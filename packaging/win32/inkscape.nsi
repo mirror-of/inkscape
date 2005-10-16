@@ -21,18 +21,27 @@
 ; MUI 1.67 compatible ------
 SetCompressor /SOLID lzma
 !include "MUI.nsh"
+!include "sections.nsh"
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
+!define MUI_HEADERIMAGE
+!define MUI_HEADERIMAGE_BITMAP "header.bmp"
+!define MUI_COMPONENTSPAGE_SMALLDESC
 
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!define MUI_LICENSEPAGE_RADIOBUTTONS
+; !define MUI_LICENSEPAGE_RADIOBUTTONS
+LicenseForceSelection off
+!define MUI_LICENSEPAGE_BUTTON $(lng_LICENSE_BUTTON)
+!define MUI_LICENSEPAGE_TEXT_BOTTOM $(lng_LICENSE_BOTTOM_TEXT)
 !insertmacro MUI_PAGE_LICENSE "..\..\Copying"
-Page custom CustomPageSingleuser
-Page custom CustomPageMultiuser
+!insertmacro MUI_PAGE_COMPONENTS
+; InstType $(lng_Full)
+; InstType $(lng_Optimal)
+; InstType $(lng_Minimal)
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -45,23 +54,8 @@ Page custom CustomPageMultiuser
 !insertmacro MUI_UNPAGE_CONFIRM
 UninstPage custom un.CustomPageUninstall
 !insertmacro MUI_UNPAGE_INSTFILES
+ShowUninstDetails hide
 !insertmacro MUI_UNPAGE_FINISH
-
-; Language files
-!insertmacro MUI_LANGUAGE "English"
-;!insertmacro MUI_LANGUAGE "Catalan"
-!insertmacro MUI_LANGUAGE "Czech"
-!insertmacro MUI_LANGUAGE "French"
-!insertmacro MUI_LANGUAGE "German"
-!insertmacro MUI_LANGUAGE "Italian"
-!insertmacro MUI_LANGUAGE "Polish"
-
-ReserveFile "inkscape.nsi.singleuser"
-ReserveFile "inkscape.nsi.multiuser"
-ReserveFile "inkscape.nsi.uninstall"
-
-
-
 
 ; #######################################
 ; STRING   LOCALIZATION
@@ -73,123 +67,16 @@ ReserveFile "inkscape.nsi.uninstall"
 ; practical.  It is not chauvinism or hubris, I swear!  ;-)
 ; default language first
 
-; Product name
-LangString lng_Caption   ${LANG_ENGLISH} "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
-;LangString lng_Caption   ${LANG_CATALAN} "${PRODUCT_NAME} -- Editor de gràfics vectorials escalables de codi obert"
-LangString lng_Caption   ${LANG_CZECH}   "${PRODUCT_NAME} -- Open Source Editor SVG vektorové grafiky"
-LangString lng_Caption   ${LANG_FRENCH}  "${PRODUCT_NAME} -- Logiciel de dessin vectoriel SVG libre"
-LangString lng_Caption   ${LANG_GERMAN}  "${PRODUCT_NAME} -- Open Source SVG-Vektorillustrator"
-LangString lng_Caption   ${LANG_ITALIAN} "${PRODUCT_NAME} -- Editor di grafica vettoriale Open Source"
-LangString lng_Caption   ${LANG_POLISH}  "${PRODUCT_NAME} -- Edytor Grafiki Wektorowej SVG Open Source"
+; Language files
+!include "english.nsh" 
+;!include "catalan.nsh" 
+;!include "czech.nsh" 
+;!include "french.nsh" 
+!include "german.nsh" 
+;!include "italian.nsh" 
+;!include "polish.nsh" 
 
-
-; installation options
-LangString lng_InstOpt   ${LANG_ENGLISH} "Installation options"
-LangString lng_InstOpt   ${LANG_CZECH} "Volby instalace"
-LangString lng_InstOpt   ${LANG_FRENCH} "Options d'installation"
-LangString lng_InstOpt   ${LANG_GERMAN} "Installations Optionen"
-LangString lng_InstOpt   ${LANG_ITALIAN} "Preferenze per l'installazione"
-LangString lng_InstOpt   ${LANG_POLISH} "Opcje instalacji"
-
-; installation options subtitle
-LangString lng_InstOpt1  ${LANG_ENGLISH} "Please make your choices for additional options"
-LangString lng_InstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících možností"
-LangString lng_InstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles"
-LangString lng_InstOpt1  ${LANG_GERMAN} "Bitte wählen Sie die optionalen Installtionsparameter"
-LangString lng_InstOpt1  ${LANG_ITALIAN} "Completare le opzioni aggiuntive per l'installazione"
-LangString lng_InstOpt1  ${LANG_POLISH} "Wybierz dodatkowe opcje instalacji"
-
-; installation type
-LangString lng_InstType  ${LANG_ENGLISH} "Install this application for:"
-LangString lng_InstType  ${LANG_CZECH} "Instalovat aplikaci pro:"
-LangString lng_InstType  ${LANG_FRENCH} "Installer cette application pour :"
-LangString lng_InstType  ${LANG_GERMAN}  "Installiert diese Anwendung für:"
-LangString lng_InstType  ${LANG_ITALIAN} "Installare questa applicazione per:"
-LangString lng_InstType  ${LANG_POLISH} "Zainstaluj aplikacjê dla:"
-
-; multi user installation
-LangString lng_AllUsers  ${LANG_ENGLISH} "Anyone who uses this computer (all users)"
-LangString lng_AllUsers  ${LANG_CZECH} "Kohokoliv kdo používá tento poèítaè (Všichni uživatelé)"
-LangString lng_AllUsers  ${LANG_FRENCH} "Toute personne utilisant cet ordinateur (tous les utilisateurs)"
-LangString lng_AllUSers  ${LANG_GERMAN}  "Alle Benutzer dieses Computers (all users)"
-LangString lng_AllUSers  ${LANG_ITALIAN}  "Chiunque usi il computer (tutti gli utenti)"
-LangString lng_AllUsers  ${LANG_POLISH} "Wszystkich, którzy korzystaj¹ z tego komputera (wszyscy u¿ytkownicy)"
-
-; single user installation
-LangString lng_CurUser  ${LANG_ENGLISH} "Only for me (current user)"
-LangString lng_CurUser  ${LANG_CZECH} "Pouze pro mne (aktuální uživatel)"
-LangString lng_CurUser  ${LANG_FRENCH} "Moi seulement (utilisateur courant)"
-LangString lng_CurUSer  ${LANG_GERMAN}  "Nur für mich (current user)"
-LangString lng_CurUser  ${LANG_ITALIAN} "Solo per me (utente attuale)"
-LangString lng_CurUser  ${LANG_POLISH} "Tylko dla mnie (aktualny u¿ytkownik)"
-
-; File type association
-LangString lng_UseAs ${LANG_ENGLISH} "Select ${PRODUCT_NAME} as default application for:"
-LangString lng_UseAs ${LANG_CZECH} "Nastavit ${PRODUCT_NAME} jako výchozí aplikaci pro:"
-LangString lng_UseAs ${LANG_FRENCH} "Sélectionner ${PRODUCT_NAME} comme application par défaut pour :"
-LangString lng_UseAs    ${LANG_GERMAN}  "Wählen Sie ${PRODUCT_NAME} als Standardanwendung zum:"
-LangString lng_UseAs    ${LANG_ITALIAN} "Impostare ${PRODUCT_NAME} come scelta predefinita per:"
-LangString lng_UseAs ${LANG_POLISH} "Wybierz ${PRODUCT_NAME} jako domyœlny program do:"
-
-; File type association for editing
-LangString lng_Editor    ${LANG_ENGLISH} "editor for SVG files"
-;LangString lng_Editor    ${LANG_CATALAN} "Voleu que l'$(^Name) sigui l'editor SVG predeterminat?"
-LangString lng_Editor    ${LANG_CZECH}   "úpravu SVG souborù"
-LangString lng_Editor    ${LANG_FRENCH}  "éditer des fichiers SVG"
-LangString lng_Editor    ${LANG_GERMAN}  "Bearbeiten für SVG Dateien machen"
-LangString lng_Editor    ${LANG_ITALIAN} "modificare file SVG"
-LangString lng_Editor    ${LANG_POLISH}  "edycji plików SVG"
-
-; File type association for reading
-LangString lng_Reader    ${LANG_ENGLISH} "reader for SVG files"
-;LangString lng_Reader    ${LANG_CATALAN} "Voleu que l'$(^Name) sigui el lector SVG predefinit?"
-LangString lng_Reader    ${LANG_CZECH}   "prohlížení SVG souborù"
-LangString lng_Reader    ${LANG_FRENCH}  "lire des fichiers SVG"
-LangString lng_Reader    ${LANG_GERMAN}  "Anzeigeprogramm für SVG Dateien"
-LangString lng_Reader    ${LANG_ITALIAN} "leggere file SVG"
-LangString lng_Reader    ${LANG_POLISH}  "otwierania plików SVG"
-
-; Post-Removal notice
-;not needed anymore, standard dialog is used
-;LangString lng_Removed   ${LANG_ENGLISH} "$(^Name) was successfully removed from your computer."
-;LangString lng_Removed   ${LANG_CATALAN} "L'$(^Name) s'ha suprimit correctament de l'ordinador."
-;LangString lng_Removed   ${LANG_CZECH}   "$(^Name) byl úspìšnì odinstalován z vašeho poèítaèe."
-;LangString lng_Removed   ${LANG_FRENCH}  "$(^Name) a été désinstallé avec succès de votre ordinateur."
-;LangString lng_Removed   ${LANG_GERMAN}  "$(^Name) wurde erfolgreich von Ihrem Computer entfernt."
-;LangString lng_Removed   ${LANG_ITALIAN} "$(^Name) è stato rimosso con successo dal sistema."
-
-; Ask to remove
-;not needed anymore, standard dialog is used
-;LangString lng_Uninstall ${LANG_ENGLISH} "Are you sure you want to completely remove $(^Name) and all of its components?"
-;LangString lng_Uninstall ${LANG_CATALAN} "Esteu segur que voleu suprimir completament $(^Name) i tots els seus components?"
-;LangString lng_Uninstall ${LANG_CZECH}   "Jste si jisti, že chcete úplnì odstranit $(^Name) a všechny jeho komponenty?"
-;LangString lng_Uninstall ${LANG_FRENCH}  "Etes-vous sûr de vouloir complètement désintaller $(^Name) et tous ses composants?"
-;LangString lng_Uninstall ${LANG_GERMAN}  "Möchten Sie $(^Name) und alle seine Komponenten von Ihrem Rechner entfernen?"
-;LangString lng_Uninstall ${LANG_ITALIAN} "Rimuovere completamente $(^Name) e tutti i suoi componenti?"
-
-; uninstallation options
-LangString lng_UInstOpt   ${LANG_ENGLISH} "Uninstallation Options"
-LangString lng_UInstOpt   ${LANG_CZECH} "Volby pro Odinstalaci"
-LangString lng_UInstOpt   ${LANG_FRENCH} "Options de désinstallation"
-LangString lng_UInstOpt   ${LANG_GERMAN} "Deinstallations Optionen"
-LangString lng_UInstOpt   ${LANG_ITALIAN} "Preferenze per la rimozione"
-LangString lng_UInstOpt   ${LANG_POLISH} "Opcje usuwania programu"
-
-; uninstallation options subtitle
-LangString lng_UInstOpt1  ${LANG_ENGLISH} "Please make your choices for additional options"
-LangString lng_UInstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících možností"
-LangString lng_UInstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles"
-LangString lng_UInstOpt1  ${LANG_GERMAN} "Bitte wählen Sie die optionalen Deinstalltionsparameter"
-LangString lng_UInstOpt1  ${LANG_ITALIAN} "Completare le opzioni aggiuntive per la rimozione"
-LangString lng_UInstOpt1  ${LANG_POLISH} "Wybierz dodatkowe opcje usuwania programu"
-
-; Ask to purge the personal preferences
-LangString lng_PurgePrefs ${LANG_ENGLISH} "Keep Inkscape preferences"
-LangString lng_PurgePrefs ${LANG_CZECH} "Chcete zachovat váš osobní soubor s nastavením?"
-LangString lng_PurgePrefs ${LANG_FRENCH} "Voulez-vous conserver votre fichier de préférences personnelles ?"
-LangString lng_PurgePrefs ${LANG_GERMAN}  "Persönliche Inkscape-Vorgaben behalten"
-LangString lng_PurgePrefs ${LANG_ITALIAN} "Mantenere i file con le configurazioni personali?"
-LangString lng_PurgePrefs ${LANG_POLISH} "Czy chcesz zachowaæ plik z w³asnymi preferencjami?"
+ReserveFile "inkscape.nsi.uninstall"
 
 
 ; #######################################
@@ -201,14 +88,11 @@ Caption           $(lng_Caption)
 OutFile           "Inkscape-${PRODUCT_VERSION}-1.win32.exe"
 InstallDir        "$PROGRAMFILES\Inkscape"
 InstallDirRegKey  HKLM "${PRODUCT_DIR_REGKEY}" ""
-ShowInstDetails   show
-ShowUnInstDetails show
+ShowInstDetails   hide
+ShowUnInstDetails hide
 
 var askMultiUser
 Var MultiUser
-Var Editor
-Var Viewer
-
 
 ; #######################################
 ;  I N S T A L L E R    S E C T I O N S
@@ -305,77 +189,233 @@ Function GetWindowsVersion
   Exch $R0
 
 FunctionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+ ; StrStr
+ ; input, top of stack = string to search for
+ ;        top of stack-1 = string to search in
+ ; output, top of stack (replaces with the portion of the string remaining)
+ ; modifies no other variables.
+ ;
+ ; Usage:
+ ;   Push "this is a long ass string"
+ ;   Push "ass"
+ ;   Call StrStr
+ ;   Pop $R0
+ ;  ($R0 at this point is "ass string")
+
+ Function StrStr
+   Exch $R1 ; st=haystack,old$R1, $R1=needle
+   Exch    ; st=old$R1,haystack
+   Exch $R2 ; st=old$R1,old$R2, $R2=haystack
+   Push $R3
+   Push $R4
+   Push $R5
+   StrLen $R3 $R1
+   StrCpy $R4 0
+   ; $R1=needle
+   ; $R2=haystack
+   ; $R3=len(needle)
+   ; $R4=cnt
+   ; $R5=tmp
+   loop:
+     StrCpy $R5 $R2 $R3 $R4
+     StrCmp $R5 $R1 done
+     StrCmp $R5 "" done
+     IntOp $R4 $R4 + 1
+     Goto loop
+ done:
+   StrCpy $R1 $R2 "" $R4
+   Pop $R5
+   Pop $R4
+   Pop $R3
+   Pop $R2
+   Exch $R1
+ FunctionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ; GetParameters
+ ; input, none
+ ; output, top of stack (replaces, with e.g. whatever)
+ ; modifies no other variables.
+ 
+ Function GetParameters
+ 
+   Push $R0
+   Push $R1
+   Push $R2
+   Push $R3
+   
+   StrCpy $R2 1
+   StrLen $R3 $CMDLINE
+   
+   ;Check for quote or space
+   StrCpy $R0 $CMDLINE $R2
+   StrCmp $R0 '"' 0 +3
+     StrCpy $R1 '"'
+     Goto loop
+   StrCpy $R1 " "
+   
+   loop:
+     IntOp $R2 $R2 + 1
+     StrCpy $R0 $CMDLINE 1 $R2
+     StrCmp $R0 $R1 get
+     StrCmp $R2 $R3 get
+     Goto loop
+   
+   get:
+     IntOp $R2 $R2 + 1
+     StrCpy $R0 $CMDLINE 1 $R2
+     StrCmp $R0 " " get
+     StrCpy $R0 $CMDLINE "" $R2
+   
+   Pop $R3
+   Pop $R2
+   Pop $R1
+   Exch $R0
+ 
+ FunctionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; GetParameterValue
+; Chris Morgan<cmorgan@alum.wpi.edu> 5/10/2004
+; -Updated 4/7/2005 to add support for retrieving a command line switch
+;  and additional documentation
+;
+; Searches the command line input, retrieved using GetParameters, for the
+; value of an option given the option name.  If no option is found the
+; default value is placed on the top of the stack upon function return.
+;
+; This function can also be used to detect the existence of just a
+; command line switch like /OUTPUT  Pass the default and "OUTPUT"
+; on the stack like normal.  An empty return string "" will indicate
+; that the switch was found, the default value indicates that
+; neither a parameter or switch was found.
+;
+; Inputs - Top of stack is default if parameter isn't found,
+;  second in stack is parameter to search for, ex. "OUTPUT"
+; Outputs - Top of the stack contains the value of this parameter
+;  So if the command line contained /OUTPUT=somedirectory, "somedirectory"
+;  will be on the top of the stack when this function returns
+;
+; Register usage
+;$R0 - default return value if the parameter isn't found
+;$R1 - input parameter, for example OUTPUT from the above example
+;$R2 - the length of the search, this is the search parameter+2
+;      as we have '/OUTPUT='
+;$R3 - the command line string
+;$R4 - result from StrStr calls
+;$R5 - search for ' ' or '"'
+ 
+Function GetParameterValue
+  Exch $R0  ; get the top of the stack(default parameter) into R0
+  Exch      ; exchange the top of the stack(default) with
+            ; the second in the stack(parameter to search for)
+  Exch $R1  ; get the top of the stack(search parameter) into $R1
+ 
+  ;Preserve on the stack the registers used in this function
+  Push $R2
+  Push $R3
+  Push $R4
+  Push $R5
+ 
+  Strlen $R2 $R1+2    ; store the length of the search string into R2
+ 
+  Call GetParameters  ; get the command line parameters
+  Pop $R3             ; store the command line string in R3
+ 
+  # search for quoted search string
+  StrCpy $R5 '"'      ; later on we want to search for a open quote
+  Push $R3            ; push the 'search in' string onto the stack
+  Push '"/$R1='       ; push the 'search for'
+  Call StrStr         ; search for the quoted parameter value
+  Pop $R4
+  StrCpy $R4 $R4 "" 1   ; skip over open quote character, "" means no maxlen
+  StrCmp $R4 "" "" next ; if we didn't find an empty string go to next
+ 
+  # search for non-quoted search string
+  StrCpy $R5 ' '      ; later on we want to search for a space since we
+                      ; didn't start with an open quote '"' we shouldn't
+                      ; look for a close quote '"'
+  Push $R3            ; push the command line back on the stack for searching
+  Push '/$R1='        ; search for the non-quoted search string
+  Call StrStr
+  Pop $R4
+ 
+  ; $R4 now contains the parameter string starting at the search string,
+  ; if it was found
+next:
+  StrCmp $R4 "" check_for_switch ; if we didn't find anything then look for
+                                 ; usage as a command line switch
+  # copy the value after /$R1= by using StrCpy with an offset of $R2,
+  # the length of '/OUTPUT='
+  StrCpy $R0 $R4 "" $R2  ; copy commandline text beyond parameter into $R0
+  # search for the next parameter so we can trim this extra text off
+  Push $R0
+  Push $R5            ; search for either the first space ' ', or the first
+                      ; quote '"'
+                      ; if we found '"/output' then we want to find the
+                      ; ending ", as in '"/output=somevalue"'
+                      ; if we found '/output' then we want to find the first
+                      ; space after '/output=somevalue'
+  Call StrStr         ; search for the next parameter
+  Pop $R4
+  StrCmp $R4 "" done  ; if 'somevalue' is missing, we are done
+  StrLen $R4 $R4      ; get the length of 'somevalue' so we can copy this
+                      ; text into our output buffer
+  StrCpy $R0 $R0 -$R4 ; using the length of the string beyond the value,
+                      ; copy only the value into $R0
+  goto done           ; if we are in the parameter retrieval path skip over
+                      ; the check for a command line switch
+ 
+; See if the parameter was specified as a command line switch, like '/output'
+check_for_switch:
+  Push $R3            ; push the command line back on the stack for searching
+  Push '/$R1'         ; search for the non-quoted search string
+  Call StrStr
+  Pop $R4
+  StrCmp $R4 "" done  ; if we didn't find anything then use the default
+  StrCpy $R0 ""       ; otherwise copy in an empty string since we found the
+                      ; parameter, just didn't find a value
+ 
+done:
+  Pop $R5
+  Pop $R4
+  Pop $R3
+  Pop $R2
+  Pop $R1
+  Exch $R0 ; put the value in $R0 at the top of the stack
+FunctionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+!macro Language polng lng
+  SectionIn 1 2 3
+  SetOutPath $INSTDIR
+  File /nonfatal /a "..\..\inkscape\*.${lng}.txt"
+  SetOutPath $INSTDIR\locale
+  File /nonfatal /a /r "..\..\inkscape\locale\${polng}"
+  SetOutPath $INSTDIR\lib\locale
+  File /nonfatal /a /r "..\..\inkscape\lib\locale\${polng}" 
+  SectionGetFlags ${SecTutorials} $R1 
+  IntOp $R1 $R1 & ${SF_SELECTED} 
+  IntCmp $R1 ${SF_SELECTED} 0 skip_tutorials 
+    SetOutPath $INSTDIR\share\tutorials
+    File /nonfatal /a "..\..\inkscape\share\tutorials\*.${lng}.*"
+  skip_tutorials:
+!macroend
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 
 
-Function .onInit
-  ;Extract InstallOptions INI files
-  !insertmacro MUI_INSTALLOPTIONS_EXTRACT "inkscape.nsi.singleuser"
-  !insertmacro MUI_INSTALLOPTIONS_EXTRACT "inkscape.nsi.multiuser"
-  
-  StrCpy $AskMultiUser "1"
-  StrCpy $MultiUser "1"
-  Call GetWindowsVersion
-  Pop $R0
-  DetailPrint "detected operating system $R0"
-FunctionEnd
 
+;--------------------------------
+; Installer Sections
 
-Function CustomPageMultiUser
-  !insertmacro MUI_HEADER_TEXT "$(lng_InstOpt)" "$(lng_InstOpt1)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.multiuser" "Field 1" "Text" "$(lng_InstType)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.multiuser" "Field 2" "Text" "$(lng_AllUsers)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.multiuser" "Field 3" "Text" "$(lng_CurUser)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.multiuser" "Field 4" "Text" "$(lng_UseAs)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.multiuser" "Field 5" "Text" "$(lng_Editor)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.multiuser" "Field 6" "Text" "$(lng_Reader)"
-
-  StrCmp $AskMultiUser "1" 0 +5
-    !insertmacro MUI_INSTALLOPTIONS_DISPLAY "inkscape.nsi.multiuser"
-    !insertmacro MUI_INSTALLOPTIONS_READ $MultiUser "inkscape.nsi.multiuser" "Field 2" "State"
-    !insertmacro MUI_INSTALLOPTIONS_READ $Editor "inkscape.nsi.multiuser" "Field 5" "State"
-    !insertmacro MUI_INSTALLOPTIONS_READ $Viewer "inkscape.nsi.multiuser" "Field 6" "State"
-
-FunctionEnd
-
-Function CustomPageSingleUser
-  !insertmacro MUI_HEADER_TEXT "$(lng_InstOpt)" "$(lng_InstOpt1)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.singleuser" "Field 1" "Text" "$(lng_UseAs)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.singleuser" "Field 2" "Text" "$(lng_Editor)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "inkscape.nsi.singleuser" "Field 3" "Text" "$(lng_Reader)"
-
-  StrCmp $askMultiUser "0" 0 +4 
-    !insertmacro MUI_INSTALLOPTIONS_DISPLAY "inkscape.nsi.singleuser"
-    !insertmacro MUI_INSTALLOPTIONS_READ $Editor "inkscape.nsi.singleuser" "Field 2" "State"
-    !insertmacro MUI_INSTALLOPTIONS_READ $Viewer "inkscape.nsi.singleuser" "Field 3" "State"
-
-FunctionEnd
-
-
-
-Section Install
-
-  StrCmp $MultiUser "1" "" SingleUser
-    DetailPrint "admin mode, registry root will be HKLM"
-    SetShellVarContext all
-    Goto endSingleUser
-
-  SingleUser:
-    DetailPrint "single user mode, registry root will be HKCU"
-    SetShellVarContext current
-  endSingleUser:		
-
-  ; check for writing registry
-  ClearErrors
-  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\inkscape.exe"  
-  IfErrors 0 +4
-    DetailPrint "fatal: failed to write to ${PRODUCT_DIR_REGKEY}"
-    DetailPrint "aborting installation"
-	Abort
-  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "MultiUser" "$MultiUser"  
-  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "askMultiUser" "$askMultiUser"  
-    
+Section -removeInkscape
   ; check for an old installation and clean that dlls and stuff
   ClearErrors
   IfFileExists $INSTDIR\etc 0 doDeleteLib
@@ -420,20 +460,57 @@ Section Install
     FindNext $0 $1
     Goto FindNextLoop
   FindNextDone:
+SectionEnd
 
-  ; now its time to copy new stuff
-  SetOutPath "$INSTDIR"
-  SetOverwrite ifnewer
-  File /a /r "..\..\inkscape\*.*"
-  WriteUninstaller "$INSTDIR\uninst.exe"
+Section $(lng_Core) SecCore
+
+  DetailPrint "Installing Inkscape Core Files ..."
+
+  SectionIn 1 2 3 RO
+  SetOutPath $INSTDIR
+  SetOverwrite on
+  SetAutoClose false
+
+  StrCmp $MultiUser "1" "" SingleUser
+    DetailPrint "admin mode, registry root will be HKLM"
+    SetShellVarContext all
+    Goto endSingleUser
+  SingleUser:
+    DetailPrint "single user mode, registry root will be HKCU"
+    SetShellVarContext current
+  endSingleUser:		
+
+  ; check for writing registry
+  ClearErrors
+  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\inkscape.exe"  
+  IfErrors 0 +4
+    DetailPrint "fatal: failed to write to ${PRODUCT_DIR_REGKEY}"
+    DetailPrint "aborting installation"
+	Abort
+  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "MultiUser" "$MultiUser"  
+  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "askMultiUser" "$askMultiUser"  
+
+  File /a "..\..\inkscape\ink*.exe"
+  File /a "..\..\inkscape\AUTHORS"
+  File /a "..\..\inkscape\COPYING"
+  File /a "..\..\inkscape\NEWS"
+  File /a "..\..\inkscape\HACKING.txt"
+  File /a "..\..\inkscape\README"
+  File /a "..\..\inkscape\TRANSLATORS"
+  File /nonfatal /a /r "..\..\inkscape\data"
+  File /nonfatal /a /r "..\..\inkscape\doc"
+  File /nonfatal /a /r "..\..\inkscape\plugins"
+  File /nonfatal /a /r /x *.??*.???* /x "examples" /x "tutorials" "..\..\inkscape\share"
+  SetOutPath $INSTDIR\modules
+  File /nonfatal /a /r "..\..\inkscape\modules\*.*"
 
   ; start menu entries
   CreateDirectory "$SMPROGRAMS\Inkscape"
   CreateShortCut "$SMPROGRAMS\Inkscape\Inkscape.lnk" "$INSTDIR\inkscape.exe"
   CreateShortCut "$SMPROGRAMS\Inkscape\Uninstall Inkscape.lnk" "$INSTDIR\uninst.exe"
-  CreateShortCut "$DESKTOP\Inkscape.lnk" "$INSTDIR\inkscape.exe"
 
   ; uninstall settings
+  WriteUninstaller "$INSTDIR\uninst.exe"
   WriteRegExpandStr SHCTX "${PRODUCT_UNINST_KEY}" "UninstallString" '"$INSTDIR\uninst.exe"'
   WriteRegExpandStr SHCTX "${PRODUCT_UNINST_KEY}" "InstallLocation" "$INSTDIR"
   WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME} ${PRODUCT_VERSION}"
@@ -442,7 +519,40 @@ Section Install
   WriteRegDWORD SHCTX "${PRODUCT_UNINST_KEY}" "NoModify" "1"
   WriteRegDWORD SHCTX "${PRODUCT_UNINST_KEY}" "NoRepair" "1"
   
+SectionEnd
+
+Section $(lng_GTKFiles) SecGTK
+
+  DetailPrint "Installing GTK Files ..."
   
+  SectionIn 1 2 3 RO
+  SetOutPath $INSTDIR
+  SetOverwrite on
+  File /a /r "..\..\inkscape\*.dll"
+  File /a /r /x "locale" "..\..\inkscape\lib"
+  File /a /r "..\..\inkscape\etc"
+SectionEnd
+
+SectionGroup $(lng_Shortcuts) SecShortcuts
+
+Section $(lng_Alluser) SecAlluser
+  ; disable this option in Win95/Win98/WinME
+  SectionIn 1 2 3 
+SectionEnd
+
+Section $(lng_Desktop) SecDesktop
+  SectionIn 1 2 3
+  CreateShortCut "$DESKTOP\Inkscape.lnk" "$INSTDIR\inkscape.exe"
+SectionEnd
+
+Section $(lng_Quicklaunch) SecQuicklaunch
+  SectionIn 1 2 3
+  StrCmp $QUICKLAUNCH $TEMP +2
+    CreateShortCut "$QUICKLAUNCH\Inkscape.lnk" "$INSTDIR\inkscape.exe"
+SectionEnd
+
+Section $(lng_SVGWriter) SecSVGWriter 
+  SectionIn 1 2 3
   ; create file associations, test before if needed
   DetailPrint "creating file associations"
   ReadRegStr $0 HKCR ".svg" ""
@@ -454,32 +564,330 @@ Section Install
     WriteRegStr HKCR ".svgz" "" "svgfile"
     WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
   
-  StrCmp $Editor "1" "" NoEditor
-    DetailPrint "creating default editor"
-    ClearErrors
-	ReadRegStr $0 HKCR ".svg" ""
-    WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
-    ReadRegStr $0 HKCR ".svgz" ""
-    WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
-	IfErrors 0 +2
-	  DetailPrint "Uups! Problems creating default editor"
-  NoEditor:
+  DetailPrint "creating default editor"
+  ClearErrors
+  ReadRegStr $0 HKCR ".svg" ""
+  WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
+  ReadRegStr $0 HKCR ".svgz" ""
+  WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
+  IfErrors 0 +2
+    DetailPrint "Uups! Problems creating default editor"
+SectionEnd
 
-  StrCmp $Viewer "1" "" NoReader
-    DetailPrint "creating default reader"
-    ClearErrors
-	ReadRegStr $0 HKCR ".svg" ""
-	WriteRegStr HKCR "$0\shell\open\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
-    ReadRegStr $0 HKCR ".svgz" ""
-	WriteRegStr HKCR "$0\shell\open\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
-	IfErrors 0 +2
-	  DetailPrint "Uups! Problems creating default reader"
-  NoReader:
-
-  SetAutoClose false
+Section $(lng_ContextMenu) SecContextMenu
+  SectionIn 1 2 3
+  ; create file associations, test before if needed
+  DetailPrint "creating file associations"
+  ReadRegStr $0 HKCR ".svg" ""
+  StrCmp $0 "" 0 +3
+    WriteRegStr HKCR ".svg" "" "svgfile"
+    WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
+  ReadRegStr $0 HKCR ".svgz" ""
+  StrCmp $0 "" 0 +3
+    WriteRegStr HKCR ".svgz" "" "svgfile"
+    WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
+  
+  DetailPrint "creating context menue"
+  ClearErrors
+  ReadRegStr $0 HKCR ".svg" ""
+  WriteRegStr HKCR "$0\shell\${PRODUCT_NAME}\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
+  ReadRegStr $0 HKCR ".svgz" ""
+  WriteRegStr HKCR "$0\shell\${PRODUCT_NAME}\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
+  IfErrors 0 +2
+    DetailPrint "Uups! Problems creating context menue integration"
 
 SectionEnd
 
+SectionGroupEnd
+
+SectionGroup $(lng_Addfiles) SecAddfiles
+
+Section $(lng_Examples) SecExamples
+  SectionIn 1 2
+  SetOutPath $INSTDIR\share
+  File /nonfatal /a /r /x "*.??*.???*" "..\..\inkscape\share\examples"
+SectionEnd
+
+Section $(lng_Tutorials) SecTutorials
+  SectionIn 1 2
+  SetOutPath $INSTDIR\share
+  File /nonfatal /a /r /x "*.??*.???*" "..\..\inkscape\share\tutorials"
+SectionEnd
+
+SectionGroupEnd
+
+SectionGroup /e $(lng_Languages) SecLanguages
+
+Section $(lng_am) SecAmharic
+  !insertmacro Language am am
+SectionEnd
+
+Section $(lng_az) SecAzerbaijani
+  !insertmacro Language az az
+SectionEnd
+
+Section $(lng_be) SecByelorussian
+  !insertmacro Language be be
+SectionEnd
+
+Section $(lng_ca) SecCatalan
+  !insertmacro Language ca ca
+SectionEnd
+
+Section $(lng_cs) SecCzech
+  !insertmacro Language cs cs
+SectionEnd
+
+Section $(lng_da) SecDanish
+  !insertmacro Language da da
+SectionEnd
+
+Section $(lng_de) SecGerman
+  !insertmacro Language 'de' 'de'
+SectionEnd
+
+Section $(lng_el) SecGreek
+  !insertmacro Language el el
+SectionEnd
+
+Section $(lng_en) SecEnglish
+  SectionIn 1 2 3 RO
+SectionEnd
+
+Section $(lng_es) SecSpanish
+  !insertmacro Language 'es' 'es'
+SectionEnd
+
+Section $(lng_es_MX) SecSpanishMexico
+  !insertmacro Language 'es_MX' 'es_MX'
+SectionEnd
+
+Section $(lng_et) SecEstonian
+  !insertmacro Language et et
+SectionEnd
+
+Section $(lng_fr) SecFrench
+  !insertmacro Language 'fr' 'fr'
+SectionEnd
+
+Section $(lng_ga) SecIrish
+  !insertmacro Language ga ga
+SectionEnd
+
+Section $(lng_gl) SecGallegan
+  !insertmacro Language gl gl
+  SectionIn 1 2 3
+SectionEnd
+
+Section $(lng_hu) SecHungarian
+  !insertmacro Language hu hu
+  SectionIn 1 2 3
+SectionEnd
+
+Section $(lng_it) SecItalian
+  !insertmacro Language it it
+  SectionIn 1 2 3
+SectionEnd
+
+Section $(lng_ja) SecJapanese
+  !insertmacro Language 'ja' 'jp'
+SectionEnd
+
+Section $(lng_mk) SecMacedonian
+  !insertmacro Language mk mk
+SectionEnd
+
+Section $(lng_nb) SecNorwegianBokmal
+  !insertmacro Language nb nb
+SectionEnd
+
+Section $(lng_nl) SecDutch
+  !insertmacro Language nl nl
+SectionEnd
+
+Section $(lng_nn) SecNorwegianNynorsk
+  !insertmacro Language nn nn
+SectionEnd
+
+Section $(lng_pa) SecPanjabi
+  !insertmacro Language pa pa
+SectionEnd
+
+Section $(lng_pl) SecPolish
+  !insertmacro Language pl pl
+SectionEnd
+
+Section $(lng_pt) SecPortuguese
+  !insertmacro Language pt pt
+SectionEnd
+
+Section $(lng_pt_BR) SecPortugueseBrazil
+  !insertmacro Language pt_BR pt_BR
+SectionEnd
+
+Section $(lng_ru) SecRussian
+  !insertmacro Language ru ru
+SectionEnd
+
+Section $(lng_sk) SecSlovak
+  !insertmacro Language sk sk
+SectionEnd
+
+Section $(lng_sl) SecSlovenian
+  !insertmacro Language sl sl
+SectionEnd
+
+Section $(lng_sr) SecSerbian
+  !insertmacro Language sr sr
+SectionEnd
+
+Section $(lng_sr@Latn) SecSerbianLatin
+  !insertmacro Language 'sr@Latn' 'sr@Latn'
+SectionEnd
+
+Section $(lng_sv) SecSwedish
+  !insertmacro Language sv sv
+SectionEnd
+
+Section $(lng_tr) SecTurkish
+  !insertmacro Language tr tr
+SectionEnd
+
+Section $(lng_uk) SecUkrainian
+  !insertmacro Language uk uk
+SectionEnd
+
+Section $(lng_zh_CN) SecChineseSimplified
+  !insertmacro Language zh_CN zh_CN
+SectionEnd
+
+SectionGroupEnd
+ 
+; Last the Descriptions
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecCore} $(lng_CoreDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecGTK} $(lng_GTKFilesDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecShortcuts} $(lng_ShortcutsDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecAlluser} $(lng_AlluserDesc) 
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(lng_DesktopDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecQuicklaunch} $(lng_QuicklaunchDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecSVGWriter} $(lng_SVGWriterDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecContextMenu} $(lng_ContextMenuDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecAddfiles} $(lng_AddfilesDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecExamples} $(lng_ExamplesDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecTutorials} $(lng_TutorialsDesc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecLanguages} $(lng_LanguagesDesc)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+!macro Parameter key Section
+  Push ${key}
+  Push ""
+  Call GetParameterValue
+  Pop $1
+  StrCmp $1 "OFF" 0 +5
+    SectionGetFlags ${Section} $0
+    IntOp $2 ${SF_SELECTED} ~
+    IntOp $0 $0 & $2
+    SectionSetFlags ${Section} $0
+  StrCmp $1 "ON" 0 +4
+    SectionGetFlags ${Section} $0
+    IntOp $0 $0 | ${SF_SELECTED}
+    SectionSetFlags ${Section} $0
+!macroend
+
+Function .onInit
+  ;Extract InstallOptions INI files
+  StrCpy $AskMultiUser "1"
+  StrCpy $MultiUser "1"
+  ; this resets AskMultiUser if Win95/98/ME
+  Call GetWindowsVersion
+  Pop $R0
+  DetailPrint "detected operating system $R0"
+  ;MessageBox MB_OK "operating system: $R0; AskMultiuser: $AskMultiUser"
+  
+  ; hide all user section if win98
+  StrCmp $AskMultiUser "1" +2
+    SectionSetText ${SecAlluser} ""
+
+  ; hide if quick launch if not available
+  StrCmp $QUICKLAUNCH $TEMP 0 +2
+    SectionSetText ${SecQuicklaunch} ""
+
+  ; proccess command line parameter
+  !insertmacro Parameter "GTK" ${SecGTK}
+  !insertmacro Parameter "SHORTCUTS" ${secShortcuts}
+  !insertmacro Parameter "ALLUSER" ${SecAlluser}
+  !insertmacro Parameter "DESKTOP" ${SecDesktop}
+  !insertmacro Parameter "QUICKLAUNCH" ${SecQUICKlaunch}
+  !insertmacro Parameter "SVGEDITOR" ${SecSVGWriter}
+  !insertmacro Parameter "CONTEXTMENUE" ${SecContextMenu}
+  !insertmacro Parameter "ADDFILES" ${SecAddfiles}
+  !insertmacro Parameter "EXAMPLES" ${SecExamples}
+  !insertmacro Parameter "TUTORIALS" ${SecTutorials}
+  !insertmacro Parameter "LANGUAGES" ${SecLanguages}
+  !insertmacro Parameter "am" ${SecAmharic}
+  !insertmacro Parameter "az" ${SecAzerbaijani}
+  !insertmacro Parameter "be" ${SecByelorussian}
+  !insertmacro Parameter "ca" ${SecCatalan}
+  !insertmacro Parameter "cs" ${SecCzech}
+  !insertmacro Parameter "da" ${SecDanish}
+  !insertmacro Parameter "de" ${SecGerman}
+  !insertmacro Parameter "el" ${SecGreek}
+  !insertmacro Parameter "es" ${SecSpanish}
+  !insertmacro Parameter "es_MX" ${SecSpanishMexico}
+  !insertmacro Parameter "et" ${SecEstonian}
+  !insertmacro Parameter "fr" ${SecFrench}
+  !insertmacro Parameter "ga" ${SecIrish}
+  !insertmacro Parameter "gl" ${SecGallegan}
+  !insertmacro Parameter "hu" ${SecHungarian}
+  !insertmacro Parameter "it" ${SecItalian}
+  !insertmacro Parameter "ja" ${SecJapanese}
+  !insertmacro Parameter "mk" ${SecMacedonian}
+  !insertmacro Parameter "nb" ${SecNorwegianBokmal}
+  !insertmacro Parameter "nl" ${SecDutch}
+  !insertmacro Parameter "nn" ${SecNorwegianNynorsk}
+  !insertmacro Parameter "pa" ${SecPanjabi}
+  !insertmacro Parameter "pl" ${SecPolish}
+  !insertmacro Parameter "pt" ${SecPortuguese}
+  !insertmacro Parameter "pt_BR" ${SecPortugueseBrazil}
+  !insertmacro Parameter "ru" ${SecRussian}
+  !insertmacro Parameter "sk" ${SecSlovak}
+  !insertmacro Parameter "sl" ${SecSlovenian}
+  !insertmacro Parameter "sr" ${SecSerbian}
+  !insertmacro Parameter "sr@Latn" ${SecSerbianLatin}
+  !insertmacro Parameter "sv" ${SecSwedish}
+  !insertmacro Parameter "tr" ${SecTurkish}
+  !insertmacro Parameter "uk" ${SecUkrainian}
+  !insertmacro Parameter "zh_CN" ${SecChineseSimplified}
+  
+  Push "?"
+  Push "TEST"
+  Call GetParameterValue
+  Pop $1
+  StrCmp $1 "TEST" +3
+    MessageBox MB_OK "possible parameters for installer:$\r$\n \
+      /?: this help screen$\r$\n \
+      /S: silent$\r$\n \
+      /D=(directory): where to install inkscape$\r$\n \
+      /GTK=(OFF/ON): GTK+ Runtime environment$\r$\n \
+      /SHORTCUTS=(OFF/ON): shortcuts to start inkscape$\r$\n \
+      /ALLUSER=(OFF/ON): for all users on the computer$\r$\n \
+      /DESKTOP=(OFF/ON): Desktop icon$\r$\n \
+      /QUICKLAUNCH=(OFF/ON): quick launch icon$\r$\n \
+      /SVGEDITOR=(OFF/ON): default SVG editor$\r$\n \
+      /CONTEXTMENUE=(OFF/ON): context menue integration$\r$\n \
+      /ADDFILES=(OFF/ON): additional files$\r$\n \
+      /EXAMPLES=(OFF/ON): examples$\r$\n \
+      /TUTORIALS=(OFF/ON): tutorials$\r$\n \
+      /LANGUAGES=(OFF/ON): translated menues, examples, etc.$\r$\n \
+      /[locale code]=(OFF/ON): e.g am, es, es_MX as in Inkscape supported"
+    Abort
+FunctionEnd
+
+Function .onSelChange
+FunctionEnd
+
+; --------------------------------------------------
 
 Function un.CustomPageUninstall
   !insertmacro MUI_HEADER_TEXT "$(lng_UInstOpt)" "$(lng_UInstOpt1)"
@@ -489,13 +897,13 @@ Function un.CustomPageUninstall
   !insertmacro MUI_INSTALLOPTIONS_DISPLAY "inkscape.nsi.uninstall"
   !insertmacro MUI_INSTALLOPTIONS_READ $MultiUser "inkscape.nsi.uninstall" "Field 2" "State"
   DetailPrint "keepfiles = $MultiUser" 
-  ;MessageBox MB_OK "adminmode = $MultiUser MultiUserOS = $askMultiUser" 
+	  ;MessageBox MB_OK "adminmode = $MultiUser MultiUserOS = $askMultiUser" 
 
 FunctionEnd
 
 
-
 Function un.onInit
+
   StrCpy $askMultiUser "1"
   StrCpy $MultiUser "1"
  
@@ -524,12 +932,12 @@ Section Uninstall
   ; remove personal settings
   Delete "$APPDATA\Inkscape\extension-errors.log"
   StrCmp $MultiUser "0" 0 endPurge  ; multiuser assigned in dialog
-    DetailPrint "purge personal settings"
+    DetailPrint "purge personal settings in $APPDATA\Inkscape"
     RMDir /r "$APPDATA\Inkscape"
   endPurge:
 
-  ; Remove file associations
-  DetailPrint "removing file associations"
+  ; Remove file associations for svg editor
+  DetailPrint "removing file associations for svg editor"
   ClearErrors
   ReadRegStr $0 HKCR ".svg" ""
   DetailPrint ".svg associated as $0"
@@ -560,6 +968,8 @@ Section Uninstall
     DeleteRegKey /ifempty HKCR "$2"
   endUninstSVGZEdit:
   
+  ; Remove file associations for svg editor
+  DetailPrint "removing file associations for svg editor"
   ClearErrors
   ReadRegStr $0 HKCR ".svg" ""
   IfErrors endUninstSVGView
@@ -588,6 +998,26 @@ Section Uninstall
     DeleteRegKey /ifempty HKCR "$2"
   endUninstSVGZView:
   
+  ; Remove file associations for context menue
+  DetailPrint "removing file associations for svg editor"
+  ClearErrors
+  ReadRegStr $0 HKCR ".svg" ""
+  IfErrors endUninstSVGContext
+  DetailPrint "removing default .svg context menue"
+  DeleteRegKey HKCR "$0\shell\${PRODUCT_NAME}"
+  DeleteRegKey /ifempty HKCR "$0\shell"
+  DeleteRegKey /ifempty HKCR "$0"
+  endUninstSVGContext:
+  
+  ClearErrors
+  ReadRegStr $2 HKCR ".svgz" ""
+  IfErrors endUninstSVGZContext
+  DetailPrint "removing default .svgzcontext menue"
+  DeleteRegKey HKCR "$2\shell\${PRODUCT_NAME}"
+  DeleteRegKey /ifempty HKCR "$2\shell"
+  DeleteRegKey /ifempty HKCR "$2"
+  endUninstSVGZContext:
+
   ReadRegStr $1 HKCR "$0" ""
   StrCmp $1 "" 0 +3
     DetailPrint "removing filetype .svg $0"
@@ -606,6 +1036,7 @@ Section Uninstall
 
   DetailPrint "removing shortcuts"
   Delete "$DESKTOP\Inkscape.lnk"
+  Delete "$QUICKLAUNCH\Inkscape.lnk"
   Delete "$SMPROGRAMS\Inkscape\Uninstall Inkscape.lnk"
   Delete "$SMPROGRAMS\Inkscape\Inkscape.lnk"
   RMDir  "$SMPROGRAMS\Inkscape"
