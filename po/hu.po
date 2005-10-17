@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-10-16 22:07+0200\n"
-"PO-Revision-Date: 2005-10-16 22:38+0200\n"
+"PO-Revision-Date: 2005-10-17 23:10+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -3653,30 +3653,30 @@ msgstr ""
 
 #: ../src/jabber_whiteboard/callbacks.cpp:59
 msgid "Jabber connection lost."
-msgstr ""
+msgstr "A Jabber-kapcsolat megszűnt."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:72
 #, c-format
 msgid "Sending message; %u message remaining in send queue."
 msgid_plural "Sending message; %u messages remaining in send queue."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Üzenet küldése; %u üzenet van még a küldési sorban."
+msgstr[1] "Üzenet küldése; %u üzenet van még a küldési sorban."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:78
 msgid "Receive queue empty."
-msgstr ""
+msgstr "A fogadási sor üres."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:154
 #, c-format
 msgid "Receiving change; %u change left to process."
 msgid_plural "Receiving change; %u changes left to process."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Módosítás fogadása; %u módosítás van hátra."
+msgstr[1] "Módosítás fogadása; %u módosítás van hátra."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:157
 #, c-format
 msgid "<b>%s</b> has left the chatroom."
-msgstr ""
+msgstr "<b>%s</b> elhagyta a csevegőszobát."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:221
 msgid "Nickname %1 is already in use.  Please choose a different nickname."
@@ -3691,15 +3691,15 @@ msgstr ""
 #. opening a new, blank document for the whiteboard session.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:131
 msgid "<b>%1</b> has invited you to a whiteboard session."
-msgstr ""
+msgstr "<b>%1</b> meghívta Önt egy rajztábla-munkamenetre."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:132
 msgid "Incoming whiteboard invitation from %1"
-msgstr ""
+msgstr "Bejövő rajztábla-meghívás %1 felhasználótól"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:135
 msgid "Do you wish to accept <b>%1</b>'s whiteboard session invitation?"
-msgstr ""
+msgstr "Elfogadja <b>%1</b> rajztábla-munkamenetre szóló meghívását?"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:137
 msgid ""
@@ -3709,19 +3709,17 @@ msgstr ""
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:143
 #: ../src/jabber_whiteboard/connection-establishment.cpp:197
-#, fuzzy
 msgid "Accept invitation"
-msgstr "Gyorsítás"
+msgstr "Meghívás elfogadása"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:144
 #: ../src/jabber_whiteboard/connection-establishment.cpp:198
 msgid "Decline invitation"
-msgstr ""
+msgstr "Meghívás elutasítása"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:145
-#, fuzzy
 msgid "Accept invitation in new document window"
-msgstr "Új dokumentum létrehozása"
+msgstr "Meghívás elfogadása új dokumentumablakban"
 
 #. We could not create a new desktop; ask the user if she or he wants to
 #. replace the current document and accept the invitation, or reject the invitation.
@@ -3738,6 +3736,9 @@ msgid ""
 "whiteboard invitation.</span>\n"
 "\n"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">A(z) <b>%1</b> nevű felhasználó "
+"elutasította az Ön rajztábla-meghívását.</span>\n"
+"\n"
 
 #. TRANSLATORS: %1 is the peer whom refused our invitation, %2 is our Jabber identity.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:240
@@ -3765,24 +3766,26 @@ msgstr ""
 #: ../src/jabber_whiteboard/invitation-confirm-dialog.cpp:26
 #: ../src/jabber_whiteboard/session-file-selector.cpp:24
 msgid "_Write session file:"
-msgstr ""
+msgstr "Munkamenet-_fájl készítése:"
 
 #: ../src/jabber_whiteboard/message-processors.cpp:145
 #, c-format
 msgid "<b>%s</b> has joined the chatroom."
-msgstr ""
+msgstr "<b>%s</b> csatlakozott a csevegőszobához."
 
 #: ../src/jabber_whiteboard/message-queue.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "%u change in receive queue."
 msgid_plural "%u changes in receive queue."
-msgstr[0] "Nincs elmentést igénylő módosítás."
+msgstr[0] "%u módosítás van a fogadási sorban."
+msgstr[1] "%u módosítás van a fogadási sorban."
 
 #: ../src/jabber_whiteboard/message-queue.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "%u change in send queue."
 msgid_plural "%u changes in send queue."
-msgstr[0] "Nincs elmentést igénylő módosítás."
+msgstr[0] "%u módosítás van a küldési sorban."
+msgstr[1] "%u módosítás van a küldési sorban."
 
 #. if ID is NULL, then we have a real problem -- we were not able to find a key
 #. nor generate one.  The only thing we can really do here is abort, since we have
@@ -3809,9 +3812,8 @@ msgstr ""
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:62
 #: ../src/jabber_whiteboard/session-manager.cpp:996
-#, fuzzy
 msgid "Set filename"
-msgstr "_Fájlnév"
+msgstr "Fájlnév beállítása"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:301
 msgid "No SSL certificate was found."
@@ -3863,9 +3865,8 @@ msgid "Continue connecting, but warn me of further errors"
 msgstr ""
 
 #: ../src/jabber_whiteboard/session-manager.cpp:330
-#, fuzzy
 msgid "Cancel connection"
-msgstr "Kijelölés"
+msgstr "Kapcsolódás leállítása"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:777
 #, c-format
@@ -3875,7 +3876,7 @@ msgstr ""
 #: ../src/jabber_whiteboard/session-manager.cpp:785
 #, c-format
 msgid "<b>%s</b> has <b>left</b> the whiteboard session."
-msgstr ""
+msgstr "<b>%s</b> <b>elhagyta</b> a rajztábla-munkamenetet."
 
 #. Inform the user
 #. TRANSLATORS: %1 is the name of the user that disconnected, %2 is the name of the user whom the disconnected user disconnected from.
@@ -3886,6 +3887,9 @@ msgid ""
 "whiteboard session.</span>\n"
 "\n"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">A(z) <b>%1</b> nevű felhasználó "
+"elhagyta a rajztábla-munkamenetet.</span>\n"
+"\n"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:791
 msgid ""
@@ -5991,36 +5995,33 @@ msgstr "Transzformáció alkalmazása az objektumra"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:43
 msgid "_Use SSL"
-msgstr ""
+msgstr "_SSL használata"
 
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-connect.cpp:68
-#, fuzzy
 msgid "_Server:"
-msgstr "Megfo_rdítás"
+msgstr "_Kiszolgáló:"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:69
-#, fuzzy
 msgid "_Username:"
-msgstr "Átne_vezés"
+msgstr "_Felhasználónév:"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:70
 msgid "_Password:"
-msgstr ""
+msgstr "_Jelszó:"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:71
 msgid "P_ort:"
-msgstr ""
+msgstr "_Port:"
 
 #. Buttons
 #: ../src/ui/dialog/whiteboard-connect.cpp:99
-#, fuzzy
 msgid "Connect"
-msgstr "Klónok"
+msgstr "Kapcsolódás"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:126
 msgid "Establishing connection to Jabber server <b>%1</b> as user <b>%2</b>"
-msgstr ""
+msgstr "Kapcsolat létrehozása a(z) <b>%1</b> Jabber-kiszolgálóhoz <b>%2</b> felhasználóként"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:131
 msgid "Failed to establish connection to Jabber server <b>%1</b>"
@@ -6036,7 +6037,7 @@ msgstr ""
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:147
 msgid "Connected to Jabber server <b>%1</b> as <b>%2</b>"
-msgstr ""
+msgstr "Kapcsolódva a(z) <b>%1</b> Jabber-kiszolgálóhoz <b>%2</b> néven"
 
 #. Construct labels
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:75
@@ -6053,8 +6054,9 @@ msgid "Chatroom _password:"
 msgstr ""
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:78
+#, fuzzy
 msgid "Chatroom _handle:"
-msgstr ""
+msgstr "Csevegőszoba-azonosító:"
 
 #. Button setup and callback registration
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:97
@@ -6068,21 +6070,20 @@ msgstr ""
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:78
 msgid "_User's Jabber ID:"
-msgstr ""
+msgstr "A felhasználó Jabber-_azonosítója:"
 
 #. Buttons
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:82
 msgid "_Invite user"
-msgstr ""
+msgstr "Felhasználó meg_hívása"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:83
-#, fuzzy
 msgid "_Cancel"
-msgstr "Mégsem"
+msgstr "_Mégsem"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:94
 msgid "Buddy List"
-msgstr ""
+msgstr "Partnerlista"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:170
 msgid "Sending whiteboard invitation to <b>%1</b>"
@@ -7507,28 +7508,29 @@ msgstr "\"Objektum-tulajdonságok\" párbeszédablak"
 
 #: ../src/verbs.cpp:2158
 msgid "_Connect to Jabber server..."
-msgstr ""
+msgstr "_Kapcsolódás egy Jabber-kiszolgálóhoz..."
 
 #: ../src/verbs.cpp:2158
 msgid "Connect to a Jabber server"
-msgstr ""
+msgstr "Kapcsolódás egy Jabber-kiszolgálóhoz"
 
 #: ../src/verbs.cpp:2160
-#, fuzzy
 msgid "Share with _user..."
-msgstr "Mentés más_ként..."
+msgstr "Megosztás egy _felhasználóval..."
 
 #: ../src/verbs.cpp:2160
 msgid "Establish a whiteboard session with another Jabber user"
-msgstr ""
+msgstr "Rajztábla-munkamenet létrehozása egy másik Jabber-felhasználóval"
 
 #: ../src/verbs.cpp:2162
 msgid "Share with _chatroom..."
-msgstr ""
+msgstr "Megosztás egy _csevegőszobával..."
 
 #: ../src/verbs.cpp:2162
 msgid "Join a chatroom to start a new whiteboard session or join one in progress"
 msgstr ""
+"Csatlakozás egy csevegőszobához egy új rajztábla-munkamenet indítása "
+"vagy egy létezőhöz való csatlakozás céljából"
 
 #: ../src/verbs.cpp:2164
 msgid "_Dump XML node tracker"
@@ -7540,23 +7542,23 @@ msgstr "Az XML-nyomkövető tartalmának kiírása a konzolra"
 
 #: ../src/verbs.cpp:2166
 msgid "_Open session file..."
-msgstr ""
+msgstr "Munkamenet-fájl _megnyitása..."
 
 #: ../src/verbs.cpp:2166
 msgid "Open and browse through records of past whiteboard sessions"
-msgstr ""
+msgstr "Korábbi rajztábla-munkamenetek megnyitása illetve azok közti böngészés"
 
 #: ../src/verbs.cpp:2168
 msgid "Session file playback"
-msgstr ""
+msgstr "Munkamenet-fájl visszajátszása"
 
 #: ../src/verbs.cpp:2170
 msgid "_Disconnect from session"
-msgstr ""
+msgstr "Lekapcsolódás a m_unkamenetről"
 
 #: ../src/verbs.cpp:2172
 msgid "Disconnect from _server"
-msgstr ""
+msgstr "Lekapcsolódás a k_iszolgálóról"
 
 #: ../src/verbs.cpp:2174
 msgid "_Input Devices..."
