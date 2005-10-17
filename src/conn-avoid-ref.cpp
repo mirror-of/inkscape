@@ -21,6 +21,7 @@
 #include "libnr/nr-rect-ops.h"
 #include "libavoid/polyutil.h"
 #include "libavoid/incremental.h"
+#include "xml/simple-node.cpp"
 #include "document.h"
 
 
@@ -32,6 +33,7 @@ SPAvoidRef::SPAvoidRef(SPItem *spitem)
     : shapeRef(NULL)
     , item(spitem)
     , setting(false)
+    , new_setting(false)
     , _transformed_connection()
 {
 }
@@ -51,11 +53,16 @@ SPAvoidRef::~SPAvoidRef()
 
 void SPAvoidRef::setAvoid(char const *value)
 {
+    if (SP_OBJECT_IS_CLONED(item)) {
+        // Don't keep avoidance information for cloned objects.
+        return;
+    }
     new_setting = false;
     if (value && (strcmp(value, "true") == 0)) {
         new_setting = true;
     }
 }
+
 
 void SPAvoidRef::handleSettingChange(void)
 {
@@ -71,8 +78,11 @@ void SPAvoidRef::handleSettingChange(void)
 
         Avoid::Polygn poly = avoid_item_poly(item);
         if (poly.pn > 0) {
+            const char *id = SP_OBJECT_REPR(item)->attribute("id");
+            g_assert(id != NULL);
+            
             // Get a unique ID for the item.
-            GQuark itemID = g_quark_from_string(SP_OBJECT(item)->id);
+            GQuark itemID = g_quark_from_string(id);
 
             shapeRef = new Avoid::ShapeRef(itemID, poly);
             Avoid::freePoly(poly);
