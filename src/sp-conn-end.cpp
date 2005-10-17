@@ -52,7 +52,8 @@ get_nearest_common_ancestor(SPObject const *const obj, SPItem const *const objs[
 
 static void
 sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
-                            SPPath *const path)
+                            SPPath *const path,
+                            bool const updatePathRepr = true)
 {
     // TODO: sp_item_invoke_bbox gives the wrong result for some objects
     //       that have internal representations that are updated later
@@ -65,8 +66,10 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
     SPItem *h2attItem[2];
     path->connEndPair.getAttachedItems(h2attItem);
     if ( !h2attItem[0] && !h2attItem[1] ) {
-        path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        path->updateRepr();
+        if (updatePathRepr) {
+            path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            path->updateRepr();
+        }
         return;
     }
 
@@ -156,8 +159,10 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
                            NR::translate(connPt - h2oldEndPt_pcoordsys[att_h]));
 #endif
     }
-    path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    path->updateRepr();
+    if (updatePathRepr) {
+        path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        path->updateRepr();
+    }
 }
 
 // TODO: This triggering of makeInvalidPath could be cleaned up to be
@@ -185,7 +190,11 @@ sp_conn_adjust_path(SPPath *const path)
     if (path->connEndPair.isAutoRoutingConn()) {
         path->connEndPair.makePathInvalid();
     }
-    sp_conn_end_move_compensate(NULL, NULL, path);
+    // Don't update the path repr or else connector dragging is slowed by
+    // constant update of values to the xml editor, and each step is also
+    // needlessly remembered by undo/redo.
+    bool const updatePathRepr = false;
+    sp_conn_end_move_compensate(NULL, NULL, path, updatePathRepr);
 }
 
 static NR::Point

@@ -1,5 +1,10 @@
 2005-10-16  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/sp-conn-end.cpp: Don't update the repr for the curve while 
+	  manually rerouting connector endpoints.  This speeds up undo/redo
+	  and allows responsive rerouting with the xml editor window open.
+	  Fixes bug #1315489.
+
 	* po/ca.po: Fix unclosed <b> found in translations.
 	
 2005-10-15  Michael Wybrow  <mjwybrow@users.sourceforge.net>
