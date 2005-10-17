@@ -645,6 +645,119 @@ main(int argc, char **argv)
     /// \todo  Should this be a static object (see inkscape.cpp)?
     Inkscape::NSApplication::Application app(argc, argv, use_gui, sp_new_gui);
 
+#ifdef WIN32
+    {
+#ifdef NONONONO
+        MessageBoxA( NULL, "GetCommandLineW() getting called", "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+
+        wchar_t* line = GetCommandLineW();
+        if ( line )
+        {
+            gchar* blerb = g_utf16_to_utf8( (gunichar2*)line,
+                                            -1,
+                                            NULL,
+                                            NULL,
+                                            NULL );
+            if ( blerb )
+            {
+                gchar *safe = Inkscape::IO::sanitizeString(blerb);
+                {
+                    char tmp[1024];
+                    snprintf( tmp, sizeof(tmp), "GetCommandLineW() = '%s'", safe );
+                    MessageBoxA( NULL, tmp, "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+                }
+            }
+            int numArgs = 0;
+            wchar_t** parsed = CommandLineToArgvW( line, &numArgs );
+            if ( parsed )
+            {
+                for ( int i = 0; i < numArgs; i++ )
+                {
+                    gchar* replacement = g_utf16_to_utf8( (gunichar2*)parsed[i],
+                                                          -1,
+                                                          NULL,
+                                                          NULL,
+                                                          NULL );
+                    if ( replacement )
+                    {
+                        gchar *safe2 = Inkscape::IO::sanitizeString(replacement);
+
+                        if ( safe2 )
+                        {
+                            {
+                                char tmp[1024];
+                                snprintf( tmp, sizeof(tmp), "    [%2d] = '%s'", i, safe2 );
+                                MessageBoxA( NULL, tmp, "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+                            }
+/*
+                            GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
+                                                                   "     [%2d] = '%s'", i, safe2 );
+                            gtk_dialog_run( GTK_DIALOG(w) );
+                            gtk_widget_destroy(w);
+*/
+
+                            g_free( safe2 );
+                        }
+                        g_free( replacement );
+                    }
+                }
+            }
+            else
+            {
+                MessageBoxA( NULL, "Unable to process command-line", "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
+/*
+                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
+                                                       "Unable to fetch result from CommandLineToArgvW()" );
+                gtk_dialog_run( GTK_DIALOG(w) );
+                gtk_widget_destroy(w);
+*/
+            }
+        }
+        else
+        {
+            {
+                MessageBoxA( NULL,  "Unable to fetch result from GetCommandLineW()", "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+/*
+                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
+                                                       "Unable to fetch result from GetCommandLineW()" );
+                gtk_dialog_run( GTK_DIALOG(w) );
+                gtk_widget_destroy(w);
+*/
+            }
+
+            char* line2 = GetCommandLineA();
+            if ( line2 )
+            {
+                gchar *safe = Inkscape::IO::sanitizeString(line2);
+                {
+                    {
+                        char tmp[1024];
+                        snprintf( tmp, sizeof(tmp), "GetCommandLineA() = '%s'", safe );
+                        MessageBoxA( NULL, tmp, "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
+                    }
+/*
+                    GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
+                                                           "GetCommandLineA() = '%s'", safe );
+                    gtk_dialog_run( GTK_DIALOG(w) );
+                    gtk_widget_destroy(w);
+*/
+                }
+            }
+            else
+            {
+                MessageBoxA( NULL, "Unable to fetch result from GetCommandLineA()", "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
+/*
+                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
+                                                       "Unable to fetch result from GetCommandLineA()" );
+                gtk_dialog_run( GTK_DIALOG(w) );
+                gtk_widget_destroy(w);
+*/
+            }
+        }
+#endif // NONONONO
+    }
+#endif // WIN32
+
     return app.run();
 }
 
@@ -652,7 +765,7 @@ void fixupSingleFilename( gchar **orig, gchar **spare )
 {
     if ( orig && *orig && **orig ) {
         GError *error = NULL;
-        gchar *newFileName = Inkscape::IO::filename_to_utf8_fallback(*orig, -1, NULL, NULL, &error);
+        gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(*orig, -1, NULL, NULL, &error);
         if ( newFileName )
         {
             *orig = newFileName;
@@ -670,11 +783,33 @@ GSList *fixupFilenameEncoding( GSList* fl )
     while ( fl ) {
         gchar *fn = static_cast<gchar*>(fl->data);
         fl = g_slist_remove( fl, fl->data );
-        gchar *newFileName = Inkscape::IO::filename_to_utf8_fallback(fn, -1, NULL, NULL, NULL);
+        gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(fn, -1, NULL, NULL, NULL);
         if ( newFileName ) {
+
+            if ( 0 )
+            {
+                gchar *safeFn = Inkscape::IO::sanitizeString(fn);
+                gchar *safeNewFn = Inkscape::IO::sanitizeString(newFileName);
+                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
+                                                       "Note: Converted '%s' to '%s'", safeFn, safeNewFn );
+                gtk_dialog_run (GTK_DIALOG (w));
+                gtk_widget_destroy (w);
+                g_free(safeNewFn);
+                g_free(safeFn);
+            }
+
             g_free( fn );
             fn = newFileName;
             newFileName = 0;
+        }
+        else
+            if ( 0 )
+        {
+            gchar *safeFn = Inkscape::IO::sanitizeString(fn);
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "Error: Unable to convert '%s'", safeFn );
+            gtk_dialog_run (GTK_DIALOG (w));
+            gtk_widget_destroy (w);
+            g_free(safeFn);
         }
         newFl = g_slist_append( newFl, fn );
     }
@@ -691,7 +826,20 @@ int sp_common_main( int argc, char const **argv, GSList **flDest )
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
     gchar const *charset;
     g_get_charset(&charset);
+#ifdef WIN32
+#ifdef NONONONO
+    {
+        char tmp[1024];
+        snprintf( tmp, sizeof(tmp), "Encoding is '%s'", charset );
+        MessageBoxA( NULL, tmp, "g_get_charset", MB_OK | MB_ICONINFORMATION );
+    }
+
+//    checkEncoding();
+#endif // NONONONO
+#endif // WIN32
     bind_textdomain_codeset(GETTEXT_PACKAGE, charset);
+
+//    checkEncoding();
 
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));

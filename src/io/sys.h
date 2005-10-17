@@ -34,11 +34,11 @@ GDir *dir_open(gchar const *utf8name, guint flags, GError **error);
 
 gchar *dir_read_utf8name(GDir *dir);
 
-gchar* filename_to_utf8_fallback( const gchar *opsysstring,
-				  gssize len,
-				  gsize *bytes_read,
-				  gsize *bytes_written,
-				  GError **error );
+gchar* locale_to_utf8_fallback( const gchar *opsysstring,
+				gssize len,
+				gsize *bytes_read,
+				gsize *bytes_written,
+				GError **error );
 
 gchar* sanitizeString( gchar const * str );
 

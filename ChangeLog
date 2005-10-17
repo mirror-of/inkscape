@@ -1,3 +1,9 @@
+2005-09-16  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/main.cpp, src/io/sys.h, src/io/sys.cpp:
+	  Switched command-line name conversion from filename to locale.
+	  Fixes bug #1250124.
+
 2005-10-16  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/sp-conn-end.cpp: Don't update the repr for the curve while 

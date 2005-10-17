@@ -302,15 +302,15 @@ Inkscape::IO::dir_read_utf8name(GDir *dir)
 }
 
 
-gchar* Inkscape::IO::filename_to_utf8_fallback( const gchar *opsysstring,
-                                                gssize len,
-                                                gsize *bytes_read,
-                                                gsize *bytes_written,
-                                                GError **error )
+gchar* Inkscape::IO::locale_to_utf8_fallback( const gchar *opsysstring,
+                                              gssize len,
+                                              gsize *bytes_read,
+                                              gsize *bytes_written,
+                                              GError **error )
 {
     gchar *result = NULL;
     if ( opsysstring ) {
-        gchar *newFileName = g_filename_to_utf8( opsysstring, len, bytes_read, bytes_written, error );
+        gchar *newFileName = g_locale_to_utf8( opsysstring, len, bytes_read, bytes_written, error );
         if ( newFileName ) {
             if ( !g_utf8_validate(newFileName, -1, NULL) ) {
                 g_warning( "input filename did not yield UTF-8" );
