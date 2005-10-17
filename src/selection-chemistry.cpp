@@ -1285,6 +1285,9 @@ sp_selection_scale_absolute(Inkscape::Selection *selection,
         return;
 
     NR::Rect const bbox(selection->bounds());
+    if (bbox.isEmpty()) {
+        return; 
+    }
 
     NR::translate const p2o(-bbox.min());
 
@@ -1303,8 +1306,13 @@ void sp_selection_scale_relative(Inkscape::Selection *selection, NR::Point const
     if (selection->isEmpty())
         return;
 
-    // don't try to scale above 1 Mpx, it won't display properly and will crash sooner or later anyway
     NR::Rect const bbox(selection->bounds());
+
+    if (bbox.isEmpty()) {
+        return;
+    }
+
+    // FIXME: ARBITRARY LIMIT: don't try to scale above 1 Mpx, it won't display properly and will crash sooner or later anyway
     if ( bbox.extent(NR::X) * scale[NR::X] > 1e6  ||
          bbox.extent(NR::Y) * scale[NR::Y] > 1e6 )
     {
@@ -1907,9 +1915,13 @@ sp_selection_tile(bool apply)
         return;
     }
 
-    // calculate the transform to be applied to objects to move them to 0,0
     sp_document_ensure_up_to_date(document);
     NR::Rect r = selection->bounds();
+    if (r.isEmpty()) {
+        return;
+    }
+
+    // calculate the transform to be applied to objects to move them to 0,0
     NR::Point move_p = NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y)));
     move_p[NR::Y] = -move_p[NR::Y];
     NR::Matrix move = NR::Matrix (NR::translate (move_p));
@@ -2067,6 +2079,14 @@ sp_selection_create_bitmap_copy ()
         return;
     }
 
+    // Get the bounding box of the selection
+    NRRect bbox;
+    sp_document_ensure_up_to_date (document);
+    selection->bounds(&bbox);
+    if (NR_RECT_DFLS_TEST_EMPTY(&bbox)) {
+        return; // exceptional situation, so not bother with a translatable error message, just quit quietly
+    }
+
     // List of the items to show; all others will be hidden
     GSList *items = g_slist_copy ((GSList *) selection->itemList());
 
@@ -2089,11 +2109,6 @@ sp_selection_create_bitmap_copy ()
 
     //g_print ("%s\n", filepath);
 
-    // Get the bounding box of the selection
-    NRRect bbox;
-    sp_document_ensure_up_to_date (document);
-    selection->bounds(&bbox);
-
     // Remember parent and z-order of the topmost one
     gint pos = SP_OBJECT_REPR(g_slist_last(items)->data)->position();
     SPObject *parent_object = SP_OBJECT_PARENT(g_slist_last(items)->data);
@@ -2112,8 +2127,8 @@ sp_selection_create_bitmap_copy ()
     }
 
     // The width and height of the bitmap in pixels
-    int width = (int) floor ((bbox.x1 - bbox.x0) * res);
-    int height =(int) floor ((bbox.y1 - bbox.y0) * res);
+    unsigned width = (unsigned) floor ((bbox.x1 - bbox.x0) * res);
+    unsigned height =(unsigned) floor ((bbox.y1 - bbox.y0) * res);
 
     // Find out if we have to run a filter
     const gchar *run = NULL;
