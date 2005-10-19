@@ -547,6 +547,11 @@ struct poptOption options[] = {
     POPT_AUTOHELP POPT_TABLEEND
 };
 
+#ifdef NONONONO
+static bool needToRecodeParams = true;
+gchar* blankParam = "";
+#endif // NONONONO
+
 int
 main(int argc, char **argv)
 {
@@ -669,8 +674,149 @@ main(int argc, char **argv)
             }
             int numArgs = 0;
             wchar_t** parsed = CommandLineToArgvW( line, &numArgs );
+
+#ifdef NONONONO_ANSI
+// test code for trying things on Win95/98/ME
+            if ( !parsed )
+            {
+                MessageBoxA( NULL, "Unable to process command-line. Faking it", "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
+                int lineLen = wcslen(line) + 1;
+                wchar_t* lineDup = new wchar_t[lineLen];
+                wcsncpy( lineDup, line, lineLen );
+
+                int pos = 0;
+                bool inQuotes = false;
+                bool inWhitespace = true;
+                std::vector<int> places;
+                while ( lineDup[pos] )
+                {
+                    if ( inQuotes )
+                    {
+                        if ( lineDup[pos] == L'"' )
+                        {
+                            inQuotes = false;
+                        }
+                    }
+                    else if ( lineDup[pos] == L'"' )
+                    {
+                        inQuotes = true;
+                        inWhitespace = false;
+                        places.push_back(pos);
+                    }
+                    else if ( lineDup[pos] == L' ' || lineDup[pos] == L'\t' )
+                    {
+                        if ( !inWhitespace )
+                        {
+                            inWhitespace = true;
+                            lineDup[pos] = 0;
+                        }
+                    }
+                    else if ( inWhitespace && (lineDup[pos] != L' ' && lineDup[pos] != L'\t') )
+                    {
+                        inWhitespace = false;
+                        places.push_back(pos);
+                    }
+                    else
+                    {
+                        // consume
+                    }
+                    pos++;
+                }
+                char zzz[1024];
+                snprintf( zzz, sizeof(zzz), "Counted %d args", places.size() );
+                MessageBoxA( NULL, zzz, "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
+
+                wchar_t** block = new wchar_t*[places.size()];
+                int i = 0;
+                for ( std::vector<int>::iterator it = places.begin(); it != places.end(); it++ )
+                {
+                    block[i++] = &lineDup[*it];
+                }
+                parsed = block;
+                numArgs = places.size();
+            }
+#endif // NONONONO_ANSI
+
             if ( parsed )
             {
+                std::vector<wchar_t*>expandedArgs;
+                if ( numArgs > 0 )
+                {
+                    expandedArgs.push_back( parsed[0] );
+                }
+
+                for ( int i1 = 1; i1 < numArgs; i1++ )
+                {
+                    bool wildcarded = (wcschr(parsed[i1], L'?') != NULL) || (wcschr(parsed[i1], L'*') != NULL);
+                    wildcarded &= parsed[i1][0] != L'"';
+                    wildcarded &= parsed[i1][0] != L'-';
+                    if ( wildcarded )
+                    {
+#ifdef NONONONO_ANSI
+                        WIN32_FIND_DATAA data = {0};
+#else
+                        WIN32_FIND_DATAW data = {0};
+#endif // NONONONO_ANSI
+
+#ifdef NONONONO_ANSI
+                        char target[MAX_PATH];
+                        if ( WideCharToMultiByte( CP_ACP, 0, parsed[i1], -1, target, sizeof(target), NULL, NULL) )
+                        {
+                            HANDLE hf = FindFirstFileA( target, &data );
+#else
+                            HANDLE hf = FindFirstFileW( parsed[i1], &data );
+#endif // NONONONO_ANSI
+                            if ( hf != INVALID_HANDLE_VALUE )
+                            {
+                                BOOL found = TRUE;
+                                do
+                                {
+#ifdef NONONONO_ANSI
+                                    int howMany = MultiByteToWideChar( CP_ACP, 0, data.cFileName, -1, NULL, 0 );
+                                    if ( howMany > 0 )
+                                    {
+                                        wchar_t* tmp = new wchar_t[howMany + 1];
+                                        MultiByteToWideChar( CP_ACP, 0, data.cFileName, -1, tmp, howMany + 1 );
+                                        expandedArgs.push_back( tmp );
+                                        found = FindNextFileA( hf, &data );
+                                    }
+#else
+                                    int howMany = wcslen(data.cFileName);
+                                    wchar_t* tmp = new wchar_t[howMany + 1];
+                                    wcsncpy( tmp, data.cFileName, howMany + 1 );
+                                    expandedArgs.push_back( tmp );
+                                    found = FindNextFileW( hf, &data );
+#endif // NONONONO_ANSI
+                                } while ( found );
+
+                                FindClose( hf );
+                            }
+                            else
+                            {
+                                expandedArgs.push_back( parsed[i1] );
+                            }
+#ifdef NONONONO_ANSI
+                        }
+#endif // NONONONO_ANSI
+                    }
+                    else
+                    {
+                        expandedArgs.push_back( parsed[i1] );
+                    }
+                }
+
+                {
+                    wchar_t** block = new wchar_t*[expandedArgs.size()];
+                    int iz = 0;
+                    for ( std::vector<wchar_t*>::iterator it = expandedArgs.begin(); it != expandedArgs.end(); it++ )
+                    {
+                        block[iz++] = *it;
+                    }
+                    parsed = block;
+                    numArgs = expandedArgs.size();
+                }
+
+                std::vector<gchar*> newArgs;
                 for ( int i = 0; i < numArgs; i++ )
                 {
                     gchar* replacement = g_utf16_to_utf8( (gunichar2*)parsed[i],
@@ -698,8 +844,25 @@ main(int argc, char **argv)
 
                             g_free( safe2 );
                         }
-                        g_free( replacement );
+                        newArgs.push_back( replacement );
                     }
+                    else
+                    {
+                        newArgs.push_back( blankParam );
+                    }
+                }
+
+                // Now push our munged params to be the new argv and argc
+                {
+                    char** block = new char*[newArgs.size()];
+                    int iz = 0;
+                    for ( std::vector<char*>::iterator it = newArgs.begin(); it != newArgs.end(); it++ )
+                    {
+                        block[iz++] = *it;
+                    }
+                    argv = block;
+                    argc = newArgs.size();
+                    needToRecodeParams = false;
                 }
             }
             else
@@ -853,12 +1016,33 @@ int sp_common_main( int argc, char const **argv, GSList **flDest )
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 
     // Now let's see if the file list still holds up
-    fl = fixupFilenameEncoding( fl );
+#ifdef NONONONO
+    if ( needToRecodeParams )
+#endif // NONONONO
+    {
+        fl = fixupFilenameEncoding( fl );
+    }
 
     // Check the globals for filename-fixup
-    fixupSingleFilename( &sp_export_png, &sp_export_png_utf8 );
-    fixupSingleFilename( &sp_export_svg, &sp_export_svg_utf8 );
-    fixupSingleFilename( &sp_global_printer, &sp_global_printer_utf8 );
+#ifdef NONONONO
+    if ( needToRecodeParams )
+    {
+#endif // NONONONO
+        fixupSingleFilename( &sp_export_png, &sp_export_png_utf8 );
+        fixupSingleFilename( &sp_export_svg, &sp_export_svg_utf8 );
+        fixupSingleFilename( &sp_global_printer, &sp_global_printer_utf8 );
+#ifdef NONONONO
+    }
+    else
+    {
+        if ( sp_export_png )
+            sp_export_png_utf8 = g_strdup( sp_export_png );
+        if ( sp_export_svg )
+            sp_export_svg_utf8 = g_strdup( sp_export_svg );
+        if ( sp_global_printer )
+            sp_global_printer_utf8 = g_strdup( sp_global_printer );
+    }
+#endif // NONONONO
 
     // Return the list if wanted, else free it up.
     if ( flDest ) {
