@@ -24,19 +24,6 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-EpsOutput::EpsOutput (void)
-{
-    dialog = NULL;
-    return;
-}
-
-EpsOutput::~EpsOutput (void)
-{
-    if (dialog != NULL)
-        gtk_widget_destroy(GTK_WIDGET(dialog));
-    return;
-}
-
 bool
 EpsOutput::check (Inkscape::Extension::Extension * module)
 {
@@ -44,26 +31,6 @@ EpsOutput::check (Inkscape::Extension::Extension * module)
         return FALSE;
 
     return TRUE;
-}
-
-void
-EpsOutput::pageBoxToggle (GtkWidget * widget, Inkscape::Extension::Output * omod)
-{
-    omod->set_param_bool("pageBoundingBox", (bool)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-    return;
-}
-
-void
-EpsOutput::textToPathToggle (GtkWidget * widget, Inkscape::Extension::Output * omod)
-{
-    omod->set_param_bool("textToPath",
-               (bool) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-}
-
-Gtk::Widget *
-EpsOutput::prefs_output (Inkscape::Extension::Output * module)
-{
-    return module->autogui();
 }
 
 /**

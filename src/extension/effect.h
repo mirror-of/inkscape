@@ -64,6 +64,12 @@ public:
 
     static Effect *  get_last_effect (void) { return _last_effect; };
     static void      set_last_effect (Effect * in_effect);
+
+    static void      place_menus (void);
+    void             place_menu (Inkscape::XML::Node * menus);
+
+private:
+    static gchar *   remove_ (gchar * instr);
 };
 
 } }  /* namespace Inkscape, Extension */

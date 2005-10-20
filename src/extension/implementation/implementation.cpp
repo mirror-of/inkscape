@@ -17,6 +17,10 @@
 #include "implementation.h"
 #include "libnr/nr-point.h"
 
+#include <extension/output.h>
+#include <extension/input.h>
+#include <extension/effect.h>
+
 namespace Inkscape {
 namespace Extension {
 namespace Implementation {
@@ -44,7 +48,7 @@ Implementation::check (Inkscape::Extension::Extension * module) {
 
 Gtk::Widget *
 Implementation::prefs_input (Inkscape::Extension::Input * module, const gchar * filename) {
-	return NULL;
+	return module->autogui();
 } /* Implementation::prefs_input */
 
 SPDocument *
@@ -55,7 +59,7 @@ Implementation::open (Inkscape::Extension::Input * module, const gchar * filenam
 
 Gtk::Widget *
 Implementation::prefs_output (Inkscape::Extension::Output * module) {
-	return NULL;
+	return module->autogui();
 } /* Implementation::prefs_output */
 
 void
@@ -66,7 +70,7 @@ Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, co
 
 Gtk::Widget *
 Implementation::prefs_effect (Inkscape::Extension::Effect * module, Inkscape::UI::View::View * view) {
-	return (Gdk::NativeWindow)0;
+	return module->autogui();
 } /* Implementation::prefs_effect */
 
 void

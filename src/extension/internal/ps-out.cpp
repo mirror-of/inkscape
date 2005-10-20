@@ -17,6 +17,7 @@
 #include <print.h>
 #include "extension/system.h"
 #include "extension/db.h"
+#include "extension/output.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -44,10 +45,23 @@ PsOutput::check (Inkscape::Extension::Extension * module)
 void
 PsOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 {
+    Inkscape::Extension::Extension * ext;
+
+    ext = Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_PS);
+    if (ext == NULL)
+        return;
+
+    bool old_textToPath  = ext->get_param_bool("textToPath");
+    bool new_val         = mod->get_param_bool("textToPath");
+    ext->set_param_bool("textToPath", new_val);
+
 	gchar * final_name;
 	final_name = g_strdup_printf("> %s", uri);
 	sp_print_document_to_file(doc, final_name);
 	g_free(final_name);
+
+    ext->set_param_bool("textToPath", old_textToPath);
+
 	return;
 }
 
@@ -65,6 +79,7 @@ PsOutput::init (void)
 		"<inkscape-extension>\n"
 			"<name>Postscript Output</name>\n"
 			"<id>org.inkscape.output.ps</id>\n"
+			"<param name=\"textToPath\" gui-text=\"Text to Path\" type=\"boolean\">true</param>\n"
 			"<output>\n"
 				"<extension>.ps</extension>\n"
 				"<mimetype>image/x-postscript</mimetype>\n"
