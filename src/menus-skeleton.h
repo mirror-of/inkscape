@@ -194,7 +194,7 @@ static char const menus_skeleton[] =
 "       <effects-list/>\n"
 "   </submenu>\n"
 #ifdef WITH_INKBOARD
-"	<submenu name=\"" N_("Whiteboard") "\">\n"
+"	<submenu name=\"" N_("Whiteboa_rd") "\">\n"
 "		<verb verb-id=\"DialogWhiteboardConnect\" />\n"
 "		<verb verb-id=\"DialogWhiteboardDisconnectSession\" />\n"
 "		<verb verb-id=\"DialogWhiteboardDisconnectServer\" />\n"
