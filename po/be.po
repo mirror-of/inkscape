@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: be\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-16 22:07+0200\n"
+"POT-Creation-Date: 2005-10-20 22:53+0200\n"
 "PO-Revision-Date: 2003-07-20 16:00+0300\n"
 "Last-Translator: Vital Khilko <dojlid@mova.org>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -145,12 +145,12 @@ msgstr "Выразае вылучаныя аб'екты ў буфэр абмен
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Выразае вылучаныя аб'екты ў буфэр абмену"
 
-#: ../src/dialogs/clonetiler.cpp:923 ../src/selection-chemistry.cpp:1765
+#: ../src/dialogs/clonetiler.cpp:923 ../src/selection-chemistry.cpp:1773
 #, fuzzy
 msgid "Select an <b>object</b> to clone."
 msgstr "Выразае вылучаныя аб'екты ў буфэр абмену"
 
-#: ../src/dialogs/clonetiler.cpp:929 ../src/selection-chemistry.cpp:1771
+#: ../src/dialogs/clonetiler.cpp:929 ../src/selection-chemistry.cpp:1779
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -4127,7 +4127,7 @@ msgstr ""
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr ""
 
-#: ../src/main.cpp:697
+#: ../src/main.cpp:1008
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4185,7 +4185,7 @@ msgid "Effects"
 msgstr "Аб'ект"
 
 #: ../src/menus-skeleton.h:197
-msgid "Whiteboard"
+msgid "Whiteboa_rd"
 msgstr ""
 
 #: ../src/menus-skeleton.h:210
@@ -4735,50 +4735,50 @@ msgstr "Выразае вылучаныя аб'екты ў буфэр абмен
 msgid "No more layers below."
 msgstr "Назва дакумэнта:"
 
-#: ../src/selection-chemistry.cpp:1802
+#: ../src/selection-chemistry.cpp:1810
 #, fuzzy
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Выбярыце файл для адкрыцьця"
 
-#: ../src/selection-chemistry.cpp:1833
+#: ../src/selection-chemistry.cpp:1841
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1850
+#: ../src/selection-chemistry.cpp:1858
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path. Select "
 "a <b>flowed text</b> to go to its frame."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1873
+#: ../src/selection-chemistry.cpp:1881
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
 "flowed text?)"
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1879
+#: ../src/selection-chemistry.cpp:1887
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1906
+#: ../src/selection-chemistry.cpp:1914
 #, fuzzy
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Выразае вылучаныя аб'екты ў буфэр абмену"
 
-#: ../src/selection-chemistry.cpp:1993
+#: ../src/selection-chemistry.cpp:2005
 #, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr "Выразае вылучаныя аб'екты ў буфэр абмену"
 
-#: ../src/selection-chemistry.cpp:2046
+#: ../src/selection-chemistry.cpp:2058
 #, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "Выразае вылучаныя аб'екты ў буфэр абмену"
 
-#: ../src/selection-chemistry.cpp:2066
+#: ../src/selection-chemistry.cpp:2078
 #, fuzzy
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Апускае вылучаныя аб'екты на ніжні слой"

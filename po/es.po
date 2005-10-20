@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-16 22:07+0200\n"
+"POT-Creation-Date: 2005-10-20 22:53+0200\n"
 "PO-Revision-Date: 2005-09-26 09:29+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
@@ -157,11 +157,11 @@ msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr ""
 "Seleccione <b>el objeto</b> del que desea eliminar las teselas clonadas."
 
-#: ../src/dialogs/clonetiler.cpp:923 ../src/selection-chemistry.cpp:1765
+#: ../src/dialogs/clonetiler.cpp:923 ../src/selection-chemistry.cpp:1773
 msgid "Select an <b>object</b> to clone."
 msgstr "Seleccione el <b>objeto</b> que desea clonar."
 
-#: ../src/dialogs/clonetiler.cpp:929 ../src/selection-chemistry.cpp:1771
+#: ../src/dialogs/clonetiler.cpp:929 ../src/selection-chemistry.cpp:1779
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -4203,7 +4203,7 @@ msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr ""
 "Eliminar definiciones no utilizadas de la(s) sección(es) «defs» del documento"
 
-#: ../src/main.cpp:697
+#: ../src/main.cpp:1008
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4263,7 +4263,7 @@ msgid "Effects"
 msgstr "Desvíos"
 
 #: ../src/menus-skeleton.h:197
-msgid "Whiteboard"
+msgid "Whiteboa_rd"
 msgstr ""
 
 #: ../src/menus-skeleton.h:210
@@ -4845,15 +4845,15 @@ msgstr "Seleccione los <b>objetos</b> que desea mover a la capa inferior."
 msgid "No more layers below."
 msgstr "No hay capas inferiores."
 
-#: ../src/selection-chemistry.cpp:1802
+#: ../src/selection-chemistry.cpp:1810
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Seleccione el <b>clon</b> que desea desconectar."
 
-#: ../src/selection-chemistry.cpp:1833
+#: ../src/selection-chemistry.cpp:1841
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "<b>No hay clones desconectables</b> en la selección."
 
-#: ../src/selection-chemistry.cpp:1850
+#: ../src/selection-chemistry.cpp:1858
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path. Select "
@@ -4863,7 +4863,7 @@ msgstr ""
 "enlazado</b> para ir a su origen. Seleccione un <b>texto en trayecto</b> "
 "para ir al trayecto. Seleccione un <b>texto fluido</b> para ir a su marco."
 
-#: ../src/selection-chemistry.cpp:1873
+#: ../src/selection-chemistry.cpp:1881
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
 "flowed text?)"
@@ -4871,27 +4871,27 @@ msgstr ""
 "<b>No se pudo encontrar</b> el objeto que quiere seleccionar (¿clon "
 "huérfano, desvío, trayecto de un texto o texto fluido?)"
 
-#: ../src/selection-chemistry.cpp:1879
+#: ../src/selection-chemistry.cpp:1887
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
 "El objeto que desea seleccionar <b>no es visible</b> (está en &lt;defs&gt;)"
 
-#: ../src/selection-chemistry.cpp:1906
+#: ../src/selection-chemistry.cpp:1914
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Seleccione los <b>objetos</b> que desea convertir en patrón."
 
-#: ../src/selection-chemistry.cpp:1993
+#: ../src/selection-chemistry.cpp:2005
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr ""
 "Seleccione un <b>objeto con relleno de mosaico</b> del que extraer objetos."
 
-#: ../src/selection-chemistry.cpp:2046
+#: ../src/selection-chemistry.cpp:2058
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "No hay <b>rellenos de mosaico</b> en la selección."
 
-#: ../src/selection-chemistry.cpp:2066
+#: ../src/selection-chemistry.cpp:2078
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr ""
 "Seleccione los <b>objetos</b> de los que desea hacer una copia en mapa de "
