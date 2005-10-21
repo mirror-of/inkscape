@@ -647,9 +647,6 @@ main(int argc, char **argv)
         }
     }
 
-    /// \todo  Should this be a static object (see inkscape.cpp)?
-    Inkscape::NSApplication::Application app(argc, argv, use_gui, sp_new_gui);
-
 #ifdef WIN32
     {
 #ifdef NONONONO
@@ -835,13 +832,6 @@ main(int argc, char **argv)
                                 snprintf( tmp, sizeof(tmp), "    [%2d] = '%s'", i, safe2 );
                                 MessageBoxA( NULL, tmp, "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
                             }
-/*
-                            GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-                                                                   "     [%2d] = '%s'", i, safe2 );
-                            gtk_dialog_run( GTK_DIALOG(w) );
-                            gtk_widget_destroy(w);
-*/
-
                             g_free( safe2 );
                         }
                         newArgs.push_back( replacement );
@@ -868,24 +858,12 @@ main(int argc, char **argv)
             else
             {
                 MessageBoxA( NULL, "Unable to process command-line", "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
-/*
-                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-                                                       "Unable to fetch result from CommandLineToArgvW()" );
-                gtk_dialog_run( GTK_DIALOG(w) );
-                gtk_widget_destroy(w);
-*/
             }
         }
         else
         {
             {
                 MessageBoxA( NULL,  "Unable to fetch result from GetCommandLineW()", "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
-/*
-                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-                                                       "Unable to fetch result from GetCommandLineW()" );
-                gtk_dialog_run( GTK_DIALOG(w) );
-                gtk_widget_destroy(w);
-*/
             }
 
             char* line2 = GetCommandLineA();
@@ -898,28 +876,19 @@ main(int argc, char **argv)
                         snprintf( tmp, sizeof(tmp), "GetCommandLineA() = '%s'", safe );
                         MessageBoxA( NULL, tmp, "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
                     }
-/*
-                    GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-                                                           "GetCommandLineA() = '%s'", safe );
-                    gtk_dialog_run( GTK_DIALOG(w) );
-                    gtk_widget_destroy(w);
-*/
                 }
             }
             else
             {
                 MessageBoxA( NULL, "Unable to fetch result from GetCommandLineA()", "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
-/*
-                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-                                                       "Unable to fetch result from GetCommandLineA()" );
-                gtk_dialog_run( GTK_DIALOG(w) );
-                gtk_widget_destroy(w);
-*/
             }
         }
 #endif // NONONONO
     }
 #endif // WIN32
+
+    /// \todo  Should this be a static object (see inkscape.cpp)?
+    Inkscape::NSApplication::Application app(argc, argv, use_gui, sp_new_gui);
 
     return app.run();
 }
