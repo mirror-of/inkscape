@@ -546,11 +546,7 @@ connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const
                 if (cc->npoints != 0) {
                     spcc_connector_finish(cc);
                 }
-                SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
-                SPDocument *doc = SP_DT_DOCUMENT(desktop);
-                sp_document_done(doc);
                 cc_set_active_conn(cc, cc->newconn);
-                sp_document_ensure_up_to_date(doc);
                 cc->state = SP_CONNECTOR_CONTEXT_IDLE;
                 ret = TRUE;
                 break;
@@ -910,7 +906,7 @@ spcc_flush_white(SPConnectorContext *cc, SPCurve *gc)
             // Adjust endpoints to shape edge.
             sp_conn_adjust_path(SP_PATH(cc->newconn));
         }
-        sp_document_done(doc);
+        cc->newconn->updateRepr();
     }
 
     sp_curve_unref(c);
