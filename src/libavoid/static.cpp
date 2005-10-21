@@ -69,10 +69,7 @@ void DestroyVisGraph(void)
         ConnRef *conn = (*cCurr);
 
         conn->removeFromGraph();
-        vertices.removeVertex(conn->src());
-        vertices.removeVertex(conn->dst());
-        conn->makeInactive();
-        //delete conn;
+        conn->unInitialise();
     }
 
     assert(vertices.connsBegin() == NULL);

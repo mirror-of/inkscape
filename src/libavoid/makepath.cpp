@@ -352,14 +352,10 @@ static void aStarPath(VertInf *src, VertInf *tar)
                         // If on DONE, Which has lower gone?
                         if (Node.g < DONE.at(i).g)
                         {
-                            printf("aStar: Strange case occurred. "
-                                    "Will we crash now?\n");
-                            //abort();
                             DONE.at(i).g = Node.g;
-                            DONE.at(i).f = Node.g + PENDING.at(i).h;
+                            DONE.at(i).f = Node.g + DONE.at(i).h;
                             DONE.at(i).pp = Node.pp;
                             DONE.at(i).inf->pathNext = Node.pp;
-                            //DONE.at(i).info->pathnext = Node.info->pathnext;
                         }
                         bNodeFound = true;
                         break;

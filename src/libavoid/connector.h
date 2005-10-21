@@ -57,6 +57,7 @@ class ConnRef
         VertInf *dst(void);
         void removeFromGraph(void);
         bool isInitialised(void);
+        void unInitialise(void);
         void setCallback(void (*cb)(void *), void *ptr);
         void ConnRef::handleInvalid(void);
         int generatePath(Point p0, Point p1);

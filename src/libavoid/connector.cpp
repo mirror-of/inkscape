@@ -35,8 +35,8 @@ ConnRefList connRefs;
 
 ConnRef::ConnRef(const uint id)
     : _id(id)
-    , _needs_reroute_flag(false)
-    , _false_path(true)
+    , _needs_reroute_flag(true)
+    , _false_path(false)
     , _active(false)
     , _route_dist(0)
     , _srcVert(NULL)
@@ -53,8 +53,8 @@ ConnRef::ConnRef(const uint id)
 
 ConnRef::ConnRef(const uint id, const Point& src, const Point& dst)
     : _id(id)
-    , _needs_reroute_flag(false)
-    , _false_path(true)
+    , _needs_reroute_flag(true)
+    , _false_path(false)
     , _active(false)
     , _route_dist(0)
     , _srcVert(NULL)
@@ -242,7 +242,16 @@ bool ConnRef::isInitialised(void)
     return _initialised;
 }
 
-    
+
+void ConnRef::unInitialise(void)
+{
+    vertices.removeVertex(_srcVert);
+    vertices.removeVertex(_dstVert);
+    makeInactive();
+    _initialised = false;
+}
+
+
 void ConnRef::removeFromGraph(void)
 {
     for (VertInf *iter = _srcVert; iter != NULL; )
