@@ -126,49 +126,8 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
     Glib::ustring how( mode );
     how.append("b");
     DEBUG_MESSAGE( dumpOne, "   calling is_os_wide()       ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-    if ( PrintWin32::is_os_wide() )
-    {
-        DEBUG_MESSAGE( dumpOne, "           is_os_wide() true   ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
-        DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        if ( wideName )
-        {
-            DEBUG_MESSAGE( dumpOne, "           STEP 2              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-            gunichar2 *wideMode = g_utf8_to_utf16( how.c_str(), -1, NULL, NULL, NULL );
-            DEBUG_MESSAGE( dumpOne, "           STEP 3              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-            if ( wideMode )
-            {
-                DEBUG_MESSAGE( dumpOne, "           STEP 4              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-                fp = _wfopen( (wchar_t*)wideName, (wchar_t*)wideMode );
-                DEBUG_MESSAGE( dumpOne, "           STEP 5              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-                g_free( wideMode );
-                DEBUG_MESSAGE( dumpOne, "           STEP 6              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-                wideMode = 0;
-            }
-            else
-            {
-                DEBUG_MESSAGE( dumpOne, "           STEP 7              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-                g_message("Unable to convert mode from UTF-8 to UTF-16");
-            }
-            DEBUG_MESSAGE( dumpOne, "           STEP 8              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-            g_free( wideName );
-            DEBUG_MESSAGE( dumpOne, "           STEP 9              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-            wideName = 0;
-        }
-        else
-        {
-            DEBUG_MESSAGE( dumpOne, "           STEP A              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-            gchar *safe = Inkscape::IO::sanitizeString(utf8name);
-            g_message("Unable to convert filename from UTF-8 to UTF-16 [%s]", safe);
-            g_free(safe);
-        }
-    }
-    else
-    {
-        DEBUG_MESSAGE( dumpOne, "           is_os_wide() false  ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        fp = g_fopen(utf8name, how.c_str());
-        DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-    }
+
+    fp = g_fopen(utf8name, how.c_str());
 #endif
 
     DEBUG_MESSAGE( dumpOne, "leaving fopen_utf8name( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
@@ -198,39 +157,9 @@ int Inkscape::IO::mkdir_utf8name( char const *utf8name )
     }
 #else
     DEBUG_MESSAGE( dumpMk, "   calling is_os_wide()       ( '%s' )[%d]", utf8name, (counter++) );
-    if ( PrintWin32::is_os_wide() )
-    {
-        DEBUG_MESSAGE( dumpMk, "           is_os_wide() true   ( '%s' )[%d]", utf8name, (counter++) );
-        gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
-        DEBUG_MESSAGE( dumpMk, "           STEP 1              ( '%s' )[%d]", utf8name, (counter++) );
-        if ( wideName )
-        {
-            DEBUG_MESSAGE( dumpMk, "           STEP 2              ( '%s' )[%d]", utf8name, (counter++) );
-            retval = _wmkdir( (wchar_t*)wideName );
-            DEBUG_MESSAGE( dumpMk, "           STEP 3              ( '%s' )[%d]", utf8name, (counter++) );
-            g_free( wideName );
-            DEBUG_MESSAGE( dumpMk, "           STEP 4              ( '%s' )[%d]", utf8name, (counter++) );
-            wideName = 0;
-        }
-        else
-        {
-            DEBUG_MESSAGE( dumpMk, "           STEP 5              ( '%s' )[%d]", utf8name, (counter++) );
-            gchar *safe = Inkscape::IO::sanitizeString(utf8name);
-            g_message("Unable to convert directory name from UTF-8 to UTF-16 [%s]", safe);
-            g_free(safe);
-        }
-    }
-    else
-    {
-        DEBUG_MESSAGE( dumpMk, "           is_os_wide() false  ( '%s' )[%d]", utf8name, (counter++) );
-        gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
-        DEBUG_MESSAGE( dumpMk, "           STEP 1              ( '%s' )[%d]", utf8name, (counter++) );
-        retval = ::mkdir(filename);
-        DEBUG_MESSAGE( dumpMk, "           STEP 2              ( '%s' )[%d]", utf8name, (counter++) );
-        g_free(filename);
-        DEBUG_MESSAGE( dumpMk, "           STEP 3              ( '%s' )[%d]", utf8name, (counter++) );
-        filename = 0;
-    }
+
+    // Mode should be ingnored inside of glib on the way in
+    retval = g_mkdir( utf8name, 0 );
 #endif
 
     DEBUG_MESSAGE( dumpMk, "leaving mkdir_utf8name( '%s' )[%d]", utf8name, (counter++) );
