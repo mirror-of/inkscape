@@ -1,5 +1,10 @@
 2005-10-22  Jon A. Cruz  <jon@joncruz.org>
 
+	* Makefile.mingw, src/io/sys.cpp:
+	  Patch 1334818.
+
+2005-10-22  Jon A. Cruz  <jon@joncruz.org>
+
 	* src/main.cpp, src/io/sys.cpp:
 	  Updating Win32 parameter filename handling.
 

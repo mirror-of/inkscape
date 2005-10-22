@@ -493,6 +493,7 @@ Section $(lng_Core) SecCore
   File /a "..\..\inkscape\ink*.exe"
   File /a "..\..\inkscape\AUTHORS"
   File /a "..\..\inkscape\COPYING"
+  File /a "..\..\inkscape\COPYING.LIB"
   File /a "..\..\inkscape\NEWS"
   File /a "..\..\inkscape\HACKING.txt"
   File /a "..\..\inkscape\README"

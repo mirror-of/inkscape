@@ -22,6 +22,7 @@ dist-strip: dist
 	-$(RMDIR) inkscape$(S)lib$(S)glib-2.0$(S)include
 	-$(RMDIR) inkscape$(S)lib$(S)gtk-2.0$(S)include
 	strip inkscape$(S)inkscape.exe
+	strip inkscape$(S)inkview.exe
 	strip inkscape$(S)libatkmm-1.6-1.dll
 	strip inkscape$(S)libglibmm-2.4-1.dll
 	strip inkscape$(S)libgdkmm-2.4-1.dll
@@ -61,6 +62,14 @@ dist:
 	-$(RMDIR) inkscape
 	$(MKDIR) inkscape
 	$(CP) src$(S)inkscape.exe inkscape
+	$(CP) src$(S)inkview.exe inkscape
+	$(CP) AUTHORS inkscape
+	$(CP) COPYING inkscape
+	$(CP) COPYING.LIB inkscape
+	$(CP) NEWS inkscape
+	$(CP) HACKING.* inkscape
+	$(CP) README.* inkscape
+	$(CP) TRANSLATORS inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libatkmm-1.6-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libglibmm-2.4-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdkmm-2.4-1.dll inkscape
