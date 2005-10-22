@@ -1105,7 +1105,7 @@ static void cc_set_active_shape(SPConnectorContext *cc, SPItem *item)
                      "shape", SP_KNOT_SHAPE_SQUARE,
                      "size", 8,
                      "anchor", GTK_ANCHOR_CENTER,
-                     "tip", _("<b>Connnection point</b>: click or drag to create a new connector"),
+                     "tip", _("<b>Connection point</b>: click or drag to create a new connector"),
                      NULL);
         
         cc->connpthandle = knot;
@@ -1182,7 +1182,7 @@ cc_set_active_conn(SPConnectorContext *cc, SPItem *item)
             g_object_set(G_OBJECT(knot),
                     "shape", SP_KNOT_SHAPE_DIAMOND,
                     "size", 10,
-                    "tip", _("<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"),
+                    "tip", _("<b>Connector endpoint</b>: drag to reroute or connect to new shapes"),
                     NULL);
 
             gtk_signal_connect (GTK_OBJECT (knot->item), "event",
