@@ -1,3 +1,8 @@
+2005-10-22  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/main.cpp, src/io/sys.cpp:
+	  Updating Win32 parameter filename handling.
+
 2005-10-22  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/connector-context.cpp: Correct two typos.  Fixes bug #1333915.
@@ -16,7 +21,7 @@
 
 	* 0.43pre0
 
-2005-09-16  Jon A. Cruz  <jon@joncruz.org>
+2005-10-19  Jon A. Cruz  <jon@joncruz.org>
 
 	* inkscape32-16.ico: patch 1323419
 
@@ -25,7 +30,7 @@
 	* src/conn-avoid-ref.cpp: Don't pass avoided objects to libavoid
 	  if they have the 'cloned' flag set.  Fixes bug #1328401.
 
-2005-09-16  Jon A. Cruz  <jon@joncruz.org>
+2005-10-17  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/main.cpp, src/io/sys.h, src/io/sys.cpp:
 	  Switched command-line name conversion from filename to locale.
@@ -48,7 +53,7 @@
 	  src/tools-switch.cpp: Allow double-clicking on connectors
 	  in the selector tool to swap to the connector tool.
 
-2005-09-12  Jon A. Cruz  <jon@joncruz.org>
+2005-10-14  Jon A. Cruz  <jon@joncruz.org>
 
 	* share/palettes/Makefile.am, share/palettes/Tango-Palette.gpl:
 	  Adding the Tango palette.

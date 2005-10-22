@@ -292,8 +292,14 @@
 #include <extension/output.h>
 
 #ifdef WIN32
+//#define REPLACEARGS_ANSI
+//#define REPLACEARGS_DEBUG
+
 #include "extension/internal/win32.h"
-#endif
+using Inkscape::Extension::Internal::PrintWin32;
+
+#endif // WIN32
+
 #include "extension/init.h"
 
 #include <glibmm/i18n.h>
@@ -379,7 +385,9 @@ static gchar *sp_export_png_utf8 = NULL;
 static gchar *sp_export_svg_utf8 = NULL;
 static gchar *sp_global_printer_utf8 = NULL;
 
-
+#ifdef WIN32
+static bool replaceArgs( int& argc, char**& argv );
+#endif
 static GSList *sp_process_args(poptContext ctx);
 struct poptOption options[] = {
     {"version", 'V', 
@@ -547,10 +555,8 @@ struct poptOption options[] = {
     POPT_AUTOHELP POPT_TABLEEND
 };
 
-#ifdef NONONONO
 static bool needToRecodeParams = true;
 gchar* blankParam = "";
-#endif // NONONONO
 
 int
 main(int argc, char **argv)
@@ -648,242 +654,12 @@ main(int argc, char **argv)
     }
 
 #ifdef WIN32
+#ifndef REPLACEARGS_ANSI
+    if ( PrintWin32::is_os_wide() )
+#endif // REPLACEARGS_ANSI
     {
-#ifdef NONONONO
-        MessageBoxA( NULL, "GetCommandLineW() getting called", "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
-
-        wchar_t* line = GetCommandLineW();
-        if ( line )
-        {
-            gchar* blerb = g_utf16_to_utf8( (gunichar2*)line,
-                                            -1,
-                                            NULL,
-                                            NULL,
-                                            NULL );
-            if ( blerb )
-            {
-                gchar *safe = Inkscape::IO::sanitizeString(blerb);
-                {
-                    char tmp[1024];
-                    snprintf( tmp, sizeof(tmp), "GetCommandLineW() = '%s'", safe );
-                    MessageBoxA( NULL, tmp, "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
-                }
-            }
-            int numArgs = 0;
-            wchar_t** parsed = CommandLineToArgvW( line, &numArgs );
-
-#ifdef NONONONO_ANSI
-// test code for trying things on Win95/98/ME
-            if ( !parsed )
-            {
-                MessageBoxA( NULL, "Unable to process command-line. Faking it", "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
-                int lineLen = wcslen(line) + 1;
-                wchar_t* lineDup = new wchar_t[lineLen];
-                wcsncpy( lineDup, line, lineLen );
-
-                int pos = 0;
-                bool inQuotes = false;
-                bool inWhitespace = true;
-                std::vector<int> places;
-                while ( lineDup[pos] )
-                {
-                    if ( inQuotes )
-                    {
-                        if ( lineDup[pos] == L'"' )
-                        {
-                            inQuotes = false;
-                        }
-                    }
-                    else if ( lineDup[pos] == L'"' )
-                    {
-                        inQuotes = true;
-                        inWhitespace = false;
-                        places.push_back(pos);
-                    }
-                    else if ( lineDup[pos] == L' ' || lineDup[pos] == L'\t' )
-                    {
-                        if ( !inWhitespace )
-                        {
-                            inWhitespace = true;
-                            lineDup[pos] = 0;
-                        }
-                    }
-                    else if ( inWhitespace && (lineDup[pos] != L' ' && lineDup[pos] != L'\t') )
-                    {
-                        inWhitespace = false;
-                        places.push_back(pos);
-                    }
-                    else
-                    {
-                        // consume
-                    }
-                    pos++;
-                }
-                char zzz[1024];
-                snprintf( zzz, sizeof(zzz), "Counted %d args", places.size() );
-                MessageBoxA( NULL, zzz, "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
-
-                wchar_t** block = new wchar_t*[places.size()];
-                int i = 0;
-                for ( std::vector<int>::iterator it = places.begin(); it != places.end(); it++ )
-                {
-                    block[i++] = &lineDup[*it];
-                }
-                parsed = block;
-                numArgs = places.size();
-            }
-#endif // NONONONO_ANSI
-
-            if ( parsed )
-            {
-                std::vector<wchar_t*>expandedArgs;
-                if ( numArgs > 0 )
-                {
-                    expandedArgs.push_back( parsed[0] );
-                }
-
-                for ( int i1 = 1; i1 < numArgs; i1++ )
-                {
-                    bool wildcarded = (wcschr(parsed[i1], L'?') != NULL) || (wcschr(parsed[i1], L'*') != NULL);
-                    wildcarded &= parsed[i1][0] != L'"';
-                    wildcarded &= parsed[i1][0] != L'-';
-                    if ( wildcarded )
-                    {
-#ifdef NONONONO_ANSI
-                        WIN32_FIND_DATAA data = {0};
-#else
-                        WIN32_FIND_DATAW data = {0};
-#endif // NONONONO_ANSI
-
-#ifdef NONONONO_ANSI
-                        char target[MAX_PATH];
-                        if ( WideCharToMultiByte( CP_ACP, 0, parsed[i1], -1, target, sizeof(target), NULL, NULL) )
-                        {
-                            HANDLE hf = FindFirstFileA( target, &data );
-#else
-                            HANDLE hf = FindFirstFileW( parsed[i1], &data );
-#endif // NONONONO_ANSI
-                            if ( hf != INVALID_HANDLE_VALUE )
-                            {
-                                BOOL found = TRUE;
-                                do
-                                {
-#ifdef NONONONO_ANSI
-                                    int howMany = MultiByteToWideChar( CP_ACP, 0, data.cFileName, -1, NULL, 0 );
-                                    if ( howMany > 0 )
-                                    {
-                                        wchar_t* tmp = new wchar_t[howMany + 1];
-                                        MultiByteToWideChar( CP_ACP, 0, data.cFileName, -1, tmp, howMany + 1 );
-                                        expandedArgs.push_back( tmp );
-                                        found = FindNextFileA( hf, &data );
-                                    }
-#else
-                                    int howMany = wcslen(data.cFileName);
-                                    wchar_t* tmp = new wchar_t[howMany + 1];
-                                    wcsncpy( tmp, data.cFileName, howMany + 1 );
-                                    expandedArgs.push_back( tmp );
-                                    found = FindNextFileW( hf, &data );
-#endif // NONONONO_ANSI
-                                } while ( found );
-
-                                FindClose( hf );
-                            }
-                            else
-                            {
-                                expandedArgs.push_back( parsed[i1] );
-                            }
-#ifdef NONONONO_ANSI
-                        }
-#endif // NONONONO_ANSI
-                    }
-                    else
-                    {
-                        expandedArgs.push_back( parsed[i1] );
-                    }
-                }
-
-                {
-                    wchar_t** block = new wchar_t*[expandedArgs.size()];
-                    int iz = 0;
-                    for ( std::vector<wchar_t*>::iterator it = expandedArgs.begin(); it != expandedArgs.end(); it++ )
-                    {
-                        block[iz++] = *it;
-                    }
-                    parsed = block;
-                    numArgs = expandedArgs.size();
-                }
-
-                std::vector<gchar*> newArgs;
-                for ( int i = 0; i < numArgs; i++ )
-                {
-                    gchar* replacement = g_utf16_to_utf8( (gunichar2*)parsed[i],
-                                                          -1,
-                                                          NULL,
-                                                          NULL,
-                                                          NULL );
-                    if ( replacement )
-                    {
-                        gchar *safe2 = Inkscape::IO::sanitizeString(replacement);
-
-                        if ( safe2 )
-                        {
-                            {
-                                char tmp[1024];
-                                snprintf( tmp, sizeof(tmp), "    [%2d] = '%s'", i, safe2 );
-                                MessageBoxA( NULL, tmp, "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
-                            }
-                            g_free( safe2 );
-                        }
-                        newArgs.push_back( replacement );
-                    }
-                    else
-                    {
-                        newArgs.push_back( blankParam );
-                    }
-                }
-
-                // Now push our munged params to be the new argv and argc
-                {
-                    char** block = new char*[newArgs.size()];
-                    int iz = 0;
-                    for ( std::vector<char*>::iterator it = newArgs.begin(); it != newArgs.end(); it++ )
-                    {
-                        block[iz++] = *it;
-                    }
-                    argv = block;
-                    argc = newArgs.size();
-                    needToRecodeParams = false;
-                }
-            }
-            else
-            {
-                MessageBoxA( NULL, "Unable to process command-line", "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
-            }
-        }
-        else
-        {
-            {
-                MessageBoxA( NULL,  "Unable to fetch result from GetCommandLineW()", "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
-            }
-
-            char* line2 = GetCommandLineA();
-            if ( line2 )
-            {
-                gchar *safe = Inkscape::IO::sanitizeString(line2);
-                {
-                    {
-                        char tmp[1024];
-                        snprintf( tmp, sizeof(tmp), "GetCommandLineA() = '%s'", safe );
-                        MessageBoxA( NULL, tmp, "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
-                    }
-                }
-            }
-            else
-            {
-                MessageBoxA( NULL, "Unable to fetch result from GetCommandLineA()", "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
-            }
-        }
-#endif // NONONONO
+        // If the call fails, we'll need to convert charsets
+        needToRecodeParams = !replaceArgs( argc, argv );
     }
 #endif // WIN32
 
@@ -958,20 +734,8 @@ int sp_common_main( int argc, char const **argv, GSList **flDest )
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
     gchar const *charset;
     g_get_charset(&charset);
-#ifdef WIN32
-#ifdef NONONONO
-    {
-        char tmp[1024];
-        snprintf( tmp, sizeof(tmp), "Encoding is '%s'", charset );
-        MessageBoxA( NULL, tmp, "g_get_charset", MB_OK | MB_ICONINFORMATION );
-    }
 
-//    checkEncoding();
-#endif // NONONONO
-#endif // WIN32
     bind_textdomain_codeset(GETTEXT_PACKAGE, charset);
-
-//    checkEncoding();
 
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
@@ -985,22 +749,17 @@ int sp_common_main( int argc, char const **argv, GSList **flDest )
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 
     // Now let's see if the file list still holds up
-#ifdef NONONONO
     if ( needToRecodeParams )
-#endif // NONONONO
     {
         fl = fixupFilenameEncoding( fl );
     }
 
     // Check the globals for filename-fixup
-#ifdef NONONONO
     if ( needToRecodeParams )
     {
-#endif // NONONONO
         fixupSingleFilename( &sp_export_png, &sp_export_png_utf8 );
         fixupSingleFilename( &sp_export_svg, &sp_export_svg_utf8 );
         fixupSingleFilename( &sp_global_printer, &sp_global_printer_utf8 );
-#ifdef NONONONO
     }
     else
     {
@@ -1011,7 +770,6 @@ int sp_common_main( int argc, char const **argv, GSList **flDest )
         if ( sp_global_printer )
             sp_global_printer_utf8 = g_strdup( sp_global_printer );
     }
-#endif // NONONONO
 
     // Return the list if wanted, else free it up.
     if ( flDest ) {
@@ -1450,6 +1208,280 @@ static void do_export_ps(SPDocument* doc, gchar const* uri, char const* mime)
         
     }
 }
+
+#ifdef WIN32
+bool replaceArgs( int& argc, char**& argv )
+{
+    bool worked = false;
+
+#ifdef REPLACEARGS_DEBUG
+    MessageBoxA( NULL, "GetCommandLineW() getting called", "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+#endif // REPLACEARGS_DEBUG
+
+    wchar_t* line = GetCommandLineW();
+    if ( line )
+    {
+#ifdef REPLACEARGS_DEBUG
+        {
+            gchar* utf8Line = g_utf16_to_utf8( (gunichar2*)line, -1, NULL, NULL, NULL );
+            if ( utf8Line )
+            {
+                gchar *safe = Inkscape::IO::sanitizeString(utf8Line);
+                {
+                    char tmp[strlen(safe) + 32];
+                    snprintf( tmp, sizeof(tmp), "GetCommandLineW() = '%s'", safe );
+                    MessageBoxA( NULL, tmp, "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+                }
+            }
+        }
+#endif // REPLACEARGS_DEBUG
+
+        int numArgs = 0;
+        wchar_t** parsed = CommandLineToArgvW( line, &numArgs );
+
+#ifdef REPLACEARGS_ANSI
+// test code for trying things on Win95/98/ME
+        if ( !parsed )
+        {
+#ifdef REPLACEARGS_DEBUG
+            MessageBoxA( NULL, "Unable to process command-line. Faking it", "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
+#endif // REPLACEARGS_DEBUG
+            int lineLen = wcslen(line) + 1;
+            wchar_t* lineDup = new wchar_t[lineLen];
+            wcsncpy( lineDup, line, lineLen );
+
+            int pos = 0;
+            bool inQuotes = false;
+            bool inWhitespace = true;
+            std::vector<int> places;
+            while ( lineDup[pos] )
+            {
+                if ( inQuotes )
+                {
+                    if ( lineDup[pos] == L'"' )
+                    {
+                        inQuotes = false;
+                    }
+                }
+                else if ( lineDup[pos] == L'"' )
+                {
+                    inQuotes = true;
+                    inWhitespace = false;
+                    places.push_back(pos);
+                }
+                else if ( lineDup[pos] == L' ' || lineDup[pos] == L'\t' )
+                {
+                    if ( !inWhitespace )
+                    {
+                        inWhitespace = true;
+                        lineDup[pos] = 0;
+                    }
+                }
+                else if ( inWhitespace && (lineDup[pos] != L' ' && lineDup[pos] != L'\t') )
+                {
+                    inWhitespace = false;
+                    places.push_back(pos);
+                }
+                else
+                {
+                    // consume
+                }
+                pos++;
+            }
+#ifdef REPLACEARGS_DEBUG
+            {
+                char tmp[256];
+                snprintf( tmp, sizeof(tmp), "Counted %d args", places.size() );
+                MessageBoxA( NULL, tmp, "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
+            }
+#endif // REPLACEARGS_DEBUG
+
+            wchar_t** block = new wchar_t*[places.size()];
+            int i = 0;
+            for ( std::vector<int>::iterator it = places.begin(); it != places.end(); it++ )
+            {
+                block[i++] = &lineDup[*it];
+            }
+            parsed = block;
+            numArgs = places.size();
+        }
+#endif // REPLACEARGS_ANSI
+
+        if ( parsed )
+        {
+            std::vector<wchar_t*>expandedArgs;
+            if ( numArgs > 0 )
+            {
+                expandedArgs.push_back( parsed[0] );
+            }
+
+            for ( int i1 = 1; i1 < numArgs; i1++ )
+            {
+                bool wildcarded = (wcschr(parsed[i1], L'?') != NULL) || (wcschr(parsed[i1], L'*') != NULL);
+                wildcarded &= parsed[i1][0] != L'"';
+                wildcarded &= parsed[i1][0] != L'-';
+                if ( wildcarded )
+                {
+#ifdef REPLACEARGS_ANSI
+                    WIN32_FIND_DATAA data = {0};
+#else
+                    WIN32_FIND_DATAW data = {0};
+#endif // REPLACEARGS_ANSI
+
+                    int baseLen = wcslen(parsed[i1]) + 2;
+                    wchar_t* base = new wchar_t[baseLen];
+                    wcsncpy( base, parsed[i1], baseLen );
+                    wchar_t* last = wcsrchr( base, L'\\' );
+                    if ( last )
+                    {
+                        last[1] = 0;
+                    }
+                    else
+                    {
+                        base[0] = 0;
+                    }
+                    baseLen = wcslen( base );
+
+#ifdef REPLACEARGS_ANSI
+                    char target[MAX_PATH];
+                    if ( WideCharToMultiByte( CP_ACP, 0, parsed[i1], -1, target, sizeof(target), NULL, NULL) )
+                    {
+                        HANDLE hf = FindFirstFileA( target, &data );
+#else
+                        HANDLE hf = FindFirstFileW( parsed[i1], &data );
+#endif // REPLACEARGS_ANSI
+                        if ( hf != INVALID_HANDLE_VALUE )
+                        {
+                            BOOL found = TRUE;
+                            do
+                            {
+#ifdef REPLACEARGS_ANSI
+                                int howMany = MultiByteToWideChar( CP_ACP, 0, data.cFileName, -1, NULL, 0 );
+                                if ( howMany > 0 )
+                                {
+                                    howMany += baseLen;
+                                    wchar_t* tmp = new wchar_t[howMany + 1];
+                                    wcsncpy( tmp, base, howMany + 1 );
+                                    MultiByteToWideChar( CP_ACP, 0, data.cFileName, -1, tmp + baseLen, howMany + 1 - baseLen );
+                                    expandedArgs.push_back( tmp );
+                                    found = FindNextFileA( hf, &data );
+                                }
+#else
+                                int howMany = wcslen(data.cFileName) + baseLen;
+                                wchar_t* tmp = new wchar_t[howMany + 1];
+                                wcsncpy( tmp, base, howMany + 1 );
+                                wcsncat( tmp, data.cFileName, howMany + 1 );
+                                expandedArgs.push_back( tmp );
+                                found = FindNextFileW( hf, &data );
+#endif // REPLACEARGS_ANSI
+                            } while ( found );
+
+                            FindClose( hf );
+                        }
+                        else
+                        {
+                            expandedArgs.push_back( parsed[i1] );
+                        }
+#ifdef REPLACEARGS_ANSI
+                    }
+#endif // REPLACEARGS_ANSI
+
+                    delete[] base;
+                }
+                else
+                {
+                    expandedArgs.push_back( parsed[i1] );
+                }
+            }
+
+            {
+                wchar_t** block = new wchar_t*[expandedArgs.size()];
+                int iz = 0;
+                for ( std::vector<wchar_t*>::iterator it = expandedArgs.begin(); it != expandedArgs.end(); it++ )
+                {
+                    block[iz++] = *it;
+                }
+                parsed = block;
+                numArgs = expandedArgs.size();
+            }
+
+            std::vector<gchar*> newArgs;
+            for ( int i = 0; i < numArgs; i++ )
+            {
+                gchar* replacement = g_utf16_to_utf8( (gunichar2*)parsed[i], -1, NULL, NULL, NULL );
+                if ( replacement )
+                {
+#ifdef REPLACEARGS_DEBUG
+                    gchar *safe2 = Inkscape::IO::sanitizeString(replacement);
+
+                    if ( safe2 )
+                    {
+                        {
+                            char tmp[1024];
+                            snprintf( tmp, sizeof(tmp), "    [%2d] = '%s'", i, safe2 );
+                            MessageBoxA( NULL, tmp, "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+                        }
+                        g_free( safe2 );
+                    }
+#endif // REPLACEARGS_DEBUG
+
+                    newArgs.push_back( replacement );
+                }
+                else
+                {
+                    newArgs.push_back( blankParam );
+                }
+            }
+
+            // Now push our munged params to be the new argv and argc
+            {
+                char** block = new char*[newArgs.size()];
+                int iz = 0;
+                for ( std::vector<char*>::iterator it = newArgs.begin(); it != newArgs.end(); it++ )
+                {
+                    block[iz++] = *it;
+                }
+                argv = block;
+                argc = newArgs.size();
+                worked = true;
+            }
+        }
+#ifdef REPLACEARGS_DEBUG
+        else
+        {
+            MessageBoxA( NULL, "Unable to process command-line", "CommandLineToArgvW", MB_OK | MB_ICONINFORMATION );
+        }
+#endif // REPLACEARGS_DEBUG
+    }
+#ifdef REPLACEARGS_DEBUG
+    else
+    {
+        {
+            MessageBoxA( NULL,  "Unable to fetch result from GetCommandLineW()", "GetCommandLineW", MB_OK | MB_ICONINFORMATION );
+        }
+
+        char* line2 = GetCommandLineA();
+        if ( line2 )
+        {
+            gchar *safe = Inkscape::IO::sanitizeString(line2);
+            {
+                {
+                    char tmp[strlen(safe) + 32];
+                    snprintf( tmp, sizeof(tmp), "GetCommandLineA() = '%s'", safe );
+                    MessageBoxA( NULL, tmp, "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
+                }
+            }
+        }
+        else
+        {
+            MessageBoxA( NULL, "Unable to fetch result from GetCommandLineA()", "GetCommandLineA", MB_OK | MB_ICONINFORMATION );
+        }
+    }
+#endif // REPLACEARGS_DEBUG
+
+    return worked;
+}
+#endif // WIN32
 
 static GSList *
 sp_process_args(poptContext ctx)
