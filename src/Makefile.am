@@ -155,7 +155,8 @@ EXTRA_DIST =	\
 	traits/copy.h	\
 	traits/function.h	\
 	traits/list-copy.h	\
-	traits/reference.h
+	traits/reference.h \
+	$(jabber_whiteboard_SOURCES)
 
 EXTRA_PROGRAMS =	\
 	inkview 	\

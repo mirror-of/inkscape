@@ -8,7 +8,6 @@ jabber_whiteboard/all: jabber_whiteboard/libjabber_whiteboard.a
 jabber_whiteboard/clean:
 	rm -f jabber_whiteboard/libjabber_whiteboard.a $(jabber_whiteboard_libjabber_whiteboard_a_OBJECTS)
 
-if WITH_INKBOARD
 jabber_whiteboard_SOURCES = \
 	jabber_whiteboard/message-tags.cpp \
 	jabber_whiteboard/internal-constants.cpp \
@@ -36,8 +35,11 @@ jabber_whiteboard_SOURCES = \
 	jabber_whiteboard/session-manager.cpp \
 	jabber_whiteboard/pedrodom.cpp \
 	jabber_whiteboard/pedroxmpp.cpp
+
+if WITH_INKBOARD
+temp_whiteboard_files = $(jabber_whiteboard_SOURCES)
 endif
 
 jabber_whiteboard_libjabber_whiteboard_a_SOURCES = \
 	jabber_whiteboard/empty.cpp \
-	$(jabber_whiteboard_SOURCES)
+	$(temp_whiteboard_files)
