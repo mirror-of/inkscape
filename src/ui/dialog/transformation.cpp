@@ -321,6 +321,7 @@ Transformation::layoutPageTransform()
     _scalar_transform_f.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onTransformValueChanged));
 
+/*
     char *svgData =
         "<?xml version='1.0' encoding='UTF-8' standalone='no'?>"
         "<svg"
@@ -349,6 +350,7 @@ Transformation::layoutPageTransform()
     transformImageIcon.showSvgFromMemory(svgData);
     _page_transform.table()
         .attach(transformImageIcon, 0, 3, 2, 3, Gtk::SHRINK | Gtk::FILL | Gtk::EXPAND,   Gtk::SHRINK | Gtk::FILL | Gtk::EXPAND);
+*/
 
 }
 
