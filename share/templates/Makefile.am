@@ -10,10 +10,11 @@ templates_DATA = \
 	business_card_90x50mm.svg \
 	CD_cover_300dpi.svg \
 	default.svg \
-	default.fr.svg \
+	default.cs.svg \
 	default.de.svg \
 	default.es.svg \
-	default.cs.svg \
+	default.fr.svg \
+	default.hu.svg \
 	default.it.svg \
 	default_mm.svg \
 	default_pt.svg \
