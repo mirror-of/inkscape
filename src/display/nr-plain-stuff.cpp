@@ -21,8 +21,6 @@
 #define NR_DEFAULT_CHECKERCOLOR0 0xbfbfbfff
 #define NR_DEFAULT_CHECKERCOLOR1 0x808080ff
 
-#define COMPOSE4(bc,fc,ba,fa,da) (((255 - fa) * (bc * ba) + fa * 255 * fc) / da)
-
 void
 nr_render_checkerboard_rgb (guchar *px, gint w, gint h, gint rs, gint xoff, gint yoff)
 {
