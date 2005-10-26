@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-20 22:53+0200\n"
-"PO-Revision-Date: 2005-09-26 09:29+0200\n"
+"POT-Creation-Date: 2005-10-26 21:07+0200\n"
+"PO-Revision-Date: 2005-10-21 13:50+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgstr "<b>Mayús</b>: dibujar alrededor del punto inicial"
 #: ../src/spiral-context.cpp:425 ../src/star-context.cpp:430
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
 msgstr ""
-"<b>La capa actual está oculta</b>. Debe estar visible para poder dibujar en "
+"<b>La capa actual está oculta</b>, debe estar visible para poder dibujar en "
 "ella."
 
 #: ../src/arc-context.cpp:420 ../src/connector-context.cpp:497
@@ -57,7 +57,7 @@ msgstr ""
 #: ../src/spiral-context.cpp:430 ../src/star-context.cpp:434
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
 msgstr ""
-"<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder dibujar "
+"<b>La capa actual está bloqueada</b>, debe desbloquearla para poder dibujar "
 "en ella."
 
 #: ../src/arc-context.cpp:499
@@ -67,27 +67,29 @@ msgid ""
 "ratio ellipse; with <b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Elipse</b>: %s &#215; %s; con <b>Ctrl</b> para crear círculo o elipse de "
-"radio entero; con <b>Mayús</b> para dibujar alrededor del punto de inicio"
+"radio entero; con <b>Mayús</b> para dibujar alrededor del punto inicial"
 
 #: ../src/connector-context.cpp:518
 msgid "Creating new connector"
 msgstr "Crear un conector nuevo"
 
-#: ../src/connector-context.cpp:943
+#: ../src/connector-context.cpp:939
 msgid "Finishing connector"
-msgstr "Terminando conector"
+msgstr "Conector final"
 
-#: ../src/connector-context.cpp:1112
-msgid "<b>Connnection point</b>: click or drag to create a new connector"
+#: ../src/connector-context.cpp:1108
+#, fuzzy
+msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
-"<b>Punto de conexion</b>: pulse o arrastre para crear un conector nuevo"
+"<b>Punto de conexión</b>: pulse o arrastre para crear un conector nuevo"
 
-#: ../src/connector-context.cpp:1189
-msgid "<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"
+#: ../src/connector-context.cpp:1185
+#, fuzzy
+msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 "<b>Fin de conector</b>: arrastre para redirigir o conectar a formas nuevas"
 
-#: ../src/connector-context.cpp:1282
+#: ../src/connector-context.cpp:1278
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Seleccione <b>por lo menos un objeto que no sea un conector</b>."
 
@@ -110,7 +112,7 @@ msgstr " relativo "
 #. This is the target location where the guide is to be moved.
 #: ../src/desktop-events.cpp:284 ../src/desktop-events.cpp:397
 msgid " absolute to "
-msgstr " absoluto a "
+msgstr " absoluto "
 
 #  create dialog
 #. create dialog
@@ -150,12 +152,11 @@ msgstr "<small>El objeto no tiene clones en mosaico.</small>"
 
 #: ../src/dialogs/clonetiler.cpp:822
 msgid "Select <b>one object</b> whose tiled clones to unclump."
-msgstr "Seleccione <b>un objeto</b> cuyas teselas desea desaglomerar."
+msgstr "Seleccione <b>un objeto</b> cuyos clones desea desaglomerar."
 
 #: ../src/dialogs/clonetiler.cpp:873
 msgid "Select <b>one object</b> whose tiled clones to remove."
-msgstr ""
-"Seleccione <b>el objeto</b> del que desea eliminar las teselas clonadas."
+msgstr "Seleccione <b>el objeto</b> cuyos clones desea eliminar."
 
 #: ../src/dialogs/clonetiler.cpp:923 ../src/selection-chemistry.cpp:1773
 msgid "Select an <b>object</b> to clone."
@@ -355,7 +356,7 @@ msgstr "Alternar el signo de los desplazamientos para cada columna"
 
 #: ../src/dialogs/clonetiler.cpp:1768
 msgid "Sc_ale"
-msgstr "Esc_alar"
+msgstr "Esc_ala"
 
 #  FIXME: implement averaging of all parameters for multiple selected stars
 #  gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
@@ -565,7 +566,7 @@ msgid ""
 "apply it to the clone"
 msgstr ""
 "Para cada clon, seleccionar un valor del dibujo en la localización de ese "
-"clon y aplicarlo a ese con"
+"clon y aplicarlo a ese clon"
 
 #: ../src/dialogs/clonetiler.cpp:2128
 msgid "1. Pick from the drawing:"
@@ -774,7 +775,7 @@ msgstr "Crear y colocar los clones de la selección"
 #. So unclumping is the process of spreading a number of objects out more evenly.
 #: ../src/dialogs/clonetiler.cpp:2487
 msgid " _Unclump "
-msgstr " Desa_glomerar "
+msgstr " Desa_aglomerar "
 
 #: ../src/dialogs/clonetiler.cpp:2488
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
@@ -784,7 +785,7 @@ msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2494
 msgid " Re_move "
-msgstr " Eli_minar "
+msgstr " El_minar "
 
 #: ../src/dialogs/clonetiler.cpp:2495
 msgid "Remove existing tiled clones of the selected object (siblings only)"
@@ -792,7 +793,7 @@ msgstr "Eliminar las teselas clonadas del objeto seleccionado (solo hermanos)"
 
 #: ../src/dialogs/clonetiler.cpp:2511
 msgid " R_eset "
-msgstr " R_einiciar "
+msgstr " R_reiniciar "
 
 #. TRANSLATORS: "change" is a noun here
 #: ../src/dialogs/clonetiler.cpp:2513
@@ -857,9 +858,8 @@ msgid "Snap the edges of the object bounding boxes"
 msgstr "Ajustar los bordes de las cajas de contorno de los objetos"
 
 #: ../src/dialogs/desktop-properties.cpp:934
-#, fuzzy
 msgid "Snap nodes to grid"
-msgstr "Ajustar los puntos a la rejilla"
+msgstr "Ajustar los nodos a la rejilla"
 
 #: ../src/dialogs/desktop-properties.cpp:934
 #: ../src/dialogs/desktop-properties.cpp:1017
@@ -891,12 +891,12 @@ msgstr "Espaciado Y:"
 #: ../src/dialogs/desktop-properties.cpp:967
 #: ../src/dialogs/desktop-properties.cpp:1028
 msgid "Snap units:"
-msgstr "Unidades para el autoajuste:"
+msgstr "Unidades para el ajuste:"
 
 #: ../src/dialogs/desktop-properties.cpp:970
 #: ../src/dialogs/desktop-properties.cpp:1031
 msgid "Snap distance:"
-msgstr "Distancia de autoajuste:"
+msgstr "Distancia de ajuste:"
 
 #: ../src/dialogs/desktop-properties.cpp:973
 msgid "Grid line color:"
@@ -912,11 +912,11 @@ msgstr "Color de las líneas de la rejilla"
 
 #: ../src/dialogs/desktop-properties.cpp:976
 msgid "Major grid line color:"
-msgstr "Color primario de líneas guía:"
+msgstr "Color de las líneas primarias:"
 
 #: ../src/dialogs/desktop-properties.cpp:977
 msgid "Major grid line color"
-msgstr "Color primario de líneas guía"
+msgstr "Color de las líneas primarias de la rejilla"
 
 #: ../src/dialogs/desktop-properties.cpp:977
 msgid "Color of the major (highlighted) grid lines"
@@ -1036,7 +1036,7 @@ msgstr ""
 
 #: ../src/dialogs/desktop-properties.cpp:1103
 msgid "Canvas size:"
-msgstr "Tamaño del lienzo:"
+msgstr "Tamaño del papel:"
 
 #: ../src/dialogs/desktop-properties.cpp:1127
 msgid "Custom"
@@ -1044,7 +1044,7 @@ msgstr "Personalizar"
 
 #: ../src/dialogs/desktop-properties.cpp:1138
 msgid "Canvas orientation:"
-msgstr "Orientación del lienzo:"
+msgstr "Orientación del papel:"
 
 #: ../src/dialogs/desktop-properties.cpp:1150
 msgid "Landscape"
@@ -1057,7 +1057,7 @@ msgstr "Vertical"
 #. Custom paper frame
 #: ../src/dialogs/desktop-properties.cpp:1165
 msgid "Custom canvas"
-msgstr "Personalizar lienzo"
+msgstr "Personalizar papel"
 
 #. Unit selector
 #: ../src/dialogs/desktop-properties.cpp:1177 ../src/dialogs/export.cpp:269
@@ -1245,7 +1245,7 @@ msgid ""
 "<b>More than one object selected.</b>  Cannot take style from multiple "
 "objects."
 msgstr ""
-"<b>Ha seleccionado más de un objeto.</b> No se pude tomar el estilo de "
+"<b>Ha seleccionado más de un objeto.</b> No se puede tomar el estilo de "
 "varios objetos."
 
 #: ../src/dialogs/display-settings.cpp:772
@@ -1351,7 +1351,7 @@ msgstr "Ctrl+flechas"
 
 #: ../src/dialogs/display-settings.cpp:943
 msgid "Scroll by:"
-msgstr "Desplazarse:"
+msgstr "Desplazar:"
 
 #: ../src/dialogs/display-settings.cpp:944
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
@@ -1438,7 +1438,7 @@ msgstr "> y < escalan:"
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in px units)"
 msgstr ""
-"Al pulsar > ó < se aumenta o disminuye la selección esta cantidad de (en "
+"Al pulsar > ó < se aumenta o disminuye la selección en esta cantidad (en "
 "unidades px)"
 
 #: ../src/dialogs/display-settings.cpp:1019
@@ -1584,13 +1584,13 @@ msgstr ""
 
 #: ../src/dialogs/display-settings.cpp:1210
 msgid "Dialogs are hidden in taskbar"
-msgstr "Se ocultan los diálogos en la barra de tareas."
+msgstr "Ocultar los diálogos en la barra de tareas."
 
 #: ../src/dialogs/display-settings.cpp:1211
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
-"Indica si las ventanas de diálogo deben ser ocultada en la barra de tareas "
-"del gestor de ventanas."
+"Indica si se muestran o no las ventanas de diálogo en la barra de tareas del "
+"gestor de ventanas."
 
 #: ../src/dialogs/display-settings.cpp:1218
 msgid "Zoom when window is resized"
@@ -1800,7 +1800,7 @@ msgstr ""
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
 #: ../src/dialogs/display-settings.cpp:1410 ../src/dialogs/export.cpp:442
 msgid "dpi"
-msgstr "dpi"
+msgstr "ppp"
 
 #. TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
 #. * rectangle with bitmap fill.
@@ -1908,7 +1908,7 @@ msgstr "_Personalizado"
 
 #: ../src/dialogs/export.cpp:254
 msgid "Export area"
-msgstr "Exportar área"
+msgstr "Área exportada"
 
 #: ../src/dialogs/export.cpp:300
 msgid "_x0:"
@@ -1928,7 +1928,7 @@ msgstr "y_1:"
 
 #: ../src/dialogs/export.cpp:406
 msgid "Bitmap size"
-msgstr "Tamaño de mapa de bits"
+msgstr "Tamaño del mapa de bits"
 
 #: ../src/dialogs/export.cpp:416
 msgid "_Width:"
@@ -1987,7 +1987,7 @@ msgstr "Exportando %s (%d x %d)"
 #: ../src/dialogs/export.cpp:1031
 #, c-format
 msgid "Could not export to filename %s.\n"
-msgstr "No se pudo exportar al archivo %s.\n"
+msgstr "No se ha podido exportar al archivo %s.\n"
 
 #: ../src/dialogs/export.cpp:1137
 msgid "Select a filename for exporting"
@@ -2255,8 +2255,8 @@ msgstr "_Id"
 msgid ""
 "The id= attribute (only letters, digits, and the characters .-_: allowed)"
 msgstr ""
-"El atributo id= (solamente se permiten letras, dígitos y los caracteres - y "
-"_)"
+"El atributo «id=» (solamente se permiten letras, dígitos y los caracteres «.-"
+"_:»)"
 
 #. Button for setting the object's id, label, title and description.
 #: ../src/dialogs/item-properties.cpp:166
@@ -2512,7 +2512,7 @@ msgid ""
 "document.  (e.g. 'en-GB')"
 msgstr ""
 "Abreviatura de dos letras del idioma, con la abreviatura opcional de este "
-"documento (por ejemplo: es-ES)"
+"documento (por ejemplo: «es-ES»)"
 
 #: ../src/dialogs/rdf.cpp:278
 msgid "Keywords"
@@ -2845,11 +2845,11 @@ msgstr "Arrastrar para reordenar nodos"
 
 #: ../src/dialogs/xml-tree.cpp:303
 msgid "New element node"
-msgstr "Nuevo nodo elemento"
+msgstr "Nuevo nodo de elemento"
 
 #: ../src/dialogs/xml-tree.cpp:325
 msgid "New text node"
-msgstr "Siguiente nodo de texto"
+msgstr "Nuevo nodo de texto"
 
 #: ../src/dialogs/xml-tree.cpp:346
 msgid "Duplicate node"
@@ -2901,7 +2901,7 @@ msgstr "Valor del atributo"
 
 #: ../src/dialogs/xml-tree.cpp:1357
 msgid "New element node..."
-msgstr "Nuevo nodo elemento..."
+msgstr "Nuevo nodo de elemento..."
 
 #: ../src/dialogs/xml-tree.cpp:1378
 #: ../src/ui/dialog/whiteboard-connect.cpp:100
@@ -2924,12 +2924,12 @@ msgstr ""
 #: ../src/document.cpp:357
 #, c-format
 msgid "New document %d"
-msgstr "Nuevo documento %d"
+msgstr "Documento nuevo %d"
 
 #: ../src/document.cpp:389
 #, c-format
 msgid "Memory document %d"
-msgstr "Documento memoria %d"
+msgstr "Documento de memoria %d"
 
 #: ../src/document.cpp:512
 #, c-format
@@ -2961,7 +2961,7 @@ msgstr ", media con radio %d"
 
 #: ../src/dropper-context.cpp:367
 msgid " under cursor"
-msgstr "bajo el cursor"
+msgstr " bajo el cursor"
 
 #. message, to show in the statusbar
 #: ../src/dropper-context.cpp:369
@@ -3033,11 +3033,11 @@ msgstr "no se cumplió una dependencia."
 
 #: ../src/extension/extension.cpp:283
 msgid "Extension \""
-msgstr "La extensión \""
+msgstr "La extensión «"
 
 #: ../src/extension/extension.cpp:283
 msgid "\" failed to load because "
-msgstr "\" no se cargó porque "
+msgstr "» no se ha cargado porque "
 
 #: ../src/extension/extension.cpp:562
 #, c-format
@@ -3150,7 +3150,7 @@ msgid ""
 msgstr ""
 "Usar operadores PostScript vectoriales. La imagen resultante normalmente "
 "será menor en tamaño de archivo y puede ser escalada arbitrariamente, pero "
-"la transparencia alfa, y los patrones se perderán."
+"se perderán la transparencia alfa y los patrones."
 
 #: ../src/extension/internal/ps.cpp:162
 msgid "Print as bitmap"
@@ -3210,7 +3210,7 @@ msgstr ""
 #. localized share/templates/default.xx.svg file, where xx is your language code.
 #: ../src/file.cpp:126
 msgid "default.svg"
-msgstr "default.svg"
+msgstr "default.es.svg"
 
 #: ../src/file.cpp:204 ../src/file.cpp:896
 #, c-format
@@ -3237,7 +3237,7 @@ msgstr "No se ha revertido el documento."
 
 #: ../src/file.cpp:378
 msgid "Select file to open"
-msgstr "Seleccione el archivo a abrir"
+msgstr "Seleccione el archivo que desea abrir"
 
 #: ../src/file.cpp:514
 #, c-format
@@ -3266,7 +3266,7 @@ msgstr "No se ha guardado el documento."
 #: ../src/file.cpp:552
 #, c-format
 msgid "File %s could not be saved."
-msgstr "No se pudo guardar el archivo %s."
+msgstr "No se ha podido guardar el archivo %s."
 
 #: ../src/file.cpp:562
 msgid "Document saved."
@@ -3296,7 +3296,7 @@ msgstr "Seleccionar el archivo a importar"
 
 #: ../src/gradient-context.cpp:262
 msgid "<b>Ctrl</b>: snap gradient angle"
-msgstr "<b>Ctrl</b>: ajuste el ángulo del gradiente"
+msgstr "<b>Ctrl</b>: ajusta el ángulo del gradiente"
 
 #: ../src/gradient-context.cpp:263
 msgid "<b>Shift</b>: draw gradient around the starting point"
@@ -3660,7 +3660,7 @@ msgstr "Mostrar u ocultar la barra de estado (abajo en la ventana)"
 #: ../src/interface.cpp:854
 #, c-format
 msgid "Verb \"%s\" Unknown"
-msgstr "Verbo «%s» deconocido"
+msgstr "Verbo «%s» desconocido"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/interface.cpp:964
@@ -3695,10 +3695,10 @@ msgid "Jabber connection lost."
 msgstr "Se ha perdido la conexión Jabber."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Sending message; %u message remaining in send queue."
 msgid_plural "Sending message; %u messages remaining in send queue."
-msgstr[0] "Enviando mensaje; %u mensajes pendientes en la cola de envío."
+msgstr[0] "Enviando mensaje; %u mensaje pendiente en la cola de envío."
 msgstr[1] "Enviando mensaje; %u mensajes pendientes en la cola de envío."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:78
@@ -3706,10 +3706,10 @@ msgid "Receive queue empty."
 msgstr "Cola de recepción vacía."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "Receiving change; %u change left to process."
 msgid_plural "Receiving change; %u changes left to process."
-msgstr[0] "Recibiendo cambio; %u cambios pendientes de procesar."
+msgstr[0] "Recibiendo cambio; %u cambio pendiente de procesar."
 msgstr[1] "Recibiendo cambio; %u cambios pendientes de procesar."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:157
@@ -3738,7 +3738,8 @@ msgstr "Invitación de pizarra blanca entrante de %1"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:135
 msgid "Do you wish to accept <b>%1</b>'s whiteboard session invitation?"
-msgstr "¿Desea aceptar la invitación de pizarra blanca de <b>%1</b>?"
+msgstr ""
+"¿Desea aceptar la invitación a la sesión de pizarra blanca de <b>%1</b>?"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:137
 msgid ""
@@ -3826,17 +3827,17 @@ msgid "<b>%s</b> has joined the chatroom."
 msgstr "<b>%s</b> se ha unido a la sala de chat."
 
 #: ../src/jabber_whiteboard/message-queue.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "%u change in receive queue."
 msgid_plural "%u changes in receive queue."
-msgstr[0] "%u cambios en la cola de recepción."
+msgstr[0] "%u cambio en la cola de recepción."
 msgstr[1] "%u cambios en la cola de recepción."
 
 #: ../src/jabber_whiteboard/message-queue.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "%u change in send queue."
 msgid_plural "%u changes in send queue."
-msgstr[0] "%u cambios en la lista de envíos."
+msgstr[0] "%u cambio en la lista de envíos."
 msgstr[1] "%u cambios en la lista de envíos."
 
 #. if ID is NULL, then we have a real problem -- we were not able to find a key
@@ -3993,160 +3994,161 @@ msgstr "Se ha cancelado el arrastre de nodo o tirador."
 msgid "Ignoring font without family that will crash Pango"
 msgstr "Se ignorará una familia de tipografías que detendría a Pango."
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:395
 msgid "Print the Inkscape version number"
 msgstr "Mostrar el número de versión de Inkscape"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:400
 msgid "Do not use X server (only process files from console)"
 msgstr "No utilizar el servidor X (sólo procesa archivos desde la consola)"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:405
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Intentar utilizar el servidor X aunque no se haya definido $DISPLAY"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:410
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 "Abrir el(los) documento(s) especificado(s) (se pueden excluir las opciones "
 "de cadena)"
 
-#: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
-#: ../src/main.cpp:475 ../src/main.cpp:480 ../src/main.cpp:485
+#: ../src/main.cpp:411 ../src/main.cpp:416 ../src/main.cpp:421
+#: ../src/main.cpp:483 ../src/main.cpp:488 ../src/main.cpp:493
 msgid "FILENAME"
 msgstr "NOMBRE DE ARCHIVO"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:415
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
-"Imprimir documento(s) al archivo de salida especificado (usa «| programa» "
-"para el filtro)"
+"Imprimir documento(s) en el archivo de salida especificado (utilice «| "
+"programa» para el filtro)"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:420
 msgid "Export document to a PNG file"
-msgstr "Exportar documento a archivo png"
+msgstr "Exportar el documento como archivo png"
 
-#: ../src/main.cpp:417
+#: ../src/main.cpp:425
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr ""
 "La resolución utilizada para exportar de SVG a mapa de bits (predeterminado "
 "90)"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:426
 msgid "DPI"
-msgstr "DPI"
+msgstr "PPP"
 
-#: ../src/main.cpp:422
-#, fuzzy
+#: ../src/main.cpp:430
 msgid ""
 "Exported area in SVG user units (default is the canvas; 0,0 is lower-left "
 "corner)"
 msgstr ""
-"El área exportada en píxeles SVG (por defecto es el documento completo, 0,0 "
-"es la esquina inferior izquierda)"
+"El área exportada en unidades de usuario SVG (por defecto es el lienzo "
+"completo, 0,0 es la esquina inferior izquierda)"
 
-#: ../src/main.cpp:423
+#: ../src/main.cpp:431
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:427
+#: ../src/main.cpp:435
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr "El área exportada es el dibujo completo (no el lienzo)"
 
-#: ../src/main.cpp:432
+#: ../src/main.cpp:440
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr ""
+"Ajustar el área de exportación del mapa de bits hacia afuera hasta los "
+"valores enteros más próximos (en unidades de usuario SVG)"
 
-#: ../src/main.cpp:437
+#: ../src/main.cpp:445
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "El ancho del mapa de bits generado en píxeles (sobreescribe ppp de "
 "exportación)"
 
-#: ../src/main.cpp:438
+#: ../src/main.cpp:446
 msgid "WIDTH"
 msgstr "ANCHO"
 
-#: ../src/main.cpp:442
+#: ../src/main.cpp:450
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "La altura del mapa de bits generado en píxeles (sobreescribe ppp de "
 "exportación)"
 
-#: ../src/main.cpp:443
+#: ../src/main.cpp:451
 msgid "HEIGHT"
 msgstr "ALTO"
 
-#: ../src/main.cpp:447
+#: ../src/main.cpp:455
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "El ID del objeto que se exportará (sobreescribe área de exportación)"
 
-#: ../src/main.cpp:448 ../src/main.cpp:524
+#: ../src/main.cpp:456 ../src/main.cpp:532
 msgid "ID"
 msgstr "ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:454
+#: ../src/main.cpp:462
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Exportar solamente el objeto con el export-id, ocultar todos los demás "
 "(solamente con export-id)"
 
-#: ../src/main.cpp:459
+#: ../src/main.cpp:467
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Usar el nombre del archivo y pistas de DPI al exportar (solamente con export-"
 "id)"
 
-#: ../src/main.cpp:464
+#: ../src/main.cpp:472
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Color de fondo del mapa de bits exportado (cualquier cadena de color "
 "admitida por SVG)"
 
-#: ../src/main.cpp:465
+#: ../src/main.cpp:473
 msgid "COLOR"
 msgstr "COLOR"
 
-#: ../src/main.cpp:469
+#: ../src/main.cpp:477
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Opacidad de fondo del mapa de bits exportado (entre 0.0 y 1.0, ó entre 1 y "
 "255)"
 
-#: ../src/main.cpp:470
+#: ../src/main.cpp:478
 msgid "VALUE"
 msgstr "VALOR"
 
-#: ../src/main.cpp:474
+#: ../src/main.cpp:482
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Exportar el documento a un archivo SVG plano (sin nombre de espacio sodipodi "
 "o inkscape)"
 
-#: ../src/main.cpp:479
+#: ../src/main.cpp:487
 msgid "Export document to a PS file"
 msgstr "Exportar el documento a un archivo PS"
 
-#: ../src/main.cpp:484
+#: ../src/main.cpp:492
 msgid "Export document to an EPS file"
 msgstr "Exportar el documento a un archivo EPS"
 
-#: ../src/main.cpp:489
+#: ../src/main.cpp:497
 msgid "Convert text object to paths on export (EPS)"
-msgstr "Convertir el texto a trazos en la exportación (EPS)"
+msgstr "Convertir el texto a trazos al exportar (EPS)"
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:502
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr ""
 "Exportar los archivos con la caja de contorno al tamaño de la página (EPS)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:500
+#: ../src/main.cpp:508
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4155,7 +4157,7 @@ msgstr ""
 "query-id»"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:506
+#: ../src/main.cpp:514
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4164,7 +4166,7 @@ msgstr ""
 "query-id»"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:512
+#: ../src/main.cpp:520
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
@@ -4172,38 +4174,38 @@ msgstr ""
 "Consultar la anchura del dibujo o, si se indica, del objeto con «--query-id»"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:518
+#: ../src/main.cpp:526
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 "Consultar la altura del dibujo o, si se indica, del objeto con «--query-id»"
 
-#: ../src/main.cpp:523
+#: ../src/main.cpp:531
 msgid "The ID of the object whose dimensions are queried"
 msgstr "El ID del objeto cuyas dimensiones se consultan"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:529
+#: ../src/main.cpp:537
 msgid "Print out the extension directory and exit"
 msgstr "Mostrar el directorio de extensiones y terminar"
 
-#: ../src/main.cpp:534
+#: ../src/main.cpp:542
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Mostrar los archivos uno por uno, cambiar al siguiente al pulsar una tecla o "
 "el ratón"
 
-#: ../src/main.cpp:539
+#: ../src/main.cpp:547
 msgid "Use the new Gtkmm GUI interface"
 msgstr "Usar la nueva interfaz GUI Gtkmm"
 
-#: ../src/main.cpp:544
+#: ../src/main.cpp:552
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr ""
 "Eliminar definiciones no utilizadas de la(s) sección(es) «defs» del documento"
 
-#: ../src/main.cpp:1008
+#: ../src/main.cpp:741
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4215,73 +4217,62 @@ msgstr ""
 
 #: ../src/menus-skeleton.h:17
 msgid "_New"
-msgstr ""
+msgstr "_Nuevo"
 
 #: ../src/menus-skeleton.h:22
-#, fuzzy
 msgid "Open _Recent"
-msgstr "Arco abierto"
+msgstr "Abrir _reciente"
 
 #: ../src/menus-skeleton.h:53
-#, fuzzy
 msgid "_Edit"
-msgstr "Editar..."
+msgstr "_Edición"
 
 #: ../src/menus-skeleton.h:84
-#, fuzzy
 msgid "_View"
-msgstr "_Ocultar"
+msgstr "_Ver"
 
 #: ../src/menus-skeleton.h:97
-#, fuzzy
 msgid "Show/Hide"
-msgstr "Mostrar las guías"
+msgstr "Mostrar/ocultar"
 
 #: ../src/menus-skeleton.h:116
-#, fuzzy
 msgid "_Layer"
-msgstr "Ba_jar capa"
+msgstr "_Capa"
 
 #: ../src/menus-skeleton.h:133
-#, fuzzy
 msgid "_Object"
-msgstr "Objeto"
+msgstr "_Objeto"
 
 #: ../src/menus-skeleton.h:155
-#, fuzzy
 msgid "_Path"
-msgstr "Trazos"
+msgstr "_Trazo"
 
 #: ../src/menus-skeleton.h:178
-#, fuzzy
 msgid "_Text"
-msgstr "Texto"
+msgstr "_Texto"
 
 #: ../src/menus-skeleton.h:190
-#, fuzzy
 msgid "Effects"
-msgstr "Desvíos"
+msgstr "Efectos"
 
 #: ../src/menus-skeleton.h:197
 msgid "Whiteboa_rd"
-msgstr ""
+msgstr "Piza_rra blanca"
 
 #: ../src/menus-skeleton.h:210
-#, fuzzy
 msgid "_Help"
-msgstr "Montón"
+msgstr "A_yuda"
 
 #: ../src/menus-skeleton.h:212
-#, fuzzy
 msgid "Tutorials"
-msgstr "Autores"
+msgstr "Tutoriales"
 
 #: ../src/node-context.cpp:379
 msgid ""
 "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
 "+Alt</b>: move along handles"
 msgstr ""
-"<b>Ctrl</b>: conmutar el tipo de nodo, pinzar el ángulo del tirador, mover "
+"<b>Ctrl</b>: conmutar el tipo de nodo, ajustar el ángulo del tirador, mover "
 "hor/vert; <b>Ctrl+Alt</b>: mover a lo largo de los tiradores"
 
 #: ../src/node-context.cpp:380
@@ -4300,7 +4291,7 @@ msgstr ""
 #: ../src/nodepath.cpp:1399 ../src/nodepath.cpp:1411 ../src/nodepath.cpp:1492
 #: ../src/nodepath.cpp:1504
 msgid "To join, you must have <b>two endnodes</b> selected."
-msgstr "Debe seleccionar <b>dos nodos finales</b> para unir."
+msgstr "Debe seleccionar <b>dos nodos finales</b> para unirlos."
 
 #: ../src/nodepath.cpp:1633 ../src/nodepath.cpp:1647
 msgid ""
@@ -4312,7 +4303,7 @@ msgstr ""
 
 #: ../src/nodepath.cpp:1743
 msgid "Cannot find path between nodes."
-msgstr "No se pudo hallar un trazo entre los nodos."
+msgstr "No se ha encontrado un trazo entre los nodos."
 
 #: ../src/nodepath.cpp:2811
 #, c-format
@@ -4322,7 +4313,7 @@ msgid ""
 "handles"
 msgstr ""
 "<b>Tirador de nodo</b>: ángulo %0.2f&#176;, longitud %s; con <b>Ctrl</b> "
-"para ajustar al ángulo; con <b>Alt</b> para mantener la longitud, con "
+"para ajustar al ángulo; con <b>Alt</b> para bloquear la longitud, con "
 "<b>Mayús</b> para girar ambos tiradores"
 
 #: ../src/nodepath.cpp:3340
@@ -4350,7 +4341,7 @@ msgid ""
 "handle in sync"
 msgstr ""
 "<b>Tirador de nodo</b>: arrastre para dar forma a la curva; con <b>Ctrl</b> "
-"para ajustar al ángulo; con <b>Alt</b> para mantener la longitud, con "
+"para ajustar al ángulo; con <b>Alt</b> para bloquear la longitud, con "
 "<b>Mayús</b> para sincronizar la rotación el tirador opuesto"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
@@ -4411,7 +4402,7 @@ msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
 msgstr[0] ""
-"Seleccionados <b>0</b> de <b>%i</b> nodos. <b>Clic</b>, <b>Mayús+clic</b> o "
+"Seleccionados <b>0</b> de <b>%i</b> nodo. <b>Clic</b>, <b>Mayús+clic</b> o "
 "<b>arrastre alrededor</b> de nodos para seleccionarlos."
 msgstr[1] ""
 "Seleccionados <b>0</b> de <b>%i</b> nodos. <b>Clic</b>, <b>Mayús+clic</b> o "
@@ -4595,7 +4586,7 @@ msgstr "_Relleno y borde"
 
 #: ../src/path-chemistry.cpp:58
 msgid "Select <b>at least two objects</b> to combine."
-msgstr "Seleccione <b>por lo menos dos objetos</b> para combinar."
+msgstr "Seleccione <b>por lo menos dos objetos</b> para combinarlos."
 
 #: ../src/path-chemistry.cpp:65
 msgid "At least one of the objects is <b>not a path</b>, cannot combine."
@@ -7346,11 +7337,11 @@ msgstr "Abrir las preferencias de Inkscape para la herramienta Conector"
 #. Zooming
 #: ../src/verbs.cpp:2090
 msgid "Zoom In"
-msgstr "Aumentar"
+msgstr "Acercar"
 
 #: ../src/verbs.cpp:2090
 msgid "Zoom in"
-msgstr "Aumentar"
+msgstr "Acercar"
 
 #: ../src/verbs.cpp:2091
 msgid "Zoom Out"
@@ -7858,7 +7849,7 @@ msgstr "Tamaño de tipografía:"
 #. * interested in.
 #: ../src/widgets/font-selector.cpp:554
 msgid "AaBbCcIiPpQq12368.;/()"
-msgstr "AaBbCcIiPpQq12368.;/()"
+msgstr "AaBbCcIiÁáÑñPpQq12368.;/()"
 
 #: ../src/widgets/gradient-selector.cpp:137
 #: ../src/widgets/gradient-toolbar.cpp:524
@@ -8032,7 +8023,7 @@ msgstr "(raíz)"
 
 #: ../src/widgets/paint-selector.cpp:182 ../src/widgets/paint-selector.cpp:561
 msgid "No paint"
-msgstr "Sin pintura"
+msgstr "Sin relleno"
 
 #: ../src/widgets/paint-selector.cpp:184 ../src/widgets/paint-selector.cpp:629
 msgid "Flat color"
@@ -8464,7 +8455,7 @@ msgstr ""
 
 #: ../src/widgets/toolbox.cpp:1968
 msgid "Thinning:"
-msgstr "Adelgazar:"
+msgstr "Estrechar:"
 
 #: ../src/widgets/toolbox.cpp:1968
 msgid ""
@@ -8574,7 +8565,3 @@ msgstr "Hacer que los conectores eviten los objetos seleccionados"
 #: ../src/widgets/toolbox.cpp:3044
 msgid "Make connectors ignore selected objects"
 msgstr "Hacer que los conectores ignoren los objetos seleccionados"
-
-#, fuzzy
-#~ msgid "<inkscape version=\""
-#~ msgstr "Mostrar el número de versión de Inkscape"

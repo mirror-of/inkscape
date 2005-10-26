@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-20 22:53+0200\n"
+"POT-Creation-Date: 2005-10-26 21:07+0200\n"
 "PO-Revision-Date: 2005-10-17 23:10+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
@@ -67,22 +67,24 @@ msgstr ""
 msgid "Creating new connector"
 msgstr "Új kapocs létrehozása"
 
-#: ../src/connector-context.cpp:943
+#: ../src/connector-context.cpp:939
 msgid "Finishing connector"
 msgstr "Kapocs befejezése"
 
-#: ../src/connector-context.cpp:1112
-msgid "<b>Connnection point</b>: click or drag to create a new connector"
+#: ../src/connector-context.cpp:1108
+#, fuzzy
+msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
 "<b>Kapcsolódási pont</b>. Új kapocs létrehozása: kattintással vagy húzással."
 
-#: ../src/connector-context.cpp:1189
-msgid "<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"
+#: ../src/connector-context.cpp:1185
+#, fuzzy
+msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 "<b>Kapocs-végpont</b>. Új útvonal készítése vagy más alakzatokhoz való "
 "kapcsolás: húzással."
 
-#: ../src/connector-context.cpp:1282
+#: ../src/connector-context.cpp:1278
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Jelöljön ki <b>legalább 1 nem-kapocs objektumot</b>."
 
@@ -3953,51 +3955,51 @@ msgstr ""
 "A családmegadás nélküli betűtípus figyelmen kívül hagyása (az ilyen "
 "betűtípus problémát okozhat)"
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:395
 msgid "Print the Inkscape version number"
 msgstr "Az Inkscape verziószámának kiírása"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:400
 msgid "Do not use X server (only process files from console)"
 msgstr ""
 "Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:405
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr ""
 "Az X grafikus rendszer használatának megkísérlése akkor is, ha a DISPLAY "
 "változó nincs beállítva"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:410
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "A megadott dokumentum(ok) megnyitása (az opciók elhagyhatók)"
 
-#: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
-#: ../src/main.cpp:475 ../src/main.cpp:480 ../src/main.cpp:485
+#: ../src/main.cpp:411 ../src/main.cpp:416 ../src/main.cpp:421
+#: ../src/main.cpp:483 ../src/main.cpp:488 ../src/main.cpp:493
 msgid "FILENAME"
 msgstr "FÁJLNÉV"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:415
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "A dokumentum(ok) nyomtatása egy adott fájlba (program számára való átadás: "
 "\"| programnév\")"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:420
 msgid "Export document to a PNG file"
 msgstr "A dokumentum exportálása PNG formátumú képbe"
 
-#: ../src/main.cpp:417
+#: ../src/main.cpp:425
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr ""
 "Az SVG-dokumentum bitképbe való exportálásához használt felbontás "
 "(alapértelmezés: 90)"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:426
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:422
+#: ../src/main.cpp:430
 msgid ""
 "Exported area in SVG user units (default is the canvas; 0,0 is lower-left "
 "corner)"
@@ -4005,15 +4007,15 @@ msgstr ""
 "Az exportált terület felhasználói SVG-mértékegységben (alapértelmezés: a "
 "rajzvászon, a bal alsó sarok a 0,0 pont)"
 
-#: ../src/main.cpp:423
+#: ../src/main.cpp:431
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:427
+#: ../src/main.cpp:435
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr "Az exportált terület a teljes rajz (nem a rajzvászon)"
 
-#: ../src/main.cpp:432
+#: ../src/main.cpp:440
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
@@ -4021,93 +4023,93 @@ msgstr ""
 "Az exportált képpontos terület illesztése kifelé a legközelebbi egész "
 "értékekhez (felhasználói SVG-mértékegységben)"
 
-#: ../src/main.cpp:437
+#: ../src/main.cpp:445
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "Az exportált bitkép szélessége képpontban (felülbírálja az export-dpi "
 "értéket)"
 
-#: ../src/main.cpp:438
+#: ../src/main.cpp:446
 msgid "WIDTH"
 msgstr "SZÉLESSÉG"
 
-#: ../src/main.cpp:442
+#: ../src/main.cpp:450
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "Az exportált bitkép magassága képpontban (felülbírálja az export-dpi értéket)"
 
-#: ../src/main.cpp:443
+#: ../src/main.cpp:451
 msgid "HEIGHT"
 msgstr "MAGASSÁG"
 
-#: ../src/main.cpp:447
+#: ../src/main.cpp:455
 msgid "The ID of the object to export (overrides export-area)"
 msgstr ""
 "Az exportálandó objektum azonosítója (felülbírálja az export-area értéket)"
 
-#: ../src/main.cpp:448 ../src/main.cpp:524
+#: ../src/main.cpp:456 ../src/main.cpp:532
 msgid "ID"
 msgstr "Azonosító"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:454
+#: ../src/main.cpp:462
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Csak az export-id-vel rendelkező objektum exportálása; a többi elrejtése "
 "(csak export-id esetén)"
 
-#: ../src/main.cpp:459
+#: ../src/main.cpp:467
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Tárolt fájlnév és DPI-információk használata exportáláskor (csak export-id "
 "esetén)"
 
-#: ../src/main.cpp:464
+#: ../src/main.cpp:472
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Az exportált bitkép háttérszíne (bármilyen, az SVG formátum által támogatott "
 "színmegadás)"
 
-#: ../src/main.cpp:465
+#: ../src/main.cpp:473
 msgid "COLOR"
 msgstr "SZÍN"
 
-#: ../src/main.cpp:469
+#: ../src/main.cpp:477
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Az exportált bitkép hátterének átlátszatlansága (vagy 0,0 és 1,0 közt, vagy "
 "1 és 255 közt)"
 
-#: ../src/main.cpp:470
+#: ../src/main.cpp:478
 msgid "VALUE"
 msgstr "ÉRTÉK"
 
-#: ../src/main.cpp:474
+#: ../src/main.cpp:482
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "A dokumentum exportálása normál SVG-fájlba (nincs sem \"sodipodi\", sem "
 "\"inkscape\" névtér)"
 
-#: ../src/main.cpp:479
+#: ../src/main.cpp:487
 msgid "Export document to a PS file"
 msgstr "A dokumentum exportálása PS formátumú fájlba"
 
-#: ../src/main.cpp:484
+#: ../src/main.cpp:492
 msgid "Export document to an EPS file"
 msgstr "A dokumentum exportálása EPS formátumú fájlba"
 
-#: ../src/main.cpp:489
+#: ../src/main.cpp:497
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Szövegobjektum átalakítása láncokká az exportálás közben (EPS)"
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:502
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr "Exportáláskor a határoló téglalap a lapméretre legyen állítva (EPS)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:500
+#: ../src/main.cpp:508
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4116,7 +4118,7 @@ msgstr ""
 "objektum) X-koordinátájának lekérdezése"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:506
+#: ../src/main.cpp:514
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4125,7 +4127,7 @@ msgstr ""
 "objektum) Y-koordinátájának lekérdezése"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:512
+#: ../src/main.cpp:520
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
@@ -4134,7 +4136,7 @@ msgstr ""
 "objektum) szélességének lekérdezése"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:518
+#: ../src/main.cpp:526
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
@@ -4142,30 +4144,30 @@ msgstr ""
 "A rajz (illetve, ha az meg van adva, a --query-id opcióval megadott "
 "objektum) magasságának lekérdezése"
 
-#: ../src/main.cpp:523
+#: ../src/main.cpp:531
 msgid "The ID of the object whose dimensions are queried"
 msgstr "Azon objektum azonosítója, amelynek a kiterjedése lekérdezendő"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:529
+#: ../src/main.cpp:537
 msgid "Print out the extension directory and exit"
 msgstr "A kiterjesztés-könyvtár kiírása, majd kilépés"
 
-#: ../src/main.cpp:534
+#: ../src/main.cpp:542
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "A megadott fájlok egyenkénti megjelenítése - ugrás a következőre: "
 "billentyűzet vagy egér használatával"
 
-#: ../src/main.cpp:539
+#: ../src/main.cpp:547
 msgid "Use the new Gtkmm GUI interface"
 msgstr "Az új Gtkmm felhasználói felület használata"
 
-#: ../src/main.cpp:544
+#: ../src/main.cpp:552
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "A nem használt definíciók eltávolítása a dokumentum defs-részeiből"
 
-#: ../src/main.cpp:1008
+#: ../src/main.cpp:741
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"

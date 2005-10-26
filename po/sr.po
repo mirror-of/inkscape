@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.42\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-20 22:53+0200\n"
+"POT-Creation-Date: 2005-10-26 21:07+0200\n"
 "PO-Revision-Date: 2005-07-08 01:23+0200\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -68,20 +68,20 @@ msgstr ""
 msgid "Creating new connector"
 msgstr "Прављење нове криве"
 
-#: ../src/connector-context.cpp:943
+#: ../src/connector-context.cpp:939
 #, fuzzy
 msgid "Finishing connector"
 msgstr "Завршавање оловке"
 
-#: ../src/connector-context.cpp:1112
-msgid "<b>Connnection point</b>: click or drag to create a new connector"
+#: ../src/connector-context.cpp:1108
+msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
 
-#: ../src/connector-context.cpp:1189
-msgid "<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"
+#: ../src/connector-context.cpp:1185
+msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 
-#: ../src/connector-context.cpp:1282
+#: ../src/connector-context.cpp:1278
 #, fuzzy
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Изаберите <b>најмање два објекта</b> за груписање."
@@ -3869,48 +3869,48 @@ msgstr "Превлачење чвора или ручке је отказано.
 msgid "Ignoring font without family that will crash Pango"
 msgstr "Игнорисање фонта без фамилије који би оборили Панго"
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:395
 msgid "Print the Inkscape version number"
 msgstr "Штампај ознаку верзије Инкскејпа"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:400
 msgid "Do not use X server (only process files from console)"
 msgstr "Не користи X сервер (само обрађуј датотеке преко конзоле)"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:405
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr ""
 "Покушај да користиш X сервер (чак иако променљива $DISPLAY није постављена)"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:410
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Отвори наведене документе (ниска опција се може прескочити)"
 
-#: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
-#: ../src/main.cpp:475 ../src/main.cpp:480 ../src/main.cpp:485
+#: ../src/main.cpp:411 ../src/main.cpp:416 ../src/main.cpp:421
+#: ../src/main.cpp:483 ../src/main.cpp:488 ../src/main.cpp:493
 msgid "FILENAME"
 msgstr "НАЗИВ ДАТОТЕКЕ"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:415
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Штампај документе у наведену излазну датотеку (користите „| програм“ за "
 "цевку)"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:420
 msgid "Export document to a PNG file"
 msgstr "Извоз документа у PNG датотеку"
 
-#: ../src/main.cpp:417
+#: ../src/main.cpp:425
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr ""
 "Резолуција која се користи за претварање СВГ-а у битмапу (подразумевано 90)"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:426
 msgid "DPI"
 msgstr "ТПИ"
 
-#: ../src/main.cpp:422
+#: ../src/main.cpp:430
 #, fuzzy
 msgid ""
 "Exported area in SVG user units (default is the canvas; 0,0 is lower-left "
@@ -3919,101 +3919,101 @@ msgstr ""
 "Површина за извоз у SVG пикселима (подразумевано је платно, 0,0 је доњи-леви "
 "угао)"
 
-#: ../src/main.cpp:423
+#: ../src/main.cpp:431
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:427
+#: ../src/main.cpp:435
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr "Површина за извоз је тренутни цртеж (а не платно)"
 
-#: ../src/main.cpp:432
+#: ../src/main.cpp:440
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr ""
 
-#: ../src/main.cpp:437
+#: ../src/main.cpp:445
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Ширина образоване битмапе у тачкама (преписује извозни ТПИ)"
 
-#: ../src/main.cpp:438
+#: ../src/main.cpp:446
 msgid "WIDTH"
 msgstr "ШИРИНА"
 
-#: ../src/main.cpp:442
+#: ../src/main.cpp:450
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Висина образоване битмапе у тачкама (занемарује атрибут „export-dpi“)"
 
-#: ../src/main.cpp:443
+#: ../src/main.cpp:451
 msgid "HEIGHT"
 msgstr "ВИСИНА"
 
-#: ../src/main.cpp:447
+#: ../src/main.cpp:455
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "ИД објекта за извоз (занемарује атрибут „export-area“)"
 
-#: ../src/main.cpp:448 ../src/main.cpp:524
+#: ../src/main.cpp:456 ../src/main.cpp:532
 msgid "ID"
 msgstr "ИД"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:454
+#: ../src/main.cpp:462
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Извози само објекат са атрибутом „export-id“, сакрива све друге (само са "
 "атрибутом „export-id“)"
 
-#: ../src/main.cpp:459
+#: ../src/main.cpp:467
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Користи сачувани назив датотеке и ТПИ резолуцију при извозу (само са "
 "атрибутом „export-id“)"
 
-#: ../src/main.cpp:464
+#: ../src/main.cpp:472
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Боја позадине битмапе за образовање (било која ознака боје коју подржава СВГ)"
 
-#: ../src/main.cpp:465
+#: ../src/main.cpp:473
 msgid "COLOR"
 msgstr "БОЈА"
 
-#: ../src/main.cpp:469
+#: ../src/main.cpp:477
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr "Боја позадине битмапе за образовање (било од 0.0 до 1.0, или 1 до 255)"
 
-#: ../src/main.cpp:470
+#: ../src/main.cpp:478
 msgid "VALUE"
 msgstr "ВРЕДНОСТ"
 
-#: ../src/main.cpp:474
+#: ../src/main.cpp:482
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Извези документ у обичну СВГ датотеку (без атрибута „sodipodi“ или "
 "„inkscape“)"
 
-#: ../src/main.cpp:479
+#: ../src/main.cpp:487
 msgid "Export document to a PS file"
 msgstr "Извоз документа у PS датотеку"
 
-#: ../src/main.cpp:484
+#: ../src/main.cpp:492
 msgid "Export document to an EPS file"
 msgstr "Извоз документа у EPS датотеку"
 
-#: ../src/main.cpp:489
+#: ../src/main.cpp:497
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Претвори текстуалне објекте у криве при извозу (EPS)"
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:502
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr ""
 "Извоз датотека са оквиром контејнера постављеним на величину стране (EPS)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:500
+#: ../src/main.cpp:508
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4021,7 +4021,7 @@ msgstr ""
 "Питај за X координату цртежа или, ако је постављено, објекта са --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:506
+#: ../src/main.cpp:514
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4029,43 +4029,43 @@ msgstr ""
 "Питај за Y координату цртежа или, ако је постављено, објекта са --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:512
+#: ../src/main.cpp:520
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr "Питај за ширину цртежа или, ако је постављено, објекта са --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:518
+#: ../src/main.cpp:526
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr "Питај за висину цртежа или, ако је постављено, објекта са --query-id"
 
-#: ../src/main.cpp:523
+#: ../src/main.cpp:531
 msgid "The ID of the object whose dimensions are queried"
 msgstr "ИД објекта за чије се димензије поставља упит"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:529
+#: ../src/main.cpp:537
 msgid "Print out the extension directory and exit"
 msgstr "Штампа директоријум са екстензијама и напушта програм"
 
-#: ../src/main.cpp:534
+#: ../src/main.cpp:542
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Приказује датотеке једну по једну, прелази на следећу након било каквог "
 "догађаја са тастерима или мишем"
 
-#: ../src/main.cpp:539
+#: ../src/main.cpp:547
 msgid "Use the new Gtkmm GUI interface"
 msgstr "Користи нови Gtkmm графички интерфејс"
 
-#: ../src/main.cpp:544
+#: ../src/main.cpp:552
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Уклања неупотребљене ставке из defs избора документа"
 
-#: ../src/main.cpp:1008
+#: ../src/main.cpp:741
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"

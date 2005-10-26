@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-20 22:53+0200\n"
+"POT-Creation-Date: 2005-10-26 21:07+0200\n"
 "PO-Revision-Date: 2005-07-13 20:45+0200\n"
 "Last-Translator: cornelius <josef.vybiral@gmail.com>\n"
 "Language-Team: Czech <none>\n"
@@ -67,20 +67,20 @@ msgstr ""
 msgid "Creating new connector"
 msgstr "Vytvářím novou křivku"
 
-#: ../src/connector-context.cpp:943
+#: ../src/connector-context.cpp:939
 #, fuzzy
 msgid "Finishing connector"
 msgstr "Dokončování kreslení perem"
 
-#: ../src/connector-context.cpp:1112
-msgid "<b>Connnection point</b>: click or drag to create a new connector"
+#: ../src/connector-context.cpp:1108
+msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
 
-#: ../src/connector-context.cpp:1189
-msgid "<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"
+#: ../src/connector-context.cpp:1185
+msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 
-#: ../src/connector-context.cpp:1282
+#: ../src/connector-context.cpp:1278
 #, fuzzy
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Vyberte <b>nejméně dva objekty</b> pro seskupení"
@@ -3836,46 +3836,46 @@ msgstr "Přesun uzlu nebo ovládacího bodu zrušen."
 msgid "Ignoring font without family that will crash Pango"
 msgstr "Ignoruji font bez rodiny, který by způsobil pád Panga"
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:395
 msgid "Print the Inkscape version number"
 msgstr "Vypsat číslo verze Inkscape"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:400
 msgid "Do not use X server (only process files from console)"
 msgstr "Nepoužívat X server (pouze zpracovat soubory z konzole)"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:405
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Pokusit se použít X server i pokud není nastavena proměnná $DISPLAY"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:410
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Otevřít zadané dokumenty (řetězce s volbami lze vypustit)"
 
-#: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
-#: ../src/main.cpp:475 ../src/main.cpp:480 ../src/main.cpp:485
+#: ../src/main.cpp:411 ../src/main.cpp:416 ../src/main.cpp:421
+#: ../src/main.cpp:483 ../src/main.cpp:488 ../src/main.cpp:493
 msgid "FILENAME"
 msgstr "SOUBOR"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:415
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Tisknout dokumenty do zadaného výstupního souboru (pro rouru použijte '| "
 "program')"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:420
 msgid "Export document to a PNG file"
 msgstr "Export dokumentu do souboru PNG"
 
-#: ../src/main.cpp:417
+#: ../src/main.cpp:425
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr "Rozlišení použité pro převod SVG do bitmapy (výchozí je 90)"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:426
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:422
+#: ../src/main.cpp:430
 #, fuzzy
 msgid ""
 "Exported area in SVG user units (default is the canvas; 0,0 is lower-left "
@@ -3884,99 +3884,99 @@ msgstr ""
 "Exportovaná oblast v SVG pixelech (výchozí je celý dokument; 0,0 je spodní "
 "levý roh)"
 
-#: ../src/main.cpp:423
+#: ../src/main.cpp:431
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:427
+#: ../src/main.cpp:435
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr "Exportovaná oblast je celá kresba (ne plátno)"
 
-#: ../src/main.cpp:432
+#: ../src/main.cpp:440
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr ""
 
-#: ../src/main.cpp:437
+#: ../src/main.cpp:445
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Šířka generované bitmapy v pixelech (přebijí nastavené dpi)"
 
-#: ../src/main.cpp:438
+#: ../src/main.cpp:446
 msgid "WIDTH"
 msgstr "ŠÍŘKA"
 
-#: ../src/main.cpp:442
+#: ../src/main.cpp:450
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Výška generované bitmapy v pixelech (přebíjí nastavené dpi)"
 
-#: ../src/main.cpp:443
+#: ../src/main.cpp:451
 msgid "HEIGHT"
 msgstr "VÝŠKA"
 
-#: ../src/main.cpp:447
+#: ../src/main.cpp:455
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "ID objektu pro export (přebíjí oblast exportu)"
 
-#: ../src/main.cpp:448 ../src/main.cpp:524
+#: ../src/main.cpp:456 ../src/main.cpp:532
 msgid "ID"
 msgstr "ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:454
+#: ../src/main.cpp:462
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Exportovat pouze objekt s id k exportu, skryj všechny ostatní (pouze s "
 "export-id)"
 
-#: ../src/main.cpp:459
+#: ../src/main.cpp:467
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr "Použít uložený název souboru a DPI při exportu (pouze s export-id)"
 
-#: ../src/main.cpp:464
+#: ../src/main.cpp:472
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Barva pozadí exportované bitmapy (jakýkoli řetězec s barvou podporovaný SVG)"
 
-#: ../src/main.cpp:465
+#: ../src/main.cpp:473
 msgid "COLOR"
 msgstr "BARVA"
 
-#: ../src/main.cpp:469
+#: ../src/main.cpp:477
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Průsvitnost pozadí exportované bitmapy (od 0.0 do 1.0, nebo od 1 do 255)"
 
-#: ../src/main.cpp:470
+#: ../src/main.cpp:478
 msgid "VALUE"
 msgstr "HODNOTA"
 
-#: ../src/main.cpp:474
+#: ../src/main.cpp:482
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Export dokumentu do prostého SVG (bez jmenného prostoru inkscape nebo "
 "sodipodi)"
 
-#: ../src/main.cpp:479
+#: ../src/main.cpp:487
 msgid "Export document to a PS file"
 msgstr "Export dokumentu do souboru PS"
 
-#: ../src/main.cpp:484
+#: ../src/main.cpp:492
 msgid "Export document to an EPS file"
 msgstr "Export dokumentu do souboru EPS"
 
-#: ../src/main.cpp:489
+#: ../src/main.cpp:497
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Převést textové objekty na křivky při exportu (EPS)"
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:502
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr "Exportovat soubory s okrajem nastaveným na velikost strany (EPS)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:500
+#: ../src/main.cpp:508
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -3984,7 +3984,7 @@ msgstr ""
 "Dotázat se na X souřadnici kresby, nebo pokud je určeno, objektu s --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:506
+#: ../src/main.cpp:514
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -3992,43 +3992,43 @@ msgstr ""
 "Dotázat se na Y souřadnici kresby, nebo pokud je určeno, objektu s --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:512
+#: ../src/main.cpp:520
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr "Dotázat se na šířku kresby, nebo pokud je určeno, objektu s --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:518
+#: ../src/main.cpp:526
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr "Dotázat se na výšku kresby, nebo pokud je určeno, objektu s --query-id"
 
-#: ../src/main.cpp:523
+#: ../src/main.cpp:531
 msgid "The ID of the object whose dimensions are queried"
 msgstr "ID objektu jehož rozměry jsou hledány"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:529
+#: ../src/main.cpp:537
 msgid "Print out the extension directory and exit"
 msgstr "Vytisknout adresář s rozšířeními a skončit"
 
-#: ../src/main.cpp:534
+#: ../src/main.cpp:542
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Zobrazit zadané soubory jeden po druhém, přepnout na další při jakékoli "
 "události myši nebo klávesnice"
 
-#: ../src/main.cpp:539
+#: ../src/main.cpp:547
 msgid "Use the new Gtkmm GUI interface"
 msgstr "Použije nové GUI využívající Gtkmm"
 
-#: ../src/main.cpp:544
+#: ../src/main.cpp:552
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Odstranit nepoužívané definice z defs sekce(í) dokumentu"
 
-#: ../src/main.cpp:1008
+#: ../src/main.cpp:741
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"

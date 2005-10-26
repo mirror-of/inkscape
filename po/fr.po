@@ -6,14 +6,14 @@
 # Didier Conchaudron <conchaudron@free.fr>, 2003.
 # Matiphas <matiphas _a_ free _point_ fr>, 2004.
 # Frederic Rodrigo <f.rodrigo free.fr>, 2004-2005.
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-20 22:53+0200\n"
-"PO-Revision-Date: 2005-09-30 00:01+0200\n"
+"POT-Creation-Date: 2005-10-26 21:07+0200\n"
+"PO-Revision-Date: 2005-10-24 12:31+0100\n"
 "Last-Translator: Matiphas <matiphas@free.fr>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -71,23 +71,25 @@ msgstr ""
 msgid "Creating new connector"
 msgstr "Création d'un nouveau connecteur"
 
-#: ../src/connector-context.cpp:943
+#: ../src/connector-context.cpp:939
 msgid "Finishing connector"
 msgstr "Tracé du connecteur terminé"
 
-#: ../src/connector-context.cpp:1112
-msgid "<b>Connnection point</b>: click or drag to create a new connector"
+#: ../src/connector-context.cpp:1108
+#, fuzzy
+msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
 "<b>Point de connnection</b> : cliquer ou déplacer pour créer un nouveau "
 "connecteur"
 
-#: ../src/connector-context.cpp:1189
-msgid "<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"
+#: ../src/connector-context.cpp:1185
+#, fuzzy
+msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 "<b>Fin de connecteur</b> : déplacer pour rerouter ou connecter à de "
 "nouvelles formes"
 
-#: ../src/connector-context.cpp:1282
+#: ../src/connector-context.cpp:1278
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Sélectionner <b>au moins un objet non connecteur</b>."
 
@@ -179,7 +181,7 @@ msgstr "<small>Hasard :</small>"
 msgid "_Symmetry"
 msgstr "_Symétrie"
 
-# See: 
+# See:
 # http://www.bib.ulb.ac.be/coursmath/doc/17.htm (visual examples)
 # http://membres.lycos.fr/villemingerard/Geometri/Sym1D.htm (French vocabulary)
 # http://www.clarku.edu/~djoyce/wallpaper/seventeen.html (English vocabulary)
@@ -832,7 +834,6 @@ msgid "Snap the edges of the object bounding boxes"
 msgstr "Faire coller les côtés des boîtes de contour des objets"
 
 #: ../src/dialogs/desktop-properties.cpp:934
-#, fuzzy
 msgid "Snap nodes to grid"
 msgstr "Faire coller les nœuds à la grille"
 
@@ -3974,151 +3975,152 @@ msgstr "Déplacement de nœud ou de poignée annulé."
 msgid "Ignoring font without family that will crash Pango"
 msgstr "Ignorer les polices sans famille qui font planter Pango"
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:395
 msgid "Print the Inkscape version number"
 msgstr "Afficher la version d'Inkscape"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:400
 msgid "Do not use X server (only process files from console)"
 msgstr ""
 "Ne pas utiliser le serveur X (traiter les fichiers seulement depuis la "
 "console)"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:405
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Essayer d'utiliser le serveur X (même si $DISPLAY n'est pas défini)"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:410
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Ouvrir les document(s) spécifiés (la chaîne d'option peut être exclue)"
 
-#: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
-#: ../src/main.cpp:475 ../src/main.cpp:480 ../src/main.cpp:485
+#: ../src/main.cpp:411 ../src/main.cpp:416 ../src/main.cpp:421
+#: ../src/main.cpp:483 ../src/main.cpp:488 ../src/main.cpp:493
 msgid "FILENAME"
 msgstr "NOM_DE_FICHIER"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:415
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Imprimer les document(s) dans le fichier de sortie spécifié (utilisez '| "
 "programme ' pour relier à un programme)"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:420
 msgid "Export document to a PNG file"
 msgstr "Exporter le document sous forme d'image PNG"
 
-#: ../src/main.cpp:417
+#: ../src/main.cpp:425
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr "La résolution utilisée pour exporter un SVG en bitmap (défaut 90)"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:426
 msgid "DPI"
 msgstr "PPP"
 
-#: ../src/main.cpp:422
-#, fuzzy
+#: ../src/main.cpp:430
 msgid ""
 "Exported area in SVG user units (default is the canvas; 0,0 is lower-left "
 "corner)"
 msgstr ""
-"Zone à exporter en pixels SVG (canevas entier par défaut; 0, 0 est le coin "
-"en bas à gauche)"
+"Zone à exporter en unités utilisateur SVG (par défaut, le canevas entier; 0, "
+"0 est le coin inférieur gauche)"
 
-#: ../src/main.cpp:423
+#: ../src/main.cpp:431
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:427
+#: ../src/main.cpp:435
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr "La zone à exporter est le dessin entier (pas le canevas)"
 
-#: ../src/main.cpp:432
+#: ../src/main.cpp:440
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr ""
+"Faire coller la zone d'exportation de bitmap aux valeurs entières "
+"supérieures les plus proches (en unités utilisateur SVG)"
 
-#: ../src/main.cpp:437
+#: ../src/main.cpp:445
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "La largeur en pixels du bitmap exporté (redéfinit la résolution)"
 
-#: ../src/main.cpp:438
+#: ../src/main.cpp:446
 msgid "WIDTH"
 msgstr "LARGEUR"
 
-#: ../src/main.cpp:442
+#: ../src/main.cpp:450
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "La hauteur en pixels du bitmap exporté (redéfinit la résolution)"
 
-#: ../src/main.cpp:443
+#: ../src/main.cpp:451
 msgid "HEIGHT"
 msgstr "HAUTEUR"
 
-#: ../src/main.cpp:447
+#: ../src/main.cpp:455
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "L'ID de l'objet à exporter (redéfinit la zone d'exportation)"
 
-#: ../src/main.cpp:448 ../src/main.cpp:524
+#: ../src/main.cpp:456 ../src/main.cpp:532
 msgid "ID"
 msgstr "ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:454
+#: ../src/main.cpp:462
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "N'exporter que l'objet avec export-id, cacher tous les autres (seulement "
 "avec export-id)"
 
-#: ../src/main.cpp:459
+#: ../src/main.cpp:467
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Utiliser le nom de fichier et la résolution enregistrés lors de "
 "l'exportation (seulement avec export-id)"
 
-#: ../src/main.cpp:464
+#: ../src/main.cpp:472
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Couleur de fond du bitmap exporté (n'importe quelle code de couleur permis "
 "par SVG)"
 
-#: ../src/main.cpp:465
+#: ../src/main.cpp:473
 msgid "COLOR"
 msgstr "COULEUR"
 
-#: ../src/main.cpp:469
+#: ../src/main.cpp:477
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr "Opacité du fond du bitmap exporté (entre 0.0 et 1.0 ou 1 et 255))"
 
-#: ../src/main.cpp:470
+#: ../src/main.cpp:478
 msgid "VALUE"
 msgstr "VALEUR"
 
-#: ../src/main.cpp:474
+#: ../src/main.cpp:482
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Exporter le document en SVG simple (sans espace de nom de Sodipodi ou "
 "d'Inkscape)"
 
-#: ../src/main.cpp:479
+#: ../src/main.cpp:487
 msgid "Export document to a PS file"
 msgstr "Exporter le document en fichier PS"
 
-#: ../src/main.cpp:484
+#: ../src/main.cpp:492
 msgid "Export document to an EPS file"
 msgstr "Exporter le document en fichier EPS"
 
-#: ../src/main.cpp:489
+#: ../src/main.cpp:497
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Convertir les objets texte en chemins lors de l'export (EPS)"
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:502
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr "Exporter les fichiers avec pour boîte de contour la page (EPS)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:500
+#: ../src/main.cpp:508
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4127,7 +4129,7 @@ msgstr ""
 "id, de l'objet"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:506
+#: ../src/main.cpp:514
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4136,7 +4138,7 @@ msgstr ""
 "id, de l'objet"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:512
+#: ../src/main.cpp:520
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
@@ -4144,37 +4146,37 @@ msgstr ""
 "Demander la largeur du dessin ou, si spécifié avec --query-id, de l'objet"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:518
+#: ../src/main.cpp:526
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 "Demander la hauteur du dessin ou, si spécifié avec --query-id, de l'objet"
 
-#: ../src/main.cpp:523
+#: ../src/main.cpp:531
 msgid "The ID of the object whose dimensions are queried"
 msgstr "L'ID de l'objet dont les dimensions sont demandées"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:529
+#: ../src/main.cpp:537
 msgid "Print out the extension directory and exit"
 msgstr "Lister le contenu du répertoire d'extensions, puis sortir"
 
-#: ../src/main.cpp:534
+#: ../src/main.cpp:542
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Afficher les fichiers donnés un par un, passer au suivant à chaque événement "
 "clavier/souris"
 
-#: ../src/main.cpp:539
+#: ../src/main.cpp:547
 msgid "Use the new Gtkmm GUI interface"
 msgstr "Utiliser la nouvelle interface Gtkmm"
 
-#: ../src/main.cpp:544
+#: ../src/main.cpp:552
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Retirer les éléments inutiles des section(s) defs du document"
 
-#: ../src/main.cpp:1008
+#: ../src/main.cpp:741
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4201,9 +4203,8 @@ msgid "_View"
 msgstr "_Vue"
 
 #: ../src/menus-skeleton.h:97
-#, fuzzy
 msgid "Show/Hide"
-msgstr "Affic_her/cacher"
+msgstr "Afficher/cacher"
 
 #: ../src/menus-skeleton.h:116
 msgid "_Layer"
@@ -4227,16 +4228,15 @@ msgstr "Effets"
 
 #: ../src/menus-skeleton.h:197
 msgid "Whiteboa_rd"
-msgstr ""
+msgstr "Tableau blanc (_r)"
 
 #: ../src/menus-skeleton.h:210
 msgid "_Help"
 msgstr "Aide (_h)"
 
 #: ../src/menus-skeleton.h:212
-#, fuzzy
 msgid "Tutorials"
-msgstr "Didac_ticiels"
+msgstr "Didacticiels"
 
 #: ../src/node-context.cpp:379
 msgid ""
@@ -4374,7 +4374,7 @@ msgid "Select a single object to edit its nodes or handles."
 msgstr "Sélectionner un seul objet pour éditer ses nœuds ou poignées."
 
 #: ../src/nodepath.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
@@ -4382,11 +4382,11 @@ msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
 msgstr[0] ""
-"Pas d'objets sélectionnés. Sélectionnez des objets par Clic, Maj+Clic ou "
-"cliquer-déplacer."
+"<b>0</b> sur <b>%i</b>  nœud sélectionné. Sélectionnez des nœuds par "
+"<b>Clic</b>, <b>Maj+Clic</b> ou <b>cliquer-déplacer</b>."
 msgstr[1] ""
-"Pas d'objets sélectionnés. Sélectionnez des objets par Clic, Maj+Clic ou "
-"cliquer-déplacer."
+"<b>0</b> sur <b>%i</b>  nœuds sélectionnés. Sélectionnez des nœuds par "
+"<b>Clic</b>, <b>Maj+Clic</b> ou <b>cliquer-déplacer</b>."
 
 #: ../src/nodepath.cpp:3650
 msgid "Drag the handles of the object to modify it."
