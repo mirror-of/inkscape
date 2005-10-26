@@ -1,3 +1,8 @@
+2005-10-26  Jon A. Cruz  <jon@joncruz.org>
+
+	* share/screens/about.svg:
+	  Trimmed bad lines. Fixed bug 1310742.
+
 2005-10-24  Ted Gould  <ted@gould.cx>
 
 	* 0.43pre1
