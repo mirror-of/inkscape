@@ -16,6 +16,7 @@ templates_DATA = \
 	default.fr.svg \
 	default.hu.svg \
 	default.it.svg \
+	default.pl.svg \
 	default_mm.svg \
 	default_pt.svg \
 	desktop_1024x768.svg \
