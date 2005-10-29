@@ -165,7 +165,7 @@ UnitMenu::getConversion(Glib::ustring const &new_unit_abbr) const
  */
 bool
 UnitMenu::isAbsolute() const {
-    return getUnitType() == UNIT_TYPE_DIMENSIONLESS;
+    return getUnitType() != UNIT_TYPE_DIMENSIONLESS;
 }
 
 } // namespace Widget
