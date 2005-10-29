@@ -87,10 +87,10 @@ static void sp_export_xdpi_value_changed         ( GtkAdjustment *adj,
                                                    GtkObject *base);
                                            
 static void sp_export_selection_changed ( Inkscape::Application *inkscape, 
-                                          SPDesktop *desktop, 
+                                          Inkscape::Selection *selection, 
                                           GtkObject *base);
 static void sp_export_selection_modified ( Inkscape::Application *inkscape, 
-                                           SPDesktop *desktop, 
+                                           Inkscape::Selection *selection, 
                                            guint flags,
                                            GtkObject *base );
 
@@ -601,7 +601,7 @@ sp_export_find_default_selection(GtkWidget * dlg)
  */
 static void
 sp_export_selection_changed ( Inkscape::Application *inkscape, 
-                              SPDesktop *desktop, 
+                              Inkscape::Selection *selection, 
                               GtkObject *base )
 {
     selection_type current_key;
@@ -620,7 +620,7 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
 
     if (inkscape &&
             SP_IS_INKSCAPE (inkscape) &&
-            desktop &&
+            selection &&
             SELECTION_CUSTOM != current_key) {
         GtkToggleButton * button;
         button = (GtkToggleButton *)gtk_object_get_data(base, selection_names[current_key]);
@@ -632,7 +632,7 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
 
 static void
 sp_export_selection_modified ( Inkscape::Application *inkscape, 
-                               SPDesktop *desktop,  /* Not sure that this is right */
+                               Inkscape::Selection *selection, 
                                guint flags,
                                GtkObject *base )
 {
