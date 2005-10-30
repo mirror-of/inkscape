@@ -183,7 +183,7 @@ static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
 	params.position = kWindowDefaultPosition;
 
 	StandardAlert(kAlertStopAlert, "\pFont caches may need to be updated",
-			"\pThere is a problem on OS X 10.4.x where X11 installation does not always generate the necessary fontconfig caches.  This can be corrected by running /usr/X11R6/bin/fc-cache as root.",
+			"\pThere is a problem on OS X 10.4.x where X11 installation does not always generate the necessary fontconfig caches.  This can be corrected by running /usr/X11R6/bin/fc-cache as root.\n\nThis may take some time.  Please do not close Inkscape.",
 			&params, &itemHit);
     
 	if (itemHit == kAlertStdAlertOKButton)
@@ -595,7 +595,7 @@ static OSStatus X11FailedHandler(EventHandlerCallRef theHandlerCall,
     if (odtid) pthread_join(odtid, NULL);
  
 	SInt16 itemHit;
-	const char *getX11 = "\pGet Apple\'s X11";
+	const char *getX11 = "\pGet X11 for Panther";
 
 	AlertStdAlertParamRec params;
 	params.movable = true;
@@ -609,7 +609,7 @@ static OSStatus X11FailedHandler(EventHandlerCallRef theHandlerCall,
 	params.position = kWindowDefaultPosition;
 
 	StandardAlert(kAlertStopAlert, "\pFailed to start X11",
-			"\pInkscape.app requires Apple's X11, which is freely downloadable from Apple's website.",
+			"\pInkscape.app requires Apple's X11, which is freely downloadable from Apple's website for Panther (10.3.x) customers and available as an optional install from the installation DVD for Tiger (10.4.x) customers.\n\nPlease install X11 and restart Inkscape.",
 			&params, &itemHit);
     
 	if (itemHit == kAlertStdAlertCancelButton)
