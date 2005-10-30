@@ -609,7 +609,7 @@ static OSStatus X11FailedHandler(EventHandlerCallRef theHandlerCall,
 	params.position = kWindowDefaultPosition;
 
 	StandardAlert(kAlertStopAlert, "\pFailed to start X11",
-			"\pInkscape.app requires Apple's X11, which is freely downloadable from Apple's website for Panther (10.3.x) customers and available as an optional install from the installation DVD for Tiger (10.4.x) customers.\n\nPlease install X11 and restart Inkscape.",
+			"\pInkscape.app requires Apple's X11, which is freely downloadable from Apple's website for Panther (10.3.x) users and available as an optional install from the installation DVD for Tiger (10.4.x) users.\n\nPlease install X11 and restart Inkscape.",
 			&params, &itemHit);
     
 	if (itemHit == kAlertStdAlertCancelButton)
