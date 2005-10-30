@@ -132,8 +132,8 @@ static struct {
     { "SPPenContext",      "pen_tool",       SP_VERB_CONTEXT_PEN, SP_VERB_CONTEXT_PEN_PREFS },
     { "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
     { "SPTextContext",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
-    { "SPGradientContext", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
     { "SPConnectorContext","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
+    { "SPGradientContext", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
     { "SPDropperContext",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
     { NULL, NULL, 0, 0 }
 };
@@ -154,8 +154,8 @@ static struct {
     { "SPPenContext", "pen_toolbox", NULL },
     { "SPDynaDrawContext", "calligraphy_toolbox", sp_calligraphy_toolbox_new },
     { "SPTextContext",   "text_toolbox",   sp_text_toolbox_new },
-    { "SPGradientContext", "gradient_toolbox", sp_gradient_toolbox_new },
     { "SPDropperContext", "dropper_toolbox", sp_dropper_toolbox_new },
+    { "SPGradientContext", "gradient_toolbox", sp_gradient_toolbox_new },
     { "SPConnectorContext", "connector_toolbox", sp_connector_toolbox_new },
     { NULL, NULL, NULL }
 };
