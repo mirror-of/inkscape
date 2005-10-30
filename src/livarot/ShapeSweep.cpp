@@ -2022,7 +2022,7 @@ int
 Shape::Winding (int nPt) const 
 {
   int askTo = pData[nPt].askForWindingB;
-  if (askTo < 0)
+  if (askTo < 0 || askTo >= numberOfEdges())
     return 0;
   if (getEdge(askTo).st < getEdge(askTo).en)
     {
