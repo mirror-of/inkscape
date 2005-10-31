@@ -1038,7 +1038,7 @@ LayerVerb::perform(SPAction *action, void *data, void *pdata)
                 sp_document_done(SP_DT_DOCUMENT(dt));
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Moved to next layer."));
             } else {
-                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move past last layer."));
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move past last layer."));
             }
             break;
         }
@@ -1049,7 +1049,7 @@ LayerVerb::perform(SPAction *action, void *data, void *pdata)
                 sp_document_done(SP_DT_DOCUMENT(dt));
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Moved to previous layer."));
             } else {
-                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move past first layer."));
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move past first layer."));
             }
             break;
         }
@@ -1108,7 +1108,7 @@ LayerVerb::perform(SPAction *action, void *data, void *pdata)
                     g_free((void *) message);
                 }
             } else {
-                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move layer any further."));
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot move layer any further."));
             }
 
             break;
@@ -1834,16 +1834,16 @@ Verb *Verb::_base_verbs[] = {
     new FileVerb(SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"),
                  GTK_STOCK_PRINT ),
     // TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-    new FileVerb(SP_VERB_FILE_VACUUM, "FileVacuum", N_("Vac_uum Defs"), N_("Remove unused stuff from the &lt;defs&gt; of the document"),
+    new FileVerb(SP_VERB_FILE_VACUUM, "FileVacuum", N_("Vac_uum Defs"), N_("Remove unused predefined items from the &lt;defs&gt; of the document"),
                  "file_vacuum" ),
     new FileVerb(SP_VERB_FILE_PRINT_DIRECT, "FilePrintDirect", N_("Print _Direct"),
-                 N_("Print directly to file or pipe"), NULL ),
+                 N_("Print directly without prompting to a file or pipe"), NULL ),
     new FileVerb(SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Previe_w"),
                  N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW ),
     new FileVerb(SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."),
                  N_("Import bitmap or SVG image into document"), "file_import"),
     new FileVerb(SP_VERB_FILE_EXPORT, "FileExport", N_("_Export Bitmap..."),
-                 N_("Export document or selection as PNG bitmap"), "file_export"),
+                 N_("Export document or selection as a bitmap image"), "file_export"),
     new FileVerb(SP_VERB_FILE_NEXT_DESKTOP, "FileNextDesktop", N_("N_ext Window"),
                  N_("Switch to the next document window"), "window_next"),
     new FileVerb(SP_VERB_FILE_PREV_DESKTOP, "FilePrevDesktop", N_("P_revious Window"),
@@ -1862,15 +1862,15 @@ Verb *Verb::_base_verbs[] = {
     new EditVerb(SP_VERB_EDIT_COPY, "EditCopy", N_("_Copy"),
                  N_("Copy selection to clipboard"), GTK_STOCK_COPY),
     new EditVerb(SP_VERB_EDIT_PASTE, "EditPaste", N_("_Paste"),
-                 N_("Paste object(s) from clipboard to mouse point"), GTK_STOCK_PASTE),
+                 N_("Paste objects from clipboard to mouse point"), GTK_STOCK_PASTE),
     new EditVerb(SP_VERB_EDIT_PASTE_STYLE, "EditPasteStyle", N_("Paste _Style"),
                  N_("Apply style of the copied object to selection"), "selection_paste_style"),
     new EditVerb(SP_VERB_EDIT_PASTE_IN_PLACE, "EditPasteInPlace", N_("Paste _In Place"),
-                 N_("Paste object(s) from clipboard to the original location"), "selection_paste_in_place"),
+                 N_("Paste objects from clipboard to the original location"), "selection_paste_in_place"),
     new EditVerb(SP_VERB_EDIT_DELETE, "EditDelete", N_("_Delete"),
                  N_("Delete selection"), GTK_STOCK_DELETE),
     new EditVerb(SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("Duplic_ate"),
-                 N_("Duplicate selected object(s)"), "edit_duplicate"),
+                 N_("Duplicate selected objects"), "edit_duplicate"),
     new EditVerb(SP_VERB_EDIT_CLONE, "EditClone", N_("Clo_ne"),
                  N_("Create a clone of selected object (a copy linked to the original)"), "edit_clone"),
     new EditVerb(SP_VERB_EDIT_UNLINK_CLONE, "EditUnlinkClone", N_("Unlin_k Clone"),
@@ -1878,10 +1878,10 @@ Verb *Verb::_base_verbs[] = {
     new EditVerb(SP_VERB_EDIT_CLONE_ORIGINAL, "EditCloneOriginal", N_("Select _Original"),
                  N_("Select the object to which the clone is linked"), NULL),
     // TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
-    new EditVerb(SP_VERB_EDIT_TILE, "EditTile", N_("O_bject(s) to Pattern"),
+    new EditVerb(SP_VERB_EDIT_TILE, "EditTile", N_("O_bjects to Pattern"),
                  N_("Convert selection to a rectangle with tiled pattern fill"), NULL),
     // TRANSLATORS: Extract objects from a tiled pattern fill
-    new EditVerb(SP_VERB_EDIT_UNTILE, "EditUnTile", N_("Pattern to Ob_ject(s)"),
+    new EditVerb(SP_VERB_EDIT_UNTILE, "EditUnTile", N_("Pattern to Ob_jects"),
                  N_("Extract objects from a tiled pattern fill"), NULL),
     new EditVerb(SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
                  N_("Delete all objects from document"), NULL),
@@ -1908,7 +1908,7 @@ Verb *Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("_Group"),
                       N_("Group selected objects"), "selection_group"),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),
-                      N_("Ungroup selected group(s)"), "selection_ungroup"),
+                      N_("Ungroup selected groups"), "selection_ungroup"),
 
     new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on Path"),
                       N_("Put text on path"), NULL),
@@ -1937,24 +1937,24 @@ Verb *Verb::_base_verbs[] = {
     // i.e. by displacing it perpendicular to the path in each point.
     // See also the Advanced Tutorial for explanation.
     new SelectionVerb(SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Outs_et"),
-                      N_("Outset selected path(s)"), "outset_path"),
+                      N_("Outset selected paths"), "outset_path"),
     new SelectionVerb(SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen",
                       N_("O_utset Path by 1 px"),
-                      N_("Outset selected path(s) by 1 px"), NULL),
+                      N_("Outset selected paths by 1 px"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_OFFSET_SCREEN_10, "SelectionOffsetScreen10",
                       N_("O_utset Path by 10 px"),
-                      N_("Outset selected path(s) by 10 px"), NULL),
+                      N_("Outset selected paths by 10 px"), NULL),
     // TRANSLATORS: "inset": contract a shape by offsetting the object's path,
     // i.e. by displacing it perpendicular to the path in each point.
     // See also the Advanced Tutorial for explanation.
     new SelectionVerb(SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset"),
-                      N_("Inset selected path(s)"), "inset_path"),
+                      N_("Inset selected paths"), "inset_path"),
     new SelectionVerb(SP_VERB_SELECTION_INSET_SCREEN, "SelectionInsetScreen",
                       N_("I_nset Path by 1 px"),
-                      N_("Inset selected path(s) by 1 px"), NULL),
+                      N_("Inset selected paths by 1 px"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_INSET_SCREEN_10, "SelectionInsetScreen",
                       N_("I_nset Path by 10 px"),
-                      N_("Inset selected path(s) by 10 px"), NULL),
+                      N_("Inset selected paths by 10 px"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_DYNAMIC_OFFSET, "SelectionDynOffset",
                       N_("D_ynamic Offset"), N_("Create a dynamic offset object"), "dynamic_offset"),
     new SelectionVerb(SP_VERB_SELECTION_LINKED_OFFSET, "SelectionLinkedOffset",
@@ -1962,11 +1962,11 @@ Verb *Verb::_base_verbs[] = {
                       N_("Create a dynamic offset object linked to the original path"),
                       "linked_offset"),
     new SelectionVerb(SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("_Stroke to Path"),
-                      N_("Convert selected stroke(s) to path(s)"), "stroke_tocurve"),
+                      N_("Convert selected strokes to paths"), "stroke_tocurve"),
     new SelectionVerb(SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Si_mplify"),
-                      N_("Simplify selected path(s) by removing extra nodes"), "simplify"),
+                      N_("Simplify selected paths by removing extra nodes"), "simplify"),
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
-                      N_("Reverses the direction of selected path(s); useful for flipping markers"), "selection_reverse"),
+                      N_("Reverses the direction of selected paths; useful for flipping markers"), "selection_reverse"),
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new SelectionVerb(SP_VERB_SELECTION_TRACE, "SelectionTrace", N_("_Trace Bitmap"),
                       N_("Convert bitmap object to paths"), "selection_trace"),
@@ -1977,7 +1977,7 @@ Verb *Verb::_base_verbs[] = {
     // TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
     // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
-                      N_("Break selected path(s) into subpaths"), "selection_break"),
+                      N_("Break selected paths into subpaths"), "selection_break"),
     new SelectionVerb(SP_VERB_SELECTION_GRIDTILE, "SelectionGridTile", N_("Gri_d Arrange..."),
                       N_("Arrange selection in grid pattern"), "grid_arrange"),
     /* Layer */
@@ -2012,18 +2012,18 @@ Verb *Verb::_base_verbs[] = {
     new ObjectVerb(SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Remove _Transformations"),
                    N_("Remove transformations from object"), "object_reset"),
     new ObjectVerb(SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("_Object to Path"),
-                   N_("Convert selected object(s) to path(s)"), "object_tocurve"),
+                   N_("Convert selected objects to paths"), "object_tocurve"),
     new ObjectVerb(SP_VERB_OBJECT_FLOW_TEXT, "ObjectFlowText", N_("_Flow into Frame"),
-                   N_("Put text into frame(s)"), NULL),
+                   N_("Put text into frames"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_UNFLOW_TEXT, "ObjectUnFlowText", N_("_Unflow"),
                    N_("Remove text from frame (creates a single-line text object)"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Convert to Text"),
-                   N_("Convert flowed text(s) to regular text objects (preserves appearance)"), NULL),
+                   N_("Convert flowed text to regular text objects (preserves appearance)"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally",
-                   N_("Flip _Horizontally"), N_("Flip selection horizontally"),
+                   N_("Flip _Horizontal"), N_("Flips selected objects horizontally"),
                    "object_flip_hor"),
     new ObjectVerb(SP_VERB_OBJECT_FLIP_VERTICAL, "ObjectFlipVertically",
-                   N_("Flip _Vertically"), N_("Flip selection vertically"),
+                   N_("Flip _Vertical"), N_("Flips selected objects vertically"),
                    "object_flip_ver"),
 
     /* Tools */
@@ -2058,33 +2058,33 @@ Verb *Verb::_base_verbs[] = {
 
     /* Tool prefs */
     new ContextVerb(SP_VERB_CONTEXT_SELECT_PREFS, "SelectPrefs", N_("Selector Preferences"),
-                    N_("Open Inkscape Preferences for the Selector tool"), NULL),
+                    N_("Open Preferences for the Selector tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_NODE_PREFS, "NodePrefs", N_("Node Tool Preferences"),
-                    N_("Open Inkscape Preferences for the Node tool"), NULL),
+                    N_("Open Preferences for the Node tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_RECT_PREFS, "RectPrefs", N_("Rectangle Preferences"),
-                    N_("Open Inkscape Preferences for the Rectangle tool"), NULL),
+                    N_("Open Preferences for the Rectangle tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_ARC_PREFS, "ArcPrefs", N_("Ellipse Preferences"),
-                    N_("Open Inkscape Preferences for the Ellipse tool"), NULL),
+                    N_("Open Preferences for the Ellipse tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_STAR_PREFS, "StarPrefs", N_("Star Preferences"),
-                    N_("Open Inkscape Preferences for the Star tool"), NULL),
+                    N_("Open Preferences for the Star tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_SPIRAL_PREFS, "SpiralPrefs", N_("Spiral Preferences"),
-                    N_("Open Inkscape Preferences for the Spiral tool"), NULL),
+                    N_("Open Preferences for the Spiral tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_PENCIL_PREFS, "PencilPrefs", N_("Pencil Preferences"),
-                    N_("Open Inkscape Preferences for the Pencil tool"), NULL),
+                    N_("Open Preferences for the Pencil tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_PEN_PREFS, "PenPrefs", N_("Pen Preferences"),
-                    N_("Open Inkscape Preferences for the Pen tool"), NULL),
+                    N_("Open Preferences for the Pen tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "CalligraphicPrefs", N_("Calligraphic Preferences"),
-                    N_("Open Inkscape Preferences for the Calligraphy tool"), NULL),
+                    N_("Open Preferences for the Calligraphy tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_TEXT_PREFS, "TextPrefs", N_("Text Preferences"),
-                    N_("Open Inkscape Preferences for the Text tool"), NULL),
+                    N_("Open Preferences for the Text tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_GRADIENT_PREFS, "GradientPrefs", N_("Gradient Preferences"),
-                    N_("Open Inkscape Preferences for the Gradient tool"), NULL),
+                    N_("Open Preferences for the Gradient tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_ZOOM_PREFS, "ZoomPrefs", N_("Zoom Preferences"),
-                    N_("Open Inkscape Preferences for the Zoom tool"), NULL),
+                    N_("Open Preferences for the Zoom tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER_PREFS, "DropperPrefs", N_("Dropper Preferences"),
-                    N_("Open Inkscape Preferences for the Dropper tool"), NULL),
+                    N_("Open Preferences for the Dropper tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR_PREFS, "ConnectorPrefs", N_("Connector Preferences"),
-                    N_("Open Inkscape Preferences for the Connector tool"), NULL),
+                    N_("Open Preferences for the Connector tool"), NULL),
 
     /* Zooming */
     new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), "zoom_in"),

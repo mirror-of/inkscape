@@ -1,3 +1,8 @@
+2005-10-31  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/verbs.cpp:
+	  Applied patch from RFE 1247694.
+
 2005-10-26  Jon A. Cruz  <jon@joncruz.org>
 
 	* share/screens/about.svg:
