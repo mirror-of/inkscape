@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-26 21:07+0200\n"
+"POT-Creation-Date: 2005-11-01 23:51+0100\n"
 "PO-Revision-Date: 2005-02-16 21:05+0900\n"
 "Last-Translator: shivaken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -6076,7 +6076,8 @@ msgid "Moved to next layer."
 msgstr "次のレイヤーに移動"
 
 #: ../src/verbs.cpp:1041
-msgid "Can't move past last layer."
+#, fuzzy
+msgid "Cannot move past last layer."
 msgstr "前のレイヤーを移動できません。"
 
 #: ../src/verbs.cpp:1050
@@ -6084,7 +6085,8 @@ msgid "Moved to previous layer."
 msgstr "前のレイヤーに切替え"
 
 #: ../src/verbs.cpp:1052
-msgid "Can't move past first layer."
+#, fuzzy
+msgid "Cannot move past first layer."
 msgstr "前のレイヤーを移動できません。"
 
 #: ../src/verbs.cpp:1069 ../src/verbs.cpp:1137
@@ -6102,7 +6104,8 @@ msgid "Lowered layer <b>%s</b>."
 msgstr "レイヤー<b>%s</b>を背面に移動しました。"
 
 #: ../src/verbs.cpp:1111
-msgid "Can't move layer any further."
+#, fuzzy
+msgid "Cannot move layer any further."
 msgstr "レイヤーを移動できません。"
 
 #. TRANSLATORS: this means "The layer has been deleted."
@@ -6229,7 +6232,8 @@ msgid "Vac_uum Defs"
 msgstr "バキューム"
 
 #: ../src/verbs.cpp:1837
-msgid "Remove unused stuff from the &lt;defs&gt; of the document"
+#, fuzzy
+msgid "Remove unused predefined items from the &lt;defs&gt; of the document"
 msgstr "未使用のオブジェクトを&lt;defs&gt;から削除する"
 
 #: ../src/verbs.cpp:1839
@@ -6237,7 +6241,8 @@ msgid "Print _Direct"
 msgstr "直接印刷..."
 
 #: ../src/verbs.cpp:1840
-msgid "Print directly to file or pipe"
+#, fuzzy
+msgid "Print directly without prompting to a file or pipe"
 msgstr "ファイルまたはパイプに印刷"
 
 #: ../src/verbs.cpp:1841
@@ -6261,7 +6266,8 @@ msgid "_Export Bitmap..."
 msgstr "エクスポート"
 
 #: ../src/verbs.cpp:1846
-msgid "Export document or selection as PNG bitmap"
+#, fuzzy
+msgid "Export document or selection as a bitmap image"
 msgstr "ドキュメントを PNG ビットマップとして出力"
 
 #: ../src/verbs.cpp:1847
@@ -6334,7 +6340,8 @@ msgid "_Paste"
 msgstr "ペースト"
 
 #: ../src/verbs.cpp:1865
-msgid "Paste object(s) from clipboard to mouse point"
+#, fuzzy
+msgid "Paste objects from clipboard to mouse point"
 msgstr "オブジェクトをクリップボードからペースト"
 
 #: ../src/verbs.cpp:1866
@@ -6350,7 +6357,8 @@ msgid "Paste _In Place"
 msgstr "同じ場所にペースト"
 
 #: ../src/verbs.cpp:1869
-msgid "Paste object(s) from clipboard to the original location"
+#, fuzzy
+msgid "Paste objects from clipboard to the original location"
 msgstr "コピー元と同じ場所にペースト"
 
 #: ../src/verbs.cpp:1870
@@ -6366,7 +6374,8 @@ msgid "Duplic_ate"
 msgstr "複製"
 
 #: ../src/verbs.cpp:1873
-msgid "Duplicate selected object(s)"
+#, fuzzy
+msgid "Duplicate selected objects"
 msgstr "選択オブジェクトを複製"
 
 #: ../src/verbs.cpp:1874
@@ -6395,7 +6404,8 @@ msgstr "クローンするオブジェクトを選択してください"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:1881
-msgid "O_bject(s) to Pattern"
+#, fuzzy
+msgid "O_bjects to Pattern"
 msgstr "オブジェクトをパターンタイルに"
 
 #: ../src/verbs.cpp:1882
@@ -6404,7 +6414,8 @@ msgstr "選択オブジェクトをパターンタイルにする"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:1884
-msgid "Pattern to Ob_ject(s)"
+#, fuzzy
+msgid "Pattern to Ob_jects"
 msgstr "パターンタイルをオブジェクトに"
 
 #: ../src/verbs.cpp:1885
@@ -6501,7 +6512,8 @@ msgid "Group selected objects"
 msgstr "選択したオブジェクトをグループ化"
 
 #: ../src/verbs.cpp:1911
-msgid "Ungroup selected group(s)"
+#, fuzzy
+msgid "Ungroup selected groups"
 msgstr "選択したグループのグループ解除"
 
 #: ../src/verbs.cpp:1913
@@ -6588,7 +6600,8 @@ msgid "Outs_et"
 msgstr "アウトセット(_E)"
 
 #: ../src/verbs.cpp:1940
-msgid "Outset selected path(s)"
+#, fuzzy
+msgid "Outset selected paths"
 msgstr "パスの外郭を抽出"
 
 #: ../src/verbs.cpp:1942
@@ -6596,7 +6609,8 @@ msgid "O_utset Path by 1 px"
 msgstr "1px アウトセット"
 
 #: ../src/verbs.cpp:1943
-msgid "Outset selected path(s) by 1 px"
+#, fuzzy
+msgid "Outset selected paths by 1 px"
 msgstr "1px 外郭を抽出"
 
 #: ../src/verbs.cpp:1945
@@ -6604,7 +6618,8 @@ msgid "O_utset Path by 10 px"
 msgstr "10px アウトセット"
 
 #: ../src/verbs.cpp:1946
-msgid "Outset selected path(s) by 10 px"
+#, fuzzy
+msgid "Outset selected paths by 10 px"
 msgstr "10px 外郭を抽出"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
@@ -6615,7 +6630,8 @@ msgid "I_nset"
 msgstr "インセット(_N)"
 
 #: ../src/verbs.cpp:1951
-msgid "Inset selected path(s)"
+#, fuzzy
+msgid "Inset selected paths"
 msgstr "パスの内殻を抽出"
 
 #: ../src/verbs.cpp:1953
@@ -6623,7 +6639,8 @@ msgid "I_nset Path by 1 px"
 msgstr "1px インセット"
 
 #: ../src/verbs.cpp:1954
-msgid "Inset selected path(s) by 1 px"
+#, fuzzy
+msgid "Inset selected paths by 1 px"
 msgstr "パスの1px 内殻を抽出"
 
 #: ../src/verbs.cpp:1956
@@ -6631,7 +6648,8 @@ msgid "I_nset Path by 10 px"
 msgstr "10px インセット"
 
 #: ../src/verbs.cpp:1957
-msgid "Inset selected path(s) by 10 px"
+#, fuzzy
+msgid "Inset selected paths by 10 px"
 msgstr "パスの10px 内殻を抽出"
 
 #: ../src/verbs.cpp:1959
@@ -6655,7 +6673,8 @@ msgid "_Stroke to Path"
 msgstr "ストロークをパスに変換"
 
 #: ../src/verbs.cpp:1965
-msgid "Convert selected stroke(s) to path(s)"
+#, fuzzy
+msgid "Convert selected strokes to paths"
 msgstr "選択ストロークをパスに変換"
 
 #: ../src/verbs.cpp:1966
@@ -6663,7 +6682,8 @@ msgid "Si_mplify"
 msgstr "パスの簡略化(_M)"
 
 #: ../src/verbs.cpp:1967
-msgid "Simplify selected path(s) by removing extra nodes"
+#, fuzzy
+msgid "Simplify selected paths by removing extra nodes"
 msgstr "選択パスからノードを削除し簡略化"
 
 #: ../src/verbs.cpp:1968
@@ -6671,7 +6691,8 @@ msgid "_Reverse"
 msgstr "逆転(_R)"
 
 #: ../src/verbs.cpp:1969
-msgid "Reverses the direction of selected path(s); useful for flipping markers"
+#, fuzzy
+msgid "Reverses the direction of selected paths; useful for flipping markers"
 msgstr "パスの方向を逆転させる"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
@@ -6706,7 +6727,8 @@ msgid "Break _Apart"
 msgstr "分割(_A)"
 
 #: ../src/verbs.cpp:1980
-msgid "Break selected path(s) into subpaths"
+#, fuzzy
+msgid "Break selected paths into subpaths"
 msgstr "選択したパスをサブパスに分割"
 
 #: ../src/verbs.cpp:1981
@@ -6836,7 +6858,8 @@ msgid "_Object to Path"
 msgstr "オブジェクトをパスに変換(_O)"
 
 #: ../src/verbs.cpp:2015
-msgid "Convert selected object(s) to path(s)"
+#, fuzzy
+msgid "Convert selected objects to paths"
 msgstr "選択オブジェクトをパスに変換"
 
 #: ../src/verbs.cpp:2016
@@ -6844,7 +6867,8 @@ msgid "_Flow into Frame"
 msgstr "テキストをフレームに挿入(_F)"
 
 #: ../src/verbs.cpp:2017
-msgid "Put text into frame(s)"
+#, fuzzy
+msgid "Put text into frames"
 msgstr "フレームの中にテキストを挿入する"
 
 #: ../src/verbs.cpp:2018
@@ -6860,24 +6884,29 @@ msgid "_Convert to Text"
 msgstr "フローテキストを抽出(_C)"
 
 #: ../src/verbs.cpp:2021
-msgid "Convert flowed text(s) to regular text objects (preserves appearance)"
+#, fuzzy
+msgid "Convert flowed text to regular text objects (preserves appearance)"
 msgstr "フローテキストをそのままテキストオブジェクトに変換"
 
 #: ../src/verbs.cpp:2023
-msgid "Flip _Horizontally"
+#, fuzzy
+msgid "Flip _Horizontal"
 msgstr "水平方向に反転(_H)"
 
 #: ../src/verbs.cpp:2023
-msgid "Flip selection horizontally"
-msgstr "選択オブジェクトを水平方向に反転"
+#, fuzzy
+msgid "Flips selected objects horizontally"
+msgstr "選択ノードを水平に配置"
 
 #: ../src/verbs.cpp:2026
-msgid "Flip _Vertically"
+#, fuzzy
+msgid "Flip _Vertical"
 msgstr "垂直方向に反転(_V)"
 
 #: ../src/verbs.cpp:2026
-msgid "Flip selection vertically"
-msgstr "選択オブジェクトを垂直方向に反転"
+#, fuzzy
+msgid "Flips selected objects vertically"
+msgstr "選択ノードを垂直に配置"
 
 #. Tools
 #: ../src/verbs.cpp:2030
@@ -6951,7 +6980,8 @@ msgid "Selector Preferences"
 msgstr "セレクタの設定"
 
 #: ../src/verbs.cpp:2061
-msgid "Open Inkscape Preferences for the Selector tool"
+#, fuzzy
+msgid "Open Preferences for the Selector tool"
 msgstr "セレクタの設定を開く"
 
 #: ../src/verbs.cpp:2062
@@ -6959,7 +6989,8 @@ msgid "Node Tool Preferences"
 msgstr "ノードツールの設定"
 
 #: ../src/verbs.cpp:2063
-msgid "Open Inkscape Preferences for the Node tool"
+#, fuzzy
+msgid "Open Preferences for the Node tool"
 msgstr "ノードツールの設定を開く"
 
 #: ../src/verbs.cpp:2064
@@ -6967,7 +6998,8 @@ msgid "Rectangle Preferences"
 msgstr "矩形の設定"
 
 #: ../src/verbs.cpp:2065
-msgid "Open Inkscape Preferences for the Rectangle tool"
+#, fuzzy
+msgid "Open Preferences for the Rectangle tool"
 msgstr "矩形の設定を開く"
 
 #: ../src/verbs.cpp:2066
@@ -6975,7 +7007,8 @@ msgid "Ellipse Preferences"
 msgstr "円／弧の設定"
 
 #: ../src/verbs.cpp:2067
-msgid "Open Inkscape Preferences for the Ellipse tool"
+#, fuzzy
+msgid "Open Preferences for the Ellipse tool"
 msgstr "円／弧の設定を開く"
 
 #: ../src/verbs.cpp:2068
@@ -6983,7 +7016,8 @@ msgid "Star Preferences"
 msgstr "星の設定"
 
 #: ../src/verbs.cpp:2069
-msgid "Open Inkscape Preferences for the Star tool"
+#, fuzzy
+msgid "Open Preferences for the Star tool"
 msgstr "星の設定を開く"
 
 #: ../src/verbs.cpp:2070
@@ -6991,7 +7025,8 @@ msgid "Spiral Preferences"
 msgstr "螺旋のプロパティ"
 
 #: ../src/verbs.cpp:2071
-msgid "Open Inkscape Preferences for the Spiral tool"
+#, fuzzy
+msgid "Open Preferences for the Spiral tool"
 msgstr "螺旋のプロパティを開く"
 
 #: ../src/verbs.cpp:2072
@@ -6999,7 +7034,8 @@ msgid "Pencil Preferences"
 msgstr "鉛筆の設定"
 
 #: ../src/verbs.cpp:2073
-msgid "Open Inkscape Preferences for the Pencil tool"
+#, fuzzy
+msgid "Open Preferences for the Pencil tool"
 msgstr "鉛筆の設定を開く"
 
 #: ../src/verbs.cpp:2074
@@ -7007,7 +7043,8 @@ msgid "Pen Preferences"
 msgstr "ペンの設定"
 
 #: ../src/verbs.cpp:2075
-msgid "Open Inkscape Preferences for the Pen tool"
+#, fuzzy
+msgid "Open Preferences for the Pen tool"
 msgstr "ペンの設定を開く"
 
 #: ../src/verbs.cpp:2076
@@ -7015,7 +7052,8 @@ msgid "Calligraphic Preferences"
 msgstr "カリグラフィック線の設定"
 
 #: ../src/verbs.cpp:2077
-msgid "Open Inkscape Preferences for the Calligraphy tool"
+#, fuzzy
+msgid "Open Preferences for the Calligraphy tool"
 msgstr "カリグラフィック線の設定を開く"
 
 #: ../src/verbs.cpp:2078
@@ -7023,7 +7061,8 @@ msgid "Text Preferences"
 msgstr "テキストの設定"
 
 #: ../src/verbs.cpp:2079
-msgid "Open Inkscape Preferences for the Text tool"
+#, fuzzy
+msgid "Open Preferences for the Text tool"
 msgstr "テキストの設定を開く"
 
 #: ../src/verbs.cpp:2080
@@ -7031,7 +7070,8 @@ msgid "Gradient Preferences"
 msgstr "グラデーションの設定"
 
 #: ../src/verbs.cpp:2081
-msgid "Open Inkscape Preferences for the Gradient tool"
+#, fuzzy
+msgid "Open Preferences for the Gradient tool"
 msgstr "グラデーションツールの設定を開く"
 
 #: ../src/verbs.cpp:2082
@@ -7039,7 +7079,8 @@ msgid "Zoom Preferences"
 msgstr "ズームの設定"
 
 #: ../src/verbs.cpp:2083
-msgid "Open Inkscape Preferences for the Zoom tool"
+#, fuzzy
+msgid "Open Preferences for the Zoom tool"
 msgstr "ズームの設定を開く"
 
 #: ../src/verbs.cpp:2084
@@ -7047,7 +7088,8 @@ msgid "Dropper Preferences"
 msgstr "スポイトの設定"
 
 #: ../src/verbs.cpp:2085
-msgid "Open Inkscape Preferences for the Dropper tool"
+#, fuzzy
+msgid "Open Preferences for the Dropper tool"
 msgstr "スポイトの設定を開く"
 
 #: ../src/verbs.cpp:2086
@@ -7057,7 +7099,7 @@ msgstr "セレクタの設定"
 
 #: ../src/verbs.cpp:2087
 #, fuzzy
-msgid "Open Inkscape Preferences for the Connector tool"
+msgid "Open Preferences for the Connector tool"
 msgstr "セレクタの設定を開く"
 
 #. Zooming
@@ -8265,6 +8307,12 @@ msgstr "オブジェクトの重なる部分を切り出す"
 #, fuzzy
 msgid "Make connectors ignore selected objects"
 msgstr "オブジェクトの重なる部分を切り出す"
+
+#~ msgid "Flip selection horizontally"
+#~ msgstr "選択オブジェクトを水平方向に反転"
+
+#~ msgid "Flip selection vertically"
+#~ msgstr "選択オブジェクトを垂直方向に反転"
 
 #, fuzzy
 #~ msgid "Could not read next message due to I/O error (error: %s)!"

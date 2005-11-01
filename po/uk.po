@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-26 21:07+0200\n"
+"POT-Creation-Date: 2005-11-01 23:51+0100\n"
 "PO-Revision-Date: 2005-10-21 13:33+0300\n"
 "Last-Translator: Maxim V. Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -4305,7 +4305,8 @@ msgstr[1] ""
 "вузлів."
 msgstr[2] ""
 "Виділено <b>0</b> з <b>%i</b> вузлів. Щоб виділити використовуйте "
-"<b>клацання</b>, <b>Shift+клацання</b>, чи перетягування рамки навколо вузлів."
+"<b>клацання</b>, <b>Shift+клацання</b>, чи перетягування рамки навколо "
+"вузлів."
 
 #: ../src/nodepath.cpp:3650
 msgid "Drag the handles of the object to modify it."
@@ -6213,7 +6214,8 @@ msgid "Moved to next layer."
 msgstr "Переміщений на наступний шар."
 
 #: ../src/verbs.cpp:1041
-msgid "Can't move past last layer."
+#, fuzzy
+msgid "Cannot move past last layer."
 msgstr "Не вдається перемістити за останній шар."
 
 #: ../src/verbs.cpp:1050
@@ -6221,7 +6223,8 @@ msgid "Moved to previous layer."
 msgstr "Переміщений на попередній шар."
 
 #: ../src/verbs.cpp:1052
-msgid "Can't move past first layer."
+#, fuzzy
+msgid "Cannot move past first layer."
 msgstr "Не вдається перемістити за перший шар."
 
 #: ../src/verbs.cpp:1069 ../src/verbs.cpp:1137
@@ -6239,7 +6242,8 @@ msgid "Lowered layer <b>%s</b>."
 msgstr "Шар <b>%s</b> опущено."
 
 #: ../src/verbs.cpp:1111
-msgid "Can't move layer any further."
+#, fuzzy
+msgid "Cannot move layer any further."
 msgstr "Не вдається перемістити шар далі."
 
 #. TRANSLATORS: this means "The layer has been deleted."
@@ -6370,7 +6374,8 @@ msgid "Vac_uum Defs"
 msgstr "О_чистити Defs"
 
 #: ../src/verbs.cpp:1837
-msgid "Remove unused stuff from the &lt;defs&gt; of the document"
+#, fuzzy
+msgid "Remove unused predefined items from the &lt;defs&gt; of the document"
 msgstr "Прибрати непотрібне з &lt;defs&gt; документу"
 
 #: ../src/verbs.cpp:1839
@@ -6378,7 +6383,8 @@ msgid "Print _Direct"
 msgstr "_Прямий друк"
 
 #: ../src/verbs.cpp:1840
-msgid "Print directly to file or pipe"
+#, fuzzy
+msgid "Print directly without prompting to a file or pipe"
 msgstr "Надрукувати документ у файл або передати програмі"
 
 #: ../src/verbs.cpp:1841
@@ -6402,7 +6408,8 @@ msgid "_Export Bitmap..."
 msgstr "_Експорт..."
 
 #: ../src/verbs.cpp:1846
-msgid "Export document or selection as PNG bitmap"
+#, fuzzy
+msgid "Export document or selection as a bitmap image"
 msgstr "Експортувати документ чи виділену частину у растровий формат PNG"
 
 #: ../src/verbs.cpp:1847
@@ -6475,7 +6482,8 @@ msgid "_Paste"
 msgstr "Вст_авити"
 
 #: ../src/verbs.cpp:1865
-msgid "Paste object(s) from clipboard to mouse point"
+#, fuzzy
+msgid "Paste objects from clipboard to mouse point"
 msgstr "Вставити об'єкт(и) з буферу обміну у позицію курсора миші"
 
 #: ../src/verbs.cpp:1866
@@ -6491,7 +6499,8 @@ msgid "Paste _In Place"
 msgstr "Вставити на _місце"
 
 #: ../src/verbs.cpp:1869
-msgid "Paste object(s) from clipboard to the original location"
+#, fuzzy
+msgid "Paste objects from clipboard to the original location"
 msgstr "Вставити об'єкти з буфера у місце, де вони були раніше"
 
 #: ../src/verbs.cpp:1870
@@ -6507,7 +6516,8 @@ msgid "Duplic_ate"
 msgstr "_Дублювати"
 
 #: ../src/verbs.cpp:1873
-msgid "Duplicate selected object(s)"
+#, fuzzy
+msgid "Duplicate selected objects"
 msgstr "Створити копію виділених об'єктів"
 
 #: ../src/verbs.cpp:1874
@@ -6536,7 +6546,8 @@ msgstr "Виділити об'єкт з яким пов'язаний клон"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:1881
-msgid "O_bject(s) to Pattern"
+#, fuzzy
+msgid "O_bjects to Pattern"
 msgstr "О_б'єкти у візерунок"
 
 #: ../src/verbs.cpp:1882
@@ -6545,7 +6556,8 @@ msgstr "Перетворити виділене у прямокутник, за�
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:1884
-msgid "Pattern to Ob_ject(s)"
+#, fuzzy
+msgid "Pattern to Ob_jects"
 msgstr "_Візерунок у об'єкти"
 
 #: ../src/verbs.cpp:1885
@@ -6642,7 +6654,8 @@ msgid "Group selected objects"
 msgstr "Згрупувати виділені об'єкти"
 
 #: ../src/verbs.cpp:1911
-msgid "Ungroup selected group(s)"
+#, fuzzy
+msgid "Ungroup selected groups"
 msgstr "Розгрупувати виділені групи"
 
 #: ../src/verbs.cpp:1913
@@ -6731,7 +6744,8 @@ msgid "Outs_et"
 msgstr "Ро_зтягнути"
 
 #: ../src/verbs.cpp:1940
-msgid "Outset selected path(s)"
+#, fuzzy
+msgid "Outset selected paths"
 msgstr "Розтягнути виділений контур"
 
 #: ../src/verbs.cpp:1942
@@ -6739,7 +6753,8 @@ msgid "O_utset Path by 1 px"
 msgstr "Р_озтягнути на 1 точку"
 
 #: ../src/verbs.cpp:1943
-msgid "Outset selected path(s) by 1 px"
+#, fuzzy
+msgid "Outset selected paths by 1 px"
 msgstr "Розтягнути виділений контур(и) на 1 точку"
 
 #: ../src/verbs.cpp:1945
@@ -6747,7 +6762,8 @@ msgid "O_utset Path by 10 px"
 msgstr "Р_озтягнути на 10 точок"
 
 #: ../src/verbs.cpp:1946
-msgid "Outset selected path(s) by 10 px"
+#, fuzzy
+msgid "Outset selected paths by 10 px"
 msgstr "Розтягнути виділений контур(и) на 10 точок"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
@@ -6758,7 +6774,8 @@ msgid "I_nset"
 msgstr "В_тягнути"
 
 #: ../src/verbs.cpp:1951
-msgid "Inset selected path(s)"
+#, fuzzy
+msgid "Inset selected paths"
 msgstr "Втягнути виділений контур(и)"
 
 #: ../src/verbs.cpp:1953
@@ -6766,7 +6783,8 @@ msgid "I_nset Path by 1 px"
 msgstr "Вт_ягнути контур на 1 точку"
 
 #: ../src/verbs.cpp:1954
-msgid "Inset selected path(s) by 1 px"
+#, fuzzy
+msgid "Inset selected paths by 1 px"
 msgstr "Втягнути виділений контур(и) на 1 точку"
 
 #: ../src/verbs.cpp:1956
@@ -6774,7 +6792,8 @@ msgid "I_nset Path by 10 px"
 msgstr "Вт_ягнути контур на 10 точок"
 
 #: ../src/verbs.cpp:1957
-msgid "Inset selected path(s) by 10 px"
+#, fuzzy
+msgid "Inset selected paths by 10 px"
 msgstr "Втягнути виділений контур(и) на 10 точок"
 
 #: ../src/verbs.cpp:1959
@@ -6800,7 +6819,8 @@ msgid "_Stroke to Path"
 msgstr "_Штрих у контур"
 
 #: ../src/verbs.cpp:1965
-msgid "Convert selected stroke(s) to path(s)"
+#, fuzzy
+msgid "Convert selected strokes to paths"
 msgstr "Перетворити виділені штрихи у контури"
 
 #: ../src/verbs.cpp:1966
@@ -6808,7 +6828,8 @@ msgid "Si_mplify"
 msgstr "_Спростити"
 
 #: ../src/verbs.cpp:1967
-msgid "Simplify selected path(s) by removing extra nodes"
+#, fuzzy
+msgid "Simplify selected paths by removing extra nodes"
 msgstr "Спростити виділені контури видаленням зайвих вузлів"
 
 #: ../src/verbs.cpp:1968
@@ -6816,7 +6837,8 @@ msgid "_Reverse"
 msgstr "Роз_вернути"
 
 #: ../src/verbs.cpp:1969
-msgid "Reverses the direction of selected path(s); useful for flipping markers"
+#, fuzzy
+msgid "Reverses the direction of selected paths; useful for flipping markers"
 msgstr ""
 "Змінити напрямок виділених контурів на протилежний; корисно для "
 "віддзеркалення маркерів"
@@ -6853,7 +6875,8 @@ msgid "Break _Apart"
 msgstr "_Розділити"
 
 #: ../src/verbs.cpp:1980
-msgid "Break selected path(s) into subpaths"
+#, fuzzy
+msgid "Break selected paths into subpaths"
 msgstr "Розділити виділені контури на частини"
 
 #: ../src/verbs.cpp:1981
@@ -6983,7 +7006,8 @@ msgid "_Object to Path"
 msgstr "_Об'єкт у контур"
 
 #: ../src/verbs.cpp:2015
-msgid "Convert selected object(s) to path(s)"
+#, fuzzy
+msgid "Convert selected objects to paths"
 msgstr "Перетворити виділені об'єкти на контури"
 
 #: ../src/verbs.cpp:2016
@@ -6991,7 +7015,8 @@ msgid "_Flow into Frame"
 msgstr "_Огорнути в рамку"
 
 #: ../src/verbs.cpp:2017
-msgid "Put text into frame(s)"
+#, fuzzy
+msgid "Put text into frames"
 msgstr "Помістити текст в рамку(и)"
 
 #: ../src/verbs.cpp:2018
@@ -7007,26 +7032,31 @@ msgid "_Convert to Text"
 msgstr "_Перетворити у текст"
 
 #: ../src/verbs.cpp:2021
-msgid "Convert flowed text(s) to regular text objects (preserves appearance)"
+#, fuzzy
+msgid "Convert flowed text to regular text objects (preserves appearance)"
 msgstr ""
 "Перетворити текст, що огорнений рамкою, у звичайний текст (із збереженням "
 "вигляду)"
 
 #: ../src/verbs.cpp:2023
-msgid "Flip _Horizontally"
+#, fuzzy
+msgid "Flip _Horizontal"
 msgstr "Віддзеркалити гор_изонтально"
 
 #: ../src/verbs.cpp:2023
-msgid "Flip selection horizontally"
-msgstr "Віддзеркалити виділені об'єкти горизонтально"
+#, fuzzy
+msgid "Flips selected objects horizontally"
+msgstr "Вирівняти вибрані вузли по горизонталі"
 
 #: ../src/verbs.cpp:2026
-msgid "Flip _Vertically"
+#, fuzzy
+msgid "Flip _Vertical"
 msgstr "Віддзеркалити _вертикально"
 
 #: ../src/verbs.cpp:2026
-msgid "Flip selection vertically"
-msgstr "Віддзеркалити виділені об'єкти вертикально"
+#, fuzzy
+msgid "Flips selected objects vertically"
+msgstr "Вирівняти вибрані вузли по вертикалі"
 
 #. Tools
 #: ../src/verbs.cpp:2030
@@ -7099,7 +7129,8 @@ msgid "Selector Preferences"
 msgstr "Параметри селектора"
 
 #: ../src/verbs.cpp:2061
-msgid "Open Inkscape Preferences for the Selector tool"
+#, fuzzy
+msgid "Open Preferences for the Selector tool"
 msgstr "Відкрити вікно параметрів Inkscape селектора"
 
 #: ../src/verbs.cpp:2062
@@ -7107,7 +7138,8 @@ msgid "Node Tool Preferences"
 msgstr "Параметри редактора вузлів"
 
 #: ../src/verbs.cpp:2063
-msgid "Open Inkscape Preferences for the Node tool"
+#, fuzzy
+msgid "Open Preferences for the Node tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Редактор вузлів\""
 
 #: ../src/verbs.cpp:2064
@@ -7115,7 +7147,8 @@ msgid "Rectangle Preferences"
 msgstr "Параметри прямокутника"
 
 #: ../src/verbs.cpp:2065
-msgid "Open Inkscape Preferences for the Rectangle tool"
+#, fuzzy
+msgid "Open Preferences for the Rectangle tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Прямокутник\""
 
 #: ../src/verbs.cpp:2066
@@ -7123,7 +7156,8 @@ msgid "Ellipse Preferences"
 msgstr "Параметри еліпса"
 
 #: ../src/verbs.cpp:2067
-msgid "Open Inkscape Preferences for the Ellipse tool"
+#, fuzzy
+msgid "Open Preferences for the Ellipse tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Еліпс\""
 
 #: ../src/verbs.cpp:2068
@@ -7131,7 +7165,8 @@ msgid "Star Preferences"
 msgstr "Властивості зірки"
 
 #: ../src/verbs.cpp:2069
-msgid "Open Inkscape Preferences for the Star tool"
+#, fuzzy
+msgid "Open Preferences for the Star tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Зірка\""
 
 #: ../src/verbs.cpp:2070
@@ -7139,7 +7174,8 @@ msgid "Spiral Preferences"
 msgstr "Властивості спіралі"
 
 #: ../src/verbs.cpp:2071
-msgid "Open Inkscape Preferences for the Spiral tool"
+#, fuzzy
+msgid "Open Preferences for the Spiral tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Спіраль\""
 
 #: ../src/verbs.cpp:2072
@@ -7147,7 +7183,8 @@ msgid "Pencil Preferences"
 msgstr "Параметри олівця"
 
 #: ../src/verbs.cpp:2073
-msgid "Open Inkscape Preferences for the Pencil tool"
+#, fuzzy
+msgid "Open Preferences for the Pencil tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Олівець\""
 
 #: ../src/verbs.cpp:2074
@@ -7155,7 +7192,8 @@ msgid "Pen Preferences"
 msgstr "Параметри пера"
 
 #: ../src/verbs.cpp:2075
-msgid "Open Inkscape Preferences for the Pen tool"
+#, fuzzy
+msgid "Open Preferences for the Pen tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Перо\""
 
 #: ../src/verbs.cpp:2076
@@ -7163,7 +7201,8 @@ msgid "Calligraphic Preferences"
 msgstr "Параметри каліграфічного пера"
 
 #: ../src/verbs.cpp:2077
-msgid "Open Inkscape Preferences for the Calligraphy tool"
+#, fuzzy
+msgid "Open Preferences for the Calligraphy tool"
 msgstr ""
 "Відкрити вікно параметрів Inkscape для інструмента \"Каліграфічне перо\""
 
@@ -7172,7 +7211,8 @@ msgid "Text Preferences"
 msgstr "Параметри тексту"
 
 #: ../src/verbs.cpp:2079
-msgid "Open Inkscape Preferences for the Text tool"
+#, fuzzy
+msgid "Open Preferences for the Text tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Текст\""
 
 #: ../src/verbs.cpp:2080
@@ -7180,7 +7220,8 @@ msgid "Gradient Preferences"
 msgstr "Параметри градієнту"
 
 #: ../src/verbs.cpp:2081
-msgid "Open Inkscape Preferences for the Gradient tool"
+#, fuzzy
+msgid "Open Preferences for the Gradient tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Градієнт\""
 
 #: ../src/verbs.cpp:2082
@@ -7188,7 +7229,8 @@ msgid "Zoom Preferences"
 msgstr "Параметри масштабу"
 
 #: ../src/verbs.cpp:2083
-msgid "Open Inkscape Preferences for the Zoom tool"
+#, fuzzy
+msgid "Open Preferences for the Zoom tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Масштаб\""
 
 #: ../src/verbs.cpp:2084
@@ -7196,7 +7238,8 @@ msgid "Dropper Preferences"
 msgstr "Параметри піпетки"
 
 #: ../src/verbs.cpp:2085
-msgid "Open Inkscape Preferences for the Dropper tool"
+#, fuzzy
+msgid "Open Preferences for the Dropper tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Піпетка\""
 
 #: ../src/verbs.cpp:2086
@@ -7204,7 +7247,8 @@ msgid "Connector Preferences"
 msgstr "Параметри лінії з'єднання"
 
 #: ../src/verbs.cpp:2087
-msgid "Open Inkscape Preferences for the Connector tool"
+#, fuzzy
+msgid "Open Preferences for the Connector tool"
 msgstr "Відкрити вікно параметрів лінії з'єднання"
 
 #. Zooming
@@ -8429,3 +8473,9 @@ msgstr "Змусити лінії обгинати виділені об'єкт�
 #: ../src/widgets/toolbox.cpp:3044
 msgid "Make connectors ignore selected objects"
 msgstr "Змусити лінії ігнорувати виділені об'єкти"
+
+#~ msgid "Flip selection horizontally"
+#~ msgstr "Віддзеркалити виділені об'єкти горизонтально"
+
+#~ msgid "Flip selection vertically"
+#~ msgstr "Віддзеркалити виділені об'єкти вертикально"

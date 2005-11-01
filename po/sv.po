@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-26 21:07+0200\n"
+"POT-Creation-Date: 2005-11-01 23:51+0100\n"
 "PO-Revision-Date: 2005-10-08 21:49+0200\n"
 "Last-Translator: Mattias Hultgren <mattias_hultgren@tele2.se>\n"
 "Language-Team: Svenska <C@li.org>\n"
@@ -6184,7 +6184,7 @@ msgid "Moved to next layer."
 msgstr ""
 
 #: ../src/verbs.cpp:1041
-msgid "Can't move past last layer."
+msgid "Cannot move past last layer."
 msgstr ""
 
 #: ../src/verbs.cpp:1050
@@ -6192,7 +6192,7 @@ msgid "Moved to previous layer."
 msgstr ""
 
 #: ../src/verbs.cpp:1052
-msgid "Can't move past first layer."
+msgid "Cannot move past first layer."
 msgstr ""
 
 #: ../src/verbs.cpp:1069 ../src/verbs.cpp:1137
@@ -6211,7 +6211,7 @@ msgid "Lowered layer <b>%s</b>."
 msgstr "Sänkte lager <b>%s</b>"
 
 #: ../src/verbs.cpp:1111
-msgid "Can't move layer any further."
+msgid "Cannot move layer any further."
 msgstr ""
 
 #. TRANSLATORS: this means "The layer has been deleted."
@@ -6341,7 +6341,7 @@ msgid "Vac_uum Defs"
 msgstr ""
 
 #: ../src/verbs.cpp:1837
-msgid "Remove unused stuff from the &lt;defs&gt; of the document"
+msgid "Remove unused predefined items from the &lt;defs&gt; of the document"
 msgstr ""
 
 #: ../src/verbs.cpp:1839
@@ -6350,7 +6350,8 @@ msgid "Print _Direct"
 msgstr "Skriv ut direkt..."
 
 #: ../src/verbs.cpp:1840
-msgid "Print directly to file or pipe"
+#, fuzzy
+msgid "Print directly without prompting to a file or pipe"
 msgstr "Skriv ut direkt till fil eller rör"
 
 #: ../src/verbs.cpp:1841
@@ -6375,7 +6376,8 @@ msgid "_Export Bitmap..."
 msgstr "_Exportera bitmappbild..."
 
 #: ../src/verbs.cpp:1846
-msgid "Export document or selection as PNG bitmap"
+#, fuzzy
+msgid "Export document or selection as a bitmap image"
 msgstr "Exportera dokument eller markering som PNG-bitmappsbild"
 
 #: ../src/verbs.cpp:1847
@@ -6448,7 +6450,8 @@ msgid "_Paste"
 msgstr "Klistra _in"
 
 #: ../src/verbs.cpp:1865
-msgid "Paste object(s) from clipboard to mouse point"
+#, fuzzy
+msgid "Paste objects from clipboard to mouse point"
 msgstr "Klistra in objekt från urklipp till muspekare"
 
 #: ../src/verbs.cpp:1866
@@ -6468,7 +6471,7 @@ msgstr "Genomstrykningsstil"
 
 #: ../src/verbs.cpp:1869
 #, fuzzy
-msgid "Paste object(s) from clipboard to the original location"
+msgid "Paste objects from clipboard to the original location"
 msgstr "Justera objekt mot horisontella mitten"
 
 #: ../src/verbs.cpp:1870
@@ -6486,7 +6489,7 @@ msgstr "Mångfaldiga"
 
 #: ../src/verbs.cpp:1873
 #, fuzzy
-msgid "Duplicate selected object(s)"
+msgid "Duplicate selected objects"
 msgstr "Mångfaldiga markerade objekt"
 
 #: ../src/verbs.cpp:1874
@@ -6517,7 +6520,7 @@ msgstr "Markera objektet som klonen är länkad till"
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:1881
 #, fuzzy
-msgid "O_bject(s) to Pattern"
+msgid "O_bjects to Pattern"
 msgstr "Objekttransformering"
 
 #: ../src/verbs.cpp:1882
@@ -6527,7 +6530,7 @@ msgstr ""
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:1884
 #, fuzzy
-msgid "Pattern to Ob_ject(s)"
+msgid "Pattern to Ob_jects"
 msgstr "Platta till objekt"
 
 #: ../src/verbs.cpp:1885
@@ -6637,7 +6640,8 @@ msgid "Group selected objects"
 msgstr "Gruppera markerade objekt"
 
 #: ../src/verbs.cpp:1911
-msgid "Ungroup selected group(s)"
+#, fuzzy
+msgid "Ungroup selected groups"
 msgstr "Avgruppera markerad(e) grupp(er)"
 
 #: ../src/verbs.cpp:1913
@@ -6741,7 +6745,7 @@ msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1940
 #, fuzzy
-msgid "Outset selected path(s)"
+msgid "Outset selected paths"
 msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1942
@@ -6751,7 +6755,7 @@ msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1943
 #, fuzzy
-msgid "Outset selected path(s) by 1 px"
+msgid "Outset selected paths by 1 px"
 msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1945
@@ -6761,7 +6765,7 @@ msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1946
 #, fuzzy
-msgid "Outset selected path(s) by 10 px"
+msgid "Outset selected paths by 10 px"
 msgstr "Slå samman markerade slingor"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
@@ -6773,7 +6777,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:1951
 #, fuzzy
-msgid "Inset selected path(s)"
+msgid "Inset selected paths"
 msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1953
@@ -6783,7 +6787,7 @@ msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1954
 #, fuzzy
-msgid "Inset selected path(s) by 1 px"
+msgid "Inset selected paths by 1 px"
 msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1956
@@ -6793,7 +6797,7 @@ msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1957
 #, fuzzy
-msgid "Inset selected path(s) by 10 px"
+msgid "Inset selected paths by 10 px"
 msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1959
@@ -6821,7 +6825,7 @@ msgstr "Genomstrykningsmålning"
 
 #: ../src/verbs.cpp:1965
 #, fuzzy
-msgid "Convert selected stroke(s) to path(s)"
+msgid "Convert selected strokes to paths"
 msgstr "Konvertera markerat objekt till slinga"
 
 #: ../src/verbs.cpp:1966
@@ -6831,7 +6835,7 @@ msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1967
 #, fuzzy
-msgid "Simplify selected path(s) by removing extra nodes"
+msgid "Simplify selected paths by removing extra nodes"
 msgstr "Slå samman markerade slingor"
 
 #: ../src/verbs.cpp:1968
@@ -6841,7 +6845,7 @@ msgstr "Filter"
 
 #: ../src/verbs.cpp:1969
 #, fuzzy
-msgid "Reverses the direction of selected path(s); useful for flipping markers"
+msgid "Reverses the direction of selected paths; useful for flipping markers"
 msgstr "Ta bort markerade objekt"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
@@ -6882,7 +6886,7 @@ msgstr "Dela upp"
 
 #: ../src/verbs.cpp:1980
 #, fuzzy
-msgid "Break selected path(s) into subpaths"
+msgid "Break selected paths into subpaths"
 msgstr "Dela upp markerad slinga till underslingor"
 
 #: ../src/verbs.cpp:1981
@@ -7030,7 +7034,7 @@ msgstr "Objekttransformering"
 
 #: ../src/verbs.cpp:2015
 #, fuzzy
-msgid "Convert selected object(s) to path(s)"
+msgid "Convert selected objects to paths"
 msgstr "Konvertera markerat objekt till slinga"
 
 #: ../src/verbs.cpp:2016
@@ -7039,7 +7043,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2017
 #, fuzzy
-msgid "Put text into frame(s)"
+msgid "Put text into frames"
 msgstr "Konvertera markerat objekt till slinga"
 
 #: ../src/verbs.cpp:2018
@@ -7058,27 +7062,27 @@ msgstr "Konvertera markerat objekt till slinga"
 
 #: ../src/verbs.cpp:2021
 #, fuzzy
-msgid "Convert flowed text(s) to regular text objects (preserves appearance)"
+msgid "Convert flowed text to regular text objects (preserves appearance)"
 msgstr "Konvertera markerade segment till linjer"
 
 #: ../src/verbs.cpp:2023
 #, fuzzy
-msgid "Flip _Horizontally"
+msgid "Flip _Horizontal"
 msgstr "Vänd horisontellt"
 
 #: ../src/verbs.cpp:2023
 #, fuzzy
-msgid "Flip selection horizontally"
+msgid "Flips selected objects horizontally"
 msgstr "Vänd markerade objekt horisontellt"
 
 #: ../src/verbs.cpp:2026
 #, fuzzy
-msgid "Flip _Vertically"
+msgid "Flip _Vertical"
 msgstr "Vänd vertikalt"
 
 #: ../src/verbs.cpp:2026
 #, fuzzy
-msgid "Flip selection vertically"
+msgid "Flips selected objects vertically"
 msgstr "Vänd markerade objekt vertikalt"
 
 #. Tools
@@ -7156,8 +7160,9 @@ msgid "Selector Preferences"
 msgstr ""
 
 #: ../src/verbs.cpp:2061
-msgid "Open Inkscape Preferences for the Selector tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Selector tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2062
 #, fuzzy
@@ -7165,8 +7170,9 @@ msgid "Node Tool Preferences"
 msgstr "Verktygsinställningar saknas"
 
 #: ../src/verbs.cpp:2063
-msgid "Open Inkscape Preferences for the Node tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Node tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2064
 #, fuzzy
@@ -7174,8 +7180,9 @@ msgid "Rectangle Preferences"
 msgstr "Rektangelegenskaper"
 
 #: ../src/verbs.cpp:2065
-msgid "Open Inkscape Preferences for the Rectangle tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Rectangle tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2066
 #, fuzzy
@@ -7183,8 +7190,9 @@ msgid "Ellipse Preferences"
 msgstr "Objekt är referens"
 
 #: ../src/verbs.cpp:2067
-msgid "Open Inkscape Preferences for the Ellipse tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Ellipse tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2068
 #, fuzzy
@@ -7192,8 +7200,9 @@ msgid "Star Preferences"
 msgstr "Stjärnegenskaper"
 
 #: ../src/verbs.cpp:2069
-msgid "Open Inkscape Preferences for the Star tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Star tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2070
 #, fuzzy
@@ -7201,8 +7210,9 @@ msgid "Spiral Preferences"
 msgstr "Spiralegenskaper"
 
 #: ../src/verbs.cpp:2071
-msgid "Open Inkscape Preferences for the Spiral tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Spiral tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2072
 #, fuzzy
@@ -7210,8 +7220,9 @@ msgid "Pencil Preferences"
 msgstr "Objekt är referens"
 
 #: ../src/verbs.cpp:2073
-msgid "Open Inkscape Preferences for the Pencil tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Pencil tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2074
 #, fuzzy
@@ -7220,7 +7231,7 @@ msgstr "Objekt är referens"
 
 #: ../src/verbs.cpp:2075
 #, fuzzy
-msgid "Open Inkscape Preferences for the Pen tool"
+msgid "Open Preferences for the Pen tool"
 msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2076
@@ -7229,8 +7240,9 @@ msgid "Calligraphic Preferences"
 msgstr "Kalligrafisk linje"
 
 #: ../src/verbs.cpp:2077
-msgid "Open Inkscape Preferences for the Calligraphy tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Calligraphy tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2078
 #, fuzzy
@@ -7238,8 +7250,9 @@ msgid "Text Preferences"
 msgstr "Objekt är referens"
 
 #: ../src/verbs.cpp:2079
-msgid "Open Inkscape Preferences for the Text tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Text tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2080
 #, fuzzy
@@ -7248,7 +7261,7 @@ msgstr "Objekt är referens"
 
 #: ../src/verbs.cpp:2081
 #, fuzzy
-msgid "Open Inkscape Preferences for the Gradient tool"
+msgid "Open Preferences for the Gradient tool"
 msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2082
@@ -7257,8 +7270,9 @@ msgid "Zoom Preferences"
 msgstr "Objekt är referens"
 
 #: ../src/verbs.cpp:2083
-msgid "Open Inkscape Preferences for the Zoom tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Zoom tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2084
 #, fuzzy
@@ -7266,8 +7280,9 @@ msgid "Dropper Preferences"
 msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2085
-msgid "Open Inkscape Preferences for the Dropper tool"
-msgstr ""
+#, fuzzy
+msgid "Open Preferences for the Dropper tool"
+msgstr "Sodipodi-bildspel"
 
 #: ../src/verbs.cpp:2086
 #, fuzzy
@@ -7276,7 +7291,7 @@ msgstr "Stjärnegenskaper"
 
 #: ../src/verbs.cpp:2087
 #, fuzzy
-msgid "Open Inkscape Preferences for the Connector tool"
+msgid "Open Preferences for the Connector tool"
 msgstr "Sodipodi-bildspel"
 
 #. Zooming
@@ -8567,6 +8582,14 @@ msgstr "Ta bort markerade objekt"
 #, fuzzy
 msgid "Make connectors ignore selected objects"
 msgstr "Ta bort markerade objekt"
+
+#, fuzzy
+#~ msgid "Flip selection horizontally"
+#~ msgstr "Vänd markerade objekt horisontellt"
+
+#, fuzzy
+#~ msgid "Flip selection vertically"
+#~ msgstr "Vänd markerade objekt vertikalt"
 
 #~ msgid "Edit"
 #~ msgstr "Redigera"

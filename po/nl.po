@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-26 21:07+0200\n"
-"PO-Revision-Date: 2005-08-01 22:20+0200\n"
+"POT-Creation-Date: 2005-11-01 23:51+0100\n"
+"PO-Revision-Date: 2005-10-31 22:07+0100\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -63,27 +63,29 @@ msgstr ""
 "beginpunt te tekenen"
 
 #: ../src/connector-context.cpp:518
-#, fuzzy
 msgid "Creating new connector"
-msgstr "Nieuw pad maken"
+msgstr "Nieuwe verbinder"
 
 #: ../src/connector-context.cpp:939
-#, fuzzy
 msgid "Finishing connector"
-msgstr "Klaar met het trekken van lijnen"
+msgstr "Klaar met verbinder"
 
 #: ../src/connector-context.cpp:1108
+#, fuzzy
 msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
+"<b>Verbindingspunt</b>: klik of sleep om een nieuwe verbinding te maken"
 
 #: ../src/connector-context.cpp:1185
+#, fuzzy
 msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
+"<b>Verbindings eindpunt</b>: sleep om verbinding te wijzigen of om nieuwe "
+"vormen te verbinden."
 
 #: ../src/connector-context.cpp:1278
-#, fuzzy
 msgid "Select <b>at least one non-connector object</b>."
-msgstr "Selecteer <b>tenminste twee objecten</b> om te groeperen."
+msgstr "Selecteer <b>tenminste één object</b> dat geen verbindingsobject is."
 
 #: ../src/desktop-events.cpp:240
 #, c-format
@@ -298,9 +300,8 @@ msgid "Randomize the vertical shift by this percentage"
 msgstr "De verticale verschuiving willekeurig aanpassen met dit percentage"
 
 #: ../src/dialogs/clonetiler.cpp:1726
-#, fuzzy
 msgid "<b>Exponent:</b>"
-msgstr "<b>Wijzigen:</b>"
+msgstr "<b>Exponent:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1733
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
@@ -801,9 +802,8 @@ msgid "Snap the edges of the object bounding boxes"
 msgstr "Omhullenden van objecten worden aangetrokken "
 
 #: ../src/dialogs/desktop-properties.cpp:934
-#, fuzzy
 msgid "Snap nodes to grid"
-msgstr "Het raster is magnetisch voor punten"
+msgstr "Het raster is magnetisch voor knooppunten"
 
 #: ../src/dialogs/desktop-properties.cpp:934
 #: ../src/dialogs/desktop-properties.cpp:1017
@@ -1384,7 +1384,7 @@ msgstr "Binnen- en buitenrand opdrachten passen het pad aan met zoveel pixels"
 
 #: ../src/dialogs/display-settings.cpp:1032
 msgid "Compass-like display of angles"
-msgstr ""
+msgstr "Hoeken weergeven als een kompas"
 
 #: ../src/dialogs/display-settings.cpp:1033
 msgid ""
@@ -1392,6 +1392,9 @@ msgid ""
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
 "counterclockwise"
 msgstr ""
+"Wanneer dit aan wijst 0 naar het noorden, en lopen hoeken van 0 tot 360 "
+"graden met de klok mee. Wanneer dit uit staat wijst 0 naar het oosten, en "
+"lopen hoeken van -180 tot 180 graden, tegen de klok in."
 
 #: ../src/dialogs/display-settings.cpp:1040
 msgid "Zoom in/out by:"
@@ -1484,9 +1487,8 @@ msgid "Gradient"
 msgstr "Kleurverloop"
 
 #: ../src/dialogs/display-settings.cpp:1178 ../src/verbs.cpp:2056
-#, fuzzy
 msgid "Connector"
-msgstr "Ontwerper"
+msgstr "Verbinder"
 
 #: ../src/dialogs/display-settings.cpp:1185 ../src/verbs.cpp:2054
 msgid "Dropper"
@@ -1953,8 +1955,8 @@ msgstr "Automatisch de bestandsnaam extensie toevoegen"
 #, fuzzy, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s komen overeen."
-msgstr[1] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s komen overeen."
+msgstr[0] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s overeenkomst"
+msgstr[1] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s overeenkomst"
 
 #: ../src/dialogs/find.cpp:381
 msgid "exact"
@@ -2060,11 +2062,11 @@ msgstr "Afbeeldingen"
 
 #: ../src/dialogs/find.cpp:634
 msgid "Search offset objects"
-msgstr ""
+msgstr "Rand-objecten zoeken"
 
 #: ../src/dialogs/find.cpp:634
 msgid "Offsets"
-msgstr ""
+msgstr "Randen"
 
 #: ../src/dialogs/find.cpp:694
 msgid "_Text: "
@@ -2153,7 +2155,7 @@ msgstr "Selecteer alle objecten met de hierboven ingevulde eigenschappen"
 #: ../src/dialogs/iconpreview.cpp:145
 #, c-format
 msgid "%d x %d"
-msgstr ""
+msgstr "%d x %d"
 
 #: ../src/dialogs/iconpreview.cpp:193
 #: ../src/ui/dialog/align-and-distribute.cpp:780
@@ -2162,13 +2164,12 @@ msgid "Selection"
 msgstr "Selectie"
 
 #: ../src/dialogs/iconpreview.cpp:195
-#, fuzzy
 msgid "Selection only or whole document"
-msgstr "Selecteren alleen binnen de huidige laag"
+msgstr "Alleen selectie of gehele document"
 
 #: ../src/dialogs/iconpreview.cpp:203
 msgid "Refresh the icons"
-msgstr ""
+msgstr "De pictogrammen verversen"
 
 #. Create the label for the object id
 #: ../src/dialogs/item-properties.cpp:143
@@ -2366,9 +2367,8 @@ msgid "Format"
 msgstr "Formaat"
 
 #: ../src/dialogs/rdf.cpp:250
-#, fuzzy
 msgid "The physical or digital manifestation of this document (MIME type)."
-msgstr "verschijning"
+msgstr "De fysieke of digitale verschijningsvorm van dit document (MIME-type)"
 
 #: ../src/dialogs/rdf.cpp:252
 msgid "Type"
@@ -2689,7 +2689,7 @@ msgstr ""
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
 #: ../src/dialogs/tiledialog.cpp:761
 msgid "Fit into selection box"
-msgstr ""
+msgstr "In selectie-box passen"
 
 #: ../src/dialogs/tiledialog.cpp:768
 msgid "Set spacing:"
@@ -2908,7 +2908,7 @@ msgstr ""
 
 #: ../src/extension/dependency.cpp:242
 msgid "Dependency::"
-msgstr ""
+msgstr "Afhankelijkheid:"
 
 #: ../src/extension/dependency.cpp:243
 msgid "  type: "
@@ -2920,7 +2920,7 @@ msgstr "Lokatie:"
 
 #: ../src/extension/dependency.cpp:245
 msgid "  string: "
-msgstr ""
+msgstr " tekst:"
 
 #: ../src/extension/dependency.cpp:248
 msgid "  description: "
@@ -2995,18 +2995,16 @@ msgid "Show dialog on startup"
 msgstr "Dit venster tonen bij het opstarten"
 
 #: ../src/extension/implementation/script.cpp:845
-#, fuzzy
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
 "but the action you requested has been cancelled."
 msgstr ""
 "Inkscape kreeg een foutmelding van het script dat was aangeroepen. De tekst "
-"die met de foutmelding mee kwam staat hieronder. Inkscape zal blijven "
-"werken, maar de gevraagde actie is geannuleerd."
+"die met de foutmelding meekwam staat hieronder. Inkscape zal blijven werken, "
+"maar de gevraagde actie is geannuleerd."
 
 #: ../src/extension/implementation/script.cpp:858
-#, fuzzy
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -3176,8 +3174,8 @@ msgstr "Selecteer een bestand om te openen"
 #, fuzzy, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
-msgstr[0] "<b>%i</b> ongebruikte item(s) verwijderd uit &lt;defs&gt;."
-msgstr[1] "<b>%i</b> ongebruikte item(s) verwijderd uit &lt;defs&gt;."
+msgstr[0] "<b>%i</b> ongebruikte definities verwijderd uit &lt;defs&gt;."
+msgstr[1] "<b>%i</b> ongebruikte definities verwijderd uit &lt;defs&gt;."
 
 #: ../src/file.cpp:519
 msgid "No unused definitions in &lt;defs&gt;."
@@ -3539,22 +3537,21 @@ msgstr ""
 "Nieuwe instellingen worden niet opgeslagen."
 
 #: ../src/inkscape.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s is not a valid menus file.\n"
 "%s"
 msgstr ""
-"%s is geen geldig voorkeuren bestand.\n"
+"%s is geen geldig menu bestand.\n"
 "%s"
 
 #: ../src/inkscape.cpp:759
-#, fuzzy
 msgid ""
 "Inkscape will run with default menus.\n"
 "New menus will not be saved."
 msgstr ""
-"Inkscape zal starten met de standaard instellingen.\n"
-"Nieuwe instellingen worden niet opgeslagen."
+"Inkscape zal starten met de standaard menu's.\n"
+"Nieuwe menu's worden niet opgeslagen."
 
 #. sp_ui_menu_append_check_item_from_verb(m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 #. checkitem_toggled, checkitem_update, 0);
@@ -3593,7 +3590,7 @@ msgstr "Statusbalk weergeven of verbergen (onderaan het scherm)"
 #: ../src/interface.cpp:854
 #, c-format
 msgid "Verb \"%s\" Unknown"
-msgstr ""
+msgstr "Werkwoord \"%s\" is onbekend"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/interface.cpp:964
@@ -3625,75 +3622,81 @@ msgstr ""
 
 #: ../src/jabber_whiteboard/callbacks.cpp:59
 msgid "Jabber connection lost."
-msgstr ""
+msgstr "Jabber verbinding verbroken."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:72
-#, c-format
+#, fuzzy, c-format
 msgid "Sending message; %u message remaining in send queue."
 msgid_plural "Sending message; %u messages remaining in send queue."
 msgstr[0] ""
+"Bericht wordt verzonden; %u berichten staan in de wachtrij voor verzending."
 msgstr[1] ""
+"Bericht wordt verzonden; %u berichten staan in de wachtrij voor verzending."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:78
 msgid "Receive queue empty."
-msgstr ""
+msgstr "Ontvangst-rij leeg."
 
 #: ../src/jabber_whiteboard/callbacks.cpp:154
-#, c-format
+#, fuzzy, c-format
 msgid "Receiving change; %u change left to process."
 msgid_plural "Receiving change; %u changes left to process."
 msgstr[0] ""
+"Bezig met ontvangen van een wijziging; nog %u wijziging te verwerken"
 msgstr[1] ""
+"Bezig met ontvangen van een wijziging; nog %u wijziging te verwerken"
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:157
 #, c-format
 msgid "<b>%s</b> has left the chatroom."
-msgstr ""
+msgstr "<b>%s</b> heeft de ruimte verlaten."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:221
 msgid "Nickname %1 is already in use.  Please choose a different nickname."
-msgstr ""
+msgstr "Bijnaam %1 wordt al gebruikt. Kies alstublieft een andere bijnaam."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:225
 msgid "An error was encountered while attempting to connect to the server."
-msgstr ""
+msgstr "Het opzetten van een verbinding met de server ging mis."
 
 #. Check to see if the user made any modifications to this document.  If so,
 #. we want to give them the option of (1) letting us clear their document or (2)
 #. opening a new, blank document for the whiteboard session.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:131
 msgid "<b>%1</b> has invited you to a whiteboard session."
-msgstr ""
+msgstr "<b>%1</b> heeft u uitgenodigd voor een whiteboard sessie."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:132
 msgid "Incoming whiteboard invitation from %1"
-msgstr ""
+msgstr "Binnenkomende uitnodiging van %1"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:135
 msgid "Do you wish to accept <b>%1</b>'s whiteboard session invitation?"
 msgstr ""
+"Wilt u de uitnodiging van <b>%1</b> voor een whiteboard sessie accepteren?"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:137
 msgid ""
 "Would you like to accept %1's invitation in a new document window?\n"
 "Accepting the invitation in your current window will discard unsaved changes."
 msgstr ""
+"Wilt u de uitnodiging van %1 accepteren in een nieuw venster?\n"
+"Als de uitnodiging in het huidige venster accepteert, gaan niet-opgeslagen "
+"wijzigingen verloren."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:143
 #: ../src/jabber_whiteboard/connection-establishment.cpp:197
-#, fuzzy
 msgid "Accept invitation"
-msgstr "Versnelling"
+msgstr "Uitnodiging accepteren"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:144
 #: ../src/jabber_whiteboard/connection-establishment.cpp:198
 msgid "Decline invitation"
-msgstr ""
+msgstr "Uitnodiging afslaan"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:145
-#, fuzzy
 msgid "Accept invitation in new document window"
-msgstr "Maak een nieuw document"
+msgstr "Uitnodiging accepteren in een nieuw venster"
 
 #. We could not create a new desktop; ask the user if she or he wants to
 #. replace the current document and accept the invitation, or reject the invitation.
@@ -3702,6 +3705,8 @@ msgid ""
 "A new document window could not be opened for a whiteboard session with <b>%"
 "1</b>"
 msgstr ""
+"Er kon geen nieuw document venster worden geopend voor een whiteboard sessie "
+"met <b>%1</b>"
 
 #. TRANSLATORS: %1 is the peer whom refused our invitation.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:237
@@ -3710,6 +3715,9 @@ msgid ""
 "whiteboard invitation.</span>\n"
 "\n"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">De gebruiker <b>%1</b> heeft uw "
+"whiteboard uitnodiging geweigerd.</span>\n"
+"\n"
 
 #. TRANSLATORS: %1 is the peer whom refused our invitation, %2 is our Jabber identity.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:240
@@ -3718,6 +3726,8 @@ msgid ""
 "invitation to <b>%1</b> again, or you may send an invitation to a different "
 "user."
 msgstr ""
+"U bent nog steeds verbonden met Jabber als <b>%2</b>, en u kunt <b>%1</b> "
+"nogmaals uitnodigen, of iemand anders."
 
 #. TRANSLATORS: %1 is the peer whom we tried to contact, but is already in a whiteboard session.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:251
@@ -3726,6 +3736,9 @@ msgid ""
 "whiteboard session.</span>\n"
 "\n"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">De gebruiker <b>%1</b> is al aanwezig "
+"in een whiteboard sessie.</span>\n"
+"\n"
 
 #. TRANSLATORS: %1 is the peer whom we tried to contact, but is already in a whiteboard session.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:254
@@ -3733,30 +3746,32 @@ msgid ""
 "You are still connected to a Jabber server as <b>%1</b>, and may send an "
 "invitation to a different user."
 msgstr ""
+"U bent nog steeds verbonden met Jabber als <b>%1</b>, en u kunt andere "
+"gebruikers uitnodigen."
 
 #: ../src/jabber_whiteboard/invitation-confirm-dialog.cpp:26
 #: ../src/jabber_whiteboard/session-file-selector.cpp:24
 msgid "_Write session file:"
-msgstr ""
+msgstr "_Sessie bestand opslaan:"
 
 #: ../src/jabber_whiteboard/message-processors.cpp:145
 #, c-format
 msgid "<b>%s</b> has joined the chatroom."
-msgstr ""
+msgstr "<b>%s</b> is de ruimte binnengekomen."
 
 #: ../src/jabber_whiteboard/message-queue.cpp:87
 #, fuzzy, c-format
 msgid "%u change in receive queue."
 msgid_plural "%u changes in receive queue."
-msgstr[0] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
-msgstr[1] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
+msgstr[0] "%u wijzigingen in de ontvangstwachtrij."
+msgstr[1] "%u wijzigingen in de ontvangstwachtrij."
 
 #: ../src/jabber_whiteboard/message-queue.cpp:117
 #, fuzzy, c-format
 msgid "%u change in send queue."
 msgid_plural "%u changes in send queue."
-msgstr[0] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
-msgstr[1] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
+msgstr[0] "%u wijzigingen in de verzendwachtrij."
+msgstr[1] "%u wijzigingen in de verzendwachtrij."
 
 #. if ID is NULL, then we have a real problem -- we were not able to find a key
 #. nor generate one.  The only thing we can really do here is abort, since we have
@@ -3775,50 +3790,54 @@ msgid ""
 "ID for new object is NULL even after generation and lookup attempts: the new "
 "object will NOT be sent, nor will any of its child objects!"
 msgstr ""
+"Het nieuwe object heeft geen ID, en het kan niet worden aangemaakt of "
+"opgezocht. Het nieuwe object (en eventuele kinderen) wordt NIET verzonden!"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
 #: ../src/jabber_whiteboard/session-manager.cpp:994
 msgid "Select a location and filename"
-msgstr ""
+msgstr "Selecteer een locatie en een bestandnaam"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:62
 #: ../src/jabber_whiteboard/session-manager.cpp:996
-#, fuzzy
 msgid "Set filename"
-msgstr "_Bestandsnaam"
+msgstr "Bestandsnaam instellen"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:301
 msgid "No SSL certificate was found."
-msgstr ""
+msgstr "Er kon geen SSL certificaat worden gevonden."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:304
 msgid "The SSL certificate provided by the Jabber server is untrusted."
-msgstr ""
+msgstr "Het SSL certificaat van de Jabber server is niet te vertrouwen."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:307
 msgid "The SSL certificate provided by the Jabber server is expired."
-msgstr ""
+msgstr "Het SSL certificaat van de Jabber server is niet langer houdbaar."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:310
 msgid ""
 "The SSL certificate provided by the Jabber server has not been activated."
-msgstr ""
+msgstr "Het SSL certificaat van de Jabber server is niet geactiveerd."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:313
 msgid ""
 "The SSL certificate provided by the Jabber server contains a hostname that "
 "does not match the Jabber server's hostname."
 msgstr ""
+"Het SSL certificaat van de Jabber server bevat een andere computernaam dan "
+"die van de Jabber server."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:316
 msgid ""
 "The SSL certificate provided by the Jabber server contains an invalid "
 "fingerprint."
 msgstr ""
+"Het SSL certificaat van de Jabber server bevat een ongeldige vingerafdruk."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:319
 msgid "An unknown error occurred while setting up the SSL connection."
-msgstr ""
+msgstr "Er trad een onbekende fout op bij het opzetten van de SSL verbinding."
 
 #. TRANSLATORS: %1 is the message that describes the specific error that occurred when
 #. establishing the SSL connection.
@@ -3828,29 +3847,31 @@ msgid ""
 "\n"
 "Do you wish to continue connecting to the Jabber server?"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">%1</span>\n"
+"\n"
+"Wilt u de verbinding met de Jabber server als nog opzetten?"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:328
 msgid "Continue connecting and ignore further errors"
-msgstr ""
+msgstr "De verbinding alsnog opgezetten en fouten negeren"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:329
 msgid "Continue connecting, but warn me of further errors"
-msgstr ""
+msgstr "De verbinding alsnog opgezetten, maar waarschuwen bij fouten"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:330
-#, fuzzy
 msgid "Cancel connection"
-msgstr "Selectie"
+msgstr "De verbinding verbreken"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:777
 #, c-format
 msgid "Established whiteboard session with <b>%s</b>."
-msgstr ""
+msgstr "Whiteboard sessie opgezet met <b>%s</b>."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:785
 #, c-format
 msgid "<b>%s</b> has <b>left</b> the whiteboard session."
-msgstr ""
+msgstr "<b>%s</b> heeft de whiteboard sessie <b>verlaten</b>."
 
 #. Inform the user
 #. TRANSLATORS: %1 is the name of the user that disconnected, %2 is the name of the user whom the disconnected user disconnected from.
@@ -3861,12 +3882,17 @@ msgid ""
 "whiteboard session.</span>\n"
 "\n"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Gebruiker <b>%1</b> heeft dewhiteboard "
+"sessie verlaten.</span>\n"
+"\n"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:791
 msgid ""
 "You are still connected to a Jabber server as <b>%2</b>, and may establish a "
 "new session to <b>%1</b> or a different user."
 msgstr ""
+"U bent nog steeds verbonden met Jabber als <b>%2</b>, en u kunt een nieuwe "
+"sessie opzetten met <b>%1</b>, of met iemand anders."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:987
 msgid ""
@@ -3876,14 +3902,19 @@ msgid ""
 "You may select a different location to record the session, or you may opt to "
 "not record this session."
 msgstr ""
+"Het bestand %1 kon niet worden geopend op de sessie op te nemen.\n"
+"De foutmelding was: %2.\n"
+"\n"
+"U kunt een andere plek kiezen op de sessie op te slaan, of u kunt kiezen de "
+"sessie niet op te slaan."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:989
 msgid "Choose a different location"
-msgstr ""
+msgstr "Een andere plek kiezen"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:990
 msgid "Skip session recording"
-msgstr ""
+msgstr "De sessie niet opslaan"
 
 #: ../src/knot.cpp:673
 msgid "Node or handle drag canceled."
@@ -3937,12 +3968,11 @@ msgid "DPI"
 msgstr "DPI"
 
 #: ../src/main.cpp:430
-#, fuzzy
 msgid ""
 "Exported area in SVG user units (default is the canvas; 0,0 is lower-left "
 "corner)"
 msgstr ""
-"Te exporteren oppervlakte in SVG pixels (standaard het hele document; 0,0 is "
+"Geëxporteerde oppervlakte in SVG pixels (standaard het hele document; 0,0 is "
 "de hoek links-onder)"
 
 #: ../src/main.cpp:431
@@ -3951,18 +3981,20 @@ msgstr "x0:y0:x1:y1"
 
 #: ../src/main.cpp:435
 msgid "Exported area is the entire drawing (not canvas)"
-msgstr ""
+msgstr "De gehele tekening (niet het canvas) is geëxporteerd"
 
 #: ../src/main.cpp:440
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr ""
+"De grootte van het te exporteren bitmap-gebied naar buiten afronden (in SVG "
+"eenheden)"
 
 #: ../src/main.cpp:445
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
-"De breedte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
+"De breedte van de gegenereerde bitmap in pixels (dit overschrijft de DPI)"
 
 #: ../src/main.cpp:446
 msgid "WIDTH"
@@ -3971,7 +4003,7 @@ msgstr "BREEDTE"
 #: ../src/main.cpp:450
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
-"De hoogte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
+"De hoogte van de gegenereerde bitmap in pixels (dit overschrijft de DPI)"
 
 #: ../src/main.cpp:451
 msgid "HEIGHT"
@@ -3980,7 +4012,7 @@ msgstr "HOOGTE"
 #: ../src/main.cpp:455
 msgid "The ID of the object to export (overrides export-area)"
 msgstr ""
-"Het ID van het te exporteren object (dit overschijft het te exporteren "
+"Het ID van het te exporteren object (dit overschrijft het te exporteren "
 "gebied)"
 
 #: ../src/main.cpp:456 ../src/main.cpp:532
@@ -4025,8 +4057,8 @@ msgstr "WAARDE"
 #: ../src/main.cpp:482
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
-"Document exporteren naar gewoon SVG bestand (geen sodipodi of "
-"inkscapenaamruimte)"
+"Document exporteren naar gewoon SVG bestand (geen sodipodi- of inkscape-"
+"naamruimte)"
 
 #: ../src/main.cpp:487
 msgid "Export document to a PS file"
@@ -4098,12 +4130,11 @@ msgstr ""
 
 #: ../src/main.cpp:547
 msgid "Use the new Gtkmm GUI interface"
-msgstr ""
+msgstr "Gebruik de nieuwe Gtkmm gebruikers interface"
 
 #: ../src/main.cpp:552
 msgid "Remove unused definitions from the defs section(s) of the document"
-msgstr ""
-"Ongebruikte definities uit het &lt;defs&gt-onderdeel van het bestand halen"
+msgstr "Ongebruikte definities uit het defs-onderdeel van het bestand halen"
 
 #: ../src/main.cpp:741
 msgid ""
@@ -4111,7 +4142,7 @@ msgid ""
 "\n"
 "Available options:"
 msgstr ""
-"[OPTIES...] [BESTAND]\n"
+"[OPTIES...] [BESTAND...]\n"
 "\n"
 "Beschikbare opties:"
 
@@ -4132,9 +4163,8 @@ msgid "_View"
 msgstr "Beel_d"
 
 #: ../src/menus-skeleton.h:97
-#, fuzzy
 msgid "Show/Hide"
-msgstr "_Weergeven/verbergen"
+msgstr "Weergeven/verbergen"
 
 #: ../src/menus-skeleton.h:116
 msgid "_Layer"
@@ -4158,16 +4188,15 @@ msgstr "Effecten"
 
 #: ../src/menus-skeleton.h:197
 msgid "Whiteboa_rd"
-msgstr ""
+msgstr "Whiteboa_rd"
 
 #: ../src/menus-skeleton.h:210
 msgid "_Help"
 msgstr "_Hulp"
 
 #: ../src/menus-skeleton.h:212
-#, fuzzy
 msgid "Tutorials"
-msgstr "_Handleidingen"
+msgstr "Handleidingen"
 
 #: ../src/node-context.cpp:379
 msgid ""
@@ -4208,13 +4237,13 @@ msgid "Cannot find path between nodes."
 msgstr "Geen pad gevonden tussen de knooppunten"
 
 #: ../src/nodepath.cpp:2811
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both "
 "handles"
 msgstr ""
-"<b>Knooppunt handvat</b>: op %.02f&#176;, lengte %s; <b>Ctrl</b> draait in "
+"<b>Knooppunt handvat</b>: hoek %0.2f&#176;, lengte %s; <b>Ctrl</b> draait in "
 "stappen; <b>Alt</b> vergrendelt de lengte; <b>Shift</b> draait ook het "
 "andere handvat"
 
@@ -4282,14 +4311,15 @@ msgstr ""
 "beide handvatten ingetrokken (sleep met <b>shift</b> om ze uit te trekken)"
 
 #: ../src/nodepath.cpp:3613
-#, fuzzy
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
-msgstr "Versleep knooppunten of -handvatten om het pad te wijzigen"
+msgstr ""
+"<b>Versleep</b> knooppunten of -handvatten;<b>pijltjes</b>-toetsen om de "
+"knooppunten te verplaatsen"
 
 #: ../src/nodepath.cpp:3614
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
-"<b>Sleep</b> het knooppunt of zijn handvatten; <b>pijltjes-toetsen</b> om "
+"<b>Sleep</b> het knooppunt of zijn handvatten; <b>pijltjes</b>-toetsen om "
 "het knooppunt te verplaatsen"
 
 #: ../src/nodepath.cpp:3640 ../src/nodepath.cpp:3652
@@ -4373,7 +4403,7 @@ msgid ""
 "segment"
 msgstr ""
 "Plaats het <b>beginpunt</b> van de arc of de taartpunt; <b>Ctrl</b> om te "
-"draaien in stappen; Sleep <b>binnen</b> de ellipse voor een arc, er "
+"draaien in stappen; Sleep <b>binnen</b> de ellips voor een arc, er "
 "<b>buiten</b> voor een taartpunt"
 
 #: ../src/object-edit.cpp:710
@@ -4383,7 +4413,7 @@ msgid ""
 "segment"
 msgstr ""
 "Plaats het <b>eindpunt</b> van de arc of de taartpunt; <b>Ctrl</b> om te "
-"draaien in stappen; Sleep <b>binnen</b> de ellipse voor een arc, er "
+"draaien in stappen; Sleep <b>binnen</b> de ellips voor een arc, er "
 "<b>buiten</b> voor een taartpunt"
 
 #: ../src/object-edit.cpp:815
@@ -4391,7 +4421,7 @@ msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
 msgstr ""
-"De <b>punt straal</b> van de ster of het polygon aanpassen; <b>Shift</b> om "
+"De <b>punt straal</b> van de ster of het polygoon aanpassen; <b>Shift</b> om "
 "af te ronden; <b>Alt</b> om te verspreiden"
 
 #: ../src/object-edit.cpp:818
@@ -4400,9 +4430,9 @@ msgid ""
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
 "randomize"
 msgstr ""
-"De <b>binnen straal</b> van de ster of het polygon aanpassen; <b>Ctrl</b> om "
-"de 'punten' recht te houden (geen draaingen); <b>Shift</b> om af te ronden; "
-"<b>Alt</b> om te verspreiden"
+"De <b>binnen straal</b> van de ster of het polygoon aanpassen; <b>Ctrl</b> "
+"om de 'punten' recht te houden (geen draaiingen); <b>Shift</b> om af te "
+"ronden; <b>Alt</b> om te verspreiden"
 
 #: ../src/object-edit.cpp:982
 msgid ""
@@ -4422,7 +4452,7 @@ msgstr ""
 
 #: ../src/object-edit.cpp:1021
 msgid "Adjust the <b>offset distance</b>"
-msgstr ""
+msgstr "De <b>rand afstand</b> aanpassen"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: ../src/object-edit.cpp:1052
@@ -4442,6 +4472,8 @@ msgstr ""
 #: ../src/object-edit.cpp:1081
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr ""
+"Sleep om de grootte van het <b>frame</b> van de <b>gevormde tekst</b> aan te "
+"passen"
 
 #. Item dialog
 #: ../src/object-ui.cpp:106
@@ -4540,46 +4572,40 @@ msgid "Appending to selected path"
 msgstr "Toevoegen aan het geselecteerde pad"
 
 #: ../src/pen-context.cpp:521
-#, fuzzy
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
-msgstr ""
-"<b>Klik</b> om de tekst te bewerken, <b>sleep</b> om een deel ven de tekst "
-"te selecteren."
+msgstr "<b>Klik</b> of <b>klik en sleep</b> om een pad te sluiten."
 
 #: ../src/pen-context.cpp:531
-#, fuzzy
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
-"<b>Klik</b> om de tekst te bewerken, <b>sleep</b> om een deel ven de tekst "
-"te selecteren."
+"<b>Klik</b> of <b>klik en sleep</b> om vanaf daar het pad voort te zetten."
 
 #: ../src/pen-context.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>%s</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, "
 "<b>Enter</b> to finish the path"
 msgstr ""
-"<b>Knooppunt handvat</b>: op %.02f&#176;, lengte %s; <b>Ctrl</b> draait in "
-"stappen; <b>Alt</b> vergrendelt de lengte; <b>Shift</b> draait ook het "
-"andere handvat"
+"<b>%s</b>: hoek %3.2f&#176;, afstand %s; <b>Ctrl</b> draait in stappen, "
+"<b>Enter</b> om het pad af te maken"
 
 #: ../src/pen-context.cpp:850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
-msgstr "<b>Draaien</b>: %0.2f&#176;; <b>ctrl</b> draait in stappen"
+msgstr ""
+"<b>Afrond handvat</b>: %3.2f&#176;; lengte %s; <b>ctrl</b> draait in stappen"
 
 #: ../src/pen-context.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>%s</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, "
 "with <b>Shift</b> to move this handle only"
 msgstr ""
-"<b>Knooppunt handvat</b>: op %.02f&#176;, lengte %s; <b>Ctrl</b> draait in "
-"stappen; <b>Alt</b> vergrendelt de lengte; <b>Shift</b> draait ook het "
-"andere handvat"
+"<b>%s</b>: hoek 3%02f&#176;, lengte %s; <b>Ctrl</b> draait in stappen; "
+"<b>Shift</b> draait allen dit handvat"
 
 #: ../src/pen-context.cpp:914
 msgid "Finishing pen"
@@ -4587,16 +4613,15 @@ msgstr "Klaar met het trekken van lijnen"
 
 #: ../src/pencil-context.cpp:319
 msgid "<b>Release</b> here to close and finish the path."
-msgstr ""
+msgstr "Laat hier <b>los</b> om het pad te sluiten."
 
 #: ../src/pencil-context.cpp:325
-#, fuzzy
 msgid "Drawing a freehand path"
-msgstr "Lijnen uit de losse hand tekenen"
+msgstr "Lijnen uit de losse pols aan het tekenen"
 
 #: ../src/pencil-context.cpp:330
 msgid "<b>Drag</b> to continue the path from this point."
-msgstr ""
+msgstr "<B>Sleep</b> om vanaf hier verder te gaan met een pad."
 
 #. Write curves to object
 #: ../src/pencil-context.cpp:389
@@ -4713,7 +4738,7 @@ msgstr "Er is niets om opnieuw te doen."
 
 #: ../src/selection-chemistry.cpp:968
 msgid "Nothing was copied."
-msgstr "Er is niets gekopieërd."
+msgstr "Er is niets gekopieerd."
 
 #: ../src/selection-chemistry.cpp:1050
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
@@ -4864,7 +4889,7 @@ msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
 msgstr ""
-"Het <b>midden</b> van draaiing and skewing: sleep om te verplaatsen; "
+"Het <b>midden</b> van draaien en schuintrekken: sleep om te verplaatsen; "
 "vergroten/verkleinen met <b>shift</b> gebruikt ook dit midden."
 
 #: ../src/seltrans.cpp:474
@@ -4873,7 +4898,7 @@ msgid ""
 "with <b>Shift</b> to scale around rotation center"
 msgstr ""
 "De selectie <b>samendrukken of uitrekken</b>; <b>Ctrl</b> behoudt de "
-"verhoudingen; <b>Shift</b> vergroot/verkleind om het draaiings-middelpunt"
+"verhoudingen; <b>Shift</b> vergroot/verkleint om het draaiings-middelpunt"
 
 #: ../src/seltrans.cpp:475
 msgid ""
@@ -4881,16 +4906,15 @@ msgid ""
 "b> to scale around rotation center"
 msgstr ""
 "De selectie <b>vergroten of verkleinen</b>; <b>Ctrl</b> behoudt de "
-"verhoudingen; <b>Shift</b> vergroot/verkleind om het draaiings-middelpunt"
+"verhoudingen; <b>Shift</b> vergroot/verkleint om het draaiings-middelpunt"
 
 #: ../src/seltrans.cpp:479
-#, fuzzy
 msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "skew around the opposite side"
 msgstr ""
-"De selectie <b>draaien</b>; <b>ctrl</b> draait in stappen, <b>shift</b> "
-"draait om de tegenoverliggende hoek"
+"De selectie <b>schuintrekken</b>; <b>ctrl</b> trekt in stappen, <b>shift</b> "
+"trekt om de tegenoverliggende hoek"
 
 #: ../src/seltrans.cpp:480
 msgid ""
@@ -4909,9 +4933,9 @@ msgstr ""
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
 #: ../src/seltrans.cpp:939
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Draaien</b>: %0.2f&#176;; <b>ctrl</b> draait in stappen"
+msgstr "<b>Schuintrekken</b>: %0.2f&#176;; <b>ctrl</b> trekt in stappen"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
 #: ../src/seltrans.cpp:990
@@ -5041,8 +5065,8 @@ msgstr "<b>Dynamische rand</b>: %s met %f pt"
 #, fuzzy, c-format
 msgid "<b>Path</b> (%i node)"
 msgid_plural "<b>Path</b> (%i nodes)"
-msgstr[0] "<b>Pad</b> (%i knooppunten)"
-msgstr[1] "<b>Pad</b> (%i knooppunten)"
+msgstr[0] "<b>Pad</b> (%i knooppunt)"
+msgstr[1] "<b>Pad</b> (%i knooppunt)"
 
 #: ../src/sp-polygon.cpp:216
 msgid "<b>Polygon</b>"
@@ -5068,15 +5092,15 @@ msgstr "<b>Spiraal</b> met %3f omwentelingen"
 #, fuzzy, c-format
 msgid "<b>Star</b> with %d vertex"
 msgid_plural "<b>Star</b> with %d vertices"
-msgstr[0] "<b>Ster</b> met %d punten"
-msgstr[1] "<b>Ster</b> met %d punten"
+msgstr[0] "<b>Ster</b> met %d punt"
+msgstr[1] "<b>Ster</b> met %d punt"
 
 #: ../src/sp-star.cpp:292
 #, fuzzy, c-format
 msgid "<b>Polygon</b> with %d vertex"
 msgid_plural "<b>Polygon</b> with %d vertices"
-msgstr[0] "<b>Veelhoek</b> met %d hoeken"
-msgstr[1] "<b>Veelhoek</b> met %d hoeken"
+msgstr[0] "<b>Veelhoek</b> met %d hoek"
+msgstr[1] "<b>Veelhoek</b> met %d hoek"
 
 #. TRANSLATORS: For description of font with no name.
 #: ../src/sp-text.cpp:403
@@ -5247,7 +5271,6 @@ msgstr ""
 "in een vorm te zetten."
 
 #: ../src/text-chemistry.cpp:322
-#, fuzzy
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "Selecteer <b>gevormde tekst</b> om het uit de vorm te halen."
 
@@ -5258,11 +5281,11 @@ msgstr ""
 "te selecteren."
 
 #: ../src/text-context.cpp:464
-#, fuzzy
 msgid ""
 "<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
 msgstr ""
-"<b>Klik</b> om een item te selecteren, <b>sleep</b> om het te verplaatsen"
+"<b>Klik</b> om de gevormde tekst aan te passen, <b>sleep</b> om een gedeelte "
+"te selecteren."
 
 #: ../src/text-context.cpp:539
 msgid "Non-printable character"
@@ -5292,21 +5315,23 @@ msgstr ""
 #: ../src/text-context.cpp:672
 #, c-format
 msgid "<b>Flowed text frame</b>: %s &#215; %s"
-msgstr ""
+msgstr "<b>Frame voor gevormde tekst</b>: %s &#215; %s"
 
 #: ../src/text-context.cpp:707 ../src/text-context.cpp:1451
 msgid "Type text; <b>Enter</b> to start new line."
-msgstr ""
+msgstr "Tik uw tekst; <b>enter</b> begint een nieuwe regel."
 
 #: ../src/text-context.cpp:718
 msgid "Flowed text is created."
-msgstr ""
+msgstr "Gevormde tekst is aangemaakt."
 
 #: ../src/text-context.cpp:721
 msgid ""
 "The frame is <b>too small</b> for the current font size. Flowed text not "
 "created."
 msgstr ""
+"Het frame is <b>te klein</b> voor de grootte van het huidige lettertype. Er "
+"is geen gevormde tekst aangemaakt."
 
 #: ../src/text-context.cpp:840
 msgid "No-break space"
@@ -5314,16 +5339,15 @@ msgstr "harde spatie"
 
 #: ../src/text-context.cpp:1449
 msgid "Type flowed text; <b>Enter</b> to start new paragraph."
-msgstr ""
+msgstr "Tik de tekst om te vormen; <b>enter</b> begint een nieuwe paragraaf."
 
 #: ../src/text-context.cpp:1459 ../src/tools-switch.cpp:189
-#, fuzzy
 msgid ""
 "<b>Click</b> to select or create text, <b>drag</b> to create flowed text; "
 "then type."
 msgstr ""
-"<b>Klik</b> om te selecteren of om een nieuwe tekst te beginnen, en ga dan "
-"tikken."
+"<b>Klik</b> om een tekst te beginnen of te selecteren, <b>sleep</b> om "
+"gevormde tekst te maken; ga dan tikken."
 
 #: ../src/tools-switch.cpp:141
 msgid ""
@@ -5376,14 +5400,12 @@ msgstr ""
 "aan het geselecteerde pad."
 
 #: ../src/tools-switch.cpp:177
-#, fuzzy
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to start a path; with <b>Shift</b> to "
 "append to selected path."
 msgstr ""
-"<b>Klik</b> om een nieuw knooppunt te maken, <b>klik en sleep</b> om een "
-"afgerond knooppunt te maken. Druk op <b>Shift</b> om toe te voegen aan het "
-"geselecteerde pad."
+"<b>Klik</b> of <b>klik en sleep</b> om een pad te beginnen; druk op "
+"<b>Shift</b> om toe te voegen aan het geselecteerde pad."
 
 #: ../src/tools-switch.cpp:183
 msgid ""
@@ -5399,7 +5421,7 @@ msgid ""
 "<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, "
 "<b>drag handles</b> to adjust gradients."
 msgstr ""
-"<b>Sleep</b> of <b>dubbel-klik</b>om een kleurverloop toe te voegen aan de "
+"<b>Sleep</b> of <b>dubbelklik</b>om een kleurverloop toe te voegen aan de "
 "geselecteerde objecten, gebruik de <b>handvatten</b> om de kleurverlopen aan "
 "te passen"
 
@@ -5413,7 +5435,7 @@ msgstr ""
 
 #: ../src/tools-switch.cpp:213
 msgid "<b>Click and drag</b> between shapes to create a connector."
-msgstr ""
+msgstr "<b>Klik en sleep</b> tussen vormen om een verbinder te maken."
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:553
 #: ../src/trace/potrace/inkscape-potrace.cpp:654
@@ -5445,26 +5467,23 @@ msgstr "Met dank aan"
 
 #: ../src/ui/dialog/aboutbox.cpp:62
 msgid "Authors"
-msgstr ""
+msgstr "Auteurs"
 
 #: ../src/ui/dialog/aboutbox.cpp:66
-#, fuzzy
 msgid "Translators"
-msgstr "Transformaties"
+msgstr "Vertalers"
 
 #: ../src/ui/dialog/aboutbox.cpp:117 ../src/verbs.cpp:2185
 msgid "About Inkscape"
 msgstr "Over Inkscape"
 
 #: ../src/ui/dialog/aboutbox.cpp:129
-#, fuzzy
 msgid "_Credits"
-msgstr "Met dank aan"
+msgstr "_Met dank aan"
 
 #: ../src/ui/dialog/aboutbox.cpp:130
-#, fuzzy
 msgid "_License"
-msgstr "Licentie"
+msgstr "_Licentie"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:664
 msgid "Align"
@@ -5524,12 +5543,11 @@ msgstr "Bovenkant van de objecten uitlijnen op de onderkant van het anker"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:707
 msgid "Align baseline anchors of texts vertically"
-msgstr "De geselecteerde knopen verticaal uitlijnen"
+msgstr "Teksten verticaal uitlijnen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:710
-#, fuzzy
 msgid "Align baseline anchors of texts horizontally"
-msgstr "De geselecteerde knopen horizontaal uitlijnen"
+msgstr "Teksten horizontaal uitlijnen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:715
 msgid "Make horizontal gaps between objects equal"
@@ -5554,7 +5572,6 @@ msgid "Make vertical gaps between objects equal"
 msgstr "De verticale afstand tussen de objecten gelijk maken"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:733
-#, fuzzy
 msgid "Distribute bottoms equidistantly"
 msgstr "De afstand tussen de onderkanten van de objecten gelijkmatig verdelen"
 
@@ -5563,22 +5580,20 @@ msgid "Distribute centers equidistantly vertically"
 msgstr "De middens van de objecten gelijkmatig in verticale richting verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:739
-#, fuzzy
 msgid "Distribute tops equidistantly"
-msgstr "De geselecteerde knopen verticaal verdelen"
+msgstr "De afstand tussen de bovenkanten van de objecten gelijkmatig verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:744
-#, fuzzy
 msgid "Distribute baseline anchors of texts horizontally"
-msgstr "De geselecteerde knopen horizontaal verdelen"
+msgstr "De geselecteerde teksten horizontaal verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:747
 msgid "Distribute baseline anchors of texts vertically"
-msgstr "De geselecteerde knopen verticaal verdelen"
+msgstr "De geselecteerde teksten verticaal verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:752
 msgid "Randomize centers in both dimensions"
-msgstr ""
+msgstr "Middens in beide richtingen willekeurig aanpassen."
 
 #: ../src/ui/dialog/align-and-distribute.cpp:755
 msgid "Unclump objects: try to equalize edge-to-edge distances"
@@ -5693,9 +5708,8 @@ msgid "Zoom in/out by"
 msgstr "In- of uitzoomen met"
 
 #: ../src/ui/dialog/memory.cpp:96
-#, fuzzy
 msgid "Heap"
-msgstr "_Hulp"
+msgstr "Heap"
 
 #: ../src/ui/dialog/memory.cpp:97
 msgid "In Use"
@@ -5704,9 +5718,8 @@ msgstr "In gebruik"
 #. TRANSLATORS: "Slack" refers to memory which is in the heap but currently unused.
 #. More typical usage is to call this memory "free" rather than "slack".
 #: ../src/ui/dialog/memory.cpp:100
-#, fuzzy
 msgid "Slack"
-msgstr "Stapelen"
+msgstr "Slack"
 
 #: ../src/ui/dialog/memory.cpp:101
 msgid "Total"
@@ -5726,9 +5739,8 @@ msgid "Recalculate"
 msgstr "Herberekenen"
 
 #: ../src/ui/dialog/messages.cpp:74
-#, fuzzy
 msgid "Ready."
-msgstr "Rood"
+msgstr "Klaar."
 
 #: ../src/ui/dialog/messages.cpp:75
 msgid ""
@@ -5759,69 +5771,63 @@ msgstr "Fouten"
 #. Dialog organization
 #: ../src/ui/dialog/session-player.cpp:73
 msgid "Session file"
-msgstr ""
+msgstr "Sessie bestand"
 
 #: ../src/ui/dialog/session-player.cpp:74
-#, fuzzy
 msgid "Playback controls"
-msgstr "Gereedschap eigenschappen"
+msgstr "Bediening voor terugspelen"
 
 #: ../src/ui/dialog/session-player.cpp:75
-#, fuzzy
 msgid "Message information"
-msgstr "_Transformaties verwijderen"
+msgstr "Bericht informatie"
 
 #. Active session file display
 #. fixme: Does this mean the active file for the session, or the file for the active session?
 #. Please indicate which with a TRANSLATORS comment.
 #: ../src/ui/dialog/session-player.cpp:85
 msgid "Active session file:"
-msgstr ""
+msgstr "Actief sessie bestand:"
 
 #: ../src/ui/dialog/session-player.cpp:86
 msgid "Delay (milliseconds):"
-msgstr ""
+msgstr "Vertraging (milliseconden):"
 
 #. Unload/load buttons
 #: ../src/ui/dialog/session-player.cpp:94
-#, fuzzy
 msgid "Close file"
-msgstr "Sluiten"
+msgstr "Bestand sluiten"
 
 #: ../src/ui/dialog/session-player.cpp:95
 msgid "Open new file"
-msgstr ""
+msgstr "Nieuw bestand openen"
 
 #: ../src/ui/dialog/session-player.cpp:96
-#, fuzzy
 msgid "Set delay"
-msgstr "Instellen als standaard"
+msgstr "Vertraging instellen"
 
 #: ../src/ui/dialog/session-player.cpp:138
-#, fuzzy
 msgid "Rewind"
-msgstr "Rood"
+msgstr "Terugspoelen"
 
 #: ../src/ui/dialog/session-player.cpp:139
 msgid "Go back one change"
-msgstr ""
+msgstr "Eén wijziging terug gaan"
 
 #: ../src/ui/dialog/session-player.cpp:140
-#, fuzzy
 msgid "Pause"
-msgstr "_Plakken"
+msgstr "Pauzeren"
 
 #: ../src/ui/dialog/session-player.cpp:141
 msgid "Go forward one change"
-msgstr ""
+msgstr "Eén wijziging verder gaan"
 
 #: ../src/ui/dialog/session-player.cpp:142
 msgid "Play"
-msgstr ""
+msgstr "Afspelen"
 
 #: ../src/ui/dialog/session-player.cpp:177 ../src/verbs.cpp:1553
 msgid "Open session file"
-msgstr ""
+msgstr "Sessie bestand openen"
 
 #. ##Set up the Potrace panel
 #. #### brightness ####
@@ -5975,9 +5981,8 @@ msgstr "Start het overtrekken"
 
 #: ../src/ui/dialog/transformation.cpp:58
 #: ../src/ui/dialog/transformation.cpp:100
-#, fuzzy
 msgid "Skew"
-msgstr "Lijn"
+msgstr "Schuintrekken"
 
 #: ../src/ui/dialog/transformation.cpp:59
 #: ../src/ui/dialog/transformation.cpp:103
@@ -5986,25 +5991,21 @@ msgstr "Transformatie"
 
 #: ../src/ui/dialog/transformation.cpp:60
 #: ../src/ui/dialog/transformation.cpp:70
-#, fuzzy
 msgid "Horizontal"
-msgstr "Horizontale tekst"
+msgstr "Horizontaal"
 
 #: ../src/ui/dialog/transformation.cpp:62
 #: ../src/ui/dialog/transformation.cpp:72
-#, fuzzy
 msgid "Vertical"
-msgstr "Verticale tekst"
+msgstr "Verticaal"
 
 #: ../src/ui/dialog/transformation.cpp:64
-#, fuzzy
 msgid "Width"
-msgstr "Breedte:"
+msgstr "Breedte"
 
 #: ../src/ui/dialog/transformation.cpp:66
-#, fuzzy
 msgid "Height"
-msgstr "Hoogte:"
+msgstr "Hoogte"
 
 #: ../src/ui/dialog/transformation.cpp:111
 msgid "Apply transform to object"
@@ -6012,102 +6013,98 @@ msgstr "Transformatie toepassen op object"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:43
 msgid "_Use SSL"
-msgstr ""
+msgstr "SSL gebr_uiken"
 
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-connect.cpp:68
-#, fuzzy
 msgid "_Server:"
-msgstr "_Omdraaien"
+msgstr "_Server:"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:69
-#, fuzzy
 msgid "_Username:"
-msgstr "_Hernoemen"
+msgstr "_Gebruikersnaam:"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:70
 msgid "_Password:"
-msgstr ""
+msgstr "_Wachtwoord:"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:71
 msgid "P_ort:"
-msgstr ""
+msgstr "P_oort:"
 
 #. Buttons
 #: ../src/ui/dialog/whiteboard-connect.cpp:99
-#, fuzzy
 msgid "Connect"
-msgstr "Klonen"
+msgstr "Verbinden"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:126
 msgid "Establishing connection to Jabber server <b>%1</b> as user <b>%2</b>"
-msgstr ""
+msgstr "Bezig met verbinden met Jabber server <b>%1</b> als <b>%2</b>"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:131
 msgid "Failed to establish connection to Jabber server <b>%1</b>"
-msgstr ""
+msgstr "Het lukte niet een verbinding op te zetten met Jabber server <b>%1</b>"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:136
 msgid "Authentication failed on Jabber server <b>%1</b> as <b>%2</b>"
-msgstr ""
+msgstr "Authenticatie bij Jabber server <b>%1</b> als <b>%s</b> mislukt"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:141
 msgid "SSL initialization failed when connecting to Jabber server <b>%1</b>"
 msgstr ""
+"SSL initialisatie mislukt bij het verbinden met Jabber server <b>%1</b>"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:147
 msgid "Connected to Jabber server <b>%1</b> as <b>%2</b>"
-msgstr ""
+msgstr "Verbonden met Jabber server <b>%1</b> als <b>%2</b>"
 
 #. Construct labels
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:75
-#, fuzzy
 msgid "Chatroom _name:"
-msgstr "Naam van de laag:"
+msgstr "_Naam van de ruimte:"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:76
 msgid "Chatroom _server:"
-msgstr ""
+msgstr "_Server waar de ruimte zich bevindt:"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:77
 msgid "Chatroom _password:"
-msgstr ""
+msgstr "_Wachtwoord van de ruimte:"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:78
 msgid "Chatroom _handle:"
-msgstr ""
+msgstr "_Handle van de ruimte:"
 
 #. Button setup and callback registration
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:97
 msgid "Connect to chatroom"
-msgstr ""
+msgstr "Verbinden met ruimte"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:132
 msgid "Synchronizing with chatroom <b>%1@%2</b> using the handle <b>%3</b>"
-msgstr ""
+msgstr "Bezig met synchroniseren met ruimte <b>%1@%2</b> met handle <b>%3</b>"
 
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:78
 msgid "_User's Jabber ID:"
-msgstr ""
+msgstr "Jabber-ID van de gebruiker:"
 
 #. Buttons
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:82
 msgid "_Invite user"
-msgstr ""
+msgstr "_Gebruiker uitnodigen"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:83
-#, fuzzy
 msgid "_Cancel"
-msgstr "Annuleren"
+msgstr "_Annuleren"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:94
 msgid "Buddy List"
-msgstr ""
+msgstr "Vriendenlijst"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:170
 msgid "Sending whiteboard invitation to <b>%1</b>"
-msgstr ""
+msgstr "Bezig met verzenden van whiteboard uitnodiging naar <b>%1</b>"
 
 #. FIXME: strings are replaced by placeholders, NOT to be translated until the code is enabled
 #. See http://sourceforge.net/mailarchive/message.php?msg_id=11746016 for details
@@ -6252,32 +6249,31 @@ msgstr ""
 
 #: ../src/ui/widget/panel.cpp:88
 msgid "small"
-msgstr ""
+msgstr "klein"
 
 #: ../src/ui/widget/panel.cpp:89
 msgid "medium"
-msgstr ""
+msgstr "middel"
 
 #: ../src/ui/widget/panel.cpp:90
-#, fuzzy
 msgid "large"
-msgstr "Doel:"
+msgstr "groot"
 
 #: ../src/ui/widget/panel.cpp:91
 msgid "huge"
-msgstr ""
+msgstr "gigantisch"
 
 #: ../src/ui/widget/panel.cpp:106
-#, fuzzy
 msgid "List"
-msgstr "binnenrand"
+msgstr "Lijst"
 
 #: ../src/verbs.cpp:1039
 msgid "Moved to next layer."
 msgstr "Verplaatst naar de volgende laag."
 
 #: ../src/verbs.cpp:1041
-msgid "Can't move past last layer."
+#, fuzzy
+msgid "Cannot move past last layer."
 msgstr "Kan niet voorbij de laatste laag verplaatsen."
 
 #: ../src/verbs.cpp:1050
@@ -6285,7 +6281,8 @@ msgid "Moved to previous layer."
 msgstr "Verplaatst naar de vorige laag."
 
 #: ../src/verbs.cpp:1052
-msgid "Can't move past first layer."
+#, fuzzy
+msgid "Cannot move past first layer."
 msgstr "Kan niet voorbij de eerste laag verplaatsen."
 
 #: ../src/verbs.cpp:1069 ../src/verbs.cpp:1137
@@ -6303,7 +6300,8 @@ msgid "Lowered layer <b>%s</b>."
 msgstr "Laag <b>%s</b> is omlaag gebracht."
 
 #: ../src/verbs.cpp:1111
-msgid "Can't move layer any further."
+#, fuzzy
+msgid "Cannot move layer any further."
 msgstr "De laag kan niet verder worden verplaatst."
 
 #. TRANSLATORS: this means "The layer has been deleted."
@@ -6316,12 +6314,16 @@ msgid ""
 "You need to connect to a Jabber server before sharing a document with "
 "another user."
 msgstr ""
+"U moet verbonden zijn met een Jabber server voordat u een document kunt "
+"delen met een andere gebruiker."
 
 #: ../src/verbs.cpp:1539
 msgid ""
 "You need to connect to a Jabber server before sharing a document with a "
 "chatroom."
 msgstr ""
+"U moet verbonden zijn met een Jabber server voordat u een document kunt "
+"delen met een ruimte."
 
 #: ../src/verbs.cpp:1549
 msgid "XML node tracker has not been initialized; nothing to dump"
@@ -6430,7 +6432,8 @@ msgid "Vac_uum Defs"
 msgstr "_Definities opruimen"
 
 #: ../src/verbs.cpp:1837
-msgid "Remove unused stuff from the &lt;defs&gt; of the document"
+#, fuzzy
+msgid "Remove unused predefined items from the &lt;defs&gt; of the document"
 msgstr "Ongebruikte items uit het &lt;defs&gt-onderdeel van het bestand halen"
 
 #: ../src/verbs.cpp:1839
@@ -6438,7 +6441,8 @@ msgid "Print _Direct"
 msgstr "_Direct afdrukken"
 
 #: ../src/verbs.cpp:1840
-msgid "Print directly to file or pipe"
+#, fuzzy
+msgid "Print directly without prompting to a file or pipe"
 msgstr "Direct afdrukken naar een pipe of een bestand"
 
 #: ../src/verbs.cpp:1841
@@ -6462,7 +6466,8 @@ msgid "_Export Bitmap..."
 msgstr "Bitmap _exporteren..."
 
 #: ../src/verbs.cpp:1846
-msgid "Export document or selection as PNG bitmap"
+#, fuzzy
+msgid "Export document or selection as a bitmap image"
 msgstr "Document of selectie als PNG bitmap exporteren"
 
 #: ../src/verbs.cpp:1847
@@ -6535,7 +6540,8 @@ msgid "_Paste"
 msgstr "_Plakken"
 
 #: ../src/verbs.cpp:1865
-msgid "Paste object(s) from clipboard to mouse point"
+#, fuzzy
+msgid "Paste objects from clipboard to mouse point"
 msgstr "Objecten plakken van het klembord naar waar de muis staat"
 
 #: ../src/verbs.cpp:1866
@@ -6551,7 +6557,8 @@ msgid "Paste _In Place"
 msgstr "Plak _op positie"
 
 #: ../src/verbs.cpp:1869
-msgid "Paste object(s) from clipboard to the original location"
+#, fuzzy
+msgid "Paste objects from clipboard to the original location"
 msgstr "Objecten plakken van het klembord naar hun originele locatie"
 
 #: ../src/verbs.cpp:1870
@@ -6567,7 +6574,8 @@ msgid "Duplic_ate"
 msgstr "_Dupliceren"
 
 #: ../src/verbs.cpp:1873
-msgid "Duplicate selected object(s)"
+#, fuzzy
+msgid "Duplicate selected objects"
 msgstr "Geselecteerde object(en) dupliceren"
 
 #: ../src/verbs.cpp:1874
@@ -6598,7 +6606,8 @@ msgstr "Selecteer het object waaraan de kloon is gekoppeld"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:1881
-msgid "O_bject(s) to Pattern"
+#, fuzzy
+msgid "O_bjects to Pattern"
 msgstr "O_bject(en) naar patroon"
 
 #: ../src/verbs.cpp:1882
@@ -6607,7 +6616,8 @@ msgstr "Zet de selectie om naar een rechthoek gevuld met een getegeld patroon"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:1884
-msgid "Pattern to Ob_ject(s)"
+#, fuzzy
+msgid "Pattern to Ob_jects"
 msgstr "Patroon naar object(en)"
 
 #: ../src/verbs.cpp:1885
@@ -6705,7 +6715,8 @@ msgid "Group selected objects"
 msgstr "De geselecteerde objecten groeperen"
 
 #: ../src/verbs.cpp:1911
-msgid "Ungroup selected group(s)"
+#, fuzzy
+msgid "Ungroup selected groups"
 msgstr "De geselecteerde groep(en) degroeperen"
 
 #: ../src/verbs.cpp:1913
@@ -6795,7 +6806,8 @@ msgid "Outs_et"
 msgstr "Buit_enrand"
 
 #: ../src/verbs.cpp:1940
-msgid "Outset selected path(s)"
+#, fuzzy
+msgid "Outset selected paths"
 msgstr "De geselecteerde paden vergroten met een buitenrand"
 
 #: ../src/verbs.cpp:1942
@@ -6803,7 +6815,8 @@ msgid "O_utset Path by 1 px"
 msgstr "B_uitenrand van 1 pixel toevoegen"
 
 #: ../src/verbs.cpp:1943
-msgid "Outset selected path(s) by 1 px"
+#, fuzzy
+msgid "Outset selected paths by 1 px"
 msgstr "De geselecteerde paden vergroten met een buitenrand van 1 pixel"
 
 #: ../src/verbs.cpp:1945
@@ -6811,7 +6824,8 @@ msgid "O_utset Path by 10 px"
 msgstr "B_uitenrand van 10 pixels toevoegen"
 
 #: ../src/verbs.cpp:1946
-msgid "Outset selected path(s) by 10 px"
+#, fuzzy
+msgid "Outset selected paths by 10 px"
 msgstr "De geselecteerde paden vergroten met een buitenrand van 10 pixels"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
@@ -6822,7 +6836,8 @@ msgid "I_nset"
 msgstr "Bi_nnenrand"
 
 #: ../src/verbs.cpp:1951
-msgid "Inset selected path(s)"
+#, fuzzy
+msgid "Inset selected paths"
 msgstr "De geselecteerde paden verkleinen met een binnenrand"
 
 #: ../src/verbs.cpp:1953
@@ -6830,7 +6845,8 @@ msgid "I_nset Path by 1 px"
 msgstr "Bi_nnenrand van 1 pixel verwijderen"
 
 #: ../src/verbs.cpp:1954
-msgid "Inset selected path(s) by 1 px"
+#, fuzzy
+msgid "Inset selected paths by 1 px"
 msgstr "De geselecteerde paden verkleinen met een binnenrand van 1 pixel"
 
 #: ../src/verbs.cpp:1956
@@ -6838,31 +6854,33 @@ msgid "I_nset Path by 10 px"
 msgstr "Bi_nnenrand van 10 pixels verwijderen"
 
 #: ../src/verbs.cpp:1957
-msgid "Inset selected path(s) by 10 px"
+#, fuzzy
+msgid "Inset selected paths by 10 px"
 msgstr "De geselecteerde paden verkleinen met een binnenrand van 10 pixels"
 
 #: ../src/verbs.cpp:1959
 msgid "D_ynamic Offset"
-msgstr ""
+msgstr "D_ynamische rand"
 
 #: ../src/verbs.cpp:1959
 msgid "Create a dynamic offset object"
-msgstr ""
+msgstr "Een 'dynamische rand'-object aanmaken"
 
 #: ../src/verbs.cpp:1961
 msgid "_Linked Offset"
-msgstr ""
+msgstr "_Gekoppelde rand"
 
 #: ../src/verbs.cpp:1962
 msgid "Create a dynamic offset object linked to the original path"
-msgstr ""
+msgstr "Maak een 'dynamische rand'-object, gekoppeld aan het originele pad"
 
 #: ../src/verbs.cpp:1964
 msgid "_Stroke to Path"
 msgstr "_Lijn naar pad"
 
 #: ../src/verbs.cpp:1965
-msgid "Convert selected stroke(s) to path(s)"
+#, fuzzy
+msgid "Convert selected strokes to paths"
 msgstr "De geselecteerde lijn(en) omzetten naar pad(en)"
 
 #: ../src/verbs.cpp:1966
@@ -6870,7 +6888,8 @@ msgid "Si_mplify"
 msgstr "_Vereenvoudigen"
 
 #: ../src/verbs.cpp:1967
-msgid "Simplify selected path(s) by removing extra nodes"
+#, fuzzy
+msgid "Simplify selected paths by removing extra nodes"
 msgstr "Vereenvoudig de geselecteerde paden door knooppunten te verwijderen"
 
 #: ../src/verbs.cpp:1968
@@ -6878,7 +6897,8 @@ msgid "_Reverse"
 msgstr "_Omdraaien"
 
 #: ../src/verbs.cpp:1969
-msgid "Reverses the direction of selected path(s); useful for flipping markers"
+#, fuzzy
+msgid "Reverses the direction of selected paths; useful for flipping markers"
 msgstr ""
 "De richting van de geselecteerde paden omdraaien; handig om markeringen om "
 "te draaien"
@@ -6915,7 +6935,8 @@ msgid "Break _Apart"
 msgstr "_Los maken"
 
 #: ../src/verbs.cpp:1980
-msgid "Break selected path(s) into subpaths"
+#, fuzzy
+msgid "Break selected paths into subpaths"
 msgstr "Splits de geselecteerde paden in subpaden"
 
 #: ../src/verbs.cpp:1981
@@ -7045,7 +7066,8 @@ msgid "_Object to Path"
 msgstr "_Object naar pad"
 
 #: ../src/verbs.cpp:2015
-msgid "Convert selected object(s) to path(s)"
+#, fuzzy
+msgid "Convert selected objects to paths"
 msgstr "De selectie omzetten naar paden"
 
 #: ../src/verbs.cpp:2016
@@ -7053,7 +7075,8 @@ msgid "_Flow into Frame"
 msgstr "Naar object _vormen"
 
 #: ../src/verbs.cpp:2017
-msgid "Put text into frame(s)"
+#, fuzzy
+msgid "Put text into frames"
 msgstr "Tekst vormen naar een object"
 
 #: ../src/verbs.cpp:2018
@@ -7071,26 +7094,31 @@ msgid "_Convert to Text"
 msgstr "_Omzetten naar tekst"
 
 #: ../src/verbs.cpp:2021
-msgid "Convert flowed text(s) to regular text objects (preserves appearance)"
+#, fuzzy
+msgid "Convert flowed text to regular text objects (preserves appearance)"
 msgstr ""
 "De gevormde tekst converteren naar een normaal tekstobject met behoud van "
 "uiterlijk"
 
 #: ../src/verbs.cpp:2023
-msgid "Flip _Horizontally"
+#, fuzzy
+msgid "Flip _Horizontal"
 msgstr "_Tuimelen"
 
 #: ../src/verbs.cpp:2023
-msgid "Flip selection horizontally"
-msgstr "De selectie horizontaal tuimelen"
+#, fuzzy
+msgid "Flips selected objects horizontally"
+msgstr "De geselecteerde knopen horizontaal uitlijnen"
 
 #: ../src/verbs.cpp:2026
-msgid "Flip _Vertically"
+#, fuzzy
+msgid "Flip _Vertical"
 msgstr "_Spiegelen"
 
 #: ../src/verbs.cpp:2026
-msgid "Flip selection vertically"
-msgstr "De selectie verticaal spiegelen"
+#, fuzzy
+msgid "Flips selected objects vertically"
+msgstr "De geselecteerde knopen verticaal uitlijnen"
 
 #. Tools
 #: ../src/verbs.cpp:2030
@@ -7154,25 +7182,26 @@ msgid "Pick averaged colors from image"
 msgstr "Selecteer gemiddelde kleuren van de afbeelding"
 
 #: ../src/verbs.cpp:2057
-#, fuzzy
 msgid "Create connectors"
-msgstr "Maak een nieuw document"
+msgstr "Maak een nieuwe verbinders"
 
 #. Tool prefs
 #: ../src/verbs.cpp:2060
 msgid "Selector Preferences"
-msgstr "Voorkeuren voor selecteren"
+msgstr "Voorkeuren voor verbinders"
 
 #: ../src/verbs.cpp:2061
-msgid "Open Inkscape Preferences for the Selector tool"
-msgstr "De Inkscape voorkeuren voor selecteren openen"
+#, fuzzy
+msgid "Open Preferences for the Selector tool"
+msgstr "De Inkscape voorkeuren voor verbinders openen"
 
 #: ../src/verbs.cpp:2062
 msgid "Node Tool Preferences"
 msgstr "Voorkeuren voor knooppunten"
 
 #: ../src/verbs.cpp:2063
-msgid "Open Inkscape Preferences for the Node tool"
+#, fuzzy
+msgid "Open Preferences for the Node tool"
 msgstr "De Inkscape voorkeuren voor het knooppunten-gereedschap openen"
 
 #: ../src/verbs.cpp:2064
@@ -7180,7 +7209,8 @@ msgid "Rectangle Preferences"
 msgstr "Voorkeuren voor rechthoeken"
 
 #: ../src/verbs.cpp:2065
-msgid "Open Inkscape Preferences for the Rectangle tool"
+#, fuzzy
+msgid "Open Preferences for the Rectangle tool"
 msgstr "De Inkscape voorkeuren voor het rechthoek-gereedschap openen"
 
 #: ../src/verbs.cpp:2066
@@ -7188,7 +7218,8 @@ msgid "Ellipse Preferences"
 msgstr "Voorkeuren voor ellipsen"
 
 #: ../src/verbs.cpp:2067
-msgid "Open Inkscape Preferences for the Ellipse tool"
+#, fuzzy
+msgid "Open Preferences for the Ellipse tool"
 msgstr "De Inkscape voorkeuren voor het ellips-gereedschap openen"
 
 #: ../src/verbs.cpp:2068
@@ -7196,7 +7227,8 @@ msgid "Star Preferences"
 msgstr "Voorkeuren voor sterren"
 
 #: ../src/verbs.cpp:2069
-msgid "Open Inkscape Preferences for the Star tool"
+#, fuzzy
+msgid "Open Preferences for the Star tool"
 msgstr "De Inkscape voorkeuren voor het ster-gereedschap openen"
 
 #: ../src/verbs.cpp:2070
@@ -7204,7 +7236,8 @@ msgid "Spiral Preferences"
 msgstr "Voorkeuren voor spiralen"
 
 #: ../src/verbs.cpp:2071
-msgid "Open Inkscape Preferences for the Spiral tool"
+#, fuzzy
+msgid "Open Preferences for the Spiral tool"
 msgstr "De Inkscape voorkeuren voor het spiraal-gereedschap openen"
 
 #: ../src/verbs.cpp:2072
@@ -7212,7 +7245,8 @@ msgid "Pencil Preferences"
 msgstr "Penseel voorkeuren"
 
 #: ../src/verbs.cpp:2073
-msgid "Open Inkscape Preferences for the Pencil tool"
+#, fuzzy
+msgid "Open Preferences for the Pencil tool"
 msgstr "De Inkscape voorkeuren voor het penseel-gereedschap openen"
 
 #: ../src/verbs.cpp:2074
@@ -7220,7 +7254,8 @@ msgid "Pen Preferences"
 msgstr "Pen voorkeuren"
 
 #: ../src/verbs.cpp:2075
-msgid "Open Inkscape Preferences for the Pen tool"
+#, fuzzy
+msgid "Open Preferences for the Pen tool"
 msgstr "De Inkscape voorkeuren voor het pen-gereedschap openen"
 
 #: ../src/verbs.cpp:2076
@@ -7228,7 +7263,8 @@ msgid "Calligraphic Preferences"
 msgstr "Kalligrafie voorkeuren"
 
 #: ../src/verbs.cpp:2077
-msgid "Open Inkscape Preferences for the Calligraphy tool"
+#, fuzzy
+msgid "Open Preferences for the Calligraphy tool"
 msgstr "De Inkscape voorkeuren voor het Kalligrafie gereedschap openen"
 
 #: ../src/verbs.cpp:2078
@@ -7236,7 +7272,8 @@ msgid "Text Preferences"
 msgstr "Tekst voorkeuren"
 
 #: ../src/verbs.cpp:2079
-msgid "Open Inkscape Preferences for the Text tool"
+#, fuzzy
+msgid "Open Preferences for the Text tool"
 msgstr "De Inkscape voorkeuren voor het tekst-gereedschap openen"
 
 #: ../src/verbs.cpp:2080
@@ -7244,7 +7281,8 @@ msgid "Gradient Preferences"
 msgstr "Kleurverloop voorkeuren"
 
 #: ../src/verbs.cpp:2081
-msgid "Open Inkscape Preferences for the Gradient tool"
+#, fuzzy
+msgid "Open Preferences for the Gradient tool"
 msgstr "De Inkscape voorkeuren voor het kleurverloop-gereedschap openen"
 
 #: ../src/verbs.cpp:2082
@@ -7252,7 +7290,8 @@ msgid "Zoom Preferences"
 msgstr "Zoom voorkeuren"
 
 #: ../src/verbs.cpp:2083
-msgid "Open Inkscape Preferences for the Zoom tool"
+#, fuzzy
+msgid "Open Preferences for the Zoom tool"
 msgstr "De Inkscape voorkeuren voor het zoom-gereedschap openen"
 
 #: ../src/verbs.cpp:2084
@@ -7260,18 +7299,18 @@ msgid "Dropper Preferences"
 msgstr "Pipet voorkeuren"
 
 #: ../src/verbs.cpp:2085
-msgid "Open Inkscape Preferences for the Dropper tool"
+#, fuzzy
+msgid "Open Preferences for the Dropper tool"
 msgstr "De Inkscape voorkeuren voor het pipet-gereedschap openen"
 
 #: ../src/verbs.cpp:2086
-#, fuzzy
 msgid "Connector Preferences"
-msgstr "Voorkeuren voor selecteren"
+msgstr "Voorkeuren voor verbinders"
 
 #: ../src/verbs.cpp:2087
 #, fuzzy
-msgid "Open Inkscape Preferences for the Connector tool"
-msgstr "De Inkscape voorkeuren voor selecteren openen"
+msgid "Open Preferences for the Connector tool"
+msgstr "De Inkscape voorkeuren voor verbinder-gereedschap openen"
 
 #. Zooming
 #: ../src/verbs.cpp:2090
@@ -7526,29 +7565,30 @@ msgstr "Object-eigenschappen dialoogvenster"
 
 #: ../src/verbs.cpp:2158
 msgid "_Connect to Jabber server..."
-msgstr ""
+msgstr "_Verbinden met Jabber server..."
 
 #: ../src/verbs.cpp:2158
 msgid "Connect to a Jabber server"
-msgstr ""
+msgstr "Verbinden met een Jabber server"
 
 #: ../src/verbs.cpp:2160
-#, fuzzy
 msgid "Share with _user..."
-msgstr "Opslaan _als..."
+msgstr "Delen met gebruiker...."
 
 #: ../src/verbs.cpp:2160
 msgid "Establish a whiteboard session with another Jabber user"
-msgstr ""
+msgstr "Een whiteboard sessie beginnen met een andere Jabber gebruiker"
 
 #: ../src/verbs.cpp:2162
 msgid "Share with _chatroom..."
-msgstr ""
+msgstr "Delen met ruimte...."
 
 #: ../src/verbs.cpp:2162
 msgid ""
 "Join a chatroom to start a new whiteboard session or join one in progress"
 msgstr ""
+"Je in een ruimte begeven om een whiteboard sessie te beginnen of om er aan "
+"eentje mee te doen"
 
 #: ../src/verbs.cpp:2164
 msgid "_Dump XML node tracker"
@@ -7560,31 +7600,31 @@ msgstr ""
 
 #: ../src/verbs.cpp:2166
 msgid "_Open session file..."
-msgstr ""
+msgstr "Sessie bestand _openen..."
 
 #: ../src/verbs.cpp:2166
 msgid "Open and browse through records of past whiteboard sessions"
-msgstr ""
+msgstr "Door opnames van whiteboard sessies bladeren"
 
 #: ../src/verbs.cpp:2168
 msgid "Session file playback"
-msgstr ""
+msgstr "Sessie bestand afspelen"
 
 #: ../src/verbs.cpp:2170
 msgid "_Disconnect from session"
-msgstr ""
+msgstr "_Verbinding met sessie verbreken"
 
 #: ../src/verbs.cpp:2172
 msgid "Disconnect from _server"
-msgstr ""
+msgstr "Verbinding met _server verbreken"
 
 #: ../src/verbs.cpp:2174
 msgid "_Input Devices..."
-msgstr ""
+msgstr "_Invoer apparaten..."
 
 #: ../src/verbs.cpp:2175
 msgid "Configure extended input devices"
-msgstr ""
+msgstr "Externe invoer-apparaten configureren"
 
 #. Help
 #: ../src/verbs.cpp:2178
@@ -7597,7 +7637,7 @@ msgstr "Toetsenbord en muis handleiding"
 
 #: ../src/verbs.cpp:2180
 msgid "About E_xtensions"
-msgstr "Over uitbreidingen"
+msgstr "Over _uitbreidingen"
 
 #: ../src/verbs.cpp:2181
 msgid "About Extensions..."
@@ -7692,9 +7732,8 @@ msgstr "Herhaal het laatste effect met dezelfde instellingen"
 
 #. "tutorial_tips"
 #: ../src/verbs.cpp:2209
-#, fuzzy
 msgid "Previous Effect Settings..."
-msgstr "Vorig effect..."
+msgstr "Instellingen van het vorig effect..."
 
 #: ../src/verbs.cpp:2210
 msgid "Repeat the last effect with new settings"
@@ -7787,7 +7826,7 @@ msgstr "Grootte:"
 #. * interested in.
 #: ../src/widgets/font-selector.cpp:554
 msgid "AaBbCcIiPpQq12368.;/()"
-msgstr "AaBbCcIiPpQq12368.;/()"
+msgstr "AaBbCcIiPpQqWw12368.;/()"
 
 #: ../src/widgets/gradient-selector.cpp:137
 #: ../src/widgets/gradient-toolbar.cpp:524
@@ -8319,21 +8358,19 @@ msgstr ""
 
 #: ../src/widgets/toolbox.cpp:1545
 msgid "W:"
-msgstr ""
+msgstr "B:"
 
 #: ../src/widgets/toolbox.cpp:1545
-#, fuzzy
 msgid "Width of rectangle"
-msgstr "Breedte van de selectie"
+msgstr "Breedte van de rechthoek"
 
 #: ../src/widgets/toolbox.cpp:1557
 msgid "H:"
-msgstr ""
+msgstr "H:"
 
 #: ../src/widgets/toolbox.cpp:1557
-#, fuzzy
 msgid "Height of rectangle"
-msgstr "Hoogte van de selectie"
+msgstr "Hoogte van de rechthoek"
 
 #: ../src/widgets/toolbox.cpp:1569
 msgid "Rx:"
@@ -8448,10 +8485,14 @@ msgstr "De invloed van weerstand op de beweging van de pen"
 #: ../src/widgets/toolbox.cpp:2035
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr ""
+"Gebruik de druk die op het invoer apparaat wordt uitgeoefend om de pen-"
+"breedte te variëren"
 
 #: ../src/widgets/toolbox.cpp:2048
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr ""
+"Gebruik de hoek waaronder het invoer apparaat wordt gehouden om de pen-hoek "
+"te variëren"
 
 #: ../src/widgets/toolbox.cpp:2375
 msgid "Start:"
@@ -8497,33 +8538,12 @@ msgstr ""
 "niet ingedrukt wordt de kleur met doorzichtigheid gekozen."
 
 #: ../src/widgets/toolbox.cpp:3040
-#, fuzzy
 msgid "Make connectors avoid selected objects"
-msgstr "De overlap tussen de geselecteerde objecten"
+msgstr "Zorg dat verbinders de geselecteerde objecten ontwijken"
 
 #: ../src/widgets/toolbox.cpp:3044
-#, fuzzy
 msgid "Make connectors ignore selected objects"
-msgstr "De overlap tussen de geselecteerde objecten"
-
-#, fuzzy
-#~ msgid "Could not read next message due to I/O error (error: %s)!"
-#~ msgstr ""
-#~ "Het fouten-logboekbestand '%s' voor uitbreidingen kon niet worden "
-#~ "aangemaakt"
-
-#~ msgid "Open one of the recently visited documents"
-#~ msgstr "Open een recentelijk geopend bestand"
-
-#~ msgid ""
-#~ "Show or hide parts of the document window (differently for normal and "
-#~ "fullscreen modes)"
-#~ msgstr ""
-#~ "Delen van het document venster weergeven of verbergen (dit verschilt voor "
-#~ "normale en volledig-scherm weergave)"
-
-#~ msgid "Interactive Inkscape tutorials"
-#~ msgstr "Interactieve Inkscape handleidingen"
+msgstr "Zorg dat verbinders de geselecteerde objecten negeren"
 
 #~ msgid ""
 #~ "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</"
@@ -8531,13 +8551,13 @@ msgstr "De overlap tussen de geselecteerde objecten"
 #~ "selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes "
 #~ "to select."
 #~ msgstr ""
-#~ "Er zijn <b>geen</b> van <b>%i</b>object geselecteerd. <b>Klik</b>, "
-#~ "<b>shift-klik</b> of <b>sleep om</b> objecten te selecteren.Er zijn "
-#~ "<b>geen</b> van <b>%i</b>objecten geselecteerd. <b>Klik</b>, <b>shift-"
-#~ "klik</b> of <b>sleep om</b> objecten te selecteren."
+#~ "<b>0</b> van <b>%i</b> knooppunt geselecteerd. <b>Klik</b>, <b>shift-"
+#~ "klik</b> of <b>sleep</b> om knooppunten te selecteren.<b>0</b> van <b>%i</"
+#~ "b> knooppunten geselecteerd. <b>Klik</b>, <b>shift-klik</b> of <b>sleep</"
+#~ "b> om knooppunten te selecteren."
 
-#~ msgid "Edit"
-#~ msgstr "Bewerken"
+#~ msgid "Flip selection horizontally"
+#~ msgstr "De selectie horizontaal tuimelen"
 
-#~ msgid "Add"
-#~ msgstr "Toevoegen"
+#~ msgid "Flip selection vertically"
+#~ msgstr "De selectie verticaal spiegelen"
