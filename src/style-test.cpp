@@ -386,6 +386,131 @@ suppress_warning_log_handler(gchar const *log_domain, GLogLevelFlags /*log_level
      * UTEST_ASSERT(streq(prev_message, exp_message)). */
 }
 
+static void
+test_mul24(unsigned const a24, unsigned const b24)
+{
+    assert(a24 <= SP_SCALE24_MAX);
+    assert(b24 <= SP_SCALE24_MAX);
+    unsigned const manual_prod24 = SP_SCALE24_FROM_FLOAT(SP_SCALE24_TO_FLOAT(a24) *
+                                                         SP_SCALE24_TO_FLOAT(b24)  );
+    unsigned const prod24 = SP_SCALE24_MUL(a24, b24);
+    UTEST_ASSERT(prod24 == manual_prod24);
+}
+
+static void
+test_scale24_mul()
+{
+    UTEST_TEST("SP_SCALE24_MUL") {
+        UTEST_ASSERT(0x1000 < SP_SCALE24_MAX);
+        UTEST_ASSERT(SP_SCALE24_MAX < SP_SCALE24_MAX + 1); // i.e. no overflow.
+        for (unsigned i = 0; i <= 10; ++i) {
+            unsigned const i24 = SP_SCALE24_MAX * i / 10;
+            UTEST_ASSERT(i24 == SP_SCALE24_FROM_FLOAT(i / 10.0));
+            for (unsigned j = 0; j <= 10; ++j) {
+                unsigned const j24 = SP_SCALE24_MAX * j / 10;
+                test_mul24(i24, j24);
+            }
+        }
+
+        for (unsigned i = 0; i < 10000; ++i) {
+            unsigned const a24 = rand() % (SP_SCALE24_MAX + 1);
+            unsigned const b24 = rand() % (SP_SCALE24_MAX + 1);
+            test_mul24(a24, b24);
+        }
+    }
+}
+
+static void
+test_merge_opacity()
+{
+    SPStyle &parent = *sp_style_new();
+    SPStyle &child = *sp_style_new();
+
+    unsigned const either = 2;
+    struct {
+        bool parent_set;
+        bool parent_inherit;
+        float parent_float_val;
+        bool child_set;
+        bool child_inherit;
+        float child_float_val;
+        unsigned exp_set;
+        unsigned exp_inherit;
+        float exp_float_val;
+    } const cases[] = {
+        {false, false, 1.0, false, false, 1.0, false, false, 1.0},
+        {false, false, 1.0, true, true, 1.0, false, false, 1.0},
+        {false, false, 1.0, true, false, 1.0, false, false, 1.0},
+        {false, false, 1.0, true, false, 0.5, true, false, 0.5},
+        {false, false, 1.0, true, false, 0.0, true, false, 0.0},
+
+        {true, true, 1.0, false, false, 1.0, true, true, 1.0},
+        {true, true, 0.7, false, false, 1.0, true, true, 0.7},
+        {true, true, 0.0, false, false, 1.0, true, true, 0.0},
+        {true, true, 1.0, true, true, 1.0, true, true, 1.0},
+        /* child computed value isn't required to be up-to-date, so test what happens when it
+         * isn't up-to-date. */
+        {true, true, 1.0, true, true, 0.7, true, true, 1.0},
+        {true, true, 0.6, true, true, 0.3, true, false, 0.36},
+        {true, true, 0.0, true, true, 0.0, true, true, 0.0},
+        {true, true, 0.0, true, true, 0.9, true, true, 0.0},
+
+        /* parent inherit, child set to number */
+        {true, true, 1.0, true, false, 1.0, true, true, 1.0},
+        {true, true, 1.0, true, false, 0.8, true, false, 0.8},
+        {true, true, 1.0, true, false, 0.0, true, false, 0.0},
+        {true, true, 0.9, true, false, 1.0, true, true, 0.9},
+        {true, true, 0.9, true, false, 0.8, true, false, 0.72},
+        {true, true, 0.9, true, false, 0.0, true, false, 0.0},
+        {true, true, 0.0, true, false, 1.0, true, true, 0.0},
+        {true, true, 0.0, true, false, 0.6, true, either, 0.0},
+        {true, true, 0.0, true, false, 0.0, true, false, 0.0},
+
+        /* parent set to number. */
+        {true, false, 1.0, false, false, 1.0, either, false, 1.0},
+        {true, false, 0.3, false, false, 1.0, true, false, 0.3},
+        {true, false, 0.3, false, false, 1.0, true, false, 0.3},
+        {true, false, 0.0, false, false, 1.0, true, false, 0.0},
+
+        {true, false, 1.0, true, true, 1.0, either, false, 1.0},
+        {true, false, 1.0, true, true, 0.8, either, false, 1.0},
+        {true, false, 0.8, true, true, 0.8, true, false, 0.64},
+        {true, false, 0.8, true, true, 0.5, true, false, 0.64},
+        {true, false, 0.0, true, true, 0.0, true, false, 0.0},
+        {true, false, 0.0, true, true, 0.4, true, false, 0.0},
+
+        {true, false, 1.0, true, false, 1.0, either, false, 1.0},
+        {true, false, 1.0, true, false, 0.4, true, false, 0.4},
+        {true, false, 1.0, true, false, 0.0, true, false, 0.0},
+        {true, false, 0.7, true, false, 1.0, true, false, 0.7},
+        {true, false, 0.7, true, false, 0.4, true, false, 0.28},
+        {true, false, 0.7, true, false, 0.0, true, false, 0.0},
+        {true, false, 0.0, true, false, 1.0, true, false, 0.0},
+        {true, false, 0.0, true, false, 0.6, true, false, 0.0},
+        {true, false, 0.0, true, false, 0.0, true, false, 0.0}
+    };
+    UTEST_TEST("sp_style_merge_from_dying_parent: opacity") {
+        for (unsigned i = 0; i < G_N_ELEMENTS(cases); ++i) {
+            parent.opacity.set = cases[i].parent_set;
+            parent.opacity.inherit = cases[i].parent_inherit;
+            parent.opacity.value = SP_SCALE24_FROM_FLOAT(cases[i].parent_float_val);
+
+            child.opacity.set = cases[i].child_set;
+            child.opacity.inherit = cases[i].child_inherit;
+            child.opacity.value = SP_SCALE24_FROM_FLOAT(cases[i].child_float_val);
+
+            sp_style_merge_from_dying_parent(&child, &parent);
+            if (cases[i].exp_set != either) {
+                UTEST_ASSERT(child.opacity.set == cases[i].exp_set);
+            }
+            if (cases[i].exp_inherit != either) {
+                UTEST_ASSERT(child.opacity.inherit == cases[i].exp_inherit);
+            }
+            UTEST_ASSERT(child.opacity.value == SP_SCALE24_FROM_FLOAT(cases[i].exp_float_val));
+        }
+    }
+}
+
 static bool
 test_style()
 {
@@ -601,6 +726,9 @@ test_style()
             props[i].tst_fn(props[i].property, props[i].tst_fn_arg);
         }
     }
+
+    test_scale24_mul();
+    test_merge_opacity();
 
     return utest_end();
 }
