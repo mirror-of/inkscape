@@ -72,6 +72,9 @@ struct SPIFloat {
 #define SP_SCALE24_TO_FLOAT(v) ((double) (v) / SP_SCALE24_MAX)
 #define SP_SCALE24_FROM_FLOAT(v) unsigned(((v) * SP_SCALE24_MAX) + .5)
 
+/** Returns a scale24 for the product of two scale24 values. */
+#define SP_SCALE24_MUL(_v1, _v2) unsigned((double)(_v1) * (_v2) / SP_SCALE24_MAX + .5)
+
 /// 24 bit data type internal to SPStyle.
 struct SPIScale24 {
     unsigned set : 1;
