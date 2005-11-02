@@ -205,17 +205,17 @@ void Base64OutputStream::close()
 
         int indx  = (int)((outBuf & 0x0003f000L) >> 12);
         int obyte = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
         indx      = (int)((outBuf & 0x00000fc0L) >>  6);
         obyte     = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
         indx      = (int)((outBuf & 0x0000003fL)      );
         obyte     = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
-        putc('=');
+        putCh('=');
         }
     else if (bitCount == 8)
         {
@@ -223,14 +223,14 @@ void Base64OutputStream::close()
 
         int indx  = (int)((outBuf & 0x00000fc0L) >>  6);
         int obyte = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
         indx      = (int)((outBuf & 0x0000003fL)      );
         obyte     = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
-        putc('=');
-        putc('=');
+        putCh('=');
+        putCh('=');
         }
 
     if (columnWidth > 0) //if <=0, no newlines
@@ -255,7 +255,7 @@ void Base64OutputStream::flush()
 /**
  * Private. Put a char to the output stream, checking for line length
  */ 
-void Base64OutputStream::putc(int ch)
+void Base64OutputStream::putCh(int ch)
 {
     destination.put(ch);
     column++;
@@ -285,19 +285,19 @@ void Base64OutputStream::put(int ch)
         {
         int indx  = (int)((outBuf & 0x00fc0000L) >> 18);
         int obyte = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
         indx      = (int)((outBuf & 0x0003f000L) >> 12);
         obyte     = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
         indx      = (int)((outBuf & 0x00000fc0L) >>  6);
         obyte     = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
         indx      = (int)((outBuf & 0x0000003fL)      );
         obyte     = (int)base64encode[indx & 63];
-        putc(obyte);
+        putCh(obyte);
 
         bitCount = 0;
         outBuf   = 0L;

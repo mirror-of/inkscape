@@ -97,7 +97,7 @@ public:
 
 private:
 
-    void putc(int ch);
+    void putCh(int ch);
 
     int column;
 

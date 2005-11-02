@@ -1,3 +1,8 @@
+2005-11-01  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/io/base64stream.h, src/io/base64stream.cpp:
+	  Applied modified patch 1341198.
+
 2005-10-31  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/verbs.cpp:
