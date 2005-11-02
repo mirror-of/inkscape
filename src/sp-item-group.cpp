@@ -512,6 +512,28 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			sp_item_adjust_paint_recursive (citem, NR::identity(), NR::identity(), false);
 
 			sp_style_merge_from_dying_parent(SP_OBJECT_STYLE(child), SP_OBJECT_STYLE(gitem));
+			/*
+			 * fixme: We currently make no allowance for the case where child is cloned
+			 * and the group has any style settings.
+			 *
+			 * (This should never occur with documents created solely with the current
+			 * version of inkscape without using the XML editor: we usually apply group
+			 * style changes to children rather than to the group itself.)
+			 *
+			 * If the group has no style settings, then
+			 * sp_style_merge_from_dying_parent should be a no-op.  Otherwise (i.e. if
+			 * we change the child's style to compensate for its parent going away)
+			 * then those changes will typically be reflected in any clones of child,
+			 * whereas we'd prefer for Ungroup not to affect the visual appearance.
+			 *
+			 * The only way of preserving styling appearance in general is for child to
+			 * be put into a new group -- a somewhat surprising response to an Ungroup
+			 * command.  We could add a new groupmode:transparent that would mostly
+			 * hide the existence of such groups from the user (i.e. editing behaves as
+			 * if the transparent group's children weren't in a group), though that's
+			 * extra complication & maintenance burden and this case is rare.
+			 */
+
 			child->updateRepr();
 
 			Inkscape::XML::Node *nrepr = SP_OBJECT_REPR (child)->duplicate();
