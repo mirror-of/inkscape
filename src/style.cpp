@@ -1483,13 +1483,14 @@ sp_style_merge_rel_enum_prop_from_dying_parent(SPIEnum &child, SPIEnum const &pa
                          && child.value == larger_val ) )
         {
             child.set = false;
-            /** \todo
+            /*
              * Note that this can result in a change in computed value in the 
              * rare case that the parent's setting was a no-op (i.e. if the 
              * parent's parent's computed value was already ultra-condensed or 
              * ultra-expanded).  However, I'd guess that the change is for the 
              * better: I'd guess that if the properties were specified
              * relatively, then the intent is to counteract parent's effect.
+             * I.e. I believe this is the best code even in that case.
              */
         } else if (child.value == parent.value) {
             /* Leave as is. */
@@ -1789,16 +1790,68 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
     /* Properties that don't inherit by default.  Most of these need special handling. */
     {
         /*
-         * opacity's effect is cumulative; we set the new value to the combined effect.  We always
-         * convert explicit `inherit' to its computed value.  The default value for opacity is 1.0,
-         * not inherit.  (Note that stroke-opacity and fill-opacity are quite different from
-         * opacity, and don't need any special handling.)
+         * opacity's effect is cumulative; we set the new value to the combined effect.  The
+         * default value for opacity is 1.0, not inherit.  (Note that stroke-opacity and
+         * fill-opacity are quite different from opacity, and don't need any special handling.)
+         *
+         * Cases:
+         * - parent & child were each previously unset, in which case the effective
+         *   opacity value is 1.0, and style should remain unset.
+         * - parent was previously unset (so computed opacity value of 1.0)
+         *   and child was set to inherit.  The merged child should
+         *   get a value of 1.0, and shouldn't inherit (lest the new parent
+         *   has a different opacity value).  Given that opacity's default
+         *   value is 1.0 (rather than inherit), we might as well have the
+         *   merged child's opacity be unset.
+         * - parent was previously unset (so opacity 1.0), and child was set to a number.
+         *   The merged child should retain its existing settings (though it doesn't matter
+         *   if we make it unset if that number was 1.0).
+         * - parent was inherit and child was unset.  Merged child should be set to inherit.
+         * - parent was inherit and child was inherit.  (We can't in general reproduce this
+         *   effect (short of introducing a new group), but setting opacity to inherit is rare.)
+         *   If the inherited value was strictly between 0.0 and 1.0 (exclusive) then the merged
+         *   child's value should be set to the product of the two, i.e. the square of the
+         *   inherited value, and should not be marked as inherit.  (This decision assumes that it
+         *   is more important to retain the effective opacity than to retain the inheriting
+         *   effect, and assumes that the inheriting effect either isn't important enough to create
+         *   a group or isn't common enough to bother maintaining the code to create a group.)  If
+         *   the inherited value was 0.0 or 1.0, then marking the merged child as inherit comes
+         *   closer to maintaining the effect.
+         * - parent was inherit and child was set to a numerical value.  If the child's value
+         *   was 1.0, then the merged child should have the same settings as the parent.
+         *   If the child's value was 0, then the merged child should also be set to 0.
+         *   If the child's value was anything else, then we do the same as for the inherit/inherit
+         *   case above: have the merged child set to the product of the two opacities and not
+         *   marked as inherit, for the same reasons as for that case.
+         * - parent was set to a value, and child was unset.  The merged child should have
+         *   parent's settings.
+         * - parent was set to a value, and child was inherit.  The merged child should
+         *   be set to the product, i.e. the square of the parent's value.
+         * - parent & child are each set to a value.  The merged child should be set to the
+         *   product.
          */
-        if (style->opacity.inherit) {
-            style->opacity.value = parent->opacity.value;
+        if ( !style->opacity.set
+             || ( !style->opacity.inherit
+                  && style->opacity.value == SP_SCALE24_MAX ) )
+        {
+            style->opacity = parent->opacity;
+        } else {
+            /* Ensure that style's computed value is up-to-date. */
+            if (style->opacity.inherit) {
+                style->opacity.value = parent->opacity.value;
+            }
+
+            /* Multiplication of opacities occurs even if a child's opacity is set to inherit. */
+            style->opacity.value = SP_SCALE24_MUL(style->opacity.value,
+                                                  parent->opacity.value);
+
+            style->opacity.inherit = (parent->opacity.inherit
+                                      && style->opacity.inherit
+                                      && (parent->opacity.value == 0 ||
+                                          parent->opacity.value == SP_SCALE24_MAX));
+            style->opacity.set = ( style->opacity.inherit
+                                   || style->opacity.value < SP_SCALE24_MAX );
         }
-        style->opacity.value = SP_SCALE24_FROM_FLOAT(SP_SCALE24_TO_FLOAT(style->opacity.value) *
-                                                     SP_SCALE24_TO_FLOAT(parent->opacity.value) );
 
         /* display is in principle similar to opacity, but implementation is easier. */
         if ( parent->display.set && !parent->display.inherit
