@@ -10,6 +10,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdio.h>
 #include <setjmp.h>
+#include <glib/gstrfuncs.h>  /* g_strdup_printf */
 #ifdef __cplusplus
 };
 #endif
@@ -81,6 +82,11 @@ utest__fail(const char *a, const char *b, const char *c)
   * \param _cond The condition to test.
   */
 #define UTEST_NAMED_ASSERT(_name, _cond) static_cast<void>((_cond) || utest__fail("Assertion `", (_name), "' failed"))
+
+#define UTEST_ASSERT_SHOW(_cond, _printf_args) \
+  static_cast<void>((_cond)	\
+		    || (utest__fail("\nAssertion `" #_cond "' failed; ", "",	\
+				    g_strdup_printf _printf_args)))
 
 int utest__test(const char *name) {
 	utest__tests++;
