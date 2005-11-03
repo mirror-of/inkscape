@@ -1,11 +1,10 @@
-#include <assert.h>
+#include <cassert>
 #include <functional>
+#include <glib/gmacros.h>
 
 #include <utest/test-1ary-cases.h>
 #include <utest/utest.h>
 #include <round.h>
-
-#define G_N_ELEMENTS(_a) (sizeof(_a) / sizeof(*_a))
 
 static Case1<double, double> const nonneg_round_cases[] = {
     { 5.0, 5.0 },
