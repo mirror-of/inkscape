@@ -2119,7 +2119,10 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
             gint i;
             for (i = 0; i < style->stroke_dash.n_dash; i++) {
                 Inkscape::CSSOStringStream os;
-                os << style->stroke_dash.dash[i] << " ";
+                if (i) {
+                    os << ", ";
+                }
+                os << style->stroke_dash.dash[i];
                 p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
             }
             if (p < c + BMAX) {
@@ -2223,7 +2226,10 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
             p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:");
             for (gint i = 0; i < from->stroke_dash.n_dash; i++) {
                 Inkscape::CSSOStringStream os;
-                os << from->stroke_dash.dash[i] << " ";
+                if (i) {
+                    os << ", ";
+                }
+                os << from->stroke_dash.dash[i];
                 p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
             }
             p += g_snprintf(p, c + BMAX - p, ";");
