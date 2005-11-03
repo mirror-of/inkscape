@@ -394,7 +394,12 @@ test_mul24(unsigned const a24, unsigned const b24)
     unsigned const manual_prod24 = SP_SCALE24_FROM_FLOAT(SP_SCALE24_TO_FLOAT(a24) *
                                                          SP_SCALE24_TO_FLOAT(b24)  );
     unsigned const prod24 = SP_SCALE24_MUL(a24, b24);
-    UTEST_ASSERT(prod24 == manual_prod24);
+    UTEST_ASSERT_SHOW(prod24 == manual_prod24,
+                      ("MUL gives 0x%06x=%g, whereas explicit conversions give 0x%06x=%g;\n"
+                       "multiplicands: 0x%06x * 0x%06x (i.e. %g * %g)",
+                       prod24, SP_SCALE24_TO_FLOAT(prod24),
+                       manual_prod24, SP_SCALE24_TO_FLOAT(manual_prod24),
+                       a24, b24, SP_SCALE24_TO_FLOAT(a24), SP_SCALE24_TO_FLOAT(b24)));
 }
 
 static void
@@ -506,7 +511,11 @@ test_merge_opacity()
             if (cases[i].exp_inherit != either) {
                 UTEST_ASSERT(child.opacity.inherit == cases[i].exp_inherit);
             }
-            UTEST_ASSERT(child.opacity.value == SP_SCALE24_FROM_FLOAT(cases[i].exp_float_val));
+            unsigned const exp24 = SP_SCALE24_FROM_FLOAT(cases[i].exp_float_val);
+            UTEST_ASSERT_SHOW(child.opacity.value == exp24,
+                              ("i=%u, expected 0x%06x=%g but found 0x%06x=%g",
+                               i, child.opacity.value, SP_SCALE24_TO_FLOAT(child.opacity.value),
+                               exp24, cases[i].exp_float_val));
         }
     }
 }
