@@ -499,10 +499,12 @@ test_merge_opacity()
             parent.opacity.set = cases[i].parent_set;
             parent.opacity.inherit = cases[i].parent_inherit;
             parent.opacity.value = SP_SCALE24_FROM_FLOAT(cases[i].parent_float_val);
+            unsigned const parent24 = parent.opacity.value;
 
             child.opacity.set = cases[i].child_set;
             child.opacity.inherit = cases[i].child_inherit;
             child.opacity.value = SP_SCALE24_FROM_FLOAT(cases[i].child_float_val);
+            unsigned const child24 = child.opacity.value;
 
             sp_style_merge_from_dying_parent(&child, &parent);
             if (cases[i].exp_set != either) {
@@ -513,9 +515,12 @@ test_merge_opacity()
             }
             unsigned const exp24 = SP_SCALE24_FROM_FLOAT(cases[i].exp_float_val);
             UTEST_ASSERT_SHOW(child.opacity.value == exp24,
-                              ("i=%u, expected 0x%06x=%g but found 0x%06x=%g",
+                              ("i=%u, expected 0x%06x=%g but found 0x%06x=%g; "
+                               "parent 0x%06x=%g, child 0x%06x=%g",
                                i, child.opacity.value, SP_SCALE24_TO_FLOAT(child.opacity.value),
-                               exp24, cases[i].exp_float_val));
+                               exp24, cases[i].exp_float_val,
+                               parent24, SP_SCALE24_TO_FLOAT(parent24),
+                               child24, SP_SCALE24_TO_FLOAT(child24)));
         }
     }
 }
