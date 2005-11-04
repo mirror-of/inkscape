@@ -408,6 +408,7 @@ test_scale24_mul()
     UTEST_TEST("SP_SCALE24_MUL") {
         UTEST_ASSERT(0x1000 < SP_SCALE24_MAX);
         UTEST_ASSERT(SP_SCALE24_MAX < SP_SCALE24_MAX + 1); // i.e. no overflow.
+
         for (unsigned i = 0; i <= 10; ++i) {
             unsigned const i24 = SP_SCALE24_MAX * i / 10;
             UTEST_ASSERT(i24 == SP_SCALE24_FROM_FLOAT(i / 10.0));
@@ -441,7 +442,7 @@ test_merge_opacity()
         float child_float_val;
         unsigned exp_set;
         unsigned exp_inherit;
-        float exp_float_val;
+        double exp_float_val;
     } const cases[] = {
         {false, false, 1.0, false, false, 1.0, false, false, 1.0},
         {false, false, 1.0, true, true, 1.0, false, false, 1.0},
@@ -517,8 +518,8 @@ test_merge_opacity()
             UTEST_ASSERT_SHOW(child.opacity.value == exp24,
                               ("i=%u, expected 0x%06x=%g but found 0x%06x=%g; "
                                "parent 0x%06x=%g, child 0x%06x=%g",
-                               i, child.opacity.value, SP_SCALE24_TO_FLOAT(child.opacity.value),
-                               exp24, cases[i].exp_float_val,
+                               i, exp24, cases[i].exp_float_val,
+                               child.opacity.value, SP_SCALE24_TO_FLOAT(child.opacity.value),
                                parent24, SP_SCALE24_TO_FLOAT(parent24),
                                child24, SP_SCALE24_TO_FLOAT(child24)));
         }
