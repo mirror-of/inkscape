@@ -1123,11 +1123,17 @@ LayerVerb::perform(SPAction *action, void *data, void *pdata)
                 if (!survivor) {
                     survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
                 }
+
+                /* Deleting the old layer before switching layers is a hack to trigger the
+                 * listeners of the deletion event (as happens when old_layer is deleted using the
+                 * xml editor).  See
+                 * http://sourceforge.net/tracker/index.php?func=detail&aid=1339397&group_id=93438&atid=604306
+                 */
+                old_layer->deleteObject();
+                sp_object_unref(old_layer, NULL);
                 if (survivor) {
                     dt->setCurrentLayer(survivor);
                 }
-                old_layer->deleteObject();
-                sp_object_unref(old_layer, NULL);
 
                 sp_document_done(SP_DT_DOCUMENT(dt));
 
