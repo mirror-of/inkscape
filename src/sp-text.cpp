@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include <algorithm>
 #include <string.h>
 
 #include <libnr/nr-rect.h>

@@ -6,6 +6,7 @@
  *
  */
 
+#include <algorithm>
 #include "livarot/Path.h"
 #include "livarot/path-description.h"
 #include <cmath>

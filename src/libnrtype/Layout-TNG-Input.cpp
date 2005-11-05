@@ -8,6 +8,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+#include <algorithm>
 #include "Layout-TNG.h"
 #include "style.h"
 #include "svg/svg-types.h"

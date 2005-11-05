@@ -6,6 +6,7 @@
  *
  */
 
+#include <algorithm>
 #include "Shape.h"
 #include "LivarotDefs.h"
 

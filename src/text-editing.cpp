@@ -12,6 +12,7 @@
 
 #include "config.h"
 
+#include <algorithm>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-point-matrix-ops.h>
 

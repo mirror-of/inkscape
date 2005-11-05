@@ -17,6 +17,7 @@
 # include "config.h"
 #endif
 
+#include <algorithm>
 #include <math.h>
 #include <string.h>
 

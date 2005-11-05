@@ -9,6 +9,7 @@
  * This code is in public domain
  */
 
+#include <algorithm>
 #include "nr-rect.h"
 #include "nr-rect-l.h"
 #include "nr-matrix.h"

@@ -10,6 +10,7 @@
  * This code is licensed under the GNU GPL; see COPYING for more information.
  */
 
+#include <algorithm>
 #include <libnr/nr-forward.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-convex-hull.h>

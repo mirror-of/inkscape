@@ -16,6 +16,7 @@
 #endif
 #include "path-prefix.h"
 
+#include <algorithm>
 #include <stdlib.h>
 #include <string.h>
 #include <libnr/nr-macros.h>

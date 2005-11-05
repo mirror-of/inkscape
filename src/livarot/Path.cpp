@@ -6,6 +6,7 @@
  *
  */
 
+#include <algorithm>
 #include <iostream>
 #include <glib.h>
 #include "Path.h"
