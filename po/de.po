@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.43\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-01 23:51+0100\n"
-"PO-Revision-Date: 2005-10-18 21:26+0200\n"
+"PO-Revision-Date: 2005-11-03 00:06+0100\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -76,14 +76,12 @@ msgid "Finishing connector"
 msgstr "Fertig mit Objektverbinder"
 
 #: ../src/connector-context.cpp:1108
-#, fuzzy
 msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
 "<b>Verbindungspunkt</b>: klicken oder ziehen, um einen neuen Objektverbinder "
 "zu erzeugen"
 
 #: ../src/connector-context.cpp:1185
-#, fuzzy
 msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 "<b>Objektverbinder-Endpunkt</b>: ziehen, um neu zu verlegen oder mit neuen "
@@ -824,11 +822,9 @@ msgstr "Umrandungsbox am Gitter einrasten"
 msgid "Snap the edges of the object bounding boxes"
 msgstr "Kanten der Umrandungsbox des Objektes einrasten"
 
-# !!! "Points"? Not "nodes"?
 #: ../src/dialogs/desktop-properties.cpp:934
-#, fuzzy
 msgid "Snap nodes to grid"
-msgstr "Knoten (Punkte) am Gitter einrasten"
+msgstr "Knoten am Gitter einrasten"
 
 #: ../src/dialogs/desktop-properties.cpp:934
 #: ../src/dialogs/desktop-properties.cpp:1017
@@ -4231,9 +4227,8 @@ msgid "Effects"
 msgstr "Effekte"
 
 #: ../src/menus-skeleton.h:197
-#, fuzzy
 msgid "Whiteboa_rd"
-msgstr "Whiteboard"
+msgstr "Whiteboa_rd"
 
 #: ../src/menus-skeleton.h:210
 msgid "_Help"
@@ -5616,7 +5611,7 @@ msgstr "Horizontale Abstände zwischen Objektmittelpunkten ausgleichen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:725
 msgid "Distribute right sides equidistantly"
-msgstr "den "
+msgstr "Abstände zwischen rechten Seiten der Objekte ausgleichen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:729
 msgid "Make vertical gaps between objects equal"
@@ -6335,7 +6330,6 @@ msgid "Moved to next layer."
 msgstr "Auf nächste Ebene verschoben."
 
 #: ../src/verbs.cpp:1041
-#, fuzzy
 msgid "Cannot move past last layer."
 msgstr "Kann nicht hinter letzte Ebene verschieben."
 
@@ -6344,7 +6338,6 @@ msgid "Moved to previous layer."
 msgstr "Zur vorherigen Ebene verschoben"
 
 #: ../src/verbs.cpp:1052
-#, fuzzy
 msgid "Cannot move past first layer."
 msgstr "Kann nicht vor erste Ebene verschieben."
 
@@ -6363,9 +6356,8 @@ msgid "Lowered layer <b>%s</b>."
 msgstr "Ebene <b>%s</b> abgesenkt."
 
 #: ../src/verbs.cpp:1111
-#, fuzzy
 msgid "Cannot move layer any further."
-msgstr "Ebene nicht weiter verschiebbar."
+msgstr "Kann Ebene nicht weiter verschieben."
 
 #. TRANSLATORS: this means "The layer has been deleted."
 #: ../src/verbs.cpp:1135
@@ -6499,18 +6491,16 @@ msgid "Vac_uum Defs"
 msgstr "Leere Defs aufräumen"
 
 #: ../src/verbs.cpp:1837
-#, fuzzy
 msgid "Remove unused predefined items from the &lt;defs&gt; of the document"
-msgstr "Unbenutzte Elemente aus den &lt;defs&gt; des Dokuments entfernen"
+msgstr "Unbenutzte vordefinierte Elemente aus den &lt;defs&gt; des Dokuments entfernen"
 
 #: ../src/verbs.cpp:1839
 msgid "Print _Direct"
 msgstr "D_irekt drucken..."
 
 #: ../src/verbs.cpp:1840
-#, fuzzy
 msgid "Print directly without prompting to a file or pipe"
-msgstr "Direkt in eine Datei oder Weiterleitung drucken"
+msgstr "Ohne Rückfrage direkt in eine Datei oder Weiterleitung drucken"
 
 #: ../src/verbs.cpp:1841
 msgid "Print Previe_w"
@@ -6533,9 +6523,8 @@ msgid "_Export Bitmap..."
 msgstr "Bitmap _exportieren..."
 
 #: ../src/verbs.cpp:1846
-#, fuzzy
 msgid "Export document or selection as a bitmap image"
-msgstr "Das Dokument oder die Auswahl als PNG-Bitmap exportieren"
+msgstr "Das Dokument oder die Auswahl als Bitmap exportieren"
 
 #: ../src/verbs.cpp:1847
 msgid "N_ext Window"
@@ -6609,9 +6598,8 @@ msgid "_Paste"
 msgstr "E_infügen"
 
 #: ../src/verbs.cpp:1865
-#, fuzzy
 msgid "Paste objects from clipboard to mouse point"
-msgstr "Den Inhalt der Zwischenablage einfügen"
+msgstr "Objekte aus der Zwischenablage an der Mausposition einfügen"
 
 #: ../src/verbs.cpp:1866
 msgid "Paste _Style"
@@ -6627,7 +6615,6 @@ msgid "Paste _In Place"
 msgstr "An Ori_ginalposition einfügen"
 
 #: ../src/verbs.cpp:1869
-#, fuzzy
 msgid "Paste objects from clipboard to the original location"
 msgstr "Objekte aus der Zwischenablage an ihrer Originalposition einfügen"
 
@@ -6644,9 +6631,8 @@ msgid "Duplic_ate"
 msgstr "Dupli_zieren"
 
 #: ../src/verbs.cpp:1873
-#, fuzzy
 msgid "Duplicate selected objects"
-msgstr "Die gewählten Objekte duplizieren"
+msgstr "Gewählte Objekte duplizieren"
 
 #: ../src/verbs.cpp:1874
 msgid "Clo_ne"
@@ -6676,7 +6662,6 @@ msgstr "Objekt auswählen, mit dem der Klon verbunden ist"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:1881
-#, fuzzy
 msgid "O_bjects to Pattern"
 msgstr "_Objekte in Füllmuster umwandeln"
 
@@ -6686,9 +6671,8 @@ msgstr "Die Auswahl zu einem Rechteck mit gekacheltem Füllmuster umwandeln"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:1884
-#, fuzzy
 msgid "Pattern to Ob_jects"
-msgstr "Füllmuster in Objekte umwandeln"
+msgstr "Füllmuster in Ob_jekte umwandeln"
 
 #: ../src/verbs.cpp:1885
 msgid "Extract objects from a tiled pattern fill"
@@ -6786,9 +6770,8 @@ msgid "Group selected objects"
 msgstr "Die gewählten Objekte gruppieren"
 
 #: ../src/verbs.cpp:1911
-#, fuzzy
 msgid "Ungroup selected groups"
-msgstr "Die Gruppierung der markierten Gruppen aufheben"
+msgstr "Gruppierung markierter Gruppen aufheben"
 
 #: ../src/verbs.cpp:1913
 msgid "_Put on Path"
@@ -6878,27 +6861,24 @@ msgid "Outs_et"
 msgstr "Aus_weiten (Vergrößern)"
 
 #: ../src/verbs.cpp:1940
-#, fuzzy
 msgid "Outset selected paths"
-msgstr "Gewählten Pfad ausweiten (vergrößern)"
+msgstr "Gewählte Pfade ausweiten (vergrößern)"
 
 #: ../src/verbs.cpp:1942
 msgid "O_utset Path by 1 px"
 msgstr "Pfad um 1 px ausweiten (vergrößern)"
 
 #: ../src/verbs.cpp:1943
-#, fuzzy
 msgid "Outset selected paths by 1 px"
-msgstr "Gewählten Pfad um 1 px ausweiten (vergrößern)"
+msgstr "Gewählte Pfade um 1 px ausweiten (vergrößern)"
 
 #: ../src/verbs.cpp:1945
 msgid "O_utset Path by 10 px"
 msgstr "Pfad um 10 px ausweiten (vergrößern)"
 
 #: ../src/verbs.cpp:1946
-#, fuzzy
 msgid "Outset selected paths by 10 px"
-msgstr "Gewählten Pfad um 10 px ausweiten (vergrößern)"
+msgstr "Gewählte Pfade um 10 px ausweiten (vergrößern)"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
@@ -6909,27 +6889,24 @@ msgstr "Schrum_pfen"
 
 # !!! make singular and plural forms
 #: ../src/verbs.cpp:1951
-#, fuzzy
 msgid "Inset selected paths"
-msgstr "Gewählten Pfad schrumpfen"
+msgstr "Gewählte Pfade schrumpfen"
 
 #: ../src/verbs.cpp:1953
 msgid "I_nset Path by 1 px"
 msgstr "Pfad um _1 px schrumpfen"
 
 #: ../src/verbs.cpp:1954
-#, fuzzy
 msgid "Inset selected paths by 1 px"
-msgstr "Den ausgewählten Pfad um 1 px schrumpfen"
+msgstr "Die ausgewählten Pfade um 1 px schrumpfen"
 
 #: ../src/verbs.cpp:1956
 msgid "I_nset Path by 10 px"
 msgstr "Pfad um 1_0 px schrumpfen"
 
 #: ../src/verbs.cpp:1957
-#, fuzzy
 msgid "Inset selected paths by 10 px"
-msgstr "Den ausgewählten Pfad um 10 px schrumpfen"
+msgstr "Die ausgewählten Pfade um 10 px schrumpfen"
 
 #: ../src/verbs.cpp:1959
 msgid "D_ynamic Offset"
@@ -6954,27 +6931,24 @@ msgid "_Stroke to Path"
 msgstr "_Kontur in Pfad umwandeln"
 
 #: ../src/verbs.cpp:1965
-#, fuzzy
 msgid "Convert selected strokes to paths"
-msgstr "Die ausgewählte Kontur in einen Pfad umwandeln"
+msgstr "Die ausgewählten Konturen in Pfade umwandeln"
 
 #: ../src/verbs.cpp:1966
 msgid "Si_mplify"
 msgstr "Ver_einfachen"
 
 #: ../src/verbs.cpp:1967
-#, fuzzy
 msgid "Simplify selected paths by removing extra nodes"
-msgstr "Pfad vereinfachen - unnötige Punkte werden entfernt"
+msgstr "Pfade vereinfachen - unnötige Punkte werden entfernt"
 
 #: ../src/verbs.cpp:1968
 msgid "_Reverse"
 msgstr "_Richtung umkehren"
 
 #: ../src/verbs.cpp:1969
-#, fuzzy
 msgid "Reverses the direction of selected paths; useful for flipping markers"
-msgstr "Richtung des gewählten Pfades umkehren"
+msgstr "Richtung der gewählten Pfade umkehren; nützlich, um Markierungen umzukehren"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: ../src/verbs.cpp:1971
@@ -7008,9 +6982,8 @@ msgid "Break _Apart"
 msgstr "_Zerlegen"
 
 #: ../src/verbs.cpp:1980
-#, fuzzy
 msgid "Break selected paths into subpaths"
-msgstr "Den markierten Pfad in Unterpfade zerlegen"
+msgstr "Die markierten Pfade in Unterpfade zerlegen"
 
 #: ../src/verbs.cpp:1981
 msgid "Gri_d Arrange..."
@@ -7139,9 +7112,8 @@ msgid "_Object to Path"
 msgstr "_Objekt in Pfad umwandeln"
 
 #: ../src/verbs.cpp:2015
-#, fuzzy
 msgid "Convert selected objects to paths"
-msgstr "Das gewählte Objekt in einen Pfad umwandeln"
+msgstr "Die gewählten Objekte in Pfade umwandeln"
 
 # !!! Frame, not form?
 #: ../src/verbs.cpp:2016
@@ -7149,9 +7121,8 @@ msgid "_Flow into Frame"
 msgstr "Umbruch an Form anpassen"
 
 #: ../src/verbs.cpp:2017
-#, fuzzy
 msgid "Put text into frames"
-msgstr "Text in Form fließen lassen"
+msgstr "Text in Formen fließen lassen"
 
 #: ../src/verbs.cpp:2018
 msgid "_Unflow"
@@ -7166,29 +7137,24 @@ msgid "_Convert to Text"
 msgstr "In normalen Text um_wandeln"
 
 #: ../src/verbs.cpp:2021
-#, fuzzy
 msgid "Convert flowed text to regular text objects (preserves appearance)"
-msgstr "Ausgewählte Fließtexte in gewöhnliche Textobjekte umwandeln"
+msgstr "Ausgewählte Fließtexte in gewöhnliche Textobjekte umwandeln (behält Aussehen bei)"
 
 #: ../src/verbs.cpp:2023
-#, fuzzy
 msgid "Flip _Horizontal"
-msgstr "_Horizontal spiegeln"
+msgstr "_Horizontal umkehren"
 
 #: ../src/verbs.cpp:2023
-#, fuzzy
 msgid "Flips selected objects horizontally"
-msgstr "Ausgewählte Knoten horizontal ausrichten"
+msgstr "Ausgewählte Objekte horizontal umkehren"
 
 #: ../src/verbs.cpp:2026
-#, fuzzy
 msgid "Flip _Vertical"
-msgstr "_Vertikal spiegeln"
+msgstr "_Vertikal umkehren"
 
 #: ../src/verbs.cpp:2026
-#, fuzzy
 msgid "Flips selected objects vertically"
-msgstr "Ausgewählte Knoten vertikal ausrichten"
+msgstr "Ausgewählte Objekte vertikal umkehren"
 
 #. Tools
 #: ../src/verbs.cpp:2030
@@ -7261,126 +7227,112 @@ msgid "Selector Preferences"
 msgstr "Einstellungen für das Auswahlwerkzeug"
 
 #: ../src/verbs.cpp:2061
-#, fuzzy
 msgid "Open Preferences for the Selector tool"
-msgstr "Inkscapes Einstellungen für das Auswahlwerkzeug öffen"
+msgstr "Einstellungen für das Auswahlwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2062
 msgid "Node Tool Preferences"
 msgstr "Einstellungen für das Knotenwerkzeug"
 
 #: ../src/verbs.cpp:2063
-#, fuzzy
 msgid "Open Preferences for the Node tool"
-msgstr "Inkscapes Einstellungen für das Knotenwerkzeug öffen"
+msgstr "Einstellungen für das Knotenwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2064
 msgid "Rectangle Preferences"
 msgstr "Eigenschaften für das Rechteckwerkzeug"
 
 #: ../src/verbs.cpp:2065
-#, fuzzy
 msgid "Open Preferences for the Rectangle tool"
-msgstr "Inkscapes Einstellungen für das Rechteckwerkzeug öffen"
+msgstr "Einstellungen für das Rechteckwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2066
 msgid "Ellipse Preferences"
 msgstr "Einstellungen für das Ellipsenwerkzeug"
 
 #: ../src/verbs.cpp:2067
-#, fuzzy
 msgid "Open Preferences for the Ellipse tool"
-msgstr "Inkscapes Einstellungen für das Ellipsenwerkzeug öffen"
+msgstr "Einstellungen für das Ellipsenwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2068
 msgid "Star Preferences"
 msgstr "Einstellungen für das Sternwerkzeug"
 
 #: ../src/verbs.cpp:2069
-#, fuzzy
 msgid "Open Preferences for the Star tool"
-msgstr "Inkscapes Eigenschaften für das Sternwerkzeug öffen"
+msgstr "Eigenschaften für das Sternwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2070
 msgid "Spiral Preferences"
 msgstr "Einstellungen für das Spiralwerkzeug"
 
 #: ../src/verbs.cpp:2071
-#, fuzzy
 msgid "Open Preferences for the Spiral tool"
-msgstr "Inkscapes Eigenschaften für das Spiralenwerkzeug öffen"
+msgstr "Eigenschaften für das Spiralenwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2072
 msgid "Pencil Preferences"
 msgstr "Einstellungen für das Malwerkzeug"
 
 #: ../src/verbs.cpp:2073
-#, fuzzy
 msgid "Open Preferences for the Pencil tool"
-msgstr "Inkscapes Eigenschaften für das Malwerkzeug öffen"
+msgstr "Eigenschaften für das Malwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2074
 msgid "Pen Preferences"
 msgstr "Einstellungen für das Zeichenwerkzeug"
 
 #: ../src/verbs.cpp:2075
-#, fuzzy
 msgid "Open Preferences for the Pen tool"
-msgstr "Inkscapes Eigenschaften für das Zeichenwerkzeug öffen"
+msgstr "Eigenschaften für das Zeichenwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2076
 msgid "Calligraphic Preferences"
 msgstr "Einstellungen für das Kalligraphiewerkzeug"
 
 #: ../src/verbs.cpp:2077
-#, fuzzy
 msgid "Open Preferences for the Calligraphy tool"
-msgstr "Inkscapes Eigenschaften für das Kalligraphiewerkzeug öffen"
+msgstr "Eigenschaften für das Kalligraphiewerkzeug öffnen"
 
 #: ../src/verbs.cpp:2078
 msgid "Text Preferences"
 msgstr "Einstellungen für das Textwerkzeug"
 
 #: ../src/verbs.cpp:2079
-#, fuzzy
 msgid "Open Preferences for the Text tool"
-msgstr "Inkscapes Eigenschaften für das Textwerkzeug öffen"
+msgstr "Eigenschaften für das Textwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2080
 msgid "Gradient Preferences"
 msgstr "Einstellungen für Farbverläufe"
 
 #: ../src/verbs.cpp:2081
-#, fuzzy
 msgid "Open Preferences for the Gradient tool"
-msgstr "Inkscapes Eigenschaften für Farbverläufe öffen"
+msgstr "Eigenschaften für Farbverläufe öffnen"
 
 #: ../src/verbs.cpp:2082
 msgid "Zoom Preferences"
 msgstr "Einstellungen für das Zoomwerkzeug"
 
 #: ../src/verbs.cpp:2083
-#, fuzzy
 msgid "Open Preferences for the Zoom tool"
-msgstr "Inkscapes Eigenschaften für das Zoomwerkzeug öffen"
+msgstr "Eigenschaften für das Zoomwerkzeug öffnen"
 
 #: ../src/verbs.cpp:2084
 msgid "Dropper Preferences"
 msgstr "Einstellungen für die Farbpipette"
 
 #: ../src/verbs.cpp:2085
-#, fuzzy
 msgid "Open Preferences for the Dropper tool"
-msgstr "Inkscapes Eigenschaften für die Farbpipette öffen"
+msgstr "Eigenschaften für die Farbpipette öffnen"
 
 #: ../src/verbs.cpp:2086
 msgid "Connector Preferences"
 msgstr "Einstellungen für Objektverbinder"
 
 #: ../src/verbs.cpp:2087
-#, fuzzy
 msgid "Open Preferences for the Connector tool"
-msgstr "Inkscapes Eigenschaften für das Objektverbinder-Werkzeug öffen"
+msgstr "Eigenschaften für das Objektverbinder-Werkzeug öffnen"
 
 #. Zooming
 #: ../src/verbs.cpp:2090
