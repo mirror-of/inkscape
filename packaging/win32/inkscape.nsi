@@ -471,25 +471,6 @@ Section $(lng_Core) SecCore
   SetOverwrite on
   SetAutoClose false
 
-  StrCmp $MultiUser "1" "" SingleUser
-    DetailPrint "admin mode, registry root will be HKLM"
-    SetShellVarContext all
-    Goto endSingleUser
-  SingleUser:
-    DetailPrint "single user mode, registry root will be HKCU"
-    SetShellVarContext current
-  endSingleUser:		
-
-  ; check for writing registry
-  ClearErrors
-  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\inkscape.exe"  
-  IfErrors 0 +4
-    DetailPrint "fatal: failed to write to ${PRODUCT_DIR_REGKEY}"
-    DetailPrint "aborting installation"
-	Abort
-  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "MultiUser" "$MultiUser"  
-  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "askMultiUser" "$askMultiUser"  
-
   File /a "..\..\inkscape\ink*.exe"
   File /a "..\..\inkscape\AUTHORS"
   File /a "..\..\inkscape\COPYING"
@@ -505,20 +486,6 @@ Section $(lng_Core) SecCore
   SetOutPath $INSTDIR\modules
   File /nonfatal /a /r "..\..\inkscape\modules\*.*"
 
-  ; start menu entries
-  CreateDirectory "$SMPROGRAMS\Inkscape"
-  CreateShortCut "$SMPROGRAMS\Inkscape\Inkscape.lnk" "$INSTDIR\inkscape.exe"
-  CreateShortCut "$SMPROGRAMS\Inkscape\Uninstall Inkscape.lnk" "$INSTDIR\uninst.exe"
-
-  ; uninstall settings
-  WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegExpandStr SHCTX "${PRODUCT_UNINST_KEY}" "UninstallString" '"$INSTDIR\uninst.exe"'
-  WriteRegExpandStr SHCTX "${PRODUCT_UNINST_KEY}" "InstallLocation" "$INSTDIR"
-  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Inkscape.exe,0"
-  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-  WriteRegDWORD SHCTX "${PRODUCT_UNINST_KEY}" "NoModify" "1"
-  WriteRegDWORD SHCTX "${PRODUCT_UNINST_KEY}" "NoRepair" "1"
   
 SectionEnd
 
@@ -534,12 +501,13 @@ Section $(lng_GTKFiles) SecGTK
   File /a /r "..\..\inkscape\etc"
 SectionEnd
 
-SectionGroup $(lng_Shortcuts) SecShortcuts
-
 Section $(lng_Alluser) SecAlluser
   ; disable this option in Win95/Win98/WinME
   SectionIn 1 2 3 
+  StrCpy $MultiUser "1"
 SectionEnd
+
+SectionGroup $(lng_Shortcuts) SecShortcuts
 
 Section $(lng_Desktop) SecDesktop
   SectionIn 1 2 3
@@ -762,6 +730,42 @@ Section $(lng_zh_CN) SecChineseSimplified
   !insertmacro Language zh_CN zh_CN
 SectionEnd
 
+Section -FinalizeInstallation
+  StrCmp $MultiUser "1" "" SingleUser
+    DetailPrint "admin mode, registry root will be HKLM"
+    SetShellVarContext all
+    Goto endSingleUser
+  SingleUser:
+    DetailPrint "single user mode, registry root will be HKCU"
+    SetShellVarContext current
+  endSingleUser:		
+
+  ; check for writing registry
+  ClearErrors
+  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\inkscape.exe"  
+  ;IfErrors 0 +4
+  ;  DetailPrint "fatal: failed to write to ${PRODUCT_DIR_REGKEY}"
+  ;  DetailPrint "aborting installation"
+  ;	Abort
+  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "MultiUser" "$MultiUser"  
+  WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "askMultiUser" "$askMultiUser"  
+
+  ; start menu entries
+  CreateDirectory "$SMPROGRAMS\Inkscape"
+  CreateShortCut "$SMPROGRAMS\Inkscape\Inkscape.lnk" "$INSTDIR\inkscape.exe"
+  CreateShortCut "$SMPROGRAMS\Inkscape\Uninstall Inkscape.lnk" "$INSTDIR\uninst.exe"
+
+  ; uninstall settings
+  WriteUninstaller "$INSTDIR\uninst.exe"
+  WriteRegExpandStr SHCTX "${PRODUCT_UNINST_KEY}" "UninstallString" '"$INSTDIR\uninst.exe"'
+  WriteRegExpandStr SHCTX "${PRODUCT_UNINST_KEY}" "InstallLocation" "$INSTDIR"
+  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Inkscape.exe,0"
+  WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegDWORD SHCTX "${PRODUCT_UNINST_KEY}" "NoModify" "1"
+  WriteRegDWORD SHCTX "${PRODUCT_UNINST_KEY}" "NoRepair" "1"
+SectionEnd
+
 SectionGroupEnd
  
 ; Last the Descriptions
@@ -799,7 +803,7 @@ SectionGroupEnd
 Function .onInit
   ;Extract InstallOptions INI files
   StrCpy $AskMultiUser "1"
-  StrCpy $MultiUser "1"
+  StrCpy $MultiUser "0"
   ; this resets AskMultiUser if Win95/98/ME
   Call GetWindowsVersion
   Pop $R0
