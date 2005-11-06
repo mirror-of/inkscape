@@ -62,6 +62,9 @@ bool InkscapeScript::interpretScript(Glib::ustring &script,
                                  Glib::ustring &error,
                                  ScriptLanguage language)
 {
+#ifndef __GNUC__
+    static char const __FUNCTION__[] = "interpretScript";
+#endif
     char * langname=NULL;
     InkscapeInterpreter *interp = NULL;
     //if() instead of switch() lets us scope vars
@@ -163,3 +166,14 @@ bool InkscapeScript::interpretUri(Glib::ustring &uri,
 //#########################################################################
 //# E N D    O F    F I L E
 //#########################################################################
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
