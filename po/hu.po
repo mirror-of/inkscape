@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-01 23:51+0100\n"
-"PO-Revision-Date: 2005-11-05 21:46+0100\n"
+"PO-Revision-Date: 2005-11-06 19:56+0100\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -3680,11 +3680,11 @@ msgstr "<b>%s</b> elhagyta a csevegőszobát."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:221
 msgid "Nickname %1 is already in use.  Please choose a different nickname."
-msgstr ""
+msgstr "A(z) \"%1\" név már foglalt. Válasszon másikat."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:225
 msgid "An error was encountered while attempting to connect to the server."
-msgstr ""
+msgstr "Hiba történt a kiszolgálóra való csatlakozás közben."
 
 #. Check to see if the user made any modifications to this document.  If so,
 #. we want to give them the option of (1) letting us clear their document or (2)
@@ -3695,17 +3695,20 @@ msgstr "<b>%1</b> meghívta Önt egy rajztábla-munkamenetre."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:132
 msgid "Incoming whiteboard invitation from %1"
-msgstr "Bejövő rajztábla-meghívás %1 felhasználótól"
+msgstr "Bejövő rajztábla-meghívás \"%1\" felhasználótól"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:135
 msgid "Do you wish to accept <b>%1</b>'s whiteboard session invitation?"
-msgstr "Elfogadja <b>%1</b> rajztábla-munkamenetre szóló meghívását?"
+msgstr "Elfogadja \"<b>%1</b>\" rajztábla-munkamenetre szóló meghívását?"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:137
 msgid ""
 "Would you like to accept %1's invitation in a new document window?\n"
 "Accepting the invitation in your current window will discard unsaved changes."
 msgstr ""
+"Elfogadja \"%1\" meghívását egy új dokumentumablakban?\n"
+"A meghívásnak a jelenlegi ablakban való elfogadása esetén a nem mentett "
+"módosítások elvesznek."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:143
 #: ../src/jabber_whiteboard/connection-establishment.cpp:197
@@ -3728,6 +3731,8 @@ msgid ""
 "A new document window could not be opened for a whiteboard session with <b>%"
 "1</b>"
 msgstr ""
+"Nem sikerült új dokumentumablakot nyitni a(z) \"<b>%1</b>\" felhasználóval "
+"létrehozandó rajztábla-munkamenet számára"
 
 #. TRANSLATORS: %1 is the peer whom refused our invitation.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:237
@@ -3736,7 +3741,7 @@ msgid ""
 "whiteboard invitation.</span>\n"
 "\n"
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">A(z) <b>%1</b> nevű felhasználó "
+"<span weight=\"bold\" size=\"larger\">A(z) \"<b>%1</b>\" nevű felhasználó "
 "elutasította az Ön rajztábla-meghívását.</span>\n"
 "\n"
 
@@ -3747,6 +3752,9 @@ msgid ""
 "invitation to <b>%1</b> again, or you may send an invitation to a different "
 "user."
 msgstr ""
+"Még kapcsolódva van \"<b>%2</b>\" néven egy Jabber-kiszolgálóhoz. Küldhet "
+"ismételten egy meghívást \"<b>%1</b>\" számára, vagy küldhet meghívást "
+"egy másik felhasználónak."
 
 #. TRANSLATORS: %1 is the peer whom we tried to contact, but is already in a whiteboard session.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:251
@@ -3755,6 +3763,9 @@ msgid ""
 "whiteboard session.</span>\n"
 "\n"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">A(z) \"<b>%1</b>\" felhasználó már benne van "
+"egy rajztábla-munkamenetben.</span>\n"
+"\n"
 
 #. TRANSLATORS: %1 is the peer whom we tried to contact, but is already in a whiteboard session.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:254
@@ -3762,6 +3773,8 @@ msgid ""
 "You are still connected to a Jabber server as <b>%1</b>, and may send an "
 "invitation to a different user."
 msgstr ""
+"Még kapcsolódva van \"<b>%1</b>\" néven egy Jabber-kiszolgálóhoz. Küldhet "
+"meghívást egy másik felhasználónak."
 
 #: ../src/jabber_whiteboard/invitation-confirm-dialog.cpp:26
 #: ../src/jabber_whiteboard/session-file-selector.cpp:24
@@ -3804,11 +3817,13 @@ msgid ""
 "ID for new object is NULL even after generation and lookup attempts: the new "
 "object will NOT be sent, nor will any of its child objects!"
 msgstr ""
+"Az új objektum azonosítója a generálási és keresési kísérleteket követően is NULL. "
+"Az új objektum és annak leszármazottjai nem lesznek elküldve."
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
 #: ../src/jabber_whiteboard/session-manager.cpp:994
 msgid "Select a location and filename"
-msgstr ""
+msgstr "Válasszon egy helyet és egy fájlnevet"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:62
 #: ../src/jabber_whiteboard/session-manager.cpp:996
@@ -3817,35 +3832,39 @@ msgstr "Fájlnév beállítása"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:301
 msgid "No SSL certificate was found."
-msgstr ""
+msgstr "SSL-tanúsítvány nem található."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:304
 msgid "The SSL certificate provided by the Jabber server is untrusted."
-msgstr ""
+msgstr "A Jabber-kiszolgáló által adott SSL-tanúsítvány nem megbízható."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:307
 msgid "The SSL certificate provided by the Jabber server is expired."
-msgstr ""
+msgstr "A Jabber-kiszolgáló által adott SSL-tanúsítvány már lejárt."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:310
 msgid "The SSL certificate provided by the Jabber server has not been activated."
-msgstr ""
+msgstr "A Jabber-kiszolgáló által adott SSL-tanúsítvány nem lett aktiválva."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:313
 msgid ""
 "The SSL certificate provided by the Jabber server contains a hostname that "
 "does not match the Jabber server's hostname."
 msgstr ""
+"A Jabber-kiszolgáló által adott SSL-tanúsítvány olyan gépnevet tartalmaz, amely "
+"eltér a Jabber-kiszolgáló gépnevétől."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:316
 msgid ""
 "The SSL certificate provided by the Jabber server contains an invalid "
 "fingerprint."
 msgstr ""
+"A Jabber-kiszolgáló által adott SSL-tanúsítvány érvénytelen ujjlenyomatot "
+"tartalmaz."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:319
 msgid "An unknown error occurred while setting up the SSL connection."
-msgstr ""
+msgstr "Ismeretlen hiba történt az SSL-kapcsolat létrehozásakor."
 
 #. TRANSLATORS: %1 is the message that describes the specific error that occurred when
 #. establishing the SSL connection.
@@ -3855,14 +3874,17 @@ msgid ""
 "\n"
 "Do you wish to continue connecting to the Jabber server?"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">%1</span>\n"
+"\n"
+"Szeretné folytatni a Jabber-kiszolgálóhoz való kapcsolódást?"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:328
 msgid "Continue connecting and ignore further errors"
-msgstr ""
+msgstr "Kapcsolódás folytatása a további hibák figyelmen kívül hagyásával"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:329
 msgid "Continue connecting, but warn me of further errors"
-msgstr ""
+msgstr "Kapcsolódás folytatása, figyelmeztetés a további hibákra"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:330
 msgid "Cancel connection"
@@ -3871,7 +3893,7 @@ msgstr "Kapcsolódás leállítása"
 #: ../src/jabber_whiteboard/session-manager.cpp:777
 #, c-format
 msgid "Established whiteboard session with <b>%s</b>."
-msgstr ""
+msgstr "Rajztábla-munkamenet létrehozva ezzel: <b>%s</b>."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:785
 #, c-format
@@ -3887,7 +3909,7 @@ msgid ""
 "whiteboard session.</span>\n"
 "\n"
 msgstr ""
-"<span weight=\"bold\" size=\"larger\">A(z) <b>%1</b> nevű felhasználó "
+"<span weight=\"bold\" size=\"larger\">A(z) \"<b>%1</b>\" nevű felhasználó "
 "elhagyta a rajztábla-munkamenetet.</span>\n"
 "\n"
 
@@ -3896,6 +3918,8 @@ msgid ""
 "You are still connected to a Jabber server as <b>%2</b>, and may establish a "
 "new session to <b>%1</b> or a different user."
 msgstr ""
+"Még kapcsolódva van \"<b>%2</b>\" néven egy Jabber-kiszolgálóhoz. Létrehozhat "
+"egy új munkamenetet \"<b>%1</b>\" vagy más felhasználóval."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:987
 msgid ""
@@ -3905,14 +3929,19 @@ msgid ""
 "You may select a different location to record the session, or you may opt to "
 "not record this session."
 msgstr ""
+"Nem sikerült megnyitni a(z) \"%1\" fájlt munkamenet-felvételhez.\n"
+"A hiba: \"%2\".\n"
+"\n"
+"Kiválaszthat egy másik helyet a munkamenet eltárolásához, vagy "
+"választhatja azt is, hogy nem veszi fel a munkamenetet."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:989
 msgid "Choose a different location"
-msgstr ""
+msgstr "Másik hely kiválasztása"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:990
 msgid "Skip session recording"
-msgstr ""
+msgstr "Ne legyen felvéve a munkamenet"
 
 #: ../src/knot.cpp:673
 msgid "Node or handle drag canceled."
@@ -5748,69 +5777,63 @@ msgstr "Hibák"
 #. Dialog organization
 #: ../src/ui/dialog/session-player.cpp:73
 msgid "Session file"
-msgstr ""
+msgstr "Munkamenet-fájl"
 
 #: ../src/ui/dialog/session-player.cpp:74
-#, fuzzy
 msgid "Playback controls"
-msgstr "Eszközvezérlők"
+msgstr "Lejátszásvezérlők"
 
 #: ../src/ui/dialog/session-player.cpp:75
-#, fuzzy
 msgid "Message information"
-msgstr "Transzformációk visszavo_nása"
+msgstr "Üzenetinformáció"
 
 #. Active session file display
 #. fixme: Does this mean the active file for the session, or the file for the active session?
 #. Please indicate which with a TRANSLATORS comment.
 #: ../src/ui/dialog/session-player.cpp:85
 msgid "Active session file:"
-msgstr ""
+msgstr "Aktív munkamenet-fájl:"
 
 #: ../src/ui/dialog/session-player.cpp:86
 msgid "Delay (milliseconds):"
-msgstr ""
+msgstr "Késleltetés (ezredmásodperc):"
 
 #. Unload/load buttons
 #: ../src/ui/dialog/session-player.cpp:94
-#, fuzzy
 msgid "Close file"
-msgstr "Bezárás"
+msgstr "Fájl bezárása"
 
 #: ../src/ui/dialog/session-player.cpp:95
 msgid "Open new file"
-msgstr ""
+msgstr "Új fájl megnyitása"
 
 #: ../src/ui/dialog/session-player.cpp:96
-#, fuzzy
 msgid "Set delay"
-msgstr "Beállítás alapértelmezésnek"
+msgstr "Késleltetés beállítása"
 
 #: ../src/ui/dialog/session-player.cpp:138
-#, fuzzy
 msgid "Rewind"
-msgstr "Vörös"
+msgstr "Visszatekerés"
 
 #: ../src/ui/dialog/session-player.cpp:139
 msgid "Go back one change"
-msgstr ""
+msgstr "Vissza egy módosítással"
 
 #: ../src/ui/dialog/session-player.cpp:140
-#, fuzzy
 msgid "Pause"
-msgstr "_Beillesztés"
+msgstr "Szünet"
 
 #: ../src/ui/dialog/session-player.cpp:141
 msgid "Go forward one change"
-msgstr ""
+msgstr "Előre egy módosítással"
 
 #: ../src/ui/dialog/session-player.cpp:142
 msgid "Play"
-msgstr ""
+msgstr "Lejátszás"
 
 #: ../src/ui/dialog/session-player.cpp:177 ../src/verbs.cpp:1553
 msgid "Open session file"
-msgstr ""
+msgstr "Munkamenet-fájl megnyitása"
 
 #. ##Set up the Potrace panel
 #. #### brightness ####
@@ -6022,52 +6045,56 @@ msgstr "Kapcsolódás"
 #: ../src/ui/dialog/whiteboard-connect.cpp:126
 msgid "Establishing connection to Jabber server <b>%1</b> as user <b>%2</b>"
 msgstr ""
-"Kapcsolat létrehozása a(z) <b>%1</b> Jabber-kiszolgálóhoz <b>%2</b> "
+"Kapcsolat létrehozása a(z) \"<b>%1</b>\" Jabber-kiszolgálóhoz \"<b>%2</b>\" "
 "felhasználóként"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:131
 msgid "Failed to establish connection to Jabber server <b>%1</b>"
-msgstr ""
+msgstr "Nem sikerült kapcsolódni a(z) \"<b>%1</b>\" Jabber-kiszolgálóhoz"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:136
 msgid "Authentication failed on Jabber server <b>%1</b> as <b>%2</b>"
 msgstr ""
+"Nem sikerült az azonosítás a(z) \"<b>%1</b>\" Jabber-kiszolgálón "
+"\"<b>%2</b>\" névvel"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:141
 msgid "SSL initialization failed when connecting to Jabber server <b>%1</b>"
 msgstr ""
+"Az SSL-inicializálás nem sikerült a(z) \"<b>%1</b>\" Jabber-kiszolgálóhoz "
+"való kapcsolódáskor"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:147
 msgid "Connected to Jabber server <b>%1</b> as <b>%2</b>"
-msgstr "Kapcsolódva a(z) <b>%1</b> Jabber-kiszolgálóhoz <b>%2</b> néven"
+msgstr "Kapcsolódva a(z) \"<b>%1</b>\" Jabber-kiszolgálóhoz \"<b>%2</b>\" néven"
 
 #. Construct labels
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:75
-#, fuzzy
 msgid "Chatroom _name:"
-msgstr "A réteg neve:"
+msgstr "A csevegőszoba _neve:"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:76
 msgid "Chatroom _server:"
-msgstr ""
+msgstr "A csevegőszoba kiszo_lgálója:"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:77
 msgid "Chatroom _password:"
-msgstr ""
+msgstr "A csevegőszoba _jelszava:"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:78
-#, fuzzy
 msgid "Chatroom _handle:"
-msgstr "Csevegőszoba-azonosító:"
+msgstr "A csevegőszoba _azonosítója:"
 
 #. Button setup and callback registration
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:97
 msgid "Connect to chatroom"
-msgstr ""
+msgstr "Kapcsolódás a csevegőszobához"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:132
 msgid "Synchronizing with chatroom <b>%1@%2</b> using the handle <b>%3</b>"
 msgstr ""
+"Szinkronizálás a(z) \"<b>%1@%2</b>\" csevegőszobával a(z) \"<b>%3</b>\" "
+"azonosítót használva"
 
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:78
@@ -6089,7 +6116,7 @@ msgstr "Partnerlista"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:170
 msgid "Sending whiteboard invitation to <b>%1</b>"
-msgstr ""
+msgstr "Rajztábla-meghívás küldése \"<b>%1</b>\" felhasználónak"
 
 #. FIXME: strings are replaced by placeholders, NOT to be translated until the code is enabled
 #. See http://sourceforge.net/mailarchive/message.php?msg_id=11746016 for details
@@ -6296,12 +6323,16 @@ msgid ""
 "You need to connect to a Jabber server before sharing a document with "
 "another user."
 msgstr ""
+"Kapcsolódni kell egy Jabber-kiszolgálóhoz, mielőtt dokumentumot "
+"osztana meg egy felhasználóval."
 
 #: ../src/verbs.cpp:1539
 msgid ""
 "You need to connect to a Jabber server before sharing a document with a "
 "chatroom."
 msgstr ""
+"Kapcsolódni kell egy Jabber-kiszolgálóhoz, mielőtt dokumentumot "
+"osztana meg egy csevegőszobával."
 
 #: ../src/verbs.cpp:1549
 msgid "XML node tracker has not been initialized; nothing to dump"
