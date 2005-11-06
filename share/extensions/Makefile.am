@@ -41,7 +41,8 @@ extensions = \
 	whirl.py \
 	addnodes.py \
 	summersnight.py \
-	ps2dxf.sh
+	ps2dxf.sh \
+	embedimage.py
 
 otherstuff =
 
@@ -78,7 +79,8 @@ modules = \
 	addnodes.inx \
 	summersnight.inx \
 	dxf_output.inx \
-	dxf_input.inx
+	dxf_input.inx \
+	embedimage.inx
 
 extension_SCRIPTS = \
 	$(extensions)
