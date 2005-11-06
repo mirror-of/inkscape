@@ -26,12 +26,6 @@ int sp_main_console(int argc, char const **argv);
 namespace Inkscape {
 namespace NSApplication {
 
-namespace Inkscape {
-namespace XML {
-class Document;
-}
-}
-
 class GSList;
 
 Application::Application(int argc, char **argv, bool use_gui, bool new_gui)
@@ -160,13 +154,14 @@ Application::exit()
 } // namespace NSApplication
 } // namespace Inkscape
 
+
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
-  fill-column:75
+  fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

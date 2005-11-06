@@ -13,7 +13,7 @@
 #define INKSCAPE_APPLICATION_APP_PROTOTYPE_H
 
 namespace Gtk {
-    class Window;
+class Window;
 }
 
 
@@ -38,15 +38,16 @@ protected:
 } // namespace NSApplication
 } // namespace Inkscape
 
-#endif // INKSCAPE_APPLICATION_EDITOR_H
+
+#endif /* !INKSCAPE_APPLICATION_APP_PROTOTYPE_H */
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
-  fill-column:75
+  fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
