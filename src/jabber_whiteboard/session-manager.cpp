@@ -788,6 +788,7 @@ SessionManager::userDisconnectedFromWhiteboard(std::string const& JID)
 	// TRANSLATORS: %1 is the name of the user that disconnected, %2 is the name of the user whom the disconnected user disconnected from.
 	// This message is not used in a chatroom context.
 	Glib::ustring primary = String::ucompose(_("<span weight=\"bold\" size=\"larger\">The user <b>%1</b> has left the whiteboard session.</span>\n\n"), JID);
+	// TRANSLATORS: %1 and %2 are userids
 	Glib::ustring secondary = String::ucompose(_("You are still connected to a Jabber server as <b>%2</b>, and may establish a new session to <b>%1</b> or a different user."), JID, lm_connection_get_jid(this->session_data->connection));
 
 	// TODO: parent this dialog to the active desktop
