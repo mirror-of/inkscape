@@ -45,6 +45,7 @@ EXTRA_DIST = \
 	TRANSLATORS \
 	inkscape.png \
 	inkscape.ico inkscape16.ico inkscape32-16.ico inkscape32.ico inkscape64.ico \
+	cxxtest/COPYING	\
 	cxxtest/cxxtestgen.pl \
 	cxxtest/cxxtestgen.py \
 	cxxtest/cxxtest/Descriptions.cpp \
@@ -94,6 +95,43 @@ EXTRA_DIST = \
 	debian/mime	\
 	debian/rules	\
 	packaging/autopackage/default.apspec.in	\
+	packaging/osx-app.sh	\
+	packaging/macosx/Resources/MenuBar.nib/classes.nib	\
+	packaging/macosx/Resources/MenuBar.nib/info.nib	\
+	packaging/macosx/Resources/MenuBar.nib/objects.xib	\
+	packaging/macosx/Resources/EPS.icns	\
+	packaging/macosx/Resources/EPSI.icns	\
+	packaging/macosx/Resources/Inkscape.icns	\
+	packaging/macosx/Resources/SVG_plain.icns	\
+	packaging/macosx/Resources/inkscape_svg.icns	\
+	packaging/macosx/Resources/openDoc	\
+	packaging/macosx/Resources/postscript.icns	\
+	packaging/macosx/Resources/script	\
+	packaging/macosx/Resources/ProgressWindow.nib/classes.nib	\
+	packaging/macosx/Resources/ProgressWindow.nib/info.nib	\
+	packaging/macosx/Resources/ProgressWindow.nib/objects.xib	\
+	packaging/macosx/Resources/bin/getdisplay.sh	\
+	packaging/macosx/Resources/bin/inkscape	\
+	packaging/macosx/ScriptExec/English.lproj/main.nib/classes.nib	\
+	packaging/macosx/ScriptExec/English.lproj/main.nib/info.nib	\
+	packaging/macosx/ScriptExec/English.lproj/main.nib/objects.xib	\
+	packaging/macosx/ScriptExec/English.lproj/InfoPlist.strings	\
+	packaging/macosx/ScriptExec/Info.plist	\
+	packaging/macosx/ScriptExec/ScriptExec_Prefix.pch	\
+	packaging/macosx/ScriptExec/main.c	\
+	packaging/macosx/ScriptExec/openDoc	\
+	packaging/macosx/ScriptExec/script	\
+	packaging/macosx/ScriptExec/version.plist	\
+	packaging/macosx/ScriptExec/MenuBar.nib/classes.nib	\
+	packaging/macosx/ScriptExec/MenuBar.nib/info.nib	\
+	packaging/macosx/ScriptExec/MenuBar.nib/objects.xib	\
+	packaging/macosx/ScriptExec/ScriptExec.xcode/project.pbxproj	\
+	packaging/macosx/ScriptExec/ScriptExec.xcode/sveinbjornt.pbxuser	\
+	packaging/macosx/ScriptExec/ScriptExec.xcode/voisine.pbxuser	\
+	packaging/win32/inkscape.nsi	\
+	packaging/win32/inkscape.nsi.uninstall	\
+	packaging/win32/english.nsh	\
+	packaging/win32/german.nsh	\
 	po/Makefile.mingw \
 	src/Makefile.mingw src/inkscape_version.h.mingw src/inkscape.rc	src/makedef.pl \
 	src/helper/sp-marshal.h.mingw src/helper/sp-marshal.cpp.mingw
