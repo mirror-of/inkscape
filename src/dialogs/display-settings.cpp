@@ -1030,6 +1030,7 @@ sp_display_dialog (void)
 
 options_checkbox (
     _("Compass-like display of angles"),
+    // TRANSLATORS: "positive clockwise" means "increasing in clockwise direction"
     _("When on, angles are displayed with 0 at north, 0 to 360 range, positive clockwise; otherwise with 0 at east, -180 to 180 range, positive counterclockwise"), tt,
     vb,
     "options.compassangledisplay", "value", 1,

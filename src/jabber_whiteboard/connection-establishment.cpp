@@ -192,6 +192,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 			} else {
 				// We could not create a new desktop; ask the user if she or he wants to 
 				// replace the current document and accept the invitation, or reject the invitation.
+				// TRANSLATORS: %1 is a userid here
 				Glib::ustring msg = "<span weight=\"bold\" size=\"larger\">" + String::ucompose(_("A new document window could not be opened for a whiteboard session with <b>%1</b>"), requesterJID) + ".</span>\n\nWould you like to accept the whiteboard connection in the active document or refuse the invitation?";
 				InvitationConfirmDialog replace_dialog(msg);
 				dialog.add_button(_("Accept invitation"), ACCEPT_INVITATION);
