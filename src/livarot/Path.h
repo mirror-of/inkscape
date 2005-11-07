@@ -44,7 +44,8 @@ class Shape;
 class Path
 {
   friend class Shape;
-    public:
+
+public:
 
   // flags for the path construction
   enum
@@ -55,7 +56,7 @@ class Path
     descr_delayed_bezier = 4,// the bezier spline we're doing was initiated by a TempBezierTo(), so we'll need an endpoint
     descr_dirty = 16         // the path description was modified
   };
-  
+
   // some data for the construction: what's pending, and some flags
   int         descr_flags;
   int         pending_bezier_cmd;
@@ -124,23 +125,23 @@ class Path
   // closeIfNeeded=false prevent the function from closing the path (resulting in a non-eulerian graph
   // pathID is a identification number for the path, and is used for recomposing curves from polylines
   // give each different Path a different ID, and feed the appropriate orig[] to the ConvertToForme() function
-  void Fill (Shape * dest, int pathID = -1, bool justAdd =
-	     false, bool closeIfNeeded = true, bool invert = false);
+  void Fill(Shape *dest, int pathID = -1, bool justAdd = false,
+            bool closeIfNeeded = true, bool invert = false);
 
   // - stroke the path; usual parameters: type of cap=butt, type of join=join and miter (see LivarotDefs.h)
   // doClose treat the path as closed (ie a loop)
-  void Stroke (Shape * dest, bool doClose, double width, JoinType join,
-	       ButtType butt, double miter, bool justAdd = false);
+  void Stroke(Shape *dest, bool doClose, double width, JoinType join,
+              ButtType butt, double miter, bool justAdd = false);
 
   // build a Path that is the outline of the Path instance's description (the result is stored in dest)
   // it doesn't compute the exact offset (it's way too complicated, but an approximation made of cubic bezier patches
   //  and segments. the algorithm was found in a plugin for Impress (by Chris Cox), but i can't find it back...
-  void Outline (Path * dest, double width, JoinType join, ButtType butt,
-		double miter);
+  void Outline(Path *dest, double width, JoinType join, ButtType butt,
+               double miter);
 
   // half outline with edges having the same direction as the original
-  void OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
-		       double miter);
+  void OutsideOutline(Path *dest, double width, JoinType join, ButtType butt,
+                      double miter);
 
   // half outline with edges having the opposite direction as the original
   void InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
@@ -375,12 +376,12 @@ class Path
 #endif
 
 /*
-   Local Variables:
-mode:c++
-c-file-style:"stroustrup"
-c-file-offsets:((innamespace . 0)(inline-open . 0))
-indent-tabs-mode:nil
-fill-column:99
-End:
- */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
