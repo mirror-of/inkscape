@@ -1,3 +1,7 @@
+2005-11-06  Ted Gould  <ted@gould.cx>
+
+	* 0.43pre2
+
 2005-11-01  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/io/base64stream.h, src/io/base64stream.cpp:
