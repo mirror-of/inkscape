@@ -12,7 +12,7 @@
  */
 
 #include <gdkmm/window.h>
-//#include <gtkmm/window.h>
+#include <glibmm/i18n.h>
 #include <gtkmm/ruler.h>
 #include "helper/units.h"
 #include "widgets/ruler.h"
