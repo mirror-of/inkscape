@@ -1,3 +1,49 @@
+2005-11-08  Ralf Stephan <ralf@ark.in-berlin.de>
+
+    merged with branch CXXIFICATION_VIEW_AND_WIDGET
+	* src/arc-context.cpp, src/dyna-draw-context.cpp, src/event-context.cpp,
+	  src/file.cpp, gradient-context.cpp, src/inkscape.cpp, src/interface.cpp,
+	  src/rect-context.cpp, src/select-context.cpp, src/seltrans.cpp,
+	  src/sp-namedview.cpp, src/spiral-context.cpp, src/star-context.cpp,
+	  src/verbs.cpp, dialogs/dialog-events.cpp, src/dialogs/layer-properties.cpp,
+	  src/ui/dialog/dialog.cpp, src/widgets/desktop-widget.cpp,
+	  src/widgets/desktop-widget.h:
+	  move gtk code into desktop-widget.cpp, called via desktop
+	* src/ui/view/Makefile_insert: added files edit-widget-interface.h,
+	  edit-widget.cpp, edit-widget.h
+	  the EditWidget is the Gtkmm version of the SPDesktopWidget
+	* src/ui/widget/Makefile_insert: added files ruler.cpp, ruler.h,
+	  svg-canvas.cpp, svg-canvas.h, zoom-status.cpp, zoom-status.h
+	  these are widgets part of the EditWidget
+	* src/file.cpp, src/inkscape.cpp, src/ui/dialog/dialog.cpp, 
+	  src/ui/dialog/dialog.h, src/application/application.h, 
+	  src/application/application.cpp:
+	  divide code /wrt Application::getNewGui(): if true, it's called by the 
+	  Gtkmm application and the inkscape object is meaningless
+	* src/application/app-prototype.h:
+	  replace UI specific return value of getWindow() with void*
+	* src/application/editor.cpp, src/application/editor.h:
+	  made Editor a singleton, collect global UI code here that (for Gtk+)
+	  lives in inkscape.cpp and elsewhere
+	* src/desktop-events.cpp, src/desktop.cpp, src/event-context.cpp,
+	  src/nodepath.cpp, src/seltrans.cpp:
+	  simplify calls to desktop->set_coordinate_status
+	* src/desktop-handles.cpp, src/desktop-handles.h, 
+	  src/extension/internal/ps.cpp, src/widgets/gradient-toolbar.cpp, 
+	  src/widgets/toolbox.cpp:
+	  widget is no longer available through desktop
+	* src/Makefile_insert: added files preferences.h preferences.cpp
+	  src/inkscape.h, src/inkscape.cpp, src/application/editor.cpp:
+	  move preferences handling into preferences.cpp/h
+	* src/desktop.cpp, src/desktop.h:
+	  use EditWidgetInterface, more cosmetics
+	* src/desktop.cpp, src/inkview.cpp, src/slideshow.cpp, src/svg-view-widget.cpp,
+	  src/svg-view.cpp, src/svg-view.h, src/ui/view/view.cpp, src/ui/view/view.h:
+	  streamline setDoc()/setDocument() logic
+	* src/inkview.cpp: include empty func bodies to make linker happy
+
+2005-11-08 ------------0.43
+
 2005-11-06  Ted Gould  <ted@gould.cx>
 
 	* 0.43pre2
