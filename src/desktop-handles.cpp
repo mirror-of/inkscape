@@ -120,12 +120,4 @@ sp_desktop_namedview (SPDesktop const * desktop)
 	return desktop->namedview;
 }
 
-SPDesktopWidget * 
-sp_desktop_widget (SPDesktop const * desktop)
-{
-	g_return_val_if_fail (desktop != NULL, NULL);
-
-	return desktop->owner;
-}
-
 

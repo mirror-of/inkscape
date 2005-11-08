@@ -1,13 +1,14 @@
-/**
+/** \file
  * \brief Editor Implementation class declaration for Inkscape.  This
- *        class implements the functionality of the window layout, menus,
- *        and signals.
+ *        singleton class implements much of the functionality of the former 
+ *        'inkscape' object and its services and signals.
  *
  * Authors:
  *   Bryce W. Harrington <bryce@bryceharrington.org>
  *   Derek P. Moore <derekm@hackunix.org>
+ *   Ralf Stephan <ralf@ark.in-berlin.de>
  *
- * Copyright (C) 2004 Authors
+ * Copyright (C) 2004-2005 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -18,158 +19,304 @@
 
 /*
   TODO:  Replace SPDocument with the new Inkscape::Document
-  TODO:  use_gui, args, and prefs move up to the 
-         Inkscape::Application::Application level
-  TODO:  Where is the best place for stock.h, stock-items.h, 
-         and icons.h to live? 
-  TODO:  A lot of the GUI bits in here need to be broken out
-         to Inkscape::UI::View::Edit.
   TODO:  Change 'desktop's to 'view*'s
   TODO:  Add derivation from Inkscape::Application::RunMode
 */
 
+#include <glib.h>
+
+#include "path-prefix.h"
+#include "io/sys.h"
+#include "sp-object-repr.h"
+#include <desktop-handles.h>
+#include <desktop.h>
+#include "document.h"
+#include "sp-namedview.h"
+#include "event-context.h"
+#include "sp-guide.h"
+#include "selection.h"
 #include "editor.h"
+#include "application/application.h"
+#include "preferences.h"
 #include "ui/view/edit.h"
+#include "ui/view/edit-widget.h"
+#include "ui/view/edit-widget-interface.h"
 
 namespace Inkscape {
 namespace NSApplication {
 
-Editor::Editor(gint argc, char **argv, bool use_gui)
-    : _preferences(NULL),
-      _documents(NULL),
-      _desktops(NULL),
-      _argv0(NULL),
-      _dialogs_toggle(true),
-      _save_preferences(true),
-      _use_gui(use_gui)
+static Editor *_instance = 0;
+static void *_window;
+
+Editor*
+Editor::create (gint argc, char **argv)
 {
-    g_warning("Creating new rep from UI::View::Edit()");
-    rep = new UI::View::Edit();
+    if (_instance == 0)
+    {
+        _instance = new Editor (argc, argv);
+        _instance->init();
+    }
+    return _instance;
+}
 
-    // Store the arguments
-//    if (_argv != NULL) {
-//        _argv = g_strdup(argv);
-//    }
+Editor::Editor (gint argc, char **argv)
+:   _documents (0),
+    _desktops (0),
+    _argv0 (argv[0]),
+    _dialogs_toggle (true)
 
-    // TODO:  Initialize _preferences with the preferences skeleton
-/*    _save_preferences = loadPreferences(); */
+{
+    sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
+    sp_object_type_register ("sodipodi:guide", SP_TYPE_GUIDE);
 
-    // Signals
-    /* TODO
-       modify_selection
-       change_selection
-       set_selection
-       set_eventcontext
-       new_desktop
-       destroy_desktop
-       activate_desktop
-       deactivate_desktop
-       new_document
-       destroy_document
-       shut_down
-       dialogs_hide
-       dialogs_unhide
-     */
+    Inkscape::Preferences::load();
+}
+
+bool
+Editor::init()
+{
+    // Load non-local template until we have everything right
+    // This code formerly lived in file.cpp
+    //
+    gchar const *tmpl = g_build_filename ((INKSCAPE_TEMPLATESDIR), "default.svg", NULL);
+    bool have_default = Inkscape::IO::file_test (tmpl, G_FILE_TEST_IS_REGULAR);
+    SPDocument *doc = sp_document_new (have_default? tmpl:0, true, true);
+    g_return_val_if_fail (doc != 0, false);
+    Inkscape::UI::View::EditWidget *ew = new Inkscape::UI::View::EditWidget (doc);
+    sp_document_unref (doc);
+    _window = ew->getWindow();
+    return ew != 0;
 }
 
 Editor::~Editor()
 {
-    if (rep != NULL) {
-        delete rep;
-    }
 }
 
-/// Returns the Gtk::Window representation of this application object
-Gtk::Window*
+/// Returns the Window representation of this application object
+void*
 Editor::getWindow()
 {
-    return rep;
+    return _window;
 }
 
 /// Returns the active document
 SPDocument*
 Editor::getActiveDocument()
 {
-/* TODO
-    if (SP_ACTIVE_DESKTOP) {
-        return SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+    if (getActiveDesktop()) {
+        return SP_DT_DOCUMENT (getActiveDesktop());
     }
-*/
 
     return NULL;
+}
+
+void
+Editor::addDocument (SPDocument *doc)
+{
+    g_assert (!g_slist_find (_instance->_documents, doc));
+    _instance->_documents = g_slist_append (_instance->_documents, doc);
+}
+
+void
+Editor::removeDocument (SPDocument *doc)
+{
+    g_assert (g_slist_find (_instance->_documents, doc));
+    _instance->_documents = g_slist_remove (_instance->_documents, doc);
+}
+
+SPDesktop* 
+Editor::createDesktop (SPDocument* doc)
+{
+    g_assert (doc != 0);
+    (new Inkscape::UI::View::EditWidget (doc))->present();
+    sp_document_unref (doc);
+    SPDesktop *dt = getActiveDesktop();
+    reactivateDesktop (dt);
+    return dt;
 }
 
 /// Returns the currently active desktop
 SPDesktop*
 Editor::getActiveDesktop()
 {
-    if (_desktops == NULL) {
+    if (_instance->_desktops == NULL) {
         return NULL;
     }
 
-//    return (SPDesktop *) _desktops->data;
-    return NULL;
+    return (SPDesktop *) _instance->_desktops->data;
 }
 
-/// Returns the event context
-SPEventContext*
-Editor::getEventContext()
+/// Add desktop to list of desktops
+void
+Editor::addDesktop (SPDesktop *dt)
 {
-/*
-    if (SP_ACTIVE_DESKTOP) {
-        return SP_DT_EVENTCONTEXT (SP_ACTIVE_DESKTOP);
+    g_return_if_fail (dt != 0);
+    g_assert (!g_slist_find (_instance->_desktops, dt));
+
+    _instance->_desktops = g_slist_append (_instance->_desktops, dt);
+
+    if (isDesktopActive (dt)) {
+        _instance->_desktop_activated_signal.emit (dt);
+        _instance->_event_context_set_signal.emit (SP_DT_EVENTCONTEXT (dt));
+        _instance->_selection_set_signal.emit (SP_DT_SELECTION (dt));
+        _instance->_selection_changed_signal.emit (SP_DT_SELECTION (dt));
     }
-*/
-
-    return NULL;
 }
 
-/// Returns the name of the application
-Glib::ustring
-Editor::getName() const
+/// Remove desktop from list of desktops
+void
+Editor::removeDesktop (SPDesktop *dt)
 {
-    return "Inkscape";
+    g_return_if_fail (dt != 0);
+    g_assert (g_slist_find (_instance->_desktops, dt));
+
+    if (dt == _instance->_desktops->data) {  // is it the active desktop?
+        _instance->_desktop_deactivated_signal.emit (dt);
+        if (_instance->_desktops->next != 0) {
+            SPDesktop * new_desktop = (SPDesktop *) _instance->_desktops->next->data;
+            _instance->_desktops = g_slist_remove (_instance->_desktops, new_desktop);
+            _instance->_desktops = g_slist_prepend (_instance->_desktops, new_desktop);
+            _instance->_desktop_activated_signal.emit (new_desktop);
+            _instance->_event_context_set_signal.emit (SP_DT_EVENTCONTEXT (new_desktop));
+            _instance->_selection_set_signal.emit (SP_DT_SELECTION (new_desktop));
+            _instance->_selection_changed_signal.emit (SP_DT_SELECTION (new_desktop));
+        } else {
+            _instance->_event_context_set_signal.emit (0);
+            if (SP_DT_SELECTION(dt))
+                SP_DT_SELECTION(dt)->clear();
+        }
+    }
+
+    _instance->_desktops = g_slist_remove (_instance->_desktops, dt);
+
+    // if this was the last desktop, shut down the program
+    if (_instance->_desktops == NULL) {
+        _instance->_shutdown_signal.emit();
+        Inkscape::NSApplication::Application::exit();
+    }
 }
 
-int
-Editor::loadPreferences()
+void 
+Editor::activateDesktop (SPDesktop* dt)
 {
-    // TODO
-    return 0;
+    g_assert (dt != 0);
+    if (isDesktopActive (dt))
+        return;
+
+    g_assert (g_slist_find (_instance->_desktops, dt));
+    SPDesktop *curr = (SPDesktop*)_instance->_desktops->data;
+    _instance->_desktop_deactivated_signal.emit (curr);
+
+    _instance->_desktops = g_slist_remove (_instance->_desktops, dt);
+    _instance->_desktops = g_slist_prepend (_instance->_desktops, dt);
+
+    _instance->_desktop_activated_signal.emit (dt);
+    _instance->_event_context_set_signal.emit (SP_DT_EVENTCONTEXT(dt));
+    _instance->_selection_set_signal.emit (SP_DT_SELECTION(dt));
+    _instance->_selection_changed_signal.emit (SP_DT_SELECTION(dt));
 }
 
-int
-Editor::savePreferences()
+void 
+Editor::reactivateDesktop (SPDesktop* dt)
 {
-    // TODO
-    return 0;
+    g_assert (dt != 0);
+    if (isDesktopActive(dt))
+        _instance->_desktop_activated_signal.emit (dt);
+}
+
+bool
+Editor::isDuplicatedView (SPDesktop* dt)
+{
+    SPDocument const* document = dt->doc();
+    if (!document) {
+        return false;
+    }
+    for ( GSList *iter = _instance->_desktops ; iter ; iter = iter->next ) {
+        SPDesktop *other_desktop=(SPDesktop *)iter->data;
+        SPDocument *other_document=other_desktop->doc();
+        if ( other_document == document && other_desktop != dt ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+ /// Returns the event context
+//SPEventContext*
+//Editor::getEventContext()
+//{
+//    if (getActiveDesktop()) {
+//        return SP_DT_EVENTCONTEXT (getActiveDesktop());
+//    }
+//
+//    return NULL;
+//}
+
+
+void 
+Editor::selectionModified (Inkscape::Selection* sel, guint flags)
+{
+    g_return_if_fail (sel != NULL);
+    if (isDesktopActive (sel->desktop()))
+        _instance->_selection_modified_signal.emit (sel, flags);
+}
+
+void 
+Editor::selectionChanged (Inkscape::Selection* sel)
+{
+    g_return_if_fail (sel != NULL);
+    if (isDesktopActive (sel->desktop()))
+        _instance->_selection_changed_signal.emit (sel);
+}
+
+void 
+Editor::subSelectionChanged (SPDesktop* dt)
+{
+    g_return_if_fail (dt != NULL);
+    if (isDesktopActive (dt)) 
+        _instance->_subselection_changed_signal.emit (dt);
+}
+
+void 
+Editor::selectionSet (Inkscape::Selection* sel)
+{
+    g_return_if_fail (sel != NULL);
+    if (isDesktopActive (sel->desktop())) {
+        _instance->_selection_set_signal.emit (sel);
+        _instance->_selection_changed_signal.emit (sel);
+    }
+}
+
+void 
+Editor::eventContextSet (SPEventContext* ec)
+{
+    g_return_if_fail (ec != NULL);
+    g_return_if_fail (SP_IS_EVENT_CONTEXT (ec));
+    if (isDesktopActive (ec->desktop))
+        _instance->_event_context_set_signal.emit (ec);
 }
 
 void
 Editor::hideDialogs()
 {
-/* TODO
-    g_signal_emit(G_OBJECT (inkscape), inkscape_signals[DIALOGS_HIDE], 0);
- */
-    _dialogs_toggle = false;
+    _instance->_dialogs_hidden_signal.emit();
+    _instance->_dialogs_toggle = false;
 }
 
 void
 Editor::unhideDialogs()
 {
-/* TODO
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_UNHIDE], 0);
-*/
-    _dialogs_toggle = true;
+    _instance->_dialogs_unhidden_signal.emit();
+    _instance->_dialogs_toggle = true;
 }
 
 void
 Editor::toggleDialogs()
 {
     if (_dialogs_toggle) {
-//        dialogs_hide();
+        hideDialogs();
     } else {
-//        dialogs_unhide();
+        unhideDialogs();
     }
 }
 
@@ -183,17 +330,80 @@ void
 Editor::exit()
 {
     //emit shutdown signal so that dialogs could remember layout
-/* TODO
-    g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
-
-    if (inkscape->preferences && inkscape->save_preferences) {
-        inkscape_save_preferences (INKSCAPE);
-    }
-
-    gtk_main_quit();
-*/
-
+    _shutdown_signal.emit();
+    Inkscape::Preferences::save();
 }
+
+//==================================================================
+
+sigc::connection 
+Editor::connectSelectionModified 
+(const sigc::slot<void, Inkscape::Selection*, guint> &slot)
+{
+    return _instance->_selection_modified_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectSelectionChanged 
+(const sigc::slot<void, Inkscape::Selection*> &slot)
+{
+    return _instance->_selection_changed_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectSubselectionChanged (const sigc::slot<void, SPDesktop*> &slot)
+{
+    return _instance->_subselection_changed_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectSelectionSet (const sigc::slot<void, Inkscape::Selection*> &slot)
+{
+    return _instance->_selection_set_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectEventContextSet (const sigc::slot<void, SPEventContext*> &slot)
+{
+    return _instance->_event_context_set_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectDesktopActivated (const sigc::slot<void, SPDesktop*> &slot)
+{
+    return _instance->_desktop_activated_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectDesktopDeactivated (const sigc::slot<void, SPDesktop*> &slot)
+{
+    return _instance->_desktop_deactivated_signal.connect (slot);
+}
+    
+sigc::connection 
+Editor::connectShutdown (const sigc::slot<void> &slot)
+{
+    return _instance->_shutdown_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectDialogsHidden (const sigc::slot<void> &slot)
+{
+    return _instance->_dialogs_hidden_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectDialogsUnhidden (const sigc::slot<void> &slot)
+{
+    return _instance->_dialogs_unhidden_signal.connect (slot);
+}
+
+sigc::connection 
+Editor::connectExternalChange (const sigc::slot<void> &slot)
+{
+    return _instance->_external_change_signal.connect (slot);
+}
+
 
 } // namespace NSApplication
 } // namespace Inkscape

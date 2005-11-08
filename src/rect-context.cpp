@@ -400,10 +400,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
         case GDK_x:
         case GDK_X:
             if (MOD__ALT_ONLY) {
-                gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx-rect");
-                if (hb && GTK_IS_WIDGET(hb)) {
-                    gtk_widget_grab_focus (GTK_WIDGET (hb));
-                }
+                desktop->setToolboxFocusTo ("altx-rect");
                 ret = TRUE;
             }
             break;

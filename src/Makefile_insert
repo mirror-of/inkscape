@@ -93,6 +93,7 @@ libinkpre_a_SOURCES =	\
 	pen-context.h	\
 	pencil-context.cpp	\
 	pencil-context.h	\
+	preferences.cpp preferences.h \
 	preferences-skeleton.h	\
 	menus-skeleton.h	\
 	prefix.cpp	\

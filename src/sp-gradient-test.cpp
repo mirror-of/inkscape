@@ -12,6 +12,10 @@
 #include "utest/utest.h"
 #include "xml/repr.h"
 
+/// Dummy functions to keep linker happy
+int sp_main_gui (int, char const**) { return 0; }
+int sp_main_console (int, char const**) { return 0; }
+
 static bool
 test_gradient()
 {

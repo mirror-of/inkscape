@@ -27,7 +27,7 @@ public:
     AppPrototype(int argc, const char **argv);
     virtual ~AppPrototype();
 
-    virtual Gtk::Window* getWindow() = 0;
+    virtual void* getWindow() = 0;
 
 protected:
     AppPrototype(AppPrototype const &);

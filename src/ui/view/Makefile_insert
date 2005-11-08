@@ -8,6 +8,9 @@ ui/view/clean:
 ui_view_libuiview_a_SOURCES =		\
 	ui/view/edit.h			\
 	ui/view/edit.cpp		\
+	ui/view/edit-widget.h		\
+	ui/view/edit-widget.cpp		\
+	ui/view/edit-widget-interface.h \
 	ui/view/view.h			\
 	ui/view/view.cpp		\
 	ui/view/view-widget.cpp \

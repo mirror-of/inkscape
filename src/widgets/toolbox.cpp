@@ -748,7 +748,7 @@ static GtkWidget *
 sp_empty_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     gtk_widget_show_all(tbl);
@@ -1185,7 +1185,7 @@ sp_star_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
 
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
@@ -1527,7 +1527,7 @@ sp_rect_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
 
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
@@ -1794,7 +1794,7 @@ static GtkWidget *
 sp_spiral_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
@@ -1944,7 +1944,7 @@ static GtkWidget *
 sp_calligraphy_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
@@ -2363,7 +2363,7 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
 
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
@@ -2544,7 +2544,7 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
 
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();

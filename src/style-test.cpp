@@ -6,6 +6,10 @@
 #include "strneq.h"
 #include "style.h"
 
+/// Dummy functions to keep linker happy
+int sp_main_gui (int, char const**) { return 0; }
+int sp_main_console (int, char const**) { return 0; }
+
 /* Extracted mechanically from http://www.w3.org/TR/SVG11/types.html#ColorKeywords:
  *
  *   tidy -wrap 999 < types.html 2> /dev/null |

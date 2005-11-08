@@ -56,8 +56,6 @@
 #include "display/canvas-bpath.h"
 #include "enums.h"
 #include "document.h"
-#include "desktop-handles.h"
-#include "widgets/desktop-widget.h"
 #include "inkscape.h"
 #include "sp-item.h"
 #include "style.h"
@@ -132,7 +130,8 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     gtk_object_sink((GtkObject *) tt);
 
     dlg = gtk_dialog_new_with_buttons(_("Print Destination"),
-            SP_DT_WIDGET(SP_ACTIVE_DESKTOP)->window,
+//            SP_DT_WIDGET(SP_ACTIVE_DESKTOP)->window,
+            NULL,
             (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_DESTROY_WITH_PARENT),
             GTK_STOCK_CANCEL,
             GTK_RESPONSE_CANCEL,

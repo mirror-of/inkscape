@@ -628,7 +628,7 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, g
     SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
     SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
 
-    desktop->set_coordinate_status(*position, 0);
+    desktop->set_coordinate_status(*position);
     desktop->setPosition (*position);
 
     if (state & GDK_MOD1_MASK) {
@@ -726,10 +726,7 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
         }
     }
 
-    GtkToggleButton *lock = (GtkToggleButton *) sp_search_by_data_recursive(desktop->owner->aux_toolbox,
-                                                                            (gpointer) "lock");
-
-    if ((state & GDK_CONTROL_MASK) || gtk_toggle_button_get_active(lock)) {
+    if ((state & GDK_CONTROL_MASK) || desktop->isToolboxButtonActive ("lock")) {
         /* Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y] */
 
         NR::Dim2 locked_dim;

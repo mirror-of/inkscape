@@ -96,7 +96,7 @@ void LayerPropertiesDialog::_showDialog(LayerPropertiesDialog::Strategy &strateg
     dialog->_strategy->setup(*dialog);
 
     dialog->set_modal(true);
-    gtk_window_set_transient_for(GTK_WINDOW(dialog->gobj()), GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(desktop->owner))));
+    desktop->setWindowTransient (dialog->gobj());
     dialog->property_destroy_with_parent() = true;
 
     dialog->show();

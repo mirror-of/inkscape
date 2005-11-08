@@ -2787,7 +2787,7 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     // we cannot emit a "moved" signal because we're now processing it
     if (me->knot->item) SP_CTRL(me->knot->item)->moveto(me->pos);
 
-    knot->desktop->set_coordinate_status(me->pos, 0);
+    knot->desktop->set_coordinate_status(me->pos);
 
     update_object(n->subpath->nodepath);
 

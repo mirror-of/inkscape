@@ -94,6 +94,9 @@ static void usage();
 
 static GtkWidget *ctrlwin = NULL;
 
+/// Dummy functions to keep linker happy
+int sp_main_gui (int, char const**) { return 0; }
+int sp_main_console (int, char const**) { return 0; }
 
 static int
 sp_svgview_main_delete (GtkWidget *widget, GdkEvent *event, struct SPSlideShow *ss)
@@ -377,7 +380,7 @@ sp_svgview_show_next (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[++current], TRUE, false);
     }
     if (doc) {
-	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
+	reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;
@@ -395,7 +398,7 @@ sp_svgview_show_prev (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[--current], TRUE, false);
     }
     if (doc) {
-	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
+	reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;
@@ -411,7 +414,7 @@ sp_svgview_goto_first (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[current], TRUE, false);
     }
     if (doc) {
-	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
+	reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;
@@ -427,7 +430,7 @@ sp_svgview_goto_last (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[current], TRUE, false);
     }
     if (doc) {
-	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
+	reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;

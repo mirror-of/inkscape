@@ -26,6 +26,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include "ui/view/view.h"
+#include "ui/view/edit-widget-interface.h"
 
 class NRRect;
 class SPCSSAttr;
@@ -38,6 +39,7 @@ struct SPItem;
 struct SPNamedView;
 struct SPObject;
 struct SPStyle;
+struct SPViewWidget;
 
 typedef int sp_verb_t;
 
@@ -63,16 +65,12 @@ namespace Inkscape {
  */
 struct SPDesktop : public Inkscape::UI::View::View
 {
-    SPDesktopWidget           *owner;
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
     SPNamedView               *namedview;
-    Inkscape::Selection       *selection;        ///< current selection; will 
-                                                 ///< never generally be NULL
+    SPCanvas                  *canvas;
+    /// current selection; will never generally be NULL
+    Inkscape::Selection       *selection;
     SPEventContext            *event_context;
-
-    Inkscape::MessageContext *guidesMessageContext() const {
-	return _guides_message_context;
-    }
 
     SPCanvasItem  *acetate;
     SPCanvasGroup *main;
@@ -86,7 +84,7 @@ struct SPDesktop : public Inkscape::UI::View::View
     SPCanvasItem  *page_border; ///< page border
     SPCSSAttr     *current;     ///< current style
 
-    NR::Matrix d2w, w2d, doc2dt;
+    NR::Matrix d2w, w2d, doc2dt; ///< transforms 
     GList *zooms_past;
     GList *zooms_future;
     unsigned int dkey;
@@ -127,6 +125,9 @@ struct SPDesktop : public Inkscape::UI::View::View
 	return _tool_subselection_changed.connect(slot);
     }
     void emitToolSubselectionChanged(gpointer data); 
+    sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
+	return _layer_changed_signal.connect(slot);
+    }
     
 	// Whiteboard changes
 
@@ -143,13 +144,14 @@ struct SPDesktop : public Inkscape::UI::View::View
     ~SPDesktop();
     void destroy();
 
+    Inkscape::MessageContext *guidesMessageContext() const {
+	return _guides_message_context;
+    }
+
     void set_active (bool new_active);
     SPObject *currentRoot() const;
     SPObject *currentLayer() const;
     void setCurrentLayer(SPObject *object);
-    sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
-	return _layer_changed_signal.connect(slot);
-    }
     SPObject *layerForObject(SPObject *object);
     bool isLayer(SPObject *object) const;
     bool isWithinViewport(SPItem *item) const;
@@ -161,7 +163,7 @@ struct SPDesktop : public Inkscape::UI::View::View
     void set_event_context (GtkType type, const gchar *config);
     void push_event_context (GtkType type, const gchar *config, unsigned int key);
 
-    void set_coordinate_status (NR::Point p, guint underline);
+    void set_coordinate_status (NR::Point p);
     SPItem *item_from_list_at_point_bottom (const GSList *list, NR::Point const p) const;
     SPItem *item_at_point (NR::Point const p, bool into_groups, SPItem *upto = NULL) const;
     SPItem *group_at_point (NR::Point const p) const;
@@ -184,6 +186,7 @@ struct SPDesktop : public Inkscape::UI::View::View
     void zoom_page_width();
     void zoom_drawing();
     void zoom_selection();
+    void zoom_grab_focus();
     double current_zoom() const  { return d2w.expansion(); }
     void prev_zoom();
     void next_zoom();
@@ -196,17 +199,36 @@ struct SPDesktop : public Inkscape::UI::View::View
 	using NR::Y;
 	scroll_world(scroll[X], scroll[Y]);
     }
+
+    void getWindowGeometry (gint &x, gint &y, gint &w, gint &h);
+    void setWindowPosition (NR::Point p);
+    void setWindowSize (gint w, gint h);
+    void setWindowTransient (void* p, int transient_policy=1);
+    void presentWindow();
+    bool warnDialog (gchar *text);
+    void toggleRulers();
+    void toggleScrollbars();
+    void layoutWidget();
+    void destroyWidget();
+    void setToolboxFocusTo (gchar const* label);
+    void setToolboxAdjustmentValue (gchar const* id, double val);
+    bool isToolboxButtonActive (gchar const *id);
     
     void fullscreen();
 
+    void registerEditWidget (Inkscape::UI::View::EditWidgetInterface *widget)
+    { _widget = widget; }
+
+    virtual void setDocument (SPDocument* doc);
     virtual bool shutdown();
     virtual void mouseover() {}
     virtual void mouseout() {}
 
 private:
-    Inkscape::Application     *inkscape;
+    Inkscape::UI::View::EditWidgetInterface       *_widget;
+    Inkscape::Application     *_inkscape;
     Inkscape::MessageContext  *_guides_message_context;
-    bool active;
+    bool _active;
     
     void push_current_zoom (GList**);
 
@@ -222,8 +244,6 @@ private:
     sigc::connection _reconstruction_start_connection;
     sigc::connection _reconstruction_finish_connection;
     
-    virtual void setDoc (SPDocument* doc);
-
     virtual void onPositionSet (double, double);
     virtual void onResized (double, double);
     virtual void onRedrawRequested();
@@ -231,6 +251,9 @@ private:
     virtual void onDocumentURISet (gchar const* uri);
     virtual void onDocumentResized (double, double);
 
+    static void _onActivate (SPDesktop* dt);
+    static void _onDeactivate (SPDesktop* dt);
+    static void _onSelectionModified (Inkscape::Selection *selection, guint flags, SPDesktop *dt);
 };
 
 #endif

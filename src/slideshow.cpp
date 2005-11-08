@@ -24,7 +24,7 @@
 #include "document.h"
 #include "sp-text.h"
 #include "svg-view-widget.h"
-#include "ui/view/view.h"
+#include "svg-view.h"
 
 static gint
 sp_slideshow_event (SPViewWidget *vw, GdkEvent *event, GtkWidget *window)
@@ -69,7 +69,7 @@ sp_slideshow_event (SPViewWidget *vw, GdkEvent *event, GtkWidget *window)
 		g_print ("Trying to load\n");
 		doc = sp_document_new (nname, TRUE);
 		if (doc) {
-			(SP_VIEW_WIDGET_VIEW (vw))->setDocument (doc);
+			reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (vw))->setDocument (doc);
 			sp_document_unref (doc);
 		}
 		g_object_set_data (G_OBJECT (window), "current", (gpointer) nname);

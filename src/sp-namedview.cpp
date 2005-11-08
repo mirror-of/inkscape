@@ -21,7 +21,7 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include <gtk/gtk.h>
+#include <gtk/gtkobject.h>
 
 #include "display/canvas-grid.h"
 #include "helper/units.h"
@@ -637,18 +637,14 @@ void
 sp_namedview_window_from_document (SPDesktop *desktop)
 {
 	SPNamedView *nv = desktop->namedview;
-	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
 	gint save_geometry = prefs_get_int_attribute ("options.savewindowgeometry", "value", 0);
 
 	// restore window size and position
-	if (save_geometry && win) {
-		if (nv->window_width != -1 && nv->window_height != -1) {
-			gtk_window_set_default_size (win, nv->window_width, nv->window_height);
-			gtk_window_reshow_with_initial_size (win);
-		}
-		if (nv->window_x != -1 && nv->window_y != -1) {
-			gtk_window_move (win, nv->window_x, nv->window_y);
-		}
+	if (save_geometry) {
+		if (nv->window_width != -1 && nv->window_height != -1)
+                    desktop->setWindowSize (nv->window_width, nv->window_height);
+		if (nv->window_x != -1 && nv->window_y != -1)
+                    desktop->setWindowPosition (NR::Point(nv->window_x, nv->window_y));
 	}
 
 	// restore zoom and view
@@ -695,7 +691,6 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	Inkscape::XML::Node *view;
 	NRRect r;
 	gint w, h, x, y;
-	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
 	gint save_geometry = prefs_get_int_attribute ("options.savewindowgeometry", "value", 0);
 	view = SP_OBJECT_REPR (desktop->namedview);
 	desktop->get_display_area (&r);
@@ -708,13 +703,12 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	sp_repr_set_svg_double(view, "inkscape:cx", (r.x0+r.x1)*0.5);
 	sp_repr_set_svg_double(view, "inkscape:cy", (r.y0+r.y1)*0.5);
 
-	if (save_geometry && win) {
-		gtk_window_get_size (win, &w, &h);
-		gtk_window_get_position (win, &x, &y);
-		sp_repr_set_int (view, "inkscape:window-width", w);
-		sp_repr_set_int (view, "inkscape:window-height", h);
-		sp_repr_set_int (view, "inkscape:window-x", x);
-		sp_repr_set_int (view, "inkscape:window-y", y);
+	if (save_geometry) {
+            desktop->getWindowGeometry (x, y, w, h);
+            sp_repr_set_int (view, "inkscape:window-width", w);
+            sp_repr_set_int (view, "inkscape:window-height", h);
+            sp_repr_set_int (view, "inkscape:window-x", x);
+            sp_repr_set_int (view, "inkscape:window-y", y);
 	}
 
 	sp_repr_set_attr(view, "inkscape:current-layer", SP_OBJECT_ID(desktop->currentLayer()));

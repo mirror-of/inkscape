@@ -42,7 +42,6 @@ namespace Inkscape {
 #define SP_DT_CONTROLS(d) sp_desktop_controls (d)
 #define SP_DT_MSGSTACK(d) sp_desktop_message_stack (d)
 #define SP_DT_NAMEDVIEW(d) sp_desktop_namedview (d)
-#define SP_DT_WIDGET(d) sp_desktop_widget (d)
 
 SPEventContext * sp_desktop_event_context (SPDesktop const * desktop);
 Inkscape::Selection * sp_desktop_selection (SPDesktop const * desktop);
@@ -57,7 +56,6 @@ SPCanvasGroup * sp_desktop_sketch (SPDesktop const * desktop);
 SPCanvasGroup * sp_desktop_controls (SPDesktop const * desktop);
 Inkscape::MessageStack * sp_desktop_message_stack (SPDesktop const * desktop);
 SPNamedView * sp_desktop_namedview (SPDesktop const * desktop);
-SPDesktopWidget * sp_desktop_widget (SPDesktop const * desktop);
 
 #endif
 

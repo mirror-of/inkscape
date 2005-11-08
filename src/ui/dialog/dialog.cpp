@@ -18,6 +18,8 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtk.h>
 
+#include "application/application.h"
+#include "application/editor.h"
 #include "inkscape.h"
 #include "event-context.h"
 #include "widgets/desktop-widget.h"
@@ -49,57 +51,16 @@ sp_retransientize_again (gpointer dlgPtr)
 static void
 sp_retransientize (Inkscape::Application *inkscape, SPDesktop *desktop, gpointer dlgPtr)
 {
-    gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
-
-    if (!transient_policy)
-        return;
-
-#ifndef WIN32
     Dialog *dlg = (Dialog *)dlgPtr;
-
-    GtkWindow *dialog_win = GTK_WINDOW(dlg->gobj());
-
-    if (dlg->retransientize_suppress) {
-         /* if retransientizing of this dialog is still forbidden after
-          * previous call warning turned off because it was confusingly fired
-          * when loading many files from command line
-          */
-
-         // g_warning("Retranzientize aborted! You're switching windows too fast!");
-        return;
-    }
-
-    GtkWindow *desktop_win = SP_DT_WIDGET(desktop)->window;
-
-    if (desktop_win && dialog_win)
-    {
-        dlg->retransientize_suppress = true; // disallow other attempts to retranzientize this dialog
-
-        gtk_window_set_transient_for (dialog_win, desktop_win);
-
-        /*
-         * This enables "aggressive" transientization,
-         * i.e. dialogs always emerging on top when you switch documents. Note
-         * however that this breaks "click to raise" policy of a window
-         * manager because the switched-to document will be raised at once
-         * (so that its transients also could raise)
-         */
-        if (transient_policy == 2 && !dlg->_hiddenF12 && !dlg->_user_hidden) {
-            // without this, a transient window not always emerges on top
-            gtk_window_present (dialog_win);
-        }
-    }
-
-    // we're done, allow next retransientizing not sooner than after 120 msec
-    gtk_timeout_add (120, (GtkFunction) sp_retransientize_again, (gpointer) dlg);
-#endif
+    dlg->onDesktopActivated (desktop);
 }
 
 static void
 sp_dialog_destroy (GtkObject *object, gpointer dlgPtr)
 {
     Dialog *dlg = (Dialog *)dlgPtr;
-    sp_signal_disconnect_by_data (INKSCAPE, dlg);
+    if (!Inkscape::NSApplication::Application::getNewGui())
+        sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
     delete dlg;
 //    wd.win = dlg = NULL;
@@ -122,9 +83,7 @@ static void
 sp_dialog_shutdown (GtkObject *object, gpointer dlgPtr)
 {
     Dialog *dlg = (Dialog *)dlgPtr;
-
-    dlg->save_geometry();
-    dlg->_user_hidden = true;
+    dlg->onShutdown();
 }
 
 void
@@ -216,17 +175,27 @@ Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
 
     sp_transientize(dlg);
     retransientize_suppress = false;
-    g_signal_connect   (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_retransientize), (void *)this);
 
     gtk_signal_connect( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg );
 
     _hiddenF12 = false;
-    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
-    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        _desktop_activated_connection = Inkscape::NSApplication::Editor::connectDesktopActivated (sigc::mem_fun (*this, &Dialog::onDesktopActivated));
+        _dialogs_hidden_connection = Inkscape::NSApplication::Editor::connectDialogsHidden (sigc::mem_fun (*this, &Dialog::onHideF12));
+        _dialogs_unhidden_connection = Inkscape::NSApplication::Editor::connectDialogsUnhidden (sigc::mem_fun (*this, &Dialog::onShowF12));
+        _shutdown_connection = Inkscape::NSApplication::Editor::connectShutdown (sigc::mem_fun (*this, &Dialog::onShutdown));
+    }
+    else
+    {
+        g_signal_connect   (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_retransientize), (void *)this);
+        g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
+        g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
+        g_signal_connect   (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_dialog_shutdown), (void *)this);
+    }
 
     gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_dialog_destroy), (void *)this);
     gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_dialog_delete), (void *)this);
-    g_signal_connect   (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_dialog_shutdown), (void *)this);
 
     g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
 
@@ -241,6 +210,14 @@ Dialog::Dialog(BaseObjectType *gobj)
 
 Dialog::~Dialog()
 {
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        _desktop_activated_connection.disconnect();
+        _dialogs_hidden_connection.disconnect();
+        _dialogs_unhidden_connection.disconnect();
+        _shutdown_connection.disconnect();
+    }
+    
     save_geometry();
 }
 
@@ -278,6 +255,58 @@ Dialog::onShowF12()
     }
 
     _hiddenF12 = false;
+}
+
+void 
+Dialog::onShutdown()
+{
+    save_geometry();
+    _user_hidden = true;
+}
+
+void
+Dialog::onDesktopActivated (SPDesktop *desktop)
+{
+    gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
+
+    if (!transient_policy)
+        return;
+
+#ifndef WIN32
+    GtkWindow *dialog_win = GTK_WINDOW(gobj());
+
+    if (retransientize_suppress) {
+         /* if retransientizing of this dialog is still forbidden after
+          * previous call warning turned off because it was confusingly fired
+          * when loading many files from command line
+          */
+
+         // g_warning("Retranzientize aborted! You're switching windows too fast!");
+        return;
+    }
+
+    if (dialog_win)
+    {
+        retransientize_suppress = true; // disallow other attempts to retranzientize this dialog
+
+        desktop->setWindowTransient (dialog_win);
+
+        /*
+         * This enables "aggressive" transientization,
+         * i.e. dialogs always emerging on top when you switch documents. Note
+         * however that this breaks "click to raise" policy of a window
+         * manager because the switched-to document will be raised at once
+         * (so that its transients also could raise)
+         */
+        if (transient_policy == 2 && !_hiddenF12 && !_user_hidden) {
+            // without this, a transient window not always emerges on top
+            gtk_window_present (dialog_win);
+        }
+    }
+
+    // we're done, allow next retransientizing not sooner than after 120 msec
+    gtk_timeout_add (120, (GtkFunction) sp_retransientize_again, (gpointer) this);
+#endif
 }
 
 

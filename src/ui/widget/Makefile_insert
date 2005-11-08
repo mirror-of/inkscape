@@ -20,12 +20,18 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/notebook-page.h	\
 	ui/widget/panel.cpp		\
 	ui/widget/panel.h		\
+	ui/widget/ruler.cpp             \
+	ui/widget/ruler.h		\
 	ui/widget/scalar-unit.cpp	\
 	ui/widget/scalar-unit.h		\
 	ui/widget/scalar.cpp		\
 	ui/widget/scalar.h		\
+	ui/widget/svg-canvas.cpp        \
+	ui/widget/svg-canvas.h          \
 	ui/widget/toolbox.cpp		\
 	ui/widget/toolbox.h		\
 	ui/widget/unit-menu.cpp		\
-	ui/widget/unit-menu.h
+	ui/widget/unit-menu.h           \
+	ui/widget/zoom-status.h         \
+	ui/widget/zoom-status.cpp
 

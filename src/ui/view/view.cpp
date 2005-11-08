@@ -124,16 +124,17 @@ void View::requestRedraw()
 }
 
 /**
- * Calls the view's virtual function setDocument(), disconnects the view 
- * from the document signals, connects the view to a new one, and emits the
- * _document_set_signal on the view.
+ * Disconnects the view from the document signals, connects the view 
+ * to a new one, and emits the _document_set_signal on the view.
+ *
+ * This is code comon to all subclasses and called from their
+ * setDocument() methods after they are done.
  * 
  * \param doc The new document to connect the view to.
  */
 void View::setDocument(SPDocument *doc) {
     g_return_if_fail(doc != NULL);
 
-    this->setDoc (doc);
     if (_doc) {
         _document_uri_set_connection.disconnect();
         _document_resized_connection.disconnect();

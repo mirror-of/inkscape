@@ -507,7 +507,7 @@ gr_change_widget (SPDesktop *desktop)
     gr_read_selection (selection, ev? ev->get_drag() : NULL, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
  
     GtkWidget *widget = gtk_hbox_new(FALSE, FALSE);
-    gtk_object_set_data(GTK_OBJECT(widget), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(widget), "dtw", desktop->canvas);
     g_object_set_data (G_OBJECT (widget), "desktop", desktop);
 
     GtkWidget *om = gr_vector_list (desktop, selection->isEmpty(), gr_selected, gr_multi);
@@ -585,7 +585,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
 {
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
 
-    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(tbl), "dtw", desktop->canvas);
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();

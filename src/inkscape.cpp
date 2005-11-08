@@ -61,6 +61,9 @@ using Inkscape::Extension::Internal::PrintWin32;
 #include "dialogs/debugdialog.h"
 #include "dialogs/input.h"
 #include "widgets/desktop-widget.h"
+#include "application/application.h"
+#include "application/editor.h"
+#include "preferences.h"
 
 #include "shortcuts.h"
 
@@ -126,8 +129,6 @@ static bool inkscape_init_config (Inkscape::XML::Document *doc, const gchar *con
 
 struct Inkscape::Application {
     GObject object;
-    Inkscape::XML::Document *preferences;
-    bool save_preferences;
     Inkscape::XML::Document *menus;
     GSList *documents;
     GSList *desktops;
@@ -167,7 +168,6 @@ static void (* segv_handler) (int) = NULL;
 #define INKSCAPE_PROFILE_DIR ".inkscape"
 #endif
 
-#define PREFERENCES_FILE "preferences.xml"
 #define MENUS_FILE "menus.xml"
 
 
@@ -309,7 +309,6 @@ inkscape_init (SPObject * object)
         g_assert_not_reached ();
     }
 
-    inkscape->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
     inkscape->menus = sp_repr_read_mem (_(menus_skeleton), MENUS_SKELETON_SIZE, NULL);
 
     inkscape->documents = NULL;
@@ -331,13 +330,7 @@ inkscape_dispose (GObject *object)
 
     g_assert (!inkscape->desktops);
 
-    if (inkscape->preferences && inkscape->save_preferences) {
-        /* fixme: This is not the best place */
-        inkscape_save_preferences (inkscape);
-        Inkscape::GC::release(inkscape->preferences);
-        inkscape->preferences = NULL;
-        inkscape->save_preferences = FALSE;
-    }
+    Inkscape::Preferences::save();
 
     if (inkscape->menus) {
         /* fixme: This is not the best place */
@@ -354,14 +347,16 @@ inkscape_dispose (GObject *object)
 void
 inkscape_ref (void)
 {
-    g_object_ref (G_OBJECT (inkscape));
+    if (inkscape)
+        g_object_ref (G_OBJECT (inkscape));
 }
 
 
 void
 inkscape_unref (void)
 {
-    g_object_unref (G_OBJECT (inkscape));
+    if (inkscape)
+        g_object_unref (G_OBJECT (inkscape));
 }
 
 
@@ -491,9 +486,7 @@ inkscape_segv_handler (int signum)
         }
     }
 
-    if (inkscape->preferences && inkscape->save_preferences) {
-        inkscape_save_preferences (inkscape);
-    }
+    Inkscape::Preferences::save();
 
     fprintf (stderr, "Emergency save completed. Inkscape will close now.\n");
     fprintf (stderr, "If you can reproduce this crash, please file a bug at www.inkscape.org\n");
@@ -586,7 +579,7 @@ inkscape_application_init (const gchar *argv0, gboolean use_gui)
 
     /* Attempt to load the preferences, and set the save_preferences flag to TRUE
        if we could, or FALSE if we couldn't */
-    inkscape->save_preferences = inkscape_load_preferences(inkscape);
+    Inkscape::Preferences::load();
     inkscape_load_menus(inkscape);
 
     /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON */
@@ -627,7 +620,7 @@ gboolean inkscape_app_use_gui( Inkscape::Application const * app )
  * 
  * Returns TRUE if the config file was successfully loaded, FALSE if not.
  */
-static bool
+bool
 inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, const gchar *skeleton, 
 		      unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
 		      const gchar *e_notsp, const gchar *warn)
@@ -686,7 +679,8 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
     /** \todo this is a hack, need to figure out how to get
      *        a reasonable merge working with the menus.xml file */
     if (skel_size == MENUS_SKELETON_SIZE) {
-        INKSCAPE->menus = doc;
+        if (INKSCAPE)
+            INKSCAPE->menus = doc;
         doc = config;
     } else {
         config->root()->mergeFrom(doc->root(), "id");
@@ -695,47 +689,6 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
     Inkscape::GC::release(doc);
     g_free (fn);
     return true;
-}
-
-/**
- *  Preferences management
- * 
- *  Attempts to load the preferences file indicated by the global PREFERENCES_FILE
- *  parameter.  If it cannot load it, the defailt preferences_skeleton will be used
- *  instead.
- */
-bool
-inkscape_load_preferences (Inkscape::Application *inkscape)
-{
-    if (inkscape_load_config (PREFERENCES_FILE, 
-                              inkscape->preferences, 
-                              preferences_skeleton, 
-                              PREFERENCES_SKELETON_SIZE,
-                              _("%s is not a regular file.\n%s"),
-                              _("%s not a valid XML file, or\n"
-                                "you don't have read permissions on it.\n%s"),
-                              _("%s is not a valid preferences file.\n%s"),
-                              _("Inkscape will run with default settings.\n"
-                                "New settings will not be saved.")))
-    {
-        sp_input_load_from_preferences();
-        return true;
-    } else
-        return false;
-}
-
-
-/*
- *  Returns true if file was successfully saved, false if not
- */
-bool
-inkscape_save_preferences (Inkscape::Application * inkscape)
-{
-    gchar *fn = profile_path(PREFERENCES_FILE);
-    bool retval = sp_repr_save_file (inkscape->preferences, fn);
-
-    g_free (fn);
-    return retval;
 }
 
 /**
@@ -777,7 +730,7 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
         return NULL;
     }
 
-    Inkscape::XML::Node *repr = sp_repr_document_root (inkscape->preferences);
+    Inkscape::XML::Node *repr = sp_repr_document_root (Inkscape::Preferences::get());
     g_assert (!(strcmp (repr->name(), "inkscape")));
 
     gchar const *s = key;
@@ -815,7 +768,10 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
 void
 inkscape_selection_modified (Inkscape::Selection *selection, guint flags)
 {
-    g_return_if_fail (inkscape != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui()) {
+        Inkscape::NSApplication::Editor::selectionModified (selection, flags);
+        return;
+    }
     g_return_if_fail (selection != NULL);
 
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
@@ -827,7 +783,10 @@ inkscape_selection_modified (Inkscape::Selection *selection, guint flags)
 void
 inkscape_selection_changed (Inkscape::Selection * selection)
 {
-    g_return_if_fail (inkscape != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui()) {
+        Inkscape::NSApplication::Editor::selectionChanged (selection);
+        return;
+    }
     g_return_if_fail (selection != NULL);
 
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
@@ -838,7 +797,11 @@ inkscape_selection_changed (Inkscape::Selection * selection)
 void
 inkscape_subselection_changed (SPDesktop *desktop)
 {
-    g_return_if_fail (inkscape != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui()) {
+        Inkscape::NSApplication::Editor::subSelectionChanged (desktop);
+        return;
+    }
+    g_return_if_fail (desktop != NULL);
 
     if (DESKTOP_IS_ACTIVE (desktop)) {
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SUBSELECTION], 0, desktop);
@@ -849,7 +812,10 @@ inkscape_subselection_changed (SPDesktop *desktop)
 void
 inkscape_selection_set (Inkscape::Selection * selection)
 {
-    g_return_if_fail (inkscape != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui()) {
+        Inkscape::NSApplication::Editor::selectionSet (selection);
+        return;
+    }
     g_return_if_fail (selection != NULL);
 
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
@@ -862,7 +828,10 @@ inkscape_selection_set (Inkscape::Selection * selection)
 void
 inkscape_eventcontext_set (SPEventContext * eventcontext)
 {
-    g_return_if_fail (inkscape != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui()) {
+        Inkscape::NSApplication::Editor::eventContextSet (eventcontext);
+        return;
+    }
     g_return_if_fail (eventcontext != NULL);
     g_return_if_fail (SP_IS_EVENT_CONTEXT (eventcontext));
 
@@ -875,8 +844,14 @@ inkscape_eventcontext_set (SPEventContext * eventcontext)
 void
 inkscape_add_desktop (SPDesktop * desktop)
 {
-    g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
+    
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        Inkscape::NSApplication::Editor::addDesktop (desktop);
+        return;
+    }
+    g_return_if_fail (inkscape != NULL);
 
     g_assert (!g_slist_find (inkscape->desktops, desktop));
 
@@ -895,8 +870,13 @@ inkscape_add_desktop (SPDesktop * desktop)
 void
 inkscape_remove_desktop (SPDesktop * desktop)
 {
-    g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        Inkscape::NSApplication::Editor::removeDesktop (desktop);
+        return;
+    }
+    g_return_if_fail (inkscape != NULL);
 
     g_assert (g_slist_find (inkscape->desktops, desktop));
 
@@ -930,8 +910,13 @@ inkscape_remove_desktop (SPDesktop * desktop)
 void
 inkscape_activate_desktop (SPDesktop * desktop)
 {
-    g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        Inkscape::NSApplication::Editor::activateDesktop (desktop);
+        return;
+    }
+    g_return_if_fail (inkscape != NULL);
 
     if (DESKTOP_IS_ACTIVE (desktop)) {
         return;
@@ -959,8 +944,13 @@ inkscape_activate_desktop (SPDesktop * desktop)
 void
 inkscape_reactivate_desktop (SPDesktop * desktop)
 {
-    g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        Inkscape::NSApplication::Editor::reactivateDesktop (desktop);
+        return;
+    }
+    g_return_if_fail (inkscape != NULL);
 
     if (DESKTOP_IS_ACTIVE (desktop))
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
@@ -1057,8 +1047,7 @@ inkscape_prev_desktop ()
 void
 inkscape_switch_desktops_next ()
 {
-    GtkWindow *w = SP_DT_WIDGET(inkscape_next_desktop ())->window;
-    gtk_window_present (w);
+    inkscape_next_desktop()->presentWindow();
 }
 
 
@@ -1066,8 +1055,7 @@ inkscape_switch_desktops_next ()
 void
 inkscape_switch_desktops_prev ()
 {
-    GtkWindow *w = SP_DT_WIDGET(inkscape_prev_desktop ())->window;
-    gtk_window_present (w);
+    inkscape_prev_desktop()->presentWindow();
 }
 
 
@@ -1075,10 +1063,13 @@ inkscape_switch_desktops_prev ()
 void
 inkscape_dialogs_hide ()
 {
-    g_return_if_fail (inkscape != NULL);
-
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_HIDE], 0);
-    inkscape->dialogs_toggle = FALSE;
+    if (Inkscape::NSApplication::Application::getNewGui())
+        Inkscape::NSApplication::Editor::hideDialogs();
+    else
+    {
+        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_HIDE], 0);
+        inkscape->dialogs_toggle = FALSE;
+    }
 }
 
 
@@ -1086,10 +1077,13 @@ inkscape_dialogs_hide ()
 void
 inkscape_dialogs_unhide ()
 {
-    g_return_if_fail (inkscape != NULL);
-
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_UNHIDE], 0);
-    inkscape->dialogs_toggle = TRUE;
+    if (Inkscape::NSApplication::Application::getNewGui())
+        Inkscape::NSApplication::Editor::unhideDialogs();
+    else
+    {
+        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_UNHIDE], 0);
+        inkscape->dialogs_toggle = TRUE;
+    }
 }
 
 
@@ -1118,12 +1112,17 @@ inkscape_external_change ()
 void
 inkscape_add_document (SPDocument *document)
 {
-    g_return_if_fail (inkscape != NULL);
     g_return_if_fail (document != NULL);
 
-    g_assert (!g_slist_find (inkscape->documents, document));
-
-    inkscape->documents = g_slist_append (inkscape->documents, document);
+    if (!Inkscape::NSApplication::Application::getNewGui())
+    {
+        g_assert (!g_slist_find (inkscape->documents, document));
+        inkscape->documents = g_slist_append (inkscape->documents, document);
+    }
+    else
+    {
+        Inkscape::NSApplication::Editor::addDocument (document);
+    }
 }
 
 
@@ -1131,12 +1130,17 @@ inkscape_add_document (SPDocument *document)
 void
 inkscape_remove_document (SPDocument *document)
 {
-    g_return_if_fail (inkscape != NULL);
     g_return_if_fail (document != NULL);
 
-    g_assert (g_slist_find (inkscape->documents, document));
-
-    inkscape->documents = g_slist_remove (inkscape->documents, document);
+    if (!Inkscape::NSApplication::Application::getNewGui())
+    {
+        g_assert (g_slist_find (inkscape->documents, document));
+        inkscape->documents = g_slist_remove (inkscape->documents, document);
+    }
+    else
+    {
+        Inkscape::NSApplication::Editor::removeDocument (document);
+    }
 
     return;
 }
@@ -1144,6 +1148,9 @@ inkscape_remove_document (SPDocument *document)
 SPDesktop *
 inkscape_active_desktop (void)
 {
+    if (Inkscape::NSApplication::Application::getNewGui())
+        return Inkscape::NSApplication::Editor::getActiveDesktop();
+
     if (inkscape->desktops == NULL) {
         return NULL;
     }
@@ -1154,6 +1161,9 @@ inkscape_active_desktop (void)
 SPDocument *
 inkscape_active_document (void)
 {
+    if (Inkscape::NSApplication::Application::getNewGui())
+        return Inkscape::NSApplication::Editor::getActiveDocument();
+
     if (SP_ACTIVE_DESKTOP) {
         return SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
     }
@@ -1202,10 +1212,11 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
 		      const gchar *warn)
 {
     gchar *dn = profile_path(NULL);
+    bool use_gui = (Inkscape::NSApplication::Application::getNewGui())? Inkscape::NSApplication::Application::getUseGui() : inkscape->use_gui;
     if (!Inkscape::IO::file_test(dn, G_FILE_TEST_EXISTS)) {
         if (Inkscape::IO::mkdir_utf8name(dn))
         {
-            if (inkscape->use_gui) {
+            if (use_gui) {
                 // Cannot create directory
                 gchar *safeDn = Inkscape::IO::sanitizeString(dn);
                 GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, safeDn, warn);
@@ -1221,7 +1232,7 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
             }
         }
     } else if (!Inkscape::IO::file_test(dn, G_FILE_TEST_IS_DIR)) {
-        if (inkscape->use_gui) {
+        if (use_gui) {
             // Not a directory
             gchar *safeDn = Inkscape::IO::sanitizeString(dn);
             GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, safeDn, warn);
@@ -1243,7 +1254,7 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
     Inkscape::IO::dump_fopen_call(fn, "H");
     FILE *fh = Inkscape::IO::fopen_utf8name(fn, "w");
     if (!fh) {
-        if (inkscape->use_gui) {
+        if (use_gui) {
             /* Cannot create file */
             gchar *safeFn = Inkscape::IO::sanitizeString(fn);
             GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, safeFn, warn);
@@ -1259,7 +1270,7 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
         }
     }
     if ( fwrite(skeleton, 1, skel_size, fh) != skel_size ) {
-        if (inkscape->use_gui) {
+        if (use_gui) {
             /* Cannot create file */
             gchar *safeFn = Inkscape::IO::sanitizeString(fn);
             GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, safeFn, warn);
@@ -1303,9 +1314,7 @@ inkscape_exit (Inkscape::Application *inkscape)
     //emit shutdown signal so that dialogs could remember layout
     g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
 
-    if (inkscape->preferences && inkscape->save_preferences) {
-        inkscape_save_preferences (INKSCAPE);
-    }
+    Inkscape::Preferences::save();
     gtk_main_quit ();
 }
 

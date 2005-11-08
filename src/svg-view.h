@@ -24,17 +24,16 @@ class SPCanvasItem;
  * Generic SVG view.
  */
 class SPSVGView : public Inkscape::UI::View::View {
-    public:
-	unsigned int _dkey;
-
-	SPCanvasGroup *_parent;
-	SPCanvasItem *_drawing;
-
-	/// Horizontal and vertical scale
-	gdouble _hscale, _vscale;
-	/// Whether to rescale automatically
-	bool _rescale, _keepaspect;
-	gdouble _width, _height;
+public:	
+    unsigned int    _dkey;
+    SPCanvasGroup  *_parent;
+    SPCanvasItem   *_drawing;
+    gdouble         _hscale;     ///< horizontal scale
+    gdouble         _vscale;     ///< vertical scale
+    bool            _rescale;    ///< whether to rescale automatically
+    bool            _keepaspect;
+    gdouble         _width;
+    gdouble         _height;
 
 
     SPSVGView (SPCanvasGroup* parent);
@@ -48,13 +47,12 @@ class SPSVGView : public Inkscape::UI::View::View {
 
     void doRescale (bool event);
 
+    virtual void setDocument (SPDocument*);
     virtual void mouseover();
     virtual void mouseout();
     virtual bool shutdown() { return true; }
 
-    private:
-    
-    virtual void setDoc (SPDocument*);
+private:
     virtual void onPositionSet (double, double) {}
     virtual void onResized (double, double) {}
     virtual void onRedrawRequested() {}

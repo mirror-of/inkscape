@@ -557,10 +557,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 case GDK_z:
                 case GDK_Z:
                     if (MOD__ALT_ONLY) {
-                        gpointer hb = gtk_object_get_data(GTK_OBJECT(desktop->owner), "altz");
-                        if (hb && GTK_IS_WIDGET(hb)) {
-                            gtk_widget_grab_focus(GTK_WIDGET(hb));
-                        }
+                        desktop->zoom_grab_focus();
                         ret = TRUE;
                     }
                     break;
@@ -844,7 +841,7 @@ static void set_event_location(SPDesktop *desktop, GdkEvent *event)
     NR::Point const button_w(event->button.x, event->button.y);
     NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
     desktop-> setPosition (button_dt);
-    desktop->set_coordinate_status(button_dt, 0);
+    desktop->set_coordinate_status(button_dt);
 }
 
 //-------------------------------------------------------------------

@@ -235,19 +235,19 @@ sp_ui_new_view_preview()
     sp_create_window(dtw, FALSE);
 }
 
+/**
+ * \param widget unused
+ */
 void
 sp_ui_close_view(GtkWidget *widget)
 {
-    GtkWidget *w;
-
     if (SP_ACTIVE_DESKTOP == NULL) {
         return;
     }
-    w = static_cast<GtkWidget*>((void*)SP_DT_WIDGET(SP_ACTIVE_DESKTOP)->window);
     if ((SP_ACTIVE_DESKTOP)->shutdown()) {
         return;
     }
-    gtk_widget_destroy(w);
+    SP_ACTIVE_DESKTOP->destroyWidget();
 }
 
 
@@ -268,29 +268,11 @@ sp_ui_close_all(void)
     /* Iterate through all the windows, destroying each in the order they
        become active */
     while (SP_ACTIVE_DESKTOP) {
-        GtkWidget *w;
-        w = static_cast<GtkWidget*>((void*)SP_DT_WIDGET(SP_ACTIVE_DESKTOP)->window);
         if ((SP_ACTIVE_DESKTOP)->shutdown()) {
             /* The user cancelled the operation, so end doing the close */
             return FALSE;
         }
-        //gtk_widget_destroy(w);
-
-        // Spackle for Bug [ 1217361 ] "freeze on quitting with transform dialog"
-        // The following code is intended to be temporary and IS NOT NEEDED once this part
-        // of Inkscape is de-bugged, when the single line above should be re-instituted.
-
-        // At present, SP_ACTIVE_DESKTOP does not guarantee to return a gtk_widget: If we find
-        // that we have been issued an object other than a widget we assume that something is
-        // wrong upstream and quit immediately.
-        if ( GTK_IS_WIDGET(w) ) {
-            //fprintf( stderr, "sp_ui_close_all( ) About to call  gtk_widget_destroy( %08p )\n", w );
-            gtk_widget_destroy(w);
-        } else {
-            g_warning( "Desktop has passed us a non-widget! : %p", w );
-            gtk_main_quit();
-            break;
-        }
+        SP_ACTIVE_DESKTOP->destroyWidget();
     }
 
     return TRUE;
@@ -589,7 +571,7 @@ checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
     Inkscape::UI::View::View *view = (Inkscape::UI::View::View *) g_object_get_data(G_OBJECT(menuitem), "view");
 
     gchar const *pref_path;
-    if (static_cast<SPDesktop*>(view)->is_fullscreen)
+    if (reinterpret_cast<SPDesktop*>(view)->is_fullscreen)
         pref_path = g_strconcat("fullscreen.", pref, NULL);
     else
         pref_path = g_strconcat("window.", pref, NULL);
@@ -597,7 +579,7 @@ checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
     gboolean checked = gtk_check_menu_item_get_active(menuitem);
     prefs_set_int_attribute(pref_path, "state", checked);
 
-    sp_desktop_widget_layout(static_cast<SPDesktop*>(view)->owner);
+    reinterpret_cast<SPDesktop*>(view)->layoutWidget();
 }
 
 static gboolean

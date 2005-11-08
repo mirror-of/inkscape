@@ -1419,10 +1419,10 @@ ZoomVerb::perform(SPAction *action, void *data, void *pdata)
             dt->prev_zoom();
             break;
         case SP_VERB_TOGGLE_RULERS:
-            sp_desktop_widget_toggle_rulers(dt->owner, dt->is_fullscreen);
+            dt->toggleRulers();
             break;
         case SP_VERB_TOGGLE_SCROLLBARS:
-            sp_desktop_widget_toggle_scrollbars(dt->owner, dt->is_fullscreen);
+            dt->toggleScrollbars();
             break;
         case SP_VERB_TOGGLE_GUIDES:
             sp_namedview_toggle_guides(doc, repr);

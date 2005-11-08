@@ -30,6 +30,9 @@ public:
 
     virtual ~Dialog();
 
+    virtual void onDesktopActivated (SPDesktop*);
+    virtual void onShutdown();
+
     /** Hide and show dialogs */
     virtual void   onHideF12();
     virtual void   onShowF12();
@@ -58,6 +61,11 @@ protected:
     static bool windowKeyPress( GtkWidget *widget, GdkEventKey *event );
 
     Inkscape::Selection*   _getSelection();
+
+    sigc::connection _desktop_activated_connection;
+    sigc::connection _dialogs_hidden_connection;
+    sigc::connection _dialogs_unhidden_connection;
+    sigc::connection _shutdown_connection;
 
 private:
     Dialog(); // no constructor without params

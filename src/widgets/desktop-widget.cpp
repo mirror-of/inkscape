@@ -108,10 +108,12 @@ SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
     gtk_label_set_markup (sb, message ? message : "");
 }
 
-void 
-SPDesktopWidget::window_get_pointer (int *x, int *y)
+NR::Point
+SPDesktopWidget::window_get_pointer()
 {
-    gdk_window_get_pointer (GTK_WIDGET (canvas)->window, x, y, NULL);
+    gint x,y;
+    gdk_window_get_pointer (GTK_WIDGET (canvas)->window, &x, &y, NULL);
+    return NR::Point(x,y);
 }
 
 /**
@@ -263,7 +265,6 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
     g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
     gtk_object_set_data (GTK_OBJECT (dtw->zoom_status), "dtw", dtw->canvas);
-    gtk_object_set_data (GTK_OBJECT (dtw), "altz", dtw->zoom_status);
     gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), dtw->zoom_status);
     gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), dtw->zoom_status);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
@@ -313,6 +314,7 @@ sp_desktop_widget_destroy (GtkObject *object)
     if (dtw->desktop) {
         dtw->layer_selector->unreference();
         inkscape_remove_desktop (dtw->desktop); // clears selection too
+        sp_signal_disconnect_by_data (G_OBJECT (dtw->desktop->namedview), dtw);
         dtw->desktop->destroy();
         Inkscape::GC::release (dtw->desktop);
         dtw->desktop = NULL;
@@ -323,11 +325,7 @@ sp_desktop_widget_destroy (GtkObject *object)
     }
 }
 
-static void
-sp_desktop_widget_set_title (SPDesktopWidget *dtw)
-{
-    sp_desktop_widget_set_title (dtw, SP_DOCUMENT_NAME (dtw->desktop->doc()));
-}
+
 /**
  * Set the title in the desktop-window (if desktop has an own window).
  * 
@@ -335,16 +333,16 @@ sp_desktop_widget_set_title (SPDesktopWidget *dtw)
  * The desktop number is only shown if it's 2 or higher,
  */
 void
-sp_desktop_widget_set_title (SPDesktopWidget *dtw, gchar const* uri)
+SPDesktopWidget::updateTitle(gchar const* uri)
 {
-    GtkWindow *window = GTK_WINDOW (gtk_object_get_data (GTK_OBJECT(dtw), "window"));
+    GtkWindow *window = GTK_WINDOW (gtk_object_get_data (GTK_OBJECT(this), "window"));
     if (window) {
         gchar const *fname = ( TRUE
                                ? uri
                                : g_basename(uri) );
         GString *name = g_string_new ("");
-        if (dtw->desktop->number > 1) {
-            g_string_printf (name, _("%s: %d - Inkscape"), fname, dtw->desktop->number);
+        if (this->desktop->number > 1) {
+            g_string_printf (name, _("%s: %d - Inkscape"), fname, this->desktop->number);
         } else {
             g_string_printf (name, _("%s - Inkscape"), fname);
         }
@@ -426,7 +424,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
     g_signal_connect (G_OBJECT (dtw->desktop->namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
     sp_desktop_widget_namedview_modified (dtw->desktop->namedview, SP_OBJECT_MODIFIED_FLAG, dtw);
 
-    sp_desktop_widget_set_title (dtw);
+    dtw->updateTitle(SP_DOCUMENT_NAME (dtw->desktop->doc()));
 }
 
 /**
@@ -465,13 +463,13 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
 }
 
 void
-sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw)
+sp_dtw_desktop_activate (SPDesktopWidget *dtw)
 {
     /* update active desktop indicator */
 }
 
 void
-sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
+sp_dtw_desktop_deactivate (SPDesktopWidget *dtw)
 {
     /* update inactive desktop indicator */
 }
@@ -620,18 +618,115 @@ SPDesktopWidget::shutdown()
 }
 
 /**
- * \pre dtw->desktop->main != 0
+ * \pre this->desktop->main != 0
  */
 void 
-sp_desktop_widget_queue_draw (SPDesktopWidget* dtw)
-{
-    gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (dtw->desktop->main)->canvas));
+SPDesktopWidget::requestCanvasUpdate() {
+    gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (this->desktop->main)->canvas));
 }
 
 void 
-sp_desktop_widget_set_coordinate_status (SPDesktopWidget *dtw, gchar *cstr)
+SPDesktopWidget::setCoordinateStatus(NR::Point p)
 {
-    gtk_label_set_text (GTK_LABEL (dtw->coord_status), cstr);
+    gchar *cstr=g_strdup_printf("%6.2f, %6.2f", dt2r * p[NR::X], dt2r * p[NR::Y]);
+    gtk_label_set_text (GTK_LABEL (this->coord_status), cstr);
+    g_free(cstr);
+}
+
+void
+SPDesktopWidget::letZoomGrabFocus()
+{
+    if (zoom_status) 
+        gtk_widget_grab_focus (zoom_status);
+}
+    
+void 
+SPDesktopWidget::getWindowGeometry (gint &x, gint &y, gint &w, gint &h)
+{
+    GtkWindow *window = GTK_WINDOW (gtk_object_get_data (GTK_OBJECT(this), "window"));
+    if (window)
+    {
+        gtk_window_get_size (window, &w, &h);
+        gtk_window_get_position (window, &x, &y);
+    }
+}
+
+void
+SPDesktopWidget::setWindowPosition (NR::Point p)
+{
+    GtkWindow *window = GTK_WINDOW (gtk_object_get_data (GTK_OBJECT(this), "window"));
+    if (window)
+    {
+        gtk_window_move (window, gint(round(p[NR::X])), gint(round(p[NR::Y])));
+    }
+}
+
+void
+SPDesktopWidget::setWindowSize (gint w, gint h)
+{
+    GtkWindow *window = GTK_WINDOW (gtk_object_get_data (GTK_OBJECT(this), "window"));
+    if (window)
+    {
+        gtk_window_set_default_size (window, w, h);
+        gtk_window_reshow_with_initial_size (window);
+    }
+}
+
+/**
+ * \note transientizing does not work on windows; when you minimize a document 
+ * and then open it back, only its transient emerges and you cannot access 
+ * the document window.
+ */
+void
+SPDesktopWidget::setWindowTransient (void *p, int transient_policy)
+{
+#ifndef WIN32
+    GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this)));
+    if (w)
+    {
+        gtk_window_set_transient_for (GTK_WINDOW(p), w);
+        
+        /* 
+         * This enables "aggressive" transientization,
+         * i.e. dialogs always emerging on top when you switch documents. Note 
+         * however that this breaks "click to raise" policy of a window 
+         * manager because the switched-to document will be raised at once 
+         * (so that its transients also could raise)
+         */
+        if (transient_policy == 2)
+        
+            // without this, a transient window not always emerges on top
+            gtk_window_present (w); 
+    }
+#endif
+}
+
+void
+SPDesktopWidget::presentWindow()
+{
+    GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this)));
+    if (w)
+        gtk_window_present (w); 
+}
+
+bool
+SPDesktopWidget::warnDialog (gchar* text)
+{
+    GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this)));
+    if (w)
+    {
+        GtkWidget *dialog = gtk_message_dialog_new(
+                w,
+                GTK_DIALOG_DESTROY_WITH_PARENT,
+                GTK_MESSAGE_WARNING,
+                GTK_BUTTONS_YES_NO,
+                text);
+        gint response = gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        if (response == GTK_RESPONSE_YES)
+            return true;
+    }
+    return false;
 }
 
 void
@@ -710,6 +805,34 @@ sp_desktop_widget_layout (SPDesktopWidget *dtw)
     }
 }
 
+void
+SPDesktopWidget::setToolboxFocusTo (const gchar* label)
+{
+    gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) label);
+    if (hb && GTK_IS_WIDGET(hb)) 
+    {
+        gtk_widget_grab_focus(GTK_WIDGET(hb));
+    }
+}
+
+void
+SPDesktopWidget::setToolboxAdjustmentValue (gchar const *id, double value)
+{
+    gpointer hb = sp_search_by_data_recursive (aux_toolbox, (gpointer) id);
+    if (hb && GTK_IS_WIDGET(hb) && GTK_IS_SPIN_BUTTON(hb)) {
+        GtkAdjustment *a = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(hb));
+        gtk_adjustment_set_value (a, value);
+    }
+}
+
+bool
+SPDesktopWidget::isToolboxButtonActive (const gchar* id)
+{
+    GtkToggleButton *b = (GtkToggleButton *) sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
+
+    return gtk_toggle_button_get_active (b) != 0;
+}
+
 SPViewWidget *
 sp_desktop_widget_new (SPNamedView *namedview)
 {
@@ -719,8 +842,10 @@ sp_desktop_widget_new (SPNamedView *namedview)
     dtw->ruler_origin = namedview->gridorigin;
 
     dtw->desktop = new SPDesktop();
-    dtw->desktop->owner = dtw;
+    dtw->stub = new SPDesktopWidget::WidgetStub (dtw);
+    dtw->desktop->registerEditWidget (dtw->stub);
     dtw->desktop->init (namedview, dtw->canvas);
+    inkscape_add_desktop (dtw->desktop);
 
     /* Once desktop is set, we can update rulers */
     sp_desktop_widget_update_rulers (dtw);
@@ -746,17 +871,14 @@ sp_desktop_widget_new (SPNamedView *namedview)
 }
 
 void
-SPDesktopWidget::viewSetPosition (double x, double y)
+SPDesktopWidget::viewSetPosition (NR::Point p)
 {
-    using NR::X;
-    using NR::Y;
-
-    NR::Point const origin = ( NR::Point(x, y) - ruler_origin );
+    NR::Point const origin = ( p - ruler_origin );
 
     /// \todo fixme:
-    GTK_RULER(hruler)->position = origin[X];
+    GTK_RULER(hruler)->position = origin[NR::X];
     gtk_ruler_draw_pos (GTK_RULER (hruler));
-    GTK_RULER(vruler)->position = origin[Y];
+    GTK_RULER(vruler)->position = origin[NR::Y];
     gtk_ruler_draw_pos (GTK_RULER (vruler));
 }
 
@@ -780,7 +902,6 @@ sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWid
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         dtw->dt2r = 1.0 / nv->doc_units->unittobase;
-
         dtw->ruler_origin = nv->gridorigin;
 
         sp_ruler_set_metric (GTK_RULER (dtw->vruler), nv->getDefaultMetric());
@@ -974,30 +1095,30 @@ sp_desktop_widget_update_zoom (SPDesktopWidget *dtw)
 }
 
 void
-sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw, bool is_fullscreen)
+sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw)
 {
     if (GTK_WIDGET_VISIBLE (dtw->hruler)) {
         gtk_widget_hide_all (dtw->hruler);
         gtk_widget_hide_all (dtw->vruler);
-        prefs_set_int_attribute (is_fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 0);
+        prefs_set_int_attribute (dtw->desktop->is_fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 0);
     } else {
         gtk_widget_show_all (dtw->hruler);
         gtk_widget_show_all (dtw->vruler);
-        prefs_set_int_attribute (is_fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 1);
+        prefs_set_int_attribute (dtw->desktop->is_fullscreen ? "fullscreen.rulers" : "window.rulers", "state", 1);
     }
 }
 
 void
-sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw, bool is_fullscreen)
+sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw)
 {
     if (GTK_WIDGET_VISIBLE (dtw->hscrollbar)) {
         gtk_widget_hide_all (dtw->hscrollbar);
         gtk_widget_hide_all (dtw->vscrollbar_box);
-        prefs_set_int_attribute (is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 0);
+        prefs_set_int_attribute (dtw->desktop->is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 0);
     } else {
         gtk_widget_show_all (dtw->hscrollbar);
         gtk_widget_show_all (dtw->vscrollbar_box);
-        prefs_set_int_attribute (is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1);
+        prefs_set_int_attribute (dtw->desktop->is_fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1);
     }
 }
 
@@ -1033,7 +1154,7 @@ set_adjustment (GtkAdjustment *adj, double l, double u, double ps, double si, do
 }
 
 void
-sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, SPDocument *doc, double scale)
+sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale)
 {
     if (!dtw) return;
     if (dtw->update) return;
@@ -1041,6 +1162,7 @@ sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, SPDocument *doc, doub
 
     /* The desktop region we always show unconditionally */
     NRRect darea;
+    SPDocument *doc = dtw->desktop->doc();
     sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &darea);
     darea.x0 = MIN (darea.x0, -sp_document_width (doc));
     darea.y0 = MIN (darea.y0, -sp_document_height (doc));

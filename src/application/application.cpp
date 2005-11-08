@@ -1,10 +1,11 @@
-/**
+/** \file
  * \brief  The top level class for managing the application.
  *
- * Author:
+ * Authors:
  *   Bryce W. Harrington <bryce@bryceharrington.org>
+ *   Ralf Stephan <ralf@ark.in-berlin.de>
  *
- * Copyright (C) 2005 Bryce Harrington
+ * Copyright (C) 2005 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -16,6 +17,9 @@
 #include <gtkmm/main.h>
 #include <glibmm/i18n.h>
 
+#include "inkscape.h"
+#include "preferences.h"
+#include "dialogs/input.h"
 #include "application.h"
 #include "app-prototype.h"
 #include "editor.h"
@@ -23,41 +27,42 @@
 int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
 
+static Gtk::Main *_gtk_main;
+static bool _use_gui, _new_gui;
+
 namespace Inkscape {
 namespace NSApplication {
 
-class GSList;
-
 Application::Application(int argc, char **argv, bool use_gui, bool new_gui)
-    : _gtk_main(NULL),
-      _argc(argc),
+    : _argc(argc),
       _argv(NULL),
-      _preferences(NULL),
       _app_impl(NULL),
-      _path_home(NULL),
-      _save_preferences(false),
-      _use_gui(use_gui)
+      _path_home(NULL)
 {
-
+    _use_gui = use_gui;
+    _new_gui = new_gui;
+    
     if (argv != NULL) {
         _argv = argv;   // TODO:  Is this correct?
     }
 
+    Inkscape::Preferences::loadSkeleton();
     if (new_gui) {
         _gtk_main = new Gtk::Main(argc, argv, true);
 
         // TODO:  Determine class by arguments
         g_warning("Creating new Editor");
-        _app_impl = (AppPrototype*)new Editor(_argc, _argv);
+        _app_impl = (AppPrototype*) Editor::create(_argc, _argv);
+        
     } else if (use_gui) {
         // No op - we'll use the old interface
     } else {
         _app_impl = NULL; // = Cmdline(_argc, _argv);
     }
 
-    // TODO:  Initialize _preferences with the preferences skeleton
-    _save_preferences = loadPreferences();
-
+    /// \todo Install segv handler here?
+    
+//    Inkscape::Extension::init();
 }
 
 Application::~Application()
@@ -65,19 +70,6 @@ Application::~Application()
     g_free(_path_home);
 }
 
-bool
-Application::loadPreferences()
-{
-    // TODO
-    return true;
-}
-
-bool
-Application::savePreferences()
-{
-    // TODO
-    return true;
-}
 
 /** Returns the current home directory location */
 gchar const*
@@ -118,8 +110,9 @@ Application::run()
     if (_gtk_main != NULL) {
         g_assert(_app_impl != NULL);
 
+        Inkscape::Preferences::load();
         g_warning("Running main window");
-        Gtk::Window *win = _app_impl->getWindow();
+        Gtk::Window *win = static_cast<Gtk::Window*>(_app_impl->getWindow());
         g_assert(win != NULL);
         _gtk_main->run(*win);
         result = 0;
@@ -137,31 +130,37 @@ Application::run()
 void
 Application::exit()
 {
-/* TODO
-    // Emit shutdown signal
-    g_signal_emit(G_OBJECT(INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
+    Inkscape::Preferences::save();
 
-    if (inkscape->preferences && inkscape->save_preferences) {
-        inkscape_save_preferences(INKSCAPE);
-    }
-*/
     if (_gtk_main != NULL) {
         _gtk_main->quit();
     }
 
 }
 
+bool
+Application::getUseGui()
+{
+    return _use_gui;
+}
+
+bool
+Application::getNewGui()
+{
+    return _new_gui;
+}
+
+
 } // namespace NSApplication
 } // namespace Inkscape
-
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:75
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

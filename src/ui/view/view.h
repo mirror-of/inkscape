@@ -80,7 +80,6 @@ public:
     void setPosition(NR::Point const &p); 
     void emitResized(gdouble width, gdouble height);
     void requestRedraw(); 
-    void setDocument(SPDocument *doc);
 
     // view subclasses must give implementations of these methods
     
@@ -101,13 +100,13 @@ protected:
     Inkscape::MessageContext *_tips_message_context;
 
     virtual void _close();
+    virtual void setDocument(SPDocument *doc);
 
     sigc::signal<void,double,double>   _position_set_signal;
     sigc::signal<void,double,double>   _resized_signal;
     sigc::signal<void,gchar const*>    _document_uri_set_signal;
     sigc::signal<void>                 _redraw_requested_signal;
 
-    virtual void setDoc (SPDocument *doc) = 0;
 private:
     sigc::connection _position_set_connection;
     sigc::connection _resized_connection;

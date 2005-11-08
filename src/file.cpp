@@ -52,7 +52,6 @@
 #include "file.h"
 #include "dialogs/dialog-events.h"
 #include "message-stack.h"
-
 #include "dialogs/filedialog.h"
 #include "prefs-utils.h"
 #include "path-prefix.h"
@@ -68,7 +67,9 @@
 #include "extension/system.h"
 
 #include "io/sys.h"
-
+#include "application/application.h"
+#include "application/editor.h"
+#include "inkscape.h"
 #include "uri.h"
 
 #ifdef WITH_INKBOARD
@@ -106,14 +107,20 @@ sp_file_new(gchar const *templ)
     SPDocument *doc = sp_document_new(templ, TRUE, true);
     g_return_val_if_fail(doc != NULL, NULL);
 
-    SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
-    sp_document_unref(doc);
-    g_return_val_if_fail(dtw != NULL, NULL);
+    SPDesktop *dt;
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        dt = Inkscape::NSApplication::Editor::createDesktop (doc);
+    } else {
+        SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
+        g_return_val_if_fail(dtw != NULL, NULL);
+        sp_document_unref(doc);
 
-    sp_create_window(dtw, TRUE);
-    SPDesktop *dt = static_cast<SPDesktop*>(dtw->view);
-    sp_namedview_window_from_document(dt);
-	return dt;
+        sp_create_window(dtw, TRUE);
+        dt = static_cast<SPDesktop*>(dtw->view);
+        sp_namedview_window_from_document(dt);
+    }
+    return dt;
 }
 
 SPDesktop*
@@ -177,10 +184,14 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
             // If the current desktop is empty, open the document there
             desktop->change_document(doc);
         } else {
-            // create a whole new desktop and window
-            SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
-            sp_create_window(dtw, TRUE);
-            desktop = static_cast<SPDesktop*>(dtw->view);
+            if (!Inkscape::NSApplication::Application::getNewGui()) {
+                // create a whole new desktop and window
+                SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
+                sp_create_window(dtw, TRUE);
+                desktop = static_cast<SPDesktop*>(dtw->view);
+            } else {
+                desktop = Inkscape::NSApplication::Editor::createDesktop (doc);
+            }
         }
         
         doc->virgin = FALSE;
@@ -234,17 +245,10 @@ sp_file_revert_dialog()
     if (repr->attribute("sodipodi:modified") != NULL) {
         gchar *text = g_strdup_printf(_("Changes will be lost!  Are you sure you want to reload document %s?"), uri);
 
-        GtkWidget *dialog = gtk_message_dialog_new(
-                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(desktop->owner))),
-                GTK_DIALOG_DESTROY_WITH_PARENT,
-                GTK_MESSAGE_WARNING,
-                GTK_BUTTONS_YES_NO,
-                text);
-        gint response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        bool response = desktop->warnDialog (text);
         g_free(text);
 
-        if (response != GTK_RESPONSE_YES) {
+        if (!response) {
             do_revert = false;
         }
     }

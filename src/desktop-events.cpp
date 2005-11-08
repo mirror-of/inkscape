@@ -114,9 +114,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                                                       ? NR::Y
                                                       : NR::X ];
                 sp_guideline_set_position(SP_GUIDELINE(guide), guide_pos_dt);
-                desktop->set_coordinate_status(event_dt, ( horiz
-                                                                      ? SP_COORDINATES_UNDERLINE_Y
-                                                                      : SP_COORDINATES_UNDERLINE_X ));
+                desktop->set_coordinate_status(event_dt);
                 desktop->setPosition (event_dt);
             }
             break;
@@ -143,7 +141,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     sp_repr_unref(repr);
                     sp_document_done(SP_DT_DOCUMENT(desktop));
                 }
-                desktop->set_coordinate_status(event_dt, 0);
+                desktop->set_coordinate_status(event_dt);
             }
 	default:
             break;
@@ -202,7 +200,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 NR::Point const motion_dt( motion_w * desktop->w2d );
                 sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, motion_dt), false);
                 moved = true;
-                desktop->set_coordinate_status(motion_dt, 0);
+                desktop->set_coordinate_status(motion_dt);
                 desktop->setPosition (motion_dt);
                 ret = TRUE;
             }
@@ -222,7 +220,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     }
                     moved = false;
                     sp_document_done(SP_DT_DOCUMENT(desktop));
-                    desktop->set_coordinate_status(event_dt, 0);
+                    desktop->set_coordinate_status(event_dt);
                     desktop->setPosition (event_dt);
                 }
                 dragging = false;
