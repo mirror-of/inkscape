@@ -41,6 +41,7 @@
 #include <gtkmm/tooltips.h>
 #include <gtkmm/accelmap.h>
 #include <glibmm/i18n.h>
+#include <pangomm/layout.h>
 
 #include "macros.h"
 #include "path-prefix.h"
