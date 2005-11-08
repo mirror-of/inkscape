@@ -105,19 +105,23 @@ sp_svg_number_write_d(gchar *buf, double val, unsigned int tprec, unsigned int f
     fval = val - dival;
     /* Write integra */
     i += sp_svg_number_write_i(buf + i, ival);
+    int end_i = i;
     if ((fprec > 0) && (padf || (fval > 0.0))) {
         buf[i++] = '.';
         while ((fprec > 0) && (padf || (fval > 0.0))) {
             fval *= 10.0;
             dival = floor(fval);
             fval -= dival;
-            buf[i++] = '0' + (int) dival;
+            int const int_dival = (int) dival;
+            buf[i++] = '0' + int_dival;
+            if (int_dival != 0) {
+                end_i = i;
+            }
             fprec -= 1;
         }
-
     }
-    buf[i] = 0;
-    return i;
+    buf[end_i] = 0;
+    return end_i;
 }
 
 unsigned int
