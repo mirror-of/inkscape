@@ -132,6 +132,7 @@ EXTRA_DIST = \
 	packaging/win32/inkscape.nsi.uninstall	\
 	packaging/win32/english.nsh	\
 	packaging/win32/german.nsh	\
+	packaging/win32/header.bmp	\
 	po/Makefile.mingw \
 	src/Makefile.mingw src/inkscape_version.h.mingw src/inkscape.rc	src/makedef.pl \
 	src/helper/sp-marshal.h.mingw src/helper/sp-marshal.cpp.mingw
