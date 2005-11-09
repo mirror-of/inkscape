@@ -3598,7 +3598,7 @@ sp_css_attr_unset_uris(SPCSSAttr *css)
 }
 
 /**
- * Scale a property.
+ * Scale a single-value property.
  */
 void
 sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
@@ -3616,8 +3616,40 @@ sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
             return;
         }
         Inkscape::CSSOStringStream os;
-        os << wd << units; // reattach units!
+        os << wd << units; // reattach units
         sp_repr_css_set_property(css, property, os.str().c_str());
+    }
+}
+
+/**
+ * Scale a list-of-values property.
+ */
+void
+sp_css_attr_scale_property_list(SPCSSAttr *css, gchar const *property, double ex)
+{
+    gchar const *string = sp_repr_css_property(css, property, NULL);
+    if (string) {
+        Inkscape::CSSOStringStream os;
+        gchar **a = g_strsplit(string, ",", 10000);
+        bool first = true;
+        for (gchar **i = a; i != NULL; i++) {
+            gchar *w = *i;
+            if (w == NULL)
+                break;
+            gchar *units = NULL;
+            double wd = g_ascii_strtod(w, &units) * ex;
+            if (w == units) {// nothing converted, non-numeric value ("none" or "inherit"); do nothing
+                g_strfreev(a);
+                return;
+            }
+            if (!first) {
+                os << ",";
+            }
+            os << wd << units; // reattach units
+            first = false;
+        }
+        sp_repr_css_set_property(css, property, os.str().c_str());
+        g_strfreev(a);
     }
 }
 
@@ -3629,7 +3661,8 @@ sp_css_attr_scale(SPCSSAttr *css, double ex)
 {
     sp_css_attr_scale_property_single(css, "baseline-shift", ex);
     sp_css_attr_scale_property_single(css, "stroke-width", ex);
-   /// \todo FIXME: scale stroke-dashoffset too; but only after making scale_property_list for stroke-dasharray
+    sp_css_attr_scale_property_list   (css, "stroke-dasharray", ex);
+    sp_css_attr_scale_property_single(css, "stroke-dashoffset", ex);
     sp_css_attr_scale_property_single(css, "font-size", ex);
     sp_css_attr_scale_property_single(css, "kerning", ex);
     sp_css_attr_scale_property_single(css, "letter-spacing", ex);
