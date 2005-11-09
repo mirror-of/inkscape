@@ -504,7 +504,7 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
  */
 
 static GtkWidget *
-sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::UI::View::View *view)
+sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::UI::View::View *view, bool radio = false, GSList *group = NULL)
 {
     SPAction *action;
     GtkWidget *item;
@@ -532,10 +532,18 @@ sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::
             gtk_misc_set_alignment((GtkMisc *) accel_lbl, 1.0, 0.5);
             gtk_box_pack_end((GtkBox *) hb, accel_lbl, FALSE, FALSE, 0);
             gtk_widget_show_all(hb);
-            item = gtk_image_menu_item_new();
+            if (radio) {
+                item = gtk_radio_menu_item_new (group);
+            } else {
+                item = gtk_image_menu_item_new();
+            }
             gtk_container_add((GtkContainer *) item, hb);
         } else {
-            item = gtk_image_menu_item_new_with_mnemonic(action->name);
+            if (radio) {
+                item = gtk_radio_menu_item_new_with_mnemonic (group, action->name);
+            } else {
+                item = gtk_image_menu_item_new_with_mnemonic (action->name);
+            }
         }
 
         nr_active_object_add_listener((NRActiveObject *)action, (NRObjectEventVector *)&menu_item_event_vector, sizeof(SPActionEventVector), item);
@@ -813,6 +821,7 @@ sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI:
 {
     if (menus == NULL) return;
     if (menu == NULL)  return;
+    GSList *group = NULL;
 
     for (Inkscape::XML::Node *menu_pntr = menus;
          menu_pntr != NULL;
@@ -830,7 +839,16 @@ sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI:
             Inkscape::Verb *verb = Inkscape::Verb::getbyid(verb_name);
 
             if (verb != NULL) {
-                sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
+                if (menu_pntr->attribute("radio") != NULL) {
+                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, true, group);
+                    group = gtk_radio_menu_item_get_group( GTK_RADIO_MENU_ITEM(item));
+                    if (menu_pntr->attribute("default") != NULL) {
+                        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
+                    }
+                } else {
+                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
+                    group = NULL;
+                }
             } else {
                 gchar string[120];
                 g_snprintf(string, 120, _("Verb \"%s\" Unknown"), verb_name);
