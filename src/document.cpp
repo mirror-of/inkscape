@@ -56,10 +56,9 @@
 #include "version.h"
 #include "dir-util.h"
 #include "unit-constants.h"
+#include "prefs-utils.h"
 
 #include "display/nr-arena-item.h"
-#include "display/nr-arena.h"
-#include "display/canvas-arena.h"
 
 #include "dialogs/rdf.h"
 
@@ -800,8 +799,6 @@ find_items_in_area(GSList *s, SPGroup *group, unsigned int dkey, NRRect const *a
     return s;
 }
 
-extern gdouble nr_arena_global_delta;
-
 /**
 Returns true if an item is among the descendants of group (recursively).
  */
@@ -827,13 +824,15 @@ sp_document_item_from_list_at_point_bottom(unsigned int dkey, SPGroup *group, GS
 {
     g_return_val_if_fail(group, NULL);
 
+    gdouble delta = prefs_get_double_attribute ("options.cursortolerance", "value", 1.0);
+
     for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 
         if (!SP_IS_ITEM(o)) continue;
 
         SPItem *item = SP_ITEM(o);
         NRArenaItem *arenaitem = sp_item_get_arenaitem(item, dkey);
-        if (nr_arena_item_invoke_pick(arenaitem, p, nr_arena_global_delta, 1) != NULL
+        if (nr_arena_item_invoke_pick(arenaitem, p, delta, 1) != NULL
             && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
             if (g_slist_find((GSList *) list, item) != NULL)
                 return item;
@@ -862,6 +861,8 @@ find_item_at_point(unsigned int dkey, SPGroup *group, NR::Point const p, gboolea
 {
     SPItem *seen = NULL, *newseen = NULL;
 
+    gdouble delta = prefs_get_double_attribute ("options.cursortolerance", "value", 1.0);
+
     for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
         if (!SP_IS_ITEM(o)) continue;
 
@@ -884,7 +885,7 @@ find_item_at_point(unsigned int dkey, SPGroup *group, NR::Point const p, gboolea
             NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
             // seen remembers the last (topmost) of items pickable at this point
-            if (nr_arena_item_invoke_pick(arenaitem, p, nr_arena_global_delta, 1) != NULL
+            if (nr_arena_item_invoke_pick(arenaitem, p, delta, 1) != NULL
                 && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
                 seen = child;
             }
@@ -902,6 +903,8 @@ find_group_at_point(unsigned int dkey, SPGroup *group, NR::Point const p)
 {
     SPItem *seen = NULL;
 
+    gdouble delta = prefs_get_double_attribute ("options.cursortolerance", "value", 1.0);
+
     for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
         if (!SP_IS_ITEM(o)) continue;
         if (SP_IS_GROUP(o) && SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER) {
@@ -915,7 +918,7 @@ find_group_at_point(unsigned int dkey, SPGroup *group, NR::Point const p)
             NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
             // seen remembers the last (topmost) of groups pickable at this point
-            if (nr_arena_item_invoke_pick(arenaitem, p, nr_arena_global_delta, 1) != NULL) {
+            if (nr_arena_item_invoke_pick(arenaitem, p, delta, 1) != NULL) {
                 seen = child;
             }
         }
