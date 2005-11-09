@@ -203,11 +203,11 @@ nr_lgradient_render_R8G8B8A8N (NRLGradientRenderer *lgr, unsigned char *px, int 
 				d[2] = s[2];
 				d[3] = 255;
 			} else if (s[3] != 0) {
-				ca = 65025 - (255 - s[3]) * (255 - d[3]);
+				ca = NR_A7(s[3],d[3]);
 				d[0] = NR_COMPOSENNN_A7 (s[0], s[3], d[0], d[3], ca);
 				d[1] = NR_COMPOSENNN_A7 (s[1], s[3], d[1], d[3], ca);
 				d[2] = NR_COMPOSENNN_A7 (s[2], s[3], d[2], d[3], ca);
-				d[3] = (ca + 127) / 255;
+				d[3] = NR_PREMUL_SINGLE(ca);
 			}
 			d += 4;
 			pos += lgr->dx;

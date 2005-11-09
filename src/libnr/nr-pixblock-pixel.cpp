@@ -132,10 +132,10 @@ nr_compose_pixblock_pixblock_pixel (NRPixBlock *dpb, unsigned char *d, const NRP
 				d[0] = 255;
 				break;
 			case NR_PIXBLOCK_MODE_R8G8B8A8N:
-				d[0] = (65025 - (255 - s[3]) * (255 - d[0]) + 127) / 255;
+				d[0] = NR_A7_NORMALIZED(s[3],d[0]);
 				break;
 			case NR_PIXBLOCK_MODE_R8G8B8A8P:
-				d[0] = (65025 - (255 - s[3]) * (255 - d[0]) + 127) / 255;
+				d[0] = NR_A7_NORMALIZED(s[3],d[0]);
 				break;
 			default:
 				break;
@@ -210,13 +210,13 @@ nr_compose_pixblock_pixblock_pixel (NRPixBlock *dpb, unsigned char *d, const NRP
 				d[0] = NR_COMPOSENPP (s[0], s[3], d[0], d[3]);
 				d[1] = NR_COMPOSENPP (s[1], s[3], d[1], d[3]);
 				d[2] = NR_COMPOSENPP (s[2], s[3], d[2], d[3]);
-				d[3] = (65025 - (255 - s[3]) * (255 - d[3]) + 127) / 255;
+				d[3] = NR_A7_NORMALIZED(s[3],d[3]);
 				break;
 			case NR_PIXBLOCK_MODE_R8G8B8A8P:
 				d[0] = NR_COMPOSEPPP (s[0], s[3], d[0], d[3]);
 				d[1] = NR_COMPOSEPPP (s[1], s[3], d[1], d[3]);
 				d[2] = NR_COMPOSEPPP (s[2], s[3], d[2], d[3]);
-				d[3] = (65025 - (255 - s[3]) * (255 - d[3]) + 127) / 255;
+				d[3] = NR_A7_NORMALIZED(s[3],d[3]);
 				break;
 			default:
 				break;
