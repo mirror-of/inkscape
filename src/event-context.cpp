@@ -58,6 +58,7 @@
 #include "knotholder.h"
 #include "object-edit.h"
 #include "attributes.h"
+#include "rubberband.h"
 
 #include "event-context.h"
 
@@ -324,6 +325,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 {
     static NR::Point button_w;
     static unsigned int panning = 0;
+    static unsigned int zoom_rb = 0;
 
     SPDesktop *desktop = event_context->desktop;
 
@@ -372,10 +374,14 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 
                     button_w = NR::Point(event->button.x,
                                          event->button.y);
-                    panning = 2;
-                    sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                    if (event->button.state == GDK_SHIFT_MASK) {
+                        zoom_rb = 2;
+                    } else {
+                        panning = 2;
+                        sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                             GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
                             NULL, event->button.time-1);
+                    }
                     ret = TRUE;
                     break;
                 case 3:
@@ -431,26 +437,52 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                     event_context->desktop->scroll_world(moved_w);
                     ret = TRUE;
                 }
+            } else if (zoom_rb) {
+                NR::Point const motion_w(event->motion.x, event->motion.y);
+                NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+
+                if ( within_tolerance
+                     && ( abs( (gint) event->motion.x - xp ) < tolerance )
+                     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+                    break; // do not drag if we're within tolerance from origin
+                }
+
+                if (within_tolerance) {
+                    sp_rubberband_start(desktop, motion_dt);
+                } else {
+                    sp_rubberband_move(motion_dt);
+                }
+
+                // Once the user has moved farther than tolerance from the original location 
+                // (indicating they intend to move the object, not click), then always process the 
+                // motion notify coordinates as given (no snapping back to origin)
+                within_tolerance = false; 
             }
             break;
         case GDK_BUTTON_RELEASE:
+            if (within_tolerance && (panning || zoom_rb)) {
+                dontgrab ++;
+                NR::Point const event_w(event->button.x, event->button.y);
+                NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
+                double const zoom_power = ( (event->button.state & GDK_SHIFT_MASK)
+                                            ? -dontgrab : dontgrab );
+                desktop->zoom_relative_keep_point(event_dt,
+                                                  pow(zoom_inc, zoom_power));
+                gtk_timeout_add(250, (GtkFunction) grab_allow_again, NULL);
+            }
             if (panning == event->button.button) {
                 panning = 0;
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 
-                        event->button.time);
-                if (within_tolerance) {
-                    dontgrab ++;
-                    NR::Point const event_w(event->button.x, event->button.y);
-                    NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
-                    double const zoom_power = ( (event->button.state & GDK_SHIFT_MASK)
-                            ? -dontgrab : dontgrab );
-                    desktop->zoom_relative_keep_point(event_dt,
-                            pow(zoom_inc, zoom_power));
-                    gtk_timeout_add(250, (GtkFunction) grab_allow_again, NULL);
-                }
-
+                                      event->button.time);
                 ret = TRUE;
-            } 
+            } else if (zoom_rb == event->button.button) {
+                zoom_rb = 0;
+                NRRect b;
+                if (sp_rubberband_rect (&b) && !within_tolerance) {
+                    desktop->set_display_area(b.x0, b.y0, b.x1, b.y1, 10);
+                }
+                sp_rubberband_stop();
+            }
             xp = yp = 0; 
             break;
         case GDK_KEY_PRESS:
