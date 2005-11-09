@@ -3034,7 +3034,7 @@ msgstr ""
 
 #: ../src/extension/implementation/script.cpp:858
 msgid ""
- "Inkscape has received additional data from the script executed.  The script "
+"Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
 "expected."
 msgstr ""
