@@ -28,20 +28,23 @@ class Scalar : public Labelled
 {
 public:
     Scalar(Glib::ustring const &label,
+           Glib::ustring const &tooltip,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",
-           bool mnemonic = false);
+           bool mnemonic = true);
     Scalar(Glib::ustring const &label,
+           Glib::ustring const &tooltip,
            unsigned digits,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",
-           bool mnemonic = false);
+           bool mnemonic = true);
     Scalar(Glib::ustring const &label,
+           Glib::ustring const &tooltip,
            Gtk::Adjustment &adjust,
            unsigned digits = 0,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",
-           bool mnemonic = false);
+           bool mnemonic = true);
 
     unsigned getDigits() const;
     double  getStep() const;
@@ -60,6 +63,9 @@ public:
     void    update();
 
     Glib::SignalProxy0<void> signal_value_changed();
+
+    bool setProgrammatically; // true if the value was set by setValue, not changed by the user; 
+                                    // if a callback checks it, it must reset it back to false
 };
 
 } // namespace Widget

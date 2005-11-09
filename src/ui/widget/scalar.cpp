@@ -34,11 +34,12 @@ namespace Widget {
  *                  indicates the next character should be used for the
  *                  mnemonic accelerator key (defaults to false).
  */
-Scalar::Scalar(Glib::ustring const &label,
+Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
-    : Labelled(label, new Gtk::SpinButton(), suffix, icon, mnemonic)
+    : Labelled(label, tooltip, new Gtk::SpinButton(), suffix, icon, mnemonic),
+      setProgrammatically(false)
 {
 }
 
@@ -53,12 +54,13 @@ Scalar::Scalar(Glib::ustring const &label,
  *                  indicates the next character should be used for the
  *                  mnemonic accelerator key (defaults to false).
  */
-Scalar::Scalar(Glib::ustring const &label,
+Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
                unsigned digits,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
-    : Labelled(label, new Gtk::SpinButton(0.0, digits), suffix, icon, mnemonic)
+    : Labelled(label, tooltip, new Gtk::SpinButton(0.0, digits), suffix, icon, mnemonic),
+      setProgrammatically(false)
 {
 }
 
@@ -72,15 +74,16 @@ Scalar::Scalar(Glib::ustring const &label,
  * \param icon      Icon filename, placed before the label (defaults to "").
  * \param mnemonic  Mnemonic toggle; if true, an underscore (_) in the label
  *                  indicates the next character should be used for the
- *                  mnemonic accelerator key (defaults to false).
+ *                  mnemonic accelerator key (defaults to true).
  */
-Scalar::Scalar(Glib::ustring const &label,
+Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
                Gtk::Adjustment &adjust,
                unsigned digits,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
-    : Labelled(label, new Gtk::SpinButton(adjust, 0.0, digits), suffix, icon, mnemonic)
+    : Labelled(label, tooltip, new Gtk::SpinButton(adjust, 0.0, digits), suffix, icon, mnemonic),
+      setProgrammatically(false)
 {
 }
 
@@ -178,6 +181,7 @@ void
 Scalar::setValue(double value)
 {
     g_assert(_widget != NULL);
+    setProgrammatically = true; // callback is supposed to reset back, if it cares
     static_cast<Gtk::SpinButton*>(_widget)->set_value(value);
 }
 
