@@ -1045,7 +1045,7 @@ sp_desktop_dialog(void)
                                "inkscape:pageopacity", 0);
 
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        spw_checkbutton(dlg, t, _("Show canvas border"),
+        spw_checkbutton(dlg, t, _("Show page border"),
                         "showborder", 0, 1, 0, cb);
 
         cb = G_CALLBACK(sp_dtw_border_layer_toggled);
@@ -1053,8 +1053,8 @@ sp_desktop_dialog(void)
                         "borderlayer", 0, 2, 0, cb);
 
         sp_color_picker_button(NULL, true, dlg, t, _("Border color:"),
-                               "bordercolor", _("Canvas border color"),
-                               _("Color of the canvas border"),
+                               "bordercolor", _("Page border color"),
+                               _("Color of the page border"),
                                "borderopacity", 4);
 
 	/* Page Shadow toggle */
@@ -1088,7 +1088,7 @@ sp_desktop_dialog(void)
         gtk_widget_show(hb);
         gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
 
-        l = gtk_label_new(_("Canvas size:"));
+        l = gtk_label_new(_("Page size:"));
         gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
         gtk_widget_show(l);
         gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
@@ -1123,7 +1123,7 @@ sp_desktop_dialog(void)
         gtk_widget_show(hb);
         gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
 
-        l = gtk_label_new(_("Canvas orientation:"));
+        l = gtk_label_new(_("Page orientation:"));
         gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
         gtk_widget_show(l);
         gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
@@ -1150,7 +1150,7 @@ sp_desktop_dialog(void)
         gtk_option_menu_set_menu(GTK_OPTION_MENU(om), m);
 
         /* Custom paper frame */
-        GtkWidget *f = gtk_frame_new(_("Custom canvas"));
+        GtkWidget *f = gtk_frame_new(_("Custom size"));
         gtk_widget_show(f);
         gtk_box_pack_start(GTK_BOX(vb), f, FALSE, FALSE, 0);
 
