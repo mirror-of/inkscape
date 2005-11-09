@@ -40,9 +40,12 @@ public:
     double        getDefaultStep() const;
     double        getDefaultPage() const;
 
-    double        getConversion(Glib::ustring const &new_unit_abbr) const;
+    double        getConversion(Glib::ustring const &new_unit_abbr, Glib::ustring const &old_unit_abbr = "no_unit") const;
 
     bool          isAbsolute() const;
+    bool          isRadial() const;
+
+    UnitTable   &getUnitTable() {return _unit_table;}
 
 protected:
     static UnitTable  _unit_table;

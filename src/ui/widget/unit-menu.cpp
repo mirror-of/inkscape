@@ -46,13 +46,7 @@ UnitMenu::~UnitMenu() {
 bool
 UnitMenu::setUnitType(UnitType unit_type) 
 {
-    if (_type != UNIT_TYPE_NONE) {
-        // Empty existing unit definitions
-        clear_text();
-        _type = UNIT_TYPE_NONE;
-    }
-
-    /* Fill in the unit widget with unit entries from the unit table */
+    /* Expand the unit widget with unit entries from the unit table */
     UnitTable::UnitMap m = _unit_table.units(unit_type);
     UnitTable::UnitMap::iterator iter = m.begin();
     while(iter != m.end()) {
@@ -145,9 +139,11 @@ UnitMenu::getDefaultPage() const
  *  new_unit_abbr.
  */
 double
-UnitMenu::getConversion(Glib::ustring const &new_unit_abbr) const
+UnitMenu::getConversion(Glib::ustring const &new_unit_abbr, Glib::ustring const &old_unit_abbr) const
 {
     double old_factor = getUnit().factor;
+    if (old_unit_abbr != "no_unit")
+        old_factor = _unit_table.getUnit(old_unit_abbr).factor;
     Unit new_unit = _unit_table.getUnit(new_unit_abbr);
 
     // Catch the case of zero or negative unit factors (error!)
@@ -160,12 +156,19 @@ UnitMenu::getConversion(Glib::ustring const &new_unit_abbr) const
     return old_factor / new_unit.factor;
 }
 
-/** Returns true if the given unit type is dimensionless 
- *  (i.e., a percentage value) 
+/** Returns true if the selected unit is not dimensionless 
+ *  (false for %, true for px, pt, cm, etc) 
  */
 bool
 UnitMenu::isAbsolute() const {
     return getUnitType() != UNIT_TYPE_DIMENSIONLESS;
+}
+
+/** Returns true if the selected unit is radial (deg or rad)
+ */
+bool
+UnitMenu::isRadial() const {
+    return getUnitType() == UNIT_TYPE_RADIAL;
 }
 
 } // namespace Widget
