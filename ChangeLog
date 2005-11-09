@@ -4,7 +4,9 @@
 	  OS X 10.4 and earlier versions of the OS without altering the script.
 	  Also, add a note that Inkscape needs to be configured with
 	  --enable-osxapp when building the OS X package.
-	
+
+	* po/nl.po: Fix an "Unmatched closing </b>" warning.
+
 2005-11-08  Ralf Stephan <ralf@ark.in-berlin.de>
 
     merged with branch CXXIFICATION_VIEW_AND_WIDGET

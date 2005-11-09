@@ -4632,7 +4632,7 @@ msgstr "Lijnen uit de losse pols aan het tekenen"
 
 #: ../src/pencil-context.cpp:330
 msgid "<b>Drag</b> to continue the path from this point."
-msgstr "<B>Sleep</b> om vanaf hier verder te gaan met een pad."
+msgstr "<b>Sleep</b> om vanaf hier verder te gaan met een pad."
 
 #. Write curves to object
 #: ../src/pencil-context.cpp:389
