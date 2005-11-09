@@ -66,7 +66,6 @@ static void sp_item_widget_setup (SPWidget *spw, Inkscape::Selection *selection)
 static void sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_hidden_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw);
-static void sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw);
 
 static void
 sp_item_dialog_destroy (GtkObject *object, gpointer data)
@@ -90,22 +89,6 @@ sp_item_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
     return FALSE; // which means, go ahead and destroy it
 
 } 
-
-void 
-transform_table_cell (GtkWidget *spw, GtkWidget *t, const gchar *label, int x, int y)
-{
-    GtkObject *a = gtk_adjustment_new (1.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (spw), label, a);
-    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 4);
-    gtk_entry_set_width_chars (GTK_ENTRY (sb), 5);
-    gtk_table_attach ( GTK_TABLE (t), sb, x, x + 1, y, y + 1, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), 
-                         spw );
-}
-
 
 /**
  * \brief  Creates new instance of item properties widget 
@@ -257,24 +240,6 @@ sp_item_widget_new (void)
                          spw );
     gtk_object_set_data (GTK_OBJECT (spw), "sensitive", cb);
 
-
-    /* Transformation matrix */
-    f = gtk_frame_new (_("Transformation matrix"));
-    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-    t = gtk_table_new (2, 3, TRUE);
-    gtk_container_set_border_width(GTK_CONTAINER(t), 4);
-    gtk_table_set_row_spacings (GTK_TABLE (t), 4);
-    gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-    gtk_container_add (GTK_CONTAINER (f), t);
-
-    transform_table_cell (spw, t, "t0", 0, 0);
-    transform_table_cell (spw, t, "t1", 0, 1);
-    transform_table_cell (spw, t, "t2", 1, 0);
-    transform_table_cell (spw, t, "t3", 1, 1);
-    transform_table_cell (spw, t, "t4", 2, 0);
-    transform_table_cell (spw, t, "t5", 2, 1);
-
     gtk_widget_show_all (spw);
 
     sp_item_widget_setup (SP_WIDGET (spw), SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
@@ -334,15 +299,6 @@ sp_item_widget_setup ( SPWidget *spw, Inkscape::Selection *selection )
     /* Hidden */
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "hidden"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), item->isExplicitlyHidden());
-
-    /* Transform */
-    {
-        char const *const names[] = {"t0", "t1", "t2", "t3", "t4", "t5"};
-        for (unsigned i = 0; i < 6; ++i) {
-            GtkAdjustment *adj = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(spw), names[i]));
-            gtk_adjustment_set_value(adj, item->transform[i]);
-        }
-    }
 
     if (SP_OBJECT_IS_CLONED (item)) {
     
@@ -483,36 +439,6 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
 
 } // end of sp_item_widget_label_changed()
 
-
-static void
-sp_item_widget_transform_value_changed ( GtkWidget *widget, SPWidget *spw )
-{
-    if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
-        return;
-
-    SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
-    g_return_if_fail (item != NULL);
-
-    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
-
-    NRMatrix t;
-    for (unsigned i = 0; i < 6; i++) {
-        gchar c[8];
-        g_snprintf (c, 8, "t%u", i);
-        t.c[i] = 
-            GTK_ADJUSTMENT (gtk_object_get_data (GTK_OBJECT (spw), c))->value;
-    }
-
-    gchar c[64];
-    sp_svg_transform_write (c, 64, &t);
-    SPException ex;
-    SP_EXCEPTION_INIT (&ex);
-    sp_object_setAttribute (SP_OBJECT (item), "transform", c, &ex);
-
-    sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "ItemDialog:transform");
-
-    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
-}
 
 /**
  * \brief  Dialog 
