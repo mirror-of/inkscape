@@ -35,16 +35,17 @@ namespace Widget {
  * \param icon      Icon filename, placed before the label (defaults to "").
  * \param mnemonic  Mnemonic toggle; if true, an underscore (_) in the text
  *                  indicates the next character should be used for the
- *                  mnemonic accelerator key (defaults to false).
+ *                  mnemonic accelerator key (defaults to true).
  */
-Labelled::Labelled(Glib::ustring const &label,
+Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
                    Gtk::Widget *widget,
                    Glib::ustring const &suffix,
                    Glib::ustring const &icon,
                    bool mnemonic)
     : _widget(widget),
       _label(new Gtk::Label(label, 0.0, 0.5, mnemonic)),
-      _suffix(new Gtk::Label(suffix, 0.0, 0.5))
+      _suffix(new Gtk::Label(suffix, 0.0, 0.5)),
+      _tooltips()
 {
     g_assert(g_utf8_validate(icon.c_str(), -1, NULL));
     if (icon != "") {
@@ -56,6 +57,7 @@ Labelled::Labelled(Glib::ustring const &label,
     if (mnemonic) {
         _label->set_mnemonic_widget(*_widget);
     }
+    _tooltips.set_tip(*_widget, tooltip);
 }
 
 

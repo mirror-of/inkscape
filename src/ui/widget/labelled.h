@@ -17,6 +17,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/image.h>
+#include <gtkmm/tooltips.h>
 
 namespace Inkscape {
 namespace UI {
@@ -25,11 +26,11 @@ namespace Widget {
 class Labelled : public Gtk::HBox
 {
 public:
-    Labelled(Glib::ustring const &label,
+    Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
              Gtk::Widget *widget,
              Glib::ustring const &suffix = "",
              Glib::ustring const &icon = "",
-             bool mnemonic = false);
+             bool mnemonic = true);
 
     /**
      * Allow the setting of the width of the labelled widget
@@ -42,6 +43,7 @@ protected:
     Gtk::Label   *_label;
     Gtk::Label   *_suffix;
     Gtk::Widget  *_icon;
+    Gtk::Tooltips _tooltips;
 };
 
 } // namespace Widget
