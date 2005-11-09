@@ -69,7 +69,7 @@ static GtkTooltips *tooltips = NULL;
 static win_data wd;
 
 /* impossible original values to make sure they are read from prefs */
-static gint x = -1000, y = -1000, w = 0, h = 0;
+static gint x = -1000, y = -1000;
 static gchar *prefs_path = "dialogs.documentoptions";
 
 struct PaperSize {
@@ -261,12 +261,9 @@ static bool
 sp_dtw_dialog_delete(GtkObject *object, GdkEvent *event, gpointer data)
 {
     gtk_window_get_position((GtkWindow *) dlg, &x, &y);
-    gtk_window_get_size((GtkWindow *) dlg, &w, &h);
 
     prefs_set_int_attribute(prefs_path, "x", x);
     prefs_set_int_attribute(prefs_path, "y", y);
-    prefs_set_int_attribute(prefs_path, "w", w);
-    prefs_set_int_attribute(prefs_path, "h", h);
 
     return FALSE; // which means, go ahead and destroy it
 }
@@ -878,19 +875,10 @@ sp_desktop_dialog(void)
             y = prefs_get_int_attribute(prefs_path, "y", 0);
         }
 
-        if (w == 0 || h == 0) {
-            w = prefs_get_int_attribute(prefs_path, "w", 0);
-            h = prefs_get_int_attribute(prefs_path, "h", 0);
-        }
-
         if (x != 0 || y != 0) {
             gtk_window_move((GtkWindow *) dlg, x, y);
         } else {
             gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
-        }
-
-        if (w && h) {
-            gtk_window_resize((GtkWindow *) dlg, w, h);
         }
 
         sp_transientize(dlg);
