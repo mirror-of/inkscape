@@ -146,87 +146,81 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 {
 	NRArenaGlyphs *glyphs;
 	raster_font *rfont;
-	NRMatrix t;
-	NRRect bbox;
 
 	glyphs = NR_ARENA_GLYPHS (item);
-
-	/* Request repaint old area if needed */
-	/* fixme: Think about it a bit (Lauris) */
-	if (!nr_rect_l_test_empty (&item->bbox)) {
-		nr_arena_request_render_rect (item->arena, &item->bbox);
-		nr_rect_l_set_empty (&item->bbox);
-	}
-
-	/* Release state data */
-//	if (glyphs->stroke_shp) {
-//    delete glyphs->stroke_shp;
-//		glyphs->stroke_shp = NULL;
-//	}
 
 	if (!glyphs->font || !glyphs->style) return NR_ARENA_ITEM_STATE_ALL;
 	if ((glyphs->style->fill.type == SP_PAINT_TYPE_NONE) && (glyphs->style->stroke.type == SP_PAINT_TYPE_NONE)) return NR_ARENA_ITEM_STATE_ALL;
 
-	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
+	NRRect bbox;
+	bbox.x0 = bbox.y0 = NR_HUGE;
+	bbox.x1 = bbox.y1 = -NR_HUGE;
 
 	if (glyphs->style->fill.type != SP_PAINT_TYPE_NONE) {
-		NRRect narea;
+		NRMatrix t;
 		nr_matrix_multiply (&t, &glyphs->g_transform, &gc->transform);
 		glyphs->x = t.c[4];
 		glyphs->y = t.c[5];
-    t.c[4]=0;
-    t.c[5]=0;
-		rfont = glyphs->font->RasterFont(t,0);
+		t.c[4]=0;
+		t.c[5]=0;
+		rfont = glyphs->font->RasterFont(t, 0);
 		if (glyphs->rfont) glyphs->rfont->Unref();
 		glyphs->rfont = rfont;
-		if ( glyphs->rfont ) glyphs->rfont->BBox(glyphs->glyph, &narea);
-		bbox.x0 = narea.x0 + glyphs->x;
-		bbox.y0 = narea.y0 + glyphs->y;
-		bbox.x1 = narea.x1 + glyphs->x;
-		bbox.y1 = narea.y1 + glyphs->y;
+
+		if (glyphs->style->stroke.type == SP_PAINT_TYPE_NONE) { // Optimization: do fill bbox only if there's no stroke
+			NRRect narea;
+			if ( glyphs->rfont ) glyphs->rfont->BBox(glyphs->glyph, &narea);
+			bbox.x0 = narea.x0 + glyphs->x;
+			bbox.y0 = narea.y0 + glyphs->y;
+			bbox.x1 = narea.x1 + glyphs->x;
+			bbox.y1 = narea.y1 + glyphs->y;
+		}
 	}                               
 
 	if (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE) {
 		/* Build state data */
-		NRRect narea;
+		NRMatrix t;
 		nr_matrix_multiply (&t, &glyphs->g_transform, &gc->transform);
 		glyphs->x = t.c[4];
 		glyphs->y = t.c[5];
-    t.c[4]=0;
-    t.c[5]=0;
-	  const float scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
-	  if ( fabs(glyphs->style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
-      font_style nstyl;
-      nstyl.transform=t;
-      nstyl.stroke_width=MAX (0.125, glyphs->style->stroke_width.computed * scale);
-      if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_BUTT ) nstyl.stroke_cap=butt_straight;
-      if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_ROUND ) nstyl.stroke_cap=butt_round;
-      if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_SQUARE ) nstyl.stroke_cap=butt_square;
-      if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_MITER ) nstyl.stroke_join=join_pointy;
-      if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_ROUND ) nstyl.stroke_join=join_round;
-      if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_BEVEL ) nstyl.stroke_join=join_straight;
-      nstyl.stroke_miter_limit = glyphs->style->stroke_miterlimit.value;
-      nstyl.nbDash=0;
-      nstyl.dashes=NULL;
-		  if ( glyphs->style->stroke_dash.n_dash > 0 ) {
-        nstyl.nbDash=glyphs->style->stroke_dash.n_dash;
-        nstyl.dashes=(double*)malloc(nstyl.nbDash*sizeof(double));
-		    for (int i = 0; i < nstyl.nbDash; i++) nstyl.dashes[i]= glyphs->style->stroke_dash.dash[i] * scale;
-  		}
-		  rfont = glyphs->font->RasterFont( nstyl);
-      if ( nstyl.dashes ) free(nstyl.dashes);
-		  if (glyphs->sfont) glyphs->sfont->Unref();
-		  glyphs->sfont = rfont;
-		  if ( glyphs->sfont ) glyphs->sfont->BBox(glyphs->glyph, &narea);
-      narea.x0-=nstyl.stroke_width;
-      narea.y0-=nstyl.stroke_width;
-      narea.x1+=nstyl.stroke_width;
-      narea.y1+=nstyl.stroke_width;
-		  bbox.x0 = narea.x0 + glyphs->x;
-		  bbox.y0 = narea.y0 + glyphs->y;
-		  bbox.x1 = narea.x1 + glyphs->x;
-		  bbox.y1 = narea.y1 + glyphs->y;
-    }
+		t.c[4]=0;
+		t.c[5]=0;
+
+		const float scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
+		if ( fabs(glyphs->style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+			font_style nstyl;
+			nstyl.transform = t;
+			nstyl.stroke_width=MAX (0.125, glyphs->style->stroke_width.computed * scale);
+			if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_BUTT ) nstyl.stroke_cap=butt_straight;
+			if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_ROUND ) nstyl.stroke_cap=butt_round;
+			if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_SQUARE ) nstyl.stroke_cap=butt_square;
+			if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_MITER ) nstyl.stroke_join=join_pointy;
+			if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_ROUND ) nstyl.stroke_join=join_round;
+			if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_BEVEL ) nstyl.stroke_join=join_straight;
+			nstyl.stroke_miter_limit = glyphs->style->stroke_miterlimit.value;
+			nstyl.nbDash=0;
+			nstyl.dashes=NULL;
+			if ( glyphs->style->stroke_dash.n_dash > 0 ) {
+				nstyl.nbDash=glyphs->style->stroke_dash.n_dash;
+				nstyl.dashes=(double*)malloc(nstyl.nbDash*sizeof(double));
+				for (int i = 0; i < nstyl.nbDash; i++) nstyl.dashes[i]= glyphs->style->stroke_dash.dash[i] * scale;
+			}
+			rfont = glyphs->font->RasterFont( nstyl);
+			if ( nstyl.dashes ) free(nstyl.dashes);
+			if (glyphs->sfont) glyphs->sfont->Unref();
+			glyphs->sfont = rfont;
+
+			NRRect narea;
+			if ( glyphs->sfont ) glyphs->sfont->BBox(glyphs->glyph, &narea);
+			narea.x0-=nstyl.stroke_width;
+			narea.y0-=nstyl.stroke_width;
+			narea.x1+=nstyl.stroke_width;
+			narea.y1+=nstyl.stroke_width;
+			bbox.x0 = narea.x0 + glyphs->x;
+			bbox.y0 = narea.y0 + glyphs->y;
+			bbox.x1 = narea.x1 + glyphs->x;
+			bbox.y1 = narea.y1 + glyphs->y;
+		}
 	}
 	if (nr_rect_d_test_empty(&bbox)) return NR_ARENA_ITEM_STATE_ALL;
 
@@ -265,7 +259,7 @@ nr_arena_glyphs_pick (NRArenaItem *item, NR::Point p, gdouble delta, unsigned in
 	
 	const double x = p[NR::X];
 	const double y = p[NR::Y];
-	/* fixme: pt in rect*/
+	/* With text we take a simple approach: pick if the point is in a characher bbox */
 	if ((x >= item->bbox.x0) && (y >= item->bbox.y0) && (x <= item->bbox.x1) && (y <= item->bbox.y1)) return item;
 
 /*	NR::Point const thePt = p;
@@ -506,10 +500,10 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 	guint ret = item->state;
 
 	/* Fill */
-	if (style->fill.type != SP_PAINT_TYPE_NONE) {
+	if (style->fill.type != SP_PAINT_TYPE_NONE || item->arena->rendermode == RENDERMODE_OUTLINE) {
 		NRPixBlock m;
-		guint32 rgba;
 		nr_pixblock_setup_fast (&m, NR_PIXBLOCK_MODE_A8, area->x0, area->y0, area->x1, area->y1, TRUE);
+
 		/* Render children fill mask */
 		for (child = group->children; child != NULL; child = child->next) {
 			ret = nr_arena_glyphs_fill_mask (NR_ARENA_GLYPHS (child), area, &m);
@@ -518,10 +512,14 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 				return ret;
 			}
 		}
+
 		/* Composite into buffer */
-		switch (style->fill.type) {
-		case SP_PAINT_TYPE_COLOR:
-			if ( item->render_opacity ) {
+		if (style->fill.type == SP_PAINT_TYPE_COLOR || item->arena->rendermode == RENDERMODE_OUTLINE) {
+			guint32 rgba;
+			if (item->arena->rendermode == RENDERMODE_OUTLINE) {
+				// In outline mode, render fill only, using outlinecolor
+				rgba = item->arena->outlinecolor;
+			} else if ( item->render_opacity ) {
 				rgba = sp_color_get_rgba32_falpha (&style->fill.value.color,
                                            SP_SCALE24_TO_FLOAT (style->fill_opacity.value) *
                                            SP_SCALE24_TO_FLOAT (style->opacity.value));
@@ -530,20 +528,17 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 			}
 			nr_blit_pixblock_mask_rgba32 (pb, &m, rgba);
 			pb->empty = FALSE;
-			break;
-		case SP_PAINT_TYPE_PAINTSERVER:
+		} else if (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
 			if (ggroup->fill_painter) {
 				nr_arena_render_paintserver_fill (pb, area, ggroup->fill_painter, SP_SCALE24_TO_FLOAT (style->fill_opacity.value), &m);
 			}
-			break;
-		default:
-			break;
 		}
+
 		nr_pixblock_release (&m);
 	}
 
 	/* Stroke */
-	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
+	if (style->stroke.type != SP_PAINT_TYPE_NONE && !(item->arena->rendermode == RENDERMODE_OUTLINE)) {
 		NRPixBlock m;
 		guint32 rgba;
 		nr_pixblock_setup_fast (&m, NR_PIXBLOCK_MODE_A8, area->x0, area->y0, area->x1, area->y1, TRUE);
