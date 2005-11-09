@@ -1441,6 +1441,12 @@ ZoomVerb::perform(SPAction *action, void *data, void *pdata)
         case SP_VERB_VIEW_NEW_PREVIEW:
             sp_ui_new_view_preview();
             break;
+        case SP_VERB_VIEW_MODE_NORMAL:
+            dt->setDisplayModeNormal();
+            break;
+        case SP_VERB_VIEW_MODE_OUTLINE:
+            dt->setDisplayModeOutline();
+            break;
         case SP_VERB_VIEW_ICON_PREVIEW:
             show_panel( Inkscape::UI::Dialogs::IconPreviewPanel::getInstance(), "dialogs.iconpreview", SP_VERB_VIEW_ICON_PREVIEW );
             break;
@@ -2092,7 +2098,7 @@ Verb *Verb::_base_verbs[] = {
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR_PREFS, "ConnectorPrefs", N_("Connector Preferences"),
                     N_("Open Preferences for the Connector tool"), NULL),
 
-    /* Zooming */
+    /* Zoom/View */
     new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), "zoom_in"),
     new ZoomVerb(SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), "zoom_out"),
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), "rulers"),
@@ -2117,6 +2123,12 @@ Verb *Verb::_base_verbs[] = {
                  "view_new"),
     new ZoomVerb(SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"),
                  N_("New View Preview"), NULL/*"view_new_preview"*/),
+
+    new ZoomVerb(SP_VERB_VIEW_MODE_NORMAL, "ViewModeNormal", N_("_Normal"),
+                 N_("Switch to normal display mode"), NULL),
+    new ZoomVerb(SP_VERB_VIEW_MODE_OUTLINE, "ViewModeOutline", N_("_Outline"),
+                 N_("Switch to outline (wireframe) display mode"), NULL),
+
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview"),
                  N_("Open a window to preview items at different icon resolutions"), NULL/*"view_icon_preview"*/),
     new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"),
