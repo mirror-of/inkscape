@@ -22,9 +22,9 @@ namespace Dialog {
 
 FillAndStroke::FillAndStroke() 
     : Dialog ("dialogs.fillstroke", SP_VERB_DIALOG_FILL_STROKE),
-      _page_fill("Fill", 1, 1),
-      _page_stroke_paint("Stroke paint", 1, 1),
-      _page_stroke_style("Stroke style", 1, 1)
+      _page_fill(1, 1),
+      _page_stroke_paint(1, 1),
+      _page_stroke_style(1, 1)
 {
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();

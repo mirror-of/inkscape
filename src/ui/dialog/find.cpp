@@ -22,7 +22,7 @@ namespace Dialog {
 
 Find::Find() 
     : Dialog ("dialogs.find", SP_VERB_DIALOG_FIND),
-      _page_find("Find", 1, 1)
+      _page_find(1, 1)
 {
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();

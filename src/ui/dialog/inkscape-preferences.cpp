@@ -79,68 +79,35 @@ InkscapePreferences::~InkscapePreferences()
 
 void InkscapePreferences::initPageMouse()
 {
-    _page_mouse.pack_start(*Gtk::manage(new Scalar(_("Grab sensitivity"),
+/*
+// example:
+    _page_mouse.pack_start(*Gtk::manage(new Scalar(_("Grab sensitivity"), _("tooltip")
                                                    _page_mouse_adj_sensitivity, 0,
                                                    _("px"))),
                            false, false, 0);
-    _page_mouse.pack_start(*Gtk::manage(new Scalar(_("Click/drag threshold"),
-                                                   _page_mouse_adj_threshold, 0,
-                                                   _("px"))),
-                           false, false, 0);
+*/
 }
 
 void InkscapePreferences::initPageScrolling()
 {
-    _page_scrolling.pack_start(*Gtk::manage(new Scalar(_("Mouse wheel scrolls by"),
-                                                       _page_scrolling_adj_wheel, 0,
-                                                       _("px"))),
-                               false, false, 0);
-
+/*
+// example:
     Gtk::Frame *f = new Gtk::Frame(_("Ctrl+arrows"));
     _page_scrolling.pack_start(*Gtk::manage(f));
     Gtk::Box *v = new Gtk::VBox;
     f->add(*v);
 
-    v->pack_start(*Gtk::manage(new Scalar(_("Scroll by"),
-                                          _page_scrolling_adj_ctrl_scroll, 0,
-                                          _("px"))),
-                  false, false, 0);
-
-    v->pack_start(*Gtk::manage(new Scalar(_("Acceleration"),
-                                          _page_scrolling_adj_ctrl_accel, 2)),
-                  false, false, 0);
-
     f = new Gtk::Frame(_("Autoscrolling"));
     _page_scrolling.pack_start(*Gtk::manage(f));
     v = new Gtk::VBox;
     f->add(*v);
-
-    v->pack_start(*Gtk::manage(new Scalar(_("Speed"),
-                                          _page_scrolling_adj_auto_speed, 2)),
-                  false, false, 0);
-    v->pack_start(*Gtk::manage(new Scalar(_("Threshold"),
-                                          _page_scrolling_adj_auto_threshold, 0,
-                                          _("px"))),
-                  false, false, 0);
+*/
 }
 
 void InkscapePreferences::initPageSteps()
 {
-    _page_steps.pack_start(*Gtk::manage(new Scalar(_("Arrow keys move by"),
-                                                   _page_steps_adj_move, 2,
-                                                   _("pt"))),
-                           false, false, 0);
-
-    _page_steps.pack_start(*Gtk::manage(new Scalar(_("> and < scale by"),
-                                                   _page_steps_adj_scale, 2,
-                                                   _("pt"))),
-                           false, false, 0);
-
-    _page_steps.pack_start(*Gtk::manage(new Scalar(_("Inset/Outset by"),
-                                                   _page_steps_adj_inset, 2,
-                                                   _("pt"))),
-                           false, false, 0);
-
+/*
+// example:
     Gtk::ComboBoxText *c = new Gtk::ComboBoxText;
     c->append_text("90");
     c->append_text("60");
@@ -154,15 +121,7 @@ void InkscapePreferences::initPageSteps()
     c->append_text("2");
     c->append_text("1");
     c->append_text(_("None"));
-
-    _page_steps.pack_start(*Gtk::manage(new Labelled(_("Rotation snaps every"),
-                                                     c, _("degrees"))),
-                           false, false, 0);
-
-    _page_steps.pack_start(*Gtk::manage(new Scalar(_("Zoom in/out by"),
-                                                   _page_steps_adj_zoom, 0,
-                                                   _("%"))),
-                           false, false, 0);
+*/
 }
 
 void InkscapePreferences::initPageTools()

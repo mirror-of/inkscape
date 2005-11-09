@@ -22,7 +22,7 @@ namespace Dialog {
 
 Export::Export() 
     : Dialog ("dialogs.export", SP_VERB_FILE_EXPORT),
-      _page_export("Export", 1, 1)
+      _page_export(1, 1)
 {
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();

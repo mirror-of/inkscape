@@ -21,10 +21,10 @@ namespace Dialog {
 
 DocumentPreferences::DocumentPreferences() 
     : Dialog ("dialogs.documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
-      _page_page("Page", 1, 1),
-      _page_grid("Grid", 1, 1),
-      _page_guides("Guides", 1, 1),
-      _page_metadata("Metadata", 1, 1)
+      _page_page(1, 1),
+      _page_grid(1, 1),
+      _page_guides(1, 1),
+      _page_metadata(1, 1)
 {
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();

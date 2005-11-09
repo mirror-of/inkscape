@@ -22,8 +22,8 @@ namespace Dialog {
 
 TextProperties::TextProperties() 
     : Dialog ("dialogs.textandfont", SP_VERB_DIALOG_TEXT),
-      _page_font("Font", 1, 1),
-      _page_text("Text", 1, 1)
+      _page_font(1, 1),
+      _page_text(1, 1)
 {
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
