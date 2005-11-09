@@ -16,17 +16,21 @@
 #define NR_RGBA32_B(v) (unsigned char) (((v) >> 8) & 0xff)
 #define NR_RGBA32_A(v) (unsigned char) ((v) & 0xff)
 
-#define NR_PREMUL(c,a) (((c) * (a) + 127) / 255)
+#define FAST_DIVIDE_BY_255(v) ((((v) << 8) + (v) + 257) >> 16)
+#define NR_PREMUL(c,a) (FAST_DIVIDE_BY_255(((c) * (a) + 127)))
+#define NR_PREMUL_SINGLE(c) (FAST_DIVIDE_BY_255((c) + 127))
 #define NR_A7(fa,ba) (65025 - (255 - fa) * (255 - ba))
+#define NR_A7_NORMALIZED(fa,ba) (FAST_DIVIDE_BY_255((65025 - (255 - (fa)) * (255 - (ba))) + 127))
 #define NR_COMPOSENNN_A7(fc,fa,bc,ba,a) (((255 - (fa)) * (bc) * (ba) + (fa) * (fc) * 255 + 127) / a)
 #define NR_COMPOSEPNN_A7(fc,fa,bc,ba,a) (((255 - (fa)) * (bc) * (ba) + (fc) * 65025 + 127) / a)
 #define NR_COMPOSENNP(fc,fa,bc,ba) (((255 - (fa)) * (bc) * (ba) + (fa) * (fc) * 255 + 32512) / 65025)
 #define NR_COMPOSEPNP(fc,fa,bc,ba) (((255 - (fa)) * (bc) * (ba) + (fc) * 65025 + 32512) / 65025)
-#define NR_COMPOSENPP(fc,fa,bc,ba) (((255 - (fa)) * (bc) + (fa) * (fc) + 127) / 255)
-#define NR_COMPOSEPPP(fc,fa,bc,ba) (((255 - (fa)) * (bc) + (fc) * 255 + 127) / 255)
-#define NR_COMPOSEP11(fc,fa,bc) (((255 - (fa)) * (bc) + (fc) * 255 + 127) / 255)
-#define NR_COMPOSEN11(fc,fa,bc) (((255 - (fa)) * (bc) + (fc) * (fa) + 127) / 255)
-#define INK_COMPOSE(f,a,b) ( ( ((guchar) b) * ((guchar) (0xff - a)) + ((guchar) ((b ^ ~f) + b/4 - (b>127? 63 : 0))) * ((guchar) a) ) / 0xff )
+#define NR_COMPOSENPP(fc,fa,bc,ba) (FAST_DIVIDE_BY_255((255 - (fa)) * (bc) + (fa) * (fc) + 127))
+#define NR_COMPOSEPPP(fc,fa,bc,ba) (FAST_DIVIDE_BY_255((255 - (fa)) * (bc) + (fc) * 255 + 127))
+#define NR_COMPOSEP11(fc,fa,bc) (FAST_DIVIDE_BY_255((255 - (fa)) * (bc) + (fc) * 255 + 127))
+#define NR_COMPOSEN11(fc,fa,bc) (FAST_DIVIDE_BY_255((255 - (fa)) * (bc) + (fc) * (fa) + 127))
+
+#define INK_COMPOSE(f,a,b) ( ( ((guchar) b) * ((guchar) (0xff - a)) + ((guchar) ((b ^ ~f) + b/4 - (b>127? 63 : 0))) * ((guchar) a) ) >>8)
 
 #endif
 
