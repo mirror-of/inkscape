@@ -3308,7 +3308,7 @@ msgstr "(штрих)"
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
-msgstr "Центр и фокус радиального градиента; перетаскивание с <b>Shift</b> "
+msgstr "<b>Центр</b> и <b>фокус</b> радиального градиента; перетаскивание с <b>Shift</b> "
 "отделяет фокус"
 
 #: ../src/gradient-drag.cpp:663
@@ -3760,7 +3760,7 @@ msgid ""
 "You are still connected to a Jabber server as <b>%1</b>, and may send an "
 "invitation to a different user."
 msgstr ""
-"Вы все еще соединены с Jabber-сервером как пользователь <b>%й</b> и можете "
+"Вы все еще соединены с Jabber-сервером как пользователь <b>%1</b> и можете "
 "послать приглашение другому пользователю."
 
 #: ../src/jabber_whiteboard/invitation-confirm-dialog.cpp:26
