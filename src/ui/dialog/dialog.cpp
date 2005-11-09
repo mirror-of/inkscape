@@ -4,6 +4,7 @@
  *
  * Author:
  *   Bryce W. Harrington <bryce@bryceharrington.org>
+ *   buliabyak@gmail.com
  *
  * Copyright (C) 2004, 2005 Authors
  *
