@@ -75,6 +75,7 @@ struct SPDesktopWidget {
     GtkWidget *sticky_zoom;
     GtkWidget *coord_status;
     GtkWidget *select_status;
+    GtkWidget *select_status_eventbox;
     GtkWidget *zoom_status;
     gulong zoom_update;
 

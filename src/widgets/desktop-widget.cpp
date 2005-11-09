@@ -106,6 +106,8 @@ SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
 {
     GtkLabel *sb=GTK_LABEL(this->select_status);
     gtk_label_set_markup (sb, message ? message : "");
+    // FIXME: TODO: remove <b></b> before displaying as tooltip
+    gtk_tooltips_set_tip (this->tt, this->select_status_eventbox, message ? message : "", NULL);
 }
 
 NR::Point
@@ -290,15 +292,16 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     //dtw->layer_selector->set_size_request(-1, SP_ICON_SIZE_BUTTON);
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector->gobj()), FALSE, FALSE, 1);
 
+    dtw->select_status_eventbox = gtk_event_box_new ();
     dtw->select_status = gtk_label_new (NULL);//gtk_statusbar_new ();
     gtk_misc_set_alignment (GTK_MISC (dtw->select_status), 0.0, 0.5);
     gtk_widget_set_size_request (dtw->select_status, 1, -1);
-    //sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);  // setting absolute size is bad, in some themes it ends up being larger!
     // display the initial welcome message in the statusbar
     gtk_label_set_markup (GTK_LABEL (dtw->select_status), _("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
     // space label 2 pixels from left edge
+    gtk_container_add (GTK_CONTAINER (dtw->select_status_eventbox), dtw->select_status);
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), gtk_hbox_new(FALSE, 0), FALSE, FALSE, 2);
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->select_status, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->select_status_eventbox, TRUE, TRUE, 0);
 
     gtk_widget_show_all (dtw->vbox);
 }
