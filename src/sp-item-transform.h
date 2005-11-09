@@ -8,6 +8,8 @@ class rotate;
 }
 
 void sp_item_rotate_rel(SPItem *item, NR::rotate const &rotation);
+void sp_item_scale_rel (SPItem *item, NR::scale const &scale);
+void sp_item_skew_rel (SPItem *item, double skewX, double skewY);
 void sp_item_move_rel(SPItem *item, NR::translate const &tr);
 
 
