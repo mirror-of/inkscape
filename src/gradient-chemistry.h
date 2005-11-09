@@ -66,6 +66,7 @@ struct SPCSSAttr;
 void sp_item_gradient_stop_set_style (SPItem *item, guint point_num, bool fill_or_stroke, SPCSSAttr *stop);
 guint32 sp_item_gradient_stop_query_style (SPItem *item, guint point_num, bool fill_or_stroke);
 void sp_item_gradient_edit_stop (SPItem *item, guint point_num, bool fill_or_stroke);
+void sp_item_gradient_reverse_vector (SPItem *item, bool fill_or_stroke);
 
 #endif
 

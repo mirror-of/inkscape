@@ -1037,6 +1037,19 @@ GrDrag::updateLevels ()
 }
 
 void
+GrDrag::selected_reverse_vector ()
+{
+    if (selected == NULL)
+        return;
+
+    for (GSList const* i = selected->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
+
+        sp_item_gradient_reverse_vector (draggable->item, draggable->fill_or_stroke);
+    }
+}
+
+void
 GrDrag::selected_move (double x, double y)
 {
     if (selected == NULL)

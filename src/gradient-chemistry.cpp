@@ -628,6 +628,59 @@ sp_item_gradient_stop_set_style (SPItem *item, guint point_num, bool fill_or_str
     }
 }
 
+void
+sp_item_gradient_reverse_vector (SPItem *item, bool fill_or_stroke)
+{
+    SPGradient *gradient = sp_item_gradient (item, fill_or_stroke);
+    if (!gradient || !SP_IS_GRADIENT(gradient))
+        return;
+
+    SPGradient *vector = sp_gradient_get_vector (gradient, false);
+    if (!vector) // orphan!
+        return;
+
+    vector = sp_gradient_fork_vector_if_necessary (vector);
+    if ( gradient != vector && gradient->ref->getObject() != vector ) {
+        sp_gradient_repr_set_link(SP_OBJECT_REPR(gradient), vector);
+    }
+
+    GSList *child_reprs = NULL;
+    GSList *child_objects = NULL;
+    std::vector<double> offsets;
+    for (SPObject *child = sp_object_first_child(vector);
+         child != NULL; child = SP_OBJECT_NEXT(child)) {
+        child_reprs = g_slist_prepend (child_reprs, SP_OBJECT_REPR(child));
+        child_objects = g_slist_prepend (child_objects, child);
+        offsets.push_back(sp_repr_get_double_attribute(SP_OBJECT_REPR(child), "offset", 0));
+    }
+
+    GSList *child_copies = NULL;
+    for (GSList *i = child_reprs; i != NULL; i = i->next) {
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) i->data;
+        child_copies = g_slist_append (child_copies, repr->duplicate());
+    }
+
+
+    for (GSList *i = child_objects; i != NULL; i = i->next) {
+        SPObject *child = SP_OBJECT (i->data);
+        child->deleteObject();
+    }
+
+    std::vector<double>::iterator iter = offsets.end() - 1;
+    for (GSList *i = child_copies; i != NULL; i = i->next) {
+        Inkscape::XML::Node *copy = (Inkscape::XML::Node *) i->data;
+        vector->appendChildRepr(copy);
+        sp_repr_set_svg_double (copy, "offset", 1 - *iter);
+        iter --;
+        sp_repr_unref(copy);
+    }
+
+    g_slist_free (child_reprs);
+    g_slist_free (child_copies);
+    g_slist_free (child_objects);
+}
+
+
 
 /**
 Set the position of point point_num of the gradient applied to item (either fill_or_stroke) to

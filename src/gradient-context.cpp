@@ -356,6 +356,23 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
                 ret = TRUE;
             }
             break;
+        case GDK_r:
+        case GDK_R:
+            if (MOD__SHIFT_ONLY) {
+                // First try selected dragger
+                if (drag && drag->selected) {
+                    drag->selected_reverse_vector();
+                } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
+                    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
+                        sp_item_gradient_reverse_vector (SP_ITEM(i->data), true);
+                        sp_item_gradient_reverse_vector (SP_ITEM(i->data), false);
+                    }
+                }
+                // we did an undoable action
+                sp_document_done (SP_DT_DOCUMENT (desktop));
+                ret = TRUE;
+            }
+            break;
         default:
             break;
         }

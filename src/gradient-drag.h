@@ -136,6 +136,8 @@ struct GrDrag {
 
 	void select_next ();
 	void select_prev ();
+
+	void selected_reverse_vector ();
 };
 
 #endif
