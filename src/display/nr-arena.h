@@ -30,10 +30,20 @@ struct NRArenaEventVector {
 	void (* request_render) (NRArena *arena, NRRectL *area, void *data);
 };
 
+enum {
+	RENDERMODE_NORMAL,
+	RENDERMODE_NOAA,
+	RENDERMODE_OUTLINE
+};
+
 struct NRArena : public NRActiveObject {
 	static NRArena *create() {
 		return reinterpret_cast<NRArena *>(nr_object_new(NR_TYPE_ARENA));
 	}
+
+	double delta;
+	int rendermode;
+	guint32 outlinecolor;
 };
 
 struct NRArenaClass : public NRActiveObjectClass {

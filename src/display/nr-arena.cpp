@@ -52,6 +52,9 @@ nr_arena_class_init (NRArenaClass *klass)
 static void
 nr_arena_init (NRArena *arena)
 {
+	arena->delta = 0; // to be set by desktop from prefs
+	arena->rendermode = RENDERMODE_NORMAL; // default is normal render
+	arena->outlinecolor = 0xff; // black; to be set by desktop from bg color
 }
 
 static void
