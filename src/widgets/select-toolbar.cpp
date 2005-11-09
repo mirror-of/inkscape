@@ -71,6 +71,8 @@
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-translate-scale-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
+#include "message-context.h"
+#include "message-stack.h"
 
 #include "select-toolbar.h"
 
@@ -419,18 +421,42 @@ static gboolean aux_set_unit(SPUnitSelector *,
 
 static void toggle_stroke (GtkWidget *button, gpointer data) {
     prefs_set_int_attribute ("options.transform", "stroke", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+    SPDesktop *desktop = (SPDesktop *)data;
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."));
+    }
 }
 
 static void toggle_corners (GtkWidget *button, gpointer data) {
     prefs_set_int_attribute ("options.transform", "rectcorners", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+    SPDesktop *desktop = (SPDesktop *)data;
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are scaled."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles are scaled."));
+    }
 }
 
 static void toggle_gradient (GtkWidget *button, gpointer data) {
     prefs_set_int_attribute ("options.transform", "gradient", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+    SPDesktop *desktop = (SPDesktop *)data;
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
+    }
 }
 
 static void toggle_pattern (GtkWidget *button, gpointer data) {
     prefs_set_int_attribute ("options.transform", "pattern", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+    SPDesktop *desktop = (SPDesktop *)data;
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
+    }
 }
 
 GtkWidget *
@@ -541,7 +567,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_stroke",
                                               _("When scaling objects, scale the stroke width by the same proportion"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_stroke), NULL);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_stroke), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "stroke", 1));
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
@@ -553,7 +579,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_corners",
                                               _("When scaling rectangles, scale the radii of rounded corners"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_corners), NULL);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_corners), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "rectcorners", 1));
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
@@ -565,7 +591,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_gradient",
                                               _("Transform gradients (in fill or stroke) along with the objects"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_gradient), NULL);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_gradient), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "gradient", 1));
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
@@ -577,7 +603,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_pattern",
                                               _("Transform patterns (in fill or stroke) along with the objects"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_pattern), NULL);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_pattern), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "pattern", 1));
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
