@@ -53,6 +53,12 @@ nr_pixblock_setup_fast (NRPixBlock *pb, NR_PIXBLOCK_MODE mode, int x0, int y0, i
 	} else if (size <= 65536) {
 		pb->size = NR_PIXBLOCK_SIZE_64K;
 		pb->data.px = nr_pixelstore_64K_new (clear, 0x0);
+	} else if (size <= 262144) {
+		pb->size = NR_PIXBLOCK_SIZE_256K;
+		pb->data.px = nr_pixelstore_256K_new (clear, 0x0);
+	} else if (size <= 1048576) {
+		pb->size = NR_PIXBLOCK_SIZE_1M;
+		pb->data.px = nr_pixelstore_1M_new (clear, 0x0);
 	} else {
 		pb->size = NR_PIXBLOCK_SIZE_BIG;
 		pb->data.px = nr_new (unsigned char, size);
@@ -172,6 +178,12 @@ nr_pixblock_release (NRPixBlock *pb)
 		break;
 	case NR_PIXBLOCK_SIZE_64K:
 		nr_pixelstore_64K_free (pb->data.px);
+		break;
+	case NR_PIXBLOCK_SIZE_256K:
+		nr_pixelstore_256K_free (pb->data.px);
+		break;
+	case NR_PIXBLOCK_SIZE_1M:
+		nr_pixelstore_1M_free (pb->data.px);
 		break;
 	case NR_PIXBLOCK_SIZE_BIG:
 		nr_free (pb->data.px);
@@ -318,6 +330,76 @@ nr_pixelstore_64K_free (unsigned char *px)
 
 	nr_64K_px[nr_64K_len] = px;
 	nr_64K_len += 1;
+}
+
+#define NR_256K_BLOCK 32
+#define NR_256K 262144
+static unsigned char **nr_256K_px = NULL;
+static unsigned int nr_256K_len = 0;
+static unsigned int nr_256K_size = 0;
+
+unsigned char *
+nr_pixelstore_256K_new (bool clear, unsigned char val)
+{
+	unsigned char *px;
+
+	if (nr_256K_len != 0) {
+		nr_256K_len -= 1;
+		px = nr_256K_px[nr_256K_len];
+	} else {
+           px = nr_new (unsigned char, NR_256K);
+	}
+
+	if (clear) memset (px, val, NR_256K);
+
+	return px;
+}
+
+void
+nr_pixelstore_256K_free (unsigned char *px)
+{
+	if (nr_256K_len == nr_256K_size) {
+		nr_256K_size += NR_256K_BLOCK;
+		nr_256K_px = nr_renew (nr_256K_px, unsigned char *, nr_256K_size);
+	}
+
+	nr_256K_px[nr_256K_len] = px;
+	nr_256K_len += 1;
+}
+
+#define NR_1M_BLOCK 32
+#define NR_1M 1048576
+static unsigned char **nr_1M_px = NULL;
+static unsigned int nr_1M_len = 0;
+static unsigned int nr_1M_size = 0;
+
+unsigned char *
+nr_pixelstore_1M_new (bool clear, unsigned char val)
+{
+	unsigned char *px;
+
+	if (nr_1M_len != 0) {
+		nr_1M_len -= 1;
+		px = nr_1M_px[nr_1M_len];
+	} else {
+           px = nr_new (unsigned char, NR_1M);
+	}
+
+	if (clear) memset (px, val, NR_1M);
+
+	return px;
+}
+
+void
+nr_pixelstore_1M_free (unsigned char *px)
+{
+	if (nr_1M_len == nr_1M_size) {
+		nr_1M_size += NR_1M_BLOCK;
+		nr_1M_px = nr_renew (nr_1M_px, unsigned char *, nr_1M_size);
+	}
+
+	nr_1M_px[nr_1M_len] = px;
+	nr_1M_len += 1;
 }
 
 /*

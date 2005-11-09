@@ -20,6 +20,8 @@ typedef enum {
 	NR_PIXBLOCK_SIZE_4K,   ///< Pixelstore 
 	NR_PIXBLOCK_SIZE_16K,  ///< Pixelstore 
 	NR_PIXBLOCK_SIZE_64K,  ///< Pixelstore 
+	NR_PIXBLOCK_SIZE_256K,  ///< Pixelstore 
+	NR_PIXBLOCK_SIZE_1M,  ///< Pixelstore 
 	NR_PIXBLOCK_SIZE_BIG,  ///< Normally allocated 
 	NR_PIXBLOCK_SIZE_STATIC ///< Externally managed 
 } NR_PIXBLOCK_SIZE;
@@ -75,6 +77,10 @@ unsigned char *nr_pixelstore_16K_new (bool clear, unsigned char val);
 void nr_pixelstore_16K_free (unsigned char *px);
 unsigned char *nr_pixelstore_64K_new (bool clear, unsigned char val);
 void nr_pixelstore_64K_free (unsigned char *px);
+unsigned char *nr_pixelstore_256K_new (bool clear, unsigned char val);
+void nr_pixelstore_256K_free (unsigned char *px);
+unsigned char *nr_pixelstore_1M_new (bool clear, unsigned char val);
+void nr_pixelstore_1M_free (unsigned char *px);
 
 #endif
 /*
