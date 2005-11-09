@@ -29,8 +29,6 @@ enum {
 	LAST_SIGNAL
 };
 
-gdouble nr_arena_global_delta;
-
 static void sp_canvas_arena_class_init(SPCanvasArenaClass *klass);
 static void sp_canvas_arena_init(SPCanvasArena *group);
 static void sp_canvas_arena_destroy(GtkObject *object);
@@ -77,8 +75,6 @@ sp_canvas_arena_class_init (SPCanvasArenaClass *klass)
 {
 	GtkObjectClass *object_class;
 	SPCanvasItemClass *item_class;
-
-	nr_arena_global_delta = prefs_get_double_attribute ("options.cursortolerance", "value", 1.0); // default is 1 px
 
 	object_class = (GtkObjectClass *) klass;
 	item_class = (SPCanvasItemClass *) klass;
@@ -166,7 +162,7 @@ sp_canvas_arena_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned i
 
 	if (arena->cursor) {
 		/* Mess with enter/leave notifiers */
-		NRArenaItem *new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
+		NRArenaItem *new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, arena->arena->delta, arena->sticky);
 		if (new_arena != arena->active) {
 			GdkEventCrossing ec;
 			ec.window = GTK_WIDGET (item->canvas)->window;
@@ -221,22 +217,42 @@ sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
 	bh = buf->rect.y1 - buf->rect.y0;
 	if ((bw < 1) || (bh < 1)) return;
 
-	/* 65536 is max cached buffer and we need 4 channels */
-	if (bw * bh < 16384) {
-		/* We can go with single buffer */
-		sw = bw;
-		sh = bh;
-	} else if (bw <= 2048) {
-		/* Go with row buffer */
-		sw = bw;
-		sh = 16384 / bw;
-	} else if (bh <= 2048) {
-		/* Go with column buffer */
-		sw = 16384 / bh;
-		sh = bh;
-	} else {
-		sw = 128;
-		sh = 128;
+	if (arena->arena->rendermode != RENDERMODE_OUTLINE) { // use 256K as a compromise to not slow down gradients
+		/* 256K is the cached buffer and we need 4 channels */
+		if (bw * bh < 65536) { // 256K/4
+			/* We can go with single buffer */
+			sw = bw;
+			sh = bh;
+		} else if (bw <= 4096) {
+			/* Go with row buffer */
+			sw = bw;
+			sh = 65536 / bw;
+		} else if (bh <= 4096) {
+			/* Go with column buffer */
+			sw = 65536 / bh;
+			sh = bh;
+		} else {
+			sw = 256;
+			sh = 256;
+		}
+	} else { // paths only, so 1M works faster
+		/* 1M is the cached buffer and we need 4 channels */
+		if (bw * bh < 262144) { // 1M/4
+			/* We can go with single buffer */
+			sw = bw;
+			sh = bh;
+		} else if (bw <= 8192) {
+			/* Go with row buffer */
+			sw = bw;
+			sh = 262144 / bw;
+		} else if (bh <= 8192) {
+			/* Go with column buffer */
+			sw = 262144 / bh;
+			sh = bh;
+		} else {
+			sw = 512;
+			sh = 512;
+		}
 	}
 
 /* fixme: RGB transformed bitmap blit is not implemented (Lauris) */
@@ -289,7 +305,7 @@ sp_canvas_arena_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_it
 				     NR_ARENA_ITEM_STATE_BBOX | NR_ARENA_ITEM_STATE_PICK,
 				     NR_ARENA_ITEM_STATE_NONE);
 
-	NRArenaItem *picked = nr_arena_item_invoke_pick (arena->root, p, nr_arena_global_delta, arena->sticky);
+	NRArenaItem *picked = nr_arena_item_invoke_pick (arena->root, p, arena->arena->delta, arena->sticky);
 
 	arena->picked = picked;
 
@@ -325,7 +341,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 
 			/* fixme: Not sure abut this, but seems the right thing (Lauris) */
 			nr_arena_item_invoke_update (arena->root, NULL, &arena->gc, NR_ARENA_ITEM_STATE_PICK, NR_ARENA_ITEM_STATE_NONE);
-			arena->active = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
+			arena->active = nr_arena_item_invoke_pick (arena->root, arena->c, arena->arena->delta, arena->sticky);
 			if (arena->active) nr_object_ref ((NRObject *) arena->active);
 			ret = sp_canvas_arena_send_event (arena, event);
 		}
@@ -344,7 +360,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 
 		/* fixme: Not sure abut this, but seems the right thing (Lauris) */
 		nr_arena_item_invoke_update (arena->root, NULL, &arena->gc, NR_ARENA_ITEM_STATE_PICK, NR_ARENA_ITEM_STATE_NONE);
-		new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
+		new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, arena->arena->delta, arena->sticky);
 		if (new_arena != arena->active) {
 			GdkEventCrossing ec;
 			ec.window = event->motion.window;
