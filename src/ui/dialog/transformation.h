@@ -24,6 +24,7 @@
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/imageicon.h"
+#include "ui/widget/button.h"
 
 
 using namespace Inkscape::UI::Widget;
@@ -92,12 +93,17 @@ public:
     void setPageTransform()
         { present(PAGE_TRANSFORM); }
 
-protected:
 
+    int getCurrentPage()
+        { return _notebook.get_current_page(); }
 
     typedef enum {
         PAGE_MOVE, PAGE_SCALE, PAGE_ROTATE, PAGE_SKEW, PAGE_TRANSFORM, PAGE_QTY
     } PageType;
+
+    void updateSelection(PageType page, Inkscape::Selection *selection);
+
+protected:
 
     Gtk::Notebook     _notebook;
 
@@ -109,6 +115,7 @@ protected:
 
     UnitMenu          _units_move;
     UnitMenu          _units_scale;
+    UnitMenu          _units_rotate;
     UnitMenu          _units_skew;
 
     ScalarUnit        _scalar_move_horizontal;
@@ -126,9 +133,10 @@ protected:
     Scalar            _scalar_transform_e;
     Scalar            _scalar_transform_f;
 
-    ImageIcon        transformImageIcon;
-
-    Gtk::CheckButton  _check_move_relative;
+    CheckButton  _check_move_relative;
+    CheckButton  _check_scale_proportional;
+    CheckButton  _check_apply_separately;
+    CheckButton  _check_replace_matrix;
 
     /**
      * Layout the GUI components, and prepare for use
@@ -141,23 +149,31 @@ protected:
 
     virtual void _apply();
     void present(PageType page);
-    void updateSelection(PageType page, Inkscape::Selection *selection);
 
     void onSelectionChanged(Inkscape::NSApplication::Application *inkscape,
                             Inkscape::Selection *selection);
     void onSelectionModified(Inkscape::NSApplication::Application *inkscape,
                              Inkscape::Selection *selection,
                              int unsigned flags);
+    void onSwitchPage(GtkNotebookPage *page,
+                    guint pagenum);
 
     /**
      * Callbacks for when a user changes values on the panels
      */
     void onMoveValueChanged();
     void onMoveRelativeToggled();
-    void onScaleValueChanged();
+    void onScaleXValueChanged();
+    void onScaleYValueChanged();
     void onRotateValueChanged();
     void onSkewValueChanged();
     void onTransformValueChanged();
+    void onReplaceMatrixToggled();
+    void onScaleProportionalToggled();
+
+    void onClear();
+
+    void onApplySeparatelyToggled();
 
     /**
      * Called when the selection is updated, to make
@@ -193,9 +209,8 @@ private:
     Transformation operator=(Transformation const &d);
 
     Gtk::Button *applyButton;
+    Gtk::Button *resetButton;
     Gtk::Button *cancelButton;
-
-
 };
 
 
