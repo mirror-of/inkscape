@@ -1150,7 +1150,8 @@ EditWidget::initStatusbar()
     _select_status.property_xalign() = 0.0;
     _select_status.property_yalign() = 0.5;
     _select_status.set_markup (_("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
-    _select_status.property_ellipsize() = Pango::ELLIPSIZE_END;
+    // include this again with Gtk+-2.6
+    //_select_status.property_ellipsize() = Pango::ELLIPSIZE_END;
     _statusbar.pack_start (_select_status, true, true, 0);
     
     _main_window_table.attach(_statusbar, 0, 1, 3, 4, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
