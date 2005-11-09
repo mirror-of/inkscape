@@ -1056,10 +1056,14 @@ sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NR::Matrix cons
     }
     sp_item_set_item_transform(item, transform_attr);
 
+    // Note: updateRepr comes before emitting the transformed signal since
+    // it causes clone SPUse's copy of the original object to brought up to
+    // date with the original.  Otherwise, sp_use_bbox returns incorrect
+    // values if called in code handling the transformed signal.
+    SP_OBJECT(item)->updateRepr();
+    
     // send the relative transform with a _transformed_signal
     item->_transformed_signal.emit(&advertized_transform, item);
-
-    SP_OBJECT(item)->updateRepr();
 }
 
 gint

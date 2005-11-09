@@ -1,5 +1,8 @@
 2005-11-09  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/sp-item.cpp: Call updateRepr before emitting the transformed
+	  signal in sp_item_write_transform.  This fixes bug #1303423.
+
 	* packaging/osx-app.sh: Fixes to allow building app bundles on both
 	  OS X 10.4 and earlier versions of the OS without altering the script.
 	  Also, add a note that Inkscape needs to be configured with
