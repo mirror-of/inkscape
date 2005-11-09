@@ -14,6 +14,9 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+#ifdef _WIN32
+#define USE_PANGO_WIN32
+#endif
 
 #include <pango/pango.h>
 #include "nr-type-primitives.h"
@@ -21,9 +24,12 @@
 #include <libnrtype/nrtype-forward.h>
 
 /* Freetype */
+#ifdef USE_PANGO_WIN32
+#include <pango/pangowin32.h>
+#else
 #include <pango/pangoft2.h>
 #include <freetype/freetype.h>
-
+#endif
 
 // the font_factory keeps a hashmap of all the loaded font_instances, and uses the PangoFontDescription
 // as index (nota: since pango already does that, using the PangoFont could work too)
@@ -55,6 +61,10 @@ public:
     // Pango data.  Backend-specific structures are cast to these opaque types.
     PangoFontMap *fontServer;
     PangoContext *fontContext;
+#ifdef USE_PANGO_WIN32
+    PangoWin32FontCache *pangoFontCache;
+    HDC hScreenDC;
+#endif
     double fontSize; /**< The huge fontsize used as workaround for hinting.
                       *   Different between freetype and win32. */
 

@@ -271,6 +271,7 @@ void noop (...) {}
 
 
 ///////////////////// FontFactory
+#ifndef USE_PANGO_WIN32
 // the substitute function to tell fontconfig to enforce outline fonts
 void FactorySubstituteFunc(FcPattern *pattern,gpointer /*data*/)
 {
@@ -279,6 +280,7 @@ void FactorySubstituteFunc(FcPattern *pattern,gpointer /*data*/)
 //	FcPatternGetString (pattern, "FC_FAMILY",0, &fam);
 //	printf("subst_f on %s\n",fam);
 }
+#endif
 
 
 font_factory*  font_factory::lUsine=NULL;
@@ -296,11 +298,17 @@ font_factory::font_factory(void)
 	maxEnt=32;
 	ents=(font_entry*)malloc(maxEnt*sizeof(font_entry));
 
+#ifdef USE_PANGO_WIN32
+    hScreenDC=pango_win32_get_dc();
+    fontServer=pango_win32_font_map_for_display();
+    fontContext=pango_win32_get_context();
+    pangoFontCache=pango_win32_font_map_get_font_cache(fontServer);
+#else
 	fontServer=pango_ft2_font_map_new();
 	pango_ft2_font_map_set_resolution((PangoFT2FontMap*)fontServer, 72, 72);
 	fontContext=pango_ft2_font_map_create_context((PangoFT2FontMap*)fontServer);
 	pango_ft2_font_map_set_default_substitute((PangoFT2FontMap*)fontServer,FactorySubstituteFunc,this,NULL);
-
+#endif
 }
 
 font_factory::~font_factory(void)
@@ -309,8 +317,11 @@ font_factory::~font_factory(void)
 	if ( ents ) free(ents);
 
 	g_object_unref(fontServer);
+#ifdef USE_PANGO_WIN32
+    pango_win32_shutdown_display();
+#else
 	//	pango_ft2_shutdown_display();
-
+#endif
 	//	g_object_unref(fontContext);
 }
 
@@ -325,7 +336,12 @@ font_instance* font_factory::FaceFromDescr(const char* family, const char* style
 
 font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 {
+#ifdef USE_PANGO_WIN32
+    // damn Pango fudges the size, so we need to unfudge. See source of pango_win32_font_map_init()
+	pango_font_description_set_size (descr, (int) (fontSize*PANGO_SCALE*72/GetDeviceCaps(hScreenDC,LOGPIXELSY))); // mandatory huge size (hinting workaround)
+#else
 	pango_font_description_set_size (descr, (int) (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
+#endif
 	
 	font_instance* res = NULL;
 	
@@ -383,7 +399,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 		res->Ref();
 		AddInCache(res);
 	}
-	res->SelectUnicodeCharmap();
+	res->InitTheFace();
 	return res;
 }
 

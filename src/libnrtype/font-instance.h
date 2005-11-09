@@ -5,10 +5,7 @@
 #include <pango/pango-types.h>
 #include <pango/pango-font.h>
 #include <require-config.h>
-
-/* Freetype2 info. */
-# include <ft2build.h>
-# include FT_FREETYPE_H
+#include "FontFactory.h"
 
 #include <libnr/nr-forward.h>
 #include <libnrtype/nrtype-forward.h>
@@ -37,9 +34,6 @@ public:
     PangoFont*            pFont;
 		// depending on the rendering backend, different temporary data
 
-    FT_Face               theFace; 
-                // it's a pointer in fact; no worries to ref/unref it, pango does its magic
-                // as long as pFont is valid, theFace is too
 		// that's the font's fingerprint; this particular PangoFontDescription gives the entry at which this font_instance
 		// resides in the font_factory loadedFaces hash_map
     PangoFontDescription* descr;
@@ -63,8 +57,8 @@ public:
     void                 InstallFace(PangoFont* iFace); // utility; should reset the pFont field if loading failed
 		                        // in case the PangoFont is a bitmap font, for example. that way, the calling function 
 		                        // will be able to check the validity of the font before installing it in loadedFaces
+    void                 InitTheFace();
 
-    void                 SelectUnicodeCharmap();  // calls FT_Select_Charmap()
     int                  MapUnicodeChar(gunichar c); // calls the relevant unicode->glyph index function
     void                 LoadGlyph(int glyph_id);    // the main backend-dependent function
 		                        // loads the given glyph's info
@@ -98,6 +92,18 @@ public:
     unsigned             PSName(gchar *str, unsigned size);
     unsigned             Family(gchar *str, unsigned size);
     unsigned             Attribute(gchar const *key, gchar *str, unsigned size);
+
+private:
+    void                 FreeTheFace();
+
+#ifdef USE_PANGO_WIN32
+    HFONT                 theFace;
+#else
+    FT_Face               theFace; 
+                // it's a pointer in fact; no worries to ref/unref it, pango does its magic
+                // as long as pFont is valid, theFace is too
+#endif
+
 };
 
 

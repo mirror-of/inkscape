@@ -100,6 +100,7 @@ bool  font_style_equal::operator()(const font_style &a,const font_style &b) {
 	return true;
 }
 
+#ifndef USE_PANGO_WIN32
 /*
  * Outline extraction
  */
@@ -153,7 +154,7 @@ static int ft2_cubic_to (FT_Vector * control1, FT_Vector * control2, FT_Vector *
 	user->last=p;
 	return 0;
 }
-
+#endif
 
 /*
  *
@@ -243,7 +244,9 @@ unsigned int font_instance::Attribute(const gchar *key, gchar *str, unsigned int
 		pango_font_description_free(td);
 		free_res=true;
 	} else if ( strcmp(key,"psname") == 0 ) {
+#ifndef USE_PANGO_WIN32
          res = (char *) FT_Get_Postscript_Name (theFace); // that's the main method, seems to always work
+#endif
          free_res=false;
          if (res == NULL) { // a very limited workaround, only bold, italic, and oblique will work
              PangoStyle style=pango_font_description_get_style(descr);
@@ -334,27 +337,41 @@ unsigned int font_instance::Attribute(const gchar *key, gchar *str, unsigned int
 	return 0;
 }
 
+void font_instance::InitTheFace()
+{
+#ifdef USE_PANGO_WIN32
+    if ( !theFace ) {
+        LOGFONT *lf=pango_win32_font_logfont(pFont);
+        g_assert(lf != NULL);
+        theFace=pango_win32_font_cache_load(daddy->pangoFontCache,lf);
+        g_free(lf);
+    }
+    SelectObject(daddy->hScreenDC,theFace);
+#else
+	theFace=pango_ft2_font_get_face(pFont);
+	FT_Select_Charmap(theFace,ft_encoding_unicode) && FT_Select_Charmap(theFace,ft_encoding_symbol);
+#endif
+}
+
+void font_instance::FreeTheFace()
+{
+#ifdef USE_PANGO_WIN32
+    SelectObject(daddy->hScreenDC,GetStockObject(SYSTEM_FONT));
+    pango_win32_font_cache_unload(daddy->pangoFontCache,theFace);
+#endif
+    theFace=NULL;
+}
+
 void font_instance::InstallFace(PangoFont* iFace)
 {
         if ( !iFace )
             return;
 	pFont=iFace;
 
-	theFace=pango_ft2_font_get_face(pFont);
-	FT_Error ftresult=FT_Select_Charmap(theFace,ft_encoding_unicode);
-	if ( ftresult ) {
-		//g_print("failed to load unicode charmap\n");
-		ftresult=FT_Select_Charmap(theFace,ft_encoding_symbol);
-		if ( ftresult ) {
-			//g_print("and failed to load symbol charmap\n");
-			if ( pFont ) g_object_unref(pFont);
-			pFont=NULL;
-			theFace=NULL;
-		}
-	}
+    InitTheFace();
 
 	if ( pFont && IsOutlineFont() == false ) {
-		theFace=NULL;
+        FreeTheFace();
 		if ( pFont ) g_object_unref(pFont);
 		pFont=NULL;
 	}
@@ -363,19 +380,21 @@ void font_instance::InstallFace(PangoFont* iFace)
 bool	font_instance::IsOutlineFont(void)
 {
 	if ( pFont == NULL ) return false;
-	theFace=pango_ft2_font_get_face(pFont);
+    InitTheFace();
+#ifdef USE_PANGO_WIN32
+    TEXTMETRIC tm;
+    return GetTextMetrics(daddy->hScreenDC,&tm) && tm.tmPitchAndFamily&TMPF_TRUETYPE;
+#else
 	return FT_IS_SCALABLE(theFace);
-}
-
-void font_instance::SelectUnicodeCharmap()
-{
-	theFace=pango_ft2_font_get_face(pFont);
-	FT_Select_Charmap(theFace,ft_encoding_unicode) && FT_Select_Charmap(theFace,ft_encoding_symbol);
+#endif
 }
 
 int font_instance::MapUnicodeChar(gunichar c)
 {
 	if ( pFont == NULL ) return 0;
+#ifdef USE_PANGO_WIN32
+    return pango_win32_font_get_glyph_index(pFont,c);
+#else
 	int res=0;
 	theFace=pango_ft2_font_get_face(pFont);
 	if ( c > 0xf0000 ) {
@@ -384,16 +403,25 @@ int font_instance::MapUnicodeChar(gunichar c)
 		res=FT_Get_Char_Index(theFace, c);
 	}
 	return res;
+#endif
 }
 
 
-
+#ifdef USE_PANGO_WIN32
+static inline NR::Point pointfx_to_nrpoint(const POINTFX &p, double scale)
+{
+    return NR::Point(*(long*)&p.x / 65536.0 * scale,
+                     *(long*)&p.y / 65536.0 * scale);
+}
+#endif
 
 void font_instance::LoadGlyph(int glyph_id)
 {
 	if ( pFont == NULL ) return;
-	theFace=pango_ft2_font_get_face(pFont);
+    InitTheFace();
+#ifndef USE_PANGO_WIN32
 	if ( theFace->units_per_EM == 0 ) return; // bitmap font
+#endif
 
 	if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
 		if ( nbGlyph >= maxGlyph ) {
@@ -406,6 +434,84 @@ void font_instance::LoadGlyph(int glyph_id)
 		n_g.bbox[0]=n_g.bbox[1]=n_g.bbox[2]=n_g.bbox[3]=0;
 		bool   doAdd=false;
 
+#ifdef USE_PANGO_WIN32
+        MAT2 identity = {{0,1},{0,0},{0,0},{0,1}};
+        OUTLINETEXTMETRIC otm;
+        GetOutlineTextMetrics(daddy->hScreenDC, sizeof(otm), &otm);
+        GLYPHMETRICS metrics;
+        DWORD bufferSize=GetGlyphOutline (daddy->hScreenDC, glyph_id, GGO_GLYPH_INDEX | GGO_NATIVE | GGO_UNHINTED, &metrics, 0, NULL, &identity);
+        if ( bufferSize == 0) {
+            // shit happened
+        } else {
+            std::auto_ptr<char> buffer(new char[bufferSize]);
+            if ( GetGlyphOutline (daddy->hScreenDC, glyph_id, GGO_GLYPH_INDEX | GGO_NATIVE | GGO_UNHINTED, &metrics, bufferSize, buffer.get(), &identity) <= 0 ) {
+                // shit happened
+            } else {
+                double scale=1.0/daddy->fontSize;
+                n_g.h_advance=metrics.gmCellIncX*scale;
+                n_g.v_advance=otm.otmTextMetrics.tmHeight*scale;
+                n_g.h_width=metrics.gmBlackBoxX*scale;
+                n_g.v_width=metrics.gmBlackBoxY*scale;
+
+                // Platform SDK is rubbish, read KB87115 instead
+                n_g.outline=new Path;
+                DWORD polyOffset=0;
+                while ( polyOffset < bufferSize ) {
+                    TTPOLYGONHEADER const *polyHeader=(TTPOLYGONHEADER const *)(buffer.get()+polyOffset);
+                    if (polyOffset+polyHeader->cb > bufferSize) break;
+
+                    if (polyHeader->dwType == TT_POLYGON_TYPE) {
+                        n_g.outline->MoveTo(pointfx_to_nrpoint(polyHeader->pfxStart, scale));
+                        POINTFX startPoint=polyHeader->pfxStart;
+                        DWORD curveOffset=polyOffset+sizeof(TTPOLYGONHEADER);
+
+                        while ( curveOffset < polyOffset+polyHeader->cb ) {
+                            TTPOLYCURVE const *polyCurve=(TTPOLYCURVE const *)(buffer.get()+curveOffset);
+                            POINTFX const *p=polyCurve->apfx;
+                            POINTFX const *endp=p+polyCurve->cpfx;
+
+                            switch (polyCurve->wType) {
+                                case TT_PRIM_LINE:
+                                    while ( p != endp )
+                                        n_g.outline->LineTo(pointfx_to_nrpoint(*p++, scale));
+                                    break;
+
+                                case TT_PRIM_QSPLINE:
+                                {
+                                    g_assert(polyCurve->cpfx >= 2);
+                                    endp -= 2;
+                                    NR::Point this_mid=pointfx_to_nrpoint(p[0], scale);
+                                    while ( p != endp ) {
+                                        NR::Point next_mid=pointfx_to_nrpoint(p[1], scale);
+	                                    n_g.outline->BezierTo((next_mid+this_mid)/2);
+	                                    n_g.outline->IntermBezierTo(this_mid);
+	                                    n_g.outline->EndBezierTo();
+                                        ++p;
+                                        this_mid=next_mid;
+                                    }
+	                                n_g.outline->BezierTo(pointfx_to_nrpoint(p[1], scale));
+	                                n_g.outline->IntermBezierTo(this_mid);
+	                                n_g.outline->EndBezierTo();
+                                    break;
+                                }
+
+                                case 3:  // TT_PRIM_CSPLINE
+                                    g_assert(polyCurve->cpfx % 3 == 0);
+                                    while ( p != endp ) {
+                                        n_g.outline->CubicTo(pointfx_to_nrpoint(p[2], scale), pointfx_to_nrpoint(p[0], scale), pointfx_to_nrpoint(p[1], scale));
+                                        p += 3;
+                                    }
+                                    break;
+                            }
+                            curveOffset += sizeof(TTPOLYCURVE)+sizeof(POINTFX)*(polyCurve->cpfx-1);
+                        }
+                    }
+                    polyOffset += polyHeader->cb;
+                }
+                doAdd=true;
+            }
+        }
+#else
 		if (FT_Load_Glyph (theFace, glyph_id, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) {
 			// shit happened
 		} else {
@@ -438,6 +544,7 @@ void font_instance::LoadGlyph(int glyph_id)
 			}
 			doAdd=true;
 		}
+#endif
 
 		if ( doAdd ) {
 			if ( n_g.outline ) {
@@ -454,16 +561,23 @@ void font_instance::LoadGlyph(int glyph_id)
 
 bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
 {
-	theFace=pango_ft2_font_get_face(pFont);
-	if ( theFace->units_per_EM == 0 ) return false; // bitmap font
-	
 	if ( pFont == NULL ) return false;
-	
+    InitTheFace();
 	if ( theFace == NULL ) return false;
+#ifdef USE_PANGO_WIN32
+    OUTLINETEXTMETRIC otm;
+    if ( !GetOutlineTextMetrics(daddy->hScreenDC,sizeof(otm),&otm) ) return false;
+    double scale=1.0/daddy->fontSize;
+    ascent=fabs(otm.otmAscent*scale);
+    descent=fabs(otm.otmDescent*scale);
+    leading=fabs(otm.otmLineGap*scale);
+#else
+	if ( theFace->units_per_EM == 0 ) return false; // bitmap font
 	ascent=fabs(((double)theFace->ascender)/((double)theFace->units_per_EM));
 	descent=fabs(((double)theFace->descender)/((double)theFace->units_per_EM));
 	leading=fabs(((double)theFace->height)/((double)theFace->units_per_EM));
 	leading-=ascent+descent;
+#endif
 	return true;
 }
 
@@ -472,18 +586,23 @@ bool font_instance::FontSlope(double &run, double &rise)
     run = 0.0;
     rise = 1.0;
 
-    theFace=pango_ft2_font_get_face(pFont);
-
-	if ( theFace->units_per_EM == 0 ) return false; // bitmap font
-	
 	if ( pFont == NULL ) return false;
-	
+    InitTheFace();
 	if ( theFace == NULL ) return false;
 
+#ifdef USE_PANGO_WIN32
+    OUTLINETEXTMETRIC otm;
+    if ( !GetOutlineTextMetrics(daddy->hScreenDC,sizeof(otm),&otm) ) return false;
+    run=otm.otmsCharSlopeRun;
+    rise=otm.otmsCharSlopeRise;
+#else
+	if ( theFace->units_per_EM == 0 ) return false; // bitmap font
+	
     TT_HoriHeader *hhea = (TT_HoriHeader*)FT_Get_Sfnt_Table(theFace, ft_sfnt_hhea);
     if (hhea == NULL) return false;
     run = hhea->caret_Slope_Run;
     rise = hhea->caret_Slope_Rise;
+#endif
 	return true;
 }
 
