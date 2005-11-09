@@ -26,7 +26,7 @@
 static void glyph_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float ven);
 
 void          font_style::Apply(Path* src,Shape* dest) {
-	src->Convert(0.25);
+	src->Convert(1);
 	if ( stroke_width > 0 ) {
 		if ( nbDash > 0 ) {
 			double dlen = 0.0;
@@ -42,7 +42,7 @@ void          font_style::Apply(Path* src,Shape* dest) {
 				free(tdashs);
 			}
 		}
-		src->Stroke(dest,false,0.5*stroke_width,stroke_join,stroke_cap,stroke_miter_limit);
+		src->Stroke(dest, false, 0.5*stroke_width, stroke_join, stroke_cap, 0.5*stroke_width*stroke_miter_limit);
 	} else {
 		src->Fill(dest,0);
 	}
