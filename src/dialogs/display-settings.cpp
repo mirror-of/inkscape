@@ -47,12 +47,11 @@ static GtkWidget *dlg = NULL;
 static win_data wd;
 
 // impossible original values to make sure they are read from prefs
-static gint x = -1000, y = -1000, w = 0, h = 0;
+static gint x = -1000, y = -1000;
 static gchar *prefs_path = "dialogs.preferences";
 
 extern gint nr_arena_image_x_sample;
 extern gint nr_arena_image_y_sample;
-extern gdouble nr_arena_global_delta;
 
 #define SB_WIDTH 90
 #define SB_LONG_ADJUSTMENT 20
@@ -78,12 +77,9 @@ static gboolean
 sp_display_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 {
     gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
-    gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
 
     prefs_set_int_attribute (prefs_path, "x", x);
     prefs_set_int_attribute (prefs_path, "y", y);
-    prefs_set_int_attribute (prefs_path, "w", w);
-    prefs_set_int_attribute (prefs_path, "h", h);
 
     return FALSE; // which means, go ahead and destroy it
 
@@ -217,7 +213,7 @@ options_selector ()
     gtk_widget_show (f);
     gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
-    fb = gtk_vbox_new (FALSE, 0);
+    fb = gtk_hbox_new (FALSE, 10);
     gtk_widget_show (fb);
     gtk_container_add (GTK_CONTAINER (f), fb);
 
@@ -243,7 +239,7 @@ options_selector ()
     gtk_widget_show (f);
     gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
-    fb = gtk_vbox_new (FALSE, 0);
+    fb = gtk_hbox_new (FALSE, 10);
     gtk_widget_show (fb);
     gtk_container_add (GTK_CONTAINER (f), fb);
 
@@ -275,7 +271,7 @@ options_selector ()
     gtk_widget_show (f);
     gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
-    fb = gtk_vbox_new (FALSE, 0);
+    fb = gtk_hbox_new (FALSE, 10);
     gtk_widget_show (fb);
     gtk_container_add (GTK_CONTAINER (f), fb);
 
@@ -487,9 +483,8 @@ options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
 static void
 sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
 {
-    nr_arena_global_delta = adj->value;
     prefs_set_double_attribute ( "options.cursortolerance", "value",
-                                 nr_arena_global_delta );
+                                 adj->value );
 }
 
 static void
@@ -849,22 +844,12 @@ sp_display_dialog (void)
             y = prefs_get_int_attribute (prefs_path, "y", 0);
         }
 
-        if (w ==0 || h == 0) {
-            w = prefs_get_int_attribute (prefs_path, "w", 0);
-            h = prefs_get_int_attribute (prefs_path, "h", 0);
-        }
-
         if (x != 0 || y != 0) {
             gtk_window_move ((GtkWindow *) dlg, x, y);
-
         } else {
-
             gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
         }
 
-        if (w && h) {
-            gtk_window_resize ((GtkWindow *) dlg, w, h);
-        }
 
         sp_transientize (dlg);
         wd.win = dlg;
@@ -1529,8 +1514,6 @@ options_checkbox (
 
         gtk_option_menu_set_history ( GTK_OPTION_MENU (om),
                                       nr_arena_image_x_sample);
-
-
 
         g_signal_connect(GTK_OBJECT (nb), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_top");
         gtk_notebook_set_current_page (GTK_NOTEBOOK (nb), prefs_get_int_attribute ("dialogs.preferences", "page_top", 0));
