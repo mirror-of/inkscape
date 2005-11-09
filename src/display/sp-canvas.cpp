@@ -32,6 +32,12 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-convex-hull.h>
 
+enum {
+	RENDERMODE_NORMAL,
+	RENDERMODE_NOAA,
+	RENDERMODE_OUTLINE
+};
+
 const gint sp_canvas_update_priority = G_PRIORITY_HIGH_IDLE;
 
 #define SP_CANVAS_WINDOW(c) (((GtkWidget *) (c))->window)
@@ -293,10 +299,11 @@ sp_canvas_item_affine_absolute (SPCanvasItem *item, NR::Matrix const& affine)
 
     if (!(item->flags & SP_CANVAS_ITEM_NEED_AFFINE)) {
         item->flags |= SP_CANVAS_ITEM_NEED_AFFINE;
-        if (item->parent != NULL)
+        if (item->parent != NULL) {
             sp_canvas_item_request_update (item->parent);
-        else
+        } else {
             sp_canvas_request_update (item->canvas);
+        }
     }
 
     item->canvas->need_repick = TRUE;
@@ -1458,10 +1465,6 @@ sp_canvas_motion (GtkWidget *widget, GdkEventMotion *event)
     return emit_event (canvas, (GdkEvent *) event);
 }
 
-/* We have to fit into pixelstore 64K */
-#define IMAGE_WIDTH_AA 341
-#define IMAGE_HEIGHT_AA 64
-
 /**
  * Helper that draws a specific rectangular part of the canvas.
  */
@@ -1483,22 +1486,42 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
         return;
 
     int sw, sh;
-    /* 65536 is max cached buffer and we need 3 channels */
-    if (bw * bh < 21845) {
-        // We can go with single buffer 
-        sw = bw;
-        sh = bh;
-    } else if (bw <= (16 * IMAGE_WIDTH_AA)) {
-        // Go with row buffer 
-        sw = bw;
-        sh = 21845 / bw;
-    } else if (bh <= (16 * IMAGE_HEIGHT_AA)) {
-        // Go with column buffer 
-        sw = 21845 / bh;
-        sh = bh;
-    } else {
-        sw = IMAGE_WIDTH_AA;
-        sh = IMAGE_HEIGHT_AA;
+    if (canvas->rendermode != RENDERMODE_OUTLINE) { // use 256K as a compromise to not slow down gradients
+        /* 256K is the cached buffer and we need 3 channels */
+        if (bw * bh <  87381) { // 256K/3
+            // We can go with single buffer 
+            sw = bw;
+            sh = bh;
+        } else if (bw <= (16 * 341)) {
+            // Go with row buffer 
+            sw = bw;
+            sh =  87381 / bw;
+        } else if (bh <= (16 * 256)) {
+            // Go with column buffer 
+            sw = 87381 / bh;
+            sh = bh;
+        } else {
+            sw = 341;
+            sh = 256;
+        }
+    } else {  // paths only, so 1M works faster
+        /* 1M is the cached buffer and we need 3 channels */
+        if (bw * bh <  349525) { // 1M/3
+            // We can go with single buffer 
+            sw = bw;
+            sh = bh;
+        } else if (bw <= (16 * 682)) {
+            // Go with row buffer 
+            sw = bw;
+            sh =  349525 / bw;
+        } else if (bh <= (16 * 512)) {
+            // Go with column buffer 
+            sw = 349525 / bh;
+            sh = bh;
+        } else {
+            sw = 682;
+            sh = 512;
+        }
     }
 
     // As we can come from expose, we have to tile here 
@@ -1508,7 +1531,12 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
             int x1 = MIN (x0 + sw, draw_x2);
 
             SPCanvasBuf buf;
-            buf.buf = nr_pixelstore_64K_new (0, 0);
+	if (canvas->rendermode != RENDERMODE_OUTLINE) {
+            buf.buf = nr_pixelstore_256K_new (FALSE, 0);
+  } else {
+            buf.buf = nr_pixelstore_1M_new (FALSE, 0);
+  }
+
             buf.buf_rowstride = sw * 3;
             buf.rect.x0 = x0;
             buf.rect.y0 = y0;
@@ -1542,7 +1570,13 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
                                               sw * 3,
                                               x0 - canvas->x0, y0 - canvas->y0);
             }
-            nr_pixelstore_64K_free (buf.buf);
+
+	if (canvas->rendermode != RENDERMODE_OUTLINE) {
+            nr_pixelstore_256K_free (buf.buf);
+  } else {
+            nr_pixelstore_1M_free (buf.buf);
+  }
+
         }
     }
 }
@@ -1660,6 +1694,9 @@ paint (SPCanvas *canvas)
     int const canvas_x1 = canvas->x0 + widget->allocation.width;
     int const canvas_y1 = canvas->y0 + widget->allocation.height;
 
+    NRRectL topaint;
+    topaint.x0 = topaint.y0 = topaint.x1 = topaint.y1 = 0;
+
     for (int j=canvas->tTop&(~3);j<canvas->tBottom;j+=4) {
         for (int i=canvas->tLeft&(~3);i<canvas->tRight;i+=4) {
             int  mode=0;
@@ -1679,16 +1716,21 @@ paint (SPCanvas *canvas)
             }
       
             if ( mode ) {
-                int x0 = 0,y0 = 0,x1 = 0,y1 = 0;
-                x0 = MAX (pl*32, canvas->x0);
-                y0 = MAX (pt*32, canvas->y0);
-                x1 = MIN (pr*32, canvas_x1);
-                y1 = MIN (pb*32, canvas_y1);
-                if ((x0 < x1) && (y0 < y1)) sp_canvas_paint_rect (canvas, x0, y0, x1, y1);
+                NRRectL tile;
+                tile.x0 = MAX (pl*32, canvas->x0);
+                tile.y0 = MAX (pt*32, canvas->y0);
+                tile.x1 = MIN (pr*32, canvas_x1);
+                tile.y1 = MIN (pb*32, canvas_y1);
+                if ((tile.x0 < tile.x1) && (tile.y0 < tile.y1)) {
+                    nr_rect_l_union (&topaint, &topaint, &tile);
+                }
+
             }
         }
     }
-  
+
+    sp_canvas_paint_rect (canvas, topaint.x0, topaint.y0, topaint.x1, topaint.y1);
+
     canvas->need_redraw = FALSE;
     return TRUE;
 }
@@ -1707,7 +1749,7 @@ do_update (SPCanvas *canvas)
 
     /* Paint if able to */
     if (GTK_WIDGET_DRAWABLE (canvas)) {
-        return paint (canvas);
+            return paint (canvas);
     }
 
     /* Pick new current item */
@@ -1787,6 +1829,7 @@ sp_canvas_scroll_to (SPCanvas *canvas, double cx, double cy, unsigned int clear)
     sp_canvas_resize_tiles(canvas,canvas->x0,canvas->y0,canvas->x0+canvas->widget.allocation.width,canvas->y0+canvas->widget.allocation.height);
   
     if (!clear) {
+        // scrolling without zoom; redraw only the newly exposed areas
         if ((dx != 0) || (dy != 0)) {
             int width, height;
             width = canvas->widget.allocation.width;
@@ -1807,7 +1850,7 @@ sp_canvas_scroll_to (SPCanvas *canvas, double cx, double cy, unsigned int clear)
             }
         }
     } else {
-        gtk_widget_queue_draw (GTK_WIDGET (canvas));
+        // scrolling as part of zoom; do nothing here - the next do_update will perform full redraw
     }
 }
 

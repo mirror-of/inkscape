@@ -150,6 +150,8 @@ struct SPCanvas {
 	unsigned int left_grabbed_item : 1;
 	/* For use by internal pick_current_item() function */
 	unsigned int in_repick : 1;
+
+	int rendermode;
 };
 
 GtkWidget *sp_canvas_new_aa (void);
