@@ -148,6 +148,9 @@ struct SPDesktop : public Inkscape::UI::View::View
 	return _guides_message_context;
     }
 
+    void setDisplayModeNormal();
+    void setDisplayModeOutline();
+
     void set_active (bool new_active);
     SPObject *currentRoot() const;
     SPObject *currentLayer() const;

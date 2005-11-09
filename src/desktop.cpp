@@ -189,8 +189,10 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas)
     g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
 
     SP_CANVAS_ARENA (drawing)->arena->delta = prefs_get_double_attribute ("options.cursortolerance", "value", 1.0); // default is 1 px
-    SP_CANVAS_ARENA (drawing)->arena->rendermode = prefs_get_int_attribute ("options.rendermode", "value", RENDERMODE_NORMAL);
-    canvas->rendermode = prefs_get_int_attribute ("options.rendermode", "value", RENDERMODE_NORMAL); // canvas needs that for choosing the best buffer size
+
+    // Start always in normal mode
+    SP_CANVAS_ARENA (drawing)->arena->rendermode = RENDERMODE_NORMAL;
+    canvas->rendermode = RENDERMODE_NORMAL; // canvas needs that for choosing the best buffer size
 
     grid = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
     guides = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
@@ -338,6 +340,20 @@ SPDesktop::~SPDesktop() {}
 
 //--------------------------------------------------------------------
 /* Public methods */
+
+void SPDesktop::setDisplayModeNormal()
+{
+    SP_CANVAS_ARENA (drawing)->arena->rendermode = RENDERMODE_NORMAL;
+    canvas->rendermode = RENDERMODE_NORMAL; // canvas needs that for choosing the best buffer size
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), d2w); // redraw
+}
+
+void SPDesktop::setDisplayModeOutline()
+{
+    SP_CANVAS_ARENA (drawing)->arena->rendermode = RENDERMODE_OUTLINE;
+    canvas->rendermode = RENDERMODE_OUTLINE; // canvas needs that for choosing the best buffer size
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), d2w); // redraw
+}
 
 /**
  * Returns current root (=bottom) layer.
