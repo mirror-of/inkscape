@@ -28,14 +28,12 @@ namespace Widget {
  *    \param label Label.
  */
   
-NotebookPage::NotebookPage(Glib::ustring const &label,
-                                       int n_rows, int n_columns)
-    : _frame(label),
-      _table(n_rows,n_columns)
+NotebookPage::NotebookPage(int n_rows, int n_columns)
+    :_table(n_rows, n_columns)
 {
-    set_border_width(4);
-    pack_start(_frame, true, true, 0);
-    _frame.add(_table);
+    set_border_width(2);
+    _table.set_spacings(2);
+    pack_start(_table, true, true, 0);
 }
 
 } // namespace Widget

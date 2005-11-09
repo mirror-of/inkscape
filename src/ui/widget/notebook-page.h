@@ -24,14 +24,11 @@ class NotebookPage : public Gtk::VBox
 {
 public:
     NotebookPage();
-    NotebookPage(Glib::ustring const &label,
-                 int n_rows, int n_columns);
+    NotebookPage(int n_rows, int n_columns);
 
-    Gtk::Frame& frame() { return _frame; }
     Gtk::Table& table() { return _table; }
 
 protected:
-    Gtk::Frame _frame;
     Gtk::Table _table;
 };
 
