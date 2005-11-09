@@ -490,7 +490,7 @@ unsigned int nr_arena_item_invoke_render(NRArenaItem *item, NRRectL const *area,
         nr_pixblock_release (&tpb);
       }
       /* Multiply with opacity if needed */
-      if ((item->opacity != 255) && !item->render_opacity) {
+      if ((item->opacity != 255) && !item->render_opacity && item->arena->rendermode != RENDERMODE_OUTLINE) {
         int x, y;
         unsigned int a;
         a = item->opacity;
@@ -518,7 +518,7 @@ unsigned int nr_arena_item_invoke_render(NRArenaItem *item, NRRectL const *area,
       } else {
         nr_pixblock_release (&ipb);
       }
-    } else if ( ((item->opacity != 255) && !item->render_opacity) ) {
+    } else if ( ((item->opacity != 255) && !item->render_opacity && item->arena->rendermode != RENDERMODE_OUTLINE) ) {
       /* Opacity only */
       // gettimeofday(&end_time,NULL);
       g_get_current_time (&end_time);
@@ -551,7 +551,7 @@ unsigned int nr_arena_item_invoke_render(NRArenaItem *item, NRRectL const *area,
 #endif
   } else {
     /* Determine, whether we need temporary buffer */
-    if (item->clip || item->mask || ((item->opacity != 255) && !item->render_opacity)) {
+    if (item->clip || item->mask || ((item->opacity != 255) && !item->render_opacity && item->arena->rendermode != RENDERMODE_OUTLINE)) {
       NRPixBlock ipb, mpb;
 
       /* Setup and render item buffer */
@@ -631,7 +631,7 @@ unsigned int nr_arena_item_invoke_render(NRArenaItem *item, NRRectL const *area,
           nr_pixblock_release (&tpb);
         }
         /* Multiply with opacity if needed */
-        if ((item->opacity != 255) && !item->render_opacity) {
+        if ((item->opacity != 255) && !item->render_opacity && item->arena->rendermode != RENDERMODE_OUTLINE) {
           int x, y;
           unsigned int a;
           a = item->opacity;
