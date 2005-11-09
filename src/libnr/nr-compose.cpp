@@ -52,7 +52,8 @@ nr_R8G8B8A8_N_EMPTY_R8G8B8A8_N (unsigned char *px, int w, int h, int rs, const u
 				*d++ = *s++;
 				*d++ = *s++;
 				*d++ = *s++;
-				*d++ = NR_PREMUL (*s++, alpha);
+				*d++ = NR_PREMUL (*s, alpha);
+				s++;
 			}
 		}
 		px += rs;
@@ -583,7 +584,7 @@ nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_P_A8 (unsigned char *px, int w, int h, int rs,
 					d[0] = NR_COMPOSEPPP (s[0], s[3], d[0], d[3]);
 					d[1] = NR_COMPOSEPPP (s[1], s[3], d[1], d[3]);
 					d[2] = NR_COMPOSEPPP (s[2], s[3], d[2], d[3]);
-					d[3] = (65025 - (255 - s[3]) * (255 - d[3]) + 127) / 255;
+					d[3] = NR_A7_NORMALIZED(s[3], d[3]);
 				} else {
 					unsigned int c;
 					c = NR_PREMUL (s[0], m[0]);
@@ -592,7 +593,7 @@ nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_P_A8 (unsigned char *px, int w, int h, int rs,
 					d[1] = NR_COMPOSEPPP (c, a, d[1], d[3]);
 					c = NR_PREMUL (s[2], m[0]);
 					d[2] = NR_COMPOSEPPP (c, a, d[2], d[3]);
-					d[3] = (65025 - (255 - a) * (255 - d[3]) + 127) / 255;
+					d[3] = NR_A7_NORMALIZED(a, d[3]);
 				}
 			}
 			d += 4;
