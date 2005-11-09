@@ -36,7 +36,6 @@
 #include "pixmaps/handles.xpm"
 #include <glibmm/i18n.h>
 #include "widgets/spw-utilities.h"
-#include "message-context.h"
 
 #include "select-context.h"
 #include "selection-chemistry.h"
