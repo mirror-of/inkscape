@@ -312,24 +312,9 @@ void TileDialog::Grid_Arrange ()
 //#########################################################################
 
 
-/**
- * Default response from the dialog.  Let's intercept it
- */
-void TileDialog::responseCallback(int response_id)
+void TileDialog::_apply()
 {
-
-    if (response_id == GTK_RESPONSE_OK)
-        {
-        Grid_Arrange();
-        }
-    else if (response_id == GTK_RESPONSE_CANCEL)
-        {
-        }
-    else
-        {
-        hide();
-        return;
-        }
+	Grid_Arrange();
 }
 
 
@@ -829,15 +814,10 @@ TileDialog::TileDialog()
     mainVBox->pack_start(TileBox);
 
     //## The OK button
-    TileOkButton     = add_button(Gtk::Stock::OK,   GTK_RESPONSE_OK);
-    tips.set_tip((*TileOkButton), _("Arrange Objects"));
+    TileOkButton     = add_button(Gtk::Stock::APPLY,   GTK_RESPONSE_APPLY);
+    tips.set_tip((*TileOkButton), _("Arrange selected objects"));
 
     show_all_children();
-
-    //## Connect the signal
-    signal_response().connect(
-    sigc::mem_fun(*this, &TileDialog::responseCallback) );
-
 }
 
 

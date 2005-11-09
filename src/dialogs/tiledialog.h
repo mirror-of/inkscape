@@ -62,9 +62,9 @@ public:
 
 
     /**
-     * Callback from OK or Cancel
+     * Callback from Apply
      */
-    void responseCallback(int response_id);
+    virtual void _apply();
 
     /**
      * Callback from spinbuttons
