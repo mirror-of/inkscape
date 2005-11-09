@@ -114,7 +114,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"toolbox\"/>\n"
 "    <group id=\"fillstroke\"/>\n"
 "    <group id=\"textandfont\"/>\n"
-"    <group id=\"transformation\"/>\n"
+"    <group id=\"transformation\" applyseparately=\"0\"/>\n"
 "    <group id=\"align\"/>\n"
 "    <group id=\"xml\"/>\n"
 "    <group id=\"find\"/>\n"
