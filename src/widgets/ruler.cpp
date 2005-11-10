@@ -248,13 +248,15 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 				(label_spacing_px > 6*digit_height || tick_index%2 == 0 || cur == 0) && 
 				(label_spacing_px > 3*digit_height || tick_index%4 == 0 ||  cur == 0))
 	    {
-	      sprintf (unit_str, "%d", (int) cur);
+				if (fabs((int)cur) >= 2000 && (((int) cur)/1000)*1000 == ((int) cur))
+					sprintf (unit_str, "%dk", ((int) cur)/1000);
+				else
+					sprintf (unit_str, "%d", (int) cur);
 	
-	      pango_layout_set_text (pango_layout, unit_str, -1);
+				pango_layout_set_text (pango_layout, unit_str, -1);
 	      
-              gdk_draw_layout (ruler->backing_store, gc,
-	                       pos + 2, 0,
-			       pango_layout);
+				gdk_draw_layout (ruler->backing_store, gc,
+	                       pos + 2, 0, pango_layout);
 	    }
 
       /* Calculate cur from start rather than incrementing by subd_incr
@@ -510,71 +512,71 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 
   /* drawing starts here */
   length = 0;
-  for (i = MAXIMUM_SUBDIVIDE - 1; i >= 0; i--)
-    {
-      subd_incr = (double) ruler->metric->ruler_scale[scale] / 
-	          (double) ruler->metric->subdivide[i];
-      if (subd_incr * fabs(increment) <= MINIMUM_INCR) 
-	continue;
+  for (i = MAXIMUM_SUBDIVIDE - 1; i >= 0; i--) {
+		subd_incr = (double) ruler->metric->ruler_scale[scale] / 
+			(double) ruler->metric->subdivide[i];
+		if (subd_incr * fabs(increment) <= MINIMUM_INCR) 
+			continue;
 
-      /* Calculate the length of the tickmarks. Make sure that
-       * this length increases for each set of ticks
-       */
-      ideal_length = height / (i + 1) - 1;
-      if (ideal_length > ++length)
-	length = ideal_length;
+		/* Calculate the length of the tickmarks. Make sure that
+		 * this length increases for each set of ticks
+		 */
+		ideal_length = height / (i + 1) - 1;
+		if (ideal_length > ++length)
+			length = ideal_length;
 
-      if (lower < upper)
-	{
-	  start = floor (lower / subd_incr) * subd_incr;
-	  end   = ceil  (upper / subd_incr) * subd_incr;
-	}
-      else
-	{
-	  start = floor (upper / subd_incr) * subd_incr;
-	  end   = ceil  (lower / subd_incr) * subd_incr;
-	}
+		if (lower < upper)
+			{
+				start = floor (lower / subd_incr) * subd_incr;
+				end   = ceil  (upper / subd_incr) * subd_incr;
+			}
+		else
+			{
+				start = floor (upper / subd_incr) * subd_incr;
+				end   = ceil  (lower / subd_incr) * subd_incr;
+			}
 
     tick_index = 0;
     cur = start;        
 
-    while (cur < end)
-	{
-	  pos = ROUND ((cur - lower) * increment);
+    while (cur < end) {
+			pos = ROUND ((cur - lower) * increment);
 
-	  gdk_draw_line (ruler->backing_store, gc,
-			 height + xthickness - length, pos,
-			 height + xthickness, pos);
+			gdk_draw_line (ruler->backing_store, gc,
+										 height + xthickness - length, pos,
+										 height + xthickness, pos);
 
-	  /* draw label */
-        double label_spacing_px = fabs((increment*(double)ruler->metric->ruler_scale[scale])/ruler->metric->subdivide[i]);
-	  if (i == 0 && 
-				(label_spacing_px > 6*digit_height || tick_index%2 == 0 || cur == 0) && 
-				(label_spacing_px > 3*digit_height || tick_index%4 == 0 || cur == 0))
-	    {
-
-	      sprintf (unit_str, "%d", (int) cur);
-	      for (j = 0; j < (int) strlen (unit_str); j++)
-		{
-		  digit_str[0] = unit_str[j];
+			/* draw label */
+			double label_spacing_px = fabs((increment*(double)ruler->metric->ruler_scale[scale])/ruler->metric->subdivide[i]);
+			if (i == 0 && 
+					(label_spacing_px > 6*digit_height || tick_index%2 == 0 || cur == 0) && 
+					(label_spacing_px > 3*digit_height || tick_index%4 == 0 || cur == 0))
+				{
+					if (fabs((int)cur) >= 2000 && (((int) cur)/1000)*1000 == ((int) cur))
+						sprintf (unit_str, "%dk", ((int) cur)/1000);
+					else
+						sprintf (unit_str, "%d", (int) cur);
+					for (j = 0; j < (int) strlen (unit_str); j++)
+						{
+							digit_str[0] = unit_str[j];
                   
-                  pango_layout_set_text (pango_layout, digit_str, 1);
+							pango_layout_set_text (pango_layout, digit_str, 1);
       
-                  gdk_draw_layout (ruler->backing_store, gc,
-	                           xthickness + 1, 
-				   pos + digit_height * (j) + 1,
-		                   pango_layout); 
-		}
-	    }
+							gdk_draw_layout (ruler->backing_store, gc,
+															 xthickness + 1, 
+															 pos + digit_height * (j) + 1,
+															 pango_layout); 
+						}
+				}
 
-      /* Calculate cur from start rather than incrementing by subd_incr
-       * in each iteration. This is to avoid propagation of floating point 
-       * errors in subd_incr.
-       */
-      ++tick_index;
-      cur = start + (((double)tick_index) * (double)ruler->metric->ruler_scale[scale])/ ruler->metric->subdivide[i];
+			/* Calculate cur from start rather than incrementing by subd_incr
+			 * in each iteration. This is to avoid propagation of floating point 
+			 * errors in subd_incr.
+			 */
+			++tick_index;
+			cur = start + (((double)tick_index) * (double)ruler->metric->ruler_scale[scale])/ ruler->metric->subdivide[i];
+		}
 	}
-    }
 }
 
 static void
