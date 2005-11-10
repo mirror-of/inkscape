@@ -47,12 +47,12 @@ Implementation::check (Inkscape::Extension::Extension * module) {
 } /* Implemenation::check */
 
 Gtk::Widget *
-Implementation::prefs_input (Inkscape::Extension::Input * module, const gchar * filename) {
+Implementation::prefs_input (Inkscape::Extension::Input * module, gchar const * filename) {
 	return module->autogui();
 } /* Implementation::prefs_input */
 
 SPDocument *
-Implementation::open (Inkscape::Extension::Input * module, const gchar * filename) {
+Implementation::open (Inkscape::Extension::Input * module, gchar const * filename) {
     /* throw open_failed(); */
     return NULL;
 } /* Implementation::open */
@@ -63,7 +63,7 @@ Implementation::prefs_output (Inkscape::Extension::Output * module) {
 } /* Implementation::prefs_output */
 
 void
-Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename) {
+Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, gchar const * filename) {
 	/* throw save_fail */
 	return;
 } /* Implementation::save */
@@ -107,7 +107,7 @@ Implementation::finish (Inkscape::Extension::Print * module)
 
 /* Rendering methods */
 unsigned int
-Implementation::bind (Inkscape::Extension::Print * module, const NRMatrix *transform, float opacity)
+Implementation::bind (Inkscape::Extension::Print * module, NRMatrix const *transform, float opacity)
 {
 	return 0;
 }
@@ -119,35 +119,35 @@ Implementation::release (Inkscape::Extension::Print * module)
 }
 
 unsigned int
-Implementation::comment (Inkscape::Extension::Print * module, const char * comment)
+Implementation::comment (Inkscape::Extension::Print * module, char const * comment)
 {
 	return 0;
 }
 
 unsigned int
-Implementation::fill (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-			   const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
+Implementation::fill (Inkscape::Extension::Print * module, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
+			   NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
 	return 0;
 }
 
 unsigned int
-Implementation::stroke (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
-			 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
+Implementation::stroke (Inkscape::Extension::Print * module, NRBPath const *bpath, NRMatrix const *transform, SPStyle const *style,
+			 NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
 	return 0;
 }
 
 unsigned int
 Implementation::image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-			const NRMatrix *transform, const SPStyle *style)
+			NRMatrix const *transform, SPStyle const *style)
 {
 	return 0;
 }
 
 unsigned int
-Implementation::text (Inkscape::Extension::Print * module, const char *text,
-                      NR::Point p, const SPStyle* style)
+Implementation::text (Inkscape::Extension::Print * module, char const *text,
+                      NR::Point p, SPStyle const *style)
 {
 	return 0;
 }
