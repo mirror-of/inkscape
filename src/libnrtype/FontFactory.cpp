@@ -27,7 +27,7 @@
 size_t  font_descr_hash::operator()( PangoFontDescription* const&x) const {
 	int    h=0;
 	h*=1128467;
-	const char* theF=pango_font_description_get_family(x);
+	char const *theF=pango_font_description_get_family(x);
 	h+=(theF)?g_str_hash(theF):0;
 	h*=1128467;
 	h+=(int)pango_font_description_get_style(x);
@@ -41,8 +41,8 @@ size_t  font_descr_hash::operator()( PangoFontDescription* const&x) const {
 }
 bool  font_descr_equal::operator()( PangoFontDescription* const&a, PangoFontDescription* const&b) {
 	//		if ( pango_font_description_equal(a,b) ) return true;
-	const char* fa=pango_font_description_get_family(a);
-	const char* fb=pango_font_description_get_family(b);
+	char const *fa = pango_font_description_get_family(a);
+	char const *fb = pango_font_description_get_family(b);
 	if ( ( fa && fb == NULL ) || ( fb && fa == NULL ) ) return false;
 	if ( fa && fb && strcmp(fa,fb) != 0 ) return false;
 	if ( pango_font_description_get_style(a) != pango_font_description_get_style(b) ) return false;
@@ -58,7 +58,7 @@ bool  font_descr_equal::operator()( PangoFontDescription* const&a, PangoFontDesc
 * A wrapper for strcasestr that also provides an implementation for Win32.
  */
 static bool
-ink_strstr (const char *haystack, const char *pneedle)
+ink_strstr (char const *haystack, char const *pneedle)
 {
 	// windows has no strcasestr implementation, so here is ours...
 	// stolen from nmap
@@ -73,7 +73,7 @@ ink_strstr (const char *haystack, const char *pneedle)
 	* modify the callers rather than calling strdown there.
 	*/
 	char buf[512];
-	register const char *p;
+	register char const *p;
 	char *needle, *q, *foundto;
 	if (!*pneedle) return true;
 	if (!haystack) return false;
@@ -99,7 +99,7 @@ ink_strstr (const char *haystack, const char *pneedle)
  */
 // FIXME: make this UTF8, add non-English style names
 static bool
-is_regular (const char *s)
+is_regular (char const *s)
 {
 	if (ink_strstr(s, "Regular")) return true;
 	if (ink_strstr(s, "Roman")) return true;
@@ -112,7 +112,7 @@ is_regular (const char *s)
 * Non-bold fonts are 'Medium' or 'Book'
  */
 static bool
-is_nonbold (const char *s)
+is_nonbold (char const *s)
 {
 	if (ink_strstr(s, "Medium")) return true;
 	if (ink_strstr(s, "Book")) return true;
@@ -123,7 +123,7 @@ is_nonbold (const char *s)
 * Italic fonts are 'Italic', 'Oblique', or 'Slanted'
  */
 static bool
-is_italic (const char *s)
+is_italic (char const *s)
 {
 	if (ink_strstr(s, "Italic")) return true;
 	if (ink_strstr(s, "Oblique")) return true;
@@ -135,7 +135,7 @@ is_italic (const char *s)
 * Bold fonts are 'Bold'
  */
 static bool
-is_bold (const char *s)
+is_bold (char const *s)
 {
 	if (ink_strstr(s, "Bold")) return true;
 	return false;
@@ -145,7 +145,7 @@ is_bold (const char *s)
 * Caps fonts are 'Caps'
  */
 static bool
-is_caps (const char *s)
+is_caps (char const *s)
 {
 	if (ink_strstr(s, "Caps")) return true;
 	return false;
@@ -157,7 +157,7 @@ is_caps (const char *s)
 * Monospaced fonts are 'Mono'
  */
 static bool
-is_mono (const char *s)
+is_mono (char const *s)
 {
 	if (ink_strstr(s, "Mono")) return true;
 	return false;
@@ -167,7 +167,7 @@ is_mono (const char *s)
 * Rounded fonts are 'Round'
  */
 static bool
-is_round (const char *s)
+is_round (char const *s)
 {
 	if (ink_strstr(s, "Round")) return true;
 	return false;
@@ -177,7 +177,7 @@ is_round (const char *s)
 * Outline fonts are 'Outline'
  */
 static bool
-is_outline (const char *s)
+is_outline (char const *s)
 {
 	if (ink_strstr(s, "Outline")) return true;
 	return false;
@@ -187,7 +187,7 @@ is_outline (const char *s)
 * Swash fonts are 'Swash'
  */
 static bool
-is_swash (const char *s)
+is_swash (char const *s)
 {
 	if (ink_strstr(s, "Swash")) return true;
 	return false;
@@ -203,10 +203,10 @@ is_swash (const char *s)
  * Q:  Is there a problem with strcasecmp on Win32?  Should it use stricmp?
  */
 static int
-style_name_compare (const void *aa, const void *bb)
+style_name_compare (void const *aa, void const *bb)
 {
-	const char *a = (char *) aa;
-	const char *b = (char *) bb;
+	char const *a = (char const *) aa;
+	char const *b = (char const *) bb;
 	
 	if (is_regular(a) && !is_regular(b)) return -1;
 	if (is_regular(b) && !is_regular(a)) return 1;
@@ -227,10 +227,10 @@ style_name_compare (const void *aa, const void *bb)
 }
 
 static int
-style_record_compare (const void *aa, const void *bb)
+style_record_compare (void const *aa, void const *bb)
 {
-	NRStyleRecord *a = (NRStyleRecord *) aa;
-	NRStyleRecord *b = (NRStyleRecord *) bb;
+	NRStyleRecord const *a = (NRStyleRecord const *) aa;
+	NRStyleRecord const *b = (NRStyleRecord const *) bb;
 	
 	return (style_name_compare (a->name, b->name));
 }
@@ -255,12 +255,12 @@ static void font_factory_style_list_destructor (NRStyleList *list)
 * On Win32 performs a stricmp(a,b), otherwise does a strcasecmp(a,b)
  */
 static int
-family_name_compare (const void *a, const void *b)
+family_name_compare (void const *a, void const *b)
 {
 #ifndef WIN32
-	return strcasecmp ((*((const char **) a)), (*((const char **) b)));
+	return strcasecmp ((*((char const **) a)), (*((char const **) b)));
 #else
-	return stricmp ((*((const char **) a)), (*((const char **) b)));
+	return stricmp ((*((char const **) a)), (*((char const **) b)));
 #endif
 }
 
@@ -325,7 +325,7 @@ font_factory::~font_factory(void)
 	//	g_object_unref(fontContext);
 }
 
-font_instance* font_factory::FaceFromDescr(const char* family, const char* style)
+font_instance* font_factory::FaceFromDescr(char const *family, char const *style)
 {
 	PangoFontDescription* temp_descr=pango_font_description_from_string(style);
     pango_font_description_set_family(temp_descr,family);
@@ -403,7 +403,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 	return res;
 }
 
-font_instance* font_factory::Face(const char* family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
+font_instance* font_factory::Face(char const *family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
 {
 	PangoFontDescription*  temp_descr=pango_font_description_new();
 	pango_font_description_set_family(temp_descr,family);
@@ -416,7 +416,7 @@ font_instance* font_factory::Face(const char* family, int variant, int style, in
 	return res;
 }
 
-font_instance* font_factory::Face(const char* family, NRTypePosDef apos)
+font_instance* font_factory::Face(char const *family, NRTypePosDef apos)
 {
 	PangoFontDescription*  temp_descr=pango_font_description_new();
 	
@@ -512,7 +512,7 @@ NRNameList* font_factory::Families(NRNameList *flist)
 	return flist;
 }
 
-NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
+NRStyleList* font_factory::Styles(gchar const *family, NRStyleList *slist)
 {
 	PangoFontFamily* theFam=NULL;
 	
@@ -523,7 +523,7 @@ NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
 		pango_font_map_list_families(fontServer, &fams, &nbFam);
 		
 		for (int i=0;i<nbFam;i++) {
-			const char* fname=pango_font_family_get_name(fams[i]);
+			char const *fname = pango_font_family_get_name(fams[i]);
 			if ( fname && strcmp(family,fname) == 0 ) {
 				theFam=fams[i];
 				break;
@@ -561,13 +561,13 @@ NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
 		if (pango_font_description_to_string (pango_font_face_describe(faces[i])) == NULL)
 			continue;
 		
-		const char *name = g_strdup (pango_font_face_get_face_name (faces[i]));
-		const char *descr = /*g_strdup (*/pango_font_description_to_string (nd)/*)*/;
+		char const *name = g_strdup (pango_font_face_get_face_name (faces[i]));
+		char const *descr = /*g_strdup (*/pango_font_description_to_string (nd)/*)*/;
 		pango_font_description_free(nd);
 		
 		// no duplicates
 		for (int j = 0; j < nr; j ++) {
-			if (!strcmp ((const char *) ((slist->records)[j].name), (const char *) name)) {
+			if (!strcmp ((char const *) ((slist->records)[j].name), (char const *) name)) {
 				continue;
 			}
 		}
@@ -625,12 +625,12 @@ void                  font_factory::AddInCache(font_instance* who)
 
 
 /*
- Local Variables:
- mode:c++
- c-file-style:"stroustrup"
- c-file-offsets:((innamespace . 0)(inline-open . 0))
- indent-tabs-mode:nil
- fill-column:99
- End:
- */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
