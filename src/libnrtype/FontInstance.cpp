@@ -462,7 +462,6 @@ void font_instance::LoadGlyph(int glyph_id)
 
                     if (polyHeader->dwType == TT_POLYGON_TYPE) {
                         n_g.outline->MoveTo(pointfx_to_nrpoint(polyHeader->pfxStart, scale));
-                        POINTFX startPoint=polyHeader->pfxStart;
                         DWORD curveOffset=polyOffset+sizeof(TTPOLYGONHEADER);
 
                         while ( curveOffset < polyOffset+polyHeader->cb ) {
@@ -505,6 +504,7 @@ void font_instance::LoadGlyph(int glyph_id)
                             }
                             curveOffset += sizeof(TTPOLYCURVE)+sizeof(POINTFX)*(polyCurve->cpfx-1);
                         }
+                        n_g.outline->Close();
                     }
                     polyOffset += polyHeader->cb;
                 }
