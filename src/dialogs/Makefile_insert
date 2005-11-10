@@ -56,8 +56,6 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/text-edit.h	\
 	dialogs/tiledialog.cpp	\
 	dialogs/tiledialog.h	\
-	dialogs/transformation.cpp	\
-	dialogs/transformation.h	\
 	dialogs/xml-tree.cpp	\
 	dialogs/xml-tree.h      \
 	dialogs/rdf.cpp	\

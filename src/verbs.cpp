@@ -40,7 +40,6 @@
 #include "dialogs/text-edit.h"
 #include "dialogs/export.h"
 #include "dialogs/xml-tree.h"
-#include "dialogs/transformation.h"
 #include "dialogs/object-properties.h"
 #include "dialogs/desktop-properties.h"
 #include "dialogs/display-settings.h"
@@ -1482,7 +1481,6 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
             show_panel( Inkscape::UI::Dialogs::SwatchesPanel::getInstance(), "dialogs.swatches", SP_VERB_DIALOG_SWATCHES);
             break;
         case SP_VERB_DIALOG_TRANSFORM:
-            //sp_transformation_dialog_move();
             dt->_dlg_mgr->showDialog("Transformation");
             break;
         case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:

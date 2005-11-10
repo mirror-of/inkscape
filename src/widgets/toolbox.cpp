@@ -73,7 +73,6 @@
 #include "desktop-style.h"
 
 #include "dialogs/object-properties.h"
-#include "dialogs/transformation.h"
 #include "dialogs/text-edit.h"
 #include "dialogs/export.h"
 #include "dialogs/dialog-events.h"
