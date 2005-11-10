@@ -84,6 +84,7 @@ sp_color_picker_new(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, gchar 
                     gchar *title, gchar *tip, guint32 rgba)
 {
     GtkWidget *b = gtk_button_new();
+    gtk_button_set_relief (GTK_BUTTON(b), GTK_RELIEF_NONE);
 
     g_object_set_data(G_OBJECT(b), "title", title);
 
