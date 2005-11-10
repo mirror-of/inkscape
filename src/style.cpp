@@ -1246,16 +1246,19 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
     } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_LIGHTER) {
         unsigned const parent_val = parent->font_weight.computed;
         g_assert(SP_CSS_FONT_WEIGHT_100 == 0);
-        style->font_weight.computed = (parent_val == SP_CSS_FONT_WEIGHT_100
-                           ? parent_val
-                           : parent_val - 1);
+        // strictly, 'bolder' and 'lighter' should go to the next weight
+        // expressible in the current font family, but that's difficult to
+        // find out, so jumping by 3 seems an appropriate approximation
+        style->font_weight.computed = (parent_val <= SP_CSS_FONT_WEIGHT_100 + 3
+                           ? SP_CSS_FONT_WEIGHT_100
+                           : parent_val - 3);
         g_assert(style->font_weight.computed <= (unsigned) SP_CSS_FONT_WEIGHT_900);
     } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLDER) {
         unsigned const parent_val = parent->font_weight.computed;
         g_assert(parent_val <= SP_CSS_FONT_WEIGHT_900);
-        style->font_weight.computed = (parent_val == SP_CSS_FONT_WEIGHT_900
-                           ? parent_val
-                           : parent_val + 1);
+        style->font_weight.computed = (parent_val >= SP_CSS_FONT_WEIGHT_900 - 3
+                           ? SP_CSS_FONT_WEIGHT_900
+                           : parent_val + 3);
         g_assert(style->font_weight.computed <= (unsigned) SP_CSS_FONT_WEIGHT_900);
     }
 
