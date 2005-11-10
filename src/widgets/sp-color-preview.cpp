@@ -152,7 +152,7 @@ sp_color_preview_paint (SPColorPreview *cp, GdkRectangle *area)
 	GtkWidget *widget;
 	GdkRectangle warea, carea;
 	GdkRectangle wpaint, cpaint;
-	gint bx, by, w2;
+	gint w2;
 
 	widget = GTK_WIDGET (cp);
 
@@ -163,22 +163,14 @@ sp_color_preview_paint (SPColorPreview *cp, GdkRectangle *area)
 
 	if (!gdk_rectangle_intersect (area, &warea, &wpaint)) return;
 
-	/* Draw shadow */
-	gtk_draw_shadow (widget->style, widget->window,
-			 (GtkStateType)widget->state, GTK_SHADOW_ETCHED_IN,
-			 warea.x, warea.y,
-			 warea.width, warea.height);
-
 	/* Transparent area */
 
-	bx = widget->style->xthickness;
-	by = widget->style->ythickness;
 	w2 = warea.width / 2;
 
-	carea.x = warea.x + bx;
-	carea.y = warea.y + by;
-	carea.width = w2 - bx;
-	carea.height = warea.height - 2 * by;
+	carea.x = warea.x;
+	carea.y = warea.y;
+	carea.width = w2;
+	carea.height = warea.height;
 
 	if (gdk_rectangle_intersect (area, &carea, &cpaint)) {
 		nr_gdk_draw_rgba32_solid (widget->window, widget->style->black_gc,
@@ -190,9 +182,9 @@ sp_color_preview_paint (SPColorPreview *cp, GdkRectangle *area)
 	/* Solid area */
 
 	carea.x = warea.x + w2;
-	carea.y = warea.y + by;
-	carea.width = warea.width - bx - w2;
-	carea.height = warea.height - 2 * by;
+	carea.y = warea.y;
+	carea.width = warea.width - w2;
+	carea.height = warea.height;
 
 	if (gdk_rectangle_intersect (area, &carea, &cpaint)) {
 		nr_gdk_draw_rgba32_solid (widget->window, widget->style->black_gc,
