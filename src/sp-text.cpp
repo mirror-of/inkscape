@@ -600,11 +600,13 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex)
     SPStyle *style = SP_OBJECT_STYLE (item);
 
     if (style && !NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
-        style->font_size.computed *= ex;
-        if (style->text) {
-            style->letter_spacing.computed *= ex;
-            style->word_spacing.computed *= ex;
+        if (!style->font_size.set) {
+            style->font_size.set = 1;
+            style->font_size.type = SP_FONT_SIZE_LENGTH;
         }
+        style->font_size.computed *= ex;
+        style->letter_spacing.computed *= ex;
+        style->word_spacing.computed *= ex;
         item->updateRepr();
     }
 
