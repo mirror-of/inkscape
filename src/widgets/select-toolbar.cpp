@@ -567,8 +567,8 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_stroke",
                                               _("When scaling objects, scale the stroke width by the same proportion"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_stroke), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "stroke", 1));
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_stroke), desktop);
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
 
@@ -579,8 +579,8 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_corners",
                                               _("When scaling rectangles, scale the radii of rounded corners"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_corners), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "rectcorners", 1));
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_corners), desktop);
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
 
@@ -591,8 +591,8 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_gradient",
                                               _("Transform gradients (in fill or stroke) along with the objects"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_gradient), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "gradient", 1));
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_gradient), desktop);
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
 
@@ -603,8 +603,8 @@ sp_select_toolbox_new(SPDesktop *desktop)
                                               "transform_pattern",
                                               _("Transform patterns (in fill or stroke) along with the objects"),
                                               tt);
-    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_pattern), desktop);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "pattern", 1));
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_pattern), desktop);
     gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
     }
 
