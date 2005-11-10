@@ -6952,19 +6952,19 @@ msgstr "Удалить текущий слой"
 #. Object
 #: ../src/verbs.cpp:2014
 msgid "Rotate _90 deg CW"
-msgstr "Повернуть на _90&#176; по часовой стрелке"
+msgstr "Повернуть на _90° по часовой стрелке"
 
 #: ../src/verbs.cpp:2015
 msgid "Rotate selection 90 degrees clockwise"
-msgstr "Повернуть выделенные объекты на 90&#176; по часовой стрелке"
+msgstr "Повернуть выделенные объекты на 90° по часовой стрелке"
 
 #: ../src/verbs.cpp:2016
 msgid "Rotate 9_0 deg CCW"
-msgstr "Повернуть на 9_0&#176; против часовой стрелки"
+msgstr "Повернуть на 9_0° против часовой стрелки"
 
 #: ../src/verbs.cpp:2017
 msgid "Rotate selection 90 degrees counter-clockwise"
-msgstr "Повернуть выделенные объекты на 90&#176; против часовой стрелки"
+msgstr "Повернуть выделенные объекты на 90° против часовой стрелки"
 
 #: ../src/verbs.cpp:2018
 msgid "Remove _Transformations"
