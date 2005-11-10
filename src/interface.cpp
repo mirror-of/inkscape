@@ -525,7 +525,8 @@ sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::
             gchar c[256];
             sp_ui_shortcut_string(shortcut, c);
             GtkWidget *const hb = gtk_hbox_new(FALSE, 16);
-            GtkWidget *const name_lbl = gtk_label_new_with_mnemonic(action->name);
+            GtkWidget *const name_lbl = gtk_label_new("");
+            gtk_label_set_markup_with_mnemonic(GTK_LABEL(name_lbl), action->name);
             gtk_misc_set_alignment((GtkMisc *) name_lbl, 0.0, 0.5);
             gtk_box_pack_start((GtkBox *) hb, name_lbl, TRUE, TRUE, 0);
             GtkWidget *const accel_lbl = gtk_label_new(c);
@@ -540,10 +541,14 @@ sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::
             gtk_container_add((GtkContainer *) item, hb);
         } else {
             if (radio) {
-                item = gtk_radio_menu_item_new_with_mnemonic (group, action->name);
+                item = gtk_radio_menu_item_new (group);
             } else {
-                item = gtk_image_menu_item_new_with_mnemonic (action->name);
+                item = gtk_image_menu_item_new ();
             }
+            GtkWidget *const name_lbl = gtk_label_new("");
+            gtk_label_set_markup_with_mnemonic(GTK_LABEL(name_lbl), action->name);
+            gtk_misc_set_alignment((GtkMisc *) name_lbl, 0.0, 0.5);
+            gtk_container_add((GtkContainer *) item, name_lbl);
         }
 
         nr_active_object_add_listener((NRActiveObject *)action, (NRObjectEventVector *)&menu_item_event_vector, sizeof(SPActionEventVector), item);
