@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-09 16:39+1100\n"
+"POT-Creation-Date: 2005-11-10 12:12+1100\n"
 "PO-Revision-Date: 2005-11-08 02:04+0300\n"
 "Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -3636,31 +3636,31 @@ msgstr "_Строка состояния"
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr "Показать/скрыть строку состояния (внизу окна)"
 
-#: ../src/interface.cpp:854
+#: ../src/interface.cpp:857
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr ""
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
-#: ../src/interface.cpp:964
+#: ../src/interface.cpp:967
 #, c-format
 msgid "Enter group #%s"
 msgstr "Войти в группу #%s"
 
-#: ../src/interface.cpp:975
+#: ../src/interface.cpp:978
 msgid "Go to parent"
 msgstr "На уровень выше"
 
-#: ../src/interface.cpp:1006
+#: ../src/interface.cpp:1009
 msgid "Could not parse SVG data"
 msgstr "Невозможно прочитать SVG-данные"
 
-#: ../src/interface.cpp:1169
+#: ../src/interface.cpp:1172
 #, c-format
 msgid "Overwrite %s"
 msgstr "Переписать %s"
 
-#: ../src/interface.cpp:1187
+#: ../src/interface.cpp:1190
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -7019,19 +7019,19 @@ msgstr "Удалить текущий слой"
 #. Object
 #: ../src/verbs.cpp:2014
 msgid "Rotate _90 deg CW"
-msgstr "Повернуть на _90&#176; по часовой стрелке"
+msgstr "Повернуть на _90° по часовой стрелке"
 
 #: ../src/verbs.cpp:2015
 msgid "Rotate selection 90 degrees clockwise"
-msgstr "Повернуть выделенные объекты на 90&#176; по часовой стрелке"
+msgstr "Повернуть выделенные объекты на 90° по часовой стрелке"
 
 #: ../src/verbs.cpp:2016
 msgid "Rotate 9_0 deg CCW"
-msgstr "Повернуть на 9_0&#176; против часовой стрелки"
+msgstr "Повернуть на 9_0° против часовой стрелки"
 
 #: ../src/verbs.cpp:2017
 msgid "Rotate selection 90 degrees counter-clockwise"
-msgstr "Повернуть выделенные объекты на 90&#176; против часовой стрелки"
+msgstr "Повернуть выделенные объекты на 90° против часовой стрелки"
 
 #: ../src/verbs.cpp:2018
 msgid "Remove _Transformations"
