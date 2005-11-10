@@ -432,9 +432,7 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
 
 /**
  *\brief   Writes the change into the corresponding attribute of the document
- *         root (svg element); moved here from the former document settings
- *         dialog.
- *
+ *         root (svg element)
  */
 static void
 sp_doc_dialog_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
@@ -914,7 +912,6 @@ sp_desktop_dialog(void)
         gtk_widget_show(v);
         gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
 
-
         /* Checkbuttons */
         /// \todo FIXME: gray out snapping when grid is off
         spw_vbox_checkbutton(dlg, v, _("Show grid"), _("Show or hide grid"), "showgrid", cb);
@@ -1076,8 +1073,6 @@ sp_desktop_dialog(void)
         gtk_table_attach (GTK_TABLE (t), doc_units, 1, 2, 6, 7,
                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
 
-        // The following comes from the former "document settings" dialog
-
         GtkWidget *vb = gtk_vbox_new(FALSE, 4);
         gtk_widget_show(vb);
         gtk_table_attach(GTK_TABLE(t), vb, 0, 2, 7, 8,
@@ -1204,8 +1199,6 @@ sp_desktop_dialog(void)
                           (GtkAttachOptions)0, 0, 0 );
         g_signal_connect( G_OBJECT(a), "value_changed",
                           G_CALLBACK(sp_doc_dialog_whatever_changed), dlg );
-
-        // end of former "document settings" stuff
 
         /*
          * Ownership metadata tab
@@ -1474,8 +1467,6 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         if (nv->doc_units) 
             sp_unit_selector_set_unit (SP_UNIT_SELECTOR(o), nv->doc_units);
 
-        // Start of former "document settings" stuff
-
         gdouble const doc_w_px = sp_document_width(SP_DT_DOCUMENT(desktop));
         gdouble const doc_h_px = sp_document_height(SP_DT_DOCUMENT(desktop));
 
@@ -1501,8 +1492,6 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
             gtk_adjustment_set_value(w_adj, doc_w_u);
             gtk_adjustment_set_value(h_adj, doc_h_u);
         }
-
-        // end of "document settings" stuff
 
         /* load the RDF entities */
         for (struct rdf_work_entity_t * entity = rdf_work_entities;
