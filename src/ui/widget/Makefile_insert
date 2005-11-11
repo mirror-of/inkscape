@@ -28,6 +28,8 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/scalar-unit.h		\
 	ui/widget/scalar.cpp		\
 	ui/widget/scalar.h		\
+	ui/widget/selected-style.h	\	
+	ui/widget/selected-style.cpp	\
 	ui/widget/svg-canvas.cpp        \
 	ui/widget/svg-canvas.h          \
 	ui/widget/toolbox.cpp		\
