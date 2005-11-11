@@ -147,17 +147,19 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
  * Apply style on selection on desktop.
  */
 void
-sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change)
+sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current)
 {
+    if (write_current) {
 // 1. Set internal value
-    sp_repr_css_merge(desktop->current, css);
+        sp_repr_css_merge(desktop->current, css);
 
 // 1a. Write to prefs; make a copy and unset any URIs first
-    SPCSSAttr *css_write = sp_repr_css_attr_new();
-    sp_repr_css_merge(css_write, css);
-    sp_css_attr_unset_uris(css_write);
-    sp_repr_css_change(inkscape_get_repr(INKSCAPE, "desktop"), css_write, "style");
-    sp_repr_css_attr_unref(css_write);
+        SPCSSAttr *css_write = sp_repr_css_attr_new();
+        sp_repr_css_merge(css_write, css);
+        sp_css_attr_unset_uris(css_write);
+        sp_repr_css_change(inkscape_get_repr(INKSCAPE, "desktop"), css_write, "style");
+        sp_repr_css_attr_unref(css_write);
+    }
 
     if (!change)
         return;
