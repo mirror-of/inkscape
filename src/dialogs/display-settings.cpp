@@ -779,7 +779,7 @@ new_objects_style (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
     gtk_widget_show (take);
 
     GtkWidget *b = new_objects_style_add_radio (
-        NULL, fb, tt, _("Current style"), _("Current style is updated every time you change the style of any object (its fill, stroke, transparency, etc.)"),
+        NULL, fb, tt, _("Last used style"), _("Apply the style you last set on an object"),
         1,
         usecurrent != 0,
         options_changed_radio,
