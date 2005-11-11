@@ -82,7 +82,7 @@ sp_object_properties_dialog_delete ( GtkObject *object,
 }
 
 
-int
+void
 sp_object_properties_page( GtkWidget *nb,
                            GtkWidget *page,
                            char *label,
@@ -105,8 +105,6 @@ sp_object_properties_page( GtkWidget *nb,
     gtk_widget_show (page);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb), page, hb);
     gtk_object_set_data (GTK_OBJECT (dlg), dlg_name, page);
-
-    return 0;
 }
 
 void
