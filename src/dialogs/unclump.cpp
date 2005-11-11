@@ -161,7 +161,7 @@ unclump_dist (SPItem *item1, SPItem *item2)
 		}
 
 		// return the minimum of all dists
-		return *min_element(dists.begin(), dists.end());
+		return *std::min_element(dists.begin(), dists.end());
 	} else {
 		return dist_r;
 	}

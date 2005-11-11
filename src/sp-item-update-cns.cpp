@@ -9,6 +9,7 @@
 #include "sp-guide-constraint.h"
 #include <sp-guide.h>
 #include <sp-item.h>
+using std::find;
 using std::vector;
 
 void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
