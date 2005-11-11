@@ -1,7 +1,9 @@
 #ifndef SEEN_MARKER_DEBUG_H
 #define SEEN_MARKER_DEBUG_H
 
-void marker_status(char const *format, ...) __attribute__((format(__printf__, 1, 2)));
+#include "gnuc-attribute.h"
+
+void marker_status(char const *format, ...) _gnuc_attribute((format(__printf__, 1, 2)));
 
 #endif /* !SEEN_MARKER_DEBUG_H */
 
