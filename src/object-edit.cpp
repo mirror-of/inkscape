@@ -936,7 +936,7 @@ sp_spiral_outer_set (SPItem *item, const NR::Point &p, const NR::Point &origin, 
 			double r0;
 			sp_spiral_get_polar (spiral, spiral->t0, &r0, NULL);
 			spiral->rad = rad_new;
-			spiral->t0 = pow (r0 / spiral->rad, 1/spiral->exp);
+			spiral->t0 = pow(r0 / spiral->rad, 1.0/spiral->exp);
 		}
 		if (!isFinite(spiral->t0)) spiral->t0 = 0.0;
 		spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);	
