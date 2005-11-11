@@ -16,7 +16,7 @@
 #include "sp-color-preview.h"
 
 #define SPCP_DEFAULT_WIDTH 32
-#define SPCP_DEFAULT_HEIGHT 16
+#define SPCP_DEFAULT_HEIGHT 11
 
 static void sp_color_preview_class_init (SPColorPreviewClass *klass);
 static void sp_color_preview_init (SPColorPreview *image);
