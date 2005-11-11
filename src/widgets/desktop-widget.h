@@ -47,6 +47,8 @@ void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
 
 namespace Inkscape { namespace Widgets { class LayerSelector; } }
 
+namespace Inkscape { namespace UI { namespace Widget { class SelectedStyle; } } }
+
 /// A GtkEventBox on an SPDesktop.
 struct SPDesktopWidget {
     SPViewWidget viewwidget;
@@ -74,10 +76,14 @@ struct SPDesktopWidget {
 
     GtkWidget *sticky_zoom;
     GtkWidget *coord_status;
+    GtkWidget *coord_status_x;
+    GtkWidget *coord_status_y;
     GtkWidget *select_status;
     GtkWidget *select_status_eventbox;
     GtkWidget *zoom_status;
     gulong zoom_update;
+
+    Inkscape::UI::Widget::SelectedStyle *selected_style;
 
     gint coord_status_id, select_status_id;
 

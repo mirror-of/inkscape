@@ -52,6 +52,7 @@
 #include "widgets/spw-utilities.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/layer-selector.h"
+#include "ui/widget/selected-style.h"
 
 #ifdef WITH_INKBOARD
 #include "jabber_whiteboard/session-manager.h"
@@ -257,6 +258,11 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     g_signal_connect (G_OBJECT (dtw->canvas), "event", G_CALLBACK (sp_desktop_widget_event), dtw);
     gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (dtw->canvas));
 
+    dtw->selected_style = new Inkscape::UI::Widget::SelectedStyle(true);
+    GtkHBox *ss_ = dtw->selected_style->gobj();
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), GTK_WIDGET(ss_), FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), gtk_vseparator_new(), FALSE, FALSE, 0);
+
     // zoom status spinbutton
     dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
     gtk_tooltips_set_tip (dtw->tt, dtw->zoom_status, _("Zoom"), NULL);
@@ -272,20 +278,32 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
     sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->zoom_status, FALSE, FALSE, 0);
+    gtk_box_pack_end (GTK_BOX (dtw->statusbar), dtw->zoom_status, FALSE, FALSE, 0);
 
     /* connecting canvas, scrollbars, rulers, statusbar */
     g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
     g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 
     // cursor coordinates
-    dtw->coord_status = gtk_label_new ("");
+    dtw->coord_status = gtk_table_new (2,2, FALSE);
+    gtk_table_set_row_spacings(GTK_TABLE(dtw->coord_status), 0);
+    gtk_table_set_col_spacings(GTK_TABLE(dtw->coord_status), 2);
     eventbox = gtk_event_box_new ();
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->coord_status);
     gtk_tooltips_set_tip (dtw->tt, eventbox, _("Cursor coordinates"), NULL);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status),  gtk_label_new("X"), 0,1, 0,1, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status),  gtk_label_new("Y"), 0,1, 1,2, GTK_FILL, GTK_FILL, 0, 0);
+    dtw->coord_status_x = gtk_label_new("000.000");
+    gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_x), 0.0, 0.5);
+    dtw->coord_status_y = gtk_label_new("000.000");
+    gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_y), 0.0, 0.5);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_x, 1,2, 0,1, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_y, 1,2, 1,2, GTK_FILL, GTK_FILL, 0, 0);
+    sp_set_font_size_smaller_smaller (dtw->coord_status);
     gtk_widget_set_size_request (dtw->coord_status, STATUS_COORD_WIDTH, -1);
-    sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
+    gtk_box_pack_end (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
+
+    gtk_box_pack_end (GTK_BOX (dtw->statusbar), gtk_vseparator_new(), FALSE, FALSE, 0);
 
     dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);
     dtw->layer_selector->reference();
@@ -631,8 +649,12 @@ SPDesktopWidget::requestCanvasUpdate() {
 void 
 SPDesktopWidget::setCoordinateStatus(NR::Point p)
 {
-    gchar *cstr=g_strdup_printf("%6.2f, %6.2f", dt2r * p[NR::X], dt2r * p[NR::Y]);
-    gtk_label_set_text (GTK_LABEL (this->coord_status), cstr);
+    gchar *cstr;
+    cstr=g_strdup_printf("%6.2f", dt2r * p[NR::X]);
+    gtk_label_set_text (GTK_LABEL (this->coord_status_x), cstr);
+    g_free(cstr);
+    cstr=g_strdup_printf("%6.2f", dt2r * p[NR::Y]);
+    gtk_label_set_text (GTK_LABEL (this->coord_status_y), cstr);
     g_free(cstr);
 }
 
@@ -849,6 +871,8 @@ sp_desktop_widget_new (SPNamedView *namedview)
     dtw->desktop->registerEditWidget (dtw->stub);
     dtw->desktop->init (namedview, dtw->canvas);
     inkscape_add_desktop (dtw->desktop);
+
+    dtw->selected_style->setDesktop(dtw->desktop);
 
     /* Once desktop is set, we can update rulers */
     sp_desktop_widget_update_rulers (dtw);
