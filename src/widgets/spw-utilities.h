@@ -49,6 +49,7 @@ spw_unit_selector(GtkWidget *dialog, GtkWidget *table,
 
 void sp_set_font_size (GtkWidget *w, guint font);
 void sp_set_font_size_smaller (GtkWidget *w);
+void sp_set_font_size_smaller_smaller (GtkWidget *w);
 
 gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer data);
 GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value);
