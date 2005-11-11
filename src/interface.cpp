@@ -832,6 +832,9 @@ sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI:
          menu_pntr != NULL;
          menu_pntr = menu_pntr->next()) {
         if (!strcmp(menu_pntr->name(), "submenu")) {
+            if (!strcmp(menu_pntr->attribute("name"), "Effects") && !prefs_get_int_attribute("extensions", "show-effects-menu", 0)) {
+                continue;
+            }
             GtkWidget *mitem = gtk_menu_item_new_with_mnemonic(_(menu_pntr->attribute("name")));
             GtkWidget *submenu = gtk_menu_new();
             sp_ui_build_dyn_menus(menu_pntr->firstChild(), submenu, view);
@@ -865,7 +868,11 @@ sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI:
             }
             continue;
         }
-        if (!strcmp(menu_pntr->name(), "seperator")) {
+        if (!strcmp(menu_pntr->name(), "separator")
+                // This was spelt wrong in the original version
+                // and so this is for backward compatibility.  It can
+                // probably be dropped after the 0.44 release.
+             || !strcmp(menu_pntr->name(), "seperator")) {
             GtkWidget *item = gtk_separator_menu_item_new();
             gtk_widget_show(item);
             gtk_menu_append(GTK_MENU(menu), item);
