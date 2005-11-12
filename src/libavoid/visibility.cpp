@@ -172,7 +172,6 @@ void vertexVisibility(VertInf *point, VertInf *partner, bool knownNew,
 //  SWEEP CODE
 //
 
-static const double PI = 4.0 * atan(1);
 static VertInf *centerInf;
 static Point centerPoint;
 static VertID centerID;
@@ -205,7 +204,7 @@ class PointPair
         static double pos_to_angle(double x, double y)
         {
             double ang = atan(y / x);
-            ang = (ang * 180) / PI;
+            ang = (ang * 180) / M_PI;
             if (x < 0)
             {
                 ang += 180;
@@ -273,7 +272,7 @@ class EdgePair
         double  obsAngle;
 };
 
-typedef std::set<EdgePair > EdgeSet;
+typedef std::set<EdgePair> EdgeSet;
 
 
 static bool ppCompare(PointPair& pp1, PointPair& pp2)
@@ -594,8 +593,7 @@ void vertexSweep(VertInf *vert)
             EdgeSet::iterator ePtr;
             if (prevDir == BEHIND)
             {
-                //ePtr = e.find(prevPair);
-                ePtr = std::find(e.begin(), e.end(), prevPair);
+                ePtr = e.find(prevPair);
                 if (ePtr != e.end())
                 {
                     e.erase(ePtr);
@@ -618,8 +616,7 @@ void vertexSweep(VertInf *vert)
 
             if (nextDir == BEHIND)
             {
-                //ePtr = e.find(nextPair);
-                ePtr = std::find(e.begin(), e.end(), nextPair);
+                ePtr = e.find(nextPair);
                 if (ePtr != e.end())
                 {
                     e.erase(ePtr);
