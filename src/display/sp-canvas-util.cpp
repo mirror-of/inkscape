@@ -50,7 +50,7 @@ void
 sp_canvas_prepare_buf (SPCanvasBuf *buf)
 {
 	if (buf->is_empty) {
-		sp_canvas_clear_buf(buf);
+		sp_canvas_clear_buffer(buf);
 		buf->is_empty = false;
 	}
 }
