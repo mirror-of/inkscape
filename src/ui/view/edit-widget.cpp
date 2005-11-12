@@ -1137,13 +1137,15 @@ EditWidget::initStickyZoom()
 void
 EditWidget::initStatusbar()
 {
+    
     _statusbar.pack_start (_zoom_status, false, false, 0);
 
     _tooltips.set_tip (_zoom_status, _("Zoom"));
     
+    _coord_status.set_size_request (STATUS_COORD_WIDTH, -1);
     _coord_eventbox.add (_coord_status);
     _tooltips.set_tip (_coord_eventbox, _("Cursor coordinates"));
-//    sp_set_font_size (static_cast<GtkWidget*>((void*)_coord_status.gobj()), STATUS_COORD_FONT_SIZE);
+    sp_set_font_size_smaller_smaller (static_cast<GtkWidget*>((void*)_coord_status.gobj()));
     setCoordinateStatus (NR::Point (0.0, 0.0));
     _statusbar.pack_start (_coord_eventbox, false, false, 5);
 
@@ -1152,9 +1154,10 @@ EditWidget::initStatusbar()
     _select_status.set_markup (_("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
     // include this again with Gtk+-2.6
     //_select_status.property_ellipsize() = Pango::ELLIPSIZE_END;
+    _select_status.set_size_request (1, -1);
     _statusbar.pack_start (_select_status, true, true, 0);
     
-    _main_window_table.attach(_statusbar, 0, 1, 3, 4, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+    _main_window_table.attach(_statusbar, 0, 1, 3, 4, Gtk::FILL, Gtk::SHRINK);
 }
 
 //========================================
