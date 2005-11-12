@@ -22,10 +22,10 @@
 namespace Inkscape {
 namespace Text {
 
-//#define IFDEBUG(...)     __VA_ARGS__
-#define IFDEBUG(...)
-
-#define TRACE(format, ...) IFDEBUG(g_print(format, ## __VA_ARGS__),g_print("\n"))
+//#define IFTRACE(_code) _code
+//#define TRACE(_args) g_print _args
+#define IFTRACE(_code)
+#define TRACE(_args)
 
 // ******* enum conversion tables
 static Layout::EnumConversionItem const enum_convert_spstyle_direction_to_pango_direction[] = {
@@ -257,7 +257,7 @@ class Layout::Calculator
             if (control_code->code == ARBITRARY_GAP) {
                 if (span->width + control_code->width > maximum_width)
                     return false;
-                TRACE("fitted control code, width = %f", control_code->width);
+                TRACE(("fitted control code, width = %f\n", control_code->width));
                 span->width += control_code->width;
                 span->end.increment();
             }
@@ -282,7 +282,7 @@ class Layout::Calculator
         double soft_hyphen_glyph_width = 0.0;
         bool soft_hyphen_in_word = false;
         bool is_soft_hyphen = false;
-        IFDEBUG(int char_count = 0);
+        IFTRACE(int char_count = 0);
 
         // if we're not at the start of the span we need to pre-init glyph_index
         span->start_glyph_index = 0;
@@ -297,7 +297,7 @@ class Layout::Calculator
 
             if (char_attributes.is_mandatory_break) {
                 *last_emergency_break_span = *last_break_span = *span;
-                TRACE("span %d end of para; width = %f chars = %d", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count);
+                TRACE(("span %d end of para; width = %f chars = %d\n", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count));
                 return false;
             }
 
@@ -330,7 +330,7 @@ class Layout::Calculator
             if (char_attributes.is_white)
                 char_width += text_source->style->word_spacing.computed;
             span->width += char_width;
-            IFDEBUG(char_count++);
+            IFTRACE(char_count++);
 
             if (char_attributes.is_white) {
                 span->whitespace_count++;
@@ -345,12 +345,12 @@ class Layout::Calculator
             span->end.increment();
 
             if (span->width > maximum_width && !char_attributes.is_white) {       // whitespaces don't matter, we can put as many as we want at eol
-                TRACE("span %d exceeded scanrun; width = %f chars = %d", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count);
+                TRACE(("span %d exceeded scanrun; width = %f chars = %d\n", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count));
                 return false;
             }
 
         } while (span->end.char_byte != 0);  // while we haven't wrapped to the next span
-        TRACE("fitted span %d width = %f chars = %d", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count);
+        TRACE(("fitted span %d width = %f chars = %d\n", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count));
         return true;
     }
 
@@ -404,12 +404,12 @@ class Layout::Calculator
     void _outputLine(ParagraphInfo const &para, LineHeight const &line_height, std::vector<ChunkInfo> const &chunk_info)
     {
         if (chunk_info.empty()) {
-            TRACE("line too short to fit anything on it, go to next");
+            TRACE(("line too short to fit anything on it, go to next\n"));
             return;
         }
 
         // we've finished fiddling about with ascents and descents: create the output
-        TRACE("found line fit; creating output");
+        TRACE(("found line fit; creating output\n"));
         Layout::Line new_line;
         new_line.in_paragraph = _flow._paragraphs.size() - 1;
         new_line.baseline_y = _scanline_maker->yCoordinate() + line_height.ascent;
@@ -644,7 +644,7 @@ class Layout::Calculator
             }
             // end adding spans to the list, on to the next chunk...
         }
-        TRACE("output done");
+        TRACE(("output done\n"));
     }
 
 /* *********************************************************************************************************/
@@ -664,11 +664,11 @@ class Layout::Calculator
             if (!text_source->y.empty())
                 initial_y = text_source->y.front().computed;
             _scanline_maker = new InfiniteScanlineMaker(initial_x, initial_y, _block_progression);
-            TRACE("  wrapping disabled");
+            TRACE(("  wrapping disabled\n"));
         }
         else {
             _scanline_maker = new ShapeScanlineMaker(_flow._input_wrap_shapes[_current_shape_index].shape, _block_progression);
-            TRACE("  begin wrap shape 0");
+            TRACE(("  begin wrap shape 0\n"));
         }
     }
 
@@ -824,7 +824,7 @@ void Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) cons
     para->free_sequence(para->pango_items);
     para->char_attributes.clear();
 
-    TRACE("itemizing para, first input %d", para->first_input_index);
+    TRACE(("itemizing para, first input %d\n", para->first_input_index));
 
     attributes_list = pango_attr_list_new();
     for(input_index = para->first_input_index ; input_index < _flow._input_stream.size() ; input_index++) {
@@ -852,8 +852,8 @@ void Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) cons
         }
     }
 
-    TRACE("whole para: \"%s\"", para_text.data());
-    TRACE("%d input sources used", input_index - para->first_input_index);
+    TRACE(("whole para: \"%s\"\n", para_text.data()));
+    TRACE(("%d input sources used\n", input_index - para->first_input_index));
 
     // do the pango_itemize()
     GList *pango_items_glist = NULL;
@@ -877,7 +877,7 @@ void Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) cons
 
     // convert the GList to our vector<> and make the font_instance for each PangoItem at the same time
     para->pango_items.reserve(g_list_length(pango_items_glist));
-    TRACE("para itemizes to %d sections", g_list_length(pango_items_glist));
+    TRACE(("para itemizes to %d sections\n", g_list_length(pango_items_glist)));
     for (GList *current_pango_item = pango_items_glist ; current_pango_item != NULL ; current_pango_item = current_pango_item->next) {
         PangoItemInfo new_item;
         new_item.item = (PangoItem*)current_pango_item->data;
@@ -892,7 +892,7 @@ void Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) cons
     para->char_attributes.resize(para_text.length() + 1);
     pango_get_log_attrs(para_text.data(), para_text.bytes(), -1, NULL, &*para->char_attributes.begin(), para->char_attributes.size());
 
-    TRACE("end para itemize, direction = %d", para->direction);
+    TRACE(("end para itemize, direction = %d\n", para->direction));
 }
 
 /**
@@ -956,7 +956,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
     unsigned byte_index_in_para = 0;
     unsigned input_index;
 
-    TRACE("build spans");
+    TRACE(("build spans\n"));
     para->free_sequence(para->unbroken_spans);
 
     for(input_index = para->first_input_index ; input_index < _flow._input_stream.size() ; input_index++) {
@@ -975,7 +975,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 new_span.text_bytes = 0;
                 new_span.char_index_in_para = char_index_in_para;
                 para->unbroken_spans.push_back(new_span);
-                TRACE("add gap span %d", para->unbroken_spans.size() - 1);
+                TRACE(("add gap span %d\n", para->unbroken_spans.size() - 1));
             }
         } else if (_flow._input_stream[input_index]->Type() == TEXT_SOURCE && pango_item_index < para->pango_items.size()) {
             Layout::InputStreamTextSource const *text_source = static_cast<Layout::InputStreamTextSource const *>(_flow._input_stream[input_index]);
@@ -1045,7 +1045,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 // now we know the length, do some final calculations and add the UnbrokenSpan to the list
                 new_span.font_size = text_source->styleComputeFontSize();
                 if (new_span.text_bytes) {
-                    int original_bidi_level = para->pango_items[pango_item_index].item->analysis.level;
+                    int const original_bidi_level = para->pango_items[pango_item_index].item->analysis.level;
                     para->pango_items[pango_item_index].item->analysis.level = 0;
                     // pango_shape() will reorder glyphs in rtl sections which messes us up because
                     // the svg spec requires us to draw glyphs in character order
@@ -1064,8 +1064,8 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     new_span.pango_item_index = pango_item_index;
                     _computeFontLineHeight(para->pango_items[pango_item_index].font, new_span.font_size, text_source->style, &new_span.line_height, &new_span.line_height_multiplier);
                     // TODO: metrics for vertical text
-                    TRACE("add text span %d \"%s\"", para->unbroken_spans.size(), text_source->text->raw().substr(span_start_byte_in_source, new_span.text_bytes).c_str());
-                    TRACE("  %d glyphs", new_span.glyph_string->num_glyphs);
+                    TRACE(("add text span %d \"%s\"\n", para->unbroken_spans.size(), text_source->text->raw().substr(span_start_byte_in_source, new_span.text_bytes).c_str()));
+                    TRACE(("  %d glyphs\n", new_span.glyph_string->num_glyphs));
                 } else {
                     // if there's no text we still need to initialise the styles
                     new_span.pango_item_index = -1;
@@ -1077,7 +1077,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                         new_span.line_height.setZero();
                         new_span.line_height_multiplier = 1.0;
                     }
-                    TRACE("add style init span %d", para->unbroken_spans.size());
+                    TRACE(("add style init span %d\n", para->unbroken_spans.size()));
                 }
                 para->unbroken_spans.push_back(new_span);
 
@@ -1097,7 +1097,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
             char_index_in_para += char_index_in_source;
         }
     }
-    TRACE("end build spans");
+    TRACE(("end build spans\n"));
     return input_index;
 }
 
@@ -1113,7 +1113,7 @@ bool Layout::Calculator::_goToNextWrapShape()
     _current_shape_index++;
     if (_current_shape_index == _flow._input_wrap_shapes.size()) return false;
     _scanline_maker = new ShapeScanlineMaker(_flow._input_wrap_shapes[_current_shape_index].shape, _block_progression);
-    TRACE("begin wrap shape %d", _current_shape_index);
+    TRACE(("begin wrap shape %d\n", _current_shape_index));
     return true;
 }
 
@@ -1170,7 +1170,7 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
             scan_runs = _scanline_maker->makeScanline(*line_height);
         }
 
-        TRACE("finding line fit y=%f, %d scan runs", scan_runs.front().y, scan_runs.size());
+        TRACE(("finding line fit y=%f, %d scan runs\n", scan_runs.front().y, scan_runs.size()));
         chunk_info->clear();
         chunk_info->reserve(scan_runs.size());
         if (para.direction == RIGHT_TO_LEFT) std::reverse(scan_runs.begin(), scan_runs.end());
@@ -1221,7 +1221,7 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
     last_span_at_emergency_break.start = start_span_pos;
     last_span_at_emergency_break.setZero();
 
-    TRACE("trying chunk from %f to %g", scan_run.x_start, scan_run.x_end);
+    TRACE(("trying chunk from %f to %g\n", scan_run.x_start, scan_run.x_end));
     BrokenSpan new_span;
     new_span.end = start_span_pos;
     while (new_span.end.iter_span != para.unbroken_spans.end()) {    // this loops once for each UnbrokenSpan
@@ -1269,7 +1269,7 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
         }
     }
 
-    TRACE("chunk complete, used %f width (%d whitespaces, %d brokenspans)", new_chunk.text_width, new_chunk.whitespace_count, new_chunk.broken_spans.size());
+    TRACE(("chunk complete, used %f width (%d whitespaces, %d brokenspans)\n", new_chunk.text_width, new_chunk.whitespace_count, new_chunk.broken_spans.size()));
     chunk_info->push_back(new_chunk);
 
     if (scan_run.width() >= 4.0 * line_height->total() && last_span_at_break.end == start_span_pos) {
@@ -1307,7 +1307,7 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
                 chunk_info->back().text_width += last_span_at_break.width;
                 chunk_info->back().whitespace_count += last_span_at_break.whitespace_count;
             }
-            TRACE("correction: fitted span %d width = %f", last_span_at_break.start.iter_span - para.unbroken_spans.begin(), last_span_at_break.width);
+            TRACE(("correction: fitted span %d width = %f\n", last_span_at_break.start.iter_span - para.unbroken_spans.begin(), last_span_at_break.width));
         }
     }
 
@@ -1332,7 +1332,7 @@ bool Layout::Calculator::calculate()
     if (_flow._input_stream.front()->Type() != TEXT_SOURCE)
         return false;
 
-    TRACE("begin calculateFlow()");
+    TRACE(("begin calculateFlow()\n"));
 
     _flow._clearOutputObjects();
 
@@ -1350,7 +1350,7 @@ bool Layout::Calculator::calculate()
         if (_flow._input_stream[para.first_input_index]->Type() == CONTROL_CODE) {
             InputStreamControlCode const *control_code = static_cast<InputStreamControlCode const *>(_flow._input_stream[para.first_input_index]);
             if (control_code->code == SHAPE_BREAK) {
-                TRACE("shape break control code");
+                TRACE(("shape break control code\n"));
                 if (!_goToNextWrapShape()) break;
                 continue;
             }
@@ -1366,7 +1366,7 @@ bool Layout::Calculator::calculate()
         else
             para.alignment = para.direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
 
-        TRACE("para prepared, adding as #%d", _flow._paragraphs.size());
+        TRACE(("para prepared, adding as #%d\n", _flow._paragraphs.size()));
         Layout::Paragraph new_paragraph;
         new_paragraph.base_direction = para.direction;
         new_paragraph.alignment = para.alignment;
@@ -1379,7 +1379,7 @@ bool Layout::Calculator::calculate()
         span_pos.char_index = 0;
 
         do {   // for each line in the paragraph
-            TRACE("begin line");
+            TRACE(("begin line\n"));
             std::vector<ChunkInfo> line_chunk_info;
             if (!_findChunksForLine(para, &span_pos, &line_chunk_info, &line_height))
                 break;   // out of shapes to wrap in to
@@ -1388,7 +1388,7 @@ bool Layout::Calculator::calculate()
             _scanline_maker->completeLine();
         } while (span_pos.iter_span != para.unbroken_spans.end());
 
-        TRACE("para %d end\n", _flow._paragraphs.size() - 1);
+        TRACE(("para %d end\n\n", _flow._paragraphs.size() - 1));
         if (_scanline_maker != NULL) {
             bool is_empty_para = _flow._characters.empty() || _flow._characters.back().line(&_flow).in_paragraph != _flow._paragraphs.size() - 1;
             if ((is_empty_para && para_end_input_index + 1 >= _flow._input_stream.size())
