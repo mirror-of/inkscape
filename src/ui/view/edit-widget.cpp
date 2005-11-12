@@ -1137,7 +1137,9 @@ EditWidget::initStickyZoom()
 void
 EditWidget::initStatusbar()
 {
-    _statusbar.pack_start (_zoom_status, false, false, 0);
+    _statusbar.pack_start (_selected_style_status, false, false, 1);
+    _statusbar.pack_start (*new Gtk::VSeparator(), false, false, 0);
+    _statusbar.pack_end (_zoom_status, false, false, 0);
     _tooltips.set_tip (_zoom_status, _("Zoom"));
 
     _layer_selector.reference();
@@ -1567,6 +1569,7 @@ EditWidget::initEdit (SPDocument *doc)
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (_desktop->namedview), "modified", G_CALLBACK (_namedview_modified), this);
     _layer_selector.setDesktop (_desktop);
+    _selected_style_status.setDesktop (_desktop);
  
     Inkscape::NSApplication::Editor::addDesktop (_desktop);
 

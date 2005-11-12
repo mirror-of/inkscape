@@ -49,7 +49,7 @@ enum {
 class SelectedStyle : public Gtk::HBox
 {
 public:
-    SelectedStyle(bool layout);
+    SelectedStyle(bool layout = true);
 
     ~SelectedStyle();
 

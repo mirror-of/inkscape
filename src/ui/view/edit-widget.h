@@ -25,6 +25,7 @@
 
 #include "ui/dialog/dialog-manager.h"
 #include "ui/view/edit-widget-interface.h"
+#include "ui/widget/selected-style.h"
 #include "ui/widget/ruler.h"
 #include "ui/widget/toolbox.h"
 #include "ui/widget/svg-canvas.h"
@@ -148,6 +149,7 @@ protected:
     Gtk::ToggleButton    _sticky_zoom;
     UI::Widget::SVGCanvas _svg_canvas;
     Gtk::HBox            _statusbar;
+    UI::Widget::SelectedStyle _selected_style_status;
     UI::Widget::ZoomStatus _zoom_status;
     Inkscape::Widgets::LayerSelector _layer_selector;
     Gtk::EventBox        _coord_eventbox;
