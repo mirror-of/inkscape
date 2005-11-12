@@ -242,7 +242,7 @@ AboutBox::show_credits(void)
         authors.push_back("Pat Suwalski");
         authors.push_back("Adib Taraben");
         authors.push_back("David Turner");
-        authors.push_back("Aleksandar Urosevic");
+        authors.push_back("Aleksandar Urošević");
         authors.push_back("Lucas Vieites");
         authors.push_back("Michael Wybrow");
         authors.push_back("Daniel Yacob");
@@ -253,7 +253,7 @@ AboutBox::show_credits(void)
         std::vector<Glib::ustring> translators;
         translators.push_back("Adib Taraben <theadib@yahoo.com>, 2004.");
         translators.push_back("Alastair McKinstry <mckinstry@computer.org>, 2000.");
-        translators.push_back("Aleksandar Urošević <urke@users.sourceforge.net>");
+        translators.push_back("Aleksandar Urošević <urke@users.sourceforge.net>, 2004, 2005.");
         translators.push_back("Alessio Frusciante <algol@firenze.linux.it>, 2002, 2003.");
         translators.push_back("Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2005.");
         translators.push_back("Alexey Remizov <alexey@remizov.pp.ru>, 2004.");
@@ -271,7 +271,6 @@ AboutBox::show_credits(void)
         translators.push_back("Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.");
         translators.push_back("Colin Marquardt <colin@marquardt-home.de>, 2004, 2005.");
         translators.push_back("Daniel Díaz <yosoy@danieldiaz.org>, 2004");
-        translators.push_back("Александар Урошевић <urke@users.sourceforge.net>");
         translators.push_back("Didier Conchaudron <conchaudron@free.fr>, 2003.");
         translators.push_back("Duarte Loreto <happyguy_pt@hotmail.com> 2002,2003 (Maintainer)");
         translators.push_back("Fatih Demir <kabalak@gtranslator.org>, 2000.");
