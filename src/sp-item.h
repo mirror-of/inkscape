@@ -38,7 +38,7 @@ enum {
 
 /**
  * Event structure.
- * 
+ *
  * \todo This is just placeholder. Plan:
  * We do extensible event structure, that hold applicable (ui, non-ui)
  * data pointers. So it is up to given object/arena implementation
@@ -53,7 +53,7 @@ struct SPEvent {
 
 class SPItemView;
 
-/// SPItemView 
+/// SPItemView
 struct SPItemView {
 	SPItemView *next;
 	unsigned int flags;
@@ -91,12 +91,14 @@ struct SPItemCtx {
 struct SPItem : public SPObject {
 	unsigned int sensitive : 1;
 	unsigned int stop_paint: 1;
+    double r_cx;
+    double r_cy;
 
 	NR::Matrix transform;
 
 	SPClipPathReference *clip_ref;
 	SPMaskReference *mask_ref;
-        
+
         // Used for object-avoiding connectors
         SPAvoidRef *avoidRef;
 

@@ -70,6 +70,7 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
+static void sp_sel_trans_handle_click(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint32 state, gpointer data);
 static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *p, guint state, gboolean *data);
 
@@ -330,6 +331,36 @@ void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, 
     sp_sel_trans_update_handles(*seltrans);
 }
 
+void sp_sel_trans_click(SPSelTrans *seltrans)
+{
+
+       seltrans->center = seltrans->box.midpoint();
+
+        sp_document_done(SP_DT_DOCUMENT(seltrans->desktop));
+
+
+}
+
+void sp_centre_trans(Inkscape::XML::Node *current, SPSelTrans *seltrans)
+{
+	 double cx ,cy;
+	 NR::Point object_centre = NR::Point(0,0);
+	 for ( Inkscape::XML::Node *child = sp_repr_children(current) ; child ; child = sp_repr_next(child) ) {
+	 				sp_centre_trans(child, seltrans);
+			}
+	 cx = sp_repr_get_double_attribute (current, "inkscape:c_rx", 9999999);
+	 cy = sp_repr_get_double_attribute (current, "inkscape:c_ry", 9999999);
+	 if (cx!=9999999 ) {
+		 object_centre = NR::Point(cx,cy);
+		 object_centre *= seltrans->current;
+	     sp_repr_set_svg_double (current, "inkscape:c_rx", object_centre[NR::X]);
+	     sp_repr_set_svg_double (current, "inkscape:c_ry", object_centre[NR::Y]);
+	 }
+ }
+
+
+
+
 void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 {
     g_return_if_fail(seltrans->grabbed);
@@ -348,8 +379,18 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
         updh = false;
     }
 
+
+
     for (unsigned i = 0; i < seltrans->items.size(); i++)
+    {
+        Inkscape::XML::Node *current = SP_OBJECT_REPR(seltrans->items[i].first);
+        if (current!=NULL){
+
+            sp_centre_trans(current, seltrans);
+        }
+
         sp_object_unref(SP_OBJECT(seltrans->items[i].first), NULL);
+    }
     seltrans->items.clear();
 
     seltrans->grabbed = FALSE;
@@ -463,6 +504,8 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
                          G_CALLBACK(sp_sel_trans_handle_new_event), (gpointer) &handle_center);
         g_signal_connect(G_OBJECT(seltrans.chandle), "grabbed",
                          G_CALLBACK(sp_sel_trans_handle_grab), (gpointer) &handle_center);
+	/*	g_signal_connect(G_OBJECT(seltrans.chandle), "clicked",
+                         G_CALLBACK(sp_sel_trans_handle_click), (gpointer) &handle_center);*/
         g_signal_connect(G_OBJECT(seltrans.chandle), "ungrabbed",
                          G_CALLBACK(sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
     }
@@ -482,6 +525,14 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
     if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
         sp_knot_hide(seltrans.chandle);
     } else {
+         Inkscape::Selection *selection = (seltrans.desktop)->selection;
+         Inkscape::XML::Node  *current = selection->singleRepr();
+         if ((current!=NULL) && (sp_repr_get_double_attribute (current, "inkscape:c_rx", 99999999)!= 99999999)){
+            double cx = sp_repr_get_double_attribute (current, "inkscape:c_rx", seltrans.center[NR::X]);
+            double cy = sp_repr_get_double_attribute (current, "inkscape:c_ry", seltrans.center[NR::Y]);
+            NR::Point center = NR::Point(cx,cy);
+            seltrans.center = center;
+        }
         sp_knot_show(seltrans.chandle);
         sp_knot_moveto (seltrans.chandle, &seltrans.center);
     }
@@ -543,6 +594,8 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
                              G_CALLBACK(sp_sel_trans_handle_new_event), (gpointer) &handle[i]);
             g_signal_connect(G_OBJECT(knot[i]), "grabbed",
                              G_CALLBACK(sp_sel_trans_handle_grab), (gpointer) &handle[i]);
+  /*          g_signal_connect(G_OBJECT(knot[i]), "clicked",
+                             G_CALLBACK(sp_sel_trans_handle_click), (gpointer) &handle[i]);*/
             g_signal_connect(G_OBJECT(knot[i]), "ungrabbed",
                              G_CALLBACK(sp_sel_trans_handle_ungrab), (gpointer) &handle[i]);
             g_signal_connect(G_OBJECT(knot[i]), "event", G_CALLBACK(sp_seltrans_handle_event), (gpointer) &handle[i]);
@@ -592,6 +645,14 @@ static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data)
     SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
 
     sp_sel_trans_ungrab(seltrans);
+}
+
+static void sp_sel_trans_handle_click(SPKnot *knot, guint state, gpointer data)
+{
+    SPDesktop *desktop = knot->desktop;
+    SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
+
+    sp_sel_trans_click(seltrans);
 }
 
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint state, gpointer data)
@@ -1005,6 +1066,15 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
             pt[X] = point[X];
         }
     }
+
+    Inkscape::Selection *selection = desktop->selection;
+    Inkscape::XML::Node  *current = selection->singleRepr();
+    if (current!=NULL){
+                        sp_repr_set_svg_double (current, "inkscape:c_rx", pt[X]);
+                        sp_repr_set_svg_double (current, "inkscape:c_ry", pt[Y]);
+
+    }
+
 
     if (!(state & GDK_SHIFT_MASK)) {
 // screen pixels to snap center to bbox

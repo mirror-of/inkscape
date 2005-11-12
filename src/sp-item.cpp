@@ -148,6 +148,9 @@ sp_item_init(SPItem *item)
 
     item->sensitive = TRUE;
 
+    item->r_cx = NULL;
+    item->r_cx = NULL;
+
     item->transform = NR::identity();
 
     item->display = NULL;
@@ -158,7 +161,7 @@ sp_item_init(SPItem *item)
 			sigc::slot2<void,SPObject*, SPObject *> sl1=sigc::bind(sigc::ptr_fun(clip_ref_changed), item);
 			cs1.connect(sl1);
 		}
-		
+
     item->mask_ref = new SPMaskReference(SP_OBJECT(item));
 		sigc::signal<void, SPObject *, SPObject *> cs2=item->mask_ref->changedSignal();
 		sigc::slot2<void,SPObject*, SPObject *> sl2=sigc::bind(sigc::ptr_fun(mask_ref_changed), item);
@@ -167,7 +170,7 @@ sp_item_init(SPItem *item)
     if (!object->style) object->style = sp_style_new_from_object(SP_OBJECT(item));
 
     item->avoidRef = new SPAvoidRef(item);
-    
+
     new (&item->_transformed_signal) sigc::signal<void, NR::Matrix const *, SPItem *>();
 }
 
@@ -222,7 +225,7 @@ bool SPItem::isHidden(unsigned display_key) const {
     return true;
 }
 
-/** 
+/**
  * Returns something suitable for the `Hide' checkbox in the Object Properties dialog box.
  *  Corresponds to setExplicitlyHidden.
  */
@@ -233,9 +236,9 @@ SPItem::isExplicitlyHidden() const
 	    && this->style->display.value == SP_CSS_DISPLAY_NONE);
 }
 
-/** 
- * Sets the display CSS property to `hidden' if \a val is true, 
- * otherwise makes it unset 
+/**
+ * Sets the display CSS property to `hidden' if \a val is true,
+ * otherwise makes it unset
  */
 void
 SPItem::setExplicitlyHidden(bool const val) {
@@ -324,6 +327,8 @@ sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "mask");
     sp_object_read_attr(object, "sodipodi:insensitive");
     sp_object_read_attr(object, "sodipodi:nonprintable");
+	sp_object_read_attr(object, "inkscape:r_cx");
+    sp_object_read_attr(object, "inkscape:r_cy");
     sp_object_read_attr(object, "inkscape:connector-avoid");
 
     if (((SPObjectClass *) (parent_class))->build) {
@@ -551,10 +556,10 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
     }
 
     SPObject const *const parent = SP_OBJECT_PARENT(object);
-    /** \todo Can someone please document why this is conditional on having 
-     * a parent? The only parentless thing I can think of is the top-level 
-     * <svg> element (SPRoot). SPRoot is derived from SPGroup, and can have 
-     * style.  I haven't looked at callers. 
+    /** \todo Can someone please document why this is conditional on having
+     * a parent? The only parentless thing I can think of is the top-level
+     * <svg> element (SPRoot). SPRoot is derived from SPGroup, and can have
+     * style.  I haven't looked at callers.
      */
     if (parent) {
         SPStyle const *const obj_style = SP_OBJECT_STYLE(object);
@@ -563,11 +568,11 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
             sp_repr_set_attr(repr, "style", ( *s ? s : NULL ));
             g_free(s);
         } else {
-            /** \todo I'm not sure what to do in this case.  Bug #1165868 
-             * suggests that it can arise, but the submitter doesn't know 
+            /** \todo I'm not sure what to do in this case.  Bug #1165868
+             * suggests that it can arise, but the submitter doesn't know
              * how to do so reliably.  The main two options are either
-             * leave repr's style attribute unchanged, or explicitly clear it.  
-             * Must also consider what to do with property attributes for 
+             * leave repr's style attribute unchanged, or explicitly clear it.
+             * Must also consider what to do with property attributes for
              * the element; see below.
              */
             char const *style_str = repr->attribute("style");
@@ -577,14 +582,14 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
             g_warning("Item's style is NULL; repr style attribute is %s", style_str);
         }
 
-        /** \note We treat object->style as authoritative.  Its effects have 
-         * been written to the style attribute above; any properties that are 
-         * unset we take to be deliberately unset (e.g. so that clones can 
+        /** \note We treat object->style as authoritative.  Its effects have
+         * been written to the style attribute above; any properties that are
+         * unset we take to be deliberately unset (e.g. so that clones can
          * override the property).
          *
-         * Note that the below has an undesirable consequence of changing the 
-         * appearance on renderers that lack CSS support (e.g. SVG tiny); 
-         * possibly we should write property attributes instead of a style 
+         * Note that the below has an undesirable consequence of changing the
+         * appearance on renderers that lack CSS support (e.g. SVG tiny);
+         * possibly we should write property attributes instead of a style
          * attribute.
          */
         sp_style_unset_property_attrs (object);
@@ -592,6 +597,8 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         sp_repr_set_attr(repr, "sodipodi:insensitive", ( item->sensitive ? NULL : "true" ));
+        sp_repr_set_attr(repr, "inkscape:r_cx", ( item->r_cx ? NULL : "true" ));
+        sp_repr_set_attr(repr, "inkscape:r_cy", ( item->r_cy ? NULL : "true" ));
     }
 
     if (((SPObjectClass *) (parent_class))->write) {
@@ -673,7 +680,7 @@ static void sp_item_private_snappoints(SPItem const *item, SnapPointsIter p)
     NR::Rect const bbox2(bbox);
     /* Just a pair of opposite corners of the bounding box suffices given that we don't yet
        support angled guide lines. */
-    
+
     *p = bbox2.min();
     *p = bbox2.max();
 }
@@ -832,7 +839,7 @@ sp_item_adjust_pattern (SPItem *item, NR::Matrix const &postmul, bool set)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
-    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
         if (SP_IS_PATTERN (server)) {
             SPPattern *pattern = sp_pattern_clone_if_necessary (item, SP_PATTERN (server), "fill");
@@ -840,7 +847,7 @@ sp_item_adjust_pattern (SPItem *item, NR::Matrix const &postmul, bool set)
         }
     }
 
-    if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+    if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
         SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
         if (SP_IS_PATTERN (server)) {
             SPPattern *pattern = sp_pattern_clone_if_necessary (item, SP_PATTERN (server), "stroke");
@@ -859,13 +866,13 @@ sp_item_adjust_gradient (SPItem *item, NR::Matrix const &postmul, bool set)
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_GRADIENT (server)) {
 
-            /** 
-             * \note Bbox units for a gradient are generally a bad idea because 
-             * with them, you cannot preserve the relative position of the 
-             * object and its gradient after rotation or skew. So now we 
-             * convert them to userspace units which are easy to keep in sync 
-             * just by adding the object's transform to gradientTransform.  
-             * \todo FIXME: convert back to bbox units after transforming with 
+            /**
+             * \note Bbox units for a gradient are generally a bad idea because
+             * with them, you cannot preserve the relative position of the
+             * object and its gradient after rotation or skew. So now we
+             * convert them to userspace units which are easy to keep in sync
+             * just by adding the object's transform to gradientTransform.
+             * \todo FIXME: convert back to bbox units after transforming with
              * the item, so as to preserve the original units.
              */
             SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
@@ -971,7 +978,7 @@ sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, N
 
     if (is_pattern)
         sp_item_adjust_pattern (item, paint_delta);
-    else 
+    else
         sp_item_adjust_gradient (item, paint_delta);
 
 // Within text, we do not fork gradients, and so must not recurse to avoid double compensation
@@ -988,7 +995,7 @@ sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, N
 }
 
 /**
- * A temporary wrapper for the next function accepting the NRMatrix 
+ * A temporary wrapper for the next function accepting the NRMatrix
  * instead of NR::Matrix
  */
 void
@@ -996,16 +1003,16 @@ sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NRMatrix const 
 {
     if (transform == NULL)
         sp_item_write_transform(item, repr, NR::identity(), adv);
-    else 
+    else
         sp_item_write_transform(item, repr, NR::Matrix (transform), adv);
 }
 
 /**
- * Set a new transform on an object. 
+ * Set a new transform on an object.
  *
- * Compensate for stroke scaling and gradient/pattern fill transform, if 
+ * Compensate for stroke scaling and gradient/pattern fill transform, if
  * necessary. Call the object's set_transform method if transforms are
- * stored optimized. Send _transformed_signal. Invoke _write method so that 
+ * stored optimized. Send _transformed_signal. Invoke _write method so that
  * the repr is updated with the new transform.
  */
 void
@@ -1034,10 +1041,10 @@ sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NR::Matrix cons
         sp_item_adjust_rects_recursive(item, advertized_transform);
     }
 
-    // recursively compensate pattern fill if it's not to be transformed 
+    // recursively compensate pattern fill if it's not to be transformed
     if (prefs_get_int_attribute("options.transform", "pattern", 1) == 0) {
         sp_item_adjust_paint_recursive (item, advertized_transform.inverse(), NR::identity(), true);
-    } 
+    }
     /// \todo FIXME: add the same else branch as for gradients below, to convert patterns to userSpaceOnUse as well
     /// recursively compensate gradient fill if it's not to be transformed
     if (prefs_get_int_attribute("options.transform", "gradient", 1) == 0) {
@@ -1061,7 +1068,7 @@ sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NR::Matrix cons
     // date with the original.  Otherwise, sp_use_bbox returns incorrect
     // values if called in code handling the transformed signal.
     SP_OBJECT(item)->updateRepr();
-    
+
     // send the relative transform with a _transformed_signal
     item->_transformed_signal.emit(&advertized_transform, item);
 }
@@ -1304,7 +1311,7 @@ sp_item_view_list_remove(SPItemView *list, SPItemView *view)
 }
 
 /**
- * Return the arenaitem corresponding to the given item in the display 
+ * Return the arenaitem corresponding to the given item in the display
  * with the given key
  */
 NRArenaItem *
