@@ -47,24 +47,11 @@ sp_canvas_item_reset_bounds (SPCanvasItem *item)
 }
 
 void
-sp_canvas_buf_ensure_buf (SPCanvasBuf *buf)
+sp_canvas_prepare_buf (SPCanvasBuf *buf)
 {
-	if (!buf->is_buf) {
-		unsigned int r, g, b;
-		int x, y;
-		r = buf->bg_color >> 16;
-		g = (buf->bg_color >> 8) & 0xff;
-		b = buf->bg_color & 0xff;
-		for (y = buf->rect.y0; y < buf->rect.y1; y++) {
-			guchar *p;
-			p = buf->buf + (y - buf->rect.y0) * buf->buf_rowstride;
-			for (x = buf->rect.x0; x < buf->rect.x1; x++) {
-				*p++ = r;
-				*p++ = g;
-				*p++ = b;
-			}
-		}
-		buf->is_buf = 1;
+	if (buf->is_empty) {
+		sp_canvas_clear_buf(buf);
+		buf->is_empty = false;
 	}
 }
 

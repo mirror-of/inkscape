@@ -1546,14 +1546,13 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
             buf.bg_color = (((color->red & 0xff00) << 8)
                             | (color->green & 0xff00)
                             | (color->blue >> 8));
-            buf.is_bg = 1;
-            buf.is_buf = 0;
+            buf.is_empty = true;
       
             if (canvas->root->flags & SP_CANVAS_ITEM_VISIBLE) {
                 SP_CANVAS_ITEM_GET_CLASS (canvas->root)->render (canvas->root, &buf);
             }
       
-            if (buf.is_bg) {
+            if (buf.is_empty) {
                 gdk_rgb_gc_set_foreground (canvas->pixmap_gc, buf.bg_color);
                 gdk_draw_rectangle (SP_CANVAS_WINDOW (canvas),
                                     canvas->pixmap_gc,

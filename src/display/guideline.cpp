@@ -84,8 +84,7 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
     SPGuideLine const *gl = SP_GUIDELINE (item);
     
-    sp_canvas_buf_ensure_buf(buf);
-    buf->is_bg = FALSE;
+    sp_canvas_prepare_buf(buf);
     
     unsigned int const r = NR_RGBA32_R (gl->rgba);
     unsigned int const g = NR_RGBA32_G (gl->rgba);

@@ -41,11 +41,8 @@ struct SPCanvasBuf{
 	NRRectL rect;
 	/// Background color, given as 0xrrggbb
 	guint32 bg_color;
-	/// Invariant: at least one of the following flags is true.
-	/// Set when the render rectangle area is the solid color bg_color.
-	unsigned int is_bg : 1;
-	/// Set when the render rectangle area is represented by the buf.
-	unsigned int is_buf : 1;
+	// If empty, ignore contents of buffer and use a solid area of bg_color
+	bool is_empty;
 };
 
 /**

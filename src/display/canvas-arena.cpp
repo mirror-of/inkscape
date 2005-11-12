@@ -204,11 +204,7 @@ sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
 				     NR_ARENA_ITEM_STATE_BBOX | NR_ARENA_ITEM_STATE_RENDER,
 				     NR_ARENA_ITEM_STATE_NONE);
 
-	if (buf->is_bg) {
-		sp_canvas_clear_buffer (buf);
-		buf->is_bg = FALSE;
-		buf->is_buf = TRUE;
-	}
+	sp_canvas_prepare_buf(buf);
   
 #ifdef arena_item_tile_cache
   age_cache();

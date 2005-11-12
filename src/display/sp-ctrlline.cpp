@@ -113,18 +113,14 @@ sp_ctrlline_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
     SPCtrlLine *ctrlline = SP_CTRLLINE (item);
 
-    if (buf->is_bg) {
-        sp_canvas_clear_buffer (buf);
-        buf->is_bg = FALSE;
-        buf->is_buf = TRUE;
-    }
     NRRectL  area;
     area.x0=buf->rect.x0;
     area.x1=buf->rect.x1;
     area.y0=buf->rect.y0;
     area.y1=buf->rect.y1;
+
     if (ctrlline->shp) {
-        sp_canvas_buf_ensure_buf (buf);
+        sp_canvas_prepare_buf (buf);
         nr_pixblock_render_ctrl_rgba (ctrlline->shp,ctrlline->rgba,area,(char*)buf->buf, buf->buf_rowstride);
     }
 }

@@ -449,8 +449,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 	if (!ctrl->defined) return;
 	if ((!ctrl->filled) && (!ctrl->stroked)) return;
 	
-	sp_canvas_buf_ensure_buf (buf);
-	buf->is_bg = FALSE;
+	sp_canvas_prepare_buf (buf);
 	
 	// the control-image is rendered into ctrl->cache
 	if (!ctrl->build) sp_ctrl_build_cache (ctrl);
