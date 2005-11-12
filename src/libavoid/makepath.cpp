@@ -30,13 +30,12 @@
 #include "libavoid/geometry.h"
 #include "libavoid/connector.h"
 #include "libavoid/graph.h"
+#include <algorithm>
 #include <vector>
 #include <math.h>
 
 namespace Avoid {
 
-
-static const double PI = 4.0 * atan(1);
 
 double segmt_penalty = 0;
 double angle_penalty = 0;
@@ -85,11 +84,11 @@ double cost(const double dist, VertInf *inf1,
             Point p2 = inf2->point;
             Point p3 = inf3->point;
 
-            double rad = PI - angleBetween(p1, p2, p3);
+            double rad = M_PI - angleBetween(p1, p2, p3);
 
-            // make `rad' between 0--10 then take it's log so small
+            // Make `rad' between 0--10 then take its log so small
             // angles are not penalised as much as large ones.
-            result += (angle_penalty * log((rad * 10 / PI) + 1));
+            result += (angle_penalty * log((rad * 10 / M_PI) + 1));
 
             // Don't penalise as an extra segment if there is no turn.
             if (rad > 0.0005)
@@ -251,6 +250,7 @@ static void aStarPath(VertInf *src, VertInf *tar)
     // Populate the PENDING container with the first location
     PENDING.push_back(Node);
     // Create a heap from PENDING for sorting
+    using std::make_heap; using std::push_heap; using std::pop_heap;
     make_heap( PENDING.begin(), PENDING.end() );
 
     while (!PENDING.empty())
