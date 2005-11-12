@@ -15,7 +15,7 @@
 #include "display/display-forward.h"
 #include "libnr/nr-point.h"
 #include "sp-object.h"
-class SPGuideAttachment;
+#include "sp-guide-attachment.h"
 
 #define SP_TYPE_GUIDE            (sp_guide_get_type())
 #define SP_GUIDE(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_GUIDE, SPGuide))
