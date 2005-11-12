@@ -23,6 +23,7 @@
 #include "libnr/nr-rect.h"
 #include "desktop.h"
 #include "desktop-handles.h"
+#include "widgets/spw-utilities.h"
 
 namespace Inkscape {
     namespace UI {
@@ -36,7 +37,7 @@ ZoomStatus::ZoomStatus()
     
     property_numeric() = false;
     property_update_policy() = Gtk::UPDATE_ALWAYS;
-
+    sp_set_font_size_smaller (static_cast<GtkWidget*>((void*)gobj()));
 }
 
 ZoomStatus::~ZoomStatus()
