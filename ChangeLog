@@ -1,3 +1,11 @@
+2005-11-12  Ralf Stephan <ralf@ark.in-berlin.de>
+
+    * src/ui/view/edit-widget.h, src/ui/view/edit-widget.cpp:
+	  new-gui: made complete statusbar widget, equals old-gui now
+	* src/widgets/layer-selector.h, src/ui/widget/selected-style.h:
+	  classes have now a constructor with default parameter
+	* src/ui/widget/zoom-status.cpp: smaller font
+
 2005-11-12  MenTaLguY  <mental@rydia.net>
 
     * src/display/canvas-arena.cpp, src/display/canvas-bpath.cpp,
