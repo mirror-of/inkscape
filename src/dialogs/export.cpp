@@ -1189,11 +1189,11 @@ sp_export_browse_store (GtkButton *button, gpointer userdata)
     return;
 } // end of sp_export_browse_store()
 
+// TODO: Move this to nr-rect-fns.h.
 static bool
-sp_export_bbox_equal(NR::Rect &one, NR::Rect &two)
+sp_export_bbox_equal(NR::Rect const &one, NR::Rect const &two)
 { 
-    // FIXME: make this an NR::Rect method
-    double epsilon = 1.0 / pow (10, EXPORT_COORD_PRECISION);
+    double const epsilon = pow(10.0, -EXPORT_COORD_PRECISION);
     return (
         (fabs(one.min()[NR::X] - two.min()[NR::X]) < epsilon) &&
         (fabs(one.min()[NR::Y] - two.min()[NR::Y]) < epsilon) &&
