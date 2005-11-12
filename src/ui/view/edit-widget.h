@@ -29,6 +29,7 @@
 #include "ui/widget/toolbox.h"
 #include "ui/widget/svg-canvas.h"
 #include "ui/widget/zoom-status.h"
+#include "widgets/layer-selector.h"
 
 struct SPDesktop;
 struct SPDocument;
@@ -148,6 +149,7 @@ protected:
     UI::Widget::SVGCanvas _svg_canvas;
     Gtk::HBox            _statusbar;
     UI::Widget::ZoomStatus _zoom_status;
+    Inkscape::Widgets::LayerSelector _layer_selector;
     Gtk::EventBox        _coord_eventbox;
     Gtk::Table           _coord_status;
     Gtk::Label           _coord_status_x, _coord_status_y;

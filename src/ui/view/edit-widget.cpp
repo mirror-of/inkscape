@@ -1140,6 +1140,9 @@ EditWidget::initStatusbar()
     _statusbar.pack_start (_zoom_status, false, false, 0);
     _tooltips.set_tip (_zoom_status, _("Zoom"));
 
+    _layer_selector.reference();
+    _statusbar.pack_start (_layer_selector, false, false, 1);
+
     _coord_status.property_n_rows() = 2;    
     _coord_status.property_n_columns() = 2;    
     _coord_status.property_row_spacing() = 0;
@@ -1563,6 +1566,7 @@ EditWidget::initEdit (SPDocument *doc)
     /// \todo convert to sigc++ when SPObject hierarchy gets converted
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (_desktop->namedview), "modified", G_CALLBACK (_namedview_modified), this);
+    _layer_selector.setDesktop (_desktop);
  
     Inkscape::NSApplication::Editor::addDesktop (_desktop);
 
@@ -1576,7 +1580,7 @@ void
 EditWidget::destroyEdit()
 {
     if (_desktop) {
-        // layer_selector->unreference();
+        _layer_selector.unreference();
         Inkscape::NSApplication::Editor::removeDesktop (_desktop); // clears selection too
         sp_signal_disconnect_by_data (G_OBJECT (_desktop->namedview), this);
         _desktop->destroy();
