@@ -152,7 +152,7 @@ sp_selected_path_boolop (bool_op bop)
             // find out which comes first
             for (Inkscape::XML::Node * child = dad->firstChild(); child; child = child->next()) {
                 if (child == as) {
-                    // a en premier->mauvais sens
+                    /* a first, so reverse. */
                     reverseOrderForOp = true;
                     break;
                 }
@@ -187,10 +187,8 @@ sp_selected_path_boolop (bool_op bop)
         curOrig = 0;
         for (GSList *l = il; l != NULL; l = l->next)
         {
-            SPCSSAttr *css;
-            const gchar *val;
-            css = sp_repr_css_attr (SP_OBJECT_REPR (il->data), "style");
-            val = sp_repr_css_property (css, "fill-rule", NULL);
+            SPCSSAttr *css = sp_repr_css_attr (SP_OBJECT_REPR (il->data), "style");
+            gchar const *val = sp_repr_css_property (css, "fill-rule", NULL);
             if (val && strcmp (val, "nonzero") == 0) {
                 origWind[curOrig]= fill_nonZero;
             } else if (val && strcmp (val, "evenodd") == 0) {
@@ -429,8 +427,8 @@ sp_selected_path_boolop (bool_op bop)
     }
     gint pos = repr_source->position();
     Inkscape::XML::Node *parent = sp_repr_parent (repr_source);
-    const char *id = repr_source->attribute("id");
-    const char *style = repr_source->attribute("style");
+    char const *id = repr_source->attribute("id");
+    char const *style = repr_source->attribute("style");
     
 
     // remove source paths
@@ -581,11 +579,8 @@ sp_selected_path_outline ()
         }
 
         {   // pas de stroke pas de chocolat
-            SPCSSAttr *css;
-            const gchar *val;
-    
-            css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-            val = sp_repr_css_property (css, "stroke", NULL);
+            SPCSSAttr *css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+            gchar const *val = sp_repr_css_property (css, "stroke", NULL);
     
             if (val == NULL || strcmp (val, "none") == 0) {
                 sp_curve_unref (curve);
@@ -596,13 +591,9 @@ sp_selected_path_outline ()
         // remember old stroke style, to be set on fill
         SPCSSAttr *ncss;
         {
-            SPCSSAttr *ocss;
-            const gchar *val;
-            const gchar *opac;
-      
-            ocss = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-            val = sp_repr_css_property (ocss, "stroke", NULL);
-            opac = sp_repr_css_property (ocss, "stroke-opacity", NULL);
+            SPCSSAttr *ocss = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+            gchar const *val = sp_repr_css_property (ocss, "stroke", NULL);
+            gchar const *opac = sp_repr_css_property (ocss, "stroke-opacity", NULL);
       
             ncss = sp_repr_css_attr_new ();
       
@@ -707,7 +698,7 @@ sp_selected_path_outline ()
         // remember parent
         Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
-        const char *id = SP_OBJECT_REPR (item)->attribute("id");
+        char const *id = SP_OBJECT_REPR (item)->attribute("id");
 
         selection->remove(item);
         SP_OBJECT (item)->deleteObject(false);
@@ -920,17 +911,14 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     res->SetBackData (false);
   
     {
-        SPCSSAttr *css;
-        const gchar *val;
-    
         Shape *theShape = new Shape;
         Shape *theRes = new Shape;
     
         orig->ConvertWithBackData (1.0);
         orig->Fill (theShape, 0);
     
-        css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-        val = sp_repr_css_property (css, "fill-rule", NULL);
+        SPCSSAttr *css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+        gchar const *val = sp_repr_css_property (css, "fill-rule", NULL);
         if (val && strcmp (val, "nonzero") == 0)
         {
             theRes->ConvertToShape (theShape, fill_nonZero);
@@ -968,8 +956,6 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     }
   
     {
-        //              SPCSSAttr *css;
-        //              const gchar *val;
         gchar tstr[80];
     
         tstr[79] = '\0';
@@ -987,8 +973,8 @@ sp_selected_path_create_offset_object (int expand, bool updating)
         g_free (str);
     
         if ( updating ) {
-            const char *id = SP_OBJECT(item)->repr->attribute("id");
-            const char *uri = g_strdup_printf ("#%s", id);
+            char const *id = SP_OBJECT(item)->repr->attribute("id");
+            char const *uri = g_strdup_printf ("#%s", id);
             sp_repr_set_attr (repr, "xlink:href", uri);
             g_free ((void *) uri);
         } else {
@@ -1138,17 +1124,14 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         res->SetBackData (false);
 
         {
-            SPCSSAttr *css;
-            const gchar *val;
-
             Shape *theShape = new Shape;
             Shape *theRes = new Shape;
 
             orig->ConvertWithBackData (0.03);
             orig->Fill (theShape, 0);
 
-            css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-            val = sp_repr_css_property (css, "fill-rule", NULL);
+            SPCSSAttr *css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+            gchar const *val = sp_repr_css_property (css, "fill-rule", NULL);
             if (val && strcmp (val, "nonzero") == 0)
             {
                 theRes->ConvertToShape (theShape, fill_nonZero);
@@ -1227,7 +1210,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         // remember parent
         Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
-        const char *id = SP_OBJECT_REPR (item)->attribute("id");
+        char const *id = SP_OBJECT_REPR (item)->attribute("id");
 
         selection->remove(item);
         SP_OBJECT (item)->deleteObject(false);
@@ -1344,7 +1327,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, Inkscape::Selection *selectio
     // remember parent
     Inkscape::XML::Node *parent = SP_OBJECT_REPR (item)->parent();
     // remember id
-    const char *id = SP_OBJECT_REPR (item)->attribute("id");
+    char const *id = SP_OBJECT_REPR (item)->attribute("id");
 
     //If a group was selected, to not change the selection list
     if (modifySelection)
