@@ -149,7 +149,8 @@ protected:
     Gtk::HBox            _statusbar;
     UI::Widget::ZoomStatus _zoom_status;
     Gtk::EventBox        _coord_eventbox;
-    Gtk::Label           _coord_status;
+    Gtk::Table           _coord_status;
+    Gtk::Label           _coord_status_x, _coord_status_y;
     Gtk::Label           _select_status;
     
     SPDesktop*           _desktop;

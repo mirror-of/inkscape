@@ -1137,17 +1137,27 @@ EditWidget::initStickyZoom()
 void
 EditWidget::initStatusbar()
 {
-    
     _statusbar.pack_start (_zoom_status, false, false, 0);
-
     _tooltips.set_tip (_zoom_status, _("Zoom"));
-    
-    _coord_status.set_size_request (STATUS_COORD_WIDTH, -1);
+
+    _coord_status.property_n_rows() = 2;    
+    _coord_status.property_n_columns() = 2;    
+    _coord_status.property_row_spacing() = 0;
+    _coord_status.property_column_spacing() = 2;
     _coord_eventbox.add (_coord_status);
     _tooltips.set_tip (_coord_eventbox, _("Cursor coordinates"));
+    _coord_status.attach (*new Gtk::Label("X"), 0,1,0,1, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (*new Gtk::Label("Y"), 0,1,1,2, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status_x.set_text ("000.000");
+    _coord_status_x.set_alignment (0.0, 0.5);
+    _coord_status_y.set_text ("000.000");
+    _coord_status_y.set_alignment (0.0, 0.5);
+    _coord_status.attach (_coord_status_x, 1,2,0,1, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (_coord_status_y, 1,2,1,2, Gtk::FILL,Gtk::FILL, 0,0);
     sp_set_font_size_smaller_smaller (static_cast<GtkWidget*>((void*)_coord_status.gobj()));
-    setCoordinateStatus (NR::Point (0.0, 0.0));
-    _statusbar.pack_start (_coord_eventbox, false, false, 5);
+    _coord_status.set_size_request (STATUS_COORD_WIDTH, -1);
+    _statusbar.pack_end (_coord_eventbox, false, false, 1);
+    _statusbar.pack_end (*new Gtk::VSeparator(), false, false, 0);
 
     _select_status.property_xalign() = 0.0;
     _select_status.property_yalign() = 0.5;
@@ -1510,10 +1520,11 @@ EditWidget::isToolboxButtonActive (gchar const*)
 void 
 EditWidget::setCoordinateStatus (NR::Point p) 
 {
-    gchar *cstr = g_strdup_printf ("%6.2f, %6.2f", 
-                                   _dt2r * p[NR::X],
-                                   _dt2r * p[NR::Y]);
-    _coord_status.property_label() = cstr;
+    gchar *cstr = g_strdup_printf ("%6.2f", _dt2r * p[NR::X]);
+    _coord_status_x.property_label() = cstr;
+    g_free (cstr);
+    cstr = g_strdup_printf ("%6.2f", _dt2r * p[NR::Y]);
+    _coord_status_y.property_label() = cstr;
     g_free (cstr);
 }
 
