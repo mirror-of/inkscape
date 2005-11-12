@@ -60,13 +60,6 @@ public:
     ICoord operator[](Dim2 d) const throw() { return _pt[d]; }
     ICoord &operator[](Dim2 d) throw() { return _pt[d]; }
 
-    __attribute__((__deprecated__)) operator NRPointL() const {
-        NRPointL nrp;
-        nrp.x = _pt[X];
-        nrp.y = _pt[Y];
-        return nrp;
-    }
-
     IPoint &operator+=(IPoint const &o) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] += o._pt[i];
