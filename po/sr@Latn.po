@@ -16,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);"
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
@@ -3228,7 +3229,7 @@ msgstr "<b>Shift</b>: iscrtava preliv sa centrom u početnoj tački"
 #: ../src/gradient-context.cpp:447
 #, c-format
 msgid "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Preliv</b> za %s objekata; <b>Ctrl</b> za prijanjanje ugla"
+msgstr "<b>Preliv</b> za %d objekata; <b>Ctrl</b> za prijanjanje ugla"
 
 #: ../src/gradient-context.cpp:449
 msgid "Select <b>objects</b> on which to create gradient."
@@ -4786,8 +4787,8 @@ msgstr "%s%s. %s."
 #, c-format
 msgid "%s in <b>%i</b> layer. %s."
 msgid_plural "%s in <b>%i</b> layers. %s."
-msgstr[0] "<b>%i</b> u <b>%i</b> sloju. %s."
-msgstr[1] "<b>%i</b> u <b>%i</b> slojeva. %s."
+msgstr[0] "<b>%s</b> u <b>%i</b> sloju. %s."
+msgstr[1] "<b>%s</b> u <b>%i</b> slojeva. %s."
 
 #: ../src/seltrans.cpp:458
 msgid ""
