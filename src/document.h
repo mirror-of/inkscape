@@ -113,6 +113,10 @@ public:
 	sigc::connection connectReconstructionFinish (ReconstructionFinish::slot_type  slot);
 	void emitReconstructionStart (void);
 	void emitReconstructionFinish  (void);
+
+        void reset_key (void *dummy);
+        sigc::connection _selection_changed_connection;
+        sigc::connection _desktop_activated_connection;
 };
 
 SPDocument *sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new = false);

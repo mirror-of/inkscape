@@ -40,6 +40,8 @@
 #include <glib.h>
 #include <string.h>
 #include <gtk/gtkmain.h>
+#include "application/application.h"
+#include "application/editor.h"
 #include "libnr/nr-matrix-fns.h"
 #include "xml/repr.h"
 #include "xml/event-fns.h"
@@ -165,6 +167,9 @@ SPDocument::~SPDocument() {
         modified_id = 0;
     }
 
+    _selection_changed_connection.disconnect();
+    _desktop_activated_connection.disconnect();
+
     if (keepalive) {
         inkscape_unref();
         keepalive = FALSE;
@@ -194,6 +199,11 @@ void SPDocument::collectOrphans() {
     }
 }
 
+void SPDocument::reset_key (void *dummy)
+{
+    actionkey = NULL;
+}
+    
 static SPDocument *
 sp_document_create(Inkscape::XML::Document *rdoc,
                    gchar const *uri,
@@ -301,11 +311,14 @@ sp_document_create(Inkscape::XML::Document *rdoc,
     sp_document_set_undo_sensitive(document, TRUE);
 
     // reset undo key when selection changes, so that same-key actions on different objects are not coalesced
-    if (INKSCAPE != NULL) {
+    if (!Inkscape::NSApplication::Application::getNewGui()) {
         g_signal_connect(G_OBJECT(INKSCAPE), "change_selection",
                          G_CALLBACK(sp_document_reset_key), document);
         g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop",
                          G_CALLBACK(sp_document_reset_key), document);
+    } else {
+        document->_selection_changed_connection = Inkscape::NSApplication::Editor::connectSelectionChanged (sigc::mem_fun (*document, &SPDocument::reset_key));
+        document->_desktop_activated_connection = Inkscape::NSApplication::Editor::connectDesktopActivated (sigc::mem_fun (*document, &SPDocument::reset_key));
     }
     inkscape_add_document(document);
 
