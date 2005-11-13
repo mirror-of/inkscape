@@ -168,10 +168,13 @@ sp_transientize (GtkWidget *dialog)
     }
 } // end of sp_transientize()
 
-
+void on_transientize (SPDesktop *desktop, win_data *wd )
+{
+    sp_transientize_callback (0, desktop, wd);
+}
 
 void
-sp_transientize_callback ( Inkscape::Application *inkscape, 
+sp_transientize_callback ( Inkscape::Application * /*inkscape*/, 
                            SPDesktop *desktop, win_data *wd )
 {
     gint transient_policy = 
@@ -201,7 +204,17 @@ sp_transientize_callback ( Inkscape::Application *inkscape,
     gtk_timeout_add (6, (GtkFunction) sp_allow_again, (gpointer) wd);  
 }
 
+void on_dialog_hide (GtkWidget *w)
+{
+    if (w)
+        gtk_widget_hide (w);
+}
 
+void on_dialog_unhide (GtkWidget *w)
+{
+    if (w)
+        gtk_widget_show (w);
+}
 
 gboolean
 sp_dialog_hide (GtkObject *object, gpointer data)
