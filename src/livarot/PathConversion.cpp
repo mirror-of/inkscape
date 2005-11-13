@@ -26,22 +26,22 @@ void Path::ConvertWithBackData(double treshhold)
     if ( descr_flags & descr_adding_bezier ) {
         CancelBezier();
     }
-    
+
     if ( descr_flags & descr_doing_subpath ) {
         CloseSubpath();
     }
-    
+
     SetBackData(true);
     ResetPoints();
     if ( descr_cmd.empty() ) {
         return;
     }
-    
+
     NR::Point curX;
     int curP = 1;
     int lastMoveTo = -1;
-	
-    // le moveto
+
+    // The initial moveto.
     {
         int const firstTyp = descr_cmd[0]->getType();
         if ( firstTyp == descr_moveto ) {
@@ -52,123 +52,134 @@ void Path::ConvertWithBackData(double treshhold)
         }
         lastMoveTo = AddPoint(curX, 0, 0.0, true);
     }
-    
-    // et le reste, 1 par 1
+
+    // And the rest, one by one.
     while ( curP < int(descr_cmd.size()) ) {
 
-        int nType = descr_cmd[curP]->getType();
+        int const nType = descr_cmd[curP]->getType();
         NR::Point nextX;
 
-        if ( nType == descr_forced ) {
+        switch (nType) {
+            case descr_forced: {
+                AddForcedPoint(curX, curP, 1.0);
+                curP++;
+                break;
+            }
 
-            AddForcedPoint(curX, curP, 1.0);
-            curP++;
+            case descr_moveto: {
+                PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo*>(descr_cmd[curP]);
+                nextX = nData->p;
+                lastMoveTo = AddPoint(nextX, curP, 0.0, true);
+                // et on avance
+                curP++;
+                break;
+            }
 
-        } else if ( nType == descr_moveto ) {
-            
-            PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo*>(descr_cmd[curP]);
-            nextX = nData->p;
-            lastMoveTo = AddPoint(nextX, curP, 0.0, true);
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_close ) {
+            case descr_close: {
+                nextX = pts[lastMoveTo].p;
+                AddPoint(nextX, curP, 1.0, false);
+                curP++;
+                break;
+            }
 
-            nextX = pts[lastMoveTo].p;
-            AddPoint(nextX, curP, 1.0, false);
-            curP++;
-            
-        } else if ( nType == descr_lineto ) {
+            case descr_lineto: {
+                PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                AddPoint(nextX,curP,1.0,false);
+                // et on avance
+                curP++;
+                break;
+            }
 
-            PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            AddPoint(nextX,curP,1.0,false);
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_cubicto ) {
-            PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8, 0.0, 1.0, curP);
-            AddPoint(nextX, curP, 1.0, false);
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_arcto ) {
-            PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold, curP);
-            AddPoint(nextX, curP, 1.0, false);
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_bezierto ) {
-            PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[curP]);
-            int nbInterm = nBData->nb;
-            nextX = nBData->p;
-			
-            int ip = curP + 1;
-            PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-			
-            if ( nbInterm >= 1 ) {
-                NR::Point bx = curX;
-                NR::Point cx = curX;
-                NR::Point dx = curX;
-        
-                dx = nData->p;
-                ip++;
-                nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-                
-                cx = 2 * bx - dx;
-        
-                for (int k = 0; k < nbInterm - 1; k++) {
-                    bx = cx;
-                    cx = dx;
-          
+            case descr_cubicto: {
+                PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8, 0.0, 1.0, curP);
+                AddPoint(nextX, curP, 1.0, false);
+                // et on avance
+                curP++;
+                break;
+            }
+
+            case descr_arcto: {
+                PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold, curP);
+                AddPoint(nextX, curP, 1.0, false);
+                // et on avance
+                curP++;
+                break;
+            }
+
+            case descr_bezierto: {
+                PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[curP]);
+                int nbInterm = nBData->nb;
+                nextX = nBData->p;
+
+                int ip = curP + 1;
+                PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
+
+                if ( nbInterm >= 1 ) {
+                    NR::Point bx = curX;
+                    NR::Point cx = curX;
+                    NR::Point dx = curX;
+
                     dx = nData->p;
                     ip++;
                     nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-          
-                    NR::Point stx;
-                    stx = (bx + cx) / 2;
-                    if ( k > 0 ) {
-                        AddPoint(stx,curP - 1+k,1.0,false);
+
+                    cx = 2 * bx - dx;
+
+                    for (int k = 0; k < nbInterm - 1; k++) {
+                        bx = cx;
+                        cx = dx;
+
+                        dx = nData->p;
+                        ip++;
+                        nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
+
+                        NR::Point stx;
+                        stx = (bx + cx) / 2;
+                        if ( k > 0 ) {
+                            AddPoint(stx,curP - 1+k,1.0,false);
+                        }
+
+                        {
+                            NR::Point mx;
+                            mx = (cx + dx) / 2;
+                            RecBezierTo(cx, stx, mx, treshhold, 8, 0.0, 1.0, curP + k);
+                        }
                     }
-          
                     {
-                        NR::Point mx;
-                        mx = (cx + dx) / 2;
-                        RecBezierTo(cx, stx, mx, treshhold, 8, 0.0, 1.0, curP + k);
+                        bx = cx;
+                        cx = dx;
+
+                        dx = nextX;
+                        dx = 2 * dx - cx;
+
+                        NR::Point stx;
+                        stx = (bx + cx) / 2;
+
+                        if ( nbInterm > 1 ) {
+                            AddPoint(stx, curP + nbInterm - 2, 1.0, false);
+                        }
+
+                        {
+                            NR::Point mx;
+                            mx = (cx + dx) / 2;
+                            RecBezierTo(cx, stx, mx, treshhold, 8, 0.0, 1.0, curP + nbInterm - 1);
+                        }
                     }
+
                 }
-                {
-                    bx = cx;
-                    cx = dx;
-                    
-                    dx = nextX;
-                    dx = 2 * dx - cx;
-          
-                    NR::Point stx;
-                    stx = (bx + cx) / 2;
-          
-                    if ( nbInterm > 1 ) {
-                        AddPoint(stx, curP + nbInterm - 2, 1.0, false);
-                    }
-          
-                    {
-                        NR::Point mx;
-                        mx = (cx + dx) / 2;
-                        RecBezierTo(cx, stx, mx, treshhold, 8, 0.0, 1.0, curP + nbInterm - 1);
-                    }
-                }
-                
+
+
+                AddPoint(nextX, curP - 1 + nbInterm, 1.0, false);
+
+                // et on avance
+                curP += 1 + nbInterm;
+                break;
             }
-			
-			
-            AddPoint(nextX, curP - 1 + nbInterm, 1.0, false);
-			
-            // et on avance
-            curP += 1 + nbInterm;
         }
         curX = nextX;
     }
@@ -180,21 +191,21 @@ void Path::Convert(double treshhold)
     if ( descr_flags & descr_adding_bezier ) {
         CancelBezier();
     }
-    
+
     if ( descr_flags & descr_doing_subpath ) {
         CloseSubpath();
     }
-    
+
     SetBackData(false);
     ResetPoints();
     if ( descr_cmd.empty() ) {
         return;
     }
-    
+
     NR::Point curX;
     int curP = 1;
     int lastMoveTo = 0;
-	
+
     // le moveto
     {
         int const firstTyp = descr_cmd[0]->getType();
@@ -207,175 +218,185 @@ void Path::Convert(double treshhold)
         lastMoveTo = AddPoint(curX, true);
     }
     descr_cmd[0]->associated = lastMoveTo;
-	
+
     // et le reste, 1 par 1
     while ( curP < int(descr_cmd.size()) ) {
-        
+
         int const nType = descr_cmd[curP]->getType();
         NR::Point nextX;
 
-        if ( nType == descr_forced ) {
-
-            descr_cmd[curP]->associated = AddForcedPoint(curX);
-            curP++;
-            
-        } else if ( nType == descr_moveto ) {
-
-            PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            lastMoveTo = AddPoint(nextX, true);
-            descr_cmd[curP]->associated = lastMoveTo;
-
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_close ) {
-            
-            nextX = pts[lastMoveTo].p;
-            descr_cmd[curP]->associated = AddPoint(nextX, false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
-                }
+        switch (nType) {
+            case descr_forced: {
+                descr_cmd[curP]->associated = AddForcedPoint(curX);
+                curP++;
+                break;
             }
-            curP++;
-            
-        } else if ( nType == descr_lineto ) {
 
-            PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            descr_cmd[curP]->associated = AddPoint(nextX, false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
-                }
+            case descr_moveto: {
+                PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                lastMoveTo = AddPoint(nextX, true);
+                descr_cmd[curP]->associated = lastMoveTo;
+
+                // et on avance
+                curP++;
+                break;
             }
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_cubicto ) {
-            PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8);
-            descr_cmd[curP]->associated = AddPoint(nextX,false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+
+            case descr_close: {
+                nextX = pts[lastMoveTo].p;
+                descr_cmd[curP]->associated = AddPoint(nextX, false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
                 }
+                curP++;
+                break;
             }
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_arcto ) {
-            
-            PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold);
-            descr_cmd[curP]->associated = AddPoint(nextX, false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+
+            case descr_lineto: {
+                PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                descr_cmd[curP]->associated = AddPoint(nextX, false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
                 }
+                // et on avance
+                curP++;
+                break;
             }
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_bezierto ) {
-            PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[curP]);
-            int nbInterm = nBData->nb;
-            nextX = nBData->p;
-            int curBD = curP;
-			
-            curP++;
-            int ip = curP;
-            PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-			
-            if ( nbInterm == 1 ) {
-                NR::Point const midX = nData->p;
-                RecBezierTo(midX, curX, nextX, treshhold, 8);
-            } else if ( nbInterm > 1 ) {
-                NR::Point bx = curX;
-                NR::Point cx = curX;
-                NR::Point dx = curX;
-								
-                dx = nData->p;
-                ip++;
-                nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-				
-                cx = 2 * bx - dx;
-				
-                for (int k = 0; k < nbInterm - 1; k++) {
-                    bx = cx;
-                    cx = dx;
-					
+
+            case descr_cubicto: {
+                PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8);
+                descr_cmd[curP]->associated = AddPoint(nextX,false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
+                }
+                // et on avance
+                curP++;
+                break;
+            }
+
+            case descr_arcto: {
+                PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold);
+                descr_cmd[curP]->associated = AddPoint(nextX, false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
+                }
+                // et on avance
+                curP++;
+                break;
+            }
+
+            case descr_bezierto: {
+                PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[curP]);
+                int nbInterm = nBData->nb;
+                nextX = nBData->p;
+                int curBD = curP;
+
+                curP++;
+                int ip = curP;
+                PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
+
+                if ( nbInterm == 1 ) {
+                    NR::Point const midX = nData->p;
+                    RecBezierTo(midX, curX, nextX, treshhold, 8);
+                } else if ( nbInterm > 1 ) {
+                    NR::Point bx = curX;
+                    NR::Point cx = curX;
+                    NR::Point dx = curX;
+
                     dx = nData->p;
                     ip++;
                     nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-					
-                    NR::Point stx = (bx + cx) / 2;
-                    if ( k > 0 ) {
-                        descr_cmd[ip - 2]->associated = AddPoint(stx, false);
-                        if ( descr_cmd[ip - 2]->associated < 0 ) {
-                            if ( curP == 0 ) {
-                                descr_cmd[ip - 2]->associated = 0;
-                            } else {
-                                descr_cmd[ip - 2]->associated = descr_cmd[ip - 3]->associated;
+
+                    cx = 2 * bx - dx;
+
+                    for (int k = 0; k < nbInterm - 1; k++) {
+                        bx = cx;
+                        cx = dx;
+
+                        dx = nData->p;
+                        ip++;
+                        nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
+
+                        NR::Point stx = (bx + cx) / 2;
+                        if ( k > 0 ) {
+                            descr_cmd[ip - 2]->associated = AddPoint(stx, false);
+                            if ( descr_cmd[ip - 2]->associated < 0 ) {
+                                if ( curP == 0 ) {
+                                    descr_cmd[ip - 2]->associated = 0;
+                                } else {
+                                    descr_cmd[ip - 2]->associated = descr_cmd[ip - 3]->associated;
+                                }
                             }
                         }
-                    }
-                    
-                    {
-                        NR::Point const mx = (cx + dx) / 2;
-                        RecBezierTo(cx, stx, mx, treshhold, 8);
-                    }
-                }
-                
-                {
-                    bx = cx;
-                    cx = dx;
-					
-                    dx = nextX;
-                    dx = 2 * dx - cx;
-					
-                    NR::Point stx = (bx + cx) / 2;
-					
-                    descr_cmd[ip - 1]->associated = AddPoint(stx, false);
-                    if ( descr_cmd[ip - 1]->associated < 0 ) {
-                        if ( curP == 0 ) {
-                            descr_cmd[ip - 1]->associated = 0;
-                        } else {
-                            descr_cmd[ip - 1]->associated = descr_cmd[ip - 2]->associated;
+
+                        {
+                            NR::Point const mx = (cx + dx) / 2;
+                            RecBezierTo(cx, stx, mx, treshhold, 8);
                         }
                     }
-                    
+
                     {
-                        NR::Point mx = (cx + dx) / 2;
-                        RecBezierTo(cx, stx, mx, treshhold, 8);
+                        bx = cx;
+                        cx = dx;
+
+                        dx = nextX;
+                        dx = 2 * dx - cx;
+
+                        NR::Point stx = (bx + cx) / 2;
+
+                        descr_cmd[ip - 1]->associated = AddPoint(stx, false);
+                        if ( descr_cmd[ip - 1]->associated < 0 ) {
+                            if ( curP == 0 ) {
+                                descr_cmd[ip - 1]->associated = 0;
+                            } else {
+                                descr_cmd[ip - 1]->associated = descr_cmd[ip - 2]->associated;
+                            }
+                        }
+
+                        {
+                            NR::Point mx = (cx + dx) / 2;
+                            RecBezierTo(cx, stx, mx, treshhold, 8);
+                        }
                     }
                 }
-            }
 
-            descr_cmd[curBD]->associated = AddPoint(nextX, false);
-            if ( descr_cmd[curBD]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curBD]->associated = 0;
-                } else {
-                    descr_cmd[curBD]->associated = descr_cmd[curBD - 1]->associated;
+                descr_cmd[curBD]->associated = AddPoint(nextX, false);
+                if ( descr_cmd[curBD]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curBD]->associated = 0;
+                    } else {
+                        descr_cmd[curBD]->associated = descr_cmd[curBD - 1]->associated;
+                    }
                 }
+
+                // et on avance
+                curP += nbInterm;
+                break;
             }
-            
-            // et on avance
-            curP += nbInterm;
         }
-        
+
         curX = nextX;
     }
 }
@@ -387,21 +408,21 @@ void Path::ConvertEvenLines(double treshhold)
     if ( descr_flags & descr_adding_bezier ) {
         CancelBezier();
     }
-    
+
     if ( descr_flags & descr_doing_subpath ) {
         CloseSubpath();
     }
-    
+
     SetBackData(false);
     ResetPoints();
     if ( descr_cmd.empty() ) {
         return;
     }
-    
+
     NR::Point curX;
     int curP = 1;
     int lastMoveTo = 0;
-	
+
     // le moveto
     {
         int const firstTyp = descr_cmd[0]->getType();
@@ -414,199 +435,208 @@ void Path::ConvertEvenLines(double treshhold)
         lastMoveTo = AddPoint(curX, true);
     }
     descr_cmd[0]->associated = lastMoveTo;
-	
+
     // et le reste, 1 par 1
     while ( curP < int(descr_cmd.size()) ) {
-        
+
         int const nType = descr_cmd[curP]->getType();
         NR::Point nextX;
-        
-        if ( nType == descr_forced ) {
-            
-            descr_cmd[curP]->associated = AddForcedPoint(curX);
-            curP++;
-            
-        } else if ( nType == descr_moveto ) {
-            
-            PathDescrMoveTo* nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            lastMoveTo = AddPoint(nextX,true);
-            descr_cmd[curP]->associated = lastMoveTo;
 
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_close ) {
-            
-            nextX = pts[lastMoveTo].p;
-            {
-                NR::Point nexcur;
-                nexcur = nextX - curX;
-                const double segL = NR::L2(nexcur);
+        switch (nType) {
+            case descr_forced: {
+                descr_cmd[curP]->associated = AddForcedPoint(curX);
+                curP++;
+                break;
+            }
+
+            case descr_moveto: {
+                PathDescrMoveTo* nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                lastMoveTo = AddPoint(nextX,true);
+                descr_cmd[curP]->associated = lastMoveTo;
+
+                // et on avance
+                curP++;
+                break;
+            }
+
+            case descr_close: {
+                nextX = pts[lastMoveTo].p;
+                {
+                    NR::Point nexcur;
+                    nexcur = nextX - curX;
+                    const double segL = NR::L2(nexcur);
+                    if ( segL > treshhold ) {
+                        for (double i = treshhold; i < segL; i += treshhold) {
+                            NR::Point nX;
+                            nX = (segL - i) * curX + i * nextX;
+                            nX /= segL;
+                            AddPoint(nX);
+                        }
+                    }
+                }
+
+                descr_cmd[curP]->associated = AddPoint(nextX,false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
+                }
+
+                curP++;
+                break;
+            }
+
+            case descr_lineto: {
+                PathDescrLineTo* nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                NR::Point nexcur = nextX - curX;
+                const double segL = L2(nexcur);
                 if ( segL > treshhold ) {
                     for (double i = treshhold; i < segL; i += treshhold) {
-                        NR::Point nX;
-                        nX = (segL - i) * curX + i * nextX;
-                        nX /= segL;
+                        NR::Point nX = ((segL - i) * curX + i * nextX) / segL;
                         AddPoint(nX);
                     }
                 }
-            }
-            
-            descr_cmd[curP]->associated = AddPoint(nextX,false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
-                }
-            }
-            
-            curP++;
-            
-        } else if ( nType == descr_lineto ) {
 
-            PathDescrLineTo* nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            NR::Point nexcur = nextX - curX;
-            const double segL = L2(nexcur);
-            if ( segL > treshhold ) {
-                for (double i = treshhold; i < segL; i += treshhold) {
-                    NR::Point nX = ((segL - i) * curX + i * nextX) / segL;
-                    AddPoint(nX);
+                descr_cmd[curP]->associated = AddPoint(nextX,false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
                 }
-            }
-            
-            descr_cmd[curP]->associated = AddPoint(nextX,false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
-                }
-            }
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_cubicto ) {
-            
-            PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8, 4 * treshhold);
-            descr_cmd[curP]->associated = AddPoint(nextX, false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
-                }
-            }
-            // et on avance
-            curP++;
-            
-        } else if ( nType == descr_arcto ) {
-
-            PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
-            nextX = nData->p;
-            DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold);
-            descr_cmd[curP]->associated =AddPoint(nextX, false);
-            if ( descr_cmd[curP]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curP]->associated = 0;
-                } else {
-                    descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
-                }
+                // et on avance
+                curP++;
+                break;
             }
 
-            // et on avance
-            curP++;
+            case descr_cubicto: {
+                PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                RecCubicTo(curX, nData->start, nextX, nData->end, treshhold, 8, 4 * treshhold);
+                descr_cmd[curP]->associated = AddPoint(nextX, false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
+                }
+                // et on avance
+                curP++;
+                break;
+            }
 
-        } else if ( nType == descr_bezierto ) {
-            PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[curP]);
-            int nbInterm = nBData->nb;
-            nextX = nBData->p;
-            int curBD = curP;
-			
-            curP++;
-            int ip = curP;
-            PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-			
-            if ( nbInterm == 1 ) {
-                NR::Point const midX = nData->p;
-                RecBezierTo(midX, curX, nextX, treshhold, 8, 4 * treshhold);
-            } else if ( nbInterm > 1 ) {
-                NR::Point bx = curX;
-                NR::Point cx = curX;
-                NR::Point dx = curX;
-								
-                dx = nData->p;
-                ip++;
-                nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-                
-                cx = 2 * bx - dx;
-				
-                for (int k = 0; k < nbInterm - 1; k++) {
-                    bx = cx;
-                    cx = dx;
+            case descr_arcto: {
+                PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[curP]);
+                nextX = nData->p;
+                DoArc(curX, nextX, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise, treshhold);
+                descr_cmd[curP]->associated =AddPoint(nextX, false);
+                if ( descr_cmd[curP]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curP]->associated = 0;
+                    } else {
+                        descr_cmd[curP]->associated = descr_cmd[curP - 1]->associated;
+                    }
+                }
+
+                // et on avance
+                curP++;
+                break;
+            }
+
+            case descr_bezierto: {
+                PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[curP]);
+                int nbInterm = nBData->nb;
+                nextX = nBData->p;
+                int curBD = curP;
+
+                curP++;
+                int ip = curP;
+                PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
+
+                if ( nbInterm == 1 ) {
+                    NR::Point const midX = nData->p;
+                    RecBezierTo(midX, curX, nextX, treshhold, 8, 4 * treshhold);
+                } else if ( nbInterm > 1 ) {
+                    NR::Point bx = curX;
+                    NR::Point cx = curX;
+                    NR::Point dx = curX;
+
                     dx = nData->p;
-
                     ip++;
                     nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
-					
-                    NR::Point stx = (bx+cx) / 2;
-                    if ( k > 0 ) {
-                        descr_cmd[ip - 2]->associated = AddPoint(stx, false);
-                        if ( descr_cmd[ip - 2]->associated < 0 ) {
-                            if ( curP == 0 ) {
-                                descr_cmd[ip- 2]->associated = 0;
-                            } else {
-                                descr_cmd[ip - 2]->associated = descr_cmd[ip - 3]->associated;
+
+                    cx = 2 * bx - dx;
+
+                    for (int k = 0; k < nbInterm - 1; k++) {
+                        bx = cx;
+                        cx = dx;
+                        dx = nData->p;
+
+                        ip++;
+                        nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[ip]);
+
+                        NR::Point stx = (bx+cx) / 2;
+                        if ( k > 0 ) {
+                            descr_cmd[ip - 2]->associated = AddPoint(stx, false);
+                            if ( descr_cmd[ip - 2]->associated < 0 ) {
+                                if ( curP == 0 ) {
+                                    descr_cmd[ip- 2]->associated = 0;
+                                } else {
+                                    descr_cmd[ip - 2]->associated = descr_cmd[ip - 3]->associated;
+                                }
                             }
                         }
-                    }
-                    
-                    {
-                        NR::Point const mx = (cx + dx) / 2;
-                        RecBezierTo(cx, stx, mx, treshhold, 8, 4 * treshhold);
-                    }
-                }
-                
-                {
-                    bx = cx;
-                    cx = dx;
-					
-                    dx = nextX;
-                    dx = 2 * dx - cx;
-					
-                    NR::Point const stx = (bx + cx) / 2;
-					
-                    descr_cmd[ip - 1]->associated = AddPoint(stx, false);
-                    if ( descr_cmd[ip - 1]->associated < 0 ) {
-                        if ( curP == 0 ) {
-                            descr_cmd[ip - 1]->associated = 0;
-                        } else {
-                            descr_cmd[ip - 1]->associated = descr_cmd[ip - 2]->associated;
+
+                        {
+                            NR::Point const mx = (cx + dx) / 2;
+                            RecBezierTo(cx, stx, mx, treshhold, 8, 4 * treshhold);
                         }
                     }
-                    
+
                     {
-                        NR::Point const mx = (cx + dx) / 2;
-                        RecBezierTo(cx, stx, mx, treshhold, 8, 4 * treshhold);
+                        bx = cx;
+                        cx = dx;
+
+                        dx = nextX;
+                        dx = 2 * dx - cx;
+
+                        NR::Point const stx = (bx + cx) / 2;
+
+                        descr_cmd[ip - 1]->associated = AddPoint(stx, false);
+                        if ( descr_cmd[ip - 1]->associated < 0 ) {
+                            if ( curP == 0 ) {
+                                descr_cmd[ip - 1]->associated = 0;
+                            } else {
+                                descr_cmd[ip - 1]->associated = descr_cmd[ip - 2]->associated;
+                            }
+                        }
+
+                        {
+                            NR::Point const mx = (cx + dx) / 2;
+                            RecBezierTo(cx, stx, mx, treshhold, 8, 4 * treshhold);
+                        }
                     }
                 }
-            }
-            
-            descr_cmd[curBD]->associated = AddPoint(nextX, false);
-            if ( descr_cmd[curBD]->associated < 0 ) {
-                if ( curP == 0 ) {
-                    descr_cmd[curBD]->associated = 0;
-                } else {
-                    descr_cmd[curBD]->associated = descr_cmd[curBD - 1]->associated;
+
+                descr_cmd[curBD]->associated = AddPoint(nextX, false);
+                if ( descr_cmd[curBD]->associated < 0 ) {
+                    if ( curP == 0 ) {
+                        descr_cmd[curBD]->associated = 0;
+                    } else {
+                        descr_cmd[curBD]->associated = descr_cmd[curBD - 1]->associated;
+                    }
                 }
+
+                // et on avance
+                curP += nbInterm;
+                break;
             }
-            
-            // et on avance
-            curP += nbInterm;
         }
         if ( NR::LInfty(curX - nextX) > 0.00001 ) {
             curX = nextX;
@@ -653,13 +683,13 @@ const NR::Point Path::PrevPoint(int i) const
 // utilitaries: given a quadratic bezier curve (start point, control point, end point, ie that's a clamped curve),
 // and an abcissis on it, get the point with that abcissis.
 // warning: it's NOT a curvilign abcissis (or whatever you call that in english), so "t" is NOT the length of "start point"->"result point"
-void Path::QuadraticPoint(double t, NR::Point &oPt, 
+void Path::QuadraticPoint(double t, NR::Point &oPt,
                           const NR::Point &iS, const NR::Point &iM, const NR::Point &iE)
 {
     NR::Point const ax = iE - 2 * iM + iS;
     NR::Point const bx = 2 * iM - 2 * iS;
     NR::Point const cx = iS;
-	
+
     oPt = t * t * ax + t * bx + cx;
 }
 // idem for cubic bezier patch
@@ -669,7 +699,7 @@ void Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR:
     NR::Point const ax = ieD - 2 * iE + 2 * iS + isD;
     NR::Point const bx = 3 * iE - ieD - 2 * isD - 3 * iS;
     NR::Point const cx = isD;
-	
+
     oPt = 3 * t * t * ax + 2 * t * bx + cx;
 }
 
@@ -726,7 +756,7 @@ static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
             eang = 2 * M_PI - eang;
         }
     }
-	
+
     csd[0] *= rx;
     csd[1] *= ry;
     ca[1] = -ca[1]; // because it's the inverse rotation
@@ -735,7 +765,7 @@ static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
     dr[1] = cross(csd, ca);
 
     ca[1] = -ca[1];
-	
+
     if ( wise ) {
 
         if (large) {
@@ -752,7 +782,7 @@ static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
                 sang -= 2*M_PI;
             }
         }
-        
+
     } else {
         if (!large) {
             dr = -dr;
@@ -769,7 +799,7 @@ static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
             }
         }
     }
-    
+
     dr += 0.5 * (iS + iE);
 }
 
@@ -808,9 +838,9 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
             cb = omega * cb;
             AddPoint( cb.vec * ar + dr );
         }
-        
+
     } else {
-        
+
         double const incr = 0.1;
         if ( sang > eang ) {
             sang -= 2*M_PI;
@@ -824,7 +854,7 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
 }
 
 
-void Path::RecCubicTo( NR::Point const &iS, NR::Point const &isD, 
+void Path::RecCubicTo( NR::Point const &iS, NR::Point const &isD,
                        NR::Point const &iE, NR::Point const &ieD,
                        double tresh, int lev, double maxL)
 {
@@ -837,7 +867,7 @@ void Path::RecCubicTo( NR::Point const &iS, NR::Point const &isD,
         if ( sC < tresh && eC < tresh ) {
             return;
         }
-        
+
     } else {
         const double sC = fabs(cross(se, isD)) / dC;
         const double eC = fabs(cross(se, ieD)) / dC;
@@ -849,10 +879,10 @@ void Path::RecCubicTo( NR::Point const &iS, NR::Point const &isD,
                 }
                 NR::Point m = 0.5 * (iS + iE) + 0.125 * (isD - ieD);
                 NR::Point md = 0.75 * (iE - iS) - 0.125 * (isD + ieD);
-				
+
                 NR::Point hisD = 0.5 * isD;
                 NR::Point hieD = 0.5 * ieD;
-				
+
                 RecCubicTo(iS, hisD, m, md, tresh, lev - 1, maxL);
                 AddPoint(m);
                 RecCubicTo(m, md, iE, hieD, tresh, lev - 1,maxL);
@@ -860,18 +890,18 @@ void Path::RecCubicTo( NR::Point const &iS, NR::Point const &isD,
             return;
         }
     }
-	
+
     if ( lev <= 0 ) {
         return;
     }
-    
+
     {
         NR::Point m = 0.5 * (iS + iE) + 0.125 * (isD - ieD);
         NR::Point md = 0.75 * (iE - iS) - 0.125 * (isD + ieD);
-				
+
         NR::Point hisD = 0.5 * isD;
         NR::Point hieD = 0.5 * ieD;
-    
+
         RecCubicTo(iS, hisD, m, md, tresh, lev - 1, maxL);
         AddPoint(m);
         RecCubicTo(m, md, iE, hieD, tresh, lev - 1,maxL);
@@ -888,7 +918,7 @@ void Path::RecBezierTo(const NR::Point &iP,
     if ( lev <= 0 ) {
         return;
     }
-    
+
     NR::Point ps = iS - iP;
     NR::Point pe = iE - iP;
     NR::Point se = iE - iS;
@@ -901,18 +931,18 @@ void Path::RecBezierTo(const NR::Point &iP,
             RecBezierTo(md, iS, m, tresh, lev - 1, maxL);
             AddPoint(m);
             md = 0.5 * (iP + iE);
-            RecBezierTo(md, m, iE, tresh, lev - 1, maxL);	
+            RecBezierTo(md, m, iE, tresh, lev - 1, maxL);
         }
         return;
     }
-    
+
     {
         const NR::Point m = 0.25 * (iS + iE + 2 * iP);
         NR::Point md = 0.5 * (iS + iP);
         RecBezierTo(md, iS, m, tresh, lev - 1, maxL);
         AddPoint(m);
         md = 0.5 * (iP + iE);
-        RecBezierTo(md, m, iE, tresh, lev - 1, maxL);	
+        RecBezierTo(md, m, iE, tresh, lev - 1, maxL);
     }
 }
 
@@ -936,11 +966,11 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
     ArcAnglesAndCenter(iS, iE, rx, ry, angle, large, wise, sang, eang, dr);
     /* TODO: This isn't as good numerically as treating iS and iE as primary.  E.g. consider
        the case of low curvature (i.e. very large radius). */
-    
+
     NR::scale const ar(rx, ry);
     NR::rotate cb(angle + sang);
     if (wise) {
-        
+
         double const incr = -0.1;
         if ( sang < eang ) {
             sang += 2*M_PI;
@@ -950,9 +980,9 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
             cb = omega * cb;
             AddPoint(cb.vec * ar + dr, piece, (sang - b) / (sang - eang));
         }
-        
+
     } else {
-        
+
         double const incr = 0.1;
         if ( sang > eang ) {
             sang -= 2 * M_PI;
@@ -965,7 +995,7 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
     }
 }
 
-void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD, 
+void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD,
                       NR::Point const &iE, NR::Point const &ieD,
                       double tresh, int lev, double st, double et, int piece)
 {
@@ -984,22 +1014,22 @@ void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD,
             return;
         }
     }
-	
+
     if ( lev <= 0 ) {
         return;
     }
-	
+
     NR::Point m = 0.5 * (iS + iE) + 0.125 * (isD - ieD);
     NR::Point md = 0.75 * (iE - iS) - 0.125 * (isD + ieD);
     double mt = (st + et) / 2;
-	
+
     NR::Point hisD = 0.5 * isD;
     NR::Point hieD = 0.5 * ieD;
-    
+
     RecCubicTo(iS, hisD, m, md, tresh, lev - 1, st, mt, piece);
     AddPoint(m, piece, mt);
     RecCubicTo(m, md, iE, hieD, tresh, lev - 1, mt, et, piece);
-	
+
 }
 
 
@@ -1012,20 +1042,20 @@ void Path::RecBezierTo(NR::Point const &iP,
     if ( lev <= 0 ) {
         return;
     }
-    
+
     NR::Point ps = iS - iP;
     NR::Point pe = iE - iP;
     const double s = fabs(cross(pe, ps));
     if ( s < tresh ) {
         return;
     }
-	
+
     {
         const double mt = (st + et) / 2;
         const NR::Point m = 0.25 * (iS + iE + 2 * iP);
         RecBezierTo(0.5 * (iS + iP), iS, m, tresh, lev - 1, st, mt, piece);
         AddPoint(m, piece, mt);
-        RecBezierTo(0.5 * (iP + iE), m, iE, tresh, lev - 1, mt, et, piece);	
+        RecBezierTo(0.5 * (iP + iE), m, iE, tresh, lev - 1, mt, et, piece);
     }
 }
 
@@ -1046,18 +1076,18 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
         // We always add a lineto afterwards, so this is fine.
         // [on ajoute toujours un lineto apres, donc c bon]
     }
-    
+
     double sang;
     double eang;
     NR::Point dr;
     ArcAnglesAndCenter(iS, iE, rx, ry, angle, large, wise, sang, eang, dr);
     /* TODO: This isn't as good numerically as treating iS and iE as primary.  E.g. consider
        the case of low curvature (i.e. very large radius). */
-    
+
     NR::scale const ar(rx, ry);
     NR::rotate cb(angle + sang);
     if (wise) {
-        
+
         double const incr = -0.1;
         if ( sang < eang ) {
             sang += 2*M_PI;
@@ -1067,7 +1097,7 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
             cb = omega * cb;
             AddPoint(cb.vec * ar + dr, piece, (sang - b) / (sang - eang));
         }
-        
+
     } else {
         double const incr = 0.1;
         if ( sang > eang ) {
@@ -1082,7 +1112,7 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
 }
 
 
-void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD, 
+void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD,
                       NR::Point const &iE, NR::Point const &ieD,
                       double tresh, int lev, double st, double et,
                       int piece, offset_orig &orig)
@@ -1103,11 +1133,11 @@ void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD,
             doneSub = true;
         }
     }
-	
+
     if ( lev <= 0 ) {
         doneSub = true;
     }
-	
+
     // test des inversions
     bool stInv = false;
     bool enInv = false;
@@ -1116,11 +1146,11 @@ void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD,
         NR::Point os_tgt;
         NR::Point oe_pos;
         NR::Point oe_tgt;
-        
+
         orig.orig->PointAndTangentAt(orig.piece, orig.tSt * (1 - st) + orig.tEn * st, os_pos, os_tgt);
         orig.orig->PointAndTangentAt(orig.piece, orig.tSt * (1 - et) + orig.tEn * et, oe_pos, oe_tgt);
-		
-    
+
+
         NR::Point n_tgt = isD;
         double si = dot(n_tgt, os_tgt);
         if ( si < 0 ) {
@@ -1138,24 +1168,24 @@ void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD,
             AddPoint(iS, piece, st);
             AddPoint(oe_pos, -1, 0.0);
             return;
-            
+
         } else if ( ( stInv && !enInv ) || ( !stInv && enInv ) ) {
             return;
         }
 
     }
-    
+
     if ( ( !stInv && !enInv && doneSub ) || lev <= 0 ) {
         return;
     }
-	
+
     {
         const NR::Point m = 0.5 * (iS+iE) + 0.125 * (isD - ieD);
         const NR::Point md = 0.75 * (iE - iS) - 0.125 * (isD + ieD);
         const double mt = (st + et) / 2;
         const NR::Point hisD = 0.5 * isD;
         const NR::Point hieD = 0.5 * ieD;
-    
+
         RecCubicTo(iS, hisD, m, md, tresh, lev - 1, st, mt, piece, orig);
         AddPoint(m, piece, mt);
         RecCubicTo(m, md, iE, hieD, tresh, lev - 1, mt, et, piece, orig);
@@ -1179,7 +1209,7 @@ void Path::RecBezierTo(NR::Point const &iP, NR::Point const &iS,NR::Point const 
     if ( s < tresh ) {
         doneSub = true ;
     }
-  
+
     // test des inversions
     bool stInv = false;
     bool enInv = false;
@@ -1190,41 +1220,39 @@ void Path::RecBezierTo(NR::Point const &iP, NR::Point const &iS,NR::Point const 
         NR::Point oe_tgt;
         NR::Point n_tgt;
         NR::Point n_pos;
-        
+
         double n_len;
         double n_rad;
         PathDescrIntermBezierTo mid(iP);
         PathDescrBezierTo fin(iE, 1);
-		
+
         TangentOnBezAt(0.0, iS, mid, fin, false, n_pos, n_tgt, n_len, n_rad);
         orig.orig->PointAndTangentAt(orig.piece, orig.tSt * (1 - st) + orig.tEn * st, os_pos, os_tgt);
         double si = dot(n_tgt, os_tgt);
         if ( si < 0 ) {
             stInv = true;
         }
-		
+
         TangentOnBezAt(1.0, iS, mid, fin, false, n_pos, n_tgt, n_len, n_rad);
         orig.orig->PointAndTangentAt(orig.piece, orig.tSt * (1 - et) + orig.tEn * et, oe_pos, oe_tgt);
         si = dot(n_tgt, oe_tgt);
         if ( si < 0 ) {
             enInv = true;
         }
-		
+
         if ( stInv && enInv ) {
             AddPoint(os_pos, -1, 0.0);
             AddPoint(iE, piece, et);
             AddPoint(iS, piece, st);
             AddPoint(oe_pos, -1, 0.0);
             return;
-            //		} else if ( ( stInv && !enInv ) || ( !stInv && enInv ) ) {
-            //			return;
         }
     }
-    
+
     if ( !stInv && !enInv && doneSub ) {
         return;
     }
-  
+
     {
         double mt = (st + et) / 2;
         NR::Point m = 0.25 * (iS + iE + 2 * iP);
@@ -1232,7 +1260,7 @@ void Path::RecBezierTo(NR::Point const &iP, NR::Point const &iS,NR::Point const 
         RecBezierTo(md, iS, m, tresh, lev - 1, st, mt, piece, orig);
         AddPoint(m, piece, mt);
         md = 0.5 * (iP + iE);
-        RecBezierTo(md, m, iE, tresh, lev - 1, mt, et, piece, orig);	
+        RecBezierTo(md, m, iE, tresh, lev - 1, mt, et, piece, orig);
     }
 }
 
@@ -1248,22 +1276,21 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
     if ( dest == NULL ) {
         return;
     }
-    
+
     if ( justAdd == false ) {
         dest->Reset(pts.size(), pts.size());
     }
-    
+
     if ( pts.size() <= 1 ) {
         return;
     }
-    
+
     int first = dest->numberOfPoints();
-  //	bool  startIsEnd = false;
-	
+
     if ( back ) {
         dest->MakeBackData(true);
     }
-	
+
     if ( invert ) {
         if ( back ) {
             {
@@ -1276,12 +1303,12 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                 int pathEnd = 0;
                 bool closed = false;
                 int lEdge = -1;
-                
+
                 while ( curP < int(pts.size()) ) {
                     int sbp = curP;
                     int lm = lastM;
                     int prp = pathEnd;
-                    
+
                     if ( pts[sbp].isMoveTo == polyline_moveto ) {
 
                         if ( closeIfNeeded ) {
@@ -1298,14 +1325,14 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                                 }
                             }
                         }
-                        
+
                         lastM = curP;
                         pathEnd = curP;
                         closed = false;
                         lEdge = -1;
-                        
+
                     } else {
-                        
+
                         if ( NR::LInfty(pts[sbp].p - pts[prp].p) >= 0.00001 ) {
                             lEdge = dest->AddEdge(first + curP, first + pathEnd);
                             if ( lEdge >= 0 ) {
@@ -1327,10 +1354,10 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                             }
                         }
                     }
-                    
+
                     curP++;
                 }
-                
+
                 if ( closeIfNeeded ) {
                     if ( closed && lEdge >= 0 ) {
                         dest->DisconnectStart(lEdge);
@@ -1347,9 +1374,9 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                     }
                 }
             }
-            
+
         } else {
-            
+
             {
                 // invert && !back && !weighted
                 for (int i = 0; i < int(pts.size()); i++) {
@@ -1390,7 +1417,7 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                     }
                     curP++;
                 }
-                
+
                 if ( closeIfNeeded ) {
                     if ( closed && lEdge >= 0 ) {
                         dest->DisconnectStart(lEdge);
@@ -1399,19 +1426,19 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         dest->AddEdge(first + lastM, first + pathEnd);
                     }
                 }
-                
+
             }
         }
-        
+
     } else {
-        
+
         if ( back ) {
             {
                 // !invert && back && !weighted
                 for (int i = 0; i < int(pts.size()); i++) {
                     dest->AddPoint(pts[i].p);
                 }
-                
+
                 int lastM = 0;
                 int curP = 1;
                 int pathEnd = 0;
@@ -1462,7 +1489,7 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                     }
                     curP++;
                 }
-                
+
                 if ( closeIfNeeded ) {
                     if ( closed && lEdge >= 0 ) {
                         dest->DisconnectEnd(lEdge);
@@ -1479,14 +1506,14 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                     }
                 }
             }
-            
+
         } else {
             {
                 // !invert && !back && !weighted
                 for (int i = 0;i < int(pts.size()); i++) {
                     dest->AddPoint(pts[i].p);
                 }
-                
+
                 int lastM = 0;
                 int curP = 1;
                 int pathEnd = 0;
@@ -1522,7 +1549,7 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                     }
                     curP++;
                 }
-                
+
                 if ( closeIfNeeded ) {
                     if ( closed && lEdge >= 0 ) {
                         dest->DisconnectEnd(lEdge);
@@ -1531,7 +1558,7 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
                         dest->AddEdge(first + pathEnd, first + lastM);
                     }
                 }
-                
+
             }
         }
     }
