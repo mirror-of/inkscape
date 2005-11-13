@@ -15,8 +15,11 @@
 #endif
 #include <glib.h>
 #include <gtk/gtk.h>
-
+#include <sigc++/sigc++.h>
 #include <glibmm/i18n.h>
+
+#include "application/application.h"
+#include "application/editor.h"
 #include "helper/window.h"
 #include "helper/unit-menu.h"
 #include "helper/units.h"
@@ -100,19 +103,31 @@ enum {
 
 static GtkSizeGroup* table_row_labels = NULL;
 
+static sigc::connection _shutdown_connection;
+static sigc::connection _dialogs_hidden_connection;
+static sigc::connection _dialogs_unhidden_connection;
+static sigc::connection _desktop_activated_connection;
+
 static void
 clonetiler_dialog_destroy (GtkObject *object, gpointer data)
 {
-
-    sp_signal_disconnect_by_data (INKSCAPE, dlg);
+    if (Inkscape::NSApplication::Application::getNewGui())
+    {
+        _shutdown_connection.disconnect();
+        _dialogs_hidden_connection.disconnect();
+        _dialogs_unhidden_connection.disconnect();
+        _desktop_activated_connection.disconnect();
+    } else {
+        sp_signal_disconnect_by_data (INKSCAPE, dlg);
+    }
+    
     wd.win = dlg = NULL;
     wd.stop = 0;
     
 }
 
-
 static gboolean
-clonetiler_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
+clonetiler_dialog_delete (GtkObject *object, GdkEvent * /*event*/, gpointer data)
 {
     gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
     gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
@@ -124,6 +139,11 @@ clonetiler_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 
     return FALSE; // which means, go ahead and destroy it
 
+}
+
+static void on_delete()
+{
+    (void)clonetiler_dialog_delete (0, 0, NULL);
 }
 
 static guint clonetiler_number_of_clones (SPObject *obj);
@@ -1561,16 +1581,24 @@ clonetiler_dialog (void)
         wd.win = dlg;
         wd.stop = 0;
         
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
                              
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
         
         gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (clonetiler_dialog_destroy), dlg);
         gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (clonetiler_dialog_delete), dlg);
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (clonetiler_dialog_delete), dlg);
-        
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
+
+        if (Inkscape::NSApplication::Application::getNewGui())
+        {
+            _shutdown_connection = Inkscape::NSApplication::Editor::connectShutdown (&on_delete);
+            _dialogs_hidden_connection = Inkscape::NSApplication::Editor::connectDialogsHidden (sigc::bind (&on_dialog_hide, dlg));
+            _dialogs_unhidden_connection = Inkscape::NSApplication::Editor::connectDialogsUnhidden (sigc::bind (&on_dialog_unhide, dlg));
+            _desktop_activated_connection = Inkscape::NSApplication::Editor::connectDesktopActivated (sigc::bind (&on_transientize, &wd));
+        } else {            
+            g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (clonetiler_dialog_delete), dlg);
+            g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
+            g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
+            g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+        }
 
         GtkTooltips *tt = gtk_tooltips_new();
 

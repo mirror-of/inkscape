@@ -15,6 +15,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "application/application.h"
+#include "application/editor.h"
 #include "macros.h"
 #include "inkscape.h"
 #include "desktop-handles.h"
@@ -32,6 +34,9 @@
 #include "dialog-events.h"
 
 #include "color-picker.h"
+
+static sigc::connection _dialogs_hidden_connection;
+static sigc::connection _dialogs_unhidden_connection;
 
 static void sp_color_picker_clicked(GObject *cp, void *data);
 
@@ -144,7 +149,13 @@ sp_color_picker_window_destroy(GtkObject *object, GObject *cp)
     /* remove window object */
     GtkWidget *w = (GtkWidget*) g_object_get_data(G_OBJECT(cp), "window");
     if (w) {
-        sp_signal_disconnect_by_data(INKSCAPE, w);
+        if (Inkscape::NSApplication::Application::getNewGui())
+        {
+            _dialogs_hidden_connection.disconnect();
+            _dialogs_unhidden_connection.disconnect();
+        } else {
+            sp_signal_disconnect_by_data(INKSCAPE, w);
+        }
         gtk_widget_destroy(GTK_WIDGET(w));
     }
 
@@ -229,8 +240,14 @@ sp_color_picker_clicked(GObject *cp, void *data)
 
         gtk_signal_connect(GTK_OBJECT(w), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), w);
 
-        g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(sp_dialog_hide), w);
-        g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(sp_dialog_unhide), w);
+        if (Inkscape::NSApplication::Application::getNewGui())
+        {
+            _dialogs_hidden_connection = Inkscape::NSApplication::Editor::connectDialogsHidden (sigc::bind (&on_dialog_hide, w));
+            _dialogs_unhidden_connection = Inkscape::NSApplication::Editor::connectDialogsUnhidden (sigc::bind (&on_dialog_unhide, w));
+        } else {
+            g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(sp_dialog_hide), w);
+            g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(sp_dialog_unhide), w);
+        }
 
         g_signal_connect(G_OBJECT(w), "destroy", G_CALLBACK(sp_color_picker_window_destroy), cp);
 
