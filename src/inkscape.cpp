@@ -722,6 +722,7 @@ inkscape_load_menus (Inkscape::Application *inkscape)
 
 /**
  * We use '.' as separator
+ * \param inkscape Unused
  */
 Inkscape::XML::Node *
 inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
