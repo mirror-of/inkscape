@@ -1,3 +1,9 @@
+2005-11-12  Jon Phillips <jon@rejon.org>
+
+	* po/it.po po/sr.po po/sr@Latn.po: Fixed these po files so that 
+	Inkscape builds okay.
+
+
 2005-11-12  Ralf Stephan <ralf@ark.in-berlin.de>
 
     * src/ui/view/edit-widget.h, src/ui/view/edit-widget.cpp:
