@@ -595,12 +595,12 @@ void SPText::rebuildLayout()
 }
 
 
-void SPText::_adjustFontsizeRecursive(SPItem *item, double ex)
+void SPText::_adjustFontsizeRecursive(SPItem *item, double ex, bool is_root)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
     if (style && !NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
-        if (!style->font_size.set) {
+        if (!style->font_size.set && is_root) {
             style->font_size.set = 1;
             style->font_size.type = SP_FONT_SIZE_LENGTH;
         }
@@ -612,7 +612,7 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex)
 
     for (SPObject *o = item->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))
-            _adjustFontsizeRecursive(SP_ITEM(o), ex);
+            _adjustFontsizeRecursive(SP_ITEM(o), ex, false);
     }
 }
 
