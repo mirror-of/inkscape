@@ -65,8 +65,6 @@ static void sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder);
 SPKnotHolder *
 sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 {
-	const gchar *name;
-	name = sp_object_tagName_get ((SPObject *) item, NULL);
 	if (SP_IS_RECT (item)) {
 		return sp_rect_knot_holder (item, desktop);
 	} else if (SP_IS_ARC (item)) {
@@ -104,13 +102,13 @@ static gdouble sp_pattern_extract_scale (SPPattern *pat)
     return  xscale;
 }
 
-static NR::Point sp_pattern_extract_trans (const SPPattern *pat)
+static NR::Point sp_pattern_extract_trans (SPPattern const *pat)
 {
     return NR::Point(pat->patternTransform[4], pat->patternTransform[5]);
 }
 
 static void
-sp_pattern_xy_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_pattern_xy_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
@@ -125,7 +123,7 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, const NR::Point &origin, gu
     }
 
      if (state)  {
-	 const NR::Point q = p_snapped - sp_pattern_extract_trans(pat);
+	 NR::Point const q = p_snapped - sp_pattern_extract_trans(pat);
          sp_item_adjust_pattern (item, NR::Matrix(NR::translate(q)));
      }
 
@@ -135,7 +133,7 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, const NR::Point &origin, gu
 
 static NR::Point sp_pattern_xy_get (SPItem *item)
 {
-    const SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
+    SPPattern const *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
     return sp_pattern_extract_trans(pat);
 
 }
@@ -156,7 +154,7 @@ static NR::Point sp_pattern_angle_get (SPItem *item)
 }
 
 static void
-sp_pattern_angle_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_pattern_angle_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -173,7 +171,7 @@ sp_pattern_angle_set (SPItem *item, const NR::Point &p, const NR::Point &origin,
     // get the scale from the current transform so we can keep it.
     gdouble scl = sp_pattern_extract_scale(pat);
     NR::Matrix rot =  NR::Matrix(NR::rotate(theta)) * NR::Matrix(NR::scale(scl,scl));
-    const NR::Point t = sp_pattern_extract_trans(pat);
+    NR::Point const t = sp_pattern_extract_trans(pat);
     rot[4] = t[NR::X];
     rot[5] = t[NR::Y];
     sp_item_adjust_pattern (item, rot, true);
@@ -181,7 +179,7 @@ sp_pattern_angle_set (SPItem *item, const NR::Point &p, const NR::Point &origin,
 }
 
 static void
-sp_pattern_scale_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_pattern_scale_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
@@ -198,7 +196,7 @@ sp_pattern_scale_set (SPItem *item, const NR::Point &p, const NR::Point &origin,
     gdouble theta = sp_pattern_extract_theta(pat,oldscale);
 
     NR::Matrix rot =  NR::Matrix(NR::rotate(theta)) * NR::Matrix(NR::scale(scl,scl));
-    const NR::Point t = sp_pattern_extract_trans(pat);
+    NR::Point const t = sp_pattern_extract_trans(pat);
     rot[4] = t[NR::X];
     rot[5] = t[NR::Y];
     sp_item_adjust_pattern (item, rot, true);
@@ -232,7 +230,7 @@ static NR::Point sp_rect_rx_get(SPItem *item)
     return NR::Point(rect->x.computed + rect->width.computed - rect->rx.computed, rect->y.computed);
 }
 
-static void sp_rect_rx_set(SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+static void sp_rect_rx_set(SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
     SPRect *rect = SP_RECT(item);
 
@@ -257,7 +255,7 @@ static NR::Point sp_rect_ry_get(SPItem *item)
     return NR::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->ry.computed);
 }
 
-static void sp_rect_ry_set(SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+static void sp_rect_ry_set(SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
     SPRect *rect = SP_RECT(item);
 
@@ -360,7 +358,7 @@ static NR::Point rect_snap_knot_position(NR::Point const &p)
     return sp_desktop_root2dt_xy_point(desktop, s);
 }
 
-static void sp_rect_wh_set_internal(SPRect *rect, const NR::Point &p, const NR::Point &origin, guint state)
+static void sp_rect_wh_set_internal(SPRect *rect, NR::Point const &p, NR::Point const &origin, guint state)
 {
     NR::Point const s = rect_snap_knot_position(p);
     
@@ -414,7 +412,7 @@ static void sp_rect_wh_set_internal(SPRect *rect, const NR::Point &p, const NR::
     ((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void sp_rect_wh_set(SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+static void sp_rect_wh_set(SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
     SPRect *rect = SP_RECT(item);
 
@@ -428,7 +426,7 @@ static NR::Point sp_rect_xy_get(SPItem *item)
     return NR::Point(rect->x.computed, rect->y.computed);
 }
 
-static void sp_rect_xy_set(SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+static void sp_rect_xy_set(SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
     SPRect *rect = SP_RECT(item);
 
@@ -542,7 +540,7 @@ static SPKnotHolder *sp_rect_knot_holder(SPItem *item, SPDesktop *desktop)
  *   -1 : outside
  */
 static gint
-sp_genericellipse_side (SPGenericEllipse *ellipse, const NR::Point &p)
+sp_genericellipse_side (SPGenericEllipse *ellipse, NR::Point const &p)
 {
 	gdouble dx = (p[NR::X] - ellipse->cx.computed) / ellipse->rx.computed;
 	gdouble dy = (p[NR::Y] - ellipse->cy.computed) / ellipse->ry.computed;
@@ -554,7 +552,7 @@ sp_genericellipse_side (SPGenericEllipse *ellipse, const NR::Point &p)
 }
 
 static void
-sp_arc_start_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_arc_start_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -584,7 +582,7 @@ static NR::Point sp_arc_start_get (SPItem *item)
 }
 
 static void
-sp_arc_end_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_arc_end_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -626,7 +624,7 @@ sp_arc_startend_click (SPItem *item, guint state)
 
 
 static void
-sp_arc_rx_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_arc_rx_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
 	SPArc *arc = SP_ARC(item);
@@ -648,7 +646,7 @@ static NR::Point sp_arc_rx_get (SPItem *item)
 }
 
 static void
-sp_arc_ry_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_arc_ry_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
 	SPArc *arc = SP_ARC(item);
@@ -717,7 +715,7 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 /* SPStar */
 
 static void
-sp_star_knot1_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_star_knot1_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	SPStar *star = SP_STAR (item);
 
@@ -741,7 +739,7 @@ sp_star_knot1_set (SPItem *item, const NR::Point &p, const NR::Point &origin, gu
 }
 
 static void
-sp_star_knot2_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_star_knot2_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	SPStar *star = SP_STAR (item);
 	if (star->flatsided == false) {
@@ -831,7 +829,7 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_inner_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_spiral_inner_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -873,7 +871,7 @@ sp_spiral_inner_set (SPItem *item, const NR::Point &p, const NR::Point &origin, 
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_outer_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_spiral_outer_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
@@ -991,7 +989,7 @@ sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 /* SPOffset */
 
 static void
-sp_offset_offset_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_offset_offset_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	SPOffset *offset = SP_OFFSET (item);
 
@@ -1065,7 +1063,7 @@ static NR::Point sp_flowtext_corner_get (SPItem *item)
 }
 
 static void
-sp_flowtext_corner_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_flowtext_corner_set (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state)
 {
 	SPRect *rect = SP_RECT(item);
 
@@ -1088,9 +1086,9 @@ sp_flowtext_knot_holder (SPItem * item, SPDesktop *desktop)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
