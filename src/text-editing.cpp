@@ -354,11 +354,11 @@ static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator 
 
     SPObject *parent_item = string_item;
     for ( ; ; ) {
+        char_index += sum_sibling_text_lengths_before(parent_item);
         parent_item = SP_OBJECT_PARENT(parent_item);
         TextTagAttributes *attributes = attributes_for_object(parent_item);
         if (!attributes) break;
         attributes->insert(char_index, char_count);
-        char_index += sum_sibling_text_lengths_before(parent_item);
     }
 }
 
