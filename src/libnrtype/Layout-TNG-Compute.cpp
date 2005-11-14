@@ -542,7 +542,6 @@ class Layout::Calculator
                             while (glyph_index < (unsigned)unbroken_span.glyph_string->num_glyphs
                                    && unbroken_span.glyph_string->log_clusters[glyph_index] == (int)char_byte)
                                 glyph_index++;
-                            glyph_rotate = 0.0;
                             glyph_index--;
                             continue;
                         }
@@ -1030,13 +1029,14 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     if (iter_text >= text_source->text_end) break;
                     if (iter_text.base() - new_span.input_stream_first_character.base() >= (int)new_span.text_bytes) break;
                     if (   i >= text_source->x.size() && i >= text_source->y.size()
-                           && i >= text_source->dx.size() && i >= text_source->dy.size()
-                           && i >= text_source->rotate.size()) break;
+                        && i >= text_source->dx.size() && i >= text_source->dy.size()
+                        && i >= text_source->rotate.size()) break;
                     if (   (text_source->x.size()  > i && text_source->x[i].set)
-                           || (text_source->y.size()  > i && text_source->y[i].set)
-                           || (text_source->dx.size() > i && text_source->dx[i].set && text_source->dx[i].computed != 0.0)
-                           || (text_source->dy.size() > i && text_source->dy[i].set && text_source->dy[i].computed != 0.0)
-                           || (text_source->rotate.size() > i && text_source->rotate[i].set && text_source->rotate[i].computed != 0.0)) {
+                        || (text_source->y.size()  > i && text_source->y[i].set)
+                        || (text_source->dx.size() > i && text_source->dx[i].set && text_source->dx[i].computed != 0.0)
+                        || (text_source->dy.size() > i && text_source->dy[i].set && text_source->dy[i].computed != 0.0)
+                        || (text_source->rotate.size() > i && text_source->rotate[i].set
+                            && (i == 0 || text_source->rotate[i].computed != text_source->rotate[i - 1].computed))) {
                         new_span.text_bytes = iter_text.base() - new_span.input_stream_first_character.base();
                         break;
                     }
