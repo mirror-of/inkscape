@@ -173,6 +173,7 @@ libinkpre_a_SOURCES =	\
 	sp-string.cpp sp-string.h	\
 	sp-symbol.cpp sp-symbol.h	\
 	sp-text.cpp sp-text.h	\
+	sp-textpath.h	\
 	sp-tspan.cpp sp-tspan.h	\
 	sp-use-reference.cpp sp-use-reference.h	\
 	sp-use.cpp sp-use.h	\

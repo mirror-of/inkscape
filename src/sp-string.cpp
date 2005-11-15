@@ -33,8 +33,6 @@
 
 #include "sp-string.h"
 #include "sp-text.h"
-#include "sp-tspan.h"
-
 #include "xml/repr.h"
 
 

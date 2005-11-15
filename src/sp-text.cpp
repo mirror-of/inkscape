@@ -65,6 +65,7 @@
 
 #include "sp-item.h"
 #include "sp-text.h"
+#include "sp-textpath.h"
 #include "sp-tspan.h"
 #include "sp-string.h"
 

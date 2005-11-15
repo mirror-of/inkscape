@@ -20,6 +20,7 @@
 #include "svg/svg.h"
 #include "selection.h"
 #include "sp-tspan.h"
+#include "sp-textpath.h"
 #include "fontsize-expansion.h"
 #include "inkscape.h"
 #include "style.h"

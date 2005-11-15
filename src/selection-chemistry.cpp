@@ -38,6 +38,7 @@
 #include "sp-path.h"
 #include "sp-use.h"
 #include "sp-text.h"
+#include "sp-textpath.h"
 #include "sp-tspan.h"
 #include "sp-flowtext.h"
 #include "text-editing.h"

@@ -17,7 +17,7 @@
 #include "message-stack.h"
 #include "selection-describer.h"
 #include "desktop.h"
-#include "sp-tspan.h"
+#include "sp-textpath.h"
 #include "sp-offset.h"
 #include "sp-flowtext.h"
 #include "sp-use.h"

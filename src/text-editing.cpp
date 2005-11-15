@@ -28,6 +28,7 @@
 #include "xml/attribute-record.h"
 
 #include "sp-text.h"
+#include "sp-textpath.h"
 #include "sp-flowtext.h"
 #include "sp-flowdiv.h"
 #include "sp-flowregion.h"

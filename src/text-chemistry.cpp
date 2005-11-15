@@ -25,7 +25,7 @@
 #include "sp-path.h"
 #include "sp-rect.h"
 #include "sp-text.h"
-#include "sp-tspan.h"
+#include "sp-textpath.h"
 #include "style.h"
 #include "inkscape.h"
 #include "document.h"

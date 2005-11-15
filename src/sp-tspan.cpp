@@ -56,6 +56,7 @@
 #include "sp-shape.h"
 #include "sp-tspan.h"
 #include "sp-text.h"
+#include "sp-textpath.h"
 
 #include "xml/repr.h"
 
