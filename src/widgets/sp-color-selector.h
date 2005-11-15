@@ -2,6 +2,7 @@
 #define __SP_COLOR_SELECTOR_H__
 
 #include <gtk/gtkvbox.h>
+#include <sigc++/sigc++.h>
 #include "../color.h"
 
 #include <glib.h>
@@ -28,6 +29,9 @@ public:
     void setColorAlpha( const SPColor& color, gfloat alpha, bool emit = false );
     void getColorAlpha( SPColor& color, gfloat* alpha ) const;
 
+    sigc::connection connectChanged (const sigc::slot<void,SPColorSelector*> & slot) 
+      { return _changed_signal.connect (slot); }
+
     virtual void setSubmode( guint submode );
     virtual guint getSubmode() const;
 
@@ -46,6 +50,9 @@ protected:
 
     SPColorSelector* _csel;
     SPColor _color;
+    
+    sigc::signal<void,SPColorSelector*> _changed_signal;
+
     gfloat _alpha;	/* guaranteed to be in [0, 1]. */
 
 private:

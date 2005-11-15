@@ -243,7 +243,7 @@ void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha, bool emit
         _colorChanged( color, alpha );
 
         if (emit)
-		gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[CHANGED]);
+            _changed_signal.emit (_csel);
     }
 }
 
@@ -267,7 +267,7 @@ void ColorSelector::_released()
                FOO_NAME(_csel));
 #endif
     gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[RELEASED]);
-    gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[CHANGED]);
+    _changed_signal.emit (_csel);
 }
 
 // Called from subclasses to update color and broadcast if needed
@@ -314,7 +314,10 @@ void ColorSelector::_updateInternals( const SPColor& color, gfloat alpha, gboole
                    (_held ? "CHANGED" : "DRAGGED" ),
                    sp_color_get_rgba32_falpha(&color,alpha), FOO_NAME(_csel));
 #endif
-        gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[_held ? CHANGED : DRAGGED]);
+        if (held)
+            _changed_signal.emit (_csel);
+        else
+            gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[DRAGGED]);
     }
 }
 
@@ -358,3 +361,15 @@ void ColorSelector::getColorAlpha( SPColor& color, gfloat* alpha ) const
         i++;
     }
 }
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
