@@ -14,6 +14,7 @@
 #define __INKSCAPE_EXTENSION_IMPEMENTATION_SCRIPT_H__
 
 #include "implementation.h"
+#include <gtkmm/messagedialog.h>
 
 namespace Inkscape {
 namespace XML {
