@@ -211,7 +211,7 @@ enum {
 };
 
 
-NR::Matrix 
+static NR::Matrix
 clonetiler_get_transform ( 
     // symmetry group
     int type,
@@ -717,7 +717,7 @@ static unsigned trace_visionkey;
 static NRArenaItem *trace_root;
 static gdouble trace_zoom;
 
-void 
+static void
 clonetiler_trace_hide_tiled_clones_recursively (SPObject *from)
 {
     if (!trace_arena)
@@ -730,7 +730,7 @@ clonetiler_trace_hide_tiled_clones_recursively (SPObject *from)
     }
 }
 
-void 
+static void
 clonetiler_trace_setup (SPDocument *doc, gdouble zoom, SPItem *original)
 {
     trace_arena = NRArena::create();
@@ -749,7 +749,7 @@ clonetiler_trace_setup (SPDocument *doc, gdouble zoom, SPItem *original)
     trace_zoom = zoom;
 }
 
-guint32
+static guint32
 clonetiler_trace_pick (NR::Rect box)
 {
     if (!trace_arena)
@@ -819,7 +819,7 @@ clonetiler_trace_pick (NR::Rect box)
     return SP_RGBA32_F_COMPOSE (R, G, B, A);
 }
 
-void
+static void
 clonetiler_trace_finish ()
 {
     if (trace_arena) {
@@ -937,7 +937,7 @@ transform_rect(NR::Rect const &r, NR::Matrix const &m)
 Randomizes \a val by \a rand, with 0 < val < 1 and all values (including 0, 1) having the same
 probability of being displaced.
  */
-double
+static double
 randomize01 (double val, double rand)
 {
     double base = MIN (val - rand, 1 - 2*rand);
@@ -1278,7 +1278,7 @@ clonetiler_apply (GtkWidget *widget, void *)
     sp_document_done(SP_DT_DOCUMENT(desktop));
 }
 
-GtkWidget *
+static GtkWidget *
 clonetiler_new_tab (GtkWidget *nb, const gchar *label)
 {
     GtkWidget *l = gtk_label_new_with_mnemonic (label);
@@ -1295,7 +1295,7 @@ clonetiler_checkbox_toggled (GtkToggleButton *tb, gpointer *data)
     prefs_set_int_attribute (prefs_path, attr, gtk_toggle_button_get_active (tb));
 }
 
-GtkWidget *
+static GtkWidget *
 clonetiler_checkbox (GtkTooltips *tt, const char *tip, const char *attr)
 {
     GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
@@ -1323,7 +1323,7 @@ clonetiler_value_changed (GtkAdjustment *adj, gpointer data)
     prefs_set_double_attribute (prefs_path, pref, adj->value);
 }
 
-GtkWidget *
+static GtkWidget *
 clonetiler_spinbox (GtkTooltips *tt, const char *tip, const char *attr, double lower, double upper, const gchar *suffix, bool exponent = false)
 {
     GtkWidget *hb = gtk_hbox_new(FALSE, 0);
@@ -1435,7 +1435,7 @@ clonetiler_reset (GtkWidget *widget, void *)
     clonetiler_reset_recursive (dlg);
 }
 
-void
+static void
 clonetiler_table_attach (GtkWidget *table, GtkWidget *widget, float align, int row, int col)
 {
     GtkWidget *a = gtk_alignment_new (align, 0, 0, 0);
@@ -1443,7 +1443,7 @@ clonetiler_table_attach (GtkWidget *table, GtkWidget *widget, float align, int r
     gtk_table_attach ( GTK_TABLE (table), a, col, col + 1, row, row + 1, (GtkAttachOptions)4, (GtkAttachOptions)0, 0, 0 );
 }
 
-GtkWidget *
+static GtkWidget *
 clonetiler_table_x_y_rand (int values)
 {
     GtkWidget *table = gtk_table_new (values + 2, 5, FALSE);
@@ -2570,14 +2570,13 @@ clonetiler_dialog (void)
 }
 
 
-
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
