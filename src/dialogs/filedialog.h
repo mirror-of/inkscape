@@ -5,6 +5,7 @@
  *    and enums FileDialogType, FileDialogSelectionType. */
 
 #include <glib/gtypes.h>
+#include <glibmm/slisthandle.h>
 
 namespace Inkscape {
 
