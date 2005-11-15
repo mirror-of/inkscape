@@ -38,20 +38,6 @@ inline ConvexHull operator*(Rect const &r, Matrix const &m) {
 }
 #endif
 
-inline Rect transform_rect(Rect const &r, NR::Matrix const &m) {
-    NR::Point p1 = r.corner(1) * m;
-    NR::Point p2 = r.corner(2) * m;
-    NR::Point p3 = r.corner(3) * m;
-    NR::Point p4 = r.corner(4) * m;
-    return Rect (
-        NR::Point(
-            std::min(std::min(p1[NR::X], p2[NR::X]), std::min(p3[NR::X], p4[NR::X])), 
-            std::min(std::min(p1[NR::Y], p2[NR::Y]), std::min(p3[NR::Y], p4[NR::Y]))), 
-        NR::Point(
-            std::max(std::max(p1[NR::X], p2[NR::X]), std::max(p3[NR::X], p4[NR::X])), 
-            std::max(std::max(p1[NR::Y], p2[NR::Y]), std::max(p3[NR::Y], p4[NR::Y]))));
-}
-
 } /* namespace NR */
 
 

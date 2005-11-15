@@ -915,6 +915,24 @@ clonetiler_remove (GtkWidget *widget, void *, bool do_undo = true)
         sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
+static NR::Rect
+transform_rect(NR::Rect const &r, NR::Matrix const &m)
+{
+    using NR::X;
+    using NR::Y;
+    NR::Point const p1 = r.corner(1) * m;
+    NR::Point const p2 = r.corner(2) * m;
+    NR::Point const p3 = r.corner(3) * m;
+    NR::Point const p4 = r.corner(4) * m;
+    return NR::Rect(
+        NR::Point(
+            std::min(std::min(p1[X], p2[X]), std::min(p3[X], p4[X])), 
+            std::min(std::min(p1[Y], p2[Y]), std::min(p3[Y], p4[Y]))), 
+        NR::Point(
+            std::max(std::max(p1[X], p2[X]), std::max(p3[X], p4[X])), 
+            std::max(std::max(p1[Y], p2[Y]), std::max(p3[Y], p4[Y]))));
+}
+
 /**
 Randomizes \a val by \a rand, with 0 < val < 1 and all values (including 0, 1) having the same
 probability of being displaced.
