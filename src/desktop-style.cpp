@@ -33,6 +33,7 @@
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-pattern.h"
+#include "sp-text.h"
 #include "xml/repr.h"
 #include "libnrtype/font-style-to-pos.h"
 

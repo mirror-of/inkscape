@@ -28,6 +28,7 @@
 #include "widgets/gradient-vector.h"
 
 #include "sp-root.h"
+#include "sp-text.h"
 #include "sp-tspan.h"
 #include "gradient-chemistry.h"
 #include "libnr/nr-point-ops.h"
