@@ -12,7 +12,6 @@
 #include "../color.h"
 #include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
-#include "sp-color-preview.h"
 #include "sp-color-scales.h"
 
 #define CSC_CHANNEL_R (1 << 0)

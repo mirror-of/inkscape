@@ -15,7 +15,6 @@
 #include "../color.h"
 #include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
-#include "sp-color-preview.h"
 #include "sp-color-wheel-selector.h"
 #include "sp-color-scales.h"
 

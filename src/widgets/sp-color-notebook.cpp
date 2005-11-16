@@ -25,7 +25,6 @@
 #include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
 #include "../prefs-utils.h"
-#include "sp-color-preview.h"
 #include "sp-color-notebook.h"
 #include "spw-utilities.h"
 
