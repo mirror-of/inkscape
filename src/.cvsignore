@@ -6,6 +6,8 @@
 .libs
 Makefile
 Makefile.in
+TAGS
+tags
 check-header-compile
 doxygen-log
 inkscape
