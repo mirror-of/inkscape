@@ -2749,21 +2749,24 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     Radial rnew(*p - n->pos);
 
     if (state & GDK_CONTROL_MASK && rnew.a != HUGE_VAL) {
-        double a_snapped, a_ortho;
-
-        int snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
+        int const snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
         /* 0 interpreted as "no snapping". */
 
-        // the closest PI/snaps angle, starting from zero
-        a_snapped = floor(rnew.a/(M_PI/snaps) + 0.5) * (M_PI/snaps);
-        // the closest PI/2 angle, starting from original angle (i.e. snapping to original, its opposite and perpendiculars)
-        a_ortho = me->origin.a + floor((rnew.a - me->origin.a)/(M_PI/2) + 0.5) * (M_PI/2);
-
-        // snap to the closest, or to snapped if ortho does not exist because original control was zero length
-        if (me->origin.a == HUGE_VAL || fabs(a_snapped - rnew.a) < fabs(a_ortho - rnew.a))
+        // The closest PI/snaps angle, starting from zero.
+        double const a_snapped = floor(rnew.a/(M_PI/snaps) + 0.5) * (M_PI/snaps);
+        if (me->origin.a == HUGE_VAL) {
+            // ortho doesn't exist: original control was zero length.
             rnew.a = a_snapped;
-        else
-            rnew.a = a_ortho;
+        } else {
+            /* The closest PI/2 angle, starting from original angle (i.e. snapping to original,
+             * its opposite and perpendiculars). */
+            double const a_ortho = me->origin.a + floor((rnew.a - me->origin.a)/(M_PI/2) + 0.5) * (M_PI/2);
+
+            // Snap to the closest.
+            rnew.a = ( fabs(a_snapped - rnew.a) < fabs(a_ortho - rnew.a)
+                       ? a_snapped
+                       : a_ortho );
+        }
     }
 
     if (state & GDK_MOD1_MASK) {
@@ -3678,4 +3681,4 @@ sp_nodepath_update_statusbar(Inkscape::NodePath::Path *nodepath)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
