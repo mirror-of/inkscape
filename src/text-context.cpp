@@ -1227,7 +1227,19 @@ sp_text_paste_inline(SPEventContext *ec)
                 tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
             }
 
-            tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, text.c_str());
+            // using indices is slow in ustrings. Whatever.
+            Glib::ustring::size_type begin = 0;
+            for ( ; ; ) {
+                Glib::ustring::size_type end = text.find('\n', begin);
+                if (end == Glib::ustring::npos) {
+                    if (begin != text.length())
+                        tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, text.substr(begin).c_str());
+                    break;
+                }
+                tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, text.substr(begin, end - begin).c_str());
+                tc->text_sel_start = tc->text_sel_end = sp_te_insert_line(tc->text, tc->text_sel_start);
+                begin = end + 1;
+            }
             sp_document_done(SP_DT_DOCUMENT(ec->desktop));
 
             return true;
