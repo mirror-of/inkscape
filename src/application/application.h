@@ -13,12 +13,15 @@
 #ifndef INKSCAPE_APPLICATION_APPLICATION_H
 #define INKSCAPE_APPLICATION_APPLICATION_H
 
+#include <glib/gtypes.h>
+
 namespace Gtk {
-    class Main;
+class Main;
 }
+
 namespace Inkscape {
-    namespace NSApplication {
-        class AppPrototype;
+namespace NSApplication {
+class AppPrototype;
 
 class Application
 {
@@ -26,9 +29,9 @@ public:
     Application(int argc, char **argv, bool use_gui=true, bool new_gui=false);
     virtual ~Application();
 
-    const gchar*    homedir() const;
+    gchar const *homedir() const;
 
-    gint            run();
+    gint run();
 
     static bool getUseGui();
     static bool getNewGui();
