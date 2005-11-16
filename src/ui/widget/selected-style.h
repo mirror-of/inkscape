@@ -91,7 +91,7 @@ protected:
     Gtk::Label _unset[2];
     Glib::ustring __unset[2];
 
-    GtkWidget *_color_preview[2];
+    Gtk::Widget *_color_preview[2];
     Glib::ustring __color[2];
 
     Gtk::Label _averaged[2];

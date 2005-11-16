@@ -16,7 +16,7 @@
 #include "selected-style.h"
 
 #include "widgets/spw-utilities.h"
-#include "widgets/sp-color-preview.h"
+#include "ui/widget/color-preview.h"
 
 #include "selection.h"
 #include "desktop-handles.h"
@@ -114,8 +114,7 @@ SelectedStyle::SelectedStyle(bool layout)
         _unset[i].show_all();
         __unset[i] = (i == SS_FILL)? (_("Unset fill")) : (_("Unset stroke"));
 
-        _color_preview[i] = sp_color_preview_new (0);
-        g_object_ref(_color_preview[i]);
+        _color_preview[i] = new Inkscape::UI::Widget::ColorPreview (0);
         __color[i] = (i == SS_FILL)? (_("Flat color fill")) : (_("Flat color stroke"));
 
         // TRANSLATOR COMMENT: A means "Averaged"
@@ -195,7 +194,7 @@ SelectedStyle::~SelectedStyle()
     delete subselection_changed_connection;
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
-        g_object_unref(_color_preview[i]);
+        delete _color_preview[i];
     }
 }
 
@@ -384,10 +383,9 @@ SelectedStyle::update()
                                      SP_SCALE24_TO_FLOAT ((i == SS_FILL)? query->fill_opacity.value : query->stroke_opacity.value));
                 _lastselected[i] = _thisselected[i];
                 _thisselected[i] = color | 0xff; // only color, opacity === 1
-                sp_color_preview_set_rgba32 ((SPColorPreview *) _color_preview[i], color);
-                Gtk::Widget *w = Glib::wrap(_color_preview[i]);
-                w->show_all();
-                place->add(*w);
+                ((Inkscape::UI::Widget::ColorPreview*)_color_preview[i])->setRgba32 (color);
+                _color_preview[i]->show_all();
+                place->add(*_color_preview[i]);
                 gchar c_string[64];
                 g_snprintf (c_string, 64, "%06x/%.3g", color >> 8, SP_RGBA32_A_F(color));
                 _tooltips.set_tip(*place, __color[i] + ": " + c_string);
