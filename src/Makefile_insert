@@ -192,6 +192,7 @@ libinkpre_a_SOURCES =	\
 	text-chemistry.cpp text-chemistry.h	\
 	text-context.cpp text-context.h	\
 	text-editing.cpp text-editing.h	\
+	text-tag-attributes.h	\
 	tools-switch.cpp tools-switch.h\
 	uri-references.cpp uri-references.h	\
 	verbs.cpp verbs.h	\

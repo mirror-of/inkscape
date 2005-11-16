@@ -7,7 +7,7 @@
 
 #include <glib/gtypes.h>
 #include "sp-item.h"
-#include "sp-text.h" /* TextTagAttributes */
+#include "text-tag-attributes.h"
 
 
 #define SP_TYPE_TSPAN (sp_tspan_get_type())

@@ -27,9 +27,9 @@
 #include "sp-flowregion.h"
 #include "sp-flowtext.h"
 #include "sp-string.h"
-#include "sp-text.h"
 #include "sp-use.h"
 #include "sp-rect.h"
+#include "text-tag-attributes.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-translate.h"
