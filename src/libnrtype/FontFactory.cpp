@@ -299,7 +299,7 @@ font_factory::font_factory(void)
     ents = (font_entry*)malloc(maxEnt*sizeof(font_entry));
 
 #ifdef USE_PANGO_WIN32
-    hScreenDC = pango_win32_get_dc();
+    hScreenDC = GetDC(NULL);
     fontServer = pango_win32_font_map_for_display();
     fontContext = pango_win32_get_context();
     pangoFontCache = pango_win32_font_map_get_font_cache(fontServer);
@@ -319,6 +319,7 @@ font_factory::~font_factory(void)
     g_object_unref(fontServer);
 #ifdef USE_PANGO_WIN32
     pango_win32_shutdown_display();
+    ReleaseDC(NULL, hScreenDC);
 #else
     //pango_ft2_shutdown_display();
 #endif
@@ -338,7 +339,7 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
 {
 #ifdef USE_PANGO_WIN32
     // damn Pango fudges the size, so we need to unfudge. See source of pango_win32_font_map_init()
-    pango_font_description_set_size(descr, (int) (fontSize*PANGO_SCALE*72/GetDeviceCaps(hScreenDC,LOGPIXELSY))); // mandatory huge size (hinting workaround)
+    pango_font_description_set_size(descr, (int) (fontSize*PANGO_SCALE*72/GetDeviceCaps(pango_win32_get_dc(),LOGPIXELSY))); // mandatory huge size (hinting workaround)
 #else
     pango_font_description_set_size(descr, (int) (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
 #endif

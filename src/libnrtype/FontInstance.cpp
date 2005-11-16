@@ -440,19 +440,20 @@ void font_instance::LoadGlyph(int glyph_id)
         GetOutlineTextMetrics(daddy->hScreenDC, sizeof(otm), &otm);
         GLYPHMETRICS metrics;
         DWORD bufferSize=GetGlyphOutline (daddy->hScreenDC, glyph_id, GGO_GLYPH_INDEX | GGO_NATIVE | GGO_UNHINTED, &metrics, 0, NULL, &identity);
+        double scale=1.0/daddy->fontSize;
+        n_g.h_advance=metrics.gmCellIncX*scale;
+        n_g.v_advance=otm.otmTextMetrics.tmHeight*scale;
+        n_g.h_width=metrics.gmBlackBoxX*scale;
+        n_g.v_width=metrics.gmBlackBoxY*scale;
+        n_g.outline=NULL;
         if ( bufferSize == 0) {
-            // shit happened
+            // character has no visual representation, but is valid (eg whitespace)
+            doAdd=true;
         } else {
             std::auto_ptr<char> buffer(new char[bufferSize]);
             if ( GetGlyphOutline (daddy->hScreenDC, glyph_id, GGO_GLYPH_INDEX | GGO_NATIVE | GGO_UNHINTED, &metrics, bufferSize, buffer.get(), &identity) <= 0 ) {
                 // shit happened
             } else {
-                double scale=1.0/daddy->fontSize;
-                n_g.h_advance=metrics.gmCellIncX*scale;
-                n_g.v_advance=otm.otmTextMetrics.tmHeight*scale;
-                n_g.h_width=metrics.gmBlackBoxX*scale;
-                n_g.v_width=metrics.gmBlackBoxY*scale;
-
                 // Platform SDK is rubbish, read KB87115 instead
                 n_g.outline=new Path;
                 DWORD polyOffset=0;
