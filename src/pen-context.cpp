@@ -31,6 +31,7 @@
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "sp-path.h"
+
 #include "pixmaps/cursor-pen.xpm"
 #include "display/canvas-bpath.h"
 #include "display/sp-canvas.h"
@@ -41,6 +42,7 @@
 #include "libnr/n-art-bpath.h"
 #include "helper/units.h"
 #include "snap.h"
+#include "macros.h"
 
 
 static void sp_pen_context_class_init(SPPenContextClass *klass);
@@ -63,7 +65,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
 static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent);
 static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent);
 static gint pen_handle_2button_press(SPPenContext *const pc);
-static gint pen_handle_key_press(SPPenContext *const pc, guint const keyval);
+static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event);
 static void spdc_reset_colors(SPPenContext *pc);
 
 
@@ -123,6 +125,7 @@ sp_pen_context_class_init(SPPenContextClass *klass)
 static void
 sp_pen_context_init(SPPenContext *pc)
 {
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
 
     event_context->cursor_shape = cursor_pen_xpm;
@@ -289,7 +292,7 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
             break;
 
         case GDK_KEY_PRESS:
-            ret = pen_handle_key_press(pc, get_group0_keyval (&event->key));
+            ret = pen_handle_key_press(pc, event);
             break;
 
         default:
@@ -682,11 +685,11 @@ pen_handle_2button_press(SPPenContext *const pc)
 }
 
 static gint
-pen_handle_key_press(SPPenContext *const pc, guint const keyval)
+pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 {
     gint ret = FALSE;
     /* fixme: */
-    switch (keyval) {
+    switch (get_group0_keyval (&event->key)) {
         case GDK_Return:
         case GDK_KP_Enter:
             if (pc->npoints != 0) {
@@ -697,6 +700,19 @@ pen_handle_key_press(SPPenContext *const pc, guint const keyval)
         case GDK_Escape:
             if (pc->npoints != 0) {
                 // if drawing, cancel, otherwise pass it up for deselecting
+                pc->state = SP_PEN_CONTEXT_STOP;
+                spdc_reset_colors(pc);
+                sp_canvas_item_hide(pc->c0);
+                sp_canvas_item_hide(pc->c1);
+                sp_canvas_item_hide(pc->cl0);
+                sp_canvas_item_hide(pc->cl1);
+                ret = TRUE;
+            }
+            break;
+        case GDK_z:
+        case GDK_Z:
+            if (MOD__CTRL_ONLY && pc->npoints != 0) {
+                // if drawing, cancel, otherwise pass it up for undo
                 pc->state = SP_PEN_CONTEXT_STOP;
                 spdc_reset_colors(pc);
                 sp_canvas_item_hide(pc->c0);
