@@ -28,6 +28,7 @@ if [ $# = 0 ]; then
 		-o -path '*/extension/script/js' -prune	\
 		-o -name '*.h' \
 		   \! -name gnome.h \! -name win32.h \! -name nr-type-gnome.h \! -name nr-type-w32.h \! -name Livarot.h \! -name radial.h \
+		   \! -name '*-test.h'	\
 		   -printf '%P\n'`
 	do
 		check_compile "$i"
