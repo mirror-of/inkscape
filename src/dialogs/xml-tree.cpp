@@ -43,7 +43,7 @@
 #include "../desktop-handles.h"
 #include "../selection.h"
 #include "../sp-item.h"
-#include "../sp-text.h"
+#include "../sp-string.h"
 #include "../sp-tspan.h"
 #include "../sp-root.h"
 #include "../sp-defs.h"
