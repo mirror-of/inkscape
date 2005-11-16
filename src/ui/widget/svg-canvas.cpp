@@ -22,8 +22,8 @@
 #include "ui/widget/svg-canvas.h"
 
 namespace Inkscape {
-    namespace UI {
-        namespace Widget {
+namespace UI {
+namespace Widget {
 
 SVGCanvas::SVGCanvas()
 {
@@ -47,8 +47,8 @@ SVGCanvas::init (SPDesktop *dt)
     Glib::RefPtr<Gtk::Style> style = _widget->get_style();
     style->set_bg(Gtk::STATE_NORMAL, style->get_white());
     _widget->set_style(style);
-    _widget->set_extension_events (Gdk::EXTENSION_EVENTS_ALL);
-    _widget->signal_event().connect (sigc::mem_fun (*this, &SVGCanvas::onEvent));
+    _widget->set_extension_events(Gdk::EXTENSION_EVENTS_ALL);
+    _widget->signal_event().connect(sigc::mem_fun(*this, &SVGCanvas::onEvent));
 }
 
 bool
@@ -64,9 +64,9 @@ SVGCanvas::onEvent (GdkEvent * ev) const
 
     if ((ev->type == GDK_BUTTON_PRESS) && (ev->button.button == 3)) {
         if (ev->button.state & GDK_SHIFT_MASK) {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (_dt->drawing), true);
+            sp_canvas_arena_set_sticky(SP_CANVAS_ARENA(_dt->drawing), true);
         } else {
-            sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (_dt->drawing), false);
+            sp_canvas_arena_set_sticky(SP_CANVAS_ARENA(_dt->drawing), false);
         }
     }
 
@@ -75,10 +75,10 @@ SVGCanvas::onEvent (GdkEvent * ev) const
     // is over the canvas. This redirection is only done for keypresses and only if there's no
     // current item on the canvas, because item events and all mouse events are caught
     // and passed on by the canvas acetate (I think). --bb
-    
+
     if (ev->type == GDK_KEY_PRESS && !_spcanvas->current_item) {
-            return sp_desktop_root_handler (0, ev, _dt);
-        }
+        return sp_desktop_root_handler(0, ev, _dt);
+    }
 
     return false;
 }
@@ -94,6 +94,4 @@ SVGCanvas::onEvent (GdkEvent * ev) const
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=4:softtabstop=4 :
-
-
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

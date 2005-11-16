@@ -1,7 +1,8 @@
 /** \file
  * Gtkmm facade/wrapper around SPRuler code that formerly lived
  * in desktop-events.cpp
- *
+ */
+/*
  * Authors:
  *   Ralf Stephan <ralf@ark.in-berlin.de>
  *   Lauris Kaplinski
@@ -29,30 +30,30 @@
 #include "sp-namedview.h"
 
 namespace Inkscape {
-    namespace UI {
-        namespace Widget {
+namespace UI {
+namespace Widget {
 
-void 
-Ruler::init (SPDesktop* dt, Gtk::Widget& w)
+void
+Ruler::init(SPDesktop *dt, Gtk::Widget &w)
 {
     _dt = dt;
     _canvas_widget = &w;
     _dragging = false;
     _guide = 0;
-    sp_ruler_set_metric (GTK_RULER(_r->gobj()), SP_PT);
+    sp_ruler_set_metric(GTK_RULER(_r->gobj()), SP_PT);
     _r->set_range(-500, 500, 0, 1000);
 }
 
-void 
-Ruler::get_range (double& lo, double& up, double& pos, double& max)
+void
+Ruler::get_range(double &lo, double &up, double &pos, double &max)
 {
-    _r->get_range (lo, up, pos, max);
+    _r->get_range(lo, up, pos, max);
 }
 
-void 
-Ruler::set_range (double lo, double up, double pos, double max)
+void
+Ruler::set_range(double lo, double up, double pos, double max)
 {
-    _r->set_range (lo, up, pos, max);
+    _r->set_range(lo, up, pos, max);
 }
 
 /// Set metric from namedview
@@ -60,102 +61,99 @@ void
 Ruler::update_metric()
 {
     if (!_dt) return;
-    sp_ruler_set_metric (GTK_RULER(_r->gobj()), _dt->namedview->getDefaultMetric());
+    sp_ruler_set_metric(GTK_RULER(_r->gobj()), _dt->namedview->getDefaultMetric());
 }
 
 /// Returns text to be used for tooltip for ruler.
 /// \todo incorrect
-Glib::ustring 
+Glib::ustring
 Ruler::get_tip()
 {
-    return gettext (sp_unit_get_plural (_dt ? 
-                                        _dt->namedview->doc_units :
-                                        &sp_unit_get_by_id (SP_UNIT_PT)));
+    return gettext(sp_unit_get_plural( _dt
+                                       ? _dt->namedview->doc_units
+                                       : &sp_unit_get_by_id(SP_UNIT_PT) ));
 }
 
 /// Helper that gets mouse coordinates relative to canvas widget.
 void
-Ruler::canvas_get_pointer (int &x, int &y)
+Ruler::canvas_get_pointer(int &x, int &y)
 {
     Gdk::ModifierType mask;
-    (void) _canvas_widget->get_window()->get_pointer (x, y, mask);
+    (void) _canvas_widget->get_window()->get_pointer(x, y, mask);
 }
 
 NR::Point
 Ruler::get_event_dt()
 {
     int wx, wy;
-    canvas_get_pointer (wx, wy);
-    NR::Point const event_win (wx, wy);
-    NR::Point const event_w (sp_canvas_window_to_world (_dt->canvas, event_win));
-    return sp_desktop_w2d_xy_point (_dt, event_w);
+    canvas_get_pointer(wx, wy);
+    NR::Point const event_win(wx, wy);
+    NR::Point const event_w(sp_canvas_window_to_world(_dt->canvas, event_win));
+    return sp_desktop_w2d_xy_point(_dt, event_w);
 }
 
-bool 
-Ruler::on_button_press_event (GdkEventButton *evb)
+bool
+Ruler::on_button_press_event(GdkEventButton *evb)
 {
-    g_assert (_dt);
-    const NR::Point &event_dt = get_event_dt();
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR (_dt->namedview);
-    
-    if (evb->button == 1)
-    {
+    g_assert(_dt);
+    NR::Point const &event_dt = get_event_dt();
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(_dt->namedview);
+
+    if (evb->button == 1) {
         _dragging = true;
         sp_repr_set_boolean(repr, "showguides", TRUE);
         sp_repr_set_boolean(repr, "inkscape:guide-bbox", TRUE);
         double const guide_pos_dt = event_dt[ _horiz_f ? NR::Y : NR::X ];
-        _guide = sp_guideline_new (_dt->guides, guide_pos_dt, !_horiz_f);
-        sp_guideline_set_color (SP_GUIDELINE(_guide), _dt->namedview->guidehicolor);
-        (void) get_window()->pointer_grab (false,
-                        Gdk::BUTTON_RELEASE_MASK | 
-                        Gdk::POINTER_MOTION_MASK | 
+        _guide = sp_guideline_new(_dt->guides, guide_pos_dt, !_horiz_f);
+        sp_guideline_set_color(SP_GUIDELINE(_guide), _dt->namedview->guidehicolor);
+        (void) get_window()->pointer_grab(false,
+                        Gdk::BUTTON_RELEASE_MASK |
+                        Gdk::POINTER_MOTION_MASK |
                         Gdk::POINTER_MOTION_HINT_MASK,
                         evb->time);
     }
     return false;
 }
 
-bool 
-Ruler::on_motion_notify_event (GdkEventMotion *)
+bool
+Ruler::on_motion_notify_event(GdkEventMotion *)
 {
-    g_assert (_dt);
-    const NR::Point &event_dt = get_event_dt();
-    
-    if (_dragging) 
-    {
+    g_assert(_dt);
+    NR::Point const &event_dt = get_event_dt();
+
+    if (_dragging) {
         double const guide_pos_dt = event_dt[ _horiz_f ? NR::Y : NR::X ];
-        sp_guideline_set_position (SP_GUIDELINE(_guide), guide_pos_dt);
-        _dt->set_coordinate_status (event_dt);
-        _dt->setPosition (event_dt);
+        sp_guideline_set_position(SP_GUIDELINE(_guide), guide_pos_dt);
+        _dt->set_coordinate_status(event_dt);
+        _dt->setPosition(event_dt);
     }
     return false;
 }
 
-bool 
-Ruler::on_button_release_event (GdkEventButton *evb)
+bool
+Ruler::on_button_release_event(GdkEventButton *evb)
 {
-    g_assert (_dt);
+    g_assert(_dt);
     int wx, wy;
-    canvas_get_pointer (wx, wy);
-    const NR::Point &event_dt = get_event_dt();
-    
+    canvas_get_pointer(wx, wy);
+    NR::Point const &event_dt = get_event_dt();
+
     if (_dragging && evb->button == 1) {
-        Gdk::Window::pointer_ungrab (evb->time);
-        gtk_object_destroy (GTK_OBJECT(_guide));
+        Gdk::Window::pointer_ungrab(evb->time);
+        gtk_object_destroy(GTK_OBJECT(_guide));
         _guide = 0;
         _dragging = false;
-        
-        if ( (_horiz_f ? wy : wx ) >= 0 )
-        {
-            Inkscape::XML::Node *repr = sp_repr_new ("sodipodi:guide");
-            sp_repr_set_attr (repr, "orientation", _horiz_f ? "horizontal" : "vertical");
+
+        if ( (_horiz_f ? wy : wx ) >= 0 ) {
+            Inkscape::XML::Node *repr = sp_repr_new("sodipodi:guide");
+            sp_repr_set_attr(repr, "orientation", _horiz_f ? "horizontal" : "vertical");
             double const guide_pos_dt = event_dt[ _horiz_f ? NR::Y : NR::X ];
-            sp_repr_set_svg_double (repr, "position", guide_pos_dt);
-            SP_OBJECT_REPR (_dt->namedview)->appendChild (repr);
-            sp_repr_unref (repr);
-            sp_document_done (SP_DT_DOCUMENT(_dt));
+            sp_repr_set_svg_double(repr, "position", guide_pos_dt);
+            SP_OBJECT_REPR(_dt->namedview)->appendChild(repr);
+            sp_repr_unref(repr);
+            sp_document_done(SP_DT_DOCUMENT(_dt));
         }
-        _dt->set_coordinate_status (event_dt);
+        _dt->set_coordinate_status(event_dt);
     }
     return false;
 }
@@ -165,7 +163,7 @@ HRuler::HRuler()
 {
     _dt = 0;
     _r = static_cast<Gtk::HRuler*>(Glib::wrap(static_cast<GtkWidget*> (sp_hruler_new())));
-    add (*_r);
+    add(*_r);
     _horiz_f = true;
 }
 
@@ -178,7 +176,7 @@ VRuler::VRuler()
 {
     _dt = 0;
     _r = static_cast<Gtk::VRuler*>(Glib::wrap(static_cast<GtkWidget*> (sp_vruler_new())));
-    add (*_r);
+    add(*_r);
     _horiz_f = false;
 }
 
@@ -197,5 +195,4 @@ VRuler::~VRuler()
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=4:softtabstop=4 :
-
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

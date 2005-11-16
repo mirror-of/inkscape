@@ -26,18 +26,18 @@
 #include "widgets/spw-utilities.h"
 
 namespace Inkscape {
-    namespace UI {
-        namespace Widget {
+namespace UI {
+namespace Widget {
 
 ZoomStatus::ZoomStatus()
-    : _adj (0.0, -1.0, 1.0, 0.1, 0.1)
+    : _adj(0.0, -1.0, 1.0, 0.1, 0.1)
 {
     _dt = 0;
     _upd_f = false;
-    
+
     property_numeric() = false;
     property_update_policy() = Gtk::UPDATE_ALWAYS;
-    sp_set_font_size_smaller (static_cast<GtkWidget*>((void*)gobj()));
+    sp_set_font_size_smaller(static_cast<GtkWidget*>((void*)gobj()));
 }
 
 ZoomStatus::~ZoomStatus()
@@ -45,17 +45,17 @@ ZoomStatus::~ZoomStatus()
     _dt = 0;
 }
 
-void 
-ZoomStatus::init (SPDesktop *dt)
+void
+ZoomStatus::init(SPDesktop *dt)
 {
     _dt = dt;
     property_digits() = 4;
-    _adj.set_value (0.0);
-    _adj.set_lower (log(SP_DESKTOP_ZOOM_MIN)/log(2.0));
-    _adj.set_upper (log(SP_DESKTOP_ZOOM_MAX)/log(2.0));
-    _adj.set_step_increment (0.1);
-    _adj.set_page_increment (0.1);
-    set_adjustment (_adj);
+    _adj.set_value(0.0);
+    _adj.set_lower(log(SP_DESKTOP_ZOOM_MIN)/log(2.0));
+    _adj.set_upper(log(SP_DESKTOP_ZOOM_MAX)/log(2.0));
+    _adj.set_step_increment(0.1);
+    _adj.set_page_increment(0.1);
+    set_adjustment(_adj);
 }
 
 void
@@ -63,33 +63,33 @@ ZoomStatus::update()
 {
     if (!_dt) return;
     _upd_f = true;
-    set_value (log(_dt->current_zoom())/log(2.0));
+    set_value(log(_dt->current_zoom())/log(2.0));
     _upd_f = false;
 }
 
 inline double
-value_to_display (double value)
+value_to_display(double value)
 {
-    return floor (pow (2, value) * 100.0 + 0.5);
+    return floor(pow(2, value) * 100.0 + 0.5);
 }
 
 inline double
-display_to_value (double value)
+display_to_value(double value)
 {
-    return  log (value / 100.0) / log (2.0);
+    return  log(value / 100.0) / log(2.0);
 }
-            
-int 
-ZoomStatus::on_input (double *new_val)
+
+int
+ZoomStatus::on_input(double *new_val)
 {
     double new_scrolled = get_value();
-    double new_typed = atof (get_text().c_str());
+    double new_typed = atof(get_text().c_str());
 
-    if (value_to_display (new_scrolled) == new_typed)
+    if (value_to_display(new_scrolled) == new_typed)
     { // the new value is set by scrolling
         *new_val = new_scrolled;
     } else { // the new value is typed in
-        *new_val = display_to_value (new_typed);
+        *new_val = display_to_value(new_typed);
     }
 
     return true;
@@ -99,8 +99,8 @@ bool
 ZoomStatus::on_output()
 {
     gchar b[64];
-    g_snprintf (b, 64, "%4.0f%%", value_to_display (get_value()));
-    set_text (b);
+    g_snprintf(b, 64, "%4.0f%%", value_to_display(get_value()));
+    set_text(b);
     return true;
 }
 
@@ -109,12 +109,12 @@ ZoomStatus::on_value_changed()
 {
     if (_upd_f) return;
     _upd_f = true;
-    g_assert (_dt);
+    g_assert(_dt);
     NRRect d;
-    double zoom_factor = pow (2, get_value());
-    _dt->get_display_area (&d);
-    _dt->zoom_absolute ((d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_factor);
-    gtk_widget_grab_focus (static_cast<GtkWidget*>((void*)_dt->canvas));   /// \todo this no love song
+    double zoom_factor = pow(2, get_value());
+    _dt->get_display_area(&d);
+    _dt->zoom_absolute((d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_factor);
+    gtk_widget_grab_focus(static_cast<GtkWidget*>((void*)_dt->canvas));   /// \todo this no love song
     _upd_f = false;
 }
 
@@ -129,5 +129,4 @@ ZoomStatus::on_value_changed()
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=4:softtabstop=4 :
-
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
