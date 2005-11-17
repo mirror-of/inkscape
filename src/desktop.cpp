@@ -64,7 +64,6 @@
 #include "selection.h"
 #include "select-context.h"
 #include "sp-namedview.h"
-#include "sp-text.h"
 #include "color.h"
 #include "sp-item.h"
 #include "sp-item-group.h"

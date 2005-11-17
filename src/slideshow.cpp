@@ -22,7 +22,6 @@
 
 #include <glibmm/i18n.h>
 #include "document.h"
-#include "sp-text.h"
 #include "svg-view-widget.h"
 #include "svg-view.h"
 

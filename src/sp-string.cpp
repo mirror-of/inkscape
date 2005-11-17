@@ -32,7 +32,6 @@
 #include "style.h"
 
 #include "sp-string.h"
-#include "sp-text.h"
 #include "xml/repr.h"
 
 
