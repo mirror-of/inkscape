@@ -1,26 +1,23 @@
+#ifndef INKSCAPE_EXTENSION_INTERNAL_GDKPIXBUF_INPUT_H
+#define INKSCAPE_EXTENSION_INTERNAL_GDKPIXBUF_INPUT_H
 
-#ifndef INKSCAPE_EXTENSION_INTERNAL_GDKPIXBUF_INPUT_H__
-#define INKSCAPE_EXTENSION_INTERNAL_GDKPIXBUF_INPUT_H__
-
-
-#include "../implementation/implementation.h"
+#include "extension/implementation/implementation.h"
 
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
 class GdkpixbufInput : Inkscape::Extension::Implementation::Implementation {
-
 public:
-	SPDocument *  open  (Inkscape::Extension::Input *mod,
-	                     const gchar *uri);
-	static void   init  (void);
-
+    SPDocument *open(Inkscape::Extension::Input *mod,
+                     gchar const *uri);
+    static void init();
 };
 
 } } }  /* namespace Inkscape, Extension, Implementation */
 
-#endif /* INKSCAPE_EXTENSION_INTERNAL_GDKPIXBUF_INPUT_H__ */
+
+#endif /* INKSCAPE_EXTENSION_INTERNAL_GDKPIXBUF_INPUT_H */
 
 /*
   Local Variables:

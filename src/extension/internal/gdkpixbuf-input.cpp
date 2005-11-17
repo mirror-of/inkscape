@@ -12,28 +12,30 @@
 #include "gdkpixbuf-input.h"
 
 namespace Inkscape {
+
 namespace IO {
-GdkPixbuf* pixbuf_new_from_file( const char *utf8name, GError **error );
+GdkPixbuf* pixbuf_new_from_file( char const *utf8name, GError **error );
 }
+
 namespace Extension {
 namespace Internal {
 
 SPDocument *
-GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
+GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 {
-    SPDocument * doc = sp_document_new(NULL, TRUE, TRUE);
-    sp_document_set_undo_sensitive (doc, FALSE); // no need to undo in this temporary document
-    GdkPixbuf* pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
-    Inkscape::XML::Node *rdoc = sp_document_repr_root (doc);
-    const gchar *docbase = rdoc->attribute("sodipodi:docbase");
-    const gchar *relname = sp_relative_path_from_path (uri, docbase);
+    SPDocument *doc = sp_document_new(NULL, TRUE, TRUE);
+    sp_document_set_undo_sensitive(doc, FALSE); // no need to undo in this temporary document
+    GdkPixbuf *pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
+    Inkscape::XML::Node *rdoc = sp_document_repr_root(doc);
+    gchar const *docbase = rdoc->attribute("sodipodi:docbase");
+    gchar const *relname = sp_relative_path_from_path(uri, docbase);
 
     if (pb) {         /* We are readable */
         Inkscape::XML::Node *repr = NULL;
 
         double width = gdk_pixbuf_get_width(pb);
         double height = gdk_pixbuf_get_height(pb);
-        const gchar* str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
+        gchar const *str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
         if ( str )
         {
             gint dpi = atoi(str);
@@ -56,42 +58,42 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 
         if (prefs_get_int_attribute("options.importbitmapsasimages", "value", 1) == 1) {
             // import as <image>
-            repr = sp_repr_new ("svg:image");
-            sp_repr_set_attr (repr, "xlink:href", relname);
-            sp_repr_set_attr (repr, "sodipodi:absref", uri);
+            repr = sp_repr_new("svg:image");
+            sp_repr_set_attr(repr, "xlink:href", relname);
+            sp_repr_set_attr(repr, "sodipodi:absref", uri);
 
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
 
         } else {
             // import as pattern-filled rect
-            Inkscape::XML::Node *pat = sp_repr_new ("svg:pattern");
+            Inkscape::XML::Node *pat = sp_repr_new("svg:pattern");
             sp_repr_set_attr(pat, "inkscape:collect", "always");
-            sp_repr_set_attr (pat, "patternUnits", "userSpaceOnUse");
+            sp_repr_set_attr(pat, "patternUnits", "userSpaceOnUse");
             sp_repr_set_svg_double(pat, "width", width);
             sp_repr_set_svg_double(pat, "height", height);
             SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc))->appendChild(pat);
-            const gchar *pat_id = pat->attribute("id");
+            gchar const *pat_id = pat->attribute("id");
             SPObject *pat_object = doc->getObjectById(pat_id);
 
-            Inkscape::XML::Node *im = sp_repr_new ("svg:image");
-            sp_repr_set_attr (im, "xlink:href", relname);
-            sp_repr_set_attr (im, "sodipodi:absref", uri);
+            Inkscape::XML::Node *im = sp_repr_new("svg:image");
+            sp_repr_set_attr(im, "xlink:href", relname);
+            sp_repr_set_attr(im, "sodipodi:absref", uri);
             sp_repr_set_svg_double(im, "width", width);
             sp_repr_set_svg_double(im, "height", height);
-            sp_repr_add_child (SP_OBJECT_REPR(pat_object), im, NULL);
+            sp_repr_add_child(SP_OBJECT_REPR(pat_object), im, NULL);
 
-            repr = sp_repr_new ("svg:rect");
-            sp_repr_set_attr (repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+            repr = sp_repr_new("svg:rect");
+            sp_repr_set_attr(repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
         }
 
         SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);
-        sp_repr_unref (repr);
-        gdk_pixbuf_unref (pb);
+        sp_repr_unref(repr);
+        gdk_pixbuf_unref(pb);
         // restore undo, as now this document may be shown to the user if a bitmap was opened
-        sp_document_set_undo_sensitive (doc, TRUE); 
+        sp_document_set_undo_sensitive(doc, TRUE);
     } else {
         printf("GdkPixbuf loader failed\n");
     }
@@ -101,12 +103,12 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 
 
 void
-GdkpixbufInput::init (void)
+GdkpixbufInput::init(void)
 {
     GSList * formatlist, * formatlisthead;
 
     /* \todo I'm not sure if I need to free this list */
-    for (formatlist = formatlisthead = gdk_pixbuf_get_formats ();
+    for (formatlist = formatlisthead = gdk_pixbuf_get_formats();
          formatlist != NULL;
          formatlist = g_slist_next(formatlist)) {
 
@@ -120,7 +122,7 @@ GdkpixbufInput::init (void)
         for (int i = 0; extensions[i] != NULL; i++) {
         for (int j = 0; mimetypes[j] != NULL; j++) {
 
-            /* thanks but no thanks, we'll handle SVG extensions... */        
+            /* thanks but no thanks, we'll handle SVG extensions... */
             if (strcmp(extensions[i], "svg") == 0) {
                 continue;
             }
@@ -159,11 +161,9 @@ GdkpixbufInput::init (void)
         g_free(description);
         g_strfreev(mimetypes);
         g_strfreev(extensions);
-     }
+    }
 
-     g_slist_free (formatlisthead);
-
-    return;
+    g_slist_free(formatlisthead);
 }
 
 } } }  /* namespace Inkscape, Extension, Implementation */
@@ -172,9 +172,9 @@ GdkpixbufInput::init (void)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=4:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
