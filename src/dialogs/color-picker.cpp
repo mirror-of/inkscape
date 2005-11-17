@@ -37,7 +37,6 @@
 
 static sigc::connection _dialogs_hidden_connection;
 static sigc::connection _dialogs_unhidden_connection;
-static sigc::connection _selector_changed_connection;
 
 static void sp_color_picker_clicked(GObject *cp, void *data);
 
@@ -70,7 +69,6 @@ sp_color_picker_button(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, Gtk
 static void
 sp_color_picker_destroy(GtkObject *cp, gpointer data)
 {
-    _selector_changed_connection.disconnect();
     GtkObject *w = (GtkObject *) g_object_get_data(G_OBJECT(cp), "window");
 
     if (w) {
@@ -267,9 +265,8 @@ sp_color_picker_clicked(GObject *cp, void *data)
                                                      SP_RGBA32_A_F(rgba));
         g_signal_connect(G_OBJECT(csel), "dragged",
                          G_CALLBACK(sp_color_picker_color_mod), cp);
-        _selector_changed_connection = ((SPColorSelector*)csel)->base->connectChanged (sigc::bind (sigc::ptr_fun (&sp_color_picker_color_mod), cp));
-//        g_signal_connect(G_OBJECT(csel), "changed",
-//                         G_CALLBACK(sp_color_picker_color_mod), cp);
+        g_signal_connect(G_OBJECT(csel), "changed",
+                         G_CALLBACK(sp_color_picker_color_mod), cp);
 
         g_object_set_data(cp, "selector", csel);
         g_object_set_data(cp, "dialog", dlg);
