@@ -33,7 +33,6 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkwindow.h>
 #include "macros.h"
-#include <sigc++/sigc++.h>
 #include <glibmm/i18n.h>
 #include "../widgets/gradient-image.h"
 #include "../inkscape.h"
@@ -75,8 +74,6 @@ static GtkWidget *dlg = NULL;
 static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
 static gchar const *prefs_path = "dialogs.gradienteditor";
-
-static sigc::connection _selector_changed_connection;
 
 GtkType
 sp_gradient_vector_selector_get_type (void)
@@ -132,7 +129,6 @@ sp_gradient_vector_selector_init (SPGradientVectorSelector *gvs)
 static void
 sp_gradient_vector_selector_destroy (GtkObject *object)
 {
-        _selector_changed_connection.disconnect();
 	SPGradientVectorSelector *gvs;
 
 	gvs = SP_GRADIENT_VECTOR_SELECTOR (object);
@@ -867,8 +863,7 @@ sp_gradient_vector_widget_new (SPGradient *gradient, SPStop *select_stop)
 	gtk_widget_show (csel);
 	gtk_container_add (GTK_CONTAINER (f), csel);
 	g_signal_connect (G_OBJECT (csel), "dragged", G_CALLBACK (sp_gradient_vector_color_dragged), vb);
-        _selector_changed_connection = ((SPColorSelector*)csel)->base->connectChanged (sigc::bind (sigc::ptr_fun (&sp_gradient_vector_color_changed), reinterpret_cast<GtkObject*>(vb)));
-//	g_signal_connect (G_OBJECT (csel), "changed", G_CALLBACK (sp_gradient_vector_color_changed), vb);
+	g_signal_connect (G_OBJECT (csel), "changed", G_CALLBACK (sp_gradient_vector_color_changed), vb);
 
 	gtk_widget_show (vb);
 

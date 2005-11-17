@@ -38,7 +38,6 @@
 
 #include "../sp-item.h"
 #include "../sp-pattern.h"
-#include <sigc++/sigc++.h>
 #include <glibmm/i18n.h>
 #include "../widgets/icon.h"
 #include "../inkscape-stock.h"
@@ -89,8 +88,6 @@ static void sp_paint_selector_set_mode_unset (SPPaintSelector *psel);
 
 
 static void sp_paint_selector_set_style_buttons (SPPaintSelector *psel, GtkWidget *active);
-
-static sigc::connection _selector_changed_connection;
 
 static GtkVBoxClass *parent_class;
 static guint psel_signals[LAST_SIGNAL] = {0};
@@ -237,7 +234,6 @@ sp_paint_selector_init (SPPaintSelector *psel)
 static void
 sp_paint_selector_destroy (GtkObject *object)
 {
-    _selector_changed_connection.disconnect();
 	SPPaintSelector *psel = SP_PAINT_SELECTOR (object);
 
 	// clean up our long-living pattern menu
@@ -620,8 +616,7 @@ sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mod
 		gtk_signal_connect (GTK_OBJECT (csel), "grabbed", GTK_SIGNAL_FUNC (sp_paint_selector_color_grabbed), psel);
 		gtk_signal_connect (GTK_OBJECT (csel), "dragged", GTK_SIGNAL_FUNC (sp_paint_selector_color_dragged), psel);
 		gtk_signal_connect (GTK_OBJECT (csel), "released", GTK_SIGNAL_FUNC (sp_paint_selector_color_released), psel);
-//		gtk_signal_connect (GTK_OBJECT (csel), "changed", GTK_SIGNAL_FUNC (sp_paint_selector_color_changed), psel);
-        _selector_changed_connection = ((SPColorSelector*)csel)->base->connectChanged (sigc::bind (sigc::ptr_fun (&sp_paint_selector_color_changed), psel));
+		gtk_signal_connect (GTK_OBJECT (csel), "changed", GTK_SIGNAL_FUNC (sp_paint_selector_color_changed), psel);
 		/* Pack everything to frame */
 		gtk_container_add (GTK_CONTAINER (psel->frame), vb);
 		psel->selector = vb;
