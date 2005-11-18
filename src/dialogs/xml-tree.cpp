@@ -41,6 +41,7 @@
 #include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-handles.h"
+#include "desktop.h"
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../sp-string.h"
@@ -77,6 +78,7 @@ struct EditableDest {
 static GtkWidget * dlg = NULL;
 static sigc::connection sel_changed_connection;
 static sigc::connection document_uri_set_connection;
+static sigc::connection document_replaced_connection;
 static win_data wd;
 // impossible original values to make sure they are read from prefs
 static gint x = -1000, y = -1000, w = 0, h = 0;
@@ -144,6 +146,7 @@ static void on_attr_unselect_row_clear_text (GtkCList *list, gint row, gint colu
 static void on_editable_changed_enable_if_valid_xml_name (GtkEditable * editable, gpointer data);
 
 static void on_desktop_selection_changed (Inkscape::Selection * selection);
+static void on_document_replaced (SPDesktop *dt, SPDocument * document);
 static void on_document_uri_set (gchar const *uri, SPDocument * document);
 
 static void on_clicked_get_editable_text (GtkWidget * widget, gpointer data);
@@ -667,11 +670,12 @@ set_tree_desktop (SPDesktop * desktop)
 
     if (current_desktop) {
         sel_changed_connection.disconnect();
-//        sp_signal_disconnect_by_data (current_desktop, dlg);
+        document_replaced_connection.disconnect();
     }
     current_desktop = desktop;
     if (desktop) {
         sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(&on_desktop_selection_changed);
+        document_replaced_connection = desktop->connectDocumentReplaced (&on_document_replaced);
         set_tree_document (SP_DT_DOCUMENT (desktop));
     } else {
         set_tree_document (NULL);
@@ -1320,6 +1324,15 @@ on_desktop_selection_changed (Inkscape::Selection * selection)
     blocked--;
 }
 
+static void
+on_document_replaced (SPDesktop *dt, SPDocument *doc)
+{
+    if (current_desktop)
+        sel_changed_connection.disconnect();
+
+    sel_changed_connection = SP_DT_SELECTION(dt)->connectChanged (&on_desktop_selection_changed);
+    set_tree_document (doc);
+}
 
 void on_document_uri_set(gchar const *uri, SPDocument *document) {
     gchar *t;
