@@ -13,6 +13,8 @@
 # include <config.h>
 #endif
 
+#include <gtkmm/separatormenuitem.h>
+
 #include "selected-style.h"
 
 #include "widgets/spw-utilities.h"
@@ -129,9 +131,9 @@ SelectedStyle::SelectedStyle(bool layout)
         _multiple[i].show_all();
         __multiple[i] = (i == SS_FILL)? (_("Multiple selected objects have the same fill")) : (_("Multiple selected objects have the same stroke"));
 
-        _popup_remove[i].add(*(new Gtk::Label((i == SS_FILL)? _("Remove fill") : _("Remove stroke"), 0.0, 0.5)));
-        _popup_remove[i].signal_activate().connect(sigc::mem_fun(*this, 
-                               (i == SS_FILL)? &SelectedStyle::on_fill_remove : &SelectedStyle::on_stroke_remove ));
+        _popup_edit[i].add(*(new Gtk::Label((i == SS_FILL)? _("Edit fill...") : _("Edit stroke..."), 0.0, 0.5)));
+        _popup_edit[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_edit : &SelectedStyle::on_stroke_edit ));
 
         _popup_lastused[i].add(*(new Gtk::Label(_("Last set color"), 0.0, 0.5)));
         _popup_lastused[i].signal_activate().connect(sigc::mem_fun(*this, 
@@ -141,20 +143,50 @@ SelectedStyle::SelectedStyle(bool layout)
         _popup_lastselected[i].signal_activate().connect(sigc::mem_fun(*this, 
                                (i == SS_FILL)? &SelectedStyle::on_fill_lastselected : &SelectedStyle::on_stroke_lastselected ));
 
+        _popup_white[i].add(*(new Gtk::Label(_("White"), 0.0, 0.5)));
+        _popup_white[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_white : &SelectedStyle::on_stroke_white ));
+
+        _popup_black[i].add(*(new Gtk::Label(_("Black"), 0.0, 0.5)));
+        _popup_black[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_black : &SelectedStyle::on_stroke_black ));
+
+        _popup_copy[i].add(*(new Gtk::Label(_("Copy color"), 0.0, 0.5)));
+        _popup_copy[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_copy : &SelectedStyle::on_stroke_copy ));
+
+        _popup_paste[i].add(*(new Gtk::Label(_("Paste color"), 0.0, 0.5)));
+        _popup_paste[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_paste : &SelectedStyle::on_stroke_paste ));
+
+        _popup_swap[i].add(*(new Gtk::Label(_("Swap fill and stroke"), 0.0, 0.5)));
+        _popup_swap[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               &SelectedStyle::on_fillstroke_swap));
+
         //TRANSLATORS COMMENT: unset is a verb here
         _popup_unset[i].add(*(new Gtk::Label((i == SS_FILL)? _("Unset fill") : _("Unset stroke"), 0.0, 0.5)));
         _popup_unset[i].signal_activate().connect(sigc::mem_fun(*this, 
                                (i == SS_FILL)? &SelectedStyle::on_fill_unset : &SelectedStyle::on_stroke_unset ));
 
-        _popup_edit[i].add(*(new Gtk::Label((i == SS_FILL)? _("Edit fill...") : _("Edit stroke..."), 0.0, 0.5)));
-        _popup_edit[i].signal_activate().connect(sigc::mem_fun(*this, 
-                               (i == SS_FILL)? &SelectedStyle::on_fill_edit : &SelectedStyle::on_stroke_edit ));
+        _popup_remove[i].add(*(new Gtk::Label((i == SS_FILL)? _("Remove fill") : _("Remove stroke"), 0.0, 0.5)));
+        _popup_remove[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_remove : &SelectedStyle::on_stroke_remove ));
 
-        _popup[i].attach(_popup_remove[i], 0,1, 0,1);
-        _popup[i].attach(_popup_lastused[i], 0,1, 1,2);
-        _popup[i].attach(_popup_lastselected[i], 0,1, 2,3);
-        _popup[i].attach(_popup_unset[i], 0,1, 3,4);
-        _popup[i].attach(_popup_edit[i], 0,1, 4,5);
+        _popup[i].attach(_popup_edit[i], 0,1, 0,1);
+          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 1,2);
+        _popup[i].attach(_popup_lastused[i], 0,1, 2,3);
+        _popup[i].attach(_popup_lastselected[i], 0,1, 3,4);
+          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 4,5);
+        _popup[i].attach(_popup_white[i], 0,1, 5,6);
+        _popup[i].attach(_popup_black[i], 0,1, 6,7);
+          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 7,8);
+        _popup[i].attach(_popup_copy[i], 0,1, 8,9);
+        _popup_copy[i].set_sensitive(false);
+        _popup[i].attach(_popup_paste[i], 0,1, 9,10);
+        _popup[i].attach(_popup_swap[i], 0,1, 10,11);
+          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 11,12); 
+        _popup[i].attach(_popup_unset[i], 0,1, 12,13);
+        _popup[i].attach(_popup_remove[i], 0,1, 13,14);
         _popup[i].show_all();
 
         _mode[i] = SS_NA;
@@ -296,6 +328,157 @@ void SelectedStyle::on_stroke_lastselected() {
     sp_document_done (SP_DT_DOCUMENT(_desktop));
 }
 
+void SelectedStyle::on_fill_white() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    gchar c[64];
+    sp_svg_write_color (c, 64, 0xffffffff);
+    sp_repr_css_set_property (css, "fill", c);
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
+
+void SelectedStyle::on_stroke_white() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    gchar c[64];
+    sp_svg_write_color (c, 64, 0xffffffff);
+    sp_repr_css_set_property (css, "stroke", c);
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
+
+void SelectedStyle::on_fill_black() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    gchar c[64];
+    sp_svg_write_color (c, 64, 0x000000ff);
+    sp_repr_css_set_property (css, "fill", c);
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
+
+void SelectedStyle::on_stroke_black() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    gchar c[64];
+    sp_svg_write_color (c, 64, 0x000000ff);
+    sp_repr_css_set_property (css, "stroke", c);
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
+
+void SelectedStyle::on_fill_copy() {
+    if (_mode[SS_FILL] == SS_COLOR) {
+        gchar c[64];
+        sp_svg_write_color (c, 64, _thisselected[SS_FILL]);
+        Glib::ustring text;
+        text += c;
+        if (!text.empty()) {
+            Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+            refClipboard->set_text(text);
+        }
+    }
+}
+
+void SelectedStyle::on_stroke_copy() {
+    if (_mode[SS_STROKE] == SS_COLOR) {
+        gchar c[64];
+        sp_svg_write_color (c, 64, _thisselected[SS_STROKE]);
+        Glib::ustring text;
+        text += c;
+        if (!text.empty()) {
+            Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+            refClipboard->set_text(text);
+        }
+    }
+}
+
+void SelectedStyle::on_fill_paste() {
+    Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+    Glib::ustring const text = refClipboard->wait_for_text();
+
+    if (!text.empty()) {
+        guint32 color = sp_svg_read_color(text.c_str(), 0x000000ff); // impossible value, as SVG color cannot have opacity
+        if (color == 0x000000ff) // failed to parse color string
+            return;
+
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+        sp_repr_css_set_property (css, "fill", text.c_str());
+        sp_desktop_set_style (_desktop, css);
+        sp_repr_css_attr_unref (css);
+        sp_document_done (SP_DT_DOCUMENT(_desktop));
+    }
+}
+
+void SelectedStyle::on_stroke_paste() {
+    Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+    Glib::ustring const text = refClipboard->wait_for_text();
+
+    if (!text.empty()) {
+        guint32 color = sp_svg_read_color(text.c_str(), 0x000000ff); // impossible value, as SVG color cannot have opacity
+        if (color == 0x000000ff) // failed to parse color string
+            return;
+
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+        sp_repr_css_set_property (css, "stroke", text.c_str());
+        sp_desktop_set_style (_desktop, css);
+        sp_repr_css_attr_unref (css);
+        sp_document_done (SP_DT_DOCUMENT(_desktop));
+    }
+}
+
+void SelectedStyle::on_fillstroke_swap() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+
+    switch (_mode[SS_FILL]) {
+    case SS_NA:
+    case SS_MANY:
+        break;
+    case SS_NONE:
+        sp_repr_css_set_property (css, "stroke", "none");
+        break;
+    case SS_UNSET:
+        sp_repr_css_unset_property (css, "stroke");
+        break;
+    case SS_COLOR:
+        gchar c[64];
+        sp_svg_write_color (c, 64, _thisselected[SS_FILL]);
+        sp_repr_css_set_property (css, "stroke", c);
+        break;
+    case SS_LGRADIENT:
+    case SS_RGRADIENT:
+    case SS_PATTERN:
+        sp_repr_css_set_property (css, "stroke", _paintserver_id[SS_FILL].c_str());
+        break;
+    }
+
+    switch (_mode[SS_STROKE]) {
+    case SS_NA:
+    case SS_MANY:
+        break;
+    case SS_NONE:
+        sp_repr_css_set_property (css, "fill", "none");
+        break;
+    case SS_UNSET:
+        sp_repr_css_unset_property (css, "fill");
+        break;
+    case SS_COLOR:
+        gchar c[64];
+        sp_svg_write_color (c, 64, _thisselected[SS_STROKE]);
+        sp_repr_css_set_property (css, "fill", c);
+        break;
+    case SS_LGRADIENT:
+    case SS_RGRADIENT:
+    case SS_PATTERN:
+        sp_repr_css_set_property (css, "fill", _paintserver_id[SS_STROKE].c_str());
+        break;
+    }
+
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
 
 void SelectedStyle::on_fill_edit() {
     sp_object_properties_fill();
@@ -357,6 +540,9 @@ SelectedStyle::update()
         _tooltips.unset_tip(*flag_place);
 
         _mode[i] = SS_NA;
+        _paintserver_id[i].clear();
+
+        _popup_copy[i].set_sensitive(false);
 
         // create temporary style
         SPStyle *query = sp_style_new ();
@@ -368,6 +554,7 @@ SelectedStyle::update()
         case QUERY_STYLE_NOTHING:
             place->add(_na[i]);
             _tooltips.set_tip(*place, __na[i]);
+            _mode[i] = SS_NA;
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently, e.g. display "averaged" somewhere in paint selector
@@ -389,18 +576,31 @@ SelectedStyle::update()
                 gchar c_string[64];
                 g_snprintf (c_string, 64, "%06x/%.3g", color >> 8, SP_RGBA32_A_F(color));
                 _tooltips.set_tip(*place, __color[i] + ": " + c_string);
+                _mode[i] = SS_COLOR;
+                _popup_copy[i].set_sensitive(true);
+
             } else if (paint->set && paint->type == SP_PAINT_TYPE_PAINTSERVER) {
                 SPPaintServer *server = (i == SS_FILL)? SP_STYLE_FILL_SERVER (query) : SP_STYLE_STROKE_SERVER (query);
+
+                Inkscape::XML::Node *srepr = SP_OBJECT_REPR(server);
+                _paintserver_id[i] += "url(#";
+                _paintserver_id[i] += srepr->attribute("id");
+                _paintserver_id[i] += ")";
+
                 if (SP_IS_LINEARGRADIENT (server)) {
                     place->add(_lgradient[i]);
                     _tooltips.set_tip(*place, __lgradient[i]);
+                    _mode[i] = SS_LGRADIENT;
                 } else if (SP_IS_RADIALGRADIENT (server)) {
                     place->add(_rgradient[i]);
                     _tooltips.set_tip(*place, __rgradient[i]);
+                    _mode[i] = SS_RGRADIENT;
                 } else if (SP_IS_PATTERN (server)) {
                     place->add(_pattern[i]);
                     _tooltips.set_tip(*place, __pattern[i]);
+                    _mode[i] = SS_PATTERN;
                 }
+
             } else if (paint->set && paint->type == SP_PAINT_TYPE_NONE) {
                 place->add(_none[i]);
                 _tooltips.set_tip(*place, __none[i]);
@@ -408,6 +608,7 @@ SelectedStyle::update()
             } else if (!paint->set) {
                 place->add(_unset[i]);
                 _tooltips.set_tip(*place, __unset[i]);
+                _mode[i] = SS_UNSET;
             }
             if (result == QUERY_STYLE_MULTIPLE_AVERAGED) {
                 flag_place->add(_averaged[i]);
@@ -420,6 +621,7 @@ SelectedStyle::update()
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
             place->add(_many[i]);
             _tooltips.set_tip(*place, __many[i]);
+            _mode[i] = SS_MANY;
             break;
         default:
             break;

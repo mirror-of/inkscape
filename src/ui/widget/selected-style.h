@@ -35,8 +35,10 @@ namespace Widget {
 enum {
     SS_NA,
     SS_NONE,
+    SS_UNSET,
     SS_PATTERN,
-    SS_GRADIENT,
+    SS_LGRADIENT,
+    SS_RGRADIENT,
     SS_MANY,
     SS_COLOR
 };
@@ -101,6 +103,7 @@ protected:
 
     guint32 _lastselected[2];
     guint32 _thisselected[2];
+    Glib::ustring _paintserver_id[2];
 
     guint _mode[2];
 
@@ -121,13 +124,27 @@ protected:
     void on_stroke_unset();
     void on_fill_edit();
     void on_stroke_edit();
+    void on_fillstroke_swap();
+    void on_fill_white();
+    void on_stroke_white();
+    void on_fill_black();
+    void on_stroke_black();
+    void on_fill_copy();
+    void on_stroke_copy();
+    void on_fill_paste();
+    void on_stroke_paste();
 
     Gtk::Menu _popup[2];
-    Gtk::MenuItem _popup_remove[2];
+    Gtk::MenuItem _popup_edit[2];
     Gtk::MenuItem _popup_lastused[2];
     Gtk::MenuItem _popup_lastselected[2];
+    Gtk::MenuItem _popup_white[2];
+    Gtk::MenuItem _popup_black[2];
+    Gtk::MenuItem _popup_copy[2];
+    Gtk::MenuItem _popup_paste[2];
+    Gtk::MenuItem _popup_swap[2];
     Gtk::MenuItem _popup_unset[2];
-    Gtk::MenuItem _popup_edit[2];
+    Gtk::MenuItem _popup_remove[2];
 
     Gtk::Tooltips _tooltips;
 };
