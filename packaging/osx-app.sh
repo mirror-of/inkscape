@@ -12,7 +12,7 @@
 # https://gnunet.org/svn/GNUnet/contrib/OSX/build_app
 # 
 # Fixes and modifications to use Gimp.app style launcher:
-# Michael Wybrow <mjwybrow@users.sourceforge.net>
+#   Michael Wybrow <mjwybrow@users.sourceforge.net>
 #
 #
 # Notes:
@@ -20,12 +20,34 @@
 # configure has been run.
 # The macosx directory is in the inkscape/packaging directory.
 #
+# When packaging Inkscape for OS X, configure should be run with the 
+# "--enable-osxapp" option which sets the correct paths for support
+# files inside the app bundle.
+# 
 # Thus, the usual use of this file would be to run it from the within the
 # inkscape/packaging directory, substituting in the inkscape binary path:
 # 	./osx-app.sh /path/to/bin/inkscape ../Info.plist macosx
-#
-# If building on 10.3.x or earlier, you will need to replace the relevant
-# lines below with their commented 10.3 equivilents, marked "10.3"
+
+
+
+# Handle some version specific details.
+VERSION=`/usr/bin/sw_vers | grep ProductVersion | cut -f2 -d'.'`
+if [ "$VERSION" -ge "4" ]; then
+  # We're on Tiger (10.4) or later.
+  # XCode behaves a little differently in Tiger and later.
+  XCODEFLAGS="-configuration Deployment"
+  SCRIPTEXECDIR="ScriptExec/build/Deployment/ScriptExec.app/Contents/MacOS"
+  # libXinerama.1.dylib is not installed as part of X11 on Panther but
+  # is introduced as a dependency if Inkscape is compiled on Tiger or
+  # later.  Thus, add the library to the bundle for Panther users
+  EXTRALIBS="/usr/X11R6/lib/libXinerama.1.dylib"
+else
+  # Panther (10.3) or earlier.
+  XCODEFLAGS="-buildstyle Deployment"
+  SCRIPTEXECDIR="ScriptExec/build/ScriptExec.app/Contents/MacOS"
+  EXTRALIBS=""
+fi
+
 
 SW=/sw
 
@@ -110,11 +132,9 @@ cp "$binary" "$binpath"
   unset CC
   
   cd "$resdir/ScriptExec"
-  # 10.3: xcodebuild -buildstyle Deployment clean build
-  xcodebuild -configuration Deployment clean build
+  xcodebuild $XCODEFLAGS clean build
 )
-# 10.3: cp "$resdir/ScriptExec/build/ScriptExec.app/Contents/MacOS/ScriptExec" "$package/Contents/MacOS/Inkscape"
-cp "$resdir/ScriptExec/build/Deployment/ScriptExec.app/Contents/MacOS/ScriptExec" "$package/Contents/MacOS/Inkscape"
+cp "$resdir/SCRIPTEXECDIR/ScriptExec" "$package/Contents/MacOS/Inkscape"
 
 # Pull down all the share files
 binary_dir=`dirname "$binary"`
@@ -169,6 +189,11 @@ while $endl; do
   else
     nfiles=$nnfiles
   fi
+done
+
+for libfile in $EXTRALIBS
+do
+  cp -f $libfile $package/Contents/Resources/lib
 done
 
 if [ "$strip" = "true" ]; then
