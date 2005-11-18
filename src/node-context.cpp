@@ -709,8 +709,8 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         ret = TRUE;
                     }
                     break;
-                case GDK_K:
-                case GDK_k:
+                case GDK_U:
+                case GDK_u:
                     if (MOD__SHIFT_ONLY) {
                         sp_node_selected_set_line_type(NR_CURVETO);
                         ret = TRUE;

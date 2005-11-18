@@ -602,9 +602,9 @@ RFE</a>).</p>
 
 
 <group>
-<title>Change path segment</title>
+<title>Change segment(s)</title>
 <keys><key><shift/>L</key>  <action>make line</action></keys>
-<keys><key><shift/>K</key>  <action>make curve</action></keys>
+<keys><key><shift/>U</key>  <action>make curve</action></keys>
 <note>These commands require that more than two adjacent nodes be selected.</note>
 </group>
 
