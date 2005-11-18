@@ -29,16 +29,23 @@
 # 	./osx-app.sh /path/to/bin/inkscape ../Info.plist macosx
 
 
-# XCode behaves a little differently in Tiger and later.
+
+# Handle some version specific details.
 VERSION=`/usr/bin/sw_vers | grep ProductVersion | cut -f2 -d'.'`
 if [ "$VERSION" -ge "4" ]; then
   # We're on Tiger (10.4) or later.
+  # XCode behaves a little differently in Tiger and later.
   XCODEFLAGS="-configuration Deployment"
   SCRIPTEXECDIR="ScriptExec/build/Deployment/ScriptExec.app/Contents/MacOS"
+  # libXinerama.1.dylib is not installed as part of X11 on Panther but
+  # is introduced as a dependency if Inkscape is compiled on Tiger or
+  # later.  Thus, add the library to the bundle for Panther users
+  EXTRALIBS="/usr/X11R6/lib/libXinerama.1.dylib"
 else
   # Panther (10.3) or earlier.
   XCODEFLAGS="-buildstyle Deployment"
   SCRIPTEXECDIR="ScriptExec/build/ScriptExec.app/Contents/MacOS"
+  EXTRALIBS=""
 fi
 
 
@@ -182,6 +189,11 @@ while $endl; do
   else
     nfiles=$nnfiles
   fi
+done
+
+for libfile in $EXTRALIBS
+do
+  cp -f $libfile $package/Contents/Resources/lib
 done
 
 if [ "$strip" = "true" ]; then

@@ -1,3 +1,8 @@
+2005-11-18  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* packaging/osx-app.sh: Add libXinerama.1.dylib to the app bundle 
+	  since users of OS X 10.3.x will not have this file.
+
 2005-11-12  Jon Phillips <jon@rejon.org>
 
 	* po/it.po po/sr.po po/sr@Latn.po: Fixed these po files so that 
@@ -6,7 +11,7 @@
 
 2005-11-12  Ralf Stephan <ralf@ark.in-berlin.de>
 
-    * src/ui/view/edit-widget.h, src/ui/view/edit-widget.cpp:
+	* src/ui/view/edit-widget.h, src/ui/view/edit-widget.cpp:
 	  new-gui: made complete statusbar widget, equals old-gui now
 	* src/widgets/layer-selector.h, src/ui/widget/selected-style.h:
 	  classes have now a constructor with default parameter
@@ -14,7 +19,7 @@
 
 2005-11-12  MenTaLguY  <mental@rydia.net>
 
-    * src/display/canvas-arena.cpp, src/display/canvas-bpath.cpp,
+	* src/display/canvas-arena.cpp, src/display/canvas-bpath.cpp,
 	  src/display/canvas-grid.cpp, src/display/guideline.cpp,
 	  src/display/sodipodi-ctrl.cpp, src/display/sodipodi-ctrlrect.cpp,
 	  src/display/sp-canvas-util.cpp, src/display/sp-canvas-util.h,
