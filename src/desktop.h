@@ -103,7 +103,11 @@ struct SPDesktop : public Inkscape::UI::View::View
     Inkscape::ObjectHierarchy *_layer_hierarchy;
     gchar * _reconstruction_old_layer_id;
 
-    sigc::connection connectDocumentReplaced (const sigc::slot<void,SPDocument*> & slot)
+    sigc::signal<void, sp_verb_t>      _tool_changed;
+    sigc::signal<void, SPObject *>     _layer_changed_signal;
+    sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
+    sigc::signal<int, SPStyle *, int>::accumulated<StopOnTrue> _query_style_signal;
+    sigc::connection connectDocumentReplaced (const sigc::slot<void,SPDesktop*,SPDocument*> & slot)
     {
         return _document_replaced_signal.connect (slot);
     }
@@ -235,11 +239,7 @@ private:
     
     void push_current_zoom (GList**);
 
-    sigc::signal<void, SPObject *>     _layer_changed_signal;
-    sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
-    sigc::signal<int, SPStyle *, int>::accumulated<StopOnTrue> _query_style_signal;
-    sigc::signal<void, sp_verb_t>      _tool_changed;
-    sigc::signal<void,SPDocument*>     _document_replaced_signal;
+    sigc::signal<void,SPDesktop*,SPDocument*>     _document_replaced_signal;
     sigc::signal<void>                 _activate_signal;
     sigc::signal<void>                 _deactivate_signal;
     sigc::signal<void,SPDesktop*,SPEventContext*> _event_context_changed_signal;
