@@ -225,8 +225,8 @@ class Node {
 Inkscape::NodePath::Path * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
 void sp_nodepath_destroy (Inkscape::NodePath::Path * nodepath);
 void sp_nodepath_deselect (Inkscape::NodePath::Path *nodepath);
-void sp_nodepath_select_all (Inkscape::NodePath::Path *nodepath);
-void sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath);
+void sp_nodepath_select_all (Inkscape::NodePath::Path *nodepath, bool invert);
+void sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath, bool invert);
 void sp_nodepath_select_next (Inkscape::NodePath::Path *nodepath);
 void sp_nodepath_select_prev (Inkscape::NodePath::Path *nodepath);
 void sp_nodepath_select_rect (Inkscape::NodePath::Path * nodepath, NRRect * b, gboolean incremental);

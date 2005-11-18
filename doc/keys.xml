@@ -374,9 +374,9 @@ RFE</a>).</p>
 <keys><key><ctrl/><alt/>A</key>	 <action>select all (all layers)</action></keys>
 <note>This works on objects in all visible and unlocked layers.</note>
 <keys><key>!</key> <action>invert selection (current layer)</action></keys>
-<note>This inverts selection (deselects what was selected and selects everything else) in the current layer.</note>
+<note>This inverts selection (deselects what was selected and vice versa) in the current layer.</note>
 <keys><key><alt/>!</key> <action>invert selection (all layers)</action></keys>
-<note>This inverts selection (deselects what was selected and selects everything else) in visible and unlocked layers.</note>
+<note>This inverts selection (deselects what was selected and vice versa) in visible and unlocked layers.</note>
 <keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 <keys><key><misc-wide f="Backspace"/></key><key><misc f="Del"/></key>	 <action>delete selection</action></keys>
 </group>
@@ -511,10 +511,15 @@ RFE</a>).</p>
 <title>Keyboard select</title>
 <keys><key><misc f="Tab"/></key>  <action>select next node</action></keys> 
 <keys><key><shift/><misc f="Tab"/></key> <action>select previous node</action></keys>
-<note>These keys let you select any node within the selected path</note>
-<keys><key><ctrl/>A</key>	 <action>select all nodes in path or subpath(s)</action></keys>
-<note>If the path has multiple subpaths and some nodes selected, this command selects all only in subpaths with selected nodes.</note>
+<note>These keys select nodes within the selected path</note>
+<keys><key><ctrl/>A</key>	 <action>select all nodes in subpath(s)</action></keys>
+<note>If the path has multiple subpaths and some nodes selected, this selects all only in subpaths with already selected nodes.</note>
 <keys><key><ctrl/><alt/>A</key>	 <action>select all nodes in path</action></keys>
+<note>This selects all nodes in the entire path.</note>
+<keys><key>!</key> <action>invert selection in subpath(s)</action></keys>
+<note>If the path has multiple subpaths and some nodes selected, this inverts selection only in subpaths with already selected nodes.</note>
+<keys><key><alt/>!</key> <action>invert selection in path</action></keys>
+<note>This inverts selection (deselects what was selected and vice versa) in the entire path.</note>
 <keys><key><misc f="Esc"/></key> <action>deselect all nodes</action></keys>
 </group>
 

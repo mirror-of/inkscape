@@ -1900,10 +1900,10 @@ sp_nodepath_deselect(Inkscape::NodePath::Path *nodepath)
 }
 
 /**
-\brief Select all nodes in the nodepath
+\brief Select or invert selection of all nodes in the nodepath
 */
 void
-sp_nodepath_select_all(Inkscape::NodePath::Path *nodepath)
+sp_nodepath_select_all(Inkscape::NodePath::Path *nodepath, bool invert)
 {
     if (!nodepath) return;
 
@@ -1911,38 +1911,46 @@ sp_nodepath_select_all(Inkscape::NodePath::Path *nodepath)
        Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
         for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
            Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
-            sp_nodepath_node_select(node, TRUE, TRUE);
+           sp_nodepath_node_select(node, TRUE, invert? !node->selected : TRUE);
         }
     }
 }
 
 /** 
  * If nothing selected, does the same as sp_nodepath_select_all(); 
- * otherwise selects all nodes in all subpaths that have selected nodes 
+ * otherwise selects/inverts all nodes in all subpaths that have selected nodes 
  * (i.e., similar to "select all in layer", with the "selected" subpaths 
  * being treated as "layers" in the path).
  */
 void
-sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath)
+sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath, bool invert)
 {
     if (!nodepath) return;
 
     if (g_list_length (nodepath->selected) == 0) {
-        sp_nodepath_select_all (nodepath);
+        sp_nodepath_select_all (nodepath, invert);
         return;
     }
 
     GList *copy = g_list_copy (nodepath->selected); // copy initial selection so that selecting in the loop does not affect us
+    GSList *subpaths = NULL;
 
     for (GList *l = copy; l != NULL; l = l->next) {
         Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
         Inkscape::NodePath::SubPath *subpath = n->subpath;
+        if (!g_slist_find (subpaths, subpath))
+            subpaths = g_slist_prepend (subpaths, subpath);
+    }
+
+    for (GSList *sp = subpaths; sp != NULL; sp = sp->next) {
+        Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) sp->data;
         for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
             Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
-            sp_nodepath_node_select(node, TRUE, TRUE);
+            sp_nodepath_node_select(node, TRUE, invert? !g_list_find(copy, node) : TRUE);
         }
     }
 
+    g_slist_free (subpaths);
     g_list_free (copy);
 }
 
