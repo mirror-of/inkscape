@@ -7,12 +7,14 @@ tutorial_DATA = \
     tutorial-elements.svg \
     tutorial-elements.fr.svg \
     tutorial-elements.es.svg \
-    elementsofdesign.sl.svg \
+    tutorial-elements.sl.svg \
     tutorial-tips.svg \
+    tutorial-tips.es.svg \
     tutorial-tips.fr.svg \
-    tipsandtricks.sl.svg \
+    tutorial-tips.sl.svg \
     making_markers.svg \
     tutorial-advanced.svg \
+    tutorial-advanced.es.svg \
     tutorial-advanced.fr.svg \
     tutorial-advanced.ja.svg \
     tutorial-advanced.sl.svg \
@@ -30,14 +32,16 @@ tutorial_DATA = \
     tutorial-calligraphy.fr.svg \
     tutorial-calligraphy.sl.svg \
     tutorial-shapes.svg \
+    tutorial-shapes.ca.svg \
     tutorial-shapes.es.svg \
     tutorial-shapes.fr.svg \
     tutorial-shapes.ja.svg \
     tutorial-shapes.sl.svg \
     tutorial-tracing.svg potrace.png oldguitar.jpg tux.png \
-    tutorial-tracing.de.svg potrace-de.png	\
-    tutorial-tracing.es.svg	\
-    tutorial-tracing.fr.svg potrace-fr.png
+    tutorial-tracing.de.svg potrace-de.png \
+    tutorial-tracing.es.svg \
+    tutorial-tracing.fr.svg potrace-fr.png \
+    tutorial-tracing.sl.svg
 
 
 
