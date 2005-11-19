@@ -181,10 +181,10 @@ gr_drag_style_set (const SPCSSAttr *css, gpointer data)
     if (css->attribute("color"))
         sp_repr_css_set_property (stop, "stop-color", css->attribute("color"));
 
-    if (css->attribute("stroke"))
+    if (css->attribute("stroke") && strcmp(css->attribute("stroke"), "none"))
         sp_repr_css_set_property (stop, "stop-color", css->attribute("stroke"));
 
-    if (css->attribute("fill"))
+    if (css->attribute("fill") && strcmp(css->attribute("fill"), "none"))
         sp_repr_css_set_property (stop, "stop-color", css->attribute("fill"));
 
     if (css->attribute("stop-color"))
@@ -202,6 +202,10 @@ gr_drag_style_set (const SPCSSAttr *css, gpointer data)
 
     if (css->attribute("fill-opacity")) // TODO: multiply
         sp_repr_css_set_property (stop, "stop-opacity", css->attribute("fill-opacity"));
+
+    if ((css->attribute("fill") && !strcmp(css->attribute("fill"), "none")) || 
+        (css->attribute("stroke") && !strcmp(css->attribute("stroke"), "none")))
+        sp_repr_css_set_property (stop, "stop-opacity", "0"); // if set to none, don't change color, set opacity to 0
 
     if (css->attribute("stop-opacity"))
         sp_repr_css_set_property (stop, "stop-opacity", css->attribute("stop-opacity"));
