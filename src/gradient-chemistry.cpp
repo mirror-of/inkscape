@@ -609,7 +609,7 @@ sp_item_gradient_stop_set_style (SPItem *item, guint point_num, bool fill_or_str
         {
             SPStop *first = sp_first_stop (vector);
             if (first) {
-                sp_repr_css_set (SP_OBJECT_REPR (first), stop, "style");
+                sp_repr_css_change (SP_OBJECT_REPR (first), stop, "style");
             }
         }
         break;
@@ -620,7 +620,7 @@ sp_item_gradient_stop_set_style (SPItem *item, guint point_num, bool fill_or_str
         {
             SPStop *last = sp_last_stop (vector);
             if (last) {
-                sp_repr_css_set (SP_OBJECT_REPR (last), stop, "style");
+                sp_repr_css_change (SP_OBJECT_REPR (last), stop, "style");
             }
         }
         break;
