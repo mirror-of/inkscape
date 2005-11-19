@@ -333,6 +333,7 @@ void SelectedStyle::on_fill_white() {
     gchar c[64];
     sp_svg_write_color (c, 64, 0xffffffff);
     sp_repr_css_set_property (css, "fill", c);
+    sp_repr_css_set_property (css, "fill-opacity", "1.0");
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     sp_document_done (SP_DT_DOCUMENT(_desktop));
@@ -343,6 +344,7 @@ void SelectedStyle::on_stroke_white() {
     gchar c[64];
     sp_svg_write_color (c, 64, 0xffffffff);
     sp_repr_css_set_property (css, "stroke", c);
+    sp_repr_css_set_property (css, "stroke-opacity", "1.0");
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     sp_document_done (SP_DT_DOCUMENT(_desktop));
@@ -353,6 +355,7 @@ void SelectedStyle::on_fill_black() {
     gchar c[64];
     sp_svg_write_color (c, 64, 0x000000ff);
     sp_repr_css_set_property (css, "fill", c);
+    sp_repr_css_set_property (css, "fill-opacity", "1.0");
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     sp_document_done (SP_DT_DOCUMENT(_desktop));
@@ -363,6 +366,7 @@ void SelectedStyle::on_stroke_black() {
     gchar c[64];
     sp_svg_write_color (c, 64, 0x000000ff);
     sp_repr_css_set_property (css, "stroke", c);
+    sp_repr_css_set_property (css, "stroke-opacity", "1.0");
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     sp_document_done (SP_DT_DOCUMENT(_desktop));
