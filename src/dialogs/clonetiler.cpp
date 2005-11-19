@@ -77,7 +77,7 @@
 #include "display/nr-arena.h"
 #include "display/nr-arena-item.h"
 
-#include "color-picker.h"
+#include "ui/widget/color-picker.h"
 #include "clonetiler.h"
 
 static GtkWidget *dlg = NULL;
@@ -107,6 +107,9 @@ static sigc::connection _shutdown_connection;
 static sigc::connection _dialogs_hidden_connection;
 static sigc::connection _dialogs_unhidden_connection;
 static sigc::connection _desktop_activated_connection;
+static sigc::connection _color_changed_connection;
+
+static Inkscape::UI::Widget::ColorPicker *color_picker;
 
 static void
 clonetiler_dialog_destroy (GtkObject *object, gpointer data)
@@ -120,6 +123,9 @@ clonetiler_dialog_destroy (GtkObject *object, gpointer data)
     } else {
         sp_signal_disconnect_by_data (INKSCAPE, dlg);
     }
+    _color_changed_connection.disconnect();
+
+    delete color_picker;
     
     wd.win = dlg = NULL;
     wd.stop = 0;
@@ -144,6 +150,23 @@ clonetiler_dialog_delete (GtkObject *object, GdkEvent * /*event*/, gpointer data
 static void on_delete()
 {
     (void)clonetiler_dialog_delete (0, 0, NULL);
+}
+
+static void
+on_picker_color_changed (guint rgba)
+{
+    static bool is_updating = false;
+    if (is_updating || !SP_ACTIVE_DESKTOP)
+        return;
+
+    is_updating = true;
+
+    Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, prefs_path);
+    gchar c[32];
+    sp_svg_write_color(c, 32, rgba);
+    sp_repr_set_attr(repr, "initial_color", c);
+
+    is_updating = false;
 }
 
 static guint clonetiler_number_of_clones (SPObject *obj);
@@ -2023,11 +2046,11 @@ clonetiler_dialog (void)
             GtkWidget *l = gtk_label_new (_("Initial color: "));
             gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
 
-            GtkWidget *color_picker = sp_color_picker_new(inkscape_get_repr(INKSCAPE, prefs_path), false, dlg, "initial_color", NULL,
-                                                          _("Initial color of tiled clones"), _("Initial color for clones (works only if the original has unset fill or stroke)"), 0);
             guint32 rgba = 0x000000ff | sp_svg_read_color (prefs_get_string_attribute(prefs_path, "initial_color"), 0x000000ff);
-            sp_color_picker_set_rgba32(color_picker, rgba);
-            gtk_box_pack_start (GTK_BOX (hb), color_picker, FALSE, FALSE, 0);
+            color_picker = new Inkscape::UI::Widget::ColorPicker (*new Glib::ustring(_("Initial color of tiled clones")), *new Glib::ustring(_("Initial color for clones (works only if the original has unset fill or stroke)")), rgba, false);
+            _color_changed_connection = color_picker->connectChanged (sigc::ptr_fun(on_picker_color_changed));
+
+            gtk_box_pack_start (GTK_BOX (hb), reinterpret_cast<GtkWidget*>(color_picker->gobj()), FALSE, FALSE, 0);
 
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
             }
