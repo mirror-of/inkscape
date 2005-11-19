@@ -29,8 +29,8 @@ struct NRLGradientRenderer {
 	NRRenderer renderer;
 	const unsigned char *vector;
 	unsigned int spread;
-	int x0, y0;
-	float dx, dy;
+	double x0, y0;
+	double dx, dy;
 };
 
 NRRenderer *nr_lgradient_renderer_setup (NRLGradientRenderer *lgr,

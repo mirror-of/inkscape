@@ -56,8 +56,8 @@ nr_lgradient_renderer_setup (NRLGradientRenderer *lgr,
 	nr_matrix_multiply (&n2px, &n2gs, gs2px);
 	nr_matrix_invert (&px2n, &n2px);
 
-	lgr->x0 = (int) (n2px.c[4] + 0.5);
-	lgr->y0 = (int) (n2px.c[5] + 0.5);
+	lgr->x0 = n2px.c[4] - 0.5;
+	lgr->y0 = n2px.c[5] - 0.5;
 	lgr->dx = px2n.c[0] * NR_GRADIENT_VECTOR_LENGTH;
 	lgr->dy = px2n.c[2] * NR_GRADIENT_VECTOR_LENGTH;
 
