@@ -865,7 +865,7 @@ RFE</a>).</p>
 </group>
 </section>
 
-*<section title="Bezier tool" color="e7f5d7">
+*<section title="Bezier (Pen) tool" color="e7f5d7">
 
 <group>
 <title>Create nodes</title>
@@ -898,7 +898,7 @@ RFE</a>).</p>
 <group>
 <title>Keyboard</title>
 <keys><key><misc f="Esc"/></key>  <action>cancel current line</action></keys>
-<keys><key><misc-wide f="Backspace"/></key> <action>erase last segment of current line</action></keys>
+<keys><key><misc-wide f="Backspace"/></key><key><misc f="Del"/></key> <action>erase last segment of current line</action></keys>
 </group>
 </section>
 

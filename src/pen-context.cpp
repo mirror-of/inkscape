@@ -723,6 +723,8 @@ pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
             }
             break;
         case GDK_BackSpace:
+        case GDK_Delete:
+        case GDK_KP_Delete:
             if (sp_curve_is_empty(pc->green_curve)) {
                 /* Same as cancel */
                 pc->state = SP_PEN_CONTEXT_STOP;
