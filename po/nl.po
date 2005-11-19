@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.
 # Jeroen van der Vegt <ajvdvegt (at) 123mail.org>, 2003, 2005.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-07 16:14+1100\n"
+"POT-Creation-Date: 2005-11-10 12:12+1100\n"
 "PO-Revision-Date: 2005-11-07 22:42+0100\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -1077,7 +1077,7 @@ msgstr "Selectie-aanduiding per object:"
 #: ../src/dialogs/display-settings.cpp:253
 #: ../src/dialogs/display-settings.cpp:390
 #: ../src/dialogs/display-settings.cpp:445
-#: ../src/dialogs/display-settings.cpp:1496
+#: ../src/dialogs/display-settings.cpp:1497
 #: ../src/dialogs/stroke-style.cpp:791 ../src/interface.cpp:764
 #: ../src/ui/dialog/inkscape-preferences.cpp:156 ../src/verbs.cpp:1827
 msgid "None"
@@ -1397,7 +1397,8 @@ msgstr "Binnen- en buitenrand opdrachten passen het pad aan met zoveel pixels"
 msgid "Compass-like display of angles"
 msgstr "Hoeken weergeven als een kompas"
 
-#: ../src/dialogs/display-settings.cpp:1033
+#. TRANSLATORS: "positive clockwise" means "increasing in clockwise direction"
+#: ../src/dialogs/display-settings.cpp:1034
 msgid ""
 "When on, angles are displayed with 0 at north, 0 to 360 range, positive "
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
@@ -1407,11 +1408,11 @@ msgstr ""
 "graden met de klok mee. Wanneer dit uit staat wijst 0 naar het oosten, en "
 "lopen hoeken van -180 tot 180 graden, tegen de klok in."
 
-#: ../src/dialogs/display-settings.cpp:1040
+#: ../src/dialogs/display-settings.cpp:1041
 msgid "Zoom in/out by:"
 msgstr "In- en uitzoomen met:"
 
-#: ../src/dialogs/display-settings.cpp:1041
+#: ../src/dialogs/display-settings.cpp:1042
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this "
 "multiplier"
@@ -1419,60 +1420,60 @@ msgstr ""
 "Klikken op het vergrootglas, gebruik van de +/- toetsen en zoomen met de "
 "middelste muisknop gebruiken deze factor."
 
-#: ../src/dialogs/display-settings.cpp:1042 ../src/helper/units.cpp:44
+#: ../src/dialogs/display-settings.cpp:1043 ../src/helper/units.cpp:44
 #: ../src/ui/dialog/inkscape-preferences.cpp:164
 msgid "%"
 msgstr "%"
 
 #. Tools
-#: ../src/dialogs/display-settings.cpp:1051
+#: ../src/dialogs/display-settings.cpp:1052
 #: ../src/ui/dialog/inkscape-preferences.cpp:58
 msgid "Tools"
 msgstr "Gereedschappen"
 
-#: ../src/dialogs/display-settings.cpp:1059
+#: ../src/dialogs/display-settings.cpp:1060
 msgid "Selector"
 msgstr "Selecteren"
 
-#: ../src/dialogs/display-settings.cpp:1070
+#: ../src/dialogs/display-settings.cpp:1071
 msgid "Node"
 msgstr "Knooppunten"
 
-#: ../src/dialogs/display-settings.cpp:1078 ../src/verbs.cpp:2058
+#: ../src/dialogs/display-settings.cpp:1079 ../src/verbs.cpp:2058
 #: ../src/widgets/desktop-widget.cpp:258
 msgid "Zoom"
 msgstr "Zoomen"
 
 #. The 4 shape tools
-#: ../src/dialogs/display-settings.cpp:1085
+#: ../src/dialogs/display-settings.cpp:1086
 msgid "Shapes"
 msgstr "Vormen"
 
-#: ../src/dialogs/display-settings.cpp:1093 ../src/verbs.cpp:2040
+#: ../src/dialogs/display-settings.cpp:1094 ../src/verbs.cpp:2040
 msgid "Rectangle"
 msgstr "Rechthoek"
 
-#: ../src/dialogs/display-settings.cpp:1099 ../src/verbs.cpp:2042
+#: ../src/dialogs/display-settings.cpp:1100 ../src/verbs.cpp:2042
 msgid "Ellipse"
 msgstr "Ellips"
 
-#: ../src/dialogs/display-settings.cpp:1105 ../src/verbs.cpp:2044
+#: ../src/dialogs/display-settings.cpp:1106 ../src/verbs.cpp:2044
 msgid "Star"
 msgstr "Ster"
 
-#: ../src/dialogs/display-settings.cpp:1111 ../src/verbs.cpp:2046
+#: ../src/dialogs/display-settings.cpp:1112 ../src/verbs.cpp:2046
 msgid "Spiral"
 msgstr "Spiraal"
 
-#: ../src/dialogs/display-settings.cpp:1125 ../src/verbs.cpp:2048
+#: ../src/dialogs/display-settings.cpp:1126 ../src/verbs.cpp:2048
 msgid "Pencil"
 msgstr "Pen"
 
-#: ../src/dialogs/display-settings.cpp:1128
+#: ../src/dialogs/display-settings.cpp:1129
 msgid "Tolerance:"
 msgstr "Tolerantie:"
 
-#: ../src/dialogs/display-settings.cpp:1129
+#: ../src/dialogs/display-settings.cpp:1130
 msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
@@ -1480,42 +1481,42 @@ msgstr ""
 "Dit beinvloed de manier waarop lijnen uit de vrije hand worden afgerond; "
 "lagere waarden leveren hoekerige lijnen op"
 
-#: ../src/dialogs/display-settings.cpp:1145 ../src/verbs.cpp:2050
+#: ../src/dialogs/display-settings.cpp:1146 ../src/verbs.cpp:2050
 msgid "Pen"
 msgstr "Lijnen"
 
-#: ../src/dialogs/display-settings.cpp:1154 ../src/verbs.cpp:2052
+#: ../src/dialogs/display-settings.cpp:1155 ../src/verbs.cpp:2052
 msgid "Calligraphy"
 msgstr "Kalligrafie"
 
-#: ../src/dialogs/display-settings.cpp:1161 ../src/dialogs/text-edit.cpp:353
+#: ../src/dialogs/display-settings.cpp:1162 ../src/dialogs/text-edit.cpp:353
 #: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:2054
 msgid "Text"
 msgstr "Tekst"
 
-#: ../src/dialogs/display-settings.cpp:1171 ../src/verbs.cpp:2056
+#: ../src/dialogs/display-settings.cpp:1172 ../src/verbs.cpp:2056
 msgid "Gradient"
 msgstr "Kleurverloop"
 
-#: ../src/dialogs/display-settings.cpp:1178 ../src/verbs.cpp:2062
+#: ../src/dialogs/display-settings.cpp:1179 ../src/verbs.cpp:2062
 msgid "Connector"
 msgstr "Verbinder"
 
-#: ../src/dialogs/display-settings.cpp:1185 ../src/verbs.cpp:2060
+#: ../src/dialogs/display-settings.cpp:1186 ../src/verbs.cpp:2060
 msgid "Dropper"
 msgstr "Pipet"
 
 #. Windows
-#: ../src/dialogs/display-settings.cpp:1197
+#: ../src/dialogs/display-settings.cpp:1198
 #: ../src/ui/dialog/inkscape-preferences.cpp:59
 msgid "Windows"
 msgstr "Vensters"
 
-#: ../src/dialogs/display-settings.cpp:1202
+#: ../src/dialogs/display-settings.cpp:1203
 msgid "Save window geometry"
 msgstr "Venster posities opslaan"
 
-#: ../src/dialogs/display-settings.cpp:1203
+#: ../src/dialogs/display-settings.cpp:1204
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
@@ -1523,19 +1524,19 @@ msgstr ""
 "De positie en grootte van vensters opslaan bij elk document in Inkscape SVG-"
 "formaat"
 
-#: ../src/dialogs/display-settings.cpp:1210
+#: ../src/dialogs/display-settings.cpp:1211
 msgid "Dialogs are hidden in taskbar"
 msgstr "Dialogen zijn verborgen in de taakbalk"
 
-#: ../src/dialogs/display-settings.cpp:1211
+#: ../src/dialogs/display-settings.cpp:1212
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr "Verberg dialoogvensters in de taakbalk"
 
-#: ../src/dialogs/display-settings.cpp:1218
+#: ../src/dialogs/display-settings.cpp:1219
 msgid "Zoom when window is resized"
 msgstr "Zoomen wanneer de venstergrootte verandert"
 
-#: ../src/dialogs/display-settings.cpp:1219
+#: ../src/dialogs/display-settings.cpp:1220
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -1546,36 +1547,36 @@ msgstr ""
 "heeft de mogelijkheid dit aan te passen boven de rechter schuifbalk)"
 
 #. Clones
-#: ../src/dialogs/display-settings.cpp:1227 ../src/dialogs/find.cpp:624
+#: ../src/dialogs/display-settings.cpp:1228 ../src/dialogs/find.cpp:624
 #: ../src/ui/dialog/inkscape-preferences.cpp:60
 msgid "Clones"
 msgstr "Klonen"
 
-#: ../src/dialogs/display-settings.cpp:1231
+#: ../src/dialogs/display-settings.cpp:1232
 msgid "When the original moves, its clones and linked offsets:"
 msgstr "Gedrag van klonen bij het verplaatsen van het origineel:"
 
-#: ../src/dialogs/display-settings.cpp:1243
+#: ../src/dialogs/display-settings.cpp:1244
 msgid "Move in parallel"
 msgstr "Parallel mee verplaatsen"
 
-#: ../src/dialogs/display-settings.cpp:1244
+#: ../src/dialogs/display-settings.cpp:1245
 msgid "Clones are translated by the same vector as their original."
 msgstr "Klonen worden op dezelfde manier verplaatst als het origineel."
 
-#: ../src/dialogs/display-settings.cpp:1251
+#: ../src/dialogs/display-settings.cpp:1252
 msgid "Stay unmoved"
 msgstr "Laten staan"
 
-#: ../src/dialogs/display-settings.cpp:1252
+#: ../src/dialogs/display-settings.cpp:1253
 msgid "Clones preserve their positions when their original is moved."
 msgstr "Klonen blijven op hun plek staan als het origineel wordt verplaatst."
 
-#: ../src/dialogs/display-settings.cpp:1259
+#: ../src/dialogs/display-settings.cpp:1260
 msgid "Move according to transform"
 msgstr "Verplaatsen volgens transformatie"
 
-#: ../src/dialogs/display-settings.cpp:1260
+#: ../src/dialogs/display-settings.cpp:1261
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
@@ -1584,83 +1585,83 @@ msgstr ""
 "Elke kloon verplaatst volgens zijn eigen 'transform='-waarde. Een gedraaide "
 "kloon zal bijvoorbeeld in een andere richting verplaatsen dan zijn origineel."
 
-#: ../src/dialogs/display-settings.cpp:1269
+#: ../src/dialogs/display-settings.cpp:1270
 msgid "When the original is deleted, its clones:"
 msgstr "Gedrag van klonen bij het verwijderen van het origineel:"
 
-#: ../src/dialogs/display-settings.cpp:1281
+#: ../src/dialogs/display-settings.cpp:1282
 msgid "Are unlinked"
 msgstr "Ontkoppelen"
 
-#: ../src/dialogs/display-settings.cpp:1281
+#: ../src/dialogs/display-settings.cpp:1282
 msgid "Orphaned clones are converted to regular objects."
 msgstr "Ontkoppelde klonen worden omgezet naar normale objecten"
 
-#: ../src/dialogs/display-settings.cpp:1287
+#: ../src/dialogs/display-settings.cpp:1288
 msgid "Are deleted"
 msgstr "Verwijderen"
 
-#: ../src/dialogs/display-settings.cpp:1287
+#: ../src/dialogs/display-settings.cpp:1288
 msgid "Orphaned clones are deleted along with their original."
 msgstr "Ontkoppelde klonen worden verwijderd samen met hun origineel"
 
 #. Transforms
 #. TRANSLATORS: Noun, i.e. transformations.
-#: ../src/dialogs/display-settings.cpp:1303
+#: ../src/dialogs/display-settings.cpp:1304
 #: ../src/ui/dialog/inkscape-preferences.cpp:61
 msgid "Transforms"
 msgstr "Transformaties"
 
-#: ../src/dialogs/display-settings.cpp:1306
+#: ../src/dialogs/display-settings.cpp:1307
 msgid "Scale stroke width"
 msgstr "Lijndikte mee schalen"
 
-#: ../src/dialogs/display-settings.cpp:1307
+#: ../src/dialogs/display-settings.cpp:1308
 #: ../src/widgets/select-toolbar.cpp:542
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "Wanneer objecten worden vergroot of verkleind, de lijndikte evenveel mee "
 "vergroten of verkleinen"
 
-#: ../src/dialogs/display-settings.cpp:1314
+#: ../src/dialogs/display-settings.cpp:1315
 msgid "Scale rounded corners in rectangles"
 msgstr "Afgeronding van hoeken mee schalen"
 
-#: ../src/dialogs/display-settings.cpp:1315
+#: ../src/dialogs/display-settings.cpp:1316
 #: ../src/widgets/select-toolbar.cpp:554
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Wanneer rechthoeken worden vergroot of verkleind, de straal van de hoek mee "
 "vergroten of verkleinen"
 
-#: ../src/dialogs/display-settings.cpp:1322
+#: ../src/dialogs/display-settings.cpp:1323
 msgid "Transform gradients"
 msgstr "Kleurverlopen transformeren"
 
-#: ../src/dialogs/display-settings.cpp:1323
+#: ../src/dialogs/display-settings.cpp:1324
 #: ../src/widgets/select-toolbar.cpp:566
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr "Kleurverlopen (op lijnen of vlakken) mee transformeren met de objecten"
 
-#: ../src/dialogs/display-settings.cpp:1330
+#: ../src/dialogs/display-settings.cpp:1331
 msgid "Transform patterns"
 msgstr "Patronen transformeren"
 
-#: ../src/dialogs/display-settings.cpp:1331
+#: ../src/dialogs/display-settings.cpp:1332
 #: ../src/widgets/select-toolbar.cpp:578
 msgid "Transform patterns (in fill or stroke) along with the objects"
 msgstr "Patronen (op lijnen of vlakken) mee transformeren met de objecten"
 
 #. TRANSLATORS: How to specify the affine transformation in the SVG file.
-#: ../src/dialogs/display-settings.cpp:1341
+#: ../src/dialogs/display-settings.cpp:1342
 msgid "Store transformation:"
 msgstr "Transformaties opslaan:"
 
-#: ../src/dialogs/display-settings.cpp:1352
+#: ../src/dialogs/display-settings.cpp:1353
 msgid "Optimized"
 msgstr "Optimaliseren"
 
-#: ../src/dialogs/display-settings.cpp:1353
+#: ../src/dialogs/display-settings.cpp:1354
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
@@ -1668,29 +1669,29 @@ msgstr ""
 "Pas, indien mogelijk, transformaties op objecten toe zonder een 'transform='-"
 "waarde toe te voegen"
 
-#: ../src/dialogs/display-settings.cpp:1360
+#: ../src/dialogs/display-settings.cpp:1361
 msgid "Preserved"
 msgstr "Behouden"
 
-#: ../src/dialogs/display-settings.cpp:1361
+#: ../src/dialogs/display-settings.cpp:1362
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
 "Transformaties altijd opslaan als een 'transform='-waarde bij objecten."
 
 #. Selecting
-#: ../src/dialogs/display-settings.cpp:1369
+#: ../src/dialogs/display-settings.cpp:1370
 msgid "Selecting"
 msgstr "Selecteren"
 
-#: ../src/dialogs/display-settings.cpp:1371
+#: ../src/dialogs/display-settings.cpp:1372
 msgid "Ctrl+A, Tab, Shift+Tab:"
 msgstr "Ctrl+A, Tab, Shift+Tab:"
 
-#: ../src/dialogs/display-settings.cpp:1380
+#: ../src/dialogs/display-settings.cpp:1381
 msgid "Select only within current layer"
 msgstr "Selecteren alleen binnen de huidige laag"
 
-#: ../src/dialogs/display-settings.cpp:1381
+#: ../src/dialogs/display-settings.cpp:1382
 msgid ""
 "Uncheck this to make keyboard selection commands work on objects in all "
 "layers"
@@ -1698,11 +1699,11 @@ msgstr ""
 "Deselecteer dit om selecteer-opdrachten via het toetsenbord van toepassing "
 "te laten zijn op alle objecten in alle lagen"
 
-#: ../src/dialogs/display-settings.cpp:1388
+#: ../src/dialogs/display-settings.cpp:1389
 msgid "Ignore hidden objects"
 msgstr "Negeer verborgen objecten"
 
-#: ../src/dialogs/display-settings.cpp:1389
+#: ../src/dialogs/display-settings.cpp:1390
 msgid ""
 "Uncheck this to be able to select objects that are hidden (either by "
 "themselves or by being in a hidden group or layer)"
@@ -1710,11 +1711,11 @@ msgstr ""
 "Deselecteer dit om objecten te kunnen selecteren die verborgen zijn (of die "
 "in een verborgen groep of laag zitten)"
 
-#: ../src/dialogs/display-settings.cpp:1396
+#: ../src/dialogs/display-settings.cpp:1397
 msgid "Ignore locked objects"
 msgstr "Negeer vergrendelde objecten"
 
-#: ../src/dialogs/display-settings.cpp:1397
+#: ../src/dialogs/display-settings.cpp:1398
 msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked group or layer)"
@@ -1723,33 +1724,33 @@ msgstr ""
 "die in een vergrendelde groep of laag zitten)"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: ../src/dialogs/display-settings.cpp:1405
+#: ../src/dialogs/display-settings.cpp:1406
 #: ../src/ui/dialog/inkscape-preferences.cpp:62
 msgid "Misc"
 msgstr "Overig"
 
-#: ../src/dialogs/display-settings.cpp:1408
+#: ../src/dialogs/display-settings.cpp:1409
 msgid "Default export resolution:"
 msgstr "Standaard resolutie voor exporteren:"
 
-#: ../src/dialogs/display-settings.cpp:1409
+#: ../src/dialogs/display-settings.cpp:1410
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr ""
 "Standaard resolutie voor bitmaps (in punten per inch) in het 'Bitmap "
 "exporteren' dialoogvenster"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: ../src/dialogs/display-settings.cpp:1410 ../src/dialogs/export.cpp:442
+#: ../src/dialogs/display-settings.cpp:1411 ../src/dialogs/export.cpp:442
 msgid "dpi"
 msgstr "dpi"
 
 #. TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
 #. * rectangle with bitmap fill.
-#: ../src/dialogs/display-settings.cpp:1421
+#: ../src/dialogs/display-settings.cpp:1422
 msgid "Import bitmap as <image>"
 msgstr "Bitmaps in het document importeren als <image>-element"
 
-#: ../src/dialogs/display-settings.cpp:1422
+#: ../src/dialogs/display-settings.cpp:1423
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
@@ -1760,11 +1761,11 @@ msgstr ""
 #. TRANSLATORS: When on, the print out (currently Postscript) will have
 #. * a comment with the each object's label visible, marking the section
 #. * of the printing commands that represent the given object.
-#: ../src/dialogs/display-settings.cpp:1432
+#: ../src/dialogs/display-settings.cpp:1433
 msgid "Add label comments to printing output"
 msgstr "Commentaar-velden toevoegen aan printer-uitvoer"
 
-#: ../src/dialogs/display-settings.cpp:1433
+#: ../src/dialogs/display-settings.cpp:1434
 msgid ""
 "When on, a comment will be added to the raw print output, marking the "
 "rendered output for an object with its label"
@@ -1773,11 +1774,11 @@ msgstr ""
 "het label van een object in staat vermeld."
 
 #. TRANSLATORS: When on, enable the effects menu, default is off
-#: ../src/dialogs/display-settings.cpp:1441
+#: ../src/dialogs/display-settings.cpp:1442
 msgid "Enable script effects (requires restart) - EXPERIMENTAL"
 msgstr "Script-effecten inschakelen (herstart noodzakelijk) - EXPERIMENTEEL"
 
-#: ../src/dialogs/display-settings.cpp:1442
+#: ../src/dialogs/display-settings.cpp:1443
 msgid ""
 "When on, the effects menu is enabled, allowing external effect scripts to be "
 "called, requires restart before effective - EXPERIMENTAL"
@@ -1787,20 +1788,20 @@ msgstr ""
 "voordat dit werkt - EXPERIMENTEEL"
 
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
-#: ../src/dialogs/display-settings.cpp:1450
+#: ../src/dialogs/display-settings.cpp:1451
 msgid "Max recent documents:"
 msgstr "Maximum aantal te onthouden recente bestanden:"
 
-#: ../src/dialogs/display-settings.cpp:1451
+#: ../src/dialogs/display-settings.cpp:1452
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr ""
 "Het maximum aantal bestandsnamen in 'Recente bestanden' in het 'Bestand'-menu"
 
-#: ../src/dialogs/display-settings.cpp:1461
+#: ../src/dialogs/display-settings.cpp:1462
 msgid "Simplification threshold:"
 msgstr "Simplificatie grenswaarde:"
 
-#: ../src/dialogs/display-settings.cpp:1462
+#: ../src/dialogs/display-settings.cpp:1463
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -1810,23 +1811,23 @@ msgstr ""
 "vlak na elkaar uitvoert, zal dat steeds meer effect hebben; na een korte "
 "pauze wordt de standaard grenswaarde hersteld."
 
-#: ../src/dialogs/display-settings.cpp:1483
+#: ../src/dialogs/display-settings.cpp:1484
 msgid "Oversample bitmaps:"
 msgstr "Bitmaps oversampelen:"
 
-#: ../src/dialogs/display-settings.cpp:1502
+#: ../src/dialogs/display-settings.cpp:1503
 msgid "2x2"
 msgstr "2x2"
 
-#: ../src/dialogs/display-settings.cpp:1508
+#: ../src/dialogs/display-settings.cpp:1509
 msgid "4x4"
 msgstr "4x4"
 
-#: ../src/dialogs/display-settings.cpp:1514
+#: ../src/dialogs/display-settings.cpp:1515
 msgid "8x8"
 msgstr "8x8"
 
-#: ../src/dialogs/display-settings.cpp:1520
+#: ../src/dialogs/display-settings.cpp:1521
 msgid "16x16"
 msgstr "16x16"
 
@@ -3598,31 +3599,31 @@ msgstr "_Statusbalk"
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr "Statusbalk weergeven of verbergen (onderaan het scherm)"
 
-#: ../src/interface.cpp:854
+#: ../src/interface.cpp:857
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "Werkwoord \"%s\" is onbekend"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
-#: ../src/interface.cpp:964
+#: ../src/interface.cpp:967
 #, c-format
 msgid "Enter group #%s"
 msgstr "Groep #%s binnengaan"
 
-#: ../src/interface.cpp:975
+#: ../src/interface.cpp:978
 msgid "Go to parent"
 msgstr "Ga naar de ouder"
 
-#: ../src/interface.cpp:1006
+#: ../src/interface.cpp:1009
 msgid "Could not parse SVG data"
 msgstr "De SVG gegevens konden niet worden verwerkt."
 
-#: ../src/interface.cpp:1169
+#: ../src/interface.cpp:1172
 #, c-format
 msgid "Overwrite %s"
 msgstr "%s overschrijven"
 
-#: ../src/interface.cpp:1187
+#: ../src/interface.cpp:1190
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -3696,12 +3697,12 @@ msgstr ""
 "wijzigingen verloren."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:143
-#: ../src/jabber_whiteboard/connection-establishment.cpp:197
+#: ../src/jabber_whiteboard/connection-establishment.cpp:198
 msgid "Accept invitation"
 msgstr "Uitnodiging accepteren"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:144
-#: ../src/jabber_whiteboard/connection-establishment.cpp:198
+#: ../src/jabber_whiteboard/connection-establishment.cpp:199
 msgid "Decline invitation"
 msgstr "Uitnodiging afslaan"
 
@@ -3711,7 +3712,8 @@ msgstr "Uitnodiging accepteren in een nieuw venster"
 
 #. We could not create a new desktop; ask the user if she or he wants to
 #. replace the current document and accept the invitation, or reject the invitation.
-#: ../src/jabber_whiteboard/connection-establishment.cpp:195
+#. TRANSLATORS: %1 is a userid here
+#: ../src/jabber_whiteboard/connection-establishment.cpp:196
 msgid ""
 "A new document window could not be opened for a whiteboard session with <b>%"
 "1</b>"
@@ -3720,7 +3722,7 @@ msgstr ""
 "met <b>%1</b>"
 
 #. TRANSLATORS: %1 is the peer whom refused our invitation.
-#: ../src/jabber_whiteboard/connection-establishment.cpp:237
+#: ../src/jabber_whiteboard/connection-establishment.cpp:238
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The user <b>%1</b> has refused your "
 "whiteboard invitation.</span>\n"
@@ -3731,7 +3733,7 @@ msgstr ""
 "\n"
 
 #. TRANSLATORS: %1 is the peer whom refused our invitation, %2 is our Jabber identity.
-#: ../src/jabber_whiteboard/connection-establishment.cpp:240
+#: ../src/jabber_whiteboard/connection-establishment.cpp:241
 msgid ""
 "You are still connected to a Jabber server as <b>%2</b>, and may send an "
 "invitation to <b>%1</b> again, or you may send an invitation to a different "
@@ -3741,7 +3743,7 @@ msgstr ""
 "nogmaals uitnodigen, of iemand anders."
 
 #. TRANSLATORS: %1 is the peer whom we tried to contact, but is already in a whiteboard session.
-#: ../src/jabber_whiteboard/connection-establishment.cpp:251
+#: ../src/jabber_whiteboard/connection-establishment.cpp:252
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The user <b>%1</b> is already in a "
 "whiteboard session.</span>\n"
@@ -3752,7 +3754,7 @@ msgstr ""
 "\n"
 
 #. TRANSLATORS: %1 is the peer whom we tried to contact, but is already in a whiteboard session.
-#: ../src/jabber_whiteboard/connection-establishment.cpp:254
+#: ../src/jabber_whiteboard/connection-establishment.cpp:255
 msgid ""
 "You are still connected to a Jabber server as <b>%1</b>, and may send an "
 "invitation to a different user."
@@ -3805,12 +3807,12 @@ msgstr ""
 "opgezocht. Het nieuwe object (en eventuele kinderen) wordt NIET verzonden!"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
-#: ../src/jabber_whiteboard/session-manager.cpp:994
+#: ../src/jabber_whiteboard/session-manager.cpp:995
 msgid "Select a location and filename"
 msgstr "Selecteer een locatie en een bestandnaam"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:62
-#: ../src/jabber_whiteboard/session-manager.cpp:996
+#: ../src/jabber_whiteboard/session-manager.cpp:997
 msgid "Set filename"
 msgstr "Bestandsnaam instellen"
 
@@ -3897,7 +3899,8 @@ msgstr ""
 "sessie verlaten.</span>\n"
 "\n"
 
-#: ../src/jabber_whiteboard/session-manager.cpp:791
+#. TRANSLATORS: %1 and %2 are userids
+#: ../src/jabber_whiteboard/session-manager.cpp:792
 msgid ""
 "You are still connected to a Jabber server as <b>%2</b>, and may establish a "
 "new session to <b>%1</b> or a different user."
@@ -3905,7 +3908,7 @@ msgstr ""
 "U bent nog steeds verbonden met Jabber als <b>%2</b>, en u kunt een nieuwe "
 "sessie opzetten met <b>%1</b>, of met iemand anders."
 
-#: ../src/jabber_whiteboard/session-manager.cpp:987
+#: ../src/jabber_whiteboard/session-manager.cpp:988
 msgid ""
 "Could not open file %1 for session recording.\n"
 "The error encountered was: %2.\n"
@@ -3919,11 +3922,11 @@ msgstr ""
 "U kunt een andere plek kiezen op de sessie op te slaan, of u kunt kiezen de "
 "sessie niet op te slaan."
 
-#: ../src/jabber_whiteboard/session-manager.cpp:989
+#: ../src/jabber_whiteboard/session-manager.cpp:990
 msgid "Choose a different location"
 msgstr "Een andere plek kiezen"
 
-#: ../src/jabber_whiteboard/session-manager.cpp:990
+#: ../src/jabber_whiteboard/session-manager.cpp:991
 msgid "Skip session recording"
 msgstr "De sessie niet opslaan"
 
@@ -6617,9 +6620,8 @@ msgstr "Selecteer het object waaraan de kloon is gekoppeld"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:1887
-#, fuzzy
 msgid "O_bjects to Pattern"
-msgstr "O_bject(en) naar patroon"
+msgstr "O_bjecten naar patroon"
 
 #: ../src/verbs.cpp:1888
 msgid "Convert selection to a rectangle with tiled pattern fill"
@@ -6627,9 +6629,8 @@ msgstr "Zet de selectie om naar een rechthoek gevuld met een getegeld patroon"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:1890
-#, fuzzy
 msgid "Pattern to Ob_jects"
-msgstr "Patroon naar object(en)"
+msgstr "Patroon naar objecten"
 
 #: ../src/verbs.cpp:1891
 msgid "Extract objects from a tiled pattern fill"
@@ -7112,7 +7113,6 @@ msgstr ""
 "uiterlijk"
 
 #: ../src/verbs.cpp:2029
-#, fuzzy
 msgid "Flip _Horizontal"
 msgstr "_Tuimelen"
 
@@ -7122,7 +7122,6 @@ msgid "Flips selected objects horizontally"
 msgstr "De geselecteerde knopen horizontaal uitlijnen"
 
 #: ../src/verbs.cpp:2032
-#, fuzzy
 msgid "Flip _Vertical"
 msgstr "_Spiegelen"
 
@@ -7342,11 +7341,11 @@ msgstr "Uitzoomen"
 
 #: ../src/verbs.cpp:2098
 msgid "_Rulers"
-msgstr "_Linialen "
+msgstr "_Linialen"
 
 #: ../src/verbs.cpp:2098
 msgid "Show or hide the canvas rulers"
-msgstr "Linialen van het canvas  weergeven of verbergen"
+msgstr "Linialen van het canvas weergeven of verbergen"
 
 #: ../src/verbs.cpp:2099
 msgid "Scroll_bars"
