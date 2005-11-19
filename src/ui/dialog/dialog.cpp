@@ -63,7 +63,6 @@ sp_dialog_destroy (GtkObject *object, gpointer dlgPtr)
     if (!Inkscape::NSApplication::Application::getNewGui())
         sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
-    delete dlg;
 //    wd.win = dlg = NULL;
 //    wd.stop = 0;
 //    x = -1000; y = -1000; w = 0; h = 0;
@@ -170,9 +169,12 @@ Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
 
     GtkWidget *dlg = GTK_WIDGET(gobj());
 
-    gchar title[500];
-    sp_ui_dialog_title_string (Inkscape::Verb::get(verb_num), title);
-    set_title(title);
+    if (verb_num)
+    {
+        gchar title[500];
+        sp_ui_dialog_title_string (Inkscape::Verb::get(verb_num), title);
+        set_title(title);
+    }
 
     sp_transientize(dlg);
     retransientize_suppress = false;

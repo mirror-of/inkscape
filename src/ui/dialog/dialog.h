@@ -26,7 +26,7 @@ class Dialog : public Gtk::Dialog {
 public:
     Dialog(BaseObjectType *gobj); // fixme: remove this
 
-    Dialog(const char *prefs_path, int verb_num, const char *apply_label = NULL);
+    Dialog(const char *prefs_path, int verb_num = 0, const char *apply_label = NULL);
 
     virtual ~Dialog();
 
