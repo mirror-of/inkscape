@@ -1,3 +1,7 @@
+2005-11-18  Ted Gould  <ted@gould.cx>
+
+	* 0.43
+
 2005-11-18  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* packaging/osx-app.sh: Add libXinerama.1.dylib to the app bundle
