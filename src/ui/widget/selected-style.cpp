@@ -212,6 +212,7 @@ SelectedStyle::SelectedStyle(bool layout)
     _stroke_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_stroke_click));
     _opacity_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_click));
 
+    _opacity_sb.signal_populate_popup().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_menu));
     _opacity_sb.signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
 
     _fill_place.add(_na[SS_FILL]);
@@ -723,6 +724,53 @@ SelectedStyle::update()
     }
 
     g_free (query);
+}
+
+void SelectedStyle::opacity_0(void) {_opacity_sb.set_value(0);}
+void SelectedStyle::opacity_025(void) {_opacity_sb.set_value(0.25);}
+void SelectedStyle::opacity_05(void) {_opacity_sb.set_value(0.5);}
+void SelectedStyle::opacity_075(void) {_opacity_sb.set_value(0.75);}
+void SelectedStyle::opacity_1(void) {_opacity_sb.set_value(1.0);}
+
+void SelectedStyle::on_opacity_menu (Gtk::Menu *menu) {
+
+    Glib::ListHandle<Gtk::Widget *> children = menu->get_children();
+    for (Glib::ListHandle<Gtk::Widget *>::iterator iter = children.begin(); iter != children.end(); iter++) {
+        menu->remove(*(*iter));
+    }
+
+    {
+        Gtk::MenuItem *item = new Gtk::MenuItem;
+        item->add(*(new Gtk::Label(_("0 (transparent)"), 0, 0)));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_0 ));
+        menu->add(*item);
+    }
+    {
+        Gtk::MenuItem *item = new Gtk::MenuItem;
+        item->add(*(new Gtk::Label("0.25", 0, 0)));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_025 ));
+        menu->add(*item);
+    }
+    {
+        Gtk::MenuItem *item = new Gtk::MenuItem;
+        item->add(*(new Gtk::Label("0.5", 0, 0)));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_05 ));
+        menu->add(*item);
+    }
+    {
+        Gtk::MenuItem *item = new Gtk::MenuItem;
+        item->add(*(new Gtk::Label("0.75", 0, 0)));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_075 ));
+        menu->add(*item);
+    }
+    {
+        Gtk::MenuItem *item = new Gtk::MenuItem;
+        item->add(*(new Gtk::Label(_("1.0 (opaque)"), 0, 0)));
+        item->signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::opacity_1 ));
+        menu->add(*item);
+    }
+
+    menu->show_all();
 }
 
 void SelectedStyle::on_opacity_changed () {

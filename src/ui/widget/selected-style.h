@@ -124,6 +124,12 @@ protected:
 
     bool _opacity_blocked;
     void on_opacity_changed();
+    void on_opacity_menu(Gtk::Menu *menu);
+    void opacity_0();
+    void opacity_025();
+    void opacity_05();
+    void opacity_075();
+    void opacity_1();
 
     void on_fill_remove();
     void on_stroke_remove();
