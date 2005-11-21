@@ -373,7 +373,7 @@ stroke_average_miterlimit (GSList const *objects)
 }
 
 /**
- * Return average fill or stroke of list of objects, if applicable.
+ * Write to style_res the average fill or stroke of list of objects, if applicable.
  */
 int
 objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill)
@@ -521,7 +521,53 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
 }
 
 /**
- * Returns style with average font size and spacing of objects.
+ * Write to style_res the average opacity of a list of objects.
+ */
+int
+objects_query_opacity (GSList *objects, SPStyle *style_res)
+{
+    if (g_slist_length(objects) == 0) {
+        /* No objects, set empty */
+        return QUERY_STYLE_NOTHING;
+    }
+
+    gdouble opacity_sum = 0;
+    gdouble opacity_prev = -1;
+    bool same_opacity = true;
+    guint opacity_items = 0;
+
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        double opacity = SP_SCALE24_TO_FLOAT(style->opacity.value);
+        opacity_sum += opacity;
+        if (opacity_prev != -1 && opacity != opacity_prev)
+            same_opacity = false;
+        opacity_prev = opacity;
+        opacity_items ++;
+    }
+    if (opacity_items > 1)
+        opacity_sum /= opacity_items;
+
+    style_res->opacity.value = SP_SCALE24_FROM_FLOAT(opacity_sum);
+
+    if (opacity_items == 0) {
+        return QUERY_STYLE_NOTHING;
+    } else if (opacity_items == 1) {
+        return QUERY_STYLE_SINGLE;
+    } else {
+        if (same_opacity)
+            return QUERY_STYLE_MULTIPLE_SAME;
+        else 
+            return QUERY_STYLE_MULTIPLE_AVERAGED;
+    }
+}
+
+/**
+ * Write to style_res the average font size and spacing of objects.
  */
 int
 objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
@@ -625,7 +671,7 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
 }
 
 /**
- * Return style with average font style of objects.
+ * Write to style_res the average font style of objects.
  */
 int
 objects_query_fontstyle (GSList *objects, SPStyle *style_res)
@@ -675,7 +721,7 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
 }
 
 /**
- * Return style with average font family of objects.
+ * Write to style_res the average font family of objects.
  */
 int
 objects_query_fontfamily (GSList *objects, SPStyle *style_res)
@@ -731,7 +777,8 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
 }
 
 /**
- * Query selection on desktop for property.
+ * Query the subselection (if any) or selection on the given desktop for the given property, write
+ * the result to style, return appropriate flag.
  */
 int
 sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
@@ -746,6 +793,8 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
         return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, true);
     } else if (property == QUERY_STYLE_PROPERTY_STROKE) {
         return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, false);
+    } else if (property == QUERY_STYLE_PROPERTY_MASTEROPACITY) {
+        return objects_query_opacity ((GSList *) desktop->selection->itemList(), style);
 
     } else if (property == QUERY_STYLE_PROPERTY_FONTFAMILY) {
         return objects_query_fontfamily ((GSList *) desktop->selection->itemList(), style);
@@ -759,7 +808,8 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
 }
 
 /**
- * Compute average style for all selected objects and style properties.
+ * Do the same as sp_desktop_query_style for all (defined) style properties, return true if none of
+ * the properties returned QUERY_STYLE_NOTHING.
  */
 bool
 sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
@@ -769,8 +819,9 @@ sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
         int result_fnumbers = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FONTNUMBERS); 
         int result_fill = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FILL);
         int result_stroke = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_STROKE);
+        int result_opacity = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
 
-        return (result_family != QUERY_STYLE_NOTHING && result_fstyle != QUERY_STYLE_NOTHING && result_fnumbers != QUERY_STYLE_NOTHING && result_fill != QUERY_STYLE_NOTHING && result_stroke != QUERY_STYLE_NOTHING);
+        return (result_family != QUERY_STYLE_NOTHING && result_fstyle != QUERY_STYLE_NOTHING && result_fnumbers != QUERY_STYLE_NOTHING && result_fill != QUERY_STYLE_NOTHING && result_stroke != QUERY_STYLE_NOTHING && result_opacity != QUERY_STYLE_NOTHING);
 }
 
 

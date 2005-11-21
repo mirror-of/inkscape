@@ -25,11 +25,11 @@ struct Node;
 }
 
 enum { // what kind of a style the query is returning
-    QUERY_STYLE_NOTHING,
-    QUERY_STYLE_SINGLE,
-    QUERY_STYLE_MULTIPLE_SAME,
-    QUERY_STYLE_MULTIPLE_DIFFERENT,
-    QUERY_STYLE_MULTIPLE_AVERAGED
+    QUERY_STYLE_NOTHING,   // nothing was queried - e.g. no selection
+    QUERY_STYLE_SINGLE,  // single object was queried
+    QUERY_STYLE_MULTIPLE_SAME, // multiple objects were queried, the results were the same
+    QUERY_STYLE_MULTIPLE_DIFFERENT, // multiple objects were queried, the results could NOT be meaningfully averaged
+    QUERY_STYLE_MULTIPLE_AVERAGED // multiple objects were queried, the results were meaningfully averaged
 };
 
 enum { // which property was queried (add when you need more)
@@ -39,7 +39,8 @@ enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_STROKESTYLE, // markers, dasharray, miterlimit, stroke-width, stroke-cap, stroke-join
     QUERY_STYLE_PROPERTY_FONTFAMILY, // font-family
     QUERY_STYLE_PROPERTY_FONTSTYLE, // font style 
-    QUERY_STYLE_PROPERTY_FONTNUMBERS // size, spacings
+    QUERY_STYLE_PROPERTY_FONTNUMBERS, // size, spacings
+    QUERY_STYLE_PROPERTY_MASTEROPACITY // opacity
 };
 
 void sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines);
@@ -58,6 +59,7 @@ int objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const is
 int objects_query_fontnumbers (GSList *objects, SPStyle *style_res);
 int objects_query_fontstyle (GSList *objects, SPStyle *style_res);
 int objects_query_fontfamily (GSList *objects, SPStyle *style_res);
+int objects_query_opacity (GSList *objects, SPStyle *style_res);
 
 int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
 bool sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query);
