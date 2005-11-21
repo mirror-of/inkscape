@@ -134,7 +134,7 @@ cp "$binary" "$binpath"
   cd "$resdir/ScriptExec"
   xcodebuild $XCODEFLAGS clean build
 )
-cp "$resdir/SCRIPTEXECDIR/ScriptExec" "$package/Contents/MacOS/Inkscape"
+cp "$resdir/$SCRIPTEXECDIR/ScriptExec" "$package/Contents/MacOS/Inkscape"
 
 # Pull down all the share files
 binary_dir=`dirname "$binary"`
