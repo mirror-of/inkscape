@@ -14,6 +14,7 @@
 #endif
 
 #include <gtkmm/separatormenuitem.h>
+#include <gtkmm/separator.h>
 
 #include "selected-style.h"
 
@@ -32,7 +33,9 @@
 #include "xml/repr.h"
 #include "document.h"
 #include "widgets/widget-sizes.h"
+#include "widgets/spinbutton-events.h"
 #include "svg/svg.h"
+#include "svg/css-ostringstream.h"
 
 static void 
 ss_selection_changed (Inkscape::Selection *, gpointer data)
@@ -60,14 +63,20 @@ namespace Widget {
 SelectedStyle::SelectedStyle(bool layout)
     : _desktop (NULL),
 
-      _table(2, 3),
+      _table(2, 6),
       _fill_label (_("F:")),
       _stroke_label (_("S:")),
+      _opacity_label (_("O:")),
       _fill_place (),
       _stroke_place (),
 
       _fill_flag_place (),
       _stroke_flag_place (),
+
+      _opacity_place (),
+      _opacity_adjustment (1.0, 0.0, 1.0, 0.01, 0.1),
+      _opacity_sb (0.02, 2),
+      _opacity_blocked(false),
 
       _tooltips ()
 {
@@ -75,6 +84,8 @@ SelectedStyle::SelectedStyle(bool layout)
     _fill_label.set_padding(0, 0);
     _stroke_label.set_alignment(0.0, 0.5);
     _stroke_label.set_padding(0, 0);
+    _opacity_label.set_alignment(0.0, 0.5);
+    _opacity_label.set_padding(0, 0);
 
     _table.set_col_spacings (2);
     _table.set_row_spacings (0);
@@ -163,6 +174,10 @@ SelectedStyle::SelectedStyle(bool layout)
         _popup_swap[i].signal_activate().connect(sigc::mem_fun(*this, 
                                &SelectedStyle::on_fillstroke_swap));
 
+        _popup_opaque[i].add(*(new Gtk::Label((i == SS_FILL)? _("Make fill opaque") : _("Make stroke opaque"), 0.0, 0.5)));
+        _popup_opaque[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_opaque : &SelectedStyle::on_stroke_opaque ));
+
         //TRANSLATORS COMMENT: unset is a verb here
         _popup_unset[i].add(*(new Gtk::Label((i == SS_FILL)? _("Unset fill") : _("Unset stroke"), 0.0, 0.5)));
         _popup_unset[i].signal_activate().connect(sigc::mem_fun(*this, 
@@ -185,8 +200,9 @@ SelectedStyle::SelectedStyle(bool layout)
         _popup[i].attach(_popup_paste[i], 0,1, 9,10);
         _popup[i].attach(_popup_swap[i], 0,1, 10,11);
           _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 11,12); 
-        _popup[i].attach(_popup_unset[i], 0,1, 12,13);
-        _popup[i].attach(_popup_remove[i], 0,1, 13,14);
+        _popup[i].attach(_popup_opaque[i], 0,1, 12,13);
+        _popup[i].attach(_popup_unset[i], 0,1, 13,14);
+        _popup[i].attach(_popup_remove[i], 0,1, 14,15);
         _popup[i].show_all();
 
         _mode[i] = SS_NA;
@@ -194,11 +210,19 @@ SelectedStyle::SelectedStyle(bool layout)
 
     _fill_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_fill_click));
     _stroke_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_stroke_click));
+    _opacity_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_click));
+
+    _opacity_sb.signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
 
     _fill_place.add(_na[SS_FILL]);
     _tooltips.set_tip(_fill_place, __na[SS_FILL]);
     _stroke_place.add(_na[SS_STROKE]);
     _tooltips.set_tip(_stroke_place, __na[SS_STROKE]);
+
+    _opacity_sb.set_adjustment(_opacity_adjustment);
+    sp_set_font_size_smaller (GTK_WIDGET(_opacity_sb.gobj()));
+    _opacity_sb.set_size_request (SELECTED_STYLE_SB_WIDTH, -1);
+    _opacity_sb.set_sensitive (false);
 
     _table.attach(_fill_label, 0,1, 0,1, Gtk::SHRINK, Gtk::SHRINK);
     _table.attach(_stroke_label, 0,1, 1,2, Gtk::SHRINK, Gtk::SHRINK);
@@ -209,11 +233,23 @@ SelectedStyle::SelectedStyle(bool layout)
     _table.attach(_fill_flag_place, 2,3, 0,1, Gtk::SHRINK, Gtk::SHRINK);
     _table.attach(_stroke_flag_place, 2,3, 1,2, Gtk::SHRINK, Gtk::SHRINK);
 
+    _table.attach(*(new Gtk::VSeparator), 3,4, 0,2, Gtk::SHRINK);
+
+    _opacity_place.add(_opacity_label);
+    _table.attach(_opacity_place, 4,5, 0,1, Gtk::SHRINK, Gtk::SHRINK);
+    _table.attach(_opacity_sb, 5,6, 0,2, Gtk::SHRINK, Gtk::SHRINK);
+
     pack_start(_table, true, true, 2);
 
     set_size_request (SELECTED_STYLE_WIDTH, -1);
 
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_opacity_label.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_place.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_flag_place.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_place.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_flag_place.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_label.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_label.gobj()));
 }
 
 SelectedStyle::~SelectedStyle()
@@ -234,6 +270,7 @@ void
 SelectedStyle::setDesktop(SPDesktop *desktop)
 {
     _desktop = desktop;
+    gtk_object_set_data (GTK_OBJECT(_opacity_sb.gobj()), "dtw", _desktop->canvas);
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
@@ -286,6 +323,22 @@ void SelectedStyle::on_stroke_unset() {
     sp_document_done (SP_DT_DOCUMENT(_desktop));
 }
 
+void SelectedStyle::on_fill_opaque() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    sp_repr_css_set_property (css, "fill-opacity", "1");
+    sp_desktop_set_style (_desktop, css, true);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
+
+void SelectedStyle::on_stroke_opaque() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    sp_repr_css_set_property (css, "stroke-opacity", "1");
+    sp_desktop_set_style (_desktop, css, true);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
+
 void SelectedStyle::on_fill_lastused() {
     SPCSSAttr *css = sp_repr_css_attr_new ();
     guint32 color = sp_desktop_get_color(_desktop, true);
@@ -333,7 +386,7 @@ void SelectedStyle::on_fill_white() {
     gchar c[64];
     sp_svg_write_color (c, 64, 0xffffffff);
     sp_repr_css_set_property (css, "fill", c);
-    sp_repr_css_set_property (css, "fill-opacity", "1.0");
+    sp_repr_css_set_property (css, "fill-opacity", "1");
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     sp_document_done (SP_DT_DOCUMENT(_desktop));
@@ -344,7 +397,7 @@ void SelectedStyle::on_stroke_white() {
     gchar c[64];
     sp_svg_write_color (c, 64, 0xffffffff);
     sp_repr_css_set_property (css, "stroke", c);
-    sp_repr_css_set_property (css, "stroke-opacity", "1.0");
+    sp_repr_css_set_property (css, "stroke-opacity", "1");
     sp_desktop_set_style (_desktop, css);
     sp_repr_css_attr_unref (css);
     sp_document_done (SP_DT_DOCUMENT(_desktop));
@@ -526,12 +579,30 @@ SelectedStyle::on_stroke_click(GdkEventButton *event)
     return true;
 }
 
+bool 
+SelectedStyle::on_opacity_click(GdkEventButton *event)
+{
+    if (event->button == 2) { // middle click
+        const char* opacity = _opacity_sb.get_value() < 0.5? "0.5" : (_opacity_sb.get_value() == 1? "0" : "1");
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+        sp_repr_css_set_property (css, "opacity", opacity);
+        sp_desktop_set_style (_desktop, css);
+        sp_repr_css_attr_unref (css);
+        sp_document_done (SP_DT_DOCUMENT (_desktop));
+        return true;
+    }
+
+    return false;
+}
 
 void
 SelectedStyle::update()
 {
     if (_desktop == NULL)
         return;
+
+    // create temporary style
+    SPStyle *query = sp_style_new ();
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
         Gtk::EventBox *place = (i == SS_FILL)? &_fill_place : &_stroke_place;
@@ -548,9 +619,7 @@ SelectedStyle::update()
 
         _popup_copy[i].set_sensitive(false);
 
-        // create temporary style
-        SPStyle *query = sp_style_new ();
-        // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if any, or selection
+        // query style from desktop. This returns a result flag and fills query with the style of subselection, if any, or selection
         int result = sp_desktop_query_style (_desktop, query, 
                                              (i == SS_FILL)? QUERY_STYLE_PROPERTY_FILL : QUERY_STYLE_PROPERTY_STROKE);
 
@@ -561,7 +630,7 @@ SelectedStyle::update()
             _mode[i] = SS_NA;
             break;
         case QUERY_STYLE_SINGLE:
-        case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently, e.g. display "averaged" somewhere in paint selector
+        case QUERY_STYLE_MULTIPLE_AVERAGED:
         case QUERY_STYLE_MULTIPLE_SAME: 
             SPIPaint *paint;
             if (i == SS_FILL) {
@@ -630,8 +699,45 @@ SelectedStyle::update()
         default:
             break;
         }
-        g_free (query);
     }
+
+// Now query opacity
+    _tooltips.unset_tip(_opacity_place);
+
+    int result = sp_desktop_query_style (_desktop, query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
+
+    switch (result) {
+    case QUERY_STYLE_NOTHING:
+        _tooltips.set_tip(_opacity_place, _("Nothing selected"));
+        _opacity_sb.set_sensitive(false);
+        break;
+    case QUERY_STYLE_SINGLE:
+    case QUERY_STYLE_MULTIPLE_AVERAGED:
+    case QUERY_STYLE_MULTIPLE_SAME:
+        _tooltips.set_tip(_opacity_place, _("Master opacity"));
+        _opacity_blocked = true;
+        _opacity_sb.set_sensitive(true);
+        _opacity_adjustment.set_value(SP_SCALE24_TO_FLOAT(query->opacity.value));
+        _opacity_blocked = false;
+        break;
+    }
+
+    g_free (query);
+}
+
+void SelectedStyle::on_opacity_changed () {
+    if (_opacity_blocked)
+        return;
+    _opacity_blocked = true;
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    Inkscape::CSSOStringStream os;
+    os << CLAMP (_opacity_adjustment.get_value(), 0.0, 1.0);
+    sp_repr_css_set_property (css, "opacity", os.str().c_str());
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_maybe_done (SP_DT_DOCUMENT (_desktop), "fillstroke:opacity");
+    spinbutton_defocus(GTK_OBJECT(_opacity_sb.gobj()));
+    _opacity_blocked = false;
 }
 
 } // namespace Widget

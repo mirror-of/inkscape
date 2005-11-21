@@ -19,6 +19,8 @@
 #include <gtkmm/enums.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/menuitem.h>
+#include <gtkmm/adjustment.h>
+#include <gtkmm/spinbutton.h>
 
 #include <sigc++/sigc++.h>
 
@@ -65,12 +67,17 @@ protected:
 
     Gtk::Label _fill_label;
     Gtk::Label _stroke_label;
+    Gtk::Label _opacity_label;
 
     Gtk::EventBox _fill_place;
     Gtk::EventBox _stroke_place;
 
     Gtk::EventBox _fill_flag_place;
     Gtk::EventBox _stroke_flag_place;
+
+    Gtk::EventBox _opacity_place;
+    Gtk::Adjustment _opacity_adjustment;
+    Gtk::SpinButton _opacity_sb;
 
     Gtk::Label _na[2];
     Glib::ustring __na[2];
@@ -113,6 +120,10 @@ protected:
 
     bool on_fill_click(GdkEventButton *event);
     bool on_stroke_click(GdkEventButton *event);
+    bool on_opacity_click(GdkEventButton *event);
+
+    bool _opacity_blocked;
+    void on_opacity_changed();
 
     void on_fill_remove();
     void on_stroke_remove();
@@ -133,6 +144,8 @@ protected:
     void on_stroke_copy();
     void on_fill_paste();
     void on_stroke_paste();
+    void on_fill_opaque();
+    void on_stroke_opaque();
 
     Gtk::Menu _popup[2];
     Gtk::MenuItem _popup_edit[2];
@@ -143,6 +156,7 @@ protected:
     Gtk::MenuItem _popup_copy[2];
     Gtk::MenuItem _popup_paste[2];
     Gtk::MenuItem _popup_swap[2];
+    Gtk::MenuItem _popup_opaque[2];
     Gtk::MenuItem _popup_unset[2];
     Gtk::MenuItem _popup_remove[2];
 
