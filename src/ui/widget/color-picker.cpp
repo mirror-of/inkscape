@@ -60,7 +60,6 @@ ColorPicker::~ColorPicker()
 {
     if (_window)
     {
-        _window_closed_connection.disconnect();
         delete _window;
         _window = 0;
     }
