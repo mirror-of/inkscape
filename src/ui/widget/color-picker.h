@@ -37,7 +37,6 @@ protected:
     friend void sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp);
     virtual void on_clicked();
     virtual void on_changed (guint32);
-    void on_window_closed (int);
     
     ColorPreview        _preview;
     Gtk::Tooltips       _tt;
@@ -45,7 +44,6 @@ protected:
     
     Glib::ustring&      _title;
     sigc::signal<void,guint32> _changed_signal;
-    sigc::connection    _window_closed_connection;
     guint32             _rgba;
     bool                _undo;
 };

@@ -60,9 +60,9 @@ ColorPicker::~ColorPicker()
 {
     if (_window)
     {
-        _window->hide();
         _window_closed_connection.disconnect();
         delete _window;
+        _window = 0;
     }
 }
 
@@ -78,16 +78,18 @@ ColorPicker::setRgba32 (guint32 rgba)
 void
 ColorPicker::on_clicked()
 {
+    static int _x, _y;
     if (_window)
     { 
+        _window->move(_x,_y);
         _window->present();
         return;
     }
 
     _window =new ColorPickerWindow (this, _title);
     _window->setRgba32 (_rgba);
-    _window_closed_connection = _window->signal_response().connect(sigc::mem_fun(*this,&ColorPicker::on_window_closed));
     _window->show_all();
+    _window->get_position (_x, _y);
 }
 
 void
@@ -114,22 +116,13 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
     ptr->_changed_signal.emit (rgba);
 }
 
-void
-ColorPicker::on_window_closed (int response)
-{
-    if (response == Gtk::RESPONSE_CLOSE || response == Gtk::RESPONSE_NONE)
-        _window->hide();
-}
-
 //==============================================================
 
 ColorPickerWindow::ColorPickerWindow (ColorPicker *cp, Glib::ustring &title)
-    : Dialog("dialog.colorpickerwindow"),
-    _csel(0)
+    : Dialog("dialogs.colorpickerwindow")
 {
     set_title (title);
     set_border_width (4);
-    set_position (Gtk::WIN_POS_CENTER);
     _csel = (SPColorSelector*)sp_color_selector_new(SP_TYPE_COLOR_NOTEBOOK,
                                   SP_COLORSPACE_TYPE_UNKNOWN);
     get_vbox()->pack_start (*Glib::wrap(&_csel->vbox), true, true, 0);
