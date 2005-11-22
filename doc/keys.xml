@@ -12,22 +12,22 @@ RFE</a>).</p>
 *<section title="Tools" color="f5f5f5">
 
 <group>
-<keys><key><keyf f="F1"/></key><key>s</key>    <action>selector</action></keys>
-<keys><key><misc-wide f="Space"/></key>   <action>selector (temporary)</action></keys>
-<note>Space switches to the select tool temporarily; another Space switches back.</note>
-<keys><key><keyf f="F2"/></key><key>n</key>	<action>node tool</action></keys>
-<keys><key><keyf f="F3"/></key><key>z</key>	 <action>zoom tool</action></keys>
-<keys><key><keyf f="F4"/></key><key>r</key>	 <action>rectangle tool</action></keys>
-<keys><key><keyf f="F5"/></key><key>e</key>	 <action>ellipse/arc tool</action></keys>
-<keys><key><keyf f="F6"/></key><key>p</key>	 <action>freehand (pencil) tool</action></keys>
-<keys><key><shift/><keyf f="F6"/></key><key>b</key>	 <action>bezier (pen) tool</action></keys>
-<keys><key><ctrl/><keyf f="F6"/></key><key>c</key>	 <action>calligraphic tool</action></keys>
-<keys><key><ctrl/><keyf f="F1"/></key><key>g</key>	 <action>gradient tool</action></keys>
-<keys><key><keyf f="F7"/></key><key>d</key>	 <action>dropper tool</action></keys>
-<keys><key><keyf f="F8"/></key><key>t</key>	 <action>text tool</action></keys>
-<keys><key><keyf f="F9"/></key><key>i</key>	 <action>spiral tool</action></keys>
-<keys><key><shift/><keyf f="F9"/></key><key>*</key>	 <action>star tool</action></keys>
-<keys><key><ctrl/><keyf f="F2"/></key><key>o</key>	 <action>connector tool</action></keys>
+<keys><key><keyf f="F1"/></key><key>s</key>    <action>Selector</action></keys>
+<keys><key><misc-wide f="Space"/></key>   <action>Selector (temporary)</action></keys>
+<note>Space switches to the Selector tool temporarily; another Space switches back.</note>
+<keys><key><keyf f="F2"/></key><key>n</key>	<action>Node tool</action></keys>
+<keys><key><keyf f="F3"/></key><key>z</key>	 <action>Zoom tool</action></keys>
+<keys><key><keyf f="F4"/></key><key>r</key>	 <action>Rectangle tool</action></keys>
+<keys><key><keyf f="F5"/></key><key>e</key>	 <action>Ellipse/arc tool</action></keys>
+<keys><key><keyf f="F6"/></key><key>p</key>	 <action>Freehand (Pencil) tool</action></keys>
+<keys><key><shift/><keyf f="F6"/></key><key>b</key>	 <action>Bezier (Pen) tool</action></keys>
+<keys><key><ctrl/><keyf f="F6"/></key><key>c</key>	 <action>Calligraphic tool</action></keys>
+<keys><key><ctrl/><keyf f="F1"/></key><key>g</key>	 <action>Gradient tool</action></keys>
+<keys><key><keyf f="F7"/></key><key>d</key>	 <action>Dropper tool</action></keys>
+<keys><key><keyf f="F8"/></key><key>t</key>	 <action>Text tool</action></keys>
+<keys><key><keyf f="F9"/></key><key>i</key>	 <action>Spiral tool</action></keys>
+<keys><key><shift/><keyf f="F9"/></key><key>*</key>	 <action>Star tool</action></keys>
+<keys><key><ctrl/><keyf f="F2"/></key><key>o</key>	 <action>Connector tool</action></keys>
 <note>Double click on the tool buttons opens the Preferences dialog showing the page of the corresponding tool.</note>
 </group>
 </section>
