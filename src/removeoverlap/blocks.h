@@ -9,7 +9,8 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#pragma once
+#ifndef SEEN_REMOVEOVERLAP_BLOCKS_H
+#define SEEN_REMOVEOVERLAP_BLOCKS_H
 
 class Block;
 class Variable;
@@ -29,3 +30,5 @@ public:
 	void split(Block *b, Block *&l, Block *&r, Constraint *c);
 	double cost();
 };
+
+#endif // SEEN_REMOVEOVERLAP_BLOCKS_H

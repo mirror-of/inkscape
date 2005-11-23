@@ -9,7 +9,8 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#pragma once
+#ifndef SEEN_REMOVEOVERLAP_BLOCK_H
+#define SEEN_REMOVEOVERLAP_BLOCK_H
 
 #include <vector>
 class Variable;
@@ -90,3 +91,5 @@ inline double Block::desiredWeightedPosition() {
 	}
 	return wp;
 }
+
+#endif // SEEN_REMOVEOVERLAP_BLOCK_H

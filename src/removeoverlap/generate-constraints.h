@@ -9,8 +9,9 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#ifndef _GENERATE_CONSTRAINTS_H
-#define _GENERATE_CONSTRAINTS_H
+#ifndef SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H
+#define SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H
+
 class Rectangle {
 private:
 	double minX,maxX,minY,maxY;
@@ -57,4 +58,4 @@ int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 
 int generateYConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vs, Constraint **&cs);
 
-#endif
+#endif // SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H

@@ -9,6 +9,9 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#ifndef SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
+#define SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
+
 class Variable;
 class Constraint;
 
@@ -18,3 +21,4 @@ double solve_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m);
 
 void cleanup();
 
+#endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H

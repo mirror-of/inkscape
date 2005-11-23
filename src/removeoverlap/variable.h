@@ -9,7 +9,8 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#pragma once
+#ifndef SEEN_REMOVEOVERLAP_VARIABLE_H
+#define SEEN_REMOVEOVERLAP_VARIABLE_H
 
 #include <vector>
 class Block;
@@ -46,3 +47,5 @@ public:
 inline double Variable::position() {
 	return block->posn+offset;
 }
+
+#endif // SEEN_REMOVEOVERLAP_VARIABLE_H

@@ -9,7 +9,9 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#pragma once
+#ifndef SEEN_REMOVEOVERLAP_CONSTRAINT_H
+#define SEEN_REMOVEOVERLAP_CONSTRAINT_H
+
 #include "variable.h"
 
 class Constraint
@@ -49,3 +51,4 @@ static inline bool compareConstraints(Constraint *&l, Constraint *&r) {
 	return sl < sr;
 }
 
+#endif // SEEN_REMOVEOVERLAP_CONSTRAINT_H
