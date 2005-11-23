@@ -1,3 +1,10 @@
+2005-11-23  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* packaging/osx-app.sh, packaging/macosx/Resources/bin/inkscape:
+	  Include some missing modules required by gnome-vfs and set shell
+	  variables to point to these modules within the OS X app bundle.
+	  Fixes bug #1363390.
+
 2005-11-21  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* packaging/osx-app.sh: Fix a typo resulting from last change.
