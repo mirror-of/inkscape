@@ -1,0 +1,231 @@
+/**
+ * \brief Remove overlaps function
+ *
+ * Authors:
+ *   Tim Dwyer <tgdwyer@gmail.com>
+ *
+ * Copyright (C) 2005 Authors
+ *
+ * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ */
+
+#include "generate-constraints.h"
+#include "variable.h"
+#include "constraint.h"
+#include <set>
+#include <vector>
+#include <assert.h>
+using namespace std;
+
+Rectangle::Rectangle(double x, double X, double y, double Y) 
+: minX(x),maxX(X),minY(y),maxY(Y) {
+		assert(x<=X);
+		assert(y<=Y);
+}
+
+struct Node;
+struct CmpNodePos { bool operator()(const Node* u, const Node* v) const; };
+
+typedef set<Node*,CmpNodePos> NodeSet;
+
+struct Node {
+	Variable *v;
+	Rectangle *r;
+	double pos;
+	Node *firstAbove, *firstBelow;
+	NodeSet *leftNeighbours, *rightNeighbours;
+	Node(Variable *v, Rectangle *r, double p) : v(v),r(r),pos(p) {
+		firstAbove=firstBelow=NULL;
+		leftNeighbours=rightNeighbours=NULL;
+	}
+	~Node() {
+		delete leftNeighbours;
+		delete rightNeighbours;
+	}
+	void addLeftNeighbour(Node *u) {
+		leftNeighbours->insert(u);
+	}
+	void addRightNeighbour(Node *u) {
+		rightNeighbours->insert(u);
+	}
+	void setNeighbours(NodeSet *left, NodeSet *right) {
+		leftNeighbours=left;
+		rightNeighbours=right;
+		for(NodeSet::iterator i=left->begin();i!=left->end();i++) {
+			Node *v=*(i);
+			v->addRightNeighbour(this);
+		}
+		for(NodeSet::iterator i=right->begin();i!=right->end();i++) {
+			Node *v=*(i);
+			v->addLeftNeighbour(this);
+		}
+	}
+};
+
+bool CmpNodePos::operator() (const Node* u, const Node* v) const {
+	if(u->pos==v->pos) {
+		return u < v;
+	}
+    return u->pos < v->pos;
+}
+
+NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
+	NodeSet *leftv = new NodeSet;
+	NodeSet::iterator i=scanline.find(v);
+	while(i--!=scanline.begin()) {
+		Node *u=*(i);
+		if(u->r->overlapX(v->r)<=0) {
+			leftv->insert(u);
+			return leftv;
+		}
+		if(u->r->overlapX(v->r)<=u->r->overlapY(v->r)) {
+			leftv->insert(u);
+		}
+	}
+	return leftv;
+}
+NodeSet* getRightNeighbours(NodeSet &scanline,Node *v) {
+	NodeSet *rightv = new NodeSet;
+	NodeSet::iterator i=scanline.find(v);
+	for(i++;i!=scanline.end(); i++) {
+		Node *u=*(i);
+		if(u->r->overlapX(v->r)<=0) {
+			rightv->insert(u);
+			return rightv;
+		}
+		if(u->r->overlapX(v->r)<=u->r->overlapY(v->r)) {
+			rightv->insert(u);
+		}
+	}
+	return rightv;
+}
+
+typedef enum {Open, Close} EventType;
+struct Event {
+	EventType type;
+	Node *v;
+	double pos;
+	Event(EventType t, Node *v, double p) : type(t),v(v),pos(p) {};
+};
+Event **events;
+int compare_events(const void *a, const void *b) {
+	Event *ea=*(Event**)a;
+	Event *eb=*(Event**)b;
+	if(ea->pos > eb->pos) {
+		return 1;
+	} else if(ea->pos < eb->pos) {
+		return -1;
+	} else if(ea->v->r==ea->v->r) {
+		// when comparing opening and closing from the same rect
+		// open must come first
+		if(ea->type==Open) return -1;
+		return 1;
+	}
+	return 0;
+}
+
+int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vars, Constraint **&cs) {
+	events=new Event*[2*n];
+	int i,m,ctr=0;
+	vector<Constraint*> constraints;
+	vars=new Variable*[n];
+	for(i=0;i<n;i++) {
+		vars[i]=new Variable("",rs[i]->getMinX(),weights[i]);
+		Node *v = new Node(vars[i],rs[i],rs[i]->getMinX());
+		events[ctr++]=new Event(Open,v,rs[i]->getMinY());
+		events[ctr++]=new Event(Close,v,rs[i]->getMaxY());
+	}
+	qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events );
+	NodeSet scanline;
+	for(i=0;i<2*n;i++) {
+		Event *e=events[i];
+		Node *v=e->v;
+		if(e->type==Open) {
+			scanline.insert(v);
+			v->setNeighbours(
+				getLeftNeighbours(scanline,v),
+				getRightNeighbours(scanline,v)
+			);
+		} else {
+			// Close event
+			int r;
+			for(NodeSet::iterator i=v->leftNeighbours->begin();
+				i!=v->leftNeighbours->end();i++
+			) {
+				Node *u=*i;
+				constraints.push_back(new Constraint(u->v,v->v,u->r->width()));
+				r=u->rightNeighbours->erase(v);
+				assert(r==1); // ensure exactly 1 element was deleted
+			}
+			
+			for(NodeSet::iterator i=v->rightNeighbours->begin();
+				i!=v->rightNeighbours->end();i++
+			) {
+				Node *u=*i;
+				constraints.push_back(new Constraint(v->v,u->v,v->r->width()));
+				r=u->leftNeighbours->erase(v);
+				assert(r==1); // ensure exactly 1 element was deleted
+			}
+			r=scanline.erase(v);
+			assert(r==1); // ensure exactly 1 element was deleted
+			delete v;
+		}
+		delete e;
+	}
+	delete [] events;
+	cs=new Constraint*[m=constraints.size()];
+	for(i=0;i<m;i++) cs[i]=constraints[i];
+	return m;
+}
+
+int generateYConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vars, Constraint **&cs) {
+	events=new Event*[2*n];
+	int ctr=0,i,m;
+	vector<Constraint*> constraints;
+	vars=new Variable*[n];
+	for(i=0;i<n;i++) {
+		vars[i]=new Variable("",rs[i]->getMinY(),weights[i]);
+		Node *v = new Node(vars[i],rs[i],rs[i]->getMinY());
+		events[ctr++]=new Event(Open,v,rs[i]->getMinX());
+		events[ctr++]=new Event(Close,v,rs[i]->getMaxX());
+	}
+	qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events );
+	NodeSet scanline;
+	for(i=0;i<2*n;i++) {
+		Event *e=events[i];
+		Node *v=e->v;
+		if(e->type==Open) {
+			scanline.insert(v);
+			NodeSet::iterator i=scanline.find(v);
+			if(i--!=scanline.begin()) {
+				Node *u=*i;
+				v->firstAbove=u;
+				u->firstBelow=v;
+			}
+			i=scanline.find(v);
+			if(++i!=scanline.end())	 {
+				Node *u=*i;
+				v->firstBelow=u;
+				u->firstAbove=v;
+			}
+		} else {
+			// Close event
+			Node *l=v->firstAbove, *r=v->firstBelow;
+			if(l!=NULL) {
+				constraints.push_back(new Constraint(l->v,v->v,l->r->height()));
+				l->firstBelow=v->firstBelow;
+			}
+			if(r!=NULL) {
+				constraints.push_back(new Constraint(v->v,r->v,v->r->height()));
+				r->firstAbove=v->firstAbove;
+			}
+			scanline.erase(v);
+			delete v;
+		}
+		delete e;
+	}
+	delete [] events;
+	cs=new Constraint*[m=constraints.size()];
+	for(i=0;i<m;i++) cs[i]=constraints[i];
+	return m;
+}
