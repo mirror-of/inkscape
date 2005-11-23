@@ -165,6 +165,11 @@ mkdir -p $pkgetc/gtk-2.0
 sed -e "s,$SW,\${CWD},g" $SW/etc/gtk-2.0/gdk-pixbuf.loaders > $pkgetc/gtk-2.0/gdk-pixbuf.loaders
 sed -e "s,$SW,\${CWD},g" $SW/etc/gtk-2.0/gtk.immodules > $pkgetc/gtk-2.0/gtk.immodules
 
+for item in gnome-vfs-mime-magic gnome-vfs-2.0
+do
+  cp -r $SW/etc/$item $pkgetc/
+done
+
 pkglib="$package/Contents/Resources/lib"
 mkdir -p $pkglib/pango/1.4.0/modules
 cp $SW/lib/pango/1.4.0/modules/*.so $pkglib/pango/1.4.0/modules/
@@ -174,13 +179,16 @@ cp -r $SW/lib/gtk-2.0/2.4.0/engines/* $pkglib/gtk-2.0/2.4.0/engines/
 cp $SW/lib/gtk-2.0/2.4.0/immodules/*.so $pkglib/gtk-2.0/2.4.0/immodules/
 cp $SW/lib/gtk-2.0/2.4.0/loaders/*.so $pkglib/gtk-2.0/2.4.0/loaders/
 
+mkdir -p $pkglib/gnome-vfs-2.0/modules
+cp $SW/lib/gnome-vfs-2.0/modules/*.so $pkglib/gnome-vfs-2.0/modules/
+
 # Find out libs we need from fink (e.g. $SW) - loop until no changes
 a=1
 nfiles=0
 endl=true
 while $endl; do
   echo "Looking for dependencies. Round " $a
-  libs="`otool -L $pkglib/gtk-2.0/2.4.0/loaders/* $pkglib/gtk-2.0/2.4.0/immodules/* $pkglib/gtk-2.0/2.4.0/engines/*.so $pkglib/pango/1.4.0/modules/* $package/Contents/Resources/lib/* $binary 2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $SW | sort | uniq`"
+  libs="`otool -L $pkglib/gtk-2.0/2.4.0/loaders/* $pkglib/gtk-2.0/2.4.0/immodules/* $pkglib/gtk-2.0/2.4.0/engines/*.so $pkglib/pango/1.4.0/modules/* $pkglib/gnome-vfs-2.0/modules/* $package/Contents/Resources/lib/* $binary 2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $SW | sort | uniq`"
   cp -f $libs $package/Contents/Resources/lib
   let "a+=1"  
   nnfiles=`ls $package/Contents/Resources/lib | wc -l`
