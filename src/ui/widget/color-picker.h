@@ -27,7 +27,7 @@ namespace Inkscape {
 
 class ColorPicker : public Gtk::Button {
 public:
-    ColorPicker (Glib::ustring& title, Glib::ustring& tip, guint32 rgba, bool undo);
+    ColorPicker (const Glib::ustring& title, const Glib::ustring& tip, const guint32 rgba, bool undo);
     virtual ~ColorPicker();
     void setRgba32 (guint32 rgba);
     sigc::connection connectChanged (const sigc::slot<void,guint>& slot) 
@@ -42,7 +42,7 @@ protected:
     Gtk::Tooltips       _tt;
     ColorPickerWindow   *_window;
     
-    Glib::ustring&      _title;
+    const Glib::ustring& _title;
     sigc::signal<void,guint32> _changed_signal;
     guint32             _rgba;
     bool                _undo;

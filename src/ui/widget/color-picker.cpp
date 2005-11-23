@@ -37,7 +37,7 @@ struct CPPointer {
 
 class ColorPickerWindow : public Inkscape::UI::Dialog::Dialog {
 public:
-    ColorPickerWindow (ColorPicker* cp, Glib::ustring &title);
+    ColorPickerWindow (ColorPicker* cp, const Glib::ustring &title);
     virtual ~ColorPickerWindow();
     void setRgba32 (guint32);
     
@@ -45,7 +45,7 @@ public:
     CPPointer _cpp;
 };
 
-ColorPicker::ColorPicker (Glib::ustring& title, Glib::ustring& tip, 
+ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip, 
                           guint32 rgba, bool undo)
 : _preview(rgba), _window(0), 
   _title(title), _rgba(rgba), _undo(undo)
@@ -117,7 +117,7 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
 
 //==============================================================
 
-ColorPickerWindow::ColorPickerWindow (ColorPicker *cp, Glib::ustring &title)
+ColorPickerWindow::ColorPickerWindow (ColorPicker *cp, const Glib::ustring &title)
     : Dialog("dialogs.colorpickerwindow")
 {
     set_title (title);
