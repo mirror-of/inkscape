@@ -6,6 +6,7 @@
  *   Aubanel MONNIER <aubi@libertysurf.fr>
  *   Frank Felfe <innerspace@iname.com>
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Tim Dwyer <tgdwyer@gmail.com>
  *
  * Copyright (C) 1999-2004, 2005 Authors
  *
@@ -21,6 +22,7 @@
 #include "verbs.h"
 
 #include "dialogs/unclump.h"
+#include "removeoverlap/removeoverlap.h"
 
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/button.h>
@@ -29,6 +31,7 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/tooltips.h>
+#include <gtk/gtk.h>
 
 #include <sigc++/sigc++.h>
 
@@ -434,6 +437,63 @@ private :
     }
 };
 
+class ActionRemoveOverlaps : public Action {
+private:
+    Gtk::Label removeOverlapXGapLabel;
+    Gtk::Label removeOverlapYGapLabel;
+    Gtk::SpinButton removeOverlapXGap;
+    Gtk::SpinButton removeOverlapYGap;
+
+public:
+    ActionRemoveOverlaps(Glib::ustring const &id,
+                         Glib::ustring const &tiptext,
+                         guint row,
+                         guint column,
+                         AlignAndDistribute &dialog) :
+        Action(id, tiptext, row, column,
+               dialog.removeOverlap_table(), dialog.tooltips(), dialog)
+    {
+        removeOverlapXGap.set_digits(1);
+        removeOverlapXGap.set_increments(1.0, 5.0);
+        removeOverlapXGap.set_range(0.0, 100.0);
+        removeOverlapXGap.set_value(0);
+        dialog.tooltips().set_tip(removeOverlapXGap, _("Minimum horizontal gap between bounding boxes"));
+        removeOverlapXGapLabel.set_label(_("Hor. Gap:"));
+        removeOverlapYGap.set_digits(1);
+        removeOverlapYGap.set_increments(1.0, 5.0);
+        removeOverlapYGap.set_range(0.0, 100.0);
+        removeOverlapYGap.set_value(0);
+        dialog.tooltips().set_tip(removeOverlapYGap, _("Minimum vertical gap between bounding boxes"));
+        removeOverlapYGapLabel.set_label(_("Vert. Gap:"));
+        dialog.removeOverlap_table().attach(removeOverlapXGapLabel, column+1, column+2, row, row+1, Gtk::FILL, Gtk::FILL);
+        dialog.removeOverlap_table().attach(removeOverlapXGap, column+2, column+3, row, row+1, Gtk::FILL, Gtk::FILL);
+        dialog.removeOverlap_table().attach(removeOverlapYGapLabel, column+3, column+4, row, row+1, Gtk::FILL, Gtk::FILL);
+        dialog.removeOverlap_table().attach(removeOverlapYGap, column+4, column+5, row, row+1, Gtk::FILL, Gtk::FILL);
+
+    }
+
+private :
+    virtual void on_button_click()
+    {
+        if (!SP_ACTIVE_DESKTOP) return;
+
+        // see comment in ActionAlign above
+        int saved_compensation = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+        prefs_set_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+
+        // xGap and yGap are the minimum space required between bounding rectangles.
+        double const xGap = removeOverlapXGap.get_value();
+        double const yGap = removeOverlapYGap.get_value();
+        removeoverlap((GSList *) SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList(),
+                      xGap, yGap);
+
+        // restore compensation setting
+        prefs_set_int_attribute("options.clonecompensation", "value", saved_compensation);
+
+        sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
+    }
+};
+
 class ActionUnclump : public Action {
 public :
     ActionUnclump(const Glib::ustring &id,
@@ -463,9 +523,9 @@ private :
     }
 };
 
-class ActionRadomize : public Action {
+class ActionRandomize : public Action {
 public :
-    ActionRadomize(const Glib::ustring &id,
+    ActionRandomize(const Glib::ustring &id,
                const Glib::ustring &tiptext,
                guint row,
                guint column,
@@ -663,9 +723,11 @@ AlignAndDistribute::AlignAndDistribute()
       randomize_bbox (NR::Point (0, 0), NR::Point (0, 0)),
       _alignFrame(_("Align")),
       _distributeFrame(_("Distribute")),
+      _removeOverlapFrame(_("Remove Overlaps")),
       _nodesFrame(_("Nodes")),
       _alignTable(2, 6, true),
       _distributeTable(3, 6, true),
+      _removeOverlapTable(1, 5, true),
       _nodesTable(1, 4, true),
       _anchorLabel(_("Relative to: "))
 {
@@ -750,10 +812,15 @@ AlignAndDistribute::AlignAndDistribute()
     //Randomize & Unclump
     addRandomizeButton("distribute_randomize",
                         _("Randomize centers in both dimensions"),
-                        2, 2);
+                        2, 1);
     addUnclumpButton("unclump",
                         _("Unclump objects: try to equalize edge-to-edge distances"),
-                        2, 4);
+                        2, 2);
+
+    //Remove overlaps
+    addRemoveOverlapsButton("remove_overlaps",
+                            _("Remove overlaps: move objects as little as possible such that their rectangular boundaries do not overlap"),
+                            0, 0);
 
     //Node Mode buttons
     addNodeButton("node_halign",
@@ -790,6 +857,7 @@ AlignAndDistribute::AlignAndDistribute()
 
     _alignFrame.add(_alignBox);
     _distributeFrame.add(_distributeTable);
+    _removeOverlapFrame.add(_removeOverlapTable);
     _nodesFrame.add(_nodesTable);
 
     // Top level vbox
@@ -800,6 +868,7 @@ AlignAndDistribute::AlignAndDistribute()
 
     vbox->pack_start(_alignFrame, true, true);
     vbox->pack_start(_distributeFrame, true, true);
+    vbox->pack_start(_removeOverlapFrame, true, true);
     vbox->pack_start(_nodesFrame, true, true);
 
     //Connect to the global tool change signal
@@ -845,6 +914,7 @@ void AlignAndDistribute::setMode(bool nodeEdit)
 
     ((_alignFrame).*(mSel))();
     ((_distributeFrame).*(mSel))();
+    ((_removeOverlapFrame).*(mSel))();
     ((_nodesFrame).*(mNode))();
 
 }
@@ -878,6 +948,15 @@ void AlignAndDistribute::addNodeButton(const Glib::ustring &id, const Glib::ustr
             *this, orientation, distribute));
 }
 
+void AlignAndDistribute::addRemoveOverlapsButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                                      guint row, guint col)
+{
+    _actionList.push_back(
+        new ActionRemoveOverlaps(
+            id, tiptext, row, col, *this)
+        );
+}
+
 void AlignAndDistribute::addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext,
                                       guint row, guint col)
 {
@@ -891,7 +970,7 @@ void AlignAndDistribute::addRandomizeButton(const Glib::ustring &id, const Glib:
                                       guint row, guint col)
 {
     _actionList.push_back(
-        new ActionRadomize(
+        new ActionRandomize(
             id, tiptext, row, col, *this)
         );
 }

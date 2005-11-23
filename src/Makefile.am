@@ -42,6 +42,7 @@ include libnr/Makefile_insert
 include libnrtype/Makefile_insert
 include libavoid/Makefile_insert
 include livarot/Makefile_insert
+include removeoverlap/Makefile_insert
 include svg/Makefile_insert
 include utest/Makefile_insert
 include widgets/Makefile_insert
@@ -83,6 +84,7 @@ noinst_LIBRARIES =	\
 	libnrtype/libnrtype.a	\
 	libavoid/libavoid.a	\
 	livarot/libvarot.a	\
+	removeoverlap/libremoveoverlap.a	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\
 	trace/libtrace.a  \

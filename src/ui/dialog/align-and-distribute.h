@@ -57,6 +57,7 @@ public:
 
     Gtk::Table &align_table(){return _alignTable;}
     Gtk::Table &distribute_table(){return _distributeTable;}
+    Gtk::Table &removeOverlap_table(){return _removeOverlapTable;}
     Gtk::Table &nodes_table(){return _nodesTable;}
     Gtk::Tooltips &tooltips(){return _tooltips;}
 
@@ -77,6 +78,9 @@ protected:
                         guint row, guint col);
     void addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
                         guint col, NR::Dim2 orientation, bool distribute);
+    void addRemoveOverlapsButton(const Glib::ustring &id,
+                        const Glib::ustring tiptext,
+                        guint row, guint col);
     void addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext, 
                         guint row, guint col);
     void addRandomizeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
@@ -85,8 +89,8 @@ protected:
                            guint row, guint col, Gtk::Table &table, NR::Dim2 orientation, bool distribute);
 
     std::list<Action *> _actionList;
-    Gtk::Frame _alignFrame, _distributeFrame, _nodesFrame;
-    Gtk::Table _alignTable, _distributeTable, _nodesTable;
+    Gtk::Frame _alignFrame, _distributeFrame, _removeOverlapFrame, _nodesFrame;
+    Gtk::Table _alignTable, _distributeTable, _removeOverlapTable, _nodesTable;
     Gtk::HBox _anchorBox;
     Gtk::VBox _alignBox;
     Gtk::Label _anchorLabel;

@@ -753,6 +753,7 @@ src/libnrtype/makefile
 src/libavoid/makefile
 src/livarot/makefile
 src/jabber_whiteboard/makefile
+src/removeoverlap/makefile
 src/svg/makefile
 src/trace/makefile
 src/traits/makefile

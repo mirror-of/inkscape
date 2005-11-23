@@ -1,3 +1,12 @@
+2005-11-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/ui/dialog/align-and-distribute.h, src/ui/dialog/align-and-distribute.cpp:
+	  Add new action ActionRemoveOverlaps, and add new button & two spin buttons
+	  to the Align & Distribute dialog box, to remove overlaps between objects.
+	* configure.ac: New directory src/removeoverlap.
+	* src/Makefile.am: Build new library removeoverlap/libremoveoverlap.a.
+	* src/Makefile_insert: Link against new library removeoverlap/libremoveoverlap.a.
+
 2005-11-23  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* packaging/osx-app.sh, packaging/macosx/Resources/bin/inkscape:
