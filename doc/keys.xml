@@ -1016,7 +1016,7 @@ RFE</a>).</p>
 
 <group>
 <title>Text on path</title>
-<keys><key><shift/>D</key>	 <action>select path</action></keys> 
+<keys><key><shift/>D</key>	 <action>select path from text</action></keys> 
 <note>To find out which path this text is put on, select it and press Shift+D. The path will be selected.</note>
 </group>
 
