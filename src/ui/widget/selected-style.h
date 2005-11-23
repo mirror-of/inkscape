@@ -1,5 +1,5 @@
 /**
- * \brief Indicator of the style of selected objects
+ * \brief Selected style indicator (fill, stroke, opacity)
  *
  * Author:
  *   buliabyak@gmail.com

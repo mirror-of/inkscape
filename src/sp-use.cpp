@@ -1,7 +1,7 @@
 #define __SP_USE_C__
 
 /*
- * SVG <svg> implementation
+ * SVG <use> implementation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>

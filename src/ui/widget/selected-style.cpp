@@ -1,5 +1,5 @@
 /**
- * \brief Button and CheckButton widgets
+ * \brief Selected style indicator (fill, stroke, opacity)
  *
  * Author:
  *   buliabyak@gmail.com
