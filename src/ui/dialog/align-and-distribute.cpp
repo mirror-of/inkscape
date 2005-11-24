@@ -450,25 +450,31 @@ public:
                          guint row,
                          guint column,
                          AlignAndDistribute &dialog) :
-        Action(id, tiptext, row, column,
+        Action(id, tiptext, row, column + 4,
                dialog.removeOverlap_table(), dialog.tooltips(), dialog)
     {
         removeOverlapXGap.set_digits(1);
         removeOverlapXGap.set_increments(1.0, 5.0);
-        removeOverlapXGap.set_range(0.0, 100.0);
+        removeOverlapXGap.set_range(-100.0, 100.0);
         removeOverlapXGap.set_value(0);
-        dialog.tooltips().set_tip(removeOverlapXGap, _("Minimum horizontal gap between bounding boxes"));
-        removeOverlapXGapLabel.set_label(_("Hor. Gap:"));
+        dialog.tooltips().set_tip(removeOverlapXGap,
+                                  _("Minimum horizontal gap (in document pixels) between bounding boxes"));
+        /* TRANSLATORS: Horizontal gap */
+        removeOverlapXGapLabel.set_label(_("H gap (px):"));
+
         removeOverlapYGap.set_digits(1);
         removeOverlapYGap.set_increments(1.0, 5.0);
-        removeOverlapYGap.set_range(0.0, 100.0);
+        removeOverlapYGap.set_range(-100.0, 100.0);
         removeOverlapYGap.set_value(0);
-        dialog.tooltips().set_tip(removeOverlapYGap, _("Minimum vertical gap between bounding boxes"));
-        removeOverlapYGapLabel.set_label(_("Vert. Gap:"));
-        dialog.removeOverlap_table().attach(removeOverlapXGapLabel, column+1, column+2, row, row+1, Gtk::FILL, Gtk::FILL);
-        dialog.removeOverlap_table().attach(removeOverlapXGap, column+2, column+3, row, row+1, Gtk::FILL, Gtk::FILL);
-        dialog.removeOverlap_table().attach(removeOverlapYGapLabel, column+3, column+4, row, row+1, Gtk::FILL, Gtk::FILL);
-        dialog.removeOverlap_table().attach(removeOverlapYGap, column+4, column+5, row, row+1, Gtk::FILL, Gtk::FILL);
+        dialog.tooltips().set_tip(removeOverlapYGap,
+                                  _("Minimum vertical gap (in document pixels) between bounding boxes"));
+        /* TRANSLATORS: Vertical gap */
+        removeOverlapYGapLabel.set_label(_("V gap (px):"));
+
+        dialog.removeOverlap_table().attach(removeOverlapXGapLabel, column, column+1, row, row+1, Gtk::FILL, Gtk::FILL);
+        dialog.removeOverlap_table().attach(removeOverlapXGap, column+1, column+2, row, row+1, Gtk::FILL, Gtk::FILL);
+        dialog.removeOverlap_table().attach(removeOverlapYGapLabel, column+2, column+3, row, row+1, Gtk::FILL, Gtk::FILL);
+        dialog.removeOverlap_table().attach(removeOverlapYGap, column+3, column+4, row, row+1, Gtk::FILL, Gtk::FILL);
 
     }
 
@@ -723,7 +729,7 @@ AlignAndDistribute::AlignAndDistribute()
       randomize_bbox (NR::Point (0, 0), NR::Point (0, 0)),
       _alignFrame(_("Align")),
       _distributeFrame(_("Distribute")),
-      _removeOverlapFrame(_("Remove Overlaps")),
+      _removeOverlapFrame(_("Remove overlaps")),
       _nodesFrame(_("Nodes")),
       _alignTable(2, 6, true),
       _distributeTable(3, 6, true),
