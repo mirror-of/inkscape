@@ -312,6 +312,9 @@ sp_nodepath_update_from_item(SPNodeContext *nc, SPItem *item)
     ec->shape_knot_holder = NULL;
     if (item) {
         nc->nodepath = sp_nodepath_new(desktop, item);
+        if (nc->nodepath) {
+            nc->nodepath->nodeContext = nc;
+        }
         ec->shape_knot_holder = sp_item_knot_holder(item, desktop);
     }
     sp_nodepath_update_statusbar(nc->nodepath);
