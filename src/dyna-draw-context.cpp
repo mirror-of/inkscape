@@ -666,6 +666,9 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                 ret = TRUE;
             }
             break;
+        case GDK_Escape:
+            SP_DT_SELECTION(desktop)->clear();
+            break;
 
         default:
             break;
