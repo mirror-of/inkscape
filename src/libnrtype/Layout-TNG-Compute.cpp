@@ -278,6 +278,7 @@ class Layout::Calculator
         }
 
         // a normal span going with a normal block-progression
+        double font_size_multiplier = span->start.iter_span->font_size / (PANGO_SCALE * _font_factory_size_multiplier);
         double soft_hyphen_glyph_width = 0.0;
         bool soft_hyphen_in_word = false;
         bool is_soft_hyphen = false;
@@ -318,7 +319,10 @@ class Layout::Calculator
             double char_width = 0.0;
             while (span->end_glyph_index < (unsigned)span->end.iter_span->glyph_string->num_glyphs
                    && span->end.iter_span->glyph_string->log_clusters[span->end_glyph_index] <= (int)span->end.char_byte) {
-                char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].glyph, _block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT);
+                if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT)
+                    char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].glyph, true);
+                else
+                    char_width += font_size_multiplier * span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].geometry.width;
                 span->end_glyph_index++;
             }
             if (char_attributes.is_cursor_position)
@@ -555,15 +559,17 @@ class Layout::Calculator
                             new_glyph.width = new_span.line_height.ascent + new_span.line_height.descent;
                         } else */
 
-                        double char_horz_advance = para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[glyph_index].glyph, false);
                         if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
                             new_glyph.x = x + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier + new_span.line_height.ascent;
-                            new_glyph.y = _y_offset + (unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset - char_horz_advance * 0.5) * font_size_multiplier;
+                            new_glyph.y = _y_offset + (unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset - unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * 0.5) * font_size_multiplier;
                             new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[glyph_index].glyph, true);
                         } else {
                             new_glyph.x = x + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier;
                             new_glyph.y = _y_offset + unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset * font_size_multiplier;
-                            new_glyph.width = new_span.font_size * char_horz_advance;
+                            new_glyph.width = unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * font_size_multiplier;
+                            if (new_glyph.width == 0)
+                                new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[glyph_index].glyph, false);
+                                // for some reason pango returns zero width for invalid glyph characters (those empty boxes), so go to freetype for the info
                         }
                         if (new_span.direction == RIGHT_TO_LEFT) {
                             // pango wanted to give us glyphs in visual order but we refused, so we need to work
@@ -572,7 +578,10 @@ class Layout::Calculator
                             for (unsigned rtl_index = glyph_index; rtl_index < it_span->end_glyph_index ; rtl_index++) {
                                 if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start && rtl_index != glyph_index)
                                     break;
-                                cluster_width += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[rtl_index].glyph, _block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT);
+                                if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT)
+                                    cluster_width += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[rtl_index].glyph, true);
+                                else
+                                    cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
                             }
                             new_glyph.x -= cluster_width;
                         }
