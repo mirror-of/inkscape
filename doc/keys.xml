@@ -428,6 +428,7 @@ RFE</a>).</p>
 <mouse><key><left-click/><left-click/></key> <action>edit the object</action></mouse>
 <note>For paths, double clicking switches to Node tool; for shapes, to corresponding shape tool; for text, to Text tool.</note>
 <note>For groups, double clicking performs the "Enter group" command (the group becomes temporary layer).</note>
+<note>Double clicking in empty space swithes to the parent layer in the hierarchy, if any.</note>
 </group>
 
 <group>
@@ -442,6 +443,8 @@ RFE</a>).</p>
 <mouse><key><shift/><alt/><left-click/></key> <action>toggle under</action></mouse>
 <mouse><key><ctrl/><alt/><left-click/></key> <action>select under, in groups</action></mouse>
 <mouse><key><shift/><ctrl/><alt/><left-click/></key> <action>toggle under, in groups</action></mouse>
+<keys><key><ctrl/><misc-wide f="Enter"/></key> <action>enter group</action></keys>
+<keys><key><ctrl/><misc-wide f="Backspace"/></key>	 <action>go to parent group</action></keys>
 </group>
 
 <group>
@@ -908,6 +911,7 @@ RFE</a>).</p>
 <mouse><key><left-arrow/></key> <key><right-arrow/></key> <action>adjust pen width</action></mouse>
 <mouse><key><up/></key> <key><down/></key> <action>adjust pen angle</action></mouse>
 <note>Width and angle can be adjusted while drawing. </note>
+<keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
 </section>
 
