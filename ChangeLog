@@ -1,5 +1,9 @@
 2005-11-24  MenTaLguY  <mental@rydia.net>
 
+    * src/seltrans.cpp: prune dead wood (sp_sel_trans_handle_click)
+
+2005-11-24  MenTaLguY  <mental@rydia.net>
+
     * src/display/canvas-arena.cpp, src/display/canvas-bpath.cpp,
 	  src/display/canvas-grid.cpp, src/display/guideline.cpp,
 	  src/display/sodipodi-ctrl.cpp, src/display/sodipodi-ctrlrect.cpp,

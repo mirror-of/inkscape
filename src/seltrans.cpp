@@ -70,7 +70,6 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
-static void sp_sel_trans_handle_click(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint32 state, gpointer data);
 static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *p, guint state, gboolean *data);
 
@@ -504,8 +503,6 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
                          G_CALLBACK(sp_sel_trans_handle_new_event), (gpointer) &handle_center);
         g_signal_connect(G_OBJECT(seltrans.chandle), "grabbed",
                          G_CALLBACK(sp_sel_trans_handle_grab), (gpointer) &handle_center);
-	/*	g_signal_connect(G_OBJECT(seltrans.chandle), "clicked",
-                         G_CALLBACK(sp_sel_trans_handle_click), (gpointer) &handle_center);*/
         g_signal_connect(G_OBJECT(seltrans.chandle), "ungrabbed",
                          G_CALLBACK(sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
     }
@@ -594,8 +591,6 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
                              G_CALLBACK(sp_sel_trans_handle_new_event), (gpointer) &handle[i]);
             g_signal_connect(G_OBJECT(knot[i]), "grabbed",
                              G_CALLBACK(sp_sel_trans_handle_grab), (gpointer) &handle[i]);
-  /*          g_signal_connect(G_OBJECT(knot[i]), "clicked",
-                             G_CALLBACK(sp_sel_trans_handle_click), (gpointer) &handle[i]);*/
             g_signal_connect(G_OBJECT(knot[i]), "ungrabbed",
                              G_CALLBACK(sp_sel_trans_handle_ungrab), (gpointer) &handle[i]);
             g_signal_connect(G_OBJECT(knot[i]), "event", G_CALLBACK(sp_seltrans_handle_event), (gpointer) &handle[i]);
@@ -645,14 +640,6 @@ static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data)
     SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
 
     sp_sel_trans_ungrab(seltrans);
-}
-
-static void sp_sel_trans_handle_click(SPKnot *knot, guint state, gpointer data)
-{
-    SPDesktop *desktop = knot->desktop;
-    SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
-
-    sp_sel_trans_click(seltrans);
 }
 
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint state, gpointer data)
