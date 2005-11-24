@@ -346,6 +346,9 @@ void font_instance::InitTheFace()
         theFace=pango_win32_font_cache_load(daddy->pangoFontCache,lf);
         g_free(lf);
     }
+    XFORM identity = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
+    SetWorldTransform(daddy->hScreenDC, &identity);
+    SetGraphicsMode(daddy->hScreenDC, GM_COMPATIBLE);
     SelectObject(daddy->hScreenDC,theFace);
 #else
 	theFace=pango_ft2_font_get_face(pFont);

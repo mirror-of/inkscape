@@ -299,7 +299,7 @@ font_factory::font_factory(void)
     ents = (font_entry*)malloc(maxEnt*sizeof(font_entry));
 
 #ifdef USE_PANGO_WIN32
-    hScreenDC = GetDC(NULL);
+    hScreenDC = pango_win32_get_dc();
     fontServer = pango_win32_font_map_for_display();
     fontContext = pango_win32_get_context();
     pangoFontCache = pango_win32_font_map_get_font_cache(fontServer);
@@ -319,7 +319,6 @@ font_factory::~font_factory(void)
     g_object_unref(fontServer);
 #ifdef USE_PANGO_WIN32
     pango_win32_shutdown_display();
-    ReleaseDC(NULL, hScreenDC);
 #else
     //pango_ft2_shutdown_display();
 #endif
