@@ -497,8 +497,9 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                         shortcut |= SP_SHORTCUT_CONTROL_MASK;
                     if (event->key.state & GDK_MOD1_MASK) 
                         shortcut |= SP_SHORTCUT_ALT_MASK;
-                    ret = sp_shortcut_invoke(shortcut, 
-                            SP_EVENT_CONTEXT_DESKTOP(event_context));
+                    ret = sp_shortcut_invoke(shortcut, desktop);
+                    break;
+
                 case GDK_Tab: // disable tab/shift-tab which cycle widget focus
                 case GDK_ISO_Left_Tab: // they will get different functions
                     if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
@@ -512,8 +513,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                             shortcut |= SP_SHORTCUT_CONTROL_MASK;
                         if (event->key.state & GDK_MOD1_MASK) 
                             shortcut |= SP_SHORTCUT_ALT_MASK;
-                        ret = sp_shortcut_invoke(shortcut,
-                                SP_EVENT_CONTEXT_DESKTOP(event_context));
+                        ret = sp_shortcut_invoke(shortcut, desktop);
                     }
                     break;
                 case GDK_W:
