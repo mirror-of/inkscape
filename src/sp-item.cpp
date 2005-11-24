@@ -148,8 +148,8 @@ sp_item_init(SPItem *item)
 
     item->sensitive = TRUE;
 
-    item->r_cx = NULL;
-    item->r_cx = NULL;
+    item->r_cx = 0;
+    item->r_cx = 0;
 
     item->transform = NR::identity();
 

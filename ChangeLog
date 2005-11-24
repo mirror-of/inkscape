@@ -1,5 +1,9 @@
 2005-11-24  MenTaLguY  <mental@rydia.net>
 
+    * src/sp-item.cpp: remedy erroneous initialization of doubles with NULL
+
+2005-11-24  MenTaLguY  <mental@rydia.net>
+
     * src/seltrans.cpp: prune dead wood (sp_sel_trans_handle_click)
 
 2005-11-24  MenTaLguY  <mental@rydia.net>
