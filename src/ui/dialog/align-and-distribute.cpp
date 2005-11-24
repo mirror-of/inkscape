@@ -453,23 +453,27 @@ public:
         Action(id, tiptext, row, column + 4,
                dialog.removeOverlap_table(), dialog.tooltips(), dialog)
     {
+        dialog.removeOverlap_table().set_col_spacings(3);
+    
         removeOverlapXGap.set_digits(1);
+        removeOverlapXGap.set_size_request(60, -1);
         removeOverlapXGap.set_increments(1.0, 5.0);
-        removeOverlapXGap.set_range(-100.0, 100.0);
+        removeOverlapXGap.set_range(-1000.0, 1000.0);
         removeOverlapXGap.set_value(0);
         dialog.tooltips().set_tip(removeOverlapXGap,
-                                  _("Minimum horizontal gap (in document pixels) between bounding boxes"));
+                                  _("Minimum horizontal gap (in px units) between bounding boxes"));
         /* TRANSLATORS: Horizontal gap */
-        removeOverlapXGapLabel.set_label(_("H gap (px):"));
+        removeOverlapXGapLabel.set_label(_("H:"));
 
         removeOverlapYGap.set_digits(1);
+        removeOverlapYGap.set_size_request(60, -1);
         removeOverlapYGap.set_increments(1.0, 5.0);
-        removeOverlapYGap.set_range(-100.0, 100.0);
+        removeOverlapYGap.set_range(-1000.0, 1000.0);
         removeOverlapYGap.set_value(0);
         dialog.tooltips().set_tip(removeOverlapYGap,
-                                  _("Minimum vertical gap (in document pixels) between bounding boxes"));
+                                  _("Minimum vertical gap (in px units) between bounding boxes"));
         /* TRANSLATORS: Vertical gap */
-        removeOverlapYGapLabel.set_label(_("V gap (px):"));
+        removeOverlapYGapLabel.set_label(_("V:"));
 
         dialog.removeOverlap_table().attach(removeOverlapXGapLabel, column, column+1, row, row+1, Gtk::FILL, Gtk::FILL);
         dialog.removeOverlap_table().attach(removeOverlapXGap, column+1, column+2, row, row+1, Gtk::FILL, Gtk::FILL);
@@ -733,7 +737,7 @@ AlignAndDistribute::AlignAndDistribute()
       _nodesFrame(_("Nodes")),
       _alignTable(2, 6, true),
       _distributeTable(3, 6, true),
-      _removeOverlapTable(1, 5, true),
+      _removeOverlapTable(1, 5, false),
       _nodesTable(1, 4, true),
       _anchorLabel(_("Relative to: "))
 {
@@ -797,15 +801,15 @@ AlignAndDistribute::AlignAndDistribute()
                         _("Make vertical gaps between objects equal"),
                         1, 4, true, NR::Y, .5, .5);
 
-    addDistributeButton("distribute_bottom",
-                        _("Distribute bottoms equidistantly"),
-                        1, 1, false, NR::Y, 1., 0.);
+    addDistributeButton("distribute_top",
+                        _("Distribute tops equidistantly"),
+                        1, 1, false, NR::Y, 0, 1);
     addDistributeButton("distribute_vcentre",
                         _("Distribute centers equidistantly vertically"),
                         1, 2, false, NR::Y, .5, .5);
-    addDistributeButton("distribute_top",
-                        _("Distribute tops equidistantly"),
-                        1, 3, false, NR::Y, 0, 1);
+    addDistributeButton("distribute_bottom",
+                        _("Distribute bottoms equidistantly"),
+                        1, 3, false, NR::Y, 1., 0.);
 
     //Baseline distribs
     addBaselineButton("distribute_baselines_hor",
@@ -818,14 +822,14 @@ AlignAndDistribute::AlignAndDistribute()
     //Randomize & Unclump
     addRandomizeButton("distribute_randomize",
                         _("Randomize centers in both dimensions"),
-                        2, 1);
+                        2, 2);
     addUnclumpButton("unclump",
                         _("Unclump objects: try to equalize edge-to-edge distances"),
-                        2, 2);
+                        2, 4);
 
     //Remove overlaps
     addRemoveOverlapsButton("remove_overlaps",
-                            _("Remove overlaps: move objects as little as possible such that their rectangular boundaries do not overlap"),
+                            _("Move objects as little as possible so that their bounding boxes do not overlap"),
                             0, 0);
 
     //Node Mode buttons
