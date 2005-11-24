@@ -268,6 +268,36 @@ key_is_a_modifier (guint key) {
             key == GDK_Meta_R);
 }
 
+void
+sp_select_context_up_one_layer(SPDesktop *desktop)
+{
+    /* Click in empty place, go up one level -- but don't leave a layer to root.
+     *
+     * (Rationale: we don't usually allow users to go to the root, since that
+     * detracts from the layer metaphor: objects at the root level can in front
+     * of or behind layers.  Whereas it's fine to go to the root if editing
+     * a document that has no layers (e.g. a non-Inkscape document).)
+     *
+     * Once we support editing SVG "islands" (e.g. <svg> embedded in an xhtml
+     * document), we might consider further restricting the below to disallow
+     * leaving a layer to go to a non-layer.
+     */
+    SPObject *const current_layer = desktop->currentLayer();
+    if (current_layer) {
+        SPObject *const parent = SP_OBJECT_PARENT(current_layer);
+        if ( parent
+             && ( SP_OBJECT_PARENT(parent)
+                  || !( SP_IS_GROUP(current_layer)
+                        && ( SPGroup::LAYER
+                             == SP_GROUP(current_layer)->layerMode() ) ) ) )
+        {
+            desktop->setCurrentLayer(parent);
+            if (SP_IS_GROUP(current_layer) && SPGroup::LAYER != SP_GROUP(current_layer)->layerMode())
+                SP_DT_SELECTION(desktop)->set(current_layer);
+        }
+    }
+}
+
 static gint
 sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
@@ -396,29 +426,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         tools_switch_by_item (desktop, clicked_item);
                     }
                 } else {
-                    /* Click in empty place, go up one level -- but don't leave a layer to root.
-                     *
-                     * (Rationale: we don't usually allow users to go to the root, since that
-                     * detracts from the layer metaphor: objects at the root level can in front
-                     * of or behind layers.  Whereas it's fine to go to the root if editing
-                     * a document that has no layers (e.g. a non-Inkscape document).)
-                     *
-                     * Once we support editing SVG "islands" (e.g. <svg> embedded in an xhtml
-                     * document), we might consider further restricting the below to disallow
-                     * leaving a layer to go to a non-layer.
-                     */
-                    SPObject *const current_layer = desktop->currentLayer();
-                    if (current_layer) {
-                        SPObject *const parent = SP_OBJECT_PARENT(current_layer);
-                        if ( parent
-                             && ( SP_OBJECT_PARENT(parent)
-                                  || !( SP_IS_GROUP(current_layer)
-                                        && ( SPGroup::LAYER
-                                             == SP_GROUP(current_layer)->layerMode() ) ) ) )
-                        {
-                            desktop->setCurrentLayer(parent);
-                        }
-                    }
+                    sp_select_context_up_one_layer(desktop);
                 }
                 ret = TRUE;
             }
@@ -778,6 +786,26 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         sp_selection_scale(selection, offset);
                     }
                     ret = TRUE;
+                    break;
+                case GDK_Return:
+                    if (MOD__CTRL_ONLY) {
+                        if (selection->singleItem()) {
+                            SPItem *clicked_item = selection->singleItem();
+                            if (SP_IS_GROUP (clicked_item)) { // enter group
+                                desktop->setCurrentLayer(reinterpret_cast<SPObject *>(clicked_item));
+                                SP_DT_SELECTION(desktop)->clear();
+                            } else {
+                                SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selected object is not a group. Cannot enter."));
+                            }
+                        }
+                        ret = TRUE;
+                    }
+                    break;
+                case GDK_BackSpace:
+                    if (MOD__CTRL_ONLY) {
+                        sp_select_context_up_one_layer(desktop);
+                        ret = TRUE;
+                    }
                     break;
                 default:
                     break;
