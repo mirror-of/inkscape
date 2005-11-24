@@ -1,3 +1,13 @@
+2005-11-24  MenTaLguY  <mental@rydia.net>
+
+    * src/display/canvas-arena.cpp, src/display/canvas-bpath.cpp,
+	  src/display/canvas-grid.cpp, src/display/guideline.cpp,
+	  src/display/sodipodi-ctrl.cpp, src/display/sodipodi-ctrlrect.cpp,
+	  src/display/sp-canvas-util.cpp, src/display/sp-canvas-util.h,
+	  src/display/sp-ctrlline.cpp, src/display/sp-ctrlquadr.cpp:
+	  
+	  cosmetic renaming
+
 2005-11-23  Robert Crosbie <swingincelt@gmail.com>
 
 	* replaced sp_repr_change_order with direct cal to repr->changeOrder

@@ -47,7 +47,7 @@ sp_canvas_item_reset_bounds (SPCanvasItem *item)
 }
 
 void
-sp_canvas_prepare_buf (SPCanvasBuf *buf)
+sp_canvas_prepare_buffer (SPCanvasBuf *buf)
 {
 	if (buf->is_empty) {
 		sp_canvas_clear_buffer(buf);

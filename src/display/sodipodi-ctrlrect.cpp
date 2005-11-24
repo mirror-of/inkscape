@@ -192,7 +192,7 @@ sp_ctrlrect_render (SPCanvasItem *item, SPCanvasBuf *buf)
 	    (cr->area.y0 < buf->rect.y1) &&
 	    ((cr->area.x1 + cr->shadow_size) >= buf->rect.x0) &&
 	    ((cr->area.y1 + cr->shadow_size) >= buf->rect.y0)) {
-                sp_canvas_prepare_buf(buf);
+                sp_canvas_prepare_buffer(buf);
 
 		/* Top */
 		sp_ctrlrect_hline (buf, cr->area.y0, cr->area.x0, cr->area.x1, cr->border_color, cr->dashed);

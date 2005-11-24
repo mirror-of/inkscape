@@ -117,7 +117,7 @@ sp_ctrlquadr_render (SPCanvasItem *item, SPCanvasBuf *buf)
     area.y1=buf->rect.y1;
 
     if (ctrlquadr->shp) {
-        sp_canvas_prepare_buf (buf);
+        sp_canvas_prepare_buffer (buf);
         nr_pixblock_render_ctrl_rgba (ctrlquadr->shp,ctrlquadr->rgba,area,(char*)buf->buf, buf->buf_rowstride);
     }
 }

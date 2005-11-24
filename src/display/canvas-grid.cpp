@@ -223,7 +223,7 @@ sp_cgrid_render (SPCanvasItem * item, SPCanvasBuf * buf)
 {
     SPCGrid *grid = SP_CGRID (item);
 
-    sp_canvas_prepare_buf (buf);
+    sp_canvas_prepare_buffer (buf);
 
     const gdouble sxg = floor ((buf->rect.x0 - grid->ow[NR::X]) / grid->sw[NR::X]) * grid->sw[NR::X] + grid->ow[NR::X];
     const gint  xlinestart = (gint) Inkscape::round((sxg - grid->ow[NR::X]) / grid->sw[NR::X]);

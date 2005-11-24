@@ -204,7 +204,7 @@ sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
 				     NR_ARENA_ITEM_STATE_BBOX | NR_ARENA_ITEM_STATE_RENDER,
 				     NR_ARENA_ITEM_STATE_NONE);
 
-	sp_canvas_prepare_buf(buf);
+	sp_canvas_prepare_buffer(buf);
   
 #ifdef arena_item_tile_cache
   age_cache();

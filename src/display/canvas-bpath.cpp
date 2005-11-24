@@ -219,7 +219,7 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (item);
 
-    sp_canvas_prepare_buf(buf);
+    sp_canvas_prepare_buffer(buf);
 
     NRRectL  area;
     area.x0=buf->rect.x0;
