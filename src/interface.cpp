@@ -380,22 +380,6 @@ sp_ui_menu_append_item( GtkMenu *menu, gchar const *stock,
 
 } // end of sp_ui_menu_append_item()
 
-
-static void
-sp_ui_menu_key_press(GtkMenuItem *item, GdkEventKey *event, void *data)
-{
-    if (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) {
-        unsigned int shortcut;
-
-        shortcut = get_group0_keyval(event);
-        if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
-        if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
-        if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
-        sp_shortcut_set(shortcut, (Inkscape::Verb *)data, true);
-    }
-}
-
-
 /**
 \brief  a wrapper around gdk_keyval_name producing (when possible) characters, not names
  */
@@ -434,7 +418,7 @@ sp_ui_shortcut_string(unsigned const shortcut, gchar *const c)
 {
     /* TODO: This function shouldn't exist.  Our callers should use GtkAccelLabel instead of
      * a generic GtkLabel containing this string, and should call gtk_widget_add_accelerator.
-     * Will probably need to change sp_shortcut_invoke callers and sp_ui_menu_key_press.
+     * Will probably need to change sp_shortcut_invoke callers.
      *
      * The existing gtk_label_new_with_mnemonic call can be replaced with
      * g_object_new(GTK_TYPE_ACCEL_LABEL, NULL) followed by
@@ -562,8 +546,6 @@ sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::
         gtk_widget_set_events(item, GDK_KEY_PRESS_MASK);
         g_signal_connect( G_OBJECT(item), "activate",
                           G_CALLBACK(sp_ui_menu_activate), action );
-        g_signal_connect( G_OBJECT(item), "key_press_event",
-                          G_CALLBACK(sp_ui_menu_key_press), (void *) verb);
 
         g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select_action), action );
         g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect_action), action );

@@ -1,5 +1,10 @@
 2005-11-24  MenTaLguY  <mental@rydia.net>
 
+    * src/shortcuts.cpp, src/interface.cpp: prune back shortcuts API in
+	  preparation for configurable key bindings work
+
+2005-11-24  MenTaLguY  <mental@rydia.net>
+
     * src/sp-item.cpp: remedy erroneous initialization of doubles with NULL
 
 2005-11-24  MenTaLguY  <mental@rydia.net>

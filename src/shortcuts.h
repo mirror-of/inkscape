@@ -22,8 +22,6 @@
 /* Returns true if action was performed */
 bool sp_shortcut_invoke (unsigned int shortcut, Inkscape::UI::View::View *view);
 
-void sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary);
-void sp_shortcut_clear (unsigned int shortcut);
 Inkscape::Verb * sp_shortcut_get_verb (unsigned int shortcut);
 unsigned int sp_shortcut_get_primary (Inkscape::Verb * verb);
 

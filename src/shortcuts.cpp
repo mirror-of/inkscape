@@ -28,6 +28,7 @@
 #include "shortcuts.h"
 #include "verbs.h"
 
+void sp_shortcut_set(unsigned int const shortcut, Inkscape::Verb *const verb, bool const is_primary);
 
 /* Returns true if action was performed */
 
@@ -455,24 +456,6 @@ sp_shortcut_set(unsigned int const shortcut, Inkscape::Verb *const verb, bool co
 
     if (is_primary) {
         g_hash_table_insert(primary_shortcuts, (gpointer)(verb), GINT_TO_POINTER(shortcut));
-    }
-}
-
-void
-sp_shortcut_clear(unsigned int shortcut)
-{
-    if (!verbs) return;
-
-    Inkscape::Verb *verb = (Inkscape::Verb *)(g_hash_table_lookup(verbs, GINT_TO_POINTER(shortcut)));
-
-    if (verb) {
-        g_hash_table_remove(verbs, GINT_TO_POINTER(shortcut));
-        unsigned int const old_primary
-            = (unsigned int)GPOINTER_TO_INT(g_hash_table_lookup(primary_shortcuts,
-                                                                (gpointer)(verb)));
-        if (old_primary == shortcut) {
-            g_hash_table_remove(primary_shortcuts, (gpointer)(verb));
-        }
     }
 }
 
