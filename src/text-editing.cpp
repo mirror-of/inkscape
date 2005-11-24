@@ -769,7 +769,7 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
                 rtspan = sp_repr_new ("svg:flowPara");
             }
             Inkscape::XML::Node *rstr = sp_repr_new_text(p);
-            sp_repr_add_child (rtspan, rstr, NULL);
+            rtspan->addChild(rstr, NULL);
             sp_repr_unref(rstr);
             repr->appendChild(rtspan);
             sp_repr_unref(rtspan);
@@ -778,7 +778,7 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
     }
     if (is_textpath) {
         Inkscape::XML::Node *rstr = sp_repr_new_text(content);
-        sp_repr_add_child (repr, rstr, NULL);
+        repr->addChild(rstr, NULL);
         sp_repr_unref(rstr);
     }
 

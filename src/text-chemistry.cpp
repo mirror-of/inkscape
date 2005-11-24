@@ -123,7 +123,7 @@ text_put_on_path()
         sp_repr_set_attr(textpath, "startOffset", "100%");
     else if (text_alignment == Inkscape::Text::Layout::CENTER)
         sp_repr_set_attr(textpath, "startOffset", "50%");
-    sp_repr_add_child(SP_OBJECT_REPR(text), textpath, NULL);
+    SP_OBJECT_REPR(text)->addChild(textpath, NULL);
 
     for ( GSList *i = text_reprs ; i ; i = i->next ) {
         // make a copy of each text child
@@ -135,9 +135,9 @@ text_put_on_path()
             sp_repr_set_attr(copy, "y", NULL);
         }
         // remove the old repr from under text
-        sp_repr_remove_child(SP_OBJECT_REPR(text), (Inkscape::XML::Node *) i->data);
+        SP_OBJECT_REPR(text)->removeChild((Inkscape::XML::Node *) i->data);
         // put its copy into under textPath
-        sp_repr_add_child(textpath, copy, NULL); // fixme: copy id
+        textpath->addChild(copy, NULL); // fixme: copy id
     }
 
     // x/y are useless with textpath, and confuse Batik 1.5
@@ -354,7 +354,7 @@ text_unflow ()
         /* Create <tspan> */
         Inkscape::XML::Node *rtspan = sp_repr_new("svg:tspan");
         sp_repr_set_attr(rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
-        sp_repr_add_child(rtext, rtspan, NULL);
+        rtext->addChild(rtspan, NULL);
 
         gchar *text_string = sp_te_get_string_multiline(flowtext);
         Inkscape::XML::Node *text_repr = sp_repr_new_text(text_string); // FIXME: transfer all formatting!!!

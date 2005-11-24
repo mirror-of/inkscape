@@ -287,7 +287,7 @@ sp_document_create(Inkscape::XML::Document *rdoc,
             rnew = r->duplicate();
         }
         // insert into the document
-        sp_repr_add_child(rroot, rnew, NULL);
+        rroot->addChild(rnew, NULL);
         // clean up
         sp_repr_unref(rnew);
     }
@@ -296,7 +296,7 @@ sp_document_create(Inkscape::XML::Document *rdoc,
     if (!SP_ROOT(document->root)->defs) {
         Inkscape::XML::Node *r;
         r = sp_repr_new("svg:defs");
-        sp_repr_add_child(rroot, r, NULL);
+        rroot->addChild(r, NULL);
         sp_repr_unref(r);
         g_assert(SP_ROOT(document->root)->defs);
     }

@@ -330,7 +330,7 @@ sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel)
 		sp_repr_unref (stop);
 	}
 
-	sp_repr_add_child (SP_OBJECT_REPR (SP_DOCUMENT_DEFS (doc)), repr, NULL);
+	SP_OBJECT_REPR (SP_DOCUMENT_DEFS (doc))->addChild(repr, NULL);
 	sp_repr_unref (repr);
 
 	gr = (SPGradient *) doc->getObjectByRepr(repr);

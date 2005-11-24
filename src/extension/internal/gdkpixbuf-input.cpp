@@ -81,7 +81,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             sp_repr_set_attr(im, "sodipodi:absref", uri);
             sp_repr_set_svg_double(im, "width", width);
             sp_repr_set_svg_double(im, "height", height);
-            sp_repr_add_child(SP_OBJECT_REPR(pat_object), im, NULL);
+            SP_OBJECT_REPR(pat_object)->addChild(im, NULL);
 
             repr = sp_repr_new("svg:rect");
             sp_repr_set_attr(repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));

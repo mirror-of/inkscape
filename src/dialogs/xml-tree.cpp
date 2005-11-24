@@ -1462,7 +1462,7 @@ cmd_duplicate_node (GtkObject * object, gpointer data)
 
     parent = sp_repr_parent (selected_repr);
     dup = selected_repr->duplicate();
-    sp_repr_add_child (parent, dup, selected_repr);
+    parent->addChild(dup, selected_repr);
 
     sp_document_done (current_document);
 
@@ -1563,7 +1563,7 @@ cmd_raise_node (GtkObject * object, gpointer data)
         before = before->next();
     }
 
-    sp_repr_change_order (parent, selected_repr, ref);
+    parent->changeOrder(selected_repr, ref);
 
     sp_document_done (current_document);
 
@@ -1581,7 +1581,7 @@ cmd_lower_node (GtkObject * object, gpointer data)
     g_return_if_fail (selected_repr->next() != NULL);
     parent = sp_repr_parent (selected_repr);
 
-    sp_repr_change_order (parent, selected_repr, selected_repr->next());
+    parent->changeOrder(selected_repr, selected_repr->next());
 
     sp_document_done (current_document);
 
@@ -1616,8 +1616,8 @@ cmd_indent_node (GtkObject * object, gpointer data)
         ref = NULL;
     }
 
-    ok = sp_repr_remove_child (parent, repr) &&
-        sp_repr_add_child (prev, repr, ref);
+    parent->removeChild(repr);
+    prev->addChild(repr, ref);
 
     if (ok) {
         sp_document_done (current_document);
@@ -1644,8 +1644,8 @@ cmd_unindent_node (GtkObject * object, gpointer data)
     grandparent = sp_repr_parent (parent);
     g_return_if_fail (grandparent);
 
-    ok = sp_repr_remove_child (parent, repr) &&
-        sp_repr_add_child (grandparent, repr, parent);
+    parent->removeChild(repr);
+    grandparent->addChild(repr, parent);
 
     if (ok) {
         sp_document_done (current_document);

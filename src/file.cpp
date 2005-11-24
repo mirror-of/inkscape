@@ -814,7 +814,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
              child != NULL; child = SP_OBJECT_NEXT(child))
         {
             // FIXME: in case of id conflict, newly added thing will be re-ided and thus likely break a reference to it from imported stuff
-            sp_repr_add_child(SP_OBJECT_REPR(in_defs), SP_OBJECT_REPR(child)->duplicate(), last_def);
+            SP_OBJECT_REPR(in_defs)->addChild(SP_OBJECT_REPR(child)->duplicate(), last_def);
         }
 
         guint items_count = 0;

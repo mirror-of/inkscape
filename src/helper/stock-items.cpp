@@ -77,7 +77,7 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
         if (object && SP_IS_MARKER(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             Inkscape::XML::Node *mark_repr = SP_OBJECT_REPR(object)->duplicate();
-            sp_repr_add_child (SP_OBJECT_REPR(defs), mark_repr, NULL);
+            SP_OBJECT_REPR(defs)->addChild(mark_repr, NULL);
             SPObject *cloned_item = current_doc->getObjectByRepr(mark_repr);
             sp_repr_unref(mark_repr);
             return cloned_item;
@@ -114,7 +114,7 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
         if (object && SP_IS_PATTERN(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             Inkscape::XML::Node *pat_repr = SP_OBJECT_REPR(object)->duplicate();
-            sp_repr_add_child (SP_OBJECT_REPR(defs), pat_repr, NULL);
+            SP_OBJECT_REPR(defs)->addChild(pat_repr, NULL);
             sp_repr_unref(pat_repr);
             return object;
         }
@@ -150,7 +150,7 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
         if (object && SP_IS_GRADIENT(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             Inkscape::XML::Node *pat_repr = SP_OBJECT_REPR(object)->duplicate();
-            sp_repr_add_child (SP_OBJECT_REPR(defs), pat_repr, NULL);
+            SP_OBJECT_REPR(defs)->addChild(pat_repr, NULL);
             sp_repr_unref(pat_repr);
             return object;
         }

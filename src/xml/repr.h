@@ -182,19 +182,6 @@ inline Inkscape::XML::Node *sp_repr_next(Inkscape::XML::Node *repr) {
     return ( repr ? repr->next() : NULL );
 }
 
-/// Add \a child node to children of \a repr before \a ref.
-inline unsigned sp_repr_add_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-    repr->addChild(child, ref);
-    return true;
-}
-
-/// Remove \a child from children of \a repr.
-inline unsigned sp_repr_remove_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child) {
-    repr->removeChild(child);
-    return true;
-}
-
 /* IO */
 
 Inkscape::XML::Document *sp_repr_read_file(gchar const *filename, gchar const *default_ns);
@@ -258,13 +245,6 @@ Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
                                           gchar const *key,
                                           gchar const *value);
 
-/// Put \a child after \a ref in list of \a repr's children.
-inline unsigned sp_repr_change_order(Inkscape::XML::Node *repr,
-                                     Inkscape::XML::Node *child,
-                                     Inkscape::XML::Node *ref) {
-    repr->changeOrder(child, ref);
-    return true;
-}
 
 Inkscape::XML::Document *sp_repr_document_new_list(GSList *reprs);
 

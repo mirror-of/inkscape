@@ -47,7 +47,7 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
         SP_OBJECT_REPR(root)->appendChild(repr);
     } else {
         Inkscape::XML::Node *layer_repr=SP_OBJECT_REPR(layer);
-        sp_repr_add_child(sp_repr_parent(layer_repr), repr, layer_repr);
+        sp_repr_parent(layer_repr)->addChild(repr, layer_repr);
     }
 
     return document->getObjectByRepr(repr);

@@ -314,7 +314,7 @@ sp_group_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			if (crepr) l = g_slist_prepend (l, crepr);
 		}
 		while (l) {
-			sp_repr_add_child (repr, (Inkscape::XML::Node *) l->data, NULL);
+			repr->addChild((Inkscape::XML::Node *) l->data, NULL);
 			sp_repr_unref ((Inkscape::XML::Node *) l->data);
 			l = g_slist_remove (l, l->data);
 		}
@@ -585,7 +585,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	if (objects) {
 	    Inkscape::XML::Node *last_def = SP_OBJECT_REPR(defs)->lastChild();
 	    while (objects) {
-		sp_repr_add_child(SP_OBJECT_REPR(defs), (Inkscape::XML::Node *) objects->data, last_def);
+		SP_OBJECT_REPR(defs)->addChild((Inkscape::XML::Node *) objects->data, last_def);
 		sp_repr_unref ((Inkscape::XML::Node *) objects->data);
 		objects = g_slist_remove (objects, objects->data);
 	    }

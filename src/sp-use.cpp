@@ -662,7 +662,7 @@ sp_use_unlink(SPUse *use)
     }
 
     // Add the duplicate repr just after the existing one.
-    sp_repr_add_child(parent, copy, repr);
+    parent->addChild(copy, repr);
 
     // Retrieve the SPItem of the resulting repr.
     SPObject *unlinked = document->getObjectByRepr(copy);

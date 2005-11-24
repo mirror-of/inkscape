@@ -127,7 +127,7 @@ prefs_set_recent_file(gchar const *uri, gchar const *name)
         if (recent) {
             Inkscape::XML::Node *child = sp_repr_lookup_child(recent, "uri", uri);
             if (child) {
-                sp_repr_change_order(recent, child, NULL);
+                recent->changeOrder(child, NULL);
             } else {
                 if (recent->childCount() >= max_documents) {
                     child = recent->firstChild();
@@ -142,7 +142,7 @@ prefs_set_recent_file(gchar const *uri, gchar const *name)
                 }
                 child = sp_repr_new("document");
                 sp_repr_set_attr(child, "uri", uri);
-                sp_repr_add_child(recent, child, NULL);
+                recent->addChild(child, NULL);
             }
             sp_repr_set_attr(child, "name", name);
         }

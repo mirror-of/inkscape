@@ -604,7 +604,7 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
             if ( temp == NULL ) {
                 /* backward compatibility: drop the dc:subject contents */
                 while ( (temp = sp_repr_children( parent )) ) {
-                    sp_repr_remove_child( parent, temp );
+                    parent->removeChild(temp);
                 }
 
                 temp = sp_repr_new ( "rdf:Bag" );
@@ -617,7 +617,7 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
 
             /* toss all the old list items */
             while ( (temp = sp_repr_children( parent )) ) {
-                sp_repr_remove_child( parent, temp );
+                parent->removeChild(temp);
             }
 
             /* chop our list up on commas */
@@ -975,7 +975,7 @@ rdf_set_defaults ( SPDocument * document )
         // create repr
         Inkscape::XML::Node * rnew = sp_repr_new (XML_TAG_NAME_METADATA);
         // insert into the document
-        sp_repr_add_child (document->rroot, rnew, NULL);
+        document->rroot->addChild(rnew, NULL);
         // clean up
         sp_repr_unref (rnew);
     }

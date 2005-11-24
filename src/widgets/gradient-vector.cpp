@@ -473,18 +473,18 @@ verify_grad(SPGradient *gradient)
 		child = sp_repr_new ("svg:stop");
 		sp_repr_set_css_double(child, "offset", 0.0);
 		sp_repr_set_attr (child, "style", os.str().c_str());
-		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);
+		SP_OBJECT_REPR (gradient)->addChild(child, NULL);
 
 		child = sp_repr_new ("svg:stop");
 		sp_repr_set_css_double(child, "offset", 1.0);
 		sp_repr_set_attr (child, "style", os.str().c_str());
-		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);
+		SP_OBJECT_REPR (gradient)->addChild(child, NULL);
 	}
 	if (i < 2) {
 		sp_repr_set_css_double(SP_OBJECT_REPR(stop), "offset", 0.0);
 		Inkscape::XML::Node *child = SP_OBJECT_REPR(stop)->duplicate();
 		sp_repr_set_css_double(child, "offset", 1.0);
-		sp_repr_add_child (SP_OBJECT_REPR(gradient), child, SP_OBJECT_REPR (stop));
+		SP_OBJECT_REPR(gradient)->addChild(child, SP_OBJECT_REPR (stop));
 	}
 }
 
@@ -695,11 +695,11 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 
 	if (next != NULL) {
 		new_stop_repr = SP_OBJECT_REPR(stop)->duplicate();
-		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(stop));
+		SP_OBJECT_REPR(gradient)->addChild(new_stop_repr, SP_OBJECT_REPR(stop));
 	} else {
 		next = stop;
 		new_stop_repr = SP_OBJECT_REPR(sp_prev_stop(stop, gradient))->duplicate();
-		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(sp_prev_stop(stop, gradient)));
+		SP_OBJECT_REPR(gradient)->addChild(new_stop_repr, SP_OBJECT_REPR(sp_prev_stop(stop, gradient)));
 	}
 
 	SPStop *newstop = (SPStop *) SP_OBJECT_DOCUMENT(gradient)->getObjectByRepr(new_stop_repr);
@@ -752,7 +752,7 @@ sp_grd_ed_del_stop (GtkWidget *widget,  GtkWidget *vb)
 			}
 		}
 
-		sp_repr_remove_child (SP_OBJECT_REPR(gradient), SP_OBJECT_REPR(stop));
+		SP_OBJECT_REPR(gradient)->removeChild(SP_OBJECT_REPR(stop));
 		sp_gradient_vector_widget_load_gradient (vb, gradient);
 		update_stop_list(GTK_WIDGET(mnu), gradient, NULL);
 		sp_document_done (SP_OBJECT_DOCUMENT (gradient));

@@ -155,7 +155,7 @@ paste_defs (GSList **defs_clip, SPDocument *doc)
         gchar const *id = repr->attribute("id");
         if (!id || !doc->getObjectById(id)) {
             Inkscape::XML::Node *copy = repr->duplicate();
-            sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
+            SP_OBJECT_REPR(defs)->addChild(copy, NULL);
             sp_repr_unref(copy);
         }
     }
@@ -649,7 +649,7 @@ sp_selection_raise()
                 // AND if it's not one of our selected objects,
                 if (!g_slist_find((GSList *) items, newref)) {
                     // move the selected object after that sibling
-                    sp_repr_change_order(grepr, SP_OBJECT_REPR(child), SP_OBJECT_REPR(newref));
+                    grepr->changeOrder(SP_OBJECT_REPR(child), SP_OBJECT_REPR(newref));
                 }
                 break;
             }
@@ -738,7 +738,7 @@ sp_selection_lower()
                     // move the selected object before that sibling
                     SPObject *put_after = prev_sibling(newref);
                     if (put_after)
-                        sp_repr_change_order(grepr, SP_OBJECT_REPR(child), SP_OBJECT_REPR(put_after));
+                        grepr->changeOrder(SP_OBJECT_REPR(child), SP_OBJECT_REPR(put_after));
                     else
                         SP_OBJECT_REPR(child)->setPosition(0);
                 }

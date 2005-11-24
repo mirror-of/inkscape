@@ -264,7 +264,7 @@ void SPItem::raiseToTop() {
     );
     if (topmost) {
         Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
-        sp_repr_change_order(sp_repr_parent(repr), repr, SP_OBJECT_REPR(topmost));
+        sp_repr_parent(repr)->changeOrder(repr, SP_OBJECT_REPR(topmost));
     }
 }
 
@@ -275,7 +275,7 @@ void SPItem::raiseOne() {
     if (next_higher) {
         Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
         Inkscape::XML::Node *ref=SP_OBJECT_REPR(next_higher);
-        sp_repr_change_order(sp_repr_parent(repr), repr, ref);
+        sp_repr_parent(repr)->changeOrder(repr, ref);
     }
 }
 
@@ -294,7 +294,7 @@ void SPItem::lowerOne() {
         ++next_lower;
         Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
         Inkscape::XML::Node *ref=( next_lower ? SP_OBJECT_REPR(&*next_lower) : NULL );
-        sp_repr_change_order(sp_repr_parent(repr), repr, ref);
+        sp_repr_parent(repr)->changeOrder(repr, ref);
     }
 }
 
@@ -314,7 +314,7 @@ void SPItem::lowerToBottom() {
         ++bottom;
         Inkscape::XML::Node *repr=SP_OBJECT_REPR(this);
         Inkscape::XML::Node *ref=( bottom ? SP_OBJECT_REPR(&*bottom) : NULL );
-        sp_repr_change_order(sp_repr_parent(repr), repr, ref);
+        sp_repr_parent(repr)->changeOrder(repr, ref);
     }
 }
 

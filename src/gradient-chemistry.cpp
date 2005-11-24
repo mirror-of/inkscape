@@ -243,7 +243,7 @@ sp_gradient_fork_vector_if_necessary (SPGradient *gr)
         SPDocument *document = SP_OBJECT_DOCUMENT(gr);
 
         Inkscape::XML::Node *repr = SP_OBJECT_REPR (gr)->duplicate();
-        sp_repr_add_child (SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document)), repr, NULL);
+        SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document))->addChild(repr, NULL);
         SPGradient *gr_new = (SPGradient *) document->getObjectByRepr(repr);
         gr_new = sp_gradient_ensure_vector_normalized (gr_new);
         sp_repr_unref (repr);
@@ -1080,7 +1080,7 @@ sp_document_default_gradient_vector(SPDocument *document, guint32 color)
     repr->appendChild(stop);
     sp_repr_unref(stop);
 
-    sp_repr_add_child(SP_OBJECT_REPR(defs), repr, NULL);
+    SP_OBJECT_REPR(defs)->addChild(repr, NULL);
     sp_repr_unref(repr);
 
     /* fixme: This does not look like nice */

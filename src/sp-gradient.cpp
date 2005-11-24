@@ -638,7 +638,7 @@ sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
             if (crepr) l = g_slist_prepend(l, crepr);
         }
         while (l) {
-            sp_repr_add_child(repr, (Inkscape::XML::Node *) l->data, NULL);
+            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
             sp_repr_unref((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
@@ -888,7 +888,7 @@ sp_gradient_repr_write_vector(SPGradient *gr)
     /* And insert new children from list */
     while (cl) {
         Inkscape::XML::Node *child = static_cast<Inkscape::XML::Node *>(cl->data);
-        sp_repr_add_child(repr, child, NULL);
+        repr->addChild(child, NULL);
         sp_repr_unref(child);
         cl = g_slist_remove(cl, child);
     }

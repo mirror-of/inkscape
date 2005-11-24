@@ -240,7 +240,7 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
         while ( l ) {
-            sp_repr_add_child(repr, (Inkscape::XML::Node *) l->data, NULL);
+            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
             sp_repr_unref((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
@@ -384,7 +384,7 @@ sp_textpath_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 	
     if ( no_content ) {
         Inkscape::XML::Node* rch = sp_repr_new_text("");
-        sp_repr_add_child(repr, rch, NULL);
+        repr->addChild(rch, NULL);
     }
 	
     if (((SPObjectClass *) textpath_parent_class)->build)
@@ -516,7 +516,7 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
         while ( l ) {
-            sp_repr_add_child(repr, (Inkscape::XML::Node *) l->data, NULL);
+            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
             sp_repr_unref((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
@@ -569,9 +569,9 @@ sp_textpath_to_text(SPObject *tp)
         // make a copy of each textpath child
         Inkscape::XML::Node *copy = ((Inkscape::XML::Node *) i->data)->duplicate();
         // remove the old repr from under textpath
-        sp_repr_remove_child(SP_OBJECT_REPR(tp), (Inkscape::XML::Node *) i->data); 
+        SP_OBJECT_REPR(tp)->removeChild((Inkscape::XML::Node *) i->data); 
         // put its copy into under textPath
-        sp_repr_add_child(SP_OBJECT_REPR(text), copy, NULL); // fixme: copy id
+        SP_OBJECT_REPR(text)->addChild(copy, NULL); // fixme: copy id
     }
 
     //remove textpath

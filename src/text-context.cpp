@@ -500,12 +500,12 @@ sp_text_context_setup_text(SPTextContext *tc)
     /* Create <tspan> */
     Inkscape::XML::Node *rtspan = sp_repr_new("svg:tspan");
     sp_repr_set_attr(rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
-    sp_repr_add_child(rtext, rtspan, NULL);
+    rtext->addChild(rtspan, NULL);
     sp_repr_unref(rtspan);
 
     /* Create TEXT */
     Inkscape::XML::Node *rstring = sp_repr_new_text("");
-    sp_repr_add_child(rtspan, rstring, NULL);
+    rtspan->addChild(rstring, NULL);
     sp_repr_unref(rstring);
     SPItem *text_item = SP_ITEM(ec->desktop->currentLayer()->appendChildRepr(rtext));
     /* fixme: Is selection::changed really immediate? */

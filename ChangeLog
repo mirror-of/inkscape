@@ -1,3 +1,9 @@
+2005-11-23  Robert Crosbie <swingincelt@gmail.com>
+
+	* replaced sp_repr_change_order with direct cal to repr->changeOrder
+	* replaced sp_repr_add_child with direct call to repr->addChild
+	* replaced sp_repr_remove_child with direct call to repr->removeChild
+
 2005-11-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/ui/dialog/align-and-distribute.h, src/ui/dialog/align-and-distribute.cpp:

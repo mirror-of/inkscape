@@ -86,7 +86,7 @@ test_style_elem()
         Inkscape::XML::Node *const repr = sp_repr_new("svg:style");
         repr->setAttribute("type", "text/css");
         Inkscape::XML::Node *const content_repr = sp_repr_new_text(".myclass { }");
-        sp_repr_add_child(repr, content_repr, NULL);
+        repr->addChild(content_repr, NULL);
         sp_object_invoke_build(&style_elem, doc, repr, false);
         UTEST_ASSERT(style_elem.is_css);
         UTEST_ASSERT(doc->style_cascade);

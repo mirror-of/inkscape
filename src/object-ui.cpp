@@ -169,14 +169,14 @@ sp_item_create_link(GtkMenuItem *menuitem, SPItem *item)
     g_return_if_fail(desktop != NULL);
 
     Inkscape::XML::Node *repr = sp_repr_new("svg:a");
-    sp_repr_add_child(SP_OBJECT_REPR(SP_OBJECT_PARENT(item)), repr, SP_OBJECT_REPR(item));
+    SP_OBJECT_REPR(SP_OBJECT_PARENT(item))->addChild(repr, SP_OBJECT_REPR(item));
     SPObject *object = SP_OBJECT_DOCUMENT(item)->getObjectByRepr(repr);
     g_return_if_fail(SP_IS_ANCHOR(object));
 
     const char *id = SP_OBJECT_REPR(item)->attribute("id");
     Inkscape::XML::Node *child = SP_OBJECT_REPR(item)->duplicate();
     SP_OBJECT(item)->deleteObject(false);
-    sp_repr_add_child(repr, child, NULL);
+    repr->addChild(child, NULL);
     sp_repr_set_attr(child, "id", id);
     sp_document_done(SP_OBJECT_DOCUMENT(object));
 

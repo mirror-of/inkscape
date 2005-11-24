@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 		UTEST_ASSERT(sp_repr_next(b) == c);
 		UTEST_ASSERT(sp_repr_next(c) == NULL);
 
-		sp_repr_change_order(root, b, c);
+		root->changeOrder(b, c);
 		UTEST_ASSERT(sp_repr_next(a) == c);
 		UTEST_ASSERT(sp_repr_next(b) == NULL);
 		UTEST_ASSERT(sp_repr_next(c) == b);

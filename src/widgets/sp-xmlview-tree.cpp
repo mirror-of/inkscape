@@ -341,7 +341,6 @@ tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkC
 {
 	GtkCTreeNode * old_parent;
 	Inkscape::XML::Node * ref;
-	int ok;
 
 	old_parent = GTK_CTREE_ROW (node)->parent;
 	if ( !old_parent || !new_parent ) return;
@@ -352,16 +351,14 @@ tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkC
 
 	SP_XMLVIEW_TREE (tree)->blocked++;
 	if (new_parent == old_parent) {
-		ok = sp_repr_change_order (NODE_DATA (old_parent)->repr, NODE_DATA (node)->repr, ref);
+		NODE_DATA (old_parent)->repr->changeOrder(NODE_DATA (node)->repr, ref);
 	} else {
-		ok = sp_repr_remove_child (NODE_DATA (old_parent)->repr, NODE_DATA (node)->repr) &&
-		     sp_repr_add_child (NODE_DATA (new_parent)->repr, NODE_DATA (node)->repr, ref);
+		NODE_DATA (old_parent)->repr->removeChild(NODE_DATA (node)->repr);
+		NODE_DATA (new_parent)->repr->addChild(NODE_DATA (node)->repr, ref);
 	}
 	SP_XMLVIEW_TREE (tree)->blocked--;
 
-	if (ok) {
-		parent_class->tree_move (tree, node, new_parent, new_sibling);
-	}
+	parent_class->tree_move (tree, node, new_parent, new_sibling);
 
 	gtk_clist_thaw (GTK_CLIST (tree));
 }

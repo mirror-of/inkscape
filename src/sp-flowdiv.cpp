@@ -215,7 +215,7 @@ sp_flowdiv_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
 		while ( l ) {
-			sp_repr_add_child (repr, (Inkscape::XML::Node *) l->data, NULL);
+			repr->addChild((Inkscape::XML::Node *) l->data, NULL);
 			sp_repr_unref ((Inkscape::XML::Node *) l->data);
 			l = g_slist_remove (l, l->data);
 		}
@@ -386,7 +386,7 @@ sp_flowtspan_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
 		while ( l ) {
-			sp_repr_add_child (repr, (Inkscape::XML::Node *) l->data, NULL);
+			repr->addChild((Inkscape::XML::Node *) l->data, NULL);
 			sp_repr_unref ((Inkscape::XML::Node *) l->data);
 			l = g_slist_remove (l, l->data);
 		}
@@ -559,7 +559,7 @@ sp_flowpara_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 			if ( c_repr ) l = g_slist_prepend (l, c_repr);
 		}
 		while ( l ) {
-			sp_repr_add_child (repr, (Inkscape::XML::Node *) l->data, NULL);
+			repr->addChild((Inkscape::XML::Node *) l->data, NULL);
 			sp_repr_unref ((Inkscape::XML::Node *) l->data);
 			l = g_slist_remove (l, l->data);
 		}

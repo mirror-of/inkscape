@@ -214,7 +214,7 @@ void Tracer::traceThread()
     if (nrPaths > 1)
         {
         groupRepr = sp_repr_new("svg:g");
-        sp_repr_add_child(par, groupRepr, imgRepr);
+        par->addChild(groupRepr, imgRepr);
         }
 
     long totalNodeCount = 0L;
@@ -229,9 +229,9 @@ void Tracer::traceThread()
         sp_repr_set_attr(pathRepr, "d",     result->getPathData());
 
         if (nrPaths > 1)
-            sp_repr_add_child(groupRepr, pathRepr, NULL);
+            groupRepr->addChild(pathRepr, NULL);
         else
-            sp_repr_add_child(par, pathRepr, imgRepr);
+            par->addChild(pathRepr, imgRepr);
 
         //### Apply the transform from the image to the new shape
         SPObject *reprobj = doc->getObjectByRepr(pathRepr);
