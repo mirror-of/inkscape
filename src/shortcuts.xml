@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<keybindings>
+<keybindings name="Inkscape default">
   <primary keyval="n" modifiers="control" verb="FileNew" />
   <secondary keyval="N" modifiers="control" verb="FileNew" />
   <primary keyval="o" modifiers="control" verb="FileOpen" />
