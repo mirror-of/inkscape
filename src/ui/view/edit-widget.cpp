@@ -53,6 +53,7 @@
 #include "ui/stock.h"
 #include "ui/stock-items.h"
 #include "ui/icons.h"
+#include "ui/dialog/document-preferences.h"
 #include "ui/widget/toolbox.h"
 
 #include "display/sodipodi-ctrlrect.h"
@@ -244,7 +245,8 @@ EditWidget::onDialogAlignAndDistribute()
 void
 EditWidget::onDialogDocumentProperties()
 {
-    _dlg_mgr.showDialog("DocumentPreferences");
+    Inkscape::UI::Dialog::DocumentPreferences::create();
+//    _dlg_mgr.showDialog("DocumentPreferences");
 }
 
 void
