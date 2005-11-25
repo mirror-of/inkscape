@@ -43,7 +43,7 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
                    Glib::ustring const &icon,
                    bool mnemonic)
     : _widget(widget),
-      _label(new Gtk::Label(label, 0.0, 0.5, mnemonic)),
+      _label(new Gtk::Label(label, 1.0, 0.5, mnemonic)),
       _suffix(new Gtk::Label(suffix, 0.0, 0.5)),
       _tooltips()
 {
