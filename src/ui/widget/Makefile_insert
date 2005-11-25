@@ -24,8 +24,15 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/labelled.h		\
 	ui/widget/notebook-page.cpp	\
 	ui/widget/notebook-page.h	\
+	ui/widget/page-sizer.cpp        \
+	ui/widget/page-sizer.h          \
+	ui/widget/panel.cpp		\
 	ui/widget/panel.cpp		\
 	ui/widget/panel.h		\
+	ui/widget/registered-widget.cpp \
+	ui/widget/registered-widget.h   \
+	ui/widget/registry.cpp          \
+	ui/widget/registry.h            \
 	ui/widget/ruler.cpp             \
 	ui/widget/ruler.h		\
 	ui/widget/scalar-unit.cpp	\
