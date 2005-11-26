@@ -105,7 +105,7 @@ RegisteredCheckButton::on_toggled()
     gboolean saved = sp_document_get_undo_sensitive (doc);
     sp_document_set_undo_sensitive (doc, FALSE);
     sp_repr_set_boolean(repr, _key->c_str(), _button->get_active());
-    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive (doc, saved);
     sp_document_done (doc);
     
@@ -188,8 +188,8 @@ RegisteredScalarUnit::on_value_changed()
 
     gboolean saved = sp_document_get_undo_sensitive (doc);
     sp_document_set_undo_sensitive (doc, FALSE);
-    sp_repr_set_attr(repr, _key->c_str(), os.str().c_str());
-    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    repr->setAttribute(_key->c_str(), os.str().c_str());
+    doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive (doc, saved);
     sp_document_done (doc);
     
@@ -233,7 +233,7 @@ RegisteredColorPicker::on_changed (guint32 rgba)
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);
-    sp_repr_set_attr(repr, _ckey->c_str(), c);
+    repr->setAttribute(_ckey->c_str(), c);
     sp_repr_set_css_double(repr, _akey->c_str(), (rgba & 0xff) / 255.0);
 
     _wr->setUpdating (false);
@@ -289,7 +289,7 @@ RegisteredSuffixedInteger::on_value_changed()
     int value = int(_adj.get_value());
     os << value;
 
-    sp_repr_set_attr(repr, _key->c_str(), os.str().c_str());
+    repr->setAttribute(_key->c_str(), os.str().c_str());
     sp_document_done(SP_DT_DOCUMENT(dt));
     
     _wr->setUpdating (false);

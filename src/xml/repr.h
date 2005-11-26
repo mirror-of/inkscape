@@ -134,16 +134,6 @@ Inkscape::XML::Node *sp_repr_new(gchar const *name);
 Inkscape::XML::Node *sp_repr_new_text(gchar const *content);
 Inkscape::XML::Node *sp_repr_new_comment(gchar const *comment);
 
-/*/// Make \a repr an anchored object. See Inkscape::GC::Anchored.
-inline Inkscape::XML::Node *sp_repr_ref(Inkscape::XML::Node *repr) {
-    return Inkscape::GC::anchor(repr);
-}
-
-inline Inkscape::XML::Node *sp_repr_unref(Inkscape::XML::Node *repr) {
-    Inkscape::GC::release(repr);
-    return NULL;
-}
-*/
 /*inline Inkscape::XML::Node *sp_repr_duplicate(Inkscape::XML::Node const *repr) {
     return repr->duplicate();
 }*/
