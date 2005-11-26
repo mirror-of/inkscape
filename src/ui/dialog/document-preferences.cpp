@@ -70,8 +70,6 @@ DocumentPreferences::DocumentPreferences()
     : Dialog ("dialogs.documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page(1, 1), _page_grid(1, 1), 
       _page_guides(1, 1), _page_metadata(1, 1),
-      _table_page (6,2,false),_table_grid (8,2,false),
-      _table_guide (4,2,false), _table_meta (5,2,false),
       _prefs_path("dialogs.documentoptions")
 {
     set_resizable (false);
@@ -131,12 +129,6 @@ DocumentPreferences::build_page()
 {
     _page_page.show();
 
-    _table_page.show();
-    _table_page.set_border_width (6);
-    _table_page.set_row_spacings (6);
-    _table_page.set_col_spacings (6);
-    _page_page.pack_start (_table_page, true, true, 0);
-
     _rcp_bg.init (_("Background:"), _("Background color"), _("Color and transparency of the page background (also used for bitmap export)"),
                    "pagecolor", "inkscape:pageopacity", _wr);
     _rcb_canb.init (_("Show page border"), "", "showborder", _wr);
@@ -159,7 +151,7 @@ DocumentPreferences::build_page()
         _rum_deflt._label, _rum_deflt._sel,
     };
     
-    attach_all (_table_page, widget_array, sizeof(widget_array));
+    attach_all (_page_page.table(), widget_array, sizeof(widget_array));
 
     _page_sizer.init (_wr);
     _page_page.add (_page_sizer);
@@ -174,24 +166,12 @@ DocumentPreferences::build_grid()
     /// Dissenting view: you want snapping without grid.
     
     _rcbgrid.init (_("Show grid"), _("Show or hide grid"), "showgrid", _wr);
-    _page_grid.pack_start (_rcbgrid.getHBox(), false, false, 0);
-    
     _rcbsnbb.init (_("Snap bounding boxes to grid"), 
                 _("Snap the edges of the object bounding boxes"), 
                 "inkscape:grid-bbox", _wr);
-    _page_grid.pack_start (_rcbsnbb.getHBox(), false, false, 0);
-    
     _rcbsnnod.init (_("Snap nodes to grid"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:grid-points", _wr);
-    _page_grid.pack_start (_rcbsnnod.getHBox(), false, false, 0);
-
-    _table_grid.show();
-    _table_grid.set_border_width (4);
-    _table_grid.set_row_spacings (4);
-    _table_grid.set_col_spacings (4);
-    _page_grid.pack_start (_table_grid, true, true, 0);
-
     _rumg.init (_("Grid units:"), "grid_units", _wr);
     _rsu_ox.init (_("Origin X:"), _("X coordinate of grid origin"), 
                   "gridoriginx", _rumg, _wr);
@@ -214,6 +194,9 @@ DocumentPreferences::build_grid()
 
     const Gtk::Widget* widget_array[] = 
     {
+        0,                  &_rcbgrid.getHBox(),
+        0,                  &_rcbsnbb.getHBox(),
+        0,                  &_rcbsnnod.getHBox(),
         _rumg._label,       _rumg._sel,
         0,                  _rsu_ox.getSU(),
         0,                  _rsu_oy.getSU(),
@@ -226,7 +209,7 @@ DocumentPreferences::build_grid()
         _rsi._label,        &_rsi._hbox,
     };
 
-    attach_all (_table_grid, widget_array, sizeof(widget_array));
+    attach_all (_page_grid.table(), widget_array, sizeof(widget_array));
 }
 
 void
@@ -238,22 +221,12 @@ DocumentPreferences::build_guides()
     /// Dissenting view: you want snapping without guides.
 
     _rcb_sgui.init (_("Show guides"), _("Show or hide guides"), "showguides", _wr);
-    _page_guides.pack_start (_rcb_sgui.getHBox(), false, false, 0);
     _rcb_snpgui.init (_("Snap bounding boxes to guides"),  
                      _("Snap the edges of the object bounding boxes"), 
                      "inkscape:guide-bbox", _wr);
-    _page_guides.pack_start (_rcb_snpgui.getHBox(), false, false, 0);
     _rcb_snbgui.init (_("Snap points to guides"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:guide-points", _wr);
-    _page_guides.pack_start (_rcb_snbgui.getHBox(), false, false, 0);
-
-    _table_guide.show();
-    _table_guide.set_border_width (4);
-    _table_guide.set_col_spacings (4);
-    _table_guide.set_row_spacings (4);
-    _page_guides.pack_start (_table_guide, true, true, 0);
-    
     _rum_gusn.init (_("Snap units:"), "guide_snap_units", _wr);
     _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _rum_gusn, _wr);
     _rcp_gui.init (_("Guide color:"), _("Guideline color"), 
@@ -264,24 +237,22 @@ DocumentPreferences::build_guides()
 
     const Gtk::Widget* widget_array[] = 
     {
+        0,                &_rcb_sgui.getHBox(),
+        0,                &_rcb_snpgui.getHBox(),
+        0,                &_rcb_snbgui.getHBox(),
         _rum_gusn._label, _rum_gusn._sel,
         0,                _rsu_gusn.getSU(),
         _rcp_gui._label, _rcp_gui._cp,
         _rcp_hgui._label, _rcp_hgui._cp,
     };
 
-    attach_all (_table_guide, widget_array, sizeof(widget_array));
+    attach_all (_page_guides.table(), widget_array, sizeof(widget_array));
 }
 
 void
 DocumentPreferences::build_metadata()
 {
     _page_metadata.show();
-
-    _table_meta.show();
-    _table_meta.set_border_width (4);
-    _table_meta.set_row_spacings (1);
-    _table_meta.set_col_spacings (4);
 
     /* add generic metadata entry areas */
     struct rdf_work_entity_t * entity;

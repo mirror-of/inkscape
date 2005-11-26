@@ -50,7 +50,6 @@ protected:
     Gtk::Notebook  _notebook;
 
     NotebookPage   _page_page, _page_grid, _page_guides, _page_metadata;
-    Gtk::Table     _table_page, _table_grid, _table_guide, _table_meta;
 
     RegisteredCheckButton _rcb_canb, _rcb_bord, _rcb_shad;
     RegisteredColorPicker _rcp_bg, _rcp_bord;
