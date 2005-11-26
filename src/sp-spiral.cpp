@@ -152,7 +152,7 @@ sp_spiral_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		/* Fixme: we may replace these attributes by
 		 * sodipodi:spiral="cx cy exp revo rad arg t0"
 		 */
-		sp_repr_set_attr (repr, "sodipodi:type", "spiral");
+		repr->setAttribute("sodipodi:type", "spiral");
 		sp_repr_set_svg_double(repr, "sodipodi:cx", spiral->cx);
 		sp_repr_set_svg_double(repr, "sodipodi:cy", spiral->cy);
 		sp_repr_set_svg_double(repr, "sodipodi:expansion", spiral->exp);
@@ -175,7 +175,7 @@ sp_spiral_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
                 return NULL;
         }
 	char *d = sp_svg_write_path ( bpath );
-	sp_repr_set_attr (repr, "d", d);
+	repr->setAttribute("d", d);
 	g_free (d);
 
 	if (((SPObjectClass *) (parent_class))->write)

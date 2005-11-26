@@ -78,7 +78,7 @@ test_style_elem()
         }
 
         g_object_unref(&style_elem);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
     }
 
     UTEST_TEST("read_content") {
@@ -94,7 +94,7 @@ test_style_elem()
         UTEST_ASSERT(stylesheet != NULL);
         UTEST_ASSERT(stylesheet->statements != NULL);
         g_object_unref(&style_elem);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
     }
 //#endif
     return utest_end();

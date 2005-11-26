@@ -324,11 +324,11 @@ cc_clear_active_shape(SPConnectorContext *cc)
 
     if (cc->active_shape_repr) {
         sp_repr_remove_listener_by_data(cc->active_shape_repr, cc);
-        sp_repr_unref(cc->active_shape_repr);
+        Inkscape::GC::release(cc->active_shape_repr);
         cc->active_shape_repr = NULL;
         
         sp_repr_remove_listener_by_data(cc->active_shape_layer_repr, cc);
-        sp_repr_unref(cc->active_shape_layer_repr);
+        Inkscape::GC::release(cc->active_shape_layer_repr);
         cc->active_shape_layer_repr = NULL;
     }
 
@@ -351,7 +351,7 @@ cc_clear_active_conn(SPConnectorContext *cc)
 
     if (cc->active_conn_repr) {
         sp_repr_remove_listener_by_data(cc->active_conn_repr, cc);
-        sp_repr_unref(cc->active_conn_repr);
+        Inkscape::GC::release(cc->active_conn_repr);
         cc->active_conn_repr = NULL;
     }
 
@@ -875,13 +875,13 @@ spcc_flush_white(SPConnectorContext *cc, SPCurve *gc)
 
         gchar *str = sp_svg_write_path(SP_CURVE_BPATH(c));
         g_assert( str != NULL );
-        sp_repr_set_attr(repr, "d", str);
+        repr->setAttribute("d", str);
         g_free(str);
 
         /* Attach repr */
         cc->newconn = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
         cc->selection->set(repr);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
         cc->newconn->transform = i2i_affine(desktop->currentRoot(), desktop->currentLayer());
         cc->newconn->updateRepr();
 
@@ -1061,20 +1061,20 @@ static void cc_set_active_shape(SPConnectorContext *cc, SPItem *item)
     // Remove existing active shape listeners
     if (cc->active_shape_repr) {
         sp_repr_remove_listener_by_data(cc->active_shape_repr, cc);
-        sp_repr_unref(cc->active_shape_repr);
+        Inkscape::GC::release(cc->active_shape_repr);
         
         sp_repr_remove_listener_by_data(cc->active_shape_layer_repr, cc);
-        sp_repr_unref(cc->active_shape_layer_repr);
+        Inkscape::GC::release(cc->active_shape_layer_repr);
     }
     
     // Listen in case the active shape changes
     cc->active_shape_repr = SP_OBJECT_REPR(item); 
     if (cc->active_shape_repr) {
-        sp_repr_ref(cc->active_shape_repr);
+        Inkscape::GC::anchor(cc->active_shape_repr);
         sp_repr_add_listener(cc->active_shape_repr, &shape_repr_events, cc);
     
         cc->active_shape_layer_repr = cc->active_shape_repr->parent();
-        sp_repr_ref(cc->active_shape_layer_repr);
+        Inkscape::GC::anchor(cc->active_shape_layer_repr);
         sp_repr_add_listener(cc->active_shape_layer_repr, &layer_repr_events, cc);
     }
 
@@ -1146,14 +1146,14 @@ cc_set_active_conn(SPConnectorContext *cc, SPItem *item)
     // Remove existing active conn listeners
     if (cc->active_conn_repr) {
         sp_repr_remove_listener_by_data(cc->active_conn_repr, cc);
-        sp_repr_unref(cc->active_conn_repr);
+        Inkscape::GC::release(cc->active_conn_repr);
         cc->active_conn_repr = NULL;
     }
     
     // Listen in case the active conn changes
     cc->active_conn_repr = SP_OBJECT_REPR(item); 
     if (cc->active_conn_repr) {
-        sp_repr_ref(cc->active_conn_repr);
+        Inkscape::GC::anchor(cc->active_conn_repr);
         sp_repr_add_listener(cc->active_conn_repr, &shape_repr_events, cc);
     }
 

@@ -44,7 +44,7 @@ void
 sp_repr_css_attr_unref(SPCSSAttr *css)
 {
     g_assert(css != NULL);
-    sp_repr_unref((Node *) css);
+    Inkscape::GC::release((Node *) css);
 }
 
 SPCSSAttr *sp_repr_css_attr(Node *repr, gchar const *attr)

@@ -534,7 +534,7 @@ sp_marker_prev_new(unsigned size, gchar const *mname,
 
     // the repr of the marker; make a copy with id="sample"
     Inkscape::XML::Node *mrepr = SP_OBJECT_REPR (marker)->duplicate();
-    sp_repr_set_attr (mrepr, "id", "sample");
+    mrepr->setAttribute("id", "sample");
 
     // replace the old sample in the sandbox by the new one
     Inkscape::XML::Node *defsrepr = SP_OBJECT_REPR (sandbox->getObjectById("defs"));
@@ -542,7 +542,7 @@ sp_marker_prev_new(unsigned size, gchar const *mname,
     if (oldmarker)
         oldmarker->deleteObject(false);
     defsrepr->appendChild(mrepr);
-    sp_repr_unref (mrepr);
+    Inkscape::GC::release(mrepr);
 
 // Uncomment this to get the sandbox documents saved (useful for debugging)
     //FILE *fp = fopen (g_strconcat(mname, ".svg", NULL), "w");

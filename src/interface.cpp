@@ -1005,7 +1005,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
             gchar const *style = repr->attribute("style");
 
             Inkscape::XML::Node *newgroup = sp_repr_new("svg:g");
-            sp_repr_set_attr(newgroup, "style", style);
+            newgroup->setAttribute("style", style);
 
             for (Inkscape::XML::Node *child = repr->firstChild(); child != NULL; child = child->next()) {
                 Inkscape::XML::Node *newchild = child->duplicate();
@@ -1034,7 +1034,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
                 prefs_set_int_attribute("options.transform", "pattern", saved_pref);
             }
 
-            sp_repr_unref(newgroup);
+            Inkscape::GC::release(newgroup);
             sp_document_done(doc);
             break;
         }
@@ -1068,7 +1068,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
 
             snprintf( tmp, sizeof(tmp), "data:%s;base64,", gdk_atom_name(data->type) );
             str.insert( 0, tmp );
-            sp_repr_set_attr( newImage, "xlink:href", str.c_str() );
+            newImage->setAttribute("xlink:href", str.c_str());
 
             GError *error = NULL;
             GdkPixbufLoader *loader = gdk_pixbuf_loader_new_with_mime_type( gdk_atom_name(data->type), &error );
@@ -1080,10 +1080,10 @@ sp_ui_drag_data_received(GtkWidget *widget,
                         int width = gdk_pixbuf_get_width(pbuf);
                         int height = gdk_pixbuf_get_height(pbuf);
                         snprintf( tmp, sizeof(tmp), "%d", width );
-                        sp_repr_set_attr( newImage, "width", tmp );
+                        newImage->setAttribute("width", tmp);
 
                         snprintf( tmp, sizeof(tmp), "%d", height );
-                        sp_repr_set_attr( newImage, "height", tmp );
+                        newImage->setAttribute("height", tmp);
                     }
                 }
             }
@@ -1093,7 +1093,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
             // Add it to the current layer
             desktop->currentLayer()->appendChildRepr(newImage);
 
-            sp_repr_unref( newImage );
+            Inkscape::GC::release(newImage);
             sp_document_done( doc );
             break;
         }

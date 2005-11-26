@@ -719,7 +719,7 @@ set_to_accumulated(SPDynaDrawContext *dc)
             dc->repr = repr;
 
             SPItem *item=SP_ITEM(desktop->currentLayer()->appendChildRepr(dc->repr));
-            sp_repr_unref(dc->repr);
+            Inkscape::GC::release(dc->repr);
             item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());
             item->updateRepr();
             SP_DT_SELECTION(desktop)->set(dc->repr);
@@ -728,7 +728,7 @@ set_to_accumulated(SPDynaDrawContext *dc)
         str = sp_svg_write_path(abp);
         g_assert( str != NULL );
         nr_free(abp);
-        sp_repr_set_attr(dc->repr, "d", str);
+        dc->repr->setAttribute("d", str);
         g_free(str);
     } else {
         if (dc->repr) {

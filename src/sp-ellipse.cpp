@@ -670,10 +670,10 @@ sp_arc_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     if (sp_version_inside_range(version, 0, 0, 0, 25)) {
         /* fixme: I am 99.9% sure we can do this here safely, but check nevertheless (Lauris) */
         sp_arc_write(object, repr, SP_OBJECT_WRITE_EXT);
-        sp_repr_set_attr(repr, "cx", NULL);
-        sp_repr_set_attr(repr, "cy", NULL);
-        sp_repr_set_attr(repr, "rx", NULL);
-        sp_repr_set_attr(repr, "ry", NULL);
+        repr->setAttribute("cx", NULL);
+        repr->setAttribute("cy", NULL);
+        repr->setAttribute("rx", NULL);
+        repr->setAttribute("ry", NULL);
     }
 }
 
@@ -723,7 +723,8 @@ sp_arc_set_elliptical_path_attribute(SPArc *arc, Inkscape::XML::Node *repr)
 
         }
     }
-    return sp_repr_set_attr(repr, "d", os.str().c_str());
+    repr->setAttribute("d", os.str().c_str());
+    return true;
 }
 
 static Inkscape::XML::Node *
@@ -737,7 +738,7 @@ sp_arc_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        sp_repr_set_attr(repr, "sodipodi:type", "arc");
+        repr->setAttribute("sodipodi:type", "arc");
         sp_repr_set_svg_double(repr, "sodipodi:cx", ge->cx.computed);
         sp_repr_set_svg_double(repr, "sodipodi:cy", ge->cy.computed);
         sp_repr_set_svg_double(repr, "sodipodi:rx", ge->rx.computed);
@@ -749,11 +750,11 @@ sp_arc_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         if (!(fabs(len) < 1e-8 || fabs(len - SP_2PI) < 1e-8)) {
             sp_repr_set_svg_double(repr, "sodipodi:start", ge->start);
             sp_repr_set_svg_double(repr, "sodipodi:end", ge->end);
-            sp_repr_set_attr(repr, "sodipodi:open", (!ge->closed) ? "true" : NULL);
+            repr->setAttribute("sodipodi:open", (!ge->closed) ? "true" : NULL);
         } else {
-            sp_repr_set_attr(repr, "sodipodi:end", NULL);
-            sp_repr_set_attr(repr, "sodipodi:start", NULL);
-            sp_repr_set_attr(repr, "sodipodi:open", NULL);
+            repr->setAttribute("sodipodi:end", NULL);
+            repr->setAttribute("sodipodi:start", NULL);
+            repr->setAttribute("sodipodi:open", NULL);
         }
     }
 

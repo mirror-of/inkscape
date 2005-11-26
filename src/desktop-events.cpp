@@ -132,13 +132,13 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                      >= 0 )
                 {
                     Inkscape::XML::Node *repr = sp_repr_new("sodipodi:guide");
-                    sp_repr_set_attr(repr, "orientation", (horiz) ? "horizontal" : "vertical");
+                    repr->setAttribute("orientation", (horiz) ? "horizontal" : "vertical");
                     double const guide_pos_dt = event_dt[ horiz
                                                           ? NR::Y
                                                           : NR::X ];
                     sp_repr_set_svg_double(repr, "position", guide_pos_dt);
                     SP_OBJECT_REPR(desktop->namedview)->appendChild(repr);
-                    sp_repr_unref(repr);
+                    Inkscape::GC::release(repr);
                     sp_document_done(SP_DT_DOCUMENT(desktop));
                 }
                 desktop->set_coordinate_status(event_dt);

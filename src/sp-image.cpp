@@ -754,13 +754,13 @@ sp_image_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		repr = sp_repr_new ("svg:image");
 	}
 
-	sp_repr_set_attr (repr, "xlink:href", image->href);
+	repr->setAttribute("xlink:href", image->href);
 	/* fixme: Reset attribute if needed (Lauris) */
 	if (image->x.set) sp_repr_set_svg_double(repr, "x", image->x.computed);
 	if (image->y.set) sp_repr_set_svg_double(repr, "y", image->y.computed);
 	if (image->width.set) sp_repr_set_svg_double(repr, "width", image->width.computed);
 	if (image->height.set) sp_repr_set_svg_double(repr, "height", image->height.computed);
-	sp_repr_set_attr (repr, "preserveAspectRatio", object->repr->attribute("preserveAspectRatio"));
+	repr->setAttribute("preserveAspectRatio", object->repr->attribute("preserveAspectRatio"));
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);

@@ -453,9 +453,9 @@ pattern_chain (SPPattern *pattern)
 	Inkscape::XML::Node *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
 
 	Inkscape::XML::Node *repr = sp_repr_new ("svg:pattern");
-	sp_repr_set_attr(repr, "inkscape:collect", "always");
+	repr->setAttribute("inkscape:collect", "always");
 	gchar *parent_ref = g_strconcat ("#", SP_OBJECT_REPR(pattern)->attribute("id"), NULL);
-	sp_repr_set_attr (repr, "xlink:href",  parent_ref);
+	repr->setAttribute("xlink:href",  parent_ref);
 	g_free (parent_ref);
 
 	defsrepr->addChild(repr, NULL);
@@ -497,9 +497,9 @@ sp_pattern_transform_multiply (SPPattern *pattern, NR::Matrix postmul, bool set)
 
 	gchar c[256];
 	if (sp_svg_transform_write(c, 256, pattern->patternTransform)) {
-		sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", c);
+		SP_OBJECT_REPR(pattern)->setAttribute("patternTransform", c);
 	} else {
-		sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
+		SP_OBJECT_REPR(pattern)->setAttribute("patternTransform", NULL);
 	}
 }
 
@@ -509,15 +509,15 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 	Inkscape::XML::Node *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
 
 	Inkscape::XML::Node *repr = sp_repr_new ("svg:pattern");
-	sp_repr_set_attr (repr, "patternUnits", "userSpaceOnUse");
+	repr->setAttribute("patternUnits", "userSpaceOnUse");
 	sp_repr_set_svg_double(repr, "width", bounds.extent(NR::X));
 	sp_repr_set_svg_double(repr, "height", bounds.extent(NR::Y));
 
 	gchar t[256];
 	if (sp_svg_transform_write(t, 256, transform)) {
-		sp_repr_set_attr(repr, "patternTransform", t);
+		repr->setAttribute("patternTransform", t);
 	} else {
-		sp_repr_set_attr(repr, "patternTransform", NULL);
+		repr->setAttribute("patternTransform", NULL);
 	}
 
 
@@ -537,7 +537,7 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 		sp_item_write_transform(copy, SP_OBJECT_REPR(copy), dup_transform);
 	}
 
-	sp_repr_unref (repr);
+	Inkscape::GC::release(repr);
 	return pat_id;
 }
 

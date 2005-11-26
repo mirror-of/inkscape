@@ -113,7 +113,7 @@ prefs_set_string_attribute(gchar const *path, gchar const *attr, gchar const *va
 {
     Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
-        sp_repr_set_attr(repr, attr, value);
+        repr->setAttribute(attr, value);
     }
 }
 
@@ -141,10 +141,10 @@ prefs_set_recent_file(gchar const *uri, gchar const *name)
                     }
                 }
                 child = sp_repr_new("document");
-                sp_repr_set_attr(child, "uri", uri);
+                child->setAttribute("uri", uri);
                 recent->addChild(child, NULL);
             }
-            sp_repr_set_attr(child, "name", name);
+            child->setAttribute("name", name);
         }
     }
 }

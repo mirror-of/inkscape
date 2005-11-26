@@ -245,7 +245,7 @@ void ColorItem::buttonClicked(bool secondary)
         gchar c[64];
         sp_svg_write_color(c, 64, rgba);
         if (repr)
-            sp_repr_set_attr(repr, attrName, c);
+            repr->setAttribute(attrName, c);
 
 
         SPCSSAttr *css = sp_repr_css_attr_new();

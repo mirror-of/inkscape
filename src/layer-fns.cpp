@@ -39,8 +39,8 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
     } while (document->getObjectById(id));
 
     Inkscape::XML::Node *repr=sp_repr_new("svg:g");
-    sp_repr_set_attr(repr, "inkscape:groupmode", "layer");
-    sp_repr_set_attr(repr, "id", id);
+    repr->setAttribute("inkscape:groupmode", "layer");
+    repr->setAttribute("id", id);
     g_free(id);
 
     if ( root == layer ) {

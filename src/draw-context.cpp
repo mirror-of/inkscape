@@ -537,14 +537,14 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
 
         gchar *str = sp_svg_write_path(SP_CURVE_BPATH(c));
         g_assert( str != NULL );
-        sp_repr_set_attr(repr, "d", str);
+        repr->setAttribute("d", str);
         g_free(str);
 
         if (!dc->white_item) {
             /* Attach repr */
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             dc->selection->set(repr);
-            sp_repr_unref(repr);
+            Inkscape::GC::release(repr);
             item->transform = i2i_affine(desktop->currentRoot(), desktop->currentLayer());
             item->updateRepr();
         }

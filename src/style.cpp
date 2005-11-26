@@ -3438,61 +3438,61 @@ sp_style_unset_property_attrs(SPObject *o)
     if (!repr) return;
 
     if (style->opacity.set) {
-        sp_repr_set_attr(repr, "opacity", NULL);
+        repr->setAttribute("opacity", NULL);
     }
     if (style->color.set) {
-        sp_repr_set_attr(repr, "color", NULL);
+        repr->setAttribute("color", NULL);
     }
     if (style->fill.set) {
-        sp_repr_set_attr(repr, "fill", NULL);
+        repr->setAttribute("fill", NULL);
     }
     if (style->fill_opacity.set) {
-        sp_repr_set_attr(repr, "fill-opacity", NULL);
+        repr->setAttribute("fill-opacity", NULL);
     }
     if (style->fill_rule.set) {
-        sp_repr_set_attr(repr, "fill-rule", NULL);
+        repr->setAttribute("fill-rule", NULL);
     }
     if (style->stroke.set) {
-        sp_repr_set_attr(repr, "stroke", NULL);
+        repr->setAttribute("stroke", NULL);
     }
     if (style->stroke_width.set) {
-        sp_repr_set_attr(repr, "stroke-width", NULL);
+        repr->setAttribute("stroke-width", NULL);
     }
     if (style->stroke_linecap.set) {
-        sp_repr_set_attr(repr, "stroke-linecap", NULL);
+        repr->setAttribute("stroke-linecap", NULL);
     }
     if (style->stroke_linejoin.set) {
-        sp_repr_set_attr(repr, "stroke-linejoin", NULL);
+        repr->setAttribute("stroke-linejoin", NULL);
     }
     if (style->marker[SP_MARKER_LOC].set) {
-        sp_repr_set_attr(repr, "marker", NULL);
+        repr->setAttribute("marker", NULL);
     }
     if (style->marker[SP_MARKER_LOC_START].set) {
-        sp_repr_set_attr(repr, "marker-start", NULL);
+        repr->setAttribute("marker-start", NULL);
     }
     if (style->marker[SP_MARKER_LOC_MID].set) {
-        sp_repr_set_attr(repr, "marker-mid", NULL);
+        repr->setAttribute("marker-mid", NULL);
     }
     if (style->marker[SP_MARKER_LOC_END].set) {
-        sp_repr_set_attr(repr, "marker-end", NULL);
+        repr->setAttribute("marker-end", NULL);
     }
     if (style->stroke_opacity.set) {
-        sp_repr_set_attr(repr, "stroke-opacity", NULL);
+        repr->setAttribute("stroke-opacity", NULL);
     }
     if (style->stroke_dasharray_set) {
-        sp_repr_set_attr(repr, "stroke-dasharray", NULL);
+        repr->setAttribute("stroke-dasharray", NULL);
     }
     if (style->stroke_dashoffset_set) {
-        sp_repr_set_attr(repr, "stroke-dashoffset", NULL);
+        repr->setAttribute("stroke-dashoffset", NULL);
     }
     if (style->text_private && style->text->font_family.set) {
-        sp_repr_set_attr(repr, "font-family", NULL);
+        repr->setAttribute("font-family", NULL);
     }
     if (style->text_anchor.set) {
-        sp_repr_set_attr(repr, "text-anchor", NULL);
+        repr->setAttribute("text-anchor", NULL);
     }
     if (style->writing_mode.set) {
-        sp_repr_set_attr(repr, "writing_mode", NULL);
+        repr->setAttribute("writing_mode", NULL);
     }
 }
 

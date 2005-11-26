@@ -158,7 +158,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 
 	doc->virgin = FALSE;
 	if (!doc->rroot->attribute("sodipodi:modified")) {
-		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+		doc->rroot->setAttribute("sodipodi:modified", "true");
 	}
 
 	sp_repr_begin_transaction (doc->rdoc);
@@ -224,7 +224,7 @@ sp_document_undo (SPDocument *doc)
 		sp_repr_undo_log (log);
 		doc->priv->redo = g_slist_prepend (doc->priv->redo, log);
 
-		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+		doc->rroot->setAttribute("sodipodi:modified", "true");
 		doc->priv->undoStackObservers.notifyUndoEvent(log);
 
 		ret = TRUE;
@@ -268,7 +268,7 @@ sp_document_redo (SPDocument *doc)
 		sp_repr_replay_log (log);
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
 
-		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+		doc->rroot->setAttribute("sodipodi:modified", "true");
 		doc->priv->undoStackObservers.notifyRedoEvent(log);
 
 		ret = TRUE;

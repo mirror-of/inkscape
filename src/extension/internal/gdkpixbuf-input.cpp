@@ -59,8 +59,8 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         if (prefs_get_int_attribute("options.importbitmapsasimages", "value", 1) == 1) {
             // import as <image>
             repr = sp_repr_new("svg:image");
-            sp_repr_set_attr(repr, "xlink:href", relname);
-            sp_repr_set_attr(repr, "sodipodi:absref", uri);
+            repr->setAttribute("xlink:href", relname);
+            repr->setAttribute("sodipodi:absref", uri);
 
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
@@ -68,8 +68,8 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         } else {
             // import as pattern-filled rect
             Inkscape::XML::Node *pat = sp_repr_new("svg:pattern");
-            sp_repr_set_attr(pat, "inkscape:collect", "always");
-            sp_repr_set_attr(pat, "patternUnits", "userSpaceOnUse");
+            pat->setAttribute("inkscape:collect", "always");
+            pat->setAttribute("patternUnits", "userSpaceOnUse");
             sp_repr_set_svg_double(pat, "width", width);
             sp_repr_set_svg_double(pat, "height", height);
             SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc))->appendChild(pat);
@@ -77,20 +77,20 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             SPObject *pat_object = doc->getObjectById(pat_id);
 
             Inkscape::XML::Node *im = sp_repr_new("svg:image");
-            sp_repr_set_attr(im, "xlink:href", relname);
-            sp_repr_set_attr(im, "sodipodi:absref", uri);
+            im->setAttribute("xlink:href", relname);
+            im->setAttribute("sodipodi:absref", uri);
             sp_repr_set_svg_double(im, "width", width);
             sp_repr_set_svg_double(im, "height", height);
             SP_OBJECT_REPR(pat_object)->addChild(im, NULL);
 
             repr = sp_repr_new("svg:rect");
-            sp_repr_set_attr(repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+            repr->setAttribute("style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
         }
 
         SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
         gdk_pixbuf_unref(pb);
         // restore undo, as now this document may be shown to the user if a bitmap was opened
         sp_document_set_undo_sensitive(doc, TRUE);

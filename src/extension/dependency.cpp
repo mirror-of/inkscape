@@ -57,7 +57,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
     _string = NULL;
     _description = NULL;
 
-    sp_repr_ref(_repr);
+    Inkscape::GC::anchor(_repr);
 
     const gchar * location = _repr->attribute("location");
     for (int i = 0; i < LOCATION_CNT && location != NULL; i++) {
@@ -89,7 +89,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
 */
 Dependency::~Dependency (void)
 {
-    sp_repr_unref(_repr);
+    Inkscape::GC::release(_repr);
 }
 
 /**

@@ -201,7 +201,7 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);
     if (repr)
-        sp_repr_set_attr(repr, colorkey, c);
+        repr->setAttribute(colorkey, c);
 
     if (alphakey && repr) {
         sp_repr_set_css_double(repr, alphakey, (rgba & 0xff) / 255.0);

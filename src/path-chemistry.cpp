@@ -123,12 +123,12 @@ sp_selected_path_combine (void)
 	Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 
 	// restore id
-	sp_repr_set_attr (repr, "id", id);
+	repr->setAttribute("id", id);
 
-	sp_repr_set_attr (repr, "style", style);
+	repr->setAttribute("style", style);
 	g_free (style);
 
-	sp_repr_set_attr (repr, "d", dstring->str);
+	repr->setAttribute("d", dstring->str);
 	g_string_free (dstring, TRUE);
 
 	// add the new group to the group members' common parent
@@ -141,7 +141,7 @@ sp_selected_path_combine (void)
 
 	selection->set(repr);
 
-	sp_repr_unref (repr);
+	Inkscape::GC::release(repr);
 }
 
 void
@@ -199,10 +199,10 @@ sp_selected_path_break_apart (void)
 			curve = (SPCurve *) l->data;
 
 			Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
-			sp_repr_set_attr (repr, "style", style);
+			repr->setAttribute("style", style);
 
 			gchar *str = sp_svg_write_path (curve->bpath);
-			sp_repr_set_attr (repr, "d", str);
+			repr->setAttribute("d", str);
 			g_free (str);
 
 			// add the new repr to the parent
@@ -213,11 +213,11 @@ sp_selected_path_break_apart (void)
 
 			// if it's the first one, restore id
 			if (l == list)
-				sp_repr_set_attr (repr, "id", id);
+				repr->setAttribute("id", id);
 
 			selection->add(repr);
 
-			sp_repr_unref (repr);
+			Inkscape::GC::release(repr);
 		}
 
 		g_slist_free (list);
@@ -280,14 +280,14 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		SP_OBJECT (item)->deleteObject(false);
 
 		// restore id
-		sp_repr_set_attr (repr, "id", id);
+		repr->setAttribute("id", id);
 		// add the new repr to the parent
 		parent->appendChild(repr);
 		// move to the saved position 
 		repr->setPosition(pos > 0 ? pos : 0);
 
 		selection->add(repr);
-		sp_repr_unref(repr);
+		Inkscape::GC::release(repr);
 	}
 
 	if (interactive) {
@@ -318,17 +318,16 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 	
 	Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
 	/* Transformation */
-	sp_repr_set_attr (repr, "transform", 
-			  SP_OBJECT_REPR (item)->attribute("transform"));
+	repr->setAttribute("transform", SP_OBJECT_REPR (item)->attribute("transform"));
 	/* Style */
 	gchar *style_str = sp_style_write_difference (SP_OBJECT_STYLE (item), 
 					       SP_OBJECT_STYLE (SP_OBJECT_PARENT (item)));
-	sp_repr_set_attr (repr, "style", style_str);
+	repr->setAttribute("style", style_str);
 	g_free (style_str);
 
 	/* Definition */
 	gchar *def_str = sp_svg_write_path (curve->bpath);
-	sp_repr_set_attr (repr, "d", def_str);
+	repr->setAttribute("d", def_str);
 	g_free (def_str);
 	sp_curve_unref (curve);
 	return repr;
@@ -360,7 +359,7 @@ sp_selected_path_reverse ()
 		SPCurve *rcurve = sp_curve_reverse (shape->curve);
 
 		char *str = sp_svg_write_path (rcurve->bpath);
-		sp_repr_set_attr (SP_OBJECT_REPR (shape), "d", str);
+		SP_OBJECT_REPR (shape)->setAttribute("d", str);
 
 		sp_curve_unref (rcurve);
 	}

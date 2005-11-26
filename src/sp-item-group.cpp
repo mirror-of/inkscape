@@ -315,7 +315,7 @@ sp_group_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		}
 		while (l) {
 			repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-			sp_repr_unref ((Inkscape::XML::Node *) l->data);
+			Inkscape::GC::release((Inkscape::XML::Node *) l->data);
 			l = g_slist_remove (l, l->data);
 		}
 	} else {
@@ -333,7 +333,7 @@ sp_group_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		} else {
 			value = NULL;
 		}
-		sp_repr_set_attr(repr, "inkscape:groupmode", value);
+		repr->setAttribute("inkscape:groupmode", value);
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)
@@ -561,9 +561,9 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			// (i.e. optimized into the object if the corresponding preference is set)
 			gchar affinestr[80];
 			if (sp_svg_transform_write(affinestr, 79, ctrans)) {
-				sp_repr_set_attr (nrepr, "transform", affinestr);
+				nrepr->setAttribute("transform", affinestr);
 			} else {
-				sp_repr_set_attr (nrepr, "transform", NULL);
+				nrepr->setAttribute("transform", NULL);
 			}
 
 			items = g_slist_prepend (items, nrepr);
@@ -586,7 +586,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	    Inkscape::XML::Node *last_def = SP_OBJECT_REPR(defs)->lastChild();
 	    while (objects) {
 		SP_OBJECT_REPR(defs)->addChild((Inkscape::XML::Node *) objects->data, last_def);
-		sp_repr_unref ((Inkscape::XML::Node *) objects->data);
+		Inkscape::GC::release((Inkscape::XML::Node *) objects->data);
 		objects = g_slist_remove (objects, objects->data);
 	    }
 	}
@@ -614,7 +614,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			}
 		}
 
-		sp_repr_unref (repr);
+		Inkscape::GC::release(repr);
 		if (children && SP_IS_ITEM (nitem)) 
 			*children = g_slist_prepend (*children, nitem);
 

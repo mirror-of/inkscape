@@ -511,7 +511,7 @@ SPObject::defaultLabel() const {
 /** Sets the label property for the object */
 void 
 SPObject::setLabel(gchar const *label) {
-    sp_repr_set_attr(SP_OBJECT_REPR(this), "inkscape:label", label, false);
+    SP_OBJECT_REPR(this)->setAttribute("inkscape:label", label, false);
 }
 
 
@@ -828,7 +828,7 @@ sp_object_invoke_build(SPObject *object, SPDocument *document, Inkscape::XML::No
 
     object->document = document;
     object->repr = repr;
-    sp_repr_ref(repr);
+    Inkscape::GC::anchor(repr);
     object->cloned = cloned;
 
     if (!SP_OBJECT_IS_CLONED(object)) {
@@ -847,7 +847,7 @@ sp_object_invoke_build(SPObject *object, SPDocument *document, Inkscape::XML::No
             if ((id == NULL) || (strcmp(id, realid) != 0)) {
                 gboolean undo_sensitive=sp_document_get_undo_sensitive(document);
                 sp_document_set_undo_sensitive(document, FALSE);
-                sp_repr_set_attr(object->repr, "id", realid);
+                object->repr->setAttribute("id", realid);
                 sp_document_set_undo_sensitive(document, undo_sensitive);
             }
         }
@@ -903,7 +903,7 @@ sp_object_invoke_release(SPObject *object)
         object->style = sp_style_unref(object->style);
     }
 
-    sp_repr_unref(object->repr);
+    Inkscape::GC::release(object->repr);
 
     object->document = NULL;
     object->repr = NULL;
@@ -970,7 +970,7 @@ sp_object_private_set(SPObject *object, unsigned int key, gchar const *value)
                     sp_object_ref(conflict, NULL);
                     // give the conflicting object a new ID
                     gchar *new_conflict_id = sp_object_get_unique_id(conflict, NULL);
-                    sp_repr_set_attr(SP_OBJECT_REPR(conflict), "id", new_conflict_id);
+                    SP_OBJECT_REPR(conflict)->setAttribute("id", new_conflict_id);
                     g_free(new_conflict_id);
                     sp_object_unref(conflict, NULL);
                 }
@@ -1116,23 +1116,23 @@ sp_object_private_write(SPObject *object, Inkscape::XML::Node *repr, guint flags
     if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
         repr = SP_OBJECT_REPR(object)->duplicate();
         if (!( flags & SP_OBJECT_WRITE_EXT )) {
-            sp_repr_set_attr(repr, "inkscape:collect", NULL);
+            repr->setAttribute("inkscape:collect", NULL);
         }
     } else {
-        sp_repr_set_attr(repr, "id", object->id);
+        repr->setAttribute("id", object->id);
 
         if (object->xml_space.set) {
             char const *xml_space;
             xml_space = sp_xml_get_space_string(object->xml_space.value);
-            sp_repr_set_attr(repr, "xml:space", xml_space);
+            repr->setAttribute("xml:space", xml_space);
         }
 
         if ( flags & SP_OBJECT_WRITE_EXT &&
              object->collectionPolicy() == SPObject::ALWAYS_COLLECT )
         {
-            sp_repr_set_attr(repr, "inkscape:collect", "always");
+            repr->setAttribute("inkscape:collect", "always");
         } else {
-            sp_repr_set_attr(repr, "inkscape:collect", NULL);
+            repr->setAttribute("inkscape:collect", NULL);
         }
     }
 

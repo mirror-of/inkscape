@@ -464,7 +464,7 @@ void sp_sel_trans_stamp(SPSelTrans *seltrans)
 
             sp_item_write_transform(copy_item, copy_repr, *new_affine);
 
-            sp_repr_unref(copy_repr);
+            Inkscape::GC::release(copy_repr);
             l = l->next;
         }
         sp_document_done(SP_DT_DOCUMENT(seltrans->desktop));

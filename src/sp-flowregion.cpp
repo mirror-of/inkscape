@@ -253,7 +253,7 @@ sp_flowregion_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
         
         while (l) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            sp_repr_unref((Inkscape::XML::Node *) l->data);
+            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
         
@@ -467,7 +467,7 @@ sp_flowregionexclude_write (SPObject *object, Inkscape::XML::Node *repr, guint f
         
         while (l) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            sp_repr_unref((Inkscape::XML::Node *) l->data);
+            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
         

@@ -164,7 +164,7 @@ on_picker_color_changed (guint rgba)
     Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, prefs_path);
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);
-    sp_repr_set_attr(repr, "initial_color", c);
+    repr->setAttribute("initial_color", c);
 
     is_updating = false;
 }
@@ -1264,16 +1264,16 @@ clonetiler_apply (GtkWidget *widget, void *)
 
             // Create the clone
             Inkscape::XML::Node *clone = sp_repr_new("svg:use");
-            sp_repr_set_attr(clone, "x", "0");
-            sp_repr_set_attr(clone, "y", "0");
-            sp_repr_set_attr(clone, "inkscape:tiled-clone-of", id_href);
-            sp_repr_set_attr(clone, "xlink:href", id_href);
+            clone->setAttribute("x", "0");
+            clone->setAttribute("y", "0");
+            clone->setAttribute("inkscape:tiled-clone-of", id_href);
+            clone->setAttribute("xlink:href", id_href);
 
             gchar affinestr[80];
             if (sp_svg_transform_write(affinestr, 79, t)) {
-                sp_repr_set_attr (clone, "transform", affinestr);
+                clone->setAttribute("transform", affinestr);
             } else {
-                sp_repr_set_attr (clone, "transform", NULL);
+                clone->setAttribute("transform", NULL);
             }
 
             if (opacity < 1.0) {
@@ -1281,13 +1281,13 @@ clonetiler_apply (GtkWidget *widget, void *)
             }
 
             if (*color_string) {
-                sp_repr_set_attr(clone, "fill", color_string);
-                sp_repr_set_attr(clone, "stroke", color_string);
+                clone->setAttribute("fill", color_string);
+                clone->setAttribute("stroke", color_string);
             }
 
             // add the new clone to the top of the original's parent
             SP_OBJECT_REPR(parent)->appendChild(clone);
-            sp_repr_unref (clone);
+            Inkscape::GC::release(clone);
         }
         cur[NR::Y] = 0;
     }

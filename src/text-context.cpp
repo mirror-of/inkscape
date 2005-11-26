@@ -200,7 +200,7 @@ sp_text_context_dispose(GObject *obj)
     }
     if (ec->shape_repr) { // remove old listener
         sp_repr_remove_listener_by_data(ec->shape_repr, ec);
-        sp_repr_unref(ec->shape_repr);
+        Inkscape::GC::release(ec->shape_repr);
         ec->shape_repr = 0;
     }
 }
@@ -267,7 +267,7 @@ sp_text_context_setup(SPEventContext *ec)
         Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(SP_FLOWTEXT(item)->get_frame(NULL));
         if (shape_repr) {
             ec->shape_repr = shape_repr;
-            sp_repr_ref(shape_repr);
+            Inkscape::GC::anchor(shape_repr);
             sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
             sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
         }
@@ -489,7 +489,7 @@ sp_text_context_setup_text(SPTextContext *tc)
 
     /* Create <text> */
     Inkscape::XML::Node *rtext = sp_repr_new("svg:text");
-    sp_repr_set_attr(rtext, "xml:space", "preserve"); // we preserve spaces in the text objects we create
+    rtext->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
 
     /* Set style */
     sp_desktop_apply_style_tool(SP_EVENT_CONTEXT_DESKTOP(ec), rtext, "tools.text", true);
@@ -499,19 +499,19 @@ sp_text_context_setup_text(SPTextContext *tc)
 
     /* Create <tspan> */
     Inkscape::XML::Node *rtspan = sp_repr_new("svg:tspan");
-    sp_repr_set_attr(rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
+    rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
     rtext->addChild(rtspan, NULL);
-    sp_repr_unref(rtspan);
+    Inkscape::GC::release(rtspan);
 
     /* Create TEXT */
     Inkscape::XML::Node *rstring = sp_repr_new_text("");
     rtspan->addChild(rstring, NULL);
-    sp_repr_unref(rstring);
+    Inkscape::GC::release(rstring);
     SPItem *text_item = SP_ITEM(ec->desktop->currentLayer()->appendChildRepr(rtext));
     /* fixme: Is selection::changed really immediate? */
     /* yes, it's immediate .. why does it matter? */
     SP_DT_SELECTION(ec->desktop)->set(text_item);
-    sp_repr_unref(rtext);
+    Inkscape::GC::release(rtext);
     text_item->transform = SP_ITEM(ec->desktop->currentRoot())->getRelativeTransform(ec->desktop->currentLayer());
     text_item->updateRepr();
     sp_document_done(SP_DT_DOCUMENT(ec->desktop));
@@ -1302,7 +1302,7 @@ sp_text_context_selection_changed(Inkscape::Selection *selection, SPTextContext 
 
     if (ec->shape_repr) { // remove old listener
         sp_repr_remove_listener_by_data(ec->shape_repr, ec);
-        sp_repr_unref(ec->shape_repr);
+        Inkscape::GC::release(ec->shape_repr);
         ec->shape_repr = 0;
     }
 
@@ -1312,7 +1312,7 @@ sp_text_context_selection_changed(Inkscape::Selection *selection, SPTextContext 
         Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(SP_FLOWTEXT(item)->get_frame(NULL));
         if (shape_repr) {
             ec->shape_repr = shape_repr;
-            sp_repr_ref(shape_repr);
+            Inkscape::GC::anchor(shape_repr);
             sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
             sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
         }

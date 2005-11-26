@@ -711,7 +711,7 @@ sp_namedview_document_from_window (SPDesktop *desktop)
             sp_repr_set_int (view, "inkscape:window-y", y);
 	}
 
-	sp_repr_set_attr(view, "inkscape:current-layer", SP_OBJECT_ID(desktop->currentLayer()));
+	view->setAttribute("inkscape:current-layer", SP_OBJECT_ID(desktop->currentLayer()));
 
 	// restore undoability
 	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), saved);
@@ -798,7 +798,7 @@ sp_namedview_toggle_guides (SPDocument *doc, Inkscape::XML::Node *repr)
 
 	sp_repr_set_boolean (repr, "showguides", v);
 
-	sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+	doc->rroot->setAttribute("sodipodi:modified", "true");
 	sp_document_set_undo_sensitive(doc, saved);
 }
 
@@ -814,7 +814,7 @@ sp_namedview_toggle_grid (SPDocument *doc, Inkscape::XML::Node *repr)
 
 	sp_repr_set_boolean (repr, "showgrid", v);
 
-	sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+	doc->rroot->setAttribute("sodipodi:modified", "true");
 	sp_document_set_undo_sensitive(doc, saved);
 }
 

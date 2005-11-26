@@ -247,7 +247,7 @@ static SPObject* split_text_object_tree_at(SPObject *split_obj, unsigned char_in
     if (is_line_break_object(split_obj)) {
         Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
         SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
-        sp_repr_unref(new_node);
+        Inkscape::GC::release(new_node);
         split_attributes(split_obj, SP_OBJECT_NEXT(split_obj), char_index);
         return SP_OBJECT_NEXT(split_obj);
     }
@@ -257,7 +257,7 @@ static SPObject* split_text_object_tree_at(SPObject *split_obj, unsigned char_in
     // copy the split node
     Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
     SP_OBJECT_REPR(duplicate_obj)->appendChild(new_node);
-    sp_repr_unref(new_node);
+    Inkscape::GC::release(new_node);
 
     // sort out the copied attributes (x/y/dx/dy/rotate)
     split_attributes(split_obj, duplicate_obj->firstChild(), char_index);
@@ -267,10 +267,10 @@ static SPObject* split_text_object_tree_at(SPObject *split_obj, unsigned char_in
     while (split_obj) {
         Inkscape::XML::Node *move_repr = SP_OBJECT_REPR(split_obj);
         SPObject *next_obj = SP_OBJECT_NEXT(split_obj);  // this is about to become invalidated by removeChild()
-        sp_repr_ref(move_repr);
+        Inkscape::GC::anchor(move_repr);
         SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->removeChild(move_repr);
         SP_OBJECT_REPR(duplicate_obj)->appendChild(move_repr);
-        sp_repr_unref(move_repr);
+        Inkscape::GC::release(move_repr);
 
         split_obj = next_obj;
     }
@@ -301,7 +301,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
         if (split_obj) {
             Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
             SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
-            sp_repr_unref(new_node);
+            Inkscape::GC::release(new_node);
         }
     } else if (SP_IS_STRING(split_obj)) {
         Glib::ustring *string = &SP_STRING(split_obj)->string;
@@ -415,7 +415,7 @@ sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gch
                 // need to add an SPString in this (pathological) case
                 Inkscape::XML::Node *rstring = sp_repr_new_text("");
                 SP_OBJECT_REPR(source_obj)->addChild(rstring, NULL);
-                sp_repr_unref(rstring);
+                Inkscape::GC::release(rstring);
                 g_assert(SP_IS_STRING(source_obj->firstChild()));
                 string_item = SP_STRING(source_obj->firstChild());
             }
@@ -441,11 +441,11 @@ static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node
 {
     while (from_repr->childCount()) {
         Inkscape::XML::Node *child = prepend ? from_repr->lastChild() : from_repr->firstChild();
-        sp_repr_ref(child);
+        Inkscape::GC::anchor(child);
         from_repr->removeChild(child);
         if (prepend) to_repr->addChild(child, NULL);
         else to_repr->appendChild(child);
-        sp_repr_unref(child);
+        Inkscape::GC::release(child);
     }
 }
 
@@ -764,22 +764,22 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
             Inkscape::XML::Node *rtspan;
             if (SP_IS_TEXT(text)) { // create a tspan for each line
                 rtspan = sp_repr_new ("svg:tspan");
-                sp_repr_set_attr (rtspan, "sodipodi:role", "line");
+                rtspan->setAttribute("sodipodi:role", "line");
             } else { // create a flowPara for each line
                 rtspan = sp_repr_new ("svg:flowPara");
             }
             Inkscape::XML::Node *rstr = sp_repr_new_text(p);
             rtspan->addChild(rstr, NULL);
-            sp_repr_unref(rstr);
+            Inkscape::GC::release(rstr);
             repr->appendChild(rtspan);
-            sp_repr_unref(rtspan);
+            Inkscape::GC::release(rtspan);
         }
         p = (e) ? e + 1 : NULL;
     }
     if (is_textpath) {
         Inkscape::XML::Node *rstr = sp_repr_new_text(content);
         repr->addChild(rstr, NULL);
-        sp_repr_unref(rstr);
+        Inkscape::GC::release(rstr);
     }
 
     g_free (content);
@@ -1177,10 +1177,10 @@ static void recursively_apply_style(SPObject *common_ancestor, SPCSSAttr const *
                         Inkscape::XML::Node *text_before = sp_repr_new_text(string_item->string.substr(0, start_char_index).c_str());
                         SP_OBJECT_REPR(common_ancestor)->addChild(text_before, prev_repr);
                         SP_OBJECT_REPR(common_ancestor)->addChild(child_span, text_before);
-                        sp_repr_unref(text_before);
+                        Inkscape::GC::release(text_before);
                         Inkscape::XML::Node *text_in_span = sp_repr_new_text(string_item->string.substr(start_char_index, end_char_index - start_char_index).c_str());
                         child_span->appendChild(text_in_span);
-                        sp_repr_unref(text_in_span);
+                        Inkscape::GC::release(text_in_span);
                         SP_OBJECT_REPR(child)->setContent(string_item->string.substr(end_char_index).c_str());
 
                     } else if (child == end_item) {
@@ -1192,7 +1192,7 @@ static void recursively_apply_style(SPObject *common_ancestor, SPCSSAttr const *
                         SP_OBJECT_REPR(common_ancestor)->addChild(child_span, prev_repr);
                         Inkscape::XML::Node *text_in_span = sp_repr_new_text(string_item->string.substr(0, end_char_index).c_str());
                         child_span->appendChild(text_in_span);
-                        sp_repr_unref(text_in_span);
+                        Inkscape::GC::release(text_in_span);
                         SP_OBJECT_REPR(child)->setContent(string_item->string.substr(end_char_index).c_str());
 
                     } else if (start_text_iter != string_item->string.begin()) {
@@ -1202,10 +1202,10 @@ static void recursively_apply_style(SPObject *common_ancestor, SPCSSAttr const *
                         Inkscape::XML::Node *text_before = sp_repr_new_text(string_item->string.substr(0, start_char_index).c_str());
                         SP_OBJECT_REPR(common_ancestor)->addChild(text_before, prev_repr);
                         SP_OBJECT_REPR(common_ancestor)->addChild(child_span, text_before);
-                        sp_repr_unref(text_before);
+                        Inkscape::GC::release(text_before);
                         Inkscape::XML::Node *text_in_span = sp_repr_new_text(string_item->string.substr(start_char_index).c_str());
                         child_span->appendChild(text_in_span);
-                        sp_repr_unref(text_in_span);
+                        Inkscape::GC::release(text_in_span);
                         child->deleteObject();
                         child = sp_object_get_child_by_repr(common_ancestor, child_span);
 
@@ -1215,13 +1215,13 @@ static void recursively_apply_style(SPObject *common_ancestor, SPCSSAttr const *
                 if (surround_entire_string) {
                     Inkscape::XML::Node *child_repr = SP_OBJECT_REPR(child);
                     SP_OBJECT_REPR(common_ancestor)->addChild(child_span, child_repr);
-                    sp_repr_ref(child_repr);
+                    Inkscape::GC::anchor(child_repr);
                     SP_OBJECT_REPR(common_ancestor)->removeChild(child_repr);
                     child_span->appendChild(child_repr);
-                    sp_repr_unref(child_repr);
+                    Inkscape::GC::release(child_repr);
                     child = sp_object_get_child_by_repr(common_ancestor, child_span);
                 }
-                sp_repr_unref(child_span);
+                Inkscape::GC::release(child_span);
 
             } else if (child != end_item) {   // not a string and we're applying to the entire object. This is easy
                 apply_css_recursive(child, css);
@@ -1294,10 +1294,10 @@ static bool tidy_operator_inexplicable_spans(SPObject **item)
     SPObject *next = *item;
     while ((*item)->hasChildren()) {
         Inkscape::XML::Node *repr = SP_OBJECT_REPR((*item)->firstChild());
-        sp_repr_ref(repr);
+        Inkscape::GC::anchor(repr);
         SP_OBJECT_REPR(*item)->removeChild(repr);
         SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(repr, SP_OBJECT_REPR(next));
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
         next = SP_OBJECT_NEXT(next);
     }
     (*item)->deleteObject();
@@ -1388,10 +1388,10 @@ static bool redundant_double_nesting_processor(SPObject **item, SPObject *child,
     else insert_after_repr = SP_OBJECT_REPR(*item);
     while (SP_OBJECT_REPR(child)->childCount()) {
         Inkscape::XML::Node *move_repr = SP_OBJECT_REPR(child)->firstChild();
-        sp_repr_ref(move_repr);
+        Inkscape::GC::anchor(move_repr);
         SP_OBJECT_REPR(child)->removeChild(move_repr);
         SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(move_repr, insert_after_repr);
-        sp_repr_unref(move_repr);
+        Inkscape::GC::release(move_repr);
         insert_after_repr = move_repr;      // I think this will stay valid long enough. It's garbage collected these days.
     }
     child->deleteObject();
@@ -1455,7 +1455,7 @@ static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, b
         SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(new_span, SP_OBJECT_REPR(*item));
     new_span->setAttribute("style", SP_OBJECT_REPR(child)->attribute("style"));
     move_child_nodes(SP_OBJECT_REPR(child), new_span);
-    sp_repr_unref(new_span);
+    Inkscape::GC::release(new_span);
     child->deleteObject();
     return true;
 }

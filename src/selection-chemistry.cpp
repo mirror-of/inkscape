@@ -100,9 +100,9 @@ void sp_selection_copy_one (Inkscape::XML::Node *repr, NR::Matrix full_t, GSList
     // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
     gchar affinestr[80];
     if (sp_svg_transform_write(affinestr, 79, full_t)) {
-        sp_repr_set_attr (copy, "transform", affinestr);
+        copy->setAttribute("transform", affinestr);
     } else {
-        sp_repr_set_attr (copy, "transform", NULL);
+        copy->setAttribute("transform", NULL);
     }
 
     *clip = g_slist_prepend(*clip, copy);
@@ -156,7 +156,7 @@ paste_defs (GSList **defs_clip, SPDocument *doc)
         if (!id || !doc->getObjectById(id)) {
             Inkscape::XML::Node *copy = repr->duplicate();
             SP_OBJECT_REPR(defs)->addChild(copy, NULL);
-            sp_repr_unref(copy);
+            Inkscape::GC::release(copy);
         }
     }
 }
@@ -182,15 +182,15 @@ GSList *sp_selection_paste_impl (SPDocument *document, SPObject *parent, GSList 
             // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
             gchar affinestr[80];
             if (sp_svg_transform_write(affinestr, 79, item_t)) {
-                sp_repr_set_attr (copy, "transform", affinestr);
+                copy->setAttribute("transform", affinestr);
             } else {
-                sp_repr_set_attr (copy, "transform", NULL);
+                copy->setAttribute("transform", NULL);
             }
         }
 
         parent->appendChildRepr(copy);
         copied = g_slist_prepend(copied, copy);
-        sp_repr_unref(copy);
+        Inkscape::GC::release(copy);
     }
     return copied;
 }
@@ -277,7 +277,7 @@ void sp_selection_duplicate()
 
         newsel = g_slist_prepend(newsel, copy);
         reprs = g_slist_remove(reprs, reprs->data);
-        sp_repr_unref(copy);
+        Inkscape::GC::release(copy);
     }
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -448,7 +448,7 @@ void sp_selection_group()
             Inkscape::XML::Node *spnew = current->duplicate();
             sp_repr_unparent(current);
             group->appendChild(spnew);
-            sp_repr_unref(spnew);
+            Inkscape::GC::release(spnew);
             topmost --; // only reduce count for those items deleted from topmost_parent
         } else { // move it to topmost_parent first
                 GSList *temp_clip = NULL;
@@ -482,7 +482,7 @@ void sp_selection_group()
                     sp_repr_unparent(in_topmost);
                     // put its copy into group
                     group->appendChild(spnew);
-                    sp_repr_unref(spnew);
+                    Inkscape::GC::release(spnew);
                     g_slist_free (copied);
                 }
         }
@@ -498,7 +498,7 @@ void sp_selection_group()
     sp_document_done(SP_DT_DOCUMENT(desktop));
 
     selection->set(group);
-    sp_repr_unref(group);
+    Inkscape::GC::release(group);
 }
 
 void sp_selection_ungroup()
@@ -1003,7 +1003,7 @@ void sp_selection_copy()
 
     // clear old defs clipboard
     while (defs_clipboard) {
-        sp_repr_unref((Inkscape::XML::Node *) defs_clipboard->data);
+        Inkscape::GC::release((Inkscape::XML::Node *) defs_clipboard->data);
         defs_clipboard = g_slist_remove (defs_clipboard, defs_clipboard->data);
     }
 
@@ -1015,7 +1015,7 @@ void sp_selection_copy()
   
     //clear main clipboard 
     while (clipboard) {
-        sp_repr_unref((Inkscape::XML::Node *) clipboard->data);
+        Inkscape::GC::release((Inkscape::XML::Node *) clipboard->data);
         clipboard = g_slist_remove(clipboard, clipboard->data);
     }
 
@@ -1270,7 +1270,7 @@ void sp_selection_remove_transform()
 
     GSList const *l = (GSList *) selection->reprList();
     while (l != NULL) {
-        sp_repr_set_attr((Inkscape::XML::Node*)l->data,"transform", NULL);
+        sp_repr_set_attr((Inkscape::XML::Node*)l->data, "transform", NULL);
         l = l->next;
     }
 
@@ -1785,9 +1785,9 @@ sp_selection_clone()
     Inkscape::XML::Node *parent = sp_repr_parent(sel_repr);
 
     Inkscape::XML::Node *clone = sp_repr_new("svg:use");
-    sp_repr_set_attr(clone, "x", "0");
-    sp_repr_set_attr(clone, "y", "0");
-    sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sel_repr->attribute("id")));
+    clone->setAttribute("x", "0");
+    clone->setAttribute("y", "0");
+    clone->setAttribute("xlink:href", g_strdup_printf("#%s", sel_repr->attribute("id")));
 
     // add the new clone to the top of the original's parent
     parent->appendChild(clone);
@@ -1795,7 +1795,7 @@ sp_selection_clone()
     sp_document_done(SP_DT_DOCUMENT(desktop));
 
     selection->set(clone);
-    sp_repr_unref(clone);
+    Inkscape::GC::release(clone);
 }
 
 void
@@ -1968,7 +1968,7 @@ sp_selection_tile(bool apply)
 
     if (apply) {
         Inkscape::XML::Node *rect = sp_repr_new ("svg:rect");
-        sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+        rect->setAttribute("style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
         sp_repr_set_svg_double(rect, "width", bounds.extent(NR::X));
         sp_repr_set_svg_double(rect, "height", bounds.extent(NR::Y));
         sp_repr_set_svg_double(rect, "x", bounds.min()[NR::X]);
@@ -1979,7 +1979,7 @@ sp_selection_tile(bool apply)
         rect->setPosition(pos > 0 ? pos : 0);
         SPItem *rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
 
-        sp_repr_unref (rect);
+        Inkscape::GC::release(rect);
 
         selection->clear();
         selection->set(rectangle);
@@ -2181,15 +2181,15 @@ sp_selection_create_bitmap_copy ()
     if (pb) {
         // Create the repr for the image
         Inkscape::XML::Node * repr = sp_repr_new ("svg:image");
-        sp_repr_set_attr (repr, "xlink:href", filename);
-        sp_repr_set_attr (repr, "sodipodi:absref", filepath);
+        repr->setAttribute("xlink:href", filename);
+        repr->setAttribute("sodipodi:absref", filepath);
         sp_repr_set_svg_double(repr, "width", gdk_pixbuf_get_width(pb));
         sp_repr_set_svg_double(repr, "height", gdk_pixbuf_get_height(pb));
 
         // Write transform
         gchar c[256];
         if (sp_svg_transform_write(c, 256, t)) {
-            sp_repr_set_attr(repr, "transform", c);
+            repr->setAttribute("transform", c);
         } 
 
         // add the new repr to the parent
@@ -2203,7 +2203,7 @@ sp_selection_create_bitmap_copy ()
         selection->add(repr);
 
         // Clean up
-        sp_repr_unref (repr);
+        Inkscape::GC::release(repr);
         gdk_pixbuf_unref (pb);
 
         // Complete undoable transaction

@@ -139,7 +139,7 @@ sp_star_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	}
 
 	if (flags & SP_OBJECT_WRITE_EXT) {
-		sp_repr_set_attr (repr, "sodipodi:type", "star");
+		repr->setAttribute("sodipodi:type", "star");
 		sp_repr_set_int (repr, "sodipodi:sides", star->sides);
 		sp_repr_set_svg_double(repr, "sodipodi:cx", star->center[NR::X]);
 		sp_repr_set_svg_double(repr, "sodipodi:cy", star->center[NR::Y]);
@@ -154,7 +154,7 @@ sp_star_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
 	sp_star_set_shape ((SPShape *) star);
 	char *d = sp_svg_write_path (((SPShape *) star)->curve->bpath);
-	sp_repr_set_attr (repr, "d", d);
+	repr->setAttribute("d", d);
 	g_free (d);
 
 	if (((SPObjectClass *) (parent_class))->write)

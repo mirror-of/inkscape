@@ -392,7 +392,7 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 
     for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
         Node *repr=(Node *)iter->data;
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
     }
     g_slist_free(reprs);
 
@@ -457,7 +457,7 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
     for (prop = node->properties; prop != NULL; prop = prop->next) {
         if (prop->children) {
             sp_repr_qualified_name (c, 256, prop->ns, prop->name, default_ns, prefix_map);
-            sp_repr_set_attr (repr, c, (gchar*)prop->children->content);
+            repr->setAttribute(c, (gchar*)prop->children->content);
             /* TODO remember prop->ns->prefix if prop->ns != NULL */
         }
     }
@@ -470,7 +470,7 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
         crepr = sp_repr_svg_read_node (child, default_ns, prefix_map);
         if (crepr) {
             repr->appendChild(crepr);
-            sp_repr_unref (crepr);
+            Inkscape::GC::release(crepr);
         }
     }
 

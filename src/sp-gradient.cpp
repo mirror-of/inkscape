@@ -226,9 +226,9 @@ sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         os << c;
     }
     os << ";stop-opacity:" << stop->opacity;
-    sp_repr_set_attr(repr, "style", os.str().c_str());
-    sp_repr_set_attr(repr, "stop-color", NULL);
-    sp_repr_set_attr(repr, "stop-opacity", NULL);
+    repr->setAttribute("style", os.str().c_str());
+    repr->setAttribute("stop-color", NULL);
+    repr->setAttribute("stop-opacity", NULL);
     sp_repr_set_css_double(repr, "offset", stop->offset);
     /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no sense
      * for offset proportions. */
@@ -639,24 +639,24 @@ sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
         while (l) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            sp_repr_unref((Inkscape::XML::Node *) l->data);
+            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     }
 
     if (gr->ref->getURI()) {
         gchar *uri_string = gr->ref->getURI()->toString();
-        sp_repr_set_attr(repr, "xlink:href", uri_string);
+        repr->setAttribute("xlink:href", uri_string);
         g_free(uri_string);
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || gr->units_set) {
         switch (gr->units) {
             case SP_GRADIENT_UNITS_USERSPACEONUSE:
-                sp_repr_set_attr(repr, "gradientUnits", "userSpaceOnUse");
+                repr->setAttribute("gradientUnits", "userSpaceOnUse");
                 break;
             default:
-                sp_repr_set_attr(repr, "gradientUnits", "objectBoundingBox");
+                repr->setAttribute("gradientUnits", "objectBoundingBox");
                 break;
         }
     }
@@ -664,9 +664,9 @@ sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     if ((flags & SP_OBJECT_WRITE_ALL) || gr->gradientTransform_set) {
         gchar c[256];
         if (sp_svg_transform_write(c, 256, gr->gradientTransform)) {
-            sp_repr_set_attr(repr, "gradientTransform", c);
+            repr->setAttribute("gradientTransform", c);
         } else {
-            sp_repr_set_attr(repr, "gradientTransform", NULL);
+            repr->setAttribute("gradientTransform", NULL);
         }
     }
 
@@ -676,13 +676,13 @@ sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
          */
         switch (gr->spread) {
             case SP_GRADIENT_SPREAD_REFLECT:
-                sp_repr_set_attr(repr, "spreadMethod", "reflect");
+                repr->setAttribute("spreadMethod", "reflect");
                 break;
             case SP_GRADIENT_SPREAD_REPEAT:
-                sp_repr_set_attr(repr, "spreadMethod", "repeat");
+                repr->setAttribute("spreadMethod", "repeat");
                 break;
             default:
-                sp_repr_set_attr(repr, "spreadMethod", "pad");
+                repr->setAttribute("spreadMethod", "pad");
                 break;
         }
     }
@@ -878,7 +878,7 @@ sp_gradient_repr_write_vector(SPGradient *gr)
         gchar c[64];
         sp_svg_write_color(c, 64, sp_color_get_rgba32_ualpha(&gr->vector.stops[i].color, 0x00));
         os << "stop-color:" << c << ";stop-opacity:" << gr->vector.stops[i].opacity;
-        sp_repr_set_attr(child, "style", os.str().c_str());
+        child->setAttribute("style", os.str().c_str());
         /* Order will be reversed here */
         cl = g_slist_prepend(cl, child);
     }
@@ -889,7 +889,7 @@ sp_gradient_repr_write_vector(SPGradient *gr)
     while (cl) {
         Inkscape::XML::Node *child = static_cast<Inkscape::XML::Node *>(cl->data);
         repr->addChild(child, NULL);
-        sp_repr_unref(child);
+        Inkscape::GC::release(child);
         cl = g_slist_remove(cl, child);
     }
 }

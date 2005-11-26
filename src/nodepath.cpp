@@ -466,8 +466,8 @@ static void update_repr_internal(Inkscape::NodePath::Path *np)
     gchar *typestr = create_typestr(np);
     gchar *svgpath = sp_svg_write_path(curve->bpath);
 
-    sp_repr_set_attr(repr, "d", svgpath);
-    sp_repr_set_attr(repr, "sodipodi:nodetypes", typestr);
+    repr->setAttribute("d", svgpath);
+    repr->setAttribute("sodipodi:nodetypes", typestr);
 
     g_free(svgpath);
     g_free(typestr);
@@ -512,8 +512,8 @@ static void stamp_repr(Inkscape::NodePath::Path *np)
 
     gchar *svgpath = sp_svg_write_path(curve->bpath);
 
-    sp_repr_set_attr(new_repr, "d", svgpath);
-    sp_repr_set_attr(new_repr, "sodipodi:nodetypes", typestr);
+    new_repr->setAttribute("d", svgpath);
+    new_repr->setAttribute("sodipodi:nodetypes", typestr);
 
     // add the new repr to the parent
     parent->appendChild(new_repr);
@@ -522,7 +522,7 @@ static void stamp_repr(Inkscape::NodePath::Path *np)
 
     sp_document_done(SP_DT_DOCUMENT(np->desktop));
 
-    sp_repr_unref(new_repr);
+    Inkscape::GC::release(new_repr);
     g_free(svgpath);
     g_free(typestr);
     sp_curve_unref(curve);

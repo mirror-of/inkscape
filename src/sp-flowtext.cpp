@@ -302,7 +302,7 @@ sp_flowtext_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
         while ( l ) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            sp_repr_unref((Inkscape::XML::Node *) l->data);
+            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
@@ -562,16 +562,16 @@ void SPFlowtext::convert_to_text()
                         new_string += *span_text_start_iter++;    // grr. no substr() with iterators
                     Inkscape::XML::Node *new_text = sp_repr_new_text(new_string.c_str());
                     span_tspan->appendChild(new_text);
-                    sp_repr_unref(new_text);
+                    Inkscape::GC::release(new_text);
                 }
             }
             it = it_span_end;
 
             line_tspan->appendChild(span_tspan);
-	        sp_repr_unref(span_tspan);
+	        Inkscape::GC::release(span_tspan);
         }
         repr->appendChild(line_tspan);
-	    sp_repr_unref(line_tspan);
+	    Inkscape::GC::release(line_tspan);
     }
 
     Inkscape::XML::Node *parent = SP_OBJECT_REPR(item)->parent();
@@ -580,7 +580,7 @@ void SPFlowtext::convert_to_text()
     sp_item_write_transform(new_item, repr, item->transform);
     SP_OBJECT(new_item)->updateRepr();
 
-    sp_repr_unref(repr);
+    Inkscape::GC::release(repr);
     selection->set(new_item);
     item->deleteObject();
 
@@ -638,7 +638,7 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, N
     SPDocument *doc = SP_DT_DOCUMENT (desktop);
 
     Inkscape::XML::Node *root_repr = sp_repr_new("svg:flowRoot");
-    sp_repr_set_attr(root_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
+    root_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
     SPItem *ft_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(root_repr));
     SPObject *root_object = doc->getObjectByRepr(root_repr);
     g_assert(SP_IS_FLOWTEXT(root_object));
@@ -675,10 +675,10 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, N
     Inkscape::XML::Node *text = sp_repr_new_text("");
     para_repr->appendChild(text);
 
-    sp_repr_unref(root_repr);
-    sp_repr_unref(region_repr);
-    sp_repr_unref(para_repr);
-    sp_repr_unref(rect_repr);
+    Inkscape::GC::release(root_repr);
+    Inkscape::GC::release(region_repr);
+    Inkscape::GC::release(para_repr);
+    Inkscape::GC::release(rect_repr);
 
     return ft_item;
 }

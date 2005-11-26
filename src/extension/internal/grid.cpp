@@ -139,7 +139,7 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
     Inkscape::XML::Node * current_layer = SP_OBJECT_REPR(((SPDesktop *)document)->currentLayer());
     Inkscape::XML::Node * path = sp_repr_new("svg:path");
 
-    sp_repr_set_attr(path, "d", path_data.c_str());
+    path->setAttribute("d", path_data.c_str());
 
     Glib::ustring style("fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000");
     style += ";stroke-width:";
@@ -147,10 +147,10 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
     sprintf(floatstring, "%f", line_width);
     style += floatstring;
     style += "pt";
-    sp_repr_set_attr(path, "style", style.c_str());
+    path->setAttribute("style", style.c_str());
 
     // Glib::ustring transform("scale(1.25 1.25)");
-    // sp_repr_set_attr(path, "transform", transform.c_str());
+    // path->setAttribute("transform", transform.c_str());
 
     current_layer->appendChild(path);
 

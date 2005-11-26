@@ -144,7 +144,7 @@ static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value
 }
 
 
-#define COPY_ATTR(rd,rs,key) sp_repr_set_attr((rd), (key), rs->attribute(key));
+#define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
 static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -154,7 +154,7 @@ static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Nod
         repr = sp_repr_new("svg:a");
     }
 
-    sp_repr_set_attr(repr, "xlink:href", anchor->href);
+    repr->setAttribute("xlink:href", anchor->href);
 
     if (repr != SP_OBJECT_REPR(object)) {
         COPY_ATTR(repr, object->repr, "xlink:type");

@@ -488,7 +488,8 @@ sp_repr_set_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int va
     g_return_val_if_fail(repr != NULL, FALSE);
     g_return_val_if_fail(key != NULL, FALSE);
 
-    return sp_repr_set_attr(repr, key, (val) ? "true" : "false");
+    repr->setAttribute(key, (val) ? "true" : "false");
+    return true;
 }
 
 unsigned int
@@ -501,7 +502,8 @@ sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int val)
 
     g_snprintf(c, 32, "%d", val);
 
-    return sp_repr_set_attr(repr, key, c);
+    repr->setAttribute(key, c);
+    return true;
 }
 
 /**
@@ -518,7 +520,8 @@ sp_repr_set_css_double(Inkscape::XML::Node *repr, gchar const *key, double val)
     Inkscape::CSSOStringStream os;
     os << val;
 
-    return sp_repr_set_attr(repr, key, os.str().c_str());
+    repr->setAttribute(key, os.str().c_str());
+    return true;
 }
 
 /**
@@ -535,7 +538,8 @@ sp_repr_set_svg_double(Inkscape::XML::Node *repr, gchar const *key, double val)
     Inkscape::SVGOStringStream os;
     os << val;
 
-    return sp_repr_set_attr(repr, key, os.str().c_str());
+    repr->setAttribute(key, os.str().c_str());
+    return true;
 }
 
 

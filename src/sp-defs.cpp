@@ -144,7 +144,7 @@ static Inkscape::XML::Node *sp_defs_write(SPObject *object, Inkscape::XML::Node 
         
         while (l) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            sp_repr_unref((Inkscape::XML::Node *) l->data);
+            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
         

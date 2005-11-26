@@ -135,7 +135,7 @@ SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
             char const * const attr_strs[] = {"inkscape:connection-start",
                                               "inkscape:connection-end"};
             gchar *uri_string = this->_connEnd[handle_ix]->ref.getURI()->toString();
-            sp_repr_set_attr(repr, attr_strs[handle_ix], uri_string);
+            repr->setAttribute(attr_strs[handle_ix], uri_string);
             g_free(uri_string);
         }
     }

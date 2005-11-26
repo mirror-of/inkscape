@@ -191,7 +191,7 @@ bool SPItem::isLocked() const {
 }
 
 void SPItem::setLocked(bool locked) {
-    sp_repr_set_attr(SP_OBJECT_REPR(this), "sodipodi:insensitive",
+    SP_OBJECT_REPR(this)->setAttribute("sodipodi:insensitive",
                      ( locked ? "1" : NULL ));
     updateRepr();
 }
@@ -550,9 +550,9 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
 
     gchar c[256];
     if (sp_svg_transform_write(c, 256, item->transform)) {
-        sp_repr_set_attr(repr, "transform", c);
+        repr->setAttribute("transform", c);
     } else {
-        sp_repr_set_attr(repr, "transform", NULL);
+        repr->setAttribute("transform", NULL);
     }
 
     SPObject const *const parent = SP_OBJECT_PARENT(object);
@@ -565,7 +565,7 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
         SPStyle const *const obj_style = SP_OBJECT_STYLE(object);
         if (obj_style) {
             gchar *s = sp_style_write_string(obj_style, SP_STYLE_FLAG_IFSET);
-            sp_repr_set_attr(repr, "style", ( *s ? s : NULL ));
+            repr->setAttribute("style", ( *s ? s : NULL ));
             g_free(s);
         } else {
             /** \todo I'm not sure what to do in this case.  Bug #1165868
@@ -596,9 +596,9 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        sp_repr_set_attr(repr, "sodipodi:insensitive", ( item->sensitive ? NULL : "true" ));
-        sp_repr_set_attr(repr, "inkscape:r_cx", ( item->r_cx ? NULL : "true" ));
-        sp_repr_set_attr(repr, "inkscape:r_cy", ( item->r_cy ? NULL : "true" ));
+        repr->setAttribute("sodipodi:insensitive", ( item->sensitive ? NULL : "true" ));
+        repr->setAttribute("inkscape:r_cx", ( item->r_cx ? NULL : "true" ));
+        repr->setAttribute("inkscape:r_cy", ( item->r_cy ? NULL : "true" ));
     }
 
     if (((SPObjectClass *) (parent_class))->write) {

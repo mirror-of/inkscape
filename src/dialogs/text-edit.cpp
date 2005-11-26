@@ -601,7 +601,7 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
         if (SP_IS_TEXT (item_list->data)) {
 
             // backwards compatibility:
-            sp_repr_set_attr (SP_OBJECT_REPR(item_list->data), "sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
+            SP_OBJECT_REPR(item_list->data)->setAttribute("sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
 
             ++items;
         }

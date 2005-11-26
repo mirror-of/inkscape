@@ -111,14 +111,14 @@ sp_gradient_get_private_normalized(SPDocument *document, SPGradient *vector, SPG
     }
 
     // privates are garbage-collectable
-    sp_repr_set_attr(repr, "inkscape:collect", "always");
+    repr->setAttribute("inkscape:collect", "always");
 
     // link to vector
     sp_gradient_repr_set_link(repr, vector);
 
     /* Append the new private gradient to defs */
     SP_OBJECT_REPR(defs)->appendChild(repr);
-    sp_repr_unref(repr);
+    Inkscape::GC::release(repr);
 
     // get corresponding object
     SPGradient *gr = (SPGradient *) document->getObjectByRepr(repr);
@@ -214,20 +214,20 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
         // copy all the attributes to it
         Inkscape::XML::Node *repr_new = SP_OBJECT_REPR(gr_new);
         Inkscape::XML::Node *repr = SP_OBJECT_REPR(gr);
-        sp_repr_set_attr(repr_new, "gradientUnits", repr->attribute("gradientUnits"));
-        sp_repr_set_attr(repr_new, "gradientTransform", repr->attribute("gradientTransform"));
-        sp_repr_set_attr(repr_new, "spreadMethod", repr->attribute("spreadMethod"));
+        repr_new->setAttribute("gradientUnits", repr->attribute("gradientUnits"));
+        repr_new->setAttribute("gradientTransform", repr->attribute("gradientTransform"));
+        repr_new->setAttribute("spreadMethod", repr->attribute("spreadMethod"));
         if (SP_IS_RADIALGRADIENT(gr)) {
-            sp_repr_set_attr(repr_new, "cx", repr->attribute("cx"));
-            sp_repr_set_attr(repr_new, "cy", repr->attribute("cy"));
-            sp_repr_set_attr(repr_new, "fx", repr->attribute("fx"));
-            sp_repr_set_attr(repr_new, "fy", repr->attribute("fy"));
-            sp_repr_set_attr(repr_new, "r", repr->attribute("r"));
+            repr_new->setAttribute("cx", repr->attribute("cx"));
+            repr_new->setAttribute("cy", repr->attribute("cy"));
+            repr_new->setAttribute("fx", repr->attribute("fx"));
+            repr_new->setAttribute("fy", repr->attribute("fy"));
+            repr_new->setAttribute("r", repr->attribute("r"));
         } else {
-            sp_repr_set_attr(repr_new, "x1", repr->attribute("x1"));
-            sp_repr_set_attr(repr_new, "y1", repr->attribute("y1"));
-            sp_repr_set_attr(repr_new, "x2", repr->attribute("x2"));
-            sp_repr_set_attr(repr_new, "y2", repr->attribute("y2"));
+            repr_new->setAttribute("x1", repr->attribute("x1"));
+            repr_new->setAttribute("y1", repr->attribute("y1"));
+            repr_new->setAttribute("x2", repr->attribute("x2"));
+            repr_new->setAttribute("y2", repr->attribute("y2"));
         }
 
         return gr_new;
@@ -246,7 +246,7 @@ sp_gradient_fork_vector_if_necessary (SPGradient *gr)
         SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document))->addChild(repr, NULL);
         SPGradient *gr_new = (SPGradient *) document->getObjectByRepr(repr);
         gr_new = sp_gradient_ensure_vector_normalized (gr_new);
-        sp_repr_unref (repr);
+        Inkscape::GC::release(repr);
         return gr_new;
     }
     return gr;
@@ -289,9 +289,9 @@ sp_gradient_reset_to_userspace (SPGradient *gr, SPItem *item)
         {
             gchar c[256];
             if (sp_svg_transform_write(c, 256, gr->gradientTransform)) {
-                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", c);
+                SP_OBJECT_REPR(gr)->setAttribute("gradientTransform", c);
             } else {
-                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", NULL);
+                SP_OBJECT_REPR(gr)->setAttribute("gradientTransform", NULL);
             }
         }
     } else {
@@ -302,7 +302,7 @@ sp_gradient_reset_to_userspace (SPGradient *gr, SPItem *item)
     }
 
     // set the gradientUnits
-    sp_repr_set_attr(repr, "gradientUnits", "userSpaceOnUse");
+    repr->setAttribute("gradientUnits", "userSpaceOnUse");
 
     return gr;
 }
@@ -358,9 +358,9 @@ sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar const *prop
         {
             gchar c[256];
             if (sp_svg_transform_write(c, 256, gr->gradientTransform)) {
-                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", c);
+                SP_OBJECT_REPR(gr)->setAttribute("gradientTransform", c);
             } else {
-                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", NULL);
+                SP_OBJECT_REPR(gr)->setAttribute("gradientTransform", NULL);
             }
         }
 
@@ -403,7 +403,7 @@ sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar const *prop
         }
 
         // set the gradientUnits
-        sp_repr_set_attr(repr, "gradientUnits", "userSpaceOnUse");
+        repr->setAttribute("gradientUnits", "userSpaceOnUse");
     }
 
     // apply the gradient to the item (may be necessary if we forked it); not recursive
@@ -431,9 +431,9 @@ sp_gradient_transform_multiply(SPGradient *gradient, NR::Matrix postmul, bool se
 
     gchar c[256];
     if (sp_svg_transform_write(c, 256, gradient->gradientTransform)) {
-        sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", c);
+        SP_OBJECT_REPR(gradient)->setAttribute("gradientTransform", c);
     } else {
-        sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", NULL);
+        SP_OBJECT_REPR(gradient)->setAttribute("gradientTransform", NULL);
     }
 }
 
@@ -673,7 +673,7 @@ sp_item_gradient_reverse_vector (SPItem *item, bool fill_or_stroke)
         vector->appendChildRepr(copy);
         sp_repr_set_svg_double (copy, "offset", 1 - *iter);
         iter --;
-        sp_repr_unref(copy);
+        Inkscape::GC::release(copy);
     }
 
     g_slist_free (child_reprs);
@@ -829,9 +829,9 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 				if (write_repr) {
 					gchar s[256];
 					if (sp_svg_transform_write(s, 256, gradient->gradientTransform)) {
-						sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", s);
+						SP_OBJECT_REPR(gradient)->setAttribute("gradientTransform", s);
 					} else {
-						sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", NULL);
+						SP_OBJECT_REPR(gradient)->setAttribute("gradientTransform", NULL);
 					}
 				} else {
 					SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -1010,7 +1010,7 @@ sp_gradient_repr_set_link(Inkscape::XML::Node *repr, SPGradient *link)
         ref = NULL;
     }
 
-    sp_repr_set_attr(repr, "xlink:href", ref);
+    repr->setAttribute("xlink:href", ref);
 }
 
 static void
@@ -1045,7 +1045,7 @@ sp_document_default_gradient_vector(SPDocument *document, guint32 color)
 
     Inkscape::XML::Node *repr = sp_repr_new("svg:linearGradient");
 
-    sp_repr_set_attr(repr, "inkscape:collect", "always");
+    repr->setAttribute("inkscape:collect", "always");
     // set here, but removed when it's edited in the gradient editor
     // to further reduce clutter, we could
     // (1) here, search gradients by color and return what is found without duplication
@@ -1058,30 +1058,30 @@ sp_document_default_gradient_vector(SPDocument *document, guint32 color)
 
     {
         gchar *t = g_strdup_printf("stop-color:%s;stop-opacity:1;", b);
-        sp_repr_set_attr(stop, "style", t);
+        stop->setAttribute("style", t);
         g_free(t);
     }
 
-    sp_repr_set_attr(stop, "offset", "0");
+    stop->setAttribute("offset", "0");
 
     repr->appendChild(stop);
-    sp_repr_unref(stop);
+    Inkscape::GC::release(stop);
 
     stop = sp_repr_new("svg:stop");
 
     {
         gchar *t = g_strdup_printf("stop-color:%s;stop-opacity:0;", b);
-        sp_repr_set_attr(stop, "style", t);
+        stop->setAttribute("style", t);
         g_free(t);
     }
 
-    sp_repr_set_attr(stop, "offset", "1");
+    stop->setAttribute("offset", "1");
 
     repr->appendChild(stop);
-    sp_repr_unref(stop);
+    Inkscape::GC::release(stop);
 
     SP_OBJECT_REPR(defs)->addChild(repr, NULL);
-    sp_repr_unref(repr);
+    Inkscape::GC::release(repr);
 
     /* fixme: This does not look like nice */
     SPGradient *gr;

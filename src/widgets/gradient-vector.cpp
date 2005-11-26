@@ -472,12 +472,12 @@ verify_grad(SPGradient *gradient)
 
 		child = sp_repr_new ("svg:stop");
 		sp_repr_set_css_double(child, "offset", 0.0);
-		sp_repr_set_attr (child, "style", os.str().c_str());
+		child->setAttribute("style", os.str().c_str());
 		SP_OBJECT_REPR (gradient)->addChild(child, NULL);
 
 		child = sp_repr_new ("svg:stop");
 		sp_repr_set_css_double(child, "offset", 1.0);
-		sp_repr_set_attr (child, "style", os.str().c_str());
+		child->setAttribute("style", os.str().c_str());
 		SP_OBJECT_REPR (gradient)->addChild(child, NULL);
 	}
 	if (i < 2) {
@@ -715,10 +715,10 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 	sp_svg_write_color (c, 64, cnew);
 	gdouble opacity = (gdouble) SP_RGBA32_A_F (cnew);
 	os << "stop-color:" << c << ";stop-opacity:" << opacity <<";";
-	sp_repr_set_attr (SP_OBJECT_REPR (newstop), "style", os.str().c_str());
+	SP_OBJECT_REPR (newstop)->setAttribute("style", os.str().c_str());
 
 	sp_gradient_vector_widget_load_gradient (vb, gradient);
-	sp_repr_unref (new_stop_repr);
+	Inkscape::GC::release(new_stop_repr);
 	update_stop_list(GTK_WIDGET(mnu), gradient, newstop);
 	GtkWidget *offspin = GTK_WIDGET (g_object_get_data (G_OBJECT (vb), "offspn"));
 	GtkWidget *offslide =GTK_WIDGET (g_object_get_data (G_OBJECT (vb), "offslide"));
@@ -988,7 +988,7 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 		SPDocument *document = SP_OBJECT_DOCUMENT (gradient);
 		gboolean saved = sp_document_get_undo_sensitive(document);
 		sp_document_set_undo_sensitive (document, FALSE);
-		sp_repr_set_attr (SP_OBJECT_REPR(gradient), "inkscape:collect", NULL);
+		SP_OBJECT_REPR(gradient)->setAttribute("inkscape:collect", NULL);
 		sp_document_set_undo_sensitive (document, saved);
 	}
 
@@ -1120,9 +1120,9 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	gchar c[64];
 	sp_svg_write_color (c, 64, rgb);
 	os << "stop-color:" << c << ";stop-opacity:" << (gdouble) alpha <<";";
-	sp_repr_set_attr (SP_OBJECT_REPR (stop), "style", os.str().c_str());
+	SP_OBJECT_REPR (stop)->setAttribute("style", os.str().c_str());
 		//	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", rgb >> 8, (gdouble) alpha);
-		//sp_repr_set_attr (SP_OBJECT_REPR (stop), "style", c);
+		//SP_OBJECT_REPR (stop)->setAttribute("style", c);
 
 	sp_document_done (SP_OBJECT_DOCUMENT (ngr));
 

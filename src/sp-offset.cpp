@@ -224,8 +224,8 @@ sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *rep
         sp_object_read_attr (object, "inkscape:radius");
     } else {
         gchar const *oldA = object->repr->attribute("sodipodi:radius");
-        sp_repr_set_attr(object->repr,"inkscape:radius",oldA);
-        sp_repr_set_attr(object->repr,"sodipodi:radius",NULL);
+        object->repr->setAttribute("inkscape:radius",oldA);
+        object->repr->setAttribute("sodipodi:radius",NULL);
     
         sp_object_read_attr (object, "inkscape:radius");
     }
@@ -233,8 +233,8 @@ sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *rep
         sp_object_read_attr (object, "inkscape:original");
     } else {    
         gchar const *oldA = object->repr->attribute("sodipodi:original");
-        sp_repr_set_attr(object->repr,"inkscape:original",oldA);
-        sp_repr_set_attr(object->repr,"sodipodi:original",NULL);
+        object->repr->setAttribute("inkscape:original",oldA);
+        object->repr->setAttribute("sodipodi:original",NULL);
 
         sp_object_read_attr (object, "inkscape:original");
     }
@@ -248,9 +248,9 @@ sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *rep
             memcpy(nA+1,oldA,lA*sizeof(char));
             nA[0]='#';
             nA[lA+1]=0;
-            sp_repr_set_attr(object->repr,"xlink:href",nA);
+            object->repr->setAttribute("xlink:href",nA);
             free(nA);
-            sp_repr_set_attr(object->repr,"inkscape:href",NULL);
+            object->repr->setAttribute("inkscape:href",NULL);
         }
         sp_object_read_attr (object, "xlink:href");
     }
@@ -273,10 +273,10 @@ sp_offset_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
          * Fixme: we may replace these attributes by
          * inkscape:offset="cx cy exp revo rad arg t0"
          */
-        sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
+        repr->setAttribute("sodipodi:type", "inkscape:offset");
         sp_repr_set_svg_double(repr, "inkscape:radius", offset->rad);
-        sp_repr_set_attr (repr, "inkscape:original", offset->original);
-        sp_repr_set_attr (repr, "inkscape:href", offset->sourceHref);
+        repr->setAttribute("inkscape:original", offset->original);
+        repr->setAttribute("inkscape:href", offset->sourceHref);
     }
 
 
@@ -288,7 +288,7 @@ sp_offset_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
     // write that curve to "d"
     char *d = sp_svg_write_path (((SPShape *) offset)->curve->bpath);
-    sp_repr_set_attr (repr, "d", d);
+    repr->setAttribute("d", d);
     g_free (d);
   
     if (((SPObjectClass *) (parent_class))->write)
@@ -1218,7 +1218,7 @@ refresh_offset_source(SPOffset* offset)
         delete res;
         delete orig;
     
-        sp_repr_set_attr (SP_OBJECT (offset)->repr, "inkscape:original", res_d);
+        SP_OBJECT (offset)->repr->setAttribute("inkscape:original", res_d);
     
         free (res_d);
     }

@@ -225,8 +225,8 @@ void Tracer::traceThread()
 	    totalNodeCount += result->getNodeCount();
 
         Inkscape::XML::Node *pathRepr = sp_repr_new("svg:path");
-        sp_repr_set_attr(pathRepr, "style", result->getStyle());
-        sp_repr_set_attr(pathRepr, "d",     result->getPathData());
+        pathRepr->setAttribute("style", result->getStyle());
+        pathRepr->setAttribute("d",     result->getPathData());
 
         if (nrPaths > 1)
             groupRepr->addChild(pathRepr, NULL);
@@ -245,7 +245,7 @@ void Tracer::traceThread()
             selection->clear();
             selection->add(pathRepr);
             }
-        sp_repr_unref (pathRepr);
+        Inkscape::GC::release(pathRepr);
         }
 
 
@@ -256,7 +256,7 @@ void Tracer::traceThread()
         {
         selection->clear();
         selection->add(groupRepr);
-        sp_repr_unref (groupRepr);
+        Inkscape::GC::release(groupRepr);
         }
 
     //## inform the document, so we can undo

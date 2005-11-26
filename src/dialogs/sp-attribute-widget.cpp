@@ -123,7 +123,7 @@ sp_attribute_widget_destroy (GtkObject *object)
     } else {
     
         if (spaw->src.repr) {
-            spaw->src.repr = sp_repr_unref (spaw->src.repr);
+            spaw->src.repr = Inkscape::GC::release(spaw->src.repr);
         }
     } // end of if()
     
@@ -235,7 +235,7 @@ sp_attribute_widget_set_object ( SPAttributeWidget *spaw,
     } else {
         
         if (spaw->src.repr) {
-            spaw->src.repr = sp_repr_unref (spaw->src.repr);
+            spaw->src.repr = Inkscape::GC::release(spaw->src.repr);
         }
     }
 
@@ -290,7 +290,7 @@ sp_attribute_widget_set_repr ( SPAttributeWidget *spaw,
     } else {
         
         if (spaw->src.repr) {
-            spaw->src.repr = sp_repr_unref (spaw->src.repr);
+            spaw->src.repr = Inkscape::GC::release(spaw->src.repr);
         }
     }
 
@@ -300,7 +300,7 @@ sp_attribute_widget_set_repr ( SPAttributeWidget *spaw,
         const gchar *val;
 
         spaw->blocked = TRUE;
-        spaw->src.repr = sp_repr_ref (repr);
+        spaw->src.repr = Inkscape::GC::anchor(repr);
         spaw->attribute = g_strdup (attribute);
 
         val = repr->attribute(attribute);
@@ -442,7 +442,7 @@ sp_attribute_table_destroy ( GtkObject *object )
         }
     } else {
         if (spat->src.repr) {
-            spat->src.repr = sp_repr_unref (spat->src.repr);
+            spat->src.repr = Inkscape::GC::release(spat->src.repr);
         }
     } // end of if()
 
@@ -546,7 +546,7 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
         }
     } else {
         if (spat->src.repr) {
-            spat->src.repr = sp_repr_unref (spat->src.repr);
+            spat->src.repr = Inkscape::GC::release(spat->src.repr);
         }
     }
 
@@ -648,7 +648,7 @@ sp_attribute_table_set_repr ( SPAttributeTable *spat,
         }
     } else {
         if (spat->src.repr) {
-            spat->src.repr = sp_repr_unref (spat->src.repr);
+            spat->src.repr = Inkscape::GC::release(spat->src.repr);
         }
     }
 
@@ -660,7 +660,7 @@ sp_attribute_table_set_repr ( SPAttributeTable *spat,
         spat->blocked = TRUE;
 
         /* Set up repr */
-        spat->src.repr = sp_repr_ref (repr);
+        spat->src.repr = Inkscape::GC::anchor(repr);
         spat->num_attr = num_attr;
         /* Create table */
         spat->table = gtk_table_new (num_attr, 2, FALSE);

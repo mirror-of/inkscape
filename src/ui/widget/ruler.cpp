@@ -146,11 +146,11 @@ Ruler::on_button_release_event(GdkEventButton *evb)
 
         if ( (_horiz_f ? wy : wx ) >= 0 ) {
             Inkscape::XML::Node *repr = sp_repr_new("sodipodi:guide");
-            sp_repr_set_attr(repr, "orientation", _horiz_f ? "horizontal" : "vertical");
+            repr->setAttribute("orientation", _horiz_f ? "horizontal" : "vertical");
             double const guide_pos_dt = event_dt[ _horiz_f ? NR::Y : NR::X ];
             sp_repr_set_svg_double(repr, "position", guide_pos_dt);
             SP_OBJECT_REPR(_dt->namedview)->appendChild(repr);
-            sp_repr_unref(repr);
+            Inkscape::GC::release(repr);
             sp_document_done(SP_DT_DOCUMENT(_dt));
         }
         _dt->set_coordinate_status(event_dt);

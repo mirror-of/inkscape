@@ -838,7 +838,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 
                     // convert layers to groups; FIXME: add "preserve layers" mode where each layer
                     // from impot is copied to the same-named layer in host
-                    sp_repr_set_attr (newchild, "inkscape:groupmode", NULL);
+                    newchild->setAttribute("inkscape:groupmode", NULL);
 
                     newgroup->appendChild(newchild);
                 }
@@ -853,13 +853,13 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
                 new_obj = SP_DOCUMENT_ROOT(in_doc)->appendChildRepr(newgroup);
             }
 
-            sp_repr_unref(newgroup);
+            Inkscape::GC::release(newgroup);
         } else {
             // just add one item
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
                     Inkscape::XML::Node *newitem = SP_OBJECT_REPR(child)->duplicate();
-                    sp_repr_set_attr (newitem, "inkscape:groupmode", NULL);
+                    newitem->setAttribute("inkscape:groupmode", NULL);
 
                     if (desktop) {
                         // Add it to the current layer
@@ -1316,7 +1316,7 @@ void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns
         if (href && g_path_is_absolute(href)) {
             const gchar *relname = sp_relative_path_from_path(href, base);
             //g_message("     setting to [%s]", relname );
-            sp_repr_set_attr(ir, "xlink:href", relname);
+            ir->setAttribute("xlink:href", relname);
         }
 // TODO next refinement is to make the first choice keeping the relative path as-is if
 //      based on the new location it gives us a valid file.

@@ -162,22 +162,22 @@ sp_input_save_to_preferences (void)
         repr = sp_repr_lookup_child(devices, "id", device->name);
         if (repr == NULL) {
             repr = sp_repr_new("group");
-            sp_repr_set_attr(repr, "id", device->name);
+            repr->setAttribute("id", device->name);
             devices->appendChild(repr);
             Inkscape::GC::release(repr);
         }
         switch (device->mode) {
             default:
             case GDK_MODE_DISABLED: {
-                sp_repr_set_attr(repr, "mode", "disabled");
+                repr->setAttribute("mode", "disabled");
                 break;
             }
             case GDK_MODE_SCREEN: {
-                sp_repr_set_attr(repr, "mode", "screen");
+                repr->setAttribute("mode", "screen");
                 break;
             }
             case GDK_MODE_WINDOW: {
-                sp_repr_set_attr(repr, "mode", "window");
+                repr->setAttribute("mode", "window");
                 break;
             }
         }
@@ -187,14 +187,14 @@ sp_input_save_to_preferences (void)
             temp_attribute += axis_use_strings[device->axes[i].use];
             temp_attribute += ";";
         }
-        sp_repr_set_attr(repr, "axes", temp_attribute.c_str());
+        repr->setAttribute("axes", temp_attribute.c_str());
 
         temp_attribute = "";
         for (i=0; i < device->num_keys; i++) {
             temp_attribute += gtk_accelerator_name(device->keys[i].keyval, device->keys[i].modifiers);
             temp_attribute += ";";
         }
-        sp_repr_set_attr(repr, "keys", temp_attribute.c_str());
+        repr->setAttribute("keys", temp_attribute.c_str());
     }
 }
 

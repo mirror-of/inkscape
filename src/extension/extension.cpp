@@ -66,7 +66,7 @@ Parameter * param_shared (const gchar * name, GSList * list);
 Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
 {
     repr = in_repr;
-    sp_repr_ref(in_repr);
+    Inkscape::GC::anchor(in_repr);
 
     id = NULL;
     name = NULL;
@@ -125,7 +125,7 @@ Extension::~Extension (void)
 //	printf("Extension Destructor: %s\n", name);
 	set_state(STATE_UNLOADED);
 	db.unregister_ext(this);
-    sp_repr_unref(repr);
+    Inkscape::GC::release(repr);
     g_free(id);
     g_free(name);
 	delete timer;

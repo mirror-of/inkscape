@@ -167,7 +167,7 @@ sp_event_context_dispose(GObject *object)
 
     if (ec->prefs_repr) {
         sp_repr_remove_listener_by_data(ec->prefs_repr, ec);
-        sp_repr_unref(ec->prefs_repr);
+        Inkscape::GC::release(ec->prefs_repr);
         ec->prefs_repr = NULL;
     }
 
@@ -721,7 +721,7 @@ sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *prefs_
     ec->key = key;
     ec->prefs_repr = prefs_repr;
     if (ec->prefs_repr) {
-        sp_repr_ref(ec->prefs_repr);
+        Inkscape::GC::anchor(ec->prefs_repr);
         sp_repr_add_listener(ec->prefs_repr, &sp_ec_event_vector, ec);
     }
 

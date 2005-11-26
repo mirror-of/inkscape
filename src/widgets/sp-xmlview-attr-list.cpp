@@ -73,11 +73,11 @@ sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, Inkscape::XML::Node * r
 	if (list->repr) {
 		gtk_clist_clear (GTK_CLIST (list));
 		sp_repr_remove_listener_by_data (list->repr, list);
-		sp_repr_unref (list->repr);
+		Inkscape::GC::release(list->repr);
 	}
 	list->repr = repr;
 	if (repr) {
-		sp_repr_ref (repr);
+		Inkscape::GC::anchor(repr);
 		sp_repr_add_listener (repr, &repr_events, list);
 		sp_repr_synthesize_events (repr, &repr_events, list);
 	}

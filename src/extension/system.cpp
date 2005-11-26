@@ -110,7 +110,7 @@ open(Extension *key, gchar const *filename)
     Inkscape::XML::Node *repr = sp_document_repr_root(doc);
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
-    sp_repr_set_attr(repr, "sodipodi:modified", NULL);
+    repr->setAttribute("sodipodi:modified", NULL);
     sp_document_set_undo_sensitive(doc, saved);
 
     sp_document_set_uri(doc, filename);
@@ -376,7 +376,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
 
         //Inkscape::XML::Node *old_repr = child_repr;
         child_repr = sp_repr_next(child_repr);
-        //sp_repr_unref(old_repr);
+        //Inkscape::GC::release(old_repr);
     }
 
     Implementation::Implementation *imp;

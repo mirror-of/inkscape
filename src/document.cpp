@@ -245,30 +245,30 @@ sp_document_create(Inkscape::XML::Document *rdoc,
     sodipodi_version = SP_ROOT(document->root)->version.sodipodi;
 
     /* fixme: Not sure about this, but lets assume ::build updates */
-    sp_repr_set_attr(rroot, "sodipodi:version", SODIPODI_VERSION);
-    sp_repr_set_attr(rroot, "inkscape:version", INKSCAPE_VERSION);
+    rroot->setAttribute("sodipodi:version", SODIPODI_VERSION);
+    rroot->setAttribute("inkscape:version", INKSCAPE_VERSION);
     /* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
 
     /* Quick hack 2 - get default image size into document */
-    if (!rroot->attribute("width")) sp_repr_set_attr(rroot, "width", A4_WIDTH_STR);
-    if (!rroot->attribute("height")) sp_repr_set_attr(rroot, "height", A4_HEIGHT_STR);
+    if (!rroot->attribute("width")) rroot->setAttribute("width", A4_WIDTH_STR);
+    if (!rroot->attribute("height")) rroot->setAttribute("height", A4_HEIGHT_STR);
     /* End of quick hack 2 */
 
     /* Quick hack 3 - Set uri attributes */
     if (uri) {
         /* fixme: Think, what this means for images (Lauris) */
-        sp_repr_set_attr(rroot, "sodipodi:docname", uri);
+        rroot->setAttribute("sodipodi:docname", uri);
         if (document->base)
-            sp_repr_set_attr(rroot, "sodipodi:docbase", document->base);
+            rroot->setAttribute("sodipodi:docbase", document->base);
     }
     /* End of quick hack 3 */
     /* between 0 and 0.25 */
     if (sp_version_inside_range(sodipodi_version, 0, 0, 0, 25)) {
         /* Clear ancient spec violating attributes */
-        sp_repr_set_attr(rroot, "SP-DOCNAME", NULL);
-        sp_repr_set_attr(rroot, "SP-DOCBASE", NULL);
-        sp_repr_set_attr(rroot, "docname", NULL);
-        sp_repr_set_attr(rroot, "docbase", NULL);
+        rroot->setAttribute("SP-DOCNAME", NULL);
+        rroot->setAttribute("SP-DOCBASE", NULL);
+        rroot->setAttribute("docname", NULL);
+        rroot->setAttribute("docbase", NULL);
     }
 
     // creating namedview
@@ -281,7 +281,7 @@ sp_document_create(Inkscape::XML::Document *rdoc,
         if (!r) {
             // if there's none, create an empty element
             rnew = sp_repr_new("sodipodi:namedview");
-            sp_repr_set_attr(rnew, "id", "base");
+            rnew->setAttribute("id", "base");
         } else {
             // otherwise, take from preferences
             rnew = r->duplicate();
@@ -289,7 +289,7 @@ sp_document_create(Inkscape::XML::Document *rdoc,
         // insert into the document
         rroot->addChild(rnew, NULL);
         // clean up
-        sp_repr_unref(rnew);
+        Inkscape::GC::release(rnew);
     }
 
     /* Defs */
@@ -297,7 +297,7 @@ sp_document_create(Inkscape::XML::Document *rdoc,
         Inkscape::XML::Node *r;
         r = sp_repr_new("svg:defs");
         rroot->addChild(r, NULL);
-        sp_repr_unref(r);
+        Inkscape::GC::release(r);
         g_assert(SP_ROOT(document->root)->defs);
     }
 
@@ -532,9 +532,9 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
     gboolean saved = sp_document_get_undo_sensitive(document);
     sp_document_set_undo_sensitive(document, FALSE);
     if (document->base)
-        sp_repr_set_attr(repr, "sodipodi:docbase", document->base);
+        repr->setAttribute("sodipodi:docbase", document->base);
 
-    sp_repr_set_attr(repr, "sodipodi:docname", document->name);
+    repr->setAttribute("sodipodi:docname", document->name);
     sp_document_set_undo_sensitive(document, saved);
 
     document->priv->uri_set_signal.emit(document->uri);

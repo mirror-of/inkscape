@@ -147,7 +147,7 @@ sp_spiral_context_dispose(GObject *object)
 
     if (ec->shape_repr) { // remove old listener
         sp_repr_remove_listener_by_data(ec->shape_repr, ec);
-        sp_repr_unref(ec->shape_repr);
+        Inkscape::GC::release(ec->shape_repr);
         ec->shape_repr = 0;
     }
 
@@ -183,7 +183,7 @@ sp_spiral_context_selection_changed(Inkscape::Selection *selection, gpointer dat
 
     if (ec->shape_repr) { // remove old listener
         sp_repr_remove_listener_by_data(ec->shape_repr, ec);
-        sp_repr_unref(ec->shape_repr);
+        Inkscape::GC::release(ec->shape_repr);
         ec->shape_repr = 0;
     }
 
@@ -193,7 +193,7 @@ sp_spiral_context_selection_changed(Inkscape::Selection *selection, gpointer dat
         Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(item);
         if (shape_repr) {
             ec->shape_repr = shape_repr;
-            sp_repr_ref(shape_repr);
+            Inkscape::GC::anchor(shape_repr);
             sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
             sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
         }
@@ -220,7 +220,7 @@ sp_spiral_context_setup(SPEventContext *ec)
         Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(item);
         if (shape_repr) {
             ec->shape_repr = shape_repr;
-            sp_repr_ref(shape_repr);
+            Inkscape::GC::anchor(shape_repr);
             sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
             sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
         }
@@ -429,13 +429,13 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
 
         /* Create object */
         Inkscape::XML::Node *repr = sp_repr_new("svg:path");
-        sp_repr_set_attr(repr, "sodipodi:type", "spiral");
+        repr->setAttribute("sodipodi:type", "spiral");
 
         /* Set style */
         sp_desktop_apply_style_tool(desktop, repr, "tools.shapes.spiral", false);
 
         sc->item = (SPItem *) desktop->currentLayer()->appendChildRepr(repr);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
         sc->item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());
         sc->item->updateRepr();
     }

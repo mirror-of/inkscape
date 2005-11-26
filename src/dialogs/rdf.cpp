@@ -547,7 +547,7 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 g_return_val_if_fail (temp != NULL, 0);
 
                 parent->appendChild(temp);
-                sp_repr_unref ( temp );
+                Inkscape::GC::release(temp);
 
                 return TRUE;
             }
@@ -563,7 +563,7 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 g_return_val_if_fail (temp != NULL, 0);
 
                 parent->appendChild(temp);
-                sp_repr_unref ( temp );
+                Inkscape::GC::release(temp);
             }
             parent = temp;
 
@@ -573,7 +573,7 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 g_return_val_if_fail (temp != NULL, 0);
 
                 parent->appendChild(temp);
-                sp_repr_unref ( temp );
+                Inkscape::GC::release(temp);
             }
             parent = temp;
 
@@ -583,7 +583,7 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 g_return_val_if_fail (temp != NULL, 0);
 
                 parent->appendChild(temp);
-                sp_repr_unref ( temp );
+                Inkscape::GC::release(temp);
 
                 return TRUE;
             }
@@ -593,7 +593,8 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
             }
 
         case RDF_RESOURCE:
-            return sp_repr_set_attr ( parent, "rdf:resource", text );
+            parent->setAttribute("rdf:resource", text );
+            return true;
 
         case RDF_XML:
             return 1;
@@ -611,7 +612,7 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 g_return_val_if_fail (temp != NULL, 0);
 
                 parent->appendChild(temp);
-                sp_repr_unref ( temp );
+                Inkscape::GC::release(temp);
             }
             parent = temp;
 
@@ -628,13 +629,13 @@ rdf_set_repr_text ( Inkscape::XML::Node * repr,
                 g_return_val_if_fail (temp != NULL, 0);
 
                 parent->appendChild(temp);
-                sp_repr_unref ( temp );
+                Inkscape::GC::release(temp);
 
                 child = sp_repr_new_text( g_strstrip(str) );
                 g_return_val_if_fail (child != NULL, 0);
 
                 temp->appendChild(child);
-                sp_repr_unref ( child );
+                Inkscape::GC::release(child);
             }
             g_strfreev( strlist );
 
@@ -667,14 +668,14 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
             g_return_val_if_fail ( parent != NULL, NULL);
 
             svg->appendChild(parent);
-            sp_repr_unref(parent);
+            Inkscape::GC::release(parent);
         }
 
         rdf = sp_repr_new( XML_TAG_NAME_RDF );
         g_return_val_if_fail (rdf != NULL, NULL);
 
         parent->appendChild(rdf);
-        sp_repr_unref(rdf);
+        Inkscape::GC::release(rdf);
     }
 
     /*
@@ -689,13 +690,13 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
 
             /* attach the metadata node */
             want_metadata->appendChild(metadata);
-            sp_repr_unref ( metadata );
+            Inkscape::GC::release(metadata);
 
             /* move the RDF into it */
-            sp_repr_ref ( rdf );
+            Inkscape::GC::anchor(rdf);
             sp_repr_unparent ( rdf );
             metadata->appendChild(rdf);
-            sp_repr_unref ( rdf );
+            Inkscape::GC::release(rdf);
     }
     
     return rdf;
@@ -719,10 +720,10 @@ rdf_get_xml_repr( SPDocument * doc, gchar const * name, bool build )
         xml = sp_repr_new( name );
         g_return_val_if_fail (xml != NULL, NULL);
 
-        sp_repr_set_attr ( xml, "rdf:about", "" );
+        xml->setAttribute("rdf:about", "" );
 
         rdf->appendChild(xml);
-        sp_repr_unref(xml);
+        Inkscape::GC::release(xml);
     }
 
     return xml;
@@ -747,7 +748,7 @@ rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
         g_return_val_if_fail (item != NULL, NULL);
 
         work->appendChild(item);
-        sp_repr_unref(item);
+        Inkscape::GC::release(item);
     }
 
     return item;
@@ -941,16 +942,16 @@ rdf_set_license(SPDocument * document, struct rdf_license_t * license)
     repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, TRUE );
     g_assert ( repr );
 
-    sp_repr_set_attr ( repr, "rdf:about", license->uri );
+    repr->setAttribute("rdf:about", license->uri );
 
     for (struct rdf_double_t * detail = license->details;
          detail->name; detail++) {
         Inkscape::XML::Node * child = sp_repr_new( detail->name );
         g_assert ( child != NULL );
 
-        sp_repr_set_attr ( child, "rdf:resource", detail->resource );
+        child->setAttribute("rdf:resource", detail->resource );
         repr->appendChild(child);
-        sp_repr_unref ( child );
+        Inkscape::GC::release(child);
     }
 }
 
@@ -977,7 +978,7 @@ rdf_set_defaults ( SPDocument * document )
         // insert into the document
         document->rroot->addChild(rnew, NULL);
         // clean up
-        sp_repr_unref (rnew);
+        Inkscape::GC::release(rnew);
     }
 
     /* install defaults */

@@ -149,7 +149,7 @@ sp_node_context_dispose(GObject *object)
 
     if (repr) {
         sp_repr_remove_listener_by_data(repr, ec);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
     }
 
     if (nc->nodepath) {
@@ -208,7 +208,7 @@ sp_node_context_setup(SPEventContext *ec)
             else
                 repr = SP_OBJECT_REPR(item); 
             if (repr) {
-                sp_repr_ref(repr);
+                Inkscape::GC::anchor(repr);
                 sp_repr_add_listener(repr, &nodepath_repr_events, ec);
                 sp_repr_synthesize_events(repr, &nodepath_repr_events, ec);
             }
@@ -250,7 +250,7 @@ sp_node_context_selection_changed(Inkscape::Selection *selection, gpointer data)
 
     if (old_repr) { // remove old listener
         sp_repr_remove_listener_by_data(old_repr, ec);
-        sp_repr_unref(old_repr);
+        Inkscape::GC::release(old_repr);
     }
 
     SPItem *item = selection->singleItem();
@@ -273,7 +273,7 @@ sp_node_context_selection_changed(Inkscape::Selection *selection, gpointer data)
             else
                 repr = SP_OBJECT_REPR(item); 
             if (repr) {
-                sp_repr_ref(repr);
+                Inkscape::GC::anchor(repr);
                 sp_repr_add_listener(repr, &nodepath_repr_events, ec);
                 sp_repr_synthesize_events(repr, &nodepath_repr_events, ec);
             }

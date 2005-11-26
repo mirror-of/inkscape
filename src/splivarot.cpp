@@ -481,8 +481,8 @@ sp_selected_path_boolop(bool_op bop)
             gchar *d = resPath[i]->svg_dump_path();
 
             Inkscape::XML::Node *repr = sp_repr_new("svg:path");
-            sp_repr_set_attr(repr, "style", style);
-            sp_repr_set_attr(repr, "d", d);
+            repr->setAttribute("style", style);
+            repr->setAttribute("d", d);
             g_free(d);
 
             // for slice, remove fill
@@ -500,9 +500,9 @@ sp_selected_path_boolop(bool_op bop)
             // we assign the same id on all pieces, but it on adding to document, it will be changed on all except one
             // this means it's basically random which of the pieces inherits the original's id and clones
             // a better algorithm might figure out e.g. the biggest piece
-            sp_repr_set_attr(repr, "id", id);
+            repr->setAttribute("id", id);
 
-            sp_repr_set_attr(repr, "transform", transform);
+            repr->setAttribute("transform", transform);
 
             // add the new repr to the parent
             parent->appendChild(repr);
@@ -511,7 +511,7 @@ sp_selected_path_boolop(bool_op bop)
             repr->setPosition(pos > 0 ? pos : 0);
 
             selection->add(repr);
-            sp_repr_unref(repr);
+            Inkscape::GC::release(repr);
 
             delete resPath[i];
         }
@@ -521,19 +521,19 @@ sp_selected_path_boolop(bool_op bop)
         gchar *d = res->svg_dump_path();
 
         Inkscape::XML::Node *repr = sp_repr_new("svg:path");
-        sp_repr_set_attr(repr, "style", style);
+        repr->setAttribute("style", style);
 
-        sp_repr_set_attr(repr, "d", d);
+        repr->setAttribute("d", d);
         g_free(d);
 
-        sp_repr_set_attr(repr, "transform", transform);
+        repr->setAttribute("transform", transform);
 
-        sp_repr_set_attr(repr, "id", id);
+        repr->setAttribute("id", id);
         parent->appendChild(repr);
         repr->setPosition(pos > 0 ? pos : 0);
 
         selection->add(repr);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
     }
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -708,7 +708,7 @@ sp_selected_path_outline()
             Inkscape::XML::Node *repr = sp_repr_new("svg:path");
 
             // restore old style
-            sp_repr_set_attr(repr, "style", style);
+            repr->setAttribute("style", style);
 
             // set old stroke style on fill
             sp_repr_css_change(repr, ncss, "style");
@@ -716,7 +716,7 @@ sp_selected_path_outline()
             sp_repr_css_attr_unref(ncss);
 
             gchar *str = orig->svg_dump_path();
-            sp_repr_set_attr(repr, "d", str);
+            repr->setAttribute("d", str);
             g_free(str);
 
             // add the new repr to the parent
@@ -725,14 +725,14 @@ sp_selected_path_outline()
             // move to the saved position
             repr->setPosition(pos > 0 ? pos : 0);
 
-            sp_repr_set_attr(repr, "id", id);
+            repr->setAttribute("id", id);
 
             SPItem *newitem = (SPItem *) SP_DT_DOCUMENT(desktop)->getObjectByRepr(repr);
             sp_item_write_transform(newitem, repr, transform);
 
             selection->add(repr);
 
-            sp_repr_unref(repr);
+            Inkscape::GC::release(repr);
         }
 
         delete res;
@@ -961,7 +961,7 @@ sp_selected_path_create_offset_object(int expand, bool updating)
         tstr[79] = '\0';
 
         repr = sp_repr_new("svg:path");
-        sp_repr_set_attr(repr, "sodipodi:type", "inkscape:offset");
+        repr->setAttribute("sodipodi:type", "inkscape:offset");
         sp_repr_set_svg_double(repr, "inkscape:radius", ( expand > 0
                                                           ? o_width
                                                           : expand < 0
@@ -969,19 +969,19 @@ sp_selected_path_create_offset_object(int expand, bool updating)
                                                           : 0 ));
 
         str = res->svg_dump_path();
-        sp_repr_set_attr(repr, "inkscape:original", str);
+        repr->setAttribute("inkscape:original", str);
         g_free(str);
 
         if ( updating ) {
             char const *id = SP_OBJECT(item)->repr->attribute("id");
             char const *uri = g_strdup_printf("#%s", id);
-            sp_repr_set_attr(repr, "xlink:href", uri);
+            repr->setAttribute("xlink:href", uri);
             g_free((void *) uri);
         } else {
-            sp_repr_set_attr(repr, "inkscape:href", NULL);
+            repr->setAttribute("inkscape:href", NULL);
         }
 
-        sp_repr_set_attr(repr, "style", style);
+        repr->setAttribute("style", style);
 
         // add the new repr to the parent
         parent->appendChild(repr);
@@ -1005,7 +1005,7 @@ sp_selected_path_create_offset_object(int expand, bool updating)
         // We need to invoke its write which will update its real repr (in particular adding d=)
         SP_OBJECT(nitem)->updateRepr();
 
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
 
         selection->set(nitem);
     }
@@ -1223,10 +1223,10 @@ sp_selected_path_do_offset(bool expand, double prefOffset)
 
             Inkscape::XML::Node *repr = sp_repr_new("svg:path");
 
-            sp_repr_set_attr(repr, "style", style);
+            repr->setAttribute("style", style);
 
             gchar *str = res->svg_dump_path();
-            sp_repr_set_attr(repr, "d", str);
+            repr->setAttribute("d", str);
             g_free(str);
 
             // add the new repr to the parent
@@ -1240,11 +1240,11 @@ sp_selected_path_do_offset(bool expand, double prefOffset)
             // reapply the transform
             sp_item_write_transform(newitem, repr, transform);
 
-            sp_repr_set_attr(repr, "id", id);
+            repr->setAttribute("id", id);
 
             selection->add(repr);
 
-            sp_repr_unref(repr);
+            Inkscape::GC::release(repr);
         }
 
         delete orig;
@@ -1344,14 +1344,14 @@ sp_selected_path_simplify_item(SPDesktop *desktop, Inkscape::Selection *selectio
 
     Inkscape::XML::Node *repr = sp_repr_new("svg:path");
 
-    sp_repr_set_attr(repr, "style", style);
+    repr->setAttribute("style", style);
 
     gchar *str = orig->svg_dump_path();
-    sp_repr_set_attr(repr, "d", str);
+    repr->setAttribute("d", str);
     g_free(str);
 
     // restore id
-    sp_repr_set_attr(repr, "id", id);
+    repr->setAttribute("id", id);
 
     // add the new repr to the parent
     parent->appendChild(repr);
@@ -1368,7 +1368,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, Inkscape::Selection *selectio
     if (modifySelection)
         selection->add(repr);
 
-    sp_repr_unref(repr);
+    Inkscape::GC::release(repr);
 
     // clean up
     if (orig) delete orig;

@@ -271,7 +271,7 @@ sp_use_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
     if (use->ref->getURI()) {
         gchar *uri_string = use->ref->getURI()->toString();
-        sp_repr_set_attr(repr, "xlink:href", uri_string);
+        repr->setAttribute("xlink:href", uri_string);
         g_free(uri_string);
     }
 
@@ -677,22 +677,22 @@ sp_use_unlink(SPUse *use)
 
     // Hold onto our SPObject and repr for now.
     sp_object_ref(SP_OBJECT(use), NULL);
-    sp_repr_ref(repr);
+    Inkscape::GC::anchor(repr);
 
     // Remove ourselves, not propagating delete events to avoid a
     // chain-reaction with other elements that might reference us.
     SP_OBJECT(use)->deleteObject(false);
 
     // Give the copy our old id and let go of our old repr.
-    sp_repr_set_attr(copy, "id", repr->attribute("id"));
-    sp_repr_unref(repr);
+    copy->setAttribute("id", repr->attribute("id"));
+    Inkscape::GC::release(repr);
 
     // Remove tiled clone attrs.
-    sp_repr_set_attr(copy, "inkscape:tiled-clone-of", NULL);
-    sp_repr_set_attr(copy, "inkscape:tile-w", NULL);
-    sp_repr_set_attr(copy, "inkscape:tile-h", NULL);
-    sp_repr_set_attr(copy, "inkscape:tile-cx", NULL);
-    sp_repr_set_attr(copy, "inkscape:tile-cy", NULL);
+    copy->setAttribute("inkscape:tiled-clone-of", NULL);
+    copy->setAttribute("inkscape:tile-w", NULL);
+    copy->setAttribute("inkscape:tile-h", NULL);
+    copy->setAttribute("inkscape:tile-cx", NULL);
+    copy->setAttribute("inkscape:tile-cy", NULL);
 
     // Establish the succession and let go of our object.
     SP_OBJECT(use)->setSuccessor(unlinked);

@@ -70,11 +70,11 @@ sp_xmlview_content_set_repr (SPXMLViewContent * text, Inkscape::XML::Node * repr
 	if ( repr == text->repr ) return;
 	if (text->repr) {
 		sp_repr_remove_listener_by_data (text->repr, text);
-		sp_repr_unref (text->repr);
+		Inkscape::GC::release(text->repr);
 	}
 	text->repr = repr;
 	if (repr) {
-		sp_repr_ref (repr);
+		Inkscape::GC::anchor(repr);
 		sp_repr_add_listener (repr, &repr_events, text);
 		sp_repr_synthesize_events (repr, &repr_events, text);
 	} else {

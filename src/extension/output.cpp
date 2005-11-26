@@ -218,11 +218,11 @@ Output::save (SPDocument * doc, const gchar * uri)
 
         gboolean saved = sp_document_get_undo_sensitive(doc);
 	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
-	sp_repr_set_attr(repr, "inkscape:dataloss", NULL);
+	repr->setAttribute("inkscape:output_extension", NULL);
+	repr->setAttribute("inkscape:dataloss", NULL);
 	if (repr->attribute("sodipodi:modified") != NULL)
 		modified = true;
-	sp_repr_set_attr(repr, "sodipodi:modified", NULL);
+	repr->setAttribute("sodipodi:modified", NULL);
 	sp_document_set_undo_sensitive (doc, saved);
 
         try {
@@ -230,15 +230,15 @@ Output::save (SPDocument * doc, const gchar * uri)
         }
         catch (...) {
             if (modified)
-                sp_repr_set_attr(repr, "sodipodi:modified", "true");
+                repr->setAttribute("sodipodi:modified", "true");
             throw;
         }
 
         saved = sp_document_get_undo_sensitive(doc);
 	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr(repr, "inkscape:output_extension", get_id());
+	repr->setAttribute("inkscape:output_extension", get_id());
 	if (dataloss) {
-		sp_repr_set_attr(repr, "inkscape:dataloss", "true");
+		repr->setAttribute("inkscape:dataloss", "true");
 	}
 	sp_document_set_undo_sensitive (doc, saved);
 

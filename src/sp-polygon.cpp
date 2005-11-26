@@ -129,7 +129,7 @@ static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::No
     /* We can safely write points here, because all subclasses require it too (Lauris) */
     NArtBpath *abp = sp_curve_first_bpath(shape->curve);
     gchar *str = sp_svg_write_polygon(abp);
-    sp_repr_set_attr(repr, "points", str);
+    repr->setAttribute("points", str);
     g_free(str);
 
     if (((SPObjectClass *) (parent_class))->write) {

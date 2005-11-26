@@ -919,7 +919,7 @@ sp_stb_sides_flat_state_changed(GtkWidget *widget, GtkObject *tbl)
         for (; items != NULL; items = items->next) {
             if (SP_IS_STAR((SPItem *) items->data)) {
                 Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
-                sp_repr_set_attr(repr, "inkscape:flatsided", "true");
+                repr->setAttribute("inkscape:flatsided", "true");
                 SP_OBJECT((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
             }
@@ -929,7 +929,7 @@ sp_stb_sides_flat_state_changed(GtkWidget *widget, GtkObject *tbl)
         for (; items != NULL; items = items->next) {
             if (SP_IS_STAR((SPItem *) items->data)) {
                 Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
-                sp_repr_set_attr(repr, "inkscape:flatsided", "false");
+                repr->setAttribute("inkscape:flatsided", "false");
                 SP_OBJECT(items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
             }
@@ -1107,14 +1107,14 @@ sp_star_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
         oldrepr = (Inkscape::XML::Node *) gtk_object_get_data(GTK_OBJECT(tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data(oldrepr, tbl);
-            sp_repr_unref(oldrepr);
+            Inkscape::GC::release(oldrepr);
             oldrepr = 0;
             g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
 
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
-            sp_repr_ref(repr);
+            Inkscape::GC::anchor(repr);
             sp_repr_add_listener(repr, &star_tb_repr_events, tbl);
             sp_repr_synthesize_events(repr, &star_tb_repr_events, tbl);
         }
@@ -1333,7 +1333,7 @@ sp_rtb_value_changed(GtkAdjustment *adj, GtkWidget *tbl, gchar const *value_name
             if (adj->value != 0) {
                 setter(SP_RECT(items->data), sp_units_get_pixels(adj->value, *unit));
             } else {
-                sp_repr_set_attr(SP_OBJECT_REPR(items->data), value_name, NULL);
+                SP_OBJECT_REPR(items->data)->setAttribute(value_name, NULL);
             }
             modmade = true;
         }
@@ -1501,14 +1501,14 @@ sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
         oldrepr = (Inkscape::XML::Node *) gtk_object_get_data(GTK_OBJECT(tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data(oldrepr, tbl);
-            sp_repr_unref(oldrepr);
+            Inkscape::GC::release(oldrepr);
             oldrepr = 0;
             g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
             g_object_set_data(G_OBJECT(tbl), "item", item);
-            sp_repr_ref(repr);
+            Inkscape::GC::anchor(repr);
             sp_repr_add_listener(repr, &rect_tb_repr_events, tbl);
             sp_repr_synthesize_events(repr, &rect_tb_repr_events, tbl);
         }
@@ -1770,14 +1770,14 @@ sp_spiral_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *t
         oldrepr = (Inkscape::XML::Node *) gtk_object_get_data(GTK_OBJECT(tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data(oldrepr, tbl);
-            sp_repr_unref(oldrepr);
+            Inkscape::GC::release(oldrepr);
             oldrepr = 0;
             g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
 
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
-            sp_repr_ref(repr);
+            Inkscape::GC::anchor(repr);
             sp_repr_add_listener(repr, &spiral_tb_repr_events, tbl);
             sp_repr_synthesize_events(repr, &spiral_tb_repr_events, tbl);
         }
@@ -2216,7 +2216,7 @@ sp_arctb_open_state_changed(GtkWidget *widget, GtkObject *tbl)
         {
             if (SP_IS_ARC((SPItem *) items->data)) {
                 Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
-                sp_repr_set_attr(repr, "sodipodi:open", "true");
+                repr->setAttribute("sodipodi:open", "true");
                 SP_OBJECT((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
             }
@@ -2228,7 +2228,7 @@ sp_arctb_open_state_changed(GtkWidget *widget, GtkObject *tbl)
         {
             if (SP_IS_ARC((SPItem *) items->data))    {
                 Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
-                sp_repr_set_attr(repr, "sodipodi:open", NULL);
+                repr->setAttribute("sodipodi:open", NULL);
                 SP_OBJECT((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
                 modmade = true;
             }
@@ -2337,14 +2337,14 @@ sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
 
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data(oldrepr, tbl);
-            sp_repr_unref(oldrepr);
+            Inkscape::GC::release(oldrepr);
             oldrepr = 0;
             g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
 
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
-            sp_repr_ref(repr);
+            Inkscape::GC::anchor(repr);
             sp_repr_add_listener(repr, &arc_tb_repr_events, tbl);
             sp_repr_synthesize_events(repr, &arc_tb_repr_events, tbl);
         }

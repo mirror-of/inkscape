@@ -111,12 +111,12 @@ sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
 	gtk_clist_freeze (GTK_CLIST (tree));
 	if (tree->repr) {
 		gtk_clist_clear (GTK_CLIST (tree));
-		sp_repr_unref (tree->repr);
+		Inkscape::GC::release(tree->repr);
 	}
 	tree->repr = repr;
 	if (repr) {
 		GtkCTreeNode * node;
-		sp_repr_ref (repr);
+		Inkscape::GC::anchor(repr);
 		node = add_node (tree, NULL, NULL, repr);
 		gtk_ctree_expand (GTK_CTREE (tree), node);
 	}
@@ -226,7 +226,7 @@ node_data_new (SPXMLViewTree * tree, GtkCTreeNode * node, Inkscape::XML::Node * 
 	data->tree = tree;
 	data->node = node;
 	data->repr = repr;
-	sp_repr_ref (repr);
+	Inkscape::GC::anchor(repr);
 	return data;
 }
 
@@ -236,7 +236,7 @@ node_data_free (gpointer ptr) {
 	data = (NodeData *) ptr;
 	sp_repr_remove_listener_by_data (data->repr, data);
 	g_assert (data->repr != NULL);
-	sp_repr_unref (data->repr);
+	Inkscape::GC::release(data->repr);
 	g_free (data);
 }
 

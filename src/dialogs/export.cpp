@@ -1057,7 +1057,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 
             temp_string = repr->attribute("inkscape:export-filename");
             if (temp_string == NULL || strcmp(temp_string, filename)) {
-                sp_repr_set_attr(repr, "inkscape:export-filename", filename);
+                repr->setAttribute("inkscape:export-filename", filename);
                 modified = TRUE;
             }
             temp_string = repr->attribute("inkscape:export-xdpi");
@@ -1072,7 +1072,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             }
             
             if (modified)
-                sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
+                repr->setAttribute("sodipodi:modified", "TRUE");
             sp_document_set_undo_sensitive(doc, saved);
             break;
         }
@@ -1095,7 +1095,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
                             strcmp(g_dirname(filename), g_dirname(SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT))) == 0))) {
                     temp_string = repr->attribute("inkscape:export-filename");
                     if (temp_string == NULL || strcmp(temp_string, filename)) {
-                        sp_repr_set_attr(repr, "inkscape:export-filename", filename);
+                        repr->setAttribute("inkscape:export-filename", filename);
                         modified = TRUE;
                     }
                 }
@@ -1113,7 +1113,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 
             if (modified) {
                 Inkscape::XML::Node * repr = sp_document_repr_root(doc);
-                sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
+                repr->setAttribute("sodipodi:modified", "TRUE");
             }
 
             sp_document_set_undo_sensitive(doc, saved);

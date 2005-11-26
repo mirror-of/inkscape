@@ -133,10 +133,10 @@ sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
         if (rect->rx.set && rect->ry.set) {
             /* 0.29 treated 0.0 radius as missing value */
             if ((rect->rx.value != 0.0) && (rect->ry.value == 0.0)) {
-                sp_repr_set_attr(repr, "ry", NULL);
+                repr->setAttribute("ry", NULL);
                 sp_object_read_attr(object, "ry");
             } else if ((rect->ry.value != 0.0) && (rect->rx.value == 0.0)) {
-                sp_repr_set_attr(repr, "rx", NULL);
+                repr->setAttribute("rx", NULL);
                 sp_object_read_attr(object, "rx");
             }
         }

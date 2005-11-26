@@ -585,11 +585,11 @@ sp_root_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        sp_repr_set_attr(repr, "sodipodi:version", SODIPODI_VERSION);
-        sp_repr_set_attr(repr, "inkscape:version", INKSCAPE_VERSION);
+        repr->setAttribute("sodipodi:version", SODIPODI_VERSION);
+        repr->setAttribute("inkscape:version", INKSCAPE_VERSION);
     }
 
-    sp_repr_set_attr(repr, "version", SVG_VERSION);
+    repr->setAttribute("version", SVG_VERSION);
 
     if (fabs(root->x.computed) > 1e-9)
         sp_repr_set_svg_double(repr, "x", root->x.computed);
@@ -599,13 +599,13 @@ sp_root_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     /* Unlike all other SPObject, here we want to preserve absolute units too (and only here,
      * according to the recommendation in http://www.w3.org/TR/SVG11/coords.html#Units).
      */
-    sp_repr_set_attr(repr, "width", sp_svg_length_write_with_units(root->width).c_str());
-    sp_repr_set_attr(repr, "height", sp_svg_length_write_with_units(root->height).c_str());
+    repr->setAttribute("width", sp_svg_length_write_with_units(root->width).c_str());
+    repr->setAttribute("height", sp_svg_length_write_with_units(root->height).c_str());
 
     if (root->viewBox_set) {
         Inkscape::SVGOStringStream os;
         os << root->viewBox.x0 << " " << root->viewBox.y0 << " " << root->viewBox.x1 - root->viewBox.x0 << " " << root->viewBox.y1 - root->viewBox.y0;
-        sp_repr_set_attr(repr, "viewBox", os.str().c_str());
+        repr->setAttribute("viewBox", os.str().c_str());
     } 
 
     if (((SPObjectClass *) (parent_class))->write)

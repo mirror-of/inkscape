@@ -241,7 +241,7 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
         while ( l ) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            sp_repr_unref((Inkscape::XML::Node *) l->data);
+            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
@@ -500,7 +500,7 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
     }
 
-    if ( textpath->sourcePath->sourceHref ) sp_repr_set_attr(repr, "xlink:href", textpath->sourcePath->sourceHref);
+    if ( textpath->sourcePath->sourceHref ) repr->setAttribute("xlink:href", textpath->sourcePath->sourceHref);
 	
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         GSList *l = NULL;
@@ -517,7 +517,7 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
         while ( l ) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            sp_repr_unref((Inkscape::XML::Node *) l->data);
+            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {

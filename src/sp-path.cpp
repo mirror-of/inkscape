@@ -159,8 +159,8 @@ sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     /* Fixes old Sodipodi nodetype to namespaced parameter */
     if (sp_version_inside_range(version, 0, 0, 0, 25)) {
         gchar const *str = repr->attribute("SODIPODI-PATH-NODE-TYPES");
-        sp_repr_set_attr(repr, "sodipodi:nodetypes", str);
-        sp_repr_set_attr(repr, "SODIPODI-PATH-NODE-TYPES", NULL);
+        repr->setAttribute("sodipodi:nodetypes", str);
+        repr->setAttribute("SODIPODI-PATH-NODE-TYPES", NULL);
     }
 
     sp_object_read_attr(object, "d");
@@ -291,13 +291,13 @@ sp_path_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         NArtBpath *abp = sp_curve_first_bpath(shape->curve);
         if (abp) {
             gchar *str = sp_svg_write_path(abp);
-            sp_repr_set_attr(repr, "d", str);
+            repr->setAttribute("d", str);
             g_free(str);
         } else {
-            sp_repr_set_attr(repr, "d", "");
+            repr->setAttribute("d", "");
         }
     } else {
-        sp_repr_set_attr(repr, "d", NULL);
+        repr->setAttribute("d", NULL);
     }
 
     SP_PATH(shape)->connEndPair.writeRepr(repr);

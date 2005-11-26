@@ -319,19 +319,19 @@ sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel)
 		Inkscape::XML::Node *stop;
 		repr = sp_repr_new ("svg:linearGradient");
 		stop = sp_repr_new ("svg:stop");
-		sp_repr_set_attr (stop, "offset", "0");
-		sp_repr_set_attr (stop, "style", "stop-color:#000;stop-opacity:1;");
+		stop->setAttribute("offset", "0");
+		stop->setAttribute("style", "stop-color:#000;stop-opacity:1;");
 		repr->appendChild(stop);
-		sp_repr_unref (stop);
+		Inkscape::GC::release(stop);
 		stop = sp_repr_new ("svg:stop");
-		sp_repr_set_attr (stop, "offset", "1");
-		sp_repr_set_attr (stop, "style", "stop-color:#fff;stop-opacity:1;");
+		stop->setAttribute("offset", "1");
+		stop->setAttribute("style", "stop-color:#fff;stop-opacity:1;");
 		repr->appendChild(stop);
-		sp_repr_unref (stop);
+		Inkscape::GC::release(stop);
 	}
 
 	SP_OBJECT_REPR (SP_DOCUMENT_DEFS (doc))->addChild(repr, NULL);
-	sp_repr_unref (repr);
+	Inkscape::GC::release(repr);
 
 	gr = (SPGradient *) doc->getObjectByRepr(repr);
 	sp_gradient_vector_selector_set_gradient (SP_GRADIENT_VECTOR_SELECTOR (sel->vectors), doc, gr);

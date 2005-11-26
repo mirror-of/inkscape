@@ -295,7 +295,7 @@ sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_boolean(repr, key, gtk_toggle_button_get_active(tb));
-    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
 
@@ -323,9 +323,9 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
-    sp_repr_set_attr(repr, "borderlayer",
+    repr->setAttribute("borderlayer",
                      gtk_toggle_button_get_active(tb) ? "top" : NULL);
-    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
 }
@@ -362,8 +362,8 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
 
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
-    sp_repr_set_attr(repr, key, os.str().c_str());
-    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    repr->setAttribute(key, os.str().c_str());
+    doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
 
@@ -490,7 +490,7 @@ sp_dtw_grid_snap_distance_changed(GtkAdjustment *adjustment,
     Inkscape::SVGOStringStream os;
     os << adjustment->value << sp_unit_selector_get_unit(us)->abbr;
 
-    sp_repr_set_attr(repr, "gridtolerance", os.str().c_str());
+    repr->setAttribute("gridtolerance", os.str().c_str());
     sp_document_done(SP_DT_DOCUMENT(dt));
 }
 
@@ -516,7 +516,7 @@ sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
     int value = int(adjustment->value);
     os << value;
 
-    sp_repr_set_attr(repr, "gridempspacing", os.str().c_str());
+    repr->setAttribute("gridempspacing", os.str().c_str());
     sp_document_done(SP_DT_DOCUMENT(dt));
 }
 
@@ -545,7 +545,7 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
     Inkscape::SVGOStringStream os;
     os << adjustment->value << sp_unit_selector_get_unit(us)->abbr;
 
-    sp_repr_set_attr(repr, "guidetolerance", os.str().c_str());
+    repr->setAttribute("guidetolerance", os.str().c_str());
 }
 
 /**
@@ -655,8 +655,8 @@ static gboolean set_doc_units (SPUnitSelector *,
 
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
-    sp_repr_set_attr (repr, "inkscape:document-units", sp_unit_get_abbreviation (new_units));
-    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    repr->setAttribute("inkscape:document-units", sp_unit_get_abbreviation (new_units));
+    doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
 

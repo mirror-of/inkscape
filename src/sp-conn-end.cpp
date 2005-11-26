@@ -257,7 +257,7 @@ sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned const handle_ix)
     g_return_if_fail(handle_ix < 2);
     char const *const attr_str[] = {"inkscape:connection-start",
                                     "inkscape:connection-end"};
-    sp_repr_set_attr(SP_OBJECT_REPR(owner), attr_str[handle_ix], NULL);
+    SP_OBJECT_REPR(owner)->setAttribute(attr_str[handle_ix], NULL);
     /* I believe this will trigger sp_conn_end_href_changed. */
 }
 

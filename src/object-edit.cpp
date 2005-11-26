@@ -281,8 +281,8 @@ static void sp_rect_ry_set(SPItem *item, NR::Point const &p, NR::Point const &or
  */
 static void rect_remove_rounding(SPRect *rect)
 {
-    sp_repr_set_attr(SP_OBJECT_REPR(rect), "rx", NULL);
-    sp_repr_set_attr(SP_OBJECT_REPR(rect), "ry", NULL);
+    SP_OBJECT_REPR(rect)->setAttribute("rx", NULL);
+    SP_OBJECT_REPR(rect)->setAttribute("ry", NULL);
 }
 
 /**
@@ -296,7 +296,7 @@ static void sp_rect_rx_knot_click(SPItem *item, guint state)
         rect_remove_rounding(rect);
     } else if (state & GDK_CONTROL_MASK) {
         /* Ctrl-click sets the vertical rounding to be the same as the horizontal */
-        sp_repr_set_attr(SP_OBJECT_REPR(rect), "ry", SP_OBJECT_REPR(rect)->attribute("rx"));
+        SP_OBJECT_REPR(rect)->setAttribute("ry", SP_OBJECT_REPR(rect)->attribute("rx"));
     }
 }
 
@@ -311,7 +311,7 @@ static void sp_rect_ry_knot_click(SPItem *item, guint state)
         rect_remove_rounding(rect);
     } else if (state & GDK_CONTROL_MASK) {
         /* Ctrl-click sets the vertical rounding to be the same as the horizontal */
-        sp_repr_set_attr(SP_OBJECT_REPR(rect), "rx", SP_OBJECT_REPR(rect)->attribute("ry"));
+        SP_OBJECT_REPR(rect)->setAttribute("rx", SP_OBJECT_REPR(rect)->attribute("ry"));
     }
 }
 

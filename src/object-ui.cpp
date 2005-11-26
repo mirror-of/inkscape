@@ -177,7 +177,7 @@ sp_item_create_link(GtkMenuItem *menuitem, SPItem *item)
     Inkscape::XML::Node *child = SP_OBJECT_REPR(item)->duplicate();
     SP_OBJECT(item)->deleteObject(false);
     repr->addChild(child, NULL);
-    sp_repr_set_attr(child, "id", id);
+    child->setAttribute("id", id);
     sp_document_done(SP_OBJECT_DOCUMENT(object));
 
     sp_object_attributes_dialog(object, "SPAnchor");

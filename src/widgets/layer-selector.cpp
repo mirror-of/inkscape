@@ -484,7 +484,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
     sp_object_ref(&object, NULL);
     row->set_value(_model_columns.object, &object);
 
-    sp_repr_ref(SP_OBJECT_REPR(&object));
+    Inkscape::GC::anchor(SP_OBJECT_REPR(&object));
     row->set_value(_model_columns.repr, SP_OBJECT_REPR(&object));
 
     row->set_value(_model_columns.callbacks, reinterpret_cast<void *>(callbacks));
@@ -504,7 +504,7 @@ void LayerSelector::_destroyEntry(Gtk::ListStore::iterator const &row) {
     Inkscape::XML::Node *repr=row->get_value(_model_columns.repr);
     if (repr) {
         sp_repr_remove_listener_by_data(repr, callbacks);
-        sp_repr_unref(repr);
+        Inkscape::GC::release(repr);
     }
     delete callbacks;
 }

@@ -736,14 +736,14 @@ void
 set_tree_select (Inkscape::XML::Node * repr)
 {
     if (selected_repr) {
-        sp_repr_unref (selected_repr);
+        Inkscape::GC::release(selected_repr);
     }
 
     selected_repr = repr;
     if (repr) {
         GtkCTreeNode * node;
 
-        sp_repr_ref (selected_repr);
+        Inkscape::GC::anchor(selected_repr);
 
         node = sp_xmlview_tree_get_repr_node (SP_XMLVIEW_TREE (tree), repr);
         if (node) {
@@ -850,11 +850,11 @@ on_tree_select_row ( GtkCTree * tree,
         return;
 
     if (selected_repr) {
-        sp_repr_unref(selected_repr);
+        Inkscape::GC::release(selected_repr);
         selected_repr = NULL;
     }
     selected_repr = repr;
-    sp_repr_ref(selected_repr);
+    Inkscape::GC::anchor(selected_repr);
 
     propagate_tree_select(selected_repr);
 
@@ -879,7 +879,7 @@ on_tree_unselect_row ( GtkCTree * tree,
     set_dt_select (NULL);
 
     if ( selected_repr && ( selected_repr == repr ) ) {
-        sp_repr_unref (selected_repr);
+        Inkscape::GC::release(selected_repr);
         selected_repr = NULL;
         selected_attr = 0;
     }
@@ -1490,7 +1490,7 @@ cmd_delete_attr (GtkObject * object, gpointer data)
 {
     g_assert (selected_repr != NULL);
     g_assert (selected_attr != 0);
-    sp_repr_set_attr (selected_repr, g_quark_to_string (selected_attr), NULL);
+    selected_repr->setAttribute(g_quark_to_string (selected_attr), NULL);
 
     SPObject *updated=current_document->getObjectByRepr(selected_repr);
     if (updated) {
