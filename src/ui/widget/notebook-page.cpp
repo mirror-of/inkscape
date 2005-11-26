@@ -33,7 +33,7 @@ NotebookPage::NotebookPage(int n_rows, int n_columns)
 {
     set_border_width(2);
     _table.set_spacings(2);
-    pack_start(_table, true, true, 0);
+    pack_start(_table, false, false, 0);
 }
 
 } // namespace Widget
