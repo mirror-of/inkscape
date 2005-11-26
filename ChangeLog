@@ -1,3 +1,8 @@
+2005-11-26  MenTaLguY <mental@rydia.net>
+
+    * src/ui/dialog/aboutbox.cpp, src/ui/dialog/aboutbox.h:
+	  clean up and simplify About dialog; fix memory management (mostly)
+
 2005-11-25  Robert Crosbie <swingincelt@gmail.com>
 
 	* replaced sp_repr_ref with direct cal to Inkscape::GC::anchor

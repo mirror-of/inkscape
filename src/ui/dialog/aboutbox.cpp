@@ -1,14 +1,12 @@
 /**
- * \brief HandleBox Widget - Adds a detachment handle to another widget.
+ * \brief AboutBox - the Inkscape about dialog
  *
- * This work really doesn't amount to much more than a convenience constructor
- * for Gtk::HandleBox.  Maybe this could be contributed back to Gtkmm, as
- * Gtkmm provides several convenience constructors for other widgets as well.
- *
- * Author:
+ * Authors:
  *   Derek P. Moore <derekm@hackunix.org>
+ *   MenTaLguY <mental@rydia.net>
  *
  * Copyright (C) 2004 Derek P. Moore
+ * Copyright 2005 MenTaLguY
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -26,305 +24,220 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-LicenseBox::LicenseBox(Gtk::Window& parent, Glib::ustring& license)
-    : AboutBoxChild(parent, _("License"))
-{
-    // This attempts to emulate the AboutDialog License dialog settings as
-    // closely as possible.  Mostly, that's border widths and shadows.  Size
-    // is probably set in some other way, but this looked close enough.
-    add_button(Gtk::Stock::CLOSE,Gtk::RESPONSE_CLOSE);
-    set_default_size(525,320);
-    set_border_width(5);
+static gchar const *authors_text();
+static gchar const *translators_text();
+static gchar const *license_text();
 
-    get_vbox()->pack_start(make_scrolled_text(license));
-}
-
-CreditsBox::CreditsBox(Gtk::Window& parent,
-                       std::vector<Glib::ustring>& authors,
-                       std::vector<Glib::ustring>& translators
-)
-    : AboutBoxChild(parent, _("Credits"))
-{
-    // This attempts to emulate the AboutDialog Credits dialog settings as
-    // closely as possible.  Mostly, that's border widths and shadows.  Size
-    // is probably set in some other way, but this looked close enough.
-    add_button(Gtk::Stock::CLOSE,Gtk::RESPONSE_CLOSE);
-    set_default_size(360,260);
-    set_border_width(5);
-
-    _notebook.set_border_width(5);
-    get_vbox()->pack_start(_notebook);
-
-    Glib::ustring contents;
-
-    flatten_vector(authors,contents);
-    if (contents != "")
-        _notebook.append_page(make_scrolled_text(contents),_("Authors"));
-
-    flatten_vector(translators,contents);
-    if (contents != "")
-        _notebook.append_page(make_scrolled_text(contents),_("Translators"));
-}
-
-void
-CreditsBox::flatten_vector(std::vector<Glib::ustring>& list,
-                           Glib::ustring& string)
-{
-    std::vector<Glib::ustring>::iterator iter;
-
-    string = "";
-    for (iter = list.begin(); iter != list.end(); iter++) {
-        string += *iter + "\n";
-    }
-}
-
-Gtk::ScrolledWindow&
-AboutBoxChild::make_scrolled_text(Glib::ustring& contents)
-{
-    // This attempts to emulate the AboutDialog child dialog settings as
-    // closely as possible.  Mostly, that's margin widths and shadows.  Size
-    // is probably set in some other way, but this looked close enough.
-    Gtk::ScrolledWindow * scrolled = new Gtk::ScrolledWindow(); 
-    scrolled->set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC);
-    scrolled->set_shadow_type(Gtk::SHADOW_IN);
-
-    Gtk::TextView *textview = new Gtk::TextView();
-    textview->set_editable(FALSE);
-    textview->set_left_margin(10);
-    textview->set_right_margin(10);
-    textview->get_buffer()->set_text(contents);
-
-    scrolled->add(*textview);
-
-    return *scrolled;
-}
-
-
-void
-AboutBoxChild::on_response(int response_id)
-{
-    switch (response_id) {
-        case Gtk::RESPONSE_CLOSE: {
-            hide();
-            break;
-        }
-        default:
-            break;
-    }
-}
+static Gtk::ScrolledWindow *make_scrolled_text(gchar const *contents);
 
 AboutBox::AboutBox(Gtk::Widget& about_svg_view, gint width, gint height)
     : Gtk::Dialog(_("About Inkscape"))
 {
-    _license = NULL;
-    _credits = NULL;
+    Gtk::Notebook *tabs=new Gtk::Notebook();
 
-    get_vbox()->pack_end(about_svg_view,TRUE,TRUE);
+    tabs->append_page(about_svg_view, _("About"));
+    tabs->append_page(*manage(make_scrolled_text(authors_text())), _("_Authors"), true);
+    tabs->append_page(*manage(make_scrolled_text(translators_text())), _("_Translators"), true);
+    tabs->append_page(*manage(make_scrolled_text(license_text())), _("_License"), true);
+
+    get_vbox()->pack_end(*manage(tabs), true, true);
+    tabs->show_all();
+
     // allow window to shrink, but restore window size
-    set_size_request(0,0);
+    set_size_request(0, 0);
     // width and height seem very broken... I'm cheating for now
     //printf("width: %d height: %d\n",width,height);
     set_default_size(width,width-60);
 
-    add_button(_("_Credits"),    INKSCAPE_ABOUT_CREDITS);
-    add_button(_("_License"),    INKSCAPE_ABOUT_LICENSE);
-    add_button(Gtk::Stock::CLOSE,Gtk::RESPONSE_CLOSE);
+    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 
     Gtk::Label * label = new Gtk::Label("Inkscape " INKSCAPE_VERSION " (" __DATE__ ")");
-    label->set_selectable(TRUE);
+    label->set_selectable(true);
     label->show();
-    get_vbox()->pack_start(*label,FALSE,FALSE);
+
+    get_vbox()->pack_start(*manage(label), false, false);
 }
 
-void
-AboutBox::on_response(int response_id)
-{
-    switch (response_id) {
-        case INKSCAPE_ABOUT_CREDITS: {
-            show_credits();
-            break;
-        }
-        case INKSCAPE_ABOUT_LICENSE: {
-            show_license();
-            break;
-        }
-        case Gtk::RESPONSE_CLOSE: {
-            hide();
-            if (_license) _license->hide();
-            if (_credits) _credits->hide();
-            break;
-        }
-        default:
-            break;
+void AboutBox::on_response(int response_id) {
+    if ( response_id == Gtk::RESPONSE_CLOSE ) {
+        hide();
     }
 }
 
-AboutBox::~AboutBox()
-{
-    if (_license) delete _license;
-    if (_credits) delete _credits;
+static Gtk::ScrolledWindow *make_scrolled_text(gchar const *contents) {
+    // This attempts to emulate the AboutDialog child dialog settings as
+    // closely as possible.  Mostly, that's margin widths and shadows.  Size
+    // is probably set in some other way, but this looked close enough.
+    Gtk::ScrolledWindow *scrolled=new Gtk::ScrolledWindow(); 
+
+    scrolled->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    scrolled->set_shadow_type(Gtk::SHADOW_IN);
+
+    Gtk::TextView *textview=manage(new Gtk::TextView());
+    textview->set_editable(false);
+    textview->set_left_margin(10);
+    textview->set_right_margin(10);
+    textview->get_buffer()->set_text(contents);
+    scrolled->add(*textview);
+
+    return scrolled;
 }
 
-void
-AboutBox::show_credits(void)
-{
-    if (!_credits) {
-        // Authors
-        std::vector<Glib::ustring> authors;
-        authors.push_back("Josh Andler");
-        authors.push_back("John Bintz");
-        authors.push_back("Arpad Biro");
-        authors.push_back("Daniel Borgmann");
-        authors.push_back("Hans Breuer");
-        authors.push_back("Nicu Buculei");
-        authors.push_back("Bulia Byak");
-        authors.push_back("Chema Celorio");
-        authors.push_back("Johan Ceuppens");
-        authors.push_back("Zbigniew Chyla");
-        authors.push_back("Alexander Clausen");
-        authors.push_back("John Cliff");
-        authors.push_back("Kees Cook");
-        authors.push_back("Ben Cromwell");
-        authors.push_back("Robert Crosbie");
-        authors.push_back("Jon Cruz");
-        authors.push_back("Daniel Díaz");
-        authors.push_back("Larry Doolittle");
-        authors.push_back("Maxim V. Dziumanenko");
-        authors.push_back("Danilo Egan");
-        authors.push_back("Frank Felfe");
-        authors.push_back("Andrew Fitzsimon");
-        authors.push_back("Edward Flick");
-        authors.push_back("Fred");
-        authors.push_back("Ben Fowler");
-        authors.push_back("Ted Gould");
-        authors.push_back("Bryce Harrington");
-        authors.push_back("Carl Hetherington");
-        authors.push_back("Karl Ove Hufthammer");
-        authors.push_back("Richard Hughes");
-        authors.push_back("Nathan Hurst");
-        authors.push_back("Thomas Ingham");
-        authors.push_back("Bob Jamison");
-        authors.push_back("Lauris Kaplinski");
-        authors.push_back("Lynn Kerby");
-        authors.push_back("Petr Kovar");
-        authors.push_back("Raph Levien");
-        authors.push_back("Nicklas Lindgren");
-        authors.push_back("Vitaly Lipatov");
-        authors.push_back("Colin Marquardt");
-        authors.push_back("Dmitry G. Mastrukov");
-        authors.push_back("Matiphas");
-        authors.push_back("Michael Meeks");
-        authors.push_back("Federico Mena");
-        authors.push_back("MenTaLguY");
-        authors.push_back("Aubanel Monnier");
-        authors.push_back("Derek P. Moore");
-        authors.push_back("Peter Moulder");
-        authors.push_back("Jörg Müller");
-        authors.push_back("Yukihiro Nakai");
-        authors.push_back("Christian Neumair");
-        authors.push_back("Andreas Nilsson");
-        authors.push_back("Mitsuru Oka");
-        authors.push_back("Jon Phillips");
-        authors.push_back("Zdenko Podobny");
-        authors.push_back("Alexandre Prokoudine");
-        authors.push_back("Alexey Remizov");
-        authors.push_back("Frederic Rodrigo");
-        authors.push_back("Juarez Rudsatz");
-        authors.push_back("Xavier Conde Rueda");
-        authors.push_back("Christian Schaller");
-        authors.push_back("Tom von Schwerdtner");
-        authors.push_back("Shivaken");
-        authors.push_back("Boštjan Špetič");
-        authors.push_back("Aaron Spike");
-        authors.push_back("Kaushik Sridharan");
-        authors.push_back("Ralf Stephan");
-        authors.push_back("Dariusz Stojek");
-        authors.push_back("Pat Suwalski");
-        authors.push_back("Adib Taraben");
-        authors.push_back("David Turner");
-        authors.push_back("Aleksandar Urosevic");
-        authors.push_back("Lucas Vieites");
-        authors.push_back("Michael Wybrow");
-        authors.push_back("Daniel Yacob");
-        authors.push_back("David Yip");
-        authors.push_back("Masatake Yamato");
+gchar const *authors_text() {
+    static gchar const text[]=
+        "Josh Andler\n"
+        "John Bintz\n"
+        "Arpad Biro\n"
+        "Daniel Borgmann\n"
+        "Hans Breuer\n"
+        "Nicu Buculei\n"
+        "Bulia Byak\n"
+        "Chema Celorio\n"
+        "Johan Ceuppens\n"
+        "Zbigniew Chyla\n"
+        "Alexander Clausen\n"
+        "John Cliff\n"
+        "Kees Cook\n"
+        "Ben Cromwell\n"
+        "Robert Crosbie\n"
+        "Jon Cruz\n"
+        "Daniel Díaz\n"
+        "Larry Doolittle\n"
+        "Maxim V. Dziumanenko\n"
+        "Danilo Egan\n"
+        "Frank Felfe\n"
+        "Andrew Fitzsimon\n"
+        "Edward Flick\n"
+        "Fred\n"
+        "Ben Fowler\n"
+        "Ted Gould\n"
+        "Bryce Harrington\n"
+        "Carl Hetherington\n"
+        "Karl Ove Hufthammer\n"
+        "Richard Hughes\n"
+        "Nathan Hurst\n"
+        "Thomas Ingham\n"
+        "Bob Jamison\n"
+        "Lauris Kaplinski\n"
+        "Lynn Kerby\n"
+        "Petr Kovar\n"
+        "Raph Levien\n"
+        "Nicklas Lindgren\n"
+        "Vitaly Lipatov\n"
+        "Colin Marquardt\n"
+        "Dmitry G. Mastrukov\n"
+        "Matiphas\n"
+        "Michael Meeks\n"
+        "Federico Mena\n"
+        "MenTaLguY\n"
+        "Aubanel Monnier\n"
+        "Derek P. Moore\n"
+        "Peter Moulder\n"
+        "Jörg Müller\n"
+        "Yukihiro Nakai\n"
+        "Christian Neumair\n"
+        "Andreas Nilsson\n"
+        "Mitsuru Oka\n"
+        "Jon Phillips\n"
+        "Zdenko Podobny\n"
+        "Alexandre Prokoudine\n"
+        "Alexey Remizov\n"
+        "Frederic Rodrigo\n"
+        "Juarez Rudsatz\n"
+        "Xavier Conde Rueda\n"
+        "Christian Schaller\n"
+        "Tom von Schwerdtner\n"
+        "Shivaken\n"
+        "Boštjan Špetič\n"
+        "Aaron Spike\n"
+        "Kaushik Sridharan\n"
+        "Ralf Stephan\n"
+        "Dariusz Stojek\n"
+        "Pat Suwalski\n"
+        "Adib Taraben\n"
+        "David Turner\n"
+        "Aleksandar Urosevic\n"
+        "Lucas Vieites\n"
+        "Michael Wybrow\n"
+        "Daniel Yacob\n"
+        "David Yip\n"
+        "Masatake Yamato\n";
 
-        // Translators
-        std::vector<Glib::ustring> translators;
-        translators.push_back("Adib Taraben <theadib@yahoo.com>, 2004.");
-        translators.push_back("Alastair McKinstry <mckinstry@computer.org>, 2000.");
-        translators.push_back("Aleksandar Urošević <urke@users.sourceforge.net>");
-        translators.push_back("Alessio Frusciante <algol@firenze.linux.it>, 2002, 2003.");
-        translators.push_back("Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2005.");
-        translators.push_back("Alexey Remizov <alexey@remizov.pp.ru>, 2004.");
-        translators.push_back("Álvaro Lopes <alvieboy@alvie.com>, 2001, 2002");
-        translators.push_back("Andreas Hyden <a.hyden@cyberpoint.se>, 2000.");
-        translators.push_back("Arman Aksoy <armish@linux-sevenler.de>, 2003.");
-        translators.push_back("Arpad Biro <biro_arpad@yahoo.com>, 2004, 2005.");
-        translators.push_back("Benedikt Roth <Benedikt.Roth@gmx.net>, 2000");
-        translators.push_back("Boštjan Špetič <igzebedze@cyberpipe.org>, 2004, 2005.");
-        translators.push_back("Brisa Francesco <fbrisa@yahoo.it>, 2000.");
-        translators.push_back("bulia byak <buliabyak@users.sf.net>, 2004.");
-        translators.push_back("Christian Meyer <chrisime@gnome.org>, 2000-2002.");
-        translators.push_back("Christian Neumair <chris@gnome-de.org>, 2002, 2003.");
-        translators.push_back("Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003.");
-        translators.push_back("Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.");
-        translators.push_back("Colin Marquardt <colin@marquardt-home.de>, 2004, 2005.");
-        translators.push_back("Daniel Díaz <yosoy@danieldiaz.org>, 2004");
-        translators.push_back("Александар Урошевић <urke@users.sourceforge.net>");
-        translators.push_back("Didier Conchaudron <conchaudron@free.fr>, 2003.");
-        translators.push_back("Duarte Loreto <happyguy_pt@hotmail.com> 2002,2003 (Maintainer)");
-        translators.push_back("Fatih Demir <kabalak@gtranslator.org>, 2000.");
-        translators.push_back("Francesc Dorca <f.dorca@filnet.es>, 2003. Traducció sodipodi.");
-        translators.push_back("Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.");
-        translators.push_back("Francisco Xosé Vázquez Grandal <fxvazquez@arrakis.es>, 2001.");
-        translators.push_back("Frederic Rodrigo <f.rodrigo free.fr>, 2004-2005.");
-        translators.push_back("Ge'ez Frontier Foundation <locales@geez.org>, 2002.");
-        translators.push_back("Jörg Müller <jfm@ram-brand.de>, 2005.");
-        translators.push_back("Jeroen van der Vegt <ajvdvegt (at) 123mail.org>, 2003, 2005.");
-        translators.push_back("Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003.");
-        translators.push_back("Josef Vybiral <josef.vybiral@gmail.com>, 2005.");
-        translators.push_back("Juarez Rudsatz <juarez@correio.com>, 2004");
-        translators.push_back("Junichi Uekawa <dancer@debian.org>, 2002.");
-        translators.push_back("Kai Lahmann <kailahmann@01019freenet.de>, 2000");
-        translators.push_back("Karl Ove Hufthammer <karl@huftis.org>, 2004, 2005.");
-        translators.push_back("Keld Simonsen <keld@dkuug.dk>, 2000-2001.");
-        translators.push_back("Kjartan Maraas <kmaraas@gnome.org>, 2000-2002.");
-        translators.push_back("Lauris Kaplinski <lauris@ariman.ee>, 2000.");
-        translators.push_back("Luca Bruno <luca.br@uno.it>, 2005.");
-        translators.push_back("Lucas Vieites Fariña<lucas@asixinformatica.com>, 2003-2005.");
-        translators.push_back("Martin Srebotnjak, <miles@filmsi.net>, 2005.");
-        translators.push_back("Masatake YAMATO <jet@gyve.org>, 2002.");
-        translators.push_back("Matiphas <matiphas _a_ free _point_ fr>, 2004.");
-        translators.push_back("Mattias Hultgren <mattias_hultgren@tele2.se>, 2005.");
-        translators.push_back("Maxim Dziumanenko <mvd@mylinux.com.ua>, 2004");
-        translators.push_back("Mitsuru Oka <oka326@parkcity.ne.jp>, 2001-2002.");
-        translators.push_back("Mufit Eribol <meribol@ere.com.tr>, 2000.");
-        translators.push_back("Quico Llach <quico@softcatala.org>, 2000. Traducció sodipodi.");
-        translators.push_back("Raymond Ostertag <raymond@linuxgraphic.org>, 2002-2003.");
-        translators.push_back("shivaken <shivaken@owls-nest.net>, 2004.");
-        translators.push_back("Simos Xenitellis <simos@hellug.gr>, 2001.");
-        translators.push_back("Takeshi Aihana <aihana@muc.biglobe.ne.jp>, 2000-2001.");
-        translators.push_back("Jose Antonio Salgueiro <developer@telefonica.net>.");
-        translators.push_back("Valek Filippov <frob@df.ru>, 2000, 2003.");
-        translators.push_back("Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.");
-        translators.push_back("Vital Khilko <dojlid@mova.org>, 2003");
-        translators.push_back("Vitaly Lipatov <lav@altlinux.ru>, 2002, 2004.");
-        translators.push_back("Wang Li <charlesw1234@163.com>, 2002");
-        translators.push_back("Xavier Conde Rueda <xavi.conde@gmail.com>, 2004, 2005");
-        translators.push_back("Yukihiro Nakai <nakai@gnome.gr.jp>, 2000, 2003.");
-        translators.push_back("Yuri Syrota <rasta@renome.rovno.ua>, 2000.");
-        translators.push_back("Zdenko Podobný <zdpo@mailbox.sk>, 2003, 2004.");
-
-        _credits = new CreditsBox(*this, authors, translators);
-    }
-    _credits->show_all();
+    return text;
 }
 
-void
-AboutBox::show_license(void)
-{
-    Glib::ustring gpl = 
+gchar const *translators_text() {
+    static char const text[]=
+        "Adib Taraben <theadib@yahoo.com>, 2004.\n"
+        "Alastair McKinstry <mckinstry@computer.org>, 2000.\n"
+        "Aleksandar Urošević <urke@users.sourceforge.net>\n"
+        "Alessio Frusciante <algol@firenze.linux.it>, 2002, 2003.\n"
+        "Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2005.\n"
+        "Alexey Remizov <alexey@remizov.pp.ru>, 2004.\n"
+        "Álvaro Lopes <alvieboy@alvie.com>, 2001, 2002\n"
+        "Andreas Hyden <a.hyden@cyberpoint.se>, 2000.\n"
+        "Arman Aksoy <armish@linux-sevenler.de>, 2003.\n"
+        "Arpad Biro <biro_arpad@yahoo.com>, 2004, 2005.\n"
+        "Benedikt Roth <Benedikt.Roth@gmx.net>, 2000\n"
+        "Boštjan Špetič <igzebedze@cyberpipe.org>, 2004, 2005.\n"
+        "Brisa Francesco <fbrisa@yahoo.it>, 2000.\n"
+        "bulia byak <buliabyak@users.sf.net>, 2004.\n"
+        "Christian Meyer <chrisime@gnome.org>, 2000-2002.\n"
+        "Christian Neumair <chris@gnome-de.org>, 2002, 2003.\n"
+        "Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003.\n"
+        "Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.\n"
+        "Colin Marquardt <colin@marquardt-home.de>, 2004, 2005.\n"
+        "Daniel Díaz <yosoy@danieldiaz.org>, 2004\n"
+        "Александар Урошевић <urke@users.sourceforge.net>\n"
+        "Didier Conchaudron <conchaudron@free.fr>, 2003.\n"
+        "Duarte Loreto <happyguy_pt@hotmail.com> 2002,2003 (Maintainer)\n"
+        "Fatih Demir <kabalak@gtranslator.org>, 2000.\n"
+        "Francesc Dorca <f.dorca@filnet.es>, 2003. Traducció sodipodi.\n"
+        "Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.\n"
+        "Francisco Xosé Vázquez Grandal <fxvazquez@arrakis.es>, 2001.\n"
+        "Frederic Rodrigo <f.rodrigo free.fr>, 2004-2005.\n"
+        "Ge'ez Frontier Foundation <locales@geez.org>, 2002.\n"
+        "Jörg Müller <jfm@ram-brand.de>, 2005.\n"
+        "Jeroen van der Vegt <ajvdvegt (at) 123mail.org>, 2003, 2005.\n"
+        "Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003.\n"
+        "Josef Vybiral <josef.vybiral@gmail.com>, 2005.\n"
+        "Juarez Rudsatz <juarez@correio.com>, 2004\n"
+        "Junichi Uekawa <dancer@debian.org>, 2002.\n"
+        "Kai Lahmann <kailahmann@01019freenet.de>, 2000\n"
+        "Karl Ove Hufthammer <karl@huftis.org>, 2004, 2005.\n"
+        "Keld Simonsen <keld@dkuug.dk>, 2000-2001.\n"
+        "Kjartan Maraas <kmaraas@gnome.org>, 2000-2002.\n"
+        "Lauris Kaplinski <lauris@ariman.ee>, 2000.\n"
+        "Luca Bruno <luca.br@uno.it>, 2005.\n"
+        "Lucas Vieites Fariña<lucas@asixinformatica.com>, 2003-2005.\n"
+        "Martin Srebotnjak, <miles@filmsi.net>, 2005.\n"
+        "Masatake YAMATO <jet@gyve.org>, 2002.\n"
+        "Matiphas <matiphas _a_ free _point_ fr>, 2004.\n"
+        "Mattias Hultgren <mattias_hultgren@tele2.se>, 2005.\n"
+        "Maxim Dziumanenko <mvd@mylinux.com.ua>, 2004\n"
+        "Mitsuru Oka <oka326@parkcity.ne.jp>, 2001-2002.\n"
+        "Mufit Eribol <meribol@ere.com.tr>, 2000.\n"
+        "Quico Llach <quico@softcatala.org>, 2000. Traducció sodipodi.\n"
+        "Raymond Ostertag <raymond@linuxgraphic.org>, 2002-2003.\n"
+        "shivaken <shivaken@owls-nest.net>, 2004.\n"
+        "Simos Xenitellis <simos@hellug.gr>, 2001.\n"
+        "Takeshi Aihana <aihana@muc.biglobe.ne.jp>, 2000-2001.\n"
+        "Jose Antonio Salgueiro <developer@telefonica.net>.\n"
+        "Valek Filippov <frob@df.ru>, 2000, 2003.\n"
+        "Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.\n"
+        "Vital Khilko <dojlid@mova.org>, 2003\n"
+        "Vitaly Lipatov <lav@altlinux.ru>, 2002, 2004.\n"
+        "Wang Li <charlesw1234@163.com>, 2002\n"
+        "Xavier Conde Rueda <xavi.conde@gmail.com>, 2004, 2005\n"
+        "Yukihiro Nakai <nakai@gnome.gr.jp>, 2000, 2003.\n"
+        "Yuri Syrota <rasta@renome.rovno.ua>, 2000.\n"
+        "Zdenko Podobný <zdpo@mailbox.sk>, 2003, 2004.\n";
+
+    return text;
+}
+
+gchar const *license_text() {
+    static gchar const text[]= 
 "            GNU GENERAL PUBLIC LICENSE\n\
                Version 2, June 1991\n\
 \n\
@@ -667,10 +580,7 @@ library.  If this is what you want to do, use the GNU Library General\n\
 Public License instead of this License.\n\
 ";
 
-    if (!_license) {
-        _license = new LicenseBox(*this,gpl);
-    }
-    _license->show_all();
+    return text;
 }
 
 

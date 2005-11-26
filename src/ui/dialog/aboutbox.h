@@ -21,56 +21,12 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-#define INKSCAPE_ABOUT_CREDITS  1
-#define INKSCAPE_ABOUT_LICENSE  2
-#define INKSCAPE_ABOUT_CLOSE    3
-
-class AboutBoxChild: public Gtk::Dialog
-{
-public:
-    AboutBoxChild::AboutBoxChild(Gtk::Window& parent, gchar * title)
-        : Gtk::Dialog(title,parent) {};
-protected:
-    virtual void         on_response(int response_id);
-    Gtk::ScrolledWindow& make_scrolled_text(Glib::ustring& contents);
-};
-
-class LicenseBox: public AboutBoxChild
-{
-public:
-    LicenseBox(Gtk::Window& parent, Glib::ustring& text);
-};
-
-class CreditsBox: public AboutBoxChild
-{
-public:
-    CreditsBox(Gtk::Window& parent,
-               std::vector<Glib::ustring>& authors,
-               std::vector<Glib::ustring>& translators);
-protected:
-    Gtk::Notebook  _notebook;
-private:
-    void flatten_vector(std::vector<Glib::ustring>& list,
-                        Glib::ustring& string);
-};
-
-class AboutBox: public Gtk::Dialog
-{
+class AboutBox: public Gtk::Dialog {
 public:
     AboutBox(Gtk::Widget& about_svg_view, gint width, gint height);
-    virtual ~AboutBox();
-protected:
-    virtual void    on_response(int response_id);
-    
-    void            show_credits(void);
-    void            show_license(void);
 
-    LicenseBox *    _license;
-    CreditsBox *    _credits;
-
-/*
-    Gtk::Dialog *  _about;
-*/
+private:
+    virtual void on_response(int response_id);
 };
 
 } // namespace Dialog
