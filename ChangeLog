@@ -1,3 +1,9 @@
+2005-11-25  Robert Crosbie <swingincelt@gmail.com>
+
+	* replaced sp_repr_ref with direct cal to Inkscape::GC::anchor
+	* replaced sp_repr_unref with direct call to Inkscape::GC::release
+	* replaced sp_repr_set_attr with direct call to repr->setAttribute
+
 2005-11-24  MenTaLguY  <mental@rydia.net>
 
     * src/shortcuts.cpp, src/interface.cpp: prune back shortcuts API in
