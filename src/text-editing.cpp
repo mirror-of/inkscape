@@ -492,6 +492,13 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     */
     Inkscape::XML::Node *new_span_repr = sp_repr_new(span_name_for_text_object(root));
 
+    if (gchar const *a = this_repr->attribute("dx"))
+        new_span_repr->setAttribute("dx", a);
+    if (gchar const *a = this_repr->attribute("dy"))
+        new_span_repr->setAttribute("dy", a);
+    if (gchar const *a = this_repr->attribute("rotate"))
+        new_span_repr->setAttribute("rotate", a);
+
     SPObject *following_item = item;
     while (SP_OBJECT_NEXT(following_item) == NULL) {
         following_item = SP_OBJECT_PARENT(following_item);
