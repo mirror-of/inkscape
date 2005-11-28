@@ -133,6 +133,7 @@ EXTRA_DIST =	\
 	libnrtype/makefile.in	\
 	libavoid/makefile.in	\
 	livarot/makefile.in	\
+	removeoverlap/makefile.in	\
 	svg/makefile.in		\
 	trace/makefile.in	\
 	traits/makefile.in	\
