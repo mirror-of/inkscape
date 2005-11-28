@@ -62,6 +62,7 @@ libinkpre_a_SOURCES =	\
 	fontsize-expansion.cpp fontsize-expansion.h	\
 	forward.h	\
 	geom.cpp geom.h	\
+	gnuc-attribute.h	\
 	gradient-context.cpp gradient-context.h \
 	gradient-drag.cpp gradient-drag.h \
 	help.cpp help.h	\
