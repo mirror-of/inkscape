@@ -44,6 +44,17 @@ Blocks::~Blocks(void)
 	}
 }
 
+int Blocks::size(void)
+{
+	Block *b=head;
+	int i=0;
+	while (b != NULL) {
+		b = b->nextRight;
+		i++;
+	}
+	return i;
+}
+
 void Blocks::add(Block *b) {
 	b->nextLeft=NULL;
 	b->nextRight=NULL;

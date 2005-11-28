@@ -27,6 +27,7 @@ public:
 	void merge_right(Block *l);
 	void split(Block *b, Block *&l, Block *&r, Constraint *c);
 	double cost();
+	int size();
 private:
 	void dfsVisit(Variable *v);
 };

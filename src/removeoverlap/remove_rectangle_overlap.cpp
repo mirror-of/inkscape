@@ -9,7 +9,7 @@ double Rectangle::yBorder=0;
  * such that rectangles are separated by at least xBorder horizontally
  * and yBorder vertically
  */
-void removeOverlaps(Rectangle *rs[], const int n, const double xBorder=0, const double yBorder=0) {
+void removeRectangleOverlap(Rectangle *rs[], const int n, const double xBorder=0, const double yBorder=0) {
 	// The extra gap avoids numerical imprecision problems
 	Rectangle::setXBorder(xBorder+0.001);
 	Rectangle::setYBorder(yBorder);
@@ -20,20 +20,20 @@ void removeOverlaps(Rectangle *rs[], const int n, const double xBorder=0, const 
 	Variable **vs;
 	Constraint **cs;
 	int m=generateXConstraints(rs,ws,n,vs,cs);
-	double cost=solve_VPSC(vs,n,cs,m);
+	VPSC vpsc_x(vs,n,cs,m);
+	double cost=vpsc_x.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveMinX(vs[i]->position());
 	}
-	cleanup();
 	delete [] vs;
 	delete [] cs;
 	Rectangle::setXBorder(Rectangle::xBorder-0.001);
+	VPSC vpsc_y(vs,n,cs,m);
 	m=generateYConstraints(rs,ws,n,vs,cs);
-	cost=solve_VPSC(vs,n,cs,m);
+	cost=vpsc_y.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveMinY(vs[i]->position());
 	}
-	cleanup();
 	delete [] vs;
 	delete [] cs;
 	delete [] ws;

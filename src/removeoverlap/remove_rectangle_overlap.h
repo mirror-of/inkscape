@@ -11,5 +11,5 @@
 
 #ifndef SEEN_REMOVEOVERLAP_H
 #define SEEN_REMOVEOVERLAP_H
-void removerectangleoverlap(Rectangle *rs[], const int n, const double xBorder, const double yBorder);
+void removeRectangleOverlap(Rectangle *rs[], const int n, const double xBorder, const double yBorder);
 #endif // SEEN_REMOVEOVERLAP_H

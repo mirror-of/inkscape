@@ -25,9 +25,9 @@ public:
 
 	VPSC(Variable *vs[], const int n, Constraint *cs[], const int m);
 	~VPSC();
+	Blocks *bs;
 private:
 	void printBlocks();
-	Blocks *bs;
 };
 
 #endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
