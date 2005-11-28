@@ -14,6 +14,8 @@ removeoverlap_libremoveoverlap_a_SOURCES =	\
 	removeoverlap/constraint.h	\
 	removeoverlap/generate-constraints.cpp	\
 	removeoverlap/generate-constraints.h	\
+	removeoverlap/remove_rectangle_overlap.cpp	\
+	removeoverlap/remove_rectangle_overlap.h	\
 	removeoverlap/removeoverlap.cpp	\
 	removeoverlap/removeoverlap.h	\
 	removeoverlap/solve_VPSC.cpp	\

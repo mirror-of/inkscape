@@ -19,13 +19,11 @@
 #include "stdio.h"
 
 using namespace std;
-Blocks *Blocks::instance;
 
 // creates list of blocks with a block for each variable, 
 // with a total ordering dependant on the variable's
 // position in the constraint DAG
 Blocks::Blocks(Variable* vs[], const int n) {
-	Blocks::instance=this;
 	head=NULL;
 	for(int i=0;i<n;i++) {
 		vs[i]->visited=false;

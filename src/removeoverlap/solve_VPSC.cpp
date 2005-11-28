@@ -15,13 +15,24 @@
 #include "block.h"
 #include "blocks.h"
 #include "variable.h"
+#include "solve_VPSC.h"
 #include <stdio.h>
 #include <assert.h>
 
 using namespace std;
 
-void printBlocks() {
-	Block *b = Blocks::instance->head;
+VPSC::VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) {
+	bs=new Blocks(vs,n);
+#ifdef LOGGING
+	printBlocks();
+#endif
+}
+VPSC::~VPSC() {
+	delete bs;
+}
+
+void VPSC::printBlocks() {
+	Block *b = bs->head;
 	int i=0;
 	while (b != NULL) {
 		FILE *logfile=fopen("cplacement.log","a");
@@ -31,28 +42,25 @@ void printBlocks() {
 		i++;
 	}
 }
-double satisfy_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) {
-	Blocks::instance=new Blocks(vs,n);		
-	Block *b = Blocks::instance->head;
-#ifdef LOGGING
-	printBlocks();
-#endif
+
+double VPSC::satisfy() {
+	Block *b = bs->head;
 	while (b != NULL) {
 		Block *r=b->nextRight;
-		Blocks::instance->merge_left(b);
+		bs->merge_left(b);
 		b=r;
 	}
 	//for(int i=0;i<m;i++) {
 	//	assert(cs[i]->slack()>-0.0000001);
 	//}
-	return Blocks::instance->cost();
+	return bs->cost();
 }
-double solve_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) {
-	satisfy_VPSC(vs,n,cs,m);
+double VPSC::solve() {
+	satisfy();
 	bool solved=false;
 	while(!solved) {
 		solved=true;
-		Block *b=Blocks::instance->head;
+		Block *b=bs->head;
 		while(b!=NULL) {
 			Constraint *c=b->find_min_lm();
 			if(c!=NULL && c->lm<0) {
@@ -64,9 +72,9 @@ double solve_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) {
 				solved=false;
 				// Split on c
 				Block *l=NULL, *r=NULL;
-				Blocks::instance->split(b,l,r,c);
+				bs->split(b,l,r,c);
 				delete b;
-				b=Blocks::instance->head;
+				b=bs->head;
 			}
 			b=b->nextRight;
 		}
@@ -74,12 +82,12 @@ double solve_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) {
 	//for(int i=0;i<m;i++) {
 	//	assert(cs[i]->slack()>-0.0000001);
 	//}
-	return Blocks::instance->cost();
+	return bs->cost();
 }
 
-bool split_once() {
+bool VPSC::split_once() {
 	bool optimal=true;
-	Block *b=Blocks::instance->head;
+	Block *b=bs->head;
 	while(b!=NULL) {
 		Constraint *c=b->find_min_lm();
 		if(c!=NULL && c->lm<0) {
@@ -91,14 +99,11 @@ bool split_once() {
 			optimal=false;
 			// Split on c
 			Block *l=NULL, *r=NULL;
-			Blocks::instance->split(b,l,r,c);
+			bs->split(b,l,r,c);
 			delete b;
-			b=Blocks::instance->head;
+			b=bs->head;
 		}
 		b=b->nextRight;
 	}
 	return optimal;
-}
-void cleanup() {
-	delete Blocks::instance;
 }

@@ -18,7 +18,6 @@ class Constraint;
 class Blocks
 {
 public:
-	static Blocks *instance;
 	Block *head;
 	Blocks(Variable* vs[], const int n);
 	~Blocks(void);
@@ -31,5 +30,4 @@ public:
 private:
 	void dfsVisit(Variable *v);
 };
-
 #endif // SEEN_REMOVEOVERLAP_BLOCKS_H

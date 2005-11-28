@@ -51,7 +51,7 @@ void removeoverlap(GSList *items, double xGap, double yGap) {
 		NR::Point max = item_box.max();
 		rs[i++]=new Rectangle(min[NR::X],max[NR::X],min[NR::Y],max[NR::Y]);
 	}
-	removerectangleoverlap(rs,n,xGap,yGap);
+	removeRectangleOverlap(rs,n,xGap,yGap);
 	i=0;
 	for (std::list<SPItem *>::iterator it(selected.begin());
 		it != selected.end();
