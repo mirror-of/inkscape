@@ -77,6 +77,28 @@ double solve_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) {
 	return Blocks::instance->cost();
 }
 
+bool split_once() {
+	bool optimal=true;
+	Block *b=Blocks::instance->head;
+	while(b!=NULL) {
+		Constraint *c=b->find_min_lm();
+		if(c!=NULL && c->lm<0) {
+#ifdef LOGGING
+			FILE *logfile=fopen("cplacement.log","a");
+			fprintf(logfile,"Split on constraint: %s\n",c->toString());
+			fclose(logfile);
+#endif
+			optimal=false;
+			// Split on c
+			Block *l=NULL, *r=NULL;
+			Blocks::instance->split(b,l,r,c);
+			delete b;
+			b=Blocks::instance->head;
+		}
+		b=b->nextRight;
+	}
+	return optimal;
+}
 void cleanup() {
 	delete Blocks::instance;
 }

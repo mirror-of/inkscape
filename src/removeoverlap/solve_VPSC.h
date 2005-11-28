@@ -19,6 +19,8 @@ double satisfy_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m);
 
 double solve_VPSC(Variable *vs[], const int n, Constraint *cs[], const int m);
 
+double split_once();
+
 void cleanup();
 
 #endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H

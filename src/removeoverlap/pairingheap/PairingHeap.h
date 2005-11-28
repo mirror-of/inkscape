@@ -63,9 +63,6 @@ public:
 template <class T>
 class PairingHeap
 {
-private:
-	bool (*lessThan)(T &lhs, T &rhs);
-	int counter;
 public:
 	PairingHeap( bool (*lessThan)(T &lhs, T &rhs) );
 	PairingHeap( const PairingHeap & rhs );
@@ -102,7 +99,8 @@ protected:
 	}
 private:
 	PairNode<T> *root;
-
+	bool (*lessThan)(T &lhs, T &rhs);
+	int counter;
 	void reclaimMemory( PairNode<T> *t ) const;
 	void compareAndLink( PairNode<T> * & first, PairNode<T> *second ) const;
 	PairNode<T> * combineSiblings( PairNode<T> *firstSibling ) const;

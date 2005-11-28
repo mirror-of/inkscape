@@ -62,15 +62,11 @@ void Block::merge(Block *b, Constraint *c, double dist) {
 	if (b->in == NULL)
 		b->setUpInConstraints();
 	in->merge(b->in);
-	//int oldsize=ins->size();
-	//ins->merge(b->ins);
-	//assert(ins->size()==b->ins->size()+oldsize);
 	if (out == NULL)
 		setUpOutConstraints();
 	if (b->out == NULL)
 		b->setUpOutConstraints();
 	out->merge(b->out);
-	//outs->merge(b->outs);
 }
 Constraint *Block::find_min_in_constraint() {
 	//assert(ins->size()==in->size());
@@ -155,6 +151,12 @@ Constraint *Block::find_min_lm() {
 	compute_dfdv(vars->front(),NULL,min_lm);
 	return min_lm;
 }
+
+/**
+ * Creates two new blocks, l and r, and splits this block across constraint c,
+ * placing the left subtree of constraints (and associated variables) into l
+ * and the right into r 
+ */
 void Block::split(Block *&l, Block *&r, Constraint *c) {
 	c->active=false;
 	l=new Block();
@@ -162,6 +164,11 @@ void Block::split(Block *&l, Block *&r, Constraint *c) {
 	r=new Block();
 	populateSplitBlock(r,c->right,c->left);
 }
+
+/**
+ * Computes the cost (squared euclidean distance from desired positions) of the
+ * current positions for variables in this block
+ */
 double Block::cost() {
 	double c = 0;
 	for (vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {

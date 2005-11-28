@@ -20,19 +20,9 @@ class StupidPriorityQueue;
 
 class Block
 {
-private:
-	void reset_active_lm(Variable *v, Variable *u);
-	double compute_dfdv(Variable *v, Variable *u, Constraint *&min_lm);
-	bool canFollowLeft(Constraint *c, Variable *last);
-	bool canFollowRight(Constraint *c, Variable *last);
-	void populateSplitBlock(Block *b, Variable *v, Variable *u);
-	void addVariable(Variable *v);
-	void setUpConstraintHeap(PairingHeap<Constraint*>* &h,bool in);
 public:
 	PairingHeap<Constraint*> *in;
 	PairingHeap<Constraint*> *out;
-	//StupidPriorityQueue *ins;
-	//StupidPriorityQueue *outs;
 	std::vector<Variable*> *vars;
 	double posn;
 	double weight;
@@ -51,6 +41,14 @@ public:
 	void setUpOutConstraints();
 	double cost();
 	char *toString();
+private:
+	void reset_active_lm(Variable *v, Variable *u);
+	double compute_dfdv(Variable *v, Variable *u, Constraint *&min_lm);
+	bool canFollowLeft(Constraint *c, Variable *last);
+	bool canFollowRight(Constraint *c, Variable *last);
+	void populateSplitBlock(Block *b, Variable *v, Variable *u);
+	void addVariable(Variable *v);
+	void setUpConstraintHeap(PairingHeap<Constraint*>* &h,bool in);
 };
 
 #include "variable.h"
@@ -70,8 +68,6 @@ inline Block::Block(Variable *v) {
 	addVariable(v);
 	in=NULL;
 	out=NULL;
-	//ins=NULL;
-	//outs=NULL;
 }
 inline Block::Block() {
 	vars=new vector<Variable*>;
@@ -80,8 +76,6 @@ inline Block::Block() {
 	wposn=0;
 	in=NULL;
 	out=NULL;
-	//ins=NULL;
-	//outs=NULL;
 }
 
 inline double Block::desiredWeightedPosition() {

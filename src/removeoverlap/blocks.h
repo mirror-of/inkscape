@@ -17,7 +17,6 @@ class Variable;
 class Constraint;
 class Blocks
 {
-	void dfsVisit(Variable *v);
 public:
 	static Blocks *instance;
 	Block *head;
@@ -29,6 +28,8 @@ public:
 	void merge_right(Block *l);
 	void split(Block *b, Block *&l, Block *&r, Constraint *c);
 	double cost();
+private:
+	void dfsVisit(Variable *v);
 };
 
 #endif // SEEN_REMOVEOVERLAP_BLOCKS_H

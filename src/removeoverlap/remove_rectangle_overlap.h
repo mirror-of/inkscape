@@ -11,7 +11,5 @@
 
 #ifndef SEEN_REMOVEOVERLAP_H
 #define SEEN_REMOVEOVERLAP_H
-
-void removeoverlap(GSList *items,double xGap, double yGap);
-
+void removerectangleoverlap(Rectangle *rs[], const int n, const double xBorder, const double yBorder);
 #endif // SEEN_REMOVEOVERLAP_H

@@ -94,7 +94,6 @@ void Blocks::merge_left(Block *r) {
 		fclose(logfile);
 #endif
 		r->in->deleteMin();
-		//r->ins->deleteMin();
 		Block *l = c->left->block;		
 		double dist = c->left->offset + c->gap - c->right->offset;
 		if (r->vars->size() > l->vars->size()) {
@@ -129,7 +128,6 @@ void Blocks::merge_right(Block *l) {
 		fclose(logfile);
 #endif
 		l->out->deleteMin();
-		//l->outs->deleteMin();
 		Block *r = c->right->block;
 		double dist = c->left->offset + c->gap - c->right->offset;
 		if (l->vars->size() > r->vars->size()) {
