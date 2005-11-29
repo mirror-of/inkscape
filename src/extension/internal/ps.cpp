@@ -446,7 +446,7 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
     if (!_stream) return 0;
 
     if (_bitmap) {
-        double const scale = _dpi / 72.0;
+        double const dots_per_pt = _dpi / PT_PER_IN;
 
         double const x0 = 0.0;
         double const y0 = 0.0;
@@ -454,8 +454,8 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
         double const y1 = y0 + _height;
 
         /* Bitmap width/height in bitmap dots. */
-        int const width = (int) (_width * scale + 0.5);
-        int const height = (int) (_height * scale + 0.5);
+        int const width = (int) (_width * dots_per_pt + 0.5);
+        int const height = (int) (_height * dots_per_pt + 0.5);
 
         NRMatrix affine;
         affine.c[0] = width / (x1 - x0);
@@ -491,12 +491,12 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
             nr_arena_item_invoke_render(mod->root, &bbox, &pb, 0);
             /* Blitter goes here */
             NRMatrix imgt;
-            imgt.c[0] = (bbox.x1 - bbox.x0) / scale;
+            imgt.c[0] = (bbox.x1 - bbox.x0) / dots_per_pt;
             imgt.c[1] = 0.0;
             imgt.c[2] = 0.0;
-            imgt.c[3] = (bbox.y1 - bbox.y0) / scale;
+            imgt.c[3] = (bbox.y1 - bbox.y0) / dots_per_pt;
             imgt.c[4] = 0.0;
-            imgt.c[5] = _height - y / scale - (bbox.y1 - bbox.y0) / scale;
+            imgt.c[5] = _height - y / dots_per_pt - (bbox.y1 - bbox.y0) / dots_per_pt;
 
             print_image(_stream, px, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0, 4 * width, &imgt);
         }
