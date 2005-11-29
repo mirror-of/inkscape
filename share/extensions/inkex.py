@@ -20,6 +20,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 import sys, copy, optparse
+
+#a dictionary of all of the xmlns prefixes in a standard inkscape doc
+NSS = {
+u'sodipodi'	:u'http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd',
+u'cc'		:u'http://web.resource.org/cc/',
+u'svg'		:u'http://www.w3.org/2000/svg',
+u'dc'		:u'http://purl.org/dc/elements/1.1/',
+u'rdf'		:u'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+u'inkscape'	:u'http://www.inkscape.org/namespaces/inkscape',
+u'xlink'	:u'http://www.w3.org/1999/xlink'
+}
+
 try:
 	import xml.dom.ext
 	import xml.dom.ext.reader.Sax2
