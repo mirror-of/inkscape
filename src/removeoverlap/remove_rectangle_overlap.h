@@ -1,6 +1,10 @@
+#ifndef REMOVE_RECTANGLE_OVERLAP_H_SEEN
+#define REMOVE_RECTANGLE_OVERLAP_H_SEEN
+
 /**
- * \brief Remove overlaps function
- *
+ * \file Declaration of main internal remove-overlaps function.
+ */
+/*
  * Authors:
  *   Tim Dwyer <tgdwyer@gmail.com>
  *
@@ -9,7 +13,7 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#ifndef SEEN_REMOVEOVERLAP_H
-#define SEEN_REMOVEOVERLAP_H
-void removeRectangleOverlap(Rectangle *rs[], const int n, const double xBorder, const double yBorder);
-#endif // SEEN_REMOVEOVERLAP_H
+void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBorder);
+
+
+#endif /* !REMOVE_RECTANGLE_OVERLAP_H_SEEN */
