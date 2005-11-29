@@ -458,10 +458,10 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
         int const height = (int) (_height * dots_per_pt + 0.5);
 
         NRMatrix affine;
-        affine.c[0] = width / (x1 - x0);
+        affine.c[0] = width / ((x1 - x0) * PX_PER_PT);
         affine.c[1] = 0.0;
         affine.c[2] = 0.0;
-        affine.c[3] = height / (y1 - y0);
+        affine.c[3] = height / ((y1 - y0) * PX_PER_PT);
         affine.c[4] = -affine.c[0] * x0;
         affine.c[5] = -affine.c[3] * y0;
 
