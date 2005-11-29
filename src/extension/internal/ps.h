@@ -34,15 +34,15 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
     std::set<std::string> _latin1_encoded_fonts;
     bool   _newlatin1font_proc_defined;
 
-	void print_bpath (SVGOStringStream &os, const NArtBpath *bp);
+	void print_bpath (SVGOStringStream &os, NArtBpath const *bp);
 
-	void PrintPS::print_fill_style (SVGOStringStream &os, const SPStyle *style, const NRRect *pbox);
-	void PrintPS::print_stroke_style (SVGOStringStream &os, const SPStyle *style);
+	void PrintPS::print_fill_style (SVGOStringStream &os, SPStyle const *style, NRRect const *pbox);
+	void PrintPS::print_stroke_style (SVGOStringStream &os, SPStyle const *style);
 
-	const char* PrintPS::PSFontName (const SPStyle *style);
+	char const *PrintPS::PSFontName (SPStyle const *style);
 
 	unsigned int print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
-				       const NRMatrix *transform);
+				       NRMatrix const *transform);
 	void compress_packbits (int nin, guchar *src, int *nout, guchar *dst);
 
 	/* ASCII 85 variables */
@@ -71,17 +71,17 @@ public:
 	virtual unsigned int finish (Inkscape::Extension::Print * module);
 
 	/* Rendering methods */
-	virtual unsigned int bind (Inkscape::Extension::Print * module, const NRMatrix *transform, float opacity);
+	virtual unsigned int bind (Inkscape::Extension::Print * module, NRMatrix const *transform, float opacity);
 	virtual unsigned int release (Inkscape::Extension::Print * module);
-	virtual unsigned int comment (Inkscape::Extension::Print * module, const char * comment);
-	virtual unsigned int fill (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-	virtual unsigned int stroke (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
-				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	virtual unsigned int comment (Inkscape::Extension::Print * module, char const *comment);
+	virtual unsigned int fill (Inkscape::Extension::Print * module, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
+			       NRRect const *pbox, NRRect const *dbox, NRRect const *bbox);
+	virtual unsigned int stroke (Inkscape::Extension::Print * module, NRBPath const *bpath, NRMatrix const *transform, SPStyle const *style,
+				 NRRect const *pbox, NRRect const *dbox, NRRect const *bbox);
 	virtual unsigned int image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-				const NRMatrix *transform, const SPStyle *style);
-        virtual unsigned int text (Inkscape::Extension::Print *module, const char *text,
-				   NR::Point p, const SPStyle *style);
+				NRMatrix const *transform, SPStyle const *style);
+        virtual unsigned int text (Inkscape::Extension::Print *module, char const *text,
+				   NR::Point p, SPStyle const *style);
 
 	bool textToPath (Inkscape::Extension::Print * ext);
 	static void init (void);

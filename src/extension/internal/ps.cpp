@@ -106,7 +106,7 @@ PrintPS::~PrintPS(void)
 unsigned int
 PrintPS::setup(Inkscape::Extension::Print * mod)
 {
-    static const gchar *pdr[] = {"72", "75", "100", "144", "150", "200", "300", "360", "600", "1200", "2400", NULL};
+    static gchar const *pdr[] = {"72", "75", "100", "144", "150", "200", "300", "360", "600", "1200", "2400", NULL};
     GtkWidget *dlg, *vbox, *f, *vb, *rb, *hb, *combo, *l, *e;
     GtkTooltips *tt;
     GList *sl;
@@ -184,8 +184,7 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     gtk_combo_set_popdown_strings(GTK_COMBO(combo), sl);
     g_list_free(sl);
     if (1) {
-        const gchar * val = NULL;
-        val = mod->get_param_string("resolution");
+        gchar const *val = mod->get_param_string("resolution");
         gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combo)->entry), val);
     }
     gtk_box_pack_end(GTK_BOX(hb), combo, FALSE, FALSE, 0);
@@ -205,8 +204,7 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
 
     e = gtk_entry_new();
     if (1) {
-        const gchar *val;
-        val = mod->get_param_string("destination");
+        gchar const *val = mod->get_param_string("destination");
         gtk_entry_set_text(GTK_ENTRY(e), val);
     }
     gtk_box_pack_start(GTK_BOX(vb), e, FALSE, FALSE, 0);
@@ -221,8 +219,8 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     g_object_unref((GObject *) tt);
 
     if (response == GTK_RESPONSE_OK) {
-        const gchar *fn;
-        const char *sstr;
+        gchar const *fn;
+        char const *sstr;
 
         _bitmap = gtk_toggle_button_get_active((GtkToggleButton *) rb);
         sstr = gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(combo)->entry));
@@ -250,7 +248,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     Inkscape::SVGOStringStream os;
     int res;
     FILE *osf, *osp;
-    const gchar * fn;
+    gchar const *fn;
     gboolean epsexport=false;
 
     _latin1_encoded_fonts.clear();
@@ -536,7 +534,7 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
 }
 
 unsigned int
-PrintPS::bind(Inkscape::Extension::Print *mod, const NRMatrix *transform, float opacity)
+PrintPS::bind(Inkscape::Extension::Print *mod, NRMatrix const *transform, float opacity)
 {
     if (!_stream) return 0;  // XXX: fixme, returning -1 as unsigned.
     if (_bitmap) return 0;
@@ -562,7 +560,7 @@ PrintPS::release(Inkscape::Extension::Print *mod)
 }
 
 unsigned int
-PrintPS::comment(Inkscape::Extension::Print *mod, const char * comment)
+PrintPS::comment(Inkscape::Extension::Print *mod, char const *comment)
 {
     if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
     if (_bitmap) return 0;
@@ -675,7 +673,7 @@ PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRe
 }
 
 void
-PrintPS::print_stroke_style(SVGOStringStream &os, const SPStyle *style)
+PrintPS::print_stroke_style(SVGOStringStream &os, SPStyle const *style)
 {
     float rgb[3];
     sp_color_get_rgb_floatv(&style->stroke.value.color, rgb);
@@ -784,8 +782,8 @@ PrintPS::fill(Inkscape::Extension::Print *mod, NRBPath const *bpath, NRMatrix co
 
 
 unsigned int
-PrintPS::stroke(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-                const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
+PrintPS::stroke(Inkscape::Extension::Print *mod, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
+                NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
     if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
     if (_bitmap) return 0;
@@ -807,7 +805,7 @@ PrintPS::stroke(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRM
 
 unsigned int
 PrintPS::image(Inkscape::Extension::Print *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
-               const NRMatrix *transform, const SPStyle *style)
+               NRMatrix const *transform, SPStyle const *style)
 {
     if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
     if (_bitmap) return 0;
@@ -834,7 +832,7 @@ PrintPS::image(Inkscape::Extension::Print *mod, guchar *px, unsigned int w, unsi
         for (c0 = 0; c0 < w; c0 += 24) {
             c1 = MIN(w, c0 + 24);
             for (c = c0; c < c1; c++) {
-                static const char xtab[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+                static char const xtab[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
                 fputc(xtab[s[0] >> 4], _stream);
                 fputc(xtab[s[0] & 0xf], _stream);
                 fputc(xtab[s[1] >> 4], _stream);
@@ -853,8 +851,8 @@ PrintPS::image(Inkscape::Extension::Print *mod, guchar *px, unsigned int w, unsi
 #endif
 }
 
-const char *
-PrintPS::PSFontName(const SPStyle *style)
+char const *
+PrintPS::PSFontName(SPStyle const *style)
 {
     font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value, font_style_to_pos(*style));
 
@@ -895,7 +893,7 @@ PrintPS::text(Inkscape::Extension::Print *mod, char const *text, NR::Point p,
     // Escape chars
     Inkscape::SVGOStringStream escaped_text;
     escaped_text << std::oct;
-    for (const gchar *p_text = text ; *p_text ; p_text = g_utf8_next_char(p_text)) {
+    for (gchar const *p_text = text ; *p_text ; p_text = g_utf8_next_char(p_text)) {
         gunichar c = g_utf8_get_char(p_text);
         if (c == '\\' || c == ')' || c == '(')
             escaped_text << '\\' << static_cast<char>(c);
@@ -908,7 +906,7 @@ PrintPS::text(Inkscape::Extension::Print *mod, char const *text, NR::Point p,
     os << "gsave\n";
 
     // set font
-    const char *fn = PSFontName(style);
+    char const *fn = PSFontName(style);
     if (_latin1_encoded_fonts.find(fn) == _latin1_encoded_fonts.end()) {
         if (!_newlatin1font_proc_defined) {
             // input: newfontname, existingfontname
@@ -965,7 +963,7 @@ PrintPS::text(Inkscape::Extension::Print *mod, char const *text, NR::Point p,
 /* PostScript helpers */
 
 void
-PrintPS::print_bpath(SVGOStringStream &os, const NArtBpath *bp)
+PrintPS::print_bpath(SVGOStringStream &os, NArtBpath const *bp)
 {
     unsigned int closed;
 
@@ -1169,7 +1167,7 @@ PrintPS::ascii85_done(SVGOStringStream &os)
 
 unsigned int
 PrintPS::print_image(FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
-                     const NRMatrix *transform)
+                     NRMatrix const *transform)
 {
     unsigned int i, j;
     /* gchar *data, *src; */
