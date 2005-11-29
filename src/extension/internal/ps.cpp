@@ -1,9 +1,10 @@
 #define __SP_PS_C__
 
+/** \file
+ * PostScript printing.
+ */
 /*
- * PostScript printing
- *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
  *
@@ -106,30 +107,20 @@ PrintPS::~PrintPS(void)
 unsigned int
 PrintPS::setup(Inkscape::Extension::Print * mod)
 {
-    static gchar const *pdr[] = {"72", "75", "100", "144", "150", "200", "300", "360", "600", "1200", "2400", NULL};
-    GtkWidget *dlg, *vbox, *f, *vb, *rb, *hb, *combo, *l, *e;
-    GtkTooltips *tt;
-    GList *sl;
-    int i;
-    int response;
-    unsigned int ret;
-#ifdef TED
-    Inkscape::XML::Node *repr;
-#endif
-    bool p2bm;
+    static gchar const *const pdr[] = {"72", "75", "100", "144", "150", "200", "300", "360", "600", "1200", "2400", NULL};
 
 #ifdef TED
-    repr = ((SPModule *) mod)->repr;
+    Inkscape::XML::Node *repr = ((SPModule *) mod)->repr;
 #endif
 
-    ret = FALSE;
+    unsigned int ret = FALSE;
 
     /* Create dialog */
-    tt = gtk_tooltips_new();
+    GtkTooltips *tt = gtk_tooltips_new();
     g_object_ref((GObject *) tt);
     gtk_object_sink((GtkObject *) tt);
 
-    dlg = gtk_dialog_new_with_buttons(_("Print Destination"),
+    GtkWidget *dlg = gtk_dialog_new_with_buttons(_("Print Destination"),
 //            SP_DT_WIDGET(SP_ACTIVE_DESKTOP)->window,
             NULL,
             (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_DESTROY_WITH_PARENT),
@@ -141,17 +132,17 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
 
     gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_OK);
 
-    vbox = GTK_DIALOG(dlg)->vbox;
+    GtkWidget *vbox = GTK_DIALOG(dlg)->vbox;
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 4);
     /* Print properties frame */
-    f = gtk_frame_new(_("Print properties"));
+    GtkWidget *f = gtk_frame_new(_("Print properties"));
     gtk_box_pack_start(GTK_BOX(vbox), f, FALSE, FALSE, 4);
-    vb = gtk_vbox_new(FALSE, 4);
+    GtkWidget *vb = gtk_vbox_new(FALSE, 4);
     gtk_container_add(GTK_CONTAINER(f), vb);
     gtk_container_set_border_width(GTK_CONTAINER(vb), 4);
     /* Print type */
-    p2bm = mod->get_param_bool("bitmap");
-    rb = gtk_radio_button_new_with_label(NULL, _("Print using PostScript operators"));
+    bool const p2bm = mod->get_param_bool("bitmap");
+    GtkWidget *rb = gtk_radio_button_new_with_label(NULL, _("Print using PostScript operators"));
     gtk_tooltips_set_tip((GtkTooltips *) tt, rb,
                          _("Use PostScript vector operators. The resulting image is usually smaller "
                            "in file size and can be arbitrarily scaled, but alpha transparency "
@@ -166,9 +157,9 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     if (p2bm) gtk_toggle_button_set_active((GtkToggleButton *) rb, TRUE);
     gtk_box_pack_start(GTK_BOX(vb), rb, FALSE, FALSE, 0);
     /* Resolution */
-    hb = gtk_hbox_new(FALSE, 4);
+    GtkWidget *hb = gtk_hbox_new(FALSE, 4);
     gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
-    combo = gtk_combo_new();
+    GtkWidget *combo = gtk_combo_new();
     gtk_combo_set_value_in_list(GTK_COMBO(combo), FALSE, FALSE);
     gtk_combo_set_use_arrows(GTK_COMBO(combo), TRUE);
     gtk_combo_set_use_arrows_always(GTK_COMBO(combo), TRUE);
@@ -176,8 +167,8 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     gtk_tooltips_set_tip((GtkTooltips *) tt, GTK_COMBO(combo)->entry,
                          _("Preferred resolution (dots per inch) of bitmap"), NULL);
     /* Setup strings */
-    sl = NULL;
-    for (i = 0; pdr[i] != NULL; i++) {
+    GList *sl = NULL;
+    for (unsigned i = 0; pdr[i] != NULL; i++) {
         sl = g_list_prepend(sl, (gpointer) pdr[i]);
     }
     sl = g_list_reverse(sl);
@@ -188,7 +179,7 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
         gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combo)->entry), val);
     }
     gtk_box_pack_end(GTK_BOX(hb), combo, FALSE, FALSE, 0);
-    l = gtk_label_new(_("Resolution:"));
+    GtkWidget *l = gtk_label_new(_("Resolution:"));
     gtk_box_pack_end(GTK_BOX(hb), l, FALSE, FALSE, 0);
 
     /* Print destination frame */
@@ -202,7 +193,7 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
                         "Use '| prog arg...' to pipe to a program."));
     gtk_box_pack_start(GTK_BOX(vb), l, FALSE, FALSE, 0);
 
-    e = gtk_entry_new();
+    GtkWidget *e = gtk_entry_new();
     if (1) {
         gchar const *val = mod->get_param_string("destination");
         gtk_entry_set_text(GTK_ENTRY(e), val);
@@ -214,7 +205,7 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
 
     gtk_widget_show_all(vbox);
 
-    response = gtk_dialog_run(GTK_DIALOG(dlg));
+    int const response = gtk_dialog_run(GTK_DIALOG(dlg));
 
     g_object_unref((GObject *) tt);
 
@@ -245,26 +236,21 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
 unsigned int
 PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
 {
-    Inkscape::SVGOStringStream os;
-    int res;
-    FILE *osf, *osp;
-    gchar const *fn;
-    gboolean epsexport=false;
+    gboolean epsexport = false;
 
     _latin1_encoded_fonts.clear();
     _newlatin1font_proc_defined = false;
 
-    fn = mod->get_param_string("destination");
-
-    osf = NULL;
-    osp = NULL;
+    FILE *osf = NULL;
+    FILE *osp = NULL;
 
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
-    GError* error = NULL;
-    gchar* local_fn = g_filename_from_utf8( fn,
+    GError *error = NULL;
+    gchar const *utf8_fn = mod->get_param_string("destination");
+    gchar *local_fn = g_filename_from_utf8( utf8_fn,
                                             -1,  &bytesRead,  &bytesWritten, &error);
-    fn = local_fn;
+    gchar const *fn = local_fn;
 
     /* TODO: Replace the below fprintf's with something that does the right thing whether in
      * gui or batch mode (e.g. --print=blah).  Consider throwing an exception: currently one of
@@ -327,10 +313,9 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
 #endif
     }
 
-    if (epsexport)
-        res = fprintf(_stream, "%%!PS-Adobe-3.0 EPSF-3.0\n");
-    else
-        res = fprintf(_stream, "%%!PS-Adobe-3.0\n");
+    int const res = fprintf(_stream, ( epsexport
+                                       ? "%%!PS-Adobe-3.0 EPSF-3.0\n"
+                                       : "%%!PS-Adobe-3.0\n" ));
     /* flush this to test output stream as early as possible */
     if (fflush(_stream)) {
         /*g_print("caught error in sp_module_print_plain_begin\n");*/
@@ -369,6 +354,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         d.y1 *= PT_PER_PX;
     }
 
+    Inkscape::SVGOStringStream os;
     if (res >= 0) {
 
         os << "%%Creator: " << PACKAGE_STRING << "\n";
@@ -447,34 +433,31 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         }
     }
 
+    /* FIXME: This function is declared to return unsigned, whereas fprintf returns a signed int *
+     * that can be zero if the first fprintf failed (os is empty) or "negative" (i.e. very positive
+     * in unsigned int interpretation) if the first fprintf failed but this one succeeds, or
+     * positive if both succeed. */
     return fprintf(_stream, "%s", os.str().c_str());
 }
 
 unsigned int
 PrintPS::finish(Inkscape::Extension::Print *mod)
 {
-    int res;
-
     if (!_stream) return 0;
 
     if (_bitmap) {
-        double x0, y0, x1, y1;
-        int width, height;
-        float scale;
+        double const scale = _dpi / 72.0;
+
+        double const x0 = 0.0;
+        double const y0 = 0.0;
+        double const x1 = x0 + _width;
+        double const y1 = y0 + _height;
+
+        /* Bitmap width/height in bitmap dots. */
+        int const width = (int) (_width * scale + 0.5);
+        int const height = (int) (_height * scale + 0.5);
+
         NRMatrix affine;
-        guchar *px;
-        int y;
-
-        scale = _dpi / 72.0;
-
-        y0 = 0.0;
-        x0 = 0.0;
-        x1 = _width;
-        y1 = _height;
-
-        width = (int) (_width * scale + 0.5);
-        height = (int) (_height * scale + 0.5);
-
         affine.c[0] = width / (x1 - x0);
         affine.c[1] = 0.0;
         affine.c[2] = 0.0;
@@ -484,29 +467,30 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
 
         nr_arena_item_set_transform(mod->root, &affine);
 
-        px = nr_new(guchar, 4 * width * 64);
+        guchar *const px = nr_new(guchar, 4 * width * 64);
 
-        for (y = 0; y < height; y += 64) {
+        for (int y = 0; y < height; y += 64) {
+            /* Set area of interest. */
             NRRectL bbox;
-            NRGC gc(NULL);
-            NRMatrix imgt;
-            NRPixBlock pb;
-            /* Set area of interest */
             bbox.x0 = 0;
             bbox.y0 = y;
             bbox.x1 = width;
             bbox.y1 = MIN(height, y + 64);
-            /* Update to renderable state */
+
+            /* Update to renderable state. */
+            NRGC gc(NULL);
             nr_matrix_set_identity(&gc.transform);
             nr_arena_item_invoke_update(mod->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
             /* Render */
             /* This should take guchar* instead of unsigned char*) */
+            NRPixBlock pb;
             nr_pixblock_setup_extern(&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
                                      bbox.x0, bbox.y0, bbox.x1, bbox.y1,
                                      (guchar*)px, 4 * width, FALSE, FALSE);
             memset(px, 0xff, 4 * width * 64);
             nr_arena_item_invoke_render(mod->root, &bbox, &pb, 0);
             /* Blitter goes here */
+            NRMatrix imgt;
             imgt.c[0] = (bbox.x1 - bbox.x0) / scale;
             imgt.c[1] = 0.0;
             imgt.c[2] = 0.0;
@@ -520,7 +504,7 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
         nr_free(px);
     }
 
-    res = fprintf(_stream, "showpage\n");
+    int const res = fprintf(_stream, "showpage\n");
 
     /* Flush stream to be sure. */
     (void) fflush(_stream);
@@ -574,7 +558,7 @@ PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRe
     g_return_if_fail( style->fill.type == SP_PAINT_TYPE_COLOR
                       || ( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
                            && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) );
-    
+
     if (style->fill.type == SP_PAINT_TYPE_COLOR) {
         float rgb[3];
         sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
@@ -585,9 +569,9 @@ PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRe
         g_assert( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
                   && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) );
 
-        if (SP_IS_LINEARGRADIENT (SP_STYLE_FILL_SERVER (style))) {
+        if (SP_IS_LINEARGRADIENT(SP_STYLE_FILL_SERVER(style))) {
 
-            SPLinearGradient *lg=SP_LINEARGRADIENT(SP_STYLE_FILL_SERVER (style));
+            SPLinearGradient *lg = SP_LINEARGRADIENT(SP_STYLE_FILL_SERVER(style));
             NR::Point p1 (lg->x1.computed, lg->y1.computed);
             NR::Point p2 (lg->x2.computed, lg->y2.computed);
             if (pbox && SP_GRADIENT(lg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
@@ -604,7 +588,7 @@ PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRe
             os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
 
             sp_gradient_ensure_vector(SP_GRADIENT(lg)); // when exporting from commandline, vector is not built
-            for (gint i = 0; unsigned(i) < lg->vector.stops.size() - 1; i++) {
+            for (unsigned i = 0; i + 1 < lg->vector.stops.size(); i++) {
                 float rgb[3];
                 sp_color_get_rgb_floatv(&lg->vector.stops[i].color, rgb);
                 os << "<<\n/FunctionType 2\n/Domain [0 1]\n";
@@ -615,26 +599,28 @@ PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRe
             }
             os << "]\n/Domain [0 1]\n";
             os << "/Bounds [ ";
-            for (gint i=0;unsigned(i)<lg->vector.stops.size()-2;i++) {
+            for (unsigned i = 0; i + 2 < lg->vector.stops.size(); i++) {
                 os << lg->vector.stops[i+1].offset <<" ";
             }
             os << "]\n";
             os << "/Encode [ ";
-            for (gint i=0;unsigned(i)<lg->vector.stops.size()-1;i++) {
+            for (unsigned i = 0; i + 1 < lg->vector.stops.size(); i++) {
                 os << "0 1 ";
             }
             os << "]\n";
             os << ">>\n>>\n";
 
-        } else if (SP_IS_RADIALGRADIENT (SP_STYLE_FILL_SERVER (style))) {
+        } else if (SP_IS_RADIALGRADIENT(SP_STYLE_FILL_SERVER(style))) {
 
-            SPRadialGradient *rg=SP_RADIALGRADIENT(SP_STYLE_FILL_SERVER (style));
-            NR::Point c (rg->cx.computed, rg->cy.computed);
-            NR::Point f (rg->fx.computed, rg->fy.computed);
+            SPRadialGradient *rg = SP_RADIALGRADIENT(SP_STYLE_FILL_SERVER(style));
+            NR::Point c(rg->cx.computed, rg->cy.computed);
+            NR::Point f(rg->fx.computed, rg->fy.computed);
             double r = rg->r.computed;
             if (pbox && SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
                 // convert to userspace
-                NR::Matrix bbox2user(pbox->x1 - pbox->x0, 0, 0, pbox->y1 - pbox->y0, pbox->x0, pbox->y0);
+                NR::Matrix const bbox2user(pbox->x1 - pbox->x0, 0,
+                                           0, pbox->y1 - pbox->y0,
+                                           pbox->x0, pbox->y0);
                 c *= bbox2user;
                 f *= bbox2user;
                 r *= bbox2user.expansion();
@@ -647,7 +633,7 @@ PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRe
             os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
 
             sp_gradient_ensure_vector(SP_GRADIENT(rg)); // when exporting from commandline, vector is not built
-            for (gint i = 0; unsigned(i) < rg->vector.stops.size() - 1; i++) {
+            for (unsigned i = 0; i + 1 < rg->vector.stops.size(); i++) {
                 float rgb[3];
                 sp_color_get_rgb_floatv(&rg->vector.stops[i].color, rgb);
                 os << "<<\n/FunctionType 2\n/Domain [0 1]\n";
@@ -658,12 +644,12 @@ PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRe
             }
             os << "]\n/Domain [0 1]\n";
             os << "/Bounds [ ";
-            for (gint i=0;unsigned(i)<rg->vector.stops.size()-2;i++) {
-                os << rg->vector.stops[i+1].offset <<" ";
+            for (unsigned i = 0; i + 2 < rg->vector.stops.size(); i++) {
+                os << rg->vector.stops[i+1].offset << " ";
             }
             os << "]\n";
             os << "/Encode [ ";
-            for (gint i=0;unsigned(i)<rg->vector.stops.size()-1;i++) {
+            for (unsigned i = 0; i + 1 < rg->vector.stops.size(); i++) {
                 os << "0 1 ";
             }
             os << "]\n";
@@ -680,13 +666,14 @@ PrintPS::print_stroke_style(SVGOStringStream &os, SPStyle const *style)
 
     os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
 
-    // There are rare cases in which for a solid line stroke_dasharray_set is true. To avoid 
+    // There are rare cases in which for a solid line stroke_dasharray_set is true. To avoid
     // invalid PS-lines such as "[0.0000000 0.0000000] 0.0000000 setdash", which should be "[] 0 setdash",
     // we first check if all components of stroke_dash.dash are 0.
     bool LineSolid = true;
     if (style->stroke_dasharray_set &&
-        style->stroke_dash.n_dash &&
-        style->stroke_dash.dash ) {
+        style->stroke_dash.n_dash   &&
+        style->stroke_dash.dash       )
+    {
         int i = 0;
         while (LineSolid && (i < style->stroke_dash.n_dash)) {
                 i++;
@@ -743,9 +730,9 @@ PrintPS::fill(Inkscape::Extension::Print *mod, NRBPath const *bpath, NRMatrix co
                 SPGradient const *g = SP_GRADIENT(SP_STYLE_FILL_SERVER(style));
                 os << "eoclip\n";
                 if (g->gradientTransform_set) {
-                    os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1] 
-                        << " " << g->gradientTransform[2] << " " << g->gradientTransform[3] 
-                        << " " << g->gradientTransform[4] << " " << g->gradientTransform[5] << "] concat\n"; 
+                    os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1]
+                        << " " << g->gradientTransform[2] << " " << g->gradientTransform[3]
+                        << " " << g->gradientTransform[4] << " " << g->gradientTransform[5] << "] concat\n";
                 }
                 os << "shfill\n";
                 if (g->gradientTransform_set) {
@@ -761,9 +748,9 @@ PrintPS::fill(Inkscape::Extension::Print *mod, NRBPath const *bpath, NRMatrix co
                 SPGradient const *g = SP_GRADIENT(SP_STYLE_FILL_SERVER(style));
                 os << "clip\n";
                 if (g->gradientTransform_set) {
-                    os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1] 
-                        << " " << g->gradientTransform[2] << " " << g->gradientTransform[3] 
-                        << " " << g->gradientTransform[4] << " " << g->gradientTransform[5] << "] concat\n"; 
+                    os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1]
+                        << " " << g->gradientTransform[2] << " " << g->gradientTransform[3]
+                        << " " << g->gradientTransform[4] << " " << g->gradientTransform[5] << "] concat\n";
                 }
                 os << "shfill\n";
                 if (g->gradientTransform_set) {
@@ -775,7 +762,7 @@ PrintPS::fill(Inkscape::Extension::Print *mod, NRBPath const *bpath, NRMatrix co
         os << "grestore\n";
 
         fprintf(_stream, "%s", os.str().c_str());
-    }        
+    }
 
     return 0;
 }
@@ -894,7 +881,7 @@ PrintPS::text(Inkscape::Extension::Print *mod, char const *text, NR::Point p,
     Inkscape::SVGOStringStream escaped_text;
     escaped_text << std::oct;
     for (gchar const *p_text = text ; *p_text ; p_text = g_utf8_next_char(p_text)) {
-        gunichar c = g_utf8_get_char(p_text);
+        gunichar const c = g_utf8_get_char(p_text);
         if (c == '\\' || c == ')' || c == '(')
             escaped_text << '\\' << static_cast<char>(c);
         else if (c >= 0x80)
@@ -930,7 +917,7 @@ PrintPS::text(Inkscape::Extension::Print *mod, char const *text, NR::Point p,
               && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) )
     {
         // set fill style
-        print_fill_style(os, style, NULL); 
+        print_fill_style(os, style, NULL);
         // FIXME: we don't know the pbox of text, so have to pass NULL. This means gradients with
         // bbox units won't work with text. However userspace gradients don't work with text either
         // (text is black) for some reason.
@@ -965,24 +952,22 @@ PrintPS::text(Inkscape::Extension::Print *mod, char const *text, NR::Point p,
 void
 PrintPS::print_bpath(SVGOStringStream &os, NArtBpath const *bp)
 {
-    unsigned int closed;
-
     os << "newpath\n";
-    closed = FALSE;
+    bool closed = false;
     while (bp->code != NR_END) {
         switch (bp->code) {
             case NR_MOVETO:
                 if (closed) {
                     os << "closepath\n";
                 }
-                closed = TRUE;
+                closed = true;
                 os << bp->x3 << " " << bp->y3 << " moveto\n";
                 break;
             case NR_MOVETO_OPEN:
                 if (closed) {
                     os << "closepath\n";
                 }
-                closed = FALSE;
+                closed = false;
                 os << bp->x3 << " " << bp->y3 << " moveto\n";
                 break;
             case NR_LINETO:
@@ -1101,11 +1086,10 @@ void
 PrintPS::ascii85_flush(SVGOStringStream &os)
 {
     char c[5];
-    int i;
-    gboolean zero_case = (ascii85_buf == 0);
-    static int max_linewidth = 75;
+    bool const zero_case = (ascii85_buf == 0);
+    static int const max_linewidth = 75;
 
-    for (i=4; i >= 0; i--) {
+    for (int i = 4; i >= 0; i--) {
         c[i] = (ascii85_buf % 85) + '!';
         ascii85_buf /= 85;
     }
@@ -1119,7 +1103,7 @@ PrintPS::ascii85_flush(SVGOStringStream &os)
         os << 'z';
         ascii85_linewidth++;
     } else {
-        for (i=0; i < ascii85_len+1; i++) {
+        for (int i = 0; i < ascii85_len+1; i++) {
             if ((ascii85_linewidth >= max_linewidth) && (c[i] != '%')) {
                 os << '\n';
                 ascii85_linewidth = 0;
@@ -1169,9 +1153,6 @@ unsigned int
 PrintPS::print_image(FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
                      NRMatrix const *transform)
 {
-    unsigned int i, j;
-    /* gchar *data, *src; */
-    guchar *packb = NULL, *plane = NULL;
     Inkscape::SVGOStringStream os;
 
     os << "gsave\n";
@@ -1196,34 +1177,33 @@ PrintPS::print_image(FILE *ofp, guchar *px, unsigned int width, unsigned int hei
     os << "true 3\n";
 
     /* Allocate buffer for packbits data. Worst case: Less than 1% increase */
-    packb = (guchar *)g_malloc((width * 105)/100+2);
-    plane = (guchar *)g_malloc(width);
+    guchar *const packb = (guchar *)g_malloc((width * 105)/100+2);
+    guchar *const plane = (guchar *)g_malloc(width);
 
     /* ps_begin_data(ofp); */
     os << "colorimage\n";
 
-#define GET_RGB_TILE(begin) \
-  {int scan_lines; \
-    scan_lines = (i+tile_height-1 < height) ? tile_height : (height-i); \
-    gimp_pixel_rgn_get_rect(&pixel_rgn, begin, 0, i, width, scan_lines); \
-    src = begin; }
+/*#define GET_RGB_TILE(begin)                   \
+ *  {int scan_lines;                                                    \
+ *    scan_lines = (i+tile_height-1 < height) ? tile_height : (height-i); \
+ *    gimp_pixel_rgn_get_rect(&pixel_rgn, begin, 0, i, width, scan_lines); \
+ *    src = begin; }
+ */
 
-    for (i = 0; i < height; i++) {
+    for (unsigned i = 0; i < height; i++) {
         /* if ((i % tile_height) == 0) GET_RGB_TILE(data); */ /* Get more data */
-        guchar *plane_ptr, *src_ptr;
-        int rgb, nout;
-        guchar *src;
-
-        src = px + i * rs;
+        guchar const *const src = px + i * rs;
 
         /* Iterate over RGB */
-        for (rgb = 0; rgb < 3; rgb++) {
-            src_ptr = src + rgb;
-            plane_ptr = plane;
-            for (j = 0; j < width; j++) {
+        for (int rgb = 0; rgb < 3; rgb++) {
+            guchar const *src_ptr = src + rgb;
+            guchar *plane_ptr = plane;
+            for (unsigned j = 0; j < width; j++) {
                 *(plane_ptr++) = *src_ptr;
                 src_ptr += 4;
             }
+
+            int nout;
             compress_packbits(width, plane, &nout, packb);
 
             ascii85_init();
@@ -1254,7 +1234,7 @@ PrintPS::print_image(FILE *ofp, guchar *px, unsigned int width, unsigned int hei
     fprintf(ofp, "%s", os.str().c_str());
 
     return 0;
-#undef GET_RGB_TILE
+//#undef GET_RGB_TILE
 }
 
 bool
@@ -1266,10 +1246,8 @@ PrintPS::textToPath(Inkscape::Extension::Print * ext)
 void
 PrintPS::init(void)
 {
-    Inkscape::Extension::Extension * ext;
-
     /* SVG in */
-    ext = Inkscape::Extension::build_from_mem(
+    (void) Inkscape::Extension::build_from_mem(
         "<inkscape-extension>\n"
         "<name>Postscript Print</name>\n"
         "<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
