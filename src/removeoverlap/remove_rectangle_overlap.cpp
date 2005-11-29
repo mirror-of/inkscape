@@ -28,8 +28,8 @@ void removeRectangleOverlap(Rectangle *rs[], const int n, const double xBorder=0
 	delete [] vs;
 	delete [] cs;
 	Rectangle::setXBorder(Rectangle::xBorder-0.001);
-	VPSC vpsc_y(vs,n,cs,m);
 	m=generateYConstraints(rs,ws,n,vs,cs);
+	VPSC vpsc_y(vs,n,cs,m);
 	cost=vpsc_y.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveMinY(vs[i]->position());
