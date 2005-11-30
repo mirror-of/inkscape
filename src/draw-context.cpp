@@ -331,57 +331,68 @@ spdc_attach_selection(SPDrawContext *dc, Inkscape::Selection *sel)
 
 
 /**
-\brief  Snaps node or handle to PI/rotationsnapsperpi degree increments
-\param dc  draw context
-\param p  cursor point (to be changed by snapping)
-\param o  origin point
-\param state  keyboard state to check if ctrl was pressed
+ *  Snaps node or handle to PI/rotationsnapsperpi degree increments.
+ *
+ *  \param dc draw context
+ *  \param p cursor point (to be changed by snapping)
+ *  \param o origin point
+ *  \param state  keyboard state to check if ctrl was pressed
 */
-void
-spdc_endpoint_snap_internal(SPEventContext const *const ec, NR::Point &p, NR::Point const o, guint const state)
+
+void spdc_endpoint_snap_rotation(SPEventContext const *const ec, NR::Point &p, NR::Point const o,
+                                 guint state)
 {
-    if ( state & GDK_CONTROL_MASK ) {
-        /* Constrained motion */
+    /* Control must be down for this snap to work */
+    if ((state & GDK_CONTROL_MASK) == 0) {
+        return;
+    }
 
-        unsigned snaps = abs(prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12));
-        /* 0 means no snapping. */
+    unsigned const snaps = abs(prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12));
+    /* 0 means no snapping. */
 
-        /* mirrored by fabs, so this corresponds to 15 degrees */
-        NR::Point best; /* best solution */
-        double bn = 1e18; /* best normal */
-        double bdot = 0;
-        NR::Point v = NR::Point(0, 1);
-        double const r00 = cos( M_PI / snaps ), r01 = sin( M_PI / snaps );
-        double const r10 = -r01, r11 = r00;
+    /* mirrored by fabs, so this corresponds to 15 degrees */
+    NR::Point best; /* best solution */
+    double bn = NR_HUGE; /* best normal */
+    double bdot = 0;
+    NR::Point v = NR::Point(0, 1);
+    double const r00 = cos(M_PI / snaps), r01 = sin(M_PI / snaps);
+    double const r10 = -r01, r11 = r00;
 
-        NR::Point delta = p - o;
+    NR::Point delta = p - o;
 
-        for (unsigned i = 0; i < snaps; i++) {
-            double const ndot = fabs(dot(v,NR::rot90(delta)));
-            NR::Point t(r00*v[NR::X] + r01*v[NR::Y],
-                        r10*v[NR::X] + r11*v[NR::Y]);
-            if ( ndot < bn ) {
-                /* I think it is better numerically to use the normal, rather than the dot product
-                 * to assess solutions, but I haven't proven it. */
-                bn = ndot;
-                best = v;
-                bdot = dot(v, delta);
-            }
-            v = t;
+    for (unsigned i = 0; i < snaps; i++) {
+        double const ndot = fabs(dot(v,NR::rot90(delta)));
+        NR::Point t(r00*v[NR::X] + r01*v[NR::Y],
+                    r10*v[NR::X] + r11*v[NR::Y]);
+        if (ndot < bn) {
+            /* I think it is better numerically to use the normal, rather than the dot product
+             * to assess solutions, but I haven't proven it. */
+            bn = ndot;
+            best = v;
+            bdot = dot(v, delta);
         }
-
-        if ( fabs(bdot) > 0 ) {
-            p = o + bdot * best;
-
-            /* Snap it along best vector */
-            namedview_vector_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p, best);
-        }
-    } else if ((state & GDK_SHIFT_MASK) == 0) {
-        /* Free */
-        namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p);
+        v = t;
+    }
+    
+    if (fabs(bdot) > 0) {
+        p = o + bdot * best;
+        
+        /* Snap it along best vector */
+        namedview_vector_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p, best);
     }
 }
 
+
+void spdc_endpoint_snap_free(SPEventContext const * const ec, NR::Point& p, guint const state)
+{
+    /* Shift disables this snap */
+    if (state & GDK_SHIFT_MASK) {
+        return;
+    }
+
+    /* FIXME: this should be doing bbox snap as well */
+    namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p);
+}
 
 static SPCurve *
 reverse_then_unref(SPCurve *orig)
