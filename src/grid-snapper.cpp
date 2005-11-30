@@ -16,7 +16,6 @@
 #include "libnr/nr-point-fns.h"
 #include "sp-namedview.h"
 #include "grid-snapper.h"
-#include "snap.h"
 
 /**
  * \return x rounded to the nearest multiple of c1 plus c0.
@@ -36,54 +35,20 @@ GridSnapper::GridSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv,
 
 }
 
-/**
- * Try to snap point.
- * \return Movement vector or NR_HUGE.
- */
-NR::Coord GridSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
+Snapper::LineList GridSnapper::get_snap_lines(NR::Point const &p) const
 {
-    if (getSnapTo(t) == false) {
-        return NR_HUGE;
-    }
+    LineList s;
     
-    NR::Coord len = L2(d);
-    if (len < NR_EPSILON) {
-        return namedview_free_snap(_named_view, t, req);
-    }
-
-    NR::Point const v = NR::unit_vector(d);
-
-    NR::Point snapped = req;
-    NR::Coord best = NR_HUGE;
-    NR::Coord upper = NR_HUGE;
-
-    /*  find nearest grid line (either H or V whatever is closer) along
-     *  the vector to the requested point.  If the distance along the
-     *  vector is less than the snap distance then snap.
-     */
-    upper = MIN(best, getDistance());
-        
     for (unsigned int i = 0; i < 2; ++i) {
-        NR::Point trial(req);
-        NR::Coord const rounded = round_to_nearest_multiple_plus(req[i],
+        NR::Coord const rounded = round_to_nearest_multiple_plus(p[i],
                                                                  _named_view->gridspacing[i],
                                                                  _named_view->gridorigin[i]);
-            
-        NR::Coord const dist = intersector_a_vector_snap(trial,
-                                                         v,
-                                                         component_vectors[i],
-                                                         rounded);
         
-        if (dist < upper) {
-            upper = best = dist;
-            snapped = trial;
-        }
+        s.push_back(std::make_pair(component_vectors[i], rounded));
     }
 
-    req = snapped;
-    return best;
+    return s;
 }
-
 
 /*
   Local Variables:

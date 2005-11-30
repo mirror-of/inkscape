@@ -38,14 +38,19 @@ public:
 
     bool will_snap_something() const;
 
-    virtual NR::Coord vector_snap(PointType t,
-                                  NR::Point &req,
-                                  NR::Point const &d) const = 0;
+    NR::Coord vector_snap(PointType t,
+                          NR::Point &req,
+                          NR::Point const &d) const;
 protected:
 
-    NR::Coord intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
-                                        NR::Point const &n, NR::Coord const d) const;
+    typedef std::list<std::pair<NR::Point, NR::Coord> > LineList;
 
+    /**
+     *  \param p Point that we are trying to snap.
+     *  \return List of lines that we should try snapping to.
+     */
+    virtual LineList get_snap_lines(NR::Point const &p) const = 0;
+    
     SPNamedView const *_named_view;
     
 private:

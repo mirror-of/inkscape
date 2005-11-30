@@ -16,7 +16,6 @@
 #include "libnr/nr-point-fns.h"
 #include "sp-namedview.h"
 #include "sp-guide.h"
-#include "snap.h"
 #include "guide-snapper.h"
 
 GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv, d)
@@ -24,47 +23,17 @@ GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(n
 
 }
 
-/**
- * Try to snap point.
- * \return Movement vector or NR_HUGE.
- */
-NR::Coord GuideSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
+Snapper::LineList GuideSnapper::get_snap_lines(NR::Point const &p) const
 {
-    if (getSnapTo(t) == false) {
-        return NR_HUGE;
-    }
+    LineList s;
     
-    NR::Coord len = L2(d);
-    if (len < NR_EPSILON) {
-        return namedview_free_snap(_named_view, t, req);
-    }
-
-    NR::Point const v = NR::unit_vector(d);
-
-    NR::Point snapped = req;
-    NR::Coord best = NR_HUGE;
-    NR::Coord upper = NR_HUGE;
-
-    upper = _named_view->guide_snapper.getDistance();
     for (GSList const *l = _named_view->guides; l != NULL; l = l->next) {
         SPGuide const &g = *SP_GUIDE(l->data);
-        NR::Point trial(req);
-        NR::Coord const dist = intersector_a_vector_snap(trial,
-                                                         v,
-                                                         g.normal,
-                                                         g.position);
-        
-        if (dist < upper) {
-            upper = best = dist;
-            snapped = trial;
-        }
+        s.push_back(std::make_pair(g.normal, g.position));
     }
 
-    req = snapped;
-    return best;
+    return s;
 }
-
-
 
 /*
   Local Variables:

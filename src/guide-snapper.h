@@ -27,9 +27,8 @@ class GuideSnapper : public Snapper
 public:
     GuideSnapper(SPNamedView const *nv, NR::Coord const d);
 
-    NR::Coord vector_snap(PointType t,
-                          NR::Point &req,
-                          NR::Point const &d) const;
+private:
+    LineList get_snap_lines(NR::Point const &p) const;
 };
 
 #endif
