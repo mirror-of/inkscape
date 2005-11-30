@@ -30,6 +30,8 @@ public:
         BBOX_POINT
     };
 
+    typedef std::pair<PointType, NR::Point> PointWithType;
+
     void setSnapTo(PointType t, bool s);
     void setDistance(NR::Coord d);
 
