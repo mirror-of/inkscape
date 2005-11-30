@@ -1594,7 +1594,6 @@ cmd_lower_node (GtkObject * object, gpointer data)
 void
 cmd_indent_node (GtkObject * object, gpointer data)
 {
-    int ok;
     Inkscape::XML::Node * prev, * parent, * repr, * ref;
 
     repr = selected_repr;
@@ -1619,13 +1618,9 @@ cmd_indent_node (GtkObject * object, gpointer data)
     parent->removeChild(repr);
     prev->addChild(repr, ref);
 
-    if (ok) {
-        sp_document_done (current_document);
-        set_tree_select (repr);
-        set_dt_select (repr);
-    } else {
-        sp_document_cancel (current_document);
-    }
+    sp_document_done(current_document);
+    set_tree_select(repr);
+    set_dt_select(repr);
 
 } // end of cmd_indent_node()
 
@@ -1635,7 +1630,6 @@ void
 cmd_unindent_node (GtkObject * object, gpointer data)
 {
     Inkscape::XML::Node * grandparent, * parent, * repr;
-    int ok;
 
     repr = selected_repr;
     g_assert (repr != NULL);
@@ -1647,13 +1641,9 @@ cmd_unindent_node (GtkObject * object, gpointer data)
     parent->removeChild(repr);
     grandparent->addChild(repr, parent);
 
-    if (ok) {
-        sp_document_done (current_document);
-        set_tree_select (repr);
-        set_dt_select (repr);
-    } else {
-        sp_document_cancel (current_document);
-    }
+    sp_document_done(current_document);
+    set_tree_select(repr);
+    set_dt_select(repr);
 
 } // end of cmd_unindent_node()
 
