@@ -464,7 +464,10 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
     int exp_sign = 0;
     double frac = 0.0;
 
-    in_num = FALSE;
+    /* fixme: Do better error processing: e.g. at least stop parsing as soon as we find an error.
+     * At some point we'll need to do all of
+     * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing.
+     */
     for (i = 0; ; i++)
     {
         c = data[i];
@@ -486,8 +489,7 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
             else
             {
                 in_num = TRUE;
-                in_frac = FALSE;
-                in_exp = FALSE;
+                assert(!in_frac && !in_exp);
                 exp = 0;
                 exp_sign = 1;
                 exp_wait_sign = FALSE;
@@ -500,13 +502,20 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
             if (!in_num)
             {
                 in_num = TRUE;
+                assert(!in_exp);
+                exp = 0;
+                exp_sign = 1;
+                exp_wait_sign = FALSE;
                 val = 0;
+                sign = 1;
             }
             in_frac = TRUE;
             frac = 1;
         }
         else if ((c == 'E' || c == 'e') && in_num)
         {
+            /* fixme: Should we add `&& !in_exp' to the above condition?
+             * It looks like the current code will parse `1e3e4' (as 1e4). */
             in_exp = TRUE;
             exp_wait_sign = TRUE;
             exp = 0;
@@ -564,10 +573,13 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
                 in_num = TRUE;
                 val = 0;
                 in_frac = TRUE;
+                in_exp = FALSE;
                 frac = 1;
             }
             else {
                 in_num = FALSE;
+                in_frac = FALSE;
+                in_exp = FALSE;
             }
         }
 
