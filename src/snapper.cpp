@@ -1,3 +1,13 @@
+/**
+ *  \file src/snapper.cpp
+ *  \brief Snapper class.
+ *
+ *  Authors:
+ *    Carl Hetherington <inkscape@carlh.net>
+ *
+ *  Released under GNU GPL, read the file 'COPYING' for more information.
+ */
+
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-values.h"
 #include "geom.h"
