@@ -31,6 +31,9 @@ NR::Coord namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Po
 
 /* List of points methods */
 
+std::pair<int, NR::Point> namedview_free_snap(SPNamedView const *nv,
+                                              std::vector<Snapper::PointWithType> const &p);
+
 std::pair<double, bool> namedview_vector_snap_list(SPNamedView const *nv,
                                                    Snapper::PointType t, const std::vector<NR::Point> &p,
                                                    NR::Point const &norm, NR::scale const &s);

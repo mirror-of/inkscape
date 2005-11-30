@@ -292,7 +292,8 @@ bool namedview_will_snap_something(SPNamedView const *nv)
 
     return (i != s.end());
 }
-            
+
+
 
 /**
  * Snap in two dimensions to nearest snapper regardless of point type.
@@ -303,10 +304,11 @@ NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req)
     NR::Coord snap_dist = namedview_free_snap(nv, Snapper::SNAP_POINT, snap_req);
     NR::Point bbox_req = req;
     NR::Coord bbox_dist = namedview_free_snap(nv, Snapper::BBOX_POINT, bbox_req);
-
+    
     req = snap_dist < bbox_dist ? snap_req : bbox_req;
     return std::min(snap_dist, bbox_dist);
 }
+
 
 /**
  * Snap in one direction to nearest snapper regardless of point type.
@@ -335,6 +337,25 @@ NR::Coord namedview_dim_snap_all_types(SPNamedView const *nv, NR::Point &req, NR
     req = snap_dist < bbox_dist ? snap_req : bbox_req;
     return std::min(snap_dist, bbox_dist);
 }
+
+std::pair<int, NR::Point> namedview_free_snap(SPNamedView const *nv,
+                                              std::vector<Snapper::PointWithType> const &p)
+{
+    NR::Coord best = NR_HUGE;
+    std::pair<int, NR::Point> s = std::make_pair(-1, NR::Point(0, 0));
+    
+    for (int i = 0; i < int(p.size()); i++) {
+        NR::Point r = p[i].second;
+        NR::Coord const d = namedview_free_snap(nv, p[i].first, r);
+        if (d < best) {
+            best = d;
+            s = std::make_pair(i, r);
+        }
+    }
+
+    return s;
+}
+
 
 
 /*
