@@ -22,11 +22,6 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-/* Static table of units */
-UnitTable UnitMenu::_unit_table;
-
-////////////////////////////////////////////////////////////////////////
-
 /**
  *    Construct a UnitMenu
  *
