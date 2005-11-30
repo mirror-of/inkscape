@@ -9,7 +9,9 @@
 	guide-snapper.{cpp,h}.  Refactor and simplify.
 	* src/geom.cpp, src/geom.h: cosmetic renaming.
 	* src/pen-context.cpp: a few minor cleanups to pen_handle_button_press().
-
+	* src/ui/widget/unit-menu.cpp: remove definition of a variable
+	that's just been made static.
+	
 2005-11-26  MenTaLguY <mental@rydia.net>
 
     * src/ui/dialog/aboutbox.cpp, src/ui/dialog/aboutbox.h:
