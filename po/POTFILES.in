@@ -266,6 +266,12 @@ src/ui/dialog/whiteboard-sharewithuser.cpp
 src/ui/stock-items.cpp
 src/ui/view/edit.cpp
 src/ui/widget/panel.cpp
+src/ui/widget/color-picker.cpp
+src/ui/widget/selected-style.cpp
+src/ui/widget/page-sizer.cpp
+src/ui/widget/panel.cpp
+src/ui/widget/toolbox.cpp
+src/ui/widget/zoom-status.cpp
 src/uri-references.cpp
 src/uri.cpp
 src/verbs.cpp
