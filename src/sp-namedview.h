@@ -22,7 +22,8 @@
 #include "sp-object-group.h"
 #include "libnr/nr-point.h"
 #include "sp-metric.h"
-#include "snap.h"
+#include "grid-snapper.h"
+#include "guide-snapper.h"
 
 
 

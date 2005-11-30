@@ -116,6 +116,9 @@ libinkpre_a_SOURCES =	\
 	shortcuts.cpp shortcuts.h	\
 	slideshow.cpp slideshow.h	\
 	snap.cpp snap.h	\
+	snapper.cpp snapper.h \
+	grid-snapper.cpp grid-snapper.h \
+	guide-snapper.cpp guide-snapper.h \
 	sp-anchor.cpp sp-anchor.h	\
 	sp-clippath.cpp sp-clippath.h	\
 	sp-conn-end-pair.cpp sp-conn-end-pair.h	\

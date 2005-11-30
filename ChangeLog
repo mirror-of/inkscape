@@ -2,8 +2,11 @@
 
 	* src/svg/svg-path.cpp: add missing #include of assert.h for
 	assert()
-	* src/dialogs/xml-tree.cpp: fix uninitialised variable warnings,
-	move some declarations to first use, coding style fixes.
+	* src/dialogs/xml-tree.cpp: fix uninitialised variable
+	warnings, move some declarations to first use, coding style fixes.
+	* src/snap.cpp, src/snap.h, src/sp-namedview.cpp: split
+	snap.{cpp,h} up into snapper.{cpp,h}, grid-snapper.{cpp,h},
+	guide-snapper.{cpp,h}.
 
 2005-11-26  MenTaLguY <mental@rydia.net>
 

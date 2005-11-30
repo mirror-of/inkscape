@@ -1,11 +1,10 @@
 #ifndef SEEN_SNAP_H
 #define SEEN_SNAP_H
 
-/** \file
- * Snapper, GridSnapper, GuideSnapper: snap distance calculation.
- */
-
-/*
+/**
+ * \file snap.h
+ * \brief Various snapping methods.
+ *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
@@ -17,83 +16,13 @@
  */
 
 #include <vector>
-#include <map>
 
-#include <forward.h>
 #include <libnr/nr-coord.h>
 #include <libnr/nr-dim2.h>
 #include <libnr/nr-forward.h>
+#include "snapper.h"
 
-
-/** 
- * \todo Consider moving Snapper etc. to separate files if this reduces 
- * the number of translation units that #include these class definitions.  
- * Doing so reduces the amount of work of the compiler, and
- * reduces the number of recompilations necessary.
- * -- pjrm
- */
-
-/// Parent for classes that can snap points to something.
-class Snapper
-{
-public:
-    Snapper(SPNamedView const *nv, NR::Coord const d);
-    virtual ~Snapper() {}
-
-    /// Point types to snap.
-    enum PointType {
-        SNAP_POINT,
-        BBOX_POINT
-    };
-
-    void setSnapTo(PointType t, bool s);
-    void setDistance(NR::Coord d);
-
-    bool getSnapTo(PointType t) const;
-    NR::Coord getDistance() const;
-
-    bool will_snap_something() const;
-
-    virtual NR::Coord vector_snap(PointType t,
-                                  NR::Point &req,
-                                  NR::Point const &d) const = 0;
-protected:
-
-    NR::Coord intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
-                                        NR::Point const &n, NR::Coord const d) const;
-
-    SPNamedView const *_named_view;
-    
-private:
-    NR::Coord _distance;
-    std::map<PointType, bool> _snap_to;
-};
-
-
-/// Snap to grid.
-class GridSnapper : public Snapper
-{
-public:
-    GridSnapper(SPNamedView const *nv, NR::Coord const d);
-
-    NR::Coord vector_snap(PointType t,
-                          NR::Point &req,
-                          NR::Point const &d) const;
-    
-};
-
-
-/// Snap to guides.
-class GuideSnapper : public Snapper
-{
-public:
-    GuideSnapper(SPNamedView const *nv, NR::Coord const d);
-
-    NR::Coord vector_snap(PointType t,
-                          NR::Point &req,
-                          NR::Point const &d) const;
-};
-
+class SPNamedView;
 
 /* Single point methods */
 NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req);
