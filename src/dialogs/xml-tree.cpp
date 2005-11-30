@@ -110,7 +110,7 @@ static void set_tree_repr(Inkscape::XML::Node *repr);
 static void set_tree_select(Inkscape::XML::Node *repr);
 static void propagate_tree_select(Inkscape::XML::Node *repr);
 
-static Inkscape::XML::Node *get_dt_select(void);
+static Inkscape::XML::Node *get_dt_select();
 static void set_dt_select(Inkscape::XML::Node *repr);
 
 static void on_tree_select_row(GtkCTree *tree, GtkCTreeNode *node, gint column, gpointer data);
@@ -172,7 +172,7 @@ static gboolean sp_xml_tree_key_press(GtkWidget *widget, GdkEventKey *event);
 /*
  * \brief Sets the XML status bar when the tree is selected.
  */
-void tree_reset_context(void)
+void tree_reset_context()
 {
     _message_context->set(Inkscape::NORMAL_MESSAGE,
                           _("<b>Click</b> to select nodes, <b>drag</b> to rearrange."));
@@ -197,12 +197,13 @@ void attr_reset_context(gint attr)
 }
 
 
-void sp_xml_tree_dialog(void)
+void sp_xml_tree_dialog()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    if (!desktop)
+    if (!desktop) {
         return;
+    }
 
     if (dlg == NULL)
     { // very long block
@@ -652,15 +653,18 @@ static void sp_xmltree_desktop_change(Inkscape::Application *inkscape,
                                       SPDesktop *desktop,
                                       GtkWidget *dialog )
 {
-    if (!desktop) return;
+    if (!desktop) {
+        return;
+    }
     set_tree_desktop(desktop);
 }
 
 
 void set_tree_desktop(SPDesktop *desktop)
 {
-    if ( desktop == current_desktop )
+    if ( desktop == current_desktop ) {
         return;
+    }
 
     if (current_desktop) {
         sel_changed_connection.disconnect();
@@ -681,8 +685,9 @@ void set_tree_desktop(SPDesktop *desktop)
 
 void set_tree_document(SPDocument *document)
 {
-    if ( document == current_document )
+    if (document == current_document) {
         return;
+    }
 
     if (current_document) {
         document_uri_set_connection.disconnect();
@@ -703,8 +708,9 @@ void set_tree_document(SPDocument *document)
 
 void set_tree_repr(Inkscape::XML::Node *repr)
 {
-    if ( repr == selected_repr )
+    if (repr == selected_repr) {
         return;
+    }
 
     gtk_clist_freeze(GTK_CLIST(tree));
 
@@ -774,10 +780,11 @@ void propagate_tree_select(Inkscape::XML::Node *repr)
 }
 
 
-Inkscape::XML::Node *get_dt_select(void)
+Inkscape::XML::Node *get_dt_select()
 {
-    if (!current_desktop)
+    if (!current_desktop) {
         return NULL;
+    }
 
     return SP_DT_SELECTION(current_desktop)->singleRepr();
 }
@@ -786,8 +793,9 @@ Inkscape::XML::Node *get_dt_select(void)
 
 void set_dt_select(Inkscape::XML::Node *repr)
 {
-    if (!current_desktop)
+    if (!current_desktop) {
         return;
+    }
 
     Inkscape::Selection *selection = SP_DT_SELECTION(current_desktop);
 
@@ -825,16 +833,18 @@ void set_dt_select(Inkscape::XML::Node *repr)
 void on_tree_select_row(GtkCTree *tree,
                         GtkCTreeNode *node,
                         gint column,
-                        gpointer data )
+                        gpointer data)
 {
-    if (blocked)
+    if (blocked) {
         return;
+    }
 
     Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(SP_XMLVIEW_TREE(tree), node);
-    g_assert( repr != NULL );
+    g_assert(repr != NULL);
 
-    if ( selected_repr == repr )
+    if (selected_repr == repr) {
         return;
+    }
 
     if (selected_repr) {
         Inkscape::GC::release(selected_repr);
@@ -853,10 +863,11 @@ void on_tree_select_row(GtkCTree *tree,
 void on_tree_unselect_row(GtkCTree *tree,
                           GtkCTreeNode *node,
                           gint column,
-                          gpointer data )
+                          gpointer data)
 {
-    if (blocked)
+    if (blocked) {
         return;
+    }
 
     Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(SP_XMLVIEW_TREE(tree), node);
     propagate_tree_select(NULL);
@@ -1135,7 +1146,7 @@ void on_tree_select_row_enable_if_indentable(GtkCTree *tree, GtkCTreeNode *node,
 {
     gboolean indentable = FALSE;
 
-    if ( xml_tree_node_mutable( node ) ) {
+    if (xml_tree_node_mutable(node)) {
         Inkscape::XML::Node *repr, *prev;
         repr = sp_xmlview_tree_node_get_repr(SP_XMLVIEW_TREE(tree), node);
 
@@ -1297,7 +1308,6 @@ void on_clicked_get_editable_text(GtkWidget *widget, gpointer data)
 
 void cmd_new_element_node(GtkObject *object, gpointer data)
 {
-
     EditableDest name;
     GtkWidget *window, *create, *cancel, *vbox, *entry, *bbox, *sep;
 
@@ -1398,8 +1408,9 @@ void cmd_duplicate_node(GtkObject *object, gpointer data)
 
     GtkCTreeNode *node = sp_xmlview_tree_get_repr_node(SP_XMLVIEW_TREE(tree), dup);
 
-    if (node)
+    if (node) {
         gtk_ctree_select(GTK_CTREE(tree), node);
+    }
 }
 
 
