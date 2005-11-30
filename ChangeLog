@@ -8,6 +8,7 @@
 	snap.{cpp,h} up into snapper.{cpp,h}, grid-snapper.{cpp,h},
 	guide-snapper.{cpp,h}.  Refactor and simplify.
 	* src/geom.cpp, src/geom.h: cosmetic renaming.
+	* src/pen-context.cpp: a few minor cleanups to pen_handle_button_press().
 
 2005-11-26  MenTaLguY <mental@rydia.net>
 

@@ -313,34 +313,37 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
 /**
  * Handle mouse button press event.
  */
-static gint
-pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
+static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
 {
-
     gint ret = FALSE;
-    if ( bevent.button == 1 ) {
+    if (bevent.button == 1) {
 
-        SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
-        SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+        SPDrawContext * const dc = SP_DRAW_CONTEXT(pc);
+        SPDesktop * const desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
+        SPItem * const layer = SP_ITEM(desktop->currentLayer());
+        
+        if (!layer || desktop->itemIsHidden(layer)) {
+            dc->_message_context->flash(
+                Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it.")
+                );
             return TRUE;
         }
-        if ( !layer || layer->isLocked()) {
-            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+        
+        if (!layer || layer->isLocked()) {
+            dc->_message_context->flash(
+                Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it.")
+                );
             return TRUE;
         }
 
-        NR::Point const event_w(bevent.x,
-                                bevent.y);
+        NR::Point const event_w(bevent.x, bevent.y);
         pen_drag_origin_w = event_w;
         pen_within_tolerance = true;
 
         /* Test whether we hit any anchor. */
-        SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);
+        SPDrawAnchor * const anchor = spdc_test_inside(pc, event_w);
 
-        NR::Point const event_dt(sp_desktop_w2d_xy_point(pc->desktop, event_w));
+        NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
         switch (pc->mode) {
             case SP_PEN_CONTEXT_MODE_CLICK:
                 /* In click mode we add point on release */
@@ -362,24 +365,31 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                     case SP_PEN_CONTEXT_STOP:
                         /* This is allowed, if we just cancelled curve */
                     case SP_PEN_CONTEXT_POINT:
-                        if ( pc->npoints == 0 ) {
+                        if (pc->npoints == 0) {
+                            
                             /* Set start anchor */
                             pc->sa = anchor;
                             NR::Point p;
                             if (anchor) {
+                                
                                 /* Adjust point to anchor if needed */
                                 p = anchor->dp;
-                                SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
+                                desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
+
                             } else {
 
                                 // This is the first click of a new curve; deselect item so that
                                 // this curve is not combined with it (unless it is drawn from its
                                 // anchor, which is handled by the sibling branch above)
+                                Inkscape::Selection * const selection = SP_DT_SELECTION(desktop);
                                 if (!(bevent.state & GDK_SHIFT_MASK)) {
-                                    SP_DT_SELECTION(desktop)->clear();
-                                    SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
-                                } else if (SP_DT_SELECTION(desktop)->singleItem() && SP_IS_PATH(SP_DT_SELECTION(desktop)->singleItem())) {
-                                    SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
+                                    
+                                    selection->clear();
+                                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
+
+                                } else if (selection->singleItem() && SP_IS_PATH(selection->singleItem())) {
+
+                                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
                                 }
 
                                 /* Create green anchor */
@@ -388,32 +398,38 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                                 ** no other points to go off.
                                 */
                                 if (!(bevent.state & GDK_SHIFT_MASK)) {
-                                    namedview_free_snap_all_types(pc->desktop->namedview, p);
+                                    namedview_free_snap_all_types(desktop->namedview, p);
                                 }
                                 pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, p);
                             }
                             spdc_pen_set_initial_point(pc, p);
                         } else {
+                            
                             /* Set end anchor */
                             pc->ea = anchor;
                             NR::Point p;
-                            if (anchor) {   
+                            if (anchor) {
+                                
                                 p = anchor->dp;
-                                // we hit an anchor, will finish the curve (either with or without closing) in release handler
+                                // we hit an anchor, will finish the curve (either with or without closing)
+                                // in release handler
                                 pc->state = SP_PEN_CONTEXT_CLOSE;
 
-                                if ( pc->green_anchor && pc->green_anchor->active ) {
-                                    // we clicked on the current curve start, so close it even if we drag a handle away from it
+                                if (pc->green_anchor && pc->green_anchor->active) {
+                                    // we clicked on the current curve start, so close it even if
+                                    // we drag a handle away from it
                                     dc->green_closed = TRUE; 
                                 }
-
                                 ret = TRUE;
                                 break;
-                            } else { 
+                                
+                            } else {
+                                
                                 p = event_dt;
                                 spdc_endpoint_snap(pc, p, bevent.state); /* Snap node only if not hitting anchor. */
                                 spdc_pen_set_subsequent_point(pc, p, true);
                             }
+                            
                         }
                         pc->state = SP_PEN_CONTEXT_CONTROL;
                         ret = TRUE;
@@ -437,6 +453,7 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
             ret = TRUE;
         }
     }
+    
     return ret;
 }
 
