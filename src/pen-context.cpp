@@ -246,10 +246,11 @@ sp_pen_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 static void
 spdc_endpoint_snap(SPPenContext const *const pc, NR::Point &p, guint const state)
 {
-    spdc_endpoint_snap_internal(pc, p, ( pc->npoints != 0
-                                         ? pc->p[0]
-                                         : p ),
-                                state);
+    if (pc->npoints > 0) {
+        spdc_endpoint_snap_rotation(pc, p, pc->p[0], state);
+    }
+
+    spdc_endpoint_snap_free(pc, p, state);
 }
 
 /** 
@@ -261,7 +262,8 @@ spdc_endpoint_snap_handle(SPPenContext const *const pc, NR::Point &p, guint cons
     g_return_if_fail(( pc->npoints == 2 ||
                        pc->npoints == 5   ));
 
-    spdc_endpoint_snap_internal(pc, p, pc->p[pc->npoints - 2], state);
+    spdc_endpoint_snap_rotation(pc, p, pc->p[pc->npoints - 2], state);
+    spdc_endpoint_snap_free(pc, p, state);
 }
 
 /**
@@ -394,12 +396,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
 
                                 /* Create green anchor */
                                 p = event_dt;
-                                /* This is the first point, so just snap it to the grid as there's
-                                ** no other points to go off.
-                                */
-                                if (!(bevent.state & GDK_SHIFT_MASK)) {
-                                    namedview_free_snap_all_types(desktop->namedview, p);
-                                }
+                                spdc_endpoint_snap(pc, p, bevent.state);
                                 pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, p);
                             }
                             spdc_pen_set_initial_point(pc, p);

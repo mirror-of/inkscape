@@ -149,7 +149,8 @@ sp_pencil_context_dispose(GObject *object)
 static void
 spdc_endpoint_snap(SPPencilContext const *pc, NR::Point &p, guint const state)
 {
-    spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
+    spdc_endpoint_snap_rotation(pc, p, pc->p[0], state);
+    spdc_endpoint_snap_free(pc, p, state);
 }
 
 /**
