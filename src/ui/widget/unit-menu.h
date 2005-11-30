@@ -1,5 +1,5 @@
 /**
- * \brief Unit Menu Widget - A drop down menu for choosing unit types. 
+ * \brief Unit Menu Widget - A drop down menu for choosing unit types.
  *
  * Author:
  *   Bryce Harrington <bryce@bryceharrington.org>
@@ -45,10 +45,10 @@ public:
     bool          isAbsolute() const;
     bool          isRadial() const;
 
-    UnitTable   &getUnitTable() {return _unit_table;}
+    UnitTable     &getUnitTable() {return _unit_table;}
 
 protected:
-    static UnitTable  _unit_table;
+    UnitTable     _unit_table;
     UnitType          _type;
 };
 
@@ -58,7 +58,7 @@ protected:
 
 #endif // INKSCAPE_UI_WIDGET_UNIT_H
 
-/* 
+/*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
