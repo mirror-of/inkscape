@@ -1,6 +1,8 @@
-/** \file
- * Various geometrical calculations.
+/**
+ *  \file src/geom.cpp
+ *  \brief Various geometrical calculations.
  */
+
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
@@ -52,25 +54,33 @@
  * \todo Why not use existing but outcommented code below 
  * (HAVE_NEW_INTERSECTOR_CODE)?
  */
-sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double const d0,
-						     NR::Point const &n1, double const d1,
-						     NR::Point &result) {
-	double denominator = dot(NR::rot90(n0), n1);
-	double X = (n1[NR::Y] * d0  -
-		    n0[NR::Y] * d1);
-	/* X = (-d1, d0) dot (n0[Y], n1[Y]) */
-	if(denominator == 0) {
-		if ( X == 0 ) {
-			return coincident;
-		} else {
-			return parallel;
-		}
-	}
-	double Y = (n0[NR::X] * d1  -
-		    n1[NR::X] * d0);
-	result = NR::Point(X, Y)/denominator;
-	return intersects;
+IntersectorKind intersector_line_intersection(NR::Point const &n0, double const d0,
+                                              NR::Point const &n1, double const d1,
+                                              NR::Point &result)
+{
+    double denominator = dot(NR::rot90(n0), n1);
+    double X = n1[NR::Y] * d0 -
+               n0[NR::Y] * d1;
+    /* X = (-d1, d0) dot (n0[Y], n1[Y]) */
+
+    if (denominator == 0) {
+        if ( X == 0 ) {
+            return COINCIDENT;
+        } else {
+            return PARALLEL;
+        }
+    }
+    
+    double Y = n0[NR::X] * d1 -
+               n1[NR::X] * d0;
+    
+    result = NR::Point(X, Y) / denominator;
+    
+    return INTERSECTS;
 }
+
+
+
 
 /*
  New code which we are not yet using
