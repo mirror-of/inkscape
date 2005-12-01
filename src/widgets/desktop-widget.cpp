@@ -263,24 +263,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), GTK_WIDGET(ss_), FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), gtk_vseparator_new(), FALSE, FALSE, 0);
 
-    // zoom status spinbutton
-    dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
-    gtk_tooltips_set_tip (dtw->tt, dtw->zoom_status, _("Zoom"), NULL);
-    gtk_widget_set_size_request (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
-    gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
-    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
-    gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->zoom_status), GTK_UPDATE_ALWAYS);
-    g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
-    g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
-    gtk_object_set_data (GTK_OBJECT (dtw->zoom_status), "dtw", dtw->canvas);
-    gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), dtw->zoom_status);
-    gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), dtw->zoom_status);
-    dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
-    dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
-    sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), dtw->zoom_status, FALSE, FALSE, 0);
-
-    /* connecting canvas, scrollbars, rulers, statusbar */
+    // connect scrollbar signals
     g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
     g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 
@@ -301,17 +284,35 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_y, 1,2, 1,2, GTK_FILL, GTK_FILL, 0, 0);
     sp_set_font_size_smaller_smaller (dtw->coord_status);
     gtk_widget_set_size_request (dtw->coord_status, STATUS_COORD_WIDTH, -1);
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
 
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), gtk_vseparator_new(), FALSE, FALSE, 0);
+    // zoom status spinbutton
+    dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
+    gtk_tooltips_set_tip (dtw->tt, dtw->zoom_status, _("Zoom"), NULL);
+    gtk_widget_set_size_request (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
+    gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
+    gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->zoom_status), GTK_UPDATE_ALWAYS);
+    g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
+    g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
+    gtk_object_set_data (GTK_OBJECT (dtw->zoom_status), "dtw", dtw->canvas);
+    gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), dtw->zoom_status);
+    gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), dtw->zoom_status);
+    dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
+    dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
+    sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->zoom_status, FALSE, FALSE, 0);
+
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), gtk_vseparator_new(), FALSE, FALSE, 0);
 
     dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);
+    // FIXME: need to unreference on container destructino to avoid leak
     dtw->layer_selector->reference();
     //dtw->layer_selector->set_size_request(-1, SP_ICON_SIZE_BUTTON);
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector->gobj()), FALSE, FALSE, 1);
 
     dtw->select_status_eventbox = gtk_event_box_new ();
-    dtw->select_status = gtk_label_new (NULL);//gtk_statusbar_new ();
+    dtw->select_status = gtk_label_new (NULL);
     gtk_misc_set_alignment (GTK_MISC (dtw->select_status), 0.0, 0.5);
     gtk_widget_set_size_request (dtw->select_status, 1, -1);
     // display the initial welcome message in the statusbar
