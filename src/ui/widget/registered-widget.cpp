@@ -17,17 +17,19 @@
 # include <config.h>
 #endif
 
-//#include <utility>  // pair
-
 #include <glibmm/i18n.h>
+#include <gtkmm/scrolledwindow.h>
+
+#include "ui/widget/color-picker.h"
+#include "ui/widget/registry.h"
+#include "ui/widget/scalar-unit.h"
+#include "ui/widget/unit-menu.h"
 
 #include "xml/repr.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
-//#include "dialogs/rdf.h"
 
 #include "inkscape.h"
-//#include "verbs.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "sp-namedview.h"
@@ -294,7 +296,6 @@ RegisteredSuffixedInteger::on_value_changed()
     
     _wr->setUpdating (false);
 }
-
 
 } // namespace Dialog
 } // namespace UI

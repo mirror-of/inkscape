@@ -12,16 +12,14 @@
 #ifndef INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 #define INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 
-#include <glibmm/i18n.h>
-
-#include "ui/widget/unit-menu.h"
-#include "ui/widget/scalar-unit.h"
-#include "ui/widget/color-picker.h"
-#include "ui/widget/registry.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
+
+class ColorPicker;
+class Registry;
+class ScalarUnit;
+class UnitMenu;
 
 class RegisteredCheckButton {
 public:
@@ -117,8 +115,6 @@ protected:
     sigc::connection _changed_connection;
     void on_value_changed();
 };
-
-//class RegisteredDataEntry;
 
 } // namespace Widget
 } // namespace UI
