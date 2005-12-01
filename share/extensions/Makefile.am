@@ -42,7 +42,9 @@ extensions = \
 	addnodes.py \
 	summersnight.py \
 	ps2dxf.sh \
-	embedimage.py
+	embedimage.py \
+	extractimage.py \
+	svg_and_media_zip_output.py
 
 otherstuff =
 
@@ -80,7 +82,9 @@ modules = \
 	summersnight.inx \
 	dxf_output.inx \
 	dxf_input.inx \
-	embedimage.inx
+	embedimage.inx \
+	extractimage.inx \
+	svg_and_media_zip_output.inx
 
 extension_SCRIPTS = \
 	$(extensions)
