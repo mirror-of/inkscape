@@ -38,7 +38,6 @@
 #include "editor.h"
 #include "application/application.h"
 #include "preferences.h"
-#include "ui/view/edit.h"
 #include "ui/view/edit-widget.h"
 #include "ui/view/edit-widget-interface.h"
 
