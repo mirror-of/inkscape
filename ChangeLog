@@ -1,3 +1,7 @@
+2005-12-01  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/widgets/icon.cpp: added idle calback pre-render.
+
 2005-11-30  MenTaLguY  <mental@rydia.net>
 
    * src/ui/dialog/aboutbox.cpp: make 'close' button default widget,

@@ -46,6 +46,10 @@
 
 #include "icon.h"
 
+extern "C" gboolean iconIdlePump( gpointer data );
+
+static void addPreRender( GtkIconSize lsize, gchar const *name );
+
 static void sp_icon_class_init(SPIconClass *klass);
 static void sp_icon_init(SPIcon *icon);
 static void sp_icon_destroy(GtkObject *object);
@@ -76,6 +80,7 @@ static void sp_icon_overlay_pixels( guchar *px, int width, int height, int strid
 static GtkWidgetClass *parent_class;
 
 static bool sizeDirty = true;
+static bool seenExpose = false;
 
 GtkType
 sp_icon_get_type()
@@ -180,6 +185,8 @@ sp_icon_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 
 static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 {
+    seenExpose = true;
+
     if ( GTK_WIDGET_DRAWABLE(widget) ) {
         SPIcon *icon = SP_ICON(widget);
         if ( !icon->pb ) {
@@ -254,6 +261,8 @@ sp_icon_new_full( GtkIconSize lsize, gchar const *name )
 {
     static gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpGtk", 0, 0, 1 );
     static gint fallback = prefs_get_int_attribute_limited( "debug.icons", "checkNames", 0, 0, 1 );
+
+    addPreRender( lsize, name );
 
     GtkStockItem stock;
     gboolean tryLoad = gtk_stock_lookup( name, &stock );
@@ -833,6 +842,65 @@ void sp_icon_overlay_pixels(guchar *px, int width, int height, int stride,
             ptr[3 - stride * 3] = 0xff;
         }
     }
+}
+
+class preRenderItem
+{
+public:
+    preRenderItem( GtkIconSize lsize, gchar const *name ) :
+        _lsize( lsize ),
+        _name( name )
+    {}
+    GtkIconSize _lsize;
+    Glib::ustring _name;
+};
+
+
+#include <queue>
+
+static std::queue<preRenderItem> pendingRenders;
+static bool callbackHooked = false;
+
+static void addPreRender( GtkIconSize lsize, gchar const *name )
+{
+
+    if ( !callbackHooked )
+    {
+        callbackHooked = true;
+        g_idle_add_full( G_PRIORITY_LOW, iconIdlePump, NULL, NULL );
+    }
+
+    preRenderItem addum( lsize, name );
+    pendingRenders.push( addum );
+}
+
+extern "C" gboolean iconIdlePump( gpointer data )
+{
+    gboolean retval = TRUE;
+
+    if ( seenExpose )
+    {
+        if ( !pendingRenders.empty() )
+        {
+            preRenderItem single( pendingRenders.front() );
+            pendingRenders.pop();
+//         g_message("      pop '%s' : %d", single._name.c_str(), single._lsize );
+
+            int psize = sp_icon_get_phys_size( single._lsize );
+
+            guchar *px = sp_icon_image_load_svg( single._name.c_str(), single._lsize, psize );
+            (void)px;
+
+            retval = TRUE;
+        }
+        else
+        {
+            callbackHooked = false;
+            retval = FALSE;
+        }
+    }
+
+    return retval;
 }
 
 /*
