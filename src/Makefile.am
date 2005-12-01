@@ -152,9 +152,6 @@ EXTRA_DIST =	\
 	helper/sp-marshal.list	\
 	utest/utest.h	\
 	utest/test-1ary-cases.h	\
-	algorithms/find-if-before.h	\
-	algorithms/find-last-if.h	\
-	algorithms/longest-common-suffix.h	\
 	traits/copy.h	\
 	traits/function.h	\
 	traits/list-copy.h	\

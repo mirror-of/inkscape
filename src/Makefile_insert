@@ -35,6 +35,8 @@ endif
 # suffice to get it linked in.  Windows devel please confirm.  -- pjrm.
 
 libinkpre_a_SOURCES =	\
+	algorithms/find-last-if.h	\
+	algorithms/longest-common-suffix.h	\
 	approx-equal.h remove-last.h	\
 	arc-context.cpp arc-context.h	\
 	attributes.cpp attributes.h	\
