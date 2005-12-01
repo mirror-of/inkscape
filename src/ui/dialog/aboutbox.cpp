@@ -35,7 +35,7 @@ AboutBox::AboutBox(Gtk::Widget& about_svg_view, gint width, gint height)
 {
     Gtk::Notebook *tabs=new Gtk::Notebook();
 
-    tabs->append_page(about_svg_view, _("About"));
+    tabs->append_page(about_svg_view, _("_Splash"), true);
     tabs->append_page(*manage(make_scrolled_text(authors_text())), _("_Authors"), true);
     tabs->append_page(*manage(make_scrolled_text(translators_text())), _("_Translators"), true);
     tabs->append_page(*manage(make_scrolled_text(license_text())), _("_License"), true);
@@ -50,6 +50,7 @@ AboutBox::AboutBox(Gtk::Widget& about_svg_view, gint width, gint height)
     set_default_size(width,width-60);
 
     add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+    set_default_response(Gtk::RESPONSE_CLOSE);
 
     Gtk::Label * label = new Gtk::Label("Inkscape " INKSCAPE_VERSION " (" __DATE__ ")");
     label->set_selectable(true);
@@ -161,7 +162,7 @@ gchar const *authors_text() {
         "Michael Wybrow\n"
         "Daniel Yacob\n"
         "David Yip\n"
-        "Masatake Yamato\n";
+        "Masatake Yamato";
 
     return text;
 }
@@ -231,7 +232,7 @@ gchar const *translators_text() {
         "Xavier Conde Rueda <xavi.conde@gmail.com>, 2004, 2005\n"
         "Yukihiro Nakai <nakai@gnome.gr.jp>, 2000, 2003.\n"
         "Yuri Syrota <rasta@renome.rovno.ua>, 2000.\n"
-        "Zdenko Podobný <zdpo@mailbox.sk>, 2003, 2004.\n";
+        "Zdenko Podobný <zdpo@mailbox.sk>, 2003, 2004.";
 
     return text;
 }
@@ -577,8 +578,7 @@ This General Public License does not permit incorporating your program into\n\
 proprietary programs.  If your program is a subroutine library, you may\n\
 consider it more useful to permit linking proprietary applications with the\n\
 library.  If this is what you want to do, use the GNU Library General\n\
-Public License instead of this License.\n\
-";
+Public License instead of this License.";
 
     return text;
 }
