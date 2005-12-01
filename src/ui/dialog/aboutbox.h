@@ -21,11 +21,14 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class AboutBox: public Gtk::Dialog {
+class AboutBox : public Gtk::Dialog {
 public:
-    AboutBox(Gtk::Widget& about_svg_view, gint width, gint height);
+    static void show_about();
+    static void hide_about();
 
 private:
+    AboutBox();
+
     virtual void on_response(int response_id);
 };
 

@@ -4,8 +4,12 @@
  * Authors:
  *   Derek P. Moore <derekm@hackunix.org>
  *   MenTaLguY <mental@rydia.net>
+ *   Kees Cook <kees@outflux.net>
+ *   Jon Phillips <jon@rejon.org>
  *
  * Copyright (C) 2004 Derek P. Moore
+ * Copyright 2004 Kees Cook
+ * Copyright 2004 Jon Phillips
  * Copyright 2005 MenTaLguY
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
@@ -16,7 +20,13 @@
 #endif
 
 #include <glibmm/i18n.h>
-#include "aboutbox.h"
+#include "path-prefix.h"
+#include "file.h"
+#include "document.h"
+#include "svg-view-widget.h"
+#include "sp-text.h"
+#include "text-editing.h"
+#include "ui/dialog/aboutbox.h"
 
 #include "inkscape_version.h"
 
@@ -24,18 +34,37 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+static Gtk::Widget *build_splash_widget();
 static gchar const *authors_text();
 static gchar const *translators_text();
 static gchar const *license_text();
 
 static Gtk::ScrolledWindow *make_scrolled_text(gchar const *contents);
 
-AboutBox::AboutBox(Gtk::Widget& about_svg_view, gint width, gint height)
-    : Gtk::Dialog(_("About Inkscape"))
-{
+static AboutBox *window=NULL;
+
+void AboutBox::show_about() {
+    if (!window) {
+        window = new AboutBox();
+    }
+    window->show();
+}
+
+void AboutBox::hide_about() {
+    if (window) {
+        window->hide();
+    }
+}
+
+AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
     Gtk::Notebook *tabs=new Gtk::Notebook();
 
-    tabs->append_page(about_svg_view, _("_Splash"), true);
+    tabs->set_scrollable();
+
+    Gtk::Widget *splash=build_splash_widget();
+    if (splash) {
+        tabs->append_page(*manage(splash), _("_Splash"), true);
+    }
     tabs->append_page(*manage(make_scrolled_text(authors_text())), _("_Authors"), true);
     tabs->append_page(*manage(make_scrolled_text(translators_text())), _("_Translators"), true);
     tabs->append_page(*manage(make_scrolled_text(license_text())), _("_License"), true);
@@ -43,26 +72,72 @@ AboutBox::AboutBox(Gtk::Widget& about_svg_view, gint width, gint height)
     get_vbox()->pack_end(*manage(tabs), true, true);
     tabs->show_all();
 
-    // allow window to shrink, but restore window size
-    set_size_request(0, 0);
-    // width and height seem very broken... I'm cheating for now
-    //printf("width: %d height: %d\n",width,height);
-    set_default_size(width,width-60);
-
     add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
     set_default_response(Gtk::RESPONSE_CLOSE);
 
-    Gtk::Label * label = new Gtk::Label("Inkscape " INKSCAPE_VERSION " (" __DATE__ ")");
+    Gtk::Label *label=new Gtk::Label();
+    gchar *label_text=g_strdup_printf("<small><i>Inkscape %s, built %s</i></small>", INKSCAPE_VERSION, __DATE__);
+    label->set_markup(label_text);
+    label->set_alignment(Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER);
+    g_free(label_text);
     label->set_selectable(true);
     label->show();
 
     get_vbox()->pack_start(*manage(label), false, false);
+
+    Gtk::Requisition requisition=size_request();
+    // allow window to shrink
+    set_size_request(0, 0);
+    set_default_size(requisition.width, requisition.height);
 }
 
 void AboutBox::on_response(int response_id) {
     if ( response_id == Gtk::RESPONSE_CLOSE ) {
-        hide();
+        AboutBox::hide_about();
     }
+}
+
+Gtk::Widget *build_splash_widget() {
+    /* TRANSLATORS: This is the filename of the `About Inkscape' picture in
+       the `screens' directory.  Thus the translation of "about.svg" should be
+       the filename of its translated version, e.g. about.zh.svg for Chinese.
+
+       N.B. about.svg changes once per release.  (We should probably rename
+       the original to about-0.40.svg etc. as soon as we have a translation.
+       If we do so, then add an item to release-checklist saying that the
+       string here should be changed.) */
+
+    // FIXME? INKSCAPE_SCREENSDIR and "about.svg" are in UTF-8, not the
+    // native filename encoding... and the filename passed to sp_document_new
+    // should be in UTF-*8..
+
+    char *about=g_build_filename(INKSCAPE_SCREENSDIR, _("about.svg"), NULL);
+    SPDocument *doc=sp_document_new (about, TRUE);
+    g_free(about);
+    g_return_val_if_fail(doc != NULL, NULL);
+
+    SPObject *version = doc->getObjectById("version");
+    if ( version && SP_IS_TEXT(version) ) {
+        sp_te_set_repr_text_multiline (SP_TEXT (version), INKSCAPE_VERSION);
+    }
+    sp_document_ensure_up_to_date(doc);
+
+    GtkWidget *v=sp_svg_view_widget_new(doc);
+
+    double width=sp_document_width(doc);
+    double height=sp_document_height(doc);
+    
+    sp_document_unref(doc);
+
+    sp_svg_view_widget_set_resize(SP_SVG_VIEW_WIDGET(v), FALSE, (int)width, (int)height);
+
+    Gtk::AspectFrame *frame=new Gtk::AspectFrame();
+    frame->unset_label();
+    frame->set_shadow_type(Gtk::SHADOW_NONE);
+    frame->property_ratio() = width / height;
+    frame->add(*manage(Glib::wrap(v)));
+
+    return frame;
 }
 
 static Gtk::ScrolledWindow *make_scrolled_text(gchar const *contents) {

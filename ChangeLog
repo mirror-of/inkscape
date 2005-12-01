@@ -1,3 +1,13 @@
+2005-12-01  MenTaLguY  <mental@rydia.net>
+
+    * src/help.cpp, src/ui/dialog/aboutbox.h, src/ui/dialog/aboutbox.cpp:
+
+	  Moved creation of the splash widget into the about dialog code,
+	  and tweaked the appearance of the dialog in a lot of subtle ways
+	  -- we now use an AspectFrame to constrain the aspect ratio of the
+	  splash view, and also finally get the correct initial size for the
+	  dialog while still allowing it to be arbitrarily resized.
+
 2005-12-01  Carl Hetherington <inkscape@carlh.net>
 
 	* src/sp-namedview.cpp: coding style.
