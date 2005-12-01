@@ -1,3 +1,7 @@
+2005-12-01  Carl Hetherington <inkscape@carlh.net>
+
+	* src/sp-namedview.cpp: coding style.
+
 2005-12-01  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/widgets/icon.cpp: added idle calback pre-render.
@@ -15,9 +19,14 @@
 	warnings, move some declarations to first use, coding style fixes.
 	* src/snap.cpp, src/snap.h, src/sp-namedview.cpp: split
 	snap.{cpp,h} up into snapper.{cpp,h}, grid-snapper.{cpp,h},
-	guide-snapper.{cpp,h}.  Refactor and simplify.
+	guide-snapper.{cpp,h}.  Refactor and simplify.  Add another
+	namedview_free_snap().
 	* src/geom.cpp, src/geom.h: cosmetic renaming.
-	* src/pen-context.cpp: a few minor cleanups to pen_handle_button_press().
+	* src/pen-context.cpp: a few minor cleanups to
+	pen_handle_button_press().  Other snapping cleanups.
+	* src/draw-context.cpp, src/draw-context.h: split
+	spdc_endpoint_snap_internal() into two functions.
+	* src/pencil-context.cpp: snapping cleanups.
 	* src/ui/widget/unit-menu.cpp: remove definition of a variable
 	that's just been made static.
 	
