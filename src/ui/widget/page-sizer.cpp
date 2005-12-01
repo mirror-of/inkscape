@@ -22,6 +22,8 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/menuitem.h>
 
+#include "ui/widget/scalar-unit.h"
+#include "ui/widget/unit-menu.h"
 #include "helper/units.h"
 #include "page-sizer.h"
 
@@ -210,7 +212,7 @@ PageSizer::PageSizer()
 //    _menu_size.show()
 
     for (PaperSize const *paper = inkscape_papers; paper->name; paper++) {
-        SizeMenuItem *item = new SizeMenuItem (paper->name);
+        SizeMenuItem *item = manage (new SizeMenuItem (paper->name));
         item->show();
         _menu_size.append (*item);
     }
