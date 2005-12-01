@@ -17,20 +17,23 @@
 #include <gtkmm/notebook.h>
 #include <glibmm/i18n.h>
 
-#include "ui/widget/registered-widget.h"
-#include "ui/widget/page-sizer.h"
+#include "ui/widget/licensor.h"
 #include "ui/widget/notebook-page.h"
+#include "ui/widget/page-sizer.h"
+#include "ui/widget/registered-widget.h"
 #include "ui/widget/registry.h"
 #include "dialog.h"
 
 using namespace Inkscape::UI::Widget;
 
 namespace Inkscape {
-namespace UI {
-namespace Dialog {
+    namespace UI {
+        namespace Widget {
+            class EntityEntry;
+        }
+        namespace Dialog {
 
-class RegisteredDataEntry;
-typedef std::list<RegisteredDataEntry*> RDElist;
+typedef std::list<EntityEntry*> RDElist;
 
 class DocumentPreferences : public Inkscape::UI::Dialog::Dialog {
 public:
@@ -49,7 +52,8 @@ protected:
     Gtk::Tooltips _tt;
     Gtk::Notebook  _notebook;
 
-    NotebookPage   _page_page, _page_grid, _page_guides, _page_metadata;
+    NotebookPage   _page_page, _page_grid, _page_guides;
+    NotebookPage   _page_metadata1, _page_metadata2;
 
     RegisteredCheckButton _rcb_canb, _rcb_bord, _rcb_shad;
     RegisteredColorPicker _rcp_bg, _rcp_bord;
@@ -68,7 +72,7 @@ protected:
     RegisteredColorPicker _rcp_gui, _rcp_hgui;
     //---------------------------------------------------------------
     RDElist _rdflist;
-    //LicenseSelector _licensor;
+    Licensor _licensor;
 
     gchar * _prefs_path;
     Registry _wr;

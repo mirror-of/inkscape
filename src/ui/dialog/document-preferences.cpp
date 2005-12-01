@@ -22,6 +22,12 @@
 
 #include <glibmm/i18n.h>
 
+#include "ui/widget/color-picker.h"
+#include "ui/widget/entity-entry.h"
+#include "ui/widget/registry.h"
+#include "ui/widget/scalar-unit.h"
+#include "ui/widget/unit-menu.h"
+
 #include "xml/repr.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
@@ -69,7 +75,7 @@ DocumentPreferences::destroy()
 DocumentPreferences::DocumentPreferences() 
     : Dialog ("dialogs.documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page(1, 1), _page_grid(1, 1), 
-      _page_guides(1, 1), _page_metadata(1, 1),
+      _page_guides(1, 1), _page_metadata1(1, 1), _page_metadata2(1, 1),
       _prefs_path("dialogs.documentoptions")
 {
     set_resizable (false);
@@ -80,7 +86,8 @@ DocumentPreferences::DocumentPreferences()
     _notebook.append_page(_page_page,      _("Page"));
     _notebook.append_page(_page_grid,      _("Grid"));
     _notebook.append_page(_page_guides,    _("Guides"));
-    _notebook.append_page(_page_metadata,  _("Metadata"));
+    _notebook.append_page(_page_metadata1, _("Metadata 1"));
+    _notebook.append_page(_page_metadata2, _("Metadata 2"));
 
     build_page();
     build_grid();
@@ -99,8 +106,8 @@ DocumentPreferences::~DocumentPreferences()
 {
 //    sp_repr_remove_listener_by_data (SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), dlg);
 
-//   for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
-//       delete (*it);
+   for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
+       delete (*it);
 }
 
 //========================================================================
@@ -138,8 +145,6 @@ DocumentPreferences::build_page()
                     "bordercolor", "borderopacity", _wr);
     _rcb_shad.init (_("Show page shadow"), "", "inkscape:showpageshadow", _wr);
     _rum_deflt.init (_("Default units:"), "inkscape:document-units", _wr);
-
-    // include RegisteredPageSizer here
 
     const Gtk::Widget* widget_array[] = 
     {
@@ -252,21 +257,36 @@ DocumentPreferences::build_guides()
 void
 DocumentPreferences::build_metadata()
 {
-    _page_metadata.show();
+    _page_metadata1.show();
 
     /* add generic metadata entry areas */
     struct rdf_work_entity_t * entity;
     int row = 0;
     for (entity = rdf_work_entities; entity && entity->name; entity++, row++) {
         if ( entity->editable == RDF_EDIT_GENERIC ) {
-//            RegisteredDataEntry *w = new RegisteredDataEntry (entity, _tt);
-//            _rdflist.push_back (w);
-//            _table_meta.attach (*w, 0,1, row, row+1, Gtk::SHRINK, (Gtk::AttachOptions)0,0,0);
+            EntityEntry *w = EntityEntry::create (entity, _tt, _wr);
+            _rdflist.push_back (w);
+            _page_metadata1.table().attach (w->_label, 0,1, row, row+1, Gtk::SHRINK, (Gtk::AttachOptions)0,0,0);
+            _page_metadata1.table().attach (*w->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+        }
+        if (row>=12) break;
+    }
+
+    _page_metadata2.show();
+
+    row = 0;
+    for (entity++; entity && entity->name; entity++, row++) {
+        if ( entity->editable == RDF_EDIT_GENERIC ) {
+            EntityEntry *w = EntityEntry::create (entity, _tt, _wr);
+            _rdflist.push_back (w);
+            _page_metadata2.table().attach (w->_label, 0,1, row, row+1, Gtk::SHRINK, (Gtk::AttachOptions)0,0,0);
+            _page_metadata2.table().attach (*w->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
     }
 
     /* add license selector pull-down and URI */
-//    _table_meta.attach (_rlic, 0,2, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    _licensor.init (_tt, _wr);
+    _page_metadata2.table().attach (_licensor._frame, 0,2, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
 }
 
 } // namespace Dialog

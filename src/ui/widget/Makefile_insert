@@ -14,6 +14,8 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/color-preview.h       \
 	ui/widget/combo-text.cpp	\
 	ui/widget/combo-text.h		\
+	ui/widget/entity-entry.cpp      \
+	ui/widget/entity-entry.h        \
 	ui/widget/handlebox.cpp		\
 	ui/widget/handlebox.h		\
 	ui/widget/icon-widget.cpp	\
@@ -22,6 +24,8 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/imageicon.h		\
 	ui/widget/labelled.cpp		\
 	ui/widget/labelled.h		\
+	ui/widget/licensor.cpp          \
+	ui/widget/licensor.h		\
 	ui/widget/notebook-page.cpp	\
 	ui/widget/notebook-page.h	\
 	ui/widget/page-sizer.cpp        \
