@@ -68,7 +68,7 @@ void Block::merge(Block *b, Constraint *c, double dist) {
 		b->setUpOutConstraints();
 	out->merge(b->out);
 }
-Constraint *Block::find_min_in_constraint() {
+Constraint *Block::findMinInConstraint() {
 	//assert(ins->size()==in->size());
 	if(in->isEmpty()) return NULL;
 	Constraint *v = in->findMin();
@@ -81,7 +81,7 @@ Constraint *Block::find_min_in_constraint() {
 	//assert(v==ins->findMin());
 	return v;
 }
-Constraint *Block::find_min_out_constraint() {
+Constraint *Block::findMinOutConstraint() {
 	//assert(outs->size()==out->size());
 	if(out->isEmpty()) return NULL;
 	Constraint *v = out->findMin();
@@ -93,6 +93,12 @@ Constraint *Block::find_min_out_constraint() {
 	}
 	//assert(v==outs->findMin());
 	return v;
+}
+void Block::deleteMinInConstraint() {
+	in->deleteMin();
+}
+void Block::deleteMinOutConstraint() {
+	out->deleteMin();
 }
 inline bool Block::canFollowLeft(Constraint *c, Variable *last) {
 	return c->left->block==this && c->active && last!=c->left;
@@ -145,7 +151,7 @@ void Block::populateSplitBlock(Block *b, Variable *v, Variable *u) {
 			populateSplitBlock(b, (*c)->right, v);
 	}
 }
-Constraint *Block::find_min_lm() {
+Constraint *Block::findMinLM() {
 	Constraint *min_lm=NULL;
 	reset_active_lm(vars->front(),NULL);
 	compute_dfdv(vars->front(),NULL,min_lm);

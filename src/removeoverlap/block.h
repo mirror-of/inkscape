@@ -21,19 +21,18 @@ class StupidPriorityQueue;
 class Block
 {
 public:
-	PairingHeap<Constraint*> *in;
-	PairingHeap<Constraint*> *out;
 	std::vector<Variable*> *vars;
 	double posn;
 	double weight;
 	double wposn;
-	Block *nextLeft, *nextRight;
 	Block();
 	Block(Variable *v);
 	~Block(void);
-	Constraint *find_min_lm();
-	Constraint *find_min_in_constraint();
-	Constraint *find_min_out_constraint();
+	Constraint *findMinLM();
+	Constraint *findMinInConstraint();
+	Constraint *findMinOutConstraint();
+	void deleteMinInConstraint();
+	void deleteMinOutConstraint();
 	double desiredWeightedPosition();
 	void merge(Block *b, Constraint *c, double dist);
 	void split(Block *&l, Block *&r, Constraint *c);
@@ -42,6 +41,8 @@ public:
 	double cost();
 	char *toString();
 private:
+	PairingHeap<Constraint*> *in;
+	PairingHeap<Constraint*> *out;
 	void reset_active_lm(Variable *v, Variable *u);
 	double compute_dfdv(Variable *v, Variable *u, Constraint *&min_lm);
 	bool canFollowLeft(Constraint *c, Variable *last);

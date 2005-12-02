@@ -12,23 +12,30 @@
 #ifndef SEEN_REMOVEOVERLAP_BLOCKS_H
 #define SEEN_REMOVEOVERLAP_BLOCKS_H
 
+#include <set>
+#include <list>
+
 class Block;
 class Variable;
 class Constraint;
-class Blocks
+/**
+ * A block structure defined over the variables such that each block contains
+ * 1 or more variables, with the invariant that all constraints inside a block
+ * are satisfied by keeping the variables fixed relative to one another
+ */
+class Blocks : public std::set<Block*>
 {
 public:
-	Block *head;
-	Blocks(Variable* vs[], const int n);
+	Blocks(Variable *vs[], const int n);
 	~Blocks(void);
-	void add(Block *b);
-	void remove(Block *b);
-	void merge_left(Block *r);
-	void merge_right(Block *l);
+	void mergeLeft(Block *r);
+	void mergeRight(Block *l);
 	void split(Block *b, Block *&l, Block *&r, Constraint *c);
+	std::list<Variable*> *totalOrder();
 	double cost();
-	int size();
 private:
-	void dfsVisit(Variable *v);
+	void dfsVisit(Variable *v, std::list<Variable*> *order);
+	Variable **vs;
+	int nvs;
 };
 #endif // SEEN_REMOVEOVERLAP_BLOCKS_H

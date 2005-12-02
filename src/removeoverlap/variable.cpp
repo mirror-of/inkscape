@@ -12,8 +12,8 @@
 #include "variable.h"
 
 char *Variable::toString() {
-	char *str=new char[20];
-	sprintf(str,"(%s=%f)",name,position());
+	char *str=new char[strlen(name)+10];
+	sprintf(str,"(%s=%3.3f)",name,position());
 	return str;
 }
 

@@ -16,18 +16,23 @@ class Variable;
 class Constraint;
 class Blocks;
 
-// Variable Placement with Separation Constraints problem instance
+/**
+ * Variable Placement with Separation Constraints problem instance
+ */
 class VPSC {
 public:
 	double satisfy();
 	double solve();
-	bool split_once();
+
+	bool move_and_split();
+	int instanceid;
 
 	VPSC(Variable *vs[], const int n, Constraint *cs[], const int m);
 	~VPSC();
 	Blocks *bs;
 private:
 	void printBlocks();
+	bool blockGraphIsCyclic();
 };
 
 #endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
