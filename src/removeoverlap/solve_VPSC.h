@@ -25,13 +25,13 @@ public:
 	double solve();
 
 	bool move_and_split();
-	int instanceid;
-
 	VPSC(Variable *vs[], const int n, Constraint *cs[], const int m);
 	~VPSC();
+protected:
 	Blocks *bs;
 private:
 	void printBlocks();
+	bool constraintGraphIsCyclic(Variable *vs[], const int n);
 	bool blockGraphIsCyclic();
 };
 
