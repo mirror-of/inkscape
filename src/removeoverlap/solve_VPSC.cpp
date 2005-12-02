@@ -139,6 +139,7 @@ struct node {
 	set<node*> in;
 	set<node*> out;
 };
+// useful in debugging - cycles would be BAD
 bool VPSC::constraintGraphIsCyclic(Variable *vs[], const int n) {
 	map<Variable*, node*> varmap;
 	vector<node*> graph;
@@ -185,6 +186,7 @@ bool VPSC::constraintGraphIsCyclic(Variable *vs[], const int n) {
 	return false;
 }
 
+// useful in debugging - cycles would be BAD
 bool VPSC::blockGraphIsCyclic() {
 	map<Block*, node*> bmap;
 	vector<node*> graph;
