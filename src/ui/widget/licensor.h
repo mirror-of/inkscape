@@ -12,10 +12,7 @@
 #ifndef INKSCAPE_UI_WIDGET_LICENSOR__H
 #define INKSCAPE_UI_WIDGET_LICENSOR__H
 
-#include <gtkmm/menu.h>
-#include <gtkmm/optionmenu.h>
 #include <gtkmm/box.h>
-#include <gtkmm/table.h>
 #include <gtkmm/frame.h>
 
 namespace Gtk {
@@ -39,11 +36,7 @@ public:
 
 protected: 
     Registry       *_wr;
-    Gtk::Tooltips  *_tt;
     EntityEntry    *_eentry;
-    Gtk::OptionMenu _om;
-    Gtk::Menu       _menu;
-    Gtk::Table      _table;
 };
 
 

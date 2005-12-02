@@ -17,10 +17,9 @@
 #endif
 
 #include <glibmm/i18n.h>
-#include <gtkmm/frame.h>
+#include <gtkmm/optionmenu.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/menuitem.h>
-#include <gtkmm/table.h>
 #include <gtkmm/box.h>
 #include <gtkmm/tooltips.h>
 
@@ -61,7 +60,7 @@ LicenseItem::on_activate_item()
 //---------------------------------------------------
 
 Licensor::Licensor()
-: Gtk::VBox(false,4), _frame(_("License")), _table(5,2,false)
+: Gtk::VBox(false,4), _frame(_("License"))
 {
 }
 
@@ -73,15 +72,16 @@ Licensor::~Licensor()
 void
 Licensor::init (Gtk::Tooltips& tt, Registry& wr)
 {
-    _tt = &tt;
     _wr = &wr;
     show();
     _frame.show();
     _frame.add (*this);
-    _om.show();
-    pack_start (_om, true, true, 0);
-    _wr->add ("licenses", &_om);
-    _menu.show();
+    Gtk::OptionMenu *om = manage (new Gtk::OptionMenu);
+    om->show();
+    pack_start (*om, true, true, 0);
+    _wr->add ("licenses", om);
+    Gtk::Menu *menu = manage (new Gtk::Menu);
+    menu->show();
 
     LicenseItem *i;
     for (struct rdf_license_t * license = rdf_licenses;
@@ -89,26 +89,22 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
              license++) {
         i = manage (new LicenseItem (license->name));
         i->show();
-        _menu.append (*i);
+        menu->append (*i);
     }
 
     i = manage (new LicenseItem (_("Proprietary")));
     i->show();
-    _menu.prepend (*i);
-    _om.set_menu (_menu);
+    menu->prepend (*i);
+    om->set_menu (*menu);
 
-    _table.show();
-    _table.set_border_width (4);
-    _table.set_row_spacings (4);
-    _table.set_col_spacings (4);
-    pack_start (_table, true, true, 0);
+    Gtk::HBox *box = manage (new Gtk::HBox);
+    pack_start (*box, true, true, 0);
 
-    int row = 0;
     /* add license-specific metadata entry areas */
     rdf_work_entity_t* entity = rdf_find_entity ( "license_uri" );
-    _eentry = EntityEntry::create (entity, *_tt, *_wr);
-    _table.attach (_eentry->_label, 0,1, row, row+1, Gtk::SHRINK, (Gtk::AttachOptions)0,0,0);
-    _table.attach (*_eentry->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+    _eentry = EntityEntry::create (entity, tt, *_wr);
+    box->pack_start (_eentry->_label, false, false, 5);
+    box->pack_start (*_eentry->_packable, true, true, 0);
 }
 
 } // namespace Dialog
