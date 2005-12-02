@@ -25,8 +25,6 @@
 #include "grid-snapper.h"
 #include "guide-snapper.h"
 
-
-
 enum {
     SP_BORDER_LAYER_BOTTOM,
     SP_BORDER_LAYER_TOP
@@ -85,6 +83,12 @@ struct SPNamedView : public SPObjectGroup {
     GSList *gridviews;
     gint viewcount;
 
+    void show(SPDesktop *desktop);
+    void hide(SPDesktop const *desktop);
+    void activateGuides(gpointer desktop, gboolean active);
+    gchar const *getName() const;
+    guint getViewCount();
+    GSList const *getViewList() const;
     SPMetric getDefaultMetric() const;
 };
 
@@ -92,15 +96,7 @@ struct SPNamedViewClass {
     SPObjectGroupClass parent_class;
 };
 
-GType sp_namedview_get_type(void);
-
-void sp_namedview_show(SPNamedView *namedview, SPDesktop *desktop);
-void sp_namedview_hide(SPNamedView *namedview, SPDesktop *desktop);
-
-void sp_namedview_activate_guides(SPNamedView *nv, gpointer desktop, gboolean active);
-guint sp_namedview_viewcount(SPNamedView *nv);
-gchar const *sp_namedview_get_name(SPNamedView *nv);
-GSList const *sp_namedview_view_list(SPNamedView *nv);
+GType sp_namedview_get_type();
 
 SPNamedView *sp_document_namedview(SPDocument *document, gchar const *name);
 

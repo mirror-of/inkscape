@@ -574,14 +574,14 @@ static Inkscape::XML::Node *sp_namedview_write(SPObject *object, Inkscape::XML::
     return repr;
 }
 
-void sp_namedview_show(SPNamedView *const nv, SPDesktop *const desktop)
+void SPNamedView::show(SPDesktop *desktop)
 {
-    for (GSList *l = nv->guides; l != NULL; l = l->next) {
+    for (GSList *l = guides; l != NULL; l = l->next) {
         sp_guide_show(SP_GUIDE(l->data), desktop->guides, (GCallback) sp_dt_guide_event);
         if (desktop->guides_active) {
             sp_guide_sensitize(SP_GUIDE(l->data), SP_DT_CANVAS(desktop), TRUE);
         }
-        if (nv->showguides) {
+        if (showguides) {
             for (GSList *v = SP_GUIDE(l->data)->views; v != NULL; v = v->next) {
                 sp_canvas_item_show(SP_CANVAS_ITEM(v->data));
             }
@@ -592,13 +592,13 @@ void sp_namedview_show(SPNamedView *const nv, SPDesktop *const desktop)
         }
     }
     
-    nv->views = g_slist_prepend(nv->views, desktop);
+    views = g_slist_prepend(views, desktop);
     
     SPCanvasItem *item = sp_canvas_item_new(SP_DT_GRID(desktop), SP_TYPE_CGRID, NULL);
     // since we're keeping a copy, we need to bump up the ref count
     gtk_object_ref(GTK_OBJECT(item));
-    nv->gridviews = g_slist_prepend(nv->gridviews, item);
-    sp_namedview_setup_grid_item(nv, item);
+    gridviews = g_slist_prepend(gridviews, item);
+    sp_namedview_setup_grid_item(this, item);
 }
 
 /*
@@ -685,21 +685,19 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
     sp_document_set_undo_sensitive(SP_DT_DOCUMENT(desktop), saved);
 }
 
-void sp_namedview_hide(SPNamedView *const nv, SPDesktop *const desktop)
+void SPNamedView::hide(SPDesktop const *desktop)
 {
-    g_assert(nv != NULL);
-    g_assert(SP_IS_NAMEDVIEW(nv));
     g_assert(desktop != NULL);
-    g_assert(g_slist_find(nv->views, desktop));
+    g_assert(g_slist_find(views, desktop));
     
-    for (GSList *l = nv->guides; l != NULL; l = l->next) {
+    for (GSList *l = guides; l != NULL; l = l->next) {
         sp_guide_hide(SP_GUIDE(l->data), SP_DT_CANVAS(desktop));
     }
     
-    nv->views = g_slist_remove(nv->views, desktop);
+    views = g_slist_remove(views, desktop);
 
     GSList *l;
-    for (l = nv->gridviews; l != NULL; l = l->next) {
+    for (l = gridviews; l != NULL; l = l->next) {
         if (SP_CANVAS_ITEM(l->data)->canvas == SP_DT_CANVAS(desktop)) {
             break;
         }
@@ -709,19 +707,17 @@ void sp_namedview_hide(SPNamedView *const nv, SPDesktop *const desktop)
     
     sp_canvas_item_hide(SP_CANVAS_ITEM(l->data));
     gtk_object_unref(GTK_OBJECT(l->data));
-    nv->gridviews = g_slist_remove(nv->gridviews, l->data);
+    gridviews = g_slist_remove(gridviews, l->data);
 }
 
-void sp_namedview_activate_guides(SPNamedView * nv, gpointer desktop, gboolean active)
+void SPNamedView::activateGuides(gpointer desktop, gboolean active)
 {
-    g_assert(nv != NULL);
-    g_assert(SP_IS_NAMEDVIEW(nv));
     g_assert(desktop != NULL);
-    g_assert(g_slist_find(nv->views, desktop));
+    g_assert(g_slist_find(views, desktop));
     
     SPDesktop *dt = static_cast<SPDesktop*>(desktop);
     
-    for (GSList *l = nv->guides; l != NULL; l = l->next) {
+    for (GSList *l = guides; l != NULL; l = l->next) {
         sp_guide_sensitize(SP_GUIDE(l->data), SP_DT_CANVAS(dt), active);
     }
 }
@@ -801,25 +797,21 @@ static void sp_namedview_setup_grid_item(SPNamedView *nv, SPCanvasItem *item)
                        NULL);
 }
 
-gchar const *sp_namedview_get_name(SPNamedView *nv)
+gchar const *SPNamedView::getName() const
 {
     SPException ex;
     SP_EXCEPTION_INIT(&ex);
-    return sp_object_getAttribute(SP_OBJECT(nv), "id", &ex);
+    return sp_object_getAttribute(SP_OBJECT(this), "id", &ex);
 }
 
-guint sp_namedview_viewcount(SPNamedView *nv)
+guint SPNamedView::getViewCount()
 {
-    g_assert(SP_IS_NAMEDVIEW(nv));
-
-    return ++nv->viewcount;
+    return ++viewcount;
 }
 
-GSList const *sp_namedview_view_list(SPNamedView *nv)
+GSList const *SPNamedView::getViewList() const
 {
-    g_assert(SP_IS_NAMEDVIEW(nv));
-
-    return nv->views;
+    return views;
 }
 
 /* This should be moved somewhere */

@@ -161,7 +161,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas)
     /* Connect document */
     setDocument (document);
 
-    number = sp_namedview_viewcount (namedview);
+    number = namedview->getViewCount();
 
 
     /* Setup Canvas */
@@ -238,7 +238,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas)
         nr_arena_item_unref (ai);
     }
 
-    sp_namedview_show (namedview, this);
+    namedview->show(this);
     /* Ugly hack */
     activate_guides (true);
     /* Ugly hack */
@@ -443,7 +443,7 @@ void
 SPDesktop::activate_guides(bool activate)
 {
     guides_active = activate;
-    sp_namedview_activate_guides (namedview, this, activate);
+    namedview->activateGuides(this, activate);
 }
 
 /**
@@ -1073,7 +1073,7 @@ void
 SPDesktop::setDocument (SPDocument *doc)
 {
     if (this->doc() && doc) {
-        sp_namedview_hide (namedview, this);
+        namedview->hide(this);
         sp_item_invoke_hide (SP_ITEM (sp_document_root (this->doc())), dkey);
     }
 
@@ -1095,7 +1095,7 @@ SPDesktop::setDocument (SPDocument *doc)
 
         namedview = sp_document_namedview (doc, NULL);
         g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (_namedview_modified), this);
-        number = sp_namedview_viewcount (namedview);
+        number = namedview->getViewCount();
 
         ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), 
                 SP_CANVAS_ARENA (drawing)->arena,
@@ -1105,7 +1105,7 @@ SPDesktop::setDocument (SPDocument *doc)
             nr_arena_item_add_child (SP_CANVAS_ARENA (drawing)->root, ai, NULL);
             nr_arena_item_unref (ai);
         }
-        sp_namedview_show (namedview, this);
+        namedview->show(this);
         /* Ugly hack */
         activate_guides (true);
         /* Ugly hack */
