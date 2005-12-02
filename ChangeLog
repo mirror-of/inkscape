@@ -1,5 +1,11 @@
 2005-12-01  MenTaLguY  <mental@rydia.net>
 
+    * src/widgets/icon.cpp: refactored a bit around the icon prerendering
+	  code and added a timer; also kick off the task immediately rather
+	  than waiting for the first expose event
+
+2005-12-01  MenTaLguY  <mental@rydia.net>
+
     * src/widgets/desktop-widget.cpp:
 
 	  moved zoom selector away from the right edge so it won't get covered

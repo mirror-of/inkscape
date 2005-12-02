@@ -32,6 +32,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
 
+#include <glibmm/timer.h>
 #include <gtkmm/image.h>
 
 #include "forward.h"
@@ -46,7 +47,7 @@
 
 #include "icon.h"
 
-extern "C" gboolean iconIdlePump( gpointer data );
+static gboolean icon_prerender_task(gpointer data);
 
 static void addPreRender( GtkIconSize lsize, gchar const *name );
 
@@ -80,7 +81,6 @@ static void sp_icon_overlay_pixels( guchar *px, int width, int height, int strid
 static GtkWidgetClass *parent_class;
 
 static bool sizeDirty = true;
-static bool seenExpose = false;
 
 GtkType
 sp_icon_get_type()
@@ -185,8 +185,6 @@ sp_icon_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 
 static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 {
-    seenExpose = true;
-
     if ( GTK_WIDGET_DRAWABLE(widget) ) {
         SPIcon *icon = SP_ICON(widget);
         if ( !icon->pb ) {
@@ -683,40 +681,34 @@ struct svg_doc_cache_t
     NRArenaItem *root;
 };
 
+static std::map<Glib::ustring, svg_doc_cache_t *> doc_cache;
+static std::map<Glib::ustring, guchar *> px_cache;
 
-static guchar *
-sp_icon_image_load_svg(gchar const *name, unsigned lsize, unsigned psize)
+static Glib::ustring icon_cache_key(gchar const *name,
+                                    unsigned lsize, unsigned psize)
 {
-    gint const dump = prefs_get_int_attribute_limited("debug.icons", "dumpSvg", 0, 0, 1);
+    Glib::ustring key=name;
+    key += ":";
+    key += lsize;
+    key += ":";
+    key += psize;
+    return key;
+}
 
-    // It would be nice to figure out how to attach "desctructors" to
-    // these maps to keep mem-watching tools like valgrind happy.
-    static std::map<Glib::ustring, svg_doc_cache_t *> doc_cache;
-    static std::map<Glib::ustring, guchar *> px_cache;
+static guchar *get_cached_pixels(Glib::ustring const &key) {
+    std::map<Glib::ustring, guchar *>::iterator found=px_cache.find(key);
+    if ( found != px_cache.end() ) {
+        return found->second;
+    }
+    return NULL;
+}
+
+static guchar *load_svg_pixels(gchar const *name,
+                               unsigned lsize, unsigned psize)
+{
     SPDocument *doc = NULL;
     NRArenaItem *root = NULL;
     svg_doc_cache_t *info = NULL;
-
-    Glib::ustring icon_index = name;
-    icon_index += ":";
-    icon_index += lsize;
-    icon_index += ":";
-    icon_index += psize;
-
-    // did we already load this icon at this scale/size?
-    guchar *px = 0;
-    {
-        std::map<Glib::ustring, guchar *>::iterator i = px_cache.find(icon_index);
-        if ( i != px_cache.end() ) {
-            px = i->second;
-        }
-    }
-    if (px) {
-        if ( dump ) {
-            g_message( "svg icon cached (%s).", icon_index.c_str() );
-        }
-        return px;
-    }
 
     // Fall back from user prefs dir into system locations.
     Glib::ustring iconsvg = name;
@@ -727,8 +719,9 @@ sp_icon_image_load_svg(gchar const *name, unsigned lsize, unsigned psize)
     sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, iconsvg.c_str(), NULL));
     sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, "icons.svg", NULL));
 
-    // Use this loop to iterate through a list of possible document locations.
-    while (!sources.empty()) {
+    // Try each document in turn until we successfully load the icon from one
+    guchar *px=NULL;
+    while ( !sources.empty() && !px ) {
         gchar *doc_filename = sources.front();
 
         // Did we already load this doc?
@@ -773,21 +766,46 @@ sp_icon_image_load_svg(gchar const *name, unsigned lsize, unsigned psize)
         g_free(doc_filename);
         sources.pop_front();
 
-        // move on to the next document
+        // move on to the next document if we couldn't get anything
         if (!info && !doc) continue;
 
-        if ( dump ) {
-            g_message( "loading svg '%s' (%d:%d)", name, lsize, psize );
-        }
         px = sp_icon_doc_icon( doc, root, name, psize );
-        if (px) {
-            px_cache[icon_index] = px;
-            break;
-        }
     }
 
     return px;
-} // end of sp_icon_image_load_svg()
+}
+
+// returns true if icon needed preloading, false if nothing was done
+static bool prerender_icon(gchar const *name, unsigned lsize, unsigned psize)
+{
+    Glib::ustring key=icon_cache_key(name, lsize, psize);
+    guchar *px=get_cached_pixels(key);
+    if (px) {
+        return false;
+    } else {
+        px = load_svg_pixels(name, lsize, psize);
+        if (px) {
+            px_cache[key] = px;
+        }
+        return true;
+    }
+}
+
+static guchar *
+sp_icon_image_load_svg(gchar const *name, unsigned lsize, unsigned psize)
+{
+    Glib::ustring key=icon_cache_key(name, lsize, psize);
+
+    // did we already load this icon at this scale/size?
+    guchar *px=get_cached_pixels(key);
+    if (!px) {
+        px = load_svg_pixels(name, lsize, psize);
+        if (px) {
+            px_cache[key] = px;
+        }
+    }
+    return px;
+}
 
 void sp_icon_overlay_pixels(guchar *px, int width, int height, int stride,
                             unsigned r, unsigned g, unsigned b)
@@ -860,47 +878,55 @@ public:
 
 static std::queue<preRenderItem> pendingRenders;
 static bool callbackHooked = false;
+static Glib::Timer *prerender_timer=NULL;
 
 static void addPreRender( GtkIconSize lsize, gchar const *name )
 {
 
     if ( !callbackHooked )
     {
+        g_message("Beginning icon prerendering");
+        prerender_timer = new Glib::Timer();
         callbackHooked = true;
-        g_idle_add_full( G_PRIORITY_LOW, iconIdlePump, NULL, NULL );
+        g_idle_add_full( G_PRIORITY_LOW, &icon_prerender_task, NULL, NULL );
     }
 
-    preRenderItem addum( lsize, name );
-    pendingRenders.push( addum );
+    pendingRenders.push(preRenderItem(lsize, name));
 }
 
-extern "C" gboolean iconIdlePump( gpointer data )
-{
-    gboolean retval = TRUE;
+// in seconds; 10msec is roughly the threshold for human-perceptible lag,
+// but up to 60-70msec is tolerable
+#define INTERACTIVE_LIMIT 0.07
 
-    if ( seenExpose )
-    {
-        if ( !pendingRenders.empty() )
-        {
-            preRenderItem single( pendingRenders.front() );
-            pendingRenders.pop();
-//         g_message("      pop '%s' : %d", single._name.c_str(), single._lsize );
+static inline int seconds_to_msec(double seconds) {
+    return (int)(seconds * 1000 + 0.5);
+}
 
-            int psize = sp_icon_get_phys_size( single._lsize );
+gboolean icon_prerender_task(gpointer data) {
+    Glib::Timer timer;
 
-            guchar *px = sp_icon_image_load_svg( single._name.c_str(), single._lsize, psize );
-            (void)px;
+    if (!pendingRenders.empty()) {
+        preRenderItem single=pendingRenders.front();
+        pendingRenders.pop();
+        int psize = sp_icon_get_phys_size(single._lsize);
+        prerender_icon(single._name.c_str(), single._lsize, psize);
 
-            retval = TRUE;
-        }
-        else
-        {
-            callbackHooked = false;
-            retval = FALSE;
+        double elapsed=timer.elapsed();
+        if ( elapsed > INTERACTIVE_LIMIT ) {
+            g_warning("Prerendering of icon \"%s\" at %dx%d pixels exceeded %dmsec (%dmsec)", single._name.c_str(), psize, psize, seconds_to_msec(INTERACTIVE_LIMIT), seconds_to_msec(elapsed));
         }
     }
 
-    return retval;
+    if (!pendingRenders.empty()) {
+        return TRUE;
+    } else {
+        prerender_timer->stop();
+        g_message("Icon prerendering complete after %g seconds", prerender_timer->elapsed());
+        delete prerender_timer;
+        prerender_timer = NULL;
+        callbackHooked = false;
+        return FALSE;
+    }
 }
 
 /*
