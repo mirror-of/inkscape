@@ -53,11 +53,11 @@ inline bool empty(NRRect const &r)
 #define nr_rect_d_point_d_test_inside(r,p) ((p) && (!(r) || (!NR_RECT_DF_TEST_EMPTY (r) && NR_RECT_DF_POINT_DF_TEST_INSIDE (r,p))))
 
 /* NULL values are OK for r0 and r1, but not for d */
-NRRect *nr_rect_d_intersect (NRRect *d, const NRRect *r0, const NRRect *r1);
-NRRectL *nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
+NRRect *nr_rect_d_intersect (NRRect *d, NRRect const *r0, NRRect const *r1);
+NRRectL *nr_rect_l_intersect (NRRectL *d, NRRectL const *r0, NRRectL const *r1);
 
-NRRect *nr_rect_d_union (NRRect *d, const NRRect *r0, const NRRect *r1);
-NRRectL *nr_rect_l_union (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
+NRRect *nr_rect_d_union (NRRect *d, NRRect const *r0, NRRect const *r1);
+NRRectL *nr_rect_l_union (NRRectL *d, NRRectL const *r0, NRRectL const *r1);
 
 NRRect *nr_rect_union_pt(NRRect *dst, NR::Point const &p);
 NRRect *nr_rect_d_union_xy (NRRect *d, NR::Coord x, NR::Coord y);
@@ -79,12 +79,12 @@ namespace NR {
  * points.  Infinities are also permitted. */
 class Rect {
 public:
-	Rect(const NRRect& r) : _min(r.x0, r.y0), _max(r.x1, r.y1) {}
-	Rect(const Rect& r) : _min(r._min), _max(r._max) {}
-	Rect(const Point &p0, const Point &p1);
+	Rect(NRRect const &r) : _min(r.x0, r.y0), _max(r.x1, r.y1) {}
+	Rect(Rect const &r) : _min(r._min), _max(r._max) {}
+	Rect(Point const &p0, Point const &p1);
 
-	const Point &min() const { return _min; }
-	const Point &max() const { return _max; }
+	Point const &min() const { return _min; }
+	Point const &max() const { return _max; }
 
 	/** returns the four corners of the rectangle in order
 	 *  (clockwise if +Y is up, anticlockwise if +Y is down) */
@@ -101,13 +101,13 @@ public:
 		return isEmpty<X>() || isEmpty<Y>();
 	}
 
-	bool intersects(const Rect &r) const {
+	bool intersects(Rect const &r) const {
 		return intersects<X>(r) && intersects<Y>(r);
 	}
-	bool contains(const Rect &r) const {
+	bool contains(Rect const &r) const {
 		return contains<X>(r) && contains<Y>(r);
 	}
-	bool contains(const Point &p) const {
+	bool contains(Point const &p) const {
 		return contains<X>(p) && contains<Y>(p);
 	}
 
@@ -154,23 +154,23 @@ public:
 	void expandTo(Point p);
 
 	/** Makes this rectangle large enough to include the rectangle r. */
-	void expandTo(const Rect &r);
+	void expandTo(Rect const &r);
 	
 	/** Returns the set of points shared by both rectangles. */
-	static Maybe<Rect> intersection(const Rect &a, const Rect &b);
+	static Maybe<Rect> intersection(Rect const &a, Rect const &b);
 
 	/** Returns the smallest rectangle that encloses both rectangles. */
-	static Rect union_bounds(const Rect &a, const Rect &b);
+	static Rect union_bounds(Rect const &a, Rect const &b);
 
 	inline Rect operator*(double s) const {
 		return Rect (s * min(), s * max());
 	}
 
-    inline int operator == (const Rect &in_rect) {
+    inline int operator == (Rect const &in_rect) {
         return ((this->min() == in_rect.min()) && (this->max() == in_rect.max()));
     }
 
-    friend inline std::ostream &operator<< (std::ostream &out_file, const NR::Rect &in_rect);
+    friend inline std::ostream &operator<< (std::ostream &out_file, NR::Rect const &in_rect);
 
 private:
 	Rect() {}
@@ -186,17 +186,17 @@ private:
 	}
 
 	template <Dim2 axis>
-	bool intersects(const Rect &r) const {
+	bool intersects(Rect const &r) const {
 		return _max[axis] >= r._min[axis] && _min[axis] <= r._max[axis];
 	}
 
 	template <Dim2 axis>
-	bool contains(const Rect &r) const {
+	bool contains(Rect const &r) const {
 		return contains(r._min) && contains(r._max);
 	}
 
 	template <Dim2 axis>
-	bool contains(const Point &p) const {
+	bool contains(Point const &p) const {
 		return p[axis] >= _min[axis] && p[axis] <= _max[axis];
 	}
 
@@ -209,7 +209,7 @@ private:
 /** A function to print out the rectange if sent to an output
     stream. */
 inline std::ostream
-&operator<< (std::ostream &out_file, const NR::Rect &in_rect)
+&operator<< (std::ostream &out_file, NR::Rect const &in_rect)
 {
 	out_file << "Rectangle:\n";
 	out_file << "\tMin Point -> " << in_rect.min() << "\n";
