@@ -161,11 +161,11 @@ public:
     /** Returns the smallest rectangle that encloses both rectangles. */
     static Rect union_bounds(Rect const &a, Rect const &b);
 
-    inline Rect operator*(double s) const {
+    inline Rect operator*(double const s) const {
         return Rect(s * min(), s * max());
     }
 
-    inline int operator==(Rect const &in_rect) {
+    inline bool operator==(Rect const &in_rect) {
         return ((this->min() == in_rect.min()) && (this->max() == in_rect.max()));
     }
 
