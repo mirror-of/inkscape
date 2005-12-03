@@ -17,9 +17,11 @@
 # include <config.h>
 #endif
 
-#include <utility>  // pair
-#include <algorithm>  // swap
 #include <glibmm/i18n.h>
+#include <gtkmm/label.h>
+#include <gtkmm/optionmenu.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/table.h>
 #include <gtkmm/menuitem.h>
 
 #include "ui/widget/scalar-unit.h"
@@ -198,54 +200,40 @@ void OrientationMenuItem::on_activate_item()
 //---------------------------------------------------
 
 PageSizer::PageSizer()
-: Gtk::VBox(false,4),
-  _hbox_size(false,4), _label_size(_("Page size:"), 1.0, 0.5), 
-  _hbox_orient(false,4), _label_orient(_("Page orientation"), 1.0, 0.5),
-  _frame(_("Custom size")), _table(4,2,false)
+: Gtk::VBox(false,4)
 {
-    pack_start (_hbox_size, false, false, 0);
-    _hbox_size.show();
-    _label_size.show();
-    _hbox_size.pack_start (_label_size, false, false, 0);
-    _omenu_size.show();
-    _hbox_size.pack_start (_omenu_size, true, true, 0);
-//    _menu_size.show()
+    Gtk::HBox *hbox_size = manage (new Gtk::HBox (false, 4));
+    pack_start (*hbox_size, false, false, 0);
+    Gtk::Label *label_size = manage (new Gtk::Label (_("Page size:"), 1.0, 0.5)); 
+    hbox_size->pack_start (*label_size, false, false, 0);
+    Gtk::OptionMenu *omenu_size = manage (new Gtk::OptionMenu);
+    hbox_size->pack_start (*omenu_size, true, true, 0);
+    Gtk::Menu *menu_size = manage (new Gtk::Menu);
 
     for (PaperSize const *paper = inkscape_papers; paper->name; paper++) {
         SizeMenuItem *item = manage (new SizeMenuItem (paper->name));
-        item->show();
-        _menu_size.append (*item);
+        menu_size->append (*item);
     }
-    SizeMenuItem *item = new SizeMenuItem (_("Custom"));
-    item->show();
-    _menu_size.prepend (*item);
-    _omenu_size.set_menu (_menu_size);
+    SizeMenuItem *item = manage (new SizeMenuItem (_("Custom")));
+    menu_size->prepend (*item);
+    omenu_size->set_menu (*menu_size);
 
-    pack_start (_hbox_orient, false, false, 0);
-    _hbox_orient.show();
-    _label_orient.show();
-    _hbox_orient.pack_start (_label_orient, false, false, 0);
-    _omenu_orient.show();
-    _hbox_orient.pack_start (_omenu_orient, true, true, 0);
-    _menu_orient.show();
+    Gtk::HBox *hbox_ori = manage (new Gtk::HBox (false, 4));
+    pack_start (*hbox_ori, false, false, 0);
+    Gtk::Label *label_ori = manage (new Gtk::Label (_("Page orientation:"), 1.0, 0.5)); 
+    hbox_ori->pack_start (*label_ori, false, false, 0);
+    Gtk::OptionMenu *omenu_ori = manage (new Gtk::OptionMenu);
+    hbox_ori->pack_start (*omenu_ori, true, true, 0);
+    Gtk::Menu *menu_ori = manage (new Gtk::Menu);
 
     OrientationMenuItem *oitem;
-    oitem = new OrientationMenuItem (_("Landscape"));
-    oitem->show();
-    _menu_orient.prepend (*oitem);
-    oitem = new OrientationMenuItem (_("Portrait"));
-    oitem->show();
-    _menu_orient.prepend (*oitem);
-    _omenu_orient.set_menu (_menu_orient);
+    oitem = manage (new OrientationMenuItem (_("Landscape")));
+    menu_ori->prepend (*oitem);
+    oitem = manage (new OrientationMenuItem (_("Portrait")));
+    menu_ori->prepend (*oitem);
+    omenu_ori->set_menu (*menu_ori);
 
-    /* Custom paper frame */
-    pack_start (_frame, false, false, 0);
-    _frame.show();
-    _table.set_border_width (4);
-    _table.set_row_spacings (4);
-    _table.set_col_spacings (4);
-    _table.show();
-    _frame.add (_table);
+    show_all_children();
 }
 
 PageSizer::~PageSizer()
@@ -255,6 +243,17 @@ PageSizer::~PageSizer()
 void
 PageSizer::init (Registry& reg)
 {
+    /* Custom paper frame */
+    Gtk::Frame *frame = manage (new Gtk::Frame(_("Custom size")));
+    pack_start (*frame, false, false, 0);
+    frame->show();
+    Gtk::Table *table = manage (new Gtk::Table (4, 2, false));
+    table->set_border_width (4);
+    table->set_row_spacings (4);
+    table->set_col_spacings (4);
+    table->show();
+    frame->add (*table);
+    
     _wr = reg;
 
     _rum.init (_("Units:"), "units", _wr);
@@ -272,13 +271,13 @@ PageSizer::init (Registry& reg)
     {
         if (arr[i])
         {
-            _table.attach (const_cast<Gtk::Widget&>(*arr[i]),   0, 1, r, r+1, 
+            table->attach (const_cast<Gtk::Widget&>(*arr[i]),   0, 1, r, r+1, 
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-            _table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 2, r, r+1, 
+            table->attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 2, r, r+1, 
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
         else
-            _table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 0, 2, r, r+1, 
+            table->attach (const_cast<Gtk::Widget&>(*arr[i+1]), 0, 2, r, r+1, 
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         ++r;
     }

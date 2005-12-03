@@ -18,10 +18,6 @@
 #define INKSCAPE_UI_WIDGET_PAGE_SIZER__H
 
 #include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/optionmenu.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/table.h>
 #include "ui/widget/registry.h"
 #include "ui/widget/registered-widget.h"
 
@@ -37,18 +33,6 @@ public:
     void init (Registry& reg);
 
 protected:
-    Gtk::HBox       _hbox_size;
-    Gtk::Label      _label_size;    
-    Gtk::OptionMenu _omenu_size;
-    Gtk::Menu       _menu_size;
-    //-----------------------------
-    Gtk::HBox       _hbox_orient;
-    Gtk::Label      _label_orient;    
-    Gtk::OptionMenu _omenu_orient;
-    Gtk::Menu       _menu_orient;
-    //-----------------------------
-    Gtk::Frame           _frame;
-    Gtk::Table           _table;
     RegisteredUnitMenu   _rum;
     RegisteredScalarUnit _rusw, _rush;
 
