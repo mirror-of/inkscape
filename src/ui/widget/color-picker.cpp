@@ -48,7 +48,7 @@ public:
 ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip, 
                           guint32 rgba, bool undo)
 : _preview(rgba), _window(0), 
-  _title(title), _rgba(rgba), _undo(undo)
+  _title(new Glib::ustring(title)), _rgba(rgba), _undo(undo)
 {
     set_relief (Gtk::RELIEF_NONE);
     _preview.show();
@@ -58,6 +58,7 @@ ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip,
 
 ColorPicker::~ColorPicker()
 {
+    delete _title;
     if (_window)
     {
         delete _window;
@@ -85,7 +86,7 @@ ColorPicker::on_clicked()
         return;
     }
 
-    _window =new ColorPickerWindow (this, _title);
+    _window =new ColorPickerWindow (this, *_title);
     _window->setRgba32 (_rgba);
     _window->show_all();
     _window->get_position (_x, _y);
@@ -103,7 +104,7 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
     float alpha;
     csel->base->getColorAlpha(color, &alpha);
     guint32 rgba = sp_color_get_rgba32_falpha(&color, alpha);
-
+    
     ColorPicker *ptr = static_cast<CPPointer*>((void*)cp)->ptr;
 
     (ptr->_preview).setRgba32 (rgba);

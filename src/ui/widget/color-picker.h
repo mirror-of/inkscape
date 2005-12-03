@@ -42,7 +42,7 @@ protected:
     Gtk::Tooltips       _tt;
     ColorPickerWindow   *_window;
     
-    const Glib::ustring& _title;
+    Glib::ustring       *_title;
     sigc::signal<void,guint32> _changed_signal;
     guint32             _rgba;
     bool                _undo;
