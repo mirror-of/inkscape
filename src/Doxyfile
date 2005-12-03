@@ -7,7 +7,13 @@
 # find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,	,;s,$,	\\,'
 # (and remove the non source files sp-skeleton.*).
 INPUT = \
+	application/application.cpp	\
+	application/application.h	\
+	application/editor.cpp	\
+	application/editor.h	\
 	arc-context.cpp	\
+	attributes.cpp	\
+	attributes.h	\
 	color-rgba.h	\
 	color.cpp	\
 	color.h	\
@@ -43,12 +49,19 @@ INPUT = \
 	extension/internal/gimpgrad.cpp	\
 	extension/internal/gimpgrad.h	\
 	extension/internal/grid.cpp	\
+	extension/internal/ps.cpp	\
+	extension/internal/ps.h	\
 	extension/parameter.cpp	\
 	extension/parameter.h	\
 	fill-or-stroke.h	\
 	gc-anchored.h	\
 	gc-managed.h	\
 	geom.cpp	\
+	geom.h	\
+	grid-snapper.cpp	\
+	grid-snapper.h	\
+	guide-snapper.cpp	\
+	guide-snapper.h	\
 	helper/action.cpp	\
 	helper/action.h	\
 	jabber_whiteboard/buddy-list-manager.h	\
@@ -95,11 +108,16 @@ INPUT = \
 	libnr/nr-pixblock.h	\
 	libnr/nr-point-matrix-ops.h	\
 	libnr/nr-point.h	\
+	libnr/nr-rect.h	\
 	libnr/nr-rotate-fns.cpp	\
 	libnr/nr-rotate-fns.h	\
 	libnr/nr-rotate.h	\
 	libnr/nr-scale-matrix-ops.h	\
 	libnr/nr-types.cpp	\
+	libnrtype/boundary-type.h	\
+	libnrtype/one-box.h	\
+	libnrtype/one-glyph.h	\
+	libnrtype/text-boundary.h	\
 	livarot/float-line.cpp	\
 	livarot/float-line.h	\
 	livarot/int-line.cpp	\
@@ -119,13 +137,18 @@ INPUT = \
 	pen-context.h	\
 	pencil-context.cpp	\
 	pencil-context.h	\
+	preferences.cpp	\
+	preferences.h	\
 	print.cpp	\
 	print.h	\
+	removeoverlap/remove_rectangle_overlap.h	\
 	selection.cpp	\
 	selection.h	\
 	shortcuts.cpp	\
 	snap.cpp	\
 	snap.h	\
+	snapper.cpp	\
+	snapper.h	\
 	sp-animation.cpp	\
 	sp-gradient-fns.h	\
 	sp-gradient.cpp	\
@@ -152,10 +175,33 @@ INPUT = \
 	svg-view-widget.h	\
 	svg-view.cpp	\
 	svg-view.h	\
+	ui/dialog/document-preferences.cpp	\
+	ui/dialog/document-preferences.h	\
+	ui/view/edit-widget-interface.h	\
 	ui/view/view-widget.cpp	\
 	ui/view/view-widget.h	\
 	ui/view/view.cpp	\
 	ui/view/view.h	\
+	ui/widget/color-picker.cpp	\
+	ui/widget/color-picker.h	\
+	ui/widget/color-preview.cpp	\
+	ui/widget/color-preview.h	\
+	ui/widget/entity-entry.cpp	\
+	ui/widget/entity-entry.h	\
+	ui/widget/licensor.cpp	\
+	ui/widget/licensor.h	\
+	ui/widget/page-sizer.cpp	\
+	ui/widget/page-sizer.h	\
+	ui/widget/registered-widget.cpp	\
+	ui/widget/registered-widget.h	\
+	ui/widget/registry.cpp	\
+	ui/widget/registry.h	\
+	ui/widget/ruler.cpp	\
+	ui/widget/ruler.h	\
+	ui/widget/svg-canvas.cpp	\
+	ui/widget/svg-canvas.h	\
+	ui/widget/zoom-status.cpp	\
+	ui/widget/zoom-status.h	\
 	undo-stack-observer.h	\
 	uri.cpp	\
 	uri.h	\
