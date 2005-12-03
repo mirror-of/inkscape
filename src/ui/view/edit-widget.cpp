@@ -245,8 +245,8 @@ EditWidget::onDialogAlignAndDistribute()
 void
 EditWidget::onDialogDocumentProperties()
 {
-    Inkscape::UI::Dialog::DocumentPreferences::create();
-//    _dlg_mgr.showDialog("DocumentPreferences");
+//    manage (Inkscape::UI::Dialog::DocumentPreferences::create());
+    _dlg_mgr.showDialog("DocumentPreferences");
 }
 
 void
