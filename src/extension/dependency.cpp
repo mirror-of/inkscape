@@ -78,6 +78,8 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
     _string = sp_repr_children(_repr)->content();
 
     _description = _repr->attribute("description");
+    if (_description == NULL)
+        _description = _repr->attribute("_description");
 
     return;
 }
@@ -245,7 +247,7 @@ operator<< (std::ostream &out_file, const Dependency & in_dep)
     out_file << _("  string: ") << in_dep._string << std::endl;
 
     if (in_dep._description != NULL) {
-        out_file << _("  description: ") << in_dep._description << std::endl;
+        out_file << _("  description: ") << _(in_dep._description) << std::endl;
     }
 
     return out_file;

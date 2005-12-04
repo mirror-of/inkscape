@@ -13,6 +13,7 @@
 
 #include <config.h>
 
+#include <glibmm/i18n.h>
 #include <gtk/gtkdialog.h>
 #include "verbs.h"
 
@@ -31,6 +32,8 @@ namespace Extension {
 
 class Effect : public Extension {
     static Effect * _last_effect;
+    static Inkscape::XML::Node * _effects_list;
+    bool find_effects_list (Inkscape::XML::Node * menustruct);
 
     class EffectVerb : public Inkscape::Verb {
         private:
@@ -47,12 +50,13 @@ class Effect : public Extension {
                        gchar const * tip,
                        gchar const * image,
                        Effect *      effect) :
-                    Verb(id, name, tip, image), _effect(effect) {
+                    Verb(id, _(name), _(tip), image), _effect(effect) {
                 /* No clue why, but this is required */
                 this->set_default_sensitive(true);
             }
     };
     EffectVerb _verb;
+    Inkscape::XML::Node * _menu_node;
 public:
                  Effect  (Inkscape::XML::Node * in_repr,
                           Implementation::Implementation * in_imp);

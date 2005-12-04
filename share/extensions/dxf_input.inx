@@ -1,13 +1,13 @@
 <inkscape-extension>
-    <name>DXF Input</name>
+    <_name>DXF Input</_name>
     <id>org.inkscape.input.dxf</id>
-    <dependency type="executable" description="dxf2svg may come with Inkscape, but is also at http://dxf-svg-convert.sourceforge.net/">dxf2svg</dependency>
+    <dependency type="executable" _description="dxf2svg may come with Inkscape, but is also at http://dxf-svg-convert.sourceforge.net/">dxf2svg</dependency>
     <dependency type="extension">org.inkscape.input.svg</dependency>
     <input>
         <extension>.dxf</extension>
         <mimetype>image/x-svgz</mimetype>
-        <filetypename>AutoCAD DXF (*.dxf)</filetypename>
-        <filetypetooltip>Import AutoCAD's Document Exchange Format</filetypetooltip>
+        <_filetypename>AutoCAD DXF (*.dxf)</_filetypename>
+        <_filetypetooltip>Import AutoCAD's Document Exchange Format</_filetypetooltip>
         <output_extension>org.inkscape.output.svg</output_extension>
     </input>
     <script>

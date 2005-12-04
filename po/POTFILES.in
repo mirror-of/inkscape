@@ -34,7 +34,6 @@ src/dialogs/stroke-style.cpp
 src/dialogs/swatches.cpp
 src/dialogs/text-edit.cpp
 src/dialogs/tiledialog.cpp
-src/dialogs/transformation.cpp
 src/dialogs/xml-tree.cpp
 src/dir-util.cpp
 src/display/bezier-utils.cpp
@@ -310,3 +309,37 @@ src/xml/repr-io.cpp
 src/xml/repr-util.cpp
 src/xml/repr.cpp
 src/zoom-context.cpp
+[type: gettext/xml] share/extensions/addnodes.inx
+[type: gettext/xml] share/extensions/ai_input.inx
+[type: gettext/xml] share/extensions/ai_output.inx
+[type: gettext/xml] share/extensions/dia.inx
+[type: gettext/xml] share/extensions/dots.inx
+[type: gettext/xml] share/extensions/dropshadow.inx
+[type: gettext/xml] share/extensions/dxf_input.inx
+[type: gettext/xml] share/extensions/dxf_output.inx
+[type: gettext/xml] share/extensions/embedimage.inx
+[type: gettext/xml] share/extensions/eps_input.inx
+[type: gettext/xml] share/extensions/epsi_output.inx
+[type: gettext/xml] share/extensions/ffmet.inx
+[type: gettext/xml] share/extensions/ffms.inx
+[type: gettext/xml] share/extensions/ffset.inx
+[type: gettext/xml] share/extensions/ffss.inx
+[type: gettext/xml] share/extensions/handles.inx
+[type: gettext/xml] share/extensions/interp.inx
+[type: gettext/xml] share/extensions/kochify.inx
+[type: gettext/xml] share/extensions/kochify_load.inx
+[type: gettext/xml] share/extensions/lindenmayer.inx
+[type: gettext/xml] share/extensions/motion.inx
+[type: gettext/xml] share/extensions/pdf_output.inx
+[type: gettext/xml] share/extensions/ps_input.inx
+[type: gettext/xml] share/extensions/radiusrand.inx
+[type: gettext/xml] share/extensions/rtree.inx
+[type: gettext/xml] share/extensions/sk_input.inx
+[type: gettext/xml] share/extensions/straightseg.inx
+[type: gettext/xml] share/extensions/summersnight.inx
+[type: gettext/xml] share/extensions/svgz_input.inx
+[type: gettext/xml] share/extensions/svgz_output.inx
+[type: gettext/xml] share/extensions/txt2svg.inx
+[type: gettext/xml] share/extensions/wavy.inx
+[type: gettext/xml] share/extensions/whirl.inx
+[type: gettext/xml] share/extensions/wmf_input.inx

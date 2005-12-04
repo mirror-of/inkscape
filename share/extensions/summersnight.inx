@@ -1,5 +1,5 @@
 <inkscape-extension>
-    <name>Summer's Night</name>
+    <_name>Summer's Night</_name>
     <id>org.ekips.filter.summersnight</id>
 	<dependency type="executable" location="extensions">summersnight.py</dependency>
 	<dependency type="executable" location="extensions">inkex.py</dependency>

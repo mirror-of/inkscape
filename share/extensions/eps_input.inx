@@ -1,13 +1,13 @@
 <inkscape-extension>
-    <name>EPS Input</name>
+    <_name>EPS Input</_name>
     <id>org.inkscape.input.eps</id>
     <dependency type="extension">org.inkscape.input.ps</dependency>
     <dependency type="executable">gs</dependency>
     <input>
         <extension>.eps</extension>
         <mimetype>image/x-encapsulated-postscript</mimetype>
-        <filetypename>Encapsulated Postscript (*.eps)</filetypename>
-        <filetypetooltip>Encapsulated Postscript</filetypetooltip>
+        <_filetypename>Encapsulated Postscript (*.eps)</_filetypename>
+        <_filetypetooltip>Encapsulated Postscript</_filetypetooltip>
         <output_extension>org.inkscape.output.eps</output_extension>
     </input>
     <script>

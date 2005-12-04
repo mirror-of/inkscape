@@ -289,6 +289,7 @@ public:
     { }
 }; /* ZoomVerb class */
 
+
 /** \brief A class to encompass all of the verbs which deal with
            dialog operations. */
 class DialogVerb : public Verb {
@@ -736,6 +737,9 @@ Verb::getbyid(gchar const *id)
     if (verb_found != _verb_ids.end()) {
         verb = verb_found->second;
     }
+
+    if (verb == NULL)
+        printf("Unable to find: %s\n", id);
 
     return verb;
 }
@@ -1474,9 +1478,11 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_DIALOG_DISPLAY:
             sp_display_dialog();
+            // dt->_dlg_mgr->showDialog("PrefInkscape");
             break;
         case SP_VERB_DIALOG_NAMEDVIEW:
             sp_desktop_dialog();
+            // dt->_dlg_mgr->showDialog("PrefDocument");
             break;
         case SP_VERB_DIALOG_FILL_STROKE:
             sp_object_properties_dialog();
@@ -1737,6 +1743,7 @@ SPActionEventVector ContextVerb::vector =
  */
 SPActionEventVector ZoomVerb::vector =
             {{NULL},ZoomVerb::perform, NULL, NULL, NULL};
+
 
 /**
  * Action vector to define functions called if a staticly defined dialog verb

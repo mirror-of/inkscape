@@ -1,5 +1,5 @@
 <inkscape-extension>
-    <name>Grid</name>
+    <_name>Grid</_name>
     <id>org.inkscape.effect.grid</id>
     <dependency type="plugin" location="plugins">grid</dependency>
     <param name="lineWidth" type="float">1.0</param>

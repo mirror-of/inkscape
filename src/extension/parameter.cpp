@@ -229,6 +229,8 @@ Parameter::make (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension *
     name = in_repr->attribute("name");
     type = in_repr->attribute("type");
     guitext = in_repr->attribute("gui-text");
+    if (guitext == NULL)
+        guitext = in_repr->attribute("_gui-text");
 
     /* In this case we just don't have enough information */
     if (name == NULL || type == NULL) {

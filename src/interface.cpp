@@ -745,30 +745,6 @@ sp_menu_append_recent_documents(GtkWidget *menu, Inkscape::UI::View::View* /* vi
     }
 }
 
-/** Creates the effects menu.
-    \param  menu  The menu to append to.
-    \param  doc   Document being used.
-    \param  view  The view of the document this is being attached to.
-*/
-static void
-sp_ui_effect_menu(GtkMenu *menu, SPDocument *doc, Inkscape::UI::View::View *view)
-{
-    Inkscape::Extension::DB::EffectList effectlist;
-    Inkscape::Extension::db.get_effect_list(effectlist);
-
-    for (Inkscape::Extension::DB::EffectList::iterator current_item = effectlist.begin();
-         current_item != effectlist.end(); current_item++) {
-        Inkscape::Extension::Effect *emod = *current_item;
-
-        Inkscape::Verb *verb = emod->get_verb();
-
-        if (verb != NULL)
-            sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
-    }
-
-    return;
-}
-
 void
 sp_ui_checkboxes_menus(GtkMenu *m, Inkscape::UI::View::View *view)
 {
@@ -866,10 +842,6 @@ sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI:
         }
         if (!strcmp(menu_pntr->name(), "recent-file-list")) {
             sp_menu_append_recent_documents(menu, view);
-            continue;
-        }
-        if (!strcmp(menu_pntr->name(), "effects-list")) {
-            sp_ui_effect_menu(GTK_MENU(menu), NULL, view);
             continue;
         }
         if (!strcmp(menu_pntr->name(), "objects-checkboxes")) {

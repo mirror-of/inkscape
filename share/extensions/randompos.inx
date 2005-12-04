@@ -1,5 +1,5 @@
 <inkscape-extension>
-    <name>Random Position</name>
+    <_name>Random Position</_name>
     <id>org.inkscape.effect.randompos</id>
     <dependency type="plugin" location="plugins">randompos</dependency>
     <effect>

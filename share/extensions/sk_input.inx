@@ -1,13 +1,13 @@
 <inkscape-extension>
-    <name>Sketch Input</name>
+    <_name>Sketch Input</_name>
     <id>org.inkscape.input.sk</id>
     <dependency type="executable" location="extensions">sk2svg.sh</dependency>
     <dependency type="executable">skconvert</dependency>
     <input>
         <extension>.sk</extension>
         <mimetype>application/x-sketch</mimetype>
-        <filetypename>Sketch Diagram (*.sk)</filetypename>
-        <filetypetooltip>A diagram created with the program Sketch</filetypetooltip>
+        <_filetypename>Sketch Diagram (*.sk)</_filetypename>
+        <_filetypetooltip>A diagram created with the program Sketch</_filetypetooltip>
     </input>
     <script>
         <command reldir="extensions">sk2svg.sh</command>

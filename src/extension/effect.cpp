@@ -7,6 +7,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "inkscape.h"
+#include "inkscape-private.h"
 #include "helper/action.h"
 #include "document.h"
 #include "prefdialog.h"
@@ -20,10 +22,23 @@ namespace Inkscape {
 namespace Extension {
 
 Effect * Effect::_last_effect = NULL;
+Inkscape::XML::Node * Effect::_effects_list = NULL;
 
 Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
-    : Extension(in_repr, in_imp), _verb(get_id(), get_name(), NULL, NULL, this)
+    : Extension(in_repr, in_imp), _verb(get_id(), get_name(), NULL, NULL, this), _menu_node(NULL)
 {
+    if (_effects_list == NULL)
+        find_effects_list(inkscape_get_menus(INKSCAPE));
+
+    if (_effects_list != NULL) {
+        _menu_node = sp_repr_new("verb");
+        _menu_node->setAttribute("verb-id", this->get_id(), false);
+        _effects_list->parent()->appendChild(_menu_node);
+        Inkscape::GC::release(_menu_node);
+    } /*else {
+        printf("Effect %s not added\n", get_name());
+    }*/
+
     return;
 }
 
@@ -37,7 +52,15 @@ Effect::~Effect (void)
 bool
 Effect::check (void)
 {
-    return Extension::check();
+    if (!Extension::check()) {
+        /** \todo  Check to see if parent has this as its only child,
+                   if so, delete it too */
+        if (_menu_node != NULL)
+            sp_repr_unparent(_menu_node);
+        _menu_node = NULL;
+        return false;
+    }
+    return true;
 }
 
 bool
@@ -105,6 +128,26 @@ Effect::set_last_effect (Effect * in_effect)
     return;
 }
 
+#define  EFFECTS_LIST  "effects-list"
+
+bool
+Effect::find_effects_list (Inkscape::XML::Node * menustruct)
+{
+    if (menustruct == NULL) return false;
+    for (Inkscape::XML::Node * child = menustruct;
+            child != NULL;
+            child = child->next()) {
+        if (!strcmp(child->name(), EFFECTS_LIST)) {
+            _effects_list = menustruct;
+            return true;
+        }
+        Inkscape::XML::Node * firstchild = child->firstChild();
+        if (firstchild != NULL)
+            if (find_effects_list(firstchild))
+                return true;
+    }
+    return false;
+}
 
 /** \brief  Create an action for a \c EffectVerb
     \param  view  Which view the action should be created for

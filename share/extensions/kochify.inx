@@ -1,5 +1,5 @@
 <inkscape-extension>
-    <name>Kochify</name>
+    <_name>Kochify</_name>
     <id>org.ekips.filter.kochify</id>
 	<dependency type="executable" location="extensions">kochify.py</dependency>
 	<dependency type="executable" location="extensions">inkex.py</dependency>

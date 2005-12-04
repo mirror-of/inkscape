@@ -1,5 +1,5 @@
 <inkscape-extension>
-    <name>Blur Edge</name>
+    <_name>Blur Edge</_name>
     <id>org.inkscape.effect.bluredge</id>
     <dependency type="plugin" location="plugins">bluredge</dependency>
     <param name="blur-width" type="float">1.0</param>

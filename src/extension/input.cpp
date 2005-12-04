@@ -55,23 +55,26 @@ Input::Input (Inkscape::XML::Node * in_repr, Implementation::Implementation * in
             if (!strcmp(child_repr->name(), "input")) {
                 child_repr = sp_repr_children(child_repr);
                 while (child_repr != NULL) {
-                    if (!strcmp(child_repr->name(), "extension")) {
+                    char const * chname = child_repr->name();
+                    if (chname[0] == '_') /* Allow _ for translation of tags */
+                        chname++;
+                    if (!strcmp(chname, "extension")) {
                         g_free (extension);
                         extension = g_strdup(sp_repr_children(child_repr)->content());
                     }
-                    if (!strcmp(child_repr->name(), "mimetype")) {
+                    if (!strcmp(chname, "mimetype")) {
                         g_free (mimetype);
                         mimetype = g_strdup(sp_repr_children(child_repr)->content());
                     }
-                    if (!strcmp(child_repr->name(), "filetypename")) {
+                    if (!strcmp(chname, "filetypename")) {
                         g_free (filetypename);
                         filetypename = g_strdup(sp_repr_children(child_repr)->content());
                     }
-                    if (!strcmp(child_repr->name(), "filetypetooltip")) {
+                    if (!strcmp(chname, "filetypetooltip")) {
                         g_free (filetypetooltip);
                         filetypetooltip = g_strdup(sp_repr_children(child_repr)->content());
                     }
-                    if (!strcmp(child_repr->name(), "output_extension")) {
+                    if (!strcmp(chname, "output_extension")) {
                         g_free (output_extension);
                         output_extension = g_strdup(sp_repr_children(child_repr)->content());
                     }

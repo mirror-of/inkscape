@@ -1,3 +1,44 @@
+2005-12-04  Ted Gould  <ted@gould.cx>
+
+	* po/POTFILES.in:
+
+	Adding the .inx files as [type: gettext/xml] so that they will get
+	translated.  Good stuff.
+
+	* share/extensions/addnodes.inx, share/extensions/ai_input.inx,
+	share/extensions/ai_output.inx, share/extensions/bluredge.inx,
+	share/extensions/dia.inx, share/extensions/dots.inx,
+	share/extensions/dropshadow.inx, share/extensions/dxf_input.inx,
+	share/extensions/dxf_output.inx, share/extensions/embedimage.inx,
+	share/extensions/eps_input.inx, share/extensions/epsi_output.inx,
+	share/extensions/ffmet.inx, share/extensions/ffms.inx,
+	share/extensions/ffset.inx, share/extensions/ffss.inx,
+	share/extensions/gimpgrad.inx, share/extensions/grid.inx,
+	share/extensions/handles.inx, share/extensions/interp.inx,
+	share/extensions/kochify.inx, share/extensions/kochify_load.inx,
+	share/extensions/lindenmayer.inx, share/extensions/motion.inx,
+	share/extensions/pdf_output.inx, share/extensions/ps_input.inx,
+	share/extensions/radiusrand.inx, share/extensions/randompnt.inx,
+	share/extensions/randompos.inx, share/extensions/rtree.inx,
+	share/extensions/sk_input.inx, share/extensions/straightseg.inx,
+	share/extensions/summersnight.inx, share/extensions/svgz_input.inx,
+	share/extensions/svgz_output.inx, share/extensions/txt2svg.inx,
+	share/extensions/wavy.inx, share/extensions/whirl.inx,
+	share/extensions/wmf_input.inx:
+
+	Marking the user visible strings as translatable.
+
+	* src/extension/dependency.cpp, src/extension/extension.cpp,
+	src/extension/init.cpp, src/extension/input.cpp, src/extension/output.cpp,
+	src/extension/parameter.cpp:
+
+	Changed to handle translated .inx files.  They will find the data, and
+	mark the right strings as translated.
+
+	* src/extension/effect.cpp, src/extension/effect.h, src/interface.cpp:
+
+	Changed menu handling to be push instead of pull
+
 2005-12-02  Carl Hetherington <inkscape@carlh.net>
 
 	* src/dropper-context.cpp: coding style.

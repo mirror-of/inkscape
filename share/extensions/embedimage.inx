@@ -1,5 +1,5 @@
 <inkscape-extension>
-    <name>Embed Images</name>
+    <_name>Embed Images</_name>
     <id>org.ekips.filter.embedimage</id>
 	<dependency type="executable" location="extensions">embedimage.py</dependency>
 	<dependency type="executable" location="extensions">inkex.py</dependency>
