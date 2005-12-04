@@ -31,9 +31,10 @@ public:
     Registry();
     ~Registry();
     
-    bool isUpdating();
-    void setUpdating (bool);
-    void add (const Glib::ustring&, const Gtk::Object*);
+    bool               isUpdating();
+    void               setUpdating (bool);
+    void               add (const Glib::ustring&, const Gtk::Object*);
+    const Gtk::Object *operator[] (const Glib::ustring&);
 
 protected:
     WMap _wmap;

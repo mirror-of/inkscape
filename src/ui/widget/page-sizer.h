@@ -1,10 +1,5 @@
 /** \file
- * \brief Widget for specifying page size.
- *
- * Part of Document Preferences dialog.
- *
- * \todo
- * This should be even finer granulated with the menus their own widget class.
+ * \brief Widget for specifying page size; part of Document Preferences dialog.
  *
  * Author:
  *   Ralf Stephan <ralf@ark.in-berlin.de>
@@ -21,6 +16,10 @@
 #include "ui/widget/registry.h"
 #include "ui/widget/registered-widget.h"
 
+namespace Gtk {
+    class OptionMenu;
+}
+
 namespace Inkscape {    
     namespace UI {
         namespace Widget {
@@ -31,11 +30,14 @@ public:
     PageSizer();
     virtual ~PageSizer();
     void init (Registry& reg);
+    void setDim (double w, double h);
 
 protected:
+    int find_paper_size (double w, double h);
+    
     RegisteredUnitMenu   _rum;
     RegisteredScalarUnit _rusw, _rush;
-
+    Gtk::OptionMenu *_omenu_size, *_omenu_ori;
     Registry _wr;
 };
 

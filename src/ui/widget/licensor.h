@@ -1,5 +1,6 @@
 /** \file
- * \brief 
+ * \brief Widget for specifying a document's license; part of document
+ * preferences dialog.
  *
  * Authors:
  *   Ralf Stephan <ralf@ark.in-berlin.de>
@@ -14,6 +15,8 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
+
+class SPDocument;
 
 namespace Gtk {
     class Tooltips;
@@ -32,6 +35,7 @@ public:
     Licensor();
     virtual ~Licensor();
     void init (Gtk::Tooltips&, Registry&);
+    void update (SPDocument *doc);
     Gtk::Frame _frame;
 
 protected: 

@@ -32,6 +32,7 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "dialogs/rdf.h"
+#include "helper/units.h"
 #include "application/editor.h"
 
 #include "inkscape.h"
@@ -59,6 +60,7 @@ DocumentPreferences::create()
 {
     if (_instance) return _instance;
     _instance = new DocumentPreferences;
+    _instance->init();
     return _instance;
 }
 
@@ -93,8 +95,12 @@ DocumentPreferences::DocumentPreferences()
     build_grid();
     build_guides();
     build_metadata();
+}
 
-//sp_dtw_update(dlg, SP_ACTIVE_DESKTOP);
+void
+DocumentPreferences::init()
+{
+    update();
 
 //sp_repr_add_listener(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), &docoptions_repr_events, dlg);
 
@@ -287,6 +293,76 @@ DocumentPreferences::build_metadata()
     /* add license selector pull-down and URI */
     _licensor.init (_tt, _wr);
     _page_metadata2.table().attach (_licensor._frame, 0,2, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+}
+
+/**
+ * Update dialog widgets from desktop.
+ */
+void
+DocumentPreferences::update()
+{
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    SPNamedView *nv = SP_DT_NAMEDVIEW(dt);
+    _wr.setUpdating (true);
+    set_sensitive (true);
+
+    //-----------------------------------------------------------page page
+    _rcp_bg.setRgba32 (nv->pagecolor);
+    _rcb_canb.setActive (nv->showborder);
+    _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
+    _rcp_bord.setRgba32 (nv->bordercolor);
+    _rcb_shad.setActive (nv->showpageshadow);
+    
+    if (nv->doc_units) 
+        _rum_deflt.setUnit (nv->doc_units);
+
+    double const doc_w_px = sp_document_width(SP_DT_DOCUMENT(dt));
+    double const doc_h_px = sp_document_height(SP_DT_DOCUMENT(dt));
+    _page_sizer.setDim (doc_w_px, doc_h_px);
+
+    //-----------------------------------------------------------grid page
+    _rcbgrid.setActive (nv->showgrid);
+    _rcbsnbb.setActive (nv->grid_snapper.getSnapTo(Snapper::BBOX_POINT));
+    _rcbsnnod.setActive (nv->grid_snapper.getSnapTo(Snapper::SNAP_POINT));
+    _rumg.setUnit (nv->gridunit);
+    
+    gdouble val;
+    val = nv->gridorigin[NR::X];
+    val = sp_pixels_get_units (val, *(nv->gridunit));
+    _rsu_ox.setValue (val);
+    val = nv->gridorigin[NR::Y];
+    val = sp_pixels_get_units (val, *(nv->gridunit));
+    _rsu_oy.setValue (val);
+    val = nv->gridspacing[NR::X];
+    val = sp_pixels_get_units (val, *(nv->gridunit));
+    _rsu_sx.setValue (val);
+    val = nv->gridspacing[NR::Y];
+    val = sp_pixels_get_units (val, *(nv->gridunit));
+    _rsu_sy.setValue (val);
+
+    _rums.setUnit (nv->gridtoleranceunit);
+    _rsu_sn.setValue (nv->gridtolerance);
+    _rcp_gcol.setRgba32 (nv->gridcolor);
+    _rcp_gmcol.setRgba32 (nv->gridempcolor);
+    _rsi.setValue (nv->gridempspacing);
+
+    //-----------------------------------------------------------guide page
+    _rcb_sgui.setActive (nv->showguides);
+    _rcb_snpgui.setActive (nv->guide_snapper.getSnapTo(Snapper::BBOX_POINT));
+    _rcb_snbgui.setActive (nv->guide_snapper.getSnapTo(Snapper::SNAP_POINT));
+    _rum_gusn.setUnit (nv->guidetoleranceunit);
+    _rsu_gusn.setValue (nv->guidetolerance);
+    _rcp_gui.setRgba32 (nv->guidecolor);
+    _rcp_hgui.setRgba32 (nv->guidehicolor);
+
+    //-----------------------------------------------------------meta pages
+    /* load the RDF entities */
+    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
+        (*it)->update (SP_ACTIVE_DOCUMENT);
+        
+    _licensor.update (SP_ACTIVE_DOCUMENT);
+
+    _wr.setUpdating (false);
 }
 
 } // namespace Dialog

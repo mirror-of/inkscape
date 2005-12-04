@@ -106,6 +106,11 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
     box->pack_start (_eentry->_label, false, false, 5);
     box->pack_start (*_eentry->_packable, true, true, 0);
 }
+    
+void 
+Licensor::update (SPDocument *doc)
+{
+}
 
 } // namespace Dialog
 } // namespace UI

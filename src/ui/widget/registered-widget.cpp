@@ -25,6 +25,7 @@
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/unit-menu.h"
 
+#include "helper/units.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
@@ -87,6 +88,12 @@ RegisteredCheckButton::getHBox()
     _packed = true;
     return _box;
 }
+    
+void
+RegisteredCheckButton::setActive (bool b)
+{
+    _button->set_active (b);
+}
 
 void
 RegisteredCheckButton::on_toggled()
@@ -137,6 +144,12 @@ RegisteredUnitMenu::init (const Glib::ustring& label, const Glib::ustring& key, 
     _wr->add (key, _sel);
 }
 
+void 
+RegisteredUnitMenu::setUnit (const SPUnit* unit)
+{
+    _sel->setUnit (sp_unit_get_abbreviation (unit));
+}
+
 RegisteredScalarUnit::RegisteredScalarUnit()
 : _widget(0), _um(0), _key(0)
 {
@@ -153,6 +166,9 @@ void
 RegisteredScalarUnit::init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, const RegisteredUnitMenu &rum, Registry& wr)
 {
     _widget = new ScalarUnit (label, tip, UNIT_TYPE_LINEAR, "", "", rum._sel);
+    _widget->initScalar (-1e6, 1e6);
+    _widget->setUnit (rum._sel->getUnitAbbr());
+    _widget->setDigits (2);
     _widget->show();
     _key = new Glib::ustring (key);
     _um = rum._sel;
@@ -165,6 +181,12 @@ ScalarUnit*
 RegisteredScalarUnit::getSU()
 {
     return _widget;
+}
+
+void 
+RegisteredScalarUnit::setValue (double val)
+{
+    _widget->setValue (val, _um->getUnitAbbr());
 }
 
 void
@@ -224,6 +246,12 @@ RegisteredColorPicker::init (const Glib::ustring& label, const Glib::ustring& ti
     _wr->add (ckey, _cp);
 }
 
+void 
+RegisteredColorPicker::setRgba32 (guint32 rgba)
+{
+    _cp->setRgba32 (rgba);
+}
+
 void
 RegisteredColorPicker::on_changed (guint32 rgba)
 {
@@ -275,6 +303,12 @@ RegisteredSuffixedInteger::init (const Glib::ustring& label, const Glib::ustring
     _changed_connection = _adj.signal_value_changed().connect (sigc::mem_fun(*this, &RegisteredSuffixedInteger::on_value_changed));
     _wr = &wr;
     _wr->add (key, &_adj);
+}
+
+void 
+RegisteredSuffixedInteger::setValue (int i)
+{
+    _adj.set_value (i);
 }
 
 void

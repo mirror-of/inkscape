@@ -90,6 +90,11 @@ EntityLineEntry::~EntityLineEntry()
     delete reinterpret_cast<Gtk::Entry*>(_packable);
 }
 
+void 
+EntityLineEntry::update (SPDocument *doc)
+{
+}
+
 void
 EntityLineEntry::on_changed()
 {
@@ -116,6 +121,11 @@ EntityMultiLineEntry::EntityMultiLineEntry (rdf_work_entity_t* ent, Gtk::Tooltip
 EntityMultiLineEntry::~EntityMultiLineEntry()
 {
     delete reinterpret_cast<Gtk::ScrolledWindow*>(_packable);
+}
+
+void 
+EntityMultiLineEntry::update (SPDocument *doc)
+{
 }
 
 void

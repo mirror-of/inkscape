@@ -45,6 +45,12 @@ Registry::add (const Glib::ustring& key, const Gtk::Object *o)
     _wmap[key] = o;
 }
 
+const Gtk::Object *
+Registry::operator[] (const Glib::ustring& key)
+{
+    return _wmap[key];
+}
+
 //====================================================
 
 

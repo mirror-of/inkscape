@@ -17,6 +17,7 @@
 # include <config.h>
 #endif
 
+#include <cmath>
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/optionmenu.h>
@@ -27,6 +28,7 @@
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/unit-menu.h"
 #include "helper/units.h"
+#include "util/units.h"
 #include "page-sizer.h"
 
 using std::pair;
@@ -206,8 +208,8 @@ PageSizer::PageSizer()
     pack_start (*hbox_size, false, false, 0);
     Gtk::Label *label_size = manage (new Gtk::Label (_("Page size:"), 1.0, 0.5)); 
     hbox_size->pack_start (*label_size, false, false, 0);
-    Gtk::OptionMenu *omenu_size = manage (new Gtk::OptionMenu);
-    hbox_size->pack_start (*omenu_size, true, true, 0);
+    _omenu_size = manage (new Gtk::OptionMenu);
+    hbox_size->pack_start (*_omenu_size, true, true, 0);
     Gtk::Menu *menu_size = manage (new Gtk::Menu);
 
     for (PaperSize const *paper = inkscape_papers; paper->name; paper++) {
@@ -216,14 +218,14 @@ PageSizer::PageSizer()
     }
     SizeMenuItem *item = manage (new SizeMenuItem (_("Custom")));
     menu_size->prepend (*item);
-    omenu_size->set_menu (*menu_size);
+    _omenu_size->set_menu (*menu_size);
 
     Gtk::HBox *hbox_ori = manage (new Gtk::HBox (false, 4));
     pack_start (*hbox_ori, false, false, 0);
     Gtk::Label *label_ori = manage (new Gtk::Label (_("Page orientation:"), 1.0, 0.5)); 
     hbox_ori->pack_start (*label_ori, false, false, 0);
-    Gtk::OptionMenu *omenu_ori = manage (new Gtk::OptionMenu);
-    hbox_ori->pack_start (*omenu_ori, true, true, 0);
+    _omenu_ori = manage (new Gtk::OptionMenu);
+    hbox_ori->pack_start (*_omenu_ori, true, true, 0);
     Gtk::Menu *menu_ori = manage (new Gtk::Menu);
 
     OrientationMenuItem *oitem;
@@ -231,7 +233,7 @@ PageSizer::PageSizer()
     menu_ori->prepend (*oitem);
     oitem = manage (new OrientationMenuItem (_("Portrait")));
     menu_ori->prepend (*oitem);
-    omenu_ori->set_menu (*menu_ori);
+    _omenu_ori->set_menu (*menu_ori);
 
     show_all_children();
 }
@@ -283,19 +285,29 @@ PageSizer::init (Registry& reg)
     }
 }
 
-#if 0
+void 
+PageSizer::setDim (double w, double h)
+{
+    _omenu_ori->set_history (w>h ? 1 : 0);
+    _omenu_size->set_history (1 + find_paper_size (w, h));
+    
+    Unit const& unit = _rum._sel->getUnit();
+    _rusw.setValue (w / unit.factor);
+    _rush.setValue (h / unit.factor);
+}
+
 /** 
  * Returns an index into inkscape_papers of a paper of the specified 
  * size (specified in px), or -1 if there's no such paper.
  */
-static int
-find_paper_size(double const w_px, double const h_px)
+int
+PageSizer::find_paper_size (double w, double h)
 {
     double given[2];
-    if ( w_px < h_px ) {
-        given[0] = w_px; given[1] = h_px;
+    if ( w < h ) {
+        given[0] = w; given[1] = h;
     } else {
-        given[0] = h_px; given[1] = w_px;
+        given[0] = h; given[1] = w;
     }
     g_return_val_if_fail(given[0] <= given[1], -1);
     for (unsigned i = 0; i < G_N_ELEMENTS(inkscape_papers) - 1; ++i) {
@@ -303,8 +315,8 @@ find_paper_size(double const w_px, double const h_px)
         double const i_sizes[2] = { sp_units_get_pixels(inkscape_papers[i].smaller, i_unit),
                                     sp_units_get_pixels(inkscape_papers[i].larger, i_unit) };
         g_return_val_if_fail(i_sizes[0] <= i_sizes[1], -1);
-        if ((fabs(given[0] - i_sizes[0]) <= .1) &&
-            (fabs(given[1] - i_sizes[1]) <= .1)   )
+        if ((std::abs(given[0] - i_sizes[0]) <= .1) &&
+            (std::abs(given[1] - i_sizes[1]) <= .1)   )
         {
             return (int) i;
         }
@@ -312,6 +324,7 @@ find_paper_size(double const w_px, double const h_px)
     return -1;
 }
 
+#if 0
 /**
  * Returns paper dimensions using specific unit and orientation.
  */

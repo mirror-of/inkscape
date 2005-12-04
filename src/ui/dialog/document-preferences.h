@@ -48,6 +48,8 @@ protected:
     void  build_grid();
     void  build_guides();
     void  build_metadata();
+    void  init();
+    void  update();
 
     Gtk::Tooltips _tt;
     Gtk::Notebook  _notebook;

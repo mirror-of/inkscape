@@ -12,6 +12,8 @@
 #ifndef INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 #define INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 
+class SPUnit;
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -26,6 +28,8 @@ public:
     RegisteredCheckButton();
     ~RegisteredCheckButton();
     void init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr);
+    void setActive (bool);
+
     Gtk::HBox& getHBox();
     Gtk::ToggleButton *_button;
     Gtk::Label *_label;
@@ -45,6 +49,7 @@ public:
     RegisteredUnitMenu();
     ~RegisteredUnitMenu();
     void init (const Glib::ustring& label, const Glib::ustring& key, Registry& wr);
+    void setUnit (const SPUnit*);
     Gtk::Label   *_label;
     UnitMenu     *_sel;
 
@@ -65,6 +70,7 @@ public:
             const RegisteredUnitMenu &rum,
             Registry& wr);
     ScalarUnit* getSU();
+    void setValue (double);
 
 protected:
     ScalarUnit   *_widget;
@@ -85,6 +91,7 @@ public:
             const Glib::ustring& ckey, 
             const Glib::ustring& akey,
             Registry& wr);
+    void setRgba32 (guint32);
 
     Gtk::Label *_label;
     ColorPicker *_cp;
@@ -103,6 +110,7 @@ public:
                const Glib::ustring& label2, 
                const Glib::ustring& key,
                Registry& wr);
+    void setValue (int);
     Gtk::Label *_label;
     Gtk::HBox _hbox;
 

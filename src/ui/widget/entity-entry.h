@@ -16,6 +16,7 @@
 #include <gtkmm/tooltips.h>
 
 struct rdf_work_entity_t;
+class SPDocument;
 
 namespace Gtk {
 class TextBuffer;
@@ -31,6 +32,7 @@ class EntityEntry {
 public:
     static EntityEntry* create (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr);
     virtual ~EntityEntry() = 0;
+    virtual void update (SPDocument *doc) = 0;
     Gtk::Label _label;
     Gtk::Widget *_packable;
 
@@ -46,6 +48,7 @@ class EntityLineEntry : public EntityEntry {
 public:
     EntityLineEntry (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr);
     ~EntityLineEntry();
+    void update (SPDocument *doc);
 
 protected:
     void on_changed();
@@ -55,6 +58,7 @@ class EntityMultiLineEntry : public EntityEntry {
 public:
     EntityMultiLineEntry (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr);
     ~EntityMultiLineEntry();
+    void update (SPDocument *doc);
 
 protected: 
     void on_changed();
