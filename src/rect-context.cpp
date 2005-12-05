@@ -45,7 +45,6 @@
 #include "xml/node-event-vector.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
-#include "selcue.h"
 
 static void sp_rect_context_class_init(SPRectContextClass *klass);
 static void sp_rect_context_init(SPRectContext *rect_context);

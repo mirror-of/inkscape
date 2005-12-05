@@ -38,7 +38,6 @@
 #include <glibmm/i18n.h>
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
-#include "selcue.h"
 #include "gradient-drag.h"
 #include "sp-gradient.h"
 #include "gradient-chemistry.h"
