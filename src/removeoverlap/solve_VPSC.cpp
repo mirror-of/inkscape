@@ -180,7 +180,7 @@ bool VPSC::constraintGraphIsCyclic(Variable *vs[], const int n) {
 			delete u;
 		}
 	}
-	for(int i=0;i<graph.size();i++) {
+	for(unsigned i=0; i<graph.size(); i++) {
 		delete graph[i];
 	}
 	return false;
@@ -237,7 +237,7 @@ bool VPSC::blockGraphIsCyclic() {
 			delete u;
 		}
 	}
-	for(int i=0;i<graph.size();i++) {
+	for(unsigned i=0; i<graph.size(); i++) {
 		delete graph[i];
 	}
 	return false;
