@@ -494,7 +494,7 @@ private :
         // xGap and yGap are the minimum space required between bounding rectangles.
         double const xGap = removeOverlapXGap.get_value();
         double const yGap = removeOverlapYGap.get_value();
-        removeoverlap((GSList *) SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList(),
+        removeoverlap(SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList(),
                       xGap, yGap);
 
         // restore compensation setting
