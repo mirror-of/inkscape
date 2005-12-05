@@ -242,27 +242,27 @@ options_selector ()
     gtk_widget_show (fb);
     gtk_container_add (GTK_CONTAINER (f), fb);
 
-    gint cue = prefs_get_int_attribute ("options.selcue", "value", SP_SELCUE_MARK);
+    gint cue = prefs_get_int_attribute ("options.selcue", "value", Inkscape::SelCue::MARK);
 
     b = sp_select_context_add_radio (
         NULL, fb, tt, _("None"),
-        _("No per-object selection indication"), NULL, SP_SELCUE_NONE, true,
-        cue == SP_SELCUE_NONE,
+        _("No per-object selection indication"), NULL, Inkscape::SelCue::NONE, true,
+        cue == Inkscape::SelCue::NONE,
         options_selcue_toggled
         );
 
     b = sp_select_context_add_radio (
         b, fb, tt, _("Mark"),
         _("Each selected object has a diamond mark in the top left corner"),
-        NULL, SP_SELCUE_MARK, true,
-        cue == SP_SELCUE_MARK,
+        NULL, Inkscape::SelCue::MARK, true,
+        cue == Inkscape::SelCue::MARK,
         options_selcue_toggled
         );
 
     sp_select_context_add_radio (
         b, fb, tt, _("Box"),
-        _("Each selected object displays its bounding box"), NULL, SP_SELCUE_BBOX, true,
-        cue == SP_SELCUE_BBOX,
+        _("Each selected object displays its bounding box"), NULL, Inkscape::SelCue::BBOX, true,
+        cue == Inkscape::SelCue::BBOX,
         options_selcue_toggled
         );
 
