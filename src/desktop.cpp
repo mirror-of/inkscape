@@ -79,6 +79,7 @@
 #include "libnr/nr-point-matrix-ops.h"
 #include "ui/dialog/dialog-manager.h"
 #include "xml/repr.h"
+#include "message-context.h"
 
 #ifdef WITH_INKBOARD
 #include "jabber_whiteboard/session-manager.h"
