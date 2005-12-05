@@ -30,6 +30,10 @@
 #define SP_IS_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_DRAW_CONTEXT))
 
 struct SPDrawAnchor;
+namespace Inkscape
+{
+  class Selection;
+}
 
 struct SPDrawContext : public SPEventContext{
     Inkscape::Selection *selection;

@@ -29,6 +29,10 @@
 #define SP_IS_CONNECTOR_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_CONNECTOR_CONTEXT))
 
 struct SPKnot;
+namespace Inkscape
+{
+  class Selection;
+}
 
 enum {
     SP_CONNECTOR_CONTEXT_IDLE,
