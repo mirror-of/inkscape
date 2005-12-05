@@ -20,7 +20,6 @@
 #include "document.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "selection.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "shortcuts.h"
@@ -51,6 +50,7 @@
 #include "zoom-context.h"
 #include "dropper-context.h"
 #include "connector-context.h"
+#include "message-context.h"
 
 #include "tools-switch.h"
 
