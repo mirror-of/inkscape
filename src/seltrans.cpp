@@ -1,4 +1,4 @@
-#define __SP_SELTRANS_C__
+#define __SELTRANS_C__
 
 /*
  * Helper object for transforming selected items
@@ -6,6 +6,7 @@
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
+ *   Carl Hetherington <inkscape@carlh.net>
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
@@ -61,25 +62,16 @@
 
 #include "isnan.h" //temp fix.  make sure included last
 
-static void sp_sel_trans_update_handles(SPSelTrans &seltrans);
-static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans);
-
 static void sp_remove_handles(SPKnot *knot[], gint num);
-static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num,
-                            gchar const *even_tip, gchar const *odd_tip);
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint32 state, gpointer data);
 static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *p, guint state, gboolean *data);
 
-static void sp_sel_trans_sel_changed(Inkscape::Selection *selection, gpointer data);
-static void sp_sel_trans_sel_modified(Inkscape::Selection *selection, guint flags, gpointer data);
-
 extern GdkPixbuf *handles[];
 
-static gboolean
-sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
+static gboolean sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
 {
     switch (event->type) {
         case GDK_MOTION_NOTIFY:
@@ -87,10 +79,12 @@ sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
         case GDK_KEY_PRESS:
             if (get_group0_keyval (&event->key) == GDK_space) {
                 /* stamping mode: both mode(show content and outline) operation with knot */
-                if (!SP_KNOT_IS_GRABBED(knot)) return FALSE;
+                if (!SP_KNOT_IS_GRABBED(knot)) {
+                    return FALSE;
+                }
                 SPDesktop *desktop = knot->desktop;
-                SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
-                sp_sel_trans_stamp(seltrans);
+                Inkscape::SelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
+                seltrans->stamp();
                 return TRUE;
             }
             break;
@@ -101,337 +95,310 @@ sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
     return FALSE;
 }
 
-SPSelTrans::SPSelTrans(SPDesktop *desktop) :
-    box(NR::Point(0,0), NR::Point(0,0)),
-    selcue(desktop),
+Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
+    _desktop(desktop),
+    _selcue(desktop),
+    _state(STATE_SCALE),
+    _show(SHOW_CONTENT),
+    _grabbed(false),
+    _show_handles(true),
+    _box(NR::Point(0,0), NR::Point(0,0)),
+    _chandle(NULL),
+    _stamp_cache(NULL),
     _message_context(desktop->messageStack())
 {
-    gint i;
-
-    g_return_if_fail(this != NULL);
     g_return_if_fail(desktop != NULL);
 
-    this->desktop = desktop;
-
-    this->state = SP_SELTRANS_STATE_SCALE;
-    this->show = SP_SELTRANS_SHOW_CONTENT;
-
-    this->grabbed = FALSE;
-    this->show_handles = TRUE;
-    for (i = 0; i < 8; i++) this->shandle[i] = NULL;
-    for (i = 0; i < 8; i++) this->rhandle[i] = NULL;
-    this->chandle = NULL;
-
-    sp_sel_trans_update_volatile_state(*this);
-
-    this->center = this->box.midpoint();
-
-    sp_sel_trans_update_handles(*this);
-
-    this->selection = SP_DT_SELECTION(desktop);
-
-    this->norm = sp_canvas_item_new(SP_DT_CONTROLS(desktop),
-                                    SP_TYPE_CTRL,
-                                    "anchor", GTK_ANCHOR_CENTER,
-                                    "mode", SP_CTRL_MODE_COLOR,
-                                    "shape", SP_CTRL_SHAPE_BITMAP,
-                                    "size", 13.0,
-                                    "filled", TRUE,
-                                    "fill_color", 0x00000000,
-                                    "stroked", TRUE,
-                                    "stroke_color", 0x000000a0,
-                                    "pixbuf", handles[12],
-                                    NULL);
-    this->grip = sp_canvas_item_new(SP_DT_CONTROLS(desktop),
-                                    SP_TYPE_CTRL,
-                                    "anchor", GTK_ANCHOR_CENTER,
-                                    "mode", SP_CTRL_MODE_XOR,
-                                    "shape", SP_CTRL_SHAPE_CROSS,
-                                    "size", 7.0,
-                                    "filled", TRUE,
-                                    "fill_color", 0xffffff7f,
-                                    "stroked", TRUE,
-                                    "stroke_color", 0xffffffff,
-                                    "pixbuf", handles[12],
-                                    NULL);
-    sp_canvas_item_hide(this->grip);
-    sp_canvas_item_hide(this->norm);
-
-    for (int i = 0;  i < 4; i++) {
-        this->l[i] = sp_canvas_item_new(SP_DT_CONTROLS(desktop), SP_TYPE_CTRLLINE, NULL);
-        sp_canvas_item_hide(this->l[i]);
+    for (int i = 0; i < 8; i++) {
+        _shandle[i] = NULL;
+        _rhandle[i] = NULL;
     }
 
-    this->stamp_cache = NULL;
+    _updateVolatileState();
 
-    _sel_changed_connection = this->selection->connectChanged(
-        sigc::bind(
-            sigc::ptr_fun(&sp_sel_trans_sel_changed),
-            (gpointer)this )
+    _center = _box.midpoint();
+
+    _updateHandles();
+
+    _selection = SP_DT_SELECTION(desktop);
+
+    _norm = sp_canvas_item_new(SP_DT_CONTROLS(desktop),
+                               SP_TYPE_CTRL,
+                               "anchor", GTK_ANCHOR_CENTER,
+                               "mode", SP_CTRL_MODE_COLOR,
+                               "shape", SP_CTRL_SHAPE_BITMAP,
+                               "size", 13.0,
+                               "filled", TRUE,
+                               "fill_color", 0x00000000,
+                               "stroked", TRUE,
+                               "stroke_color", 0x000000a0,
+                               "pixbuf", handles[12],
+                               NULL);
+    
+    _grip = sp_canvas_item_new(SP_DT_CONTROLS(desktop),
+                               SP_TYPE_CTRL,
+                               "anchor", GTK_ANCHOR_CENTER,
+                               "mode", SP_CTRL_MODE_XOR,
+                               "shape", SP_CTRL_SHAPE_CROSS,
+                               "size", 7.0,
+                               "filled", TRUE,
+                               "fill_color", 0xffffff7f,
+                               "stroked", TRUE,
+                               "stroke_color", 0xffffffff,
+                               "pixbuf", handles[12],
+                               NULL);
+    
+    sp_canvas_item_hide(_grip);
+    sp_canvas_item_hide(_norm);
+
+    for (int i = 0; i < 4; i++) {
+        _l[i] = sp_canvas_item_new(SP_DT_CONTROLS(desktop), SP_TYPE_CTRLLINE, NULL);
+        sp_canvas_item_hide(_l[i]);
+    }
+
+    _sel_changed_connection = _selection->connectChanged(
+        sigc::mem_fun(*this, &Inkscape::SelTrans::_selChanged)
         );
-    _sel_modified_connection = this->selection->connectModified(
-        sigc::bind(
-            sigc::ptr_fun(&sp_sel_trans_sel_modified),
-            (gpointer)this
-            )
+
+    _sel_modified_connection = _selection->connectModified(
+        sigc::mem_fun(*this, &Inkscape::SelTrans::_selModified)
         );
 }
 
-SPSelTrans::~SPSelTrans() {
-    this->_sel_changed_connection.disconnect();
-    this->_sel_modified_connection.disconnect();
+Inkscape::SelTrans::~SelTrans()
+{
+    _sel_changed_connection.disconnect();
+    _sel_modified_connection.disconnect();
 
-    for (unsigned i = 0; i < 8; i++) {
-        if (this->shandle[i]) {
-            g_object_unref(G_OBJECT(this->shandle[i]));
-            this->shandle[i] = NULL;
+    for (unsigned int i = 0; i < 8; i++) {
+        if (_shandle[i]) {
+            g_object_unref(G_OBJECT(_shandle[i]));
+            _shandle[i] = NULL;
         }
-        if (this->rhandle[i]) {
-            g_object_unref(G_OBJECT(this->rhandle[i]));
-            this->rhandle[i] = NULL;
+        if (_rhandle[i]) {
+            g_object_unref(G_OBJECT(_rhandle[i]));
+            _rhandle[i] = NULL;
         }
     }
-    if (this->chandle) {
-        g_object_unref(G_OBJECT(this->chandle));
-        this->chandle = NULL;
+    if (_chandle) {
+        g_object_unref(G_OBJECT(_chandle));
+        _chandle = NULL;
     }
 
-    if (this->norm) {
-        gtk_object_destroy(GTK_OBJECT(this->norm));
-        this->norm = NULL;
+    if (_norm) {
+        gtk_object_destroy(GTK_OBJECT(_norm));
+        _norm = NULL;
     }
-    if (this->grip) {
-        gtk_object_destroy(GTK_OBJECT(this->grip));
-        this->grip = NULL;
+    if (_grip) {
+        gtk_object_destroy(GTK_OBJECT(_grip));
+        _grip = NULL;
     }
     for (int i = 0; i < 4; i++) {
-        if (this->l[i]) {
-            gtk_object_destroy(GTK_OBJECT(this->l[i]));
-            this->l[i] = NULL;
+        if (_l[i]) {
+            gtk_object_destroy(GTK_OBJECT(_l[i]));
+            _l[i] = NULL;
         }
     }
 
-    for (unsigned i = 0; i < this->items.size(); i++) {
-        sp_object_unref(SP_OBJECT(this->items[i].first), NULL);
+    for (unsigned i = 0; i < _items.size(); i++) {
+        sp_object_unref(SP_OBJECT(_items[i].first), NULL);
     }
 
-    this->items.clear();
+    _items.clear();
 }
 
-void sp_sel_trans_reset_state(SPSelTrans *seltrans)
+void Inkscape::SelTrans::resetState()
 {
-    seltrans->state = SP_SELTRANS_STATE_SCALE;
+    _state = STATE_SCALE;
 }
 
-void sp_sel_trans_increase_state(SPSelTrans *seltrans)
+void Inkscape::SelTrans::increaseState()
 {
-    if (seltrans->state == SP_SELTRANS_STATE_SCALE) {
-        seltrans->state = SP_SELTRANS_STATE_ROTATE;
+    if (_state == STATE_SCALE) {
+        _state = STATE_ROTATE;
     } else {
-        seltrans->state = SP_SELTRANS_STATE_SCALE;
+        _state = STATE_SCALE;
     }
 
-    sp_sel_trans_update_handles(*seltrans);
+    _updateHandles();
 }
 
-void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
+void Inkscape::SelTrans::setCenter(NR::Point const &p)
 {
-    seltrans->center = p;
-
-    sp_sel_trans_update_handles(*seltrans);
+    _center = p;
+    _updateHandles();
 }
 
-void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles)
+void Inkscape::SelTrans::grab(NR::Point const &p, gdouble x, gdouble y, bool show_handles)
 {
-    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(_desktop);
 
-    g_return_if_fail(!seltrans->grabbed);
+    g_return_if_fail(!_grabbed);
 
-    seltrans->grabbed = TRUE;
-    seltrans->show_handles = show_handles;
-    sp_sel_trans_update_volatile_state(*seltrans);
+    _grabbed = true;
+    _show_handles = show_handles;
+    _updateVolatileState();
 
-    seltrans->changed = FALSE;
+    _changed = false;
 
-    if (seltrans->empty) return;
+    if (_empty) {
+        return;
+    }
 
     for (GSList const *l = selection->itemList(); l; l = l->next) {
         SPItem *it = (SPItem*)sp_object_ref(SP_OBJECT(l->data), NULL);
-        seltrans->items.push_back(std::pair<SPItem *, NR::Matrix>(it, sp_item_i2d_affine(it)));
+        _items.push_back(std::pair<SPItem *, NR::Matrix>(it, sp_item_i2d_affine(it)));
     }
 
-    seltrans->current.set_identity();
+    _current.set_identity();
 
-    seltrans->point = p;
+    _point = p;
 
-    seltrans->snap_points = selection->getSnapPointsConvexHull ();
-    seltrans->bbox_points = selection->getBBoxPoints ();
+    _snap_points = selection->getSnapPointsConvexHull();
+    _bbox_points = selection->getBBoxPoints();
 
     gchar const *scale_origin = prefs_get_string_attribute("tools.select", "scale_origin");
     bool const origin_on_bbox = (scale_origin == NULL || !strcmp(scale_origin, "bbox"));
-    NR::Rect op_box = seltrans->box;
-    if (origin_on_bbox == false && seltrans->snap_points.empty() == false) {
-        std::vector<NR::Point>::iterator i = seltrans->snap_points.begin();
+    NR::Rect op_box = _box;
+    if (origin_on_bbox == false && _snap_points.empty() == false) {
+        std::vector<NR::Point>::iterator i = _snap_points.begin();
         op_box = NR::Rect(*i, *i);
         i++;
-        while (i != seltrans->snap_points.end()) {
+        while (i != _snap_points.end()) {
             op_box.expandTo(*i);
             i++;
         }
     }
 
-    seltrans->opposite = ( op_box.min() + ( op_box.dimensions() * NR::scale(1-x, 1-y) ) );
+    _opposite = ( op_box.min() + ( op_box.dimensions() * NR::scale(1-x, 1-y) ) );
 
     if ((x != -1) && (y != -1)) {
-        sp_canvas_item_show(seltrans->norm);
-        sp_canvas_item_show(seltrans->grip);
+        sp_canvas_item_show(_norm);
+        sp_canvas_item_show(_grip);
     }
 
-    if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
+    if (_show == SHOW_OUTLINE) {
         for (int i = 0; i < 4; i++)
-            sp_canvas_item_show(seltrans->l[i]);
+            sp_canvas_item_show(_l[i]);
     }
 
 
-    sp_sel_trans_update_handles(*seltrans);
-    g_return_if_fail(seltrans->stamp_cache == NULL);
+    _updateHandles();
+    g_return_if_fail(_stamp_cache == NULL);
 }
 
-void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, NR::Point const &norm)
+void Inkscape::SelTrans::transform(NR::Matrix const &rel_affine, NR::Point const &norm)
 {
-    g_return_if_fail(seltrans->grabbed);
-    g_return_if_fail(!seltrans->empty);
+    g_return_if_fail(_grabbed);
+    g_return_if_fail(!_empty);
 
     NR::Matrix const affine( NR::translate(-norm) * rel_affine * NR::translate(norm) );
 
-    if (seltrans->show == SP_SELTRANS_SHOW_CONTENT) {
+    if (_show == SHOW_CONTENT) {
         // update the content
-        for (unsigned i = 0; i < seltrans->items.size(); i++) {
-            SPItem &item = *seltrans->items[i].first;
-            NR::Matrix const &prev_transform = seltrans->items[i].second;
+        for (unsigned i = 0; i < _items.size(); i++) {
+            SPItem &item = *_items[i].first;
+            NR::Matrix const &prev_transform = _items[i].second;
             sp_item_set_i2d_affine(&item, prev_transform * affine);
         }
     } else {
         NR::Point p[4];
         /* update the outline */
         for (unsigned i = 0 ; i < 4 ; i++) {
-            p[i] = seltrans->box.corner(i) * affine;
+            p[i] = _box.corner(i) * affine;
         }
         for (unsigned i = 0 ; i < 4 ; i++) {
-            sp_ctrlline_set_coords(SP_CTRLLINE(seltrans->l[i]),
-                                   p[i], p[(i+1)%4]);
+            sp_ctrlline_set_coords(SP_CTRLLINE(_l[i]), p[i], p[(i+1)%4]);
         }
     }
 
-    seltrans->current = affine;
-
-    seltrans->changed = TRUE;
-
-    sp_sel_trans_update_handles(*seltrans);
+    _current = affine;
+    _changed = true;
+    _updateHandles();
 }
 
-void sp_sel_trans_click(SPSelTrans *seltrans)
+void Inkscape::SelTrans::_centreTrans(Inkscape::XML::Node *current) const
 {
-
-       seltrans->center = seltrans->box.midpoint();
-
-        sp_document_done(SP_DT_DOCUMENT(seltrans->desktop));
-
-
-}
-
-void sp_centre_trans(Inkscape::XML::Node *current, SPSelTrans *seltrans)
-{
-	 double cx ,cy;
-	 NR::Point object_centre = NR::Point(0,0);
-	 for ( Inkscape::XML::Node *child = sp_repr_children(current) ; child ; child = sp_repr_next(child) ) {
-	 				sp_centre_trans(child, seltrans);
-			}
-	 cx = sp_repr_get_double_attribute (current, "inkscape:c_rx", 9999999);
-	 cy = sp_repr_get_double_attribute (current, "inkscape:c_ry", 9999999);
-	 if (cx!=9999999 ) {
-		 object_centre = NR::Point(cx,cy);
-		 object_centre *= seltrans->current;
-	     sp_repr_set_svg_double (current, "inkscape:c_rx", object_centre[NR::X]);
-	     sp_repr_set_svg_double (current, "inkscape:c_ry", object_centre[NR::Y]);
-	 }
+    for ( Inkscape::XML::Node *child = sp_repr_children(current) ; child ; child = sp_repr_next(child) ) {
+        _centreTrans(child);
+    }
+    double const cx = sp_repr_get_double_attribute(current, "inkscape:c_rx", 9999999);
+    double const cy = sp_repr_get_double_attribute(current, "inkscape:c_ry", 9999999);
+    if (cx != 9999999) {
+        NR::Point object_centre = NR::Point(cx, cy) * _current;
+        sp_repr_set_svg_double(current, "inkscape:c_rx", object_centre[NR::X]);
+        sp_repr_set_svg_double(current, "inkscape:c_ry", object_centre[NR::Y]);
+    }
  }
 
 
 
 
-void sp_sel_trans_ungrab(SPSelTrans *seltrans)
+void Inkscape::SelTrans::ungrab()
 {
-    g_return_if_fail(seltrans->grabbed);
+    g_return_if_fail(_grabbed);
 
-    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(_desktop);
 
     bool updh = true;
-    if (!seltrans->empty && seltrans->changed) {
-
-        sp_selection_apply_affine(selection, seltrans->current, (seltrans->show == SP_SELTRANS_SHOW_OUTLINE)? true : false);
-
-        seltrans->center *= seltrans->current;
-
-        sp_document_done(SP_DT_DOCUMENT(seltrans->desktop));
-
+    if (!_empty && _changed) {
+        sp_selection_apply_affine(selection, _current, (_show == SHOW_OUTLINE)? true : false);
+        _center *= _current;
+        sp_document_done(SP_DT_DOCUMENT(_desktop));
         updh = false;
     }
 
-
-
-    for (unsigned i = 0; i < seltrans->items.size(); i++)
+    for (unsigned i = 0; i < _items.size(); i++)
     {
-        Inkscape::XML::Node *current = SP_OBJECT_REPR(seltrans->items[i].first);
-        if (current!=NULL){
-
-            sp_centre_trans(current, seltrans);
+        Inkscape::XML::Node *current = SP_OBJECT_REPR(_items[i].first);
+        if (current != NULL) {
+            _centreTrans(current);
         }
 
-        sp_object_unref(SP_OBJECT(seltrans->items[i].first), NULL);
+        sp_object_unref(SP_OBJECT(_items[i].first), NULL);
     }
-    seltrans->items.clear();
+    _items.clear();
 
-    seltrans->grabbed = FALSE;
-    seltrans->show_handles = TRUE;
+    _grabbed = false;
+    _show_handles = true;
 
-    sp_canvas_item_hide(seltrans->norm);
-    sp_canvas_item_hide(seltrans->grip);
+    sp_canvas_item_hide(_norm);
+    sp_canvas_item_hide(_grip);
 
-    if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
+    if (_show == SHOW_OUTLINE) {
         for (int i = 0; i < 4; i++)
-            sp_canvas_item_hide(seltrans->l[i]);
+            sp_canvas_item_hide(_l[i]);
     }
 
-    sp_sel_trans_update_volatile_state(*seltrans);
+    _updateVolatileState();
     if (updh) {
-        sp_sel_trans_update_handles(*seltrans);
+        _updateHandles();
     }
-    if (seltrans->stamp_cache) {
-        g_slist_free(seltrans->stamp_cache);
-        seltrans->stamp_cache = NULL;
+    if (_stamp_cache) {
+        g_slist_free(_stamp_cache);
+        _stamp_cache = NULL;
     }
 
-    seltrans->_message_context.clear();
+    _message_context.clear();
 }
 
 /* fixme: This is really bad, as we compare positions for each stamp (Lauris) */
 /* fixme: IMHO the best way to keep sort cache would be to implement timestamping at last */
 
-void sp_sel_trans_stamp(SPSelTrans *seltrans)
+void Inkscape::SelTrans::stamp()
 {
-    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans->desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(_desktop);
 
     /* stamping mode */
-    if (!seltrans->empty) {
+    if (!_empty) {
         GSList *l;
-        if (seltrans->stamp_cache) {
-            l = seltrans->stamp_cache;
+        if (_stamp_cache) {
+            l = _stamp_cache;
         } else {
             /* Build cache */
             l  = g_slist_copy((GSList *) selection->itemList());
             l  = g_slist_sort(l, (GCompareFunc) sp_object_compare_position);
-            seltrans->stamp_cache = l;
+            _stamp_cache = l;
         }
 
         while (l) {
@@ -450,12 +417,12 @@ void sp_sel_trans_stamp(SPSelTrans *seltrans)
             // move to the saved position
             copy_repr->setPosition(pos > 0 ? pos : 0);
 
-            SPItem *copy_item = (SPItem *) SP_DT_DOCUMENT(seltrans->desktop)->getObjectByRepr(copy_repr);
+            SPItem *copy_item = (SPItem *) SP_DT_DOCUMENT(_desktop)->getObjectByRepr(copy_repr);
 
             NR::Matrix const *new_affine;
-            if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
+            if (_show == SHOW_OUTLINE) {
                 NR::Matrix const i2d(sp_item_i2d_affine(original_item));
-                NR::Matrix const i2dnew( i2d * seltrans->current );
+                NR::Matrix const i2dnew( i2d * _current );
                 sp_item_set_i2d_affine(copy_item, i2dnew);
                 new_affine = &copy_item->transform;
             } else {
@@ -467,25 +434,24 @@ void sp_sel_trans_stamp(SPSelTrans *seltrans)
             Inkscape::GC::release(copy_repr);
             l = l->next;
         }
-        sp_document_done(SP_DT_DOCUMENT(seltrans->desktop));
+        sp_document_done(SP_DT_DOCUMENT(_desktop));
     }
 }
 
-static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
+void Inkscape::SelTrans::_updateHandles()
 {
-    if ( !seltrans.show_handles
-         || seltrans.empty )
+    if ( !_show_handles || _empty )
     {
-        sp_remove_handles(seltrans.shandle, 8);
-        sp_remove_handles(seltrans.rhandle, 8);
-        sp_remove_handles(&seltrans.chandle, 1);
+        sp_remove_handles(_shandle, 8);
+        sp_remove_handles(_rhandle, 8);
+        sp_remove_handles(&_chandle, 1);
         return;
     }
 
     // center handle
-    if ( seltrans.chandle == NULL ) {
-        seltrans.chandle = sp_knot_new(seltrans.desktop);
-        g_object_set(G_OBJECT(seltrans.chandle),
+    if ( _chandle == NULL ) {
+        _chandle = sp_knot_new(_desktop);
+        g_object_set(G_OBJECT(_chandle),
                      "anchor", handle_center.anchor,
                      "shape", SP_CTRL_SHAPE_BITMAP,
                      "size", 13,
@@ -497,81 +463,78 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
                      "pixbuf", handles[handle_center.control],
                      "tip", _("<b>Center</b> of rotation and skewing: drag to reposition; scaling with Shift also uses this center"),
                      NULL);
-        g_signal_connect(G_OBJECT(seltrans.chandle), "request",
+        g_signal_connect(G_OBJECT(_chandle), "request",
                          G_CALLBACK(sp_sel_trans_handle_request), (gpointer) &handle_center);
-        g_signal_connect(G_OBJECT(seltrans.chandle), "moved",
+        g_signal_connect(G_OBJECT(_chandle), "moved",
                          G_CALLBACK(sp_sel_trans_handle_new_event), (gpointer) &handle_center);
-        g_signal_connect(G_OBJECT(seltrans.chandle), "grabbed",
+        g_signal_connect(G_OBJECT(_chandle), "grabbed",
                          G_CALLBACK(sp_sel_trans_handle_grab), (gpointer) &handle_center);
-        g_signal_connect(G_OBJECT(seltrans.chandle), "ungrabbed",
+        g_signal_connect(G_OBJECT(_chandle), "ungrabbed",
                          G_CALLBACK(sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
     }
 
-    sp_remove_handles(&seltrans.chandle, 1);
-    if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
-        sp_remove_handles(seltrans.rhandle, 8);
-        sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8,
-                        _("<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center"),
-                        _("<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center"));
+    sp_remove_handles(&_chandle, 1);
+    if ( _state == STATE_SCALE ) {
+        sp_remove_handles(_rhandle, 8);
+        _showHandles(_shandle, handles_scale, 8,
+                    _("<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center"),
+                    _("<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</b> to scale around rotation center"));
     } else {
-        sp_remove_handles(seltrans.shandle, 8);
-        sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8,
-                        _("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side"),
-                        _("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner"));
+        sp_remove_handles(_shandle, 8);
+        _showHandles(_rhandle, handles_rotate, 8,
+                    _("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side"),
+                    _("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner"));
     }
-    if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
-        sp_knot_hide(seltrans.chandle);
+    if ( _state == STATE_SCALE ) {
+        sp_knot_hide(_chandle);
     } else {
-         Inkscape::Selection *selection = (seltrans.desktop)->selection;
-         Inkscape::XML::Node  *current = selection->singleRepr();
-         if ((current!=NULL) && (sp_repr_get_double_attribute (current, "inkscape:c_rx", 99999999)!= 99999999)){
-            double cx = sp_repr_get_double_attribute (current, "inkscape:c_rx", seltrans.center[NR::X]);
-            double cy = sp_repr_get_double_attribute (current, "inkscape:c_ry", seltrans.center[NR::Y]);
-            NR::Point center = NR::Point(cx,cy);
-            seltrans.center = center;
+        Inkscape::Selection *selection = _desktop->selection;
+        Inkscape::XML::Node *current = selection->singleRepr();
+        if (current != NULL && sp_repr_get_double_attribute(current, "inkscape:c_rx", 99999999) != 99999999) {
+            double cx = sp_repr_get_double_attribute(current, "inkscape:c_rx", _center[NR::X]);
+            double cy = sp_repr_get_double_attribute(current, "inkscape:c_ry", _center[NR::Y]);
+            _center = NR::Point(cx, cy);
         }
-        sp_knot_show(seltrans.chandle);
-        sp_knot_moveto (seltrans.chandle, &seltrans.center);
+        sp_knot_show(_chandle);
+        sp_knot_moveto(_chandle, &_center);
     }
 }
 
-static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)
+void Inkscape::SelTrans::_updateVolatileState()
 {
-    Inkscape::Selection *selection = SP_DT_SELECTION(seltrans.desktop);
-    seltrans.empty = selection->isEmpty();
+    Inkscape::Selection *selection = SP_DT_SELECTION(_desktop);
+    _empty = selection->isEmpty();
 
-    if (seltrans.empty) {
+    if (_empty) {
         return;
     }
 
-    seltrans.box = selection->bounds();
-    if (seltrans.box.isEmpty()) {
-        seltrans.empty = TRUE;
+    _box = selection->bounds();
+    if (_box.isEmpty()) {
+        _empty = true;
         return;
     }
 
-    seltrans.current.set_identity();
+    _current.set_identity();
 }
 
 static void sp_remove_handles(SPKnot *knot[], gint num)
 {
-    gint i;
-
-    for (i = 0; i < num; i++) {
+    for (int i = 0; i < num; i++) {
         if (knot[i] != NULL) {
             sp_knot_hide(knot[i]);
         }
     }
 }
 
-static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num,
-                            gchar const *even_tip, gchar const *odd_tip)
+void Inkscape::SelTrans::_showHandles(SPKnot *knot[], SPSelTransHandle const handle[], gint num,
+                             gchar const *even_tip, gchar const *odd_tip)
 {
-    g_return_if_fail( !seltrans.empty );
+    g_return_if_fail( !_empty );
 
-    for (gint i = 0; i < num; i++) {
+    for (int i = 0; i < num; i++) {
         if (knot[i] == NULL) {
-            knot[i] = sp_knot_new(seltrans.desktop);
+            knot[i] = sp_knot_new(_desktop);
             g_object_set(G_OBJECT(knot[i]),
                          "anchor", handle[i].anchor,
                          "shape", SP_CTRL_SHAPE_BITMAP,
@@ -598,142 +561,141 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
         sp_knot_show(knot[i]);
 
         NR::Point const handle_pt(handle[i].x, handle[i].y);
-        NR::Point p( seltrans.box.min()
-                     + ( seltrans.box.dimensions()
+        NR::Point p( _box.min()
+                     + ( _box.dimensions()
                          * NR::scale(handle_pt) ) );
 
-        sp_knot_moveto (knot[i], &p);
+        sp_knot_moveto(knot[i], &p);
     }
 }
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data)
 {
-    SPDesktop *desktop = knot->desktop;
-    SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
-    SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
-
-    switch (handle.anchor) {
-        case GTK_ANCHOR_CENTER:
-            g_object_set(G_OBJECT(seltrans->grip),
-                         "shape", SP_CTRL_SHAPE_BITMAP,
-                         "size", 13.0,
-                         NULL);
-            sp_canvas_item_show(seltrans->grip);
-            break;
-        default:
-            g_object_set(G_OBJECT(seltrans->grip),
-                         "shape", SP_CTRL_SHAPE_CROSS,
-                         "size", 7.0,
-                         NULL);
-            sp_canvas_item_show(seltrans->norm);
-            sp_canvas_item_show(seltrans->grip);
-
-            break;
-    }
-
-    sp_sel_trans_grab(seltrans, sp_knot_position(knot), handle.x, handle.y, FALSE);
+    SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleGrab(
+        knot, state, *(SPSelTransHandle const *) data
+        );
 }
 
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data)
 {
-    SPDesktop *desktop = knot->desktop;
-    SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
-
-    sp_sel_trans_ungrab(seltrans);
+    SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->ungrab();
 }
 
 static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint state, gpointer data)
+{
+    SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleNewEvent(
+        knot, position, state, *(SPSelTransHandle const *) data
+        );
+}
+
+static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, guint state, gboolean *data)
+{
+    return SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleRequest(
+        knot, position, state, *(SPSelTransHandle const *) data
+        );
+}
+
+void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint state, SPSelTransHandle const &handle)
+{
+    switch (handle.anchor) {
+        case GTK_ANCHOR_CENTER:
+            g_object_set(G_OBJECT(_grip),
+                         "shape", SP_CTRL_SHAPE_BITMAP,
+                         "size", 13.0,
+                         NULL);
+            sp_canvas_item_show(_grip);
+            break;
+        default:
+            g_object_set(G_OBJECT(_grip),
+                         "shape", SP_CTRL_SHAPE_CROSS,
+                         "size", 7.0,
+                         NULL);
+            sp_canvas_item_show(_norm);
+            sp_canvas_item_show(_grip);
+
+            break;
+    }
+
+    grab(sp_knot_position(knot), handle.x, handle.y, FALSE);
+}
+
+
+void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, NR::Point *position, guint state, SPSelTransHandle const &handle)
 {
     if (!SP_KNOT_IS_GRABBED(knot)) {
         return;
     }
 
-    SPDesktop *desktop = knot->desktop;
-    SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
-
     // in case items have been unhooked from the document, don't
     // try to continue processing events for them.
-    for (unsigned i = 0; i < seltrans->items.size(); i++) {
-        if (!SP_OBJECT_DOCUMENT(SP_OBJECT(seltrans->items[i].first)) ) {
+    for (unsigned int i = 0; i < _items.size(); i++) {
+        if (!SP_OBJECT_DOCUMENT(SP_OBJECT(_items[i].first)) ) {
             return;
         }
     }
 
-    SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
-    handle.action(seltrans, handle, *position, state);
+    handle.action(this, handle, *position, state);
 }
 
-/* fixme: Highly experimental test :) */
 
-static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, guint state, gboolean *data)
+gboolean Inkscape::SelTrans::handleRequest(SPKnot *knot, NR::Point *position, guint state, SPSelTransHandle const &handle)
 {
-    using NR::X;
-    using NR::Y;
+    if (!SP_KNOT_IS_GRABBED(knot)) {
+        return TRUE;
+    }
 
-    if (!SP_KNOT_IS_GRABBED(knot)) return TRUE;
+    knot->desktop->set_coordinate_status(*position);
+    knot->desktop->setPosition(*position);
 
-    SPDesktop *desktop = knot->desktop;
-    SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
-    SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
-
-    desktop->set_coordinate_status(*position);
-    desktop->setPosition (*position);
-
+    
     if (state & GDK_MOD1_MASK) {
-        NR::Point const &point = seltrans->point;
-        *position = point + ( *position - point ) / 10;
+        *position = _point + ( *position - _point ) / 10;
     }
 
-    if (!(state & GDK_SHIFT_MASK) == !(seltrans->state == SP_SELTRANS_STATE_ROTATE)) {
-        seltrans->origin = seltrans->opposite;
+    if (!(state & GDK_SHIFT_MASK) == !(_state == STATE_ROTATE)) {
+        _origin = _opposite;
     } else {
-        seltrans->origin = seltrans->center;
+        _origin = _center;
     }
-    if (handle.request(seltrans, handle, *position, state)) {
+    if (handle.request(this, handle, *position, state)) {
         sp_knot_set_position(knot, position, state);
-        SP_CTRL(seltrans->grip)->moveto(*position);
-        SP_CTRL(seltrans->norm)->moveto(seltrans->origin);
+        SP_CTRL(_grip)->moveto(*position);
+        SP_CTRL(_norm)->moveto(_origin);
     }
 
     return TRUE;
 }
 
-static void sp_sel_trans_sel_changed(Inkscape::Selection *selection, gpointer data)
-{
-    SPSelTrans *seltrans = (SPSelTrans *) data;
 
-    if (!seltrans->grabbed) {
-        sp_sel_trans_update_volatile_state(*seltrans);
-        seltrans->center = seltrans->box.midpoint();
-        sp_sel_trans_update_handles(*seltrans);
+void Inkscape::SelTrans::_selChanged(Inkscape::Selection *selection)
+{
+    if (!_grabbed) {
+        _updateVolatileState();
+        _center = _box.midpoint();
+        _updateHandles();
     }
 }
 
-static void
-sp_sel_trans_sel_modified(Inkscape::Selection *selection, guint flags, gpointer data)
+void Inkscape::SelTrans::_selModified(Inkscape::Selection *selection, guint flags)
 {
-    SPSelTrans *seltrans;
-
-    seltrans = (SPSelTrans *) data;
-
-    if (!seltrans->grabbed) {
-        sp_sel_trans_update_volatile_state(*seltrans);
+    if (!_grabbed) {
+        _updateVolatileState();
 
         if (
              (flags != (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) &&
              (flags != SP_OBJECT_PARENT_MODIFIED_FLAG) &&
              (flags != SP_OBJECT_CHILD_MODIFIED_FLAG) &&
-             !seltrans->changed) {
-            // Only reset center if object itself is modified (not style, parent or child), and this is not a local change by seltrans
+             !_changed) {
+            // Only reset center if object itself is modified (not style, parent or child),
+            // and this is not a local change by seltrans
             // (still annoyingly recenters on keyboard transforms, fixme)
-            seltrans->center = seltrans->box.midpoint();
+            _center = _box.midpoint();
         }
 
         // reset internal flag
-        seltrans->changed = FALSE;
+        _changed = false;
 
-        // Update the handles
-        sp_sel_trans_update_handles(*seltrans);
+        _updateHandles();
     }
 }
 
@@ -749,32 +711,55 @@ static double sign(double const x)
              : 1 );
 }
 
-gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+gboolean sp_sel_trans_scale_request(Inkscape::SelTrans *seltrans,
+                                    SPSelTransHandle const &, NR::Point &pt, guint state)
+{
+    return seltrans->scaleRequest(pt, state);
+}
+
+gboolean sp_sel_trans_stretch_request(Inkscape::SelTrans *seltrans,
+                                      SPSelTransHandle const &handle, NR::Point &pt, guint state)
+{
+    return seltrans->stretchRequest(handle, pt, state);
+}
+
+gboolean sp_sel_trans_skew_request(Inkscape::SelTrans *seltrans,
+                                   SPSelTransHandle const &handle, NR::Point &pt, guint state)
+{
+    return seltrans->skewRequest(handle, pt, state);
+}
+
+gboolean sp_sel_trans_rotate_request(Inkscape::SelTrans *seltrans,
+                                     SPSelTransHandle const &, NR::Point &pt, guint state)
+{
+    return seltrans->rotateRequest(pt, state);
+}
+
+gboolean sp_sel_trans_center_request(Inkscape::SelTrans *seltrans,
+                                     SPSelTransHandle const &, NR::Point &pt, guint state)
+{
+    return seltrans->centerRequest(pt, state);
+}
+
+gboolean Inkscape::SelTrans::scaleRequest(NR::Point &pt, guint state)
 {
     using NR::X;
     using NR::Y;
 
-    SPDesktop *desktop = seltrans->desktop;
-
-    /* Original position of the scale knot */
-    NR::Point point = seltrans->point;
-    /* Origin for scaling */
-    NR::Point const norm(seltrans->origin);
-
-    NR::Point d = point - norm;
+    NR::Point d = _point - _origin;
     NR::scale s(0, 0);
 
     /* Work out the new scale factors `s' */
     for ( unsigned int i = 0 ; i < 2 ; i++ ) {
         if ( fabs(d[i]) > 0.001 ) {
-            s[i] = ( pt[i] - norm[i] ) / d[i];
+            s[i] = ( pt[i] - _origin[i] ) / d[i];
             if ( fabs(s[i]) < 1e-9 ) {
                 s[i] = 1e-9;
             }
         }
     }
 
-    if ((state & GDK_CONTROL_MASK) || desktop->isToolboxButtonActive ("lock")) {
+    if ((state & GDK_CONTROL_MASK) || _desktop->isToolboxButtonActive ("lock")) {
         /* Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y] */
 
         NR::Dim2 locked_dim;
@@ -789,12 +774,12 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
         }
 
         /* Snap the scale factor */
-        std::pair<double, bool> bb = namedview_vector_snap_list(desktop->namedview,
-                                                                Snapper::BBOX_POINT, seltrans->bbox_points,
-                                                                norm, s);
-        std::pair<double, bool> sn = namedview_vector_snap_list(desktop->namedview,
-                                                                Snapper::SNAP_POINT, seltrans->snap_points,
-                                                                norm, s);
+        std::pair<double, bool> bb = namedview_vector_snap_list(_desktop->namedview,
+                                                                Snapper::BBOX_POINT, _bbox_points,
+                                                                _origin, s);
+        std::pair<double, bool> sn = namedview_vector_snap_list(_desktop->namedview,
+                                                                Snapper::SNAP_POINT, _snap_points,
+                                                                _origin, s);
 
         double bd = bb.second ? fabs(bb.first - s[locked_dim]) : NR_HUGE;
         double sd = sn.second ? fabs(sn.first - s[locked_dim]) : NR_HUGE;
@@ -807,12 +792,12 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
     } else {
         /* Scale aspect ratio is unlocked */
         for ( unsigned int i = 0 ; i < 2 ; i++ ) {
-            std::pair<double, bool> bb = namedview_dim_snap_list_scale(desktop->namedview,
-                                                                       Snapper::BBOX_POINT, seltrans->bbox_points,
-                                                                       norm, s[i], NR::Dim2(i));
-            std::pair<double, bool> sn = namedview_dim_snap_list_scale(desktop->namedview,
-                                                                       Snapper::SNAP_POINT, seltrans->snap_points,
-                                                                       norm, s[i], NR::Dim2(i));
+            std::pair<double, bool> bb = namedview_dim_snap_list_scale(_desktop->namedview,
+                                                                       Snapper::BBOX_POINT, _bbox_points,
+                                                                       _origin, s[i], NR::Dim2(i));
+            std::pair<double, bool> sn = namedview_dim_snap_list_scale(_desktop->namedview,
+                                                                       Snapper::SNAP_POINT, _snap_points,
+                                                                       _origin, s[i], NR::Dim2(i));
 
             /* Pick the snap that puts us closest to the original scale */
             NR::Coord bd = bb.second ? fabs(bb.first - s[i]) : NR_HUGE;
@@ -822,25 +807,20 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
     }
 
     /* Update the knot position */
-    pt = ( point - norm ) * s + norm;
+    pt = ( _point - _origin ) * s + _origin;
 
     /* Status text */
-    seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
-                                    _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
-                                    100 * s[NR::X], 100 * s[NR::Y]);
+    _message_context.setF(Inkscape::NORMAL_MESSAGE,
+                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
+                          100 * s[NR::X], 100 * s[NR::Y]);
 
     return TRUE;
 }
 
-gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
+gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, NR::Point &pt, guint state)
 {
     using NR::X;
     using NR::Y;
-
-    SPDesktop *desktop = seltrans->desktop;
-
-    NR::Point point = seltrans->point;
-    NR::Point const norm(seltrans->origin);
 
     NR::Dim2 axis, perp;
 
@@ -860,25 +840,25 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
             return TRUE;
     };
 
-    if ( fabs( point[axis] - norm[axis] ) < 1e-15 ) {
+    if ( fabs( _point[axis] - _origin[axis] ) < 1e-15 ) {
         return FALSE;
     }
 
     NR::scale s(1, 1);
-    s[axis] = ( ( pt[axis] - norm[axis] )
-                / ( point[axis] - norm[axis] ) );
+    s[axis] = ( ( pt[axis] - _origin[axis] )
+                / ( _point[axis] - _origin[axis] ) );
     if ( fabs(s[axis]) < 1e-15 ) {
         s[axis] = 1e-15;
     }
     if ( state & GDK_CONTROL_MASK ) {
         s[perp] = fabs(s[axis]);
 
-        std::pair<double, bool> sn = namedview_vector_snap_list(desktop->namedview,
+        std::pair<double, bool> sn = namedview_vector_snap_list(_desktop->namedview,
                                                                 Snapper::BBOX_POINT,
-                                                                seltrans->bbox_points, norm, s);
-        std::pair<double, bool> bb = namedview_vector_snap_list(desktop->namedview,
+                                                                _bbox_points, _origin, s);
+        std::pair<double, bool> bb = namedview_vector_snap_list(_desktop->namedview,
                                                                 Snapper::SNAP_POINT,
-                                                                seltrans->snap_points, norm, s);
+                                                                _snap_points, _origin, s);
 
         double bd = bb.second ? fabs(bb.first - s[axis]) : NR_HUGE;
         double sd = sn.second ? fabs(sn.first - s[axis]) : NR_HUGE;
@@ -887,10 +867,10 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
         s[axis] = fabs(ratio) * sign(s[axis]);
         s[perp] = fabs(s[axis]);
     } else {
-        std::pair<NR::Coord, bool> bb = namedview_dim_snap_list_scale(desktop->namedview, Snapper::BBOX_POINT,
-                                                                      seltrans->bbox_points, norm, s[axis], axis);
-        std::pair<NR::Coord, bool> sn = namedview_dim_snap_list_scale(desktop->namedview, Snapper::SNAP_POINT,
-                                                                      seltrans->snap_points, norm, s[axis], axis);
+        std::pair<NR::Coord, bool> bb = namedview_dim_snap_list_scale(_desktop->namedview, Snapper::BBOX_POINT,
+                                                                      _bbox_points, _origin, s[axis], axis);
+        std::pair<NR::Coord, bool> sn = namedview_dim_snap_list_scale(_desktop->namedview, Snapper::SNAP_POINT,
+                                                                      _snap_points, _origin, s[axis], axis);
 
         /* Pick the snap that puts us closest to the original scale */
         NR::Coord bd = bb.second ? fabs(bb.first - s[axis]) : NR_HUGE;
@@ -898,21 +878,21 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
         s[axis] = (bd < sd) ? bb.first : sn.first;
     }
 
-    pt = ( point - norm ) * NR::scale(s) + norm;
+    pt = ( _point - _origin ) * NR::scale(s) + _origin;
     if (isNaN(pt[X] + pt[Y])) {
         g_warning("point=(%g, %g), norm=(%g, %g), s=(%g, %g)\n",
-                  point[X], point[Y], norm[X], norm[Y], s[X], s[Y]);
+                  _point[X], _point[Y], _origin[X], _origin[Y], s[X], s[Y]);
     }
 
     // status text
-    seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
-                                    _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
-                                    100 * s[NR::X], 100 * s[NR::Y]);
+    _message_context.setF(Inkscape::NORMAL_MESSAGE,
+                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
+                          100 * s[NR::X], 100 * s[NR::Y]);
 
     return TRUE;
 }
 
-gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
+gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, NR::Point &pt, guint state)
 {
     using NR::X;
     using NR::Y;
@@ -920,11 +900,6 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
     if (handle.cursor != GDK_SB_V_DOUBLE_ARROW && handle.cursor != GDK_SB_H_DOUBLE_ARROW) {
         return FALSE;
     }
-
-    SPDesktop *desktop = seltrans->desktop;
-
-    NR::Point const point(seltrans->point);
-    NR::Point const norm(seltrans->origin);
 
     NR::Dim2 dim_a;
     NR::Dim2 dim_b;
@@ -939,13 +914,13 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
     double skew[2];
     double s[2] = { 1.0, 1.0 };
 
-    if (fabs(point[dim_a] - norm[dim_a]) < NR_EPSILON) {
+    if (fabs(_point[dim_a] - _origin[dim_a]) < NR_EPSILON) {
         return FALSE;
     }
 
-    skew[dim_a] = ( pt[dim_b] - point[dim_b] ) / ( point[dim_a] - norm[dim_a] );
+    skew[dim_a] = ( pt[dim_b] - _point[dim_b] ) / ( _point[dim_a] - _origin[dim_a] );
 
-    s[dim_a] = ( pt[dim_a] - norm[dim_a] ) / ( point[dim_a] - norm[dim_a] );
+    s[dim_a] = ( pt[dim_a] - _origin[dim_a] ) / ( _point[dim_a] - _origin[dim_a] );
 
     if ( fabs(s[dim_a]) < 1 ) {
         s[dim_a] = sign(s[dim_a]);
@@ -966,37 +941,35 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
         }
         skew[dim_a] = tan(radians) * s[dim_a];
     } else {
-        skew[dim_a] = namedview_dim_snap_list_skew(desktop->namedview,
-                Snapper::SNAP_POINT, seltrans->snap_points,
-                norm, skew[dim_a], dim_b);
+        skew[dim_a] = namedview_dim_snap_list_skew(_desktop->namedview,
+                Snapper::SNAP_POINT, _snap_points,
+                _origin, skew[dim_a], dim_b);
     }
 
-    pt[dim_b] = ( point[dim_a] - norm[dim_a] ) * skew[dim_a] + point[dim_b];
-    pt[dim_a] = ( point[dim_a] - norm[dim_a] ) * s[dim_a] + norm[dim_a];
+    pt[dim_b] = ( _point[dim_a] - _origin[dim_a] ) * skew[dim_a] + _point[dim_b];
+    pt[dim_a] = ( _point[dim_a] - _origin[dim_a] ) * s[dim_a] + _origin[dim_a];
 
     /* status text */
     double degrees = 180 / M_PI * radians;
     if (degrees > 180) degrees -= 360;
     if (degrees < -180) degrees += 360;
 
-    seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
-                                    // TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-                                    _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"),
-                                    degrees);
+    _message_context.setF(Inkscape::NORMAL_MESSAGE,
+                          // TRANSLATORS: don't modify the first ";"
+                          // (it will NOT be displayed as ";" - only the second one will be)
+                          _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"),
+                          degrees);
 
     return TRUE;
 }
 
-gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+gboolean Inkscape::SelTrans::rotateRequest(NR::Point &pt, guint state)
 {
     int snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
 
-    NR::Point const point = seltrans->point;
-    NR::Point const norm = seltrans->origin;
-
     // rotate affine in rotate
-    NR::Point const d1 = point - norm;
-    NR::Point const d2 = pt    - norm;
+    NR::Point const d1 = _point - _origin;
+    NR::Point const d2 = pt     - _origin;
 
     NR::Coord const h1 = NR::L2(d1);
     if (h1 < 1e-15) return FALSE;
@@ -1023,38 +996,37 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 
     NR::rotate const r1(q1);
     NR::rotate const r2(q2);
-    pt = point * NR::translate(-norm) * ( r2 / r1 ) * NR::translate(norm);
+    pt = _point * NR::translate(-_origin) * ( r2 / r1 ) * NR::translate(_origin);
 
     /* status text */
     double degrees = 180 / M_PI * radians;
     if (degrees > 180) degrees -= 360;
     if (degrees < -180) degrees += 360;
 
-    seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
-                                    // TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-                                    _("<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), degrees);
+    _message_context.setF(Inkscape::NORMAL_MESSAGE,
+                          // TRANSLATORS: don't modify the first ";"
+                          // (it will NOT be displayed as ";" - only the second one will be)
+                          _("<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), degrees);
 
     return TRUE;
 }
 
-gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+gboolean Inkscape::SelTrans::centerRequest(NR::Point &pt, guint state)
 {
     using NR::X;
     using NR::Y;
-    SPDesktop *desktop = seltrans->desktop;
-    namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, pt);
+    namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, pt);
 
     if (state & GDK_CONTROL_MASK) {
-        NR::Point point = seltrans->point;
-        if ( fabs( point[X] - pt[X] )  >
-             fabs( point[Y] - pt[Y] ) ) {
-            pt[Y] = point[Y];
+        if ( fabs( _point[X] - pt[X] )  >
+             fabs( _point[Y] - pt[Y] ) ) {
+            pt[Y] = _point[Y];
         } else {
-            pt[X] = point[X];
+            pt[X] = _point[X];
         }
     }
 
-    Inkscape::Selection *selection = desktop->selection;
+    Inkscape::Selection *selection = _desktop->selection;
     Inkscape::XML::Node  *current = selection->singleRepr();
     if (current!=NULL){
                         sp_repr_set_svg_double (current, "inkscape:c_rx", pt[X]);
@@ -1067,27 +1039,27 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
 // screen pixels to snap center to bbox
 #define SNAP_DIST 5
         // FIXME: take from prefs
-        double snap_dist = SNAP_DIST / desktop->current_zoom();
+        double snap_dist = SNAP_DIST / _desktop->current_zoom();
 
-        if (fabs(pt[X] - seltrans->box.min()[NR::X]) < snap_dist)
-            pt[X] = seltrans->box.min()[NR::X];
-        if (fabs(pt[X] - seltrans->box.midpoint()[NR::X]) < snap_dist)
-            pt[X] = seltrans->box.midpoint()[NR::X];
-        if (fabs(pt[X] - seltrans->box.max()[NR::X]) < snap_dist)
-            pt[X] = seltrans->box.max()[NR::X];
+        if (fabs(pt[X] - _box.min()[NR::X]) < snap_dist)
+            pt[X] = _box.min()[NR::X];
+        if (fabs(pt[X] - _box.midpoint()[NR::X]) < snap_dist)
+            pt[X] = _box.midpoint()[NR::X];
+        if (fabs(pt[X] - _box.max()[NR::X]) < snap_dist)
+            pt[X] = _box.max()[NR::X];
 
-        if (fabs(pt[Y] - seltrans->box.min()[NR::Y]) < snap_dist)
-            pt[Y] = seltrans->box.min()[NR::Y];
-        if (fabs(pt[Y] - seltrans->box.midpoint()[NR::Y]) < snap_dist)
-            pt[Y] = seltrans->box.midpoint()[NR::Y];
-        if (fabs(pt[Y] - seltrans->box.max()[NR::Y]) < snap_dist)
-            pt[Y] = seltrans->box.max()[NR::Y];
+        if (fabs(pt[Y] - _box.min()[NR::Y]) < snap_dist)
+            pt[Y] = _box.min()[NR::Y];
+        if (fabs(pt[Y] - _box.midpoint()[NR::Y]) < snap_dist)
+            pt[Y] = _box.midpoint()[NR::Y];
+        if (fabs(pt[Y] - _box.max()[NR::Y]) < snap_dist)
+            pt[Y] = _box.max()[NR::Y];
     }
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(pt[X], desktop->namedview->getDefaultMetric());
-    GString *ys = SP_PX_TO_METRIC_STRING(pt[Y], desktop->namedview->getDefaultMetric());
-    seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"), xs->str, ys->str);
+    GString *xs = SP_PX_TO_METRIC_STRING(pt[X], _desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(pt[Y], _desktop->namedview->getDefaultMetric());
+    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);
 
@@ -1099,7 +1071,27 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
  *
  */
 
-void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
+void sp_sel_trans_stretch(Inkscape::SelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
+{
+    seltrans->stretch(handle, pt, state);
+}
+
+void sp_sel_trans_scale(Inkscape::SelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+{
+    seltrans->scale(pt, state);
+}
+
+void sp_sel_trans_skew(Inkscape::SelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
+{
+    seltrans->skew(handle, pt, state);
+}
+
+void sp_sel_trans_rotate(Inkscape::SelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+{
+    seltrans->rotate(pt, state);
+}
+    
+void Inkscape::SelTrans::stretch(SPSelTransHandle const &handle, NR::Point &pt, guint state)
 {
     using NR::X;
     using NR::Y;
@@ -1120,8 +1112,8 @@ void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle const &handle, 
             break;
     }
 
-    NR::Point const scale_origin(seltrans->origin);
-    double const offset = seltrans->point[dim] - scale_origin[dim];
+    NR::Point const scale_origin(_origin);
+    double const offset = _point[dim] - scale_origin[dim];
     if (!( fabs(offset) >= 1e-15 )) {
         return;
     }
@@ -1129,7 +1121,7 @@ void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle const &handle, 
     s[dim] = ( pt[dim] - scale_origin[dim] ) / offset;
     if (isNaN(s[dim])) {
         g_warning("s[dim]=%g, pt[dim]=%g, scale_origin[dim]=%g, point[dim]=%g\n",
-                  s[dim], pt[dim], scale_origin[dim], seltrans->point[dim]);
+                  s[dim], pt[dim], scale_origin[dim], _point[dim]);
     }
     if (!( fabs(s[dim]) >= 1e-15 )) {
         s[dim] = 1e-15;
@@ -1139,31 +1131,27 @@ void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle const &handle, 
         s[!dim] = fabs(s[dim]);
     }
     NR::Matrix const stretch(s);
-    sp_sel_trans_transform(seltrans, stretch, scale_origin);
+    transform(stretch, scale_origin);
 }
 
-void sp_sel_trans_scale(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+void Inkscape::SelTrans::scale(NR::Point &pt, guint state)
 {
-    NR::Point const point = seltrans->point;
-    NR::Point norm = seltrans->origin;
-    NR::Point const offset = point - norm;
+    NR::Point const offset = _point - _origin;
 
     NR::Point s(1, 1);
     for (int i = 0; i < 2; i++) {
         if (fabs(offset[i]) > 1e-9)
-            s[i] = (pt[i] - norm[i]) / offset[i];
+            s[i] = (pt[i] - _origin[i]) / offset[i];
         if (fabs(s[i]) < 1e-9)
             s[i] = 1e-9;
     }
     NR::Matrix const scale((NR::scale(s)));
-    sp_sel_trans_transform(seltrans, scale, norm);
+    transform(scale, _origin);
 }
 
-void sp_sel_trans_skew(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
+void Inkscape::SelTrans::skew(SPSelTransHandle const &handle, NR::Point &pt, guint state)
 {
-    NR::Point const point = seltrans->point;
-    NR::Point norm = seltrans->origin;
-    NR::Point const offset = point - norm;
+    NR::Point const offset = _point - _origin;
 
     unsigned dim;
     switch (handle.cursor) {
@@ -1178,11 +1166,12 @@ void sp_sel_trans_skew(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR:
             abort();
             break;
     }
-    if (fabs(offset[dim]) < 1e-15)
+    if (fabs(offset[dim]) < 1e-15) {
         return;
+    }
     NR::Matrix skew = NR::identity();
-    skew[2*dim + dim] = (pt[dim] - norm[dim]) / offset[dim];
-    skew[2*dim + (1-dim)] = (pt[1-dim] - point[1-dim]) / offset[dim];
+    skew[2*dim + dim] = (pt[dim] - _origin[dim]) / offset[dim];
+    skew[2*dim + (1-dim)] = (pt[1-dim] - _point[1-dim]) / offset[dim];
     skew[2*(1-dim) + (dim)] = 0;
     skew[2*(1-dim) + (1-dim)] = 1;
 
@@ -1191,34 +1180,87 @@ void sp_sel_trans_skew(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR:
             skew[3*i] = 1e-15;
         }
     }
-    sp_sel_trans_transform(seltrans, skew, norm);
+    transform(skew, _origin);
 }
 
-void sp_sel_trans_rotate(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+void Inkscape::SelTrans::rotate(NR::Point &pt, guint state)
 {
-    NR::Point const point = seltrans->point;
-    NR::Point norm = seltrans->origin;
-    NR::Point const offset = point - norm;
+    NR::Point const offset = _point - _origin;
 
     NR::Coord const h1 = NR::L2(offset);
-    if (h1 < 1e-15)
+    if (h1 < 1e-15) {
         return;
+    }
     NR::Point const q1 = offset / h1;
-    NR::Coord const h2 = NR::L2( pt - norm );
-    if (h2 < 1e-15)
+    NR::Coord const h2 = NR::L2( pt - _origin );
+    if (h2 < 1e-15) {
         return;
-    NR::Point const q2 = (pt - norm) / h2;
+    }
+    NR::Point const q2 = (pt - _origin) / h2;
     NR::rotate const r1(q1);
     NR::rotate const r2(q2);
 
     NR::Matrix rotate( r2 / r1 );
-    sp_sel_trans_transform(seltrans, rotate, norm);
+    transform(rotate, _origin);
 }
 
-void sp_sel_trans_center(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
+void sp_sel_trans_center(Inkscape::SelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
 {
-    sp_sel_trans_set_center(seltrans, pt);
+    seltrans->setCenter(pt);
 }
+
+
+void Inkscape::SelTrans::moveTo(NR::Point const &xy, guint state)
+{
+    using NR::X;
+    using NR::Y;
+
+    NR::Point dxy = xy - _point;
+
+    if (state & GDK_MOD1_MASK) {
+        /* Alt pressed means keep offset: snap the moved distance to the grid */
+        namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, dxy);
+    } else if ((state & GDK_SHIFT_MASK) == 0) {
+        /* Snap as normal.  Shift-drag will not snap to the grid even if it is enabled. */
+        for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
+            std::pair<NR::Coord, bool> b = namedview_dim_snap_list(_desktop->namedview,
+                                                                   Snapper::BBOX_POINT, _bbox_points,
+                                                                   dxy[dim], NR::Dim2(dim));
+            std::pair<NR::Coord, bool> s = namedview_dim_snap_list(_desktop->namedview,
+                                                                   Snapper::SNAP_POINT, _snap_points,
+                                                                   dxy[dim], NR::Dim2(dim));
+            
+            /* Pick the snap that puts us closest to the original point */
+            NR::Coord bd = b.second ? fabs(b.first - dxy[dim]) : NR_HUGE;
+            NR::Coord sd = s.second ? fabs(s.first - dxy[dim]) : NR_HUGE;
+            dxy[dim] = (bd < sd) ? b.first : s.first;
+        }
+    }
+
+    /* N.B. If we ever implement angled guides, then we'll want to make sure that the movement
+       respects both the snapped-to guide and the h-or-v constraint implied by control mask.
+       This should be a special case of snapping to h-or-v followed by snapping to whatever
+       real guides there are. */
+    if (state & GDK_CONTROL_MASK) {
+        if ( fabs(dxy[X]) > fabs(dxy[Y]) ) {
+            dxy[Y] = 0.0;
+        } else {
+            dxy[X] = 0.0;
+        }
+    }
+
+    NR::Matrix const move((NR::translate(dxy)));
+    NR::Point const norm(0, 0);
+    transform(move, norm);
+
+    // status text
+    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], _desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], _desktop->namedview->getDefaultMetric());
+    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
+    g_string_free(xs, TRUE);
+    g_string_free(ys, TRUE);
+}
+
 
 /*
   Local Variables:

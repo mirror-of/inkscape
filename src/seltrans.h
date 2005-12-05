@@ -1,11 +1,12 @@
-#ifndef __SP_SELTRANS_H__
-#define __SP_SELTRANS_H__
+#ifndef __SELTRANS_H__
+#define __SELTRANS_H__
 
 /*
  * Helper object for transforming selected items
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Carl Hetherington <inkscape@carlh.net>
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
@@ -22,93 +23,128 @@
 #include <vector>
 
 struct SPKnot;
-class SPSelTrans;
 class SPDesktop;
 class SPCanvasItem;
+class SPSelTransHandle;
 
-enum {
-	SP_SELTRANS_SHOW_CONTENT,
-	SP_SELTRANS_SHOW_OUTLINE
-};
+namespace Inkscape
+{
 
-enum {
-	SP_SELTRANS_STATE_SCALE,
-	SP_SELTRANS_STATE_ROTATE
-};
-
-struct SPSelTrans {
-	SPSelTrans(SPDesktop *desktop);
-	~SPSelTrans();
-
-	SPDesktop *desktop;
-
-	Inkscape::Selection *selection;
-	guint state : 1;
-	guint show : 1;
-
-	unsigned int grabbed : 1;
-	unsigned int show_handles : 1;
-	unsigned int empty : 1;
-	unsigned int changed : 1;
-	
-	std::vector<std::pair<SPItem *,NR::Matrix> > items;
-	
-	std::vector<NR::Point> snap_points;
-	std::vector<NR::Point> bbox_points;
-
-	NR::Rect box;
-	NR::Matrix current;
-	NR::Point opposite; ///< opposite point to where a scale is taking place
-	NR::Point origin; ///< position of origin for transforms
-	NR::Point point; ///< original position of the knot being used for the current transform
-	NR::Point center;
-	SPKnot *shandle[8];
-	SPKnot *rhandle[8];
-	SPKnot *chandle;
-	SPCanvasItem *norm;
-	SPCanvasItem *grip;
-	SPCanvasItem *l[4];
-	guint sel_changed_id;
-	guint sel_modified_id;
-	GSList *stamp_cache;
-
-	SPSelCue selcue;
-
-	Inkscape::MessageContext &messageContext() {
-		return _message_context;
-	}
-
-	SigC::Connection _sel_changed_connection;
-	SigC::Connection _sel_modified_connection;
-	Inkscape::MessageContext _message_context;
-};
-
-/*
- * Logic
- *
- * grab - removes handles, makes unsensitive
- * ungrab - if changed, flushes, otherwise increases state, shows handles,
- *          makes sensitive
- * if changed or sel changed during grabbing, sets state to scale
- *
- */ 
-
-void sp_sel_trans_reset_state(SPSelTrans *seltrans);
-void sp_sel_trans_increase_state(SPSelTrans *seltrans);
-void sp_sel_trans_set_center(SPSelTrans *seltrans, gdouble x, gdouble y);
-void sp_sel_trans_update_item_bboxes (SPSelTrans *seltrans);
-
-void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles);
-void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, NR::Point const &norm);
-void sp_sel_trans_ungrab(SPSelTrans *seltrans);
-void sp_sel_trans_stamp(SPSelTrans *seltrans);
-
-inline NR::Point sp_sel_trans_point_desktop(SPSelTrans const *seltrans) {
-	return seltrans->point;
+namespace XML
+{
+  class Node;
 }
 
-inline NR::Point sp_sel_trans_origin_desktop(SPSelTrans const *seltrans) {
-	return seltrans->origin;
+class SelTrans
+{
+public:
+    SelTrans(SPDesktop *desktop);
+    ~SelTrans();
+
+    Inkscape::MessageContext &messageContext() {
+        return _message_context;
+    }
+
+    void increaseState();
+    void resetState();
+    void setCenter(NR::Point const &p);
+    void grab(NR::Point const &p, gdouble x, gdouble y, bool show_handles);
+    void transform(NR::Matrix const &rel_affine, NR::Point const &norm);
+    void ungrab();
+    void stamp();
+    void moveTo(NR::Point const &xy, guint state);
+    void stretch(SPSelTransHandle const &handle, NR::Point &pt, guint state);
+    void scale(NR::Point &pt, guint state);
+    void skew(SPSelTransHandle const &handle, NR::Point &pt, guint state);
+    void rotate(NR::Point &pt, guint state);
+    gboolean scaleRequest(NR::Point &pt, guint state);
+    gboolean stretchRequest(SPSelTransHandle const &handle, NR::Point &pt, guint state);
+    gboolean skewRequest(SPSelTransHandle const &handle, NR::Point &pt, guint state);
+    gboolean rotateRequest(NR::Point &pt, guint state);
+    gboolean centerRequest(NR::Point &pt, guint state);
+
+    gboolean handleRequest(SPKnot *knot, NR::Point *position, guint state, SPSelTransHandle const &handle);
+    void handleGrab(SPKnot *knot, guint state, SPSelTransHandle const &handle);
+    void handleNewEvent(SPKnot *knot, NR::Point *position, guint state, SPSelTransHandle const &handle);
+
+    enum Show
+    {
+        SHOW_CONTENT,
+        SHOW_OUTLINE
+    };
+
+    void setShow(Show s) {
+        _show = s;
+    }
+    bool isEmpty() {
+        return _empty;
+    }
+    
+private:
+    void _updateHandles();
+    void _updateVolatileState();
+    void _selChanged(Inkscape::Selection *selection);
+    void _selModified(Inkscape::Selection *selection, guint flags);
+    void _showHandles(SPKnot *knot[], SPSelTransHandle const handle[], gint num,
+                      gchar const *even_tip, gchar const *odd_tip);
+    void _centreTrans(Inkscape::XML::Node *current) const;
+    
+    enum State {
+        STATE_SCALE,
+	STATE_ROTATE
+    };
+    
+    SPDesktop *_desktop;
+
+    std::vector<std::pair<SPItem *, NR::Matrix> > _items;
+    
+    std::vector<NR::Point> _snap_points;
+    std::vector<NR::Point> _bbox_points;
+    
+    SPSelCue _selcue;
+
+    Inkscape::Selection *_selection;
+    State _state;
+    Show _show;
+
+    bool _grabbed;
+    bool _show_handles;
+    bool _empty;
+    bool _changed;
+
+    NR::Rect _box;
+    NR::Matrix _current;
+    NR::Point _opposite; ///< opposite point to where a scale is taking place
+    NR::Point _center;
+    SPKnot *_shandle[8];
+    SPKnot *_rhandle[8];
+    SPKnot *_chandle;
+    SPCanvasItem *_norm;
+    SPCanvasItem *_grip;
+    SPCanvasItem *_l[4];
+    guint _sel_changed_id;
+    guint _sel_modified_id;
+    GSList *_stamp_cache;    
+
+    NR::Point _origin; ///< position of origin for transforms
+    NR::Point _point; ///< original position of the knot being used for the current transform
+    Inkscape::MessageContext _message_context;
+    SigC::Connection _sel_changed_connection;
+    SigC::Connection _sel_modified_connection;
+};
+
 }
 
 #endif
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
