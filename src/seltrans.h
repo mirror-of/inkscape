@@ -101,7 +101,7 @@ private:
     std::vector<NR::Point> _snap_points;
     std::vector<NR::Point> _bbox_points;
     
-    SPSelCue _selcue;
+    Inkscape::SelCue _selcue;
 
     Inkscape::Selection *_selection;
     State _state;
