@@ -40,7 +40,6 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "document.h"
-#include "selcue.h"
 
 #include "pixmaps/cursor-dropper.xpm"
 

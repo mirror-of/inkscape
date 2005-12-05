@@ -41,8 +41,6 @@ struct SPDropperContext {
 	double G;
 	double B;
 	double alpha;
-
-	SPSelCue selcue;
 };
 
 struct SPDropperContextClass {
