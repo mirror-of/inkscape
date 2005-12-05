@@ -30,7 +30,6 @@
 #include "../macros.h"
 #include "../verbs.h"
 #include "../interface.h"
-#include "../seltrans.h"
 #include "../selection.h"
 #include "../selection-chemistry.h"
 #include "../style.h"

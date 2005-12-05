@@ -27,7 +27,6 @@
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
-#include "../seltrans.h"
 #include "../message-stack.h"
 #include "../dropper-context.h"
 #include "../enums.h"
