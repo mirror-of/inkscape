@@ -52,6 +52,8 @@
 #include "tools-switch.h"
 #include "message-context.h"
 #include "message-stack.h"
+#include "selection-describer.h"
+#include "seltrans.h"
 
 static void sp_select_context_class_init(SPSelectContextClass *klass);
 static void sp_select_context_init(SPSelectContext *select_context);
@@ -61,8 +63,6 @@ static void sp_select_context_setup(SPEventContext *ec);
 static void sp_select_context_set(SPEventContext *ec, gchar const *key, gchar const *val);
 static gint sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
-static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state);
 
 static SPEventContextClass *parent_class;
 
@@ -187,7 +187,7 @@ sp_select_context_setup(SPEventContext *ec)
 
     select_context->_describer = new Inkscape::SelectionDescriber(desktop->selection, desktop->messageStack());
 
-    select_context->_seltrans = new SPSelTrans(desktop);
+    select_context->_seltrans = new Inkscape::SelTrans(desktop);
 
     sp_event_context_read(ec, "show");
     sp_event_context_read(ec, "transform");
@@ -204,9 +204,9 @@ sp_select_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 
     if (!strcmp(key, "show")) {
         if (val && !strcmp(val, "outline")) {
-            sc->_seltrans->show = SP_SELTRANS_SHOW_OUTLINE;
+            sc->_seltrans->setShow(Inkscape::SelTrans::SHOW_OUTLINE);
         } else {
-            sc->_seltrans->show = SP_SELTRANS_SHOW_CONTENT;
+            sc->_seltrans->setShow(Inkscape::SelTrans::SHOW_CONTENT);
         }
     } 
 }
@@ -216,11 +216,11 @@ sp_select_context_abort(SPEventContext *event_context)
 {
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
-    SPSelTrans *seltrans = sc->_seltrans;
+    Inkscape::SelTrans *seltrans = sc->_seltrans;
 
     if (sc->dragging) {
         if (sc->moved) { // cancel dragging an object
-            sp_sel_trans_ungrab(seltrans);
+            seltrans->ungrab();
             sc->moved = FALSE;
             sc->dragging = FALSE;
             drag_escaped = 1;
@@ -305,7 +305,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
 
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
-    SPSelTrans *seltrans = sc->_seltrans;
+    Inkscape::SelTrans *seltrans = sc->_seltrans;
 
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
 
@@ -373,7 +373,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
             if (get_group0_keyval (&event->key) == GDK_space) {
                 if (sc->dragging && sc->grabbed) {
                     /* stamping mode: show content mode moving */
-                    sp_sel_trans_stamp(seltrans);
+                    seltrans->stamp();
                     ret = TRUE;
                 }
             }
@@ -401,7 +401,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
-    SPSelTrans *seltrans = sc->_seltrans;
+    Inkscape::SelTrans *seltrans = sc->_seltrans;
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     gdouble const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2, 0, 1000); // in px
     gdouble const offset = prefs_get_double_attribute_limited("options.defaultscale", "value", 2, 0, 1000);
@@ -499,17 +499,18 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                 (!group_at_point || !selection->includes(group_at_point))
                                 && !sc->button_press_alt) {
                                 // select what is under cursor
-                                if (!seltrans->empty)
-                                    sp_sel_trans_reset_state(seltrans);
+                                if (!seltrans->isEmpty()) {
+                                    seltrans->resetState();
+                                }
                                 // when simply ctrl-dragging, we don't want to go into groups
                                 if (item_at_point && !selection->includes(item_at_point))
                                     selection->set(item_at_point);
                             } // otherwise, do not change selection so that dragging selected-within-group items, as well as alt-dragging, is possible
-                            sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
+                            seltrans->grab(p, -1, -1, FALSE);
                             sc->moved = TRUE;
                         }
-                        if (!seltrans->empty)
-                            sp_selection_moveto(seltrans, p, event->button.state);
+                        if (!seltrans->isEmpty())
+                            seltrans->moveTo(p, event->button.state);
                         if (desktop->scroll_to_point(&p))
                             // unfortunately in complex drawings, gobbling results in losing grab of the object, for some mysterious reason
                             ; //gobble_motion_events(GDK_BUTTON1_MASK);
@@ -529,26 +530,26 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 if (sc->dragging) {
                     if (sc->moved) {
                         // item has been moved
-                        sp_sel_trans_ungrab(seltrans);
+                        seltrans->ungrab();
                         sc->moved = FALSE;
                     } else if (sc->item && !drag_escaped) {
                         // item has not been moved -> simply a click, do selecting
                         if (!selection->isEmpty()) {
                             if (event->button.state & GDK_SHIFT_MASK) {
                                 // with shift, toggle selection
-                                sp_sel_trans_reset_state(seltrans);
+                                seltrans->resetState();
                                 selection->toggle(sc->item);
                             } else {
                                 // without shift, increase state (i.e. toggle scale/rotation handles)
                                 if (selection->includes(sc->item)) {
-                                    sp_sel_trans_increase_state(seltrans);
+                                    seltrans->increaseState();
                                 } else {
-                                    sp_sel_trans_reset_state(seltrans);
+                                    seltrans->resetState();
                                     selection->set(sc->item);
                                 }
                             }
                         } else { // simple or shift click, no previous selection
-                            sp_sel_trans_reset_state(seltrans);
+                            seltrans->resetState();
                             selection->set(sc->item);
                         }
                     }
@@ -561,7 +562,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     if (sp_rubberband_rect(&b) && !within_tolerance) {
                         // this was a rubberband drag
                         sp_rubberband_stop();
-                        sp_sel_trans_reset_state(seltrans);
+                        seltrans->resetState();
                         // find out affected items:
                         GSList *items = sp_document_items_in_box(SP_DT_DOCUMENT(desktop), desktop->dkey, &b);
                         if (event->button.state & GDK_SHIFT_MASK) {
@@ -604,9 +605,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
                             if (item) {
                                 if (selection->includes(item)) {
-                                    sp_sel_trans_increase_state(seltrans);
+                                    seltrans->increaseState();
                                 } else {
-                                    sp_sel_trans_reset_state(seltrans);
+                                    seltrans->resetState();
                                     selection->set(item);
                                 }
                                 item = NULL;
@@ -734,7 +735,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     /* stamping mode: show outline mode moving */
                     /* FIXME: Is next condition ok? (lauris) */
                     if (sc->dragging && sc->grabbed) {
-                        sp_sel_trans_stamp(seltrans);
+                        seltrans->stamp();
                         ret = TRUE;
                     }
                     break;
@@ -827,56 +828,6 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     return ret;
 }
 
-static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state)
-{
-    using NR::X;
-    using NR::Y;
-
-    SPDesktop *desktop = seltrans->desktop;
-
-    NR::Point dxy = xy - sp_sel_trans_point_desktop(seltrans);
-
-    if (state & GDK_MOD1_MASK) {
-        /* Alt pressed means keep offset: snap the moved distance to the grid */
-        namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, dxy);
-    } else if ((state & GDK_SHIFT_MASK) == 0) {
-        /* Snap as normal.  Shift-drag will not snap to the grid even if it is enabled. */
-        for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
-            std::pair<NR::Coord, bool> b = namedview_dim_snap_list (desktop->namedview, Snapper::BBOX_POINT, seltrans->bbox_points,
-                                                                    dxy[dim], NR::Dim2(dim));
-            std::pair<NR::Coord, bool> s = namedview_dim_snap_list (desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points,
-                                                                    dxy[dim], NR::Dim2(dim));
-            
-            /* Pick the snap that puts us closest to the original point */
-            NR::Coord bd = b.second ? fabs(b.first - dxy[dim]) : NR_HUGE;
-            NR::Coord sd = s.second ? fabs(s.first - dxy[dim]) : NR_HUGE;
-            dxy[dim] = (bd < sd) ? b.first : s.first;
-        }
-    }
-
-    /* N.B. If we ever implement angled guides, then we'll want to make sure that the movement
-       respects both the snapped-to guide and the h-or-v constraint implied by control mask.
-       This should be a special case of snapping to h-or-v followed by snapping to whatever
-       real guides there are. */
-    if (state & GDK_CONTROL_MASK) {
-        if ( fabs(dxy[X]) > fabs(dxy[Y]) ) {
-            dxy[Y] = 0.0;
-        } else {
-            dxy[X] = 0.0;
-        }
-    }
-
-    NR::Matrix const move((NR::translate(dxy)));
-    NR::Point const norm(0, 0);
-    sp_sel_trans_transform(seltrans, move, norm);
-
-    // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], desktop->namedview->getDefaultMetric());
-    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], desktop->namedview->getDefaultMetric());
-    seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
-    g_string_free(xs, TRUE);
-    g_string_free(ys, TRUE);
-}
 
 /*
   Local Variables:

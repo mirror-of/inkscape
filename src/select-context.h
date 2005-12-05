@@ -13,8 +13,6 @@
  */
 
 #include "event-context.h"
-#include "selection-describer.h"
-#include "seltrans.h"
 
 #define SP_TYPE_SELECT_CONTEXT            (sp_select_context_get_type ())
 #define SP_SELECT_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_SELECT_CONTEXT, SPSelectContext))
@@ -25,7 +23,11 @@
 class SPSelectContext;
 class SPSelectContextClass;
 
-namespace Inkscape { class MessageContext; }
+namespace Inkscape {
+  class MessageContext;
+  class SelTrans;
+  class SelectionDescriber;
+}
 
 struct SPSelectContext : public SPEventContext {
 	guint dragging : 1;
@@ -35,7 +37,7 @@ struct SPSelectContext : public SPEventContext {
 	bool button_press_alt;
 	SPItem *item;
 	SPCanvasItem *grabbed;
-	SPSelTrans *_seltrans;
+	Inkscape::SelTrans *_seltrans;
 	Inkscape::SelectionDescriber *_describer;
 };
 
