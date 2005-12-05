@@ -59,6 +59,7 @@
 #include "object-edit.h"
 #include "attributes.h"
 #include "rubberband.h"
+#include "selcue.h"
 
 #include "event-context.h"
 
@@ -753,18 +754,16 @@ sp_event_context_finish(SPEventContext *ec)
 //-------------------------------member functions
 
 /**
- * Enables/disables the SPEventContext's SPSelCue.
+ * Enables/disables the SPEventContext's SelCue.
  */
 void SPEventContext::enableSelectionCue(bool enable) {
     if (enable) {
         if (!_selcue) {
-            _selcue = new SPSelCue(desktop);
+            _selcue = new Inkscape::SelCue(desktop);
         }
     } else {
-        if (_selcue) {
-            delete _selcue;
-            _selcue = NULL;
-        }
+        delete _selcue;
+        _selcue = NULL;
     }
 }
 

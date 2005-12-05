@@ -19,7 +19,6 @@
 
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
-#include "selcue.h"
 
 #include "forward.h"
 
@@ -37,7 +36,10 @@ struct GrDrag;
 
 struct SPKnotHolder;
 
-namespace Inkscape { class MessageContext; }
+namespace Inkscape {
+  class MessageContext;
+  class SelCue;
+}
 
 /**
  * Base class for Event processors.
@@ -68,7 +70,7 @@ struct SPEventContext : public GObject {
 
     Inkscape::MessageContext *_message_context;
 
-    SPSelCue *_selcue;
+    Inkscape::SelCue *_selcue;
 
     GrDrag *_grdrag;
     GrDrag *get_drag () {return _grdrag;}
