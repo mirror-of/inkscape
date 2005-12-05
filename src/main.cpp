@@ -132,7 +132,7 @@
  */
 /** \page Tools Tools Related Classes and Files
  * 
- * SPSelCue [\ref selcue.cpp, \ref selcue.h, \ref rubberband.cpp]
+ * SelCue [\ref selcue.cpp, \ref selcue.h, \ref rubberband.cpp]
  * Inkscape::Selection [\ref selection.cpp, \ref selection.h, \ref selection-chemistry.cpp]
  * SPSelTrans [\ref seltrans.cpp, \ref seltrans.h]
  * 
