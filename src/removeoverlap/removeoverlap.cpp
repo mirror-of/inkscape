@@ -25,7 +25,7 @@
 * such that rectangular bounding boxes are separated by at least xGap
 * horizontally and yGap vertically
 */
-void removeoverlap(GSList *items, double xGap, double yGap) {
+void removeoverlap(GSList const *items, double xGap, double yGap) {
 	if(!items) {
 		return;
 	}
