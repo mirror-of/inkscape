@@ -1,3 +1,14 @@
+2005-12-05  Carl Hetherington <inkscape@carlh.net>
+
+	* src/desktop.cpp, src/tools-switch.cpp,
+	src/dialogs/clonetiler.cpp, src/dialogs/display-settings.cpp:
+	re-jig #includes slightly.
+
+	* src/seltrans.{cpp,h}: C++-ification and cleanup.
+
+	* src/select-context.{cpp,h}, src/seltrans-handles.h: adapt for
+	changes to SelTrans.
+
 2005-12-04  Ted Gould  <ted@gould.cx>
 
 	* po/POTFILES.in:
