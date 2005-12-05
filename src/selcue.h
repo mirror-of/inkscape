@@ -6,37 +6,59 @@
  *
  * Authors:
  *   bulia byak <bulia@users.sf.net>
+ *   Carl Hetherington <inkscape@carlh.net>
  *
  * Copyright (C) 2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib/gslist.h>
+#include <list>
 #include <sigc++/sigc++.h>
 
-#include "forward.h"
+class SPDesktop;
+class SPCanvasItem;
 
-namespace Inkscape { class Selection; }
+namespace Inkscape {
 
-enum {
-        SP_SELCUE_NONE,
-        SP_SELCUE_MARK,
-        SP_SELCUE_BBOX
+class Selection;
+
+class SelCue
+{
+public:
+    SelCue(SPDesktop *desktop);
+    ~SelCue();
+
+    enum Type {
+        NONE,
+        MARK,
+        BBOX
+    };
+
+private:
+
+    void _updateItemBboxes();
+
+    SPDesktop *_desktop;
+    Selection *_selection;
+    sigc::connection _sel_changed_connection;
+    sigc::connection _sel_modified_connection;
+    std::list<SPCanvasItem*> _item_bboxes;
+    std::list<SPCanvasItem*> _text_baselines;
 };
 
-struct SPSelCue {
-	SPSelCue(SPDesktop *desktop);
-	~SPSelCue();
-
-	SPDesktop *desktop;
-	Inkscape::Selection *selection;
-	sigc::connection sel_changed_connection;
-	sigc::connection sel_modified_connection;
-	GSList *item_bboxes;
-	GSList *text_baselines;
-};
-
-void sp_sel_cue_update_item_bboxes (SPSelCue * selcue);
-
+}
+  
 #endif
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

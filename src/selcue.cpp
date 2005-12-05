@@ -1,10 +1,11 @@
-#define __SP_SELCUE_C__
+#define __SELCUE_C__
 
 /*
  * Helper object for showing selected items
  *
  * Authors:
  *   bulia byak <bulia@users.sf.net>
+ *   Carl Hetherington <inkscape@carlh.net>
  *
  * Copyright (C) 2004 Authors
  *
@@ -27,148 +28,122 @@
 #include "sp-item.h"
 #include "selcue.h"
 
-static void 
-sp_sel_cue_sel_changed(Inkscape::Selection *selection, gpointer data)
+Inkscape::SelCue::SelCue(SPDesktop *desktop)
+    : _desktop(desktop)
 {
-	SPSelCue *selcue = (SPSelCue *) data;
-	sp_sel_cue_update_item_bboxes (selcue);
+    _selection = SP_DT_SELECTION(_desktop);
+
+    _sel_changed_connection = _selection->connectChanged(
+        sigc::hide(sigc::mem_fun(*this, &Inkscape::SelCue::_updateItemBboxes))
+        );
+
+    _sel_modified_connection = _selection->connectModified(
+        sigc::hide(sigc::hide(sigc::mem_fun(*this, &Inkscape::SelCue::_updateItemBboxes)))
+        );
+
+    _updateItemBboxes();
 }
 
-static void
-sp_sel_cue_sel_modified (Inkscape::Selection *selection, guint flags, gpointer data)
+Inkscape::SelCue::~SelCue()
 {
-	SPSelCue *selcue = (SPSelCue *) data;
-	sp_sel_cue_update_item_bboxes (selcue);
+    _sel_changed_connection.disconnect();
+    _sel_modified_connection.disconnect();
+
+    for (std::list<SPCanvasItem*>::iterator i = _item_bboxes.begin(); i != _item_bboxes.end(); i++) {
+        gtk_object_destroy(*i);
+    }
+    _item_bboxes.clear();
+
+    for (std::list<SPCanvasItem*>::iterator i = _text_baselines.begin(); i != _text_baselines.end(); i++) {
+        gtk_object_destroy(*i);
+    }
+    _text_baselines.clear();
 }
 
-
-SPSelCue::SPSelCue(SPDesktop *desktop) {
-
-    this->desktop = desktop;
-
-    this->selection = SP_DT_SELECTION(desktop);
-
-    this->item_bboxes = NULL;
-    this->text_baselines = NULL;
-
-    this->sel_changed_connection = this->selection->connectChanged(
-        sigc::bind (
-            sigc::ptr_fun(&sp_sel_cue_sel_changed), 
-            (gpointer)this ));
-
-    this->sel_modified_connection = this->selection->connectModified(
-        sigc::bind(
-            sigc::ptr_fun(&sp_sel_cue_sel_modified),
-            (gpointer)this ));
-
-    sp_sel_cue_update_item_bboxes (this);
-}
-
-SPSelCue::~SPSelCue() {
-	this->sel_changed_connection.disconnect();
-	this->sel_modified_connection.disconnect();
-
-	for (GSList *l = this->item_bboxes; l != NULL; l = l->next) {
-		gtk_object_destroy( GTK_OBJECT (l->data));
-	}
-	g_slist_free (this->item_bboxes);
-	this->item_bboxes = NULL;
-
-	for (GSList *l = this->text_baselines; l != NULL; l = l->next) {
-		gtk_object_destroy( GTK_OBJECT (l->data));
-	}
-	g_slist_free (this->text_baselines);
-	this->text_baselines = NULL;
-}
-
-void
-sp_sel_cue_update_item_bboxes (SPSelCue * selcue)
+void Inkscape::SelCue::_updateItemBboxes()
 {
-       g_return_if_fail (selcue != NULL);
+    for (std::list<SPCanvasItem*>::iterator i = _item_bboxes.begin(); i != _item_bboxes.end(); i++) {
+        gtk_object_destroy(*i);
+    }
+    _item_bboxes.clear();
 
-       GSList const* l;
-       for (l = selcue->item_bboxes; l != NULL; l = l->next) {
-               gtk_object_destroy( GTK_OBJECT (l->data));
-       }
-       g_slist_free (selcue->item_bboxes);
-       selcue->item_bboxes = NULL;
+    for (std::list<SPCanvasItem*>::iterator i = _text_baselines.begin(); i != _text_baselines.end(); i++) {
+        gtk_object_destroy(*i);
+    }
+    _text_baselines.clear();
 
-	for (GSList *l = selcue->text_baselines; l != NULL; l = l->next) {
-		gtk_object_destroy( GTK_OBJECT (l->data));
-	}
-	g_slist_free (selcue->text_baselines);
-	selcue->text_baselines = NULL;
+    gint mode = prefs_get_int_attribute ("options.selcue", "value", MARK);
+    if (mode == NONE) {
+        return;
+    }
 
-	 gint mode = prefs_get_int_attribute ("options.selcue", "value", SP_SELCUE_MARK);
-	 if (mode == SP_SELCUE_NONE)
-		 return;
+    g_return_if_fail(_selection != NULL);
 
-       g_return_if_fail (selcue->selection != NULL);
+    for (GSList const *l = _selection->itemList(); l != NULL; l = l->next) {
+        SPItem *item = (SPItem *) l->data;
 
+        NRRect b;
+        sp_item_bbox_desktop(item, &b);
 
-       for (l = selcue->selection->itemList(); l != NULL; l = l->next) {
-           SPItem *item = (SPItem *) l->data;
+        SPCanvasItem* box = NULL;
 
-           NRRect b;
-           sp_item_bbox_desktop (item, &b);
+        if (mode == MARK) {
+            box = sp_canvas_item_new(SP_DT_CONTROLS(_desktop),
+                                      SP_TYPE_CTRL,
+                                      "mode", SP_CTRL_MODE_XOR,
+                                      "shape", SP_CTRL_SHAPE_DIAMOND,
+                                      "size", 5.0,
+                                      "filled", TRUE,
+                                      "fill_color", 0x000000ff,
+                                      "stroked", FALSE,
+                                      "stroke_color", 0x000000ff,
+                                      NULL);
+            sp_canvas_item_show(box);
+            SP_CTRL(box)->moveto(NR::Point(b.x0, b.y1));
+            
+            sp_canvas_item_move_to_z(box, 0); // just low enough to not get in the way of other draggable knots
 
-           SPCanvasItem* box = NULL;
-
-           if (mode == SP_SELCUE_MARK) {
-               box = sp_canvas_item_new (SP_DT_CONTROLS (selcue->desktop),
-                                         SP_TYPE_CTRL,
-                                         "mode", SP_CTRL_MODE_XOR,
-                                         "shape", SP_CTRL_SHAPE_DIAMOND,
-                                         "size", 5.0,
-                                         "filled", TRUE,
-                                         "fill_color", 0x000000ff,
-                                         "stroked", FALSE,
-                                         "stroke_color", 0x000000ff,
-                                         NULL);
-               sp_canvas_item_show (box);
-               SP_CTRL(box)->moveto (NR::Point(b.x0, b.y1));
-
-               sp_canvas_item_move_to_z (box, 0); // just low enough to not get in the way of other draggable knots
-
-           } else if (mode == SP_SELCUE_BBOX) {
-               box = sp_canvas_item_new (
-                   SP_DT_CONTROLS (selcue->desktop),
-                   SP_TYPE_CTRLRECT,
-                   NULL
-                   );
-                     
-               sp_ctrlrect_set_area (SP_CTRLRECT (box), b.x0, b.y0, b.x1, b.y1);
-               sp_ctrlrect_set_color (SP_CTRLRECT (box), 0x000000a0, 0, 0);
-               sp_ctrlrect_set_dashed (SP_CTRLRECT (box), 1);
-
-               sp_canvas_item_move_to_z (box, 0);
-           }
+        } else if (mode == BBOX) {
+            box = sp_canvas_item_new(
+                SP_DT_CONTROLS(_desktop),
+                SP_TYPE_CTRLRECT,
+                NULL
+                );
+            
+            sp_ctrlrect_set_area(SP_CTRLRECT(box), b.x0, b.y0, b.x1, b.y1);
+            sp_ctrlrect_set_color(SP_CTRLRECT(box), 0x000000a0, 0, 0);
+            sp_ctrlrect_set_dashed(SP_CTRLRECT(box), 1);
+            
+            sp_canvas_item_move_to_z(box, 0);
+        }
                 
-           if (box) 
-               selcue->item_bboxes = g_slist_append (selcue->item_bboxes, box);
+        if (box) {
+            _item_bboxes.push_back(box);
+        }
 
-           SPCanvasItem* baseline_point = NULL;
-           if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) { // visualize baseline
-               Inkscape::Text::Layout const *layout = te_get_layout(item);
-               if(layout != NULL) {
-                   NR::Point a = layout->characterAnchorPoint(layout->begin()) * sp_item_i2d_affine(item);
-                   baseline_point = sp_canvas_item_new(SP_DT_CONTROLS(selcue->desktop), SP_TYPE_CTRL,
-                                                       "mode", SP_CTRL_MODE_XOR,
-                                                       "size", 4.0,
-                                                       "filled", 0,
-                                                       "stroked", 1,
-                                                       "stroke_color", 0x000000ff,
-                                                       NULL);
-
-                   sp_canvas_item_show (baseline_point);
-                   SP_CTRL(baseline_point)->moveto (a);
-                   sp_canvas_item_move_to_z (baseline_point, 0);
-               }
-           }
-
-           if (baseline_point) 
-               selcue->text_baselines = g_slist_append (selcue->text_baselines, baseline_point);
-       }
+        SPCanvasItem* baseline_point = NULL;
+        if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) { // visualize baseline
+            Inkscape::Text::Layout const *layout = te_get_layout(item);
+            if (layout != NULL) {
+                NR::Point a = layout->characterAnchorPoint(layout->begin()) * sp_item_i2d_affine(item);
+                baseline_point = sp_canvas_item_new(SP_DT_CONTROLS(_desktop), SP_TYPE_CTRL,
+                                                    "mode", SP_CTRL_MODE_XOR,
+                                                    "size", 4.0,
+                                                    "filled", 0,
+                                                    "stroked", 1,
+                                                    "stroke_color", 0x000000ff,
+                                                    NULL);
+                
+                sp_canvas_item_show(baseline_point);
+                SP_CTRL(baseline_point)->moveto(a);
+                sp_canvas_item_move_to_z(baseline_point, 0);
+            }
+        }
+        
+        if (baseline_point) {
+               _text_baselines.push_back(baseline_point);
+        }
+    }
 }
 
 /*
