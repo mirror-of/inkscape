@@ -153,9 +153,9 @@ static double sp_guideline_point(SPCanvasItem *item, NR::Point p, SPCanvasItem *
     *actual_item = item;
 
     if (gl->vertical) {
-        return fabs(gl->position - p[NR::X]);
+        return MAX(fabs(gl->position - p[NR::X])-1, 0);
     } else {
-        return fabs(gl->position - p[NR::Y]);
+        return MAX(fabs(gl->position - p[NR::Y])-1, 0);
     }
 }
 
