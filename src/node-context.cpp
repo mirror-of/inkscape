@@ -44,10 +44,7 @@
 #include "libnr/nr-point-matrix-ops.h"
 #include "livarot/Path.h"
 #include "style.h"
-
-//from splivarot.cpp
-Path::cut_position get_nearest_position_on_Path(SPItem * item, NR::Point p);
-NR::Point get_point_on_Path(SPItem * item, int piece, double t);
+#include "splivarot.h"
 
 static void sp_node_context_class_init(SPNodeContextClass *klass);
 static void sp_node_context_init(SPNodeContext *node_context);
@@ -394,8 +391,8 @@ sp_node_context_is_over_stroke (SPNodeContext *nc, SPItem *item, NR::Point event
     nc->curvepoint_doc *= sp_item_dt2i_affine(item, desktop);
     nc->curvepoint_doc *= sp_item_i2doc_affine(item);
 
-    Path::cut_position position = get_nearest_position_on_Path(item, nc->curvepoint_doc);
-    NR::Point nearest = get_point_on_Path(item, position.piece, position.t);
+    NR::Maybe<Path::cut_position> position = get_nearest_position_on_Path(item, nc->curvepoint_doc);
+    NR::Point nearest = get_point_on_Path(item, position.assume().piece, position.assume().t);
     NR::Point delta = nearest - nc->curvepoint_doc;
 
     delta = sp_desktop_d2w_xy_point(desktop, delta);
@@ -414,8 +411,8 @@ sp_node_context_is_over_stroke (SPNodeContext *nc, SPItem *item, NR::Point event
         nc->curvepoint_event[NR::X] = (gint) event_p [NR::X];
         nc->curvepoint_event[NR::Y] = (gint) event_p [NR::Y];
         nc->hit = true;
-        nc->grab_t = position.t;
-        nc->grab_node = sp_nodepath_get_node_by_index(position.piece);
+        nc->grab_t = position.assume().t;
+        nc->grab_node = sp_nodepath_get_node_by_index(position.assume().piece);
     }
 
     return close;
