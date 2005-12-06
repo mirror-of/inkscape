@@ -25,3 +25,7 @@ removeoverlap_libremoveoverlap_a_SOURCES =	\
 	removeoverlap/pairingheap/dsexceptions.h	\
 	removeoverlap/pairingheap/PairingHeap.cpp	\
 	removeoverlap/pairingheap/PairingHeap.h
+
+removeoverlap_remove_rectangle_overlap_test_SOURCES =	\
+	removeoverlap/remove_rectangle_overlap-test.cpp
+removeoverlap_remove_rectangle_overlap_test_LDADD = removeoverlap/libremoveoverlap.a -lglib-2.0
