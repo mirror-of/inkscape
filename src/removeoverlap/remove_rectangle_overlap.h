@@ -12,7 +12,6 @@
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
-
 void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBorder);
 
 

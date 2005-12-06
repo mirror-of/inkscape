@@ -102,8 +102,7 @@ void Blocks::mergeLeft(Block *r) {
 			r = l;
 			l = tmp;
 		}
-		erase(l);
-		delete l;
+		removeBlock(l);
 		c=r->findMinInConstraint();
 	}		
 #ifdef LOGGING
@@ -140,8 +139,7 @@ void Blocks::mergeRight(Block *l) {
 			l = r;
 			r = tmp;
 		}
-		erase(r);
-		delete r;
+		removeBlock(r);
 		c=l->findMinOutConstraint();
 	}	
 #ifdef LOGGING
@@ -149,7 +147,21 @@ void Blocks::mergeRight(Block *l) {
 	fprintf(logfile,"  merged %s\n",l->toString());
 	fclose(logfile);
 #endif
-}	
+}
+void Blocks::removeBlock(Block *doomed) {
+	doomed->deleted=true;
+	//erase(doomed);
+}
+void Blocks::cleanup() {
+	vector<Block*> bcopy(size());
+	copy(begin(),end(),bcopy.begin());
+	for(vector<Block*>::iterator i=bcopy.begin();i!=bcopy.end();i++) {
+		Block *b=*i;
+		if(b->deleted) {
+			erase(b);
+		}
+	}
+}
 
 /**
  * Splits block b across constraint c into two new blocks, l and r (c's left
@@ -170,9 +182,8 @@ void Blocks::split(Block *b, Block *&l, Block *&r, Constraint *c) {
 	r->wposn = r->desiredWeightedPosition();
 	r->posn = r->wposn / r->weight;
 	mergeRight(r);
-	
-	erase(b);
-	delete b;
+	removeBlock(b);
+
 	insert(l);
 	insert(r);
 }

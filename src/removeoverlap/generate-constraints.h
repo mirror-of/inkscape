@@ -35,16 +35,16 @@ public:
 		minY=y;
 	}
 	inline double overlapX(Rectangle *r) {
-		if (minX < r->minX && r->minX < r->getMaxX())
+		if (minX <= r->minX && r->minX <= getMaxX())
 			return getMaxX() - r->minX;
-		if (r->minX < minX && minX < r->getMaxX())
+		if (r->minX <= minX && minX <= r->getMaxX())
 			return r->getMaxX() - minX;
 		return 0;
 	}
 	inline double overlapY(Rectangle *r) {
-		if (minY < r->minY && r->minY < getMaxY())
+		if (minY <= r->minY && r->minY <= getMaxY())
 			return getMaxY() - r->minY;
-		if (r->minY < minY && minY < r->getMaxY())
+		if (r->minY <= minY && minY <= r->getMaxY())
 			return r->getMaxY() - minY;
 		return 0;
 	}

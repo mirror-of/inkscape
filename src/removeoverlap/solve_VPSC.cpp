@@ -55,11 +55,14 @@ double VPSC::satisfy() {
 	list<Variable*> *vs=bs->totalOrder();
 	for(list<Variable*>::iterator i=vs->begin();i!=vs->end();i++) {
 		Variable *v=*i;
-		bs->mergeLeft(v->block);
+		if(!v->block->deleted) {
+			bs->mergeLeft(v->block);
+		}
 	}
 	//for(int i=0;i<m;i++) {
 	//	assert(cs[i]->slack()>-0.0000001);
 	//}
+	bs->cleanup();
 	delete vs;
 	return bs->cost();
 }
@@ -84,10 +87,13 @@ double VPSC::solve() {
 				fprintf(logfile,"Split on constraint: %s\n",c->toString());
 				fclose(logfile);
 #endif
-				solved=false;
 				// Split on c
 				Block *l=NULL, *r=NULL;
 				bs->split(b,l,r,c);
+				bs->cleanup();
+				// split alters the block set so we have to restart
+				solved=false;
+				break;
 			}
 		}
 	}
@@ -105,32 +111,38 @@ bool VPSC::move_and_split() {
 	//assert(!blockGraphIsCyclic());
 	for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
 		Block *b=*i;
-		assert(b->vars->size()>0); 
-		b->wposn = b->desiredWeightedPosition();
-		b->posn = b->wposn / b->weight;
-	}
-	satisfy();
-	/*
-	assert(!blockGraphIsCyclic());
-	bool optimal=true;
-	for(set<Block *>::iterator i=bs->begin();i!=bs->end();i++) {
-		Block *b=*i;
-		Constraint *c=b->findMinLM();
-		if(c!=NULL && c->lm<0) {
-#ifdef LOGGING
-			FILE *logfile=fopen("cplacement.log","a");
-			fprintf(logfile,"Split on constraint: %s\n",c->toString());
-			fclose(logfile);
-#endif
-			optimal=false;
-			// Split on c
-			Block *l=NULL, *r=NULL;
-			bs->split(b,l,r,c);
+		if(!b->deleted) {
+			b->wposn = b->desiredWeightedPosition();
+			b->posn = b->wposn / b->weight;
+			bs->mergeLeft(b);
+			bs->mergeRight(b);
 		}
 	}
-	return optimal;
-	*/
-	return false;
+	bs->cleanup();
+	// assert(!blockGraphIsCyclic());
+	bool solved=false;
+	while(!solved) {
+		solved=true;
+		for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
+			Block *b=*i;
+			Constraint *c=b->findMinLM();
+			if(c!=NULL && c->lm<0) {
+#ifdef LOGGING
+				FILE *logfile=fopen("cplacement.log","a");
+				fprintf(logfile,"Split on constraint: %s\n",c->toString());
+				fclose(logfile);
+#endif
+				// Split on c
+				Block *l=NULL, *r=NULL;
+				bs->split(b,l,r,c);
+				bs->cleanup();
+				// split alters the block set so we have to restart
+				solved=false;
+				break;
+			}
+		}
+	}
+	return solved;
 }
 #include <map>
 #include <vector>

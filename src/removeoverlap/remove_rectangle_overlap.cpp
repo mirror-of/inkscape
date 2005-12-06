@@ -9,7 +9,7 @@ double Rectangle::yBorder=0;
  * such that rectangles are separated by at least xBorder horizontally
  * and yBorder vertically
  */
-void removeRectangleOverlap(Rectangle *rs[], const int n, const double xBorder=0, const double yBorder=0) {
+void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder=0, double yBorder=0) {
 	// The extra gap avoids numerical imprecision problems
 	Rectangle::setXBorder(xBorder+0.001);
 	Rectangle::setYBorder(yBorder);

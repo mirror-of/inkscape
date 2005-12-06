@@ -25,8 +25,7 @@ public:
 	double posn;
 	double weight;
 	double wposn;
-	Block();
-	Block(Variable *v);
+	Block(Variable *v=NULL);
 	~Block(void);
 	Constraint *findMinLM();
 	Constraint *findMinInConstraint();
@@ -40,6 +39,7 @@ public:
 	void setUpOutConstraints();
 	double cost();
 	char *toString();
+	bool deleted;
 private:
 	PairingHeap<Constraint*> *in;
 	PairingHeap<Constraint*> *out;
@@ -63,20 +63,15 @@ inline void Block::addVariable(Variable *v) {
 	posn=wposn/weight;
 }
 inline Block::Block(Variable *v) {
+	posn=weight=wposn=0;
+	in=NULL;
+	out=NULL;
+	deleted=false;
 	vars=new vector<Variable*>;
-	weight=wposn=0;
+	if(v!=NULL) {
 	v->offset=0;
 	addVariable(v);
-	in=NULL;
-	out=NULL;
-}
-inline Block::Block() {
-	vars=new vector<Variable*>;
-	weight=0;
-	posn=0;
-	wposn=0;
-	in=NULL;
-	out=NULL;
+	}
 }
 
 inline double Block::desiredWeightedPosition() {
