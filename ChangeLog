@@ -4,10 +4,24 @@
 	src/dialogs/clonetiler.cpp, src/dialogs/display-settings.cpp:
 	re-jig #includes slightly.
 
-	* src/seltrans.{cpp,h}: C++-ification and cleanup.
+	* src/seltrans.{cpp,h}, src/selcue.{cpp,h}: C++-ification and cleanup.
 
 	* src/select-context.{cpp,h}, src/seltrans-handles.h: adapt for
 	changes to SelTrans.
+
+	* src/event-context.{cpp,h}: adapt for changes to SelCue.
+
+	* src/rect-context.cpp, src/gradient-context.cpp: remove unnecessary include.
+
+	* src/connector-context.h, src/draw-context.h: add a forward
+	declaration.
+
+	* src/dropper-context.{cpp,h}: remove an unused variable and its
+	associated includes.
+
+	* src/main.cpp: fix comment for renamed SPSelCue.
+
+	* src/dialogs/display-settings.cpp: adapt for slightly re-jigged SelCue.
 
 2005-12-04  Ted Gould  <ted@gould.cx>
 
