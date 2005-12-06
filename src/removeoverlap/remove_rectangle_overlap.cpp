@@ -1,3 +1,5 @@
+#include "remove_rectangle_overlap.h"
+#include <cassert>
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
@@ -9,7 +11,8 @@ double Rectangle::yBorder=0;
  * such that rectangles are separated by at least xBorder horizontally
  * and yBorder vertically
  */
-void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder=0, double yBorder=0) {
+void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBorder) {
+	assert(0 <= n);
 	// The extra gap avoids numerical imprecision problems
 	Rectangle::setXBorder(xBorder+0.001);
 	Rectangle::setYBorder(yBorder);
