@@ -140,8 +140,6 @@ static void sp_nodepath_node_destroy(Inkscape::NodePath::Node *node);
 static Inkscape::NodePath::NodeSide *sp_node_get_side(Inkscape::NodePath::Node *node, gint which);
 static Inkscape::NodePath::NodeSide *sp_node_opposite_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
 static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
-//from splivarot.cpp
-Path::cut_position get_nearest_position_on_Path(SPItem * item, NR::Point p);
 
 // active_node indicates mouseover node
 static Inkscape::NodePath::Node *active_node = NULL;
