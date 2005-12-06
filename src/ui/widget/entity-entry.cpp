@@ -64,8 +64,8 @@ EntityEntry::create (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr)
 }
 
 EntityEntry::EntityEntry (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr)
-: _label(_(ent->title), 1.0, 0.5),_packable(0), 
-  _tt(&tt), _wr(&wr)
+: _label(_(ent->title), 1.0, 0.5), _packable(0), 
+  _entity(ent), _tt(&tt), _wr(&wr)
 {
 }
 
@@ -93,6 +93,8 @@ EntityLineEntry::~EntityLineEntry()
 void 
 EntityLineEntry::update (SPDocument *doc)
 {
+    const char *text = rdf_get_work_entity (doc, _entity);
+    reinterpret_cast<Gtk::Entry*>(_packable)->set_text (text ? text : "");
 }
 
 void
@@ -126,6 +128,10 @@ EntityMultiLineEntry::~EntityMultiLineEntry()
 void 
 EntityMultiLineEntry::update (SPDocument *doc)
 {
+    const char *text = rdf_get_work_entity (doc, _entity);
+    Gtk::ScrolledWindow *s = reinterpret_cast<Gtk::ScrolledWindow*>(_packable);
+    Gtk::TextView *tv = reinterpret_cast<Gtk::TextView*>(s->get_child());
+    tv->get_buffer()->set_text (text ? text : "");
 }
 
 void

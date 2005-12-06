@@ -40,6 +40,7 @@ protected:
     EntityEntry (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr);
     virtual void on_changed() = 0;
     sigc::connection _changed_connection;
+    rdf_work_entity_t *_entity;
     Gtk::Tooltips *_tt;
     Registry *_wr;
 };

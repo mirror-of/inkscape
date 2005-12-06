@@ -15,6 +15,7 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/optionmenu.h>
 
 class SPDocument;
 
@@ -39,6 +40,7 @@ public:
     Gtk::Frame _frame;
 
 protected: 
+    Gtk::OptionMenu       _omenu;
     Registry       *_wr;
     EntityEntry    *_eentry;
 };

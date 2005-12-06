@@ -18,7 +18,6 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/optionmenu.h>
-#include <gtkmm/menu.h>
 #include <gtkmm/menuitem.h>
 #include <gtkmm/box.h>
 #include <gtkmm/tooltips.h>
@@ -76,26 +75,21 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
     show();
     _frame.show();
     _frame.add (*this);
-    Gtk::OptionMenu *om = manage (new Gtk::OptionMenu);
-    om->show();
-    pack_start (*om, true, true, 0);
-    _wr->add ("licenses", om);
-    Gtk::Menu *menu = manage (new Gtk::Menu);
-    menu->show();
+    pack_start (_omenu, true, true, 0);
+    _wr->add ("licenses", &_omenu);
+    Gtk::Menu *m = manage (new Gtk::Menu);
 
     LicenseItem *i;
     for (struct rdf_license_t * license = rdf_licenses;
              license && license->name;
              license++) {
         i = manage (new LicenseItem (license->name));
-        i->show();
-        menu->append (*i);
+        m->append (*i);
     }
 
     i = manage (new LicenseItem (_("Proprietary")));
-    i->show();
-    menu->prepend (*i);
-    om->set_menu (*menu);
+    m->prepend (*i);
+    _omenu.set_menu (*m);
 
     Gtk::HBox *box = manage (new Gtk::HBox);
     pack_start (*box, true, true, 0);
@@ -105,11 +99,30 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
     _eentry = EntityEntry::create (entity, tt, *_wr);
     box->pack_start (_eentry->_label, false, false, 5);
     box->pack_start (*_eentry->_packable, true, true, 0);
+
+    show_all_children();
 }
     
 void 
 Licensor::update (SPDocument *doc)
 {
+    /* identify the license info */
+    struct rdf_license_t * license = rdf_get_license (doc);
+
+    if (license) {
+        for (int i=0; rdf_licenses[i].name; i++) {
+            if (license == &rdf_licenses[i]) {
+                _omenu.set_history (i+1);
+                break;
+            }
+        }
+    }
+    else {
+        _omenu.set_history (0);
+    }
+    
+    /* update the URI */
+    _eentry->update (doc);
 }
 
 } // namespace Dialog
