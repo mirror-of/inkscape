@@ -152,17 +152,6 @@ sp_path_finalize(GObject *obj)
 static void
 sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    SPPath *path = SP_PATH(object);
-
-    Inkscape::Version version = sp_object_get_sodipodi_version(object);
-
-    /* Fixes old Sodipodi nodetype to namespaced parameter */
-    if (sp_version_inside_range(version, 0, 0, 0, 25)) {
-        gchar const *str = repr->attribute("SODIPODI-PATH-NODE-TYPES");
-        repr->setAttribute("sodipodi:nodetypes", str);
-        repr->setAttribute("SODIPODI-PATH-NODE-TYPES", NULL);
-    }
-
     sp_object_read_attr(object, "d");
 
     /* d is a required attribute */
@@ -178,41 +167,6 @@ sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "marker-end");
 
     sp_conn_end_pair_build(object);
-
-    if (sp_version_inside_range(version, 0, 0, 0, 25)) {
-        SPShape *shape = (SPShape *) path;
-        /* Remove fill from open paths for compatibility with inkscape < 0.25 */
-        /* And set fill-rule of closed paths to evenodd */
-        /* We force style rewrite at moment (Lauris) */
-        gboolean changed = TRUE;
-        gboolean open = FALSE;
-        if (shape->curve && shape->curve->bpath) {
-            for (NArtBpath *bp = shape->curve->bpath; bp->code != NR_END; bp++) {
-                if (bp->code == NR_MOVETO_OPEN) {
-                    open = TRUE;
-                    break;
-                }
-            }
-        }
-        SPCSSAttr *css = sp_repr_css_attr(repr, "style");
-        if (open) {
-            gchar const *val = sp_repr_css_property(css, "fill", NULL);
-            if (val && strcmp(val, "none")) {
-                sp_repr_css_set_property(css, "fill", "none");
-                changed = TRUE;
-            }
-        } else {
-            gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
-            if (!val) {
-                sp_repr_css_set_property(css, "fill-rule", "evenodd");
-                changed = TRUE;
-            }
-        }
-        if (changed) {
-            sp_repr_css_set(repr, css, "style");
-        }
-        sp_repr_css_attr_unref(css);
-    }
 
     if (((SPObjectClass *) parent_class)->build) {
         ((SPObjectClass *) parent_class)->build(object, document, repr);

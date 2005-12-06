@@ -129,45 +129,6 @@ sp_shape_init (SPShape *shape)
 static void
 sp_shape_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-	Inkscape::Version version;
-
-	version = sp_object_get_sodipodi_version (object);
-
-	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
-		SPCSSAttr *css;
-		const gchar *val;
-		gboolean changed;
-		/* Have to check for percentage opacities */
-		css = sp_repr_css_attr (repr, "style");
-		/* We force style rewrite at moment (Lauris) */
-		changed = TRUE;
-		val = sp_repr_css_property (css, "opacity", NULL);
-		if (val && strchr (val, '%')) {
-			Inkscape::CSSOStringStream os;
-			os << sp_svg_read_percentage (val, 1.0);
-			sp_repr_css_set_property (css, "opacity", os.str().c_str());
-			changed = TRUE;
-		}
-		val = sp_repr_css_property (css, "fill-opacity", NULL);
-		if (val && strchr (val, '%')) {
-			Inkscape::CSSOStringStream os;
-			os << sp_svg_read_percentage (val, 1.0);
-			sp_repr_css_set_property (css, "fill-opacity", os.str().c_str());
-			changed = TRUE;
-		}
-		val = sp_repr_css_property (css, "stroke-opacity", NULL);
-		if (val && strchr (val, '%')) {
-			Inkscape::CSSOStringStream os;
-			os << sp_svg_read_percentage (val, 1.0);
-			sp_repr_css_set_property (css, "stroke-opacity", os.str().c_str());
-			changed = TRUE;
-		}
-		if (changed) {
-		  sp_repr_css_set (repr, css, "style");
-		}
-		sp_repr_css_attr_unref (css);
-	}
-
 	if (((SPObjectClass *) (parent_class))->build) {
 	  (*((SPObjectClass *) (parent_class))->build) (object, document, repr);
 	}

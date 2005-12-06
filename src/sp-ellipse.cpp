@@ -649,32 +649,14 @@ sp_arc_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 
     Inkscape::Version version = sp_object_get_sodipodi_version(object);
 
-    if (sp_version_inside_range(version, 0, 0, 0, 25)) {
-        /* Old spec violating arc attributes */
-        sp_object_read_attr(object, "cx");
-        sp_object_read_attr(object, "cy");
-        sp_object_read_attr(object, "rx");
-        sp_object_read_attr(object, "ry");
-    } else {
-        /* New attributes */
-        sp_object_read_attr(object, "sodipodi:cx");
-        sp_object_read_attr(object, "sodipodi:cy");
-        sp_object_read_attr(object, "sodipodi:rx");
-        sp_object_read_attr(object, "sodipodi:ry");
-    }
+    sp_object_read_attr(object, "sodipodi:cx");
+    sp_object_read_attr(object, "sodipodi:cy");
+    sp_object_read_attr(object, "sodipodi:rx");
+    sp_object_read_attr(object, "sodipodi:ry");
 
     sp_object_read_attr(object, "sodipodi:start");
     sp_object_read_attr(object, "sodipodi:end");
     sp_object_read_attr(object, "sodipodi:open");
-
-    if (sp_version_inside_range(version, 0, 0, 0, 25)) {
-        /* fixme: I am 99.9% sure we can do this here safely, but check nevertheless (Lauris) */
-        sp_arc_write(object, repr, SP_OBJECT_WRITE_EXT);
-        repr->setAttribute("cx", NULL);
-        repr->setAttribute("cy", NULL);
-        repr->setAttribute("rx", NULL);
-        repr->setAttribute("ry", NULL);
-    }
 }
 
 /*
@@ -771,25 +753,6 @@ static void
 sp_arc_set(SPObject *object, unsigned int key, gchar const *value)
 {
     SPGenericEllipse *ge = SP_GENERICELLIPSE(object);
-
-    Inkscape::Version version = sp_object_get_sodipodi_version(object);
-
-    if (sp_version_inside_range(version, 0, 0, 0, 25)) {
-        switch (key) {
-            case SP_ATTR_CX:
-                key = SP_ATTR_SODIPODI_CX;
-                break;
-            case SP_ATTR_CY:
-                key = SP_ATTR_SODIPODI_CY;
-                break;
-            case SP_ATTR_RX:
-                key = SP_ATTR_SODIPODI_RX;
-                break;
-            case SP_ATTR_RY:
-                key = SP_ATTR_SODIPODI_RY;
-                break;
-        }
-    }
 
     switch (key) {
         case SP_ATTR_SODIPODI_CX:

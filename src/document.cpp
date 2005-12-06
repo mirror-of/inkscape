@@ -262,14 +262,6 @@ sp_document_create(Inkscape::XML::Document *rdoc,
             rroot->setAttribute("sodipodi:docbase", document->base);
     }
     /* End of quick hack 3 */
-    /* between 0 and 0.25 */
-    if (sp_version_inside_range(sodipodi_version, 0, 0, 0, 25)) {
-        /* Clear ancient spec violating attributes */
-        rroot->setAttribute("SP-DOCNAME", NULL);
-        rroot->setAttribute("SP-DOCBASE", NULL);
-        rroot->setAttribute("docname", NULL);
-        rroot->setAttribute("docbase", NULL);
-    }
 
     // creating namedview
     if (!sp_item_group_get_child_by_name((SPGroup *) document->root, NULL, "sodipodi:namedview")) {
