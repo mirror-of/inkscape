@@ -25,6 +25,7 @@ namespace NR {
 /** An exception class for run-time type errors */
 template <typename T>
 class IsNot : public std::domain_error {
+public:
     IsNot() : domain_error(std::string("Is not ") + typeid(T).name()) {}
 };
 
