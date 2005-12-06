@@ -1573,11 +1573,13 @@ Path_for_item(SPItem *item, bool doTransformation, bool transformFull)
     return dest;
 }
 
-Path::cut_position
-get_nearest_position_on_Path(SPItem *item, NR::Point p)
+NR::Maybe<Path::cut_position> get_nearest_position_on_Path(SPItem *item, NR::Point p)
 {
     //Create and initialize a livarot Path
     Path *path = Path_for_item(item, true, true);
+    if (path == NULL) {
+        return NR::Nothing();
+    }
     path->ConvertWithBackData(0.01);
 
     //get nearest position on path
@@ -1586,8 +1588,7 @@ get_nearest_position_on_Path(SPItem *item, NR::Point p)
     return pos;
 }
 
-NR::Point
-get_point_on_Path(SPItem *item, int piece, double t)
+NR::Point get_point_on_Path(SPItem *item, int piece, double t)
 {
     //Create and initialize a livarot Path
     Path *path = Path_for_item(item, true, true);
