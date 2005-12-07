@@ -1346,6 +1346,9 @@ _update_snap_distances (SPDesktop *desktop)
     nv.guide_snapper.setDistance(sp_convert_distance_full(nv.guidetolerance,
                                                           *nv.guidetoleranceunit,
                                                           px));
+    nv.object_snapper.setDistance(sp_convert_distance_full(nv.objecttolerance,
+                                                           *nv.objecttoleranceunit,
+                                                           px));
 }
 
 /**
