@@ -1,4 +1,6 @@
 #include "removeoverlap/remove_rectangle_overlap.h"
+#include <unistd.h>  // for alarm()
+#include <time.h>  // for srand seed and clock().
 #include <glib/gmacros.h>
 #include <glib/gmem.h>
 #include <cstdlib>
@@ -21,6 +23,18 @@ possibly_le(double const a, double const b)
 }
 
 static void
+show_rects(unsigned const n_rects, double const rect2coords[][4])
+{
+    for (unsigned i = 0; i < n_rects; ++i) {
+        printf("{%g, %g, %g, %g},\n",
+               rect2coords[i][0],
+               rect2coords[i][1],
+               rect2coords[i][2],
+               rect2coords[i][3]);
+    }
+}
+
+static void
 test_case(unsigned const n_rects, double const rect2coords[][4])
 {
     Rectangle **rs = (Rectangle **) g_malloc(sizeof(Rectangle*) * n_rects);
@@ -37,10 +51,15 @@ test_case(unsigned const n_rects, double const rect2coords[][4])
         UTEST_ASSERT(possibly_eq(rs[i]->height(), (rect2coords[i][3] -
                                                    rect2coords[i][2]  )));
         for (unsigned j = 0; j < i; ++j) {
-            UTEST_ASSERT( possibly_le(rs[i]->getMaxX(), rs[j]->getMinX()) ||
-                          possibly_le(rs[j]->getMaxX(), rs[i]->getMinX()) ||
-                          possibly_le(rs[i]->getMaxY(), rs[j]->getMinY()) ||
-                          possibly_le(rs[j]->getMaxY(), rs[i]->getMinY())   );
+            if (!( possibly_le(rs[i]->getMaxX(), rs[j]->getMinX()) ||
+                   possibly_le(rs[j]->getMaxX(), rs[i]->getMinX()) ||
+                   possibly_le(rs[i]->getMaxY(), rs[j]->getMinY()) ||
+                   possibly_le(rs[j]->getMaxY(), rs[i]->getMinY())   )) {
+                show_rects(n_rects, rect2coords);
+                char buf[32];
+                sprintf(buf, "[%u],[%u] of %u", j, i, n_rects);
+                utest__fail("Found overlap among ", buf, " rectangles");
+            }
         }
     }
     for (unsigned i = 0; i < n_rects; ++i) {
@@ -51,9 +70,14 @@ test_case(unsigned const n_rects, double const rect2coords[][4])
 
 int main()
 {
+    srand(time(NULL));
+
+    /* Ensure that the program doesn't run for more than 30 seconds. */
+    alarm(30);
+
     utest_start("removeRectangleOverlap(zero gaps)");
 
-    /* Derived from Bulia's initial test case. */
+    /* Derived from Bulia's initial test case.  This used to crash. */
     UTEST_TEST("eg0") {
         double case0[][4] = {
             {-180.5, 69.072, 368.071, 629.071},
@@ -85,7 +109,7 @@ int main()
     }
 #endif
 
-#if 0 /* disable some known fails for the moment */
+    /* The next few examples used to result in overlaps. */
     UTEST_TEST("eg2") {
         double case2[][4] = {
             {3, 4, 6, 13},
@@ -109,18 +133,74 @@ int main()
         };
         test_case(G_N_ELEMENTS(case3), case3);
     }
-#endif
+
+    UTEST_TEST("eg4") {
+        double case4[][4] = {
+            {0, 1, 2, 3},
+            {0, 4, 0, 4},
+            {1, 6, 0, 4},
+            {2, 3, 4, 5},
+            {0, 5, 4, 6}
+        };
+        test_case(G_N_ELEMENTS(case4), case4);
+    }
+
+    UTEST_TEST("eg5") {
+        double case5[][4] = {
+            {1, 5, 1, 2},
+            {1, 6, 5, 7},
+            {6, 8, 1, 2},
+            {2, 3, 1, 4},
+            {5, 8, 2, 6}
+        };
+        test_case(G_N_ELEMENTS(case5), case5);
+    }
+
+    /* The next two examples caused loops in the version at 2005-12-07 04:00 UTC. */
+    UTEST_TEST("loop0") {
+        double loop0[][4] = {
+            {13, 16, 6, 27},
+            {0, 6, 0, 12},
+            {11, 14, 1, 10},
+            {12, 39, 5, 24},
+            {14, 34, 4, 7},
+            {1, 30, 20, 27},
+            {1, 6, 1, 2},
+            {19, 28, 10, 24},
+            {4, 34, 15, 21},
+            {7, 13, 13, 34}
+        };
+        test_case(G_N_ELEMENTS(loop0), loop0);
+    }
+
+    UTEST_TEST("loop1") {
+        double loop1[][4] = {
+            {6, 18, 9, 16},
+            {8, 26, 10, 13},
+            {3, 10, 0, 14},
+            {0, 5, 16, 22},
+            {1, 8, 11, 21},
+            {1, 5, 0, 13},
+            {24, 25, 0, 2}
+        };
+        test_case(G_N_ELEMENTS(loop1), loop1);
+    }
 
     /* Random cases of up to 10 rectangles, with small non-neg int coords. */
-    UTEST_TEST("random ints") {
-        for (unsigned n = 0; n < 10; ++n) {
-            unsigned const fld_size = 2 * n;
+    for (unsigned n = 0; n <= 10; ++n) {
+        char buf[64];
+        sprintf(buf, "random ints with %u rectangles", n);
+        UTEST_TEST(buf) {
+            unsigned const fld_size = 4 * n;
             double (*coords)[4] = (double (*)[4]) g_malloc(n * 4 * sizeof(double));
+            clock_t const clock_stop = clock() + CLOCKS_PER_SEC;
             for (unsigned repeat = (n == 0 ? 1
                                     : n == 1 ? 36
-                                    : (1 << 5)  ); repeat--;) {
+                                    : (1 << 16)  ); repeat--;) {
                 for (unsigned i = 0; i < n; ++i) {
                     for (unsigned d = 0; d < 2; ++d) {
+                        //unsigned const start = rand() % fld_size;
+                        //unsigned const end = start + rand() % (fld_size - start);
                         unsigned const end = 1 + (rand() % (fld_size - 1));
                         unsigned const start = rand() % end;
                         coords[i][2 * d] = start;
@@ -128,6 +208,9 @@ int main()
                     }
                 }
                 test_case(n, coords);
+                if (clock() >= clock_stop) {
+                    break;
+                }
             }
             g_free(coords);
         }
