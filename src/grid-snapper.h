@@ -15,10 +15,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "snapper.h"
+#include "line-snapper.h"
+
+namespace Inkscape
+{
 
 /// Snap to grid
-class GridSnapper : public Snapper
+class GridSnapper : public LineSnapper
 {
 public:
     GridSnapper(SPNamedView const *nv, NR::Coord const d);
@@ -26,6 +29,8 @@ public:
 private:    
     LineList get_snap_lines(NR::Point const &p) const;
 };
+
+}
 
 #endif
 
