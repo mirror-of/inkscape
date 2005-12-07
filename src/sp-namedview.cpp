@@ -122,8 +122,9 @@ static void sp_namedview_init(SPNamedView *nv)
     
     nv->default_layer_id = 0;
     
-    new (&nv->grid_snapper) GridSnapper(nv, 0);
-    new (&nv->guide_snapper) GuideSnapper(nv, 0);
+    new (&nv->grid_snapper) Inkscape::GridSnapper(nv, 0);
+    new (&nv->guide_snapper) Inkscape::GuideSnapper(nv, 0);
+    new (&nv->object_snapper) Inkscape::ObjectSnapper(nv, 0);
 }
 
 static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
@@ -141,6 +142,7 @@ static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape:
     sp_object_read_attr(object, "showguides");
     sp_object_read_attr(object, "gridtolerance");
     sp_object_read_attr(object, "guidetolerance");
+    sp_object_read_attr(object, "objecttolerance");
     sp_object_read_attr(object, "gridoriginx");
     sp_object_read_attr(object, "gridoriginy");
     sp_object_read_attr(object, "gridspacingx");
@@ -171,8 +173,12 @@ static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape:
     sp_object_read_attr(object, "inkscape:window-y");
     sp_object_read_attr(object, "inkscape:grid-bbox");
     sp_object_read_attr(object, "inkscape:guide-bbox");
+    sp_object_read_attr(object, "inkscape:object-bbox");
     sp_object_read_attr(object, "inkscape:grid-points");
     sp_object_read_attr(object, "inkscape:guide-points");
+    sp_object_read_attr(object, "inkscape:object-points");
+    sp_object_read_attr(object, "inkscape:object-paths");
+    sp_object_read_attr(object, "inkscape:object-nodes");
     sp_object_read_attr(object, "inkscape:current-layer");
     
     /* Construct guideline list */
@@ -202,6 +208,7 @@ static void sp_namedview_release(SPObject *object)
     
     namedview->grid_snapper.~GridSnapper();
     namedview->guide_snapper.~GuideSnapper();
+    namedview->object_snapper.~ObjectSnapper();
     
     if (((SPObjectClass *) parent_class)->release) {
         ((SPObjectClass *) parent_class)->release(object);
@@ -221,11 +228,11 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             nv->showgrid = sp_str_to_bool(value);
             sp_namedview_setup_grid(nv);
             if (!nv->showgrid) { // grid goes off, disable snaps even if they are turned on
-                nv->grid_snapper.setSnapTo(Snapper::BBOX_POINT, false);
-                nv->grid_snapper.setSnapTo(Snapper::SNAP_POINT, false);
+                nv->grid_snapper.setSnapTo(Inkscape::Snapper::BBOX_POINT, false);
+                nv->grid_snapper.setSnapTo(Inkscape::Snapper::SNAP_POINT, false);
             } else { // grid goes on, enable snaps if they are turned on
-                nv->grid_snapper.setSnapTo(Snapper::BBOX_POINT, nv->snap_grid_bbox);
-                nv->grid_snapper.setSnapTo(Snapper::SNAP_POINT, nv->snap_grid_point);
+                nv->grid_snapper.setSnapTo(Inkscape::Snapper::BBOX_POINT, nv->snap_grid_bbox);
+                nv->grid_snapper.setSnapTo(Inkscape::Snapper::SNAP_POINT, nv->snap_grid_point);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
@@ -236,11 +243,11 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
                 nv->showguides = sp_str_to_bool(value);
             }
             if (!nv->showguides) { // guides go off, disable snaps even if they are turned on
-                nv->guide_snapper.setSnapTo(Snapper::BBOX_POINT, false);
-                nv->guide_snapper.setSnapTo(Snapper::SNAP_POINT, false);
+                nv->guide_snapper.setSnapTo(Inkscape::Snapper::BBOX_POINT, false);
+                nv->guide_snapper.setSnapTo(Inkscape::Snapper::SNAP_POINT, false);
             } else { // guides go on, enable snaps if they are turned on
-                nv->guide_snapper.setSnapTo(Snapper::BBOX_POINT, nv->snap_guide_bbox);
-                nv->guide_snapper.setSnapTo(Snapper::SNAP_POINT, nv->snap_guide_point);
+                nv->guide_snapper.setSnapTo(Inkscape::Snapper::BBOX_POINT, nv->snap_guide_bbox);
+                nv->guide_snapper.setSnapTo(Inkscape::Snapper::SNAP_POINT, nv->snap_guide_point);
             }
             sp_namedview_setup_guides(nv);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -258,6 +265,14 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             nv->guidetolerance = DEFAULTTOLERANCE;
             if (value) {
                 sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->guidetolerance, &nv->guidetoleranceunit);
+            }
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SP_ATTR_OBJECTTOLERANCE:
+            nv->objecttoleranceunit = nv->doc_units;
+            nv->objecttolerance = DEFAULTTOLERANCE;
+            if (value) {
+                sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->objecttolerance, &nv->objecttoleranceunit);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
@@ -431,22 +446,42 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             break;
 	case SP_ATTR_INKSCAPE_GRID_BBOX:
             nv->snap_grid_bbox = (value) ? sp_str_to_bool(value) : TRUE;
-            nv->grid_snapper.setSnapTo(Snapper::BBOX_POINT, nv->showgrid && nv->snap_grid_bbox);
+            nv->grid_snapper.setSnapTo(Inkscape::Snapper::BBOX_POINT, nv->showgrid && nv->snap_grid_bbox);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	case SP_ATTR_INKSCAPE_GRID_POINTS:
             nv->snap_grid_point = (value) ? sp_str_to_bool(value) : FALSE;
-            nv->grid_snapper.setSnapTo(Snapper::SNAP_POINT, nv->showgrid && nv->snap_grid_point);
+            nv->grid_snapper.setSnapTo(Inkscape::Snapper::SNAP_POINT, nv->showgrid && nv->snap_grid_point);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	case SP_ATTR_INKSCAPE_GUIDE_BBOX:
             nv->snap_guide_bbox = (value) ? sp_str_to_bool(value) : TRUE;
-            nv->guide_snapper.setSnapTo(Snapper::BBOX_POINT, nv->showguides && nv->snap_guide_bbox);
+            nv->guide_snapper.setSnapTo(Inkscape::Snapper::BBOX_POINT, nv->showguides && nv->snap_guide_bbox);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	case SP_ATTR_INKSCAPE_GUIDE_POINTS:
             nv->snap_guide_point = (value) ? sp_str_to_bool(value) : FALSE;
-            nv->guide_snapper.setSnapTo(Snapper::SNAP_POINT, nv->showguides && nv->snap_guide_point);
+            nv->guide_snapper.setSnapTo(Inkscape::Snapper::SNAP_POINT, nv->showguides && nv->snap_guide_point);
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SP_ATTR_INKSCAPE_OBJECT_BBOX:
+            nv->snap_object_bbox = (value) ? sp_str_to_bool(value) : FALSE;
+            nv->object_snapper.setSnapTo(Inkscape::Snapper::BBOX_POINT, nv->snap_object_bbox);
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SP_ATTR_INKSCAPE_OBJECT_POINTS:
+            nv->snap_object_point = (value) ? sp_str_to_bool(value) : FALSE;
+            nv->object_snapper.setSnapTo(Inkscape::Snapper::SNAP_POINT, nv->snap_object_point);
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SP_ATTR_INKSCAPE_OBJECT_PATHS:
+            nv->snap_object_paths = (value) ? sp_str_to_bool(value) : TRUE;
+            nv->object_snapper.setSnapToPaths(nv->snap_object_paths);
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        case SP_ATTR_INKSCAPE_OBJECT_NODES:
+            nv->snap_object_nodes = (value) ? sp_str_to_bool(value) : TRUE;
+            nv->object_snapper.setSnapToNodes(nv->snap_object_nodes);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	case SP_ATTR_INKSCAPE_CURRENT_LAYER:

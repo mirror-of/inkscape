@@ -1,3 +1,31 @@
+2005-12-07  Carl Hetherington <inkscape@carlh.net>
+
+	* src/libnr/nr-convex-hull.h: remove unnecessary includes.
+
+	* src/line-snapper.{cpp,h}, src/object-snapper.{cpp,h},
+	src/attributes.{cpp,h}, src/desktop.cpp, src/dyna-draw-context.cpp
+	src/arc-context.cpp, src/grid-snapper.h, src/nodepath.cpp,
+	src/rect-context.cpp, src/selection-chemistry.cpp,
+	src/seltrans.cpp, src/snap.{cpp,h}, src/snapper.{cpp,h},
+	src/sp-namedview.{cpp,h}, src/spiral-context.cpp,
+	src/star-context.cpp, src/dialogs/desktop-properties.{cpp,h}:
+	first cut of object snapping.
+
+	* src/grid-snapper.cpp: use Inkscape namespace.
+
+2005-12-06  Carl Hetherington <inkscape@carlh.net>
+
+	* src/libnr/nr-maybe.h: add missing public: to class IsNot.
+
+	* src/splivarot.{cpp,h}: declare some more functions.  Fix
+	get_nearest_position_on_Path to not crash if you call it with an
+	Item that isn't Shape or Text.
+
+	* src/node-context.cpp: adapt for changes in splivarot.{cpp,h}.
+
+	* src/nodepath.cpp: remove declaration of a function now declared
+	in splivarot.h.
+
 2005-12-05  Carl Hetherington <inkscape@carlh.net>
 
 	* src/desktop.cpp, src/tools-switch.cpp,

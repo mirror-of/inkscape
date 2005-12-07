@@ -24,6 +24,8 @@
 #include "sp-metric.h"
 #include "grid-snapper.h"
 #include "guide-snapper.h"
+#include "object-snapper.h"
+
 
 enum {
     SP_BORDER_LAYER_BOTTOM,
@@ -42,6 +44,10 @@ struct SPNamedView : public SPObjectGroup {
     int snap_grid_point;
     int snap_guide_bbox;
     int snap_guide_point;
+    int snap_object_bbox;
+    int snap_object_point;
+    int snap_object_paths;
+    int snap_object_nodes;
 
     double zoom;
     double cx;
@@ -51,8 +57,9 @@ struct SPNamedView : public SPObjectGroup {
     gint window_x;
     gint window_y;
 
-    GridSnapper grid_snapper;
-    GuideSnapper guide_snapper;
+    Inkscape::GridSnapper grid_snapper;
+    Inkscape::GuideSnapper guide_snapper;
+    Inkscape::ObjectSnapper object_snapper;
 
     SPUnit const *gridunit;
     /* Grid data is in points regardless of unit */
@@ -68,6 +75,9 @@ struct SPNamedView : public SPObjectGroup {
     SPUnit const *guidetoleranceunit;
     gdouble guidetolerance;
 
+    SPUnit const *objecttoleranceunit;
+    gdouble objecttolerance;
+    
     GQuark default_layer_id;
 
     guint32 gridcolor;

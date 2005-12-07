@@ -25,28 +25,42 @@
 class SPNamedView;
 
 /* Single point methods */
-NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req);
-NR::Coord namedview_vector_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Point const &d);
-NR::Coord namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req, NR::Dim2 const dim);
+NR::Coord namedview_free_snap(SPNamedView const *nv, Inkscape::Snapper::PointType t, NR::Point &req,
+                              SPItem const *it);
+NR::Coord namedview_vector_snap(SPNamedView const *nv, Inkscape::Snapper::PointType t, NR::Point &req,
+                                NR::Point const &d, std::list<SPItem const *> const &it);
+NR::Coord namedview_vector_snap(SPNamedView const *nv, Inkscape::Snapper::PointType t, NR::Point &req,
+                                NR::Point const &d, SPItem const *it);
+NR::Coord namedview_dim_snap(SPNamedView const *nv, Inkscape::Snapper::PointType t, NR::Point& req,
+                             NR::Dim2 const dim, SPItem const *it);
+NR::Coord namedview_dim_snap(SPNamedView const *nv, Inkscape::Snapper::PointType t, NR::Point& req,
+                             NR::Dim2 const dim, std::list<SPItem const *> const &it);
 
 /* List of points methods */
 
 std::pair<int, NR::Point> namedview_free_snap(SPNamedView const *nv,
-                                              std::vector<Snapper::PointWithType> const &p);
+                                              std::vector<Inkscape::Snapper::PointWithType> const &p);
 
 std::pair<double, bool> namedview_vector_snap_list(SPNamedView const *nv,
-                                                   Snapper::PointType t, const std::vector<NR::Point> &p,
-                                                   NR::Point const &norm, NR::scale const &s);
+                                                   Inkscape::Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                   NR::Point const &norm, NR::scale const &s,
+                                                   std::list<SPItem const *> const &it
+                                                   );
 
 std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv,
-                                                   Snapper::PointType t, const std::vector<NR::Point> &p,
-                                                   double const dx, NR::Dim2 const dim);
+                                                   Inkscape::Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                   double const dx, NR::Dim2 const dim,
+                                                   std::list<SPItem const *> const &it
+                                                   );
 
 std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv,
-                                                      Snapper::PointType t, const std::vector<NR::Point> &p,
-                                                      NR::Point const &norm, double const sx, NR::Dim2 const dim);
+                                                      Inkscape::Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                      NR::Point const &norm, double const sx,
+                                                      NR::Dim2 const dim,
+                                                      std::list<SPItem const *> const &it);
 
-NR::Coord namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
+NR::Coord namedview_dim_snap_list_skew(SPNamedView const *nv, Inkscape::Snapper::PointType t,
+                                       const std::vector<NR::Point> &p,
                                        NR::Point const &norm, double const sx, NR::Dim2 const dim);
 
 
@@ -56,12 +70,20 @@ NR::Coord namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType
  * and a bbox point.  Any callers of these methods should instead be calling
  * namedview_*_snap twice; once with a snap point and once with the corresponding
  * bbox point (taking, e.g., stroke width into account).  However in some cases
- * working out the bbox point is hard, so these methods are a hack for the
- * 0.39 release.  They should be removed.
+ * working out the bbox point is hard, so these methods are a hack for now.
+ * They should be removed.
  */
-NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req);
-NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Point const &d);
-NR::Coord namedview_dim_snap_all_types(SPNamedView const *nv, NR::Point& req, NR::Dim2 const dim);
+NR::Coord namedview_free_snap_all_types(SPNamedView const *nv,
+                                        NR::Point &req,
+                                        SPItem const *it = NULL);
+NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv,
+                                          NR::Point &req,
+                                          NR::Point const &d,
+                                          SPItem const *it = NULL);
+NR::Coord namedview_dim_snap_all_types(SPNamedView const *nv,
+                                       NR::Point& req,
+                                       NR::Dim2 const dim,
+                                       SPItem const *it = NULL);
 
 
 #endif /* !SEEN_SNAP_H */

@@ -12,10 +12,15 @@
  */
 
 #include <map>
+#include <list>
 #include "libnr/nr-coord.h"
 #include "libnr/nr-point.h"
 
 struct SPNamedView;
+struct SPItem;
+
+namespace Inkscape
+{
 
 /// Parent for classes that can snap points to something
 class Snapper
@@ -40,26 +45,51 @@ public:
 
     bool will_snap_something() const;
 
+    NR::Coord free_snap(PointType t,
+                        NR::Point &req,
+                        std::list<SPItem const *> const &it) const;
+
     NR::Coord vector_snap(PointType t,
                           NR::Point &req,
-                          NR::Point const &d) const;
+                          NR::Point const &d,
+                          std::list<SPItem const *> const &it) const;
 protected:
-
-    typedef std::list<std::pair<NR::Point, NR::Coord> > LineList;
-
-    /**
-     *  \param p Point that we are trying to snap.
-     *  \return List of lines that we should try snapping to.
-     */
-    virtual LineList get_snap_lines(NR::Point const &p) const = 0;
-    
     SPNamedView const *_named_view;
     
 private:
-    NR::Coord _distance;
-    std::map<PointType, bool> _snap_to;
+
+    /**
+     *  Try to perform a "free snap" of a point.  Given a point, this method will
+     *  try to snap it to whatever the snapper is interested in (grid, guides, whatever).
+     *
+     *  \param req Point to snap (desktop coordinates).  Filled in with the snapped point,
+     *  if one is found.
+     *  \param it Items that should not be snapped to.
+     *  \return Distance (desktop coordinates) from the original to the snapped point, or NR_HUGE.
+     */
+    virtual NR::Coord do_free_snap(NR::Point &req,
+                                   std::list<SPItem const *> const &it) const = 0;
+
+    /**
+     *  Try to perform a "vector snap" of a point.  Given a point, this method will
+     *  try to snap it to whatever the snapper is interested in (grid, guides, whatever).
+     *  FIXME: I am not convinced that this vector snapping is necessary, and it may soon
+     *  be removed.
+     *
+     *  \param req Point to snap (desktop coordinates).  Filled in with the snapped point,
+     *  if one is found.
+     *  \param it Items that should not be snapped to.
+     *  \return Distance (desktop coordinates) from the original to the snapped point, or NR_HUGE.
+     */    
+    virtual NR::Coord do_vector_snap(NR::Point &req,
+                                     NR::Point const &d,
+                                     std::list<SPItem const *> const &it) const = 0;
+    
+    NR::Coord _distance; ///< snap distance (desktop coordinates)
+    std::map<PointType, bool> _snap_to; ///< point types that we will snap to
 };
 
+}
 
 #endif /* !SEEN_SNAPPER_H */
 
