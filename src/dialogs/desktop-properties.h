@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-void sp_desktop_dialog (void);
+void sp_desktop_dialog();
 
 #endif
 

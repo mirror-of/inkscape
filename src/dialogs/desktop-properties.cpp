@@ -548,6 +548,30 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
     repr->setAttribute("guidetolerance", os.str().c_str());
 }
 
+static void
+sp_dtw_object_snap_distance_changed(GtkAdjustment *adjustment,
+                                    GtkWidget *dialog)
+{
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
+        return;
+    }
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (!dt) {
+        return;
+    }
+
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
+
+    SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(dialog),
+                                                                "object_snap_units");
+
+    Inkscape::SVGOStringStream os;
+    os << adjustment->value << sp_unit_selector_get_unit(us)->abbr;
+
+    repr->setAttribute("objecttolerance", os.str().c_str());
+}
+
 /**
  * Returns paper dimensions using specific unit and orientation.
  */
@@ -854,448 +878,447 @@ sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
 }
 
 
+static void sp_desktop_dialog_create_grid(GtkWidget* nb)
+{
+    GCallback cb = G_CALLBACK(sp_dtw_whatever_toggled);
+
+    GtkWidget *l = gtk_label_new(_("Grid"));
+    GtkWidget *v = gtk_vbox_new(FALSE, 0);
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
+    
+    /* Checkbuttons */
+    /// \todo FIXME: gray out snapping when grid is off
+    spw_vbox_checkbutton(dlg, v, _("Show grid"), _("Show or hide grid"), "showgrid", cb);
+    spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"),
+                         _("Snap the edges of the object bounding boxes"), "inkscape:grid-bbox", cb);
+    spw_vbox_checkbutton(dlg, v, _("Snap nodes to grid"),
+                         _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:grid-points", cb);
+
+    GtkWidget *t = gtk_table_new(8, 2, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 4);
+    gtk_table_set_row_spacings(GTK_TABLE(t), 4);
+    gtk_table_set_col_spacings(GTK_TABLE(t), 4);
+    gtk_box_pack_start(GTK_BOX(v), t, TRUE, TRUE, 0);
+    
+    cb = G_CALLBACK(sp_dtw_whatever_changed);
+    
+    GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    int row = 0;
+    spw_dropdown(dlg, t, _("Grid units:"), "grid_units", row++, us);
+    
+    spw_unit_selector(dlg, t, _("Origin X:"), "gridoriginx",
+                      row++, us, cb, true);
+    
+    spw_unit_selector(dlg, t, _("Origin Y:"), "gridoriginy",
+                      row++, us, cb, true);
+    
+    spw_unit_selector(dlg, t, _("Spacing X:"), "gridspacingx",
+                      row++, us, cb);
+    
+    spw_unit_selector(dlg, t, _("Spacing Y:"), "gridspacingy",
+                      row++, us, cb);
+    
+    us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    spw_dropdown(dlg, t, _("Snap units:"), "grid_snap_units",
+                 row++, us);
+    
+    spw_unit_selector(dlg, t, _("Snap distance:"), "gridtolerance", row++, us,
+                      G_CALLBACK(sp_dtw_grid_snap_distance_changed));
+    
+    sp_color_picker_button(NULL, true, dlg, t, _("Grid line color:"), "gridcolor",
+                           _("Grid line color"),
+                           _("Color of grid lines"), "gridopacity", row++);
+    
+    sp_color_picker_button(NULL, true, dlg, t, _("Major grid line color:"), "gridempcolor",
+                           _("Major grid line color"),
+                           _("Color of the major (highlighted) grid lines"), "gridempopacity", row++);
+    
+    spw_label(t, _("Major grid line every:"), 0, row);
+    GtkObject * a = gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 1.0, 1.0);
+    gtk_object_set_data(GTK_OBJECT(a), (const gchar *)"key", (gpointer)"gridempspacing");
+    gtk_object_set_data(GTK_OBJECT(dlg), "gridempspacing", a);
+    
+    GtkWidget * hbox = gtk_hbox_new(FALSE, 2);
+    
+    GtkWidget * sb = gtk_spin_button_new (GTK_ADJUSTMENT(a), 1.0, 0);
+    
+    // TRANSLATORS: This belongs to the "Major grid line every:" string,
+    //  see grid settings in the "Document Preferences" dialog
+    GtkWidget * label = gtk_label_new(_("lines"));
+    
+    gtk_box_pack_start(GTK_BOX(hbox), sb, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    
+    gtk_table_attach(GTK_TABLE(t),
+                     hbox, 1, 2, row, row+1,
+                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+    
+    g_signal_connect(G_OBJECT(a), "value_changed", G_CALLBACK(sp_dtw_grid_emp_spacing_changed), dlg);
+}
+
+static void sp_desktop_dialog_create_guidelines(GtkWidget* nb)
+{
+    GtkWidget *l = gtk_label_new(_("Guides"));
+    GtkWidget *v = gtk_vbox_new(FALSE, 0);
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
+    
+    /* Checkbuttons */
+    /// \todo FIXME: gray out snapping when guides are off
+    GCallback cb = G_CALLBACK(sp_dtw_whatever_toggled);
+    spw_vbox_checkbutton(dlg, v, _("Show guides"), _("Show or hide guides"), "showguides", cb);
+    spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to guides"),
+                         _("Snap the edges of the object bounding boxes"), "inkscape:guide-bbox", cb);
+    spw_vbox_checkbutton(dlg, v, _("Snap nodes to guides"),
+                         _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:guide-points", cb);
+    
+    GtkWidget* t = gtk_table_new(4, 2, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 4);
+    gtk_table_set_row_spacings(GTK_TABLE(t), 4);
+    gtk_table_set_col_spacings(GTK_TABLE(t), 4);
+    gtk_box_pack_start(GTK_BOX(v), t, TRUE, TRUE, 0);
+    
+    int row = 0;
+    GtkWidget* us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    spw_dropdown(dlg, t, _("Snap units:"), "guide_snap_units",
+                 row++, us);
+    
+    spw_unit_selector(dlg, t, _("Snap distance:"), "guidetolerance",
+                      row++, us,
+                      G_CALLBACK(sp_dtw_guides_snap_distance_changed));
+    
+    sp_color_picker_button(NULL, true, dlg, t, _("Guide color:"), "guidecolor",
+                           _("Guideline color"), _("Color of guidelines"), "guideopacity", row++);
+    
+    sp_color_picker_button(NULL, true, dlg, t, _("Highlight color:"), "guidehicolor",
+                           _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"),
+                           "guidehiopacity", row++);
+}
+
+static void sp_desktop_dialog_create_page(GtkWidget* nb)
+{
+    GtkWidget* l = gtk_label_new(_("Page"));
+    GtkWidget* t = gtk_table_new(1, 2, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 6);
+    gtk_table_set_row_spacings(GTK_TABLE(t), 6);
+    gtk_table_set_col_spacings(GTK_TABLE(t), 6);
+    gtk_notebook_prepend_page(GTK_NOTEBOOK(nb), t, l);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), 0);
+    
+    sp_color_picker_button(NULL, true, dlg, t, _("Background:"),
+                           "pagecolor", _("Background color"), 
+                           _("Color and transparency of the page background (also used for bitmap export)"),
+                           "inkscape:pageopacity", 0);
+    
+    GCallback cb = G_CALLBACK(sp_dtw_whatever_toggled);
+    spw_checkbutton(dlg, t, _("Show page border"),
+                    "showborder", 0, 1, 0, cb);
+    
+    cb = G_CALLBACK(sp_dtw_border_layer_toggled);
+    spw_checkbutton(dlg, t, _("Border on top of drawing"),
+                    "borderlayer", 0, 2, 0, cb);
+    
+    sp_color_picker_button(NULL, true, dlg, t, _("Border color:"),
+                           "bordercolor", _("Page border color"),
+                           _("Color of the page border"),
+                           "borderopacity", 4);
+    
+    /* Page Shadow toggle */
+    cb = G_CALLBACK(sp_dtw_whatever_toggled);
+    spw_checkbutton(dlg, t, _("Show page shadow"),
+                    "inkscape:showpageshadow", 0, 5, 0, cb);
+    
+    
+    l = gtk_label_new(_("Default units:"));
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_table_attach (GTK_TABLE (t), l, 0, 1, 6, 7,
+                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+    GtkWidget *doc_units = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    gtk_tooltips_set_tip(tooltips, doc_units, _("Units for the tool controls, ruler, and the statusbar"), NULL);
+    g_signal_connect(G_OBJECT(doc_units), "set_unit", G_CALLBACK(set_doc_units), NULL);
+    gtk_object_set_data (GTK_OBJECT (dlg), "doc_units", doc_units);
+    gtk_table_attach (GTK_TABLE (t), doc_units, 1, 2, 6, 7,
+                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+    
+    GtkWidget *vb = gtk_vbox_new(FALSE, 4);
+    gtk_table_attach(GTK_TABLE(t), vb, 0, 2, 7, 8,
+                     (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                     (GtkAttachOptions)0, 0, 0);
+    
+    GtkWidget *hb = gtk_hbox_new(FALSE, 4);
+    gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
+    
+    l = gtk_label_new(_("Page size:"));
+    gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+    gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
+    GtkWidget *om = gtk_option_menu_new();
+    gtk_box_pack_start(GTK_BOX(hb), om, TRUE, TRUE, 0);
+    gtk_object_set_data(GTK_OBJECT(dlg), "papers", om);
+    
+    GtkWidget *m = gtk_menu_new();
+    
+    GtkWidget *i;
+    for (PaperSize const *paper = inkscape_papers;
+         paper->name;
+         paper++) {
+        i = gtk_menu_item_new_with_label(paper->name);
+        g_signal_connect(G_OBJECT(i), "activate",
+                         G_CALLBACK(sp_doc_dialog_paper_selected),
+                         (gpointer) paper);
+        gtk_menu_append(GTK_MENU(m), i);
+    }
+    
+    i = gtk_menu_item_new_with_label(_("Custom"));
+    g_signal_connect(G_OBJECT(i), "activate",
+                     G_CALLBACK(sp_doc_dialog_paper_selected), NULL);
+    gtk_menu_prepend(GTK_MENU(m), i);
+    gtk_option_menu_set_menu(GTK_OPTION_MENU(om), m);
+    
+    hb = gtk_hbox_new(FALSE, 4);
+    gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
+    
+    l = gtk_label_new(_("Page orientation:"));
+    gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+    gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
+    om = gtk_option_menu_new();
+    gtk_box_pack_start(GTK_BOX(hb), om, TRUE, TRUE, 0);
+    gtk_object_set_data(GTK_OBJECT(dlg), "orientation", om);
+    
+    m = gtk_menu_new();
+    
+    i = gtk_menu_item_new_with_label(_("Landscape"));
+    g_signal_connect(G_OBJECT(i), "activate",
+                     G_CALLBACK(sp_doc_dialog_paper_orientation_selected), NULL);
+    gtk_menu_prepend(GTK_MENU(m), i);
+    
+    i = gtk_menu_item_new_with_label(_("Portrait"));
+    g_signal_connect(G_OBJECT(i), "activate",
+                     G_CALLBACK(sp_doc_dialog_paper_orientation_selected), NULL);
+    gtk_menu_prepend(GTK_MENU(m), i);
+    
+    gtk_option_menu_set_menu(GTK_OPTION_MENU(om), m);
+    
+    /* Custom paper frame */
+    GtkWidget *f = gtk_frame_new(_("Custom size"));
+    gtk_box_pack_start(GTK_BOX(vb), f, FALSE, FALSE, 0);
+    
+    GtkWidget *tt = gtk_table_new(4, 2, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(tt), 4);
+    gtk_table_set_row_spacings(GTK_TABLE(tt), 4);
+    gtk_table_set_col_spacings(GTK_TABLE(tt), 4);
+    gtk_container_add(GTK_CONTAINER(f), tt);
+    
+    GtkWidget* us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    spw_dropdown(dlg, tt, _("Units:"), "units", 0, us);
+    
+    l = gtk_label_new(_("Width:"));
+    gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+    gtk_table_attach( GTK_TABLE(tt), l, 0, 1, 1, 2,
+                      (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                      (GtkAttachOptions)0, 0, 0);
+    GtkObject *a = gtk_adjustment_new(0.0, 1e-6, 1e6, 1.0, 10.0, 10.0);
+    gtk_object_set_data(GTK_OBJECT(a), "key", (void *)"width");
+    gtk_object_set_data(GTK_OBJECT(a), "unit_selector", us);
+    gtk_object_set_data(GTK_OBJECT(dlg), "width", a);
+    sp_unit_selector_add_adjustment(SP_UNIT_SELECTOR(us),
+                                    GTK_ADJUSTMENT(a));
+    GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 1.0, 2);
+    gtk_table_attach(GTK_TABLE(tt), sb, 1, 2, 1, 2,
+                     (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                     (GtkAttachOptions)0, 0, 0);
+    g_signal_connect(G_OBJECT(a), "value_changed",
+                     G_CALLBACK(sp_doc_dialog_whatever_changed), dlg);
+    
+    
+    l = gtk_label_new(_("Height:"));
+    gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+    gtk_table_attach( GTK_TABLE(tt), l, 0, 1, 2, 3,
+                      (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                      (GtkAttachOptions)0, 0, 0 );
+    a = gtk_adjustment_new(0.0, 1e-6, 1e6, 1.0, 10.0, 10.0);
+    gtk_object_set_data(GTK_OBJECT(a), "key", (void *)"height");
+    gtk_object_set_data(GTK_OBJECT(a), "unit_selector", us);
+    gtk_object_set_data(GTK_OBJECT(dlg), "height", a);
+    sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us),
+                                     GTK_ADJUSTMENT(a));
+    sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 1.0, 2);
+    gtk_table_attach( GTK_TABLE(tt), sb, 1, 2, 2, 3,
+                      (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                      (GtkAttachOptions)0, 0, 0 );
+    g_signal_connect( G_OBJECT(a), "value_changed",
+                      G_CALLBACK(sp_doc_dialog_whatever_changed), dlg );
+}
+
+static void sp_desktop_dialog_create_metadata(GtkWidget* nb)
+{
+    GtkWidget* l = gtk_label_new (_("Metadata"));
+    GtkWidget* t = gtk_table_new (5, 2, FALSE);
+    gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+    gtk_table_set_row_spacings (GTK_TABLE (t), 1);
+    gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+    gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+    
+    int row = 0;
+    /* add generic metadata entry areas */
+    struct rdf_work_entity_t * entity;
+    for (entity = rdf_work_entities; entity && entity->name; entity++) {
+        if ( entity->editable == RDF_EDIT_GENERIC ) {
+            sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
+        }
+    }
+
+    /* add license selector pull-down */
+    GtkWidget *f = gtk_frame_new(_("License"));
+    
+    gtk_table_attach ( GTK_TABLE (t), f, 0, 2, row, row+1, 
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
+    row++;
+    
+    GtkWidget* vb = gtk_vbox_new (FALSE, 4);
+    gtk_container_add(GTK_CONTAINER(f), vb);
+    
+    GtkWidget* om = gtk_option_menu_new ();
+    gtk_box_pack_start (GTK_BOX (vb), om, TRUE, TRUE, 0);
+    gtk_object_set_data (GTK_OBJECT (dlg), "licenses", om);
+    
+    GtkWidget* m = gtk_menu_new ();
+    
+    for (struct rdf_license_t * license = rdf_licenses;
+         license && license->name;
+         license++) {
+        GtkWidget* i = gtk_menu_item_new_with_label (license->name);
+        g_signal_connect ( G_OBJECT (i), "activate",
+                           G_CALLBACK (sp_doc_dialog_license_selected),
+                           (gpointer)(license));
+        gtk_menu_append (GTK_MENU (m), i);
+    }
+    GtkWidget* i = gtk_menu_item_new_with_label (_("Proprietary"));
+    g_signal_connect ( G_OBJECT (i), "activate", 
+                       G_CALLBACK (sp_doc_dialog_license_selected), NULL);
+    gtk_menu_prepend (GTK_MENU (m), i);
+    gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
+    
+    t = gtk_table_new (5, 2, FALSE);
+    gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+    gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+    gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+    
+    gtk_box_pack_start (GTK_BOX (vb), t, TRUE, TRUE, 0);
+        
+    row = 0;
+    /* add license-specific metadata entry areas */
+    entity = rdf_find_entity ( "license_uri" );
+    GtkWidget * w = sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
+    gtk_widget_set_sensitive ( w, FALSE );
+}
+
+static void sp_desktop_dialog_create_object_snap(GtkWidget *nb)
+{
+    GtkWidget *l = gtk_label_new(_("Object snap"));
+    GtkWidget *v = gtk_vbox_new(FALSE, 0);
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
+    
+    /* Checkbuttons */
+    GCallback cb = G_CALLBACK(sp_dtw_whatever_toggled);
+    spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to objects"),
+                         _("Snap the edges of the object bounding boxes to other objects"),
+                         "inkscape:object-bbox", cb);
+    spw_vbox_checkbutton(dlg, v, _("Snap nodes to objects"),
+                         _("Snap the nodes of objects to other objects"),
+                         "inkscape:object-points", cb);
+    spw_vbox_checkbutton(dlg, v, _("Snap to object paths"),
+                         _("Snap to other object paths"),
+                         "inkscape:object-paths", cb);
+    spw_vbox_checkbutton(dlg, v, _("Snap to object nodes"),
+                         _("Snap to other object nodes"),
+                         "inkscape:object-nodes", cb);
+
+    GtkWidget *t = gtk_table_new(2, 2, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 4);
+    gtk_table_set_row_spacings(GTK_TABLE(t), 4);
+    gtk_table_set_col_spacings(GTK_TABLE(t), 4);
+    gtk_box_pack_start(GTK_BOX(v), t, TRUE, TRUE, 0);
+    
+    int row = 0;
+    GtkWidget* us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    spw_dropdown(dlg, t, _("Snap units:"), "object_snap_units",
+                 row++, us);
+    
+    spw_unit_selector(dlg, t, _("Snap distance:"), "objecttolerance",
+                      row++, us,
+                      G_CALLBACK(sp_dtw_object_snap_distance_changed));
+}
+
+static void sp_desktop_dialog_create()
+{
+    gchar title[500];
+    sp_ui_dialog_title_string(Inkscape::Verb::get(SP_VERB_DIALOG_NAMEDVIEW), title);
+
+    dlg = sp_window_new(title, TRUE);
+    gtk_window_set_resizable((GtkWindow *) dlg, FALSE);
+
+    if (x == -1000 || y == -1000) {
+        x = prefs_get_int_attribute(prefs_path, "x", 0);
+        y = prefs_get_int_attribute(prefs_path, "y", 0);
+    }
+    
+    if (x != 0 || y != 0) {
+        gtk_window_move((GtkWindow *) dlg, x, y);
+    } else {
+        gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+    }
+    
+    sp_transientize(dlg);
+    wd.win = dlg;
+    wd.stop = 0;
+    tooltips = gtk_tooltips_new ();
+    gtk_tooltips_enable (tooltips);
+    
+    g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop", G_CALLBACK(sp_transientize_callback), &wd);
+    
+    gtk_signal_connect(GTK_OBJECT(dlg), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg);
+    
+    gtk_signal_connect(GTK_OBJECT(dlg), "destroy", G_CALLBACK(sp_dtw_dialog_destroy), dlg);
+    gtk_signal_connect(GTK_OBJECT(dlg), "delete_event", G_CALLBACK(sp_dtw_dialog_delete), dlg);
+    g_signal_connect(G_OBJECT(INKSCAPE), "shut_down", G_CALLBACK(sp_dtw_dialog_delete), dlg);
+    
+    g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(sp_dialog_hide), dlg);
+    g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(sp_dialog_unhide), dlg);
+    
+    GtkWidget *nb = gtk_notebook_new();
+    gtk_container_add(GTK_CONTAINER(dlg), nb);
+
+    sp_desktop_dialog_create_grid(nb);
+    sp_desktop_dialog_create_guidelines(nb);
+    sp_desktop_dialog_create_page(nb);
+    sp_desktop_dialog_create_metadata(nb);
+    sp_desktop_dialog_create_object_snap(nb);
+
+    gtk_widget_show_all(dlg);
+
+    g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop",
+                     G_CALLBACK(sp_dtw_activate_desktop), dlg);
+    
+    g_signal_connect(G_OBJECT(INKSCAPE), "deactivate_desktop",
+                     G_CALLBACK(sp_dtw_deactivate_desktop), dlg);
+    sp_dtw_update(dlg, SP_ACTIVE_DESKTOP);
+    
+    sp_repr_add_listener(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), &docoptions_repr_events, dlg);
+}
+
+
 /*
  * \brief   Creates the desktop properties dialog
  *
  */
-void
-sp_desktop_dialog(void)
+void sp_desktop_dialog()
 {
-    if (!dlg) {
-        gchar title[500];
-        sp_ui_dialog_title_string(Inkscape::Verb::get(SP_VERB_DIALOG_NAMEDVIEW), title);
-
-        dlg = sp_window_new(title, TRUE);
-        gtk_window_set_resizable ((GtkWindow *) dlg, FALSE);
-
-        if (x == -1000 || y == -1000) {
-            x = prefs_get_int_attribute(prefs_path, "x", 0);
-            y = prefs_get_int_attribute(prefs_path, "y", 0);
-        }
-
-        if (x != 0 || y != 0) {
-            gtk_window_move((GtkWindow *) dlg, x, y);
-        } else {
-            gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
-        }
-
-        sp_transientize(dlg);
-        wd.win = dlg;
-        wd.stop = 0;
-        tooltips = gtk_tooltips_new ();
-        gtk_tooltips_enable (tooltips);
-
-        g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop", G_CALLBACK(sp_transientize_callback), &wd);
-
-        gtk_signal_connect(GTK_OBJECT(dlg), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg);
-
-        gtk_signal_connect(GTK_OBJECT(dlg), "destroy", G_CALLBACK(sp_dtw_dialog_destroy), dlg);
-        gtk_signal_connect(GTK_OBJECT(dlg), "delete_event", G_CALLBACK(sp_dtw_dialog_delete), dlg);
-        g_signal_connect(G_OBJECT(INKSCAPE), "shut_down", G_CALLBACK(sp_dtw_dialog_delete), dlg);
-
-        g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(sp_dialog_hide), dlg);
-        g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(sp_dialog_unhide), dlg);
-
-        GtkWidget *nb = gtk_notebook_new();
-        gtk_widget_show(nb);
-        gtk_container_add(GTK_CONTAINER(dlg), nb);
-
-
-        /* Grid settings */
-
-        GCallback cb = G_CALLBACK(sp_dtw_whatever_toggled);
-
-        /* Notebook tab */
-        GtkWidget *l = gtk_label_new(_("Grid"));
-        gtk_widget_show(l);
-        GtkWidget *v = gtk_vbox_new(FALSE, 0);
-        gtk_widget_show(v);
-        gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
-
-        /* Checkbuttons */
-        /// \todo FIXME: gray out snapping when grid is off
-        spw_vbox_checkbutton(dlg, v, _("Show grid"), _("Show or hide grid"), "showgrid", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"), _("Snap the edges of the object bounding boxes"), "inkscape:grid-bbox", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap nodes to grid"), _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:grid-points", cb);
-
-        /*   Commenting out until Nathan implements the grids -- bryce
-         *   spw_checkbutton(dlg, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
-         *   spw_checkbutton(dlg, t, _("Hex grid"), "hexgrid", 1, row++, 0, cb);
-         */
-
-        GtkWidget *t = gtk_table_new(8, 2, FALSE);
-        gtk_widget_show(t);
-        gtk_container_set_border_width(GTK_CONTAINER(t), 4);
-        gtk_table_set_row_spacings(GTK_TABLE(t), 4);
-        gtk_table_set_col_spacings(GTK_TABLE(t), 4);
-        gtk_box_pack_start(GTK_BOX(v), t, TRUE, TRUE, 0);
-
-        cb = G_CALLBACK(sp_dtw_whatever_changed);
-
-        GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        int row = 0;
-        spw_dropdown(dlg, t, _("Grid units:"), "grid_units", row++, us);
-
-        spw_unit_selector(dlg, t, _("Origin X:"), "gridoriginx",
-                          row++, us, cb, true);
-
-        spw_unit_selector(dlg, t, _("Origin Y:"), "gridoriginy",
-                          row++, us, cb, true);
-
-        spw_unit_selector(dlg, t, _("Spacing X:"), "gridspacingx",
-                          row++, us, cb);
-
-        spw_unit_selector(dlg, t, _("Spacing Y:"), "gridspacingy",
-                          row++, us, cb);
-
-        us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        spw_dropdown(dlg, t, _("Snap units:"), "grid_snap_units",
-                     row++, us);
-
-        spw_unit_selector(dlg, t, _("Snap distance:"), "gridtolerance", row++, us,
-                          G_CALLBACK(sp_dtw_grid_snap_distance_changed));
-
-        sp_color_picker_button(NULL, true, dlg, t, _("Grid line color:"), "gridcolor",
-                               _("Grid line color"), _("Color of grid lines"), "gridopacity", row++);
-
-        sp_color_picker_button(NULL, true, dlg, t, _("Major grid line color:"), "gridempcolor",
-                               _("Major grid line color"), _("Color of the major (highlighted) grid lines"), "gridempopacity", row++);
-
-        if (1) {
-            spw_label(t, _("Major grid line every:"), 0, row);
-            GtkObject * a = gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 1.0, 1.0);
-            gtk_object_set_data(GTK_OBJECT(a), (const gchar *)"key", (gpointer)"gridempspacing");
-            gtk_object_set_data(GTK_OBJECT(dlg), "gridempspacing", a);
-
-            GtkWidget * hbox = gtk_hbox_new(FALSE, 2);
-
-            GtkWidget * sb = gtk_spin_button_new (GTK_ADJUSTMENT(a), 1.0, 0);
-            gtk_widget_show(sb);
-
-            // TRANSLATORS: This belongs to the "Major grid line every:" string,
-            //  see grid settings in the "Document Preferences" dialog
-            GtkWidget * label = gtk_label_new(_("lines"));
-            gtk_widget_show(label);
-
-            gtk_box_pack_start(GTK_BOX(hbox), sb, TRUE, TRUE, 0);
-            gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-            gtk_widget_show(hbox);
-
-            gtk_table_attach(GTK_TABLE(t), hbox, 1, 2, row, row+1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            g_signal_connect(G_OBJECT(a), "value_changed", G_CALLBACK(sp_dtw_grid_emp_spacing_changed), dlg);
-            row++;
-        }
-
-        /* Guidelines page */
-
-        l = gtk_label_new(_("Guides"));
-        gtk_widget_show(l);
-        v = gtk_vbox_new(FALSE, 0);
-        gtk_widget_show(v);
-        gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
-
-        /* Checkbuttons */
-        /// \todo FIXME: gray out snapping when guides are off
-        cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        spw_vbox_checkbutton(dlg, v, _("Show guides"), _("Show or hide guides"), "showguides", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to guides"),  _("Snap the edges of the object bounding boxes"), "inkscape:guide-bbox", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap points to guides"), _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:guide-points", cb);
-
-        t = gtk_table_new(4, 2, FALSE);
-        gtk_widget_show(t);
-        gtk_container_set_border_width(GTK_CONTAINER(t), 4);
-        gtk_table_set_row_spacings(GTK_TABLE(t), 4);
-        gtk_table_set_col_spacings(GTK_TABLE(t), 4);
-        gtk_box_pack_start(GTK_BOX(v), t, TRUE, TRUE, 0);
-
-        row = 0;
-        us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        spw_dropdown(dlg, t, _("Snap units:"), "guide_snap_units",
-                     row++, us);
-
-        spw_unit_selector(dlg, t, _("Snap distance:"), "guidetolerance",
-                          row++, us,
-                          G_CALLBACK(sp_dtw_guides_snap_distance_changed));
-
-        sp_color_picker_button(NULL, true, dlg, t, _("Guide color:"), "guidecolor",
-                               _("Guideline color"), _("Color of guidelines"), "guideopacity", row++);
-
-        sp_color_picker_button(NULL, true, dlg, t, _("Highlight color:"), "guidehicolor",
-                               _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"),
-                               "guidehiopacity", row++);
-
-        row=0;
-        /* Page page */
-        l = gtk_label_new(_("Page"));
-        gtk_widget_show(l);
-        t = gtk_table_new(1, 2, FALSE);
-        gtk_widget_show(t);
-        gtk_container_set_border_width(GTK_CONTAINER(t), 6);
-        gtk_table_set_row_spacings(GTK_TABLE(t), 6);
-        gtk_table_set_col_spacings(GTK_TABLE(t), 6);
-        gtk_notebook_prepend_page(GTK_NOTEBOOK(nb), t, l);
-        gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), 0);
-
-        sp_color_picker_button(NULL, true, dlg, t, _("Background:"),
-                               "pagecolor", _("Background color"), 
-                               _("Color and transparency of the page background (also used for bitmap export)"),
-                               "inkscape:pageopacity", 0);
-
-        cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        spw_checkbutton(dlg, t, _("Show page border"),
-                        "showborder", 0, 1, 0, cb);
-
-        cb = G_CALLBACK(sp_dtw_border_layer_toggled);
-        spw_checkbutton(dlg, t, _("Border on top of drawing"),
-                        "borderlayer", 0, 2, 0, cb);
-
-        sp_color_picker_button(NULL, true, dlg, t, _("Border color:"),
-                               "bordercolor", _("Page border color"),
-                               _("Color of the page border"),
-                               "borderopacity", 4);
-
-	/* Page Shadow toggle */
-        cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        spw_checkbutton(dlg, t, _("Show page shadow"),
-		                  "inkscape:showpageshadow", 0, 5, 0, cb);
-
-	
-        l = gtk_label_new(_("Default units:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_widget_show(l);
-        gtk_table_attach (GTK_TABLE (t), l, 0, 1, 6, 7,
-                    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-        GtkWidget *doc_units = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        gtk_tooltips_set_tip(tooltips, doc_units, _("Units for the tool controls, ruler, and the statusbar"), NULL);
-        g_signal_connect(G_OBJECT(doc_units), "set_unit", G_CALLBACK(set_doc_units), NULL);
-        gtk_object_set_data (GTK_OBJECT (dlg), "doc_units", doc_units);
-        gtk_widget_show(doc_units);
-        gtk_table_attach (GTK_TABLE (t), doc_units, 1, 2, 6, 7,
-                    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-
-        GtkWidget *vb = gtk_vbox_new(FALSE, 4);
-        gtk_widget_show(vb);
-        gtk_table_attach(GTK_TABLE(t), vb, 0, 2, 7, 8,
-                         (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions)0, 0, 0);
-
-        GtkWidget *hb = gtk_hbox_new(FALSE, 4);
-        gtk_widget_show(hb);
-        gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
-
-        l = gtk_label_new(_("Page size:"));
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_widget_show(l);
-        gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
-        GtkWidget *om = gtk_option_menu_new();
-        gtk_widget_show(om);
-        gtk_box_pack_start(GTK_BOX(hb), om, TRUE, TRUE, 0);
-        gtk_object_set_data(GTK_OBJECT(dlg), "papers", om);
-
-        GtkWidget *m = gtk_menu_new();
-        gtk_widget_show(m);
-
-        GtkWidget *i;
-        for (PaperSize const *paper = inkscape_papers;
-             paper->name;
-             paper++) {
-            i = gtk_menu_item_new_with_label(paper->name);
-            gtk_widget_show(i);
-            g_signal_connect(G_OBJECT(i), "activate",
-                             G_CALLBACK(sp_doc_dialog_paper_selected),
-                             (gpointer) paper);
-            gtk_menu_append(GTK_MENU(m), i);
-        }
-
-        i = gtk_menu_item_new_with_label(_("Custom"));
-        gtk_widget_show(i);
-        g_signal_connect(G_OBJECT(i), "activate",
-                         G_CALLBACK(sp_doc_dialog_paper_selected), NULL);
-        gtk_menu_prepend(GTK_MENU(m), i);
-        gtk_option_menu_set_menu(GTK_OPTION_MENU(om), m);
-
-        hb = gtk_hbox_new(FALSE, 4);
-        gtk_widget_show(hb);
-        gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
-
-        l = gtk_label_new(_("Page orientation:"));
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_widget_show(l);
-        gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
-        om = gtk_option_menu_new();
-        gtk_widget_show(om);
-        gtk_box_pack_start(GTK_BOX(hb), om, TRUE, TRUE, 0);
-        gtk_object_set_data(GTK_OBJECT(dlg), "orientation", om);
-
-        m = gtk_menu_new();
-        gtk_widget_show(m);
-
-        i = gtk_menu_item_new_with_label(_("Landscape"));
-        gtk_widget_show(i);
-        g_signal_connect(G_OBJECT(i), "activate",
-                         G_CALLBACK(sp_doc_dialog_paper_orientation_selected), NULL);
-        gtk_menu_prepend(GTK_MENU(m), i);
-
-        i = gtk_menu_item_new_with_label(_("Portrait"));
-        gtk_widget_show(i);
-        g_signal_connect(G_OBJECT(i), "activate",
-                         G_CALLBACK(sp_doc_dialog_paper_orientation_selected), NULL);
-        gtk_menu_prepend(GTK_MENU(m), i);
-
-        gtk_option_menu_set_menu(GTK_OPTION_MENU(om), m);
-
-        /* Custom paper frame */
-        GtkWidget *f = gtk_frame_new(_("Custom size"));
-        gtk_widget_show(f);
-        gtk_box_pack_start(GTK_BOX(vb), f, FALSE, FALSE, 0);
-
-        GtkWidget *tt = gtk_table_new(4, 2, FALSE);
-        gtk_widget_show(tt);
-        gtk_container_set_border_width(GTK_CONTAINER(tt), 4);
-        gtk_table_set_row_spacings(GTK_TABLE(tt), 4);
-        gtk_table_set_col_spacings(GTK_TABLE(tt), 4);
-        gtk_container_add(GTK_CONTAINER(f), tt);
-
-        us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        spw_dropdown(dlg, tt, _("Units:"), "units", 0, us);
-
-        l = gtk_label_new(_("Width:"));
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_widget_show(l);
-        gtk_table_attach( GTK_TABLE(tt), l, 0, 1, 1, 2,
-                          (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
-                          (GtkAttachOptions)0, 0, 0);
-        GtkObject *a = gtk_adjustment_new(0.0, 1e-6, 1e6, 1.0, 10.0, 10.0);
-        gtk_object_set_data(GTK_OBJECT(a), "key", (void *)"width");
-        gtk_object_set_data(GTK_OBJECT(a), "unit_selector", us);
-        gtk_object_set_data(GTK_OBJECT(dlg), "width", a);
-        sp_unit_selector_add_adjustment(SP_UNIT_SELECTOR(us),
-                                        GTK_ADJUSTMENT(a));
-        GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 1.0, 2);
-        gtk_widget_show(sb);
-        gtk_table_attach(GTK_TABLE(tt), sb, 1, 2, 1, 2,
-                         (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions)0, 0, 0);
-        g_signal_connect(G_OBJECT(a), "value_changed",
-                         G_CALLBACK(sp_doc_dialog_whatever_changed), dlg);
-
-
-        l = gtk_label_new(_("Height:"));
-        gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
-        gtk_widget_show(l);
-        gtk_table_attach( GTK_TABLE(tt), l, 0, 1, 2, 3,
-                          (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
-                          (GtkAttachOptions)0, 0, 0 );
-        a = gtk_adjustment_new(0.0, 1e-6, 1e6, 1.0, 10.0, 10.0);
-        gtk_object_set_data(GTK_OBJECT(a), "key", (void *)"height");
-        gtk_object_set_data(GTK_OBJECT(a), "unit_selector", us);
-        gtk_object_set_data(GTK_OBJECT(dlg), "height", a);
-        sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us),
-                                         GTK_ADJUSTMENT(a));
-        sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 1.0, 2);
-        gtk_widget_show(sb);
-        gtk_table_attach( GTK_TABLE(tt), sb, 1, 2, 2, 3,
-                          (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
-                          (GtkAttachOptions)0, 0, 0 );
-        g_signal_connect( G_OBJECT(a), "value_changed",
-                          G_CALLBACK(sp_doc_dialog_whatever_changed), dlg );
-
-        /*
-         * Ownership metadata tab
-         */
-        l = gtk_label_new (_("Metadata"));
-        gtk_widget_show (l);
-        t = gtk_table_new (5, 2, FALSE);
-        gtk_widget_show (t);
-        gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-        gtk_table_set_row_spacings (GTK_TABLE (t), 1);
-        gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
-
-        row=0;
-        /* add generic metadata entry areas */
-        struct rdf_work_entity_t * entity;
-        for (entity = rdf_work_entities; entity && entity->name; entity++) {
-            if ( entity->editable == RDF_EDIT_GENERIC ) {
-                sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
-            }
-        }
-
-        /* add license selector pull-down */
-        f = gtk_frame_new(_("License"));
-        gtk_widget_show(f);
-
-        gtk_table_attach ( GTK_TABLE (t), f, 0, 2, row, row+1, 
-                           (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                           (GtkAttachOptions)0, 0, 0 );
-        row++;
-
-        vb = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb);
-        gtk_container_add(GTK_CONTAINER(f), vb);
-
-        om = gtk_option_menu_new ();
-        gtk_widget_show (om);
-        gtk_box_pack_start (GTK_BOX (vb), om, TRUE, TRUE, 0);
-        gtk_object_set_data (GTK_OBJECT (dlg), "licenses", om);
-
-        m = gtk_menu_new ();
-        gtk_widget_show (m);
-
-        for (struct rdf_license_t * license = rdf_licenses;
-             license && license->name;
-             license++) {
-            i = gtk_menu_item_new_with_label (license->name);
-            gtk_widget_show (i);
-            g_signal_connect ( G_OBJECT (i), "activate",
-                G_CALLBACK (sp_doc_dialog_license_selected),
-                (gpointer)(license));
-            gtk_menu_append (GTK_MENU (m), i);
-        }
-        i = gtk_menu_item_new_with_label (_("Proprietary"));
-        gtk_widget_show (i);
-        g_signal_connect ( G_OBJECT (i), "activate", 
-                           G_CALLBACK (sp_doc_dialog_license_selected), NULL);
-        gtk_menu_prepend (GTK_MENU (m), i);
-        gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
-
-        t = gtk_table_new (5, 2, FALSE);
-        gtk_widget_show (t);
-        gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-        gtk_table_set_row_spacings (GTK_TABLE (t), 4);
-        gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-
-        gtk_box_pack_start (GTK_BOX (vb), t, TRUE, TRUE, 0);
-        
-        row = 0;
-        /* add license-specific metadata entry areas */
-        entity = rdf_find_entity ( "license_uri" );
-        GtkWidget * w = sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
-        gtk_widget_set_sensitive ( w, FALSE );
-        /*
-        entity = rdf_find_entity ( "license_fragment" );
-        w = sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
-        gtk_widget_set_sensitive ( w, FALSE );
-        */
-
-        // end "Metadata" tab
-
-
-        g_signal_connect( G_OBJECT(INKSCAPE), "activate_desktop",
-                          G_CALLBACK(sp_dtw_activate_desktop), dlg);
-
-        g_signal_connect( G_OBJECT(INKSCAPE), "deactivate_desktop",
-                          G_CALLBACK(sp_dtw_deactivate_desktop), dlg);
-        sp_dtw_update(dlg, SP_ACTIVE_DESKTOP);
-
-        sp_repr_add_listener(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), &docoptions_repr_events, dlg);
-
-    } // end of if (!dlg)
+    if (dlg == NULL) {
+        sp_desktop_dialog_create();
+    }
 
     gtk_window_present((GtkWindow *) dlg);
-
-
-} // end of sp_desktop_dialog(void)
+}
 
 /**
  * Callback to enable notifyig namedview of any changes in dialog widgets.
@@ -1364,9 +1387,9 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->showgrid);
 
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:grid-bbox");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapTo(Snapper::BBOX_POINT));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:grid-points");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapTo(Snapper::SNAP_POINT));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->grid_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
 
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "grid_units");
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(o), nv->gridunit);
@@ -1415,9 +1438,9 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->showguides);
 
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:guide-bbox");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapTo(Snapper::BBOX_POINT));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
         o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:guide-points");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapTo(Snapper::SNAP_POINT));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->guide_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
 
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "guide_snap_units");
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(o), nv->guidetoleranceunit);
@@ -1522,6 +1545,19 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
                                        license ? license->uri : NULL,
                                        license ? FALSE : TRUE ); 
         sp_doc_dialog_update_work_entity( entity );
+
+        o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:object-bbox");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->object_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
+        o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:object-points");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->object_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
+        o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:object-paths");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->object_snapper.getSnapToPaths());
+        o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "inkscape:object-nodes");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->object_snapper.getSnapToNodes());
+        o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "object_snap_units");
+        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(o), nv->objecttoleranceunit);
+        o = (GtkObject *) gtk_object_get_data(GTK_OBJECT(dialog), "objecttolerance");
+        gtk_adjustment_set_value(GTK_ADJUSTMENT(o), nv->objecttolerance);
 
         gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
     }
