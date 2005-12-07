@@ -10,6 +10,7 @@
  */
 
 #include "generate-constraints.h"
+#include "isnan.h"
 #include "variable.h"
 #include "constraint.h"
 #include <set>
@@ -63,10 +64,33 @@ struct Node {
 };
 
 bool CmpNodePos::operator() (const Node* u, const Node* v) const {
-	if(u->pos==v->pos) {
-		return u < v;
+	if (u->pos < v->pos) {
+		return true;
 	}
-    return u->pos < v->pos;
+	if (v->pos < u->pos) {
+		return false;
+	}
+	if (isNaN(u->pos) != isNaN(v->pos)) {
+		return isNaN(u->pos);
+	}
+	return u < v;
+
+	/* I don't know how important it is to handle NaN correctly
+	 * (e.g. we probably handle it badly in other code anyway, and
+	 * in any case the best we can hope for is to reduce the
+	 * badness of other nodes).
+	 *
+	 * Nevertheless, we try to do the right thing here and in
+	 * event comparison.  The issue is that (on platforms with
+	 * ieee floating point comparison) NaN compares neither less
+	 * than nor greater than any other number, yet sort wants a
+	 * well-defined ordering.  In particular, we want to ensure
+	 * transitivity of equivalence, which normally wouldn't be
+	 * guaranteed if the "middle" item in the transitivity
+	 * involves a NaN.  (NaN is neither less than nor greater than
+	 * other numbers, so tends to be considered as equal to all
+	 * other numbers: even unequal numbers.)
+	 */
 }
 
 NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
@@ -115,6 +139,11 @@ int compare_events(const void *a, const void *b) {
 		return 1;
 	} else if(ea->pos < eb->pos) {
 		return -1;
+	} else if(isNaN(ea->pos) != isNaN(ea->pos)) {
+		/* See comment in CmpNodePos. */
+		return ( isNaN(ea->pos)
+			 ? -1
+			 : 1 );
 	} else if(ea->v->r==ea->v->r) {
 		// when comparing opening and closing from the same rect
 		// open must come first
