@@ -25,17 +25,19 @@
  * mean "ignore the grid in this dimention".  We're currently discussing "good" semantics
  * for guide/grid snapping.
  */
+
+/* FIXME: move this somewhere else, perhaps */
 static double round_to_nearest_multiple_plus(double x, double const c1, double const c0)
 {
     return floor((x - c0) / c1 + .5) * c1 + c0;
 }
 
-GridSnapper::GridSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv, d)
+Inkscape::GridSnapper::GridSnapper(SPNamedView const *nv, NR::Coord const d) : LineSnapper(nv, d)
 {
 
 }
 
-Snapper::LineList GridSnapper::get_snap_lines(NR::Point const &p) const
+Inkscape::LineSnapper::LineList Inkscape::GridSnapper::get_snap_lines(NR::Point const &p) const
 {
     LineList s;
     
