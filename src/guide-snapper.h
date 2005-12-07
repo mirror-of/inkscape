@@ -21,8 +21,11 @@
 
 struct SPNamedView;
 
+namespace Inkscape
+{
+
 /// Snap to guides
-class GuideSnapper : public Snapper
+class GuideSnapper : public LineSnapper
 {
 public:
     GuideSnapper(SPNamedView const *nv, NR::Coord const d);
@@ -30,6 +33,8 @@ public:
 private:
     LineList get_snap_lines(NR::Point const &p) const;
 };
+
+}
 
 #endif
 

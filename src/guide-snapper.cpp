@@ -18,12 +18,12 @@
 #include "sp-guide.h"
 #include "guide-snapper.h"
 
-GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv, d)
+Inkscape::GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : LineSnapper(nv, d)
 {
 
 }
 
-Snapper::LineList GuideSnapper::get_snap_lines(NR::Point const &p) const
+Inkscape::GuideSnapper::LineList Inkscape::GuideSnapper::get_snap_lines(NR::Point const &p) const
 {
     LineList s;
     
