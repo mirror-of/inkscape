@@ -11,9 +11,7 @@
  * This code is licensed under the GNU GPL; see COPYING for more information.
  */
 
-#include <stdexcept>
 #include <libnr/nr-rect.h>
-#include <libnr/nr-maybe.h>
 
 namespace NR {
 
