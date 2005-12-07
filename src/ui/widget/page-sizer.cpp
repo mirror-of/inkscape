@@ -27,8 +27,12 @@
 
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/unit-menu.h"
+
 #include "helper/units.h"
 #include "util/units.h"
+#include "inkscape.h"
+#include "desktop-handles.h"
+#include "document.h"
 #include "page-sizer.h"
 
 using std::pair;
@@ -155,48 +159,33 @@ static PaperSize const inkscape_papers[] = {
 };
 
 //===================================================
+static const SPUnit _px_unit = sp_unit_get_by_id (SP_UNIT_PX);
 
 class SizeMenuItem : public Gtk::MenuItem {
 public:
-    SizeMenuItem (const Glib::ustring &s);
-    virtual ~SizeMenuItem();
+    SizeMenuItem (PaperSize const * paper, PageSizer * widget)
+    : Gtk::MenuItem (paper ? paper->name : _("Custom")), 
+      _paper(paper), _parent(widget) {}
 protected:
-    void on_activate_item();
+    PaperSize const * _paper;
+    PageSizer *_parent;
+    void on_activate();
 };
-
-SizeMenuItem::SizeMenuItem (const Glib::ustring &s)
-: Gtk::MenuItem(s)
-{
-}
-
-SizeMenuItem::~SizeMenuItem()
-{
-}
 
 void
-SizeMenuItem::on_activate_item()
+SizeMenuItem::on_activate()
 {
-}
-
-class OrientationMenuItem : public Gtk::MenuItem {
-public:
-    OrientationMenuItem (const Glib::ustring &s);
-    virtual ~OrientationMenuItem();
-protected:
-    void on_activate_item();
-};
-
-OrientationMenuItem::OrientationMenuItem (const Glib::ustring &s) 
-: Gtk::MenuItem(s) 
-{
-}
-
-OrientationMenuItem::~OrientationMenuItem()
-{
-}
-
-void OrientationMenuItem::on_activate_item()
-{
+    if (_parent == 0) // handle Custom entry
+        return;
+        
+    double w = _paper->smaller, h = _paper->larger;
+    SPUnit const &src_unit = sp_unit_get_by_id (_paper->unit);
+    sp_convert_distance (&w, &src_unit, &_px_unit);
+    sp_convert_distance (&h, &src_unit, &_px_unit);
+    if (_parent->_landscape)
+        _parent->setDim (h, w);
+    else
+        _parent->setDim (w, h);
 }
 
 //---------------------------------------------------
@@ -213,10 +202,10 @@ PageSizer::PageSizer()
     Gtk::Menu *menu_size = manage (new Gtk::Menu);
 
     for (PaperSize const *paper = inkscape_papers; paper->name; paper++) {
-        SizeMenuItem *item = manage (new SizeMenuItem (paper->name));
+        SizeMenuItem *item = manage (new SizeMenuItem (paper, this));
         menu_size->append (*item);
     }
-    SizeMenuItem *item = manage (new SizeMenuItem (_("Custom")));
+    SizeMenuItem *item = manage (new SizeMenuItem (0, 0));
     menu_size->prepend (*item);
     _omenu_size->set_menu (*menu_size);
 
@@ -228,18 +217,22 @@ PageSizer::PageSizer()
     hbox_ori->pack_start (*_omenu_ori, true, true, 0);
     Gtk::Menu *menu_ori = manage (new Gtk::Menu);
 
-    OrientationMenuItem *oitem;
-    oitem = manage (new OrientationMenuItem (_("Landscape")));
+    Gtk::MenuItem *oitem;
+    oitem = manage (new Gtk::MenuItem (_("Landscape")));
+    _landscape_connection = oitem->signal_activate().connect (sigc::mem_fun (*this, &PageSizer::on_landscape));
     menu_ori->prepend (*oitem);
-    oitem = manage (new OrientationMenuItem (_("Portrait")));
+    oitem = manage (new Gtk::MenuItem (_("Portrait")));
+    _portrait_connection = oitem->signal_activate().connect (sigc::mem_fun (*this, &PageSizer::on_portrait));
     menu_ori->prepend (*oitem);
     _omenu_ori->set_menu (*menu_ori);
-
-    show_all_children();
 }
 
 PageSizer::~PageSizer()
 {
+    _portrait_connection.disconnect();
+    _landscape_connection.disconnect();
+    _changedw_connection.disconnect();
+    _changedh_connection.disconnect();
 }
 
 void
@@ -248,12 +241,10 @@ PageSizer::init (Registry& reg)
     /* Custom paper frame */
     Gtk::Frame *frame = manage (new Gtk::Frame(_("Custom size")));
     pack_start (*frame, false, false, 0);
-    frame->show();
     Gtk::Table *table = manage (new Gtk::Table (4, 2, false));
     table->set_border_width (4);
     table->set_row_spacings (4);
     table->set_col_spacings (4);
-    table->show();
     frame->add (*table);
     
     _wr = reg;
@@ -262,38 +253,33 @@ PageSizer::init (Registry& reg)
     _rusw.init (_("Width:"), "", "width", _rum, _wr);
     _rush.init (_("Height:"), "", "height", _rum, _wr);
 
-    const Gtk::Widget* arr[] =
-    {
-        _rum._label, _rum._sel,
-        0,           _rusw.getSU(),
-        0,           _rush.getSU(),
-    };
+    table->attach (*_rum._label, 0,1,0,1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+    table->attach (*_rum._sel, 1,2,0,1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+    table->attach (*_rusw.getSU(), 0,2,1,2, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+    table->attach (*_rush.getSU(), 0,2,2,3, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
 
-    for (unsigned i=0, r=0; i<sizeof(arr)/sizeof(Gtk::Widget*); i+=2)
-    {
-        if (arr[i])
-        {
-            table->attach (const_cast<Gtk::Widget&>(*arr[i]),   0, 1, r, r+1, 
-                      Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-            table->attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 2, r, r+1, 
-                      Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-        }
-        else
-            table->attach (const_cast<Gtk::Widget&>(*arr[i+1]), 0, 2, r, r+1, 
-                      Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-        ++r;
-    }
+    _changedw_connection = _rusw.getSU()->signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_value_changed));
+    _changedh_connection = _rush.getSU()->signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_value_changed));
+    
+    show_all_children();
 }
 
+/**
+ * \param w, h given in px
+ */
 void 
 PageSizer::setDim (double w, double h)
 {
-    _omenu_ori->set_history (w>h ? 1 : 0);
+    _landscape = w>h;
+    _omenu_ori->set_history (_landscape ? 1 : 0);
     _omenu_size->set_history (1 + find_paper_size (w, h));
     
     Unit const& unit = _rum._sel->getUnit();
     _rusw.setValue (w / unit.factor);
     _rush.setValue (h / unit.factor);
+    
+    if (SP_ACTIVE_DESKTOP)
+        sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
 }
 
 /** 
@@ -301,7 +287,7 @@ PageSizer::setDim (double w, double h)
  * size (specified in px), or -1 if there's no such paper.
  */
 int
-PageSizer::find_paper_size (double w, double h)
+PageSizer::find_paper_size (double w, double h) const
 {
     double given[2];
     if ( w < h ) {
@@ -324,121 +310,27 @@ PageSizer::find_paper_size (double w, double h)
     return -1;
 }
 
-#if 0
-/**
- * Returns paper dimensions using specific unit and orientation.
- */
-static pair<double, double>
-get_paper_size(PaperSize const &paper, bool const landscape, SPUnit const *const dest_unit)
+void
+PageSizer::on_portrait()
 {
-    double h, w;
-    if (landscape) {
-        w = paper.larger;
-        h = paper.smaller;
-    } else {
-        w = paper.smaller;
-        h = paper.larger;
-    }
-    SPUnit const &src_unit = sp_unit_get_by_id(paper.unit);
-    sp_convert_distance(&w, &src_unit, dest_unit);
-    sp_convert_distance(&h, &src_unit, dest_unit);
-    return pair<double, double>(w, h);
+    double w = _rusw.getSU()->getValue ("px");
+    double h = _rush.getSU()->getValue ("px");
+    if (h<w) setDim (h, w);
 }
 
-/**
- * Callback to set height/width widgets from paper type, orientation,
- * and unit widgets.
- */
-static void
-sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
+void
+PageSizer::on_landscape()
 {
-    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
-        return;
-    }
-
-    PaperSize const *const paper = (PaperSize const *) data;
-
-    if (paper) {
-        GtkWidget *const om = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
-        bool const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
-
-        SPUnitSelector *const us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dlg), "units");
-        SPUnit const *const unit = sp_unit_selector_get_unit(us);
-
-        pair<double, double> const w_h(get_paper_size(*paper, landscape, unit));
-
-        GtkAdjustment *const aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
-        GtkAdjustment *const ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
-        gtk_adjustment_set_value(aw, w_h.first);
-        gtk_adjustment_set_value(ah, w_h.second);
-    } 
-
-    if (!SP_ACTIVE_DESKTOP) {
-        return;
-    }
-
-    sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
+    double w = _rusw.getSU()->getValue ("px");
+    double h = _rush.getSU()->getValue ("px");
+    if (w<h) setDim (h, w);
 }
 
-/**
- * Callback to set height/width widgets from paper type, orientation,
- * and unit widgets.
- */
-static void
-sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
+void
+PageSizer::on_value_changed()
 {
-    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
-        return;
-    }
-
-    GtkAdjustment *aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
-    GtkAdjustment *ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
-
-    gdouble w = gtk_adjustment_get_value(aw);
-    gdouble h = gtk_adjustment_get_value(ah);
-
-    /* only toggle when we actually swap */
-    GtkWidget *om = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
-    gint const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
-
-    if ( landscape
-         ? (w < h)
-         : (w > h) )
-    {
-        std::swap(w, h);
-    }
-
-    gtk_adjustment_set_value(aw, w);
-    gtk_adjustment_set_value(ah, h);
+    setDim (_rusw.getSU()->getValue("px"), _rush.getSU()->getValue("px"));
 }
-
-        gdouble const doc_w_px = sp_document_width(SP_DT_DOCUMENT(desktop));
-        gdouble const doc_h_px = sp_document_height(SP_DT_DOCUMENT(desktop));
-
-        GtkWidget *pm = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "papers");
-        GtkWidget *om = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "orientation");
-
-        /* select paper orientation */
-        gint const landscape = ( doc_w_px > doc_h_px );
-        gtk_option_menu_set_history(GTK_OPTION_MENU(om), landscape);
-
-        /* find matching paper size */
-        gint const pos = 1 + find_paper_size(doc_w_px, doc_h_px);
-        gtk_option_menu_set_history(GTK_OPTION_MENU(pm), pos);
-
-        /* Show document width/height in the requested units. */
-        {
-            SPUnitSelector const *us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dialog), "units");
-            SPUnit const *unit = sp_unit_selector_get_unit(us);
-            gdouble const doc_w_u = sp_pixels_get_units(doc_w_px, *unit);
-            gdouble const doc_h_u = sp_pixels_get_units(doc_h_px, *unit);
-            GtkAdjustment *w_adj = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "width");
-            GtkAdjustment *h_adj = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "height");
-            gtk_adjustment_set_value(w_adj, doc_w_u);
-            gtk_adjustment_set_value(h_adj, doc_h_u);
-        }
-#endif
-
 
 } // namespace Widget
 } // namespace UI

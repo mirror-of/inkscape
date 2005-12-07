@@ -12,6 +12,7 @@
 #ifndef INKSCAPE_UI_WIDGET_PAGE_SIZER__H
 #define INKSCAPE_UI_WIDGET_PAGE_SIZER__H
 
+#include <sigc++/sigc++.h>
 #include <gtkmm/box.h>
 #include "ui/widget/registry.h"
 #include "ui/widget/registered-widget.h"
@@ -31,14 +32,20 @@ public:
     virtual ~PageSizer();
     void init (Registry& reg);
     void setDim (double w, double h);
+    bool                 _landscape;
 
 protected:
-    int find_paper_size (double w, double h);
+    int find_paper_size (double w, double h) const;
+    void on_portrait();
+    void on_landscape();
+    void on_value_changed();
     
     RegisteredUnitMenu   _rum;
     RegisteredScalarUnit _rusw, _rush;
-    Gtk::OptionMenu *_omenu_size, *_omenu_ori;
-    Registry _wr;
+    Gtk::OptionMenu     *_omenu_size, *_omenu_ori;
+    sigc::connection     _portrait_connection, _landscape_connection;
+    sigc::connection     _changedw_connection, _changedh_connection;
+    Registry             _wr;
 };
 
 }}}
