@@ -299,7 +299,8 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             /* Position center */
             sc->center = sp_desktop_w2d_xy_point (event_context->desktop, NR::Point(event->button.x, event->button.y));
             /* Snap center to nearest magnetic point */
-            namedview_free_snap (event_context->desktop->namedview, Snapper::SNAP_POINT, sc->center);
+            namedview_free_snap (event_context->desktop->namedview, Inkscape::Snapper::SNAP_POINT,
+                                 sc->center, sc->item);
             sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
                                  GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
                                  NULL, event->button.time);
@@ -448,7 +449,7 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
     /* Free movement for corner point */
     NR::Point p0 = sp_desktop_dt2root_xy_point (desktop, sc->center);
     NR::Point p1 = sp_desktop_dt2root_xy_point (desktop, p);
-    namedview_free_snap (desktop->namedview, Snapper::SNAP_POINT, p1);
+    namedview_free_snap (desktop->namedview, Inkscape::Snapper::SNAP_POINT, p1, sc->item);
 
     SPStar *star = SP_STAR(sc->item);
 

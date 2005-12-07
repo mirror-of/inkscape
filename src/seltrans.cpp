@@ -759,6 +759,14 @@ gboolean Inkscape::SelTrans::scaleRequest(NR::Point &pt, guint state)
         }
     }
 
+    /* Get a STL list of the selected items.
+    ** FIXME: this should probably be done by Inkscape::Selection.
+    */
+    std::list<SPItem const*> it;
+    for (GSList const *i = _selection->itemList(); i != NULL; i = i->next) {
+        it.push_back(reinterpret_cast<SPItem*>(i->data));
+    }
+
     if ((state & GDK_CONTROL_MASK) || _desktop->isToolboxButtonActive ("lock")) {
         /* Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y] */
 
@@ -776,10 +784,10 @@ gboolean Inkscape::SelTrans::scaleRequest(NR::Point &pt, guint state)
         /* Snap the scale factor */
         std::pair<double, bool> bb = namedview_vector_snap_list(_desktop->namedview,
                                                                 Snapper::BBOX_POINT, _bbox_points,
-                                                                _origin, s);
+                                                                _origin, s, it);
         std::pair<double, bool> sn = namedview_vector_snap_list(_desktop->namedview,
                                                                 Snapper::SNAP_POINT, _snap_points,
-                                                                _origin, s);
+                                                                _origin, s, it);
 
         double bd = bb.second ? fabs(bb.first - s[locked_dim]) : NR_HUGE;
         double sd = sn.second ? fabs(sn.first - s[locked_dim]) : NR_HUGE;
@@ -794,10 +802,10 @@ gboolean Inkscape::SelTrans::scaleRequest(NR::Point &pt, guint state)
         for ( unsigned int i = 0 ; i < 2 ; i++ ) {
             std::pair<double, bool> bb = namedview_dim_snap_list_scale(_desktop->namedview,
                                                                        Snapper::BBOX_POINT, _bbox_points,
-                                                                       _origin, s[i], NR::Dim2(i));
+                                                                       _origin, s[i], NR::Dim2(i), it);
             std::pair<double, bool> sn = namedview_dim_snap_list_scale(_desktop->namedview,
                                                                        Snapper::SNAP_POINT, _snap_points,
-                                                                       _origin, s[i], NR::Dim2(i));
+                                                                       _origin, s[i], NR::Dim2(i), it);
 
             /* Pick the snap that puts us closest to the original scale */
             NR::Coord bd = bb.second ? fabs(bb.first - s[i]) : NR_HUGE;
@@ -850,15 +858,24 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, NR::
     if ( fabs(s[axis]) < 1e-15 ) {
         s[axis] = 1e-15;
     }
+
+    /* Get a STL list of the selected items.
+    ** FIXME: this should probably be done by Inkscape::Selection.
+    */
+    std::list<SPItem const*> it;
+    for (GSList const *i = _selection->itemList(); i != NULL; i = i->next) {
+        it.push_back(reinterpret_cast<SPItem*>(i->data));
+    }
+    
     if ( state & GDK_CONTROL_MASK ) {
         s[perp] = fabs(s[axis]);
 
         std::pair<double, bool> sn = namedview_vector_snap_list(_desktop->namedview,
                                                                 Snapper::BBOX_POINT,
-                                                                _bbox_points, _origin, s);
+                                                                _bbox_points, _origin, s, it);
         std::pair<double, bool> bb = namedview_vector_snap_list(_desktop->namedview,
                                                                 Snapper::SNAP_POINT,
-                                                                _snap_points, _origin, s);
+                                                                _snap_points, _origin, s, it);
 
         double bd = bb.second ? fabs(bb.first - s[axis]) : NR_HUGE;
         double sd = sn.second ? fabs(sn.first - s[axis]) : NR_HUGE;
@@ -868,9 +885,11 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, NR::
         s[perp] = fabs(s[axis]);
     } else {
         std::pair<NR::Coord, bool> bb = namedview_dim_snap_list_scale(_desktop->namedview, Snapper::BBOX_POINT,
-                                                                      _bbox_points, _origin, s[axis], axis);
+                                                                      _bbox_points, _origin,
+                                                                      s[axis], axis, it);
         std::pair<NR::Coord, bool> sn = namedview_dim_snap_list_scale(_desktop->namedview, Snapper::SNAP_POINT,
-                                                                      _snap_points, _origin, s[axis], axis);
+                                                                      _snap_points, _origin,
+                                                                      s[axis], axis, it);
 
         /* Pick the snap that puts us closest to the original scale */
         NR::Coord bd = bb.second ? fabs(bb.first - s[axis]) : NR_HUGE;
@@ -1015,7 +1034,7 @@ gboolean Inkscape::SelTrans::centerRequest(NR::Point &pt, guint state)
 {
     using NR::X;
     using NR::Y;
-    namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, pt);
+    namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, pt, NULL);
 
     if (state & GDK_CONTROL_MASK) {
         if ( fabs( _point[X] - pt[X] )  >
@@ -1217,18 +1236,26 @@ void Inkscape::SelTrans::moveTo(NR::Point const &xy, guint state)
 
     NR::Point dxy = xy - _point;
 
+    /* Get a STL list of the selected items.
+    ** FIXME: this should probably be done by Inkscape::Selection.
+    */
+    std::list<SPItem const*> it;
+    for (GSList const *i = _selection->itemList(); i != NULL; i = i->next) {
+        it.push_back(reinterpret_cast<SPItem*>(i->data));
+    }    
+
     if (state & GDK_MOD1_MASK) {
         /* Alt pressed means keep offset: snap the moved distance to the grid */
-        namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, dxy);
+        namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, dxy, NULL);
     } else if ((state & GDK_SHIFT_MASK) == 0) {
         /* Snap as normal.  Shift-drag will not snap to the grid even if it is enabled. */
         for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
             std::pair<NR::Coord, bool> b = namedview_dim_snap_list(_desktop->namedview,
                                                                    Snapper::BBOX_POINT, _bbox_points,
-                                                                   dxy[dim], NR::Dim2(dim));
+                                                                   dxy[dim], NR::Dim2(dim), it);
             std::pair<NR::Coord, bool> s = namedview_dim_snap_list(_desktop->namedview,
                                                                    Snapper::SNAP_POINT, _snap_points,
-                                                                   dxy[dim], NR::Dim2(dim));
+                                                                   dxy[dim], NR::Dim2(dim), it);
             
             /* Pick the snap that puts us closest to the original point */
             NR::Coord bd = b.second ? fabs(b.first - dxy[dim]) : NR_HUGE;

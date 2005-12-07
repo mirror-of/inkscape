@@ -938,8 +938,8 @@ static void sp_nodepath_selected_nodes_move(Inkscape::NodePath::Path *nodepath, 
             NR::Point p = n->pos + delta;
             for (int dim = 0; dim < 2; dim++) {
                 NR::Coord dist = namedview_dim_snap(nodepath->desktop->namedview,
-                                                    Snapper::SNAP_POINT, p,
-                                                    NR::Dim2(dim));
+                                                    Inkscape::Snapper::SNAP_POINT, p,
+                                                    NR::Dim2(dim), nodepath->path);
                 if (dist < best[dim]) {
                     best[dim] = dist;
                     best_pt[dim] = p[dim] - n->pos[dim];
@@ -2718,9 +2718,11 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
             scal = dot(delta, ndelta) / linelen;
             (*p) = n->pos + (scal / linelen) * ndelta;
         }
-        namedview_vector_snap(n->subpath->nodepath->desktop->namedview, Snapper::SNAP_POINT, *p, ndelta);
+        namedview_vector_snap(n->subpath->nodepath->desktop->namedview,
+                              Inkscape::Snapper::SNAP_POINT, *p, ndelta, NULL);
     } else {
-        namedview_free_snap(n->subpath->nodepath->desktop->namedview, Snapper::SNAP_POINT, *p);
+        namedview_free_snap(n->subpath->nodepath->desktop->namedview,
+                            Inkscape::Snapper::SNAP_POINT, *p, NULL);
     }
 
     sp_node_adjust_knot(n, -which);
