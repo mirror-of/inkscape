@@ -8,10 +8,10 @@
 	src/rect-context.cpp, src/selection-chemistry.cpp,
 	src/seltrans.cpp, src/snap.{cpp,h}, src/snapper.{cpp,h},
 	src/sp-namedview.{cpp,h}, src/spiral-context.cpp,
-	src/star-context.cpp, src/dialogs/desktop-properties.{cpp,h}:
-	first cut of object snapping.
+	src/star-context.cpp, src/dialogs/desktop-properties.{cpp,h},
+	src/Makefile_insert: first cut of object snapping.
 
-	* src/grid-snapper.cpp: use Inkscape namespace.
+	* src/grid-snapper.cpp, src/guide-snapper.{cpp,h}: use Inkscape namespace.
 
 2005-12-06  Carl Hetherington <inkscape@carlh.net>
 
