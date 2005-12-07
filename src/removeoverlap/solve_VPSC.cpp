@@ -80,6 +80,11 @@ double VPSC::solve() {
 		solved=true;
 		for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
 			Block *b=*i;
+			b->setUpInConstraints();
+			b->setUpOutConstraints();
+		}
+		for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
+			Block *b=*i;
 			Constraint *c=b->findMinLM();
 			if(c!=NULL && c->lm<0) {
 #ifdef LOGGING

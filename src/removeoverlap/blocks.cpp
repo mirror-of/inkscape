@@ -92,6 +92,7 @@ void Blocks::mergeLeft(Block *r) {
 #endif
 		r->deleteMinInConstraint();
 		Block *l = c->left->block;		
+		l->setUpInConstraints();
 		//assert(r->nextRight!=l);
 		double dist = c->left->offset + c->gap - c->right->offset;
 		if (r->vars->size() > l->vars->size()) {
