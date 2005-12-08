@@ -27,7 +27,7 @@ public:
     GridSnapper(SPNamedView const *nv, NR::Coord const d);
 
 private:    
-    LineList get_snap_lines(NR::Point const &p) const;
+    LineList _getSnapLines(NR::Point const &p) const;
 };
 
 }
