@@ -71,17 +71,13 @@ NR::Coord namedview_free_snap(SPNamedView const *nv, Inkscape::Snapper::PointTyp
 
     std::list<const Inkscape::Snapper*> snappers = namedview_get_snappers(nv);
 
-    std::list<SPItem const *> lit;
-    lit.push_back(it);
-
     NR::Coord best = NR_HUGE;
     for (std::list<const Inkscape::Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
-        NR::Point trial_req = req;
-        NR::Coord const dist = (*i)->free_snap(t, trial_req, lit);
 
-        if (dist < best) {
-            req = trial_req;
-            best = dist;
+        Inkscape::SnappedPoint const s = (*i)->freeSnap(t, req, it);
+        if (s.second < best) {
+            req = s.first;
+            best = s.second;
         }
     }
 
@@ -118,12 +114,10 @@ NR::Coord namedview_vector_snap(SPNamedView const *nv, Inkscape::Snapper::PointT
 
     NR::Coord best = NR_HUGE;
     for (std::list<const Inkscape::Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
-        NR::Point trial_req = req;
-        NR::Coord dist = (*i)->vector_snap(t, trial_req, d, it);
-
-        if (dist < best) {
-            req = trial_req;
-            best = dist;
+        Inkscape::SnappedPoint const s = (*i)->constrainedSnap(t, req, d, it);
+        if (s.second < best) {
+            req = s.first;
+            best = s.second;
         }
     }
 
@@ -303,7 +297,7 @@ bool namedview_will_snap_something(SPNamedView const *nv)
 {
     std::list<const Inkscape::Snapper*> s = namedview_get_snappers(nv);
     std::list<const Inkscape::Snapper*>::iterator i = s.begin();
-    while (i != s.end() && (*i)->will_snap_something() == false) {
+    while (i != s.end() && (*i)->willSnapSomething() == false) {
         i++;
     }
 
