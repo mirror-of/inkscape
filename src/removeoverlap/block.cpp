@@ -15,7 +15,7 @@
 #include "blocks.h"
 #include "variable.h"
 #include "pairingheap/PairingHeap.h"
-#include "assert.h"
+#include <cassert>
 
 using namespace std;
 
@@ -188,7 +188,7 @@ char *Block::toString() {
 	char *str=new char[buffsize];
 	sprintf(str,"Block:");
 	for(vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {
-		_snprintf(str,buffsize,"%s %s",str,(*v)->toString());
+		snprintf(str,buffsize,"%s %s",str,(*v)->toString());
 	}
 	return str;
 }

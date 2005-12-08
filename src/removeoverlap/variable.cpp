@@ -12,7 +12,7 @@
 #include "variable.h"
 char *Variable::toString() {
 	char *str=new char[_TOSTRINGBUFFSIZE];
-	_snprintf(str,_TOSTRINGBUFFSIZE,"(%3d=%.3f)",id,position());
+	snprintf(str, _TOSTRINGBUFFSIZE, "(%3d=%.3f)", id, position());
 	return str;
 }
 
