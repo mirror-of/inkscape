@@ -566,14 +566,13 @@ static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator i
 
     SPObject *parent_item = string_item;
     for ( ; ; ) {
+        char_index += sum_sibling_text_lengths_before(parent_item);
         parent_item = SP_OBJECT_PARENT(parent_item);
         TextTagAttributes *attributes = attributes_for_object(parent_item);
         if (attributes == NULL) break;
 
         attributes->erase(char_index, char_count);
         attributes->writeTo(SP_OBJECT_REPR(parent_item));
-        for (SPObject *sibling = SP_OBJECT_PARENT(parent_item)->firstChild() ; sibling && sibling != parent_item ; sibling = SP_OBJECT_NEXT(sibling))
-            char_index += sp_text_get_length(sibling);
     }
 }
 
