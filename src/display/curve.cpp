@@ -625,6 +625,7 @@ sp_curve_closepath(SPCurve *curve)
 
         if (bs->c(3) != be->c(3)) {
             sp_curve_lineto(curve, bs->c(3));
+            bs = curve->bpath + curve->substart;
         }
 
         bs->code = NR_MOVETO;
