@@ -27,11 +27,6 @@ class ObjectSnapper : public Snapper
 public:
   ObjectSnapper(SPNamedView const *nv, NR::Coord const d);
 
-  NR::Coord vector_snap(PointType t,
-			NR::Point &req,
-			NR::Point const &d,
-			SPItem const *i) const;
-
   void setSnapToNodes(bool s) {
     _snap_to_nodes = s;
   }
@@ -49,18 +44,20 @@ public:
   }
   
 private:
-  NR::Coord do_vector_snap(NR::Point &req, NR::Point const &d,
+  SnappedPoint _doFreeSnap(NR::Point const &p,
 			   std::list<SPItem const *> const &it) const;
-  NR::Coord do_free_snap(NR::Point &req, std::list<SPItem const *> const &it) const;
+
+  SnappedPoint _doConstrainedSnap(NR::Point const &p,
+				  NR::Point const &c,
+				  std::list<SPItem const *> const &it) const;
   
-  void _find_candidates(std::list<SPItem*>& c,
-			SPObject* r,
-			std::list<SPItem const *> const &it,
-			NR::Point const &p) const;
-  void _snap_nodes(NR::Point &snapped, NR::Coord &best, NR::Coord &upper,
-		   NR::Point const &req, std::list<SPItem*> const &cand) const;
-  void _snap_paths(NR::Point &snapped, NR::Coord &best, NR::Coord &upper,
-		   NR::Point const &req, std::list<SPItem*> const &cand) const;
+  void _findCandidates(std::list<SPItem*>& c,
+		       SPObject* r,
+		       std::list<SPItem const *> const &it,
+		       NR::Point const &p) const;
+  
+  void _snapNodes(Inkscape::SnappedPoint &s, NR::Point const &p, std::list<SPItem*> const &cand) const;
+  void _snapPaths(Inkscape::SnappedPoint &s, NR::Point const &p, std::list<SPItem*> const &cand) const;
   
   bool _snap_to_nodes;
   bool _snap_to_paths;

@@ -9,67 +9,63 @@ Inkscape::LineSnapper::LineSnapper(SPNamedView const *nv, NR::Coord const d) : S
 
 }
 
-NR::Coord Inkscape::LineSnapper::do_free_snap(NR::Point &req, std::list<SPItem const *> const &it) const
+Inkscape::SnappedPoint Inkscape::LineSnapper::_doFreeSnap(NR::Point const &p,
+                                                          std::list<SPItem const *> const &it) const
 {
-    NR::Point result = req;
-	
-    NR::Coord const dh = do_vector_snap(result, component_vectors[NR::X], it);
-    result[NR::Y] = req[NR::Y];
-    NR::Coord const dv = do_vector_snap(result, component_vectors[NR::Y], it);
-    req = result;
-	
-    if (dh < NR_HUGE && dv < NR_HUGE) {
-        return hypot(dh, dv);
+    /* Snap along x (ie to vertical lines) */
+    Inkscape::SnappedPoint const v = _doConstrainedSnap(p, component_vectors[NR::X], it);
+    /* Snap along y (ie to horizontal lines) */
+    Inkscape::SnappedPoint const h = _doConstrainedSnap(p, component_vectors[NR::Y], it);
+
+    /* If we snapped to both, combine the two results.  This is so that, for example,
+    ** we snap nicely to the intersection of two guidelines.
+    */
+    if (v.second < NR_HUGE && h.second < NR_HUGE) {
+        return std::make_pair(NR::Point(v.first[NR::X], h.first[NR::Y]), hypot(v.second, h.second));
     }
 
-    if (dh < NR_HUGE) {
-        return dh;
+    /* If we snapped to a vertical line, return that */
+    if (v.second < NR_HUGE) {
+        return v;
     }
 
-    if (dv < NR_HUGE) {
-	return dv;
-    }
-    
-    return NR_HUGE;
+    /* Otherwise just return any horizontal snap; if we didn't snap to that either
+    ** we haven't snapped to anything.
+    */
+    return h;
 }
 
-NR::Coord Inkscape::LineSnapper::do_vector_snap(NR::Point &req, NR::Point const &d,
-                                                std::list<SPItem const *> const &it) const
+Inkscape::SnappedPoint Inkscape::LineSnapper::_doConstrainedSnap(NR::Point const &p,
+                                                                 NR::Point const &c,
+                                                                 std::list<SPItem const *> const &it) const
 {
-    NR::Point const v = NR::unit_vector(d);
-
-    /* Set to the snapped point, if we snap */
-    NR::Point snapped = req;
-    /* Distance to best snap point */
-    NR::Coord best = NR_HUGE;
-    /* Current upper limit for an acceptable snap */
-    NR::Coord upper = getDistance();
+    Inkscape::SnappedPoint s = std::make_pair(p, NR_HUGE);
+    NR::Point const v = NR::unit_vector(c);
 
     /* Get the lines that we will try to snap to */
-    const LineList s = get_snap_lines(req);
+    const LineList lines = _getSnapLines(p);
 
-    for (LineList::const_iterator i = s.begin(); i != s.end(); i++) {
-
-        NR::Point trial(req);
+    for (LineList::const_iterator i = lines.begin(); i != lines.end(); i++) {
 
         /* Normal to the line we're trying to snap along */
-        NR::Point const n2(NR::rot90(v));
+        NR::Point const n(NR::rot90(v));
 
         /* Hence constant term of the line we're trying to snap along */
-        NR::Coord const d2 = dot(n2, req);
+        NR::Coord const q = dot(n, p);
 
         /* Try to intersect this line with the target line */
-        if (intersector_line_intersection(n2, d2, i->first, i->second, trial) == INTERSECTS) {
-            const NR::Coord dist = L2(trial - req);
-            if (dist < upper) {
-                upper = best = dist;
-                snapped = trial;
+        NR::Point t = p;
+        IntersectorKind const k = intersector_line_intersection(n, q, component_vectors[i->first], i->second, t);
+
+        if (k == INTERSECTS) {
+            const NR::Coord dist = L2(t - p);
+            if (dist < getDistance() && dist < s.second) {
+                s = std::make_pair(t, dist);
             }
         }
     }
 
-    req = snapped;
-    return best;
+    return s;
 }
 
 /*
