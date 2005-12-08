@@ -186,6 +186,20 @@ int main()
         test_case(G_N_ELEMENTS(loop1), loop1);
     }
 
+    UTEST_TEST("loop2") {
+        double loop2[][4] = {
+            {16, 22, 9, 16},
+            {8, 9, 14, 19},
+            {17, 25, 8, 13},
+            {10, 26, 26, 29},
+            {14, 19, 9, 19},
+            {0, 18, 3, 12},
+            {7, 8, 14, 22},
+            {14, 20, 25, 29}
+        };
+        test_case(G_N_ELEMENTS(loop2), loop2);
+    }
+
     /* Random cases of up to 10 rectangles, with small non-neg int coords. */
     for (unsigned n = 0; n <= 10; ++n) {
         char buf[64];
