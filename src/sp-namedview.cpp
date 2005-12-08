@@ -965,6 +965,14 @@ SPMetric SPNamedView::getDefaultMetric() const
     }
 }
 
+SPNamedView::SnapperList SPNamedView::getSnappers() const
+{
+    SnapperList s;
+    s.push_back(&grid_snapper);
+    s.push_back(&guide_snapper);
+    s.push_back(&object_snapper);
+    return s;
+}
 
 /*
   Local Variables:

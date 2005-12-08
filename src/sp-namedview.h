@@ -100,6 +100,9 @@ struct SPNamedView : public SPObjectGroup {
     guint getViewCount();
     GSList const *getViewList() const;
     SPMetric getDefaultMetric() const;
+
+    typedef std::list<const Inkscape::Snapper *> SnapperList;
+    SnapperList getSnappers() const;
 };
 
 struct SPNamedViewClass {
