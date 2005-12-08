@@ -10,10 +10,9 @@
  */
 
 #include "variable.h"
-
 char *Variable::toString() {
-	char *str=new char[strlen(name)+10];
-	sprintf(str,"(%s=%3.3f)",name,position());
+	char *str=new char[_TOSTRINGBUFFSIZE];
+	_snprintf(str,_TOSTRINGBUFFSIZE,"(%3d=%.3f)",id,position());
 	return str;
 }
 

@@ -159,8 +159,8 @@ int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 	vector<Constraint*> constraints;
 	vars=new Variable*[n];
 	for(i=0;i<n;i++) {
-		vars[i]=new Variable("",rs[i]->getMinX(),weights[i]);
-		Node *v = new Node(vars[i],rs[i],rs[i]->getMinX());
+		vars[i]=new Variable(i,rs[i]->getCentreX(),weights[i]);
+		Node *v = new Node(vars[i],rs[i],rs[i]->getCentreX());
 		events[ctr++]=new Event(Open,v,rs[i]->getMinY());
 		events[ctr++]=new Event(Close,v,rs[i]->getMaxY());
 	}
@@ -182,7 +182,8 @@ int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 				i!=v->leftNeighbours->end();i++
 			) {
 				Node *u=*i;
-				constraints.push_back(new Constraint(u->v,v->v,u->r->width()));
+				double sep = (v->r->width()+u->r->width())/2.0;
+				constraints.push_back(new Constraint(u->v,v->v,sep));
 				r=u->rightNeighbours->erase(v);
 				assert(r==1); // ensure exactly 1 element was deleted
 			}
@@ -191,7 +192,8 @@ int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 				i!=v->rightNeighbours->end();i++
 			) {
 				Node *u=*i;
-				constraints.push_back(new Constraint(v->v,u->v,v->r->width()));
+				double sep = (v->r->width()+u->r->width())/2.0;
+				constraints.push_back(new Constraint(v->v,u->v,sep));
 				r=u->leftNeighbours->erase(v);
 				assert(r==1); // ensure exactly 1 element was deleted
 			}
@@ -213,8 +215,8 @@ int generateYConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 	vector<Constraint*> constraints;
 	vars=new Variable*[n];
 	for(i=0;i<n;i++) {
-		vars[i]=new Variable("",rs[i]->getMinY(),weights[i]);
-		Node *v = new Node(vars[i],rs[i],rs[i]->getMinY());
+		vars[i]=new Variable(i,rs[i]->getCentreY(),weights[i]);
+		Node *v = new Node(vars[i],rs[i],rs[i]->getCentreY());
 		events[ctr++]=new Event(Open,v,rs[i]->getMinX());
 		events[ctr++]=new Event(Close,v,rs[i]->getMaxX());
 	}
@@ -241,11 +243,13 @@ int generateYConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 			// Close event
 			Node *l=v->firstAbove, *r=v->firstBelow;
 			if(l!=NULL) {
-				constraints.push_back(new Constraint(l->v,v->v,l->r->height()));
+				double sep = (v->r->height()+l->r->height())/2.0;
+				constraints.push_back(new Constraint(l->v,v->v,sep));
 				l->firstBelow=v->firstBelow;
 			}
 			if(r!=NULL) {
-				constraints.push_back(new Constraint(v->v,r->v,v->r->height()));
+				double sep = (v->r->height()+r->r->height())/2.0;
+				constraints.push_back(new Constraint(v->v,r->v,sep));
 				r->firstAbove=v->firstAbove;
 			}
 			scanline.erase(v);

@@ -131,6 +131,7 @@ void Blocks::mergeRight(Block *l) {
 #endif
 		l->deleteMinOutConstraint();
 		Block *r = c->right->block;
+		r->setUpOutConstraints();
 		double dist = c->left->offset + c->gap - c->right->offset;
 		if (l->vars->size() > r->vars->size()) {
 			l->merge(r, c, dist);

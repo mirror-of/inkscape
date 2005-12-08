@@ -10,7 +10,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdio.h>
 #include <setjmp.h>
-#include <glib/gstrfuncs.h>  /* g_strdup_printf */
+//#include <glib/gstrfuncs.h>  /* g_strdup_printf */
 #ifdef __cplusplus
 };
 #endif

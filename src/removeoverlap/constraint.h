@@ -39,13 +39,12 @@ static inline bool compareConstraints(Constraint *&l, Constraint *&r) {
 	if(l->left->block==l->right->block) sl=-999999;
 	if(r->left->block==r->right->block) sr=-999999;
 	if(sl==sr) {
-		int c = strcmp(l->left->name,r->left->name);
-		if(c==0) {
-			c = strcmp(l->right->name,r->right->name);
-			if(c<0) return true;
+		// arbitrary choice based on id
+		if(l->left->id==r->left->id) {
+			if(l->right->id<r->right->id) return true;
 			return false;
 		}
-		if(c<0) return true;
+		if(l->left->id<r->left->id) return true;
 		return false;
 	}
 	return sl < sr;

@@ -184,10 +184,11 @@ double Block::cost() {
 	return c;
 }
 char *Block::toString() {
-	char *str=new char[vars->size()*20];
+	int buffsize=vars->size() * Variable::_TOSTRINGBUFFSIZE;
+	char *str=new char[buffsize];
 	sprintf(str,"Block:");
 	for(vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {
-		sprintf(str,"%s %s",str,(*v)->toString());
+		_snprintf(str,buffsize,"%s %s",str,(*v)->toString());
 	}
 	return str;
 }

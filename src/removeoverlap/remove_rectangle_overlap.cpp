@@ -26,7 +26,7 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	VPSC vpsc_x(vs,n,cs,m);
 	double cost=vpsc_x.solve();
 	for(int i=0;i<n;i++) {
-		rs[i]->moveMinX(vs[i]->position());
+		rs[i]->moveCentreX(vs[i]->position());
 	}
 	delete [] vs;
 	delete [] cs;
@@ -35,7 +35,7 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	VPSC vpsc_y(vs,n,cs,m);
 	cost=vpsc_y.solve();
 	for(int i=0;i<n;i++) {
-		rs[i]->moveMinY(vs[i]->position());
+		rs[i]->moveCentreY(vs[i]->position());
 	}
 	delete [] vs;
 	delete [] cs;

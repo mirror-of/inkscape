@@ -19,7 +19,8 @@ class Constraint;
 class Variable
 {
 public:
-	char* name;
+	static const unsigned int _TOSTRINGBUFFSIZE=20;
+	int id; // useful in log files
 	double desiredPosition;
 	double weight;
 	double offset;
@@ -28,16 +29,14 @@ public:
 	std::vector<Constraint*> in;
 	std::vector<Constraint*> out;
 	char *toString();
-	inline Variable(const char *name, const double desiredPos, const double weight)
-		: name(new char[strlen(name)+1])
+	inline Variable(const int id, const double desiredPos, const double weight)
+		: id(id)
 		, desiredPosition(desiredPos)
 		, weight(weight)
 	{
-		strcpy(this->name,name);
 	}
 	inline double position();
 	~Variable(void){
-		delete name;
 		in.clear();
 		out.clear();
 	}

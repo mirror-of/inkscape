@@ -33,6 +33,8 @@ private:
 	void printBlocks();
 	bool constraintGraphIsCyclic(Variable *vs[], const int n);
 	bool blockGraphIsCyclic();
+	Constraint **cs;
+	int m;
 };
 
 #endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H

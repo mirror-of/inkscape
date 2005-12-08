@@ -70,3 +70,9 @@ ui/dialog/whiteboard-connect.cpp
 ui/dialog/whiteboard-sharewithchat.cpp
 ui/dialog/whiteboard-sharewithuser.cpp
 
+###############################################
+# Various test harnesses in removeoverlap
+###############################################
+removeoverlap/placement_SolveVPSC.cpp
+removeoverlap/placement_SolveVPSC.h
+removeoverlap/test.cpp

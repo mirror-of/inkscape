@@ -21,7 +21,7 @@
 //#define LOGGING
 using namespace std;
 
-VPSC::VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) {
+VPSC::VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) : cs(cs), m(m) {
 	//assert(!constraintGraphIsCyclic(vs,n));
 	bs=new Blocks(vs,n);
 #ifdef LOGGING
@@ -38,6 +38,11 @@ void VPSC::printBlocks() {
 		Block *b=*i;
 		FILE *logfile=fopen("cplacement.log","a");
 		fprintf(logfile," %s\n",b->toString());
+		fclose(logfile);
+	}
+	for(int i=0;i<m;i++) {
+		FILE *logfile=fopen("cplacement.log","a");
+		fprintf(logfile," %s\n",cs[i]->toString());
 		fclose(logfile);
 	}
 }
