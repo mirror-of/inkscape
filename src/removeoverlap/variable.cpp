@@ -10,6 +10,9 @@
  */
 
 #include "variable.h"
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
 char *Variable::toString() {
 	char *str=new char[_TOSTRINGBUFFSIZE];
 	snprintf(str, _TOSTRINGBUFFSIZE, "(%3d=%.3f)", id, position());

@@ -183,6 +183,10 @@ double Block::cost() {
 	}
 	return c;
 }
+
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
 char *Block::toString() {
 	int buffsize=vars->size() * Variable::_TOSTRINGBUFFSIZE;
 	char *str=new char[buffsize];
