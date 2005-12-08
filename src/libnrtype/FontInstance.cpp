@@ -449,7 +449,9 @@ void font_instance::LoadGlyph(int glyph_id)
         n_g.h_width=metrics.gmBlackBoxX*scale;
         n_g.v_width=metrics.gmBlackBoxY*scale;
         n_g.outline=NULL;
-        if ( bufferSize == 0) {
+        if ( bufferSize == GDI_ERROR) {
+            // shit happened
+        } else if ( bufferSize == 0) {
             // character has no visual representation, but is valid (eg whitespace)
             doAdd=true;
         } else {
