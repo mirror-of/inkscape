@@ -76,3 +76,5 @@ ui/dialog/whiteboard-sharewithuser.cpp
 removeoverlap/placement_SolveVPSC.cpp
 removeoverlap/placement_SolveVPSC.h
 removeoverlap/test.cpp
+removeoverlap/remove_rectangle_overlap-test.cpp
+removeoverlap/remove_rectangle_overlap-test.h
