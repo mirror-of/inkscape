@@ -70,7 +70,7 @@ bool Inkscape::Snapper::getSnapTo(PointType t) const
 /**
  *  \return true if this Snapper will snap at least one kind of point.
  */
-bool Inkscape::Snapper::will_snap_something() const
+bool Inkscape::Snapper::willSnapSomething() const
 {
     std::map<PointType, bool>::const_iterator i = _snap_to.begin();
     while (i != _snap_to.end() && i->second == false) {
@@ -81,46 +81,99 @@ bool Inkscape::Snapper::will_snap_something() const
 }
 
 
+
 /**
- *  Try to snap a point using this snapper along a vector.
- *  If a snap is made, req will be filled in with the snapped point.
- *  
+ *  Try to snap a point to whatever this snapper is interested in.  Any
+ *  snap that occurs will be to the nearest "interesting" thing (e.g. a
+ *  grid or guide line)
+ *
  *  \param t Point type.
- *  \param req Point (desktop coordinates).
- *  \param d Vector to snap along.
- *  \param it Items to ignore while snapping.
- *  \return Distance along d from the original to the snapped point.
+ *  \param p Point to snap (desktop coordinates).
+ *  \param it Item that should not be snapped to.
+ *  \return Snapped point.
  */
 
-NR::Coord Inkscape::Snapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d,
-                               std::list<SPItem const *> const &it) const
+Inkscape::SnappedPoint Inkscape::Snapper::freeSnap(PointType t,
+                                                   NR::Point const &p,
+                                                   SPItem const *it) const
 {
-    if (getSnapTo(t) == false) {
-        return NR_HUGE;
-    }
-
-    return do_vector_snap(req, d, it);
+    std::list<SPItem const *> lit;
+    lit.push_back(it);
+    return freeSnap(t, p, lit);
 }
 
 
 /**
- *  Try to snap a point using this snapper.
- *  If a snap is made, req will be filled in with the snapped point.
- *  
+ *  Try to snap a point to whatever this snapper is interested in.  Any
+ *  snap that occurs will be to the nearest "interesting" thing (e.g. a
+ *  grid or guide line)
+ *
  *  \param t Point type.
- *  \param req Point (desktop coordinates).
- *  \param it Items to ignore while snapping.
- *  \return Distance along d from the original to the snapped point.
+ *  \param p Point to snap (desktop coordinates).
+ *  \param it Items that should not be snapped to.
+ *  \return Snapped point.
  */
 
-NR::Coord Inkscape::Snapper::free_snap(PointType t, NR::Point &req, std::list<SPItem const *> const &it) const
+Inkscape::SnappedPoint Inkscape::Snapper::freeSnap(PointType t,
+                                                   NR::Point const &p,
+                                                   std::list<SPItem const *> const &it) const
 {
     if (getSnapTo(t) == false) {
-        return NR_HUGE;
+        return std::make_pair(p, NR_HUGE);
     }
 
-    return do_free_snap(req, it);
+    return _doFreeSnap(p, it);
 }
+
+
+
+
+/**
+ *  Try to snap a point to whatever this snapper is interested in, where
+ *  the snap point is constrained to lie along a specified vector from the
+ *  original point.
+ *
+ *  \param p Point to snap (desktop coordinates).
+ *  \param c Vector to constrain the snap to.
+ *  \param it Items that should not be snapped to.
+ *  \return Snapped point.
+ */
+
+Inkscape::SnappedPoint Inkscape::Snapper::constrainedSnap(PointType t,
+                                                          NR::Point const &p,
+                                                          NR::Point const &c,
+                                                          SPItem const *it) const
+{
+    std::list<SPItem const *> lit;
+    lit.push_back(it);
+    return constrainedSnap(t, p, c, lit);
+}
+
+
+/**
+ *  Try to snap a point to whatever this snapper is interested in, where
+ *  the snap point is constrained to lie along a specified vector from the
+ *  original point.
+ *
+ *  \param p Point to snap (desktop coordinates).
+ *  \param c Vector to constrain the snap to.
+ *  \param it Items that should not be snapped to.
+ *  \return Snapped point.
+ */
+
+Inkscape::SnappedPoint Inkscape::Snapper::constrainedSnap(PointType t,
+                                                          NR::Point const &p,
+                                                          NR::Point const &c,
+                                                          std::list<SPItem const *> const &it) const
+{
+    if (getSnapTo(t) == false) {
+        return std::make_pair(p, NR_HUGE);
+    }
+
+    return _doConstrainedSnap(p, c, it);
+}
+
+
 
 
 
