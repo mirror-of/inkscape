@@ -81,8 +81,12 @@ double VPSC::satisfy() {
 double VPSC::solve() {
 	satisfy();
 	bool solved=false;
-	while(!solved) {
+	// Solve shouldn't loop indefinately
+	// ... but just to make sure we limit the number of iterations
+	int maxtries=100;
+	while(!solved&&maxtries>=0) {
 		solved=true;
+		maxtries--;
 		for(set<Block*>::const_iterator i=bs->begin();i!=bs->end();i++) {
 			Block *b=*i;
 			b->setUpInConstraints();
