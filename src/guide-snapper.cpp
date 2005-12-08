@@ -23,13 +23,19 @@ Inkscape::GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) :
 
 }
 
-Inkscape::GuideSnapper::LineList Inkscape::GuideSnapper::get_snap_lines(NR::Point const &p) const
+Inkscape::GuideSnapper::LineList Inkscape::GuideSnapper::_getSnapLines(NR::Point const &p) const
 {
     LineList s;
     
     for (GSList const *l = _named_view->guides; l != NULL; l = l->next) {
-        SPGuide const &g = *SP_GUIDE(l->data);
-        s.push_back(std::make_pair(g.normal, g.position));
+        SPGuide const *g = SP_GUIDE(l->data);
+
+        /* We assume here that guides are horizontal or vertical */
+        if (g->normal == component_vectors[NR::X]) {
+            s.push_back(std::make_pair(NR::X, g->position));
+        } else {
+            s.push_back(std::make_pair(NR::Y, g->position));
+        }
     }
 
     return s;

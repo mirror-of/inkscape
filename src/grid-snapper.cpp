@@ -37,7 +37,7 @@ Inkscape::GridSnapper::GridSnapper(SPNamedView const *nv, NR::Coord const d) : L
 
 }
 
-Inkscape::LineSnapper::LineList Inkscape::GridSnapper::get_snap_lines(NR::Point const &p) const
+Inkscape::LineSnapper::LineList Inkscape::GridSnapper::_getSnapLines(NR::Point const &p) const
 {
     LineList s;
     
@@ -46,7 +46,7 @@ Inkscape::LineSnapper::LineList Inkscape::GridSnapper::get_snap_lines(NR::Point 
                                                                  _named_view->gridspacing[i],
                                                                  _named_view->gridorigin[i]);
         
-        s.push_back(std::make_pair(component_vectors[i], rounded));
+        s.push_back(std::make_pair(NR::Dim2(i), rounded));
     }
 
     return s;
