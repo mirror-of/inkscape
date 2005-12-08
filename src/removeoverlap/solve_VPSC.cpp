@@ -83,12 +83,12 @@ double VPSC::solve() {
 	bool solved=false;
 	while(!solved) {
 		solved=true;
-		for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
+		for(set<Block*>::const_iterator i=bs->begin();i!=bs->end();i++) {
 			Block *b=*i;
 			b->setUpInConstraints();
 			b->setUpOutConstraints();
 		}
-		for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
+		for(set<Block*>::const_iterator i=bs->begin();i!=bs->end();i++) {
 			Block *b=*i;
 			Constraint *c=b->findMinLM();
 			if(c!=NULL && c->lm<0) {
@@ -119,7 +119,7 @@ double VPSC::solve() {
  */
 bool VPSC::move_and_split() {
 	//assert(!blockGraphIsCyclic());
-	for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
+	for(set<Block*>::const_iterator i=bs->begin();i!=bs->end();i++) {
 		Block *b=*i;
 		if(!b->deleted) {
 			b->wposn = b->desiredWeightedPosition();
@@ -212,13 +212,13 @@ bool VPSC::constraintGraphIsCyclic(Variable *vs[], const int n) {
 bool VPSC::blockGraphIsCyclic() {
 	map<Block*, node*> bmap;
 	vector<node*> graph;
-	for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
+	for(set<Block*>::const_iterator i=bs->begin();i!=bs->end();i++) {
 		Block *b=*i;
 		node *u=new node;
 		graph.push_back(u);
 		bmap[b]=u;
 	}
-	for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
+	for(set<Block*>::const_iterator i=bs->begin();i!=bs->end();i++) {
 		Block *b=*i;
 		b->setUpInConstraints();
 		Constraint *c=b->findMinInConstraint();
