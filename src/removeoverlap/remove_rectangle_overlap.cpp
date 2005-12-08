@@ -1,5 +1,6 @@
 #include "remove_rectangle_overlap.h"
 #include <cassert>
+#include "constraint.h"
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
@@ -27,8 +28,12 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	double cost=vpsc_x.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreX(vs[i]->position());
+		delete vs[i];
 	}
 	delete [] vs;
+	for(int i = 0; i < m; ++i) {
+		delete cs[i];
+	}
 	delete [] cs;
 	Rectangle::setXBorder(Rectangle::xBorder-0.001);
 	m=generateYConstraints(rs,ws,n,vs,cs);
@@ -36,8 +41,12 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	cost=vpsc_y.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreY(vs[i]->position());
+		delete vs[i];
 	}
 	delete [] vs;
+	for(int i = 0; i < m; ++i) {
+		delete cs[i];
+	}
 	delete [] cs;
 	delete [] ws;
 }
