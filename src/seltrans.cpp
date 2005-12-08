@@ -254,7 +254,7 @@ void Inkscape::SelTrans::grab(NR::Point const &p, gdouble x, gdouble y, bool sho
 
     _point = p;
 
-    _snap_points = selection->getSnapPointsConvexHull();
+    _snap_points = selection->getSnapPoints();
     _bbox_points = selection->getBBoxPoints();
 
     gchar const *scale_origin = prefs_get_string_attribute("tools.select", "scale_origin");
@@ -1231,9 +1231,9 @@ void sp_sel_trans_center(Inkscape::SelTrans *seltrans, SPSelTransHandle const &,
 
 void Inkscape::SelTrans::moveTo(NR::Point const &xy, guint state)
 {
-    using NR::X;
-    using NR::Y;
-
+    SnapManager const m(_desktop->namedview);
+    
+    /* The amount that we've moved by during this drag */
     NR::Point dxy = xy - _point;
 
     /* Get a STL list of the selected items.
@@ -1242,47 +1242,82 @@ void Inkscape::SelTrans::moveTo(NR::Point const &xy, guint state)
     std::list<SPItem const*> it;
     for (GSList const *i = _selection->itemList(); i != NULL; i = i->next) {
         it.push_back(reinterpret_cast<SPItem*>(i->data));
-    }    
+    }
 
-    if (state & GDK_MOD1_MASK) {
-        /* Alt pressed means keep offset: snap the moved distance to the grid */
-        namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, dxy, NULL);
-    } else if ((state & GDK_SHIFT_MASK) == 0) {
-        /* Snap as normal.  Shift-drag will not snap to the grid even if it is enabled. */
-        for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
-            std::pair<NR::Coord, bool> b = namedview_dim_snap_list(_desktop->namedview,
-                                                                   Snapper::BBOX_POINT, _bbox_points,
-                                                                   dxy[dim], NR::Dim2(dim), it);
-            std::pair<NR::Coord, bool> s = namedview_dim_snap_list(_desktop->namedview,
-                                                                   Snapper::SNAP_POINT, _snap_points,
-                                                                   dxy[dim], NR::Dim2(dim), it);
+    bool const alt = (state & GDK_MOD1_MASK);
+    bool const control = (state & GDK_CONTROL_MASK);
+    bool const shift = (state & GDK_SHIFT_MASK);
+
+    if (alt) {
+
+        /* Alt pressed means keep offset: snap the moved distance to the grid.
+        ** FIXME: this will snap to more than just the grid, nowadays.
+        */
+
+        dxy = m.freeSnap(Snapper::SNAP_POINT, dxy, NULL).first;
+
+    } else if (!shift) {
+
+        /* We're snapping to things, possibly with a constraint to horizontal or
+        ** vertical movement.  Obtain a list of possible translations and then
+        ** pick the smallest.
+        */
+
+        /* This will be our list of possible translations */
+        std::list<std::pair<NR::Point, bool> > s;
+        
+        if (control) {
             
-            /* Pick the snap that puts us closest to the original point */
-            NR::Coord bd = b.second ? fabs(b.first - dxy[dim]) : NR_HUGE;
-            NR::Coord sd = s.second ? fabs(s.first - dxy[dim]) : NR_HUGE;
-            dxy[dim] = (bd < sd) ? b.first : s.first;
-        }
-    }
+            /* Snap to things, and also constrain to horizontal or vertical movement */
 
-    /* N.B. If we ever implement angled guides, then we'll want to make sure that the movement
-       respects both the snapped-to guide and the h-or-v constraint implied by control mask.
-       This should be a special case of snapping to h-or-v followed by snapping to whatever
-       real guides there are. */
-    if (state & GDK_CONTROL_MASK) {
-        if ( fabs(dxy[X]) > fabs(dxy[Y]) ) {
-            dxy[Y] = 0.0;
+            for (unsigned int dim = 0; dim < 2; dim++) {
+                s.push_back(m.constrainedSnapTranslation(Inkscape::Snapper::BBOX_POINT,
+                                                         _bbox_points,
+                                                         component_vectors[dim], it, dxy));
+                s.push_back(m.constrainedSnapTranslation(Inkscape::Snapper::SNAP_POINT,
+                                                         _snap_points,
+                                                         component_vectors[dim], it, dxy));
+            }
+            
         } else {
-            dxy[X] = 0.0;
+
+            /* Snap to things with no constraint */
+
+            s.push_back(m.freeSnapTranslation(Inkscape::Snapper::BBOX_POINT,
+                                              _bbox_points, it, dxy));
+            s.push_back(m.freeSnapTranslation(Inkscape::Snapper::SNAP_POINT,
+                                              _snap_points, it, dxy));
+        }
+
+        /* Pick one */
+        NR::Coord best = NR_HUGE;
+        for (std::list<std::pair<NR::Point, bool> >::const_iterator i = s.begin(); i != s.end(); i++) {
+            if (i->second) {
+                NR::Coord const m = NR::L2(i->first);
+                if (m < best) {
+                    best = m;
+                    dxy = i->first;
+                }
+            }
         }
     }
-
+    
+    if (control) {
+        /* Ensure that the horizontal and vertical constraint has been applied */
+        if (fabs(dxy[NR::X]) > fabs(dxy[NR::Y])) {
+            dxy[NR::Y] = 0;
+        } else {
+            dxy[NR::X] = 0;
+        }
+    }
+    
     NR::Matrix const move((NR::translate(dxy)));
     NR::Point const norm(0, 0);
     transform(move, norm);
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], _desktop->namedview->getDefaultMetric());
-    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], _desktop->namedview->getDefaultMetric());
+    GString *xs = SP_PX_TO_METRIC_STRING(dxy[NR::X], _desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(dxy[NR::Y], _desktop->namedview->getDefaultMetric());
     _message_context.setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
     g_string_free(xs, TRUE);
     g_string_free(ys, TRUE);
