@@ -29,8 +29,154 @@
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-values.h>
 
-static std::list<const Inkscape::Snapper*> namedview_get_snappers(SPNamedView const *nv);
-static bool namedview_will_snap_something(SPNamedView const *nv);
+
+/**
+ * \return true if one of the snappers will try to snap something.
+ */
+bool SnapManager::willSnapSomething() const
+{
+    SPNamedView::SnapperList s = namedview->getSnappers();
+    SPNamedView::SnapperList::const_iterator i = s.begin();
+    while (i != s.end() && (*i)->willSnapSomething() == false) {
+        i++;
+    }
+
+    return (i != s.end());
+}
+
+
+/* FIXME: lots of cut-and-paste here.  This needs some
+** functor voodoo to cut it all down a bit.
+*/
+
+Inkscape::SnappedPoint SnapManager::freeSnap(Inkscape::Snapper::PointType t,
+                                             NR::Point const &p,
+                                             SPItem const *it) const
+
+{
+    std::list<SPItem const *> lit;
+    lit.push_back(it);
+    return freeSnap(t, p, lit);
+}
+
+
+Inkscape::SnappedPoint SnapManager::freeSnap(Inkscape::Snapper::PointType t,
+                                             NR::Point const &p,
+                                             std::list<SPItem const *> const &it) const
+{
+    Inkscape::SnappedPoint r = std::make_pair(p, NR_HUGE);
+    
+    SPNamedView::SnapperList snappers = namedview->getSnappers();
+    for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
+        Inkscape::SnappedPoint const s = (*i)->freeSnap(t, p, it);
+        if (s.second < r.second) {
+            r = s;
+        }
+    }
+
+    return r;
+}
+
+
+Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::Snapper::PointType t,
+                                                    NR::Point const &p,
+                                                    NR::Point const &c,
+                                                    SPItem const *it) const
+{
+    std::list<SPItem const *> lit;
+    lit.push_back(it);
+    return constrainedSnap(t, p, c, lit);
+}
+
+
+Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::Snapper::PointType t,
+                                                    NR::Point const &p,
+                                                    NR::Point const &c,
+                                                    std::list<SPItem const *> const &it) const
+{
+    Inkscape::SnappedPoint r = std::make_pair(p, NR_HUGE);
+    
+    SPNamedView::SnapperList snappers = namedview->getSnappers();
+    for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
+        Inkscape::SnappedPoint const s = (*i)->constrainedSnap(t, p, c, it);
+        if (s.second < r.second) {
+            r = s;
+        }
+    }
+
+    return r;
+}
+
+
+std::pair<NR::Point, bool> SnapManager::freeSnapTranslation(Inkscape::Snapper::PointType t,
+                                                            std::vector<NR::Point> const &p,
+                                                            std::list<SPItem const *> const &it,
+                                                            NR::Point const &tr) const
+{
+    if (willSnapSomething() == false) {
+        return std::make_pair(tr, false);
+    }
+
+    NR::Point best_translation = tr;
+    NR::Coord best_distance = NR_HUGE;
+
+    for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
+        /* Translated version of this point */
+        NR::Point const q = *i + tr;
+        /* Snap it */
+        Inkscape::SnappedPoint s = freeSnap(t, q, it);
+        if (s.second < NR_HUGE) {
+            /* Resulting translation */
+            NR::Point const r = s.first - *i;
+            NR::Coord const d = NR::L2(r);
+            if (d < best_distance) {
+                best_distance = d;
+                best_translation = r;
+            }
+        }
+    }
+
+    return std::make_pair(best_translation, best_distance < NR_HUGE);
+}
+
+
+
+std::pair<NR::Point, bool> SnapManager::constrainedSnapTranslation(Inkscape::Snapper::PointType t,
+                                                                   std::vector<NR::Point> const &p,
+                                                                   NR::Point const &c,
+                                                                   std::list<SPItem const *> const &it,
+                                                                   NR::Point const &tr) const
+{
+    if (willSnapSomething() == false) {
+        return std::make_pair(tr, false);
+    }
+
+    NR::Point best_translation = tr;
+    NR::Coord best_distance = NR_HUGE;
+
+    for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
+        /* Translated version of this point */
+        NR::Point const q = *i + tr;
+        /* Snap it */
+        Inkscape::SnappedPoint s = constrainedSnap(t, q, c, it);
+        if (s.second < NR_HUGE) {
+            /* Resulting translation */
+            NR::Point const r = s.first - *i;
+            NR::Coord const d = NR::L2(r);
+            if (d < best_distance) {
+                best_distance = d;
+                best_translation = r;
+            }
+        }
+    }
+
+    return std::make_pair(best_translation, best_distance < NR_HUGE);
+}
+
+
+
+
+
 
 /// Minimal distance to norm before point is considered for snap.
 static const double MIN_DIST_NORM = 1.0;
@@ -69,10 +215,10 @@ NR::Coord namedview_free_snap(SPNamedView const *nv, Inkscape::Snapper::PointTyp
     g_assert(nv != NULL);
     g_assert(SP_IS_NAMEDVIEW(nv));
 
-    std::list<const Inkscape::Snapper*> snappers = namedview_get_snappers(nv);
+    SPNamedView::SnapperList snappers = nv->getSnappers();
 
     NR::Coord best = NR_HUGE;
-    for (std::list<const Inkscape::Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
+    for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
 
         Inkscape::SnappedPoint const s = (*i)->freeSnap(t, req, it);
         if (s.second < best) {
@@ -110,10 +256,10 @@ NR::Coord namedview_vector_snap(SPNamedView const *nv, Inkscape::Snapper::PointT
     g_assert(nv != NULL);
     g_assert(SP_IS_NAMEDVIEW(nv));
 
-    std::list<const Inkscape::Snapper*> snappers = namedview_get_snappers(nv);
+    SPNamedView::SnapperList snappers = nv->getSnappers();
 
     NR::Coord best = NR_HUGE;
-    for (std::list<const Inkscape::Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
+    for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
         Inkscape::SnappedPoint const s = (*i)->constrainedSnap(t, req, d, it);
         if (s.second < best) {
             req = s.first;
@@ -144,8 +290,10 @@ std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv, Inksca
 {
     NR::Coord dist = NR_HUGE;
     NR::Coord xdist = dx;
+
+    SnapManager const m(nv);
     
-    if (namedview_will_snap_something(nv)) {
+    if (m.willSnapSomething()) {
         for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
             NR::Point q = *i;
             NR::Coord const pre = q[dim];
@@ -171,7 +319,9 @@ std::pair<double, bool> namedview_vector_snap_list(SPNamedView const *nv, Inksca
     using NR::X;
     using NR::Y;
 
-    if (namedview_will_snap_something(nv) == false) {
+    SnapManager const m(nv);
+
+    if (m.willSnapSomething() == false) {
         return std::make_pair(s[X], false);
     }
     
@@ -209,7 +359,8 @@ std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv, Ink
                                                       double const sx, NR::Dim2 dim,
                                                       std::list<const SPItem *> const &it)
 {
-    if (namedview_will_snap_something(nv) == false) {
+    SnapManager const m(nv);
+    if (m.willSnapSomething() == false) {
         return std::make_pair(sx, false);
     }
 
@@ -251,7 +402,9 @@ double namedview_dim_snap_list_skew(SPNamedView const *nv, Inkscape::Snapper::Po
                                     const std::vector<NR::Point> &p, NR::Point const &norm, 
                                     double const sx, NR::Dim2 const dim)
 {
-    if (namedview_will_snap_something(nv) == false) {
+    SnapManager const m(nv);
+    
+    if (m.willSnapSomething() == false) {
         return sx;
     }
 
@@ -277,32 +430,8 @@ double namedview_dim_snap_list_skew(SPNamedView const *nv, Inkscape::Snapper::Po
     return skew;
 }
 
-/**
- * Return list of all snappers.
- */
-static std::list<const Inkscape::Snapper*> namedview_get_snappers(SPNamedView const *nv)
-{
-/// \todo FIXME: this should probably be in SPNamedView
-    std::list<const Inkscape::Snapper*> s;
-    s.push_back(&nv->grid_snapper);
-    s.push_back(&nv->guide_snapper);
-    s.push_back(&nv->object_snapper);
-    return s;
-}
 
-/**
- * True if one of the snappers in the named view's list will snap something.
- */
-bool namedview_will_snap_something(SPNamedView const *nv)
-{
-    std::list<const Inkscape::Snapper*> s = namedview_get_snappers(nv);
-    std::list<const Inkscape::Snapper*>::iterator i = s.begin();
-    while (i != s.end() && (*i)->willSnapSomething() == false) {
-        i++;
-    }
 
-    return (i != s.end());
-}
 
 
 

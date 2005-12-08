@@ -24,6 +24,47 @@
 
 class SPNamedView;
 
+class SnapManager
+{
+public:
+    SnapManager(SPNamedView const *v) : namedview(v) {}
+
+    bool willSnapSomething() const;
+
+    Inkscape::SnappedPoint freeSnap(Inkscape::Snapper::PointType t,
+                                    NR::Point const &p,
+                                    SPItem const *it) const;
+
+    Inkscape::SnappedPoint freeSnap(Inkscape::Snapper::PointType t,
+                                    NR::Point const &p,
+                                    std::list<SPItem const *> const &it) const;
+    
+    Inkscape::SnappedPoint constrainedSnap(Inkscape::Snapper::PointType t,
+                                           NR::Point const &p,
+                                           NR::Point const &c,
+                                           SPItem const *it) const;
+    
+    Inkscape::SnappedPoint constrainedSnap(Inkscape::Snapper::PointType t,
+                                           NR::Point const &p,
+                                           NR::Point const &c,
+                                           std::list<SPItem const *> const &it) const;
+
+    std::pair<NR::Point, bool> freeSnapTranslation(Inkscape::Snapper::PointType t,
+                                                   std::vector<NR::Point> const &p,
+                                                   std::list<SPItem const *> const &it,
+                                                   NR::Point const &tr) const;
+
+    std::pair<NR::Point, bool> constrainedSnapTranslation(Inkscape::Snapper::PointType t,
+                                                          std::vector<NR::Point> const &p,
+                                                          NR::Point const &c,
+                                                          std::list<SPItem const *> const &it,
+                                                          NR::Point const &tr) const;
+
+private:
+    SPNamedView const *namedview;
+};
+
+
 /* Single point methods */
 NR::Coord namedview_free_snap(SPNamedView const *nv, Inkscape::Snapper::PointType t, NR::Point &req,
                               SPItem const *it);
