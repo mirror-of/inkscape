@@ -175,7 +175,7 @@ bool VPSC::constraintGraphIsCyclic(Variable *vs[], const int n) {
 			Variable *l=(*c)->left;
 			varmap[vs[i]]->in.insert(varmap[l]);
 		}
-		
+
 		for(vector<Constraint*>::iterator c=vs[i]->out.begin();c!=vs[i]->out.end();c++) {
 			Variable *r=(*c)->right;
 			varmap[vs[i]]->out.insert(varmap[r]);
@@ -228,7 +228,7 @@ bool VPSC::blockGraphIsCyclic() {
 			b->deleteMinInConstraint();
 			c=b->findMinInConstraint();
 		}
-		
+
 		b->setUpOutConstraints();
 		c=b->findMinOutConstraint();
 		while(c!=NULL) {
