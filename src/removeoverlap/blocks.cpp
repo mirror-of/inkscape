@@ -81,7 +81,6 @@ void Blocks::mergeLeft(Block *r) {
 	r->setUpInConstraints();
 	Constraint *c=r->findMinInConstraint();
 	while (c != NULL && c->slack()<0) {
-		
 #ifdef LOGGING
 		logfile=fopen("cplacement.log","a");
 		char *str=c->toString();
@@ -99,9 +98,7 @@ void Blocks::mergeLeft(Block *r) {
 			r->merge(l, c, -dist);
 		} else {
 			l->merge(r, c, dist);
-			Block *tmp = r;
-			r = l;
-			l = tmp;
+			std::swap(l, r);
 		}
 		removeBlock(l);
 		c=r->findMinInConstraint();
@@ -137,9 +134,7 @@ void Blocks::mergeRight(Block *l) {
 			l->merge(r, c, dist);
 		} else {
 			r->merge(l, c, -dist);
-			Block *tmp = l;
-			l = r;
-			r = tmp;
+			std::swap(l, r);
 		}
 		removeBlock(r);
 		c=l->findMinOutConstraint();
@@ -161,6 +156,7 @@ void Blocks::cleanup() {
 		Block *b=*i;
 		if(b->deleted) {
 			erase(b);
+			delete b;
 		}
 	}
 }
