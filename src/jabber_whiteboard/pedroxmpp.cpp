@@ -614,7 +614,7 @@ public:
     static void hash(unsigned char *dataIn,
                      unsigned long len, unsigned char *digest);
 
-    static DOMString Md5::hashHex(unsigned char *dataIn, unsigned long len);
+    static DOMString hashHex(unsigned char *dataIn, unsigned long len);
 
     /**
      *  Initialize the context (also zeroizes contents)

@@ -198,7 +198,7 @@ public:
   cut_position*    CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut);
   cut_position    PointToCurvilignPosition(NR::Point const &pos) const;
   //Should this take a cut_position as a param?
-  double           Path::PositionToLength(int piece, double t);
+  double           PositionToLength(int piece, double t);
   
   // caution: not tested on quadratic b-splines, most certainly buggy
   void             ConvertPositionsToMoveTo(int nbPos,cut_position* poss);

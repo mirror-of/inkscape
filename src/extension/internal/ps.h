@@ -38,10 +38,10 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
 
     void print_bpath(SVGOStringStream &os, NArtBpath const *bp);
 
-    void PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *style, NRRect const *pbox);
-    void PrintPS::print_stroke_style(SVGOStringStream &os, SPStyle const *style);
+    void print_fill_style(SVGOStringStream &os, SPStyle const *style, NRRect const *pbox);
+    void print_stroke_style(SVGOStringStream &os, SPStyle const *style);
 
-    char const *PrintPS::PSFontName(SPStyle const *style);
+    char const *PSFontName(SPStyle const *style);
 
     unsigned int print_image(FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
                              NRMatrix const *transform);

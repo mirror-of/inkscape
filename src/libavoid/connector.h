@@ -59,7 +59,7 @@ class ConnRef
         bool isInitialised(void);
         void unInitialise(void);
         void setCallback(void (*cb)(void *), void *ptr);
-        void ConnRef::handleInvalid(void);
+        void handleInvalid(void);
         int generatePath(Point p0, Point p1);
         void makePathInvalid(void);
         

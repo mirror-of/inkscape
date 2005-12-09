@@ -58,7 +58,7 @@ public:
     /**
      * Respond to selection change
      */
-    void TileDialog::updateSelection();
+    void updateSelection();
 
 
     /**

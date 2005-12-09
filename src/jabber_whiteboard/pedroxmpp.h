@@ -746,7 +746,7 @@ public:
      *
      */
     virtual std::vector<XmppUser>
-          XmppClient::groupChatGetUserList(const DOMString &groupJid);
+          groupChatGetUserList(const DOMString &groupJid);
 
     /**
      *
