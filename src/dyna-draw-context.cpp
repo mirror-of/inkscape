@@ -62,6 +62,7 @@
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-point-fns.h"
 #include "xml/repr.h"
+#include "context-fns.h"
 
 #define DDC_RED_RGBA 0xff0000ff
 #define DDC_GREEN_RGBA 0x000000ff
@@ -501,16 +502,11 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
         if ( event->button.button == 1 ) {
 
             SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
-            SPItem *layer=SP_ITEM(desktop->currentLayer());
-            if ( !layer || desktop->itemIsHidden(layer)) {
-                dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-                return TRUE;
-            }
-            if ( !layer || layer->isLocked()) {
-                dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
-                return TRUE;
-            }
 
+            if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
+                return TRUE;
+            }
+            
             NR::Point const button_w(event->button.x,
                                      event->button.y);
             NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));

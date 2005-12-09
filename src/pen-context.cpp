@@ -43,6 +43,7 @@
 #include "helper/units.h"
 #include "snap.h"
 #include "macros.h"
+#include "context-fns.h"
 
 
 static void sp_pen_context_class_init(SPPenContextClass *klass);
@@ -323,21 +324,11 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
         SPDrawContext * const dc = SP_DRAW_CONTEXT(pc);
         SPDesktop * const desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
         SPItem * const layer = SP_ITEM(desktop->currentLayer());
-        
-        if (!layer || desktop->itemIsHidden(layer)) {
-            dc->_message_context->flash(
-                Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it.")
-                );
-            return TRUE;
-        }
-        
-        if (!layer || layer->isLocked()) {
-            dc->_message_context->flash(
-                Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it.")
-                );
-            return TRUE;
-        }
 
+        if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
+            return TRUE;
+        }
+        
         NR::Point const event_w(bevent.x, bevent.y);
         pen_drag_origin_w = event_w;
         pen_within_tolerance = true;
