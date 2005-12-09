@@ -195,13 +195,9 @@ RegisteredScalarUnit::on_value_changed()
         return;
 
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
-    if (!dt) {
+    if (!dt) 
         return;
-    }
 
-    SPDocument *doc = SP_DT_DOCUMENT(dt);
-
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR (SP_DT_NAMEDVIEW(dt));
     Inkscape::SVGOStringStream os;
     os << _widget->getValue("");
     if (_um)
@@ -209,8 +205,10 @@ RegisteredScalarUnit::on_value_changed()
 
     _wr->setUpdating (true);
 
+    SPDocument *doc = SP_DT_DOCUMENT(dt);
     gboolean saved = sp_document_get_undo_sensitive (doc);
     sp_document_set_undo_sensitive (doc, FALSE);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR (SP_DT_NAMEDVIEW(dt));
     repr->setAttribute(_key.c_str(), os.str().c_str());
     doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive (doc, saved);
