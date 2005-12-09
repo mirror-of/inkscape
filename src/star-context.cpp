@@ -51,6 +51,7 @@
 #include "object-edit.h"
 #include "widgets/spw-utilities.h"
 #include <libnr/nr-point-fns.h>
+#include "context-fns.h"
 
 #include "star-context.h"
 
@@ -426,15 +427,7 @@ static void sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
 
     if (!sc->item) {
 
-        SPItem *layer = SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer) ) {
-            sc->_message_context->set(Inkscape::ERROR_MESSAGE,
-                                      _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-            return;
-        }
-        if ( !layer || layer->isLocked() ) {
-            sc->_message_context->set(Inkscape::ERROR_MESSAGE,
-                                      _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+        if (Inkscape::have_viable_layer(desktop, sc->_message_context) == false) {
             return;
         }
 
