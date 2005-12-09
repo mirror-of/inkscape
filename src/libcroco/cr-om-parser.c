@@ -1016,7 +1016,7 @@ cr_om_parser_parse_paths_to_cascade (CROMParser * a_this,
 
         g_return_val_if_fail (a_this, CR_BAD_PARAM_ERROR);
 
-        memset (sheets, 0, sizeof (CRStyleSheet) * 3);
+        memset (sheets, 0, sizeof (sheets));
         paths[0] = (guchar *) a_author_path;
         paths[1] = (guchar *) a_user_path;
         paths[2] = (guchar *) a_ua_path;
