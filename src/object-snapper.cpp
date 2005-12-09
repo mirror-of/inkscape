@@ -93,7 +93,7 @@ void Inkscape::ObjectSnapper::_snapNodes(Inkscape::SnappedPoint &s,
                     /* Try to snap to this node of the path */
                     NR::Coord const dist = NR::L2(n - p);
                     if (dist < getDistance() && dist < s.second) {
-                        s = std::make_pair(p, dist);
+                        s = std::make_pair(n, dist);
                     }
                     
                     j++;
