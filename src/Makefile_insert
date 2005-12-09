@@ -45,6 +45,7 @@ libinkpre_a_SOURCES =	\
 	color-rgba.h	\
 	conn-avoid-ref.cpp conn-avoid-ref.h	\
 	connector-context.cpp connector-context.h	\
+	context-fns.cpp context-fns.h \
 	desktop-affine.cpp desktop-affine.h	\
 	desktop-events.cpp desktop-events.h	\
 	desktop-handles.cpp desktop-handles.h	\
