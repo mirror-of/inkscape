@@ -2,6 +2,21 @@
 
 	* src/object-snapper.cpp: make node snapping work again.
 
+	* src/star-context.cpp: use SnapManager.  Some other minor cleanups.
+
+	* src/arc-context.cpp, src/connector-context.cpp,
+	src/dyna-draw-context.cpp, src/pen-context.cpp,
+	src/pencil-context.cpp, src/rect-context.cpp,
+	src/selection-chemistry.cpp, src/spiral-context.cpp,
+	src/star-context.cpp, src/text-context.cpp: use
+	Inkscape::have_viable_layer.
+
+	* src/context-fns.{cpp,h}: new files.
+
+	* src/arc-context.cpp, src/context-fns.{cpp,h},
+	src/rect-context.cpp: abstract common code into context-fns and
+	clean it up a bit.
+
 2005-12-08  Carl Hetherington <inkscape@carlh.net>
 
 	* src/grid-snapper.cpp, src/guide-snapper.cpp, src/line-snapper.h:
