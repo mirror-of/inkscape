@@ -269,8 +269,7 @@ sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
     }    
 }
 
-static gint
-sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
+static gint sp_star_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
     static gboolean dragging;
 
@@ -279,31 +278,36 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 
     SPStarContext *sc = SP_STAR_CONTEXT (event_context);
 
-    event_context->tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+    event_context->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
 
     gint ret = FALSE;
-
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
         if (event->button.button == 1) {
-           // save drag origin
+            // save drag origin
             event_context->xp = (gint) event->button.x;
             event_context->yp = (gint) event->button.y;
             event_context->within_tolerance = true;
 
-           // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
+            NR::Point const p(event->button.x, event->button.y);
+
+            // remember clicked item, disregarding groups, honoring Alt
+            event_context->item_to_select = sp_event_context_find_item(desktop, p,
+                                                                       event->button.state & GDK_MOD1_MASK, TRUE);
 
             dragging = TRUE;
+            
             /* Position center */
-            sc->center = sp_desktop_w2d_xy_point (event_context->desktop, NR::Point(event->button.x, event->button.y));
-            /* Snap center to nearest magnetic point */
-            namedview_free_snap (event_context->desktop->namedview, Inkscape::Snapper::SNAP_POINT,
-                                 sc->center, sc->item);
-            sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
-                                 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
-                                 NULL, event->button.time);
+            sc->center = sp_desktop_w2d_xy_point(desktop, p);
+            
+            /* Snap center */
+            SnapManager const m(desktop->namedview);
+            sc->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, sc->center, sc->item).first;
+            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                                GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                                GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
+                                NULL, event->button.time);
             ret = TRUE;
         }
         break;
@@ -332,7 +336,7 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             dragging = FALSE;
             if (!event_context->within_tolerance) {
                 // we've been dragging, finish the star
-            sp_star_finish (sc);
+                sp_star_finish (sc);
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
                 if (event->button.state & GDK_SHIFT_MASK) {
@@ -347,11 +351,11 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 
             event_context->item_to_select = NULL;
             ret = TRUE;
-            sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM (desktop->acetate), event->button.time);
         }
         break;
     case GDK_KEY_PRESS:
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_group0_keyval(&event->key)) {
         case GDK_Alt_R:
         case GDK_Control_L:
         case GDK_Control_R:
@@ -359,10 +363,10 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
         case GDK_Shift_R:
         case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
         case GDK_Meta_R:
-            sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
-                                        _("<b>Ctrl</b>: snap angle; keep rays radial"),
-                                        NULL,
-                                        NULL);
+            sp_event_show_modifier_tip(event_context->defaultMessageContext(), event,
+                                       _("<b>Ctrl</b>: snap angle; keep rays radial"),
+                                       NULL,
+                                       NULL);
             break;
         case GDK_Up:
         case GDK_Down:
@@ -414,31 +418,32 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
     return ret;
 }
 
-static void
-sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
+static void sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
 {
     SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
 
-    int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+    int const snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
     if (!sc->item) {
 
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            sc->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+        SPItem *layer = SP_ITEM(desktop->currentLayer());
+        if ( !layer || desktop->itemIsHidden(layer) ) {
+            sc->_message_context->set(Inkscape::ERROR_MESSAGE,
+                                      _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
             return;
         }
-        if ( !layer || layer->isLocked()) {
-            sc->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+        if ( !layer || layer->isLocked() ) {
+            sc->_message_context->set(Inkscape::ERROR_MESSAGE,
+                                      _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
             return;
         }
 
         /* Create object */
-        Inkscape::XML::Node *repr = sp_repr_new ("svg:path");
+        Inkscape::XML::Node *repr = sp_repr_new("svg:path");
         repr->setAttribute("sodipodi:type", "star");
 
         /* Set style */
-        sp_desktop_apply_style_tool (desktop, repr, "tools.shapes.star", false);
+        sp_desktop_apply_style_tool(desktop, repr, "tools.shapes.star", false);
 
         sc->item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
         Inkscape::GC::release(repr);
@@ -446,19 +451,23 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
         sc->item->updateRepr();
     }
 
-    /* Free movement for corner point */
-    NR::Point p0 = sp_desktop_dt2root_xy_point (desktop, sc->center);
-    NR::Point p1 = sp_desktop_dt2root_xy_point (desktop, p);
-    namedview_free_snap (desktop->namedview, Inkscape::Snapper::SNAP_POINT, p1, sc->item);
+    NR::Point const p0 = sp_desktop_dt2root_xy_point(desktop, sc->center);
+    NR::Point p1 = sp_desktop_dt2root_xy_point(desktop, p);
+
+    /* Snap corner point with no constraints */
+    SnapManager const m(desktop->namedview);;
+    p1 = m.freeSnap(Inkscape::Snapper::SNAP_POINT, p1, sc->item).first;
 
     SPStar *star = SP_STAR(sc->item);
 
-    gdouble sides = (gdouble) sc->magnitude;
-    NR::Point d = p1 - p0;
-    gdouble r1 = NR::L2 (d);
-    gdouble arg1 = atan2 (d);
+    double const sides = (gdouble) sc->magnitude;
+    NR::Point const d = p1 - p0;
+    NR::Coord const r1 = NR::L2(d);
+    double arg1 = atan2(d);
+    
     if (state & GDK_CONTROL_MASK) {
-        arg1 = sp_round(arg1, M_PI/snaps);
+        /* Snap angle */
+        arg1 = sp_round(arg1, M_PI / snaps);
     }
 
     sp_star_position_set(star, sc->magnitude, p0, r1, r1 * sc->proportion,
@@ -467,10 +476,11 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
     /* status text */
     GString *rads = SP_PX_TO_METRIC_STRING(r1, desktop->namedview->getDefaultMetric());
     sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
-                                      ( sc->isflatsided?
-                                      _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
-                                          : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
-                                      rads->str, sp_round ((arg1)*180/M_PI, 0.0001));
+                               ( sc->isflatsided?
+                                 _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
+                                 : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
+                               rads->str, sp_round((arg1) * 180 / M_PI, 0.0001));
+    
     g_string_free(rads, FALSE);
 }
 
