@@ -38,6 +38,7 @@
 #include <glibmm/i18n.h>
 #include "libnr/in-svg-plane.h"
 #include "libnr/n-art-bpath.h"
+#include "context-fns.h"
 
 static void sp_pencil_context_class_init(SPPencilContextClass *klass);
 static void sp_pencil_context_init(SPPencilContext *pc);
@@ -203,13 +204,8 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
 
         SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
         SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-            return TRUE;
-        }
-        if ( !layer || layer->isLocked()) {
-            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+
+        if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
             return TRUE;
         }
 
