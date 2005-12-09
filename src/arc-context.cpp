@@ -44,6 +44,7 @@
 #include "desktop.h"
 #include "widgets/desktop-widget.h"
 #include "desktop-style.h"
+#include "context-fns.h"
 
 #include "arc-context.h"
 
@@ -409,13 +410,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 
     if (!ac->item) {
 
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            ac->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-            return;
-        }
-        if ( !layer || layer->isLocked()) {
-            ac->_message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+        if (Inkscape::have_viable_layer(desktop, ac->_message_context) == false) {
             return;
         }
 

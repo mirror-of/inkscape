@@ -73,6 +73,7 @@
 #include "sp-conn-end.h"
 #include "conn-avoid-ref.h"
 #include "libavoid/vertices.h"
+#include "context-fns.h"
 
 #include "prefs-utils.h"  // for prefs_get_int_attribute_limited
 
@@ -488,16 +489,11 @@ connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const
     if ( bevent.button == 1 ) {
 
         SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            cc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-            return TRUE;
-        }
-        if ( !layer || layer->isLocked()) {
-            cc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
-            return TRUE;
-        }
 
+        if (Inkscape::have_viable_layer(desktop, cc->_message_context) == false) {
+            return TRUE;
+        }
+        
         NR::Point const event_w(bevent.x,
                                 bevent.y);
         connector_drag_origin_w = event_w;
