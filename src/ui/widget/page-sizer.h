@@ -35,6 +35,7 @@ public:
     bool                 _landscape;
 
 protected:
+    void setDoc (double w, double h);
     int find_paper_size (double w, double h) const;
     void on_portrait();
     void on_landscape();

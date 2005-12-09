@@ -277,9 +277,19 @@ PageSizer::setDim (double w, double h)
     Unit const& unit = _rum._sel->getUnit();
     _rusw.setValue (w / unit.factor);
     _rush.setValue (h / unit.factor);
-    
-    if (SP_ACTIVE_DESKTOP)
-        sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
+}
+
+void
+PageSizer::setDoc (double w, double h)
+{
+    setDim (w, h);
+    if (!SP_ACTIVE_DESKTOP)
+        return;
+
+    SPDocument *doc = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
+    sp_document_set_width (doc, _rusw.getSU()->getValue("px"), &_px_unit);
+    sp_document_set_height (doc, _rush.getSU()->getValue("px"), &_px_unit);
+    sp_document_done (doc);
 }
 
 /** 
@@ -315,7 +325,7 @@ PageSizer::on_portrait()
 {
     double w = _rusw.getSU()->getValue ("px");
     double h = _rush.getSU()->getValue ("px");
-    if (h<w) setDim (h, w);
+    if (h<w) setDoc (h, w);
 }
 
 void
@@ -323,13 +333,13 @@ PageSizer::on_landscape()
 {
     double w = _rusw.getSU()->getValue ("px");
     double h = _rush.getSU()->getValue ("px");
-    if (w<h) setDim (h, w);
+    if (w<h) setDoc (h, w);
 }
 
 void
 PageSizer::on_value_changed()
 {
-    setDim (_rusw.getSU()->getValue("px"), _rush.getSU()->getValue("px"));
+    setDoc (_rusw.getSU()->getValue("px"), _rush.getSU()->getValue("px"));
 }
 
 } // namespace Widget
