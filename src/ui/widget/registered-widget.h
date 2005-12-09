@@ -39,7 +39,7 @@ protected:
     Gtk::Tooltips     _tt;
     sigc::connection  _toggled_connection;
     Registry    *_wr;
-    Glib::ustring     *_key;
+    Glib::ustring      _key;
     bool               _packed;
     void on_toggled();
 };
@@ -76,8 +76,8 @@ protected:
     ScalarUnit   *_widget;
     sigc::connection  _value_changed_connection;
     UnitMenu         *_um;
-    Registry   *_wr;
-    Glib::ustring    *_key;
+    Registry         *_wr;
+    Glib::ustring    _key;
     void on_value_changed();
 };
 
@@ -97,9 +97,10 @@ public:
     ColorPicker *_cp;
 
 protected:
-    Glib::ustring    *_ckey, *_akey;
-    Registry   *_wr;
+    Glib::ustring _ckey, _akey;
+    Registry      *_wr;
     void on_changed (guint32);
+    sigc::connection _changed_connection;
 };
 
 class RegisteredSuffixedInteger {
@@ -118,8 +119,8 @@ protected:
     Gtk::SpinButton *_sb;
     Gtk::Adjustment _adj;
     Gtk::Label      *_suffix;
-    Glib::ustring   *_key;
-    Registry  *_wr;
+    Glib::ustring   _key;
+    Registry        *_wr;
     sigc::connection _changed_connection;
     void on_value_changed();
 };

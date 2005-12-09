@@ -50,7 +50,7 @@ namespace Widget {
 //====================================================
 
 RegisteredCheckButton::RegisteredCheckButton()
-: _button(0), _label(0), _key(0), _packed(false)
+: _button(0), _label(0), _packed(false)
 {
 }
 
@@ -59,7 +59,6 @@ RegisteredCheckButton::~RegisteredCheckButton()
     _toggled_connection.disconnect();
     if (_button) delete _button;
     if (_label) delete _label;
-    if (_key) delete _key;
 }
 
 void
@@ -70,7 +69,7 @@ RegisteredCheckButton::init (const Glib::ustring& label, const Glib::ustring& ti
     _button->show();
     _label = new Gtk::Label (label, 1.0, 0.5);
     _label->show();
-    _key = new Glib::ustring (key);
+    _key = key;
     _wr = &wr;
     _toggled_connection = _button->signal_toggled().connect (sigc::mem_fun (*this, &RegisteredCheckButton::on_toggled));
     _wr->add (key, _button);
@@ -113,7 +112,7 @@ RegisteredCheckButton::on_toggled()
 
     gboolean saved = sp_document_get_undo_sensitive (doc);
     sp_document_set_undo_sensitive (doc, FALSE);
-    sp_repr_set_boolean(repr, _key->c_str(), _button->get_active());
+    sp_repr_set_boolean(repr, _key.c_str(), _button->get_active());
     doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive (doc, saved);
     sp_document_done (doc);
@@ -151,14 +150,13 @@ RegisteredUnitMenu::setUnit (const SPUnit* unit)
 }
 
 RegisteredScalarUnit::RegisteredScalarUnit()
-: _widget(0), _um(0), _key(0)
+: _widget(0), _um(0)
 {
 }
 
 RegisteredScalarUnit::~RegisteredScalarUnit()
 {
     if (_widget) delete _widget;
-    if (_key) delete _key;
     _value_changed_connection.disconnect();
 }
 
@@ -170,7 +168,7 @@ RegisteredScalarUnit::init (const Glib::ustring& label, const Glib::ustring& tip
     _widget->setUnit (rum._sel->getUnitAbbr());
     _widget->setDigits (2);
     _widget->show();
-    _key = new Glib::ustring (key);
+    _key = key;
     _um = rum._sel;
     _value_changed_connection = _widget->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScalarUnit::on_value_changed));
     _wr = &wr;
@@ -187,6 +185,7 @@ void
 RegisteredScalarUnit::setValue (double val)
 {
     _widget->setValue (val, _um->getUnitAbbr());
+    on_value_changed();
 }
 
 void
@@ -212,7 +211,7 @@ RegisteredScalarUnit::on_value_changed()
 
     gboolean saved = sp_document_get_undo_sensitive (doc);
     sp_document_set_undo_sensitive (doc, FALSE);
-    repr->setAttribute(_key->c_str(), os.str().c_str());
+    repr->setAttribute(_key.c_str(), os.str().c_str());
     doc->rroot->setAttribute("sodipodi:modified", "true");
     sp_document_set_undo_sensitive (doc, saved);
     sp_document_done (doc);
@@ -221,16 +220,15 @@ RegisteredScalarUnit::on_value_changed()
 }
 
 RegisteredColorPicker::RegisteredColorPicker()
-: _label(0), _cp(0), _ckey(0), _akey(0)
+: _label(0), _cp(0)
 {
 }
 
 RegisteredColorPicker::~RegisteredColorPicker()
 {
+    _changed_connection.disconnect();
     if (_cp) delete _cp;
     if (_label) delete _label;
-    if (_ckey) delete _ckey;
-    if (_akey) delete _akey;
 }
 
 void
@@ -240,10 +238,11 @@ RegisteredColorPicker::init (const Glib::ustring& label, const Glib::ustring& ti
     _label->show();
     _cp = new ColorPicker (title,tip,0,true);
     _cp->show();
-    _ckey = new Glib::ustring (ckey);
-    _akey = new Glib::ustring (akey);
+    _ckey = ckey;
+    _akey = akey;
     _wr = &wr;
     _wr->add (ckey, _cp);
+    _changed_connection = _cp->connectChanged (sigc::mem_fun (*this, &RegisteredColorPicker::on_changed));
 }
 
 void 
@@ -263,8 +262,8 @@ RegisteredColorPicker::on_changed (guint32 rgba)
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);
-    repr->setAttribute(_ckey->c_str(), c);
-    sp_repr_set_css_double(repr, _akey->c_str(), (rgba & 0xff) / 255.0);
+    repr->setAttribute(_ckey.c_str(), c);
+    sp_repr_set_css_double(repr, _akey.c_str(), (rgba & 0xff) / 255.0);
 
     _wr->setUpdating (false);
 }
@@ -272,14 +271,13 @@ RegisteredColorPicker::on_changed (guint32 rgba)
 RegisteredSuffixedInteger::RegisteredSuffixedInteger()
 : _label(0), _sb(0),
   _adj(0.0,0.0,100.0,1.0,1.0,1.0), 
-  _suffix(0), _key(0) 
+  _suffix(0)
 {
 }
 
 RegisteredSuffixedInteger::~RegisteredSuffixedInteger()
 {
     _changed_connection.disconnect();
-    if (_key) delete _key;
     if (_label) delete _label;
     if (_suffix) delete _suffix;
     if (_sb) delete _sb;
@@ -288,7 +286,7 @@ RegisteredSuffixedInteger::~RegisteredSuffixedInteger()
 void
 RegisteredSuffixedInteger::init (const Glib::ustring& label, const Glib::ustring& suffix, const Glib::ustring& key, Registry& wr)
 {
-    _key = new Glib::ustring (key);
+    _key = key;
     _label = new Gtk::Label (label);
     _label->set_alignment (1.0, 0.5);
     _label->show();
@@ -325,7 +323,7 @@ RegisteredSuffixedInteger::on_value_changed()
     int value = int(_adj.get_value());
     os << value;
 
-    repr->setAttribute(_key->c_str(), os.str().c_str());
+    repr->setAttribute(_key.c_str(), os.str().c_str());
     sp_document_done(SP_DT_DOCUMENT(dt));
     
     _wr->setUpdating (false);
