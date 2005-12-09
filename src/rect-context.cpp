@@ -463,83 +463,22 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
         rc.item->updateRepr();
     }
 
-    NR::Point p0, p1;
-    if ( state & GDK_CONTROL_MASK ) {
-        NR::Point delta = pt - rc.center;
-        /* fixme: Snapping */
-        if ( ( fabs(delta[0]) > fabs(delta[1]) )
-             && ( delta[1] != 0.0) )
-        {
-            delta[0] = floor( delta[0] / delta[1] + 0.5 ) * delta[1];
-        } else if ( delta[0] != 0.0 ) {
-            delta[1] = floor( delta[1] / delta[0] + 0.5 ) * delta[0];
-        }
-        p1 = rc.center + delta;
-        if ( state & GDK_SHIFT_MASK ) {
-            p0 = rc.center - delta;
-            NR::Coord const l0 = namedview_vector_snap_all_types(desktop->namedview, p0, p0 - p1, rc.item);
-            NR::Coord const l1 = namedview_vector_snap_all_types(desktop->namedview, p1, p1 - p0, rc.item);
-
-            if (l0 < l1) {
-                p1 = 2 * rc.center - p0;
-            } else {
-                p0 = 2 * rc.center - p1;
-            }
-        } else {
-            p0 = rc.center;
-            namedview_vector_snap_all_types(desktop->namedview, p1, p1 - p0, rc.item);
-        }
-    } else if ( state & GDK_SHIFT_MASK ) {
-        /* Corner point movements are bound */
-        p1 = pt;
-        p0 = 2 * rc.center - p1;
-        for (unsigned d = 0 ; d < 2 ; ++d) {
-            double snap_movement[2];
-            snap_movement[0] = namedview_dim_snap_all_types(desktop->namedview, p0, NR::Dim2(d), rc.item);
-            snap_movement[1] = namedview_dim_snap_all_types(desktop->namedview, p1, NR::Dim2(d), rc.item);
-            if ( snap_movement[0] <
-                 snap_movement[1] )
-            {
-                /* Use point 0 position. */
-                p1[d] = 2 * rc.center[d] - p0[d];
-            } else {
-                p0[d] = 2 * rc.center[d] - p1[d];
-            }
-        }
-    } else {
-        /* Free movement for corner point */
-        p0 = rc.center;
-        p1 = pt;
-        namedview_free_snap_all_types(desktop->namedview, p1, rc.item);
-    }
-
-    p0 = sp_desktop_dt2root_xy_point(desktop, p0);
-    p1 = sp_desktop_dt2root_xy_point(desktop, p1);
-
-    // TODO: use NR::Rect
-    using NR::X;
-    using NR::Y;
-    NR::Coord const x0 = MIN(p0[X], p1[X]);
-    NR::Coord const y0 = MIN(p0[Y], p1[Y]);
-    NR::Coord const x1 = MAX(p0[X], p1[X]);
-    NR::Coord const y1 = MAX(p0[Y], p1[Y]);
-    NR::Coord const w  = x1 - x0;
-    NR::Coord const h  = y1 - y0;
-
-    sp_rect_position_set(SP_RECT(rc.item), x0, y0, w, h);
+    NR::Rect const r = Inkscape::snap_rectangular_box(desktop, rc.item, pt, rc.center, state);
+    
+    sp_rect_position_set(SP_RECT(rc.item), r.min()[NR::X], r.min()[NR::Y], r.dimensions()[NR::X], r.dimensions()[NR::Y]);
     if ( rc.rx != 0.0 ) {
         sp_rect_set_rx (SP_RECT(rc.item), TRUE, rc.rx);
     }
     if ( rc.ry != 0.0 ) {
         if (rc.rx == 0.0)
-            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, MIN(w, h)/2));
+            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, MIN(r.dimensions()[NR::X], r.dimensions()[NR::Y])/2));
         else 
-            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, h));
+            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, r.dimensions()[NR::Y]));
     }
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(fabs( x1 - x0 ), desktop->namedview->getDefaultMetric());
-    GString *ys = SP_PX_TO_METRIC_STRING(fabs( y1 - y0 ), desktop->namedview->getDefaultMetric());
+    GString *xs = SP_PX_TO_METRIC_STRING(r.dimensions()[NR::X], desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(r.dimensions()[NR::Y], desktop->namedview->getDefaultMetric());
     rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio rectangle; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);

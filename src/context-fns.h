@@ -8,6 +8,8 @@ class MessageStack;
 
 extern bool have_viable_layer(SPDesktop *desktop, MessageContext *message);
 extern bool have_viable_layer(SPDesktop *desktop, MessageStack *message);
+NR::Rect snap_rectangular_box(SPDesktop const *desktop, SPItem *item,
+                              NR::Point const &pt, NR::Point const &center, int state);
 
 }
 

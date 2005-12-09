@@ -427,78 +427,14 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
         ac->item->updateRepr();
     }
 
-    /* This is bit ugly, but so we are */
+    NR::Rect const r = Inkscape::snap_rectangular_box(desktop, ac->item, pt, ac->center, state);
 
-    NR::Point p0, p1;
-    if (state & GDK_CONTROL_MASK) {
-        NR::Point delta = pt - ac->center;
-        /* fixme: Snapping */
-        if ((fabs(delta[0]) > fabs(delta[1])) && (delta[1] != 0.0)) {
-            delta[0] = floor(delta[0]/delta[1] + 0.5) * delta[1];
-        } else if (delta[0] != 0.0) {
-            delta[1] = floor(delta[1]/delta[0] + 0.5) * delta[0];
-        }
-        p1 = ac->center + delta;
-        if (state & GDK_SHIFT_MASK) {
-            p0 = ac->center - delta;
-            const NR::Coord l0 = namedview_vector_snap(desktop->namedview,
-                                                       Inkscape::Snapper::SNAP_POINT,
-                                                       p0, p0 - p1,
-                                                       ac->item);
-            const NR::Coord l1 = namedview_vector_snap(desktop->namedview,
-                                                       Inkscape::Snapper::SNAP_POINT,
-                                                       p1, p1 - p0,
-                                                       ac->item);
+    sp_arc_position_set(SP_ARC(ac->item),
+                        r.midpoint()[NR::X], r.midpoint()[NR::Y],
+                        r.dimensions()[NR::X] / 2, r.dimensions()[NR::Y] / 2);
 
-            if (l0 < l1) {
-                p1 = 2 * ac->center - p0;
-            } else {
-                p0 = 2 * ac->center - p1;
-            }
-        } else {
-            p0 = ac->center;
-            namedview_vector_snap(desktop->namedview, Inkscape::Snapper::SNAP_POINT, p1, p1 - p0, ac->item);
-        }
-    } else if (state & GDK_SHIFT_MASK) {
-        /* Corner point movements are bound */
-        p1 = pt;
-        p0 = 2 * ac->center - p1;
-        for (int d = 0 ; d < 2 ; ++d) {
-            NR::Coord snap_movement[2];
-            snap_movement[0] = namedview_dim_snap(desktop->namedview,
-                                                  Inkscape::Snapper::SNAP_POINT, p0,
-                                                  NR::Dim2(d), ac->item);
-            snap_movement[1] = namedview_dim_snap(desktop->namedview,
-                                                  Inkscape::Snapper::SNAP_POINT, p1,
-                                                  NR::Dim2(d), ac->item);
-            if ( snap_movement[0] <
-                 snap_movement[1] ) {
-                /* Use point 0 position. */
-                p1[d] = 2 * ac->center[d] - p0[d];
-            } else {
-                p0[d] = 2 * ac->center[d] - p1[d];
-            }
-        }
-    } else {
-        /* Free movement for corner point */
-        p0 = ac->center;
-        p1 = pt;
-        namedview_free_snap(desktop->namedview, Inkscape::Snapper::SNAP_POINT, p1, ac->item);
-    }
-
-    p0 = sp_desktop_dt2root_xy_point(desktop, p0);
-    p1 = sp_desktop_dt2root_xy_point(desktop, p1);
-
-    // FIXME: use NR::Rect
-    const NR::Coord x0 = MIN(p0[NR::X], p1[NR::X]);
-    const NR::Coord y0 = MIN(p0[NR::Y], p1[NR::Y]);
-    const NR::Coord x1 = MAX(p0[NR::X], p1[NR::X]);
-    const NR::Coord y1 = MAX(p0[NR::Y], p1[NR::Y]);
-
-    sp_arc_position_set(SP_ARC(ac->item), (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2);
-
-    GString *xs = SP_PX_TO_METRIC_STRING(fabs(x1-x0), desktop->namedview->getDefaultMetric());
-    GString *ys = SP_PX_TO_METRIC_STRING(fabs(y1-y0), desktop->namedview->getDefaultMetric());
+    GString *xs = SP_PX_TO_METRIC_STRING(r.dimensions()[NR::X], desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(r.dimensions()[NR::Y], desktop->namedview->getDefaultMetric());
     ac->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make circle or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);
