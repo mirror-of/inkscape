@@ -45,6 +45,7 @@
 #include "xml/node-event-vector.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
+#include "context-fns.h"
 
 static void sp_rect_context_class_init(SPRectContextClass *klass);
 static void sp_rect_context_init(SPRectContext *rect_context);
@@ -446,13 +447,7 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
 
     if (!rc.item) {
 
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-            return;
-        }
-        if ( !layer || layer->isLocked()) {
-            rc._message_context->set(Inkscape::ERROR_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+        if (Inkscape::have_viable_layer(desktop, rc._message_context) == false) {
             return;
         }
 

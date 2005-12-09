@@ -75,6 +75,7 @@
 #include "file.h"
 #include "dir-util.h"
 #include "layer-fns.h"
+#include "context-fns.h"
 using NR::X;
 using NR::Y;
 
@@ -1044,17 +1045,13 @@ void sp_selection_copy()
 void sp_selection_paste(bool in_place)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == NULL) return;
+    if (desktop == NULL) {
+        return;
+    }
 
-            SPItem *layer=SP_ITEM(desktop->currentLayer());
-            if ( !layer || desktop->itemIsHidden(layer)) {
-                desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to paste to it."));
-                return;
-            }
-            if ( !layer || layer->isLocked()) {
-                desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to paste to it."));
-                return;
-            }
+    if (Inkscape::have_viable_layer(desktop, desktop->messageStack()) == false) {
+        return;
+    }
 
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 

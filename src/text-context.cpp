@@ -58,6 +58,7 @@
 #include "prefs-utils.h"
 #include "rubberband.h"
 #include "sp-metrics.h"
+#include "context-fns.h"
 
 #include "text-editing.h"
 
@@ -610,13 +611,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
             if (event->button.button == 1) {
 
                 SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(ec);
-                SPItem *layer=SP_ITEM(desktop->currentLayer());
-                if ( !layer || desktop->itemIsHidden(layer)) {
-                    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to add text."));
-                    return TRUE;
-                }
-                if ( !layer || layer->isLocked()) {
-                    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to add text."));
+
+                if (Inkscape::have_viable_layer(desktop, desktop->messageStack()) == false) {
                     return TRUE;
                 }
 

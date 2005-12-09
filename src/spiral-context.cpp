@@ -51,6 +51,7 @@
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
 #include <libnr/nr-point-fns.h>
+#include "context-fns.h"
 
 static void sp_spiral_context_class_init(SPSpiralContextClass * klass);
 static void sp_spiral_context_init(SPSpiralContext *spiral_context);
@@ -415,15 +416,7 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
 
     if (!sc->item) {
 
-        SPItem *layer=SP_ITEM(desktop->currentLayer());
-        if ( !layer || desktop->itemIsHidden(layer)) {
-            sc->_message_context->set(Inkscape::ERROR_MESSAGE,
-                                      _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
-            return;
-        }
-        if ( !layer || layer->isLocked()) {
-            sc->_message_context->set(Inkscape::ERROR_MESSAGE,
-                                      _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+        if (Inkscape::have_viable_layer(desktop, sc->_message_context) == false) {
             return;
         }
 
@@ -440,10 +433,10 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
         sc->item->updateRepr();
     }
 
-    /* Free movement for corner point */
     NR::Point const p0 = sp_desktop_dt2root_xy_point(desktop, sc->center);
     NR::Point p1 = sp_desktop_dt2root_xy_point(desktop, p);
-    namedview_free_snap(desktop->namedview, Inkscape::Snapper::SNAP_POINT, p1, sc->item);
+    SnapManager const m(desktop->namedview);
+    p1 = m.freeSnap(Inkscape::Snapper::SNAP_POINT, p1, sc->item).first;
 
     SPSpiral *spiral = SP_SPIRAL(sc->item);
 
