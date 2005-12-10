@@ -76,8 +76,8 @@ DocumentPreferences::destroy()
 
 DocumentPreferences::DocumentPreferences() 
     : Dialog ("dialogs.documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
-      _page_page(1, 1), _page_grid(1, 1), 
-      _page_guides(1, 1), _page_metadata1(1, 1), _page_metadata2(1, 1),
+      _page_page(1, 1), _page_grid(1, 1), _page_guides(1, 1),
+      _page_snap(1, 1), _page_metadata1(1, 1), _page_metadata2(1, 1),
       _prefs_path("dialogs.documentoptions")
 {
     set_resizable (false);
@@ -88,12 +88,14 @@ DocumentPreferences::DocumentPreferences()
     _notebook.append_page(_page_page,      _("Page"));
     _notebook.append_page(_page_grid,      _("Grid"));
     _notebook.append_page(_page_guides,    _("Guides"));
+    _notebook.append_page(_page_snap,      _("Snap"));
     _notebook.append_page(_page_metadata1, _("Metadata 1"));
     _notebook.append_page(_page_metadata2, _("Metadata 2"));
 
     build_page();
     build_grid();
     build_guides();
+    build_snap();
     build_metadata();
 }
 
@@ -177,12 +179,6 @@ DocumentPreferences::build_grid()
     /// Dissenting view: you want snapping without grid.
     
     _rcbgrid.init (_("Show grid"), _("Show or hide grid"), "showgrid", _wr);
-    _rcbsnbb.init (_("Snap bounding boxes to grid"), 
-                _("Snap the edges of the object bounding boxes"), 
-                "inkscape:grid-bbox", _wr);
-    _rcbsnnod.init (_("Snap nodes to grid"), 
-                _("Snap path nodes, text baselines, ellipse centers, etc."), 
-                "inkscape:grid-points", _wr);
     _rumg.init (_("Grid units:"), "grid_units", _wr);
     _rsu_ox.init (_("Origin X:"), _("X coordinate of grid origin"), 
                   "gridoriginx", _rumg, _wr);
@@ -192,10 +188,6 @@ DocumentPreferences::build_grid()
                   "gridspacingx", _rumg, _wr);
     _rsu_sy.init (_("Spacing Y:"), _("Distance of horizontal grid lines"), 
                   "gridspacingy", _rumg, _wr);
-    _rums.init (_("Snap units:"), "grid_snap_units", _wr);
-    _rsu_sn.init (_("Snap distance:"), 
-                  _("Max. snapping distance from grid"),
-                  "gridtolerance", _rums, _wr);
     _rcp_gcol.init (_("Grid line color:"), _("Grid line color"), 
                     _("Color of grid lines"), "gridcolor", "gridopacity", _wr);
     _rcp_gmcol.init (_("Major grid line color:"), _("Major grid line color"), 
@@ -206,15 +198,11 @@ DocumentPreferences::build_grid()
     const Gtk::Widget* widget_array[] = 
     {
         0,                  &_rcbgrid.getHBox(),
-        0,                  &_rcbsnbb.getHBox(),
-        0,                  &_rcbsnnod.getHBox(),
         _rumg._label,       _rumg._sel,
         0,                  _rsu_ox.getSU(),
         0,                  _rsu_oy.getSU(),
         0,                  _rsu_sx.getSU(),
         0,                  _rsu_sy.getSU(),
-        _rums._label,       _rums._sel,
-        0,                  _rsu_sn.getSU(),
         _rcp_gcol._label,   _rcp_gcol._cp, 
         _rcp_gmcol._label,  _rcp_gmcol._cp,
         _rsi._label,        &_rsi._hbox,
@@ -232,14 +220,6 @@ DocumentPreferences::build_guides()
     /// Dissenting view: you want snapping without guides.
 
     _rcb_sgui.init (_("Show guides"), _("Show or hide guides"), "showguides", _wr);
-    _rcb_snpgui.init (_("Snap bounding boxes to guides"),  
-                     _("Snap the edges of the object bounding boxes"), 
-                     "inkscape:guide-bbox", _wr);
-    _rcb_snbgui.init (_("Snap points to guides"), 
-                _("Snap path nodes, text baselines, ellipse centers, etc."), 
-                "inkscape:guide-points", _wr);
-    _rum_gusn.init (_("Snap units:"), "guide_snap_units", _wr);
-    _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _rum_gusn, _wr);
     _rcp_gui.init (_("Guide color:"), _("Guideline color"), 
                    _("Color of guidelines"), "guidecolor", "guideopacity", _wr);
     _rcp_hgui.init (_("Highlight color:"), _("Highlighted guideline color"), 
@@ -249,16 +229,104 @@ DocumentPreferences::build_guides()
     const Gtk::Widget* widget_array[] = 
     {
         0,                &_rcb_sgui.getHBox(),
-        0,                &_rcb_snpgui.getHBox(),
-        0,                &_rcb_snbgui.getHBox(),
-        _rum_gusn._label, _rum_gusn._sel,
-        0,                _rsu_gusn.getSU(),
         _rcp_gui._label, _rcp_gui._cp,
         _rcp_hgui._label, _rcp_hgui._cp,
     };
 
     attach_all (_page_guides.table(), widget_array, sizeof(widget_array));
 }
+
+void
+DocumentPreferences::build_snap()
+{
+    _page_snap.show();
+
+    Gtk::Frame* obj_frame = manage (new Gtk::Frame (_("Object snapping")));
+    _page_snap.table().attach (*obj_frame, 0,2,0,1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    Gtk::Table* table_obj = manage (new Gtk::Table (4, 2, false));
+    obj_frame->add (*table_obj);
+
+    _rcbsnbo.init (_("Snap bounding boxes to objects"), 
+                _("Snap the edges of the object bounding boxes to other objects"), 
+                "inkscape:", _wr);
+    _rcbsnnob.init (_("Snap nodes to objects"), 
+                _("Snap the nodes of objects to other objects"), 
+                "inkscape:", _wr);
+    _rcbsnop.init (_("Snap to object paths"), 
+                _("Snap to other object paths"), 
+                "inkscape:", _wr);
+    _rcbsnon.init (_("Snap to object nodes"), 
+                _("Snap to other object nodes"), 
+                "inkscape:", _wr);
+    _rumso.init (_("Snap units:"), "object_snap_units", _wr);
+    _rsu_sno.init (_("Snap distance:"), 
+                  _("Max. snapping distance from object"),
+                  "objecttolerance", _rumso, _wr);
+    
+    const Gtk::Widget* array2[] = 
+    {
+        0,                  &_rcbsnbo.getHBox(),
+        0,                  &_rcbsnnob.getHBox(),
+        0,                  &_rcbsnop.getHBox(),
+        0,                  &_rcbsnon.getHBox(),
+        _rumso._label,      _rumso._sel,
+        0,                  _rsu_sno.getSU(),
+    };
+
+    attach_all (*table_obj, array2, sizeof(array2));
+    
+    Gtk::Frame* grid_frame = manage (new Gtk::Frame (_("Grid snapping")));
+    _page_snap.table().attach (*grid_frame, 0,2,1,2, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    Gtk::Table* table_grid = manage (new Gtk::Table (4, 2, false));
+    grid_frame->add (*table_grid);
+
+    _rcbsnbb.init (_("Snap bounding boxes to grid"), 
+                _("Snap the edges of the object bounding boxes"), 
+                "inkscape:grid-bbox", _wr);
+    _rcbsnnod.init (_("Snap nodes to grid"), 
+                _("Snap path nodes, text baselines, ellipse centers, etc."), 
+                "inkscape:grid-points", _wr);
+    _rums.init (_("Snap units:"), "grid_snap_units", _wr);
+    _rsu_sn.init (_("Snap distance:"), 
+                  _("Max. snapping distance from grid"),
+                  "gridtolerance", _rums, _wr);
+    
+    const Gtk::Widget* array1[] = 
+    {
+        0,                  &_rcbsnbb.getHBox(),
+        0,                  &_rcbsnnod.getHBox(),
+        _rums._label,       _rums._sel,
+        0,                  _rsu_sn.getSU(),
+    };
+
+    attach_all (*table_grid, array1, sizeof(array1));
+
+   
+    Gtk::Frame* gui_frame = manage (new Gtk::Frame (_("Guide snapping")));
+    _page_snap.table().attach (*gui_frame, 0,2,2,3, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    Gtk::Table* table_gui = manage (new Gtk::Table (4, 2, false));
+    gui_frame->add (*table_gui);
+
+    _rcb_snpgui.init (_("Snap bounding boxes to guides"),  
+                     _("Snap the edges of the object bounding boxes"), 
+                     "inkscape:guide-bbox", _wr);
+    _rcb_snbgui.init (_("Snap points to guides"), 
+                _("Snap path nodes, text baselines, ellipse centers, etc."), 
+                "inkscape:guide-points", _wr);
+    _rum_gusn.init (_("Snap units:"), "guide_snap_units", _wr);
+    _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _rum_gusn, _wr);
+
+    const Gtk::Widget* widget_array[] = 
+    {
+        0,                &_rcb_snpgui.getHBox(),
+        0,                &_rcb_snbgui.getHBox(),
+        _rum_gusn._label, _rum_gusn._sel,
+        0,                _rsu_gusn.getSU(),
+    };
+
+    attach_all (*table_gui, widget_array, sizeof(widget_array));
+
+ }
 
 void
 DocumentPreferences::build_metadata()

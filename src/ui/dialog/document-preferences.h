@@ -47,6 +47,7 @@ protected:
     void  build_page();
     void  build_grid();
     void  build_guides();
+    void  build_snap();
     void  build_metadata();
     void  init();
     void  update();
@@ -55,7 +56,7 @@ protected:
     Gtk::Notebook  _notebook;
 
     NotebookPage   _page_page, _page_grid, _page_guides;
-    NotebookPage   _page_metadata1, _page_metadata2;
+    NotebookPage   _page_snap, _page_metadata1, _page_metadata2;
 
     RegisteredCheckButton _rcb_canb, _rcb_bord, _rcb_shad;
     RegisteredColorPicker _rcp_bg, _rcp_bord;
@@ -72,6 +73,10 @@ protected:
     RegisteredUnitMenu    _rum_gusn;
     RegisteredScalarUnit  _rsu_gusn;
     RegisteredColorPicker _rcp_gui, _rcp_hgui;
+    //---------------------------------------------------------------
+    RegisteredCheckButton _rcbsnbo, _rcbsnnob, _rcbsnop, _rcbsnon;
+    RegisteredUnitMenu    _rumso;
+    RegisteredScalarUnit  _rsu_sno;
     //---------------------------------------------------------------
     RDElist _rdflist;
     Licensor _licensor;
