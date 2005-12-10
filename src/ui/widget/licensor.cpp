@@ -21,6 +21,7 @@
 #include <gtkmm/menuitem.h>
 #include <gtkmm/box.h>
 #include <gtkmm/tooltips.h>
+#include <gtkmm/entry.h>
 
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/registry.h"
@@ -34,26 +35,28 @@ namespace Widget {
 
 //===================================================
 
+const struct rdf_license_t _proprietary_license = 
+  {_("Proprietary"), "", 0};
+
 class LicenseItem : public Gtk::MenuItem {
 public:
-    LicenseItem (const Glib::ustring &s);
-    virtual ~LicenseItem();
+    LicenseItem (struct rdf_license_t const* license, EntityEntry* entity);
 protected:
-    void on_activate_item();
+    void on_activate();
+    struct rdf_license_t const*_lic;
+    EntityEntry         *_eep;
 };
 
-LicenseItem::LicenseItem (const Glib::ustring &s)
-: Gtk::MenuItem(s)
+LicenseItem::LicenseItem (struct rdf_license_t const* license, EntityEntry* entity)
+: Gtk::MenuItem(license->name), _lic(license), _eep(entity)
 {
 }
 
-LicenseItem::~LicenseItem()
-{
-}
-
+/// \pre it is assumed that the license URI entry is not multiline
 void
-LicenseItem::on_activate_item()
+LicenseItem::on_activate()
 {
+    reinterpret_cast<Gtk::Entry*>(_eep->_packable)->set_text (_lic->uri);
 }
 
 //---------------------------------------------------
@@ -79,18 +82,6 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
     _wr->add ("licenses", &_omenu);
     Gtk::Menu *m = manage (new Gtk::Menu);
 
-    LicenseItem *i;
-    for (struct rdf_license_t * license = rdf_licenses;
-             license && license->name;
-             license++) {
-        i = manage (new LicenseItem (license->name));
-        m->append (*i);
-    }
-
-    i = manage (new LicenseItem (_("Proprietary")));
-    m->prepend (*i);
-    _omenu.set_menu (*m);
-
     Gtk::HBox *box = manage (new Gtk::HBox);
     pack_start (*box, true, true, 0);
 
@@ -99,6 +90,18 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
     _eentry = EntityEntry::create (entity, tt, *_wr);
     box->pack_start (_eentry->_label, false, false, 5);
     box->pack_start (*_eentry->_packable, true, true, 0);
+
+    LicenseItem *i;
+    for (struct rdf_license_t * license = rdf_licenses;
+             license && license->name;
+             license++) {
+        i = manage (new LicenseItem (license, _eentry));
+        m->append (*i);
+    }
+
+    i = manage (new LicenseItem (&_proprietary_license, _eentry));
+    m->prepend (*i);
+    _omenu.set_menu (*m);
 
     show_all_children();
 }
