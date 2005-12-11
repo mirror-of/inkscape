@@ -250,8 +250,8 @@ PageSizer::init (Registry& reg)
     _wr = reg;
 
     _rum.init (_("Units:"), "units", _wr);
-    _rusw.init (_("Width:"), "", "width", _rum, _wr);
-    _rush.init (_("Height:"), "", "height", _rum, _wr);
+    _rusw.init (_("Width:"), _("Width of paper"), "width", _rum, _wr);
+    _rush.init (_("Height:"), _("Height of paper"), "height", _rum, _wr);
 
     table->attach (*_rum._label, 0,1,0,1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
     table->attach (*_rum._sel, 1,2,0,1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
