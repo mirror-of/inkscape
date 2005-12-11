@@ -850,7 +850,6 @@ removeoverlap/generate-constraints.h
 removeoverlap/pairingheap/PairingHeap.cpp
 removeoverlap/pairingheap/PairingHeap.h
 removeoverlap/pairingheap/dsexceptions.h
-removeoverlap/remove_rectangle_overlap-test.cpp
 removeoverlap/remove_rectangle_overlap.cpp
 removeoverlap/remove_rectangle_overlap.h
 removeoverlap/removeoverlap.cpp
@@ -1210,7 +1209,6 @@ util/compose.hpp
 util/filter-list.h
 util/forward-pointer-iterator.h
 util/glib-list-iterators.h
-util/list-container-test.cpp
 util/list-container.h
 util/list.h
 util/map-list.h

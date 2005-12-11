@@ -10,7 +10,6 @@ OBJECTS = \
 	application/application.o \
 	application/editor.o \
 	arc-context.o \
-	attributes-test.o \
 	attributes.o \
 	color.o \
 	composite-undo-stack-observer.o \
@@ -51,7 +50,6 @@ OBJECTS = \
 	dialogs/tiledialog.o \
 	dialogs/unclump.o \
 	dialogs/xml-tree.o \
-	dir-util-test.o \
 	dir-util.o \
 	display/bezier-utils.o \
 	display/canvas-arena.o \
@@ -422,7 +420,6 @@ OBJECTS = \
 	removeoverlap/remove_rectangle_overlap.o \
 	removeoverlap/removeoverlap.o \
 	removeoverlap/solve_VPSC.o \
-	removeoverlap/test.o \
 	removeoverlap/variable.o \
 	rubberband.o \
 	satisfied-guide-cns.o \
@@ -480,7 +477,6 @@ OBJECTS = \
 	sp-spiral.o \
 	sp-star.o \
 	sp-string.o \
-	sp-style-elem-test.o \
 	sp-style-elem.o \
 	sp-symbol.o \
 	sp-text.o \
@@ -494,7 +490,6 @@ OBJECTS = \
 	streams-handles.o \
 	streams-jar.o \
 	streams-zlib.o \
-	style-test.o \
 	style.o \
 	svg-view-widget.o \
 	svg-view.o \
