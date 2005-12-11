@@ -86,15 +86,13 @@ DocumentPreferences::DocumentPreferences()
     get_vbox()->pack_start (_notebook, true, true);
 
     _notebook.append_page(_page_page,      _("Page"));
-    _notebook.append_page(_page_grid,      _("Grid"));
-    _notebook.append_page(_page_guides,    _("Guides"));
+    _notebook.append_page(_page_grid,      _("Grid/Guides"));
     _notebook.append_page(_page_snap,      _("Snap"));
     _notebook.append_page(_page_metadata1, _("Metadata 1"));
     _notebook.append_page(_page_metadata2, _("Metadata 2"));
 
     build_page();
     build_grid();
-    build_guides();
     build_snap();
     build_metadata();
 }
@@ -178,6 +176,11 @@ DocumentPreferences::build_grid()
     /// \todo FIXME: gray out snapping when grid is off.
     /// Dissenting view: you want snapping without grid.
     
+    Gtk::Frame* grid_frame = manage (new Gtk::Frame (_("Grid")));
+    _page_grid.table().attach (*grid_frame, 0,2,0,1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    Gtk::Table* table_grid = manage (new Gtk::Table (9, 2, false));
+    grid_frame->add (*table_grid);
+
     _rcbgrid.init (_("Show grid"), _("Show or hide grid"), "showgrid", _wr);
     _rumg.init (_("Grid units:"), "grid_units", _wr);
     _rsu_ox.init (_("Origin X:"), _("X coordinate of grid origin"), 
@@ -208,16 +211,12 @@ DocumentPreferences::build_grid()
         _rsi._label,        &_rsi._hbox,
     };
 
-    attach_all (_page_grid.table(), widget_array, sizeof(widget_array));
-}
+    attach_all (*table_grid, widget_array, sizeof(widget_array));
 
-void
-DocumentPreferences::build_guides()
-{
-    _page_guides.show();
-
-    /// \todo FIXME: gray out snapping when guides are off
-    /// Dissenting view: you want snapping without guides.
+    Gtk::Frame* guide_frame = manage (new Gtk::Frame (_("Guides")));
+    _page_grid.table().attach (*guide_frame, 0,2,1,2, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    Gtk::Table* table_guide = manage (new Gtk::Table (3, 2, false));
+    guide_frame->add (*table_guide);
 
     _rcb_sgui.init (_("Show guides"), _("Show or hide guides"), "showguides", _wr);
     _rcp_gui.init (_("Guide color:"), _("Guideline color"), 
@@ -226,14 +225,14 @@ DocumentPreferences::build_guides()
                     _("Color of a guideline when it is under mouse"),
                     "guidehicolor", "guidehiopacity", _wr);
 
-    const Gtk::Widget* widget_array[] = 
+    const Gtk::Widget* array[] = 
     {
         0,                &_rcb_sgui.getHBox(),
         _rcp_gui._label, _rcp_gui._cp,
         _rcp_hgui._label, _rcp_hgui._cp,
     };
 
-    attach_all (_page_guides.table(), widget_array, sizeof(widget_array));
+    attach_all (*table_guide, array, sizeof(array));
 }
 
 void
@@ -248,16 +247,16 @@ DocumentPreferences::build_snap()
 
     _rcbsnbo.init (_("Snap bounding boxes to objects"), 
                 _("Snap the edges of the object bounding boxes to other objects"), 
-                "inkscape:", _wr);
+                "inkscape:object-bbox", _wr);
     _rcbsnnob.init (_("Snap nodes to objects"), 
                 _("Snap the nodes of objects to other objects"), 
-                "inkscape:", _wr);
+                "inkscape:object-points", _wr);
     _rcbsnop.init (_("Snap to object paths"), 
                 _("Snap to other object paths"), 
-                "inkscape:", _wr);
+                "inkscape:object-paths", _wr);
     _rcbsnon.init (_("Snap to object nodes"), 
                 _("Snap to other object nodes"), 
-                "inkscape:", _wr);
+                "inkscape:object-nodes", _wr);
     _rumso.init (_("Snap units:"), "object_snap_units", _wr);
     _rsu_sno.init (_("Snap distance:"), 
                   _("Max. snapping distance from object"),
