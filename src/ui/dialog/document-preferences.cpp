@@ -144,12 +144,13 @@ DocumentPreferences::build_page()
 
     _rcp_bg.init (_("Background:"), _("Background color"), _("Color and transparency of the page background (also used for bitmap export)"),
                    "pagecolor", "inkscape:pageopacity", _wr);
-    _rcb_canb.init (_("Show page border"), "", "showborder", _wr);
-    _rcb_bord.init (_("Border on top of drawing"), "", "borderlayer", _wr);
+    // (see also the hack in RegisteredColorPicker)
+    _rcb_canb.init (_("Show page border"), _("If set, rectangular page border is shown"), "showborder", _wr);
+    _rcb_bord.init (_("Border on top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr);
     _rcp_bord.init (_("Border color:"), _("Page border color"),
                     _("Color of the page border"),
                     "bordercolor", "borderopacity", _wr);
-    _rcb_shad.init (_("Show page shadow"), "", "inkscape:showpageshadow", _wr);
+    _rcb_shad.init (_("Show page shadow"), "If set, page border shows a shadow on its right and lower side", "inkscape:showpageshadow", _wr);
     _rum_deflt.init (_("Default units:"), "inkscape:document-units", _wr);
 
     const Gtk::Widget* widget_array[] = 
@@ -374,7 +375,7 @@ DocumentPreferences::update()
     set_sensitive (true);
 
     //-----------------------------------------------------------page page
-    _rcp_bg.setRgba32 (nv->pagecolor);
+    _rcp_bg.setRgba32 (nv->pagecolor | 0xff);
     _rcb_canb.setActive (nv->showborder);
     _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
     _rcp_bord.setRgba32 (nv->bordercolor);
@@ -389,8 +390,6 @@ DocumentPreferences::update()
 
     //-----------------------------------------------------------grid page
     _rcbgrid.setActive (nv->showgrid);
-    _rcbsnbb.setActive (nv->grid_snapper.getSnapTo(Snapper::BBOX_POINT));
-    _rcbsnnod.setActive (nv->grid_snapper.getSnapTo(Snapper::SNAP_POINT));
     _rumg.setUnit (nv->gridunit);
     
     gdouble val;
@@ -407,20 +406,32 @@ DocumentPreferences::update()
     val = sp_pixels_get_units (val, *(nv->gridunit));
     _rsu_sy.setValue (val);
 
-    _rums.setUnit (nv->gridtoleranceunit);
-    _rsu_sn.setValue (nv->gridtolerance);
     _rcp_gcol.setRgba32 (nv->gridcolor);
     _rcp_gmcol.setRgba32 (nv->gridempcolor);
     _rsi.setValue (nv->gridempspacing);
 
-    //-----------------------------------------------------------guide page
+    //-----------------------------------------------------------guide
     _rcb_sgui.setActive (nv->showguides);
-    _rcb_snpgui.setActive (nv->guide_snapper.getSnapTo(Snapper::BBOX_POINT));
-    _rcb_snbgui.setActive (nv->guide_snapper.getSnapTo(Snapper::SNAP_POINT));
-    _rum_gusn.setUnit (nv->guidetoleranceunit);
-    _rsu_gusn.setValue (nv->guidetolerance);
     _rcp_gui.setRgba32 (nv->guidecolor);
     _rcp_hgui.setRgba32 (nv->guidehicolor);
+
+    //-----------------------------------------------------------snap
+    _rcbsnbo.setActive (nv->object_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
+    _rcbsnnob.setActive (nv->object_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
+    _rcbsnop.setActive (nv->object_snapper.getSnapToPaths());
+    _rcbsnop.setActive (nv->object_snapper.getSnapToNodes());
+    _rumso.setUnit (nv->objecttoleranceunit);
+    _rsu_sno.setValue (nv->objecttolerance);
+     
+    _rcbsnbb.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
+    _rcbsnnod.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
+    _rums.setUnit (nv->gridtoleranceunit);
+    _rsu_sn.setValue (nv->gridtolerance);
+    
+     _rcb_snpgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
+    _rcb_snbgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
+    _rum_gusn.setUnit (nv->guidetoleranceunit);
+    _rsu_gusn.setValue (nv->guidetolerance);
 
     //-----------------------------------------------------------meta pages
     /* load the RDF entities */
