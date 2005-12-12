@@ -120,7 +120,7 @@ libinkpre_a_SOURCES =	\
 	slideshow.cpp slideshow.h	\
 	snap.cpp snap.h	\
 	snapper.cpp snapper.h \
-	line-snapper.cpp line_snapper.h \
+	line-snapper.cpp line-snapper.h \
 	grid-snapper.cpp grid-snapper.h \
 	guide-snapper.cpp guide-snapper.h \
 	object-snapper.cpp object-snapper.h \
