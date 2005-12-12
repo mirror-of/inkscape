@@ -4,7 +4,6 @@
  * \file snap.cpp
  *
  * \brief Various snapping methods
- * \todo Circular snap, path snap?
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -200,34 +199,6 @@ NR::Coord namedview_dim_snap(SPNamedView const *nv, Inkscape::Snapper::PointType
                              NR::Dim2 const dim, std::list<SPItem const *> const &it)
 {
     return namedview_vector_snap(nv, t, req, component_vectors[dim], it);
-}
-
-/**
- * Try to snap \a req in both dimensions.
- *
- * \param nv NamedView to use.
- * \param req Point to snap; updated to the snapped point if a snap occurred.
- * \return Distance to the snap point, or \c NR_HUGE if no snap occurred.
- */
-NR::Coord namedview_free_snap(SPNamedView const *nv, Inkscape::Snapper::PointType t,
-                              NR::Point& req, SPItem const *it)
-{
-    g_assert(nv != NULL);
-    g_assert(SP_IS_NAMEDVIEW(nv));
-
-    SPNamedView::SnapperList snappers = nv->getSnappers();
-
-    NR::Coord best = NR_HUGE;
-    for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
-
-        Inkscape::SnappedPoint const s = (*i)->freeSnap(t, req, it);
-        if (s.second < best) {
-            req = s.first;
-            best = s.second;
-        }
-    }
-
-    return best;
 }
 
 
@@ -429,81 +400,6 @@ double namedview_dim_snap_list_skew(SPNamedView const *nv, Inkscape::Snapper::Po
 
     return skew;
 }
-
-
-
-
-
-
-/**
- * Snap in two dimensions to nearest snapper regardless of point type.
- */
-NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req, SPItem const *it)
-{
-    NR::Point snap_req = req;
-    NR::Coord snap_dist = namedview_free_snap(nv, Inkscape::Snapper::SNAP_POINT, snap_req, it);
-    NR::Point bbox_req = req;
-    NR::Coord bbox_dist = namedview_free_snap(nv, Inkscape::Snapper::BBOX_POINT, bbox_req, it);
-    
-    req = snap_dist < bbox_dist ? snap_req : bbox_req;
-    return std::min(snap_dist, bbox_dist);
-}
-
-
-/**
- * Snap in one direction to nearest snapper regardless of point type.
- */
-NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv,
-                                          NR::Point &req,
-                                          NR::Point const &d,
-                                          SPItem const *it)
-{
-    NR::Point snap_req = req;
-    NR::Coord snap_dist = namedview_vector_snap(nv, Inkscape::Snapper::SNAP_POINT, snap_req, d, it);
-    NR::Point bbox_req = req;
-    NR::Coord bbox_dist = namedview_vector_snap(nv, Inkscape::Snapper::BBOX_POINT, bbox_req, d, it);
-
-    req = snap_dist < bbox_dist ? snap_req : bbox_req;
-    return std::min(snap_dist, bbox_dist);
-}
-
-/**
- * Snap in one dimension to nearest snapper regardless of point type.
- */
-NR::Coord namedview_dim_snap_all_types(SPNamedView const *nv,
-                                       NR::Point &req,
-                                       NR::Dim2 const dim,
-                                       SPItem const *it)
-{
-    NR::Point snap_req = req;
-    NR::Coord snap_dist = namedview_dim_snap(nv, Inkscape::Snapper::SNAP_POINT, snap_req, dim, it);
-    NR::Point bbox_req = req;
-    NR::Coord bbox_dist = namedview_dim_snap(nv, Inkscape::Snapper::BBOX_POINT, bbox_req, dim, it);
-
-    req = snap_dist < bbox_dist ? snap_req : bbox_req;
-    return std::min(snap_dist, bbox_dist);
-}
-
-std::pair<int, NR::Point> namedview_free_snap(SPNamedView const *nv,
-                                              std::vector<Inkscape::Snapper::PointWithType> const &p,
-                                              SPItem const *it)
-{
-    NR::Coord best = NR_HUGE;
-    std::pair<int, NR::Point> s = std::make_pair(-1, NR::Point(0, 0));
-    
-    for (int i = 0; i < int(p.size()); i++) {
-        NR::Point r = p[i].second;
-        NR::Coord const d = namedview_free_snap(nv, p[i].first, r, it);
-        if (d < best) {
-            best = d;
-            s = std::make_pair(i, r);
-        }
-    }
-
-    return s;
-}
-
-
 
 /*
   Local Variables:
