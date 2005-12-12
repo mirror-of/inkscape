@@ -1481,8 +1481,8 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
             // dt->_dlg_mgr->showDialog("PrefInkscape");
             break;
         case SP_VERB_DIALOG_NAMEDVIEW:
-            sp_desktop_dialog();
-            // dt->_dlg_mgr->showDialog("PrefDocument");
+            // sp_desktop_dialog();
+            dt->_dlg_mgr->showDialog("DocumentPreferences");
             break;
         case SP_VERB_DIALOG_FILL_STROKE:
             sp_object_properties_dialog();
