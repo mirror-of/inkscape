@@ -12,6 +12,8 @@
 #include "sp-namedview.h"
 #include "snapper.h"
 
+Inkscape::Snapper::PointType const Inkscape::Snapper::BBOX_POINT = 0x1;
+Inkscape::Snapper::PointType const Inkscape::Snapper::SNAP_POINT = 0x2;
 
 /**
  *  Construct new Snapper for named view.
@@ -50,7 +52,11 @@ NR::Coord Inkscape::Snapper::getDistance() const
  */
 void Inkscape::Snapper::setSnapTo(PointType t, bool s)
 {
-    _snap_to[t] = s;
+    if (s) {
+        _snap_to |= t;
+    } else {
+        _snap_to &= ~t;
+    }
 }
 
 /**
@@ -59,12 +65,7 @@ void Inkscape::Snapper::setSnapTo(PointType t, bool s)
  */
 bool Inkscape::Snapper::getSnapTo(PointType t) const
 {
-    std::map<PointType, bool>::const_iterator i = _snap_to.find(t);
-    if (i == _snap_to.end()) {
-        return false;
-    }
-
-    return i->second;
+    return (_snap_to & t);
 }
 
 /**
@@ -72,12 +73,7 @@ bool Inkscape::Snapper::getSnapTo(PointType t) const
  */
 bool Inkscape::Snapper::willSnapSomething() const
 {
-    std::map<PointType, bool>::const_iterator i = _snap_to.begin();
-    while (i != _snap_to.end() && i->second == false) {
-        i++;
-    }
-
-    return (i != _snap_to.end());
+    return (_snap_to != 0);
 }
 
 

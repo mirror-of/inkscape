@@ -37,10 +37,9 @@ public:
     virtual ~Snapper() {}
 
     /// Point types to snap.
-    enum PointType {
-        SNAP_POINT,
-        BBOX_POINT
-    };
+    typedef int PointType;
+    static const PointType SNAP_POINT;
+    static const PointType BBOX_POINT;
 
     typedef std::pair<PointType, NR::Point> PointWithType;
 
@@ -101,7 +100,7 @@ private:
                                             std::list<SPItem const *> const &it) const = 0;
     
     NR::Coord _distance; ///< snap distance (desktop coordinates)
-    std::map<PointType, bool> _snap_to; ///< point types that we will snap to
+    int _snap_to; ///< bitmap of point types that we will snap to 
 };
 
 }
