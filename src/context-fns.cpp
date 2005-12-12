@@ -6,6 +6,7 @@
 #include "context-fns.h"
 #include "snap.h"
 #include "desktop-affine.h"
+#include "event-context.h"
 
 /* FIXME: could probably use a template here */
 
@@ -164,6 +165,20 @@ NR::Rect Inkscape::snap_rectangular_box(SPDesktop const *desktop, SPItem *item,
     return NR::Rect(NR::Point(MIN(p[0][NR::X], p[1][NR::X]), MIN(p[0][NR::Y], p[1][NR::Y])),
                     NR::Point(MAX(p[0][NR::X], p[1][NR::X]), MAX(p[0][NR::Y], p[1][NR::Y])));
 }
+
+
+
+NR::Point Inkscape::setup_for_drag_start(SPDesktop *desktop, SPEventContext* ec, GdkEvent *ev)
+{
+    ec->xp = static_cast<gint>(ev->button.x);
+    ec->yp = static_cast<gint>(ev->button.y);
+    ec->within_tolerance = true;
+
+    NR::Point const p(ev->button.x, ev->button.y);
+    ec->item_to_select = sp_event_context_find_item(desktop, p, ev->button.state & GDK_MOD1_MASK, TRUE);
+    return sp_desktop_w2d_xy_point(ec->desktop, p);
+}
+
 
 /*
   Local Variables:
