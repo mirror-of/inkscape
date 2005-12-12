@@ -278,16 +278,20 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
                 event_context->yp = (gint) event->button.y;
                 event_context->within_tolerance = true;
 
+                NR::Point const p(event->button.x, event->button.y);
+
                 // remember clicked item, disregarding groups, honoring Alt
-                event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
+                event_context->item_to_select = sp_event_context_find_item(desktop, p,
+                                                                           event->button.state & GDK_MOD1_MASK, TRUE);
 
                 dragging = true;
+
                 /* Position center */
-                ac->center = sp_desktop_w2d_xy_point(event_context->desktop,
-                                                     NR::Point(event->button.x, event->button.y));
-                /* Snap center to nearest magnetic point */
-                namedview_free_snap(event_context->desktop->namedview,
-                                    Inkscape::Snapper::SNAP_POINT, ac->center, ac->item);
+                ac->center = sp_desktop_w2d_xy_point(desktop, p);
+
+                /* Snap center */
+                SnapManager const m(desktop->namedview);
+                ac->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, ac->center, ac->item).first;
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
                                     NULL, event->button.time);
@@ -308,7 +312,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
                 event_context->within_tolerance = false;
 
                 NR::Point const motion_w(event->motion.x, event->motion.y);
-                NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
+                NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
                 sp_arc_drag(ac, motion_dt, event->motion.state);
                 ret = TRUE;
             }
