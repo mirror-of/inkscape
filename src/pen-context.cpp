@@ -323,7 +323,6 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
 
         SPDrawContext * const dc = SP_DRAW_CONTEXT(pc);
         SPDesktop * const desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
-        SPItem * const layer = SP_ITEM(desktop->currentLayer());
 
         if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
             return TRUE;
