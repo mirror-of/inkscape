@@ -1034,11 +1034,12 @@ gboolean Inkscape::SelTrans::centerRequest(NR::Point &pt, guint state)
 {
     using NR::X;
     using NR::Y;
-    namedview_free_snap(_desktop->namedview, Snapper::SNAP_POINT, pt, NULL);
+
+    SnapManager const m(_desktop->namedview);
+    pt = m.freeSnap(Snapper::SNAP_POINT, pt, NULL).first;
 
     if (state & GDK_CONTROL_MASK) {
-        if ( fabs( _point[X] - pt[X] )  >
-             fabs( _point[Y] - pt[Y] ) ) {
+        if ( fabs(_point[X] - pt[X]) > fabs(_point[Y] - pt[Y]) ) {
             pt[Y] = _point[Y];
         } else {
             pt[X] = _point[X];
@@ -1046,33 +1047,31 @@ gboolean Inkscape::SelTrans::centerRequest(NR::Point &pt, guint state)
     }
 
     Inkscape::Selection *selection = _desktop->selection;
-    Inkscape::XML::Node  *current = selection->singleRepr();
-    if (current!=NULL){
-                        sp_repr_set_svg_double (current, "inkscape:c_rx", pt[X]);
-                        sp_repr_set_svg_double (current, "inkscape:c_ry", pt[Y]);
+    Inkscape::XML::Node *current = selection->singleRepr();
+    if (current != NULL){
+        sp_repr_set_svg_double(current, "inkscape:c_rx", pt[X]);
+        sp_repr_set_svg_double(current, "inkscape:c_ry", pt[Y]);
 
     }
 
-
     if (!(state & GDK_SHIFT_MASK)) {
-// screen pixels to snap center to bbox
+        // screen pixels to snap center to bbox
 #define SNAP_DIST 5
         // FIXME: take from prefs
         double snap_dist = SNAP_DIST / _desktop->current_zoom();
 
-        if (fabs(pt[X] - _box.min()[NR::X]) < snap_dist)
-            pt[X] = _box.min()[NR::X];
-        if (fabs(pt[X] - _box.midpoint()[NR::X]) < snap_dist)
-            pt[X] = _box.midpoint()[NR::X];
-        if (fabs(pt[X] - _box.max()[NR::X]) < snap_dist)
-            pt[X] = _box.max()[NR::X];
+        for (int i = 0; i < 2; i++) {
 
-        if (fabs(pt[Y] - _box.min()[NR::Y]) < snap_dist)
-            pt[Y] = _box.min()[NR::Y];
-        if (fabs(pt[Y] - _box.midpoint()[NR::Y]) < snap_dist)
-            pt[Y] = _box.midpoint()[NR::Y];
-        if (fabs(pt[Y] - _box.max()[NR::Y]) < snap_dist)
-            pt[Y] = _box.max()[NR::Y];
+            if (fabs(pt[i] - _box.min()[i]) < snap_dist) {
+                pt[i] = _box.min()[i];
+            }
+            if (fabs(pt[i] - _box.midpoint()[i]) < snap_dist) {
+                pt[i] = _box.midpoint()[i];
+            }
+            if (fabs(pt[i] - _box.max()[i]) < snap_dist) {
+                pt[i] = _box.max()[i];
+            }
+        }
     }
 
     // status text

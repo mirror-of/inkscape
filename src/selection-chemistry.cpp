@@ -1045,9 +1045,12 @@ void sp_selection_copy()
 void sp_selection_paste(bool in_place)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    
     if (desktop == NULL) {
         return;
     }
+
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
 
     if (Inkscape::have_viable_layer(desktop, desktop->messageStack()) == false) {
         return;
@@ -1066,26 +1069,27 @@ void sp_selection_paste(bool in_place)
         return;
     }
 
-    GSList *copied = sp_selection_paste_impl (SP_DT_DOCUMENT (desktop), desktop->currentLayer(), &clipboard, &defs_clipboard);
+    GSList *copied = sp_selection_paste_impl(document, desktop->currentLayer(), &clipboard, &defs_clipboard);
     // add pasted objects to selection
     selection->setReprList((GSList const *) copied);
     g_slist_free (copied);
 
     if (!in_place) {
-        sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
+        sp_document_ensure_up_to_date(document);
 
         NR::Point m( desktop->point() - selection->bounds().midpoint() );
 
         /* Snap the offset of the new item(s) to the grid */
         /* FIXME: this gridsnap fiddling is a hack. */
-        gdouble const curr_gridsnap = desktop->namedview->grid_snapper.getDistance();
-        desktop->namedview->grid_snapper.setDistance(NR_HUGE);
-        namedview_free_snap(desktop->namedview, Inkscape::Snapper::SNAP_POINT, m, NULL);
-        desktop->namedview->grid_snapper.setDistance(curr_gridsnap);
+        Inkscape::GridSnapper &s = desktop->namedview->grid_snapper;
+        gdouble const curr_gridsnap = s.getDistance();
+        s.setDistance(NR_HUGE);
+        m = s.freeSnap(Inkscape::Snapper::SNAP_POINT, m, NULL).first;
+        s.setDistance(curr_gridsnap);
         sp_selection_move_relative(selection, m);
     }
 
-    sp_document_done(SP_DT_DOCUMENT(desktop));
+    sp_document_done(document);
 }
 
 void sp_selection_paste_style()
