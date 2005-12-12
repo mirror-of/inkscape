@@ -260,15 +260,7 @@ static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *
     switch (event->type) {
     case GDK_BUTTON_PRESS:
         if ( event->button.button == 1 ) {
-
-            // save drag origin
-            event_context->xp = (gint) event->button.x;
-            event_context->yp = (gint) event->button.y;
-            event_context->within_tolerance = true;
-
-            // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
-
+            Inkscape::setup_for_drag_start(desktop, event_context, event);
             ret = TRUE;
         }
         break;
