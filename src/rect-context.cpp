@@ -311,11 +311,15 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
 
             dragging = true;
+
             /* Position center */
             NR::Point const button_dt(sp_desktop_w2d_xy_point(event_context->desktop, button_w));
-            /* Snap center to nearest magnetic point */
-            rc->center = button_dt;
-            namedview_free_snap_all_types(event_context->desktop->namedview, rc->center, rc->item);
+
+            /* Snap center */
+            SnapManager const m(desktop->namedview);
+            rc->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT | Inkscape::Snapper::BBOX_POINT,
+                                    button_dt, rc->item).first;
+            
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                 ( GDK_KEY_PRESS_MASK | 
                                   GDK_BUTTON_RELEASE_MASK       |
