@@ -47,9 +47,14 @@
 	* src/line-snapper.cpp, src/object-snapper.{cpp,h}: Coding style.
 	Various cleanups.  Small API changes.
 
-	* src/span.cpp: changes to Snapper API.
+	* src/snap.cpp: changes to Snapper API.  Added work-in-progress SnapManager.
 
 	* src/snapper.{cpp,h}: API cleanups.
+
+	* src/sp-namedview.{cpp,h}: added getSnappers().
+
+	* src/seltrans.cpp: Cleanup and fix moveTo().  Go back to snapping
+	to snap points rather than the convex hull, at least for a bit.
 
 2005-12-07  Carl Hetherington <inkscape@carlh.net>
 
