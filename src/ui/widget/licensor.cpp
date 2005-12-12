@@ -26,6 +26,8 @@
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/registry.h"
 #include "dialogs/rdf.h"
+#include "document.h"
+#include "inkscape.h"
 
 #include "licensor.h"
 
@@ -40,23 +42,31 @@ const struct rdf_license_t _proprietary_license =
 
 class LicenseItem : public Gtk::MenuItem {
 public:
-    LicenseItem (struct rdf_license_t const* license, EntityEntry* entity);
+    LicenseItem (struct rdf_license_t const* license, EntityEntry* entity, Registry &wr);
 protected:
     void on_activate();
-    struct rdf_license_t const*_lic;
-    EntityEntry         *_eep;
+    struct rdf_license_t const *_lic;
+    EntityEntry                *_eep;
+    Registry                   &_wr;
 };
 
-LicenseItem::LicenseItem (struct rdf_license_t const* license, EntityEntry* entity)
-: Gtk::MenuItem(license->name), _lic(license), _eep(entity)
+LicenseItem::LicenseItem (struct rdf_license_t const* license, EntityEntry* entity, Registry &wr)
+: Gtk::MenuItem(license->name), _lic(license), _eep(entity), _wr(wr)
 {
 }
 
-/// \pre it is assumed that the license URI entry is not multiline
+/// \pre it is assumed that the license URI entry is a Gtk::Entry
 void
 LicenseItem::on_activate()
 {
+    if (_wr.isUpdating()) return;
+
+    _wr.setUpdating (true);
+    rdf_set_license (SP_ACTIVE_DOCUMENT, _lic);
+    sp_document_done (SP_ACTIVE_DOCUMENT);
+    _wr.setUpdating (false);
     reinterpret_cast<Gtk::Entry*>(_eep->_packable)->set_text (_lic->uri);
+    _eep->on_changed();
 }
 
 //---------------------------------------------------
@@ -74,12 +84,11 @@ Licensor::~Licensor()
 void
 Licensor::init (Gtk::Tooltips& tt, Registry& wr)
 {
-    _wr = &wr;
     show();
     _frame.show();
     _frame.add (*this);
     pack_start (_omenu, true, true, 0);
-    _wr->add ("licenses", &_omenu);
+    wr.add ("licenses", &_omenu);
     Gtk::Menu *m = manage (new Gtk::Menu);
 
     Gtk::HBox *box = manage (new Gtk::HBox);
@@ -87,7 +96,7 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
 
     /* add license-specific metadata entry areas */
     rdf_work_entity_t* entity = rdf_find_entity ( "license_uri" );
-    _eentry = EntityEntry::create (entity, tt, *_wr);
+    _eentry = EntityEntry::create (entity, tt, wr);
     box->pack_start (_eentry->_label, false, false, 5);
     box->pack_start (*_eentry->_packable, true, true, 0);
 
@@ -95,17 +104,17 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
     for (struct rdf_license_t * license = rdf_licenses;
              license && license->name;
              license++) {
-        i = manage (new LicenseItem (license, _eentry));
+        i = manage (new LicenseItem (license, _eentry, wr));
         m->append (*i);
     }
 
-    i = manage (new LicenseItem (&_proprietary_license, _eentry));
+    i = manage (new LicenseItem (&_proprietary_license, _eentry, wr));
     m->prepend (*i);
     _omenu.set_menu (*m);
 
     show_all_children();
 }
-    
+
 void 
 Licensor::update (SPDocument *doc)
 {

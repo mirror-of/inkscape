@@ -41,7 +41,6 @@ public:
 
 protected: 
     Gtk::OptionMenu       _omenu;
-    Registry       *_wr;
     EntityEntry    *_eentry;
 };
 
