@@ -286,25 +286,14 @@ static gint sp_star_context_root_handler(SPEventContext *event_context, GdkEvent
     switch (event->type) {
     case GDK_BUTTON_PRESS:
         if (event->button.button == 1) {
-            // save drag origin
-            event_context->xp = (gint) event->button.x;
-            event_context->yp = (gint) event->button.y;
-            event_context->within_tolerance = true;
-
-            NR::Point const p(event->button.x, event->button.y);
-
-            // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item(desktop, p,
-                                                                       event->button.state & GDK_MOD1_MASK, TRUE);
-
+            
             dragging = TRUE;
+
+            sc->center = Inkscape::setup_for_drag_start(desktop, event_context, event);
             
-            /* Position center */
-            sc->center = sp_desktop_w2d_xy_point(desktop, p);
-            
-            /* Snap center */
             SnapManager const m(desktop->namedview);
             sc->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, sc->center, sc->item).first;
+
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                                 GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,

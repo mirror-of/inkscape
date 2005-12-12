@@ -265,7 +265,6 @@ sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
     SPDesktop *desktop = event_context->desktop;
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
-
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(event_context);
 
     event_context->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
@@ -275,22 +274,13 @@ sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                // save drag origin
-                event_context->xp = (gint) event->button.x;
-                event_context->yp = (gint) event->button.y;
-                event_context->within_tolerance = true;
-
-                // Remember clicked item, disregarding groups.
-                NR::Point const button_w(event->button.x,
-                                         event->button.y);
-                event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
 
                 dragging = TRUE;
-                /* Position center */
-                sc->center = sp_desktop_w2d_xy_point(event_context->desktop, button_w);
-                /* Snap center to nearest magnetic point */
-                namedview_free_snap(event_context->desktop->namedview, Inkscape::Snapper::SNAP_POINT,
-                                    sc->center, sc->item);
+                sc->center = Inkscape::setup_for_drag_start(desktop, event_context, event);
+
+                SnapManager const m(desktop->namedview);
+                sc->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, sc->center, sc->item).first;
+                
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     ( GDK_KEY_PRESS_MASK |
                                       GDK_BUTTON_RELEASE_MASK |
