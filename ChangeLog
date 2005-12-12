@@ -1,3 +1,23 @@
+2005-12-12  Carl Hetherington <inkscape@carlh.net>
+
+	* src/arc-context.cpp: minor cleanups.  Use SnapManager more.  Use
+	Inkscape::setup_for_drag_start.
+
+	* src/connector-context.cpp, src/draw-context.cpp,
+	src/object-edit.cpp, src/pencil-context.cpp, src/rect-context.cpp,
+	src/spiral-context.cpp, src/star-context.cpp: use SnapManager.
+
+	* src/rect-context.cpp, src/spiral-context.cpp,
+	src/star-context.cpp: use Inkscape::setup_for_drag_start().
+
+	* src/snapper.{cpp,h}: simplify snap point types code.
+
+	* src/context-fns.{cpp,h}: add setup_for_drag_start().
+
+	* src/dyna-draw-context.cpp: remove unused and erroneous snapping code.
+
+	* src/pen-context.cpp: remove unused variable.
+	
 2005-12-09  Carl Hetherington <inkscape@carlh.net>
 
 	* src/object-snapper.cpp: make node snapping work again.
