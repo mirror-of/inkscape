@@ -53,7 +53,6 @@ private:
 };
 
 #include "variable.h"
-using namespace std;
 
 inline void Block::addVariable(Variable *v) {
 	v->block=this;
@@ -67,7 +66,7 @@ inline Block::Block(Variable *v) {
 	in=NULL;
 	out=NULL;
 	deleted=false;
-	vars=new vector<Variable*>;
+	vars=new std::vector<Variable*>;
 	if(v!=NULL) {
 	v->offset=0;
 	addVariable(v);
@@ -76,7 +75,7 @@ inline Block::Block(Variable *v) {
 
 inline double Block::desiredWeightedPosition() {
 	double wp = 0;
-	for (vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {
+	for (std::vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {
 		wp += ((*v)->desiredPosition - (*v)->offset) * (*v)->weight;
 	}
 	return wp;

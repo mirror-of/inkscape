@@ -17,8 +17,6 @@
 #include "pairingheap/PairingHeap.h"
 #include <cassert>
 
-using namespace std;
-
 Block::~Block(void)
 {
 	delete vars;

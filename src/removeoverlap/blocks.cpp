@@ -17,12 +17,17 @@
 #include "block.h"
 #include "variable.h"
 #include "constraint.h"
-#include "assert.h"
+#include <cassert>
 #include <vector>
 #include <list>
-#include "stdio.h"
 //#define LOGGING
-using namespace std;
+#ifdef LOGGING
+# include <cstdio>
+using std::fprintf;
+#endif
+using std::list;
+using std::set;
+using std::vector;
 
 Blocks::Blocks(Variable *vs[], const int n) : vs(vs),nvs(n) {
 	for(int i=0;i<nvs;i++) {

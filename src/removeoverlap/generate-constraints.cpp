@@ -15,8 +15,9 @@
 #include "constraint.h"
 #include <set>
 #include <vector>
-#include <assert.h>
-using namespace std;
+#include <cassert>
+using std::set;
+using std::vector;
 
 Rectangle::Rectangle(double x, double X, double y, double Y) 
 : minX(x),maxX(X),minY(y),maxY(Y) {

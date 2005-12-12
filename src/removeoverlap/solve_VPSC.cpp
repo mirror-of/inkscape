@@ -19,7 +19,8 @@
 #include <stdio.h>
 #include <assert.h>
 //#define LOGGING
-using namespace std;
+using std::list;
+using std::set;
 
 VPSC::VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) : cs(cs), m(m) {
 	//assert(!constraintGraphIsCyclic(vs,n));
@@ -158,9 +159,12 @@ bool VPSC::move_and_split() {
 	}
 	return solved;
 }
+
 #include <map>
 #include <vector>
 #include <set>
+using std::map;
+using std::vector;
 struct node {
 	set<node*> in;
 	set<node*> out;
