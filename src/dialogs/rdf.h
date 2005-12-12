@@ -106,7 +106,7 @@ unsigned int  rdf_set_work_entity(SPDocument * doc,
 
 struct rdf_license_t * rdf_get_license(SPDocument * doc);
 void                   rdf_set_license(SPDocument * doc,
-                                       struct rdf_license_t * license);
+                                       struct rdf_license_t const * license);
 
 void rdf_set_defaults ( SPDocument * document );
 

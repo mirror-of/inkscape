@@ -930,7 +930,7 @@ rdf_get_license(SPDocument * document)
  *  
  */
 void
-rdf_set_license(SPDocument * document, struct rdf_license_t * license)
+rdf_set_license(SPDocument * document, struct rdf_license_t const * license)
 {
     // drop old license section
     Inkscape::XML::Node * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
