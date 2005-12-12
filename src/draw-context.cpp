@@ -378,7 +378,9 @@ void spdc_endpoint_snap_rotation(SPEventContext const *const ec, NR::Point &p, N
         p = o + bdot * best;
         
         /* Snap it along best vector */
-        namedview_vector_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p, best);
+        SnapManager const m(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview);
+        p = m.constrainedSnap(Inkscape::Snapper::SNAP_POINT | Inkscape::Snapper::BBOX_POINT,
+                              p, best, NULL).first;
     }
 }
 
