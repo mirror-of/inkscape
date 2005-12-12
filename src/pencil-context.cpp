@@ -204,13 +204,14 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
 
         SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
         SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
+        Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
         if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
             return TRUE;
         }
 
-        NR::Point const button_w(bevent.x,
-                                 bevent.y);
+        NR::Point const button_w(bevent.x, bevent.y);
+        
         /* Find desktop coordinates */
         NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, button_w);
 
@@ -226,7 +227,7 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
                 /* Set first point of sequence */
                 if (anchor) {
                     p = anchor->dp;
-                    SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
+                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
                 } else {
 
                     if (!(bevent.state & GDK_SHIFT_MASK)) {
@@ -234,12 +235,12 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
                         // This is the first click of a new curve; deselect item so that
                         // this curve is not combined with it (unless it is drawn from its
                         // anchor, which is handled by the sibling branch above)
-                        SP_DT_SELECTION(desktop)->clear();
-                        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
-
-                        namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(pc)->namedview, p);
-                    } else if (SP_DT_SELECTION(desktop)->singleItem() && SP_IS_PATH(SP_DT_SELECTION(desktop)->singleItem())) {
-                        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
+                        selection->clear();
+                        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
+                        SnapManager const m(desktop->namedview);
+                        p = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, p, NULL).first;
+                    } else if (selection->singleItem() && SP_IS_PATH(selection->singleItem())) {
+                        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
                     }
                 }
                 pc->sa = anchor;
@@ -305,7 +306,8 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
                 if (anchor) {
                     p = anchor->dp;
                 } else if ((mevent.state & GDK_SHIFT_MASK) == 0) {
-                    namedview_free_snap_all_types(dt->namedview, p);
+                    SnapManager const m(dt->namedview);
+                    p = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, p, NULL).first;
                 }
                 if ( pc->npoints != 0 ) { // buttonpress may have happened before we entered draw context!
                     spdc_add_freehand_point(pc, p, mevent.state);
