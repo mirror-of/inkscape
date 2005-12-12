@@ -470,9 +470,7 @@ sp_dyna_draw_timeout_handler(gpointer data)
     if (! sp_dyna_draw_apply(dc, p)) {
         return TRUE;
     }
-    p = sp_dyna_draw_get_curr_vpoint(dc);
-    namedview_free_snap(desktop->namedview, Inkscape::Snapper::SNAP_POINT, p, NULL);
-    // something's not right here
+
     if ( dc->cur != dc->last ) {
         sp_dyna_draw_brush(dc);
         g_assert( dc->npoints > 0 );
@@ -513,10 +511,6 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
             sp_dyna_draw_reset(dc, button_dt);
             sp_dyna_draw_extinput(dc, event);
             sp_dyna_draw_apply(dc, button_dt);
-            NR::Point p = sp_dyna_draw_get_curr_vpoint(dc);
-            namedview_free_snap(desktop->namedview, Inkscape::Snapper::SNAP_POINT, p, NULL);
-            /* TODO: p isn't subsequently used; we should probably get rid of the last
-               1-2 statements (or use p).  Same for MOTION_NOTIFY below. */
             sp_curve_reset(dc->accumulated);
             if (dc->repr) {
                 dc->repr = NULL;
@@ -559,9 +553,6 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                 ret = TRUE;
                 break;
             }
-            NR::Point p = sp_dyna_draw_get_curr_vpoint(dc);
-            namedview_free_snap(desktop->namedview, Inkscape::Snapper::SNAP_POINT, p, NULL);
-            /* p unused; see comments above in BUTTON_PRESS. */
 
             if ( dc->cur != dc->last ) {
                 sp_dyna_draw_brush(dc);
