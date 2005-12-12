@@ -275,6 +275,7 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
 }
 
 /** Determine average stroke width, simple method */
+// see TODO in dialogs/stroke-style.cpp on how to get rid of this eventually
 gdouble
 stroke_average_width (GSList const *objects)
 {
@@ -307,69 +308,6 @@ stroke_average_width (GSList const *objects)
         return NR_HUGE;
 
     return avgwidth / (g_slist_length ((GSList *) objects) - n_notstroked);
-}
-
-/** Determines if the stroke width differs among objects */
-bool
-stroke_width_varying (GSList const *objects)
-{
-    if (g_slist_length ((GSList *) objects) <= 1)
-        return false;
-
-    gdouble width = NR_HUGE;
-
-    for (GSList const *l = objects; l != NULL; l = l->next) {
-
-        if (!SP_IS_ITEM (l->data))
-            continue;
-
-        SPObject *object = SP_OBJECT(l->data);
-
-        if ( SP_OBJECT_STYLE (object)->stroke.type == SP_PAINT_TYPE_NONE ) {
-            continue;
-        }
-
-        NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(l->data));
-
-        if (width == NR_HUGE) {
-            width = SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion();
-        } else {
-            if (fabs (width - SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion()) > 1e-3)
-                return true;
-        }
-
-    }
-
-    return false;
-}
-
-/** Determine average miterlimit */
-gdouble
-stroke_average_miterlimit (GSList const *objects)
-{
-    if (g_slist_length ((GSList *)objects) == 0)
-        return NR_HUGE;
-
-    gdouble avgml = 0.0;
-    bool notstroked = true;
-
-    for (GSList const *l = objects; l != NULL; l = l->next) {
-        if (!SP_IS_ITEM (l->data))
-            continue;
-
-        SPObject *object = SP_OBJECT(l->data);
-
-        avgml += object->style->stroke_miterlimit.value;
-
-        if ( object->style->stroke.type != SP_PAINT_TYPE_NONE ) {
-            notstroked = false;
-        }
-    }
-
-    if (notstroked)
-        return NR_HUGE;
-
-    return avgml / g_slist_length ((GSList *) objects);
 }
 
 /**
@@ -563,6 +501,218 @@ objects_query_opacity (GSList *objects, SPStyle *style_res)
             return QUERY_STYLE_MULTIPLE_SAME;
         else 
             return QUERY_STYLE_MULTIPLE_AVERAGED;
+    }
+}
+
+/**
+ * Write to style_res the average stroke width of a list of objects.
+ */
+int
+objects_query_strokewidth (GSList *objects, SPStyle *style_res)
+{
+    if (g_slist_length(objects) == 0) {
+        /* No objects, set empty */
+        return QUERY_STYLE_NOTHING;
+    }
+
+    gdouble avgwidth = 0.0;
+
+    gdouble prev_sw = -1;
+    bool same_sw = true;
+
+    int n_stroked = 0;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+        if (!SP_IS_ITEM(obj)) continue;
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        if ( style->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;
+        } 
+
+        n_stroked ++;
+
+        NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(obj));
+        double sw = style->stroke_width.computed * i2d.expansion();
+
+        if (prev_sw != -1 && fabs(sw - prev_sw) > 1e-3)
+            same_sw = false;
+        prev_sw = sw;
+
+        avgwidth += sw;
+    }
+
+    if (n_stroked > 1)
+        avgwidth /= (n_stroked);
+
+    style_res->stroke_width.computed = avgwidth;
+    style_res->stroke_width.set = true;
+
+    if (n_stroked == 0) {
+        return QUERY_STYLE_NOTHING;
+    } else if (n_stroked == 1) {
+        return QUERY_STYLE_SINGLE;
+    } else {
+        if (same_sw)
+            return QUERY_STYLE_MULTIPLE_SAME;
+        else 
+            return QUERY_STYLE_MULTIPLE_AVERAGED;
+    }
+}
+
+/**
+ * Write to style_res the average miter limit of a list of objects.
+ */
+int
+objects_query_miterlimit (GSList *objects, SPStyle *style_res)
+{
+    if (g_slist_length(objects) == 0) {
+        /* No objects, set empty */
+        return QUERY_STYLE_NOTHING;
+    }
+
+    gdouble avgml = 0.0;
+    int n_stroked = 0;
+
+    gdouble prev_ml = -1;
+    bool same_ml = true;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+        if (!SP_IS_ITEM(obj)) continue;
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        if ( style->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;
+        } 
+
+        n_stroked ++;
+
+        if (prev_ml != -1 && fabs(style->stroke_miterlimit.value - prev_ml) > 1e-3)
+            same_ml = false;
+        prev_ml = style->stroke_miterlimit.value;
+
+        avgml += style->stroke_miterlimit.value;
+    }
+
+    if (n_stroked > 1)
+        avgml /= (n_stroked);
+
+    style_res->stroke_miterlimit.value = avgml;
+    style_res->stroke_miterlimit.set = true;
+
+    if (n_stroked == 0) {
+        return QUERY_STYLE_NOTHING;
+    } else if (n_stroked == 1) {
+        return QUERY_STYLE_SINGLE;
+    } else {
+        if (same_ml)
+            return QUERY_STYLE_MULTIPLE_SAME;
+        else 
+            return QUERY_STYLE_MULTIPLE_AVERAGED;
+    }
+}
+
+/**
+ * Write to style_res the stroke cap of a list of objects.
+ */
+int
+objects_query_strokecap (GSList *objects, SPStyle *style_res)
+{
+    if (g_slist_length(objects) == 0) {
+        /* No objects, set empty */
+        return QUERY_STYLE_NOTHING;
+    }
+
+    int cap = -1;
+    gdouble prev_cap = -1;
+    bool same_cap = true;
+    int n_stroked = 0;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+        if (!SP_IS_ITEM(obj)) continue;
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        if ( style->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;
+        } 
+
+        n_stroked ++;
+
+        if (prev_cap != -1 && style->stroke_linecap.value != prev_cap)
+            same_cap = false;
+        prev_cap = style->stroke_linecap.value;
+
+        cap = style->stroke_linecap.value;
+    }
+
+    style_res->stroke_linecap.value = cap;
+    style_res->stroke_linecap.set = true;
+
+    if (n_stroked == 0) {
+        return QUERY_STYLE_NOTHING;
+    } else if (n_stroked == 1) {
+        return QUERY_STYLE_SINGLE;
+    } else {
+        if (same_cap)
+            return QUERY_STYLE_MULTIPLE_SAME;
+        else 
+            return QUERY_STYLE_MULTIPLE_DIFFERENT;
+    }
+}
+
+/**
+ * Write to style_res the stroke join of a list of objects.
+ */
+int
+objects_query_strokejoin (GSList *objects, SPStyle *style_res)
+{
+    if (g_slist_length(objects) == 0) {
+        /* No objects, set empty */
+        return QUERY_STYLE_NOTHING;
+    }
+
+    int join = -1;
+    gdouble prev_join = -1;
+    bool same_join = true;
+    int n_stroked = 0;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+        if (!SP_IS_ITEM(obj)) continue;
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        if ( style->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;
+        } 
+
+        n_stroked ++;
+
+        if (prev_join != -1 && style->stroke_linejoin.value != prev_join)
+            same_join = false;
+        prev_join = style->stroke_linejoin.value;
+
+        join = style->stroke_linejoin.value;
+    }
+
+    style_res->stroke_linejoin.value = join;
+    style_res->stroke_linejoin.set = true;
+
+    if (n_stroked == 0) {
+        return QUERY_STYLE_NOTHING;
+    } else if (n_stroked == 1) {
+        return QUERY_STYLE_SINGLE;
+    } else {
+        if (same_join)
+            return QUERY_STYLE_MULTIPLE_SAME;
+        else 
+            return QUERY_STYLE_MULTIPLE_DIFFERENT;
     }
 }
 
@@ -793,6 +943,16 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
         return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, true);
     } else if (property == QUERY_STYLE_PROPERTY_STROKE) {
         return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, false);
+
+    } else if (property == QUERY_STYLE_PROPERTY_STROKEWIDTH) {
+        return objects_query_strokewidth ((GSList *) desktop->selection->itemList(), style);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKEMITERLIMIT) {
+        return objects_query_miterlimit ((GSList *) desktop->selection->itemList(), style);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKECAP) {
+        return objects_query_strokecap ((GSList *) desktop->selection->itemList(), style);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKEJOIN) {
+        return objects_query_strokejoin ((GSList *) desktop->selection->itemList(), style);
+
     } else if (property == QUERY_STYLE_PROPERTY_MASTEROPACITY) {
         return objects_query_opacity ((GSList *) desktop->selection->itemList(), style);
 
@@ -819,9 +979,13 @@ sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
         int result_fnumbers = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FONTNUMBERS); 
         int result_fill = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FILL);
         int result_stroke = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_STROKE);
+        int result_strokewidth = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
+        int result_strokemiterlimit = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_STROKEMITERLIMIT);
+        int result_strokecap = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_STROKECAP);
+        int result_strokejoin = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_STROKEJOIN);
         int result_opacity = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
 
-        return (result_family != QUERY_STYLE_NOTHING && result_fstyle != QUERY_STYLE_NOTHING && result_fnumbers != QUERY_STYLE_NOTHING && result_fill != QUERY_STYLE_NOTHING && result_stroke != QUERY_STYLE_NOTHING && result_opacity != QUERY_STYLE_NOTHING);
+        return (result_family != QUERY_STYLE_NOTHING && result_fstyle != QUERY_STYLE_NOTHING && result_fnumbers != QUERY_STYLE_NOTHING && result_fill != QUERY_STYLE_NOTHING && result_stroke != QUERY_STYLE_NOTHING && result_opacity != QUERY_STYLE_NOTHING && result_strokewidth != QUERY_STYLE_NOTHING && result_strokemiterlimit != QUERY_STYLE_NOTHING && result_strokecap != QUERY_STYLE_NOTHING && result_strokejoin != QUERY_STYLE_NOTHING);
 }
 
 

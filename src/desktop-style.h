@@ -36,6 +36,10 @@ enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_EVERYTHING,
     QUERY_STYLE_PROPERTY_FILL,  // fill, fill-opacity
     QUERY_STYLE_PROPERTY_STROKE,  // stroke, stroke-opacity
+    QUERY_STYLE_PROPERTY_STROKEWIDTH,  // stroke-width
+    QUERY_STYLE_PROPERTY_STROKEMITERLIMIT,  // miter limit
+    QUERY_STYLE_PROPERTY_STROKEJOIN,  // stroke join
+    QUERY_STYLE_PROPERTY_STROKECAP,  // stroke cap
     QUERY_STYLE_PROPERTY_STROKESTYLE, // markers, dasharray, miterlimit, stroke-width, stroke-cap, stroke-join
     QUERY_STYLE_PROPERTY_FONTFAMILY, // font-family
     QUERY_STYLE_PROPERTY_FONTSTYLE, // font style 
@@ -52,14 +56,16 @@ double sp_desktop_get_font_size_tool (SPDesktop *desktop);
 void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, char const *tool, bool with_text);
 
 gdouble stroke_average_width (GSList const *objects);
-bool stroke_width_varying (GSList const *objects);
-gdouble stroke_average_miterlimit (GSList const *objects);
 
 int objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill);
 int objects_query_fontnumbers (GSList *objects, SPStyle *style_res);
 int objects_query_fontstyle (GSList *objects, SPStyle *style_res);
 int objects_query_fontfamily (GSList *objects, SPStyle *style_res);
 int objects_query_opacity (GSList *objects, SPStyle *style_res);
+int objects_query_strokewidth (GSList *objects, SPStyle *style_res);
+int objects_query_miterlimit (GSList *objects, SPStyle *style_res);
+int objects_query_strokecap (GSList *objects, SPStyle *style_res);
+int objects_query_strokejoin (GSList *objects, SPStyle *style_res);
 
 int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
 bool sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query);
