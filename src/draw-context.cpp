@@ -391,7 +391,8 @@ void spdc_endpoint_snap_free(SPEventContext const * const ec, NR::Point& p, guin
     }
 
     /* FIXME: this should be doing bbox snap as well */
-    namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview, p);
+    SnapManager const m(SP_EVENT_CONTEXT_DESKTOP(ec)->namedview);
+    p = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, p, NULL).first;
 }
 
 static SPCurve *
