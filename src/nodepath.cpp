@@ -2686,9 +2686,9 @@ static void node_ctrl_ungrabbed(SPKnot *knot, guint state, gpointer data)
  */
 static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
 {
-   Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
+    Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
-   Inkscape::NodePath::NodeSide *me, *opposite;
+    Inkscape::NodePath::NodeSide *me, *opposite;
     gint which;
     if (n->p.knot == knot) {
         me = &n->p;
@@ -2704,25 +2704,24 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
         g_assert_not_reached();
     }
 
-    NRPathcode othercode = sp_node_path_code_from_side(n, opposite);
+    NRPathcode const othercode = sp_node_path_code_from_side(n, opposite);
 
-    if (opposite->other && (n->type !=Inkscape::NodePath::NODE_CUSP) && (othercode == NR_LINETO)) {
-        gdouble len, linelen, scal;
+    SnapManager const m(n->subpath->nodepath->desktop->namedview);
+
+    if (opposite->other && (n->type != Inkscape::NodePath::NODE_CUSP) && (othercode == NR_LINETO)) {
         /* We are smooth node adjacent with line */
-        NR::Point delta = *p - n->pos;
-        len = NR::L2(delta);
-       Inkscape::NodePath::Node *othernode = opposite->other;
-        NR::Point ndelta = n->pos - othernode->pos;
-        linelen = NR::L2(ndelta);
-        if ((len > 1e-18) && (linelen > 1e-18)) {
-            scal = dot(delta, ndelta) / linelen;
+        NR::Point const delta = *p - n->pos;
+        NR::Coord const len = NR::L2(delta);
+        Inkscape::NodePath::Node *othernode = opposite->other;
+        NR::Point const ndelta = n->pos - othernode->pos;
+        NR::Coord const linelen = NR::L2(ndelta);
+        if (len > NR_EPSILON && linelen > NR_EPSILON) {
+            NR::Coord const scal = dot(delta, ndelta) / linelen;
             (*p) = n->pos + (scal / linelen) * ndelta;
         }
-        namedview_vector_snap(n->subpath->nodepath->desktop->namedview,
-                              Inkscape::Snapper::SNAP_POINT, *p, ndelta, NULL);
+        *p = m.constrainedSnap(Inkscape::Snapper::SNAP_POINT, *p, ndelta, NULL).first;
     } else {
-        namedview_free_snap(n->subpath->nodepath->desktop->namedview,
-                            Inkscape::Snapper::SNAP_POINT, *p, NULL);
+        *p = m.freeSnap(Inkscape::Snapper::SNAP_POINT, *p, NULL).first;
     }
 
     sp_node_adjust_knot(n, -which);
