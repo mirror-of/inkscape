@@ -986,6 +986,13 @@ sp_stroke_style_line_widget_new(void)
 
     hb = spw_hbox(t, 3, 1, i);
 
+// TODO: when this is gtkmmified, use an Inkscape::UI::Widget::ScalarUnit instead of the separate
+// spinbutton and unit selector for stroke width. In sp_stroke_style_line_update, use
+// setHundredPercent to remember the aeraged width corresponding to 100%. Then the
+// stroke_width_set_unit will be removed (because ScalarUnit takes care of conversions itself), and
+// with it, the two remaining calls of stroke_average_width, allowing us to get rid of that
+// function in desktop-style.
+
     a = gtk_adjustment_new(1.0, 0.0, 1000.0, 0.1, 10.0, 10.0);
     gtk_object_set_data(GTK_OBJECT(spw), "width", a);
     sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 3);
@@ -1287,87 +1294,70 @@ sp_stroke_style_line_update(SPWidget *spw, Inkscape::Selection *sel)
     GtkWidget *us = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "units"));
     GtkWidget *dsel = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "dash"));
 
-    if ( !sel || sel->isEmpty() ) {
-        /* No objects, set empty */
-        gtk_widget_set_sensitive(sset, FALSE);
-        gtk_object_set_data( GTK_OBJECT(spw), "update",
-                             GINT_TO_POINTER(FALSE) );
-        return;
-    }
+    // create temporary style
+    SPStyle *query = sp_style_new ();
+    // query into it
+    int result_sw = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKEWIDTH); 
+    int result_ml = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKEMITERLIMIT); 
+    int result_cap = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKECAP); 
+    int result_join = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKEJOIN); 
 
-    GSList const *objects = sel->itemList();
-
-    gdouble avgwidth = stroke_average_width (objects);
-    gdouble avgml = stroke_average_miterlimit (objects);
-
-    if (avgwidth != NR_HUGE) {
-        gtk_widget_set_sensitive(sset, TRUE);
-    } else {
+    if (result_sw == QUERY_STYLE_NOTHING) {
         /* No objects stroked, set insensitive */
         gtk_widget_set_sensitive(sset, FALSE);
 
         gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
         return;
-    }
-
-    SPUnit const *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
-
-    if (stroke_width_varying (objects)) {
-        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT));
     } else {
-        // only one object; no sense to keep percent, switch to absolute
-        if (unit->base != SP_UNIT_ABSOLUTE && unit->base != SP_UNIT_DEVICE) {
-            // FIXME: use some other default absolute unit
-            sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PT));
+        gtk_widget_set_sensitive(sset, TRUE);
+
+        SPUnit const *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
+
+        if (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED) {
+            sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT));
+        } else {
+            // same width, or only one object; no sense to keep percent, switch to absolute
+            if (unit->base != SP_UNIT_ABSOLUTE && unit->base != SP_UNIT_DEVICE) {
+                sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)->doc_units);
+            }
+        }
+
+        unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+
+        if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
+            double avgwidth = sp_pixels_get_units (query->stroke_width.computed, *unit);
+            gtk_adjustment_set_value(GTK_ADJUSTMENT(width), avgwidth);
+        } else {
+            gtk_adjustment_set_value(GTK_ADJUSTMENT(width), 100);
         }
     }
 
-    unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+    if (result_ml != QUERY_STYLE_NOTHING)
+        gtk_adjustment_set_value(GTK_ADJUSTMENT(ml), query->stroke_miterlimit.value); // TODO: reflect averagedness?
 
-    if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
-        avgwidth = sp_pixels_get_units (avgwidth, *unit);
-        gtk_adjustment_set_value(GTK_ADJUSTMENT(width), avgwidth);
-    } else {
-        gtk_adjustment_set_value(GTK_ADJUSTMENT(width), 100);
-    }
-
-    gtk_adjustment_set_value(GTK_ADJUSTMENT(ml), avgml);
-
-    /* Join & Cap */
-    SPObject * const object = SP_OBJECT(objects->data);
-    SPStyle * const style = SP_OBJECT_STYLE(object);
-    unsigned const jointype = object->style->stroke_linejoin.value;
-    unsigned const captype = object->style->stroke_linecap.value;
-
-    bool joinValid = true;
-    bool capValid = true;
-    for (GSList const *l = objects->next; l != NULL; l = l->next) {
-        SPObject *o = SP_OBJECT(l->data);
-        if ( o->style->stroke_linejoin.value != jointype ) {
-            joinValid = false;
-        }
-        if ( o->style->stroke_linecap.value != captype ) {
-            capValid = false;
-        }
-    }
-
-    if (joinValid) {
-        sp_jointype_set (spw, jointype);
+    if (result_join != QUERY_STYLE_MULTIPLE_DIFFERENT) {
+        sp_jointype_set (spw, query->stroke_linejoin.value);
     } else {
         sp_stroke_style_set_join_buttons(spw, NULL);
     }
 
-    if (capValid) {
-        sp_captype_set (spw, captype);
+    if (result_cap != QUERY_STYLE_MULTIPLE_DIFFERENT) {
+        sp_captype_set (spw, query->stroke_linecap.value);
     } else {
         sp_stroke_style_set_cap_buttons(spw, NULL);
     }
 
+    g_free (query);
+
+    GSList const *objects = sel->itemList();
+    SPObject * const object = SP_OBJECT(objects->data);
+    SPStyle * const style = SP_OBJECT_STYLE(object);
+
     /* Markers */
-    sp_stroke_style_update_marker_menus(spw, objects);
+    sp_stroke_style_update_marker_menus(spw, objects); // FIXME: make this desktop query too
 
     /* Dash */
-    sp_dash_selector_set_from_style (dsel, style);
+    sp_dash_selector_set_from_style (dsel, style); // FIXME: make this desktop query too
 
     gtk_widget_set_sensitive(sset, TRUE);
 
