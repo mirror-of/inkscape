@@ -100,6 +100,14 @@ EntityLineEntry::update (SPDocument *doc)
 void
 EntityLineEntry::on_changed()
 {
+    if (_wr->isUpdating()) return;
+
+    _wr->setUpdating (true);
+    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    char const *text = reinterpret_cast<Gtk::Entry*>(_packable)->get_text().c_str();
+    if (rdf_set_work_entity (doc, _entity, text))
+        sp_document_done (doc);
+    _wr->setUpdating (false);
 }
 
 EntityMultiLineEntry::EntityMultiLineEntry (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr)
@@ -137,6 +145,16 @@ EntityMultiLineEntry::update (SPDocument *doc)
 void
 EntityMultiLineEntry::on_changed()
 {
+    if (_wr->isUpdating()) return;
+
+    _wr->setUpdating (true);
+    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    Gtk::ScrolledWindow *s = reinterpret_cast<Gtk::ScrolledWindow*>(_packable);
+    Gtk::TextView *tv = reinterpret_cast<Gtk::TextView*>(s->get_child());
+    char const *text = tv->get_buffer()->get_text().c_str();
+    if (rdf_set_work_entity (doc, _entity, text))
+        sp_document_done (doc);
+    _wr->setUpdating (false);
 }
 
 } // namespace Dialog

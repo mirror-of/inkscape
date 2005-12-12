@@ -33,12 +33,12 @@ public:
     static EntityEntry* create (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr);
     virtual ~EntityEntry() = 0;
     virtual void update (SPDocument *doc) = 0;
+    virtual void on_changed() = 0;
     Gtk::Label _label;
     Gtk::Widget *_packable;
 
 protected: 
     EntityEntry (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Registry& wr);
-    virtual void on_changed() = 0;
     sigc::connection _changed_connection;
     rdf_work_entity_t *_entity;
     Gtk::Tooltips *_tt;
@@ -52,7 +52,7 @@ public:
     void update (SPDocument *doc);
 
 protected:
-    void on_changed();
+    virtual void on_changed();
 };
 
 class EntityMultiLineEntry : public EntityEntry {
@@ -62,7 +62,7 @@ public:
     void update (SPDocument *doc);
 
 protected: 
-    void on_changed();
+    virtual void on_changed();
     Gtk::TextView _v;
 };
 
