@@ -388,7 +388,7 @@ sp_node_context_is_over_stroke (SPNodeContext *nc, SPItem *item, NR::Point event
 
     //Translate click point into proper coord system
     nc->curvepoint_doc = sp_desktop_w2d_xy_point(desktop, event_p);
-    nc->curvepoint_doc *= sp_item_dt2i_affine(item, desktop);
+    nc->curvepoint_doc *= sp_item_dt2i_affine(item);
     nc->curvepoint_doc *= sp_item_i2doc_affine(item);
 
     NR::Maybe<Path::cut_position> position = get_nearest_position_on_Path(item, nc->curvepoint_doc);

@@ -1254,14 +1254,14 @@ void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &i2dt)
 
 
 NR::Matrix
-sp_item_dt2i_affine(SPItem const *item, SPDesktop *)
+sp_item_dt2i_affine(SPItem const *item)
 {
     /* fixme: Implement the right way (Lauris) */
     return sp_item_i2d_affine(item).inverse();
 }
 
 NRMatrix *
-sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *affine)
+sp_item_dt2i_affine(SPItem const *item, NRMatrix *affine)
 {
     /* fixme: Implement the right way (Lauris) */
     NRMatrix i2dt;

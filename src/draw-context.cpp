@@ -531,7 +531,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
 
     /* Now we have to go back to item coordinates at last */
     sp_curve_transform(c, ( dc->white_item
-                            ? sp_item_dt2i_affine(dc->white_item, SP_EVENT_CONTEXT_DESKTOP(dc))
+                            ? sp_item_dt2i_affine(dc->white_item)
                             : sp_desktop_dt2root_affine(SP_EVENT_CONTEXT_DESKTOP(dc)) ));
 
     SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
