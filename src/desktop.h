@@ -84,7 +84,6 @@ struct SPDesktop : public Inkscape::UI::View::View
     SPCanvasItem  *page_border; ///< page border
     SPCSSAttr     *current;     ///< current style
 
-    NR::Matrix d2w, w2d, doc2dt; ///< transforms 
     GList *zooms_past;
     GList *zooms_future;
     unsigned int dkey;
@@ -194,7 +193,7 @@ struct SPDesktop : public Inkscape::UI::View::View
     void zoom_drawing();
     void zoom_selection();
     void zoom_grab_focus();
-    double current_zoom() const  { return d2w.expansion(); }
+    double current_zoom() const  { return _d2w.expansion(); }
     void prev_zoom();
     void next_zoom();
 
@@ -226,6 +225,13 @@ struct SPDesktop : public Inkscape::UI::View::View
     void registerEditWidget (Inkscape::UI::View::EditWidgetInterface *widget)
     { _widget = widget; }
 
+    NR::Matrix w2d() const;
+    NR::Point w2d(NR::Point const &p) const;
+    NR::Point d2w(NR::Point const &p) const;
+    NR::Matrix doc2dt() const;
+    NR::Point doc2dt(NR::Point const &p) const;
+    NR::Point dt2doc(NR::Point const &p) const;
+
     virtual void setDocument (SPDocument* doc);
     virtual bool shutdown();
     virtual void mouseover() {}
@@ -236,6 +242,9 @@ private:
     Inkscape::Application     *_inkscape;
     Inkscape::MessageContext  *_guides_message_context;
     bool _active;
+    NR::Matrix _w2d;
+    NR::Matrix _d2w;
+    NR::Matrix _doc2dt;
     
     void push_current_zoom (GList**);
 

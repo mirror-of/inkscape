@@ -89,7 +89,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
             if (event->button.button == 1) {
                 dragging = true;
                 NR::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
-                NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
+                NR::Point const event_dt(desktop->w2d(event_w));
 
                 // explicitly show guidelines; if I draw a guide, I want them on
                 sp_repr_set_boolean(repr, "showguides", TRUE);
@@ -109,7 +109,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
 	case GDK_MOTION_NOTIFY:
             if (dragging) {
                 NR::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
-                NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
+                NR::Point const event_dt(desktop->w2d(event_w));
                 double const guide_pos_dt = event_dt[ horiz
                                                       ? NR::Y
                                                       : NR::X ];
@@ -122,7 +122,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
             if (dragging && event->button.button == 1) {
                 gdk_pointer_ungrab(event->button.time);
                 NR::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
-                NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
+                NR::Point const event_dt(desktop->w2d(event_w));
                 dragging = false;
                 gtk_object_destroy(GTK_OBJECT(guide));
                 guide = NULL;
@@ -197,7 +197,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             if (dragging) {
                 NR::Point const motion_w(event->motion.x,
                                          event->motion.y);
-                NR::Point const motion_dt( motion_w * desktop->w2d );
+                NR::Point const motion_dt(desktop->w2d(motion_w));
                 sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, motion_dt), false);
                 moved = true;
                 desktop->set_coordinate_status(motion_dt);
@@ -210,7 +210,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 if (moved) {
                     NR::Point const event_w(event->button.x,
                                             event->button.y);
-                    NR::Point const event_dt(event_w * desktop->w2d);
+                    NR::Point const event_dt(desktop->w2d(event_w));
                     if (sp_canvas_world_pt_inside_window(item->canvas, event_w)) {
                         sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, event_dt), true);
                     } else {

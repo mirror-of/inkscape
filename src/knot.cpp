@@ -566,7 +566,7 @@ static int sp_knot_handler(SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
             break;
 	case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                NR::Point const p = sp_desktop_w2d_xy_point(knot->desktop, NR::Point(event->button.x, event->button.y));
+                NR::Point const p = knot->desktop->w2d(NR::Point(event->button.x, event->button.y));
                 sp_knot_start_dragging(knot, p, (gint) event->button.x, (gint) event->button.y, event->button.time);
                 consumed = TRUE;
             }
@@ -623,7 +623,7 @@ static int sp_knot_handler(SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
                                      TRUE);
                 }
                 NR::Point const motion_w(event->motion.x, event->motion.y);
-                NR::Point const motion_dt = sp_desktop_w2d_xy_point(knot->desktop, motion_w);
+                NR::Point const motion_dt = knot->desktop->w2d(motion_w);
                 NR::Point p = motion_dt - knot->grabbed_rel_pos;
                 sp_knot_request_position (knot, &p, event->motion.state);
                 knot->desktop->scroll_to_point (&motion_dt);

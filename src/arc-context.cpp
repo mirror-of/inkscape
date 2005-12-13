@@ -292,7 +292,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
                 event_context->within_tolerance = false;
 
                 NR::Point const motion_w(event->motion.x, event->motion.y);
-                NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+                NR::Point const motion_dt(desktop->w2d(motion_w));
                 sp_arc_drag(ac, motion_dt, event->motion.state);
                 ret = TRUE;
             }

@@ -15,7 +15,7 @@
 #include <gtk/gtktypeutils.h>
 
 #include "draw-anchor.h"
-#include "desktop-affine.h"
+#include "desktop.h"
 #include "desktop-handles.h"
 #include "event-context.h"
 #include "display/sodipodi-ctrl.h"
@@ -76,7 +76,7 @@ sp_draw_anchor_test(SPDrawAnchor *anchor, NR::Point w, gboolean activate)
 {
     SPDesktop *dt = SP_EVENT_CONTEXT_DESKTOP(anchor->dc);
 
-    if ( activate && ( NR::LInfty( w - sp_desktop_d2w_xy_point(dt, anchor->dp) ) <= A_SNAP ) ) {
+    if ( activate && ( NR::LInfty( w - dt->d2w(anchor->dp) ) <= A_SNAP ) ) {
         if (!anchor->active) {
             sp_canvas_item_set((GtkObject *) anchor->ctrl, "filled", TRUE, NULL);
             anchor->active = TRUE;

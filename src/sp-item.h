@@ -233,7 +233,6 @@ NR::Matrix sp_item_i2r_affine(SPItem const *item);
 void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &transform);
 
 NR::Matrix sp_item_dt2i_affine(SPItem const *item);
-NRMatrix *sp_item_dt2i_affine(SPItem const *item, NRMatrix *transform);
 
 int sp_item_repr_compare_position(SPItem *first, SPItem *second);
 

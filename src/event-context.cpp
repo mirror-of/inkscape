@@ -440,7 +440,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 }
             } else if (zoom_rb) {
                 NR::Point const motion_w(event->motion.x, event->motion.y);
-                NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+                NR::Point const motion_dt(desktop->w2d(motion_w));
 
                 if ( within_tolerance
                      && ( abs( (gint) event->motion.x - xp ) < tolerance )
@@ -464,7 +464,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
             if (within_tolerance && (panning || zoom_rb)) {
                 dontgrab ++;
                 NR::Point const event_w(event->button.x, event->button.y);
-                NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
+                NR::Point const event_dt(desktop->w2d(event_w));
                 double const zoom_power = ( (event->button.state & GDK_SHIFT_MASK)
                                             ? -dontgrab : dontgrab );
                 desktop->zoom_relative_keep_point(event_dt,
@@ -870,7 +870,7 @@ static void set_event_location(SPDesktop *desktop, GdkEvent *event)
     }
 
     NR::Point const button_w(event->button.x, event->button.y);
-    NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+    NR::Point const button_dt(desktop->w2d(button_w));
     desktop-> setPosition (button_dt);
     desktop->set_coordinate_status(button_dt);
 }

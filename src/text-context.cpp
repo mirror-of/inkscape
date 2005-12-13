@@ -369,7 +369,7 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                     SP_DT_SELECTION(ec->desktop)->set(item_ungrouped);
                     if (tc->text) {
                         // find out click point in document coordinates
-                        NR::Point p = sp_desktop_w2d_xy_point(ec->desktop, NR::Point(event->button.x, event->button.y));
+                        NR::Point p = ec->desktop->w2d(NR::Point(event->button.x, event->button.y));
                         // set the cursor closest to that point
                         tc->text_sel_start = tc->text_sel_end = sp_te_get_position_by_coords(tc->text, p);
                         // update display
@@ -417,7 +417,7 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                 Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
                 if (!layout) break;
                 // find out click point in document coordinates
-                NR::Point p = sp_desktop_w2d_xy_point(ec->desktop, NR::Point(event->button.x, event->button.y));
+                NR::Point p = ec->desktop->w2d(NR::Point(event->button.x, event->button.y));
                 // set the cursor closest to that point
                 Inkscape::Text::Layout::iterator new_end = sp_te_get_position_by_coords(tc->text, p);
                 if (tc->dragging == 2) {
@@ -622,7 +622,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 ec->within_tolerance = true;
 
                 NR::Point const button_pt(event->button.x, event->button.y);
-                tc->p0 = NR::Point(sp_desktop_w2d_xy_point(desktop, button_pt));
+                tc->p0 = desktop->w2d(button_pt);
                 sp_rubberband_start(desktop, tc->p0);
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK |
@@ -658,7 +658,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 ec->within_tolerance = false;
 
                 NR::Point const motion_pt(event->motion.x, event->motion.y);
-                NR::Point const p(sp_desktop_w2d_xy_point(desktop, motion_pt));
+                NR::Point const p = desktop->w2d(motion_pt);
 
                 sp_rubberband_move(p);
                 gobble_motion_events(GDK_BUTTON1_MASK);
@@ -688,7 +688,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 if (tc->creating && ec->within_tolerance) {
                     /* Button 1, set X & Y & new item */
                     SP_DT_SELECTION(desktop)->clear();
-                    NR::Point dtp = sp_desktop_w2d_xy_point(ec->desktop, NR::Point(event->button.x, event->button.y));
+                    NR::Point dtp = ec->desktop->w2d(NR::Point(event->button.x, event->button.y));
                     tc->pdoc = sp_desktop_dt2root_xy_point(ec->desktop, dtp);
 
                     tc->show = TRUE;
@@ -706,7 +706,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                     ec->within_tolerance = false;
                 } else if (tc->creating) {
                     NR::Point const button_pt(event->button.x, event->button.y);
-                    NR::Point p1 = NR::Point(sp_desktop_w2d_xy_point(desktop, button_pt));
+                    NR::Point p1 = desktop->w2d(button_pt);
                     double cursor_height = sp_desktop_get_font_size_tool(ec->desktop);
                     if (fabs(p1[NR::Y] - tc->p0[NR::Y]) > cursor_height) {
                         // otherwise even one line won't fit; most probably a slip of hand (even if bigger than tolerance)

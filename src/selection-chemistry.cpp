@@ -1749,10 +1749,10 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
     {
         NR::Point const s_dt(( sbox.x0 + sbox.x1 ) / 2,
                              ( sbox.y0 + sbox.y1 ) / 2);
-        NR::Point const s_w( s_dt * desktop->d2w );
+        NR::Point const s_w = desktop->d2w(s_dt);
         NR::Point const d_dt(( dbox.x0 + dbox.x1 ) / 2,
                              ( dbox.y0 + dbox.y1 ) / 2);
-        NR::Point const d_w( d_dt * desktop->d2w );
+        NR::Point const d_w = desktop->d2w(d_dt);
         NR::Point const moved_w( d_w - s_w );
         gint const dx = (gint) moved_w[X];
         gint const dy = (gint) moved_w[Y];
@@ -1945,7 +1945,7 @@ sp_selection_tile(bool apply)
         repr_copies = g_slist_prepend (repr_copies, dup);
     }
 
-    NR::Rect bounds (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max()));
+    NR::Rect bounds(desktop->dt2doc(r.min()), desktop->dt2doc(r.max()));
 
     if (apply) {
         // delete objects so that their clones don't get alerted; this object will be restored shortly
@@ -1962,7 +1962,7 @@ sp_selection_tile(bool apply)
     prefs_set_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
 
     const gchar *pat_id = pattern_tile (repr_copies, bounds, document,
-                                        NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, NR::Point(r.min()[NR::X], r.max()[NR::Y])))), move);
+                                        NR::Matrix(NR::translate(desktop->dt2doc(NR::Point(r.min()[NR::X], r.max()[NR::Y])))), move);
 
     // restore compensation setting
     prefs_set_int_attribute("options.clonecompensation", "value", saved_compensation);

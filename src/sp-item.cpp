@@ -1260,16 +1260,6 @@ sp_item_dt2i_affine(SPItem const *item)
     return sp_item_i2d_affine(item).inverse();
 }
 
-NRMatrix *
-sp_item_dt2i_affine(SPItem const *item, NRMatrix *affine)
-{
-    /* fixme: Implement the right way (Lauris) */
-    NRMatrix i2dt;
-    sp_item_i2d_affine(item, &i2dt);
-    nr_matrix_invert(affine, &i2dt);
-    return affine;
-}
-
 /* Item views */
 
 static SPItemView *

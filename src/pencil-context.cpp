@@ -213,7 +213,7 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
         NR::Point const button_w(bevent.x, bevent.y);
         
         /* Find desktop coordinates */
-        NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, button_w);
+        NR::Point p = pc->desktop->w2d(button_w);
 
         /* Test whether we hit any anchor. */
         SPDrawAnchor *anchor = spdc_test_inside(pc, button_w);
@@ -275,7 +275,7 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
     }
 
     /* Find desktop coordinates */
-    NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(mevent.x, mevent.y));
+    NR::Point p = dt->w2d(NR::Point(mevent.x, mevent.y));
 
     /* Test whether we hit any anchor. */
     SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(mevent.x, mevent.y));
@@ -349,8 +349,7 @@ pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &re
         pc->is_drawing = false;
 
         /* Find desktop coordinates */
-        NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(revent.x,
-                                                            revent.y));
+        NR::Point p = dt->w2d(NR::Point(revent.x, revent.y));
 
         /* Test whether we hit any anchor. */
         SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(revent.x,
@@ -532,7 +531,7 @@ fit_and_split(SPPencilContext *pc)
 {
     g_assert( pc->npoints > 1 );
 
-    double const tolerance_sq = square( NR::expansion(pc->desktop->w2d)
+    double const tolerance_sq = square( NR::expansion(pc->desktop->w2d())
                                         * prefs_get_double_attribute_limited("tools.freehand.pencil",
                                                                              "tolerance", 10.0, 1.0, 100.0) );
 

@@ -315,7 +315,7 @@ static gint sp_star_context_root_handler(SPEventContext *event_context, GdkEvent
             event_context->within_tolerance = false;
 
             NR::Point const motion_w(event->motion.x, event->motion.y);
-            NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
+            NR::Point const motion_dt(event_context->desktop->w2d(motion_w));
             sp_star_drag (sc, motion_dt, event->motion.state);
             ret = TRUE;
         }

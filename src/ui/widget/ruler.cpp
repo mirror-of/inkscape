@@ -89,7 +89,7 @@ Ruler::get_event_dt()
     canvas_get_pointer(wx, wy);
     NR::Point const event_win(wx, wy);
     NR::Point const event_w(sp_canvas_window_to_world(_dt->canvas, event_win));
-    return sp_desktop_w2d_xy_point(_dt, event_w);
+    return _dt->w2d(event_w);
 }
 
 bool

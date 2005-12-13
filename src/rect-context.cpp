@@ -305,7 +305,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             dragging = true;
 
             /* Position center */
-            NR::Point const button_dt(sp_desktop_w2d_xy_point(event_context->desktop, button_w));
+            NR::Point const button_dt(desktop->w2d(button_w));
 
             /* Snap center */
             SnapManager const m(desktop->namedview);
@@ -338,7 +338,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 
             NR::Point const motion_w(event->motion.x,
                                      event->motion.y);
-            NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
+            NR::Point const motion_dt(desktop->w2d(motion_w));
             sp_rect_drag(*rc, motion_dt, event->motion.state);
             ret = TRUE;
         }

@@ -466,7 +466,7 @@ sp_dyna_draw_timeout_handler(gpointer data)
     int x, y;
     gtk_widget_get_pointer(GTK_WIDGET(canvas), &x, &y);
     NR::Point p = sp_canvas_window_to_world(canvas, NR::Point(x, y));
-    p = sp_desktop_w2d_xy_point(desktop, p);
+    p = desktop->w2d(p);
     if (! sp_dyna_draw_apply(dc, p)) {
         return TRUE;
     }
@@ -507,7 +507,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
             
             NR::Point const button_w(event->button.x,
                                      event->button.y);
-            NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+            NR::Point const button_dt(desktop->w2d(button_w));
             sp_dyna_draw_reset(dc, button_dt);
             sp_dyna_draw_extinput(dc, event);
             sp_dyna_draw_apply(dc, button_dt);
@@ -546,7 +546,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
 
             NR::Point const motion_w(event->motion.x,
                                      event->motion.y);
-            NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+            NR::Point const motion_dt(desktop->w2d(motion_w));
 
             sp_dyna_draw_extinput(dc, event);
             if (!sp_dyna_draw_apply(dc, motion_dt)) {
@@ -788,7 +788,7 @@ static void
 fit_and_split_line(SPDynaDrawContext *dc,
                    gboolean release)
 {
-    double const tolerance_sq = square( NR::expansion(SP_EVENT_CONTEXT(dc)->desktop->w2d) * TOLERANCE_LINE );
+    double const tolerance_sq = square( NR::expansion(SP_EVENT_CONTEXT(dc)->desktop->w2d()) * TOLERANCE_LINE );
 
     NR::Point b[4];
     double const n_segs = sp_bezier_fit_cubic(b, dc->point1, dc->npoints, tolerance_sq);
@@ -832,7 +832,7 @@ fit_and_split_line(SPDynaDrawContext *dc,
 static void
 fit_and_split_calligraphics(SPDynaDrawContext *dc, gboolean release)
 {
-    double const tolerance_sq = square( NR::expansion(SP_EVENT_CONTEXT(dc)->desktop->w2d) * TOLERANCE_CALLIGRAPHIC );
+    double const tolerance_sq = square( NR::expansion(SP_EVENT_CONTEXT(dc)->desktop->w2d()) * TOLERANCE_CALLIGRAPHIC );
 
 #ifdef DYNA_DRAW_VERBOSE
     g_print("[F&S:R=%c]", release?'T':'F');

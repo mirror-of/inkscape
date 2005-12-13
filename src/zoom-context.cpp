@@ -141,7 +141,7 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                 within_tolerance = true;
                 
                 NR::Point const button_w(event->button.x, event->button.y);
-                NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+                NR::Point const button_dt(desktop->w2d(button_w));
                 sp_rubberband_start(desktop, button_dt);
 
                 escaped = false;
@@ -165,7 +165,7 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                 within_tolerance = false; 
                 
                 NR::Point const motion_w(event->motion.x, event->motion.y);
-                NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+                NR::Point const motion_dt(desktop->w2d(motion_w));
                 sp_rubberband_move(motion_dt);
             }
             break;
@@ -177,7 +177,7 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                     desktop->set_display_area(b.x0, b.y0, b.x1, b.y1, 10);
                 } else if (!escaped) {
                     NR::Point const button_w(event->button.x, event->button.y);
-                    NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+                    NR::Point const button_dt(desktop->w2d(button_w));
                     double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
                                            ? 1 / zoom_inc
                                            : zoom_inc );

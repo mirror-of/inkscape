@@ -36,7 +36,7 @@
 #include "prefs-utils.h"
 #include "sp-namedview.h"
 #include "inkscape-private.h"
-#include "desktop-affine.h"
+#include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
 #include "document.h"
@@ -256,8 +256,8 @@ static gint sp_dropper_context_root_handler(SPEventContext *ec, GdkEvent *event)
                         break;
                     }
                     
-                    NR::Point cd = sp_desktop_w2d_xy_point(ec->desktop, dc->centre);
-                    NR::Matrix w2dt = sp_desktop_w2dt_affine(ec->desktop);
+                    NR::Point const cd = ec->desktop->w2d(dc->centre);
+                    NR::Matrix const w2dt = ec->desktop->w2d();
                     const double scale = rw * NR_MATRIX_DF_EXPANSION(&w2dt);
                     NR::Matrix const sm( NR::scale(scale, scale) * NR::translate(cd) );
                     sp_canvas_item_affine_absolute(dc->area, sm);

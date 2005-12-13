@@ -387,7 +387,7 @@ sp_node_context_is_over_stroke (SPNodeContext *nc, SPItem *item, NR::Point event
     SPDesktop *desktop = SP_EVENT_CONTEXT (nc)->desktop;
 
     //Translate click point into proper coord system
-    nc->curvepoint_doc = sp_desktop_w2d_xy_point(desktop, event_p);
+    nc->curvepoint_doc = desktop->w2d(event_p);
     nc->curvepoint_doc *= sp_item_dt2i_affine(item);
     nc->curvepoint_doc *= sp_item_i2doc_affine(item);
 
@@ -395,7 +395,7 @@ sp_node_context_is_over_stroke (SPNodeContext *nc, SPItem *item, NR::Point event
     NR::Point nearest = get_point_on_Path(item, position.assume().piece, position.assume().t);
     NR::Point delta = nearest - nc->curvepoint_doc;
 
-    delta = sp_desktop_d2w_xy_point(desktop, delta);
+    delta = desktop->d2w(delta);
 
     double stroke_tolerance = 
         (SP_OBJECT_STYLE (item)->stroke.type != SP_PAINT_TYPE_NONE? 
@@ -555,7 +555,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
                 NR::Point const button_w(event->button.x,
                                          event->button.y);
-                NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+                NR::Point const button_dt(desktop->w2d(button_w));
                 sp_rubberband_start(desktop, button_dt);
                 ret = TRUE;
             }
@@ -576,7 +576,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 if (nc->nodepath && nc->hit) {
                     NR::Point const delta_w(event->motion.x - nc->curvepoint_event[NR::X],
                                          event->motion.y - nc->curvepoint_event[NR::Y]);
-                    NR::Point const delta_dt(sp_desktop_w2d_xy_point(desktop, delta_w));
+                    NR::Point const delta_dt(desktop->w2d(delta_w));
                     sp_nodepath_curve_drag (nc->grab_node, nc->grab_t, delta_dt, undo_label);
                     nc->curvepoint_event[NR::X] = (gint) event->motion.x;   
                     nc->curvepoint_event[NR::Y] = (gint) event->motion.y;
@@ -584,7 +584,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 } else {
                     NR::Point const motion_w(event->motion.x,
                                          event->motion.y);
-                    NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+                    NR::Point const motion_dt(desktop->w2d(motion_w));
                     sp_rubberband_move(motion_dt);
                 }
                 nc->drag = TRUE;

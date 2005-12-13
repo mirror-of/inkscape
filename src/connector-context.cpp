@@ -483,7 +483,7 @@ connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const
 {
     NR::Point const event_w(bevent.x, bevent.y);
     /* Find desktop coordinates */
-    NR::Point p = sp_desktop_w2d_xy_point(cc->desktop, event_w);
+    NR::Point p = cc->desktop->w2d(event_w);
 
     gint ret = FALSE;
     if ( bevent.button == 1 ) {
@@ -499,7 +499,7 @@ connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const
         connector_drag_origin_w = event_w;
         connector_within_tolerance = true;
 
-        NR::Point const event_dt(sp_desktop_w2d_xy_point(cc->desktop, event_w));
+        NR::Point const event_dt = cc->desktop->w2d(event_w);
         switch (cc->state) {
             case SP_CONNECTOR_CONTEXT_STOP:
                 /* This is allowed, if we just cancelled curve */
@@ -594,7 +594,7 @@ connector_handle_motion_notify(SPConnectorContext *const cc, GdkEventMotion cons
     SPDesktop *const dt = cc->desktop;
 
     /* Find desktop coordinates */
-    NR::Point p = sp_desktop_w2d_xy_point(dt, event_w);
+    NR::Point p = dt->w2d(event_w);
 
     switch (cc->state) {
         case SP_CONNECTOR_CONTEXT_DRAGGING:
@@ -658,7 +658,7 @@ connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton con
         NR::Point const event_w(revent.x, revent.y);
 
         /* Find desktop coordinates */
-        NR::Point p = sp_desktop_w2d_xy_point(cc->desktop, event_w);
+        NR::Point p = cc->desktop->w2d(event_w);
 
         switch (cc->state) {
             //case SP_CONNECTOR_CONTEXT_POINT:
@@ -782,8 +782,8 @@ spcc_connector_set_subsequent_point(SPConnectorContext *const cc, NR::Point cons
     g_assert( cc->npoints != 0 );
 
     SPDesktop *dt = cc->desktop;
-    NR::Point o = sp_desktop_d2doc_xy_point(dt, cc->p[0]);
-    NR::Point d = sp_desktop_d2doc_xy_point(dt, p);
+    NR::Point o = dt->dt2doc(cc->p[0]);
+    NR::Point d = dt->dt2doc(p);
     Avoid::Point src = { o[NR::X], o[NR::Y] };
     Avoid::Point dst = { d[NR::X], d[NR::Y] };
 
@@ -807,7 +807,7 @@ spcc_connector_set_subsequent_point(SPConnectorContext *const cc, NR::Point cons
         NR::Point p(route.ps[i].x, route.ps[i].y);
         sp_curve_lineto(cc->red_curve, p);
     }
-    sp_curve_transform(cc->red_curve, dt->doc2dt);
+    sp_curve_transform(cc->red_curve, dt->doc2dt());
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve);
 }
 

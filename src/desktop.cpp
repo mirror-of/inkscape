@@ -77,6 +77,7 @@
 #include "display/sodipodi-ctrlrect.h"
 #include "display/sp-canvas-util.h"
 #include "libnr/nr-point-matrix-ops.h"
+#include "libnr/nr-matrix-div.h"
 #include "ui/dialog/dialog-manager.h"
 #include "xml/repr.h"
 #include "message-context.h"
@@ -118,9 +119,9 @@ SPDesktop::SPDesktop()
     controls = NULL;
     event_context = 0;
 
-    d2w.set_identity();
-    w2d.set_identity();
-    doc2dt = NR::Matrix(NR::scale(1, -1));
+    _d2w.set_identity();
+    _w2d.set_identity();
+    _doc2dt = NR::Matrix(NR::scale(1, -1));
 
     guides_active = false;
 
@@ -224,8 +225,8 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas)
     
 
     /* Connect event for page resize */
-    doc2dt[5] = sp_document_height (document);
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), doc2dt);
+    _doc2dt[5] = sp_document_height (document);
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
 
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (_namedview_modified), this);
 
@@ -345,14 +346,14 @@ void SPDesktop::setDisplayModeNormal()
 {
     SP_CANVAS_ARENA (drawing)->arena->rendermode = RENDERMODE_NORMAL;
     canvas->rendermode = RENDERMODE_NORMAL; // canvas needs that for choosing the best buffer size
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), d2w); // redraw
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _d2w); // redraw
 }
 
 void SPDesktop::setDisplayModeOutline()
 {
     SP_CANVAS_ARENA (drawing)->arena->rendermode = RENDERMODE_OUTLINE;
     canvas->rendermode = RENDERMODE_OUTLINE; // canvas needs that for choosing the best buffer size
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), d2w); // redraw
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _d2w); // redraw
 }
 
 /**
@@ -548,13 +549,13 @@ SPDesktop::point() const
 {
     NR::Point p = _widget->getPointer();
     NR::Point pw = sp_canvas_window_to_world (canvas, p);
-    p = sp_desktop_w2d_xy_point (this, pw);
+    p = w2d(pw);
 
     NRRect r;
     sp_canvas_get_viewbox (canvas, &r);
 
-    NR::Point r0 = sp_desktop_w2d_xy_point (this, NR::Point(r.x0, r.y0));
-    NR::Point r1 = sp_desktop_w2d_xy_point (this, NR::Point(r.x1, r.y1));
+    NR::Point r0 = w2d(NR::Point(r.x0, r.y0));
+    NR::Point r1 = w2d(NR::Point(r.x1, r.y1));
 
     if (p[NR::X] >= r0[NR::X] &&
         p[NR::X] <= r1[NR::X] &&
@@ -618,7 +619,7 @@ SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double 
     viewbox.x1 -= border;
     viewbox.y1 -= border;
 
-    double scale = expansion(d2w);
+    double scale = expansion(_d2w);
     double newscale;
     if (((x1 - x0) * (viewbox.y1 - viewbox.y0)) > ((y1 - y0) * (viewbox.x1 - viewbox.x0))) {
         newscale = (viewbox.x1 - viewbox.x0) / (x1 - x0);
@@ -631,9 +632,9 @@ SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double 
     int clear = FALSE;
     if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
         /* Set zoom factors */
-        d2w = NR::Matrix(NR::scale(newscale, -newscale));
-        w2d = NR::Matrix(NR::scale(1/newscale, 1/-newscale));
-        sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), d2w);
+        _d2w = NR::Matrix(NR::scale(newscale, -newscale));
+        _w2d = NR::Matrix(NR::scale(1/newscale, 1/-newscale));
+        sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _d2w);
         clear = TRUE;
     }
 
@@ -645,7 +646,7 @@ SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double 
     sp_canvas_scroll_to (canvas, x0 * newscale - border, y1 * -newscale - border, clear);
 
     _widget->updateRulers();
-    _widget->updateScrollbars (expansion(d2w));
+    _widget->updateScrollbars (expansion(_d2w));
     _widget->updateZoom();
 }
 
@@ -659,7 +660,7 @@ SPDesktop::get_display_area (NRRect *area) const
 
     sp_canvas_get_viewbox (canvas, &viewbox);
 
-    double scale = d2w[0];
+    double scale = _d2w[0];
 
     area->x0 = viewbox.x0 / scale;
     area->y0 = viewbox.y1 / -scale;
@@ -730,7 +731,7 @@ SPDesktop::zoom_absolute_keep_point (double cx, double cy, double px, double py,
     // maximum or minimum zoom reached, but there's no exact equality because of rounding errors;
     // this check prevents "sliding" when trying to zoom in at maximum zoom;
     /// \todo someone please fix calculations properly and remove this hack
-    if (fabs(expansion(d2w) - zoom) < 0.0001*zoom && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.000001))
+    if (fabs(expansion(_d2w) - zoom) < 0.0001*zoom && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.000001))
         return;
 
     NRRect viewbox;
@@ -773,7 +774,7 @@ SPDesktop::zoom_relative_keep_point (double cx, double cy, double zoom)
     if (cy > area.y1)
         cy = area.y1;
 
-    gdouble scale = expansion(d2w) * zoom;
+    gdouble scale = expansion(_d2w) * zoom;
     double px = (cx - area.x0)/(area.x1 - area.x0);
     double py = (cy - area.y0)/(area.y1 - area.y0);
 
@@ -786,7 +787,7 @@ SPDesktop::zoom_relative_keep_point (double cx, double cy, double zoom)
 void
 SPDesktop::zoom_relative (double cx, double cy, double zoom)
 {
-    gdouble scale = expansion(d2w) * zoom;
+    gdouble scale = expansion(_d2w) * zoom;
     zoom_absolute (cx, cy, scale);
 }
 
@@ -888,7 +889,7 @@ SPDesktop::scroll_world (double dx, double dy)
     sp_canvas_scroll_to (canvas, viewbox.x0 - dx, viewbox.y0 - dy, FALSE);
 
     _widget->updateRulers();
-    _widget->updateScrollbars (expansion(d2w));
+    _widget->updateScrollbars (expansion(_d2w));
 }
 
 bool
@@ -900,7 +901,7 @@ SPDesktop::scroll_to_point (NR::Point const *p, gdouble autoscrollspeed)
     gdouble autoscrolldistance = (gdouble) prefs_get_int_attribute_limited ("options.autoscrolldistance", "value", 0, -1000, 10000);
 
     // autoscrolldistance is in screen pixels, but the display area is in document units
-    autoscrolldistance /= expansion(d2w);
+    autoscrolldistance /= expansion(_d2w);
 
     /// \todo FIXME: njh: we need an expandBy function for rects
     dbox.x0 -= autoscrolldistance;
@@ -911,7 +912,7 @@ SPDesktop::scroll_to_point (NR::Point const *p, gdouble autoscrollspeed)
     if (!((*p)[NR::X] > dbox.x0 && (*p)[NR::X] < dbox.x1) ||
         !((*p)[NR::Y] > dbox.y0 && (*p)[NR::Y] < dbox.y1)   ) {
 
-        NR::Point const s_w( (*p) * d2w );
+        NR::Point const s_w( (*p) * _d2w );
 
         gdouble x_to;
         if ((*p)[NR::X] < dbox.x0)
@@ -930,7 +931,7 @@ SPDesktop::scroll_to_point (NR::Point const *p, gdouble autoscrollspeed)
             y_to = (*p)[NR::Y];
 
         NR::Point const d_dt(x_to, y_to);
-        NR::Point const d_w( d_dt * d2w );
+        NR::Point const d_w( d_dt * _d2w );
         NR::Point const moved_w( d_w - s_w );
 
         if (autoscrollspeed == 0)
@@ -1139,8 +1140,8 @@ SPDesktop::onDocumentURISet (gchar const* uri)
 void
 SPDesktop::onDocumentResized (gdouble width, gdouble height)
 {
-    doc2dt[5] = height;
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), doc2dt);
+    _doc2dt[5] = height;
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
     sp_ctrlrect_set_area (SP_CTRLRECT (page), 0.0, 0.0, width, height);
     sp_ctrlrect_set_area (SP_CTRLRECT (page_border), 0.0, 0.0, width, height);
 }
@@ -1165,7 +1166,7 @@ SPDesktop::_onSelectionModified
 (Inkscape::Selection *selection, guint flags, SPDesktop *dt)
 {
     if (!dt->_widget) return;
-    dt->_widget->updateScrollbars (expansion(dt->d2w));
+    dt->_widget->updateScrollbars (expansion(dt->_d2w));
 }
 
 static void 
@@ -1350,6 +1351,38 @@ _update_snap_distances (SPDesktop *desktop)
                                                            *nv.objecttoleranceunit,
                                                            px));
 }
+
+
+NR::Matrix SPDesktop::w2d() const
+{
+    return _w2d;
+}
+
+NR::Point SPDesktop::w2d(NR::Point const &p) const
+{
+    return p * _w2d;
+}
+
+NR::Point SPDesktop::d2w(NR::Point const &p) const
+{
+    return p * _d2w;
+}
+
+NR::Matrix SPDesktop::doc2dt() const
+{
+    return _doc2dt;
+}
+
+NR::Point SPDesktop::doc2dt(NR::Point const &p) const
+{
+    return p * _doc2dt;
+}
+
+NR::Point SPDesktop::dt2doc(NR::Point const &p) const
+{
+    return p / _doc2dt;
+}
+
 
 /**
  * Pop event context from desktop's context stack. Never used.

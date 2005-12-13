@@ -440,7 +440,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 within_tolerance = true;
 
                 NR::Point const button_pt(event->button.x, event->button.y);
-                NR::Point const p(sp_desktop_w2d_xy_point(desktop, button_pt));
+                NR::Point const p(desktop->w2d(button_pt));
                 sp_rubberband_start(desktop, p);
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
@@ -466,7 +466,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
         case GDK_MOTION_NOTIFY:
             if (event->motion.state & GDK_BUTTON1_MASK) {
                 NR::Point const motion_pt(event->motion.x, event->motion.y);
-                NR::Point const p(sp_desktop_w2d_xy_point(desktop, motion_pt));
+                NR::Point const p(desktop->w2d(motion_pt));
 
                 if ( within_tolerance
                      && ( abs( (gint) event->motion.x - xp ) < tolerance )

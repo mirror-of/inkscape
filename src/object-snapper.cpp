@@ -22,7 +22,7 @@
 #include "display/curve.h"
 #include "snap.h"
 #include "geom.h"
-#include "desktop-affine.h"
+#include "desktop.h"
 #include "inkscape.h"
 #include "splivarot.h"
 
@@ -88,7 +88,7 @@ void Inkscape::ObjectSnapper::_snapNodes(Inkscape::SnappedPoint &s,
 
                     /* Get this node in desktop coordinates */
                     NArtBpath const &bp = sh->curve->bpath[j];
-                    NR::Point const n = sp_desktop_doc2d_xy_point(desktop, bp.c(3) * i2doc);
+                    NR::Point const n = desktop->doc2dt(bp.c(3) * i2doc);
 
                     /* Try to snap to this node of the path */
                     NR::Coord const dist = NR::L2(n - p);
@@ -113,7 +113,7 @@ void Inkscape::ObjectSnapper::_snapPaths(Inkscape::SnappedPoint &s,
     */
     SPDesktop const *desktop = SP_ACTIVE_DESKTOP;
 
-    NR::Point const p_doc = sp_desktop_d2doc_xy_point(desktop, p);
+    NR::Point const p_doc = desktop->dt2doc(p);
 
     for (std::list<SPItem*>::const_iterator i = cand.begin(); i != cand.end(); i++) {
 
@@ -127,7 +127,7 @@ void Inkscape::ObjectSnapper::_snapPaths(Inkscape::SnappedPoint &s,
 
             /* Convert the nearest point back to desktop coordinates */
             NR::Point const o_it = get_point_on_Path(*i, o.assume().piece, o.assume().t);
-            NR::Point const o_dt = sp_desktop_doc2d_xy_point(desktop, o_it * i2doc);
+            NR::Point const o_dt = desktop->doc2dt(o_it * i2doc);
             
             NR::Coord const dist = NR::L2(o_dt - p);
             if (dist < getDistance() && dist < s.second) {

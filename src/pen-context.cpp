@@ -335,7 +335,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
         /* Test whether we hit any anchor. */
         SPDrawAnchor * const anchor = spdc_test_inside(pc, event_w);
 
-        NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
+        NR::Point const event_dt(desktop->w2d(event_w));
         switch (pc->mode) {
             case SP_PEN_CONTEXT_MODE_CLICK:
                 /* In click mode we add point on release */
@@ -482,7 +482,7 @@ pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
     }
 
     /* Find desktop coordinates */
-    NR::Point p = sp_desktop_w2d_xy_point(dt, event_w);
+    NR::Point p = dt->w2d(event_w);
 
     /* Test, whether we hit any anchor */
     SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);
@@ -580,7 +580,7 @@ pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent)
         NR::Point const event_w(revent.x,
                                 revent.y);
         /* Find desktop coordinates */
-        NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, event_w);
+        NR::Point p = pc->desktop->w2d(event_w);
 
         /* Test whether we hit any anchor. */
         SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);

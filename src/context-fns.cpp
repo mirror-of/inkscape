@@ -176,7 +176,7 @@ NR::Point Inkscape::setup_for_drag_start(SPDesktop *desktop, SPEventContext* ec,
 
     NR::Point const p(ev->button.x, ev->button.y);
     ec->item_to_select = sp_event_context_find_item(desktop, p, ev->button.state & GDK_MOD1_MASK, TRUE);
-    return sp_desktop_w2d_xy_point(ec->desktop, p);
+    return ec->desktop->w2d(p);
 }
 
 
