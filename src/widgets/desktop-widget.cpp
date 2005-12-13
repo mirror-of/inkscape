@@ -267,10 +267,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
     g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 
-    GtkWidget *grip=gtk_statusbar_new();
-    gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(grip), TRUE);
-    gtk_statusbar_push(GTK_STATUSBAR(grip), 0, "    ");
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), grip, FALSE, FALSE, 0);
+    GtkWidget *statusbar_tail=gtk_statusbar_new();
+    gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(statusbar_tail), TRUE);
+    gtk_box_pack_end (GTK_BOX (dtw->statusbar), statusbar_tail, FALSE, FALSE, 0);
 
     // zoom status spinbutton
     dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
@@ -287,7 +286,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
     sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), dtw->zoom_status, FALSE, FALSE, 0);
+    gtk_box_pack_end (GTK_BOX (statusbar_tail), dtw->zoom_status, FALSE, FALSE, 0);
 
     // cursor coordinates
     dtw->coord_status = gtk_table_new (2,2, FALSE);
@@ -306,9 +305,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_y, 1,2, 1,2, GTK_FILL, GTK_FILL, 0, 0);
     sp_set_font_size_smaller_smaller (dtw->coord_status);
     gtk_widget_set_size_request (dtw->coord_status, STATUS_COORD_WIDTH, -1);
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
+    gtk_box_pack_end (GTK_BOX (statusbar_tail), eventbox, FALSE, FALSE, 1);
 
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), gtk_vseparator_new(), FALSE, FALSE, 0);
+    gtk_box_pack_end (GTK_BOX (statusbar_tail), gtk_vseparator_new(), FALSE, FALSE, 0);
 
     dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);
     // FIXME: need to unreference on container destructino to avoid leak
