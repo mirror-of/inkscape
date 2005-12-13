@@ -68,6 +68,7 @@ dist:
 	$(CP) COPYING.LIB inkscape
 	$(CP) NEWS inkscape
 	$(CP) HACKING.* inkscape
+	$(CP) README inkscape$(S)README.txt
 	$(CP) README.* inkscape
 	$(CP) TRANSLATORS inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libatkmm-1.6-1.dll inkscape
