@@ -663,7 +663,7 @@ void TextTagAttributes::readFrom(Inkscape::XML::Node const *node)
 
 bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value)
 {
-    std::vector<SPSVGLength> *attr_vector;
+    std::vector<SVGLength> *attr_vector;
     switch (key) {
         case SP_ATTR_X:      attr_vector = &attributes.x; break;
         case SP_ATTR_Y:      attr_vector = &attributes.y; break;
@@ -673,15 +673,8 @@ bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value)
         default: return false;
     }
 
-    GList *list_base = sp_svg_length_list_read(value);     // FIXME: sp_svg_length_list_read() amalgamates repeated separators. This prevents unset values.
-    // simple GList to std::vector<> converter:
-    attr_vector->clear();
-    attr_vector->reserve(g_list_length(list_base));
-    for (GList *list = list_base ; list ; list = list->next) {
-        attr_vector->push_back(*reinterpret_cast<SPSVGLength*>(list->data));
-        g_free(list->data);
-    }
-    g_list_free(list_base);
+    // FIXME: sp_svg_length_list_read() amalgamates repeated separators. This prevents unset values.
+    *attr_vector = sp_svg_length_list_read(value);
     return true;
 }
 
@@ -694,7 +687,7 @@ void TextTagAttributes::writeTo(Inkscape::XML::Node *node) const
     writeSingleAttribute(node, "rotate", attributes.rotate);
 }
 
-void TextTagAttributes::writeSingleAttribute(Inkscape::XML::Node *node, gchar const *key, std::vector<SPSVGLength> const &attr_vector)
+void TextTagAttributes::writeSingleAttribute(Inkscape::XML::Node *node, gchar const *key, std::vector<SVGLength> const &attr_vector)
 {
     if (attr_vector.empty())
         node->setAttribute(key, NULL);
@@ -703,7 +696,7 @@ void TextTagAttributes::writeSingleAttribute(Inkscape::XML::Node *node, gchar co
         gchar single_value_string[32];
 
         // FIXME: this has no concept of unset values because sp_svg_length_list_read() can't read them back in
-        for (std::vector<SPSVGLength>::const_iterator it = attr_vector.begin() ; it != attr_vector.end() ; it++) {
+        for (std::vector<SVGLength>::const_iterator it = attr_vector.begin() ; it != attr_vector.end() ; it++) {
             g_ascii_formatd(single_value_string, sizeof (single_value_string), "%.8g", it->computed);
             if (!string.empty()) string += ' ';
             string += single_value_string;
@@ -741,7 +734,7 @@ void TextTagAttributes::mergeInto(Inkscape::Text::Layout::OptionalTextTagAttrs *
     mergeSingleAttribute(&output->rotate, parent_attrs.rotate, parent_attrs_offset, copy_dxdyrotate ? &attributes.rotate : NULL);
 }
 
-void TextTagAttributes::mergeSingleAttribute(std::vector<SPSVGLength> *output_list, std::vector<SPSVGLength> const &parent_list, unsigned parent_offset, std::vector<SPSVGLength> const *overlay_list)
+void TextTagAttributes::mergeSingleAttribute(std::vector<SVGLength> *output_list, std::vector<SVGLength> const &parent_list, unsigned parent_offset, std::vector<SVGLength> const *overlay_list)
 {
     if (overlay_list == NULL) {
         output_list->resize(std::max(0, (int)parent_list.size() - (int)parent_offset));
@@ -751,7 +744,7 @@ void TextTagAttributes::mergeSingleAttribute(std::vector<SPSVGLength> *output_li
         output_list->reserve(std::max((int)parent_list.size() - (int)parent_offset, (int)overlay_list->size()));
         unsigned overlay_offset = 0;
         while (parent_offset < parent_list.size() || overlay_offset < overlay_list->size()) {
-            SPSVGLength const *this_item;
+            SVGLength const *this_item;
             if (overlay_offset < overlay_list->size()) {
                 this_item = &(*overlay_list)[overlay_offset];
                 overlay_offset++;
@@ -777,7 +770,7 @@ void TextTagAttributes::erase(unsigned start_index, unsigned n)
     eraseSingleAttribute(&attributes.rotate, start_index, n);
 }
 
-void TextTagAttributes::eraseSingleAttribute(std::vector<SPSVGLength> *attr_vector, unsigned start_index, unsigned n)
+void TextTagAttributes::eraseSingleAttribute(std::vector<SVGLength> *attr_vector, unsigned start_index, unsigned n)
 {
     if (attr_vector->size() <= start_index) return;
     if (attr_vector->size() <= start_index + n)
@@ -798,10 +791,10 @@ void TextTagAttributes::insert(unsigned start_index, unsigned n)
     insertSingleAttribute(&attributes.rotate, start_index, n, false);
 }
 
-void TextTagAttributes::insertSingleAttribute(std::vector<SPSVGLength> *attr_vector, unsigned start_index, unsigned n, bool is_xy)
+void TextTagAttributes::insertSingleAttribute(std::vector<SVGLength> *attr_vector, unsigned start_index, unsigned n, bool is_xy)
 {
     if (attr_vector->size() <= start_index) return;
-    SPSVGLength zero_length;
+    SVGLength zero_length;
     zero_length = 0.0;
     attr_vector->insert(attr_vector->begin() + start_index, n, zero_length);
     if (is_xy) {
@@ -823,7 +816,7 @@ void TextTagAttributes::split(unsigned index, TextTagAttributes *second)
     splitSingleAttribute(&attributes.rotate, index, &second->attributes.rotate, true);
 }
 
-void TextTagAttributes::splitSingleAttribute(std::vector<SPSVGLength> *first_vector, unsigned index, std::vector<SPSVGLength> *second_vector, bool trimZeros)
+void TextTagAttributes::splitSingleAttribute(std::vector<SVGLength> *first_vector, unsigned index, std::vector<SVGLength> *second_vector, bool trimZeros)
 {
     second_vector->clear();
     if (first_vector->size() <= index) return;
@@ -831,7 +824,7 @@ void TextTagAttributes::splitSingleAttribute(std::vector<SPSVGLength> *first_vec
     std::copy(first_vector->begin() + index, first_vector->end(), second_vector->begin());
     first_vector->resize(index);
     if (trimZeros)
-        while (!first_vector->empty() && (!first_vector->back().set || first_vector->back().value == 0.0))
+        while (!first_vector->empty() && (!first_vector->back()._set || first_vector->back().value == 0.0))
             first_vector->resize(first_vector->size() - 1);
 }
 
@@ -849,7 +842,7 @@ void TextTagAttributes::join(TextTagAttributes const &first, TextTagAttributes c
     joinSingleAttribute(&attributes.rotate, first.attributes.rotate, second.attributes.rotate, second_index);
 }
 
-void TextTagAttributes::joinSingleAttribute(std::vector<SPSVGLength> *dest_vector, std::vector<SPSVGLength> const &first_vector, std::vector<SPSVGLength> const &second_vector, unsigned second_index)
+void TextTagAttributes::joinSingleAttribute(std::vector<SVGLength> *dest_vector, std::vector<SVGLength> const &first_vector, std::vector<SVGLength> const &second_vector, unsigned second_index)
 {
     if (second_vector.empty())
         *dest_vector = first_vector;
@@ -857,7 +850,7 @@ void TextTagAttributes::joinSingleAttribute(std::vector<SPSVGLength> *dest_vecto
         dest_vector->resize(second_index + second_vector.size());
         if (first_vector.size() < second_index) {
             std::copy(first_vector.begin(), first_vector.end(), dest_vector->begin());
-            SPSVGLength zero_length;
+            SVGLength zero_length;
             zero_length = 0.0;
             std::fill(dest_vector->begin() + first_vector.size(), dest_vector->begin() + second_index, zero_length);
         } else
@@ -868,7 +861,7 @@ void TextTagAttributes::joinSingleAttribute(std::vector<SPSVGLength> *dest_vecto
 
 void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, double scale_y, bool extend_zero_length)
 {
-    SPSVGLength zero_length;
+    SVGLength zero_length;
     zero_length = 0.0;
 
     /* edge testcases for this code:
@@ -898,15 +891,15 @@ void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, doub
             attributes.y[i] = point[NR::Y];
         }
     }
-    for (std::vector<SPSVGLength>::iterator it = attributes.dx.begin() ; it != attributes.dx.end() ; it++)
+    for (std::vector<SVGLength>::iterator it = attributes.dx.begin() ; it != attributes.dx.end() ; it++)
         *it = it->computed * scale_x;
-    for (std::vector<SPSVGLength>::iterator it = attributes.dy.begin() ; it != attributes.dy.end() ; it++)
+    for (std::vector<SVGLength>::iterator it = attributes.dy.begin() ; it != attributes.dy.end() ; it++)
         *it = it->computed * scale_y;
 }
 
 void TextTagAttributes::addToDxDy(unsigned index, NR::Point const &adjust)
 {
-    SPSVGLength zero_length;
+    SVGLength zero_length;
     zero_length = 0.0;
 
     if (adjust[NR::X] != 0.0) {
@@ -921,7 +914,7 @@ void TextTagAttributes::addToDxDy(unsigned index, NR::Point const &adjust)
 
 void TextTagAttributes::addToRotate(unsigned index, double delta)
 {
-    SPSVGLength zero_length;
+    SVGLength zero_length;
     zero_length = 0.0;
 
     if (attributes.rotate.size() < index + 1) {

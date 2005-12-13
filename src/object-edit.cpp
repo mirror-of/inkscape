@@ -234,11 +234,11 @@ static void sp_rect_rx_set(SPItem *item, NR::Point const &p, NR::Point const &or
     if (state & GDK_CONTROL_MASK) {
         gdouble temp = MIN(rect->height.computed, rect->width.computed) / 2.0;
         rect->rx.computed = rect->ry.computed = CLAMP(rect->x.computed + rect->width.computed - p[NR::X], 0.0, temp);
-        rect->rx.set = rect->ry.set = TRUE;
+        rect->rx._set = rect->ry._set = true;
         
     } else {
         rect->rx.computed = CLAMP(rect->x.computed + rect->width.computed - p[NR::X], 0.0, rect->width.computed / 2.0);
-        rect->rx.set = TRUE;
+        rect->rx._set = true;
     }
     
     ((SPObject*)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -259,9 +259,9 @@ static void sp_rect_ry_set(SPItem *item, NR::Point const &p, NR::Point const &or
     if (state & GDK_CONTROL_MASK) {        
         gdouble temp = MIN(rect->height.computed, rect->width.computed) / 2.0;
         rect->rx.computed = rect->ry.computed = CLAMP(p[NR::Y] - rect->y.computed, 0.0, temp);
-        rect->ry.set = rect->rx.set = TRUE;
+        rect->ry._set = rect->rx._set = true;
     } else {
-        if (!rect->rx.set || rect->rx.computed == 0) {
+        if (!rect->rx._set || rect->rx.computed == 0) {
             rect->ry.computed = CLAMP(p[NR::Y] - rect->y.computed,
                                       0.0,
                                       MIN(rect->height.computed / 2.0, rect->width.computed / 2.0));
@@ -271,7 +271,7 @@ static void sp_rect_ry_set(SPItem *item, NR::Point const &p, NR::Point const &or
                                       rect->height.computed / 2.0);
         }
 
-        rect->ry.set = TRUE;
+        rect->ry._set = true;
     }
 
     ((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -323,11 +323,11 @@ static void sp_rect_clamp_radii(SPRect *rect)
     // clamp rounding radii so that they do not exceed width/height
     if (2 * rect->rx.computed > rect->width.computed) {
         rect->rx.computed = 0.5 * rect->width.computed;
-        rect->rx.set = TRUE;
+        rect->rx._set = true;
     }
     if (2 * rect->ry.computed > rect->height.computed) {
         rect->ry.computed = 0.5 * rect->height.computed;
-        rect->ry.set = TRUE;
+        rect->ry._set = true;
     }
 }
 
@@ -387,13 +387,13 @@ static void sp_rect_wh_set_internal(SPRect *rect, NR::Point const &p, NR::Point 
             }
         }
 
-        rect->width.set = rect->height.set = TRUE;
+        rect->width._set = rect->height._set = true;
 
     } else {
         // move freely
         rect->width.computed = MAX(s[NR::X] - rect->x.computed, 0);
         rect->height.computed = MAX(s[NR::Y] - rect->y.computed, 0);
-        rect->width.set = rect->height.set = TRUE;
+        rect->width._set = rect->height._set = true;
     }
 
     sp_rect_clamp_radii(rect);
@@ -469,7 +469,7 @@ static void sp_rect_xy_set(SPItem *item, NR::Point const &p, NR::Point const &or
 
         }
 
-        rect->width.set = rect->height.set = rect->x.set = rect->y.set = TRUE;
+        rect->width._set = rect->height._set = rect->x._set = rect->y._set = true;
 
     } else {
         // move freely
@@ -477,7 +477,7 @@ static void sp_rect_xy_set(SPItem *item, NR::Point const &p, NR::Point const &or
         rect->width.computed = MAX(w_orig - minx, 0);
         rect->y.computed = MIN(s[NR::Y], opposite_y);
         rect->height.computed = MAX(h_orig - miny, 0);
-        rect->width.set = rect->height.set = rect->x.set = rect->y.set = TRUE;
+        rect->width._set = rect->height._set = rect->x._set = rect->y._set = true;
     }
 
     sp_rect_clamp_radii(rect);

@@ -121,10 +121,10 @@ sp_root_init(SPRoot *root)
     root->version.inkscape = root->original.inkscape =
         root->version.sodipodi = root->original.sodipodi = zero_version;
 
-    sp_svg_length_unset(&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-    sp_svg_length_unset(&root->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-    sp_svg_length_unset(&root->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
-    sp_svg_length_unset(&root->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
+    root->x.unset();
+    root->y.unset();
+    root->width.unset(SVGLength::PERCENT, 1.0, 1.0);
+    root->height.unset(SVGLength::PERCENT, 1.0, 1.0);
 
     /* nr_matrix_set_identity(&root->viewbox); */
     root->viewBox_set = FALSE;
@@ -214,32 +214,32 @@ sp_root_set(SPObject *object, unsigned int key, gchar const *value)
             }
             break;
         case SP_ATTR_X:
-            if (!sp_svg_length_read_absolute(value, &root->x)) {
+            if (!root->x.readAbsolute(value)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-                sp_svg_length_unset(&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
+                root->x.unset();
             }
             /* fixme: I am almost sure these do not require viewport flag (Lauris) */
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
         case SP_ATTR_Y:
-            if (!sp_svg_length_read_absolute(value, &root->y)) {
+            if (!root->y.readAbsolute(value)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-                sp_svg_length_unset(&root->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
+                root->y.unset();
             }
             /* fixme: I am almost sure these do not require viewport flag (Lauris) */
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
         case SP_ATTR_WIDTH:
-            if (!sp_svg_length_read_absolute(value, &root->width) || !(root->width.computed > 0.0)) {
+            if (!root->width.readAbsolute(value) || !(root->width.computed > 0.0)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-                sp_svg_length_unset(&root->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
+                root->width.unset(SVGLength::PERCENT, 1.0, 1.0);
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
         case SP_ATTR_HEIGHT:
-            if (!sp_svg_length_read_absolute(value, &root->height) || !(root->height.computed > 0.0)) {
+            if (!root->height.readAbsolute(value) || !(root->height.computed > 0.0)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-                sp_svg_length_unset(&root->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
+                root->height.unset(SVGLength::PERCENT, 1.0, 1.0);
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
@@ -412,16 +412,16 @@ sp_root_update(SPObject *object, SPCtx *ctx, guint flags)
     /* fixme: This will be invoked too often (Lauris) */
     /* fixme: We should calculate only if parent viewport has changed (Lauris) */
     /* If position is specified as percentage, calculate actual values */
-    if (root->x.unit == SP_SVG_UNIT_PERCENT) {
+    if (root->x.unit == SVGLength::PERCENT) {
         root->x.computed = root->x.value * (ictx->vp.x1 - ictx->vp.x0);
     }
-    if (root->y.unit == SP_SVG_UNIT_PERCENT) {
+    if (root->y.unit == SVGLength::PERCENT) {
         root->y.computed = root->y.value * (ictx->vp.y1 - ictx->vp.y0);
     }
-    if (root->width.unit == SP_SVG_UNIT_PERCENT) {
+    if (root->width.unit == SVGLength::PERCENT) {
         root->width.computed = root->width.value * (ictx->vp.x1 - ictx->vp.x0);
     }
-    if (root->height.unit == SP_SVG_UNIT_PERCENT) {
+    if (root->height.unit == SVGLength::PERCENT) {
         root->height.computed = root->height.value * (ictx->vp.y1 - ictx->vp.y0);
     }
 

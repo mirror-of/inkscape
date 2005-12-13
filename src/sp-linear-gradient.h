@@ -6,15 +6,15 @@
  */
 
 #include "sp-gradient.h"
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-linear-gradient-fns.h"
 
 /** Linear gradient. */
 struct SPLinearGradient : public SPGradient {
-    SPSVGLength x1;
-    SPSVGLength y1;
-    SPSVGLength x2;
-    SPSVGLength y2;
+    SVGLength x1;
+    SVGLength y1;
+    SVGLength x2;
+    SVGLength y2;
 };
 
 /// The SPLinearGradient vtable.

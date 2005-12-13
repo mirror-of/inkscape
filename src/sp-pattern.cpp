@@ -141,10 +141,10 @@ sp_pattern_init (SPPattern *pat)
 	pat->patternTransform = NR::identity();
 	pat->patternTransform_set = FALSE;
 
-	sp_svg_length_unset (&pat->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&pat->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&pat->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&pat->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	pat->x.unset();
+	pat->y.unset();
+	pat->width.unset();
+	pat->height.unset();
 
 	pat->viewBox_set = FALSE;
 }
@@ -238,27 +238,19 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	}
 	case SP_ATTR_X:
-		if (!sp_svg_length_read (value, &pat->x)) {
-			sp_svg_length_unset (&pat->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        pat->x.readOrUnset(value);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
-		if (!sp_svg_length_read (value, &pat->y)) {
-			sp_svg_length_unset (&pat->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        pat->y.readOrUnset(value);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
-		if (!sp_svg_length_read (value, &pat->width)) {
-			sp_svg_length_unset (&pat->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        pat->width.readOrUnset(value);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
-		if (!sp_svg_length_read (value, &pat->height)) {
-			sp_svg_length_unset (&pat->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        pat->height.readOrUnset(value);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_VIEWBOX: {
@@ -586,7 +578,7 @@ NR::Matrix const &pattern_patternTransform(SPPattern const *pat)
 gdouble pattern_x (SPPattern *pat)
 {
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->x.set)
+		if (pat_i->x._set)
 			return pat_i->x.computed;
 	}
 	return 0;
@@ -595,7 +587,7 @@ gdouble pattern_x (SPPattern *pat)
 gdouble pattern_y (SPPattern *pat)
 {
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->y.set)
+		if (pat_i->y._set)
 			return pat_i->y.computed;
 	}
 	return 0;
@@ -604,7 +596,7 @@ gdouble pattern_y (SPPattern *pat)
 gdouble pattern_width (SPPattern *pat)
 {
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->width.set)
+		if (pat_i->width._set)
 			return pat_i->width.computed;
 	}
 	return 0;
@@ -613,7 +605,7 @@ gdouble pattern_width (SPPattern *pat)
 gdouble pattern_height (SPPattern *pat)
 {
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->height.set)
+		if (pat_i->height._set)
 			return pat_i->height.computed;
 	}
 	return 0;

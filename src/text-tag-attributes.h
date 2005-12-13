@@ -4,7 +4,7 @@
 #include <vector>
 #include <glib/gtypes.h>
 #include "libnrtype/Layout-TNG.h"
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 
 namespace Inkscape {
 namespace XML {
@@ -110,24 +110,24 @@ private:
     /** Does the reverse of readSingleAttribute(), converting a vector<> to
     its SVG string representation and writing it in to \a node. Used by
     writeTo(). */
-    static void writeSingleAttribute(Inkscape::XML::Node *node, gchar const *key, std::vector<SPSVGLength> const &attr_vector);
+    static void writeSingleAttribute(Inkscape::XML::Node *node, gchar const *key, std::vector<SVGLength> const &attr_vector);
 
     /** Does mergeInto() for one member of #attributes. If \a overlay_list
     is NULL then it does a simple copy of parent elements, starting at
     \a parent_offset. */
-    static void mergeSingleAttribute(std::vector<SPSVGLength> *output_list, std::vector<SPSVGLength> const &parent_list, unsigned parent_offset, std::vector<SPSVGLength> const *overlay_list = NULL);
+    static void mergeSingleAttribute(std::vector<SVGLength> *output_list, std::vector<SVGLength> const &parent_list, unsigned parent_offset, std::vector<SVGLength> const *overlay_list = NULL);
 
     /// Does the work for erase().
-    static void eraseSingleAttribute(std::vector<SPSVGLength> *attr_vector, unsigned start_index, unsigned n);
+    static void eraseSingleAttribute(std::vector<SVGLength> *attr_vector, unsigned start_index, unsigned n);
 
     /// Does the work for insert().
-    static void insertSingleAttribute(std::vector<SPSVGLength> *attr_vector, unsigned start_index, unsigned n, bool is_xy);
+    static void insertSingleAttribute(std::vector<SVGLength> *attr_vector, unsigned start_index, unsigned n, bool is_xy);
 
     /// Does the work for split().
-    static void splitSingleAttribute(std::vector<SPSVGLength> *first_vector, unsigned index, std::vector<SPSVGLength> *second_vector, bool trimZeros);
+    static void splitSingleAttribute(std::vector<SVGLength> *first_vector, unsigned index, std::vector<SVGLength> *second_vector, bool trimZeros);
 
     /// Does the work for join().
-    static void joinSingleAttribute(std::vector<SPSVGLength> *dest_vector, std::vector<SPSVGLength> const &first_vector, std::vector<SPSVGLength> const &second_vector, unsigned second_index);
+    static void joinSingleAttribute(std::vector<SVGLength> *dest_vector, std::vector<SVGLength> const &first_vector, std::vector<SVGLength> const &second_vector, unsigned second_index);
 };
 
 

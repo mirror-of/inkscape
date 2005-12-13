@@ -851,7 +851,7 @@ void text_wrapper::KernXForLastAddition(GList *i_kern_x, double scale)
     int last_len = uni32_length - last_addition;
     GList *l = i_kern_x;
     for (int i = 0; i < last_len && l && l->data; i++, l = l->next) {
-        kern_x[last_addition + i] = ((SPSVGLength *) l->data)->computed * scale;
+        kern_x[last_addition + i] = ((SVGLength *) l->data)->computed * scale;
     }
 }
 
@@ -865,7 +865,7 @@ void text_wrapper::KernYForLastAddition(GList *i_kern_y, double scale)
     int last_len = uni32_length - last_addition;
     GList *l = i_kern_y;
     for (int i = 0; i < last_len && l && l->data; i++, l = l->next) {
-        kern_y[last_addition + i] = ((SPSVGLength *) l->data)->computed * scale;
+        kern_y[last_addition + i] = ((SVGLength *) l->data)->computed * scale;
     }
 }
 

@@ -90,10 +90,10 @@ sp_line_class_init (SPLineClass *klass)
 static void
 sp_line_init (SPLine * line)
 {
-	sp_svg_length_unset (&line->x1, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&line->y1, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&line->x2, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&line->y2, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	line->x1.unset();
+	line->y1.unset();
+	line->x2.unset();
+	line->y2.unset();
 }
 
 
@@ -119,27 +119,19 @@ sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 
 	switch (key) {
 	case SP_ATTR_X1:
-		if (!sp_svg_length_read (value, &line->x1)) {
-			sp_svg_length_unset (&line->x1, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        line->x1.readOrUnset(value);
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y1:
-		if (!sp_svg_length_read (value, &line->y1)) {
-			sp_svg_length_unset (&line->y1, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        line->y1.readOrUnset(value);
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_X2:
-		if (!sp_svg_length_read (value, &line->x2)) {
-			sp_svg_length_unset (&line->x2, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        line->x2.readOrUnset(value);
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y2:
-		if (!sp_svg_length_read (value, &line->y2)) {
-			sp_svg_length_unset (&line->y2, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        line->y2.readOrUnset(value);
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
@@ -159,10 +151,10 @@ sp_line_update (SPObject *object, SPCtx *ctx, guint flags)
  		double const d = 1.0 / NR::expansion(((SPItemCtx const *) ctx)->i2vp);
 		double const em = style->font_size.computed;
 		double const ex = em * 0.5;  // fixme: get from pango or libnrtype.
- 		sp_svg_length_update(&line->x1, em, ex, d);
- 		sp_svg_length_update(&line->x2, em, ex, d);
- 		sp_svg_length_update(&line->y1, em, ex, d);
- 		sp_svg_length_update(&line->y2, em, ex, d);
+ 		line->x1.update(em, ex, d);
+ 		line->x2.update(em, ex, d);
+ 		line->y1.update(em, ex, d);
+ 		line->y2.update(em, ex, d);
 
 		sp_shape_set_shape ((SPShape *) object);
 	}

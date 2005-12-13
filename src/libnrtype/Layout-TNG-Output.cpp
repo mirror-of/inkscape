@@ -20,7 +20,7 @@
 #include "font-instance.h"
 #include "display/curve.h"
 #include <pango/pango-types.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 
 namespace Inkscape {
 namespace Text {
@@ -281,12 +281,12 @@ Glib::ustring Layout::dumpAsText() const
     return result;
 }
 
-void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
+void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
 {
     double offset = 0.0;
 
-    if (startOffset.set) {
-        if (startOffset.unit == SP_SVG_UNIT_PERCENT)
+    if (startOffset._set) {
+        if (startOffset.unit == SVGLength::PERCENT)
             offset = startOffset.computed * const_cast<Path&>(path).Length();
         else
             offset = startOffset.computed;

@@ -166,7 +166,7 @@ sp_star_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 static void
 sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPSVGLengthUnit unit;
+	SVGLength::Unit unit;
 
 	SPStar *star = SP_STAR (object);
 
@@ -183,27 +183,27 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_SODIPODI_CX:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->center[NR::X]) ||
-		    (unit == SP_SVG_UNIT_EM) ||
-		    (unit == SP_SVG_UNIT_EX) ||
-		    (unit == SP_SVG_UNIT_PERCENT)) {
+		    (unit == SVGLength::EM) ||
+		    (unit == SVGLength::EX) ||
+		    (unit == SVGLength::PERCENT)) {
 			star->center[NR::X] = 0.0;
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CY:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->center[NR::Y]) ||
-		    (unit == SP_SVG_UNIT_EM) ||
-		    (unit == SP_SVG_UNIT_EX) ||
-		    (unit == SP_SVG_UNIT_PERCENT)) {
+		    (unit == SVGLength::EM) ||
+		    (unit == SVGLength::EX) ||
+		    (unit == SVGLength::PERCENT)) {
 			star->center[NR::Y] = 0.0;
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_R1:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->r[0]) ||
-		    (unit == SP_SVG_UNIT_EM) ||
-		    (unit == SP_SVG_UNIT_EX) ||
-		    (unit == SP_SVG_UNIT_PERCENT)) {
+		    (unit == SVGLength::EM) ||
+		    (unit == SVGLength::EX) ||
+		    (unit == SVGLength::PERCENT)) {
 			star->r[0] = 1.0;
 		}
 		/* fixme: Need CLAMP (Lauris) */
@@ -211,9 +211,9 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_SODIPODI_R2:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->r[1]) ||
-		    (unit == SP_SVG_UNIT_EM) ||
-		    (unit == SP_SVG_UNIT_EX) ||
-		    (unit == SP_SVG_UNIT_PERCENT)) {
+		    (unit == SVGLength::EM) ||
+		    (unit == SVGLength::EX) ||
+		    (unit == SVGLength::PERCENT)) {
 			star->r[1] = 0.0;
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

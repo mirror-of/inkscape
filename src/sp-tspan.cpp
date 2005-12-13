@@ -334,7 +334,7 @@ sp_textpath_init(SPTextPath *textpath)
 {
     new (&textpath->attributes) TextTagAttributes;
 	
-    textpath->startOffset.set = 0;
+    textpath->startOffset._set = false;
     textpath->originalPath = NULL;
     textpath->isUpdating=false;
     // set up the uri reference
@@ -404,9 +404,7 @@ sp_textpath_set(SPObject *object, unsigned key, gchar const *value)
                 textpath->sourcePath->link((char*)value);
                 break;
             case SP_ATTR_STARTOFFSET:
-                if (!sp_svg_length_read(value, &textpath->startOffset)) {
-                    sp_svg_length_unset(&textpath->startOffset, SP_SVG_UNIT_NONE, 0.0, 0.0);
-                }
+                textpath->startOffset.readOrUnset(value);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 break;
             default:
@@ -488,8 +486,8 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 	
     textpath->attributes.writeTo(repr);
-    if (textpath->startOffset.set) {
-        if (textpath->startOffset.unit == SP_SVG_UNIT_PERCENT) {
+    if (textpath->startOffset._set) {
+        if (textpath->startOffset.unit == SVGLength::PERCENT) {
 	        Inkscape::SVGOStringStream os;
             os << (textpath->startOffset.computed * 100.0) << "%";
             SP_OBJECT_REPR(textpath)->setAttribute("startOffset", os.str().c_str());

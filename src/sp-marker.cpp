@@ -174,27 +174,19 @@ sp_marker_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_REFX:
-		if (!sp_svg_length_read (value, &marker->refX)) {
-			sp_svg_length_unset (&marker->refX, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        marker->refX.readOrUnset(value);
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_REFY:
-		if (!sp_svg_length_read (value, &marker->refY)) {
-			sp_svg_length_unset (&marker->refX, SP_SVG_UNIT_NONE, 0.0, 0.0);
-		}
+	        marker->refY.readOrUnset(value);
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_MARKERWIDTH:
-		if (!sp_svg_length_read (value, &marker->markerWidth)) {
-			sp_svg_length_unset (&marker->markerWidth, SP_SVG_UNIT_NONE, 3.0, 3.0);
-		}
+	        marker->markerWidth.readOrUnset(value, SVGLength::NONE, 3.0, 3.0); 
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_MARKERHEIGHT:
-		if (!sp_svg_length_read (value, &marker->markerHeight)) {
-			sp_svg_length_unset (&marker->markerHeight, SP_SVG_UNIT_NONE, 3.0, 3.0);
-		}
+	        marker->markerHeight.readOrUnset(value, SVGLength::NONE, 3.0, 3.0); 
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_ORIENT:
@@ -467,22 +459,22 @@ sp_marker_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	} else {
 		repr->setAttribute("markerUnits", NULL);
 	}
-	if (marker->refX.set) {
+	if (marker->refX._set) {
 		sp_repr_set_svg_double(repr, "refX", marker->refX.computed);
 	} else {
 		repr->setAttribute("refX", NULL);
 	}
-	if (marker->refY.set) {
+	if (marker->refY._set) {
 		sp_repr_set_svg_double (repr, "refY", marker->refY.computed);
 	} else {
 		repr->setAttribute("refY", NULL);
 	}
-	if (marker->markerWidth.set) {
+	if (marker->markerWidth._set) {
 		sp_repr_set_svg_double (repr, "markerWidth", marker->markerWidth.computed);
 	} else {
 		repr->setAttribute("markerWidth", NULL);
 	}
-	if (marker->markerHeight.set) {
+	if (marker->markerHeight._set) {
 		sp_repr_set_svg_double (repr, "markerHeight", marker->markerHeight.computed);
 	} else {
 		repr->setAttribute("markerHeight", NULL);

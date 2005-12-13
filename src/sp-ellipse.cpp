@@ -127,10 +127,10 @@ static void sp_genericellipse_class_init(SPGenericEllipseClass *klass)
 static void
 sp_genericellipse_init(SPGenericEllipse *ellipse)
 {
-    sp_svg_length_unset(&ellipse->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
-    sp_svg_length_unset(&ellipse->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
-    sp_svg_length_unset(&ellipse->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
-    sp_svg_length_unset(&ellipse->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
+    ellipse->cx.unset();
+    ellipse->cy.unset();
+    ellipse->rx.unset();
+    ellipse->ry.unset();
 
     ellipse->start = 0.0;
     ellipse->end = SP_2PI;
@@ -146,10 +146,10 @@ sp_genericellipse_update(SPObject *object, SPCtx *ctx, guint flags)
         double const d = 1.0 / NR::expansion(((SPItemCtx const *) ctx)->i2vp);
         double const em = style->font_size.computed;
         double const ex = em * 0.5; // fixme: get from pango or libnrtype
-        sp_svg_length_update(&ellipse->cx, em, ex, d);
-        sp_svg_length_update(&ellipse->cy, em, ex, d);
-        sp_svg_length_update(&ellipse->rx, em, ex, d);
-        sp_svg_length_update(&ellipse->ry, em, ex, d);
+        ellipse->cx.update(em, ex, d);
+        ellipse->cy.update(em, ex, d);
+        ellipse->rx.update(em, ex, d);
+        ellipse->ry.update(em, ex, d);
         sp_shape_set_shape((SPShape *) object);
     }
 
@@ -403,26 +403,22 @@ sp_ellipse_set(SPObject *object, unsigned int key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_CX:
-            if (!sp_svg_length_read(value, &ellipse->cx)) {
-                sp_svg_length_unset(&ellipse->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            ellipse->cx.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_CY:
-            if (!sp_svg_length_read(value, &ellipse->cy)) {
-                sp_svg_length_unset(&ellipse->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            ellipse->cy.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_RX:
-            if (!sp_svg_length_read(value, &ellipse->rx) || (ellipse->rx.value <= 0.0)) {
-                sp_svg_length_unset(&ellipse->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!ellipse->rx.read(value) || (ellipse->rx.value <= 0.0)) {
+                ellipse->rx.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_RY:
-            if (!sp_svg_length_read(value, &ellipse->ry) || (ellipse->ry.value <= 0.0)) {
-                sp_svg_length_unset(&ellipse->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!ellipse->ry.read(value) || (ellipse->ry.value <= 0.0)) {
+                ellipse->ry.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
@@ -553,20 +549,16 @@ sp_circle_set(SPObject *object, unsigned int key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_CX:
-            if (!sp_svg_length_read(value, &ge->cx)) {
-                sp_svg_length_unset(&ge->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            ge->cx.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_CY:
-            if (!sp_svg_length_read(value, &ge->cy)) {
-                sp_svg_length_unset(&ge->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            ge->cy.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_R:
-            if (!sp_svg_length_read(value, &ge->rx) || (ge->rx.value <= 0.0)) {
-                sp_svg_length_unset(&ge->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!ge->rx.read(value) || ge->rx.value <= 0.0) {
+                ge->rx.unset();
             }
             ge->ry = ge->rx;
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -756,26 +748,22 @@ sp_arc_set(SPObject *object, unsigned int key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_SODIPODI_CX:
-            if (!sp_svg_length_read(value, &ge->cx)) {
-                sp_svg_length_unset(&ge->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            ge->cx.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_SODIPODI_CY:
-            if (!sp_svg_length_read(value, &ge->cy)) {
-                sp_svg_length_unset(&ge->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            ge->cy.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_SODIPODI_RX:
-            if (!sp_svg_length_read(value, &ge->rx) || (ge->rx.computed <= 0.0)) {
-                sp_svg_length_unset(&ge->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!ge->rx.read(value) || ge->rx.computed <= 0.0) {
+                ge->rx.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_SODIPODI_RY:
-            if (!sp_svg_length_read(value, &ge->ry) || (ge->ry.computed <= 0.0)) {
-                sp_svg_length_unset(&ge->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!ge->ry.read(value) || ge->ry.computed <= 0.0) {
+                ge->ry.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;

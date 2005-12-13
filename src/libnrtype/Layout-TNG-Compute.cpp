@@ -12,7 +12,7 @@
 #include "Layout-TNG.h"
 #include "style.h"
 #include "font-instance.h"
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-object.h"
 #include "Layout-TNG-Scanline-Maker.h"
 #include "FontFactory.h"
@@ -125,7 +125,7 @@ class Layout::Calculator
         double line_height_multiplier;  /// calculated from the font-height css property
         unsigned text_bytes;
         unsigned char_index_in_para;    /// the index of the first character in this span in the paragraph, for looking up char_attributes
-        SPSVGLength x, y, dx, dy, rotate;  // these are reoriented copies of the <tspan> attributes. We change span when we encounter one.
+        SVGLength x, y, dx, dy, rotate;  // these are reoriented copies of the <tspan> attributes. We change span when we encounter one.
 
         UnbrokenSpan() : glyph_string(NULL) {}
         void free() {if (glyph_string) pango_glyph_string_free(glyph_string); glyph_string = NULL;}
@@ -238,7 +238,7 @@ class Layout::Calculator
     {
         span->setZero();
 
-        if (span->start.iter_span->dx.set && span->start.char_byte == 0)
+        if (span->start.iter_span->dx._set && span->start.char_byte == 0)
             span->width += span->start.iter_span->dx.computed;
 
         if (span->start.iter_span->pango_item_index == -1) {
@@ -426,7 +426,7 @@ class Layout::Calculator
             // we may also have y move orders to deal with here (dx, dy and rotate are done per span)
             if (!it_chunk->broken_spans.empty()    // this one only happens for empty paragraphs
                 && it_chunk->broken_spans.front().start.char_byte == 0
-                && it_chunk->broken_spans.front().start.iter_span->y.set) {
+                && it_chunk->broken_spans.front().start.iter_span->y._set) {
                 // if this is the start of a line, we should change the baseline rather than each glyph individually
                 if (_flow._characters.empty() || _flow._characters.back().chunk(&_flow).in_line != _flow._lines.size() - 1) {
                     new_line.baseline_y = it_chunk->broken_spans.front().start.iter_span->y.computed;
@@ -460,9 +460,9 @@ class Layout::Calculator
 
                 if (it_span->start.char_byte == 0) {
                     // start of an unbroken span, we might have dx, dy or rotate still to process (x and y are done per chunk)
-                    if (unbroken_span.dx.set) x += unbroken_span.dx.computed;
-                    if (unbroken_span.dy.set) _y_offset += unbroken_span.dy.computed;
-                    if (unbroken_span.rotate.set) glyph_rotate = unbroken_span.rotate.computed * (M_PI/180);
+                    if (unbroken_span.dx._set) x += unbroken_span.dx.computed;
+                    if (unbroken_span.dy._set) _y_offset += unbroken_span.dy.computed;
+                    if (unbroken_span.rotate._set) glyph_rotate = unbroken_span.rotate.computed * (M_PI/180);
                 }
 
                 if (_flow._input_stream[unbroken_span.input_index]->Type() == TEXT_SOURCE
@@ -1001,11 +1001,11 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 new_span.input_index = input_index;
 
                 // cut at <tspan> attribute changes as well
-                new_span.x.set = false;
-                new_span.y.set = false;
-                new_span.dx.set = false;
-                new_span.dy.set = false;
-                new_span.rotate.set = false;
+                new_span.x._set = false;
+                new_span.y._set = false;
+                new_span.dx._set = false;
+                new_span.dy._set = false;
+                new_span.rotate._set = false;
                 if (_block_progression == TOP_TO_BOTTOM || _block_progression == BOTTOM_TO_TOP) {
                     if (text_source->x.size()  > char_index_in_source) new_span.x  = text_source->x[char_index_in_source];
                     if (text_source->y.size()  > char_index_in_source) new_span.y  = text_source->y[char_index_in_source];
@@ -1018,7 +1018,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     if (text_source->dy.size() > char_index_in_source) new_span.dx = text_source->dy[char_index_in_source];
                 }
                 if (text_source->rotate.size() > char_index_in_source) new_span.rotate = text_source->rotate[char_index_in_source];
-                if (input_index == 0 && para->unbroken_spans.empty() && !new_span.y.set && _flow._input_wrap_shapes.empty()) {
+                if (input_index == 0 && para->unbroken_spans.empty() && !new_span.y._set && _flow._input_wrap_shapes.empty()) {
                     // if we don't set an explicit y some of the automatic wrapping code takes over and moves the text vertically
                     // so that the top of the letters is at zero, not the baseline
                     new_span.y = 0.0;
@@ -1031,11 +1031,11 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     if (   i >= text_source->x.size() && i >= text_source->y.size()
                         && i >= text_source->dx.size() && i >= text_source->dy.size()
                         && i >= text_source->rotate.size()) break;
-                    if (   (text_source->x.size()  > i && text_source->x[i].set)
-                        || (text_source->y.size()  > i && text_source->y[i].set)
-                        || (text_source->dx.size() > i && text_source->dx[i].set && text_source->dx[i].computed != 0.0)
-                        || (text_source->dy.size() > i && text_source->dy[i].set && text_source->dy[i].computed != 0.0)
-                        || (text_source->rotate.size() > i && text_source->rotate[i].set
+                    if (   (text_source->x.size()  > i && text_source->x[i]._set)
+                        || (text_source->y.size()  > i && text_source->y[i]._set)
+                        || (text_source->dx.size() > i && text_source->dx[i]._set && text_source->dx[i].computed != 0.0)
+                        || (text_source->dy.size() > i && text_source->dy[i]._set && text_source->dy[i].computed != 0.0)
+                        || (text_source->rotate.size() > i && text_source->rotate[i]._set
                             && (i == 0 || text_source->rotate[i].computed != text_source->rotate[i - 1].computed))) {
                         new_span.text_bytes = iter_text.base() - new_span.input_stream_first_character.base();
                         break;
@@ -1229,7 +1229,7 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
         new_span.start = new_span.end;
 
         // force a chunk change at x or y attribute change
-        if ((new_span.start.iter_span->x.set || new_span.start.iter_span->y.set) && new_span.start.char_byte == 0) {
+        if ((new_span.start.iter_span->x._set || new_span.start.iter_span->y._set) && new_span.start.char_byte == 0) {
 
             if (new_span.start.iter_span != start_span_pos.iter_span)
                 chunk_info->push_back(new_chunk);
@@ -1238,7 +1238,7 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
             new_chunk.text_width = 0.0;
             new_chunk.whitespace_count = 0;
             new_chunk.broken_spans.clear();
-            if (new_span.start.iter_span->x.set) new_chunk.x = new_span.start.iter_span->x.computed;
+            if (new_span.start.iter_span->x._set) new_chunk.x = new_span.start.iter_span->x.computed;
             // y doesn't need to be done until output time
         }
 
@@ -1479,8 +1479,8 @@ void Layout::_calculateCursorShapeForEmpty()
     _empty_cursor_shape.rotation = caret_slope;
 
     if (_input_wrap_shapes.empty()) {
-        _empty_cursor_shape.position = NR::Point(text_source->x.empty() || !text_source->x.front().set ? 0.0 : text_source->x.front().computed,
-                                                 text_source->y.empty() || !text_source->y.front().set ? 0.0 : text_source->y.front().computed);
+        _empty_cursor_shape.position = NR::Point(text_source->x.empty() || !text_source->x.front()._set ? 0.0 : text_source->x.front().computed,
+                                                 text_source->y.empty() || !text_source->y.front()._set ? 0.0 : text_source->y.front().computed);
     } else {
         Direction block_progression = text_source->styleGetBlockProgression();
         ShapeScanlineMaker scanline_maker(_input_wrap_shapes.front().shape, block_progression);

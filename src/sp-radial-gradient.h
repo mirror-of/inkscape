@@ -7,16 +7,16 @@
 
 #include <glib/gtypes.h>
 #include "sp-gradient.h"
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-radial-gradient-fns.h"
 
 /** Radial gradient. */
 struct SPRadialGradient : public SPGradient {
-    SPSVGLength cx;
-    SPSVGLength cy;
-    SPSVGLength r;
-    SPSVGLength fx;
-    SPSVGLength fy;
+    SVGLength cx;
+    SVGLength cy;
+    SVGLength r;
+    SVGLength fx;
+    SVGLength fy;
 };
 
 /// The SPRadialGradient vtable.

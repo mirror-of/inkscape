@@ -433,7 +433,7 @@ sp_document_set_width (SPDocument *document, gdouble width, const SPUnit *unit)
 {
     SPRoot *root = SP_ROOT(document->root);
 
-    if (root->width.unit == SP_SVG_UNIT_PERCENT && root->viewBox_set) { // set to viewBox=
+    if (root->width.unit == SVGLength::PERCENT && root->viewBox_set) { // set to viewBox=
         root->viewBox.x1 = root->viewBox.x0 + sp_units_get_pixels (width, *unit);
     } else { // set to width=
         root->width.computed = sp_units_get_pixels (width, *unit);
@@ -441,10 +441,10 @@ sp_document_set_width (SPDocument *document, gdouble width, const SPUnit *unit)
          * cm when writing */
         if (!strcmp(unit->abbr, "m")) {
             root->width.value = 100*width;
-            root->width.unit = SP_SVG_UNIT_CM;
+            root->width.unit = SVGLength::CM;
         } else {
             root->width.value = width;
-            root->width.unit = (SPSVGLengthUnit) sp_unit_get_svg_unit(unit);
+            root->width.unit = (SVGLength::Unit) sp_unit_get_svg_unit(unit);
         }
     }
 
@@ -455,7 +455,7 @@ void sp_document_set_height (SPDocument * document, gdouble height, const SPUnit
 {
     SPRoot *root = SP_ROOT(document->root);
 
-    if (root->height.unit == SP_SVG_UNIT_PERCENT && root->viewBox_set) { // set to viewBox=
+    if (root->height.unit == SVGLength::PERCENT && root->viewBox_set) { // set to viewBox=
         root->viewBox.y1 = root->viewBox.y0 + sp_units_get_pixels (height, *unit);
     } else { // set to height=
         root->height.computed = sp_units_get_pixels (height, *unit);
@@ -463,10 +463,10 @@ void sp_document_set_height (SPDocument * document, gdouble height, const SPUnit
          * cm when writing */
         if (!strcmp(unit->abbr, "m")) {
             root->height.value = 100*height;
-            root->height.unit = SP_SVG_UNIT_CM;
+            root->height.unit = SVGLength::CM;
         } else {
             root->height.value = height;
-            root->height.unit = (SPSVGLengthUnit) sp_unit_get_svg_unit(unit);
+            root->height.unit = (SVGLength::Unit) sp_unit_get_svg_unit(unit);
         }
     }
 

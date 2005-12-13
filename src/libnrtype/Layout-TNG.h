@@ -23,7 +23,7 @@ class SPStyle;
 class Shape;
 class NRArenaGroup;
 class SPPrintContext;
-class SPSVGLength;
+class SVGLength;
 class Path;
 class SPCurve;
 class font_instance;
@@ -100,7 +100,7 @@ Comments:
   The SVG spec allows you to do this as long as intermediate calculations
   are done double. Very very long lines might not finish precisely where
   you want, but that's to be expected with any typesetting. Also,
-  SPSVGLength only uses floats.
+  SVGLength only uses floats.
 - If you look at the six arrays for holding the output data you'll realise
   that there's no O(1) way to drill down from a paragraph to find its
   starting glyph. This was a conscious decision to reduce complexity and
@@ -150,11 +150,11 @@ public:
     the caller to deal with the inheritance of these values using its
     knowledge of the parse tree. */
     struct OptionalTextTagAttrs {
-        std::vector<SPSVGLength> x;
-        std::vector<SPSVGLength> y;
-        std::vector<SPSVGLength> dx;
-        std::vector<SPSVGLength> dy;
-        std::vector<SPSVGLength> rotate;
+        std::vector<SVGLength> x;
+        std::vector<SVGLength> y;
+        std::vector<SVGLength> dx;
+        std::vector<SVGLength> dy;
+        std::vector<SVGLength> rotate;
     };
 
     /** Control codes which can be embedded in the text to be flowed. See
@@ -339,7 +339,7 @@ public:
     removed at some point.
     A pointer to \a path is retained by the class for use by the cursor
     positioning functions. */
-    void fitToPathAlign(SPSVGLength const &startOffset, Path const &path);
+    void fitToPathAlign(SVGLength const &startOffset, Path const &path);
 
     /** Convert the specified range of characters into their bezier 
     outlines.
@@ -571,11 +571,11 @@ private:
         SPStyle *style;
         /** These vectors can (often will) be shorter than the text
         in this source, but never longer. */
-        std::vector<SPSVGLength> x;
-        std::vector<SPSVGLength> y;
-        std::vector<SPSVGLength> dx;
-        std::vector<SPSVGLength> dy;
-        std::vector<SPSVGLength> rotate;
+        std::vector<SVGLength> x;
+        std::vector<SVGLength> y;
+        std::vector<SVGLength> dx;
+        std::vector<SVGLength> dy;
+        std::vector<SVGLength> rotate;
         
         // a few functions for some of the more complicated style accesses
         float styleComputeFontSize() const;
@@ -604,7 +604,7 @@ private:
     complex. This copies them to be the right length and starting at zero.
     We also don't want to write five bits of identical code just with
     different variable names. */
-    static void _copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, size_t max_length);
+    static void _copyInputVector(std::vector<SVGLength> const &input_vector, unsigned input_offset, std::vector<SVGLength> *output_vector, size_t max_length);
 
     /** There are a few cases where we have different sets of enums meaning
     the same thing, eg Pango font styles vs. SPStyle font styles. These need

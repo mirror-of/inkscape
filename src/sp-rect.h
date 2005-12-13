@@ -14,7 +14,7 @@
  */
 
 #include <glib.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-shape.h"
 
 
@@ -29,12 +29,12 @@ class SPRect;
 class SPRectClass;
 
 struct SPRect : public SPShape {
-	SPSVGLength x;
-	SPSVGLength y;
-	SPSVGLength width;
-	SPSVGLength height;
-	SPSVGLength rx;
-	SPSVGLength ry;
+	SVGLength x;
+	SVGLength y;
+	SVGLength width;
+	SVGLength height;
+	SVGLength rx;
+	SVGLength ry;
 };
 
 struct SPRectClass {

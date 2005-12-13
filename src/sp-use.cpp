@@ -120,10 +120,10 @@ sp_use_class_init(SPUseClass *classname)
 static void
 sp_use_init(SPUse *use)
 {
-    sp_svg_length_unset(&use->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-    sp_svg_length_unset(&use->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-    sp_svg_length_unset(&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
-    sp_svg_length_unset(&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
+    use->x.unset();
+    use->y.unset();
+    use->width.unset(SVGLength::PERCENT, 1.0, 1.0);
+    use->height.unset(SVGLength::PERCENT, 1.0, 1.0);
     use->href = NULL;
 
     new (&use->_delete_connection) sigc::connection();
@@ -195,27 +195,19 @@ sp_use_set(SPObject *object, unsigned key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_X:
-            if (!sp_svg_length_read(value, &use->x)) {
-                sp_svg_length_unset(&use->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            use->x.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_Y:
-            if (!sp_svg_length_read(value, &use->y)) {
-                sp_svg_length_unset(&use->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            use->y.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_WIDTH:
-            if (!sp_svg_length_read(value, &use->width)) {
-                sp_svg_length_unset(&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
-            }
+            use->width.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_HEIGHT:
-            if (!sp_svg_length_read(value, &use->height)) {
-                sp_svg_length_unset(&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
-            }
+            use->height.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
@@ -412,8 +404,8 @@ sp_use_get_root_transform(SPUse *use)
         // represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
         if (SP_IS_USE(i_tem)) {
             SPUse *i_use = SP_USE(i_tem);
-            if ((i_use->x.set && i_use->x.computed != 0) || (i_use->y.set && i_use->y.computed != 0)) {
-                t = t * NR::translate(i_use->x.set ? i_use->x.computed : 0, i_use->y.set ? i_use->y.computed : 0);
+            if ((i_use->x._set && i_use->x.computed != 0) || (i_use->y._set && i_use->y.computed != 0)) {
+                t = t * NR::translate(i_use->x._set ? i_use->x.computed : 0, i_use->y._set ? i_use->y.computed : 0);
             }
         }
 
@@ -432,9 +424,9 @@ NR::Matrix
 sp_use_get_parent_transform(SPUse *use)
 {
     NR::Matrix t(NR::identity());
-    if ((use->x.set && use->x.computed != 0) || (use->y.set && use->y.computed != 0)) {
-        t *= NR::translate(use->x.set ? use->x.computed : 0,
-                           use->y.set ? use->y.computed : 0);
+    if ((use->x._set && use->x.computed != 0) || (use->y._set && use->y.computed != 0)) {
+        t *= NR::translate(use->x._set ? use->x.computed : 0,
+                           use->y._set ? use->y.computed : 0);
     }
 
     t *= SP_ITEM(use)->transform;
@@ -571,16 +563,16 @@ sp_use_update(SPObject *object, SPCtx *ctx, unsigned flags)
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     /* Set up child viewport */
-    if (use->x.unit == SP_SVG_UNIT_PERCENT) {
+    if (use->x.unit == SVGLength::PERCENT) {
         use->x.computed = use->x.value * (ictx->vp.x1 - ictx->vp.x0);
     }
-    if (use->y.unit == SP_SVG_UNIT_PERCENT) {
+    if (use->y.unit == SVGLength::PERCENT) {
         use->y.computed = use->y.value * (ictx->vp.y1 - ictx->vp.y0);
     }
-    if (use->width.unit == SP_SVG_UNIT_PERCENT) {
+    if (use->width.unit == SVGLength::PERCENT) {
         use->width.computed = use->width.value * (ictx->vp.x1 - ictx->vp.x0);
     }
-    if (use->height.unit == SP_SVG_UNIT_PERCENT) {
+    if (use->height.unit == SVGLength::PERCENT) {
         use->height.computed = use->height.value * (ictx->vp.y1 - ictx->vp.y0);
     }
     cctx.vp.x0 = 0.0;

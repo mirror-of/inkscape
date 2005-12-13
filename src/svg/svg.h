@@ -13,8 +13,9 @@
  */
 #include <glib.h>
 #include <libnr/nr-forward.h>
-#include <svg/svg-types.h>
+#include "svg/svg-length.h"
 #include <string>
+#include <vector>
 
 
 /* Generic */
@@ -45,17 +46,11 @@ unsigned int sp_svg_number_write_de (gchar *buf, double val, unsigned int tprec,
  * Any return value pointer can be NULL
  */
 
-unsigned int sp_svg_length_read (const gchar *str, SPSVGLength *length);
-unsigned int sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length);
 unsigned int sp_svg_length_read_computed_absolute (const gchar *str, float *length);
-GList *sp_svg_length_list_read (const gchar *str);
-unsigned int sp_svg_length_read_ldd (const gchar *str, SPSVGLengthUnit *unit, double *value, double *computed);
+std::vector<SVGLength> sp_svg_length_list_read (const gchar *str);
+unsigned int sp_svg_length_read_ldd (const gchar *str, SVGLength::Unit *unit, double *value, double *computed);
 
-void sp_svg_length_set (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed);
-void sp_svg_length_unset (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed);
-void sp_svg_length_update (SPSVGLength *length, double em, double ex, double scale);
-
-std::string sp_svg_length_write_with_units(SPSVGLength const &length);
+std::string sp_svg_length_write_with_units(SVGLength const &length);
 
 bool sp_svg_transform_read(gchar const *str, NR::Matrix *transform);
 

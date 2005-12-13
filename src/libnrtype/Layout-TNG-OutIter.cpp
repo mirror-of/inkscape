@@ -14,7 +14,7 @@
 #include "font-instance.h"
 #include "livarot/Shape.h"
 #include "Layout-TNG-Scanline-Maker.h"
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "libnr/nr-matrix-rotate-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
 #include "libnr/nr-point-matrix-ops.h"
@@ -498,7 +498,7 @@ void Layout::getSourceOfCharacter(iterator const &it, void **source_cookie, Glib
 
 void Layout::simulateLayoutUsingKerning(iterator const &from, iterator const &to, OptionalTextTagAttrs *result) const
 {
-    SPSVGLength zero_length;
+    SVGLength zero_length;
     zero_length = 0.0;
 
     result->x.clear();

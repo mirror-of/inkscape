@@ -27,7 +27,7 @@ class SPMarkerView;
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "enums.h"
 #include "sp-item-group.h"
 #include "sp-marker-loc.h"
@@ -39,12 +39,12 @@ struct SPMarker : public SPGroup {
 	unsigned int markerUnits : 1;
 
 	/* reference point */
-	SPSVGLength refX;
-	SPSVGLength refY;
+	SVGLength refX;
+	SVGLength refY;
 
 	/* dimensions */
-	SPSVGLength markerWidth;
-	SPSVGLength markerHeight;
+	SVGLength markerWidth;
+	SVGLength markerHeight;
 
 	/* orient */
 	unsigned int orient_set : 1;

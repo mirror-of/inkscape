@@ -14,7 +14,7 @@
  */
 
 #include <sigc++/sigc++.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-item.h"
 
 
@@ -34,10 +34,10 @@ struct SPUse : public SPItem {
 	SPObject *child;
 
 	// SVG attrs
-	SPSVGLength x;
-	SPSVGLength y;
-	SPSVGLength width;
-	SPSVGLength height;
+	SVGLength x;
+	SVGLength y;
+	SVGLength width;
+	SVGLength height;
 	gchar *href;
 
 	// the reference to the original object

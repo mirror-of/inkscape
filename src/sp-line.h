@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-shape.h"
 
 
@@ -27,10 +27,10 @@ class SPLine;
 class SPLineClass;
 
 struct SPLine : public SPShape {
-	SPSVGLength x1;
-	SPSVGLength y1;
-	SPSVGLength x2;
-	SPSVGLength y2;
+	SVGLength x1;
+	SVGLength y1;
+	SVGLength x2;
+	SVGLength y2;
 };
 
 struct SPLineClass {

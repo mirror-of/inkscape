@@ -469,10 +469,10 @@ sp_image_class_init (SPImageClass * klass)
 static void
 sp_image_init (SPImage *image)
 {
-	sp_svg_length_unset (&image->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&image->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&image->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
-	sp_svg_length_unset (&image->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	image->x.unset();
+	image->y.unset();
+	image->width.unset();
+	image->height.unset();
 	image->aspect_align = SP_ASPECT_NONE;
 }
 
@@ -533,30 +533,30 @@ sp_image_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_X:
-		if (!sp_svg_length_read_absolute (value, &image->x)) {
+		if (!image->x.readAbsolute(value)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-			sp_svg_length_unset (&image->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
+			image->x.unset();
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
-		if (!sp_svg_length_read_absolute (value, &image->y)) {
+		if (!image->y.readAbsolute(value)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-			sp_svg_length_unset (&image->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
+			image->y.unset();
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
-		if (!sp_svg_length_read_absolute (value, &image->width)) {
+		if (!image->width.readAbsolute(value)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-			sp_svg_length_unset (&image->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
+			image->width.unset();
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
-		if (!sp_svg_length_read_absolute (value, &image->height)) {
+		if (!image->height.readAbsolute(value)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-			sp_svg_length_unset (&image->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
+			image->height.unset();
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -756,10 +756,10 @@ sp_image_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
 	repr->setAttribute("xlink:href", image->href);
 	/* fixme: Reset attribute if needed (Lauris) */
-	if (image->x.set) sp_repr_set_svg_double(repr, "x", image->x.computed);
-	if (image->y.set) sp_repr_set_svg_double(repr, "y", image->y.computed);
-	if (image->width.set) sp_repr_set_svg_double(repr, "width", image->width.computed);
-	if (image->height.set) sp_repr_set_svg_double(repr, "height", image->height.computed);
+	if (image->x._set) sp_repr_set_svg_double(repr, "x", image->x.computed);
+	if (image->y._set) sp_repr_set_svg_double(repr, "y", image->y.computed);
+	if (image->width._set) sp_repr_set_svg_double(repr, "width", image->width.computed);
+	if (image->height._set) sp_repr_set_svg_double(repr, "height", image->height.computed);
 	repr->setAttribute("preserveAspectRatio", object->repr->attribute("preserveAspectRatio"));
 
 	if (((SPObjectClass *) (parent_class))->write)
@@ -972,10 +972,10 @@ sp_image_update_canvas_image (SPImage *image)
 
 	if (image->pixbuf) {
 		/* fixme: We are slightly violating spec here (Lauris) */
-		if (!image->width.set) {
+		if (!image->width._set) {
 			image->width.computed = gdk_pixbuf_get_width (image->pixbuf);
 		}
-		if (!image->height.set) {
+		if (!image->height._set) {
 			image->height.computed = gdk_pixbuf_get_height (image->pixbuf);
 		}
 	}

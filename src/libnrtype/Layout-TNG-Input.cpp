@@ -11,7 +11,7 @@
 #include <algorithm>
 #include "Layout-TNG.h"
 #include "style.h"
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-object.h"
 #include "FontFactory.h"
 #include <glib/glist.h>
@@ -57,13 +57,13 @@ void Layout::appendText(Glib::ustring const &text, SPStyle *style, void *source_
     _input_stream.push_back(new_source);
 }
 
-void Layout::_copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, size_t max_length)
+void Layout::_copyInputVector(std::vector<SVGLength> const &input_vector, unsigned input_offset, std::vector<SVGLength> *output_vector, size_t max_length)
 {
     output_vector->clear();
     if (input_offset >= input_vector.size()) return;
     output_vector->reserve(std::min(max_length, input_vector.size() - input_offset));
     while (input_offset < input_vector.size() && max_length != 0) {
-        if (!input_vector[input_offset].set)
+        if (!input_vector[input_offset]._set)
             break;
         output_vector->push_back(input_vector[input_offset]);
         input_offset++;

@@ -22,7 +22,7 @@
 
 #include <libnr/nr-matrix.h>
 #include "version.h"
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "enums.h"
 #include "sp-item-group.h"
 
@@ -34,10 +34,10 @@ struct SPRoot : public SPGroup {
         Inkscape::Version inkscape;
     } version, original;
 
-    SPSVGLength x;
-    SPSVGLength y;
-    SPSVGLength width;
-    SPSVGLength height;
+    SVGLength x;
+    SVGLength y;
+    SVGLength width;
+    SVGLength height;
 
     /* viewBox; */
     unsigned int viewBox_set : 1;

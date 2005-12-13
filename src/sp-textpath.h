@@ -2,7 +2,7 @@
 #define INKSCAPE_SP_TEXTPATH_H
 
 #include <glib/gtypes.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-item.h"
 #include "sp-text.h"
 class SPUsePath;
@@ -18,7 +18,7 @@ class Path;
 
 struct SPTextPath : public SPItem {
     TextTagAttributes attributes;
-    SPSVGLength startOffset;
+    SVGLength startOffset;
 
     Path *originalPath;
     bool isUpdating;

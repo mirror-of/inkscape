@@ -130,7 +130,7 @@ sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     Inkscape::Version const version = sp_object_get_sodipodi_version(object);
 
     if ( version.major == 0 && version.minor == 29 ) {
-        if (rect->rx.set && rect->ry.set) {
+        if (rect->rx._set && rect->ry._set) {
             /* 0.29 treated 0.0 radius as missing value */
             if ((rect->rx.value != 0.0) && (rect->ry.value == 0.0)) {
                 repr->setAttribute("ry", NULL);
@@ -152,38 +152,34 @@ sp_rect_set(SPObject *object, unsigned key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_X:
-            if (!sp_svg_length_read(value, &rect->x)) {
-                sp_svg_length_unset(&rect->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            rect->x.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_Y:
-            if (!sp_svg_length_read(value, &rect->y)) {
-                sp_svg_length_unset(&rect->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
-            }
+            rect->y.readOrUnset(value);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_WIDTH:
-            if (!sp_svg_length_read(value, &rect->width) || (rect->width.value < 0.0)) {
-                sp_svg_length_unset(&rect->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!rect->width.read(value) || rect->width.value < 0.0) {
+                rect->width.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_HEIGHT:
-            if (!sp_svg_length_read(value, &rect->height) || (rect->height.value < 0.0)) {
-                sp_svg_length_unset(&rect->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!rect->height.read(value) || rect->height.value < 0.0) {
+                rect->height.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_RX:
-            if (!sp_svg_length_read(value, &rect->rx) || (rect->rx.value < 0.0)) {
-                sp_svg_length_unset(&rect->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!rect->rx.read(value) || rect->rx.value < 0.0) {
+                rect->rx.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_RY:
-            if (!sp_svg_length_read(value, &rect->ry) || (rect->ry.value < 0.0)) {
-                sp_svg_length_unset(&rect->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
+            if (!rect->ry.read(value) || rect->ry.value < 0.0) {
+                rect->ry.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
@@ -206,12 +202,12 @@ sp_rect_update(SPObject *object, SPCtx *ctx, guint flags)
         double const h = (ictx->vp.y1 - ictx->vp.y0) / d;
         double const em = style->font_size.computed;
         double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
-        sp_svg_length_update(&rect->x, em, ex, w);
-        sp_svg_length_update(&rect->y, em, ex, h);
-        sp_svg_length_update(&rect->width, em, ex, w);
-        sp_svg_length_update(&rect->height, em, ex, h);
-        sp_svg_length_update(&rect->rx, em, ex, w);
-        sp_svg_length_update(&rect->ry, em, ex, h);
+        rect->x.update(em, ex, w);
+        rect->y.update(em, ex, h);
+        rect->width.update(em, ex, w);
+        rect->height.update(em, ex, h);
+        rect->rx.update(em, ex, w);
+        rect->ry.update(em, ex, h);
         sp_shape_set_shape((SPShape *) object);
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
@@ -231,8 +227,8 @@ sp_rect_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
     sp_repr_set_svg_double(repr, "width", rect->width.computed);
     sp_repr_set_svg_double(repr, "height", rect->height.computed);
-    if (rect->rx.set) sp_repr_set_svg_double(repr, "rx", rect->rx.computed);
-    if (rect->ry.set) sp_repr_set_svg_double(repr, "ry", rect->ry.computed);
+    if (rect->rx._set) sp_repr_set_svg_double(repr, "rx", rect->rx.computed);
+    if (rect->ry._set) sp_repr_set_svg_double(repr, "ry", rect->ry.computed);
     sp_repr_set_svg_double(repr, "x", rect->x.computed);
     sp_repr_set_svg_double(repr, "y", rect->y.computed);
 
@@ -267,15 +263,15 @@ sp_rect_set_shape(SPShape *shape)
     double const h = rect->height.computed;
     double const w2 = w / 2;
     double const h2 = h / 2;
-    double const rx = std::min(( rect->rx.set
+    double const rx = std::min(( rect->rx._set
                                  ? rect->rx.computed
-                                 : ( rect->ry.set
+                                 : ( rect->ry._set
                                      ? rect->ry.computed
                                      : 0.0 ) ),
                                .5 * rect->width.computed);
-    double const ry = std::min(( rect->ry.set
+    double const ry = std::min(( rect->ry._set
                                  ? rect->ry.computed
-                                 : ( rect->rx.set
+                                 : ( rect->rx._set
                                      ? rect->rx.computed
                                      : 0.0 ) ),
                                .5 * rect->height.computed);
@@ -332,7 +328,7 @@ sp_rect_set_rx(SPRect *rect, gboolean set, gdouble value)
     g_return_if_fail(rect != NULL);
     g_return_if_fail(SP_IS_RECT(rect));
 
-    rect->rx.set = set;
+    rect->rx._set = set;
     if (set) rect->rx.computed = value;
 
     SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -344,7 +340,7 @@ sp_rect_set_ry(SPRect *rect, gboolean set, gdouble value)
     g_return_if_fail(rect != NULL);
     g_return_if_fail(SP_IS_RECT(rect));
 
-    rect->ry.set = set;
+    rect->ry._set = set;
     if (set) rect->ry.computed = value;
 
     SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -389,10 +385,10 @@ sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
     /* fixme: Would be nice to preserve units here */
     rect->width = rect->width.computed * sw;
     rect->height = rect->height.computed * sh;
-    if (rect->rx.set) {
+    if (rect->rx._set) {
         rect->rx = rect->rx.computed * sw;
     }
-    if (rect->ry.set) {
+    if (rect->ry._set) {
         rect->ry = rect->ry.computed * sh;
     }
 
@@ -434,13 +430,13 @@ sp_rect_set_visible_rx(SPRect *rect, gdouble rx)
 {
     if (rx == 0) {
         rect->rx.computed = 0;
-        rect->rx.set = FALSE;
+        rect->rx._set = false;
     } else {
         rect->rx.computed = rx / vector_stretch(
             NR::Point(rect->x.computed + 1, rect->y.computed),
             NR::Point(rect->x.computed, rect->y.computed),
             SP_ITEM(rect)->transform);
-        rect->rx.set = TRUE;
+        rect->rx._set = true;
     }
     SP_OBJECT(rect)->updateRepr();
 }
@@ -450,13 +446,13 @@ sp_rect_set_visible_ry(SPRect *rect, gdouble ry)
 {
     if (ry == 0) {
         rect->ry.computed = 0;
-        rect->ry.set = FALSE;
+        rect->ry._set = false;
     } else {
         rect->ry.computed = ry / vector_stretch(
             NR::Point(rect->x.computed, rect->y.computed + 1),
             NR::Point(rect->x.computed, rect->y.computed),
             SP_ITEM(rect)->transform);
-        rect->ry.set = TRUE;
+        rect->ry._set = true;
     }
     SP_OBJECT(rect)->updateRepr();
 }
@@ -464,7 +460,7 @@ sp_rect_set_visible_ry(SPRect *rect, gdouble ry)
 gdouble
 sp_rect_get_visible_rx(SPRect *rect)
 {
-    if (!rect->rx.set)
+    if (!rect->rx._set)
         return 0;
     return rect->rx.computed * vector_stretch(
         NR::Point(rect->x.computed + 1, rect->y.computed),
@@ -475,7 +471,7 @@ sp_rect_get_visible_rx(SPRect *rect)
 gdouble
 sp_rect_get_visible_ry(SPRect *rect)
 {
-    if (!rect->ry.set)
+    if (!rect->ry._set)
         return 0;
     return rect->ry.computed * vector_stretch(
         NR::Point(rect->x.computed, rect->y.computed + 1),
@@ -505,7 +501,7 @@ sp_rect_compensate_rxry(SPRect *rect, NR::Matrix xform)
 
     // If only one of the radii is set, set both radii so they have the same visible length
     // This is needed because if we just set them the same length in SVG, they might end up unequal because of transform
-    if ((rect->rx.set && !rect->ry.set) || (rect->ry.set && !rect->rx.set)) {
+    if ((rect->rx._set && !rect->ry._set) || (rect->ry._set && !rect->rx._set)) {
         gdouble r = MAX(rect->rx.computed, rect->ry.computed);
         rect->rx.computed = r / eX;
         rect->ry.computed = r / eY;
@@ -518,7 +514,7 @@ sp_rect_compensate_rxry(SPRect *rect, NR::Matrix xform)
     // that's ok because this preserves the intended radii in case the rect is enlarged again,
     // and set_shape will take care of trimming too large radii when generating d=
 
-    rect->rx.set = rect->ry.set = TRUE;
+    rect->rx._set = rect->ry._set = true;
 }
 
 void
@@ -528,7 +524,7 @@ sp_rect_set_visible_width(SPRect *rect, gdouble width)
         NR::Point(rect->x.computed + 1, rect->y.computed),
         NR::Point(rect->x.computed, rect->y.computed),
         SP_ITEM(rect)->transform);
-    rect->width.set = TRUE;
+    rect->width._set = true;
     SP_OBJECT(rect)->updateRepr();
 }
 
@@ -539,14 +535,14 @@ sp_rect_set_visible_height(SPRect *rect, gdouble height)
         NR::Point(rect->x.computed, rect->y.computed + 1),
         NR::Point(rect->x.computed, rect->y.computed),
         SP_ITEM(rect)->transform);
-    rect->height.set = TRUE;
+    rect->height._set = true;
     SP_OBJECT(rect)->updateRepr();
 }
 
 gdouble
 sp_rect_get_visible_width(SPRect *rect)
 {
-    if (!rect->width.set)
+    if (!rect->width._set)
         return 0;
     return rect->width.computed * vector_stretch(
         NR::Point(rect->x.computed + 1, rect->y.computed),
@@ -557,7 +553,7 @@ sp_rect_get_visible_width(SPRect *rect)
 gdouble
 sp_rect_get_visible_height(SPRect *rect)
 {
-    if (!rect->height.set)
+    if (!rect->height._set)
         return 0;
     return rect->height.computed * vector_stretch(
         NR::Point(rect->x.computed, rect->y.computed + 1),

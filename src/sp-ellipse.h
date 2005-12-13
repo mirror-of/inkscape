@@ -14,7 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-shape.h"
 
 /* Common parent class */
@@ -29,10 +29,10 @@ class SPGenericEllipse;
 class SPGenericEllipseClass;
 
 struct SPGenericEllipse : public SPShape {
-	SPSVGLength cx;
-	SPSVGLength cy;
-	SPSVGLength rx;
-	SPSVGLength ry;
+	SVGLength cx;
+	SVGLength cy;
+	SVGLength rx;
+	SVGLength ry;
 
 	unsigned int closed : 1;
 	double start, end;

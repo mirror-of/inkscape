@@ -1330,10 +1330,10 @@ static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
  */
 static void sp_lineargradient_init(SPLinearGradient *lg)
 {
-    sp_svg_length_unset(&lg->x1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
-    sp_svg_length_unset(&lg->y1, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
-    sp_svg_length_unset(&lg->x2, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
-    sp_svg_length_unset(&lg->y2, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
+    lg->x1.unset(SVGLength::PERCENT, 0.0, 0.0);
+    lg->y1.unset(SVGLength::PERCENT, 0.5, 0.5);
+    lg->x2.unset(SVGLength::PERCENT, 1.0, 1.0);
+    lg->y2.unset(SVGLength::PERCENT, 0.5, 0.5);
 }
 
 /**
@@ -1362,27 +1362,19 @@ sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_X1:
-            if (!sp_svg_length_read(value, &lg->x1)) {
-                sp_svg_length_unset(&lg->x1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
-            }
+            lg->x1.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_Y1:
-            if (!sp_svg_length_read(value, &lg->y1)) {
-                sp_svg_length_unset(&lg->y1, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
-            }
+            lg->y1.readOrUnset(value, SVGLength::PERCENT, 0.5, 0.5);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_X2:
-            if (!sp_svg_length_read(value, &lg->x2)) {
-                sp_svg_length_unset(&lg->x2, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
-            }
+            lg->x2.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_Y2:
-            if (!sp_svg_length_read(value, &lg->y2)) {
-                sp_svg_length_unset(&lg->y2, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
-            }
+            lg->y2.readOrUnset(value, SVGLength::PERCENT, 0.5, 0.5);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
@@ -1404,13 +1396,13 @@ sp_lineargradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags
         repr = sp_repr_new("svg:linearGradient");
     }
 
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->x1.set)
+    if ((flags & SP_OBJECT_WRITE_ALL) || lg->x1._set)
         sp_repr_set_svg_double(repr, "x1", lg->x1.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->y1.set)
+    if ((flags & SP_OBJECT_WRITE_ALL) || lg->y1._set)
         sp_repr_set_svg_double(repr, "y1", lg->y1.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->x2.set)
+    if ((flags & SP_OBJECT_WRITE_ALL) || lg->x2._set)
         sp_repr_set_svg_double(repr, "x2", lg->x2.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->y2.set)
+    if ((flags & SP_OBJECT_WRITE_ALL) || lg->y2._set)
         sp_repr_set_svg_double(repr, "y2", lg->y2.computed);
 
     if (((SPObjectClass *) lg_parent_class)->write)
@@ -1512,10 +1504,10 @@ sp_lineargradient_set_position(SPLinearGradient *lg,
     g_return_if_fail(SP_IS_LINEARGRADIENT(lg));
 
     /* fixme: units? (Lauris)  */
-    sp_svg_length_set(&lg->x1, SP_SVG_UNIT_NONE, x1, x1);
-    sp_svg_length_set(&lg->y1, SP_SVG_UNIT_NONE, y1, y1);
-    sp_svg_length_set(&lg->x2, SP_SVG_UNIT_NONE, x2, x2);
-    sp_svg_length_set(&lg->y2, SP_SVG_UNIT_NONE, y2, y2);
+    lg->x1.set(SVGLength::NONE, x1, x1);
+    lg->y1.set(SVGLength::NONE, y1, y1);
+    lg->x2.set(SVGLength::NONE, x2, x2);
+    lg->y2.set(SVGLength::NONE, y2, y2);
 
     SP_OBJECT(lg)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -1616,11 +1608,11 @@ static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
 static void
 sp_radialgradient_init(SPRadialGradient *rg)
 {
-    sp_svg_length_unset(&rg->cx, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
-    sp_svg_length_unset(&rg->cy, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
-    sp_svg_length_unset(&rg->r, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
-    sp_svg_length_unset(&rg->fx, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
-    sp_svg_length_unset(&rg->fy, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
+    rg->cx.unset(SVGLength::PERCENT, 0.5, 0.5);
+    rg->cy.unset(SVGLength::PERCENT, 0.5, 0.5);
+    rg->r.unset(SVGLength::PERCENT, 0.5, 0.5);
+    rg->fx.unset(SVGLength::PERCENT, 0.5, 0.5);
+    rg->fy.unset(SVGLength::PERCENT, 0.5, 0.5);
 }
 
 /**
@@ -1649,40 +1641,40 @@ sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_CX:
-            if (!sp_svg_length_read(value, &rg->cx)) {
-                sp_svg_length_unset(&rg->cx, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
+            if (!rg->cx.read(value)) {
+                rg->cx.unset(SVGLength::PERCENT, 0.5, 0.5);
             }
-            if (!rg->fx.set) {
+            if (!rg->fx._set) {
                 rg->fx.value = rg->cx.value;
                 rg->fx.computed = rg->cx.computed;
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_CY:
-            if (!sp_svg_length_read(value, &rg->cy)) {
-                sp_svg_length_unset(&rg->cy, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
+            if (!rg->cy.read(value)) {
+                rg->cy.unset(SVGLength::PERCENT, 0.5, 0.5);
             }
-            if (!rg->fy.set) {
+            if (!rg->fy._set) {
                 rg->fy.value = rg->cy.value;
                 rg->fy.computed = rg->cy.computed;
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_R:
-            if (!sp_svg_length_read(value, &rg->r)) {
-                sp_svg_length_unset(&rg->r, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
+            if (!rg->r.read(value)) {
+                rg->r.unset(SVGLength::PERCENT, 0.5, 0.5);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_FX:
-            if (!sp_svg_length_read(value, &rg->fx)) {
-                sp_svg_length_unset(&rg->fx, rg->cx.unit, rg->cx.value, rg->cx.computed);
+            if (!rg->fx.read(value)) {
+                rg->fx.unset(rg->cx.unit, rg->cx.value, rg->cx.computed);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_FY:
-            if (!sp_svg_length_read(value, &rg->fy)) {
-                sp_svg_length_unset(&rg->fy, rg->cy.unit, rg->cy.value, rg->cy.computed);
+            if (!rg->fy.read(value)) {
+                rg->fy.unset(rg->cy.unit, rg->cy.value, rg->cy.computed);
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
@@ -1705,11 +1697,11 @@ sp_radialgradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags
         repr = sp_repr_new("svg:radialGradient");
     }
 
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx.set) sp_repr_set_svg_double(repr, "cx", rg->cx.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cy.set) sp_repr_set_svg_double(repr, "cy", rg->cy.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->r.set) sp_repr_set_svg_double(repr, "r", rg->r.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fx.set) sp_repr_set_svg_double(repr, "fx", rg->fx.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fy.set) sp_repr_set_svg_double(repr, "fy", rg->fy.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx._set) sp_repr_set_svg_double(repr, "cx", rg->cx.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cy._set) sp_repr_set_svg_double(repr, "cy", rg->cy.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->r._set) sp_repr_set_svg_double(repr, "r", rg->r.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fx._set) sp_repr_set_svg_double(repr, "fx", rg->fx.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fy._set) sp_repr_set_svg_double(repr, "fy", rg->fy.computed);
 
     if (((SPObjectClass *) rg_parent_class)->write)
         (* ((SPObjectClass *) rg_parent_class)->write)(object, repr, flags);
@@ -1791,11 +1783,11 @@ sp_radialgradient_set_position(SPRadialGradient *rg,
     g_return_if_fail(SP_IS_RADIALGRADIENT(rg));
 
     /* fixme: units? (Lauris)  */
-    sp_svg_length_set(&rg->cx, SP_SVG_UNIT_NONE, cx, cx);
-    sp_svg_length_set(&rg->cy, SP_SVG_UNIT_NONE, cy, cy);
-    sp_svg_length_set(&rg->fx, SP_SVG_UNIT_NONE, fx, fx);
-    sp_svg_length_set(&rg->fy, SP_SVG_UNIT_NONE, fy, fy);
-    sp_svg_length_set(&rg->r, SP_SVG_UNIT_NONE, r, r);
+    rg->cx.set(SVGLength::NONE, cx, cx);
+    rg->cy.set(SVGLength::NONE, cy, cy);
+    rg->fx.set(SVGLength::NONE, fx, fx);
+    rg->fy.set(SVGLength::NONE, fy, fy);
+    rg->r.set(SVGLength::NONE, r, r);
 
     SP_OBJECT(rg)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }

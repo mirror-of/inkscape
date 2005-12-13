@@ -28,16 +28,16 @@ class SPImageClass;
 #include <glib.h>
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-item.h"
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
 struct SPImage : public SPItem {
-	SPSVGLength x;
-	SPSVGLength y;
-	SPSVGLength width;
-	SPSVGLength height;
+	SVGLength x;
+	SVGLength y;
+	SVGLength width;
+	SVGLength height;
 
 	// Added by EAF
 	/* preserveAspectRatio */

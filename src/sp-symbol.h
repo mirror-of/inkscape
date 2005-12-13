@@ -26,7 +26,7 @@ class SPSymbolClass;
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "enums.h"
 #include "sp-item-group.h"
 

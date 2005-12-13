@@ -28,7 +28,7 @@ class SPPatternClass;
 
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
-#include "svg/svg-types.h"
+#include "svg/svg-length.h"
 #include "sp-paint-server.h"
 #include "uri-references.h"
 
@@ -63,10 +63,10 @@ struct SPPattern : public SPPaintServer {
 	NR::Matrix patternTransform;
 	guint patternTransform_set : 1;
 	/* Tile rectangle */
-	SPSVGLength x;
-	SPSVGLength y;
-	SPSVGLength width;
-	SPSVGLength height;
+	SVGLength x;
+	SVGLength y;
+	SVGLength width;
+	SVGLength height;
 	/* VieBox */
 	NRRect viewBox;
 	guint viewBox_set : 1;
