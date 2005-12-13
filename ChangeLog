@@ -11,8 +11,25 @@
 	src/select-context.cpp, src/selection-chemistry.cpp,
 	src/sp-item.cpp, src/sp-item.h src/spiral-context.cpp,
 	src/star-context.cpp, src/text-context.cpp src/zoom-context.cpp,
-	src/ui/widget/ruler.cpp: make desktop's transforms private members.
+	src/ui/widget/ruler.cpp: make desktop's transforms private
+	members.
 
+	* src/document.cpp, src/object-edit.cpp, src/sp-ellipse.cpp,
+	src/sp-ellipse.h, src/sp-gradient.cpp, src/sp-image.cpp,
+	src/sp-image.h, src/sp-line.cpp, src/sp-line.h,
+	src/sp-linear-gradient.h, src/sp-marker.cpp, src/sp-marker.h,
+	src/sp-pattern.cpp, src/sp-pattern.h, src/sp-radial-gradient.h,
+	src/sp-rect.cpp, src/sp-rect.h, src/sp-root.cpp, src/sp-root.h,
+	src/sp-star.cpp, src/sp-symbol.h, src/sp-text.cpp,
+	src/sp-textpath.h, src/sp-tspan.cpp, src/sp-use.cpp, src/sp-use.h,
+	src/text-tag-attributes.h, src/helper/units.cpp,
+	src/helper/units.h, src/libnrtype/Layout-TNG-Compute.cpp,
+	src/libnrtype/Layout-TNG-Input.cpp,
+	src/libnrtype/Layout-TNG-OutIter.cpp,
+	src/libnrtype/Layout-TNG-Output.cpp, src/libnrtype/Layout-TNG.h,
+	src/libnrtype/TextWrapper.cpp, src/svg/svg-length.cpp,
+	src/svg/svg.h: partial C++-ificiation of SPSVGLength.  Rename it
+	to SVGLength.
 
 2005-12-12  MenTaLguY  <mental@rydia.net>
 
@@ -38,7 +55,19 @@
 	* src/dyna-draw-context.cpp: remove unused and erroneous snapping code.
 
 	* src/pen-context.cpp: remove unused variable.
-	
+
+	* src/draw-context.cpp: use SnapManager.
+
+	* src/nodepath.cpp: const fixes.  Use SnapManager.
+
+	* src/selection-chemistry.cpp, src/seltrans.cpp: some cleanups.
+	Use new snap API.
+
+	* src/snap.{cpp,h}: remove some dead code.
+
+	* src/sp-item.{cpp,h}, src/node-context.cpp, src/draw-context.cpp:
+	remove an unnecessary parameter from sp_item_dt2i_affine().
+
 2005-12-09  Carl Hetherington <inkscape@carlh.net>
 
 	* src/object-snapper.cpp: make node snapping work again.
