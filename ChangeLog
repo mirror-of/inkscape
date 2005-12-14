@@ -9,6 +9,11 @@
 	src/widgets/desktop-widget.cpp: remove NRMatrix version of
 	sp_item_i2d_affine().  Some include file adjustments.
 
+	* src/arc-context.cpp: some very minor cleanups.
+
+	* src/svg/svg-length.{cpp,h}, src/helper/units.cpp: use INCH
+	rather than IN to avoid breaking the compile on some systems.
+
 2005-12-13  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/arc-context.cpp, src/connector-context.cpp,
