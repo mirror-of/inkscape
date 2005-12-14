@@ -144,7 +144,6 @@ DocumentPreferences::build_page()
 
     _rcp_bg.init (_("Background:"), _("Background color"), _("Color and transparency of the page background (also used for bitmap export)"),
                    "pagecolor", "inkscape:pageopacity", _wr);
-    // (see also the hack in RegisteredColorPicker)
     _rcb_canb.init (_("Show page border"), _("If set, rectangular page border is shown"), "showborder", _wr);
     _rcb_bord.init (_("Border on top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr);
     _rcp_bord.init (_("Border color:"), _("Page border color"),
@@ -375,7 +374,7 @@ DocumentPreferences::update()
     set_sensitive (true);
 
     //-----------------------------------------------------------page page
-    _rcp_bg.setRgba32 (nv->pagecolor | 0xff);
+    _rcp_bg.setRgba32 (nv->pagecolor);
     _rcb_canb.setActive (nv->showborder);
     _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
     _rcp_bord.setRgba32 (nv->bordercolor);

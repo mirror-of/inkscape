@@ -261,12 +261,6 @@ RegisteredColorPicker::on_changed (guint32 rgba)
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);
     repr->setAttribute(_ckey.c_str(), c);
-    // Hack to prevent page opacity from being set to other values than 0xFF
-    if (!_ckey.compare ("pagecolor")) 
-    {
-        rgba |= 0xff;
-        setRgba32 (rgba);
-    }
     sp_repr_set_css_double(repr, _akey.c_str(), (rgba & 0xff) / 255.0);
 
     _wr->setUpdating (false);
