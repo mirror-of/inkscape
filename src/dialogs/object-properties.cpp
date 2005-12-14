@@ -166,7 +166,7 @@ sp_object_properties_dialog (void)
                                       INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE);
         }
 
-        /* Stroke line page */
+        /* Stroke style page */
         {
             GtkWidget *page = sp_stroke_style_line_widget_new ();
             sp_object_properties_page(nb, page, _("Stroke st_yle"), "stroke-line",
@@ -220,28 +220,27 @@ sp_object_properties_dialog (void)
 
 } // end of sp_object_properties_dialog()
 
+void sp_object_properties_fill (void)
+{
+    sp_object_properties_dialog ();
+    GtkWidget *nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
+    gtk_notebook_set_page (GTK_NOTEBOOK (nb), 0);
+}
 
 void sp_object_properties_stroke (void)
 {
-    GtkWidget *nb;
-
     sp_object_properties_dialog ();
-
-    nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
-
+    GtkWidget *nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
     gtk_notebook_set_page (GTK_NOTEBOOK (nb), 1);
 }
 
-void sp_object_properties_fill (void)
+void sp_object_properties_stroke_style (void)
 {
-    GtkWidget *nb;
-
     sp_object_properties_dialog ();
-
-    nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
-
-    gtk_notebook_set_page (GTK_NOTEBOOK (nb), 0);
+    GtkWidget *nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
+    gtk_notebook_set_page (GTK_NOTEBOOK (nb), 2);
 }
+
 
 
 static void
