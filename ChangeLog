@@ -1,3 +1,14 @@
+2005-12-14  Carl Hetherington  <inkscape@carlh.net>
+
+        * src/dyna-draw-context.cpp, src/gradient-context.cpp,
+	src/selection.h, src/sp-flowtext.cpp, src/sp-item.cpp,
+	src/sp-item.h, src/sp-shape.cpp, src/sp-text.cpp,
+	src/dialogs/layer-properties.cpp,
+	src/extension/internal/bluredge.cpp,
+	src/extension/internal/grid.cpp, src/ui/dialog/transformation.cpp,
+	src/widgets/desktop-widget.cpp: remove NRMatrix version of
+	sp_item_i2d_affine().  Some include file adjustments.
+
 2005-12-13  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/arc-context.cpp, src/connector-context.cpp,
