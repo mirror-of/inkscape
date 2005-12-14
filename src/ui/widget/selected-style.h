@@ -30,6 +30,8 @@
 
 #include "button.h"
 
+class SPUnit;
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -108,6 +110,10 @@ protected:
     Gtk::Label _multiple[2];
     Glib::ustring __multiple[2];
 
+    Gtk::HBox _stroke;
+    Gtk::EventBox _stroke_width_place;
+    Gtk::Label _stroke_width;
+
     guint32 _lastselected[2];
     guint32 _thisselected[2];
     Glib::ustring _paintserver_id[2];
@@ -121,6 +127,7 @@ protected:
     bool on_fill_click(GdkEventButton *event);
     bool on_stroke_click(GdkEventButton *event);
     bool on_opacity_click(GdkEventButton *event);
+    bool on_sw_click(GdkEventButton *event);
 
     bool _opacity_blocked;
     void on_opacity_changed();
@@ -165,6 +172,19 @@ protected:
     Gtk::MenuItem _popup_opaque[2];
     Gtk::MenuItem _popup_unset[2];
     Gtk::MenuItem _popup_remove[2];
+
+    Gtk::Menu _popup_sw; 
+    Gtk::RadioButtonGroup _sw_group;
+    Gtk::RadioMenuItem _popup_px; 
+    void on_popup_px();
+    Gtk::RadioMenuItem _popup_pt; 
+    void on_popup_pt();
+    Gtk::RadioMenuItem _popup_mm;
+    void on_popup_mm();
+    void on_popup_preset(int i);
+    Gtk::MenuItem _popup_sw_remove;
+
+    SPUnit *_sw_unit;
 
     Gtk::Tooltips _tooltips;
 };

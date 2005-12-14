@@ -23,6 +23,7 @@
 
 #include "selection.h"
 #include "desktop-handles.h"
+#include "sp-namedview.h"
 #include "style.h"
 #include "desktop-style.h"
 #include "color.h"
@@ -36,6 +37,10 @@
 #include "widgets/spinbutton-events.h"
 #include "svg/svg.h"
 #include "svg/css-ostringstream.h"
+#include "helper/units.h"
+
+static gdouble const _sw_presets[]     = { 32 ,  16 ,  10 ,  8 ,  6 ,  4 ,  3 ,  2 ,  1.5 ,  1 ,  0.75 ,  0.5 ,  0.25 ,  0.1 };
+static gchar* const _sw_presets_str[] = {"32", "16", "10", "8", "6", "4", "3", "2", "1.5", "1", "0.75", "0.5", "0.25", "0.1"};
 
 static void 
 ss_selection_changed (Inkscape::Selection *, gpointer data)
@@ -76,7 +81,17 @@ SelectedStyle::SelectedStyle(bool layout)
       _opacity_place (),
       _opacity_adjustment (1.0, 0.0, 1.0, 0.01, 0.1),
       _opacity_sb (0.02, 2),
-      _opacity_blocked(false),
+
+      _stroke (),
+      _stroke_width (""),
+
+      _opacity_blocked (false),
+
+      _popup_px(_sw_group),
+      _popup_pt(_sw_group),
+      _popup_mm(_sw_group),
+
+      _sw_unit(NULL),
 
       _tooltips ()
 {
@@ -131,13 +146,13 @@ SelectedStyle::SelectedStyle(bool layout)
         __color[i] = (i == SS_FILL)? (_("Flat color fill")) : (_("Flat color stroke"));
 
         // TRANSLATOR COMMENT: A means "Averaged"
-        _averaged[i].set_markup (_("A"));
+        _averaged[i].set_markup (_("<b>a</b>"));
         sp_set_font_size_smaller_smaller (GTK_WIDGET(_averaged[i].gobj()));
         _averaged[i].show_all();
         __averaged[i] = (i == SS_FILL)? (_("Fill is averaged over selected objects")) : (_("Stroke is averaged over selected objects"));
 
         // TRANSLATOR COMMENT: M means "Multiple"
-        _multiple[i].set_markup (_("M"));
+        _multiple[i].set_markup (_("<b>m</b>"));
         sp_set_font_size_smaller_smaller (GTK_WIDGET(_multiple[i].gobj()));
         _multiple[i].show_all();
         __multiple[i] = (i == SS_FILL)? (_("Multiple selected objects have the same fill")) : (_("Multiple selected objects have the same stroke"));
@@ -208,17 +223,56 @@ SelectedStyle::SelectedStyle(bool layout)
         _mode[i] = SS_NA;
     }
 
+    {
+        _popup_px.add(*(new Gtk::Label(_("px"), 0.0, 0.5)));
+        _popup_px.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_popup_px));
+        _popup_sw.attach(_popup_px, 0,1, 0,1);
+
+        _popup_pt.add(*(new Gtk::Label(_("pt"), 0.0, 0.5)));
+        _popup_pt.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_popup_pt));
+        _popup_sw.attach(_popup_pt, 0,1, 1,2);
+
+        _popup_mm.add(*(new Gtk::Label(_("mm"), 0.0, 0.5)));
+        _popup_mm.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_popup_mm));
+        _popup_sw.attach(_popup_mm, 0,1, 2,3);
+
+        _popup_sw.attach(*(new Gtk::SeparatorMenuItem()), 0,1, 3,4);
+
+        for (guint i = 0; i < G_N_ELEMENTS(_sw_presets_str); ++i) {
+            Gtk::MenuItem *mi = Gtk::manage(new Gtk::MenuItem());
+            mi->add(*(new Gtk::Label(_sw_presets_str[i], 0.0, 0.5)));
+            mi->signal_activate().connect(sigc::bind<int>(sigc::mem_fun(*this, &SelectedStyle::on_popup_preset), i));
+            _popup_sw.attach(*mi, 0,1, 4+i, 5+i);
+        }
+
+        guint i = G_N_ELEMENTS(_sw_presets_str) + 5;
+
+        _popup_sw.attach(*(new Gtk::SeparatorMenuItem()), 0,1, i,i+1);
+
+        _popup_sw_remove.add(*(new Gtk::Label(_("Remove"), 0.0, 0.5)));
+        _popup_sw_remove.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_stroke_remove));
+        _popup_sw.attach(_popup_sw_remove, 0,1, i+1,i+2);
+
+        _popup_sw.show_all();
+    }
+
     _fill_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_fill_click));
     _stroke_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_stroke_click));
     _opacity_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_click));
+    _stroke_width_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_sw_click));
 
     _opacity_sb.signal_populate_popup().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_menu));
     _opacity_sb.signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
 
     _fill_place.add(_na[SS_FILL]);
     _tooltips.set_tip(_fill_place, __na[SS_FILL]);
+
     _stroke_place.add(_na[SS_STROKE]);
     _tooltips.set_tip(_stroke_place, __na[SS_STROKE]);
+
+    _stroke.pack_start(_stroke_place);
+    _stroke_width_place.add(_stroke_width);
+    _stroke.pack_start(_stroke_width_place, Gtk::PACK_SHRINK);
 
     _opacity_sb.set_adjustment(_opacity_adjustment);
     sp_set_font_size_smaller (GTK_WIDGET(_opacity_sb.gobj()));
@@ -228,13 +282,13 @@ SelectedStyle::SelectedStyle(bool layout)
     _table.attach(_fill_label, 0,1, 0,1, Gtk::SHRINK, Gtk::SHRINK);
     _table.attach(_stroke_label, 0,1, 1,2, Gtk::SHRINK, Gtk::SHRINK);
 
-    _table.attach(_fill_place, 1,2, 0,1);
-    _table.attach(_stroke_place, 1,2, 1,2);
+    _table.attach(_fill_flag_place, 1,2, 0,1, Gtk::SHRINK, Gtk::SHRINK);
+    _table.attach(_stroke_flag_place, 1,2, 1,2, Gtk::SHRINK, Gtk::SHRINK);
 
-    _table.attach(_fill_flag_place, 2,3, 0,1, Gtk::SHRINK, Gtk::SHRINK);
-    _table.attach(_stroke_flag_place, 2,3, 1,2, Gtk::SHRINK, Gtk::SHRINK);
+    _table.attach(_fill_place, 2,3, 0,1);
+    _table.attach(_stroke, 2,3, 1,2);
 
-    _table.attach(*(new Gtk::VSeparator), 3,4, 0,2, Gtk::SHRINK);
+    //_table.attach(*(new Gtk::VSeparator), 3,4, 0,2, Gtk::SHRINK);
 
     _opacity_place.add(_opacity_label);
     _table.attach(_opacity_place, 4,5, 0,1, Gtk::SHRINK, Gtk::SHRINK);
@@ -242,13 +296,14 @@ SelectedStyle::SelectedStyle(bool layout)
 
     pack_start(_table, true, true, 2);
 
-    set_size_request (SELECTED_STYLE_WIDTH, -1);
+    set_size_request (SELECTED_STYLE_WIDTH + 20, -1);
 
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_opacity_label.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_place.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_flag_place.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_place.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_flag_place.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_stroke_width.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_label.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_label.gobj()));
 }
@@ -290,6 +345,8 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
             sigc::ptr_fun(&ss_subselection_changed),
             this )
     ));
+
+    //_sw_unit = (SPUnit *) SP_DT_NAMEDVIEW(desktop)->doc_units;
 }
 
 void SelectedStyle::on_fill_remove() {
@@ -581,6 +638,19 @@ SelectedStyle::on_stroke_click(GdkEventButton *event)
 }
 
 bool 
+SelectedStyle::on_sw_click(GdkEventButton *event)
+{
+    if (event->button == 1) { // click, open fill&stroke
+        sp_object_properties_stroke_style ();
+    } else if (event->button == 3) { // right-click, popup menu
+        _popup_sw.popup(event->button, event->time);
+    } else if (event->button == 2) { // middle click, toggle none/lastwidth?
+        //
+    }
+    return true;
+}
+
+bool 
 SelectedStyle::on_opacity_click(GdkEventButton *event)
 {
     if (event->button == 2) { // middle click
@@ -594,6 +664,35 @@ SelectedStyle::on_opacity_click(GdkEventButton *event)
     }
 
     return false;
+}
+
+void SelectedStyle::on_popup_px() {
+    _sw_unit = (SPUnit *) &(sp_unit_get_by_id(SP_UNIT_PX));
+    update();
+}
+void SelectedStyle::on_popup_pt() {
+    _sw_unit = (SPUnit *) &(sp_unit_get_by_id(SP_UNIT_PT));
+    update();
+}
+void SelectedStyle::on_popup_mm() {
+    _sw_unit = (SPUnit *) &(sp_unit_get_by_id(SP_UNIT_MM));
+    update();
+}
+
+void SelectedStyle::on_popup_preset(int i) {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    gdouble w;
+    if (_sw_unit) {
+        w = sp_units_get_pixels (_sw_presets[i], *_sw_unit);
+    } else {
+        w = _sw_presets[i];
+    }
+    Inkscape::CSSOStringStream os;
+    os << w;
+    sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
+    sp_desktop_set_style (_desktop, css, true);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
 }
 
 void
@@ -623,6 +722,7 @@ SelectedStyle::update()
         // query style from desktop. This returns a result flag and fills query with the style of subselection, if any, or selection
         int result = sp_desktop_query_style (_desktop, query, 
                                              (i == SS_FILL)? QUERY_STYLE_PROPERTY_FILL : QUERY_STYLE_PROPERTY_STROKE);
+        int result_sw = sp_desktop_query_style (_desktop, query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
 
         switch (result) {
         case QUERY_STYLE_NOTHING:
@@ -697,6 +797,42 @@ SelectedStyle::update()
             _tooltips.set_tip(*place, __many[i]);
             _mode[i] = SS_MANY;
             break;
+        default:
+            break;
+        }
+
+        switch (result_sw) {
+        case QUERY_STYLE_NOTHING:
+            _stroke_width.set_markup("");
+            break;
+        case QUERY_STYLE_SINGLE:
+        case QUERY_STYLE_MULTIPLE_AVERAGED:
+        case QUERY_STYLE_MULTIPLE_SAME: 
+        {
+            double w;
+            if (_sw_unit) {
+                w = sp_pixels_get_units(query->stroke_width.computed, *_sw_unit);
+            } else {
+                w = query->stroke_width.computed;
+            }
+            {
+                gchar *str = g_strdup_printf(" %.3g", w);
+                _stroke_width.set_markup(str);
+                g_free (str);
+            }
+            {
+                gchar *str = g_strdup_printf(_("Stroke width: %.5g%s%s"), 
+                                             w, 
+                                             _sw_unit? sp_unit_get_abbreviation(_sw_unit) : "px", 
+                                             (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED)?
+                                                 _(" (averaged)") : "");
+                _tooltips.set_tip(_stroke_width_place, str);
+                g_free (str);
+            }
+
+
+            break;
+        }
         default:
             break;
         }
