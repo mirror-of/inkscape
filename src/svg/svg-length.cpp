@@ -366,7 +366,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                 break;
             case UVAL('i','n'):
                 if (unit) {
-                    *unit = SVGLength::IN;
+                    *unit = SVGLength::INCH;
                 }
                 if (computed) {
                     *computed = v * PX_PER_IN;
@@ -473,7 +473,7 @@ gchar const *sp_svg_length_get_css_units(SVGLength::Unit unit)
         case SVGLength::PC: return "pc";
         case SVGLength::MM: return "mm";
         case SVGLength::CM: return "cm";
-        case SVGLength::IN: return "in";
+        case SVGLength::INCH: return "in";
         case SVGLength::EM: return "em";
         case SVGLength::EX: return "ex";
         case SVGLength::PERCENT: return "%";

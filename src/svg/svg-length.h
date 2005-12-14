@@ -26,7 +26,7 @@ public:
 	PC,
 	MM,
 	CM,
-	IN,
+	INCH,
 	EM,
 	EX,
 	PERCENT

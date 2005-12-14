@@ -45,7 +45,7 @@ SPUnit const sp_units[] = {
     {SP_UNIT_MM, SP_UNIT_ABSOLUTE, PX_PER_MM, SP_MM, SVGLength::MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
     {SP_UNIT_CM, SP_UNIT_ABSOLUTE, PX_PER_CM, SP_CM, SVGLength::CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
     {SP_UNIT_M, SP_UNIT_ABSOLUTE, PX_PER_M, SP_M, SVGLength::NONE, N_("Meter"), N_("m"), N_("Meters"), N_("m")}, // no svg_unit
-    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, PX_PER_IN, SP_IN, SVGLength::IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
+    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, PX_PER_IN, SP_IN, SVGLength::INCH, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
     /* Volatiles do not have default, so there are none here */
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
     {SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, NONE, SVGLength::EM, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
