@@ -53,6 +53,7 @@
 #include "widgets/spinbutton-events.h"
 #include "widgets/layer-selector.h"
 #include "ui/widget/selected-style.h"
+#include "sp-item.h"
 
 #ifdef WITH_INKBOARD
 #include "jabber_whiteboard/session-manager.h"

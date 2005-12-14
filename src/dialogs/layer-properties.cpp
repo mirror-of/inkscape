@@ -29,6 +29,7 @@
 #include "message-stack.h"
 #include "desktop-handles.h"
 #include "layer-fns.h"
+#include "sp-object.h"
 
 #include "layer-properties.h"
 

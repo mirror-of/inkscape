@@ -340,8 +340,7 @@ sp_flowtext_print(SPItem *item, SPPrintContext *ctx)
     dbox.y0 = 0.0;
     dbox.x1 = sp_document_width(SP_OBJECT_DOCUMENT(item));
     dbox.y1 = sp_document_height(SP_OBJECT_DOCUMENT(item));
-    NRMatrix ctm;
-    sp_item_i2d_affine(item, &ctm);
+    NR::Matrix const ctm = sp_item_i2d_affine(item);
 
     group->layout.print(ctx, &pbox, &dbox, &bbox, ctm);
 }

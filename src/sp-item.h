@@ -226,7 +226,6 @@ NR::Matrix matrix_from_desktop (NR::Matrix m, SPItem const *item);
  * \return TRANSFORM.
  */
 NR::Matrix sp_item_i2d_affine(SPItem const *item);
-NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *transform);
 
 NR::Matrix sp_item_i2r_affine(SPItem const *item);
 

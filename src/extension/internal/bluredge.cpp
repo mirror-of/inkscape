@@ -17,6 +17,7 @@
 #include "helper/action.h"
 #include "prefs-utils.h"
 #include "path-chemistry.h"
+#include "sp-item.h"
 
 #include "util/glib-list-iterators.h"
 

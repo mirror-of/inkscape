@@ -28,6 +28,7 @@
 #include "prefs-utils.h"
 #include "sp-item-transform.h"
 #include "macros.h"
+#include "sp-item.h"
 
 namespace Inkscape {
 namespace UI {

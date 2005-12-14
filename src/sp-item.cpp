@@ -1218,23 +1218,6 @@ NR::Matrix matrix_from_desktop(NR::Matrix const m, SPItem const *item)
     return ret;
 }
 
-NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
-{
-    g_return_val_if_fail(item != NULL, NULL);
-    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
-    g_return_val_if_fail(affine != NULL, NULL);
-
-    NRMatrix const i2doc(sp_item_i2doc_affine(item));
-
-    NRMatrix doc2dt;
-    nr_matrix_set_scale(&doc2dt, 1, -1);
-    doc2dt.c[5] = sp_document_height(SP_OBJECT_DOCUMENT(item));
-
-    nr_matrix_multiply(affine, &i2doc, &doc2dt);
-
-    return affine;
-}
-
 void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &i2dt)
 {
     g_return_if_fail( item != NULL );

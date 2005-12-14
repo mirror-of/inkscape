@@ -42,6 +42,7 @@
 #include "sp-gradient.h"
 #include "gradient-chemistry.h"
 #include "xml/repr.h"
+#include "sp-item.h"
 
 static void sp_gradient_context_class_init(SPGradientContextClass *klass);
 static void sp_gradient_context_init(SPGradientContext *gr_context);

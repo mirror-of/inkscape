@@ -63,6 +63,7 @@
 #include "libnr/nr-point-fns.h"
 #include "xml/repr.h"
 #include "context-fns.h"
+#include "sp-item.h"
 
 #define DDC_RED_RGBA 0xff0000ff
 #define DDC_GREEN_RGBA 0x000000ff

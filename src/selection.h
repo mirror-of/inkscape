@@ -22,11 +22,12 @@
 #include "libnr/nr-rect.h"
 #include "libnr/nr-convex-hull.h"
 #include "forward.h"
-#include "sp-item.h"
 #include "gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include "util/list.h"
+
+class SPItem;
 
 namespace Inkscape {
 namespace XML {

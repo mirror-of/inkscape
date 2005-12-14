@@ -606,7 +606,6 @@ void
 sp_shape_print (SPItem *item, SPPrintContext *ctx)
 {
 	NRRect pbox, dbox, bbox;
-	NRMatrix i2d;
 
 	SPShape *shape = SP_SHAPE(item);
 
@@ -627,20 +626,20 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
 	dbox.x1 = sp_document_width (SP_OBJECT_DOCUMENT (item));
 	dbox.y1 = sp_document_height (SP_OBJECT_DOCUMENT (item));
 	sp_item_bbox_desktop (item, &bbox);
-	sp_item_i2d_affine (item, &i2d);
+	NR::Matrix const i2d = sp_item_i2d_affine(item);
 
         SPStyle* style = SP_OBJECT_STYLE (item);
 
 	if (style->fill.type != SP_PAINT_TYPE_NONE) {
 		NRBPath bp;
 		bp.path = shape->curve->bpath;
-		sp_print_fill (ctx, &bp, &i2d, style, &pbox, &dbox, &bbox);
+		sp_print_fill (ctx, &bp, i2d, style, &pbox, &dbox, &bbox);
 	}
 
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
 		NRBPath bp;
 		bp.path = shape->curve->bpath;
-		sp_print_stroke (ctx, &bp, &i2d, style, &pbox, &dbox, &bbox);
+		sp_print_stroke (ctx, &bp, i2d, style, &pbox, &dbox, &bbox);
 	}
 
         for (NArtBpath* bp = shape->curve->bpath; bp->code != NR_END; bp++) {

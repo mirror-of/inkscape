@@ -24,6 +24,7 @@
 #include "desktop.h"
 #include "selection.h"
 #include "xml/repr.h"
+#include "sp-object.h"
 
 #include "extension/implementation/implementation.h"
 #include "extension/extension.h"
@@ -136,7 +137,7 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
 
     // std::cout << "Path Data: " << path_data << std::endl;
 
-    Inkscape::XML::Node * current_layer = SP_OBJECT_REPR(((SPDesktop *)document)->currentLayer());
+    Inkscape::XML::Node * current_layer = ((SPDesktop *)document)->currentLayer()->repr;
     Inkscape::XML::Node * path = sp_repr_new("svg:path");
 
     path->setAttribute("d", path_data.c_str());
