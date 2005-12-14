@@ -286,32 +286,34 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), dtw->zoom_status);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
-    sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
-    gtk_box_pack_end (GTK_BOX (statusbar_tail), dtw->zoom_status, FALSE, FALSE, 0);
 
     // cursor coordinates
-    dtw->coord_status = gtk_table_new (2,2, FALSE);
+    dtw->coord_status = gtk_table_new (5, 2, FALSE);
     gtk_table_set_row_spacings(GTK_TABLE(dtw->coord_status), 0);
     gtk_table_set_col_spacings(GTK_TABLE(dtw->coord_status), 2);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status), gtk_vseparator_new(), 0,1, 0,2, GTK_FILL, GTK_FILL, 0, 0);
     eventbox = gtk_event_box_new ();
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->coord_status);
     gtk_tooltips_set_tip (dtw->tt, eventbox, _("Cursor coordinates"), NULL);
-    gtk_table_attach(GTK_TABLE(dtw->coord_status),  gtk_label_new("X"), 0,1, 0,1, GTK_FILL, GTK_FILL, 0, 0);
-    gtk_table_attach(GTK_TABLE(dtw->coord_status),  gtk_label_new("Y"), 0,1, 1,2, GTK_FILL, GTK_FILL, 0, 0);
-    dtw->coord_status_x = gtk_label_new("000.000");
+    GtkWidget *label_x = gtk_label_new("X:");
+    gtk_misc_set_alignment (GTK_MISC(label_x), 0.0, 0.5);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status),  label_x, 1,2, 0,1, GTK_FILL, GTK_FILL, 0, 0);
+    GtkWidget *label_y = gtk_label_new("Y:");
+    gtk_misc_set_alignment (GTK_MISC(label_y), 0.0, 0.5);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status),  label_y, 1,2, 1,2, GTK_FILL, GTK_FILL, 0, 0);
+    dtw->coord_status_x = gtk_label_new("0.0");
     gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_x), 0.0, 0.5);
-    dtw->coord_status_y = gtk_label_new("000.000");
+    dtw->coord_status_y = gtk_label_new("0.0");
     gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_y), 0.0, 0.5);
-    gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_x, 1,2, 0,1, GTK_FILL, GTK_FILL, 0, 0);
-    gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_y, 1,2, 1,2, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_x, 2,3, 0,1, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_y, 2,3, 1,2, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status),  gtk_label_new("Z:"), 3,4, 0,2, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status),  dtw->zoom_status, 4,5, 0,2, GTK_FILL, GTK_FILL, 0, 0);
     sp_set_font_size_smaller_smaller (dtw->coord_status);
-    gtk_widget_set_size_request (dtw->coord_status, STATUS_COORD_WIDTH, -1);
     gtk_box_pack_end (GTK_BOX (statusbar_tail), eventbox, FALSE, FALSE, 1);
 
-    gtk_box_pack_end (GTK_BOX (statusbar_tail), gtk_vseparator_new(), FALSE, FALSE, 0);
-
     dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);
-    // FIXME: need to unreference on container destructino to avoid leak
+    // FIXME: need to unreference on container destruction to avoid leak
     dtw->layer_selector->reference();
     //dtw->layer_selector->set_size_request(-1, SP_ICON_SIZE_BUTTON);
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector->gobj()), FALSE, FALSE, 1);

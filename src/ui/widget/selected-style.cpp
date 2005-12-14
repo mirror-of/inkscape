@@ -288,22 +288,21 @@ SelectedStyle::SelectedStyle(bool layout)
     _table.attach(_fill_place, 2,3, 0,1);
     _table.attach(_stroke, 2,3, 1,2);
 
-    //_table.attach(*(new Gtk::VSeparator), 3,4, 0,2, Gtk::SHRINK);
-
     _opacity_place.add(_opacity_label);
-    _table.attach(_opacity_place, 4,5, 0,1, Gtk::SHRINK, Gtk::SHRINK);
+    _table.attach(_opacity_place, 4,5, 0,2, Gtk::SHRINK, Gtk::SHRINK);
     _table.attach(_opacity_sb, 5,6, 0,2, Gtk::SHRINK, Gtk::SHRINK);
 
     pack_start(_table, true, true, 2);
 
-    set_size_request (SELECTED_STYLE_WIDTH + 20, -1);
+    set_size_request (SELECTED_STYLE_WIDTH, -1);
 
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_opacity_label.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_opacity_sb.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_place.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_flag_place.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_place.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_flag_place.gobj()));
-    sp_set_font_size_smaller (GTK_WIDGET(_stroke_width.gobj()));
+    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_width.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_label.gobj()));
     sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_label.gobj()));
 }

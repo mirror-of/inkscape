@@ -1141,30 +1141,31 @@ EditWidget::initStatusbar()
 {
     _statusbar.pack_start (_selected_style_status, false, false, 1);
     _statusbar.pack_start (*new Gtk::VSeparator(), false, false, 0);
-    _statusbar.pack_end (_zoom_status, false, false, 0);
+
     _tooltips.set_tip (_zoom_status, _("Zoom"));
 
     _layer_selector.reference();
     _statusbar.pack_start (_layer_selector, false, false, 1);
 
     _coord_status.property_n_rows() = 2;    
-    _coord_status.property_n_columns() = 2;    
+    _coord_status.property_n_columns() = 5;    
     _coord_status.property_row_spacing() = 0;
     _coord_status.property_column_spacing() = 2;
     _coord_eventbox.add (_coord_status);
     _tooltips.set_tip (_coord_eventbox, _("Cursor coordinates"));
-    _coord_status.attach (*new Gtk::Label("X"), 0,1,0,1, Gtk::FILL,Gtk::FILL, 0,0);
-    _coord_status.attach (*new Gtk::Label("Y"), 0,1,1,2, Gtk::FILL,Gtk::FILL, 0,0);
-    _coord_status_x.set_text ("000.000");
+    _coord_status.attach (*new Gtk::VSeparator(), 0,1, 0,2, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (*new Gtk::Label("X:", 0.0, 0.5), 1,2, 0,1, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (*new Gtk::Label("Y:", 0.0, 0.5), 1,2, 1,2, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status_x.set_text ("0.0");
     _coord_status_x.set_alignment (0.0, 0.5);
-    _coord_status_y.set_text ("000.000");
+    _coord_status_y.set_text ("0.0");
     _coord_status_y.set_alignment (0.0, 0.5);
-    _coord_status.attach (_coord_status_x, 1,2,0,1, Gtk::FILL,Gtk::FILL, 0,0);
-    _coord_status.attach (_coord_status_y, 1,2,1,2, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (_coord_status_x, 2,3, 0,1, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (_coord_status_y, 2,3, 1,2, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (*new Gtk::Label("Z:", 0.0, 0.5), 3,4, 0,2, Gtk::FILL,Gtk::FILL, 0,0);
+    _coord_status.attach (_zoom_status, 4,5, 0,2, Gtk::FILL,Gtk::FILL, 0,0);
     sp_set_font_size_smaller_smaller (static_cast<GtkWidget*>((void*)_coord_status.gobj()));
-    _coord_status.set_size_request (STATUS_COORD_WIDTH, -1);
     _statusbar.pack_end (_coord_eventbox, false, false, 1);
-    _statusbar.pack_end (*new Gtk::VSeparator(), false, false, 0);
 
     _select_status.property_xalign() = 0.0;
     _select_status.property_yalign() = 0.5;
