@@ -1368,7 +1368,6 @@ sp_text_context_style_query(SPStyle *style, int property, SPTextContext *tc)
     sp_text_context_validate_cursor_iterators(tc);
 
     GSList *styles_list = NULL;
-    int result = QUERY_STYLE_NOTHING;
 
     Inkscape::Text::Layout::iterator begin_it, end_it;
     if (tc->text_sel_start < tc->text_sel_end) {
@@ -1390,16 +1389,7 @@ sp_text_context_style_query(SPStyle *style, int property, SPTextContext *tc)
         styles_list = g_slist_prepend(styles_list, (gpointer)pos_obj);
     }
 
-    if (property == QUERY_STYLE_PROPERTY_FONTFAMILY)
-        result = objects_query_fontfamily(styles_list, style);
-    else if (property == QUERY_STYLE_PROPERTY_FONTSTYLE)
-        result = objects_query_fontstyle(styles_list, style);
-    else if (property == QUERY_STYLE_PROPERTY_FONTNUMBERS)
-        result = objects_query_fontnumbers(styles_list, style);
-    else if (property == QUERY_STYLE_PROPERTY_FILL)
-        result = objects_query_fillstroke(styles_list, style, true);
-    else if (property == QUERY_STYLE_PROPERTY_STROKE)
-        result = objects_query_fillstroke(styles_list, style, false);
+    int result = sp_desktop_query_style_from_list (styles_list, style, property);
 
     g_slist_free(styles_list);
     return result;

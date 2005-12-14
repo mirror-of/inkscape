@@ -67,6 +67,7 @@ int objects_query_miterlimit (GSList *objects, SPStyle *style_res);
 int objects_query_strokecap (GSList *objects, SPStyle *style_res);
 int objects_query_strokejoin (GSList *objects, SPStyle *style_res);
 
+int sp_desktop_query_style_from_list (GSList *list, SPStyle *style, int property);
 int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
 bool sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query);
 

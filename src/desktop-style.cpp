@@ -927,6 +927,42 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
 }
 
 /**
+ * Query the given list of objects for the given property, write
+ * the result to style, return appropriate flag.
+ */
+int
+sp_desktop_query_style_from_list (GSList *list, SPStyle *style, int property)
+{
+    if (property == QUERY_STYLE_PROPERTY_FILL) {
+        return objects_query_fillstroke (list, style, true);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKE) {
+        return objects_query_fillstroke (list, style, false);
+
+    } else if (property == QUERY_STYLE_PROPERTY_STROKEWIDTH) {
+        return objects_query_strokewidth (list, style);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKEMITERLIMIT) {
+        return objects_query_miterlimit (list, style);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKECAP) {
+        return objects_query_strokecap (list, style);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKEJOIN) {
+        return objects_query_strokejoin (list, style);
+
+    } else if (property == QUERY_STYLE_PROPERTY_MASTEROPACITY) {
+        return objects_query_opacity (list, style);
+
+    } else if (property == QUERY_STYLE_PROPERTY_FONTFAMILY) {
+        return objects_query_fontfamily (list, style);
+    } else if (property == QUERY_STYLE_PROPERTY_FONTSTYLE) {
+        return objects_query_fontstyle (list, style);
+    } else if (property == QUERY_STYLE_PROPERTY_FONTNUMBERS) {
+        return objects_query_fontnumbers (list, style);
+    }
+
+    return QUERY_STYLE_NOTHING;
+}
+
+
+/**
  * Query the subselection (if any) or selection on the given desktop for the given property, write
  * the result to style, return appropriate flag.
  */
@@ -939,32 +975,7 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
         return ret; // subselection returned a style, pass it on
 
     // otherwise, do querying and averaging over selection
-    if (property == QUERY_STYLE_PROPERTY_FILL) {
-        return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, true);
-    } else if (property == QUERY_STYLE_PROPERTY_STROKE) {
-        return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, false);
-
-    } else if (property == QUERY_STYLE_PROPERTY_STROKEWIDTH) {
-        return objects_query_strokewidth ((GSList *) desktop->selection->itemList(), style);
-    } else if (property == QUERY_STYLE_PROPERTY_STROKEMITERLIMIT) {
-        return objects_query_miterlimit ((GSList *) desktop->selection->itemList(), style);
-    } else if (property == QUERY_STYLE_PROPERTY_STROKECAP) {
-        return objects_query_strokecap ((GSList *) desktop->selection->itemList(), style);
-    } else if (property == QUERY_STYLE_PROPERTY_STROKEJOIN) {
-        return objects_query_strokejoin ((GSList *) desktop->selection->itemList(), style);
-
-    } else if (property == QUERY_STYLE_PROPERTY_MASTEROPACITY) {
-        return objects_query_opacity ((GSList *) desktop->selection->itemList(), style);
-
-    } else if (property == QUERY_STYLE_PROPERTY_FONTFAMILY) {
-        return objects_query_fontfamily ((GSList *) desktop->selection->itemList(), style);
-    } else if (property == QUERY_STYLE_PROPERTY_FONTSTYLE) {
-        return objects_query_fontstyle ((GSList *) desktop->selection->itemList(), style);
-    } else if (property == QUERY_STYLE_PROPERTY_FONTNUMBERS) {
-        return objects_query_fontnumbers ((GSList *) desktop->selection->itemList(), style);
-    }
-
-    return QUERY_STYLE_NOTHING;
+    return sp_desktop_query_style_from_list ((GSList *) desktop->selection->itemList(), style, property);
 }
 
 /**
