@@ -722,8 +722,6 @@ SelectedStyle::update()
         // query style from desktop. This returns a result flag and fills query with the style of subselection, if any, or selection
         int result = sp_desktop_query_style (_desktop, query, 
                                              (i == SS_FILL)? QUERY_STYLE_PROPERTY_FILL : QUERY_STYLE_PROPERTY_STROKE);
-        int result_sw = sp_desktop_query_style (_desktop, query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
-
         switch (result) {
         case QUERY_STYLE_NOTHING:
             place->add(_na[i]);
@@ -800,42 +798,6 @@ SelectedStyle::update()
         default:
             break;
         }
-
-        switch (result_sw) {
-        case QUERY_STYLE_NOTHING:
-            _stroke_width.set_markup("");
-            break;
-        case QUERY_STYLE_SINGLE:
-        case QUERY_STYLE_MULTIPLE_AVERAGED:
-        case QUERY_STYLE_MULTIPLE_SAME: 
-        {
-            double w;
-            if (_sw_unit) {
-                w = sp_pixels_get_units(query->stroke_width.computed, *_sw_unit);
-            } else {
-                w = query->stroke_width.computed;
-            }
-            {
-                gchar *str = g_strdup_printf(" %.3g", w);
-                _stroke_width.set_markup(str);
-                g_free (str);
-            }
-            {
-                gchar *str = g_strdup_printf(_("Stroke width: %.5g%s%s"), 
-                                             w, 
-                                             _sw_unit? sp_unit_get_abbreviation(_sw_unit) : "px", 
-                                             (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED)?
-                                                 _(" (averaged)") : "");
-                _tooltips.set_tip(_stroke_width_place, str);
-                g_free (str);
-            }
-
-
-            break;
-        }
-        default:
-            break;
-        }
     }
 
 // Now query opacity
@@ -856,6 +818,42 @@ SelectedStyle::update()
         _opacity_sb.set_sensitive(true);
         _opacity_adjustment.set_value(SP_SCALE24_TO_FLOAT(query->opacity.value));
         _opacity_blocked = false;
+        break;
+    }
+
+// Now query stroke_width
+    int result_sw = sp_desktop_query_style (_desktop, query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
+    switch (result_sw) {
+    case QUERY_STYLE_NOTHING:
+        _stroke_width.set_markup("");
+        break;
+    case QUERY_STYLE_SINGLE:
+    case QUERY_STYLE_MULTIPLE_AVERAGED:
+    case QUERY_STYLE_MULTIPLE_SAME: 
+    {
+        double w;
+        if (_sw_unit) {
+            w = sp_pixels_get_units(query->stroke_width.computed, *_sw_unit);
+        } else {
+            w = query->stroke_width.computed;
+        }
+        {
+            gchar *str = g_strdup_printf(" %.3g", w);
+            _stroke_width.set_markup(str);
+            g_free (str);
+        }
+        {
+            gchar *str = g_strdup_printf(_("Stroke width: %.5g%s%s"), 
+                                         w, 
+                                         _sw_unit? sp_unit_get_abbreviation(_sw_unit) : "px", 
+                                         (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED)?
+                                         _(" (averaged)") : "");
+            _tooltips.set_tip(_stroke_width_place, str);
+            g_free (str);
+        }
+        break;
+    }
+    default:
         break;
     }
 
