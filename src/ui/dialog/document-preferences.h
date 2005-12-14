@@ -27,6 +27,9 @@
 using namespace Inkscape::UI::Widget;
 
 namespace Inkscape {
+    namespace XML {
+        class Node;
+    }
     namespace UI {
         namespace Widget {
             class EntityEntry;
@@ -39,11 +42,9 @@ class DocumentPreferences : public Inkscape::UI::Dialog::Dialog {
 public:
     static DocumentPreferences *create();
     static void destroy();
-    static bool isUpdating();
-    static void setUpdating (bool);
-    static void addKey (const Glib::ustring&, Gtk::Object*);
 
 protected:
+    friend void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
     void  build_page();
     void  build_grid();
     void  build_guides();

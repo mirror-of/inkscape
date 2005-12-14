@@ -29,6 +29,7 @@
 #include "ui/widget/unit-menu.h"
 
 #include "xml/repr.h"
+#include "xml/node-event-vector.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "dialogs/rdf.h"
@@ -54,6 +55,17 @@ namespace Dialog {
 //---------------------------------------------------
 
 DocumentPreferences *_instance = 0;
+
+void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
+
+static Inkscape::XML::NodeEventVector const _repr_events = {
+    NULL, /* child_added */
+    NULL, /* child_removed */
+    on_repr_attr_changed,
+    NULL, /* content_changed */
+    NULL  /* order_changed */
+};
+
 
 DocumentPreferences*
 DocumentPreferences::create()
@@ -102,7 +114,8 @@ DocumentPreferences::init()
 {
     update();
 
-//sp_repr_add_listener(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), &docoptions_repr_events, dlg);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
+    repr->addListener (&_repr_events, this);
 
     show_all_children();
     present();
@@ -110,10 +123,11 @@ DocumentPreferences::init()
 
 DocumentPreferences::~DocumentPreferences() 
 {
-//    sp_repr_remove_listener_by_data (SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), dlg);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
+    repr->removeListenerByData (this);
 
-   for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
-       delete (*it);
+    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
+        delete (*it);
 }
 
 //========================================================================
@@ -441,6 +455,21 @@ DocumentPreferences::update()
 
     _wr.setUpdating (false);
 }
+
+//--------------------------------------------------------------------
+
+/**
+ * Called when XML node attribute changed; updates dialog widgets.
+ */
+void
+on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer)
+{
+    if (!_instance || _instance->_wr.isUpdating())
+        return;
+
+    _instance->update();
+}
+
 
 } // namespace Dialog
 } // namespace UI
