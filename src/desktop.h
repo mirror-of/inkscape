@@ -105,7 +105,7 @@ struct SPDesktop : public Inkscape::UI::View::View
     sigc::signal<void, sp_verb_t>      _tool_changed;
     sigc::signal<void, SPObject *>     _layer_changed_signal;
     sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
-    sigc::signal<int, SPStyle *, int>::accumulated<StopOnTrue> _query_style_signal;
+    sigc::signal<int, SPStyle *, int>::accumulated<StopOnNonZero> _query_style_signal;
     sigc::connection connectDocumentReplaced (const sigc::slot<void,SPDesktop*,SPDocument*> & slot)
     {
         return _document_replaced_signal.connect (slot);
