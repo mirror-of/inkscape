@@ -453,8 +453,6 @@ sp_style_unref(SPStyle *style)
     style->refcount -= 1;
 
     if (style->refcount < 1) {
-        // if (style->object)
-        //    gtk_signal_disconnect_by_data(GTK_OBJECT(style->object), style);
         if (style->object)
             g_signal_handlers_disconnect_matched(G_OBJECT(style->object),
                                                  G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, style);
@@ -2012,7 +2010,7 @@ sp_style_merge_ipaint(SPStyle *style, SPIPaint *paint, SPIPaint const *parent)
             paint->value.paint.server = parent->value.paint.server;
             paint->value.paint.uri = parent->value.paint.uri;
             if (paint->value.paint.server) {
-                if (!style->cloned) {
+                if (style->object && !style->cloned) {
                     sp_object_href(SP_OBJECT(paint->value.paint.server), style);
                 }
                 g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
@@ -2863,7 +2861,7 @@ sp_style_read_ipaint(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
             SPObject *ps = sp_uri_reference_resolve(document, str);
             if (ps && SP_IS_PAINT_SERVER(ps)) {
                 paint->value.paint.server = SP_PAINT_SERVER(ps);
-                if (!style->cloned) {
+                if (style->object && !style->cloned) {
                     sp_object_href(SP_OBJECT(paint->value.paint.server), style);
                 }
                 g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
@@ -3405,13 +3403,13 @@ sp_style_paint_clear(SPStyle *style, SPIPaint *paint,
                      unsigned hunref, unsigned unset)
 {
     if (hunref && (paint->type == SP_PAINT_TYPE_PAINTSERVER) && paint->value.paint.server) {
-        if (!style->cloned) {
-            sp_object_hunref(SP_OBJECT(paint->value.paint.server), style);
+        if (style->object) {
+            if (!style->cloned) {
+                sp_object_hunref(SP_OBJECT(paint->value.paint.server), style);
+            }
+            g_signal_handlers_disconnect_matched(G_OBJECT(paint->value.paint.server),
+                                                 G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, style);
         }
-        // gtk_signal_disconnect_by_data(GTK_OBJECT(paint->value.server),
-        //        style);
-        g_signal_handlers_disconnect_matched(G_OBJECT(paint->value.paint.server),
-                                             G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, style);
         paint->value.paint.server = NULL;
         paint->value.paint.uri = NULL;
         paint->type = SP_PAINT_TYPE_NONE;
