@@ -37,6 +37,22 @@ struct StopOnTrue {
   }
 };
 
+/**
+ * Iterates until nonzero or returns 0.
+ * When used as signal accumulator, stops emission if one slot returns nonzero.
+ */
+struct StopOnNonZero {
+  typedef int result_type;
+
+  template<typename T_iterator>
+  result_type operator()(T_iterator first, T_iterator last) const{	
+	for (; first != last; ++first)
+		if (*first) return *first;
+	return 0;      
+  }
+};
+
+
 namespace NR {
     class Point;
 }
