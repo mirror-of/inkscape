@@ -62,7 +62,7 @@ LicenseItem::on_activate()
     if (_wr.isUpdating()) return;
 
     _wr.setUpdating (true);
-    rdf_set_license (SP_ACTIVE_DOCUMENT, _lic);
+    rdf_set_license (SP_ACTIVE_DOCUMENT, _lic->details ? _lic : 0);
     sp_document_done (SP_ACTIVE_DOCUMENT);
     _wr.setUpdating (false);
     reinterpret_cast<Gtk::Entry*>(_eep->_packable)->set_text (_lic->uri);
