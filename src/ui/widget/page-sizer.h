@@ -46,7 +46,7 @@ protected:
     Gtk::OptionMenu     *_omenu_size, *_omenu_ori;
     sigc::connection     _portrait_connection, _landscape_connection;
     sigc::connection     _changedw_connection, _changedh_connection;
-    Registry             _wr;
+    Registry             *_wr;
 };
 
 }}}
