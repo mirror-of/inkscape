@@ -926,7 +926,7 @@ rdf_get_license(SPDocument * document)
 /**
  *  \brief   Stores an RDF/License XML in the document XML
  *  \param   document  Which document to update
- *  \param   license   The desired RDF/License structure to store
+ *  \param   license   The desired RDF/License structure to store; NULL drops old license, so can be used for proprietary license. 
  *  
  */
 void
