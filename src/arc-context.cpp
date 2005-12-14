@@ -143,9 +143,7 @@ static void sp_arc_context_dispose(GObject *object)
         sp_arc_finish(ac);
     }
 
-    if (ac->_message_context) {
-        delete ac->_message_context;
-    }
+    delete ac->_message_context;
 
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
@@ -194,12 +192,13 @@ void sp_arc_context_selection_changed(Inkscape::Selection * selection, gpointer 
 static void sp_arc_context_setup(SPEventContext *ec)
 {
     SPArcContext *ac = SP_ARC_CONTEXT(ec);
+    Inkscape::Selection *selection = SP_DT_SELECTION(ec->desktop);
 
     if (((SPEventContextClass *) parent_class)->setup) {
         ((SPEventContextClass *) parent_class)->setup(ec);
     }
 
-    SPItem *item = SP_DT_SELECTION(ec->desktop)->singleItem();
+    SPItem *item = selection->singleItem();
 
     if (item) {
         ec->shape_knot_holder = sp_item_knot_holder(item, ec->desktop);
@@ -213,7 +212,9 @@ static void sp_arc_context_setup(SPEventContext *ec)
     }
 
     ac->sel_changed_connection.disconnect();
-    ac->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(sigc::bind(sigc::ptr_fun(&sp_arc_context_selection_changed), (gpointer)ac));
+    ac->sel_changed_connection = selection->connectChanged(
+        sigc::bind(sigc::ptr_fun(&sp_arc_context_selection_changed), (gpointer) ac)
+        );
 
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
         ec->enableSelectionCue();
@@ -223,7 +224,7 @@ static void sp_arc_context_setup(SPEventContext *ec)
         ec->enableGrDrag();
     }
 
-    ac->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
+    ac->_message_context = new Inkscape::MessageContext(ec->desktop->messageStack());
 }
 
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
