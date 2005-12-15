@@ -14,6 +14,7 @@
 #define INKSCAPE_UI_DIALOG_DOCUMENT_PREFERENCES_H
 
 #include <list>
+#include <sigc++/sigc++.h>
 #include <gtkmm/notebook.h>
 #include <glibmm/i18n.h>
 
@@ -43,6 +44,7 @@ public:
     void  update();
     static DocumentPreferences *create();
     static void destroy();
+    sigc::connection _doc_replaced_connection;
 
 protected:
     void  build_page();

@@ -40,6 +40,7 @@
 #include "verbs.h"
 #include "document.h"
 #include "desktop-handles.h"
+#include "desktop.h"
 #include "sp-namedview.h"
 
 #include "document-preferences.h"
@@ -57,6 +58,7 @@ namespace Dialog {
 DocumentPreferences *_instance = 0;
 
 static void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
+static void on_doc_replaced (SPDesktop* dt, SPDocument* doc);
 static void on_activate_desktop (Inkscape::Application *, SPDesktop* dt, void*);
 static void on_deactivate_desktop (Inkscape::Application *, SPDesktop* dt, void*);
 
@@ -119,6 +121,8 @@ DocumentPreferences::init()
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     repr->addListener (&_repr_events, this);
 
+    _doc_replaced_connection = SP_ACTIVE_DESKTOP->connectDocumentReplaced (sigc::ptr_fun (on_doc_replaced));
+
     g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop",
                      G_CALLBACK(on_activate_desktop), 0);
     
@@ -133,6 +137,7 @@ DocumentPreferences::~DocumentPreferences()
 {
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     repr->removeListenerByData (this);
+    _doc_replaced_connection.disconnect();
 
     for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
         delete (*it);
@@ -488,7 +493,7 @@ on_activate_desktop (Inkscape::Application *, SPDesktop* dt, void*)
 
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     repr->addListener (&_repr_events, _instance);
-
+    _instance->_doc_replaced_connection = SP_ACTIVE_DESKTOP->connectDocumentReplaced (sigc::ptr_fun (on_doc_replaced));
     _instance->update();
 }
 
@@ -500,7 +505,17 @@ on_deactivate_desktop (Inkscape::Application *, SPDesktop* dt, void*)
 
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     repr->removeListenerByData (_instance);
+    _instance->_doc_replaced_connection.disconnect();
+}
 
+static void 
+on_doc_replaced (SPDesktop* dt, SPDocument* doc)
+{
+    if (!_instance)
+        return;
+
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
+    repr->addListener (&_repr_events, _instance);
     _instance->update();
 }
 
