@@ -22,6 +22,7 @@
 #include "sp-guide.h"
 #include "sp-namedview.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "geom.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-scale.h>
@@ -63,12 +64,12 @@ Inkscape::SnappedPoint SnapManager::freeSnap(Inkscape::Snapper::PointType t,
                                              NR::Point const &p,
                                              std::list<SPItem const *> const &it) const
 {
-    Inkscape::SnappedPoint r = std::make_pair(p, NR_HUGE);
+    Inkscape::SnappedPoint r(p, NR_HUGE);
     
     SPNamedView::SnapperList snappers = namedview->getSnappers();
     for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
         Inkscape::SnappedPoint const s = (*i)->freeSnap(t, p, it);
-        if (s.second < r.second) {
+        if (s.getDistance() < r.getDistance()) {
             r = s;
         }
     }
@@ -93,12 +94,12 @@ Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::Snapper::PointType
                                                     NR::Point const &c,
                                                     std::list<SPItem const *> const &it) const
 {
-    Inkscape::SnappedPoint r = std::make_pair(p, NR_HUGE);
+    Inkscape::SnappedPoint r(p, NR_HUGE);
     
     SPNamedView::SnapperList snappers = namedview->getSnappers();
     for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
         Inkscape::SnappedPoint const s = (*i)->constrainedSnap(t, p, c, it);
-        if (s.second < r.second) {
+        if (s.getDistance() < r.getDistance()) {
             r = s;
         }
     }
@@ -124,9 +125,9 @@ std::pair<NR::Point, bool> SnapManager::freeSnapTranslation(Inkscape::Snapper::P
         NR::Point const q = *i + tr;
         /* Snap it */
         Inkscape::SnappedPoint s = freeSnap(t, q, it);
-        if (s.second < NR_HUGE) {
+        if (s.getDistance() < NR_HUGE) {
             /* Resulting translation */
-            NR::Point const r = s.first - *i;
+            NR::Point const r = s.getPoint() - *i;
             NR::Coord const d = NR::L2(r);
             if (d < best_distance) {
                 best_distance = d;
@@ -158,9 +159,9 @@ std::pair<NR::Point, bool> SnapManager::constrainedSnapTranslation(Inkscape::Sna
         NR::Point const q = *i + tr;
         /* Snap it */
         Inkscape::SnappedPoint s = constrainedSnap(t, q, c, it);
-        if (s.second < NR_HUGE) {
+        if (s.getDistance() < NR_HUGE) {
             /* Resulting translation */
-            NR::Point const r = s.first - *i;
+            NR::Point const r = s.getPoint() - *i;
             NR::Coord const d = NR::L2(r);
             if (d < best_distance) {
                 best_distance = d;
@@ -232,9 +233,9 @@ NR::Coord namedview_vector_snap(SPNamedView const *nv, Inkscape::Snapper::PointT
     NR::Coord best = NR_HUGE;
     for (SPNamedView::SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
         Inkscape::SnappedPoint const s = (*i)->constrainedSnap(t, req, d, it);
-        if (s.second < best) {
-            req = s.first;
-            best = s.second;
+        if (s.getDistance() < best) {
+            req = s.getPoint();
+            best = s.getDistance();
         }
     }
 

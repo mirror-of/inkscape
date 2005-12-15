@@ -36,6 +36,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "desktop.h"
 #include "desktop-style.h"
 #include "message-context.h"
@@ -279,7 +280,7 @@ sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 sc->center = Inkscape::setup_for_drag_start(desktop, event_context, event);
 
                 SnapManager const m(desktop->namedview);
-                sc->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, sc->center, sc->item).first;
+                sc->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, sc->center, sc->item).getPoint();
                 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     ( GDK_KEY_PRESS_MASK |
@@ -426,7 +427,7 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
     NR::Point const p0 = sp_desktop_dt2root_xy_point(desktop, sc->center);
     NR::Point p1 = sp_desktop_dt2root_xy_point(desktop, p);
     SnapManager const m(desktop->namedview);
-    p1 = m.freeSnap(Inkscape::Snapper::SNAP_POINT, p1, sc->item).first;
+    p1 = m.freeSnap(Inkscape::Snapper::SNAP_POINT, p1, sc->item).getPoint();
 
     SPSpiral *spiral = SP_SPIRAL(sc->item);
 

@@ -69,6 +69,7 @@
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-point-matrix-ops.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "knot.h"
 #include "sp-conn-end.h"
 #include "conn-avoid-ref.h"
@@ -524,7 +525,7 @@ connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const
                         // as there's no other points to go off.
                         SnapManager const m(cc->desktop->namedview);
                         p = m.freeSnap(Inkscape::Snapper::SNAP_POINT | Inkscape::Snapper::BBOX_POINT,
-                                       p, NULL).first;
+                                       p, NULL).getPoint();
                     }                        
                     spcc_connector_set_initial_point(cc, p);
                     

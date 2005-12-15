@@ -15,19 +15,13 @@
 #include <list>
 #include "libnr/nr-coord.h"
 #include "libnr/nr-point.h"
+#include "snapped-point.h"
 
 struct SPNamedView;
 struct SPItem;
 
 namespace Inkscape
 {
-
-/// The result of an attempt to snap.  If a snap occurred, the
-/// first element is the snapped point and the second element is
-/// the distance from the original point to the snapped point.
-/// If no snap occurred, the first element is the original point
-/// and the second element is set to NR_HUGE.
-typedef std::pair<NR::Point, NR::Coord> SnappedPoint;
 
 /// Parent for classes that can snap points to something
 class Snapper

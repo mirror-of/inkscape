@@ -31,6 +31,7 @@
 #include "sp-path.h"
 #include "prefs-utils.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "pixmaps/cursor-pencil.xpm"
 #include "display/bezier-utils.h"
 #include "display/canvas-bpath.h"
@@ -238,7 +239,7 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
                         selection->clear();
                         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
                         SnapManager const m(desktop->namedview);
-                        p = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, p, NULL).first;
+                        p = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, p, NULL).getPoint();
                     } else if (selection->singleItem() && SP_IS_PATH(selection->singleItem())) {
                         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
                     }
@@ -307,7 +308,7 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
                     p = anchor->dp;
                 } else if ((mevent.state & GDK_SHIFT_MASK) == 0) {
                     SnapManager const m(dt->namedview);
-                    p = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, p, NULL).first;
+                    p = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, p, NULL).getPoint();
                 }
                 if ( pc->npoints != 0 ) { // buttonpress may have happened before we entered draw context!
                     spdc_add_freehand_point(pc, p, mevent.state);

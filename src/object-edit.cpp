@@ -26,6 +26,7 @@
 #include "prefs-utils.h"
 #include "inkscape.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "document.h"
@@ -343,7 +344,7 @@ static NR::Point rect_snap_knot_position(NR::Point const &p)
     SPDesktop const *desktop = inkscape_active_desktop();
     NR::Point s = sp_desktop_dt2root_xy_point(desktop, p);
     SnapManager const m(desktop->namedview);
-    s = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, s, NULL).first;
+    s = m.freeSnap(Inkscape::Snapper::BBOX_POINT | Inkscape::Snapper::SNAP_POINT, s, NULL).getPoint();
     return sp_desktop_root2dt_xy_point(desktop, s);
 }
 

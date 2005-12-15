@@ -31,6 +31,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "desktop.h"
 #include "desktop-style.h"
 #include "message-context.h"
@@ -310,7 +311,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             /* Snap center */
             SnapManager const m(desktop->namedview);
             rc->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT | Inkscape::Snapper::BBOX_POINT,
-                                    button_dt, rc->item).first;
+                                    button_dt, rc->item).getPoint();
             
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                 ( GDK_KEY_PRESS_MASK | 

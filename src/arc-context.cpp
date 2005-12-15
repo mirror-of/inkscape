@@ -32,6 +32,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "pixmaps/cursor-ellipse.xpm"
 #include "sp-metrics.h"
 #include "knotholder.h"
@@ -271,7 +272,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
                 ac->center = Inkscape::setup_for_drag_start(desktop, event_context, event);
 
                 SnapManager const m(desktop->namedview);
-                ac->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, ac->center, ac->item).first;
+                ac->center = m.freeSnap(Inkscape::Snapper::SNAP_POINT, ac->center, ac->item).getPoint();
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                                     GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,

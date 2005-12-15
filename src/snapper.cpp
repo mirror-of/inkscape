@@ -11,6 +11,7 @@
 #include "libnr/nr-values.h"
 #include "sp-namedview.h"
 #include "snapper.h"
+#include "snapped-point.h"
 
 Inkscape::Snapper::PointType const Inkscape::Snapper::BBOX_POINT = 0x1;
 Inkscape::Snapper::PointType const Inkscape::Snapper::SNAP_POINT = 0x2;
@@ -115,7 +116,7 @@ Inkscape::SnappedPoint Inkscape::Snapper::freeSnap(PointType t,
                                                    std::list<SPItem const *> const &it) const
 {
     if (getSnapTo(t) == false) {
-        return std::make_pair(p, NR_HUGE);
+        return SnappedPoint(p, NR_HUGE);
     }
 
     return _doFreeSnap(p, it);
@@ -163,15 +164,11 @@ Inkscape::SnappedPoint Inkscape::Snapper::constrainedSnap(PointType t,
                                                           std::list<SPItem const *> const &it) const
 {
     if (getSnapTo(t) == false) {
-        return std::make_pair(p, NR_HUGE);
+        return SnappedPoint(p, NR_HUGE);
     }
 
     return _doConstrainedSnap(p, c, it);
 }
-
-
-
-
 
 /*
   Local Variables:

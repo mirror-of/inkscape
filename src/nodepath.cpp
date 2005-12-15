@@ -31,6 +31,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "message-stack.h"
 #include "message-context.h"
 #include "node-context.h"
@@ -2719,9 +2720,9 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
             NR::Coord const scal = dot(delta, ndelta) / linelen;
             (*p) = n->pos + (scal / linelen) * ndelta;
         }
-        *p = m.constrainedSnap(Inkscape::Snapper::SNAP_POINT, *p, ndelta, NULL).first;
+        *p = m.constrainedSnap(Inkscape::Snapper::SNAP_POINT, *p, ndelta, NULL).getPoint();
     } else {
-        *p = m.freeSnap(Inkscape::Snapper::SNAP_POINT, *p, NULL).first;
+        *p = m.freeSnap(Inkscape::Snapper::SNAP_POINT, *p, NULL).getPoint();
     }
 
     sp_node_adjust_knot(n, -which);

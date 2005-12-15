@@ -53,6 +53,25 @@
 	src/svg/svg.h: partial C++-ificiation of SPSVGLength.  Rename it
 	to SVGLength.
 
+2005-12-13  Mathieu Dimanche <mdimanche@free.fr>
+
+	* src/snapped-point.{cpp,h} : new files.
+
+	* src/Makefile_insert : Added the new files
+
+	* src/arc-context.cpp, src/connector-context.cpp,
+	src/context-fns.cpp, src/draw-context.cpp, src/nodepath.cpp,
+	src/object-edit.cpp, src/pencil-context.cpp,
+	src/selection-chemistry.cpp, src/seltrans.cpp, src/snap.cpp,
+	src/spiral-context.cpp, src/star-context.cpp,
+	src/line-snapper.cpp, src/line-snapper.h, src/object-snapper.cpp,
+	src/object-snapper.h src/snapper.cpp, src/snapper.h,
+	src/event-context.cpp, src/rect-context.cpp,
+	src/select-context.cpp : Use SnappedPoint class
+
+	* src/color-rgba.h : Added rgba32 unsigned int handling and
+	"inverse" members (NEED TO BE TESTED)
+
 2005-12-12  MenTaLguY  <mental@rydia.net>
 
     * src/widgets/desktop-widget.cpp: moved some widgets into statusbar

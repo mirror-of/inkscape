@@ -3,6 +3,7 @@
 #include "geom.h"
 #include "line-snapper.h"
 #include "snap.h"
+#include "snapped-point.h"
 
 Inkscape::LineSnapper::LineSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv, d)
 {
@@ -20,12 +21,12 @@ Inkscape::SnappedPoint Inkscape::LineSnapper::_doFreeSnap(NR::Point const &p,
     /* If we snapped to both, combine the two results.  This is so that, for example,
     ** we snap nicely to the intersection of two guidelines.
     */
-    if (v.second < NR_HUGE && h.second < NR_HUGE) {
-        return std::make_pair(NR::Point(v.first[NR::X], h.first[NR::Y]), hypot(v.second, h.second));
+    if (v.getDistance() < NR_HUGE && h.getDistance() < NR_HUGE) {
+        return SnappedPoint(NR::Point(v.getPoint()[NR::X], h.getPoint()[NR::Y]), hypot(v.getDistance(), h.getDistance()));
     }
 
     /* If we snapped to a vertical line, return that */
-    if (v.second < NR_HUGE) {
+    if (v.getDistance() < NR_HUGE) {
         return v;
     }
 
@@ -39,7 +40,8 @@ Inkscape::SnappedPoint Inkscape::LineSnapper::_doConstrainedSnap(NR::Point const
                                                                  NR::Point const &c,
                                                                  std::list<SPItem const *> const &it) const
 {
-    Inkscape::SnappedPoint s = std::make_pair(p, NR_HUGE);
+    Inkscape::SnappedPoint s = SnappedPoint(p, NR_HUGE);
+
     NR::Point const v = NR::unit_vector(c);
 
     /* Get the lines that we will try to snap to */
@@ -59,8 +61,8 @@ Inkscape::SnappedPoint Inkscape::LineSnapper::_doConstrainedSnap(NR::Point const
 
         if (k == INTERSECTS) {
             const NR::Coord dist = L2(t - p);
-            if (dist < getDistance() && dist < s.second) {
-                s = std::make_pair(t, dist);
+            if (dist < getDistance() && dist < s.getDistance() ) {
+                s = SnappedPoint(t, dist);
             }
         }
     }

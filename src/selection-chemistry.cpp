@@ -49,6 +49,7 @@
 #include "path-chemistry.h"
 #include "desktop-affine.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-fns.h"
@@ -1084,7 +1085,7 @@ void sp_selection_paste(bool in_place)
         Inkscape::GridSnapper &s = desktop->namedview->grid_snapper;
         gdouble const curr_gridsnap = s.getDistance();
         s.setDistance(NR_HUGE);
-        m = s.freeSnap(Inkscape::Snapper::SNAP_POINT, m, NULL).first;
+        m = s.freeSnap(Inkscape::Snapper::SNAP_POINT, m, NULL).getPoint();
         s.setDistance(curr_gridsnap);
         sp_selection_move_relative(selection, m);
     }

@@ -41,6 +41,7 @@
 #include "desktop-affine.h"
 #include "knot.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "selection.h"
 #include "select-context.h"
 #include "uri-references.h"
@@ -1036,7 +1037,7 @@ gboolean Inkscape::SelTrans::centerRequest(NR::Point &pt, guint state)
     using NR::Y;
 
     SnapManager const m(_desktop->namedview);
-    pt = m.freeSnap(Snapper::SNAP_POINT, pt, NULL).first;
+    pt = m.freeSnap(Snapper::SNAP_POINT, pt, NULL).getPoint();
 
     if (state & GDK_CONTROL_MASK) {
         if ( fabs(_point[X] - pt[X]) > fabs(_point[Y] - pt[Y]) ) {
@@ -1253,7 +1254,7 @@ void Inkscape::SelTrans::moveTo(NR::Point const &xy, guint state)
         ** FIXME: this will snap to more than just the grid, nowadays.
         */
 
-        dxy = m.freeSnap(Snapper::SNAP_POINT, dxy, NULL).first;
+        dxy = m.freeSnap(Snapper::SNAP_POINT, dxy, NULL).getPoint();
 
     } else if (!shift) {
 

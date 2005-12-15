@@ -21,6 +21,7 @@
 #include "sp-path.h"
 #include "display/curve.h"
 #include "snap.h"
+#include "snapped-point.h"
 #include "geom.h"
 #include "desktop.h"
 #include "inkscape.h"
@@ -92,8 +93,8 @@ void Inkscape::ObjectSnapper::_snapNodes(Inkscape::SnappedPoint &s,
 
                     /* Try to snap to this node of the path */
                     NR::Coord const dist = NR::L2(n - p);
-                    if (dist < getDistance() && dist < s.second) {
-                        s = std::make_pair(n, dist);
+                    if (dist < getDistance() && dist < s.getDistance()) {
+                        s = SnappedPoint(n, dist);
                     }
                     
                     j++;
@@ -130,8 +131,8 @@ void Inkscape::ObjectSnapper::_snapPaths(Inkscape::SnappedPoint &s,
             NR::Point const o_dt = desktop->doc2dt(o_it * i2doc);
             
             NR::Coord const dist = NR::L2(o_dt - p);
-            if (dist < getDistance() && dist < s.second) {
-                s = std::make_pair(o_dt, dist);
+            if (dist < getDistance() && dist < s.getDistance()) {
+                s = SnappedPoint(o_dt, dist);
             }
         }
     }
@@ -146,7 +147,7 @@ Inkscape::SnappedPoint Inkscape::ObjectSnapper::_doFreeSnap(NR::Point const &p,
     std::list<SPItem*> cand;
     _findCandidates(cand, sp_document_root(_named_view->document), it, p);
 
-    SnappedPoint s = std::make_pair(p, NR_HUGE);
+    SnappedPoint s(p, NR_HUGE);
 
     if (_snap_to_nodes) {
         _snapNodes(s, p, cand);
