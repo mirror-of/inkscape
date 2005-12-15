@@ -29,11 +29,11 @@ namespace Inkscape { class URIReference; }
 class SPGuideConstraint;
 
 enum {
-	SP_EVENT_INVALID,
-	SP_EVENT_NONE,
-	SP_EVENT_ACTIVATE,
-	SP_EVENT_MOUSEOVER,
-	SP_EVENT_MOUSEOUT
+    SP_EVENT_INVALID,
+    SP_EVENT_NONE,
+    SP_EVENT_ACTIVATE,
+    SP_EVENT_MOUSEOVER,
+    SP_EVENT_MOUSEOUT
 };
 
 /**
@@ -47,19 +47,18 @@ enum {
  *
  */
 struct SPEvent {
-	unsigned int type;
-	gpointer data;
+    unsigned int type;
+    gpointer data;
 };
 
 class SPItemView;
 
 /// SPItemView
 struct SPItemView {
-	SPItemView *next;
-	unsigned int flags;
-	unsigned int key;
-	/* SPItem *item; */
-	NRArenaItem *arenaitem;
+    SPItemView *next;
+    unsigned int flags;
+    unsigned int key;
+    NRArenaItem *arenaitem;
 };
 
 /* flags */
@@ -77,94 +76,95 @@ class SPItemCtx;
 
 /// Contains transformations to document/viewport and the viewport size.
 struct SPItemCtx {
-        /** Unused */
-	SPCtx ctx;
-	/** Item to document transformation */
-	NR::Matrix i2doc;
-	/** Viewport size */
-	NRRect vp;
-	/** Item to viewport transformation */
-	NR::Matrix i2vp;
+    SPCtx ctx;
+    /** Item to document transformation */
+    NR::Matrix i2doc;
+    /** Viewport size */
+    NRRect vp;
+    /** Item to viewport transformation */
+    NR::Matrix i2vp;
 };
 
 /** Abstract base class for all visible shapes. */
 struct SPItem : public SPObject {
-	unsigned int sensitive : 1;
-	unsigned int stop_paint: 1;
+    unsigned int sensitive : 1;
+    unsigned int stop_paint: 1;
     double r_cx;
     double r_cy;
+    
+    NR::Matrix transform;
+    
+    SPClipPathReference *clip_ref;
+    SPMaskReference *mask_ref;
+    
+    // Used for object-avoiding connectors
+    SPAvoidRef *avoidRef;
+    
+    SPItemView *display;
+    
+    std::vector<SPGuideConstraint> constraints;
+    
+    sigc::signal<void, NR::Matrix const *, SPItem *> _transformed_signal;
+    
+    bool isLocked() const;
+    void setLocked(bool lock);
+    
+    bool isHidden() const;
+    void setHidden(bool hidden);
+    
+    bool isHidden(unsigned display_key) const;
+    
+    bool isExplicitlyHidden() const;
+    
+    void setExplicitlyHidden(bool val);
+    
+    bool isVisibleAndUnlocked() const;
+    
+    bool isVisibleAndUnlocked(unsigned display_key) const;
+    
+    NR::Matrix getRelativeTransform(SPObject const *obj) const;
+    
+    void raiseOne();
+    void lowerOne();
+    void raiseToTop();
+    void lowerToBottom();
 
-	NR::Matrix transform;
+    NR::Rect invokeBbox(NR::Matrix const &transform) const;
 
-	SPClipPathReference *clip_ref;
-	SPMaskReference *mask_ref;
-
-        // Used for object-avoiding connectors
-        SPAvoidRef *avoidRef;
-
-	SPItemView *display;
-
-	std::vector<SPGuideConstraint> constraints;
-
-	sigc::signal<void, NR::Matrix const *, SPItem *> _transformed_signal;
-
-	bool isLocked() const;
-	void setLocked(bool lock);
-
-	bool isHidden() const;
-	void setHidden(bool hidden);
-
-	bool isHidden(unsigned display_key) const;
-
-	bool isExplicitlyHidden() const;
-
-	void setExplicitlyHidden(bool val);
-
-	bool isVisibleAndUnlocked() const;
-
-	bool isVisibleAndUnlocked(unsigned display_key) const;
-
-	NR::Matrix getRelativeTransform(SPObject const *obj) const;
-
-	void raiseOne();
-	void lowerOne();
-	void raiseToTop();
-	void lowerToBottom();
-
-	sigc::connection connectTransformed(sigc::slot<void, NR::Matrix const *, SPItem *> slot)  {
-                return _transformed_signal.connect(slot);
-        }
+    sigc::connection connectTransformed(sigc::slot<void, NR::Matrix const *, SPItem *> slot)  {
+        return _transformed_signal.connect(slot);
+    }
 };
 
 typedef std::back_insert_iterator<std::vector<NR::Point> > SnapPointsIter;
 
 /// The SPItem vtable.
 struct SPItemClass {
-	SPObjectClass parent_class;
+    SPObjectClass parent_class;
 
-	/** BBox union in given coordinate system */
-	void (* bbox) (SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
-
-	/** Printing method. Assumes ctm is set to item affine matrix */
-	/* \todo Think about it, and maybe implement generic export method instead (Lauris) */
-	void (* print) (SPItem *item, SPPrintContext *ctx);
-
-	/** Give short description of item (for status display) */
-	gchar * (* description) (SPItem * item);
-
-	NRArenaItem * (* show) (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
-	void (* hide) (SPItem *item, unsigned int key);
-
-	/** Write to an iterator the points that should be considered for snapping
-	* as the item's `nodes'.
-	*/
-        void (* snappoints) (SPItem const *item, SnapPointsIter p);
-
-	/** Apply the transform optimally, and return any residual transformation */
-	NR::Matrix (* set_transform)(SPItem *item, NR::Matrix const &transform);
-
-	/** Emit event, if applicable */
-	gint (* event) (SPItem *item, SPEvent *event);
+    /** BBox union in given coordinate system */
+    void (* bbox) (SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+    
+    /** Printing method. Assumes ctm is set to item affine matrix */
+    /* \todo Think about it, and maybe implement generic export method instead (Lauris) */
+    void (* print) (SPItem *item, SPPrintContext *ctx);
+    
+    /** Give short description of item (for status display) */
+    gchar * (* description) (SPItem * item);
+    
+    NRArenaItem * (* show) (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
+    void (* hide) (SPItem *item, unsigned int key);
+    
+    /** Write to an iterator the points that should be considered for snapping
+     * as the item's `nodes'.
+     */
+    void (* snappoints) (SPItem const *item, SnapPointsIter p);
+    
+    /** Apply the transform optimally, and return any residual transformation */
+    NR::Matrix (* set_transform)(SPItem *item, NR::Matrix const &transform);
+    
+    /** Emit event, if applicable */
+    gint (* event) (SPItem *item, SPEvent *event);
 };
 
 /* Flag testing macros */
@@ -174,25 +174,25 @@ struct SPItemClass {
 /* Methods */
 
 void sp_item_invoke_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear);
-void sp_item_invoke_bbox_full (SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear);
+void sp_item_invoke_bbox_full(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear);
 
 unsigned sp_item_pos_in_parent(SPItem *item);
 
-gchar * sp_item_description (SPItem * item);
-void sp_item_invoke_print (SPItem *item, SPPrintContext *ctx);
+gchar *sp_item_description(SPItem * item);
+void sp_item_invoke_print(SPItem *item, SPPrintContext *ctx);
 
 /** Shows/Hides item on given arena display list */
-unsigned int sp_item_display_key_new (unsigned int numkeys);
-NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
-void sp_item_invoke_hide (SPItem *item, unsigned int key);
+unsigned int sp_item_display_key_new(unsigned int numkeys);
+NRArenaItem *sp_item_invoke_show(SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
+void sp_item_invoke_hide(SPItem *item, unsigned int key);
 
 void sp_item_snappoints(SPItem const *item, SnapPointsIter p);
 
-void sp_item_adjust_pattern (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
-void sp_item_adjust_gradient (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
-void sp_item_adjust_stroke (SPItem *item, gdouble ex);
-void sp_item_adjust_stroke_width_recursive (SPItem *item, gdouble ex);
-void sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, NR::Matrix t_ancestors, bool is_pattern);
+void sp_item_adjust_pattern(SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
+void sp_item_adjust_gradient(SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
+void sp_item_adjust_stroke(SPItem *item, gdouble ex);
+void sp_item_adjust_stroke_width_recursive(SPItem *item, gdouble ex);
+void sp_item_adjust_paint_recursive(SPItem *item, NR::Matrix advertized_transform, NR::Matrix t_ancestors, bool is_pattern);
 
 void sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NRMatrix const *transform, NR::Matrix const *adv = NULL);
 void sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NR::Matrix const &transform, NR::Matrix const *adv = NULL);
@@ -203,9 +203,9 @@ gint sp_item_event (SPItem *item, SPEvent *event);
 
 /* Utility */
 
-NRArenaItem *sp_item_get_arenaitem (SPItem *item, unsigned int key);
+NRArenaItem *sp_item_get_arenaitem(SPItem *item, unsigned int key);
 
-void sp_item_bbox_desktop (SPItem *item, NRRect *bbox);
+void sp_item_bbox_desktop(SPItem *item, NRRect *bbox);
 NR::Rect sp_item_bbox_desktop(SPItem *item);
 
 NR::Matrix i2anc_affine(SPObject const *item, SPObject const *ancestor);
@@ -226,15 +226,10 @@ NR::Matrix matrix_from_desktop (NR::Matrix m, SPItem const *item);
  * \return TRANSFORM.
  */
 NR::Matrix sp_item_i2d_affine(SPItem const *item);
-
 NR::Matrix sp_item_i2r_affine(SPItem const *item);
-
 void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &transform);
-
 NR::Matrix sp_item_dt2i_affine(SPItem const *item);
-
 int sp_item_repr_compare_position(SPItem *first, SPItem *second);
-
 SPItem *sp_item_first_item_child (SPObject *obj);
 
 #endif

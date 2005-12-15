@@ -608,6 +608,13 @@ sp_item_write(SPObject *const object, Inkscape::XML::Node *repr, guint flags)
     return repr;
 }
 
+NR::Rect SPItem::invokeBbox(NR::Matrix const &transform) const
+{
+    NRRect r;
+    sp_item_invoke_bbox_full(this, &r, transform, 0, TRUE);
+    return NR::Rect(r);
+}
+
 void
 sp_item_invoke_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear)
 {

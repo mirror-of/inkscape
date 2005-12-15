@@ -263,15 +263,14 @@ sp_gradient_reset_to_userspace (SPGradient *gr, SPItem *item)
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(gr);
 
     // calculate the bbox of the item
-    NRRect bbox;
     sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
-    sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+    NR::Rect const bbox = item->invokeBbox(NR::identity()); // we need "true" bbox without item_i2d_affine
 
-    double width = bbox.x1 - bbox.x0;
-    double height = bbox.y1 - bbox.y0;
-    g_assert (height > 0 && width > 0);
+    NR::Coord const width = bbox.dimensions()[NR::X];
+    NR::Coord const height = bbox.dimensions()[NR::Y];
+    g_assert(width > 0 && height > 0);
 
-    NR::Point center = NR::Point (0.5 * (bbox.x1 + bbox.x0), 0.5 * (bbox.y1 + bbox.y0));
+    NR::Point const center = bbox.midpoint();
 
     if (SP_IS_RADIALGRADIENT(gr)) {
         sp_repr_set_svg_double(repr, "cx", center[NR::X]);
@@ -325,10 +324,11 @@ sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar const *prop
         Inkscape::XML::Node *repr = SP_OBJECT_REPR(gr);
 
         // calculate the bbox of the item
-        NRRect bbox;
         sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
-        sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-        NR::Matrix bbox2user(bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+        NR::Rect const bbox = item->invokeBbox(NR::identity()); // we need "true" bbox without item_i2d_affine
+        NR::Matrix bbox2user(bbox.dimensions()[NR::X], 0,
+                             0, bbox.dimensions()[NR::Y],
+                             bbox.min()[NR::X], bbox.min()[NR::Y]);
 
         /* skew is the additional transform, defined by the proportions of the item, that we need
          * to apply to the gradient in order to work around this weird bit from SVG 1.1
@@ -905,10 +905,11 @@ sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke)
     }
 
     if (SP_GRADIENT(gradient)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-        NRRect bbox;
         sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
-        sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
-        p *= NR::Matrix(bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+        NR::Rect const bbox = item->invokeBbox(NR::identity()); // we need "true" bbox without item_i2d_affine
+        p *= NR::Matrix(bbox.dimensions()[NR::X], 0,
+                        0, bbox.dimensions()[NR::Y],
+                        bbox.min()[NR::X], bbox.min()[NR::Y]);
     }
     p *= NR::Matrix(gradient->gradientTransform) * sp_item_i2d_affine(item);
     return p;

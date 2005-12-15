@@ -30,15 +30,6 @@ SPConnEnd::SPConnEnd(SPObject *const owner) :
 {
 }
 
-/* In principle, SPItem is const, but invoke_bbox is currently non-const. */
-static NR::Rect
-get_bbox(SPItem *const item, NR::Matrix const &m)
-{
-    NRRect bbox;
-    sp_item_invoke_bbox(item, &bbox, m, true);
-    return NR::Rect(bbox);
-}
-
 static SPObject const *
 get_nearest_common_ancestor(SPObject const *const obj, SPItem const *const objs[2]) {
     SPObject const *anc_sofar = obj;
@@ -82,8 +73,8 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
         NR::Point h2endPt_icoordsys[2];
         NR::Matrix h2i2anc[2];
         NR::Rect h2bbox_icoordsys[2] = {
-            get_bbox(h2attItem[0], NR::identity()),
-            get_bbox(h2attItem[1], NR::identity())
+            h2attItem[0]->invokeBbox(NR::identity()),
+            h2attItem[1]->invokeBbox(NR::identity())
         };
         for (unsigned h = 0; h < 2; ++h) {
             h2i2anc[h] = i2anc_affine(h2attItem[h], ancestor);
@@ -119,7 +110,7 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
 
         NR::Rect otherpt_rect = NR::Rect(otherpt, otherpt);
         NR::Rect h2bbox_icoordsys[2] = { otherpt_rect, otherpt_rect };
-        h2bbox_icoordsys[ind] = get_bbox(h2attItem[ind], NR::identity());
+        h2bbox_icoordsys[ind] = h2attItem[ind]->invokeBbox(NR::identity());
         
         h2i2anc = i2anc_affine(h2attItem[ind], ancestor);
         h2endPt_icoordsys[ind] = h2bbox_icoordsys[ind].midpoint();
@@ -151,7 +142,7 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
         NR::Point const dirn_icoordsys = ( dirn_pcoordsys
                                            * NR::transform(path2anc)
                                            / NR::transform(i2anc) );
-        NR::Rect const bbox_icoordsys(get_bbox(h2attItem[att_h], NR::identity()));
+        NR::Rect const bbox_icoordsys(h2attItem[att_h]->invokeBbox(NR::identity()));
         NR::Point const ctr_icoordsys = bbox_icoordsys.midpoint();
         NR::Point const connPt = calc_bbox_conn_pt(bbox_icoordsys,
                                                 ctr_icoordsys + dirn_icoordsys);

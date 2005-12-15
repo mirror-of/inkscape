@@ -1,3 +1,9 @@
+2005-12-15  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/conn-avoid-ref.cpp, src/gradient-chemistry.cpp,
+	src/sp-conn-end.cpp, src/sp-item.{cpp,h}: NR::Rect version of
+	sp_item_invoke_bbox (SPItem::invokeBbox).  Use it in some places.
+
 2005-12-14  Carl Hetherington  <inkscape@carlh.net>
 
         * src/dyna-draw-context.cpp, src/gradient-context.cpp,

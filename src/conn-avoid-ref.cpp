@@ -120,10 +120,8 @@ static Avoid::Polygn avoid_item_poly(SPItem const *item)
     //       by the sp_*_update functions, e.g., text.
     sp_document_ensure_up_to_date(item->document);
     
-    NRRect bboxRect;
-    sp_item_invoke_bbox(item, &bboxRect, sp_item_i2doc_affine(item), TRUE);
+    NR::Rect rHull = item->invokeBbox(sp_item_i2doc_affine(item));
     
-    NR::Rect rHull(bboxRect);
     // Add a little buffer around the edge of each object.
     NR::Rect rExpandedHull = NR::expand(rHull, -10.0); 
     poly = Avoid::newPoly(4);
