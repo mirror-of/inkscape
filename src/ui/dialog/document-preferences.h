@@ -40,18 +40,17 @@ typedef std::list<EntityEntry*> RDElist;
 
 class DocumentPreferences : public Inkscape::UI::Dialog::Dialog {
 public:
+    void  update();
     static DocumentPreferences *create();
     static void destroy();
 
 protected:
-    friend void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
     void  build_page();
     void  build_grid();
     void  build_guides();
     void  build_snap();
     void  build_metadata();
     void  init();
-    void  update();
 
     Gtk::Tooltips _tt;
     Gtk::Notebook  _notebook;

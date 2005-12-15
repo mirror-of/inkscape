@@ -56,7 +56,9 @@ namespace Dialog {
 
 DocumentPreferences *_instance = 0;
 
-void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
+static void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
+static void on_activate_desktop (Inkscape::Application *, SPDesktop* dt, void*);
+static void on_deactivate_desktop (Inkscape::Application *, SPDesktop* dt, void*);
 
 static Inkscape::XML::NodeEventVector const _repr_events = {
     NULL, /* child_added */
@@ -117,6 +119,12 @@ DocumentPreferences::init()
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     repr->addListener (&_repr_events, this);
 
+    g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop",
+                     G_CALLBACK(on_activate_desktop), 0);
+    
+    g_signal_connect(G_OBJECT(INKSCAPE), "deactivate_desktop",
+                     G_CALLBACK(on_deactivate_desktop), 0);
+    
     show_all_children();
     present();
 }
@@ -382,6 +390,8 @@ DocumentPreferences::build_metadata()
 void
 DocumentPreferences::update()
 {
+    if (_wr.isUpdating()) return;
+    
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
     SPNamedView *nv = SP_DT_NAMEDVIEW(dt);
     _wr.setUpdating (true);
@@ -461,11 +471,35 @@ DocumentPreferences::update()
 /**
  * Called when XML node attribute changed; updates dialog widgets.
  */
-void
+static void
 on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer)
 {
-    if (!_instance || _instance->_wr.isUpdating())
+    if (!_instance)
         return;
+
+    _instance->update();
+}
+
+static void 
+on_activate_desktop (Inkscape::Application *, SPDesktop* dt, void*)
+{
+    if (!_instance)
+        return;
+
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
+    repr->addListener (&_repr_events, _instance);
+
+    _instance->update();
+}
+
+static void 
+on_deactivate_desktop (Inkscape::Application *, SPDesktop* dt, void*)
+{
+    if (!_instance)
+        return;
+
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
+    repr->removeListenerByData (_instance);
 
     _instance->update();
 }
