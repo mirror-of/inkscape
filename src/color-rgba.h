@@ -13,6 +13,8 @@
 #define SEEN_COLOR_RGBA_H
 
 #include <glib/gmessages.h>
+#include "libnr/nr-pixops.h"
+#include "decimal-round.h"
 
 /**
     \brief  A class to contain a floating point RGBA color.
@@ -42,6 +44,24 @@ public:
     {
         for (int i = 0; i < 4; i++)
             _c[i] = 0.0;
+    }
+
+    /**
+        \brief  A constructor to create the color from an unsigned
+                int, as found everywhere when dealing with colors
+        \param  intcolor   rgba32 "unsigned int representation (0xRRGGBBAA)
+
+        Separate the values and load them into the array of floats in this object.
+        TODO : maybe get rid of the NR_RGBA32_x C-style functions and replace
+            the calls with the bitshifting they do
+    */
+    ColorRGBA(unsigned int intcolor)
+    {
+         _c[0] = NR_RGBA32_R(intcolor)/255.0;
+         _c[1] = NR_RGBA32_G(intcolor)/255.0;
+         _c[2] = NR_RGBA32_B(intcolor)/255.0;
+         _c[3] = NR_RGBA32_A(intcolor)/255.0;
+
     }
 
     /**
@@ -119,6 +139,39 @@ public:
         }
 
         return ColorRGBA(returnval[0], returnval[1], returnval[2], returnval[3]);
+    }
+
+   /**
+        \brief  Create a ColorRGBA with the inverse color of the current ColorRGBA
+
+        do 1 minus each color components (but not the alpha) and put it into \c _c.
+    */
+    ColorRGBA getInverse() const {
+        return ColorRGBA( (1.0 - _c[0]), (1.0 - _c[1]), (1.0 - _c[2]), _c[3] );
+    }
+
+   /**
+        \brief  Create a ColorRGBA with the inverse color of a given ColorRGBA
+
+        do 1 minus each color components (but not the alpha) and put it into \c _c.
+    */
+    ColorRGBA getInverse(const ColorRGBA ref) const {
+        return getInverse(ref);
+    }
+
+   /**
+        \brief  Give the rgba32 "unsigned int" representation of the color
+
+        round each components*255 and combine them (RRGGBBAA).
+        WARNING : this reduces color precision (from float to 0->255 int per component)
+            but it should be expected since we request this kind of output
+    */
+    unsigned int getIntValue() const {
+
+         return   (int(Inkscape::decimal_round(_c[0]*255, 0)) << 24) | 
+                        (int(Inkscape::decimal_round(_c[1]*255, 0))  << 16) | 
+                        (int(Inkscape::decimal_round(_c[2]*255, 0))  << 8) | 
+                        (int(Inkscape::decimal_round(_c[3]*255, 0)));
     }
 
 private:
