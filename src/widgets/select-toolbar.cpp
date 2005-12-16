@@ -241,73 +241,12 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
                                      sv > 5e-4 ? "selector:toolbar:scale:vertical" : NULL );
 
     if (actionkey != NULL) {
-        NR::Matrix p2o = NR::Matrix (NR::translate (-bbox.min()));
-        NR::Matrix o2n = NR::Matrix (NR::translate (x0, y0));
-
-        NR::Matrix scale = NR::Matrix (NR::scale (1, 1));
-        NR::Matrix unbudge = NR::Matrix (NR::translate (0, 0));
-
-        int transform_stroke = prefs_get_int_attribute ("options.transform", "stroke", 1);
         gdouble strokewidth = stroke_average_width (selection->itemList());
+        int transform_stroke = prefs_get_int_attribute ("options.transform", "stroke", 1);
 
-        if ( fabs( bbox.extent(NR::X) ) > 1e-06 ) {
-            if (transform_stroke || strokewidth == NR_HUGE || 
-                fabs(x1 - x0 - strokewidth) < 1e-3 || fabs(bbox.extent(NR::X) - strokewidth) < 1e-3) {
-                NR::Matrix direct = NR::Matrix (NR::scale(( x1 - x0 ) / ( bbox.extent(NR::X) ), 1));
-                if (strokewidth == NR_HUGE || strokewidth == 0 || 
-                    fabs(bbox.extent(NR::X) - strokewidth) < 1e-3) {
-                    scale *= direct;
-                } else {
-                    // To find out the matrix to scale an object to get the given target dimension if the
-                    // stroke is scaled by the expansion of that matrix, we need to solve a
-                    // quadratic equation
-                    gdouble A = (bbox.extent(NR::X) - strokewidth)*(bbox.extent(NR::X) - strokewidth);
-                    gdouble B = -2 * (bbox.extent(NR::X) - strokewidth) * (x1 - x0) - strokewidth*strokewidth;
-                    gdouble C = (x1 - x0)*(x1 - x0);
-                    if (B*B - 4*A*C > 0) {
-                        gdouble sol2 = (-B - sqrt (B*B - 4*A*C))/(2*A);
-                        scale *= NR::scale(sol2, 1);
-                        unbudge *= NR::translate (0.5 * strokewidth * (sqrt(sol2) - sol2), 0);
-                    } else {
-                        scale *= direct;
-                    }
-                }
+        NR::Matrix scaler = get_scale_transform_with_stroke (bbox, strokewidth, transform_stroke, x0, y0, x1, y1);
 
-            } else {
-                gdouble ratio = ( x1 - x0 - strokewidth) / ( bbox.extent(NR::X) - strokewidth);
-                scale *= NR::scale(ratio, 1);
-                unbudge *= NR::translate (0.5 * strokewidth * (1 - ratio), 0);
-            }
-        }
-
-        if ( fabs( bbox.extent(NR::Y) ) > 1e-06 ) {
-            if (transform_stroke || strokewidth == NR_HUGE || 
-                fabs(y1 - y0 - strokewidth) < 1e-3 || fabs(bbox.extent(NR::Y) - strokewidth) < 1e-3) {
-                NR::Matrix direct = NR::Matrix (NR::scale(1, ( y1 - y0 ) / ( bbox.extent(NR::Y) )));
-                if (strokewidth == NR_HUGE || strokewidth == 0 || 
-                    fabs(bbox.extent(NR::Y) - strokewidth) < 1e-3) {
-                    scale *= direct;
-                } else {
-                    gdouble A = (bbox.extent(NR::Y) - strokewidth)*(bbox.extent(NR::Y) - strokewidth);
-                    gdouble B = -2 * (bbox.extent(NR::Y) - strokewidth) * (y1 - y0) - strokewidth*strokewidth;
-                    gdouble C = (y1 - y0)*(y1 - y0);
-                    if (B*B - 4*A*C > 0) {
-                        gdouble sol2 = (-B - sqrt (B*B - 4*A*C))/(2*A);
-                        scale *= NR::scale(1, sol2);
-                        unbudge *= NR::translate (0, 0.5 * strokewidth * (sqrt(sol2) - sol2));
-                    } else {
-                        scale *= direct;
-                    }
-                }
-            } else {
-                gdouble ratio = ( y1 - y0 - strokewidth ) / ( bbox.extent(NR::Y) - strokewidth );
-                scale *= NR::scale(1, ratio);
-                unbudge *= NR::translate (0, 0.5 * strokewidth * (1 - ratio));
-            }
-        }
-
-        sp_selection_apply_affine(selection, p2o * scale * unbudge * o2n);
-
+        sp_selection_apply_affine(selection, scaler);
         sp_document_maybe_done (document, actionkey);
 
         // defocus spinbuttons by moving focus to the canvas, unless "stay" is on
