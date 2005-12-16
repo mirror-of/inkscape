@@ -17,6 +17,34 @@
 #include "pairingheap/PairingHeap.h"
 #include <cassert>
 
+using namespace std;
+void Block::addVariable(Variable *v) {
+	v->block=this;
+	vars->push_back(v);
+	weight+=v->weight;
+	wposn += v->weight * (v->desiredPosition - v->offset);
+	posn=wposn/weight;
+}
+Block::Block(Variable *v) {
+	timeStamp=0;
+	posn=weight=wposn=0;
+	in=NULL;
+	out=NULL;
+	deleted=false;
+	vars=new vector<Variable*>;
+	if(v!=NULL) {
+	v->offset=0;
+	addVariable(v);
+	}
+}
+
+double Block::desiredWeightedPosition() {
+	double wp = 0;
+	for (vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {
+		wp += ((*v)->desiredPosition - (*v)->offset) * (*v)->weight;
+	}
+	return wp;
+}
 Block::~Block(void)
 {
 	delete vars;
@@ -55,41 +83,45 @@ void Block::merge(Block *b, Constraint *c, double dist) {
 		v->offset+=dist;
 		vars->push_back(v);
 	}
-	if (in == NULL)
-		setUpInConstraints();
-	if (b->in == NULL)
-		b->setUpInConstraints();
+}
+
+void Block::mergeIn(Block *b) {
 	in->merge(b->in);
-	if (out == NULL)
-		setUpOutConstraints();
-	if (b->out == NULL)
-		b->setUpOutConstraints();
+}
+void Block::mergeOut(Block *b) {
 	out->merge(b->out);
 }
 Constraint *Block::findMinInConstraint() {
-	//assert(ins->size()==in->size());
-	if(in->isEmpty()) return NULL;
-	Constraint *v = in->findMin();
-	while (v->left->block == v->right->block) {
-		in->deleteMin();
-		//ins->deleteMin();
-		if(in->isEmpty()) return NULL;
+	Constraint *v = NULL;
+	while (!in->isEmpty()) {
 		v = in->findMin();
+		Block *lb=v->left->block;
+		Block *rb=v->right->block;
+		if(lb == rb) {
+			// constraint has been merged into the same block
+			in->deleteMin();
+			v = NULL;
+		} else if(lb->timeStamp<rb->timeStamp && v->timeStamp<lb->timeStamp) {
+			// block at other end of constraint has been moved since this
+			in->deleteMin();
+			v->timeStamp=++blockTimeCtr;
+			in->insert(v);
+			v = NULL;
+		} else {
+			// v really is the most violated constraint!
+			break;
+		}
 	}
-	//assert(v==ins->findMin());
 	return v;
 }
 Constraint *Block::findMinOutConstraint() {
-	//assert(outs->size()==out->size());
 	if(out->isEmpty()) return NULL;
 	Constraint *v = out->findMin();
 	while (v->left->block == v->right->block) {
 		out->deleteMin();
-		//outs->deleteMin();
 		if(out->isEmpty()) return NULL;
 		v = out->findMin();
 	}
-	//assert(v==outs->findMin());
 	return v;
 }
 void Block::deleteMinInConstraint() {
@@ -181,16 +213,11 @@ double Block::cost() {
 	}
 	return c;
 }
-
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
-char *Block::toString() {
-	int buffsize=vars->size() * Variable::_TOSTRINGBUFFSIZE;
-	char *str=new char[buffsize];
-	sprintf(str,"Block:");
-	for(vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {
-		snprintf(str,buffsize,"%s %s",str,(*v)->toString());
+ostream& operator <<(ostream &os, const Block &b)
+{
+	os<<"Block:";
+	for(vector<Variable*>::iterator v=b.vars->begin();v!=b.vars->end();v++) {
+		os<<" "<<**v;
 	}
-	return str;
+    return os;
 }

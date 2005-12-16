@@ -25,7 +25,7 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	Constraint **cs;
 	int m=generateXConstraints(rs,ws,n,vs,cs);
 	VPSC vpsc_x(vs,n,cs,m);
-	double cost=vpsc_x.solve();
+	vpsc_x.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreX(vs[i]->position());
 		delete vs[i];
@@ -38,7 +38,7 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	Rectangle::setXBorder(Rectangle::xBorder-0.001);
 	m=generateYConstraints(rs,ws,n,vs,cs);
 	VPSC vpsc_y(vs,n,cs,m);
-	cost=vpsc_y.solve();
+	vpsc_y.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreY(vs[i]->position());
 		delete vs[i];

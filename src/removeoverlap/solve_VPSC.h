@@ -21,14 +21,15 @@ class Blocks;
  */
 class VPSC {
 public:
-	double satisfy();
-	double solve();
+	void satisfy();
+	void solve();
 
-	bool move_and_split();
+	void move_and_split();
 	VPSC(Variable *vs[], const int n, Constraint *cs[], const int m);
 	~VPSC();
 protected:
 	Blocks *bs;
+	void refine();
 private:
 	void printBlocks();
 	bool constraintGraphIsCyclic(Variable *vs[], const int n);

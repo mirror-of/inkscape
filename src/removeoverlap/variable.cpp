@@ -8,14 +8,13 @@
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
-
 #include "variable.h"
-#ifdef WIN32
-#define snprintf _snprintf
-#endif
-char *Variable::toString() {
-	char *str=new char[_TOSTRINGBUFFSIZE];
-	snprintf(str, _TOSTRINGBUFFSIZE, "(%3d=%.3f)", id, position());
-	return str;
+std::ostream& operator <<(std::ostream &os, const Variable &v) {
+	os << "(" << v.id << "=" << v.position() << ")";
+    return os;
 }
 
+#include "block.h"
+double Variable::position() const {
+	return block->posn+offset;
+}

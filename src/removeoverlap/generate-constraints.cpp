@@ -63,7 +63,6 @@ struct Node {
 		}
 	}
 };
-
 bool CmpNodePos::operator() (const Node* u, const Node* v) const {
 	if (u->pos < v->pos) {
 		return true;

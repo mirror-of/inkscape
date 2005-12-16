@@ -13,8 +13,6 @@
 #define SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H
 
 class Rectangle {
-private:
-	double minX,maxX,minY,maxY;
 public:
 	static double xBorder,yBorder;
 	Rectangle(double x, double X, double y, double Y);
@@ -56,6 +54,8 @@ public:
 			return r->getMaxY() - minY;
 		return 0;
 	}
+private:
+	double minX,maxX,minY,maxY;
 };
 
 class Variable;

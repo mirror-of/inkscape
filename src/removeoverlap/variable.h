@@ -13,16 +13,18 @@
 #define SEEN_REMOVEOVERLAP_VARIABLE_H
 
 #include <vector>
+#include <iostream>
 class Block;
 class Constraint;
 
 class Variable
 {
+	friend std::ostream& operator <<(std::ostream &os, const Variable &v);
 public:
 	static const unsigned int _TOSTRINGBUFFSIZE=20;
-	int id; // useful in log files
+	const int id; // useful in log files
 	double desiredPosition;
-	double weight;
+	const double weight;
 	double offset;
 	Block *block;
 	bool visited;
@@ -35,16 +37,10 @@ public:
 		, weight(weight)
 	{
 	}
-	inline double position();
+	double position() const;
 	~Variable(void){
 		in.clear();
 		out.clear();
 	}
 };
-#include "block.h"
-
-inline double Variable::position() {
-	return block->posn+offset;
-}
-
 #endif // SEEN_REMOVEOVERLAP_VARIABLE_H

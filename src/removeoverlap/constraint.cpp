@@ -11,6 +11,7 @@
 
 #include "constraint.h"
 #include "variable.h"
+#include <iostream>
 
 Constraint::Constraint(Variable *left, Variable *right, double gap)
 {
@@ -21,9 +22,10 @@ Constraint::Constraint(Variable *left, Variable *right, double gap)
 	this->gap=gap;
 	active=false;
 	visited=false;
+	timeStamp=0;
 }
-char *Constraint::toString() {
-	char *str=new char[50];
-	sprintf(str,"%s+%f<=%s(%f)\n",left->toString(),gap,right->toString(),slack());
-	return str;
+std::ostream& operator <<(std::ostream &os, const Constraint &c)
+{
+	os<<*c.left<<"+"<<c.gap<<"<="<<*c.right<<"("<<c.slack()<<")";
+    return os;
 }

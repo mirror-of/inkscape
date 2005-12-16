@@ -20,16 +20,20 @@
 #include <cassert>
 #include <vector>
 #include <list>
-//#define LOGGING
-#ifdef LOGGING
-# include <cstdio>
-using std::fprintf;
+#ifdef RECTANGLE_OVERLAP_LOGGING
+#include <fstream>
+using std::ofstream;
 #endif
-using std::list;
 using std::set;
 using std::vector;
+using std::iterator;
+using std::list;
+using std::copy;
+
+long blockTimeCtr;
 
 Blocks::Blocks(Variable *vs[], const int n) : vs(vs),nvs(n) {
+	blockTimeCtr=0;
 	for(int i=0;i<nvs;i++) {
 		insert(new Block(vs[i]));
 	}
@@ -76,78 +80,64 @@ void Blocks::dfsVisit(Variable *v, list<Variable*> *order) {
  * neighbouring (left) block until no more violated constraints are found
  */
 void Blocks::mergeLeft(Block *r) {	
-#ifdef LOGGING
-	FILE *logfile=fopen("cplacement.log","a");
-	char *str=r->toString();
-	fprintf(logfile,"merge_left called on %s\n",str);
-	delete str;
-	fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	ofstream f(LOGFILE,ios::app);
+	f<<"mergeLeft called on "<<*r<<endl;
 #endif
 	r->setUpInConstraints();
+	r->timeStamp=++blockTimeCtr;
 	Constraint *c=r->findMinInConstraint();
 	while (c != NULL && c->slack()<0) {
-#ifdef LOGGING
-		logfile=fopen("cplacement.log","a");
-		char *str=c->toString();
-		fprintf(logfile,"  merge_left on constraint: %s\n",str);
-		assert(strncmp(str,"(v4=-1.432)+0.100000<=(v2=-1.422)(-0.089346)",44)!=0);
-		delete str;
-		fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+        f<<"mergeLeft on constraint: "<<*c<<endl;
 #endif
 		r->deleteMinInConstraint();
 		Block *l = c->left->block;		
-		l->setUpInConstraints();
-		//assert(r->nextRight!=l);
-		double dist = c->left->offset + c->gap - c->right->offset;
-		if (r->vars->size() > l->vars->size()) {
-			r->merge(l, c, -dist);
-		} else {
-			l->merge(r, c, dist);
+		if(l->in==NULL)	l->setUpInConstraints();
+		double dist = c->right->offset - c->left->offset - c->gap;
+		if (r->vars->size() < l->vars->size()) {
+			dist=-dist;
 			std::swap(l, r);
 		}
+		r->merge(l, c, dist);
+		r->mergeIn(l);
+		r->timeStamp=++blockTimeCtr;
 		removeBlock(l);
 		c=r->findMinInConstraint();
 	}		
-#ifdef LOGGING
-	logfile=fopen("cplacement.log","a");
-	fprintf(logfile,"  merged %s\n",r->toString());
-	fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	f<<"merged "<<*r<<endl;
 #endif
 }	
 /**
  * Symmetrical to mergeLeft
  */
 void Blocks::mergeRight(Block *l) {	
-#ifdef LOGGING
-	FILE *logfile=fopen("cplacement.log","a");
-	fprintf(logfile,"merge_right called on %s\n",l->toString());
-	fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	ofstream f(LOGFILE,ios::app);
+	f<<"mergeRight called on "<<*l<<endl;
 #endif	
 	l->setUpOutConstraints();
 	Constraint *c = l->findMinOutConstraint();
 	while (c != NULL && c->slack()<0) {		
-#ifdef LOGGING
-		logfile=fopen("cplacement.log","a");
-		fprintf(logfile,"  merge_right on constraint: %s\n",c->toString());
-		fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+		f<<"mergeRight on constraint: "<<*c<<endl;
 #endif
 		l->deleteMinOutConstraint();
 		Block *r = c->right->block;
 		r->setUpOutConstraints();
 		double dist = c->left->offset + c->gap - c->right->offset;
 		if (l->vars->size() > r->vars->size()) {
-			l->merge(r, c, dist);
-		} else {
-			r->merge(l, c, -dist);
+			dist=-dist;
 			std::swap(l, r);
 		}
+		l->merge(r, c, dist);
+		l->mergeOut(r);
 		removeBlock(r);
 		c=l->findMinOutConstraint();
 	}	
-#ifdef LOGGING
-	logfile=fopen("cplacement.log","a");
-	fprintf(logfile,"  merged %s\n",l->toString());
-	fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	f<<"merged "<<*l<<endl;
 #endif
 }
 void Blocks::removeBlock(Block *doomed) {
@@ -165,17 +155,16 @@ void Blocks::cleanup() {
 		}
 	}
 }
-
 /**
  * Splits block b across constraint c into two new blocks, l and r (c's left
  * and right sides respectively)
  */
 void Blocks::split(Block *b, Block *&l, Block *&r, Constraint *c) {
 	b->split(l,r,c);
-#ifdef LOGGING
-	FILE *logfile=fopen("cplacement.log","a");
-	fprintf(logfile,"Left: %s, Right: %s\n",l->toString(),r->toString());
-	fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	ofstream f(LOGFILE,ios::app);
+	f<<"Split left: "<<*l<<endl;
+	f<<"Split right: "<<*r<<endl;
 #endif
 	r->posn = b->posn;
 	r->wposn = r->posn * r->weight;
@@ -201,3 +190,4 @@ double Blocks::cost() {
 	}
 	return c;
 }
+

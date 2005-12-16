@@ -18,14 +18,17 @@
 #include "solve_VPSC.h"
 #include <stdio.h>
 #include <assert.h>
-//#define LOGGING
+#ifdef RECTANGLE_OVERLAP_LOGGING
+#include <fstream>
+#endif
+
 using std::list;
 using std::set;
 
 VPSC::VPSC(Variable *vs[], const int n, Constraint *cs[], const int m) : cs(cs), m(m) {
 	//assert(!constraintGraphIsCyclic(vs,n));
 	bs=new Blocks(vs,n);
-#ifdef LOGGING
+#ifdef RECTANGLE_OVERLAP_LOGGING
 	printBlocks();
 #endif
 }
@@ -35,17 +38,16 @@ VPSC::~VPSC() {
 
 // useful in debugging
 void VPSC::printBlocks() {
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	ofstream f(LOGFILE,ios::app);
 	for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
 		Block *b=*i;
-		FILE *logfile=fopen("cplacement.log","a");
-		fprintf(logfile," %s\n",b->toString());
-		fclose(logfile);
+		f<<"  "<<*b<<endl;
 	}
 	for(int i=0;i<m;i++) {
-		FILE *logfile=fopen("cplacement.log","a");
-		fprintf(logfile," %s\n",cs[i]->toString());
-		fclose(logfile);
+		f<<"  "<<*cs[i]<<endl;
 	}
+#endif
 }
 /**
 * Produces a feasible - though not necessarily optimal - solution by
@@ -57,7 +59,7 @@ void VPSC::printBlocks() {
 * first) fixing the position of variables inside blocks relative to one
 * another so that constraints internal to the block are satisfied.
 */
-double VPSC::satisfy() {
+void VPSC::satisfy() {
 	list<Variable*> *vs=bs->totalOrder();
 	for(list<Variable*>::iterator i=vs->begin();i!=vs->end();i++) {
 		Variable *v=*i;
@@ -70,17 +72,9 @@ double VPSC::satisfy() {
 	//}
 	bs->cleanup();
 	delete vs;
-	return bs->cost();
 }
 
-/**
- * Calculate the optimal solution. After using satisfy() to produce a
- * feasible solution, solve() examines each block to see if further
- * refinement is possible by splitting the block. This is done repeatedly
- * until no further improvement is possible.
- */
-double VPSC::solve() {
-	satisfy();
+void VPSC::refine() {
 	bool solved=false;
 	// Solve shouldn't loop indefinately
 	// ... but just to make sure we limit the number of iterations
@@ -97,10 +91,9 @@ double VPSC::solve() {
 			Block *b=*i;
 			Constraint *c=b->findMinLM();
 			if(c!=NULL && c->lm<0) {
-#ifdef LOGGING
-				FILE *logfile=fopen("cplacement.log","a");
-				fprintf(logfile,"Split on constraint: %s\n",c->toString());
-				fclose(logfile);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+				ofstream f(LOGFILE,ios::app);
+				f<<"Split on constraint: "<<*c<<endl;
 #endif
 				// Split on c
 				Block *l=NULL, *r=NULL;
@@ -115,49 +108,38 @@ double VPSC::solve() {
 	//for(int i=0;i<m;i++) {
 	//	assert(cs[i]->slack()>-0.0000001);
 	//}
-	return bs->cost();
+}
+/**
+ * Calculate the optimal solution. After using satisfy() to produce a
+ * feasible solution, refine() examines each block to see if further
+ * refinement is possible by splitting the block. This is done repeatedly
+ * until no further improvement is possible.
+ */
+void VPSC::solve() {
+	satisfy();
+	refine();
 }
 
 /**
  * incremental version of solve that should allow refinement after blocks are
  * moved.  Work in progress.
  */
-bool VPSC::move_and_split() {
+void VPSC::move_and_split() {
 	//assert(!blockGraphIsCyclic());
 	for(set<Block*>::const_iterator i=bs->begin();i!=bs->end();i++) {
 		Block *b=*i;
 		if(!b->deleted) {
 			b->wposn = b->desiredWeightedPosition();
 			b->posn = b->wposn / b->weight;
+			Variable *v=b->vars->front();
 			bs->mergeLeft(b);
-			bs->mergeRight(b);
+			// b may be merged away, so get any new block from one of its members
+			bs->mergeRight(v->block);
 		}
 	}
 	bs->cleanup();
 	// assert(!blockGraphIsCyclic());
-	bool solved=false;
-	while(!solved) {
-		solved=true;
-		for(set<Block*>::iterator i=bs->begin();i!=bs->end();i++) {
-			Block *b=*i;
-			Constraint *c=b->findMinLM();
-			if(c!=NULL && c->lm<0) {
-#ifdef LOGGING
-				FILE *logfile=fopen("cplacement.log","a");
-				fprintf(logfile,"Split on constraint: %s\n",c->toString());
-				fclose(logfile);
-#endif
-				// Split on c
-				Block *l=NULL, *r=NULL;
-				bs->split(b,l,r,c);
-				bs->cleanup();
-				// split alters the block set so we have to restart
-				solved=false;
-				break;
-			}
-		}
-	}
-	return solved;
+	refine();
 }
 
 #include <map>

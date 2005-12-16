@@ -13,6 +13,7 @@
 #define SEEN_REMOVEOVERLAP_BLOCK_H
 
 #include <vector>
+#include <iostream>
 class Variable;
 class Constraint;
 template <class T> class PairingHeap;
@@ -20,6 +21,7 @@ class StupidPriorityQueue;
 
 class Block
 {
+	friend std::ostream& operator <<(std::ostream &os,const Block &b);
 public:
 	std::vector<Variable*> *vars;
 	double posn;
@@ -34,15 +36,17 @@ public:
 	void deleteMinOutConstraint();
 	double desiredWeightedPosition();
 	void merge(Block *b, Constraint *c, double dist);
+	void mergeIn(Block *b);
+	void mergeOut(Block *b);
 	void split(Block *&l, Block *&r, Constraint *c);
 	void setUpInConstraints();
 	void setUpOutConstraints();
 	double cost();
-	char *toString();
 	bool deleted;
-private:
+	long timeStamp;
 	PairingHeap<Constraint*> *in;
 	PairingHeap<Constraint*> *out;
+private:
 	void reset_active_lm(Variable *v, Variable *u);
 	double compute_dfdv(Variable *v, Variable *u, Constraint *&min_lm);
 	bool canFollowLeft(Constraint *c, Variable *last);
@@ -51,34 +55,5 @@ private:
 	void addVariable(Variable *v);
 	void setUpConstraintHeap(PairingHeap<Constraint*>* &h,bool in);
 };
-
-#include "variable.h"
-
-inline void Block::addVariable(Variable *v) {
-	v->block=this;
-	vars->push_back(v);
-	weight+=v->weight;
-	wposn += v->weight * (v->desiredPosition - v->offset);
-	posn=wposn/weight;
-}
-inline Block::Block(Variable *v) {
-	posn=weight=wposn=0;
-	in=NULL;
-	out=NULL;
-	deleted=false;
-	vars=new std::vector<Variable*>;
-	if(v!=NULL) {
-	v->offset=0;
-	addVariable(v);
-	}
-}
-
-inline double Block::desiredWeightedPosition() {
-	double wp = 0;
-	for (std::vector<Variable*>::iterator v=vars->begin();v!=vars->end();v++) {
-		wp += ((*v)->desiredPosition - (*v)->offset) * (*v)->weight;
-	}
-	return wp;
-}
 
 #endif // SEEN_REMOVEOVERLAP_BLOCK_H

@@ -12,6 +12,9 @@
 #ifndef SEEN_REMOVEOVERLAP_BLOCKS_H
 #define SEEN_REMOVEOVERLAP_BLOCKS_H
 
+//#define RECTANGLE_OVERLAP_LOGGING
+//#define LOGFILE "cplacement.log"
+
 #include <set>
 #include <list>
 
@@ -36,8 +39,10 @@ public:
 	double cost();
 private:
 	void dfsVisit(Variable *v, std::list<Variable*> *order);
-	void Blocks::removeBlock(Block *doomed);
+	void removeBlock(Block *doomed);
 	Variable **vs;
 	int nvs;
 };
+
+extern long blockTimeCtr;
 #endif // SEEN_REMOVEOVERLAP_BLOCKS_H
