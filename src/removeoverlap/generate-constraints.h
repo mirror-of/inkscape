@@ -18,14 +18,14 @@ private:
 public:
 	static double xBorder,yBorder;
 	Rectangle(double x, double X, double y, double Y);
-	double getMaxX() { return maxX+xBorder; }
-	double getMaxY() { return maxY+yBorder; }
-	double getMinX() { return minX; }
-	double getMinY() { return minY; }
-	double getCentreX() { return minX+width()/2.0; }
-	double getCentreY() { return minY+height()/2.0; }
-	double width() { return getMaxX()-minX; }
-	double height() { return getMaxY()-minY; }
+	double getMaxX() const { return maxX+xBorder; }
+	double getMaxY() const { return maxY+yBorder; }
+	double getMinX() const { return minX; }
+	double getMinY() const { return minY; }
+	double getCentreX() const { return minX+width()/2.0; }
+	double getCentreY() const { return minY+height()/2.0; }
+	double width() const { return getMaxX()-minX; }
+	double height() const { return getMaxY()-minY; }
 	static void setXBorder(double x) {xBorder=x;}
 	static void setYBorder(double y) {yBorder=y;}
 	void moveCentreX(double x) {
@@ -42,14 +42,14 @@ public:
 		maxY=y+height()-yBorder;
 		minY=y;
 	}
-	inline double overlapX(Rectangle *r) {
+	inline double overlapX(Rectangle *r) const {
 		if (getCentreX() <= r->getCentreX() && r->minX < getMaxX())
 			return getMaxX() - r->minX;
 		if (r->getCentreX() <= getCentreX() && minX < r->getMaxX())
 			return r->getMaxX() - minX;
 		return 0;
 	}
-	inline double overlapY(Rectangle *r) {
+	inline double overlapY(Rectangle *r) const {
 		if (getCentreY() <= r->getCentreY() && r->minY < getMaxY())
 			return getMaxY() - r->minY;
 		if (r->getCentreY() <= getCentreY() && minY < r->getMaxY())
