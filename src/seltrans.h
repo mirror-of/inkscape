@@ -113,6 +113,7 @@ private:
     bool _changed;
 
     NR::Rect _box;
+    gdouble _strokewidth;
     NR::Matrix _current;
     NR::Point _opposite; ///< opposite point to where a scale is taking place
     NR::Point _center;

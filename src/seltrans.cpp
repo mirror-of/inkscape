@@ -39,6 +39,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
+#include "desktop-style.h"
 #include "knot.h"
 #include "snap.h"
 #include "snapped-point.h"
@@ -48,6 +49,7 @@
 #include "widgets/desktop-widget.h"
 #include "sp-use.h"
 #include "sp-item.h"
+#include "sp-item-transform.h"
 #include <sp-item-update-cns.h>
 #include "seltrans-handles.h"
 #include "selcue.h"
@@ -515,6 +517,8 @@ void Inkscape::SelTrans::_updateVolatileState()
         _empty = true;
         return;
     }
+
+    _strokewidth = stroke_average_width (selection->itemList());
 
     _current.set_identity();
 }
@@ -1149,23 +1153,34 @@ void Inkscape::SelTrans::stretch(SPSelTransHandle const &handle, NR::Point &pt, 
         /* Preserve aspect ratio, but never flip in the dimension not being edited. */
         s[!dim] = fabs(s[dim]);
     }
-    NR::Matrix const stretch(s);
-    transform(stretch, scale_origin);
+
+    NR::Rect new_bbox = _box * (NR::translate(-scale_origin) * NR::Matrix(s) * NR::translate(scale_origin));
+
+    int transform_stroke = prefs_get_int_attribute ("options.transform", "stroke", 1);
+    NR::Matrix scaler = get_scale_transform_with_stroke (_box, _strokewidth, transform_stroke, 
+                   new_bbox.min()[NR::X], new_bbox.min()[NR::Y], new_bbox.max()[NR::X], new_bbox.max()[NR::Y]);
+
+    transform(scaler, NR::Point(0, 0)); // we have already accounted for origin, so pass 0,0
 }
 
 void Inkscape::SelTrans::scale(NR::Point &pt, guint state)
 {
     NR::Point const offset = _point - _origin;
 
-    NR::Point s(1, 1);
-    for (int i = 0; i < 2; i++) {
+    NR::scale s (1, 1);
+    for (int i = NR::X; i <= NR::Y; i++) {
         if (fabs(offset[i]) > 1e-9)
             s[i] = (pt[i] - _origin[i]) / offset[i];
         if (fabs(s[i]) < 1e-9)
             s[i] = 1e-9;
     }
-    NR::Matrix const scale((NR::scale(s)));
-    transform(scale, _origin);
+    NR::Rect new_bbox = _box * (NR::translate(-_origin) * NR::Matrix(s) * NR::translate(_origin));
+
+    int transform_stroke = prefs_get_int_attribute ("options.transform", "stroke", 1);
+    NR::Matrix scaler = get_scale_transform_with_stroke (_box, _strokewidth, transform_stroke, 
+                   new_bbox.min()[NR::X], new_bbox.min()[NR::Y], new_bbox.max()[NR::X], new_bbox.max()[NR::Y]);
+
+    transform(scaler, NR::Point(0, 0)); // we have already accounted for origin, so pass 0,0
 }
 
 void Inkscape::SelTrans::skew(SPSelTransHandle const &handle, NR::Point &pt, guint state)
