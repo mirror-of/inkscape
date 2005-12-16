@@ -23,6 +23,9 @@
 #include <libnr/nr-point-ops.h>
 #include <libnr/nr-values.h>
 #include <libnr/nr-maybe.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 
 /* NULL rect is infinite */
 
@@ -155,14 +158,33 @@ public:
     /** Makes this rectangle large enough to include the rectangle r. */
     void expandTo(Rect const &r);
 
+    inline void move_left (gdouble by) {
+        _min[NR::X] += by;
+    }
+    inline void move_right (gdouble by) {
+        _max[NR::X] += by;
+    }
+    inline void move_top (gdouble by) {
+        _min[NR::Y] += by;
+    }
+    inline void move_bottom (gdouble by) {
+        _max[NR::Y] += by;
+    }
+
     /** Returns the set of points shared by both rectangles. */
     static Maybe<Rect> intersection(Rect const &a, Rect const &b);
 
     /** Returns the smallest rectangle that encloses both rectangles. */
     static Rect union_bounds(Rect const &a, Rect const &b);
 
+    /** Scales the rect by s, with origin at 0, 0 */
     inline Rect operator*(double const s) const {
         return Rect(s * min(), s * max());
+    }
+
+    /** Transforms the rect by m. Note that it gives correct results only for scales and translates */
+    inline Rect operator*(Matrix const m) const {
+        return Rect(_min * m, _max * m);
     }
 
     inline bool operator==(Rect const &in_rect) {
