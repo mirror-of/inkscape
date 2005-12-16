@@ -12,6 +12,9 @@
 	src/ui/view/edit-widget.cpp, src/ui/widget/zoom-status.cpp,
 	src/widgets/desktop-widget.cpp: more NRRect removals and cleanups.
 
+	* src/grid-snapper.cpp: snap only to visible grid lines (patch
+	from mtou).
+
 2005-12-15  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/conn-avoid-ref.cpp, src/gradient-chemistry.cpp,
