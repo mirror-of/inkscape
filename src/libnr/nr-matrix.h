@@ -395,14 +395,18 @@ class Matrix {
     }
 
 
-
-
     private:
 
 
     NR::Coord _c[6];
 };
 
+/** A function to print out the Matrix (for debugging) */
+inline std::ostream &operator<< (std::ostream &out_file, const NR::Matrix &m) {
+    out_file << "A: " << m[0] << "  C: " << m[2] << "  E: " << m[4] << "\n";
+    out_file << "B: " << m[1] << "  D: " << m[3] << "  F: " << m[5] << "\n";
+    return out_file;
+}
 
 extern void assert_close(Matrix const &a, Matrix const &b);
 
