@@ -23,8 +23,9 @@
 
 #include <gtk/gtktypeutils.h>
 #include <sigc++/sigc++.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-fns.h>
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-rect.h"
 #include "ui/view/view.h"
 #include "ui/view/edit-widget-interface.h"
 
@@ -175,7 +176,7 @@ struct SPDesktop : public Inkscape::UI::View::View
     SPItem *group_at_point (NR::Point const p) const;
     NR::Point point() const;
 
-    NRRect *get_display_area (NRRect *area) const;
+    NR::Rect get_display_area() const;
     void set_display_area (double x0, double y0, double x1, double y1, double border, bool log = true);
     void zoom_absolute (double cx, double cy, double zoom);
     void zoom_relative (double cx, double cy, double zoom);

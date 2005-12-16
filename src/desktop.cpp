@@ -78,6 +78,7 @@
 #include "display/sp-canvas-util.h"
 #include "libnr/nr-point-matrix-ops.h"
 #include "libnr/nr-matrix-div.h"
+#include "libnr/nr-rect-ops.h"
 #include "ui/dialog/dialog-manager.h"
 #include "xml/repr.h"
 #include "message-context.h"
@@ -410,11 +411,9 @@ bool SPDesktop::isLayer(SPObject *object) const {
  */
 bool SPDesktop::isWithinViewport (SPItem *item) const 
 {
-    NRRect viewport;
-    NRRect bbox;
-    get_display_area (&viewport);
-    sp_item_bbox_desktop(item, &bbox);
-    return NR::Rect(viewport).contains(NR::Rect(bbox));
+    NR::Rect const viewport = get_display_area();
+    NR::Rect const bbox = sp_item_bbox_desktop(item);
+    return viewport.contains(bbox);
 }
 
 ///
@@ -551,11 +550,10 @@ SPDesktop::point() const
     NR::Point pw = sp_canvas_window_to_world (canvas, p);
     p = w2d(pw);
 
-    NRRect r;
-    sp_canvas_get_viewbox (canvas, &r);
+    NR::Rect const r = canvas->getViewbox();
 
-    NR::Point r0 = w2d(NR::Point(r.x0, r.y0));
-    NR::Point r1 = w2d(NR::Point(r.x1, r.y1));
+    NR::Point r0 = w2d(r.min());
+    NR::Point r1 = w2d(r.max());
 
     if (p[NR::X] >= r0[NR::X] &&
         p[NR::X] <= r1[NR::X] &&
@@ -574,14 +572,13 @@ SPDesktop::point() const
 void
 SPDesktop::push_current_zoom (GList **history)
 {
-    NRRect area;
-    get_display_area (&area);
+    NR::Rect const area = get_display_area();
 
     NRRect *old_zoom = g_new(NRRect, 1);
-    old_zoom->x0 = area.x0;
-    old_zoom->x1 = area.x1;
-    old_zoom->y0 = area.y0;
-    old_zoom->y1 = area.y1;
+    old_zoom->x0 = area.min()[NR::X];
+    old_zoom->x1 = area.max()[NR::X];
+    old_zoom->y0 = area.min()[NR::Y];
+    old_zoom->y1 = area.max()[NR::Y];
     if ( *history == NULL
          || !( ( ((NRRect *) ((*history)->data))->x0 == old_zoom->x0 ) &&
                ( ((NRRect *) ((*history)->data))->x1 == old_zoom->x1 ) &&
@@ -598,76 +595,63 @@ SPDesktop::push_current_zoom (GList **history)
 void
 SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double border, bool log)
 {
-    g_assert (_widget);
+    g_assert(_widget);
 
     // save the zoom
     if (log) {
-        push_current_zoom (&zooms_past);
+        push_current_zoom(&zooms_past);
         // if we do a logged zoom, our zoom-forward list is invalidated, so delete it
         g_list_free (zooms_future);
         zooms_future = NULL;
     }
 
-    double cx = 0.5 * (x0 + x1);
-    double cy = 0.5 * (y0 + y1);
+    double const cx = 0.5 * (x0 + x1);
+    double const cy = 0.5 * (y0 + y1);
 
-    NRRect viewbox;
-    sp_canvas_get_viewbox (canvas, &viewbox);
-
-    viewbox.x0 += border;
-    viewbox.y0 += border;
-    viewbox.x1 -= border;
-    viewbox.y1 -= border;
+    NR::Rect const viewbox = NR::expand(canvas->getViewbox(), border);
 
     double scale = expansion(_d2w);
     double newscale;
-    if (((x1 - x0) * (viewbox.y1 - viewbox.y0)) > ((y1 - y0) * (viewbox.x1 - viewbox.x0))) {
-        newscale = (viewbox.x1 - viewbox.x0) / (x1 - x0);
+    if (((x1 - x0) * viewbox.dimensions()[NR::Y]) > ((y1 - y0) * viewbox.dimensions()[NR::X])) {
+        newscale = viewbox.dimensions()[NR::X] / (x1 - x0);
     } else {
-        newscale = (viewbox.y1 - viewbox.y0) / (y1 - y0);
+        newscale = viewbox.dimensions()[NR::Y] / (y1 - y0);
     }
 
-    newscale = CLAMP (newscale, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
+    newscale = CLAMP(newscale, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
 
     int clear = FALSE;
     if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
         /* Set zoom factors */
         _d2w = NR::Matrix(NR::scale(newscale, -newscale));
         _w2d = NR::Matrix(NR::scale(1/newscale, 1/-newscale));
-        sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _d2w);
+        sp_canvas_item_affine_absolute(SP_CANVAS_ITEM(main), _d2w);
         clear = TRUE;
     }
 
     /* Calculate top left corner */
-    x0 = cx - 0.5 * (viewbox.x1 - viewbox.x0) / newscale;
-    y1 = cy + 0.5 * (viewbox.y1 - viewbox.y0) / newscale;
+    x0 = cx - 0.5 * viewbox.dimensions()[NR::X] / newscale;
+    y1 = cy + 0.5 * viewbox.dimensions()[NR::Y] / newscale;
 
     /* Scroll */
     sp_canvas_scroll_to (canvas, x0 * newscale - border, y1 * -newscale - border, clear);
 
     _widget->updateRulers();
-    _widget->updateScrollbars (expansion(_d2w));
+    _widget->updateScrollbars(expansion(_d2w));
     _widget->updateZoom();
 }
 
 /**
  * Return viewbox dimensions.
  */
-NRRect *
-SPDesktop::get_display_area (NRRect *area) const
+NR::Rect SPDesktop::get_display_area() const
 {
-    NRRect viewbox;
+    NR::Rect const viewbox = canvas->getViewbox();
 
-    sp_canvas_get_viewbox (canvas, &viewbox);
+    double const scale = _d2w[0];
 
-    double scale = _d2w[0];
-
-    area->x0 = viewbox.x0 / scale;
-    area->y0 = viewbox.y1 / -scale;
-    area->x1 = viewbox.x1 / scale;
-    area->y1 = viewbox.y0 / -scale;
-
-    return area;
+    return NR::Rect(NR::Point(viewbox.min()[NR::X] / scale, viewbox.max()[NR::Y] / -scale),
+                    NR::Point(viewbox.max()[NR::X] / scale, viewbox.min()[NR::Y] / -scale));
 }
 
 /**
@@ -734,17 +718,16 @@ SPDesktop::zoom_absolute_keep_point (double cx, double cy, double px, double py,
     if (fabs(expansion(_d2w) - zoom) < 0.0001*zoom && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.000001))
         return;
 
-    NRRect viewbox;
-    sp_canvas_get_viewbox (canvas, &viewbox);
+    NR::Rect const viewbox = canvas->getViewbox();
 
-    const double width2 = (viewbox.x1 - viewbox.x0) / zoom;
-    const double height2 = (viewbox.y1 - viewbox.y0) / zoom;
+    double const width2 = viewbox.dimensions()[NR::X] / zoom;
+    double const height2 = viewbox.dimensions()[NR::Y] / zoom;
 
-    set_display_area (cx - px * width2, 
-            cy - py * height2, 
-            cx + (1 - px) * width2, 
-            cy + (1 - py) * height2, 
-            0.0);
+    set_display_area(cx - px * width2, 
+                     cy - py * height2, 
+                     cx + (1 - px) * width2, 
+                     cy + (1 - py) * height2, 
+                     0.0);
 }
 
 /**
@@ -762,23 +745,26 @@ SPDesktop::zoom_absolute (double cx, double cy, double zoom)
 void
 SPDesktop::zoom_relative_keep_point (double cx, double cy, double zoom)
 {
-    NRRect area;
-    get_display_area (&area);
+    NR::Rect const area = get_display_area();
 
-    if (cx < area.x0)
-        cx = area.x0;
-    if (cx > area.x1)
-        cx = area.x1;
-    if (cy < area.y0)
-        cy = area.y0;
-    if (cy > area.y1)
-        cy = area.y1;
+    if (cx < area.min()[NR::X]) {
+        cx = area.min()[NR::X];
+    }
+    if (cx > area.max()[NR::X]) {
+        cx = area.max()[NR::X];
+    }
+    if (cy < area.min()[NR::Y]) {
+        cy = area.min()[NR::Y];
+    }
+    if (cy > area.max()[NR::Y]) {
+        cy = area.max()[NR::Y];
+    }
 
-    gdouble scale = expansion(_d2w) * zoom;
-    double px = (cx - area.x0)/(area.x1 - area.x0);
-    double py = (cy - area.y0)/(area.y1 - area.y0);
+    gdouble const scale = expansion(_d2w) * zoom;
+    double const px = (cx - area.min()[NR::X]) / area.dimensions()[NR::X];
+    double const py = (cy - area.min()[NR::Y]) / area.dimensions()[NR::Y];
 
-    zoom_absolute_keep_point (cx, cy, px, py, scale);
+    zoom_absolute_keep_point(cx, cy, px, py, scale);
 }
 
 /**
@@ -814,18 +800,21 @@ SPDesktop::zoom_page()
 void
 SPDesktop::zoom_page_width()
 {
+    NR::Rect const a = get_display_area();
+
     NRRect d;
-
-    get_display_area (&d);
-
     d.x0 = 0.0;
-    d.x1 = sp_document_width (doc());
+    d.y0 = a.min()[NR::Y];
+    d.x1 = sp_document_width(doc());
+    d.y1 = a.max()[NR::Y];
 
-    if ((fabs (d.x1 - d.x0) < 1.0)) return;
+    if ((fabs (d.x1 - d.x0) < 1.0)) {
+        return;
+    }
 
     d.y1 = d.y0 = (d.y1 + d.y0) / 2;
 
-    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
+    set_display_area(d.x0, d.y0, d.x1, d.y1, 10);
 }
 
 /**
@@ -881,52 +870,43 @@ SPDesktop::zoom_drawing()
 void 
 SPDesktop::scroll_world (double dx, double dy)
 {
-   g_assert (_widget); 
+    g_assert(_widget); 
 
-    NRRect viewbox;
-    sp_canvas_get_viewbox (canvas, &viewbox);
+    NR::Rect const viewbox = canvas->getViewbox();
 
-    sp_canvas_scroll_to (canvas, viewbox.x0 - dx, viewbox.y0 - dy, FALSE);
+    sp_canvas_scroll_to(canvas, viewbox.min()[NR::X] - dx, viewbox.min()[NR::Y] - dy, FALSE);
 
     _widget->updateRulers();
-    _widget->updateScrollbars (expansion(_d2w));
+    _widget->updateScrollbars(expansion(_d2w));
 }
 
 bool
 SPDesktop::scroll_to_point (NR::Point const *p, gdouble autoscrollspeed)
 {
-    NRRect dbox;
-    get_display_area (&dbox);
-
     gdouble autoscrolldistance = (gdouble) prefs_get_int_attribute_limited ("options.autoscrolldistance", "value", 0, -1000, 10000);
 
     // autoscrolldistance is in screen pixels, but the display area is in document units
     autoscrolldistance /= expansion(_d2w);
+    NR::Rect const dbox = NR::expand(get_display_area(), -autoscrolldistance);
 
-    /// \todo FIXME: njh: we need an expandBy function for rects
-    dbox.x0 -= autoscrolldistance;
-    dbox.x1 += autoscrolldistance;
-    dbox.y0 -= autoscrolldistance;
-    dbox.y1 += autoscrolldistance;
-
-    if (!((*p)[NR::X] > dbox.x0 && (*p)[NR::X] < dbox.x1) ||
-        !((*p)[NR::Y] > dbox.y0 && (*p)[NR::Y] < dbox.y1)   ) {
+    if (!((*p)[NR::X] > dbox.min()[NR::X] && (*p)[NR::X] < dbox.max()[NR::X]) ||
+        !((*p)[NR::Y] > dbox.min()[NR::Y] && (*p)[NR::Y] < dbox.max()[NR::Y])   ) {
 
         NR::Point const s_w( (*p) * _d2w );
 
         gdouble x_to;
-        if ((*p)[NR::X] < dbox.x0)
-            x_to = dbox.x0;
-        else if ((*p)[NR::X] > dbox.x1)
-            x_to = dbox.x1;
+        if ((*p)[NR::X] < dbox.min()[NR::X])
+            x_to = dbox.min()[NR::X];
+        else if ((*p)[NR::X] > dbox.max()[NR::X])
+            x_to = dbox.max()[NR::X];
         else
             x_to = (*p)[NR::X];
 
         gdouble y_to;
-        if ((*p)[NR::Y] < dbox.y0)
-            y_to = dbox.y0;
-        else if ((*p)[NR::Y] > dbox.y1)
-            y_to = dbox.y1;
+        if ((*p)[NR::Y] < dbox.min()[NR::Y])
+            y_to = dbox.min()[NR::Y];
+        else if ((*p)[NR::Y] > dbox.max()[NR::Y])
+            y_to = dbox.max()[NR::Y];
         else
             y_to = (*p)[NR::Y];
 

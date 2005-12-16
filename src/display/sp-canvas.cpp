@@ -1978,18 +1978,12 @@ bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, NR::Point const &w
 /**
  * Return canvas window coordinates as NRRect.
  */
-NRRect *sp_canvas_get_viewbox(SPCanvas const *canvas, NRRect *viewbox)
+NR::Rect SPCanvas::getViewbox() const
 {
-    g_return_val_if_fail (canvas != NULL, NULL);
-    g_return_val_if_fail (SP_IS_CANVAS (canvas), NULL);
-    g_return_val_if_fail (viewbox != NULL, NULL);
+    GtkWidget const *w = GTK_WIDGET(this);
 
-    viewbox->x0 = canvas->dx0;
-    viewbox->y0 = canvas->dy0;
-    viewbox->x1 = viewbox->x0 + GTK_WIDGET (canvas)->allocation.width;
-    viewbox->y1 = viewbox->y0 + GTK_WIDGET (canvas)->allocation.height;
-
-    return viewbox;
+    return NR::Rect(NR::Point(dx0, dy0),
+                    NR::Point(dx0 + w->allocation.width, dy0 + w->allocation.height));
 }
 
 inline int sp_canvas_tile_floor(int x)

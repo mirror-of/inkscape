@@ -289,29 +289,26 @@ flerp(double f0, double f1, double p)
 static NR::Point
 sp_dyna_draw_get_npoint(SPDynaDrawContext const *dc, NR::Point v)
 {
-    NRRect drect;
-    SP_EVENT_CONTEXT(dc)->desktop->get_display_area(&drect);
-    double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
-    return NR::Point(( v[NR::X] - drect.x0 ) / max,  ( v[NR::Y] - drect.y0 ) / max);
+    NR::Rect drect = SP_EVENT_CONTEXT(dc)->desktop->get_display_area();
+    double const max = MAX ( drect.dimensions()[NR::X], drect.dimensions()[NR::Y] );
+    return NR::Point(( v[NR::X] - drect.min()[NR::X] ) / max,  ( v[NR::Y] - drect.min()[NR::Y] ) / max);
 }
 
 /* Get view point */
 static NR::Point
 sp_dyna_draw_get_vpoint(SPDynaDrawContext const *dc, NR::Point n)
 {
-    NRRect drect;
-    SP_EVENT_CONTEXT(dc)->desktop->get_display_area(&drect);
-    double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
-    return NR::Point(n[NR::X] * max + drect.x0, n[NR::Y] * max + drect.y0);
+    NR::Rect drect = SP_EVENT_CONTEXT(dc)->desktop->get_display_area();
+    double const max = MAX ( drect.dimensions()[NR::X], drect.dimensions()[NR::Y] );
+    return NR::Point(n[NR::X] * max + drect.min()[NR::X], n[NR::Y] * max + drect.min()[NR::Y]);
 }
 
 /* Get current view point */
 static NR::Point sp_dyna_draw_get_curr_vpoint(SPDynaDrawContext const *dc)
 {
-    NRRect drect;
-    SP_EVENT_CONTEXT(dc)->desktop->get_display_area(&drect);
-    double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
-    return NR::Point(dc->cur[NR::X] * max + drect.x0, dc->cur[NR::Y] * max + drect.y0);
+    NR::Rect drect = SP_EVENT_CONTEXT(dc)->desktop->get_display_area();
+    double const max = MAX ( drect.dimensions()[NR::X], drect.dimensions()[NR::Y] );
+    return NR::Point(dc->cur[NR::X] * max + drect.min()[NR::X], dc->cur[NR::Y] * max + drect.min()[NR::Y]);
 }
 
 static void

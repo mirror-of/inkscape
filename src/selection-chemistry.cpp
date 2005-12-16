@@ -1739,20 +1739,13 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
  */
 void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 {
-    NRRect dbox;
-    desktop->get_display_area(&dbox);
-    NRRect sbox;
-    sp_item_bbox_desktop(item, &sbox);
-    if ( dbox.x0 > sbox.x0  ||
-         dbox.y0 > sbox.y0  ||
-         dbox.x1 < sbox.x1  ||
-         dbox.y1 < sbox.y1 )
-    {
-        NR::Point const s_dt(( sbox.x0 + sbox.x1 ) / 2,
-                             ( sbox.y0 + sbox.y1 ) / 2);
+    NR::Rect dbox = desktop->get_display_area();
+    NR::Rect sbox = sp_item_bbox_desktop(item);
+
+    if (dbox.contains(sbox) == false) {
+        NR::Point const s_dt = sbox.midpoint();
         NR::Point const s_w = desktop->d2w(s_dt);
-        NR::Point const d_dt(( dbox.x0 + dbox.x1 ) / 2,
-                             ( dbox.y0 + dbox.y1 ) / 2);
+        NR::Point const d_dt = dbox.midpoint();
         NR::Point const d_w = desktop->d2w(d_dt);
         NR::Point const moved_w( d_w - s_w );
         gint const dx = (gint) moved_w[X];

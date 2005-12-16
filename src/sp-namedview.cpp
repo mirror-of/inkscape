@@ -694,16 +694,15 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
 {
     gint save_geometry = prefs_get_int_attribute("options.savewindowgeometry", "value", 0);
     Inkscape::XML::Node *view = SP_OBJECT_REPR(desktop->namedview);
-    NRRect r;
-    desktop->get_display_area(&r);
+    NR::Rect const r = desktop->get_display_area();
     
     // saving window geometry is not undoable
     gboolean saved = sp_document_get_undo_sensitive(SP_DT_DOCUMENT(desktop));
     sp_document_set_undo_sensitive(SP_DT_DOCUMENT(desktop), FALSE);
     
     sp_repr_set_svg_double(view, "inkscape:zoom", desktop->current_zoom());
-    sp_repr_set_svg_double(view, "inkscape:cx", (r.x0+r.x1)*0.5);
-    sp_repr_set_svg_double(view, "inkscape:cy", (r.y0+r.y1)*0.5);
+    sp_repr_set_svg_double(view, "inkscape:cx", r.midpoint()[NR::X]);
+    sp_repr_set_svg_double(view, "inkscape:cy", r.midpoint()[NR::Y]);
     
     if (save_geometry) {
         gint w, h, x, y;

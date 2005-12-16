@@ -398,31 +398,29 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     }
 
     if (GTK_WIDGET_REALIZED (widget)) {
-        NRRect area;
-        double zoom;
-        dtw->desktop->get_display_area (&area);
-        zoom = dtw->desktop->current_zoom();
+        NR::Rect const area = dtw->desktop->get_display_area();
+        double zoom = dtw->desktop->current_zoom();
 
-        if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
-            GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
+        if (GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate) {
+            GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate (widget, allocation);
+        }
 
-        if (SP_BUTTON_IS_DOWN (dtw->sticky_zoom)) {
-            NRRect newarea;
-            double zpsp;
+        if (SP_BUTTON_IS_DOWN(dtw->sticky_zoom)) {
             /* Calculate zoom per pixel */
-            zpsp = zoom / hypot (area.x1 - area.x0, area.y1 - area.y0);
+            double const zpsp = zoom / hypot (area.dimensions()[NR::X], area.dimensions()[NR::Y]);
             /* Find new visible area */
-            dtw->desktop->get_display_area (&newarea);
+            NR::Rect newarea = dtw->desktop->get_display_area();
             /* Calculate adjusted zoom */
-            zoom = zpsp * hypot (newarea.x1 - newarea.x0, newarea.y1 - newarea.y0);
-            dtw->desktop->zoom_absolute (0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
+            zoom = zpsp * hypot(newarea.dimensions()[NR::X], newarea.dimensions()[NR::Y]);
+            dtw->desktop->zoom_absolute(newarea.midpoint()[NR::X], newarea.midpoint()[NR::Y], zoom);
         } else {
-            dtw->desktop->zoom_absolute (0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
+            dtw->desktop->zoom_absolute(area.midpoint()[NR::X], area.midpoint()[NR::Y], zoom);
         }
 
     } else {
-        if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
+        if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate) {
             GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
+        }
 //            this->size_allocate (widget, allocation);
     }
 }
@@ -920,15 +918,14 @@ SPDesktopWidget::viewSetPosition (NR::Point p)
 void
 sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 {
-    NRRect viewbox;
-    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
-    double scale = dtw->desktop->current_zoom();
-    double s = viewbox.x0 / scale - dtw->ruler_origin[NR::X];
-    double e = viewbox.x1 / scale - dtw->ruler_origin[NR::X];
-    gtk_ruler_set_range (GTK_RULER (dtw->hruler), s,  e, GTK_RULER (dtw->hruler)->position, (e - s));
-    s = viewbox.y0 / -scale - dtw->ruler_origin[NR::Y];
-    e = viewbox.y1 / -scale - dtw->ruler_origin[NR::Y];
-    gtk_ruler_set_range (GTK_RULER (dtw->vruler), s, e, GTK_RULER (dtw->vruler)->position, (e - s));
+    NR::Rect const viewbox = dtw->canvas->getViewbox();
+    double const scale = dtw->desktop->current_zoom();
+    double s = viewbox.min()[NR::X] / scale - dtw->ruler_origin[NR::X];
+    double e = viewbox.max()[NR::X] / scale - dtw->ruler_origin[NR::X];
+    gtk_ruler_set_range(GTK_RULER(dtw->hruler), s,  e, GTK_RULER(dtw->hruler)->position, (e - s));
+    s = viewbox.min()[NR::Y] / -scale - dtw->ruler_origin[NR::Y];
+    e = viewbox.max()[NR::Y] / -scale - dtw->ruler_origin[NR::Y];
+    gtk_ruler_set_range(GTK_RULER(dtw->vruler), s, e, GTK_RULER(dtw->vruler)->position, (e - s));
 }
 
 
@@ -1016,15 +1013,14 @@ sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data)
 static void
 sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
 {
-    NRRect d;
-    double zoom_factor = pow (2, gtk_spin_button_get_value (spin));
+    double const zoom_factor = pow (2, gtk_spin_button_get_value (spin));
 
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (data);
     SPDesktop *desktop = dtw->desktop;
 
-    desktop->get_display_area (&d);
+    NR::Rect const d = desktop->get_display_area();
     g_signal_handler_block (spin, dtw->zoom_update);
-    desktop->zoom_absolute ((d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_factor);
+    desktop->zoom_absolute (d.midpoint()[NR::X], d.midpoint()[NR::Y], zoom_factor);
     g_signal_handler_unblock (spin, dtw->zoom_update);
 
     spinbutton_defocus (GTK_OBJECT (spin));
@@ -1077,10 +1073,8 @@ sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data)
 static void
 sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor)
 {
-    NRRect d;
-
-    dt->get_display_area (&d);
-    dt->zoom_absolute (( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, factor);
+    NR::Rect const d = dt->get_display_area();
+    dt->zoom_absolute(d.midpoint()[NR::X], d.midpoint()[NR::Y], factor);
 }
 
 static void
@@ -1196,38 +1190,35 @@ sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale)
     dtw->update = 1;
 
     /* The desktop region we always show unconditionally */
-    NRRect darea;
     SPDocument *doc = dtw->desktop->doc();
-    sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &darea);
-    darea.x0 = MIN (darea.x0, -sp_document_width (doc));
-    darea.y0 = MIN (darea.y0, -sp_document_height (doc));
-    darea.x1 = MAX (darea.x1, 2 * sp_document_width (doc));
-    darea.y1 = MAX (darea.y1, 2 * sp_document_height (doc));
+    NR::Rect const r = sp_item_bbox_desktop(SP_ITEM(SP_DOCUMENT_ROOT(doc)));
+    NR::Rect darea(NR::Point(MIN(r.min()[NR::X], -sp_document_width(doc)),
+                             MIN(r.min()[NR::Y], -sp_document_height(doc))),
+                   NR::Point(MAX(r.max()[NR::X], 2 * sp_document_width(doc)),
+                             MAX(r.max()[NR::Y], 2 * sp_document_height(doc))));
 
     /* Canvas region we always show unconditionally */
-    NRRect carea;
-    carea.x0 = darea.x0 * scale - 64;
-    carea.y0 = darea.y1 * -scale - 64;
-    carea.x1 = darea.x1 * scale + 64;
-    carea.y1 = darea.y0 * -scale + 64;
+    NR::Rect carea(NR::Point(darea.min()[NR::X] * scale - 64,
+                             darea.max()[NR::Y] * -scale - 64),
+                   NR::Point(darea.max()[NR::X] * scale + 64,
+                             darea.min()[NR::Y] * -scale + 64));
 
-    NRRect viewbox;
-    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
+    NR::Rect viewbox = dtw->canvas->getViewbox();
 
     /* Viewbox is always included into scrollable region */
-    nr_rect_d_union (&carea, &carea, &viewbox);
+    carea = NR::Rect::union_bounds(carea, viewbox);
 
-    set_adjustment (dtw->hadj, carea.x0, carea.x1,
-                    (viewbox.x1 - viewbox.x0),
-                    0.1 * (viewbox.x1 - viewbox.x0),
-                    (viewbox.x1 - viewbox.x0));
-    gtk_adjustment_set_value (dtw->hadj, viewbox.x0);
+    set_adjustment(dtw->hadj, carea.min()[NR::X], carea.max()[NR::X],
+                   viewbox.dimensions()[NR::X],
+                   0.1 * viewbox.dimensions()[NR::X],
+                   viewbox.dimensions()[NR::X]);
+    gtk_adjustment_set_value(dtw->hadj, viewbox.min()[NR::X]);
 
-    set_adjustment (dtw->vadj, carea.y0, carea.y1,
-                    (viewbox.y1 - viewbox.y0),
-                    0.1 * (viewbox.y1 - viewbox.y0),
-                    (viewbox.y1 - viewbox.y0));
-    gtk_adjustment_set_value (dtw->vadj, viewbox.y0);
+    set_adjustment(dtw->vadj, carea.min()[NR::Y], carea.max()[NR::Y],
+                   viewbox.dimensions()[NR::Y],
+                   0.1 * viewbox.dimensions()[NR::Y],
+                   viewbox.dimensions()[NR::Y]);
+    gtk_adjustment_set_value(dtw->vadj, viewbox.min()[NR::Y]);
 
     dtw->update = 0;
 }

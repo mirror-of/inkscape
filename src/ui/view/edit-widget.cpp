@@ -1398,19 +1398,18 @@ EditWidget::viewSetPosition (NR::Point p)
 void 
 EditWidget::updateRulers() 
 {    
-    NRRect viewbox;
     NR::Point origin = _namedview->gridorigin;
 
-    sp_canvas_get_viewbox (_svg_canvas.spobj(), &viewbox);
+    NR::Rect const viewbox = _svg_canvas.spobj()->getViewbox();
     double lo, up, pos, max;
-    double scale = _desktop->current_zoom();
-    double s = viewbox.x0 / scale - origin[NR::X];
-    double e = viewbox.x1 / scale - origin[NR::X];
-    _top_ruler.get_range (lo, up, pos, max);
-    _top_ruler.set_range (s, e, pos, e);
-    s = viewbox.y0 / -scale - origin[NR::Y];
-    e = viewbox.y1 / -scale - origin[NR::Y];
-    _left_ruler.set_range (s, e, origin[NR::Y], e);
+    double const scale = _desktop->current_zoom();
+    double s = viewbox.min()[NR::X] / scale - origin[NR::X];
+    double e = viewbox.max()[NR::X] / scale - origin[NR::X];
+    _top_ruler.get_range(lo, up, pos, max);
+    _top_ruler.set_range(s, e, pos, e);
+    s = viewbox.min()[NR::Y] / -scale - origin[NR::Y];
+    e = viewbox.max()[NR::Y] / -scale - origin[NR::Y];
+    _left_ruler.set_range(s, e, origin[NR::Y], e);
     /// \todo is that correct?
 }
 
@@ -1418,48 +1417,46 @@ void
 EditWidget::updateScrollbars (double scale) 
 {
     // do not call this function before canvas has its size allocated
-    if (!is_realized()) return;
+    if (!is_realized() || _update_s_f) {
+        return;
+    }
 
-    if (_update_s_f) return;
     _update_s_f = true;
 
     /* The desktop region we always show unconditionally */
-    NRRect darea;
     SPDocument *doc = _desktop->doc();
-    sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &darea);
-    darea.x0 = MIN (darea.x0, -sp_document_width (doc));
-    darea.y0 = MIN (darea.y0, -sp_document_height (doc));
-    darea.x1 = MAX (darea.x1, 2 * sp_document_width (doc));
-    darea.y1 = MAX (darea.y1, 2 * sp_document_height (doc));
+    NR::Rect const r = sp_item_bbox_desktop(SP_ITEM(SP_DOCUMENT_ROOT(doc)));
+    NR::Rect darea(NR::Point(MIN(r.min()[NR::X], -sp_document_width(doc)),
+                             MIN(r.min()[NR::Y], -sp_document_height(doc))),
+                   NR::Point(MAX(r.max()[NR::X], 2 * sp_document_width(doc)),
+                             MAX(r.max()[NR::Y], 2 * sp_document_height(doc))));
 
     /* Canvas region we always show unconditionally */
-    NRRect carea;
-    carea.x0 = darea.x0 * scale - 64;
-    carea.y0 = darea.y1 * -scale - 64;
-    carea.x1 = darea.x1 * scale + 64;
-    carea.y1 = darea.y0 * -scale + 64;
+    NR::Rect carea(NR::Point(darea.min()[NR::X] * scale - 64,
+                             darea.max()[NR::Y] * -scale - 64),
+                   NR::Point(darea.max()[NR::X] * scale + 64,
+                             darea.min()[NR::Y] * -scale + 64));
 
-    NRRect viewbox;
-    sp_canvas_get_viewbox (_svg_canvas.spobj(), &viewbox);
+    NR::Rect const viewbox = _svg_canvas.spobj()->getViewbox();
 
     /* Viewbox is always included into scrollable region */
-    nr_rect_d_union (&carea, &carea, &viewbox);
+    carea = NR::Rect::union_bounds(carea, viewbox);
 
     Gtk::Adjustment *adj = _bottom_scrollbar.get_adjustment();
-    adj->set_value (viewbox.x0);
-    adj->set_lower (carea.x0);
-    adj->set_upper (carea.x1);
-    adj->set_page_increment (viewbox.x1 - viewbox.x0);
-    adj->set_step_increment (0.1 * (viewbox.x1 - viewbox.x0));
-    adj->set_page_size (viewbox.x1 - viewbox.x0);
+    adj->set_value(viewbox.min()[NR::X]);
+    adj->set_lower(carea.min()[NR::X]);
+    adj->set_upper(carea.max()[NR::X]);
+    adj->set_page_increment(viewbox.dimensions()[NR::X]);
+    adj->set_step_increment(0.1 * (viewbox.dimensions()[NR::X]));
+    adj->set_page_size(viewbox.dimensions()[NR::X]);
 
     adj = _right_scrollbar.get_adjustment();
-    adj->set_value (viewbox.y0);
-    adj->set_lower (carea.y0);
-    adj->set_upper (carea.y1);
-    adj->set_page_increment (viewbox.y1 - viewbox.y0);
-    adj->set_step_increment (0.1 * (viewbox.y1 - viewbox.y0));
-    adj->set_page_size (viewbox.y1 - viewbox.y0);
+    adj->set_value(viewbox.min()[NR::Y]);
+    adj->set_lower(carea.min()[NR::Y]);
+    adj->set_upper(carea.max()[NR::Y]);
+    adj->set_page_increment(viewbox.dimensions()[NR::Y]);
+    adj->set_step_increment(0.1 * viewbox.dimensions()[NR::Y]);
+    adj->set_page_size(viewbox.dimensions()[NR::Y]);
 
     _update_s_f = false;
 }
@@ -1644,39 +1641,34 @@ EditWidget::onWindowSizeAllocate (Gtk::Allocation &newall)
         return;
     }
 
-    NRRect area;
-    double zoom;
-    _desktop->get_display_area (&area);
-    zoom = _desktop->current_zoom();
+    NR::Rect const area = _desktop->get_display_area();
+    double zoom = _desktop->current_zoom();
 
     if (_sticky_zoom.get_active()) {
-        NRRect newarea;
-        double zpsp;
         /* Calculate zoom per pixel */
-        zpsp = zoom / hypot (area.x1 - area.x0, area.y1 - area.y0);
+        double const zpsp = zoom / hypot(area.dimensions()[NR::X], area.dimensions()[NR::Y]);
         /* Find new visible area */
-        _desktop->get_display_area (&newarea);
+        NR::Rect const newarea = _desktop->get_display_area();
         /* Calculate adjusted zoom */
-        zoom = zpsp * hypot (newarea.x1 - newarea.x0, newarea.y1 - newarea.y0);
+        zoom = zpsp * hypot(newarea.dimensions()[NR::X], newarea.dimensions()[NR::Y]);
     }
 
-    _desktop->zoom_absolute (0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
+    _desktop->zoom_absolute(area.midpoint()[NR::X], area.midpoint()[NR::Y], zoom);
 }
 
 void
 EditWidget::onWindowRealize()
 {
-    NRRect d;
-    d.x0 = 0.0;
-    d.y0 = 0.0;
-    d.x1 = sp_document_width (_desktop->doc());
-    d.y1 = sp_document_height (_desktop->doc());
+    NR::Rect d(NR::Point(0, 0),
+               NR::Point(sp_document_width(_desktop->doc()), sp_document_height(_desktop->doc())));
 
-    if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
+    if (fabs(d.dimensions()[NR::X]) < 1.0 || fabs(d.dimensions()[NR::Y]) < 1.0) {
+        return;
+    }
 
-    _desktop->set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
-    _namedview_modified (_desktop->namedview, SP_OBJECT_MODIFIED_FLAG, this);
-    setTitle (SP_DOCUMENT_NAME (_desktop->doc()));
+    _desktop->set_display_area(d.min()[NR::X], d.min()[NR::Y], d.max()[NR::X], d.max()[NR::Y], 10);
+    _namedview_modified(_desktop->namedview, SP_OBJECT_MODIFIED_FLAG, this);
+    setTitle (SP_DOCUMENT_NAME(_desktop->doc()));
 }
 
 void

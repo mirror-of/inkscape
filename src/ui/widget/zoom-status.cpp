@@ -110,10 +110,9 @@ ZoomStatus::on_value_changed()
     if (_upd_f) return;
     _upd_f = true;
     g_assert(_dt);
-    NRRect d;
     double zoom_factor = pow(2, get_value());
-    _dt->get_display_area(&d);
-    _dt->zoom_absolute((d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_factor);
+    NR::Rect const d =_dt->get_display_area();
+    _dt->zoom_absolute(d.midpoint()[NR::X], d.midpoint()[NR::Y], zoom_factor);
     gtk_widget_grab_focus(static_cast<GtkWidget*>((void*)_dt->canvas));   /// \todo this no love song
     _upd_f = false;
 }

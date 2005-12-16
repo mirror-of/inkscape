@@ -1372,8 +1372,6 @@ ContextVerb::perform(SPAction *action, void *data, void *pdata)
 void
 ZoomVerb::perform(SPAction *action, void *data, void *pdata)
 {
-    NRRect d;
-
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     if (!dt)
         return;
@@ -1388,25 +1386,35 @@ ZoomVerb::perform(SPAction *action, void *data, void *pdata)
 
     switch (GPOINTER_TO_INT(data)) {
         case SP_VERB_ZOOM_IN:
-            dt->get_display_area(&d);
-            dt->zoom_relative( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_inc );
+        {
+            NR::Rect const d = dt->get_display_area();
+            dt->zoom_relative( d.midpoint()[NR::X], d.midpoint()[NR::Y], zoom_inc);
             break;
+        }
         case SP_VERB_ZOOM_OUT:
-            dt->get_display_area(&d);
-            dt->zoom_relative( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / zoom_inc );
+        {
+            NR::Rect const d = dt->get_display_area();
+            dt->zoom_relative( d.midpoint()[NR::X], d.midpoint()[NR::Y], 1 / zoom_inc );
             break;
+        }
         case SP_VERB_ZOOM_1_1:
-            dt->get_display_area(&d);
-            dt->zoom_absolute( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1.0 );
+        {
+            NR::Rect const d = dt->get_display_area();
+            dt->zoom_absolute( d.midpoint()[NR::X], d.midpoint()[NR::Y], 1.0 );
             break;
+        }
         case SP_VERB_ZOOM_1_2:
-            dt->get_display_area(&d);
-            dt->zoom_absolute( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 0.5);
+        {
+            NR::Rect const d = dt->get_display_area();
+            dt->zoom_absolute( d.midpoint()[NR::X], d.midpoint()[NR::Y], 0.5);
             break;
+        }
         case SP_VERB_ZOOM_2_1:
-            dt->get_display_area(&d);
-            dt->zoom_absolute( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 2.0 );
+        {
+            NR::Rect const d = dt->get_display_area();
+            dt->zoom_absolute( d.midpoint()[NR::X], d.midpoint()[NR::Y], 2.0 );
             break;
+        }
         case SP_VERB_ZOOM_PAGE:
             dt->zoom_page();
             break;
