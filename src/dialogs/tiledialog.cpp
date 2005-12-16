@@ -50,22 +50,35 @@
 int
 sp_compare_x_position(SPItem *first, SPItem *second)
 {
-    NRRect a;
-    sp_item_invoke_bbox(first, &a, sp_item_i2doc_affine(first), TRUE);
-    double a_height = fabs (a.y1 - a.y0);
+    using NR::X;
+    using NR::Y;
 
-    NRRect b;
-    sp_item_invoke_bbox(second, &b, sp_item_i2doc_affine(second), TRUE);
-    double b_height = fabs (b.y1 - b.y0);
-    bool a_in_b_vert = FALSE;
-    if ((a.y0 < b.y0+0.1) && (a.y0 > b.y0 - b_height)) a_in_b_vert = TRUE;
-    else if ((b.y0 < a.y0+0.1) && (b.y0 > a.y0 - a_height)) a_in_b_vert = TRUE;
-    else if (b.y0 == a.y0) a_in_b_vert = TRUE;
-    else a_in_b_vert = FALSE;
+    NR::Rect const a = first->invokeBbox(sp_item_i2doc_affine(first));
+    double const a_height = a.dimensions()[Y];
 
-    if (!a_in_b_vert) return -1;
-    if (a_in_b_vert && (a.x0 > b.x0)) return 1;
-    if (a_in_b_vert && (a.x0 < b.x0)) return -1;
+    NR::Rect const b = second->invokeBbox(sp_item_i2doc_affine(second));
+    double const b_height = b.dimensions()[Y];
+    
+    bool a_in_b_vert = false;
+    if ((a.min()[Y] < b.min()[Y] + 0.1) && (a.min()[Y] > b.min()[Y] - b_height)) {
+        a_in_b_vert = true;
+    } else if ((b.min()[Y] < a.min()[Y] + 0.1) && (b.min()[Y] > a.min()[Y] - a_height)) {
+        a_in_b_vert = true;
+    } else if (b.min()[Y] == a.min()[Y]) {
+        a_in_b_vert = true;
+    } else {
+        a_in_b_vert = false;
+    }
+
+    if (!a_in_b_vert) {
+        return -1;
+    }
+    if (a_in_b_vert && a.min()[X] > b.min()[X]) {
+        return 1;
+    }
+    if (a_in_b_vert && a.min()[X] < b.min()[X]) {
+        return -1;
+    }
     return 0;
 }
 
@@ -75,13 +88,16 @@ sp_compare_x_position(SPItem *first, SPItem *second)
 int
 sp_compare_y_position(SPItem *first, SPItem *second)
 {
-    NRRect a;
-    sp_item_invoke_bbox(first, &a, sp_item_i2doc_affine(first), TRUE);
-    NRRect b;
-    sp_item_invoke_bbox(second, &b, sp_item_i2doc_affine(second), TRUE);
+    NR::Rect const a = first->invokeBbox(sp_item_i2doc_affine(first));
+    NR::Rect const b = second->invokeBbox(sp_item_i2doc_affine(second));
 
-    if (a.y0 > b.y0) return 1;
-    if (a.y0 < b.y0) return -1;
+    if (a.min()[NR::Y] > b.min()[NR::Y]) {
+        return 1;
+    }
+    if (a.min()[NR::Y] < b.min()[NR::Y]) {
+        return -1;
+    }
+    
     return 0;
 }
 
@@ -142,18 +158,25 @@ void TileDialog::Grid_Arrange ()
     const GSList *items = selection->itemList();
     cnt=0;
     for (; items != NULL; items = items->next) {
-        NRRect b;
-        SPItem *item=SP_ITEM(items->data);
-        sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
-        width = fabs (b.x1 - b.x0);
-        height = fabs (b.y1 - b.y0);
-        cx = (b.x1 + b.x0)/2;
-        cy = (b.y1 + b.y0)/2;
+        SPItem *item = SP_ITEM(items->data);
+        NR::Rect const b = item->invokeBbox(sp_item_i2doc_affine(item));
+        width = b.dimensions()[NR::X];
+        height = b.dimensions()[NR::Y];
+        cx = b.midpoint()[NR::X];
+        cy = b.midpoint()[NR::Y];
 
-        if (b.x0 < grid_left) grid_left = b.x0;
-        if (b.y0 < grid_top) grid_top = b.y0;
-        if (width > col_width) col_width = width;
-        if (height > row_height) row_height = height;
+        if (b.min()[NR::X] < grid_left) {
+            grid_left = b.min()[NR::X];
+        }
+        if (b.min()[NR::Y] < grid_top) {
+            grid_top = b.min()[NR::Y];
+        }
+        if (width > col_width) {
+            col_width = width;
+        }
+        if (height > row_height) {
+            row_height = height;
+        }
     }
 
 
@@ -172,13 +195,16 @@ void TileDialog::Grid_Arrange ()
         cnt=0;
         const GSList *sizes = sorted;
         for (; sizes != NULL; sizes = sizes->next) {
-            NRRect b;
-            SPItem *item=SP_ITEM(sizes->data);
-            sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
-            width = fabs (b.x1 - b.x0);
-            height = fabs (b.y1 - b.y0);
-            if (width > col_widths[(cnt % NoOfCols)]) col_widths[(cnt % NoOfCols)] = width;
-            if (height > row_heights[(cnt / NoOfCols)]) row_heights[(cnt / NoOfCols)] = height;
+            SPItem *item = SP_ITEM(sizes->data);
+            NR::Rect const b = item->invokeBbox(sp_item_i2doc_affine(item));
+            width = b.dimensions()[NR::X];
+            height = b.dimensions()[NR::Y];
+            if (width > col_widths[(cnt % NoOfCols)]) {
+                col_widths[(cnt % NoOfCols)] = width;
+            }
+            if (height > row_heights[(cnt / NoOfCols)]) {
+                row_heights[(cnt / NoOfCols)] = height;
+            }
             cnt++;
         }
 
@@ -275,10 +301,9 @@ void TileDialog::Grid_Arrange ()
              for (; current_row != NULL; current_row = current_row->next) {
                  SPItem *item=SP_ITEM(current_row->data);
                  Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
-                 NRRect b;
-                 sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
-                 width = b.x1 - b.x0;
-                 height = b.y1 - b.y0;
+                 NR::Rect const b = item->invokeBbox(sp_item_i2doc_affine(item));
+                 width = b.dimensions()[NR::X];
+                 height = b.dimensions()[NR::Y];
                  row = cnt / NoOfCols;
                  col = cnt % NoOfCols;
 
@@ -289,7 +314,7 @@ void TileDialog::Grid_Arrange ()
                  new_x = grid_left + (((col_widths[col] - width)/2)*HorizAlign) + col_xs[col];
                  new_y = grid_top + (((row_heights[row] - height)/2)*VertAlign) + row_ys[row];
 
-                 NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y); // why are the two args the opposite ways round???
+                 NR::Point move = NR::Point(new_x - b.min()[NR::X], b.min()[NR::Y] - new_y); // why are the two args the opposite ways round???
                  NR::Matrix const &affine = NR::Matrix(NR::translate(move));
                  sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
                  sp_item_write_transform(item, repr, item->transform,  NULL);
@@ -832,6 +857,18 @@ TileDialog::TileDialog()
 //#########################################################################
 //## E N D    O F    F I L E
 //#########################################################################
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 
 
 

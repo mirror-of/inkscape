@@ -1085,11 +1085,10 @@ clonetiler_apply (GtkWidget *widget, void *)
         w = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-w", 0);
         h = sp_repr_get_double_attribute (obj_repr, "inkscape:tile-h", 0);
     } else {
-        NRRect r;
-        sp_item_invoke_bbox(SP_ITEM(obj), &r, sp_item_i2doc_affine(SP_ITEM(obj)), TRUE);
-        c = NR::Point ((r.x0 + r.x1)/2, (r.y0 + r.y1)/2); 
-        w = fabs (r.x1 - r.x0); 
-        h = fabs (r.y1 - r.y0); 
+        NR::Rect const r = SP_ITEM(obj)->invokeBbox(sp_item_i2doc_affine(SP_ITEM(obj)));
+        c = r.midpoint();
+        w = r.dimensions()[NR::X];
+        h = r.dimensions()[NR::Y];
 
         sp_repr_set_svg_double(obj_repr, "inkscape:tile-w", w);
         sp_repr_set_svg_double(obj_repr, "inkscape:tile-h", h);

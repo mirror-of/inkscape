@@ -550,20 +550,16 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
         if (object && SP_IS_ITEM(object)) {
             /* Find bbox in document */
             NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));
-            NRRect dbox;
-            sp_item_invoke_bbox(SP_ITEM(object), &dbox, i2doc, TRUE);
+            NR::Rect dbox = SP_ITEM(object)->invokeBbox(i2doc);
 
             if ( SP_OBJECT_PARENT(object) == NULL )
             {
-                dbox.x0 = 0;
-                dbox.y0 = 0;
-
-                dbox.x1 = sp_document_width( doc );
-                dbox.y1 = sp_document_height( doc );
+                dbox = NR::Rect(NR::Point(0, 0),
+                                NR::Point(sp_document_width(doc), sp_document_height(doc)));
             }
 
             /* This is in document coordinates, i.e. pixels */
-            if (!nr_rect_d_test_empty(&dbox)) {
+            if (dbox.isEmpty() == false) {
                 NRGC gc(NULL);
                 /* Update to renderable state */
                 double sf = 1.0;
@@ -576,10 +572,10 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
                                              NR_ARENA_ITEM_STATE_NONE );
                 /* Item integer bbox in points */
                 NRRectL ibox;
-                ibox.x0 = (int) floor(sf * dbox.x0 + 0.5);
-                ibox.y0 = (int) floor(sf * dbox.y0 + 0.5);
-                ibox.x1 = (int) floor(sf * dbox.x1 + 0.5);
-                ibox.y1 = (int) floor(sf * dbox.y1 + 0.5);
+                ibox.x0 = (int) floor(sf * dbox.min()[NR::X] + 0.5);
+                ibox.y0 = (int) floor(sf * dbox.min()[NR::Y] + 0.5);
+                ibox.x1 = (int) floor(sf * dbox.max()[NR::X] + 0.5);
+                ibox.y1 = (int) floor(sf * dbox.max()[NR::Y] + 0.5);
 
                 if ( dump ) {
                     g_message( "   box    --'%s'  (%f,%f)-(%f,%f)", name, (double)ibox.x0, (double)ibox.y0, (double)ibox.x1, (double)ibox.y1 );
@@ -608,10 +604,10 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
                                                      NR_ARENA_ITEM_STATE_ALL,
                                                      NR_ARENA_ITEM_STATE_NONE );
                         /* Item integer bbox in points */
-                        ibox.x0 = (int) floor(sf * dbox.x0 + 0.5);
-                        ibox.y0 = (int) floor(sf * dbox.y0 + 0.5);
-                        ibox.x1 = (int) floor(sf * dbox.x1 + 0.5);
-                        ibox.y1 = (int) floor(sf * dbox.y1 + 0.5);
+                        ibox.x0 = (int) floor(sf * dbox.min()[NR::X] + 0.5);
+                        ibox.y0 = (int) floor(sf * dbox.min()[NR::Y] + 0.5);
+                        ibox.x1 = (int) floor(sf * dbox.max()[NR::X] + 0.5);
+                        ibox.y1 = (int) floor(sf * dbox.max()[NR::Y] + 0.5);
 
                         if ( dump ) {
                             g_message( "   box2   --'%s'  (%f,%f)-(%f,%f)", name, (double)ibox.x0, (double)ibox.y0, (double)ibox.x1, (double)ibox.y1 );

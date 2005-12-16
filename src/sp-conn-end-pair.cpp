@@ -156,10 +156,7 @@ SPConnEndPair::getEndpoints(NR::Point endPts[]) const {
     
     for (unsigned h = 0; h < 2; ++h) {
         if ( h2attItem[h] ) {
-            NRRect bboxrect;
-            sp_item_invoke_bbox(h2attItem[h], &bboxrect,
-                    sp_item_i2doc_affine(h2attItem[h]), true);
-            NR::Rect bbox(bboxrect);
+            NR::Rect const bbox = h2attItem[h]->invokeBbox(sp_item_i2doc_affine(h2attItem[h]));
             endPts[h] = bbox.midpoint();
         }
         else 

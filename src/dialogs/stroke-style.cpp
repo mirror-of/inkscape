@@ -560,11 +560,11 @@ sp_marker_prev_new(unsigned size, gchar const *mname,
     // Find object's bbox in document
     NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));
 
-    NRRect dbox;
-    sp_item_invoke_bbox(SP_ITEM(object), &dbox, i2doc, TRUE);
+    NR::Rect const dbox = SP_ITEM(object)->invokeBbox(i2doc);
 
-    if (nr_rect_d_test_empty(&dbox))
+    if (dbox.isEmpty()) {
         return NULL;
+    }
 
     /* Update to renderable state */
     NRMatrix t;
@@ -579,10 +579,10 @@ sp_marker_prev_new(unsigned size, gchar const *mname,
 
     /* Item integer bbox in points */
     NRRectL ibox;
-    ibox.x0 = (int) floor(sf * dbox.x0 + 0.5);
-    ibox.y0 = (int) floor(sf * dbox.y0 + 0.5);
-    ibox.x1 = (int) floor(sf * dbox.x1 + 0.5);
-    ibox.y1 = (int) floor(sf * dbox.y1 + 0.5);
+    ibox.x0 = (int) floor(sf * dbox.min()[NR::X] + 0.5);
+    ibox.y0 = (int) floor(sf * dbox.min()[NR::Y] + 0.5);
+    ibox.x1 = (int) floor(sf * dbox.max()[NR::X] + 0.5);
+    ibox.y1 = (int) floor(sf * dbox.max()[NR::Y] + 0.5);
 
     /* Find visible area */
     int width = ibox.x1 - ibox.x0;

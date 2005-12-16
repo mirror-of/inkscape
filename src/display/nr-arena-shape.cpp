@@ -1085,6 +1085,16 @@ nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRect *pbox)
     nr_arena_item_request_update(shape, NR_ARENA_ITEM_STATE_ALL, FALSE);
 }
 
+void NRArenaShape::setPaintBox(NR::Rect const &pbox)
+{
+    paintbox.x0 = pbox.min()[NR::X];
+    paintbox.y0 = pbox.min()[NR::Y];
+    paintbox.x1 = pbox.max()[NR::X];
+    paintbox.y1 = pbox.max()[NR::Y];
+
+    nr_arena_item_request_update(this, NR_ARENA_ITEM_STATE_ALL, FALSE);
+}
+
 static void
 shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float ven)
 {

@@ -197,15 +197,15 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	}
 
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
-		NRRect paintbox;
 		/* This is suboptimal, because changing parent style schedules recalculation */
 		/* But on the other hand - how can we know that parent does not tie style and transform */
-		sp_item_invoke_bbox(SP_ITEM (object), &paintbox, NR::identity(), TRUE);
+                NR::Rect const paintbox = SP_ITEM(object)->invokeBbox(NR::identity());
 		for (SPItemView *v = SP_ITEM (shape)->display; v != NULL; v = v->next) {
-			if (flags & SP_OBJECT_MODIFIED_FLAG) {
-				nr_arena_shape_set_path(NR_ARENA_SHAPE(v->arenaitem), shape->curve,(flags & SP_OBJECT_USER_MODIFIED_FLAG_B));
-			}
-			nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (v->arenaitem), &paintbox);
+                    NRArenaShape * const s = NR_ARENA_SHAPE(v->arenaitem);
+                    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+                        nr_arena_shape_set_path(s, shape->curve, (flags & SP_OBJECT_USER_MODIFIED_FLAG_B));
+                    }
+                    s->setPaintBox(paintbox);
 		}
 	}
 
@@ -676,19 +676,15 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
 static NRArenaItem *
 sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 {
-	SPObject *object;
-	SPShape *shape;
-	NRRect paintbox;
-	NRArenaItem *arenaitem;
+	SPObject *object = SP_OBJECT(item);
+	SPShape *shape = SP_SHAPE(item);
 
-	object = SP_OBJECT (item);
-	shape = SP_SHAPE (item);
-
-	arenaitem = NRArenaShape::create(arena);
-	nr_arena_shape_set_style (NR_ARENA_SHAPE (arenaitem), object->style);
-	nr_arena_shape_set_path(NR_ARENA_SHAPE(arenaitem), shape->curve,false);
-	sp_item_invoke_bbox(item, &paintbox, NR::identity(), TRUE);
-	nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (arenaitem), &paintbox);
+	NRArenaItem *arenaitem = NRArenaShape::create(arena);
+        NRArenaShape * const s = NR_ARENA_SHAPE(arenaitem);
+	nr_arena_shape_set_style(s, object->style);
+	nr_arena_shape_set_path(s, shape->curve, false);
+        NR::Rect const paintbox = item->invokeBbox(NR::identity());
+        s->setPaintBox(paintbox);
 
         if (sp_shape_has_markers (shape)) {
 

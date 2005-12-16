@@ -682,14 +682,12 @@ NR::Rect sp_item_bbox_desktop(SPItem *item)
 
 static void sp_item_private_snappoints(SPItem const *item, SnapPointsIter p)
 {
-    NRRect bbox;
-    sp_item_invoke_bbox(item, &bbox, sp_item_i2d_affine(item), TRUE);
-    NR::Rect const bbox2(bbox);
+    NR::Rect const bbox = item->invokeBbox(sp_item_i2d_affine(item));
     /* Just a pair of opposite corners of the bounding box suffices given that we don't yet
        support angled guide lines. */
 
-    *p = bbox2.min();
-    *p = bbox2.max();
+    *p = bbox.min();
+    *p = bbox.max();
 }
 
 void sp_item_snappoints(SPItem const *item, SnapPointsIter p)

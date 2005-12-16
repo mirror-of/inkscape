@@ -1,3 +1,11 @@
+2005-12-16  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/conn-avoid-ref.cpp, sp-conn-end-pair.cpp, sp-conn-end.cpp,
+	sp-item.cpp, sp-shape.cpp, dialogs/clonetiler.cpp,
+	dialogs/stroke-style.cpp, dialogs/tiledialog.cpp,
+	dialogs/unclump.cpp, display/nr-arena-shape.cpp,
+	display/nr-arena-shape.h, widgets/icon.cpp: more NRRect removal.
+
 2005-12-15  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/conn-avoid-ref.cpp, src/gradient-chemistry.cpp,

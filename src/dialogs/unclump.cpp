@@ -46,9 +46,8 @@ unclump_center (SPItem *item)
         return i->second;
     }
 
-    NRRect r;
-    sp_item_invoke_bbox(item, &r, sp_item_i2d_affine(item), TRUE);
-    NR::Point c = NR::Point ((r.x0 + r.x1)/2, (r.y0 + r.y1)/2); 
+    NR::Rect const r = item->invokeBbox(sp_item_i2d_affine(item));
+    NR::Point const c = r.midpoint();
     c_cache[SP_OBJECT_ID(item)] = c;
     return c; 
 }
@@ -61,9 +60,8 @@ unclump_wh (SPItem *item)
     if ( i != wh_cache.end() ) {
         wh = i->second;
     } else {
-        NRRect r;
-        sp_item_invoke_bbox(item, &r, sp_item_i2d_affine(item), TRUE);
-        wh = NR::Point (fabs (r.x1 - r.x0), fabs (r.y1 - r.y0));
+        NR::Rect const r = item->invokeBbox(sp_item_i2d_affine(item));
+        wh = r.dimensions();
         wh_cache[SP_OBJECT_ID(item)] = wh;
     }
 

@@ -165,6 +165,8 @@ struct NRArenaShape : public NRArenaItem {
 	void setLineJoin(JoinType join);
 	void setMitreLimit(double limit);
 
+        void setPaintBox(NR::Rect const &pbox);
+
 	void _invalidateCachedFill() {
 		if (cached_fill) {
 			delete cached_fill;

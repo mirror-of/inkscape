@@ -46,7 +46,7 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
                             SPPath *const path,
                             bool const updatePathRepr = true)
 {
-    // TODO: sp_item_invoke_bbox gives the wrong result for some objects
+    // TODO: SPItem::invokeBbox gives the wrong result for some objects
     //       that have internal representations that are updated later
     //       by the sp_*_update functions, e.g., text.
     sp_document_ensure_up_to_date(path->document);
