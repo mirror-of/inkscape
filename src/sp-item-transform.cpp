@@ -76,7 +76,7 @@ void sp_item_move_rel(SPItem *item, NR::translate const &tr)
 /*
 ** Returns the matrix you need to apply to an object with given bbox and strokewidth to
 scale/move it to the new box x0/y0/x1/y1. Takes into account the "scale stroke"
-preference value passed to it. Has to solve a couple quadratic equations to make sure
+preference value passed to it. Has to solve a quadratic equation to make sure
 the goal is met exactly and the stroke scaling is obeyed.
 */
 
@@ -88,8 +88,8 @@ get_scale_transform_with_stroke (NR::Rect &bbox_param, gdouble strokewidth, bool
     NR::Matrix p2o = NR::Matrix (NR::translate (-bbox.min()));
     NR::Matrix o2n = NR::Matrix (NR::translate (x0, y0));
 
-    NR::Matrix scale = NR::Matrix (NR::scale (1, 1));
-    NR::Matrix unbudge = NR::Matrix (NR::translate (0, 0));
+    NR::Matrix scale = NR::Matrix (NR::scale (1, 1)); // scale component
+    NR::Matrix unbudge = NR::Matrix (NR::translate (0, 0)); // move component to compensate for the drift caused by stroke width change
 
     gdouble w0 = bbox.extent(NR::X);
     gdouble h0 = bbox.extent(NR::Y);
@@ -110,14 +110,16 @@ get_scale_transform_with_stroke (NR::Rect &bbox_param, gdouble strokewidth, bool
     gdouble ratio_y = (h1 - r0) / (h0 - r0);
     NR::Matrix direct_constant_r = NR::Matrix (NR::scale(ratio_x, ratio_y));
 
-    if (transform_stroke && r0 != 0 && r0 != NR_HUGE) {
-
+    if (transform_stroke && r0 != 0 && r0 != NR_HUGE) { // there's stroke, and we need to scale it
+        // These coefficients are obtained from the assumption that scaling applies to the
+        // non-stroked "shape proper" and that stroke scale is scaled by the expansion of that
+        // matrix
         gdouble A = -(w0 *h0) + r0*(w0 + h0);
         gdouble B = -(w1 + h1) * r0*r0;
         gdouble C = w1 * h1 * r0*r0;
         if (B*B - 4*A*C > 0) {
             gdouble r1 = (-B - sqrt (B*B - 4*A*C))/(2*A);
-            gdouble r2 = (-B + sqrt (B*B - 4*A*C))/(2*A);
+            //gdouble r2 = (-B + sqrt (B*B - 4*A*C))/(2*A);
             //std::cout << "r0" << r0 << " r1" << r1 << " r2" << r2 << "\n";
             gdouble scale_x = (w1 - r1)/(w0 - r0);
             gdouble scale_y = (h1 - r1)/(h0 - r0);
@@ -127,7 +129,7 @@ get_scale_transform_with_stroke (NR::Rect &bbox_param, gdouble strokewidth, bool
             scale *= direct;
         }
     } else {
-        if (r0 == 0 || r0 == NR_HUGE) {
+        if (r0 == 0 || r0 == NR_HUGE) { // no stroke to scale
             scale *= direct;
         } else {// nonscaling strokewidth
             scale *= direct_constant_r;
