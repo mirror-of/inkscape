@@ -15,10 +15,11 @@ double Rectangle::yBorder=0;
  * and yBorder vertically
  *
  * Works in three passes: 
- *   1) removes some overlap horizontally
- *   2) removes remaing overlap vertically
- *   3) a last horizontal pass (starting from original x-positions)
- *      in case rectangles were moved too much in the first pass.
+ * 1) removes some overlap horizontally
+ * 2) removes remaining overlap vertically
+ * 3) a last horizontal pass removes all overlap starting from original
+ *    x-positions - this corrects the case where rectangles were moved 
+ *    too much in the first pass.
  */
 void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBorder) {
 	assert(0 <= n);
