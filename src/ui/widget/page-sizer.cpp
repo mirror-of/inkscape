@@ -283,7 +283,7 @@ void
 PageSizer::setDoc (double w, double h)
 {
     setDim (w, h);
-    if (!SP_ACTIVE_DESKTOP)
+    if (!SP_ACTIVE_DESKTOP || _wr->isUpdating())
         return;
 
     SPDocument *doc = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
