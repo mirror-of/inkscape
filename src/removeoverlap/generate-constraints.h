@@ -62,7 +62,7 @@ class Variable;
 class Constraint;
 
 // returns number of constraints generated
-int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vs, Constraint **&cs);
+int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vs, Constraint **&cs,bool useNeighbourLists);
 
 int generateYConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vs, Constraint **&cs);
 

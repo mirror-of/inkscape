@@ -5,25 +5,37 @@
 #include "solve_VPSC.h"
 #include "variable.h"
 
+#define EXTRA_GAP 0.0001
+
 double Rectangle::xBorder=0;
 double Rectangle::yBorder=0;
 /**
  * Takes an array of n rectangles and moves them as little as possible
  * such that rectangles are separated by at least xBorder horizontally
  * and yBorder vertically
+ *
+ * Works in three passes: 
+ *   1) removes some overlap horizontally
+ *   2) removes remaing overlap vertically
+ *   3) a last horizontal pass (starting from original x-positions)
+ *      in case rectangles were moved too much in the first pass.
  */
 void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBorder) {
 	assert(0 <= n);
 	// The extra gap avoids numerical imprecision problems
-	Rectangle::setXBorder(xBorder+0.001);
-	Rectangle::setYBorder(yBorder);
+	Rectangle::setXBorder(xBorder+EXTRA_GAP);
+	Rectangle::setYBorder(yBorder+EXTRA_GAP);
 	double *ws=new double[n];
 	for(int i=0;i<n;i++) {
 		ws[i]=1;
 	}
 	Variable **vs;
 	Constraint **cs;
-	int m=generateXConstraints(rs,ws,n,vs,cs);
+	double *oldX = new double[n];
+	int m=generateXConstraints(rs,ws,n,vs,cs,true);
+	for(int i=0;i<n;i++) {
+		oldX[i]=vs[i]->desiredPosition;
+	}
 	VPSC vpsc_x(vs,n,cs,m);
 	vpsc_x.solve();
 	for(int i=0;i<n;i++) {
@@ -35,12 +47,29 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 		delete cs[i];
 	}
 	delete [] cs;
-	Rectangle::setXBorder(Rectangle::xBorder-0.001);
+	// Removing the extra gap here ensures things that were moved to be adjacent to
+	// one another above are not considered overlapping
+	Rectangle::setXBorder(Rectangle::xBorder-EXTRA_GAP);
 	m=generateYConstraints(rs,ws,n,vs,cs);
 	VPSC vpsc_y(vs,n,cs,m);
 	vpsc_y.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreY(vs[i]->position());
+		rs[i]->moveCentreX(oldX[i]);
+		delete vs[i];
+	}
+	delete [] vs;
+	delete [] oldX;
+	for(int i = 0; i < m; ++i) {
+		delete cs[i];
+	}
+	delete [] cs;
+	Rectangle::setYBorder(Rectangle::yBorder-EXTRA_GAP);
+	m=generateXConstraints(rs,ws,n,vs,cs,false);
+	VPSC vpsc_x2(vs,n,cs,m);
+	vpsc_x2.solve();
+	for(int i=0;i<n;i++) {
+		rs[i]->moveCentreX(vs[i]->position());
 		delete vs[i];
 	}
 	delete [] vs;

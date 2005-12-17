@@ -153,7 +153,12 @@ int compare_events(const void *a, const void *b) {
 	return 0;
 }
 
-int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vars, Constraint **&cs) {
+/**
+ * Prepares variables and constraints in order to apply VPSC horizontally.
+ * useNeighbourLists determines whether or not a heuristic is used to deciding whether to resolve
+ * all overlap in the x pass, or leave some overlaps for the y pass.
+ */
+int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vars, Constraint **&cs, bool useNeighbourLists) {
 	events=new Event*[2*n];
 	int i,m,ctr=0;
 	vector<Constraint*> constraints;
@@ -171,34 +176,60 @@ int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 		Node *v=e->v;
 		if(e->type==Open) {
 			scanline.insert(v);
-			v->setNeighbours(
-				getLeftNeighbours(scanline,v),
-				getRightNeighbours(scanline,v)
-			);
+			if(useNeighbourLists) {
+				v->setNeighbours(
+					getLeftNeighbours(scanline,v),
+					getRightNeighbours(scanline,v)
+				);
+			} else {
+				NodeSet::iterator i=scanline.find(v);
+				if(i--!=scanline.begin()) {
+					Node *u=*i;
+					v->firstAbove=u;
+					u->firstBelow=v;
+				}
+				i=scanline.find(v);
+				if(++i!=scanline.end())	 {
+					Node *u=*i;
+					v->firstBelow=u;
+					u->firstAbove=v;
+				}
+			}
 		} else {
 			// Close event
 			int r;
-			for(NodeSet::iterator i=v->leftNeighbours->begin();
-				i!=v->leftNeighbours->end();i++
-			) {
-				Node *u=*i;
-				double sep = (v->r->width()+u->r->width())/2.0;
-				constraints.push_back(new Constraint(u->v,v->v,sep));
-				r=u->rightNeighbours->erase(v);
-				assert(r==1); // ensure exactly 1 element was deleted
-			}
-			
-			for(NodeSet::iterator i=v->rightNeighbours->begin();
-				i!=v->rightNeighbours->end();i++
-			) {
-				Node *u=*i;
-				double sep = (v->r->width()+u->r->width())/2.0;
-				constraints.push_back(new Constraint(v->v,u->v,sep));
-				r=u->leftNeighbours->erase(v);
-				assert(r==1); // ensure exactly 1 element was deleted
+			if(useNeighbourLists) {
+				for(NodeSet::iterator i=v->leftNeighbours->begin();
+					i!=v->leftNeighbours->end();i++
+				) {
+					Node *u=*i;
+					double sep = (v->r->width()+u->r->width())/2.0;
+					constraints.push_back(new Constraint(u->v,v->v,sep));
+					r=u->rightNeighbours->erase(v);
+				}
+				
+				for(NodeSet::iterator i=v->rightNeighbours->begin();
+					i!=v->rightNeighbours->end();i++
+				) {
+					Node *u=*i;
+					double sep = (v->r->width()+u->r->width())/2.0;
+					constraints.push_back(new Constraint(v->v,u->v,sep));
+					r=u->leftNeighbours->erase(v);
+				}
+			} else {
+				Node *l=v->firstAbove, *r=v->firstBelow;
+				if(l!=NULL) {
+					double sep = (v->r->width()+l->r->width())/2.0;
+					constraints.push_back(new Constraint(l->v,v->v,sep));
+					l->firstBelow=v->firstBelow;
+				}
+				if(r!=NULL) {
+					double sep = (v->r->width()+r->r->width())/2.0;
+					constraints.push_back(new Constraint(v->v,r->v,sep));
+					r->firstAbove=v->firstAbove;
+				}
 			}
 			r=scanline.erase(v);
-			assert(r==1); // ensure exactly 1 element was deleted
 			delete v;
 		}
 		delete e;
@@ -209,6 +240,9 @@ int generateXConstraints(Rectangle *rs[], double weights[], const int n, Variabl
 	return m;
 }
 
+/**
+ * Prepares variables and constraints in order to apply VPSC vertically to remove ALL overlap.
+ */
 int generateYConstraints(Rectangle *rs[], double weights[], const int n, Variable **&vars, Constraint **&cs) {
 	events=new Event*[2*n];
 	int ctr=0,i,m;
