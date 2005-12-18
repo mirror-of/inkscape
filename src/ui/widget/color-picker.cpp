@@ -58,11 +58,7 @@ ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip,
 
 ColorPicker::~ColorPicker()
 {
-    if (_window)
-    {
-        delete _window;
-        _window = 0;
-    }
+    closeWindow();
 }
 
 void
@@ -72,6 +68,16 @@ ColorPicker::setRgba32 (guint32 rgba)
     _rgba = rgba;
     if (_window)
         _window->setRgba32 (rgba);
+}
+
+void
+ColorPicker::closeWindow()
+{
+    if (_window)
+    {
+        delete _window;
+        _window = 0;
+    }
 }
 
 void

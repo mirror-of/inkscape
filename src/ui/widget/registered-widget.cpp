@@ -226,19 +226,23 @@ RegisteredColorPicker::setRgba32 (guint32 rgba)
 }
 
 void
+RegisteredColorPicker::closeWindow()
+{
+    _cp->closeWindow();
+}
+
+void
 RegisteredColorPicker::on_changed (guint32 rgba)
 {
     if (_wr->isUpdating() || !SP_ACTIVE_DESKTOP)
         return;
 
     _wr->setUpdating (true);
-
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);
     repr->setAttribute(_ckey.c_str(), c);
     sp_repr_set_css_double(repr, _akey.c_str(), (rgba & 0xff) / 255.0);
-
     _wr->setUpdating (false);
 }
 

@@ -30,6 +30,7 @@ public:
     ColorPicker (const Glib::ustring& title, const Glib::ustring& tip, const guint32 rgba, bool undo);
     virtual ~ColorPicker();
     void setRgba32 (guint32 rgba);
+    void closeWindow();
     sigc::connection connectChanged (const sigc::slot<void,guint>& slot) 
         { return _changed_signal.connect (slot); }
 

@@ -88,6 +88,7 @@ public:
             const Glib::ustring& akey,
             Registry& wr);
     void setRgba32 (guint32);
+    void closeWindow();
 
     Gtk::Label *_label;
     ColorPicker *_cp;
