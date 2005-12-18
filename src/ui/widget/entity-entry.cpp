@@ -79,9 +79,7 @@ EntityLineEntry::EntityLineEntry (rdf_work_entity_t* ent, Gtk::Tooltips& tt, Reg
 {
     Gtk::Entry *e = new Gtk::Entry;
     tt.set_tip (*e, _(ent->tip));
-    e->show();
     _packable = e;
-    _wr->add (ent->name, e);
     _changed_connection = e->signal_changed().connect (sigc::mem_fun (*this, &EntityLineEntry::on_changed));
 }
 
@@ -116,15 +114,12 @@ EntityMultiLineEntry::EntityMultiLineEntry (rdf_work_entity_t* ent, Gtk::Tooltip
     Gtk::ScrolledWindow *s = new Gtk::ScrolledWindow;
     s->set_policy (Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     s->set_shadow_type (Gtk::SHADOW_IN);
-    s->show();
     _packable = s;
     _v.set_size_request (-1, 5);
     _v.set_wrap_mode (Gtk::WRAP_WORD);
     _v.set_accepts_tab (false);
-    _v.show();
     s->add (_v);
     tt.set_tip (_v, _(ent->tip));
-    _wr->add (ent->name, &_v);
     _changed_connection = _v.get_buffer()->signal_changed().connect (sigc::mem_fun (*this, &EntityMultiLineEntry::on_changed));
 }
 

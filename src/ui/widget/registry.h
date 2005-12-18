@@ -24,8 +24,6 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
    
-typedef std::map<Glib::ustring, const Gtk::Object*> WMap;
-    
 class Registry {
 public:
     Registry();
@@ -33,11 +31,8 @@ public:
     
     bool               isUpdating();
     void               setUpdating (bool);
-    void               add (const Glib::ustring&, const Gtk::Object*);
-    const Gtk::Object *operator[] (const Glib::ustring&);
 
 protected:
-    WMap _wmap;
     bool _updating;
 };
 

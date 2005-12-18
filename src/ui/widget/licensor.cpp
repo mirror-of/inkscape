@@ -88,7 +88,6 @@ Licensor::init (Gtk::Tooltips& tt, Registry& wr)
     _frame.show();
     _frame.add (*this);
     pack_start (_omenu, true, true, 0);
-    wr.add ("licenses", &_omenu);
     Gtk::Menu *m = manage (new Gtk::Menu);
 
     Gtk::HBox *box = manage (new Gtk::HBox);
