@@ -46,6 +46,7 @@
 #include <gtk/gtkbutton.h>
 
 #include "gc-core.h"
+#include "preferences.h"
 
 #include <glibmm/i18n.h>
 #include "document.h"
@@ -173,6 +174,7 @@ main (int argc, const char **argv)
     LIBXML_TEST_VERSION
     
     Inkscape::GC::init();
+    Inkscape::Preferences::loadSkeleton();
 
     gtk_init (&argc, (char ***) &argv);
 
@@ -196,6 +198,7 @@ main (int argc, const char **argv)
     ss.fullscreen = false;
 
     inkscape = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
+    Inkscape::Preferences::load();
 
     for (i = 1; i < argc; i++) {
 	struct stat st;
