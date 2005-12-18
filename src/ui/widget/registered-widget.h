@@ -12,6 +12,9 @@
 #ifndef INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 #define INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 
+#include <gtkmm/box.h>
+#include <gtkmm/eventbox.h>
+
 class SPUnit;
 
 namespace Inkscape {
@@ -27,20 +30,16 @@ class RegisteredCheckButton {
 public:
     RegisteredCheckButton();
     ~RegisteredCheckButton();
-    void init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr);
+    void init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true);
     void setActive (bool);
 
-    Gtk::HBox& getHBox();
     Gtk::ToggleButton *_button;
-    Gtk::Label *_label;
 
 protected:
-    Gtk::HBox _box;
     Gtk::Tooltips     _tt;
     sigc::connection  _toggled_connection;
     Registry    *_wr;
     Glib::ustring      _key;
-    bool               _packed;
     void on_toggled();
 };
 
@@ -55,9 +54,6 @@ public:
 
 protected:
     Registry *_wr;
-//    sigc::connection  _changed_connection;
-//    Glib::ustring     *_key;
-//    void on_changed();
 };
 
 class RegisteredScalarUnit {

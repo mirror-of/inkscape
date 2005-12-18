@@ -50,7 +50,7 @@ namespace Widget {
 //====================================================
 
 RegisteredCheckButton::RegisteredCheckButton()
-: _button(0), _label(0), _packed(false)
+: _button(0)
 {
 }
 
@@ -58,36 +58,20 @@ RegisteredCheckButton::~RegisteredCheckButton()
 {
     _toggled_connection.disconnect();
     if (_button) delete _button;
-    if (_label) delete _label;
 }
 
 void
-RegisteredCheckButton::init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr)
+RegisteredCheckButton::init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right)
 {
     _button = new Gtk::CheckButton;
     _tt.set_tip (*_button, tip);
-    _button->show();
-    _label = new Gtk::Label (label, 1.0, 0.5);
-    _label->show();
+    _button->add (*manage (new Gtk::Label (label)));
+    _button->set_alignment (right? 1.0 : 0.0, 0.5);
     _key = key;
     _wr = &wr;
     _toggled_connection = _button->signal_toggled().connect (sigc::mem_fun (*this, &RegisteredCheckButton::on_toggled));
-    _wr->add (key, _button);
 }
 
-Gtk::HBox&
-RegisteredCheckButton::getHBox()
-{
-    if (!_packed)
-    {
-        _box.pack_start (*_button, false, false, 0);
-        _box.pack_start (*_label, false, false, 0);
-        _box.show();
-    }
-    _packed = true;
-    return _box;
-}
-    
 void
 RegisteredCheckButton::setActive (bool b)
 {
@@ -135,12 +119,9 @@ void
 RegisteredUnitMenu::init (const Glib::ustring& label, const Glib::ustring& key, Registry& wr)
 {
     _label = new Gtk::Label (label, 1.0, 0.5);
-    _label->show();
     _sel = new UnitMenu ();
     _sel->setUnitType (UNIT_TYPE_LINEAR);
-    _sel->show();
     _wr = &wr;
-    _wr->add (key, _sel);
 }
 
 void 
@@ -167,12 +148,10 @@ RegisteredScalarUnit::init (const Glib::ustring& label, const Glib::ustring& tip
     _widget->initScalar (-1e6, 1e6);
     _widget->setUnit (rum._sel->getUnitAbbr());
     _widget->setDigits (2);
-    _widget->show();
     _key = key;
     _um = rum._sel;
     _value_changed_connection = _widget->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScalarUnit::on_value_changed));
     _wr = &wr;
-    _wr->add (key, _widget);
 }
 
 ScalarUnit*
@@ -233,13 +212,10 @@ void
 RegisteredColorPicker::init (const Glib::ustring& label, const Glib::ustring& title, const Glib::ustring& tip, const Glib::ustring& ckey, const Glib::ustring& akey, Registry& wr)
 {
     _label = new Gtk::Label (label, 1.0, 0.5);
-    _label->show();
     _cp = new ColorPicker (title,tip,0,true);
-    _cp->show();
     _ckey = ckey;
     _akey = akey;
     _wr = &wr;
-    _wr->add (ckey, _cp);
     _changed_connection = _cp->connectChanged (sigc::mem_fun (*this, &RegisteredColorPicker::on_changed));
 }
 
@@ -287,18 +263,13 @@ RegisteredSuffixedInteger::init (const Glib::ustring& label, const Glib::ustring
     _key = key;
     _label = new Gtk::Label (label);
     _label->set_alignment (1.0, 0.5);
-    _label->show();
     _sb = new Gtk::SpinButton (_adj, 1.0, 0);
-    _sb->show();
     _suffix = new Gtk::Label (suffix);
-    _suffix->show();
     _hbox.pack_start (*_sb, true, true, 0);
     _hbox.pack_start (*_suffix, false, false, 0);
-    _hbox.show();
 
     _changed_connection = _adj.signal_value_changed().connect (sigc::mem_fun(*this, &RegisteredSuffixedInteger::on_value_changed));
     _wr = &wr;
-    _wr->add (key, &_adj);
 }
 
 void 
