@@ -171,21 +171,21 @@ DocumentPreferences::build_page()
 
     _rcp_bg.init (_("Background:"), _("Background color"), _("Color and transparency of the page background (also used for bitmap export)"),
                    "pagecolor", "inkscape:pageopacity", _wr);
-    _rcb_canb.init (_("Show page border"), _("If set, rectangular page border is shown"), "showborder", _wr);
-    _rcb_bord.init (_("Border on top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr);
+    _rcb_canb.init (_("Show page border"), _("If set, rectangular page border is shown"), "showborder", _wr, false);
+    _rcb_bord.init (_("Border on top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false);
     _rcp_bord.init (_("Border color:"), _("Page border color"),
                     _("Color of the page border"),
                     "bordercolor", "borderopacity", _wr);
-    _rcb_shad.init (_("Show page shadow"), "If set, page border shows a shadow on its right and lower side", "inkscape:showpageshadow", _wr);
+    _rcb_shad.init (_("Show page shadow"), "If set, page border shows a shadow on its right and lower side", "inkscape:showpageshadow", _wr, false);
     _rum_deflt.init (_("Default units:"), "inkscape:document-units", _wr);
 
     const Gtk::Widget* widget_array[] = 
     {
+        0, _rcb_canb._button,
+        0, _rcb_bord._button,
+        0, _rcb_shad._button,
         _rcp_bg._label, _rcp_bg._cp,
-        _rcb_canb._label, _rcb_canb._button,
-        _rcb_bord._label, _rcb_bord._button,
         _rcp_bord._label, _rcp_bord._cp,
-        _rcb_shad._label, _rcb_shad._button,
         _rum_deflt._label, _rum_deflt._sel,
     };
     
@@ -227,7 +227,7 @@ DocumentPreferences::build_grid()
 
     const Gtk::Widget* widget_array[] = 
     {
-        0,                  &_rcbgrid.getHBox(),
+        0,                  _rcbgrid._button,
         _rumg._label,       _rumg._sel,
         0,                  _rsu_ox.getSU(),
         0,                  _rsu_oy.getSU(),
@@ -254,7 +254,7 @@ DocumentPreferences::build_grid()
 
     const Gtk::Widget* array[] = 
     {
-        0,                &_rcb_sgui.getHBox(),
+        0,               _rcb_sgui._button,
         _rcp_gui._label, _rcp_gui._cp,
         _rcp_hgui._label, _rcp_hgui._cp,
     };
@@ -291,10 +291,10 @@ DocumentPreferences::build_snap()
     
     const Gtk::Widget* array2[] = 
     {
-        0,                  &_rcbsnbo.getHBox(),
-        0,                  &_rcbsnnob.getHBox(),
-        0,                  &_rcbsnop.getHBox(),
-        0,                  &_rcbsnon.getHBox(),
+        0,                  _rcbsnbo._button,
+        0,                  _rcbsnnob._button,
+        0,                  _rcbsnop._button,
+        0,                  _rcbsnon._button,
         _rumso._label,      _rumso._sel,
         0,                  _rsu_sno.getSU(),
     };
@@ -319,8 +319,8 @@ DocumentPreferences::build_snap()
     
     const Gtk::Widget* array1[] = 
     {
-        0,                  &_rcbsnbb.getHBox(),
-        0,                  &_rcbsnnod.getHBox(),
+        0,                  _rcbsnbb._button,
+        0,                  _rcbsnnod._button,
         _rums._label,       _rums._sel,
         0,                  _rsu_sn.getSU(),
     };
@@ -344,8 +344,8 @@ DocumentPreferences::build_snap()
 
     const Gtk::Widget* widget_array[] = 
     {
-        0,                &_rcb_snpgui.getHBox(),
-        0,                &_rcb_snbgui.getHBox(),
+        0,                _rcb_snpgui._button,
+        0,                _rcb_snbgui._button,
         _rum_gusn._label, _rum_gusn._sel,
         0,                _rsu_gusn.getSU(),
     };
