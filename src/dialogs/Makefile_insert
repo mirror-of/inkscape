@@ -18,8 +18,6 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/color-picker.h \
 	dialogs/debugdialog.cpp	\
 	dialogs/debugdialog.h	\
-	dialogs/desktop-properties.cpp	\
-	dialogs/desktop-properties.h	\
 	dialogs/dialog-events.cpp	\
 	dialogs/dialog-events.h	\
 	dialogs/display-settings.cpp	\
