@@ -48,7 +48,6 @@
 #include "interface.h"
 #include <glibmm/i18n.h>
 #include "selection-chemistry.h"
-#include "dialogs/desktop-properties.h"
 #include "macros.h"
 #include "tools-switch.h"
 #include "prefs-utils.h"

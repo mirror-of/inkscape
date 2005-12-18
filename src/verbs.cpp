@@ -41,7 +41,6 @@
 #include "dialogs/export.h"
 #include "dialogs/xml-tree.h"
 #include "dialogs/object-properties.h"
-#include "dialogs/desktop-properties.h"
 #include "dialogs/display-settings.h"
 #include "dialogs/item-properties.h"
 #include "dialogs/find.h"
