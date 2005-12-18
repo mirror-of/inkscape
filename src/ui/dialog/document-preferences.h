@@ -53,6 +53,7 @@ protected:
     void  build_snap();
     void  build_metadata();
     void  init();
+    virtual void  on_response (int);
 
     Gtk::Tooltips _tt;
     Gtk::Notebook  _notebook;

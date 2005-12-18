@@ -473,6 +473,20 @@ DocumentPreferences::update()
 
 //--------------------------------------------------------------------
 
+void
+DocumentPreferences::on_response (int id)
+{
+    if (id == Gtk::RESPONSE_DELETE_EVENT)
+    {
+        _rcp_bg.closeWindow();
+        _rcp_bord.closeWindow();
+        _rcp_gcol.closeWindow();
+        _rcp_gmcol.closeWindow();
+        _rcp_gui.closeWindow();
+        _rcp_hgui.closeWindow();
+    }
+}
+
 /**
  * Called when XML node attribute changed; updates dialog widgets.
  */
