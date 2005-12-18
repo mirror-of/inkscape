@@ -14,8 +14,6 @@ dialogs/clean:
 	rm -f dialogs/libspdialogs.a $(dialogs_libspdialogs_a_OBJECTS)
 
 dialogs_libspdialogs_a_SOURCES = \
-	dialogs/color-picker.cpp \
-	dialogs/color-picker.h \
 	dialogs/debugdialog.cpp	\
 	dialogs/debugdialog.h	\
 	dialogs/dialog-events.cpp	\
