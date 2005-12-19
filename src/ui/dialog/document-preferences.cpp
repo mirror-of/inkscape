@@ -485,7 +485,9 @@ DocumentPreferences::on_response (int id)
         _rcp_gmcol.closeWindow();
         _rcp_gui.closeWindow();
         _rcp_hgui.closeWindow();
-    }
+    } else
+    if (id == Gtk::RESPONSE_CLOSE)
+        hide();
 }
 
 /**
