@@ -10,12 +10,14 @@
  */
 
 #include "generate-constraints.h"
-#include "isnan.h"
 #include "variable.h"
 #include "constraint.h"
 #include <set>
 #include <vector>
 #include <cassert>
+
+#include "isnan.h" /* Include last */
+
 using std::set;
 using std::vector;
 

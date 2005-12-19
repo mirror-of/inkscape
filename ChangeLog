@@ -9,6 +9,10 @@
 	* src/display/curve.cpp, src/display/curve.hpp: Added a couple of 
 	  functions that return the second and second-last points in a curve.
 
+	* src/removeoverlap/generate-constraints.cpp: Moved the 
+	  #include "isnan.h" to be the final include.  This fixes a
+	  compilation error on OS X.
+
 2005-12-16  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/conn-avoid-ref.cpp, sp-conn-end-pair.cpp, sp-conn-end.cpp,
