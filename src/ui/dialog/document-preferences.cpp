@@ -96,6 +96,7 @@ DocumentPreferences::DocumentPreferences()
       _page_snap(1, 1), _page_metadata1(1, 1), _page_metadata2(1, 1),
       _prefs_path("dialogs.documentoptions")
 {
+    hide();
     set_resizable (false);
     _tt.enable();
     get_vbox()->set_spacing (4);
