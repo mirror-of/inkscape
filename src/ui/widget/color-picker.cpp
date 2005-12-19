@@ -131,8 +131,6 @@ ColorPickerWindow::ColorPickerWindow (ColorPicker *cp, const Glib::ustring &titl
     _csel = (SPColorSelector*)sp_color_selector_new(SP_TYPE_COLOR_NOTEBOOK,
                                   SP_COLORSPACE_TYPE_UNKNOWN);
     get_vbox()->pack_start (*Glib::wrap(&_csel->vbox), true, true, 0);
-    set_has_separator();
-    add_button (Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 
     _cpp.ptr = cp;
     g_signal_connect(G_OBJECT(_csel), "dragged",
