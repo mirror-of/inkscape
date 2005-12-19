@@ -16,6 +16,12 @@
 #include "variable.h"
 #include "pairingheap/PairingHeap.h"
 #include <cassert>
+#ifdef RECTANGLE_OVERLAP_LOGGING
+#include <fstream>
+using std::ios;
+using std::ofstream;
+using std::endl;
+#endif
 using std::vector;
 
 void Block::addVariable(Variable *v) {
@@ -86,6 +92,9 @@ void Block::merge(Block *b, Constraint *c, double dist) {
 }
 
 void Block::mergeIn(Block *b) {
+	// ensures the correct constraint is at the top of the heaps
+	findMinInConstraint();
+	b->findMinInConstraint();
 	in->merge(b->in);
 }
 void Block::mergeOut(Block *b) {
@@ -97,6 +106,13 @@ Constraint *Block::findMinInConstraint() {
 		v = in->findMin();
 		Block *lb=v->left->block;
 		Block *rb=v->right->block;
+#ifdef RECTANGLE_OVERLAP_LOGGING
+		ofstream f(LOGFILE,ios::app);
+		f<<"  checking constraint "<<*v<<endl;
+		f<<"    lb->timestamp "<<lb->timeStamp<<endl;
+		f<<"    rb->timestamp "<<rb->timeStamp<<endl;
+		f<<"    v->timestamp "<<v->timeStamp<<endl;
+#endif
 		if(lb == rb) {
 			// constraint has been merged into the same block
 			in->deleteMin();

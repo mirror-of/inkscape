@@ -20,6 +20,9 @@
 #include <assert.h>
 #ifdef RECTANGLE_OVERLAP_LOGGING
 #include <fstream>
+using std::ios;
+using std::ofstream;
+using std::endl;
 #endif
 
 using std::list;
@@ -67,9 +70,9 @@ void VPSC::satisfy() {
 			bs->mergeLeft(v->block);
 		}
 	}
-	//for(int i=0;i<m;i++) {
-	//	assert(cs[i]->slack()>-0.0000001);
-	//}
+	for(int i=0;i<m;i++) {
+		assert(cs[i]->slack()>-0.0000001);
+	}
 	bs->cleanup();
 	delete vs;
 }
@@ -105,9 +108,9 @@ void VPSC::refine() {
 			}
 		}
 	}
-	//for(int i=0;i<m;i++) {
-	//	assert(cs[i]->slack()>-0.0000001);
-	//}
+	for(int i=0;i<m;i++) {
+		assert(cs[i]->slack()>-0.0000001);
+	}
 }
 /**
  * Calculate the optimal solution. After using satisfy() to produce a

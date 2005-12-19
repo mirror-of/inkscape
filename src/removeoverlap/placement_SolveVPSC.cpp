@@ -36,9 +36,9 @@ JNIEXPORT jdouble JNICALL Java_placement_SolveVPSC_solve
 	double cost=0;
 	VPSC vpsc(vs,n,cs,m);
 	if(mode==0) {
-		cost = vpsc.satisfy();
+		vpsc.satisfy();
 	} else {
-		cost = vpsc.solve();
+		vpsc.solve();
 	}
 	for (i=0; i<n; i++) {
 		double p=vs[i]->position();
@@ -73,7 +73,7 @@ JNIEXPORT jint JNICALL Java_placement_SolveVPSC_generateXConstraints
 	double *minY = env->GetDoubleArrayElements(rMinY, 0);
 	double *maxY = env->GetDoubleArrayElements(rMaxY, 0);
 	for(int i=0;i<n;i++) rs[i]=new Rectangle(minX[i],maxX[i],minY[i],maxY[i]);
-	m = generateXConstraints(rs, ws, n, vs, cs);
+	m = generateXConstraints(rs, ws, n, vs, cs, true);
 	return m;
 }
 
@@ -90,6 +90,7 @@ JNIEXPORT jint JNICALL Java_placement_SolveVPSC_generateYConstraints
 	m = generateYConstraints(rs, ws, n, vs, cs);
 	return m;
 }
+using namespace std;
 JNIEXPORT void JNICALL Java_placement_SolveVPSC_getConstraints
 (JNIEnv *env, jobject obj, jintArray cLeft, jintArray cRight, jdoubleArray cGap) {
 	map<Variable*,int> vmap;
