@@ -34,6 +34,22 @@ show_rects(unsigned const n_rects, double const rect2coords[][4])
     }
 }
 
+/**
+ * Returns the signum of x, but erring towards returning 0 if x is "not too far" from 0.  ("Not too
+ * far from 0" means [-0.9, 0.9] in current version.)
+ */
+static int
+sgn0(double const x)
+{
+    if (x <= -0.9) {
+        return -1;
+    } else if (0.9 <= x) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 static void
 test_case(unsigned const n_rects, double const rect2coords[][4])
 {
@@ -59,6 +75,35 @@ test_case(unsigned const n_rects, double const rect2coords[][4])
                 char buf[32];
                 sprintf(buf, "[%u],[%u] of %u", j, i, n_rects);
                 utest__fail("Found overlap among ", buf, " rectangles");
+            }
+        }
+
+        /* Optimality test. */
+        {
+            bool found_block[2] = {false, false};
+            int const desired_movement[2] = {sgn0(rect2coords[i][0] - rs[i]->getMinX()),
+                                             sgn0(rect2coords[i][2] - rs[i]->getMinY())};
+            for (unsigned j = 0; j < n_rects; ++j) {
+                if (j == i)
+                    continue;
+                for (unsigned d = 0; d < 2; ++d) {
+                    if ( ( desired_movement[d] < 0
+                           ? abs(rs[j]->getMaxD(d) - rs[i]->getMinD(d))
+                           : abs(rs[i]->getMaxD(d) - rs[j]->getMinD(d)) )
+                         < .002 ) {
+                        found_block[d] = true;
+                    }
+                }
+            }
+
+            for (unsigned d = 0; d < 2; ++d) {
+                if ( !found_block[d]
+                     && desired_movement[d] != 0 ) {
+                    show_rects(n_rects, rect2coords);
+                    char buf[32];
+                    sprintf(buf, "%c in rectangle [%u] of %u", "XY"[d], i, n_rects);
+                    utest__fail("Found clear non-optimality in ", buf, " rectangles");
+                }
             }
         }
     }
@@ -156,6 +201,21 @@ int main()
         test_case(G_N_ELEMENTS(case5), case5);
     }
 
+    /* This one causes overlap in 2005-12-19 04:00 UTC version. */
+    UTEST_TEST("olap6") {
+        double case6[][4] = {
+            {7, 22, 39, 54},
+            {7, 33, 0, 59},
+            {3, 26, 16, 56},
+            {7, 17, 18, 20},
+            {1, 59, 11, 26},
+            {19, 20, 13, 49},
+            {1, 10, 0, 4},
+            {47, 52, 1, 3}
+        };
+        test_case(G_N_ELEMENTS(case6), case6);
+    }
+
     /* The next two examples caused loops in the version at 2005-12-07 04:00 UTC. */
     UTEST_TEST("loop0") {
         double loop0[][4] = {
@@ -205,7 +265,7 @@ int main()
         char buf[64];
         sprintf(buf, "random ints with %u rectangles", n);
         UTEST_TEST(buf) {
-            unsigned const fld_size = 4 * n;
+            unsigned const fld_size = 8 * n;
             double (*coords)[4] = (double (*)[4]) g_malloc(n * 4 * sizeof(double));
             clock_t const clock_stop = clock() + CLOCKS_PER_SEC;
             for (unsigned repeat = (n == 0 ? 1
