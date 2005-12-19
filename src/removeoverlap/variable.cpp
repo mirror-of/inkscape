@@ -11,7 +11,7 @@
 #include "variable.h"
 std::ostream& operator <<(std::ostream &os, const Variable &v) {
 	os << "(" << v.id << "=" << v.position() << ")";
-    return os;
+	return os;
 }
 
 #include "block.h"

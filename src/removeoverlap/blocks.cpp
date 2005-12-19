@@ -89,7 +89,7 @@ void Blocks::mergeLeft(Block *r) {
 	Constraint *c=r->findMinInConstraint();
 	while (c != NULL && c->slack()<0) {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-        f<<"mergeLeft on constraint: "<<*c<<endl;
+		f<<"mergeLeft on constraint: "<<*c<<endl;
 #endif
 		r->deleteMinInConstraint();
 		Block *l = c->left->block;		
