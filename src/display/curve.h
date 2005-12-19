@@ -111,6 +111,8 @@ NArtBpath *sp_curve_last_bpath(SPCurve const *curve);
 NArtBpath *sp_curve_first_bpath(SPCurve const *curve);
 NR::Point sp_curve_first_point(SPCurve const *curve);
 NR::Point sp_curve_last_point(SPCurve const *curve);
+NR::Point sp_curve_second_point(SPCurve const *curve);
+NR::Point sp_curve_penultimate_point(SPCurve const *curve);
 
 void sp_curve_append(SPCurve *curve, SPCurve const *curve2, bool use_lineto);
 SPCurve *sp_curve_reverse(SPCurve const *curve);

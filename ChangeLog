@@ -1,3 +1,14 @@
+2005-12-19  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/sp-conn-end.cpp, src/connector-context.cpp: Have connectors
+	  draw to the correct position on shape bounding boxes.  Previously
+	  the point where connectors were drawn was on straight line between
+	  the two endpoints.  These points now lie on the line between the 
+	  second last point on the polyline and the center of the shape.
+	  
+	* src/display/curve.cpp, src/display/curve.hpp: Added a couple of 
+	  functions that return the second and second-last points in a curve.
+
 2005-12-16  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/conn-avoid-ref.cpp, sp-conn-end-pair.cpp, sp-conn-end.cpp,
@@ -23,7 +34,7 @@
 
 2005-12-14  Carl Hetherington  <inkscape@carlh.net>
 
-        * src/dyna-draw-context.cpp, src/gradient-context.cpp,
+	* src/dyna-draw-context.cpp, src/gradient-context.cpp,
 	src/selection.h, src/sp-flowtext.cpp, src/sp-item.cpp,
 	src/sp-item.h, src/sp-shape.cpp, src/sp-text.cpp,
 	src/dialogs/layer-properties.cpp,

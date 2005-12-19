@@ -16,7 +16,6 @@
  *     connector starts outside of S but inside C, or if the best route around
  *     an object involves going inside C but without entering S.)
  *  o  Draw connectors to shape edges rather than bounding box.
- *  o  Fix minor endpoint position error for connected objects.
  *  o  Show a visual indicator for objects with the 'avoid' property set.
  *  o  Create an interface for setting markers (arrow heads).
  *  o  Better distinguish between paths and connectors to prevent problems

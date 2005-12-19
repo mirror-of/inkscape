@@ -76,19 +76,21 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
             h2attItem[0]->invokeBbox(NR::identity()),
             h2attItem[1]->invokeBbox(NR::identity())
         };
+        NR::Point last_seg_endPt[2] = {
+            sp_curve_second_point(path->curve),
+            sp_curve_penultimate_point(path->curve)
+        };
         for (unsigned h = 0; h < 2; ++h) {
             h2i2anc[h] = i2anc_affine(h2attItem[h], ancestor);
             h2endPt_icoordsys[h] = h2bbox_icoordsys[h].midpoint();
         }
 
-        /* For each attached object, change the corresponding point to be on the edge of
-         * the bbox. */
+        // For each attached object, change the corresponding point to be
+        // on the edge of the bbox.
         NR::Point h2endPt_pcoordsys[2];
         for (unsigned h = 0; h < 2; ++h) {
             h2endPt_icoordsys[h] = calc_bbox_conn_pt(h2bbox_icoordsys[h],
-                                                     ( h2endPt_icoordsys[!h]
-                                                       * h2i2anc[!h]
-                                                       / h2i2anc[h] ));
+                                         ( last_seg_endPt[h] / h2i2anc[h] ));
             h2endPt_pcoordsys[h] = h2endPt_icoordsys[h] * h2i2anc[h] / path2anc;
         }
         change_endpts(path->curve, h2endPt_pcoordsys);
@@ -96,59 +98,41 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
         // We leave the unattached endpoint where it is, and adjust the
         // position of the attached endpoint to be on the edge of the bbox.
         unsigned ind;
-        NR::Point otherpt;
+        NR::Point other_endpt;
+        NR::Point last_seg_pt;
         if (h2attItem[0] != NULL) {
-            otherpt = sp_curve_last_point(path->curve);
+            other_endpt = sp_curve_last_point(path->curve);
+            last_seg_pt = sp_curve_second_point(path->curve);
             ind = 0;
         }
         else {
-            otherpt = sp_curve_first_point(path->curve);
+            other_endpt = sp_curve_first_point(path->curve);
+            last_seg_pt = sp_curve_penultimate_point(path->curve);
             ind = 1;
         }
         NR::Point h2endPt_icoordsys[2];
         NR::Matrix h2i2anc;
 
-        NR::Rect otherpt_rect = NR::Rect(otherpt, otherpt);
+        NR::Rect otherpt_rect = NR::Rect(other_endpt, other_endpt);
         NR::Rect h2bbox_icoordsys[2] = { otherpt_rect, otherpt_rect };
         h2bbox_icoordsys[ind] = h2attItem[ind]->invokeBbox(NR::identity());
         
         h2i2anc = i2anc_affine(h2attItem[ind], ancestor);
         h2endPt_icoordsys[ind] = h2bbox_icoordsys[ind].midpoint();
         
-        h2endPt_icoordsys[!ind] = otherpt;
+        h2endPt_icoordsys[!ind] = other_endpt;
 
         // For the attached object, change the corresponding point to be
         // on the edge of the bbox.
         NR::Point h2endPt_pcoordsys[2];
         h2endPt_icoordsys[ind] = calc_bbox_conn_pt(h2bbox_icoordsys[ind],
-                                                 ( h2endPt_icoordsys[!ind]
-                                                   / h2i2anc ));
+                                                 ( last_seg_pt / h2i2anc ));
         h2endPt_pcoordsys[ind] = h2endPt_icoordsys[ind] * h2i2anc / path2anc;
         
         // Leave the other where it is.
-        h2endPt_pcoordsys[!ind] = otherpt;
+        h2endPt_pcoordsys[!ind] = other_endpt;
         
         change_endpts(path->curve, h2endPt_pcoordsys);
-
-#if 0
-        /* Only one end attached.  Do translate. */
-        unsigned const att_h = ( h2attItem[0] == NULL );
-        SPCurve const *const curve = path->curve;
-        NR::Point const h2oldEndPt_pcoordsys[2] = { sp_curve_first_point(curve),
-                                                    sp_curve_last_point(curve) };
-        NR::Point const dirn_pcoordsys = ( h2oldEndPt_pcoordsys[!att_h] -
-                                           h2oldEndPt_pcoordsys[att_h]   );
-        NR::Matrix const i2anc(i2anc_affine(h2attItem[att_h], ancestor));
-        NR::Point const dirn_icoordsys = ( dirn_pcoordsys
-                                           * NR::transform(path2anc)
-                                           / NR::transform(i2anc) );
-        NR::Rect const bbox_icoordsys(h2attItem[att_h]->invokeBbox(NR::identity()));
-        NR::Point const ctr_icoordsys = bbox_icoordsys.midpoint();
-        NR::Point const connPt = calc_bbox_conn_pt(bbox_icoordsys,
-                                                ctr_icoordsys + dirn_icoordsys);
-        sp_curve_transform(path->curve,
-                           NR::translate(connPt - h2oldEndPt_pcoordsys[att_h]));
-#endif
     }
     if (updatePathRepr) {
         path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

@@ -741,6 +741,40 @@ sp_curve_first_point(SPCurve const *const curve)
 }
 
 /**
+ * Return the second point of first subpath or (0,0).
+ */
+NR::Point
+sp_curve_second_point(SPCurve const *const curve)
+{
+    g_return_val_if_fail(curve != NULL, NR::Point(0, 0));
+
+    if (curve->end < 2) {
+        return NR::Point(0, 0);
+    }
+
+    NArtBpath *const bpath = curve->bpath + 1;
+    g_return_val_if_fail(bpath != NULL, NR::Point(0, 0));
+    return bpath->c(3);
+}
+
+/**
+ * Return the second-last point of last subpath or (0,0).
+ */
+NR::Point
+sp_curve_penultimate_point(SPCurve const *const curve)
+{
+    g_return_val_if_fail(curve != NULL, NR::Point(0, 0));
+
+    if (curve->end < 2) {
+        return NR::Point(0, 0);
+    }
+
+    NArtBpath *const bpath = curve->bpath + curve->end - 2;
+    g_return_val_if_fail(bpath != NULL, NR::Point(0, 0));
+    return bpath->c(3);
+}
+
+/**
  * Return last point of last subpath or (0,0).
  */
 NR::Point
