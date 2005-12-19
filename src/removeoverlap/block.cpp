@@ -16,8 +16,8 @@
 #include "variable.h"
 #include "pairingheap/PairingHeap.h"
 #include <cassert>
+using std::vector;
 
-using namespace std;
 void Block::addVariable(Variable *v) {
 	v->block=this;
 	vars->push_back(v);
@@ -33,8 +33,8 @@ Block::Block(Variable *v) {
 	deleted=false;
 	vars=new vector<Variable*>;
 	if(v!=NULL) {
-	v->offset=0;
-	addVariable(v);
+		v->offset=0;
+		addVariable(v);
 	}
 }
 
