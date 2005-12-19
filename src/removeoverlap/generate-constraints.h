@@ -20,6 +20,12 @@ public:
 	double getMaxY() const { return maxY+yBorder; }
 	double getMinX() const { return minX; }
 	double getMinY() const { return minY; }
+	double getMinD(unsigned const d) const {
+		return ( d == 0 ? getMinX() : getMinY() );
+	}
+	double getMaxD(unsigned const d) const {
+		return ( d == 0 ? getMaxX() : getMaxY() );
+	}
 	double getCentreX() const { return minX+width()/2.0; }
 	double getCentreY() const { return minY+height()/2.0; }
 	double width() const { return getMaxX()-minX; }
