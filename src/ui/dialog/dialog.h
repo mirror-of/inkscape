@@ -55,6 +55,7 @@ protected:
     Gtk::Tooltips tooltips;
 
     virtual void   on_response(int response_id);
+    virtual bool   on_delete_event (GdkEventAny*);
     virtual void   _apply();
     virtual void   _close();
 
