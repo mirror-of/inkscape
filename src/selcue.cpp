@@ -82,8 +82,7 @@ void Inkscape::SelCue::_updateItemBboxes()
     for (GSList const *l = _selection->itemList(); l != NULL; l = l->next) {
         SPItem *item = (SPItem *) l->data;
 
-        NRRect b;
-        sp_item_bbox_desktop(item, &b);
+        NR::Rect const b = sp_item_bbox_desktop(item);
 
         SPCanvasItem* box = NULL;
 
@@ -99,7 +98,7 @@ void Inkscape::SelCue::_updateItemBboxes()
                                       "stroke_color", 0x000000ff,
                                       NULL);
             sp_canvas_item_show(box);
-            SP_CTRL(box)->moveto(NR::Point(b.x0, b.y1));
+            SP_CTRL(box)->moveto(NR::Point(b.min()[NR::X], b.max()[NR::Y]));
             
             sp_canvas_item_move_to_z(box, 0); // just low enough to not get in the way of other draggable knots
 
@@ -110,9 +109,9 @@ void Inkscape::SelCue::_updateItemBboxes()
                 NULL
                 );
             
-            sp_ctrlrect_set_area(SP_CTRLRECT(box), b.x0, b.y0, b.x1, b.y1);
-            sp_ctrlrect_set_color(SP_CTRLRECT(box), 0x000000a0, 0, 0);
-            sp_ctrlrect_set_dashed(SP_CTRLRECT(box), 1);
+            SP_CTRLRECT(box)->setRectangle(b);
+            SP_CTRLRECT(box)->setColor(0x000000a0, 0, 0);
+            SP_CTRLRECT(box)->setDashed(true);
             
             sp_canvas_item_move_to_z(box, 0);
         }
