@@ -381,7 +381,7 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             break;
 	case SP_ATTR_BORDERLAYER:
             nv->borderlayer = SP_BORDER_LAYER_BOTTOM;
-            if (value && !strcasecmp(value, "top")) nv->borderlayer = SP_BORDER_LAYER_TOP;
+            if (value && !strcasecmp(value, "true")) nv->borderlayer = SP_BORDER_LAYER_TOP;
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	case SP_ATTR_BORDERCOLOR:
