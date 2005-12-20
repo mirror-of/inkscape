@@ -15,12 +15,17 @@
 #include <set>
 #include <vector>
 #include <cassert>
+#include <iostream>
 
 #include "isnan.h" /* Include last */
 
 using std::set;
 using std::vector;
 
+std::ostream& operator <<(std::ostream &os, const Rectangle &r) {
+	os << "{"<<r.minX<<","<<r.maxX<<","<<r.minY<<","<<r.maxY<<"},";
+	return os;
+}
 Rectangle::Rectangle(double x, double X, double y, double Y) 
 : minX(x),maxX(X),minY(y),maxY(Y) {
 		assert(x<=X);

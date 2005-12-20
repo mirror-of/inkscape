@@ -4,6 +4,13 @@
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
+#ifdef RECTANGLE_OVERLAP_LOGGING
+#include "blocks.h"
+#include <fstream>
+using std::ios;
+using std::ofstream;
+using std::endl;
+#endif
 
 #define EXTRA_GAP 0.0001
 
@@ -23,6 +30,7 @@ double Rectangle::yBorder=0;
  */
 void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBorder) {
 	assert(0 <= n);
+	try {
 	// The extra gap avoids numerical imprecision problems
 	Rectangle::setXBorder(xBorder+EXTRA_GAP);
 	Rectangle::setYBorder(yBorder+EXTRA_GAP);
@@ -38,6 +46,11 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 		oldX[i]=vs[i]->desiredPosition;
 	}
 	VPSC vpsc_x(vs,n,cs,m);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	ofstream f(LOGFILE,ios::app);
+	f<<"Calling VPSC: Horizontal pass 1"<<endl;
+	f.close();
+#endif
 	vpsc_x.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreX(vs[i]->position());
@@ -53,6 +66,11 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	Rectangle::setXBorder(Rectangle::xBorder-EXTRA_GAP);
 	m=generateYConstraints(rs,ws,n,vs,cs);
 	VPSC vpsc_y(vs,n,cs,m);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	f.open(LOGFILE,ios::app);
+	f<<"Calling VPSC: Vertical pass"<<endl;
+	f.close();
+#endif
 	vpsc_y.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreY(vs[i]->position());
@@ -68,6 +86,11 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	Rectangle::setYBorder(Rectangle::yBorder-EXTRA_GAP);
 	m=generateXConstraints(rs,ws,n,vs,cs,false);
 	VPSC vpsc_x2(vs,n,cs,m);
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	f.open(LOGFILE,ios::app);
+	f<<"Calling VPSC: Horizontal pass 2"<<endl;
+	f.close();
+#endif
 	vpsc_x2.solve();
 	for(int i=0;i<n;i++) {
 		rs[i]->moveCentreX(vs[i]->position());
@@ -79,4 +102,10 @@ void removeRectangleOverlap(Rectangle *rs[], int n, double xBorder, double yBord
 	}
 	delete [] cs;
 	delete [] ws;
+	} catch (char *str) {
+		std::cerr<<str<<std::endl;
+		for(int i=0;i<n;i++) {
+			std::cerr << *rs[i]<<std::endl;
+		}
+	}
 }

@@ -109,7 +109,7 @@ JNIEXPORT void JNICALL Java_placement_SolveVPSC_getConstraints
 }
 JNIEXPORT void JNICALL Java_placement_SolveVPSC_removeOverlaps
 (JNIEnv *env, jobject obj, jdoubleArray rMinX, jdoubleArray rMaxX, jdoubleArray rMinY, jdoubleArray rMaxY) {
-	assert(1==2);
+	//assert(1==2); //break for debugging
 	n = (int)env->GetArrayLength(rMinX);
 	Rectangle **rs=new Rectangle*[n];
 	double *minX = env->GetDoubleArrayElements(rMinX, 0);

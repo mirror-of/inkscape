@@ -1,3 +1,9 @@
+2005-11-23  Tim Dwyer  <tdwyer@mail.csse.monash.edu.au>
+
+	* src/removeoverlap/*.{cpp,h}: Bug fix in removeoverlap algorithm that
+	  should finally get timestamps working properly.  Specifically, heap
+	  timestamps are now refreshed before a merge.
+
 2005-12-19  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/sp-conn-end.cpp, src/connector-context.cpp: Have connectors

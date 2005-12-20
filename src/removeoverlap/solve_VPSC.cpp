@@ -70,10 +70,17 @@ void VPSC::satisfy() {
 			bs->mergeLeft(v->block);
 		}
 	}
+	bs->cleanup();
 	for(int i=0;i<m;i++) {
+		if(cs[i]->slack()<-0.0000001) {
+#ifdef RECTANGLE_OVERLAP_LOGGING
+			ofstream f(LOGFILE,ios::app);
+			f<<"Error: Unsatisfied constraint: "<<*cs[i]<<endl;
+#endif
+			throw "Unsatisfied constraint";
+		}
 		assert(cs[i]->slack()>-0.0000001);
 	}
-	bs->cleanup();
 	delete vs;
 }
 

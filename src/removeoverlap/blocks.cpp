@@ -101,6 +101,9 @@ void Blocks::mergeLeft(Block *r) {
 			dist=-dist;
 			std::swap(l, r);
 		}
+		// ensure constraint heaps are up to date
+		l->findMinInConstraint();
+		r->findMinInConstraint();
 		r->merge(l, c, dist);
 		r->mergeIn(l);
 		r->timeStamp=++blockTimeCtr;

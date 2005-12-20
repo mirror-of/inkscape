@@ -187,6 +187,7 @@ gchar const *authors_text() {
         "Jon Cruz\n"
         "Daniel Díaz\n"
         "Larry Doolittle\n"
+        "Tim Dwyer\n"
         "Maxim V. Dziumanenko\n"
         "Danilo Egan\n"
         "Frank Felfe\n"

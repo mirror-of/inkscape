@@ -11,8 +11,10 @@
 
 #ifndef SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H
 #define SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H
+#include <iostream>
 
-class Rectangle {
+class Rectangle {	
+	friend std::ostream& operator <<(std::ostream &os, const Rectangle &r);
 public:
 	static double xBorder,yBorder;
 	Rectangle(double x, double X, double y, double Y);
@@ -63,6 +65,7 @@ public:
 private:
 	double minX,maxX,minY,maxY;
 };
+
 
 class Variable;
 class Constraint;
