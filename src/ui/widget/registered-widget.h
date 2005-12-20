@@ -51,9 +51,12 @@ public:
     void setUnit (const SPUnit*);
     Gtk::Label   *_label;
     UnitMenu     *_sel;
+    sigc::connection _changed_connection;
 
 protected:
-    Registry *_wr;
+    void on_changed();
+    Registry     *_wr;
+    Glib::ustring _key;
 };
 
 class RegisteredScalarUnit {

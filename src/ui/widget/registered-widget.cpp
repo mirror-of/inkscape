@@ -111,6 +111,7 @@ RegisteredUnitMenu::RegisteredUnitMenu()
 
 RegisteredUnitMenu::~RegisteredUnitMenu()
 {
+    _changed_connection.disconnect();
     if (_label) delete _label;
     if (_sel) delete _sel;
 }
@@ -122,6 +123,8 @@ RegisteredUnitMenu::init (const Glib::ustring& label, const Glib::ustring& key, 
     _sel = new UnitMenu ();
     _sel->setUnitType (UNIT_TYPE_LINEAR);
     _wr = &wr;
+    _key = key;
+    _changed_connection = _sel->signal_changed().connect (sigc::mem_fun (*this, &RegisteredUnitMenu::on_changed));
 }
 
 void 
@@ -129,6 +132,34 @@ RegisteredUnitMenu::setUnit (const SPUnit* unit)
 {
     _sel->setUnit (sp_unit_get_abbreviation (unit));
 }
+
+void
+RegisteredUnitMenu::on_changed()
+{
+    if (_wr->isUpdating())
+        return;
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (!dt) 
+        return;
+
+    Inkscape::SVGOStringStream os;
+    os << _sel->getUnitAbbr();
+
+    _wr->setUpdating (true);
+
+    SPDocument *doc = SP_DT_DOCUMENT(dt);
+    gboolean saved = sp_document_get_undo_sensitive (doc);
+    sp_document_set_undo_sensitive (doc, FALSE);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR (SP_DT_NAMEDVIEW(dt));
+    repr->setAttribute(_key.c_str(), os.str().c_str());
+    doc->rroot->setAttribute("sodipodi:modified", "true");
+    sp_document_set_undo_sensitive (doc, saved);
+    sp_document_done (doc);
+    
+    _wr->setUpdating (false);
+}
+
 
 RegisteredScalarUnit::RegisteredScalarUnit()
 : _widget(0), _um(0)
