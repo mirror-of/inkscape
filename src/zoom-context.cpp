@@ -142,7 +142,7 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                 
                 NR::Point const button_w(event->button.x, event->button.y);
                 NR::Point const button_dt(desktop->w2d(button_w));
-                sp_rubberband_start(desktop, button_dt);
+                Inkscape::Rubberband::get()->start(desktop, button_dt);
 
                 escaped = false;
 
@@ -166,15 +166,15 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                 
                 NR::Point const motion_w(event->motion.x, event->motion.y);
                 NR::Point const motion_dt(desktop->w2d(motion_w));
-                sp_rubberband_move(motion_dt);
+                Inkscape::Rubberband::get()->move(motion_dt);
             }
             break;
             
 	case GDK_BUTTON_RELEASE:
             if ( event->button.button == 1 ) {
-                NRRect b;
-                if (sp_rubberband_rect (&b) && !within_tolerance) {
-                    desktop->set_display_area(b.x0, b.y0, b.x1, b.y1, 10);
+                NR::Maybe<NR::Rect> const b = Inkscape::Rubberband::get()->getRectangle();
+                if (b != NR::Nothing() && !within_tolerance) {
+                    desktop->set_display_area(b.assume(), 10);
                 } else if (!escaped) {
                     NR::Point const button_w(event->button.x, event->button.y);
                     NR::Point const button_dt(desktop->w2d(button_w));
@@ -185,15 +185,15 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                 }
                 ret = TRUE;
             }
-            sp_rubberband_stop();
+            Inkscape::Rubberband::get()->stop();
             xp = yp = 0; 
             escaped = false;
             break;
             
         case GDK_KEY_PRESS:
             switch (get_group0_keyval (&event->key)) {
-                case GDK_Escape: 
-                    sp_rubberband_stop();
+                case GDK_Escape:
+                    Inkscape::Rubberband::get()->stop();
                     xp = yp = 0; 
                     escaped = true;
                     ret = TRUE;

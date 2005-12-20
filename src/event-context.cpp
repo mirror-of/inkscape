@@ -448,9 +448,9 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 }
 
                 if (within_tolerance) {
-                    sp_rubberband_start(desktop, motion_dt);
+                    Inkscape::Rubberband::get()->start(desktop, motion_dt);
                 } else {
-                    sp_rubberband_move(motion_dt);
+                    Inkscape::Rubberband::get()->move(motion_dt);
                 }
 
                 // Once the user has moved farther than tolerance from the original location 
@@ -477,11 +477,11 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 ret = TRUE;
             } else if (zoom_rb == event->button.button) {
                 zoom_rb = 0;
-                NRRect b;
-                if (sp_rubberband_rect (&b) && !within_tolerance) {
-                    desktop->set_display_area(b.x0, b.y0, b.x1, b.y1, 10);
+                NR::Maybe<NR::Rect> const b = Inkscape::Rubberband::get()->getRectangle();
+                if (b != NR::Nothing() && !within_tolerance) {
+                    desktop->set_display_area(b.assume(), 10);
                 }
-                sp_rubberband_stop();
+                Inkscape::Rubberband::get()->stop();
             }
             xp = yp = 0; 
             break;

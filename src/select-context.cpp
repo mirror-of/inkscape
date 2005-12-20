@@ -244,10 +244,9 @@ sp_select_context_abort(SPEventContext *event_context)
             return true;
         }
     } else {
-        NRRect b;
-
-        if (sp_rubberband_rect(&b)) { // cancel rubberband
-            sp_rubberband_stop();
+        NR::Maybe<NR::Rect> const b = Inkscape::Rubberband::get()->getRectangle();
+        if (b != NR::Nothing()) {
+            Inkscape::Rubberband::get()->stop();
             rb_escaped = 1;
             SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
             return true;
@@ -397,7 +396,6 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     SPItem *item = NULL;
     SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
     gint ret = FALSE;
-    NRRect b;
 
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
@@ -441,7 +439,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
                 NR::Point const button_pt(event->button.x, event->button.y);
                 NR::Point const p(desktop->w2d(button_pt));
-                sp_rubberband_start(desktop, p);
+                Inkscape::Rubberband::get()->start(desktop, p);
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
                                     NULL, event->button.time);
@@ -485,7 +483,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     /* User has dragged fast, so we get events on root (lauris)*/
                     // not only that; we will end up here when ctrl-dragging as well
                     // and also when we started within tolerance, but trespassed tolerance outside of item
-                    sp_rubberband_stop();
+                    Inkscape::Rubberband::get()->stop();
                     item_at_point = desktop->item_at_point(NR::Point(event->button.x, event->button.y), FALSE);
                     if (!item_at_point) // if no item at this point, try at the click point (bug 1012200)
                         item_at_point = desktop->item_at_point(NR::Point(xp, yp), FALSE);
@@ -519,7 +517,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         sc->dragging = FALSE;
                     }
                 } else {
-                    sp_rubberband_move(p);
+                    Inkscape::Rubberband::get()->move(p);
                     gobble_motion_events(GDK_BUTTON1_MASK);
                 }
             }
@@ -559,12 +557,13 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     }
                     sc->item = NULL;
                 } else {
-                    if (sp_rubberband_rect(&b) && !within_tolerance) {
+                    NR::Maybe<NR::Rect> const b = Inkscape::Rubberband::get()->getRectangle();
+                    if (b != NR::Nothing() && !within_tolerance) {
                         // this was a rubberband drag
-                        sp_rubberband_stop();
+                        Inkscape::Rubberband::get()->stop();
                         seltrans->resetState();
                         // find out affected items:
-                        GSList *items = sp_document_items_in_box(SP_DT_DOCUMENT(desktop), desktop->dkey, &b);
+                        GSList *items = sp_document_items_in_box(SP_DT_DOCUMENT(desktop), desktop->dkey, b.assume());
                         if (event->button.state & GDK_SHIFT_MASK) {
                             // with shift, add to selection
                             selection->addList (items);
@@ -574,7 +573,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         }
                         g_slist_free (items);
                     } else { // it was just a click, or a too small rubberband
-                        sp_rubberband_stop();
+                        Inkscape::Rubberband::get()->stop();
                         if (sc->button_press_shift && !rb_escaped && !drag_escaped) {
                             // this was a shift-click, select what was clicked upon
 

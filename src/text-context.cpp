@@ -191,10 +191,9 @@ sp_text_context_dispose(GObject *obj)
         sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
         tc->grabbed = NULL;
     }
-    NRRect b;
-    if (sp_rubberband_rect(&b)) {
-        sp_rubberband_stop();
-    }
+    
+    Inkscape::Rubberband::get()->stop();
+    
     if (ec->shape_knot_holder) {
         sp_knot_holder_destroy(ec->shape_knot_holder);
         ec->shape_knot_holder = NULL;
@@ -226,13 +225,13 @@ sp_text_context_setup(SPEventContext *ec)
     sp_canvas_item_hide(tc->cursor);
 
     tc->indicator = sp_canvas_item_new(SP_DT_CONTROLS(desktop), SP_TYPE_CTRLRECT, NULL);
-    sp_ctrlrect_set_area(SP_CTRLRECT(tc->indicator), 0, 0, 100, 100);
-    sp_ctrlrect_set_color(SP_CTRLRECT(tc->indicator), 0x0000ff7f, FALSE, 0);
+    SP_CTRLRECT(tc->indicator)->setRectangle(NR::Rect(NR::Point(0, 0), NR::Point(100, 100)));
+    SP_CTRLRECT(tc->indicator)->setColor(0x0000ff7f, false, 0);
     sp_canvas_item_hide(tc->indicator);
 
     tc->frame = sp_canvas_item_new(SP_DT_CONTROLS(desktop), SP_TYPE_CTRLRECT, NULL);
-    sp_ctrlrect_set_area(SP_CTRLRECT(tc->frame), 0, 0, 100, 100);
-    sp_ctrlrect_set_color(SP_CTRLRECT(tc->frame), 0x0000ff7f, FALSE, 0);
+    SP_CTRLRECT(tc->frame)->setRectangle(NR::Rect(NR::Point(0, 0), NR::Point(100, 100)));
+    SP_CTRLRECT(tc->frame)->setColor(0x0000ff7f, false, 0);
     sp_canvas_item_hide(tc->frame);
 
     tc->timeout = gtk_timeout_add(250, (GtkFunction) sp_text_context_timeout, ec);
@@ -447,12 +446,8 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
             // find out item under mouse, disregarding groups
             item_ungrouped = desktop->item_at_point(NR::Point(event->button.x, event->button.y), TRUE);
             if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
-                NRRect bbox;
-                sp_item_bbox_desktop(item_ungrouped, &bbox);
                 sp_canvas_item_show(tc->indicator);
-                sp_ctrlrect_set_area(SP_CTRLRECT(tc->indicator),
-                                     bbox.x0, bbox.y0,
-                                     bbox.x1, bbox.y1);
+                SP_CTRLRECT(tc->indicator)->setRectangle(sp_item_bbox_desktop(item_ungrouped));
 
                 ec->cursor_shape = cursor_text_insert_xpm;
                 ec->hot_x = 7;
@@ -623,7 +618,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
 
                 NR::Point const button_pt(event->button.x, event->button.y);
                 tc->p0 = desktop->w2d(button_pt);
-                sp_rubberband_start(desktop, tc->p0);
+                Inkscape::Rubberband::get()->start(desktop, tc->p0);
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK |
                                         GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
@@ -660,7 +655,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 NR::Point const motion_pt(event->motion.x, event->motion.y);
                 NR::Point const p = desktop->w2d(motion_pt);
 
-                sp_rubberband_move(p);
+                Inkscape::Rubberband::get()->move(p);
                 gobble_motion_events(GDK_BUTTON1_MASK);
 
                 // status text
@@ -680,10 +675,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                     tc->grabbed = NULL;
                 }
 
-                NRRect b;
-                if (sp_rubberband_rect(&b)) {
-                    sp_rubberband_stop();
-                }
+                Inkscape::Rubberband::get()->stop();
 
                 if (tc->creating && ec->within_tolerance) {
                     /* Button 1, set X & Y & new item */
@@ -1045,10 +1037,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
                                         tc->grabbed = NULL;
                                     }
-                                    NRRect b;
-                                    if (sp_rubberband_rect(&b)) {
-                                        sp_rubberband_stop();
-                                    }
+                                    Inkscape::Rubberband::get()->stop();
                                 } else {
                                     SP_DT_SELECTION(ec->desktop)->clear();
                                 }
@@ -1172,10 +1161,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                             sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
                             tc->grabbed = NULL;
                         }
-                        NRRect b;
-                        if (sp_rubberband_rect(&b)) {
-                            sp_rubberband_stop();
-                        }
+                        Inkscape::Rubberband::get()->stop();
                     } 
                 }
             }
@@ -1440,10 +1426,8 @@ sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see)
         if (SP_IS_FLOWTEXT(tc->text)) {
             SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (NULL); // first frame only
             if (frame) {
-                NRRect bbox;
-                sp_item_bbox_desktop(frame, &bbox);
                 sp_canvas_item_show(tc->frame);
-                sp_ctrlrect_set_area(SP_CTRLRECT(tc->frame), bbox.x0, bbox.y0, bbox.x1, bbox.y1);
+                SP_CTRLRECT(tc->frame)->setRectangle(sp_item_bbox_desktop(frame));
             }
             SP_EVENT_CONTEXT(tc)->_message_context->set(Inkscape::NORMAL_MESSAGE, _("Type flowed text; <b>Enter</b> to start new paragraph."));
         } else {

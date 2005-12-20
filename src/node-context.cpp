@@ -556,7 +556,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 NR::Point const button_w(event->button.x,
                                          event->button.y);
                 NR::Point const button_dt(desktop->w2d(button_w));
-                sp_rubberband_start(desktop, button_dt);
+                Inkscape::Rubberband::get()->start(desktop, button_dt);
                 ret = TRUE;
             }
             break;
@@ -585,7 +585,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     NR::Point const motion_w(event->motion.x,
                                          event->motion.y);
                     NR::Point const motion_dt(desktop->w2d(motion_w));
-                    sp_rubberband_move(motion_dt);
+                    Inkscape::Rubberband::get()->move(motion_dt);
                 }
                 nc->drag = TRUE;
                 ret = TRUE;
@@ -619,15 +619,17 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
         case GDK_BUTTON_RELEASE:
             event_context->xp = event_context->yp = 0;
             if (event->button.button == 1) {
-                NRRect b;
+
+                NR::Maybe<NR::Rect> b = Inkscape::Rubberband::get()->getRectangle();
+                    
                 if (nc->hit && !event_context->within_tolerance) { //drag curve
                     if (undo_label == undo_label_1)
                         undo_label = undo_label_2;
                     else 
                         undo_label = undo_label_1;
-                } else if (sp_rubberband_rect(&b) && !event_context->within_tolerance) { // drag to select
+                } else if (b != NR::Nothing() && !event_context->within_tolerance) { // drag to select
                     if (nc->nodepath) {
-                        sp_nodepath_select_rect(nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
+                        sp_nodepath_select_rect(nc->nodepath, b.assume(), event->button.state & GDK_SHIFT_MASK);
                     }
                 } else {
                     if (!(nc->rb_escaped)) { // unless something was cancelled
@@ -638,7 +640,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     }
                 }
                 ret = TRUE;
-                sp_rubberband_stop();
+                Inkscape::Rubberband::get()->stop();
                 nc->rb_escaped = false;
                 nc->drag = FALSE;
                 nc->hit = false;
@@ -798,9 +800,9 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     break;
                 case GDK_Escape:
                 {
-                    NRRect b;
-                    if (sp_rubberband_rect(&b)) { // cancel rubberband
-                        sp_rubberband_stop();
+                    NR::Maybe<NR::Rect> const b = Inkscape::Rubberband::get()->getRectangle();
+                    if (b != NR::Nothing()) {
+                        Inkscape::Rubberband::get()->stop();
                         nc->rb_escaped = true;
                     } else {
                         if (nc->nodepath && nc->nodepath->selected) {
