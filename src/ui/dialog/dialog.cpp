@@ -57,29 +57,6 @@ sp_retransientize (Inkscape::Application *inkscape, SPDesktop *desktop, gpointer
 }
 
 static void
-sp_dialog_destroy (GtkObject *object, gpointer dlgPtr)
-{
-    Dialog *dlg = (Dialog *)dlgPtr;
-    if (!Inkscape::NSApplication::Application::getNewGui())
-        sp_signal_disconnect_by_data (INKSCAPE, dlg);
-
-//    wd.win = dlg = NULL;
-//    wd.stop = 0;
-//    x = -1000; y = -1000; w = 0; h = 0;
-}
-
-static gboolean
-sp_dialog_delete (GtkObject *object, GdkEvent *event, gpointer dlgPtr)
-{
-    Dialog *dlg = (Dialog *)dlgPtr;
-
-    dlg->save_geometry();
-    dlg->_user_hidden = true;
-
-    return FALSE; // which means, go ahead and destroy it
-}
-
-static void
 sp_dialog_shutdown (GtkObject *object, gpointer dlgPtr)
 {
     Dialog *dlg = (Dialog *)dlgPtr;
@@ -142,6 +119,8 @@ void unhideCallback(GtkObject *object, gpointer dlgPtr)
     dlg->onShowF12();
 }
 
+//=====================================================================
+
 /**
  * UI::Dialog::Dialog is a base class for all dialogs in Inkscape.  The
  * purpose of this class is to provide a unified place for ensuring
@@ -154,6 +133,7 @@ void unhideCallback(GtkObject *object, gpointer dlgPtr)
  */
 Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
 {
+    hide();
     set_has_separator(false);
 
     _prefs_path = prefs_path;
@@ -197,13 +177,10 @@ Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
         g_signal_connect   (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_dialog_shutdown), (void *)this);
     }
 
-    gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_dialog_destroy), (void *)this);
-    gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_dialog_delete), (void *)this);
-
     g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
 
-    present();
     read_geometry();
+    present();
 }
 
 Dialog::Dialog(BaseObjectType *gobj)
@@ -236,6 +213,32 @@ bool Dialog::windowKeyPress( GtkWidget *widget, GdkEventKey *event )
         ( event->state & GDK_MOD1_MASK ?
           SP_SHORTCUT_ALT_MASK : 0 );
     return sp_shortcut_invoke( shortcut, SP_ACTIVE_DESKTOP );
+}
+
+//---------------------------------------------------------------------
+
+void
+Dialog::on_response(int response_id)
+{
+    switch (response_id) {
+        case Gtk::RESPONSE_APPLY: {
+            _apply();
+            break;
+        }
+        case Gtk::RESPONSE_CLOSE: {
+            _close();
+            break;
+        }
+    }
+}
+
+bool
+Dialog::on_delete_event (GdkEventAny *event)
+{
+    save_geometry();
+    _user_hidden = true;
+
+    return false;
 }
 
 void
@@ -317,21 +320,6 @@ Inkscape::Selection*
 Dialog::_getSelection()
 {
     return SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
-}
-
-void
-Dialog::on_response(int response_id)
-{
-    switch (response_id) {
-        case Gtk::RESPONSE_APPLY: {
-            _apply();
-            break;
-        }
-        case Gtk::RESPONSE_CLOSE: {
-            _close();
-            break;
-        }
-    }
 }
 
 void
