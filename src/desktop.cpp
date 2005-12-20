@@ -179,12 +179,12 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas)
     g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
 
     table = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
-    sp_ctrlrect_set_area (SP_CTRLRECT (table), -80000.0, -80000.0, 80000.0, 80000.0);
-    sp_ctrlrect_set_color (SP_CTRLRECT (table), 0x00000000, TRUE, 0x00000000);
+    SP_CTRLRECT(table)->setRectangle(NR::Rect(NR::Point(-80000, -80000), NR::Point(80000, 80000)));
+    SP_CTRLRECT(table)->setColor(0x00000000, true, 0x00000000);
     sp_canvas_item_move_to_z (table, 0);
 
     page = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
-    sp_ctrlrect_set_color ((SPCtrlRect *) page, 0x00000000, FALSE, 0x00000000);
+    ((CtrlRect *) page)->setColor(0x00000000, FALSE, 0x00000000);
     page_border = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
 
     drawing = sp_canvas_item_new (main, SP_TYPE_CANVAS_ARENA, NULL);
@@ -210,8 +210,12 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas)
     push_event_context (SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
-    sp_ctrlrect_set_area (SP_CTRLRECT (page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
-    sp_ctrlrect_set_area (SP_CTRLRECT (page_border), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
+
+    NR::Rect const d(NR::Point(0.0, 0.0),
+                     NR::Point(sp_document_width(document), sp_document_height(document)));
+    
+    SP_CTRLRECT(page)->setRectangle(d);
+    SP_CTRLRECT(page_border)->setRectangle(d);
 
     /* the following sets the page shadow on the canvas
        It was originally set to 5, which is really cheesy!
@@ -220,8 +224,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas)
     */
 
     if ( namedview->pageshadow != 0 && namedview->showpageshadow ) {
-        sp_ctrlrect_set_shadow (SP_CTRLRECT (page_border), 
-                                namedview->pageshadow, 0x3f3f3fff);
+        SP_CTRLRECT(page_border)->setShadow(namedview->pageshadow, 0x3f3f3fff);
     }
     
 
@@ -641,6 +644,11 @@ SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double 
     _widget->updateZoom();
 }
 
+void SPDesktop::set_display_area(NR::Rect const &a, NR::Coord b, bool log)
+{
+    set_display_area(a.min()[NR::X], a.min()[NR::Y], a.max()[NR::X], a.max()[NR::Y], b, log);
+}
+
 /**
  * Return viewbox dimensions.
  */
@@ -783,15 +791,14 @@ SPDesktop::zoom_relative (double cx, double cy, double zoom)
 void
 SPDesktop::zoom_page()
 {
-    NRRect d;
+    NR::Rect d(NR::Point(0, 0),
+               NR::Point(sp_document_width(doc()), sp_document_height(doc())));
+                         
+    if (d.dimensions()[NR::X] < 1.0 || d.dimensions()[NR::Y] < 1.0) {
+        return;
+    }
 
-    d.x0 = d.y0 = 0.0;
-    d.x1 = sp_document_width (doc());
-    d.y1 = sp_document_height (doc());
-
-    if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
-
-    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
+    set_display_area(d, 10);
 }
 
 /**
@@ -802,19 +809,14 @@ SPDesktop::zoom_page_width()
 {
     NR::Rect const a = get_display_area();
 
-    NRRect d;
-    d.x0 = 0.0;
-    d.y0 = a.min()[NR::Y];
-    d.x1 = sp_document_width(doc());
-    d.y1 = a.max()[NR::Y];
-
-    if ((fabs (d.x1 - d.x0) < 1.0)) {
+    if (sp_document_width(doc()) < 1.0) {
         return;
     }
 
-    d.y1 = d.y0 = (d.y1 + d.y0) / 2;
-
-    set_display_area(d.x0, d.y0, d.x1, d.y1, 10);
+    NR::Rect d(NR::Point(0, a.midpoint()[NR::Y]),
+               NR::Point(sp_document_width(doc()), a.midpoint()[NR::Y]));
+               
+    set_display_area(d, 10);
 }
 
 /**
@@ -823,11 +825,13 @@ SPDesktop::zoom_page_width()
 void
 SPDesktop::zoom_selection()
 {
-    NRRect d;
-    selection->bounds(&d);
+    NR::Rect const d = selection->bounds();
 
-    if ((fabs (d.x1 - d.x0) < 0.1) || (fabs (d.y1 - d.y0) < 0.1)) return;
-    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
+    if (d.dimensions()[NR::X] < 0.1 || d.dimensions()[NR::Y] < 0.1) {
+        return;
+    }
+    
+    set_display_area(d, 10);
 }
 
 /**
@@ -849,19 +853,16 @@ SPDesktop::zoom_drawing()
     SPItem *docitem = SP_ITEM (sp_document_root (doc()));
     g_return_if_fail (docitem != NULL);
 
-    NRRect d;
-    sp_item_bbox_desktop (docitem, &d);
+    NR::Rect d = sp_item_bbox_desktop(docitem);
 
     /* Note that the second condition here indicates that
     ** there are no items in the drawing.
     */
-    if ( (fabs (d.x1 - d.x0) < 1.0 || fabs (d.y1 - d.y0) < 1.0) ||
-         (d.x0 > d.x1 && d.y0 > d.y1))
-    {
+    if ( d.dimensions()[NR::X] < 1.0 || d.dimensions()[NR::Y] < 1.0 ) {
         return;
     }
 
-    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
+    set_display_area(d, 10);
 }
 
 /**
@@ -1122,8 +1123,9 @@ SPDesktop::onDocumentResized (gdouble width, gdouble height)
 {
     _doc2dt[5] = height;
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
-    sp_ctrlrect_set_area (SP_CTRLRECT (page), 0.0, 0.0, width, height);
-    sp_ctrlrect_set_area (SP_CTRLRECT (page_border), 0.0, 0.0, width, height);
+    NR::Rect const a(NR::Point(0, 0), NR::Point(width, height));
+    SP_CTRLRECT(page)->setRectangle(a);
+    SP_CTRLRECT(page_border)->setRectangle(a);
 }
 
 
@@ -1255,8 +1257,7 @@ _namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
         /* Show/hide page background */
         if (nv->pagecolor & 0xff) {
             sp_canvas_item_show (desktop->table);
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->table, 0x00000000, 
-                TRUE, nv->pagecolor);
+            ((CtrlRect *) desktop->table)->setColor(0x00000000, true, nv->pagecolor);
             sp_canvas_item_move_to_z (desktop->table, 0);
         } else {
             sp_canvas_item_hide (desktop->table);
@@ -1267,11 +1268,10 @@ _namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
             // show
             sp_canvas_item_show (desktop->page_border);
             // set color and shadow
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page_border, 
-			    nv->bordercolor, FALSE, 0x00000000);
-            if (nv->pageshadow)
-                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
-				nv->pageshadow, nv->bordercolor);
+            ((CtrlRect *) desktop->page_border)->setColor(nv->bordercolor, false, 0x00000000);
+            if (nv->pageshadow) {
+                ((CtrlRect *) desktop->page_border)->setShadow(nv->pageshadow, nv->bordercolor);
+            }
             // place in the z-order stack
             if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
                  sp_canvas_item_move_to_z (desktop->page_border, 2);
@@ -1283,20 +1283,16 @@ _namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
             }
         } else {
                 sp_canvas_item_hide (desktop->page_border);
-                if (nv->pageshadow)
-                    sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0, 
-				    0x00000000);
+                if (nv->pageshadow) {
+                    ((CtrlRect *) desktop->page)->setShadow(0, 0x00000000);
+                }
         }
 	
         /* Show/hide page shadow */
         if (nv->showpageshadow && nv->pageshadow) {
-            // show
-            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
-                            nv->pageshadow, nv->bordercolor);
+            ((CtrlRect *) desktop->page_border)->setShadow(nv->pageshadow, nv->bordercolor);
         } else {
-            // hide
-            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 0, 
-                            0x00000000);
+            ((CtrlRect *) desktop->page_border)->setShadow(0, 0x00000000);
         }
 
         if (SP_RGBA32_A_U(nv->pagecolor) < 128 ||

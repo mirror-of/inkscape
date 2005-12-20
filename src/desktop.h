@@ -178,6 +178,7 @@ struct SPDesktop : public Inkscape::UI::View::View
 
     NR::Rect get_display_area() const;
     void set_display_area (double x0, double y0, double x1, double y1, double border, bool log = true);
+    void set_display_area(NR::Rect const &a, NR::Coord border, bool log = true);
     void zoom_absolute (double cx, double cy, double zoom);
     void zoom_relative (double cx, double cy, double zoom);
     void zoom_absolute_keep_point (double cx, double cy, double px, double py, double zoom);
