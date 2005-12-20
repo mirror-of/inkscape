@@ -463,7 +463,7 @@ DocumentPreferences::update()
     _rsu_gusn.setValue (nv->guidetolerance);
 
     //-----------------------------------------------------------meta pages
-    /* load the RDF entities */
+    /* update the RDF entities */
     for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
         (*it)->update (SP_ACTIVE_DOCUMENT);
         
@@ -477,7 +477,7 @@ DocumentPreferences::update()
 void
 DocumentPreferences::on_response (int id)
 {
-    if (id == Gtk::RESPONSE_DELETE_EVENT)
+    if (id == Gtk::RESPONSE_DELETE_EVENT || id == Gtk::RESPONSE_CLOSE)
     {
         _rcp_bg.closeWindow();
         _rcp_bord.closeWindow();
@@ -485,7 +485,8 @@ DocumentPreferences::on_response (int id)
         _rcp_gmcol.closeWindow();
         _rcp_gui.closeWindow();
         _rcp_hgui.closeWindow();
-    } else
+    } 
+    
     if (id == Gtk::RESPONSE_CLOSE)
         hide();
 }
