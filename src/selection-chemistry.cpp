@@ -622,7 +622,7 @@ sp_selection_raise()
 
     GSList const *items = (GSList *) selection->itemList();
     if (!items) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> to raise."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise."));
         return;
     }
 
