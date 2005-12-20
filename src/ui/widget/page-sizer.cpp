@@ -183,9 +183,9 @@ SizeMenuItem::on_activate()
     sp_convert_distance (&w, &src_unit, &_px_unit);
     sp_convert_distance (&h, &src_unit, &_px_unit);
     if (_parent->_landscape)
-        _parent->setDim (h, w);
+        _parent->setDim (h, w, true);
     else
-        _parent->setDim (w, h);
+        _parent->setDim (w, h, true);
 }
 
 //---------------------------------------------------
@@ -208,23 +208,6 @@ PageSizer::PageSizer()
     SizeMenuItem *item = manage (new SizeMenuItem (0, 0));
     menu_size->prepend (*item);
     _omenu_size->set_menu (*menu_size);
-
-    Gtk::HBox *hbox_ori = manage (new Gtk::HBox (false, 4));
-    pack_start (*hbox_ori, false, false, 0);
-    Gtk::Label *label_ori = manage (new Gtk::Label (_("Page orientation:"), 1.0, 0.5)); 
-    hbox_ori->pack_start (*label_ori, false, false, 0);
-    _omenu_ori = manage (new Gtk::OptionMenu);
-    hbox_ori->pack_start (*_omenu_ori, true, true, 0);
-    Gtk::Menu *menu_ori = manage (new Gtk::Menu);
-
-    Gtk::MenuItem *oitem;
-    oitem = manage (new Gtk::MenuItem (_("Landscape")));
-    _landscape_connection = oitem->signal_activate().connect (sigc::mem_fun (*this, &PageSizer::on_landscape));
-    menu_ori->prepend (*oitem);
-    oitem = manage (new Gtk::MenuItem (_("Portrait")));
-    _portrait_connection = oitem->signal_activate().connect (sigc::mem_fun (*this, &PageSizer::on_portrait));
-    menu_ori->prepend (*oitem);
-    _omenu_ori->set_menu (*menu_ori);
 }
 
 PageSizer::~PageSizer()
@@ -238,6 +221,18 @@ PageSizer::~PageSizer()
 void
 PageSizer::init (Registry& reg)
 {
+    Gtk::HBox *hbox_ori = manage (new Gtk::HBox);
+    pack_start (*hbox_ori, false, false, 0);
+    Gtk::Label *label_ori = manage (new Gtk::Label (_("Page orientation:"), 0.0, 0.5)); 
+    hbox_ori->pack_start (*label_ori, false, false, 0);
+    _rb_land = manage (new Gtk::RadioButton (_("Landscape")));
+    Gtk::RadioButton::Group group = _rb_land->get_group();
+    hbox_ori->pack_end (*_rb_land, false, false, 5);
+    _rb_port = manage (new Gtk::RadioButton (_("Portrait")));
+    hbox_ori->pack_end (*_rb_port, false, false, 5);
+    _rb_port->set_group (group);
+    _rb_port->set_active (true);
+    
     /* Custom paper frame */
     Gtk::Frame *frame = manage (new Gtk::Frame(_("Custom size")));
     pack_start (*frame, false, false, 0);
@@ -258,6 +253,8 @@ PageSizer::init (Registry& reg)
     table->attach (*_rusw.getSU(), 0,2,1,2, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
     table->attach (*_rush.getSU(), 0,2,2,3, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
 
+    _landscape_connection = _rb_land->signal_toggled().connect (sigc::mem_fun (*this, &PageSizer::on_landscape));
+    _portrait_connection = _rb_port->signal_toggled().connect (sigc::mem_fun (*this, &PageSizer::on_portrait));
     _changedw_connection = _rusw.getSU()->signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_value_changed));
     _changedh_connection = _rush.getSU()->signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_value_changed));
     
@@ -268,15 +265,20 @@ PageSizer::init (Registry& reg)
  * \param w, h given in px
  */
 void 
-PageSizer::setDim (double w, double h)
+PageSizer::setDim (double w, double h, bool update)
 {
     _landscape = w>h;
-    _omenu_ori->set_history (_landscape ? 1 : 0);
+    _rb_land->set_active (_landscape ? true : false);
+    _rb_port->set_active (_landscape ? false : true);
     _omenu_size->set_history (1 + find_paper_size (w, h));
     
     Unit const& unit = _rum._sel->getUnit();
+    if (!update) _changedw_connection.block();
     _rusw.setValue (w / unit.factor);
+    if (!update) _changedw_connection.unblock();
+    if (!update) _changedh_connection.block();
     _rush.setValue (h / unit.factor);
+    if (!update) _changedh_connection.unblock();
 }
 
 void
@@ -339,6 +341,8 @@ PageSizer::on_landscape()
 void
 PageSizer::on_value_changed()
 {
+    if (_wr->isUpdating()) return;
+
     setDoc (_rusw.getSU()->getValue("px"), _rush.getSU()->getValue("px"));
 }
 

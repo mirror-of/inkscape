@@ -19,6 +19,7 @@
 
 namespace Gtk {
     class OptionMenu;
+    class RadioButton;
 }
 
 namespace Inkscape {    
@@ -31,7 +32,7 @@ public:
     PageSizer();
     virtual ~PageSizer();
     void init (Registry& reg);
-    void setDim (double w, double h);
+    void setDim (double w, double h, bool update = false);
     bool                 _landscape;
 
 protected:
@@ -43,7 +44,8 @@ protected:
     
     RegisteredUnitMenu   _rum;
     RegisteredScalarUnit _rusw, _rush;
-    Gtk::OptionMenu     *_omenu_size, *_omenu_ori;
+    Gtk::OptionMenu     *_omenu_size;
+    Gtk::RadioButton    *_rb_port, *_rb_land;
     sigc::connection     _portrait_connection, _landscape_connection;
     sigc::connection     _changedw_connection, _changedh_connection;
     Registry             *_wr;
