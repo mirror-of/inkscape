@@ -309,7 +309,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_y, 2,3, 1,2, GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach(GTK_TABLE(dtw->coord_status),  gtk_label_new("Z:"), 3,4, 0,2, GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach(GTK_TABLE(dtw->coord_status),  dtw->zoom_status, 4,5, 0,2, GTK_FILL, GTK_FILL, 0, 0);
-    sp_set_font_size_smaller_smaller (dtw->coord_status);
+    sp_set_font_size_smaller (dtw->coord_status);
     gtk_box_pack_end (GTK_BOX (statusbar_tail), eventbox, FALSE, FALSE, 1);
 
     dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);

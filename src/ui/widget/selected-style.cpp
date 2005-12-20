@@ -108,37 +108,37 @@ SelectedStyle::SelectedStyle(bool layout)
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
 
         _na[i].set_markup (_("N/A"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_na[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_na[i].gobj()));
         _na[i].show_all();
         __na[i] = (_("Nothing selected"));
 
         _none[i].set_markup (_("None"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_none[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_none[i].gobj()));
         _none[i].show_all();
         __none[i] = (i == SS_FILL)? (_("No fill")) : (_("No stroke"));
 
         _pattern[i].set_markup (_("Pattern"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_pattern[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_pattern[i].gobj()));
         _pattern[i].show_all();
         __pattern[i] = (i == SS_FILL)? (_("Pattern fill")) : (_("Pattern stroke"));
 
         _lgradient[i].set_markup (_("L Gradient"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_lgradient[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_lgradient[i].gobj()));
         _lgradient[i].show_all();
         __lgradient[i] = (i == SS_FILL)? (_("Linear gradient fill")) : (_("Linear gradient stroke"));
 
         _rgradient[i].set_markup (_("R Gradient"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_rgradient[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_rgradient[i].gobj()));
         _rgradient[i].show_all();
         __rgradient[i] = (i == SS_FILL)? (_("Radial gradient fill")) : (_("Radial gradient stroke"));
 
         _many[i].set_markup (_("Different"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_many[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_many[i].gobj()));
         _many[i].show_all();
         __many[i] = (i == SS_FILL)? (_("Different fills")) : (_("Different strokes"));
 
         _unset[i].set_markup (_("Unset"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_unset[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_unset[i].gobj()));
         _unset[i].show_all();
         __unset[i] = (i == SS_FILL)? (_("Unset fill")) : (_("Unset stroke"));
 
@@ -147,13 +147,13 @@ SelectedStyle::SelectedStyle(bool layout)
 
         // TRANSLATOR COMMENT: A means "Averaged"
         _averaged[i].set_markup (_("<b>a</b>"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_averaged[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_averaged[i].gobj()));
         _averaged[i].show_all();
         __averaged[i] = (i == SS_FILL)? (_("Fill is averaged over selected objects")) : (_("Stroke is averaged over selected objects"));
 
         // TRANSLATOR COMMENT: M means "Multiple"
         _multiple[i].set_markup (_("<b>m</b>"));
-        sp_set_font_size_smaller_smaller (GTK_WIDGET(_multiple[i].gobj()));
+        sp_set_font_size_smaller (GTK_WIDGET(_multiple[i].gobj()));
         _multiple[i].show_all();
         __multiple[i] = (i == SS_FILL)? (_("Multiple selected objects have the same fill")) : (_("Multiple selected objects have the same stroke"));
 
@@ -296,15 +296,15 @@ SelectedStyle::SelectedStyle(bool layout)
 
     set_size_request (SELECTED_STYLE_WIDTH, -1);
 
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_opacity_label.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_opacity_sb.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_place.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_flag_place.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_place.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_flag_place.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_width.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_fill_label.gobj()));
-    sp_set_font_size_smaller_smaller (GTK_WIDGET(_stroke_label.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_opacity_label.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_opacity_sb.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_fill_place.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_fill_flag_place.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_stroke_place.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_stroke_flag_place.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_stroke_width.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_fill_label.gobj()));
+    sp_set_font_size_smaller (GTK_WIDGET(_stroke_label.gobj()));
 }
 
 SelectedStyle::~SelectedStyle()

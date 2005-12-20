@@ -1164,7 +1164,7 @@ EditWidget::initStatusbar()
     _coord_status.attach (_coord_status_y, 2,3, 1,2, Gtk::FILL,Gtk::FILL, 0,0);
     _coord_status.attach (*new Gtk::Label("Z:", 0.0, 0.5), 3,4, 0,2, Gtk::FILL,Gtk::FILL, 0,0);
     _coord_status.attach (_zoom_status, 4,5, 0,2, Gtk::FILL,Gtk::FILL, 0,0);
-    sp_set_font_size_smaller_smaller (static_cast<GtkWidget*>((void*)_coord_status.gobj()));
+    sp_set_font_size_smaller (static_cast<GtkWidget*>((void*)_coord_status.gobj()));
     _statusbar.pack_end (_coord_eventbox, false, false, 1);
 
     _select_status.property_xalign() = 0.0;
