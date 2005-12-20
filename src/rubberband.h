@@ -1,36 +1,54 @@
 #ifndef __RUBBERBAND_H__
 #define __RUBBERBAND_H__
 
-/*
- * Rubberbanding selector
+/**
+ * \file src/rubberband.h
+ * \brief Rubberbanding selector
  *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Carl Hetherington <inkscape@carlh.net>
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
 #include "forward.h"
-#include <libnr/nr-forward.h>
-#include <libnr/nr-point.h>
+#include "libnr/nr-forward.h"
+#include "libnr/nr-point.h"
+#include "libnr/nr-maybe.h"
 
 /* fixme: do multidocument safe */
 
-void sp_rubberband_start(SPDesktop *desktop, NR::Point const &p);
+class CtrlRect;
 
-inline void sp_rubberband_start (SPDesktop *desktop, double x, double y)
+namespace Inkscape
 {
-  sp_rubberband_start(desktop, NR::Point(x, y));
+
+class Rubberband
+{
+public:
+
+    void start(SPDesktop *desktop, NR::Point const &p);
+    void move(NR::Point const &p);
+    NR::Maybe<NR::Rect> getRectangle() const;
+    void stop();
+
+    static Rubberband* get();
+
+private:
+
+    Rubberband();
+    static Rubberband* _instance;
+    
+    SPDesktop *_desktop;
+    NR::Point _start;
+    NR::Point _end;
+    CtrlRect *_canvas;
+};
+
 }
-
-void sp_rubberband_move(NR::Point const &p);
-void sp_rubberband_move (double x, double y);
-void sp_rubberband_stop (void);
-
-gboolean sp_rubberband_rect (NRRect *rect);
 
 #endif
 
