@@ -2070,7 +2070,7 @@ void sp_nodepath_select_prev(Inkscape::NodePath::Path *nodepath)
 /**
  * \brief Select all nodes that are within the rectangle.
  */
-void sp_nodepath_select_rect(Inkscape::NodePath::Path *nodepath, NRRect *b, gboolean incremental)
+void sp_nodepath_select_rect(Inkscape::NodePath::Path *nodepath, NR::Rect const &b, gboolean incremental)
 {
     if (!incremental) {
         sp_nodepath_deselect(nodepath);
@@ -2081,9 +2081,7 @@ void sp_nodepath_select_rect(Inkscape::NodePath::Path *nodepath, NRRect *b, gboo
         for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
            Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
 
-            NR::Point p = node->pos;
-
-            if ((p[NR::X] > b->x0) && (p[NR::X] < b->x1) && (p[NR::Y] > b->y0) && (p[NR::Y] < b->y1)) {
+            if (b.contains(node->pos)) {
                 sp_nodepath_node_select(node, TRUE, TRUE);
             }
         }

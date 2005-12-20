@@ -748,54 +748,31 @@ sp_document_idle_handler(gpointer data)
     return repeat;
 }
 
-static int
-is_within(NRRect const *area, NRRect const *box)
+static bool is_within(NR::Rect const &area, NR::Rect const &box)
 {
-    if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
-        return false;
-
-    return (box->x0 > area->x0) && (box->x1 < area->x1)
-        && (box->y0 > area->y0) && (box->y1 < area->y1);
+    return area.contains(box);
 }
 
-static int
-overlaps(NRRect const *area, NRRect const *box)
+static bool overlaps(NR::Rect const &area, NR::Rect const &box)
 {
-    if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
-        return false;
-
-    /* FIXME: The below looks suspicious: it tests whether area's border overlaps box rather than
-     * whether area's inside overlaps box's inside.  E.g. if box fits entirely within area then it
-     * returns false.
-     *
-     * If this is the intended behaviour, then it should be documented (both here and in the
-     * caller).
-     *
-     * Otherwise, consider replacing this function body with a call to nr_rect_d_test_intersect.
-     */
-    return (((area->x0 > box->x0) && (area->x0 < box->x1)) ||
-            ((area->x1 > box->x0) && (area->x1 < box->x1))   ) &&
-           (((area->y0 > box->y0) && (area->y0 < box->y1)) ||
-            ((area->y1 > box->y0) && (area->y1 < box->y1))   );
+    return area.intersects(box);
 }
 
-static GSList *
-find_items_in_area(GSList *s, SPGroup *group, unsigned int dkey, NRRect const *area,
-                   int (*test)(NRRect const *, NRRect const *), bool take_insensitive = false)
+static GSList *find_items_in_area(GSList *s, SPGroup *group, unsigned int dkey, NR::Rect const &area,
+                                  bool (*test)(NR::Rect const &, NR::Rect const &), bool take_insensitive = false)
 {
     g_return_val_if_fail(SP_IS_GROUP(group), s);
 
     for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
-        if (!SP_IS_ITEM(o)) continue;
-        if (SP_IS_GROUP(o) &&
-            SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER )
-        {
+        if (!SP_IS_ITEM(o)) {
+            continue;
+        }
+        if (SP_IS_GROUP(o) && SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER ) {
             s = find_items_in_area(s, SP_GROUP(o), dkey, area, test);
         } else {
             SPItem *child = SP_ITEM(o);
-            NRRect box;
-            sp_item_bbox_desktop(child, &box);
-            if (test(area, &box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
+            NR::Rect box = sp_item_bbox_desktop(child);
+            if (test(area, box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
                 s = g_slist_append(s, child);
             }
         }
@@ -938,15 +915,12 @@ find_group_at_point(unsigned int dkey, SPGroup *group, NR::Point const p)
  *
  */
 
-GSList *
-sp_document_items_in_box(SPDocument *document, unsigned int dkey, NRRect const *box)
+GSList *sp_document_items_in_box(SPDocument *document, unsigned int dkey, NR::Rect const &box)
 {
     g_return_val_if_fail(document != NULL, NULL);
     g_return_val_if_fail(document->priv != NULL, NULL);
-    g_return_val_if_fail(box != NULL, NULL);
 
-    return find_items_in_area(NULL, SP_GROUP(document->root),
-                              dkey, box, is_within);
+    return find_items_in_area(NULL, SP_GROUP(document->root), dkey, box, is_within);
 }
 
 /*
@@ -956,15 +930,12 @@ sp_document_items_in_box(SPDocument *document, unsigned int dkey, NRRect const *
  *
  */
 
-GSList *
-sp_document_partial_items_in_box(SPDocument *document, unsigned int dkey, NRRect const *box)
+GSList *sp_document_partial_items_in_box(SPDocument *document, unsigned int dkey, NR::Rect const &box)
 {
     g_return_val_if_fail(document != NULL, NULL);
     g_return_val_if_fail(document->priv != NULL, NULL);
-    g_return_val_if_fail(box != NULL, NULL);
 
-    return find_items_in_area(NULL, SP_GROUP(document->root),
-                              dkey, box, overlaps);
+    return find_items_in_area(NULL, SP_GROUP(document->root), dkey, box, overlaps);
 }
 
 SPItem *

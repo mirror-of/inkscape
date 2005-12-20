@@ -229,7 +229,7 @@ void sp_nodepath_select_all (Inkscape::NodePath::Path *nodepath, bool invert);
 void sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath, bool invert);
 void sp_nodepath_select_next (Inkscape::NodePath::Path *nodepath);
 void sp_nodepath_select_prev (Inkscape::NodePath::Path *nodepath);
-void sp_nodepath_select_rect (Inkscape::NodePath::Path * nodepath, NRRect * b, gboolean incremental);
+void sp_nodepath_select_rect (Inkscape::NodePath::Path * nodepath, NR::Rect const &b, gboolean incremental);
 GList *save_nodepath_selection (Inkscape::NodePath::Path *nodepath);
 void restore_nodepath_selection (Inkscape::NodePath::Path *nodepath, GList *r);
 gboolean nodepath_repr_d_changed (Inkscape::NodePath::Path * np, const char *newd);

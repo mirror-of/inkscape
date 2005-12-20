@@ -292,34 +292,33 @@ Inkscape::XML::Node *Selection::singleRepr() {
     return obj ? SP_OBJECT_REPR(obj) : NULL;
 }
 
-NRRect *Selection::bounds(NRRect *bbox) const {
+NRRect *Selection::bounds(NRRect *bbox) const
+{
     g_return_val_if_fail (bbox != NULL, NULL);
-
-    GSList const *items=const_cast<Selection *>(this)->itemList();
-    if (!items) {
-        bbox->x0 = bbox->y0 = bbox->x1 = bbox->y1 = 0.0;
-        return bbox;
-    }
-
-    bbox->x0 = bbox->y0 = 1e18;
-    bbox->x1 = bbox->y1 = -1e18;
-
-    for ( GSList const *iter=items ; iter != NULL ; iter = iter->next ) {
-        SPItem *item=SP_ITEM(iter->data);
-        NRRect b;
-        sp_item_bbox_desktop(item, &b);
-        if (b.x0 < bbox->x0) bbox->x0 = b.x0;
-        if (b.y0 < bbox->y0) bbox->y0 = b.y0;
-        if (b.x1 > bbox->x1) bbox->x1 = b.x1;
-        if (b.y1 > bbox->y1) bbox->y1 = b.y1;
-    }
-
+    NR::Rect const b = bounds();
+    bbox->x0 = b.min()[NR::X];
+    bbox->y0 = b.min()[NR::Y];
+    bbox->x1 = b.max()[NR::X];
+    bbox->x1 = b.max()[NR::Y];
     return bbox;
 }
 
-NR::Rect Selection::bounds() const {
-    NRRect r;
-    return NR::Rect(*bounds(&r));
+NR::Rect Selection::bounds() const
+{
+    GSList const *items = const_cast<Selection *>(this)->itemList();
+    if (!items) {
+        return NR::Rect(NR::Point(0, 0), NR::Point(0, 0));
+    }
+
+    GSList const *i = items;
+    NR::Rect bbox = sp_item_bbox_desktop(SP_ITEM(i->data));
+
+    while (i != NULL) {
+        bbox = NR::Rect::union_bounds(bbox, sp_item_bbox_desktop(SP_ITEM(i->data)));
+        i = i->next;
+    }
+
+    return bbox;
 }
 
 NRRect *Selection::boundsInDocument(NRRect *bbox) const {
@@ -389,10 +388,9 @@ std::vector<NR::Point> Selection::getBBoxPoints() const {
     GSList const *items = const_cast<Selection *>(this)->itemList();
     std::vector<NR::Point> p;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-        NRRect b;
-        sp_item_bbox_desktop(SP_ITEM(iter->data), &b);
-        p.push_back(NR::Point(b.x0, b.y0));
-        p.push_back(NR::Point(b.x1, b.y1));
+        NR::Rect b = sp_item_bbox_desktop(SP_ITEM(iter->data));
+        p.push_back(b.min());
+        p.push_back(b.max());
     }
 
     return p;
