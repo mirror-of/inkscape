@@ -106,13 +106,13 @@ if test x$AUTOMAKE != x; then
     check_version $VER $AUTOMAKE_REQUIRED_VERSION
 
     # Exclude automake 1.9.[0-6]
-#    if expr $VER \>= 1.9.0 >/dev/null && expr $VER \<= 1.9.6 >/dev/null ; then
-#        echo
-#        echo "  You must have automake less than 1.9.0 or newer than 1.9.6"
-#        echo "  Get ftp://ftp.gnu.org/pub/gnu/automake/automake-1.8.5.tar.gz"
-#        echo "  (or a newer version of 1.8 if it is available)"
-#        DIE=1
-#    fi
+    if expr $VER \>= 1.9.0 >/dev/null && expr $VER \<= 1.9.6 >/dev/null ; then
+        echo
+        echo "  You must have automake less than 1.9.0 or newer than 1.9.6"
+        echo "  Get ftp://ftp.gnu.org/pub/gnu/automake/automake-1.8.5.tar.gz"
+        echo "  (or a newer version of 1.8 if it is available)"
+        DIE=1
+    fi
 fi
 
 echo -n "checking for glib-gettextize >= $GLIB_REQUIRED_VERSION ... "
