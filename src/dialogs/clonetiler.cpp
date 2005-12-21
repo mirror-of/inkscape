@@ -2400,7 +2400,7 @@ clonetiler_dialog (void)
 
                 {
                     GtkWidget *l = gtk_label_new ("");
-                    gtk_label_set_markup (GTK_LABEL(l), "x");
+                    gtk_label_set_markup (GTK_LABEL(l), "&#215;");
                     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
                     gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
                 }
@@ -2448,7 +2448,7 @@ clonetiler_dialog (void)
                 }
                 {
                     GtkWidget *l = gtk_label_new ("");
-                    gtk_label_set_markup (GTK_LABEL(l), "x");
+                    gtk_label_set_markup (GTK_LABEL(l), "&#215;");
                     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
                     gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
                 }
