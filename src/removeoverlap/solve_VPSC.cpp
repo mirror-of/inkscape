@@ -77,9 +77,9 @@ void VPSC::satisfy() {
 			ofstream f(LOGFILE,ios::app);
 			f<<"Error: Unsatisfied constraint: "<<*cs[i]<<endl;
 #endif
+			assert(cs[i]->slack()>-0.0000001);
 			throw "Unsatisfied constraint";
 		}
-		assert(cs[i]->slack()>-0.0000001);
 	}
 	delete vs;
 }

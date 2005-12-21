@@ -92,10 +92,6 @@ void Block::merge(Block *b, Constraint *c, double dist) {
 }
 
 void Block::mergeIn(Block *b) {
-#ifdef RECTANGLE_OVERLAP_LOGGING
-	ofstream f(LOGFILE,ios::app);
-	f<<"  merging constraint heaps."<<endl;
-#endif
 	in->merge(b->in);
 }
 void Block::mergeOut(Block *b) {
@@ -106,20 +102,21 @@ Constraint *Block::findMinInConstraint() {
 	while (!in->isEmpty()) {
 		v = in->findMin();
 		Block *lb=v->left->block;
-		assert(this==v->right->block);
+		Block *rb=v->right->block;
+		// rb may not be this if called between merge and mergeIn
 #ifdef RECTANGLE_OVERLAP_LOGGING
 		ofstream f(LOGFILE,ios::app);
 		f<<"  checking constraint "<<*v<<endl;
-		f<<"    timestamps: left="<<lb->timeStamp<<" right="<<timeStamp<<" constraint="<<v->timeStamp<<endl;
+		f<<"    timestamps: left="<<lb->timeStamp<<" right="<<rb->timeStamp<<" constraint="<<v->timeStamp<<endl;
 #endif
-		if(lb == this) {
+		if(lb == rb) {
 			// constraint has been merged into the same block
 			in->deleteMin();
 #ifdef RECTANGLE_OVERLAP_LOGGING
 			f<<"    skipping internal constraint"<<endl;
 #endif
 			v = NULL;
-		} else if(lb->timeStamp > timeStamp && v->timeStamp < lb->timeStamp) {
+		} else if(lb->timeStamp > rb->timeStamp && v->timeStamp < lb->timeStamp) {
 			// block at other end of constraint has been moved since this
 			in->deleteMin();
 			v->timeStamp=++blockTimeCtr;

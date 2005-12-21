@@ -105,6 +105,8 @@ void Blocks::mergeLeft(Block *r) {
 		l->findMinInConstraint();
 		r->findMinInConstraint();
 		r->merge(l, c, dist);
+		l->findMinInConstraint();
+		r->findMinInConstraint();
 		r->mergeIn(l);
 		r->timeStamp=++blockTimeCtr;
 		removeBlock(l);
