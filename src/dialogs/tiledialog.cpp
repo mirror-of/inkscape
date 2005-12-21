@@ -21,6 +21,7 @@
 
 #include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
+#include <gtk/gtksizegroup.h>
 #include <glibmm/i18n.h>
 #include "interface.h"
 #include "verbs.h"
@@ -32,7 +33,7 @@
 #include "xml/repr.h"
 #include "document.h"
 #include "sp-item.h"
-
+#include "widgets/icon.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-fns.h"
@@ -153,6 +154,7 @@ void TileDialog::Grid_Arrange ()
     grid_top = 99999;
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     const GSList *items = selection->itemList();
@@ -252,13 +254,12 @@ void TileDialog::Grid_Arrange ()
 
     // Fit to bbox, calculate padding between rows accordingly.
     if (!SpaceManualRadioButton.get_active()){
-        NRRect b;
-        selection->bounds(&b);
-        #ifdef DEBUG_GRID_ARRANGE
-        g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_height,total_col_width,fabs (b.x1 - b.x0),fabs (b.y1 - b.y0));
-        #endif
-        paddingx = (fabs (b.x1 - b.x0) - total_col_width) / (NoOfCols -1);
-        paddingy = (fabs (b.y1 - b.y0) - total_row_height) / (NoOfRows -1);
+        NR::Rect b = selection->bounds();
+#ifdef DEBUG_GRID_ARRANGE
+g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_height,total_col_width, b.extent(NR::X), b.extent(NR::Y));
+#endif
+        paddingx = (b.extent(NR::X) - total_col_width) / (NoOfCols -1);
+        paddingy = (b.extent(NR::Y) - total_row_height) / (NoOfRows -1);
     }
 
 /*
@@ -595,6 +596,11 @@ TileDialog::TileDialog()
      // bool used by spin button callbacks to stop loops where they change each other.
     updating = false;
 
+    // could not do this in gtkmm - there's no Gtk::SizeGroup public constructor (!)
+    GtkSizeGroup *_col1 = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+    GtkSizeGroup *_col2 = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+    GtkSizeGroup *_col3 = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+
     {
         // Selection Change signal
         g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), this);
@@ -612,7 +618,7 @@ TileDialog::TileDialog()
     int selcount = 1;
     if (!selection->isEmpty()) {
         GSList const *items = selection->itemList();
-        selcount =g_slist_length((GSList *)items);
+        selcount = g_slist_length((GSList *)items);
     }
 
 
@@ -633,11 +639,9 @@ TileDialog::TileDialog()
     NoOfRowsSpinner.set_range(1.0, 100.0);
     NoOfRowsSpinner.set_value(PerCol);
     NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_col_spinbutton_changed));
-
-    NoOfRowsBox.pack_start(NoOfRowsSpinner, false, false, MARGIN);
     tips.set_tip(NoOfRowsSpinner, _("Number of rows"));
-
-
+    NoOfRowsBox.pack_start(NoOfRowsSpinner, false, false, MARGIN);
+    gtk_size_group_add_widget(_col1, (GtkWidget *) NoOfRowsBox.gobj());
 
     RowHeightButton.set_label(_("Equal height"));
     double AutoRow = prefs_get_double_attribute ("dialogs.gridtiler", "AutoRowSize", 15);
@@ -652,11 +656,7 @@ TileDialog::TileDialog()
     tips.set_tip(RowHeightButton, _("If not set, each row has the height of the tallest object in it"));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
 
-
-
-
  {
-
         /*#### Radio buttons to control vertical alignment ####*/
 
         VertAlignLabel.set_label(_("Align:"));
@@ -664,15 +664,15 @@ TileDialog::TileDialog()
 
         VertTopRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
         VertAlignGroup = VertTopRadioButton.get_group();
-        VertAlignVBox.pack_start(VertTopRadioButton, false, false, MARGIN);
+        VertAlignVBox.pack_start(VertTopRadioButton, false, false, 0);
 
         VertCentreRadioButton.set_group(VertAlignGroup);
         VertCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
-        VertAlignVBox.pack_start(VertCentreRadioButton, false, false, MARGIN);
+        VertAlignVBox.pack_start(VertCentreRadioButton, false, false, 0);
 
         VertBotRadioButton.set_group(VertAlignGroup);
         VertBotRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
-        VertAlignVBox.pack_start(VertBotRadioButton, false, false, MARGIN);
+        VertAlignVBox.pack_start(VertBotRadioButton, false, false, 0);
 
         VertAlign = prefs_get_double_attribute ("dialogs.gridtiler", "VertAlign", 1);
         if (VertAlign == 0) {
@@ -692,11 +692,12 @@ TileDialog::TileDialog()
 
 
     /*#### Label for X ####*/
-    padXByYLabel.set_label("   ");
+    padXByYLabel.set_label(" ");
     XByYLabelVBox.pack_start(padXByYLabel, false, false, MARGIN);
-    XByYLabel.set_label(_(" X "));
+    XByYLabel.set_markup(" &#215; ");
     XByYLabelVBox.pack_start(XByYLabel, false, false, MARGIN);
     SpinsHBox.pack_start(XByYLabelVBox, false, false, MARGIN);
+    gtk_size_group_add_widget(_col2, (GtkWidget *) XByYLabelVBox.gobj());
 
     /*#### Number of columns ####*/
 
@@ -708,11 +709,9 @@ TileDialog::TileDialog()
     NoOfColsSpinner.set_range(1.0, 100.0);
     NoOfColsSpinner.set_value(PerRow);
     NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_row_spinbutton_changed));
-
-    NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
     tips.set_tip(NoOfColsSpinner, _("Number of columns"));
-
-
+    NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
+    gtk_size_group_add_widget(_col3, (GtkWidget *) NoOfColsBox.gobj());
 
     ColumnWidthButton.set_label(_("Equal width"));
     double AutoCol = prefs_get_double_attribute ("dialogs.gridtiler", "AutoColSize", 15);
@@ -733,17 +732,21 @@ TileDialog::TileDialog()
         HorizAlignLabel.set_label(_("Align:"));
         HorizAlignVBox.pack_start(HorizAlignLabel, false, false, MARGIN);
 
+        HorizAlignHBox.pack_start(*(new Gtk::HBox()), true, true, 0); // centering strut
+
         HorizLeftRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
         HorizAlignGroup = HorizLeftRadioButton.get_group();
-        HorizAlignHBox.pack_start(HorizLeftRadioButton, false, false, MARGIN);
+        HorizAlignHBox.pack_start(HorizLeftRadioButton, false, false, 0);
 
         HorizCentreRadioButton.set_group(HorizAlignGroup);
         HorizCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
-        HorizAlignHBox.pack_start(HorizCentreRadioButton, false, false, MARGIN);
+        HorizAlignHBox.pack_start(HorizCentreRadioButton, false, false, 0);
 
         HorizRightRadioButton.set_group(HorizAlignGroup);
         HorizRightRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
-        HorizAlignHBox.pack_start(HorizRightRadioButton, false, false, MARGIN);
+        HorizAlignHBox.pack_start(HorizRightRadioButton, false, false, 0);
+
+        HorizAlignHBox.pack_start(*(new Gtk::HBox()), true, true, 0); // centering strut
 
         HorizAlign = prefs_get_double_attribute ("dialogs.gridtiler", "HorizAlign", 1);
         if (HorizAlign == 0) {
@@ -763,15 +766,11 @@ TileDialog::TileDialog()
 
     TileBox.pack_start(SpinsHBox, false, false, MARGIN);
 
-
-
-
     {
         /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/
         SpaceByBBoxRadioButton.set_label(_("Fit into selection box"));
         SpaceByBBoxRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
         SpacingGroup = SpaceByBBoxRadioButton.get_group();
-
 
         SpacingVBox.pack_start(SpaceByBBoxRadioButton, false, false, MARGIN);
 
@@ -780,63 +779,67 @@ TileDialog::TileDialog()
         SpaceManualRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
         SpacingVBox.pack_start(SpaceManualRadioButton, false, false, MARGIN);
 
-        double SpacingType = prefs_get_double_attribute ("dialogs.gridtiler", "SpacingType", 15);
-        if (SpacingType>0) {
-            ManualSpacing=true;
-            SpaceManualRadioButton.set_active(ManualSpacing);
-            SpaceByBBoxRadioButton.set_active(!ManualSpacing);
-        }
-        else {
-            ManualSpacing=false;
-            SpaceManualRadioButton.set_active(ManualSpacing);
-            SpaceByBBoxRadioButton.set_active(!ManualSpacing);
-        }
-
         TileBox.pack_start(SpacingVBox, false, false, MARGIN);
-
     }
 
     {
         /*#### Y Padding ####*/
 
-        YPadLabel.set_label(_("Row spacing:   "));
-        YPadBox.pack_start(YPadLabel, false, false, MARGIN);
+        GtkWidget *i = sp_icon_new (GTK_ICON_SIZE_MENU, "clonetiler_per_row");
+        YPadBox.pack_start (*(Glib::wrap(i)), false, false, MARGIN);
 
         YPadSpinner.set_digits(1);
         YPadSpinner.set_increments(0.2, 2);
-        YPadSpinner.set_range(0.0, 999.0);
+        YPadSpinner.set_range(-10000, 10000);
         double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
         YPadSpinner.set_value(YPad);
-        YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
-        tips.set_tip(YPadSpinner, _("Vertical spacing between rows"));
+        YPadBox.pack_start(YPadSpinner, true, true, MARGIN);
+        tips.set_tip(YPadSpinner, _("Vertical spacing between rows (px units)"));
         YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_ypad_spinbutton_changed));
+        gtk_size_group_add_widget(_col1, (GtkWidget *) YPadBox.gobj());
 
         SizesHBox.pack_start(YPadBox, false, false, MARGIN);
     }
 
     {
+    Gtk::HBox *spacer = new Gtk::HBox;
+    SizesHBox.pack_start(*spacer, false, false, 0);
+    gtk_size_group_add_widget(_col2, (GtkWidget *) spacer->gobj());
+    }
+
+    {
         /*#### X padding ####*/
 
-        XPadLabel.set_label(_("Column spacing:"));
-        XPadBox.pack_start(XPadLabel, false, false, MARGIN);
+        GtkWidget *i = sp_icon_new (GTK_ICON_SIZE_MENU, "clonetiler_per_column");
+        XPadBox.pack_start (*(Glib::wrap(i)), false, false, MARGIN);
 
         XPadSpinner.set_digits(1);
         XPadSpinner.set_increments(0.2, 2);
-        XPadSpinner.set_range(0.0, 999.0);
+        XPadSpinner.set_range(-10000, 10000);
         double XPad = prefs_get_double_attribute ("dialogs.gridtiler", "XPad", 15);
         XPadSpinner.set_value(XPad);
-        XPadBox.pack_start(XPadSpinner, false, false, MARGIN);
-        tips.set_tip(XPadSpinner, _("Horizontal spacing between columns"));
+        XPadBox.pack_start(XPadSpinner, true, true, MARGIN);
+        tips.set_tip(XPadSpinner, _("Horizontal spacing between columns (px units)"));
         XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_xpad_spinbutton_changed));
+        gtk_size_group_add_widget(_col3, (GtkWidget *) XPadBox.gobj());
 
         SizesHBox.pack_start(XPadBox, false, false, MARGIN);
     }
 
 
-
     TileBox.pack_start(SizesHBox, false, false, MARGIN);
 
     mainVBox->pack_start(TileBox);
+
+    double SpacingType = prefs_get_double_attribute ("dialogs.gridtiler", "SpacingType", 15);
+    if (SpacingType>0) {
+        ManualSpacing=true;
+    } else {
+        ManualSpacing=false;
+    }
+    SpaceManualRadioButton.set_active(ManualSpacing);
+    SpaceByBBoxRadioButton.set_active(!ManualSpacing);
+    SizesHBox.set_sensitive (ManualSpacing);
 
     //## The OK button
     TileOkButton     = add_button(Gtk::Stock::APPLY,   GTK_RESPONSE_APPLY);
