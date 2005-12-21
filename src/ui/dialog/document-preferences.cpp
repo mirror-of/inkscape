@@ -367,7 +367,7 @@ DocumentPreferences::build_metadata()
         if ( entity->editable == RDF_EDIT_GENERIC ) {
             EntityEntry *w = EntityEntry::create (entity, _tt, _wr);
             _rdflist.push_back (w);
-            _page_metadata1.table().attach (w->_label, 0,1, row, row+1, Gtk::SHRINK, (Gtk::AttachOptions)0,0,0);
+            _page_metadata1.table().attach (w->_label, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
             _page_metadata1.table().attach (*w->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
         if (row>=12) break;
@@ -380,7 +380,7 @@ DocumentPreferences::build_metadata()
         if ( entity->editable == RDF_EDIT_GENERIC ) {
             EntityEntry *w = EntityEntry::create (entity, _tt, _wr);
             _rdflist.push_back (w);
-            _page_metadata2.table().attach (w->_label, 0,1, row, row+1, Gtk::SHRINK, (Gtk::AttachOptions)0,0,0);
+            _page_metadata2.table().attach (w->_label, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
             _page_metadata2.table().attach (*w->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
     }
