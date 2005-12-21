@@ -1,3 +1,9 @@
+2005-12-21  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/interface.cpp, src/preferences-skeleton.h,
+	  src/widgets/desktop-widget.h, src/widgets/desktop-widget.cpp:
+	  Adding panels/swatches to main UI.
+
 2005-11-23  Tim Dwyer  <tdwyer@mail.csse.monash.edu.au>
 
 	* src/removeoverlap/*.{cpp,h}: Bug fix in removeoverlap algorithm that

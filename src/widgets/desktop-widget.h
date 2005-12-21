@@ -66,6 +66,8 @@ struct SPDesktopWidget {
 
     GtkWidget *menubar, *statusbar;
 
+    GtkWidget *panels;
+
     GtkWidget *hscrollbar, *vscrollbar, *vscrollbar_box;
 
     GtkWidget *tool_toolbox, *aux_toolbox, *commands_toolbox;

@@ -54,6 +54,7 @@
 #include "widgets/layer-selector.h"
 #include "ui/widget/selected-style.h"
 #include "sp-item.h"
+#include "dialogs/swatches.h"
 
 #ifdef WITH_INKBOARD
 #include "jabber_whiteboard/session-manager.h"
@@ -187,6 +188,14 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->statusbar = gtk_hbox_new (FALSE, 0);
     //gtk_widget_set_usize (dtw->statusbar, -1, BOTTOM_BAR_HEIGHT);
     gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->statusbar, FALSE, TRUE, 0);
+
+    {
+        using Inkscape::UI::Dialogs::SwatchesPanel;
+
+        SwatchesPanel* swatches = new SwatchesPanel();
+        dtw->panels = GTK_WIDGET(swatches->gobj());
+        gtk_box_pack_end( GTK_BOX( dtw->vbox ), dtw->panels, FALSE, TRUE, 0 );
+    }
 
     hbox = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_end (GTK_BOX (dtw->vbox), hbox, TRUE, TRUE, 0);
@@ -817,6 +826,12 @@ sp_desktop_widget_layout (SPDesktopWidget *dtw)
         gtk_widget_hide_all (dtw->statusbar);
     } else {
         gtk_widget_show_all (dtw->statusbar);
+    }
+
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.panels" : "window.panels", "state", 1) == 0) {
+        gtk_widget_hide_all( dtw->panels );
+    } else {
+        gtk_widget_show_all( dtw->panels );
     }
 
     if (prefs_get_int_attribute (fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1) == 0) {

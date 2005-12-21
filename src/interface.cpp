@@ -762,6 +762,8 @@ sp_ui_checkboxes_menus(GtkMenu *m, Inkscape::UI::View::View *view)
                                            checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS));
     sp_ui_menu_append_check_item_from_verb(m, view, _("_Statusbar"), _("Show or hide the statusbar (at the bottom of the window)"), "statusbar",
                                            checkitem_toggled, checkitem_update, 0);
+    sp_ui_menu_append_check_item_from_verb(m, view, _("_Panels"), _("Show or hide the panels"), "panels",
+                                           checkitem_toggled, checkitem_update, 0);
 }
 
 /** \brief  This function turns XML into a menu
