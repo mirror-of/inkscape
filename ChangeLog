@@ -1,3 +1,8 @@
+2005-12-22  Jon A. Cruz  <jon@joncruz.org>
+
+	* share/palettes/Tango-Palette.gpl:
+	  Updated to newer version from the Tango project.
+
 2005-12-21  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/interface.cpp, src/preferences-skeleton.h,
