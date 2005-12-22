@@ -116,8 +116,10 @@ void VPSC::refine() {
 		}
 	}
 	for(int i=0;i<m;i++) {
-		assert(cs[i]->slack()>-0.0000001);
-		throw "Unsatisfied constraint";
+		if(cs[i]->slack()<-0.0000001) {
+			assert(cs[i]->slack()>-0.0000001);
+			throw "Unsatisfied constraint";
+		}
 	}
 }
 /**
@@ -162,6 +164,7 @@ struct node {
 	set<node*> in;
 	set<node*> out;
 };
+/*
 // useful in debugging - cycles would be BAD
 bool VPSC::constraintGraphIsCyclic(Variable *vs[], const int n) {
 	map<Variable*, node*> varmap;
@@ -265,3 +268,4 @@ bool VPSC::blockGraphIsCyclic() {
 	}
 	return false;
 }
+*/
