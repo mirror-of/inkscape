@@ -76,8 +76,14 @@ void Block::setUpConstraintHeap(PairingHeap<Constraint*>* &h,bool in) {
 			}
 		}
 	}
-}
-// Merge b into this block
+}	
+/**
+ * Merges b into this block across c.  Can be either a
+ * right merge or a left merge
+ * @param b block to merge into this
+ * @param c constraint being merged
+ * @param distance separation required to satisfy c
+ */
 void Block::merge(Block *b, Constraint *c, double dist) {
 	c->active=true;
 	wposn+=b->wposn-dist*b->weight;
@@ -92,9 +98,18 @@ void Block::merge(Block *b, Constraint *c, double dist) {
 }
 
 void Block::mergeIn(Block *b) {
+#ifdef RECTANGLE_OVERLAP_LOGGING
+	ofstream f(LOGFILE,ios::app);
+	f<<"  merging constraint heaps... "<<endl;
+#endif
+	// We check the top of the heaps to remove possible internal constraints
+	findMinInConstraint();
+	b->findMinInConstraint();
 	in->merge(b->in);
 }
-void Block::mergeOut(Block *b) {
+void Block::mergeOut(Block *b) {	
+	findMinOutConstraint();
+	b->findMinOutConstraint();
 	out->merge(b->out);
 }
 Constraint *Block::findMinInConstraint() {
@@ -106,17 +121,17 @@ Constraint *Block::findMinInConstraint() {
 		// rb may not be this if called between merge and mergeIn
 #ifdef RECTANGLE_OVERLAP_LOGGING
 		ofstream f(LOGFILE,ios::app);
-		f<<"  checking constraint "<<*v<<endl;
-		f<<"    timestamps: left="<<lb->timeStamp<<" right="<<rb->timeStamp<<" constraint="<<v->timeStamp<<endl;
+		f<<"  checking constraint ... "<<*v;
+		//f<<"    timestamps: left="<<lb->timeStamp<<" right="<<rb->timeStamp<<" constraint="<<v->timeStamp<<endl;
 #endif
 		if(lb == rb) {
 			// constraint has been merged into the same block
 			in->deleteMin();
 #ifdef RECTANGLE_OVERLAP_LOGGING
-			f<<"    skipping internal constraint"<<endl;
+			f<<" ... skipping internal constraint"<<endl;
 #endif
 			v = NULL;
-		} else if(lb->timeStamp > rb->timeStamp && v->timeStamp < lb->timeStamp) {
+		/*} else if(lb->timeStamp > rb->timeStamp && v->timeStamp < lb->timeStamp) {
 			// block at other end of constraint has been moved since this
 			in->deleteMin();
 			v->timeStamp=++blockTimeCtr;
@@ -125,10 +140,11 @@ Constraint *Block::findMinInConstraint() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
 			f<<"    reinserting out of date constraint"<<endl;
 #endif
+		*/
 		} else {
 			// v really is the most violated constraint!
 #ifdef RECTANGLE_OVERLAP_LOGGING
-			f<<"    found min constraint"<<endl;
+			f<<" ... min constraint"<<endl;
 #endif
 			break;
 		}
@@ -157,6 +173,12 @@ inline bool Block::canFollowLeft(Constraint *c, Variable *last) {
 inline bool Block::canFollowRight(Constraint *c, Variable *last) {
 	return c->right->block==this && c->active && last!=c->right;
 }
+
+// computes the derivative of v and the lagrange multipliers
+// of v's out constraints (as the recursive sum of those below.
+// Does not backtrack over u.
+// also records the constraint with minimum lagrange multiplier
+// in min_lm
 double Block::compute_dfdv(Variable *v, Variable *u, Constraint *&min_lm) {
 	double dfdv=v->weight*(v->position() - v->desiredPosition);
 	for(vector<Constraint*>::iterator it=v->out.begin();it!=v->out.end();it++) {
@@ -175,6 +197,10 @@ double Block::compute_dfdv(Variable *v, Variable *u, Constraint *&min_lm) {
 	}
 	return dfdv;
 }
+
+// resets LMs for all active constraints to 0 by
+// traversing active constraint tree starting from v,
+// not back tracking over u
 void Block::reset_active_lm(Variable *v, Variable *u) {
 	for(vector<Constraint*>::iterator it=v->out.begin();it!=v->out.end();it++) {
 		Constraint *c=*it;
@@ -191,6 +217,19 @@ void Block::reset_active_lm(Variable *v, Variable *u) {
 		}
 	}
 }
+/**
+ * finds the constraint with the minimum lagrange multiplier, that is, the constraint
+ * that most wants to split
+ */
+Constraint *Block::findMinLM() {
+	Constraint *min_lm=NULL;
+	reset_active_lm(vars->front(),NULL);
+	compute_dfdv(vars->front(),NULL,min_lm);
+	return min_lm;
+}
+
+// populates block b by traversing the active constraint tree adding variables as they're 
+// visited.  Starts from variable v and does not backtrack over variable u.
 void Block::populateSplitBlock(Block *b, Variable *v, Variable *u) {
 	b->addVariable(v);
 	for (vector<Constraint*>::iterator c=v->in.begin();c!=v->in.end();c++) {
@@ -202,13 +241,6 @@ void Block::populateSplitBlock(Block *b, Variable *v, Variable *u) {
 			populateSplitBlock(b, (*c)->right, v);
 	}
 }
-Constraint *Block::findMinLM() {
-	Constraint *min_lm=NULL;
-	reset_active_lm(vars->front(),NULL);
-	compute_dfdv(vars->front(),NULL,min_lm);
-	return min_lm;
-}
-
 /**
  * Creates two new blocks, l and r, and splits this block across constraint c,
  * placing the left subtree of constraints (and associated variables) into l

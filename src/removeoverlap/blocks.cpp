@@ -95,20 +95,15 @@ void Blocks::mergeLeft(Block *r) {
 #endif
 		r->deleteMinInConstraint();
 		Block *l = c->left->block;		
-		if(l->in==NULL)	l->setUpInConstraints();
+		l->setUpInConstraints();
 		double dist = c->right->offset - c->left->offset - c->gap;
 		if (r->vars->size() < l->vars->size()) {
 			dist=-dist;
 			std::swap(l, r);
 		}
-		// ensure constraint heaps are up to date
-		l->findMinInConstraint();
-		r->findMinInConstraint();
 		r->merge(l, c, dist);
-		l->findMinInConstraint();
-		r->findMinInConstraint();
 		r->mergeIn(l);
-		r->timeStamp=++blockTimeCtr;
+		//r->timeStamp=++blockTimeCtr;
 		removeBlock(l);
 		c=r->findMinInConstraint();
 	}		
