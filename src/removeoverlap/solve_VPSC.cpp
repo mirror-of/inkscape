@@ -117,6 +117,7 @@ void VPSC::refine() {
 	}
 	for(int i=0;i<m;i++) {
 		assert(cs[i]->slack()>-0.0000001);
+		throw "Unsatisfied constraint";
 	}
 }
 /**

@@ -71,6 +71,7 @@ void Block::setUpConstraintHeap(PairingHeap<Constraint*>* &h,bool in) {
 		vector<Constraint*> *cs=in?&(v->in):&(v->out);
 		for (vector<Constraint*>::iterator j=cs->begin();j!=cs->end();j++) {
 			Constraint *c=*j;
+			c->timeStamp=blockTimeCtr;
 			if (c->left->block != this && in || c->right->block != this && !in) {
 				h->insert(c);
 			}
@@ -114,6 +115,7 @@ void Block::mergeOut(Block *b) {
 }
 Constraint *Block::findMinInConstraint() {
 	Constraint *v = NULL;
+	vector<Constraint*> outOfDate;
 	while (!in->isEmpty()) {
 		v = in->findMin();
 		Block *lb=v->left->block;
@@ -122,7 +124,7 @@ Constraint *Block::findMinInConstraint() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
 		ofstream f(LOGFILE,ios::app);
 		f<<"  checking constraint ... "<<*v;
-		//f<<"    timestamps: left="<<lb->timeStamp<<" right="<<rb->timeStamp<<" constraint="<<v->timeStamp<<endl;
+		f<<"    timestamps: left="<<lb->timeStamp<<" right="<<rb->timeStamp<<" constraint="<<v->timeStamp<<endl;
 #endif
 		if(lb == rb) {
 			// constraint has been merged into the same block
@@ -130,24 +132,28 @@ Constraint *Block::findMinInConstraint() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
 			f<<" ... skipping internal constraint"<<endl;
 #endif
-			v = NULL;
-		/*} else if(lb->timeStamp > rb->timeStamp && v->timeStamp < lb->timeStamp) {
+		} else if(lb->timeStamp > rb->timeStamp 
+			&& v->timeStamp < lb->timeStamp 
+			|| v->timeStamp < rb->timeStamp) {
 			// block at other end of constraint has been moved since this
 			in->deleteMin();
-			v->timeStamp=++blockTimeCtr;
-			in->insert(v);
-			v = NULL;
+			outOfDate.push_back(v);
 #ifdef RECTANGLE_OVERLAP_LOGGING
 			f<<"    reinserting out of date constraint"<<endl;
 #endif
-		*/
 		} else {
-			// v really is the most violated constraint!
-#ifdef RECTANGLE_OVERLAP_LOGGING
-			f<<" ... min constraint"<<endl;
-#endif
 			break;
 		}
+	}
+	for(vector<Constraint*>::iterator i=outOfDate.begin();i!=outOfDate.end();i++) {
+		v=*i;
+		v->timeStamp=blockTimeCtr;
+		in->insert(v);
+	}
+	if(in->isEmpty()) {
+		v=NULL;
+	} else {
+		v=in->findMin();
 	}
 	return v;
 }

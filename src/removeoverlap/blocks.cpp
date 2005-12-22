@@ -86,8 +86,8 @@ void Blocks::mergeLeft(Block *r) {
 	ofstream f(LOGFILE,ios::app);
 	f<<"mergeLeft called on "<<*r<<endl;
 #endif
-	r->setUpInConstraints();
 	r->timeStamp=++blockTimeCtr;
+	r->setUpInConstraints();
 	Constraint *c=r->findMinInConstraint();
 	while (c != NULL && c->slack()<0) {
 #ifdef RECTANGLE_OVERLAP_LOGGING
@@ -95,7 +95,7 @@ void Blocks::mergeLeft(Block *r) {
 #endif
 		r->deleteMinInConstraint();
 		Block *l = c->left->block;		
-		l->setUpInConstraints();
+		if (l->in==NULL) l->setUpInConstraints();
 		double dist = c->right->offset - c->left->offset - c->gap;
 		if (r->vars->size() < l->vars->size()) {
 			dist=-dist;
@@ -103,7 +103,7 @@ void Blocks::mergeLeft(Block *r) {
 		}
 		r->merge(l, c, dist);
 		r->mergeIn(l);
-		//r->timeStamp=++blockTimeCtr;
+		r->timeStamp=++blockTimeCtr;
 		removeBlock(l);
 		c=r->findMinInConstraint();
 	}		
