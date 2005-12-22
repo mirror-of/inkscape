@@ -688,12 +688,136 @@ pen_handle_2button_press(SPPenContext *const pc)
     return ret;
 }
 
+void
+pen_lastpoint_move (SPPenContext *const pc, gdouble x, gdouble y)
+{
+    if (pc->npoints != 5)
+        return;
+
+    // green
+    NArtBpath *const bpath = sp_curve_last_bpath(pc->green_curve);
+    if (bpath) {
+        if (bpath->code == NR_CURVETO) {
+            bpath->x2 += x;
+            bpath->y2 += y;
+        }
+        bpath->x3 += x;
+        bpath->y3 += y;
+        if (pc->green_bpaths && pc->green_bpaths->data) {
+            // remove old piecewise green canvasitems
+            while (pc->green_bpaths) {
+                gtk_object_destroy(GTK_OBJECT(pc->green_bpaths->data));
+                pc->green_bpaths = g_slist_remove(pc->green_bpaths, pc->green_bpaths->data);
+            }
+            // one canvas bpath for all of green_curve
+            SPCanvasItem *cshape = sp_canvas_bpath_new(SP_DT_SKETCH(pc->desktop), pc->green_curve);
+            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), pc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(cshape), 0, SP_WIND_RULE_NONZERO);
+
+            pc->green_bpaths = g_slist_prepend(pc->green_bpaths, cshape);
+        }
+    } else {
+        // start anchor too
+        if (pc->green_anchor) {
+            pc->green_anchor->dp += NR::Point(x, y);
+            SP_CTRL(pc->green_anchor->ctrl)->moveto(pc->green_anchor->dp);
+        }
+    }
+
+    // red
+    pc->p[0] += NR::Point(x, y);
+    pc->p[1] += NR::Point(x, y);
+    sp_curve_reset(pc->red_curve);
+    sp_curve_moveto(pc->red_curve, pc->p[0]);
+    sp_curve_curveto(pc->red_curve, pc->p[1], pc->p[2], pc->p[3]);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
+
+    // handles
+    if (pc->p[0] != pc->p[1]) {
+        SP_CTRL(pc->c1)->moveto(pc->p[1]);
+        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), pc->p[0], pc->p[1]);
+    }
+    if (bpath && bpath->code == NR_CURVETO && NR::Point(bpath->x2, bpath->y2) != pc->p[0]) {
+        SP_CTRL(pc->c0)->moveto(NR::Point(bpath->x2, bpath->y2));
+        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl0), NR::Point(bpath->x2, bpath->y2), pc->p[0]);
+    }
+}
+
+void
+pen_lastpoint_move_screen (SPPenContext *const pc, gdouble x, gdouble y)
+{
+    pen_lastpoint_move (pc, x / pc->desktop->current_zoom(), y / pc->desktop->current_zoom());
+}
+
 static gint
 pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 {
     gint ret = FALSE;
-    /* fixme: */
+    gdouble const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2, 0, 1000); // in px
+
     switch (get_group0_keyval (&event->key)) {
+
+        case GDK_Left: // move last point left
+        case GDK_KP_Left:
+        case GDK_KP_4:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, -10, 0); // shift
+                    else pen_lastpoint_move_screen(pc, -1, 0); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) pen_lastpoint_move(pc, -10*nudge, 0); // shift
+                    else pen_lastpoint_move(pc, -nudge, 0); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
+        case GDK_Up: // move last point up
+        case GDK_KP_Up:
+        case GDK_KP_8:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, 0, 10); // shift
+                    else pen_lastpoint_move_screen(pc, 0, 1); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) pen_lastpoint_move(pc, 0, 10*nudge); // shift
+                    else pen_lastpoint_move(pc, 0, nudge); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
+        case GDK_Right: // move last point right
+        case GDK_KP_Right:
+        case GDK_KP_6:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, 10, 0); // shift
+                    else pen_lastpoint_move_screen(pc, 1, 0); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) pen_lastpoint_move(pc, 10*nudge, 0); // shift
+                    else pen_lastpoint_move(pc, nudge, 0); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
+        case GDK_Down: // move last point down
+        case GDK_KP_Down:
+        case GDK_KP_2:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, 0, -10); // shift
+                    else pen_lastpoint_move_screen(pc, 0, -1); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) pen_lastpoint_move(pc, 0, -10*nudge); // shift
+                    else pen_lastpoint_move(pc, 0, -nudge); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
+
         case GDK_Return:
         case GDK_KP_Enter:
             if (pc->npoints != 0) {
