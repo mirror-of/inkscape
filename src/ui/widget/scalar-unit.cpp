@@ -64,10 +64,9 @@ ScalarUnit::ScalarUnit(Glib::ustring const &label, Glib::ustring const &tooltip,
         g_assert(_unit_menu);
         _unit_menu->setUnitType(unit_type);
         pack_start(*Gtk::manage(_unit_menu), false, false, 4);
-    } else {
-        _unit_menu->signal_changed()
-            .connect_notify(sigc::mem_fun(*this, &ScalarUnit::on_unit_changed));
     }
+    _unit_menu->signal_changed()
+            .connect_notify(sigc::mem_fun(*this, &ScalarUnit::on_unit_changed));
 }
 
 /**
