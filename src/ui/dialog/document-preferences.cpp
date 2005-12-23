@@ -51,6 +51,9 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+#define N_METADATA_ENTITIES_ON_PAGE 12  /* number of metadata entity entries */
+                                        /* on first metadata page */
+
 //===================================================
 
 //---------------------------------------------------
@@ -370,7 +373,7 @@ DocumentPreferences::build_metadata()
             _page_metadata1.table().attach (w->_label, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
             _page_metadata1.table().attach (*w->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
-        if (row>=12) break;
+        if (row >= N_METADATA_ENTITIES_ON_PAGE) break;
     }
 
     _page_metadata2.show();
