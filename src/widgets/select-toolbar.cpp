@@ -170,6 +170,8 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     SPDocument *document = SP_DT_DOCUMENT(desktop);
+
+    sp_document_ensure_up_to_date (document);
     NR::Rect bbox = selection->bounds();
 
     if (!((bbox.max()[NR::X] - bbox.min()[NR::X] > 1e-6) || (bbox.max()[NR::Y] - bbox.min()[NR::Y] > 1e-6))) {
@@ -177,6 +179,8 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     }
 
     gdouble x0, y0, x1, y1, xrel, yrel;
+    GtkAdjustment *a_w;
+    GtkAdjustment *a_h;
 
     if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
         GtkAdjustment *a;
@@ -184,12 +188,12 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         x0 = sp_units_get_pixels (a->value, unit);
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "Y");
         y0 = sp_units_get_pixels (a->value, unit);
-        a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
-        x1 = x0 + sp_units_get_pixels (a->value, unit);
-        xrel = sp_units_get_pixels (a->value, unit) / bbox.extent(NR::X);
-        a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
-        y1 = y0 + sp_units_get_pixels (a->value, unit);
-        yrel = sp_units_get_pixels (a->value, unit) / bbox.extent(NR::Y);
+        a_w = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
+        x1 = x0 + sp_units_get_pixels (a_w->value, unit);
+        xrel = sp_units_get_pixels (a_w->value, unit) / bbox.extent(NR::X);
+        a_h = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
+        y1 = y0 + sp_units_get_pixels (a_h->value, unit);
+        yrel = sp_units_get_pixels (a_h->value, unit) / bbox.extent(NR::Y);
     } else {
         GtkAdjustment *a;
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
@@ -198,20 +202,20 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "Y");
         double const y0_propn = a->value * unit.unittobase;
         y0 = y0_propn * bbox.min()[NR::Y];
-        a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
-        xrel = a->value * unit.unittobase;
+        a_w = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
+        xrel = a_w->value * unit.unittobase;
         x1 = x0 + xrel * bbox.extent(NR::X);
-        a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
-        yrel = a->value * unit.unittobase;
+        a_h = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
+        yrel = a_h->value * unit.unittobase;
         y1 = y0 + yrel * bbox.extent(NR::Y);
     }
 
     // Keep proportions if lock is on
     GtkWidget *lock = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "lock"));
     if (SP_BUTTON_IS_DOWN(lock)) {
-        if (fabs(xrel - 1.0) < 1e-6) {
+        if (adj == a_h) {
             x1 = x0 + yrel * bbox.extent(NR::X);
-        } else if (fabs(yrel - 1.0) < 1e-6) {
+        } else if (adj == a_w) {
             y1 = y0 + xrel * bbox.extent(NR::Y);
         }
     }
