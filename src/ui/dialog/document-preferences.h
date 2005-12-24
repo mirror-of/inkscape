@@ -68,18 +68,18 @@ protected:
     //---------------------------------------------------------------
     RegisteredCheckButton _rcbgrid, _rcbsnbb, _rcbsnnod;
     RegisteredUnitMenu    _rumg, _rums;
-    RegisteredScalarUnit  _rsu_ox, _rsu_oy, _rsu_sx, _rsu_sy, _rsu_sn;
+    RegisteredScalarUnit  _rsu_ox, _rsu_oy, _rsu_sx, _rsu_sy;
     RegisteredColorPicker _rcp_gcol, _rcp_gmcol;
     RegisteredSuffixedInteger _rsi;
     //---------------------------------------------------------------
     RegisteredCheckButton _rcb_sgui, _rcb_snpgui, _rcb_snbgui;
     RegisteredUnitMenu    _rum_gusn;
-    RegisteredScalarUnit  _rsu_gusn;
+    RegisteredScaleUnit  _rsu_sn, _rsu_gusn;
     RegisteredColorPicker _rcp_gui, _rcp_hgui;
     //---------------------------------------------------------------
     RegisteredCheckButton _rcbsnbo, _rcbsnnob, _rcbsnop, _rcbsnon;
     RegisteredUnitMenu    _rumso;
-    RegisteredScalarUnit  _rsu_sno;
+    RegisteredScaleUnit  _rsu_sno;
     //---------------------------------------------------------------
     RDElist _rdflist;
     Licensor _licensor;

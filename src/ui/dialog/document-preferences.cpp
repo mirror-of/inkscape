@@ -162,8 +162,18 @@ attach_all (Gtk::Table &table, const Gtk::Widget *arr[], unsigned size, int star
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
         else
-            table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 0, 2, r, r+1, 
+        {
+            if (arr[i+1])
+                table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 0, 2, r, r+1, 
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+            else
+            {
+                Gtk::HBox *space = manage (new Gtk::HBox);
+                space->set_size_request (15, 15);
+                table.attach (*space, 0, 2, r, r+1, 
+                      Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+            }
+        }
         ++r;
     }
 }
@@ -185,12 +195,14 @@ DocumentPreferences::build_page()
 
     const Gtk::Widget* widget_array[] = 
     {
+        _rum_deflt._label, _rum_deflt._sel,
+        0, 0,
         0, _rcb_canb._button,
         0, _rcb_bord._button,
         0, _rcb_shad._button,
         _rcp_bg._label, _rcp_bg._cp,
         _rcp_bord._label, _rcp_bord._cp,
-        _rum_deflt._label, _rum_deflt._sel,
+        0, 0,
     };
     
     attach_all (_page_page.table(), widget_array, sizeof(widget_array));
@@ -238,6 +250,7 @@ DocumentPreferences::build_grid()
         0,                  _rsu_sx.getSU(),
         0,                  _rsu_sy.getSU(),
         _rcp_gcol._label,   _rcp_gcol._cp, 
+        0,                  0,
         _rcp_gmcol._label,  _rcp_gmcol._cp,
         _rsi._label,        &_rsi._hbox,
     };
@@ -288,10 +301,9 @@ DocumentPreferences::build_snap()
     _rcbsnon.init (_("Snap to object nodes"), 
                 _("Snap to other object nodes"), 
                 "inkscape:object-nodes", _wr);
-    _rumso.init (_("Snap units:"), "object_snap_units", _wr);
     _rsu_sno.init (_("Snap distance:"), 
                   _("Max. snapping distance from object"),
-                  "objecttolerance", _rumso, _wr);
+                  "objecttolerance", _wr, 0.0, 100.0);
     
     const Gtk::Widget* array2[] = 
     {
@@ -299,8 +311,7 @@ DocumentPreferences::build_snap()
         0,                  _rcbsnnob._button,
         0,                  _rcbsnop._button,
         0,                  _rcbsnon._button,
-        _rumso._label,      _rumso._sel,
-        0,                  _rsu_sno.getSU(),
+        0,                  _rsu_sno._hbox,
     };
 
     attach_all (*table_obj, array2, sizeof(array2));
@@ -316,17 +327,15 @@ DocumentPreferences::build_snap()
     _rcbsnnod.init (_("Snap nodes to grid"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:grid-points", _wr);
-    _rums.init (_("Snap units:"), "grid_snap_units", _wr);
     _rsu_sn.init (_("Snap distance:"), 
                   _("Max. snapping distance from grid"),
-                  "gridtolerance", _rums, _wr);
+                  "gridtolerance", _wr, 0.0, 100.0);
     
     const Gtk::Widget* array1[] = 
     {
         0,                  _rcbsnbb._button,
         0,                  _rcbsnnod._button,
-        _rums._label,       _rums._sel,
-        0,                  _rsu_sn.getSU(),
+        0,                  _rsu_sn._hbox,
     };
 
     attach_all (*table_grid, array1, sizeof(array1));
@@ -343,15 +352,13 @@ DocumentPreferences::build_snap()
     _rcb_snbgui.init (_("Snap points to guides"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:guide-points", _wr);
-    _rum_gusn.init (_("Snap units:"), "guide_snap_units", _wr);
-    _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _rum_gusn, _wr);
+    _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _wr, 0.0, 100.0);
 
     const Gtk::Widget* widget_array[] = 
     {
         0,                _rcb_snpgui._button,
         0,                _rcb_snbgui._button,
-        _rum_gusn._label, _rum_gusn._sel,
-        0,                _rsu_gusn.getSU(),
+        0,                _rsu_gusn._hbox,
     };
 
     attach_all (*table_gui, widget_array, sizeof(widget_array));
@@ -452,18 +459,15 @@ DocumentPreferences::update()
     _rcbsnnob.setActive (nv->object_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
     _rcbsnop.setActive (nv->object_snapper.getSnapToPaths());
     _rcbsnop.setActive (nv->object_snapper.getSnapToNodes());
-    _rumso.setUnit (nv->objecttoleranceunit);
-    _rsu_sno.setValue (nv->objecttolerance);
+    _rsu_sno.setValue (nv->objecttolerance, nv->objecttoleranceunit);
      
     _rcbsnbb.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
     _rcbsnnod.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
-    _rums.setUnit (nv->gridtoleranceunit);
-    _rsu_sn.setValue (nv->gridtolerance);
+    _rsu_sn.setValue (nv->gridtolerance, nv->gridtoleranceunit);
     
      _rcb_snpgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
     _rcb_snbgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
-    _rum_gusn.setUnit (nv->guidetoleranceunit);
-    _rsu_gusn.setValue (nv->guidetolerance);
+    _rsu_gusn.setValue (nv->guidetolerance, nv->guidetoleranceunit);
 
     //-----------------------------------------------------------meta pages
     /* update the RDF entities */
