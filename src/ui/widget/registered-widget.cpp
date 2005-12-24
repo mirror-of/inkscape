@@ -19,6 +19,7 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/scale.h>
 
 #include "ui/widget/color-picker.h"
 #include "ui/widget/registry.h"
@@ -194,7 +195,7 @@ RegisteredScalarUnit::getSU()
 void 
 RegisteredScalarUnit::setValue (double val)
 {
-    _widget->setValue (val, _um->getUnitAbbr());
+    _widget->setValue (val);
     on_value_changed();
 }
 
@@ -225,6 +226,91 @@ RegisteredScalarUnit::on_value_changed()
     sp_document_done (doc);
     
     _wr->setUpdating (false);
+}
+
+RegisteredScaleUnit::RegisteredScaleUnit()
+: _hbox(0)
+{
+}
+
+RegisteredScaleUnit::~RegisteredScaleUnit()
+{
+    if (_hbox) delete _hbox;
+    _spin_changed_connection.disconnect();
+    _scale_changed_connection.disconnect();
+}
+
+void
+RegisteredScaleUnit::init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, double min, double max)
+{
+    _hbox = new Gtk::HBox;
+    Gtk::Label *theLabel = manage (new Gtk::Label (label));
+    _hbox->add (*theLabel);
+    _hscale = manage (new Gtk::HScale (min, max, 0.1));
+    _hscale->set_draw_value (false);
+    _hscale->set_size_request (100, -1);
+    _hbox->add (*_hscale);
+    _widget = manage (new ScalarUnit ("", tip));
+    _hbox->add (*_widget);
+    _widget->initScalar (min, max);
+    _widget->setDigits (2);
+    _widget->setUnit ("px");
+    _key = key;
+    _spin_changed_connection = _widget->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScaleUnit::on_spin_changed));
+    _scale_changed_connection = _hscale->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScaleUnit::on_scale_changed));
+    _wr = &wr;
+}
+
+void 
+RegisteredScaleUnit::setValue (double val, const SPUnit* unit)
+{
+    _widget->setValue (val, sp_unit_get_abbreviation (unit));
+    _hscale->set_value (val);
+    update();
+}
+
+void
+RegisteredScaleUnit::update()
+{
+    if (_wr->isUpdating())
+        return;
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (!dt) 
+        return;
+
+    Inkscape::SVGOStringStream os;
+    os << _widget->getValue("");
+    os << _widget->getUnit().abbr;
+
+    _wr->setUpdating (true);
+
+    SPDocument *doc = SP_DT_DOCUMENT(dt);
+    gboolean saved = sp_document_get_undo_sensitive (doc);
+    sp_document_set_undo_sensitive (doc, FALSE);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR (SP_DT_NAMEDVIEW(dt));
+    repr->setAttribute(_key.c_str(), os.str().c_str());
+    doc->rroot->setAttribute("sodipodi:modified", "true");
+    sp_document_set_undo_sensitive (doc, saved);
+    sp_document_done (doc);
+    
+    _wr->setUpdating (false);
+}
+
+void
+RegisteredScaleUnit::on_spin_changed()
+{
+    double val = _widget->getValue ("px");
+    _hscale->set_value (val);
+    update();
+}
+
+void
+RegisteredScaleUnit::on_scale_changed()
+{
+    double val = _hscale->get_value();
+    _widget->setValue (val);
+    update();
 }
 
 RegisteredColorPicker::RegisteredColorPicker()

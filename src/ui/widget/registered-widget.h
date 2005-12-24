@@ -13,9 +13,13 @@
 #define INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 
 #include <gtkmm/box.h>
-#include <gtkmm/eventbox.h>
+#include <gtkmm/adjustment.h>
 
 class SPUnit;
+
+namespace Gtk {
+    class HScale;
+}
 
 namespace Inkscape {
 namespace UI {
@@ -78,6 +82,29 @@ protected:
     Registry         *_wr;
     Glib::ustring    _key;
     void on_value_changed();
+};
+
+class RegisteredScaleUnit {
+public:
+    RegisteredScaleUnit();
+    ~RegisteredScaleUnit();
+    void init (const Glib::ustring& label, 
+            const Glib::ustring& tip, 
+            const Glib::ustring& key, 
+            Registry& wr, double min, double max);
+    void setValue (double, const SPUnit*);
+    Gtk::HBox* _hbox;
+
+protected:
+    void on_spin_changed();
+    void on_scale_changed();
+    void update();
+    ScalarUnit       *_widget;
+    sigc::connection  _spin_changed_connection;
+    sigc::connection  _scale_changed_connection;
+    Gtk::HScale      *_hscale;
+    Registry         *_wr;
+    Glib::ustring     _key;
 };
 
 class RegisteredColorPicker {
