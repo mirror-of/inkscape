@@ -26,13 +26,13 @@
 
 /** \mainpage The Inkscape Source Code Documentation
  * While the standard doxygen documentation can be accessed through the links
- * in the header, the following documents are additionally available to the 
+ * in the header, the following documents are additionally available to the
  * interested reader.
- * 
+ *
  * \section groups Main directory documentation
- * Inkscape's classes and files in the main directory can be grouped into 
+ * Inkscape's classes and files in the main directory can be grouped into
  * the following categories:
- * 
+ *
  * - \subpage ObjectTree - inkscape's SVG canvas
  * - \subpage Tools - the tools UI
  * - \subpage UI - inkscape's user interface
@@ -42,7 +42,7 @@
  *
  * See also the <a href="dirs.html">other directories</a> until doxygen
  * allows setting links to those doc files.
- * 
+ *
  * \section extlinks Links to external documentation
  *
  * \subsection liblinks External documentation on libraries used in inkscape
@@ -65,7 +65,7 @@
  * <a href="http://xmlsoft.org/XSLT/html/libxslt-lib.html#LIBXSLT-LIB">libxslt</a>
  * <a href="http://xmlsoft.org/html/index.html">libxml2</a>
  *
- * \subsection stdlinks External standards documentation 
+ * \subsection stdlinks External standards documentation
  *
  * <a href="http://www.w3.org/TR/SVG/">SVG1.1</a>
  * <a href="http://www.w3.org/TR/SVG12/">SVG1.2</a>
@@ -131,13 +131,13 @@
  *
  */
 /** \page Tools Tools Related Classes and Files
- * 
+ *
  * SelCue [\ref selcue.cpp, \ref selcue.h, \ref rubberband.cpp]
  * Inkscape::Selection [\ref selection.cpp, \ref selection.h, \ref selection-chemistry.cpp]
  * SPSelTrans [\ref seltrans.cpp, \ref seltrans.h]
- * 
+ *
  * \section Event Context Class Hierarchy
- * 
+ *
  *- SPEventContext[\ref event-context.cpp, \ref event-context.h]
  * - SPArcContext [\ref arc-context.cpp, \ref arc-context.h]
  * - SPDrawContext [\ref draw-context.cpp, \ref draw-context.h]
@@ -149,14 +149,14 @@
  * - SPSelectContext [\ref select-context.cpp, \ref select-context.h]
  * - SPSpiralContext [\ref spiral-context.cpp, \ref spiral-context.h]
  * - SPStarContext [\ref star-context.cpp, \ref star-context.h]
- *   
+ *
  * SPNodeContext [\ref node-context.cpp, \ref node-context.h]
- * 
+ *
  * SPZoomContext [\ref zoom-context.cpp, \ref zoom-context.h]
- * 
- * SPDynaDrawContext [\ref dyna-draw-context.cpp, \ref dyna-draw-context.h] 
- * 
- * SPDropperContext [\ref dropper-context.cpp, \ref dropper-context.h] 
+ *
+ * SPDynaDrawContext [\ref dyna-draw-context.cpp, \ref dyna-draw-context.h]
+ *
+ * SPDropperContext [\ref dropper-context.cpp, \ref dropper-context.h]
  */
 /** \page UI User Interface Classes and Files
  *
@@ -166,25 +166,25 @@
  *   - SPSVGView [\ref svg-view.cpp, \ref svg-view.h]
  *
  * SPDesktopWidget [\ref desktop-widget.h] SPSVGSPViewWidget [\ref svg-view.cpp]
- * SPDocument [\ref document.cpp, \ref document.h] 
- * 
- * SPDrawAnchor [\ref draw-anchor.cpp, \ref draw-anchor.h] 
+ * SPDocument [\ref document.cpp, \ref document.h]
+ *
+ * SPDrawAnchor [\ref draw-anchor.cpp, \ref draw-anchor.h]
  * SPKnot [\ref knot.cpp, \ref knot.h, \ref knot-enums.h]
  * SPKnotHolder [\ref knotholder.cpp, \ref knotholder.h, \ref knot-holder-entity.h]
  *
  * [\ref layer-fns.cpp, \ref selection-describer.h]
- * Inkscape::MessageContext [\ref message-context.h] 
- * Inkscape::MessageStack [\ref message-stack.h, \ref message.h] 
+ * Inkscape::MessageContext [\ref message-context.h]
+ * Inkscape::MessageStack [\ref message-stack.h, \ref message.h]
  *
  * Snapper, GridSnapper, GuideSnapper [\ref snap.cpp, \ref snap.h]
  *
  * SPGuide [\ref sp-guide.cpp, \ref sp-guide.h, \ref satisfied-guide-cns.cpp, \ref sp-guide-attachment.h, \ref sp-guide-constraint.h]
- * 
+ *
  * [\ref help.cpp] [\ref inkscape.cpp] [\ref inkscape-stock.cpp]
- * [\ref interface.cpp, \ref memeq.h] [\ref main.cpp, \ref winmain.cpp] 
+ * [\ref interface.cpp, \ref memeq.h] [\ref main.cpp, \ref winmain.cpp]
  * [\ref menus-skeleton.h, \ref preferences-skeleton.h]
  * [\ref object-ui.cpp] [\ref select-toolbar.cpp] [\ref shortcuts.cpp]
- * [\ref sp-cursor.cpp] [\ref text-edit.cpp] [\ref toolbox.cpp, \ref ui/widget/toolbox.cpp] 
+ * [\ref sp-cursor.cpp] [\ref text-edit.cpp] [\ref toolbox.cpp, \ref ui/widget/toolbox.cpp]
  * Inkscape::Verb [\ref verbs.h]
  *
  */
@@ -192,7 +192,7 @@
  *
  * SPStyle [\ref style.cpp, \ref style.h]
  * Media [\ref media.cpp, \ref media.h]
- * [\ref attributes.cpp, \ref attributes.h] 
+ * [\ref attributes.cpp, \ref attributes.h]
  *
  * - Inkscape::URIReference [\ref uri-references.cpp, \ref uri-references.h]
  *   - SPClipPathReference [\ref sp-clippath.h]
@@ -204,16 +204,16 @@
  */
 /** \page Rendering Rendering Related Classes and Files
  *
- * SPColor [\ref color.cpp, \ref color.h, \ref color-rgba.h] 
+ * SPColor [\ref color.cpp, \ref color.h, \ref color-rgba.h]
  * [\ref geom.cpp] [\ref isnan.h] [\ref mod360.cpp]
  */
 /** \page OtherServices Classes and Files From Other Services
  * [\ref inkview.cpp, \ref slideshow.cpp] [\ref sp-animation.cpp]
- * 
+ *
  * Inkscape::GC
  *
  * [\ref sp-metrics.cpp, \ref sp-metrics.h]
- * 
+ *
  * [\ref prefs-utils.cpp] [\ref print.cpp]
  *
  * - Inkscape::GZipBuffer [\ref streams-gzip.h]
@@ -221,13 +221,13 @@
  * - Inkscape::ZlibBuffer [\ref streams-zlib.h]
  * - Inkscape::URIHandle [\ref streams-handles.h]
  *   - Inkscape::FileHandle
- * [\ref dir-util.cpp] [\ref file.cpp] 
+ * [\ref dir-util.cpp] [\ref file.cpp]
  * Inkscape::URI [\ref uri.h, \ref extract-uri.cpp, \ref uri-references.cpp]
- * Inkscape::BadURIException [\ref bad-uri-exception.h] 
- * 
+ * Inkscape::BadURIException [\ref bad-uri-exception.h]
+ *
  * Inkscape::Whiteboard::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
  * [\ref document-undo.cpp]
- * 
+ *
  * {\ref dialogs/} [\ref approx-equal.h] [\ref decimal-round.h] [\ref enums.h] [\ref unit-constants.h]
  */
 
@@ -294,6 +294,8 @@
 #ifdef WIN32
 //#define REPLACEARGS_ANSI
 //#define REPLACEARGS_DEBUG
+
+#include "registrytool.h"
 
 #include "extension/internal/win32.h"
 using Inkscape::Extension::Internal::PrintWin32;
@@ -390,47 +392,47 @@ static bool replaceArgs( int& argc, char**& argv );
 #endif
 static GSList *sp_process_args(poptContext ctx);
 struct poptOption options[] = {
-    {"version", 'V', 
+    {"version", 'V',
      POPT_ARG_NONE, NULL, SP_ARG_VERSION,
-     N_("Print the Inkscape version number"), 
+     N_("Print the Inkscape version number"),
      NULL},
 
-    {"without-gui", 'z', 
+    {"without-gui", 'z',
      POPT_ARG_NONE, NULL, SP_ARG_NOGUI,
      N_("Do not use X server (only process files from console)"),
      NULL},
 
-    {"with-gui", 'g', 
+    {"with-gui", 'g',
      POPT_ARG_NONE, NULL, SP_ARG_GUI,
      N_("Try to use X server (even if $DISPLAY is not set)"),
      NULL},
 
-    {"file", 'f', 
+    {"file", 'f',
      POPT_ARG_STRING, NULL, SP_ARG_FILE,
      N_("Open specified document(s) (option string may be excluded)"),
      N_("FILENAME")},
 
-    {"print", 'p', 
+    {"print", 'p',
      POPT_ARG_STRING, &sp_global_printer, SP_ARG_PRINT,
      N_("Print document(s) to specified output file (use '| program' for pipe)"),
      N_("FILENAME")},
 
-    {"export-png", 'e', 
+    {"export-png", 'e',
      POPT_ARG_STRING, &sp_export_png, SP_ARG_EXPORT_PNG,
      N_("Export document to a PNG file"),
      N_("FILENAME")},
 
-    {"export-dpi", 'd', 
+    {"export-dpi", 'd',
      POPT_ARG_STRING, &sp_export_dpi, SP_ARG_EXPORT_DPI,
      N_("The resolution used for exporting SVG into bitmap (default 90)"),
      N_("DPI")},
 
-    {"export-area", 'a', 
+    {"export-area", 'a',
      POPT_ARG_STRING, &sp_export_area, SP_ARG_EXPORT_AREA,
      N_("Exported area in SVG user units (default is the canvas; 0,0 is lower-left corner)"),
      N_("x0:y0:x1:y1")},
 
-    {"export-area-drawing", 'D', 
+    {"export-area-drawing", 'D',
      POPT_ARG_NONE, &sp_export_area_drawing, SP_ARG_EXPORT_AREA_DRAWING,
      N_("Exported area is the entire drawing (not canvas)"),
      NULL},
@@ -440,46 +442,46 @@ struct poptOption options[] = {
      N_("Snap the bitmap export area outwards to the nearest integer values (in SVG user units)"),
      NULL},
 
-    {"export-width", 'w', 
+    {"export-width", 'w',
      POPT_ARG_STRING, &sp_export_width, SP_ARG_EXPORT_WIDTH,
-     N_("The width of exported bitmap in pixels (overrides export-dpi)"), 
+     N_("The width of exported bitmap in pixels (overrides export-dpi)"),
      N_("WIDTH")},
 
-    {"export-height", 'h', 
+    {"export-height", 'h',
      POPT_ARG_STRING, &sp_export_height, SP_ARG_EXPORT_HEIGHT,
-     N_("The height of exported bitmap in pixels (overrides export-dpi)"), 
+     N_("The height of exported bitmap in pixels (overrides export-dpi)"),
      N_("HEIGHT")},
 
-    {"export-id", 'i', 
+    {"export-id", 'i',
      POPT_ARG_STRING, &sp_export_id, SP_ARG_EXPORT_ID,
-     N_("The ID of the object to export (overrides export-area)"), 
+     N_("The ID of the object to export (overrides export-area)"),
      N_("ID")},
 
-    {"export-id-only", 'j', 
+    {"export-id-only", 'j',
      POPT_ARG_NONE, &sp_export_id_only, SP_ARG_EXPORT_ID_ONLY,
      // TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
      //  See "man inkscape" for details.
-     N_("Export just the object with export-id, hide all others (only with export-id)"), 
+     N_("Export just the object with export-id, hide all others (only with export-id)"),
      NULL},
 
-    {"export-use-hints", 't', 
+    {"export-use-hints", 't',
      POPT_ARG_NONE, &sp_export_use_hints, SP_ARG_EXPORT_USE_HINTS,
-     N_("Use stored filename and DPI hints when exporting (only with export-id)"), 
+     N_("Use stored filename and DPI hints when exporting (only with export-id)"),
      NULL},
 
-    {"export-background", 'b', 
+    {"export-background", 'b',
      POPT_ARG_STRING, &sp_export_background, SP_ARG_EXPORT_BACKGROUND,
-     N_("Background color of exported bitmap (any SVG-supported color string)"), 
+     N_("Background color of exported bitmap (any SVG-supported color string)"),
      N_("COLOR")},
 
-    {"export-background-opacity", 'y', 
+    {"export-background-opacity", 'y',
      POPT_ARG_STRING, &sp_export_background_opacity, SP_ARG_EXPORT_BACKGROUND_OPACITY,
-     N_("Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"), 
+     N_("Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"),
      N_("VALUE")},
 
-    {"export-plain-svg", 'l', 
+    {"export-plain-svg", 'l',
      POPT_ARG_STRING, &sp_export_svg, SP_ARG_EXPORT_SVG,
-     N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"), 
+     N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"),
      N_("FILENAME")},
 
     {"export-ps", 'P',
@@ -526,9 +528,9 @@ struct poptOption options[] = {
      N_("Query the height of the drawing or, if specified, of the object with --query-id"),
      NULL},
 
-    {"query-id", 'I', 
+    {"query-id", 'I',
      POPT_ARG_STRING, &sp_query_id, SP_ARG_QUERY_ID,
-     N_("The ID of the object whose dimensions are queried"), 
+     N_("The ID of the object whose dimensions are queried"),
      N_("ID")},
 
     {"extension-directory", 'x',
@@ -537,12 +539,12 @@ struct poptOption options[] = {
      N_("Print out the extension directory and exit"),
      NULL},
 
-    {"slideshow", 's', 
+    {"slideshow", 's',
      POPT_ARG_NONE, &sp_global_slideshow, SP_ARG_SLIDESHOW,
-     N_("Show given files one-by-one, switch to next on any key/mouse event"), 
+     N_("Show given files one-by-one, switch to next on any key/mouse event"),
      NULL},
 
-    {"new-gui", 'G', 
+    {"new-gui", 'G',
      POPT_ARG_NONE, &sp_new_gui, SP_ARG_NEW_GUI,
      N_("Use the new Gtkmm GUI interface"),
      NULL},
@@ -570,6 +572,8 @@ main(int argc, char **argv)
 
 #ifdef ENABLE_NLS
 #ifdef WIN32
+    RegistryTool rt;
+    rt.setPathInfo();
     gchar *pathBuf = g_strconcat(g_path_get_dirname(argv[0]), "\\", PACKAGE_LOCALE_DIR, NULL);
     bindtextdomain(GETTEXT_PACKAGE, pathBuf);
     g_free(pathBuf);
@@ -1062,7 +1066,7 @@ sp_do_export_png(SPDocument *doc)
             return;
         }
         g_print("DPI: %g\n", dpi);
-    } 
+    }
 
     if (sp_export_area_snap) {
         area.x0 = std::floor (area.x0);
@@ -1139,7 +1143,7 @@ sp_do_export_png(SPDocument *doc)
     g_print("Area %g:%g:%g:%g exported to %d x %d pixels (%g dpi)\n", area.x0, area.y0, area.x1, area.y1, width, height, dpi);
 
     g_print("Bitmap saved as: %s\n", filename);
-  
+
     if ((width >= 1) && (height >= 1) && (width < 65536) && (height < 65536)) {
         sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true, sp_export_id_only ? items : NULL);
     } else {
@@ -1181,7 +1185,7 @@ static void do_export_ps(SPDocument* doc, gchar const* uri, char const* mime)
 
     bool old_text_to_path = false;
     bool old_bbox_page = false;
-    
+
     try {
         old_text_to_path = (*i)->get_param_bool("textToPath");
         (*i)->set_param_bool("textToPath", sp_export_text_to_path);
@@ -1197,7 +1201,7 @@ static void do_export_ps(SPDocument* doc, gchar const* uri, char const* mime)
     catch (...) {
         g_warning ("Could not set export-bbox-page option for this export.");
     }
-    
+
     (*i)->save(doc, uri);
 
     try {
@@ -1205,7 +1209,7 @@ static void do_export_ps(SPDocument* doc, gchar const* uri, char const* mime)
         (*i)->set_param_bool("pageBoundingBox", old_bbox_page);
     }
     catch (...) {
-        
+
     }
 }
 
