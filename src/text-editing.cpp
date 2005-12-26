@@ -1082,6 +1082,7 @@ static bool objects_have_equal_style(SPObject const *parent, SPObject const *chi
 
     Glib::ustring child_style_construction(parent_style);
     while (child != parent) {
+        // FIXME: this assumes that child's style is only in style= whereas it can also be in css attributes!
         char const *style_text = SP_OBJECT_REPR(child)->attribute("style");
         if (style_text && *style_text) {
             child_style_construction += ';';
