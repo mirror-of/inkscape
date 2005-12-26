@@ -37,6 +37,7 @@
 #include "../desktop-handles.h"
 #include "../unit-constants.h"
 #include "xml/repr.h"
+#include "ui/widget/style-swatch.h"
 
 #include "display-settings.h"
 
@@ -698,7 +699,6 @@ static GtkWidget* new_objects_style_add_radio (
 	gtk_object_set_data (GTK_OBJECT (r), "button_to_activate", (gpointer) button);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (r), s);
-	gtk_box_pack_start (GTK_BOX (fb), r, FALSE, FALSE, 0);
 	gtk_signal_connect (GTK_OBJECT (r), "toggled", GTK_SIGNAL_FUNC (h), (gpointer) prefs_path);
 
        return r;
@@ -742,6 +742,20 @@ style_from_selection_to_tool(GtkWidget *widget, gchar const *prefs_path)
 
     sp_repr_css_change (inkscape_get_repr (INKSCAPE, prefs_path), css, "style");
     sp_repr_css_attr_unref (css);
+
+    // update the swatch
+    Inkscape::UI::Widget::StyleSwatch *swatch = 
+        (Inkscape::UI::Widget::StyleSwatch *) gtk_object_get_data (GTK_OBJECT (widget), "swatch");
+    if (swatch) {
+        Inkscape::XML::Node *tool_repr = inkscape_get_repr(INKSCAPE, prefs_path);
+        if (tool_repr) {
+            SPCSSAttr *css = sp_repr_css_attr_inherited(tool_repr, "style");
+            
+            swatch->setStyle (css);
+
+            sp_repr_css_attr_unref(css);
+        }
+    }
 }
 
 static void
@@ -777,25 +791,54 @@ new_objects_style (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
     gtk_tooltips_set_tip (tt, take, _("Remember the style of the (first) selected object as this tool's style"), NULL);
     gtk_widget_show (take);
 
-    GtkWidget *b = new_objects_style_add_radio (
-        NULL, fb, tt, _("Last used style"), _("Apply the style you last set on an object"),
-        1,
-        usecurrent != 0,
-        options_changed_radio,
-        path, "usecurrent", take
-        );
+    GtkWidget *b;
+    {
+        b = new_objects_style_add_radio (
+            NULL, fb, tt, _("Last used style"), _("Apply the style you last set on an object"),
+            1,
+            usecurrent != 0,
+            options_changed_radio,
+            path, "usecurrent", take
+            );
 
-    new_objects_style_add_radio (
-        b, fb, tt, _("This tool's own style:"), _("Each tool may store its own style to apply to the newly created objects. Use the button below to set it."),
-        0,
-        usecurrent == 0,
-        options_changed_radio,
-        path, "usecurrent", take
-        );
+        GtkWidget *hb = gtk_hbox_new(FALSE, HB_MARGIN);
+        gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
+        gtk_widget_show_all(hb);
 
-    gtk_widget_set_sensitive (take, (usecurrent == 0));
-    gtk_box_pack_start (GTK_BOX (fb), take, FALSE, FALSE, 0);
-    gtk_signal_connect (GTK_OBJECT (take), "clicked", GTK_SIGNAL_FUNC (style_from_selection_to_tool), (void *) path);
+        gtk_box_pack_start (GTK_BOX (fb), hb, FALSE, FALSE, 0);
+    }
+
+    {
+        b = new_objects_style_add_radio (
+            b, fb, tt, _("This tool's own style:"), _("Each tool may store its own style to apply to the newly created objects. Use the button below to set it."),
+            0,
+            usecurrent == 0,
+            options_changed_radio,
+            path, "usecurrent", take
+            );
+
+        GtkWidget *hb = gtk_hbox_new(FALSE, HB_MARGIN);
+        gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
+
+        // style swatch
+        Inkscape::XML::Node *tool_repr = inkscape_get_repr(INKSCAPE, path);
+        if (tool_repr) {
+            SPCSSAttr *css = sp_repr_css_attr_inherited(tool_repr, "style");
+            Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch(css);
+            gtk_box_pack_start (GTK_BOX (hb), (GtkWidget *) swatch->gobj(), FALSE, FALSE, 0);
+            sp_repr_css_attr_unref(css);
+            gtk_object_set_data (GTK_OBJECT (take), "swatch", (gpointer) swatch);
+        }
+
+        // add "take from selection" button
+        gtk_widget_set_sensitive (take, (usecurrent == 0));
+        gtk_box_pack_start (GTK_BOX (hb), take, FALSE, FALSE, 0);
+        gtk_signal_connect (GTK_OBJECT (take), "clicked", GTK_SIGNAL_FUNC (style_from_selection_to_tool), (void *) path);
+
+        gtk_widget_show_all(hb);
+
+        gtk_box_pack_start (GTK_BOX (fb), hb, FALSE, FALSE, 0);
+    }
 }
 
 
