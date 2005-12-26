@@ -98,6 +98,17 @@ sp_repr_css_property(SPCSSAttr *css, gchar const *name, gchar const *defval)
              : attr );
 }
 
+bool
+sp_repr_css_property_is_unset(SPCSSAttr *css, gchar const *name)
+{
+    g_assert(css != NULL);
+    g_assert(name != NULL);
+
+    char const *attr = ((Node *)css)->attribute(name);
+    return (attr && !strcmp(attr, "inkscape:unset"));
+}
+
+
 void
 sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *value)
 {
@@ -125,13 +136,9 @@ sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double defval)
     return sp_repr_get_double_attribute((Node *) css, name, defval);
 }
 
-void
-sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
+gchar *
+sp_repr_css_write_string(SPCSSAttr *css)
 {
-    g_assert(repr != NULL);
-    g_assert(css != NULL);
-    g_assert(attr != NULL);
-
     Glib::ustring buffer;
 
     for ( List<AttributeRecord const> iter = css->attributeList() ;
@@ -149,7 +156,21 @@ sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
         }
     }
 
-    repr->setAttribute(attr, ( buffer.empty() ? NULL : buffer.c_str() ));
+    return (buffer.empty() ? NULL : g_strdup (buffer.c_str()));
+}
+
+void
+sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
+{
+    g_assert(repr != NULL);
+    g_assert(css != NULL);
+    g_assert(attr != NULL);
+
+    gchar *value = sp_repr_css_write_string(css);
+
+    repr->setAttribute(attr, value);
+
+    if (value) g_free (value);
 }
 
 void
