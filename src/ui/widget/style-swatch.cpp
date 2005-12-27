@@ -137,8 +137,6 @@ StyleSwatch::setStyle(SPStyle *query)
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
         Gtk::EventBox *place = &(_place[i]);
 
-        _tooltips.unset_tip(*_place);
-
         SPIPaint *paint;
         if (i == SS_FILL) {
             paint = &(query->fill);
@@ -152,9 +150,14 @@ StyleSwatch::setStyle(SPStyle *query)
             ((Inkscape::UI::Widget::ColorPreview*)_color_preview[i])->setRgba32 (color);
             _color_preview[i]->show_all();
             place->add(*_color_preview[i]);
-            gchar c_string[64];
-            g_snprintf (c_string, 64, "%06x/%.3g", color >> 8, SP_RGBA32_A_F(color));
-            _tooltips.set_tip(*place, Glib::ustring((i == SS_FILL)? _("Fill") : _("Stroke")) + ": " + c_string);
+            gchar *tip;
+            if (i == SS_FILL) {
+                tip = g_strdup_printf ("Fill: %06x/%.3g", color >> 8, SP_RGBA32_A_F(color));
+            } else {
+                tip = g_strdup_printf ("Stroke: %06x/%.3g", color >> 8, SP_RGBA32_A_F(color));
+            }
+            _tooltips.set_tip(*place, tip);
+            g_free (tip);
         } else if (paint->set && paint->type == SP_PAINT_TYPE_PAINTSERVER) {
             SPPaintServer *server = (i == SS_FILL)? SP_STYLE_FILL_SERVER (query) : SP_STYLE_STROKE_SERVER (query);
 
@@ -206,12 +209,19 @@ StyleSwatch::setStyle(SPStyle *query)
             _tooltips.set_tip(_stroke_width_place, str);
             g_free (str);
         }
+    } else {
+        _tooltips.unset_tip(_stroke_width_place);
+        _stroke_width.set_markup ("");
     }
 
     gdouble op = SP_SCALE24_TO_FLOAT(query->opacity.value);
     if (op != 1) {
         {
-            gchar *str = g_strdup_printf(_("0:%.3g"), op);
+            gchar *str;
+            if (op == 0)
+                str = g_strdup_printf(_("0:%.3g"), op);
+            else 
+                str = g_strdup_printf(_("0:.%d"), (int) (op*10));
             _opacity_value.set_markup (str);
             g_free (str);
         }
