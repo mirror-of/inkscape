@@ -14,8 +14,6 @@
 #define INKSCAPE_UI_WIDGET_LICENSOR__H
 
 #include <gtkmm/box.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/optionmenu.h>
 
 class SPDocument;
 
@@ -37,11 +35,9 @@ public:
     virtual ~Licensor();
     void init (Gtk::Tooltips&, Registry&);
     void update (SPDocument *doc);
-    Gtk::Frame _frame;
 
 protected: 
-    Gtk::OptionMenu       _omenu;
-    EntityEntry    *_eentry;
+    EntityEntry          *_eentry;
 };
 
 

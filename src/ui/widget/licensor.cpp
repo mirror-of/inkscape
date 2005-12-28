@@ -17,8 +17,7 @@
 #endif
 
 #include <glibmm/i18n.h>
-#include <gtkmm/optionmenu.h>
-#include <gtkmm/menuitem.h>
+#include <gtkmm/radiobutton.h>
 #include <gtkmm/box.h>
 #include <gtkmm/tooltips.h>
 #include <gtkmm/entry.h>
@@ -40,24 +39,28 @@ namespace Widget {
 const struct rdf_license_t _proprietary_license = 
   {_("Proprietary"), "", 0};
 
-class LicenseItem : public Gtk::MenuItem {
+class LicenseItem : public Gtk::RadioButton {
 public:
     LicenseItem (struct rdf_license_t const* license, EntityEntry* entity, Registry &wr);
 protected:
-    void on_activate();
+    void on_toggled();
     struct rdf_license_t const *_lic;
     EntityEntry                *_eep;
     Registry                   &_wr;
 };
 
 LicenseItem::LicenseItem (struct rdf_license_t const* license, EntityEntry* entity, Registry &wr)
-: Gtk::MenuItem(license->name), _lic(license), _eep(entity), _wr(wr)
+: Gtk::RadioButton(license->name), _lic(license), _eep(entity), _wr(wr)
 {
+    static Gtk::RadioButtonGroup group = get_group();
+    static bool first = true;
+    if (first) first = false;
+    else       set_group (group);
 }
 
 /// \pre it is assumed that the license URI entry is a Gtk::Entry
 void
-LicenseItem::on_activate()
+LicenseItem::on_toggled()
 {
     if (_wr.isUpdating()) return;
 
@@ -72,7 +75,7 @@ LicenseItem::on_activate()
 //---------------------------------------------------
 
 Licensor::Licensor()
-: Gtk::VBox(false,4), _frame(_("License"))
+: Gtk::VBox(false,4)
 {
 }
 
@@ -84,32 +87,29 @@ Licensor::~Licensor()
 void
 Licensor::init (Gtk::Tooltips& tt, Registry& wr)
 {
-    show();
-    _frame.show();
-    _frame.add (*this);
-    pack_start (_omenu, true, true, 0);
-    Gtk::Menu *m = manage (new Gtk::Menu);
-
-    Gtk::HBox *box = manage (new Gtk::HBox);
-    pack_start (*box, true, true, 0);
-
     /* add license-specific metadata entry areas */
     rdf_work_entity_t* entity = rdf_find_entity ( "license_uri" );
     _eentry = EntityEntry::create (entity, tt, wr);
-    box->pack_start (_eentry->_label, false, false, 5);
-    box->pack_start (*_eentry->_packable, true, true, 0);
 
     LicenseItem *i;
+    wr.setUpdating (true);
+    i = manage (new LicenseItem (&_proprietary_license, _eentry, wr));
+    add (*i);
+    LicenseItem *pd = i;
     for (struct rdf_license_t * license = rdf_licenses;
              license && license->name;
              license++) {
         i = manage (new LicenseItem (license, _eentry, wr));
-        m->append (*i);
+        add(*i);
     }
+    pd->set_active();
+    wr.setUpdating (false);
 
-    i = manage (new LicenseItem (&_proprietary_license, _eentry, wr));
-    m->prepend (*i);
-    _omenu.set_menu (*m);
+    Gtk::HBox *box = manage (new Gtk::HBox);
+    pack_start (*box, true, true, 0);
+
+    box->pack_start (_eentry->_label, false, false, 5);
+    box->pack_start (*_eentry->_packable, true, true, 0);
 
     show_all_children();
 }
@@ -121,15 +121,14 @@ Licensor::update (SPDocument *doc)
     struct rdf_license_t * license = rdf_get_license (doc);
 
     if (license) {
-        for (int i=0; rdf_licenses[i].name; i++) {
-            if (license == &rdf_licenses[i]) {
-                _omenu.set_history (i+1);
+        int i;
+        for (i=0; rdf_licenses[i].name; i++) 
+            if (license == &rdf_licenses[i]) 
                 break;
-            }
-        }
+        reinterpret_cast<LicenseItem*>(children()[i+1].get_widget())->set_active();
     }
     else {
-        _omenu.set_history (0);
+        reinterpret_cast<LicenseItem*>(children()[0].get_widget())->set_active();
     }
     
     /* update the URI */
