@@ -51,8 +51,8 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-#define N_METADATA_ENTITIES_ON_PAGE 12  /* number of metadata entity entries */
-                                        /* on first metadata page */
+#define SPACE_SIZE_X 15
+#define SPACE_SIZE_Y 15
 
 //===================================================
 
@@ -149,29 +149,43 @@ DocumentPreferences::~DocumentPreferences()
 
 //========================================================================
 
+/**
+ * Helper function that attachs widgets in a 3xn table. The widgets come in an
+ * array that has two entries per table row. The two entries code for four
+ * possible cases: (0,0) means insert space in first column; (0, non-0) means
+ * widget in columns 2-3; (non-0, 0) means label in columns 1-3; and
+ * (non-0, non-0) means two widgets in columns 2 and 3.
+**/
 inline void
 attach_all (Gtk::Table &table, const Gtk::Widget *arr[], unsigned size, int start = 0)
 {
     for (unsigned i=0, r=start; i<size/sizeof(Gtk::Widget*); i+=2)
     {
-        if (arr[i])
+        if (arr[i] && arr[i+1])
         {
-            table.attach (const_cast<Gtk::Widget&>(*arr[i]),   0, 1, r, r+1, 
+            table.attach (const_cast<Gtk::Widget&>(*arr[i]),   1, 2, r, r+1, 
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-            table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 2, r, r+1, 
+            table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 2, 3, r, r+1, 
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
         else
         {
             if (arr[i+1])
-                table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 0, 2, r, r+1, 
+                table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 3, r, r+1, 
                       Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+            else if (arr[i])
+            {
+                Gtk::Label& label = reinterpret_cast<Gtk::Label&> (const_cast<Gtk::Widget&>(*arr[i]));
+                label.set_alignment (0.0);
+                table.attach (label, 0, 3, r, r+1, 
+                      Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+            }
             else
             {
                 Gtk::HBox *space = manage (new Gtk::HBox);
-                space->set_size_request (15, 15);
-                table.attach (*space, 0, 2, r, r+1, 
-                      Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+                space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
+                table.attach (*space, 0, 1, r, r+1, 
+                      (Gtk::AttachOptions)0, (Gtk::AttachOptions)0,0,0);
             }
         }
         ++r;
@@ -190,25 +204,33 @@ DocumentPreferences::build_page()
     _rcp_bord.init (_("Border color:"), _("Page border color"),
                     _("Color of the page border"),
                     "bordercolor", "borderopacity", _wr);
-    _rcb_shad.init (_("Show page shadow"), "If set, page border shows a shadow on its right and lower side", "inkscape:showpageshadow", _wr, false);
+    _rcb_shad.init (_("Show border shadow"), "If set, page border shows a shadow on its right and lower side", "inkscape:showpageshadow", _wr, false);
     _rum_deflt.init (_("Default units:"), "inkscape:document-units", _wr);
+    Gtk::Label* label_gen = manage (new Gtk::Label);
+    label_gen->set_markup (_("<b>General</b>"));
+    Gtk::Label* label_bor = manage (new Gtk::Label);
+    label_bor->set_markup (_("<b>Border</b>"));
+    Gtk::Label *label_for = manage (new Gtk::Label);
+    label_for->set_markup (_("<b>Format</b>"));
+    _page_sizer.init (_wr);
 
     const Gtk::Widget* widget_array[] = 
     {
+        label_gen,         0,
         _rum_deflt._label, _rum_deflt._sel,
+        _rcp_bg._label,    _rcp_bg._cp,
         0, 0,
-        0, _rcb_canb._button,
-        0, _rcb_bord._button,
-        0, _rcb_shad._button,
-        _rcp_bg._label, _rcp_bg._cp,
-        _rcp_bord._label, _rcp_bord._cp,
+        label_for,         0,
+        0,                 &_page_sizer,
         0, 0,
+        label_bor,         0,
+        0,                 _rcb_canb._button,
+        0,                 _rcb_bord._button,
+        0,                 _rcb_shad._button,
+        _rcp_bord._label,  _rcp_bord._cp,
     };
     
     attach_all (_page_page.table(), widget_array, sizeof(widget_array));
-
-    _page_sizer.init (_wr);
-    _page_page.add (_page_sizer);
 }
 
 void
@@ -219,11 +241,6 @@ DocumentPreferences::build_grid()
     /// \todo FIXME: gray out snapping when grid is off.
     /// Dissenting view: you want snapping without grid.
     
-    Gtk::Frame* grid_frame = manage (new Gtk::Frame (_("Grid")));
-    _page_grid.table().attach (*grid_frame, 0,2,0,1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    Gtk::Table* table_grid = manage (new Gtk::Table (9, 2, false));
-    grid_frame->add (*table_grid);
-
     _rcbgrid.init (_("Show grid"), _("Show or hide grid"), "showgrid", _wr);
     _rumg.init (_("Grid units:"), "grid_units", _wr);
     _rsu_ox.init (_("Origin X:"), _("X coordinate of grid origin"), 
@@ -240,9 +257,20 @@ DocumentPreferences::build_grid()
                      _("Color of the major (highlighted) grid lines"), 
                      "gridempcolor", "gridempopacity", _wr);
     _rsi.init (_("Major grid line every:"), _("lines"), "gridempspacing", _wr);
+    _rcb_sgui.init (_("Show guides"), _("Show or hide guides"), "showguides", _wr);
+    _rcp_gui.init (_("Guide color:"), _("Guideline color"), 
+                   _("Color of guidelines"), "guidecolor", "guideopacity", _wr);
+    _rcp_hgui.init (_("Highlight color:"), _("Highlighted guideline color"), 
+                    _("Color of a guideline when it is under mouse"),
+                    "guidehicolor", "guidehiopacity", _wr);
+    Gtk::Label *label_grid = manage (new Gtk::Label);
+    label_grid->set_markup (_("<b>Grid</b>"));
+    Gtk::Label *label_gui = manage (new Gtk::Label);
+    label_gui->set_markup (_("<b>Guides</b>"));
 
     const Gtk::Widget* widget_array[] = 
     {
+        label_grid,         0,
         0,                  _rcbgrid._button,
         _rumg._label,       _rumg._sel,
         0,                  _rsu_ox.getSU(),
@@ -253,41 +281,20 @@ DocumentPreferences::build_grid()
         0,                  0,
         _rcp_gmcol._label,  _rcp_gmcol._cp,
         _rsi._label,        &_rsi._hbox,
-    };
-
-    attach_all (*table_grid, widget_array, sizeof(widget_array));
-
-    Gtk::Frame* guide_frame = manage (new Gtk::Frame (_("Guides")));
-    _page_grid.table().attach (*guide_frame, 0,2,1,2, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    Gtk::Table* table_guide = manage (new Gtk::Table (3, 2, false));
-    guide_frame->add (*table_guide);
-
-    _rcb_sgui.init (_("Show guides"), _("Show or hide guides"), "showguides", _wr);
-    _rcp_gui.init (_("Guide color:"), _("Guideline color"), 
-                   _("Color of guidelines"), "guidecolor", "guideopacity", _wr);
-    _rcp_hgui.init (_("Highlight color:"), _("Highlighted guideline color"), 
-                    _("Color of a guideline when it is under mouse"),
-                    "guidehicolor", "guidehiopacity", _wr);
-
-    const Gtk::Widget* array[] = 
-    {
+        0, 0,
+        label_gui,       0,
         0,               _rcb_sgui._button,
         _rcp_gui._label, _rcp_gui._cp,
         _rcp_hgui._label, _rcp_hgui._cp,
     };
 
-    attach_all (*table_guide, array, sizeof(array));
+    attach_all (_page_grid.table(), widget_array, sizeof(widget_array));
 }
 
 void
 DocumentPreferences::build_snap()
 {
     _page_snap.show();
-
-    Gtk::Frame* obj_frame = manage (new Gtk::Frame (_("Object snapping")));
-    _page_snap.table().attach (*obj_frame, 0,2,0,1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    Gtk::Table* table_obj = manage (new Gtk::Table (4, 2, false));
-    obj_frame->add (*table_obj);
 
     _rcbsnbo.init (_("Snap bounding boxes to objects"), 
                 _("Snap the edges of the object bounding boxes to other objects"), 
@@ -303,24 +310,7 @@ DocumentPreferences::build_snap()
                 "inkscape:object-nodes", _wr);
     _rsu_sno.init (_("Snap distance:"), 
                   _("Max. snapping distance from object"),
-                  "objecttolerance", _wr, 0.0, 100.0);
-    
-    const Gtk::Widget* array2[] = 
-    {
-        0,                  _rcbsnbo._button,
-        0,                  _rcbsnnob._button,
-        0,                  _rcbsnop._button,
-        0,                  _rcbsnon._button,
-        0,                  _rsu_sno._hbox,
-    };
-
-    attach_all (*table_obj, array2, sizeof(array2));
-    
-    Gtk::Frame* grid_frame = manage (new Gtk::Frame (_("Grid snapping")));
-    _page_snap.table().attach (*grid_frame, 0,2,1,2, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    Gtk::Table* table_grid = manage (new Gtk::Table (4, 2, false));
-    grid_frame->add (*table_grid);
-
+                  "objecttolerance", _wr);
     _rcbsnbb.init (_("Snap bounding boxes to grid"), 
                 _("Snap the edges of the object bounding boxes"), 
                 "inkscape:grid-bbox", _wr);
@@ -329,40 +319,42 @@ DocumentPreferences::build_snap()
                 "inkscape:grid-points", _wr);
     _rsu_sn.init (_("Snap distance:"), 
                   _("Max. snapping distance from grid"),
-                  "gridtolerance", _wr, 0.0, 100.0);
-    
-    const Gtk::Widget* array1[] = 
-    {
-        0,                  _rcbsnbb._button,
-        0,                  _rcbsnnod._button,
-        0,                  _rsu_sn._hbox,
-    };
-
-    attach_all (*table_grid, array1, sizeof(array1));
-
-   
-    Gtk::Frame* gui_frame = manage (new Gtk::Frame (_("Guide snapping")));
-    _page_snap.table().attach (*gui_frame, 0,2,2,3, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    Gtk::Table* table_gui = manage (new Gtk::Table (4, 2, false));
-    gui_frame->add (*table_gui);
-
+                  "gridtolerance", _wr);
     _rcb_snpgui.init (_("Snap bounding boxes to guides"),  
                      _("Snap the edges of the object bounding boxes"), 
                      "inkscape:guide-bbox", _wr);
     _rcb_snbgui.init (_("Snap points to guides"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:guide-points", _wr);
-    _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _wr, 0.0, 100.0);
-
-    const Gtk::Widget* widget_array[] = 
+    _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _wr);
+    Gtk::Label *label_o = manage (new Gtk::Label);
+    label_o->set_markup (_("<b>Object Snapping</b>"));
+    Gtk::Label *label_gr = manage (new Gtk::Label);
+    label_gr->set_markup (_("<b>Grid Snapping</b>"));
+    Gtk::Label *label_gu = manage (new Gtk::Label);
+    label_gu->set_markup (_("<b>Guide Snapping</b>"));
+     
+    const Gtk::Widget* array[] = 
     {
+        label_o,            0,
+        0,                  _rcbsnbo._button,
+        0,                  _rcbsnnob._button,
+        0,                  _rcbsnop._button,
+        0,                  _rcbsnon._button,
+        0,                  _rsu_sno._hbox,
+        0, 0,
+        label_gr,           0,
+        0,                  _rcbsnbb._button,
+        0,                  _rcbsnnod._button,
+        0,                  _rsu_sn._hbox,
+        0, 0,
+        label_gu,         0,
         0,                _rcb_snpgui._button,
         0,                _rcb_snbgui._button,
         0,                _rsu_gusn._hbox,
     };
 
-    attach_all (*table_gui, widget_array, sizeof(widget_array));
-
+    attach_all (_page_snap.table(), array, sizeof(array));
  }
 
 void
@@ -370,34 +362,39 @@ DocumentPreferences::build_metadata()
 {
     _page_metadata1.show();
 
-    /* add generic metadata entry areas */
+    Gtk::Label *label = manage (new Gtk::Label);
+    label->set_markup (_("<b>Dublin Core Entities</b>"));
+    label->set_alignment (0.0);
+    _page_metadata1.table().attach (*label, 0,3,0,1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+     /* add generic metadata entry areas */
     struct rdf_work_entity_t * entity;
-    int row = 0;
+    int row = 1;
     for (entity = rdf_work_entities; entity && entity->name; entity++, row++) {
         if ( entity->editable == RDF_EDIT_GENERIC ) {
             EntityEntry *w = EntityEntry::create (entity, _tt, _wr);
             _rdflist.push_back (w);
-            _page_metadata1.table().attach (w->_label, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata1.table().attach (*w->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+            Gtk::HBox *space = manage (new Gtk::HBox);
+            space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
+            _page_metadata1.table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+            _page_metadata1.table().attach (w->_label, 1,2, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+            _page_metadata1.table().attach (*w->_packable, 2,3, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
         }
-        if (row >= N_METADATA_ENTITIES_ON_PAGE) break;
     }
 
     _page_metadata2.show();
 
     row = 0;
-    for (entity++; entity && entity->name; entity++, row++) {
-        if ( entity->editable == RDF_EDIT_GENERIC ) {
-            EntityEntry *w = EntityEntry::create (entity, _tt, _wr);
-            _rdflist.push_back (w);
-            _page_metadata2.table().attach (w->_label, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata2.table().attach (*w->_packable, 1,2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-        }
-    }
-
+    Gtk::Label *llabel = manage (new Gtk::Label);
+    llabel->set_markup (_("<b>License</b>"));
+    llabel->set_alignment (0.0);
+    _page_metadata2.table().attach (*llabel, 0,3, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
     /* add license selector pull-down and URI */
+    ++row;
     _licensor.init (_tt, _wr);
-    _page_metadata2.table().attach (_licensor._frame, 0,2, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    Gtk::HBox *space = manage (new Gtk::HBox);
+    space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
+    _page_metadata2.table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    _page_metadata2.table().attach (_licensor, 1,3, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
 }
 
 /**
@@ -439,11 +436,11 @@ DocumentPreferences::update()
     val = sp_pixels_get_units (val, *(nv->gridunit));
     _rsu_oy.setValue (val);
     val = nv->gridspacing[NR::X];
-    val = sp_pixels_get_units (val, *(nv->gridunit));
-    _rsu_sx.setValue (val);
+    double gridx = sp_pixels_get_units (val, *(nv->gridunit));
+    _rsu_sx.setValue (gridx);
     val = nv->gridspacing[NR::Y];
-    val = sp_pixels_get_units (val, *(nv->gridunit));
-    _rsu_sy.setValue (val);
+    double gridy = sp_pixels_get_units (val, *(nv->gridunit));
+    _rsu_sy.setValue (gridy);
 
     _rcp_gcol.setRgba32 (nv->gridcolor);
     _rcp_gmcol.setRgba32 (nv->gridempcolor);
@@ -463,6 +460,8 @@ DocumentPreferences::update()
      
     _rcbsnbb.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
     _rcbsnnod.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
+    double grids = gridx<gridy ? gridx : gridy;
+    _rsu_sn.setMax (grids / 2.0);
     _rsu_sn.setValue (nv->gridtolerance, nv->gridtoleranceunit);
     
      _rcb_snpgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
