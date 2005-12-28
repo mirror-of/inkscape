@@ -91,8 +91,9 @@ public:
     void init (const Glib::ustring& label, 
             const Glib::ustring& tip, 
             const Glib::ustring& key, 
-            Registry& wr, double min, double max);
+            Registry& wr);
     void setValue (double, const SPUnit*);
+    void setMax (double);
     Gtk::HBox* _hbox;
 
 protected:

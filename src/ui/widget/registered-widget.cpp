@@ -241,20 +241,20 @@ RegisteredScaleUnit::~RegisteredScaleUnit()
 }
 
 void
-RegisteredScaleUnit::init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, double min, double max)
+RegisteredScaleUnit::init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr)
 {
     _hbox = new Gtk::HBox;
     Gtk::Label *theLabel = manage (new Gtk::Label (label));
     _hbox->add (*theLabel);
-    _hscale = manage (new Gtk::HScale (min, max, 0.1));
+    _hscale = manage (new Gtk::HScale (5, 50, 1));
     _hscale->set_draw_value (false);
     _hscale->set_size_request (100, -1);
     _hbox->add (*_hscale);
     _widget = manage (new ScalarUnit ("", tip));
-    _hbox->add (*_widget);
-    _widget->initScalar (min, max);
+    _widget->initScalar (5, 50);
     _widget->setDigits (2);
     _widget->setUnit ("px");
+    _hbox->add (*_widget);
     _key = key;
     _spin_changed_connection = _widget->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScaleUnit::on_spin_changed));
     _scale_changed_connection = _hscale->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScaleUnit::on_scale_changed));
@@ -267,6 +267,17 @@ RegisteredScaleUnit::setValue (double val, const SPUnit* unit)
     _widget->setValue (val, sp_unit_get_abbreviation (unit));
     _hscale->set_value (val);
     update();
+}
+
+void
+RegisteredScaleUnit::setMax (double theMax)
+{
+//    theMax += 0.1;
+    _hscale->set_range (0, theMax);
+    _hscale->set_increments (theMax / 100, theMax / 100);
+//    _widget->initScalar (0.0, theMax);
+//    _widget->setIncrements (theMax / 100, theMax / 100);
+//    _widget->setDigits (2);
 }
 
 void
