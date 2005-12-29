@@ -218,6 +218,7 @@ static void sp_namedview_release(SPObject *object)
 static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *value)
 {
     SPNamedView *nv = SP_NAMEDVIEW(object);
+    SPUnit const &px = sp_unit_get_by_id(SP_UNIT_PX);
 
     switch (key) {
 	case SP_ATTR_VIEWONLY:
@@ -253,7 +254,7 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	case SP_ATTR_GRIDTOLERANCE:
-            nv->gridtoleranceunit = nv->doc_units;
+            nv->gridtoleranceunit = &px;
             nv->gridtolerance = DEFAULTTOLERANCE;
             if (value) {
                 sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->gridtolerance, &nv->gridtoleranceunit);
@@ -261,7 +262,7 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	case SP_ATTR_GUIDETOLERANCE:
-            nv->guidetoleranceunit = nv->doc_units;
+            nv->guidetoleranceunit = &px;
             nv->guidetolerance = DEFAULTTOLERANCE;
             if (value) {
                 sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->guidetolerance, &nv->guidetoleranceunit);
@@ -269,7 +270,7 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_OBJECTTOLERANCE:
-            nv->objecttoleranceunit = nv->doc_units;
+            nv->objecttoleranceunit = &px;
             nv->objecttolerance = DEFAULTTOLERANCE;
             if (value) {
                 sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->objecttolerance, &nv->objecttoleranceunit);
