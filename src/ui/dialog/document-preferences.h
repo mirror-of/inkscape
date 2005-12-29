@@ -74,12 +74,13 @@ protected:
     //---------------------------------------------------------------
     RegisteredCheckButton _rcb_sgui, _rcb_snpgui, _rcb_snbgui;
     RegisteredUnitMenu    _rum_gusn;
-    RegisteredScaleUnit  _rsu_sn, _rsu_gusn;
+    RegisteredSlider      _rsu_sn, _rsu_gusn;
     RegisteredColorPicker _rcp_gui, _rcp_hgui;
     //---------------------------------------------------------------
     RegisteredCheckButton _rcbsnbo, _rcbsnnob, _rcbsnop, _rcbsnon;
     RegisteredUnitMenu    _rumso;
-    RegisteredScaleUnit  _rsu_sno;
+    RegisteredSlider      _rsu_sno;
+    RegisteredRadioButtonPair _rrb_pix;
     //---------------------------------------------------------------
     RDElist _rdflist;
     Licensor _licensor;

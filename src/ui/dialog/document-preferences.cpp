@@ -308,7 +308,7 @@ DocumentPreferences::build_snap()
     _rcbsnon.init (_("Snap to object nodes"), 
                 _("Snap to other object nodes"), 
                 "inkscape:object-nodes", _wr);
-    _rsu_sno.init (_("Snap distance:"), 
+    _rsu_sno.init (_("Snap distance:"), _("pixels"),
                   _("Max. snapping distance from object"),
                   "objecttolerance", _wr);
     _rcbsnbb.init (_("Snap bounding boxes to grid"), 
@@ -317,7 +317,7 @@ DocumentPreferences::build_snap()
     _rcbsnnod.init (_("Snap nodes to grid"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:grid-points", _wr);
-    _rsu_sn.init (_("Snap distance:"), 
+    _rsu_sn.init (_("Snap distance:"),  _("pixels"),
                   _("Max. snapping distance from grid"),
                   "gridtolerance", _wr);
     _rcb_snpgui.init (_("Snap bounding boxes to guides"),  
@@ -326,7 +326,10 @@ DocumentPreferences::build_snap()
     _rcb_snbgui.init (_("Snap points to guides"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:guide-points", _wr);
-    _rsu_gusn.init (_("Snap distance:"), "", "guidetolerance", _wr);
+    _rsu_gusn.init (_("Snap distance:"), _("pixels"), 
+                _("Max. snapping distance from guides"), "guidetolerance", _wr);
+    _rrb_pix.init (_("Pixels are:"), _("Screen pixels"), _("Absolute"),
+                _("tolerance"), "spx", "px", _wr);
     Gtk::Label *label_o = manage (new Gtk::Label);
     label_o->set_markup (_("<b>Object Snapping</b>"));
     Gtk::Label *label_gr = manage (new Gtk::Label);
@@ -352,6 +355,8 @@ DocumentPreferences::build_snap()
         0,                _rcb_snpgui._button,
         0,                _rcb_snbgui._button,
         0,                _rsu_gusn._hbox,
+        0, 0,
+        0,                _rrb_pix._hbox,
     };
 
     attach_all (_page_snap.table(), array, sizeof(array));
@@ -460,8 +465,6 @@ DocumentPreferences::update()
      
     _rcbsnbb.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
     _rcbsnnod.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
-    double grids = gridx<gridy ? gridx : gridy;
-    _rsu_sn.setMax (grids / 2.0);
     _rsu_sn.setValue (nv->gridtolerance, nv->gridtoleranceunit);
     
      _rcb_snpgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
