@@ -228,60 +228,51 @@ RegisteredScalarUnit::on_value_changed()
     _wr->setUpdating (false);
 }
 
-RegisteredScaleUnit::RegisteredScaleUnit()
+RegisteredSlider::RegisteredSlider()
 : _hbox(0)
 {
 }
 
-RegisteredScaleUnit::~RegisteredScaleUnit()
+RegisteredSlider::~RegisteredSlider()
 {
     if (_hbox) delete _hbox;
-    _spin_changed_connection.disconnect();
     _scale_changed_connection.disconnect();
 }
 
 void
-RegisteredScaleUnit::init (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr)
+RegisteredSlider::init (const Glib::ustring& label1, const Glib::ustring& label2, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr)
 {
     _hbox = new Gtk::HBox;
-    Gtk::Label *theLabel = manage (new Gtk::Label (label));
-    _hbox->add (*theLabel);
-    _hscale = manage (new Gtk::HScale (5, 50, 1));
-    _hscale->set_draw_value (false);
+    Gtk::Label *theLabel1 = manage (new Gtk::Label (label1));
+    _hbox->add (*theLabel1);
+    _hscale = manage (new Gtk::HScale (0.4, 50.1, 0.1));
+    _hscale->set_draw_value (true);
+    _hscale->set_value_pos (Gtk::POS_RIGHT);
     _hscale->set_size_request (100, -1);
     _hbox->add (*_hscale);
-    _widget = manage (new ScalarUnit ("", tip));
-    _widget->initScalar (5, 50);
-    _widget->setDigits (2);
-    _widget->setUnit ("px");
-    _hbox->add (*_widget);
+    Gtk::Label *theLabel2 = manage (new Gtk::Label (label2));
+    _hbox->add (*theLabel2);
     _key = key;
-    _spin_changed_connection = _widget->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScaleUnit::on_spin_changed));
-    _scale_changed_connection = _hscale->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredScaleUnit::on_scale_changed));
+    _scale_changed_connection = _hscale->signal_value_changed().connect (sigc::mem_fun (*this, &RegisteredSlider::update));
     _wr = &wr;
 }
 
 void 
-RegisteredScaleUnit::setValue (double val, const SPUnit* unit)
+RegisteredSlider::setValue (double val, const SPUnit* unit)
 {
-    _widget->setValue (val, sp_unit_get_abbreviation (unit));
     _hscale->set_value (val);
     update();
 }
 
 void
-RegisteredScaleUnit::setMax (double theMax)
+RegisteredSlider::setLimits (double theMin, double theMax)
 {
-//    theMax += 0.1;
-    _hscale->set_range (0, theMax);
-    _hscale->set_increments (theMax / 100, theMax / 100);
-//    _widget->initScalar (0.0, theMax);
-//    _widget->setIncrements (theMax / 100, theMax / 100);
-//    _widget->setDigits (2);
+    _hscale->set_range (theMin, theMax);
+    _hscale->get_adjustment()->set_step_increment (1);
 }
 
 void
-RegisteredScaleUnit::update()
+RegisteredSlider::update()
 {
     if (_wr->isUpdating())
         return;
@@ -291,8 +282,7 @@ RegisteredScaleUnit::update()
         return;
 
     Inkscape::SVGOStringStream os;
-    os << _widget->getValue("");
-    os << _widget->getUnit().abbr;
+    os << _hscale->get_value();
 
     _wr->setUpdating (true);
 
@@ -306,22 +296,6 @@ RegisteredScaleUnit::update()
     sp_document_done (doc);
     
     _wr->setUpdating (false);
-}
-
-void
-RegisteredScaleUnit::on_spin_changed()
-{
-    double val = _widget->getValue ("px");
-    _hscale->set_value (val);
-    update();
-}
-
-void
-RegisteredScaleUnit::on_scale_changed()
-{
-    double val = _hscale->get_value();
-    _widget->setValue (val);
-    update();
 }
 
 RegisteredColorPicker::RegisteredColorPicker()
@@ -428,6 +402,45 @@ RegisteredSuffixedInteger::on_value_changed()
     sp_document_done(SP_DT_DOCUMENT(dt));
     
     _wr->setUpdating (false);
+}
+
+RegisteredRadioButtonPair::RegisteredRadioButtonPair()
+: _hbox(0)
+{
+}
+
+RegisteredRadioButtonPair::~RegisteredRadioButtonPair()
+{
+    _changed_connection.disconnect();
+}
+
+void
+RegisteredRadioButtonPair::init (const Glib::ustring& label, 
+const Glib::ustring& label1, const Glib::ustring& label2, 
+const Glib::ustring& key, const char* val1, const char* val2,
+Registry& wr)
+{
+    _hbox = new Gtk::HBox;
+    _hbox->add (*manage (new Gtk::Label (label)));
+    _rb1 = manage (new Gtk::RadioButton (label1));
+    _hbox->add (*_rb1);
+    Gtk::RadioButtonGroup group = _rb1->get_group();
+    _rb2 = manage (new Gtk::RadioButton (group, label2, false));
+    _hbox->add (*_rb2);
+    _rb2->set_active();
+    _key = key;
+    _val1 = val1;
+    _val2 = val2;
+}
+
+void 
+RegisteredRadioButtonPair::setValue (bool first)
+{
+}
+
+void
+RegisteredRadioButtonPair::on_value_changed()
+{
 }
 
 } // namespace Dialog

@@ -19,6 +19,7 @@ class SPUnit;
 
 namespace Gtk {
     class HScale;
+    class RadioButton;
 }
 
 namespace Inkscape {
@@ -84,24 +85,22 @@ protected:
     void on_value_changed();
 };
 
-class RegisteredScaleUnit {
+class RegisteredSlider {
 public:
-    RegisteredScaleUnit();
-    ~RegisteredScaleUnit();
-    void init (const Glib::ustring& label, 
+    RegisteredSlider();
+    ~RegisteredSlider();
+    void init (const Glib::ustring& label1, 
+            const Glib::ustring& label2, 
             const Glib::ustring& tip, 
             const Glib::ustring& key, 
             Registry& wr);
     void setValue (double, const SPUnit*);
-    void setMax (double);
+    void setLimits (double, double);
     Gtk::HBox* _hbox;
 
 protected:
-    void on_spin_changed();
     void on_scale_changed();
     void update();
-    ScalarUnit       *_widget;
-    sigc::connection  _spin_changed_connection;
     sigc::connection  _scale_changed_connection;
     Gtk::HScale      *_hscale;
     Registry         *_wr;
@@ -152,6 +151,30 @@ protected:
     sigc::connection _changed_connection;
     void on_value_changed();
 };
+
+class RegisteredRadioButtonPair {
+public:
+    RegisteredRadioButtonPair();
+    ~RegisteredRadioButtonPair();
+    void init (const Glib::ustring& label, 
+               const Glib::ustring& label1, 
+               const Glib::ustring& label2, 
+               const Glib::ustring& key,
+               const char* val1,
+               const char* val2,
+               Registry& wr);
+    void setValue (bool first);
+    Gtk::HBox *_hbox;
+
+protected:
+    Gtk::RadioButton *_rb1, *_rb2;
+    Glib::ustring   _key, _val1, _val2;
+    Registry        *_wr;
+    sigc::connection _changed_connection;
+    void on_value_changed();
+};
+
+
 
 } // namespace Widget
 } // namespace UI
