@@ -169,6 +169,10 @@ SelectedStyle::SelectedStyle(bool layout)
         _popup_lastselected[i].signal_activate().connect(sigc::mem_fun(*this, 
                                (i == SS_FILL)? &SelectedStyle::on_fill_lastselected : &SelectedStyle::on_stroke_lastselected ));
 
+        _popup_invert[i].add(*(new Gtk::Label(_("Invert"), 0.0, 0.5)));
+        _popup_invert[i].signal_activate().connect(sigc::mem_fun(*this, 
+                               (i == SS_FILL)? &SelectedStyle::on_fill_invert : &SelectedStyle::on_stroke_invert ));
+
         _popup_white[i].add(*(new Gtk::Label(_("White"), 0.0, 0.5)));
         _popup_white[i].signal_activate().connect(sigc::mem_fun(*this, 
                                (i == SS_FILL)? &SelectedStyle::on_fill_white : &SelectedStyle::on_stroke_white ));
@@ -207,17 +211,19 @@ SelectedStyle::SelectedStyle(bool layout)
         _popup[i].attach(_popup_lastused[i], 0,1, 2,3);
         _popup[i].attach(_popup_lastselected[i], 0,1, 3,4);
           _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 4,5);
-        _popup[i].attach(_popup_white[i], 0,1, 5,6);
-        _popup[i].attach(_popup_black[i], 0,1, 6,7);
-          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 7,8);
-        _popup[i].attach(_popup_copy[i], 0,1, 8,9);
+        _popup[i].attach(_popup_invert[i], 0,1, 5,6);
+          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 6,7);
+        _popup[i].attach(_popup_white[i], 0,1, 7,8);
+        _popup[i].attach(_popup_black[i], 0,1, 8,9);
+          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 9,10);
+        _popup[i].attach(_popup_copy[i], 0,1, 10,11);
         _popup_copy[i].set_sensitive(false);
-        _popup[i].attach(_popup_paste[i], 0,1, 9,10);
-        _popup[i].attach(_popup_swap[i], 0,1, 10,11);
-          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 11,12); 
-        _popup[i].attach(_popup_opaque[i], 0,1, 12,13);
-        _popup[i].attach(_popup_unset[i], 0,1, 13,14);
-        _popup[i].attach(_popup_remove[i], 0,1, 14,15);
+        _popup[i].attach(_popup_paste[i], 0,1, 11,12);
+        _popup[i].attach(_popup_swap[i], 0,1, 12,13);
+          _popup[i].attach(*(new Gtk::SeparatorMenuItem()), 0,1, 13,14); 
+        _popup[i].attach(_popup_opaque[i], 0,1, 14,15);
+        _popup[i].attach(_popup_unset[i], 0,1, 15,16);
+        _popup[i].attach(_popup_remove[i], 0,1, 16,17);
         _popup[i].show_all();
 
         _mode[i] = SS_NA;
@@ -437,6 +443,44 @@ void SelectedStyle::on_stroke_lastselected() {
     sp_repr_css_attr_unref (css);
     sp_document_done (SP_DT_DOCUMENT(_desktop));
 }
+
+void SelectedStyle::on_fill_invert() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    guint32 color = _thisselected[SS_FILL];
+    gchar c[64];
+    if (_mode[SS_FILL] != SS_COLOR) return;
+    sp_svg_write_color (c, 64,
+        SP_RGBA32_U_COMPOSE(
+                (255 - SP_RGBA32_R_U(color)),
+                (255 - SP_RGBA32_G_U(color)),
+                (255 - SP_RGBA32_B_U(color)),
+                SP_RGBA32_A_U(color)
+        )
+    );
+    sp_repr_css_set_property (css, "fill", c);
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+}
+
+void SelectedStyle::on_stroke_invert() {
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    guint32 color = _thisselected[SS_STROKE];
+    gchar c[64];
+    if (_mode[SS_STROKE] != SS_COLOR) return;
+    sp_svg_write_color (c, 64,
+        SP_RGBA32_U_COMPOSE(
+                (255 - SP_RGBA32_R_U(color)),
+                (255 - SP_RGBA32_G_U(color)),
+                (255 - SP_RGBA32_B_U(color)),
+                SP_RGBA32_A_U(color)
+        )
+    );
+    sp_repr_css_set_property (css, "stroke", c);
+    sp_desktop_set_style (_desktop, css);
+    sp_repr_css_attr_unref (css);
+    sp_document_done (SP_DT_DOCUMENT(_desktop));
+} 
 
 void SelectedStyle::on_fill_white() {
     SPCSSAttr *css = sp_repr_css_attr_new ();

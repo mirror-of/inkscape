@@ -1,10 +1,11 @@
 /**
  * \brief Selected style indicator (fill, stroke, opacity)
  *
- * Author:
+ * Authors:
  *   buliabyak@gmail.com
+ *   scislac@users.sf.net
  *
- * Copyright (C) 2005 author
+ * Copyright (C) 2005 authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -149,6 +150,8 @@ protected:
     void on_fill_edit();
     void on_stroke_edit();
     void on_fillstroke_swap();
+    void on_fill_invert();
+    void on_stroke_invert();
     void on_fill_white();
     void on_stroke_white();
     void on_fill_black();
@@ -164,6 +167,7 @@ protected:
     Gtk::MenuItem _popup_edit[2];
     Gtk::MenuItem _popup_lastused[2];
     Gtk::MenuItem _popup_lastselected[2];
+    Gtk::MenuItem _popup_invert[2];
     Gtk::MenuItem _popup_white[2];
     Gtk::MenuItem _popup_black[2];
     Gtk::MenuItem _popup_copy[2];
