@@ -1,3 +1,8 @@
+2005-12-30  Josh Andler  <scislac@users.sf.net>
+
+	* src/ui/widget/selected-style.cpp, src/ui/widget/selected-style.h
+	  Added "invert" function to right-click menu of style selector.
+
 2005-12-22  Jon A. Cruz  <jon@joncruz.org>
 
 	* share/palettes/Tango-Palette.gpl:
