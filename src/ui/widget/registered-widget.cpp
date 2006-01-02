@@ -258,9 +258,22 @@ RegisteredSlider::init (const Glib::ustring& label1, const Glib::ustring& label2
 }
 
 void 
-RegisteredSlider::setValue (double val, const SPUnit* unit)
+RegisteredSlider::setValue (double val, bool is_absolute)
 {
     _hscale->set_value (val);
+    Gtk::Adjustment *adj = _hscale->get_adjustment();
+    if (is_absolute) 
+    { 
+        adj->set_lower (0.4); 
+        adj->set_upper (50.1);
+        adj->set_step_increment (0.1);
+    }
+    else             
+    { 
+        adj->set_lower (1.0); 
+        adj->set_upper (51.0);
+        adj->set_step_increment (1.0);
+    }
     update();
 }
 
@@ -417,8 +430,7 @@ RegisteredRadioButtonPair::~RegisteredRadioButtonPair()
 void
 RegisteredRadioButtonPair::init (const Glib::ustring& label, 
 const Glib::ustring& label1, const Glib::ustring& label2, 
-const Glib::ustring& key, const char* val1, const char* val2,
-Registry& wr)
+const Glib::ustring& key, Registry& wr)
 {
     _hbox = new Gtk::HBox;
     _hbox->add (*manage (new Gtk::Label (label)));
@@ -429,18 +441,40 @@ Registry& wr)
     _hbox->add (*_rb2);
     _rb2->set_active();
     _key = key;
-    _val1 = val1;
-    _val2 = val2;
+    _wr = &wr;
+    _changed_connection = _rb1->signal_toggled().connect (sigc::mem_fun (*this, &RegisteredRadioButtonPair::on_value_changed));
 }
 
 void 
-RegisteredRadioButtonPair::setValue (bool first)
+RegisteredRadioButtonPair::setValue (bool second)
 {
+    if (second) _rb2->set_active();
+    else        _rb1->set_active();
 }
 
 void
 RegisteredRadioButtonPair::on_value_changed()
 {
+    if (_wr->isUpdating())
+        return;
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (!dt) 
+        return;
+
+    _wr->setUpdating (true);
+    
+    bool second = _rb2->get_active();
+    SPDocument *doc = SP_DT_DOCUMENT(dt);
+    gboolean saved = sp_document_get_undo_sensitive (doc);
+    sp_document_set_undo_sensitive (doc, FALSE);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR (SP_DT_NAMEDVIEW(dt));
+    repr->setAttribute(_key.c_str(), second ? "true" : "false");
+    doc->rroot->setAttribute("sodipodi:modified", "true");
+    sp_document_set_undo_sensitive (doc, saved);
+    sp_document_done (doc);
+    
+    _wr->setUpdating (false);
 }
 
 } // namespace Dialog

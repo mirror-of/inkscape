@@ -94,7 +94,7 @@ public:
             const Glib::ustring& tip, 
             const Glib::ustring& key, 
             Registry& wr);
-    void setValue (double, const SPUnit*);
+    void setValue (double, bool);
     void setLimits (double, double);
     Gtk::HBox* _hbox;
 
@@ -160,15 +160,13 @@ public:
                const Glib::ustring& label1, 
                const Glib::ustring& label2, 
                const Glib::ustring& key,
-               const char* val1,
-               const char* val2,
                Registry& wr);
-    void setValue (bool first);
+    void setValue (bool second);
     Gtk::HBox *_hbox;
 
 protected:
     Gtk::RadioButton *_rb1, *_rb2;
-    Glib::ustring   _key, _val1, _val2;
+    Glib::ustring   _key;
     Registry        *_wr;
     sigc::connection _changed_connection;
     void on_value_changed();
