@@ -11,7 +11,7 @@
 #include "snapped-point.h"
 
 Inkscape::SnappedPoint::SnappedPoint(NR::Point p, NR::Coord d)
-    : _point(p), _distance(d)
+    : _distance(d), _point(p)
 {
     
 }
