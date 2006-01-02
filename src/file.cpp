@@ -126,16 +126,28 @@ sp_file_new(gchar const *templ)
 SPDesktop*
 sp_file_new_default()
 {
-    // TRANSLATORS: default.svg is localizable - this is the name of the default document
-    //  template. This way you can localize the default pagesize, translate the name of
-    //  the default layer, etc. If you wish to localize this file, please create a
-    //  localized share/templates/default.xx.svg file, where xx is your language code.
-    char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, _("default.svg"), NULL);
-    if (Inkscape::IO::file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
-        return sp_file_new(default_template);
-    } else {
-        return sp_file_new(NULL);
+    std::list<gchar *> sources;
+    sources.push_back( profile_path("templates") ); // first try user's local dir
+    sources.push_back( g_strdup(INKSCAPE_TEMPLATESDIR) ); // then the system templates dir
+
+    while (!sources.empty()) {
+        gchar *dirname = sources.front();
+        if ( Inkscape::IO::file_test( dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR) ) ) {
+
+            // TRANSLATORS: default.svg is localizable - this is the name of the default document
+            //  template. This way you can localize the default pagesize, translate the name of
+            //  the default layer, etc. If you wish to localize this file, please create a
+            //  localized share/templates/default.xx.svg file, where xx is your language code.
+            char *default_template = g_build_filename(dirname, _("default.svg"), NULL);
+            if (Inkscape::IO::file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
+                return sp_file_new(default_template);
+            } 
+        }
+        g_free(dirname);
+        sources.pop_front();
     }
+
+    return sp_file_new(NULL);
 }
 
 

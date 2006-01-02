@@ -679,41 +679,58 @@ sp_file_new_from_template(GtkWidget *widget, gchar const *uri)
 void
 sp_menu_append_new_templates(GtkWidget *menu, Inkscape::UI::View::View *view)
 {
-    GDir *dir = g_dir_open(INKSCAPE_TEMPLATESDIR, 0, NULL);
-    if (!dir)
-        return;
-    for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
-        if (!g_str_has_suffix(file, ".svg"))
-            continue; // skip non-svg files
+    std::list<gchar *> sources;
+    sources.push_back( profile_path("templates") ); // first try user's local dir
+    sources.push_back( g_strdup(INKSCAPE_TEMPLATESDIR) ); // then the system templates dir
 
-        gchar *basename = g_path_get_basename(file);
-        if (g_str_has_suffix(basename, ".svg") && g_str_has_prefix(basename, "default."))
-            continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
+    // Use this loop to iterate through a list of possible document locations.
+    while (!sources.empty()) {
+        gchar *dirname = sources.front();
 
-        gchar const *filepath = g_build_filename(INKSCAPE_TEMPLATESDIR, file, NULL);
-        gchar *dupfile = g_strndup(file, strlen(file) - 4);
-        gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
-        g_free(dupfile);
-        GtkWidget *item = gtk_menu_item_new_with_label(filename);
-        g_free(filename);
+        if ( Inkscape::IO::file_test( dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR) ) ) {
+            GError *err = 0;
+            GDir *dir = g_dir_open(dirname, 0, &err);
 
-        gtk_widget_show(item);
-        // how does "filepath" ever get freed?
-        g_signal_connect(G_OBJECT(item),
-                         "activate",
-                         G_CALLBACK(sp_file_new_from_template),
-                         (gpointer) filepath);
+            if (dir) {
+                for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
+                    if (!g_str_has_suffix(file, ".svg"))
+                        continue; // skip non-svg files
 
-        if (view) {
-            // set null tip for now; later use a description from the template file
-            g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
-            g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) NULL );
-            g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
+                    gchar *basename = g_path_get_basename(file);
+                    if (g_str_has_suffix(basename, ".svg") && g_str_has_prefix(basename, "default."))
+                        continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
+
+                    gchar const *filepath = g_build_filename(dirname, file, NULL);
+                    gchar *dupfile = g_strndup(file, strlen(file) - 4);
+                    gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
+                    g_free(dupfile);
+                    GtkWidget *item = gtk_menu_item_new_with_label(filename);
+                    g_free(filename);
+
+                    gtk_widget_show(item);
+                    // how does "filepath" ever get freed?
+                    g_signal_connect(G_OBJECT(item),
+                                     "activate",
+                                     G_CALLBACK(sp_file_new_from_template),
+                                     (gpointer) filepath);
+
+                    if (view) {
+                        // set null tip for now; later use a description from the template file
+                        g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
+                        g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) NULL );
+                        g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
+                    }
+
+                    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+                }
+                g_dir_close(dir);
+            }
         }
 
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+        // toss the dirname
+        g_free(dirname);
+        sources.pop_front();
     }
-    g_dir_close(dir);
 }
 
 void
