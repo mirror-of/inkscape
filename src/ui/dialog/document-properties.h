@@ -1,5 +1,5 @@
 /** \file
- * \brief  Document Preferences dialog
+ * \brief  Document Properties dialog
  *
  * Authors:
  *   Ralf Stephan <ralf@ark.in-berlin.de>
@@ -39,10 +39,10 @@ namespace Inkscape {
 
 typedef std::list<EntityEntry*> RDElist;
 
-class DocumentPreferences : public Inkscape::UI::Dialog::Dialog {
+class DocumentProperties : public Inkscape::UI::Dialog::Dialog {
 public:
     void  update();
-    static DocumentPreferences *create();
+    static DocumentProperties *create();
     static void destroy();
     sigc::connection _doc_replaced_connection;
 
@@ -89,8 +89,8 @@ protected:
     Registry _wr;
 
 private:
-    DocumentPreferences();
-    virtual ~DocumentPreferences();
+    DocumentProperties();
+    virtual ~DocumentProperties();
 };
 
 } // namespace Dialog

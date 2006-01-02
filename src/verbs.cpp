@@ -1489,7 +1489,7 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
             break;
         case SP_VERB_DIALOG_NAMEDVIEW:
             // sp_desktop_dialog();
-            dt->_dlg_mgr->showDialog("DocumentPreferences");
+            dt->_dlg_mgr->showDialog("DocumentProperties");
             break;
         case SP_VERB_DIALOG_FILL_STROKE:
             sp_object_properties_dialog();
@@ -2159,7 +2159,7 @@ Verb *Verb::_base_verbs[] = {
     /* Dialogs */
     new DialogVerb(SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("In_kscape Preferences..."),
                    N_("Global Inkscape preferences"), GTK_STOCK_PREFERENCES ),
-    new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Preferences..."),
+    new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Properties..."),
                    N_("Preferences saved with the document"), GTK_STOCK_PROPERTIES ),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Fill and Stroke dialog"), "fill_and_stroke"),

@@ -24,8 +24,8 @@ ui_dialog_libuidialog_a_SOURCES =		\
 	ui/dialog/dialog.h			\
 	ui/dialog/align-and-distribute.cpp	\
 	ui/dialog/align-and-distribute.h	\
-	ui/dialog/document-preferences.cpp	\
-	ui/dialog/document-preferences.h	\
+	ui/dialog/document-properties.cpp	\
+	ui/dialog/document-properties.h	\
 	ui/dialog/export.cpp			\
 	ui/dialog/export.h			\
 	ui/dialog/extension-editor.cpp		\

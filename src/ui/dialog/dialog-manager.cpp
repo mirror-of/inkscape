@@ -18,7 +18,7 @@
 #include "ui/dialog/dialog-manager.h"
 
 #include "ui/dialog/align-and-distribute.h"
-#include "ui/dialog/document-preferences.h"
+#include "ui/dialog/document-properties.h"
 #include "ui/dialog/export.h"
 #include "ui/dialog/extension-editor.h"
 #include "ui/dialog/fill-and-stroke.h"
@@ -76,7 +76,7 @@ Dialog *create() { return T::create(); }
  */
 DialogManager::DialogManager() {
     registerFactory("AlignAndDistribute",  &create<AlignAndDistribute>);
-    registerFactory("DocumentPreferences", &create<DocumentPreferences>);
+    registerFactory("DocumentProperties", &create<DocumentProperties>);
     registerFactory("Export",              &create<Export>);
     registerFactory("ExtensionEditor",     &create<ExtensionEditor>);
     registerFactory("FillAndStroke",       &create<FillAndStroke>);

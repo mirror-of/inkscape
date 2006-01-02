@@ -1,6 +1,6 @@
 /** \file
  *
- * Document preferences dialog, Gtkmm-style
+ * Document properties dialog, Gtkmm-style
  *
  * Authors:
  *   bulia byak <buliabyak@users.sf.net>
@@ -43,7 +43,7 @@
 #include "desktop.h"
 #include "sp-namedview.h"
 
-#include "document-preferences.h"
+#include "document-properties.h"
 
 using std::pair;
 
@@ -58,7 +58,7 @@ namespace Dialog {
 
 //---------------------------------------------------
 
-DocumentPreferences *_instance = 0;
+DocumentProperties *_instance = 0;
 
 static void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
 static void on_doc_replaced (SPDesktop* dt, SPDocument* doc);
@@ -74,17 +74,17 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
 };
 
 
-DocumentPreferences*
-DocumentPreferences::create()
+DocumentProperties*
+DocumentProperties::create()
 {
     if (_instance) return _instance;
-    _instance = new DocumentPreferences;
+    _instance = new DocumentProperties;
     _instance->init();
     return _instance;
 }
 
 void
-DocumentPreferences::destroy()
+DocumentProperties::destroy()
 {
     if (_instance)
     {
@@ -93,7 +93,7 @@ DocumentPreferences::destroy()
     }
 }
 
-DocumentPreferences::DocumentPreferences() 
+DocumentProperties::DocumentProperties() 
     : Dialog ("dialogs.documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page(1, 1), _page_grid(1, 1), _page_guides(1, 1),
       _page_snap(1, 1), _page_metadata1(1, 1), _page_metadata2(1, 1),
@@ -118,7 +118,7 @@ DocumentPreferences::DocumentPreferences()
 }
 
 void
-DocumentPreferences::init()
+DocumentProperties::init()
 {
     update();
 
@@ -137,7 +137,7 @@ DocumentPreferences::init()
     present();
 }
 
-DocumentPreferences::~DocumentPreferences() 
+DocumentProperties::~DocumentProperties() 
 {
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     repr->removeListenerByData (this);
@@ -193,7 +193,7 @@ attach_all (Gtk::Table &table, const Gtk::Widget *arr[], unsigned size, int star
 }
 
 void
-DocumentPreferences::build_page()
+DocumentProperties::build_page()
 {
     _page_page.show();
 
@@ -234,7 +234,7 @@ DocumentPreferences::build_page()
 }
 
 void
-DocumentPreferences::build_grid()
+DocumentProperties::build_grid()
 {
     _page_grid.show();
 
@@ -292,7 +292,7 @@ DocumentPreferences::build_grid()
 }
 
 void
-DocumentPreferences::build_snap()
+DocumentProperties::build_snap()
 {
     _page_snap.show();
 
@@ -363,7 +363,7 @@ DocumentPreferences::build_snap()
  }
 
 void
-DocumentPreferences::build_metadata()
+DocumentProperties::build_metadata()
 {
     _page_metadata1.show();
 
@@ -406,7 +406,7 @@ DocumentPreferences::build_metadata()
  * Update dialog widgets from desktop.
  */
 void
-DocumentPreferences::update()
+DocumentProperties::update()
 {
     if (_wr.isUpdating()) return;
     
@@ -485,7 +485,7 @@ DocumentPreferences::update()
 //--------------------------------------------------------------------
 
 void
-DocumentPreferences::on_response (int id)
+DocumentProperties::on_response (int id)
 {
     if (id == Gtk::RESPONSE_DELETE_EVENT || id == Gtk::RESPONSE_CLOSE)
     {
