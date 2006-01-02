@@ -77,6 +77,8 @@ struct SPNamedView : public SPObjectGroup {
 
     SPUnit const *objecttoleranceunit;
     gdouble objecttolerance;
+
+    bool has_abs_tolerance;
     
     GQuark default_layer_id;
 
