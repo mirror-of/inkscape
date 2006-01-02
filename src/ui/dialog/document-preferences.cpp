@@ -329,7 +329,7 @@ DocumentPreferences::build_snap()
     _rsu_gusn.init (_("Snap distance:"), _("pixels"), 
                 _("Max. snapping distance from guides"), "guidetolerance", _wr);
     _rrb_pix.init (_("Pixels are:"), _("Screen pixels"), _("Absolute"),
-                _("tolerance"), "spx", "px", _wr);
+                _("inkscape:has_abs_tolerance"), _wr);
     Gtk::Label *label_o = manage (new Gtk::Label);
     label_o->set_markup (_("<b>Object Snapping</b>"));
     Gtk::Label *label_gr = manage (new Gtk::Label);
@@ -461,15 +461,16 @@ DocumentPreferences::update()
     _rcbsnnob.setActive (nv->object_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
     _rcbsnop.setActive (nv->object_snapper.getSnapToPaths());
     _rcbsnop.setActive (nv->object_snapper.getSnapToNodes());
-    _rsu_sno.setValue (nv->objecttolerance, nv->objecttoleranceunit);
+    _rsu_sno.setValue (nv->objecttolerance, nv->has_abs_tolerance);
      
     _rcbsnbb.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
     _rcbsnnod.setActive (nv->grid_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
-    _rsu_sn.setValue (nv->gridtolerance, nv->gridtoleranceunit);
+    _rsu_sn.setValue (nv->gridtolerance, nv->has_abs_tolerance);
     
      _rcb_snpgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::BBOX_POINT));
     _rcb_snbgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
-    _rsu_gusn.setValue (nv->guidetolerance, nv->guidetoleranceunit);
+    _rsu_gusn.setValue (nv->guidetolerance, nv->has_abs_tolerance);
+    _rrb_pix.setValue (true);
 
     //-----------------------------------------------------------meta pages
     /* update the RDF entities */
