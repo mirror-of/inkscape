@@ -239,14 +239,8 @@ void ColorItem::buttonClicked(bool secondary)
     if (desktop) {
         char const * attrName = secondary ? "stroke" : "fill";
         guint32 rgba = (_r << 24) | (_g << 16) | (_b << 8) | 0xff;
-        //g_object_set_data(G_OBJECT(cp), "color", GUINT_TO_POINTER(rgba));
-        Inkscape::XML::Node *repr = SP_OBJECT_REPR (SP_DT_NAMEDVIEW (desktop));
-
         gchar c[64];
         sp_svg_write_color(c, 64, rgba);
-        if (repr)
-            repr->setAttribute(attrName, c);
-
 
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_set_property( css, attrName, c );
