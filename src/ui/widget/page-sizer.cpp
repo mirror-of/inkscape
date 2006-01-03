@@ -275,6 +275,8 @@ PageSizer::setDim (double w, double h, bool update)
     Unit const& unit = _rum._sel->getUnit();
     if (!update) _changedw_connection.block();
     _rusw.setValue (w / unit.factor);
+    if (!update) _changedw_connection.unblock();
+    if (!update) _changedh_connection.block();
     _rush.setValue (h / unit.factor);
     if (!update) _changedh_connection.unblock();
 }
