@@ -430,6 +430,7 @@ RegisteredRadioButtonPair::~RegisteredRadioButtonPair()
 void
 RegisteredRadioButtonPair::init (const Glib::ustring& label, 
 const Glib::ustring& label1, const Glib::ustring& label2, 
+const Glib::ustring& tip1, const Glib::ustring& tip2, 
 const Glib::ustring& key, Registry& wr)
 {
     _hbox = new Gtk::HBox;
@@ -440,6 +441,8 @@ const Glib::ustring& key, Registry& wr)
     _rb2 = manage (new Gtk::RadioButton (group, label2, false));
     _hbox->add (*_rb2);
     _rb2->set_active();
+    _tt.set_tip (*_rb1, tip1);
+    _tt.set_tip (*_rb2, tip2);
     _key = key;
     _wr = &wr;
     _changed_connection = _rb1->signal_toggled().connect (sigc::mem_fun (*this, &RegisteredRadioButtonPair::on_value_changed));

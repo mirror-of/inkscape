@@ -159,6 +159,8 @@ public:
     void init (const Glib::ustring& label, 
                const Glib::ustring& label1, 
                const Glib::ustring& label2, 
+               const Glib::ustring& tip1, 
+               const Glib::ustring& tip2, 
                const Glib::ustring& key,
                Registry& wr);
     void setValue (bool second);
@@ -166,6 +168,7 @@ public:
 
 protected:
     Gtk::RadioButton *_rb1, *_rb2;
+    Gtk::Tooltips     _tt;
     Glib::ustring   _key;
     Registry        *_wr;
     sigc::connection _changed_connection;
