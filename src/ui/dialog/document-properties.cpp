@@ -108,8 +108,8 @@ DocumentProperties::DocumentProperties()
     _notebook.append_page(_page_page,      _("Page"));
     _notebook.append_page(_page_grid,      _("Grid/Guides"));
     _notebook.append_page(_page_snap,      _("Snap"));
-    _notebook.append_page(_page_metadata1, _("Metadata 1"));
-    _notebook.append_page(_page_metadata2, _("Metadata 2"));
+    _notebook.append_page(_page_metadata1, _("Metadata"));
+    _notebook.append_page(_page_metadata2, _("License"));
 
     build_page();
     build_grid();
@@ -308,7 +308,7 @@ DocumentProperties::build_snap()
     _rcbsnon.init (_("Snap to object nodes"), 
                 _("Snap to other object nodes"), 
                 "inkscape:object-nodes", _wr);
-    _rsu_sno.init (_("Snap distance:"), _("pixels"),
+    _rsu_sno.init (_("Snap distance:"), _(""),
                   _("Max. snapping distance from object"),
                   "objecttolerance", _wr);
     _rcbsnbb.init (_("Snap bounding boxes to grid"), 
@@ -317,7 +317,7 @@ DocumentProperties::build_snap()
     _rcbsnnod.init (_("Snap nodes to grid"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:grid-points", _wr);
-    _rsu_sn.init (_("Snap distance:"),  _("pixels"),
+    _rsu_sn.init (_("Snap distance:"),  _(""),
                   _("Max. snapping distance from grid"),
                   "gridtolerance", _wr);
     _rcb_snpgui.init (_("Snap bounding boxes to guides"),  
@@ -326,9 +326,11 @@ DocumentProperties::build_snap()
     _rcb_snbgui.init (_("Snap points to guides"), 
                 _("Snap path nodes, text baselines, ellipse centers, etc."), 
                 "inkscape:guide-points", _wr);
-    _rsu_gusn.init (_("Snap distance:"), _("pixels"), 
+    _rsu_gusn.init (_("Snap distance:"), _(""), 
                 _("Max. snapping distance from guides"), "guidetolerance", _wr);
-    _rrb_pix.init (_("Pixels are:"), _("Screen pixels"), _("Absolute"),
+    _rrb_pix.init (_("Distance units:"), _("Screen pixels"), _("px units"),
+                _("Screen pixels have always the same value, regardless of zoom"),
+                _("px units are an absolute distance measure, i.e., zooming in will enlarge distance."),
                 _("inkscape:has_abs_tolerance"), _wr);
     Gtk::Label *label_o = manage (new Gtk::Label);
     label_o->set_markup (_("<b>Object Snapping</b>"));
