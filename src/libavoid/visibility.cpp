@@ -255,6 +255,17 @@ class EdgePair
             }
             return false;
         }
+        bool operator!=(const EdgePair& rhs) const
+        {
+            if (((vInf1->id == rhs.vInf1->id) &&
+                        (vInf2->id == rhs.vInf2->id)) ||
+                ((vInf1->id == rhs.vInf2->id) &&
+                        (vInf2->id == rhs.vInf1->id)))
+            {
+                return false;
+            }
+            return true;
+        }
         void SetObsAng(double a)
         {
             obsAngle = fmod(initangle - (a - 180), 360);

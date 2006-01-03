@@ -1,3 +1,8 @@
+2006-01-03  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/libavoid/visibility.cpp: Add operator!= for the EdgePair class.
+	  This is needed to compile on Tru64 UNIX.  Fixes bug #1386755.
+
 2005-12-30  Josh Andler  <scislac@users.sf.net>
 
 	* src/ui/widget/selected-style.cpp, src/ui/widget/selected-style.h
