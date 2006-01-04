@@ -189,14 +189,18 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     gtk_container_add(GTK_CONTAINER(f), vb);
     gtk_container_set_border_width(GTK_CONTAINER(vb), 4);
 
-    l = gtk_label_new(_("Use '> filename' to print to file.\n"
+    l = gtk_label_new(_("Printer name (as given by lpstat -p);\n"
+                        "leave empty to use the system default printer.\n"
+                        "Use '> filename' to print to file.\n"
                         "Use '| prog arg...' to pipe to a program."));
     gtk_box_pack_start(GTK_BOX(vb), l, FALSE, FALSE, 0);
 
     GtkWidget *e = gtk_entry_new();
     if (1) {
         gchar const *val = mod->get_param_string("destination");
-        gtk_entry_set_text(GTK_ENTRY(e), val);
+        gtk_entry_set_text(GTK_ENTRY(e), ( val != NULL
+                                           ? val
+                                           : "" ));
     }
     gtk_box_pack_start(GTK_BOX(vb), e, FALSE, FALSE, 0);
 
@@ -285,10 +289,10 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
             }
             _stream = osf;
         } else {
-            gchar *qn;
             /* put cwd stuff in here */
-            /* FIXME: quote fn */
-            qn = g_strdup_printf("lpr -P %s", fn);
+            gchar *qn = ( *fn
+                          ? g_strdup_printf("lpr -P %s", fn)  /* FIXME: quote fn */
+                          : g_strdup("lpr") );
 #ifndef WIN32
             osp = popen(qn, "w");
 #else
@@ -1253,13 +1257,11 @@ PrintPS::init(void)
         "<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
         "<param name=\"bitmap\" type=\"boolean\">FALSE</param>\n"
         "<param name=\"resolution\" type=\"string\">72</param>\n"
-        "<param name=\"destination\" type=\"string\">lp</param>\n"
+        "<param name=\"destination\" type=\"string\"></param>\n"
         "<param name=\"pageBoundingBox\" type=\"boolean\">TRUE</param>\n"
         "<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
         "<print/>\n"
         "</inkscape-extension>", new PrintPS());
-
-    return;
 }
 
 

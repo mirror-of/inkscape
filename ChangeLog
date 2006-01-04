@@ -1,3 +1,13 @@
+2006-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/extension/internal/ps.cpp (setup): Clarify the meaning of
+	  `Print destination', mentioning the new possibility of leaving
+	  as empty.
+	* (PrintPS::begin) If print destination is an empty string, then
+	  don't pass `-P %s' to lpr: just let lpr use its default.
+	* (PrintPS::init) Change default print destination from `lp' to empty
+	  string.
+
 2006-01-04  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/widgets/desktop-widget.cpp:
