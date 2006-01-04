@@ -175,6 +175,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     widget = GTK_WIDGET (dtw);
 
+    Gtk::VPaned* pane = manage( new Gtk::VPaned() );
+    pane->show_all();
+
     dtw->window = 0;
     
     dtw->desktop = NULL;
@@ -183,7 +186,11 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     /* Main table */
     dtw->vbox = gtk_vbox_new (FALSE, 0);
-    gtk_container_add (GTK_CONTAINER (dtw), dtw->vbox);
+    gtk_container_add( GTK_CONTAINER(dtw), GTK_WIDGET(pane->gobj()) );
+
+    Gtk::VBox* tmp = Glib::wrap( GTK_VBOX(dtw->vbox) );
+    Gtk::VBox* boxWrap = manage( tmp );
+    pane->add1( *boxWrap );
 
     dtw->statusbar = gtk_hbox_new (FALSE, 0);
     //gtk_widget_set_usize (dtw->statusbar, -1, BOTTOM_BAR_HEIGHT);
@@ -192,9 +199,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     {
         using Inkscape::UI::Dialogs::SwatchesPanel;
 
-        SwatchesPanel* swatches = new SwatchesPanel();
+        SwatchesPanel* swatches = manage( new SwatchesPanel() );
         dtw->panels = GTK_WIDGET(swatches->gobj());
-        gtk_box_pack_end( GTK_BOX( dtw->vbox ), dtw->panels, FALSE, TRUE, 0 );
+        pane->add2( *swatches );
     }
 
     hbox = gtk_hbox_new (FALSE, 0);
@@ -830,8 +837,30 @@ sp_desktop_widget_layout (SPDesktopWidget *dtw)
 
     if (prefs_get_int_attribute (fullscreen ? "fullscreen.panels" : "window.panels", "state", 1) == 0) {
         gtk_widget_hide_all( dtw->panels );
+        GList* kids = gtk_container_get_children( GTK_CONTAINER( dtw->statusbar ) );
+        if ( kids )
+        {
+            GList* last = g_list_last( kids );
+            if ( last )
+            {
+                GtkStatusbar* tail = GTK_STATUSBAR( last->data );
+                gtk_statusbar_set_has_resize_grip( tail, TRUE );
+            }
+            g_list_free( kids );
+        }
     } else {
         gtk_widget_show_all( dtw->panels );
+        GList* kids = gtk_container_get_children( GTK_CONTAINER( dtw->statusbar ) );
+        if ( kids )
+        {
+            GList* last = g_list_last( kids );
+            if ( last )
+            {
+                GtkStatusbar* tail = GTK_STATUSBAR( last->data );
+                gtk_statusbar_set_has_resize_grip( tail, FALSE );
+            }
+            g_list_free( kids );
+        }
     }
 
     if (prefs_get_int_attribute (fullscreen ? "fullscreen.scrollbars" : "window.scrollbars", "state", 1) == 0) {
@@ -907,7 +936,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
 
     dtw->menubar = sp_ui_main_menubar (dtw->desktop);
     gtk_widget_show_all (dtw->menubar);
-    gtk_box_pack_start (GTK_BOX (gtk_bin_get_child (GTK_BIN (dtw))), dtw->menubar, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
 
     sp_desktop_widget_layout (dtw);
 

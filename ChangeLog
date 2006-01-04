@@ -1,3 +1,8 @@
+2006-01-04  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/widgets/desktop-widget.cpp:
+	  Adding split pane for swatches.
+
 2006-01-03  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/libavoid/visibility.cpp: Add operator!= for the EdgePair class.
