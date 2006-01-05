@@ -111,11 +111,11 @@ private:
 
 template <typename T>
 struct MaybeTraits {
-    typedef T storage;
-    typedef T& reference;
-    typedef const T &const_reference;
+    typedef T const storage;
+    typedef T const &reference;
+    typedef T const &const_reference;
     static storage to_storage(const_reference t) { return t; }
-    static reference from_storage(storage t) { return t; }
+    static reference from_storage(storage &t) { return t; }
 };
 
 template <typename T>
