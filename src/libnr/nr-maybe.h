@@ -60,7 +60,6 @@ public:
     typedef MaybeTraits<T> traits;
     typedef typename traits::storage storage;
     typedef typename traits::reference reference;
-    typedef typename traits::const_reference const_reference;
 
     Maybe(Nothing n) : _is_nothing(true), _t() {}
 
@@ -98,7 +97,7 @@ public:
     }
 
     bool operator==(Nothing n) { return _is_nothing; }
-    bool operator==(const_reference r) {
+    bool operator==(reference r) {
         return traits::from_storage(_t) == r;
     }
 
@@ -113,17 +112,15 @@ template <typename T>
 struct MaybeTraits {
     typedef T const storage;
     typedef T const &reference;
-    typedef T const &const_reference;
-    static storage to_storage(const_reference t) { return t; }
-    static reference from_storage(storage &t) { return t; }
+    static reference to_storage(reference t) { return t; }
+    static reference from_storage(reference t) { return t; }
 };
 
 template <typename T>
 struct MaybeTraits<T&> {
     typedef T *storage;
     typedef T &reference;
-    typedef T &const_reference;
-    static storage to_storage(const_reference t) { return &t; }
+    static storage to_storage(reference t) { return &t; }
     static reference from_storage(storage t) { return *t; }
 };
 
