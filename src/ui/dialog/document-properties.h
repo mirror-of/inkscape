@@ -23,6 +23,7 @@
 #include "ui/widget/page-sizer.h"
 #include "ui/widget/registered-widget.h"
 #include "ui/widget/registry.h"
+#include "ui/widget/tolerance-slider.h"
 #include "dialog.h"
 
 using namespace Inkscape::UI::Widget;
@@ -74,12 +75,12 @@ protected:
     //---------------------------------------------------------------
     RegisteredCheckButton _rcb_sgui, _rcb_snpgui, _rcb_snbgui;
     RegisteredUnitMenu    _rum_gusn;
-    RegisteredSlider      _rsu_sn, _rsu_gusn;
+    ToleranceSlider      _rsu_sn, _rsu_gusn;
     RegisteredColorPicker _rcp_gui, _rcp_hgui;
     //---------------------------------------------------------------
     RegisteredCheckButton _rcbsnbo, _rcbsnnob, _rcbsnop, _rcbsnon;
     RegisteredUnitMenu    _rumso;
-    RegisteredSlider      _rsu_sno;
+    ToleranceSlider       _rsu_sno;
     RegisteredRadioButtonPair _rrb_pix;
     //---------------------------------------------------------------
     RDElist _rdflist;

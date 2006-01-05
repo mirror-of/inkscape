@@ -49,6 +49,8 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/style-swatch.cpp      \
 	ui/widget/svg-canvas.cpp        \
 	ui/widget/svg-canvas.h          \
+	ui/widget/tolerance-slider.cpp  \
+	ui/widget/tolerance-slider.h    \
 	ui/widget/toolbox.cpp		\
 	ui/widget/toolbox.h		\
 	ui/widget/unit-menu.cpp		\

@@ -85,28 +85,6 @@ protected:
     void on_value_changed();
 };
 
-class RegisteredSlider {
-public:
-    RegisteredSlider();
-    ~RegisteredSlider();
-    void init (const Glib::ustring& label1, 
-            const Glib::ustring& label2, 
-            const Glib::ustring& tip, 
-            const Glib::ustring& key, 
-            Registry& wr);
-    void setValue (double, bool);
-    void setLimits (double, double);
-    Gtk::HBox* _hbox;
-
-protected:
-    void on_scale_changed();
-    void update();
-    sigc::connection  _scale_changed_connection;
-    Gtk::HScale      *_hscale;
-    Registry         *_wr;
-    Glib::ustring     _key;
-};
-
 class RegisteredColorPicker {
 public:
     RegisteredColorPicker();
