@@ -1,3 +1,11 @@
+2006-01-04  MenTaLguY  <mental@rydia.net>
+
+	* src/Makefile_insert, src/shortcuts-default-xml.cpp,
+	  src/shortcuts.cpp, src/shortcuts.xml:
+
+      Moved default shortcuts XML file into a string constant (for now);
+	  replaced hard-coded structure with code to read XML file.
+
 2006-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/extension/internal/ps.cpp (setup): Clarify the meaning of
