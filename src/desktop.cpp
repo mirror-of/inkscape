@@ -454,14 +454,16 @@ SPDesktop::activate_guides(bool activate)
  * Make desktop switch documents.
  */
 void
-SPDesktop::change_document (SPDocument *document)
+SPDesktop::change_document (SPDocument *theDocument)
 {
-    g_return_if_fail (document != NULL);
+    g_return_if_fail (theDocument != NULL);
 
     /* unselect everything before switching documents */
     selection->clear();
 
-    setDocument (document);
+    setDocument (theDocument);
+    _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
+    _document_replaced_signal.emit (this, theDocument);
 }
 
 /**
