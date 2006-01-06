@@ -12,9 +12,7 @@ src/desktop-events.cpp
 src/desktop-handles.cpp
 src/desktop.cpp
 src/dialogs/clonetiler.cpp
-src/dialogs/color-picker.cpp
 src/dialogs/debugdialog.cpp
-src/dialogs/desktop-properties.cpp
 src/dialogs/dialog-events.cpp
 src/dialogs/display-settings.cpp
 src/dialogs/export.cpp
