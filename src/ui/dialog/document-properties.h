@@ -18,7 +18,6 @@
 #include <gtkmm/notebook.h>
 #include <glibmm/i18n.h>
 
-#include "ui/widget/licensor.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/page-sizer.h"
 #include "ui/widget/registered-widget.h"
@@ -33,12 +32,7 @@ namespace Inkscape {
         class Node;
     }
     namespace UI {
-        namespace Widget {
-            class EntityEntry;
-        }
         namespace Dialog {
-
-typedef std::list<EntityEntry*> RDElist;
 
 class DocumentProperties : public Inkscape::UI::Dialog::Dialog {
 public:
@@ -52,7 +46,6 @@ protected:
     void  build_grid();
     void  build_guides();
     void  build_snap();
-    void  build_metadata();
     void  init();
     virtual void  on_response (int);
 
@@ -60,7 +53,7 @@ protected:
     Gtk::Notebook  _notebook;
 
     NotebookPage   _page_page, _page_grid, _page_guides;
-    NotebookPage   _page_snap, _page_metadata1, _page_metadata2;
+    NotebookPage   _page_snap;
 
     RegisteredCheckButton _rcb_canb, _rcb_bord, _rcb_shad;
     RegisteredColorPicker _rcp_bg, _rcp_bord;
@@ -83,8 +76,6 @@ protected:
     ToleranceSlider       _rsu_sno;
     RegisteredRadioButtonPair _rrb_pix;
     //---------------------------------------------------------------
-    RDElist _rdflist;
-    Licensor _licensor;
 
     gchar * _prefs_path;
     Registry _wr;

@@ -1487,6 +1487,10 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
             sp_display_dialog();
             // dt->_dlg_mgr->showDialog("PrefInkscape");
             break;
+        case SP_VERB_DIALOG_METADATA:
+            // sp_desktop_dialog();
+            dt->_dlg_mgr->showDialog("DocumentMetadata");
+            break;
         case SP_VERB_DIALOG_NAMEDVIEW:
             // sp_desktop_dialog();
             dt->_dlg_mgr->showDialog("DocumentProperties");
@@ -2161,6 +2165,8 @@ Verb *Verb::_base_verbs[] = {
                    N_("Global Inkscape preferences"), GTK_STOCK_PREFERENCES ),
     new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Properties..."),
                    N_("Preferences saved with the document"), GTK_STOCK_PROPERTIES ),
+    new DialogVerb(SP_VERB_DIALOG_METADATA, "DialogMetadata", N_("_Document Metadata..."),
+                   N_("Metadata saved with the document"), NULL ),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Fill and Stroke dialog"), "fill_and_stroke"),
     // TRANSLATORS: "Swatches" means: color samples

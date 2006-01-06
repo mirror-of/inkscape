@@ -23,7 +23,6 @@
 #include <glibmm/i18n.h>
 
 #include "ui/widget/color-picker.h"
-#include "ui/widget/entity-entry.h"
 #include "ui/widget/registry.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/unit-menu.h"
@@ -52,13 +51,13 @@ namespace UI {
 namespace Dialog {
 
 #define SPACE_SIZE_X 15
-#define SPACE_SIZE_Y 15
+#define SPACE_SIZE_Y 10
 
 //===================================================
 
 //---------------------------------------------------
 
-DocumentProperties *_instance = 0;
+static DocumentProperties *_instance = 0;
 
 static void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
 static void on_doc_replaced (SPDesktop* dt, SPDocument* doc);
@@ -96,7 +95,7 @@ DocumentProperties::destroy()
 DocumentProperties::DocumentProperties() 
     : Dialog ("dialogs.documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page(1, 1), _page_grid(1, 1), _page_guides(1, 1),
-      _page_snap(1, 1), _page_metadata1(1, 1), _page_metadata2(1, 1),
+      _page_snap(1, 1), 
       _prefs_path("dialogs.documentoptions")
 {
     hide();
@@ -108,13 +107,10 @@ DocumentProperties::DocumentProperties()
     _notebook.append_page(_page_page,      _("Page"));
     _notebook.append_page(_page_grid,      _("Grid/Guides"));
     _notebook.append_page(_page_snap,      _("Snap"));
-    _notebook.append_page(_page_metadata1, _("Metadata"));
-    _notebook.append_page(_page_metadata2, _("License"));
 
     build_page();
     build_grid();
     build_snap();
-    build_metadata();
 }
 
 void
@@ -142,9 +138,6 @@ DocumentProperties::~DocumentProperties()
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
     repr->removeListenerByData (this);
     _doc_replaced_connection.disconnect();
-
-    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
-        delete (*it);
 }
 
 //========================================================================
@@ -364,46 +357,6 @@ DocumentProperties::build_snap()
     attach_all (_page_snap.table(), array, sizeof(array));
  }
 
-void
-DocumentProperties::build_metadata()
-{
-    _page_metadata1.show();
-
-    Gtk::Label *label = manage (new Gtk::Label);
-    label->set_markup (_("<b>Dublin Core Entities</b>"));
-    label->set_alignment (0.0);
-    _page_metadata1.table().attach (*label, 0,3,0,1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-     /* add generic metadata entry areas */
-    struct rdf_work_entity_t * entity;
-    int row = 1;
-    for (entity = rdf_work_entities; entity && entity->name; entity++, row++) {
-        if ( entity->editable == RDF_EDIT_GENERIC ) {
-            EntityEntry *w = EntityEntry::create (entity, _tt, _wr);
-            _rdflist.push_back (w);
-            Gtk::HBox *space = manage (new Gtk::HBox);
-            space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-            _page_metadata1.table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata1.table().attach (w->_label, 1,2, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata1.table().attach (*w->_packable, 2,3, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-        }
-    }
-
-    _page_metadata2.show();
-
-    row = 0;
-    Gtk::Label *llabel = manage (new Gtk::Label);
-    llabel->set_markup (_("<b>License</b>"));
-    llabel->set_alignment (0.0);
-    _page_metadata2.table().attach (*llabel, 0,3, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    /* add license selector pull-down and URI */
-    ++row;
-    _licensor.init (_tt, _wr);
-    Gtk::HBox *space = manage (new Gtk::HBox);
-    space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_metadata2.table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    _page_metadata2.table().attach (_licensor, 1,3, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-}
-
 /**
  * Update dialog widgets from desktop.
  */
@@ -473,13 +426,6 @@ DocumentProperties::update()
     _rcb_snbgui.setActive (nv->guide_snapper.getSnapTo(Inkscape::Snapper::SNAP_POINT));
     _rsu_gusn.setValue (nv->guidetolerance, nv->has_abs_tolerance);
     _rrb_pix.setValue (true);
-
-    //-----------------------------------------------------------meta pages
-    /* update the RDF entities */
-    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); it++)
-        (*it)->update (SP_ACTIVE_DOCUMENT);
-        
-    _licensor.update (SP_ACTIVE_DOCUMENT);
 
     _wr.setUpdating (false);
 }
