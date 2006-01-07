@@ -55,6 +55,7 @@ int Unit::defaultDigits() const {
  */
 UnitTable::UnitTable() 
 {
+    // if we swich to the xml file, don't forget to force locale to 'C'
     //    load("share/ui/units.xml");  // <-- Buggy 
     gchar *filename = g_build_filename(INKSCAPE_UIDIR, "units.txt", NULL);
     loadText(filename);
@@ -152,6 +153,13 @@ UnitTable::loadText(Glib::ustring const &filename) {
 	return false;
     }
 
+    // bypass current locale in order to make
+    // sscanf read floats with '.' as a separator
+    // set locate to 'C' and keep old locale
+    char *old_locale;
+    old_locale = g_strdup (setlocale (LC_NUMERIC, NULL));
+    setlocale (LC_NUMERIC, "C");
+
     while (fgets(buf, BUFSIZE, f) != NULL) {
 	char name[BUFSIZE];
 	char plural[BUFSIZE];
@@ -161,6 +169,7 @@ UnitTable::loadText(Glib::ustring const &filename) {
 	char primary[BUFSIZE];
 
 	int nchars = 0;
+    // locate is set to C, scanning %lf should work _everywhere_
 	if (sscanf(buf, "%s %s %s %s %lf %s %n", 
 		   name, plural, abbr, type, &factor, 
 		   primary, &nchars) != 6) {
@@ -198,6 +207,10 @@ UnitTable::loadText(Glib::ustring const &filename) {
 	addUnit(u, (primary[0]=='Y' || primary[0]=='y'));
 
     }
+
+    // set back the saved locale
+    setlocale (LC_NUMERIC, old_locale);
+    g_free (old_locale);
 
     // close file
     if (fclose(f) != 0) {
