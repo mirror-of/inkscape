@@ -10,11 +10,9 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
 #endif
 
 #include "gc-alloc.h"
-#include "debug/heap.h"
 #include "debug/gc-heap.h"
 #include "debug/sysv-heap.h"
 #include <vector>

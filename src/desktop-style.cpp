@@ -11,17 +11,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "macros.h"
 #include "desktop.h"
-#include "sp-object.h"
-#include "color.h"
 #include "color-rgba.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 #include "selection.h"
 #include "sp-tspan.h"
 #include "sp-textpath.h"
-#include "fontsize-expansion.h"
 #include "inkscape.h"
 #include "style.h"
 #include "prefs-utils.h"
@@ -29,11 +25,9 @@
 #include "sp-flowtext.h"
 #include "sp-flowregion.h"
 #include "sp-flowdiv.h"
-#include "sp-gradient.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-pattern.h"
-#include "sp-text.h"
 #include "xml/repr.h"
 #include "libnrtype/font-style-to-pos.h"
 

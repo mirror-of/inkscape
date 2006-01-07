@@ -12,14 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-div.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include "desktop.h"
 #include "document.h"
 #include "sp-root.h"
-#include "desktop-affine.h"
 
 NR::Matrix const sp_desktop_root2dt_affine (SPDesktop const *dt)
 {

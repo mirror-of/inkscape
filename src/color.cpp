@@ -14,7 +14,6 @@
  */
 
 #include <math.h>
-#include <glib.h>
 #include "color.h"
 
 /// A color space is just a name.

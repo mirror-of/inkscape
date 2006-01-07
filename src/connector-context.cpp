@@ -41,7 +41,6 @@
  */
 
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtksignal.h>
 
 #include "connector-context.h"
 #include "pixmaps/cursor-connector.xpm"
@@ -58,24 +57,17 @@
 #include "selection.h"
 #include "inkscape.h"
 #include "prefs-utils.h"
-#include "sp-item.h"
 #include "sp-path.h"
 #include "display/canvas-bpath.h"
-#include "display/sp-canvas.h"
-#include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
 #include <glibmm/i18n.h>
-#include "libnr/n-art-bpath.h"
-#include "libnr/nr-point-matrix-ops.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "knot.h"
 #include "sp-conn-end.h"
 #include "conn-avoid-ref.h"
 #include "libavoid/vertices.h"
 #include "context-fns.h"
 
-#include "prefs-utils.h"  // for prefs_get_int_attribute_limited
 
 
 static void sp_connector_context_class_init(SPConnectorContextClass *klass);

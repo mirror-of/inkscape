@@ -18,34 +18,26 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <math.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
 #include <glibmm/i18n.h>
 #include "display/sp-canvas.h"
-#include "inkscape.h"
 #include "sp-ellipse.h"
 #include "document.h"
 #include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-handles.h"
-#include "desktop-affine.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "pixmaps/cursor-ellipse.xpm"
 #include "sp-metrics.h"
-#include "knotholder.h"
 #include "xml/repr.h"
 #include "xml/node-event-vector.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
-#include "widgets/spw-utilities.h"
 #include "message-context.h"
 #include "desktop.h"
-#include "widgets/desktop-widget.h"
 #include "desktop-style.h"
-#include "libnr/nr-rect.h"
 #include "context-fns.h"
 
 #include "arc-context.h"

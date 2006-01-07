@@ -14,7 +14,6 @@
 
 #include "display/sp-canvas.h"
 #include "desktop.h"
-#include "desktop-handles.h"
 
 SPEventContext *
 sp_desktop_event_context (SPDesktop const * desktop)

@@ -9,13 +9,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cstdlib>
 #include <fstream>
-#include <cstring>
 #include <vector>
 #include <glib/gmessages.h>
 #include "debug/logger.h"
-#include "debug/event.h"
 #include "debug/simple-event.h"
 #include "gc-alloc.h"
 

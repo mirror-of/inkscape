@@ -13,9 +13,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <sigc++/sigc++.h>
 #include <glibmm/i18n.h>
 
 #include "application/application.h"
@@ -31,7 +29,6 @@
 #include "../verbs.h"
 #include "../interface.h"
 #include "../selection.h"
-#include "../selection-chemistry.h"
 #include "../style.h"
 #include "../desktop-handles.h"
 #include "../sp-namedview.h"
@@ -44,31 +41,9 @@
 
 #include "svg/svg.h"
 
-#include "libnr/nr-point.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "libnr/nr-point-ops.h"
-#include "libnr/nr-point-fns.h"
-#include "libnr/nr-rect.h"
-#include "libnr/nr-rect-ops.h"
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-fns.h"
 
-#include "libnr/nr-matrix-rotate-ops.h"
-#include "libnr/nr-matrix-scale-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
-#include "libnr/nr-rotate-matrix-ops.h"
-#include "libnr/nr-scale-matrix-ops.h"
-#include "libnr/nr-rotate-fns.h"
-#include "libnr/nr-rotate.h"
-#include "libnr/nr-rotate-matrix-ops.h"
-#include "libnr/nr-rotate-ops.h"
-#include "libnr/nr-scale.h"
-#include "libnr/nr-scale-matrix-ops.h"
-#include "libnr/nr-scale-ops.h"
-#include "libnr/nr-scale-translate-ops.h"
-#include "libnr/nr-translate.h"
-#include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-ops.h"
 #include "libnr/nr-translate-rotate-ops.h"
 #include "libnr/nr-translate-scale-ops.h"
@@ -77,7 +52,6 @@
 #include "display/nr-arena-item.h"
 
 #include "ui/widget/color-picker.h"
-#include "clonetiler.h"
 
 static GtkWidget *dlg = NULL;
 static win_data wd;

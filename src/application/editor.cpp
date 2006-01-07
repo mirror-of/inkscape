@@ -23,13 +23,11 @@
   TODO:  Add derivation from Inkscape::Application::RunMode
 */
 
-#include <glib.h>
 
 #include "path-prefix.h"
 #include "io/sys.h"
 #include "sp-object-repr.h"
 #include <desktop-handles.h>
-#include <desktop.h>
 #include "document.h"
 #include "sp-namedview.h"
 #include "event-context.h"
@@ -39,7 +37,6 @@
 #include "application/application.h"
 #include "preferences.h"
 #include "ui/view/edit-widget.h"
-#include "ui/view/edit-widget-interface.h"
 
 namespace Inkscape {
 namespace NSApplication {

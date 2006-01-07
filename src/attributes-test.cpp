@@ -1,4 +1,3 @@
-#include <glib/gmacros.h>
 #include <vector>
 #include "utest/utest.h"
 #include "attributes.h"

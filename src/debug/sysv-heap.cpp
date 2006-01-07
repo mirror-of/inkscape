@@ -10,11 +10,9 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
 #endif
 
 #ifdef HAVE_MALLOC_H
-#include <malloc.h>
 #endif
 
 #include "debug/sysv-heap.h"

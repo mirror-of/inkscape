@@ -10,14 +10,9 @@
  */
 
 
-#include <vector>
 
 #include "sp-item.h"
-#include "libnr/nr-point.h"
-#include "libnr/nr-rect.h"
-#include "libnr/nr-convex-hull.h"
 #include "conn-avoid-ref.h"
-#include "libnr/nr-point-matrix-ops.h"
 #include "libnr/nr-rect-ops.h"
 #include "libavoid/polyutil.h"
 #include "libavoid/incremental.h"

@@ -14,31 +14,23 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <gtk/gtksignal.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtklabel.h>
-#include <gtk/gtkimage.h>
 #include <gtk/gtkstock.h>
 #include "display/guideline.h"
 #include "helper/unit-menu.h"
 #include "helper/units.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "widgets/icon.h"
-#include "inkscape-private.h"
 #include "desktop.h"
 #include "document.h"
 #include "sp-guide.h"
 #include "sp-namedview.h"
-#include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "event-context.h"
 #include "widgets/desktop-widget.h"
 #include "sp-metrics.h"
-#include "sp-item.h"
-#include "desktop-events.h"
 #include <glibmm/i18n.h>
 #include "dialogs/dialog-events.h"
 #include "message-context.h"

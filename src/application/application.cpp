@@ -15,13 +15,9 @@
 #endif
 
 #include <gtkmm/main.h>
-#include <glibmm/i18n.h>
 
-#include "inkscape.h"
 #include "preferences.h"
-#include "dialogs/input.h"
 #include "application.h"
-#include "app-prototype.h"
 #include "editor.h"
 
 int sp_main_gui(int argc, char const **argv);

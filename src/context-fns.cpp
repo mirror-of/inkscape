@@ -5,7 +5,6 @@
 #include "message-stack.h"
 #include "context-fns.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "desktop-affine.h"
 #include "event-context.h"
 

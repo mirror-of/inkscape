@@ -15,18 +15,12 @@
  *
  */
 
-#include <glib/gquark.h>
-#include <glib/gmessages.h>
 #include <glib/gstrfuncs.h>
-#include <cstring>
-#include "algorithms/find-if-before.h"
 #include "xml/simple-node.h"
 #include "xml/node-event-vector.h"
 #include "xml/node-fns.h"
 #include "xml/repr.h"
-#include "xml/node-observer.h"
 #include "debug/event-tracker.h"
-#include "debug/event.h"
 
 namespace Inkscape {
 
