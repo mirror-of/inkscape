@@ -558,19 +558,14 @@ NRStyleList *font_factory::Styles(gchar const *family, NRStyleList *slist)
         PangoFontDescription *nd = pango_font_face_describe(faces[i]);
         if (nd == NULL)
             continue;
-        if (pango_font_description_to_string(pango_font_face_describe(faces[i])) == NULL)
+        char const *descr = pango_font_description_to_string(nd);
+        if (descr == NULL) {
+            pango_font_description_free(nd);
             continue;
+        }
 		
         char const *name = g_strdup(pango_font_face_get_face_name(faces[i]));
-        char const *descr = /*g_strdup(*/pango_font_description_to_string(nd)/*)*/;
         pango_font_description_free(nd);
-		
-        // no duplicates
-        for (int j = 0; j < nr; j ++) {
-            if (!strcmp((char const *) ((slist->records)[j].name), (char const *) name)) {
-                continue;
-            }
-        }
 		
         slist->records[nr].name = name;
         slist->records[nr].descr = descr;
