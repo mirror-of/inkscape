@@ -190,7 +190,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     Gtk::VBox* tmp = Glib::wrap( GTK_VBOX(dtw->vbox) );
     Gtk::VBox* boxWrap = manage( tmp );
-    pane->add1( *boxWrap );
+    pane->pack1( *boxWrap, true, true );
 
     dtw->statusbar = gtk_hbox_new (FALSE, 0);
     //gtk_widget_set_usize (dtw->statusbar, -1, BOTTOM_BAR_HEIGHT);
@@ -201,7 +201,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
         SwatchesPanel* swatches = manage( new SwatchesPanel() );
         dtw->panels = GTK_WIDGET(swatches->gobj());
-        pane->add2( *swatches );
+        pane->pack2( *swatches, false, true );
     }
 
     hbox = gtk_hbox_new (FALSE, 0);
