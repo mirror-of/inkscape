@@ -13,9 +13,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include "../extension.h"
 #include "implementation.h"
-#include "libnr/nr-point.h"
 
 #include <extension/output.h>
 #include <extension/input.h>

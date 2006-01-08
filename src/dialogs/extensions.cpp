@@ -14,21 +14,8 @@
 
 #include "extensions.h"
 
-#include <gtk/gtk.h>
 
-#include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
-#include <glibmm/i18n.h>
-#include "interface.h"
-#include "verbs.h"
-#include "prefs-utils.h"
-#include "inkscape.h"
-#include "macros.h"
-#include "document.h"
-#include "selection.h"
-#include "display/nr-arena.h"
-#include <glib.h>
-#include <gtkmm/scrolledwindow.h>
 #include "extension/db.h"
 
 namespace Inkscape {

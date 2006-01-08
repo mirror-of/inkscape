@@ -14,7 +14,6 @@
 
 #include "svglsimpl.h"
 
-#include <stdarg.h>
 
 namespace org {
 namespace w3c {

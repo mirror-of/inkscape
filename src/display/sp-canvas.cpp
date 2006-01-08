@@ -19,8 +19,6 @@
 # include "config.h"
 #endif
 
-#include <libnr/nr-values.h>
-#include <libnr/nr-macros.h>
 #include <libnr/nr-pixblock.h>
 
 #include <gtk/gtkmain.h>
@@ -29,7 +27,6 @@
 #include <helper/sp-marshal.h>
 #include <display/sp-canvas.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-convex-hull.h>
 
 enum {

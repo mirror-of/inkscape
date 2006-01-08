@@ -18,8 +18,6 @@
 # include "config.h"
 #endif
 
-#include <glib.h>
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
@@ -33,9 +31,7 @@
 #include "dialog-events.h"
 #include "verbs.h"
 #include "interface.h"
-#include "selection.h"
 #include "style.h"
-#include "object-properties.h"
 #include "inkscape-stock.h"
 #include "prefs-utils.h"
 #include "svg/css-ostringstream.h"

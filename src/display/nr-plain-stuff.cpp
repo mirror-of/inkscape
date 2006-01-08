@@ -11,10 +11,7 @@
  * Released under GNU GPL
  */
 
-#include <stdlib.h>
-#include <time.h>
 #include <libnr/nr-pixops.h>
-#include <libnr/nr-compose.h>
 #include "nr-plain-stuff.h"
 
 #define NR_DEFAULT_CHECKERSIZEP2 2

@@ -19,15 +19,10 @@
 
 #include <gtk/gtk.h>
 
-#include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
-#include <gtkmm/togglebutton.h>
 #include <glibmm/i18n.h>
-#include "interface.h"
-#include "verbs.h"
 #include "prefs-utils.h"
 #include "inkscape.h"
-#include "macros.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "selection.h"
@@ -35,7 +30,6 @@
 #include "display/nr-arena.h"
 #include "sp-root.h"
 #include "xml/repr.h"
-#include <glib.h>
 
 extern "C" {
 // takes doc, root, icon, and icon name to produce pixels

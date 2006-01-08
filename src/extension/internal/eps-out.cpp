@@ -11,14 +11,10 @@
 # include <config.h>
 #endif
 #include "eps-out.h"
-#include <gtk/gtk.h>
 #include <print.h>
-#include <glibmm/i18n.h>
-#include "extension/extension.h"
 #include "extension/system.h"
 #include "extension/db.h"
 #include "extension/output.h"
-#include "dialogs/dialog-events.h"
 
 namespace Inkscape {
 namespace Extension {

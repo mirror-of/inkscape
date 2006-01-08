@@ -15,23 +15,14 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include "curve.h"
-#include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "canvas-bpath.h"
 
 #include <livarot/Shape.h>
 #include <livarot/Path.h>
-#include <livarot/AlphaLigne.h>
 #include <livarot/int-line.h>
 #include <livarot/BitLigne.h>
-#include <libnr/nr-point.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-point-ops.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-rect-l.h>
 #include <libnr/nr-pixops.h>
-#include <libnr/nr-compose.h>
 
 void nr_pixblock_render_bpath_rgba (Shape* theS,uint32_t color,NRRectL &area,char* destBuf,int stride);
 

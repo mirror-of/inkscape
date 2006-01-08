@@ -15,27 +15,21 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <gdk/gdkkeysyms.h>
 
 #include <gtkmm.h>
 
 #include <libnr/n-art-bpath.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-pixblock.h>
 
 #include "macros.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
-#include "display/curve.h"
 #include <glibmm/i18n.h>
 #include "svg/svg.h"
-#include "enums.h"
 #include "color.h"
 #include "color-rgba.h"
 #include "desktop-style.h"
 #include "prefs-utils.h"
 #include "sp-namedview.h"
-#include "inkscape-private.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
@@ -45,9 +39,7 @@
 
 #include "dropper-context.h"
 #include "message-context.h"
-#include <libnr/nr-point-fns.h>
 #include "libnr/nr-scale-translate-ops.h"
-#include <algorithm>
 
 #define C1 0.552
 static NArtBpath const spdc_circle[] = {

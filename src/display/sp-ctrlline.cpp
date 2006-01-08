@@ -17,19 +17,12 @@
  *
  */
 
-#include <math.h>
-#include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "sp-ctrlline.h"
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <libnr/nr-point.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-point-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
-#include <libnr/nr-rect-l.h>
 #include <livarot/Shape.h>
 #include <livarot/Path.h>
 

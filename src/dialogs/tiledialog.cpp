@@ -19,27 +19,19 @@
 
 #include "tiledialog.h"
 
-#include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <gtk/gtksizegroup.h>
 #include <glibmm/i18n.h>
-#include "interface.h"
 #include "verbs.h"
 #include "prefs-utils.h"
 #include "inkscape.h"
-#include "macros.h"
 #include "desktop-handles.h"
 #include "selection.h"
-#include "xml/repr.h"
 #include "document.h"
 #include "sp-item.h"
 #include "widgets/icon.h"
 
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-fns.h"
-#include "libnr/nr-matrix-ops.h"
 
-#include <glib.h>
 
 /*
  *    Sort items by their x co-ordinates, taking account of y (keeps rows intact)

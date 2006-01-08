@@ -1,6 +1,4 @@
-#include "in-dt-coordsys.h"
 #include "sp-root.h"
-#include <glib.h>
 
 /** Returns true iff \a item is suitable to be included in the selection, in particular
     whether it has a bounding box in the desktop coordinate system for rendering resize handles.

@@ -30,10 +30,8 @@
 
 
 #include "xmlreader.h"
-#include "domimpl.h"
 #include "svgimpl.h"
 
-#include <stdio.h>
 #include <stdarg.h>
 
 namespace org {

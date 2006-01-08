@@ -18,14 +18,9 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtksignal.h>
 
 #include "display/canvas-bpath.h"
-#include "display/sp-canvas.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
 #include <glibmm/i18n.h>
@@ -36,7 +31,6 @@
 #include "desktop-style.h"
 #include "document.h"
 #include "draw-anchor.h"
-#include "draw-context.h"
 #include "macros.h"
 #include "message-stack.h"
 #include "pen-context.h"
@@ -44,7 +38,6 @@
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "sp-path.h"
 
 

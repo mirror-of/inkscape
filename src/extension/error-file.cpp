@@ -7,20 +7,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <iostream>  // Work-around for sys/cdefs.h not defining __const for libintl.h.
-#include <stdlib.h>
 
 // #include <glibmm/ustring.h>
 #include <glibmm/i18n.h>
 
-#include <gtkmm/checkbutton.h>
-#include <gtkmm/label.h>
-#include <gtkmm/stock.h>
-#include <gtkmm/paned.h>
 
 #include "inkscape.h"
 #include "prefs-utils.h"
-#include "extension/extension.h"
 #include "dialogs/extensions.h"
 
 #include "error-file.h"

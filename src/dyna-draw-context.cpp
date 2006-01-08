@@ -29,23 +29,14 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "svg/svg.h"
-#include <glibmm/i18n.h>
-#include "display/curve.h"
 #include "display/canvas-bpath.h"
-#include "display/sodipodi-ctrl.h"
 #include "display/bezier-utils.h"
 
 #include "macros.h"
-#include "enums.h"
-#include "mod360.h"
-#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop.h"
@@ -54,13 +45,9 @@
 #include "desktop-affine.h"
 #include "desktop-style.h"
 #include "message-context.h"
-#include "snap.h"
 #include "pixmaps/cursor-calligraphy.xpm"
-#include "widgets/desktop-widget.h"
 #include "dyna-draw-context.h"
-#include "widgets/spw-utilities.h"
 #include "libnr/n-art-bpath.h"
-#include "libnr/nr-point-fns.h"
 #include "xml/repr.h"
 #include "context-fns.h"
 #include "sp-item.h"

@@ -7,19 +7,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <iostream>
-#include <stdio.h>
 
 #include <glibmm/i18n.h>
-#include <glibmm/module.h>
-#include <glibmm/fileutils.h>
-#include <glibmm/miscutils.h>
 
 #include "config.h"
 #include "path-prefix.h"
 
 #include "dependency.h"
-#include "extension.h"
 #include "db.h"
 
 namespace Inkscape {

@@ -16,11 +16,6 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <math.h>
-#include <string.h>
-#include <glib.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-blit.h>
 #include <libnr/nr-path.h>
 #include "../style.h"
@@ -29,10 +24,6 @@
 
 #ifdef test_glyph_liv
 #include "../display/canvas-bpath.h"
-#include "../livarot/LivarotDefs.h"
-#include "../livarot/Path.h"
-#include "../livarot/Shape.h"
-#include <libnr/nr-matrix-ops.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/raster-glyph.h>
 #include <libnrtype/RasterFont.h>

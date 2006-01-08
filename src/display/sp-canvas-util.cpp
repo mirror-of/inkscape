@@ -12,17 +12,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
 
 #include "libnr/nr-matrix-div.h"
-#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-pixops.h"
-#include <libnr/nr-compose.h>
 #include "sp-canvas-util.h"
 
 #include <livarot/Shape.h>
-#include <livarot/Path.h>
-#include <livarot/AlphaLigne.h>
 #include <livarot/int-line.h>
 #include <livarot/BitLigne.h>
 

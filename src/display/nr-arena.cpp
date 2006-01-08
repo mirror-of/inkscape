@@ -14,7 +14,6 @@
 
 #include "nr-arena-item.h"
 #include "nr-arena.h"
-#include <libnr/nr-rect.h>
 #include <libnr/nr-blit.h>
 
 static void nr_arena_class_init (NRArenaClass *klass);

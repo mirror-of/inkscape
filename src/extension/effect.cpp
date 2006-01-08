@@ -7,7 +7,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "inkscape.h"
 #include "inkscape-private.h"
 #include "helper/action.h"
 #include "document.h"

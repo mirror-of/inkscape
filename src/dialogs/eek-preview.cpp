@@ -37,7 +37,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include <string.h>
 #include "eek-preview.h"
 
 #define PRIME_BUTTON_MAGIC_NUMBER 1

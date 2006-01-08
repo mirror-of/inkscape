@@ -17,41 +17,24 @@
 # include <config.h>
 #endif
 
-#include "path-prefix.h"
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <errno.h>
-#include <svg/svg.h>
-#include "interface.h"
-#include "document.h"
-#include "inkscape.h"
 #include "ui/view/view.h"
 #include "desktop-handles.h"
 #include "selection.h"
-#include "file.h"
-#include "sp-object.h"
 #include "sp-namedview.h"
 #include "io/sys.h"
 #include "prefs-utils.h"
 
-#include <fstream>
-#include <glibmm/i18n.h>
 
 #include "../system.h"
 
-#include "extension/extension.h"
-#include "extension/input.h"
-#include "extension/output.h"
 #include "extension/effect.h"
 #include "extension/db.h"
-#include "implementation.h"
 #include "script.h"
 
 #include "util/glib-list-iterators.h"
 
 #ifdef WIN32
-#include <windows.h>
 #endif
 
 /** This is the command buffer that gets allocated from the stack */

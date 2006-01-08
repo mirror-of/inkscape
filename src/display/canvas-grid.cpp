@@ -7,13 +7,9 @@
  *
  */
 
-#include <math.h>
 
-#include "round.h"
-#include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "canvas-grid.h"
-#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-pixops.h>
 
 enum {

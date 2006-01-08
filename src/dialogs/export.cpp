@@ -19,22 +19,14 @@
 # include "config.h"
 #endif
 
-#include <iostream>
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 #include <gtk/gtk.h>
 
-#include "xml/repr.h"
 #include <glibmm/i18n.h>
 #include "helper/unit-menu.h"
 #include "helper/units.h"
 #include "unit-constants.h"
 #include "helper/window.h"
-#include "widgets/spw-utilities.h"
-#include "inkscape.h"
 #include "inkscape-private.h"
-#include "dir-util.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "sp-item.h"
@@ -48,13 +40,11 @@
 #include "../verbs.h"
 #include "../interface.h"
 
-#include "extension/extension.h"
 #include "extension/output.h"
 #include "extension/db.h"
 
 #include "io/sys.h"
 
-#include "export.h"
 
 #define SP_EXPORT_MIN_SIZE 1.0
 

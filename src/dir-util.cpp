@@ -3,9 +3,7 @@
 #define DIR_UTIL_C
 
 #include <errno.h>
-#include <stdlib.h>
 #include <glib.h>
-#include "dir-util.h"
 #include <string.h>
 
 /** Returns a form of \a path relative to \a base if that is easy to construct (e.g. if \a path

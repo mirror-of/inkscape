@@ -15,8 +15,6 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <glib.h>
-#include <glibmm/i18n.h>
 #include "db.h"
 #include "input.h"
 #include "output.h"

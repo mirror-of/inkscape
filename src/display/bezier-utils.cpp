@@ -29,15 +29,11 @@
 # include <config.h>
 #endif
 
-#include <math.h>
 
 #ifdef HAVE_IEEEFP_H
-#include <ieeefp.h>
 #endif
-#include <stdlib.h>
 #include "bezier-utils.h"
 #include <libnr/nr-point-fns.h>
-#include <glib.h>
 
 #include "isnan.h"
 

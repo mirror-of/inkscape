@@ -16,8 +16,6 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <gtk/gtksignal.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtklabel.h>
 #include "xml/repr.h"

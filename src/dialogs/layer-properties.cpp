@@ -14,14 +14,8 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/notebook.h>
-#include <gtkmm/separator.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/table.h>
 #include <gtkmm/stock.h>
 
-#include "dialogs/dialog-events.h"
 #include <glibmm/i18n.h>
 #include "inkscape.h"
 #include "desktop.h"

@@ -15,11 +15,8 @@
  *
  */
 
-#include <cmath>
-#include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "sodipodi-ctrlrect.h"
-#include "libnr/nr-point-matrix-ops.h"
 
 /*
  * Currently we do not have point method, as it should always be painted

@@ -21,47 +21,32 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <glib.h>
 
-#include <libnr/nr-values.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-fns.h>
 
 #include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
 #include "helper/unit-menu.h"
 #include "helper/units.h"
-#include "svg/svg.h"
 #include "svg/css-ostringstream.h"
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
-#include "sp-gradient.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
-#include <sp-use.h>
 #include "sp-marker.h"
 #include <sp-pattern.h>
 #include <widgets/paint-selector.h>
 #include <widgets/dash-selector.h>
-#include "enums.h"
 #include "style.h"
 #include "gradient-chemistry.h"
-#include "document.h"
 #include "sp-namedview.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
-#include "marker-status.h"
 #include "selection.h"
-#include "sp-item.h"
 #include "inkscape.h"
 #include "inkscape-stock.h"
 #include "dialogs/dialog-events.h"
-#include "sp-root.h"
-#include "sp-defs.h"
 #include "sp-text.h"
-#include "sp-shape.h"
 #include "sp-rect.h"
 #include "document-private.h"
 #include "display/nr-arena.h"
@@ -70,7 +55,6 @@
 #include "widgets/icon.h"
 #include "helper/stock-items.h"
 #include "io/sys.h"
-#include <file.h>
 
 #include "dialogs/stroke-style.h"
 

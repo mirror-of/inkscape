@@ -16,13 +16,8 @@
 # include <config.h>
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
 
-#include <string.h>
-#include <glib.h>
 
-#include "inkscape.h"
 #include "xml/repr.h"
 #include "rdf.h"
 #include "sp-item-group.h"

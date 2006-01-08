@@ -12,32 +12,19 @@
 # include <config.h>
 #endif
 
-#include <vector>
 
 #include "swatches.h"
 
-#include <gtk/gtk.h>
 
-#include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
-#include <gtkmm/radiomenuitem.h>
-#include "interface.h"
-#include "verbs.h"
-#include "prefs-utils.h"
 #include "inkscape.h"
-#include "macros.h"
 #include "document.h"
 #include "desktop-handles.h"
-#include "selection.h"
-#include "display/nr-arena.h"
-#include <glib.h>
-#include <gtkmm/table.h>
 #include "extension/db.h"
 #include "inkscape.h"
 #include "svg/svg.h"
 #include "desktop-style.h"
-#include "ui/previewable.h"
 #include "io/sys.h"
 #include "path-prefix.h"
 

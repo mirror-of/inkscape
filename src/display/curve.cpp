@@ -15,16 +15,9 @@
  * Released under GNU GPL
  */
 
-#include <math.h>
-#include <string.h>
-#include <glib/gmessages.h>
 
 #include <display/curve.h>
 #include <libnr/n-art-bpath.h>
-#include <libnr/nr-point.h>
-#include <libnr/nr-path.h>
-#include <libnr/nr-macros.h>
-#include <libnr/nr-point-fns.h>
 #include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-translate-ops.h>
 

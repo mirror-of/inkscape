@@ -15,15 +15,11 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
-#include <stdlib.h>
-#include <gtk/gtksignal.h>
 #include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "macros.h"
 #include "sp-anchor.h"
 #include "sp-attribute-widget.h"
-#include "object-attributes.h"
 
 struct SPAttrDesc {
     gchar const *label;

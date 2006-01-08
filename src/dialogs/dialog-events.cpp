@@ -15,14 +15,8 @@
 # include "config.h"
 #endif
 
-#include <glib.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtksignal.h>
-#include <time.h>
-#include "helper/window.h"
-#include "widgets/sp-widget.h"
 #include "macros.h"
-#include "inkscape.h"
 #include <gtk/gtk.h>
 #include "desktop.h"
 #include "inkscape-private.h"

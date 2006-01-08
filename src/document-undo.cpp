@@ -45,29 +45,20 @@
  */
 
 
-#include "config.h"
 
 #if HAVE_STRING_H
-#include <string.h>
 #endif
 
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
 #endif
 
 #include "xml/repr.h"
-#include "xml/event-fns.h"
-#include "sp-object.h"
-#include "sp-item.h"
 #include "document-private.h"
-#include "document.h"
-#include "selection.h"
 #include "inkscape.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
 
-#include "composite-undo-stack-observer.h"
 
 /*
  * Undo & redo

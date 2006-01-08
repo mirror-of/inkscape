@@ -1,5 +1,4 @@
 #include "utest/test-2ary-cases.h"
-#include "utest/utest.h"
 #include "dir-util.h"
 #include "streq.h"
 

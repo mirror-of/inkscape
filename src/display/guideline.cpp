@@ -11,14 +11,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <math.h>
 
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-pixops.h>
 
 #include "sp-canvas-util.h"
 #include "guideline.h"
-#include <libnr/nr-matrix-fns.h>
 
 static void sp_guideline_class_init(SPGuideLineClass *c);
 static void sp_guideline_init(SPGuideLine *guideline);

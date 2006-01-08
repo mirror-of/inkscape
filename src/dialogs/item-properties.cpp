@@ -16,34 +16,24 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
-#include <ctype.h>
-#include <libnr/nr-values.h>
-#include <glib.h>
-#include <gtk/gtksignal.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkhbox.h>
-#include <gtk/gtkhscale.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtktextview.h>
-#include <gtk/gtktextbuffer.h>
 #include <gtk/gtktooltips.h>
 
 #include <glibmm/i18n.h>
 #include "helper/window.h"
-#include "../svg/svg.h"
 #include "../widgets/sp-widget.h"
 #include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-handles.h"
-#include "../desktop-style.h"
 #include "../selection.h"
 #include "../sp-item.h"
-#include "../style.h"
 #include "../macros.h"
 #include "../verbs.h"
 #include "../interface.h"
@@ -51,7 +41,6 @@
 #include "dialog-events.h"
 #include "../prefs-utils.h"
 
-#include "item-properties.h"
 
 static GtkWidget *dlg = NULL;
 static win_data wd;

@@ -8,8 +8,6 @@
  *
  */
 
-#include <math.h>
-#include "sp-canvas.h"
 #include "sp-canvas-util.h"
 
 #include "sodipodi-ctrl.h"

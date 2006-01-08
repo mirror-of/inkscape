@@ -14,9 +14,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string>
 #include <gtk/gtk.h>
-#include <gtk/gtkwidget.h>
 
 #include "../inkscape.h"
 #include "../macros.h"
@@ -27,7 +25,6 @@
 #include "dialog-events.h"
 #include "../prefs-utils.h"
 
-#include "input.h"
 
 static GtkWidget *dlg = NULL;
 static win_data wd;

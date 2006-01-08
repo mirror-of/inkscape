@@ -12,11 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <math.h>
-#include <glib.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-blit.h>
 #include "nr-arena-group.h"
 
 static void nr_arena_group_class_init (NRArenaGroupClass *klass);

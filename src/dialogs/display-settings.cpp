@@ -15,10 +15,8 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <glib.h>
 #include <gtk/gtk.h>
 
-#include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "../inkscape.h"
 #include "../prefs-utils.h"
@@ -28,7 +26,6 @@
 #include "../verbs.h"
 #include "../interface.h"
 #include "../message-stack.h"
-#include "../dropper-context.h"
 #include "../enums.h"
 #include "../selcue.h"
 #include "../selection.h"
@@ -39,7 +36,6 @@
 #include "xml/repr.h"
 #include "ui/widget/style-swatch.h"
 
-#include "display-settings.h"
 
 
 

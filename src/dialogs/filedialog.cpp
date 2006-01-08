@@ -15,48 +15,31 @@
 #endif
 
 
-#include <gtkmm/box.h>
-#include <gtkmm/filechooserdialog.h>
-#include <gtkmm/menubar.h>
-#include <gtkmm/menu.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/expander.h>
-#include <gtkmm/comboboxtext.h>
-#include <gtkmm/stock.h>
-#include <gdkmm/pixbuf.h>
 
 //Temporary ugly hack
 //Remove these after the get_filter() calls in
 //show() on both classes are fixed
 #include <gtk/gtkfilechooser.h>
-#include <gtk/gtkfilefilter.h>
 
 //Another hack
 #include <gtk/gtkentry.h>
 #include <gtk/gtkexpander.h>
 
-#include <vector>
-#include <map>
 
-#include <string.h>
 #include <sys/stat.h>
 
-#include "interface.h"
 #include "filedialog.h"
 #include <glibmm/i18n.h>
 #include "prefs-utils.h"
 
 #include <dialogs/dialog-events.h>
-#include <extension/extension.h>
 #include <extension/input.h>
 #include <extension/output.h>
 #include <extension/db.h>
 
 //for the preview widget
-#include "document.h"
 #include "inkscape.h"
 #include "svg-view-widget.h"
-#include "uri.h"
 
 #undef INK_DUMP_FILENAME_CONV
 

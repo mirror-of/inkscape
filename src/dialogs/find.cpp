@@ -11,18 +11,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm/container.h>
-#include <gtkmm/buttonbox.h>
-#include <gtkmm/image.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/tooltips.h>
-#include <gtkmm/table.h>
 
-#include "dialogs/find.h"
 #include "widgets/icon.h"
 
 #include "message-stack.h"
-#include "verbs.h"
 
 //TODO  : delete this
 GtkWidget * sp_find_dialog_old (void);
@@ -35,29 +27,22 @@ sp_find_dialog(){
     return;
 }
 
-#include "config.h"
 
 #include <gtk/gtk.h>
 
-#include "../inkscape-stock.h"
 #include <glibmm/i18n.h>
 #include "helper/window.h"
-#include "helper/unit-menu.h"
-#include "libnr/nr-scale.h"
-#include "libnr/nr-scale-ops.h"
 #include "macros.h"
 #include "inkscape.h"
 #include "document.h"
 #include "desktop.h"
 #include "selection.h"
-#include "selection-chemistry.h"
 #include "desktop-handles.h"
 
 #include "dialog-events.h"
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
-#include "../sp-object.h"
 #include "../sp-text.h"
 #include "../sp-flowtext.h"
 #include "../text-editing.h"
@@ -68,7 +53,6 @@ sp_find_dialog(){
 #include "../sp-ellipse.h"
 #include "../sp-star.h"
 #include "../sp-spiral.h"
-#include "../sp-polygon.h"
 #include "../sp-path.h"
 #include "../sp-line.h"
 #include "../sp-polyline.h"

@@ -19,46 +19,22 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmisc.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtktooltips.h>
 
-#include <libnr/nr-values.h>
-#include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-path.h>
 
-#include <glibmm/i18n.h>
-#include <helper/window.h>
-#include <svg/svg.h>
 #include <widgets/sp-widget.h>
-#include <sp-gradient.h>
 #include <sp-linear-gradient.h>
 #include <sp-pattern.h>
 #include <sp-radial-gradient.h>
-#include <sp-use.h>
 #include <widgets/paint-selector.h>
 #include <style.h>
 #include <gradient-chemistry.h>
-#include <document.h>
 #include <desktop-style.h>
 #include <desktop-handles.h>
 #include <selection.h>
-#include <sp-item.h>
 #include <inkscape.h>
 #include <document-private.h>
-#include <file.h>
 #include <xml/repr.h>
 
-#include "fill-style.h"
 
 // These can be deleted once we sort out the libart dependence.
 

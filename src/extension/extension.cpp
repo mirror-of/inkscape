@@ -20,22 +20,10 @@
 # include "config.h"
 #endif
 
-#include <ostream>
-#include <fstream>
-#include <string.h>
-#include <stdlib.h>
 
-#include "path-prefix.h"
-#include "xml/repr.h"
 #include <glibmm/i18n.h>
-#include "dir-util.h"
 #include "inkscape.h"
-#include "sp-object.h"
-#include "document.h"
-#include "prefs-utils.h"
-#include "extension.h"
 #include "extension/implementation/implementation.h"
-#include "libnr/nr-point.h"
 
 #include "db.h"
 #include "dependency.h"

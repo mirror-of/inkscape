@@ -12,17 +12,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtktypeutils.h>
 
 #include "draw-anchor.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "event-context.h"
 #include "display/sodipodi-ctrl.h"
-#include "display/sp-canvas.h"
-#include <glibmm/i18n.h>
-#include "libnr/nr-point-fns.h"
-#include "libnr/nr-point-ops.h"
 
 /**
  * Creates an anchor object and initializes it.

@@ -1,7 +1,6 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "document.h"
 #include "document-private.h"

@@ -17,21 +17,12 @@
 #endif
 #include "path-prefix.h"
 
-#include <inttypes.h>
-#include <dirent.h>
-#include <glib.h>
-#include <string.h>
 
 #include "inkscape.h"
-#include "xml/repr.h"
-#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 
-#include "extension/extension.h"
 #include "system.h"
 #include "db.h"
-#include "implementation/script.h"
-#include "internal/svg.h"
 #include "internal/svgz.h"
 #include "internal/ps.h"
 #ifdef WITH_GNOME_PRINT
@@ -50,7 +41,6 @@
 #include "internal/gimpgrad.h"
 #include "internal/grid.h"
 #include "prefs-utils.h"
-#include "error-file.h"
 #include "io/sys.h"
 
 extern gboolean inkscape_app_use_gui( Inkscape::Application const *app );

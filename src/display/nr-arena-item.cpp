@@ -15,20 +15,13 @@
 #define noNR_ARENA_ITEM_VERBOSE
 #define noNR_ARENA_ITEM_DEBUG_CASCADE
 
-#include <string.h>
-#include <assert.h>
 
-#include <libnr/nr-macros.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-blit.h>
 #include <libnr/nr-pixops.h>
 #include "nr-arena.h"
 #include "nr-arena-item.h"
 //#include "nr-arena-group.h"
 
-#include "../prefs-utils.h"
-#include <sys/time.h>
 
 static void nr_arena_item_class_init (NRArenaItemClass *klass);
 static void nr_arena_item_init (NRArenaItem *item);

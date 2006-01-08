@@ -37,25 +37,16 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <glib.h>
-#include <string.h>
 #include <gtk/gtkmain.h>
 #include "application/application.h"
 #include "application/editor.h"
 #include "libnr/nr-matrix-fns.h"
 #include "xml/repr.h"
-#include "xml/event-fns.h"
-#include "helper/sp-marshal.h"
 #include "helper/units.h"
-#include <glibmm/i18n.h>
 #include "inkscape-private.h"
 #include "inkscape_version.h"
 #include "sp-object-repr.h"
-#include "sp-item-group.h"
-#include "sp-root.h"
-#include "sp-namedview.h"
 #include "document-private.h"
-#include "version.h"
 #include "dir-util.h"
 #include "unit-constants.h"
 #include "prefs-utils.h"
@@ -69,8 +60,6 @@
 
 #define SP_DOCUMENT_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE - 1)
 
-#include <locale>
-#include <sstream>
 
 static gint sp_document_idle_handler(gpointer data);
 

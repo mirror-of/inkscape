@@ -18,9 +18,6 @@
 # include "config.h"
 #endif
 
-#include <sigc++/sigc++.h>
-#include <string.h>
-#include <glib.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
@@ -31,8 +28,6 @@
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkentry.h>
-#include <gtk/gtktooltips.h>
-#include <gtk/gtkimage.h>
 #include <gtk/gtkarrow.h>
 
 #include <glibmm/i18n.h>
@@ -43,11 +38,9 @@
 #include "../desktop-handles.h"
 #include "desktop.h"
 #include "../selection.h"
-#include "../sp-item.h"
 #include "../sp-string.h"
 #include "../sp-tspan.h"
 #include "../sp-root.h"
-#include "../sp-defs.h"
 #include "../event-context.h"
 #include "in-dt-coordsys.h"
 

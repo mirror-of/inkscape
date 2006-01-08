@@ -12,11 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-macros.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-pixblock-pixel.h>
-#include <libnr/nr-blit.h>
 
 #include "nr-gradient-gpl.h"
 

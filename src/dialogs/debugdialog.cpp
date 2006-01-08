@@ -18,15 +18,9 @@
 #include "debugdialog.h"
 
 #include <gtkmm.h>
-#include <gtkmm/box.h>
-#include <gtkmm/dialog.h>
-#include <gtkmm/textview.h>
-#include <gtkmm/button.h>
 
-#include <dialogs/dialog-events.h>
 #include <glibmm/i18n.h>
 
-#include <glib.h>
 
 namespace Inkscape {
 namespace UI {

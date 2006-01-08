@@ -21,12 +21,9 @@
 
 #include "util/glib-list-iterators.h"
 
-#include "extension/implementation/implementation.h"
-#include "extension/extension.h"
 #include "extension/effect.h"
 #include "extension/system.h"
 
-#include <glibmm/i18n.h>
 
 #include "bluredge.h"
 

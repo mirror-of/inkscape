@@ -13,27 +13,16 @@
  */
 
 
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 
-#include <display/curve.h>
 #include <display/nr-arena.h>
 #include <display/nr-arena-shape.h>
 #include <libnr/n-art-bpath.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-path.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-blit.h>
-#include <livarot/Shape.h>
 #include <livarot/Path.h>
-#include <livarot/AlphaLigne.h>
 #include <livarot/float-line.h>
 #include <livarot/int-line.h>
-#include <livarot/BitLigne.h>
-#include <libnr/nr-matrix-ops.h>
 #include <style.h>
 
 //int  showRuns=0;
@@ -194,7 +183,6 @@ nr_arena_shape_set_child_position (NRArenaItem *item, NRArenaItem *child, NRAren
     nr_arena_item_request_render (child);
 }
 
-#include "enums.h"
 void nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc);
 void nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc);
 void nr_arena_shape_add_bboxes(NRArenaShape* shape,NRRect &bbox);

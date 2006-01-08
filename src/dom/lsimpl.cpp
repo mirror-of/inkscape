@@ -27,9 +27,6 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "domimpl.h"
-#include "events.h"
-#include "traversal.h"
 #include "lsimpl.h"
 
 #include <stdarg.h>

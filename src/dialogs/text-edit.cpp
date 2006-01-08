@@ -17,16 +17,12 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
 
-#include <glib.h>
 #include <gtk/gtk.h>
 
 #ifdef WITH_GTKSPELL
 extern "C" {
-#include <gtkspell/gtkspell.h>
 }
 #endif
 
@@ -34,7 +30,6 @@ extern "C" {
 #include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "../widgets/font-selector.h"
-#include "../forward.h"
 #include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-style.h"
@@ -55,7 +50,6 @@ extern "C" {
 #include "widgets/icon.h"
 #include <xml/repr.h>
 
-#include "text-edit.h"
 
 #define VB_MARGIN 4
 
