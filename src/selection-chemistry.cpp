@@ -41,6 +41,7 @@
 #include "sp-textpath.h"
 #include "sp-tspan.h"
 #include "sp-flowtext.h"
+#include "sp-flowregion.h"
 #include "text-editing.h"
 #include "text-context.h"
 #include "dropper-context.h"
@@ -1213,10 +1214,21 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
       // Same for textpath if we are also doing ANY transform to its path: do not touch textpath,
       // letters cannot be squeezed or rotated anyway, they only refill the changed path.
       // Same for linked offset if we are also moving its source: do not move it.
-        if (transform_textpath_with_path || transform_offset_with_source || transform_flowtext_with_frame) {
+        if (transform_textpath_with_path || transform_offset_with_source) {
 		// restore item->transform field from the repr, in case it was changed by seltrans
             sp_object_read_attr (SP_OBJECT (item), "transform");
 
+        } else if (transform_flowtext_with_frame) {
+            // apply the inverse of the region's transform to the <use> so that the flow remains
+            // the same (even though the output itself gets transformed)
+            for (SPObject *region = item->firstChild() ; region ; region = SP_OBJECT_NEXT(region)) {
+                if (!SP_IS_FLOWREGION(region) && !SP_IS_FLOWREGIONEXCLUDE(region))
+                    continue;
+                for (SPObject *use = region->firstChild() ; use ; use = SP_OBJECT_NEXT(use)) {
+                    if (!SP_IS_USE(use)) continue;
+                    sp_item_write_transform(SP_USE(use), SP_OBJECT_REPR(use), item->transform.inverse(), NULL);
+                }
+            }
         } else if (transform_clone_with_original) {
             // We are transforming a clone along with its original. The below matrix juggling is
             // necessary to ensure that they transform as a whole, i.e. the clone's induced
