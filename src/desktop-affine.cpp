@@ -15,6 +15,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "sp-root.h"
+#include "libnr/nr-matrix-ops.h"
 
 NR::Matrix const sp_desktop_root2dt_affine (SPDesktop const *dt)
 {

@@ -19,6 +19,7 @@
 #include <libnr/n-art-bpath.h>
 #include <libnr/nr-path.h>
 #include <libnr/nr-pixops.h>
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-blit.h>
 #include <livarot/Path.h>
 #include <livarot/float-line.h>

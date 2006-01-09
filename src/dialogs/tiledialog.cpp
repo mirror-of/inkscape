@@ -22,6 +22,7 @@
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <gtk/gtksizegroup.h>
 #include <glibmm/i18n.h>
+#include "libnr/nr-matrix-ops.h"
 #include "verbs.h"
 #include "prefs-utils.h"
 #include "inkscape.h"
