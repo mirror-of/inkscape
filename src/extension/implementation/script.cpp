@@ -17,6 +17,8 @@
 # include <config.h>
 #endif
 
+#include <unistd.h>
+
 #include <errno.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/scrolledwindow.h>
@@ -35,6 +37,7 @@
 #include "util/glib-list-iterators.h"
 
 #ifdef WIN32
+#include <windows.h>
 #endif
 
 /** This is the command buffer that gets allocated from the stack */
@@ -407,7 +410,7 @@ Script::open(Inkscape::Extension::Input *module, gchar const *filename)
     int data_read = 0;
     gint tempfd;
     gchar *tempfilename_out;
- 
+
     // FIXME: process the GError instead of passing NULL
     if ((tempfd = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_out, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
