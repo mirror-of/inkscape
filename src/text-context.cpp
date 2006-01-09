@@ -28,8 +28,7 @@
 #include <display/sp-ctrlquadr.h>
 #include <libnr/nr-point-matrix-ops.h>
 #include <gtk/gtkimmulticontext.h>
-
-#include <gtkmm.h>
+#include <gtkmm/clipboard.h>
 
 #include "macros.h"
 #include "sp-text.h"

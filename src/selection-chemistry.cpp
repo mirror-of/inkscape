@@ -20,8 +20,7 @@
 #endif
 
 #include <string.h>
-#include <gtk/gtk.h>
-#include <gtkmm.h>
+#include <gtkmm/clipboard.h>
 
 #include "svg/svg.h"
 #include "document.h"

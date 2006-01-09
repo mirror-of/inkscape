@@ -33,8 +33,6 @@
 
 #include "helper/action.h"
 
-#include <gtkmm.h>
-
 #include <glibmm/i18n.h>
 
 #include "dialogs/text-edit.h"

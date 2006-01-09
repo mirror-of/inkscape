@@ -13,7 +13,8 @@
 #ifndef INKSCAPE_DIALOG_H
 #define INKSCAPE_DIALOG_H
 
-#include <gtkmm.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/tooltips.h>
 
 namespace Inkscape { class Selection; }
 class SPDesktop;

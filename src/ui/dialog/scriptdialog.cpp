@@ -14,14 +14,16 @@
 # include <config.h>
 #endif
 
+#include <glibmm/i18n.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/menubar.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/textview.h>
+
 #include "scriptdialog.h"
-
-#include <gtkmm.h>
-#include <glibmm.h>
-
 #include <extension/script/InkscapeScript.h>
 
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {

@@ -15,7 +15,6 @@
 
 #include "verbs.h"
 #include "dialog.h"
-#include <gtkmm.h>
 
 #include "jabber_whiteboard/session-file-selector.h"
 

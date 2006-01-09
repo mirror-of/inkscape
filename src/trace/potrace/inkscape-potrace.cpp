@@ -13,8 +13,8 @@
  *
  */
 
-#include "inkscape-potrace.h"
-
+#include <glibmm/i18n.h>
+#include <gtkmm/main.h>
 
 #include "trace/filterset.h"
 #include "trace/imagemap-gdk.h"
@@ -28,15 +28,13 @@
 #include <sp-path.h>
 #include <svg/stringstream.h>
 #include <xml/repr.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <glibmm/i18n.h>
-
-#include <gtkmm.h>
-
 #include "greymap.h"
 #include "curve.h"
 #include "potracelib.h"
 #include "bitmap.h"
+
+#include "inkscape-potrace.h"
+
 
 static void updateGui()
 {

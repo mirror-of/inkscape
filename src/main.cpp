@@ -236,6 +236,8 @@
 #endif
 #include "path-prefix.h"
 
+#include <gtk/gtkmessagedialog.h>
+
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
 #endif

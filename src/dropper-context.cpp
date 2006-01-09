@@ -16,14 +16,16 @@
 # include <config.h>
 #endif
 
-#include <gtkmm.h>
+#include <glibmm/i18n.h>
+#include <glibmm/ustring.h>
+#include <glibmm/refptr.h>
+#include <gtkmm/clipboard.h>
+#include <gdk/gdkkeysyms.h>
 
-#include <libnr/n-art-bpath.h>
-
+#include "libnr/n-art-bpath.h"
 #include "macros.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
-#include <glibmm/i18n.h>
 #include "svg/svg.h"
 #include "color.h"
 #include "color-rgba.h"

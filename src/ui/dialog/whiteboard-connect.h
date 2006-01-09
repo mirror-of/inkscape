@@ -15,7 +15,6 @@
 
 #include "verbs.h"
 #include "dialog.h"
-#include <gtkmm.h>
 
 struct SPDesktop;
 

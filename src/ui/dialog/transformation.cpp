@@ -22,6 +22,7 @@
 #include "libnr/nr-rect.h"
 #include "libnr/nr-scale-ops.h"
 #include "libnr/nr-matrix-ops.h"
+#include "inkscape.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "verbs.h"

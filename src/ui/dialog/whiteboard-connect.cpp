@@ -10,10 +10,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm.h>
 #include <glibmm/i18n.h>
-
 #include <gtk/gtkdialog.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/table.h>
 
 #include "inkscape.h"
 #include "desktop.h"

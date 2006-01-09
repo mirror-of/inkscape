@@ -12,16 +12,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glibmm/ustring.h>
+#include <gtkmm/box.h>
 
 
-#include <gtkmm.h>
-
-#include "inkscape.h"
-#include "document.h"
-#include "svg-view.h"
-
-
-
+class SPDocument;
 
 namespace Inkscape
 {

@@ -13,7 +13,6 @@
 
 #include "previewholder.h"
 
-#include <gtkmm.h>
 #include <gtkmm/scrolledwindow.h>
 
 

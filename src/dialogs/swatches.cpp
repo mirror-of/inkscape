@@ -12,11 +12,9 @@
 # include <config.h>
 #endif
 
-
-#include "swatches.h"
-
-
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
+#include <gtk/gtkdnd.h>
+
 #include <glibmm/i18n.h>
 #include "inkscape.h"
 #include "document.h"
@@ -27,6 +25,7 @@
 #include "desktop-style.h"
 #include "io/sys.h"
 #include "path-prefix.h"
+#include "swatches.h"
 
 #include "eek-preview.h"
 

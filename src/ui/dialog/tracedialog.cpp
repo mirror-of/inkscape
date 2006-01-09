@@ -14,29 +14,31 @@
 # include <config.h>
 #endif
 
-#include "tracedialog.h"
-#include "trace/trace.h"
-#include "trace/potrace/inkscape-potrace.h"
-
-#include <gtkmm.h>
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
-
-#include <gtk/gtk.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/radiobutton.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/spinbutton.h>
+#include <gtkmm/image.h>
+#include <gtkmm/stock.h>
 
 #include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
+
 #include "interface.h"
 #include "verbs.h"
 #include "prefs-utils.h"
 #include "inkscape.h"
 #include "macros.h"
 
-#include <glib.h>
-
 #include "dialog.h"
+
+#include "tracedialog.h"
+#include "trace/trace.h"
+#include "trace/potrace/inkscape-potrace.h"
 
 
 namespace Inkscape {

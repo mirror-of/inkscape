@@ -10,8 +10,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-#include <glibmm.h>
 #include <glibmm/i18n.h>
 
 #include <sigc++/sigc++.h>

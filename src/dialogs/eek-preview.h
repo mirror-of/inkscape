@@ -39,8 +39,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include <glib.h>
-#include <gtk/gtk.h>
+#include <gtk/gtkdrawingarea.h>
 
 G_BEGIN_DECLS
 

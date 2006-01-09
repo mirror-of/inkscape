@@ -15,12 +15,15 @@
 # include <config.h>
 #endif
 
-#include "debugdialog.h"
-
-#include <gtkmm.h>
-
 #include <glibmm/i18n.h>
+#include <gtkmm/box.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/textview.h>
+#include <gtkmm/button.h>
+#include <gtkmm/menubar.h>
+#include <gtkmm/scrolledwindow.h>
 
+#include "debugdialog.h"
 
 namespace Inkscape {
 namespace UI {

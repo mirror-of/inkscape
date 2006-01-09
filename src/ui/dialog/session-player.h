@@ -14,7 +14,6 @@
 
 #include "verbs.h"
 #include "dialog.h"
-#include <gtkmm.h>
 
 #include "ui/widget/icon-widget.h"
 

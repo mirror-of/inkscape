@@ -15,7 +15,6 @@
 #ifndef INKSCAPE_EXTENSION_SYSTEM_H__
 #define INKSCAPE_EXTENSION_SYSTEM_H__
 
-#include <gtk/gtk.h>
 #include "document.h"
 #include "extension/extension.h"
 

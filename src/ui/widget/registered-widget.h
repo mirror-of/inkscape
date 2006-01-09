@@ -20,6 +20,8 @@ class SPUnit;
 namespace Gtk {
     class HScale;
     class RadioButton;
+    class SpinButton;
+    class ToggleButton;
 }
 
 namespace Inkscape {

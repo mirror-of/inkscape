@@ -30,8 +30,8 @@
 #include <gtkmm/image.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/comboboxtext.h>
+#include <gtkmm/spinbutton.h>
 #include <gtkmm/tooltips.h>
-#include <gtk/gtk.h>
 
 #include <sigc++/sigc++.h>
 

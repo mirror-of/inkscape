@@ -28,9 +28,6 @@
 #include <string.h>
 #include <time.h>
 #include <libnr/nr-pixops.h>
-#include <glib.h>
-
-#include <gtkmm.h>
 
 #include "macros.h"
 #include "xml/node-fns.h"

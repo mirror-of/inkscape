@@ -19,6 +19,8 @@
 #include <glibmm/i18n.h>
 #include "ui/view/view-widget.h"
 #include "svg-view-widget.h"
+#include "document.h"
+#include "inkscape.h"
 
 
 namespace Inkscape
