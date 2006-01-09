@@ -5,15 +5,15 @@
  * Cartesian point class.
  */
 
-#include <math.h>
-#include <stdexcept>
+//#include <math.h>
+//#include <stdexcept>
 #include <iostream>
-#include <iomanip>
+//#include <iomanip>
 
 #include <libnr/nr-coord.h>
 #include <libnr/nr-dim2.h>
 
-#include "round.h"
+//#include "round.h"
 #include "decimal-round.h"
 
 /// A NRPoint consists of x and y coodinates.

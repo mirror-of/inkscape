@@ -2,9 +2,8 @@
 #ifndef SEEN_NR_POINT_MATRIX_OPS_H
 #define SEEN_NR_POINT_MATRIX_OPS_H
 
-#include <libnr/nr-point.h>
-#include <libnr/nr-matrix.h>
-
+#include "libnr/nr-point.h"
+#include "libnr/nr-matrix.h"
 
 namespace NR {
 

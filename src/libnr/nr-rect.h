@@ -13,19 +13,21 @@
  * This code is in public domain
  */
 
+
 #include <stdexcept>
-#include <iostream>
+
+#include "libnr/nr-values.h"
 #include <libnr/nr-coord.h>
 #include <libnr/nr-i-coord.h>
 #include <libnr/nr-dim2.h>
-#include <libnr/nr-macros.h>
 #include <libnr/nr-point.h>
-#include <libnr/nr-point-ops.h>
-#include <libnr/nr-values.h>
 #include <libnr/nr-maybe.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-matrix-ops.h>
+
+struct NRMatrix;
+namespace NR {
+    struct Matrix;
+}
 
 /* NULL rect is infinite */
 
@@ -67,9 +69,6 @@ NRRectL *nr_rect_l_union_xy(NRRectL *d, NR::ICoord x, NR::ICoord y);
 
 NRRect *nr_rect_d_matrix_transform(NRRect *d, NRRect const *s, NR::Matrix const &m);
 NRRect *nr_rect_d_matrix_transform(NRRect *d, NRRect const *s, NRMatrix const *m);
-
-#include <stdexcept>
-#include <typeinfo>
 
 namespace NR {
 

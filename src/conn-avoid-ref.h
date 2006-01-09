@@ -13,9 +13,12 @@
  */
 
 
-#include <forward.h>
 #include <sigc++/connection.h>
-#include "libavoid/shape.h"
+
+struct SPItem;
+namespace Avoid {
+    class ShapeRef;
+}
 
 class SPAvoidRef {
 public:

@@ -19,7 +19,8 @@
 
 #include <glib/gmessages.h>
 
-#include <libnr/nr-macros.h>
+#include "libnr/nr-coord.h"
+#include "libnr/nr-values.h"
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-scale.h>
 #include <libnr/nr-translate.h>
