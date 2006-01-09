@@ -18,16 +18,16 @@
 #endif
 
 #include <errno.h>
+#include <gtkmm/textview.h>
+#include <gtkmm/scrolledwindow.h>
+
 #include "ui/view/view.h"
 #include "desktop-handles.h"
 #include "selection.h"
 #include "sp-namedview.h"
 #include "io/sys.h"
 #include "prefs-utils.h"
-
-
 #include "../system.h"
-
 #include "extension/effect.h"
 #include "extension/db.h"
 #include "script.h"

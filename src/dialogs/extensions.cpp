@@ -12,11 +12,12 @@
 # include <config.h>
 #endif
 
+#include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
+#include <gtkmm/scrolledwindow.h>
+
+#include "extension/db.h"
 #include "extensions.h"
 
-
-#include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
-#include "extension/db.h"
 
 namespace Inkscape {
 namespace UI {

@@ -12,12 +12,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
 #include <gtkmm/textview.h>
-
-#include "sp-object.h"
 #include "ui/widget/panel.h"
-#include "extension/extension.h"
+
+namespace Inkscape {
+        namespace Extension {
+                class Extension;
+        }
+}
 
 namespace Inkscape {
 namespace UI {

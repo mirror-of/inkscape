@@ -16,6 +16,7 @@
 #include "verbs.h"
 #include "dialog.h"
 
+#include <gtkmm/table.h>
 #include "jabber_whiteboard/session-file-selector.h"
 
 struct SPDesktop;

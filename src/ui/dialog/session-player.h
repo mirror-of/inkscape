@@ -15,6 +15,10 @@
 #include "verbs.h"
 #include "dialog.h"
 
+#include "gtkmm/toolbutton.h"
+#include "gtkmm/toolbar.h"
+#include "gtkmm/expander.h"
+
 #include "ui/widget/icon-widget.h"
 
 struct SPDesktop;

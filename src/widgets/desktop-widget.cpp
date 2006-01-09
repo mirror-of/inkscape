@@ -22,7 +22,7 @@
 
 #include <glib.h>
 #include <glibmm/i18n.h>
-
+#include <gtkmm/paned.h>
 #include <gtk/gtk.h>
 
 #include "macros.h"

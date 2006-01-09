@@ -12,12 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/tooltips.h>
 
-#include <vector>
-
-#include "sp-object.h"
 #include "ui/widget/panel.h"
 #include "ui/previewholder.h"
 

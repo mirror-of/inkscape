@@ -40,6 +40,7 @@
 #include <gtkmm/toolbar.h>
 #include <gtkmm/tooltips.h>
 #include <gtkmm/accelmap.h>
+#include <gtkmm/separator.h>
 #include <glibmm/i18n.h>
 #include <pangomm/layout.h>
 

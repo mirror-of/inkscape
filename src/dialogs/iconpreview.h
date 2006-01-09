@@ -13,14 +13,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
+#include <gtkmm/paned.h>
+#include <gtkmm/image.h>
 #include <gtkmm/toggletoolbutton.h>
 
-#include "sp-object.h"
 #include "ui/widget/panel.h"
+
+struct SPObject;
 
 namespace Inkscape {
 namespace UI {

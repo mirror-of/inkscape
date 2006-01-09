@@ -17,11 +17,12 @@
 # include <config.h>
 #endif
 
-#include "tiledialog.h"
 
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <gtk/gtksizegroup.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/stock.h>
+
 #include "libnr/nr-matrix-ops.h"
 #include "verbs.h"
 #include "prefs-utils.h"
@@ -31,6 +32,7 @@
 #include "document.h"
 #include "sp-item.h"
 #include "widgets/icon.h"
+#include "tiledialog.h"
 
 
 

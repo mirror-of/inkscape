@@ -21,6 +21,9 @@
 
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
+#include <gtkmm/buttonbox.h>
+#include <gtkmm/stock.h>
+
 #include "prefs-utils.h"
 #include "inkscape.h"
 #include "document.h"

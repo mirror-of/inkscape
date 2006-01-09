@@ -22,6 +22,8 @@
 
 
 #include <glibmm/i18n.h>
+#include <gtkmm/box.h>
+
 #include "inkscape.h"
 #include "extension/implementation/implementation.h"
 

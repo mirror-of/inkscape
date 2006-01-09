@@ -18,6 +18,8 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/filechooserdialog.h>
+#include <gtkmm/stock.h>
 
 #include "gc-anchored.h"
 

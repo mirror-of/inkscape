@@ -15,10 +15,13 @@
  */
 
 
-#include <gtkmm.h>
 #include <gtkmm/box.h>
-#include <gtkmm/dialog.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/tooltips.h>
 #include <gtkmm/button.h>
+#include <gtkmm/spinbutton.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/radiobutton.h>
 
 #include "ui/dialog/dialog.h"
 

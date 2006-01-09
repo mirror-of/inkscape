@@ -13,24 +13,23 @@
 #ifndef __WHITEBOARD_SHAREWITHUSER_DIALOG_H__
 #define __WHITEBOARD_SHAREWITHUSER_DIALOG_H__
 
-#include "verbs.h"
-#include "dialog.h"
+#include <gtkmm/liststore.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/scrolledwindow.h>
 
+#include "verbs.h"
+#include "ui/dialog/dialog.h"
 #include "jabber_whiteboard/session-file-selector.h"
+
 
 struct SPDesktop;
 
 namespace Inkscape {
-
-namespace Whiteboard {
-
-class SessionManager;
-
-}
-
-namespace UI {
-
-namespace Dialog {
+    namespace Whiteboard {
+        class SessionManager;
+    }
+    namespace UI {
+        namespace Dialog {
 
 class WhiteboardShareWithUserDialog : public Dialog {
 public:

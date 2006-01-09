@@ -12,6 +12,8 @@
 #include "session-file-selector.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/filechooserdialog.h>
+#include <gtkmm/stock.h>
 
 namespace Inkscape {
 

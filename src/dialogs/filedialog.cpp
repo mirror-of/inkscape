@@ -25,21 +25,26 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkexpander.h>
 
-
 #include <sys/stat.h>
-
-#include "filedialog.h"
 #include <glibmm/i18n.h>
-#include "prefs-utils.h"
+#include <gtkmm/box.h>
+#include <gtkmm/filechooserdialog.h>
+#include <gtkmm/menubar.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/expander.h>
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/stock.h>
+#include <gdkmm/pixbuf.h>
 
+#include "prefs-utils.h"
 #include <dialogs/dialog-events.h>
 #include <extension/input.h>
 #include <extension/output.h>
 #include <extension/db.h>
-
-//for the preview widget
 #include "inkscape.h"
 #include "svg-view-widget.h"
+#include "filedialog.h"
 
 #undef INK_DUMP_FILENAME_CONV
 

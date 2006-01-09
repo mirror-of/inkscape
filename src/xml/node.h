@@ -17,7 +17,6 @@
 
 #include <glib/gtypes.h>
 #include "gc-anchored.h"
-#include "util/shared-c-string-ptr.h"
 #include "util/list.h"
 
 namespace Inkscape {

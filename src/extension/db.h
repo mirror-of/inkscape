@@ -18,8 +18,6 @@
 #include <map>
 #include <list>
 
-#include <glib.h>
-#include <gtkmm.h>
 #include "extension/extension.h"
 
 namespace Inkscape {

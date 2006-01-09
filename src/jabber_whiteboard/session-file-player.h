@@ -12,33 +12,21 @@
 #ifndef __WHITEBOARD_SESSION_FILE_PLAYER_H__
 #define __WHITEBOARD_SESSION_FILE_PLAYER_H__
 
-#include <glibmm.h>
-#include <gtkmm.h>
 #include <list>
-
-#include "gc-alloc.h"
-#include "gc-managed.h"
-#include "gc-anchored.h"
-#include "gc-finalized.h"
-
-//#include "jabber_whiteboard/sliding-buffer.hpp"
-//#include "jabber_whiteboard/player-functors.h"
+#include <glibmm/refptr.h>
+#include <glibmm/ustring.h>
+#include <gtkmm/textbuffer.h>
+#include <sigc++/sigc++.h>
 
 struct SPDesktop;
 
 namespace Inkscape {
-
-namespace UI {
-
-namespace Dialog {
-
-class SessionPlaybackDialogImpl;
-
-}
-
-}
-
-namespace Whiteboard {
+    namespace UI {
+       namespace Dialog {
+           class SessionPlaybackDialogImpl;
+       }
+    }
+    namespace Whiteboard {
 
 class SessionFile;
 class SessionManager;

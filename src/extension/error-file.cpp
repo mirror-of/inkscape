@@ -15,6 +15,7 @@
 #include "inkscape.h"
 #include "prefs-utils.h"
 #include "dialogs/extensions.h"
+#include "extension/extension.h"
 
 #include "error-file.h"
 

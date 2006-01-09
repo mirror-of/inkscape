@@ -34,6 +34,9 @@
 #include "helper/action.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/filechooserdialog.h>
+#include <gtkmm/stock.h>
 
 #include "dialogs/text-edit.h"
 #include "dialogs/export.h"
