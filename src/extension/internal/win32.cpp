@@ -23,6 +23,7 @@
 #include "win32.h"
 #include "system.h"
 #include "extension/print.h"
+#include <gtk/gtk.h>
 
 /* Initialization */
 
@@ -254,7 +255,7 @@ PrintWin32::finish (Inkscape::Extension::Print *mod)
 	int sheight, row;
 	BITMAPINFO bmInfo = {
 		{
-			sizeof (BITMAPINFOHEADER), // bV4Size 
+			sizeof (BITMAPINFOHEADER), // bV4Size
 			64,      // biWidth
 			64,      // biHeight
 			1,       // biPlanes
@@ -277,14 +278,14 @@ PrintWin32::finish (Inkscape::Extension::Print *mod)
 	dpiX = (int) GetDeviceCaps (_hDC, LOGPIXELSX);
 	dpiY = (int) GetDeviceCaps (_hDC, LOGPIXELSY);
 	// Size in pixels of the printable area
-	pPhysicalWidth = GetDeviceCaps (_hDC, PHYSICALWIDTH); 
-	pPhysicalHeight = GetDeviceCaps (_hDC, PHYSICALHEIGHT); 
+	pPhysicalWidth = GetDeviceCaps (_hDC, PHYSICALWIDTH);
+	pPhysicalHeight = GetDeviceCaps (_hDC, PHYSICALHEIGHT);
 	// Top left corner of prontable area
-	pPhysicalOffsetX = GetDeviceCaps (_hDC, PHYSICALOFFSETX); 
-	pPhysicalOffsetY = GetDeviceCaps (_hDC, PHYSICALOFFSETY); 
+	pPhysicalOffsetX = GetDeviceCaps (_hDC, PHYSICALOFFSETX);
+	pPhysicalOffsetY = GetDeviceCaps (_hDC, PHYSICALOFFSETY);
 	// Size in pixels of the printable area
-	pPrintableWidth = GetDeviceCaps (_hDC, HORZRES); 
-	pPrintableHeight = GetDeviceCaps (_hDC, VERTRES); 
+	pPrintableWidth = GetDeviceCaps (_hDC, HORZRES);
+	pPrintableHeight = GetDeviceCaps (_hDC, VERTRES);
 
 	// Scaling from document to device
 	scalex = dpiX / 72.0;
@@ -480,7 +481,7 @@ void
 PrintWin32::init (void)
 {
 	Inkscape::Extension::Extension * ext;
-	
+
 	/* SVG in */
     ext = Inkscape::Extension::build_from_mem(
 		"<inkscape-extension>\n"
