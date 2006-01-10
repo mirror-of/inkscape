@@ -20,6 +20,7 @@
 #include "svg/svg.h"
 #include "attributes.h"
 #include "display/curve.h"
+#include <glibmm/i18n.h>
 #include "xml/repr.h"
 
 #include "sp-star.h"

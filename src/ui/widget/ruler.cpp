@@ -12,6 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glibmm/i18n.h>
 #include <gtkmm/ruler.h>
 #include "helper/units.h"
 #include "widgets/ruler.h"

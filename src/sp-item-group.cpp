@@ -28,6 +28,7 @@
 
 #include "sp-root.h"
 #include "sp-use.h"
+#include <glibmm/i18n.h>
 #include "prefs-utils.h"
 
 static void sp_group_class_init (SPGroupClass *klass);
