@@ -1,5 +1,7 @@
 #include <glib/gmem.h>
 #include "livarot/sweep-event-queue.h"
+#include "livarot/sweep-tree.h"
+#include "livarot/sweep-event.h"
 #include "livarot/Shape.h"
 
 SweepEventQueue::SweepEventQueue(int s) : nbEvt(0), maxEvt(s)

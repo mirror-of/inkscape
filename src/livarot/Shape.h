@@ -18,9 +18,11 @@
 
 #include "libnr/nr-point.h"
 #include "livarot/livarot-forward.h"
-#include "livarot/sweep-event.h"
-#include "livarot/sweep-tree.h"
 #include "livarot/LivarotDefs.h"
+
+struct SweepTree;
+struct SweepTreeList;
+struct SweepEventQueue;
 
 /*
  * the Shape class (was the Digraph class, as the header says) stores digraphs (no kidding!) of which 

@@ -1,6 +1,8 @@
 #include "libnr/nr-point-fns.h"
 #include "livarot/sweep-event-queue.h"
 #include "livarot/sweep-tree-list.h"
+#include "livarot/sweep-tree.h"
+#include "livarot/sweep-event.h"
 #include "livarot/Shape.h"
 
 

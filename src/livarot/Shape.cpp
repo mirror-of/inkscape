@@ -8,6 +8,8 @@
 
 #include <glib/gmem.h>
 #include "Shape.h"
+#include "livarot/sweep-event-queue.h"
+#include "livarot/sweep-tree-list.h"
 #include <libnr/nr-point-fns.h>
 
 /*

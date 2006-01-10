@@ -10,6 +10,7 @@
 #include "Shape.h"
 #include "livarot/sweep-event-queue.h"
 #include "livarot/sweep-tree-list.h"
+#include "livarot/sweep-tree.h"
 
 #include "libnr/nr-matrix.h"
 
