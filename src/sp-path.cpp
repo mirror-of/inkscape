@@ -18,11 +18,14 @@
 # include <config.h>
 #endif
 
+#ifdef WIN32
+# include <glibmm/i18n.h>
+#endif
+
 #include <display/curve.h>
 #include <libnr/n-art-bpath.h>
 #include <libnr/nr-matrix-fns.h>
 
-#include <glibmm/i18n.h>
 #include "svg/svg.h"
 #include "xml/repr.h"
 #include "attributes.h"

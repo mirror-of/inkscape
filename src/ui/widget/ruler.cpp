@@ -12,7 +12,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
+#ifdef WIN32
+# include <glibmm/i18n.h>
+#endif
+
 #include <gtkmm/ruler.h>
 #include "helper/units.h"
 #include "widgets/ruler.h"

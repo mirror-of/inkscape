@@ -17,6 +17,10 @@
 # include "config.h"
 #endif
 
+#ifdef WIN32
+# include <glibmm/i18n.h>
+#endif
+
 #include "display/nr-arena-group.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-fns.h"
@@ -28,7 +32,6 @@
 
 #include "sp-root.h"
 #include "sp-use.h"
-#include <glibmm/i18n.h>
 #include "prefs-utils.h"
 
 static void sp_group_class_init (SPGroupClass *klass);

@@ -16,11 +16,13 @@
 
 #include "config.h"
 
+#ifdef WIN32
+# include <glibmm/i18n.h>
+#endif
 
 #include "svg/svg.h"
 #include "attributes.h"
 #include "display/curve.h"
-#include <glibmm/i18n.h>
 #include "xml/repr.h"
 
 #include "sp-star.h"
