@@ -11,19 +11,13 @@
  *
  * This code is in public domain
  */
-#include "config.h"
 
 #include <math.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <ctype.h>
 
 #include "svg.h"
 #include "stringstream.h"
 #include "../unit-constants.h"
 
-#include <glib.h>
 
 static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, float *val, float *computed, char **next);
 

@@ -14,11 +14,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "forward.h"
+#include <gdk/gdktypes.h>
 
-#include <glib.h>
-
-
+struct SPColorSpace;
 
 /* Useful composition macros */
 

@@ -6,10 +6,8 @@
  *
  */
 
-#include <algorithm>
 #include "livarot/Path.h"
 #include "livarot/path-description.h"
-#include <cmath>
 #include <libnr/nr-point-fns.h>
 
 /*

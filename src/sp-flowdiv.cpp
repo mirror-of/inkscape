@@ -6,15 +6,11 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
 
 #include "libnr/nr-matrix-ops.h"
 #include "xml/repr.h"
 //#include "svg/svg.h"
 
-#include "attributes.h"
-#include "sp-object.h"
-#include "sp-item.h"
 //#include "style.h"
 
 #include "sp-flowdiv.h"

@@ -10,11 +10,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <iostream>
-#include <stdio.h>
 
-#include <glibmm/timeval.h>
-#include <glibmm/main.h>
 
 #include "extension.h"
 #include "timer.h"

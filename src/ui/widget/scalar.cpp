@@ -16,7 +16,6 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/spinbutton.h>
 
 #include "scalar.h"
 

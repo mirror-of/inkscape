@@ -16,12 +16,10 @@
  */
 
 #include <glib-object.h>
-#include <glib.h>
 #include <gtk/gtksignal.h>
 #include <sigc++/sigc++.h>
 #include <sigc++/class_slot.h>
 
-#include "forward.h"
 #include "libcroco/cr-cascade.h"
 #include "libnr/nr-forward.h"
 
@@ -29,21 +27,19 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 
-namespace Inkscape {
-namespace XML {
-class Node;
-}
-}
+struct SPDesktop;
+struct SPItem;
+struct SPObject;
+struct SPGroup;
 
 namespace Inkscape {
-namespace XML {
-class Document;
-}
-}
-
-namespace Inkscape {
-class Selection; 
-class UndoStackObserver;
+    struct Application;
+    class Selection; 
+    class UndoStackObserver;
+    namespace XML {
+        class Document;
+        class Node;
+    }
 }
 
 class SPDocumentPrivate;

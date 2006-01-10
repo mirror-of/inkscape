@@ -13,62 +13,25 @@
 # include "config.h"
 #endif
 
-#include <sigc++/sigc++.h>
-#include <string.h>
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkselection.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktooltips.h>
-#include <gtk/gtkdnd.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkhandlebox.h>
 
 #include "macros.h"
-#include "helper/window.h"
-#include "widgets/desktop-widget.h"
-#include "widgets/icon.h"
 #include "widgets/button.h"
 #include "widgets/widget-sizes.h"
 #include "widgets/spw-utilities.h"
-#include "widgets/sp-widget.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/gradient-vector.h"
 #include "widgets/gradient-image.h"
 #include "style.h"
 
 #include "prefs-utils.h"
-#include "inkscape-stock.h"
-#include "verbs.h"
-#include "file.h"
-#include "selection-chemistry.h"
-#include "path-chemistry.h"
-#include "inkscape-private.h"
-#include "document.h"
 #include "document-private.h"
-#include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "interface.h"
-#include "nodepath.h"
-#include "helper/gnome-utils.h"
 #include <glibmm/i18n.h>
-#include "helper/unit-menu.h"
-#include "helper/units.h"
 
-#include "select-toolbar.h"
-#include "star-context.h"
-#include "spiral-context.h"
 #include "gradient-context.h"
 #include "gradient-drag.h"
-#include "sp-rect.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
-#include "sp-pattern.h"
-#include "sp-ellipse.h"
-#include "sp-gradient.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "gradient-chemistry.h"
@@ -76,7 +39,6 @@
 
 #include "toolbox.h"
 
-#include "gradient-toolbar.h"
 
 //########################
 //##       Gradient     ##

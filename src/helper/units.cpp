@@ -19,12 +19,8 @@
 # include "config.h"
 #endif
 
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 #include "helper/units.h"
 #include <glibmm/i18n.h>
-#include "sp-metrics.h"
 #include "unit-constants.h"
 #include "svg/svg-length.h"
 

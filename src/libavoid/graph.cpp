@@ -23,7 +23,6 @@
 #include "libavoid/debug.h"
 #include "libavoid/graph.h"
 #include "libavoid/connector.h"
-#include "libavoid/geometry.h"
 #include "libavoid/polyutil.h"
 #include "libavoid/timer.h"
 

@@ -14,16 +14,8 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
-#include <glib.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmarshal.h>
-#include <gtk/gtklist.h>
-#include <gtk/gtkadjustment.h>
 #include "helper/sp-marshal.h"
 #include <glibmm/i18n.h>
-#include "../xml/repr.h"
 #include "../xml/node-event-vector.h"
 #include "sp-xmlview-attr-list.h"
 

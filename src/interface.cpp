@@ -19,44 +19,30 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <vector>
-#include <glib.h>
-#include <glib-object.h>
 #include <gtk/gtk.h>
-#include "inkscape.h"
 #include "inkscape-private.h"
-#include "extension/db.h"
 #include "extension/effect.h"
 #include "widgets/icon.h"
 #include "prefs-utils.h"
 #include "path-prefix.h"
 
-#include "verbs.h"
 #include "shortcuts.h"
 
 #include "document.h"
 #include "desktop-handles.h"
 #include "file.h"
-#include "help.h"
 #include "interface.h"
-#include "widgets/toolbox.h"
 #include "desktop.h"
 #include "object-ui.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "path-chemistry.h"
-#include "zoom-context.h"
 #include "svg-view-widget.h"
 #include "widgets/desktop-widget.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
 
-#include "dir-util.h"
-#include "memeq.h"
 #include "helper/action.h"
 #include "helper/gnome-utils.h"
-#include <glibmm/i18n.h>
 #include "helper/window.h"
 
 #include "io/sys.h"

@@ -15,20 +15,13 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
-#include <glibmm/i18n.h>
-#include "xml/repr.h"
 #include "sp-object.h"
-#include "document.h"
-#include "dir-util.h"
-#include "../implementation/implementation.h"
 #include "svg.h"
 #include "file.h"
 #include "extension/system.h"
 #include "extension/output.h"
 
 #ifdef WITH_GNOME_VFS
-#include <libgnomevfs/gnome-vfs.h>
 #endif
 
 namespace Inkscape {

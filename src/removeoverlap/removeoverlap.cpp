@@ -9,12 +9,7 @@
 *
 * Released under GNU GPL.  Read the file 'COPYING' for more information.
 */
-#include <glib/gslist.h>
-#include <list>
-#include "inkscape.h"
 #include "util/glib-list-iterators.h"
-#include "libnr/nr-rect.h"
-#include "libnr/nr-point.h"
 #include "sp-item.h"
 #include "sp-item-transform.h"
 #include "removeoverlap/generate-constraints.h"

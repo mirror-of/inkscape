@@ -23,6 +23,7 @@
 
 #ifdef WITH_GTKSPELL
 extern "C" {
+# include <gtkspell/gtkspell.h>
 }
 #endif
 

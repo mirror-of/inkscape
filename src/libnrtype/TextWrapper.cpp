@@ -9,7 +9,6 @@
 #endif
 #include "TextWrapper.h"
 
-#include "FontFactory.h"
 #include <libnrtype/font-instance.h>
 #include "libnrtype/text-boundary.h"
 #include "libnrtype/one-glyph.h"

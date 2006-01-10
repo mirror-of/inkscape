@@ -2,10 +2,8 @@
  * Functions to/from NR::rotate.
  */
 #include <glib.h>
-#include <cmath>
-#include <libnr/nr-rotate.h>
-#include <libnr/nr-rotate-fns.h>
-#include <libnr/nr-rotate-ops.h>
+#include "libnr/nr-rotate-ops.h"
+#include "libnr/nr-rotate-fns.h"
 
 /**
  * Returns a rotation matrix corresponding by the specified angle about the origin.

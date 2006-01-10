@@ -13,7 +13,6 @@
  */
 
 #include "sp-object-group.h"
-#include "sp-object-repr.h"
 #include "xml/repr.h"
 
 static void sp_objectgroup_class_init (SPObjectGroupClass *klass);

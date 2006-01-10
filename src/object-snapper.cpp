@@ -10,19 +10,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "libnr/nr-values.h"
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-rect-ops.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "object-snapper.h"
 #include "document.h"
 #include "sp-namedview.h"
-#include "sp-shape.h"
 #include "sp-path.h"
 #include "display/curve.h"
-#include "snap.h"
-#include "snapped-point.h"
-#include "geom.h"
 #include "desktop.h"
 #include "inkscape.h"
 #include "splivarot.h"

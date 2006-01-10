@@ -8,16 +8,12 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <algorithm>
 #include "Layout-TNG.h"
 #include "style.h"
 #include "font-instance.h"
 #include "svg/svg-length.h"
 #include "sp-object.h"
 #include "Layout-TNG-Scanline-Maker.h"
-#include "FontFactory.h"
-#include <pango/pango.h>
-#include <map>
 
 namespace Inkscape {
 namespace Text {

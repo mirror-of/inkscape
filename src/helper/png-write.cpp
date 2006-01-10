@@ -12,10 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 
 #include <png.h>
-#include <glib.h>
 #include "png-write.h"
 #include "io/sys.h"
 

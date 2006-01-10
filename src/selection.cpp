@@ -16,25 +16,16 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <algorithm>
-#include <glib/gmain.h>
 #include "macros.h"
-#include "helper/sp-marshal.h"
-#include <glibmm/i18n.h>
 #include "inkscape-private.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "document.h"
-#include "sp-item.h"
 #include "selection.h"
-#include "tools-switch.h"
-#include "sp-item-group.h"
-#include "inkscape.h"
 #include "xml/repr.h"
 
 #include "sp-shape.h"
 
-#include "helper/stlport.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 

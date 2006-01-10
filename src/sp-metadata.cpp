@@ -15,9 +15,7 @@
 # include "config.h"
 #endif
 
-#include "attributes.h"
 #include "sp-metadata.h"
-#include "xml/repr.h"
 #include "xml/node-iterators.h"
 #include "document.h"
 

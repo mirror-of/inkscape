@@ -18,31 +18,15 @@
 # include <config.h>
 #endif
 
-#include "sp-item.h"
 #include "verbs.h"
 
 #include "dialogs/unclump.h"
 #include "removeoverlap/removeoverlap.h"
 
-#include <gtkmm/buttonbox.h>
-#include <gtkmm/button.h>
-#include <gtkmm/table.h>
-#include <gtkmm/image.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/tooltips.h>
 
-#include <sigc++/sigc++.h>
 
-#include <list>
-#include <map>
-#include <vector>
 
-#include "libnr/nr-macros.h"
-#include "libnr/nr-point-fns.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "libnr/nr-rect.h"
 
 #include "util/glib-list-iterators.h"
 
@@ -62,7 +46,6 @@
 #include "text-editing.h"
 
 #include "node-context.h" //For node align/distribute function
-#include "nodepath.h" //For node align/distribute function
 
 #include "tools-switch.h"
 

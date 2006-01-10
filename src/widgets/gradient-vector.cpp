@@ -20,18 +20,8 @@
 # include "config.h"
 #endif
 #ifdef HAVE_STRING_H
-#include <string.h>
 #endif
 #include <gtk/gtk.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkwindow.h>
 #include "macros.h"
 #include <glibmm/i18n.h>
 #include "../widgets/gradient-image.h"
@@ -45,10 +35,7 @@
 
 #include "../dialogs/dialog-events.h"
 #include "../prefs-utils.h"
-#include "../verbs.h"
-#include "../interface.h"
 #include "svg/css-ostringstream.h"
-#include "sp-gradient-vector.h"
 #include "sp-stop.h"
 
 enum {
@@ -402,11 +389,9 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 ###                 Vector Editing Widget
 ##################################################################*/
 
-#include "../widgets/sp-color-selector.h"
 #include "../widgets/sp-color-notebook.h"
 #include "../widgets/sp-color-preview.h"
 #include "../widgets/widget-sizes.h"
-#include "../selection.h"
 #include "../xml/node-event-vector.h"
 #include "../svg/svg.h"
 

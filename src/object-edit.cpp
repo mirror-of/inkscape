@@ -10,11 +10,7 @@
  * Licensed under GNU GPL
  */
 
-#include "config.h"
 
-#include <gdk/gdktypes.h>
-#include <glib.h>
-#include <math.h>
 
 #include "sp-item.h"
 #include "sp-rect.h"
@@ -26,28 +22,19 @@
 #include "prefs-utils.h"
 #include "inkscape.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "desktop-affine.h"
-#include "desktop-handles.h"
-#include "document.h"
 #include <style.h>
 #include "desktop.h"
 
 #include "sp-pattern.h"
 #include "sp-path.h"
 
-#include "macros.h"
 #include <glibmm/i18n.h>
 
 #include "object-edit.h"
 
-#include <libnr/nr-point-fns.h>
-#include <libnr/nr-scale.h>
 #include <libnr/nr-scale-ops.h>
 
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
 
 #include "xml/repr.h"
 

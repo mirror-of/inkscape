@@ -9,9 +9,6 @@
  * This code is in the Public Domain
  */
 
-#include <string.h>
-#include <stdlib.h>
-#include "nr-macros.h"
 #include "nr-pixblock.h"
 
 /// Size of buffer that needs no allocation (default 4).

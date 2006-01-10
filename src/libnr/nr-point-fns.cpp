@@ -1,7 +1,4 @@
 #include <libnr/nr-point-fns.h>
-#include <libnr/nr-dim2.h>
-#include <cmath>
-#include <algorithm>
 #include <isnan.h>
 
 using NR::Point;

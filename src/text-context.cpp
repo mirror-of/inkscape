@@ -16,24 +16,18 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <algorithm>
-#include <math.h>
 
-#include <ctype.h>
-#include <glib-object.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkmain.h>
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
 #include <display/sp-ctrlquadr.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtkmm/clipboard.h>
 
 #include "macros.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
-#include "inkscape.h"
 #include "document.h"
 #include "sp-namedview.h"
 #include "style.h"
@@ -46,14 +40,10 @@
 #include "message-context.h"
 #include "pixmaps/cursor-text.xpm"
 #include "pixmaps/cursor-text-insert.xpm"
-#include "ui/view/view.h"
 #include <glibmm/i18n.h>
 #include "object-edit.h"
-#include "knotholder.h"
 #include "xml/repr.h"
-#include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
-#include "event-context.h"
 #include "prefs-utils.h"
 #include "rubberband.h"
 #include "sp-metrics.h"

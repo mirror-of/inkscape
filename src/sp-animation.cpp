@@ -14,7 +14,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "attributes.h"
 #include "sp-animation.h"
 
 #if 0

@@ -13,7 +13,6 @@
  */
 
 #include <libnr/nr-pixblock-pattern.h>
-#include <gtk/gtksignal.h>
 #include "macros.h"
 #include "../display/nr-plain-stuff.h"
 #include "../display/nr-plain-stuff-gdk.h"

@@ -8,12 +8,7 @@
 
 #include "Path.h"
 #include "Shape.h"
-#include <libnr/nr-point.h>
-#include <libnr/nr-point-fns.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-rotate.h>
 #include <libnr/nr-rotate-ops.h>
-#include <math.h>
 
 /*
  * stroking polylines into a Shape instance

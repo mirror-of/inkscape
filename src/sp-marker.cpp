@@ -13,10 +13,6 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
@@ -26,10 +22,6 @@
 #include "display/nr-arena-group.h"
 #include "xml/repr.h"
 #include "attributes.h"
-#include "print.h"
-#include "document.h"
-#include "sp-defs.h"
-#include "sp-namedview.h"
 #include "sp-marker.h"
 
 struct SPMarkerView {

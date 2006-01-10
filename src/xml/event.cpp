@@ -13,18 +13,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "repr.h"
 #include "event.h"
 #include "event-fns.h"
-#include "util/list.h"
 #include "util/reverse-list.h"
-#include "xml/node.h"
 #include "xml/document.h"
-#include "xml/session.h"
 #include "xml/node-observer.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
-#include <cstring>
 
 using Inkscape::Util::List;
 using Inkscape::Util::reverse_list;

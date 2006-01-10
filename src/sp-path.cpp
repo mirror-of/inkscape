@@ -17,23 +17,14 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
 
 #include <display/curve.h>
 #include <libnr/n-art-bpath.h>
-#include <libnr/nr-path.h>
-#include <libnr/nr-values.h>
-#include <libnr/nr-macros.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-matrix-ops.h>
 
-#include <glibmm/i18n.h>
 #include "svg/svg.h"
 #include "xml/repr.h"
 #include "attributes.h"
-#include "style.h"
-#include "version.h"
 
 #include "sp-path.h"
 

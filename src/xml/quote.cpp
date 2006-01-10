@@ -11,12 +11,9 @@
  * of the GNU General Public License: see the file `COPYING'.
  */
 
-#include <stdlib.h>
 #include <string.h>
-#include <glib/gmacros.h>
 #include <glib/gmem.h>
 
-#include "xml/quote.h"
 
 /** \return strlen(xml_quote_strdup(\a val)) (without doing the malloc).
  *  \pre val != NULL

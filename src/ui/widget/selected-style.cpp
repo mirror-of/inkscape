@@ -13,8 +13,6 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/separatormenuitem.h>
-#include <gtkmm/separator.h>
 
 #include "selected-style.h"
 
@@ -23,10 +21,8 @@
 
 #include "selection.h"
 #include "desktop-handles.h"
-#include "sp-namedview.h"
 #include "style.h"
 #include "desktop-style.h"
-#include "color.h"
 #include "sp-linear-gradient-fns.h"
 #include "sp-radial-gradient-fns.h"
 #include "sp-pattern.h"

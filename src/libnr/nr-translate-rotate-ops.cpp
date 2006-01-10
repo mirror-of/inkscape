@@ -1,9 +1,5 @@
-#include <libnr/nr-translate-rotate-ops.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
 #include <libnr/nr-rotate-ops.h>
-#include <libnr/nr-translate.h>
 
 NR::Matrix
 operator*(NR::translate const &a, NR::rotate const &b)

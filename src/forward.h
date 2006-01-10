@@ -15,10 +15,6 @@
 
 #include <glib-object.h>
 
-#include <glib.h>
-
-
-
 /* Generic containers */
 
 namespace Inkscape {

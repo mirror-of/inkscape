@@ -15,11 +15,7 @@
 # include "config.h"
 #endif
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtksignal.h>
-#include <string.h>
 #include "macros.h"
-#include "xml/repr.h"
-#include "svg/svg.h"
 #include <glibmm/i18n.h>
 #include "display/sp-canvas-util.h"
 #include "object-edit.h"
@@ -27,22 +23,14 @@
 #include "path-chemistry.h"
 #include "rubberband.h"
 #include "desktop.h"
-#include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "selection.h"
-#include "nodepath.h"
-#include "knotholder.h"
 #include "pixmaps/cursor-node.xpm"
 #include "message-context.h"
 #include "node-context.h"
-#include "sp-cursor.h"
 #include "pixmaps/cursor-node-d.xpm"
-#include "document.h"
 #include "prefs-utils.h"
-#include "xml/repr.h"
 #include "xml/node-event-vector.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "livarot/Path.h"
 #include "style.h"
 #include "splivarot.h"
 

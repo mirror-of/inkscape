@@ -16,64 +16,44 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include "path-prefix.h"
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
-#include "debug/logger.h"
 #include "debug/simple-event.h"
 #include "debug/event-tracker.h"
 
 #ifndef WIN32
-#include <unistd.h>
-#define HAS_PROC_SELF_EXE  //to get path of executable
+# define HAS_PROC_SELF_EXE  //to get path of executable
 #else
 
 // For now to get at is_os_wide().
-#include "extension/internal/win32.h"
+# include "extension/internal/win32.h"
 using Inkscape::Extension::Internal::PrintWin32;
 
-#include <direct.h>
 #define _WIN32_IE 0x0400
 //#define HAS_SHGetSpecialFolderPath
 #define HAS_SHGetSpecialFolderLocation
 #define HAS_GetModuleFileName
-#include <shlobj.h> //to get appdata path
+# include <shlobj.h>
 #endif
 
-#include <time.h>
-#include <fcntl.h>
 #include <signal.h>
-#include <ctype.h>
 
-#include <glib.h>
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
 #include <gtk/gtkmessagedialog.h>
 
 #include <glibmm/i18n.h>
 #include "helper/sp-marshal.h"
 #include "dialogs/debugdialog.h"
-#include "dialogs/input.h"
-#include "widgets/desktop-widget.h"
 #include "application/application.h"
 #include "application/editor.h"
 #include "preferences.h"
 
-#include "shortcuts.h"
 
-#include "file.h"
 #include "document.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
 #include "event-context.h"
-#include "inkscape.h"
 #include "inkscape-private.h"
 #include "prefs-utils.h"
 #include "xml/repr.h"
@@ -84,7 +64,6 @@ using Inkscape::Extension::Internal::PrintWin32;
 static Inkscape::Application *inkscape = NULL;
 
 /* Backbones of configuration xml data */
-#include "preferences-skeleton.h"
 #include "menus-skeleton.h"
 
 enum {

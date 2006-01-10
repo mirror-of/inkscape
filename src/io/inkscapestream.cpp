@@ -11,10 +11,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <stdarg.h>
 
 #include "inkscapestream.h"
-#include "ftos.h"
 
 namespace Inkscape
 {

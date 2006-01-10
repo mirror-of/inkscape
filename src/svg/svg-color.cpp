@@ -11,20 +11,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 
 #include <math.h>
 
 #if HAVE_STRING_H
-#include <string.h>
 #endif
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
 #endif
 
-#include <ctype.h>
-#include <glib.h>
 #include "svg.h"
 
 struct SPSVGColor {

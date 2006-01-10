@@ -13,10 +13,6 @@
 #include <livarot/int-line.h>
 #include <livarot/Path.h>
 #include <livarot/Shape.h>
-#include <libnr/nr-point.h>
-#include <libnr/nr-point-ops.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-pixblock.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/raster-glyph.h>

@@ -13,9 +13,6 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/frame.h>
-#include <gtkmm/label.h>
-#include <gtkmm/table.h>
 #include "notebook-page.h"
 
 namespace Inkscape {

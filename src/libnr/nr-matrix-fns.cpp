@@ -1,4 +1,3 @@
-#include <libnr/nr-point-fns.h>
 #include <libnr/nr-matrix-fns.h>
 
 namespace NR {

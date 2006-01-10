@@ -1,8 +1,6 @@
-#include "satisfied-guide-cns.h"
 #include <desktop-handles.h>
 #include <libnr/nr-point-fns.h>
 #include <sp-guide.h>
-#include <sp-guide-attachment.h>
 #include <sp-guide-constraint.h>
 #include <sp-namedview.h>
 #include <approx-equal.h>

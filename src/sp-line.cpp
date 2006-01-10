@@ -14,19 +14,12 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <math.h>
-#include <string.h>
-#include "svg/svg.h"
 #include "attributes.h"
 #include "style.h"
 #include "sp-line.h"
 #include "display/curve.h"
 #include <glibmm/i18n.h>
-#include <libnr/nr-point.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include <xml/repr.h>
 
 static void sp_line_class_init (SPLineClass *klass);

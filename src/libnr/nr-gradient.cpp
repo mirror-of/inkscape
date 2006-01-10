@@ -9,8 +9,6 @@
  * This code is in public domain
  */
 
-#include <libnr/nr-macros.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-pixblock-pixel.h>
 #include <libnr/nr-blit.h>

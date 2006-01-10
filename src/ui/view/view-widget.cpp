@@ -11,7 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "macros.h"
 #include "view.h"
 #include "view-widget.h"
 

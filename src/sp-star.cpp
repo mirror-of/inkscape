@@ -16,21 +16,11 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
 
 #include "svg/svg.h"
 #include "attributes.h"
-#include "dialogs/object-attributes.h"
 #include "display/curve.h"
-#include <glibmm/i18n.h>
 #include "xml/repr.h"
-#include "libnr/nr-point.h"
-#include "libnr/nr-point-fns.h"
-#include "libnr/nr-point-ops.h"
-#include "libnr/nr-point-l.h"
-#include "libnr/nr-point-matrix-ops.h"
 
 #include "sp-star.h"
 

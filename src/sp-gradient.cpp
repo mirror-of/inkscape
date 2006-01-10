@@ -18,12 +18,7 @@
 
 #define noSP_GRADIENT_VERBOSE
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
 
-#include <libnr/nr-gradient.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
@@ -31,25 +26,19 @@
 #include <libnr/nr-matrix-translate-ops.h>
 #include "libnr/nr-scale-translate-ops.h"
 
-#include <gtk/gtksignal.h>
 
 #include "display/nr-gradient-gpl.h"
 #include "svg/svg.h"
 #include "svg/css-ostringstream.h"
 #include "attributes.h"
 #include "document-private.h"
-#include "sp-object-repr.h"
-#include "sp-gradient.h"
 #include "gradient-chemistry.h"
-#include "sp-gradient-fns.h"
 #include "sp-gradient-reference.h"
-#include "sp-gradient-vector.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-stop.h"
 #include "streq.h"
 #include "uri.h"
-#include "uri-references.h"
 #include "xml/repr.h"
 
 #define SP_MACROS_SILENT

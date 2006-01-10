@@ -18,13 +18,8 @@
 #endif
 #include "path-prefix.h"
 
-#include <gtk/gtk.h>
-#include "inkscape.h"
 #include "help.h"
 #include "file.h"
-#include <glibmm/i18n.h>
-#include "libnr/nr-macros.h"
-#include "inkscape_version.h"
 
 #include "ui/dialog/aboutbox.h"
 

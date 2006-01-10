@@ -11,8 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include "version.h"
 

@@ -17,9 +17,7 @@
 
 #include "messages.h"
 
-#include <glib.h>
 
-#include "dialogs/dialog-events.h"
 #include "verbs.h"
 
 namespace Inkscape {

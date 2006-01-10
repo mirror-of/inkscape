@@ -14,18 +14,13 @@
 
 #define noKNOT_HOLDER_DEBUG
 
-#include <glib.h>
-#include <gtk/gtksignal.h>
 
 #include "document.h"
-#include "sp-item.h"
 #include "sp-shape.h"
 #include "knot.h"
 #include "knotholder.h"
 #include "knot-holder-entity.h"
 #include <libnr/nr-matrix-div.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
 
 class SPDesktop;
 
@@ -34,7 +29,6 @@ static void knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gp
 static void knot_ungrabbed_handler (SPKnot *knot, unsigned int state, SPKnotHolder *kh);
 
 #ifdef KNOT_HOLDER_DEBUG
-#include <gtk/gtk.h>
 
 static void sp_knot_holder_debug(GtkObject *object, gpointer data)
 {

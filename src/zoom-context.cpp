@@ -13,22 +13,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <math.h>
-#include <stdlib.h>
 
-#include <gtk/gtkeditable.h>
-#include <gtk/gtkeditable.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
 #include "rubberband.h"
-#include "inkscape.h"
-#include "document.h"
-#include "selection.h"
 #include "desktop.h"
-#include "desktop-handles.h"
-#include "desktop-affine.h"
-#include "sp-item.h"
 #include "pixmaps/cursor-zoom.xpm"
 #include "pixmaps/cursor-zoom-out.xpm"
 #include "prefs-utils.h"

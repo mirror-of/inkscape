@@ -1,7 +1,4 @@
-#include <cstddef>
 #include <stdarg.h>
-#include <iostream>
-#include "gc-core.h"
 #include "../utest/utest.h"
 #include "util/list-container.h"
 

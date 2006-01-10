@@ -4,16 +4,10 @@
  
 #define SP_REPR_CSS_C
 
-#include <math.h>
-#include <string.h>
-#include <stdio.h>
 
-#include <glib.h>
 #include <glibmm/ustring.h>
 
 #include "xml/repr.h"
-#include "xml/attribute-record.h"
-#include "xml/sp-css-attr.h"
 #include "xml/simple-node.h"
 
 using Inkscape::Util::List;

@@ -23,43 +23,24 @@
  *
  */
 
-#include "config.h"
 
-#include <string.h>
 
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-rotate.h>
 
-#include <livarot/LivarotDefs.h>
-#include <livarot/Shape.h>
 #include <livarot/Path.h>
 
-#include <glib.h>
 //#include <gtk/gtk.h>
 
-#include <glibmm/i18n.h>
-#include "svg/svg.h"
 #include "svg/stringstream.h"
-#include "display/nr-arena-group.h"
-#include "display/nr-arena-glyphs.h"
 #include "attributes.h"
-#include "document.h"
-#include "style.h"
 
 #include "sp-use-reference.h"
 
 
-#include "sp-object.h"
-#include "sp-shape.h"
 #include "sp-tspan.h"
 #include "sp-textpath.h"
 
 #include "xml/repr.h"
 
-#include "prefs-utils.h"
 
 /*#####################################################
 #  SPTSPAN

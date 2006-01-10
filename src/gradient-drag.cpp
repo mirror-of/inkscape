@@ -11,7 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <sigc++/sigc++.h>
 #include <glibmm/i18n.h>
 
 #include "desktop-handles.h"
@@ -19,13 +18,7 @@
 #include "desktop.h"
 #include "desktop-style.h"
 #include "document.h"
-#include "display/sp-canvas.h"
-#include "display/sp-canvas-util.h"
-#include "display/sodipodi-ctrl.h"
 #include "display/sp-ctrlline.h"
-#include "display/sodipodi-ctrlrect.h"
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-ops.h"
 
 #include "xml/repr.h"
 
@@ -33,7 +26,6 @@
 #include "sp-item.h"
 #include "style.h"
 #include "knot.h"
-#include "sp-gradient.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "gradient-chemistry.h"

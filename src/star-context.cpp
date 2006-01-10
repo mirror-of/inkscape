@@ -16,42 +16,27 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <glib.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtklabel.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtkcheckbutton.h>
 
 #include "macros.h"
 #include "display/sp-canvas.h"
 #include "sp-star.h"
-#include "inkscape.h"
 #include "document.h"
 #include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "desktop.h"
 #include "desktop-style.h"
 #include "message-context.h"
 #include "pixmaps/cursor-star.xpm"
-#include "widgets/desktop-widget.h"
 #include "sp-metrics.h"
 #include <glibmm/i18n.h>
 #include "prefs-utils.h"
-#include "knotholder.h"
 #include "xml/repr.h"
 #include "xml/node-event-vector.h"
 #include "object-edit.h"
-#include "widgets/spw-utilities.h"
-#include <libnr/nr-point-fns.h>
 #include "context-fns.h"
 
 #include "star-context.h"

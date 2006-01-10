@@ -14,7 +14,6 @@
 # include <config.h>
 #endif
 
-#include <algorithm>
 #include "icon-widget.h"
 
 namespace Inkscape {

@@ -11,11 +11,8 @@
  * This code is in public domain
  */
 
-#include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
-#include <libnr/nr-macros.h>
 
 #include "helper/action.h"
 

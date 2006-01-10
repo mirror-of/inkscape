@@ -16,16 +16,12 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <glib.h>
-#include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>
-#include <gtk/gtkbutton.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtktooltips.h>
 
-#include "../document.h"
 #include "../document-private.h"
 #include "../gradient-chemistry.h"
 

@@ -9,33 +9,23 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 #include <glibmm/i18n.h>
 
-#include <cstring>
-#include <algorithm>
-#include <functional>
-#include <gtkmm/liststore.h>
-#include <gtkmm/image.h>
 
 #include "desktop-handles.h"
-#include "selection.h"
 
 #include "widgets/layer-selector.h"
 #include "widgets/shrink-wrap-button.h"
 #include "widgets/icon.h"
 
-#include "util/list.h"
 #include "util/reverse-list.h"
 #include "util/filter-list.h"
 
-#include "sp-object.h"
 #include "sp-item.h"
 #include "desktop.h"
 #include "document.h"
 #include "dialogs/layer-properties.h"
 
-#include "xml/repr.h"
 #include "xml/node-event-vector.h"
 
 namespace Inkscape {

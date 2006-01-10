@@ -16,34 +16,24 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <math.h>
-#include <string.h>
-#include <ctype.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 //#define GDK_PIXBUF_ENABLE_BACKEND 1
 //#include <gdk-pixbuf/gdk-pixbuf-io.h>
 #include "display/nr-arena-image.h"
-#include "svg/svg.h"
 
 //Added for preserveAspectRatio support -- EAF
 #include "enums.h"
 #include "attributes.h"
 
 #include "print.h"
-#include "style.h"
 #include "brokenimage.xpm"
 #include "document.h"
-#include "dialogs/object-attributes.h"
 #include "sp-image.h"
 #include <glibmm/i18n.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include "xml/quote.h"
 #include <xml/repr.h>
 
-#include "file.h"
 #include "io/sys.h"
 #include <png.h>
 

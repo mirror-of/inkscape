@@ -5,11 +5,9 @@
 /* $Id$ */
 /* private part of the path and curve data structures */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "potracelib.h"
 #include "lists.h"
 #include "curve.h"
 

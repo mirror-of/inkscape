@@ -16,11 +16,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtkwidget.h>
-#include <glib/gprintf.h>
-#include <gtkmm/adjustment.h>
 #include "ui/widget/zoom-status.h"
-#include "libnr/nr-rect.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "widgets/spw-utilities.h"

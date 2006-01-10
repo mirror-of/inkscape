@@ -9,15 +9,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gdk/gdkevents.h>
-#include <gtk/gtktypeutils.h>
-#include <glibmm/wrap.h>
-#include <gdkmm/event.h>
-#include <gtkmm/style.h>
 #include <gtkmm/widget.h>
 #include "desktop.h"
 #include "desktop-events.h"
-#include "display/sp-canvas.h"
 #include "display/canvas-arena.h"
 #include "ui/widget/svg-canvas.h"
 

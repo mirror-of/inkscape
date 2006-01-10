@@ -1,4 +1,3 @@
-#include "mod360.h"
 #include <glib.h>
 #include <math.h>
 

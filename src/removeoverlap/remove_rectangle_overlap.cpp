@@ -1,12 +1,7 @@
-#include "remove_rectangle_overlap.h"
-#include <cassert>
-#include "constraint.h"
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
 #ifdef RECTANGLE_OVERLAP_LOGGING
-#include "blocks.h"
-#include <fstream>
 using std::ios;
 using std::ofstream;
 using std::endl;

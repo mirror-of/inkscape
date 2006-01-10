@@ -22,14 +22,8 @@
  *
  */
 
-#include "config.h"
 
-#include <string.h>
 
-#include <glib.h>
-#include "svg/svg.h"
-#include "attributes.h"
-#include "style.h"
 
 #include "sp-string.h"
 #include "xml/repr.h"

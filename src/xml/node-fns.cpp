@@ -1,15 +1,9 @@
 #ifdef HAVE_CONFIG_H
-#include "config.h"
 #endif
 
-#include <cstring>
 #include <map>
-#include <glib/gmessages.h>
-#include <glib/gquark.h>
 
-#include "xml/node.h"
 #include "xml/node-iterators.h"
-#include "xml/node-fns.h"
 #include "algorithms/find-if-before.h"
 
 namespace Inkscape {

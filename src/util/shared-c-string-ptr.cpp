@@ -11,7 +11,6 @@
 
 #include <cstring>
 #include <glib/gmessages.h>
-#include <sys/types.h>
 #include "gc-core.h"
 #include "util/shared-c-string-ptr.h"
 

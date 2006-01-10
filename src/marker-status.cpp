@@ -1,4 +1,3 @@
-#include "marker-status.h"
 
 void marker_status(char const *format, ...)
 {

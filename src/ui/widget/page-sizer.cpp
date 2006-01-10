@@ -18,18 +18,13 @@
 #endif
 
 #include <cmath>
-#include <glibmm/i18n.h>
-#include <gtkmm/label.h>
 #include <gtkmm/optionmenu.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/table.h>
-#include <gtkmm/menuitem.h>
 
 #include "ui/widget/scalar-unit.h"
-#include "ui/widget/unit-menu.h"
 
 #include "helper/units.h"
-#include "util/units.h"
 #include "inkscape.h"
 #include "desktop-handles.h"
 #include "document.h"

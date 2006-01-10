@@ -21,9 +21,7 @@
  */
 
 
-#include <cstddef>
 
-#include <assert.h>
 
 #include <gtk/gtkstock.h>
 
@@ -33,23 +31,18 @@
 
 #include "helper/action.h"
 
-#include <glibmm/i18n.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/stock.h>
 
 #include "dialogs/text-edit.h"
-#include "dialogs/export.h"
 #include "dialogs/xml-tree.h"
 #include "dialogs/object-properties.h"
 #include "dialogs/display-settings.h"
 #include "dialogs/item-properties.h"
 #include "dialogs/find.h"
-#include "dialogs/debugdialog.h"
 #include "dialogs/layer-properties.h"
 #include "dialogs/clonetiler.h"
-#include "ui/widget/panel.h"
-#include "ui/dialog/dialog.h"
 #include "dialogs/iconpreview.h"
 #include "dialogs/extensions.h"
 #include "dialogs/swatches.h"
@@ -61,8 +54,6 @@
 #include "ui/dialog/whiteboard-sharewithchat.h"
 #include "jabber_whiteboard/session-manager.h"
 #include "jabber_whiteboard/node-tracker.h"
-#include "jabber_whiteboard/session-file.h"
-#include "jabber_whiteboard/session-file-player.h"
 #endif
 
 #include "extension/effect.h"
@@ -74,16 +65,11 @@
 #include "document.h"
 #include "desktop.h"
 #include "message-stack.h"
-#include "widgets/desktop-widget.h"
 #include "desktop-handles.h"
-#include "selection.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "text-chemistry.h"
-#include "shortcuts.h"
-#include "widgets/toolbox.h"
 #include "ui/dialog/dialog-manager.h"
-#include "ui/view/view.h"
 #include "interface.h"
 #include "prefs-utils.h"
 #include "splivarot.h"
@@ -91,7 +77,6 @@
 #include "sp-flowtext.h"
 #include "layer-fns.h"
 #include "node-context.h"
-#include "verbs.h"
 
 
 /**

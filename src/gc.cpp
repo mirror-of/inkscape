@@ -10,11 +10,8 @@
  */
 
 #include "gc-core.h"
-#include <cstdlib>
-#include <cstring>
 #include <stdexcept>
 #include <glib/gmessages.h>
-#include "debug/heap.h"
 
 namespace Inkscape {
 namespace GC {

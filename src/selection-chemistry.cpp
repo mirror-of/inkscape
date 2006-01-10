@@ -19,11 +19,9 @@
 # include "config.h"
 #endif
 
-#include <string.h>
 #include <gtkmm/clipboard.h>
 
 #include "svg/svg.h"
-#include "document.h"
 #include "inkscape.h"
 #include "desktop.h"
 #include "desktop-style.h"
@@ -32,11 +30,8 @@
 #include "desktop-handles.h"
 #include "message-stack.h"
 #include "sp-item-transform.h"
-#include "sp-item-group.h"
 #include "sp-marker.h"
-#include "sp-path.h"
 #include "sp-use.h"
-#include "sp-text.h"
 #include "sp-textpath.h"
 #include "sp-tspan.h"
 #include "sp-flowtext.h"
@@ -45,17 +40,8 @@
 #include "text-context.h"
 #include "dropper-context.h"
 #include <glibmm/i18n.h>
-#include "display/sp-canvas.h"
-#include "path-chemistry.h"
-#include "desktop-affine.h"
-#include "snap.h"
-#include "snapped-point.h"
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-ops.h"
-#include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-rotate-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
-#include "libnr/nr-point-matrix-ops.h"
 #include "libnr/nr-rotate-fns.h"
 #include "libnr/nr-scale-ops.h"
 #include "libnr/nr-scale-translate-ops.h"
@@ -69,12 +55,10 @@
 #include "sp-linear-gradient-fns.h"
 #include "sp-pattern.h"
 #include "sp-radial-gradient-fns.h"
-#include "sp-use-reference.h"
 #include "sp-namedview.h"
 #include "prefs-utils.h"
 #include "sp-offset.h"
 #include "file.h"
-#include "dir-util.h"
 #include "layer-fns.h"
 #include "context-fns.h"
 using NR::X;

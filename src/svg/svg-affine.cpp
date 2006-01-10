@@ -13,34 +13,23 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 
-#include <math.h>
 
 #if HAVE_STRING_H
-#include <string.h>
 #endif
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
 #endif
 
-#include <stdio.h>
-#include <ctype.h>
 
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
 #include <libnr/nr-rotate-fns.h>
-#include <libnr/nr-rotate-ops.h>
 #include <libnr/nr-rotate-matrix-ops.h>
 #include <libnr/nr-scale-matrix-ops.h>
 #include <libnr/nr-translate-matrix-ops.h>
 #include <libnr/nr-translate-rotate-ops.h>
-#include <libnr/nr-translate-ops.h>
-#include <libnr/nr-values.h>
-#include <glib.h>
 #include "svg.h"
 
 #ifndef M_PI

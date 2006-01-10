@@ -14,15 +14,13 @@
 #include "InkscapeInterpreter.h"
 
 #ifdef WITH_PERL
-#include "InkscapePerl.h"
+# include "InkscapePerl.h"
 #endif
 
 #ifdef WITH_PYTHON
-#include "InkscapePython.h"
+# include "InkscapePython.h"
 #endif
 
-#include <iostream>
-#include <stdio.h>
 
 namespace Inkscape {
 namespace Extension {

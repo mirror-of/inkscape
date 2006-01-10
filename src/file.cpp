@@ -25,13 +25,8 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <time.h>
 #include <libnr/nr-pixops.h>
 
-#include "macros.h"
-#include "xml/node-fns.h"
-#include "document.h"
 #include "document-private.h"
 #include "selection-chemistry.h"
 #include "ui/view/view-widget.h"
@@ -42,12 +37,10 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "selection.h"
-#include "sp-image.h"
 #include "interface.h"
 #include "style.h"
 #include "print.h"
 #include "file.h"
-#include "dialogs/dialog-events.h"
 #include "message-stack.h"
 #include "dialogs/filedialog.h"
 #include "prefs-utils.h"
@@ -57,7 +50,6 @@
 #include "desktop-handles.h"
 
 #include "extension/db.h"
-#include "extension/extension.h"
 #include "extension/input.h"
 #include "extension/output.h"
 /* #include "extension/menu.h"  */

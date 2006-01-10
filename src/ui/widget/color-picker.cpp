@@ -13,16 +13,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "macros.h"
 #include "inkscape.h"
 #include "desktop-handles.h"
 #include "document.h"
-#include "sp-object.h"
 
-#include <glibmm/i18n.h>
 #include "ui/dialog/dialog.h"
 
-#include "widgets/sp-color-selector.h"
 #include "widgets/sp-color-notebook.h"
 
 #include "color-picker.h"

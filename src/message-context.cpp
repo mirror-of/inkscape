@@ -9,7 +9,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib/gmem.h>
 #include <glib/gstrfuncs.h>
 #include "message-context.h"
 #include "message-stack.h"

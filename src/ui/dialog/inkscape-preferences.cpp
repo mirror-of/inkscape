@@ -13,12 +13,8 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/frame.h>
-#include <gtkmm/comboboxtext.h>
 
 #include "inkscape-preferences.h"
-#include "ui/widget/labelled.h"
-#include "ui/widget/scalar.h"
 #include "verbs.h"
 
 // NOTE: this is currently a placeholder. The real dialog is in src/dialogs/display-settings.cpp.

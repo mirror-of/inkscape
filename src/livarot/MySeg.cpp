@@ -7,7 +7,6 @@
  *
  */
 
-#include "MyMath.h"
 #include "MySeg.h"
 #include <math.h>
 

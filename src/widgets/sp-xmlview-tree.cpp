@@ -11,16 +11,6 @@
  * Released under the GNU GPL; see COPYING for details
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <glib.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmarshal.h>
-#include <gtk/gtkclist.h>
-#include <gtk/gtkctree.h>
-#include <gtk/gtkcontainer.h>
-#include "../xml/repr.h"
 #include "../xml/node-event-vector.h"
 #include "sp-xmlview-tree.h"
 

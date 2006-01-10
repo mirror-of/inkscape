@@ -16,15 +16,11 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
 
 #include "display/nr-arena-group.h"
-#include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-fns.h"
 #include "xml/repr.h"
-#include "xml/node-fns.h"
-#include "sp-object-repr.h"
 #include "svg/svg.h"
 #include "document.h"
 #include "style.h"
@@ -32,8 +28,6 @@
 
 #include "sp-root.h"
 #include "sp-use.h"
-#include "sp-item-group.h"
-#include <glibmm/i18n.h>
 #include "prefs-utils.h"
 
 static void sp_group_class_init (SPGroupClass *klass);

@@ -1,11 +1,5 @@
-#include "sp-item-update-cns.h"
-#include <vector>
 
-#include <approx-equal.h>
-#include <libnr/nr-point.h>
-#include <remove-last.h>
 #include "satisfied-guide-cns.h"
-#include "sp-guide-attachment.h"
 #include "sp-guide-constraint.h"
 #include <sp-guide.h>
 #include <sp-item.h>

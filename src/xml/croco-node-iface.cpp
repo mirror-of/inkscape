@@ -1,6 +1,5 @@
 #include "xml/croco-node-iface.h"
 #include "xml/node.h"
-#include <cstring>
 #include <glib/gstrfuncs.h>
 
 static char const *

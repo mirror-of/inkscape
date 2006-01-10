@@ -21,16 +21,10 @@
 
 #include <inkscape.h>
 #include <desktop-handles.h>
-#include <document.h>
 #include "message-stack.h"
-#include <selection.h>
-#include <sp-image.h>
 #include <sp-path.h>
 #include <svg/stringstream.h>
-#include <xml/repr.h>
-#include "greymap.h"
 #include "curve.h"
-#include "potracelib.h"
 #include "bitmap.h"
 
 #include "inkscape-potrace.h"

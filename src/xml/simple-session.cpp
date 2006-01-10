@@ -12,10 +12,7 @@
  *
  */
 
-#include <glib/gmessages.h>
-#include <glib/gquark.h>
 #include "xml/simple-session.h"
-#include "xml/event.h"
 #include "xml/event-fns.h"
 #include "xml/element-node.h"
 #include "xml/text-node.h"

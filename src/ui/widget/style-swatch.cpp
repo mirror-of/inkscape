@@ -18,22 +18,12 @@
 #include "widgets/spw-utilities.h"
 #include "ui/widget/color-preview.h"
 
-#include "selection.h"
-#include "desktop-handles.h"
-#include "sp-namedview.h"
 #include "style.h"
-#include "desktop-style.h"
-#include "color.h"
 #include "sp-linear-gradient-fns.h"
 #include "sp-radial-gradient-fns.h"
 #include "sp-pattern.h"
-#include "dialogs/object-properties.h"
 #include "xml/repr.h"
-#include "document.h"
 #include "widgets/widget-sizes.h"
-#include "widgets/spinbutton-events.h"
-#include "svg/svg.h"
-#include "svg/css-ostringstream.h"
 #include "helper/units.h"
 
 enum {

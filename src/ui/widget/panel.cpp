@@ -15,13 +15,6 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/frame.h>
-#include <gtkmm/label.h>
-#include <gtkmm/table.h>
-#include <gtkmm/menuitem.h>
-#include <gtkmm/separatormenuitem.h>
-#include <gtkmm/radiomenuitem.h>
-#include <gtk/gtkmain.h>
 #include <glibmm/i18n.h>
 
 #include "panel.h"

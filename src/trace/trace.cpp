@@ -11,11 +11,8 @@
  */
 
 
-#include <glibmm.h>
 
-#include "trace/trace.h"
 #include "trace/potrace/inkscape-potrace.h"
-#include "ui/dialog/tracedialog.h"
 
 #include <inkscape.h>
 #include <desktop-handles.h>
@@ -23,11 +20,7 @@
 #include "message-stack.h"
 #include <glibmm/i18n.h>
 #include <selection.h>
-#include <sp-image.h>
-#include <sp-path.h>
-#include <display/curve.h>
 #include <xml/repr.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 
 namespace Inkscape {

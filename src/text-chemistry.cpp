@@ -14,19 +14,11 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
-#include "libnr/nr-macros.h"
 #include "libnr/nr-matrix-fns.h"
 #include "xml/repr.h"
-#include "svg/svg.h"
-#include "display/curve.h"
 #include <glibmm/i18n.h>
-#include "sp-object.h"
-#include "sp-path.h"
 #include "sp-rect.h"
-#include "sp-text.h"
 #include "sp-textpath.h"
-#include "style.h"
 #include "inkscape.h"
 #include "document.h"
 #include "message-stack.h"

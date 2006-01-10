@@ -13,7 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include "sp-shape.h"
 
 #define SP_TYPE_POLYGON (sp_polygon_get_type ())

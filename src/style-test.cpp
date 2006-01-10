@@ -1,5 +1,4 @@
 #include <cassert>
-#include <cstring>
 #include <cmath>
 #include "utest/utest.h"
 #include "streq.h"

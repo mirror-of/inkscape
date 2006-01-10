@@ -1,6 +1,5 @@
 #include "svg/stringstream.h"
 #include "svg/strip-trailing-zeros.h"
-#include <string>
 
 Inkscape::SVGOStringStream::SVGOStringStream()
 {

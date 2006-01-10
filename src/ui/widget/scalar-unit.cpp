@@ -26,9 +26,7 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/spinbutton.h>
 #include "scalar-unit.h"
-#include "util/units.h"
 
 namespace Inkscape {
 namespace UI {

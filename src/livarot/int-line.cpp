@@ -10,10 +10,7 @@
  */
 
 #include <glib/gmem.h>
-#include <cstdio>
-#include <cstring>
 #include <cmath>
-#include "livarot/LivarotDefs.h"
 #include "livarot/int-line.h"
 #include "livarot/float-line.h"
 #include "livarot/BitLigne.h"

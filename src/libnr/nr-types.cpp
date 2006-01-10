@@ -3,8 +3,6 @@
  */
 
 #include <libnr/nr-types.h>
-#include <glib.h>
-#include <math.h>
 
 #include "isnan.h" //temporary fix for isnan()
 

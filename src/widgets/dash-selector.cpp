@@ -18,10 +18,6 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
-#include <glib.h>
-#include <string.h>
-#include <libnr/nr-values.h>
 #include <libnr/nr-macros.h>
 #include <gtk/gtk.h>
 

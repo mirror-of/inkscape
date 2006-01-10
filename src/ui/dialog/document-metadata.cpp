@@ -18,23 +18,15 @@
 # include <config.h>
 #endif
 
-#include <utility>  // pair
 
-#include <glibmm/i18n.h>
 
 #include "ui/widget/entity-entry.h"
-#include "ui/widget/registry.h"
 
-#include "xml/repr.h"
 #include "xml/node-event-vector.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "dialogs/rdf.h"
-#include "application/editor.h"
 
 #include "inkscape.h"
 #include "verbs.h"
-#include "document.h"
 #include "desktop-handles.h"
 #include "desktop.h"
 #include "sp-namedview.h"

@@ -13,14 +13,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
-
+#include <gdk/gdktypes.h>
 #include "libnr/nr-matrix.h"
-#include "forward.h"
+#include "sp-paint-server.h"
 #include "sp-gradient-spread.h"
 #include "sp-gradient-units.h"
-#include "sp-paint-server.h"
 #include "sp-gradient-vector.h"
+
+struct SPGradientReference;
 
 typedef enum {
 	SP_GRADIENT_TYPE_UNKNOWN,

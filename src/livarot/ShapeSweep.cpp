@@ -8,7 +8,6 @@
 
 #include <glib/gmem.h>
 #include "Shape.h"
-#include "LivarotDefs.h"
 #include "livarot/sweep-event-queue.h"
 #include "livarot/sweep-tree-list.h"
 

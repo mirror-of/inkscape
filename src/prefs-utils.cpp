@@ -9,7 +9,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -18,7 +17,6 @@
 #include "inkscape.h"
 #include "xml/repr.h"
 
-#include "prefs-utils.h"
 
 void
 prefs_set_int_attribute(gchar const *path, gchar const *attr, gint value)

@@ -1,5 +1,3 @@
-#include "libnr/nr-scale-translate-ops.h"
-#include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-translate-ops.h"
 
 NR::Matrix

@@ -12,9 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
 #include "document.h"
 #include "sp-object.h"
 #include "uri.h"

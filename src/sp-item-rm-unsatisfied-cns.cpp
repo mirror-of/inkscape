@@ -1,14 +1,9 @@
-#include <glib.h>
-#include <vector>
 
 #include <approx-equal.h>
-#include <libnr/nr-point-fns.h>
 #include <remove-last.h>
 #include <sp-guide.h>
-#include <sp-guide-attachment.h>
 #include <sp-guide-constraint.h>
 #include <sp-item.h>
-#include <sp-item-rm-unsatisfied-cns.h>
 using std::vector;
 
 void sp_item_rm_unsatisfied_cns(SPItem &item)

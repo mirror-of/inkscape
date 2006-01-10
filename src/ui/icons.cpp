@@ -15,10 +15,7 @@
 
 #include <gtkmm/iconfactory.h>
 #include <gtkmm/stock.h>
-#include <glibmm/miscutils.h>
-#include <vector>
 
-#include "icons.h"
 #include "stock.h"
 #include "path-prefix.h"
 

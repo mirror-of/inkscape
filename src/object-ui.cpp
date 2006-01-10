@@ -36,17 +36,11 @@ sp_object_menu(SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 /* Implementation */
 
 #include <gtk/gtkmenuitem.h>
-#include <gtk/gtksignal.h>
 
 #include <glibmm/i18n.h>
 
-#include "sp-item-group.h"
 #include "sp-anchor.h"
 #include "sp-image.h"
-#include "sp-rect.h"
-#include "sp-star.h"
-#include "sp-ellipse.h"
-#include "sp-spiral.h"
 
 #include "document.h"
 #include "desktop-handles.h"
@@ -54,12 +48,8 @@ sp_object_menu(SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 
 #include "dialogs/item-properties.h"
 #include "dialogs/object-attributes.h"
-#include "dialogs/fill-style.h"
 #include "dialogs/object-properties.h"
 
-#include "sp-flowtext.h"
-#include "sp-flowregion.h"
-#include "sp-flowdiv.h"
 #include "sp-path.h"
 
 

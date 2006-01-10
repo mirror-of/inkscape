@@ -20,7 +20,6 @@
  * 
 */
 
-#include "libavoid/connector.h"
 #include "libavoid/graph.h"
 #include "libavoid/makepath.h"
 #include "libavoid/visibility.h"

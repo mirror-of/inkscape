@@ -15,31 +15,16 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <strings.h>
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
 
-#include <glib.h>
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
 
 #include "io/sys.h"
-#include "io/inkscapestream.h"
 #include "io/uristream.h"
 #include "io/gzipstream.h"
 
-#include <map>
-#include <glibmm/ustring.h>
-#include <glibmm/quark.h>
-#include "util/list.h"
-#include "util/shared-c-string-ptr.h"
 
 using Inkscape::IO::Writer;
 using Inkscape::Util::List;

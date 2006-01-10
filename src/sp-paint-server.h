@@ -14,11 +14,7 @@
  */
 
 #include <libnr/nr-pixblock.h>
-
-#include "forward.h"
 #include "sp-object.h"
-
-#include <glib.h>
 
 
 

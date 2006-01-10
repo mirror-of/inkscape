@@ -17,11 +17,9 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include "../color.h"
 #include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
 #include "../prefs-utils.h"
@@ -30,7 +28,6 @@
 
 #include "sp-color-scales.h"
 #include "sp-color-wheel-selector.h"
-#include "sp-color-gtkselector.h"
 
 struct SPColorNotebookTracker {
 	const gchar* name;

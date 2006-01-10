@@ -11,7 +11,6 @@
 
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-pixblock-pixel.h>
-#include <libnr/nr-pixblock-line.h>
 
 void
 nr_pixblock_draw_line_rgba32 (NRPixBlock *d, long x0, long y0, long x1, long y1, short first, unsigned long rgba)

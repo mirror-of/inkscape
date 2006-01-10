@@ -12,10 +12,7 @@
 
 #include "xsltstream.h"
 #include "stringstream.h"
-#include <libxslt/xslt.h>
-#include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
 
 
 

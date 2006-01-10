@@ -13,10 +13,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
 #endif
 
-#include "macros.h"
 #include "libnr/nr-point.h"
 #include "document.h"
 #include "view.h"

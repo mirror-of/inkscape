@@ -18,19 +18,14 @@
 # include "config.h"
 #endif
 
-#include <math.h>
-#include <string.h>
 
 #include "libnr/n-art-bpath.h"
-#include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-fns.h"
-#include "libnr/nr-point-matrix-ops.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "xml/repr.h"
 #include "attributes.h"
 #include "style.h"
-#include "version.h"
 #include "display/curve.h"
 #include <glibmm/i18n.h>
 

@@ -10,7 +10,6 @@
  */
 
 
-#include <libxml/xmlerror.h>
 #include "simple-sax.h"
 
 namespace Inkscape {

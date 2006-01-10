@@ -12,7 +12,6 @@
  */
 
 #include "nr-matrix.h"
-#include "nr-values.h"
 
 
 

@@ -10,12 +10,8 @@
  */
 
 #include "generate-constraints.h"
-#include "variable.h"
 #include "constraint.h"
 #include <set>
-#include <vector>
-#include <cassert>
-#include <iostream>
 
 #include "isnan.h" /* Include last */
 

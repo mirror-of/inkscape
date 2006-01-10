@@ -18,23 +18,17 @@
 #include "config.h"
 
 #if HAVE_STRING_H
-#include <string.h>
 #endif
 
-#include <ctype.h>
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
 #endif
 
-#include <gtk/gtksignal.h>
-#include "libcroco/cr-prop-list.h"
 #include "libcroco/cr-sel-eng.h"
 #include "xml/croco-node-iface.h"
 
 #include "svg/svg.h"
 
-#include "enums.h"
 #include "display/canvas-bpath.h"
 #include "attributes.h"
 #include "document.h"

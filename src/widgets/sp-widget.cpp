@@ -13,11 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtksignal.h>
 #include "macros.h"
-#include "../xml/node-event-vector.h"
-#include "../inkscape.h"
-#include "../selection.h"
 #include "../document.h"
 #include "sp-widget.h"
 

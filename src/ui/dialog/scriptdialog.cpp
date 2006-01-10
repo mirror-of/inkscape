@@ -15,7 +15,6 @@
 #endif
 
 #include <glibmm/i18n.h>
-#include <gtkmm/menu.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>

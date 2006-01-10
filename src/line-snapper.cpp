@@ -2,8 +2,6 @@
 #include "libnr/nr-point-fns.h"
 #include "geom.h"
 #include "line-snapper.h"
-#include "snap.h"
-#include "snapped-point.h"
 
 Inkscape::LineSnapper::LineSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv, d)
 {

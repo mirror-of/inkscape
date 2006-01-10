@@ -22,13 +22,11 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/label.h>
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/stock.h>
 
 #include "path-prefix.h"
-#include "file.h"
 #include "document.h"
 #include "svg-view-widget.h"
 #include "sp-text.h"

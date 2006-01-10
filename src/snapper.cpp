@@ -10,8 +10,6 @@
 
 #include "libnr/nr-values.h"
 #include "sp-namedview.h"
-#include "snapper.h"
-#include "snapped-point.h"
 
 Inkscape::Snapper::PointType const Inkscape::Snapper::BBOX_POINT = 0x1;
 Inkscape::Snapper::PointType const Inkscape::Snapper::SNAP_POINT = 0x2;

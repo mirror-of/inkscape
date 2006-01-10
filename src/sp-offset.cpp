@@ -19,14 +19,10 @@
 # include "config.h"
 #endif
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
 
 #include "svg/svg.h"
 #include "attributes.h"
 #include "display/curve.h"
-#include "dialogs/object-attributes.h"
 #include <glibmm/i18n.h>
 
 #include "livarot/Path.h"
@@ -35,18 +31,12 @@
 #include "enums.h"
 #include "prefs-utils.h"
 #include "sp-text.h"
-#include "sp-shape.h"
 #include "sp-offset.h"
 #include "sp-use-reference.h"
 #include "uri.h"
 
 #include "libnr/n-art-bpath.h"
-#include "libnr/nr-point.h"
-#include <libnr/nr-point-fns.h>
-#include <libnr/nr-point-ops.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-matrix-ops.h>
 
 #include "xml/repr.h"
 

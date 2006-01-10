@@ -17,39 +17,22 @@
 # include "config.h"
 #endif
 
-#include <glib/gmessages.h>
-#include <string.h>
 
 #include <libnr/n-art-bpath.h>
-#include <libnr/nr-pixblock.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
-#include <libnr/nr-point-fns.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-scale-matrix-ops.h>
 
-#include <xml/repr.h>
 
 #include "macros.h"
-#include <glibmm/i18n.h>
-#include "svg/svg.h"
-#include "svg/css-ostringstream.h"
-#include "display/curve.h"
 #include "display/nr-arena-shape.h"
-#include "uri-references.h"
 #include "print.h"
 #include "document.h"
 #include "marker-status.h"
-#include "selection.h"
-#include "sp-paint-server.h"
 #include "style.h"
-#include "sp-root.h"
 #include "sp-marker.h"
-#include "sp-shape.h"
 #include "sp-path.h"
-#include "sp-defs.h"
 #include "prefs-utils.h"
 
 #define noSHAPE_VERBOSE

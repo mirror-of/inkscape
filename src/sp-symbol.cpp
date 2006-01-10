@@ -13,17 +13,12 @@
 
 #include "config.h"
 
-#include <string.h>
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
-#include "svg/svg.h"
 #include "display/nr-arena-group.h"
 #include "xml/repr.h"
 #include "attributes.h"
 #include "print.h"
-#include "document.h"
-#include "sp-defs.h"
-#include "sp-namedview.h"
 #include "sp-symbol.h"
 
 static void sp_symbol_class_init (SPSymbolClass *klass);

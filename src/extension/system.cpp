@@ -15,16 +15,9 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
 
 #include <interface.h>
-#include <glibmm/i18n.h>
-#include "xml/repr.h"
-#include "document.h"
-#include "inkscape.h"
 
-#include "extension/extension.h"
-#include "system.h"
 #include "db.h"
 #include "input.h"
 #include "output.h"

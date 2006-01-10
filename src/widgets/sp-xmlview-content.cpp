@@ -11,17 +11,9 @@
  * Released under the GNU GPL; see COPYING for details
  */
 
-#include <string.h>
-#include <glib.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmarshal.h>
-#include <gtk/gtkadjustment.h>
 
-#include "xml/repr.h"
 #include "xml/node-event-vector.h"
 #include "sp-xmlview-content.h"
-#include "macros.h"
 #include "desktop-handles.h"
 #include "document-private.h"
 #include "inkscape.h"

@@ -13,14 +13,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include "libnr/nr-matrix-rotate-ops.h"
 #include "libnr/nr-matrix-scale-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
-#include "svg/svg.h"
-#include "sp-item-transform.h"
 #include "sp-item.h"
 
 static NR::translate inverse(NR::translate const m)

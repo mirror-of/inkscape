@@ -14,19 +14,9 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <ctype.h>
 
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-pixblock.h>
 
-#include <glibmm/i18n.h>
-#include "enums.h"
-#include "document.h"
 #include "sp-item.h"
-#include "style.h"
-#include "sp-paint-server.h"
 #include "extension/print.h"
 #include "extension/system.h"
 #include "print.h"

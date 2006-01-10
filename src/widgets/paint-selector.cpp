@@ -15,28 +15,16 @@
 # include "config.h"
 #endif
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
 
-#include <libnr/nr-values.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-div.h>
-#include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-matrix-ops.h>
 
-#include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkradiobutton.h>
-#include <gtk/gtkhseparator.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtkmenuitem.h>
-#include <gtk/gtkimage.h>
 
-#include "../sp-item.h"
 #include "../sp-pattern.h"
 #include <glibmm/i18n.h>
 #include "../widgets/icon.h"
@@ -44,7 +32,6 @@
 #include "widgets/widget-sizes.h"
 #include "xml/repr.h"
 
-#include "sp-color-selector.h"
 #include "sp-color-notebook.h"
 #include "sp-linear-gradient-fns.h"
 #include "sp-radial-gradient-fns.h"
@@ -53,7 +40,6 @@
 #include <inkscape.h>
 #include <document-private.h>
 #include <desktop-style.h>
-#include <selection.h>
 #include <style.h>
 #include "svg/svg.h"
 #include "svg/css-ostringstream.h"

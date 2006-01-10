@@ -13,11 +13,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtksignal.h>
 #include <gtk/gtkscrolledwindow.h>
 #include "display/canvas-arena.h"
 #include "document.h"
-#include "sp-item.h"
 #include "svg-view.h"
 #include "svg-view-widget.h"
 

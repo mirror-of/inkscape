@@ -12,8 +12,6 @@
  *
  */
 
-#include <functional>
-#include <algorithm>
 #include "algorithms/find-if-before.h"
 #include "xml/composite-node-observer.h"
 #include "xml/node-event-vector.h"

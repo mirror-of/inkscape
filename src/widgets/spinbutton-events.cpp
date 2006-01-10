@@ -13,19 +13,7 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkaccelgroup.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkselection.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktooltips.h>
-#include <gtk/gtkdnd.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkhandlebox.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "../event-context.h"
@@ -33,7 +21,6 @@
 #include "sp-widget.h"
 #include "widget-sizes.h"
 
-#include "spinbutton-events.h"
 
 gboolean
 spinbutton_focus_in (GtkWidget *w, GdkEventKey *event, gpointer data)

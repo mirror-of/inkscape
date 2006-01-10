@@ -15,42 +15,25 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
 #include "macros.h"
-#include "display/sp-canvas-util.h"
 #include "rubberband.h"
-#include "inkscape-private.h"
 #include "document.h"
-#include "sp-namedview.h"
 #include "selection.h"
-#include "desktop-affine.h"
 #include "seltrans-handles.h"
 #include "sp-cursor.h"
-#include "widgets/desktop-widget.h"
 #include "pixmaps/cursor-select-m.xpm"
 #include "pixmaps/cursor-select-d.xpm"
 #include "pixmaps/handles.xpm"
 #include <glibmm/i18n.h>
-#include "widgets/spw-utilities.h"
 
 #include "select-context.h"
 #include "selection-chemistry.h"
-#include "path-chemistry.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "dialogs/object-properties.h"
-#include "sp-metrics.h"
-#include "sp-item.h"
-#include "sp-item-group.h"
 #include "sp-root.h"
-#include "snap.h"
 #include "prefs-utils.h"
 #include "tools-switch.h"
-#include "message-context.h"
 #include "message-stack.h"
 #include "selection-describer.h"
 #include "seltrans.h"

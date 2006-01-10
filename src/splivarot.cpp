@@ -16,12 +16,9 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <time.h>
-#include <string.h>
 
 #include "xml/repr.h"
 #include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "sp-path.h"
 #include "sp-text.h"
 #include "sp-item-group.h"
@@ -31,23 +28,17 @@
 #include "message-stack.h"
 #include "selection.h"
 #include "desktop-handles.h"
-#include "path-chemistry.h"
 #include "desktop.h"
-#include "splivarot.h"
 #include "display/canvas-bpath.h"
-#include "display/curve.h"
 #include <glibmm/i18n.h>
 #include "prefs-utils.h"
 
 #include "libnr/n-art-bpath.h"
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-point.h"
 #include "xml/repr.h"
 #include "xml/repr-sorting.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
-#include "livarot/LivarotDefs.h"
 
 Path   *Path_for_item(SPItem *item, bool doTransformation, bool transformFull = true);
 bool   Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who);

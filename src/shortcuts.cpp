@@ -22,16 +22,12 @@
 # include "config.h"
 #endif
 
-#include "string.h"
-#include <glib.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "helper/action.h"
 #include "shortcuts.h"
 #include "verbs.h"
-#include "xml/document.h"
-#include "xml/node.h"
 #include "xml/node-iterators.h"
 #include "xml/repr.h"
 

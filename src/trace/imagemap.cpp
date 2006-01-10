@@ -1,10 +1,7 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "imagemap.h"
 
-#include <glib.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "io/sys.h"
 
 /*#########################################################################

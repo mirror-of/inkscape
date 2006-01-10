@@ -6,13 +6,10 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
 #include <glibmm/i18n.h>
 
 #include <xml/repr.h>
 
-#include "sp-object.h"
-#include "sp-item.h"
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-use.h"
@@ -20,16 +17,9 @@
 
 #include "sp-flowregion.h"
 
-#include "display/curve.h"
 #include "display/canvas-bpath.h"
 
-#include "libnr/nr-point.h"
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-point-ops.h"
-#include "libnr/nr-matrix-ops.h"
-#include "libnr/nr-path.h"
 
-#include "livarot/LivarotDefs.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 

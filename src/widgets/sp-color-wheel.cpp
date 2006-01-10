@@ -13,17 +13,9 @@
  * This code is in public domain
  */
 
-#include <gdk/gdk.h>
-#include <gdk/gdkrgb.h>
 #include <gtk/gtksignal.h>
-#include <gtk/gtkmain.h>
 #include "sp-color-wheel.h"
-#include "math.h"
-#include "color.h"
-#include "string.h" // for memcpy
-#include "gtk/gtkwindow.h"
 
-#include "libnr/nr-matrix.h"
 #include "libnr/nr-rotate-ops.h"
 
 #define WHEEL_SIZE 96

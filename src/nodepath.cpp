@@ -10,14 +10,10 @@
  * This code is in public domain
  */
 
-#include "config.h"
 
-#include <math.h>
 //#include <string.h>
 #include <gdk/gdkkeysyms.h>
-#include "svg/svg.h"
 #include "display/curve.h"
-#include "display/sp-canvas-util.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
 #include <glibmm/i18n.h>
@@ -29,13 +25,10 @@
 #include "sp-namedview.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "desktop-affine.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "message-stack.h"
 #include "message-context.h"
 #include "node-context.h"
-#include "nodepath.h"
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "xml/repr.h"
@@ -43,15 +36,9 @@
 #include "prefs-utils.h"
 #include "sp-metrics.h"
 #include "sp-path.h"
-#include "sp-shape.h"
 
-#include "libnr/nr-point-ops.h"
-#include <libnr/nr-rect.h>
 //#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
-#include "livarot/Path.h"
 #include "splivarot.h"
 
 class NR::Matrix;
@@ -72,8 +59,6 @@ GType sp_flowtext_get_type (void);
 
 #include "helper/stlport.h"
 
-#include <libnr/nr-point-matrix-ops.h>
-#include <libnr/nr-point-fns.h>
 
 /// \todo fixme: Implement these via preferences */
 

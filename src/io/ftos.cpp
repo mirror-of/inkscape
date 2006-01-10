@@ -150,7 +150,6 @@
 //
 /////////////////////////////////////////////////////////////////////// */
 
-#include <string>
 
 // This is the routine used for converting a floating point into a string
 // This may be included in stdlib.h on some systems and may conflict.
@@ -164,14 +163,12 @@
 using namespace std;
 
 #ifndef HAS_ECVT
-#include <cstdio>
 #include <glib.h>
 #endif
 
 
 #include "ftos.h"
 
-#include <iostream>
 
 // This routine counts from the end of a string like '10229000' to find the index
 // of the first non-'0' character (5 would be returned for the above number.)

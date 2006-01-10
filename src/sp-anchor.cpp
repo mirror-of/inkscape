@@ -17,12 +17,8 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
 
 #include <glibmm/i18n.h>
-#include "forward.h"
-#include "display/sp-canvas.h"
-#include "dialogs/object-attributes.h"
 #include "xml/quote.h"
 #include "xml/repr.h"
 #include "attributes.h"

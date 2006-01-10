@@ -13,7 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include "svg/svg-length.h"
 #include "sp-shape.h"
 

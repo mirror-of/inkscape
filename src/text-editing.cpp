@@ -10,30 +10,21 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 
-#include <algorithm>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-point-matrix-ops.h>
 
-#include <glib.h>
 
-#include "svg/svg.h"
 #include "desktop.h"
 #include "style.h"
-#include "desktop-style.h"
 #include "unit-constants.h"
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
 
-#include "sp-text.h"
 #include "sp-textpath.h"
 #include "sp-flowtext.h"
 #include "sp-flowdiv.h"
 #include "sp-flowregion.h"
 #include "sp-tspan.h"
-#include "sp-string.h"
 
 #include "text-editing.h"
 

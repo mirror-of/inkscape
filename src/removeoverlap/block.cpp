@@ -13,11 +13,8 @@
 #include "constraint.h"
 #include "block.h"
 #include "blocks.h"
-#include "variable.h"
 #include "pairingheap/PairingHeap.h"
-#include <cassert>
 #ifdef RECTANGLE_OVERLAP_LOGGING
-#include <fstream>
 using std::ios;
 using std::ofstream;
 using std::endl;

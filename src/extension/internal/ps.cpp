@@ -27,24 +27,13 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
 #include <signal.h>
 #include <errno.h>
-#include <math.h>
 
 #include <libnr/n-art-bpath.h>
-#include <libnr/nr-macros.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
 
-#include <glib.h>
 #include <gtk/gtkstock.h>
-#include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
-#include <gtk/gtkhbox.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkcombo.h>
@@ -55,19 +44,11 @@
 #include <glibmm/i18n.h>
 #include "display/nr-arena-item.h"
 #include "display/canvas-bpath.h"
-#include "enums.h"
-#include "document.h"
-#include "inkscape.h"
 #include "sp-item.h"
 #include "style.h"
-#include "inkscape_version.h"
-#include "sp-gradient.h"
-#include "sp-gradient-vector.h"
 #include "sp-linear-gradient.h"
-#include "sp-pattern.h"
 #include "sp-radial-gradient.h"
 
-#include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 #include "libnrtype/font-style-to-pos.h"
 
@@ -75,7 +56,6 @@
 
 #include "ps.h"
 #include "extension/system.h"
-#include "extension/extension.h"
 #include "extension/print.h"
 
 #include "io/sys.h"

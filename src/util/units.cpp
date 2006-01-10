@@ -4,7 +4,6 @@
 
 #include <cmath>
 #include <cerrno>
-#include <glib/gmessages.h>
 #include <glib.h>
 
 #include "io/simple-sax.h"

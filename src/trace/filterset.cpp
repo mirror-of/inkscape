@@ -9,15 +9,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-#include <math.h>
-
-#include "filterset.h"
 
 #include "imagemap-gdk.h"
+#include "filterset.h"
 
 
 /*#########################################################################

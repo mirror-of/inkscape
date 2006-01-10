@@ -16,21 +16,15 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
 
 #include "svg/svg.h"
 #include "attributes.h"
 #include "display/bezier-utils.h"
 #include "display/curve.h"
-#include "dialogs/object-attributes.h"
 #include <glibmm/i18n.h>
 #include "xml/repr.h"
 
 #include "sp-spiral.h"
-#include <libnr/nr-point.h>
-#include <libnr/nr-point-fns.h>
 
 static void sp_spiral_class_init (SPSpiralClass *klass);
 static void sp_spiral_init (SPSpiral *spiral);

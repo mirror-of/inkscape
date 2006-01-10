@@ -18,7 +18,6 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkwindow.h>
-#include <gtk/gtksignal.h>
 
 #include <glibmm/i18n.h>
 #include "document.h"

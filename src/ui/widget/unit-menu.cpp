@@ -13,7 +13,6 @@
 # include <config.h>
 #endif
 
-#include <map>
 #include <cmath>
 
 #include "unit-menu.h"

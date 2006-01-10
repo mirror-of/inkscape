@@ -6,15 +6,7 @@
 # include "config.h"
 #endif
 #include <math.h>
-#include <string.h>
-#include <stdlib.h>
 #include <gtk/gtksignal.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkcolorsel.h>
-#include "../color.h"
 #include <glibmm/i18n.h>
 #include "sp-color-selector.h"
 

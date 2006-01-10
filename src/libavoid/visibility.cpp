@@ -26,9 +26,7 @@
 #include "libavoid/shape.h"
 #include "libavoid/debug.h"
 #include "libavoid/visibility.h"
-#include "libavoid/vertices.h"
 #include "libavoid/graph.h"
-#include "libavoid/geometry.h"
 
 #include <math.h>
 

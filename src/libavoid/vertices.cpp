@@ -20,14 +20,10 @@
  *
 */
 
-#include "libavoid/vertices.h"
 #include "libavoid/geometry.h"
 #include "libavoid/graph.h"  // For alertConns
 #include "libavoid/debug.h"
 
-#include <iostream>
-#include <cstdlib>
-#include <cassert>
 
 
 namespace Avoid {

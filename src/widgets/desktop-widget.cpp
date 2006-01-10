@@ -20,21 +20,14 @@
 # include "config.h"
 #endif
 
-#include <glib.h>
-#include <glibmm/i18n.h>
 #include <gtkmm/paned.h>
 #include <gtk/gtk.h>
 
 #include "macros.h"
-#include "forward.h"
 #include "inkscape-private.h"
-#include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-events.h"
-#include "desktop-affine.h"
 #include "document.h"
-#include "selection.h"
-#include "select-context.h"
 #include "desktop-widget.h"
 #include "sp-namedview.h"
 #include "interface.h"
@@ -42,12 +35,10 @@
 #include "prefs-utils.h"
 #include "file.h"
 #include "display/canvas-arena.h"
-#include "display/gnome-canvas-acetate.h"
 #include <extension/db.h>
 #include "helper/units.h"
 #include "widgets/button.h"
 #include "widgets/ruler.h"
-#include "widgets/icon.h"
 #include "widgets/widget-sizes.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/spinbutton-events.h"
@@ -57,7 +48,6 @@
 #include "dialogs/swatches.h"
 
 #ifdef WITH_INKBOARD
-#include "jabber_whiteboard/session-manager.h"
 #endif
 
 

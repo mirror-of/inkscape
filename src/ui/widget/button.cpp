@@ -13,8 +13,6 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/button.h>
-#include <gtkmm/checkbutton.h>
 #include "button.h"
 
 namespace Inkscape {

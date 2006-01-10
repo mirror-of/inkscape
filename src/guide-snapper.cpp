@@ -16,7 +16,6 @@
 #include "libnr/nr-point-fns.h"
 #include "sp-namedview.h"
 #include "sp-guide.h"
-#include "guide-snapper.h"
 
 Inkscape::GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : LineSnapper(nv, d)
 {

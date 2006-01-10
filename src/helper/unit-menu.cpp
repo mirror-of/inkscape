@@ -17,9 +17,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <glib.h>
 #include <gtk/gtksignal.h>
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
@@ -27,7 +25,6 @@
 #include "helper/units.h"
 #include "unit-menu.h"
 #include "widgets/spw-utilities.h"
-#include "widgets/widget-sizes.h"
 
 struct SPUnitSelector {
     GtkHBox box;

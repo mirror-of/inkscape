@@ -16,23 +16,12 @@
 # include "config.h"
 #endif
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <libnr/nr-macros.h>
 
 #include <gtk/gtk.h>
-#include <glib.h>
  
-#include <glibmm/i18n.h>
-#include "helper/window.h"
-#include "widgets/button.h"
-#include "inkscape.h"
-#include "document.h"
 #include "selection.h"
 
 #include "helper/unit-menu.h"
-#include "spw-utilities.h"
 
 /** 
  * Creates a label widget with the given text, at the given col, row 

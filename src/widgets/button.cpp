@@ -13,26 +13,12 @@
  * This code is in public domain
  */
 
-#include "config.h"
 
 #if HAVE_STRING_H
-#include <string.h>
 #endif
 
-#include <libnr/nr-macros.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-pixblock.h>
-#include <libnr/nr-pixblock-pattern.h>
-#include <libnr/nr-pixops.h>
 
-#include <gdk/gdkkeys.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkbin.h>
-#include <gtk/gtkmenuitem.h>
 
-#include "helper/sp-marshal.h"
 
 #include "shortcuts.h"
 #include "interface.h"

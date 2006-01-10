@@ -4,13 +4,11 @@
 
 /* $Id$ */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
 #include "render.h"
-#include "greymap.h"
 #include "auxiliary.h"
 
 /* ---------------------------------------------------------------------- */

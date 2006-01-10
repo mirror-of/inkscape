@@ -7,7 +7,6 @@
  */
 
 #include "livarot/Shape.h"
-#include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
 #include "livarot/Path.h"
 #include "livarot/path-description.h"

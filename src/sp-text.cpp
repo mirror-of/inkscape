@@ -21,53 +21,33 @@
  *
  */
 
-#include "config.h"
 
-#include <algorithm>
-#include <string.h>
 
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-point-matrix-ops.h>
-#include <libnr/nr-rotate.h>
 //#include <libnrtype/nr-typeface.h>
 #include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-style-to-pos.h>
 
-#include <livarot/LivarotDefs.h>
-#include <livarot/Shape.h>
-#include <livarot/Path.h>
 
-#include <glib.h>
 //#include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
-#include "svg/svg.h"
 #include "svg/stringstream.h"
-#include "display/curve.h"
-#include "display/nr-arena-group.h"
 #include "display/nr-arena-glyphs.h"
 #include "attributes.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "sp-namedview.h"
-#include "fontsize-expansion.h"
 #include "style.h"
-#include "version.h"
 #include "inkscape.h"
-#include "print.h"
 #include "sp-metrics.h"
 #include "xml/quote.h"
 #include "xml/repr.h"
 #include "mod360.h"
 
-#include "sp-item.h"
-#include "sp-text.h"
 #include "sp-textpath.h"
 #include "sp-tspan.h"
-#include "sp-string.h"
 
 #include "text-editing.h"
 

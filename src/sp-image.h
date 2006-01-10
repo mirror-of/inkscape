@@ -25,8 +25,6 @@ class SPImageClass;
 
 /* SPImage */
 
-#include <glib.h>
-
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "svg/svg-length.h"
 #include "sp-item.h"

@@ -14,9 +14,7 @@
 #endif
 
 #include <string.h>
-#include <stdio.h>
 #include "nr-pixops.h"
-#include "nr-compose.h"
 
 #ifdef WITH_MMX
 /* fixme: */

@@ -26,16 +26,10 @@
      Lauris Kaplinski <lauris@ximian.com>
 */
 
-#include <math.h>
-#include <string.h>
-#include <assert.h>
 #include "libnr/n-art-bpath.h"
 #include "gnome-canvas-bpath-util.h"
-#include "svg.h"
 #include "stringstream.h"
 
-#include <locale>
-#include <sstream>
 
 /* This module parses an SVG path element into an RsvgBpathDef.
 

@@ -18,7 +18,6 @@
 #include "shortcuts.h"
 #include "desktop.h"
 #include "event-context.h"
-#include "helper/window.h"
 
 static gboolean
 sp_window_key_press (GtkWidget *widget, GdkEventKey *event)

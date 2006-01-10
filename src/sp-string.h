@@ -6,10 +6,7 @@
  * extracted from sp-text
  */
 
-#include <glib.h>
 #include <glibmm/ustring.h>
-
-#include <sigc++/sigc++.h>
 
 #include "sp-object.h"
 

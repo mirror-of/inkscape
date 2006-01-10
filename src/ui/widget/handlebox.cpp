@@ -17,7 +17,6 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/widget.h>
 #include "handlebox.h"
 
 namespace Inkscape {

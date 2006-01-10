@@ -16,16 +16,13 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
 #include "display/guideline.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "sp-guide.h"
-#include <sp-guide-attachment.h>
 #include <sp-item-notify-moveto.h>
 #include <sp-item.h>
 #include <sp-guide-constraint.h>
-#include <libnr/nr-values.h>
 #include <glibmm/i18n.h>
 #include <xml/repr.h>
 #include <remove-last.h>

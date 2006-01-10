@@ -13,9 +13,7 @@
 # include <config.h>
 #endif
 
-#include <vector>
 #include <glibmm/i18n.h>
-#include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 

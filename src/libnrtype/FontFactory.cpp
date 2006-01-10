@@ -11,7 +11,6 @@
 #include "FontFactory.h"
 #include <libnrtype/font-instance.h>
 
-#include <pango/pango.h>
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"

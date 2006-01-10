@@ -12,13 +12,8 @@
  * This code is in public domain
  */
 
-#include <gdk/gdk.h>
-#include <gdk/gdkrgb.h>
 #include <gtk/gtksignal.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtktooltips.h>
 #include "sp-color-scales.h"
-#include "sp-color-slider.h"
 
 #define SLIDER_WIDTH 96
 #define SLIDER_HEIGHT 8

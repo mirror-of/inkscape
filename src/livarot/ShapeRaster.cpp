@@ -6,15 +6,12 @@
  *
  */
 
-#include <algorithm>
 #include "Shape.h"
-#include "LivarotDefs.h"
 
 #include "livarot/float-line.h"
 #include "AlphaLigne.h"
 #include "BitLigne.h"
 
-#include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
 #include "livarot/sweep-event-queue.h"
 #include "livarot/sweep-tree-list.h"

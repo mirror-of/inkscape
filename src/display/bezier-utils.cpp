@@ -31,6 +31,7 @@
 
 
 #ifdef HAVE_IEEEFP_H
+# include <ieefp.h>
 #endif
 #include "bezier-utils.h"
 #include <libnr/nr-point-fns.h>

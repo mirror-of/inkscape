@@ -1,4 +1,3 @@
-#include "extract-uri.h"
 #include <string.h>
 #include <glib.h>
 

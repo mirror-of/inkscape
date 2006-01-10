@@ -14,14 +14,10 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <iostream>
 
-#include <glib.h>
 
 #include <gtkmm/adjustment.h>
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/box.h>
-#include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 
 #include <glibmm/i18n.h>

@@ -15,37 +15,27 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <glib.h>
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
 #include "display/sp-canvas.h"
 #include "sp-rect.h"
-#include "inkscape.h"
 #include "document.h"
 #include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-handles.h"
-#include "desktop-affine.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "desktop.h"
 #include "desktop-style.h"
 #include "message-context.h"
 #include "pixmaps/cursor-rect.xpm"
 #include "rect-context.h"
-#include "widgets/desktop-widget.h"
 #include "sp-metrics.h"
 #include <glibmm/i18n.h>
 #include "object-edit.h"
-#include "knotholder.h"
 #include "xml/repr.h"
 #include "xml/node-event-vector.h"
 #include "prefs-utils.h"
-#include "widgets/spw-utilities.h"
 #include "context-fns.h"
 
 static void sp_rect_context_class_init(SPRectContextClass *klass);

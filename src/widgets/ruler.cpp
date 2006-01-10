@@ -13,10 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtkruler.h>
 #include <cmath>
-#include <math.h>
-#include <stdio.h>
 #include <string.h>
 #include "widget-sizes.h"
 #include "ruler.h"

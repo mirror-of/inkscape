@@ -16,13 +16,10 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
-#include "libnr/nr-macros.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
 #include "display/curve.h"
 #include <glibmm/i18n.h>
-#include "sp-object.h"
 #include "sp-path.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
@@ -33,7 +30,6 @@
 #include "message-stack.h"
 #include "selection.h"
 #include "desktop-handles.h"
-#include "path-chemistry.h"
 
 /* Helper functions for sp_selected_path_to_curves */
 static void sp_selected_path_to_curves0 (gboolean do_document_done, guint32 text_grouping_policy);

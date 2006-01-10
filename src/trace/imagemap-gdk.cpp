@@ -1,10 +1,7 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "imagemap-gdk.h"
 
-#include <glib.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 /*#########################################################################
 ## G R A Y M A P

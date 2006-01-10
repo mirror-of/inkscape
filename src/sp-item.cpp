@@ -24,12 +24,8 @@
 # include "config.h"
 #endif
 
-#include <math.h>
-#include <string.h>
 
-#include <algorithm>
 
-#include "macros.h"
 #include "svg/svg.h"
 #include "print.h"
 #include "display/nr-arena.h"
@@ -37,38 +33,28 @@
 #include "attributes.h"
 #include "document.h"
 #include "uri.h"
-#include "uri-references.h"
 
-#include "selection.h"
 #include "style.h"
 #include <glibmm/i18n.h>
 #include "sp-root.h"
-#include "sp-anchor.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "sp-rect.h"
 #include "sp-use.h"
 #include "sp-text.h"
-#include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
 #include "sp-pattern.h"
-#include "sp-gradient.h"
 #include "gradient-chemistry.h"
 #include "prefs-utils.h"
 #include "conn-avoid-ref.h"
 
-#include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-fns.h"
-#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-scale-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
 #include "libnr/nr-scale-translate-ops.h"
-#include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-scale-ops.h"
-#include "libnr/nr-rect.h"
 #include "algorithms/find-last-if.h"
-#include "util/list.h"
 #include "util/reverse-list.h"
 
 #include "xml/repr.h"

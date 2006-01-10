@@ -16,28 +16,19 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <math.h>
-#include <glib-object.h>
-#include <gtk/gtksignal.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 #include "helper/sp-marshal.h"
-#include "display/sp-canvas-util.h"
 #include "display/sodipodi-ctrl.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "desktop-events.h"
-#include "desktop-affine.h"
 #include "knot.h"
-#include "inkscape.h"
 #include "document.h"
 #include "prefs-utils.h"
-#include <libnr/nr-point-fns.h>
 #include "message-stack.h"
 #include "message-context.h"
 #include "event-context.h"
 
-#include "sp-guide.h"
 
 #define KNOT_EVENT_MASK (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | \
 			 GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | \

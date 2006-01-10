@@ -16,50 +16,31 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <math.h>
 
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
-#include <libnr/nr-point-fns.h>
 #include <libnr/nr-rotate-ops.h>
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-translate-matrix-ops.h>
 #include <libnr/nr-translate-ops.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtktogglebutton.h>
-#include "macros.h"
-#include "svg/svg.h"
-#include "inkscape-private.h"
-#include "inkscape.h"
 #include "document.h"
 #include "sp-namedview.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "desktop-affine.h"
 #include "desktop-style.h"
 #include "knot.h"
 #include "snap.h"
-#include "snapped-point.h"
 #include "selection.h"
 #include "select-context.h"
-#include "uri-references.h"
-#include "widgets/desktop-widget.h"
-#include "sp-use.h"
 #include "sp-item.h"
 #include "sp-item-transform.h"
-#include <sp-item-update-cns.h>
 #include "seltrans-handles.h"
-#include "selcue.h"
 #include "seltrans.h"
 #include "selection-chemistry.h"
 #include "sp-metrics.h"
 #include <glibmm/i18n.h>
-#include "widgets/spw-utilities.h"
 #include "display/sp-ctrlline.h"
-#include "display/sodipodi-ctrlrect.h"
 #include "prefs-utils.h"
 #include "xml/repr.h"
 

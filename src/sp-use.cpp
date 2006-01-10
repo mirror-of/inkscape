@@ -16,25 +16,17 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
-#include <glib-object.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-fns.h>
 #include "libnr/nr-matrix-translate-ops.h"
 #include <glibmm/i18n.h>
-#include "svg/svg.h"
 #include "display/nr-arena-group.h"
 #include "attributes.h"
 #include "document.h"
 #include "sp-object-repr.h"
 #include "sp-flowregion.h"
 #include "uri.h"
-#include "uri-references.h"
-#include "macros.h"
 #include "xml/repr.h"
-#include "sp-item.h"
-#include "enums.h"
 #include "prefs-utils.h"
 #include "style.h"
 #include "sp-symbol.h"
@@ -42,7 +34,6 @@
 #include "sp-use-reference.h"
 
 /* fixme: */
-#include "desktop-events.h"
 
 static void sp_use_class_init(SPUseClass *classname);
 static void sp_use_init(SPUse *use);

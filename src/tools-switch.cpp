@@ -9,21 +9,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
 #include "inkscape-private.h"
-#include "file.h"
-#include "document.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "selection-chemistry.h"
-#include "path-chemistry.h"
-#include "shortcuts.h"
-#include "verbs.h"
 #include <glibmm/i18n.h>
 
 #include <xml/repr.h>
@@ -39,7 +32,6 @@
 #include "sp-star.h"
 #include "spiral-context.h"
 #include "sp-spiral.h"
-#include "draw-context.h"
 #include "dyna-draw-context.h"
 #include "pen-context.h"
 #include "pencil-context.h"

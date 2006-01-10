@@ -9,11 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "../config.h"
-#include <cstdlib>
-#include "layer-fns.h"
 #include "document.h"
-#include "sp-object.h"
 #include "sp-item-group.h"
 #include "xml/repr.h"
 #include "algorithms/find-last-if.h"

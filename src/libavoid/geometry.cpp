@@ -27,7 +27,6 @@
 */
 
 #include "libavoid/graph.h"
-#include "libavoid/geometry.h"
 #include "libavoid/polyutil.h"
 
 #include <math.h>

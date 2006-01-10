@@ -12,7 +12,6 @@
  */
 
 #include <glib.h>
-#include <libxml/xmlmemory.h>
 #include "uri.h"
 #include <glibmm/ustring.h>
 

@@ -13,9 +13,7 @@
 # include "config.h"
 #endif
 
-#include <math.h>
 #include "nr-pixops.h"
-#include "nr-compose-transform.h"
 #include "nr-matrix.h"
 
 

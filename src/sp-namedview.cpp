@@ -15,13 +15,8 @@
 
 #include "config.h"
 
-#include <math.h>
 
-#include <string.h>
-#include <ctype.h>
-#include <errno.h>
 
-#include <gtk/gtkobject.h>
 
 #include "display/canvas-grid.h"
 #include "helper/units.h"

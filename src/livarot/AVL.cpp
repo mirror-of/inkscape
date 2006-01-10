@@ -7,7 +7,6 @@
  */
 
 #include "AVL.h"
-#include "LivarotDefs.h"
 
 /*
  * the algorithm explanation for this code comes from purists.org, which seems to have disappeared since

@@ -12,9 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
 
-#include <libnr/nr-matrix.h>
 
 #include "display/nr-arena.h"
 #include "display/nr-arena-group.h"

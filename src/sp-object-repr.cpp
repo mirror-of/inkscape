@@ -11,15 +11,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "document.h"
-#include "sp-item.h"
 #include "sp-defs.h"
 #include "sp-symbol.h"
 #include "sp-marker.h"
 #include "sp-use.h"
 #include "sp-root.h"
-#include "sp-namedview.h"
-#include "sp-guide.h"
 #include "sp-image.h"
 #include "sp-linear-gradient-fns.h"
 #include "sp-path.h"
@@ -33,8 +29,6 @@
 #include "sp-line.h"
 #include "sp-metadata.h"
 #include "sp-polyline.h"
-#include "sp-polygon.h"
-#include "sp-text.h"
 #include "sp-textpath.h"
 #include "sp-tspan.h"
 #include "sp-pattern.h"
@@ -45,7 +39,6 @@
 #include "sp-flowdiv.h"
 #include "sp-flowregion.h"
 #include "sp-flowtext.h"
-#include "sp-object-repr.h"
 #include "sp-style-elem.h"
 #include "xml/repr.h"
 

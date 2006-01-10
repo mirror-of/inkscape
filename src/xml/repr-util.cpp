@@ -27,7 +27,6 @@
 # include <stdlib.h>
 #endif
 
-#include <stdio.h>
 
 #include <glib.h>
 
@@ -36,7 +35,6 @@
 
 #include "xml/repr.h"
 #include "xml/repr-sorting.h"
-#include "xml/attribute-record.h"
 
 struct SPXMLNs {
     SPXMLNs *next;

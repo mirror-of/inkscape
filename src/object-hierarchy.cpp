@@ -9,8 +9,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <algorithm>
-#include <glib/gmessages.h>
 #include "sp-object.h"
 #include "object-hierarchy.h"
 

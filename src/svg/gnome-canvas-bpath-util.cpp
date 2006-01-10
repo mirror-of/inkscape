@@ -10,9 +10,6 @@
  *          Raph Levien <raph@acm.org>
  */
 
-#include <math.h>
-#include <string.h>
-#include <glib.h>
 
 #include "libnr/n-art-bpath.h"
 #include "gnome-canvas-bpath-util.h"

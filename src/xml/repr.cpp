@@ -18,25 +18,14 @@
 
 #define noREPR_VERBOSE
 
-#include "config.h"
 
-#include <string.h>
 
 #if HAVE_STDDEF_H
-#include <stddef.h>
 #endif
 
-#include <glib.h>
 
-#include "util/shared-c-string-ptr.h"
 
 #include "xml/repr.h"
-#include "xml/node-fns.h"
-#include "xml/node-event-vector.h"
-#include "xml/attribute-record.h"
-#include "xml/event.h"
-#include "xml/event-fns.h"
-#include "xml/simple-session.h"
 #include "xml/text-node.h"
 #include "xml/element-node.h"
 #include "xml/comment-node.h"

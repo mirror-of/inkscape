@@ -20,12 +20,7 @@
  * 
 */
 
-#include <cassert>
-#include <cstdlib>
 
-#include "libavoid/polyutil.h"
-#include "libavoid/geomtypes.h"
-#include "libavoid/vertices.h"
 #include "libavoid/shape.h"
 
 namespace Avoid {

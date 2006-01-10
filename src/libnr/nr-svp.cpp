@@ -18,16 +18,9 @@
 #endif
 
 #ifdef HAVE_IEEEFP_H
-#include <ieeefp.h>
+# include <ieeefp.h>
 #endif
-#include <assert.h>
-#include <stdio.h>
-#include <glib.h>
 
-#include "nr-values.h"
-#include "nr-macros.h"
-#include "nr-rect.h"
-#include "nr-matrix.h"
 #include "nr-svp-private.h"
 
 /* Sorted vector paths */

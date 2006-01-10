@@ -9,7 +9,6 @@
  * This code is in public domain
  */
 
-#include "nr-rect.h"
 #include "nr-pixops.h"
 #include "nr-compose.h"
 #include "nr-blit.h"

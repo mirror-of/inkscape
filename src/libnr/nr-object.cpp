@@ -10,8 +10,6 @@
  * This code is in public domain
  */
 
-#include <new>
-#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 

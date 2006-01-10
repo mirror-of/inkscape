@@ -12,20 +12,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <sigc++/sigc++.h>
 #include "desktop-handles.h"
 #include "selection.h"
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sodipodi-ctrlrect.h"
-#include "libnr/nr-point-matrix-ops.h"
 #include "libnrtype/Layout-TNG.h"
 #include "text-editing.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "prefs-utils.h"
-#include "sp-item.h"
 #include "selcue.h"
 
 Inkscape::SelCue::SelCue(SPDesktop *desktop)

@@ -11,11 +11,8 @@
  */
 
 #include <gtkmm/stock.h>
-#include <gtkmm/stockitem.h>
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
-#include "stock-items.h"
 #include "stock.h"
 
 namespace Inkscape {

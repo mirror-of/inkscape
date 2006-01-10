@@ -6,15 +6,10 @@
  *
  */
 
-#include <algorithm>
-#include <iostream>
 #include <glib.h>
 #include "Path.h"
 #include "livarot/path-description.h"
-#include <libnr/nr-point.h>
-#include <libnr/nr-point-ops.h>
 #include <libnr/nr-matrix-ops.h>
-#include "../svg/stringstream.h"
 
 /*
  * manipulation of the path data: path description and polyline

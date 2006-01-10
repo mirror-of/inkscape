@@ -1,4 +1,3 @@
-#include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-point-matrix-ops.h"
 

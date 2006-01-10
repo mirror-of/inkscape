@@ -2,13 +2,9 @@
  * Implementation of sp_item_notify_moveto().
  */
 
-#include "sp-item-notify-moveto.h"
 #include <sp-item.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
 #include <sp-guide.h>
-#include <approx-equal.h>
 #include <sp-item-rm-unsatisfied-cns.h>
 using std::vector;
 

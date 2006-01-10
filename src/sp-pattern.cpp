@@ -14,24 +14,14 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-pixblock.h>
 #include <libnr/nr-matrix-ops.h>
-#include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-fns.h"
 #include <libnr/nr-translate-matrix-ops.h>
-#include <gtk/gtksignal.h>
 #include "macros.h"
 #include "svg/svg.h"
 #include "display/nr-arena.h"
 #include "display/nr-arena-group.h"
 #include "attributes.h"
-#include "document.h"
-#include "sp-object-repr.h"
-#include "sp-item.h"
-#include "document.h"
 #include "document-private.h"
 #include "uri.h"
 #include "sp-pattern.h"

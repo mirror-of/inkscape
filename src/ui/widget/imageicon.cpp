@@ -14,10 +14,7 @@
 
 
 #include "imageicon.h"
-#include <stdio.h>
 #include <sys/stat.h>
-#include <glibmm/i18n.h>
-#include "ui/view/view-widget.h"
 #include "svg-view-widget.h"
 #include "document.h"
 #include "inkscape.h"

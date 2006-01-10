@@ -1,4 +1,3 @@
-#include "libnr/nr-scale-matrix-ops.h"
 #include "libnr/nr-matrix-ops.h"
 
 NR::Matrix

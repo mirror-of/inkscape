@@ -15,10 +15,7 @@
 # include <config.h>
 #endif
 
-#include <glibmm/ustring.h>
-#include "extension/implementation/implementation.h"
 #include <color-rgba.h>
-#include "document.h"
 #include "io/sys.h"
 #include "extension/system.h"
 

@@ -15,7 +15,6 @@
 
 #include "gzipstream.h"
 
-#include  <zlib.h>
 
 namespace Inkscape
 {

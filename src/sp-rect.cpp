@@ -17,25 +17,13 @@
 # include "config.h"
 #endif
 
-#include <algorithm>
-#include <math.h>
-#include <string.h>
 
 #include <display/curve.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-point-fns.h>
-#include <libnr/nr-point-matrix-ops.h>
 
-#include "svg/svg.h"
 #include "attributes.h"
 #include "style.h"
-#include "document.h"
-#include "dialogs/object-attributes.h"
-#include "sp-root.h"
-#include "sp-shape.h"
 #include "sp-rect.h"
 #include <glibmm/i18n.h>
 #include "xml/repr.h"

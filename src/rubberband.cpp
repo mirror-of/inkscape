@@ -13,7 +13,6 @@
  */
 
 #include "display/sodipodi-ctrlrect.h"
-#include "libnr/nr-matrix-ops.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "rubberband.h"

@@ -10,11 +10,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "../config.h"
 #include <glibmm/i18n.h>
 #include "xml/quote.h"
 #include "selection.h"
-#include "message-stack.h"
 #include "selection-describer.h"
 #include "desktop.h"
 #include "sp-textpath.h"

@@ -15,7 +15,6 @@
 
 // Standard include files
 #include <string>		// for string
-#include <algorithm>		// for reverse
 
 using namespace std;
 

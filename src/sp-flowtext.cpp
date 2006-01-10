@@ -4,12 +4,10 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
 #include <glibmm/i18n.h>
 
 #include "attributes.h"
 #include "xml/repr.h"
-#include "svg/svg.h"
 #include "style.h"
 #include "inkscape.h"
 #include "document.h"
@@ -17,10 +15,7 @@
 #include "desktop-handles.h"
 #include "desktop.h"
 #include "desktop-affine.h"
-#include "print.h"
 
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-point.h"
 #include "xml/repr.h"
 
 #include "sp-flowdiv.h"
@@ -31,20 +26,11 @@
 #include "sp-rect.h"
 #include "text-tag-attributes.h"
 
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-translate.h"
-#include "libnr/nr-scale.h"
-#include "libnr/nr-matrix-ops.h"
-#include "libnr/nr-translate-ops.h"
-#include "libnr/nr-scale-ops.h"
 
 #include "livarot/Shape.h"
 
-#include "display/nr-arena-item.h"
-#include "display/nr-arena-group.h"
 #include "display/nr-arena-glyphs.h"
 
-#include <pango/pango.h>
 
 static void sp_flowtext_class_init(SPFlowtextClass *klass);
 static void sp_flowtext_init(SPFlowtext *group);

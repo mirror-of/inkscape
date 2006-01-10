@@ -2,7 +2,6 @@
 #include "svg/strip-trailing-zeros.h"
 #include <glib/gmessages.h>
 #include <glib/gstrfuncs.h>
-#include <string>
 
 Inkscape::CSSOStringStream::CSSOStringStream()
 {

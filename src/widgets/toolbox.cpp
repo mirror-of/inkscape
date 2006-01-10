@@ -28,68 +28,34 @@
 # include "config.h"
 #endif
 
-#include <sigc++/sigc++.h>
-#include <string.h>
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkselection.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktooltips.h>
-#include <gtk/gtkdnd.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkhandlebox.h>
 
-#include "macros.h"
-#include "helper/window.h"
-#include "widgets/desktop-widget.h"
-#include "widgets/icon.h"
 #include "widgets/button.h"
 #include "widgets/widget-sizes.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/spinbutton-events.h"
 
 #include "prefs-utils.h"
-#include "inkscape-stock.h"
 #include "verbs.h"
-#include "file.h"
-#include "selection-chemistry.h"
-#include "path-chemistry.h"
-#include "inkscape-private.h"
-#include "document.h"
 #include "sp-namedview.h"
-#include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "interface.h"
 #include "nodepath.h"
 #include "xml/repr.h"
 #include "xml/node-event-vector.h"
-#include "helper/gnome-utils.h"
 #include <glibmm/i18n.h>
 #include "helper/unit-menu.h"
 #include "helper/units.h"
-#include "desktop-style.h"
 
-#include "dialogs/object-properties.h"
-#include "dialogs/text-edit.h"
-#include "dialogs/export.h"
-#include "dialogs/dialog-events.h"
 
 
 #include "select-toolbar.h"
 #include "gradient-toolbar.h"
 
-#include "dropper-context.h"
-#include "star-context.h"
-#include "spiral-context.h"
-#include "gradient-context.h"
 #include "connector-context.h"
 #include "sp-rect.h"
 #include "sp-star.h"
 #include "sp-spiral.h"
-#include "sp-pattern.h"
 #include "sp-ellipse.h"
 #include "selection.h"
 #include "document-private.h"

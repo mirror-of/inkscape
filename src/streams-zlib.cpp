@@ -10,7 +10,6 @@
  */
 
 #include "streams-zlib.h"
-#include <cstring>
 
 namespace Inkscape {
 

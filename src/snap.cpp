@@ -15,17 +15,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <algorithm>
-#include <math.h>
-#include <list>
-#include <utility>
-#include "sp-guide.h"
 #include "sp-namedview.h"
 #include "snap.h"
-#include "snapped-point.h"
-#include "geom.h"
 #include <libnr/nr-point-fns.h>
-#include <libnr/nr-scale.h>
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-values.h>
 

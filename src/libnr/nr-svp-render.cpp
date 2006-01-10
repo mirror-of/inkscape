@@ -14,8 +14,6 @@
 
 #define noNR_VERBOSE
 
-#include "nr-macros.h"
-#include "nr-pixops.h"
 #include "nr-svp-render.h"
 
 static void nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs, int x0, int y0, int x1, int y1,

@@ -15,17 +15,8 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <string.h>
-#include <glibmm/i18n.h>
-#include "xml/repr.h"
-#include "sp-object.h"
-#include "document.h"
-#include "dir-util.h"
-#include "../implementation/implementation.h"
 #include "svgz.h"
-#include "file.h"
 #include "extension/system.h"
-#include "extension/output.h"
 
 namespace Inkscape {
 namespace Extension {

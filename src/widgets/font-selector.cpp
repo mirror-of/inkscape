@@ -14,32 +14,23 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 
 #if HAVE_STRING_H
-#include <string.h>
 #endif
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
 #endif
 
-#include <ctype.h>
 
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-blit.h>
 
-#include <glib.h>
 
-#include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/raster-glyph.h>
 #include <libnrtype/RasterFont.h>
 #include <libnrtype/TextWrapper.h>
 #include <libnrtype/one-glyph.h>
 
-#include <gtk/gtksignal.h>
-#include <gtk/gtkhbox.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkclist.h>

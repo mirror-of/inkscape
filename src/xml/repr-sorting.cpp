@@ -1,8 +1,6 @@
-#include "xml/repr-sorting.h"
 
 #include "algorithms/longest-common-suffix.h"
 #include "xml/repr.h"
-#include "xml/node.h"
 #include "xml/node-iterators.h"
 
 static bool

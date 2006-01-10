@@ -11,37 +11,17 @@
 # include <config.h>
 #endif
 #include "latex-pstricks-out.h"
-#include "latex-pstricks.h"
-#include "inkscape.h"
 #include "sp-path.h"
-#include "style.h"
-#include "color.h"
-#include "display/curve.h"
-#include "libnr/n-art-bpath.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include <gtk/gtk.h>
 #include <print.h>
-#include <glibmm/i18n.h>
-#include "extension/extension.h"
 #include "extension/system.h"
 #include "extension/print.h"
 #include "extension/db.h"
-#include "extension/output.h"
-#include "document.h"
 #include "display/nr-arena.h"
 #include "display/nr-arena-item.h"
 
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-pixblock.h>
 
-#include <stdio.h>
-#include <string.h>
 
-#include <vector>
-#include <string>
 
-#include "io/sys.h"
 
 namespace Inkscape {
 namespace Extension {

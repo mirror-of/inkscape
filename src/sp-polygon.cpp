@@ -14,9 +14,6 @@
 
 #include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
 #include "attributes.h"
 #include "sp-polygon.h"
 #include "display/curve.h"

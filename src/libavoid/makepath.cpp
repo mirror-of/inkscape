@@ -25,12 +25,8 @@
  *
 */
 
-#include "libavoid/vertices.h"
-#include "libavoid/makepath.h"
-#include "libavoid/geometry.h"
 #include "libavoid/connector.h"
 #include "libavoid/graph.h"
-#include <algorithm>
 #include <vector>
 #include <math.h>
 

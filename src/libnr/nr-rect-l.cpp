@@ -1,5 +1,4 @@
 #include <libnr/nr-rect-l.h>
-#include <math.h>
 
 namespace NR {
 

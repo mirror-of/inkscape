@@ -16,22 +16,18 @@
 #endif
 
 #include <gtkmm/stock.h>
-#include <gtk/gtksignal.h>
 #include <gtk/gtk.h>
 
 #include "application/application.h"
 #include "application/editor.h"
 #include "inkscape.h"
 #include "event-context.h"
-#include "widgets/desktop-widget.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "dialog.h"
 #include "dialog-manager.h"
 #include "dialogs/dialog-events.h"
 #include "shortcuts.h"
 #include "prefs-utils.h"
-#include "macros.h"
 #include "interface.h"
 #include "verbs.h"
 

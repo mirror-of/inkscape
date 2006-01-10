@@ -2,10 +2,7 @@
 #include "document.h"
 #include "inkscape-private.h"
 #include "sp-style-elem.h"
-#include "sp-object.h"
-#include "sp-object-repr.h"
 #include "streq.h"
-#include "svg/svg.h"
 #include "utest/utest.h"
 #include "xml/repr.h"
 

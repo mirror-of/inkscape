@@ -20,12 +20,7 @@
  * 
 */
 
-#include <iostream>
-#include "libavoid/vertices.h"
 #include "libavoid/connector.h"
-#include "libavoid/graph.h"
-#include "libavoid/static.h"
-#include "libavoid/shape.h"
 #include "libavoid/visibility.h"
 
 namespace Avoid {

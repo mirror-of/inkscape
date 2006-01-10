@@ -1,7 +1,4 @@
-#include "libnr/nr-matrix-scale-ops.h"
-#include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
-#include "libnr/nr-scale.h"
 
 NR::Matrix
 operator/(NR::Matrix const &m, NR::scale const &s)

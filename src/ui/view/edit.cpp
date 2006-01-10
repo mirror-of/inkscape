@@ -6,7 +6,6 @@
 # include <config.h>
 #endif
 
-#include "edit.h"
 
 namespace Inkscape {
 namespace UI {

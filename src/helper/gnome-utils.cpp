@@ -15,7 +15,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <glib.h>
-#include "gnome-utils.h"
 
 /**
  * gnome_uri_list_extract_uris:

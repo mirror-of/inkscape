@@ -11,35 +11,21 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 
-#include <math.h>
-#include <string.h>
-#include <glib.h>
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
-#include "display/sp-canvas.h"
-#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "desktop-affine.h"
-#include "snap.h"
-#include "desktop-style.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "pixmaps/cursor-gradient.xpm"
 #include "gradient-context.h"
-#include "widgets/desktop-widget.h"
-#include "sp-metrics.h"
 #include <glibmm/i18n.h>
 #include "prefs-utils.h"
-#include "widgets/spw-utilities.h"
 #include "gradient-drag.h"
-#include "sp-gradient.h"
 #include "gradient-chemistry.h"
 #include "xml/repr.h"
 #include "sp-item.h"

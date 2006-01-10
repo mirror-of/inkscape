@@ -27,22 +27,13 @@
 # include <config.h>
 #endif
 
-#include <gtk/gtksignal.h>
 #include <gtk/gtkwindow.h>
-#include <gtkmm/action.h>
 #include <gtkmm/radioaction.h>
-#include <gtkmm/buttonbox.h>
 #include <gtkmm/menubar.h>
-#include <gtkmm/menu.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/stock.h>
-#include <gtkmm/toolbar.h>
-#include <gtkmm/tooltips.h>
 #include <gtkmm/accelmap.h>
 #include <gtkmm/separator.h>
-#include <glibmm/i18n.h>
-#include <pangomm/layout.h>
 
 #include "macros.h"
 #include "path-prefix.h"
@@ -50,22 +41,15 @@
 #include "file.h"
 #include "application/editor.h"
 #include "edit-widget.h"
-#include "gc-managed.h"
 #include "ui/stock.h"
 #include "ui/stock-items.h"
 #include "ui/icons.h"
-#include "ui/dialog/document-properties.h"
-#include "ui/widget/toolbox.h"
 
 #include "display/sodipodi-ctrlrect.h"
 #include "helper/units.h"
 #include "shortcuts.h"
 #include "widgets/spw-utilities.h"
-#include "widgets/widget-sizes.h"
-#include "xml/repr.h"
 #include "event-context.h"
-#include <desktop.h>   // for the moment
-#include <desktop-handles.h>
 #include "document.h"
 #include "sp-namedview.h"
 #include "sp-item.h"

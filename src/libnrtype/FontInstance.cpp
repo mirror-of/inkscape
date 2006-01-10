@@ -11,7 +11,6 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include "FontFactory.h"
 #include <libnr/nr-rect.h>
 #include <libnrtype/font-glyph.h>
 #include <libnrtype/font-instance.h>
@@ -19,7 +18,6 @@
 /* #include <layout/LEGlyphStorage.h> */
 
 #include <livarot/Path.h>
-#include <livarot/Shape.h>
 
 #include "RasterFont.h"
 
@@ -32,7 +30,6 @@
 # include <pango/pangoft2.h>
 
 
-#include <glib.h>
 
 size_t  font_style_hash::operator()(const font_style &x) const {
 	int      h=0,n;

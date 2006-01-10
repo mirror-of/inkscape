@@ -27,7 +27,6 @@
 #include "attributes.h"
 #include "sp-skeleton.h"
 #include "xml/repr.h"
-#include "document.h"
 
 #define DEBUG_SKELETON
 #ifdef DEBUG_SKELETON

@@ -1,4 +1,3 @@
-#include "libnr/nr-matrix-rotate-ops.h"
 #include "libnr/nr-matrix-ops.h"
 
 NR::Matrix operator*(NR::Matrix const &m, NR::rotate const &r)

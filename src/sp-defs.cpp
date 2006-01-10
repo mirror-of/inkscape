@@ -16,7 +16,6 @@
  * flips in
  */
 
-#include "sp-object-repr.h"
 #include "sp-defs.h"
 #include "xml/repr.h"
 

@@ -1,21 +1,13 @@
-#include <glib/gmessages.h>
-#include <glib/gstrfuncs.h>
 
 #include "display/curve.h"
 #include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-fns.h"
-#include "libnr/nr-matrix-ops.h"
-#include "libnr/nr-point.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "libnr/nr-rect.h"
 #include "xml/repr.h"
 #include "sp-conn-end.h"
 #include "sp-path.h"
 #include "uri.h"
 #include "document.h"
 
-#include "libavoid/vertices.h"
-#include "libavoid/connector.h"
 
 static void change_endpts(SPCurve *const curve, NR::Point const h2endPt[2]);
 static NR::Point calc_bbox_conn_pt(NR::Rect const &bbox, NR::Point const &p);

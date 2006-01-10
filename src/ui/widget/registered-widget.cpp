@@ -17,14 +17,10 @@
 # include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/scale.h>
 
 #include "ui/widget/color-picker.h"
 #include "ui/widget/registry.h"
 #include "ui/widget/scalar-unit.h"
-#include "ui/widget/unit-menu.h"
 
 #include "helper/units.h"
 #include "xml/repr.h"

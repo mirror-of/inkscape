@@ -10,8 +10,6 @@
  */
 
 #include "constraint.h"
-#include "variable.h"
-#include <iostream>
 
 Constraint::Constraint(Variable *left, Variable *right, double gap)
 {

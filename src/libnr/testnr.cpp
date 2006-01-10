@@ -10,19 +10,11 @@
  */
 
 #if defined (_WIN32) || defined (__WIN32__)
-#include <windows.h>
+# include <windows.h> 
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/time.h>
-#include <time.h>
-#include <glib.h>
 
-#include "nr-types.h"
-#include "nr-pixblock.h"
 #include "nr-blit.h"
-#include "nr-path.h"
 
 static double
 get_time (void)

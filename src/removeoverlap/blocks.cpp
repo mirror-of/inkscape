@@ -15,13 +15,8 @@
 
 #include "blocks.h"
 #include "block.h"
-#include "variable.h"
 #include "constraint.h"
-#include <cassert>
-#include <vector>
-#include <list>
 #ifdef RECTANGLE_OVERLAP_LOGGING
-#include <fstream>
 using std::ios;
 using std::ofstream;
 using std::endl;

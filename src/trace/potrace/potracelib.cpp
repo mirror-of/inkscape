@@ -5,11 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "potracelib.h"
-#include "curve.h"
 #include "decompose.h"
 #include "trace.h"
-#include "progress.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

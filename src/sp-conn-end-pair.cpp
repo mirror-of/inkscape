@@ -9,21 +9,14 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <glib/gmem.h>
 
 #include "attributes.h"
-#include "sp-conn-end-pair.h"
 #include "sp-conn-end.h"
-#include "sp-object.h"
 #include "uri.h"
 #include "display/curve.h"
-#include "libnr/nr-matrix-div.h"
-#include "libnr/nr-matrix-fns.h"
-#include "libnr/nr-rect.h"
 #include "xml/repr.h"
 #include "sp-path.h"
 #include "libavoid/vertices.h"
-#include "libavoid/connector.h"
 
 
 SPConnEndPair::SPConnEndPair(SPPath *const owner)

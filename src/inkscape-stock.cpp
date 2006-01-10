@@ -23,7 +23,6 @@
 
 #include "gtk/gtkiconfactory.h"
 
-#include "inkscape-stock.h"
 
 void
 inkscape_gtk_stock_init() {

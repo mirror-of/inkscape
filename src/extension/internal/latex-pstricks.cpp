@@ -11,39 +11,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
 
-#include <string.h>
 #include <signal.h>
 #include <errno.h>
 
 #include "libnr/n-art-bpath.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "libnr/nr-rect.h"
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-fns.h"
-#include "libnr/nr-path.h"
-#include "libnr/nr-pixblock.h"
-#include "display/canvas-bpath.h"
 #include "sp-item.h"
 
-#include <glib.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtkbox.h>
-#include <gtk/gtkstock.h>
 
-#include <glibmm/i18n.h>
-#include "enums.h"
-#include "document.h"
 #include "style.h"
-#include "sp-paint-server.h"
-#include "inkscape_version.h"
 
 #include "latex-pstricks.h"
 
 #include <unit-constants.h>
 
-#include "extension/extension.h"
 #include "extension/system.h"
 #include "extension/print.h"
 

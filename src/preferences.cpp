@@ -19,7 +19,6 @@
 #include "xml/repr.h"
 #include "dialogs/input.h"
 #include "inkscape.h"
-#include "application/application.h"
 #include "preferences.h"
 
 #define PREFERENCES_FILE "preferences.xml"

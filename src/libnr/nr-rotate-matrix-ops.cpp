@@ -1,7 +1,4 @@
-#include <libnr/nr-rotate-matrix-ops.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-rotate.h>
 
 NR::Matrix
 operator*(NR::rotate const &a, NR::Matrix const &b)

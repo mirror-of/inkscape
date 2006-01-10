@@ -1,7 +1,6 @@
 #ifndef SP_POLYLINE_H
 #define SP_POLYLINE_H
 
-#include <glib.h>
 #include "sp-shape.h"
 
 

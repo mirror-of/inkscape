@@ -31,8 +31,6 @@
  * dictionary and so on. Source: doc/architecture.txt
  */
 
-#include <cstring>
-#include <list>
 
 #include "helper/sp-marshal.h"
 #include "xml/node-event-vector.h"
@@ -45,10 +43,8 @@
 #include "strneq.h"
 #include "xml/repr.h"
 #include "xml/node-fns.h"
-#include "debug/event.h"
 #include "debug/event-tracker.h"
 
-#include "sp-object.h"
 #include "algorithms/longest-common-suffix.h"
 using std::memcpy;
 using std::strchr;

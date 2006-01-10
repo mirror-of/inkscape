@@ -8,20 +8,12 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <algorithm>
 #include "Layout-TNG.h"
 #include "livarot/Path.h"
 #include "font-instance.h"
-#include "livarot/Shape.h"
-#include "Layout-TNG-Scanline-Maker.h"
 #include "svg/svg-length.h"
-#include "libnr/nr-matrix-rotate-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
-#include "libnr/nr-point-matrix-ops.h"
-#include "libnr/nr-rotate-matrix-ops.h"
-#include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-rotate-ops.h"
-#include "display/curve.h"
 #include "style.h"
 
 namespace Inkscape {

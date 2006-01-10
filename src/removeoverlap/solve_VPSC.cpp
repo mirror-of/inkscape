@@ -9,17 +9,12 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#include <vector>
 
 #include "constraint.h"
 #include "block.h"
 #include "blocks.h"
-#include "variable.h"
 #include "solve_VPSC.h"
-#include <stdio.h>
-#include <assert.h>
 #ifdef RECTANGLE_OVERLAP_LOGGING
-#include <fstream>
 using std::ios;
 using std::ofstream;
 using std::endl;
@@ -156,8 +151,6 @@ void VPSC::move_and_split() {
 }
 
 #include <map>
-#include <vector>
-#include <set>
 using std::map;
 using std::vector;
 struct node {

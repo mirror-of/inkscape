@@ -19,7 +19,6 @@
 #include "widgets/icon.h"
 
 #include "labelled.h"
-#include "path-prefix.h"
 
 namespace Inkscape {
 namespace UI {

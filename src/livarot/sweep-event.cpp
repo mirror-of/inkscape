@@ -1,7 +1,4 @@
-#include <algorithm>
 #include <glib/gmem.h>
-#include "libnr/nr-point.h"
-#include "livarot/sweep-event.h"
 #include "livarot/sweep-event-queue.h"
 #include "livarot/Shape.h"
 

@@ -14,15 +14,12 @@
 # include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/scale.h>
 
-#include "helper/units.h"
 #include "xml/repr.h"
-#include "svg/svg.h"
 #include "svg/stringstream.h"
 
 #include "inkscape.h"

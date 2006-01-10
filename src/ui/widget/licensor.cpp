@@ -16,16 +16,11 @@
 # include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
-#include <gtkmm/radiobutton.h>
-#include <gtkmm/box.h>
-#include <gtkmm/tooltips.h>
 #include <gtkmm/entry.h>
 
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/registry.h"
 #include "dialogs/rdf.h"
-#include "document.h"
 #include "inkscape.h"
 
 #include "licensor.h"

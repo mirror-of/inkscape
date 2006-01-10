@@ -14,67 +14,35 @@
 # include "config.h"
 #endif
 
-#include <string.h>
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkaccelgroup.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkselection.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktooltips.h>
-#include <gtk/gtkdnd.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkhandlebox.h>
-#include <gdk/gdkkeysyms.h>
 
-#include "macros.h"
-#include "helper/window.h"
-#include "widgets/icon.h"
 #include "widgets/button.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
 #include "widgets/spinbutton-events.h"
 
 #include "prefs-utils.h"
-#include "inkscape-stock.h"
-#include "file.h"
 #include "selection-chemistry.h"
-#include "path-chemistry.h"
-#include "inkscape-private.h"
 #include "document.h"
 #include "inkscape.h"
-#include "sp-object.h"
 #include "desktop-style.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "sp-namedview.h"
-#include "interface.h"
 #include "toolbox.h"
-#include "helper/gnome-utils.h"
 #include <glibmm/i18n.h>
 #include "widgets/sp-widget.h"
 #include "helper/unit-menu.h"
 #include "helper/units.h"
-#include "helper/window.h"
 #include "widgets/sp-widget.h"
-#include "macros.h"
 #include "inkscape.h"
 #include "verbs.h"
-#include "interface.h"
-#include "inkscape-stock.h"
 #include "prefs-utils.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "widgets/desktop-widget.h"
 #include "sp-item-transform.h"
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-ops.h"
-#include "libnr/nr-translate-scale-ops.h"
-#include "libnr/nr-matrix-translate-ops.h"
-#include "message-context.h"
 #include "message-stack.h"
 
-#include "select-toolbar.h"
 
 static void
 sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)

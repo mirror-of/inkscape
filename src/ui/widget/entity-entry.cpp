@@ -16,21 +16,14 @@
 # include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/entry.h>
 
 #include "ui/widget/registry.h"
 
-#include "xml/repr.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "dialogs/rdf.h"
 
 #include "inkscape.h"
-#include "document.h"
-#include "desktop-handles.h"
-#include "sp-namedview.h"
 
 #include "entity-entry.h"
 

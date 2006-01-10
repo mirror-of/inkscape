@@ -1,5 +1,3 @@
-#include "libnr/nr-translate-matrix-ops.h"
-#include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 
 namespace NR {

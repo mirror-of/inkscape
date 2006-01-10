@@ -1,9 +1,4 @@
-#include <glib.h>
-#include <libcroco/cr-cascade.h>
 #include <libcroco/cr-parser.h>
-#include <libcroco/cr-statement.h>
-#include <libcroco/cr-string.h>
-#include "xml/node.h"
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
 #include "document.h"

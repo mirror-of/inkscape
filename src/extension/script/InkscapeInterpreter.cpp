@@ -11,7 +11,6 @@
 
 #include "InkscapeInterpreter.h"
 
-#include <iostream>
 #include <fstream>
 
 namespace Inkscape {

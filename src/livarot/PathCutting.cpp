@@ -7,13 +7,9 @@
  *
  */
 
-#include <glib/gmem.h>
 #include "Path.h"
 #include "livarot/path-description.h"
 #include "libnr/n-art-bpath.h"
-#include "libnr/nr-point-fns.h"
-#include "libnr/nr-point-ops.h"
-#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-point-matrix-ops.h"
 
 void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)

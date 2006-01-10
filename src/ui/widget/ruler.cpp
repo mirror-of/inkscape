@@ -12,19 +12,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gdkmm/window.h>
-#include <glibmm/i18n.h>
 #include <gtkmm/ruler.h>
 #include "helper/units.h"
 #include "widgets/ruler.h"
 #include "ui/widget/ruler.h"
 
-#include "sp-object.h"
 #include "xml/repr.h"
-#include "display/sp-canvas.h"
 #include "display/guideline.h"
 #include "desktop.h"
-#include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "document.h"
 #include "sp-namedview.h"

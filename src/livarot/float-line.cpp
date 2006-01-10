@@ -9,7 +9,6 @@
  *
  */
 
-#include <cstdio>
 #ifdef faster_flatten
 # include <cmath>  // std::abs(float)
 #endif

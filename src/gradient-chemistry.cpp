@@ -13,29 +13,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
-#include <ctype.h>
 
 #include "style.h"
 #include "document-private.h"
 #include "desktop-style.h"
 
-#include "sp-gradient.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-stop.h"
 #include "widgets/gradient-vector.h"
 
-#include "sp-root.h"
 #include "sp-text.h"
 #include "sp-tspan.h"
-#include "gradient-chemistry.h"
-#include "libnr/nr-point-ops.h"
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-point-matrix-ops.h>
 #include "xml/repr.h"
 #include "svg/svg.h"
 

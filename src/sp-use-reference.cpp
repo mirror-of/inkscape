@@ -8,23 +8,15 @@
  */
 
 #include "enums.h"
-#include "forward.h"
 #include "sp-use-reference.h"
-#include "sp-object.h"
-#include "sp-item.h"
 
 #include "display/curve.h"
 #include "livarot/Path.h"
-#include "livarot/Shape.h"
 #include "prefs-utils.h"
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "uri.h"
 
-#include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-ops.h"
-#include "libnr/nr-point.h"
-#include "libnr/nr-point-ops.h"
 
 
 bool SPUseReference::_acceptObject(SPObject * const obj) const

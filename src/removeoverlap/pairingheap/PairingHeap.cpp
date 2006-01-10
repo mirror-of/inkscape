@@ -15,11 +15,14 @@
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
-#include "PairingHeap.h"
+
+#include <vector.h>
+
 #include "dsexceptions.h"
+#include "PairingHeap.h"
+
 #ifndef PAIRING_HEAP_CPP
 #define PAIRING_HEAP_CPP
-#include <vector>
 using namespace std;
 /**
 * Construct the pairing heap.

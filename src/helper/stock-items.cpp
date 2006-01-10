@@ -21,13 +21,8 @@
 #endif
 #include "path-prefix.h"
 
-#include <string.h>
-#include <glib.h>
 
-#include <libnr/nr-values.h>
-#include <libnr/nr-matrix.h>
 #include <xml/repr.h>
-#include "sp-defs.h"
 #include "sp-gradient-fns.h"
 #include "document-private.h"
 #include "sp-pattern.h"
@@ -37,7 +32,6 @@
 
 #include "io/sys.h"
 
-#include <gtk/gtk.h>
 
 
 

@@ -16,28 +16,15 @@
 #endif
 #include "path-prefix.h"
 
-#include <algorithm>
-#include <stdlib.h>
-#include <string.h>
-#include <libnr/nr-macros.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-pixblock.h>
-#include <libnr/nr-pixblock-pattern.h>
-#include <libnr/nr-pixops.h>
 
-#include <map>
 
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
 
-#include <glibmm/timer.h>
 #include <gtkmm/image.h>
 
-#include "forward.h"
 #include "prefs-utils.h"
-#include "inkscape-private.h"
 #include "inkscape.h"
 #include "document.h"
 #include "sp-item.h"

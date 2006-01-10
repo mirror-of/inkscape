@@ -9,11 +9,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "widgets/shrink-wrap-button.h"
 #include <gtkmm/button.h>
-#include <gtk/gtkwidget.h>
 #include <gtk/gtkbin.h>
-#include <algorithm>
 
 namespace Inkscape {
 namespace Widgets {

@@ -20,11 +20,8 @@
  * 
 */
 
-#include <cassert>
 
-#include "libavoid/shape.h"
 #include "libavoid/graph.h"  // For alertConns
-#include "libavoid/vertices.h"
 #include "libavoid/polyutil.h"
 
 
