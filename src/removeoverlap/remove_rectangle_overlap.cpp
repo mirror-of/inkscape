@@ -1,6 +1,8 @@
+#include <iostream>
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
+#include "constraint.h"
 #ifdef RECTANGLE_OVERLAP_LOGGING
 using std::ios;
 using std::ofstream;

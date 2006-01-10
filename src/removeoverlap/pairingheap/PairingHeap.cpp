@@ -16,7 +16,7 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#include <vector.h>
+#include <vector>
 
 #include "dsexceptions.h"
 #include "PairingHeap.h"
