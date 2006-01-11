@@ -21,16 +21,14 @@
  *
  */
 
-
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <libnr/nr-matrix-fns.h>
-//#include <libnrtype/nr-typeface.h>
 #include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-style-to-pos.h>
-
-
-//#include <gtk/gtk.h>
 
 #include <glibmm/i18n.h>
 #include "svg/stringstream.h"
@@ -50,10 +48,6 @@
 #include "sp-tspan.h"
 
 #include "text-editing.h"
-
-//#include "sp-use-reference.h"
-//#include "prefs-utils.h"
-
 
 /*#####################################################
 #  SPTEXT

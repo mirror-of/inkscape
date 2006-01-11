@@ -22,7 +22,10 @@
  * http://www.gnu.org/copyleft/gpl.html
  *
  */
-#include "config.h"
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #if defined(g_ascii_strtod)
 /*

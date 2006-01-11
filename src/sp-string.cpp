@@ -24,6 +24,10 @@
 
 
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 
 #include "sp-string.h"
 #include "xml/repr.h"

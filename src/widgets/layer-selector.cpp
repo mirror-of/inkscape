@@ -9,8 +9,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
+#include <glibmm/i18n.h>
 
 #include "desktop-handles.h"
 
@@ -25,7 +28,6 @@
 #include "desktop.h"
 #include "document.h"
 #include "dialogs/layer-properties.h"
-
 #include "xml/node-event-vector.h"
 
 namespace Inkscape {

@@ -23,22 +23,16 @@
  *
  */
 
-
-
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <livarot/Path.h>
-
-//#include <gtk/gtk.h>
-
 #include "svg/stringstream.h"
 #include "attributes.h"
-
 #include "sp-use-reference.h"
-
-
 #include "sp-tspan.h"
 #include "sp-textpath.h"
-
 #include "xml/repr.h"
 
 

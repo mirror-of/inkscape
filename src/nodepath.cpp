@@ -10,8 +10,10 @@
  * This code is in public domain
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-//#include <string.h>
 #include <gdk/gdkkeysyms.h>
 #include "display/curve.h"
 #include "display/sp-ctrlline.h"
@@ -32,12 +34,9 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "xml/repr.h"
-//#include "object-edit.h"
 #include "prefs-utils.h"
 #include "sp-metrics.h"
 #include "sp-path.h"
-
-//#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include "splivarot.h"
 
