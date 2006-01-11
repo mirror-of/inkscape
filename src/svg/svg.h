@@ -11,12 +11,15 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <glib.h>
-#include <libnr/nr-forward.h>
+#include <glib/gtypes.h>
 #include "svg/svg-length.h"
-#include <string>
 #include <vector>
 
+struct NArtBpath;
+struct NRMatrix;
+namespace NR {
+    class Matrix;
+}
 
 /* Generic */
 
@@ -63,8 +66,6 @@ unsigned int sp_svg_read_color (const gchar * str, unsigned int def);
 int sp_svg_write_color (char * buf, int buflen, unsigned int color);
 
 /* NB! As paths can be long, we use here dynamic string */
-
-#include <libnr/nr-path.h>
 
 NArtBpath * sp_svg_read_path (const char * str);
 char * sp_svg_write_path (const NArtBpath * bpath);

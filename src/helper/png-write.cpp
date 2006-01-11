@@ -16,7 +16,7 @@
 # include "config.h"
 #endif
 
-
+#include <glib/gmessages.h>
 #include <png.h>
 #include "png-write.h"
 #include "io/sys.h"

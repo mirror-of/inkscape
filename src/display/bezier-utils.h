@@ -17,7 +17,7 @@
  */
 
 #include <libnr/nr-forward.h>
-#include <glib.h>
+#include <glib/gtypes.h>
 
 /* Bezier approximation utils */
 

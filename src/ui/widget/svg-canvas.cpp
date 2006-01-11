@@ -13,6 +13,7 @@
 #include "desktop.h"
 #include "desktop-events.h"
 #include "display/canvas-arena.h"
+#include "display/display-forward.h"
 #include "ui/widget/svg-canvas.h"
 
 namespace Inkscape {

@@ -10,6 +10,7 @@
 
 #include "sp-canvas-util.h"
 #include "canvas-grid.h"
+#include "display-forward.h"
 #include <libnr/nr-pixops.h>
 
 enum {

@@ -14,6 +14,7 @@
  */
 
 #include "display/canvas-arena.h"
+#include "display/display-forward.h"
 #include "document.h"
 #include "sp-item.h"
 #include "svg-view.h"

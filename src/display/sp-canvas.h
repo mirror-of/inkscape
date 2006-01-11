@@ -15,17 +15,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
+#include <glib/gtypes.h>
+#include <gdk/gdkevents.h>
+#include <gdk/gdkgc.h>
+#include <gtk/gtkobject.h>
+#include <gtk/gtkwidget.h>
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-rect-l.h>
-#include <gdk/gdk.h>
-#include <gtk/gtklayout.h>
 
-#include <display/display-forward.h>
-
-#include <inttypes.h>
+struct SPCanvas;
+struct SPCanvasGroup;
 
 enum {
     SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,

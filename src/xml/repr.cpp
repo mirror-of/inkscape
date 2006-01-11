@@ -22,13 +22,6 @@
 # include "config.h"
 #endif
 
-
-
-#if HAVE_STDDEF_H
-#endif
-
-
-
 #include "xml/repr.h"
 #include "xml/text-node.h"
 #include "xml/element-node.h"

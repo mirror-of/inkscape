@@ -48,6 +48,7 @@
 #include "pixmaps/cursor-calligraphy.xpm"
 #include "dyna-draw-context.h"
 #include "libnr/n-art-bpath.h"
+#include "libnr/nr-path.h"
 #include "xml/repr.h"
 #include "context-fns.h"
 #include "sp-item.h"

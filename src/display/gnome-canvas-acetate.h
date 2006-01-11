@@ -15,8 +15,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
-
+#include <glib/gtypes.h>
+#include "display/sp-canvas.h"
 
 
 #define GNOME_TYPE_CANVAS_ACETATE (sp_canvas_acetate_get_type ())
@@ -25,10 +25,6 @@
 #define GNOME_IS_CANVAS_ACETATE(obj) (GTK_CHECK_TYPE ((obj), GNOME_TYPE_CANVAS_ACETATE))
 #define GNOME_IS_CANVAS_ACETATE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GNOME_TYPE_CANVAS_ACETATE))
 
-struct SPCanvasAcetate;
-struct SPCanvasAcetateClass;
-
-#include "sp-canvas.h"
 
 struct SPCanvasAcetate {
 	SPCanvasItem item;

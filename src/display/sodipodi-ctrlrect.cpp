@@ -15,6 +15,7 @@
  *
  */
 
+#include "display-forward.h"
 #include "sp-canvas-util.h"
 #include "sodipodi-ctrlrect.h"
 

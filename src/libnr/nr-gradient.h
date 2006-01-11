@@ -10,10 +10,6 @@
  * This code is in public domain
  */
 
-#include <glib.h>
-
-
-
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-render.h>
 

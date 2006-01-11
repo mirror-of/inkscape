@@ -13,7 +13,7 @@
 
 
 #include <libnr/nr-pixops.h>
-
+#include "display-forward.h"
 #include "sp-canvas-util.h"
 #include "guideline.h"
 

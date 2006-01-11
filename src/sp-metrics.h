@@ -1,7 +1,8 @@
 #ifndef SP_METRICS_H
 #define SP_METRICS_H
 
-#include "svg/svg.h"
+#include <glib/gstring.h>
+#include <glib/gtypes.h>
 #include "sp-metric.h"
 
 gdouble sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, const SPMetric metric_dst);

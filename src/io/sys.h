@@ -13,7 +13,9 @@
  */
 
 #include <stdio.h>
-#include <glib.h>
+#include <glib/gtypes.h>
+#include <glib/gdir.h>
+#include <glib/gfileutils.h>
 
 /*#####################
 ## U T I L I T Y

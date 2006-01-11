@@ -29,10 +29,12 @@
 # include <config.h>
 #endif
 
-
 #ifdef HAVE_IEEEFP_H
 # include <ieefp.h>
 #endif
+
+#include <glib/gmessages.h>
+#include <glib/gmem.h>
 #include "bezier-utils.h"
 #include <libnr/nr-point-fns.h>
 

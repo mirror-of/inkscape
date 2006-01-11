@@ -15,13 +15,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
-
-#if HAVE_STRING_H
-#endif
-
-
-#if HAVE_STDLIB_H
+#ifdef HAVE_CONFIG_H
+# include "config.h"
 #endif
 
 #include "libcroco/cr-sel-eng.h"

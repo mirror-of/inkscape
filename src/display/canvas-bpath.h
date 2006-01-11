@@ -13,21 +13,19 @@
  *
  */
 
-#include <glib.h>
+#include <glib/gtypes.h>
 
+#include <display/sp-canvas.h>
 
+struct SPCanvasBPath;
+struct SPCanvasBPathClass;
+struct SPCurve;
 
 #define SP_TYPE_CANVAS_BPATH (sp_canvas_bpath_get_type ())
 #define SP_CANVAS_BPATH(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_CANVAS_BPATH, SPCanvasBPath))
 #define SP_CANVAS_BPATH_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_CANVAS_BPATH, SPCanvasBPathClass))
 #define SP_IS_CANVAS_BPATH(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_CANVAS_BPATH))
 #define SP_IS_CANVAS_BPATH_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CANVAS_BPATH))
-
-struct SPCanvasBPath;
-struct SPCanvasBPathClass;
-
-#include <display/sp-canvas.h>
-#include <display/curve.h>
 
 #define bpath_liv
 

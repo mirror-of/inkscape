@@ -17,7 +17,8 @@
 #endif
 #include "sp-canvas-util.h"
 #include "canvas-bpath.h"
-
+#include "display/display-forward.h"
+#include "display/curve.h"
 #include <livarot/Shape.h>
 #include <livarot/Path.h>
 #include <livarot/int-line.h>

@@ -15,15 +15,10 @@
 # include "config.h"
 #endif
 
-
 #include <math.h>
-
-#if HAVE_STRING_H
-#endif
-
-#if HAVE_STDLIB_H
-#endif
-
+#include <glib/gstrfuncs.h>
+#include <glib/ghash.h>
+#include <glib/gprintf.h>
 #include "svg.h"
 
 struct SPSVGColor {

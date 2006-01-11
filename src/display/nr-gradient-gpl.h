@@ -17,10 +17,6 @@
  * Here is GPL code, unlike other libnr wihich is public domain
  */
 
-#include <glib.h>
-
-
-
 #include <libnr/nr-gradient.h>
 
 /* Linear */

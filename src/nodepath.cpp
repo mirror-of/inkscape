@@ -39,6 +39,7 @@
 #include "sp-path.h"
 #include <libnr/nr-matrix-ops.h>
 #include "splivarot.h"
+#include "svg/svg.h"
 
 class NR::Matrix;
 

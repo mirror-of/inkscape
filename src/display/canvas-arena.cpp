@@ -15,6 +15,7 @@
 #include <libnr/nr-blit.h>
 #include <gtk/gtksignal.h>
 
+#include <display/display-forward.h>
 #include <display/sp-canvas-util.h>
 #include <helper/sp-marshal.h>
 #include <display/nr-arena.h>

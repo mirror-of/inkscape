@@ -17,7 +17,7 @@
 #endif
 
 #include <math.h>
-
+#include <glib/gstrfuncs.h>
 #include "svg.h"
 #include "stringstream.h"
 #include "../unit-constants.h"

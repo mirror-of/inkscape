@@ -11,6 +11,7 @@
  * Released under GNU GPL
  */
 
+#include <glib/gmessages.h>
 #include <libnr/nr-pixops.h>
 #include "nr-plain-stuff.h"
 

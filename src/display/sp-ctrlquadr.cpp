@@ -11,6 +11,7 @@
  * Released under GNU GPL
  */
 
+#include "display-forward.h"
 #include "sp-canvas-util.h"
 #include "sp-ctrlquadr.h"
 

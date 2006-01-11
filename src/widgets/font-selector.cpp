@@ -18,17 +18,7 @@
 # include "config.h"
 #endif
 
-
-#if HAVE_STRING_H
-#endif
-
-#if HAVE_STDLIB_H
-#endif
-
-
 #include <libnr/nr-blit.h>
-
-
 #include <libnrtype/font-instance.h>
 #include <libnrtype/raster-glyph.h>
 #include <libnrtype/RasterFont.h>

@@ -9,7 +9,7 @@
  */
 
 #include "sp-canvas-util.h"
-
+#include "display-forward.h"
 #include "sodipodi-ctrl.h"
 
 enum {

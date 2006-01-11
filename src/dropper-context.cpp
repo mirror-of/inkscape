@@ -26,6 +26,7 @@
 #include "macros.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
+#include "display/curve.h"
 #include "svg/svg.h"
 #include "color.h"
 #include "color-rgba.h"

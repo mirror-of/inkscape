@@ -31,6 +31,7 @@
 #include <libnrtype/font-style-to-pos.h>
 
 #include <glibmm/i18n.h>
+#include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "display/nr-arena-glyphs.h"
 #include "attributes.h"

@@ -17,15 +17,7 @@
 # include "config.h"
 #endif
 
-
-
-#if HAVE_STRING_H
-#endif
-
-#if HAVE_STDLIB_H
-#endif
-
-
+#include <glib/gstrfuncs.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>

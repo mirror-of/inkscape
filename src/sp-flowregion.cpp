@@ -9,7 +9,7 @@
 #include <glibmm/i18n.h>
 
 #include <xml/repr.h>
-
+#include "display/curve.h"
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-use.h"

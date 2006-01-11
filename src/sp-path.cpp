@@ -24,6 +24,7 @@
 
 #include <display/curve.h>
 #include <libnr/n-art-bpath.h>
+#include <libnr/nr-path.h>
 #include <libnr/nr-matrix-fns.h>
 
 #include "svg/svg.h"
