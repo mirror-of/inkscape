@@ -12,16 +12,23 @@
 #ifndef __TRACE_H__
 #define __TRACE_H__
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include <string.h>
+#ifdef HAVE_STDLIB_H
+# include <stdlib.h>
+#endif
 
-#include <glib.h>
-#include <sp-image.h>
-#include <sp-path.h>
+#ifdef HAVE_STRING_H
+# include <string.h>
+#endif
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdkpixbuf.h>
 
 
+struct SPImage;
+struct SPItem;
 
 namespace Inkscape {
 

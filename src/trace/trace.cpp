@@ -21,7 +21,8 @@
 #include <glibmm/i18n.h>
 #include <selection.h>
 #include <xml/repr.h>
-
+#include "sp-item.h"
+#include "sp-image.h"
 
 namespace Inkscape {
 

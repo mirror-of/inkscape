@@ -12,12 +12,10 @@
 
 /* Sorted vector paths */
 
+#include <glib/gtypes.h>
 #include <libnr/nr-coord.h>
-#include <libnr/nr-forward.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-path.h>
 
-#include <glib.h>
+struct NRPoint;
 
 struct NRSVPSegment {
     gint16 wind;

@@ -27,6 +27,10 @@
 */
 
 #include <cassert>
+#include <glib/gmem.h>
+#include <glib/gmessages.h>
+#include <glib/gstrfuncs.h>
+
 #include "libnr/n-art-bpath.h"
 #include "gnome-canvas-bpath-util.h"
 #include "stringstream.h"

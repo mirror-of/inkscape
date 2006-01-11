@@ -21,6 +21,7 @@
 # include <ieeefp.h>
 #endif
 
+#include "nr-rect.h"
 #include "nr-svp-private.h"
 
 /* Sorted vector paths */

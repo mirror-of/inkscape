@@ -13,11 +13,7 @@
 #ifndef PATH_UTIL_H
 #define PATH_UTIL_H
 
-#include <glib.h>
-
-#include <libnr/nr-path.h>
-
-
+struct NArtBpath;
 
 struct GnomeCanvasBpathDef {
 	int ref_count;
