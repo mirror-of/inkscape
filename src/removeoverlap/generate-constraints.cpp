@@ -9,9 +9,10 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#include <set>
+#include <cassert>
 #include "generate-constraints.h"
 #include "constraint.h"
-#include <set>
 
 #include "isnan.h" /* Include last */
 

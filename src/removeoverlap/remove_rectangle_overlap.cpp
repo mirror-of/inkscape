@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"

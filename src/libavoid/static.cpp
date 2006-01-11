@@ -20,6 +20,7 @@
  * 
 */
 
+#include <cassert>
 #include "libavoid/connector.h"
 #include "libavoid/visibility.h"
 

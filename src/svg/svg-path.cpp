@@ -26,6 +26,7 @@
      Lauris Kaplinski <lauris@ximian.com>
 */
 
+#include <cassert>
 #include "libnr/n-art-bpath.h"
 #include "gnome-canvas-bpath-util.h"
 #include "stringstream.h"
