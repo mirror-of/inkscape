@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__APPLE__)
 # include <glibmm/i18n.h>
 #endif
 

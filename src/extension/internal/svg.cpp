@@ -22,6 +22,7 @@
 #include "extension/output.h"
 
 #ifdef WITH_GNOME_VFS
+# include <libgnomevfs/gnome-vfs.h>
 #endif
 
 namespace Inkscape {

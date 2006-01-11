@@ -17,7 +17,7 @@
 # include "config.h"
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__APPLE__)
 # include <glibmm/i18n.h>
 #endif
 
