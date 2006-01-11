@@ -41,7 +41,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h> 
 #include <string.h>
+#include "prefix.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,8 +62,10 @@ extern "C" {
 
 #ifdef ENABLE_BINRELOC
 
-
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/param.h>
+#include <unistd.h>
 
 /**
  * br_locate:
@@ -76,6 +80,7 @@ extern "C" {
  *
  * Example:
  * --> main.c
+ * #include "prefix.h"
  * #include "libfoo.h"
  *
  * int main (int argc, char *argv[]) {
@@ -85,6 +90,7 @@ extern "C" {
  * }
  *
  * --> libfoo.c starts here
+ * #include "prefix.h"
  *
  * void libfoo_start () {
  *	--> "" is a symbol that belongs to libfoo (because it's called
