@@ -610,6 +610,17 @@ NRRect *pattern_viewBox (SPPattern *pat)
 	return &(pat->viewBox);
 }
 
+bool pattern_hasItemChildren (SPPattern *pat)
+{
+	for (SPObject *child = sp_object_first_child(SP_OBJECT(pat)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+		if (SP_IS_ITEM (child)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
 
 /* Painter */
 
@@ -624,8 +635,6 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 {
 	SPPattern *pat = SP_PATTERN (ps);
 	SPPatPainter *pp = g_new (SPPatPainter, 1);
-
-	SPObject *child;
 
 	pp->painter.type = SP_PAINTER_IND;
 	pp->painter.fill = sp_pat_fill;
@@ -669,14 +678,11 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 	nr_matrix_invert (&pp->px2ps, &pp->ps2px);
 
 	if (pat->viewBox_set) {
-		/* Forget content units at all (lauris) */
-		gdouble tmp_x = pattern_width (pat) / (pattern_viewBox(pat)->x1 - pattern_viewBox(pat)->x0);
-		gdouble tmp_y = pattern_height (pat) / (pattern_viewBox(pat)->y1 - pattern_viewBox(pat)->y0);
+		gdouble tmp_x = (pattern_viewBox(pat)->x1 - pattern_viewBox(pat)->x0) / pattern_width (pat);
+		gdouble tmp_y = (pattern_viewBox(pat)->y1 - pattern_viewBox(pat)->y0) / pattern_height (pat);
 
-		NR::Matrix vb2ps (tmp_x, 0.0, 0.0, tmp_y, -pattern_viewBox(pat)->x0 * tmp_x, -pattern_viewBox(pat)->y0 * tmp_y);
-
-		/* Problem: What to do, if we have mixed lengths and percentages? (Lauris) */
-		/* Currently we do ignore percentages at all, but that is not good (Lauris) */
+		// FIXME: preserveAspectRatio must be taken into account here too!
+		NR::Matrix vb2ps (tmp_x, 0.0, 0.0, tmp_y, pattern_x(pat) - pattern_viewBox(pat)->x0, pattern_y(pat) - pattern_viewBox(pat)->y0);
 
 		NR::Matrix vb2us = vb2ps * pattern_patternTransform(pat);
 
@@ -717,8 +723,8 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 
 	/* Show items */
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (sp_object_first_child(SP_OBJECT(pat_i))) { // find the first one with children
-			for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+		if (pat_i && SP_IS_OBJECT (pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
+			for (SPObject *child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 				if (SP_IS_ITEM (child)) {
 					NRArenaItem *cai;
 					cai = sp_item_invoke_show (SP_ITEM (child), pp->arena, pp->dkey, SP_ITEM_REFERENCE_FLAGS);
@@ -788,16 +794,12 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 static void
 sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter)
 {
-	SPPatPainter *pp;
-	SPPattern *pat;
-	SPObject *child;
-
-	pp = (SPPatPainter *) painter;
-	pat = pp->pat;
+	SPPatPainter *pp = (SPPatPainter *) painter;
+	SPPattern *pat = pp->pat;
 
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i && SP_IS_OBJECT (pat_i) && sp_object_first_child(SP_OBJECT(pat_i))) { // find the first one with children
-			for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+		if (pat_i && SP_IS_OBJECT (pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
+			for (SPObject *child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 				if (SP_IS_ITEM (child)) {
 						sp_item_invoke_hide (SP_ITEM (child), pp->dkey);
 				}
@@ -944,10 +946,10 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 		ba.y1 = pb->area.y1;
 		nr_rect_d_matrix_transform (&psa, &ba, &pp->px2ps);
 		
-		psa.x0 = floor ((psa.x0 - pattern_x (pp->pat)) / pattern_width (pp->pat));
-		psa.y0 = floor ((psa.y0 - pattern_y (pp->pat)) / pattern_height (pp->pat));
-		psa.x1 = ceil ((psa.x1 - pattern_x (pp->pat)) / pattern_width (pp->pat));
-		psa.y1 = ceil ((psa.y1 - pattern_y (pp->pat)) / pattern_height (pp->pat));
+		psa.x0 = floor ((psa.x0 - pattern_x (pp->pat)) / pattern_width (pp->pat)) -1;
+		psa.y0 = floor ((psa.y0 - pattern_y (pp->pat)) / pattern_height (pp->pat)) -1;
+		psa.x1 = ceil ((psa.x1 - pattern_x (pp->pat)) / pattern_width (pp->pat)) +1;
+		psa.y1 = ceil ((psa.y1 - pattern_y (pp->pat)) / pattern_height (pp->pat)) +1;
 		
 		for (y = psa.y0; y < psa.y1; y++) {
 			for (x = psa.x0; x < psa.x1; x++) {
