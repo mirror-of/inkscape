@@ -15,6 +15,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <stdint.h>
 #include <glib/gtypes.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkgc.h>
