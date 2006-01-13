@@ -33,6 +33,8 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/panel.cpp		\
 	ui/widget/panel.cpp		\
 	ui/widget/panel.h		\
+	ui/widget/preferences-widget.cpp \
+	ui/widget/preferences-widget.h   \
 	ui/widget/registered-widget.cpp \
 	ui/widget/registered-widget.h   \
 	ui/widget/registry.cpp          \

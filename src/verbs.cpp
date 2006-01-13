@@ -1470,8 +1470,8 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_DIALOG_DISPLAY:
-            sp_display_dialog();
-            // dt->_dlg_mgr->showDialog("PrefInkscape");
+            //sp_display_dialog();
+            dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
         case SP_VERB_DIALOG_METADATA:
             // sp_desktop_dialog();
