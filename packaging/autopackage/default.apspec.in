@@ -25,7 +25,7 @@ CPPFLAGS="-I/usr/local/src/inkscape/extra/static/include"
 LDFLAGS="-L/usr/local/src/inkscape/extra/static/lib"
 CXX="ccache apg++" 
 export PATH PKG_CONFIG_PATH CPPFLAGS LDFLAGS CXX
-prepareBuild --enable-binreloc --with-gnome-vfs=no --enable-lcms --enable-inkboard
+prepareBuild --enable-binreloc --with-gnome-vfs=no --enable-lcms
 
 [BuildUnprepare]
 unprepareBuild
