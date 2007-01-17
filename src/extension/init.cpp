@@ -25,6 +25,7 @@
 #include "db.h"
 #include "internal/svgz.h"
 #include "internal/ps.h"
+#include "internal/pdf.h"
 #ifdef HAVE_CAIRO_PDF
 # include "internal/pdf-cairo.h"
 #endif
@@ -37,6 +38,7 @@
 # include "internal/emf-win32-print.h"
 #endif
 #include "internal/ps-out.h"
+#include "internal/pdf-out.h"
 #ifdef HAVE_CAIRO_PDF
 # include "internal/cairo-pdf-out.h"
 # include "internal/cairo-renderer-pdf-out.h"
@@ -114,6 +116,8 @@ init()
     Internal::PsOutput::init();
     Internal::EpsOutput::init();
     Internal::PrintPS::init();
+    Internal::PdfOutput::init();
+    Internal::PrintPDF::init();
 #ifdef HAVE_CAIRO_PDF
     Internal::CairoPdfOutput::init();
     Internal::PrintCairoPDF::init();
