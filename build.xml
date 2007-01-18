@@ -6,7 +6,7 @@
     </description>
 
   <!-- set global properties for this build -->
-  <property name="version"     value="0.45"/>
+  <property name="version"     value="0.45pre1"/>
   <property name="arch"        value="i686-pc-mingw32-"/>
   <!--<property name="archutil"    value="${arch}"/>-->
   <property name="archutil"    value=""/>
@@ -25,7 +25,7 @@
     <copy file="${src}/helper/sp-marshal.cpp.mingw"
           tofile="${src}/helper/sp-marshal.cpp"/>
     <makefile file="inkscape_version.h">
-    #define INKSCAPE_VERSION "${version}+devel"
+    #define INKSCAPE_VERSION "${version}"
     </makefile>
     <makefile file="config.h">
         #ifndef _CONFIG_H_
