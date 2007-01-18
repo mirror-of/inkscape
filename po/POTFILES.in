@@ -82,7 +82,6 @@ src/extension/internal/grid.cpp
 src/extension/internal/latex-pstricks-out.cpp
 src/extension/internal/latex-pstricks.cpp
 src/extension/internal/odf.cpp
-src/extension/internal/pdf-cairo.cpp
 src/extension/internal/pov-out.cpp
 src/extension/internal/ps-out.cpp
 src/extension/internal/ps.cpp
