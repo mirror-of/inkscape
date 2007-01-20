@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-14 18:11+0100\n"
+"POT-Creation-Date: 2007-01-20 20:06+0100\n"
 "PO-Revision-Date: 2007-01-14 18:09+0100\n"
 "Last-Translator: Valessio Soares de Brito <valessio@gmail.com>\n"
 "Language-Team: Português Brasil <inkscape-brasil@listas.softwarelivre.org>\n"
@@ -1354,52 +1354,52 @@ msgstr "Ajustar título do objeto"
 msgid "Set object description"
 msgstr "Ajustar descrição do objeto"
 
-#: ../src/dialogs/layers-panel.cpp:590 ../src/widgets/layer-selector.cpp:590
+#: ../src/dialogs/layers-panel.cpp:592 ../src/widgets/layer-selector.cpp:590
 msgid "Unhide layer"
 msgstr "Mostrar Camada"
 
-#: ../src/dialogs/layers-panel.cpp:590 ../src/widgets/layer-selector.cpp:590
+#: ../src/dialogs/layers-panel.cpp:592 ../src/widgets/layer-selector.cpp:590
 msgid "Hide layer"
 msgstr "Ocultar Camada"
 
-#: ../src/dialogs/layers-panel.cpp:601 ../src/widgets/layer-selector.cpp:582
+#: ../src/dialogs/layers-panel.cpp:603 ../src/widgets/layer-selector.cpp:582
 msgid "Lock layer"
 msgstr "Travar Camada"
 
-#: ../src/dialogs/layers-panel.cpp:601 ../src/widgets/layer-selector.cpp:582
+#: ../src/dialogs/layers-panel.cpp:603 ../src/widgets/layer-selector.cpp:582
 msgid "Unlock layer"
 msgstr "Destravar Camada"
 
-#: ../src/dialogs/layers-panel.cpp:698
+#: ../src/dialogs/layers-panel.cpp:699
 msgid "Change layer opacity"
 msgstr "Mudar opacidade da camada"
 
-#: ../src/dialogs/layers-panel.cpp:763
+#: ../src/dialogs/layers-panel.cpp:764
 #, fuzzy
 msgid "Opacity, %:"
 msgstr "Opacidade:"
 
-#: ../src/dialogs/layers-panel.cpp:789
+#: ../src/dialogs/layers-panel.cpp:790
 msgid "New"
 msgstr "Novo"
 
-#: ../src/dialogs/layers-panel.cpp:794
+#: ../src/dialogs/layers-panel.cpp:795
 msgid "Top"
 msgstr "Acima"
 
-#: ../src/dialogs/layers-panel.cpp:800
+#: ../src/dialogs/layers-panel.cpp:801
 msgid "Up"
 msgstr "Acima"
 
-#: ../src/dialogs/layers-panel.cpp:806
+#: ../src/dialogs/layers-panel.cpp:807
 msgid "Dn"
 msgstr "Abaixo"
 
-#: ../src/dialogs/layers-panel.cpp:812
+#: ../src/dialogs/layers-panel.cpp:813
 msgid "Bot"
 msgstr "Abaixo"
 
-#: ../src/dialogs/layers-panel.cpp:822
+#: ../src/dialogs/layers-panel.cpp:823
 msgid "X"
 msgstr "X"
 
@@ -2333,13 +2333,13 @@ msgstr ""
 "retornou nenhum erro, mas isso pode indicar que o resultado não será como o "
 "esperado."
 
-#: ../src/extension/init.cpp:187
+#: ../src/extension/init.cpp:175
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr ""
 "Nome de diretório externo do módulo inválido.  Os módulos não serão "
 "carregados."
 
-#: ../src/extension/init.cpp:201
+#: ../src/extension/init.cpp:189
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
@@ -2493,79 +2493,6 @@ msgstr "OpenDocument drawing (*.odg)"
 msgid "OpenDocument drawing file"
 msgstr "Arquivo OpenDocument drawing"
 
-#: ../src/extension/internal/pdf-cairo.cpp:123
-#: ../src/extension/internal/ps.cpp:121
-msgid "Print Destination"
-msgstr "Destino da impressão"
-
-#. Print properties frame
-#: ../src/extension/internal/pdf-cairo.cpp:138
-#: ../src/extension/internal/ps.cpp:136
-msgid "Print properties"
-msgstr "Propriedades da Impressão"
-
-#: ../src/extension/internal/pdf-cairo.cpp:145
-msgid "Print using PDF operators"
-msgstr "Imprimir usando operadores PostScript"
-
-#: ../src/extension/internal/pdf-cairo.cpp:147
-msgid ""
-"Use PDF vector operators. The resulting image is usually smaller in file "
-"size and can be arbitrarily scaled, but patterns will be lost."
-msgstr ""
-"Use os operadores de vetor PDF. A imagem resultante é geralmente menor em "
-"tamanho de arquivo e pode arbitrariamente ser escalada, mas os padrões de "
-"preenchimento serão perdidas. "
-
-#: ../src/extension/internal/pdf-cairo.cpp:152
-#: ../src/extension/internal/ps.cpp:150
-msgid "Print as bitmap"
-msgstr "Imprimir como figura"
-
-#: ../src/extension/internal/pdf-cairo.cpp:154
-#: ../src/extension/internal/ps.cpp:152
-msgid ""
-"Print everything as bitmap. The resulting image is usually larger in file "
-"size and cannot be arbitrarily scaled without quality loss, but all objects "
-"will be rendered exactly as displayed."
-msgstr ""
-"Imprimir tudo como figura. A imagem resultante é geralmente maior em tamanho "
-"e não pode ser ampliada sem perda de qualidade. Porém todos os objetos são "
-"gerados exatamente como mostrado."
-
-#: ../src/extension/internal/pdf-cairo.cpp:168
-#: ../src/extension/internal/ps.cpp:166
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr "Resolução preferida para a figura (pontos por polegada)"
-
-#: ../src/extension/internal/pdf-cairo.cpp:182
-#: ../src/extension/internal/ps.cpp:180
-msgid "Resolution:"
-msgstr "Resolução:"
-
-#. Print destination frame
-#: ../src/extension/internal/pdf-cairo.cpp:186
-#: ../src/extension/internal/ps.cpp:184
-msgid "Print destination"
-msgstr "Destino da impressão"
-
-#: ../src/extension/internal/pdf-cairo.cpp:192
-#: ../src/extension/internal/ps.cpp:190
-msgid ""
-"Printer name (as given by lpstat -p);\n"
-"leave empty to use the system default printer.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to a program."
-msgstr ""
-"Nome da impressora (como dado pelo lpstat - p);\n"
-"deixe em branco para usar a impressora padrão do sistema.\n"
-"Use '> nomedearquivo.ext' para imprimir para um arquivo.\n"
-"Use '| programa argumentos...' para direcionar para um programa."
-
-#: ../src/extension/internal/pdf-cairo.cpp:1021
-msgid "PDF Print"
-msgstr "Impressão PDF"
-
 #: ../src/extension/internal/pov-out.cpp:457
 msgid "PovRay Output"
 msgstr "Saída PovRay"
@@ -2591,6 +2518,15 @@ msgstr "Postscript (*.ps)"
 msgid "Postscript File"
 msgstr "Arquivo Postscript"
 
+#: ../src/extension/internal/ps.cpp:121
+msgid "Print Destination"
+msgstr "Destino da impressão"
+
+#. Print properties frame
+#: ../src/extension/internal/ps.cpp:136
+msgid "Print properties"
+msgstr "Propriedades da Impressão"
+
 #: ../src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "Imprimir usando operadores PostScript"
@@ -2604,6 +2540,45 @@ msgstr ""
 "Use os operadores de vetor PostScript. A imagem resultante é geralmente "
 "menor em tamanho de arquivo e pode ser ampliada facilmente, porém a "
 "transparência alpha, os gradientes e padrões de preenchimento serão perdidas."
+
+#: ../src/extension/internal/ps.cpp:150
+msgid "Print as bitmap"
+msgstr "Imprimir como figura"
+
+#: ../src/extension/internal/ps.cpp:152
+msgid ""
+"Print everything as bitmap. The resulting image is usually larger in file "
+"size and cannot be arbitrarily scaled without quality loss, but all objects "
+"will be rendered exactly as displayed."
+msgstr ""
+"Imprimir tudo como figura. A imagem resultante é geralmente maior em tamanho "
+"e não pode ser ampliada sem perda de qualidade. Porém todos os objetos são "
+"gerados exatamente como mostrado."
+
+#: ../src/extension/internal/ps.cpp:166
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "Resolução preferida para a figura (pontos por polegada)"
+
+#: ../src/extension/internal/ps.cpp:180
+msgid "Resolution:"
+msgstr "Resolução:"
+
+#. Print destination frame
+#: ../src/extension/internal/ps.cpp:184
+msgid "Print destination"
+msgstr "Destino da impressão"
+
+#: ../src/extension/internal/ps.cpp:190
+msgid ""
+"Printer name (as given by lpstat -p);\n"
+"leave empty to use the system default printer.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to a program."
+msgstr ""
+"Nome da impressora (como dado pelo lpstat - p);\n"
+"deixe em branco para usar a impressora padrão do sistema.\n"
+"Use '> nomedearquivo.ext' para imprimir para um arquivo.\n"
+"Use '| programa argumentos...' para direcionar para um programa."
 
 #: ../src/extension/internal/ps.cpp:1719
 msgid "Postscript Print"
@@ -4379,12 +4354,14 @@ msgid "Move"
 msgstr "Mover"
 
 #: ../src/selection-chemistry.cpp:1754
-msgid "Nudge vertically by pixels"
-msgstr ""
+#, fuzzy
+msgid "Move vertically by pixels"
+msgstr "Inverter a posição da seleção verticalmente"
 
 #: ../src/selection-chemistry.cpp:1757
-msgid "Nudge horizontally by pixels"
-msgstr ""
+#, fuzzy
+msgid "Move horizontally by pixels"
+msgstr "Horizontal"
 
 #: ../src/selection-chemistry.cpp:2021 ../src/selection-describer.cpp:65
 #, fuzzy
@@ -4855,6 +4832,16 @@ msgstr[1] "<b>Grupos</b> de <b>%d</b> objetos"
 #: ../src/sp-item.cpp:849
 msgid "Object"
 msgstr "Objeto"
+
+#: ../src/sp-item.cpp:866
+#, c-format
+msgid "%s; <i>clipped</i>"
+msgstr ""
+
+#: ../src/sp-item.cpp:871
+#, fuzzy, c-format
+msgid "%s; <i>masked</i>"
+msgstr "<i>%s</i>"
 
 #: ../src/sp-line.cpp:187
 msgid "<b>Line</b>"
@@ -6262,7 +6249,7 @@ msgid "Information"
 msgstr "Matriz de transformação"
 
 #: ../src/ui/dialog/extension-editor.cpp:81
-#: ../share/extensions/funcplot.inx.h:7
+#: ../share/extensions/funcplot.inx.h:7 ../share/extensions/measure.inx.h:2
 msgid "Help"
 msgstr "Aj_uda"
 
@@ -6305,19 +6292,19 @@ msgid "Append filename extension automatically"
 msgstr "Acrescentar extensão de arquivo automaticamente"
 
 #: ../src/ui/dialog/filedialog.cpp:1808
-msgid "Source left bound"
+msgid "Left edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1809
-msgid "Source top bound"
+msgid "Top edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1810
-msgid "Source right bound"
+msgid "Right edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1811
-msgid "Source bottom bound"
+msgid "Bottom edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1812
@@ -6342,8 +6329,8 @@ msgstr "Destino da impressão"
 
 #: ../src/ui/dialog/filedialog.cpp:1816
 #, fuzzy
-msgid "Dots per inch resolution"
-msgstr "Resolução padrão de exportação"
+msgid "Resolution (dots per inch)"
+msgstr "Resolução preferida para a figura (pontos por polegada)"
 
 #. #########################################
 #. ## EXTRA WIDGET -- SOURCE SIDE
@@ -8493,6 +8480,16 @@ msgstr "Altura do retângulo"
 #, fuzzy
 msgid "Set page size"
 msgstr "Tamanho da tela:"
+
+#: ../src/ui/widget/style-swatch.cpp:274
+#, c-format
+msgid "Fill: %06x/%.3g"
+msgstr ""
+
+#: ../src/ui/widget/style-swatch.cpp:276
+#, c-format
+msgid "Stroke: %06x/%.3g"
+msgstr ""
 
 #: ../src/ui/widget/style-swatch.cpp:325
 #, fuzzy, c-format
@@ -10766,8 +10763,9 @@ msgid "Star: Change number of corners"
 msgstr ""
 
 #: ../src/widgets/toolbox.cpp:944
-msgid "Star: Change spike ratio"
-msgstr ""
+#, fuzzy
+msgid "Star: Change spoke ratio"
+msgstr "Armazenar transformação:"
 
 #: ../src/widgets/toolbox.cpp:998
 #, fuzzy
@@ -11359,7 +11357,7 @@ msgstr ""
 msgid "Dot size"
 msgstr "Tamanho da Fonte"
 
-#: ../share/extensions/dots.inx.h:2 ../share/extensions/measure.inx.h:1
+#: ../share/extensions/dots.inx.h:2
 #, fuzzy
 msgid "Font size"
 msgstr "Tamanho da Fonte"
@@ -11370,7 +11368,7 @@ msgid "Number Nodes"
 msgstr "Número de linhas"
 
 #: ../share/extensions/dots.inx.h:4 ../share/extensions/handles.inx.h:2
-#: ../share/extensions/measure.inx.h:3
+#: ../share/extensions/measure.inx.h:10
 msgid "Visualize Path"
 msgstr ""
 
@@ -11711,8 +11709,37 @@ msgstr ""
 msgid "Color Markers to Match Stroke"
 msgstr ""
 
-#: ../share/extensions/measure.inx.h:2
+#: ../share/extensions/measure.inx.h:1
+#, fuzzy
+msgid "Font size [px]"
+msgstr "Tamanho da Fonte"
+
+#. <param name="unit" type="string" _gui-text="Unit {km|m|cm|mm|in|px|pt}">mm</param>
+#: ../share/extensions/measure.inx.h:4
+#, fuzzy
+msgid "Length Unit: "
+msgstr "Ampliar largura do traço"
+
+#: ../share/extensions/measure.inx.h:5
+msgid "Measure"
+msgstr ""
+
+#: ../share/extensions/measure.inx.h:6
 msgid "Measure Path"
+msgstr ""
+
+#: ../share/extensions/measure.inx.h:7
+#, fuzzy
+msgid "Offset [px]"
+msgstr "Tipografia:"
+
+#: ../share/extensions/measure.inx.h:8
+#, fuzzy
+msgid "Precision"
+msgstr "Descrição"
+
+#: ../share/extensions/measure.inx.h:9
+msgid "Scale Factor (Drawing:Real Length) = 1:"
 msgstr ""
 
 #: ../share/extensions/motion.inx.h:1
@@ -11956,6 +11983,24 @@ msgstr ""
 #: ../share/extensions/wmf_input.inx.h:3
 msgid "Windows Metafile Input"
 msgstr ""
+
+#~ msgid "Print using PDF operators"
+#~ msgstr "Imprimir usando operadores PostScript"
+
+#~ msgid ""
+#~ "Use PDF vector operators. The resulting image is usually smaller in file "
+#~ "size and can be arbitrarily scaled, but patterns will be lost."
+#~ msgstr ""
+#~ "Use os operadores de vetor PDF. A imagem resultante é geralmente menor em "
+#~ "tamanho de arquivo e pode arbitrariamente ser escalada, mas os padrões de "
+#~ "preenchimento serão perdidas. "
+
+#~ msgid "PDF Print"
+#~ msgstr "Impressão PDF"
+
+#, fuzzy
+#~ msgid "Dots per inch resolution"
+#~ msgstr "Resolução padrão de exportação"
 
 #, fuzzy
 #~ msgid ""

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-10 22:45+0100\n"
+"POT-Creation-Date: 2007-01-20 20:06+0100\n"
 "PO-Revision-Date: 2006-11-05 18:06+0100\n"
 "Last-Translator: Wei-Lun Chao <william.chao@ossii.com.tw>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -1348,57 +1348,57 @@ msgstr "邊框樣式(_Y)"
 msgid "Set object description"
 msgstr "描述:"
 
-#: ../src/dialogs/layers-panel.cpp:590 ../src/widgets/layer-selector.cpp:590
+#: ../src/dialogs/layers-panel.cpp:592 ../src/widgets/layer-selector.cpp:590
 #, fuzzy
 msgid "Unhide layer"
 msgstr "提升圖層(_R)"
 
-#: ../src/dialogs/layers-panel.cpp:590 ../src/widgets/layer-selector.cpp:590
+#: ../src/dialogs/layers-panel.cpp:592 ../src/widgets/layer-selector.cpp:590
 #, fuzzy
 msgid "Hide layer"
 msgstr "提升圖層(_R)"
 
-#: ../src/dialogs/layers-panel.cpp:601 ../src/widgets/layer-selector.cpp:582
+#: ../src/dialogs/layers-panel.cpp:603 ../src/widgets/layer-selector.cpp:582
 #, fuzzy
 msgid "Lock layer"
 msgstr "降低圖層(_L)"
 
-#: ../src/dialogs/layers-panel.cpp:601 ../src/widgets/layer-selector.cpp:582
+#: ../src/dialogs/layers-panel.cpp:603 ../src/widgets/layer-selector.cpp:582
 #, fuzzy
 msgid "Unlock layer"
 msgstr "降低圖層(_L)"
 
-#: ../src/dialogs/layers-panel.cpp:698
+#: ../src/dialogs/layers-panel.cpp:699
 #, fuzzy
 msgid "Change layer opacity"
 msgstr "主要濁度"
 
-#: ../src/dialogs/layers-panel.cpp:763
+#: ../src/dialogs/layers-panel.cpp:764
 #, fuzzy
 msgid "Opacity, %:"
 msgstr "濁度:"
 
-#: ../src/dialogs/layers-panel.cpp:789
+#: ../src/dialogs/layers-panel.cpp:790
 msgid "New"
 msgstr "新增"
 
-#: ../src/dialogs/layers-panel.cpp:794
+#: ../src/dialogs/layers-panel.cpp:795
 msgid "Top"
 msgstr "頂層"
 
-#: ../src/dialogs/layers-panel.cpp:800
+#: ../src/dialogs/layers-panel.cpp:801
 msgid "Up"
 msgstr "上一層"
 
-#: ../src/dialogs/layers-panel.cpp:806
+#: ../src/dialogs/layers-panel.cpp:807
 msgid "Dn"
 msgstr "下一層"
 
-#: ../src/dialogs/layers-panel.cpp:812
+#: ../src/dialogs/layers-panel.cpp:813
 msgid "Bot"
 msgstr "底層"
 
-#: ../src/dialogs/layers-panel.cpp:822
+#: ../src/dialogs/layers-panel.cpp:823
 msgid "X"
 msgstr "X"
 
@@ -2316,7 +2316,7 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr "啟動時顯示對話框"
 
-#: ../src/extension/implementation/script.cpp:991
+#: ../src/extension/implementation/script.cpp:1014
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
@@ -2325,7 +2325,7 @@ msgstr ""
 "Inkscape 已經從它呼叫的命令稿中接收到一個錯誤。該錯誤回傳的文字已包含於下。"
 "Inkscape 將會繼續運行，但是您所要求的動作已經取消。"
 
-#: ../src/extension/implementation/script.cpp:1004
+#: ../src/extension/implementation/script.cpp:1027
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -2334,11 +2334,11 @@ msgstr ""
 "Inkscape 已經從執行的命令稿中接收到額外的資料。命令稿並未回傳錯誤，但是這可能"
 "指出，所得結果將會不如預期。"
 
-#: ../src/extension/init.cpp:187
+#: ../src/extension/init.cpp:175
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr "空的外部模組目錄名稱。將不會載入模組。"
 
-#: ../src/extension/init.cpp:201
+#: ../src/extension/init.cpp:189
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
@@ -2496,77 +2496,6 @@ msgstr "開放文件繪圖 (*.odg)"
 msgid "OpenDocument drawing file"
 msgstr "開放文件繪圖檔案"
 
-#: ../src/extension/internal/pdf-cairo.cpp:123
-#: ../src/extension/internal/ps.cpp:121
-msgid "Print Destination"
-msgstr "列印指定範圍"
-
-#. Print properties frame
-#: ../src/extension/internal/pdf-cairo.cpp:138
-#: ../src/extension/internal/ps.cpp:136
-msgid "Print properties"
-msgstr "列印屬性"
-
-#: ../src/extension/internal/pdf-cairo.cpp:145
-msgid "Print using PDF operators"
-msgstr "使用 PDF 運算子列印"
-
-#: ../src/extension/internal/pdf-cairo.cpp:147
-msgid ""
-"Use PDF vector operators. The resulting image is usually smaller in file "
-"size and can be arbitrarily scaled, but patterns will be lost."
-msgstr ""
-"使用 PDF 向量運算子。結果的圖像檔案尺寸通常會較小而可以任意縮放，但是圖案會失"
-"去。"
-
-#: ../src/extension/internal/pdf-cairo.cpp:152
-#: ../src/extension/internal/ps.cpp:150
-msgid "Print as bitmap"
-msgstr "列印成點陣圖"
-
-#: ../src/extension/internal/pdf-cairo.cpp:154
-#: ../src/extension/internal/ps.cpp:152
-msgid ""
-"Print everything as bitmap. The resulting image is usually larger in file "
-"size and cannot be arbitrarily scaled without quality loss, but all objects "
-"will be rendered exactly as displayed."
-msgstr ""
-"以點陣圖印出所有東西。產生的圖片檔尺寸常常比較大，而且無法在不喪失品質下任意"
-"伸縮，但是所有的物件潤算將會與顯示相同。"
-
-#: ../src/extension/internal/pdf-cairo.cpp:168
-#: ../src/extension/internal/ps.cpp:166
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr "偏好的點陣圖解析度(每英吋幾點)"
-
-#: ../src/extension/internal/pdf-cairo.cpp:182
-#: ../src/extension/internal/ps.cpp:180
-msgid "Resolution:"
-msgstr "解析度:"
-
-#. Print destination frame
-#: ../src/extension/internal/pdf-cairo.cpp:186
-#: ../src/extension/internal/ps.cpp:184
-msgid "Print destination"
-msgstr "列印指定範圍"
-
-#: ../src/extension/internal/pdf-cairo.cpp:192
-#: ../src/extension/internal/ps.cpp:190
-msgid ""
-"Printer name (as given by lpstat -p);\n"
-"leave empty to use the system default printer.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to a program."
-msgstr ""
-"印表機名稱(透過lpstat -p得到)；\n"
-"不填寫使用系統預設印表機。\n"
-"使用 「> 檔案名稱」 列印到檔案。\n"
-"使用 「| prog arg…」透過管道輸出到另一個程式。"
-
-#: ../src/extension/internal/pdf-cairo.cpp:1021
-msgid "PDF Print"
-msgstr "PDF 列印"
-
 #: ../src/extension/internal/pov-out.cpp:457
 msgid "PovRay Output"
 msgstr "PovRay 輸出"
@@ -2592,6 +2521,15 @@ msgstr "Postscript (*.ps)"
 msgid "Postscript File"
 msgstr "Postscript 檔案"
 
+#: ../src/extension/internal/ps.cpp:121
+msgid "Print Destination"
+msgstr "列印指定範圍"
+
+#. Print properties frame
+#: ../src/extension/internal/ps.cpp:136
+msgid "Print properties"
+msgstr "列印屬性"
+
 #: ../src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "使用 PostScript 列印"
@@ -2604,6 +2542,44 @@ msgid ""
 msgstr ""
 "使用 PostScript 向量運算器。產生的圖片檔尺寸常常比較小，而且可以任意伸縮，但"
 "是會喪失 alpha 透明度與圖樣。"
+
+#: ../src/extension/internal/ps.cpp:150
+msgid "Print as bitmap"
+msgstr "列印成點陣圖"
+
+#: ../src/extension/internal/ps.cpp:152
+msgid ""
+"Print everything as bitmap. The resulting image is usually larger in file "
+"size and cannot be arbitrarily scaled without quality loss, but all objects "
+"will be rendered exactly as displayed."
+msgstr ""
+"以點陣圖印出所有東西。產生的圖片檔尺寸常常比較大，而且無法在不喪失品質下任意"
+"伸縮，但是所有的物件潤算將會與顯示相同。"
+
+#: ../src/extension/internal/ps.cpp:166
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "偏好的點陣圖解析度(每英吋幾點)"
+
+#: ../src/extension/internal/ps.cpp:180
+msgid "Resolution:"
+msgstr "解析度:"
+
+#. Print destination frame
+#: ../src/extension/internal/ps.cpp:184
+msgid "Print destination"
+msgstr "列印指定範圍"
+
+#: ../src/extension/internal/ps.cpp:190
+msgid ""
+"Printer name (as given by lpstat -p);\n"
+"leave empty to use the system default printer.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to a program."
+msgstr ""
+"印表機名稱(透過lpstat -p得到)；\n"
+"不填寫使用系統預設印表機。\n"
+"使用 「> 檔案名稱」 列印到檔案。\n"
+"使用 「| prog arg…」透過管道輸出到另一個程式。"
 
 #: ../src/extension/internal/ps.cpp:1719
 msgid "Postscript Print"
@@ -4314,12 +4290,14 @@ msgid "Move"
 msgstr "移動(_M)"
 
 #: ../src/selection-chemistry.cpp:1754
-msgid "Nudge vertically by pixels"
-msgstr ""
+#, fuzzy
+msgid "Move vertically by pixels"
+msgstr "垂直對齊所選節點"
 
 #: ../src/selection-chemistry.cpp:1757
-msgid "Nudge horizontally by pixels"
-msgstr ""
+#, fuzzy
+msgid "Move horizontally by pixels"
+msgstr "水平(_H)"
 
 #: ../src/selection-chemistry.cpp:2021 ../src/selection-describer.cpp:65
 msgid "Clone"
@@ -4765,6 +4743,16 @@ msgstr[0] "<b>%d</b> 項物件的<b>群組</b>"
 msgid "Object"
 msgstr "物件"
 
+#: ../src/sp-item.cpp:866
+#, c-format
+msgid "%s; <i>clipped</i>"
+msgstr ""
+
+#: ../src/sp-item.cpp:871
+#, fuzzy, c-format
+msgid "%s; <i>masked</i>"
+msgstr "<i>%s</i>"
+
 #: ../src/sp-line.cpp:187
 msgid "<b>Line</b>"
 msgstr "<b>線條</b>"
@@ -5048,61 +5036,69 @@ msgid ""
 "path first."
 msgstr "您無法在這個版本中將文字放在矩形之上。請先將矩形轉換成路徑。"
 
-#: ../src/text-chemistry.cpp:174 ../src/verbs.cpp:2074
+#: ../src/text-chemistry.cpp:117
+msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
+msgstr ""
+
+#: ../src/text-chemistry.cpp:184 ../src/verbs.cpp:2074
 msgid "Put text on path"
 msgstr "放置文字於路徑上"
 
-#: ../src/text-chemistry.cpp:186
+#: ../src/text-chemistry.cpp:196
 msgid "Select <b>a text on path</b> to remove it from path."
 msgstr "選擇<b>文字與路徑</b>以將文字從路徑之上移除。"
 
-#: ../src/text-chemistry.cpp:208
+#: ../src/text-chemistry.cpp:218
 msgid "<b>No texts-on-paths</b> in the selection."
 msgstr "選取區中<b>沒有路徑上的文字</b>。"
 
-#: ../src/text-chemistry.cpp:212 ../src/verbs.cpp:2076
+#: ../src/text-chemistry.cpp:222 ../src/verbs.cpp:2076
 msgid "Remove text from path"
 msgstr "從路徑移除文字"
 
-#: ../src/text-chemistry.cpp:237 ../src/text-chemistry.cpp:257
+#: ../src/text-chemistry.cpp:247 ../src/text-chemistry.cpp:267
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "選取<b>文字</b>以從其中移除突出部份。"
 
-#: ../src/text-chemistry.cpp:260 ../src/widgets/toolbox.cpp:4154
+#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4154
 msgid "Remove manual kerns"
 msgstr "移除手動字距"
 
-#: ../src/text-chemistry.cpp:279
+#: ../src/text-chemistry.cpp:289
 msgid ""
 "Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text "
 "into frame."
 msgstr "選取<b>一段文字</b>與一或多條<b>路徑或形狀</b>來讓文字在圖框中流動。"
 
-#: ../src/text-chemistry.cpp:347
+#: ../src/text-chemistry.cpp:357
 #, fuzzy
 msgid "Flow text into shape"
 msgstr "流動轉為訊框(_F)"
 
-#: ../src/text-chemistry.cpp:368
+#: ../src/text-chemistry.cpp:378
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "選擇<b>流動文字</b>以停止其流動。"
 
-#: ../src/text-chemistry.cpp:431
+#: ../src/text-chemistry.cpp:441
 #, fuzzy
 msgid "Unflow flowed text"
 msgstr "浮動文字"
 
-#: ../src/text-chemistry.cpp:443
+#: ../src/text-chemistry.cpp:453
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "選擇<b>流動文字</b>以停止其流動。"
 
-#: ../src/text-chemistry.cpp:479
+#: ../src/text-chemistry.cpp:471
+msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
+msgstr ""
+
+#: ../src/text-chemistry.cpp:499
 #, fuzzy
 msgid "Convert flowed text to text"
 msgstr "把文字轉化成路徑"
 
-#: ../src/text-chemistry.cpp:484
+#: ../src/text-chemistry.cpp:504
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "選取區中<b>沒有物件</b>可以轉成路徑。"
@@ -6081,7 +6077,7 @@ msgid "Information"
 msgstr "資訊"
 
 #: ../src/ui/dialog/extension-editor.cpp:81
-#: ../share/extensions/funcplot.inx.h:7
+#: ../share/extensions/funcplot.inx.h:7 ../share/extensions/measure.inx.h:2
 msgid "Help"
 msgstr "輔助"
 
@@ -6123,19 +6119,19 @@ msgid "Append filename extension automatically"
 msgstr "自動加上副檔名"
 
 #: ../src/ui/dialog/filedialog.cpp:1808
-msgid "Source left bound"
+msgid "Left edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1809
-msgid "Source top bound"
+msgid "Top edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1810
-msgid "Source right bound"
+msgid "Right edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1811
-msgid "Source bottom bound"
+msgid "Bottom edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1812
@@ -6160,8 +6156,8 @@ msgstr "列印指定範圍"
 
 #: ../src/ui/dialog/filedialog.cpp:1816
 #, fuzzy
-msgid "Dots per inch resolution"
-msgstr "預設匯出解析度:"
+msgid "Resolution (dots per inch)"
+msgstr "偏好的點陣圖解析度(每英吋幾點)"
 
 #. #########################################
 #. ## EXTRA WIDGET -- SOURCE SIDE
@@ -7260,8 +7256,8 @@ msgstr "堆疊"
 #: ../src/ui/dialog/tracedialog.cpp:531
 #, fuzzy
 msgid ""
-"Stack scans on top of one another (no gaps) instead of or tiling (usually "
-"with gaps)"
+"Stack scans on top of one another (no gaps) instead of tiling (usually with "
+"gaps)"
 msgstr "堆疊垂直掃瞄 (無間隙) 或是水平並排 (常常具有間隙)"
 
 #: ../src/ui/dialog/tracedialog.cpp:534
@@ -8188,6 +8184,16 @@ msgstr "紙張高度"
 #, fuzzy
 msgid "Set page size"
 msgstr "頁面尺寸(_A)："
+
+#: ../src/ui/widget/style-swatch.cpp:274
+#, c-format
+msgid "Fill: %06x/%.3g"
+msgstr ""
+
+#: ../src/ui/widget/style-swatch.cpp:276
+#, c-format
+msgid "Stroke: %06x/%.3g"
+msgstr ""
 
 #: ../src/ui/widget/style-swatch.cpp:325
 #, c-format
@@ -9967,48 +9973,48 @@ msgstr "漸層中無停止點"
 msgid "Change gradient stop offset"
 msgstr "線性漸變描邊"
 
-#: ../src/widgets/gradient-vector.cpp:732
+#: ../src/widgets/gradient-vector.cpp:733
 #, fuzzy
 msgid "Add gradient stop"
 msgstr "放射漸變繪製"
 
-#: ../src/widgets/gradient-vector.cpp:764
+#: ../src/widgets/gradient-vector.cpp:765
 #, fuzzy
 msgid "Delete gradient stop"
 msgstr "刪除停止點"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:800
+#: ../src/widgets/gradient-vector.cpp:801
 msgid "Add stop"
 msgstr "新增停止點"
 
-#: ../src/widgets/gradient-vector.cpp:803
+#: ../src/widgets/gradient-vector.cpp:804
 msgid "Add another control stop to gradient"
 msgstr "新增漸層中的控制停止點"
 
-#: ../src/widgets/gradient-vector.cpp:805
+#: ../src/widgets/gradient-vector.cpp:806
 msgid "Delete stop"
 msgstr "刪除停止點"
 
-#: ../src/widgets/gradient-vector.cpp:808
+#: ../src/widgets/gradient-vector.cpp:809
 msgid "Delete current control stop from gradient"
 msgstr "從漸層刪除現有控制停止點"
 
 #. Label
-#: ../src/widgets/gradient-vector.cpp:819
+#: ../src/widgets/gradient-vector.cpp:820
 msgid "Offset:"
 msgstr "偏移:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:864
+#: ../src/widgets/gradient-vector.cpp:865
 msgid "Stop Color"
 msgstr "停止顏色"
 
-#: ../src/widgets/gradient-vector.cpp:893
+#: ../src/widgets/gradient-vector.cpp:894
 msgid "Gradient editor"
 msgstr "漸層編輯器"
 
-#: ../src/widgets/gradient-vector.cpp:1169
+#: ../src/widgets/gradient-vector.cpp:1170
 #, fuzzy
 msgid "Change gradient stop color"
 msgstr "線性漸變描邊"
@@ -10379,8 +10385,9 @@ msgid "Star: Change number of corners"
 msgstr ""
 
 #: ../src/widgets/toolbox.cpp:944
-msgid "Star: Change spike ratio"
-msgstr ""
+#, fuzzy
+msgid "Star: Change spoke ratio"
+msgstr "儲存變形:"
 
 #: ../src/widgets/toolbox.cpp:998
 #, fuzzy
@@ -10795,6 +10802,7 @@ msgstr "最大線段長度"
 
 #: ../share/extensions/addnodes.inx.h:3 ../share/extensions/flatten.inx.h:3
 #: ../share/extensions/markers_strokepaint.inx.h:2
+#: ../share/extensions/perspective.inx.h:1
 #: ../share/extensions/radiusrand.inx.h:3
 #: ../share/extensions/straightseg.inx.h:2
 #: ../share/extensions/summersnight.inx.h:2 ../share/extensions/whirl.inx.h:4
@@ -10957,7 +10965,7 @@ msgstr ""
 msgid "Dot size"
 msgstr "點大小"
 
-#: ../share/extensions/dots.inx.h:2 ../share/extensions/measure.inx.h:1
+#: ../share/extensions/dots.inx.h:2
 msgid "Font size"
 msgstr "字型大小"
 
@@ -10966,7 +10974,7 @@ msgid "Number Nodes"
 msgstr "節點數"
 
 #: ../share/extensions/dots.inx.h:4 ../share/extensions/handles.inx.h:2
-#: ../share/extensions/measure.inx.h:3
+#: ../share/extensions/measure.inx.h:10
 msgid "Visualize Path"
 msgstr "可視化路徑"
 
@@ -11300,9 +11308,39 @@ msgstr ""
 msgid "Color Markers to Match Stroke"
 msgstr ""
 
-#: ../share/extensions/measure.inx.h:2
+#: ../share/extensions/measure.inx.h:1
+#, fuzzy
+msgid "Font size [px]"
+msgstr "字型大小"
+
+#. <param name="unit" type="string" _gui-text="Unit {km|m|cm|mm|in|px|pt}">mm</param>
+#: ../share/extensions/measure.inx.h:4
+#, fuzzy
+msgid "Length Unit: "
+msgstr "縮放長度"
+
+#: ../share/extensions/measure.inx.h:5
+#, fuzzy
+msgid "Measure"
+msgstr "測量路徑"
+
+#: ../share/extensions/measure.inx.h:6
 msgid "Measure Path"
 msgstr "測量路徑"
+
+#: ../share/extensions/measure.inx.h:7
+#, fuzzy
+msgid "Offset [px]"
+msgstr "偏移路徑"
+
+#: ../share/extensions/measure.inx.h:8
+#, fuzzy
+msgid "Precision"
+msgstr "描述"
+
+#: ../share/extensions/measure.inx.h:9
+msgid "Scale Factor (Drawing:Real Length) = 1:"
+msgstr ""
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -11368,6 +11406,11 @@ msgstr "列間距"
 #, fuzzy
 msgid "Tangential offset"
 msgstr "垂直偏移"
+
+#: ../share/extensions/perspective.inx.h:2
+#, fuzzy
+msgid "Perspective"
+msgstr "表現"
 
 #: ../share/extensions/ps_input.inx.h:1
 msgid "Postscript"
@@ -11534,6 +11577,23 @@ msgstr "Windows 後設檔案 (*.wmf)"
 #: ../share/extensions/wmf_input.inx.h:3
 msgid "Windows Metafile Input"
 msgstr "Windows 後設檔案輸入"
+
+#~ msgid "Print using PDF operators"
+#~ msgstr "使用 PDF 運算子列印"
+
+#~ msgid ""
+#~ "Use PDF vector operators. The resulting image is usually smaller in file "
+#~ "size and can be arbitrarily scaled, but patterns will be lost."
+#~ msgstr ""
+#~ "使用 PDF 向量運算子。結果的圖像檔案尺寸通常會較小而可以任意縮放，但是圖案"
+#~ "會失去。"
+
+#~ msgid "PDF Print"
+#~ msgstr "PDF 列印"
+
+#, fuzzy
+#~ msgid "Dots per inch resolution"
+#~ msgstr "預設匯出解析度:"
 
 #~ msgid "You cannot put flowtext on a path. Convert flowtext to text first."
 #~ msgstr "不能再路徑上放置浮動文字。首先把浮動文字轉化成文字。"

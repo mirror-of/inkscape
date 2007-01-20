@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-10 22:45+0100\n"
+"POT-Creation-Date: 2007-01-20 20:06+0100\n"
 "PO-Revision-Date: 2006-06-10 22:37+0200\n"
 "Last-Translator: Aleksandar Urošević <urke@users.sf.net>\n"
 "Language-Team: Serbian <prevod@gnome.org>\n"
@@ -1384,57 +1384,57 @@ msgstr "С_тил линије"
 msgid "Set object description"
 msgstr " опис: "
 
-#: ../src/dialogs/layers-panel.cpp:590 ../src/widgets/layer-selector.cpp:590
+#: ../src/dialogs/layers-panel.cpp:592 ../src/widgets/layer-selector.cpp:590
 #, fuzzy
 msgid "Unhide layer"
 msgstr "_Издигни слој"
 
-#: ../src/dialogs/layers-panel.cpp:590 ../src/widgets/layer-selector.cpp:590
+#: ../src/dialogs/layers-panel.cpp:592 ../src/widgets/layer-selector.cpp:590
 #, fuzzy
 msgid "Hide layer"
 msgstr "_Издигни слој"
 
-#: ../src/dialogs/layers-panel.cpp:601 ../src/widgets/layer-selector.cpp:582
+#: ../src/dialogs/layers-panel.cpp:603 ../src/widgets/layer-selector.cpp:582
 #, fuzzy
 msgid "Lock layer"
 msgstr "_Заклони слој"
 
-#: ../src/dialogs/layers-panel.cpp:601 ../src/widgets/layer-selector.cpp:582
+#: ../src/dialogs/layers-panel.cpp:603 ../src/widgets/layer-selector.cpp:582
 #, fuzzy
 msgid "Unlock layer"
 msgstr "_Заклони слој"
 
-#: ../src/dialogs/layers-panel.cpp:698
+#: ../src/dialogs/layers-panel.cpp:699
 #, fuzzy
 msgid "Change layer opacity"
 msgstr "Основна провидност"
 
-#: ../src/dialogs/layers-panel.cpp:763
+#: ../src/dialogs/layers-panel.cpp:764
 #, fuzzy
 msgid "Opacity, %:"
 msgstr "Провидност:"
 
-#: ../src/dialogs/layers-panel.cpp:789
+#: ../src/dialogs/layers-panel.cpp:790
 msgid "New"
 msgstr "Ново"
 
-#: ../src/dialogs/layers-panel.cpp:794
+#: ../src/dialogs/layers-panel.cpp:795
 msgid "Top"
 msgstr "Врх"
 
-#: ../src/dialogs/layers-panel.cpp:800
+#: ../src/dialogs/layers-panel.cpp:801
 msgid "Up"
 msgstr "Горе"
 
-#: ../src/dialogs/layers-panel.cpp:806
+#: ../src/dialogs/layers-panel.cpp:807
 msgid "Dn"
 msgstr "Доле"
 
-#: ../src/dialogs/layers-panel.cpp:812
+#: ../src/dialogs/layers-panel.cpp:813
 msgid "Bot"
 msgstr "Дно"
 
-#: ../src/dialogs/layers-panel.cpp:822
+#: ../src/dialogs/layers-panel.cpp:823
 msgid "X"
 msgstr "X"
 
@@ -2362,7 +2362,7 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr "Прикажи ову поруку при сваком покретању програма"
 
-#: ../src/extension/implementation/script.cpp:991
+#: ../src/extension/implementation/script.cpp:1014
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
@@ -2372,7 +2372,7 @@ msgstr ""
 "приказан. Inkscape ће наставити са радом, али је захтевана акција "
 "обустављена."
 
-#: ../src/extension/implementation/script.cpp:1004
+#: ../src/extension/implementation/script.cpp:1027
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -2382,13 +2382,13 @@ msgstr ""
 "вратила грешку, али ово може да значи да резултат неће изгледати како се "
 "очекује."
 
-#: ../src/extension/init.cpp:187
+#: ../src/extension/init.cpp:175
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr ""
 "Нема назива директоријума за екстерне модуле. Никакви модули неће бити "
 "учитани."
 
-#: ../src/extension/init.cpp:201
+#: ../src/extension/init.cpp:189
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
@@ -2548,78 +2548,6 @@ msgstr "OpenDocument цртеж (*.odg)"
 msgid "OpenDocument drawing file"
 msgstr "Датотека OpenDocument цртежа"
 
-#: ../src/extension/internal/pdf-cairo.cpp:123
-#: ../src/extension/internal/ps.cpp:121
-msgid "Print Destination"
-msgstr "Одредиште штампе"
-
-#. Print properties frame
-#: ../src/extension/internal/pdf-cairo.cpp:138
-#: ../src/extension/internal/ps.cpp:136
-msgid "Print properties"
-msgstr "Особине штампе"
-
-#: ../src/extension/internal/pdf-cairo.cpp:145
-msgid "Print using PDF operators"
-msgstr "Штампај помоћу PDF оператора"
-
-#: ../src/extension/internal/pdf-cairo.cpp:147
-msgid ""
-"Use PDF vector operators. The resulting image is usually smaller in file "
-"size and can be arbitrarily scaled, but patterns will be lost."
-msgstr ""
-"Користе се векторски оператори из PDF-а. Добијена слика ће вероватно бити "
-"умањена и датотека ће бити мање величине, али ће обрасци бити изгубљени"
-
-#: ../src/extension/internal/pdf-cairo.cpp:152
-#: ../src/extension/internal/ps.cpp:150
-msgid "Print as bitmap"
-msgstr "Штампање битмапе"
-
-#: ../src/extension/internal/pdf-cairo.cpp:154
-#: ../src/extension/internal/ps.cpp:152
-msgid ""
-"Print everything as bitmap. The resulting image is usually larger in file "
-"size and cannot be arbitrarily scaled without quality loss, but all objects "
-"will be rendered exactly as displayed."
-msgstr ""
-"Штампаће се као битмапа. Добијена слика ће вероватно бити већа и неће моћи "
-"да се увећава без губитка на квалитету, што зависи од размере увећања, али "
-"сва графика ће се исцртати исто као што је и приказана"
-
-#: ../src/extension/internal/pdf-cairo.cpp:168
-#: ../src/extension/internal/ps.cpp:166
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr "Жељена резолуција (тачака по инчу) битмапе"
-
-#: ../src/extension/internal/pdf-cairo.cpp:182
-#: ../src/extension/internal/ps.cpp:180
-msgid "Resolution:"
-msgstr "Резолуција:"
-
-#. Print destination frame
-#: ../src/extension/internal/pdf-cairo.cpp:186
-#: ../src/extension/internal/ps.cpp:184
-msgid "Print destination"
-msgstr "Одредиште штампе"
-
-#: ../src/extension/internal/pdf-cairo.cpp:192
-#: ../src/extension/internal/ps.cpp:190
-msgid ""
-"Printer name (as given by lpstat -p);\n"
-"leave empty to use the system default printer.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to a program."
-msgstr ""
-"Назив штампаче (како је дато са lpstat -p);\n"
-"оставите празно за употребу подразумеваног системског штампача.\n"
-"Користите „> датотека“ за штампање у датотеку.\n"
-"Користите „| програм аргумент...“ за прослеђивање програму."
-
-#: ../src/extension/internal/pdf-cairo.cpp:1021
-msgid "PDF Print"
-msgstr "PDF штампа"
-
 #: ../src/extension/internal/pov-out.cpp:457
 msgid "PovRay Output"
 msgstr "Излаз као PovRay"
@@ -2645,6 +2573,15 @@ msgstr "Postscript (*.ps)"
 msgid "Postscript File"
 msgstr "Postscript датотека"
 
+#: ../src/extension/internal/ps.cpp:121
+msgid "Print Destination"
+msgstr "Одредиште штампе"
+
+#. Print properties frame
+#: ../src/extension/internal/ps.cpp:136
+msgid "Print properties"
+msgstr "Особине штампе"
+
 #: ../src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "Штампање помоћу PostScript оператора"
@@ -2658,6 +2595,45 @@ msgstr ""
 "Користе се векторски оператори из PostScript-а. Добијена слика ће вероватно "
 "бити умањена и датотека ће бити мање величине, али провидност и обрасци ће "
 "бити изгубљени"
+
+#: ../src/extension/internal/ps.cpp:150
+msgid "Print as bitmap"
+msgstr "Штампање битмапе"
+
+#: ../src/extension/internal/ps.cpp:152
+msgid ""
+"Print everything as bitmap. The resulting image is usually larger in file "
+"size and cannot be arbitrarily scaled without quality loss, but all objects "
+"will be rendered exactly as displayed."
+msgstr ""
+"Штампаће се као битмапа. Добијена слика ће вероватно бити већа и неће моћи "
+"да се увећава без губитка на квалитету, што зависи од размере увећања, али "
+"сва графика ће се исцртати исто као што је и приказана"
+
+#: ../src/extension/internal/ps.cpp:166
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "Жељена резолуција (тачака по инчу) битмапе"
+
+#: ../src/extension/internal/ps.cpp:180
+msgid "Resolution:"
+msgstr "Резолуција:"
+
+#. Print destination frame
+#: ../src/extension/internal/ps.cpp:184
+msgid "Print destination"
+msgstr "Одредиште штампе"
+
+#: ../src/extension/internal/ps.cpp:190
+msgid ""
+"Printer name (as given by lpstat -p);\n"
+"leave empty to use the system default printer.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to a program."
+msgstr ""
+"Назив штампаче (како је дато са lpstat -p);\n"
+"оставите празно за употребу подразумеваног системског штампача.\n"
+"Користите „> датотека“ за штампање у датотеку.\n"
+"Користите „| програм аргумент...“ за прослеђивање програму."
 
 #: ../src/extension/internal/ps.cpp:1719
 msgid "Postscript Print"
@@ -4447,12 +4423,14 @@ msgid "Move"
 msgstr "_Померaj"
 
 #: ../src/selection-chemistry.cpp:1754
-msgid "Nudge vertically by pixels"
-msgstr ""
+#, fuzzy
+msgid "Move vertically by pixels"
+msgstr "Поравнава изабране чворове усправно"
 
 #: ../src/selection-chemistry.cpp:1757
-msgid "Nudge horizontally by pixels"
-msgstr ""
+#, fuzzy
+msgid "Move horizontally by pixels"
+msgstr "_Водоравно"
 
 #: ../src/selection-chemistry.cpp:2021 ../src/selection-describer.cpp:65
 msgid "Clone"
@@ -4931,6 +4909,16 @@ msgstr[2] "<b>Група</b> од <b>%d</b> објеката"
 msgid "Object"
 msgstr "Објекат"
 
+#: ../src/sp-item.cpp:866
+#, c-format
+msgid "%s; <i>clipped</i>"
+msgstr ""
+
+#: ../src/sp-item.cpp:871
+#, fuzzy, c-format
+msgid "%s; <i>masked</i>"
+msgstr "<i>%s</i>"
+
 #: ../src/sp-line.cpp:187
 msgid "<b>Line</b>"
 msgstr "<b>Линија</b>"
@@ -5232,31 +5220,35 @@ msgstr ""
 "У овој верзији не можете да поставите текст на правоугаоник. Прво претворите "
 "правоугаоник у криву."
 
-#: ../src/text-chemistry.cpp:174 ../src/verbs.cpp:2074
+#: ../src/text-chemistry.cpp:117
+msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
+msgstr ""
+
+#: ../src/text-chemistry.cpp:184 ../src/verbs.cpp:2074
 msgid "Put text on path"
 msgstr "Поставља текст на криву"
 
-#: ../src/text-chemistry.cpp:186
+#: ../src/text-chemistry.cpp:196
 msgid "Select <b>a text on path</b> to remove it from path."
 msgstr "Изаберите <b>текст на облику</b> за склањање са криве."
 
-#: ../src/text-chemistry.cpp:208
+#: ../src/text-chemistry.cpp:218
 msgid "<b>No texts-on-paths</b> in the selection."
 msgstr "<b>Нема текста на облику</b> у избору."
 
-#: ../src/text-chemistry.cpp:212 ../src/verbs.cpp:2076
+#: ../src/text-chemistry.cpp:222 ../src/verbs.cpp:2076
 msgid "Remove text from path"
 msgstr "Уклања текст са криве"
 
-#: ../src/text-chemistry.cpp:237 ../src/text-chemistry.cpp:257
+#: ../src/text-chemistry.cpp:247 ../src/text-chemistry.cpp:267
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Изаберите <b>текст</b> за који ће бити уклоњено уклапање слова."
 
-#: ../src/text-chemistry.cpp:260 ../src/widgets/toolbox.cpp:4154
+#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4154
 msgid "Remove manual kerns"
 msgstr "Уклони ручне кернинге"
 
-#: ../src/text-chemistry.cpp:279
+#: ../src/text-chemistry.cpp:289
 msgid ""
 "Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text "
 "into frame."
@@ -5264,31 +5256,35 @@ msgstr ""
 "Изаберите <b>текст</b> и једну или више <b>криву или облик</b> за постављање "
 "текста у оквир."
 
-#: ../src/text-chemistry.cpp:347
+#: ../src/text-chemistry.cpp:357
 #, fuzzy
 msgid "Flow text into shape"
 msgstr "_Уклопи у оквир"
 
-#: ../src/text-chemistry.cpp:368
+#: ../src/text-chemistry.cpp:378
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "Изаберите <b>уклопљени текст</b> за уклањање из оквира."
 
-#: ../src/text-chemistry.cpp:431
+#: ../src/text-chemistry.cpp:441
 #, fuzzy
 msgid "Unflow flowed text"
 msgstr "Уклопљени текст"
 
-#: ../src/text-chemistry.cpp:443
+#: ../src/text-chemistry.cpp:453
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "Изаберите <b>уклопљени текст</b> за уклањање из оквира."
 
-#: ../src/text-chemistry.cpp:479
+#: ../src/text-chemistry.cpp:471
+msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
+msgstr ""
+
+#: ../src/text-chemistry.cpp:499
 #, fuzzy
 msgid "Convert flowed text to text"
 msgstr "Текст у криве"
 
-#: ../src/text-chemistry.cpp:484
+#: ../src/text-chemistry.cpp:504
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "<b>Нема објекта</b> за претварање у криве међу изабраним објектима."
@@ -6287,7 +6283,7 @@ msgid "Information"
 msgstr "Подаци"
 
 #: ../src/ui/dialog/extension-editor.cpp:81
-#: ../share/extensions/funcplot.inx.h:7
+#: ../share/extensions/funcplot.inx.h:7 ../share/extensions/measure.inx.h:2
 msgid "Help"
 msgstr "Помоћ"
 
@@ -6329,19 +6325,19 @@ msgid "Append filename extension automatically"
 msgstr "Аутоматски додај екстензију датотеке"
 
 #: ../src/ui/dialog/filedialog.cpp:1808
-msgid "Source left bound"
+msgid "Left edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1809
-msgid "Source top bound"
+msgid "Top edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1810
-msgid "Source right bound"
+msgid "Right edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1811
-msgid "Source bottom bound"
+msgid "Bottom edge of source"
 msgstr ""
 
 #: ../src/ui/dialog/filedialog.cpp:1812
@@ -6366,8 +6362,8 @@ msgstr "Одредиште штампе"
 
 #: ../src/ui/dialog/filedialog.cpp:1816
 #, fuzzy
-msgid "Dots per inch resolution"
-msgstr "Подразумевана резолуција за извоз:"
+msgid "Resolution (dots per inch)"
+msgstr "Жељена резолуција (тачака по инчу) битмапе"
 
 #. #########################################
 #. ## EXTRA WIDGET -- SOURCE SIDE
@@ -7529,8 +7525,8 @@ msgstr "Гомилање"
 #: ../src/ui/dialog/tracedialog.cpp:531
 #, fuzzy
 msgid ""
-"Stack scans on top of one another (no gaps) instead of or tiling (usually "
-"with gaps)"
+"Stack scans on top of one another (no gaps) instead of tiling (usually with "
+"gaps)"
 msgstr ""
 "Додаје испитивања усправно (без празнина) или поплочава водоравно (обично са "
 "празнинама)"
@@ -8474,6 +8470,16 @@ msgstr "Висина стране"
 #, fuzzy
 msgid "Set page size"
 msgstr "Величина стр_ане:"
+
+#: ../src/ui/widget/style-swatch.cpp:274
+#, c-format
+msgid "Fill: %06x/%.3g"
+msgstr ""
+
+#: ../src/ui/widget/style-swatch.cpp:276
+#, c-format
+msgid "Stroke: %06x/%.3g"
+msgstr ""
 
 #: ../src/ui/widget/style-swatch.cpp:325
 #, c-format
@@ -10283,48 +10289,48 @@ msgstr "Без станице боје у преливу"
 msgid "Change gradient stop offset"
 msgstr "Линеарни прелив линије"
 
-#: ../src/widgets/gradient-vector.cpp:732
+#: ../src/widgets/gradient-vector.cpp:733
 #, fuzzy
 msgid "Add gradient stop"
 msgstr "Кружни прелив линије"
 
-#: ../src/widgets/gradient-vector.cpp:764
+#: ../src/widgets/gradient-vector.cpp:765
 #, fuzzy
 msgid "Delete gradient stop"
 msgstr "Уклони станицу боје"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:800
+#: ../src/widgets/gradient-vector.cpp:801
 msgid "Add stop"
 msgstr "Додај станицу боје"
 
-#: ../src/widgets/gradient-vector.cpp:803
+#: ../src/widgets/gradient-vector.cpp:804
 msgid "Add another control stop to gradient"
 msgstr "Додавање још једне контролне станице боје у прелив"
 
-#: ../src/widgets/gradient-vector.cpp:805
+#: ../src/widgets/gradient-vector.cpp:806
 msgid "Delete stop"
 msgstr "Уклони станицу боје"
 
-#: ../src/widgets/gradient-vector.cpp:808
+#: ../src/widgets/gradient-vector.cpp:809
 msgid "Delete current control stop from gradient"
 msgstr "Уклањање тренутне контролне станице боје из прелива"
 
 #. Label
-#: ../src/widgets/gradient-vector.cpp:819
+#: ../src/widgets/gradient-vector.cpp:820
 msgid "Offset:"
 msgstr "Размак:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:864
+#: ../src/widgets/gradient-vector.cpp:865
 msgid "Stop Color"
 msgstr "Станица боје"
 
-#: ../src/widgets/gradient-vector.cpp:893
+#: ../src/widgets/gradient-vector.cpp:894
 msgid "Gradient editor"
 msgstr "Уређивач прелива"
 
-#: ../src/widgets/gradient-vector.cpp:1169
+#: ../src/widgets/gradient-vector.cpp:1170
 #, fuzzy
 msgid "Change gradient stop color"
 msgstr "Линеарни прелив линије"
@@ -10714,8 +10720,9 @@ msgid "Star: Change number of corners"
 msgstr ""
 
 #: ../src/widgets/toolbox.cpp:944
-msgid "Star: Change spike ratio"
-msgstr ""
+#, fuzzy
+msgid "Star: Change spoke ratio"
+msgstr "Бележење трансформација:"
 
 #: ../src/widgets/toolbox.cpp:998
 #, fuzzy
@@ -11140,6 +11147,7 @@ msgstr "Максимална дужина сегмента"
 
 #: ../share/extensions/addnodes.inx.h:3 ../share/extensions/flatten.inx.h:3
 #: ../share/extensions/markers_strokepaint.inx.h:2
+#: ../share/extensions/perspective.inx.h:1
 #: ../share/extensions/radiusrand.inx.h:3
 #: ../share/extensions/straightseg.inx.h:2
 #: ../share/extensions/summersnight.inx.h:2 ../share/extensions/whirl.inx.h:4
@@ -11302,7 +11310,7 @@ msgstr ""
 msgid "Dot size"
 msgstr "Величина тачке"
 
-#: ../share/extensions/dots.inx.h:2 ../share/extensions/measure.inx.h:1
+#: ../share/extensions/dots.inx.h:2
 msgid "Font size"
 msgstr "Величина фонта"
 
@@ -11311,7 +11319,7 @@ msgid "Number Nodes"
 msgstr "Тачке са бројевима"
 
 #: ../share/extensions/dots.inx.h:4 ../share/extensions/handles.inx.h:2
-#: ../share/extensions/measure.inx.h:3
+#: ../share/extensions/measure.inx.h:10
 msgid "Visualize Path"
 msgstr "Манипулације кривама"
 
@@ -11648,9 +11656,39 @@ msgstr ""
 msgid "Color Markers to Match Stroke"
 msgstr ""
 
-#: ../share/extensions/measure.inx.h:2
+#: ../share/extensions/measure.inx.h:1
+#, fuzzy
+msgid "Font size [px]"
+msgstr "Величина фонта"
+
+#. <param name="unit" type="string" _gui-text="Unit {km|m|cm|mm|in|px|pt}">mm</param>
+#: ../share/extensions/measure.inx.h:4
+#, fuzzy
+msgid "Length Unit: "
+msgstr "Дужина деонице"
+
+#: ../share/extensions/measure.inx.h:5
+#, fuzzy
+msgid "Measure"
+msgstr "Дужина криве"
+
+#: ../share/extensions/measure.inx.h:6
 msgid "Measure Path"
 msgstr "Дужина криве"
+
+#: ../share/extensions/measure.inx.h:7
+#, fuzzy
+msgid "Offset [px]"
+msgstr "Удаљеност криве"
+
+#: ../share/extensions/measure.inx.h:8
+#, fuzzy
+msgid "Precision"
+msgstr "Опис"
+
+#: ../share/extensions/measure.inx.h:9
+msgid "Scale Factor (Drawing:Real Length) = 1:"
+msgstr ""
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -11716,6 +11754,11 @@ msgstr "Размак између линија"
 #, fuzzy
 msgid "Tangential offset"
 msgstr "Усправни померај"
+
+#: ../share/extensions/perspective.inx.h:2
+#, fuzzy
+msgid "Perspective"
+msgstr "Понашање"
 
 #: ../share/extensions/ps_input.inx.h:1
 msgid "Postscript"
@@ -11884,6 +11927,23 @@ msgstr "Windows Metafile (*.wmf)"
 #: ../share/extensions/wmf_input.inx.h:3
 msgid "Windows Metafile Input"
 msgstr "Windows Metafile улаз"
+
+#~ msgid "Print using PDF operators"
+#~ msgstr "Штампај помоћу PDF оператора"
+
+#~ msgid ""
+#~ "Use PDF vector operators. The resulting image is usually smaller in file "
+#~ "size and can be arbitrarily scaled, but patterns will be lost."
+#~ msgstr ""
+#~ "Користе се векторски оператори из PDF-а. Добијена слика ће вероватно бити "
+#~ "умањена и датотека ће бити мање величине, али ће обрасци бити изгубљени"
+
+#~ msgid "PDF Print"
+#~ msgstr "PDF штампа"
+
+#, fuzzy
+#~ msgid "Dots per inch resolution"
+#~ msgstr "Подразумевана резолуција за извоз:"
 
 #~ msgid "You cannot put flowtext on a path. Convert flowtext to text first."
 #~ msgstr ""
