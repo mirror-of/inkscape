@@ -1,18 +1,38 @@
-
 Inkscape 0.45: overview
 
    This release brings the exciting new features developed by the Google
    Summer of Code 2006 participants, as well as tons of other
-   improvements across the board.
+   improvements across the board. Here are the highlights:
+     * Gaussian blur is the first SVG filter supported by Inkscape. You
+       can now blur any object in the drawing, and it remains fully
+       vector and editable. This gives a huge boost to Inkscape as a
+       creative art tool.
+
+     * Display speed and interactivity: not only does Inkscape render
+       faster, but it can now respond to user input before it finished
+       redrawing the screen, which greatly improves the interactivity of
+       the program.
+
+     * History dialog makes it easy to return to any stage that your
+       drawing went through, undoing and redoing your actions in bulk.
+
+     * Bitmap tracing sports a redesigned dialog and several new options.
+
+     * Many new extension effects are added, including Color effects and
+       Pattern along path.
+
+     * Dozens of smaller features are added throughout the program, and
+       hundreds of bugs are fixed.
+
 
 SVG filters: Gaussian blur
 
    Thanks to Google's Summer of Code program, Inkscape now has basic
-   support for [44]SVG filters. The only filter enabled so far is
+   support for SVG filters. The only filter enabled so far is
    Gaussian blur.
 
    With it, you can softly and naturally blur any Inkscape objects:
-   paths, shapes, groups, text], images. Clones inherit blurring from
+   paths, shapes, groups, text, images. Clones inherit blurring from
    their original, but they can also be blurred independently from the
    original (you can create blurred clones with Tile Clones, too). Both
    the fill and stroke of an object are blurred together, creating
@@ -113,9 +133,9 @@ Undo history
           + For readability, consecutive changes of the same type are
             placed in a collapsable branch showing a triangle marker and
             the number of the hidden actions in the branch.
-          + By clicking on an event event in the list, you can easily
-            move through the undo history, i.e. undo or redo any number
-            of actions with one click.
+          + By clicking on an event in the list, you can easily move
+            through the undo history, i.e. undo or redo any number of
+            actions with one click.
 
      * The Undo and Redo commands in the Edit menu display the
        descriptions of the commands to be undone and redone,
@@ -260,53 +280,6 @@ Outline mode
           placing it after the <group id="options"> opening tag.
 
 
-PDF export
-
-     * A new Cairo-based PDF exporter has been added to Inkscape.
-       Inkscape 0.45 can export shapes, strokes, transparency, gradients,
-       patterns, text, and images correctly to Cairo. While clipping
-       paths and masks are known to be faulty or missing. Cairo will
-       write a PDF with vector graphics when possible and fall back to
-       raster graphics when needed. What can be exported as vectors and
-       how much of the image will be rasterized when the fallback kicks
-       in depends on your version of Cairo. Cairo version 1.2 with the
-       pdf backend compiled in is the minimum requirement for any
-       Cairo-based PDF exports.
-
-     * [removed? - mental] The native PDF exporter introduced in Inkscape
-       0.44 is improved along with the new Cairo-based PDF exporter.
-       Changes since Inkscape 0.44 include: New features: bitmap images
-       can be embedded, pdf files can be exported from commandline.
-       Changed behaviour: the pointless text to path question is gone.
-       Fixed bugs: save failure is now detected, miter limits are now >=
-       1, pdfs with transparent gradient are now embeddable, eccentric
-       elliptic gradients fixed, dash style inheritance fixed,
-       transparency inheritance fixed.
-
-
-PS/EPS export
-
-     * There's a new option to embed the fonts used in the document in
-       the PS or EPS exported file. As of now, this works for Type 1
-       fonts only, not TrueType. The option is available when performing
-       the export from the GUI as well as from the command line via the
-       --export-embed-fonts option.
-
-
-EMF export
-
-     * Inkscape has a limited support for exporting EMF (Enhanced Meta
-       File) format. This works only on Windows, and only exports strokes
-       and fills with constant colours. No text, no images, no gradients,
-       no transparency.
-
-
-Command line
-
-     * The new --export-pdf command line parameter allows exporting an
-       SVG image to PDF from command line.
-
-
 Keyboard profiles
 
    The previous release allowed sets of keybinding to be created for
@@ -341,40 +314,75 @@ Keyboard profiles
 
 Extension effects
 
-     * 3 new parameter types have been added to the extension effect UI:
-       tabs, enumerations and optiongroups (radiobuttons). Examples are
-       available of how to use these parameters in the definition of
-       extensions: the new function plotter uses tabs; enumerations are
-       used by the 'Pattern along path' extension; and a small developer
-       example is given to illustrate the use of optiongroups (identical
-       to enumerations).
+   Inkscape's extension effects, written in Python using the inkex
+   utility class, are currently a major growth point of the project. They
+   allow new developers to create functionality very quickly, without
+   having to learn Inkscape's huge C/C++ codebase. However, eventually we
+   plan to move many of these effects into the core of Inkscape, which
+   will make them much faster and more interactive. From this viewpoint,
+   effects can be considered a quick way to prototype and test the
+   algorithms and UI controls of the future Inkscape features. However,
+   this does not prevent effects from being genuinely useful in everyday
+   work, and in this version we have many useful additions.
 
-     * A new extension, Render > Lorem ipsum creates the traditional
-       Latin-like random text for design mock-ups. The number of
-       paragraphs, the number of sentences per paragraph and the possible
-       fluctuation of the number of sentences (for uneven paragraphs) can
-       be adjusted. If no flowed text element is selected, a new one in a
-       new layer is created, matching the size of the canvas.
+New effects
 
-     * Pattern along path: A new powerful extension (in "Generate from
-       path" submenu) allows you to bend, repeat and/or stretch a pattern
+     * Pattern along path: A new powerful extension in the "Generate from
+       path" submenu allows you to bend, repeat and/or stretch a pattern
        object (which can be a path or a group) along a "skeleton" path.
        This makes it easy to create a variety of patterned and shaped
-       strokes. This obsoletes the old "Kochify" extension which is
-       removed.
+       strokes. (This obsoletes the old "Kochify" extension which is
+       removed.)
+
+          Effect's parameters include:
+
+          + Copies of the pattern selects one of the four modes: Single
+            stretched one copy of the pattern is placed the skeleton path
+            and stretched/squeezed to match its length; Repeated
+            streched: as many copies as would fit are placed along the
+            skeleton path and stretched to fit exactly; Single and
+            Repeated: same but without stretching.
+
+          + Deformation type can be one of: Snake bends the pattern
+            flatly in the plane of the drawing, the width not depending
+            on direction; Ribbon bends it as a vertical ribbon, or like a
+            calligraphic stroke with maximum fixation, so that width
+            depends on direction (minimum for vertical parts of the
+            stroke, maximum for horizontal).
+
+          + Several parameters allow you to adjust spacing between the
+            copies of the pattern (for Multiple modes) and their offset
+            in two directions.
+
+          + Normally the effect assumes that the pattern object is
+            horizontal and bends its horizontal axis (at mid-hegith)
+            along the skeleton path. There's a checkbox that allows you
+            to use a vertical pattern instead.
 
      * Color effects: A new group of extensions in the Color submenu of
        the Effects menu allows you to adjust all colors of a selection at
        once. These commands affect both fill and stroke colors, including
-       gradients (but not bitmaps). The commands include a full set of
-       HSL adjustments (increasing/decreasing hue, saturation, or
-       lightness by 5%), Brighter and Darker (adjust brightness by up or
-       down by 10%), Desaturate, Grayscale, Negative, commands for
-       removing or swapping the Red, Green, Blue channels, as well as a
-       Custom command where you can set your own formulas for modifying
-       the color channels. These extensions are a temporary solution; in
-       a future version, similar functionality will be added to Inkscape
-       core.
+       gradients (but not bitmaps). The commands include:
+
+          + a full set of HSL adjustments (increasing/decreasing hue,
+            saturation, or lightness by 5%),
+
+          + Brighter and Darker (adjust brightness up or down by 10%),
+
+          + Desaturate,
+
+          + Grayscale,
+
+          + Negative,
+
+          + commands for removing or swapping the Red, Green, Blue
+            channels,
+
+          + a Custom command where you can set your own formulas for
+            modifying the color channels.
+
+          These extensions are a temporary solution; in a future version,
+          similar functionality will be added to Inkscape core.
 
           Note: undoing color changes on gradients exposes a bug where an
           object seems to "disappear"; this is however only a display
@@ -386,19 +394,43 @@ Extension effects
           genuinely useful functionality which was so far missing in
           Inkscape.
 
-     * The Function Plotter has been extended, providing greater
-       flexibility in x- and y-range definition.
+     * Recent fixes in the processing of SVG <defs /> have made it
+       possible to implement the often requested Color Markers to Match
+       Stroke effect. It is no longer necessary to spend long stretches
+       of time hand editing XML to recolor arrow heads and other markers.
+
+     * Lorem ipsum (in "Render" submenu) is a new extension that creates
+       the traditional Latin-like random text for design mock-ups. The
+       number of paragraphs, the number of sentences per paragraph and
+       the possible fluctuation of the number of sentences (for uneven
+       paragraphs) can be adjusted. If no flowed text element is
+       selected, a new one in a new layer is created, matching the size
+       of the canvas.
+
+     * Fractalize (in "Modify Path" submenu) replaces each segment of the
+       selected path by a crooked line, subdivided to the given depth,
+       with randomly displaced nodes.
 
      * g2png: The new group-to-PNG Python extension (g2png) is an easy
        way to export any group or layer to individual PNG files. It was
-       first created for use in the [58]Inkscape User Manual (also
+       first created for use in the Inkscape User Manual (also
        available in SVN's user_manual module) but is also interesting for
        many other uses. If e.g. you have to draw a set of icons, you can
        draw them in the same document, thus making copying, duplicating,
        cloning etc. easier. Then just create a group for each icon, and
        with the extension, each group ends up in its own PNG file.
 
-     * [color markers to match stroke - acspike]
+
+Improved effects
+
+     * The Function Plotter has been extended, providing greater
+       flexibility in x- and y-range definition.
+
+     * The Measure Path extension is improved with several new parameters
+       added (units, scale, precision, distance from path).
+
+     * The Extract One Image extension is fixed to automatically append
+       filename extension to the created bitmap file.
 
      * The "Blur Edge" extension is renamed into Inset/Outset Halo to
        avoid confusion with the real Gaussian blur that we now support,
@@ -406,8 +438,16 @@ Extension effects
        From the selected path, it creates a group of inset and outset
        paths that form a stepped "halo" around the object.
 
-     * The Extract One Image extension automatically appends filename
-       extension to the created bitmap file.
+
+Infrastructure
+
+     * 3 new parameter types have been added to the extension effect UI:
+       tabs, enumerations and optiongroups (radiobuttons). Examples are
+       available of how to use these parameters in the definition of
+       extensions: the new function plotter uses tabs; enumerations are
+       used by the 'Pattern along path' extension; and a small developer
+       example is given to illustrate the use of optiongroups (identical
+       to enumerations).
 
      * In an extension's INX file, you can specify <effects-menu
        hidden="yes"/> to hide that extension from the Effects menu.
@@ -415,6 +455,46 @@ Extension effects
        keyboard shortcut (by using its id as an "action" in your
        ~/.inkscape/keys/default.xml).
 
+     * In an extension's INX file, you can add needs-document="no"
+       attribute to the <effect> element. This indicates that the
+       extension does not process the current SVG document, and Inkscape
+       does not bother saving and restoring the document from a temporary
+       file which allows this extension to run faster and smoother. (This
+       is used for the new open-in-default-browser Help menu commands
+       which are technically implemented as extensions.)
+
+
+Export formats
+
+
+PDF export
+
+   Inkscape's PDF exporter has been improved:
+     * New features: bitmap images can be embedded; PDF files can be
+       exported from command line using the --export-pdf parameter.
+
+     * Changed behavior: the pointless text to path question is gone.
+
+     * Fixed bugs: save failure is now detected, miter limits are now >=
+       1, PDFs with transparent gradient are now embeddable, eccentric
+       elliptic gradients fixed, dash style inheritance fixed,
+       transparency inheritance fixed.
+
+
+PS/EPS export
+
+   There's a new option to embed the fonts used in the document in the PS
+   or EPS exported file. As of now, this works for Type 1 fonts only, not
+   TrueType. The option is available when performing the export from the
+   GUI as well as from the command line via the --export-embed-fonts
+   option.
+
+EMF export
+
+   Inkscape has a limited support for exporting EMF (Enhanced Meta File)
+   format. This works only on Windows, and only exports strokes and fills
+   with constant colors. No text, no images, no gradients, no
+   transparency.
 
 SVG output
 
@@ -486,17 +566,22 @@ Even more improvements
        convert a flowed text to text before these operations was a
        stumble for many users.
 
-     * [new Help commands]
+     * Several commands were added to the Help menu, providing the
+       long-missing access to basic information about Inkscape and SVG
+       right from the program: Inkscape manual, Command line
+       options, FAQ, Release notes, Bug report page, and the
+       SVG 1.1 specification. All these commands open the
+       corresponding web pages in the user's default web browser.
 
      * Exported PNG images have the correct resolution set in the
        headers.
 
-     * [sculpt profiles - bbyak]
-
      * [new toolbar: squeezable, expansion menu, right-click menus -
        joncruz]
 
-     * [union of a single object - acspike]
+     * The Path -> Union (Ctrl++) operation now functions when only a
+       single object is selected. Use this to remove self-intersections
+       from objects.
 
      * We removed the "hacked" filename entry field that we had added to
        the Open and Save dialogs because starting from version 2.10, GTK+
@@ -531,7 +616,7 @@ Even more improvements
        are not properly supported by GTK. With extended input disabled,
        you can still use your tablet as a mouse.
 
-     * Simplify Path now had two modes when working with a group of
+     * Simplify Path now has two modes when working with a group of
        paths: the default mode, which treats all of the paths as one
        large object to simplify, or the new mode, which acts the same as
        using Simplify on each path in a group separately. In
@@ -602,13 +687,13 @@ Translations
        Inkscape's user interface in that language. Isthay isway oughtbray
        otay usway ybay away ewnay anslatortray.
 
-     * default lituanian template was not installed before, which is now
+     * Default Lithuanian template was not installed before, which is now
        fixed.
 
      * Updated British English, Catalan, Bulgarian and Thai translations.
 
 
-Tutorials and Templates
+Tutorials and templates
 
      * New tutorial "Easter Eggs" by Steve Karg.
 
@@ -616,6 +701,10 @@ Tutorials and Templates
 
      * Russian header and footer templates are added.
 
+
+Dependency changes
+
+   [short text about using GK 2.8 now, and other dependency changes?]
 
 Bugfixes
 
@@ -650,11 +739,11 @@ Bugfixes
        disappeared object will show up OK.
 
      * When resizing objects, scaling numbers in the statusbar are no
-       longer overwritten by other text when pressing special keys (alt,
-       shift, ctrl).
+       longer overwritten by other text when pressing the modifier keys
+       (Alt, Shift, Ctrl).
 
      * To work around problems some users have had with pressure
-       sensitive tablets ([66]bug), the pressure sensitivity can be
+       sensitive tablets (bug), the pressure sensitivity can be
        disabled from the misc tab of Inkscape preferences dialogue. The
        tablet can then be used, though with reduced functionality.
 
@@ -666,7 +755,7 @@ Bugfixes
        checks whether the saved position of the dialog is offscreen, if
        so it will move the dialog to the center of the screen. Note that
        this not solve all problems. If the dialog is still not visible,
-       go to the [67]bugreport where a procedure is given to make the
+       go to the bugreport where a procedure is given to make the
        dialog visible (editting preferences.xml).
 
      * Performing a boolean union without selecting an object no longer
@@ -683,19 +772,51 @@ Bugfixes
 Known problems
 
 
-Problem with Dialogs on Top on Microsoft Windows (win32)
+Problem with "Dialogs on Top" on Windows
 
-   [Describe minimizing of document window problem, and solution:
-   right-click taskbar button and press "Restore"]
+     * Although the "Dialogs on Top" option is now available on Windows
+       (File > Inkscape Preferences > Windows), it does not work exactly
+       as it should (yet!). When the document window is minimized, the
+       dialogs remain visible, i.e. are not minimized together with the
+       document window. Because of this, it is not possible to get the
+       document window back by clicking its taskbar button. A workaround
+       to this problem is to right-click the Inkscape taskbar button and
+       select "Restore". We expect that future releases of GTK will solve
+       this problem.
+
+
+Numerical Python required for Perspective effect
+
+     * This effect will not work until you install a python module called
+       numpy (Numerical Python). It can be downloaded at
+       numpy.scipy.org.
+
+
+Do not use a clone of an object as its clipping path
+
+     * There's a known crash when you try to use an object's clone as its
+       clipping path. Either unlink the clone first, or clip one clone of
+       a source object (not the source itself) by another clone of the
+       same. Fixing this bug requires some deep changes in the code and
+       therefore was postponed until after 0.45 so as not to delay the
+       release.
+
+
+Non-Unicode symbol fonts on Windows don't work
+
+     * On Windows, symbol fonts without a Unicode map do not work. This
+       is a limitation of the Pango library that we use.
+
 
 OSX 10.3.9: cannot open files
 
-   This bug is due to a missing symbol (_statvfs) in the system library
-   /usr/lib/libSystem.B.dylib on 10.3.9. The dependency is introduced by
-   one of the gnome-vf2 modules. It is not something we can easily fix
-   other than by not linking with gnome-vfs2, which we will do for or
-   upcoming 0.45 release if no other solution becomes apparent.
-   [mjwybrow]
+     * This bug is due to a missing symbol (_statvfs) in the system
+       library /usr/lib/libSystem.B.dylib on 10.3.9. The dependency is
+       introduced by one of the gnome-vf2 modules. It is not something we
+       can easily fix other than by not linking with gnome-vfs2, which we
+       will do for or upcoming 0.45 release if no other solution becomes
+       apparent. [mjwybrow]
+
 
 Problems with some Debian libgc-6.7 packages
 
@@ -724,3 +845,6 @@ Beware of defective themes on Linux
        problems also affect older versions of Inkscape.
 
 
+
+For information on prior releases, please see:
+    http://wiki.inkscape.org:8080/wiki/index.php/Inkscape
