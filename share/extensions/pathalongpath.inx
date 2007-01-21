@@ -4,18 +4,18 @@
 	<dependency type="executable" location="extensions">pathmodifier.py</dependency>
 	<dependency type="executable" location="extensions">pathalongpath.py</dependency>
 	<dependency type="executable" location="extensions">inkex.py</dependency>
-	<param name="title" type="description">This effect bends a pattern object along an arbitrary "skeleton" path. The pattern can be a path or a group of paths. First, select the pattern object; then add to selection the skeleton path; then call this effect.</param>
+	<_param name="title" type="description">This effect bends a pattern object along an arbitrary "skeleton" path. The pattern can be a path or a group of paths. First, select the pattern object; then add to selection the skeleton path; then call this effect.</_param>
 
 	<param name="copymode" type="enum" _gui-text="Copies of the pattern:">
-	       <item>Single</item>
-	       <item>Single, stretched</item>
-	       <item>Repeated</item>
-	       <item>Repeated, stretched</item>
+	       <_item>Single</_item>
+	       <_item>Single, stretched</_item>
+	       <_item>Repeated</_item>
+	       <_item>Repeated, stretched</_item>
 	</param>
 
 	<param name="kind" type="enum" _gui-text="Deformation type:">
-	       <item>Snake</item>
-	       <item>Ribbon</item>
+	       <_item>Snake</_item>
+	       <_item>Ribbon</_item>
 	</param>
 
 	<param name="space"     type="float"   _gui-text="Space between copies:" min="-10000.0" max="10000.0" >0.0</param>
