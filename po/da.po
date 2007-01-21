@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-20 20:06+0100\n"
+"POT-Creation-Date: 2007-01-21 13:27+0100\n"
 "PO-Revision-Date: 2006-11-05 18:36+0100\n"
 "Last-Translator: Rune Rønde Laursen <runerl@skjoldhoej.dk>\n"
 "Language-Team: Dansk <dansk@klid.dk>\n"
@@ -11202,7 +11202,7 @@ msgid "Number Nodes"
 msgstr "Nummerér knudpunkter"
 
 #: ../share/extensions/dots.inx.h:4 ../share/extensions/handles.inx.h:2
-#: ../share/extensions/measure.inx.h:10
+#: ../share/extensions/measure.inx.h:11
 msgid "Visualize Path"
 msgstr "Visualisér sti"
 
@@ -11305,6 +11305,11 @@ msgid "Extract One Image"
 msgstr "Udpak et billede"
 
 #: ../share/extensions/extractimage.inx.h:3
+#, fuzzy
+msgid "Note: The file extension is appended automatically."
+msgstr "Tilføj filnavneendelse automatisk"
+
+#: ../share/extensions/extractimage.inx.h:4
 msgid "Path to save image"
 msgstr "Sti til gemning af billede"
 
@@ -11572,6 +11577,16 @@ msgstr "Beskrivelse"
 msgid "Scale Factor (Drawing:Real Length) = 1:"
 msgstr ""
 
+#: ../share/extensions/measure.inx.h:10
+msgid ""
+"This effect measures the length of the selected path and adds it as a text-"
+"on-path object with the selected unit. The number of significant digits can "
+"be controlled by the Precision field. The Offset field controls the distance "
+"from the text to the path. The Scale factor can be used to make measurements "
+"in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
+"real world, Scale must be set to 250."
+msgstr ""
+
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
 msgstr "Vinkel"
@@ -11629,13 +11644,47 @@ msgstr "Mønsterforskydning"
 
 #: ../share/extensions/pathalongpath.inx.h:8
 #, fuzzy
+msgid "Repeated"
+msgstr "Gentag:"
+
+#: ../share/extensions/pathalongpath.inx.h:9
+msgid "Repeated, stretched"
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx.h:10
+msgid "Ribbon"
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx.h:11
+#, fuzzy
+msgid "Single"
+msgstr "Vinkel"
+
+#: ../share/extensions/pathalongpath.inx.h:12
+msgid "Single, stretched"
+msgstr ""
+
+#: ../share/extensions/pathalongpath.inx.h:13
+#, fuzzy
+msgid "Snake"
+msgstr "Vrid"
+
+#: ../share/extensions/pathalongpath.inx.h:14
+#, fuzzy
 msgid "Space between copies:"
 msgstr "Mellemrum mellem linjer"
 
-#: ../share/extensions/pathalongpath.inx.h:9
+#: ../share/extensions/pathalongpath.inx.h:15
 #, fuzzy
 msgid "Tangential offset"
 msgstr "Lodret forskydning"
+
+#: ../share/extensions/pathalongpath.inx.h:16
+msgid ""
+"This effect bends a pattern object along an arbitrary \"skeleton\" path. The "
+"pattern can be a path or a group of paths. First, select the pattern object; "
+"then add to selection the skeleton path; then call this effect."
+msgstr ""
 
 #: ../share/extensions/perspective.inx.h:2
 #, fuzzy
