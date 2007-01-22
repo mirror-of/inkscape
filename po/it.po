@@ -9,18 +9,19 @@
 #: ../src/widgets/toolbox.cpp:4035 ../src/widgets/toolbox.cpp:4056
 #: ../src/widgets/toolbox.cpp:4085 ../src/widgets/toolbox.cpp:4106
 #: ../src/widgets/toolbox.cpp:4133
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.45~pre1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-21 13:27+0100\n"
-"PO-Revision-Date: 2007-01-18 14:14+0100\n"
+"PO-Revision-Date: 2007-01-22 20:32+0100\n"
 "Last-Translator: Luca Bruno <luca.br@uno.it>>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);"
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
@@ -2890,16 +2891,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
-"separate"
-msgid_plural ""
-"Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
-"separate"
-msgstr[0] ""
+"separateGradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> "
+"to separate"
+msgstr ""
 "<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
-"<b>Maiusc</b> per separare il fuoco"
-msgstr[1] ""
-"<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
-"<b>Maiusc</b> per separare il fuoco"
+"<b>Maiusc</b> per separare il fuoco<b>Centro</b> e <b>fuoco</b> del "
+"gradiente radiale; trascinare con <b>Maiusc</b> per separare il fuoco"
 
 #: ../src/helper/units.cpp:36
 msgid "Unit"
@@ -3798,16 +3795,13 @@ msgstr "Selezionare un singolo oggetto per modificarne i nodi o le maniglie"
 #, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
-"or <b>drag around</b> nodes to select."
-msgid_plural ""
-"<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
-"or <b>drag around</b> nodes to select."
-msgstr[0] ""
+"or <b>drag around</b> nodes to select.<b>0</b> out of <b>%i</b> nodes "
+"selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to "
+"select."
+msgstr ""
 "Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno agli "
-"oggetti per selezionare."
-msgstr[1] ""
-"Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno agli "
-"oggetti per selezionare."
+"oggetti per selezionare.Nessun oggetto selezionato. Click, Maiusc+click, o "
+"trascinare attorno agli oggetti per selezionare."
 
 #: ../src/nodepath.cpp:4271
 msgid "Drag the handles of the object to modify it."
@@ -3824,10 +3818,8 @@ msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati; %s. %s."
 #, fuzzy, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgid_plural ""
 "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgstr[0] "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
-msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati; %s. %s."
+msgstr "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
 
 #: ../src/nodepath.cpp:4292
 #, c-format
@@ -4339,12 +4331,10 @@ msgid "Move"
 msgstr "Muovi"
 
 #: ../src/selection-chemistry.cpp:1754
-#, fuzzy
 msgid "Move vertically by pixels"
 msgstr "Scosta verticalmente di pixel"
 
 #: ../src/selection-chemistry.cpp:1757
-#, fuzzy
 msgid "Move horizontally by pixels"
 msgstr "Scosta orizzontalmente di pixel"
 
@@ -4817,9 +4807,9 @@ msgid "%s; <i>clipped</i>"
 msgstr ""
 
 #: ../src/sp-item.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "%s; <i>masked</i>"
-msgstr "<i>%s</i>"
+msgstr "%s; <i>mascherato</i>"
 
 #: ../src/sp-line.cpp:187
 msgid "<b>Line</b>"
@@ -5896,6 +5886,8 @@ msgid ""
 "A grid with vertical lines and two diagonal line groups, each representing "
 "the projection of a primary axis."
 msgstr ""
+"Una griglia con linee verticali e due gruppi di linee diagonali, che "
+"rappresentano ognuna la proiezone di un asse principale."
 
 #: ../src/ui/dialog/document-properties.cpp:247
 msgid "Grid _units:"
@@ -6229,9 +6221,8 @@ msgid "Destination height"
 msgstr "Altezza destinazione"
 
 #: ../src/ui/dialog/filedialog.cpp:1816
-#, fuzzy
 msgid "Resolution (dots per inch)"
-msgstr "Risoluzione preferita della bitmap (in punti per pollice)"
+msgstr "Risoluzione (in punti per pollice)"
 
 #. #########################################
 #. ## EXTRA WIDGET -- SOURCE SIDE
@@ -6776,6 +6767,9 @@ msgid ""
 "ReleaseNotes on this issue! (Rightclick the taskbar button and press "
 "'Restore' to bring back a minimized document window)"
 msgstr ""
+"Determina se se le sottofinestre stanno sopra la finestra del documento.Si "
+"vedano le ReleaseNotes in caso di problemi! (Cliccare col destro sulla barra "
+"e premere «Ripristoina» per mostrare nuovamente un documento minimizzato)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:440
 msgid "Windows"
@@ -6933,22 +6927,26 @@ msgid ""
 "Best quality, but display may be very slow at high zooms (bitmap export "
 "always uses best quality)"
 msgstr ""
+"Qualità ottima, ma la visualizzaione può essere molto lenta ad alti "
+"ingrandimenti (l'esportazione bitmpa usa sempre l'ottima qualità)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:515
 msgid "Better quality, but slower display"
-msgstr ""
+msgstr "Qualità buona, ma visualizzazione più lenta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:517
 msgid "Average quality, acceptable display speed"
-msgstr ""
+msgstr "Qualità media, buon compromesso per velocità di visualizzazione"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:519
 msgid "Lower quality (some artifacts), but display is faster"
-msgstr ""
+msgstr "Qualità scadente (artefatti visibili), ma veloce in visualizzazione"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:521
 msgid "Lowest quality (considerable artifacts), but display is fastest"
 msgstr ""
+"Qualità pessima (pesanti artefatti visibili), ma velocissimo in "
+"visualizzazione"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:523
 msgid "Filters"
@@ -7406,7 +7404,7 @@ msgstr "Rimuovi sfondo"
 
 #: ../src/ui/dialog/tracedialog.cpp:539
 msgid "Remove bottom (background) layer when done"
-msgstr ""
+msgstr "Rimuovi ultimo livello (sfondo) quando finito"
 
 #: ../src/ui/dialog/tracedialog.cpp:543
 msgid "Multiple scans: creates a group of paths"
@@ -7442,7 +7440,7 @@ msgstr "Smussa angoli"
 
 #: ../src/ui/dialog/tracedialog.cpp:575
 msgid "Smooth out sharp corners of the trace"
-msgstr ""
+msgstr "Smussa gli angoli della vettorizzazione"
 
 #: ../src/ui/dialog/tracedialog.cpp:584
 msgid "Increase this to smooth corners more"
@@ -7484,7 +7482,7 @@ msgstr "Selezione sottoimmagine SIOX"
 
 #: ../src/ui/dialog/tracedialog.cpp:639
 msgid "Cover the area you want to select as the foreground"
-msgstr ""
+msgstr "Copre l'area che si vuole selezionare come primo piano"
 
 #. ## preview
 #: ../src/ui/dialog/tracedialog.cpp:644
@@ -8321,12 +8319,12 @@ msgstr "Imposta dimensione pagina"
 #: ../src/ui/widget/style-swatch.cpp:274
 #, c-format
 msgid "Fill: %06x/%.3g"
-msgstr ""
+msgstr "Riempimento: %06x/%.3g"
 
 #: ../src/ui/widget/style-swatch.cpp:276
 #, c-format
 msgid "Stroke: %06x/%.3g"
-msgstr ""
+msgstr "Contorno: %06x/%.3g"
 
 #: ../src/ui/widget/style-swatch.cpp:325
 #, c-format
@@ -10283,24 +10281,34 @@ msgid ""
 "Now <b>gradients</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
 msgstr ""
+"Ora i <b>gradienti</b> vengono <b>trasformati</b> insieme ai loro oggetti "
+"quando questi vengono trasformati (spostati, ridimensionati, ruotati o "
+"distorti)."
 
 #: ../src/widgets/select-toolbar.cpp:367
 msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed "
 "(moved, scaled, rotated, or skewed)."
 msgstr ""
+"Ora i <b>gradienti</b> restano <b>fissi</b> quando gli oggetti vengono "
+"trasformati (spostati, ridimensionati, ruotati o distorti)."
 
 #: ../src/widgets/select-toolbar.cpp:375
 msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
 msgstr ""
+"Ora i <b>motivi</b> vengono <b>trasformati</b> insieme ai loro oggetti "
+"quando questi vengono trasformati (spostati, ridimensionati, ruotati o "
+"distorti)."
 
 #: ../src/widgets/select-toolbar.cpp:377
 msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
 msgstr ""
+"Ora i <b>motivi</b> restano <b>fissi</b> quando gli oggetti vengono "
+"trasformati (spostati, ridimensionati, ruotati o distorti)."
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
@@ -10547,7 +10555,6 @@ msgid "Star: Change number of corners"
 msgstr "Stella: cambia numero di vertici"
 
 #: ../src/widgets/toolbox.cpp:944
-#, fuzzy
 msgid "Star: Change spoke ratio"
 msgstr "Stella: Cambia lunghezza dei raggi"
 
@@ -11110,6 +11117,8 @@ msgid ""
 "If you do not have it, there is likely to be something wrong with your "
 "Inkscape installation."
 msgstr ""
+"Lo script dia2svg dovrebbe venire installato insieme ad Inkscape.Se non è "
+"presente, è probabile che vi sia qualche problema nell'installazione"
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Dot size"
@@ -11223,9 +11232,8 @@ msgid "Extract One Image"
 msgstr "Estrai un'immagine"
 
 #: ../share/extensions/extractimage.inx.h:3
-#, fuzzy
 msgid "Note: The file extension is appended automatically."
-msgstr "Aggiungi automaticamente l'estensione"
+msgstr "Nota: l'estensione del file viene aggiunta automaticamente"
 
 #: ../share/extensions/extractimage.inx.h:4
 msgid "Path to save image"
@@ -11454,34 +11462,29 @@ msgid "Color Markers to Match Stroke"
 msgstr "Uniforma colore delimitatori e contorno"
 
 #: ../share/extensions/measure.inx.h:1
-#, fuzzy
 msgid "Font size [px]"
-msgstr "Dimensione carattere"
+msgstr "Dimensione carattere [px]"
 
 #. <param name="unit" type="string" _gui-text="Unit {km|m|cm|mm|in|px|pt}">mm</param>
 #: ../share/extensions/measure.inx.h:4
-#, fuzzy
 msgid "Length Unit: "
-msgstr "Lunghezza:"
+msgstr "Unità di lunghezza:"
 
 #: ../share/extensions/measure.inx.h:5
-#, fuzzy
 msgid "Measure"
-msgstr "Misura tracciato"
+msgstr "Misura"
 
 #: ../share/extensions/measure.inx.h:6
 msgid "Measure Path"
 msgstr "Misura tracciato"
 
 #: ../share/extensions/measure.inx.h:7
-#, fuzzy
 msgid "Offset [px]"
-msgstr "Tracciato estruso"
+msgstr "Margine [px]"
 
 #: ../share/extensions/measure.inx.h:8
-#, fuzzy
 msgid "Precision"
-msgstr "Descrizione"
+msgstr "Precisione"
 
 #: ../share/extensions/measure.inx.h:9
 msgid "Scale Factor (Drawing:Real Length) = 1:"
@@ -11546,31 +11549,28 @@ msgid "Pattern is vertical"
 msgstr "Motivo verticale"
 
 #: ../share/extensions/pathalongpath.inx.h:8
-#, fuzzy
 msgid "Repeated"
-msgstr "Ripetizione:"
+msgstr "Ripetuto"
 
 #: ../share/extensions/pathalongpath.inx.h:9
 msgid "Repeated, stretched"
-msgstr ""
+msgstr "Ripetuto, adattato"
 
 #: ../share/extensions/pathalongpath.inx.h:10
 msgid "Ribbon"
-msgstr ""
+msgstr "Nastro"
 
 #: ../share/extensions/pathalongpath.inx.h:11
-#, fuzzy
 msgid "Single"
-msgstr "Angolo"
+msgstr "Singolo"
 
 #: ../share/extensions/pathalongpath.inx.h:12
 msgid "Single, stretched"
-msgstr ""
+msgstr "Singolo, adattato"
 
 #: ../share/extensions/pathalongpath.inx.h:13
-#, fuzzy
 msgid "Snake"
-msgstr "Distorsione"
+msgstr "Serpente"
 
 #: ../share/extensions/pathalongpath.inx.h:14
 msgid "Space between copies:"
@@ -11755,6 +11755,39 @@ msgstr "Windows Metafile (*.wmf)"
 msgid "Windows Metafile Input"
 msgstr "Input Windows Metafile"
 
+#: ../src/gradient-drag.cpp:678
+#, fuzzy, c-format
+msgid ""
+"Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
+"separate"
+"Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
+"separate"
+msgstr ""
+"<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
+"<b>Maiusc</b> per separare il fuoco"
+"<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
+"<b>Maiusc</b> per separare il fuoco"
+
+#: ../src/nodepath.cpp:4265
+#, fuzzy, c-format
+msgid ""
+"<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
+"or <b>drag around</b> nodes to select."
+"<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
+"or <b>drag around</b> nodes to select."
+msgstr ""
+"Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno agli "
+"oggetti per selezionare."
+"Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno agli "
+"oggetti per selezionare."
+
+#: ../src/nodepath.cpp:4286
+#, fuzzy, c-format
+msgid ""
+"<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+"<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+msgstr "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
+
 #~ msgid "Print using PDF operators"
 #~ msgstr "Stampa usando gli operatori PDF"
 
@@ -11768,34 +11801,6 @@ msgstr "Input Windows Metafile"
 
 #~ msgid "PDF Print"
 #~ msgstr "Stampa PDF"
-
-#, fuzzy
-#~ msgid ""
-#~ "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
-#~ "separateGradient point shared by <b>%d</b> gradients; drag with <b>Shift</"
-#~ "b> to separate"
-#~ msgstr ""
-#~ "<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
-#~ "<b>Maiusc</b> per separare il fuoco<b>Centro</b> e <b>fuoco</b> del "
-#~ "gradiente radiale; trascinare con <b>Maiusc</b> per separare il fuoco"
-
-#, fuzzy
-#~ msgid ""
-#~ "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</"
-#~ "b>, or <b>drag around</b> nodes to select.<b>0</b> out of <b>%i</b> nodes "
-#~ "selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes "
-#~ "to select."
-#~ msgstr ""
-#~ "Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno "
-#~ "agli oggetti per selezionare.Nessun oggetto selezionato. Click, Maiusc"
-#~ "+click, o trascinare attorno agli oggetti per selezionare."
-
-#, fuzzy
-#~ msgid ""
-#~ "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %"
-#~ "s.<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> "
-#~ "subpaths. %s."
-#~ msgstr "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
 
 #~ msgid "Dots per inch resolution"
 #~ msgstr "Risoluzione in punti per pollice"
