@@ -26,7 +26,7 @@ LangString lng_LICENSE_BOTTOM_TEXT   ${LANG_ITALIAN} "$(^Name) è rilasciato sott
 LangString lng_DIFFERENT_USER ${LANG_ITALIAN} "Inkscape è stato installato dall'utente $0.  Potrebbe non essere possibile portare a termine l'installazione.   Accedere come $0 e riprovare."
 
 ; want to uninstall before install
-LangString lng_WANT_UNINSTALL_BEFORE ${LANG_ITALIAN} "$R1 has already been installed. $\nDo you want to remove the previous version before installing $(^Name) ?"
+LangString lng_WANT_UNINSTALL_BEFORE ${LANG_ITALIAN} "$R1 è già stato installato. $\n Si vuole rimuovere la versione precedente prima di installare $(^Name) ?"
 
 ; press OK to continue press Cancel to abort
 LangString lng_OK_CANCEL_DESC ${LANG_ITALIAN} "$\n$\nPress OK to continue or press CANCEL to abort."
@@ -98,13 +98,13 @@ LangString lng_SVGWriterDesc ${LANG_ITALIAN} "Imposta ${PRODUCT_NAME} come edito
 LangString lng_ContextMenu ${LANG_ITALIAN} "Menu Contestuale"
 
 ; Context Menu description
-LangString lng_ContextMenuDesc ${LANG_ITALIAN} "Aggiunge ${PRODUCT_NAME} nel Menu Contestuale per i file SVG"
+LangString lng_ContextMenuDesc ${LANG_ITALIAN} "Aggiungi ${PRODUCT_NAME} nel Menu Contestuale per i file SVG"
 
 ; remove personal preferences
 LangString lng_DeletePrefs ${LANG_ITALIAN} "Delete personal preferences"
 
 ; remove personal preferences description
-LangString lng_DeletePrefsDesc ${LANG_ITALIAN} "Delete personal preferences leftover from previous installations"
+LangString lng_DeletePrefsDesc ${LANG_ITALIAN} "Rimuovi impostazioni personali lasciate da precedenti installazioni"
 
 
 ; Additional files section
@@ -123,7 +123,7 @@ LangString lng_ExamplesDesc $(LANG_ITALIAN) "Esempi usando ${PRODUCT_NAME}"
 LangString lng_Tutorials $(LANG_ITALIAN) "Tutorial"
 
 ; Tutorials section description
-LangString lng_TutorialsDesc $(LANG_ITALIAN) "Tutorial usando ${PRODUCT_NAME}"
+LangString lng_TutorialsDesc $(LANG_ITALIAN) "Tutorial per ${PRODUCT_NAME}"
 
 
 ; Languages section
