@@ -6,16 +6,12 @@
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <luca.br@uno.it>, 2005-2007.
 #
-#: ../src/widgets/toolbox.cpp:4035 ../src/widgets/toolbox.cpp:4056
-#: ../src/widgets/toolbox.cpp:4085 ../src/widgets/toolbox.cpp:4106
-#: ../src/widgets/toolbox.cpp:4133
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: inkscape 0.45~pre1\n"
+"Project-Id-Version: inkscape 0.45~pre2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-21 13:27+0100\n"
-"PO-Revision-Date: 2007-01-22 20:32+0100\n"
+"PO-Revision-Date: 2007-01-24 18:12+0100\n"
 "Last-Translator: Luca Bruno <luca.br@uno.it>>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -2339,7 +2335,7 @@ msgid ""
 "but the action you requested has been cancelled."
 msgstr ""
 "Inkscape ha ricevuto un errore dallo script invocato. Il testo restituito "
-"dall'errore è disponibile più sotto. Inkscape continuerà a funzionare, ma "
+"dall'errore è disponibile qui sotto. Inkscape continuerà a funzionare, ma "
 "l'azione richiesta è stata annullata."
 
 #: ../src/extension/implementation/script.cpp:1027
@@ -2384,9 +2380,8 @@ msgid "Number of steps"
 msgstr "Numero di passi"
 
 #: ../src/extension/internal/bluredge.cpp:134
-#, fuzzy
 msgid "Number of inset/outset copies of the object to make"
-msgstr "Numero delle copie dell'oggetti da fare per simulare il blur"
+msgstr "Numero delle copie intruse/estruse dell'oggetto"
 
 #: ../src/extension/internal/bluredge.cpp:138
 #: ../share/extensions/interp.inx.h:3 ../share/extensions/motion.inx.h:3
@@ -2483,7 +2478,7 @@ msgstr "Render"
 
 #: ../src/extension/internal/grid.cpp:226
 msgid "Draw a path which is a grid"
-msgstr "Disegna un tracciato che è una griglia"
+msgstr "Disegna un tracciato a forma di griglia"
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:106
 msgid "LaTeX Output"
@@ -7390,12 +7385,11 @@ msgid "Stack scans"
 msgstr "Scansione pila"
 
 #: ../src/ui/dialog/tracedialog.cpp:531
-#, fuzzy
 msgid ""
 "Stack scans on top of one another (no gaps) instead of tiling (usually with "
 "gaps)"
 msgstr ""
-"Scansione della pila verticale (senza interruzioni) o orizzontale "
+"Scansione della pila verticale (senza interruzioni) invece che in serie "
 "(solitamente con interruzioni)"
 
 #: ../src/ui/dialog/tracedialog.cpp:534
@@ -7408,7 +7402,7 @@ msgstr "Rimuovi ultimo livello (sfondo) quando finito"
 
 #: ../src/ui/dialog/tracedialog.cpp:543
 msgid "Multiple scans: creates a group of paths"
-msgstr ""
+msgstr "Scansione multipla: crea un gruppo di tracciati"
 
 #. # end multiple scan
 #. ## end mode page
@@ -7452,13 +7446,14 @@ msgstr "Ottimizza tracciato"
 
 #: ../src/ui/dialog/tracedialog.cpp:591
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
-msgstr ""
+msgstr "Prova ad ottimizzare i tracciati unendo segmenti curvi Bezier adiacenti"
 
 #: ../src/ui/dialog/tracedialog.cpp:599
 msgid ""
 "Increase this to reduce the number of nodes in the trace by more aggressive "
 "optimization"
-msgstr ""
+msgstr "Aumentare il valore per ridurre il numero di nodi nella vettorizzazione usando "
+"ottimizzazioni più spinte"
 
 #. ## end option page
 #: ../src/ui/dialog/tracedialog.cpp:606 ../src/ui/dialog/tracedialog.cpp:612
@@ -10733,7 +10728,7 @@ msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 1 = fixed "
 "angle)"
 msgstr ""
-"L'angolo di fissaggio della penna (0 = sempre perpendicolare alla direzione, "
+"L'angolo di fissaggiodella penna (0 = sempre perpendicolare alla direzione, "
 "1 = angolo fisso)"
 
 #: ../src/widgets/toolbox.cpp:2248
@@ -10744,7 +10739,8 @@ msgstr "Estremi:"
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
 "round caps)"
-msgstr ""
+msgstr "Aumentare il valore per avere maggior protrusione degli spigoli di fine contorno "
+"(0 = nessuno spigolo, 1 = spigolo arrotondato)"
 
 #: ../src/widgets/toolbox.cpp:2258 ../src/widgets/toolbox.cpp:2415
 msgid "Tremor:"
@@ -10769,7 +10765,7 @@ msgstr "Massa:"
 
 #: ../src/widgets/toolbox.cpp:2279 ../src/widgets/toolbox.cpp:2436
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
-msgstr ""
+msgstr "Aumentare il valore per impostare il ritardo al pennino, come se fosse rallentato per inerzia"
 
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
@@ -10945,7 +10941,7 @@ msgstr "Lunghezza:"
 
 #: ../src/widgets/toolbox.cpp:4347
 msgid "Ideal length for connectors when layout is applied"
-msgstr ""
+msgstr "Lunghezza ideale dei connettori quando il modello è applicato"
 
 #: ../src/widgets/toolbox.cpp:4362
 msgid "Make connectors with end-markers (arrows) point downwards"
@@ -11325,7 +11321,7 @@ msgstr ""
 
 #: ../share/extensions/funcplot.inx.h:16
 msgid "y-value of rectangle's bottom"
-msgstr ""
+msgstr "Valore y per il bordo inferiore del rettangolo"
 
 #: ../share/extensions/funcplot.inx.h:17
 msgid "y-value of rectangle's top"
@@ -11754,3 +11750,4 @@ msgstr "Windows Metafile (*.wmf)"
 #: ../share/extensions/wmf_input.inx.h:3
 msgid "Windows Metafile Input"
 msgstr "Input Windows Metafile"
+
