@@ -6,18 +6,21 @@
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <luca.br@uno.it>, 2005-2007.
 #
+#: ../src/widgets/toolbox.cpp:4035 ../src/widgets/toolbox.cpp:4056
+#: ../src/widgets/toolbox.cpp:4085 ../src/widgets/toolbox.cpp:4106
+#: ../src/widgets/toolbox.cpp:4133
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.45~pre2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 13:27+0100\n"
+"POT-Creation-Date: 2007-01-25 16:13+0100\n"
 "PO-Revision-Date: 2007-01-24 18:12+0100\n"
 "Last-Translator: Luca Bruno <luca.br@uno.it>>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
@@ -2883,15 +2886,19 @@ msgstr ""
 "<b>Maiusc</b> per separare il fuoco"
 
 #: ../src/gradient-drag.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
-"separateGradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> "
-"to separate"
-msgstr ""
-"<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
-"<b>Maiusc</b> per separare il fuoco<b>Centro</b> e <b>fuoco</b> del "
-"gradiente radiale; trascinare con <b>Maiusc</b> per separare il fuoco"
+"separate"
+msgid_plural ""
+"Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
+"separate"
+msgstr[0] ""
+"Punto di gradiente condiviso da <b>%d</b> gradiente; trascinare con "
+"<b>Maiusc</b> per separare"
+msgstr[1] ""
+"Punto di gradiente condiviso da <b>%d</b> gradienti; trascinare con "
+"<b>Maiusc</b> per separare"
 
 #: ../src/helper/units.cpp:36
 msgid "Unit"
@@ -3700,7 +3707,7 @@ msgstr "Ritira maniglia"
 msgid "Move node handle"
 msgstr "Muovi maniglia del nodo"
 
-#: ../src/nodepath.cpp:3465
+#: ../src/nodepath.cpp:3464
 #, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -3711,19 +3718,19 @@ msgstr ""
 "far scattare gli angoli; <b>Alt</b> per bloccare la lunghezza; <b>Maiusc</b> "
 "per ruotare entrambe le maniglie"
 
-#: ../src/nodepath.cpp:3643
+#: ../src/nodepath.cpp:3642
 msgid "Rotate nodes"
 msgstr "Ruota nodi"
 
-#: ../src/nodepath.cpp:3768
+#: ../src/nodepath.cpp:3767
 msgid "Scale nodes"
 msgstr "Ridimensiona nodi"
 
-#: ../src/nodepath.cpp:3815
+#: ../src/nodepath.cpp:3814
 msgid "Flip nodes"
 msgstr "Inverti nodi"
 
-#: ../src/nodepath.cpp:3980
+#: ../src/nodepath.cpp:3979
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3733,40 +3740,40 @@ msgstr ""
 "di direzione"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4204
+#: ../src/nodepath.cpp:4205
 msgid "end node"
 msgstr "nodo finale"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:4209
+#: ../src/nodepath.cpp:4210
 msgid "cusp"
 msgstr "angolare"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:4212
+#: ../src/nodepath.cpp:4213
 msgid "smooth"
 msgstr "curvo"
 
-#: ../src/nodepath.cpp:4214
+#: ../src/nodepath.cpp:4215
 msgid "symmetric"
 msgstr "simmetrico"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4220
+#: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "nodo finale, maniglia ritratta (trascinare con <b>Maiusc</b> per estenderla)"
 
-#: ../src/nodepath.cpp:4222
+#: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "una maniglia ritratta (trascinare con <b>Maiusc</b> per estenderla)"
 
-#: ../src/nodepath.cpp:4225
+#: ../src/nodepath.cpp:4226
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "entrambe le maniglie ritratte (trascinare con <b>Maiusc</b> per estenderle)"
 
-#: ../src/nodepath.cpp:4237
+#: ../src/nodepath.cpp:4238
 msgid ""
 "<b>Drag</b> nodes or node handles; <b>Alt+drag</b> nodes to sculpt; "
 "<b>arrow</b> keys to move nodes, <b>&lt; &gt;</b> to scale, <b>[ ]</b> to "
@@ -3776,47 +3783,52 @@ msgstr ""
 "nodi da scolpire; usare i <b>tasti freccia</b> per spostare i nodi, <b>&lt; "
 "&gt;</b> per ridimensionare, <b>[ ]</b> per ruotare"
 
-#: ../src/nodepath.cpp:4238
+#: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Trascinare</b> il nodo o le sue maniglie; usare i <b>tasti freccia</b> "
 "per spostare il nodo"
 
-#: ../src/nodepath.cpp:4261 ../src/nodepath.cpp:4273
+#: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
 msgstr "Selezionare un singolo oggetto per modificarne i nodi o le maniglie"
 
-#: ../src/nodepath.cpp:4265
-#, fuzzy, c-format
+#: ../src/nodepath.cpp:4266
+#, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
-"or <b>drag around</b> nodes to select.<b>0</b> out of <b>%i</b> nodes "
-"selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to "
-"select."
-msgstr ""
-"Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno agli "
-"oggetti per selezionare.Nessun oggetto selezionato. Click, Maiusc+click, o "
-"trascinare attorno agli oggetti per selezionare."
+"or <b>drag around</b> nodes to select."
+msgid_plural ""
+"<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
+"or <b>drag around</b> nodes to select."
+msgstr[0] ""
+"<b>0</b> di <b>%i</b> nodo selezionato. <b>Click</b>, <b>Maiusc+click</b>, o <b>trascinare</b> attorno agli "
+"oggetti per selezionare."
+msgstr[1] ""
+"<b>0</b> di <b>%i</b> nodi selezionati. <b>Click</b>, <b>Maiusc+click</b>, o <b>trascinare</b> attorno agli "
+"oggetti per selezionare."
 
-#: ../src/nodepath.cpp:4271
+#: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
 msgstr "Trascinare le maniglie dell'oggetto per modificarlo."
 
-#: ../src/nodepath.cpp:4279
+#: ../src/nodepath.cpp:4280
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
 msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati; %s. %s."
 
-#: ../src/nodepath.cpp:4286
-#, fuzzy, c-format
+#: ../src/nodepath.cpp:4287
+#, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+msgid_plural ""
 "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgstr "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
+msgstr[0] "<b>%i</b> di <b>%i</b> nodo selezionato in <b>%i</b> di <b>%i</b> sottotracciati. %s."
+msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati in <b>%i</b> di <b>%i</b> sottotracciati. %s."
 
-#: ../src/nodepath.cpp:4292
+#: ../src/nodepath.cpp:4293
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4417,9 +4429,8 @@ msgstr ""
 "o il fissaggio."
 
 #: ../src/selection-chemistry.cpp:2674
-#, fuzzy
 msgid "Set clipping path"
-msgstr "Chiusura tracciato."
+msgstr "Imposta fissaggio"
 
 #: ../src/selection-chemistry.cpp:2676
 msgid "Set mask"
@@ -4431,9 +4442,8 @@ msgstr ""
 "Selezionare <b>l'oggetto</b> da cui rimuovere la maschera o il fissaggio."
 
 #: ../src/selection-chemistry.cpp:2757
-#, fuzzy
 msgid "Release clipping path"
-msgstr "Rimuove il fissaggio dalla selezione"
+msgstr "Rimuovi fissaggio"
 
 #: ../src/selection-chemistry.cpp:2759
 msgid "Release mask"
@@ -5143,23 +5153,23 @@ msgstr "Fluisci testo in struttura"
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "Selezionare <b>un testo dinamico</b> da spezzare."
 
-#: ../src/text-chemistry.cpp:441
+#: ../src/text-chemistry.cpp:445
 msgid "Unflow flowed text"
 msgstr "Spezza testo dinamico"
 
-#: ../src/text-chemistry.cpp:453
+#: ../src/text-chemistry.cpp:457
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "Selezionare <b>un testo dinamico</b> da convertire."
 
-#: ../src/text-chemistry.cpp:471
+#: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr "Il testo dinamico deve essere <b>visibile</b> per esser convertito."
 
-#: ../src/text-chemistry.cpp:499
+#: ../src/text-chemistry.cpp:503
 msgid "Convert flowed text to text"
 msgstr "Converti testo dinamica in testo"
 
-#: ../src/text-chemistry.cpp:504
+#: ../src/text-chemistry.cpp:508
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "<b>Nessun testo dinamico</b> nella selezione da convertire."
 
@@ -7446,14 +7456,16 @@ msgstr "Ottimizza tracciato"
 
 #: ../src/ui/dialog/tracedialog.cpp:591
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
-msgstr "Prova ad ottimizzare i tracciati unendo segmenti curvi Bezier adiacenti"
+msgstr ""
+"Prova ad ottimizzare i tracciati unendo segmenti curvi Bezier adiacenti"
 
 #: ../src/ui/dialog/tracedialog.cpp:599
 msgid ""
 "Increase this to reduce the number of nodes in the trace by more aggressive "
 "optimization"
-msgstr "Aumentare il valore per ridurre il numero di nodi nella vettorizzazione usando "
-"ottimizzazioni più spinte"
+msgstr ""
+"Aumentare il valore per ridurre il numero di nodi nella vettorizzazione "
+"usando ottimizzazioni più spinte"
 
 #. ## end option page
 #: ../src/ui/dialog/tracedialog.cpp:606 ../src/ui/dialog/tracedialog.cpp:612
@@ -10717,18 +10729,18 @@ msgid ""
 "fixation = 0)"
 msgstr ""
 "L'angolazione della penna (in gradi; 0 = orizzontale; non ha effetto se "
+"incidenza = 0)"
 
 #: ../src/widgets/toolbox.cpp:2237 ../src/widgets/toolbox.cpp:2391
 msgid "Fixation:"
-msgstr "Fissaggio:"
+msgstr "Incidenza:"
 
 #: ../src/widgets/toolbox.cpp:2237 ../src/widgets/toolbox.cpp:2391
-#, fuzzy
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 1 = fixed "
 "angle)"
 msgstr ""
-"L'angolo di fissaggiodella penna (0 = sempre perpendicolare alla direzione, "
+"Angolo di incidenza (0 = pennino sempre perpendicolare alla direzione, "
 "1 = angolo fisso)"
 
 #: ../src/widgets/toolbox.cpp:2248
@@ -10739,8 +10751,9 @@ msgstr "Estremi:"
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
 "round caps)"
-msgstr "Aumentare il valore per avere maggior protrusione degli spigoli di fine contorno "
-"(0 = nessuno spigolo, 1 = spigolo arrotondato)"
+msgstr ""
+"Aumentare il valore per avere maggior protrusione degli spigoli di fine "
+"contorno (0 = nessuno spigolo, 1 = spigolo arrotondato)"
 
 #: ../src/widgets/toolbox.cpp:2258 ../src/widgets/toolbox.cpp:2415
 msgid "Tremor:"
@@ -10748,24 +10761,25 @@ msgstr "Tremore:"
 
 #: ../src/widgets/toolbox.cpp:2258 ../src/widgets/toolbox.cpp:2415
 msgid "Increase to make strokes rugged and trembling"
-msgstr ""
+msgstr "Aumentare per rendere il tratto increspato e tremolante"
 
 #: ../src/widgets/toolbox.cpp:2269 ../src/widgets/toolbox.cpp:2425
-#, fuzzy
 msgid "Wiggle:"
-msgstr "Titolo:"
+msgstr "Ondulazione:"
 
 #: ../src/widgets/toolbox.cpp:2269 ../src/widgets/toolbox.cpp:2425
 msgid "Increase to make the pen waver and wiggle"
-msgstr ""
+msgstr "Aumentare per rendere la scrittura più ondulata"
 
 #: ../src/widgets/toolbox.cpp:2279 ../src/widgets/toolbox.cpp:2436
 msgid "Mass:"
-msgstr "Massa:"
+msgstr "Inerzia:"
 
 #: ../src/widgets/toolbox.cpp:2279 ../src/widgets/toolbox.cpp:2436
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
-msgstr "Aumentare il valore per impostare il ritardo al pennino, come se fosse rallentato per inerzia"
+msgstr ""
+"Aumentare il valore per impostare il ritardo al pennino, come se fosse "
+"rallentato per inerzia"
 
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
@@ -10980,24 +10994,24 @@ msgid "Modify Path"
 msgstr "Modifica tracciato"
 
 #: ../share/extensions/ai_input.inx.h:1
-msgid "AI Input"
-msgstr "Input AI"
+msgid "AI 8.0 Input"
+msgstr "Input AI 8.0"
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-msgid "Adobe Illustrator (*.ai)"
-msgstr "Adobe Illustrator (*.ai)"
+msgid "Adobe Illustrator 8.0 (*.ai)"
+msgstr "Adobe Illustrator 8.0 (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
-msgid "Open files saved with Adobe Illustrator"
-msgstr "Apre file salvati con Adobe Illustrator"
+msgid "Open files saved with Adobe Illustrator 8.0 or older"
+msgstr "Apre file salvati con Adobe Illustrator 8.0 o più vecchi"
 
 #: ../share/extensions/ai_output.inx.h:1
-msgid "AI Output"
-msgstr "Output AI"
+msgid "AI 8.0 Output"
+msgstr "Output AI 8.0"
 
 #: ../share/extensions/ai_output.inx.h:3
-msgid "Write Adobe Illustrator"
-msgstr "Scrivi Adobe Illustrator"
+msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
+msgstr "Scrivi Adobe Illustrator 8.0 (basato su Postscript)"
 
 #: ../share/extensions/aisvg.inx.h:1
 msgid "AI SVG Input"
@@ -11750,4 +11764,3 @@ msgstr "Windows Metafile (*.wmf)"
 #: ../share/extensions/wmf_input.inx.h:3
 msgid "Windows Metafile Input"
 msgstr "Input Windows Metafile"
-
