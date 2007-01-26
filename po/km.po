@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 13:27+0100\n"
+"POT-Creation-Date: 2007-01-26 23:55+0100\n"
 "PO-Revision-Date: 2006-11-05 18:29+0100\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -3658,7 +3658,7 @@ msgstr "ត្រឡប់​ចំណុច​ទាញ​ប់​"
 msgid "Move node handle"
 msgstr "ផ្លាស់ទី​ចំណុច​ទាញ​ថ្នាំង​"
 
-#: ../src/nodepath.cpp:3465
+#: ../src/nodepath.cpp:3464
 #, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -3668,19 +3668,19 @@ msgstr ""
 "<b>ចំណុច​ទាញ​ថ្នាំង​​ថ្នាំង​</b> ៖ មុំ​ %0.2f&#176;, មានប្រវែង​ %s; ប្រើ​ <b>បញ្ជា</b> ដើម្បី​ខ្ទាស់​"
 "មុះ​ ប្រើ​ <b>ជំនួស​</b> ដើម្បី​ចាក់សោ​ប្រវែង​ ប្រើ <b>ប្តូរ​</b> ដើម្បី​ចំណុច​ទាញ​ទាំងពីរ​។ាំងពីរ​"
 
-#: ../src/nodepath.cpp:3643
+#: ../src/nodepath.cpp:3642
 msgid "Rotate nodes"
 msgstr "បង្វិល​ថ្នាំង​"
 
-#: ../src/nodepath.cpp:3768
+#: ../src/nodepath.cpp:3767
 msgid "Scale nodes"
 msgstr "ធ្វើ​មាត្រដ្ឋាន​ថ្នាំង​"
 
-#: ../src/nodepath.cpp:3815
+#: ../src/nodepath.cpp:3814
 msgid "Flip nodes"
 msgstr "ត្រឡប់​ថ្នាំង​"
 
-#: ../src/nodepath.cpp:3980
+#: ../src/nodepath.cpp:3979
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3689,38 +3689,38 @@ msgstr ""
 "+ជំនួស​</b> ដើម្បី​ខ្ទាស់​ទិស​ដៅ​របស់​ចំណុច​ទាញ​ ។"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4204
+#: ../src/nodepath.cpp:4205
 msgid "end node"
 msgstr "ចុង​ថ្នាំង​"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:4209
+#: ../src/nodepath.cpp:4210
 msgid "cusp"
 msgstr "ចុងស្រួច​"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:4212
+#: ../src/nodepath.cpp:4213
 msgid "smooth"
 msgstr "រលោង​"
 
-#: ../src/nodepath.cpp:4214
+#: ../src/nodepath.cpp:4215
 msgid "symmetric"
 msgstr "symmetric"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4220
+#: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "ចុង​ថ្នាំង​ត្រូវ​បាន​បព្រួញ​ចំណុច​ទាញ​ ( អូស​ដោយ​ប្រើ​ <b>ប្តូរ​</b> ដើម្បី​ពង្រី​)"
 
-#: ../src/nodepath.cpp:4222
+#: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "ចំណុច​ទាញ មួយ​ត្រូវ​បាន​បព្រួញ​ (អូស​ដោយ​ប្រើ​ <b>ប្តូរ</b>ដើម្បី​ពង្រីក​)"
 
-#: ../src/nodepath.cpp:4225
+#: ../src/nodepath.cpp:4226
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr "ចំណុច​ទាញ​ទាំងពីរ​ត្រូវ​បាន​បព្រួញ​្រូវ​បានធ្វើ​ត្រឡប់​(អូសដោយ​ប្រើ​ <b>ប្តូរ​</b> ដើម្បីពង្រីក​)"
 
-#: ../src/nodepath.cpp:4237
+#: ../src/nodepath.cpp:4238
 msgid ""
 "<b>Drag</b> nodes or node handles; <b>Alt+drag</b> nodes to sculpt; "
 "<b>arrow</b> keys to move nodes, <b>&lt; &gt;</b> to scale, <b>[ ]</b> to "
@@ -3729,15 +3729,15 @@ msgstr ""
 "<b>អូស</b> ថ្នាំង ឬ​ចំណុច​ទាញ​ថ្នាំង <b>ជំនួស (Alt) + អូស</b> ដើម្បី​ឆ្លាក់ គ្រាប់​ចុច<b>ព្រួញ</b> "
 "ដើម្បី​ផ្លាស់ទី​ថ្នាំង <b>&lt; &gt;</b> ដើម្បី​ធ្វើ​មាត្រដ្ឋាន <b>[ ]</b> ដើម្បី​បង្វិល"
 
-#: ../src/nodepath.cpp:4238
+#: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr "<b>អូស​</b> ថ្នាំង​ឬ ចំណុច​ទាញ​ថ្នាំង​​របស់ប្រើ​គ្រាប់​<b>គ្រាប់​ចុច​ព្រួញ​</b> ដើម្បី​ផ្លាស់ទី​ថ្នាំង​"
 
-#: ../src/nodepath.cpp:4261 ../src/nodepath.cpp:4273
+#: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
 msgstr "ជ្រើស​វត្ថុ​មួយ​ដើម្បី​កែសម្រួល​ថ្នាំង​ឬ ចំណុច​ទាញ​ថ្នាំង​​របស់​វា​ ។"
 
-#: ../src/nodepath.cpp:4265
+#: ../src/nodepath.cpp:4266
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -3749,17 +3749,17 @@ msgstr[0] ""
 "<b>0</b> អស់ <b>%i</b> ថ្នាំង​ដែល​បាន​ជ្រើស ។ <b>ចុច</b> <b>ប្ដូរ (Shift) + បញ្ជា "
 "(click)</b> ឬ <b>អូស​ជុំវិញ</b> ថ្នាំង​ដើម្បី​ជ្រើស ។"
 
-#: ../src/nodepath.cpp:4271
+#: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
 msgstr "អូស​ដំណោះស្រាយ​នៃ​វត្ថុ​ដើម្បី​កែប្រែ​វា​ ។"
 
-#: ../src/nodepath.cpp:4279
+#: ../src/nodepath.cpp:4280
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "<b>%i</b> នៃ <b>%i</b> ថ្នាំងបានជ្រើស %s. %s."
 
-#: ../src/nodepath.cpp:4286
+#: ../src/nodepath.cpp:4287
 #, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
@@ -3768,7 +3768,7 @@ msgid_plural ""
 msgstr[0] ""
 "<b>%i</b>  <b>%i</b> ថ្នាំង​ដែល​បានជ្រើស​ក្នុង​ <b>%i</b> នៃ​ <b>%i</b> ផ្លូវ​រង​ %s ។"
 
-#: ../src/nodepath.cpp:4292
+#: ../src/nodepath.cpp:4293
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4342,27 +4342,27 @@ msgstr "ជ្រើស​ <b>វត្ថុ</b> ដើម្បី​បង្
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr "ជ្រើស​វត្ថុ​របាំង​និង  <b>វត្ថុ​ជាច្រើន​</b> ដើម្បី​អនុវត្ត​តម្បៀត​ខ្ទាស់​ឬ របាំង​ទៅ​កាន់​ ។"
 
-#: ../src/selection-chemistry.cpp:2674
+#: ../src/selection-chemistry.cpp:2698
 msgid "Set clipping path"
 msgstr "កំណត់​ផ្លូវ​តម្រៀត​ខ្ទាស់​"
 
-#: ../src/selection-chemistry.cpp:2676
+#: ../src/selection-chemistry.cpp:2700
 msgid "Set mask"
 msgstr "កំណត់​របាំង​"
 
-#: ../src/selection-chemistry.cpp:2689
+#: ../src/selection-chemistry.cpp:2713
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr "ជ្រើស​ <b>វត្ថុ</b> ដើម្បីយកតម្រៀត​ខ្ទាស់​ផ្លូវ ឬ របាំងចេញ​ពី  ។"
 
-#: ../src/selection-chemistry.cpp:2757
+#: ../src/selection-chemistry.cpp:2781
 msgid "Release clipping path"
 msgstr "បញ្ចេញ​តម្បៀត​ខ្ទាស់​ផ្លូវ​"
 
-#: ../src/selection-chemistry.cpp:2759
+#: ../src/selection-chemistry.cpp:2783
 msgid "Release mask"
 msgstr "បញ្ចេញ របាំង​"
 
-#: ../src/selection-chemistry.cpp:2803
+#: ../src/selection-chemistry.cpp:2827
 msgid "Fit page to selection"
 msgstr "ទំព័រ​សម​នឹង​ជម្រើស"
 
@@ -5033,26 +5033,26 @@ msgstr "លំហូរ​ទៅ​ក្នុង​ស៊ុម​"
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "ជ្រើស​ <b>លំហូរ​អត្ថបទ​</b> ដើម្បី​កុំ​ឲ្យ​ហូរ​"
 
-#: ../src/text-chemistry.cpp:441
+#: ../src/text-chemistry.cpp:445
 #, fuzzy
 msgid "Unflow flowed text"
 msgstr "លំហូរ​អត្ថបទ​"
 
-#: ../src/text-chemistry.cpp:453
+#: ../src/text-chemistry.cpp:457
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "ជ្រើស​ <b>លំហូរ​អត្ថបទ​</b> ដើម្បី​កុំ​ឲ្យ​ហូរ​"
 
-#: ../src/text-chemistry.cpp:471
+#: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:499
+#: ../src/text-chemistry.cpp:503
 #, fuzzy
 msgid "Convert flowed text to text"
 msgstr "បម្លែង​អត្ថបទ​ទៅ​ជា​ផ្លូវ​"
 
-#: ../src/text-chemistry.cpp:504
+#: ../src/text-chemistry.cpp:508
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "<b>គ្មាន​វត្ថុ​</b> សម្រាប់​បម្លែង​ទៅ​ជា​ផ្លូវ​ក្នុង​ការជ្រើស​ឡើយ​េ​ ។"
@@ -10569,6 +10569,24 @@ msgstr "ចំនួន​សរុប​ ៖"
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
+#: ../src/widgets/toolbox.cpp:2291
+#, fuzzy
+msgid "Pressure"
+msgstr "ការពារ​"
+
+#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr "ប្រើការរុញ​ច្រាន​នៃ​ឧបករណ៍​បញ្ចូល​ដើម្បី​ប្តូរ​ទទឹង​នៃ​ប៉ិច​"
+
+#: ../src/widgets/toolbox.cpp:2303
+#, fuzzy
+msgid "Tilt"
+msgstr "ចំណងជើង"
+
+#: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr "ប្រើ​រនាំង​នៃ​ឧបករណ៍​បញ្ចូលដើ​ម្បី​ប្តូរ​មុំ​នៃ​​ចុង​ស្លាបប៉ាការបស់ប៉ិច"
+
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
 #, fuzzy
@@ -10578,14 +10596,6 @@ msgstr "ធ្វើ​ឲ្យ​មូល​ ៖"
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Increase to round the ends of strokes"
 msgstr ""
-
-#: ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr "ប្រើការរុញ​ច្រាន​នៃ​ឧបករណ៍​បញ្ចូល​ដើម្បី​ប្តូរ​ទទឹង​នៃ​ប៉ិច​"
-
-#: ../src/widgets/toolbox.cpp:2469
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
-msgstr "ប្រើ​រនាំង​នៃ​ឧបករណ៍​បញ្ចូលដើ​ម្បី​ប្តូរ​មុំ​នៃ​​ចុង​ស្លាបប៉ាការបស់ប៉ិច"
 
 #: ../src/widgets/toolbox.cpp:2578
 msgid "Arc: Change start/end"
@@ -10781,23 +10791,28 @@ msgid "Modify Path"
 msgstr "កែប្រែ​ផ្លូវ​"
 
 #: ../share/extensions/ai_input.inx.h:1
-msgid "AI Input"
+#, fuzzy
+msgid "AI 8.0 Input"
 msgstr "បញ្ចូល AI "
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-msgid "Adobe Illustrator (*.ai)"
+#, fuzzy
+msgid "Adobe Illustrator 8.0 (*.ai)"
 msgstr "កម្មវិធី Adobe Illustrator (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
-msgid "Open files saved with Adobe Illustrator"
+#, fuzzy
+msgid "Open files saved with Adobe Illustrator 8.0 or older"
 msgstr "បើក​ឯកសារ​ដែល​បាន​រក្សា​ជា​ មួយ​កម្មវិធី​ Adobe Illustrator"
 
 #: ../share/extensions/ai_output.inx.h:1
-msgid "AI Output"
+#, fuzzy
+msgid "AI 8.0 Output"
 msgstr "ទិន្នផល​ AI "
 
 #: ../share/extensions/ai_output.inx.h:3
-msgid "Write Adobe Illustrator"
+#, fuzzy
+msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
 msgstr "សរសេរកម្មវិធី​ Adobe Illustrator"
 
 #: ../share/extensions/aisvg.inx.h:1

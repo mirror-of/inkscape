@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 13:27+0100\n"
+"POT-Creation-Date: 2007-01-26 23:55+0100\n"
 "PO-Revision-Date: 2006-11-05 17:57+0100\n"
 "Last-Translator: Ruud Steltenpool <svg@steltenpower.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -3852,7 +3852,7 @@ msgstr "Rechthoek"
 msgid "Move node handle"
 msgstr "Willekeur:"
 
-#: ../src/nodepath.cpp:3465
+#: ../src/nodepath.cpp:3464
 #, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -3863,22 +3863,22 @@ msgstr ""
 "stappen; <b>Alt</b> vergrendelt de lengte; <b>Shift</b> draait ook het "
 "andere handvat"
 
-#: ../src/nodepath.cpp:3643
+#: ../src/nodepath.cpp:3642
 #, fuzzy
 msgid "Rotate nodes"
 msgstr "Item omhoog brengen"
 
-#: ../src/nodepath.cpp:3768
+#: ../src/nodepath.cpp:3767
 #, fuzzy
 msgid "Scale nodes"
 msgstr "Item omhoog brengen"
 
-#: ../src/nodepath.cpp:3815
+#: ../src/nodepath.cpp:3814
 #, fuzzy
 msgid "Flip nodes"
 msgstr "rasterlijnen"
 
-#: ../src/nodepath.cpp:3980
+#: ../src/nodepath.cpp:3979
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3888,41 +3888,41 @@ msgstr ""
 "richting"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4204
+#: ../src/nodepath.cpp:4205
 msgid "end node"
 msgstr "eind-knooppunt"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:4209
+#: ../src/nodepath.cpp:4210
 msgid "cusp"
 msgstr "hoekig"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:4212
+#: ../src/nodepath.cpp:4213
 msgid "smooth"
 msgstr "glad"
 
-#: ../src/nodepath.cpp:4214
+#: ../src/nodepath.cpp:4215
 msgid "symmetric"
 msgstr "symmetrisch"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4220
+#: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "eind-knooppunt, handvat ingetrokken (sleep met <b>shift</b> om het uit te "
 "trekken)"
 
-#: ../src/nodepath.cpp:4222
+#: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "één handvat ingetrokken (sleep met <b>shift</b> om het uit te trekken)"
 
-#: ../src/nodepath.cpp:4225
+#: ../src/nodepath.cpp:4226
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "beide handvatten ingetrokken (sleep met <b>shift</b> om ze uit te trekken)"
 
-#: ../src/nodepath.cpp:4237
+#: ../src/nodepath.cpp:4238
 #, fuzzy
 msgid ""
 "<b>Drag</b> nodes or node handles; <b>Alt+drag</b> nodes to sculpt; "
@@ -3932,18 +3932,18 @@ msgstr ""
 "<b>Versleep</b> knooppunten of -handvatten;<b>pijltjes</b>-toetsen om de "
 "knooppunten te verplaatsen"
 
-#: ../src/nodepath.cpp:4238
+#: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Sleep</b> het knooppunt of zijn handvatten; <b>pijltjes</b>-toetsen om "
 "het knooppunt te verplaatsen"
 
-#: ../src/nodepath.cpp:4261 ../src/nodepath.cpp:4273
+#: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
 msgstr ""
 "Selecteer één enkel object om zijn knooppunten of handvatten te wijzigen."
 
-#: ../src/nodepath.cpp:4265
+#: ../src/nodepath.cpp:4266
 #, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -3958,18 +3958,18 @@ msgstr[1] ""
 "Er zijn geen objecten geselecteerd. Klik, shift-klik of sleep om objecten te "
 "selecteren."
 
-#: ../src/nodepath.cpp:4271
+#: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
 msgstr "Sleep de handvatten van het object om het te wijzigen."
 
-#: ../src/nodepath.cpp:4279
+#: ../src/nodepath.cpp:4280
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "<b>%i</b> van <b>%i</b> knooppunt geselecteerd; %s. %s."
 msgstr[1] "<b>%i</b> van <b>%i</b> knooppunt geselecteerd; %s. %s."
 
-#: ../src/nodepath.cpp:4286
+#: ../src/nodepath.cpp:4287
 #, fuzzy, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
@@ -3978,7 +3978,7 @@ msgid_plural ""
 msgstr[0] "<b>%i</b> van <b>%i</b> knooppunt geselecteerd; %s. %s."
 msgstr[1] "<b>%i</b> van <b>%i</b> knooppunt geselecteerd; %s. %s."
 
-#: ../src/nodepath.cpp:4292
+#: ../src/nodepath.cpp:4293
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4625,33 +4625,33 @@ msgstr "Selecteer <b>objecten</b> om de stijl op toe te passen."
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr "Selecteer <b>objecten</b> om de stijl op toe te passen."
 
-#: ../src/selection-chemistry.cpp:2674
+#: ../src/selection-chemistry.cpp:2698
 #, fuzzy
 msgid "Set clipping path"
 msgstr "Het pad wordt gesloten."
 
-#: ../src/selection-chemistry.cpp:2676
+#: ../src/selection-chemistry.cpp:2700
 #, fuzzy
 msgid "Set mask"
 msgstr "Sterren"
 
-#: ../src/selection-chemistry.cpp:2689
+#: ../src/selection-chemistry.cpp:2713
 #, fuzzy
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr ""
 "Selecteer één of meer <b>teksten</b> om de tekenspatiëring van te "
 "verwijderen."
 
-#: ../src/selection-chemistry.cpp:2757
+#: ../src/selection-chemistry.cpp:2781
 msgid "Release clipping path"
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:2759
+#: ../src/selection-chemistry.cpp:2783
 #, fuzzy
 msgid "Release mask"
 msgstr "_Omdraaien"
 
-#: ../src/selection-chemistry.cpp:2803
+#: ../src/selection-chemistry.cpp:2827
 #, fuzzy
 msgid "Fit page to selection"
 msgstr "In selectie-box passen"
@@ -5383,26 +5383,26 @@ msgstr "Naar object _vormen"
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "Selecteer <b>gevormde tekst</b> om het uit de vorm te halen."
 
-#: ../src/text-chemistry.cpp:441
+#: ../src/text-chemistry.cpp:445
 #, fuzzy
 msgid "Unflow flowed text"
 msgstr "Gevormde tekst is aangemaakt."
 
-#: ../src/text-chemistry.cpp:453
+#: ../src/text-chemistry.cpp:457
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "Selecteer <b>gevormde tekst</b> om het uit de vorm te halen."
 
-#: ../src/text-chemistry.cpp:471
+#: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:499
+#: ../src/text-chemistry.cpp:503
 #, fuzzy
 msgid "Convert flowed text to text"
 msgstr "Een bitmap overtrekken en omzetten naar paden"
 
-#: ../src/text-chemistry.cpp:504
+#: ../src/text-chemistry.cpp:508
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "<b>Geen pad(en)</b> in de selectie om te converteren naar een pad."
@@ -11246,6 +11246,28 @@ msgstr "Massa:"
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
+#: ../src/widgets/toolbox.cpp:2291
+#, fuzzy
+msgid "Pressure"
+msgstr "Behouden"
+
+#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+"Gebruik de druk die op het invoer apparaat wordt uitgeoefend om de pen-"
+"breedte te variëren"
+
+#: ../src/widgets/toolbox.cpp:2303
+#, fuzzy
+msgid "Tilt"
+msgstr "Titel"
+
+#: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr ""
+"Gebruik de hoek waaronder het invoer apparaat wordt gehouden om de pen-hoek "
+"te variëren"
+
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
 #, fuzzy
@@ -11255,18 +11277,6 @@ msgstr "Afgerond:"
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Increase to round the ends of strokes"
 msgstr ""
-
-#: ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr ""
-"Gebruik de druk die op het invoer apparaat wordt uitgeoefend om de pen-"
-"breedte te variëren"
-
-#: ../src/widgets/toolbox.cpp:2469
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
-msgstr ""
-"Gebruik de hoek waaronder het invoer apparaat wordt gehouden om de pen-hoek "
-"te variëren"
 
 #: ../src/widgets/toolbox.cpp:2578
 msgid "Arc: Change start/end"
@@ -11471,24 +11481,26 @@ msgid "Modify Path"
 msgstr "Pas Path aan"
 
 #: ../share/extensions/ai_input.inx.h:1
-msgid "AI Input"
-msgstr ""
+#, fuzzy
+msgid "AI 8.0 Input"
+msgstr "Uitvoer"
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-msgid "Adobe Illustrator (*.ai)"
+msgid "Adobe Illustrator 8.0 (*.ai)"
 msgstr ""
 
 #: ../share/extensions/ai_input.inx.h:3
-msgid "Open files saved with Adobe Illustrator"
+#, fuzzy
+msgid "Open files saved with Adobe Illustrator 8.0 or older"
 msgstr "Open bestanden opgeslagen met Adobe Illustrator"
 
 #: ../share/extensions/ai_output.inx.h:1
 #, fuzzy
-msgid "AI Output"
+msgid "AI 8.0 Output"
 msgstr "Uitvoer"
 
 #: ../share/extensions/ai_output.inx.h:3
-msgid "Write Adobe Illustrator"
+msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
 msgstr ""
 
 #: ../share/extensions/aisvg.inx.h:1

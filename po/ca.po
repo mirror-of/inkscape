@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 13:27+0100\n"
+"POT-Creation-Date: 2007-01-26 23:55+0100\n"
 "PO-Revision-Date: 2006-12-24 18:36+0100\n"
 "Last-Translator: Xavier Conde Rueda <xavi.conde@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -3699,7 +3699,7 @@ msgstr "Estén el manejador"
 msgid "Move node handle"
 msgstr "Mou el manejador del node"
 
-#: ../src/nodepath.cpp:3465
+#: ../src/nodepath.cpp:3464
 #, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -3710,19 +3710,19 @@ msgstr ""
 "s'ajusta l'angle; amb <b>alt</b> es bloca la longitud; amb <b>majúscules</b> "
 "es gira el manejador oposat a la vegada"
 
-#: ../src/nodepath.cpp:3643
+#: ../src/nodepath.cpp:3642
 msgid "Rotate nodes"
 msgstr "Gira els nodes"
 
-#: ../src/nodepath.cpp:3768
+#: ../src/nodepath.cpp:3767
 msgid "Scale nodes"
 msgstr "Escala els nodes"
 
-#: ../src/nodepath.cpp:3815
+#: ../src/nodepath.cpp:3814
 msgid "Flip nodes"
 msgstr "Inverteix els nodes"
 
-#: ../src/nodepath.cpp:3980
+#: ../src/nodepath.cpp:3979
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3731,39 +3731,39 @@ msgstr ""
 "hor./vert.; amb <b>Ctrl+Alt</b> per ajustar les direccions dels manejadors"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4204
+#: ../src/nodepath.cpp:4205
 msgid "end node"
 msgstr "node final"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:4209
+#: ../src/nodepath.cpp:4210
 msgid "cusp"
 msgstr "afilat"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:4212
+#: ../src/nodepath.cpp:4213
 msgid "smooth"
 msgstr "suau"
 
-#: ../src/nodepath.cpp:4214
+#: ../src/nodepath.cpp:4215
 msgid "symmetric"
 msgstr "simètric"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4220
+#: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "node final, manejador no estès (arrossegueu amb <b>Maj</b> per estendre)"
 
-#: ../src/nodepath.cpp:4222
+#: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "un manejador estès (arrossegueu amb <b>Maj</b> per estendre)"
 
-#: ../src/nodepath.cpp:4225
+#: ../src/nodepath.cpp:4226
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr "ambdós manejadors estesos (arrossegueu amb <b>Maj</b> per estendre)"
 
-#: ../src/nodepath.cpp:4237
+#: ../src/nodepath.cpp:4238
 msgid ""
 "<b>Drag</b> nodes or node handles; <b>Alt+drag</b> nodes to sculpt; "
 "<b>arrow</b> keys to move nodes, <b>&lt; &gt;</b> to scale, <b>[ ]</b> to "
@@ -3773,17 +3773,17 @@ msgstr ""
 "esculpir els nodes; tecles de <b>fletxa</b> per moure els nodes; <b>&lt; &gt;"
 "</b> per escalar, <b>[ ]</b> per rotar"
 
-#: ../src/nodepath.cpp:4238
+#: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Arrossegueu</b> el node o els seus manejadors; les <b>fletxes de teclat</"
 "b> mouen el node"
 
-#: ../src/nodepath.cpp:4261 ../src/nodepath.cpp:4273
+#: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
 msgstr "Seleccioneu un objecte per editar-ne els nodes o els manejadors."
 
-#: ../src/nodepath.cpp:4265
+#: ../src/nodepath.cpp:4266
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -3798,18 +3798,18 @@ msgstr[1] ""
 "No s'ha seleccionat <b>cap</b> node de <b>%i</b>. <b>Cliqueu</b>, <b>Maj"
 "+clic</b>, o <b>arrossegueu al voltant dels nodes </b> per seleccionar."
 
-#: ../src/nodepath.cpp:4271
+#: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
 msgstr "Arrossegueu els manejadors de l'objecte per modificar-lo."
 
-#: ../src/nodepath.cpp:4279
+#: ../src/nodepath.cpp:4280
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "S'ha seleccionat <b>%i</b> node de <b>%i</b>; %s. %s."
 msgstr[1] "S'han seleccionat <b>%i</b> nodes de <b>%i</b>; %s. %s."
 
-#: ../src/nodepath.cpp:4286
+#: ../src/nodepath.cpp:4287
 #, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
@@ -3822,7 +3822,7 @@ msgstr[1] ""
 "S'han seleccionat <b>%i</b> nodes de <b>%i</b> en <b>%i</b> subcamí de <b>%"
 "i</b>. %s."
 
-#: ../src/nodepath.cpp:4292
+#: ../src/nodepath.cpp:4293
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4417,28 +4417,28 @@ msgstr ""
 "Seleccioneu un objecte de màscara i altres <b>objectes</b> per aplicar-hi un "
 "camí de retall o una màscara."
 
-#: ../src/selection-chemistry.cpp:2674
+#: ../src/selection-chemistry.cpp:2698
 msgid "Set clipping path"
 msgstr "Estableix el camí de retall"
 
-#: ../src/selection-chemistry.cpp:2676
+#: ../src/selection-chemistry.cpp:2700
 msgid "Set mask"
 msgstr "Estableix la màscara"
 
-#: ../src/selection-chemistry.cpp:2689
+#: ../src/selection-chemistry.cpp:2713
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr ""
 "Seleccioneu <b>objectes</b> per suprimir un camí de retall o una màscara."
 
-#: ../src/selection-chemistry.cpp:2757
+#: ../src/selection-chemistry.cpp:2781
 msgid "Release clipping path"
 msgstr "Allibera el camí de retall"
 
-#: ../src/selection-chemistry.cpp:2759
+#: ../src/selection-chemistry.cpp:2783
 msgid "Release mask"
 msgstr "Allibera la màscara"
 
-#: ../src/selection-chemistry.cpp:2803
+#: ../src/selection-chemistry.cpp:2827
 msgid "Fit page to selection"
 msgstr "Ajusta la pàgina a la selecció"
 
@@ -5130,24 +5130,24 @@ msgstr "Flota el text dintre d'una forma"
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "Seleccioneu <b>un text flotant</b> per desfer-ho."
 
-#: ../src/text-chemistry.cpp:441
+#: ../src/text-chemistry.cpp:445
 msgid "Unflow flowed text"
 msgstr "Desfés un text flotant"
 
-#: ../src/text-chemistry.cpp:453
+#: ../src/text-chemistry.cpp:457
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "Seleccioneu <b>un text flotant</b> per desfer-ho."
 
-#: ../src/text-chemistry.cpp:471
+#: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:499
+#: ../src/text-chemistry.cpp:503
 msgid "Convert flowed text to text"
 msgstr "Converteix el text flotant en text"
 
-#: ../src/text-chemistry.cpp:504
+#: ../src/text-chemistry.cpp:508
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "<b>No hi ha cap objecte</b> per convertir en camí en la selecció."
@@ -10746,6 +10746,26 @@ msgstr "Cota:"
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
+#: ../src/widgets/toolbox.cpp:2291
+#, fuzzy
+msgid "Pressure"
+msgstr "Preservat"
+
+#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+"Usa la pressió del dispositiu d'entrada per modificar l'amplada de la ploma"
+
+#: ../src/widgets/toolbox.cpp:2303
+#, fuzzy
+msgid "Tilt"
+msgstr "Títol"
+
+#: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr ""
+"Usa la inclinació del dispositiu d'entrada per modificar l'angle de la ploma"
+
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Round:"
@@ -10754,16 +10774,6 @@ msgstr "Arrodoniment:"
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Increase to round the ends of strokes"
 msgstr "Incrementeu per arrodonir el final dels contorns"
-
-#: ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr ""
-"Usa la pressió del dispositiu d'entrada per modificar l'amplada de la ploma"
-
-#: ../src/widgets/toolbox.cpp:2469
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
-msgstr ""
-"Usa la inclinació del dispositiu d'entrada per modificar l'angle de la ploma"
 
 #: ../src/widgets/toolbox.cpp:2578
 msgid "Arc: Change start/end"
@@ -10961,23 +10971,28 @@ msgid "Modify Path"
 msgstr "Modifica el camí"
 
 #: ../share/extensions/ai_input.inx.h:1
-msgid "AI Input"
+#, fuzzy
+msgid "AI 8.0 Input"
 msgstr "Entrada de l'Illustrator"
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-msgid "Adobe Illustrator (*.ai)"
+#, fuzzy
+msgid "Adobe Illustrator 8.0 (*.ai)"
 msgstr "Adobe Illustrator (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
-msgid "Open files saved with Adobe Illustrator"
+#, fuzzy
+msgid "Open files saved with Adobe Illustrator 8.0 or older"
 msgstr "Obre fitxers desats amb l'Adobe Illustrator"
 
 #: ../share/extensions/ai_output.inx.h:1
-msgid "AI Output"
+#, fuzzy
+msgid "AI 8.0 Output"
 msgstr "Sortida d'Illustrator"
 
 #: ../share/extensions/ai_output.inx.h:3
-msgid "Write Adobe Illustrator"
+#, fuzzy
+msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
 msgstr "Escriu un Adobe Illustrator"
 
 #: ../share/extensions/aisvg.inx.h:1

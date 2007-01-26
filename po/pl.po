@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 13:27+0100\n"
+"POT-Creation-Date: 2007-01-26 23:55+0100\n"
 "PO-Revision-Date: 2006-11-05 18:38+0100\n"
 "Last-Translator: Przemysław Loesch <p_loesch@poczta.onet.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -3780,7 +3780,7 @@ msgstr "Prostokąt"
 msgid "Move node handle"
 msgstr "Zmiana losowa uchwytów"
 
-#: ../src/nodepath.cpp:3465
+#: ../src/nodepath.cpp:3464
 #, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -3790,22 +3790,22 @@ msgstr ""
 "<b>Uchwyt węzła</b>: kąt %0.2f&#176;, długość %s; z <b>Ctrl</b> przyciąganie "
 "do kąta; z <b>Alt</b> blokada odległości; z <b>Shift</b> obrót obu uchwytów"
 
-#: ../src/nodepath.cpp:3643
+#: ../src/nodepath.cpp:3642
 #, fuzzy
 msgid "Rotate nodes"
 msgstr "Przenieś do góry"
 
-#: ../src/nodepath.cpp:3768
+#: ../src/nodepath.cpp:3767
 #, fuzzy
 msgid "Scale nodes"
 msgstr "Przenieś do góry"
 
-#: ../src/nodepath.cpp:3815
+#: ../src/nodepath.cpp:3814
 #, fuzzy
 msgid "Flip nodes"
 msgstr "linii"
 
-#: ../src/nodepath.cpp:3980
+#: ../src/nodepath.cpp:3979
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3814,41 +3814,41 @@ msgstr ""
 "pionowo; z <b>Ctrl+Alt</b> wzdłuż linii uchwytów"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4204
+#: ../src/nodepath.cpp:4205
 msgid "end node"
 msgstr "węzeł końcowy"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:4209
+#: ../src/nodepath.cpp:4210
 msgid "cusp"
 msgstr "ostry"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:4212
+#: ../src/nodepath.cpp:4213
 msgid "smooth"
 msgstr "gładki"
 
-#: ../src/nodepath.cpp:4214
+#: ../src/nodepath.cpp:4215
 msgid "symmetric"
 msgstr "symetrycznie"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4220
+#: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "węzeł końcowy, uchwyt zredukowany (przeciągnij z <b>Shift</b> aby go "
 "odzyskać)"
 
-#: ../src/nodepath.cpp:4222
+#: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "jeden z uchwytów zredukowany (przeciągnij z <b>Shift</b> aby go odzyskać)"
 
-#: ../src/nodepath.cpp:4225
+#: ../src/nodepath.cpp:4226
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr "oba uchwyty zredukowane (przeciągnij z <b>Shift</b> aby je odzyskać)"
 
-#: ../src/nodepath.cpp:4237
+#: ../src/nodepath.cpp:4238
 msgid ""
 "<b>Drag</b> nodes or node handles; <b>Alt+drag</b> nodes to sculpt; "
 "<b>arrow</b> keys to move nodes, <b>&lt; &gt;</b> to scale, <b>[ ]</b> to "
@@ -3858,17 +3858,17 @@ msgstr ""
 "modelować; klawisze <b>strzałek</b> aby przesuwać węzły, <b>&lt; &gt;</b> "
 "aby skalować, <b>[ ]</b> aby obracać"
 
-#: ../src/nodepath.cpp:4238
+#: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Przeciągnij</b> węze lub jego uchwyty; klawisze <b>strzałek</b> "
 "przesuwają węzeł"
 
-#: ../src/nodepath.cpp:4261 ../src/nodepath.cpp:4273
+#: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
 msgstr "Zaznacz pojedynczy obiekt aby edytować jego węzły lub uchwyty"
 
-#: ../src/nodepath.cpp:4265
+#: ../src/nodepath.cpp:4266
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -3886,11 +3886,11 @@ msgstr[2] ""
 "Wybrano <b>0</b> z <b>%i</b> węzłów. <b>Kliknij</b>, <b>kliknij+Shift</b>, "
 "lub <b>przeciągnij</b> ramkę aby wybrać węzły."
 
-#: ../src/nodepath.cpp:4271
+#: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
 msgstr "Przeciągnij uchwyty obiektu aby go zmodyfikować."
 
-#: ../src/nodepath.cpp:4279
+#: ../src/nodepath.cpp:4280
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
@@ -3898,7 +3898,7 @@ msgstr[0] "Wybrano <b>%i</b> z <b>%i</b> węzła; %s. %s."
 msgstr[1] "Wybrano <b>%i</b> z <b>%i</b> węzłów; %s. %s."
 msgstr[2] "Wybrano <b>%i</b> z <b>%i</b> węzłów; %s. %s."
 
-#: ../src/nodepath.cpp:4286
+#: ../src/nodepath.cpp:4287
 #, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
@@ -3914,7 +3914,7 @@ msgstr[2] ""
 "Wybrano <b>%i</b> z <b>%i</b> węzłów na <b>%i</b> z <b>%i</b> ścieżek "
 "zagnieżdżonych. %s."
 
-#: ../src/nodepath.cpp:4292
+#: ../src/nodepath.cpp:4293
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4546,31 +4546,31 @@ msgstr ""
 "Zaznacz obiekt maskujący i <b>obiekt(y)</b>, dla których zastosować ścieżkę "
 "przycinającą lub maskę."
 
-#: ../src/selection-chemistry.cpp:2674
+#: ../src/selection-chemistry.cpp:2698
 #, fuzzy
 msgid "Set clipping path"
 msgstr "Zamknięcie ścieżki."
 
-#: ../src/selection-chemistry.cpp:2676
+#: ../src/selection-chemistry.cpp:2700
 #, fuzzy
 msgid "Set mask"
 msgstr "Gwiazdy"
 
-#: ../src/selection-chemistry.cpp:2689
+#: ../src/selection-chemistry.cpp:2713
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr "Zaznacz <b>obiekt(y)</b> do usunięcia ścieżki przycinającej lub maski."
 
-#: ../src/selection-chemistry.cpp:2757
+#: ../src/selection-chemistry.cpp:2781
 #, fuzzy
 msgid "Release clipping path"
 msgstr "Usuwa ścieżkę przycinającą z zaznaczenia"
 
-#: ../src/selection-chemistry.cpp:2759
+#: ../src/selection-chemistry.cpp:2783
 #, fuzzy
 msgid "Release mask"
 msgstr "Zdejmij"
 
-#: ../src/selection-chemistry.cpp:2803
+#: ../src/selection-chemistry.cpp:2827
 #, fuzzy
 msgid "Fit page to selection"
 msgstr "Dopasowanie do ramki zaznaczenia"
@@ -5292,26 +5292,26 @@ msgstr "Wprowadź tekst do _kształtu"
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "Zazancz <b>dopasowany tekst</b> aby go uwolnić z ramki."
 
-#: ../src/text-chemistry.cpp:441
+#: ../src/text-chemistry.cpp:445
 #, fuzzy
 msgid "Unflow flowed text"
 msgstr "Tekst opływający"
 
-#: ../src/text-chemistry.cpp:453
+#: ../src/text-chemistry.cpp:457
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "Zazancz <b>dopasowany tekst</b> aby go uwolnić z ramki."
 
-#: ../src/text-chemistry.cpp:471
+#: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:499
+#: ../src/text-chemistry.cpp:503
 #, fuzzy
 msgid "Convert flowed text to text"
 msgstr "Konwertuj tekst na ścieżkę"
 
-#: ../src/text-chemistry.cpp:504
+#: ../src/text-chemistry.cpp:508
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "W zaznaczeniu <b>brak obiektów</b> do przekształcenia w ścieżki."
@@ -11021,6 +11021,25 @@ msgstr "Masa:"
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
+#: ../src/widgets/toolbox.cpp:2291
+#, fuzzy
+msgid "Pressure"
+msgstr "Zawsze zapisywane"
+
+#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr "Zastosuj siłę nacisku urządzenia wejściowego do zmiany grubości kreski"
+
+#: ../src/widgets/toolbox.cpp:2303
+#, fuzzy
+msgid "Tilt"
+msgstr "Tytuł"
+
+#: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr ""
+"Zastosuj pochylenie urządzenia wejściowego do zmiany kąta ustawienia stalówki"
+
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
 #, fuzzy
@@ -11030,15 +11049,6 @@ msgstr "Zaokrąglenie:"
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Increase to round the ends of strokes"
 msgstr ""
-
-#: ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr "Zastosuj siłę nacisku urządzenia wejściowego do zmiany grubości kreski"
-
-#: ../src/widgets/toolbox.cpp:2469
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
-msgstr ""
-"Zastosuj pochylenie urządzenia wejściowego do zmiany kąta ustawienia stalówki"
 
 #: ../src/widgets/toolbox.cpp:2578
 msgid "Arc: Change start/end"
@@ -11238,23 +11248,28 @@ msgid "Modify Path"
 msgstr "Edytuj ścieżkę"
 
 #: ../share/extensions/ai_input.inx.h:1
-msgid "AI Input"
+#, fuzzy
+msgid "AI 8.0 Input"
 msgstr "Źródło AI"
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-msgid "Adobe Illustrator (*.ai)"
+#, fuzzy
+msgid "Adobe Illustrator 8.0 (*.ai)"
 msgstr "Adobe Illustrator (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
-msgid "Open files saved with Adobe Illustrator"
+#, fuzzy
+msgid "Open files saved with Adobe Illustrator 8.0 or older"
 msgstr "Otwórz pliki zapisane w programie Adobe Illustrator"
 
 #: ../share/extensions/ai_output.inx.h:1
-msgid "AI Output"
+#, fuzzy
+msgid "AI 8.0 Output"
 msgstr "Wyjście AI"
 
 #: ../share/extensions/ai_output.inx.h:3
-msgid "Write Adobe Illustrator"
+#, fuzzy
+msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
 msgstr "Zapisz jako Adobe Illustrator"
 
 #: ../share/extensions/aisvg.inx.h:1
@@ -12928,10 +12943,6 @@ msgstr "Źródło Metaplik Windows"
 #, fuzzy
 #~ msgid "Select _Original Clone"
 #~ msgstr "Zaznacz ory_ginał"
-
-#, fuzzy
-#~ msgid "Tile"
-#~ msgstr "Tytuł"
 
 #, fuzzy
 #~ msgid "Select A_ll"

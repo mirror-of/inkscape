@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 13:27+0100\n"
+"POT-Creation-Date: 2007-01-26 23:55+0100\n"
 "PO-Revision-Date: 2006-11-05 17:47+0100\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -3724,7 +3724,7 @@ msgstr "आयात"
 msgid "Move node handle"
 msgstr "नोड ह्यान्डलहरू अनियमित पार्नुहोस्"
 
-#: ../src/nodepath.cpp:3465
+#: ../src/nodepath.cpp:3464
 #, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -3734,22 +3734,22 @@ msgstr ""
 "<b>नोड ह्यान्डल</b>: कोण %0.2f&#176;, लम्बाइ %s; कोण सटाउन <b>Ctrl</b> संग; "
 "लम्बाई ताल्चा लगाउन <b>Alt</b> संग; दुबै ह्यान्डलहरू घुमाउन <b>Shift</b> संग"
 
-#: ../src/nodepath.cpp:3643
+#: ../src/nodepath.cpp:3642
 #, fuzzy
 msgid "Rotate nodes"
 msgstr "नोड बढाउनुहोस्"
 
-#: ../src/nodepath.cpp:3768
+#: ../src/nodepath.cpp:3767
 #, fuzzy
 msgid "Scale nodes"
 msgstr "नोड बढाउनुहोस्"
 
-#: ../src/nodepath.cpp:3815
+#: ../src/nodepath.cpp:3814
 #, fuzzy
 msgid "Flip nodes"
 msgstr "लाइनहरू"
 
-#: ../src/nodepath.cpp:3980
+#: ../src/nodepath.cpp:3979
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3758,38 +3758,38 @@ msgstr ""
 "ह्यान्डलको डाइरेक्टरी सटाउन <b>Ctrl+Alt</b> संग"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4204
+#: ../src/nodepath.cpp:4205
 msgid "end node"
 msgstr "अन्त्य नोड"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:4209
+#: ../src/nodepath.cpp:4210
 msgid "cusp"
 msgstr "cusp"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:4212
+#: ../src/nodepath.cpp:4213
 msgid "smooth"
 msgstr "मिहिन"
 
-#: ../src/nodepath.cpp:4214
+#: ../src/nodepath.cpp:4215
 msgid "symmetric"
 msgstr "सममिति"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4220
+#: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "अन्त्य नोड, ह्यान्डल खण्डन गरियो (विस्तार गर्न <b>Shift</b> संग तान्नुहोस्)"
 
-#: ../src/nodepath.cpp:4222
+#: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "एक ह्यान्डल खण्डन गरियो (विस्तार गर्न <b>Shift</b> संग तान्नुहोस्)"
 
-#: ../src/nodepath.cpp:4225
+#: ../src/nodepath.cpp:4226
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr "दुबै ह्यान्डलहरू खण्डन गरियो (विस्तार गर्न <b>Shift</b> संग तान्नुहोस्)"
 
-#: ../src/nodepath.cpp:4237
+#: ../src/nodepath.cpp:4238
 msgid ""
 "<b>Drag</b> nodes or node handles; <b>Alt+drag</b> nodes to sculpt; "
 "<b>arrow</b> keys to move nodes, <b>&lt; &gt;</b> to scale, <b>[ ]</b> to "
@@ -3799,16 +3799,16 @@ msgstr ""
 "सार्नका लागि <b>बाँण</b> कुञ्जीहरू, <b>&lt; &gt;</b> मापन गर्नका लागि, <b>[ ]</b> "
 "घुमाउनका लागि"
 
-#: ../src/nodepath.cpp:4238
+#: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "नोड वा यसको ह्यान्डलहरू <b>तान्नुहोस्</b>; नोडहरू सार्नका लागि<b>बाँण</b> कुञ्जीहरू"
 
-#: ../src/nodepath.cpp:4261 ../src/nodepath.cpp:4273
+#: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
 msgstr "यसको नोडहरू वा ह्यान्डलहरू सम्पादन गर्न एकल वस्तु चयन गर्नुहोस् ।"
 
-#: ../src/nodepath.cpp:4265
+#: ../src/nodepath.cpp:4266
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -3823,18 +3823,18 @@ msgstr[1] ""
 "<b>%i</b> मघ्ये <b>०</b> नोडहरू चयन गरियो । <b>क्लिक गर्नुहोस्</b>, <b>Shift+click</"
 "b>, वा चयन गर्न नोडहरू <b>वरिपरि तान्नुहोस्</b> ।"
 
-#: ../src/nodepath.cpp:4271
+#: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
 msgstr "यसलाई परिमार्जन गर्न वस्तुको ह्यान्डलहरू तान्नुहोस् ।"
 
-#: ../src/nodepath.cpp:4279
+#: ../src/nodepath.cpp:4280
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "<b>%i</b> मध्ये <b>%i</b> नोड चयन गरियो; %s. %s."
 msgstr[1] "<b>%i</b> मध्ये <b>%i</b> नोडहरू चयन गरियो; %s. %s."
 
-#: ../src/nodepath.cpp:4286
+#: ../src/nodepath.cpp:4287
 #, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
@@ -3847,7 +3847,7 @@ msgstr[1] ""
 "सहायक बाटोहरू <b>%i</b> मध्ये <b>%i</b> मा <b>%i</b> मध्ये <b>%i</b> नोडहरू चयन "
 "गरियो । %s."
 
-#: ../src/nodepath.cpp:4292
+#: ../src/nodepath.cpp:4293
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4459,31 +4459,31 @@ msgstr "यसबाट क्लिप बाटो वा मास्क स�
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr "क्लिप बाटो वा मास्क यसमा लागू गर्न <b>वस्तु(हरू)</b> र मास्क वस्तु चयन गर्नुहोस् ।"
 
-#: ../src/selection-chemistry.cpp:2674
+#: ../src/selection-chemistry.cpp:2698
 #, fuzzy
 msgid "Set clipping path"
 msgstr "बाटो बन्द"
 
-#: ../src/selection-chemistry.cpp:2676
+#: ../src/selection-chemistry.cpp:2700
 #, fuzzy
 msgid "Set mask"
 msgstr "ताराहरू"
 
-#: ../src/selection-chemistry.cpp:2689
+#: ../src/selection-chemistry.cpp:2713
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr "यसबाट क्लिप बाटो वा मास्क हटाउन <b>वस्तु(हरू)</b> चयन गर्नुहोस् ।"
 
-#: ../src/selection-chemistry.cpp:2757
+#: ../src/selection-chemistry.cpp:2781
 #, fuzzy
 msgid "Release clipping path"
 msgstr "चयन बाट क्लिपिङ् बाटो हटाउनुहोस्"
 
-#: ../src/selection-chemistry.cpp:2759
+#: ../src/selection-chemistry.cpp:2783
 #, fuzzy
 msgid "Release mask"
 msgstr "निष्काशन"
 
-#: ../src/selection-chemistry.cpp:2803
+#: ../src/selection-chemistry.cpp:2827
 #, fuzzy
 msgid "Fit page to selection"
 msgstr "चयनमा पृष्ठ ठीक्क पार्नुहोस्"
@@ -5183,26 +5183,26 @@ msgstr "फ्रेम भित्रको प्रवाह"
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "यसलाई प्रवाह हटाउन <b>प्रवाहित पाठ</b> चयन गर्नुहोस् ।"
 
-#: ../src/text-chemistry.cpp:441
+#: ../src/text-chemistry.cpp:445
 #, fuzzy
 msgid "Unflow flowed text"
 msgstr "प्रवाह भएको पाठ"
 
-#: ../src/text-chemistry.cpp:453
+#: ../src/text-chemistry.cpp:457
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "यसलाई प्रवाह हटाउन <b>प्रवाहित पाठ</b> चयन गर्नुहोस् ।"
 
-#: ../src/text-chemistry.cpp:471
+#: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:499
+#: ../src/text-chemistry.cpp:503
 #, fuzzy
 msgid "Convert flowed text to text"
 msgstr "पाठलाई बाटोमा रुपान्तरण गर्नुहोस्"
 
-#: ../src/text-chemistry.cpp:504
+#: ../src/text-chemistry.cpp:508
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "चयनमा बाटोमा रुपान्तरण गर्न <b>कुनै पनि वस्तुहरू</b> छैन ।"
@@ -10759,6 +10759,24 @@ msgstr "समूह:"
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
+#: ../src/widgets/toolbox.cpp:2291
+#, fuzzy
+msgid "Pressure"
+msgstr "सुरक्षित"
+
+#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+
+#: ../src/widgets/toolbox.cpp:2303
+#, fuzzy
+msgid "Tilt"
+msgstr "शीर्षक"
+
+#: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr ""
+
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
 #, fuzzy
@@ -10767,14 +10785,6 @@ msgstr "घुमाउरो:"
 
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Increase to round the ends of strokes"
-msgstr ""
-
-#: ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr ""
-
-#: ../src/widgets/toolbox.cpp:2469
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr ""
 
 #: ../src/widgets/toolbox.cpp:2578
@@ -10967,23 +10977,28 @@ msgid "Modify Path"
 msgstr "बाटो परिमार्जन गर्नुहोस्"
 
 #: ../share/extensions/ai_input.inx.h:1
-msgid "AI Input"
+#, fuzzy
+msgid "AI 8.0 Input"
 msgstr "AI आगत"
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-msgid "Adobe Illustrator (*.ai)"
+#, fuzzy
+msgid "Adobe Illustrator 8.0 (*.ai)"
 msgstr "एडब वर्णनकर्ता (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
-msgid "Open files saved with Adobe Illustrator"
+#, fuzzy
+msgid "Open files saved with Adobe Illustrator 8.0 or older"
 msgstr "एडब वर्णनकर्ता संग बचत गरिएको फाइलहरू खोल्नुहोस्"
 
 #: ../share/extensions/ai_output.inx.h:1
-msgid "AI Output"
+#, fuzzy
+msgid "AI 8.0 Output"
 msgstr "AI निर्गत"
 
 #: ../share/extensions/ai_output.inx.h:3
-msgid "Write Adobe Illustrator"
+#, fuzzy
+msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
 msgstr "एडब वर्णनकर्ता लेख्नुहोस्"
 
 #: ../share/extensions/aisvg.inx.h:1

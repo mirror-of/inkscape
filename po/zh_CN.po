@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 13:27+0100\n"
+"POT-Creation-Date: 2007-01-26 23:55+0100\n"
 "PO-Revision-Date: 2006-11-05 18:07+0100\n"
 "Last-Translator: Chris Jia <Chrisjiasl@gmail.com>\n"
 "Language-Team: \n"
@@ -3664,7 +3664,7 @@ msgstr "矩形"
 msgid "Move node handle"
 msgstr "随机化节点控制点"
 
-#: ../src/nodepath.cpp:3465
+#: ../src/nodepath.cpp:3464
 #, c-format
 msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -3674,22 +3674,22 @@ msgstr ""
 "<b>节点句柄</b>：角度 %0.2f&#176;，长度 %s；按住 <b>Ctrl</b> 捕捉角度；使用 "
 "<b>Alt</b> 锁定长度；按住 <b>Shift</b> 旋转控制点"
 
-#: ../src/nodepath.cpp:3643
+#: ../src/nodepath.cpp:3642
 #, fuzzy
 msgid "Rotate nodes"
 msgstr "提升节点"
 
-#: ../src/nodepath.cpp:3768
+#: ../src/nodepath.cpp:3767
 #, fuzzy
 msgid "Scale nodes"
 msgstr "提升节点"
 
-#: ../src/nodepath.cpp:3815
+#: ../src/nodepath.cpp:3814
 #, fuzzy
 msgid "Flip nodes"
 msgstr "线"
 
-#: ../src/nodepath.cpp:3980
+#: ../src/nodepath.cpp:3979
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -3698,38 +3698,38 @@ msgstr ""
 "b> 捕捉控制点的方向"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4204
+#: ../src/nodepath.cpp:4205
 msgid "end node"
 msgstr "端点"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:4209
+#: ../src/nodepath.cpp:4210
 msgid "cusp"
 msgstr "锐化"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:4212
+#: ../src/nodepath.cpp:4213
 msgid "smooth"
 msgstr "平滑"
 
-#: ../src/nodepath.cpp:4214
+#: ../src/nodepath.cpp:4215
 msgid "symmetric"
 msgstr "对称"
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
-#: ../src/nodepath.cpp:4220
+#: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "端点，控制点重新跟踪（按住 <b>Shift</b> 拖动来扩展）"
 
-#: ../src/nodepath.cpp:4222
+#: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr "单个控制点重新跟踪（按住 <b>Shift</b> 拖动来扩展）"
 
-#: ../src/nodepath.cpp:4225
+#: ../src/nodepath.cpp:4226
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr "所有控制点重新跟踪（按住 <b>Shift</b> 拖动来扩展）"
 
-#: ../src/nodepath.cpp:4237
+#: ../src/nodepath.cpp:4238
 msgid ""
 "<b>Drag</b> nodes or node handles; <b>Alt+drag</b> nodes to sculpt; "
 "<b>arrow</b> keys to move nodes, <b>&lt; &gt;</b> to scale, <b>[ ]</b> to "
@@ -3738,15 +3738,15 @@ msgstr ""
 "<b>拖动</b>节点或节点控制点；<b>Alt+拖动</b>节点造型； <b>方向</b>键移动节"
 "点；<b>&lt; &gt;</b> 缩放，<b>[ ]</b> 旋转"
 
-#: ../src/nodepath.cpp:4238
+#: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr "<b>拖动</b>节点或它的控制点；<b>方向</b>键移动节点"
 
-#: ../src/nodepath.cpp:4261 ../src/nodepath.cpp:4273
+#: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
 msgstr "选择单个对象编辑它的节点或控制点。"
 
-#: ../src/nodepath.cpp:4265
+#: ../src/nodepath.cpp:4266
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -3761,18 +3761,18 @@ msgstr[1] ""
 "<b>%i</b>中的<b>0</b>个节点选择。<b>单击</b>，<b>Shift+单击</b>，或者<b>附近"
 "拖动</b>节点来选择。"
 
-#: ../src/nodepath.cpp:4271
+#: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
 msgstr "拖动对象的控制点修改。"
 
-#: ../src/nodepath.cpp:4279
+#: ../src/nodepath.cpp:4280
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "选择了<b>%i</b>个节点在<b>%i</b>个里面； %s. %s。"
 msgstr[1] "选择了<b>%i</b>个节点在<b>%i</b>个里面； %s. %s。"
 
-#: ../src/nodepath.cpp:4286
+#: ../src/nodepath.cpp:4287
 #, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
@@ -3781,7 +3781,7 @@ msgid_plural ""
 msgstr[0] ""
 "<b>%i</b> / <b>%i</b> 节点已选择在 <b>%i</b> / <b>%i</b> 子路径中 %s。"
 
-#: ../src/nodepath.cpp:4292
+#: ../src/nodepath.cpp:4293
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4376,31 +4376,31 @@ msgstr "选择<b>对象</b>创建剪裁路径或者遮罩。"
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr "选择遮罩对象和<b>对象</b>应用剪裁路径或者遮罩。"
 
-#: ../src/selection-chemistry.cpp:2674
+#: ../src/selection-chemistry.cpp:2698
 #, fuzzy
 msgid "Set clipping path"
 msgstr "关闭路径。"
 
-#: ../src/selection-chemistry.cpp:2676
+#: ../src/selection-chemistry.cpp:2700
 #, fuzzy
 msgid "Set mask"
 msgstr "星形"
 
-#: ../src/selection-chemistry.cpp:2689
+#: ../src/selection-chemistry.cpp:2713
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr "选择<b>对象</b>去除剪裁路径或者遮罩。"
 
-#: ../src/selection-chemistry.cpp:2757
+#: ../src/selection-chemistry.cpp:2781
 #, fuzzy
 msgid "Release clipping path"
 msgstr "从选区中移除剪裁路径"
 
-#: ../src/selection-chemistry.cpp:2759
+#: ../src/selection-chemistry.cpp:2783
 #, fuzzy
 msgid "Release mask"
 msgstr "释放(_R)"
 
-#: ../src/selection-chemistry.cpp:2803
+#: ../src/selection-chemistry.cpp:2827
 #, fuzzy
 msgid "Fit page to selection"
 msgstr "页面适应选区"
@@ -5086,26 +5086,26 @@ msgstr "把浮动转化成框架(_F)"
 msgid "Select <b>a flowed text</b> to unflow it."
 msgstr "选择<b>已浮动文字</b>解除浮动。"
 
-#: ../src/text-chemistry.cpp:441
+#: ../src/text-chemistry.cpp:445
 #, fuzzy
 msgid "Unflow flowed text"
 msgstr "浮动文字"
 
-#: ../src/text-chemistry.cpp:453
+#: ../src/text-chemistry.cpp:457
 #, fuzzy
 msgid "Select <b>flowed text(s)</b> to convert."
 msgstr "选择<b>已浮动文字</b>解除浮动。"
 
-#: ../src/text-chemistry.cpp:471
+#: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:499
+#: ../src/text-chemistry.cpp:503
 #, fuzzy
 msgid "Convert flowed text to text"
 msgstr "把文字转化成路径"
 
-#: ../src/text-chemistry.cpp:504
+#: ../src/text-chemistry.cpp:508
 #, fuzzy
 msgid "<b>No flowed text(s)</b> to convert in the selection."
 msgstr "选取里<b>没有对象</b>可以转化到路径。"
@@ -10589,6 +10589,24 @@ msgstr "质量："
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
+#: ../src/widgets/toolbox.cpp:2291
+#, fuzzy
+msgid "Pressure"
+msgstr "保持"
+
+#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr "使用输入设备的压力改变笔的宽度"
+
+#: ../src/widgets/toolbox.cpp:2303
+#, fuzzy
+msgid "Tilt"
+msgstr "标题"
+
+#: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr "输入设备的倾斜度改变笔尖的角度"
+
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
 #, fuzzy
@@ -10598,14 +10616,6 @@ msgstr "圆角："
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Increase to round the ends of strokes"
 msgstr ""
-
-#: ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr "使用输入设备的压力改变笔的宽度"
-
-#: ../src/widgets/toolbox.cpp:2469
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
-msgstr "输入设备的倾斜度改变笔尖的角度"
 
 #: ../src/widgets/toolbox.cpp:2578
 msgid "Arc: Change start/end"
@@ -10798,23 +10808,28 @@ msgid "Modify Path"
 msgstr "修改路径"
 
 #: ../share/extensions/ai_input.inx.h:1
-msgid "AI Input"
+#, fuzzy
+msgid "AI 8.0 Input"
 msgstr "AI 输出"
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-msgid "Adobe Illustrator (*.ai)"
+#, fuzzy
+msgid "Adobe Illustrator 8.0 (*.ai)"
 msgstr "Adobe 插图(*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
-msgid "Open files saved with Adobe Illustrator"
+#, fuzzy
+msgid "Open files saved with Adobe Illustrator 8.0 or older"
 msgstr "打开使用 Adobe 插图保存的文件"
 
 #: ../share/extensions/ai_output.inx.h:1
-msgid "AI Output"
+#, fuzzy
+msgid "AI 8.0 Output"
 msgstr "AI 输出"
 
 #: ../share/extensions/ai_output.inx.h:3
-msgid "Write Adobe Illustrator"
+#, fuzzy
+msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
 msgstr "保存 Adobe 插图"
 
 #: ../share/extensions/aisvg.inx.h:1

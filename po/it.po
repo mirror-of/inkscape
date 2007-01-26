@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.45~pre2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-25 16:13+0100\n"
+"POT-Creation-Date: 2007-01-26 23:55+0100\n"
 "PO-Revision-Date: 2007-01-24 18:12+0100\n"
 "Last-Translator: Luca Bruno <luca.br@uno.it>>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -3802,11 +3802,11 @@ msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
 msgstr[0] ""
-"<b>0</b> di <b>%i</b> nodo selezionato. <b>Click</b>, <b>Maiusc+click</b>, o <b>trascinare</b> attorno agli "
-"oggetti per selezionare."
+"<b>0</b> di <b>%i</b> nodo selezionato. <b>Click</b>, <b>Maiusc+click</b>, o "
+"<b>trascinare</b> attorno agli oggetti per selezionare."
 msgstr[1] ""
-"<b>0</b> di <b>%i</b> nodi selezionati. <b>Click</b>, <b>Maiusc+click</b>, o <b>trascinare</b> attorno agli "
-"oggetti per selezionare."
+"<b>0</b> di <b>%i</b> nodi selezionati. <b>Click</b>, <b>Maiusc+click</b>, o "
+"<b>trascinare</b> attorno agli oggetti per selezionare."
 
 #: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
@@ -3825,8 +3825,12 @@ msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
 msgid_plural ""
 "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgstr[0] "<b>%i</b> di <b>%i</b> nodo selezionato in <b>%i</b> di <b>%i</b> sottotracciati. %s."
-msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati in <b>%i</b> di <b>%i</b> sottotracciati. %s."
+msgstr[0] ""
+"<b>%i</b> di <b>%i</b> nodo selezionato in <b>%i</b> di <b>%i</b> "
+"sottotracciati. %s."
+msgstr[1] ""
+"<b>%i</b> di <b>%i</b> nodi selezionati in <b>%i</b> di <b>%i</b> "
+"sottotracciati. %s."
 
 #: ../src/nodepath.cpp:4293
 #, c-format
@@ -4428,28 +4432,28 @@ msgstr ""
 "Selezionare l'oggetto mascher e l'<b>oggetto</b> a cui applicare la maschera "
 "o il fissaggio."
 
-#: ../src/selection-chemistry.cpp:2674
+#: ../src/selection-chemistry.cpp:2698
 msgid "Set clipping path"
 msgstr "Imposta fissaggio"
 
-#: ../src/selection-chemistry.cpp:2676
+#: ../src/selection-chemistry.cpp:2700
 msgid "Set mask"
 msgstr "Imposta maschera"
 
-#: ../src/selection-chemistry.cpp:2689
+#: ../src/selection-chemistry.cpp:2713
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr ""
 "Selezionare <b>l'oggetto</b> da cui rimuovere la maschera o il fissaggio."
 
-#: ../src/selection-chemistry.cpp:2757
+#: ../src/selection-chemistry.cpp:2781
 msgid "Release clipping path"
 msgstr "Rimuovi fissaggio"
 
-#: ../src/selection-chemistry.cpp:2759
+#: ../src/selection-chemistry.cpp:2783
 msgid "Release mask"
 msgstr "Rimuovi maschera"
 
-#: ../src/selection-chemistry.cpp:2803
+#: ../src/selection-chemistry.cpp:2827
 msgid "Fit page to selection"
 msgstr "Adatta la pagina alla selezione"
 
@@ -10740,8 +10744,8 @@ msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 1 = fixed "
 "angle)"
 msgstr ""
-"Angolo di incidenza (0 = pennino sempre perpendicolare alla direzione, "
-"1 = angolo fisso)"
+"Angolo di incidenza (0 = pennino sempre perpendicolare alla direzione, 1 = "
+"angolo fisso)"
 
 #: ../src/widgets/toolbox.cpp:2248
 msgid "Caps:"
@@ -10781,6 +10785,28 @@ msgstr ""
 "Aumentare il valore per impostare il ritardo al pennino, come se fosse "
 "rallentato per inerzia"
 
+#: ../src/widgets/toolbox.cpp:2291
+#, fuzzy
+msgid "Pressure"
+msgstr "Preserva"
+
+#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+"Usare la pressione del dispositivo di input per alterare la larghezza della "
+"penna"
+
+#: ../src/widgets/toolbox.cpp:2303
+#, fuzzy
+msgid "Tilt"
+msgstr "Titolo"
+
+#: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr ""
+"Usare l'inclinazione della dispositivo di input per alterare l'angolo della "
+"punta della penna"
+
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Round:"
@@ -10789,18 +10815,6 @@ msgstr "Arrotondamento:"
 #: ../src/widgets/toolbox.cpp:2402
 msgid "Increase to round the ends of strokes"
 msgstr "Aumentare per arrotondare gli estremi dei contorni"
-
-#: ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr ""
-"Usare la pressione del dispositivo di input per alterare la larghezza della "
-"penna"
-
-#: ../src/widgets/toolbox.cpp:2469
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
-msgstr ""
-"Usare l'inclinazione della dispositivo di input per alterare l'angolo della "
-"punta della penna"
 
 #: ../src/widgets/toolbox.cpp:2578
 msgid "Arc: Change start/end"
