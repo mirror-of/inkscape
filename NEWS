@@ -4,22 +4,35 @@ Inkscape 0.45: overview
    Summer of Code 2006 participants, as well as tons of other
    improvements across the board. Here are the highlights:
      * Gaussian blur is the first SVG filter supported by Inkscape. You
-       can now blur any object in the drawing, and it remains fully
-       vector and editable. This gives a huge boost to Inkscape as a
-       creative art tool.
+       can blur any object to any extent - yet it remains vector and
+       fully editable. This gives a huge boost to Inkscape as a creative
+       art tool.
 
      * Display speed and interactivity: not only does Inkscape render
        faster, but it can now respond to user input before it finished
        redrawing the screen, which greatly improves the interactivity of
        the program.
 
-     * History dialog makes it easy to return to any stage that your
-       drawing went through, undoing and redoing your actions in bulk.
+     * History dialog makes it easy to to review your editing session and
+       jump to any step of it, undoing and redoing multiple actions with
+       one click.
 
-     * Bitmap tracing sports a redesigned dialog and several new options.
+     * Several important tool features are added, notably the new
+       selection mode in Node tool and the adjustable rounded caps in
+       Calligraphic pen.
+
+     * Bitmap tracing works better for multi-color traces, sports a
+       redesigned dialog and several new options.
 
      * Many new extension effects are added, including Color effects and
        Pattern along path.
+
+     * The Outline mode has got many fixes and improvements, including a
+       keyboard shortcut.
+
+     * Several new commands in Help menu open various Inkscape-related
+       pages in your default browser, making Inkscape reference
+       information more accessible as you work.
 
      * Dozens of smaller features are added throughout the program, and
        hundreds of bugs are fixed.
@@ -46,7 +59,8 @@ SVG filters: Gaussian blur
        (Ctrl+Shift+F) and use the Blur slider. The blur value is a
        percentage, with 100% corresponding to a blurring radius of 1/8 of
        the object's bounding box' perimeter (that is, for a square, a
-       blur of 100% will have the radius equal to half a side).
+       blur of 100% will have the radius equal to half a side, which
+       turns any shape into an amorphous cloud).
 
      * The Tile Clones dialog also supports blurring. On the Blur &
        opacity tab, you can set the blur percentage per row or per column
@@ -62,7 +76,8 @@ SVG filters: Gaussian blur
        when blurring thin strokes; on the other hand, the "best quality"
        setting may make Inkscape extremely slow at high zooms. These
        settings only affect the screen display of blurred objects; bitmap
-       export always uses the best quality.
+       export always uses the best quality (and may therefore become
+       quite slow for images with a lot of blur).
 
    Here are a few tips on using blur:
      * Masks and clipping are applied after blur. That is, if you clip an
@@ -80,14 +95,15 @@ SVG filters: Gaussian blur
        generally, if you want the shadow to be the same color as the
        object), you can clone instead of copy to make the shadow
        auto-updating. But what if your foreground object is not black but
-       you need a black shadow? Here's a recipe: unset the object's fill
-       (it becomes black); create two clones of it; put one clone on top
-       and paint any color you want; put the other clone at bottom, blur
-       it and shift sideways. Now you can edit the unset-fill original
-       (use Alt+click to select it) and everything will update.
+       you need an auto-updating black shadow? Here's a recipe: unset the
+       object's fill (it becomes black); create two clones of it; put one
+       clone on top and paint any color you want; put the other clone at
+       bottom, blur it and shift sideways. Now you can edit the
+       unset-fill original (use Alt+click to select it) and everything
+       will update.
 
      * If an object has a fill that you don't want to blur (e.g. pattern,
-       or if it's a bitmap), but you just want to feather its edges, use
+       or if it's a bitmap), but you just want to feather the edges, use
        a blurred transparency mask. For this, copy the object; paint it
        white; blur it as needed; scale the blurred copy down so its blur
        margins are entirely within the original object; select both the
@@ -103,7 +119,7 @@ SVG filters: Gaussian blur
      * You can combine blurring with gradients. For example, an ellipse
        with elliptic opacity gradient will look much softer and more
        natural when blurred. An object with a horizontal linear opacity
-       gradient, when blurred, will look like it is more blurred on its
+       gradient, when blurred, will look as if it's more blurred on its
        transparent side than on its opaque side.
 
      * A clone of a blurred object inherits the blur of the original.
@@ -115,24 +131,29 @@ SVG filters: Gaussian blur
        dialog does not reflect that.
 
      * Note that Firefox 2.0 does not support SVG filters, so your files
-       will be displayed in Firefox 2.0 without blur. However, support
-       has been added in the current development version ("trunk") and
-       will be included in Firefox 3.0. The Opera web browser, as well as
-       librsvg (used by Wikipedia) and Batik, support filters correctly.
+       will be displayed in Firefox 2.0 without blur. However, filter
+       support has been added in the current development version and will
+       be included in Firefox 3.0. The Opera web browser, as well as
+       librsvg (used by Wikipedia) and Batik, support filters correctly
+       in their current versions.
 
 
 Undo history
 
-     * Inkscape now features a History Dialog accessible through
-       Ctrl+Shift+H or Edit->Undo History. All changes to the document
-       since it was opened are recorded here.
+     * Inkscape now features a History Dialog accessible via Ctrl+Shift+H
+       or Edit > Undo History. All changes made to the document since it
+       was opened are recorded here.
+
           + In the dialog, changes are listed from the oldest (top) to
             the newest (bottom).
+
           + The type of each change is indicated by an icon and a short
             description.
+
           + For readability, consecutive changes of the same type are
-            placed in a collapsable branch showing a triangle marker and
+            placed in a collapsible branch showing a triangle marker and
             the number of the hidden actions in the branch.
+
           + By clicking on an event in the list, you can easily move
             through the undo history, i.e. undo or redo any number of
             actions with one click.
@@ -151,21 +172,22 @@ Rendering improvements
        keyboard input and can abort the current redraw and start over if
        you do some screen-changing operation. As a result, Inkscape now
        feels much snappier and more interactive. This interruptibility is
-       fine-tuned for some interactive operations (such as node dragging)
-       so that a balance is achieved between responsiveness and
+       fine-tuned for some continuous-drag operations (such as node
+       dragging) so that a balance is achieved between responsiveness and
        completeness of display.
 
-     * Radial gradients are rendered faster by at least 10%.
+     * Screen render is faster by 2-3% overall:
 
-     * Screen render is faster by 2-3%, up to 5% for complex drawings
-       with transparency.
+          + Complex drawings with transparency are faster by up to 5%.
+
+          + Radial gradients are rendered faster by at least 10%.
+
+     * Rendering (compositing) quality has been improved. This is most
+       visible with (partially) transparent gradients: banding is a lot
+       less pronounced now. Speed has also been improved in some cases.
 
      * Display is more responsive when working at high zoom levels when
        using a tablet.
-
-     * Rendering (compositing) quality has been improved. This is most
-       visible with (partially) transparent gradients, banding is a lot
-       less pronounced now. Speed has also been improved in some cases.
 
 
 Tools
@@ -180,13 +202,11 @@ Node tool
        deselects the farthest selected node. There are two modes that
        differ by how the closest/farthest nodes are chosen:
 
-     *
-          + Spatial selection (Mousewheel, PageUp/PageDown): distances to
+          + Spatial selection (mousewheel, PageUp/PageDown): distances to
             nodes are measured directly, regardless of which subpath a
             node belongs to.
 
-     *
-          + Linear selection (Ctrl+Mousewheel,
+          + Linear selection (Ctrl+mousewheel,
             Ctrl+PageUp/Ctrl+PageDown): node distances are measured along
             the path, and only the nodes belonging to the same subpath as
             the hovered node are considered (i.e. other subpaths are
@@ -200,16 +220,19 @@ Node tool
 Dropper
 
      * Instead of the confusing toggle button, now the Controls bar for
-       the Dropper tool has two checkboxes, "Pick alpha" and "Set alpha",
+       the Dropper tool has two checkboxes, Pick alpha and Set alpha,
        which work as follows. Suppose you have an object selected and,
        using Dropper, click on an object which has red (#FF0000) fill and
        0.5 opacity (half-transparent).
+
           + If the "Pick alpha" checkbox is off, the selected object will
             get the fill color #800000 (i.e. faded-out red) and fill
             opacity will be at 1.0 (opaque).
+
           + If the "Pick alpha" checkbox is on but "Set alpha" is off,
             the selected object will get the fill color #FF0000 (red) and
             fill opacity will be at 1.0.
+
           + If both "Pick alpha" and "Set alpha" are on, the selected
             object will get the fill color #FF0000 (red) and fill opacity
             will be at 0.5 (half-transparent).
@@ -217,8 +240,8 @@ Dropper
           If you Shift+click instead of click, the same changes will be
           made to stroke color and stroke opacity, correspondingly. Note
           that in no situation can Dropper change the master opacity of
-          the selected object(s), although it can pick it just as it does
-          any other kind of opacity.
+          the selected object(s) (only the fill/stroke opacity), although
+          it can pick it just as it does any other kind of opacity.
 
 
 Calligraphy
@@ -234,6 +257,17 @@ Calligraphy
        inversion (i.e. low drag corresponds to high wiggle, and vice
        versa). Increase this parameter (default is 0) to make the pen
        waver and wiggle in curly patterns.
+
+     * As a first step towards a redesign of the tools' controls, the
+       Controls bar of the Calligraphy pen has been upgraded. Now it no
+       longer prevents the Inkscape window from resizing narrower than
+       the bar. The items on the far right end of the bar which didn't
+       fit in a narrow window are still accessible through an expansion
+       menu which allows you to toggle switches, select commands, and set
+       values of numeric fields. Also, each editable numeric value field
+       has a new right-click menu with some common values which often
+       allows you to set a desired value much faster than by scrolling
+       the control or typing the value into it.
 
 
 Outline mode
@@ -282,24 +316,23 @@ Outline mode
 
 Keyboard profiles
 
-   The previous release allowed sets of keybinding to be created for
-   Inkscape in the style of other applications. Two more sets of
-   keybindings have been added.
+   The previous release allowed sets of keybindings (keymaps) to be
+   created for Inkscape in the style of other applications. Two more
+   keymaps have been added:
      * Adobe Illustrator
      * Macromedia Freehand
 
    Of course not every feature in these other programs has a direct match
-   to features in Inkscape so if you can please do help us out by
+   to features in Inkscape; so, if you can, please help us out by
    reporting any problems you may have or improvements you would like to
    request.
 
-   Additionally, a keybinding that focuses on tablet-based illustration
-   and drawing work has been added:
+   Additionally, a keymap that focuses on tablet-based illustration and
+   drawing work has been added:
      * right-handed-illustration.xml
 
-   This keybinding places all commonly-used commands under the left hand,
-   so that the user's hands rarely leave the keyboard or the
-   tablet/stylus.
+   This keymap places all commonly-used commands under the left hand, so
+   that the user's hands rarely leave the keyboard or the tablet/stylus.
 
    (To enable a profile, copy it into default.xml in the same directory,
    overwriting the old file. To restore the default Inkscape set, copy
@@ -323,7 +356,7 @@ Extension effects
    effects can be considered a quick way to prototype and test the
    algorithms and UI controls of the future Inkscape features. However,
    this does not prevent effects from being genuinely useful in everyday
-   work, and in this version we have many useful additions.
+   work, and in this version we have several excellent additions.
 
 New effects
 
@@ -337,30 +370,31 @@ New effects
           Effect's parameters include:
 
           + Copies of the pattern selects one of the four modes: Single
-            stretched one copy of the pattern is placed the skeleton path
-            and stretched/squeezed to match its length; Repeated
-            streched: as many copies as would fit are placed along the
+            stretched: one copy of the pattern is placed on the skeleton
+            path and stretched/squeezed to match its length; Repeated
+            stretched: as many copies as would fit are placed along the
             skeleton path and stretched to fit exactly; Single and
             Repeated: same but without stretching.
 
           + Deformation type can be one of: Snake bends the pattern
             flatly in the plane of the drawing, the width not depending
-            on direction; Ribbon bends it as a vertical ribbon, or like a
+            on direction; Ribbon bends it as a vertical ribbon or like a
             calligraphic stroke with maximum fixation, so that width
             depends on direction (minimum for vertical parts of the
             stroke, maximum for horizontal).
 
           + Several parameters allow you to adjust spacing between the
             copies of the pattern (for Multiple modes) and their offset
-            in two directions.
+            in two directions (along the skeleton path and perpendicular
+            to it).
 
           + Normally the effect assumes that the pattern object is
-            horizontal and bends its horizontal axis (at mid-hegith)
+            horizontal and bends its horizontal axis (at mid-height)
             along the skeleton path. There's a checkbox that allows you
             to use a vertical pattern instead.
 
-          Some examples of using this effect can be seen at a screenshot
-          at [63][1].
+          Some examples of using this effect are shown on a screenshot at
+          [63][1].
 
      * Color effects: A new group of extensions in the Color submenu of
        the Effects menu allows you to adjust all colors of a selection at
@@ -384,23 +418,23 @@ New effects
           + a Custom command where you can set your own formulas for
             modifying the color channels.
 
-          Some examples of using this effect can be seen at a screenshot
-          at [64][2].
+          Some examples of using this effect are shown on a screenshot at
+          [64][2].
 
           Note: undoing color changes on gradients exposes a bug where an
-          object seems to "disappear"; this is however only a display
-          issue (caused by the order in which gradients and their users
-          are restored on undo) not causing any loss of information.
-          Also, on large documents and large selections with gradients,
-          Python's XPath code may get quite slow. Despite these
-          shortcomings, we decided to add this extension, because it's
-          genuinely useful functionality which was so far missing in
-          Inkscape.
+          object seems to "disappear"; this is only a display issue
+          (caused by the order in which gradients and their users are
+          restored on undo) not causing any loss of information. Also, on
+          large documents and large selections with gradients, Python's
+          XPath code may get quite slow. Despite these shortcomings, we
+          decided to add this extension, because it's genuinely useful
+          functionality which was so far missing in Inkscape.
 
      * Recent fixes in the processing of SVG <defs /> have made it
        possible to implement the often requested Color Markers to Match
-       Stroke effect. It is no longer necessary to spend long stretches
-       of time hand editing XML to recolor arrow heads and other markers.
+       Stroke effect. It is no longer necessary to hand-edit XML to
+       recolor arrowheads; just change the stroke color of your path and
+       call this effect to recolor its markers to match.
 
      * Lorem ipsum (in "Render" submenu) is a new extension that creates
        the traditional Latin-like random text for design mock-ups. The
@@ -417,11 +451,12 @@ New effects
      * g2png: The new group-to-PNG Python extension (g2png) is an easy
        way to export any group or layer to individual PNG files. It was
        first created for use in the Inkscape User Manual (also
-       available in SVN's user_manual module) but is also interesting for
-       many other uses. If e.g. you have to draw a set of icons, you can
-       draw them in the same document, thus making copying, duplicating,
-       cloning etc. easier. Then just create a group for each icon, and
-       with the extension, each group ends up in its own PNG file.
+       available in SVN in the user_manual module) but is also
+       interesting for many other uses. If e.g. you have to draw a set of
+       icons, you can draw them in the same document, thus making
+       copying, duplicating, cloning etc. easier. Then just create a
+       group for each icon, and with the extension, each group ends up in
+       its own PNG file.
 
 
 Improved effects
@@ -445,12 +480,11 @@ Improved effects
 Infrastructure
 
      * 3 new parameter types have been added to the extension effect UI:
-       tabs, enumerations and optiongroups (radiobuttons). Examples are
-       available of how to use these parameters in the definition of
-       extensions: the new function plotter uses tabs; enumerations are
-       used by the 'Pattern along path' extension; and a small developer
-       example is given to illustrate the use of optiongroups (identical
-       to enumerations).
+       tabs, enumerations and optiongroups (radio buttons). Examples are
+       available of how to use these parameters in INX files: the new
+       Function Plotter uses tabs; enumerations are used by the Pattern
+       along path extension; and a small developer example is given to
+       illustrate the use of optiongroups (identical to enumerations).
 
      * In an extension's INX file, you can specify <effects-menu
        hidden="yes"/> to hide that extension from the Effects menu.
@@ -461,7 +495,7 @@ Infrastructure
      * In an extension's INX file, you can add needs-document="no"
        attribute to the <effect> element. This indicates that the
        extension does not process the current SVG document, and Inkscape
-       does not bother saving and restoring the document from a temporary
+       will not bother saving and restoring the document from a temporary
        file which allows this extension to run faster and smoother. (This
        is used for the new open-in-default-browser Help menu commands
        which are technically implemented as extensions.)
@@ -542,14 +576,19 @@ Bitmap tracing
        adequate results with less colors used. This improves tracing
        results both for full-color photographs and for limited-color
        drawings.
+
      * The Trace Bitmap dialog now provides access to three more tracing
        parameters:
+
           + Suppress speckles: If set, spots or speckles larger than the
-            given size are suppressed in the trace.
+            given size (in pixels) are suppressed in the trace.
+
           + Smooth corners: This parameter controls how much smoothing is
             applied to corners in the traced path.
+
           + Optimize paths: If set, trace paths are optimized by joining
             adjacent Bezier segments with the given tolerance.
+
      * All controls in the Trace Bitmap dialog are reorganized to be
        easier to find. The dialog is redesigned to use two main tabs:
        Mode (where you select the tracing mode, such as brightness cutoff
@@ -562,12 +601,18 @@ Bitmap tracing
 
 Even more improvements
 
-     * A 'Save a copy'-function has been added to the file menu, similar
-       to the 'Save a copy' functionality of e.g. Adobe Illustrator. With
-       this function, you can save your document under a new filename,
-       but Inkscape will 'forget' it has done this: later saves will be
+     * The opacity of objects is now displayed as percentage, from 0 to
+       100, both in the Fill & Stroke dialog (with one fractional digit)
+       and in the statusbar style indicator (with no fractional digits),
+       instead of from 0 to 1.0 as before. This makes opacity values
+       easier to read, type, and say.
+
+     * A Save a copy command has been added to the file menu, similar to
+       the 'Save a copy' functionality of e.g. Adobe Illustrator. With
+       this command, you can save your document under a new filename, but
+       Inkscape will then "forget" it has done this: later saves will be
        to the old filename. The default shortcut assigned to this
-       function is: Shift+Ctrl+Alt+S.
+       function is Shift+Ctrl+Alt+S.
 
      * Text and flowed text objects behave more consistently. Now you can
        put a flowed text on path or (re)flow it into a shape just as you
@@ -582,15 +627,11 @@ Even more improvements
        SVG 1.1 specification. All these commands open the
        corresponding web pages in the user's default web browser.
 
-     * Exported PNG images have the correct resolution set in the
-       headers.
-
-     * [new toolbar: squeezable, expansion menu, right-click menus -
-       joncruz]
+     * Exported PNG images have the correct resolution set in the header.
 
      * The Path -> Union (Ctrl++) operation now functions when only a
        single object is selected. Use this to remove self-intersections
-       from objects.
+       in path objects.
 
      * We removed the "hacked" filename entry field that we had added to
        the Open and Save dialogs because starting from version 2.10, GTK+
@@ -643,21 +684,9 @@ Even more improvements
        Inkscape. The business card 85×54 template is now installed as
        well.
 
-     * The opacity of objects is now displayed as percentage, from 0 to
-       100, both in the Fill & Stroke dialog (with one fractional digit)
-       and in the statusbar style indicator (with no fractional digits),
-       instead of from 0 to 1.0 as before. This makes opacity values
-       easier to read, type, and say.
-
      * "Other" license type was added to the metadata/license dialog so
        that people know that they are entering a URI to an "other"
        license.
-
-     * Doxygen DoxyFile is updated.
-
-     * Thanks to patches submitted by users of our community, Inkscape
-       can now be built on SGI IRIX 6.5.28, gcc 3.4.0 systems and on
-       Tru64 systems.
 
 
 Examples
@@ -686,7 +715,7 @@ Examples
        of the objects.
 
 
-Translations
+Translations, tutorials, templates
 
      * Remarkable improvements are in the Danish, Finnish, Nepalese and
        the Vietnamese translations of the user interface. They all jumped
@@ -696,19 +725,16 @@ Translations
        Inkscape's user interface in that language. Isthay isway oughtbray
        otay usway ybay away ewnay anslatortray.
 
-     * Default Lithuanian template was not installed before, which is now
-       fixed.
-
      * Updated British English, Catalan, Bulgarian and Thai translations.
 
-
-Tutorials and templates
+     * Default Lithuanian template was not installed before, which is now
+       fixed.
 
      * New tutorial "Easter Eggs" by Steve Karg.
 
      * Added Catalan default template and elements tutorial.
 
-     * Russian header and footer templates are added.
+     * Russian header and footer templates for tutorials are added.
 
 
 Dependency changes
@@ -716,11 +742,11 @@ Dependency changes
      * We have changed the GTK+ requirement for compilation to version
        2.8. However, it is highly recommended to use at least the version
        2.10.7 because previous versions contain at least one crash bug
-       which may cause Inkscape to crash when editing a value in a
+       which may cause Inkscape to crash after typing in a value into a
        spinbutton.
 
 
-Bugfixes
+Notable bugfixes
 
      * When deleting a node, neighboring smooth nodes are converted to
        cusp.
@@ -734,7 +760,10 @@ Bugfixes
        Simplify, Object/Stroke to path, or boolean operations.
 
      * Ungrouping a group containing clipped/masked objects might
-       sometime break the clip/mask (move it away); fixed.
+       sometime break the clip/mask (move it away); this is fixed.
+
+     * Transforming an object and its clone no longer behaves
+       unexpectedly when they are both within a transformed group.
 
      * User-supplied templates in ~/.inkscape/templates can now be SVGZ
        files in addition to SVG.
@@ -748,18 +777,18 @@ Bugfixes
        if a display operation requires more memory than available, or
        more than 100Mb (which corresponds to a 5000x5000 pixel buffer),
        it is skipped. This may result in blurred objects "disappearing"
-       at high zooms. This is purely a display issue, however, it never
-       corrupts data; just zoom out (or reduce blur radius) and the
+       at high zooms. This is purely a display issue, however, and it
+       never corrupts data; just zoom out (or reduce blur radius) and the
        disappeared object will show up OK.
 
      * When resizing objects, scaling numbers in the statusbar are no
        longer overwritten by other text when pressing the modifier keys
        (Alt, Shift, Ctrl).
 
-     * To work around problems some users have had with pressure
-       sensitive tablets (bug), the pressure sensitivity can be
-       disabled from the misc tab of Inkscape preferences dialogue. The
-       tablet can then be used, though with reduced functionality.
+     * To work around problems some users had with pressure-sensitive
+       tablets (bug 1281512), the pressure sensitivity can be
+       disabled from the Misc tab of Inkscape Preferences dialog. After
+       that, the tablet can still be used as a regular mouse.
 
      * The layer widget in the statusbar used to lose its current layer
        after an effect run; this is fixed.
@@ -769,18 +798,22 @@ Bugfixes
        checks whether the saved position of the dialog is offscreen, if
        so it will move the dialog to the center of the screen. Note that
        this not solve all problems. If the dialog is still not visible,
-       go to the bugreport where a procedure is given to make the
-       dialog visible (editting preferences.xml).
-
-     * Performing a boolean union without selecting an object no longer
-       crashes Inkscape.
+       go to the bug 1250236 where a procedure is given to make the
+       dialog visible (by editing preferences.xml).
 
      * Grid and guidelines no longer vanish when changing their color.
 
-     * Group transformation is now correctly applied when ungrouping and
-       undo'ing the ungroup.
+     * Group transformation is now correctly re-applied when ungrouping
+       and then undoing the ungroup operation.
 
      * Text dialog no longer discards the style of the selected text.
+
+     * Inkscape no longer crashes when you try to unflow an empty flowed
+       text.
+
+     * Thanks to patches submitted by users of our community, Inkscape
+       can now be built on SGI IRIX 6.5.28, gcc 3.4.0 systems and on
+       Tru64 systems.
 
 
 Known problems
@@ -799,21 +832,30 @@ Problem with "Dialogs on Top" on Windows
        this problem.
 
 
+Spinbuttons may crash if you have GTK+ older than 2.10.7
+
+     * You may experience crashes after typing in a value into a
+       spinbutton if you have a version of GTK+ 2.10.6 or older. Upgrade
+       your GTK+ to fix this. (This does not affect the Windows package
+       as it comes with GTK+ 2.10.9.)
+
+
 Numerical Python required for Perspective effect
 
      * This effect will not work until you install a python module called
        numpy (Numerical Python). It can be downloaded at
-       numpy.scipy.org.
+       numpy.scipy.org. The Windows package already contains this
+       module.
 
 
-Do not use a clone of an object as its clipping path
+Do not use a clone of an object as its clipping path/mask
 
-     * There's a known crash when you try to use an object's clone as its
-       clipping path. Either unlink the clone first, or clip one clone of
+     * In this version, you cannot use an object's clone as its clipping
+       path or mask. Either unlink the clone first, or clip one clone of
        a source object (not the source itself) by another clone of the
-       same. Fixing this bug requires some deep changes in the code and
-       therefore was postponed until after 0.45 so as not to delay the
-       release.
+       same. Properly fixing this bug requires some deep changes in the
+       code and therefore was postponed until after 0.45 so as not to
+       delay the release.
 
 
 Non-Unicode symbol fonts on Windows don't work
@@ -827,9 +869,8 @@ OSX 10.3.9: cannot open files
      * This bug is due to a missing symbol (_statvfs) in the system
        library /usr/lib/libSystem.B.dylib on 10.3.9. The dependency is
        introduced by one of the gnome-vf2 modules. It is not something we
-       can easily fix other than by not linking with gnome-vfs2, which we
-       will do for or upcoming 0.45 release if no other solution becomes
-       apparent. [mjwybrow]
+       can easily fix other than by not linking with gnome-vfs2, but
+       unfortunately this was not resolved in time for 0.45.
 
 
 Problems with some Debian libgc-6.7 packages
