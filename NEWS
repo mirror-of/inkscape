@@ -359,6 +359,9 @@ New effects
             along the skeleton path. There's a checkbox that allows you
             to use a vertical pattern instead.
 
+          Some examples of using this effect can be seen at a screenshot
+          at [63][1].
+
      * Color effects: A new group of extensions in the Color submenu of
        the Effects menu allows you to adjust all colors of a selection at
        once. These commands affect both fill and stroke colors, including
@@ -381,8 +384,8 @@ New effects
           + a Custom command where you can set your own formulas for
             modifying the color channels.
 
-          These extensions are a temporary solution; in a future version,
-          similar functionality will be added to Inkscape core.
+          Some examples of using this effect can be seen at a screenshot
+          at [64][2].
 
           Note: undoing color changes on gradients exposes a bug where an
           object seems to "disappear"; this is however only a display
@@ -465,6 +468,12 @@ Infrastructure
 
 
 Export formats
+
+
+AI import/export
+
+     * We only support AI import and export for Adobe Illustrator 8.0 and
+       older. This has been clarified in the Open and Save As lists.
 
 
 PDF export
@@ -704,7 +713,12 @@ Tutorials and templates
 
 Dependency changes
 
-   [short text about using GK 2.8 now, and other dependency changes?]
+     * We have changed the GTK+ requirement for compilation to version
+       2.8. However, it is highly recommended to use at least the version
+       2.10.7 because previous versions contain at least one crash bug
+       which may cause Inkscape to crash when editing a value in a
+       spinbutton.
+
 
 Bugfixes
 
