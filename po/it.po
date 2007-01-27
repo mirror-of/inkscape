@@ -6,21 +6,18 @@
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <luca.br@uno.it>, 2005-2007.
 #
-#: ../src/widgets/toolbox.cpp:4035 ../src/widgets/toolbox.cpp:4056
-#: ../src/widgets/toolbox.cpp:4085 ../src/widgets/toolbox.cpp:4106
-#: ../src/widgets/toolbox.cpp:4133
 msgid ""
 msgstr ""
-"Project-Id-Version: inkscape 0.45~pre2\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: inkscape 0.45\n"
+"Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2007-01-26 19:05-0800\n"
-"PO-Revision-Date: 2007-01-24 18:12+0100\n"
-"Last-Translator: Luca Bruno <luca.br@uno.it>>\n"
+"PO-Revision-Date: 2007-01-27 14:59+0100\n"
+"Last-Translator: Luca Bruno <luca.br@uno.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);"
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
@@ -1015,9 +1012,8 @@ msgstr "Disattiva riempimento"
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] ""
-"<b>%d</b> oggetto trovato (su un totale di <b>%d</b>), corrispondenza %s.<b>%"
-"d</b> oggetti trovati (su un totale di <b>%d</b>), corrispondenza %s."
+msgstr[0] "<b>%d</b> oggetto trovato (su un totale di <b>%d</b>), corrispondenza %s."
+msgstr[1] "<b>%d</b> oggetti trovati (su un totale di <b>%d</b>), corrispondenza %s."
 
 #: ../src/dialogs/find.cpp:374 ../src/ui/dialog/find.cpp:437
 msgid "exact"
@@ -2825,9 +2821,9 @@ msgstr "Inverti gradiente"
 #, c-format
 msgid "<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle"
 msgid_plural "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"
-msgstr[0] ""
-"<b>Gradiente</b> per %d oggetto; con <b>Ctrl</b> per far scattare "
-"l'angolo<b>Gradiente</b> per %d oggetti; con <b>Ctrl</b> per far scattare "
+msgstr[0] "<b>Gradiente</b> per %d oggetto; con <b>Ctrl</b> per far scattare "
+"l'angolo"
+msgstr[1] "<b>Gradiente</b> per %d oggetti; con <b>Ctrl</b> per far scattare "
 "l'angolo"
 
 #: ../src/gradient-context.cpp:465
@@ -2890,13 +2886,11 @@ msgstr ""
 msgid ""
 "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
 "separate"
-msgid_plural ""
 "Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
 "separate"
-msgstr[0] ""
+msgstr ""
 "Punto di gradiente condiviso da <b>%d</b> gradiente; trascinare con "
 "<b>Maiusc</b> per separare"
-msgstr[1] ""
 "Punto di gradiente condiviso da <b>%d</b> gradienti; trascinare con "
 "<b>Maiusc</b> per separare"
 
@@ -3798,13 +3792,11 @@ msgstr "Selezionare un singolo oggetto per modificarne i nodi o le maniglie"
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
-msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
-msgstr[0] ""
+msgstr ""
 "<b>0</b> di <b>%i</b> nodo selezionato. <b>Click</b>, <b>Maiusc+click</b>, o "
 "<b>trascinare</b> attorno agli oggetti per selezionare."
-msgstr[1] ""
 "<b>0</b> di <b>%i</b> nodi selezionati. <b>Click</b>, <b>Maiusc+click</b>, o "
 "<b>trascinare</b> attorno agli oggetti per selezionare."
 
@@ -3823,12 +3815,10 @@ msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati; %s. %s."
 #, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgid_plural ""
 "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgstr[0] ""
+msgstr ""
 "<b>%i</b> di <b>%i</b> nodo selezionato in <b>%i</b> di <b>%i</b> "
 "sottotracciati. %s."
-msgstr[1] ""
 "<b>%i</b> di <b>%i</b> nodi selezionati in <b>%i</b> di <b>%i</b> "
 "sottotracciati. %s."
 
@@ -4813,7 +4803,7 @@ msgstr "Oggetto"
 #: ../src/sp-item.cpp:866
 #, c-format
 msgid "%s; <i>clipped</i>"
-msgstr ""
+msgstr "%s; <i>fissato</i>"
 
 #: ../src/sp-item.cpp:871
 #, c-format
@@ -5546,7 +5536,8 @@ msgstr "about.svg"
 msgid "translator-credits"
 msgstr ""
 "Luca Bruno (luca.br@uno.it)\n"
-"Luca Ferretti (elle.uca@infinito.it)"
+"Luca Ferretti (elle.uca@infinito.it)\n"
+"Francesco Ricci (tardo2002@libero.it)"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:219
 #: ../src/ui/dialog/align-and-distribute.cpp:759
@@ -6199,19 +6190,19 @@ msgstr "Aggiungi automaticamente l'estensione"
 
 #: ../src/ui/dialog/filedialog.cpp:1808
 msgid "Left edge of source"
-msgstr ""
+msgstr "Margine sinistro dell'originale"
 
 #: ../src/ui/dialog/filedialog.cpp:1809
 msgid "Top edge of source"
-msgstr ""
+msgstr "Margine superiore dell'originale"
 
 #: ../src/ui/dialog/filedialog.cpp:1810
 msgid "Right edge of source"
-msgstr ""
+msgstr "Margine destro dell'originale"
 
 #: ../src/ui/dialog/filedialog.cpp:1811
 msgid "Bottom edge of source"
-msgstr ""
+msgstr "Margine inferiore dell'originale"
 
 #: ../src/ui/dialog/filedialog.cpp:1812
 msgid "Source width"
@@ -7918,11 +7909,11 @@ msgstr "Spedizione invito whiteboard a <b>%1</b>"
 #: ../src/ui/view/edit-widget.cpp:902 ../src/ui/view/edit-widget.cpp:906
 #: ../src/ui/view/edit-widget.cpp:910 ../src/ui/view/edit-widget.cpp:914
 msgid "PLACEHOLDER, do not translate"
-msgstr ""
+msgstr "PLACEHOLDER, do not translate"
 
 #: ../src/ui/view/edit-widget.cpp:999
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
-msgstr ""
+msgstr "PLACEHOLDER, DO NOT TRANSLATE"
 
 #: ../src/ui/view/edit-widget.cpp:1058 ../src/widgets/desktop-widget.cpp:250
 msgid "Zoom drawing if window size changes"
@@ -10786,9 +10777,8 @@ msgstr ""
 "rallentato per inerzia"
 
 #: ../src/widgets/toolbox.cpp:2291
-#, fuzzy
 msgid "Pressure"
-msgstr "Preserva"
+msgstr "Pressione"
 
 #: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
 msgid "Use the pressure of the input device to alter the width of the pen"
@@ -10797,9 +10787,8 @@ msgstr ""
 "penna"
 
 #: ../src/widgets/toolbox.cpp:2303
-#, fuzzy
 msgid "Tilt"
-msgstr "Titolo"
+msgstr "Tilt"
 
 #: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
@@ -10866,7 +10855,8 @@ msgstr "Preleva trasparenza"
 msgid ""
 "Pick both the color and the alpha (transparency) under cursor; otherwise, "
 "pick only the visible color premultiplied by alpha"
-msgstr ""
+msgstr "Preleva sia il colore che l'alpha (trasparenza) sotto il cursoe; altrimenti preleva "
+"solo il colore visibile premoltiplicato per il valore alpha"
 
 #: ../src/widgets/toolbox.cpp:3084
 msgid "Set alpha"
@@ -10875,7 +10865,7 @@ msgstr "Imposta trasparenza"
 #: ../src/widgets/toolbox.cpp:3085
 msgid ""
 "If alpha was picked, assign it to selection as fill or stroke transparency"
-msgstr ""
+msgstr "Se il canale alpha è prelevato, lo assegna alla selezione come trasparenza di riempimento o contorno"
 
 #: ../src/widgets/toolbox.cpp:3384
 msgid "Text: Change font family"
@@ -11309,7 +11299,7 @@ msgstr "Grafico funzione"
 
 #: ../share/extensions/funcplot.inx.h:8
 msgid "Isotropic scaling (uses smallest: width/xrange or height/yrange)"
-msgstr ""
+msgstr "Ridimensionamento isotropico (usa altezza/range-y o larghezza/range-y minimi)"
 
 #: ../share/extensions/funcplot.inx.h:9
 msgid "Multiply x-range by 2*pi"
@@ -11475,7 +11465,7 @@ msgstr "Numero di paragrafi"
 
 #: ../share/extensions/lorem_ipsum.inx.h:3
 msgid "Paragraph length fluctuation (sentences)"
-msgstr ""
+msgstr "Lunghezza paragrafo (numero frasi)"
 
 #: ../share/extensions/lorem_ipsum.inx.h:5
 msgid "Sentences per paragraph"
@@ -11512,7 +11502,7 @@ msgstr "Precisione"
 
 #: ../share/extensions/measure.inx.h:9
 msgid "Scale Factor (Drawing:Real Length) = 1:"
-msgstr ""
+msgstr "Fattore di riduzione (Disegno:Lughezza reale) = 1"
 
 #: ../share/extensions/measure.inx.h:10
 msgid ""
@@ -11522,7 +11512,11 @@ msgid ""
 "from the text to the path. The Scale factor can be used to make measurements "
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
-msgstr ""
+msgstr "Questo effetto misura la lunghezza del tracciato selezionato e la stampa come un "
+"oggetto testuale sul tracciato, con l'unità di misura scelta. Il numero di cifre decimali "
+"può essere controllato con l'opzione Precisione. Il campo Margine controlla la distanza "
+"del testo dal tracciato. Il fattore di riduzione è utile per misure di disegni in scala. Per esempio,"
+"se 1 cm di disegno corrisponde a 2,5 metri reali, il fattore di riduzione va impostato a 250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -11609,7 +11603,9 @@ msgid ""
 "This effect bends a pattern object along an arbitrary \"skeleton\" path. The "
 "pattern can be a path or a group of paths. First, select the pattern object; "
 "then add to selection the skeleton path; then call this effect."
-msgstr ""
+msgstr "Questo effetto riproduce un motivo lungo un tracciato di scheletro a scelta."
+"Il motivo può essere un tracciato o un gruppo di tracciati. Selezionare prima "
+"il motivo, poi il tracciato, quindi applicare questo effetto."
 
 #: ../share/extensions/perspective.inx.h:2
 msgid "Perspective"
@@ -11778,3 +11774,4 @@ msgstr "Windows Metafile (*.wmf)"
 #: ../share/extensions/wmf_input.inx.h:3
 msgid "Windows Metafile Input"
 msgstr "Input Windows Metafile"
+
