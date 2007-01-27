@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-26 19:05-0800\n"
-"PO-Revision-Date: 2007-01-11 00:20+0100\n"
+"POT-Creation-Date: 2007-01-27 00:39+0100\n"
+"PO-Revision-Date: 2007-01-26 01:08+0100\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4398,12 +4398,10 @@ msgid "Move"
 msgstr "Verschieben"
 
 #: ../src/selection-chemistry.cpp:1754
-#, fuzzy
 msgid "Move vertically by pixels"
 msgstr "Vertikal um einzelne Pixel verschieben"
 
 #: ../src/selection-chemistry.cpp:1757
-#, fuzzy
 msgid "Move horizontally by pixels"
 msgstr "Horizontal um einzelne Pixel verschieben"
 
@@ -4878,13 +4876,12 @@ msgstr "Objekt"
 #: ../src/sp-item.cpp:866
 #, c-format
 msgid "%s; <i>clipped</i>"
-msgstr ""
+msgstr "%s; <i>ausgeschnitten</i>"
 
-# !!!
 #: ../src/sp-item.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "%s; <i>masked</i>"
-msgstr "<i>%s</i>"
+msgstr "%s, <i>maskiert</i>"
 
 # !!!
 #: ../src/sp-line.cpp:187
@@ -5181,7 +5178,7 @@ msgstr ""
 
 #: ../src/text-chemistry.cpp:117
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
-msgstr ""
+msgstr "Der Fließtext muss sichtbar sein, um einem Pfad zugewiesen zu werden."
 
 #: ../src/text-chemistry.cpp:184 ../src/verbs.cpp:2074
 msgid "Put text on path"
@@ -5233,7 +5230,7 @@ msgstr "<b>Fließtext</b> zum Umwandeln auswählen."
 
 #: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
-msgstr ""
+msgstr "Der Fließtext muss sichtbar sein, um  umgewandelt werden zu können."
 
 #: ../src/text-chemistry.cpp:503
 msgid "Convert flowed text to text"
@@ -6289,19 +6286,19 @@ msgstr "Automatisch einen Suffix für Dateinamen anhängen"
 
 #: ../src/ui/dialog/filedialog.cpp:1808
 msgid "Left edge of source"
-msgstr ""
+msgstr "Linke Kante der Quelle"
 
 #: ../src/ui/dialog/filedialog.cpp:1809
 msgid "Top edge of source"
-msgstr ""
+msgstr "Obere Kante der Quelle"
 
 #: ../src/ui/dialog/filedialog.cpp:1810
 msgid "Right edge of source"
-msgstr ""
+msgstr "Rechte Kante der Quelle"
 
 #: ../src/ui/dialog/filedialog.cpp:1811
 msgid "Bottom edge of source"
-msgstr ""
+msgstr "Untere Kante der Quelle"
 
 #: ../src/ui/dialog/filedialog.cpp:1812
 msgid "Source width"
@@ -6320,9 +6317,8 @@ msgid "Destination height"
 msgstr "Zielhöhe"
 
 #: ../src/ui/dialog/filedialog.cpp:1816
-#, fuzzy
 msgid "Resolution (dots per inch)"
-msgstr "Bevorzugte Auflösung der Bitmap (Punkte pro Zoll)"
+msgstr "Auflösung (Punkte pro Zoll)"
 
 #. #########################################
 #. ## EXTRA WIDGET -- SOURCE SIDE
@@ -7495,9 +7491,7 @@ msgstr "Gaußschen Weichzeichner vor dem Nachzeichnen anwenden"
 msgid "Stack scans"
 msgstr "Scans stapeln"
 
-# !!! source string wrong!
 #: ../src/ui/dialog/tracedialog.cpp:531
-#, fuzzy
 msgid ""
 "Stack scans on top of one another (no gaps) instead of tiling (usually with "
 "gaps)"
@@ -8436,12 +8430,12 @@ msgstr "Seitengröße setzen"
 #: ../src/ui/widget/style-swatch.cpp:274
 #, c-format
 msgid "Fill: %06x/%.3g"
-msgstr ""
+msgstr "Füllung: %06x/%.3g"
 
 #: ../src/ui/widget/style-swatch.cpp:276
 #, c-format
 msgid "Stroke: %06x/%.3g"
-msgstr ""
+msgstr "Kontur: %06x/%.3g"
 
 #: ../src/ui/widget/style-swatch.cpp:325
 #, c-format
@@ -10678,7 +10672,6 @@ msgid "Star: Change number of corners"
 msgstr "Stern: Anzahl der Ecken ändern"
 
 #: ../src/widgets/toolbox.cpp:944
-#, fuzzy
 msgid "Star: Change spoke ratio"
 msgstr "Stern: Verhältnis der Spitzen ändern"
 
@@ -10898,9 +10891,8 @@ msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr "Erhöhen, um den Füller nachzuschleppen, wie durch Trägheit verlangsamt"
 
 #: ../src/widgets/toolbox.cpp:2291
-#, fuzzy
 msgid "Pressure"
-msgstr "Beibehalten"
+msgstr "Druck"
 
 #: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
 msgid "Use the pressure of the input device to alter the width of the pen"
@@ -10909,9 +10901,8 @@ msgstr ""
 "Füllers zu beeinflussen"
 
 #: ../src/widgets/toolbox.cpp:2303
-#, fuzzy
 msgid "Tilt"
-msgstr "Titel"
+msgstr "Neigung"
 
 #: ../src/widgets/toolbox.cpp:2304 ../src/widgets/toolbox.cpp:2469
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
@@ -11123,29 +11114,24 @@ msgid "Modify Path"
 msgstr "Pfad modifizieren"
 
 #: ../share/extensions/ai_input.inx.h:1
-#, fuzzy
 msgid "AI 8.0 Input"
-msgstr "AI einlesen"
+msgstr "AI 8.0 einlesen"
 
 #: ../share/extensions/ai_input.inx.h:2 ../share/extensions/ai_output.inx.h:2
-#, fuzzy
 msgid "Adobe Illustrator 8.0 (*.ai)"
-msgstr "Adobe Illustrator (*.ai)"
+msgstr "Adobe Illustrator 8.0 (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
-#, fuzzy
 msgid "Open files saved with Adobe Illustrator 8.0 or older"
-msgstr "Mit Adobe Illustrator gespeicherte Dateien öffnen"
+msgstr "Mit Adobe Illustrator 8.0 oder älter gespeicherte Dateien öffnen"
 
 #: ../share/extensions/ai_output.inx.h:1
-#, fuzzy
 msgid "AI 8.0 Output"
-msgstr "AI-Ausgabe"
+msgstr "AI-8.0-Ausgabe"
 
 #: ../share/extensions/ai_output.inx.h:3
-#, fuzzy
 msgid "Write Adobe Illustrator 8.0 (Postscript-based)"
-msgstr "Adobe Illustrator schreiben"
+msgstr "Adobe Illustrator 8.0 (Postscript-basiert) schreiben"
 
 #: ../share/extensions/aisvg.inx.h:1
 msgid "AI SVG Input"
@@ -11378,9 +11364,8 @@ msgid "Extract One Image"
 msgstr "Ein Bild extrahieren"
 
 #: ../share/extensions/extractimage.inx.h:3
-#, fuzzy
 msgid "Note: The file extension is appended automatically."
-msgstr "Automatisch einen Suffix für Dateinamen anhängen"
+msgstr "Die Dateinamens-Erweiterung wird automatisch angehängt."
 
 #: ../share/extensions/extractimage.inx.h:4
 msgid "Path to save image"
@@ -11613,39 +11598,33 @@ msgid "Color Markers to Match Stroke"
 msgstr "Färbe Markierungen wie Striche"
 
 #: ../share/extensions/measure.inx.h:1
-#, fuzzy
 msgid "Font size [px]"
-msgstr "Schriftgröße"
+msgstr "Schriftgröße [px]"
 
 #. <param name="unit" type="string" _gui-text="Unit {km|m|cm|mm|in|px|pt}">mm</param>
 #: ../share/extensions/measure.inx.h:4
-#, fuzzy
 msgid "Length Unit: "
-msgstr "Länge"
+msgstr "Längeneinheit: "
 
 #: ../share/extensions/measure.inx.h:5
-#, fuzzy
 msgid "Measure"
-msgstr "Pfad ausmessen"
+msgstr "Ausmessen"
 
 #: ../share/extensions/measure.inx.h:6
 msgid "Measure Path"
 msgstr "Pfad ausmessen"
 
-# !!! verb or noun?
 #: ../share/extensions/measure.inx.h:7
-#, fuzzy
 msgid "Offset [px]"
-msgstr "Pfadversatz"
+msgstr "Versatz [px]"
 
 #: ../share/extensions/measure.inx.h:8
-#, fuzzy
 msgid "Precision"
-msgstr "Beschreibung"
+msgstr "Genauigkeit"
 
 #: ../share/extensions/measure.inx.h:9
 msgid "Scale Factor (Drawing:Real Length) = 1:"
-msgstr ""
+msgstr "Maßstab (Zeichnung:Wirkliche Länge) = 1:"
 
 #: ../share/extensions/measure.inx.h:10
 msgid ""
@@ -11656,6 +11635,13 @@ msgid ""
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
 msgstr ""
+"Dieser Effekt mißt die Länge des gewählten Pfads und fügt sie als ein Text-"
+"auf-Pfad-Objekt mit der gewählten Einheit hinzu. Die Zahl der signifikanten "
+"Stellen kann mit dem Feld »Genauigkeit« festgelegt werden. Das Feld "
+"»Versatz« steuert den Abstand der Einheit vom Pfad. Der Maßstab kann benutzt "
+"werden, um in skalierten Zeichnungen zu messen. Wenn zum Beispiel 1 cm in "
+"der Zeichung 2,5 m in der Realität entsprechen, setzt man den Maßstab auf "
+"250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -11706,31 +11692,28 @@ msgid "Pattern is vertical"
 msgstr "Muster ist vertikal"
 
 #: ../share/extensions/pathalongpath.inx.h:8
-#, fuzzy
 msgid "Repeated"
-msgstr "Wiederholung:"
+msgstr "Wiederholt"
 
 #: ../share/extensions/pathalongpath.inx.h:9
 msgid "Repeated, stretched"
-msgstr ""
+msgstr "Wiederholt, gestreckt"
 
 #: ../share/extensions/pathalongpath.inx.h:10
 msgid "Ribbon"
-msgstr ""
+msgstr "Band"
 
 #: ../share/extensions/pathalongpath.inx.h:11
-#, fuzzy
 msgid "Single"
-msgstr "Winkel"
+msgstr "Einzeln"
 
 #: ../share/extensions/pathalongpath.inx.h:12
 msgid "Single, stretched"
-msgstr ""
+msgstr "Einzeln, gestreckt"
 
 #: ../share/extensions/pathalongpath.inx.h:13
-#, fuzzy
 msgid "Snake"
-msgstr "Scheren"
+msgstr "Schlange"
 
 #: ../share/extensions/pathalongpath.inx.h:14
 msgid "Space between copies:"
@@ -11746,11 +11729,14 @@ msgid ""
 "pattern can be a path or a group of paths. First, select the pattern object; "
 "then add to selection the skeleton path; then call this effect."
 msgstr ""
+"Dieser Effekt verbiegt ein Muster-Objekt entlang eines willkürlichen "
+"»Skelett«-Pfades. Das Muster kann ein Pfad oder eine Gruppe von Pfaden sein. "
+"Wählen Sie zuerst das Muster-Objekt, dann fügen Sie den »Skelett«-Pfad zur "
+"Auswahl hinzu, dann rufen Sie diesen Effekt auf."
 
 #: ../share/extensions/perspective.inx.h:2
-#, fuzzy
 msgid "Perspective"
-msgstr "Anwesenheit"
+msgstr "Perspektive"
 
 #: ../share/extensions/ps_input.inx.h:1
 msgid "Postscript"
