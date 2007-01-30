@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.45\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-26 19:05-0800\n"
-"PO-Revision-Date: 2007-01-27 14:30+0100\n"
+"PO-Revision-Date: 2007-01-30 20:49+0100\n"
 "Last-Translator: Josef Vybíral <josef.vybiral@gmail.com>\n"
 "Language-Team:  <none>\n"
 "MIME-Version: 1.0\n"
@@ -5252,7 +5252,9 @@ msgstr "about.svg"
 #. one per line in the form of:  name surname (email). Use \n for newline.
 #: ../src/ui/dialog/aboutbox.cpp:265
 msgid "translator-credits"
-msgstr "Program: Josef Vybíral (josef.vybiral@gmail.com)Návody: Lukáš Hess"
+msgstr ""
+"Program: Josef Vybíral (josef.vybiral@gmail.com) \n"
+"Návody: Lukáš Hess"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:219
 #: ../src/ui/dialog/align-and-distribute.cpp:759
