@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-14 18:11+0100\n"
-"PO-Revision-Date: 2007-01-29 22:24-0300\n"
-"Last-Translator: Samy Marcelo Nascimento <samynascimento@gmail.com>\n"
+"PO-Revision-Date: 2007-02-01 12:01-0300\n"
+"Last-Translator: Valessio Brito <valessio@gmail.com>\n"
 "Language-Team: Português Brasil <inkscape-brasil@listas.softwarelivre.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6135,9 +6135,8 @@ msgid "Background"
 msgstr "Plano de fundo:"
 
 #: ../src/ui/dialog/filedialog.cpp:1928
-#, fuzzy
 msgid "Destination"
-msgstr "Destino da impressão"
+msgstr "Destino"
 
 #: ../src/ui/dialog/fill-and-stroke.cpp:36
 msgid "Fill"
@@ -6412,9 +6411,8 @@ msgid "Keep selected"
 msgstr "Manter selecionado"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:309
-#, fuzzy
 msgid "Don't attach connectors to text objects"
-msgstr "Fazer com que os conectores evitem os objetos selecionados"
+msgstr "Não anexar conectores a textos"
 
 #. Selector
 #: ../src/ui/dialog/inkscape-preferences.cpp:312
@@ -7109,7 +7107,7 @@ msgstr "Pausar"
 
 #: ../src/ui/dialog/session-player.cpp:141
 msgid "Go forward one change"
-msgstr "Avançar uma mudança"
+msgstr "Avançar uma modificação"
 
 #: ../src/ui/dialog/session-player.cpp:142
 msgid "Play"
@@ -7453,9 +7451,8 @@ msgstr ""
 "se não, transformar a seleção ao todo "
 
 #: ../src/ui/dialog/transformation.cpp:105
-#, fuzzy
 msgid "Edit c_urrent matrix"
-msgstr "Levantar a camada atual"
+msgstr "Editar matriz _atual"
 
 #: ../src/ui/dialog/transformation.cpp:105
 msgid ""
@@ -7488,14 +7485,12 @@ msgid "Reset the values on the current tab to defaults"
 msgstr "Reinicie os valores da tabela atual para os valores padrão"
 
 #: ../src/ui/dialog/transformation.cpp:157
-#, fuzzy
 msgid "Apply transformation to selection"
-msgstr "Aplicar transformação ao objeto"
+msgstr "Aplicar transformação à seleção"
 
 #: ../src/ui/dialog/transformation.cpp:746
-#, fuzzy
 msgid "Edit transformation matrix"
-msgstr "Matriz de transformação"
+msgstr "Editar matriz de transformação"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:44
 msgid "_Use SSL"
@@ -7503,7 +7498,7 @@ msgstr "_Usar SSL"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:44
 msgid "_Register"
-msgstr "Registrar"
+msgstr "_Registrar"
 
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-connect.cpp:76
@@ -7917,7 +7912,7 @@ msgstr "Gradiente radial"
 
 #: ../src/ui/widget/selected-style.cpp:157
 msgid "Different"
-msgstr "Diferença"
+msgstr "Diferente"
 
 #: ../src/ui/widget/selected-style.cpp:160
 msgid "Different fills"
@@ -7929,9 +7924,8 @@ msgstr "Traços diferentes"
 
 #: ../src/ui/widget/selected-style.cpp:162
 #: ../src/ui/widget/style-swatch.cpp:303
-#, fuzzy
 msgid "Unset"
-msgstr "comprimir"
+msgstr "Comprimir"
 
 #: ../src/ui/widget/selected-style.cpp:168
 #, fuzzy
@@ -8141,28 +8135,25 @@ msgid "U_nits:"
 msgstr "U_nidades:"
 
 #: ../src/ui/widget/page-sizer.cpp:301
-#, fuzzy
 msgid "Width of paper"
-msgstr "Largura do retângulo"
+msgstr "Largura do papel"
 
 #: ../src/ui/widget/page-sizer.cpp:303
 msgid "_Height:"
 msgstr "_Altura:"
 
 #: ../src/ui/widget/page-sizer.cpp:303
-#, fuzzy
 msgid "Height of paper"
-msgstr "Altura do retângulo"
+msgstr "Altura do papel"
 
 #: ../src/ui/widget/page-sizer.cpp:355
-#, fuzzy
 msgid "Set page size"
-msgstr "Tamanho da tela:"
+msgstr "Definir tamanho da tela"
 
 #: ../src/ui/widget/style-swatch.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Stroke width: %.5g%s"
-msgstr "Largura do traço"
+msgstr "Largura do traço: %.5g%s"
 
 #: ../src/ui/widget/style-swatch.cpp:341
 #, c-format
@@ -8247,14 +8238,12 @@ msgid "Deleted layer."
 msgstr "A camada foi apagada."
 
 #: ../src/verbs.cpp:1288
-#, fuzzy
 msgid "Flip horizontally"
-msgstr "Inverter _Horizontalmente"
+msgstr "Inverter horizontalmente"
 
 #: ../src/verbs.cpp:1297
-#, fuzzy
 msgid "Flip vertically"
-msgstr "Inverter _Verticalmente"
+msgstr "Inverter verticalmente"
 
 #. TRANSLATORS: If you have translated the keys.svg file to your language, then
 #. translate this string as "keys.LANG.svg" (where LANG is your language code);
@@ -8332,7 +8321,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:1972
 msgid "_Save"
-msgstr "Salvar"
+msgstr "_Salvar"
 
 #: ../src/verbs.cpp:1972
 msgid "Save document"
@@ -8348,7 +8337,7 @@ msgstr "Salvar o documento com um outro nome"
 
 #: ../src/verbs.cpp:1976
 msgid "Save a Cop_y..."
-msgstr "Salvar _Cópia..."
+msgstr "Salvar Cóp_ia..."
 
 #: ../src/verbs.cpp:1977
 msgid "Save a copy of the document under a new name"
@@ -8397,16 +8386,14 @@ msgid "_Import..."
 msgstr "_Importar..."
 
 #: ../src/verbs.cpp:1988
-#, fuzzy
 msgid "Import a bitmap or SVG image into this document"
-msgstr "Importar figura ou imagem SVG para dentro do desenho"
+msgstr "Importar figura ou imagem SVG para o desenho"
 
 #: ../src/verbs.cpp:1989
 msgid "_Export Bitmap..."
 msgstr "_Exportar Figura..."
 
 #: ../src/verbs.cpp:1990
-#, fuzzy
 msgid "Export this document or a selection as a bitmap image"
 msgstr "Exportar o desenho ou a seleção como um bitmap"
 
@@ -8431,9 +8418,8 @@ msgid "_Close"
 msgstr "Fe_char"
 
 #: ../src/verbs.cpp:1996
-#, fuzzy
 msgid "Close this document window"
-msgstr "Pular para a janela de desenho anterior"
+msgstr "Fechar a janela do desenho"
 
 #: ../src/verbs.cpp:1997
 msgid "_Quit"
@@ -8448,9 +8434,8 @@ msgid "Undo last action"
 msgstr "Desfazer a última ação"
 
 #: ../src/verbs.cpp:2003
-#, fuzzy
 msgid "Do again the last undone action"
-msgstr "Fazer novamente a ação que foi desfeita"
+msgstr "Refazer a última ação desfeita"
 
 #: ../src/verbs.cpp:2004
 msgid "Cu_t"
@@ -8473,37 +8458,32 @@ msgid "_Paste"
 msgstr "Co_lar"
 
 #: ../src/verbs.cpp:2009
-#, fuzzy
 msgid "Paste objects from clipboard to mouse point, or paste text"
-msgstr "Colar os objetos da área de transferência para a posição do mouse"
+msgstr "Colar objetos ou texto da área de transferência para a posição do mouse"
 
 #: ../src/verbs.cpp:2010
 msgid "Paste _Style"
 msgstr "Colar E_stilo"
 
 #: ../src/verbs.cpp:2011
-#, fuzzy
 msgid "Apply the style of the copied object to selection"
 msgstr "Aplicar o estilo do objeto copiado para a seleção"
 
 #: ../src/verbs.cpp:2013
-#, fuzzy
 msgid "Scale selection to match the size of the copied object"
-msgstr "Mover seleção para a camada acima da atual"
+msgstr "Redimensionar seleção para o tamanho do objeto selecionado"
 
 #: ../src/verbs.cpp:2014
-#, fuzzy
 msgid "Paste _Width"
-msgstr "_Largura da Página"
+msgstr "Colar La_rgura"
 
 #: ../src/verbs.cpp:2015
 msgid "Scale selection horizontally to match the width of the copied object"
 msgstr "Redimensionar seleção horizontalmente para a largura do objeto copiado"
 
 #: ../src/verbs.cpp:2016
-#, fuzzy
 msgid "Paste _Height"
-msgstr "Colar E_stilo"
+msgstr "Colar _Altura"
 
 #: ../src/verbs.cpp:2017
 msgid "Scale selection vertically to match the height of the copied object"
@@ -8591,7 +8571,6 @@ msgstr "Selecione o objeto ao qual o clone está ligado"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:2037
-#, fuzzy
 msgid "Objects to Patter_n"
 msgstr "O_bjeto para Padrão"
 
@@ -8601,9 +8580,8 @@ msgstr "Converter a seleção para um padrão, a ser usado como preenchimento."
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:2040
-#, fuzzy
 msgid "Pattern to _Objects"
-msgstr "Padrão para O_bjeto"
+msgstr "Padrão para _Objeto"
 
 #: ../src/verbs.cpp:2041
 msgid "Extract objects from a tiled pattern fill"
@@ -8887,9 +8865,8 @@ msgstr ""
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: ../src/verbs.cpp:2131
-#, fuzzy
 msgid "_Trace Bitmap..."
-msgstr "_Traçar figura"
+msgstr "_Traçar Bitmap..."
 
 #: ../src/verbs.cpp:2132
 msgid "Create one or more paths from a bitmap by tracing it"
@@ -8926,9 +8903,8 @@ msgid "Gri_d Arrange..."
 msgstr "Ajuste da Gra_de..."
 
 #: ../src/verbs.cpp:2142
-#, fuzzy
 msgid "Arrange selected objects in a grid pattern"
-msgstr "Organizar seleção na grade padrão"
+msgstr "Arrumar objetos selecionados em um padrão de grade"
 
 #. Layer
 #: ../src/verbs.cpp:2144
@@ -9021,14 +8997,12 @@ msgstr "Apagar a camada atual"
 
 #. Object
 #: ../src/verbs.cpp:2168
-#, fuzzy
 msgid "Rotate _90&#176; CW"
-msgstr "Girar +_90 graus"
+msgstr "Girar +_90&#176; graus"
 
 #: ../src/verbs.cpp:2169
-#, fuzzy
 msgid "Rotate selection 90&#176; clockwise"
-msgstr "Girar a seleção 90 graus no sentido hórario"
+msgstr "Girar a seleção 90&#176; graus no sentido hórario"
 
 #: ../src/verbs.cpp:2170
 #, fuzzy
@@ -9036,9 +9010,8 @@ msgid "Rotate 9_0&#176; CCW"
 msgstr "Girar -9_0 graus"
 
 #: ../src/verbs.cpp:2171
-#, fuzzy
 msgid "Rotate selection 90&#176; counter-clockwise"
-msgstr "Girar a seleção 90 graus no sentido anti-horário"
+msgstr "Girar a seleção 90&#176; graus no sentido anti-horário"
 
 #: ../src/verbs.cpp:2172
 msgid "Remove _Transformations"
@@ -11118,20 +11091,19 @@ msgstr "As seguintes funções estão disponíveis: (funções matemáticas padr
 
 #: ../share/extensions/funcplot.inx.h:16
 msgid "y-value of rectangle's bottom"
-msgstr "valor de y da base do retângulo"
+msgstr "Valor de y da base do retângulo"
 
 #: ../share/extensions/funcplot.inx.h:17
 msgid "y-value of rectangle's top"
-msgstr "valor de y do topo do retângulo"
+msgstr "Valor de y do topo do retângulo"
 
 #: ../share/extensions/g2pngs.inx.h:1
 msgid "Directory"
 msgstr "Pasta"
 
 #: ../share/extensions/g2pngs.inx.h:3
-#, fuzzy
 msgid "Groups to PNGs"
-msgstr "Grupos"
+msgstr "Grupos para PNGs"
 
 #: ../share/extensions/g2pngs.inx.h:4
 msgid "Save layers only"
@@ -11229,7 +11201,7 @@ msgstr "Ângulo direito"
 
 #: ../share/extensions/lindenmayer.inx .h:11
 msgid "Rules"
-msgstr "Réguas"
+msgstr "Regras"
 
 #: ../share/extensions/lindenmayer.inx .h:12
 msgid "Step length (px)"
@@ -11462,7 +11434,7 @@ msgstr "Centro Y"
 
 #: ../share/extensions/whirl.inx.h:5
 msgid "Rotation is clockwise"
-msgstr "Girar a seleção 90 graus no sentido hórario"
+msgstr "Girar no sentido horário"
 
 #: ../share/extensions/whirl.inx.h:6
 msgid "Whirl"
