@@ -5531,11 +5531,11 @@ msgstr "about.svg"
 #: ../src/ui/dialog/aboutbox.cpp:265
 msgid "translator-credits"
 msgstr ""
-" Valek Filippov <frob@df.ru>, 2000, 2003."
-"Vitaly Lipatov <lav@altlinux.ru>, 2002, 2004."
-"Alexey Remizov <alexey@remizov.pp.ru>, 2004."
-"bulia byak <buliabyak@users.sf.net>, 2004."
-"Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2004-2007."
+"Valek Filippov (frob@df.ru), 2000, 2003.\n"
+"Vitaly Lipatov (lav@altlinux.ru), 2002, 2004.\n"
+"Alexey Remizov (alexey@remizov.pp.ru), 2004.\n"
+"bulia byak (buliabyak@users.sf.net), 2004.\n"
+"Alexandre Prokoudine (alexandre.prokoudine@gmail.com), 2004-2007."
 
 #: ../src/ui/dialog/align-and-distribute.cpp:219
 #: ../src/ui/dialog/align-and-distribute.cpp:759
