@@ -74,6 +74,7 @@ src/extension/implementation/implementation.cpp
 src/extension/implementation/script.cpp
 src/extension/init.cpp
 src/extension/internal/bluredge.cpp
+src/extension/internal/emf-win32-inout.cpp
 src/extension/internal/eps-out.cpp
 src/extension/internal/gdkpixbuf-input.cpp
 src/extension/internal/gimpgrad.cpp
@@ -82,6 +83,7 @@ src/extension/internal/grid.cpp
 src/extension/internal/latex-pstricks-out.cpp
 src/extension/internal/latex-pstricks.cpp
 src/extension/internal/odf.cpp
+src/extension/internal/pdf.cpp
 src/extension/internal/pov-out.cpp
 src/extension/internal/ps-out.cpp
 src/extension/internal/ps.cpp
@@ -106,6 +108,7 @@ src/helper/stock-items.cpp
 src/helper/unit-menu.cpp
 src/helper/units.cpp
 src/helper/window.cpp
+src/ink-action.cpp
 src/inkjar/jar.cpp
 src/inkscape-stock.cpp
 src/inkscape.cpp
@@ -364,7 +367,7 @@ src/zoom-context.cpp
 [type: gettext/xml] share/extensions/inkscape_help_reportabug.inx
 [type: gettext/xml] share/extensions/inkscape_help_svgspec.inx
 [type: gettext/xml] share/extensions/interp.inx
-[type: gettext/xml] share/extensions/lindenmayer.inx 
+[type: gettext/xml] share/extensions/lindenmayer.inx
 [type: gettext/xml] share/extensions/lorem_ipsum.inx
 [type: gettext/xml] share/extensions/markers_strokepaint.inx
 [type: gettext/xml] share/extensions/measure.inx
