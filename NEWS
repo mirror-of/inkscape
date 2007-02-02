@@ -269,6 +269,9 @@ Calligraphy
        allows you to set a desired value much faster than by scrolling
        the control or typing the value into it.
 
+     * The calligraphy tool responsiveness has been reduced to prevent
+       "blobs" forming at the ends of strokes when low fixation is used.
+
 
 Outline mode
 
@@ -394,7 +397,7 @@ New effects
             to use a vertical pattern instead.
 
           Some examples of using this effect are shown on a screenshot at
-          [63][1].
+          [62][1].
 
      * Color effects: A new group of extensions in the Color submenu of
        the Effects menu allows you to adjust all colors of a selection at
@@ -419,7 +422,7 @@ New effects
             modifying the color channels.
 
           Some examples of using this effect are shown on a screenshot at
-          [64][2].
+          [63][2].
 
           Note: undoing color changes on gradients exposes a bug where an
           object seems to "disappear"; this is only a display issue
@@ -862,15 +865,6 @@ Non-Unicode symbol fonts on Windows don't work
 
      * On Windows, symbol fonts without a Unicode map do not work. This
        is a limitation of the Pango library that we use.
-
-
-OSX 10.3.9: cannot open files
-
-     * This bug is due to a missing symbol (_statvfs) in the system
-       library /usr/lib/libSystem.B.dylib on 10.3.9. The dependency is
-       introduced by one of the gnome-vf2 modules. It is not something we
-       can easily fix other than by not linking with gnome-vfs2, but
-       unfortunately this was not resolved in time for 0.45.
 
 
 Problems with some Debian libgc-6.7 packages
