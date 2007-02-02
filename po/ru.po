@@ -11007,7 +11007,7 @@ msgstr "Удалить красный компонент"
 
 #: ../share/extensions/color_rgbbarrel.inx.h:2
 msgid "RGB Barrel"
-msgstr "«Бочка» RGB (RGB->BGR->GRB->...)"
+msgstr "«Бочка» RGB..."
 
 #: ../share/extensions/dia.inx.h:1
 msgid "A diagram created with the program Dia"
