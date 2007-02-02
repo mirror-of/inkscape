@@ -168,6 +168,7 @@ EXTRA_DIST =	\
 	traits/function.h	\
 	traits/list-copy.h	\
 	traits/reference.h \
+	$(inkboard_dialog_extradist) \
 	$(jabber_whiteboard_SOURCES)
 
 EXTRA_PROGRAMS =	\
