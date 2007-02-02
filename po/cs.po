@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.45\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-26 19:05-0800\n"
-"PO-Revision-Date: 2007-01-30 20:49+0100\n"
+"PO-Revision-Date: 2007-02-02 10:44+0100\n"
 "Last-Translator: Josef Vybíral <josef.vybiral@gmail.com>\n"
 "Language-Team:  <none>\n"
 "MIME-Version: 1.0\n"
@@ -8763,7 +8763,7 @@ msgstr "Otočit o _90&#176; vpravo"
 
 #: ../src/verbs.cpp:2169
 msgid "Rotate selection 90&#176; clockwise"
-msgstr "Otočit výběr o 90&#176; po směru hodinových ručiček"
+msgstr "Otočit výběr o 90˚ po směru hodinových ručiček"
 
 #: ../src/verbs.cpp:2170
 msgid "Rotate 9_0&#176; CCW"
@@ -8771,7 +8771,7 @@ msgstr "Otočit o 9_0&#176; vlevo"
 
 #: ../src/verbs.cpp:2171
 msgid "Rotate selection 90&#176; counter-clockwise"
-msgstr "Otočit výběr o 90&#176; po směru hodinových ručiček"
+msgstr "Otočit výběr o 90˚ po směru hodinových ručiček"
 
 #: ../src/verbs.cpp:2172
 msgid "Remove _Transformations"

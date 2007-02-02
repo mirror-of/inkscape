@@ -76,6 +76,7 @@ ShowUninstDetails hide
 !include "german.nsh" 
 !include "italian.nsh" 
 !include "japanese.nsh"
+!include "russian.nsh"
 !include "slovak.nsh" 
 !include "polish.nsh" 
 !include "spanish.nsh" 
