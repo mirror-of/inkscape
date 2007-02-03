@@ -57,10 +57,11 @@ SVG filters: Gaussian blur
    objects to achieve the "feathered mask" effect.
      * To blur selected objects, open the Fill and Stroke dialog
        (Ctrl+Shift+F) and use the Blur slider. The blur value is a
-       percentage, with 100% corresponding to a blurring radius of 1/8 of
-       the object's bounding box' perimeter (that is, for a square, a
-       blur of 100% will have the radius equal to half a side, which
-       turns any shape into an amorphous cloud).
+       percentage, with 100% corresponding to a blurring radius (standard
+       deviation of Gaussian function) of 1/8 of the object's bounding
+       box' perimeter (that is, for a square, a blur of 100% will have
+       the radius equal to half a side, which turns any shape into an
+       amorphous cloud).
 
      * The Tile Clones dialog also supports blurring. On the Blur &
        opacity tab, you can set the blur percentage per row or per column
@@ -114,7 +115,8 @@ SVG filters: Gaussian blur
        blurred object you make its blur squeezed as well. So, the easiest
        way to blur a path horizontally more than vertically is this:
        stretch it upwards without blur, then apply blur and squeeze it
-       back into the original shape.
+       back into the original shape. (This only works if the stretched
+       path does not already have a Transform attribute.)
 
      * You can combine blurring with gradients. For example, an ellipse
        with elliptic opacity gradient will look much softer and more
@@ -269,8 +271,11 @@ Calligraphy
        allows you to set a desired value much faster than by scrolling
        the control or typing the value into it.
 
-     * The calligraphy tool responsiveness has been reduced to prevent
-       "blobs" forming at the ends of strokes when low fixation is used.
+     * With low or zero Fixation parameter, some users of tablet pens
+       experienced "blobs" (brief reversals of a stroke's right/left
+       edges, causing "holes" and "bubbles" in a calligraphic stroke),
+       especially often at the start of a stroke. Hopefully this problem
+       is now fixed without reducing the responsiveness of the tool.
 
 
 Outline mode
