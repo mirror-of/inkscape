@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-10 22:45+0100\n"
-"PO-Revision-Date: 2007-02-01 18:36+0100\n"
+"PO-Revision-Date: 2007-02-03 18:36+0100\n"
 "Last-Translator: Xavier Conde Rueda <xavi.conde@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -2232,7 +2232,7 @@ msgid ""
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
 " S'ha produït degut a un fiter .inx inadequat per a aquesta extensió. Un "
-"fitxer .inx inadequat pot ser degut a una instal·lació d'Inkscape amb errors."
+"fitxer .inx inadequat pot ser degut a una instal·lació de l'Inkscape amb errors."
 
 #: ../src/extension/extension.cpp:252
 msgid "an ID was not defined for it."
@@ -2240,7 +2240,7 @@ msgstr "no se li ha definit un ID."
 
 #: ../src/extension/extension.cpp:256
 msgid "there was no name defined for it."
-msgstr "no se li havia cap nom definit."
+msgstr "no se li havia definit cap nom."
 
 #: ../src/extension/extension.cpp:260
 msgid "the XML description of it got lost."
@@ -8416,12 +8416,12 @@ msgstr "tutorial-calligraphy.ca.svg"
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1727
 msgid "tutorial-elements.svg"
-msgstr "tutorial-elements.svg"
+msgstr "tutorial-elements.ca.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1731
 msgid "tutorial-tips.svg"
-msgstr "tutorial-tips.svg"
+msgstr "tutorial-tips.ca.svg"
 
 #: ../src/verbs.cpp:1963
 msgid "Does nothing"
@@ -8531,7 +8531,7 @@ msgstr "Exporta el document o la selecció com a mapa de bits"
 
 #: ../src/verbs.cpp:1991
 msgid "N_ext Window"
-msgstr "S_egüent finestra"
+msgstr "Finestra s_egüent"
 
 #: ../src/verbs.cpp:1992
 msgid "Switch to the next document window"
@@ -8539,7 +8539,7 @@ msgstr "Commuta a la finestra del document següent"
 
 #: ../src/verbs.cpp:1993
 msgid "P_revious Window"
-msgstr "Anterior finest_ra"
+msgstr "Finest_ra anterior"
 
 #: ../src/verbs.cpp:1994
 msgid "Switch to the previous document window"
@@ -9143,19 +9143,19 @@ msgstr "Suprimeix la capa actual"
 #. Object
 #: ../src/verbs.cpp:2168
 msgid "Rotate _90&#176; CW"
-msgstr "Gira _90&#176; horaris"
+msgstr "Gira _90º horaris"
 
 #: ../src/verbs.cpp:2169
 msgid "Rotate selection 90&#176; clockwise"
-msgstr "Gira la selecció 90&#176; graus en sentit horari"
+msgstr "Gira la selecció 90º graus en sentit horari"
 
 #: ../src/verbs.cpp:2170
 msgid "Rotate 9_0&#176; CCW"
-msgstr "Gira 9_0&#176; antihoraris"
+msgstr "Gira 9_0º antihoraris"
 
 #: ../src/verbs.cpp:2171
 msgid "Rotate selection 90&#176; counter-clockwise"
-msgstr "Gira la selecció 90&#176; en sentit antihorari"
+msgstr "Gira la selecció 90º en sentit antihorari"
 
 #: ../src/verbs.cpp:2172
 msgid "Remove _Transformations"
