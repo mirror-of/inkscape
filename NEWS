@@ -3,6 +3,7 @@ Inkscape 0.45: overview
    This release brings the exciting new features developed by the Google
    Summer of Code 2006 participants, as well as tons of other
    improvements across the board. Here are the highlights:
+
      * Gaussian blur is the first SVG filter supported by Inkscape. You
        can blur any object to any extent - yet it remains vector and
        fully editable. This gives a huge boost to Inkscape as a creative
@@ -55,6 +56,7 @@ SVG filters: Gaussian blur
    arbitrarily shaped shades and lights, depth of field, drop shadows,
    glows, etc. Also, blurred objects can be used as masks for other
    objects to achieve the "feathered mask" effect.
+
      * To blur selected objects, open the Fill and Stroke dialog
        (Ctrl+Shift+F) and use the Blur slider. The blur value is a
        percentage, with 100% corresponding to a blurring radius (standard
@@ -81,6 +83,7 @@ SVG filters: Gaussian blur
        quite slow for images with a lot of blur).
 
    Here are a few tips on using blur:
+
      * Masks and clipping are applied after blur. That is, if you clip an
        object and then blur it (or blur it first and then clip - it makes
        no difference), the clipped edges will remain crisp. Often, this
@@ -327,6 +330,7 @@ Keyboard profiles
    The previous release allowed sets of keybindings (keymaps) to be
    created for Inkscape in the style of other applications. Two more
    keymaps have been added:
+
      * Adobe Illustrator
      * Macromedia Freehand
 
@@ -337,6 +341,7 @@ Keyboard profiles
 
    Additionally, a keymap that focuses on tablet-based illustration and
    drawing work has been added:
+
      * right-handed-illustration.xml
 
    This keymap places all commonly-used commands under the left hand, so
@@ -553,6 +558,7 @@ SVG output
    be customized via editing the preferences.xml file (there's no UI for
    these options). A <group id="svgoutput"> inside <group id="options">
    can have the following attributes:
+
      * usenamedcolors (default is 0). If nonzero, Inkscape uses symbolic
        color names (such as "white" or "lime") and three-digit color
        designations (such as $dfe) where appropriate; otherwise, it

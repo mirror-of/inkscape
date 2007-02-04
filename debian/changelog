@@ -1,8 +1,9 @@
 inkscape (0.44+0.45pre3-1) unstable; urgency=low
 
-  * Upstream pre-release
-
- -- Bryce Harrington <bryce@bryceharrington.org>  Thu, 1 Feb 2007 01:01:01 -800
+  * Upstream release
+  * New blur feature + many other changes.  See NEWS.
+	
+ -- Bryce Harrington <bryce@bryceharrington.org>  Sat, 3 Feb 2007 01:01:01 -800
 
 inkscape (0.44+0.45pre2-1) unstable; urgency=low
 

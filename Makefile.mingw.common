@@ -140,7 +140,7 @@ endif
 
 
 ###### VERSION NUMBER
-VERSION_NR = 0.45pre3
+VERSION_NR = 0.45
 VERSION = \"$(VERSION_NR)\"
 
 ####### the XP_WIN def is necessary for libjs.a
