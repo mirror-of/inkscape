@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-26 23:55+0100\n"
-"PO-Revision-Date: 2007-01-19 09:08+0530\n"
+"PO-Revision-Date: 2007-02-21 03:35+0100\n"
 "Last-Translator: Jurmey Rabgay <pemai_jurmey@hotmail.com>\n"
 "Language-Team: Dzongkha <pgeyleg@dit.gov.bt>\n"
 "MIME-Version: 1.0\n"
@@ -4276,11 +4276,11 @@ msgstr "བཟོ་བསྒྱུར་རྩ་བསྐྲད་གཏང་
 
 #: ../src/selection-chemistry.cpp:1590
 msgid "Rotate 90&#176; CW"
-msgstr "༩༠ ལུ་བསྒྱིར་&#༡༧༦་ སི་ཌབ་ལུ་"
+msgstr "༩༠ ལུ་བསྒྱིར་&#176;༡༧༦་ སི་ཌབ་ལུ་"
 
 #: ../src/selection-chemistry.cpp:1618
 msgid "Rotate 90&#176; CCW"
-msgstr "༩༠ ལུ་བསྒྱིར་&#༡༧༦་ སི་སི་ཌབ་ལུ་"
+msgstr "༩༠ ལུ་བསྒྱིར་&#176;༡༧༦་ སི་སི་ཌབ་ལུ་"
 
 #: ../src/selection-chemistry.cpp:1636 ../src/seltrans.cpp:380
 #: ../src/ui/dialog/transformation.cpp:666
@@ -9147,7 +9147,7 @@ msgstr "ད་ལྟོའི་བང་རིམ་དེ་བཏོན་ག
 #. Object
 #: ../src/verbs.cpp:2168
 msgid "Rotate _90&#176; CW"
-msgstr "དབྱེ་རིམ་ ༩༠ གཡས་སྐོར་སྦེ་བསྒྱིར།&#176"
+msgstr "དབྱེ་རིམ་ ༩༠ གཡས་སྐོར་སྦེ་བསྒྱིར།&#176;"
 
 #: ../src/verbs.cpp:2169
 msgid "Rotate selection 90&#176; clockwise"

@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.44\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-26 19:05-0800\n"
-"PO-Revision-Date: 2006-11-05 18:06+0100\n"
+"PO-Revision-Date: 2007-02-21 03:36+0100\n"
 "Last-Translator: Wei-Lun Chao <william.chao@ossii.com.tw>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -3672,9 +3672,7 @@ msgid ""
 "<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both "
 "handles"
-msgstr ""
-"<b>節點控柄</b>: 角度 %0.2f&#176﹑長度 %s；以 <b>Ctrl</b> 來抓取角度；以 "
-"<b>Alt</b> 來鎖定長度；以 <b>Shift</b> 來旋轉兩個控柄"
+msgstr "<b>節點控柄</b>: 角度 %0.2f&#176;長度 %s；以 <b>Ctrl</b> 來抓取角度；以 <b>Alt</b> 來鎖定長度；以 <b>Shift</b> 來旋轉兩個控柄"
 
 #: ../src/nodepath.cpp:3642
 #, fuzzy
@@ -3971,16 +3969,14 @@ msgstr "<b>點選</b>或<b>拖曳</b>以自此點起繼續路徑。"
 msgid ""
 "<b>%s</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, "
 "<b>Enter</b> to finish the path"
-msgstr ""
-"<b>%s</b>: 角度 %3.2f&#176；距離 %s；以 <b>Ctrl</b> 來抓取角度，<b>Enter</b> "
-"來結束路徑"
+msgstr "<b>%s</b>: 角度 %3.2f&#176;距離 %s；以 <b>Ctrl</b> 來抓取角度，<b>Enter</b> 來結束路徑"
 
 #: ../src/pen-context.cpp:1087
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
-msgstr "<b>曲線控柄</b>: 角度 %3.2f&#176；長度 %s; 以 <b>Ctrl</b> 來抓取角度"
+msgstr "<b>曲線控柄</b>: 角度 %3.2f&#176;長度 %s; 以 <b>Ctrl</b> 來抓取角度"
 
 #: ../src/pen-context.cpp:1117
 #, c-format
