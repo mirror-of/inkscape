@@ -1,7 +1,7 @@
-п»ї; #######################################
+; #######################################
 ; russian.nsh
 ; russian language strings for inkscape installer
-; windows code page: utf-8
+; windows code page: 1251
 ; Authors:
 ; Alexandre Prokoudine alexandre.prokoudine@gmail.com
 ;
@@ -10,190 +10,198 @@
 ; 24 october 2006 new languages en_US@piglatin, th
 ; 3rd December 2006 new languages eu km
 ; 14th December 2006 new lng_DeletePrefs, lng_DeletePrefsDesc, lng_WANT_UNINSTALL_BEFORE and lng_OK_CANCEL_DESC; 2nd February 2007 new language ru
+; february 15 2007 new language bn, en_AU, eo, id, ro
 
 !insertmacro MUI_LANGUAGE "Russian"
 
 ; Product name
-LangString lng_Caption   ${LANG_RUSSIAN} "${PRODUCT_NAME} -- Р РµРґР°РєС‚РѕСЂ РІРµРєС‚РѕСЂРЅРѕР№ РіСЂР°С„РёРєРё СЃ РѕС‚РєСЂС‹С‚С‹Рј РёСЃС…РѕРґРЅС‹Рј РєРѕРґРѕРј"
+LangString lng_Caption   ${LANG_RUSSIAN} "${PRODUCT_NAME} -- Редактор векторной графики с открытым исходным кодом"
 
 ; Button text "Next >" for the license page
-LangString lng_LICENSE_BUTTON   ${LANG_RUSSIAN} "Р”Р°Р»СЊС€Рµ >"
+LangString lng_LICENSE_BUTTON   ${LANG_RUSSIAN} "Дальше >"
 
 ; Bottom text for the license page
-LangString lng_LICENSE_BOTTOM_TEXT   ${LANG_RUSSIAN} "$(^Name) РІС‹РїСѓС‰РµРЅ РЅР° СѓСЃР»РѕРІРёСЏС… GNU General Public License (GPL). Р›РёС†РµРЅР·РёСЏ РїСЂРµРґР»Р°РіР°РµС‚СЃСЏ РґР»СЏ РѕР·РЅР°РєРѕРјР»РµРЅРёСЏ. $_CLICK"
+LangString lng_LICENSE_BOTTOM_TEXT   ${LANG_RUSSIAN} "$(^Name) выпущен на условиях GNU General Public License (GPL). Лицензия предлагается для ознакомления. $_CLICK"
 
 ;has been installed by different user
-LangString lng_DIFFERENT_USER ${LANG_RUSSIAN} "Inkscape СѓСЃС‚Р°РЅРѕРІР»РµРЅ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј $0.$\r$\nР•СЃР»Рё РІС‹ РїСЂРѕРґРѕР»Р¶РёС‚Рµ, СѓСЃС‚Р°РЅРѕРІРєР° РјРѕР¶РµС‚ РЅРµ Р·Р°РІРµСЂС€РёС‚СЊСЃСЏ СѓСЃРїРµС€РЅРѕ!$\r$\nР’РѕР№РґРёС‚Рµ РІ СЃРёСЃС‚РµРјСѓ РєР°Рє РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ $0 Рё РїРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°."
+LangString lng_DIFFERENT_USER ${LANG_RUSSIAN} "Inkscape установлен пользователем $0.$\r$\nЕсли вы продолжите, установка может не завершиться успешно!$\r$\nВойдите в систему как пользователь $0 и попробуйте снова."
 
 ; want to uninstall before install
-LangString lng_WANT_UNINSTALL_BEFORE ${LANG_RUSSIAN} "$R1 СѓР¶Рµ СѓСЃС‚Р°РЅРѕРІР»РµРЅР°. $\nР’С‹ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ РїСЂРµРґС‹РґСѓС‰СѓСЋ РІРµСЂСЃРёСЋ РїРµСЂРµРґ СѓСЃС‚Р°РЅРѕРІРєРѕР№ $(^Name) ?"
+LangString lng_WANT_UNINSTALL_BEFORE ${LANG_RUSSIAN} "$R1 уже установлена. $\nВы хотите удалить предыдущую версию перед установкой $(^Name) ?"
 
 ; press OK to continue press Cancel to abort
-LangString lng_OK_CANCEL_DESC ${LANG_RUSSIAN} "$\n$\nРќР°Р¶РјРёС‚Рµ OK РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ РёР»Рё CANCEL РґР»СЏ РїСЂРµСЂС‹РІР°РЅРёСЏ СѓСЃС‚Р°РЅРѕРІРєРё."
+LangString lng_OK_CANCEL_DESC ${LANG_RUSSIAN} "$\n$\nНажмите OK для продолжения или CANCEL для прерывания установки."
 
 ;you have no admin rigths
-LangString lng_NO_ADMIN ${LANG_RUSSIAN} "РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°.$\r$\nРЈСЃС‚Р°РЅРѕРІРєР° Inkscape РґР»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РјРѕР¶РµС‚ РЅРµ Р·Р°РІРµСЂС€РёС‚СЊСЃСЏ СѓСЃРїРµС€РЅРѕ.$\r$\nРќРµ РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РїР°СЂР°РјРµС‚СЂ В«Р”Р»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№В»."
+LangString lng_NO_ADMIN ${LANG_RUSSIAN} "У вас нет прав администратора.$\r$\nУстановка Inkscape для всех пользователей может не завершиться успешно.$\r$\nНе используйте параметр «Для всех пользователей»."
 
 ;win9x is not supported
-LangString lng_NOT_SUPPORTED ${LANG_RUSSIAN} "Inkscape РЅРµ СЂР°Р±РѕС‚Р°РµС‚ РІ Windows 95/98/ME!$\r$\nРџРѕРґСЂРѕР±РЅРѕСЃС‚Рё РёР·Р»РѕР¶РµРЅС‹ РЅР° СЃР°Р№С‚Рµ РїСЂРѕРіСЂР°РјРјС‹."
+LangString lng_NOT_SUPPORTED ${LANG_RUSSIAN} "Inkscape не работает в Windows 95/98/ME!$\r$\nПодробности изложены на сайте программы."
 
 ; Full install type
-LangString lng_Full $(LANG_RUSSIAN) "РџРѕР»РЅР°СЏ"
+LangString lng_Full $(LANG_RUSSIAN) "Полная"
 
 ; Optimal install type
-LangString lng_Optimal $(LANG_RUSSIAN) "РћРїС‚РёРјР°Р»СЊРЅР°СЏ"
+LangString lng_Optimal $(LANG_RUSSIAN) "Оптимальная"
 
 ; Minimal install type
-LangString lng_Minimal $(LANG_RUSSIAN) "РњРёРЅРёРјР°Р»СЊРЅР°СЏ"
+LangString lng_Minimal $(LANG_RUSSIAN) "Минимальная"
 
 ; Core install section
-LangString lng_Core $(LANG_RUSSIAN) "${PRODUCT_NAME}, СЂРµРґР°РєС‚РѕСЂ SVG (С‚СЂРµР±СѓРµС‚СЃСЏ)"
+LangString lng_Core $(LANG_RUSSIAN) "${PRODUCT_NAME}, редактор SVG (требуется)"
 
 ; Core install section description
-LangString lng_CoreDesc $(LANG_RUSSIAN) "РћСЃРЅРѕРІРЅС‹Рµ С„Р°Р№Р»С‹ Рё Р±РёР±Р»РёРѕС‚РµРєРё ${PRODUCT_NAME}"
+LangString lng_CoreDesc $(LANG_RUSSIAN) "Основные файлы и библиотеки ${PRODUCT_NAME}"
 
 ; GTK+ install section
-LangString lng_GTKFiles $(LANG_RUSSIAN) "РЎСЂРµРґР° РёСЃРїРѕР»РЅРµРЅРёСЏ GTK+ (С‚СЂРµР±СѓРµС‚СЃСЏ)"
+LangString lng_GTKFiles $(LANG_RUSSIAN) "Среда исполнения GTK+ (требуется)"
 
 ; GTK+ install section description
-LangString lng_GTKFilesDesc $(LANG_RUSSIAN) "РњРЅРѕРіРѕРїР»Р°С‚С„РѕСЂРјРµРЅРЅС‹Рµ СЃСЂРµРґСЃС‚РІР° СЂР°Р·СЂР°Р±РѕС‚РєРё, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ ${PRODUCT_NAME}"
+LangString lng_GTKFilesDesc $(LANG_RUSSIAN) "Многоплатформенные средства разработки, необходимые для ${PRODUCT_NAME}"
 
 ; shortcuts install section
-LangString lng_Shortcuts $(LANG_RUSSIAN) "РЇСЂР»С‹РєРё"
+LangString lng_Shortcuts $(LANG_RUSSIAN) "Ярлыки"
 
 ; shortcuts install section description
-LangString lng_ShortcutsDesc $(LANG_RUSSIAN) "РЇСЂР»С‹РєРё РґР»СЏ Р·Р°РїСѓСЃРєР° ${PRODUCT_NAME}"
+LangString lng_ShortcutsDesc $(LANG_RUSSIAN) "Ярлыки для запуска ${PRODUCT_NAME}"
 
 ; All user install section
-LangString lng_Alluser $(LANG_RUSSIAN) "Р”Р»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№"
+LangString lng_Alluser $(LANG_RUSSIAN) "Для всех пользователей"
 
 ; All user install section description
-LangString lng_AlluserDesc $(LANG_RUSSIAN) "РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РїСЂРѕРіСЂР°РјРјСѓ РґР»СЏ РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ СЌС‚РѕРіРѕ РєРѕРјРїСЊСЋС‚РµСЂР°"
+LangString lng_AlluserDesc $(LANG_RUSSIAN) "Установить программу для всех пользователей этого компьютера"
 
 ; Desktop section
-LangString lng_Desktop $(LANG_RUSSIAN) "Р Р°Р±РѕС‡РёР№ СЃС‚РѕР»"
+LangString lng_Desktop $(LANG_RUSSIAN) "Рабочий стол"
 
 ; Desktop section description
-LangString lng_DesktopDesc $(LANG_RUSSIAN) "РЎРѕР·РґР°С‚СЊ СЏСЂР»С‹Рє РґР»СЏ ${PRODUCT_NAME} РЅР° Р Р°Р±РѕС‡РµРј СЃС‚РѕР»Рµ"
+LangString lng_DesktopDesc $(LANG_RUSSIAN) "Создать ярлык для ${PRODUCT_NAME} на Рабочем столе"
 
 ; Start Menu  section
-LangString lng_Startmenu $(LANG_RUSSIAN) "РњРµРЅСЋ В«РџСѓСЃРєВ»"
+LangString lng_Startmenu $(LANG_RUSSIAN) "Меню «Пуск»"
 
 ; Start Menu section description
-LangString lng_StartmenuDesc $(LANG_RUSSIAN) "РЎРѕР·РґР°С‚СЊ РіСЂСѓРїРїСѓ ${PRODUCT_NAME} РІ РјРµРЅСЋ В«РџСѓСЃРєВ»"
+LangString lng_StartmenuDesc $(LANG_RUSSIAN) "Создать группу ${PRODUCT_NAME} в меню «Пуск»"
 
 ; Quick launch section
-LangString lng_Quicklaunch $(LANG_RUSSIAN) "РџР°РЅРµР»СЊ Р±С‹СЃС‚СЂРѕРіРѕ Р·Р°РїСѓСЃРєР°"
+LangString lng_Quicklaunch $(LANG_RUSSIAN) "Панель быстрого запуска"
 
 ; Quick launch section description
-LangString lng_QuicklaunchDesc $(LANG_RUSSIAN) "РЎРѕР·РґР°С‚СЊ СЏСЂР»С‹Рє РґР»СЏ ${PRODUCT_NAME} РІ РїР°РЅРµР»Рё Р±С‹СЃС‚СЂРѕРіРѕ Р·Р°РїСѓСЃРєР°"
+LangString lng_QuicklaunchDesc $(LANG_RUSSIAN) "Создать ярлык для ${PRODUCT_NAME} в панели быстрого запуска"
 
 ; File type association for editing
-LangString lng_SVGWriter ${LANG_RUSSIAN} "РћС‚РєСЂС‹РІР°С‚СЊ С„Р°Р№Р»С‹ SVG РІ ${PRODUCT_NAME}"
+LangString lng_SVGWriter ${LANG_RUSSIAN} "Открывать файлы SVG в ${PRODUCT_NAME}"
 
 ; File type association for editing description
-LangString lng_SVGWriterDesc ${LANG_RUSSIAN} "Р’С‹Р±СЂР°С‚СЊ ${PRODUCT_NAME} СЂРµРґР°РєС‚РѕСЂРѕРј С„Р°Р№Р»РѕРІ SVG РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ"
+LangString lng_SVGWriterDesc ${LANG_RUSSIAN} "Выбрать ${PRODUCT_NAME} редактором файлов SVG по умолчанию"
 
 ; Context Menu
-LangString lng_ContextMenu ${LANG_RUSSIAN} "РљРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ"
+LangString lng_ContextMenu ${LANG_RUSSIAN} "Контекстное меню"
 
 ; Context Menu description
-LangString lng_ContextMenuDesc ${LANG_RUSSIAN} "Р”РѕР±Р°РІРёС‚СЊ ${PRODUCT_NAME} РІ РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ РґР»СЏ С„Р°Р№Р»РѕРІ SVG"
+LangString lng_ContextMenuDesc ${LANG_RUSSIAN} "Добавить ${PRODUCT_NAME} в контекстное меню для файлов SVG"
 
 ; remove personal preferences
-LangString lng_DeletePrefs ${LANG_RUSSIAN} "РЈРґР°Р»РёС‚СЊ Р»РёС‡РЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё"
+LangString lng_DeletePrefs ${LANG_RUSSIAN} "Удалить личные настройки"
 
 ; remove personal preferences description
-LangString lng_DeletePrefsDesc ${LANG_RUSSIAN} "РЈРґР°Р»РёС‚СЊ Р»РёС‡РЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё, РѕСЃС‚Р°РІС€РёРµСЃСЏ РѕС‚ РїСЂРµРґС‹РґСѓС‰РёС… РІРµСЂСЃРёР№ РїСЂРѕРіСЂР°РјРјС‹"
+LangString lng_DeletePrefsDesc ${LANG_RUSSIAN} "Удалить личные настройки, оставшиеся от предыдущих версий программы"
 
 
 ; Additional files section
-LangString lng_Addfiles $(LANG_RUSSIAN) "Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ С„Р°Р№Р»С‹"
+LangString lng_Addfiles $(LANG_RUSSIAN) "Дополнительные файлы"
 
 ; Additional files section description
-LangString lng_AddfilesDesc $(LANG_RUSSIAN) "Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ С„Р°Р№Р»С‹"
+LangString lng_AddfilesDesc $(LANG_RUSSIAN) "Дополнительные файлы"
 
 ; Examples section
-LangString lng_Examples $(LANG_RUSSIAN) "РџСЂРёРјРµСЂС‹"
+LangString lng_Examples $(LANG_RUSSIAN) "Примеры"
 
 ; Examples section description
-LangString lng_ExamplesDesc $(LANG_RUSSIAN) "РџСЂРёРјРµСЂС‹ С„Р°Р№Р»РѕРІ, СЃРѕР·РґР°РЅРЅС‹С… РІ ${PRODUCT_NAME}"
+LangString lng_ExamplesDesc $(LANG_RUSSIAN) "Примеры файлов, созданных в ${PRODUCT_NAME}"
 
 ; Tutorials section
-LangString lng_Tutorials $(LANG_RUSSIAN) "РЈСЂРѕРєРё"
+LangString lng_Tutorials $(LANG_RUSSIAN) "Уроки"
 
 ; Tutorials section description
-LangString lng_TutorialsDesc $(LANG_RUSSIAN) "РЈСЂРѕРєРё РїРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЋ ${PRODUCT_NAME}"
+LangString lng_TutorialsDesc $(LANG_RUSSIAN) "Уроки по использованию ${PRODUCT_NAME}"
 
 
 ; Languages section
-LangString lng_Languages $(LANG_RUSSIAN) "РџРµСЂРµРІРѕРґС‹"
+LangString lng_Languages $(LANG_RUSSIAN) "Переводы"
 
 ; Languages section dscription
-LangString lng_LanguagesDesc $(LANG_RUSSIAN) "РЈСЃС‚Р°РЅРѕРІРєР° РїРµСЂРµРІРѕРґРѕРІ ${PRODUCT_NAME} РЅР° СЂР°Р·РЅС‹Рµ СЏР·С‹РєРё"
+LangString lng_LanguagesDesc $(LANG_RUSSIAN) "Установка переводов ${PRODUCT_NAME} на разные языки"
 
-LangString lng_am $(LANG_RUSSIAN) "am  РђРјС…Р°СЂСЃРєРёР№ (РђРјР°СЂРёРЅСЊСЏ)"
-LangString lng_az $(LANG_RUSSIAN) "az  РђР·РµСЂР±Р°Р№РґР¶Р°РЅСЃРєРёР№"
-LangString lng_be $(LANG_RUSSIAN) "be  Р‘РµР»РѕСЂСѓСЃСЃРєРёР№"
-LangString lng_bg $(LANG_RUSSIAN) "bg  Р‘РѕР»РіР°СЂСЃРєРёР№"
-LangString lng_ca $(LANG_RUSSIAN) "ca  РљР°С‚Р°Р»Р°РЅСЃРєРёР№"
-LangString lng_cs $(LANG_RUSSIAN) "cs  Р§РµС€СЃРєРёР№"
-LangString lng_da $(LANG_RUSSIAN) "da  Р”Р°С‚СЃРєРёР№"
-LangString lng_de $(LANG_RUSSIAN) "de  РќРµРјРµС†РєРёР№"
-LangString lng_dz $(LANG_RUSSIAN) "dz  Р”Р·РѕРЅРі-РєСЌ"
-LangString lng_el $(LANG_RUSSIAN) "el  Р“СЂРµС‡РµСЃРєРёР№"
-LangString lng_en $(LANG_RUSSIAN) "en  РђРЅРіР»РёР№СЃРєРёР№"
-LangString lng_en_CA $(LANG_RUSSIAN) "en_CA РђРЅРіР»РёР№СЃРєРёР№ (РљР°РЅР°РґР°)"
-LangString lng_en_GB $(LANG_RUSSIAN) "en_GB РђРЅРіР»РёР№СЃРєРёР№ (Р’РµР»РёРєРѕР±СЂРёС‚Р°РЅРёСЏ)"
-LangString lng_en_US@piglatin $(LANG_RUSSIAN) "en_US@piglatin РџРѕСЂРѕСЃСЏС‡СЊСЏ Р»Р°С‚С‹РЅСЊ"
-LangString lng_es $(LANG_RUSSIAN) "es  РСЃРїР°РЅСЃРєРёР№"
-LangString lng_es_MX $(LANG_RUSSIAN) "es_MX  РСЃРїР°РЅСЃРєРёР№ (РњРµРєСЃРёРєР°)"
-LangString lng_et $(LANG_RUSSIAN) "et  Р­СЃС‚РѕРЅСЃРєРёР№"
-LangString lng_eu $(LANG_RUSSIAN) "eu  Р‘Р°СЃРєСЃРєРёР№"
-LangString lng_fi $(LANG_RUSSIAN) "fi  Р¤РёРЅСЃРєРёР№"
-LangString lng_fr $(LANG_RUSSIAN) "fr  Р¤СЂР°РЅС†СѓР·СЃРєРёР№"
-LangString lng_ga $(LANG_RUSSIAN) "ga  РСЂР»Р°РЅРґСЃРєРёР№"
-LangString lng_gl $(LANG_RUSSIAN) "gl  Р“Р°Р»РёСЃРёР№СЃРєРёР№"
-LangString lng_hr $(LANG_RUSSIAN) "hr  РҐРѕСЂРІР°С‚СЃРєРёР№"
-LangString lng_hu $(LANG_RUSSIAN) "hu  Р’РµРЅРіРµСЂСЃРєРёР№"
-LangString lng_it $(LANG_RUSSIAN) "it  РС‚Р°Р»СЊСЏРЅСЃРєРёР№"
-LangString lng_ja $(LANG_RUSSIAN) "ja  РЇРїРѕРЅСЃРєРёР№"
-LangString lng_km $(LANG_RUSSIAN) "km  РљС…РјРµСЂСЃРєРёР№"
-LangString lng_ko $(LANG_RUSSIAN) "ko  РљРѕСЂРµР№СЃРєРёР№"
-LangString lng_lt $(LANG_RUSSIAN) "lt  Р›РёС‚РѕРІСЃРєРёР№"
-LangString lng_mk $(LANG_RUSSIAN) "mk  РњР°РєРµРґРѕРЅСЃРєРёР№"
-LangString lng_mn $(LANG_RUSSIAN) "mn  РњРѕРЅРіРѕР»СЊСЃРєРёР№"
-LangString lng_ne $(LANG_RUSSIAN) "ne  РќРµРїР°Р»СЊСЃРєРёР№"
-LangString lng_nb $(LANG_RUSSIAN) "nb  РќРѕСЂРІРµР¶СЃРєРёР№ (Р±СѓРєРјРѕР»)"
-LangString lng_nl $(LANG_RUSSIAN) "nl  Р”Р°С‚СЃРєРёР№"
-LangString lng_nn $(LANG_RUSSIAN) "nn  РќРѕСЂРІРµР¶СЃРєРёР№ (РЅСЋРЅРѕСЂСЃРє)"
-LangString lng_pa $(LANG_RUSSIAN) "pa  РџРµРЅРґР¶Р°Р±СЃРєРёР№"
-LangString lng_pl $(LANG_RUSSIAN) "po  РџРѕР»СЊСЃРєРёР№"
-LangString lng_pt $(LANG_RUSSIAN) "pt  РџРѕСЂС‚СѓРіР°Р»СЊСЃРєРёР№"
-LangString lng_pt_BR $(LANG_RUSSIAN) "pt_BR РџРѕСЂС‚СѓРіР°Р»СЊСЃРєРёР№ (Р‘СЂР°Р·РёР»РёСЏ)"
-LangString lng_ru $(LANG_RUSSIAN) "ru  Р СѓСЃСЃРєРёР№"
-LangString lng_rw $(LANG_RUSSIAN) "rw  РљРёРЅСЊСЏСЂСѓР°РЅРґР°"
-LangString lng_sk $(LANG_RUSSIAN) "sk  РЎР»РѕРІР°С†РєРёР№"
-LangString lng_sl $(LANG_RUSSIAN) "sl  РЎР»РѕРІРµРЅСЃРєРёР№"
-LangString lng_sq $(LANG_RUSSIAN) "sq  РђР»Р±Р°РЅСЃРєРёР№"
-LangString lng_sr $(LANG_RUSSIAN) "sr  РЎРµСЂР±СЃРєРёР№"
-LangString lng_sr@Latn $(LANG_RUSSIAN) "sr@Latn  РЎРµСЂР±СЃРєРёР№ (Р»Р°С‚РёРЅРёС†Р°)"
-LangString lng_sv $(LANG_RUSSIAN) "sv  РЁРІРµРґСЃРєРёР№"
-LangString lng_th $(LANG_RUSSIAN) "th  РўР°Р№СЃРєРёР№"
-LangString lng_tr $(LANG_RUSSIAN) "tr  РўСѓСЂРµС†РєРёР№"
-LangString lng_uk $(LANG_RUSSIAN) "uk  РЈРєСЂР°РёРЅСЃРєРёР№"
-LangString lng_vi $(LANG_RUSSIAN) "vi  Р’СЊРµС‚РЅР°РјСЃРєРёР№"
-LangString lng_zh_CN $(LANG_RUSSIAN) "zh_CH  РљРёС‚Р°Р№СЃРєРёР№ СѓРїСЂРѕС‰С‘РЅРЅС‹Р№"
-LangString lng_zh_TW $(LANG_RUSSIAN) "zh_TW  РљРёС‚Р°Р№СЃРєРёР№ С‚СЂР°РґРёС†РёРѕРЅРЅС‹Р№"
+LangString lng_am $(LANG_RUSSIAN) "am  Амхарский (Амаринья)"
+LangString lng_az $(LANG_RUSSIAN) "az  Азербайджанский"
+LangString lng_be $(LANG_RUSSIAN) "be  Белорусский"
+LangString lng_bg $(LANG_RUSSIAN) "bg  Болгарский"
+LangString lng_bn $(LANG_RUSSIAN) "bn  Bengali"
+LangString lng_ca $(LANG_RUSSIAN) "ca  Каталанский"
+LangString lng_cs $(LANG_RUSSIAN) "cs  Чешский"
+LangString lng_da $(LANG_RUSSIAN) "da  Датский"
+LangString lng_de $(LANG_RUSSIAN) "de  Немецкий"
+LangString lng_dz $(LANG_RUSSIAN) "dz  Дзонг-кэ"
+LangString lng_el $(LANG_RUSSIAN) "el  Греческий"
+LangString lng_en $(LANG_RUSSIAN) "en  Английский"
+LangString lng_en_AU $(LANG_RUSSIAN) "en_AU Australian English"
+LangString lng_en_CA $(LANG_RUSSIAN) "en_CA Английский (Канада)"
+LangString lng_en_GB $(LANG_RUSSIAN) "en_GB Английский (Великобритания)"
+LangString lng_en_US@piglatin $(LANG_RUSSIAN) "en_US@piglatin Поросячья латынь"
+LangString lng_eo $(LANG_RUSSIAN) "eo  Esperanto"
+LangString lng_es $(LANG_RUSSIAN) "es  Испанский"
+LangString lng_es_MX $(LANG_RUSSIAN) "es_MX  Испанский (Мексика)"
+LangString lng_et $(LANG_RUSSIAN) "et  Эстонский"
+LangString lng_eu $(LANG_RUSSIAN) "eu  Баскский"
+LangString lng_fi $(LANG_RUSSIAN) "fi  Финский"
+LangString lng_fr $(LANG_RUSSIAN) "fr  Французский"
+LangString lng_ga $(LANG_RUSSIAN) "ga  Ирландский"
+LangString lng_gl $(LANG_RUSSIAN) "gl  Галисийский"
+LangString lng_hr $(LANG_RUSSIAN) "hr  Хорватский"
+LangString lng_hu $(LANG_RUSSIAN) "hu  Венгерский"
+LangString lng_id $(LANG_RUSSIAN) "id  Indonesian"
+LangString lng_it $(LANG_RUSSIAN) "it  Итальянский"
+LangString lng_ja $(LANG_RUSSIAN) "ja  Японский"
+LangString lng_km $(LANG_RUSSIAN) "km  Кхмерский"
+LangString lng_ko $(LANG_RUSSIAN) "ko  Корейский"
+LangString lng_lt $(LANG_RUSSIAN) "lt  Литовский"
+LangString lng_mk $(LANG_RUSSIAN) "mk  Македонский"
+LangString lng_mn $(LANG_RUSSIAN) "mn  Монгольский"
+LangString lng_ne $(LANG_RUSSIAN) "ne  Непальский"
+LangString lng_nb $(LANG_RUSSIAN) "nb  Норвежский (букмол)"
+LangString lng_nl $(LANG_RUSSIAN) "nl  Датский"
+LangString lng_nn $(LANG_RUSSIAN) "nn  Норвежский (нюнорск)"
+LangString lng_pa $(LANG_RUSSIAN) "pa  Пенджабский"
+LangString lng_pl $(LANG_RUSSIAN) "po  Польский"
+LangString lng_pt $(LANG_RUSSIAN) "pt  Португальский"
+LangString lng_pt_BR $(LANG_RUSSIAN) "pt_BR Португальский (Бразилия)"
+LangString lng_ro $(LANG_RUSSIAN) "ro  Romanian"
+LangString lng_ru $(LANG_RUSSIAN) "ru  Русский"
+LangString lng_rw $(LANG_RUSSIAN) "rw  Киньяруанда"
+LangString lng_sk $(LANG_RUSSIAN) "sk  Словацкий"
+LangString lng_sl $(LANG_RUSSIAN) "sl  Словенский"
+LangString lng_sq $(LANG_RUSSIAN) "sq  Албанский"
+LangString lng_sr $(LANG_RUSSIAN) "sr  Сербский"
+LangString lng_sr@Latn $(LANG_RUSSIAN) "sr@Latn  Сербский (латиница)"
+LangString lng_sv $(LANG_RUSSIAN) "sv  Шведский"
+LangString lng_th $(LANG_RUSSIAN) "th  Тайский"
+LangString lng_tr $(LANG_RUSSIAN) "tr  Турецкий"
+LangString lng_uk $(LANG_RUSSIAN) "uk  Украинский"
+LangString lng_vi $(LANG_RUSSIAN) "vi  Вьетнамский"
+LangString lng_zh_CN $(LANG_RUSSIAN) "zh_CH  Китайский упрощённый"
+LangString lng_zh_TW $(LANG_RUSSIAN) "zh_TW  Китайский традиционный"
 
 
 
 
 ; uninstallation options
-LangString lng_UInstOpt   ${LANG_RUSSIAN} "РџР°СЂР°РјРµС‚СЂС‹ СѓРґР°Р»РµРЅРёСЏ РїСЂРѕРіСЂР°РјРјС‹ РёР· СЃРёСЃС‚РµРјС‹"
+LangString lng_UInstOpt   ${LANG_RUSSIAN} "Параметры удаления программы из системы"
 
 ; uninstallation options subtitle
-LangString lng_UInstOpt1  ${LANG_RUSSIAN} "РЈР±РµРґРёС‚РµСЃСЊ РІ С‚РѕРј, С‡С‚Рѕ СѓРєР°Р·Р°Р»Рё РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹"
+LangString lng_UInstOpt1  ${LANG_RUSSIAN} "Убедитесь в том, что указали дополнительные параметры"
 
 ; Ask to purge the personal preferences
-LangString lng_PurgePrefs ${LANG_RUSSIAN} "РЎРѕС…СЂР°РЅРёС‚СЊ Р»РёС‡РЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё"
+LangString lng_PurgePrefs ${LANG_RUSSIAN} "Сохранить личные настройки"
+
+ 	  	 
