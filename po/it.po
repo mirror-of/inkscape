@@ -6,18 +6,21 @@
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <luca.br@uno.it>, 2005-2007.
 #
+#: ../src/widgets/toolbox.cpp:4037 ../src/widgets/toolbox.cpp:4058
+#: ../src/widgets/toolbox.cpp:4087 ../src/widgets/toolbox.cpp:4108
+#: ../src/widgets/toolbox.cpp:4135
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.45\n"
-"Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2007-01-26 19:05-0800\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-03-13 13:48-0500\n"
 "PO-Revision-Date: 2007-01-27 14:59+0100\n"
 "Last-Translator: Luca Bruno <luca.br@uno.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
@@ -51,44 +54,49 @@ msgstr ""
 msgid "Create ellipse"
 msgstr "Crea ellisse"
 
-#: ../src/connector-context.cpp:517
+#: ../src/connector-context.cpp:519
 msgid "Creating new connector"
 msgstr "Creazione nuovo connettore"
 
-#: ../src/connector-context.cpp:711
+#: ../src/connector-context.cpp:746
+#, fuzzy
+msgid "Connector endpoint drag canceled."
+msgstr "Nodo o maniglia cancellato."
+
+#: ../src/connector-context.cpp:794
 msgid "Reroute connector"
 msgstr "Reinstrada connettore"
 
 #. Flush pending updates
-#: ../src/connector-context.cpp:918
+#: ../src/connector-context.cpp:958
 msgid "Create connector"
 msgstr "Crea connettore"
 
-#: ../src/connector-context.cpp:942
+#: ../src/connector-context.cpp:982
 msgid "Finishing connector"
 msgstr "Terminazione connettore"
 
-#: ../src/connector-context.cpp:1086
+#: ../src/connector-context.cpp:1126
 msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
 "<b>Punto di connessione</b>: fare clic o trascinare per creare un nuovo "
 "connettore"
 
-#: ../src/connector-context.cpp:1157
+#: ../src/connector-context.cpp:1197
 msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 "<b>Punto finale connettore</b>: trascinare per reinstradare o connettere a "
 "nuove forme"
 
-#: ../src/connector-context.cpp:1268
+#: ../src/connector-context.cpp:1308
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Selezionare <b>almeno un oggetto non-connettore</b>."
 
-#: ../src/connector-context.cpp:1273 ../src/widgets/toolbox.cpp:4319
+#: ../src/connector-context.cpp:1313 ../src/widgets/toolbox.cpp:4321
 msgid "Make connectors avoid selected objects"
 msgstr "Fa sì che i connettori evitino gli oggetti selezionati"
 
-#: ../src/connector-context.cpp:1274 ../src/widgets/toolbox.cpp:4323
+#: ../src/connector-context.cpp:1314 ../src/widgets/toolbox.cpp:4325
 msgid "Make connectors ignore selected objects"
 msgstr "Fa sì che i connettori ignorino gli oggetti selezionati"
 
@@ -146,27 +154,27 @@ msgstr "<small>L'oggetto ha <b>%d</b> cloni in serie. </small>"
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>L'oggetto non ha cloni in serie.</small>"
 
-#: ../src/dialogs/clonetiler.cpp:851
+#: ../src/dialogs/clonetiler.cpp:856
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr "Selezionare <b>un oggetto</b> di cui sparpagliare i cloni in serie."
 
-#: ../src/dialogs/clonetiler.cpp:873
+#: ../src/dialogs/clonetiler.cpp:878
 msgid "Unclump tiled clones"
 msgstr "Sparpaglia cloni in serie"
 
-#: ../src/dialogs/clonetiler.cpp:903
+#: ../src/dialogs/clonetiler.cpp:908
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Selezionare <b>un oggetto</b> da cui rimuovere i cloni in serie"
 
-#: ../src/dialogs/clonetiler.cpp:926
+#: ../src/dialogs/clonetiler.cpp:931
 msgid "Delete tiled clones"
 msgstr "Elimina cloni in serie"
 
-#: ../src/dialogs/clonetiler.cpp:972 ../src/selection-chemistry.cpp:1987
+#: ../src/dialogs/clonetiler.cpp:977 ../src/selection-chemistry.cpp:1987
 msgid "Select an <b>object</b> to clone."
 msgstr "Selezionare un <b>oggetto</b> da clonare."
 
-#: ../src/dialogs/clonetiler.cpp:978
+#: ../src/dialogs/clonetiler.cpp:983
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -174,23 +182,23 @@ msgstr ""
 "Se si vogliono clonare diversi oggetti, occorre <b>raggrupparli</b> e "
 "<b>clonare il gruppo</b>."
 
-#: ../src/dialogs/clonetiler.cpp:1335
+#: ../src/dialogs/clonetiler.cpp:1340
 msgid "Create tiled clones"
 msgstr "Crea cloni in serie"
 
-#: ../src/dialogs/clonetiler.cpp:1518
+#: ../src/dialogs/clonetiler.cpp:1523
 msgid "<small>Per row:</small>"
 msgstr "<small>Per riga:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1531
+#: ../src/dialogs/clonetiler.cpp:1536
 msgid "<small>Per column:</small>"
 msgstr "<small>Per colonna:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1539
+#: ../src/dialogs/clonetiler.cpp:1544
 msgid "<small>Randomize:</small>"
 msgstr "<small>Casualità:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1693
+#: ../src/dialogs/clonetiler.cpp:1698
 msgid "_Symmetry"
 msgstr "_Simmetria"
 
@@ -199,310 +207,310 @@ msgstr "_Simmetria"
 #. * http://www.clarku.edu/~djoyce/wallpaper/seventeen.html (English vocabulary); or
 #. * http://membres.lycos.fr/villemingerard/Geometri/Sym1D.htm (French vocabulary).
 #.
-#: ../src/dialogs/clonetiler.cpp:1701
+#: ../src/dialogs/clonetiler.cpp:1706
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr "Selezionare uno dei 17 gruppi di simmetria per le serie"
 
 #. TRANSLATORS: "translation" means "shift" / "displacement" here.
-#: ../src/dialogs/clonetiler.cpp:1712
+#: ../src/dialogs/clonetiler.cpp:1717
 msgid "<b>P1</b>: simple translation"
 msgstr "<b>P1</b>: traslazione semplice"
 
-#: ../src/dialogs/clonetiler.cpp:1713
+#: ../src/dialogs/clonetiler.cpp:1718
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr "<b>P2</b>: rotazione 180&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1714
+#: ../src/dialogs/clonetiler.cpp:1719
 msgid "<b>PM</b>: reflection"
 msgstr "<b>PM</b>: riflessione"
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined.
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: ../src/dialogs/clonetiler.cpp:1717
+#: ../src/dialogs/clonetiler.cpp:1722
 msgid "<b>PG</b>: glide reflection"
 msgstr "<b>PG</b>: riflessione scorrevole"
 
-#: ../src/dialogs/clonetiler.cpp:1718
+#: ../src/dialogs/clonetiler.cpp:1723
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr "<b>CM</b>: riflessione + riflessione scorrevole"
 
-#: ../src/dialogs/clonetiler.cpp:1719
+#: ../src/dialogs/clonetiler.cpp:1724
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr "<b>PMM</b>: riflessione + riflessione"
 
-#: ../src/dialogs/clonetiler.cpp:1720
+#: ../src/dialogs/clonetiler.cpp:1725
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr "<b>PMG</b>: riflessione + rotazione 180&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1721
+#: ../src/dialogs/clonetiler.cpp:1726
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr "<b>PGG</b>: riflessione scorrevole + rotazione 180&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1722
+#: ../src/dialogs/clonetiler.cpp:1727
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr "<b>CMM</b>: riflessione + riflessione + rotazione 180&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1723
+#: ../src/dialogs/clonetiler.cpp:1728
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr "<b>P4</b>: rotazione 90&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1724
+#: ../src/dialogs/clonetiler.cpp:1729
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr "<b>P4M</b>: rotazione 90&#176; + riflessione 45&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1725
+#: ../src/dialogs/clonetiler.cpp:1730
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr "<b>P4G</b>: rotazione 90&#176; + riflessione 90&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1726
+#: ../src/dialogs/clonetiler.cpp:1731
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr "<b>P3</b>: rotazione 120&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1727
+#: ../src/dialogs/clonetiler.cpp:1732
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr "<b>P31M</b>: riflessione + rotazione 120&#176;, denso"
 
-#: ../src/dialogs/clonetiler.cpp:1728
+#: ../src/dialogs/clonetiler.cpp:1733
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr "<b>P3M1</b>: riflessione + rotazione 120&#176;, rado"
 
-#: ../src/dialogs/clonetiler.cpp:1729
+#: ../src/dialogs/clonetiler.cpp:1734
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr "<b>P6</b>: rotazione 60&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1730
+#: ../src/dialogs/clonetiler.cpp:1735
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>: riflessione + rotazione 60&#176;"
 
-#: ../src/dialogs/clonetiler.cpp:1758
+#: ../src/dialogs/clonetiler.cpp:1763
 msgid "S_hift"
 msgstr "Spos_tamento"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
-#: ../src/dialogs/clonetiler.cpp:1768
+#: ../src/dialogs/clonetiler.cpp:1773
 #, no-c-format
 msgid "<b>Shift X:</b>"
 msgstr "<b>Spostamento X:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1776
+#: ../src/dialogs/clonetiler.cpp:1781
 #, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr ""
 "Lo spostamento orizzontale per ogni riga (in % sulla larghezza del clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1784
+#: ../src/dialogs/clonetiler.cpp:1789
 #, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr ""
 "Lo spostamento orizzontale per ogni colonna (in % sulla larghezza del clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1791
+#: ../src/dialogs/clonetiler.cpp:1796
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "Rende casuale di questa percentuale lo spostamento orizzontale"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
-#: ../src/dialogs/clonetiler.cpp:1801
+#: ../src/dialogs/clonetiler.cpp:1806
 #, no-c-format
 msgid "<b>Shift Y:</b>"
 msgstr "<b>Spostamento Y:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1809
+#: ../src/dialogs/clonetiler.cpp:1814
 #, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
 msgstr "Lo spostamento verticale per ogni riga (in % sull'altezza del clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1817
+#: ../src/dialogs/clonetiler.cpp:1822
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
 msgstr ""
 "Lo spostamento verticale per ogni colonna (in % sull'altezza del clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1824
+#: ../src/dialogs/clonetiler.cpp:1829
 msgid "Randomize the vertical shift by this percentage"
 msgstr "Rende casuale di questa percentuale lo spostamento verticale"
 
-#: ../src/dialogs/clonetiler.cpp:1832
+#: ../src/dialogs/clonetiler.cpp:1837
 msgid "<b>Exponent:</b>"
 msgstr "<b>Esponente:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1839
+#: ../src/dialogs/clonetiler.cpp:1844
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "Specifica se le righe sono a spaziatura costante (1), convergenti (<1) o "
 "divergenti (>1)"
 
-#: ../src/dialogs/clonetiler.cpp:1846
+#: ../src/dialogs/clonetiler.cpp:1851
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "Specifica se le colonne sono a spaziatura costante (1), convergenti (<1) o "
 "divergenti (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: ../src/dialogs/clonetiler.cpp:1854 ../src/dialogs/clonetiler.cpp:1944
-#: ../src/dialogs/clonetiler.cpp:2003 ../src/dialogs/clonetiler.cpp:2060
-#: ../src/dialogs/clonetiler.cpp:2109 ../src/dialogs/clonetiler.cpp:2240
+#: ../src/dialogs/clonetiler.cpp:1859 ../src/dialogs/clonetiler.cpp:1949
+#: ../src/dialogs/clonetiler.cpp:2008 ../src/dialogs/clonetiler.cpp:2065
+#: ../src/dialogs/clonetiler.cpp:2114 ../src/dialogs/clonetiler.cpp:2245
 msgid "<small>Alternate:</small>"
 msgstr "<small>Alterna:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1860
+#: ../src/dialogs/clonetiler.cpp:1865
 msgid "Alternate the sign of shifts for each row"
 msgstr "Alterna il segno dello spostamento per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:1865
+#: ../src/dialogs/clonetiler.cpp:1870
 msgid "Alternate the sign of shifts for each column"
 msgstr "Alterna il segno dello spostamento per ogni colonna"
 
-#: ../src/dialogs/clonetiler.cpp:1874
+#: ../src/dialogs/clonetiler.cpp:1879
 msgid "Sc_ale"
 msgstr "Sc_ala"
 
-#: ../src/dialogs/clonetiler.cpp:1882
+#: ../src/dialogs/clonetiler.cpp:1887
 msgid "<b>Scale X:</b>"
 msgstr "<b>Scala X:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1890
+#: ../src/dialogs/clonetiler.cpp:1895
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr ""
 "Il ridimensionamento orizzontale per ogni riga (in % sulla larghezza del "
 "clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1898
+#: ../src/dialogs/clonetiler.cpp:1903
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr ""
 "Il ridimensionamento orizzontale per ogni colonna (in % sulla larghezza del "
 "clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1905
+#: ../src/dialogs/clonetiler.cpp:1910
 msgid "Randomize the horizontal scale by this percentage"
 msgstr "Rende casuale di questa percentuale il ridimensionamento orizzontale"
 
-#: ../src/dialogs/clonetiler.cpp:1913
+#: ../src/dialogs/clonetiler.cpp:1918
 msgid "<b>Scale Y:</b>"
 msgstr "<b>Scala Y:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1921
+#: ../src/dialogs/clonetiler.cpp:1926
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr ""
 "Il ridimensionamento verticale per ogni riga (in % sulla larghezza del clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1929
+#: ../src/dialogs/clonetiler.cpp:1934
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr ""
 "I ridimensionamento verticale per ogni colonna (in % sulla larghezza del "
 "clone)"
 
-#: ../src/dialogs/clonetiler.cpp:1936
+#: ../src/dialogs/clonetiler.cpp:1941
 msgid "Randomize the vertical scale by this percentage"
 msgstr "Rende casuale di questa percentuale il ridimensionamento verticale"
 
-#: ../src/dialogs/clonetiler.cpp:1950
+#: ../src/dialogs/clonetiler.cpp:1955
 msgid "Alternate the sign of scales for each row"
 msgstr "Alterna il segno del ridimensionamento per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:1955
+#: ../src/dialogs/clonetiler.cpp:1960
 msgid "Alternate the sign of scales for each column"
 msgstr "Alterna il segno del ridimensionamento per ogni colonna"
 
-#: ../src/dialogs/clonetiler.cpp:1964
+#: ../src/dialogs/clonetiler.cpp:1969
 msgid "_Rotation"
 msgstr "_Rotazione"
 
-#: ../src/dialogs/clonetiler.cpp:1972
+#: ../src/dialogs/clonetiler.cpp:1977
 msgid "<b>Angle:</b>"
 msgstr "<b>Angolo:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1980
+#: ../src/dialogs/clonetiler.cpp:1985
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
 msgstr "Ruota i cloni di questo angolo per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:1988
+#: ../src/dialogs/clonetiler.cpp:1993
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
 msgstr "Ruota i cloni di questo angolo per ogni colonna"
 
-#: ../src/dialogs/clonetiler.cpp:1995
+#: ../src/dialogs/clonetiler.cpp:2000
 msgid "Randomize the rotation angle by this percentage"
 msgstr "Rende casuale di questa percentuale l'angolo di rotazione"
 
-#: ../src/dialogs/clonetiler.cpp:2009
+#: ../src/dialogs/clonetiler.cpp:2014
 msgid "Alternate the rotation direction for each row"
 msgstr "Alterna la direzione della rotazione per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:2014
+#: ../src/dialogs/clonetiler.cpp:2019
 msgid "Alternate the rotation direction for each column"
 msgstr "Alterna la direzione della rotazione per ogni colonna"
 
-#: ../src/dialogs/clonetiler.cpp:2022
+#: ../src/dialogs/clonetiler.cpp:2027
 msgid "_Blur & opacity"
 msgstr "Sfocatura & _opacità"
 
-#: ../src/dialogs/clonetiler.cpp:2031
+#: ../src/dialogs/clonetiler.cpp:2036
 msgid "<b>Blur:</b>"
 msgstr "<b>Sfocatura:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2038
+#: ../src/dialogs/clonetiler.cpp:2043
 msgid "Blur tiles by this percentage for each row"
 msgstr "Sfuoca i cloni di questa percentuale per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:2045
+#: ../src/dialogs/clonetiler.cpp:2050
 msgid "Blur tiles by this percentage for each column"
 msgstr "Sfuoca i cloni di questa percentuale per ogni colonna"
 
-#: ../src/dialogs/clonetiler.cpp:2052
+#: ../src/dialogs/clonetiler.cpp:2057
 msgid "Randomize the tile blur by this percentage"
 msgstr "Rende casuale di questa percentuale la sfocatura del clone"
 
-#: ../src/dialogs/clonetiler.cpp:2066
+#: ../src/dialogs/clonetiler.cpp:2071
 msgid "Alternate the sign of blur change for each row"
 msgstr "Alterna il segno del valore di cambiamento di sfocatura per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:2071
+#: ../src/dialogs/clonetiler.cpp:2076
 msgid "Alternate the sign of blur change for each column"
 msgstr ""
 "Alterna il segno del valore di cambiamento di sfocatura per ogni colonna"
 
-#: ../src/dialogs/clonetiler.cpp:2080
+#: ../src/dialogs/clonetiler.cpp:2085
 msgid "<b>Fade out:</b>"
 msgstr "<b>Opacità:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2087
+#: ../src/dialogs/clonetiler.cpp:2092
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr "Riduce di questa percentuale per ogni riga l'opacità dei cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2094
+#: ../src/dialogs/clonetiler.cpp:2099
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr "Riduce di questa percentuale per ogni colonna l'opacità dei cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2101
+#: ../src/dialogs/clonetiler.cpp:2106
 msgid "Randomize the tile opacity by this percentage"
 msgstr "Rende casuale di questa percentuale l'opacità dei cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2115
+#: ../src/dialogs/clonetiler.cpp:2120
 msgid "Alternate the sign of opacity change for each row"
 msgstr "Alterna il segno del valore di opacità per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:2120
+#: ../src/dialogs/clonetiler.cpp:2125
 msgid "Alternate the sign of opacity change for each column"
 msgstr "Alterna il segno del valore di opacità per ogni colonna"
 
-#: ../src/dialogs/clonetiler.cpp:2128
+#: ../src/dialogs/clonetiler.cpp:2133
 msgid "Co_lor"
 msgstr "Co_lore"
 
-#: ../src/dialogs/clonetiler.cpp:2133
+#: ../src/dialogs/clonetiler.cpp:2138
 msgid "Initial color: "
 msgstr "Colore iniziale: "
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid "Initial color of tiled clones"
 msgstr "Colore iniziale dei cloni in serie"
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke)"
@@ -510,72 +518,72 @@ msgstr ""
 "Colore iniziale dei cloni (funziona solo se l'originale non possiede "
 "riempimenti o bordi)"
 
-#: ../src/dialogs/clonetiler.cpp:2152
+#: ../src/dialogs/clonetiler.cpp:2157
 msgid "<b>H:</b>"
 msgstr "<b>H:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2159
+#: ../src/dialogs/clonetiler.cpp:2164
 msgid "Change the tile hue by this percentage for each row"
 msgstr "Cambia di questa percentuale per ogni riga l'opacità dei cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2166
+#: ../src/dialogs/clonetiler.cpp:2171
 msgid "Change the tile hue by this percentage for each column"
 msgstr "Cambia di questa percentuale per ogni colonna l'opacità dei cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2173
+#: ../src/dialogs/clonetiler.cpp:2178
 msgid "Randomize the tile hue by this percentage"
 msgstr "Rende casuale di questa percentuale l'opacità del clone"
 
-#: ../src/dialogs/clonetiler.cpp:2182
+#: ../src/dialogs/clonetiler.cpp:2187
 msgid "<b>S:</b>"
 msgstr "<b>S:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2189
+#: ../src/dialogs/clonetiler.cpp:2194
 msgid "Change the color saturation by this percentage for each row"
 msgstr "Cambia di questa percentuale per ogni riga la saturazione del colore"
 
-#: ../src/dialogs/clonetiler.cpp:2196
+#: ../src/dialogs/clonetiler.cpp:2201
 msgid "Change the color saturation by this percentage for each column"
 msgstr ""
 "Cambia di questa percentuale per ogni colonna la saturazione del colore"
 
-#: ../src/dialogs/clonetiler.cpp:2203
+#: ../src/dialogs/clonetiler.cpp:2208
 msgid "Randomize the color saturation by this percentage"
 msgstr "Rende casuale di questa percentuale la saturazione del clone"
 
-#: ../src/dialogs/clonetiler.cpp:2211
+#: ../src/dialogs/clonetiler.cpp:2216
 msgid "<b>L:</b>"
 msgstr "<b>L:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2218
+#: ../src/dialogs/clonetiler.cpp:2223
 msgid "Change the color lightness by this percentage for each row"
 msgstr "Riduce di questa percentuale per ogni riga la luminosità dei cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2225
+#: ../src/dialogs/clonetiler.cpp:2230
 msgid "Change the color lightness by this percentage for each column"
 msgstr "Riduce di questa percentuale per ogni colonna la luminosità dei cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2232
+#: ../src/dialogs/clonetiler.cpp:2237
 msgid "Randomize the color lightness by this percentage"
 msgstr "Rende casuale di questa percentuale la luminosità del clone"
 
-#: ../src/dialogs/clonetiler.cpp:2246
+#: ../src/dialogs/clonetiler.cpp:2251
 msgid "Alternate the sign of color changes for each row"
 msgstr "Alterna il segno del valore di cambiamento del valore per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:2251
+#: ../src/dialogs/clonetiler.cpp:2256
 msgid "Alternate the sign of color changes for each column"
 msgstr "Alterna il segno del valore di cambiamento del valore per ogni riga"
 
-#: ../src/dialogs/clonetiler.cpp:2259
+#: ../src/dialogs/clonetiler.cpp:2264
 msgid "_Trace"
 msgstr "Ve_ttorizza"
 
-#: ../src/dialogs/clonetiler.cpp:2266
+#: ../src/dialogs/clonetiler.cpp:2271
 msgid "Trace the drawing under the tiles"
 msgstr "Vettorizza il disegno sotto i cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2270
+#: ../src/dialogs/clonetiler.cpp:2275
 msgid ""
 "For each clone, pick a value from the drawing in that clone's location and "
 "apply it to the clone"
@@ -583,11 +591,11 @@ msgstr ""
 "Per ogni clone preleva il valore del disegno su cui il clone è posto e lo "
 "applica al clone"
 
-#: ../src/dialogs/clonetiler.cpp:2284
+#: ../src/dialogs/clonetiler.cpp:2289
 msgid "1. Pick from the drawing:"
 msgstr "1. Preleva dal disegno:"
 
-#: ../src/dialogs/clonetiler.cpp:2295 ../src/dialogs/clonetiler.cpp:2442
+#: ../src/dialogs/clonetiler.cpp:2300 ../src/dialogs/clonetiler.cpp:2447
 #: ../share/extensions/color_brighter.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
 #: ../share/extensions/color_darker.inx.h:1
@@ -607,112 +615,112 @@ msgstr "1. Preleva dal disegno:"
 msgid "Color"
 msgstr "Colore"
 
-#: ../src/dialogs/clonetiler.cpp:2296
+#: ../src/dialogs/clonetiler.cpp:2301
 msgid "Pick the visible color and opacity"
 msgstr "Preleva il colore visibile e l'opacità"
 
-#: ../src/dialogs/clonetiler.cpp:2303 ../src/dialogs/clonetiler.cpp:2452
+#: ../src/dialogs/clonetiler.cpp:2308 ../src/dialogs/clonetiler.cpp:2457
 #: ../share/extensions/svg_dropshadow.inx.h:3
 msgid "Opacity"
 msgstr "Opacità"
 
-#: ../src/dialogs/clonetiler.cpp:2304
+#: ../src/dialogs/clonetiler.cpp:2309
 msgid "Pick the total accumulated opacity"
 msgstr "Preleva l'opacità accumulata totale"
 
-#: ../src/dialogs/clonetiler.cpp:2311
+#: ../src/dialogs/clonetiler.cpp:2316
 msgid "R"
 msgstr "R"
 
-#: ../src/dialogs/clonetiler.cpp:2312
+#: ../src/dialogs/clonetiler.cpp:2317
 msgid "Pick the Red component of the color"
 msgstr "Preleva la componente Rossa del colore"
 
-#: ../src/dialogs/clonetiler.cpp:2319
+#: ../src/dialogs/clonetiler.cpp:2324
 msgid "G"
 msgstr "G"
 
-#: ../src/dialogs/clonetiler.cpp:2320
+#: ../src/dialogs/clonetiler.cpp:2325
 msgid "Pick the Green component of the color"
 msgstr "Preleva la componente Verde del colore"
 
-#: ../src/dialogs/clonetiler.cpp:2327
+#: ../src/dialogs/clonetiler.cpp:2332
 msgid "B"
 msgstr "B"
 
-#: ../src/dialogs/clonetiler.cpp:2328
+#: ../src/dialogs/clonetiler.cpp:2333
 msgid "Pick the Blue component of the color"
 msgstr "Preleva la componente Blu del colore"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2337
+#: ../src/dialogs/clonetiler.cpp:2342
 msgid "clonetiler|H"
 msgstr "H"
 
-#: ../src/dialogs/clonetiler.cpp:2338
+#: ../src/dialogs/clonetiler.cpp:2343
 msgid "Pick the hue of the color"
 msgstr "Preleva l'opacità del colore"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2347
+#: ../src/dialogs/clonetiler.cpp:2352
 msgid "clonetiler|S"
 msgstr "S"
 
-#: ../src/dialogs/clonetiler.cpp:2348
+#: ../src/dialogs/clonetiler.cpp:2353
 msgid "Pick the saturation of the color"
 msgstr "Preleva la saturazione del colore"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2357
+#: ../src/dialogs/clonetiler.cpp:2362
 msgid "clonetiler|L"
 msgstr "L"
 
-#: ../src/dialogs/clonetiler.cpp:2358
+#: ../src/dialogs/clonetiler.cpp:2363
 msgid "Pick the lightness of the color"
 msgstr "Preleva la luminosità del colore"
 
-#: ../src/dialogs/clonetiler.cpp:2368
+#: ../src/dialogs/clonetiler.cpp:2373
 msgid "2. Tweak the picked value:"
 msgstr "2. Corregge il valore prelevato:"
 
-#: ../src/dialogs/clonetiler.cpp:2378
+#: ../src/dialogs/clonetiler.cpp:2383
 msgid "Gamma-correct:"
 msgstr "Correzione-gamma:"
 
-#: ../src/dialogs/clonetiler.cpp:2383
+#: ../src/dialogs/clonetiler.cpp:2388
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
 msgstr ""
 "Sposta l'intervallo medio del valore prelevato verso l'alto (>0) o verso il "
 "basso (<0)"
 
-#: ../src/dialogs/clonetiler.cpp:2390
+#: ../src/dialogs/clonetiler.cpp:2395
 msgid "Randomize:"
 msgstr "Casualità:"
 
-#: ../src/dialogs/clonetiler.cpp:2395
+#: ../src/dialogs/clonetiler.cpp:2400
 msgid "Randomize the picked value by this percentage"
 msgstr "Rende casuale di questa percentuale il valore prelevato"
 
-#: ../src/dialogs/clonetiler.cpp:2402
+#: ../src/dialogs/clonetiler.cpp:2407
 msgid "Invert:"
 msgstr "Inverti:"
 
-#: ../src/dialogs/clonetiler.cpp:2406
+#: ../src/dialogs/clonetiler.cpp:2411
 msgid "Invert the picked value"
 msgstr "Inverti il valore prelevato"
 
-#: ../src/dialogs/clonetiler.cpp:2412
+#: ../src/dialogs/clonetiler.cpp:2417
 msgid "3. Apply the value to the clones':"
 msgstr "3. Applica il valore prelevato ai cloni:"
 
-#: ../src/dialogs/clonetiler.cpp:2422
+#: ../src/dialogs/clonetiler.cpp:2427
 msgid "Presence"
 msgstr "Presenza"
 
-#: ../src/dialogs/clonetiler.cpp:2425
+#: ../src/dialogs/clonetiler.cpp:2430
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
@@ -720,16 +728,16 @@ msgstr ""
 "Ogni clone viene creato con la probabilità determinata dal valore prelevato "
 "in quel punto"
 
-#: ../src/dialogs/clonetiler.cpp:2432
+#: ../src/dialogs/clonetiler.cpp:2437
 msgid "Size"
 msgstr "Dimensione"
 
-#: ../src/dialogs/clonetiler.cpp:2435
+#: ../src/dialogs/clonetiler.cpp:2440
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr ""
 "La dimensione di ogni clone è determinata dal valore preso in quel punto"
 
-#: ../src/dialogs/clonetiler.cpp:2445
+#: ../src/dialogs/clonetiler.cpp:2450
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
@@ -737,47 +745,47 @@ msgstr ""
 "Ogni clone è colorato col colore prelevato (l'originale non deve avere "
 "riempimento o bordo)"
 
-#: ../src/dialogs/clonetiler.cpp:2455
+#: ../src/dialogs/clonetiler.cpp:2460
 msgid "Each clone's opacity is determined by the picked value in that point"
 msgstr "L'opacità di ogni clone è determinata dal valore preso in quel punto"
 
-#: ../src/dialogs/clonetiler.cpp:2482
+#: ../src/dialogs/clonetiler.cpp:2487
 msgid "How many rows in the tiling"
 msgstr "Il numero di righe della serie"
 
-#: ../src/dialogs/clonetiler.cpp:2502
+#: ../src/dialogs/clonetiler.cpp:2507
 msgid "How many columns in the tiling"
 msgstr "Il numero di colonne della serie"
 
-#: ../src/dialogs/clonetiler.cpp:2532
+#: ../src/dialogs/clonetiler.cpp:2537
 msgid "Width of the rectangle to be filled"
 msgstr "Larghezza del rettangolo da riempire"
 
-#: ../src/dialogs/clonetiler.cpp:2557
+#: ../src/dialogs/clonetiler.cpp:2562
 msgid "Height of the rectangle to be filled"
 msgstr "Altezza del rettangolo da riempire"
 
-#: ../src/dialogs/clonetiler.cpp:2572
+#: ../src/dialogs/clonetiler.cpp:2577
 msgid "Rows, columns: "
 msgstr "Righe, colonne: "
 
-#: ../src/dialogs/clonetiler.cpp:2573
+#: ../src/dialogs/clonetiler.cpp:2578
 msgid "Create the specified number of rows and columns"
 msgstr "Crea il numero specificato di righe e colonne"
 
-#: ../src/dialogs/clonetiler.cpp:2582
+#: ../src/dialogs/clonetiler.cpp:2587
 msgid "Width, height: "
 msgstr "Larghezza, altezza: "
 
-#: ../src/dialogs/clonetiler.cpp:2583
+#: ../src/dialogs/clonetiler.cpp:2588
 msgid "Fill the specified width and height with the tiling"
 msgstr "Riempie la larghezza e l'altezza specificata con i cloni"
 
-#: ../src/dialogs/clonetiler.cpp:2599
+#: ../src/dialogs/clonetiler.cpp:2604
 msgid "Use saved size and position of the tile"
 msgstr "Usa la dimensione e la posizione salvata per la serie"
 
-#: ../src/dialogs/clonetiler.cpp:2602
+#: ../src/dialogs/clonetiler.cpp:2607
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
@@ -785,11 +793,11 @@ msgstr ""
 "Forza la dimensione e la posizione del clone all'ultima clonazione salvata, "
 "invece di usare le dimensioni attuali"
 
-#: ../src/dialogs/clonetiler.cpp:2626
+#: ../src/dialogs/clonetiler.cpp:2631
 msgid " <b>_Create</b> "
 msgstr " <b>_Crea</b> "
 
-#: ../src/dialogs/clonetiler.cpp:2628
+#: ../src/dialogs/clonetiler.cpp:2633
 msgid "Create and tile the clones of the selection"
 msgstr "Crea e serializza i cloni della selezione"
 
@@ -798,29 +806,29 @@ msgstr "Crea e serializza i cloni della selezione"
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/dialogs/clonetiler.cpp:2643
+#: ../src/dialogs/clonetiler.cpp:2648
 msgid " _Unclump "
 msgstr " Spa_rpaglia "
 
-#: ../src/dialogs/clonetiler.cpp:2644
+#: ../src/dialogs/clonetiler.cpp:2649
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr ""
 "Distribuisce i cloni in modo da ridurre gli agglomerati, può essere ripetuto"
 
-#: ../src/dialogs/clonetiler.cpp:2650
+#: ../src/dialogs/clonetiler.cpp:2655
 msgid " Re_move "
 msgstr " Ri_muovi "
 
-#: ../src/dialogs/clonetiler.cpp:2651
+#: ../src/dialogs/clonetiler.cpp:2656
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr "Rimuovi i cloni in serie dell'oggetto selezionati (solo imparentati)"
 
-#: ../src/dialogs/clonetiler.cpp:2667
+#: ../src/dialogs/clonetiler.cpp:2672
 msgid " R_eset "
 msgstr " R_eimposta "
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/dialogs/clonetiler.cpp:2669
+#: ../src/dialogs/clonetiler.cpp:2674
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
@@ -1012,8 +1020,10 @@ msgstr "Disattiva riempimento"
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] "<b>%d</b> oggetto trovato (su un totale di <b>%d</b>), corrispondenza %s."
-msgstr[1] "<b>%d</b> oggetti trovati (su un totale di <b>%d</b>), corrispondenza %s."
+msgstr[0] ""
+"<b>%d</b> oggetto trovato (su un totale di <b>%d</b>), corrispondenza %s."
+msgstr[1] ""
+"<b>%d</b> oggetti trovati (su un totale di <b>%d</b>), corrispondenza %s."
 
 #: ../src/dialogs/find.cpp:374 ../src/ui/dialog/find.cpp:437
 msgid "exact"
@@ -1925,13 +1935,13 @@ msgstr "Centra linee"
 msgid "Align lines right"
 msgstr "Allinea linee a destra"
 
-#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3959
-#: ../src/widgets/toolbox.cpp:4005
+#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3961
+#: ../src/widgets/toolbox.cpp:4007
 msgid "Horizontal text"
 msgstr "Testo orizzontale"
 
-#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3970
-#: ../src/widgets/toolbox.cpp:4016
+#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3972
+#: ../src/widgets/toolbox.cpp:4018
 msgid "Vertical text"
 msgstr "Testo verticale"
 
@@ -2197,7 +2207,7 @@ msgstr ""
 msgid "Set picked color"
 msgstr "Imposta colore selezionato"
 
-#: ../src/dyna-draw-context.cpp:696
+#: ../src/dyna-draw-context.cpp:713
 msgid "Create calligraphic stroke"
 msgstr "Crea linee calligrafiche"
 
@@ -2388,6 +2398,50 @@ msgstr "Numero delle copie intruse/estruse dell'oggetto"
 msgid "Generate from Path"
 msgstr "Genera da tracciato"
 
+#: ../src/extension/internal/emf-win32-inout.cpp:1373
+#, fuzzy
+msgid "EMF Input"
+msgstr "Input DXF"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1378
+#, fuzzy
+msgid "Enhanced Metafiles (*.emf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1379
+msgid "Enhanced Metafiles"
+msgstr ""
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1387
+#, fuzzy
+msgid "WMF Input"
+msgstr "Input WPG"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1392
+#, fuzzy
+msgid "Windows Metafiles (*.wmf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1393
+#, fuzzy
+msgid "Windows Metafiles"
+msgstr "Input Windows Metafile"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1401
+#, fuzzy
+msgid "EMF Output"
+msgstr "Output DXF"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1406
+#, fuzzy
+msgid "Enhanced Metafile (*.emf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1407
+#, fuzzy
+msgid "Enhanced Metafile"
+msgstr "Modifica rettangolo"
+
 #: ../src/extension/internal/eps-out.cpp:89
 msgid "Encapsulated Postscript Output"
 msgstr "Encapsulated Postscript Output"
@@ -2469,9 +2523,9 @@ msgid "Vertical Offset"
 msgstr "Proiezione verticale"
 
 #: ../src/extension/internal/grid.cpp:224 ../share/extensions/eqtexsvg.inx.h:3
-#: ../share/extensions/funcplot.inx.h:12 ../share/extensions/lindenmayer.inx
-#: .h:9 ../share/extensions/lorem_ipsum.inx.h:4
-#: ../share/extensions/rtree.inx.h:4
+#: ../share/extensions/funcplot.inx.h:12
+#: ../share/extensions/lindenmayer.inx.h:9
+#: ../share/extensions/lorem_ipsum.inx.h:4 ../share/extensions/rtree.inx.h:4
 msgid "Render"
 msgstr "Render"
 
@@ -2507,6 +2561,74 @@ msgstr "Disegno OpenDocument (*.odg)"
 msgid "OpenDocument drawing file"
 msgstr "File di disegno OpenDocument"
 
+#: ../src/extension/internal/pdf.cpp:108 ../src/extension/internal/ps.cpp:121
+msgid "Print Destination"
+msgstr "Destinazione stampa"
+
+#. Print properties frame
+#: ../src/extension/internal/pdf.cpp:123 ../src/extension/internal/ps.cpp:136
+msgid "Print properties"
+msgstr "Impostazioni stampa"
+
+#: ../src/extension/internal/pdf.cpp:130
+#, fuzzy
+msgid "Print using PDF operators"
+msgstr "Stampa usando gli operatori PostScript"
+
+#: ../src/extension/internal/pdf.cpp:132
+#, fuzzy
+msgid ""
+"Use PDF vector operators. The resulting image is usually smaller in file "
+"size and can be arbitrarily scaled, but patterns will be lost."
+msgstr ""
+"Usa gli operatori vettoriali PostScript. L'immagine risultante solitamente è "
+"di dimensioni più contenute e può essere ridimensionata a piacere, ma "
+"verranno persi i motivi e la trasparenza alpha."
+
+#: ../src/extension/internal/pdf.cpp:137 ../src/extension/internal/ps.cpp:150
+msgid "Print as bitmap"
+msgstr "Stampa come bitmap"
+
+#: ../src/extension/internal/pdf.cpp:139 ../src/extension/internal/ps.cpp:152
+msgid ""
+"Print everything as bitmap. The resulting image is usually larger in file "
+"size and cannot be arbitrarily scaled without quality loss, but all objects "
+"will be rendered exactly as displayed."
+msgstr ""
+"Stampa tutto come bitmap. L'immagine risultante solitamente è di dimensioni "
+"maggiori e non può essere ridimensionata senza una perdità di qualità, ma "
+"tutti gli oggetti verranno disegnati esattamente come vengono mostrati."
+
+#: ../src/extension/internal/pdf.cpp:153 ../src/extension/internal/ps.cpp:166
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "Risoluzione preferita della bitmap (in punti per pollice)"
+
+#: ../src/extension/internal/pdf.cpp:167 ../src/extension/internal/ps.cpp:180
+msgid "Resolution:"
+msgstr "Risoluzione:"
+
+#. Print destination frame
+#: ../src/extension/internal/pdf.cpp:171 ../src/extension/internal/ps.cpp:184
+msgid "Print destination"
+msgstr "Destinazione stampa"
+
+#: ../src/extension/internal/pdf.cpp:177 ../src/extension/internal/ps.cpp:190
+msgid ""
+"Printer name (as given by lpstat -p);\n"
+"leave empty to use the system default printer.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to a program."
+msgstr ""
+"Nome della stampante (come mostrato da lpstat -p);\n"
+"lasciar vuoto per usare la stampante predefinita del sistema.\n"
+"Usare '> filename' per stampare su file.\n"
+"Usare '| prog arg...' per mandare in pipe ad un programma."
+
+#: ../src/extension/internal/pdf.cpp:1566
+#, fuzzy
+msgid "PDF Print"
+msgstr "Stampa LaTeX"
+
 #: ../src/extension/internal/pov-out.cpp:457
 msgid "PovRay Output"
 msgstr "Output PovRay"
@@ -2532,15 +2654,6 @@ msgstr "Postscript (*.ps)"
 msgid "Postscript File"
 msgstr "File Postscript"
 
-#: ../src/extension/internal/ps.cpp:121
-msgid "Print Destination"
-msgstr "Destinazione stampa"
-
-#. Print properties frame
-#: ../src/extension/internal/ps.cpp:136
-msgid "Print properties"
-msgstr "Impostazioni stampa"
-
 #: ../src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "Stampa usando gli operatori PostScript"
@@ -2554,45 +2667,6 @@ msgstr ""
 "Usa gli operatori vettoriali PostScript. L'immagine risultante solitamente è "
 "di dimensioni più contenute e può essere ridimensionata a piacere, ma "
 "verranno persi i motivi e la trasparenza alpha."
-
-#: ../src/extension/internal/ps.cpp:150
-msgid "Print as bitmap"
-msgstr "Stampa come bitmap"
-
-#: ../src/extension/internal/ps.cpp:152
-msgid ""
-"Print everything as bitmap. The resulting image is usually larger in file "
-"size and cannot be arbitrarily scaled without quality loss, but all objects "
-"will be rendered exactly as displayed."
-msgstr ""
-"Stampa tutto come bitmap. L'immagine risultante solitamente è di dimensioni "
-"maggiori e non può essere ridimensionata senza una perdità di qualità, ma "
-"tutti gli oggetti verranno disegnati esattamente come vengono mostrati."
-
-#: ../src/extension/internal/ps.cpp:166
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr "Risoluzione preferita della bitmap (in punti per pollice)"
-
-#: ../src/extension/internal/ps.cpp:180
-msgid "Resolution:"
-msgstr "Risoluzione:"
-
-#. Print destination frame
-#: ../src/extension/internal/ps.cpp:184
-msgid "Print destination"
-msgstr "Destinazione stampa"
-
-#: ../src/extension/internal/ps.cpp:190
-msgid ""
-"Printer name (as given by lpstat -p);\n"
-"leave empty to use the system default printer.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to a program."
-msgstr ""
-"Nome della stampante (come mostrato da lpstat -p);\n"
-"lasciar vuoto per usare la stampante predefinita del sistema.\n"
-"Usare '> filename' per stampare su file.\n"
-"Usare '| prog arg...' per mandare in pipe ad un programma."
 
 #: ../src/extension/internal/ps.cpp:1719
 msgid "Postscript Print"
@@ -2688,7 +2762,7 @@ msgstr "Formato grafico vettoriale usato da Corel WordPerfect"
 #. running from the console, in which case calling sp_ui
 #. routines will cause a segfault.  See bug 1000350 - bryce
 #. sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
-#: ../src/extension/system.cpp:101
+#: ../src/extension/system.cpp:102
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 "Impossibile la determinazione automatica del formato. Il file verrà aperto "
@@ -2821,10 +2895,10 @@ msgstr "Inverti gradiente"
 #, c-format
 msgid "<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle"
 msgid_plural "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"
-msgstr[0] "<b>Gradiente</b> per %d oggetto; con <b>Ctrl</b> per far scattare "
-"l'angolo"
-msgstr[1] "<b>Gradiente</b> per %d oggetti; con <b>Ctrl</b> per far scattare "
-"l'angolo"
+msgstr[0] ""
+"<b>Gradiente</b> per %d oggetto; con <b>Ctrl</b> per far scattare l'angolo"
+msgstr[1] ""
+"<b>Gradiente</b> per %d oggetti; con <b>Ctrl</b> per far scattare l'angolo"
 
 #: ../src/gradient-context.cpp:465
 msgid "Select <b>objects</b> on which to create gradient."
@@ -2882,17 +2956,19 @@ msgstr ""
 "<b>Maiusc</b> per separare il fuoco"
 
 #: ../src/gradient-drag.cpp:678
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
 "separate"
+msgid_plural ""
 "Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
 "separate"
-msgstr ""
-"Punto di gradiente condiviso da <b>%d</b> gradiente; trascinare con "
-"<b>Maiusc</b> per separare"
-"Punto di gradiente condiviso da <b>%d</b> gradienti; trascinare con "
-"<b>Maiusc</b> per separare"
+msgstr[0] ""
+"<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
+"<b>Maiusc</b> per separare il fuoco"
+msgstr[1] ""
+"<b>Centro</b> e <b>fuoco</b> del gradiente radiale; trascinare con "
+"<b>Maiusc</b> per separare il fuoco"
 
 #: ../src/helper/units.cpp:36
 msgid "Unit"
@@ -3025,6 +3101,13 @@ msgstr "ex"
 #: ../src/helper/units.cpp:49
 msgid "Ex squares"
 msgstr "Riquadri Ex"
+
+#: ../src/ink-action.cpp:179 ../src/widgets/toolbox.cpp:2292
+#: ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+"Usare la pressione del dispositivo di input per alterare la larghezza della "
+"penna"
 
 #: ../src/inkscape.cpp:447
 msgid "Untitled document"
@@ -3480,7 +3563,7 @@ msgstr ""
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Elimina definizioni superflue dalle sezioni defs del documento"
 
-#: ../src/main.cpp:557
+#: ../src/main.cpp:563
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -3788,17 +3871,19 @@ msgid "Select a single object to edit its nodes or handles."
 msgstr "Selezionare un singolo oggetto per modificarne i nodi o le maniglie"
 
 #: ../src/nodepath.cpp:4266
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
+msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
-msgstr ""
-"<b>0</b> di <b>%i</b> nodo selezionato. <b>Click</b>, <b>Maiusc+click</b>, o "
-"<b>trascinare</b> attorno agli oggetti per selezionare."
-"<b>0</b> di <b>%i</b> nodi selezionati. <b>Click</b>, <b>Maiusc+click</b>, o "
-"<b>trascinare</b> attorno agli oggetti per selezionare."
+msgstr[0] ""
+"Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno agli "
+"oggetti per selezionare."
+msgstr[1] ""
+"Nessun oggetto selezionato. Click, Maiusc+click, o trascinare attorno agli "
+"oggetti per selezionare."
 
 #: ../src/nodepath.cpp:4272
 msgid "Drag the handles of the object to modify it."
@@ -3812,15 +3897,13 @@ msgstr[0] "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
 msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati; %s. %s."
 
 #: ../src/nodepath.cpp:4287
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+msgid_plural ""
 "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgstr ""
-"<b>%i</b> di <b>%i</b> nodo selezionato in <b>%i</b> di <b>%i</b> "
-"sottotracciati. %s."
-"<b>%i</b> di <b>%i</b> nodi selezionati in <b>%i</b> di <b>%i</b> "
-"sottotracciati. %s."
+msgstr[0] "<b>%i</b> di <b>%i</b> nodo selezionato; %s. %s."
+msgstr[1] "<b>%i</b> di <b>%i</b> nodi selezionati; %s. %s."
 
 #: ../src/nodepath.cpp:4293
 #, c-format
@@ -4753,14 +4836,14 @@ msgstr "Regione dinamica"
 msgid "Flow excluded region"
 msgstr "Regione non dinamica"
 
-#: ../src/sp-flowtext.cpp:369
+#: ../src/sp-flowtext.cpp:370
 #, c-format
 msgid "<b>Flowed text</b> (%d character)"
 msgid_plural "<b>Flowed text</b> (%d characters)"
 msgstr[0] "<b>Testo dinamico</b> (%d carattere)"
 msgstr[1] "<b>Testo dinamico</b> (%d caratteri)"
 
-#: ../src/sp-flowtext.cpp:371
+#: ../src/sp-flowtext.cpp:372
 #, c-format
 msgid "<b>Linked flowed text</b> (%d character)"
 msgid_plural "<b>Linked flowed text</b> (%d characters)"
@@ -5127,7 +5210,7 @@ msgstr "Rimuove il testo dal tracciato"
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Selezionare <b>il testo</b> da cui rimuovere le trasformazioni."
 
-#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4154
+#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4156
 msgid "Remove manual kerns"
 msgstr "Rimuovi trasformazioni manuali"
 
@@ -5574,7 +5657,7 @@ msgid "Remove overlaps"
 msgstr "Rimuovi sovrapposizione"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:520
-#: ../src/widgets/toolbox.cpp:4241
+#: ../src/widgets/toolbox.cpp:4243
 msgid "Arrange connector network"
 msgstr "Sistema connettori rete"
 
@@ -5714,7 +5797,7 @@ msgstr ""
 "sovrappongano"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:863
-#: ../src/widgets/toolbox.cpp:4343
+#: ../src/widgets/toolbox.cpp:4345
 msgid "Nicely arrange selected connector network"
 msgstr "Disponi ordinatamente i connettori di rete selezionati"
 
@@ -10000,7 +10083,7 @@ msgstr "Dimensione carattere:"
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3730
+#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3732
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQq12369$€¢?.;/()"
 
@@ -10780,12 +10863,6 @@ msgstr ""
 msgid "Pressure"
 msgstr "Pressione"
 
-#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr ""
-"Usare la pressione del dispositivo di input per alterare la larghezza della "
-"penna"
-
 #: ../src/widgets/toolbox.cpp:2303
 msgid "Tilt"
 msgstr "Tilt"
@@ -10847,47 +10924,50 @@ msgstr "Rendi intero"
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Rende la forma in un ellisse intero, non un arco o un segmento"
 
-#: ../src/widgets/toolbox.cpp:3068
+#: ../src/widgets/toolbox.cpp:3070
 msgid "Pick alpha"
 msgstr "Preleva trasparenza"
 
-#: ../src/widgets/toolbox.cpp:3069
+#: ../src/widgets/toolbox.cpp:3071
 msgid ""
 "Pick both the color and the alpha (transparency) under cursor; otherwise, "
 "pick only the visible color premultiplied by alpha"
-msgstr "Preleva sia il colore che l'alpha (trasparenza) sotto il cursoe; altrimenti preleva "
-"solo il colore visibile premoltiplicato per il valore alpha"
+msgstr ""
+"Preleva sia il colore che l'alpha (trasparenza) sotto il cursoe; altrimenti "
+"preleva solo il colore visibile premoltiplicato per il valore alpha"
 
-#: ../src/widgets/toolbox.cpp:3084
+#: ../src/widgets/toolbox.cpp:3086
 msgid "Set alpha"
 msgstr "Imposta trasparenza"
 
-#: ../src/widgets/toolbox.cpp:3085
+#: ../src/widgets/toolbox.cpp:3087
 msgid ""
 "If alpha was picked, assign it to selection as fill or stroke transparency"
-msgstr "Se il canale alpha è prelevato, lo assegna alla selezione come trasparenza di riempimento o contorno"
+msgstr ""
+"Se il canale alpha è prelevato, lo assegna alla selezione come trasparenza "
+"di riempimento o contorno"
 
-#: ../src/widgets/toolbox.cpp:3384
+#: ../src/widgets/toolbox.cpp:3386
 msgid "Text: Change font family"
 msgstr "Testo: Cambia font"
 
-#: ../src/widgets/toolbox.cpp:3467
+#: ../src/widgets/toolbox.cpp:3469
 msgid "Text: Change alignment"
 msgstr "Testo: Cambia allineamento"
 
-#: ../src/widgets/toolbox.cpp:3513
+#: ../src/widgets/toolbox.cpp:3515
 msgid "Text: Change font style"
 msgstr "Testo: Cambia stile"
 
-#: ../src/widgets/toolbox.cpp:3560
+#: ../src/widgets/toolbox.cpp:3562
 msgid "Text: Change orientation"
 msgstr "Testo: Cambia orientamento"
 
-#: ../src/widgets/toolbox.cpp:3656
+#: ../src/widgets/toolbox.cpp:3658
 msgid "Text: Change font size"
 msgstr "Testo: Cambia dimensione carattere"
 
-#: ../src/widgets/toolbox.cpp:3839
+#: ../src/widgets/toolbox.cpp:3841
 msgid ""
 "This font is currently not installed on your system. Inkscape will use the "
 "default font instead."
@@ -10895,78 +10975,78 @@ msgstr ""
 "Questo carattere non è attualmente installato sul sistema. Inkscape userà al "
 "suo posto il  carattere predefinito"
 
-#: ../src/widgets/toolbox.cpp:3877
+#: ../src/widgets/toolbox.cpp:3879
 msgid "Align left"
 msgstr "Allinea a sinistra"
 
-#: ../src/widgets/toolbox.cpp:3888
+#: ../src/widgets/toolbox.cpp:3890
 msgid "Center"
 msgstr "Centra"
 
-#: ../src/widgets/toolbox.cpp:3899
+#: ../src/widgets/toolbox.cpp:3901
 msgid "Align right"
 msgstr "Allinea a destra"
 
-#: ../src/widgets/toolbox.cpp:3910
+#: ../src/widgets/toolbox.cpp:3912
 msgid "Justify"
 msgstr "Giustifica"
 
-#: ../src/widgets/toolbox.cpp:3926
+#: ../src/widgets/toolbox.cpp:3928
 msgid "Bold"
 msgstr "Grassetto"
 
-#: ../src/widgets/toolbox.cpp:3937
+#: ../src/widgets/toolbox.cpp:3939
 msgid "Italic"
 msgstr "Corsivo"
 
-#: ../src/widgets/toolbox.cpp:4035
+#: ../src/widgets/toolbox.cpp:4037
 msgid "Spacing between letters"
 msgstr "Spaziatura tra le lettere"
 
-#: ../src/widgets/toolbox.cpp:4056
+#: ../src/widgets/toolbox.cpp:4058
 msgid "Spacing between lines"
 msgstr "Spaziatura tra le linee"
 
-#: ../src/widgets/toolbox.cpp:4085
+#: ../src/widgets/toolbox.cpp:4087
 msgid "Horizontal kerning"
 msgstr "Trasformazione orizzontale"
 
-#: ../src/widgets/toolbox.cpp:4106
+#: ../src/widgets/toolbox.cpp:4108
 msgid "Vertical kerning"
 msgstr "Trasformazione verticale"
 
-#: ../src/widgets/toolbox.cpp:4133
+#: ../src/widgets/toolbox.cpp:4135
 msgid "Letter rotation"
 msgstr "Rotazione del carattere"
 
-#: ../src/widgets/toolbox.cpp:4222
+#: ../src/widgets/toolbox.cpp:4224
 msgid "Change connector spacing"
 msgstr "Cambia spaziatura connettori"
 
-#: ../src/widgets/toolbox.cpp:4331
+#: ../src/widgets/toolbox.cpp:4333
 msgid "Spacing:"
 msgstr "Spaziatura:"
 
-#: ../src/widgets/toolbox.cpp:4332
+#: ../src/widgets/toolbox.cpp:4334
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr ""
 "Lo spazio da lasciare intorno agli oggetti quando si tracciano "
 "automaticamente i connettori"
 
-#: ../src/widgets/toolbox.cpp:4346
+#: ../src/widgets/toolbox.cpp:4348
 msgid "Length:"
 msgstr "Lunghezza:"
 
-#: ../src/widgets/toolbox.cpp:4347
+#: ../src/widgets/toolbox.cpp:4349
 msgid "Ideal length for connectors when layout is applied"
 msgstr "Lunghezza ideale dei connettori quando il modello è applicato"
 
-#: ../src/widgets/toolbox.cpp:4362
+#: ../src/widgets/toolbox.cpp:4364
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr ""
 "Fa sì che i connettori con delimitatori finali (frecce) puntino indietro"
 
-#: ../src/widgets/toolbox.cpp:4376
+#: ../src/widgets/toolbox.cpp:4378
 msgid "Do not allow overlapping shapes"
 msgstr "Non permettere la sovrapposizione delle forme"
 
@@ -11299,7 +11379,8 @@ msgstr "Grafico funzione"
 
 #: ../share/extensions/funcplot.inx.h:8
 msgid "Isotropic scaling (uses smallest: width/xrange or height/yrange)"
-msgstr "Ridimensionamento isotropico (usa altezza/range-y o larghezza/range-y minimi)"
+msgstr ""
+"Ridimensionamento isotropico (usa altezza/range-y o larghezza/range-y minimi)"
 
 #: ../share/extensions/funcplot.inx.h:9
 msgid "Multiply x-range by 2*pi"
@@ -11417,41 +11498,41 @@ msgstr "Metodo d'interpolazione"
 msgid "Interpolation steps"
 msgstr "Passi d'interpolazione"
 
-#: ../share/extensions/lindenmayer.inx .h:1
+#: ../share/extensions/lindenmayer.inx.h:1
 msgid "Axiom"
 msgstr "Assioma"
 
-#: ../share/extensions/lindenmayer.inx .h:2
+#: ../share/extensions/lindenmayer.inx.h:2
 msgid "L-system"
 msgstr "Sistema L"
 
-#: ../share/extensions/lindenmayer.inx .h:3
+#: ../share/extensions/lindenmayer.inx.h:3
 msgid "Left angle"
 msgstr "Angolo sinistro"
 
-#: ../share/extensions/lindenmayer.inx .h:4
+#: ../share/extensions/lindenmayer.inx.h:4
 msgid "Order"
 msgstr "Ordine"
 
-#: ../share/extensions/lindenmayer.inx .h:6
+#: ../share/extensions/lindenmayer.inx.h:6
 #, no-c-format
 msgid "Randomize angle (%)"
 msgstr "Casualità angolo (%)"
 
-#: ../share/extensions/lindenmayer.inx .h:8
+#: ../share/extensions/lindenmayer.inx.h:8
 #, no-c-format
 msgid "Randomize step (%)"
 msgstr "Casualità passo (%)"
 
-#: ../share/extensions/lindenmayer.inx .h:10
+#: ../share/extensions/lindenmayer.inx.h:10
 msgid "Right angle"
 msgstr "Angolo destro"
 
-#: ../share/extensions/lindenmayer.inx .h:11
+#: ../share/extensions/lindenmayer.inx.h:11
 msgid "Rules"
 msgstr "Regola"
 
-#: ../share/extensions/lindenmayer.inx .h:12
+#: ../share/extensions/lindenmayer.inx.h:12
 msgid "Step length (px)"
 msgstr "Lunghezza passi (px)"
 
@@ -11512,11 +11593,14 @@ msgid ""
 "from the text to the path. The Scale factor can be used to make measurements "
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
-msgstr "Questo effetto misura la lunghezza del tracciato selezionato e la stampa come un "
-"oggetto testuale sul tracciato, con l'unità di misura scelta. Il numero di cifre decimali "
-"può essere controllato con l'opzione Precisione. Il campo Margine controlla la distanza "
-"del testo dal tracciato. Il fattore di riduzione è utile per misure di disegni in scala. Per esempio,"
-"se 1 cm di disegno corrisponde a 2,5 metri reali, il fattore di riduzione va impostato a 250."
+msgstr ""
+"Questo effetto misura la lunghezza del tracciato selezionato e la stampa "
+"come un oggetto testuale sul tracciato, con l'unità di misura scelta. Il "
+"numero di cifre decimali può essere controllato con l'opzione Precisione. Il "
+"campo Margine controlla la distanza del testo dal tracciato. Il fattore di "
+"riduzione è utile per misure di disegni in scala. Per esempio,se 1 cm di "
+"disegno corrisponde a 2,5 metri reali, il fattore di riduzione va impostato "
+"a 250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -11567,45 +11651,22 @@ msgid "Pattern is vertical"
 msgstr "Motivo verticale"
 
 #: ../share/extensions/pathalongpath.inx.h:8
-msgid "Repeated"
-msgstr "Ripetuto"
-
-#: ../share/extensions/pathalongpath.inx.h:9
-msgid "Repeated, stretched"
-msgstr "Ripetuto, adattato"
-
-#: ../share/extensions/pathalongpath.inx.h:10
-msgid "Ribbon"
-msgstr "Nastro"
-
-#: ../share/extensions/pathalongpath.inx.h:11
-msgid "Single"
-msgstr "Singolo"
-
-#: ../share/extensions/pathalongpath.inx.h:12
-msgid "Single, stretched"
-msgstr "Singolo, adattato"
-
-#: ../share/extensions/pathalongpath.inx.h:13
-msgid "Snake"
-msgstr "Serpente"
-
-#: ../share/extensions/pathalongpath.inx.h:14
 msgid "Space between copies:"
 msgstr "Spaziatura tra le copie:"
 
-#: ../share/extensions/pathalongpath.inx.h:15
+#: ../share/extensions/pathalongpath.inx.h:9
 msgid "Tangential offset"
 msgstr "Proiezione tangenziale"
 
-#: ../share/extensions/pathalongpath.inx.h:16
+#: ../share/extensions/pathalongpath.inx.h:10
 msgid ""
 "This effect bends a pattern object along an arbitrary \"skeleton\" path. The "
 "pattern can be a path or a group of paths. First, select the pattern object; "
 "then add to selection the skeleton path; then call this effect."
-msgstr "Questo effetto riproduce un motivo lungo un tracciato di scheletro a scelta."
-"Il motivo può essere un tracciato o un gruppo di tracciati. Selezionare prima "
-"il motivo, poi il tracciato, quindi applicare questo effetto."
+msgstr ""
+"Questo effetto riproduce un motivo lungo un tracciato di scheletro a scelta."
+"Il motivo può essere un tracciato o un gruppo di tracciati. Selezionare "
+"prima il motivo, poi il tracciato, quindi applicare questo effetto."
 
 #: ../share/extensions/perspective.inx.h:2
 msgid "Perspective"
@@ -11775,3 +11836,49 @@ msgstr "Windows Metafile (*.wmf)"
 msgid "Windows Metafile Input"
 msgstr "Input Windows Metafile"
 
+#~ msgid ""
+#~ "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
+#~ "separateGradient point shared by <b>%d</b> gradients; drag with <b>Shift</"
+#~ "b> to separate"
+#~ msgstr ""
+#~ "Punto di gradiente condiviso da <b>%d</b> gradiente; trascinare con "
+#~ "<b>Maiusc</b> per separarePunto di gradiente condiviso da <b>%d</b> "
+#~ "gradienti; trascinare con <b>Maiusc</b> per separare"
+
+#~ msgid ""
+#~ "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</"
+#~ "b>, or <b>drag around</b> nodes to select.<b>0</b> out of <b>%i</b> nodes "
+#~ "selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes "
+#~ "to select."
+#~ msgstr ""
+#~ "<b>0</b> di <b>%i</b> nodo selezionato. <b>Click</b>, <b>Maiusc+click</"
+#~ "b>, o <b>trascinare</b> attorno agli oggetti per selezionare.<b>0</b> di "
+#~ "<b>%i</b> nodi selezionati. <b>Click</b>, <b>Maiusc+click</b>, o "
+#~ "<b>trascinare</b> attorno agli oggetti per selezionare."
+
+#~ msgid ""
+#~ "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %"
+#~ "s.<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> "
+#~ "subpaths. %s."
+#~ msgstr ""
+#~ "<b>%i</b> di <b>%i</b> nodo selezionato in <b>%i</b> di <b>%i</b> "
+#~ "sottotracciati. %s.<b>%i</b> di <b>%i</b> nodi selezionati in <b>%i</b> "
+#~ "di <b>%i</b> sottotracciati. %s."
+
+#~ msgid "Repeated"
+#~ msgstr "Ripetuto"
+
+#~ msgid "Repeated, stretched"
+#~ msgstr "Ripetuto, adattato"
+
+#~ msgid "Ribbon"
+#~ msgstr "Nastro"
+
+#~ msgid "Single"
+#~ msgstr "Singolo"
+
+#~ msgid "Single, stretched"
+#~ msgstr "Singolo, adattato"
+
+#~ msgid "Snake"
+#~ msgstr "Serpente"

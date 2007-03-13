@@ -3,19 +3,19 @@
 # This file is distributed under the same license as the Inkscape package.
 # Copyright (C) 2000, 2006, 2007 Free Software Foundation, Inc.
 #
-#: ../src/widgets/toolbox.cpp:4035 ../src/widgets/toolbox.cpp:4056
-#: ../src/widgets/toolbox.cpp:4085 ../src/widgets/toolbox.cpp:4106
-#: ../src/widgets/toolbox.cpp:4133
 # Keld Simonsen <keld@dkuug.dk>, 2000-2001.
 # Kjartan Maraas <kmaraas@online.no>, 2000.
 # Rune Rønde Laursen <runerl@skjoldhoej.dk>, 2006.
 # Rune Rønde Møller <runerl@skjoldhoej.dk>, 2007.
 # Rune Rønde Møller <runerm@skjoldhoej.dk>, 2007.
+#: ../src/widgets/toolbox.cpp:4037 ../src/widgets/toolbox.cpp:4058
+#: ../src/widgets/toolbox.cpp:4087 ../src/widgets/toolbox.cpp:4108
+#: ../src/widgets/toolbox.cpp:4135
 msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-26 19:05-0800\n"
+"POT-Creation-Date: 2007-03-13 13:48-0500\n"
 "PO-Revision-Date: 2007-01-27 08:31+0100\n"
 "Last-Translator: Rune Rønde Møller <runerm@skjoldhoej.dk>\n"
 "Language-Team: Dansk <dansk@klid.dk>\n"
@@ -34,7 +34,8 @@ msgid "Inkscape SVG Vector Illustrator"
 msgstr "Inkscape SVG Vector Illustrator"
 
 #: ../src/arc-context.cpp:331
-msgid "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
+msgid ""
+"<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
 msgstr ""
 "<b>Ctrl</b>: trinvis justering af afsnit/udsnit på ellipse med "
 "heltalsforhold eller cirkel"
@@ -56,52 +57,60 @@ msgstr ""
 msgid "Create ellipse"
 msgstr "Opret ellipse"
 
-#: ../src/connector-context.cpp:517
+#: ../src/connector-context.cpp:519
 msgid "Creating new connector"
 msgstr "Opret ny forbindelse"
 
-#: ../src/connector-context.cpp:711
+#: ../src/connector-context.cpp:746
+#, fuzzy
+msgid "Connector endpoint drag canceled."
+msgstr "Træk i knudepunkt eller håndtag, annulleret."
+
+#: ../src/connector-context.cpp:794
 msgid "Reroute connector"
 msgstr "Omdirigér forbindelse"
 
 #. Flush pending updates
-#: ../src/connector-context.cpp:918
+#: ../src/connector-context.cpp:958
 msgid "Create connector"
 msgstr "Opret forbindelse"
 
-#: ../src/connector-context.cpp:942
+#: ../src/connector-context.cpp:982
 msgid "Finishing connector"
 msgstr "Afsluttende forbindelse"
 
-#: ../src/connector-context.cpp:1086
+#: ../src/connector-context.cpp:1126
 msgid "<b>Connection point</b>: click or drag to create a new connector"
-msgstr "<b>Forbindelsespunkt</b>: klik eller træk for at oprette en ny forbindelse"
+msgstr ""
+"<b>Forbindelsespunkt</b>: klik eller træk for at oprette en ny forbindelse"
 
-#: ../src/connector-context.cpp:1157
+#: ../src/connector-context.cpp:1197
 msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 "<b>Forbindelsesendepunkt</b>: træk for at omdirigere eller forbinde til nye "
 "figurer"
 
-#: ../src/connector-context.cpp:1268
+#: ../src/connector-context.cpp:1308
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Markér <b>mindst ét objekt der ikke er en forbindelse</b>."
 
-#: ../src/connector-context.cpp:1273 ../src/widgets/toolbox.cpp:4319
+#: ../src/connector-context.cpp:1313 ../src/widgets/toolbox.cpp:4321
 msgid "Make connectors avoid selected objects"
 msgstr "Lad forbindelser undvige markerede objekter"
 
-#: ../src/connector-context.cpp:1274 ../src/widgets/toolbox.cpp:4323
+#: ../src/connector-context.cpp:1314 ../src/widgets/toolbox.cpp:4325
 msgid "Make connectors ignore selected objects"
 msgstr "Lad forbindelser ignorere markerede objekter"
 
 #: ../src/context-fns.cpp:33 ../src/context-fns.cpp:62
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
-msgstr "<b>Det aktuelle lag er skjult</b>. Vis laget, for at kunne tegne på det."
+msgstr ""
+"<b>Det aktuelle lag er skjult</b>. Vis laget, for at kunne tegne på det."
 
 #: ../src/context-fns.cpp:39 ../src/context-fns.cpp:68
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr "<b>Det aktuelle lag er låst</b>. Lås det op, for at kunne tegne på det."
+msgstr ""
+"<b>Det aktuelle lag er låst</b>. Lås det op, for at kunne tegne på det."
 
 #: ../src/desktop-events.cpp:110
 msgid "Create guide"
@@ -145,27 +154,27 @@ msgstr "<small>Objektet har <b>%d</b> fliselagte kloner.</small>"
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>Objektet har ingen fliselagte kloner.</small>"
 
-#: ../src/dialogs/clonetiler.cpp:851
+#: ../src/dialogs/clonetiler.cpp:856
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr "Markér <b>et objekt</b> hvis fliselagte kloner skal afklumpes."
 
-#: ../src/dialogs/clonetiler.cpp:873
+#: ../src/dialogs/clonetiler.cpp:878
 msgid "Unclump tiled clones"
 msgstr "Afklump fliselagte kloners"
 
-#: ../src/dialogs/clonetiler.cpp:903
+#: ../src/dialogs/clonetiler.cpp:908
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Markér <b>et objekt</b> hvis fliselagte kloner skal fjernes."
 
-#: ../src/dialogs/clonetiler.cpp:926
+#: ../src/dialogs/clonetiler.cpp:931
 msgid "Delete tiled clones"
 msgstr "Slet fliselagte kloner"
 
-#: ../src/dialogs/clonetiler.cpp:972 ../src/selection-chemistry.cpp:1987
+#: ../src/dialogs/clonetiler.cpp:977 ../src/selection-chemistry.cpp:1987
 msgid "Select an <b>object</b> to clone."
 msgstr "Markér et <b>objekt</b> til kloning."
 
-#: ../src/dialogs/clonetiler.cpp:978
+#: ../src/dialogs/clonetiler.cpp:983
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -173,23 +182,23 @@ msgstr ""
 "Hvis du vil klone flere objekter, så <b>gruppér</b> dem og <b>klon gruppen</"
 "b>."
 
-#: ../src/dialogs/clonetiler.cpp:1335
+#: ../src/dialogs/clonetiler.cpp:1340
 msgid "Create tiled clones"
 msgstr "Opret fliselagte kloner"
 
-#: ../src/dialogs/clonetiler.cpp:1518
+#: ../src/dialogs/clonetiler.cpp:1523
 msgid "<small>Per row:</small>"
 msgstr "<small>Pr. række:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1531
+#: ../src/dialogs/clonetiler.cpp:1536
 msgid "<small>Per column:</small>"
 msgstr "<small>Pr. søjle:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1539
+#: ../src/dialogs/clonetiler.cpp:1544
 msgid "<small>Randomize:</small>"
 msgstr "<small>Tilfældiggør:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1693
+#: ../src/dialogs/clonetiler.cpp:1698
 msgid "_Symmetry"
 msgstr "_Symmetri"
 
@@ -198,295 +207,297 @@ msgstr "_Symmetri"
 #. * http://www.clarku.edu/~djoyce/wallpaper/seventeen.html (English vocabulary); or
 #. * http://membres.lycos.fr/villemingerard/Geometri/Sym1D.htm (French vocabulary).
 #.
-#: ../src/dialogs/clonetiler.cpp:1701
+#: ../src/dialogs/clonetiler.cpp:1706
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr "Vælg én af de 17 symmetrigrupper til fliselægningen"
 
 #. TRANSLATORS: "translation" means "shift" / "displacement" here.
-#: ../src/dialogs/clonetiler.cpp:1712
+#: ../src/dialogs/clonetiler.cpp:1717
 msgid "<b>P1</b>: simple translation"
 msgstr "<b>P1</b>: simpel omformning"
 
-#: ../src/dialogs/clonetiler.cpp:1713
+#: ../src/dialogs/clonetiler.cpp:1718
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr "<b>P2</b>: 180° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1714
+#: ../src/dialogs/clonetiler.cpp:1719
 msgid "<b>PM</b>: reflection"
 msgstr "<b>PM</b>: reflektion"
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined.
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: ../src/dialogs/clonetiler.cpp:1717
+#: ../src/dialogs/clonetiler.cpp:1722
 msgid "<b>PG</b>: glide reflection"
 msgstr "<b>PG</b>: glidereflektion"
 
-#: ../src/dialogs/clonetiler.cpp:1718
+#: ../src/dialogs/clonetiler.cpp:1723
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr "<b>CM</b>: reflektion + glidereflektion"
 
-#: ../src/dialogs/clonetiler.cpp:1719
+#: ../src/dialogs/clonetiler.cpp:1724
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr "<b>PMM</b>: reflektion + reflektion"
 
-#: ../src/dialogs/clonetiler.cpp:1720
+#: ../src/dialogs/clonetiler.cpp:1725
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr "<b>PMG</b>: reflektion + 180° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1721
+#: ../src/dialogs/clonetiler.cpp:1726
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr "<b>PGG</b>: glidereflektion + 180° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1722
+#: ../src/dialogs/clonetiler.cpp:1727
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr "<b>CMM</b>: reflektion + reflektion + 180° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1723
+#: ../src/dialogs/clonetiler.cpp:1728
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr "<b>P4</b>: 90° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1724
+#: ../src/dialogs/clonetiler.cpp:1729
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr "<b>P4M</b>: 90° rotation + 45° reflektion"
 
-#: ../src/dialogs/clonetiler.cpp:1725
+#: ../src/dialogs/clonetiler.cpp:1730
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr "<b>P4G</b>: 90° rotation + 90° reflektion"
 
-#: ../src/dialogs/clonetiler.cpp:1726
+#: ../src/dialogs/clonetiler.cpp:1731
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr "<b>P3</b>: 120° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1727
+#: ../src/dialogs/clonetiler.cpp:1732
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr "<b>P31M</b>: reflektion + 120° rotation, tæt"
 
-#: ../src/dialogs/clonetiler.cpp:1728
+#: ../src/dialogs/clonetiler.cpp:1733
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr "<b>P3M1</b>: reflektion + 120° rotation, spredt"
 
-#: ../src/dialogs/clonetiler.cpp:1729
+#: ../src/dialogs/clonetiler.cpp:1734
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr "<b>P6</b>: 60° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1730
+#: ../src/dialogs/clonetiler.cpp:1735
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>: reflektion + 60° rotation"
 
-#: ../src/dialogs/clonetiler.cpp:1758
+#: ../src/dialogs/clonetiler.cpp:1763
 msgid "S_hift"
 msgstr "S_hift"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
-#: ../src/dialogs/clonetiler.cpp:1768
+#: ../src/dialogs/clonetiler.cpp:1773
 #, no-c-format
 msgid "<b>Shift X:</b>"
 msgstr "<b>X-forskydning:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1776
+#: ../src/dialogs/clonetiler.cpp:1781
 #, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr "Vandrets forskydning pr. række (i % af flisebredde)"
 
-#: ../src/dialogs/clonetiler.cpp:1784
+#: ../src/dialogs/clonetiler.cpp:1789
 #, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr "Vandrets forskydning pr. søjle (i % af flisebredde)"
 
-#: ../src/dialogs/clonetiler.cpp:1791
+#: ../src/dialogs/clonetiler.cpp:1796
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "Tilfældiggør den vandrette forskydning med denne procentdel"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
-#: ../src/dialogs/clonetiler.cpp:1801
+#: ../src/dialogs/clonetiler.cpp:1806
 #, no-c-format
 msgid "<b>Shift Y:</b>"
 msgstr "<b>Y-forskydning:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1809
+#: ../src/dialogs/clonetiler.cpp:1814
 #, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
 msgstr "Lodret forskydning pr. række (i % af flisehøjde)"
 
-#: ../src/dialogs/clonetiler.cpp:1817
+#: ../src/dialogs/clonetiler.cpp:1822
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
 msgstr "Lodret forskydning pr. søjle (i % af flisehøjde)"
 
-#: ../src/dialogs/clonetiler.cpp:1824
+#: ../src/dialogs/clonetiler.cpp:1829
 msgid "Randomize the vertical shift by this percentage"
 msgstr "Tilfældiggør den lodrette forskydning med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:1832
+#: ../src/dialogs/clonetiler.cpp:1837
 msgid "<b>Exponent:</b>"
 msgstr "<b>Eksponent:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1839
+#: ../src/dialogs/clonetiler.cpp:1844
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr "Om rækker er ligeligt fordelt (1), konvergerer (<1) eller divergerer (>1)"
+msgstr ""
+"Om rækker er ligeligt fordelt (1), konvergerer (<1) eller divergerer (>1)"
 
-#: ../src/dialogs/clonetiler.cpp:1846
+#: ../src/dialogs/clonetiler.cpp:1851
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr "Om søjler er ligeligt fordelt (1), konvergerer (<1) eller divergerer (>1)"
+msgstr ""
+"Om søjler er ligeligt fordelt (1), konvergerer (<1) eller divergerer (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: ../src/dialogs/clonetiler.cpp:1854 ../src/dialogs/clonetiler.cpp:1944
-#: ../src/dialogs/clonetiler.cpp:2003 ../src/dialogs/clonetiler.cpp:2060
-#: ../src/dialogs/clonetiler.cpp:2109 ../src/dialogs/clonetiler.cpp:2240
+#: ../src/dialogs/clonetiler.cpp:1859 ../src/dialogs/clonetiler.cpp:1949
+#: ../src/dialogs/clonetiler.cpp:2008 ../src/dialogs/clonetiler.cpp:2065
+#: ../src/dialogs/clonetiler.cpp:2114 ../src/dialogs/clonetiler.cpp:2245
 msgid "<small>Alternate:</small>"
 msgstr "<small>Skiftende fortegn:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1860
+#: ../src/dialogs/clonetiler.cpp:1865
 msgid "Alternate the sign of shifts for each row"
 msgstr "Skiftende fortegn på forskydninger for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:1865
+#: ../src/dialogs/clonetiler.cpp:1870
 msgid "Alternate the sign of shifts for each column"
 msgstr "Skiftende fortegn på forskydninger for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:1874
+#: ../src/dialogs/clonetiler.cpp:1879
 msgid "Sc_ale"
 msgstr "Sk_alér"
 
-#: ../src/dialogs/clonetiler.cpp:1882
+#: ../src/dialogs/clonetiler.cpp:1887
 msgid "<b>Scale X:</b>"
 msgstr "<b>X-skalering:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1890
+#: ../src/dialogs/clonetiler.cpp:1895
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr "Vandret skalering pr. række (i % af flisebredde)"
 
-#: ../src/dialogs/clonetiler.cpp:1898
+#: ../src/dialogs/clonetiler.cpp:1903
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr "Vandret skalering pr. søjle (i % af flisebredde)"
 
-#: ../src/dialogs/clonetiler.cpp:1905
+#: ../src/dialogs/clonetiler.cpp:1910
 msgid "Randomize the horizontal scale by this percentage"
 msgstr "Tilfældiggør vandret skalering med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:1913
+#: ../src/dialogs/clonetiler.cpp:1918
 msgid "<b>Scale Y:</b>"
 msgstr "<b>Y-skalering:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1921
+#: ../src/dialogs/clonetiler.cpp:1926
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr "Lodret skalering pr. række (i % af flisehøjde)"
 
-#: ../src/dialogs/clonetiler.cpp:1929
+#: ../src/dialogs/clonetiler.cpp:1934
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr "Lodret skalering pr. søjle (i % af flisehøjde)"
 
-#: ../src/dialogs/clonetiler.cpp:1936
+#: ../src/dialogs/clonetiler.cpp:1941
 msgid "Randomize the vertical scale by this percentage"
 msgstr "Tilfældiggør den lodrette skalering med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:1950
+#: ../src/dialogs/clonetiler.cpp:1955
 msgid "Alternate the sign of scales for each row"
 msgstr "Skiftende fortegn på skalering for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:1955
+#: ../src/dialogs/clonetiler.cpp:1960
 msgid "Alternate the sign of scales for each column"
 msgstr "Skiftende fortegn på skalaer for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:1964
+#: ../src/dialogs/clonetiler.cpp:1969
 msgid "_Rotation"
 msgstr "_Rotering"
 
-#: ../src/dialogs/clonetiler.cpp:1972
+#: ../src/dialogs/clonetiler.cpp:1977
 msgid "<b>Angle:</b>"
 msgstr "<b>Vinkel:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1980
+#: ../src/dialogs/clonetiler.cpp:1985
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
 msgstr "Rotér fliser med denne vinkel for række"
 
-#: ../src/dialogs/clonetiler.cpp:1988
+#: ../src/dialogs/clonetiler.cpp:1993
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
 msgstr "Rotér fliser med denne vinkel for søjle"
 
-#: ../src/dialogs/clonetiler.cpp:1995
+#: ../src/dialogs/clonetiler.cpp:2000
 msgid "Randomize the rotation angle by this percentage"
 msgstr "Tilfældiggør rotationsvinkelen med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:2009
+#: ../src/dialogs/clonetiler.cpp:2014
 msgid "Alternate the rotation direction for each row"
 msgstr "Skiftende rotationsretning for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2014
+#: ../src/dialogs/clonetiler.cpp:2019
 msgid "Alternate the rotation direction for each column"
 msgstr "Skiftende rotationsretning for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2022
+#: ../src/dialogs/clonetiler.cpp:2027
 msgid "_Blur & opacity"
 msgstr "_Udtværing & uigennemsigtighed"
 
-#: ../src/dialogs/clonetiler.cpp:2031
+#: ../src/dialogs/clonetiler.cpp:2036
 msgid "<b>Blur:</b>"
 msgstr "<b>Udtvær:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2038
+#: ../src/dialogs/clonetiler.cpp:2043
 msgid "Blur tiles by this percentage for each row"
 msgstr "Udtvær fliser med denne procentdel for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2045
+#: ../src/dialogs/clonetiler.cpp:2050
 msgid "Blur tiles by this percentage for each column"
 msgstr "Udtvær fliser med denne procentdel for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2052
+#: ../src/dialogs/clonetiler.cpp:2057
 msgid "Randomize the tile blur by this percentage"
 msgstr "Tilfældiggør flise-udtværing med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:2066
+#: ../src/dialogs/clonetiler.cpp:2071
 msgid "Alternate the sign of blur change for each row"
 msgstr "Skiftende fortegn på udtværing for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2071
+#: ../src/dialogs/clonetiler.cpp:2076
 msgid "Alternate the sign of blur change for each column"
 msgstr "Skiftende fortegn på udtværing for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2080
+#: ../src/dialogs/clonetiler.cpp:2085
 msgid "<b>Fade out:</b>"
 msgstr "<b>Ton ud:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2087
+#: ../src/dialogs/clonetiler.cpp:2092
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr "Formindsk flise-uigennemsigtighed med denne procentdel for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2094
+#: ../src/dialogs/clonetiler.cpp:2099
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr "Formindsk flise-uigennemsigtighed med denne procentdel for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2101
+#: ../src/dialogs/clonetiler.cpp:2106
 msgid "Randomize the tile opacity by this percentage"
 msgstr "Tilfældiggør flise-uigennemsigtigheden med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:2115
+#: ../src/dialogs/clonetiler.cpp:2120
 msgid "Alternate the sign of opacity change for each row"
 msgstr "Skiftende fortegn for ændringen af uigennemsigtigheden for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2120
+#: ../src/dialogs/clonetiler.cpp:2125
 msgid "Alternate the sign of opacity change for each column"
 msgstr "Skiftende fortegn for ændringen af uigennemsigtigheden for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2128
+#: ../src/dialogs/clonetiler.cpp:2133
 msgid "Co_lor"
 msgstr "Fa_rve"
 
-#: ../src/dialogs/clonetiler.cpp:2133
+#: ../src/dialogs/clonetiler.cpp:2138
 msgid "Initial color: "
 msgstr "Startfarve: "
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid "Initial color of tiled clones"
 msgstr "Fliselagte kloners startfarve"
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke)"
@@ -494,71 +505,71 @@ msgstr ""
 "Kloners startfarve (virker kun hvis der er ikke-sat farve på originalens "
 "streg eller udfyldning)"
 
-#: ../src/dialogs/clonetiler.cpp:2152
+#: ../src/dialogs/clonetiler.cpp:2157
 msgid "<b>H:</b>"
 msgstr "<b>H:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2159
+#: ../src/dialogs/clonetiler.cpp:2164
 msgid "Change the tile hue by this percentage for each row"
 msgstr "Ændr flise-farvetone med denne procentdel for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2166
+#: ../src/dialogs/clonetiler.cpp:2171
 msgid "Change the tile hue by this percentage for each column"
 msgstr "Ændr flise-farvetone med denne procentdel for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2173
+#: ../src/dialogs/clonetiler.cpp:2178
 msgid "Randomize the tile hue by this percentage"
 msgstr "Tilfældiggør flise-farvetone med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:2182
+#: ../src/dialogs/clonetiler.cpp:2187
 msgid "<b>S:</b>"
 msgstr "<b>S:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2189
+#: ../src/dialogs/clonetiler.cpp:2194
 msgid "Change the color saturation by this percentage for each row"
 msgstr "Ændr farvemætningen med denne procentdel for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2196
+#: ../src/dialogs/clonetiler.cpp:2201
 msgid "Change the color saturation by this percentage for each column"
 msgstr "Ændr farvemætningen med denne procentdel for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2203
+#: ../src/dialogs/clonetiler.cpp:2208
 msgid "Randomize the color saturation by this percentage"
 msgstr "Tilfældiggør farvemætningen med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:2211
+#: ../src/dialogs/clonetiler.cpp:2216
 msgid "<b>L:</b>"
 msgstr "<b>L:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2218
+#: ../src/dialogs/clonetiler.cpp:2223
 msgid "Change the color lightness by this percentage for each row"
 msgstr "Ændr lysstyrken med denne procentdel for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2225
+#: ../src/dialogs/clonetiler.cpp:2230
 msgid "Change the color lightness by this percentage for each column"
 msgstr "Ændr lysstyrken med denne procentdel for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2232
+#: ../src/dialogs/clonetiler.cpp:2237
 msgid "Randomize the color lightness by this percentage"
 msgstr "Tilfældiggør lysstyrken med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:2246
+#: ../src/dialogs/clonetiler.cpp:2251
 msgid "Alternate the sign of color changes for each row"
 msgstr "Skiftende fortegn på farveændringer for hver række"
 
-#: ../src/dialogs/clonetiler.cpp:2251
+#: ../src/dialogs/clonetiler.cpp:2256
 msgid "Alternate the sign of color changes for each column"
 msgstr "Skiftende fortegn på farveændringer for hver søjle"
 
-#: ../src/dialogs/clonetiler.cpp:2259
+#: ../src/dialogs/clonetiler.cpp:2264
 msgid "_Trace"
 msgstr "_Tegn af"
 
-#: ../src/dialogs/clonetiler.cpp:2266
+#: ../src/dialogs/clonetiler.cpp:2271
 msgid "Trace the drawing under the tiles"
 msgstr "Tegn tegningen under fliserne af"
 
-#: ../src/dialogs/clonetiler.cpp:2270
+#: ../src/dialogs/clonetiler.cpp:2275
 msgid ""
 "For each clone, pick a value from the drawing in that clone's location and "
 "apply it to the clone"
@@ -566,11 +577,11 @@ msgstr ""
 "Vælg for hver klon en værdi fra tegningen i den aktuelle klons placering og "
 "anvend værdien på klonen"
 
-#: ../src/dialogs/clonetiler.cpp:2284
+#: ../src/dialogs/clonetiler.cpp:2289
 msgid "1. Pick from the drawing:"
 msgstr "1. Vælg fra tegningen:"
 
-#: ../src/dialogs/clonetiler.cpp:2295 ../src/dialogs/clonetiler.cpp:2442
+#: ../src/dialogs/clonetiler.cpp:2300 ../src/dialogs/clonetiler.cpp:2447
 #: ../share/extensions/color_brighter.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
 #: ../share/extensions/color_darker.inx.h:1
@@ -590,124 +601,126 @@ msgstr "1. Vælg fra tegningen:"
 msgid "Color"
 msgstr "Farve"
 
-#: ../src/dialogs/clonetiler.cpp:2296
+#: ../src/dialogs/clonetiler.cpp:2301
 msgid "Pick the visible color and opacity"
 msgstr "Vælg den synlige farve og uigennemsigtighed"
 
-#: ../src/dialogs/clonetiler.cpp:2303 ../src/dialogs/clonetiler.cpp:2452
+#: ../src/dialogs/clonetiler.cpp:2308 ../src/dialogs/clonetiler.cpp:2457
 #: ../share/extensions/svg_dropshadow.inx.h:3
 msgid "Opacity"
 msgstr "Uigennemsigtighed"
 
-#: ../src/dialogs/clonetiler.cpp:2304
+#: ../src/dialogs/clonetiler.cpp:2309
 msgid "Pick the total accumulated opacity"
 msgstr "Vælg den totale akkumulerede uigennemsigtighed"
 
-#: ../src/dialogs/clonetiler.cpp:2311
+#: ../src/dialogs/clonetiler.cpp:2316
 msgid "R"
 msgstr "R"
 
-#: ../src/dialogs/clonetiler.cpp:2312
+#: ../src/dialogs/clonetiler.cpp:2317
 msgid "Pick the Red component of the color"
 msgstr "Vælg farvens rødkomponent"
 
-#: ../src/dialogs/clonetiler.cpp:2319
+#: ../src/dialogs/clonetiler.cpp:2324
 msgid "G"
 msgstr "G"
 
-#: ../src/dialogs/clonetiler.cpp:2320
+#: ../src/dialogs/clonetiler.cpp:2325
 msgid "Pick the Green component of the color"
 msgstr "Vælg farvens grønkomponent"
 
-#: ../src/dialogs/clonetiler.cpp:2327
+#: ../src/dialogs/clonetiler.cpp:2332
 msgid "B"
 msgstr "B"
 
-#: ../src/dialogs/clonetiler.cpp:2328
+#: ../src/dialogs/clonetiler.cpp:2333
 msgid "Pick the Blue component of the color"
 msgstr "Vælg farvens blåkomponent"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2337
+#: ../src/dialogs/clonetiler.cpp:2342
 msgid "clonetiler|H"
 msgstr "clonetiler|Farvetone"
 
-#: ../src/dialogs/clonetiler.cpp:2338
+#: ../src/dialogs/clonetiler.cpp:2343
 msgid "Pick the hue of the color"
 msgstr "Vælg farvetone"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2347
+#: ../src/dialogs/clonetiler.cpp:2352
 msgid "clonetiler|S"
 msgstr "clonetiler|Mætning"
 
-#: ../src/dialogs/clonetiler.cpp:2348
+#: ../src/dialogs/clonetiler.cpp:2353
 msgid "Pick the saturation of the color"
 msgstr "Vælg farvens mætning"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2357
+#: ../src/dialogs/clonetiler.cpp:2362
 msgid "clonetiler|L"
 msgstr "clonetiler|Lysstyrke"
 
-#: ../src/dialogs/clonetiler.cpp:2358
+#: ../src/dialogs/clonetiler.cpp:2363
 msgid "Pick the lightness of the color"
 msgstr "Vælg farvens lysstyrke"
 
-#: ../src/dialogs/clonetiler.cpp:2368
+#: ../src/dialogs/clonetiler.cpp:2373
 msgid "2. Tweak the picked value:"
 msgstr "2. Ændr den valgte værdi:"
 
-#: ../src/dialogs/clonetiler.cpp:2378
+#: ../src/dialogs/clonetiler.cpp:2383
 msgid "Gamma-correct:"
 msgstr "Gamma-korrigering:"
 
-#: ../src/dialogs/clonetiler.cpp:2383
+#: ../src/dialogs/clonetiler.cpp:2388
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
-msgstr "Forskyd mellemværdierne af de valgte værdier opad (>0) eller nedad (<0)"
+msgstr ""
+"Forskyd mellemværdierne af de valgte værdier opad (>0) eller nedad (<0)"
 
-#: ../src/dialogs/clonetiler.cpp:2390
+#: ../src/dialogs/clonetiler.cpp:2395
 msgid "Randomize:"
 msgstr "Tilfældiggør:"
 
-#: ../src/dialogs/clonetiler.cpp:2395
+#: ../src/dialogs/clonetiler.cpp:2400
 msgid "Randomize the picked value by this percentage"
 msgstr "Tilfældiggør den valgte værdi med denne procentdel"
 
-#: ../src/dialogs/clonetiler.cpp:2402
+#: ../src/dialogs/clonetiler.cpp:2407
 msgid "Invert:"
 msgstr "Invertér:"
 
-#: ../src/dialogs/clonetiler.cpp:2406
+#: ../src/dialogs/clonetiler.cpp:2411
 msgid "Invert the picked value"
 msgstr "Invertér den valgte værdi"
 
-#: ../src/dialogs/clonetiler.cpp:2412
+#: ../src/dialogs/clonetiler.cpp:2417
 msgid "3. Apply the value to the clones':"
 msgstr "3. Anvend værdien på klonerne:"
 
-#: ../src/dialogs/clonetiler.cpp:2422
+#: ../src/dialogs/clonetiler.cpp:2427
 msgid "Presence"
 msgstr "Nærvær"
 
-#: ../src/dialogs/clonetiler.cpp:2425
+#: ../src/dialogs/clonetiler.cpp:2430
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
-msgstr "Hver klon oprettes med sandsynligheden bestemt af den valgte værdi i punktet"
+msgstr ""
+"Hver klon oprettes med sandsynligheden bestemt af den valgte værdi i punktet"
 
-#: ../src/dialogs/clonetiler.cpp:2432
+#: ../src/dialogs/clonetiler.cpp:2437
 msgid "Size"
 msgstr "Størrelse"
 
-#: ../src/dialogs/clonetiler.cpp:2435
+#: ../src/dialogs/clonetiler.cpp:2440
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr "Hver klons størrelse bestemmes af den valgte værdi i punktet"
 
-#: ../src/dialogs/clonetiler.cpp:2445
+#: ../src/dialogs/clonetiler.cpp:2450
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
@@ -715,47 +728,47 @@ msgstr ""
 "Hver klon males af den valgte farve (virker kun hvis originalen har "
 "uindfattet streg eller udfyldning)"
 
-#: ../src/dialogs/clonetiler.cpp:2455
+#: ../src/dialogs/clonetiler.cpp:2460
 msgid "Each clone's opacity is determined by the picked value in that point"
 msgstr "Hver klons uigennemsigtighed bestemmes af den valgte værdi i punktet"
 
-#: ../src/dialogs/clonetiler.cpp:2482
+#: ../src/dialogs/clonetiler.cpp:2487
 msgid "How many rows in the tiling"
 msgstr "Hvor mange rækker i fliselægningen"
 
-#: ../src/dialogs/clonetiler.cpp:2502
+#: ../src/dialogs/clonetiler.cpp:2507
 msgid "How many columns in the tiling"
 msgstr "Hvor mange søjler i fliselægningen"
 
-#: ../src/dialogs/clonetiler.cpp:2532
+#: ../src/dialogs/clonetiler.cpp:2537
 msgid "Width of the rectangle to be filled"
 msgstr "Bredde på firkanten der skal udfyldes"
 
-#: ../src/dialogs/clonetiler.cpp:2557
+#: ../src/dialogs/clonetiler.cpp:2562
 msgid "Height of the rectangle to be filled"
 msgstr "Højde på firkanten der skal udfyldes"
 
-#: ../src/dialogs/clonetiler.cpp:2572
+#: ../src/dialogs/clonetiler.cpp:2577
 msgid "Rows, columns: "
 msgstr "Rækker, søjler: "
 
-#: ../src/dialogs/clonetiler.cpp:2573
+#: ../src/dialogs/clonetiler.cpp:2578
 msgid "Create the specified number of rows and columns"
 msgstr "Opret det angivede antal rækker og søjler"
 
-#: ../src/dialogs/clonetiler.cpp:2582
+#: ../src/dialogs/clonetiler.cpp:2587
 msgid "Width, height: "
 msgstr "Bredde, højde: "
 
-#: ../src/dialogs/clonetiler.cpp:2583
+#: ../src/dialogs/clonetiler.cpp:2588
 msgid "Fill the specified width and height with the tiling"
 msgstr "Udfyld den angivede bredde og højde med fliselægningen"
 
-#: ../src/dialogs/clonetiler.cpp:2599
+#: ../src/dialogs/clonetiler.cpp:2604
 msgid "Use saved size and position of the tile"
 msgstr "Benyt flisens gemte størrelse og placering"
 
-#: ../src/dialogs/clonetiler.cpp:2602
+#: ../src/dialogs/clonetiler.cpp:2607
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
@@ -763,11 +776,11 @@ msgstr ""
 "Lad som om flisens størrelse og placering er samme som sidste gang du "
 "fliselagde, istedet for den aktuelle størrelse"
 
-#: ../src/dialogs/clonetiler.cpp:2626
+#: ../src/dialogs/clonetiler.cpp:2631
 msgid " <b>_Create</b> "
 msgstr " <b>_Opret</b> "
 
-#: ../src/dialogs/clonetiler.cpp:2628
+#: ../src/dialogs/clonetiler.cpp:2633
 msgid "Create and tile the clones of the selection"
 msgstr "Opret og fliselæg klonerne i markeringen"
 
@@ -776,28 +789,29 @@ msgstr "Opret og fliselæg klonerne i markeringen"
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/dialogs/clonetiler.cpp:2643
+#: ../src/dialogs/clonetiler.cpp:2648
 msgid " _Unclump "
 msgstr " _Afklump "
 
-#: ../src/dialogs/clonetiler.cpp:2644
+#: ../src/dialogs/clonetiler.cpp:2649
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr "Spred kloner for at reducere klumpning. Kan gentages"
 
-#: ../src/dialogs/clonetiler.cpp:2650
+#: ../src/dialogs/clonetiler.cpp:2655
 msgid " Re_move "
 msgstr " _Fjern "
 
-#: ../src/dialogs/clonetiler.cpp:2651
+#: ../src/dialogs/clonetiler.cpp:2656
 msgid "Remove existing tiled clones of the selected object (siblings only)"
-msgstr "Fjern eksisterende fliselagte kloner af det markerede objekt (kun søskende)"
+msgstr ""
+"Fjern eksisterende fliselagte kloner af det markerede objekt (kun søskende)"
 
-#: ../src/dialogs/clonetiler.cpp:2667
+#: ../src/dialogs/clonetiler.cpp:2672
 msgid " R_eset "
 msgstr " _Nulstil "
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/dialogs/clonetiler.cpp:2669
+#: ../src/dialogs/clonetiler.cpp:2674
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
@@ -1123,14 +1137,16 @@ msgstr "_ID: "
 
 #: ../src/dialogs/find.cpp:692 ../src/ui/dialog/find.cpp:61
 msgid "Find objects by the value of the id attribute (exact or partial match)"
-msgstr "Find objekter ud fra værdien af attributten ID (nøjagtig eller delvis match)"
+msgstr ""
+"Find objekter ud fra værdien af attributten ID (nøjagtig eller delvis match)"
 
 #: ../src/dialogs/find.cpp:693 ../src/ui/dialog/find.cpp:62
 msgid "_Style: "
 msgstr "_Stil: "
 
 #: ../src/dialogs/find.cpp:693 ../src/ui/dialog/find.cpp:62
-msgid "Find objects by the value of the style attribute (exact or partial match)"
+msgid ""
+"Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 "Find objekter ud fra værdien af attributten stil (nøjagtig eller delvis "
 "match)"
@@ -1141,7 +1157,8 @@ msgstr "_Attribut: "
 
 #: ../src/dialogs/find.cpp:694 ../src/ui/dialog/find.cpp:63
 msgid "Find objects by the name of an attribute (exact or partial match)"
-msgstr "Find objekter ud fra navnet på en attribut (nøjagtig eller delvis match)"
+msgstr ""
+"Find objekter ud fra navnet på en attribut (nøjagtig eller delvis match)"
 
 #: ../src/dialogs/find.cpp:708 ../src/ui/dialog/find.cpp:64
 msgid "Search in s_election"
@@ -1245,7 +1262,8 @@ msgid "_Id"
 msgstr "_Id"
 
 #: ../src/dialogs/item-properties.cpp:129
-msgid "The id= attribute (only letters, digits, and the characters .-_: allowed)"
+msgid ""
+"The id= attribute (only letters, digits, and the characters .-_: allowed)"
 msgstr "Attributten «id=» (kun bogstaver, tal og tegnene .-_: er tilladt)"
 
 #. Button for setting the object's id, label, title and description.
@@ -1597,15 +1615,18 @@ msgid "Creator"
 msgstr "Forfatter"
 
 #: ../src/dialogs/rdf.cpp:254
-msgid "Name of entity primarily responsible for making the content of this document."
-msgstr "Navnet på forfatteren med hovedansvar for udformningen af dette dokument."
+msgid ""
+"Name of entity primarily responsible for making the content of this document."
+msgstr ""
+"Navnet på forfatteren med hovedansvar for udformningen af dette dokument."
 
 #: ../src/dialogs/rdf.cpp:256
 msgid "Rights"
 msgstr "Rettigheder"
 
 #: ../src/dialogs/rdf.cpp:257
-msgid "Name of entity with rights to the Intellectual Property of this document."
+msgid ""
+"Name of entity with rights to the Intellectual Property of this document."
 msgstr "Navnet på forfatteren med ophavsretten til dette dokument."
 
 #: ../src/dialogs/rdf.cpp:259
@@ -1890,13 +1911,13 @@ msgstr "Centrér linjer"
 msgid "Align lines right"
 msgstr "Højrejustér linjer"
 
-#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3959
-#: ../src/widgets/toolbox.cpp:4005
+#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3961
+#: ../src/widgets/toolbox.cpp:4007
 msgid "Horizontal text"
 msgstr "Vandret tekst"
 
-#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3970
-#: ../src/widgets/toolbox.cpp:4016
+#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3972
+#: ../src/widgets/toolbox.cpp:4018
 msgid "Vertical text"
 msgstr "Lodret tekst"
 
@@ -2085,7 +2106,8 @@ msgstr "Opret nyt tekstknudepunkt"
 
 #: ../src/dialogs/xml-tree.cpp:1465
 #, c-format
-msgid "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
+msgid ""
+"Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
 msgstr ""
 "Kan ikke sætte <b>%s</b>: Et andet element med værdien <b>%s</b> eksisterer "
 "allerede!"
@@ -2160,7 +2182,7 @@ msgstr ""
 msgid "Set picked color"
 msgstr "Sæt valgt farve"
 
-#: ../src/dyna-draw-context.cpp:696
+#: ../src/dyna-draw-context.cpp:713
 msgid "Create calligraphic stroke"
 msgstr "Opret kalligrafisk streg"
 
@@ -2347,6 +2369,50 @@ msgstr "Antal ind-/udskubbede kopier af objektet der skal oprettes"
 msgid "Generate from Path"
 msgstr "Opret fra sti"
 
+#: ../src/extension/internal/emf-win32-inout.cpp:1373
+#, fuzzy
+msgid "EMF Input"
+msgstr "DXF inddata"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1378
+#, fuzzy
+msgid "Enhanced Metafiles (*.emf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1379
+msgid "Enhanced Metafiles"
+msgstr ""
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1387
+#, fuzzy
+msgid "WMF Input"
+msgstr "WPG-inddata"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1392
+#, fuzzy
+msgid "Windows Metafiles (*.wmf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1393
+#, fuzzy
+msgid "Windows Metafiles"
+msgstr "Windows Metafile-inddata"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1401
+#, fuzzy
+msgid "EMF Output"
+msgstr "DXF-uddata"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1406
+#, fuzzy
+msgid "Enhanced Metafile (*.emf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1407
+#, fuzzy
+msgid "Enhanced Metafile"
+msgstr "Ændr rektangel"
+
 #: ../src/extension/internal/eps-out.cpp:89
 msgid "Encapsulated Postscript Output"
 msgstr "Encapsulated PostScript-uddata"
@@ -2428,9 +2494,9 @@ msgid "Vertical Offset"
 msgstr "Lodret forskydning"
 
 #: ../src/extension/internal/grid.cpp:224 ../share/extensions/eqtexsvg.inx.h:3
-#: ../share/extensions/funcplot.inx.h:12 ../share/extensions/lindenmayer.inx
-#: .h:9 ../share/extensions/lorem_ipsum.inx.h:4
-#: ../share/extensions/rtree.inx.h:4
+#: ../share/extensions/funcplot.inx.h:12
+#: ../share/extensions/lindenmayer.inx.h:9
+#: ../share/extensions/lorem_ipsum.inx.h:4 ../share/extensions/rtree.inx.h:4
 msgid "Render"
 msgstr "Optegn"
 
@@ -2466,6 +2532,74 @@ msgstr "OpenDocument drawing (*.odg)"
 msgid "OpenDocument drawing file"
 msgstr "OpenDocument drawing fil"
 
+#: ../src/extension/internal/pdf.cpp:108 ../src/extension/internal/ps.cpp:121
+msgid "Print Destination"
+msgstr "Udskrivningsdestination"
+
+#. Print properties frame
+#: ../src/extension/internal/pdf.cpp:123 ../src/extension/internal/ps.cpp:136
+msgid "Print properties"
+msgstr "Udskrivningsegenskaber"
+
+#: ../src/extension/internal/pdf.cpp:130
+#, fuzzy
+msgid "Print using PDF operators"
+msgstr "Udskriv ved hjælp af PostScript operatorer"
+
+#: ../src/extension/internal/pdf.cpp:132
+#, fuzzy
+msgid ""
+"Use PDF vector operators. The resulting image is usually smaller in file "
+"size and can be arbitrarily scaled, but patterns will be lost."
+msgstr ""
+"Benyt PostScript vektoroperatorer. Det resulterende billede har normalt "
+"mindre filstørrelse og kan skaleres vilkårligt, men alfagennemsigtighed og "
+"mønstre går tabt."
+
+#: ../src/extension/internal/pdf.cpp:137 ../src/extension/internal/ps.cpp:150
+msgid "Print as bitmap"
+msgstr "Udskriv som punktbillede"
+
+#: ../src/extension/internal/pdf.cpp:139 ../src/extension/internal/ps.cpp:152
+msgid ""
+"Print everything as bitmap. The resulting image is usually larger in file "
+"size and cannot be arbitrarily scaled without quality loss, but all objects "
+"will be rendered exactly as displayed."
+msgstr ""
+"Udskriv alt som punktbillede. Det resulterende billede har normalt større "
+"filstørrelse og kan ikke skaleres vilkårligt uden kvalitetstab, men alle "
+"objekter udskrives præcis som vist."
+
+#: ../src/extension/internal/pdf.cpp:153 ../src/extension/internal/ps.cpp:166
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "Foretrukken opløsning af punktbillede (dpi)"
+
+#: ../src/extension/internal/pdf.cpp:167 ../src/extension/internal/ps.cpp:180
+msgid "Resolution:"
+msgstr "Opløsning:"
+
+#. Print destination frame
+#: ../src/extension/internal/pdf.cpp:171 ../src/extension/internal/ps.cpp:184
+msgid "Print destination"
+msgstr "Udskrivningsdestination"
+
+#: ../src/extension/internal/pdf.cpp:177 ../src/extension/internal/ps.cpp:190
+msgid ""
+"Printer name (as given by lpstat -p);\n"
+"leave empty to use the system default printer.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to a program."
+msgstr ""
+"Printernavn (som angivet af lpstat -p);\n"
+"lad være tomt for at bruge systemets standardprinter.\n"
+"Brug '> filnavn' for at udskrive til fil.\n"
+"Brug '| prog arg...' for at viderelede til et program (pipe)."
+
+#: ../src/extension/internal/pdf.cpp:1566
+#, fuzzy
+msgid "PDF Print"
+msgstr "LaTeX udskrivning"
+
 #: ../src/extension/internal/pov-out.cpp:457
 msgid "PovRay Output"
 msgstr "PovRay-uddata"
@@ -2491,15 +2625,6 @@ msgstr "PostScript (*.ps)"
 msgid "Postscript File"
 msgstr "PostScript-fil"
 
-#: ../src/extension/internal/ps.cpp:121
-msgid "Print Destination"
-msgstr "Udskrivningsdestination"
-
-#. Print properties frame
-#: ../src/extension/internal/ps.cpp:136
-msgid "Print properties"
-msgstr "Udskrivningsegenskaber"
-
 #: ../src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "Udskriv ved hjælp af PostScript operatorer"
@@ -2513,45 +2638,6 @@ msgstr ""
 "Benyt PostScript vektoroperatorer. Det resulterende billede har normalt "
 "mindre filstørrelse og kan skaleres vilkårligt, men alfagennemsigtighed og "
 "mønstre går tabt."
-
-#: ../src/extension/internal/ps.cpp:150
-msgid "Print as bitmap"
-msgstr "Udskriv som punktbillede"
-
-#: ../src/extension/internal/ps.cpp:152
-msgid ""
-"Print everything as bitmap. The resulting image is usually larger in file "
-"size and cannot be arbitrarily scaled without quality loss, but all objects "
-"will be rendered exactly as displayed."
-msgstr ""
-"Udskriv alt som punktbillede. Det resulterende billede har normalt større "
-"filstørrelse og kan ikke skaleres vilkårligt uden kvalitetstab, men alle "
-"objekter udskrives præcis som vist."
-
-#: ../src/extension/internal/ps.cpp:166
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr "Foretrukken opløsning af punktbillede (dpi)"
-
-#: ../src/extension/internal/ps.cpp:180
-msgid "Resolution:"
-msgstr "Opløsning:"
-
-#. Print destination frame
-#: ../src/extension/internal/ps.cpp:184
-msgid "Print destination"
-msgstr "Udskrivningsdestination"
-
-#: ../src/extension/internal/ps.cpp:190
-msgid ""
-"Printer name (as given by lpstat -p);\n"
-"leave empty to use the system default printer.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to a program."
-msgstr ""
-"Printernavn (som angivet af lpstat -p);\n"
-"lad være tomt for at bruge systemets standardprinter.\n"
-"Brug '> filnavn' for at udskrive til fil.\n"
-"Brug '| prog arg...' for at viderelede til et program (pipe)."
 
 #: ../src/extension/internal/ps.cpp:1719
 msgid "Postscript Print"
@@ -2647,7 +2733,7 @@ msgstr "Skalérbar vektorgrafikformat brugt af Corel WordPerfect"
 #. running from the console, in which case calling sp_ui
 #. routines will cause a segfault.  See bug 1000350 - bryce
 #. sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
-#: ../src/extension/system.cpp:101
+#: ../src/extension/system.cpp:102
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr "Format-autodetektion mislykkedes. Filen åbnes som SVG."
 
@@ -2671,7 +2757,8 @@ msgstr "Dokument endnu ikke gemt, kan ikke fortryde."
 #: ../src/file.cpp:246
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
-msgstr "Ændringer vil gå tabt!  Er du sikker på du vil genindlæse dokumentet %s?"
+msgstr ""
+"Ændringer vil gå tabt!  Er du sikker på du vil genindlæse dokumentet %s?"
 
 #: ../src/file.cpp:266
 msgid "Document reverted."
@@ -2985,6 +3072,11 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Ex-kvadrater"
 
+#: ../src/ink-action.cpp:179 ../src/widgets/toolbox.cpp:2292
+#: ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr "Benyt inddata-enhedens tryk til at ændre pennens bredde"
+
 #: ../src/inkscape.cpp:447
 msgid "Untitled document"
 msgstr "Unavngivet dokument"
@@ -3258,7 +3350,8 @@ msgstr "Eksportér dokument til PNG-fil"
 
 #: ../src/main.cpp:228
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
-msgstr "Opløsningen der bruges ved eksportering af punktbillede fra SVG (standard 90)"
+msgstr ""
+"Opløsningen der bruges ved eksportering af punktbillede fra SVG (standard 90)"
 
 #: ../src/main.cpp:229
 msgid "DPI"
@@ -3323,14 +3416,16 @@ msgstr "ID"
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
 #: ../src/main.cpp:270
-msgid "Export just the object with export-id, hide all others (only with export-id)"
+msgid ""
+"Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Eksportér kun objektet med eksporterings-ID, skjul alle andre (kun med "
 "eksporterings-id)"
 
 #: ../src/main.cpp:275
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
-msgstr "Brug gemt filnavn og DPI-vink når der eksporteres (kun med eksporterings-id)"
+msgstr ""
+"Brug gemt filnavn og DPI-vink når der eksporteres (kun med eksporterings-id)"
 
 #: ../src/main.cpp:280
 msgid "Background color of exported bitmap (any SVG-supported color string)"
@@ -3429,13 +3524,14 @@ msgstr "Udskriv mappennavnet, og forlad"
 
 #: ../src/main.cpp:360
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
-msgstr "Vis givne filer en-efter-en, skift til næste ved enhver taste/muse-hændelse"
+msgstr ""
+"Vis givne filer en-efter-en, skift til næste ved enhver taste/muse-hændelse"
 
 #: ../src/main.cpp:365
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Fjern ubrugte definitioner fra definitionsdelen(e) af dokumentet"
 
-#: ../src/main.cpp:557
+#: ../src/main.cpp:563
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -3534,7 +3630,8 @@ msgstr ""
 "vandret/lodret; <b>Ctrl+Alt</b>: flyt langs håndtag"
 
 #: ../src/node-context.cpp:367
-msgid "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
+msgid ""
+"<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 "<b>Shift</b>: slå knudepunktsmarkering til/fra, slå trinvis justering fra, "
 "rotér begge håndtag"
@@ -3707,7 +3804,8 @@ msgstr "symmetrisk"
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
 #: ../src/nodepath.cpp:4221
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
-msgstr "endeknudepunkt, håndtag tilbagetrukket (træk med <b>Shift</b> for at udvide)"
+msgstr ""
+"endeknudepunkt, håndtag tilbagetrukket (træk med <b>Shift</b> for at udvide)"
 
 #: ../src/nodepath.cpp:4223
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
@@ -3735,7 +3833,8 @@ msgstr ""
 
 #: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
-msgstr "Vælg et enkelt objekt, for at redigere dets knudepunkter eller håndtag."
+msgstr ""
+"Vælg et enkelt objekt, for at redigere dets knudepunkter eller håndtag."
 
 #: ../src/nodepath.cpp:4266
 #, c-format
@@ -3765,8 +3864,10 @@ msgstr[1] "<b>%i</b> af <b>%i</b> knudepunkter markeret; %s. %s."
 
 #: ../src/nodepath.cpp:4287
 #, c-format
-msgid "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgid_plural "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+msgid ""
+"<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+msgid_plural ""
+"<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
 msgstr[0] ""
 "<b>%i</b> af <b>%i</b> knudepunkt markeret i <b>%i</b> af <b>%i</b> "
 "understier. %s."
@@ -3882,7 +3983,8 @@ msgstr "<b>Skalér</b> mønsterudfyldningen ensartet"
 
 #: ../src/object-edit.cpp:1035
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Rotér</b> udfyldningsmønsteret med; <b>Ctrl</b> for trinvis justering"
+msgstr ""
+"<b>Rotér</b> udfyldningsmønsteret med; <b>Ctrl</b> for trinvis justering"
 
 #: ../src/object-edit.cpp:1060
 msgid "Drag to resize the <b>flowed text frame</b>"
@@ -3897,7 +3999,8 @@ msgid "At least one of the objects is <b>not a path</b>, cannot combine."
 msgstr "Mindst et af objekterne er <b>ikke en sti</b>, kan ikke kombinere."
 
 #: ../src/path-chemistry.cpp:71
-msgid "You cannot combine objects from <b>different groups</b> or <b>layers</b>."
+msgid ""
+"You cannot combine objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "Du kan ikke kombinere objekter fra <b>forskellige grupper</b> eller <b>lag</"
 "b>."
@@ -3963,8 +4066,10 @@ msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr "<b>Klik</b> eller <b>klik og træk</b> for at lukke og afslutte stien."
 
 #: ../src/pen-context.cpp:565
-msgid "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
-msgstr "<b>Klik</b> eller <b>klik og træk</b> for at fortsætte stien fra dette punkt."
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
+msgstr ""
+"<b>Klik</b> eller <b>klik og træk</b> for at fortsætte stien fra dette punkt."
 
 #: ../src/pen-context.cpp:1062
 #, c-format
@@ -4067,7 +4172,8 @@ msgstr "<b>Ctrl</b>: markér i grupper, flyt vandret/lodret"
 
 #: ../src/select-context.cpp:658
 msgid "<b>Shift</b>: toggle select, force rubberband, disable snapping"
-msgstr "<b>Shift</b>: markér/afmarkér, tving gummibånd, deaktivér trinvis justering"
+msgstr ""
+"<b>Shift</b>: markér/afmarkér, tving gummibånd, deaktivér trinvis justering"
 
 #: ../src/select-context.cpp:659
 msgid "<b>Alt</b>: select under, move selected"
@@ -4132,7 +4238,8 @@ msgstr "Markér <b>objekt(er)</b> at hæve."
 
 #: ../src/selection-chemistry.cpp:650 ../src/selection-chemistry.cpp:703
 #: ../src/selection-chemistry.cpp:738 ../src/selection-chemistry.cpp:797
-msgid "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
+msgid ""
+"You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "Du kan ikke hæve/sænke objekter fra <b>forskellige grupper</b> eller <b>lag</"
 "b>."
@@ -4319,7 +4426,8 @@ msgstr ""
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
-msgstr "Objektet du forsøger at markere er <b>usynligt</b> (det er i &lt;defs&gt;)"
+msgstr ""
+"Objektet du forsøger at markere er <b>usynligt</b> (det er i &lt;defs&gt;)"
 
 #: ../src/selection-chemistry.cpp:2143
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -4331,7 +4439,8 @@ msgstr "Objekter til mønster"
 
 #: ../src/selection-chemistry.cpp:2241
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
-msgstr "Markér et <b>objekt med mønsterudfyldning</b> at udtrække objekter fra."
+msgstr ""
+"Markér et <b>objekt med mønsterudfyldning</b> at udtrække objekter fra."
 
 #: ../src/selection-chemistry.cpp:2294
 msgid "<b>No pattern fills</b> in the selection."
@@ -4449,7 +4558,8 @@ msgstr "Klik på markeringen for at skifte skalerings- eller roteringshåndtag"
 
 #. no items
 #: ../src/selection-describer.cpp:103
-msgid "No objects selected. Click, Shift+click, or drag around objects to select."
+msgid ""
+"No objects selected. Click, Shift+click, or drag around objects to select."
 msgstr ""
 "Ingen objekter markeret. Klik, Shift+klik, eller træk omkring objekterne for "
 "at markere."
@@ -4681,14 +4791,14 @@ msgstr "Flyd område"
 msgid "Flow excluded region"
 msgstr "Flyd ekskluderet område"
 
-#: ../src/sp-flowtext.cpp:369
+#: ../src/sp-flowtext.cpp:370
 #, c-format
 msgid "<b>Flowed text</b> (%d character)"
 msgid_plural "<b>Flowed text</b> (%d characters)"
 msgstr[0] "<b>Flydende tekstområde</b> (%d tegn)"
 msgstr[1] "<b>Flydende tekstområde</b> (%d tegn)"
 
-#: ../src/sp-flowtext.cpp:371
+#: ../src/sp-flowtext.cpp:372
 #, c-format
 msgid "<b>Linked flowed text</b> (%d character)"
 msgid_plural "<b>Linked flowed text</b> (%d characters)"
@@ -4849,7 +4959,8 @@ msgstr "<b>Alt</b>: lås spiralradius"
 
 #: ../src/spiral-context.cpp:439
 #, c-format
-msgid "<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+msgid ""
+"<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Spiral</b>: radius %s, vinkel %5g&#176;; med <b>Ctrl</b> for trinvis "
 "justering."
@@ -4907,8 +5018,10 @@ msgstr ""
 "XOR, division eller sti-beskæring."
 
 #: ../src/splivarot.cpp:183
-msgid "One of the objects is <b>not a path</b>, cannot perform boolean operation."
-msgstr "Et af objekterne er <b>ikke en sti</b>, kan ikke udføre boolsk operation."
+msgid ""
+"One of the objects is <b>not a path</b>, cannot perform boolean operation."
+msgstr ""
+"Et af objekterne er <b>ikke en sti</b>, kan ikke udføre boolsk operation."
 
 #: ../src/splivarot.cpp:590
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -4979,7 +5092,8 @@ msgstr "<b>Ctrl</b>: trinvis justering; hold stråler radiære"
 
 #: ../src/star-context.cpp:448
 #, c-format
-msgid "<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+msgid ""
+"<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Polygon</b>: radius %s, vinkel %5g°; med <b>Ctrl</b> for trinvis "
 "justering."
@@ -4987,7 +5101,8 @@ msgstr ""
 #: ../src/star-context.cpp:449
 #, c-format
 msgid "<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Stjerne</b>: radius %s, vinkel %5g°; med <b>Ctrl</b> for trinvis justering"
+msgstr ""
+"<b>Stjerne</b>: radius %s, vinkel %5g°; med <b>Ctrl</b> for trinvis justering"
 
 #: ../src/star-context.cpp:472
 msgid "Create star"
@@ -5038,7 +5153,7 @@ msgstr "Fjern tekst fra sti"
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Markér <b>tekst(er)</b> at fjerne knibning fra."
 
-#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4154
+#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4156
 msgid "Remove manual kerns"
 msgstr "Fjern manuelle knibninger"
 
@@ -5085,7 +5200,8 @@ msgstr ""
 "teksten."
 
 #: ../src/text-context.cpp:450
-msgid "<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
+msgid ""
+"<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
 msgstr ""
 "<b>Klik</b> for at redigere flydende tekst; <b>træk</b> for at markere dele "
 "af teksten."
@@ -5467,7 +5583,8 @@ msgstr "H:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:460
 msgid "Minimum vertical gap (in px units) between bounding boxes"
-msgstr "Minimumstørrelse (i billedpunkter) af lodret åbning mellem omkrandsningsbokse"
+msgstr ""
+"Minimumstørrelse (i billedpunkter) af lodret åbning mellem omkrandsningsbokse"
 
 #. TRANSLATORS: Vertical gap
 #: ../src/ui/dialog/align-and-distribute.cpp:462
@@ -5480,7 +5597,7 @@ msgid "Remove overlaps"
 msgstr "Fjern ovelap"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:520
-#: ../src/widgets/toolbox.cpp:4241
+#: ../src/widgets/toolbox.cpp:4243
 msgid "Arrange connector network"
 msgstr "Arrangér forbindelsesnetværk"
 
@@ -5617,7 +5734,7 @@ msgstr ""
 "hinanden"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:863
-#: ../src/widgets/toolbox.cpp:4343
+#: ../src/widgets/toolbox.cpp:4345
 msgid "Nicely arrange selected connector network"
 msgstr "Arrangér det markerede forbindelsesnetværk pænt"
 
@@ -5698,8 +5815,10 @@ msgid "Background color"
 msgstr "Baggrundsfarve"
 
 #: ../src/ui/dialog/document-properties.cpp:196
-msgid "Color and transparency of the page background (also used for bitmap export)"
-msgstr "Sidebaggrundens farve og gennemsigtighed (bruges og til punktbilledeksport)"
+msgid ""
+"Color and transparency of the page background (also used for bitmap export)"
+msgstr ""
+"Sidebaggrundens farve og gennemsigtighed (bruges og til punktbilledeksport)"
 
 #: ../src/ui/dialog/document-properties.cpp:198
 msgid "Show page _border"
@@ -5958,8 +6077,10 @@ msgid "Controls max. snapping distance from object"
 msgstr "Kontrollerer maksimal hæng-på-afstand til objekt"
 
 #: ../src/ui/dialog/document-properties.cpp:322
-msgid "If set, objects snap to the nearest object when moved, regardless of distance"
-msgstr "Hvis sat, hænges objektet på nærmeste objekt, uden hensyntagen til afstanden"
+msgid ""
+"If set, objects snap to the nearest object when moved, regardless of distance"
+msgstr ""
+"Hvis sat, hænges objektet på nærmeste objekt, uden hensyntagen til afstanden"
 
 #: ../src/ui/dialog/document-properties.cpp:324
 msgid "Snap _bounding boxes to grid"
@@ -6012,7 +6133,8 @@ msgid "Controls max. snapping distance from guides"
 msgstr "Kontrollerer maksimal hæng-på-afstand fra hjælpelinjer"
 
 #: ../src/ui/dialog/document-properties.cpp:342
-msgid "If set, objects snap to the nearest guide when moved, regardless of distance"
+msgid ""
+"If set, objects snap to the nearest guide when moved, regardless of distance"
 msgstr ""
 "Hvis sat, hænges objekter på nærmeste hjælpelinje når det flyttes, uden "
 "hensyntagen til afstanden"
@@ -6184,7 +6306,8 @@ msgid "Click/drag threshold:"
 msgstr "Klik/træk-tærskelværdi:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:149
-msgid "Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
+msgid ""
+"Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
 msgstr ""
 "Maksimum musetræk (i skærm-billedpunkter) der tolkes som et klik, ikke et "
 "træk"
@@ -6215,7 +6338,8 @@ msgstr "Rul med:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:161
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
-msgstr "Tryk på Ctrl+piletaster, ruller med denne afstand (i skærmbilledpunkter)"
+msgstr ""
+"Tryk på Ctrl+piletaster, ruller med denne afstand (i skærmbilledpunkter)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:163
 msgid "Acceleration:"
@@ -6280,7 +6404,8 @@ msgid "> and < scale by:"
 msgstr "> og < skalér med:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:183
-msgid "Pressing > or < scales selection up or down by this increment (in px units)"
+msgid ""
+"Pressing > or < scales selection up or down by this increment (in px units)"
 msgstr ""
 "Tryk på > eller < skalerer markeringen op eller ned med denne stigning (i "
 "billedpunkter)"
@@ -6290,7 +6415,8 @@ msgid "Inset/Outset by:"
 msgstr "Skub ind/ud med:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:186
-msgid "Inset and Outset commands displace the path by this distance (in px units)"
+msgid ""
+"Inset and Outset commands displace the path by this distance (in px units)"
 msgstr "Skub ind/ud-kommandoen, forskyder stien med afstanden (i px-enheder)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:187
@@ -6339,8 +6465,10 @@ msgid "Show selection cue"
 msgstr "Vis markeringsvink"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:206
-msgid "Whether selected objects display a selection cue (the same as in selector)"
-msgstr "Om de markerede objekter viser et markerningsvink (som i markeringsværktøjet)"
+msgid ""
+"Whether selected objects display a selection cue (the same as in selector)"
+msgstr ""
+"Om de markerede objekter viser et markerningsvink (som i markeringsværktøjet)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:212
 msgid "Enable gradient editing"
@@ -6358,7 +6486,8 @@ msgstr "<b>Ingen objekter markeret</b> at hente stilen fra."
 msgid ""
 "<b>More than one object selected.</b>  Cannot take style from multiple "
 "objects."
-msgstr "<b>Mere end et objekt markeret.</b> Kan ikke tage stil fra flere objekter."
+msgstr ""
+"<b>Mere end et objekt markeret.</b> Kan ikke tage stil fra flere objekter."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:269
 msgid "Create new objects with:"
@@ -6626,7 +6755,8 @@ msgstr "Dialoger holdes over dokumenvinduer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:434
 msgid "Same as Normal but may work better with some window managers"
-msgstr "Samme som Normal, men fungerer måske bedre med nogle vindueshåndteringer"
+msgstr ""
+"Samme som Normal, men fungerer måske bedre med nogle vindueshåndteringer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:437
 msgid ""
@@ -6845,7 +6975,8 @@ msgstr "Lad tastaturmarkeringskommandoer virke på objekter i alle lag"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:540
 msgid "Make keyboard selection commands work on objects in current layer only"
-msgstr "Lad tastaturmarkeringskommandoer virke på objekter i kun det aktuelle lag"
+msgstr ""
+"Lad tastaturmarkeringskommandoer virke på objekter i kun det aktuelle lag"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:542
 msgid ""
@@ -6966,7 +7097,8 @@ msgid "Use the topmost selected object as a clipping path or mask"
 msgstr "Benyt det øverste markerede objekt som beskæringssti eller maske"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:582
-msgid "Uncheck this to use the bottom selected object as the clipping path or mask"
+msgid ""
+"Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
 "Deaktivér for at bruge det nederste markerede objekt som beskæringssti eller "
 "maske"
@@ -7297,7 +7429,8 @@ msgstr "Optimér stier"
 
 #: ../src/ui/dialog/tracedialog.cpp:591
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
-msgstr "Forsøg at optimere stier ved at sammenføje tilstødende Bezier-kurve-segmenter"
+msgstr ""
+"Forsøg at optimere stier ved at sammenføje tilstødende Bezier-kurve-segmenter"
 
 #: ../src/ui/dialog/tracedialog.cpp:599
 msgid ""
@@ -7598,7 +7731,8 @@ msgstr "Forbind til chatroom"
 
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:137
 msgid "Synchronizing with chatroom <b>%1@%2</b> using the handle <b>%3</b>"
-msgstr "Synkoniserer med chatrum <b>%1@%2</b> ved brug af kaldenavnet <b>%3</b>"
+msgstr ""
+"Synkoniserer med chatrum <b>%1@%2</b> ved brug af kaldenavnet <b>%3</b>"
 
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:76
@@ -8477,7 +8611,8 @@ msgstr "_Indsæt"
 
 #: ../src/verbs.cpp:2009
 msgid "Paste objects from clipboard to mouse point, or paste text"
-msgstr "Indsæt objekter fra klippebord til musepilens placering, eller indsæt tekst"
+msgstr ""
+"Indsæt objekter fra klippebord til musepilens placering, eller indsæt tekst"
 
 #: ../src/verbs.cpp:2010
 msgid "Paste _Style"
@@ -8497,7 +8632,8 @@ msgstr "Indsæt _bredde"
 
 #: ../src/verbs.cpp:2015
 msgid "Scale selection horizontally to match the width of the copied object"
-msgstr "Skalér markering vandret så den passer med bredden af det kopierede objekt"
+msgstr ""
+"Skalér markering vandret så den passer med bredden af det kopierede objekt"
 
 #: ../src/verbs.cpp:2016
 msgid "Paste _Height"
@@ -8505,7 +8641,8 @@ msgstr "Indsæt _højde"
 
 #: ../src/verbs.cpp:2017
 msgid "Scale selection vertically to match the height of the copied object"
-msgstr "Skalér markering lodret så den passer med højden af det kopierede objekt"
+msgstr ""
+"Skalér markering lodret så den passer med højden af det kopierede objekt"
 
 #: ../src/verbs.cpp:2018
 msgid "Paste Size Separately"
@@ -9075,7 +9212,8 @@ msgstr "_Konvertér til tekst"
 
 #: ../src/verbs.cpp:2181
 msgid "Convert flowed text to regular text object (preserves appearance)"
-msgstr "Konvertér flydende tekst til almindelig tekstobjekt (bevarer udseendet)"
+msgstr ""
+"Konvertér flydende tekst til almindelig tekstobjekt (bevarer udseendet)"
 
 #: ../src/verbs.cpp:2183
 msgid "Flip _Horizontal"
@@ -9106,7 +9244,8 @@ msgid "Remove mask from selection"
 msgstr "Fjern maske fra markering"
 
 #: ../src/verbs.cpp:2193
-msgid "Apply clipping path to selection (using the topmost object as clipping path)"
+msgid ""
+"Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
 "Anvend beskæringsti på markeringen (ved at bruge det øverste objekt som "
 "beskæringssti)"
@@ -9439,7 +9578,8 @@ msgstr "Forhåndsvis_ning..."
 
 #: ../src/verbs.cpp:2291
 msgid "Open a window to preview objects at different icon resolutions"
-msgstr "Åbn et vindue at forhåndsvise objekter ved forskellige ikon-opløsninger"
+msgstr ""
+"Åbn et vindue at forhåndsvise objekter ved forskellige ikon-opløsninger"
 
 #: ../src/verbs.cpp:2293
 msgid "Zoom to fit page in window"
@@ -9765,7 +9905,8 @@ msgid "Fit Page to Selection or Drawing"
 msgstr "Tilpas siden til markering eller tegning"
 
 #: ../src/verbs.cpp:2387
-msgid "Fit the page to the current selection or the drawing if there is no selection"
+msgid ""
+"Fit the page to the current selection or the drawing if there is no selection"
 msgstr ""
 "Tilpas siden til den aktuelle markering, eller til tegningen hvis der ingen "
 "markering er"
@@ -9816,7 +9957,7 @@ msgstr "Skrifttypestørrelse:"
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3730
+#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3732
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQq12369$€¢?.;/()"
 
@@ -10032,7 +10173,8 @@ msgstr ""
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: ../src/widgets/paint-selector.cpp:201
-msgid "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
+msgid ""
+"Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
 msgstr ""
 "Udfyldning er ubrudt, med mindre en understi er modsat rettet (fyld-regel: "
 "nonzero)"
@@ -10077,7 +10219,8 @@ msgstr "<b>Stregbredden</b> <b>skaleres ikke</b> når objekter skaleres."
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are "
 "scaled."
-msgstr "<b>Afrundede hjørner i firkanter</b> <b>skaleres</b> når firkanter skaleres."
+msgstr ""
+"<b>Afrundede hjørner i firkanter</b> <b>skaleres</b> når firkanter skaleres."
 
 #: ../src/widgets/select-toolbar.cpp:357
 msgid ""
@@ -10505,7 +10648,8 @@ msgstr "Inderste omgangs radius (relativt til spiralstørrelsen)"
 
 #: ../src/widgets/toolbox.cpp:2206 ../src/widgets/toolbox.cpp:2358
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
-msgstr "Bredde på den kalligrafiske pen (relativt til det synlige område af lærredet)"
+msgstr ""
+"Bredde på den kalligrafiske pen (relativt til det synlige område af lærredet)"
 
 #: ../src/widgets/toolbox.cpp:2216 ../src/widgets/toolbox.cpp:2368
 msgid "Thinning:"
@@ -10577,15 +10721,12 @@ msgstr "Masse:"
 
 #: ../src/widgets/toolbox.cpp:2279 ../src/widgets/toolbox.cpp:2436
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
-msgstr "Forøg for at lade pennen slæbe efter, som om den bliver sagtnet af inerti"
+msgstr ""
+"Forøg for at lade pennen slæbe efter, som om den bliver sagtnet af inerti"
 
 #: ../src/widgets/toolbox.cpp:2291
 msgid "Pressure"
 msgstr "Tryk"
-
-#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr "Benyt inddata-enhedens tryk til at ændre pennens bredde"
 
 #: ../src/widgets/toolbox.cpp:2303
 msgid "Tilt"
@@ -10633,7 +10774,8 @@ msgid "Open arc"
 msgstr "Åben bue"
 
 #: ../src/widgets/toolbox.cpp:2808
-msgid "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
+msgid ""
+"Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Skift mellem bue (ikke-lukket figur) og linjestykke (lukket figur med to "
 "radier)"
@@ -10646,11 +10788,11 @@ msgstr "Gør hel"
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Gør figuren til hel ellipse, ikke bue eller linjestykke"
 
-#: ../src/widgets/toolbox.cpp:3068
+#: ../src/widgets/toolbox.cpp:3070
 msgid "Pick alpha"
 msgstr "Vælg alfa"
 
-#: ../src/widgets/toolbox.cpp:3069
+#: ../src/widgets/toolbox.cpp:3071
 msgid ""
 "Pick both the color and the alpha (transparency) under cursor; otherwise, "
 "pick only the visible color premultiplied by alpha"
@@ -10658,37 +10800,38 @@ msgstr ""
 "Vælg både farven og alfa (gennemsigtigthed) under markøren; ellers vælg kun "
 "den synlige farve præmultipliceret med alfa"
 
-#: ../src/widgets/toolbox.cpp:3084
+#: ../src/widgets/toolbox.cpp:3086
 msgid "Set alpha"
 msgstr "Anvend alfa"
 
-#: ../src/widgets/toolbox.cpp:3085
-msgid "If alpha was picked, assign it to selection as fill or stroke transparency"
+#: ../src/widgets/toolbox.cpp:3087
+msgid ""
+"If alpha was picked, assign it to selection as fill or stroke transparency"
 msgstr ""
 "Hvis alfa blev valgt, tildel den til markeringen som udfyldnings- eller  "
 "streggennemsigtighed"
 
-#: ../src/widgets/toolbox.cpp:3384
+#: ../src/widgets/toolbox.cpp:3386
 msgid "Text: Change font family"
 msgstr "Tekst: Skift skrifttype-familie"
 
-#: ../src/widgets/toolbox.cpp:3467
+#: ../src/widgets/toolbox.cpp:3469
 msgid "Text: Change alignment"
 msgstr "Tekst: Skift placering"
 
-#: ../src/widgets/toolbox.cpp:3513
+#: ../src/widgets/toolbox.cpp:3515
 msgid "Text: Change font style"
 msgstr "Tekst: Skift skrifttype-stil"
 
-#: ../src/widgets/toolbox.cpp:3560
+#: ../src/widgets/toolbox.cpp:3562
 msgid "Text: Change orientation"
 msgstr "Tekst: Skift orientering"
 
-#: ../src/widgets/toolbox.cpp:3656
+#: ../src/widgets/toolbox.cpp:3658
 msgid "Text: Change font size"
 msgstr "Tekst: Skift skrifttypestørrelse"
 
-#: ../src/widgets/toolbox.cpp:3839
+#: ../src/widgets/toolbox.cpp:3841
 msgid ""
 "This font is currently not installed on your system. Inkscape will use the "
 "default font instead."
@@ -10696,75 +10839,75 @@ msgstr ""
 "Denne skrifttype er i øjeblikket ikke installeret på dit system. Inkscape "
 "vil bruge standardskrifttypen istedet."
 
-#: ../src/widgets/toolbox.cpp:3877
+#: ../src/widgets/toolbox.cpp:3879
 msgid "Align left"
 msgstr "Venstrestillet"
 
-#: ../src/widgets/toolbox.cpp:3888
+#: ../src/widgets/toolbox.cpp:3890
 msgid "Center"
 msgstr "Centrér"
 
-#: ../src/widgets/toolbox.cpp:3899
+#: ../src/widgets/toolbox.cpp:3901
 msgid "Align right"
 msgstr "Højrestillet"
 
-#: ../src/widgets/toolbox.cpp:3910
+#: ../src/widgets/toolbox.cpp:3912
 msgid "Justify"
 msgstr "Ligestillet"
 
-#: ../src/widgets/toolbox.cpp:3926
+#: ../src/widgets/toolbox.cpp:3928
 msgid "Bold"
 msgstr "Fed"
 
-#: ../src/widgets/toolbox.cpp:3937
+#: ../src/widgets/toolbox.cpp:3939
 msgid "Italic"
 msgstr "Kursiv"
 
-#: ../src/widgets/toolbox.cpp:4035
+#: ../src/widgets/toolbox.cpp:4037
 msgid "Spacing between letters"
 msgstr "Mellemrum mellem tegn"
 
-#: ../src/widgets/toolbox.cpp:4056
+#: ../src/widgets/toolbox.cpp:4058
 msgid "Spacing between lines"
 msgstr "Mellemrum mellem linjer"
 
-#: ../src/widgets/toolbox.cpp:4085
+#: ../src/widgets/toolbox.cpp:4087
 msgid "Horizontal kerning"
 msgstr "Vandret knibning"
 
-#: ../src/widgets/toolbox.cpp:4106
+#: ../src/widgets/toolbox.cpp:4108
 msgid "Vertical kerning"
 msgstr "Lodret knibning"
 
-#: ../src/widgets/toolbox.cpp:4133
+#: ../src/widgets/toolbox.cpp:4135
 msgid "Letter rotation"
 msgstr "Tegnrotation"
 
-#: ../src/widgets/toolbox.cpp:4222
+#: ../src/widgets/toolbox.cpp:4224
 msgid "Change connector spacing"
 msgstr "Ændr afstand på forbindelsesmellemrum"
 
-#: ../src/widgets/toolbox.cpp:4331
+#: ../src/widgets/toolbox.cpp:4333
 msgid "Spacing:"
 msgstr "Mellemrum:"
 
-#: ../src/widgets/toolbox.cpp:4332
+#: ../src/widgets/toolbox.cpp:4334
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr "Afstand omkring objekter, når forbindelser dirigeres automatisk"
 
-#: ../src/widgets/toolbox.cpp:4346
+#: ../src/widgets/toolbox.cpp:4348
 msgid "Length:"
 msgstr "Længde:"
 
-#: ../src/widgets/toolbox.cpp:4347
+#: ../src/widgets/toolbox.cpp:4349
 msgid "Ideal length for connectors when layout is applied"
 msgstr "Ideel længde for forbindelser når layout anvendes"
 
-#: ../src/widgets/toolbox.cpp:4362
+#: ../src/widgets/toolbox.cpp:4364
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr "Lad forbindelser med endemarkører (pile) pege nedad"
 
-#: ../src/widgets/toolbox.cpp:4376
+#: ../src/widgets/toolbox.cpp:4378
 msgid "Do not allow overlapping shapes"
 msgstr "Tillad ikke overlappende figurer"
 
@@ -11098,7 +11241,8 @@ msgstr "Funktionsplotter"
 
 #: ../share/extensions/funcplot.inx.h:8
 msgid "Isotropic scaling (uses smallest: width/xrange or height/yrange)"
-msgstr "Isotropisk skalering (bruger mindste: bredde/x-vidde eller højde/y-vidde)"
+msgstr ""
+"Isotropisk skalering (bruger mindste: bredde/x-vidde eller højde/y-vidde)"
 
 #: ../share/extensions/funcplot.inx.h:9
 msgid "Multiply x-range by 2*pi"
@@ -11216,41 +11360,41 @@ msgstr "Interpolationsmetode"
 msgid "Interpolation steps"
 msgstr "Interpolationstrin"
 
-#: ../share/extensions/lindenmayer.inx .h:1
+#: ../share/extensions/lindenmayer.inx.h:1
 msgid "Axiom"
 msgstr "Aksiom"
 
-#: ../share/extensions/lindenmayer.inx .h:2
+#: ../share/extensions/lindenmayer.inx.h:2
 msgid "L-system"
 msgstr "L-system"
 
-#: ../share/extensions/lindenmayer.inx .h:3
+#: ../share/extensions/lindenmayer.inx.h:3
 msgid "Left angle"
 msgstr "Venstre vinkel"
 
-#: ../share/extensions/lindenmayer.inx .h:4
+#: ../share/extensions/lindenmayer.inx.h:4
 msgid "Order"
 msgstr "Rækkefølge"
 
-#: ../share/extensions/lindenmayer.inx .h:6
+#: ../share/extensions/lindenmayer.inx.h:6
 #, no-c-format
 msgid "Randomize angle (%)"
 msgstr "Tilfældiggør vinkel (%)"
 
-#: ../share/extensions/lindenmayer.inx .h:8
+#: ../share/extensions/lindenmayer.inx.h:8
 #, no-c-format
 msgid "Randomize step (%)"
 msgstr "Tilfældiggør trin (%)"
 
-#: ../share/extensions/lindenmayer.inx .h:10
+#: ../share/extensions/lindenmayer.inx.h:10
 msgid "Right angle"
 msgstr "Højre vinkel"
 
-#: ../share/extensions/lindenmayer.inx .h:11
+#: ../share/extensions/lindenmayer.inx.h:11
 msgid "Rules"
 msgstr "Regler"
 
-#: ../share/extensions/lindenmayer.inx .h:12
+#: ../share/extensions/lindenmayer.inx.h:12
 msgid "Step length (px)"
 msgstr "Trinlængde (px)"
 
@@ -11311,7 +11455,13 @@ msgid ""
 "from the text to the path. The Scale factor can be used to make measurements "
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
-msgstr "Denne effekt måler længde på de markerede stier og tilføjer det som et tekst-på-sti-objekt, med den valgte målenenhed. Antallet af betydende cifre kan styres vha. præcisionsfeltet. Forskydningsfeltet kontrollerer afstanden fra teksten til stien. Skaleringsfaktoren kan bruges til at udføre målinger på skalerede tegninger. For eksempel, hvis 1 cm på tegningen er lig med 2.5m i virkeligheden, skal skaleringsfaktoren være 250."
+msgstr ""
+"Denne effekt måler længde på de markerede stier og tilføjer det som et tekst-"
+"på-sti-objekt, med den valgte målenenhed. Antallet af betydende cifre kan "
+"styres vha. præcisionsfeltet. Forskydningsfeltet kontrollerer afstanden fra "
+"teksten til stien. Skaleringsfaktoren kan bruges til at udføre målinger på "
+"skalerede tegninger. For eksempel, hvis 1 cm på tegningen er lig med 2.5m i "
+"virkeligheden, skal skaleringsfaktoren være 250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -11362,43 +11512,23 @@ msgid "Pattern is vertical"
 msgstr "Mønster er lodret"
 
 #: ../share/extensions/pathalongpath.inx.h:8
-msgid "Repeated"
-msgstr "Gentaget"
-
-#: ../share/extensions/pathalongpath.inx.h:9
-msgid "Repeated, stretched"
-msgstr "Gentaget, strakt"
-
-#: ../share/extensions/pathalongpath.inx.h:10
-msgid "Ribbon"
-msgstr "Strimmel"
-
-#: ../share/extensions/pathalongpath.inx.h:11
-msgid "Single"
-msgstr "Enkel"
-
-#: ../share/extensions/pathalongpath.inx.h:12
-msgid "Single, stretched"
-msgstr "Enkelt, strakt"
-
-#: ../share/extensions/pathalongpath.inx.h:13
-msgid "Snake"
-msgstr "Slange"
-
-#: ../share/extensions/pathalongpath.inx.h:14
 msgid "Space between copies:"
 msgstr "Afstand mellem kopier:"
 
-#: ../share/extensions/pathalongpath.inx.h:15
+#: ../share/extensions/pathalongpath.inx.h:9
 msgid "Tangential offset"
 msgstr "Tangential forskydning"
 
-#: ../share/extensions/pathalongpath.inx.h:16
+#: ../share/extensions/pathalongpath.inx.h:10
 msgid ""
 "This effect bends a pattern object along an arbitrary \"skeleton\" path. The "
 "pattern can be a path or a group of paths. First, select the pattern object; "
 "then add to selection the skeleton path; then call this effect."
-msgstr "Denne effekt bøjer et mønsterobjekt langs en vilkårlig \"skelet\"-sti. Mønsteret kan være en sti eller en gruppe af stier. Først vælges mønsterobjektet; så tilføjes skeletstien til markeringen og så anvendes anvendes denne effekt."
+msgstr ""
+"Denne effekt bøjer et mønsterobjekt langs en vilkårlig \"skelet\"-sti. "
+"Mønsteret kan være en sti eller en gruppe af stier. Først vælges "
+"mønsterobjektet; så tilføjes skeletstien til markeringen og så anvendes "
+"anvendes denne effekt."
 
 #: ../share/extensions/perspective.inx.h:2
 msgid "Perspective"
@@ -11508,7 +11638,8 @@ msgstr "Komprimeret Inkscape SVG med medie (*.zip)"
 msgid ""
 "Inkscape's native file format compressed with Zip and including all media "
 "files"
-msgstr "Inkscapes eget filformat komprimeret med Zip og indeholdende alle mediefiler"
+msgstr ""
+"Inkscapes eget filformat komprimeret med Zip og indeholdende alle mediefiler"
 
 #: ../share/extensions/svg_and_media_zip_output.inx.h:3
 msgid "ZIP Output"
@@ -11566,3 +11697,20 @@ msgstr "Windows Metafile (*.wmf)"
 msgid "Windows Metafile Input"
 msgstr "Windows Metafile-inddata"
 
+#~ msgid "Repeated"
+#~ msgstr "Gentaget"
+
+#~ msgid "Repeated, stretched"
+#~ msgstr "Gentaget, strakt"
+
+#~ msgid "Ribbon"
+#~ msgstr "Strimmel"
+
+#~ msgid "Single"
+#~ msgstr "Enkel"
+
+#~ msgid "Single, stretched"
+#~ msgstr "Enkelt, strakt"
+
+#~ msgid "Snake"
+#~ msgstr "Slange"

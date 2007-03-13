@@ -5,23 +5,24 @@
 #
 #
 # Courtesy of Prevod.org team (http://prevod.org/)
-#: ../src/widgets/toolbox.cpp:4035 ../src/widgets/toolbox.cpp:4056
-#: ../src/widgets/toolbox.cpp:4085 ../src/widgets/toolbox.cpp:4106
-#: ../src/widgets/toolbox.cpp:4133
 # Maintainer: Aleksandar Urošević <urke@users.sf.net> 2004, 2005, 2006, 2007.
 # Aleksandar Urošević <urke@users.sourceforge.net>, 2007.
+#: ../src/widgets/toolbox.cpp:4037 ../src/widgets/toolbox.cpp:4058
+#: ../src/widgets/toolbox.cpp:4087 ../src/widgets/toolbox.cpp:4108
+#: ../src/widgets/toolbox.cpp:4135
 msgid ""
 msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-28 00:37+0100\n"
+"POT-Creation-Date: 2007-03-13 13:48-0500\n"
 "PO-Revision-Date: 2007-01-28 15:40+0100\n"
 "Last-Translator: Aleksandar Urošević <urke@users.sf.net>\n"
 "Language-Team: Serbian <gnome@prevod.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../inkscape.desktop.in.h:1
@@ -33,8 +34,10 @@ msgid "Inkscape SVG Vector Illustrator"
 msgstr "Inkscape - program za vektorsko crtanje"
 
 #: ../src/arc-context.cpp:331
-msgid "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
-msgstr "<b>Ctrl</b>: pravi kružnicu ili proporcionalnu elipsu, prijanja na ugao/luk"
+msgid ""
+"<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
+msgstr ""
+"<b>Ctrl</b>: pravi kružnicu ili proporcionalnu elipsu, prijanja na ugao/luk"
 
 #: ../src/arc-context.cpp:332 ../src/rect-context.cpp:374
 msgid "<b>Shift</b>: draw around the starting point"
@@ -47,49 +50,55 @@ msgid ""
 "ratio ellipse; with <b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Elipsa</b>: %s &#215; %s; pritisnite <b>Ctrl</b> za iscrtavanje kružnice "
-"ili proporcionalne elipse; pritisnite <b>Shift</b> za iscrtavanje oko početne "
-"tačke"
+"ili proporcionalne elipse; pritisnite <b>Shift</b> za iscrtavanje oko "
+"početne tačke"
 
 #: ../src/arc-context.cpp:438
 msgid "Create ellipse"
 msgstr "Nacrtana elipsa"
 
-#: ../src/connector-context.cpp:517
+#: ../src/connector-context.cpp:519
 msgid "Creating new connector"
 msgstr "Pravljenje nove poveznice"
 
-#: ../src/connector-context.cpp:711
+#: ../src/connector-context.cpp:746
+#, fuzzy
+msgid "Connector endpoint drag canceled."
+msgstr "Prevlačenje čvora ili ručke je otkazano."
+
+#: ../src/connector-context.cpp:794
 msgid "Reroute connector"
 msgstr "Preusmeri poveznice"
 
 #. Flush pending updates
-#: ../src/connector-context.cpp:918
+#: ../src/connector-context.cpp:958
 msgid "Create connector"
 msgstr "Nacrtana poveznica"
 
-#: ../src/connector-context.cpp:942
+#: ../src/connector-context.cpp:982
 msgid "Finishing connector"
 msgstr "Završetak poveznice"
 
-#: ../src/connector-context.cpp:1086
+#: ../src/connector-context.cpp:1126
 msgid "<b>Connection point</b>: click or drag to create a new connector"
-msgstr "<b>Tačka poveznice</b>: kliknite ili povucite za pravljenje nove poveznice"
+msgstr ""
+"<b>Tačka poveznice</b>: kliknite ili povucite za pravljenje nove poveznice"
 
-#: ../src/connector-context.cpp:1157
+#: ../src/connector-context.cpp:1197
 msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
-"<b>Završetak poveznice</b>: povucite za preusmeravanje ili povezivanje na novi "
-"oblik"
+"<b>Završetak poveznice</b>: povucite za preusmeravanje ili povezivanje na "
+"novi oblik"
 
-#: ../src/connector-context.cpp:1268
+#: ../src/connector-context.cpp:1308
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Izaberite <b>najmanje jedan nepovezan objekat</b>."
 
-#: ../src/connector-context.cpp:1273 ../src/widgets/toolbox.cpp:4319
+#: ../src/connector-context.cpp:1313 ../src/widgets/toolbox.cpp:4321
 msgid "Make connectors avoid selected objects"
 msgstr "Poveznice zaobilaze izabrane objekte"
 
-#: ../src/connector-context.cpp:1274 ../src/widgets/toolbox.cpp:4323
+#: ../src/connector-context.cpp:1314 ../src/widgets/toolbox.cpp:4325
 msgid "Make connectors ignore selected objects"
 msgstr "Poveznice se iscrtavaju preko izabranih objekata (ne zaobilaze ih)"
 
@@ -147,27 +156,27 @@ msgstr "<small>Objekat ima <b>%d</b> popločanih klonova.</small>"
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>Objekat nema popločane klonove</small>"
 
-#: ../src/dialogs/clonetiler.cpp:851
+#: ../src/dialogs/clonetiler.cpp:856
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr "Izaberite <b>objekat</b> sa naslaganim klonovima za razdvajanje."
 
-#: ../src/dialogs/clonetiler.cpp:873
+#: ../src/dialogs/clonetiler.cpp:878
 msgid "Unclump tiled clones"
 msgstr "Rastavi naslagane klonove"
 
-#: ../src/dialogs/clonetiler.cpp:903
+#: ../src/dialogs/clonetiler.cpp:908
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Izaberite <b>objekat</b> sa naslaganim klonovima za uklanjanje."
 
-#: ../src/dialogs/clonetiler.cpp:926
+#: ../src/dialogs/clonetiler.cpp:931
 msgid "Delete tiled clones"
 msgstr "Ukloni naslagane klonove"
 
-#: ../src/dialogs/clonetiler.cpp:972 ../src/selection-chemistry.cpp:1987
+#: ../src/dialogs/clonetiler.cpp:977 ../src/selection-chemistry.cpp:1987
 msgid "Select an <b>object</b> to clone."
 msgstr "Izaberite <b>objekat</b> za kloniranje."
 
-#: ../src/dialogs/clonetiler.cpp:978
+#: ../src/dialogs/clonetiler.cpp:983
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -175,23 +184,23 @@ msgstr ""
 "Ako želite da klonirate više objekata, <b>grupišite</b> ih pa <b>klonirajte "
 "grupu</b>."
 
-#: ../src/dialogs/clonetiler.cpp:1335
+#: ../src/dialogs/clonetiler.cpp:1340
 msgid "Create tiled clones"
 msgstr "Slaganje klonova"
 
-#: ../src/dialogs/clonetiler.cpp:1518
+#: ../src/dialogs/clonetiler.cpp:1523
 msgid "<small>Per row:</small>"
 msgstr "<small>Po redu:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1531
+#: ../src/dialogs/clonetiler.cpp:1536
 msgid "<small>Per column:</small>"
 msgstr "<small>Po koloni:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1539
+#: ../src/dialogs/clonetiler.cpp:1544
 msgid "<small>Randomize:</small>"
 msgstr "<small>Nasumično:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1693
+#: ../src/dialogs/clonetiler.cpp:1698
 msgid "_Symmetry"
 msgstr "_Simetrija"
 
@@ -200,367 +209,369 @@ msgstr "_Simetrija"
 #. * http://www.clarku.edu/~djoyce/wallpaper/seventeen.html (English vocabulary); or
 #. * http://membres.lycos.fr/villemingerard/Geometri/Sym1D.htm (French vocabulary).
 #.
-#: ../src/dialogs/clonetiler.cpp:1701
+#: ../src/dialogs/clonetiler.cpp:1706
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr "Izaberite jednu od 17 simetričnih grupa za popločavanje"
 
 #. TRANSLATORS: "translation" means "shift" / "displacement" here.
-#: ../src/dialogs/clonetiler.cpp:1712
+#: ../src/dialogs/clonetiler.cpp:1717
 msgid "<b>P1</b>: simple translation"
 msgstr "<b>P1</b>: jednostavno premeštanje"
 
-#: ../src/dialogs/clonetiler.cpp:1713
+#: ../src/dialogs/clonetiler.cpp:1718
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr "<b>P2</b>: 180&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1714
+#: ../src/dialogs/clonetiler.cpp:1719
 msgid "<b>PM</b>: reflection"
 msgstr "<b>PM</b>: refleksija"
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined.
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: ../src/dialogs/clonetiler.cpp:1717
+#: ../src/dialogs/clonetiler.cpp:1722
 msgid "<b>PG</b>: glide reflection"
 msgstr "<b>PG</b>: refleksija sa pomerajem"
 
-#: ../src/dialogs/clonetiler.cpp:1718
+#: ../src/dialogs/clonetiler.cpp:1723
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr "<b>CM</b>: refleksija + refleksija sa pomerajem"
 
-#: ../src/dialogs/clonetiler.cpp:1719
+#: ../src/dialogs/clonetiler.cpp:1724
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr "<b>PMM</b>: refleksija + refleksija"
 
-#: ../src/dialogs/clonetiler.cpp:1720
+#: ../src/dialogs/clonetiler.cpp:1725
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr "<b>PMG</b>: refleksija + 180&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1721
+#: ../src/dialogs/clonetiler.cpp:1726
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr "<b>PGG</b>: refleksija sa pomerajem + 180&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1722
+#: ../src/dialogs/clonetiler.cpp:1727
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr "<b>CMM</b>: refleksija + refleksija + 180&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1723
+#: ../src/dialogs/clonetiler.cpp:1728
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr "<b>P4</b>: 90&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1724
+#: ../src/dialogs/clonetiler.cpp:1729
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr "<b>P4M</b>: 90&#176; rotacija + 45&#176; refleksija"
 
-#: ../src/dialogs/clonetiler.cpp:1725
+#: ../src/dialogs/clonetiler.cpp:1730
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr "<b>P4G</b>: 90&#176; rotacija + 90&#176; refleksija"
 
-#: ../src/dialogs/clonetiler.cpp:1726
+#: ../src/dialogs/clonetiler.cpp:1731
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr "<b>P3</b>: 120&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1727
+#: ../src/dialogs/clonetiler.cpp:1732
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr "<b>P31M</b>: refleksija + 120&#176; rotacija, zgusnuto"
 
-#: ../src/dialogs/clonetiler.cpp:1728
+#: ../src/dialogs/clonetiler.cpp:1733
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr "<b>P3M1</b>: refleksija + 120&#176; rotacija, rastegnuto"
 
-#: ../src/dialogs/clonetiler.cpp:1729
+#: ../src/dialogs/clonetiler.cpp:1734
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr "<b>P6</b>: 60&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1730
+#: ../src/dialogs/clonetiler.cpp:1735
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>: refleksija + 60&#176; rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1758
+#: ../src/dialogs/clonetiler.cpp:1763
 msgid "S_hift"
 msgstr "_Pomeranje"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
-#: ../src/dialogs/clonetiler.cpp:1768
+#: ../src/dialogs/clonetiler.cpp:1773
 #, no-c-format
 msgid "<b>Shift X:</b>"
 msgstr "<b>Pomeranje po X:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1776
+#: ../src/dialogs/clonetiler.cpp:1781
 #, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr "Vodoravni pomeraj reda (u % širine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1784
+#: ../src/dialogs/clonetiler.cpp:1789
 #, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr "Vodoravni pomeraj kolone (u % širine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1791
+#: ../src/dialogs/clonetiler.cpp:1796
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "Nasumični vodoravni pomeraj za ovaj procenat"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
-#: ../src/dialogs/clonetiler.cpp:1801
+#: ../src/dialogs/clonetiler.cpp:1806
 #, no-c-format
 msgid "<b>Shift Y:</b>"
 msgstr "<b>Pomeranje po Y:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1809
+#: ../src/dialogs/clonetiler.cpp:1814
 #, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
 msgstr "Uspravni pomeraj reda (u % visine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1817
+#: ../src/dialogs/clonetiler.cpp:1822
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
 msgstr "Uspravni pomeraj kolone (u % visine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1824
+#: ../src/dialogs/clonetiler.cpp:1829
 msgid "Randomize the vertical shift by this percentage"
 msgstr "Nasumični uspravni pomeraj za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:1832
+#: ../src/dialogs/clonetiler.cpp:1837
 msgid "<b>Exponent:</b>"
 msgstr "<b>Eksponent:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1839
+#: ../src/dialogs/clonetiler.cpp:1844
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr "Da li su redovi razdvojeni podjednako (1), spojeno (<1) ili razdvojeno (>1)"
+msgstr ""
+"Da li su redovi razdvojeni podjednako (1), spojeno (<1) ili razdvojeno (>1)"
 
-#: ../src/dialogs/clonetiler.cpp:1846
+#: ../src/dialogs/clonetiler.cpp:1851
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr "Da li su kolone razdvojene podjednako (1), spojeno (<1) ili razdvojeno (>1)"
+msgstr ""
+"Da li su kolone razdvojene podjednako (1), spojeno (<1) ili razdvojeno (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: ../src/dialogs/clonetiler.cpp:1854 ../src/dialogs/clonetiler.cpp:1944
-#: ../src/dialogs/clonetiler.cpp:2003 ../src/dialogs/clonetiler.cpp:2060
-#: ../src/dialogs/clonetiler.cpp:2109 ../src/dialogs/clonetiler.cpp:2240
+#: ../src/dialogs/clonetiler.cpp:1859 ../src/dialogs/clonetiler.cpp:1949
+#: ../src/dialogs/clonetiler.cpp:2008 ../src/dialogs/clonetiler.cpp:2065
+#: ../src/dialogs/clonetiler.cpp:2114 ../src/dialogs/clonetiler.cpp:2245
 msgid "<small>Alternate:</small>"
 msgstr "<small>Izvrtanje:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1860
+#: ../src/dialogs/clonetiler.cpp:1865
 msgid "Alternate the sign of shifts for each row"
 msgstr "Naizmenični pomeraj (plus/minus) za svaki red"
 
-#: ../src/dialogs/clonetiler.cpp:1865
+#: ../src/dialogs/clonetiler.cpp:1870
 msgid "Alternate the sign of shifts for each column"
 msgstr "Naizmenični pomeraj (plus/minus) za svaku kolonu"
 
-#: ../src/dialogs/clonetiler.cpp:1874
+#: ../src/dialogs/clonetiler.cpp:1879
 msgid "Sc_ale"
 msgstr "Ra_zmera"
 
-#: ../src/dialogs/clonetiler.cpp:1882
+#: ../src/dialogs/clonetiler.cpp:1887
 msgid "<b>Scale X:</b>"
 msgstr "<b>Razmera X</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1890
+#: ../src/dialogs/clonetiler.cpp:1895
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr "Vodoravna razmera po redu (u % širine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1898
+#: ../src/dialogs/clonetiler.cpp:1903
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr "Vodoravna razmera po koloni (u % širine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1905
+#: ../src/dialogs/clonetiler.cpp:1910
 msgid "Randomize the horizontal scale by this percentage"
 msgstr "Nasumična vodoravna razmera za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:1913
+#: ../src/dialogs/clonetiler.cpp:1918
 msgid "<b>Scale Y:</b>"
 msgstr "<b>Razmera Y:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1921
+#: ../src/dialogs/clonetiler.cpp:1926
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr "Uspravna razmera po redu (u % visine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1929
+#: ../src/dialogs/clonetiler.cpp:1934
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr "Uspravna razmera po koloni (u % visine objekta)"
 
-#: ../src/dialogs/clonetiler.cpp:1936
+#: ../src/dialogs/clonetiler.cpp:1941
 msgid "Randomize the vertical scale by this percentage"
 msgstr "Nasumična uspravna razmera za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:1950
+#: ../src/dialogs/clonetiler.cpp:1955
 msgid "Alternate the sign of scales for each row"
 msgstr "Naizmenična razmera svakog reda"
 
-#: ../src/dialogs/clonetiler.cpp:1955
+#: ../src/dialogs/clonetiler.cpp:1960
 msgid "Alternate the sign of scales for each column"
 msgstr "Naizmenična razmera svake kolone"
 
-#: ../src/dialogs/clonetiler.cpp:1964
+#: ../src/dialogs/clonetiler.cpp:1969
 msgid "_Rotation"
 msgstr "_Rotacija"
 
-#: ../src/dialogs/clonetiler.cpp:1972
+#: ../src/dialogs/clonetiler.cpp:1977
 msgid "<b>Angle:</b>"
 msgstr "<b>Ugao:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1980
+#: ../src/dialogs/clonetiler.cpp:1985
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
 msgstr "Rotacija objekta za ovaj ugao u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:1988
+#: ../src/dialogs/clonetiler.cpp:1993
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
 msgstr "Rotacija objekta za ovaj ugao u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:1995
+#: ../src/dialogs/clonetiler.cpp:2000
 msgid "Randomize the rotation angle by this percentage"
 msgstr "Nasumičan ugao rotacije za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:2009
+#: ../src/dialogs/clonetiler.cpp:2014
 msgid "Alternate the rotation direction for each row"
 msgstr "Naizmeničan smer rotacije u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2014
+#: ../src/dialogs/clonetiler.cpp:2019
 msgid "Alternate the rotation direction for each column"
 msgstr "Naizmeničan smer rotacije u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2022
+#: ../src/dialogs/clonetiler.cpp:2027
 msgid "_Blur & opacity"
 msgstr "_Zamućenje i providnost"
 
-#: ../src/dialogs/clonetiler.cpp:2031
+#: ../src/dialogs/clonetiler.cpp:2036
 msgid "<b>Blur:</b>"
 msgstr "<b>Zamućenje:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2038
+#: ../src/dialogs/clonetiler.cpp:2043
 msgid "Blur tiles by this percentage for each row"
 msgstr "Zamućivanje objekta za ovaj procenat u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2045
+#: ../src/dialogs/clonetiler.cpp:2050
 msgid "Blur tiles by this percentage for each column"
 msgstr "Zamućivanje objekta za ovaj procenat u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2052
+#: ../src/dialogs/clonetiler.cpp:2057
 msgid "Randomize the tile blur by this percentage"
 msgstr "Nasumično zamućivanje objekta za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:2066
+#: ../src/dialogs/clonetiler.cpp:2071
 msgid "Alternate the sign of blur change for each row"
 msgstr "Naizmenično zamućenje u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2071
+#: ../src/dialogs/clonetiler.cpp:2076
 msgid "Alternate the sign of blur change for each column"
 msgstr "Naizmenično zamućenje u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2080
+#: ../src/dialogs/clonetiler.cpp:2085
 msgid "<b>Fade out:</b>"
 msgstr "<b>Providnost:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2087
+#: ../src/dialogs/clonetiler.cpp:2092
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr "Povećavanje providnosti objekta za ovaj procenat u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2094
+#: ../src/dialogs/clonetiler.cpp:2099
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr "Povećavanje providnosti objekta za ovaj procenat u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2101
+#: ../src/dialogs/clonetiler.cpp:2106
 msgid "Randomize the tile opacity by this percentage"
 msgstr "Proizvoljna providnost objekta za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:2115
+#: ../src/dialogs/clonetiler.cpp:2120
 msgid "Alternate the sign of opacity change for each row"
 msgstr "Naizmenična providnost u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2120
+#: ../src/dialogs/clonetiler.cpp:2125
 msgid "Alternate the sign of opacity change for each column"
 msgstr "Naizmenična providnost u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2128
+#: ../src/dialogs/clonetiler.cpp:2133
 msgid "Co_lor"
 msgstr "Bo_je"
 
-#: ../src/dialogs/clonetiler.cpp:2133
+#: ../src/dialogs/clonetiler.cpp:2138
 msgid "Initial color: "
 msgstr "Početna boja:"
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid "Initial color of tiled clones"
 msgstr "Početna boja pojedinačnog klona"
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke)"
 msgstr ""
-"Početna boja za klonove (ima efekta samo ako original nema postavljenu popunu "
-"i boju ivične linije)"
+"Početna boja za klonove (ima efekta samo ako original nema postavljenu "
+"popunu i boju ivične linije)"
 
-#: ../src/dialogs/clonetiler.cpp:2152
+#: ../src/dialogs/clonetiler.cpp:2157
 msgid "<b>H:</b>"
 msgstr "<b>Nijansa:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2159
+#: ../src/dialogs/clonetiler.cpp:2164
 msgid "Change the tile hue by this percentage for each row"
 msgstr "Promena nijanse objekta za ovaj procenat u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2166
+#: ../src/dialogs/clonetiler.cpp:2171
 msgid "Change the tile hue by this percentage for each column"
 msgstr "Promena nijanse objekta za ovaj procenat u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2173
+#: ../src/dialogs/clonetiler.cpp:2178
 msgid "Randomize the tile hue by this percentage"
 msgstr "Nasumična nijansa objekta za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:2182
+#: ../src/dialogs/clonetiler.cpp:2187
 msgid "<b>S:</b>"
 msgstr "<b>Zasićenost:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2189
+#: ../src/dialogs/clonetiler.cpp:2194
 msgid "Change the color saturation by this percentage for each row"
 msgstr "Promena zasićenosti boje za ovaj procenat u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2196
+#: ../src/dialogs/clonetiler.cpp:2201
 msgid "Change the color saturation by this percentage for each column"
 msgstr "Promena zasićenosti boje za ovaj procenat u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2203
+#: ../src/dialogs/clonetiler.cpp:2208
 msgid "Randomize the color saturation by this percentage"
 msgstr "Nasumična zasićenost boje za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:2211
+#: ../src/dialogs/clonetiler.cpp:2216
 msgid "<b>L:</b>"
 msgstr "<b>Osvetljenost:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2218
+#: ../src/dialogs/clonetiler.cpp:2223
 msgid "Change the color lightness by this percentage for each row"
 msgstr "Promena osvetljenosti boje za ovaj procenat u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2225
+#: ../src/dialogs/clonetiler.cpp:2230
 msgid "Change the color lightness by this percentage for each column"
 msgstr "Promena osvetljenosti boje za ovaj procenat u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2232
+#: ../src/dialogs/clonetiler.cpp:2237
 msgid "Randomize the color lightness by this percentage"
 msgstr "Nasumična osvetljenost boje za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:2246
+#: ../src/dialogs/clonetiler.cpp:2251
 msgid "Alternate the sign of color changes for each row"
 msgstr "Naizmenična boja u svakom redu"
 
-#: ../src/dialogs/clonetiler.cpp:2251
+#: ../src/dialogs/clonetiler.cpp:2256
 msgid "Alternate the sign of color changes for each column"
 msgstr "Naizmenična boja u svakoj koloni"
 
-#: ../src/dialogs/clonetiler.cpp:2259
+#: ../src/dialogs/clonetiler.cpp:2264
 msgid "_Trace"
 msgstr "_Precrtavanje"
 
-#: ../src/dialogs/clonetiler.cpp:2266
+#: ../src/dialogs/clonetiler.cpp:2271
 msgid "Trace the drawing under the tiles"
 msgstr "Precrtavanje crteža ispod popločanih objekata"
 
-#: ../src/dialogs/clonetiler.cpp:2270
+#: ../src/dialogs/clonetiler.cpp:2275
 msgid ""
 "For each clone, pick a value from the drawing in that clone's location and "
 "apply it to the clone"
@@ -568,11 +579,11 @@ msgstr ""
 "Za svaki klon, uzima se vrednost sa crteža sa površine klona i primenjuje se "
 "na klon"
 
-#: ../src/dialogs/clonetiler.cpp:2284
+#: ../src/dialogs/clonetiler.cpp:2289
 msgid "1. Pick from the drawing:"
 msgstr "1. Uzmi sa crteža:"
 
-#: ../src/dialogs/clonetiler.cpp:2295 ../src/dialogs/clonetiler.cpp:2442
+#: ../src/dialogs/clonetiler.cpp:2300 ../src/dialogs/clonetiler.cpp:2447
 #: ../share/extensions/color_brighter.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
 #: ../share/extensions/color_darker.inx.h:1
@@ -592,110 +603,110 @@ msgstr "1. Uzmi sa crteža:"
 msgid "Color"
 msgstr "Boja"
 
-#: ../src/dialogs/clonetiler.cpp:2296
+#: ../src/dialogs/clonetiler.cpp:2301
 msgid "Pick the visible color and opacity"
 msgstr "Uzima vidljivu boju i providnost"
 
-#: ../src/dialogs/clonetiler.cpp:2303 ../src/dialogs/clonetiler.cpp:2452
+#: ../src/dialogs/clonetiler.cpp:2308 ../src/dialogs/clonetiler.cpp:2457
 #: ../share/extensions/svg_dropshadow.inx.h:3
 msgid "Opacity"
 msgstr "Providnost"
 
-#: ../src/dialogs/clonetiler.cpp:2304
+#: ../src/dialogs/clonetiler.cpp:2309
 msgid "Pick the total accumulated opacity"
 msgstr "Uzima ukupnu nagomilanu providnost"
 
-#: ../src/dialogs/clonetiler.cpp:2311
+#: ../src/dialogs/clonetiler.cpp:2316
 msgid "R"
 msgstr "Crvena"
 
-#: ../src/dialogs/clonetiler.cpp:2312
+#: ../src/dialogs/clonetiler.cpp:2317
 msgid "Pick the Red component of the color"
 msgstr "Uzima crvenu komponentu boje"
 
-#: ../src/dialogs/clonetiler.cpp:2319
+#: ../src/dialogs/clonetiler.cpp:2324
 msgid "G"
 msgstr "Zelena"
 
-#: ../src/dialogs/clonetiler.cpp:2320
+#: ../src/dialogs/clonetiler.cpp:2325
 msgid "Pick the Green component of the color"
 msgstr "Uzima zelenu komponentu boje"
 
-#: ../src/dialogs/clonetiler.cpp:2327
+#: ../src/dialogs/clonetiler.cpp:2332
 msgid "B"
 msgstr "Plava"
 
-#: ../src/dialogs/clonetiler.cpp:2328
+#: ../src/dialogs/clonetiler.cpp:2333
 msgid "Pick the Blue component of the color"
 msgstr "Uzima plavu komponentu boje"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2337
+#: ../src/dialogs/clonetiler.cpp:2342
 msgid "clonetiler|H"
 msgstr "Nijansa"
 
-#: ../src/dialogs/clonetiler.cpp:2338
+#: ../src/dialogs/clonetiler.cpp:2343
 msgid "Pick the hue of the color"
 msgstr "Uzima nijansu boje"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2347
+#: ../src/dialogs/clonetiler.cpp:2352
 msgid "clonetiler|S"
 msgstr "Zasićenost"
 
-#: ../src/dialogs/clonetiler.cpp:2348
+#: ../src/dialogs/clonetiler.cpp:2353
 msgid "Pick the saturation of the color"
 msgstr "Uzima zasićenost boje"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2357
+#: ../src/dialogs/clonetiler.cpp:2362
 msgid "clonetiler|L"
 msgstr "Osvetljenost"
 
-#: ../src/dialogs/clonetiler.cpp:2358
+#: ../src/dialogs/clonetiler.cpp:2363
 msgid "Pick the lightness of the color"
 msgstr "Uzima osvetljenost boje"
 
-#: ../src/dialogs/clonetiler.cpp:2368
+#: ../src/dialogs/clonetiler.cpp:2373
 msgid "2. Tweak the picked value:"
 msgstr "2. Podešavanje uzete vrednosti"
 
-#: ../src/dialogs/clonetiler.cpp:2378
+#: ../src/dialogs/clonetiler.cpp:2383
 msgid "Gamma-correct:"
 msgstr "Korekcija game:"
 
-#: ../src/dialogs/clonetiler.cpp:2383
+#: ../src/dialogs/clonetiler.cpp:2388
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
 msgstr "Pomera srednji nivo uzete vrednosti naviše (>0) ili nadole (<0)"
 
-#: ../src/dialogs/clonetiler.cpp:2390
+#: ../src/dialogs/clonetiler.cpp:2395
 msgid "Randomize:"
 msgstr "Nasumično:"
 
-#: ../src/dialogs/clonetiler.cpp:2395
+#: ../src/dialogs/clonetiler.cpp:2400
 msgid "Randomize the picked value by this percentage"
 msgstr "Nasumično uzimanje vrednosti za ovaj procenat"
 
-#: ../src/dialogs/clonetiler.cpp:2402
+#: ../src/dialogs/clonetiler.cpp:2407
 msgid "Invert:"
 msgstr "Izvrtanje:"
 
-#: ../src/dialogs/clonetiler.cpp:2406
+#: ../src/dialogs/clonetiler.cpp:2411
 msgid "Invert the picked value"
 msgstr "Preokretanje uzete vrednosti"
 
-#: ../src/dialogs/clonetiler.cpp:2412
+#: ../src/dialogs/clonetiler.cpp:2417
 msgid "3. Apply the value to the clones':"
 msgstr "3. Primena vrednosti na klonove:"
 
-#: ../src/dialogs/clonetiler.cpp:2422
+#: ../src/dialogs/clonetiler.cpp:2427
 msgid "Presence"
 msgstr "Ponašanje"
 
-#: ../src/dialogs/clonetiler.cpp:2425
+#: ../src/dialogs/clonetiler.cpp:2430
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
@@ -703,15 +714,16 @@ msgstr ""
 "Svaki klon je napravljen sa osobinama proračunatim iz uzete vrednosti u toj "
 "tački"
 
-#: ../src/dialogs/clonetiler.cpp:2432
+#: ../src/dialogs/clonetiler.cpp:2437
 msgid "Size"
 msgstr "Veličina"
 
-#: ../src/dialogs/clonetiler.cpp:2435
+#: ../src/dialogs/clonetiler.cpp:2440
 msgid "Each clone's size is determined by the picked value in that point"
-msgstr "Svaki klon ima veličinu proračunatu na osnovu uzete vrednosti u toj tački"
+msgstr ""
+"Svaki klon ima veličinu proračunatu na osnovu uzete vrednosti u toj tački"
 
-#: ../src/dialogs/clonetiler.cpp:2445
+#: ../src/dialogs/clonetiler.cpp:2450
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
@@ -719,47 +731,48 @@ msgstr ""
 "Svaki klon se boji uzetom bojom (original ne sme da ima postavljenu popunu "
 "ili boju ivične linije)"
 
-#: ../src/dialogs/clonetiler.cpp:2455
+#: ../src/dialogs/clonetiler.cpp:2460
 msgid "Each clone's opacity is determined by the picked value in that point"
-msgstr "Providnost svakog klona se računa na osnovu uzete vrednosti u toj tački"
+msgstr ""
+"Providnost svakog klona se računa na osnovu uzete vrednosti u toj tački"
 
-#: ../src/dialogs/clonetiler.cpp:2482
+#: ../src/dialogs/clonetiler.cpp:2487
 msgid "How many rows in the tiling"
 msgstr "Koliko će redova imati popločana površina"
 
-#: ../src/dialogs/clonetiler.cpp:2502
+#: ../src/dialogs/clonetiler.cpp:2507
 msgid "How many columns in the tiling"
 msgstr "Koliko će kolona imati popločana površina"
 
-#: ../src/dialogs/clonetiler.cpp:2532
+#: ../src/dialogs/clonetiler.cpp:2537
 msgid "Width of the rectangle to be filled"
 msgstr "Širina površine koja će se popuniti"
 
-#: ../src/dialogs/clonetiler.cpp:2557
+#: ../src/dialogs/clonetiler.cpp:2562
 msgid "Height of the rectangle to be filled"
 msgstr "Visina površine koja će se popuniti"
 
-#: ../src/dialogs/clonetiler.cpp:2572
+#: ../src/dialogs/clonetiler.cpp:2577
 msgid "Rows, columns: "
 msgstr "Redova, kolona: "
 
-#: ../src/dialogs/clonetiler.cpp:2573
+#: ../src/dialogs/clonetiler.cpp:2578
 msgid "Create the specified number of rows and columns"
 msgstr "Napravi određeni broj redova i kolona"
 
-#: ../src/dialogs/clonetiler.cpp:2582
+#: ../src/dialogs/clonetiler.cpp:2587
 msgid "Width, height: "
 msgstr "Širina, visina: "
 
-#: ../src/dialogs/clonetiler.cpp:2583
+#: ../src/dialogs/clonetiler.cpp:2588
 msgid "Fill the specified width and height with the tiling"
 msgstr "Popuni određenu širinu i visinu popločavanjem"
 
-#: ../src/dialogs/clonetiler.cpp:2599
+#: ../src/dialogs/clonetiler.cpp:2604
 msgid "Use saved size and position of the tile"
 msgstr "Koristi sačuvanu veličinu i položaj objekta"
 
-#: ../src/dialogs/clonetiler.cpp:2602
+#: ../src/dialogs/clonetiler.cpp:2607
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
@@ -767,11 +780,11 @@ msgstr ""
 "Uzmi da su veličina i pozicija objekta iste kao i predhodnog puta kada je "
 "popločan (ako jeste), umesto korišćenja trenutne veličine"
 
-#: ../src/dialogs/clonetiler.cpp:2626
+#: ../src/dialogs/clonetiler.cpp:2631
 msgid " <b>_Create</b> "
 msgstr " <b>_Napravi</b> "
 
-#: ../src/dialogs/clonetiler.cpp:2628
+#: ../src/dialogs/clonetiler.cpp:2633
 msgid "Create and tile the clones of the selection"
 msgstr "Napravi i popločaj klonove izabranog objekta"
 
@@ -780,28 +793,30 @@ msgstr "Napravi i popločaj klonove izabranog objekta"
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/dialogs/clonetiler.cpp:2643
+#: ../src/dialogs/clonetiler.cpp:2648
 msgid " _Unclump "
 msgstr " _Rastavi "
 
-#: ../src/dialogs/clonetiler.cpp:2644
+#: ../src/dialogs/clonetiler.cpp:2649
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
-msgstr "Rastavljanje klonova da bi se razredili; može se uzastopno primenjivati"
+msgstr ""
+"Rastavljanje klonova da bi se razredili; može se uzastopno primenjivati"
 
-#: ../src/dialogs/clonetiler.cpp:2650
+#: ../src/dialogs/clonetiler.cpp:2655
 msgid " Re_move "
 msgstr " _Ukloni "
 
-#: ../src/dialogs/clonetiler.cpp:2651
+#: ../src/dialogs/clonetiler.cpp:2656
 msgid "Remove existing tiled clones of the selected object (siblings only)"
-msgstr "Uklanja postojeće popločane klonove izabranog objekta (samo istog nivoa)"
+msgstr ""
+"Uklanja postojeće popločane klonove izabranog objekta (samo istog nivoa)"
 
-#: ../src/dialogs/clonetiler.cpp:2667
+#: ../src/dialogs/clonetiler.cpp:2672
 msgid " R_eset "
 msgstr " _Vaspostavi "
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/dialogs/clonetiler.cpp:2669
+#: ../src/dialogs/clonetiler.cpp:2674
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
@@ -993,9 +1008,12 @@ msgstr "Uklonjena popunu"
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] "<b>%d</b> objekat pronađen (od ukupno <b>%d</b>), %s odgovara uslovu"
-msgstr[1] "<b>%d</b> objekta pronađena (od ukupno <b>%d</b>), %s odgovara uslovu"
-msgstr[2] "<b>%d</b> objekata pronađeno (od ukupno <b>%d</b>), %s odgovara uslovu"
+msgstr[0] ""
+"<b>%d</b> objekat pronađen (od ukupno <b>%d</b>), %s odgovara uslovu"
+msgstr[1] ""
+"<b>%d</b> objekta pronađena (od ukupno <b>%d</b>), %s odgovara uslovu"
+msgstr[2] ""
+"<b>%d</b> objekata pronađeno (od ukupno <b>%d</b>), %s odgovara uslovu"
 
 #: ../src/dialogs/find.cpp:374 ../src/ui/dialog/find.cpp:437
 msgid "exact"
@@ -1128,15 +1146,18 @@ msgstr "_ID: "
 
 #: ../src/dialogs/find.cpp:692 ../src/ui/dialog/find.cpp:61
 msgid "Find objects by the value of the id attribute (exact or partial match)"
-msgstr "Traži objekte po sadržaju osobine „ID“ (apsolutno ili delimično poklapanje)"
+msgstr ""
+"Traži objekte po sadržaju osobine „ID“ (apsolutno ili delimično poklapanje)"
 
 #: ../src/dialogs/find.cpp:693 ../src/ui/dialog/find.cpp:62
 msgid "_Style: "
 msgstr "_Stil: "
 
 #: ../src/dialogs/find.cpp:693 ../src/ui/dialog/find.cpp:62
-msgid "Find objects by the value of the style attribute (exact or partial match)"
-msgstr "Traži objekte po sadržaju osobine „stil“ (apsolutno ili delimično poklapanje)"
+msgid ""
+"Find objects by the value of the style attribute (exact or partial match)"
+msgstr ""
+"Traži objekte po sadržaju osobine „stil“ (apsolutno ili delimično poklapanje)"
 
 #: ../src/dialogs/find.cpp:694 ../src/ui/dialog/find.cpp:63
 msgid "_Attribute: "
@@ -1248,7 +1269,8 @@ msgid "_Id"
 msgstr "_ID"
 
 #: ../src/dialogs/item-properties.cpp:129
-msgid "The id= attribute (only letters, digits, and the characters .-_: allowed)"
+msgid ""
+"The id= attribute (only letters, digits, and the characters .-_: allowed)"
 msgstr "Atribut id= (samo sliva, brojevi i znaci .-_: dozvoljeno"
 
 #. Button for setting the object's id, label, title and description.
@@ -1294,7 +1316,8 @@ msgstr "_Zaključaj"
 
 #: ../src/dialogs/item-properties.cpp:228
 msgid "Check to make the object insensitive (not selectable by mouse)"
-msgstr "Aktivirajte da učinite objekat neosetljivim (nije ga moguće izabrati mišem)"
+msgstr ""
+"Aktivirajte da učinite objekat neosetljivim (nije ga moguće izabrati mišem)"
 
 #: ../src/dialogs/item-properties.cpp:304
 #: ../src/dialogs/item-properties.cpp:311
@@ -1600,15 +1623,18 @@ msgid "Creator"
 msgstr "Autor"
 
 #: ../src/dialogs/rdf.cpp:254
-msgid "Name of entity primarily responsible for making the content of this document."
-msgstr "Naziv primarnog autora koji je odgovoran za pravljenje sadržaja dokumenta."
+msgid ""
+"Name of entity primarily responsible for making the content of this document."
+msgstr ""
+"Naziv primarnog autora koji je odgovoran za pravljenje sadržaja dokumenta."
 
 #: ../src/dialogs/rdf.cpp:256
 msgid "Rights"
 msgstr "Prava"
 
 #: ../src/dialogs/rdf.cpp:257
-msgid "Name of entity with rights to the Intellectual Property of this document."
+msgid ""
+"Name of entity with rights to the Intellectual Property of this document."
 msgstr "Naziv entiteta koji ima prava na intelektualnu svojinu ovog dokumenta."
 
 #: ../src/dialogs/rdf.cpp:259
@@ -1663,7 +1689,8 @@ msgstr "Ključne reči"
 msgid ""
 "The topic of this document as comma-separated key words, phrases, or "
 "classifications."
-msgstr "Sadržina dokumenta kao zarezom razdvojene reči, fraze ili klasifikacije."
+msgstr ""
+"Sadržina dokumenta kao zarezom razdvojene reči, fraze ili klasifikacije."
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
@@ -1891,13 +1918,13 @@ msgstr "Centralno poravnanje"
 msgid "Align lines right"
 msgstr "Desno poravnanje"
 
-#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3959
-#: ../src/widgets/toolbox.cpp:4005
+#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3961
+#: ../src/widgets/toolbox.cpp:4007
 msgid "Horizontal text"
 msgstr "Vodoravni tekst"
 
-#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3970
-#: ../src/widgets/toolbox.cpp:4016
+#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3972
+#: ../src/widgets/toolbox.cpp:4018
 msgid "Vertical text"
 msgstr "Uspravni tekst"
 
@@ -2086,8 +2113,10 @@ msgstr "Novi novi čvor teksta"
 
 #: ../src/dialogs/xml-tree.cpp:1465
 #, c-format
-msgid "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
-msgstr "Ne mogu da postavim <b>%s</b>: Već postoji atribut sa vrednošću <b>%s</b>"
+msgid ""
+"Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
+msgstr ""
+"Ne mogu da postavim <b>%s</b>: Već postoji atribut sa vrednošću <b>%s</b>"
 
 #: ../src/dialogs/xml-tree.cpp:1480
 msgid "Change attribute"
@@ -2150,15 +2179,15 @@ msgid ""
 "average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> "
 "to copy the color under mouse to clipboard"
 msgstr ""
-"<b>Klik</b> postavlja popunu, <b>Shift+klik</b> liniju. <b>Prevlačenjem</b> se "
-"uzima prosečna boja površine. <b>Alt</b> za izokrenutu boju. <b>Ctrl+C</b> "
-"za kopiranje boje ispod kursora u klipbord"
+"<b>Klik</b> postavlja popunu, <b>Shift+klik</b> liniju. <b>Prevlačenjem</b> "
+"se uzima prosečna boja površine. <b>Alt</b> za izokrenutu boju. <b>Ctrl+C</"
+"b> za kopiranje boje ispod kursora u klipbord"
 
 #: ../src/dropper-context.cpp:389
 msgid "Set picked color"
 msgstr "Postavljena izabrana boja"
 
-#: ../src/dyna-draw-context.cpp:696
+#: ../src/dyna-draw-context.cpp:713
 msgid "Create calligraphic stroke"
 msgstr "Nacrtana kaligrafska linija"
 
@@ -2278,8 +2307,8 @@ msgstr ""
 "učitana</span>\n"
 "\n"
 "Problematične ekstenzije su preskočene. Inkscape će nastaviti izvršavanje, "
-"ali ove ekstenzije neće biti dostupne. Za detalje o otklanjanju ovih grešaka, "
-"pogledajte dnevnik grešaka sačuvan u: "
+"ali ove ekstenzije neće biti dostupne. Za detalje o otklanjanju ovih "
+"grešaka, pogledajte dnevnik grešaka sačuvan u: "
 
 #. This is some filler text, needs to change before relase
 #: ../src/extension/error-file.cpp:62
@@ -2346,6 +2375,50 @@ msgstr "Broj unutrašnjih/spoljašnih kopija objekta koji će se napraviti"
 #: ../share/extensions/pathalongpath.inx.h:4
 msgid "Generate from Path"
 msgstr "Pravljenje od krive"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1373
+#, fuzzy
+msgid "EMF Input"
+msgstr "DXF ulaz"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1378
+#, fuzzy
+msgid "Enhanced Metafiles (*.emf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1379
+msgid "Enhanced Metafiles"
+msgstr ""
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1387
+#, fuzzy
+msgid "WMF Input"
+msgstr "WPG ulaz"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1392
+#, fuzzy
+msgid "Windows Metafiles (*.wmf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1393
+#, fuzzy
+msgid "Windows Metafiles"
+msgstr "Windows Metafile ulaz"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1401
+#, fuzzy
+msgid "EMF Output"
+msgstr "DXF izlaz"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1406
+#, fuzzy
+msgid "Enhanced Metafile (*.emf)"
+msgstr "Windows Metafile (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1407
+#, fuzzy
+msgid "Enhanced Metafile"
+msgstr "Promena pravougaonika"
 
 #: ../src/extension/internal/eps-out.cpp:89
 msgid "Encapsulated Postscript Output"
@@ -2428,9 +2501,9 @@ msgid "Vertical Offset"
 msgstr "Uspravni pomeraj"
 
 #: ../src/extension/internal/grid.cpp:224 ../share/extensions/eqtexsvg.inx.h:3
-#: ../share/extensions/funcplot.inx.h:12 ../share/extensions/lindenmayer.inx
-#: .h:9 ../share/extensions/lorem_ipsum.inx.h:4
-#: ../share/extensions/rtree.inx.h:4
+#: ../share/extensions/funcplot.inx.h:12
+#: ../share/extensions/lindenmayer.inx.h:9
+#: ../share/extensions/lorem_ipsum.inx.h:4 ../share/extensions/rtree.inx.h:4
 msgid "Render"
 msgstr "Generisanje"
 
@@ -2466,6 +2539,74 @@ msgstr "OpenDocument crtež (*.odg)"
 msgid "OpenDocument drawing file"
 msgstr "Datoteka OpenDocument crteža"
 
+#: ../src/extension/internal/pdf.cpp:108 ../src/extension/internal/ps.cpp:121
+msgid "Print Destination"
+msgstr "Odredište štampe"
+
+#. Print properties frame
+#: ../src/extension/internal/pdf.cpp:123 ../src/extension/internal/ps.cpp:136
+msgid "Print properties"
+msgstr "Osobine štampe"
+
+#: ../src/extension/internal/pdf.cpp:130
+#, fuzzy
+msgid "Print using PDF operators"
+msgstr "Štampanje pomoću PostScript operatora"
+
+#: ../src/extension/internal/pdf.cpp:132
+#, fuzzy
+msgid ""
+"Use PDF vector operators. The resulting image is usually smaller in file "
+"size and can be arbitrarily scaled, but patterns will be lost."
+msgstr ""
+"Koriste se vektorski operatori iz PostScript-a. Dobijena slika će verovatno "
+"biti umanjena i datoteka će biti manje veličine, ali providnost i obrasci će "
+"biti izgubljeni"
+
+#: ../src/extension/internal/pdf.cpp:137 ../src/extension/internal/ps.cpp:150
+msgid "Print as bitmap"
+msgstr "Štampanje bitmape"
+
+#: ../src/extension/internal/pdf.cpp:139 ../src/extension/internal/ps.cpp:152
+msgid ""
+"Print everything as bitmap. The resulting image is usually larger in file "
+"size and cannot be arbitrarily scaled without quality loss, but all objects "
+"will be rendered exactly as displayed."
+msgstr ""
+"Štampaće se kao bitmapa. Dobijena slika će verovatno biti veća i neće moći "
+"da se uvećava bez gubitka na kvalitetu, što zavisi od razmere uvećanja, ali "
+"sva grafika će se iscrtati isto kao što je i prikazana"
+
+#: ../src/extension/internal/pdf.cpp:153 ../src/extension/internal/ps.cpp:166
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "Željena rezolucija (tačaka po inču) bitmape"
+
+#: ../src/extension/internal/pdf.cpp:167 ../src/extension/internal/ps.cpp:180
+msgid "Resolution:"
+msgstr "Rezolucija:"
+
+#. Print destination frame
+#: ../src/extension/internal/pdf.cpp:171 ../src/extension/internal/ps.cpp:184
+msgid "Print destination"
+msgstr "Odredište štampe"
+
+#: ../src/extension/internal/pdf.cpp:177 ../src/extension/internal/ps.cpp:190
+msgid ""
+"Printer name (as given by lpstat -p);\n"
+"leave empty to use the system default printer.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to a program."
+msgstr ""
+"Naziv štampače (kako je dato sa lpstat -p);\n"
+"ostavite prazno za upotrebu podrazumevanog sistemskog štampača.\n"
+"Koristite „> datoteka“ za štampanje u datoteku.\n"
+"Koristite „| program argument...“ za prosleđivanje programu."
+
+#: ../src/extension/internal/pdf.cpp:1566
+#, fuzzy
+msgid "PDF Print"
+msgstr "LaTeX štampa"
+
 #: ../src/extension/internal/pov-out.cpp:457
 msgid "PovRay Output"
 msgstr "Izlaz kao PovRay"
@@ -2491,15 +2632,6 @@ msgstr "Postscript (*.ps)"
 msgid "Postscript File"
 msgstr "Postscript datoteka"
 
-#: ../src/extension/internal/ps.cpp:121
-msgid "Print Destination"
-msgstr "Odredište štampe"
-
-#. Print properties frame
-#: ../src/extension/internal/ps.cpp:136
-msgid "Print properties"
-msgstr "Osobine štampe"
-
 #: ../src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "Štampanje pomoću PostScript operatora"
@@ -2513,45 +2645,6 @@ msgstr ""
 "Koriste se vektorski operatori iz PostScript-a. Dobijena slika će verovatno "
 "biti umanjena i datoteka će biti manje veličine, ali providnost i obrasci će "
 "biti izgubljeni"
-
-#: ../src/extension/internal/ps.cpp:150
-msgid "Print as bitmap"
-msgstr "Štampanje bitmape"
-
-#: ../src/extension/internal/ps.cpp:152
-msgid ""
-"Print everything as bitmap. The resulting image is usually larger in file "
-"size and cannot be arbitrarily scaled without quality loss, but all objects "
-"will be rendered exactly as displayed."
-msgstr ""
-"Štampaće se kao bitmapa. Dobijena slika će verovatno biti veća i neće moći "
-"da se uvećava bez gubitka na kvalitetu, što zavisi od razmere uvećanja, ali "
-"sva grafika će se iscrtati isto kao što je i prikazana"
-
-#: ../src/extension/internal/ps.cpp:166
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr "Željena rezolucija (tačaka po inču) bitmape"
-
-#: ../src/extension/internal/ps.cpp:180
-msgid "Resolution:"
-msgstr "Rezolucija:"
-
-#. Print destination frame
-#: ../src/extension/internal/ps.cpp:184
-msgid "Print destination"
-msgstr "Odredište štampe"
-
-#: ../src/extension/internal/ps.cpp:190
-msgid ""
-"Printer name (as given by lpstat -p);\n"
-"leave empty to use the system default printer.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to a program."
-msgstr ""
-"Naziv štampače (kako je dato sa lpstat -p);\n"
-"ostavite prazno za upotrebu podrazumevanog sistemskog štampača.\n"
-"Koristite „> datoteka“ za štampanje u datoteku.\n"
-"Koristite „| program argument...“ za prosleđivanje programu."
 
 #: ../src/extension/internal/ps.cpp:1719
 msgid "Postscript Print"
@@ -2647,9 +2740,10 @@ msgstr "Vektorski format koji se koristi u Corel WordPerfect"
 #. running from the console, in which case calling sp_ui
 #. routines will cause a segfault.  See bug 1000350 - bryce
 #. sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
-#: ../src/extension/system.cpp:101
+#: ../src/extension/system.cpp:102
 msgid "Format autodetect failed. The file is being opened as SVG."
-msgstr "Automatsko prepoznavanje formata nije uspelo. Datoteka je otvorena kao SVG."
+msgstr ""
+"Automatsko prepoznavanje formata nije uspelo. Datoteka je otvorena kao SVG."
 
 #. TRANSLATORS: default.svg is localizable - this is the name of the default document
 #. template. This way you can localize the default pagesize, translate the name of
@@ -2987,6 +3081,12 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Eks kvadrati"
 
+#: ../src/ink-action.cpp:179 ../src/widgets/toolbox.cpp:2292
+#: ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+"Nivo pritiska detektovanog na ulaznom uređaju utiče na širinu poteza olovke"
+
 #: ../src/inkscape.cpp:447
 msgid "Untitled document"
 msgstr "Neimenovani dokument"
@@ -3194,7 +3294,8 @@ msgstr "<b>%1</b> Vas je pozvao na crtačku sesiju."
 
 #: ../src/jabber_whiteboard/session-manager.cpp:310
 msgid "Do you wish to accept <b>%1</b>'s whiteboard session invitation?"
-msgstr "Hoćete li da prihvatite na poziv na crtačku sesiju od korisnika <b>%1</b>?"
+msgstr ""
+"Hoćete li da prihvatite na poziv na crtačku sesiju od korisnika <b>%1</b>?"
 
 #: ../src/jabber_whiteboard/session-manager.cpp:314
 msgid "Accept invitation"
@@ -3234,7 +3335,8 @@ msgstr "Ne koristi X server (samo obrađuj datoteke preko konzole)"
 
 #: ../src/main.cpp:208
 msgid "Try to use X server (even if $DISPLAY is not set)"
-msgstr "Pokušaj da koristiš X server (čak iako promenljiva $DISPLAY nije postavljena)"
+msgstr ""
+"Pokušaj da koristiš X server (čak iako promenljiva $DISPLAY nije postavljena)"
 
 #: ../src/main.cpp:213
 msgid "Open specified document(s) (option string may be excluded)"
@@ -3258,7 +3360,8 @@ msgstr "Izvoz dokumenta u PNG datoteku"
 
 #: ../src/main.cpp:228
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
-msgstr "Rezolucija koja se koristi za pretvaranje SVG-a u bitmapu (podrazumevano 90)"
+msgstr ""
+"Rezolucija koja se koristi za pretvaranje SVG-a u bitmapu (podrazumevano 90)"
 
 #: ../src/main.cpp:229
 msgid "DPI"
@@ -3319,7 +3422,8 @@ msgstr "ID"
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
 #: ../src/main.cpp:270
-msgid "Export just the object with export-id, hide all others (only with export-id)"
+msgid ""
+"Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Izvozi samo objekat sa atributom „export-id“, sakriva sve druge (samo sa "
 "atributom „export-id“)"
@@ -3332,7 +3436,9 @@ msgstr ""
 
 #: ../src/main.cpp:280
 msgid "Background color of exported bitmap (any SVG-supported color string)"
-msgstr "Boja pozadine bitmape za obrazovanje (bilo koja oznaka boje koju podržava SVG)"
+msgstr ""
+"Boja pozadine bitmape za obrazovanje (bilo koja oznaka boje koju podržava "
+"SVG)"
 
 #: ../src/main.cpp:281
 msgid "COLOR"
@@ -3340,7 +3446,8 @@ msgstr "BOJA"
 
 #: ../src/main.cpp:285
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
-msgstr "Boja pozadine bitmape za obrazovanje (bilo od 0.0 do 1.0, ili 1 do 255)"
+msgstr ""
+"Boja pozadine bitmape za obrazovanje (bilo od 0.0 do 1.0, ili 1 do 255)"
 
 #: ../src/main.cpp:286
 msgid "VALUE"
@@ -3374,21 +3481,24 @@ msgstr "Ugradi fontove ori izvozu (samo Type 1) (EPS)"
 
 #: ../src/main.cpp:320
 msgid "Export files with the bounding box set to the page size (EPS)"
-msgstr "Izvoz datoteka sa okvirom kontejnera postavljenim na veličinu strane (EPS)"
+msgstr ""
+"Izvoz datoteka sa okvirom kontejnera postavljenim na veličinu strane (EPS)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:326
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
-msgstr "Pitaj za X koordinatu crteža ili, ako je postavljeno, objekta sa --query-id"
+msgstr ""
+"Pitaj za X koordinatu crteža ili, ako je postavljeno, objekta sa --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:332
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
-msgstr "Pitaj za Y koordinatu crteža ili, ako je postavljeno, objekta sa --query-id"
+msgstr ""
+"Pitaj za Y koordinatu crteža ili, ako je postavljeno, objekta sa --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:338
@@ -3423,7 +3533,7 @@ msgstr ""
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Uklanja neupotrebljene stavke iz defs izbora dokumenta"
 
-#: ../src/main.cpp:557
+#: ../src/main.cpp:563
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -3518,12 +3628,15 @@ msgid ""
 "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
 "+Alt</b>: move along handles"
 msgstr ""
-"<b>Ctrl</b>: promena tipa čvora, prijanjanje ugla ručke, pomeranje vodoravno i "
-"uspravno; <b>Ctrl+Alt</b>: pomeranje duž ručki"
+"<b>Ctrl</b>: promena tipa čvora, prijanjanje ugla ručke, pomeranje vodoravno "
+"i uspravno; <b>Ctrl+Alt</b>: pomeranje duž ručki"
 
 #: ../src/node-context.cpp:367
-msgid "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
-msgstr "<b>Shift</b>: promena izbora čvora, isključivanje prijanjanja, rotiranje obe ručke"
+msgid ""
+"<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
+msgstr ""
+"<b>Shift</b>: promena izbora čvora, isključivanje prijanjanja, rotiranje obe "
+"ručke"
 
 #: ../src/node-context.cpp:368
 msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
@@ -3645,8 +3758,9 @@ msgid ""
 "angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both "
 "handles"
 msgstr ""
-"<b>Ručka čvora</b>: ugao %0.2f&#176;, dužina %s; sa <b>Ctrl</b> za prijanjanje "
-"ugla; sa <b>Alt</b> za fiksnu dužinu; sa <b>Shift</b> za rotaciju obe ručke"
+"<b>Ručka čvora</b>: ugao %0.2f&#176;, dužina %s; sa <b>Ctrl</b> za "
+"prijanjanje ugla; sa <b>Alt</b> za fiksnu dužinu; sa <b>Shift</b> za "
+"rotaciju obe ručke"
 
 #: ../src/nodepath.cpp:3642
 msgid "Rotate nodes"
@@ -3712,7 +3826,8 @@ msgstr ""
 
 #: ../src/nodepath.cpp:4239
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
-msgstr "<b>Povlačite</b> čvorove ili ručke; <b>strelice</b> za pomeranje čvorova"
+msgstr ""
+"<b>Povlačite</b> čvorove ili ručke; <b>strelice</b> za pomeranje čvorova"
 
 #: ../src/nodepath.cpp:4262 ../src/nodepath.cpp:4274
 msgid "Select a single object to edit its nodes or handles."
@@ -3750,10 +3865,14 @@ msgstr[2] "<b>%i</b> od <b>%i</b> čvorova odabrano; %s. %s."
 
 #: ../src/nodepath.cpp:4287
 #, c-format
-msgid "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgid_plural "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgstr[0] "<b>%i</b> od <b>%i</b> čvora odabrano u <b>%i</b> od <b>%i</b> podkrivi. %s."
-msgstr[1] "<b>%i</b> od <b>%i</b> čvora odabrano u <b>%i</b> od <b>%i</b> podkrivi. %s."
+msgid ""
+"<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+msgid_plural ""
+"<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
+msgstr[0] ""
+"<b>%i</b> od <b>%i</b> čvora odabrano u <b>%i</b> od <b>%i</b> podkrivi. %s."
+msgstr[1] ""
+"<b>%i</b> od <b>%i</b> čvora odabrano u <b>%i</b> od <b>%i</b> podkrivi. %s."
 msgstr[2] ""
 "<b>%i</b> od <b>%i</b> čvorova odabrano u <b>%i</b> od <b>%i</b> podkrivi. %"
 "s."
@@ -3771,8 +3890,8 @@ msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
 msgstr ""
-"Prilagođavanje poluprečnika <b>vodoravnog zaobljenja</b>; <b>Ctrl</b> za istu "
-"vrednost uspravnog poluprečnika"
+"Prilagođavanje poluprečnika <b>vodoravnog zaobljenja</b>; <b>Ctrl</b> za "
+"istu vrednost uspravnog poluprečnika"
 
 #: ../src/object-edit.cpp:494
 msgid ""
@@ -3787,16 +3906,18 @@ msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
 msgstr ""
-"Podesi <b>širinu i visinu</b> pravougaonika; <b>Ctrl</b> zaključava odnos ili "
-"izduživanje jedne dimenzije"
+"Podesi <b>širinu i visinu</b> pravougaonika; <b>Ctrl</b> zaključava odnos "
+"ili izduživanje jedne dimenzije"
 
 #: ../src/object-edit.cpp:681
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
-msgstr "Podešavanje <b>širine</b> elipse, sa <b>Ctrl</b> za pravljenje kružnice"
+msgstr ""
+"Podešavanje <b>širine</b> elipse, sa <b>Ctrl</b> za pravljenje kružnice"
 
 #: ../src/object-edit.cpp:684
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
-msgstr "Podešavanje <b>visine</b> elipse, sa <b>Ctrl</b> za pravljenje kružnice"
+msgstr ""
+"Podešavanje <b>visine</b> elipse, sa <b>Ctrl</b> za pravljenje kružnice"
 
 #: ../src/object-edit.cpp:687
 msgid ""
@@ -3804,8 +3925,9 @@ msgid ""
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
 "segment"
 msgstr ""
-"Pozicija <b>početne tačke</b> luka ili segmenta; sa <b>Ctrl</b> za prijanjanje "
-"ugla; povlačenje ka <b>unutra</b> za elipsu luka, ka <b>spolja</b> za segment"
+"Pozicija <b>početne tačke</b> luka ili segmenta; sa <b>Ctrl</b> za "
+"prijanjanje ugla; povlačenje ka <b>unutra</b> za elipsu luka, ka <b>spolja</"
+"b> za segment"
 
 #: ../src/object-edit.cpp:690
 msgid ""
@@ -3813,8 +3935,9 @@ msgid ""
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
 "segment"
 msgstr ""
-"Pozicija <b>završne tačke</b> luka ili segmenta; sa <b>Ctrl</b> za prijanjanje "
-"ugla; povlačenje ka <b>unutra</b> za elipsu luka, ka <b>spolja</b> za segment"
+"Pozicija <b>završne tačke</b> luka ili segmenta; sa <b>Ctrl</b> za "
+"prijanjanje ugla; povlačenje ka <b>unutra</b> za elipsu luka, ka <b>spolja</"
+"b> za segment"
 
 #: ../src/object-edit.cpp:795
 msgid ""
@@ -3830,25 +3953,25 @@ msgid ""
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
 "randomize"
 msgstr ""
-"Podešavanje <b>unutrašnjeg poluprečnika</b> zvezde; sa <b>Ctrl</b> se zadržava "
-"jednakost krakova (bez iskrivljenja); sa <b>Shift</b> za zaobljivanje; sa "
-"<b>Alt</b> za nasumičnost"
+"Podešavanje <b>unutrašnjeg poluprečnika</b> zvezde; sa <b>Ctrl</b> se "
+"zadržava jednakost krakova (bez iskrivljenja); sa <b>Shift</b> za "
+"zaobljivanje; sa <b>Alt</b> za nasumičnost"
 
 #: ../src/object-edit.cpp:962
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
 msgstr ""
-"Zamotavanje/odmotavanje spirale <b>ka spolja</b>; sa <b>Ctrl</b> za prijanjanje "
-"ugla; sa <b>Alt</b> za konverziju/diverziju"
+"Zamotavanje/odmotavanje spirale <b>ka spolja</b>; sa <b>Ctrl</b> za "
+"prijanjanje ugla; sa <b>Alt</b> za konverziju/diverziju"
 
 #: ../src/object-edit.cpp:964
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
 msgstr ""
-"Zamotavanje/odmotavanje spirale <b>ka unutra</b>; sa <b>Ctrl</b> za prijanjanje "
-"ugla; sa <b>Shift</b> za skaliranje/rotaciju"
+"Zamotavanje/odmotavanje spirale <b>ka unutra</b>; sa <b>Ctrl</b> za "
+"prijanjanje ugla; sa <b>Shift</b> za skaliranje/rotaciju"
 
 #: ../src/object-edit.cpp:1001
 msgid "Adjust the <b>offset distance</b>"
@@ -3865,7 +3988,9 @@ msgstr "Jedinstvena <b>promena veličine</b> popune mustrom"
 
 #: ../src/object-edit.cpp:1035
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Rotiranje</b> popune mustrom; pritisnite <b>Ctrl</b> za prijanjanje na uglao"
+msgstr ""
+"<b>Rotiranje</b> popune mustrom; pritisnite <b>Ctrl</b> za prijanjanje na "
+"uglao"
 
 #: ../src/object-edit.cpp:1060
 msgid "Drag to resize the <b>flowed text frame</b>"
@@ -3880,7 +4005,8 @@ msgid "At least one of the objects is <b>not a path</b>, cannot combine."
 msgstr "Jedan od objekata <b>nije zatvorena kriva</b> i ne može se sjediniti."
 
 #: ../src/path-chemistry.cpp:71
-msgid "You cannot combine objects from <b>different groups</b> or <b>layers</b>."
+msgid ""
+"You cannot combine objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "Ne možete da sjedinite objekte u <b>različitim grupama</b> ili <b>slojevima</"
 "b>."
@@ -3943,11 +4069,14 @@ msgstr "Dodavanje izabranoj krivi"
 
 #: ../src/pen-context.cpp:555
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
-msgstr "<b>Klik</b> ili <b>klik i povlačenje</b>za zatvaranje i završavanje putanje."
+msgstr ""
+"<b>Klik</b> ili <b>klik i povlačenje</b>za zatvaranje i završavanje putanje."
 
 #: ../src/pen-context.cpp:565
-msgid "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
-msgstr "<b>Klik</b> ili <b>klik i povlačenje</b> za nastavak putanje od ovog čvora."
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
+msgstr ""
+"<b>Klik</b> ili <b>klik i povlačenje</b> za nastavak putanje od ovog čvora."
 
 #: ../src/pen-context.cpp:1062
 #, c-format
@@ -3955,8 +4084,8 @@ msgid ""
 "<b>%s</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, "
 "<b>Enter</b> to finish the path"
 msgstr ""
-"<b>%s</b>: ugao %3.2f&#176;, razdaljina %s; sa <b>Ctrl</b> za prijanjanje ugla, "
-"<b>Enter</b> za zatvaranje putanje"
+"<b>%s</b>: ugao %3.2f&#176;, razdaljina %s; sa <b>Ctrl</b> za prijanjanje "
+"ugla, <b>Enter</b> za zatvaranje putanje"
 
 #: ../src/pen-context.cpp:1087
 #, c-format
@@ -3964,8 +4093,8 @@ msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr ""
-"<b>Ručka putanje</b>: ugao %3.2f&#176;,dužina %s; sa <b>Ctrl</b> za prijanjanje "
-"ugla"
+"<b>Ručka putanje</b>: ugao %3.2f&#176;,dužina %s; sa <b>Ctrl</b> za "
+"prijanjanje ugla"
 
 #: ../src/pen-context.cpp:1117
 #, c-format
@@ -3973,8 +4102,8 @@ msgid ""
 "<b>%s</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, "
 "with <b>Shift</b> to move this handle only"
 msgstr ""
-"<b>%s</b>: ugao %3.2f&#176;, dužina %s; sa <b>Ctrl</b> za prijanjanje ugla, sa "
-"<b>Shift</b> za pomeranje samo ove ručke"
+"<b>%s</b>: ugao %3.2f&#176;, dužina %s; sa <b>Ctrl</b> za prijanjanje ugla, "
+"sa <b>Shift</b> za pomeranje samo ove ručke"
 
 #: ../src/pen-context.cpp:1153
 msgid "Drawing finished"
@@ -4049,7 +4178,9 @@ msgstr "<b>Ctrl</b>: izbor u grupi, pomeranje vodoravno/uspravno"
 
 #: ../src/select-context.cpp:658
 msgid "<b>Shift</b>: toggle select, force rubberband, disable snapping"
-msgstr "<b>Shift</b>:\tpostavlja i ukida izbor, forsira gumicu, isključuje prijanjanje"
+msgstr ""
+"<b>Shift</b>:\tpostavlja i ukida izbor, forsira gumicu, isključuje "
+"prijanjanje"
 
 #: ../src/select-context.cpp:659
 msgid "<b>Alt</b>: select under, move selected"
@@ -4114,7 +4245,8 @@ msgstr "Izaberite <b>objekte</b> za izdizanje."
 
 #: ../src/selection-chemistry.cpp:650 ../src/selection-chemistry.cpp:703
 #: ../src/selection-chemistry.cpp:738 ../src/selection-chemistry.cpp:797
-msgid "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
+msgid ""
+"You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "Ne mogu se izdići/zakloniti objekti iz <b>različitih grupa</b> ili "
 "<b>slojeva</b>."
@@ -4316,7 +4448,8 @@ msgstr "Objekat pretvoren u mustru"
 
 #: ../src/selection-chemistry.cpp:2241
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
-msgstr "Izaberite <b>objekat popunjen mustrom</b> za izdvajanje objekata iz mustre."
+msgstr ""
+"Izaberite <b>objekat popunjen mustrom</b> za izdvajanje objekata iz mustre."
 
 #: ../src/selection-chemistry.cpp:2294
 msgid "<b>No pattern fills</b> in the selection."
@@ -4336,7 +4469,8 @@ msgstr "Napravljena bitmapa"
 
 #: ../src/selection-chemistry.cpp:2573
 msgid "Select <b>object(s)</b> to create clippath or mask from."
-msgstr "Izaberite <b>objekte</b> od kojih će se napraviti uzorak krive ili maska."
+msgstr ""
+"Izaberite <b>objekte</b> od kojih će se napraviti uzorak krive ili maska."
 
 #: ../src/selection-chemistry.cpp:2576
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
@@ -4354,7 +4488,8 @@ msgstr "Postavljena maska"
 
 #: ../src/selection-chemistry.cpp:2713
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
-msgstr "Izaberite <b>objekte</b> iz kojih će se ukloniti uzorak krive ili maska."
+msgstr ""
+"Izaberite <b>objekte</b> iz kojih će se ukloniti uzorak krive ili maska."
 
 #: ../src/selection-chemistry.cpp:2781
 msgid "Release clipping path"
@@ -4434,7 +4569,8 @@ msgstr "Kliknite na izabrani objekat za promenu režima skaliranje/rotacija"
 
 #. no items
 #: ../src/selection-describer.cpp:103
-msgid "No objects selected. Click, Shift+click, or drag around objects to select."
+msgid ""
+"No objects selected. Click, Shift+click, or drag around objects to select."
 msgstr ""
 "Nema izabranih objekata. Klik, Shift+klik ili prevlačenje oko objekta za "
 "izbor."
@@ -4559,8 +4695,8 @@ msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
 msgstr ""
-"<b>Centar</b> rotacije i ukošavanja: povucite za premeštanje; promena veličine "
-"sa "
+"<b>Centar</b> rotacije i ukošavanja: povucite za premeštanje; promena "
+"veličine sa "
 
 #: ../src/seltrans.cpp:506
 msgid ""
@@ -4583,8 +4719,8 @@ msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "skew around the opposite side"
 msgstr ""
-"<b>Iskošavanje</b> izbora; sa <b>Ctrl</b> za prijanjanje ugla; sa <b>Shift</b> "
-"za rotiranje oko suprotne strane"
+"<b>Iskošavanje</b> izbora; sa <b>Ctrl</b> za prijanjanje ugla; sa <b>Shift</"
+"b> za rotiranje oko suprotne strane"
 
 #: ../src/seltrans.cpp:512
 msgid ""
@@ -4673,7 +4809,7 @@ msgstr "Uklopljiva površina"
 msgid "Flow excluded region"
 msgstr "Neuklopljiva površina "
 
-#: ../src/sp-flowtext.cpp:369
+#: ../src/sp-flowtext.cpp:370
 #, c-format
 msgid "<b>Flowed text</b> (%d character)"
 msgid_plural "<b>Flowed text</b> (%d characters)"
@@ -4681,7 +4817,7 @@ msgstr[0] "<b>Uklopljeni tekst</b> (%d znak)"
 msgstr[1] "<b>Uklopljeni tekst</b> (%d znaka)"
 msgstr[2] "<b>Uklopljeni tekst</b> (%d znakova)"
 
-#: ../src/sp-flowtext.cpp:371
+#: ../src/sp-flowtext.cpp:372
 #, c-format
 msgid "<b>Linked flowed text</b> (%d character)"
 msgid_plural "<b>Linked flowed text</b> (%d characters)"
@@ -4850,8 +4986,11 @@ msgstr "<b>Alt</b>: zaključava prečnik spirale"
 
 #: ../src/spiral-context.cpp:439
 #, c-format
-msgid "<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Spirala</b>: prečnik %s, ugao %5g&#176;; sa <b>Ctrl</b> za prijanjanje ugla"
+msgid ""
+"<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+msgstr ""
+"<b>Spirala</b>: prečnik %s, ugao %5g&#176;; sa <b>Ctrl</b> za prijanjanje "
+"ugla"
 
 #: ../src/spiral-context.cpp:460
 msgid "Create spiral"
@@ -4887,15 +5026,16 @@ msgstr "Izaberite <b>najmanje dve krive</b> za primenjivanje Bulove operacije."
 
 #: ../src/splivarot.cpp:115
 msgid "Select <b>at least 1 path</b> to perform a boolean union."
-msgstr "Izaberite <b>najmanje jednu krivu</b> za primenjivanje Bulovog sjedinjavanja."
+msgstr ""
+"Izaberite <b>najmanje jednu krivu</b> za primenjivanje Bulovog sjedinjavanja."
 
 #: ../src/splivarot.cpp:121
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
 msgstr ""
-"Izaberite <b>tačno dve krive</b> za primenjivanje operacije različitosti, XOR, "
-"podele ili isecanja krive."
+"Izaberite <b>tačno dve krive</b> za primenjivanje operacije različitosti, "
+"XOR, podele ili isecanja krive."
 
 #: ../src/splivarot.cpp:138 ../src/splivarot.cpp:153
 msgid ""
@@ -4906,8 +5046,10 @@ msgstr ""
 "XOR, podelu ili isecanje krive."
 
 #: ../src/splivarot.cpp:183
-msgid "One of the objects is <b>not a path</b>, cannot perform boolean operation."
-msgstr "Jedan od objekata <b>nije kriva</b>, nije moguće primeniti Bulovu operaciju."
+msgid ""
+"One of the objects is <b>not a path</b>, cannot perform boolean operation."
+msgstr ""
+"Jedan od objekata <b>nije kriva</b>, nije moguće primeniti Bulovu operaciju."
 
 #: ../src/splivarot.cpp:590
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
@@ -4978,13 +5120,16 @@ msgstr "<b>Ctrl</b>: prijanja na ugao; zadrži radijalne krake"
 
 #: ../src/star-context.cpp:448
 #, c-format
-msgid "<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Poligon</b>: poluprečnik %s, ugao %5g&#176;; <b>Ctrl</b> prijanja na ugao"
+msgid ""
+"<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+msgstr ""
+"<b>Poligon</b>: poluprečnik %s, ugao %5g&#176;; <b>Ctrl</b> prijanja na ugao"
 
 #: ../src/star-context.cpp:449
 #, c-format
 msgid "<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Zvezda</b>: poluprečnik %s, ugao %5g&#176;; <b>Ctrl</b> prijanja na ugao"
+msgstr ""
+"<b>Zvezda</b>: poluprečnik %s, ugao %5g&#176;; <b>Ctrl</b> prijanja na ugao"
 
 #: ../src/star-context.cpp:472
 msgid "Create star"
@@ -5037,7 +5182,7 @@ msgstr "Uklanja tekst sa krive"
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Izaberite <b>tekst</b> za koji će biti uklonjeno uklapanje slova."
 
-#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4154
+#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4156
 msgid "Remove manual kerns"
 msgstr "Uklonjeni ručni kerninzi"
 
@@ -5046,8 +5191,8 @@ msgid ""
 "Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text "
 "into frame."
 msgstr ""
-"Izaberite <b>tekst</b> i jednu ili više <b>krivu ili oblik</b> za postavljanje "
-"teksta u okvir."
+"Izaberite <b>tekst</b> i jednu ili više <b>krivu ili oblik</b> za "
+"postavljanje teksta u okvir."
 
 #: ../src/text-chemistry.cpp:357
 msgid "Flow text into shape"
@@ -5067,7 +5212,8 @@ msgstr "Izaberite <b>uklopljeni tekst</b> za konverziju."
 
 #: ../src/text-chemistry.cpp:475
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
-msgstr "Uklopljeni tekst mora biti <b>vidljiv</b> ukoliko želite da ga konvertujete."
+msgstr ""
+"Uklopljeni tekst mora biti <b>vidljiv</b> ukoliko želite da ga konvertujete."
 
 #: ../src/text-chemistry.cpp:503
 msgid "Convert flowed text to text"
@@ -5079,13 +5225,15 @@ msgstr "U izboru <b>nema uklopljenog teksta</b> za konvertovanje."
 
 #: ../src/text-context.cpp:448
 msgid "<b>Click</b> to edit the text, <b>drag</b> to select part of the text."
-msgstr "<b>Klik</b> za uređivanje teksta, <b>prevlačenje</b> za izbor dela teksta."
+msgstr ""
+"<b>Klik</b> za uređivanje teksta, <b>prevlačenje</b> za izbor dela teksta."
 
 #: ../src/text-context.cpp:450
-msgid "<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
+msgid ""
+"<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
 msgstr ""
-"<b>Klik</b> za uređivanje uklopljenog teksta, <b>prevlačenje</b> za izbor dela "
-"teksta."
+"<b>Klik</b> za uređivanje uklopljenog teksta, <b>prevlačenje</b> za izbor "
+"dela teksta."
 
 #: ../src/text-context.cpp:503
 msgid "Create text"
@@ -5223,8 +5371,8 @@ msgid ""
 "nodes to select them, then <b>drag</b> nodes and handles. <b>Click</b> on an "
 "object to select."
 msgstr ""
-"Za uređivanje krive <b>klik</b>, <b>Shift+klik</b> ili <b>povlačenje preko</b> "
-"čvorova za izbor, zatim <b>povlačenje</b> čvorova i ručki. <b>Klik</b> na "
+"Za uređivanje krive <b>klik</b>, <b>Shift+klik</b> ili <b>povlačenje preko</"
+"b> čvorova za izbor, zatim <b>povlačenje</b> čvorova i ručki. <b>Klik</b> na "
 "objekat za izbor."
 
 #: ../src/tools-switch.cpp:139
@@ -5232,8 +5380,8 @@ msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
 "resize. <b>Click</b> to select."
 msgstr ""
-"Crtanje pravougaonika <b>povlačenjem</b>. <b>Povlačenje kvačica</b> za zaobljene "
-"uglove i promenu veličine. <b>Klik</b> za izbor."
+"Crtanje pravougaonika <b>povlačenjem</b>. <b>Povlačenje kvačica</b> za "
+"zaobljene uglove i promenu veličine. <b>Klik</b> za izbor."
 
 #: ../src/tools-switch.cpp:145
 msgid ""
@@ -5256,48 +5404,48 @@ msgid ""
 "<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral "
 "shape. <b>Click</b> to select."
 msgstr ""
-"Crtanje spirale <b>povlačenjem</b>. Uređivanje spirale <b>povlačenjem kvačica</"
-"b>. <b>Klik</b> za izbor."
+"Crtanje spirale <b>povlačenjem</b>. Uređivanje spirale <b>povlačenjem "
+"kvačica</b>. <b>Klik</b> za izbor."
 
 #: ../src/tools-switch.cpp:163
 msgid ""
 "<b>Drag</b> to create a freehand line. Start drawing with <b>Shift</b> to "
 "append to selected path."
 msgstr ""
-"Crtanje krive linije <b>povlačenjem</b>. Započnite crtanje sa <b>Shifta</b> za "
-"dodavanje na izabranu krivu."
+"Crtanje krive linije <b>povlačenjem</b>. Započnite crtanje sa <b>Shifta</b> "
+"za dodavanje na izabranu krivu."
 
 #: ../src/tools-switch.cpp:169
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to start a path; with <b>Shift</b> to "
 "append to selected path."
 msgstr ""
-"<b>Klik</b> ili <b>klik i povlačenje</b> za počinjanje krive; sa <b>Shift</b> "
-"za dodavanje na izabranu krivu."
+"<b>Klik</b> ili <b>klik i povlačenje</b> za počinjanje krive; sa <b>Shift</"
+"b> za dodavanje na izabranu krivu."
 
 #: ../src/tools-switch.cpp:175
 msgid ""
 "<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow "
 "keys adjust width, <b>up</b>/<b>down</b> adjust angle."
 msgstr ""
-"Crtanje kaligrafske linije <b>povlačenjem</b>. Strelica <b>levo</b>/<b>desno</"
-"b> podešava širinu, <b>gore</b>/<b>dole</b> podešava ugao."
+"Crtanje kaligrafske linije <b>povlačenjem</b>. Strelica <b>levo</b>/"
+"<b>desno</b> podešava širinu, <b>gore</b>/<b>dole</b> podešava ugao."
 
 #: ../src/tools-switch.cpp:187
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, "
 "<b>drag handles</b> to adjust gradients."
 msgstr ""
-"<b>Pravljenje</b> ili <b>dvoklik</b> za pravljenje preliva za izabrani objekat, "
-"<b>povlačenje ručki</b> za uređivanje preliva."
+"<b>Pravljenje</b> ili <b>dvoklik</b> za pravljenje preliva za izabrani "
+"objekat, <b>povlačenje ručki</b> za uređivanje preliva."
 
 #: ../src/tools-switch.cpp:193
 msgid ""
 "<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to "
 "zoom out."
 msgstr ""
-"<b>Klik</b> ili <b>prevlačenje preko površine</b> za uvećanje, <b>Shift+klik</"
-"b> za umanjenje."
+"<b>Klik</b> ili <b>prevlačenje preko površine</b> za uvećanje, <b>Shift"
+"+klik</b> za umanjenje."
 
 #: ../src/tools-switch.cpp:205
 msgid "<b>Click and drag</b> between shapes to create a connector."
@@ -5478,7 +5626,7 @@ msgid "Remove overlaps"
 msgstr "Ukloni preklapanja"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:520
-#: ../src/widgets/toolbox.cpp:4241
+#: ../src/widgets/toolbox.cpp:4243
 msgid "Arrange connector network"
 msgstr "Raspoređena mreža poveznica"
 
@@ -5613,7 +5761,7 @@ msgid ""
 msgstr "Pomeranje objekata tek toliko da im se kontejneri ne preklapaju"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:863
-#: ../src/widgets/toolbox.cpp:4343
+#: ../src/widgets/toolbox.cpp:4345
 msgid "Nicely arrange selected connector network"
 msgstr "Precizno raspoređuje mrežu izabranih poveznica"
 
@@ -5694,7 +5842,8 @@ msgid "Background color"
 msgstr "Boja pozadine"
 
 #: ../src/ui/dialog/document-properties.cpp:196
-msgid "Color and transparency of the page background (also used for bitmap export)"
+msgid ""
+"Color and transparency of the page background (also used for bitmap export)"
 msgstr ""
 "Boja i providnost pozadine strane (takođe se koristi za izvoz u bitmapiranu "
 "sliku)"
@@ -5956,7 +6105,8 @@ msgid "Controls max. snapping distance from object"
 msgstr "Kontrola maksimalne udaljenosti prijanjanja uz objekat"
 
 #: ../src/ui/dialog/document-properties.cpp:322
-msgid "If set, objects snap to the nearest object when moved, regardless of distance"
+msgid ""
+"If set, objects snap to the nearest object when moved, regardless of distance"
 msgstr ""
 "Ako je uključeno, objekti prijanjaju uz najbliži objekat pri pomeranju, "
 "zanemarujući udaljenost"
@@ -6012,7 +6162,8 @@ msgid "Controls max. snapping distance from guides"
 msgstr "Kontrola maksimalne udaljenosti prijanjanja uz vođice"
 
 #: ../src/ui/dialog/document-properties.cpp:342
-msgid "If set, objects snap to the nearest guide when moved, regardless of distance"
+msgid ""
+"If set, objects snap to the nearest guide when moved, regardless of distance"
 msgstr ""
 "Ako je uključeno, objekti prijanjaju uz najbližu vođicu pri pomeranju, "
 "zanemarujući udaljenost"
@@ -6184,7 +6335,8 @@ msgid "Click/drag threshold:"
 msgstr "Prag klika/pomeraja:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:149
-msgid "Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
+msgid ""
+"Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
 msgstr ""
 "Maksimalan pomeraj (u pikselima ekrana) koji se tretira kao klik, a ne kao "
 "pomeraj"
@@ -6215,7 +6367,9 @@ msgstr "Pomeraj za:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:161
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
-msgstr "Pritiskanjem Ctrl+strelica pomera za ovoliku razdaljinu (u ekranskim pikselima)"
+msgstr ""
+"Pritiskanjem Ctrl+strelica pomera za ovoliku razdaljinu (u ekranskim "
+"pikselima)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:163
 msgid "Acceleration:"
@@ -6242,8 +6396,8 @@ msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
 msgstr ""
-"Koliko brzo se platno pomera kada uhvatite spoljašnjost platna (0 za isključeno "
-"automatsko pomeranje)"
+"Koliko brzo se platno pomera kada uhvatite spoljašnjost platna (0 za "
+"isključeno automatsko pomeranje)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:170
 #: ../src/ui/dialog/tracedialog.cpp:409 ../src/ui/dialog/tracedialog.cpp:442
@@ -6257,8 +6411,8 @@ msgid ""
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
 "Koliko blizu (u ekranskim pikselima) je potrebno da kursor bude uz ivicu "
-"platna za aktiviranje automatskog pomeranja; pozitivna vrednost je van platna, "
-"negativna je za unutrašnjost platna"
+"platna za aktiviranje automatskog pomeranja; pozitivna vrednost je van "
+"platna, negativna je za unutrašnjost platna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:176
 msgid "Steps"
@@ -6281,15 +6435,18 @@ msgid "> and < scale by:"
 msgstr "„>“ i „<“ menjaju veličinu za:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:183
-msgid "Pressing > or < scales selection up or down by this increment (in px units)"
-msgstr "Pritiskanjem „>“ ili „<“ menja se veličina izbora za ovaj korak (u pikselima)"
+msgid ""
+"Pressing > or < scales selection up or down by this increment (in px units)"
+msgstr ""
+"Pritiskanjem „>“ ili „<“ menja se veličina izbora za ovaj korak (u pikselima)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:185
 msgid "Inset/Outset by:"
 msgstr "Skupljanje/širenje za:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:186
-msgid "Inset and Outset commands displace the path by this distance (in px units)"
+msgid ""
+"Inset and Outset commands displace the path by this distance (in px units)"
 msgstr "Skupljanje i Širenje pomera krivu za ovu razdaljinu (u pikselima)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:187
@@ -6319,8 +6476,8 @@ msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
 msgstr ""
-"Rotacija sa pritisnutim Ctrl prijanja za ovoliko stepeni; takođe, pritiskanje "
-"[ ili ] rotira objekat za ovu vrednost"
+"Rotacija sa pritisnutim Ctrl prijanja za ovoliko stepeni; takođe, "
+"pritiskanje [ ili ] rotira objekat za ovu vrednost"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:198
 msgid "Zoom in/out by:"
@@ -6339,7 +6496,8 @@ msgid "Show selection cue"
 msgstr "Prikaži obeleživač"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:206
-msgid "Whether selected objects display a selection cue (the same as in selector)"
+msgid ""
+"Whether selected objects display a selection cue (the same as in selector)"
 msgstr "Uvek kada se za izabrani objekat prikazuje oznaka (kao kod izbornika)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:212
@@ -6469,7 +6627,8 @@ msgstr "Suprotne ivice kontejnera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:335
 msgid "Default scale origin will be on the bounding box of the item"
-msgstr "Podrazumevana osnova za promenu veličine će biti okvir kontejnera objekta"
+msgstr ""
+"Podrazumevana osnova za promenu veličine će biti okvir kontejnera objekta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:336
 msgid "Farthest opposite node"
@@ -6513,8 +6672,9 @@ msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
 msgstr ""
-"Ova vrednost se odnosi na jačinu umekšavanja primenjenih na iscrtavanje krive "
-"slobodnom rukom; manje vrednosti proizvode nazubljenije linije sa više čvorova"
+"Ova vrednost se odnosi na jačinu umekšavanja primenjenih na iscrtavanje "
+"krive slobodnom rukom; manje vrednosti proizvode nazubljenije linije sa više "
+"čvorova"
 
 #. Pen
 #: ../src/ui/dialog/inkscape-preferences.cpp:373 ../src/verbs.cpp:2212
@@ -6555,7 +6715,9 @@ msgstr "Poveznica"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:395
 msgid "If on, connector attachment points will not be shown for text objects"
-msgstr "Ako je uključeno, tačka kačenja poveznicom neće biti prikazana za tekst objekat"
+msgstr ""
+"Ako je uključeno, tačka kačenja poveznicom neće biti prikazana za tekst "
+"objekat"
 
 #. Dropper
 #: ../src/ui/dialog/inkscape-preferences.cpp:397 ../src/verbs.cpp:2222
@@ -6690,8 +6852,8 @@ msgid ""
 "example, a rotated clone will move in a different direction than its "
 "original."
 msgstr ""
-"Svaki klon se pomera u skladu sa vrednošću njegovog transform= atributa. Npr, "
-"rotirani klon će se pomeriti u suprotnom pravcu od originala."
+"Svaki klon se pomera u skladu sa vrednošću njegovog transform= atributa. "
+"Npr, rotirani klon će se pomeriti u suprotnom pravcu od originala."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:463
 msgid "When the original is deleted, its clones:"
@@ -6737,17 +6899,20 @@ msgstr "Pri promeni veličine objekta, proporcijalno se menja i širina linije"
 #: ../src/ui/dialog/inkscape-preferences.cpp:484
 #: ../src/widgets/select-toolbar.cpp:516
 msgid "When scaling rectangles, scale the radii of rounded corners"
-msgstr "Pri promeni veličine pravougaonika, menja se i poluprečnik zaobljenih uglova"
+msgstr ""
+"Pri promeni veličine pravougaonika, menja se i poluprečnik zaobljenih uglova"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:486
 #: ../src/widgets/select-toolbar.cpp:528
 msgid "Transform gradients (in fill or stroke) along with the objects"
-msgstr "Transformacija preliva (u popuni ili ivičnoj linije) zajedno sa objektom"
+msgstr ""
+"Transformacija preliva (u popuni ili ivičnoj linije) zajedno sa objektom"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:488
 #: ../src/widgets/select-toolbar.cpp:540
 msgid "Transform patterns (in fill or stroke) along with the objects"
-msgstr "Transformacija mustre (u popuni ili ivičnoj liniji) zajedno sa objektom"
+msgstr ""
+"Transformacija mustre (u popuni ili ivičnoj liniji) zajedno sa objektom"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:489
 msgid "Store transformation:"
@@ -6851,7 +7016,8 @@ msgstr "Ctrl+A, Tab, Shift+Tab:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:538
 msgid "Make keyboard selection commands work on objects in all layers"
-msgstr "Omogućava da izbor objekata pomoću tastature funkcioniše u svim slojevima"
+msgstr ""
+"Omogućava da izbor objekata pomoću tastature funkcioniše u svim slojevima"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:540
 msgid "Make keyboard selection commands work on objects in current layer only"
@@ -6880,8 +7046,8 @@ msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked group or layer)"
 msgstr ""
-"Isključite ovu opciju da bi mogli da izaberete zaključani objekat (bilo njega "
-"lično ili prelaskom u zaključanu grupu ili sloj)"
+"Isključite ovu opciju da bi mogli da izaberete zaključani objekat (bilo "
+"njega lično ili prelaskom u zaključanu grupu ili sloj)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid ""
@@ -6901,7 +7067,8 @@ msgstr "Podrazumevana rezolucija za izvoz:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:559
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
-msgstr "Podrazumevana rezolucija bitmape (tačaka po inču) u Izvoznom prozorčetu"
+msgstr ""
+"Podrazumevana rezolucija bitmape (tačaka po inču) u Izvoznom prozorčetu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:560
 msgid "Import bitmap as <image>"
@@ -6977,10 +7144,12 @@ msgstr "Isecanje i maskiranje:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:580
 msgid "Use the topmost selected object as a clipping path or mask"
-msgstr "Upotreba najvišeg izabranog objekta kao oblika za isecanje ili maskiranje"
+msgstr ""
+"Upotreba najvišeg izabranog objekta kao oblika za isecanje ili maskiranje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:582
-msgid "Uncheck this to use the bottom selected object as the clipping path or mask"
+msgid ""
+"Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
 "Isključite ovu opciju da bi se izabrani objekat na dnu koristio kao oblik za "
 "isecanje ili maskiranje"
@@ -7313,7 +7482,8 @@ msgstr "Optimizovanje putanje"
 
 #: ../src/ui/dialog/tracedialog.cpp:591
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
-msgstr "Pokušaj da se optimizuje putanja spajanjem bliskih Bezierovih segmenata krive"
+msgstr ""
+"Pokušaj da se optimizuje putanja spajanjem bliskih Bezierovih segmenata krive"
 
 #: ../src/ui/dialog/tracedialog.cpp:599
 msgid ""
@@ -7419,16 +7589,16 @@ msgid ""
 "Horizontal skew angle (positive = counterclockwise), or absolute "
 "displacement, or percentage displacement"
 msgstr ""
-"Ugao vodoravnog krivljenja (pozitivan = u obrnutom smeru od kazaljke na satu), "
-"ili apsolutno pomeranje, ili procentualno pomeranje"
+"Ugao vodoravnog krivljenja (pozitivan = u obrnutom smeru od kazaljke na "
+"satu), ili apsolutno pomeranje, ili procentualno pomeranje"
 
 #: ../src/ui/dialog/transformation.cpp:92
 msgid ""
 "Vertical skew angle (positive = counterclockwise), or absolute displacement, "
 "or percentage displacement"
 msgstr ""
-"Ugao uspravnog krivljenja (pozitivan = u obrnutom smeru od kazaljke na satu), "
-"ili apsolutno pomeranje, ili procentualno pomeranje"
+"Ugao uspravnog krivljenja (pozitivan = u obrnutom smeru od kazaljke na "
+"satu), ili apsolutno pomeranje, ili procentualno pomeranje"
 
 #: ../src/ui/dialog/transformation.cpp:95
 msgid "Transformation matrix element A"
@@ -7568,7 +7738,8 @@ msgstr "Neuspešno povezivanje sa džeber serverom <b>%1</b>"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:210
 msgid "Establishing connection to Jabber server <b>%1</b> as user <b>%2</b>"
-msgstr "Uspostavljanje veze sa džeber serverom <b>%1</b> kao korisnik <b>%2</b>"
+msgstr ""
+"Uspostavljanje veze sa džeber serverom <b>%1</b> kao korisnik <b>%2</b>"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:222
 msgid "Authentication failed on Jabber server <b>%1</b> as <b>%2</b>"
@@ -7577,7 +7748,8 @@ msgstr "Neuspela identifikacija na džeber server <b>%1</b> kao <b>%2</b>"
 #: ../src/ui/dialog/whiteboard-connect.cpp:227
 #: ../src/ui/dialog/whiteboard-connect.cpp:265
 msgid "SSL initialization failed when connecting to Jabber server <b>%1</b>"
-msgstr "SSL inicijalizacija nije uspela pri povezivanju sa džeber serverom <b>%1</b>"
+msgstr ""
+"SSL inicijalizacija nije uspela pri povezivanju sa džeber serverom <b>%1</b>"
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:233
 #: ../src/ui/dialog/whiteboard-connect.cpp:271
@@ -7785,9 +7957,9 @@ msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
 msgstr ""
-"<b>Dobro došli u Inkscape!</b> Koristite oblike ili alat za crtanje slobodnom "
-"rukom da bi iscrtali objekte; koristite izbornik (strelicu) za njihovo "
-"pomeranje i promenu oblika."
+"<b>Dobro došli u Inkscape!</b> Koristite oblike ili alat za crtanje "
+"slobodnom rukom da bi iscrtali objekte; koristite izbornik (strelicu) za "
+"njihovo pomeranje i promenu oblika."
 
 #: ../src/ui/view/edit-widget.cpp:1196 ../src/widgets/desktop-widget.cpp:562
 #, c-format
@@ -8351,7 +8523,8 @@ msgstr "_Oporavak"
 
 #: ../src/verbs.cpp:1971
 msgid "Revert to the last saved version of document (changes will be lost)"
-msgstr "Povraćaj poslednje sačuvane verzije dokumenta (izmene će biti zanemarene)"
+msgstr ""
+"Povraćaj poslednje sačuvane verzije dokumenta (izmene će biti zanemarene)"
 
 #: ../src/verbs.cpp:1972
 msgid "_Save"
@@ -8492,7 +8665,8 @@ msgstr "U_baci"
 
 #: ../src/verbs.cpp:2009
 msgid "Paste objects from clipboard to mouse point, or paste text"
-msgstr "Ubacuje objekte iz klipborda na poziciju kursora miša, odnosno ubacuje tekst"
+msgstr ""
+"Ubacuje objekte iz klipborda na poziciju kursora miša, odnosno ubacuje tekst"
 
 #: ../src/verbs.cpp:2010
 msgid "Paste _Style"
@@ -8655,8 +8829,8 @@ msgstr "Izv_rni izbor"
 #: ../src/verbs.cpp:2049
 msgid "Invert selection (unselect what is selected and select everything else)"
 msgstr ""
-"Izvrtanje izbora (uklanja se izbor onoga što je izabrano i vrši se izbor svega "
-"što nije bilo izabrano)"
+"Izvrtanje izbora (uklanja se izbor onoga što je izabrano i vrši se izbor "
+"svega što nije bilo izabrano)"
 
 #: ../src/verbs.cpp:2050
 msgid "Invert in All Layers"
@@ -9092,7 +9266,9 @@ msgstr "_Pretvori u tekst"
 
 #: ../src/verbs.cpp:2181
 msgid "Convert flowed text to regular text object (preserves appearance)"
-msgstr "Pretvara izabrani uklopljeni tekst u regularan tekst objekat (zadržava izgled)"
+msgstr ""
+"Pretvara izabrani uklopljeni tekst u regularan tekst objekat (zadržava "
+"izgled)"
 
 #: ../src/verbs.cpp:2183
 msgid "Flip _Horizontal"
@@ -9123,10 +9299,11 @@ msgid "Remove mask from selection"
 msgstr "Uklanja masku iz izbora"
 
 #: ../src/verbs.cpp:2193
-msgid "Apply clipping path to selection (using the topmost object as clipping path)"
+msgid ""
+"Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
-"Primenjuje isecanje putanjom na izbor (koristeći najviši objekat kao isecajuću "
-"putanju)"
+"Primenjuje isecanje putanjom na izbor (koristeći najviši objekat kao "
+"isecajuću putanju)"
 
 #: ../src/verbs.cpp:2195
 msgid "Remove clipping path from selection"
@@ -9610,7 +9787,8 @@ msgstr "_Osobine objekta..."
 
 #: ../src/verbs.cpp:2334
 msgid "Edit the ID, locked and visible status, and other object properties"
-msgstr "Uređivanje ID-a, zaključavanje i status vidljivosti, i druge osobine objekta"
+msgstr ""
+"Uređivanje ID-a, zaključavanje i status vidljivosti, i druge osobine objekta"
 
 #: ../src/verbs.cpp:2337
 msgid "_Instant Messaging..."
@@ -9782,7 +9960,8 @@ msgid "Fit Page to Selection or Drawing"
 msgstr "Prilagodi stranu izboru ili crtežu"
 
 #: ../src/verbs.cpp:2387
-msgid "Fit the page to the current selection or the drawing if there is no selection"
+msgid ""
+"Fit the page to the current selection or the drawing if there is no selection"
 msgstr ""
 "Prilagođava veličine strane trenutnom izboru ili crtežu ako ništa nije "
 "izabrano"
@@ -9833,7 +10012,7 @@ msgstr "Veličina fonta:"
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3730
+#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3732
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbVvDdĐđLJljČč12368.;/()"
 
@@ -9897,8 +10076,8 @@ msgid ""
 "If the gradient is used by more than one object, create a copy of it for the "
 "selected object(s)"
 msgstr ""
-"Ako preliv koristi više od jednog objekta, napravi njegovu kopiju za izabrane "
-"objekte"
+"Ako preliv koristi više od jednog objekta, napravi njegovu kopiju za "
+"izabrane objekte"
 
 #: ../src/widgets/gradient-toolbar.cpp:494
 msgid "Edit the stops of the gradient"
@@ -10044,12 +10223,15 @@ msgstr "Ukloni boju (učini je neodređenom da može biti nasleđena)"
 msgid ""
 "Any path self-intersections or subpaths create holes in the fill (fill-rule: "
 "evenodd)"
-msgstr "Bilo koje preklapanje krive objekta pravi rupe u popuni (fill-rule: evenodd)"
+msgstr ""
+"Bilo koje preklapanje krive objekta pravi rupe u popuni (fill-rule: evenodd)"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: ../src/widgets/paint-selector.cpp:201
-msgid "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
-msgstr "Popuna je jednobojna dok podkriva ne bude izokrenuta (fill-rule: nonzero)"
+msgid ""
+"Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
+msgstr ""
+"Popuna je jednobojna dok podkriva ne bude izokrenuta (fill-rule: nonzero)"
 
 #: ../src/widgets/paint-selector.cpp:516
 msgid "No objects"
@@ -10072,8 +10254,8 @@ msgid ""
 "Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to create a new "
 "pattern from selection."
 msgstr ""
-"Koristite <b>Objekat &gt; Mustra &gt; Objekat u Mustru</b> za pravljenje nove "
-"mustre od izbora."
+"Koristite <b>Objekat &gt; Mustra &gt; Objekat u Mustru</b> za pravljenje "
+"nove mustre od izbora."
 
 #: ../src/widgets/select-toolbar.cpp:227
 msgid "Transform by toolbar"
@@ -10117,8 +10299,8 @@ msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed "
 "(moved, scaled, rotated, or skewed)."
 msgstr ""
-"<b>Prelivi</b> su ostali <b>nepromenjeni</b> kada su objekti kojima pripadaju "
-"transformisani (pomereni, skalirani, rotirani ili iskrivljeni)."
+"<b>Prelivi</b> su ostali <b>nepromenjeni</b> kada su objekti kojima "
+"pripadaju transformisani (pomereni, skalirani, rotirani ili iskrivljeni)."
 
 #: ../src/widgets/select-toolbar.cpp:375
 msgid ""
@@ -10520,7 +10702,8 @@ msgstr "Unutrašnji poluprečnik:"
 
 #: ../src/widgets/toolbox.cpp:1899
 msgid "Radius of the innermost revolution (relative to the spiral size)"
-msgstr "Poluprečnik najmanje unutrašnje revolucije (odnosi se na veličinu spirale)"
+msgstr ""
+"Poluprečnik najmanje unutrašnje revolucije (odnosi se na veličinu spirale)"
 
 #: ../src/widgets/toolbox.cpp:2206 ../src/widgets/toolbox.cpp:2358
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
@@ -10535,8 +10718,8 @@ msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
-"Koliko brzina tanji potez (veće od 0 čini brze poteze tanjim, manje od 0 čini "
-"ih debljim. 0 čini debljinu nezavisnu od brzine poteza)"
+"Koliko brzina tanji potez (veće od 0 čini brze poteze tanjim, manje od 0 "
+"čini ih debljim. 0 čini debljinu nezavisnu od brzine poteza)"
 
 #: ../src/widgets/toolbox.cpp:2226 ../src/widgets/toolbox.cpp:2381
 msgid "Angle:"
@@ -10604,10 +10787,6 @@ msgstr ""
 msgid "Pressure"
 msgstr "Pritisak"
 
-#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr "Nivo pritiska detektovanog na ulaznom uređaju utiče na širinu poteza olovke"
-
 #: ../src/widgets/toolbox.cpp:2303
 msgid "Tilt"
 msgstr "Nagib"
@@ -10654,8 +10833,10 @@ msgid "Open arc"
 msgstr "Otvoreni luk"
 
 #: ../src/widgets/toolbox.cpp:2808
-msgid "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
-msgstr "Promena između luka (otvorene linije) i dela (zatvorena linija sa dva ugla)"
+msgid ""
+"Switch between arc (unclosed shape) and segment (closed shape with two radii)"
+msgstr ""
+"Promena između luka (otvorene linije) i dela (zatvorena linija sa dva ugla)"
 
 #: ../src/widgets/toolbox.cpp:2827
 msgid "Make whole"
@@ -10665,11 +10846,11 @@ msgstr "Upotpuni"
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Zatvori liniju u elipsu, ne kao luk ili deo"
 
-#: ../src/widgets/toolbox.cpp:3068
+#: ../src/widgets/toolbox.cpp:3070
 msgid "Pick alpha"
 msgstr "Uzmi providnost"
 
-#: ../src/widgets/toolbox.cpp:3069
+#: ../src/widgets/toolbox.cpp:3071
 msgid ""
 "Pick both the color and the alpha (transparency) under cursor; otherwise, "
 "pick only the visible color premultiplied by alpha"
@@ -10677,113 +10858,115 @@ msgstr ""
 "Uzima boju i providnost pod kursorom; u suprotnom, uzima samo vidljive boje "
 "pomnožene providnošću"
 
-#: ../src/widgets/toolbox.cpp:3084
+#: ../src/widgets/toolbox.cpp:3086
 msgid "Set alpha"
 msgstr "Postavi providnost"
 
-#: ../src/widgets/toolbox.cpp:3085
-msgid "If alpha was picked, assign it to selection as fill or stroke transparency"
-msgstr "Ako je uzeta providnost, primeni je na izbor kao providnost popune ili linije"
+#: ../src/widgets/toolbox.cpp:3087
+msgid ""
+"If alpha was picked, assign it to selection as fill or stroke transparency"
+msgstr ""
+"Ako je uzeta providnost, primeni je na izbor kao providnost popune ili linije"
 
-#: ../src/widgets/toolbox.cpp:3384
+#: ../src/widgets/toolbox.cpp:3386
 msgid "Text: Change font family"
 msgstr "Tekst: Promenjena familija fonta"
 
-#: ../src/widgets/toolbox.cpp:3467
+#: ../src/widgets/toolbox.cpp:3469
 msgid "Text: Change alignment"
 msgstr "Tekst: Promenjeno poravnanje"
 
-#: ../src/widgets/toolbox.cpp:3513
+#: ../src/widgets/toolbox.cpp:3515
 msgid "Text: Change font style"
 msgstr "Tekst: Promenjen stil fonta"
 
-#: ../src/widgets/toolbox.cpp:3560
+#: ../src/widgets/toolbox.cpp:3562
 msgid "Text: Change orientation"
 msgstr "Tekst: Promenjena orijentacija"
 
-#: ../src/widgets/toolbox.cpp:3656
+#: ../src/widgets/toolbox.cpp:3658
 msgid "Text: Change font size"
 msgstr "Tekst: Promenjena veličina fonta"
 
-#: ../src/widgets/toolbox.cpp:3839
+#: ../src/widgets/toolbox.cpp:3841
 msgid ""
 "This font is currently not installed on your system. Inkscape will use the "
 "default font instead."
 msgstr ""
-"Ovaj font trenutno nije instaliran na Vašem sistemu. Inkscape će umesto njega "
-"koristiti podrazumevani font."
+"Ovaj font trenutno nije instaliran na Vašem sistemu. Inkscape će umesto "
+"njega koristiti podrazumevani font."
 
-#: ../src/widgets/toolbox.cpp:3877
+#: ../src/widgets/toolbox.cpp:3879
 msgid "Align left"
 msgstr "Levo poravnanje"
 
-#: ../src/widgets/toolbox.cpp:3888
+#: ../src/widgets/toolbox.cpp:3890
 msgid "Center"
 msgstr "Centralno poravnanje"
 
-#: ../src/widgets/toolbox.cpp:3899
+#: ../src/widgets/toolbox.cpp:3901
 msgid "Align right"
 msgstr "Desno poravnanje"
 
-#: ../src/widgets/toolbox.cpp:3910
+#: ../src/widgets/toolbox.cpp:3912
 msgid "Justify"
 msgstr "Obostrano poravnanje"
 
-#: ../src/widgets/toolbox.cpp:3926
+#: ../src/widgets/toolbox.cpp:3928
 msgid "Bold"
 msgstr "Podebljano"
 
-#: ../src/widgets/toolbox.cpp:3937
+#: ../src/widgets/toolbox.cpp:3939
 msgid "Italic"
 msgstr "Kurziv"
 
-#: ../src/widgets/toolbox.cpp:4035
+#: ../src/widgets/toolbox.cpp:4037
 msgid "Spacing between letters"
 msgstr "Razmak između karaktera"
 
-#: ../src/widgets/toolbox.cpp:4056
+#: ../src/widgets/toolbox.cpp:4058
 msgid "Spacing between lines"
 msgstr "Razmak između linija"
 
-#: ../src/widgets/toolbox.cpp:4085
+#: ../src/widgets/toolbox.cpp:4087
 msgid "Horizontal kerning"
 msgstr "Vodoravni kerning"
 
-#: ../src/widgets/toolbox.cpp:4106
+#: ../src/widgets/toolbox.cpp:4108
 msgid "Vertical kerning"
 msgstr "Uspravni kerning"
 
-#: ../src/widgets/toolbox.cpp:4133
+#: ../src/widgets/toolbox.cpp:4135
 msgid "Letter rotation"
 msgstr "Rotacija karaktera"
 
-#: ../src/widgets/toolbox.cpp:4222
+#: ../src/widgets/toolbox.cpp:4224
 msgid "Change connector spacing"
 msgstr "Promenjen razmak poveznica"
 
-#: ../src/widgets/toolbox.cpp:4331
+#: ../src/widgets/toolbox.cpp:4333
 msgid "Spacing:"
 msgstr "Razmak:"
 
-#: ../src/widgets/toolbox.cpp:4332
+#: ../src/widgets/toolbox.cpp:4334
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr ""
 "Veličina prostora oko objekata koja će ostati slobodna pri automatskom "
 "usmeravanju poveznica"
 
-#: ../src/widgets/toolbox.cpp:4346
+#: ../src/widgets/toolbox.cpp:4348
 msgid "Length:"
 msgstr "Dužina:"
 
-#: ../src/widgets/toolbox.cpp:4347
+#: ../src/widgets/toolbox.cpp:4349
 msgid "Ideal length for connectors when layout is applied"
 msgstr "Idealna dužina poveznica kada je primenjen oblik"
 
-#: ../src/widgets/toolbox.cpp:4362
+#: ../src/widgets/toolbox.cpp:4364
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr "Napravi poveznice sa markerima (strelicama) okrenutim na dole"
 
-#: ../src/widgets/toolbox.cpp:4376
+#: ../src/widgets/toolbox.cpp:4378
 msgid "Do not allow overlapping shapes"
 msgstr "Bez preklapanja oblika"
 
@@ -10844,7 +11027,8 @@ msgstr "Adobe Illustrator SVG (*.ai.svg)"
 
 #: ../share/extensions/aisvg.inx.h:3
 msgid "Cleans the cruft out of Adobe Illustrator SVGs before opening"
-msgstr "Odstranjivanje otpadaka iz Adobe Illustrator SVG datoteke pre otvaranja"
+msgstr ""
+"Odstranjivanje otpadaka iz Adobe Illustrator SVG datoteke pre otvaranja"
 
 #: ../share/extensions/color_brighter.inx.h:1
 msgid "Brighter"
@@ -11117,7 +11301,8 @@ msgstr "Funkcija plotera"
 
 #: ../share/extensions/funcplot.inx.h:8
 msgid "Isotropic scaling (uses smallest: width/xrange or height/yrange)"
-msgstr "Izotropsko skaliranje (koristite najmanje: širina/x-domet ili visina/y-domet)"
+msgstr ""
+"Izotropsko skaliranje (koristite najmanje: širina/x-domet ili visina/y-domet)"
 
 #: ../share/extensions/funcplot.inx.h:9
 msgid "Multiply x-range by 2*pi"
@@ -11235,41 +11420,41 @@ msgstr "Metod utapanja"
 msgid "Interpolation steps"
 msgstr "Broj koraka utapanja"
 
-#: ../share/extensions/lindenmayer.inx .h:1
+#: ../share/extensions/lindenmayer.inx.h:1
 msgid "Axiom"
 msgstr "Aksiom"
 
-#: ../share/extensions/lindenmayer.inx .h:2
+#: ../share/extensions/lindenmayer.inx.h:2
 msgid "L-system"
 msgstr "L-sistem"
 
-#: ../share/extensions/lindenmayer.inx .h:3
+#: ../share/extensions/lindenmayer.inx.h:3
 msgid "Left angle"
 msgstr "Ugao u levo"
 
-#: ../share/extensions/lindenmayer.inx .h:4
+#: ../share/extensions/lindenmayer.inx.h:4
 msgid "Order"
 msgstr "Broj ciklusa"
 
-#: ../share/extensions/lindenmayer.inx .h:6
+#: ../share/extensions/lindenmayer.inx.h:6
 #, no-c-format
 msgid "Randomize angle (%)"
 msgstr "Nasumični uglovi (%)"
 
-#: ../share/extensions/lindenmayer.inx .h:8
+#: ../share/extensions/lindenmayer.inx.h:8
 #, no-c-format
 msgid "Randomize step (%)"
 msgstr "Nasumični korak (%)"
 
-#: ../share/extensions/lindenmayer.inx .h:10
+#: ../share/extensions/lindenmayer.inx.h:10
 msgid "Right angle"
 msgstr "Ugao u desno"
 
-#: ../share/extensions/lindenmayer.inx .h:11
+#: ../share/extensions/lindenmayer.inx.h:11
 msgid "Rules"
 msgstr "Pravila"
 
-#: ../share/extensions/lindenmayer.inx .h:12
+#: ../share/extensions/lindenmayer.inx.h:12
 msgid "Step length (px)"
 msgstr "Dužina koraka (px)"
 
@@ -11331,12 +11516,12 @@ msgid ""
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
 msgstr ""
-"Ovaj efekat izračunava dužinu izabrane putanje i dodaje je kao "
-"tekst na putanji sa izabranom jedinicom mere. Broj decimala "
-"se može podešavati u polju za Preciznost. Polje za Pomeraj reguliše "
-"udaljenost teksta od putanje. Faktor za Skaliranje se može koristiti "
-"za razmeru na crtežu. Na primer, ako 1 cm na crtežu predstavlja 2,5 m "
-"u prirodi, Skaliranje mora biti postavljeno na 250."
+"Ovaj efekat izračunava dužinu izabrane putanje i dodaje je kao tekst na "
+"putanji sa izabranom jedinicom mere. Broj decimala se može podešavati u "
+"polju za Preciznost. Polje za Pomeraj reguliše udaljenost teksta od putanje. "
+"Faktor za Skaliranje se može koristiti za razmeru na crtežu. Na primer, ako "
+"1 cm na crtežu predstavlja 2,5 m u prirodi, Skaliranje mora biti postavljeno "
+"na 250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -11400,9 +11585,9 @@ msgid ""
 "pattern can be a path or a group of paths. First, select the pattern object; "
 "then add to selection the skeleton path; then call this effect."
 msgstr ""
-"Ovaj efekat postavlja objekat duž putanje „osnove“. Objekat može "
-"biti obična putanja ili grupa putanja. Prvo, izaberite objekat, "
-"potom izboru dodajte putanju „osnove“, a zatim primenite ovaj efekat."
+"Ovaj efekat postavlja objekat duž putanje „osnove“. Objekat može biti obična "
+"putanja ili grupa putanja. Prvo, izaberite objekat, potom izboru dodajte "
+"putanju „osnove“, a zatim primenite ovaj efekat."
 
 #: ../share/extensions/perspective.inx.h:2
 msgid "Perspective"
@@ -11571,4 +11756,3 @@ msgstr "Windows Metafile (*.wmf)"
 #: ../share/extensions/wmf_input.inx.h:3
 msgid "Windows Metafile Input"
 msgstr "Windows Metafile ulaz"
-

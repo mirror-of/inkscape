@@ -1,9 +1,36 @@
+Inkscape 0.45.1 changes with respect to 0.45
+
+     * Patch [ 1667939 ]: fix crash when tile-tracing with too small
+       clones
+     * Patch [ 1666532 ]: Broken link in inkview man page
+     * Patch [ 1665447 ]: fix for the blur quantization bug 1617082
+     * Patch [ 1664849 ]: fix for 1662589: increase blur margins
+     * Patch [ 1664004 ]: embedimage.py with fixed search order
+     * Patch [ 1662649 ]: markers.svg with reversed order
+     * Crudely improve check-markup for { markup, fix translations with
+       bugs in that area (dz and zh_TW).
+     * Patch [ 1659404 ]: Set locale directory from environment variable
+     * Patch [ 1657072 ]: fix for bug 1654495
+     * Patch [ 1654636 ]: defocus dropper checkboxes
+     * Updated slovak translation
+     * Adding japanese.nsh and russian.nsh into files that should go into
+       the release tarball
+     * Correct russian translation
+     * Patch [ 1651797 ]: fix for attributes when saving/save-a-copy
+     * Patch [ 1651752 ]: fix dropper tool
+     * Pattern along path extension fixed on Windows
+     * Include libtiff3.dll in the Windows distribution, fixing crash
+       when opening TIFF files
+     * Patch [ 1673067 ]: fix blur export on flowtext
+     * Patch [ 1678075 ]: fix FontInstance.cpp compile issue
+     * Patch [ 1673502 ]: fix broken Envelope (Summers Night) effect
+
+
 Inkscape 0.45: overview
 
    This release brings the exciting new features developed by the Google
    Summer of Code 2006 participants, as well as tons of other
    improvements across the board. Here are the highlights:
-
      * Gaussian blur is the first SVG filter supported by Inkscape. You
        can blur any object to any extent - yet it remains vector and
        fully editable. This gives a huge boost to Inkscape as a creative
@@ -11,8 +38,8 @@ Inkscape 0.45: overview
 
      * Display speed and interactivity: not only does Inkscape render
        faster, but it can now respond to user input before it finished
-       redrawing the screen, which greatly improves the interactivity of
-       the program.
+       redrawing the screen, which greatly improves the responsiveness
+       (perceived speed or interactivity) of the program.
 
      * History dialog makes it easy to to review your editing session and
        jump to any step of it, undoing and redoing multiple actions with
@@ -56,7 +83,6 @@ SVG filters: Gaussian blur
    arbitrarily shaped shades and lights, depth of field, drop shadows,
    glows, etc. Also, blurred objects can be used as masks for other
    objects to achieve the "feathered mask" effect.
-
      * To blur selected objects, open the Fill and Stroke dialog
        (Ctrl+Shift+F) and use the Blur slider. The blur value is a
        percentage, with 100% corresponding to a blurring radius (standard
@@ -83,7 +109,6 @@ SVG filters: Gaussian blur
        quite slow for images with a lot of blur).
 
    Here are a few tips on using blur:
-
      * Masks and clipping are applied after blur. That is, if you clip an
        object and then blur it (or blur it first and then clip - it makes
        no difference), the clipped edges will remain crisp. Often, this
@@ -330,7 +355,6 @@ Keyboard profiles
    The previous release allowed sets of keybindings (keymaps) to be
    created for Inkscape in the style of other applications. Two more
    keymaps have been added:
-
      * Adobe Illustrator
      * Macromedia Freehand
 
@@ -341,7 +365,6 @@ Keyboard profiles
 
    Additionally, a keymap that focuses on tablet-based illustration and
    drawing work has been added:
-
      * right-handed-illustration.xml
 
    This keymap places all commonly-used commands under the left hand, so
@@ -407,7 +430,7 @@ New effects
             to use a vertical pattern instead.
 
           Some examples of using this effect are shown on a screenshot at
-          [62][1].
+          [64][1].
 
      * Color effects: A new group of extensions in the Color submenu of
        the Effects menu allows you to adjust all colors of a selection at
@@ -432,7 +455,7 @@ New effects
             modifying the color channels.
 
           Some examples of using this effect are shown on a screenshot at
-          [63][2].
+          [65][2].
 
           Note: undoing color changes on gradients exposes a bug where an
           object seems to "disappear"; this is only a display issue
@@ -558,7 +581,6 @@ SVG output
    be customized via editing the preferences.xml file (there's no UI for
    these options). A <group id="svgoutput"> inside <group id="options">
    can have the following attributes:
-
      * usenamedcolors (default is 0). If nonzero, Inkscape uses symbolic
        color names (such as "white" or "lime") and three-digit color
        designations (such as $dfe) where appropriate; otherwise, it
@@ -739,7 +761,12 @@ Translations, tutorials, templates
        Inkscape's user interface in that language. Isthay isway oughtbray
        otay usway ybay away ewnay anslatortray.
 
-     * Updated British English, Catalan, Bulgarian and Thai translations.
+     * Updated British English, Catalan, Czech, Bulgarian, French,
+       Danish, Finnish, German, Brazilian Portuguese and Thai, Vietnamese
+       and Dzongkha translations.
+
+     * A new Esperanto translation added including default document
+       template.
 
      * Default Lithuanian template was not installed before, which is now
        fixed.
@@ -749,6 +776,12 @@ Translations, tutorials, templates
      * Added Catalan default template and elements tutorial.
 
      * Russian header and footer templates for tutorials are added.
+
+     * Several tutorial translations were updated, namely Catalan,
+       Brazilian Portuguese, Russian, German, Danish and French.
+
+     * There are also new Russian and Japanese translations of Windows
+       installer strings.
 
 
 Dependency changes
@@ -907,4 +940,4 @@ Beware of defective themes on Linux
 
 
 For information on prior releases, please see:
-    http://wiki.inkscape.org:8080/wiki/index.php/Inkscape
+    http://wiki.inkscape.org/wiki/index.php/Inkscape

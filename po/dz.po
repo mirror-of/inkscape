@@ -4,14 +4,14 @@
 # Dorji Tashi <dorjee_doss@hotmail.com>, 2006.
 # Jurmey Rabgay <jur_gay@yahoo.com>, 2006.
 #
-#: ../src/widgets/toolbox.cpp:4035 ../src/widgets/toolbox.cpp:4056
-#: ../src/widgets/toolbox.cpp:4085 ../src/widgets/toolbox.cpp:4106
-#: ../src/widgets/toolbox.cpp:4133
+#: ../src/widgets/toolbox.cpp:4037 ../src/widgets/toolbox.cpp:4058
+#: ../src/widgets/toolbox.cpp:4087 ../src/widgets/toolbox.cpp:4108
+#: ../src/widgets/toolbox.cpp:4135
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-26 23:55+0100\n"
+"POT-Creation-Date: 2007-03-13 13:48-0500\n"
 "PO-Revision-Date: 2007-02-21 03:35+0100\n"
 "Last-Translator: Jurmey Rabgay <pemai_jurmey@hotmail.com>\n"
 "Language-Team: Dzongkha <pgeyleg@dit.gov.bt>\n"
@@ -56,44 +56,49 @@ msgstr ""
 msgid "Create ellipse"
 msgstr "སྒོང་དབྱིབས་གསར་བསྐྲུན་འབད་"
 
-#: ../src/connector-context.cpp:517
+#: ../src/connector-context.cpp:519
 msgid "Creating new connector"
 msgstr "མཐུད་བྱེད་གསརཔ་གསར་བསྐྲུན་འབད་དོ།"
 
-#: ../src/connector-context.cpp:711
+#: ../src/connector-context.cpp:746
+#, fuzzy
+msgid "Connector endpoint drag canceled."
+msgstr "མཐུད་མཚམས་ ཡང་ན་ ཆ་མེད་གཏང་ཡོད་མི་འདྲུད་ནི་དེ་ལེགས་སྐྱོང་འཐབ།"
+
+#: ../src/connector-context.cpp:794
 msgid "Reroute connector"
 msgstr "མཐུད་བྱེད་ལུ་ སླར་འགྲུལ་ལམ་བཟོ་"
 
 #. Flush pending updates
-#: ../src/connector-context.cpp:918
+#: ../src/connector-context.cpp:958
 msgid "Create connector"
 msgstr "མཐུད་བྱེད་ གསར་བསྐྲུན་འབད་"
 
-#: ../src/connector-context.cpp:942
+#: ../src/connector-context.cpp:982
 msgid "Finishing connector"
 msgstr "མཐུད་བྱེད་མཇུག་བསྡུ་དོ།"
 
-#: ../src/connector-context.cpp:1086
+#: ../src/connector-context.cpp:1126
 msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
 "<b> མཐུད་བྱེད་ས་ཚཚིགས།</b>: མཐུད་བྱེད་གསརཔ་གསར་བསྐྲུན་འབད་ནིའི་དོན་ལུ་ཨེབ་གཏང་འབད་དགོཔ་དང་ "
 "ཡང་ན འདྲུད།"
 
-#: ../src/connector-context.cpp:1157
+#: ../src/connector-context.cpp:1197
 msgid "<b>Connector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 "<b>མཐོད་བྱེད་ཀྱི་མཇུག་གི་ས་ཚིགས།</b>: དབྱིབས་གསརཔ་ཚུ་ལུ་སླར་འགྲུལ་བསྐྱོད་དང་ཡང་ན་ མཐུད་ནིའི་དོན་ལུ་"
 "འདྲུད།"
 
-#: ../src/connector-context.cpp:1268
+#: ../src/connector-context.cpp:1308
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "ཉུང་མཐའ་ལུ་<b>མཐུད་མ་བཏུབ་མི་དངོས་པོ་གཅིག་</b>སེལ་འཐུ་འབད།"
 
-#: ../src/connector-context.cpp:1273 ../src/widgets/toolbox.cpp:4319
+#: ../src/connector-context.cpp:1313 ../src/widgets/toolbox.cpp:4321
 msgid "Make connectors avoid selected objects"
 msgstr "མཐུད་བྱེད་ཚུ་གིས་ སེལ་འཐུ་འབད་ཡོད་པའི་དངོས་པོ་ཚུ་ ཟུར་བཞག་བཅུག"
 
-#: ../src/connector-context.cpp:1274 ../src/widgets/toolbox.cpp:4323
+#: ../src/connector-context.cpp:1314 ../src/widgets/toolbox.cpp:4325
 msgid "Make connectors ignore selected objects"
 msgstr "མཐུད་བྱེད་ཀྱིས་སེལ་འཐུ་འབད་ཡོད་པའི་དངོས་པོ་ཚུ་ སྣང་མེད་སྦེ་བཞག་བཅུག"
 
@@ -148,27 +153,27 @@ msgstr "<small>་དངོས་པོ་ལུ་ <b>%d</b> ཊ་ཡིལཌ
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>དངོས་པོ་ལུ་ཊ་ཡིལཌི་ངོ་འདྲ་མེད།</small>"
 
-#: ../src/dialogs/clonetiler.cpp:851
+#: ../src/dialogs/clonetiler.cpp:856
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr "ཊཡིལཌི་ངོ་འདྲ་དེ་སྡེབས་སྤུང་བཤོལ་ནི་ཨིན་མི་<b>དངོས་པོ་གཅིག་</b>སེལ་འཐུ་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:873
+#: ../src/dialogs/clonetiler.cpp:878
 msgid "Unclump tiled clones"
 msgstr "ཊ་ཡིལཌི་ངོ་འདྲ་ཚུ་ སྡེབ་འཛིངས་འབད་བཤོལ་"
 
-#: ../src/dialogs/clonetiler.cpp:903
+#: ../src/dialogs/clonetiler.cpp:908
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "ཊཡིལཌི་ངོ་འདྲ་དེ་རྩ་བསྐྲད་གཏང་ནི་ཨིན་མི་<b>དངོས་པོ་ཅིག་</b>སེལ་འཐུ་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:926
+#: ../src/dialogs/clonetiler.cpp:931
 msgid "Delete tiled clones"
 msgstr "ཊཡིལཌི་ངོ་འདྲ་ཚུ་ བཏོན་གཏང་"
 
-#: ../src/dialogs/clonetiler.cpp:972 ../src/selection-chemistry.cpp:1987
+#: ../src/dialogs/clonetiler.cpp:977 ../src/selection-chemistry.cpp:1987
 msgid "Select an <b>object</b> to clone."
 msgstr "ངོ་འདྲ་བཟོ་ནིའི་དོན་ལུ་་<b>དངོས་པོ་ཅིག</b> སེལ་འཐུ་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:978
+#: ../src/dialogs/clonetiler.cpp:983
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -176,23 +181,23 @@ msgstr ""
 "ཁྱོད་ཀྱིས་དངོས་པོ་ཚུ་ལེ་ཤ་ཅིག་ངོ་འདྲ་བཟོ་དགོ་པ་ཅིན་ <b>དེ་ཚུ་སྡེ་ཚན་བཟོ་ཞིནམ་ལས་</b> སྡེ་ཚན་དེ་ངོ་འདྲ་"
 "བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:1335
+#: ../src/dialogs/clonetiler.cpp:1340
 msgid "Create tiled clones"
 msgstr "ཊཡིལཌི་ངོ་འདྲ་ཚུ་ གསར་བསྐྲུན་འབད་"
 
-#: ../src/dialogs/clonetiler.cpp:1518
+#: ../src/dialogs/clonetiler.cpp:1523
 msgid "<small>Per row:</small>"
 msgstr "<small>གྲལ་ཐིག་རེ་ལུ:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1531
+#: ../src/dialogs/clonetiler.cpp:1536
 msgid "<small>Per column:</small>"
 msgstr "<small>ཀོར་ཐིག་རེ་ལུ་:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1539
+#: ../src/dialogs/clonetiler.cpp:1544
 msgid "<small>Randomize:</small>"
 msgstr "<small>གང་དྲག་བཟོ:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1693
+#: ../src/dialogs/clonetiler.cpp:1698
 msgid "_Symmetry"
 msgstr "མཛེས་སྙོམས།(_S)"
 
@@ -201,298 +206,298 @@ msgstr "མཛེས་སྙོམས།(_S)"
 #. * http://www.clarku.edu/~djoyce/wallpaper/seventeen.html (English vocabulary); or
 #. * http://membres.lycos.fr/villemingerard/Geometri/Sym1D.htm (French vocabulary).
 #.
-#: ../src/dialogs/clonetiler.cpp:1701
+#: ../src/dialogs/clonetiler.cpp:1706
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr "ཊཡིལ་འབད་ནིའི་དོན་ལུ་ མཛེས་སྙོམས་ཅན་༡༧་ ཡད་མི་དེ་ལས་ག་འབད་རུང་ཅིག་སེལ་འཐུ་འབད།"
 
 #. TRANSLATORS: "translation" means "shift" / "displacement" here.
-#: ../src/dialogs/clonetiler.cpp:1712
+#: ../src/dialogs/clonetiler.cpp:1717
 msgid "<b>P1</b>: simple translation"
 msgstr "<b>P1</b>:བཤུད།"
 
-#: ../src/dialogs/clonetiler.cpp:1713
+#: ../src/dialogs/clonetiler.cpp:1718
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr "<b>P2</b>: 180&#176;བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1714
+#: ../src/dialogs/clonetiler.cpp:1719
 msgid "<b>PM</b>: reflection"
 msgstr "<b>PM</b>:འཆར་སྣང་།"
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined.
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: ../src/dialogs/clonetiler.cpp:1717
+#: ../src/dialogs/clonetiler.cpp:1722
 msgid "<b>PG</b>: glide reflection"
 msgstr "<b>PG</b>:ག་ལཡིཌི་ འཆར་སྣང་། "
 
-#: ../src/dialogs/clonetiler.cpp:1718
+#: ../src/dialogs/clonetiler.cpp:1723
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr "<b>CM</b>:འཆར་སྣང་ + ག་ལཡིཌི་འཆར་སྣང་།"
 
-#: ../src/dialogs/clonetiler.cpp:1719
+#: ../src/dialogs/clonetiler.cpp:1724
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr "<b>PMM</b>:འཆར་སྣང་ + འཆར་སྣང་།"
 
-#: ../src/dialogs/clonetiler.cpp:1720
+#: ../src/dialogs/clonetiler.cpp:1725
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr "<b>PMG</b>: འཆར་སྣང་། + 180&#176; བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1721
+#: ../src/dialogs/clonetiler.cpp:1726
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr "<b>PGG</b>: ག་ལཡིཌི་འཆར་སྣང་ + 180&#176; བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1722
+#: ../src/dialogs/clonetiler.cpp:1727
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr "<b>CMM</b>: འཆར་སྣང་ + འཆར་སྣང་ + 180&#176; བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1723
+#: ../src/dialogs/clonetiler.cpp:1728
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr "<b>P4</b>: 90&#176; བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1724
+#: ../src/dialogs/clonetiler.cpp:1729
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr "<b>P4M</b>: 90&#176; བསྒྱིར་ནི། + 45&#176; འཆར་སྣང་།"
 
-#: ../src/dialogs/clonetiler.cpp:1725
+#: ../src/dialogs/clonetiler.cpp:1730
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr "<b>P4G</b>: 90&#176; བསྒྱིར་ནི། + 90&#176; འཆར་སྣང་།"
 
-#: ../src/dialogs/clonetiler.cpp:1726
+#: ../src/dialogs/clonetiler.cpp:1731
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr "<b>P3</b>: 120&#176; བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1727
+#: ../src/dialogs/clonetiler.cpp:1732
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr "<b>P31M</b>: འཆར་སྣང་ + 120&#176; བསྒྱིར་ནི། སྟུག་ཚད།"
 
-#: ../src/dialogs/clonetiler.cpp:1728
+#: ../src/dialogs/clonetiler.cpp:1733
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr "<b>P3M1</b>: འཆར་སྣང་ + 120&#176; བསྒྱིར་ནི། མིང་དཔྱད།"
 
-#: ../src/dialogs/clonetiler.cpp:1729
+#: ../src/dialogs/clonetiler.cpp:1734
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr "<b>P6</b>: 60&#176; བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1730
+#: ../src/dialogs/clonetiler.cpp:1735
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>:འོད་འཆར་བ་ + 60&#176; བསྒྱིར་ནི།"
 
-#: ../src/dialogs/clonetiler.cpp:1758
+#: ../src/dialogs/clonetiler.cpp:1763
 msgid "S_hift"
 msgstr "བཤུད།(_h)"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
-#: ../src/dialogs/clonetiler.cpp:1768
+#: ../src/dialogs/clonetiler.cpp:1773
 #, no-c-format
 msgid "<b>Shift X:</b>"
 msgstr "<b>བཤུད། X:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1776
+#: ../src/dialogs/clonetiler.cpp:1781
 #, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr "གྲལ་ཐིག་རེ་ལུ་ཐད་སྙོམས་སོར་ལྡེ་རེ། (ཊ་ཡིལ་རྒྱ་ཚད་ཀྱི་བརྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1784
+#: ../src/dialogs/clonetiler.cpp:1789
 #, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr "ཀེར་ཐིག་རེ་ལུ་ཐད་སྙོམ་སོར་ལྡེ་རེ།(ཊ་ཡིལ་རྒྱ་ཚད་ཀྱི་བརྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1791
+#: ../src/dialogs/clonetiler.cpp:1796
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "ཐད་སྙོམས་སྦེ་ཡོད་མི་སོར་ལྡེ་དེ་བརྒྱ་ཆ་འདི་གིས་གང་དྲག་བཟོ།"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
-#: ../src/dialogs/clonetiler.cpp:1801
+#: ../src/dialogs/clonetiler.cpp:1806
 #, no-c-format
 msgid "<b>Shift Y:</b>"
 msgstr "<b>བཤུད། ཝའི།:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1809
+#: ../src/dialogs/clonetiler.cpp:1814
 #, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
 msgstr "གྲལ་ཕྲང་རེ་ལུ་ཀེར་ཐིག་བཤུད་ནི་རེ། (ཊ་ཡིལ་མཐོ་ཚད་ཀྱི་བརྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1817
+#: ../src/dialogs/clonetiler.cpp:1822
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
 msgstr "ཀེར་ཐིག་རེ་ལུ་ཀེར་ཕྲང་བཤུད་ནི་རེ། (ཊ་ཡིལ་མཐོ་ཚད་ཀྱི་བརྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1824
+#: ../src/dialogs/clonetiler.cpp:1829
 msgid "Randomize the vertical shift by this percentage"
 msgstr "ཀེར་ཕྲང་བཤུད་ནི་དེ་བརྒྱ་ཆ་འདི་གིས་གང་དྲག་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:1832
+#: ../src/dialogs/clonetiler.cpp:1837
 msgid "<b>Exponent:</b>"
 msgstr "<b>འགྲེལ་བརྗོད་པ:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1839
+#: ../src/dialogs/clonetiler.cpp:1844
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "གྲལ་ཐིག་ཚུ་ཆ་ཅན་སྦེ་བར་སྟོང་བཏོན་ཡོདཔ་ཨིན་(༡) གཅིག་ཏུ་འདུ་བ་ (<༡) ཡང་ན་  ཁ་འགྱེ་བ། (>1)"
 
-#: ../src/dialogs/clonetiler.cpp:1846
+#: ../src/dialogs/clonetiler.cpp:1851
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "ཀེར་ཐིག་ཚུ་ཆ་སྙོམས་སྦེ་བར་སྟོང་བཏོན་ཡོདཔ་ཨིན་ན་དང་མེན་ན་(1), ཁྱབ་ཚད་ (<1) ཡང་ན་  ཁ་འགྱེ་བ། "
 "(>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: ../src/dialogs/clonetiler.cpp:1854 ../src/dialogs/clonetiler.cpp:1944
-#: ../src/dialogs/clonetiler.cpp:2003 ../src/dialogs/clonetiler.cpp:2060
-#: ../src/dialogs/clonetiler.cpp:2109 ../src/dialogs/clonetiler.cpp:2240
+#: ../src/dialogs/clonetiler.cpp:1859 ../src/dialogs/clonetiler.cpp:1949
+#: ../src/dialogs/clonetiler.cpp:2008 ../src/dialogs/clonetiler.cpp:2065
+#: ../src/dialogs/clonetiler.cpp:2114 ../src/dialogs/clonetiler.cpp:2245
 msgid "<small>Alternate:</small>"
 msgstr "<small>སོར་ལེན:</small>"
 
-#: ../src/dialogs/clonetiler.cpp:1860
+#: ../src/dialogs/clonetiler.cpp:1865
 msgid "Alternate the sign of shifts for each row"
 msgstr "གྲལ་ཐིག་རེ་ལུ་བཞིན་གྱི་དོན་ལུ་ སོར་ནིའི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:1865
+#: ../src/dialogs/clonetiler.cpp:1870
 msgid "Alternate the sign of shifts for each column"
 msgstr "ཀེར་ཐིག་རེ་རེ་བཞིན་གྱི་དོན་ལུ་སོར་ལྡེའི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:1874
+#: ../src/dialogs/clonetiler.cpp:1879
 msgid "Sc_ale"
 msgstr "ཚད་ཤིང་།(_a)"
 
-#: ../src/dialogs/clonetiler.cpp:1882
+#: ../src/dialogs/clonetiler.cpp:1887
 msgid "<b>Scale X:</b>"
 msgstr "<b>;ཚད་ཤིང་ ཨེགསི:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1890
+#: ../src/dialogs/clonetiler.cpp:1895
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr "གྲལ་ཐིག་རེ་ལུ་ཐད་སྙོམས་ཀྱི་ཚད་ཤིང་རེ།(ཊ་ཡིལ་རྒྱ ཚད་ཀྱི་བསྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1898
+#: ../src/dialogs/clonetiler.cpp:1903
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr "ཀེར་ཐིག་རེ་ལུ་ཐད་སྙོམས་ཆ་ཚད་རེ།ཊ་ཡིལ་རྒྱ་ཚད་ཀྱི་བསྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1905
+#: ../src/dialogs/clonetiler.cpp:1910
 msgid "Randomize the horizontal scale by this percentage"
 msgstr "བརྒྱ་ཆ་འདི་གིས་ཐད་སྙོམ་སྦེ་ཡོད་མི་ཆ་ཚད་དེ་གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:1913
+#: ../src/dialogs/clonetiler.cpp:1918
 msgid "<b>Scale Y:</b>"
 msgstr "<b>ཚད་ཤིང་ ཝའི།:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1921
+#: ../src/dialogs/clonetiler.cpp:1926
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr "གྲལ་་ཐིག་རེ་ལུ་ཀེར་ཕྲང་ཆ་ཚད་རེ། (ཊ་ཡིལ་མཐོ་ཚད་ཀྱི་བརྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1929
+#: ../src/dialogs/clonetiler.cpp:1934
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr "ཀེར་ཐིག་རེ་ལུ་ཀེར་ཕྲང་ཆ་ཚད་རེ། (ཊ་ཡིལ་མཐོ་ཚད་ཀྱི་བརྒྱ་ཆའི་ནང་ལུ།)"
 
-#: ../src/dialogs/clonetiler.cpp:1936
+#: ../src/dialogs/clonetiler.cpp:1941
 msgid "Randomize the vertical scale by this percentage"
 msgstr "བརྒྱ་ཆ་འདི་གིས་ཀེར་ཕྲང་ཆ་ཚད་དེ་གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:1950
+#: ../src/dialogs/clonetiler.cpp:1955
 msgid "Alternate the sign of scales for each row"
 msgstr "གྲལ་ཐིག་རེ་རེ་བཞིན་ལུ་ཆ་ཚད་ཚུ་གི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:1955
+#: ../src/dialogs/clonetiler.cpp:1960
 msgid "Alternate the sign of scales for each column"
 msgstr "ཀེར་ཐིག་རེ་རེ་བཞིན་ལུ་ཆ་ཚད་ཚུ་གི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:1964
+#: ../src/dialogs/clonetiler.cpp:1969
 msgid "_Rotation"
 msgstr "བསྒྱིར་ནི།(_R)"
 
-#: ../src/dialogs/clonetiler.cpp:1972
+#: ../src/dialogs/clonetiler.cpp:1977
 msgid "<b>Angle:</b>"
 msgstr "<b>གྲུ་ཟུར།:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:1980
+#: ../src/dialogs/clonetiler.cpp:1985
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
 msgstr "གྲལ་ཐིག་རེ་རེའིི་དོན་ལུ་གྲུ་ཟུར་འདི་གིས་ཊ་ཡིལ་ཚུ་བསྒྱིར།"
 
-#: ../src/dialogs/clonetiler.cpp:1988
+#: ../src/dialogs/clonetiler.cpp:1993
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
 msgstr "ཀེར་ཐིག་རེ་རེའི་དོན་ལུ་གྲུ་ཟུར་འདི་གིས་ཊ་ཡིལ་ཚུ་བསྒྱིར།"
 
-#: ../src/dialogs/clonetiler.cpp:1995
+#: ../src/dialogs/clonetiler.cpp:2000
 msgid "Randomize the rotation angle by this percentage"
 msgstr "བསྒྱ་ཆ་འདི་གིས་བསྒྱིར་མིའི་གྲུ་ཟུར་དེ་གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:2009
+#: ../src/dialogs/clonetiler.cpp:2014
 msgid "Alternate the rotation direction for each row"
 msgstr "གྲླ་དིག་རེ་རེའི་དོན་ལུ་བསྒྱིར་མའི་ཁ་ཕྱོགས་དེེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2014
+#: ../src/dialogs/clonetiler.cpp:2019
 msgid "Alternate the rotation direction for each column"
 msgstr "ཀེར་ཐིག་རེ་རེའི་དོན་ལུ་བསྒྱིར་མའི་ཁ་ཕྱོགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2022
+#: ../src/dialogs/clonetiler.cpp:2027
 msgid "_Blur & opacity"
 msgstr "རབ་རིབ་ &དྭངས་སྒྲིབ་ཨམ་(_B)"
 
-#: ../src/dialogs/clonetiler.cpp:2031
+#: ../src/dialogs/clonetiler.cpp:2036
 msgid "<b>Blur:</b>"
 msgstr "<b>རབ་རིབ་:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2038
+#: ../src/dialogs/clonetiler.cpp:2043
 msgid "Blur tiles by this percentage for each row"
 msgstr "གྲལ་ཐིག་རེ་ལུ་ བརྒྱ་ཆ་འདི་གིས་ ཊཡིལསི་ རབ་རིབ་བཟོ་"
 
-#: ../src/dialogs/clonetiler.cpp:2045
+#: ../src/dialogs/clonetiler.cpp:2050
 msgid "Blur tiles by this percentage for each column"
 msgstr "ཀེར་ཐིག་རེ་ལུ་ བརྒྱ་ཆ་འདི་གིས་ ཊཡིལསི་ རབ་རིབ་བཟོ་"
 
-#: ../src/dialogs/clonetiler.cpp:2052
+#: ../src/dialogs/clonetiler.cpp:2057
 msgid "Randomize the tile blur by this percentage"
 msgstr "བརྒྱ་ཆ་འདི་གིས་ ཊ་ཡིལ་རབ་རིབ་ གང་འབྱུང་བཟོ་"
 
-#: ../src/dialogs/clonetiler.cpp:2066
+#: ../src/dialogs/clonetiler.cpp:2071
 msgid "Alternate the sign of blur change for each row"
 msgstr "གྲལ་ཐིག་རེ་ལུ་ རབ་རིབ་འགྱུར་བའི་རྟགས་ བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/dialogs/clonetiler.cpp:2071
+#: ../src/dialogs/clonetiler.cpp:2076
 msgid "Alternate the sign of blur change for each column"
 msgstr "ཀེར་ཐིག་རེ་ལུ་ རབ་རིབ་འགྱུར་བའི་རྟགས་ བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/dialogs/clonetiler.cpp:2080
+#: ../src/dialogs/clonetiler.cpp:2085
 msgid "<b>Fade out:</b>"
 msgstr "<b>བཀྱག་ཉམས་ནི།:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2087
+#: ../src/dialogs/clonetiler.cpp:2092
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr "གྲལ་ཐིག་རེ་རེའི་དོན་ལུ་བརྒྱ ཆ་་འདི་གིས་ཊ་ཡིལ་གྱི་དྭངས་སྒྲིབ་དེ་མར་ཕབ་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2094
+#: ../src/dialogs/clonetiler.cpp:2099
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr "ཀེར་ཐིག་རེ་རེའི་དོན་ལུ་བརྒྱ་ཆ་འདི་གིས་ཊ་ཡིལ་གྱི་དྭངས་སྒྲིབ་དེ་མར་ཕབ་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2101
+#: ../src/dialogs/clonetiler.cpp:2106
 msgid "Randomize the tile opacity by this percentage"
 msgstr "ཊ་ཡིལ་དྭངས་སྒྲིབ་དེ་བརྒྱ་ཆ་འདི་གིས་གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:2115
+#: ../src/dialogs/clonetiler.cpp:2120
 msgid "Alternate the sign of opacity change for each row"
 msgstr "གྲལ་ཐིག་རེ་རེའི་དོན་ལུ་དྭངས་སྒྲིབ་བསྒྱུར་བཅོས་ཀྱི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2120
+#: ../src/dialogs/clonetiler.cpp:2125
 msgid "Alternate the sign of opacity change for each column"
 msgstr "ཀེར་ཐིག་རེ་རེའི་དོན་ལུ་དྭངས་སྒྲིབ་བསྒྱུར་བཅོས་ཀྱི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2128
+#: ../src/dialogs/clonetiler.cpp:2133
 msgid "Co_lor"
 msgstr "ཚོས་གཞི།(_l)"
 
-#: ../src/dialogs/clonetiler.cpp:2133
+#: ../src/dialogs/clonetiler.cpp:2138
 msgid "Initial color: "
 msgstr "འགོ་ཐོག་གི་ཚོས་ཞགི:"
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid "Initial color of tiled clones"
 msgstr "ཊ་ཡིལཌི་་ངོ་འདྲའི་འགོ་ཐོག་ཚོས་གཞི།"
 
-#: ../src/dialogs/clonetiler.cpp:2137
+#: ../src/dialogs/clonetiler.cpp:2142
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke)"
@@ -500,71 +505,71 @@ msgstr ""
 "ངོ་འདྲའི་དོན་ལུ་འགོ་ཐོག་ཚོས་གཞི། (ངོ་མ་འདི་གིས་སི་ཊོརོག་ཡང་ན་ བཀང་ནི་དེ་ཚུད་སྒྲིག་མ་འབད་བ་ཅན་རྐྱངམ་"
 "ཅིག་ལཱ་གཡོག་ཚུ་འབད་ཏུབ་ཨིན།)"
 
-#: ../src/dialogs/clonetiler.cpp:2152
+#: ../src/dialogs/clonetiler.cpp:2157
 msgid "<b>H:</b>"
 msgstr "<b>ཨེཆི་:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2159
+#: ../src/dialogs/clonetiler.cpp:2164
 msgid "Change the tile hue by this percentage for each row"
 msgstr "གྲལ་ཐིག་རེ་རེའི་དོན་ལུ་ ཊ་ཡིལ་ཚོན་མདངས་དེ་བརྒྱ་ཆ་འདི་གིས་བསྒྱུར་བཅོས་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2166
+#: ../src/dialogs/clonetiler.cpp:2171
 msgid "Change the tile hue by this percentage for each column"
 msgstr "ཀེར་ཐིག་རེ་རེའི་དོན་ལུ་ ཊ་ཡིལ་ཚོན་མདངས་དེ་བརྒྱ་ཆ་འདི་གིས་བསྒྱུར་བཅོས་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2173
+#: ../src/dialogs/clonetiler.cpp:2178
 msgid "Randomize the tile hue by this percentage"
 msgstr "ཊ་ཡིལ་མམཚོན་མདངས་དེ་བརྒྱ་ཆ་འདི་གིས་གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:2182
+#: ../src/dialogs/clonetiler.cpp:2187
 msgid "<b>S:</b>"
 msgstr "<b>ཨེསི་:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2189
+#: ../src/dialogs/clonetiler.cpp:2194
 msgid "Change the color saturation by this percentage for each row"
 msgstr "གྲལ་ཐིག་རེ་རེའི་དོན་ལུ་ཚོས་གཞི་མཐའ་ཚད་དེ་བརྒྱ་ཆ་འདི་གིས་བསྒྱུར་བཅོས་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2196
+#: ../src/dialogs/clonetiler.cpp:2201
 msgid "Change the color saturation by this percentage for each column"
 msgstr "ཀེར་ཐིག་རེ་རེའི་དོན་ལུ་ཚོས་གཞི་མཐའ་ཚད་དེ་བརྒྱ་ཆ་འདི་གིས་བསྒྱུར་བཅོས་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2203
+#: ../src/dialogs/clonetiler.cpp:2208
 msgid "Randomize the color saturation by this percentage"
 msgstr "ཚོས་གཞི་མཐའ་ཚད་དེ་བརྒྱ་ཆ་་འདི་གིས་གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:2211
+#: ../src/dialogs/clonetiler.cpp:2216
 msgid "<b>L:</b>"
 msgstr "<b>ཨེལ་:</b>"
 
-#: ../src/dialogs/clonetiler.cpp:2218
+#: ../src/dialogs/clonetiler.cpp:2223
 msgid "Change the color lightness by this percentage for each row"
 msgstr "གྲལ་ཐིག་རེ་རེའི་དོན་ལུ་ཚོས་གཞི་འོད་མདངས་དེ་བརྒྱ་ཆ་འདི་གིས་བསྒྱུར་བཅོས་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2225
+#: ../src/dialogs/clonetiler.cpp:2230
 msgid "Change the color lightness by this percentage for each column"
 msgstr "ཀེར་ཐིག་རེརརེའི་དོན་ལུ་ཚོས་གཞི་འོད་མདངས་དེ་བརྒྱ་ཆ་འདི་གིས་བསྒྱུར་བཅོས་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2232
+#: ../src/dialogs/clonetiler.cpp:2237
 msgid "Randomize the color lightness by this percentage"
 msgstr "བརྒྱ་ཆ་འདི་གིས་ཚོས་གཞིའི་འོད་མདངས་དེ་གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:2246
+#: ../src/dialogs/clonetiler.cpp:2251
 msgid "Alternate the sign of color changes for each row"
 msgstr "གྲལ་ཐིག་རེ་རེའི་དོན་ལུ་ཚོས་གཞི་བསྒྱུར་བཅོས་ཀྱི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2251
+#: ../src/dialogs/clonetiler.cpp:2256
 msgid "Alternate the sign of color changes for each column"
 msgstr "ཀེར་ཐིག་རེ་རེའི་དོན་ལུ་ཚོས་གཞི་བསྒྱུར་བཅོས་ཀྱི་མིང་རྟགས་དེ་སོར་ལེན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2259
+#: ../src/dialogs/clonetiler.cpp:2264
 msgid "_Trace"
 msgstr "བཤུལ།(_T)"
 
-#: ../src/dialogs/clonetiler.cpp:2266
+#: ../src/dialogs/clonetiler.cpp:2271
 msgid "Trace the drawing under the tiles"
 msgstr "པར་ཚུ་ཊ་ཡིལསི་དེ་གི་འོག་ལུ་བཤུལ་འཚོལ་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2270
+#: ../src/dialogs/clonetiler.cpp:2275
 msgid ""
 "For each clone, pick a value from the drawing in that clone's location and "
 "apply it to the clone"
@@ -572,11 +577,11 @@ msgstr ""
 "ངོ་འདྲ་རེ་རེའི་དོན་ལུ་ ངོ་འདྲའི་ས་ཁོངས་འདི་ནང་གི་་འབྲི་ནིའི་ནང་ལས་ གནས་གོང་ཅིག་འཐུ་ཞིནམ་ལས་ ངོ་འདྲ་"
 "ལུ་འཇུག་སྤྱོད་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2284
+#: ../src/dialogs/clonetiler.cpp:2289
 msgid "1. Pick from the drawing:"
 msgstr "༡. འབྲི་ནིའི་ནང་ལས་འཐུ:"
 
-#: ../src/dialogs/clonetiler.cpp:2295 ../src/dialogs/clonetiler.cpp:2442
+#: ../src/dialogs/clonetiler.cpp:2300 ../src/dialogs/clonetiler.cpp:2447
 #: ../share/extensions/color_brighter.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
 #: ../share/extensions/color_darker.inx.h:1
@@ -596,110 +601,110 @@ msgstr "༡. འབྲི་ནིའི་ནང་ལས་འཐུ:"
 msgid "Color"
 msgstr "ཚོས་གཞི།"
 
-#: ../src/dialogs/clonetiler.cpp:2296
+#: ../src/dialogs/clonetiler.cpp:2301
 msgid "Pick the visible color and opacity"
 msgstr "མཐོང་ཚུགས་པའི་ཚོས་གཞི་དང་དྭངས་སྒྲིབ་དེ་འཐུ།"
 
-#: ../src/dialogs/clonetiler.cpp:2303 ../src/dialogs/clonetiler.cpp:2452
+#: ../src/dialogs/clonetiler.cpp:2308 ../src/dialogs/clonetiler.cpp:2457
 #: ../share/extensions/svg_dropshadow.inx.h:3
 msgid "Opacity"
 msgstr "དྭངས་སྒྲིབ།"
 
-#: ../src/dialogs/clonetiler.cpp:2304
+#: ../src/dialogs/clonetiler.cpp:2309
 msgid "Pick the total accumulated opacity"
 msgstr "སྤུང་གསོག་འབད་ཡོད་པའི་དྭངས་སྒྲིབ་ཀྱི་བསྡོམས་དེ་འཐུ།"
 
-#: ../src/dialogs/clonetiler.cpp:2311
+#: ../src/dialogs/clonetiler.cpp:2316
 msgid "R"
 msgstr "ཨཱར།"
 
-#: ../src/dialogs/clonetiler.cpp:2312
+#: ../src/dialogs/clonetiler.cpp:2317
 msgid "Pick the Red component of the color"
 msgstr "ཚོས་གཞི་གི་ཆ་ཤས་དམརཔོ་དེ་འཐུ།"
 
-#: ../src/dialogs/clonetiler.cpp:2319
+#: ../src/dialogs/clonetiler.cpp:2324
 msgid "G"
 msgstr "ཇི།"
 
-#: ../src/dialogs/clonetiler.cpp:2320
+#: ../src/dialogs/clonetiler.cpp:2325
 msgid "Pick the Green component of the color"
 msgstr "ཚོས་གཞི་གི་ཆ་ཤས་ལྗང་ཁུ་དེ་འཐུ།"
 
-#: ../src/dialogs/clonetiler.cpp:2327
+#: ../src/dialogs/clonetiler.cpp:2332
 msgid "B"
 msgstr "བི།"
 
-#: ../src/dialogs/clonetiler.cpp:2328
+#: ../src/dialogs/clonetiler.cpp:2333
 msgid "Pick the Blue component of the color"
 msgstr "ཚོས་གཞི་གི་ཆ་ཤས་ཧོནམ་དེ་འཐུ།"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2337
+#: ../src/dialogs/clonetiler.cpp:2342
 msgid "clonetiler|H"
 msgstr "H"
 
-#: ../src/dialogs/clonetiler.cpp:2338
+#: ../src/dialogs/clonetiler.cpp:2343
 msgid "Pick the hue of the color"
 msgstr "ཚོས་གཞི་གི་མཚོན་མདང་དེ་འཐུ།"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2347
+#: ../src/dialogs/clonetiler.cpp:2352
 msgid "clonetiler|S"
 msgstr "S"
 
-#: ../src/dialogs/clonetiler.cpp:2348
+#: ../src/dialogs/clonetiler.cpp:2353
 msgid "Pick the saturation of the color"
 msgstr "ཚོས་གཞི་གི་མཐའ་ཚད་དེ་འཐུ།"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-#: ../src/dialogs/clonetiler.cpp:2357
+#: ../src/dialogs/clonetiler.cpp:2362
 msgid "clonetiler|L"
 msgstr "L"
 
-#: ../src/dialogs/clonetiler.cpp:2358
+#: ../src/dialogs/clonetiler.cpp:2363
 msgid "Pick the lightness of the color"
 msgstr "ཚོས་གཞི་གི་འོད་མདང་དེ་འཐུ།"
 
-#: ../src/dialogs/clonetiler.cpp:2368
+#: ../src/dialogs/clonetiler.cpp:2373
 msgid "2. Tweak the picked value:"
 msgstr "༢་ འཐུ་སྟེ་ཡོད་པའི་གནས་གོང་དེ་སོར་མོས་འཐེན།"
 
-#: ../src/dialogs/clonetiler.cpp:2378
+#: ../src/dialogs/clonetiler.cpp:2383
 msgid "Gamma-correct:"
 msgstr "གམ་མ་-ནོར་བཅོས:"
 
-#: ../src/dialogs/clonetiler.cpp:2383
+#: ../src/dialogs/clonetiler.cpp:2388
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
 msgstr "འཐུ་སྟེ་ཡོད་པའི་གནས་གོང་གི་ཁྱབ་ཚད་བར་མ་དེ་ ཁ་ཡར་དང་(>0) ཡང་ན་ཁ་མར་ (<0) བཤུད།"
 
-#: ../src/dialogs/clonetiler.cpp:2390
+#: ../src/dialogs/clonetiler.cpp:2395
 msgid "Randomize:"
 msgstr "གང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:2395
+#: ../src/dialogs/clonetiler.cpp:2400
 msgid "Randomize the picked value by this percentage"
 msgstr "འཐུ་ཡོད་པའི་གནས་གོང་དེ་བརྒྱ ཆ་འདི་གིསགང་འབྱུང་བཟོ།"
 
-#: ../src/dialogs/clonetiler.cpp:2402
+#: ../src/dialogs/clonetiler.cpp:2407
 msgid "Invert:"
 msgstr "གནས་ལོག་འབད:"
 
-#: ../src/dialogs/clonetiler.cpp:2406
+#: ../src/dialogs/clonetiler.cpp:2411
 msgid "Invert the picked value"
 msgstr "འཐུ་ཡོད་པའི་གནས་གོང་དེ་གནས་ལོག་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2412
+#: ../src/dialogs/clonetiler.cpp:2417
 msgid "3. Apply the value to the clones':"
 msgstr "༣་ ངོ་འདྲ་འདི་ལུ་གནས་གོང་དེ་འཇུག་སྤྱོད་འབད:"
 
-#: ../src/dialogs/clonetiler.cpp:2422
+#: ../src/dialogs/clonetiler.cpp:2427
 msgid "Presence"
 msgstr " ངོ་འཛོམས།"
 
-#: ../src/dialogs/clonetiler.cpp:2425
+#: ../src/dialogs/clonetiler.cpp:2430
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
@@ -707,16 +712,16 @@ msgstr ""
 "ངོ་འདྲ་ཚུ་ཆ་མཉམ་ ཡིག་ཚད་དེ་ནང་ལུ་འཐུ་ཡོད་པའི་གནས་གོང་དེ་གིས་གཏན་འབེབས་བཟོ་ཡོད་པའི་འབྱུང་ངེས་དང་"
 "གཅིག་ཁར་གསར་བསྐྲུན་འབད་ཡོདཔ་ཨིན།"
 
-#: ../src/dialogs/clonetiler.cpp:2432
+#: ../src/dialogs/clonetiler.cpp:2437
 msgid "Size"
 msgstr "ཚད།"
 
-#: ../src/dialogs/clonetiler.cpp:2435
+#: ../src/dialogs/clonetiler.cpp:2440
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr ""
 "ཡིག་ཚད་འདི་ནང་ལུ་ངོ་འདྲའི་ཚད་ཚུ་ཆ་མཉམ་ འཐུ་སྟེ་ཡོད་པའི་གནས་གོང་དེ་གིས་གཏན་འབེབས་བཟོཝ་ཨིན།"
 
-#: ../src/dialogs/clonetiler.cpp:2445
+#: ../src/dialogs/clonetiler.cpp:2450
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
@@ -724,48 +729,48 @@ msgstr ""
 "ངོ་འདྲ་ཚུ་ཆ་མཉམ་འཐུ་སྟེ་ཡོད་པའི་ཚོས་གཞི་དེ་གིས་ཚོན་གཏང་གཏང་ཡོདཔ་ཨིན། (ངོ་མ་འདི་གིས་ བཀང་ནི་ཡང་"
 "ན་ སི་ཊོ་རོག་གཞི་སྒྲིག་འབད་ནི་བོལ་དགོ)"
 
-#: ../src/dialogs/clonetiler.cpp:2455
+#: ../src/dialogs/clonetiler.cpp:2460
 msgid "Each clone's opacity is determined by the picked value in that point"
 msgstr ""
 "ངོ་འདྲའིི་དྭངས་སྒྲིབ་དེ་ཆ་མཉམ་ཡིག་ཚད་དེ་ནང་ལུ་ འཐུ་སྟེ་ཡོད་པའི་གནས་གོང་དེ་གིས་གཏན་འབེབས་བཟོཝ་ཨིན།"
 
-#: ../src/dialogs/clonetiler.cpp:2482
+#: ../src/dialogs/clonetiler.cpp:2487
 msgid "How many rows in the tiling"
 msgstr "ཊ་ཡིལ་ལིང་ནང་ལུ་གྲལ་ཐིག་ག་དེ་ཅིག་འདུག"
 
-#: ../src/dialogs/clonetiler.cpp:2502
+#: ../src/dialogs/clonetiler.cpp:2507
 msgid "How many columns in the tiling"
 msgstr "ཊ་ཡིལ་ལིང་ནང་ལུ་ཀེར་ཐིག་ག་དེ་ཅིག་འདུག"
 
-#: ../src/dialogs/clonetiler.cpp:2532
+#: ../src/dialogs/clonetiler.cpp:2537
 msgid "Width of the rectangle to be filled"
 msgstr "བཀང་དགོ་པའི་གྲུ་བཞི་ནར་མོ་དེ་གི་རྒྱ་ཚད།"
 
-#: ../src/dialogs/clonetiler.cpp:2557
+#: ../src/dialogs/clonetiler.cpp:2562
 msgid "Height of the rectangle to be filled"
 msgstr "བཀང་དགོ་པའི་གྲུ་བཞི་ནར་མོ་དེ་གི་མཐོ་ཚད།"
 
-#: ../src/dialogs/clonetiler.cpp:2572
+#: ../src/dialogs/clonetiler.cpp:2577
 msgid "Rows, columns: "
 msgstr "གྲལ་ཐིག་ ཀེར་ཐིག: "
 
-#: ../src/dialogs/clonetiler.cpp:2573
+#: ../src/dialogs/clonetiler.cpp:2578
 msgid "Create the specified number of rows and columns"
 msgstr "གྲླ་ཐིག་དང་ཀེར་ཐིག་ཚུ་གི་གསལ་བཀོད་འབད་ཡོད་ཡོད་པའི་ཨང་ཡིག་དེ་གསར་བསྐྲུན་འབད།"
 
-#: ../src/dialogs/clonetiler.cpp:2582
+#: ../src/dialogs/clonetiler.cpp:2587
 msgid "Width, height: "
 msgstr "རྒྱ་ཚད་ མཐོ་ཚད:"
 
-#: ../src/dialogs/clonetiler.cpp:2583
+#: ../src/dialogs/clonetiler.cpp:2588
 msgid "Fill the specified width and height with the tiling"
 msgstr "གསལ་བཀོད་འབད་ཡོད་པའི་རྒྱ་ཚད་དང་མཐོ་ཚད་དེ་ཊ་ཡིལ་ལིང་དང་གཅིག་ཁར་བཀང་།"
 
-#: ../src/dialogs/clonetiler.cpp:2599
+#: ../src/dialogs/clonetiler.cpp:2604
 msgid "Use saved size and position of the tile"
 msgstr "ཏ་ཡིལ་གི་སྲུང་བཞག་འབད་ཡོད་པའི་ཚད་དང་གནས་ས་དེ་ལག་ལེན་འཐབ།"
 
-#: ../src/dialogs/clonetiler.cpp:2602
+#: ../src/dialogs/clonetiler.cpp:2607
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
@@ -773,11 +778,11 @@ msgstr ""
 "ད་ལྟོའིི་ཚད་དེ་ལག་ལེན་མ་འཐབ་པར་ འདིའི་ཚབ་ལུ་ ཊ་ཡིལ་གི་ཚད་དང་གནས་ས་དེ་ ཁྱོད་ཀྱིས་ཁ་རྩ་ཁ་ཉིནམ་ཊ་"
 "ཡིལ་འབད་དོ་བཟུམ་སྦེ་ ཨིན་བཏབ།"
 
-#: ../src/dialogs/clonetiler.cpp:2626
+#: ../src/dialogs/clonetiler.cpp:2631
 msgid " <b>_Create</b> "
 msgstr "<b>གསར་བསྐྲུན།</b>(_C)"
 
-#: ../src/dialogs/clonetiler.cpp:2628
+#: ../src/dialogs/clonetiler.cpp:2633
 msgid "Create and tile the clones of the selection"
 msgstr "སེལ་འཐུའི་ངོ་འདྲ་དེེ་གསར་བསྐྲུན་འབད་དེ་ཊི་ཡིལ་འབད།"
 
@@ -786,30 +791,30 @@ msgstr "སེལ་འཐུའི་ངོ་འདྲ་དེེ་གསར
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/dialogs/clonetiler.cpp:2643
+#: ../src/dialogs/clonetiler.cpp:2648
 msgid " _Unclump "
 msgstr "སྡེབས་འཛིངས་བཤོལ། (_U)"
 
-#: ../src/dialogs/clonetiler.cpp:2644
+#: ../src/dialogs/clonetiler.cpp:2649
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr ""
 "སྡེབས་འཛིངས་འབད་ནི་མར་ཕབ་འབད་ནིའི་དོན་ལུ་ ངོ་འདྲ་ཚུ་དར་ཁྱབ་གཏང། ཡང་བསྐྱར་དུ་འཇུག་སྤྱོད་འབད་བཏུབ།"
 
-#: ../src/dialogs/clonetiler.cpp:2650
+#: ../src/dialogs/clonetiler.cpp:2655
 msgid " Re_move "
 msgstr "རྩ་བསྐྲད། (_m)"
 
-#: ../src/dialogs/clonetiler.cpp:2651
+#: ../src/dialogs/clonetiler.cpp:2656
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr ""
 "སེལ་འཐུ་འབད་ཡོད་པའི་དངོས་པོ་དེ་གི་ ད་ལྟོ་ཊ་ཡིལ་འབད་ཡོད་པའི་ངོ་འདྲ་ཚུ་རྩ་བསྐྲད་གཏང། (སྤུན་ཆ་རྐྱངམ་ཅིག)"
 
-#: ../src/dialogs/clonetiler.cpp:2667
+#: ../src/dialogs/clonetiler.cpp:2672
 msgid " R_eset "
 msgstr "སླར་སྒྲིག་འབད། (_e)"
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/dialogs/clonetiler.cpp:2669
+#: ../src/dialogs/clonetiler.cpp:2674
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
@@ -1905,13 +1910,13 @@ msgstr "གྲལ་ཐིག་ཚུ་དབུས་སྒྲིག་འབ
 msgid "Align lines right"
 msgstr "གྲལ་ཐིག་ཚུ་གཡས་ལུ་ཕྲང་།"
 
-#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3959
-#: ../src/widgets/toolbox.cpp:4005
+#: ../src/dialogs/text-edit.cpp:288 ../src/widgets/toolbox.cpp:3961
+#: ../src/widgets/toolbox.cpp:4007
 msgid "Horizontal text"
 msgstr "ཐད་སྙོམས་ཚིག་ཡིག"
 
-#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3970
-#: ../src/widgets/toolbox.cpp:4016
+#: ../src/dialogs/text-edit.cpp:302 ../src/widgets/toolbox.cpp:3972
+#: ../src/widgets/toolbox.cpp:4018
 msgid "Vertical text"
 msgstr "ཀེར་ཕྲང་ཚིག་ཡིག"
 
@@ -2180,7 +2185,7 @@ msgstr ""
 msgid "Set picked color"
 msgstr "འཐུ་ཡོད་པའི་ཚོས་གཞི་ གཞི་སྒྲིག་འབད་"
 
-#: ../src/dyna-draw-context.cpp:696
+#: ../src/dyna-draw-context.cpp:713
 msgid "Create calligraphic stroke"
 msgstr "ཀ་ལི་ག་ར་ཕིག་གི་གྲལ་ཐིག་སི་ཊོཀ་ གསར་བསྐྲུན་འབད་"
 
@@ -2363,6 +2368,50 @@ msgstr "བཟོ་ནི་གི་དོན་ལུ་ དངོས་པ�
 msgid "Generate from Path"
 msgstr "འགྲུལ་ལམ་ནང་ལས་བཟོ་བཏོན་འབད།"
 
+#: ../src/extension/internal/emf-win32-inout.cpp:1373
+#, fuzzy
+msgid "EMF Input"
+msgstr "ཌི་ཨེགསི་ཨེཕི་ ཨིན་པུཊི།"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1378
+#, fuzzy
+msgid "Enhanced Metafiles (*.emf)"
+msgstr "ཝིན་ཌོ མེ་ཊ་ཕ་ཡིལ། (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1379
+msgid "Enhanced Metafiles"
+msgstr ""
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1387
+#, fuzzy
+msgid "WMF Input"
+msgstr "ཌབ་ལུ་པི་ཇི་ ཨིན་པུཊི་"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1392
+#, fuzzy
+msgid "Windows Metafiles (*.wmf)"
+msgstr "ཝིན་ཌོ མེ་ཊ་ཕ་ཡིལ། (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1393
+#, fuzzy
+msgid "Windows Metafiles"
+msgstr "ཝིན་ཌོ་མེ་ཊ་ཕ་ཡིལ་ཨིནཔུཊི།"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1401
+#, fuzzy
+msgid "EMF Output"
+msgstr "ཌི་ཨེགསི་ཨེཕི་ ཨའུཊི་པུཊི།"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1406
+#, fuzzy
+msgid "Enhanced Metafile (*.emf)"
+msgstr "ཝིན་ཌོ མེ་ཊ་ཕ་ཡིལ། (*.wmf)"
+
+#: ../src/extension/internal/emf-win32-inout.cpp:1407
+#, fuzzy
+msgid "Enhanced Metafile"
+msgstr "གྲུ་བཞི་ནར་མོ་ བསྒྱུར་བཅོས་འབད་"
+
 #: ../src/extension/internal/eps-out.cpp:89
 msgid "Encapsulated Postscript Output"
 msgstr "བསྡུས་དོན་བཀོད་དེ་ཡོད་པའི་ པོསིཊི་སིཀིརིཔཊི་ ཨའུཊི་པུཊི།"
@@ -2444,9 +2493,9 @@ msgid "Vertical Offset"
 msgstr "ཀེར་ཕྲང་པར་ལེན།"
 
 #: ../src/extension/internal/grid.cpp:224 ../share/extensions/eqtexsvg.inx.h:3
-#: ../share/extensions/funcplot.inx.h:12 ../share/extensions/lindenmayer.inx
-#: .h:9 ../share/extensions/lorem_ipsum.inx.h:4
-#: ../share/extensions/rtree.inx.h:4
+#: ../share/extensions/funcplot.inx.h:12
+#: ../share/extensions/lindenmayer.inx.h:9
+#: ../share/extensions/lorem_ipsum.inx.h:4 ../share/extensions/rtree.inx.h:4
 msgid "Render"
 msgstr "ལྷག་སྟོན་འབད་ནི།"
 
@@ -2482,6 +2531,72 @@ msgstr "ཡིག་ཆ་འབྲི་ནི་ཁ་ཕྱེ།(*.odg)"
 msgid "OpenDocument drawing file"
 msgstr "ཡིག་ཆ་འབྲི་མིའི་ཡིག་སྣོད་ཁ་ཕྱེ།"
 
+#: ../src/extension/internal/pdf.cpp:108 ../src/extension/internal/ps.cpp:121
+msgid "Print Destination"
+msgstr "འགྲོ་ཡུལ་དཔར་བསྐྲུན་འབད།"
+
+#. Print properties frame
+#: ../src/extension/internal/pdf.cpp:123 ../src/extension/internal/ps.cpp:136
+msgid "Print properties"
+msgstr "རྒྱུ་དངོས་ཚུ་དཔར་བསྐྲུན་འབད།"
+
+#: ../src/extension/internal/pdf.cpp:130
+msgid "Print using PDF operators"
+msgstr "པི་ཌི་ཨེཕ་བཀོལ་སྤྱོདཔ་ཚུ་ལག་ལེན་འཐབ་པའི་ཐོག་ལས་དཔར་བསྐྲུན་འབད།"
+
+#: ../src/extension/internal/pdf.cpp:132
+msgid ""
+"Use PDF vector operators. The resulting image is usually smaller in file "
+"size and can be arbitrarily scaled, but patterns will be lost."
+msgstr ""
+"པི་ཌི་ཨེཕ་ མཉམ་ཐིག་བཀོད་སྤྱོདཔ་དེ་ལག་ལེན་འཐབ། གྲུབ་འབྲས་ཐོན་མི་གཟུགས་བརྙན་གྱི་ ཡིག་སྣོད་ཀྱི་ཚད་དེ་སྤྱིར་"
+"གཏང་གི་ཆུང་ཀུ་འོངམ་ཨིནམ་དང་ བར་སྒྲིག་གི་ཐོག་ལས་ཆ་ཚད་འཇལ་ཚུགས་ དེ་འབདཝ་ད་ ཨཱལ་ཕ་དྭངས་གསལ་ཅན་"
+"དང་ དཔེ་གཞི་དེ་ཚུ་བརླག་སྟོར་ཞུགས་འོང་།"
+
+#: ../src/extension/internal/pdf.cpp:137 ../src/extension/internal/ps.cpp:150
+msgid "Print as bitmap"
+msgstr "བིཊི་མེཔ་བཟུམ་སྦེ་དཔར་བསྐྲུན་འབད།"
+
+#: ../src/extension/internal/pdf.cpp:139 ../src/extension/internal/ps.cpp:152
+msgid ""
+"Print everything as bitmap. The resulting image is usually larger in file "
+"size and cannot be arbitrarily scaled without quality loss, but all objects "
+"will be rendered exactly as displayed."
+msgstr ""
+"ཆ་མཉམ་རང་བིཊི་མེཔ་བཟུམ་སྦེ་དཔར་བསྐྲུན་འབད། གྲུབ་འབྲས་བྱུང་མི་གཟུགས་བརྙན་ཚུ་གི་ཡིག་སྣོད་ཀྱི་ཚད་དེ་སྤྱིར་"
+"གཏང་གིས་སྦོམ་སུ་སྦེ་འོངམ་ཨིནམ་དང་ སྤུད་ཚད་ཀྱི་བརླག་གཏོར་མ་ཞུགས་པར་བར་སྒྲིག་གི་ཐོག་ལས་ཆ་ཚད་འཇལ་མི་"
+"བཏུབ་ དེ་འབདཝ་ད་ བཀྲམ་སྟོན་འབད་དེ་ཡོད་དོ་བཟུམ་སྦེ་ དངོས་པོ་ཆ་མཉམ་རང་ཏག་ཏག་སྦེ་ལྷག་སྟོན་འབད་འོང་།"
+
+#: ../src/extension/internal/pdf.cpp:153 ../src/extension/internal/ps.cpp:166
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "བིཊི་མེཔ་གི་(ཨིནཅི་རེ་ལུ་ཚག་རེ་)དགའ་བའི་ཧུམ་ཆ།"
+
+#: ../src/extension/internal/pdf.cpp:167 ../src/extension/internal/ps.cpp:180
+msgid "Resolution:"
+msgstr "ཧུམ་ཆ:"
+
+#. Print destination frame
+#: ../src/extension/internal/pdf.cpp:171 ../src/extension/internal/ps.cpp:184
+msgid "Print destination"
+msgstr "འགྲོ་ཡུལ་དཔར་བསྐྲུན་འབད།"
+
+#: ../src/extension/internal/pdf.cpp:177 ../src/extension/internal/ps.cpp:190
+msgid ""
+"Printer name (as given by lpstat -p);\n"
+"leave empty to use the system default printer.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to a program."
+msgstr ""
+"དཔར་བསྐྲུན་པའི་མིང་ (as given by lpstat -p);\n"
+"སྔོན་སྒྲིག་དཔར་བསྐྲུན་པའི་རིམ་ལུགས་དེ་ལག་ལེན་འཐབ་ནིའི་དོན་ལུ་སྟོངམ་བཞགལས་རིམ་ལུ་'པ་ཡིབ་འབད་ནིའི་དོན་"
+"ལུ་\n"
+"ཡིག་སྣོད་ནང་ལུ་དཔར་བསྐྲུན་འབད་ནིའི་དོན་ལུ་ '> filename' དེ་ལག་ལེན་འཐབ།\n"
+"ལས་རིམ་ཅིག་ནང་ལུ་བརྒྱུད་གདུང་འབད་ནིའི་དོན་ལུ་ '| prog arg...' དེལག་ལེན་འཐབ།"
+
+#: ../src/extension/internal/pdf.cpp:1566
+msgid "PDF Print"
+msgstr "པི་ཌི་ཨེཕ་ དཔར་བསྐྲུན།"
+
 #: ../src/extension/internal/pov-out.cpp:457
 msgid "PovRay Output"
 msgstr "PovRay ཨའུཊི་པུཊི།"
@@ -2507,15 +2622,6 @@ msgstr "པོསིཊི་སིཀིརིཔཊི།(*.ps)"
 msgid "Postscript File"
 msgstr "པོསིཊི་སིཀིརིཔཊི། ཡིག་སྣོད།"
 
-#: ../src/extension/internal/ps.cpp:121
-msgid "Print Destination"
-msgstr "འགྲོ་ཡུལ་དཔར་བསྐྲུན་འབད།"
-
-#. Print properties frame
-#: ../src/extension/internal/ps.cpp:136
-msgid "Print properties"
-msgstr "རྒྱུ་དངོས་ཚུ་དཔར་བསྐྲུན་འབད།"
-
 #: ../src/extension/internal/ps.cpp:143
 msgid "Print using PostScript operators"
 msgstr "པོསིཊི་སིཀིརིཔཊི་ བཀོལ་སྤྱོདཔ་ཚུ་ལག་ལེན་འཐབ་པའི་ཐོག་ལས་དཔར་བསྐྲུན་འབད།"
@@ -2529,46 +2635,6 @@ msgstr ""
 "པོསིཊི་སིཀིརིཔཊི་མཉམ་ཐིག་བཀོད་སྤྱོདཔ་དེ་ལག་ལེན་འཐབ། གྲུབ་འབྲས་ཐོན་མི་གཟུགས་བརྙན་གྱི་ ཡིག་སྣོད་ཀྱི་ཚད་དེ་"
 "སྤྱིར་གཏང་གི་ཆུང་ཀུ་འོངམ་ཨིནམ་དང་ བར་སྒྲིག་གི་ཐོག་ལས་ཆ་ཚད་འཇལ་ཚུགས་ དེ་འབདཝ་ད་ ཨཱལ་ཕ་དྭངས་གསལ་"
 "ཅན་དང་ དཔེ་གཞི་དེ་ཚུ་བརླག་སྟོར་ཞུགས་འོང་།"
-
-#: ../src/extension/internal/ps.cpp:150
-msgid "Print as bitmap"
-msgstr "བིཊི་མེཔ་བཟུམ་སྦེ་དཔར་བསྐྲུན་འབད།"
-
-#: ../src/extension/internal/ps.cpp:152
-msgid ""
-"Print everything as bitmap. The resulting image is usually larger in file "
-"size and cannot be arbitrarily scaled without quality loss, but all objects "
-"will be rendered exactly as displayed."
-msgstr ""
-"ཆ་མཉམ་རང་བིཊི་མེཔ་བཟུམ་སྦེ་དཔར་བསྐྲུན་འབད། གྲུབ་འབྲས་བྱུང་མི་གཟུགས་བརྙན་ཚུ་གི་ཡིག་སྣོད་ཀྱི་ཚད་དེ་སྤྱིར་"
-"གཏང་གིས་སྦོམ་སུ་སྦེ་འོངམ་ཨིནམ་དང་ སྤུད་ཚད་ཀྱི་བརླག་གཏོར་མ་ཞུགས་པར་བར་སྒྲིག་གི་ཐོག་ལས་ཆ་ཚད་འཇལ་མི་"
-"བཏུབ་ དེ་འབདཝ་ད་ བཀྲམ་སྟོན་འབད་དེ་ཡོད་དོ་བཟུམ་སྦེ་ དངོས་པོ་ཆ་མཉམ་རང་ཏག་ཏག་སྦེ་ལྷག་སྟོན་འབད་འོང་།"
-
-#: ../src/extension/internal/ps.cpp:166
-msgid "Preferred resolution (dots per inch) of bitmap"
-msgstr "བིཊི་མེཔ་གི་(ཨིནཅི་རེ་ལུ་ཚག་རེ་)དགའ་བའི་ཧུམ་ཆ།"
-
-#: ../src/extension/internal/ps.cpp:180
-msgid "Resolution:"
-msgstr "ཧུམ་ཆ:"
-
-#. Print destination frame
-#: ../src/extension/internal/ps.cpp:184
-msgid "Print destination"
-msgstr "འགྲོ་ཡུལ་དཔར་བསྐྲུན་འབད།"
-
-#: ../src/extension/internal/ps.cpp:190
-msgid ""
-"Printer name (as given by lpstat -p);\n"
-"leave empty to use the system default printer.\n"
-"Use '> filename' to print to file.\n"
-"Use '| prog arg...' to pipe to a program."
-msgstr ""
-"དཔར་བསྐྲུན་པའི་མིང་ (as given by lpstat -p);\n"
-"སྔོན་སྒྲིག་དཔར་བསྐྲུན་པའི་རིམ་ལུགས་དེ་ལག་ལེན་འཐབ་ནིའི་དོན་ལུ་སྟོངམ་བཞགལས་རིམ་ལུ་'པ་ཡིབ་འབད་ནིའི་དོན་"
-"ལུ་\n"
-"ཡིག་སྣོད་ནང་ལུ་དཔར་བསྐྲུན་འབད་ནིའི་དོན་ལུ་ '> filename' དེ་ལག་ལེན་འཐབ།\n"
-"ལས་རིམ་ཅིག་ནང་ལུ་བརྒྱུད་གདུང་འབད་ནིའི་དོན་ལུ་ '| prog arg...' དེལག་ལེན་འཐབ།"
 
 #: ../src/extension/internal/ps.cpp:1719
 msgid "Postscript Print"
@@ -2664,7 +2730,7 @@ msgstr "ཀོ་རེལ་ཝོརཌི་པར་ཕེཀཊི་གི
 #. running from the console, in which case calling sp_ui
 #. routines will cause a segfault.  See bug 1000350 - bryce
 #. sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
-#: ../src/extension/system.cpp:101
+#: ../src/extension/system.cpp:102
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 "རྩ་སྒྲིག་རང་བཞིན་གྱིས་སྐྱོན་འཛིན་འབད་ནི་འཐུས་ཤོས་བྱུང་ཡོདཔ། ཡིག་སྣོད་དེ་ཨེསི་ཉི་སྦེ་ཁ་ཕྱེ་སྟེ་བཞག་ཡོད།"
@@ -3002,6 +3068,12 @@ msgstr "ཨེགསི།"
 #: ../src/helper/units.cpp:49
 msgid "Ex squares"
 msgstr "ཨེགསི་གྲུ་བཞི་ཚུ།"
+
+#: ../src/ink-action.cpp:179 ../src/widgets/toolbox.cpp:2292
+#: ../src/widgets/toolbox.cpp:2456
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+"སྨྱུག་བྲིས་དེ་གི་རྒྱ་ཚད་དེ་བསྒཡུར་བཅོས་འབད་ནིའི་དོན་ལུ་ ཨིན་པུཊི་ཐབས་འཕྲུལ་དེ་གི་ཨེབ་ཤུགས་དེ་ལག་ལེན་འཐབ།"
 
 #: ../src/inkscape.cpp:447
 msgid "Untitled document"
@@ -3454,7 +3526,7 @@ msgstr ""
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "ཡིག་ཆ་དེ་གི་ཌེཕསི་ དབྱེ་ཚན་(s)ནང་ལས་ལག་ལེན་མ་འཐབ་པར་ཡོད་མི་ངོས་ཚིག་ཚུ་རྩ་བསྐྲད་གཏང་།"
 
-#: ../src/main.cpp:557
+#: ../src/main.cpp:563
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4736,14 +4808,14 @@ msgstr "འབབ་རྒྱུན་ལུང་ཕྱོགས།"
 msgid "Flow excluded region"
 msgstr "འབབ་རྒྱུན་གྲངས་སུ་མ་བཙུགས་པར་ཡོད་མི་ལུང་ཕྱོགས།"
 
-#: ../src/sp-flowtext.cpp:369
+#: ../src/sp-flowtext.cpp:370
 #, c-format
 msgid "<b>Flowed text</b> (%d character)"
 msgid_plural "<b>Flowed text</b> (%d characters)"
 msgstr[0] "<b>འབབ་རྒྱུན་འབད་ཡོད་པའི་ཚིག་ཡིག</b>(%d ཡིག་འབྲུ་ཚུ།)"
 msgstr[1] "<b>འབབ་རྒྱུན་འབད་ཡོད་པའི་ཚིག་ཡིག</b>(%d ཡིག་འབྲུ་ཚུ།)"
 
-#: ../src/sp-flowtext.cpp:371
+#: ../src/sp-flowtext.cpp:372
 #, c-format
 msgid "<b>Linked flowed text</b> (%d character)"
 msgid_plural "<b>Linked flowed text</b> (%d characters)"
@@ -5103,7 +5175,7 @@ msgstr "འགྲུལ་ལམ་ནང་ལས་ཚིག་ཡིག་ར
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "ནང་ལས་ ཀ་རནསི་ རྩ་བསྐྲད་གཏང་ནིའི་དོན་ལུ་<b>ཚིག་ཡིག་(ཚུ་)</b> སེལ་འཐུ་འབད།"
 
-#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4154
+#: ../src/text-chemistry.cpp:270 ../src/widgets/toolbox.cpp:4156
 msgid "Remove manual kerns"
 msgstr "ལག་དེབ་ཀརནི་ཚུ་རྩ་བསྐྲད་གཏང་།"
 
@@ -5549,7 +5621,7 @@ msgid "Remove overlaps"
 msgstr "མཐའ་མནོན་ཚུ་རྩ་བསྐྲད་གཏང་།"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:520
-#: ../src/widgets/toolbox.cpp:4241
+#: ../src/widgets/toolbox.cpp:4243
 msgid "Arrange connector network"
 msgstr "མཐུད་བྱེད་ཡོངས་འབྲེལ་ བདེ་ཞིབ་འབད་"
 
@@ -5687,7 +5759,7 @@ msgstr ""
 "དངོས་པོ་ཚུ་ག་དེ་ཉུང་ཉུང་སྦེ་སྤོ་བཤུད་འབད་བ་ཅིན་ དེ་ཚུ་གི་བཅད་མཚམས་སྒྲོམ་ཚུ་མཐའ་མནོན་འབད་མི་འགྱོ།"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:863
-#: ../src/widgets/toolbox.cpp:4343
+#: ../src/widgets/toolbox.cpp:4345
 msgid "Nicely arrange selected connector network"
 msgstr "སེལ་འཐུ་འབད་དེ་ཡོད་མི་མཐུད་བྱེད་ཡོངས་འབྲེལ་དེ་ལེགས་ཤོམ་སྦེ་བདེ་ཞིབ་འབད།"
 
@@ -9948,7 +10020,7 @@ msgstr "ཡིག་གཟུགས་ཀྱི་ཚད:"
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3730
+#: ../src/widgets/font-selector.cpp:594 ../src/widgets/toolbox.cpp:3732
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQq12369$€¢?.;/()"
 
@@ -10725,11 +10797,6 @@ msgstr ""
 msgid "Pressure"
 msgstr "ཉམས་སྲུང་འབད་ཡོདཔ།"
 
-#: ../src/widgets/toolbox.cpp:2292 ../src/widgets/toolbox.cpp:2456
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr ""
-"སྨྱུག་བྲིས་དེ་གི་རྒྱ་ཚད་དེ་བསྒཡུར་བཅོས་འབད་ནིའི་དོན་ལུ་ ཨིན་པུཊི་ཐབས་འཕྲུལ་དེ་གི་ཨེབ་ཤུགས་དེ་ལག་ལེན་འཐབ།"
-
 #: ../src/widgets/toolbox.cpp:2303
 #, fuzzy
 msgid "Tilt"
@@ -10791,11 +10858,11 @@ msgstr "ཆ་ཚང་བཟོ།"
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "དབྱིབས་དེ་ ཞུ་དབྱིབས་ ཡང་ན་ ཆ་གོས་མེན་པར་ སྒོང་དབྱིབས་ཆ་ཚང་ཅིག་བཟོ།"
 
-#: ../src/widgets/toolbox.cpp:3068
+#: ../src/widgets/toolbox.cpp:3070
 msgid "Pick alpha"
 msgstr "ཨཱལ་ཕ་ འཐུ་"
 
-#: ../src/widgets/toolbox.cpp:3069
+#: ../src/widgets/toolbox.cpp:3071
 msgid ""
 "Pick both the color and the alpha (transparency) under cursor; otherwise, "
 "pick only the visible color premultiplied by alpha"
@@ -10803,36 +10870,36 @@ msgstr ""
 "འོད་རྟགས་ཀྱི་འོག་ལུ་ ཚོས་གཞི་དང་ཨཱལ་ཕ་(དྭངས་གསལ་)གཉིས་ཀུ་འཐུ་ དེ་མེན་པ་ཅིན་ ཨཱལ་་ཕ་གིས་ སྔ་གོང་"
 "ལས་དགུ་མཐའ་བརྐྱབས་ཡོད་པའི་མཐོང་ཚུགས་པའི་ཚོས་གཞི་རྐྱངམ་ཅིག་ འཐུ་"
 
-#: ../src/widgets/toolbox.cpp:3084
+#: ../src/widgets/toolbox.cpp:3086
 msgid "Set alpha"
 msgstr "ཨཱལ་ཕ་ གཞི་སྒྲིག་འབད་"
 
-#: ../src/widgets/toolbox.cpp:3085
+#: ../src/widgets/toolbox.cpp:3087
 msgid ""
 "If alpha was picked, assign it to selection as fill or stroke transparency"
 msgstr "ཨཱལ་ཕ་འདི་འཐུ་ཡོད་པ་ཅིན་ བཀང་བ་ ཡངན་ སི་ཊོཀ་དྭངས་གསལ་སྦེ་ སེལ་འཐུ་ལུ་ འགན་སྤྲོད་འབད་"
 
-#: ../src/widgets/toolbox.cpp:3384
+#: ../src/widgets/toolbox.cpp:3386
 msgid "Text: Change font family"
 msgstr "ཚིག་ཡིག་: ཡིག་གཟུགས་རྩ་ལག་ བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/widgets/toolbox.cpp:3467
+#: ../src/widgets/toolbox.cpp:3469
 msgid "Text: Change alignment"
 msgstr "ཚིག་ཡིག་: ཕྲང་སྒྲིག་བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/widgets/toolbox.cpp:3513
+#: ../src/widgets/toolbox.cpp:3515
 msgid "Text: Change font style"
 msgstr "ཚིག་ཡིག་: ཡིག་གཟུགས་རྩ་ལག་ བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/widgets/toolbox.cpp:3560
+#: ../src/widgets/toolbox.cpp:3562
 msgid "Text: Change orientation"
 msgstr "ཚིག་ཡིག་: ཕྱོགས་ བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/widgets/toolbox.cpp:3656
+#: ../src/widgets/toolbox.cpp:3658
 msgid "Text: Change font size"
 msgstr "ཚིག་ཡིག་: ཡིག་གཟུགས་ཀྱི་ཚད་ བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/widgets/toolbox.cpp:3839
+#: ../src/widgets/toolbox.cpp:3841
 msgid ""
 "This font is currently not installed on your system. Inkscape will use the "
 "default font instead."
@@ -10840,75 +10907,75 @@ msgstr ""
 "ཡིག་གཟུགས་འདི་ད་ལྟོ་ཁྱོད་རའི་རིམ་ལུགས་ནང་ལུ་གཞི་བཙུགས་མ་འབད། ཨིངཀིསི་ཀེབ་དེ་གིས་ ཚབ་ལུ་སྔོན་སྒྲིག་ཡིག་"
 "གཟུགས་དེ་ལག་ལེན་འཐབ་འོང་།"
 
-#: ../src/widgets/toolbox.cpp:3877
+#: ../src/widgets/toolbox.cpp:3879
 msgid "Align left"
 msgstr "གཡོན་ལུ་ཕྲང་།"
 
-#: ../src/widgets/toolbox.cpp:3888
+#: ../src/widgets/toolbox.cpp:3890
 msgid "Center"
 msgstr "དབུས།"
 
-#: ../src/widgets/toolbox.cpp:3899
+#: ../src/widgets/toolbox.cpp:3901
 msgid "Align right"
 msgstr "གཡས་ཕྲང་།"
 
-#: ../src/widgets/toolbox.cpp:3910
+#: ../src/widgets/toolbox.cpp:3912
 msgid "Justify"
 msgstr "ལྟེམས་བཅོས།"
 
-#: ../src/widgets/toolbox.cpp:3926
+#: ../src/widgets/toolbox.cpp:3928
 msgid "Bold"
 msgstr "རྒྱགས་པ།"
 
-#: ../src/widgets/toolbox.cpp:3937
+#: ../src/widgets/toolbox.cpp:3939
 msgid "Italic"
 msgstr "ཨའི་ཊ་ལིཀ། "
 
-#: ../src/widgets/toolbox.cpp:4035
+#: ../src/widgets/toolbox.cpp:4037
 msgid "Spacing between letters"
 msgstr "ཡི་གུ་ཚུ་གི་བར་ན་སྟོང་བཏོན་ནི།"
 
-#: ../src/widgets/toolbox.cpp:4056
+#: ../src/widgets/toolbox.cpp:4058
 msgid "Spacing between lines"
 msgstr "གྲལ་ཐིག་ཚུ་གི་བར་ན་བར་སྟོང་སྟོན་ནི།"
 
-#: ../src/widgets/toolbox.cpp:4085
+#: ../src/widgets/toolbox.cpp:4087
 msgid "Horizontal kerning"
 msgstr "ཐད་སྙོམས་སྦེ་ཀརནི་འབད་ནི།"
 
-#: ../src/widgets/toolbox.cpp:4106
+#: ../src/widgets/toolbox.cpp:4108
 msgid "Vertical kerning"
 msgstr "ཀེར་ཕྲང་སྦེ་ཀརནི་འབད་ནི།"
 
-#: ../src/widgets/toolbox.cpp:4133
+#: ../src/widgets/toolbox.cpp:4135
 msgid "Letter rotation"
 msgstr "ཡི་གུ་བསྒྱིར་ནི།"
 
-#: ../src/widgets/toolbox.cpp:4222
+#: ../src/widgets/toolbox.cpp:4224
 msgid "Change connector spacing"
 msgstr "མཐུད་བྱེད་ཀྱི་བར་སྟོང་བཞག་ཐངས་ བསྒྱུར་བཅོས་འབད་"
 
-#: ../src/widgets/toolbox.cpp:4331
+#: ../src/widgets/toolbox.cpp:4333
 msgid "Spacing:"
 msgstr "བར་སྟོང་སྟོན་ནི:"
 
-#: ../src/widgets/toolbox.cpp:4332
+#: ../src/widgets/toolbox.cpp:4334
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr "ཨོ་ཊོ་རའུ་ཊིང་ མཐུད་བྱེད་ཚུ་གིས་ དངོས་པོ་ཚུ་གི་མཐའ་སྐོར་ལུ་བཞག་ཡོད་མི་བར་སྟོང་གི་བསྡོམས།"
 
-#: ../src/widgets/toolbox.cpp:4346
+#: ../src/widgets/toolbox.cpp:4348
 msgid "Length:"
 msgstr "རིང་ཚད་:"
 
-#: ../src/widgets/toolbox.cpp:4347
+#: ../src/widgets/toolbox.cpp:4349
 msgid "Ideal length for connectors when layout is applied"
 msgstr "སྒྲིག་བཀོད་འདི་འཇུག་སྤྱོད་འབད་བའི་སྐབས་ མཐུད་བྱེད་ཀྱི་དོན་ལུ་ མཐུན་པའི་རིང་ཚད་"
 
-#: ../src/widgets/toolbox.cpp:4362
+#: ../src/widgets/toolbox.cpp:4364
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr "མཇུག་གི་རྟགས་བཀོད་པའི་(མདའ་རྟགས་)ས་ཚིགས་མར་ཕྱོགས་དང་གཅིག་ཁར་ མཐུད་བྱེད་བཟོ་"
 
-#: ../src/widgets/toolbox.cpp:4376
+#: ../src/widgets/toolbox.cpp:4378
 msgid "Do not allow overlapping shapes"
 msgstr "དབྱིབས་ཚུ་མཐའ་མནོན་འབད་མ་བཅུག་"
 
@@ -11367,41 +11434,41 @@ msgstr "བསྐྱར་བསྣོན་ཐབས་ལམ།"
 msgid "Interpolation steps"
 msgstr "བསྐྱར་བསྣོན་རིམ་པ། "
 
-#: ../share/extensions/lindenmayer.inx .h:1
+#: ../share/extensions/lindenmayer.inx.h:1
 msgid "Axiom"
 msgstr "ཨེག་སི་ཡམ།"
 
-#: ../share/extensions/lindenmayer.inx .h:2
+#: ../share/extensions/lindenmayer.inx.h:2
 msgid "L-system"
 msgstr "ཨེལ་-རིམ་ལུགས།"
 
-#: ../share/extensions/lindenmayer.inx .h:3
+#: ../share/extensions/lindenmayer.inx.h:3
 msgid "Left angle"
 msgstr "གཡོན་གྱི་གྲུ་ཟུར།"
 
-#: ../share/extensions/lindenmayer.inx .h:4
+#: ../share/extensions/lindenmayer.inx.h:4
 msgid "Order"
 msgstr "གོ་རིམ།"
 
-#: ../share/extensions/lindenmayer.inx .h:6
+#: ../share/extensions/lindenmayer.inx.h:6
 #, no-c-format
 msgid "Randomize angle (%)"
 msgstr "གྲུ་ཟུར་གང་བྱུང་བཟོ།(%)"
 
-#: ../share/extensions/lindenmayer.inx .h:8
+#: ../share/extensions/lindenmayer.inx.h:8
 #, no-c-format
 msgid "Randomize step (%)"
 msgstr "རིམ་པ་གང་འབྱུང་བཟོ།(%)"
 
-#: ../share/extensions/lindenmayer.inx .h:10
+#: ../share/extensions/lindenmayer.inx.h:10
 msgid "Right angle"
 msgstr "གཡས་ཀྱི་གྲུ་ཟུར།"
 
-#: ../share/extensions/lindenmayer.inx .h:11
+#: ../share/extensions/lindenmayer.inx.h:11
 msgid "Rules"
 msgstr "ལམ་ལུགས།"
 
-#: ../share/extensions/lindenmayer.inx .h:12
+#: ../share/extensions/lindenmayer.inx.h:12
 msgid "Step length (px)"
 msgstr "རིམ་པའི་རིང་ཚད།(པི་ཨེགསི།)"
 
@@ -11518,41 +11585,14 @@ msgid "Pattern is vertical"
 msgstr "དཔེ་གཞི་འདི་ཀེར་ཕྲང་ཨིན་"
 
 #: ../share/extensions/pathalongpath.inx.h:8
-#, fuzzy
-msgid "Repeated"
-msgstr "ཡང་བསྐྱར:"
-
-#: ../share/extensions/pathalongpath.inx.h:9
-msgid "Repeated, stretched"
-msgstr ""
-
-#: ../share/extensions/pathalongpath.inx.h:10
-msgid "Ribbon"
-msgstr ""
-
-#: ../share/extensions/pathalongpath.inx.h:11
-#, fuzzy
-msgid "Single"
-msgstr "གྲུ་ཟུར།"
-
-#: ../share/extensions/pathalongpath.inx.h:12
-msgid "Single, stretched"
-msgstr ""
-
-#: ../share/extensions/pathalongpath.inx.h:13
-#, fuzzy
-msgid "Snake"
-msgstr "གསེག་ལོག་"
-
-#: ../share/extensions/pathalongpath.inx.h:14
 msgid "Space between copies:"
 msgstr "འདྲ་བཤུས་བར་ནའི་བར་སྟོང་:"
 
-#: ../share/extensions/pathalongpath.inx.h:15
+#: ../share/extensions/pathalongpath.inx.h:9
 msgid "Tangential offset"
 msgstr "ཊེན་ཇེནཊི་ཤེལ་པར་ལེན།"
 
-#: ../share/extensions/pathalongpath.inx.h:16
+#: ../share/extensions/pathalongpath.inx.h:10
 msgid ""
 "This effect bends a pattern object along an arbitrary \"skeleton\" path. The "
 "pattern can be a path or a group of paths. First, select the pattern object; "
@@ -11728,19 +11768,17 @@ msgstr "ཝིན་ཌོ མེ་ཊ་ཕ་ཡིལ། (*.wmf)"
 msgid "Windows Metafile Input"
 msgstr "ཝིན་ཌོ་མེ་ཊ་ཕ་ཡིལ་ཨིནཔུཊི།"
 
-#~ msgid "Print using PDF operators"
-#~ msgstr "པི་ཌི་ཨེཕ་བཀོལ་སྤྱོདཔ་ཚུ་ལག་ལེན་འཐབ་པའི་ཐོག་ལས་དཔར་བསྐྲུན་འབད།"
+#, fuzzy
+#~ msgid "Repeated"
+#~ msgstr "ཡང་བསྐྱར:"
 
-#~ msgid ""
-#~ "Use PDF vector operators. The resulting image is usually smaller in file "
-#~ "size and can be arbitrarily scaled, but patterns will be lost."
-#~ msgstr ""
-#~ "པི་ཌི་ཨེཕ་ མཉམ་ཐིག་བཀོད་སྤྱོདཔ་དེ་ལག་ལེན་འཐབ། གྲུབ་འབྲས་ཐོན་མི་གཟུགས་བརྙན་གྱི་ ཡིག་སྣོད་ཀྱི་ཚད་དེ་"
-#~ "སྤྱིར་གཏང་གི་ཆུང་ཀུ་འོངམ་ཨིནམ་དང་ བར་སྒྲིག་གི་ཐོག་ལས་ཆ་ཚད་འཇལ་ཚུགས་ དེ་འབདཝ་ད་ ཨཱལ་ཕ་དྭངས་"
-#~ "གསལ་ཅན་དང་ དཔེ་གཞི་དེ་ཚུ་བརླག་སྟོར་ཞུགས་འོང་།"
+#, fuzzy
+#~ msgid "Single"
+#~ msgstr "གྲུ་ཟུར།"
 
-#~ msgid "PDF Print"
-#~ msgstr "པི་ཌི་ཨེཕ་ དཔར་བསྐྲུན།"
+#, fuzzy
+#~ msgid "Snake"
+#~ msgstr "གསེག་ལོག་"
 
 #~ msgid "Source left bound"
 #~ msgstr "གཡོན་གནས་འབྱུང་ཁུངས་"
