@@ -1,3 +1,5 @@
+#include <glib.h>
+
 #include <string>
 #include <vector>
 
@@ -228,7 +230,7 @@ private:
 
     void getLineAndColumn(long pos, long *lineNr, long *colNr);
 
-    void error(char *fmt, ...);
+    void error(char *fmt, ...) G_GNUC_PRINTF(2,3);
 
     int peek(long pos);
 

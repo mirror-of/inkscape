@@ -35,7 +35,7 @@ if test "$GCC" = "yes"; then
   CFLAGS="-Wno-pointer-sign $CFLAGS"
   AC_COMPILE_IFELSE([int dummy;
 ], , CFLAGS="$ink_svd_CFLAGS",)
-  CFLAGS="-Wall -W $CFLAGS"
+  CFLAGS="-Wall -Wformat-security -W $CFLAGS"
 fi
 
 AC_LANG(C++)
@@ -669,7 +669,7 @@ if test "$GXX" = "yes"; then
   # programmer deliberately has an unused parameter (e.g. because it's used
   # as a callback or similar function pointer use).
 
-  CXXFLAGS="-Wall -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch  $CXXFLAGS"
+  CXXFLAGS="-Wall -Wformat-security -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch  $CXXFLAGS"
 
   dnl Test for arch-specific situations.
   case "$host_cpu" in
