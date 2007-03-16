@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-13 13:48-0500\n"
-"PO-Revision-Date: 2007-01-26 01:08+0100\n"
+"PO-Revision-Date: 2007-03-16 01:00+0100\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -65,9 +65,8 @@ msgstr "Einen neuen Objektverbinder erzeugen"
 
 # !!!
 #: ../src/connector-context.cpp:746
-#, fuzzy
 msgid "Connector endpoint drag canceled."
-msgstr "Verschieben von Knoten oder Knotenanfassern abgebrochen."
+msgstr "Ziehen von Objektverbinder-Endpunkt abgebrochen."
 
 #: ../src/connector-context.cpp:794
 msgid "Reroute connector"
@@ -2423,48 +2422,40 @@ msgid "Generate from Path"
 msgstr "Aus Pfad erzeugen"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1373
-#, fuzzy
 msgid "EMF Input"
-msgstr "DXF einlesen"
+msgstr "EMF einlesen"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1378
-#, fuzzy
 msgid "Enhanced Metafiles (*.emf)"
-msgstr "Windows-Metafile (*.wmf)"
+msgstr "Enhanced Metafiles (*.wmf)"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1379
 msgid "Enhanced Metafiles"
-msgstr ""
+msgstr "Enhanced Metafiles"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1387
-#, fuzzy
 msgid "WMF Input"
-msgstr "WPG einlesen"
+msgstr "WMF einlesen"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1392
-#, fuzzy
 msgid "Windows Metafiles (*.wmf)"
-msgstr "Windows-Metafile (*.wmf)"
+msgstr "Windows-Metafiles (*.wmf)"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1393
-#, fuzzy
 msgid "Windows Metafiles"
-msgstr "Windows-Metafile einlesen"
+msgstr "Windows-Metafiles"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1401
-#, fuzzy
 msgid "EMF Output"
-msgstr "DXF-Ausgabe"
+msgstr "EMF-Ausgabe"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1406
-#, fuzzy
 msgid "Enhanced Metafile (*.emf)"
-msgstr "Windows-Metafile (*.wmf)"
+msgstr "Enhanced Metafile (*.wmf)"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1407
-#, fuzzy
 msgid "Enhanced Metafile"
-msgstr "Rechteck ändern"
+msgstr "Enhanced Metafile"
 
 #: ../src/extension/internal/eps-out.cpp:89
 msgid "Encapsulated Postscript Output"
