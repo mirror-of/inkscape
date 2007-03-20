@@ -24,7 +24,8 @@ Inkscape 0.45.1 changes with respect to 0.45
      * Patch [ 1673067 ]: fix blur export on flowtext
      * Patch [ 1678075 ]: fix FontInstance.cpp compile issue
      * Patch [ 1673502 ]: fix broken Envelope (Summers Night) effect
-
+     * Security: fixed format string overflows in dialogs (CVE-2007-1463)
+       and whiteboard Jabber protocol (CVE-2007-1464).
 
 Inkscape 0.45: overview
 
