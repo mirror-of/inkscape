@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-20 02:24+0100\n"
+"POT-Creation-Date: 2008-02-23 02:05-0800\n"
 "PO-Revision-Date: 2006-11-05 18:37+0100\n"
 "Last-Translator: Daniel Díaz <yosoy@danieldiaz.org>\n"
 "Language-Team: none <none>\n"
@@ -57,26 +57,24 @@ msgstr ""
 msgid "Create ellipse"
 msgstr "Crear un documento nuevo"
 
-#: ../src/box3d.cpp:341
+#: ../src/box3d.cpp:317
 #, fuzzy
 msgid "<b>3D Box</b>"
 msgstr "Círculo"
 
-#: ../src/box3d-context.cpp:480 ../src/box3d-context.cpp:487
-#: ../src/box3d-context.cpp:494 ../src/box3d-context.cpp:501
-#: ../src/box3d-context.cpp:508 ../src/box3d-context.cpp:515
+#: ../src/box3d-context.cpp:450 ../src/box3d-context.cpp:457
+#: ../src/box3d-context.cpp:464 ../src/box3d-context.cpp:471
+#: ../src/box3d-context.cpp:478 ../src/box3d-context.cpp:485
 #, fuzzy
 msgid "Change perspective (angle of PLs)"
 msgstr "Rectángulo"
 
 #. status text
-#. GString *Ax = SP_PX_TO_METRIC_STRING(origin[NR::X], desktop->namedview->getDefaultMetric());
-#. GString *Ay = SP_PX_TO_METRIC_STRING(origin[NR::Y], desktop->namedview->getDefaultMetric());
-#: ../src/box3d-context.cpp:730
+#: ../src/box3d-context.cpp:640
 msgid "<b>3D Box</b>; with <b>Shift</b> to extrude along the Z axis"
 msgstr ""
 
-#: ../src/box3d-context.cpp:757
+#: ../src/box3d-context.cpp:664
 #, fuzzy
 msgid "Create 3D box"
 msgstr "Cerrar"
@@ -729,7 +727,7 @@ msgstr ""
 #: ../src/dialogs/clonetiler.cpp:2599 ../src/dialogs/clonetiler.cpp:2748
 #: ../src/extension/internal/bitmap/opacity.cpp:37
 #: ../src/extension/internal/bitmap/opacity.cpp:39
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2188
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2238
 #: ../src/widgets/toolbox.cpp:3186
 #, fuzzy
 msgid "Opacity"
@@ -839,7 +837,7 @@ msgid ""
 msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2728
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2165
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2214
 #, fuzzy
 msgid "Size"
 msgstr "Caras:"
@@ -976,15 +974,15 @@ msgstr ""
 msgid "none"
 msgstr "Ninguno"
 
-#: ../src/dialogs/export.cpp:143 ../src/verbs.cpp:2478
+#: ../src/dialogs/export.cpp:143 ../src/verbs.cpp:2484
 msgid "_Page"
 msgstr "_Página"
 
-#: ../src/dialogs/export.cpp:143 ../src/verbs.cpp:2482
+#: ../src/dialogs/export.cpp:143 ../src/verbs.cpp:2488
 msgid "_Drawing"
 msgstr "_Dibujo"
 
-#: ../src/dialogs/export.cpp:143 ../src/verbs.cpp:2484
+#: ../src/dialogs/export.cpp:143 ../src/verbs.cpp:2490
 msgid "_Selection"
 msgstr "_Selección"
 
@@ -1488,8 +1486,8 @@ msgid ""
 msgstr ""
 
 #. Button for setting the object's id, label, title and description.
-#: ../src/dialogs/item-properties.cpp:143 ../src/verbs.cpp:2358
-#: ../src/verbs.cpp:2362
+#: ../src/dialogs/item-properties.cpp:143 ../src/verbs.cpp:2364
+#: ../src/verbs.cpp:2368
 #, fuzzy
 msgid "_Set"
 msgstr "Ajustar ID"
@@ -1806,9 +1804,10 @@ msgstr ""
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr ""
 
+#. _settings->add_checkbutton(false, SP_ATTR_STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
 #: ../src/dialogs/rdf.cpp:247 ../src/extension/internal/bitmap/addNoise.cpp:46
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2144
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2217
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2193
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2270
 #, fuzzy
 msgid "Type"
 msgstr "Tipo:"
@@ -1974,11 +1973,11 @@ msgstr ""
 
 #: ../src/dialogs/stroke-style.cpp:793 ../src/filter-enums.cpp:95
 #: ../src/flood-context.cpp:264 ../src/interface.cpp:829
-#: ../src/ui/dialog/filter-effects-dialog.cpp:476
+#: ../src/ui/dialog/filter-effects-dialog.cpp:507
 #: ../src/ui/dialog/inkscape-preferences.cpp:207
 #: ../src/ui/dialog/inkscape-preferences.cpp:368
 #: ../src/ui/dialog/inkscape-preferences.cpp:469
-#: ../src/ui/dialog/inkscape-preferences.cpp:895 ../src/verbs.cpp:2119
+#: ../src/ui/dialog/inkscape-preferences.cpp:895 ../src/verbs.cpp:2125
 msgid "None"
 msgstr "Ninguno"
 
@@ -2165,7 +2164,7 @@ msgstr "Espaciado de líneas:"
 #. Text
 #: ../src/dialogs/text-edit.cpp:377 ../src/selection-describer.cpp:66
 #: ../src/ui/dialog/inkscape-preferences.cpp:439
-#: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:2390
+#: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:2396
 #: ../share/extensions/lorem_ipsum.inx.h:5
 #: ../share/extensions/text_flipcase.inx.h:1
 #: ../share/extensions/text_lowercase.inx.h:1
@@ -2652,11 +2651,11 @@ msgid "[Unchanged]"
 msgstr ""
 
 #. Edit
-#: ../src/event-log.cpp:264 ../src/event-log.cpp:267 ../src/verbs.cpp:2156
+#: ../src/event-log.cpp:264 ../src/event-log.cpp:267 ../src/verbs.cpp:2162
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: ../src/event-log.cpp:274 ../src/event-log.cpp:278 ../src/verbs.cpp:2158
+#: ../src/event-log.cpp:274 ../src/event-log.cpp:278 ../src/verbs.cpp:2164
 msgid "_Redo"
 msgstr "_Rehacer"
 
@@ -2923,7 +2922,7 @@ msgstr "Azul:"
 #: ../src/extension/internal/bitmap/oilPaint.cpp:38
 #: ../src/extension/internal/bitmap/sharpen.cpp:39
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:42
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2195
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2248
 #, fuzzy
 msgid "Radius"
 msgstr "Radio:"
@@ -3289,12 +3288,12 @@ msgid "Shade"
 msgstr "Agudeza:"
 
 #: ../src/extension/internal/bitmap/shade.cpp:41
-#: ../src/ui/dialog/filter-effects-dialog.cpp:944
+#: ../src/ui/dialog/filter-effects-dialog.cpp:992
 msgid "Azimuth"
 msgstr ""
 
 #: ../src/extension/internal/bitmap/shade.cpp:42
-#: ../src/ui/dialog/filter-effects-dialog.cpp:945
+#: ../src/ui/dialog/filter-effects-dialog.cpp:993
 #, fuzzy
 msgid "Elevation"
 msgstr "Resolución:"
@@ -3563,7 +3562,7 @@ msgstr ""
 msgid "Gradients used in GIMP"
 msgstr "Editor de gradiente"
 
-#: ../src/extension/internal/grid.cpp:192 ../src/ui/widget/panel.cpp:132
+#: ../src/extension/internal/grid.cpp:192 ../src/ui/widget/panel.cpp:140
 msgid "Grid"
 msgstr "Rejilla"
 
@@ -3708,129 +3707,129 @@ msgstr ""
 msgid "PDF Print"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:53
+#. TRANSLATORS: The following are document crop settings for PDF import
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:54
 msgid "media box"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:54
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:55
 msgid "crop box"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:55
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:56
 msgid "trim box"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:56
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:57
 msgid "bleed box"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:57
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:58
 msgid "art box"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:69
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:70
 #, fuzzy
 msgid "Select page:"
 msgstr "Selección"
 
 #. Display total number of pages
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:83
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:84
 #, c-format
 msgid "out of %i"
 msgstr ""
 
 #. Crop settings
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:89
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:90
 #, fuzzy
 msgid "Clip to:"
 msgstr "Limpi_eza"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:101
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:102
 #, fuzzy
 msgid "Page settings"
 msgstr "Opciones de contorno"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:103
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:104
 msgid "Precision of approximating gradient meshes:"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:104
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:105
 msgid ""
 "<b>Note</b>: setting the precision too high may result in a large SVG file "
 "and slow performance."
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:109
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:378
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:110
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:379
 #, fuzzy
 msgid "rough"
 msgstr "A_grupar"
 
 #. Text options
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:113
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:114
 #, fuzzy
 msgid "Text handling:"
 msgstr "Espaciado Y:"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:115
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:116
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:117
 #, fuzzy
 msgid "Import text as text"
 msgstr "Convierte el contorno seleccionado en trazo"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:119
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:120
 #, fuzzy
 msgid "Embed images"
 msgstr "URI de la imagen:"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:122
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:123
 #, fuzzy
 msgid "Import settings"
 msgstr "Opciones de contorno"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:239
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:240
 msgid "PDF Import Settings"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:379
-#: ../src/ui/widget/panel.cpp:114
-msgid "medium"
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:380
+msgid "pdfinput|medium"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:380
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:381
 #, fuzzy
 msgid "fine"
 msgstr "Cerrar"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:381
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:382
 #, fuzzy
 msgid "very fine"
 msgstr "Sin título"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:728
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:729
 #, fuzzy
 msgid "PDF Input"
 msgstr "Entrada"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:733
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:734
 msgid "Adobe PDF (*.pdf)"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:734
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:735
 msgid "Adobe Portable Document Format"
 msgstr ""
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:741
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:742
 #, fuzzy
 msgid "AI Input"
 msgstr "Entrada"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:746
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:747
 #, fuzzy
 msgid "Adobe Illustrator 9.0 and above (*.ai)"
 msgstr "Ilustrador vectorial SVG"
 
-#: ../src/extension/internal/pdfinput/pdf-input.cpp:747
+#: ../src/extension/internal/pdfinput/pdf-input.cpp:748
 msgid "Open files saved in Adobe Illustrator 9.0 and newer versions"
 msgstr ""
 
@@ -3974,12 +3973,12 @@ msgstr ""
 msgid "Vector graphics format used by Corel WordPerfect"
 msgstr ""
 
-#: ../src/extension/prefdialog.cpp:188
+#: ../src/extension/prefdialog.cpp:191
 #, fuzzy
 msgid "Live Preview"
 msgstr "_Nueva vista"
 
-#: ../src/extension/prefdialog.cpp:188
+#: ../src/extension/prefdialog.cpp:191
 msgid "Controls whether the effect settings are rendered live on canvas"
 msgstr ""
 
@@ -4131,7 +4130,7 @@ msgstr ""
 msgid "Document exported..."
 msgstr "Documento guardado."
 
-#: ../src/file.cpp:1334 ../src/verbs.cpp:2145
+#: ../src/file.cpp:1334 ../src/verbs.cpp:2151
 msgid "Import From Open Clip Art Library"
 msgstr ""
 
@@ -4272,7 +4271,7 @@ msgid "Luminance to Alpha"
 msgstr ""
 
 #. File
-#: ../src/filter-enums.cpp:71 ../src/verbs.cpp:2122
+#: ../src/filter-enums.cpp:71 ../src/verbs.cpp:2128
 #, fuzzy
 msgid "Default"
 msgstr "Predeterminados"
@@ -4335,7 +4334,7 @@ msgstr ""
 msgid "Duplicate"
 msgstr "D_uplicar"
 
-#: ../src/filter-enums.cpp:94 ../src/ui/widget/panel.cpp:153
+#: ../src/filter-enums.cpp:94 ../src/ui/widget/panel.cpp:161
 msgid "Wrap"
 msgstr ""
 
@@ -5800,38 +5799,38 @@ msgstr "Estrella"
 msgid "Change scalar parameter"
 msgstr "Opacidad:"
 
-#: ../src/live_effects/parameter/path.cpp:104
+#: ../src/live_effects/parameter/path.cpp:110
 #: ../src/live_effects/parameter/point.cpp:105
 msgid "Edit on-canvas"
 msgstr ""
 
-#: ../src/live_effects/parameter/path.cpp:114
+#: ../src/live_effects/parameter/path.cpp:120
 #, fuzzy
 msgid "Copy path"
 msgstr "Cortar trazo"
 
-#: ../src/live_effects/parameter/path.cpp:124
+#: ../src/live_effects/parameter/path.cpp:130
 #, fuzzy
 msgid "Paste path"
 msgstr "An_cho de página"
 
-#: ../src/live_effects/parameter/path.cpp:182
+#: ../src/live_effects/parameter/path.cpp:188
 #: ../src/selection-chemistry.cpp:1313 ../src/selection-chemistry.cpp:1367
 #: ../src/selection-chemistry.cpp:1403
 #, fuzzy
 msgid "Nothing on the clipboard."
 msgstr "No hay nada en el portapapeles."
 
-#: ../src/live_effects/parameter/path.cpp:192
+#: ../src/live_effects/parameter/path.cpp:198
 msgid "This effect does not support arcs yet, try to convert to path."
 msgstr ""
 
-#: ../src/live_effects/parameter/path.cpp:198
+#: ../src/live_effects/parameter/path.cpp:204
 #, fuzzy
 msgid "Paste path parameter"
 msgstr "Pegar e_stilo"
 
-#: ../src/live_effects/parameter/path.cpp:202
+#: ../src/live_effects/parameter/path.cpp:208
 msgid "Clipboard does not contain a path."
 msgstr ""
 
@@ -6116,7 +6115,7 @@ msgstr "Abrir _reciente"
 msgid "_Edit"
 msgstr "_Edición"
 
-#: ../src/menus-skeleton.h:60 ../src/verbs.cpp:2168
+#: ../src/menus-skeleton.h:60 ../src/verbs.cpp:2174
 #, fuzzy
 msgid "Paste Si_ze"
 msgstr "Pegar e_stilo"
@@ -6721,11 +6720,11 @@ msgstr ""
 msgid "Finishing freehand"
 msgstr "Terminar mano alzada"
 
-#: ../src/persp3d.cpp:337
+#: ../src/persp3d.cpp:321
 msgid "Toggle vanishing point"
 msgstr ""
 
-#: ../src/persp3d.cpp:348
+#: ../src/persp3d.cpp:332
 msgid "Toggle multiple vanishing points"
 msgstr ""
 
@@ -7040,7 +7039,7 @@ msgid "Rotate by pixels"
 msgstr "Rotar %0.2f grados"
 
 #: ../src/selection-chemistry.cpp:1926 ../src/seltrans.cpp:431
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2182
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2232
 #: ../src/ui/dialog/transformation.cpp:666
 #, fuzzy
 msgid "Scale"
@@ -7216,7 +7215,7 @@ msgstr "Seleccione los objetos a los que quiera pegarle el estilo."
 msgid "Fit page to selection"
 msgstr "Ancho de la selección"
 
-#: ../src/selection-describer.cpp:42 ../src/ui/widget/spin-slider.cpp:113
+#: ../src/selection-describer.cpp:42 ../src/ui/widget/spin-slider.cpp:117
 #, fuzzy
 msgid "Link"
 msgstr "in"
@@ -7228,7 +7227,7 @@ msgstr "Círculo"
 
 #. ellipse
 #: ../src/selection-describer.cpp:46 ../src/selection-describer.cpp:72
-#: ../src/ui/dialog/inkscape-preferences.cpp:404 ../src/verbs.cpp:2378
+#: ../src/ui/dialog/inkscape-preferences.cpp:404 ../src/verbs.cpp:2384
 msgid "Ellipse"
 msgstr "Elipse"
 
@@ -7257,13 +7256,13 @@ msgstr "Elipse"
 
 #. Rectangle
 #: ../src/selection-describer.cpp:62
-#: ../src/ui/dialog/inkscape-preferences.cpp:396 ../src/verbs.cpp:2374
+#: ../src/ui/dialog/inkscape-preferences.cpp:396 ../src/verbs.cpp:2380
 msgid "Rectangle"
 msgstr "Rectángulo"
 
 #. 3D box
 #: ../src/selection-describer.cpp:64
-#: ../src/ui/dialog/inkscape-preferences.cpp:400 ../src/verbs.cpp:2376
+#: ../src/ui/dialog/inkscape-preferences.cpp:400 ../src/verbs.cpp:2382
 msgid "3D Box"
 msgstr ""
 
@@ -7278,13 +7277,13 @@ msgstr "Offset:"
 
 #. spiral
 #: ../src/selection-describer.cpp:76
-#: ../src/ui/dialog/inkscape-preferences.cpp:410 ../src/verbs.cpp:2382
+#: ../src/ui/dialog/inkscape-preferences.cpp:410 ../src/verbs.cpp:2388
 msgid "Spiral"
 msgstr "Espiral"
 
 #. star
 #: ../src/selection-describer.cpp:78
-#: ../src/ui/dialog/inkscape-preferences.cpp:407 ../src/verbs.cpp:2380
+#: ../src/ui/dialog/inkscape-preferences.cpp:407 ../src/verbs.cpp:2386
 #: ../src/widgets/toolbox.cpp:1890
 msgid "Star"
 msgstr "Estrella"
@@ -7717,7 +7716,7 @@ msgstr "Rectángulo"
 
 #. TRANSLATORS: Used for statusbar description for long <use> chains:
 #. * "Clone of: Clone of: ... in Layer 1".
-#: ../src/sp-use.cpp:320
+#: ../src/sp-use.cpp:320 ../src/ui/widget/panel.cpp:173
 #, fuzzy
 msgid "..."
 msgstr "_Abrir..."
@@ -7944,7 +7943,7 @@ msgstr ""
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:192 ../src/verbs.cpp:2240
+#: ../src/text-chemistry.cpp:192 ../src/verbs.cpp:2246
 #, fuzzy
 msgid "Put text on path"
 msgstr "Convierte el contorno seleccionado en trazo"
@@ -7960,7 +7959,7 @@ msgstr ""
 msgid "<b>No texts-on-paths</b> in the selection."
 msgstr "No hay grupos descombinables en la selección."
 
-#: ../src/text-chemistry.cpp:229 ../src/verbs.cpp:2242
+#: ../src/text-chemistry.cpp:229 ../src/verbs.cpp:2248
 #, fuzzy
 msgid "Remove text from path"
 msgstr "Convierte el contorno seleccionado en trazo"
@@ -8452,7 +8451,7 @@ msgid "Create link"
 msgstr "_Crear enlace"
 
 #. "Ungroup"
-#: ../src/ui/context-menu.cpp:193 ../src/verbs.cpp:2236
+#: ../src/ui/context-menu.cpp:193 ../src/verbs.cpp:2242
 msgid "_Ungroup"
 msgstr "Desagr_upar"
 
@@ -8910,7 +8909,7 @@ msgstr ""
 msgid "_Enable snapping"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:100 ../src/verbs.cpp:2446
+#: ../src/ui/dialog/document-properties.cpp:100 ../src/verbs.cpp:2452
 msgid "Toggle snapping on or off"
 msgstr ""
 
@@ -9042,7 +9041,7 @@ msgstr "Guías"
 msgid "Grids"
 msgstr "Rejilla"
 
-#: ../src/ui/dialog/document-properties.cpp:132 ../src/verbs.cpp:2446
+#: ../src/ui/dialog/document-properties.cpp:132 ../src/verbs.cpp:2452
 #, fuzzy
 msgid "Snap"
 msgstr "Estilo"
@@ -9341,327 +9340,537 @@ msgstr "Contorno"
 msgid "Stroke st_yle"
 msgstr "Estilo de contorno"
 
+#: ../src/ui/dialog/filter-effects-dialog.cpp:504
+msgid ""
+"This matrix determines a linear transform on colour space. Each line affects "
+"one of the color components. Each column determines how much of each color "
+"component from the input is passed to the output. The last column does not "
+"depend on input colors, so can be used to adjust a constant component value."
+msgstr ""
+
 #. pack_start(_fromSVGElement, false, false);
-#: ../src/ui/dialog/filter-effects-dialog.cpp:583
+#: ../src/ui/dialog/filter-effects-dialog.cpp:614
 #, fuzzy
 msgid "Image File"
 msgstr "URI de la imagen:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:586
+#: ../src/ui/dialog/filter-effects-dialog.cpp:617
 #, fuzzy
 msgid "Selected SVG Element"
 msgstr "Suprimir los nodos seleccionados"
 
 #. TODO: any image, not justy svg
-#: ../src/ui/dialog/filter-effects-dialog.cpp:655
+#: ../src/ui/dialog/filter-effects-dialog.cpp:686
 msgid "Select an image to be used as feImage input"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:747
+#: ../src/ui/dialog/filter-effects-dialog.cpp:778
+msgid "This SVG filter effect does not require any parameters."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:784
 msgid "This SVG filter effect is not yet implemented in Inkscape."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:927
+#: ../src/ui/dialog/filter-effects-dialog.cpp:975
 msgid "Light Source:"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:992
+msgid "Direction angle for the light source on the XY plane, in degrees"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:993
+msgid "Direction angle for the light source on the YZ plane, in degrees"
 msgstr ""
 
 #. default x:
 #. default y:
 #. default z:
-#: ../src/ui/dialog/filter-effects-dialog.cpp:948
-#: ../src/ui/dialog/filter-effects-dialog.cpp:951
+#: ../src/ui/dialog/filter-effects-dialog.cpp:996
+#: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #, fuzzy
 msgid "Location"
 msgstr "Resolución:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:954
+#: ../src/ui/dialog/filter-effects-dialog.cpp:996
+#: ../src/ui/dialog/filter-effects-dialog.cpp:999
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1002
+#, fuzzy
+msgid "X coordinate"
+msgstr "Coordenadas del cursor"
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:996
+#: ../src/ui/dialog/filter-effects-dialog.cpp:999
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1002
+#, fuzzy
+msgid "Y coordinate"
+msgstr "Coordenadas del cursor"
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:996
+#: ../src/ui/dialog/filter-effects-dialog.cpp:999
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1002
+#, fuzzy
+msgid "Z coordinate"
+msgstr "Coordenadas del cursor"
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1002
 #, fuzzy
 msgid "Points At"
 msgstr "Puntos"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:955
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1003
 #, fuzzy
 msgid "Specular Exponent"
 msgstr "Exportar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:956
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1003
+msgid "Exponent value controlling the focus for the light source"
+msgstr ""
+
+#. TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1005
 #, fuzzy
 msgid "Cone Angle"
 msgstr "Ángulo:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1016
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1005
+msgid ""
+"This is the angle between the spot light axis (i.e. the axis between the "
+"light source and the point to which it is pointing at) and the spot light "
+"cone. No light is projected outside this cone."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1065
 msgid "New light source"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1057
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1106
 #, fuzzy
 msgid "_Duplicate"
 msgstr "D_uplicar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1083
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1132
 #, fuzzy
 msgid "_Filter"
 msgstr "Caras:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1097
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1146
 #, fuzzy
 msgid "R_ename"
 msgstr "Nombre de archivo"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1191
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1240
 #, fuzzy
 msgid "Rename filter"
 msgstr "_Eliminar enlace"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1227
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1276
 #, fuzzy
 msgid "Apply filter"
 msgstr "_Bajar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1303
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1352
 #, fuzzy
 msgid "Add filter"
 msgstr "_Bajar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1314
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1363
 #, fuzzy
 msgid "Remove filter"
 msgstr "_Eliminar enlace"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1329
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1378
 #, fuzzy
 msgid "Duplicate filter"
 msgstr "Duplicar nodo"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1396
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1445
 #, fuzzy
 msgid "_Effect"
 msgstr "Offset:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1404
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1453
 #, fuzzy
 msgid "Connections"
 msgstr "Esquinas:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1520
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1569
 msgid "Remove filter primitive"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:1891
+#: ../src/ui/dialog/filter-effects-dialog.cpp:1940
 #, fuzzy
 msgid "Remove merge node"
 msgstr "_Eliminar enlace"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2007
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2056
 msgid "Reorder filter primitive"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2043
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2092
 #, fuzzy
 msgid "Add Effect:"
 msgstr "Offset:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2044
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2093
 #, fuzzy
 msgid "No effect selected"
 msgstr "Sin documentos seleccionados"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2045
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2094
 #, fuzzy
 msgid "No filter selected"
 msgstr "Sin documentos seleccionados"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2080
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2129
 #, fuzzy
 msgid "Effect parameters"
 msgstr "Rectángulo"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2081
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2130
 msgid "Filter General Settings"
 msgstr ""
 
 #. default x:
 #. default y:
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2137
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2186
 #, fuzzy
 msgid "Coordinates"
 msgstr "Coordenadas del cursor"
 
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2186
+msgid "X coordinate of the left corners of filter effects region"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2186
+msgid "Y coordinate of the upper corners of filter effects region"
+msgstr ""
+
 #. default width:
 #. default height:
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2138
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2187
 #: ../share/extensions/dimension.inx.h:1
 #, fuzzy
 msgid "Dimensions"
 msgstr "Di_visión"
 
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2187
+#, fuzzy
+msgid "Width of filter effects region"
+msgstr "Ancho de la selección"
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2187
+#, fuzzy
+msgid "Height of filter effects region"
+msgstr "Altura de la selección"
+
 #. # end multiple scan
 #. ## end mode page
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2141
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2190
 #: ../src/ui/dialog/tracedialog.cpp:553 ../src/widgets/toolbox.cpp:3113
 #, fuzzy
 msgid "Mode"
 msgstr "Modo:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2145
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2193
+msgid ""
+"Indicates the type of matrix operation. The keyword 'matrix' indicates that "
+"a full 5x4 matrix of values will be provided. The other keywords represent "
+"convenience shortcuts to allow commonly used color operations to be "
+"performed without specifying a complete matrix."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2194
 #, fuzzy
 msgid "Value(s)"
 msgstr "Valor"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2158
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2194
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2207
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2247
 #, fuzzy
 msgid "Operator"
 msgstr "Crear"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2159
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2208
 msgid "K1"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2160
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2208
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2209
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2210
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2211
+msgid ""
+"If the arithmetic operation is chosen, each result pixel is computed using "
+"the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
+"values of the first and second inputs respectively."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2209
 msgid "K2"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2161
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2210
 msgid "K3"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2162
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2211
 msgid "K4"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2214
+#, fuzzy
+msgid "width of the convolve matrix"
+msgstr "Ancho de la selección"
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2214
+msgid "height of the convolve matrix"
 msgstr ""
 
 #. default x:
 #. default y:
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2166
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2215
 #, fuzzy
 msgid "Target"
 msgstr "Objetivo:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2167
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2215
+msgid ""
+"X coordinate of the target point in the convolve matrix. The convolution is "
+"applied to pixels around this point."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2215
+msgid ""
+"Y coordinate of the target point in the convolve matrix. The convolution is "
+"applied to pixels around this point."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 msgid "Kernel"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2169
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2216
+msgid ""
+"This matrix describes the convolve operation that is applied to the input "
+"image in order to calculate the pixel colors at the output. Different "
+"arrangements of values in this matrix result in various possible visual "
+"effects. An identity matrix would lead to a motion blur effect (parallel to "
+"the matrix diagonal) while a matrix filled with a constant non-zero value "
+"would lead to a common blur effect."
+msgstr ""
+
+#. TODO: svg spec: The default value is the sum of all values in kernelMatrix, with the exception that if the sum is zero, then the divisor is set to 1.
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2219
 #, fuzzy
 msgid "Divisor"
 msgstr "Di_visión"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2170
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2219
+msgid ""
+"After applying the kernelMatrix to the input image to yield a number, that "
+"number is divided by divisor to yield the final destination color value. A "
+"divisor that is the sum of all the matrix values tends to have an evening "
+"effect on the overall color intensity of the result."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2220
 msgid "Bias"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2171
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2220
+msgid ""
+"This value is added to each component. This is useful to define a constant "
+"value as the zero response of the filter."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2221
 #, fuzzy
 msgid "Edge Mode"
 msgstr "Modo:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2172
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2221
+msgid ""
+"Determines how to extend the input image as necessary with color values so "
+"that the matrix operations can be applied when the kernel is positioned at "
+"or near the edge of the input image."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 #, fuzzy
 msgid "Preserve Alpha"
 msgstr "Conservar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2175
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2222
+msgid "If set, the alpha channel won't be altered by this filter primitive."
+msgstr ""
+
+#. default: white
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2225
 #, fuzzy
 msgid "Diffuse Color"
 msgstr "Visible"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2176
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2206
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2225
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2258
+msgid "Defines the color of the light source"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2226
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2259
 msgid "Surface Scale"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2177
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2207
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2226
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2259
+msgid ""
+"This value amplifies the heights of the bump map defined by the input alpha "
+"channel"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2227
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2260
 #, fuzzy
 msgid "Constant"
 msgstr "Cerrar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2178
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2209
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2227
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2260
+msgid "This constant affects the Phong lighting model."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2228
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2262
 msgid "Kernel Unit Length"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2183
-#, fuzzy
-msgid "X Channel"
-msgstr "Cancelar"
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2232
+msgid "This defines the intensity of the displacement effect."
+msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2184
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2233
 #, fuzzy
-msgid "Y Channel"
-msgstr "Cancelar"
+msgid "X displacement"
+msgstr "Nuevo nodo elemento"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2187
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2233
+msgid "Color component that controls the displacement in the X direction"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2234
+#, fuzzy
+msgid "Y displacement"
+msgstr "Nuevo nodo elemento"
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2234
+msgid "Color component that controls the displacement in the Y direction"
+msgstr ""
+
+#. default: black
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2237
 #, fuzzy
 msgid "Flood Color"
 msgstr "Color de parada"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2191
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2237
+msgid "The whole filter region will be filled with this color."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2241
 msgid "Standard Deviation"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2198
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2241
+msgid "The standard deviation for the blur operation."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2247
+msgid ""
+"Erode: performs \"thinning\" of input image.\n"
+"Dilate: performs \"fattenning\" of input image."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2251
 #, fuzzy
 msgid "Source of Image"
 msgstr "Número de revoluciones"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2201
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 #, fuzzy
 msgid "Delta X"
 msgstr "_Eliminar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2202
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2254
+msgid "This is how far the input image gets shifted to the right"
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 #, fuzzy
 msgid "Delta Y"
 msgstr "_Eliminar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2205
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2255
+msgid "This is how far the input image gets shifted downwards"
+msgstr ""
+
+#. default: white
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2258
 #, fuzzy
 msgid "Specular Color"
 msgstr "Color de parada"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2208
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2261
 #: ../share/extensions/interp.inx.h:2
 #, fuzzy
 msgid "Exponent"
 msgstr "Exportar"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2216
-msgid "Stitch Tiles"
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2261
+msgid "Exponent for specular term, larger is more \"shiny\"."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2218
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2270
+msgid ""
+"Indicates whether the filter primitive should perform a noise or turbulence "
+"function."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid "Base Frequency"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2219
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2272
 #, fuzzy
 msgid "Octaves"
 msgstr "Activo"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2220
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2273
 #, fuzzy
 msgid "Seed"
 msgstr "Rojo:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2232
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2273
+msgid "The starting number for the pseudo random number generator."
+msgstr ""
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2285
 msgid "Add filter primitive"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2248
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2301
 msgid ""
 "The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, "
 "multiply, darken and lighten."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2252
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2305
 msgid ""
 "The <b>feColorMatrix</b> filter primitive applies a matrix transformation to "
 "colour of each rendered pixel. This allows for effects like turning object "
 "to grayscale, modifying colour saturation and changing colour hue."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2256
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2309
 msgid ""
 "The <b>feComponentTransfer</b> filter primitive manipulates the input's "
 "color components (red, green, blue, and alpha) according to particular "
@@ -9669,7 +9878,7 @@ msgid ""
 "adjustment, color balance, and thresholding."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2260
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2313
 msgid ""
 "The <b>feComposite</b> filter primitive composites two images using one of "
 "the Porter-Duff blending modes or the aritmetic mode described in SVG "
@@ -9677,7 +9886,7 @@ msgid ""
 "between the corresponding pixel values of the images."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2264
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2317
 msgid ""
 "The <b>feConvolveMatrix</b> lets you specify a Convolution to be applied on "
 "the image. Common effects created using convolution matrices are blur, "
@@ -9686,7 +9895,7 @@ msgid ""
 "is faster and resolution-independent."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2268
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2321
 msgid ""
 "The <b>feDiffuseLighting</b> and feSpecularLighting filter primitives create "
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
@@ -9694,7 +9903,7 @@ msgid ""
 "opacity areas recede away from the viewer."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2272
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2325
 msgid ""
 "The <b>feDisplacementMap</b> filter primitive displaces the pixels in the "
 "first input using the second input as a displacement map, that shows from "
@@ -9702,26 +9911,26 @@ msgid ""
 "effects."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2276
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2329
 msgid ""
 "The <b>feFlood</b> filter primitive fills the region with a given color and "
 "opacity.  It is usually used as an input to other filters to apply color to "
 "a graphic."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2280
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2333
 msgid ""
 "The <b>feGaussianBlur</b> filter primitive uniformly blurs its input.  It is "
 "commonly used together with feOffset to create a drop shadow effect."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2284
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2337
 msgid ""
 "The <b>feImage</b> filter primitive fills the region with an external image "
 "or another part of the document."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2288
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2341
 msgid ""
 "The <b>feMerge</b> filter primitive composites several temporary images "
 "inside the filter primitive to a single image. It uses normal alpha "
@@ -9729,21 +9938,21 @@ msgid ""
 "in 'normal' mode or several feComposite primitives in 'over' mode."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2292
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2345
 msgid ""
 "The <b>feMorphology</b> filter primitive provides erode and dilate effects. "
 "For single-colour objects erode makes the object thinner and dilate makes it "
 "thicker."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2296
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2349
 msgid ""
 "The <b>feOffset</b> filter primitive offsets the image by an user-defined "
 "amount. For example, this is useful for drop shadows, where the shadow is in "
 "a slightly different position than the actual object."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2300
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2353
 msgid ""
 "The feDiffuseLighting and <b>feSpecularLighting</b> filter primitives create "
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
@@ -9751,23 +9960,23 @@ msgid ""
 "opacity areas recede away from the viewer."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2304
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2357
 msgid ""
 "The <b>feTile</b> filter primitive tiles a region with its input graphic"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2308
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2361
 msgid ""
 "The <b>feTurbulence</b> filter primitive renders Perlin noise. This kind of "
 "noise is useful in simulating several nature phenomena like clouds, fire and "
 "smoke and in generating complex textures like marble or granite."
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2326
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2379
 msgid "Duplicate filter primitive"
 msgstr ""
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2379
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2432
 #, fuzzy
 msgid "Set filter primitive attribute"
 msgstr "Borrar atributo"
@@ -10182,13 +10391,13 @@ msgid "Node"
 msgstr "Ninguno"
 
 #. Tweak
-#: ../src/ui/dialog/inkscape-preferences.cpp:383 ../src/verbs.cpp:2372
+#: ../src/ui/dialog/inkscape-preferences.cpp:383 ../src/verbs.cpp:2378
 msgid "Tweak"
 msgstr ""
 
 #. Zoom
 #: ../src/ui/dialog/inkscape-preferences.cpp:387
-#: ../src/ui/view/edit-widget.cpp:1073 ../src/verbs.cpp:2394
+#: ../src/ui/view/edit-widget.cpp:1073 ../src/verbs.cpp:2400
 #: ../src/widgets/desktop-widget.cpp:485
 msgid "Zoom"
 msgstr "Aumentar"
@@ -10200,7 +10409,7 @@ msgid "Shapes"
 msgstr "Agudeza:"
 
 #. Pencil
-#: ../src/ui/dialog/inkscape-preferences.cpp:413 ../src/verbs.cpp:2384
+#: ../src/ui/dialog/inkscape-preferences.cpp:413 ../src/verbs.cpp:2390
 msgid "Pencil"
 msgstr "Lápiz"
 
@@ -10217,12 +10426,12 @@ msgid ""
 msgstr ""
 
 #. Pen
-#: ../src/ui/dialog/inkscape-preferences.cpp:422 ../src/verbs.cpp:2386
+#: ../src/ui/dialog/inkscape-preferences.cpp:422 ../src/verbs.cpp:2392
 msgid "Pen"
 msgstr "Pluma"
 
 #. Calligraphy
-#: ../src/ui/dialog/inkscape-preferences.cpp:427 ../src/verbs.cpp:2388
+#: ../src/ui/dialog/inkscape-preferences.cpp:427 ../src/verbs.cpp:2394
 msgid "Calligraphy"
 msgstr "Caligrafía"
 
@@ -10239,19 +10448,19 @@ msgid ""
 msgstr ""
 
 #. Paint Bucket
-#: ../src/ui/dialog/inkscape-preferences.cpp:435 ../src/verbs.cpp:2400
+#: ../src/ui/dialog/inkscape-preferences.cpp:435 ../src/verbs.cpp:2406
 #, fuzzy
 msgid "Paint Bucket"
 msgstr "Imprimir documento"
 
 #. Gradient
-#: ../src/ui/dialog/inkscape-preferences.cpp:444 ../src/verbs.cpp:2392
+#: ../src/ui/dialog/inkscape-preferences.cpp:444 ../src/verbs.cpp:2398
 #, fuzzy
 msgid "Gradient"
 msgstr "Editor de gradiente"
 
 #. Connector
-#: ../src/ui/dialog/inkscape-preferences.cpp:447 ../src/verbs.cpp:2398
+#: ../src/ui/dialog/inkscape-preferences.cpp:447 ../src/verbs.cpp:2404
 #, fuzzy
 msgid "Connector"
 msgstr "Esquinas:"
@@ -10261,7 +10470,7 @@ msgid "If on, connector attachment points will not be shown for text objects"
 msgstr ""
 
 #. Dropper
-#: ../src/ui/dialog/inkscape-preferences.cpp:452 ../src/verbs.cpp:2396
+#: ../src/ui/dialog/inkscape-preferences.cpp:452 ../src/verbs.cpp:2402
 msgid "Dropper"
 msgstr "Cuentagotas"
 
@@ -11791,45 +12000,49 @@ msgstr ""
 msgid "_Save as SVG"
 msgstr ""
 
-#: ../src/ui/widget/panel.cpp:112
+#: ../src/ui/widget/panel.cpp:120
 #, fuzzy
 msgid "tiny"
 msgstr "in"
 
-#: ../src/ui/widget/panel.cpp:113
+#: ../src/ui/widget/panel.cpp:121
 msgid "small"
 msgstr ""
 
-#: ../src/ui/widget/panel.cpp:115
+#: ../src/ui/widget/panel.cpp:122
+msgid "swatches|medium"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:123
 #, fuzzy
 msgid "large"
 msgstr "Objetivo:"
 
-#: ../src/ui/widget/panel.cpp:116
+#: ../src/ui/widget/panel.cpp:124
 msgid "huge"
 msgstr ""
 
-#: ../src/ui/widget/panel.cpp:131
+#: ../src/ui/widget/panel.cpp:139
 #, fuzzy
 msgid "List"
 msgstr "Re_ducir"
 
-#: ../src/ui/widget/panel.cpp:163
+#: ../src/ui/widget/panel.cpp:171
 #, fuzzy
 msgid "Shape"
 msgstr "Agudeza:"
 
-#: ../src/ui/widget/panel.cpp:165
+#: ../src/ui/widget/panel.cpp:174
 #, fuzzy
 msgid "Tall"
 msgstr "Valor"
 
-#: ../src/ui/widget/panel.cpp:166
+#: ../src/ui/widget/panel.cpp:175
 #, fuzzy
 msgid "Square"
 msgstr "Em cuadrado"
 
-#: ../src/ui/widget/panel.cpp:167
+#: ../src/ui/widget/panel.cpp:176
 #, fuzzy
 msgid "Wide"
 msgstr "Caras:"
@@ -12378,19 +12591,19 @@ msgstr ""
 "y la calidad dependerá del factor de ampliación, pero todos los objetos "
 "serán renderizados idénticos a lo que ve en pantalla."
 
-#: ../src/vanishing-point.cpp:135
+#: ../src/vanishing-point.cpp:124
 msgid "Split vanishing points"
 msgstr ""
 
-#: ../src/vanishing-point.cpp:181
+#: ../src/vanishing-point.cpp:169
 msgid "Merge vanishing points"
 msgstr ""
 
-#: ../src/vanishing-point.cpp:252
+#: ../src/vanishing-point.cpp:225
 msgid "3D box: Move vanishing point"
 msgstr ""
 
-#: ../src/vanishing-point.cpp:351
+#: ../src/vanishing-point.cpp:306
 #, c-format
 msgid "<b>Finite</b> vanishing point shared by <b>%d</b> box"
 msgid_plural ""
@@ -12401,7 +12614,7 @@ msgstr[1] ""
 
 #. This won't make sense any more when infinite VPs are not shown on the canvas,
 #. but currently we update the status message anyway
-#: ../src/vanishing-point.cpp:358
+#: ../src/vanishing-point.cpp:313
 #, c-format
 msgid "<b>Infinite</b> vanishing point shared by <b>%d</b> box"
 msgid_plural ""
@@ -12410,7 +12623,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/vanishing-point.cpp:366
+#: ../src/vanishing-point.cpp:321
 #, c-format
 msgid ""
 "shared by <b>%d</b> box; drag with <b>Shift</b> to separate selected box(es)"
@@ -12420,90 +12633,90 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/verbs.cpp:1116
+#: ../src/verbs.cpp:1122
 #, fuzzy
 msgid "Switch to next layer"
 msgstr "Cambiar a la ventana de documento siguiente"
 
-#: ../src/verbs.cpp:1117
+#: ../src/verbs.cpp:1123
 #, fuzzy
 msgid "Switched to next layer."
 msgstr "Cambiar a la ventana de documento siguiente"
 
-#: ../src/verbs.cpp:1119
+#: ../src/verbs.cpp:1125
 msgid "Cannot go past last layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1128
+#: ../src/verbs.cpp:1134
 #, fuzzy
 msgid "Switch to previous layer"
 msgstr "Cambiar a la ventana de documento anterior"
 
-#: ../src/verbs.cpp:1129
+#: ../src/verbs.cpp:1135
 #, fuzzy
 msgid "Switched to previous layer."
 msgstr "Cambiar a la ventana de documento anterior"
 
-#: ../src/verbs.cpp:1131
+#: ../src/verbs.cpp:1137
 msgid "Cannot go before first layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1148 ../src/verbs.cpp:1232
+#: ../src/verbs.cpp:1154 ../src/verbs.cpp:1238
 #, fuzzy
 msgid "No current layer."
 msgstr "Documento guardado."
 
-#: ../src/verbs.cpp:1177 ../src/verbs.cpp:1181
+#: ../src/verbs.cpp:1183 ../src/verbs.cpp:1187
 #, fuzzy, c-format
 msgid "Raised layer <b>%s</b>."
 msgstr "Elevar nodo"
 
-#: ../src/verbs.cpp:1178
+#: ../src/verbs.cpp:1184
 #, fuzzy
 msgid "Layer to top"
 msgstr "Poner al fren_te"
 
-#: ../src/verbs.cpp:1182
+#: ../src/verbs.cpp:1188
 #, fuzzy
 msgid "Raise layer"
 msgstr "Elevar nodo"
 
-#: ../src/verbs.cpp:1185 ../src/verbs.cpp:1189
+#: ../src/verbs.cpp:1191 ../src/verbs.cpp:1195
 #, fuzzy, c-format
 msgid "Lowered layer <b>%s</b>."
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:1186
+#: ../src/verbs.cpp:1192
 #, fuzzy
 msgid "Layer to bottom"
 msgstr "_Bajar al fondo"
 
-#: ../src/verbs.cpp:1190
+#: ../src/verbs.cpp:1196
 #, fuzzy
 msgid "Lower layer"
 msgstr "Bajar nodo"
 
-#: ../src/verbs.cpp:1199
+#: ../src/verbs.cpp:1205
 msgid "Cannot move layer any further."
 msgstr ""
 
-#: ../src/verbs.cpp:1227
+#: ../src/verbs.cpp:1233
 #, fuzzy
 msgid "Delete layer"
 msgstr "Seleccionar"
 
 #. TRANSLATORS: this means "The layer has been deleted."
-#: ../src/verbs.cpp:1230
+#: ../src/verbs.cpp:1236
 #, fuzzy
 msgid "Deleted layer."
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:1312
+#: ../src/verbs.cpp:1318
 #, fuzzy
 msgid "Flip horizontally"
 msgstr "Reflejo _horizontal"
 
-#: ../src/verbs.cpp:1327
+#: ../src/verbs.cpp:1333
 #, fuzzy
 msgid "Flip vertically"
 msgstr "Reflejo _vertical"
@@ -12511,620 +12724,620 @@ msgstr "Reflejo _vertical"
 #. TRANSLATORS: If you have translated the tutorial-basic.svg file to your language,
 #. then translate this string as "tutorial-basic.LANG.svg" (where LANG is your language
 #. code); otherwise leave as "tutorial-basic.svg".
-#: ../src/verbs.cpp:1791
+#: ../src/verbs.cpp:1797
 msgid "tutorial-basic.svg"
 msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1795
+#: ../src/verbs.cpp:1801
 #, fuzzy
 msgid "tutorial-shapes.svg"
 msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1799
+#: ../src/verbs.cpp:1805
 #, fuzzy
 msgid "tutorial-advanced.svg"
 msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1803
+#: ../src/verbs.cpp:1809
 #, fuzzy
 msgid "tutorial-tracing.svg"
 msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1807
+#: ../src/verbs.cpp:1813
 #, fuzzy
 msgid "tutorial-calligraphy.svg"
 msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1811
+#: ../src/verbs.cpp:1817
 #, fuzzy
 msgid "tutorial-elements.svg"
 msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1815
+#: ../src/verbs.cpp:1821
 #, fuzzy
 msgid "tutorial-tips.svg"
 msgstr "tutorial-basic.svg"
 
-#: ../src/verbs.cpp:2092 ../src/verbs.cpp:2578
+#: ../src/verbs.cpp:2098 ../src/verbs.cpp:2584
 #, fuzzy
 msgid "Unlock all objects in the current layer"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2096 ../src/verbs.cpp:2580
+#: ../src/verbs.cpp:2102 ../src/verbs.cpp:2586
 #, fuzzy
 msgid "Unlock all objects in all layers"
 msgstr "Seleccionar todos los objetos o todos los nodos"
 
-#: ../src/verbs.cpp:2100 ../src/verbs.cpp:2582
+#: ../src/verbs.cpp:2106 ../src/verbs.cpp:2588
 #, fuzzy
 msgid "Unhide all objects in the current layer"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2104 ../src/verbs.cpp:2584
+#: ../src/verbs.cpp:2110 ../src/verbs.cpp:2590
 #, fuzzy
 msgid "Unhide all objects in all layers"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2119
+#: ../src/verbs.cpp:2125
 msgid "Does nothing"
 msgstr "No hacer nada"
 
-#: ../src/verbs.cpp:2122
+#: ../src/verbs.cpp:2128
 #, fuzzy
 msgid "Create new document from the default template"
 msgstr "Crear un documento nuevo"
 
-#: ../src/verbs.cpp:2124
+#: ../src/verbs.cpp:2130
 msgid "_Open..."
 msgstr "_Abrir..."
 
-#: ../src/verbs.cpp:2125
+#: ../src/verbs.cpp:2131
 #, fuzzy
 msgid "Open an existing document"
 msgstr "Abrir un documento existente"
 
-#: ../src/verbs.cpp:2126
+#: ../src/verbs.cpp:2132
 msgid "Re_vert"
 msgstr ""
 
-#: ../src/verbs.cpp:2127
+#: ../src/verbs.cpp:2133
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr ""
 
-#: ../src/verbs.cpp:2128
+#: ../src/verbs.cpp:2134
 msgid "_Save"
 msgstr "_Guardar"
 
-#: ../src/verbs.cpp:2128
+#: ../src/verbs.cpp:2134
 msgid "Save document"
 msgstr "Guardar documento"
 
-#: ../src/verbs.cpp:2130
+#: ../src/verbs.cpp:2136
 msgid "Save _As..."
 msgstr "G_uardar como..."
 
-#: ../src/verbs.cpp:2131
+#: ../src/verbs.cpp:2137
 #, fuzzy
 msgid "Save document under a new name"
 msgstr "Guardar documento con un nombre nuevo"
 
-#: ../src/verbs.cpp:2132
+#: ../src/verbs.cpp:2138
 #, fuzzy
 msgid "Save a Cop_y..."
 msgstr "G_uardar como..."
 
-#: ../src/verbs.cpp:2133
+#: ../src/verbs.cpp:2139
 #, fuzzy
 msgid "Save a copy of the document under a new name"
 msgstr "Guardar documento con un nombre nuevo"
 
-#: ../src/verbs.cpp:2134
+#: ../src/verbs.cpp:2140
 msgid "_Print..."
 msgstr "_Imprimir"
 
-#: ../src/verbs.cpp:2134
+#: ../src/verbs.cpp:2140
 msgid "Print document"
 msgstr "Imprimir documento"
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-#: ../src/verbs.cpp:2137
+#: ../src/verbs.cpp:2143
 msgid "Vac_uum Defs"
 msgstr ""
 
-#: ../src/verbs.cpp:2137
+#: ../src/verbs.cpp:2143
 msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the &lt;"
 "defs&gt; of the document"
 msgstr ""
 
-#: ../src/verbs.cpp:2139
+#: ../src/verbs.cpp:2145
 msgid "Print Previe_w"
 msgstr "_Vista preliminar"
 
-#: ../src/verbs.cpp:2140
+#: ../src/verbs.cpp:2146
 msgid "Preview document printout"
 msgstr "Vista preliminar de impresión"
 
-#: ../src/verbs.cpp:2141
+#: ../src/verbs.cpp:2147
 msgid "_Import..."
 msgstr "_Importar..."
 
-#: ../src/verbs.cpp:2142
+#: ../src/verbs.cpp:2148
 #, fuzzy
 msgid "Import a bitmap or SVG image into this document"
 msgstr "Importar mapa de bits o imagen SVG al documento"
 
-#: ../src/verbs.cpp:2143
+#: ../src/verbs.cpp:2149
 msgid "_Export Bitmap..."
 msgstr "_Exportar mapa de bits..."
 
-#: ../src/verbs.cpp:2144
+#: ../src/verbs.cpp:2150
 #, fuzzy
 msgid "Export this document or a selection as a bitmap image"
 msgstr "Exportar documento como mapa de bits PNG"
 
-#: ../src/verbs.cpp:2145
+#: ../src/verbs.cpp:2151
 msgid "Import a document from Open Clip Art Library"
 msgstr ""
 
-#: ../src/verbs.cpp:2146
+#: ../src/verbs.cpp:2152
 msgid "Export To Open Clip Art Library"
 msgstr ""
 
-#: ../src/verbs.cpp:2146
+#: ../src/verbs.cpp:2152
 #, fuzzy
 msgid "Export this document to Open Clip Art Library"
 msgstr "Exportar documento como mapa de bits PNG"
 
-#: ../src/verbs.cpp:2147
+#: ../src/verbs.cpp:2153
 #, fuzzy
 msgid "N_ext Window"
 msgstr "Ventana sigui_ente"
 
-#: ../src/verbs.cpp:2148
+#: ../src/verbs.cpp:2154
 msgid "Switch to the next document window"
 msgstr "Cambiar a la ventana de documento siguiente"
 
-#: ../src/verbs.cpp:2149
+#: ../src/verbs.cpp:2155
 #, fuzzy
 msgid "P_revious Window"
 msgstr "Ventana anter_ior"
 
-#: ../src/verbs.cpp:2150
+#: ../src/verbs.cpp:2156
 msgid "Switch to the previous document window"
 msgstr "Cambiar a la ventana de documento anterior"
 
-#: ../src/verbs.cpp:2151
+#: ../src/verbs.cpp:2157
 #, fuzzy
 msgid "_Close"
 msgstr "Cerrar"
 
-#: ../src/verbs.cpp:2152
+#: ../src/verbs.cpp:2158
 #, fuzzy
 msgid "Close this document window"
 msgstr "Cambiar a la ventana de documento anterior"
 
-#: ../src/verbs.cpp:2153
+#: ../src/verbs.cpp:2159
 msgid "_Quit"
 msgstr "_Salir"
 
-#: ../src/verbs.cpp:2153
+#: ../src/verbs.cpp:2159
 #, fuzzy
 msgid "Quit Inkscape"
 msgstr "Acerca de Inkscape"
 
-#: ../src/verbs.cpp:2156
+#: ../src/verbs.cpp:2162
 msgid "Undo last action"
 msgstr "Deshacer la última acción"
 
-#: ../src/verbs.cpp:2159
+#: ../src/verbs.cpp:2165
 #, fuzzy
 msgid "Do again the last undone action"
 msgstr "Rehacer la acción deshecha"
 
-#: ../src/verbs.cpp:2160
+#: ../src/verbs.cpp:2166
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../src/verbs.cpp:2161
+#: ../src/verbs.cpp:2167
 #, fuzzy
 msgid "Cut selection to clipboard"
 msgstr "Cortar los objetos seleccionados y llevarlos al portapapeles"
 
-#: ../src/verbs.cpp:2162
+#: ../src/verbs.cpp:2168
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../src/verbs.cpp:2163
+#: ../src/verbs.cpp:2169
 #, fuzzy
 msgid "Copy selection to clipboard"
 msgstr "Copiar los objetos seleccionados al portapapeles"
 
-#: ../src/verbs.cpp:2164
+#: ../src/verbs.cpp:2170
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../src/verbs.cpp:2165
+#: ../src/verbs.cpp:2171
 #, fuzzy
 msgid "Paste objects from clipboard to mouse point, or paste text"
 msgstr "Pegar los objetos desde el portapapeles"
 
-#: ../src/verbs.cpp:2166
+#: ../src/verbs.cpp:2172
 msgid "Paste _Style"
 msgstr "Pegar e_stilo"
 
-#: ../src/verbs.cpp:2167
+#: ../src/verbs.cpp:2173
 #, fuzzy
 msgid "Apply the style of the copied object to selection"
 msgstr "Aplicar el estilo del objeto copiado a la selección"
 
-#: ../src/verbs.cpp:2169
+#: ../src/verbs.cpp:2175
 msgid "Scale selection to match the size of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2170
+#: ../src/verbs.cpp:2176
 #, fuzzy
 msgid "Paste _Width"
 msgstr "An_cho de página"
 
-#: ../src/verbs.cpp:2171
+#: ../src/verbs.cpp:2177
 msgid "Scale selection horizontally to match the width of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2172
+#: ../src/verbs.cpp:2178
 #, fuzzy
 msgid "Paste _Height"
 msgstr "Alto:"
 
-#: ../src/verbs.cpp:2173
+#: ../src/verbs.cpp:2179
 msgid "Scale selection vertically to match the height of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2174
+#: ../src/verbs.cpp:2180
 msgid "Paste Size Separately"
 msgstr ""
 
-#: ../src/verbs.cpp:2175
+#: ../src/verbs.cpp:2181
 msgid "Scale each selected object to match the size of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2176
+#: ../src/verbs.cpp:2182
 msgid "Paste Width Separately"
 msgstr ""
 
-#: ../src/verbs.cpp:2177
+#: ../src/verbs.cpp:2183
 msgid ""
 "Scale each selected object horizontally to match the width of the copied "
 "object"
 msgstr ""
 
-#: ../src/verbs.cpp:2178
+#: ../src/verbs.cpp:2184
 msgid "Paste Height Separately"
 msgstr ""
 
-#: ../src/verbs.cpp:2179
+#: ../src/verbs.cpp:2185
 msgid ""
 "Scale each selected object vertically to match the height of the copied "
 "object"
 msgstr ""
 
-#: ../src/verbs.cpp:2180
+#: ../src/verbs.cpp:2186
 msgid "Paste _In Place"
 msgstr "Pegar en el s_itio"
 
-#: ../src/verbs.cpp:2181
+#: ../src/verbs.cpp:2187
 #, fuzzy
 msgid "Paste objects from clipboard to the original location"
 msgstr "Pegar los objetos en el lugar original."
 
-#: ../src/verbs.cpp:2182
+#: ../src/verbs.cpp:2188
 #, fuzzy
 msgid "Paste Path _Effect"
 msgstr "Pegar e_stilo"
 
-#: ../src/verbs.cpp:2183
+#: ../src/verbs.cpp:2189
 #, fuzzy
 msgid "Apply the path effect of the copied object to selection"
 msgstr "Aplicar el estilo del objeto copiado a la selección"
 
-#: ../src/verbs.cpp:2184
+#: ../src/verbs.cpp:2190
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../src/verbs.cpp:2185
+#: ../src/verbs.cpp:2191
 #, fuzzy
 msgid "Delete selection"
 msgstr "Suprimir los nodos seleccionados"
 
-#: ../src/verbs.cpp:2186
+#: ../src/verbs.cpp:2192
 #, fuzzy
 msgid "Duplic_ate"
 msgstr "D_uplicar"
 
-#: ../src/verbs.cpp:2187
+#: ../src/verbs.cpp:2193
 #, fuzzy
 msgid "Duplicate selected objects"
 msgstr "Duplicar los objetos seleccionados"
 
-#: ../src/verbs.cpp:2188
+#: ../src/verbs.cpp:2194
 #, fuzzy
 msgid "Create Clo_ne"
 msgstr "Crear un documento nuevo"
 
-#: ../src/verbs.cpp:2189
+#: ../src/verbs.cpp:2195
 #, fuzzy
 msgid "Create a clone (a copy linked to the original) of selected object"
 msgstr "Crear un objeto de offset dinámico enlazado al trazo original"
 
-#: ../src/verbs.cpp:2190
+#: ../src/verbs.cpp:2196
 msgid "Unlin_k Clone"
 msgstr ""
 
-#: ../src/verbs.cpp:2191
+#: ../src/verbs.cpp:2197
 msgid ""
 "Cut the selected clone's link to its original, turning it into a standalone "
 "object"
 msgstr ""
 
-#: ../src/verbs.cpp:2192
+#: ../src/verbs.cpp:2198
 #, fuzzy
 msgid "Select _Original"
 msgstr "Seleccion_ar todo"
 
-#: ../src/verbs.cpp:2193
+#: ../src/verbs.cpp:2199
 #, fuzzy
 msgid "Select the object to which the selected clone is linked"
 msgstr "Seleccione objetos para bajar."
 
 #. TRANSLATORS: Convert selection to a line marker
-#: ../src/verbs.cpp:2195
+#: ../src/verbs.cpp:2201
 #, fuzzy
 msgid "Objects to _Marker"
 msgstr "_Objeto a trazo"
 
-#: ../src/verbs.cpp:2196
+#: ../src/verbs.cpp:2202
 #, fuzzy
 msgid "Convert selection to a line marker"
 msgstr "Bajar la selección un nivel"
 
 #. TRANSLATORS: Convert selection to a collection of guidelines
-#: ../src/verbs.cpp:2198
+#: ../src/verbs.cpp:2204
 #, fuzzy
 msgid "Objects to Gu_ides"
 msgstr "_Objeto a trazo"
 
-#: ../src/verbs.cpp:2199
+#: ../src/verbs.cpp:2205
 msgid ""
 "Convert selected objects to a collection of guidelines aligned with their "
 "edges"
 msgstr ""
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
-#: ../src/verbs.cpp:2201
+#: ../src/verbs.cpp:2207
 #, fuzzy
 msgid "Objects to Patter_n"
 msgstr "_Objeto a trazo"
 
-#: ../src/verbs.cpp:2202
+#: ../src/verbs.cpp:2208
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr ""
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
-#: ../src/verbs.cpp:2204
+#: ../src/verbs.cpp:2210
 #, fuzzy
 msgid "Pattern to _Objects"
 msgstr "Patrón:"
 
-#: ../src/verbs.cpp:2205
+#: ../src/verbs.cpp:2211
 msgid "Extract objects from a tiled pattern fill"
 msgstr ""
 
-#: ../src/verbs.cpp:2206
+#: ../src/verbs.cpp:2212
 msgid "Clea_r All"
 msgstr "Limpia_r todo"
 
-#: ../src/verbs.cpp:2207
+#: ../src/verbs.cpp:2213
 msgid "Delete all objects from document"
 msgstr "Borrar todos los objetos del documento"
 
-#: ../src/verbs.cpp:2208
+#: ../src/verbs.cpp:2214
 #, fuzzy
 msgid "Select Al_l"
 msgstr "Seleccion_ar todo"
 
-#: ../src/verbs.cpp:2209
+#: ../src/verbs.cpp:2215
 msgid "Select all objects or all nodes"
 msgstr "Seleccionar todos los objetos o todos los nodos"
 
-#: ../src/verbs.cpp:2210
+#: ../src/verbs.cpp:2216
 #, fuzzy
 msgid "Select All in All La_yers"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2211
+#: ../src/verbs.cpp:2217
 #, fuzzy
 msgid "Select all objects in all visible and unlocked layers"
 msgstr "Seleccionar todos los objetos o todos los nodos"
 
-#: ../src/verbs.cpp:2212
+#: ../src/verbs.cpp:2218
 #, fuzzy
 msgid "In_vert Selection"
 msgstr "Selección"
 
-#: ../src/verbs.cpp:2213
+#: ../src/verbs.cpp:2219
 msgid "Invert selection (unselect what is selected and select everything else)"
 msgstr ""
 
-#: ../src/verbs.cpp:2214
+#: ../src/verbs.cpp:2220
 msgid "Invert in All Layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2215
+#: ../src/verbs.cpp:2221
 msgid "Invert selection in all visible and unlocked layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2216
+#: ../src/verbs.cpp:2222
 #, fuzzy
 msgid "Select Next"
 msgstr "Selección"
 
-#: ../src/verbs.cpp:2217
+#: ../src/verbs.cpp:2223
 #, fuzzy
 msgid "Select next object or node"
 msgstr "Seleccionar todos los objetos o todos los nodos"
 
-#: ../src/verbs.cpp:2218
+#: ../src/verbs.cpp:2224
 #, fuzzy
 msgid "Select Previous"
 msgstr "Cambiar a la ventana de documento anterior"
 
-#: ../src/verbs.cpp:2219
+#: ../src/verbs.cpp:2225
 #, fuzzy
 msgid "Select previous object or node"
 msgstr "Seleccionar todos los objetos o todos los nodos"
 
-#: ../src/verbs.cpp:2220
+#: ../src/verbs.cpp:2226
 msgid "D_eselect"
 msgstr "D_eseleccionar"
 
-#: ../src/verbs.cpp:2221
+#: ../src/verbs.cpp:2227
 msgid "Deselect any selected objects or nodes"
 msgstr "Deseleccionar los objetos o nodos seleccionados."
 
-#: ../src/verbs.cpp:2222 ../src/widgets/toolbox.cpp:1100
+#: ../src/verbs.cpp:2228 ../src/widgets/toolbox.cpp:1100
 #, fuzzy
 msgid "Next Path Effect Parameter"
 msgstr "Pegar e_stilo"
 
-#: ../src/verbs.cpp:2223 ../src/widgets/toolbox.cpp:1101
+#: ../src/verbs.cpp:2229 ../src/widgets/toolbox.cpp:1101
 msgid "Show next Path Effect parameter for editing"
 msgstr ""
 
 #. Selection
-#: ../src/verbs.cpp:2226
+#: ../src/verbs.cpp:2232
 msgid "Raise to _Top"
 msgstr "Poner al fren_te"
 
-#: ../src/verbs.cpp:2227
+#: ../src/verbs.cpp:2233
 msgid "Raise selection to top"
 msgstr "Poner la selección al frente"
 
-#: ../src/verbs.cpp:2228
+#: ../src/verbs.cpp:2234
 msgid "Lower to _Bottom"
 msgstr "_Bajar al fondo"
 
-#: ../src/verbs.cpp:2229
+#: ../src/verbs.cpp:2235
 msgid "Lower selection to bottom"
 msgstr "Bajar la selección al fondo"
 
-#: ../src/verbs.cpp:2230
+#: ../src/verbs.cpp:2236
 msgid "_Raise"
 msgstr "Eleva_r"
 
-#: ../src/verbs.cpp:2231
+#: ../src/verbs.cpp:2237
 msgid "Raise selection one step"
 msgstr "Elevar la selección un nivel"
 
-#: ../src/verbs.cpp:2232
+#: ../src/verbs.cpp:2238
 msgid "_Lower"
 msgstr "_Bajar"
 
-#: ../src/verbs.cpp:2233
+#: ../src/verbs.cpp:2239
 msgid "Lower selection one step"
 msgstr "Bajar la selección un nivel"
 
-#: ../src/verbs.cpp:2234
+#: ../src/verbs.cpp:2240
 msgid "_Group"
 msgstr "A_grupar"
 
-#: ../src/verbs.cpp:2235
+#: ../src/verbs.cpp:2241
 msgid "Group selected objects"
 msgstr "Agrupar los objetos seleccionados"
 
-#: ../src/verbs.cpp:2237
+#: ../src/verbs.cpp:2243
 #, fuzzy
 msgid "Ungroup selected groups"
 msgstr "Desagrupar grupo(s) seleccionado(s)"
 
-#: ../src/verbs.cpp:2239
+#: ../src/verbs.cpp:2245
 #, fuzzy
 msgid "_Put on Path"
 msgstr "Convierte el contorno seleccionado en trazo"
 
-#: ../src/verbs.cpp:2241
+#: ../src/verbs.cpp:2247
 #, fuzzy
 msgid "_Remove from Path"
 msgstr "Deshacer _transformaciones"
 
-#: ../src/verbs.cpp:2243
+#: ../src/verbs.cpp:2249
 msgid "Remove Manual _Kerns"
 msgstr ""
 
 #. TRANSLATORS: "glyph": An image used in the visual representation of characters;
 #. roughly speaking, how a character looks. A font is a set of glyphs.
-#: ../src/verbs.cpp:2246
+#: ../src/verbs.cpp:2252
 #, fuzzy
 msgid "Remove all manual kerns and glyph rotations from a text object"
 msgstr "Eliminar transformaciones del objeto"
 
-#: ../src/verbs.cpp:2248
+#: ../src/verbs.cpp:2254
 msgid "_Union"
 msgstr "_Unión"
 
-#: ../src/verbs.cpp:2249
+#: ../src/verbs.cpp:2255
 #, fuzzy
 msgid "Create union of selected paths"
 msgstr "Reducir los trazos seleccionados"
 
-#: ../src/verbs.cpp:2250
+#: ../src/verbs.cpp:2256
 msgid "_Intersection"
 msgstr "_Intersección"
 
-#: ../src/verbs.cpp:2251
+#: ../src/verbs.cpp:2257
 #, fuzzy
 msgid "Create intersection of selected paths"
 msgstr "Intersección de objetos seleccionados"
 
-#: ../src/verbs.cpp:2252
+#: ../src/verbs.cpp:2258
 msgid "_Difference"
 msgstr "_Diferencia"
 
-#: ../src/verbs.cpp:2253
+#: ../src/verbs.cpp:2259
 #, fuzzy
 msgid "Create difference of selected paths (bottom minus top)"
 msgstr "Diferencia de objetos seleccionados"
 
-#: ../src/verbs.cpp:2254
+#: ../src/verbs.cpp:2260
 msgid "E_xclusion"
 msgstr "E_xclusión"
 
-#: ../src/verbs.cpp:2255
+#: ../src/verbs.cpp:2261
 msgid ""
 "Create exclusive OR of selected paths (those parts that belong to only one "
 "path)"
 msgstr ""
 
-#: ../src/verbs.cpp:2256
+#: ../src/verbs.cpp:2262
 msgid "Di_vision"
 msgstr "Di_visión"
 
-#: ../src/verbs.cpp:2257
+#: ../src/verbs.cpp:2263
 msgid "Cut the bottom path into pieces"
 msgstr "Cortar el trazo del fondo en pedazos"
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: ../src/verbs.cpp:2260
+#: ../src/verbs.cpp:2266
 msgid "Cut _Path"
 msgstr "Cortar trazo"
 
-#: ../src/verbs.cpp:2261
+#: ../src/verbs.cpp:2267
 #, fuzzy
 msgid "Cut the bottom path's stroke into pieces, removing fill"
 msgstr "Cortar el objeto del fondo en pedazos"
@@ -13132,32 +13345,32 @@ msgstr "Cortar el objeto del fondo en pedazos"
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: ../src/verbs.cpp:2265
+#: ../src/verbs.cpp:2271
 #, fuzzy
 msgid "Outs_et"
 msgstr "A_mpliar"
 
-#: ../src/verbs.cpp:2266
+#: ../src/verbs.cpp:2272
 #, fuzzy
 msgid "Outset selected paths"
 msgstr "Ampliar los trazos seleccionados"
 
-#: ../src/verbs.cpp:2268
+#: ../src/verbs.cpp:2274
 #, fuzzy
 msgid "O_utset Path by 1 px"
 msgstr "A_mpliar trazo 1 px"
 
-#: ../src/verbs.cpp:2269
+#: ../src/verbs.cpp:2275
 #, fuzzy
 msgid "Outset selected paths by 1 px"
 msgstr "Ampliar los trazos seleccionados 1 px"
 
-#: ../src/verbs.cpp:2271
+#: ../src/verbs.cpp:2277
 #, fuzzy
 msgid "O_utset Path by 10 px"
 msgstr "Re_ducir trazo 10 px"
 
-#: ../src/verbs.cpp:2272
+#: ../src/verbs.cpp:2278
 #, fuzzy
 msgid "Outset selected paths by 10 px"
 msgstr "Ampliar los trazos seleccionados 10 px"
@@ -13165,1038 +13378,1038 @@ msgstr "Ampliar los trazos seleccionados 10 px"
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: ../src/verbs.cpp:2276
+#: ../src/verbs.cpp:2282
 msgid "I_nset"
 msgstr "Re_ducir"
 
-#: ../src/verbs.cpp:2277
+#: ../src/verbs.cpp:2283
 #, fuzzy
 msgid "Inset selected paths"
 msgstr "Reducir los trazos seleccionados"
 
-#: ../src/verbs.cpp:2279
+#: ../src/verbs.cpp:2285
 #, fuzzy
 msgid "I_nset Path by 1 px"
 msgstr "Re_ducir trazo 1 px"
 
-#: ../src/verbs.cpp:2280
+#: ../src/verbs.cpp:2286
 #, fuzzy
 msgid "Inset selected paths by 1 px"
 msgstr "Reducir los trazos seleccionados 1 px"
 
-#: ../src/verbs.cpp:2282
+#: ../src/verbs.cpp:2288
 #, fuzzy
 msgid "I_nset Path by 10 px"
 msgstr "Re_ducir trazo 10 px"
 
-#: ../src/verbs.cpp:2283
+#: ../src/verbs.cpp:2289
 #, fuzzy
 msgid "Inset selected paths by 10 px"
 msgstr "Reducir los trazos seleccionados 10 px"
 
-#: ../src/verbs.cpp:2285
+#: ../src/verbs.cpp:2291
 msgid "D_ynamic Offset"
 msgstr "Offset d_inámico"
 
-#: ../src/verbs.cpp:2285
+#: ../src/verbs.cpp:2291
 msgid "Create a dynamic offset object"
 msgstr "Crear un objeto de offset dinámico"
 
-#: ../src/verbs.cpp:2287
+#: ../src/verbs.cpp:2293
 msgid "_Linked Offset"
 msgstr "Offset en_lazado"
 
-#: ../src/verbs.cpp:2288
+#: ../src/verbs.cpp:2294
 msgid "Create a dynamic offset object linked to the original path"
 msgstr "Crear un objeto de offset dinámico enlazado al trazo original"
 
-#: ../src/verbs.cpp:2290
+#: ../src/verbs.cpp:2296
 msgid "_Stroke to Path"
 msgstr "Con_torno a trazo"
 
-#: ../src/verbs.cpp:2291
+#: ../src/verbs.cpp:2297
 #, fuzzy
 msgid "Convert selected object's stroke to paths"
 msgstr "Convierte el objeto seleccionado en trazos"
 
-#: ../src/verbs.cpp:2292
+#: ../src/verbs.cpp:2298
 msgid "Si_mplify"
 msgstr "Simp_lificar"
 
-#: ../src/verbs.cpp:2293
+#: ../src/verbs.cpp:2299
 #, fuzzy
 msgid "Simplify selected paths (remove extra nodes)"
 msgstr "Simplifica el trazo seleccionado"
 
-#: ../src/verbs.cpp:2294
+#: ../src/verbs.cpp:2300
 #, fuzzy
 msgid "_Reverse"
 msgstr "Reglas"
 
-#: ../src/verbs.cpp:2295
+#: ../src/verbs.cpp:2301
 #, fuzzy
 msgid "Reverse the direction of selected paths (useful for flipping markers)"
 msgstr "Intersección de objetos seleccionados"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-#: ../src/verbs.cpp:2297
+#: ../src/verbs.cpp:2303
 #, fuzzy
 msgid "_Trace Bitmap..."
 msgstr "Imprimir como mapa de bits"
 
-#: ../src/verbs.cpp:2298
+#: ../src/verbs.cpp:2304
 msgid "Create one or more paths from a bitmap by tracing it"
 msgstr ""
 
-#: ../src/verbs.cpp:2299
+#: ../src/verbs.cpp:2305
 #, fuzzy
 msgid "_Make a Bitmap Copy"
 msgstr "Imprimir como mapa de bits"
 
-#: ../src/verbs.cpp:2300
+#: ../src/verbs.cpp:2306
 #, fuzzy
 msgid "Export selection to a bitmap and insert it into document"
 msgstr "Importar mapa de bits o imagen SVG al documento"
 
-#: ../src/verbs.cpp:2301
+#: ../src/verbs.cpp:2307
 msgid "_Combine"
 msgstr "_Combinar"
 
-#: ../src/verbs.cpp:2302
+#: ../src/verbs.cpp:2308
 msgid "Combine several paths into one"
 msgstr ""
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: ../src/verbs.cpp:2305
+#: ../src/verbs.cpp:2311
 msgid "Break _Apart"
 msgstr "Descombin_ar"
 
-#: ../src/verbs.cpp:2306
+#: ../src/verbs.cpp:2312
 #, fuzzy
 msgid "Break selected paths into subpaths"
 msgstr "Separar los trazos seleccionados en subtrazos"
 
-#: ../src/verbs.cpp:2307
+#: ../src/verbs.cpp:2313
 #, fuzzy
 msgid "Rows and Columns..."
 msgstr "Círculo"
 
-#: ../src/verbs.cpp:2308
+#: ../src/verbs.cpp:2314
 #, fuzzy
 msgid "Arrange selected objects in a table"
 msgstr "Agrupar los objetos seleccionados"
 
 #. Layer
-#: ../src/verbs.cpp:2310
+#: ../src/verbs.cpp:2316
 #, fuzzy
 msgid "_Add Layer..."
 msgstr "_Bajar"
 
-#: ../src/verbs.cpp:2311
+#: ../src/verbs.cpp:2317
 #, fuzzy
 msgid "Create a new layer"
 msgstr "Crear un documento nuevo"
 
-#: ../src/verbs.cpp:2312
+#: ../src/verbs.cpp:2318
 #, fuzzy
 msgid "Re_name Layer..."
 msgstr "Elevar nodo"
 
-#: ../src/verbs.cpp:2313
+#: ../src/verbs.cpp:2319
 #, fuzzy
 msgid "Rename the current layer"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2314
+#: ../src/verbs.cpp:2320
 #, fuzzy
 msgid "Switch to Layer Abov_e"
 msgstr "Cambiar a la ventana de documento siguiente"
 
-#: ../src/verbs.cpp:2315
+#: ../src/verbs.cpp:2321
 #, fuzzy
 msgid "Switch to the layer above the current"
 msgstr "Cambiar a la ventana de documento siguiente"
 
-#: ../src/verbs.cpp:2316
+#: ../src/verbs.cpp:2322
 #, fuzzy
 msgid "Switch to Layer Belo_w"
 msgstr "Cambiar a la ventana de documento siguiente"
 
-#: ../src/verbs.cpp:2317
+#: ../src/verbs.cpp:2323
 #, fuzzy
 msgid "Switch to the layer below the current"
 msgstr "Cambiar a la ventana de documento siguiente"
 
-#: ../src/verbs.cpp:2318
+#: ../src/verbs.cpp:2324
 #, fuzzy
 msgid "Move Selection to Layer Abo_ve"
 msgstr "Bajar la selección al fondo"
 
-#: ../src/verbs.cpp:2319
+#: ../src/verbs.cpp:2325
 msgid "Move selection to the layer above the current"
 msgstr ""
 
-#: ../src/verbs.cpp:2320
+#: ../src/verbs.cpp:2326
 #, fuzzy
 msgid "Move Selection to Layer Bel_ow"
 msgstr "Bajar la selección un nivel"
 
-#: ../src/verbs.cpp:2321
-msgid "Move selection to the layer below the current"
-msgstr ""
-
-#: ../src/verbs.cpp:2322
-#, fuzzy
-msgid "Layer to _Top"
-msgstr "Poner al fren_te"
-
-#: ../src/verbs.cpp:2323
-#, fuzzy
-msgid "Raise the current layer to the top"
-msgstr "Poner la selección al frente"
-
-#: ../src/verbs.cpp:2324
-#, fuzzy
-msgid "Layer to _Bottom"
-msgstr "_Bajar al fondo"
-
-#: ../src/verbs.cpp:2325
-#, fuzzy
-msgid "Lower the current layer to the bottom"
-msgstr "Bajar la selección al fondo"
-
-#: ../src/verbs.cpp:2326
-#, fuzzy
-msgid "_Raise Layer"
-msgstr "Elevar nodo"
-
 #: ../src/verbs.cpp:2327
-msgid "Raise the current layer"
+msgid "Move selection to the layer below the current"
 msgstr ""
 
 #: ../src/verbs.cpp:2328
 #, fuzzy
+msgid "Layer to _Top"
+msgstr "Poner al fren_te"
+
+#: ../src/verbs.cpp:2329
+#, fuzzy
+msgid "Raise the current layer to the top"
+msgstr "Poner la selección al frente"
+
+#: ../src/verbs.cpp:2330
+#, fuzzy
+msgid "Layer to _Bottom"
+msgstr "_Bajar al fondo"
+
+#: ../src/verbs.cpp:2331
+#, fuzzy
+msgid "Lower the current layer to the bottom"
+msgstr "Bajar la selección al fondo"
+
+#: ../src/verbs.cpp:2332
+#, fuzzy
+msgid "_Raise Layer"
+msgstr "Elevar nodo"
+
+#: ../src/verbs.cpp:2333
+msgid "Raise the current layer"
+msgstr ""
+
+#: ../src/verbs.cpp:2334
+#, fuzzy
 msgid "_Lower Layer"
 msgstr "Bajar nodo"
 
-#: ../src/verbs.cpp:2329
+#: ../src/verbs.cpp:2335
 msgid "Lower the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2330
+#: ../src/verbs.cpp:2336
 #, fuzzy
 msgid "_Delete Current Layer"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2331
+#: ../src/verbs.cpp:2337
 #, fuzzy
 msgid "Delete the current layer"
 msgstr "Seleccionar"
 
 #. Object
-#: ../src/verbs.cpp:2334
+#: ../src/verbs.cpp:2340
 #, fuzzy
 msgid "Rotate _90&#176; CW"
 msgstr "Rotar _90 grados a la derecha"
 
 #. This is shared between tooltips and statusbar, so they
 #. must use UTF-8, not HTML entities for special characters.
-#: ../src/verbs.cpp:2337
+#: ../src/verbs.cpp:2343
 #, fuzzy
 msgid "Rotate selection 90° clockwise"
 msgstr "Rotar el objeto 90 grados a la derecha"
 
-#: ../src/verbs.cpp:2338
+#: ../src/verbs.cpp:2344
 #, fuzzy
 msgid "Rotate 9_0&#176; CCW"
 msgstr "Rotar 9_0 grados a la izquierda"
 
 #. This is shared between tooltips and statusbar, so they
 #. must use UTF-8, not HTML entities for special characters.
-#: ../src/verbs.cpp:2341
+#: ../src/verbs.cpp:2347
 #, fuzzy
 msgid "Rotate selection 90° counter-clockwise"
 msgstr "Rotar el objeto 90 grados a la izquierda"
 
-#: ../src/verbs.cpp:2342
+#: ../src/verbs.cpp:2348
 msgid "Remove _Transformations"
 msgstr "Deshacer _transformaciones"
 
-#: ../src/verbs.cpp:2343
+#: ../src/verbs.cpp:2349
 msgid "Remove transformations from object"
 msgstr "Eliminar transformaciones del objeto"
 
-#: ../src/verbs.cpp:2344
+#: ../src/verbs.cpp:2350
 msgid "_Object to Path"
 msgstr "_Objeto a trazo"
 
-#: ../src/verbs.cpp:2345
+#: ../src/verbs.cpp:2351
 #, fuzzy
 msgid "Convert selected object to path"
 msgstr "Convierte el objeto seleccionado en trazos"
 
-#: ../src/verbs.cpp:2346
+#: ../src/verbs.cpp:2352
 msgid "_Flow into Frame"
 msgstr ""
 
-#: ../src/verbs.cpp:2347
+#: ../src/verbs.cpp:2353
 msgid ""
 "Put text into a frame (path or shape), creating a flowed text linked to the "
 "frame object"
 msgstr ""
 
-#: ../src/verbs.cpp:2348
+#: ../src/verbs.cpp:2354
 #, fuzzy
 msgid "_Unflow"
 msgstr "_Deshacer"
 
-#: ../src/verbs.cpp:2349
+#: ../src/verbs.cpp:2355
 msgid "Remove text from frame (creates a single-line text object)"
 msgstr ""
 
-#: ../src/verbs.cpp:2350
+#: ../src/verbs.cpp:2356
 #, fuzzy
 msgid "_Convert to Text"
 msgstr "Convierte el contorno seleccionado en trazo"
 
-#: ../src/verbs.cpp:2351
+#: ../src/verbs.cpp:2357
 #, fuzzy
 msgid "Convert flowed text to regular text object (preserves appearance)"
 msgstr "Convierte el objeto seleccionado en trazos"
 
-#: ../src/verbs.cpp:2353
+#: ../src/verbs.cpp:2359
 #, fuzzy
 msgid "Flip _Horizontal"
 msgstr "Reflejo _horizontal"
 
-#: ../src/verbs.cpp:2353
+#: ../src/verbs.cpp:2359
 #, fuzzy
 msgid "Flip selected objects horizontally"
 msgstr "Reflejar los objetos seleccionados horizontalmente"
 
-#: ../src/verbs.cpp:2356
+#: ../src/verbs.cpp:2362
 #, fuzzy
 msgid "Flip _Vertical"
 msgstr "Reflejo _vertical"
 
-#: ../src/verbs.cpp:2356
+#: ../src/verbs.cpp:2362
 #, fuzzy
 msgid "Flip selected objects vertically"
 msgstr "Reflejar los objetos seleccionados verticalmente"
 
-#: ../src/verbs.cpp:2359
+#: ../src/verbs.cpp:2365
 msgid "Apply mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2360 ../src/verbs.cpp:2364
+#: ../src/verbs.cpp:2366 ../src/verbs.cpp:2370
 #, fuzzy
 msgid "_Release"
 msgstr "Reglas"
 
-#: ../src/verbs.cpp:2361
+#: ../src/verbs.cpp:2367
 #, fuzzy
 msgid "Remove mask from selection"
 msgstr "Altura de la selección"
 
-#: ../src/verbs.cpp:2363
+#: ../src/verbs.cpp:2369
 msgid ""
 "Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
 
-#: ../src/verbs.cpp:2365
+#: ../src/verbs.cpp:2371
 msgid "Remove clipping path from selection"
 msgstr ""
 
 #. Tools
-#: ../src/verbs.cpp:2368
+#: ../src/verbs.cpp:2374
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2369
+#: ../src/verbs.cpp:2375
 #, fuzzy
 msgid "Select and transform objects"
 msgstr "Seleccionar y transformar objetos (F1)"
 
-#: ../src/verbs.cpp:2370
+#: ../src/verbs.cpp:2376
 msgid "Node Edit"
 msgstr "Edición de nodos"
 
-#: ../src/verbs.cpp:2371
+#: ../src/verbs.cpp:2377
 #, fuzzy
 msgid "Edit paths by nodes"
 msgstr "Editar trazo o tiradores de control (F2)"
 
-#: ../src/verbs.cpp:2373
+#: ../src/verbs.cpp:2379
 msgid "Tweak objects by sculpting or painting"
 msgstr ""
 
-#: ../src/verbs.cpp:2375
+#: ../src/verbs.cpp:2381
 #, fuzzy
 msgid "Create rectangles and squares"
 msgstr "Crear rectángulos y cuadrados (F4)"
 
-#: ../src/verbs.cpp:2377
+#: ../src/verbs.cpp:2383
 #, fuzzy
 msgid "Create 3D boxes"
 msgstr "Cerrar"
 
-#: ../src/verbs.cpp:2379
+#: ../src/verbs.cpp:2385
 #, fuzzy
 msgid "Create circles, ellipses, and arcs"
 msgstr "Crear círculos, elipses y arcos (F5)"
 
-#: ../src/verbs.cpp:2381
+#: ../src/verbs.cpp:2387
 #, fuzzy
 msgid "Create stars and polygons"
 msgstr "Crear estrellas y polígonos (*)"
 
-#: ../src/verbs.cpp:2383
+#: ../src/verbs.cpp:2389
 #, fuzzy
 msgid "Create spirals"
 msgstr "Crear espirales (F9)"
 
-#: ../src/verbs.cpp:2385
+#: ../src/verbs.cpp:2391
 #, fuzzy
 msgid "Draw freehand lines"
 msgstr "Dibujar líneas a mano alzada (F6)"
 
-#: ../src/verbs.cpp:2387
+#: ../src/verbs.cpp:2393
 #, fuzzy
 msgid "Draw Bezier curves and straight lines"
 msgstr "Dibujar curvas Bézier y líneas rectas (Mayús+F6)"
 
-#: ../src/verbs.cpp:2389
+#: ../src/verbs.cpp:2395
 #, fuzzy
 msgid "Draw calligraphic or brush strokes"
 msgstr "Dibujar líneas caligráficas (Ctrl+F6)"
 
-#: ../src/verbs.cpp:2391
+#: ../src/verbs.cpp:2397
 #, fuzzy
 msgid "Create and edit text objects"
 msgstr "Crear y editar objetos de texto (F8)"
 
-#: ../src/verbs.cpp:2393
+#: ../src/verbs.cpp:2399
 #, fuzzy
 msgid "Create and edit gradients"
 msgstr "Crear y editar objetos de texto (F8)"
 
-#: ../src/verbs.cpp:2395
+#: ../src/verbs.cpp:2401
 #, fuzzy
 msgid "Zoom in or out"
 msgstr "Acercar o alejar (F3)"
 
-#: ../src/verbs.cpp:2397
+#: ../src/verbs.cpp:2403
 #, fuzzy
 msgid "Pick colors from image"
 msgstr "Seleccionar colores de la imagen (F7)"
 
-#: ../src/verbs.cpp:2399
+#: ../src/verbs.cpp:2405
 #, fuzzy
 msgid "Create diagram connectors"
 msgstr "Crear un documento nuevo"
 
-#: ../src/verbs.cpp:2401
+#: ../src/verbs.cpp:2407
 msgid "Fill bounded areas"
 msgstr ""
 
 #. Tool prefs
-#: ../src/verbs.cpp:2404
+#: ../src/verbs.cpp:2410
 msgid "Selector Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2405
+#: ../src/verbs.cpp:2411
 #, fuzzy
 msgid "Open Preferences for the Selector tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2406
+#: ../src/verbs.cpp:2412
 msgid "Node Tool Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2407
+#: ../src/verbs.cpp:2413
 #, fuzzy
 msgid "Open Preferences for the Node tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2408
+#: ../src/verbs.cpp:2414
 #, fuzzy
 msgid "Tweak Tool Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2409
+#: ../src/verbs.cpp:2415
 #, fuzzy
 msgid "Open Preferences for the Tweak tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2410
+#: ../src/verbs.cpp:2416
 #, fuzzy
 msgid "Rectangle Preferences"
 msgstr "_Propiedades del rectángulo"
 
-#: ../src/verbs.cpp:2411
+#: ../src/verbs.cpp:2417
 #, fuzzy
 msgid "Open Preferences for the Rectangle tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2412
+#: ../src/verbs.cpp:2418
 #, fuzzy
 msgid "3D Box Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2413
+#: ../src/verbs.cpp:2419
 #, fuzzy
 msgid "Open Preferences for the 3D Box tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2414
+#: ../src/verbs.cpp:2420
 #, fuzzy
 msgid "Ellipse Preferences"
 msgstr "Opciones globales de Inkscape"
 
-#: ../src/verbs.cpp:2415
+#: ../src/verbs.cpp:2421
 #, fuzzy
 msgid "Open Preferences for the Ellipse tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2416
+#: ../src/verbs.cpp:2422
 #, fuzzy
 msgid "Star Preferences"
 msgstr "_Propiedades de la estrella"
 
-#: ../src/verbs.cpp:2417
+#: ../src/verbs.cpp:2423
 #, fuzzy
 msgid "Open Preferences for the Star tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2418
+#: ../src/verbs.cpp:2424
 #, fuzzy
 msgid "Spiral Preferences"
 msgstr "_Propiedades de la espiral"
 
-#: ../src/verbs.cpp:2419
+#: ../src/verbs.cpp:2425
 #, fuzzy
 msgid "Open Preferences for the Spiral tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2420
+#: ../src/verbs.cpp:2426
 #, fuzzy
 msgid "Pencil Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2421
+#: ../src/verbs.cpp:2427
 #, fuzzy
 msgid "Open Preferences for the Pencil tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2422
+#: ../src/verbs.cpp:2428
 #, fuzzy
 msgid "Pen Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2423
+#: ../src/verbs.cpp:2429
 #, fuzzy
 msgid "Open Preferences for the Pen tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2424
+#: ../src/verbs.cpp:2430
 #, fuzzy
 msgid "Calligraphic Preferences"
 msgstr "Línea caligráfica"
 
-#: ../src/verbs.cpp:2425
+#: ../src/verbs.cpp:2431
 #, fuzzy
 msgid "Open Preferences for the Calligraphy tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2426
+#: ../src/verbs.cpp:2432
 #, fuzzy
 msgid "Text Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2427
+#: ../src/verbs.cpp:2433
 #, fuzzy
 msgid "Open Preferences for the Text tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2428
+#: ../src/verbs.cpp:2434
 #, fuzzy
 msgid "Gradient Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2429
+#: ../src/verbs.cpp:2435
 #, fuzzy
 msgid "Open Preferences for the Gradient tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2430
+#: ../src/verbs.cpp:2436
 #, fuzzy
 msgid "Zoom Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2431
+#: ../src/verbs.cpp:2437
 #, fuzzy
 msgid "Open Preferences for the Zoom tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2432
+#: ../src/verbs.cpp:2438
 #, fuzzy
 msgid "Dropper Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2433
+#: ../src/verbs.cpp:2439
 #, fuzzy
 msgid "Open Preferences for the Dropper tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2434
+#: ../src/verbs.cpp:2440
 #, fuzzy
 msgid "Connector Preferences"
 msgstr "_Propiedades de la estrella"
 
-#: ../src/verbs.cpp:2435
+#: ../src/verbs.cpp:2441
 #, fuzzy
 msgid "Open Preferences for the Connector tool"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2436
+#: ../src/verbs.cpp:2442
 #, fuzzy
 msgid "Paint Bucket Preferences"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2437
+#: ../src/verbs.cpp:2443
 #, fuzzy
 msgid "Open Preferences for the Paint Bucket tool"
 msgstr "Inkscape: _Avanzado"
 
 #. Zoom/View
-#: ../src/verbs.cpp:2440
+#: ../src/verbs.cpp:2446
 msgid "Zoom In"
 msgstr "Aumentar"
 
-#: ../src/verbs.cpp:2440
+#: ../src/verbs.cpp:2446
 msgid "Zoom in"
 msgstr "Aumentar"
 
-#: ../src/verbs.cpp:2441
+#: ../src/verbs.cpp:2447
 msgid "Zoom Out"
 msgstr "Alejar"
 
-#: ../src/verbs.cpp:2441
+#: ../src/verbs.cpp:2447
 msgid "Zoom out"
 msgstr "Alejar"
 
-#: ../src/verbs.cpp:2442
+#: ../src/verbs.cpp:2448
 #, fuzzy
 msgid "_Rulers"
 msgstr "Reglas"
 
-#: ../src/verbs.cpp:2442
+#: ../src/verbs.cpp:2448
 #, fuzzy
 msgid "Show or hide the canvas rulers"
 msgstr "Mostrar/ocultar reglas"
 
-#: ../src/verbs.cpp:2443
+#: ../src/verbs.cpp:2449
 #, fuzzy
 msgid "Scroll_bars"
 msgstr "Barras de desplazamiento"
 
-#: ../src/verbs.cpp:2443
+#: ../src/verbs.cpp:2449
 #, fuzzy
 msgid "Show or hide the canvas scrollbars"
 msgstr "Mostrar/ocultar barras de desplazamiento"
 
-#: ../src/verbs.cpp:2444
+#: ../src/verbs.cpp:2450
 #, fuzzy
 msgid "_Grid"
 msgstr "Rejilla"
 
-#: ../src/verbs.cpp:2444
+#: ../src/verbs.cpp:2450
 #, fuzzy
 msgid "Show or hide the grid"
 msgstr "Mostrar/ocultar la rejilla"
 
-#: ../src/verbs.cpp:2445
+#: ../src/verbs.cpp:2451
 #, fuzzy
 msgid "G_uides"
 msgstr "Guías"
 
-#: ../src/verbs.cpp:2445
+#: ../src/verbs.cpp:2451
 msgid "Show or hide guides (drag from a ruler to create a guide)"
 msgstr ""
 
-#: ../src/verbs.cpp:2447
+#: ../src/verbs.cpp:2453
 #, fuzzy
 msgid "Nex_t Zoom"
 msgstr "Zoom siguien_te"
 
-#: ../src/verbs.cpp:2447
+#: ../src/verbs.cpp:2453
 msgid "Next zoom (from the history of zooms)"
 msgstr ""
 
-#: ../src/verbs.cpp:2449
+#: ../src/verbs.cpp:2455
 #, fuzzy
 msgid "Pre_vious Zoom"
 msgstr "Zoom anterior"
 
-#: ../src/verbs.cpp:2449
+#: ../src/verbs.cpp:2455
 msgid "Previous zoom (from the history of zooms)"
 msgstr ""
 
-#: ../src/verbs.cpp:2451
+#: ../src/verbs.cpp:2457
 msgid "Zoom 1:_1"
 msgstr "Zoom 1:_1"
 
-#: ../src/verbs.cpp:2451
+#: ../src/verbs.cpp:2457
 msgid "Zoom to 1:1"
 msgstr "Zoom a 1:1"
 
-#: ../src/verbs.cpp:2453
+#: ../src/verbs.cpp:2459
 msgid "Zoom 1:_2"
 msgstr "Zoom 1:2"
 
-#: ../src/verbs.cpp:2453
+#: ../src/verbs.cpp:2459
 msgid "Zoom to 1:2"
 msgstr "Zoom a 1:2"
 
-#: ../src/verbs.cpp:2455
+#: ../src/verbs.cpp:2461
 msgid "_Zoom 2:1"
 msgstr "_Zoom 2:1"
 
-#: ../src/verbs.cpp:2455
+#: ../src/verbs.cpp:2461
 msgid "Zoom to 2:1"
 msgstr "_Zoom a 2:1"
 
-#: ../src/verbs.cpp:2458
+#: ../src/verbs.cpp:2464
 msgid "_Fullscreen"
 msgstr "_Pantalla completa"
 
-#: ../src/verbs.cpp:2458
+#: ../src/verbs.cpp:2464
 #, fuzzy
 msgid "Stretch this document window to full screen"
 msgstr "Cambiar a la ventana de documento anterior"
 
-#: ../src/verbs.cpp:2461
+#: ../src/verbs.cpp:2467
 #, fuzzy
 msgid "Duplic_ate Window"
 msgstr "Duplicar nodo"
 
-#: ../src/verbs.cpp:2461
+#: ../src/verbs.cpp:2467
 #, fuzzy
 msgid "Open a new window with the same document"
 msgstr "Opciones guardadas con el documento"
 
-#: ../src/verbs.cpp:2463
+#: ../src/verbs.cpp:2469
 #, fuzzy
 msgid "_New View Preview"
 msgstr "_Nueva vista"
 
-#: ../src/verbs.cpp:2464
+#: ../src/verbs.cpp:2470
 #, fuzzy
 msgid "New View Preview"
 msgstr "_Nueva vista"
 
 #. "view_new_preview"
-#: ../src/verbs.cpp:2466
+#: ../src/verbs.cpp:2472
 msgid "_Normal"
 msgstr ""
 
-#: ../src/verbs.cpp:2467
+#: ../src/verbs.cpp:2473
 msgid "Switch to normal display mode"
 msgstr ""
 
-#: ../src/verbs.cpp:2468
+#: ../src/verbs.cpp:2474
 #, fuzzy
 msgid "_Outline"
 msgstr "Mostrar el boceto"
 
-#: ../src/verbs.cpp:2469
+#: ../src/verbs.cpp:2475
 msgid "Switch to outline (wireframe) display mode"
 msgstr ""
 
-#: ../src/verbs.cpp:2470
+#: ../src/verbs.cpp:2476
 #, fuzzy
 msgid "_Toggle"
 msgstr "Ángulo:"
 
-#: ../src/verbs.cpp:2471
-msgid "Toggle between normal and outline display modes"
-msgstr ""
-
-#: ../src/verbs.cpp:2473
-#, fuzzy
-msgid "Color-managed view"
-msgstr "Mostrar contorno del papel"
-
-#: ../src/verbs.cpp:2474
-#, fuzzy
-msgid "Toggle color-managed display for this document window"
-msgstr "Cambiar a la ventana de documento anterior"
-
-#: ../src/verbs.cpp:2476
-#, fuzzy
-msgid "Ico_n Preview..."
-msgstr "_Nueva vista"
-
 #: ../src/verbs.cpp:2477
-msgid "Open a window to preview objects at different icon resolutions"
+msgid "Toggle between normal and outline display modes"
 msgstr ""
 
 #: ../src/verbs.cpp:2479
 #, fuzzy
+msgid "Color-managed view"
+msgstr "Mostrar contorno del papel"
+
+#: ../src/verbs.cpp:2480
+#, fuzzy
+msgid "Toggle color-managed display for this document window"
+msgstr "Cambiar a la ventana de documento anterior"
+
+#: ../src/verbs.cpp:2482
+#, fuzzy
+msgid "Ico_n Preview..."
+msgstr "_Nueva vista"
+
+#: ../src/verbs.cpp:2483
+msgid "Open a window to preview objects at different icon resolutions"
+msgstr ""
+
+#: ../src/verbs.cpp:2485
+#, fuzzy
 msgid "Zoom to fit page in window"
 msgstr "Ajustar la página a la ventana"
 
-#: ../src/verbs.cpp:2480
+#: ../src/verbs.cpp:2486
 msgid "Page _Width"
 msgstr "An_cho de página"
 
-#: ../src/verbs.cpp:2481
+#: ../src/verbs.cpp:2487
 #, fuzzy
 msgid "Zoom to fit page width in window"
 msgstr "Ajustar la anchura de la página a la ventana"
 
-#: ../src/verbs.cpp:2483
+#: ../src/verbs.cpp:2489
 #, fuzzy
 msgid "Zoom to fit drawing in window"
 msgstr "Ajustar el dibujo a la ventana"
 
-#: ../src/verbs.cpp:2485
+#: ../src/verbs.cpp:2491
 #, fuzzy
 msgid "Zoom to fit selection in window"
 msgstr "Ajustar la selección a la ventana"
 
 #. Dialogs
-#: ../src/verbs.cpp:2488
+#: ../src/verbs.cpp:2494
 #, fuzzy
 msgid "In_kscape Preferences..."
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2489
+#: ../src/verbs.cpp:2495
 #, fuzzy
 msgid "Edit global Inkscape preferences"
 msgstr "Opciones globales de Inkscape"
 
-#: ../src/verbs.cpp:2490
+#: ../src/verbs.cpp:2496
 #, fuzzy
 msgid "_Document Properties..."
 msgstr "Opciones del _documento"
 
-#: ../src/verbs.cpp:2491
+#: ../src/verbs.cpp:2497
 #, fuzzy
 msgid "Edit properties of this document (to be saved with the document)"
 msgstr "Opciones guardadas con el documento"
 
-#: ../src/verbs.cpp:2492
+#: ../src/verbs.cpp:2498
 #, fuzzy
 msgid "Document _Metadata..."
 msgstr "Documento guardado."
 
-#: ../src/verbs.cpp:2493
+#: ../src/verbs.cpp:2499
 #, fuzzy
 msgid "Edit document metadata (to be saved with the document)"
 msgstr "Opciones guardadas con el documento"
 
-#: ../src/verbs.cpp:2494
+#: ../src/verbs.cpp:2500
 #, fuzzy
 msgid "_Fill and Stroke..."
 msgstr "_Relleno y contorno"
 
-#: ../src/verbs.cpp:2495
+#: ../src/verbs.cpp:2501
 msgid ""
 "Edit objects' colors, gradients, stroke width, arrowheads, dash patterns..."
 msgstr ""
 
 #. TRANSLATORS: "Swatches" means: color samples
-#: ../src/verbs.cpp:2497
+#: ../src/verbs.cpp:2503
 #, fuzzy
 msgid "S_watches..."
 msgstr "G_uardar como..."
 
-#: ../src/verbs.cpp:2498
-msgid "Select colors from a swatches palette"
-msgstr ""
-
-#: ../src/verbs.cpp:2499
-#, fuzzy
-msgid "Transfor_m..."
-msgstr "Transfor_mar"
-
-#: ../src/verbs.cpp:2500
-#, fuzzy
-msgid "Precisely control objects' transformations"
-msgstr "Transformaciones de objeto"
-
-#: ../src/verbs.cpp:2501
-#, fuzzy
-msgid "_Align and Distribute..."
-msgstr "_Alinear y distribuir"
-
-#: ../src/verbs.cpp:2502
-msgid "Align and distribute objects"
-msgstr "Alinear y distribuir objetos"
-
-#: ../src/verbs.cpp:2503
-msgid "Undo _History..."
-msgstr ""
-
 #: ../src/verbs.cpp:2504
-msgid "Undo History"
+msgid "Select colors from a swatches palette"
 msgstr ""
 
 #: ../src/verbs.cpp:2505
 #, fuzzy
-msgid "_Text and Font..."
-msgstr "_Texto y tipografía"
+msgid "Transfor_m..."
+msgstr "Transfor_mar"
 
 #: ../src/verbs.cpp:2506
-msgid "View and select font family, font size and other text properties"
-msgstr ""
+#, fuzzy
+msgid "Precisely control objects' transformations"
+msgstr "Transformaciones de objeto"
 
 #: ../src/verbs.cpp:2507
 #, fuzzy
-msgid "_XML Editor..."
-msgstr "Editor _XML"
+msgid "_Align and Distribute..."
+msgstr "_Alinear y distribuir"
 
 #: ../src/verbs.cpp:2508
-msgid "View and edit the XML tree of the document"
-msgstr ""
+msgid "Align and distribute objects"
+msgstr "Alinear y distribuir objetos"
 
 #: ../src/verbs.cpp:2509
-#, fuzzy
-msgid "_Find..."
-msgstr "_Imprimir"
-
-#: ../src/verbs.cpp:2510
-#, fuzzy
-msgid "Find objects in document"
-msgstr "Sin gradientes en el documento"
-
-#: ../src/verbs.cpp:2511
-msgid "_Messages..."
+msgid "Undo _History..."
 msgstr ""
 
+#: ../src/verbs.cpp:2510
+msgid "Undo History"
+msgstr ""
+
+#: ../src/verbs.cpp:2511
+#, fuzzy
+msgid "_Text and Font..."
+msgstr "_Texto y tipografía"
+
 #: ../src/verbs.cpp:2512
-msgid "View debug messages"
+msgid "View and select font family, font size and other text properties"
 msgstr ""
 
 #: ../src/verbs.cpp:2513
 #, fuzzy
-msgid "S_cripts..."
-msgstr "_Imprimir"
+msgid "_XML Editor..."
+msgstr "Editor _XML"
 
 #: ../src/verbs.cpp:2514
-msgid "Run scripts"
+msgid "View and edit the XML tree of the document"
 msgstr ""
 
 #: ../src/verbs.cpp:2515
 #, fuzzy
+msgid "_Find..."
+msgstr "_Imprimir"
+
+#: ../src/verbs.cpp:2516
+#, fuzzy
+msgid "Find objects in document"
+msgstr "Sin gradientes en el documento"
+
+#: ../src/verbs.cpp:2517
+msgid "_Messages..."
+msgstr ""
+
+#: ../src/verbs.cpp:2518
+msgid "View debug messages"
+msgstr ""
+
+#: ../src/verbs.cpp:2519
+#, fuzzy
+msgid "S_cripts..."
+msgstr "_Imprimir"
+
+#: ../src/verbs.cpp:2520
+msgid "Run scripts"
+msgstr ""
+
+#: ../src/verbs.cpp:2521
+#, fuzzy
 msgid "Show/Hide D_ialogs"
 msgstr "_Mostar/ocultar ventanas de diálogo"
 
-#: ../src/verbs.cpp:2516
+#: ../src/verbs.cpp:2522
 #, fuzzy
 msgid "Show or hide all open dialogs"
 msgstr "Conmutar la visibilidad de los diálogos activos"
 
-#: ../src/verbs.cpp:2517
+#: ../src/verbs.cpp:2523
 #, fuzzy
 msgid "Create Tiled Clones..."
 msgstr "Cerrar"
 
-#: ../src/verbs.cpp:2518
+#: ../src/verbs.cpp:2524
 #, fuzzy
 msgid ""
 "Create multiple clones of selected object, arranging them into a pattern or "
 "scattering"
 msgstr "Crear un objeto de offset dinámico enlazado al trazo original"
 
-#: ../src/verbs.cpp:2519
+#: ../src/verbs.cpp:2525
 #, fuzzy
 msgid "_Object Properties..."
 msgstr "_Propiedades del rectángulo"
 
-#: ../src/verbs.cpp:2520
+#: ../src/verbs.cpp:2526
 msgid "Edit the ID, locked and visible status, and other object properties"
 msgstr ""
 
-#: ../src/verbs.cpp:2523
+#: ../src/verbs.cpp:2529
 msgid "_Instant Messaging..."
 msgstr ""
 
-#: ../src/verbs.cpp:2523
+#: ../src/verbs.cpp:2529
 msgid "Jabber Instant Messaging Client"
 msgstr ""
 
-#: ../src/verbs.cpp:2525
+#: ../src/verbs.cpp:2531
 msgid "_Input Devices..."
 msgstr ""
 
-#: ../src/verbs.cpp:2526
+#: ../src/verbs.cpp:2532
 msgid "Configure extended input devices, such as a graphics tablet"
 msgstr ""
 
-#: ../src/verbs.cpp:2527
+#: ../src/verbs.cpp:2533
 #, fuzzy
 msgid "_Extensions..."
 msgstr "Expansión:"
 
-#: ../src/verbs.cpp:2528
+#: ../src/verbs.cpp:2534
 msgid "Query information about extensions"
 msgstr ""
 
-#: ../src/verbs.cpp:2529
+#: ../src/verbs.cpp:2535
 #, fuzzy
 msgid "Layer_s..."
 msgstr "_Bajar"
 
-#: ../src/verbs.cpp:2530
+#: ../src/verbs.cpp:2536
 #, fuzzy
 msgid "View Layers"
 msgstr "Elevar nodo"
 
-#: ../src/verbs.cpp:2531
+#: ../src/verbs.cpp:2537
 #, fuzzy
 msgid "Path Effects..."
 msgstr "Offset:"
 
-#: ../src/verbs.cpp:2532
+#: ../src/verbs.cpp:2538
 msgid "Manage path effects"
 msgstr ""
 
-#: ../src/verbs.cpp:2533
+#: ../src/verbs.cpp:2539
 msgid "Filter Effects..."
 msgstr ""
 
-#: ../src/verbs.cpp:2534
+#: ../src/verbs.cpp:2540
 msgid "Manage SVG filter effects"
 msgstr ""
 
 #. Help
-#: ../src/verbs.cpp:2537
+#: ../src/verbs.cpp:2543
 #, fuzzy
 msgid "About E_xtensions"
 msgstr "Expansión:"
 
-#: ../src/verbs.cpp:2538
+#: ../src/verbs.cpp:2544
 msgid "Information on Inkscape extensions"
 msgstr ""
 
-#: ../src/verbs.cpp:2539
+#: ../src/verbs.cpp:2545
 #, fuzzy
 msgid "About _Memory"
 msgstr "Expansión:"
 
-#: ../src/verbs.cpp:2540
+#: ../src/verbs.cpp:2546
 #, fuzzy
 msgid "Memory usage information"
 msgstr "Reiniciar _transformación"
 
-#: ../src/verbs.cpp:2541
+#: ../src/verbs.cpp:2547
 msgid "_About Inkscape"
 msgstr "_Acerca de Inkscape"
 
-#: ../src/verbs.cpp:2542
+#: ../src/verbs.cpp:2548
 msgid "Inkscape version, authors, license"
 msgstr ""
 
@@ -14204,142 +14417,142 @@ msgstr ""
 #. new HelpVerb(SP_VERB_SHOW_LICENSE, "ShowLicense", N_("_License"),
 #. N_("Distribution terms"), /*"show_license"*/"inkscape_options"),
 #. Tutorials
-#: ../src/verbs.cpp:2547
+#: ../src/verbs.cpp:2553
 msgid "Inkscape: _Basic"
 msgstr "Inkscape: _Básico"
 
-#: ../src/verbs.cpp:2548
+#: ../src/verbs.cpp:2554
 msgid "Getting started with Inkscape"
 msgstr ""
 
 #. "tutorial_basic"
-#: ../src/verbs.cpp:2549
+#: ../src/verbs.cpp:2555
 #, fuzzy
 msgid "Inkscape: _Shapes"
 msgstr "Inkscape: _Básico"
 
-#: ../src/verbs.cpp:2550
+#: ../src/verbs.cpp:2556
 msgid "Using shape tools to create and edit shapes"
 msgstr ""
 
-#: ../src/verbs.cpp:2551
+#: ../src/verbs.cpp:2557
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: _Avanzado"
 
-#: ../src/verbs.cpp:2552
+#: ../src/verbs.cpp:2558
 #, fuzzy
 msgid "Advanced Inkscape topics"
 msgstr "Muestra de diapositivas Inkscape"
 
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-#: ../src/verbs.cpp:2554
+#: ../src/verbs.cpp:2560
 #, fuzzy
 msgid "Inkscape: T_racing"
 msgstr "Inkscape: _Básico"
 
-#: ../src/verbs.cpp:2555
+#: ../src/verbs.cpp:2561
 #, fuzzy
 msgid "Using bitmap tracing"
 msgstr "Tamaño de mapa de bits"
 
 #. "tutorial_tracing"
-#: ../src/verbs.cpp:2556
+#: ../src/verbs.cpp:2562
 #, fuzzy
 msgid "Inkscape: _Calligraphy"
 msgstr "Inkscape: _Básico"
 
-#: ../src/verbs.cpp:2557
+#: ../src/verbs.cpp:2563
 msgid "Using the Calligraphy pen tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2558
+#: ../src/verbs.cpp:2564
 msgid "_Elements of Design"
 msgstr "_Elementos de diseño"
 
-#: ../src/verbs.cpp:2559
+#: ../src/verbs.cpp:2565
 #, fuzzy
 msgid "Principles of design in the tutorial form"
 msgstr "_Elementos de diseño"
 
 #. "tutorial_design"
-#: ../src/verbs.cpp:2560
+#: ../src/verbs.cpp:2566
 msgid "_Tips and Tricks"
 msgstr "_Trucos y consejos"
 
-#: ../src/verbs.cpp:2561
+#: ../src/verbs.cpp:2567
 #, fuzzy
 msgid "Miscellaneous tips and tricks"
 msgstr "_Trucos y consejos"
 
 #. "tutorial_tips"
 #. Effect
-#: ../src/verbs.cpp:2564
+#: ../src/verbs.cpp:2570
 #, fuzzy
 msgid "Previous Effect"
 msgstr "Zoom anterior"
 
-#: ../src/verbs.cpp:2565
+#: ../src/verbs.cpp:2571
 msgid "Repeat the last effect with the same settings"
 msgstr ""
 
-#: ../src/verbs.cpp:2566
+#: ../src/verbs.cpp:2572
 #, fuzzy
 msgid "Previous Effect Settings..."
 msgstr "Zoom anterior"
 
-#: ../src/verbs.cpp:2567
+#: ../src/verbs.cpp:2573
 msgid "Repeat the last effect with new settings"
 msgstr ""
 
 #. Fit Page
-#: ../src/verbs.cpp:2570
+#: ../src/verbs.cpp:2576
 #, fuzzy
 msgid "Fit Page to Selection"
 msgstr "Ancho de la selección"
 
-#: ../src/verbs.cpp:2571
+#: ../src/verbs.cpp:2577
 #, fuzzy
 msgid "Fit the page to the current selection"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2572
+#: ../src/verbs.cpp:2578
 #, fuzzy
 msgid "Fit Page to Drawing"
 msgstr "Ancho de la selección"
 
-#: ../src/verbs.cpp:2573
+#: ../src/verbs.cpp:2579
 #, fuzzy
 msgid "Fit the page to the drawing"
 msgstr "Gradiente sin paradas"
 
-#: ../src/verbs.cpp:2574
+#: ../src/verbs.cpp:2580
 #, fuzzy
 msgid "Fit Page to Selection or Drawing"
 msgstr "Ancho de la selección"
 
-#: ../src/verbs.cpp:2575
+#: ../src/verbs.cpp:2581
 msgid ""
 "Fit the page to the current selection or the drawing if there is no selection"
 msgstr ""
 
 #. LockAndHide
-#: ../src/verbs.cpp:2577
+#: ../src/verbs.cpp:2583
 #, fuzzy
 msgid "Unlock All"
 msgstr "Bajar nodo"
 
-#: ../src/verbs.cpp:2579
+#: ../src/verbs.cpp:2585
 #, fuzzy
 msgid "Unlock All in All Layers"
 msgstr "Seleccionar"
 
-#: ../src/verbs.cpp:2581
+#: ../src/verbs.cpp:2587
 #, fuzzy
 msgid "Unhide All"
 msgstr "Elevar nodo"
 
-#: ../src/verbs.cpp:2583
+#: ../src/verbs.cpp:2589
 #, fuzzy
 msgid "Unhide All in All Layers"
 msgstr "Seleccionar"
@@ -16980,6 +17193,13 @@ msgstr "Convierte el contorno seleccionado en trazo"
 msgid "Space between copies:"
 msgstr ""
 
+#: ../share/extensions/pathalongpath.inx.h:10
+msgid ""
+"This effect bends a pattern object along arbitrary \"skeleton\" paths. The "
+"pattern is the top most object in the selection. (groups of paths/shapes/"
+"clones... allowed)"
+msgstr ""
+
 #: ../share/extensions/perfectboundcover.inx.h:1
 msgid "Bleed (in)"
 msgstr ""
@@ -17339,6 +17559,14 @@ msgstr ""
 #, fuzzy
 msgid "XAML Input"
 msgstr "Entrada"
+
+#, fuzzy
+#~ msgid "X Channel"
+#~ msgstr "Cancelar"
+
+#, fuzzy
+#~ msgid "Y Channel"
+#~ msgstr "Cancelar"
 
 #, fuzzy
 #~ msgid "Preferred resolution (dpi) of bitmaps"
