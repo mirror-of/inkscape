@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.46\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
-"PO-Revision-Date: 2008-01-26 11:42+0100\n"
+"POT-Creation-Date: 2008-02-25 21:39+0100\n"
+"PO-Revision-Date: 2008-02-22 21:38+0100\n"
 "Last-Translator: Alan Monfort <alan.monfort@free.fr>\n"
 "Language-Team: An Drouizig <alan.monfort@free.fr>\n"
 "MIME-Version: 1.0\n"
@@ -58,26 +58,23 @@ msgid "Create ellipse"
 msgstr "Krouiñ un elipsenn"
 
 #: ../src/box3d.cpp:317
-#, fuzzy
 msgid "<b>3D Box</b>"
-msgstr "<b>Riblennr</b>"
+msgstr "<b>Boest 3M</b>"
 
 #: ../src/box3d-context.cpp:450 ../src/box3d-context.cpp:457
 #: ../src/box3d-context.cpp:464 ../src/box3d-context.cpp:471
 #: ../src/box3d-context.cpp:478 ../src/box3d-context.cpp:485
-#, fuzzy
 msgid "Change perspective (angle of PLs)"
-msgstr "Boestad 3M : Kemmañ an diarsell (korn an ahel anvevenn)"
+msgstr "Kemmañ an diarsell (korn linennoù an diarsell)"
 
 #. status text
 #: ../src/box3d-context.cpp:640
 msgid "<b>3D Box</b>; with <b>Shift</b> to extrude along the Z axis"
-msgstr ""
+msgstr "<b>Boest 3M</b>; gant <b>Shift</b> evit eztourzhañ a-hed an ahel Z"
 
 #: ../src/box3d-context.cpp:664
-#, fuzzy
 msgid "Create 3D box"
-msgstr "Krouiñ boestadoù 3M"
+msgstr "Krouiñ ur voest 3M"
 
 #: ../src/connector-context.cpp:522
 msgid "Creating new connector"
@@ -149,9 +146,9 @@ msgid "Move guide"
 msgstr "Dilec'hiañ un dealf"
 
 #: ../src/desktop-events.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Guideline</b>: %s"
-msgstr "Linenn an dealfoù : %s"
+msgstr "<b>Linenn an dealfoù</b> : %s"
 
 #: ../src/desktop.cpp:734
 msgid "No previous zoom."
@@ -1063,11 +1060,11 @@ msgid "Export the bitmap file with these settings"
 msgstr "Ezporzhiañ ar restr bitmap gant an arvetennoù-mañ"
 
 #: ../src/dialogs/export.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Batch export %d selected object"
 msgid_plural "Batch export %d selected objects"
 msgstr[0] "Ezporzhiañ a-stroll %d ergorenn diuzet"
-msgstr[1] "Ezporzhiañ a-stroll %d ergorenn diuzet"
+msgstr[1] "Ezporzhiañ a-stroll %d a ergorennoù diuzet"
 
 #: ../src/dialogs/export.cpp:1014
 msgid "Export in progress"
@@ -1342,9 +1339,8 @@ msgstr ""
 "Diuzañ an ergorennoù o klotañ gant an holl vaeziennoù hoc'h eus leuniet"
 
 #: ../src/dialogs/guidelinedialog.cpp:44
-#, fuzzy
 msgid "Unit:"
-msgstr "Unanennoù : "
+msgstr "Unanenn : "
 
 #: ../src/dialogs/guidelinedialog.cpp:45
 #: ../src/dialogs/object-attributes.cpp:57 ../src/widgets/toolbox.cpp:1114
@@ -1357,18 +1353,16 @@ msgid "Y:"
 msgstr "Y :"
 
 #: ../src/dialogs/guidelinedialog.cpp:47
-#, fuzzy
 msgid "Angle (degrees):"
-msgstr "a zerezioù"
+msgstr "Korn (derezioù) :"
 
 #: ../src/dialogs/guidelinedialog.cpp:48
 msgid "Rela_tive change"
 msgstr "Dilec'hiadur _daveel"
 
 #: ../src/dialogs/guidelinedialog.cpp:48
-#, fuzzy
 msgid "Move and/or rotate the guide relative to current settings"
-msgstr "Dilec'hiañ ha c'hwelañ an dealf e-keñver e arventennoù bremanel"
+msgstr "Dilec'hiañ ha/pe c'hwelañ an dealf e-keñver e arventennoù bremanel"
 
 #: ../src/dialogs/guidelinedialog.cpp:114
 msgid "Set guide properties"
@@ -1379,12 +1373,12 @@ msgid "Guideline"
 msgstr "Linenn an dealfoù"
 
 #: ../src/dialogs/guidelinedialog.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Guideline ID: %s"
-msgstr "Linenn an dealfoù : %s"
+msgstr "Naoudi linenn an dealfoù : %s"
 
 #: ../src/dialogs/guidelinedialog.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Current: %s"
 msgstr "Arventennoù bremanel : %s"
 
@@ -1985,15 +1979,13 @@ msgstr "Arventenniñ stil an tres"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/dialogs/swatches.cpp:269
-#, fuzzy
 msgid "Set fill"
-msgstr "Diarventenniñ al leuniañ"
+msgstr "Arventenniñ al leuniañ"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/dialogs/swatches.cpp:277
-#, fuzzy
 msgid "Set stroke"
-msgstr "Diarventenniñ an tres"
+msgstr "Arventenniñ an tres"
 
 #: ../src/dialogs/swatches.cpp:496
 msgid "Change color definition"
@@ -2137,9 +2129,8 @@ msgstr "Esaouiñ a-zremm etre ar bannoù (piks.)"
 
 #. ## The OK button
 #: ../src/dialogs/tiledialog.cpp:865
-#, fuzzy
 msgid "Arrange"
-msgstr "Korn"
+msgstr "Kempenn"
 
 #: ../src/dialogs/tiledialog.cpp:866
 msgid "Arrange selected objects"
@@ -2372,7 +2363,7 @@ msgid ""
 "grids."
 msgstr ""
 "Despizñ a ra mar bez desteudet ouzh ar gael pe get. Gweredekaet e vez evit "
-"kaeloù anwelus ivez."
+"kaelioù anwelus ivez."
 
 #: ../src/display/canvas-grid.cpp:329
 msgid "_Visible"
@@ -2384,7 +2375,7 @@ msgid ""
 "to invisible grids."
 msgstr ""
 "Despizñ a ra mar bez skrammet ar gael pe get. Desteudet e vez an ergorennoù "
-"ouzh ar c'haeloù anwelus."
+"ouzh ar c'haelioù anwelus."
 
 #: ../src/display/canvas-grid.cpp:690
 msgid "Spacing _X:"
@@ -3241,9 +3232,8 @@ msgid "Generate from Path"
 msgstr "Genel diouzh un treug"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:171
-#, fuzzy
 msgid "Cairo PDF Output"
-msgstr "Ec'hankad DXF"
+msgstr "Ec'hankad PDF Cairo"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:173
 msgid "Restrict to PDF version"
@@ -3272,37 +3262,32 @@ msgid "Preferred resolution (DPI) of bitmaps"
 msgstr "Diarunusted  ar bitmapoù kavet gwell (pikoù dre veutad)"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:182
-#, fuzzy
 msgid "PDF via Cairo (*.pdf)"
-msgstr "Diervad Dia (*.dia)"
+msgstr "PDF dre Cairo (*.pdf)"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:183
-#, fuzzy
 msgid "PDF File"
-msgstr "Restr"
+msgstr "Restr PDF"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:222
-#, fuzzy
 msgid "Cairo PS Output"
-msgstr "Ec'hankad DXF"
+msgstr "Ec'hankad postscript Cairo"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:224
 msgid "Restrict to PS level"
 msgstr "Destrizhañ da live PS"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:225
-#, fuzzy
 msgid "PostScript level 3"
-msgstr "Live 2 Postscript"
+msgstr "Live 3 Postscript"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:227
 msgid "PostScript level 2"
 msgstr "Live 2 Postscript"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:236
-#, fuzzy
 msgid "PostScript via Cairo (*.ps)"
-msgstr "Postscript (*.ps)"
+msgstr "Postscript dre Cairo (*.ps)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:237
 #: ../src/extension/internal/ps-out.cpp:90
@@ -3365,7 +3350,7 @@ msgstr "Encapsulated Postscript (*.eps)"
 
 #: ../src/extension/internal/eps-out.cpp:98
 msgid "Encapsulated Postscript File"
-msgstr "REstr Encapsulated Postscript"
+msgstr "Restr Encapsulated Postscript"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:113
 #, c-format
@@ -3613,33 +3598,28 @@ msgid "very fine"
 msgstr "spis kenañ"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:729
-#, fuzzy
 msgid "PDF Input"
-msgstr "Enankad DXF"
+msgstr "Enankad PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:734
-#, fuzzy
 msgid "Adobe PDF (*.pdf)"
-msgstr "AutoCAD DXF (*.dxf)"
+msgstr "Adobe PDF (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:735
 msgid "Adobe Portable Document Format"
-msgstr ""
+msgstr "Adobe Portable Document Format"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:742
-#, fuzzy
 msgid "AI Input"
-msgstr "Enankad AI 8.0"
+msgstr "Enankad AI"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:747
-#, fuzzy
 msgid "Adobe Illustrator 9.0 and above (*.ai)"
-msgstr "Adobe Illustrator 8.0 (*.ai)"
+msgstr "Adobe Illustrator 9.0 ha nevesoc'h (*.ai)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:748
-#, fuzzy
 msgid "Open files saved in Adobe Illustrator 9.0 and newer versions"
-msgstr "Digeriñ ar restroù enrollet gant Adobe Illustrator 8.0 pe nevesoc'h"
+msgstr "Digeriñ ar restroù enrollet gant Adobe Illustrator 9.0 ha nevesoc'h"
 
 #: ../src/extension/internal/pov-out.cpp:683
 msgid "PovRay Output"
@@ -4008,7 +3988,7 @@ msgstr "Pent an tres"
 #. TRANSLATORS: This is a context string, only put the word "Normal" in your translation
 #: ../src/filter-enums.cpp:52
 msgid "filterBlendMode|Normal"
-msgstr ""
+msgstr "filterBlendMode|Skoueriek"
 
 #: ../src/filter-enums.cpp:53
 msgid "Multiply"
@@ -4177,23 +4157,23 @@ msgid "<b>Too much inset</b>, the result is empty."
 msgstr "<b>Strishaet eo bet re</b>, goullo eo an disoc'h."
 
 #: ../src/flood-context.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Area filled, path with <b>%d</b> node created and unioned with selection."
 msgid_plural ""
 "Area filled, path with <b>%d</b> nodes created and unioned with selection."
 msgstr[0] ""
-"Maez leuniet, treug gant <b>%d</b> a glomoù bet krouet ha unanet gant an "
+"Maez leuniet, treug gant <b>%d</b> c'hlom bet krouet hag unanet gant an "
 "diuzad."
 msgstr[1] ""
-"Maez leuniet, treug gant <b>%d</b> a glomoù bet krouet ha unanet gant an "
+"Maez leuniet, treug gant <b>%d</b> a glomoù bet krouet hag unanet gant an "
 "diuzad."
 
 #: ../src/flood-context.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Area filled, path with <b>%d</b> node created."
 msgid_plural "Area filled, path with <b>%d</b> nodes created."
-msgstr[0] "Maez leuniet, treug gant <b>%d</b> a glomoù bet krouet."
+msgstr[0] "Maez leuniet, treug gant <b>%d</b> c'hlom bet krouet."
 msgstr[1] "Maez leuniet, treug gant <b>%d</b> a glomoù bet krouet."
 
 #: ../src/flood-context.cpp:681 ../src/flood-context.cpp:976
@@ -4257,61 +4237,59 @@ msgstr "Ilrezenn skinek <b>arsav kreiz</b>"
 
 #. TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a compound message
 #: ../src/gradient-context.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "%s selected"
-msgstr "An hini diwezhañ diuzet"
+msgstr "%s bet diuzet"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/gradient-context.cpp:164 ../src/gradient-context.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid " out of %d gradient handle"
 msgid_plural " out of %d gradient handles"
-msgstr[0] "Dilec'hiañ dornelloù an ilrezenn"
-msgstr[1] "Dilec'hiañ dornelloù an ilrezenn"
+msgstr[0] " diwar %d dornell eus an ilrezenn"
+msgstr[1] " diwar %d a zornelloù eus an ilrezenn"
 
 #. TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
 #: ../src/gradient-context.cpp:165 ../src/gradient-context.cpp:174
 #: ../src/gradient-context.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid " on %d selected object"
 msgid_plural " on %d selected objects"
-msgstr[0] "Ezporzhiañ a-stroll %d ergorenn diuzet"
-msgstr[1] "Ezporzhiañ a-stroll %d ergorenn diuzet"
+msgstr[0] " diwar %d ergorenn diuzet"
+msgstr[1] " diwar %d a ergorennoù diuzet"
 
 #. TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
 #: ../src/gradient-context.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "One handle merging %d stop (drag with <b>Shift</b> to separate) selected"
 msgid_plural ""
 "One handle merging %d stops (drag with <b>Shift</b> to separate) selected"
 msgstr[0] ""
-"Un dornell o toueziañ %d arsav (riklañ gant <b>Shift</b> evit disrannañ) "
-"diuzet diwar %d a zornelloù ilrezenn war %d ergorenn diuzet"
+"Un dornell o toueziañ %d arsav (riklañ gant <b>Shift</b> evit disrannañ) bet "
+"diuzet"
 msgstr[1] ""
-"Un dornell o toueziañ %d arsav (riklañ gant <b>Shift</b> evit disrannañ) "
-"diuzet diwar %d a zornelloù ilrezenn war %d ergorenn diuzet"
+"Un dornell o toueziañ %d arsav (riklañ gant <b>Shift</b> evit disrannañ) bet "
+"diuzet"
 
 #. TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
 #: ../src/gradient-context.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> gradient handle selected out of %d"
 msgid_plural "<b>%d</b> gradient handles selected out of %d"
-msgstr[0] ""
-"<b>%d</b> a zornelloù ilrezenn diuzet diwar %d war %d ergorenn diuzet"
-msgstr[1] ""
-"<b>%d</b> a zornelloù ilrezenn diuzet diwar %d war %d ergorenn diuzet"
+msgstr[0] "<b>%d</b> dornell ilrezenn diuzet diwar %d"
+msgstr[1] "<b>%d</b> a zornelloù ilrezenn diuzet diwar %d"
 
 #. TRANSLATORS: The plural refers to number of selected objects
 #: ../src/gradient-context.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "<b>No</b> gradient handles selected out of %d on %d selected object"
 msgid_plural ""
 "<b>No</b> gradient handles selected out of %d on %d selected objects"
 msgstr[0] ""
-"<b>Tamm</b> dornelloù ilrezenn diuzet ebet diwar %d war %d ergorenn diuzet"
+"<b>Tamm</b> dornell ilrezenn diuzet ebet diwar %d war %d ergorenn diuzet"
 msgstr[1] ""
-"<b>Tamm</b> dornelloù ilrezenn diuzet ebet diwar %d war %d ergorenn diuzet"
+"<b>Tamm</b> dornell ilrezenn diuzet ebet diwar %d war %d ergorenn diuzet"
 
 #: ../src/gradient-context.cpp:385 ../src/gradient-context.cpp:478
 #: ../src/widgets/gradient-vector.cpp:735
@@ -4456,20 +4434,19 @@ msgstr "Pt"
 
 #: ../src/helper/units.cpp:39
 msgid "Pica"
-msgstr ""
+msgstr "Pica"
 
 #: ../src/helper/units.cpp:39
 msgid "pc"
-msgstr ""
+msgstr "pc"
 
 #: ../src/helper/units.cpp:39
-#, fuzzy
 msgid "Picas"
-msgstr "Beskell"
+msgstr "Picas"
 
 #: ../src/helper/units.cpp:39
 msgid "Pc"
-msgstr ""
+msgstr "Pc"
 
 #: ../src/helper/units.cpp:40
 msgid "Pixel"
@@ -4553,18 +4530,16 @@ msgid "Inches"
 msgstr "a veutadoù"
 
 #: ../src/helper/units.cpp:47
-#, fuzzy
 msgid "Foot"
-msgstr "Nodrezh"
+msgstr "Troad"
 
 #: ../src/helper/units.cpp:47
 msgid "ft"
-msgstr ""
+msgstr "ft"
 
 #: ../src/helper/units.cpp:47
-#, fuzzy
 msgid "Feet"
-msgstr "Arz dieub"
+msgstr "a dreid"
 
 #. Volatiles do not have default, so there are none here
 #. TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
@@ -4799,11 +4774,11 @@ msgstr "_Skrivañ restr an estez :"
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2630
 msgid "Shared SVG whiteboard tool."
-msgstr ""
+msgstr "Benveg an daolenn wenn SVG rannet"
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2631
 msgid "Based on the Pedro XMPP client"
-msgstr ""
+msgstr "Daizezet war an arval Pedro XMPP"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
 msgid "Select a location and filename"
@@ -4846,104 +4821,103 @@ msgid "Move handle"
 msgstr "Dilec'hiañ an dornell"
 
 #: ../src/libgdl/gdl-dock-bar.c:108
-#, fuzzy
 msgid "Master"
-msgstr "Irienn"
+msgstr "Mestr"
 
 #: ../src/libgdl/gdl-dock-bar.c:109
 msgid "GdlDockMaster object which the dockbar widget is attached to"
-msgstr ""
+msgstr "Ergorenn GdlDockMaster ma 'z eo staget penefi ar varrenn gae outi"
 
 #: ../src/libgdl/gdl-dock-bar.c:116
-#, fuzzy
 msgid "Dockbar style"
-msgstr "Stagus"
+msgstr "Stil barrenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-bar.c:117
 msgid "Dockbar style to show items on it"
-msgstr ""
+msgstr "Stil barrenn ar c'hae evit diskouez an ergorennoù warni"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify"
-msgstr ""
+msgstr "Arlunaat"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify this dock"
-msgstr ""
+msgstr "Arlunaat ar c'hae-mañ"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close"
-msgstr "_Serriñ"
+msgstr "Serriñ"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close this dock"
-msgstr "Serriñ prenestr an teul-mañ"
+msgstr "Serriñ ar c'hae-mañ"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:706
 #: ../src/libgdl/gdl-dock-tablabel.c:128
 msgid "Controlling dock item"
-msgstr ""
+msgstr "O wiriañ ergorenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:707
 msgid "Dockitem which 'owns' this grip"
-msgstr ""
+msgstr "Ergorenn gae hag 'en deus' ar stagell-mañ"
 
 #: ../src/libgdl/gdl-dock-item.c:287
-#, fuzzy
 msgid "Orientation"
-msgstr "Reteradur ar bajenn :"
+msgstr "Reteradur"
 
 #: ../src/libgdl/gdl-dock-item.c:288
 msgid "Orientation of the docking item"
-msgstr ""
+msgstr "Reteradur an ergorenn stagus"
 
 #: ../src/libgdl/gdl-dock-item.c:303
 msgid "Resizable"
-msgstr ""
+msgstr "Admentus"
 
 #: ../src/libgdl/gdl-dock-item.c:304
+#, fuzzy
 msgid "If set, the dock item can be resized when docked in a paned"
 msgstr ""
+"Mar gweredekaet e vez admentet ergorenn ar c'hae mar bez staget ouzh un "
+"isprenestr"
 
 #: ../src/libgdl/gdl-dock-item.c:311
-#, fuzzy
 msgid "Item behavior"
-msgstr "Emzalc'h"
+msgstr "Emzalc'h an ergorenn"
 
 #: ../src/libgdl/gdl-dock-item.c:312
 msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
 msgstr ""
+"Emzalc'h hollek evit ergorenn ar c'hae (d.l.e. mar bez o neuial pe brennet, "
+"h.a.)"
 
 #: ../src/libgdl/gdl-dock-item.c:320 ../src/libgdl/gdl-dock-master.c:148
-#, fuzzy
 msgid "Locked"
-msgstr "P_rennañ"
+msgstr "Prennet"
 
 #: ../src/libgdl/gdl-dock-item.c:321
 msgid ""
 "If set, the dock item cannot be dragged around and it doesn't show a grip"
 msgstr ""
+"Mar gweredekaet ne vez ket riklet an ergorenn tro dro dezhi ha ne ziskouez "
+"ket ur stagell"
 
 #: ../src/libgdl/gdl-dock-item.c:329
 msgid "Preferred width"
-msgstr ""
+msgstr "Led kavet gwellañ"
 
 #: ../src/libgdl/gdl-dock-item.c:330
 msgid "Preferred width for the dock item"
-msgstr ""
+msgstr "Led kavet gwellañ evit ergorenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-item.c:336
-#, fuzzy
 msgid "Preferred height"
-msgstr "Sav an tarzh"
+msgstr "Sav kavet gwell"
 
 #: ../src/libgdl/gdl-dock-item.c:337
 msgid "Preferred height for the dock item"
-msgstr ""
+msgstr "Sav kavet gwellañ evit ergorenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-item.c:616
 #, c-format
@@ -4951,6 +4925,8 @@ msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
 msgstr ""
+"Un ergorenn gae a vez ouzhpennet (%p eus ar rizh %s) e-barzh %s. Arverit ur "
+"GdlDock pe ur ergorenn gae kenaoz all."
 
 #: ../src/libgdl/gdl-dock-item.c:623
 #, c-format
@@ -4958,70 +4934,71 @@ msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
 msgstr ""
+"O klask ouzhpennañ ur penefi e rizh %s d'ur %s, met ur penefi a vez "
+"endalc'het nemetken war un dro ; ur penefi e rizh %s ez eus endeo"
 
 #: ../src/libgdl/gdl-dock-item.c:1345 ../src/libgdl/gdl-dock-item.c:1390
 #, c-format
 msgid "Unsupported docking strategy %s in dock object of type %s"
-msgstr ""
+msgstr "Doare kaeañ anskor %s ouzh ergorenn gae he rizh %s"
 
 #. UnLock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1479
-#, fuzzy
 msgid "UnLock"
-msgstr "P_rennañ"
+msgstr "Dibrennañ"
 
 #. Hide menuitem.
 #: ../src/libgdl/gdl-dock-item.c:1486
-#, fuzzy
 msgid "Hide"
-msgstr "_Kuzhat"
+msgstr "Kuzhat"
 
 #. Lock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1491
-#, fuzzy
 msgid "Lock"
-msgstr "P_rennañ"
+msgstr "Prennañ"
 
 #: ../src/libgdl/gdl-dock-item.c:1717
 #, c-format
 msgid "Attempt to bind an unbound item %p"
-msgstr ""
+msgstr "Klask bevennañ un ergorenn unvevenn %p"
 
 #: ../src/libgdl/gdl-dock-master.c:141 ../src/libgdl/gdl-dock.c:183
-#, fuzzy
 msgid "Default title"
-msgstr "Unanennoù dre zio_uer :"
+msgstr "Titl dre ziouer"
 
 #: ../src/libgdl/gdl-dock-master.c:142
 msgid "Default title for newly created floating docks"
-msgstr ""
+msgstr "Titl dre ziouer evit ar c'haeoù neuennus nevez krouet"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
+"Mar arventennet da 1 e vo prennet an holl ergorennoù kae bevennet gant ar "
+"mestr ; mar bez da 0 e vo dibrenn ; meneget e vo an dibarder e-touez an "
+"ergorennoù gant -1"
 
 #: ../src/libgdl/gdl-dock-master.c:157 ../src/libgdl/gdl-switcher.c:707
-#, fuzzy
 msgid "Switcher Style"
-msgstr "Gwriat ar c'harrelloù"
+msgstr "Stil an trec'haoler"
 
 #: ../src/libgdl/gdl-dock-master.c:158 ../src/libgdl/gdl-switcher.c:708
-#, fuzzy
 msgid "Switcher buttons style"
-msgstr "Dilec'hiet betek an dreuzfollenn war-lerc'h."
+msgstr "Stil afell an trec'haoler"
 
 #: ../src/libgdl/gdl-dock-master.c:165
-#, fuzzy
 msgid "Expand direction"
-msgstr "Astenn tresañ al linenn"
+msgstr "Roudadur an astenn"
 
 #: ../src/libgdl/gdl-dock-master.c:166
+#, fuzzy
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
 "given direction"
 msgstr ""
+"Aotren ergorennoù mestr ar c'hae da astenn o endalc'herioù war du ar roud "
+"lavaret"
 
 #: ../src/libgdl/gdl-dock-master.c:781
 #, c-format
@@ -5029,6 +5006,8 @@ msgid ""
 "master %p: unable to add object %p[%s] to the hash.  There already is an "
 "item with that name (%p)."
 msgstr ""
+"mestr %p : n'eo ket gouest da ouzhpennañ an ergorenn %p[%s] d'an drailh. Un "
+"ergorenn gant an hevelep anv-mañ (%p) zo anezhi endeo."
 
 #: ../src/libgdl/gdl-dock-master.c:954
 #, c-format
@@ -5036,6 +5015,8 @@ msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
 msgstr ""
+"Emgefreek eo reoler %p ar c'hae nevez. Anvet e vez reoler, ergorennoù ar "
+"c'hae dre zorn nemetken"
 
 #: ../src/libgdl/gdl-dock-notebook.c:134
 #: ../src/ui/dialog/align-and-distribute.cpp:907
@@ -5046,9 +5027,8 @@ msgid "Page"
 msgstr "Pajenn"
 
 #: ../src/libgdl/gdl-dock-notebook.c:135
-#, fuzzy
 msgid "The index of the current page"
-msgstr "Adenvel an dreuzfollenn vremanel"
+msgstr "Ibil ar bajenn vremanel"
 
 #: ../src/libgdl/gdl-dock-object.c:120 ../src/ui/widget/page-sizer.cpp:195
 msgid "Name"
@@ -5056,43 +5036,39 @@ msgstr "Anv"
 
 #: ../src/libgdl/gdl-dock-object.c:121
 msgid "Unique name for identifying the dock object"
-msgstr ""
+msgstr "Anv nemetañ evit naoudiañ ergorenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-object.c:128
-#, fuzzy
 msgid "Long name"
-msgstr "Dianv"
+msgstr "Anv hir"
 
 #: ../src/libgdl/gdl-dock-object.c:129
-#, fuzzy
 msgid "Human readable name for the dock object"
-msgstr "Ur skritell da leuniañ evit ar ergorenn"
+msgstr "Anv aes da lenn evit ergorenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-object.c:135
-#, fuzzy
 msgid "Stock Icon"
-msgstr "Berniañ ar c'hwilervadurioù"
+msgstr "Arlun ar bern"
 
 #: ../src/libgdl/gdl-dock-object.c:136
 msgid "Stock icon for the dock object"
-msgstr ""
+msgstr "Berniañ arlun Pixbuf evit ergorenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-object.c:142
 msgid "Pixbuf Icon"
-msgstr ""
+msgstr "Arlun Pixbuf"
 
 #: ../src/libgdl/gdl-dock-object.c:143
 msgid "Pixbuf icon for the dock object"
-msgstr ""
+msgstr "Arlun Pixbuf evit ergorenn ar c'hae"
 
 #: ../src/libgdl/gdl-dock-object.c:148
-#, fuzzy
 msgid "Dock master"
-msgstr "Prennañ an dreuzfollenn"
+msgstr "Mestr ar c'hae"
 
 #: ../src/libgdl/gdl-dock-object.c:149
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "Ar mestr kae ma 'z eo bevennet an ergorenn gae-mañ outañ"
 
 #: ../src/libgdl/gdl-dock-object.c:434
 #, c-format
@@ -5107,31 +5083,32 @@ msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
 msgstr ""
+"Azgoulennet e oa un ergorenn %p divevennet gant ar gwezhiadur kaeañ. Marteze "
+"e sacho an arload"
 
 #: ../src/libgdl/gdl-dock-object.c:570
 #, c-format
 msgid "Cannot dock %p to %p because they belong to different masters"
-msgstr ""
+msgstr "N'haller ket kaeañ %p ouzh %p rak da vistri disheñvel ez eont"
 
 #: ../src/libgdl/gdl-dock-object.c:612
 #, c-format
 msgid ""
 "Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
+"Klask krommañ ouzh %p un ergorenn %p bet krommet endeo (mestr bremanel : %p)"
 
 #: ../src/libgdl/gdl-dock-paned.c:132
-#, fuzzy
 msgid "Position"
-msgstr "Lec'hiadur :"
+msgstr "Lec'hiadur"
 
 #: ../src/libgdl/gdl-dock-paned.c:133
 msgid "Position of the divider in pixels"
-msgstr ""
+msgstr "Lec'hiadur an dispartier e pikselioù"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:143
-#, fuzzy
 msgid "Sticky"
-msgstr "munut"
+msgstr "Pegus"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:144
 msgid ""
@@ -5140,18 +5117,16 @@ msgid ""
 msgstr ""
 
 #: ../src/libgdl/gdl-dock-placeholder.c:151
-#, fuzzy
 msgid "Host"
-msgstr "ledanaat"
+msgstr "Ostiz"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:152
 msgid "The dock object this placeholder is attached to"
-msgstr ""
+msgstr "Ergorenn ar c'hae ma vo staget al lec'h miret outi"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:159
-#, fuzzy
 msgid "Next placement"
-msgstr "Lec'hiadur an dafar"
+msgstr "Lec'hiadur da zont"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:160
 msgid ""
@@ -5161,34 +5136,31 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-placeholder.c:170
 msgid "Width for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Led evit ar penefi pa vez staget ouzh ar lec'h miret"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:178
 msgid "Height for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Sav evit ar penefi pa vez staget ouzh ar lec'h miret"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:184
-#, fuzzy
 msgid "Floating Toplevel"
-msgstr "O neuial"
+msgstr "Live uhelañ neuennus"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:185
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
-msgstr ""
+msgstr "Mard emañ al lec'h miret enni evit live uhelañ ur c'hae neuennus"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:191
-#, fuzzy
 msgid "X-Coordinate"
-msgstr "Daveoù ar reti"
+msgstr "Daveoù-X"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:192
 msgid "X-Coordinate fow dock when floating"
 msgstr ""
 
 #: ../src/libgdl/gdl-dock-placeholder.c:198
-#, fuzzy
 msgid "Y-Coordinate"
-msgstr "Daveoù ar reti"
+msgstr "Daveoù-Y"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:199
 msgid "Y-Coordinate fow dock when floating"
@@ -5196,7 +5168,7 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-placeholder.c:494
 msgid "Attempt to dock a dock object to an unbound placeholder"
-msgstr ""
+msgstr "Klask kaeañ un ergorenn gae ouzh ul lec'h miret anvevenn"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:618
 #, c-format
@@ -5209,56 +5181,55 @@ msgid ""
 "Something weird happened while getting the child placement for %p from "
 "parent %p"
 msgstr ""
+"Degouezhet ez eus bet un dra iskis pa oa o klask kaout ul lec'hiadur mod "
+"bugel evit %p diouzh ar c'har %p"
 
 #: ../src/libgdl/gdl-dock-tablabel.c:129
+#, fuzzy
 msgid "Dockitem which 'owns' this tablabel"
-msgstr ""
+msgstr "Ergorenn gae ha 'dezhi' ar skritell daolenn-mañ"
 
 #: ../src/libgdl/gdl-dock.c:175 ../src/ui/dialog/inkscape-preferences.cpp:464
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
 msgid "Floating"
-msgstr "O neuial"
+msgstr "Neuennus"
 
 #: ../src/libgdl/gdl-dock.c:176
 msgid "Whether the dock is floating in its own window"
-msgstr ""
+msgstr "Mard emañ ar c'hae neuennus war e brenestr dezhañ"
 
 #: ../src/libgdl/gdl-dock.c:184
 msgid "Default title for the newly created floating docks"
-msgstr ""
+msgstr "Titl dre ziouer evit ar c'haeoù neuennus nevez krouet"
 
 #: ../src/libgdl/gdl-dock.c:191
 msgid "Width for the dock when it's of floating type"
-msgstr ""
+msgstr "Led evit ar c'hae mard eo unan neuennus"
 
 #: ../src/libgdl/gdl-dock.c:199
 msgid "Height for the dock when it's of floating type"
-msgstr ""
+msgstr "Sav evit ar c'hae mard eo unan neuennus"
 
 #: ../src/libgdl/gdl-dock.c:206
-#, fuzzy
 msgid "Float X"
-msgstr "O neuial"
+msgstr "Neuennat X"
 
 #: ../src/libgdl/gdl-dock.c:207
-#, fuzzy
 msgid "X coordinate for a floating dock"
-msgstr "Daveenn X ar gael orin"
+msgstr "Daveenn X evit ur c'hae neuennus"
 
 #: ../src/libgdl/gdl-dock.c:214
-#, fuzzy
 msgid "Float Y"
-msgstr "O neuial"
+msgstr "Neuennat Y"
 
 #: ../src/libgdl/gdl-dock.c:215
-#, fuzzy
 msgid "Y coordinate for a floating dock"
-msgstr "Daveenn Y ar gael orin"
+msgstr "Daveenn Y evit ur c'hae neuennus"
 
 #: ../src/libgdl/gdl-dock.c:499
 #, c-format
 msgid "Dock #%d"
-msgstr ""
+msgstr "Kae niv. %d"
 
 #: ../src/libnrtype/FontFactory.cpp:774
 msgid "Ignoring font without family that will crash Pango"
@@ -5309,7 +5280,6 @@ msgstr ""
 "steuenn."
 
 #: ../src/live_effects/parameter/enum.h:50
-#, fuzzy
 msgid "Change enumeration parameter"
 msgstr "Kemmañ arventenn an niveriñ"
 
@@ -5414,19 +5384,16 @@ msgid "Scale the width of the stroke path relative to its length"
 msgstr "Skeulaat sav tres an treug e-keñver e hirder"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:57
-#, fuzzy
 msgid "Bend path"
 msgstr "Krommañ an treug"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:57
-#, fuzzy
 msgid "Path along which to bend the original path"
-msgstr "Krouiñ ul linkad dialuskel eus ur ergorenn ereet ouzh an treug orin"
+msgstr "Treug hag a vo krommet a-hed an treug orin"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:58
-#, fuzzy
 msgid "Width of the path"
-msgstr "Led ar goustur"
+msgstr "Led an treug"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:65
@@ -5434,18 +5401,18 @@ msgid "Width in units of length"
 msgstr "Led e unanennoù an hirder "
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
-#, fuzzy
 msgid "Scale the width of the path in units of its length"
-msgstr "Skeulaat led goustur an treug e unanennoù e hirder"
+msgstr "Skeulaat led an treug e unanennoù e hirder"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
-#, fuzzy
 msgid "Original path is vertical"
-msgstr "A-serzh eo ar goustur"
+msgstr "A-serzh eo an treug orin"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
 msgstr ""
+"C'hwelañ a ra an hini orin betek 90 derez, kent e grommañ a-hed an treug "
+"krommañ"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:53
 msgid "Single"
@@ -5511,13 +5478,12 @@ msgid "Pattern is vertical"
 msgstr "A-serzh eo ar goustur"
 
 #: ../src/live_effects/lpe-slant.cpp:18
-#, fuzzy
 msgid "Slant factor"
-msgstr "Liv unvan"
+msgstr "Sturiadell stouiñ"
 
 #: ../src/live_effects/lpe-slant.cpp:18
 msgid "y = y + x*(slant factor)"
-msgstr ""
+msgstr "y = y + x*(sturiadell stouiñ)"
 
 #: ../src/live_effects/lpe-slant.cpp:19 ../src/widgets/toolbox.cpp:4842
 msgid "Center"
@@ -5526,11 +5492,11 @@ msgstr "Kreizañ"
 #: ../src/live_effects/lpe-slant.cpp:19
 msgid "The x-coord of this point is around which the slant will happen"
 msgstr ""
+"Emañ daveen-x ar poent-mañ tro-dro d'an hini ma teuy war-wel ar stouadenn"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:21
-#, fuzzy
 msgid "Stack step"
-msgstr "Berniañ ar c'hwilervadurioù"
+msgstr "Paz berniañ"
 
 #: ../src/live_effects/parameter/parameter.cpp:138
 msgid "Change scalar parameter"
@@ -5542,9 +5508,8 @@ msgid "Edit on-canvas"
 msgstr "Embann war ar steuenn"
 
 #: ../src/live_effects/parameter/path.cpp:120
-#, fuzzy
 msgid "Copy path"
-msgstr "Troc'hañ an treug"
+msgstr "Eilañ an treug"
 
 #: ../src/live_effects/parameter/path.cpp:130
 msgid "Paste path"
@@ -6459,11 +6424,11 @@ msgstr "Oc'h echuiñ an tresañ dre zorn"
 
 #: ../src/persp3d.cpp:321
 msgid "Toggle vanishing point"
-msgstr ""
+msgstr "Trec'haoliñ an trafoent"
 
 #: ../src/persp3d.cpp:332
 msgid "Toggle multiple vanishing points"
-msgstr ""
+msgstr "Trec'haoliñ an trafoentoù lies"
 
 #: ../src/preferences.cpp:59
 #, c-format
@@ -7247,19 +7212,19 @@ msgstr[0] "<b>Testenn red ereet</b> (%d arouezenn)"
 msgstr[1] "<b>Testenn red ereet</b> (%d arouezenn)"
 
 #: ../src/sp-guide.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "vertical, at %s"
-msgstr "dealf sturiañ a-serzh e %s"
+msgstr "a-serzh, e %s"
 
 #: ../src/sp-guide.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "horizontal, at %s"
-msgstr "dealf sturiañ a-zremm e %s"
+msgstr "a-zremm, e %s"
 
 #: ../src/sp-guide.cpp:405
 #, c-format
 msgid "at %d degrees, through (%s,%s); <b>Ctrl</b>+click to delete"
-msgstr ""
+msgstr "betek %d a zerezioù, dre (%s,%s); <b>Ctrl</b>+klikañ evit diverkañ"
 
 #: ../src/sp-image.cpp:1041
 msgid "embedded"
@@ -7398,14 +7363,13 @@ msgid "<b>Text</b> (%s, %s)"
 msgstr "<b>Testenn</b> (%s, %s)"
 
 #: ../src/sp-tref.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Cloned character data</b> from: %s"
-msgstr "<b>Klon</b> eus : %s"
+msgstr "<b>Roadennoù an arouez klonet</b> eus : %s"
 
 #: ../src/sp-tref.cpp:363
-#, fuzzy
 msgid "<b>Orphaned cloned character data</b>"
-msgstr "<b>Klon emzivad</b>"
+msgstr "<b>Roadennoù an arouez emzivad klonet</b>"
 
 #: ../src/sp-tspan.cpp:285
 msgid "<b>Text span</b>"
@@ -7829,7 +7793,7 @@ msgstr "Biziata an destenn"
 
 #: ../src/text-editing.cpp:40
 msgid "You cannot edit <b>cloned character data</b>."
-msgstr ""
+msgstr "N'hallit ket embann <b>roadennoù un arouez bet klonet</b>."
 
 #: ../src/tools-switch.cpp:148
 msgid ""
@@ -7858,7 +7822,7 @@ msgid ""
 "<b>Drag</b> to create a 3D box. <b>Drag controls</b> to resize in "
 "perspective. <b>Click</b> to select (with <b>Ctrl+Alt</b> for single faces)."
 msgstr ""
-"<b>Riklañ</b> evit krouiñ ur boest 3M. <b>Riklañ ar reolerioù</b> evit kemm "
+"<b>Riklañ</b> evit krouiñ ur voest 3M. <b>Riklañ ar reolerioù</b> evit kemm "
 "ar vent en diarsell. <b>Klikañ</b> evit diuzañ (gant <b>Ctrl+Alt</b> evit an "
 "talioù en o unan)."
 
@@ -8151,7 +8115,7 @@ msgstr "_Aozerion"
 
 #: ../src/ui/dialog/aboutbox.cpp:94
 msgid "_Translators"
-msgstr "_Trourion"
+msgstr "_Troourion"
 
 #: ../src/ui/dialog/aboutbox.cpp:96
 msgid "_License"
@@ -8619,9 +8583,8 @@ msgstr ""
 
 #. TRANSLATORS: In Grid|_New translate only the word _New. It ref to grid
 #: ../src/ui/dialog/document-properties.cpp:119
-#, fuzzy
 msgid "Grid|_New"
-msgstr "Kael"
+msgstr "Grid|_Nevez"
 
 #: ../src/ui/dialog/document-properties.cpp:119
 msgid "Create new grid."
@@ -8643,7 +8606,7 @@ msgstr "Dealfoù"
 #: ../src/ui/dialog/document-properties.cpp:131
 #: ../src/ui/dialog/inkscape-preferences.cpp:879
 msgid "Grids"
-msgstr "Kaeloù"
+msgstr "Kaelioù"
 
 #: ../src/ui/dialog/document-properties.cpp:132 ../src/verbs.cpp:2452
 msgid "Snap"
@@ -8764,7 +8727,7 @@ msgstr "<b>Desteudañ ouzh kenskejadurioù eus</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:357
 msgid "<b>Snapping to special nodes</b>"
-msgstr "<b>Desteudañ ouzhklomoù arbennik</b>"
+msgstr "<b>Desteudañ ouzh klomoù arbennik</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:426
 msgid "<b>Creation</b>"
@@ -8923,28 +8886,26 @@ msgstr ""
 
 #. pack_start(_fromSVGElement, false, false);
 #: ../src/ui/dialog/filter-effects-dialog.cpp:614
-#, fuzzy
 msgid "Image File"
-msgstr "Skeudenn"
+msgstr "Restr skeudenn"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:617
-#, fuzzy
 msgid "Selected SVG Element"
-msgstr "Diverkañ ar regenn"
+msgstr "Elfenn SVG bet diuzet"
 
 #. TODO: any image, not justy svg
 #: ../src/ui/dialog/filter-effects-dialog.cpp:686
-#, fuzzy
 msgid "Select an image to be used as feImage input"
-msgstr "Diuzañ ur skeudenn ha unan pe veur a lun a-us dezhi"
+msgstr "Diuzañ ur skeudenn da vezañ arveret evel ur feSkeudenn"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:778
+#, fuzzy
 msgid "This SVG filter effect does not require any parameters."
-msgstr ""
+msgstr "N'eo ket kefloueret c'hoazh efed ar sil SVG e-barzh Inkscape."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:784
 msgid "This SVG filter effect is not yet implemented in Inkscape."
-msgstr ""
+msgstr "N'eo ket kefloueret c'hoazh efed ar sil SVG e-barzh Inkscape."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:975
 msgid "Light Source:"
@@ -9076,25 +9037,22 @@ msgid "No effect selected"
 msgstr "Efed ebet bet diuzet"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2094
-#, fuzzy
 msgid "No filter selected"
 msgstr "Efed ebet bet diuzet"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2129
-#, fuzzy
 msgid "Effect parameters"
-msgstr "<b>Arventennoù an efed</b>"
+msgstr "Arventennoù an efed"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2130
 msgid "Filter General Settings"
-msgstr ""
+msgstr "Arventennoù hollek ar silañ"
 
 #. default x:
 #. default y:
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
-#, fuzzy
 msgid "Coordinates"
-msgstr "Daveoù ar reti"
+msgstr "Daveoù"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
 #, fuzzy
@@ -9109,9 +9067,8 @@ msgstr ""
 #. default height:
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
 #: ../share/extensions/dimension.inx.h:1
-#, fuzzy
 msgid "Dimensions"
-msgstr "Rannañ"
+msgstr "Mentoù"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
 #, fuzzy
@@ -9340,9 +9297,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2251
-#, fuzzy
 msgid "Source of Image"
-msgstr "Niver a bajennoù"
+msgstr "Tarzh ar skeudenn"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 msgid "Delta X"
@@ -9840,9 +9796,8 @@ msgid "Ctrl+click dot size:"
 msgstr "Ctrl+Klik ment ar pikoù :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:242
-#, fuzzy
 msgid "times current stroke width"
-msgstr "Skeulaat led an tres"
+msgstr "a wechioù led an tres bremanel"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:243
 msgid "Size of dots created with Ctrl+click (relative to current stroke width)"
@@ -10114,7 +10069,7 @@ msgstr "Stagus"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:466
 msgid "Dialogs are hidden in taskbar"
-msgstr "Ar boestoù emziv a vez kuzhet e barrenn an trevelloù"
+msgstr "Ar boestadoù emziv a vez kuzhet e barrenn an trevelloù"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:467
 msgid "Zoom when window is resized"
@@ -10174,7 +10129,7 @@ msgstr "Keweriet e vo ar boestadoù emziviz evel prenestroù reoliek"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:497
 msgid "Dialogs stay on top of document windows"
-msgstr "Ar boestoù emziviz a chomo war lein an teul"
+msgstr "Ar boestadoù emziviz a chomo war lein an teul"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:499
 msgid "Same as Normal but may work better with some window managers"
@@ -10420,18 +10375,21 @@ msgstr "Perzhded izeloc'h (evit ergorennoù zo), tizh skrammañ herrekoc'h avat"
 #: ../src/ui/dialog/inkscape-preferences.cpp:606
 msgid "Lowest quality (considerable artifacts), but display is fastest"
 msgstr ""
-"Perzhded izelañ (evit an ergorennoù brasañ), tizh skrammañ herrekañ avat"
+"Perzhded izelañ (evit an ergorennoù brasañ), an tizh skrammañ herrekañ avat"
 
+# kentegenn b. -où : primitive
+# Ditour elfennel eus un areg gouleviñ.
 #: ../src/ui/dialog/inkscape-preferences.cpp:608
-#, fuzzy
 msgid "Show filter primitives infobox"
-msgstr "Arventenniñ doareennoù ar sil kentidik"
+msgstr "Diskouez boestad-ditouroù kentegenn ar sil"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:610
 msgid ""
 "Show icons and descriptions for the filter primitives available at the "
 "filter effects dialog."
 msgstr ""
+"Diskouez an arlunioù hag an deskrivadurioù evit ar c'hentegennoù sil hegerz "
+"gant boestad emziviz an efedoù."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:612
 msgid "Filters"
@@ -10677,9 +10635,8 @@ msgid "Color management"
 msgstr "Ardeiñ al livioù"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:829
-#, fuzzy
 msgid "Major grid line emphasizing"
-msgstr "Linenn bennañ war bep a"
+msgstr "Pouezañ war linenn bennañ ar gael "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:831
 msgid "Don't emphasize gridlines when zoomed out"
@@ -10949,7 +10906,7 @@ msgstr "Ger-tremen :"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:401
 msgid "Error while reading the Open Clip Art RSS feed"
-msgstr ""
+msgstr "Fazi e-pad ma oa o lenn lanv RSS an Open Clip Art"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:439
 msgid ""
@@ -10961,12 +10918,11 @@ msgstr ""
 
 #: ../src/ui/dialog/ocaldialogs.cpp:453
 msgid "Server supplied malformed Clip Art feed"
-msgstr ""
+msgstr "Lanv Clip Art stummet fall zo bet pourchaset gant an dafariad"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:544
-#, fuzzy
 msgid "Search for:"
-msgstr "Klask"
+msgstr "Klask :"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:545
 msgid "No files matched your search"
@@ -10977,37 +10933,32 @@ msgid "Search"
 msgstr "Klask"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:573
-#, fuzzy
 msgid "Files found"
-msgstr "restr bet kavet"
+msgstr "Restr bet kavet"
 
 #: ../src/ui/dialog/print.cpp:86
 msgid "Could not open temporary PNG for bitmap printing"
-msgstr ""
+msgstr "N'haller ket digeriñ PNG padennek evit moullañ mod bitmap"
 
 #: ../src/ui/dialog/print.cpp:101
-#, fuzzy
 msgid "Could not set up Document"
-msgstr "N'haller ket dezrannañ ar roadennoù SVG"
+msgstr "N'haller ket arventennañ an teul"
 
 #: ../src/ui/dialog/print.cpp:105
 msgid "Failed to set CairoRenderContext"
-msgstr ""
+msgstr "C'hwitadenn war arventenniñ KendestennDeouezCairo"
 
 #. set up dialog title, based on document name
 #: ../src/ui/dialog/print.cpp:145
-#, fuzzy
 msgid "SVG Document"
-msgstr "Teul"
+msgstr "Teul SVG"
 
 #: ../src/ui/dialog/print.cpp:146
-#, fuzzy
 msgid "Print"
-msgstr "poent"
+msgstr "Moullañ"
 
 #. build custom preferences tab
 #: ../src/ui/dialog/print.cpp:169
-#, fuzzy
 msgid "Rendering"
 msgstr "Deouez"
 
@@ -11630,24 +11581,20 @@ msgid "List"
 msgstr "Roll"
 
 #: ../src/ui/widget/panel.cpp:171
-#, fuzzy
 msgid "Shape"
-msgstr "Lunioù"
+msgstr "Lun"
 
 #: ../src/ui/widget/panel.cpp:174
-#, fuzzy
 msgid "Tall"
-msgstr "Taolenn"
+msgstr "Bras"
 
 #: ../src/ui/widget/panel.cpp:175
-#, fuzzy
 msgid "Square"
-msgstr "Penn karrez"
+msgstr "Karrez"
 
 #: ../src/ui/widget/panel.cpp:176
-#, fuzzy
 msgid "Wide"
-msgstr "_Kuzhat"
+msgstr "Ledan"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:25
 msgid "_Blend mode:"
@@ -12077,73 +12024,68 @@ msgid "Opacity: %.3g"
 msgstr "Demerez : %.3g"
 
 #: ../src/ui/widget/preferences-widget.cpp:278
-#, fuzzy
 msgid "Reset"
-msgstr "D_eraouekaat"
+msgstr "Deraouekaat"
 
 #: ../src/ui/widget/random.cpp:123
 msgid ""
 "Reseed the random number generator; this creates a different sequence of "
 "random numbers."
 msgstr ""
+"Adhadañ ar c'henerez niverennoù dargouezhek ; drezi e vez krouet ur gemalenn "
+"niverennoù dargouezhek disheñvel."
 
 #: ../src/ui/widget/rendering-options.cpp:39
-#, fuzzy
 msgid "Vector"
-msgstr "Diuzer"
+msgstr "Sturiadell"
 
 #: ../src/ui/widget/rendering-options.cpp:40
-#, fuzzy
 msgid "Bitmap"
-msgstr "Beskell"
+msgstr "Bitmap"
 
 #: ../src/ui/widget/rendering-options.cpp:41
-#, fuzzy
 msgid "Backend"
 msgstr "Drekva "
 
 #: ../src/ui/widget/rendering-options.cpp:42
 msgid "Bitmap options"
-msgstr ""
+msgstr "Dibarzhioù ar bitmap"
 
 #: ../src/ui/widget/rendering-options.cpp:44
-#, fuzzy
 msgid "Preferred resolution of rendering, in dots per inch."
-msgstr "Diarunusted kavet gwell (pid dre veutad) ar bitmap"
+msgstr "Diarunusted kavet gwell, e pikoù dre veutad"
 
 #: ../src/ui/widget/rendering-options.cpp:52
-#, fuzzy
 msgid ""
 "Render using Cairo vector operations.  The resulting image is usually "
 "smaller in file size and can be arbitrarily scaled, but some filter effects "
 "will not be correctly rendered."
 msgstr ""
-"Arverañ niñvaderioù sturiadeloù PDF. Ar skeudenn graet a vez bihanoc'h a-fet "
-"ment restr ha skeulaet e vez gant ho c'hoant koulskoude e vo kollet ar "
-"gousturioù."
+"Deouez dre arverañ gwezhiadurioù sturiadell Cairo. Ar skeudenn graet a vez "
+"bihanoc'h a-fet ment restr ha skeulaet e vez gant ho c'hoant, koulskoude ne "
+"vo ket deouezet mat efedoù ar siloù zo."
 
 #: ../src/ui/widget/rendering-options.cpp:57
-#, fuzzy
 msgid ""
 "Render everything as bitmap.  The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
 msgstr ""
-"Moullañ pep tra evel ur bitmap. Ar skeudenn graet a vez brasoc'h a-fet ment "
+"Deouez pep tra evel ur bitmap. Ar skeudenn graet a vez brasoc'h a-fet ment "
 "restr ha ne vez ket skeulaet gant ho c'hoant hep koll un tamm perzhded, "
 "koulskoude e vo deouezet an ergorennoù peurheñvel ouzh ar skrammañ."
 
 #: ../src/vanishing-point.cpp:124
 msgid "Split vanishing points"
-msgstr ""
+msgstr "Dispartiañ an trafoentoù"
 
 #: ../src/vanishing-point.cpp:169
 msgid "Merge vanishing points"
-msgstr ""
+msgstr "Toueziañ an trafoentoù"
 
 #: ../src/vanishing-point.cpp:225
 msgid "3D box: Move vanishing point"
-msgstr ""
+msgstr "Boest 3M : dilec'hiañ an trafoent"
 
 #: ../src/vanishing-point.cpp:306
 #, c-format
@@ -12151,8 +12093,10 @@ msgid "<b>Finite</b> vanishing point shared by <b>%d</b> box"
 msgid_plural ""
 "<b>Finite</b> vanishing point shared by <b>%d</b> boxes; drag with <b>Shift</"
 "b> to separate selected box(es)"
-msgstr[0] ""
+msgstr[0] "<b>Bevennek</b> trafoent rannet gant <b>%d</b> voest"
 msgstr[1] ""
+"<b>Bevennek</b> trafoent rannet gant <b>%d</b> a voestoù ; riklañ gant "
+"<b>Shift</b> evit dispartiañ ar boest(où) bet diuzet"
 
 #. This won't make sense any more when infinite VPs are not shown on the canvas,
 #. but currently we update the status message anyway
@@ -12162,22 +12106,24 @@ msgid "<b>Infinite</b> vanishing point shared by <b>%d</b> box"
 msgid_plural ""
 "<b>Infinite</b> vanishing point shared by <b>%d</b> boxes; drag with "
 "<b>Shift</b> to separate selected box(es)"
-msgstr[0] ""
+msgstr[0] "<b>Anvevennek</b> trafoent rannet gant <b>%d</b> voest"
 msgstr[1] ""
+"<b>Anvevennek</b> trafoent rannet gant <b>%d</b> a voestoù ; riklañ gant "
+"<b>Shift</b> evit dispartiañ ar boest(où) bet diuzet"
 
 #: ../src/vanishing-point.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "shared by <b>%d</b> box; drag with <b>Shift</b> to separate selected box(es)"
 msgid_plural ""
 "shared by <b>%d</b> boxes; drag with <b>Shift</b> to separate selected box"
 "(es)"
 msgstr[0] ""
-"Poent an ilrezenn rannet gant <b>%d</b> ilrezenn ; riklañ gant <b>Shift</b> "
-"evit disrannañ"
+"rannet gant <b>%d</b> voest ; riklañ gant <b>Shift</b> evit dispartiañ ar "
+"boestoù bet diuzet"
 msgstr[1] ""
-"Poent an ilrezenn rannet gant <b>%d</b> ilrezenn ; riklañ gant <b>Shift</b> "
-"evit disrannañ"
+"rannet gant <b>%d</b> a voestoù ; riklañ gant <b>Shift</b> evit dispartiañ "
+"ar boestoù bet diuzet"
 
 #: ../src/verbs.cpp:1122
 msgid "Switch to next layer"
@@ -12963,14 +12909,12 @@ msgid "Break selected paths into subpaths"
 msgstr "Terriñ an treugoù diuzet e istreugoù"
 
 #: ../src/verbs.cpp:2313
-#, fuzzy
 msgid "Rows and Columns..."
-msgstr "Renkoù, bannoù :"
+msgstr "Renkoù ha bannoù..."
 
 #: ../src/verbs.cpp:2314
-#, fuzzy
 msgid "Arrange selected objects in a table"
-msgstr "Kempenn an ergorennoù diuzet e goustur ur gael"
+msgstr "Kempenn an ergorennoù diuzet war un daolenn"
 
 #. Layer
 #: ../src/verbs.cpp:2316
@@ -13521,15 +13465,12 @@ msgid "Toggle between normal and outline display modes"
 msgstr "Trec'haoliñ etre ar modoù skrammañ reizh ha trolinenn"
 
 #: ../src/verbs.cpp:2479
-#, fuzzy
 msgid "Color-managed view"
-msgstr "Gwel ardoet al livioù "
+msgstr "Gwel al livioù ardoet"
 
 #: ../src/verbs.cpp:2480
-#, fuzzy
 msgid "Toggle color-managed display for this document window"
-msgstr ""
-"Trec'haoliñ kengeidadur skrammañ ardoet al livioù evit prenestr an teul-mañ"
+msgstr "Trec'haoliñ skrammadur al livioù ardoet  evit prenestr an teul-mañ"
 
 #: ../src/verbs.cpp:2482
 msgid "Ico_n Preview..."
@@ -14316,7 +14257,7 @@ msgstr "Dilec'hiañ ar gousturioù"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:110
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:219
 #: ../src/widgets/sp-color-scales.cpp:397
@@ -14375,9 +14316,8 @@ msgid "_K"
 msgstr "_D"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:234
-#, fuzzy
 msgid "Gray"
-msgstr "Louedoù"
+msgstr "Loued"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:237
 #: ../src/widgets/sp-color-icc-selector.cpp:238
@@ -14402,11 +14342,12 @@ msgstr "Melen"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:295
 msgid "Fix"
-msgstr ""
+msgstr "Ratreañ"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:298
 msgid "Fix RGB fallback to match icc-color() value."
 msgstr ""
+"Ratreañ an trevnad skrammañ RGG evit ma kloto gant gwerzh al livioù-icc."
 
 #. Label
 #: ../src/widgets/sp-color-icc-selector.cpp:379
@@ -14887,12 +14828,13 @@ msgstr "Korn linenn an diarsell davit ar roud X"
 #. Translators: VP is short for 'vanishing point'
 #: ../src/widgets/toolbox.cpp:2600
 msgid "State of VP in X direction"
-msgstr "Stad ar PMG davit ar roud X"
+msgstr "Stad an trafoent davit ar roud X"
 
 #: ../src/widgets/toolbox.cpp:2601
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
-"Trec’haoliñ PMG davit ar roud X etre 'bevennek' hag 'anvevenn' (= kenstur)"
+"Trec’haoliñ an trafoent davit ar roud X etre 'bevennek' hag 'anvevenn' (= "
+"kenstur)"
 
 #: ../src/widgets/toolbox.cpp:2616
 msgid "Angle in Y direction"
@@ -14910,12 +14852,13 @@ msgstr "Korn linenn an diarsell davit ar roud Y"
 #. Translators: VP is short for 'vanishing point'
 #: ../src/widgets/toolbox.cpp:2639
 msgid "State of VP in Y direction"
-msgstr "Stad ar PMG davit ar roud Y"
+msgstr "Stad an trafoent davit ar roud Y"
 
 #: ../src/widgets/toolbox.cpp:2640
 msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
-"Trec’haoliñ PMG davit ar roud Y etre 'bevennek' hag 'anvevenn' (= kenstur)"
+"Trec’haoliñ an trafoent davit ar roud Y etre 'bevennek' hag 'anvevenn' (= "
+"kenstur)"
 
 #: ../src/widgets/toolbox.cpp:2655
 msgid "Angle in Z direction"
@@ -14929,12 +14872,13 @@ msgstr "Korn linenn an diarsell davit ar roud Z"
 #. Translators: VP is short for 'vanishing point'
 #: ../src/widgets/toolbox.cpp:2678
 msgid "State of VP in Z direction"
-msgstr "Stad ar PMG davit ar roud Z"
+msgstr "Stad an trafoent davit ar roud Z"
 
 #: ../src/widgets/toolbox.cpp:2679
 msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
-"Trec’haoliñ PMG davit ar roud Z etre 'bevennek' hag 'anvevenn' (= kenstur)"
+"Trec’haoliñ an trafoent davit ar roud Z etre 'bevennek' hag 'anvevenn' (= "
+"kenstur)"
 
 #: ../src/widgets/toolbox.cpp:2736
 msgid "Change spiral"
@@ -15705,9 +15649,8 @@ msgid "Add Nodes"
 msgstr "Ouzhpennañ klomoù"
 
 #: ../share/extensions/addnodes.inx.h:2
-#, fuzzy
 msgid "Maximum segment length (px)"
-msgstr "Hirder uc'hek ar regenn"
+msgstr "Hirder uc'hek ar regenn (piks.)"
 
 #: ../share/extensions/addnodes.inx.h:3 ../share/extensions/edge3d.inx.h:6
 #: ../share/extensions/flatten.inx.h:3 ../share/extensions/fractalize.inx.h:2
@@ -15725,9 +15668,8 @@ msgid "AI 8.0 Input"
 msgstr "Enankad AI 8.0"
 
 #: ../share/extensions/ai_input.inx.h:2
-#, fuzzy
 msgid "Adobe Illustrator 8.0 and below (*.ai)"
-msgstr "Adobe Illustrator 8.0 (*.ai)"
+msgstr "Adobe Illustrator 8.0 ha koshoc'h (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
 msgid "Open files saved with Adobe Illustrator 8.0 or older"
@@ -15819,9 +15761,8 @@ msgid "Negative"
 msgstr "Ginel"
 
 #: ../share/extensions/color_randomize.inx.h:4
-#, fuzzy
 msgid "Randomize"
-msgstr "Dargouezhekaat :"
+msgstr "Dargouezhekaat"
 
 #: ../share/extensions/color_removeblue.inx.h:2
 msgid "Remove Blue"
@@ -15881,14 +15822,12 @@ msgstr ""
 "ganeoc'h ez eus c'hoarvezet un dra fall e-pad staliadur Inskacape."
 
 #: ../share/extensions/dimension.inx.h:3
-#, fuzzy
 msgid "X Offset"
-msgstr "Linkañ"
+msgstr "Linkañ X"
 
 #: ../share/extensions/dimension.inx.h:4
-#, fuzzy
 msgid "Y Offset"
-msgstr "Linkañ"
+msgstr "Linkañ Y"
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Dot size"
@@ -16192,7 +16131,7 @@ msgstr "Dornelloù an dresadenn"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:1
 msgid "Ask Us a Question"
-msgstr ""
+msgstr "Goulennit diganeomp"
 
 #: ../share/extensions/inkscape_help_commandline.inx.h:1
 msgid "Command Line Options"
@@ -16402,7 +16341,7 @@ msgstr "Diskenn (e-barzh)"
 
 #: ../share/extensions/perfectboundcover.inx.h:2
 msgid "Bond Weight #"
-msgstr ""
+msgstr "Tevder ar paper niv."
 
 #: ../share/extensions/perfectboundcover.inx.h:3
 msgid "Book Height (inches)"
@@ -16418,7 +16357,7 @@ msgstr "Led al levr (meutadoù)"
 
 #: ../share/extensions/perfectboundcover.inx.h:6
 msgid "Caliper (inches)"
-msgstr ""
+msgstr "Gaol dre riklañ (meutadoù)"
 
 #: ../share/extensions/perfectboundcover.inx.h:7
 msgid "Cover"
@@ -16446,7 +16385,7 @@ msgstr "Niver a bajennoù"
 
 #: ../share/extensions/perfectboundcover.inx.h:13
 msgid "Pages Per Inch (PPI)"
-msgstr ""
+msgstr "Pajennoù dre veutad (PDM)"
 
 #: ../share/extensions/perfectboundcover.inx.h:14
 msgid "Paper Thickness Measurement"
@@ -16461,9 +16400,8 @@ msgid "Remove existing guides"
 msgstr "Dilemel an dealfoù o vezañ anezho"
 
 #: ../share/extensions/perfectboundcover.inx.h:18
-#, fuzzy
 msgid "Specify Width"
-msgstr "Led ar c'hreion"
+msgstr "Erspizañ al led"
 
 #: ../share/extensions/perspective.inx.h:2
 msgid "Perspective"
@@ -16564,17 +16502,16 @@ msgstr "Gwezennad dargouezhek"
 #: ../share/extensions/rubberstretch.inx.h:2
 #, no-c-format
 msgid "Curve (%):"
-msgstr ""
+msgstr "Krommañ (%) :"
 
 #: ../share/extensions/rubberstretch.inx.h:4
-#, fuzzy
 msgid "Rubber Stretch"
-msgstr "Niver a zent"
+msgstr "Tamm kaoutchoug"
 
 #: ../share/extensions/rubberstretch.inx.h:6
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Strength (%):"
-msgstr "Hirder ar paz (px)"
+msgstr "Kreñver (%) :"
 
 #: ../share/extensions/sk_input.inx.h:1
 msgid "A diagram created with the program Sketch"
@@ -16593,14 +16530,12 @@ msgid "Gear Placement"
 msgstr "Lec'hiadur an dafar"
 
 #: ../share/extensions/spirograph.inx.h:2
-#, fuzzy
 msgid "Inside (Hypotrochoid)"
-msgstr "Diabarzh (Hypotrochoid)"
+msgstr "Diabarzh (Hipotrokoid)"
 
 #: ../share/extensions/spirograph.inx.h:3
-#, fuzzy
 msgid "Outside (Epitrochoid)"
-msgstr "Diavaez (Epitrochoid)"
+msgstr "Diavaez (Epitrokoid)"
 
 #: ../share/extensions/spirograph.inx.h:4
 msgid "Quality (Default = 16)"
