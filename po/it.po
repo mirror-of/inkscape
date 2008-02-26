@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-26 11:38+0100\n"
-"PO-Revision-Date: 2008-02-17 17:27+0100\n"
+"POT-Creation-Date: 2008-02-26 22:34+0100\n"
+"PO-Revision-Date: 2008-02-24 16:42+0100\n"
 "Last-Translator: Luca Bruno <lucab@debian.org>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -62,9 +62,8 @@ msgid "Create ellipse"
 msgstr "Crea ellisse"
 
 #: ../src/box3d.cpp:317
-#, fuzzy
 msgid "<b>3D Box</b>"
-msgstr "<b>Bordo</b>"
+msgstr "<b>Solido 3D</b>"
 
 #: ../src/box3d-context.cpp:450 ../src/box3d-context.cpp:457
 #: ../src/box3d-context.cpp:464 ../src/box3d-context.cpp:471
@@ -3610,7 +3609,7 @@ msgstr "Impostazioni importazione PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:380
 msgid "pdfinput|medium"
-msgstr ""
+msgstr "medio"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:381
 msgid "fine"
@@ -4262,61 +4261,57 @@ msgstr "<b>Passaggio intermedio</b> del gradiente lineare"
 
 #. TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a compound message
 #: ../src/gradient-context.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "%s selected"
-msgstr "Ultimo selezionato"
+msgstr "%s selezionato"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/gradient-context.cpp:164 ../src/gradient-context.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid " out of %d gradient handle"
 msgid_plural " out of %d gradient handles"
-msgstr[0] "Muovi maniglia del gradiente"
-msgstr[1] "Muovi maniglia del gradiente"
+msgstr[0] "di %d maniglia di gradiente"
+msgstr[1] "di %d maniglie di gradiente"
 
 #. TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
 #: ../src/gradient-context.cpp:165 ../src/gradient-context.cpp:174
 #: ../src/gradient-context.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid " on %d selected object"
 msgid_plural " on %d selected objects"
-msgstr[0] "Esporta separatamente %d oggetto selezionato"
-msgstr[1] "Esporta separatamente questi %d oggetti selezionati"
+msgstr[0] "su %d oggetto selezionati"
+msgstr[1] "su %d oggetti selezionati"
 
 #. TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
 #: ../src/gradient-context.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "One handle merging %d stop (drag with <b>Shift</b> to separate) selected"
 msgid_plural ""
 "One handle merging %d stops (drag with <b>Shift</b> to separate) selected"
 msgstr[0] ""
-"Una maniglia multifunzione per %d passaggi (trascinare con <b>Maiusc</b> per "
-"separare) selezionata su %d maniglie di gradiente per %d oggetti selezionati"
+"Una maniglia multifunzione per %d passaggio (trascinare con <b>Maiusc</b> "
+"per separare) selezionata"
 msgstr[1] ""
 "Una maniglia multifunzione per %d passaggi (trascinare con <b>Maiusc</b> per "
-"separare) selezionata su %d maniglie di gradiente per %d oggetti selezionati"
+"separare) selezionata"
 
 #. TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
 #: ../src/gradient-context.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> gradient handle selected out of %d"
 msgid_plural "<b>%d</b> gradient handles selected out of %d"
-msgstr[0] ""
-"<b>%d</b> maniglie di gradiente selezionate su %d per %d oggetti nella "
-"selezione"
-msgstr[1] ""
-"<b>%d</b> maniglie di gradiente selezionate su %d per %d oggetti nella "
-"selezione"
+msgstr[0] "<b>%d</b> maniglia di gradiente selezionata su %d"
+msgstr[1] "<b>%d</b> maniglie di gradiente selezionate su %d"
 
 #. TRANSLATORS: The plural refers to number of selected objects
 #: ../src/gradient-context.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "<b>No</b> gradient handles selected out of %d on %d selected object"
 msgid_plural ""
 "<b>No</b> gradient handles selected out of %d on %d selected objects"
 msgstr[0] ""
-"<b>Nessuna</b> maniglia di gradiente selezionata su %d per %d oggetti nella "
+"<b>Nessuna</b> maniglia di gradiente selezionata su %d per %d oggetto nella "
 "selezione"
 msgstr[1] ""
 "<b>Nessuna</b> maniglia di gradiente selezionata su %d per %d oggetti nella "
@@ -4806,11 +4801,11 @@ msgstr "_Scrivi file sessione:"
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2630
 msgid "Shared SVG whiteboard tool."
-msgstr ""
+msgstr "Strumento whiteboard per SVG condivisi."
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2631
 msgid "Based on the Pedro XMPP client"
-msgstr ""
+msgstr "Basato sul client XMPP Pedro"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
 msgid "Select a location and filename"
@@ -4853,104 +4848,102 @@ msgid "Move handle"
 msgstr "Muovi maniglia"
 
 #: ../src/libgdl/gdl-dock-bar.c:108
-#, fuzzy
 msgid "Master"
-msgstr "Bitmap"
+msgstr "Principale"
 
 #: ../src/libgdl/gdl-dock-bar.c:109
 msgid "GdlDockMaster object which the dockbar widget is attached to"
 msgstr ""
+"Oggetto GdlDockMaster a cui è attaccato il widget della barra del pannello"
 
 #: ../src/libgdl/gdl-dock-bar.c:116
-#, fuzzy
 msgid "Dockbar style"
-msgstr "Fissabile"
+msgstr "Stile barra dei pannelli"
 
 #: ../src/libgdl/gdl-dock-bar.c:117
 msgid "Dockbar style to show items on it"
-msgstr ""
+msgstr "Stile della barra del pannello su cui mostrare gli oggetti"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify"
-msgstr ""
+msgstr "Iconifica"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify this dock"
-msgstr ""
+msgstr "Iconifica questo pannello"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close"
-msgstr "_Chiudi"
+msgstr "Chiudi"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close this dock"
-msgstr "Chiude la finestra di questo documento"
+msgstr "Chiude questo pannello"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:706
 #: ../src/libgdl/gdl-dock-tablabel.c:128
 msgid "Controlling dock item"
-msgstr ""
+msgstr "Pannello atto al controllo"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:707
 msgid "Dockitem which 'owns' this grip"
-msgstr ""
+msgstr "Pannello a cui appartiene questa scheda"
 
 #: ../src/libgdl/gdl-dock-item.c:287
-#, fuzzy
 msgid "Orientation"
-msgstr "Orientamento della pagina:"
+msgstr "Orientamento"
 
 #: ../src/libgdl/gdl-dock-item.c:288
 msgid "Orientation of the docking item"
-msgstr ""
+msgstr "Orientazione dell'elemento del pannello"
 
 #: ../src/libgdl/gdl-dock-item.c:303
 msgid "Resizable"
-msgstr ""
+msgstr "Ridimensionabile"
 
 #: ../src/libgdl/gdl-dock-item.c:304
 msgid "If set, the dock item can be resized when docked in a paned"
 msgstr ""
+"Se attivo, l'elemento del pannello può essere ridimensionato quando "
+"incorniciato in un pannello"
 
 #: ../src/libgdl/gdl-dock-item.c:311
-#, fuzzy
 msgid "Item behavior"
-msgstr "Comportamento"
+msgstr "Comportamento oggetto"
 
 #: ../src/libgdl/gdl-dock-item.c:312
 msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
 msgstr ""
+"Comportamento predefinito del pannello (se può fluttuare, è bloccato, etc...)"
 
 #: ../src/libgdl/gdl-dock-item.c:320 ../src/libgdl/gdl-dock-master.c:148
-#, fuzzy
 msgid "Locked"
-msgstr "Blocca"
+msgstr "Bloccato"
 
 #: ../src/libgdl/gdl-dock-item.c:321
 msgid ""
 "If set, the dock item cannot be dragged around and it doesn't show a grip"
 msgstr ""
+"Se attivo, il pannello non può essere trascinato e non mostra un'etichetta "
+"di controllo"
 
 #: ../src/libgdl/gdl-dock-item.c:329
 msgid "Preferred width"
-msgstr ""
+msgstr "Larghezza preferita"
 
 #: ../src/libgdl/gdl-dock-item.c:330
 msgid "Preferred width for the dock item"
-msgstr ""
+msgstr "Larghezza preferita per il pannello"
 
 #: ../src/libgdl/gdl-dock-item.c:336
-#, fuzzy
 msgid "Preferred height"
-msgstr "Altezza sorgente"
+msgstr "Altezza preferita"
 
 #: ../src/libgdl/gdl-dock-item.c:337
 msgid "Preferred height for the dock item"
-msgstr ""
+msgstr "Altezza preferita per il pannello"
 
 #: ../src/libgdl/gdl-dock-item.c:616
 #, c-format
@@ -4958,6 +4951,8 @@ msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
 msgstr ""
+"Non è possibile aggiungere un pannello (%p di tipo %s) all'interno di %s. "
+"Usare un GdlDock o altri oggetti per pannelli."
 
 #: ../src/libgdl/gdl-dock-item.c:623
 #, c-format
@@ -4965,23 +4960,23 @@ msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
 msgstr ""
+"Tentativo di aggiunta di un widget di tipo %s a un %s, che può contenere un "
+"solo widget per volta, mentre contiene già  un elemento di tipo %s"
 
 #: ../src/libgdl/gdl-dock-item.c:1345 ../src/libgdl/gdl-dock-item.c:1390
 #, c-format
 msgid "Unsupported docking strategy %s in dock object of type %s"
-msgstr ""
+msgstr "Strategia di riquadro %s non supportata per un pannello di tipo %s"
 
 #. UnLock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1479
-#, fuzzy
 msgid "UnLock"
-msgstr "Blocca"
+msgstr "Sblocca"
 
 #. Hide menuitem.
 #: ../src/libgdl/gdl-dock-item.c:1486
-#, fuzzy
 msgid "Hide"
-msgstr "Na_scondi"
+msgstr "Nascondi"
 
 #. Lock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1491
@@ -4991,22 +4986,23 @@ msgstr "Blocca"
 #: ../src/libgdl/gdl-dock-item.c:1717
 #, c-format
 msgid "Attempt to bind an unbound item %p"
-msgstr ""
+msgstr "Tentativo di aggancio di un oggetto libero %p"
 
 #: ../src/libgdl/gdl-dock-master.c:141 ../src/libgdl/gdl-dock.c:183
-#, fuzzy
 msgid "Default title"
-msgstr "_Unità predefinite:"
+msgstr "Titolo predefinito"
 
 #: ../src/libgdl/gdl-dock-master.c:142
 msgid "Default title for newly created floating docks"
-msgstr ""
+msgstr "Titolo predefinito per i nuovi pannelli fluttuanti"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
+"Se impostato a 1, tutti i pannelli legati al master sono bloccati; se è 0, "
+"sono tutti sbloccati; -1 indica inconsistenza tra gli oggetti"
 
 #: ../src/libgdl/gdl-dock-master.c:157 ../src/libgdl/gdl-switcher.c:707
 #, fuzzy
@@ -5019,15 +5015,16 @@ msgid "Switcher buttons style"
 msgstr "Passato al livello successivo."
 
 #: ../src/libgdl/gdl-dock-master.c:165
-#, fuzzy
 msgid "Expand direction"
-msgstr "Espandi spaziatura linea"
+msgstr "Espandi direzione"
 
 #: ../src/libgdl/gdl-dock-master.c:166
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
 "given direction"
 msgstr ""
+"Permette agli elementi del master di espandere i loro contenitori nella "
+"direzione voluta"
 
 #: ../src/libgdl/gdl-dock-master.c:781
 #, c-format
@@ -5035,6 +5032,8 @@ msgid ""
 "master %p: unable to add object %p[%s] to the hash.  There already is an "
 "item with that name (%p)."
 msgstr ""
+"master %p: impossibile aggiungere l'oggetto %p[%s] alla serie. Esiste già un "
+"oggetto con quel nome (%p)."
 
 #: ../src/libgdl/gdl-dock-master.c:954
 #, c-format
@@ -5042,6 +5041,8 @@ msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
 msgstr ""
+"Il nuovo pannello controllore %p è automatico. Andrebbero impostati "
+"controllori sono pannelli manuali."
 
 #: ../src/libgdl/gdl-dock-notebook.c:134
 #: ../src/ui/dialog/align-and-distribute.cpp:907
@@ -5052,9 +5053,8 @@ msgid "Page"
 msgstr "Pagina"
 
 #: ../src/libgdl/gdl-dock-notebook.c:135
-#, fuzzy
 msgid "The index of the current page"
-msgstr "Rinomina il livello attuale"
+msgstr "L'indice della pagina attuale"
 
 #: ../src/libgdl/gdl-dock-object.c:120 ../src/ui/widget/page-sizer.cpp:195
 msgid "Name"
@@ -5062,43 +5062,39 @@ msgstr "Nome"
 
 #: ../src/libgdl/gdl-dock-object.c:121
 msgid "Unique name for identifying the dock object"
-msgstr ""
+msgstr "Nome unico per identificare il pannello"
 
 #: ../src/libgdl/gdl-dock-object.c:128
-#, fuzzy
 msgid "Long name"
-msgstr "Senza nome"
+msgstr "Nome esteso"
 
 #: ../src/libgdl/gdl-dock-object.c:129
-#, fuzzy
 msgid "Human readable name for the dock object"
-msgstr "Un'etichetta personale per l'oggetto"
+msgstr "Nome descrittivo del pannello"
 
 #: ../src/libgdl/gdl-dock-object.c:135
-#, fuzzy
 msgid "Stock Icon"
-msgstr "Scansione pila"
+msgstr "Icona stock"
 
 #: ../src/libgdl/gdl-dock-object.c:136
 msgid "Stock icon for the dock object"
-msgstr ""
+msgstr "Icona stock per il pannello"
 
 #: ../src/libgdl/gdl-dock-object.c:142
 msgid "Pixbuf Icon"
-msgstr ""
+msgstr "Icona pixbuf"
 
 #: ../src/libgdl/gdl-dock-object.c:143
 msgid "Pixbuf icon for the dock object"
-msgstr ""
+msgstr "Icona pixbuf per il pannello"
 
 #: ../src/libgdl/gdl-dock-object.c:148
-#, fuzzy
 msgid "Dock master"
-msgstr "Blocca livello"
+msgstr "Pannello master"
 
 #: ../src/libgdl/gdl-dock-object.c:149
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "Pannello master a cui questo pannello è legato"
 
 #: ../src/libgdl/gdl-dock-object.c:434
 #, c-format
@@ -5106,6 +5102,8 @@ msgid ""
 "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
 "hasn't implemented this method"
 msgstr ""
+"Chiamata a gdl_dock_object_dock in un pannello %p (del tipo %s) per cui "
+"questo metodo non è implementato"
 
 #: ../src/libgdl/gdl-dock-object.c:563
 #, c-format
@@ -5113,46 +5111,49 @@ msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
 msgstr ""
+"Operazione di aggancio richiesta per un oggetto libero %p. L'applicazione "
+"potrebbe andare in crash"
 
 #: ../src/libgdl/gdl-dock-object.c:570
 #, c-format
 msgid "Cannot dock %p to %p because they belong to different masters"
-msgstr ""
+msgstr "Impossibile agganciare %p a %p perché appartengono a master diversi"
 
 #: ../src/libgdl/gdl-dock-object.c:612
 #, c-format
 msgid ""
 "Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
+"Tentativo di agganciare a %p un pannello %p già collegato (master attuale: %"
+"p)"
 
 #: ../src/libgdl/gdl-dock-paned.c:132
-#, fuzzy
 msgid "Position"
-msgstr "Posizione:"
+msgstr "Posizione"
 
 #: ../src/libgdl/gdl-dock-paned.c:133
 msgid "Position of the divider in pixels"
-msgstr ""
+msgstr "Posizione del divisore in pixel"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:143
-#, fuzzy
 msgid "Sticky"
-msgstr "piccolo"
+msgstr "Fissato"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:144
 msgid ""
 "Whether the placeholder will stick to its host or move up the hierarchy when "
 "the host is redocked"
 msgstr ""
+"Determina se il segnaposto resterà legato al suo ospitante o scalerà la "
+"gerarchia quando l'ospitante viene riagganciato"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:151
-#, fuzzy
 msgid "Host"
-msgstr "estrusione"
+msgstr "Ospitante"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:152
 msgid "The dock object this placeholder is attached to"
-msgstr ""
+msgstr "Il pannello a cui questo segnaposto è agganciato"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:159
 #, fuzzy
@@ -5164,50 +5165,52 @@ msgid ""
 "The position an item will be docked to our host if a request is made to dock "
 "to us"
 msgstr ""
+"La posizione in cui un oggetto verrà agganciato all'ospitante attuale se "
+"questo elemento riceverà una richiesta di aggancio"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:170
 msgid "Width for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Larghezza del widget quando è attaccato ad un segnaposto"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:178
 msgid "Height for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Altezza del widget quando è attaccato ad un segnaposto"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:184
-#, fuzzy
 msgid "Floating Toplevel"
-msgstr "Fluttuante"
+msgstr "Livello principale fluttuante"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:185
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
 msgstr ""
+"Determina se il segnaposto rimane per un pannello fluttuante di primo livello"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:191
-#, fuzzy
 msgid "X-Coordinate"
-msgstr "Coordinate"
+msgstr "Coordinata X"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:192
 msgid "X-Coordinate fow dock when floating"
-msgstr ""
+msgstr "Coordinata X del pannello quando fluttuante"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:198
-#, fuzzy
 msgid "Y-Coordinate"
-msgstr "Coordinate"
+msgstr "Coordinata Y"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:199
 msgid "Y-Coordinate fow dock when floating"
-msgstr ""
+msgstr "Coordinata X del pannello quando fluttuante"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:494
 msgid "Attempt to dock a dock object to an unbound placeholder"
-msgstr ""
+msgstr "Tentativo di aggancio di un pannello ad un segnaposto non fisso"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:618
 #, c-format
 msgid "Got a detach signal from an object (%p) who is not our host %p"
 msgstr ""
+"Ricevuto un segnale di distacco da un oggetto (%p) diverso dall'ospitante "
+"attuale %p"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:643
 #, c-format
@@ -5215,10 +5218,12 @@ msgid ""
 "Something weird happened while getting the child placement for %p from "
 "parent %p"
 msgstr ""
+"È successo qualcosa di strano durante la richiesta della posizione di %p "
+"all'elemento padre %p"
 
 #: ../src/libgdl/gdl-dock-tablabel.c:129
 msgid "Dockitem which 'owns' this tablabel"
-msgstr ""
+msgstr "Elemento del pannello a cui appartiene questa scheda"
 
 #: ../src/libgdl/gdl-dock.c:175 ../src/ui/dialog/inkscape-preferences.cpp:464
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
@@ -5227,44 +5232,40 @@ msgstr "Fluttuante"
 
 #: ../src/libgdl/gdl-dock.c:176
 msgid "Whether the dock is floating in its own window"
-msgstr ""
+msgstr "Determina se il pannello è fluttuante con una propria finestra"
 
 #: ../src/libgdl/gdl-dock.c:184
 msgid "Default title for the newly created floating docks"
-msgstr ""
+msgstr "Titolo predefinito per i nuovi pannelli fluttuanti"
 
 #: ../src/libgdl/gdl-dock.c:191
 msgid "Width for the dock when it's of floating type"
-msgstr ""
+msgstr "Larghezza del pannello quando fluttuante"
 
 #: ../src/libgdl/gdl-dock.c:199
 msgid "Height for the dock when it's of floating type"
-msgstr ""
+msgstr "Altezza del pannello quando fluttuante"
 
 #: ../src/libgdl/gdl-dock.c:206
-#, fuzzy
 msgid "Float X"
-msgstr "Fluttuante"
+msgstr "X fluttuante"
 
 #: ../src/libgdl/gdl-dock.c:207
-#, fuzzy
 msgid "X coordinate for a floating dock"
-msgstr "Coordinata X dell'origine della griglia"
+msgstr "Coordinata X per un pannello fluttuante"
 
 #: ../src/libgdl/gdl-dock.c:214
-#, fuzzy
 msgid "Float Y"
-msgstr "Fluttuante"
+msgstr "Y fluttuante"
 
 #: ../src/libgdl/gdl-dock.c:215
-#, fuzzy
 msgid "Y coordinate for a floating dock"
-msgstr "Coordinate Y dell'origine della griglia"
+msgstr "Coordinata Y per un pannello fluttuante"
 
 #: ../src/libgdl/gdl-dock.c:499
 #, c-format
 msgid "Dock #%d"
-msgstr ""
+msgstr "Pannello %d"
 
 #: ../src/libnrtype/FontFactory.cpp:774
 msgid "Ignoring font without family that will crash Pango"
@@ -5424,9 +5425,8 @@ msgid "Path along which to bend the original path"
 msgstr "Crea una proiezione dinamica del tracciato originale"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:58
-#, fuzzy
 msgid "Width of the path"
-msgstr "Larghezza del motivo"
+msgstr "Larghezza del tracciato"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:65
@@ -5434,14 +5434,12 @@ msgid "Width in units of length"
 msgstr "Larghezza in unità di lunghezza"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
-#, fuzzy
 msgid "Scale the width of the path in units of its length"
 msgstr "Ridimensiona la larghezza del motivo in unità della sua lunghezza"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
-#, fuzzy
 msgid "Original path is vertical"
-msgstr "Motivo verticale"
+msgstr "Tracciato verticale"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
@@ -5528,9 +5526,8 @@ msgid "The x-coord of this point is around which the slant will happen"
 msgstr ""
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:21
-#, fuzzy
 msgid "Stack step"
-msgstr "Scansione pila"
+msgstr "Pila dei passaggi"
 
 #: ../src/live_effects/parameter/parameter.cpp:138
 msgid "Change scalar parameter"
@@ -6199,8 +6196,8 @@ msgstr ""
 "Modifica <b>l'altezza e la larghezza</b> del rettangolo; con <b>Ctrl</b> per "
 "mantenere la proporzione o allungare su una sola dimensione"
 
+#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6208,8 +6205,8 @@ msgstr ""
 "Ridimensiona il solido lungo gli assi X/Y; con <b>Maiusc</b> per l'asse Z; "
 "con <b>Ctrl</b> per fissare alle direzioni degli spigoli o delle diagonali"
 
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
-#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6217,23 +6214,22 @@ msgstr ""
 "Ridimensiona il solido lungo l'asse Z; con <b>Maiusc</b> per gli assi X/Y; "
 "con <b>Ctrl</b> per fissare alle direzioni degli spigoli o delle diagonali"
 
-#: ../src/object-edit.cpp:731
-#, fuzzy
-msgid "Move the box in perspective"
+#: ../src/object-edit.cpp:727
+msgid "Move the box in perspective."
 msgstr "Sposta il solido in prospettiva."
 
-#: ../src/object-edit.cpp:909
+#: ../src/object-edit.cpp:905
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
 "Modifica la <b>larghezza</b> dell'ellisse, con <b>Ctrl</b> per farne un "
 "cerchio"
 
-#: ../src/object-edit.cpp:912
+#: ../src/object-edit.cpp:908
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
 "Modifica l'<b>altezza</b> dell'ellisse, con <b>Ctrl</b> per farne un cerchio"
 
-#: ../src/object-edit.cpp:915
+#: ../src/object-edit.cpp:911
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6243,7 +6239,7 @@ msgstr ""
 "b> per far scattare l'angolo; trascinare <b>dentro</b> l'ellisse per un "
 "arco, <b>fuori</b> per un segmento"
 
-#: ../src/object-edit.cpp:918
+#: ../src/object-edit.cpp:914
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6253,7 +6249,7 @@ msgstr ""
 "per far scattare l'angolo; trascinare <b>dentro</b> l'ellisse per un arco, "
 "<b>fuori</b> per un segmento"
 
-#: ../src/object-edit.cpp:1028
+#: ../src/object-edit.cpp:1024
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6261,7 +6257,7 @@ msgstr ""
 "Modifica il <b>diametro</b> della stella o del poligono; con <b>Maiusc</b> "
 "per arrotondare; con <b>Alt</b> per avere casualità"
 
-#: ../src/object-edit.cpp:1031
+#: ../src/object-edit.cpp:1027
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6271,7 +6267,7 @@ msgstr ""
 "mantenere la direzione dei raggi (senza deformazione); con <b>Maiusc</b> per "
 "arrotondare; con <b>Alt</b> per avere casualità"
 
-#: ../src/object-edit.cpp:1195
+#: ../src/object-edit.cpp:1191
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6279,7 +6275,7 @@ msgstr ""
 "Arrotola/srotola una spirale dall'<b>interno</b>; con <b>Ctrl</b> per far "
 "scattare l'angolo; con <b>Alt</b> per far convergere/divergere"
 
-#: ../src/object-edit.cpp:1197
+#: ../src/object-edit.cpp:1193
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6287,26 +6283,26 @@ msgstr ""
 "Arrotola/srotola una spirale dall'<b>esterno</b>; con <b>Ctrl</b> per far "
 "scattare l'angolo; con <b>Maiusc</b> per ridimensionare/ruotare"
 
-#: ../src/object-edit.cpp:1234
+#: ../src/object-edit.cpp:1230
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Regola la <b>distanza di proiezione</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1260
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Muove</b> il motivo di riempimento all'interno dell'oggetto"
 
-#: ../src/object-edit.cpp:1266
+#: ../src/object-edit.cpp:1262
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Ridimensiona</b> uniformemente il motivo di riempimento"
 
-#: ../src/object-edit.cpp:1268
+#: ../src/object-edit.cpp:1264
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Ruota</b> il motivo di riempimento; con <b>Ctrl</b> per far scattare "
 "l'angolo"
 
-#: ../src/object-edit.cpp:1293
+#: ../src/object-edit.cpp:1289
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Trascinare per ridimensionare il <b>riquadro del testo dinamico</b>"
 
@@ -6356,27 +6352,27 @@ msgstr "Selezionare l'<b>oggetto</b> da convertire in tracciato."
 msgid "Converting objects to paths..."
 msgstr "Conversione oggetti in tracciati..."
 
-#: ../src/path-chemistry.cpp:351
+#: ../src/path-chemistry.cpp:350
 msgid "Object to path"
 msgstr "Da oggetto a tracciato"
 
-#: ../src/path-chemistry.cpp:353
+#: ../src/path-chemistry.cpp:352
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "<b>Nessun oggetto</b> nella selezione da convertire in tracciato."
 
-#: ../src/path-chemistry.cpp:418
+#: ../src/path-chemistry.cpp:417
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Selezionare il <b>tracciato</b> da invertire."
 
-#: ../src/path-chemistry.cpp:427
+#: ../src/path-chemistry.cpp:426
 msgid "Reversing paths..."
 msgstr "Inversione tracciati"
 
-#: ../src/path-chemistry.cpp:454
+#: ../src/path-chemistry.cpp:453
 msgid "Reverse path"
 msgstr "Inverti tracciato"
 
-#: ../src/path-chemistry.cpp:456
+#: ../src/path-chemistry.cpp:455
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>Nessun tracciato</b> nella selezione da invertire."
 
@@ -6458,14 +6454,12 @@ msgid "Finishing freehand"
 msgstr "Terminazione mano libera"
 
 #: ../src/persp3d.cpp:321
-#, fuzzy
 msgid "Toggle vanishing point"
-msgstr "Unisci punti di fuga"
+msgstr "Attiva punto di fuga"
 
 #: ../src/persp3d.cpp:332
-#, fuzzy
 msgid "Toggle multiple vanishing points"
-msgstr "Dividi punti di fuga"
+msgstr "Attiva punti di fuga multipli"
 
 #: ../src/preferences.cpp:59
 #, c-format
@@ -6559,7 +6553,7 @@ msgstr ""
 #: ../src/select-context.cpp:707
 msgid "<b>Ctrl</b>: click to select in groups; drag to move hor/vert"
 msgstr ""
-"<b>Ctrl</b>: cliccare per selezionare nei gruppi, trascinare  per muovere in "
+"<b>Ctrl</b>: cliccare per selezionare nei gruppi, trascinare per muovere in "
 "orizzontale o verticale"
 
 #: ../src/select-context.cpp:708
@@ -6616,7 +6610,7 @@ msgstr "Selezionare un <b>gruppo</b> da dividere."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>Nessun gruppo</b> nella selezione da dividere."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
 msgid "Ungroup"
 msgstr "Dividi"
 
@@ -7278,7 +7272,7 @@ msgstr "<b>Immagine con un descrittore sbagliato</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Immagine</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:698
+#: ../src/sp-item-group.cpp:696
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"
@@ -7830,7 +7824,7 @@ msgid ""
 "<b>Click</b> to select or create text, <b>drag</b> to create flowed text; "
 "then type."
 msgstr ""
-"<b>Cliccare</b> per selezionare o creare un testo, <b>trascinare</b>per "
+"<b>Cliccare</b> per selezionare o creare un testo, <b>trascinare</b> per "
 "creare un testo dinamico; quindi scrivere."
 
 #: ../src/text-context.cpp:1659
@@ -8928,6 +8922,11 @@ msgid ""
 "component from the input is passed to the output. The last column does not "
 "depend on input colors, so can be used to adjust a constant component value."
 msgstr ""
+"Questa matrice determina una trasformazione lineare dello spazio cromatico. "
+"Ogni riga agisce su una componente del colore. Ogni colonna determina in che "
+"quantità il colore in input verrà passato all'output. L'ultima colonna non "
+"dipende dal colore in input, per cui può essere usata per impostare una "
+"componente costante."
 
 #. pack_start(_fromSVGElement, false, false);
 #: ../src/ui/dialog/filter-effects-dialog.cpp:614
@@ -8944,9 +8943,8 @@ msgid "Select an image to be used as feImage input"
 msgstr "Selezionare un'immagine da usare come input per feImage"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:778
-#, fuzzy
 msgid "This SVG filter effect does not require any parameters."
-msgstr "Questo filtro SVG non è ancora implementato in Inkscape."
+msgstr "Questo filtro SVG non necessita di alcun parametro."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:784
 msgid "This SVG filter effect is not yet implemented in Inkscape."
@@ -8958,11 +8956,11 @@ msgstr "Sorgente d'illuminazione:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:992
 msgid "Direction angle for the light source on the XY plane, in degrees"
-msgstr ""
+msgstr "Angolo di incidenza della sorgente luminosa sul piano XY, in gradi"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:993
 msgid "Direction angle for the light source on the YZ plane, in degrees"
-msgstr ""
+msgstr "Angolo di incidenza della sorgente luminosa sul piano YZ, in gradi"
 
 #. default x:
 #. default y:
@@ -8975,23 +8973,20 @@ msgstr "Posizione"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "X coordinate"
-msgstr "Coordinata X:"
+msgstr "Coordinata X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Y coordinate"
-msgstr "Coordinata Y:"
+msgstr "Coordinata Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Z coordinate"
-msgstr "Coordinata X:"
+msgstr "Coordinata X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
 msgid "Points At"
@@ -9003,7 +8998,7 @@ msgstr "Esponente speculare"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
 msgid "Exponent value controlling the focus for the light source"
-msgstr ""
+msgstr "Valore esponenziale per il controllo del fuoco della sorgente luminosa"
 
 #. TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1005
@@ -9016,6 +9011,9 @@ msgid ""
 "light source and the point to which it is pointing at) and the spot light "
 "cone. No light is projected outside this cone."
 msgstr ""
+"Questo è l'angolo tra l'asse del punto di illuminazione (ossia l'asse "
+"congiungente la sorgente luminosa e il punto illuminato) e il cono "
+"d'illuminazione. All'infuori di questo coso non verrà proiettata alcuna luce."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1065
 msgid "New light source"
@@ -9100,13 +9098,12 @@ msgid "Coordinates"
 msgstr "Coordinate"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
-#, fuzzy
 msgid "X coordinate of the left corners of filter effects region"
-msgstr "Crea e serializza i cloni della selezione"
+msgstr "Coordinata X dell'angolo sinistro della regione affetta dal filtro"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
 msgid "Y coordinate of the upper corners of filter effects region"
-msgstr ""
+msgstr "Coordinata Y dell'angolo superiore della regione affetta dal filtro"
 
 #. default width:
 #. default height:
@@ -9116,14 +9113,12 @@ msgid "Dimensions"
 msgstr "Dimensioni"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
-#, fuzzy
 msgid "Width of filter effects region"
-msgstr "Larghezza della selezione"
+msgstr "Larghezza della regione affetta dal filtro"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
-#, fuzzy
 msgid "Height of filter effects region"
-msgstr "Altezza della selezione"
+msgstr "Altezza della regione affetta dal filtro"
 
 #. # end multiple scan
 #. ## end mode page
@@ -9162,6 +9157,9 @@ msgid ""
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
 "values of the first and second inputs respectively."
 msgstr ""
+"Se viene impostata l'operazione matematica, ogni pixel sarà il risultato "
+"della formula k1*i1*i2 + k2*i1 + k3*i2 + k4, in cui i1 e i2 sono i valori "
+"dei pixel rispettivamente del primo e del secondo input"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2209
 msgid "K2"
@@ -9176,14 +9174,12 @@ msgid "K4"
 msgstr "K4"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
-#, fuzzy
 msgid "width of the convolve matrix"
-msgstr "Larghezza del motivo"
+msgstr "larghezza della matrice di convoluzione"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
-#, fuzzy
 msgid "height of the convolve matrix"
-msgstr "Altezza del rettangolo da riempire"
+msgstr "altezza della matrice di convoluzione"
 
 #. default x:
 #. default y:
@@ -9196,12 +9192,16 @@ msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
+"Coordinata X del punto del punto affetto dalla matrice di convoluzione. La "
+"convoluzione viene applicata ai pixel attorno a questo punto."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
+"Coordinata Y del punto del punto affetto dalla matrice di convoluzione. La "
+"convoluzione viene applicata ai pixel attorno a questo punto."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 msgid "Kernel"
@@ -9239,6 +9239,8 @@ msgid ""
 "This value is added to each component. This is useful to define a constant "
 "value as the zero response of the filter."
 msgstr ""
+"Questo valore verrà aggiunto ad ogni componente. Risulta utile per definire "
+"un valore costante per l'effetto nullo del filtro."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
 msgid "Edge Mode"
@@ -9257,7 +9259,7 @@ msgstr "Preserva Alpha"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 msgid "If set, the alpha channel won't be altered by this filter primitive."
-msgstr ""
+msgstr "Se attivo, il canale alpha non verrà alterato da questo filtro."
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
@@ -9267,7 +9269,7 @@ msgstr "Colore diffuso"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
 msgid "Defines the color of the light source"
-msgstr ""
+msgstr "Determina il colore della sorgente luminosa."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
@@ -9280,6 +9282,8 @@ msgid ""
 "This value amplifies the heights of the bump map defined by the input alpha "
 "channel"
 msgstr ""
+"Questo valore amplifica l'altezza della mappa a sbalzo definita dal canale "
+"alpha"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
@@ -9289,7 +9293,7 @@ msgstr "Costante"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
 msgid "This constant affects the Phong lighting model."
-msgstr ""
+msgstr "Questa costante regola il modello di illuminazione di Phong."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2228
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2262
@@ -9298,25 +9302,27 @@ msgstr "Unità lunghezza nocciolo"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2232
 msgid "This defines the intensity of the displacement effect."
-msgstr ""
+msgstr "Questa l'intensità dell'effetto di spostamento"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
-#, fuzzy
 msgid "X displacement"
-msgstr "Mappa di spostamento"
+msgstr "Spostamento X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
 msgid "Color component that controls the displacement in the X direction"
 msgstr ""
+"Componente del colore che controlla la direzione dello spostamento lungo la "
+"direzione X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
-#, fuzzy
 msgid "Y displacement"
-msgstr "Mappa di spostamento"
+msgstr "Spostamento Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
 msgid "Color component that controls the displacement in the Y direction"
 msgstr ""
+"Componente del colore che controlla la direzione dello spostamento lungo la "
+"direzione Y"
 
 #. default: black
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
@@ -9325,7 +9331,7 @@ msgstr "Colore uniforme"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
 msgid "The whole filter region will be filled with this color."
-msgstr ""
+msgstr "L'intera regione verrà riempita con questo colore."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2241
 msgid "Standard Deviation"
@@ -9333,7 +9339,7 @@ msgstr "Deviazione standard"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2241
 msgid "The standard deviation for the blur operation."
-msgstr ""
+msgstr "La deviazione standard per l'operazione di sfocatura."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2247
 msgid ""
@@ -9351,7 +9357,7 @@ msgstr "Delta X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 msgid "This is how far the input image gets shifted to the right"
-msgstr ""
+msgstr "Determina lo spostamento a destra dell'immagine"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "Delta Y"
@@ -9359,7 +9365,7 @@ msgstr "Delta Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "This is how far the input image gets shifted downwards"
-msgstr ""
+msgstr "Determina lo spostamento in basso dell'immagine"
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
@@ -9380,6 +9386,8 @@ msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
 msgstr ""
+"Indica se la primitiva del filtro fornirà una funzione di rumore o "
+"turbolenza."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid "Base Frequency"
@@ -9395,7 +9403,7 @@ msgstr "Seme"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2273
 msgid "The starting number for the pseudo random number generator."
-msgstr ""
+msgstr "Il seme iniziale per il generatore  di numeri pseudo-casuali."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2285
 msgid "Add filter primitive"
@@ -10991,22 +10999,20 @@ msgstr "File trovati"
 
 #: ../src/ui/dialog/print.cpp:86
 msgid "Could not open temporary PNG for bitmap printing"
-msgstr ""
+msgstr "Impossibile aprire la PNG temporanea per la stampa"
 
 #: ../src/ui/dialog/print.cpp:101
-#, fuzzy
 msgid "Could not set up Document"
-msgstr "Impossibile importare la sorgente della stampa: %s"
+msgstr "Impossibile impostare Document"
 
 #: ../src/ui/dialog/print.cpp:105
 msgid "Failed to set CairoRenderContext"
-msgstr ""
+msgstr "Impossibile impostare CairoRenderContext"
 
 #. set up dialog title, based on document name
 #: ../src/ui/dialog/print.cpp:145
-#, fuzzy
 msgid "SVG Document"
-msgstr "Documento"
+msgstr "Documento SVG"
 
 #: ../src/ui/dialog/print.cpp:146
 msgid "Print"
@@ -11014,9 +11020,8 @@ msgstr "Stampa"
 
 #. build custom preferences tab
 #: ../src/ui/dialog/print.cpp:169
-#, fuzzy
 msgid "Rendering"
-msgstr "Render"
+msgstr "Rendering"
 
 #: ../src/ui/dialog/scriptdialog.cpp:205
 msgid "_Execute Python"
@@ -11622,7 +11627,7 @@ msgstr "piccola"
 
 #: ../src/ui/widget/panel.cpp:122
 msgid "swatches|medium"
-msgstr ""
+msgstr "medio"
 
 #: ../src/ui/widget/panel.cpp:123
 msgid "large"
@@ -11637,24 +11642,20 @@ msgid "List"
 msgstr "Elenco"
 
 #: ../src/ui/widget/panel.cpp:171
-#, fuzzy
 msgid "Shape"
-msgstr "Forme"
+msgstr "Forma"
 
 #: ../src/ui/widget/panel.cpp:174
-#, fuzzy
 msgid "Tall"
-msgstr "Tabella"
+msgstr "Stretta"
 
 #: ../src/ui/widget/panel.cpp:175
-#, fuzzy
 msgid "Square"
-msgstr "Estremo squadrato"
+msgstr "Quadrata"
 
 #: ../src/ui/widget/panel.cpp:176
-#, fuzzy
 msgid "Wide"
-msgstr "Na_scondi"
+msgstr "Larga"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:25
 msgid "_Blend mode:"
@@ -12085,59 +12086,54 @@ msgid "Opacity: %.3g"
 msgstr "Opacità: %.3g"
 
 #: ../src/ui/widget/preferences-widget.cpp:278
-#, fuzzy
 msgid "Reset"
-msgstr " R_eimposta "
+msgstr "Reimposta "
 
 #: ../src/ui/widget/random.cpp:123
 msgid ""
 "Reseed the random number generator; this creates a different sequence of "
 "random numbers."
 msgstr ""
+"Reinizializza il generatore di numeri casuali; serve a creare una sequenza "
+"di numeri casuali diversa."
 
 #: ../src/ui/widget/rendering-options.cpp:39
-#, fuzzy
 msgid "Vector"
-msgstr "Selettore"
+msgstr "Vettore"
 
 #: ../src/ui/widget/rendering-options.cpp:40
-#, fuzzy
 msgid "Bitmap"
-msgstr "Bias"
+msgstr "Bitmap"
 
 #: ../src/ui/widget/rendering-options.cpp:41
-#, fuzzy
 msgid "Backend"
-msgstr "Sfondo"
+msgstr "Terminale"
 
 #: ../src/ui/widget/rendering-options.cpp:42
 msgid "Bitmap options"
-msgstr ""
+msgstr "Opzioni bitmap"
 
 #: ../src/ui/widget/rendering-options.cpp:44
-#, fuzzy
 msgid "Preferred resolution of rendering, in dots per inch."
-msgstr "Risoluzione preferita della bitmap (in punti per pollice)"
+msgstr "Risoluzione preferita per il rendering, in punti per pollice."
 
 #: ../src/ui/widget/rendering-options.cpp:52
-#, fuzzy
 msgid ""
 "Render using Cairo vector operations.  The resulting image is usually "
 "smaller in file size and can be arbitrarily scaled, but some filter effects "
 "will not be correctly rendered."
 msgstr ""
-"Usa gli operatori vettoriali PDF. L'immagine risultante solitamente è di "
-"dimensioni più contenute e può essere ridimensionata a piacere, ma i motivi "
-"andranno persi."
+"Esporta usando gli operatori vettoriali Cairo. L'immagine risultante "
+"solitamente è di dimensioni più contenute e può essere ridimensionata a "
+"piacere, ma alcuni filtri potrebbero non venire correttamente rappresentati."
 
 #: ../src/ui/widget/rendering-options.cpp:57
-#, fuzzy
 msgid ""
 "Render everything as bitmap.  The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
 msgstr ""
-"Stampa tutto come bitmap. L'immagine risultante solitamente è di dimensioni "
+"Esporta tutto come bitmap. L'immagine risultante solitamente è di dimensioni "
 "maggiori e non può essere ridimensionata senza una perdita di qualità, ma "
 "tutti gli oggetti verranno disegnati esattamente come vengono mostrati."
 
@@ -14338,7 +14334,7 @@ msgstr "Muovi motivi"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:110
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:219
 #: ../src/widgets/sp-color-scales.cpp:397
@@ -14397,9 +14393,8 @@ msgid "_K"
 msgstr "_K"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:234
-#, fuzzy
 msgid "Gray"
-msgstr "Grigi"
+msgstr "Grigio"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:237
 #: ../src/widgets/sp-color-icc-selector.cpp:238
@@ -14424,11 +14419,11 @@ msgstr "Giallo"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:295
 msgid "Fix"
-msgstr ""
+msgstr "Fissa"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:298
 msgid "Fix RGB fallback to match icc-color() value."
-msgstr ""
+msgstr "Fissa fallback RGB corrispondente al valore icc-color()."
 
 #. Label
 #: ../src/widgets/sp-color-icc-selector.cpp:379
@@ -16370,6 +16365,13 @@ msgid ""
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
 msgstr ""
+"Questo effetto misura la lunghezza del tracciato selezionato e ne crea un "
+"testo su tracciato con l'unità di misura specificata. Il numero di cifre "
+"significative può essere controllato tramite il campo Precisione.  Il campo "
+"Margine controlla la distanza del testo dal tracciato. Il fattore di "
+"riduzione può essere usato per fare misure di disegni in scala. Per esempio, "
+"se un 1 cm nel disegno corrisponde a 2.5 m nella realtà, il fattore "
+"dev'essere impostato a 250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
