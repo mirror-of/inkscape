@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2008-01-08 09:45+0100\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -6190,8 +6190,8 @@ msgstr ""
 "Nastaviť <b>šírku a výšku</b> obdĺžnika; s <b>Ctrl</b> zamknúť pomer alebo "
 "natiahnuť iba v jednom rozmere"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6199,8 +6199,8 @@ msgstr ""
 "Zmeniť veľkosť obdĺžnika v smere X/Y; so <b>Shift</b> na osi Z; s <b>Ctrl</"
 "b> obmedziť na smery hrán alebo diagonál"
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6208,19 +6208,20 @@ msgstr ""
 "Zmeniť veľkosť obdĺžnika na osi Z; so <b>Shift</b> v smere X/Y; s <b>Ctrl</"
 "b> obmedziť na smery hrán alebo diagonál"
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+#, fuzzy
+msgid "Move the box in perspective"
 msgstr "Posunúť kváder v perspektíve."
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "Doladiť <b>šírku</b> elipsy, s <b>Ctrl</b> sa vytvorí kružnica"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Doladiť <b>výšku</b> elipsy, s <b>Ctrl</b> sa vytvorí kružnica"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6230,7 +6231,7 @@ msgstr ""
 "prichytávanie k uhlu; ťahanie <b>vnútri</b> elipsy urobí oblúk, <b>mimo</b> "
 "urobí segment"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6240,7 +6241,7 @@ msgstr ""
 "prichytávanie k uhlu; ťahanie <b>vnútri</b> elipsy urobí oblúk, <b>mimo</b> "
 "urobí segment"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6248,7 +6249,7 @@ msgstr ""
 "Nastaviť <b>polomer vrchola</b> hviezdy alebo mnohouholníka; s <b>Ctrl</b> "
 "zaoblenie; s <b>Alt</b> znáhodnenie"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6258,7 +6259,7 @@ msgstr ""
 "hviezdy radiálne (bez skosenia); so <b>Shift</b> zaoblenie; s <b>Alt</b> "
 "znáhodnenie"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6266,7 +6267,7 @@ msgstr ""
 "Zbaliť/rozbaliť špirálu <b>zvnútra</b>; s <b>Ctrl</b> prichytávanie k uhlu; "
 "s <b>Alt</b> konvergovať/divergovať"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6274,24 +6275,24 @@ msgstr ""
 "Zbaliť/rozbaliť špirálu <b>zvonka</b>; s <b>Ctrl</b> prichytávanie k uhlu; "
 "so <b>Shift</b> zmena mierky/otáčanie"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Prispôsobiť <b>vzdialenosť posunu</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Presunúť</b> vzorku výplne dovnútra objektu"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Mierka</b> vzorky vyplní rovnomerne"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Otočiť</b> vzorku výplne; s <b>Ctrl</b> prichytávanie k uhlu"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Ťahaním zmeníte veľkosť <b>rámca textového toku</b>"
 
@@ -6342,27 +6343,27 @@ msgstr "Vyberte <b>objekt</b>, ktorá sa má konvertovať na cestu."
 msgid "Converting objects to paths..."
 msgstr "Konvertovanie objektov na cesty..."
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Objekt na cestu"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "Vo výbere <b>nie sú objekty</b>, ktoré je možné konvertovať na cesty."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Vyberte <b>cestu</b>, ktorá sa má obrátiť."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 msgid "Reversing paths..."
 msgstr "Obrátenie smeru ciest..."
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Obrátiť smer cesty"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "Výber <b>neobsahuje cesty</b>, ktorých smer možno obrátiť."
 
@@ -6596,7 +6597,7 @@ msgstr "Vyberte <b>skupinu</b> na odstránenie zoskupenia."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "Vo výbere <b>nie sú objekty</b>, ktorým je možné zrušiť zoskupenie."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Zrušiť zoskupenie"
 
@@ -7265,7 +7266,7 @@ msgstr "<b>Obrázok so zlým odkazom</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Obrázok</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

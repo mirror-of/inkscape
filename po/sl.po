@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Inkscape package.
 # Copyright (C) 2004-2006 Free Software Foundation, Inc.
 # Boštjan Špetič <igzebedze@cyberpipe.org>, 2004, 2005.
-# Martin Srebotnjak, <miles@filmsi.net>, 2005.
+# Martin Srebotnjak, <miles@filmsi.net>, 2005, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.46\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
-"PO-Revision-Date: 2008-02-08 10:45+0100\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
+"PO-Revision-Date: 2008-02-26 10:26+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
 "MIME-Version: 1.0\n"
@@ -64,9 +64,8 @@ msgid "Create ellipse"
 msgstr "Ustvari elipso"
 
 #: ../src/box3d.cpp:317
-#, fuzzy
 msgid "<b>3D Box</b>"
-msgstr "<b>Rob</b>"
+msgstr "<b>3D-okvir</b>"
 
 #: ../src/box3d-context.cpp:450 ../src/box3d-context.cpp:457
 #: ../src/box3d-context.cpp:464 ../src/box3d-context.cpp:471
@@ -1058,11 +1057,11 @@ msgid "Export the bitmap file with these settings"
 msgstr "Izvozi bitno sliko s temi nastavitvami"
 
 #: ../src/dialogs/export.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Batch export %d selected object"
 msgid_plural "Batch export %d selected objects"
 msgstr[0] "Paketni izvoz %d izbranih predmetov"
-msgstr[1] "Paketni izvoz %d izbranih predmetov"
+msgstr[1] "Paketni izvoz %d izbranega predmeta"
 msgstr[2] "Paketni izvoz %d izbranih predmetov"
 msgstr[3] "Paketni izvoz %d izbranih predmetov"
 
@@ -1974,15 +1973,13 @@ msgstr "Nastavi slog poteze"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/dialogs/swatches.cpp:269
-#, fuzzy
 msgid "Set fill"
-msgstr "Odnastavi polnilo"
+msgstr "Nastavi polnilo"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/dialogs/swatches.cpp:277
-#, fuzzy
 msgid "Set stroke"
-msgstr "Odnastavi potezo"
+msgstr "Nastavi potezo"
 
 #: ../src/dialogs/swatches.cpp:496
 msgid "Change color definition"
@@ -3254,9 +3251,8 @@ msgid "PDF File"
 msgstr "Datoteka PDF"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:222
-#, fuzzy
 msgid "Cairo PS Output"
-msgstr "Izvoz Cairo PDF"
+msgstr "Izvoz Cairo PS"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:224
 msgid "Restrict to PS level"
@@ -3454,7 +3450,7 @@ msgid ""
 "will be rendered exactly as displayed."
 msgstr ""
 "Tiskaj kot sliko. Datoteka bo večja, ob preoblikovanjih bo prišlo do izgube "
-"kvalitete, bo pa vse izrisano natanko tako, kot je sedaj na zaslonu."
+"kakovosti, bo pa vse izrisano natanko tako, kot je sedaj na zaslonu."
 
 #: ../src/extension/internal/pdf-cairo.cpp:168
 #: ../src/extension/internal/ps.cpp:191
@@ -3570,7 +3566,7 @@ msgstr "Nastavitve uvoza PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:380
 msgid "pdfinput|medium"
-msgstr ""
+msgstr "srednje"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:381
 msgid "fine"
@@ -3973,7 +3969,7 @@ msgstr "Barva poteze"
 #. TRANSLATORS: This is a context string, only put the word "Normal" in your translation
 #: ../src/filter-enums.cpp:52
 msgid "filterBlendMode|Normal"
-msgstr ""
+msgstr "Navadno"
 
 #: ../src/filter-enums.cpp:53
 msgid "Multiply"
@@ -4142,31 +4138,33 @@ msgid "<b>Too much inset</b>, the result is empty."
 msgstr "<b>Preveč vloženo</b>, rezultat je prazen."
 
 #: ../src/flood-context.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Area filled, path with <b>%d</b> node created and unioned with selection."
 msgid_plural ""
 "Area filled, path with <b>%d</b> nodes created and unioned with selection."
 msgstr[0] ""
-"Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči, ki je "
+"Območje je zapolnjeno, ustvarjena je bila pot s/z <b>%d</b> vozlišči, ki je "
 "bila združena z izborom."
 msgstr[1] ""
-"Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči, ki je "
+"Območje je zapolnjeno, ustvarjena je bila pot s/z <b>%d</b> vozliščem, ki je "
 "bila združena z izborom."
 msgstr[2] ""
-"Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči, ki je "
-"bila združena z izborom."
+"Območje je zapolnjeno, ustvarjena je bila pot s/z <b>%d</b> vozliščema, ki "
+"je bila združena z izborom."
 msgstr[3] ""
-"Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči, ki je "
+"Območje je zapolnjeno, ustvarjena je bila pot s/z <b>%d</b> vozlišči, ki je "
 "bila združena z izborom."
 
 #: ../src/flood-context.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Area filled, path with <b>%d</b> node created."
 msgid_plural "Area filled, path with <b>%d</b> nodes created."
 msgstr[0] "Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči."
-msgstr[1] "Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči."
-msgstr[2] "Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči."
+msgstr[1] ""
+"Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozliščem."
+msgstr[2] ""
+"Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozliščema."
 msgstr[3] "Območje je zapolnjeno, ustvarjena je bila pot z <b>%d</b> vozlišči."
 
 #: ../src/flood-context.cpp:681 ../src/flood-context.cpp:976
@@ -4230,79 +4228,70 @@ msgstr "Krožen preliv - <b>vmesna točka</b>"
 
 #. TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a compound message
 #: ../src/gradient-context.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "%s selected"
-msgstr "Zadnja izbira"
+msgstr "%s izbranih"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/gradient-context.cpp:164 ../src/gradient-context.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid " out of %d gradient handle"
 msgid_plural " out of %d gradient handles"
-msgstr[0] "Premakni ročico preliva"
-msgstr[1] "Premakni ročico preliva"
-msgstr[2] "Premakni ročico preliva"
-msgstr[3] "Premakni ročico preliva"
+msgstr[0] " izmed %d ročic preliva"
+msgstr[1] " izmed %d ročice preliva"
+msgstr[2] " izmed %d ročic preliva"
+msgstr[3] " izmed %d ročic preliva"
 
 #. TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
 #: ../src/gradient-context.cpp:165 ../src/gradient-context.cpp:174
 #: ../src/gradient-context.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid " on %d selected object"
 msgid_plural " on %d selected objects"
-msgstr[0] "Paketni izvoz %d izbranih predmetov"
-msgstr[1] "Paketni izvoz %d izbranih predmetov"
-msgstr[2] "Paketni izvoz %d izbranih predmetov"
-msgstr[3] "Paketni izvoz %d izbranih predmetov"
+msgstr[0] " na %d izbranih predmetih"
+msgstr[1] " na %d izbranem predmetu"
+msgstr[2] " na %d izbranih predmetih"
+msgstr[3] " na %d izbranih predmetih"
 
 #. TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
 #: ../src/gradient-context.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "One handle merging %d stop (drag with <b>Shift</b> to separate) selected"
 msgid_plural ""
 "One handle merging %d stops (drag with <b>Shift</b> to separate) selected"
 msgstr[0] ""
-"Izbrana je ena ročica, ki spaja %d točk (povlecite s <b>Shift</b> za "
-"ločitev), izmed %d-ih ročic preliva na %d izbranih predmetih"
+"Izbrana je ena ročica, ki spaja %d točk (povlecite s <b>Shift</b> za ločitev)"
 msgstr[1] ""
-"Izbrana je ena ročica, ki spaja %d točk (povlecite s <b>Shift</b> za "
-"ločitev), izmed %d-ih ročic preliva na %d izbranih predmetih"
+"Izbrana je ena ročica, ki spaja %d točko (povlecite s <b>Shift</b> za "
+"ločitev)"
 msgstr[2] ""
-"Izbrana je ena ročica, ki spaja %d točk (povlecite s <b>Shift</b> za "
-"ločitev), izmed %d-ih ročic preliva na %d izbranih predmetih"
+"Izbrana je ena ročica, ki spaja %d točki (povlecite s <b>Shift</b> za "
+"ločitev)"
 msgstr[3] ""
-"Izbrana je ena ročica, ki spaja %d točk (povlecite s <b>Shift</b> za "
-"ločitev), izmed %d-ih ročic preliva na %d izbranih predmetih"
+"Izbrana je ena ročica, ki spaja %d točke (povlecite s <b>Shift</b> za "
+"ločitev)"
 
 #. TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
 #: ../src/gradient-context.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> gradient handle selected out of %d"
 msgid_plural "<b>%d</b> gradient handles selected out of %d"
-msgstr[0] ""
-"<b>%d</b> izbranih ročic preliva izmed %d-ih na %d izbranih predmetih"
-msgstr[1] ""
-"<b>%d</b> izbranih ročic preliva izmed %d-ih na %d izbranih predmetih"
-msgstr[2] ""
-"<b>%d</b> izbranih ročic preliva izmed %d-ih na %d izbranih predmetih"
-msgstr[3] ""
-"<b>%d</b> izbranih ročic preliva izmed %d-ih na %d izbranih predmetih"
+msgstr[0] "<b>%d</b> izbranih ročic preliva izmed %d"
+msgstr[1] "<b>%d</b> izbranih ročic preliva izmed %d"
+msgstr[2] "<b>%d</b> izbranih ročic preliva izmed %d"
+msgstr[3] "<b>%d</b> izbranih ročic preliva izmed %d"
 
 #. TRANSLATORS: The plural refers to number of selected objects
 #: ../src/gradient-context.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "<b>No</b> gradient handles selected out of %d on %d selected object"
 msgid_plural ""
 "<b>No</b> gradient handles selected out of %d on %d selected objects"
-msgstr[0] ""
-"<b>Nič</b> ročic preliva izbranih izmed %d-ih na %d izbranih predmetih"
-msgstr[1] ""
-"<b>Nič</b> ročic preliva izbranih izmed %d-ih na %d izbranih predmetih"
-msgstr[2] ""
-"<b>Nič</b> ročic preliva izbranih izmed %d-ih na %d izbranih predmetih"
-msgstr[3] ""
-"<b>Nič</b> ročic preliva izbranih izmed %d-ih na %d izbranih predmetih"
+msgstr[0] "<b>Nič</b> ročic preliva izbranih izmed %d na %d izbranih predmetih"
+msgstr[1] "<b>Nič</b> ročic preliva izbranih izmed %d na %d izbranih predmetih"
+msgstr[2] "<b>Nič</b> ročic preliva izbranih izmed %d na %d izbranih predmetih"
+msgstr[3] "<b>Nič</b> ročic preliva izbranih izmed %d na %d izbranih predmetih"
 
 #: ../src/gradient-context.cpp:385 ../src/gradient-context.cpp:478
 #: ../src/widgets/gradient-vector.cpp:735
@@ -4789,11 +4778,11 @@ msgstr "Datoteka _zapisovanja seje:"
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2630
 msgid "Shared SVG whiteboard tool."
-msgstr ""
+msgstr "Orodje Skupna risalna tabla SVG."
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2631
 msgid "Based on the Pedro XMPP client"
-msgstr ""
+msgstr "Temelji na odjemalcu Pedro XMPP"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
 msgid "Select a location and filename"
@@ -4836,104 +4825,101 @@ msgid "Move handle"
 msgstr "Premakni ročico"
 
 #: ../src/libgdl/gdl-dock-bar.c:108
-#, fuzzy
 msgid "Master"
-msgstr "Rasteriziraj"
+msgstr "Gospodar"
 
 #: ../src/libgdl/gdl-dock-bar.c:109
 msgid "GdlDockMaster object which the dockbar widget is attached to"
-msgstr ""
+msgstr "Predmet GdlDockMaster, na katerega je pripet gradnik sidrne vrstice"
 
 #: ../src/libgdl/gdl-dock-bar.c:116
-#, fuzzy
 msgid "Dockbar style"
-msgstr "Sidrno"
+msgstr "Slog sidrne vrstice"
 
 #: ../src/libgdl/gdl-dock-bar.c:117
 msgid "Dockbar style to show items on it"
-msgstr ""
+msgstr "Slog sidrne vrstice za prikaz elementov"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify"
-msgstr ""
+msgstr "Ikoniziraj"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify this dock"
-msgstr ""
+msgstr "Ikoniziraj to sidrišče"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close"
-msgstr "_Zapri"
+msgstr "Zapri"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close this dock"
-msgstr "Zapri to okno dokumenta"
+msgstr "Zapri to sidrišče"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:706
 #: ../src/libgdl/gdl-dock-tablabel.c:128
 msgid "Controlling dock item"
-msgstr ""
+msgstr "Nadzorni element sidranja"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:707
 msgid "Dockitem which 'owns' this grip"
-msgstr ""
+msgstr "Element sidrišča, ki ima 'v lasti' ta prijem"
 
 #: ../src/libgdl/gdl-dock-item.c:287
-#, fuzzy
 msgid "Orientation"
-msgstr "Postavitev strani:"
+msgstr "Usmerjenost"
 
 #: ../src/libgdl/gdl-dock-item.c:288
 msgid "Orientation of the docking item"
-msgstr ""
+msgstr "Usmerjenost sidranega elementa"
 
 #: ../src/libgdl/gdl-dock-item.c:303
 msgid "Resizable"
-msgstr ""
+msgstr "Spremenljive velikosti"
 
 #: ../src/libgdl/gdl-dock-item.c:304
 msgid "If set, the dock item can be resized when docked in a paned"
 msgstr ""
+"Če je nastavljeno, je mogoče elementu sidranja spremeniti velikost, ko je "
+"zasidran v podoknu"
 
 #: ../src/libgdl/gdl-dock-item.c:311
-#, fuzzy
 msgid "Item behavior"
-msgstr "Vedenje"
+msgstr "Vedenje elementa"
 
 #: ../src/libgdl/gdl-dock-item.c:312
 msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
 msgstr ""
+"Splošno vedenje elementa sidranja (ali lahko plava, če je zaklenjen ipd.)"
 
 #: ../src/libgdl/gdl-dock-item.c:320 ../src/libgdl/gdl-dock-master.c:148
-#, fuzzy
 msgid "Locked"
-msgstr "Zakleni"
+msgstr "Zaklenjeno"
 
 #: ../src/libgdl/gdl-dock-item.c:321
 msgid ""
 "If set, the dock item cannot be dragged around and it doesn't show a grip"
 msgstr ""
+"Če je nastavljeno, elementa sidranja ni mogoče vleči naokoli in ne prikaže "
+"ročice"
 
 #: ../src/libgdl/gdl-dock-item.c:329
 msgid "Preferred width"
-msgstr ""
+msgstr "Priporočena širina"
 
 #: ../src/libgdl/gdl-dock-item.c:330
 msgid "Preferred width for the dock item"
-msgstr ""
+msgstr "Priporočena širina sidranega elementa"
 
 #: ../src/libgdl/gdl-dock-item.c:336
-#, fuzzy
 msgid "Preferred height"
-msgstr "Višina vira"
+msgstr "Priporočena višina"
 
 #: ../src/libgdl/gdl-dock-item.c:337
 msgid "Preferred height for the dock item"
-msgstr ""
+msgstr "Priporočena višina sidranega elementa"
 
 #: ../src/libgdl/gdl-dock-item.c:616
 #, c-format
@@ -4941,6 +4927,8 @@ msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
 msgstr ""
+"Predmeta sidranja (%p vrste %s) ni mogoče dodati v %s. Uporabite GdlDock ali "
+"nek drug sestavljen predmet sidranja."
 
 #: ../src/libgdl/gdl-dock-item.c:623
 #, c-format
@@ -4948,23 +4936,23 @@ msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
 msgstr ""
+"Poskus dodajanja gradnika vrste %s k %s, vendar ta lahko vsebuje le en "
+"gradnik naenkrat; trenutno že vsebuje gradnik vrste %s"
 
 #: ../src/libgdl/gdl-dock-item.c:1345 ../src/libgdl/gdl-dock-item.c:1390
 #, c-format
 msgid "Unsupported docking strategy %s in dock object of type %s"
-msgstr ""
+msgstr "Nepodprta strategija sidranja %s pri predmetu sidranja vrste %s"
 
 #. UnLock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1479
-#, fuzzy
 msgid "UnLock"
-msgstr "Zakleni"
+msgstr "Odkleni"
 
 #. Hide menuitem.
 #: ../src/libgdl/gdl-dock-item.c:1486
-#, fuzzy
 msgid "Hide"
-msgstr "_Skrij"
+msgstr "Skrij"
 
 #. Lock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1491
@@ -4974,43 +4962,44 @@ msgstr "Zakleni"
 #: ../src/libgdl/gdl-dock-item.c:1717
 #, c-format
 msgid "Attempt to bind an unbound item %p"
-msgstr ""
+msgstr "Poskusi vezati nevezan element %p"
 
 #: ../src/libgdl/gdl-dock-master.c:141 ../src/libgdl/gdl-dock.c:183
-#, fuzzy
 msgid "Default title"
-msgstr "Privzete _enote:"
+msgstr "Privzeti naslov"
 
 #: ../src/libgdl/gdl-dock-master.c:142
 msgid "Default title for newly created floating docks"
-msgstr ""
+msgstr "Privzeti naslov za novo ustvarjena plavajoča sidrišča"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
+"Če je nastavljeno na 1, so elementi sidranja, privezani na glavnega, "
+"zaklenjeni; če je 0, so vsi nezaklenjeni; -1 nakazuje nedoslednost med "
+"elementi"
 
 #: ../src/libgdl/gdl-dock-master.c:157 ../src/libgdl/gdl-switcher.c:707
-#, fuzzy
 msgid "Switcher Style"
-msgstr "Sešij tlakovce"
+msgstr "Slog preklopnika"
 
 #: ../src/libgdl/gdl-dock-master.c:158 ../src/libgdl/gdl-switcher.c:708
-#, fuzzy
 msgid "Switcher buttons style"
-msgstr "Preklopljeno na naslednjo plast."
+msgstr "Slog gumbov preklopnika"
 
 #: ../src/libgdl/gdl-dock-master.c:165
-#, fuzzy
 msgid "Expand direction"
-msgstr "Razširi razmik med črtami"
+msgstr "Razširi smer"
 
 #: ../src/libgdl/gdl-dock-master.c:166
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
 "given direction"
 msgstr ""
+"Dovoli elementom sidranja gospodarja, da razširijo svoje vsebovane predmete "
+"sidranja v podani smeri"
 
 #: ../src/libgdl/gdl-dock-master.c:781
 #, c-format
@@ -5018,6 +5007,8 @@ msgid ""
 "master %p: unable to add object %p[%s] to the hash.  There already is an "
 "item with that name (%p)."
 msgstr ""
+"gospodar %p: predmeta %p[%s] ni mogoče dodati v razpršeno tabelo.  Element s "
+"tem imenom (%p) že obstaja."
 
 #: ../src/libgdl/gdl-dock-master.c:954
 #, c-format
@@ -5025,6 +5016,8 @@ msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
 msgstr ""
+"Novi kontrolnik sidrišča %p je samodejen.  Le predmeti ročnega sidranja naj "
+"bodo poimenovani kontrolnik."
 
 #: ../src/libgdl/gdl-dock-notebook.c:134
 #: ../src/ui/dialog/align-and-distribute.cpp:907
@@ -5035,9 +5028,8 @@ msgid "Page"
 msgstr "Stran"
 
 #: ../src/libgdl/gdl-dock-notebook.c:135
-#, fuzzy
 msgid "The index of the current page"
-msgstr "Preimenuj trenutno plast"
+msgstr "Kazalo trenutne strani"
 
 #: ../src/libgdl/gdl-dock-object.c:120 ../src/ui/widget/page-sizer.cpp:195
 msgid "Name"
@@ -5045,43 +5037,39 @@ msgstr "Ime"
 
 #: ../src/libgdl/gdl-dock-object.c:121
 msgid "Unique name for identifying the dock object"
-msgstr ""
+msgstr "Enkratno ime za identifikacijo predmeta sidrišča"
 
 #: ../src/libgdl/gdl-dock-object.c:128
-#, fuzzy
 msgid "Long name"
-msgstr "Brezimen"
+msgstr "Dolgo ime"
 
 #: ../src/libgdl/gdl-dock-object.c:129
-#, fuzzy
 msgid "Human readable name for the dock object"
-msgstr "Prosta oznaka predmeta"
+msgstr "Berljivo ime predmeta sidranja"
 
 #: ../src/libgdl/gdl-dock-object.c:135
-#, fuzzy
 msgid "Stock Icon"
-msgstr "Zloži preglede"
+msgstr "Naložena ikona"
 
 #: ../src/libgdl/gdl-dock-object.c:136
 msgid "Stock icon for the dock object"
-msgstr ""
+msgstr "Naložena ikona za predmet sidranja"
 
 #: ../src/libgdl/gdl-dock-object.c:142
 msgid "Pixbuf Icon"
-msgstr ""
+msgstr "Ikona Pixbuf"
 
 #: ../src/libgdl/gdl-dock-object.c:143
 msgid "Pixbuf icon for the dock object"
-msgstr ""
+msgstr "Ikona Pixbuf za predmet sidranja"
 
 #: ../src/libgdl/gdl-dock-object.c:148
-#, fuzzy
 msgid "Dock master"
-msgstr "Zakleni plast"
+msgstr "Glavno sidrišče"
 
 #: ../src/libgdl/gdl-dock-object.c:149
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "Glavno sidrišče, na katerega je privezan ta predmet sidranja"
 
 #: ../src/libgdl/gdl-dock-object.c:434
 #, c-format
@@ -5089,6 +5077,8 @@ msgid ""
 "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
 "hasn't implemented this method"
 msgstr ""
+"Klic gdl_dock_object_dock v predmetu sidranja %p (vrsta predmeta: %s), kar "
+"ta metoda ne podpira"
 
 #: ../src/libgdl/gdl-dock-object.c:563
 #, c-format
@@ -5096,101 +5086,102 @@ msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
 msgstr ""
+"Zahtevana je operacija sidranja v neprivezanem predmetu %p. Program se bo "
+"morda sesul"
 
 #: ../src/libgdl/gdl-dock-object.c:570
 #, c-format
 msgid "Cannot dock %p to %p because they belong to different masters"
-msgstr ""
+msgstr "Sidranje %p na %p ni možno, kajti pripadata različnim gospodarjem"
 
 #: ../src/libgdl/gdl-dock-object.c:612
 #, c-format
 msgid ""
 "Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
+"Poskus priveza na %p že privezanega predmeta sidranja %p (trenutni gospodar: "
+"%p)"
 
 #: ../src/libgdl/gdl-dock-paned.c:132
-#, fuzzy
 msgid "Position"
-msgstr "Položaj:"
+msgstr "Položaj"
 
 #: ../src/libgdl/gdl-dock-paned.c:133
 msgid "Position of the divider in pixels"
-msgstr ""
+msgstr "Položaj ločila v slikovnih točkah"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:143
-#, fuzzy
 msgid "Sticky"
-msgstr "majcen"
+msgstr "Lepljivo"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:144
 msgid ""
 "Whether the placeholder will stick to its host or move up the hierarchy when "
 "the host is redocked"
 msgstr ""
+"Ali se bo ograda držala gostitelja ali se premaknila v hierarhiji, ko bo "
+"gostitelj ponovno zasidran"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:151
-#, fuzzy
 msgid "Host"
-msgstr "razširi"
+msgstr "Gostitelj"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:152
 msgid "The dock object this placeholder is attached to"
-msgstr ""
+msgstr "Predmet sidranja, na katerega je privezana ta ograda"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:159
-#, fuzzy
 msgid "Next placement"
-msgstr "Postavitev opreme"
+msgstr "Naslednja postavitev"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:160
 msgid ""
 "The position an item will be docked to our host if a request is made to dock "
 "to us"
 msgstr ""
+"Položaj, na katerega bo sidran element na našega gostitelja, če bo podana "
+"zahteva za sidranje na nas"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:170
 msgid "Width for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Širina gradnika, ko je privezan na ogrado"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:178
 msgid "Height for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Višina gradnika, ko je privezan na ogrado"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:184
-#, fuzzy
 msgid "Floating Toplevel"
-msgstr "Plavajoče"
+msgstr "Plavajoča vrhnja raven"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:185
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
-msgstr ""
+msgstr "Ali ograda nadomešča vrhovno plavajoče sidrišče"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:191
-#, fuzzy
 msgid "X-Coordinate"
-msgstr "Koordinate"
+msgstr "X-koordinata"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:192
 msgid "X-Coordinate fow dock when floating"
-msgstr ""
+msgstr "X-koordinata sidrišča, če je plavajoče"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:198
-#, fuzzy
 msgid "Y-Coordinate"
-msgstr "Koordinate"
+msgstr "Y-koordinata"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:199
 msgid "Y-Coordinate fow dock when floating"
-msgstr ""
+msgstr "Y-koordinata sidrišča, če je plavajoče"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:494
 msgid "Attempt to dock a dock object to an unbound placeholder"
-msgstr ""
+msgstr "Poskus sidranja predmeta sidranja na nevezano ogrado"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:618
 #, c-format
 msgid "Got a detach signal from an object (%p) who is not our host %p"
-msgstr ""
+msgstr "Prejet signal odveze predmeta (%p), ki ni naš gostitelj %p"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:643
 #, c-format
@@ -5198,10 +5189,12 @@ msgid ""
 "Something weird happened while getting the child placement for %p from "
 "parent %p"
 msgstr ""
+"Nekaj čudnega se je zgodilo pri pridobivanju postavitve otroka za %p od "
+"starša %p"
 
 #: ../src/libgdl/gdl-dock-tablabel.c:129
 msgid "Dockitem which 'owns' this tablabel"
-msgstr ""
+msgstr "Element sidranja, ki ima 'v lasti' to ime"
 
 #: ../src/libgdl/gdl-dock.c:175 ../src/ui/dialog/inkscape-preferences.cpp:464
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
@@ -5210,44 +5203,40 @@ msgstr "Plavajoče"
 
 #: ../src/libgdl/gdl-dock.c:176
 msgid "Whether the dock is floating in its own window"
-msgstr ""
+msgstr "Ali je sidrišče plavajoče v lastnem oknu"
 
 #: ../src/libgdl/gdl-dock.c:184
 msgid "Default title for the newly created floating docks"
-msgstr ""
+msgstr "Privzeti naslov za novo ustvarjena plavajoča sidrišča"
 
 #: ../src/libgdl/gdl-dock.c:191
 msgid "Width for the dock when it's of floating type"
-msgstr ""
+msgstr "Širina sidrišča, če je plavajoče vrste"
 
 #: ../src/libgdl/gdl-dock.c:199
 msgid "Height for the dock when it's of floating type"
-msgstr ""
+msgstr "Višina sidrišča, če je plavajoče vrste"
 
 #: ../src/libgdl/gdl-dock.c:206
-#, fuzzy
 msgid "Float X"
-msgstr "Plavajoče"
+msgstr "Plavajoče X"
 
 #: ../src/libgdl/gdl-dock.c:207
-#, fuzzy
 msgid "X coordinate for a floating dock"
-msgstr "Koordinata X izvora mreže"
+msgstr "Koordinata X plavajočega sidrišča"
 
 #: ../src/libgdl/gdl-dock.c:214
-#, fuzzy
 msgid "Float Y"
-msgstr "Plavajoče"
+msgstr "Plavajoče Y"
 
 #: ../src/libgdl/gdl-dock.c:215
-#, fuzzy
 msgid "Y coordinate for a floating dock"
-msgstr "Koordinata Y izvora mreže"
+msgstr "Koordinata Y plavajočega sidrišča"
 
 #: ../src/libgdl/gdl-dock.c:499
 #, c-format
 msgid "Dock #%d"
-msgstr ""
+msgstr "Sidrišče #%d"
 
 #: ../src/libnrtype/FontFactory.cpp:774
 msgid "Ignoring font without family that will crash Pango"
@@ -5402,19 +5391,16 @@ msgid "Scale the width of the stroke path relative to its length"
 msgstr "Spremeni merilo širine poti poteze glede na njeno dolžino"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:57
-#, fuzzy
 msgid "Bend path"
 msgstr "Ukrivi pot"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:57
-#, fuzzy
 msgid "Path along which to bend the original path"
-msgstr "Ustvari razširitev kot predmet, povezan z izvirno potjo"
+msgstr "Pot, vzdolž katere naj bo ukrivljena izvorna pot"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:58
-#, fuzzy
 msgid "Width of the path"
-msgstr "Širina vzorca"
+msgstr "Širina poti"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:65
@@ -5422,18 +5408,18 @@ msgid "Width in units of length"
 msgstr "Širina v dolžinskih enotah"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
-#, fuzzy
 msgid "Scale the width of the path in units of its length"
-msgstr "Spremeni merilo višine vzorca v enotah njegove dolžine"
+msgstr "Spremeni merilo višine poti v enotah njene dolžine"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
-#, fuzzy
 msgid "Original path is vertical"
-msgstr "Vzorec je navpičen"
+msgstr "Izvorna pot je navpična"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
 msgstr ""
+"Zasuka izvirnik pod kotom 90 stopinj, preden ga ukrivi vzdolž poti "
+"ukrivljanja"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:53
 msgid "Single"
@@ -5499,13 +5485,12 @@ msgid "Pattern is vertical"
 msgstr "Vzorec je navpičen"
 
 #: ../src/live_effects/lpe-slant.cpp:18
-#, fuzzy
 msgid "Slant factor"
-msgstr "Čista barva"
+msgstr "Faktor nagnjenosti"
 
 #: ../src/live_effects/lpe-slant.cpp:18
 msgid "y = y + x*(slant factor)"
-msgstr ""
+msgstr "y = y + x*(faktor nagnjenosti)"
 
 #: ../src/live_effects/lpe-slant.cpp:19 ../src/widgets/toolbox.cpp:4842
 msgid "Center"
@@ -5513,12 +5498,11 @@ msgstr "Sredinsko"
 
 #: ../src/live_effects/lpe-slant.cpp:19
 msgid "The x-coord of this point is around which the slant will happen"
-msgstr ""
+msgstr "Okoli koordinate X te točke se bo izvedla nagnjenost"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:21
-#, fuzzy
 msgid "Stack step"
-msgstr "Zloži preglede"
+msgstr "Korak skladanja"
 
 #: ../src/live_effects/parameter/parameter.cpp:138
 msgid "Change scalar parameter"
@@ -6186,8 +6170,8 @@ msgstr ""
 "Prilagodite <b>višino in širino</b> pravokotnika; s <b>Ctrl</b> zaklenete "
 "razmerje ali raztegujete le eno razseznost"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6195,8 +6179,8 @@ msgstr ""
 "Spremeni velikost v smeri X/Y; s tipko <b>Shift</b> vzdolž osi Z; z <b>Ctrl</"
 "b> za omejitev na smeri robov ali diagonal."
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6204,19 +6188,20 @@ msgstr ""
 "Spremeni velikost okvira vzdolž osi Z; s tipko <b>Shift</b> v smeri X/Y; z "
 "<b>Ctrl</b> za omejitev na smeri robov ali diagonal."
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+#, fuzzy
+msgid "Move the box in perspective"
 msgstr "Premakni okvir v perspektivo."
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "Prilagodite <b>širino</b> elipse; s <b>Ctrl</b> narišete krog"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Prilagodite <b>višino</b> elipse; s <b>Ctrl</b> narišete krog"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6225,7 +6210,7 @@ msgstr ""
 "Nastavitev <b>začetne točke</b> loka ali odseka; s <b>Ctrl</b> preskakujete "
 "po kotih; za lok povlecite <b>znotraj</b> elipse in za odsek <b>zunaj</b>"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6234,7 +6219,7 @@ msgstr ""
 "Nastavitev <b>končne točke</b> loka ali odseka; s <b>Ctrl</b> preskakujete "
 "po kotih; za lok povlecite <b>znotraj</b> elipse in za odsek <b>zunaj</b>"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6242,7 +6227,7 @@ msgstr ""
 "Prilagodite <b>polmer vrhov</b> zvezde ali mnogokotnika; s <b>Ctrl</b> ju "
 "zaobljite; z <b>Alt</b> napravite naključno"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6252,7 +6237,7 @@ msgstr ""
 "ostanejo kraki pravilni (ne zamaknjeni); s <b>Shift</b> jo zaobljite; z "
 "<b>Alt</b> napravite naključno"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6260,7 +6245,7 @@ msgstr ""
 "Zavijte/razvijte spiralo od <b>znotraj</b>; s <b>Ctrl</b> preskakujete po "
 "kotih; z <b>Alt</b> prilagodite konvergenčnost"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6268,24 +6253,24 @@ msgstr ""
 "Zavijte/razvijte spiralo od <b>zunaj</b>; s <b>Ctrl</b> preskakujete po "
 "kotih; s <b>Shift</b> jo razvlečete/vrtite"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Prilagodite <b>razdaljo zamika</b>."
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Premakne</b> vzorec v predmetu."
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "Enakomerno <b>spremeni velikost</b> vzorca."
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Vrtite</b>vzorec; s <b>Ctrl</b> preskakujte po kotih."
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Povlecite za umeritev <b>okvirja tekočega besedila</b>."
 
@@ -6334,27 +6319,27 @@ msgstr "Izberite nekaj <b>predmetov</b> za pretvorbo v poti."
 msgid "Converting objects to paths..."
 msgstr "Pretvarjanje predmetov v poti ..."
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Predmet v pot"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "Med izbiro <b>ni predmetov</b>, ki bi jih lahko pretvoril v črte."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Izberite <b>eno ali več poti</b> za spremembo smeri."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 msgid "Reversing paths..."
 msgstr "Preobračanje poti ..."
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Preobrni pot"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "V izbiri <b>ni poti</b>, ki bi jih lahko obrnil."
 
@@ -6436,14 +6421,12 @@ msgid "Finishing freehand"
 msgstr "Dokončaj prostoročno"
 
 #: ../src/persp3d.cpp:321
-#, fuzzy
 msgid "Toggle vanishing point"
-msgstr "Spoji izginjajoče točke"
+msgstr "Vključi/izključi izginjajočo točko"
 
 #: ../src/persp3d.cpp:332
-#, fuzzy
 msgid "Toggle multiple vanishing points"
-msgstr "Razcepi izginjajoče točke"
+msgstr "Vključi/izključi več izginjajočih točk"
 
 #: ../src/preferences.cpp:59
 #, c-format
@@ -6593,7 +6576,7 @@ msgstr "Izberite <b>skupino</b> za razdruženje"
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "Med izbranimi predmeti <b>ni skupin</b>, ki bi jih lahko razdružili."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Razdruži"
 
@@ -7266,7 +7249,7 @@ msgstr "<b>Slika s slabo povezavo</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Slika</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"
@@ -7401,14 +7384,13 @@ msgid "<b>Text</b> (%s, %s)"
 msgstr "<b>Besedilo</b> (%s, %s)"
 
 #: ../src/sp-tref.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Cloned character data</b> from: %s"
-msgstr "<b>Klon</b> predmeta %s"
+msgstr "<b>Podatki kloniranega znaka</b>: %s"
 
 #: ../src/sp-tref.cpp:363
-#, fuzzy
 msgid "<b>Orphaned cloned character data</b>"
-msgstr "<b>Klon-sirota</b>"
+msgstr "<b>Podatki osirotelega kloniranega znaka</b>"
 
 #: ../src/sp-tspan.cpp:285
 msgid "<b>Text span</b>"
@@ -7824,7 +7806,7 @@ msgstr "Vtipkajte besedilo"
 
 #: ../src/text-editing.cpp:40
 msgid "You cannot edit <b>cloned character data</b>."
-msgstr ""
+msgstr "<b>Podatkov kloniranega znaka</b> ne morete urejati."
 
 #: ../src/tools-switch.cpp:148
 msgid ""
@@ -8620,9 +8602,8 @@ msgstr ""
 
 #. TRANSLATORS: In Grid|_New translate only the word _New. It ref to grid
 #: ../src/ui/dialog/document-properties.cpp:119
-#, fuzzy
 msgid "Grid|_New"
-msgstr "Mreža"
+msgstr "_Nov"
 
 #: ../src/ui/dialog/document-properties.cpp:119
 msgid "Create new grid."
@@ -8918,6 +8899,11 @@ msgid ""
 "component from the input is passed to the output. The last column does not "
 "depend on input colors, so can be used to adjust a constant component value."
 msgstr ""
+"Ta matrika določa linearno transformacijo nad barvnim prostorom. Vsaka "
+"vrstica vpliva na eno od barvnih komponent. Vsak stolpec določa, koliko "
+"vsake barvne komponente je z vhoda posredovano naprej na izhod. Zadnji "
+"stolpec ni odvisen od vhodnih barv, torej ga lahko uporabite za prilagajanje "
+"konstantne komponentne vrednosti."
 
 #. pack_start(_fromSVGElement, false, false);
 #: ../src/ui/dialog/filter-effects-dialog.cpp:614
@@ -8935,11 +8921,11 @@ msgstr "Izberite sliko, ki bo uporabljena kot vhod feImage (feSlika)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:778
 msgid "This SVG filter effect does not require any parameters."
-msgstr ""
+msgstr "Ta učinek filtra SVG ne potrebuje nobenih parametrov."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:784
 msgid "This SVG filter effect is not yet implemented in Inkscape."
-msgstr ""
+msgstr "Ta učinek filtra SVG v Inkscape še ni implementiran."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:975
 msgid "Light Source:"
@@ -8947,11 +8933,11 @@ msgstr "Vir svetlobe:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:992
 msgid "Direction angle for the light source on the XY plane, in degrees"
-msgstr ""
+msgstr "Kot smeri vira svetlobe na ravnini XY, v stopinjah"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:993
 msgid "Direction angle for the light source on the YZ plane, in degrees"
-msgstr ""
+msgstr "Kot smeri vira svetlobe na ravnini YZ, v stopinjah"
 
 #. default x:
 #. default y:
@@ -8964,23 +8950,20 @@ msgstr "Mesto"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "X coordinate"
-msgstr "Koordinata X:"
+msgstr "Koordinata X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Y coordinate"
-msgstr "Koordinata Y:"
+msgstr "Koordinata Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Z coordinate"
-msgstr "Koordinata X:"
+msgstr "Koordinata Z"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
 msgid "Points At"
@@ -8992,7 +8975,7 @@ msgstr "Eksponent odsevnosti"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
 msgid "Exponent value controlling the focus for the light source"
-msgstr ""
+msgstr "Eksponentna vrednost, ki nadzira gorišče vira svetlobe"
 
 #. TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1005
@@ -9005,6 +8988,9 @@ msgid ""
 "light source and the point to which it is pointing at) and the spot light "
 "cone. No light is projected outside this cone."
 msgstr ""
+"To je kot med svetlobno osjo (osjo med virom svetlobe in točko, v katero je "
+"ta usmerjen) in stožcem snopa svetlobe. Zunaj tega stožca svetloba ni "
+"projicirana."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1065
 msgid "New light source"
@@ -9071,18 +9057,16 @@ msgid "No effect selected"
 msgstr "Izbran ni noben učinek"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2094
-#, fuzzy
 msgid "No filter selected"
-msgstr "Izbran ni noben učinek"
+msgstr "Izbran ni noben filter"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2129
-#, fuzzy
 msgid "Effect parameters"
-msgstr "<b>Parametri učinka</b>"
+msgstr "Parametri učinka"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2130
 msgid "Filter General Settings"
-msgstr ""
+msgstr "Splošne nastavitve filtra"
 
 #. default x:
 #. default y:
@@ -9091,13 +9075,12 @@ msgid "Coordinates"
 msgstr "Koordinate"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
-#, fuzzy
 msgid "X coordinate of the left corners of filter effects region"
-msgstr "Ustvari in tlakuj nove klone izbranega predmeta"
+msgstr "Koordinata X levih oglišč območja učinkovanja filtra"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
 msgid "Y coordinate of the upper corners of filter effects region"
-msgstr ""
+msgstr "Koordinata Y zgornjih robov območja učinkovanja filtra"
 
 #. default width:
 #. default height:
@@ -9107,14 +9090,12 @@ msgid "Dimensions"
 msgstr "Mere"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
-#, fuzzy
 msgid "Width of filter effects region"
-msgstr "Širina izbire"
+msgstr "Širina območja učinkovanja filtra"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
-#, fuzzy
 msgid "Height of filter effects region"
-msgstr "Višina izbire"
+msgstr "Višina območja učinkovanja filtra"
 
 #. # end multiple scan
 #. ## end mode page
@@ -9130,6 +9111,10 @@ msgid ""
 "convenience shortcuts to allow commonly used color operations to be "
 "performed without specifying a complete matrix."
 msgstr ""
+"Nakazuje vrsto operacije z matriko. Ključna beseda 'matrika' nakazuje, da "
+"bodo zagotovljena polna matrika vrednosti 5x4. Druge ključne besede "
+"predstavljajo tipke za bližnjico, ki omogočajo rabo pogosto uporabljenih "
+"barvnih operacij brez določanja celotne matrike."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2194
 msgid "Value(s)"
@@ -9153,6 +9138,9 @@ msgid ""
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
 "values of the first and second inputs respectively."
 msgstr ""
+"Če je aritmetična operacija izbrana, bo vsaka točka rezultata izračunana s "
+"formulo k1*i1*i2 + k2*i1 + k3*i2 + k4, kjer sta i1 in i2 točkovni vrednosti "
+"prvega in drugega vhoda."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2209
 msgid "K2"
@@ -9167,14 +9155,12 @@ msgid "K4"
 msgstr "K4"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
-#, fuzzy
 msgid "width of the convolve matrix"
-msgstr "Širina vzorca"
+msgstr "Širina konvolucijske matrike"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
-#, fuzzy
 msgid "height of the convolve matrix"
-msgstr "Višina pravokotnika, ki naj se zapolni"
+msgstr "Višina konvolucijske matrike"
 
 #. default x:
 #. default y:
@@ -9187,12 +9173,16 @@ msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
+"Koordinata X ciljne točke v konvolucijski matriki. Konvolucija se izbede na "
+"slikovnih točkah okoli te točke."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
+"Koordinata Y ciljne točke v konvolucijski matriki. Konvolucija se izbede na "
+"slikovnih točkah okoli te točke."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 msgid "Kernel"
@@ -9207,6 +9197,12 @@ msgid ""
 "the matrix diagonal) while a matrix filled with a constant non-zero value "
 "would lead to a common blur effect."
 msgstr ""
+"Ta matrika opisuje konvolucijo, ki se izvede nad vhodno sliko, da bi "
+"izračunali barve točk na izhodu. Različne razporeditve vrednosti v tej "
+"matriki povzročijo različne možne vidne učinke. Identifikacijska matrika "
+"povzroči učinek zabrisa gibanja (vzporedno z diagonalo matrike), medtem ko "
+"matrika, zapolnjena s konstantnimi neničelnimi vrednostmi pripelje do "
+"navadnega učinka zabrisanja."
 
 #. TODO: svg spec: The default value is the sum of all values in kernelMatrix, with the exception that if the sum is zero, then the divisor is set to 1.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2219
@@ -9220,6 +9216,10 @@ msgid ""
 "divisor that is the sum of all the matrix values tends to have an evening "
 "effect on the overall color intensity of the result."
 msgstr ""
+"Po uporabi kernelMatrix na vhodni sliki je številka rezultata deljena z "
+"deliteljem, da določi končno ciljno barvno vredonst. Delitelj, ki je vsota "
+"vseh matričnih vrednosti, ima nekakšen večerni učinek na celotno barvno "
+"intenzivnost rezultata."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2220
 msgid "Bias"
@@ -9230,6 +9230,8 @@ msgid ""
 "This value is added to each component. This is useful to define a constant "
 "value as the zero response of the filter."
 msgstr ""
+"Vrednost je dodana vsaki komponenti. To je uporabno za določanje konstantne "
+"vrednosti kot ničelnega odziva filtra."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
 msgid "Edge Mode"
@@ -9241,6 +9243,9 @@ msgid ""
 "that the matrix operations can be applied when the kernel is positioned at "
 "or near the edge of the input image."
 msgstr ""
+"Določa, kako prilagojeno razširiti vhodno sliko z barvnimi vrednostmi, da je "
+"matrična operacija lahko izvedena, ko je jedro postavljeno na ali blizu roba "
+"vhodne slike."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 msgid "Preserve Alpha"
@@ -9248,7 +9253,7 @@ msgstr "Ohrani alfo"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 msgid "If set, the alpha channel won't be altered by this filter primitive."
-msgstr ""
+msgstr "Če je nastavljeno, kanal alfa ne bo spremenjen s to osnovo filtra."
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
@@ -9258,7 +9263,7 @@ msgstr "Razpršena barva"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
 msgid "Defines the color of the light source"
-msgstr ""
+msgstr "Določa barvo svetlobnega vira"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
@@ -9271,6 +9276,7 @@ msgid ""
 "This value amplifies the heights of the bump map defined by the input alpha "
 "channel"
 msgstr ""
+"Ta vrednost okrepi višine poslikave odtisa, kot jo določa vhodni kanal alfa"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
@@ -9280,7 +9286,7 @@ msgstr "Konstantno"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
 msgid "This constant affects the Phong lighting model."
-msgstr ""
+msgstr "Ta konstanta vpliva na model osvetlitve Phong."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2228
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2262
@@ -9289,25 +9295,23 @@ msgstr "Dolžina enote jedra"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2232
 msgid "This defines the intensity of the displacement effect."
-msgstr ""
+msgstr "To določa intenzivnost učinka razmestitve."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
-#, fuzzy
 msgid "X displacement"
-msgstr "Zemljevid razmestitve"
+msgstr "Razmestitev X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
 msgid "Color component that controls the displacement in the X direction"
-msgstr ""
+msgstr "Barvna komponenta, ki nadzira razmestitev v smeri X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
-#, fuzzy
 msgid "Y displacement"
-msgstr "Zemljevid razmestitve"
+msgstr "Razmestitev Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
 msgid "Color component that controls the displacement in the Y direction"
-msgstr ""
+msgstr "Barvna komponenta, ki nadzira razmestitev v smeri Y"
 
 #. default: black
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
@@ -9316,7 +9320,7 @@ msgstr "Razlita barva"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
 msgid "The whole filter region will be filled with this color."
-msgstr ""
+msgstr "S to barvo bo zapolnjeno celotno območje filtriranja."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2241
 msgid "Standard Deviation"
@@ -9324,13 +9328,15 @@ msgstr "Standardna deviacija"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2241
 msgid "The standard deviation for the blur operation."
-msgstr ""
+msgstr "Standardna deviacija za operacijo zabrisa."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2247
 msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
 msgstr ""
+"Razjedi: performs \"tanjšanje\" vhodne podobe.\n"
+"Razpostri: izvede \"debelitev\" vhodne podobe."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2251
 msgid "Source of Image"
@@ -9342,7 +9348,7 @@ msgstr "Sprememba X (delta)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 msgid "This is how far the input image gets shifted to the right"
-msgstr ""
+msgstr "Tako daleč se vhodna slika zamakne na desno"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "Delta Y"
@@ -9350,7 +9356,7 @@ msgstr "Sprememba Y (delta)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "This is how far the input image gets shifted downwards"
-msgstr ""
+msgstr "Tako daleč se vhodna slika zamakne navzdol"
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
@@ -9364,13 +9370,13 @@ msgstr "Eksponentno"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2261
 msgid "Exponent for specular term, larger is more \"shiny\"."
-msgstr ""
+msgstr "Eksponent odbojnega pogoja, več pomeni bolj \"blesteče\"."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2270
 msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
-msgstr ""
+msgstr "Nakazuje, ali naj osnova filtra izvede funkcijo šuma ali turbulence."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid "Base Frequency"
@@ -9386,7 +9392,7 @@ msgstr "Seme"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2273
 msgid "The starting number for the pseudo random number generator."
-msgstr ""
+msgstr "Začetna številka za generator psevdo naključnih številk."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2285
 msgid "Add filter primitive"
@@ -10363,7 +10369,7 @@ msgstr "povprečna kakovost"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:591
 msgid "Lower quality (faster)"
-msgstr "nižja kvaliteta (hitreje)"
+msgstr "nižja kakovost (hitreje)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:593
 msgid "Lowest quality (fastest)"
@@ -10398,15 +10404,16 @@ msgid "Lowest quality (considerable artifacts), but display is fastest"
 msgstr "najnižja kakovost (opazni artefakti), a z najhitrejšim prikazom"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:608
-#, fuzzy
 msgid "Show filter primitives infobox"
-msgstr "Nastavite atribut osnove filtra"
+msgstr "Pokaži polje z informacijami o osnovi filtra"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:610
 msgid ""
 "Show icons and descriptions for the filter primitives available at the "
 "filter effects dialog."
 msgstr ""
+"Pokaži ikone in opise za osnove filtrov, ki so na voljo v pogovornem oknu "
+"učinkov filtrov."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:612
 msgid "Filters"
@@ -10918,7 +10925,7 @@ msgstr "Geslo:"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:401
 msgid "Error while reading the Open Clip Art RSS feed"
-msgstr ""
+msgstr "Napaka pri branju novic RSS Open Clip Art"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:439
 msgid ""
@@ -10930,12 +10937,11 @@ msgstr ""
 
 #: ../src/ui/dialog/ocaldialogs.cpp:453
 msgid "Server supplied malformed Clip Art feed"
-msgstr ""
+msgstr "Strežnik je posredoval popačene novice Clip Art"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:544
-#, fuzzy
 msgid "Search for:"
-msgstr "Išči"
+msgstr "Išči:"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:545
 msgid "No files matched your search"
@@ -10946,28 +10952,25 @@ msgid "Search"
 msgstr "Išči"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:573
-#, fuzzy
 msgid "Files found"
 msgstr "najdenih datotek"
 
 #: ../src/ui/dialog/print.cpp:86
 msgid "Could not open temporary PNG for bitmap printing"
-msgstr ""
+msgstr "Začasne PNG za tiskanje bitne slike ni bilo mogoče odpreti"
 
 #: ../src/ui/dialog/print.cpp:101
-#, fuzzy
 msgid "Could not set up Document"
-msgstr "Ni mogoče določiti vira tiskanja: %s"
+msgstr "Dokumenta ni mogoče vzpostaviti"
 
 #: ../src/ui/dialog/print.cpp:105
 msgid "Failed to set CairoRenderContext"
-msgstr ""
+msgstr "Nastavitev CairoRenderContext ni uspela"
 
 #. set up dialog title, based on document name
 #: ../src/ui/dialog/print.cpp:145
-#, fuzzy
 msgid "SVG Document"
-msgstr "Dokument"
+msgstr "Dokument SVG"
 
 #: ../src/ui/dialog/print.cpp:146
 msgid "Print"
@@ -10975,9 +10978,8 @@ msgstr "Natisni"
 
 #. build custom preferences tab
 #: ../src/ui/dialog/print.cpp:169
-#, fuzzy
 msgid "Rendering"
-msgstr "Upodobi"
+msgstr "Upodabljanje"
 
 #: ../src/ui/dialog/scriptdialog.cpp:205
 msgid "_Execute Python"
@@ -11580,7 +11582,7 @@ msgstr "majhen"
 
 #: ../src/ui/widget/panel.cpp:122
 msgid "swatches|medium"
-msgstr ""
+msgstr "srednji"
 
 #: ../src/ui/widget/panel.cpp:123
 msgid "large"
@@ -11595,24 +11597,20 @@ msgid "List"
 msgstr "Seznam"
 
 #: ../src/ui/widget/panel.cpp:171
-#, fuzzy
 msgid "Shape"
-msgstr "Oblike"
+msgstr "Lik"
 
 #: ../src/ui/widget/panel.cpp:174
-#, fuzzy
 msgid "Tall"
-msgstr "Tabela"
+msgstr "Visok"
 
 #: ../src/ui/widget/panel.cpp:175
-#, fuzzy
 msgid "Square"
-msgstr "Kvadraten konec"
+msgstr "Kvadraten"
 
 #: ../src/ui/widget/panel.cpp:176
-#, fuzzy
 msgid "Wide"
-msgstr "_Skrij"
+msgstr "Širok"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:25
 msgid "_Blend mode:"
@@ -12044,59 +12042,56 @@ msgid "Opacity: %.3g"
 msgstr "Prekrivnost: %.3g"
 
 #: ../src/ui/widget/preferences-widget.cpp:278
-#, fuzzy
 msgid "Reset"
-msgstr " Po_nastavi "
+msgstr "Ponastavi "
 
 #: ../src/ui/widget/random.cpp:123
 msgid ""
 "Reseed the random number generator; this creates a different sequence of "
 "random numbers."
 msgstr ""
+"Ponovno zasadi generator naključnih številk; s tem ustvarite drugačno "
+"zaporedje naključnih številk."
 
 #: ../src/ui/widget/rendering-options.cpp:39
-#, fuzzy
 msgid "Vector"
-msgstr "Izbirnik"
+msgstr "Vektor"
 
 #: ../src/ui/widget/rendering-options.cpp:40
-#, fuzzy
 msgid "Bitmap"
-msgstr "Poševno/prečno"
+msgstr "Bitna slika"
 
 #: ../src/ui/widget/rendering-options.cpp:41
-#, fuzzy
 msgid "Backend"
-msgstr "Ozadje"
+msgstr "Hrbtenica"
 
 #: ../src/ui/widget/rendering-options.cpp:42
 msgid "Bitmap options"
-msgstr ""
+msgstr "Možnosti za bitne slike"
 
 #: ../src/ui/widget/rendering-options.cpp:44
-#, fuzzy
 msgid "Preferred resolution of rendering, in dots per inch."
-msgstr "Željena ločljivost slike (DPI)"
+msgstr "Priporočena ločljivost upodabljanja, v pikah na palec."
 
 #: ../src/ui/widget/rendering-options.cpp:52
-#, fuzzy
 msgid ""
 "Render using Cairo vector operations.  The resulting image is usually "
 "smaller in file size and can be arbitrarily scaled, but some filter effects "
 "will not be correctly rendered."
 msgstr ""
-"Uporabi vektorske operatorje PDF. Tako bo datoteka manjša, dalo se jo bo "
-"poljubno preoblikovati, izgubljeni pa bodo vzorci."
+"Upodobi z uporabo vektorskih operacij Cairo. Tako bo datoteka manjša, mogoče "
+"jo je poljubno preoblikovati, nekateri učinki filtrov pa bodo nepravilno "
+"upodobljeni."
 
 #: ../src/ui/widget/rendering-options.cpp:57
-#, fuzzy
 msgid ""
 "Render everything as bitmap.  The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
 msgstr ""
-"Tiskaj kot sliko. Datoteka bo večja, ob preoblikovanjih bo prišlo do izgube "
-"kvalitete, bo pa vse izrisano natanko tako, kot je sedaj na zaslonu."
+"Upodobi vse kot bitno sliko. Datoteka bo večja, ob poljubnih preoblikovanjih "
+"bo prišlo do izgube kakovosti, bo pa vse izrisano natanko tako, kot je sedaj "
+"na zaslonu."
 
 #: ../src/vanishing-point.cpp:124
 msgid "Split vanishing points"
@@ -14281,7 +14276,7 @@ msgstr "Premakni vzorce"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:110
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:219
 #: ../src/widgets/sp-color-scales.cpp:397
@@ -14340,9 +14335,8 @@ msgid "_K"
 msgstr "_K"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:234
-#, fuzzy
 msgid "Gray"
-msgstr "Sivine"
+msgstr "Siva"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:237
 #: ../src/widgets/sp-color-icc-selector.cpp:238
@@ -14367,11 +14361,11 @@ msgstr "Rumena"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:295
 msgid "Fix"
-msgstr ""
+msgstr "Popravi"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:298
 msgid "Fix RGB fallback to match icc-color() value."
-msgstr ""
+msgstr "Popravi upad RGB za ujemanje z vrednostjo icc-color()."
 
 #. Label
 #: ../src/widgets/sp-color-icc-selector.cpp:379
@@ -15839,14 +15833,12 @@ msgstr ""
 "ga nimate, je morda nekaj narobe z vašo namestitvijo aplikacije Inkscape."
 
 #: ../share/extensions/dimension.inx.h:3
-#, fuzzy
 msgid "X Offset"
-msgstr "Zamik"
+msgstr "Zamik X"
 
 #: ../share/extensions/dimension.inx.h:4
-#, fuzzy
 msgid "Y Offset"
-msgstr "Zamik"
+msgstr "Zamik Y"
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Dot size"
@@ -16304,6 +16296,12 @@ msgid ""
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
 msgstr ""
+"Ta učinek izmeri dolžino izbrane poti in jo doda kot predmet besedila na "
+"poti z izbrano enoto. Število vodilnih števk lahko nadzorujete s poljem "
+"Natančnost. Polje Zamik nadzira oddaljenost besedila od poti. Faktor "
+"spremembe merila lahko uporabite za merjenje risb, katerih merilo je "
+"spremenjeno. Če je npr. 1 cm v risbi enak 2,5 m v resničnem svetu, mora biti "
+"faktor nastavljen na 250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -16355,6 +16353,8 @@ msgid ""
 "pattern is the top most object in the selection. (groups of paths/shapes/"
 "clones... allowed)"
 msgstr ""
+"Ta učinek ukrivi predmet vzorca vzdolž poljubne poti \"okostja\". Vzorec je "
+"vrhnji predmet v izboru. (skupine poti/liki/kloni ... so dovoljene)"
 
 #: ../share/extensions/perfectboundcover.inx.h:1
 msgid "Bleed (in)"
@@ -16362,7 +16362,7 @@ msgstr "Razlij (navznoter)"
 
 #: ../share/extensions/perfectboundcover.inx.h:2
 msgid "Bond Weight #"
-msgstr ""
+msgstr "Teža vezave #"
 
 #: ../share/extensions/perfectboundcover.inx.h:3
 msgid "Book Height (inches)"
@@ -16378,7 +16378,7 @@ msgstr "Širina knjige (palci)"
 
 #: ../share/extensions/perfectboundcover.inx.h:6
 msgid "Caliper (inches)"
-msgstr ""
+msgstr "Šestilo (palci)"
 
 #: ../share/extensions/perfectboundcover.inx.h:7
 msgid "Cover"
@@ -16406,7 +16406,7 @@ msgstr "Število strani"
 
 #: ../share/extensions/perfectboundcover.inx.h:13
 msgid "Pages Per Inch (PPI)"
-msgstr ""
+msgstr "Strani na palec (PPI)"
 
 #: ../share/extensions/perfectboundcover.inx.h:14
 msgid "Paper Thickness Measurement"
@@ -16421,9 +16421,8 @@ msgid "Remove existing guides"
 msgstr "Odstrani obstoječa vodila"
 
 #: ../share/extensions/perfectboundcover.inx.h:18
-#, fuzzy
 msgid "Specify Width"
-msgstr "Širina peresa"
+msgstr "Navedite širina"
 
 #: ../share/extensions/perspective.inx.h:2
 msgid "Perspective"
@@ -16691,20 +16690,11 @@ msgstr "Uvoz Metadatoteke Windows"
 msgid "XAML Input"
 msgstr "Uvoz XAML"
 
-#~ msgid "medium"
-#~ msgstr "srednje"
-
-#~ msgid "X Channel"
-#~ msgstr "Kanal X"
-
-#~ msgid "Y Channel"
-#~ msgstr "Kanal Y"
-
-#~ msgid "Stitch Tiles"
-#~ msgstr "Sešij tlakovce"
-
 #~ msgid "Preferred resolution (dpi) of bitmaps"
 #~ msgstr "Željena ločljivost (dpi) bitnih slik"
+
+#~ msgid "medium"
+#~ msgstr "srednje"
 
 #~ msgid "%s selected out of %d gradient handles on %d selected object"
 #~ msgid_plural "%s selected out of %d gradient handles on %d selected objects"
@@ -16712,6 +16702,12 @@ msgstr "Uvoz XAML"
 #~ msgstr[1] "%s izbranih od %d ročic preliva na %d izbranem predmetu"
 #~ msgstr[2] "%s izbranih od %d ročic preliva na %d izbranih predmetih"
 #~ msgstr[3] "%s izbranih od %d ročic preliva na %d izbranih predmetih"
+
+#~ msgid "X Channel"
+#~ msgstr "Kanal X"
+
+#~ msgid "Y Channel"
+#~ msgstr "Kanal Y"
 
 #~ msgid "Search Tag"
 #~ msgstr "Iskalna oznaka"

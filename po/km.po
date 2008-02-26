@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: km\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2008-02-22 15:19+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -5962,8 +5962,8 @@ msgstr ""
 "លៃតម្រូវ <b>ទទឹង និង​កម្ពស់</b> របស់​ចតុកោណ ដោយប្រើ <b>បញ្ជា(Ctrl)</b> ដើម្បី​ចាក់សោ​កាំ ឬ​ពង្រីក​"
 "ក្នុង​មួយ​វិមាត្រ​ប៉ុណ្ណោះ"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -5971,8 +5971,8 @@ msgstr ""
 "ប្រអប់​ផ្លាស់ប្ដូរ​ទំហំ ក្នុង​ទិសដៅ X/Y ដោយ​ប្រើ <b>ប្ដូរ (Shift)</b> តាម​អ័ក្ស Z  ដោយ​ប្រើ​<b>បញ្ជា"
 "(Ctrl)</b> ដើម្បី​បង្ខំ​ទិស​ដៅ​របស់​គែម ឬអង្កត់​ទ្រូវ"
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -5980,19 +5980,20 @@ msgstr ""
 "ប្រអប់ផ្លាស់ប្ដូរ​ទំហំតាម​អ័ក្ស Z ដោយ​ប្រើ <b>ប្ដូរ(Shift)</b> នៅ​ក្នុង​ទិស X/Y ដោយ​ប្រើ <b>បញ្ជា"
 "(Ctrl)</b> ដើម្បី​បង្ខំ​ទិស​ទៅ​ទិស​របស់គែម ឬ​អង្កត់​ទ្រូវ"
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+#, fuzzy
+msgid "Move the box in perspective"
 msgstr "ផ្លាស់ទី​ប្រអប់​ជា​យថាទស្សន៍ ។"
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "លៃតម្រូវ​រាង​ពងក្រពើ <b>ទទឹង</b>​ដោយ​ប្រើ <b>បញ្ជា(Ctrl)</b> ដើម្បី​បង្កើត​រង្វង់"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "លៃតម្រូវ​រាង​ពងក្រពើ <b>កម្ពស់</b> ដោយ​ប្រើ <b>បញ្ជា(Ctrl)</b> ដើម្បី​បង្កើត​រង្វង់"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6001,7 +6002,7 @@ msgstr ""
 "ទីតាំង<b>ចំណុច​ចាប់ផ្ដើម</b> របស់​ធ្នូ ឬ​ចម្រៀក ដោយ​ប្រើ<b>បញ្ជា(Ctrl)</b> ដើម្បី​ខ្ទាស់​មុំ អូស "
 "<b>ខាងក្នុង</b> រាង​ពងក្រពើ សម្រាប់​ធ្នូ <b>ខាង​ក្រៅ</b> សម្រាប់​ចម្រៀក"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6010,7 +6011,7 @@ msgstr ""
 "ទីតាំង <b>ចំណុច​ចុង</b> របស់​ធ្នូ ឬ​ចម្រៀក ដោយ​ប្រើ <b>បញ្ជា(Ctrl)</b> ដើម្បី​ខ្ទាស់​មុំ អូស <b>ខាង​"
 "ក្នុង</b> រាង​ពងក្រពើ សម្រាប់​ធ្នូ <b>ខាង​ក្រៅ</b> សម្រាប់​ចម្រៀក"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6018,7 +6019,7 @@ msgstr ""
 "លៃតម្រូវ <b>ជំនួយ​កាំ</b> របស់​រាង​ផ្កាយ ឬ​ពហុកោណ ដោយ​ប្រើ <b>ប្ដូរ(Shift)</b> ដើម្បី​ធ្វើ​ឲ្យ​មូល "
 "ដោយ​ប្រើ<b>ជំនួស(Alt)</b> ដើម្បី​ដោយ​ចៃដន្យ"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6027,7 +6028,7 @@ msgstr ""
 "លៃតម្រូវ <b>កាំមូលដ្ឋាន</b> របស់​ផ្កាយ ដោយ​ប្រើ<b>បញ្ជា(Ctrl)</b> ដើម្បី​រក្សា​កាំផ្កាយ "
 "(គ្មានឆៀង) ដោយ​ប្រើ<b>ប្ដូរ​ដើម្បីធ្វើ​ឲ្យ​មូល</b> ដោយ​ប្រើ <b>ជំនួស(Alt)</b> ដើម្បីធ្វើ​ចៃដន្យ"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6035,7 +6036,7 @@ msgstr ""
 "រមូរ/មិនរមូរ​គួច​ពី <b>ខាង​ក្នុង</b> ដោយ​ប្រើ<b>បញ្ជា(Ctrl)</b> ដើម្បី​ខ្ទាស់​មុំ ដោយ​ប្រើ <b>ជំនួស"
 "(Alt)</b> ដើម្បីធ្វើ​ឲ្យ​ជួបគ្នា/ឃ្លា​ពី​គ្នា"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6043,24 +6044,24 @@ msgstr ""
 "រមូរ/មិន​រមូរ​គួច​ពី <b>ខាងក្រៅ</b> ដោយ​ប្រើ <b>បញ្ជា(Ctrl)</b> ដើម្បី​ខ្ទាស់​មុំ ដោយ​ប្រើ <b>ប្ដូរ"
 "(Shift)</b> ដើម្បី​ធ្វើ​មាត្រដ្ឋាន/បង្វិល"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "លៃតម្រូវ​<b>ចម្ងាយ​អុហ្វសិត​</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>ផ្លាស់ទី​</b>បំពេញ​លំនាំខាង​​ក្នុង​វត្ថុ​"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>ធ្វើមាត្រដ្ឋាន​</b> បំពេញ​លំនាំ​ដែល​មាន​សភាព​ដូច​គ្នា​"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>បង្វិល​</b>បំពេញ​លំនាំ​ ដោយ​ប្រើ​<b>បញ្ជា(Ctrl)​</b> ដើម្បី​ខ្ទាស់​មុំ​"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "អូស​ដើម្បី​ផ្លាស់ប្ដូរ​​ទំហំ  <b>ឆ្លង​កាត់​ស៊ុម​អត្ថបទ​</b>"
 
@@ -6109,27 +6110,27 @@ msgstr "ជ្រើស <b>វត្ថុ</b> ដើម្បី​បម្ល
 msgid "Converting objects to paths..."
 msgstr "កំពុង​បម្លែង​វត្ថុ​ទៅជា​ផ្លូវ..."
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "វត្ថុ​ទៅ​ផ្លូវ​"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "<b>គ្មាន​វត្ថុ</b> ដើម្បី​បម្លែង​ទៅ​ផ្លូវ​នៅ​ក្នុ​ងជម្រើស ។"
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "ជ្រើស<b>ផ្លូវ</b> ត្រូវ​ត្រឡប់ ។"
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 msgid "Reversing paths..."
 msgstr "កំពុង​ដាក់​បញ្ច្រាស​ផ្លូវ..."
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "ដាក់​បញ្ច្រាស់​​ផ្លូវ"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>គ្មាន​ផ្លូវ</b> ត្រូវ​ដាក់​បញ្ច្រាស​ក្នុង​​ជម្រើស ។"
 
@@ -6350,7 +6351,7 @@ msgstr "ជ្រើស<b>ក្រុម</b> ដើម្បី​បំបែ�
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>គ្មាន​ក្រុម</b> ត្រូវ​បំបែក​នៅ​ក្នុង​ជម្រើស ។"
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "បំបែក​ក្រុម​"
 
@@ -6983,7 +6984,7 @@ msgstr "<b>រូបភាព​ដែល​មាន​សេចក្ដី​
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>រូបភាព</b> %d &#215; %d ៖ %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

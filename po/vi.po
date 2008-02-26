@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2008-02-16 12:54+0700\n"
 "Last-Translator: Nguyen Dinh Trung <nguyendinhtrung141@gmail.com>\n"
 "Language-Team: Vietnamese <vi-bugs@googlegroups.com>\n"
@@ -6124,8 +6124,8 @@ msgstr ""
 "Điều chỉnh <b>chiều rộng và độ cao</b> của hình chữ nhật; giữ <b>Ctrl</b> "
 "khoá tỷ lệ hay kéo giãn theo chỉ một chiều."
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6133,8 +6133,8 @@ msgstr ""
 "Thay đổi kích cỡ hộp về hướng X/Y; giữ <b>Shift</b> thì theo trục Z; "
 "<b>Ctrl</b> hạn chế thành các hướng của cạnh hay đường chéo"
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6142,19 +6142,20 @@ msgstr ""
 "Thay đổi kích cỡ hộp theo trục Z; giữ <b>Shift</b> thì về hướng X/Y; "
 "<b>Ctrl</b> hạn chế thành các hướng của cạnh hay đường chéo"
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+#, fuzzy
+msgid "Move the box in perspective"
 msgstr "Di chuyển hộp theo phối cảnh."
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "Thay đổi <b>chiều rộng</b> của elip. Giữ <b>Ctrl</b> tạo hình tròn."
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Thay đổi <b>chiều cao</b> của elip. Giữ <b>Ctrl</b> tạo hình tròn."
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6163,7 +6164,7 @@ msgstr ""
 "Vị trí <b>đầu</b> của cung hay hình quạt; giữ <b>Ctrl</b> đính góc; rê "
 "<b>vào trong</b> tạo cung, <b>ra ngoài</b> tạo hình quạt."
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6172,7 +6173,7 @@ msgstr ""
 "Vị trí <b>cuối</b> của cung hay hình quạt; giữ <b>Ctrl</b> đính góc; rê "
 "<b>vào trong</b> tạo cung; <b>ra ngoài</b> tạo hình quạt."
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6180,7 +6181,7 @@ msgstr ""
 "Điều chỉnh <b>bán kính ngoài</b>; giữ <b>Shift</b> làm tròn; giữ <b>Alt</b> "
 "ngẫu nhiên hoá."
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6189,7 +6190,7 @@ msgstr ""
 "Điều chỉnh <b>bán kính trong</b> của hình sao; giữ <b>Ctrl</b> không làm "
 "lệch cạnh; giữ <b>Shift</b> làm tròn; giữ <b>Alt</b> ngẫu nhiên hoá."
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6197,7 +6198,7 @@ msgstr ""
 "Cuộn/bỏ cuộn xoắn ốc từ <b>bên trong</b>; với phím: <b>Ctrl</b> đính góc; "
 "<b>Alt</b> hội tụ/phân kỳ."
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6205,24 +6206,24 @@ msgstr ""
 "Cuộn/bỏ cuộn xoắn ốc từ <b>bên ngoài</b>; với phím: <b>Ctrl</b> đính góc; "
 "<b>Alt</b> co giãn/xoay."
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Điều chỉnh <b>độ dịch</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Di chuyển</b> mẫu tô bên trong đối tượng"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Co giãn</b> đều mẫu tô"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Xoay</b>mẫu tô; giữ <b>Ctrl</b> đính góc."
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Kéo để thay đổi kích cỡ của <b>khung văn bản trong khung</b>"
 
@@ -6275,28 +6276,28 @@ msgstr "Chọn (các) <b>đối tượng</b> cần chuyển đổi sang đườn
 msgid "Converting objects to paths..."
 msgstr "Đang chuyển đổi các đối tượng sang đường nét..."
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Đối tượng sang đường nét"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr ""
 "Trong vùng chọn, <b>không có đối tượng</b> cần chuyển đổi sang đường nét."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Chọn (các) <b>đường nét</b> cần đảo ngược."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 msgid "Reversing paths..."
 msgstr "Đang đảo ngược các đường nét..."
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Đảo đường nét"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "Trong vùng chọn, <b>không có đối tượng</b> cần đảo ngược."
 
@@ -6532,7 +6533,7 @@ msgstr "Chọn một <b>nhóm</b> cần tách nhóm."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "Trong vùng chọn, <b>không có nhóm</b> cần tách nhóm."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Rã nhóm"
 
@@ -7176,7 +7177,7 @@ msgstr "<b>Ảnh có tham chiếu sai</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Ảnh</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

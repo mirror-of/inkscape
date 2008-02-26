@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2007-12-22 16:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -6209,8 +6209,8 @@ msgstr ""
 "Скоригувати <b>ширину та висоту</b> прямокутника. <b>Ctrl</b> фіксує "
 "співвідношення чи розтягує/стискає лише один вимір"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6218,8 +6218,8 @@ msgstr ""
 "Змінити розмір об’єкта у напрямку осей X/Y; з <b>Shift</b> — вздовж осі Z; "
 "<b>Ctrl</b> — фіксування напрямків країв або діагоналей"
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6227,19 +6227,20 @@ msgstr ""
 "Змінити розмір об’єкта вздовж осі Z; з <b>Shift</b> — у напрямку осей X/Y; "
 "<b>Ctrl</b> — фіксування напрямків країв або діагоналей"
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+#, fuzzy
+msgid "Move the box in perspective"
 msgstr "Переміщення об’єкта у перспективу."
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "Змінити <b>велику вісь</b> еліпса. <b>Ctrl</b> робить коло"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Змінити <b>малу вісь</b> еліпса. <b>Ctrl</b> робить коло"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6248,7 +6249,7 @@ msgstr ""
 "<b>Початкова точка</b> сектора чи дуги. <b>Ctrl</b> обмежує кут. "
 "Перетягування <b>всередині</b> еліпса дає дугу, <b>зовні</b> - сегмент"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6257,7 +6258,7 @@ msgstr ""
 "<b>Кінцева точка</b> сектора чи дуги. <b>Ctrl</b> обмежує кут. Перетягування "
 "<b>всередині</b> еліпса дає дугу, <b>зовні</b> - сегмент"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6265,7 +6266,7 @@ msgstr ""
 "Змінити <b>великий радіус</b> зірки чи багатокутника. <b>Shift</b> - "
 "округляє; <b>Alt</b> - змішує"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6274,7 +6275,7 @@ msgstr ""
 "Змінити <b>малий радіус</b> зірки. <b>Ctrl</b> зберігає промені зірки "
 "радіальними (без нахилу), <b>Shift</b> - округляє; <b>Alt</b> - змішує"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6282,7 +6283,7 @@ msgstr ""
 "Згорнути/розгорнути спіраль <b>всередині</b>. <b>Ctrl</b> - обмежує кут, "
 "<b>Alt</b> змінює нелінійність"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6290,24 +6291,24 @@ msgstr ""
 "Згорнути/розгорнути спіраль <b>зовні</b>. <b>Ctrl</b> - обмежує кут, "
 "<b>Shift</b> - розтягує/обертає як ціле"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Міняти <b>відстань втягування</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Переміщувати</b> заповнення візерунком всередині об'єкту"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "Пропорційно <b>масштабувати</b> заповнення візерунком"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Обертати</b> заповнення візерунком, <b>Ctrl</b> обмежує кут"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Перетягніть для зміни розміру <b>тексту у рамці</b>"
 
@@ -6358,27 +6359,27 @@ msgstr "Виділіть <b>об'єкти</b> для перетворення у
 msgid "Converting objects to paths..."
 msgstr "Перетворення об’єктів на контури..."
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Об'єкт у контур"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "У виділеному <b>немає об'єктів</b>, що перетворюються у контур."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Виберіть <b>контур(и)</b> для зміни напряму."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 msgid "Reversing paths..."
 msgstr "Розвертання контурів..."
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Розвернути контур"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "У виділеному <b>немає контурів</b> для зміни напряму."
 
@@ -6612,7 +6613,7 @@ msgstr "Виділіть <b>групу</b> для розгрупування."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "У виділеному <b>немає груп</b>."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Розгрупувати"
 
@@ -7278,7 +7279,7 @@ msgstr "<b>Зображення з неправильним посиланням
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Зображення</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

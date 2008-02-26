@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2007-01-05 13:35-0600\n"
 "Last-Translator: Jon South <striker@lunar-linux.org>\n"
 "Language-Team: \n"
@@ -6396,35 +6396,35 @@ msgstr ""
 "ithway <b>Ctrl</b> otay ocklay atioray orway etchstray inway oneway "
 "imensionday onlyway"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+msgid "Move the box in perspective"
 msgstr ""
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
 "Adjustway ellipseway <b>idthway</b>, ithway <b>Ctrl</b> otay akemay irclecay"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
 "Adjustway ellipseway <b>eighthay</b>, ithway <b>Ctrl</b> otay akemay irclecay"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6434,7 +6434,7 @@ msgstr ""
 "ithway <b>Ctrl</b> otay apsnay angleway; agdray <b>insideway</b> ethay "
 "ellipseway orfay arcway, <b>outsideway</b> orfay egmentsay"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6444,7 +6444,7 @@ msgstr ""
 "ithway <b>Ctrl</b> otay apsnay angleway; agdray <b>insideway</b> ethay "
 "ellipseway orfay arcway, <b>outsideway</b> orfay egmentsay"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6452,7 +6452,7 @@ msgstr ""
 "Adjustway ethay <b>iptay adiusray</b> ofway ethay arstay orway olygonpay; "
 "ithway <b>Iftshay</b> otay oundray; ithway <b>Altway</b> otay andomizeray"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6462,7 +6462,7 @@ msgstr ""
 "b> otay eepkay arstay aysray adialray (onay ewskay); ithway <b>Iftshay</b> "
 "otay oundray; ithway <b>Altway</b> otay andomizeray"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6470,7 +6470,7 @@ msgstr ""
 "Ollray/unrollway ethay iralspay omfray <b>insideway</b>; ithway <b>Ctrl</b> "
 "otay apsnay angleway; ithway <b>Altway</b> otay onvergecay/ivergeday"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6478,26 +6478,26 @@ msgstr ""
 "Ollray/unrollway ethay iralspay omfray <b>outsideway</b>; ithway <b>Ctrl</b> "
 "otay apsnay angleway; ithway <b>Iftshay</b> otay alescay/otateray"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Adjustway ethay <b>offsetway istanceday</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Ovemay</b> ethay atternpay illfay insideway ethay objectway"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Alescay</b> ethay atternpay illfay uniformlyway"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Otateray</b> ethay atternpay illfay; ithway <b>Ctrl</b> otay apsnay "
 "angleway"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Agdray otay esizeray ethay <b>owedflay exttay amefray</b>"
 
@@ -6553,29 +6553,29 @@ msgstr "Electsay <b>objectway(s)</b> otay onvertcay otay athpay."
 msgid "Converting objects to paths..."
 msgstr "Onvertcay extstay otay athspay"
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Objectway otay athpay"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr ""
 "<b>Onay objectsway</b> otay onvertcay otay athpay inway ethay electionsay."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Electsay <b>athpay(s)</b> otay everseray."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 #, fuzzy
 msgid "Reversing paths..."
 msgstr "Everseray athpay"
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Everseray athpay"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>Onay athspay</b> otay everseray inway ethay electionsay."
 
@@ -6812,7 +6812,7 @@ msgstr "Electsay a <b>oupgray</b> otay ungroupway."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>Onay oupsgray</b> otay ungroupway inway ethay electionsay."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Ungroupway"
 
@@ -7483,7 +7483,7 @@ msgstr "<b>Imageway ithway adbay eferenceray</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Imageway</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

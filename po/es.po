@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2008-02-14 20:22+0100\n"
 "Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
 "Language-Team: Español <inkscape-translator@lists.sourceforge.net>\n"
@@ -6256,8 +6256,8 @@ msgstr ""
 "Ajustar el <b>alto y el ancho</b> del rectángulo; con <b>Ctrl</b> para "
 "bloquear la proporción o estirar en una sola dirección"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6265,8 +6265,8 @@ msgstr ""
 "Redimensionar caja en dirección X/Y, con <b>Mayús</b> por el eje Z; con "
 "<b>Ctrl</b> para restringir a las direcciones de los bordes o diagonales"
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6274,22 +6274,23 @@ msgstr ""
 "Redimensionar caja por el eje Z, con <b>Mayús</b> en dirección X/Y; con "
 "<b>Ctrl</b> para restringir a las direcciones de los bordes o diagonales"
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+#, fuzzy
+msgid "Move the box in perspective"
 msgstr "Mover la caja en perspectiva"
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
 "Ajustar el <b>ancho</b> de la elipse; con <b>Ctrl</b> para hacer un círculo"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
 "Ajustar el <b>alto y el ancho</b> del rectángulo; con <b>Ctrl</b> para "
 "bloquear la proporción"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6299,7 +6300,7 @@ msgstr ""
 "ajustar el ángulo; arrastre <b>por dentro</b> para obtener la elipse del "
 "arco, <b>por fuera</b> para el segmento"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6309,7 +6310,7 @@ msgstr ""
 "ajustar el ángulo; arrastre <b>por dentro</b> para obtener la elipse del "
 "arco, <b>por fuera</b> para el segmento"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6317,7 +6318,7 @@ msgstr ""
 "Ajusta el <b>radio base</b> de la estrella o polígono; con <b>Ctrl</b> para "
 "redondear; con <b>Alt</b> para aleatorizar"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6328,7 +6329,7 @@ msgstr ""
 "redondear, con <b>Alt</b> para aleatorizar"
 
 #  fixme: CTRL SNAP!!! remove "skew and scale"
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6337,7 +6338,7 @@ msgstr ""
 "ajustar al ángulo; con <b>Alt</b> para converger/divergir"
 
 #  fixme: CTRL SNAP!!! remove "skew and scale"
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6345,25 +6346,25 @@ msgstr ""
 "Enrollar/desenrollar la espiral <b>desde fuera</b>; con <b>Ctrl</b> para "
 "ajustar al ángulo; con <b>Mayús</b> para escalar/rotar"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Ajustar la distancia de <b>desvío</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Mover</b> el relleno de mosaico dentro del objeto"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Escalar</b> el relleno de mosaico uniformemente"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Rotar</b> el relleno de mosaico; con <b>Ctrl</b> para ajustar el ángulo"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Arrastre para redimensionar el <b>marco de texto fluido</b>"
 
@@ -6412,28 +6413,28 @@ msgstr "Seleccione los <b>objetos</b> que desea convertir en trayectos."
 msgid "Converting objects to paths..."
 msgstr "Convirtiendo objetos en trayectos..."
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Objeto a trayecto"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr ""
 "<b>No hay objetos</b> que se puedan convertir en trayectos en la selección."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Seleccione los <b>trayectos</b> que desea revertir."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 msgid "Reversing paths..."
 msgstr "Revirtiendo trayectos..."
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Revertir trayecto"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>No hay trayectos</b> reversibles en la selección."
 
@@ -6675,7 +6676,7 @@ msgstr "Seleccione un <b>grupo</b> para desagrupar."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>No hay grupos</b> desagrupables en la selección."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Desagrupar"
 
@@ -7343,7 +7344,7 @@ msgstr "<b>Imagen con referencia incorrecta</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Imagen</b> %d &#215; %d : %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

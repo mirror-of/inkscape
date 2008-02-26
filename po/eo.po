@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eo\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2008-01-31 17:28+0100\n"
 "Last-Translator: Antonio C. Codazzi <f_sophia@libero.it>\n"
 "Language-Team: esperanto <eo@li.org>\n"
@@ -6184,8 +6184,8 @@ msgstr ""
 "Aranĝu <b>alton kaj larĝon</b> de rektangulo; kun <b>Strkl</b> por teni "
 "proporciojn aŭ plilongigi nur unu dimension"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6193,8 +6193,8 @@ msgstr ""
 "Ĝi readaptas la fakon laŭ X/Y direkto; kun <b>Ŝvkl</b> laŭ Z akso; kun "
 "<b>Strkl</b> limiĝi al la direktoj de randoj aŭ diagonaloj"
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -6202,19 +6202,20 @@ msgstr ""
 "Ĝi readaptas la fakon laŭ Z akso; kun <b>Ŝvkl</b> laŭ X/Y direkto; kun "
 "<b>Strkl</b> limiĝi al la direktoj de randoj aŭ diagonaloj"
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+#, fuzzy
+msgid "Move the box in perspective"
 msgstr "Movu la fakon perspektive"
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "Aranĝu <b>larĝon</b> de elipso; kun <b>Strkl</b> por igi ĝin cirkla"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Aranĝu <b>alton</b> de elipso; kun <b>Strkl</b> por igi ĝin cirkla"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6224,7 +6225,7 @@ msgstr ""
 "elklikigi angulon; trenu <b>enen</b> la elipson por arko, <b>eksteren</b> "
 "por segmento"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6234,7 +6235,7 @@ msgstr ""
 "elklikigi angulon; trenu <b>enen</b> la elipson por arko, <b>eksteren</b> "
 "por segmento"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6242,7 +6243,7 @@ msgstr ""
 "Aranĝo de <b>diametro</b> de stelo aŭ plurlatero; uzu <b>Ŝvkl</b> por "
 "rondigi; uzu <b>Alt</b> por aleatorigi"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6252,7 +6253,7 @@ msgstr ""
 "por teni direkton de radiusoj (sen deformo); uzu <b>Ŝvkl</b> por rondigi; "
 "uzu <b>Alt</b> por aleatorigi"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6260,7 +6261,7 @@ msgstr ""
 "Volvu/malvolvu spiralon <b>interne</b>; uzu <b>Strkl</b> por eklikigi "
 "angulon; uzu <b>Alt</b> por konverĝi/diverĝi"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6268,25 +6269,25 @@ msgstr ""
 "Volvu/malvolvu spiralon <b>ekstere</b>; uzu <b>Strkl</b> por eklikigi "
 "angulon; uzu <b>Ŝvkl</b> por readapti/rotacii"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Aranĝu <b>distanzo de projekcio</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Movu</b> plenigantan motivon interne de objekto"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Skalu</b> sammaniere plenigantan motivon"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Turnu</b> plenigantan motivon; uzu <b>Strkl</b> por elklikigi la angulon"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Trenu por readapti <b>fakon de moviĝanta teksto</b>"
 
@@ -6336,27 +6337,27 @@ msgstr "Elektu <b>objekton</b> kiu estas konvertenda en streko."
 msgid "Converting objects to paths..."
 msgstr "Konvertante objektojn en strekoj..."
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Konvertu objekton en streko"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "<b>Neniu konvertenda objekto</b> en elekto."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Elektu inversigenda(j)n <b>streko(j)n</b>."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 msgid "Reversing paths..."
 msgstr "Inversigante strekojn..."
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Inversigu strekon"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>Neniu inversigenda streko</b> en elekto."
 
@@ -6589,7 +6590,7 @@ msgstr "Elektu malgrupigendan <b>grupon</b>."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>Neniu malgrupigenda grupo</b> en la elekto."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Malgrupigu"
 
@@ -7239,7 +7240,7 @@ msgstr "<b>Bildo kun malbona referenco</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Bildo</b> %d x %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

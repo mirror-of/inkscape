@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2007-04-23 16:31+0800\n"
 "Last-Translator: Wei-Lun Chao <william.chao@ossii.com.tw>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -6147,33 +6147,33 @@ msgid ""
 msgstr ""
 "調整矩形<b>寬度與高度</b>；以 <b>Ctrl</b> 來鎖定比率或只在一個維度中伸展"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+msgid "Move the box in perspective"
 msgstr ""
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "調整橢圓形<b>寬度</b>，以 <b>Ctrl</b> 來調為圓形"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "調整橢圓形<b>高度</b>，以 <b>Ctrl</b> 來調為圓形"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6182,7 +6182,7 @@ msgstr ""
 "設定弧形或扇形的<b>起點</b>位置；可藉由 <b>Ctrl</b> 鍵來抓取角度；拖曳橢圓形"
 "的<b>內部</b>可成為弧形，<b>外部</b>可成為扇形。"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6191,7 +6191,7 @@ msgstr ""
 "設定弧形或扇形的<b>終點</b>位置；可藉由 <b>Ctrl</b> 鍵來抓取角度；拖曳橢圓形"
 "的<b>內部</b>可成為弧形，<b>外部</b>可成為扇形。"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6199,7 +6199,7 @@ msgstr ""
 "調整星形或多邊形的<b>尖端半徑</b>；以 <b>Shift</b> 來形成圓角；以 <b>Alt</b> "
 "來隨機變化"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6208,7 +6208,7 @@ msgstr ""
 "調整星形的<b>基本半徑</b>；按住 <b>Ctrl</b> 以保持星形光芒為放射狀(無歪斜)；"
 "按住 <b>Shift</b> 使其圓滑；按住 <b>Alt</b> 使其隨機變化"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6216,7 +6216,7 @@ msgstr ""
 "從<b>內部</b>捲動/反捲螺旋形；以 <b>Ctrl</b> 來抓取角度；以 <b>Alt</b> 來收"
 "斂/發散"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6224,24 +6224,24 @@ msgstr ""
 "從<b>外部</b>捲動/反捲螺旋形；以 <b>Ctrl</b> 來抓取角度；以 <b>Shift</b> 來伸"
 "縮/旋轉"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "調整<b>偏移距離</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>移動</b>物件內部的圖樣填充"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "單一型式地<b>伸縮</b>填充圖樣"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>旋轉</b>填充圖樣；藉由 <b>Ctrl</b> 來抓取角度"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "拖曳以改變<b>流動文字訊框</b>的大小"
 
@@ -6293,28 +6293,28 @@ msgstr "選擇<b>物件</b>以轉換成路徑。"
 msgid "Converting objects to paths..."
 msgstr "把文字轉化成路徑"
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "物件轉為路徑"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "選取區中<b>沒有物件</b>可以轉成路徑。"
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "選取<b>路徑</b>以反轉。"
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 #, fuzzy
 msgid "Reversing paths..."
 msgstr "反向路徑"
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "反向路徑"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "選取區中<b>沒有路徑</b>可以反轉。"
 
@@ -6538,7 +6538,7 @@ msgstr "選擇一個<b>群組</b>以拆解。"
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "選取區中<b>沒有群組</b>可以拆解。"
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "取消分組"
 
@@ -7181,7 +7181,7 @@ msgstr "<b>參照品質不良的圖片</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>圖片</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-02-23 02:05-0800\n"
+"POT-Creation-Date: 2008-02-26 11:38+0100\n"
 "PO-Revision-Date: 2007-03-28 18:36+0100\n"
 "Last-Translator: Robert Millan <rmh@aybabtu.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -6308,33 +6308,33 @@ msgstr ""
 "Ajusta <b>l'amplada i l'alçada</b> del rectangle; amb <b>Ctrl</b> es bloca "
 "la relació o s'ajusta només una dimensió"
 
-#: ../src/object-edit.cpp:709 ../src/object-edit.cpp:711
 #: ../src/object-edit.cpp:713 ../src/object-edit.cpp:715
+#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
 
-#: ../src/object-edit.cpp:717 ../src/object-edit.cpp:719
 #: ../src/object-edit.cpp:721 ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:725 ../src/object-edit.cpp:727
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
 
-#: ../src/object-edit.cpp:727
-msgid "Move the box in perspective."
+#: ../src/object-edit.cpp:731
+msgid "Move the box in perspective"
 msgstr ""
 
-#: ../src/object-edit.cpp:905
+#: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "Ajusta <b>l'amplada</b> de l'el·lipsi, amb <b>Ctrl</b> es fa un cercle"
 
-#: ../src/object-edit.cpp:908
+#: ../src/object-edit.cpp:912
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Ajusteu <b>l'alçada</b> de l'el·lipsi, amb <b>Ctrl</b> es fa un cercle"
 
-#: ../src/object-edit.cpp:911
+#: ../src/object-edit.cpp:915
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6344,7 +6344,7 @@ msgstr ""
 "s'ajusta l'angle; arrossegueu <b>a dins</b> l'el·lipsi per a l'arc, <b>a "
 "fora</b> per al segment"
 
-#: ../src/object-edit.cpp:914
+#: ../src/object-edit.cpp:918
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -6354,7 +6354,7 @@ msgstr ""
 "l'angle; arrossegueu <b>a dins</b> l'el·lipsi per a l'arc, <b>a fora</b> per "
 "al segment"
 
-#: ../src/object-edit.cpp:1024
+#: ../src/object-edit.cpp:1028
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -6362,7 +6362,7 @@ msgstr ""
 "Ajusteu la <b>distància al centre</b> de l'estel del polígon; amb <b>Maj</b> "
 "per a arrodonir; amb <b>Alt</b> per a aleatoritzar"
 
-#: ../src/object-edit.cpp:1027
+#: ../src/object-edit.cpp:1031
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -6372,7 +6372,7 @@ msgstr ""
 "raigs de l'estel radial (sense tòrcer); amb <b>Maj</b> per a arrodonir; amb "
 "<b>Alt</b> per a aleatoritzar"
 
-#: ../src/object-edit.cpp:1191
+#: ../src/object-edit.cpp:1195
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -6380,7 +6380,7 @@ msgstr ""
 "Enrotlleu/desenrotlleu l'espiral des de <b>dins</b>; amb <b>Ctrl</b> per "
 "ajustar l'angle; amb <b>Alt</b> per convergir/divergir"
 
-#: ../src/object-edit.cpp:1193
+#: ../src/object-edit.cpp:1197
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -6388,24 +6388,24 @@ msgstr ""
 "Enrotlleu/desenrotlleu l'espiral des de <b>fora</b>; amb <b>Ctrl</b> per "
 "ajustar l'angle; amb <b>Maj</b> per escalar/girar"
 
-#: ../src/object-edit.cpp:1230
+#: ../src/object-edit.cpp:1234
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Ajusteu la <b>distància de desplaçament</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:1260
+#: ../src/object-edit.cpp:1264
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Moveu</b> el patró d'emplenat de l'interior de l'objecte"
 
-#: ../src/object-edit.cpp:1262
+#: ../src/object-edit.cpp:1266
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Escaleu</b> el patró d'emplenat uniformement"
 
-#: ../src/object-edit.cpp:1264
+#: ../src/object-edit.cpp:1268
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Gireu</b> el patró d'emplenat; amb <b>Ctrl</b> per ajustar l'angle"
 
-#: ../src/object-edit.cpp:1289
+#: ../src/object-edit.cpp:1293
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Arrossegueu per canviar la grandària del <b>marc de text flotant</b>"
 
@@ -6457,28 +6457,28 @@ msgstr "Seleccioneu <b>objectes</b> per convertir a camí."
 msgid "Converting objects to paths..."
 msgstr "Convertix texts en camins"
 
-#: ../src/path-chemistry.cpp:350
+#: ../src/path-chemistry.cpp:351
 msgid "Object to path"
 msgstr "Objecte a camí"
 
-#: ../src/path-chemistry.cpp:352
+#: ../src/path-chemistry.cpp:353
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr "<b>No hi ha cap objecte</b> per convertir en camí en la selecció."
 
-#: ../src/path-chemistry.cpp:417
+#: ../src/path-chemistry.cpp:418
 msgid "Select <b>path(s)</b> to reverse."
 msgstr "Seleccioneu <b>camins</b> per invertir."
 
-#: ../src/path-chemistry.cpp:426
+#: ../src/path-chemistry.cpp:427
 #, fuzzy
 msgid "Reversing paths..."
 msgstr "Camí a l'inrevés"
 
-#: ../src/path-chemistry.cpp:453
+#: ../src/path-chemistry.cpp:454
 msgid "Reverse path"
 msgstr "Camí a l'inrevés"
 
-#: ../src/path-chemistry.cpp:455
+#: ../src/path-chemistry.cpp:456
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>No hi ha cap camí</b> per invertir en la selecció."
 
@@ -6715,7 +6715,7 @@ msgstr "Seleccioneu un <b>grup</b> per a desagrupar-lo."
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>No hi ha cap grup</b> en la selecció que es pugui desagrupar."
 
-#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:451
+#: ../src/selection-chemistry.cpp:585 ../src/sp-item-group.cpp:453
 msgid "Ungroup"
 msgstr "Desagrupa"
 
@@ -7382,7 +7382,7 @@ msgstr "<b>La imatge té una referència incorrecta</b>: %s"
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Imatge</b> %d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:696
+#: ../src/sp-item-group.cpp:698
 #, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"
