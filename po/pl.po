@@ -1,4 +1,3 @@
-#
 # Translation of Inkscape to Polish
 #
 # Copyright (C) 2001-2004, 2008 Free Software Foundation, Inc.
@@ -13,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.46\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-02-27 15:14+0100\n"
-"PO-Revision-Date: 2008-02-27 14:29-0000\n"
+"PO-Revision-Date: 2008-02-28 09:54-0000\n"
 "Last-Translator: Marcin Floryan <marcin.floryan@gmail.com>\n"
 "Language-Team: Polish <inkscapeplteam@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -4622,7 +4621,7 @@ msgstr ""
 #. checkitem_toggled, checkitem_update, 0);
 #: ../src/interface.cpp:841
 msgid "Commands Bar"
-msgstr "Pasek poleceń"
+msgstr "Pasek p_oleceń"
 
 #: ../src/interface.cpp:841
 msgid "Show or hide the Commands bar (under the menu)"
@@ -4630,7 +4629,7 @@ msgstr "Wyświetla lub ukrywa pasek poleceń (pod menu)"
 
 #: ../src/interface.cpp:843
 msgid "Tool Controls Bar"
-msgstr "Pasek narzędzi"
+msgstr "Pasek _narzędzi"
 
 #: ../src/interface.cpp:843
 msgid "Show or hide the Tool Controls bar"
@@ -4783,7 +4782,7 @@ msgstr "Styl paska elementów dokowalnych"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify"
-msgstr "Do ikony"
+msgstr "Minimalizuj"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify this dock"
@@ -5091,11 +5090,11 @@ msgstr "Okno dokowalne, które posiada tę etykietę karty"
 #: ../src/ui/dialog/inkscape-preferences.cpp:464
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
 msgid "Floating"
-msgstr "Swobodne"
+msgstr "Przestawne"
 
 #: ../src/libgdl/gdl-dock.c:176
 msgid "Whether the dock is floating in its own window"
-msgstr "Czy okno dokowalne może być swobodne w swoim własnym oknie"
+msgstr "Czy okno dokowalne może być przestawnym w swoim własnym oknie"
 
 #: ../src/libgdl/gdl-dock.c:184
 msgid "Default title for the newly created floating docks"
@@ -5103,11 +5102,11 @@ msgstr "Domyślna nazwa tworzonych okien dokowalnych"
 
 #: ../src/libgdl/gdl-dock.c:191
 msgid "Width for the dock when it's of floating type"
-msgstr "Szerokość okna dokowalnego w trybie swobodnym"
+msgstr "Szerokość okna dokowalnego w trybie przestawnym"
 
 #: ../src/libgdl/gdl-dock.c:199
 msgid "Height for the dock when it's of floating type"
-msgstr "Wysokość okna dokowalnego w trybie swobodnym"
+msgstr "Wysokość okna dokowalnego w trybie przestawnym"
 
 #: ../src/libgdl/gdl-dock.c:206
 msgid "Float X"
@@ -5115,7 +5114,7 @@ msgstr "Współrzędna X"
 
 #: ../src/libgdl/gdl-dock.c:207
 msgid "X coordinate for a floating dock"
-msgstr "Współrzędna X okna dokowalnego w trybie swobodnym"
+msgstr "Współrzędna X okna dokowalnego w trybie przestawnym"
 
 #: ../src/libgdl/gdl-dock.c:214
 msgid "Float Y"
@@ -5123,7 +5122,7 @@ msgstr "Współrzędna Y"
 
 #: ../src/libgdl/gdl-dock.c:215
 msgid "Y coordinate for a floating dock"
-msgstr "Współrzędna Y okna dokowalnego w trybie swobodnym"
+msgstr "Współrzędna Y okna dokowalnego w trybie przestawnym"
 
 #: ../src/libgdl/gdl-dock.c:499
 #, c-format
@@ -5431,7 +5430,7 @@ msgstr "Nie używaj X serwera (przetwarzaj jedynie pliki z poziomu konsoli)"
 
 #: ../src/main.cpp:228
 msgid "Try to use X server (even if $DISPLAY is not set)"
-msgstr "Spróbuj używać X serwera (nawet gdy nie ustawiono zmiennej $DISPLAY)"
+msgstr "Spróbuj używać X serwera (nawet, gdy nie ustawiono zmiennej $DISPLAY)"
 
 #: ../src/main.cpp:233
 msgid "Open specified document(s) (option string may be excluded)"
@@ -5979,7 +5978,7 @@ msgstr "Zmiana wielkości obiektu wzdłuż osi Z; z <b>Shift</b> w kierunkach X/
 
 #: ../src/object-edit.cpp:731
 msgid "Move the box in perspective"
-msgstr "Przesuwaj obiekt w perspektywie"
+msgstr "Utwórz perspektywę obiektu"
 
 #: ../src/object-edit.cpp:909
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -7628,11 +7627,11 @@ msgstr "Udoskonalanie metodą odpychania"
 
 #: ../src/tweak-context.cpp:1042
 msgid "Shrink tweak"
-msgstr "Udoskonalanie przez zmniejszanie"
+msgstr "Udoskonalanie wklęśnięć"
 
 #: ../src/tweak-context.cpp:1046
 msgid "Grow tweak"
-msgstr "Udoskonalanie przez powiększanie"
+msgstr "Udoskonalanie uwypuklania"
 
 #: ../src/tweak-context.cpp:1050
 msgid "Attract tweak"
@@ -7747,8 +7746,10 @@ msgstr "about.svg"
 #: ../src/ui/dialog/aboutbox.cpp:337
 msgid "translator-credits"
 msgstr ""
-"Przemysław Loesch 2006\n"
-"Zespół lokalizacyjny Inkscape  2008"
+"Polska lokalizacja wykonana przez:\n"
+"2005 - 2006 - Przemysław Loesch <p_loesch@poczta.onet.pl>\n"
+"2008 - Polski Zespół lokalizacyjny Inkscape <inkscapeplteam@gmail.com>\n"
+"W składzie:  Leszek(teo)Życzkowski, Marcin Floryan, Piotr Parafiniuk i inni"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:234
 #: ../src/ui/dialog/align-and-distribute.cpp:780
@@ -7762,7 +7763,7 @@ msgstr "Rozłóż"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:465
 msgid "Minimum horizontal gap (in px units) between bounding boxes"
-msgstr "Minimalny odstęp poziomy (w pixelach) pomiędzy obramowaniami obiektów"
+msgstr "Minimalny odstęp poziomy (w pikselach) pomiędzy obramowaniami obiektów"
 
 #. TRANSLATORS: Horizontal gap
 #: ../src/ui/dialog/align-and-distribute.cpp:467
@@ -7772,7 +7773,7 @@ msgstr "Wys.:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:475
 msgid "Minimum vertical gap (in px units) between bounding boxes"
-msgstr "Minimalny odstęp pionowy (w pixelach) pomiędzy obramowaniami obiektów"
+msgstr "Minimalny odstęp pionowy (w pikselach) pomiędzy obramowaniami obiektów"
 
 #. TRANSLATORS: Vertical gap
 #: ../src/ui/dialog/align-and-distribute.cpp:477
@@ -8356,7 +8357,7 @@ msgstr "Dodaj automatycznie rozszerzenie nazwy pliku"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1079
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1357
 msgid "Guess from extension"
-msgstr "Na podstawie rozszerzenia"
+msgstr "Wszystkie pliki (*.*)"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1378
 msgid "Left edge of source"
@@ -9031,7 +9032,7 @@ msgstr "Próg:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:179
 msgid "How far (in screen pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"
-msgstr "Odległość od obrzeża obszaru roboczego, przy której uruchamiane jest automatyczne przewijanie. Wartość dodatnia oznacza położenie poza obszarem roboczym, ujemna wewnątrz."
+msgstr "Odległość (w pikselach ekranu) od obrzeża obszaru roboczego, przy której uruchamiane jest automatyczne przewijanie. Wartość dodatnia oznacza położenie poza obszarem roboczym, ujemna wewnątrz."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:180
 msgid "Left mouse button pans when Space is pressed"
@@ -10777,7 +10778,7 @@ msgstr "Edytuj macierz przekształcenia"
 #: ../src/ui/view/edit-widget.cpp:918
 #: ../src/ui/view/edit-widget.cpp:1003
 msgid "PLACEHOLDER, do not translate"
-msgstr ""
+msgstr "-"
 
 #: ../src/ui/view/edit-widget.cpp:1062
 #: ../src/widgets/desktop-widget.cpp:376
