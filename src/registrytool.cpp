@@ -136,7 +136,7 @@ bool RegistryTool::setPathInfo()
     //    fullPath.c_str(), path.c_str(), exeName.c_str());
 
     Glib::ustring keyName =
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\";
+    "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\";
     keyName.append(exeName);
 
     Glib::ustring valueName = "";
@@ -166,7 +166,7 @@ void testReg()
 {
     RegistryTool rt;
     char *key =
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\inkscape.exe";
+    "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\inkscape.exe";
     char *name  = "";
     char *value = "c:\\inkscape\\inkscape.exe";
     if (!rt.setStringValue(key, name, value))
