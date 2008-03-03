@@ -21,11 +21,12 @@ SPDocument *
 GdkpixbufInput::open(Inkscape::Extension::Input */*mod*/, char const *uri)
 {
     SPDocument *doc = sp_document_new(NULL, TRUE, TRUE);
-    bool saved = sp_document_get_undo_sensitive(doc);
-    sp_document_set_undo_sensitive(doc, false); // no need to undo in this temporary document
     GdkPixbuf *pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
 
     if (pb) {         /* We are readable */
+        bool saved = sp_document_get_undo_sensitive(doc);
+        sp_document_set_undo_sensitive(doc, false); // no need to undo in this temporary document
+
         Inkscape::XML::Node *repr = NULL;
 
         double width = gdk_pixbuf_get_width(pb);
