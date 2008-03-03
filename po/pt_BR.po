@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-02-21 21:42-0300\n"
-"PO-Revision-Date: 2008-03-03 00:08-0300\n"
+"PO-Revision-Date: 2008-03-03 01:53-0300\n"
 "Last-Translator: Felipe C. da S. Sanches <felipe.sanches@gmail.com>\n"
 "Language-Team: Português Brasil <inkscape-brasil@listas.softwarelivre.org>\n"
 "MIME-Version: 1.0\n"
@@ -9043,16 +9043,15 @@ msgstr "Adicionar Primitiva de Filtro:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2093
 msgid "No effect selected"
-msgstr "Nenhum efeito selecionado"
+msgstr "Nenhuma primitiva de filtro selecionada"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2094
-#, fuzzy
 msgid "No filter selected"
-msgstr "Nenhum efeito selecionado"
+msgstr "Nenhum filtro selecionado"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2129
 msgid "Effect parameters"
-msgstr "<b>Parâmetros das Primitivas de Filtro</b>"
+msgstr "Parâmetros das primitivas de filtro"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2130
 msgid "Filter General Settings"
