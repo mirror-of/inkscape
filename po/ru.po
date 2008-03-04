@@ -5496,9 +5496,8 @@ msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Пытаться использовать X сервер (даже если переменная $DISPLAY не установлена)"
 
 #: ../src/main.cpp:233
-#, fuzzy
 msgid "Open specified document(s) (option string may be excluded)"
-msgstr "Открыть указанные документы"
+msgstr "Открыть указанные документы (строка с параметрами может быть исключена)"
 
 #: ../src/main.cpp:234
 #: ../src/main.cpp:239
@@ -6296,7 +6295,7 @@ msgstr "<b>Проведите курсором мыши</b> по объекта�
 
 #: ../src/select-context.cpp:547
 msgid "<b>Drag around</b> objects to select them; press <b>Alt</b> to switch to touch selection"
-msgstr "<b><b>Проведите курсором мыши</b> вокруг объектов, чтобы выделить их; нажмите <b>Alt</b> для переключения на касательное выделение"
+msgstr "<b>Проведите курсором мыши</b> вокруг объектов, чтобы выделить их; нажмите <b>Alt</b> для переключения на касательное выделение"
 
 #: ../src/select-context.cpp:707
 msgid "<b>Ctrl</b>: click to select in groups; drag to move hor/vert"
@@ -8472,9 +8471,8 @@ msgid "Document"
 msgstr "Документ"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1435
-#, fuzzy
 msgid "Custom"
-msgstr "Нестандартный"
+msgstr "Другой"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1475
 msgid "Cairo"
@@ -10224,9 +10222,8 @@ msgid "Could not open temporary PNG for bitmap printing"
 msgstr "Не удалось открыть временный файл PNG для растровой печати"
 
 #: ../src/ui/dialog/print.cpp:101
-#, fuzzy
 msgid "Could not set up Document"
-msgstr "Невозможно экспортировать в файл %s.\n"
+msgstr "Не удалось настроить документ"
 
 #: ../src/ui/dialog/print.cpp:105
 msgid "Failed to set CairoRenderContext"
@@ -11405,7 +11402,6 @@ msgid "Render using Cairo vector operations.  The resulting image is usually sma
 msgstr "Использовать векторные операторы Cairo. Итоговое изображение обычно имеет меньший размер файла и свободно масштабируется, но некоторые фильтры эффектов будут переданы некорректно."
 
 #: ../src/ui/widget/rendering-options.cpp:57
-#, fuzzy
 msgid "Render everything as bitmap.  The resulting image is usually larger in file size and cannot be arbitrarily scaled without quality loss, but all objects will be rendered exactly as displayed."
 msgstr "Напечатать как растр. Как правило, файл будет большего размера, и полученное изображение нельзя будет произвольно масштабировать без потери качества. Однако все графические элементы будут напечатаны так, как они выглядят на экране."
 
