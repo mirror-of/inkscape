@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-02-26 11:38+0100\n"
-"PO-Revision-Date: 2008-03-02 21:47+0100\n"
+"PO-Revision-Date: 2008-03-02 23:37+0100\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -3537,7 +3537,7 @@ msgstr "Importovať text ako text"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:120
 msgid "Embed images"
-msgstr "Vkladať obrázky"
+msgstr "Vložiť obrázky"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:123
 msgid "Import settings"
@@ -3856,7 +3856,7 @@ msgstr "Dokument bol exportovaný."
 #: ../src/file.cpp:1334
 #: ../src/verbs.cpp:2151
 msgid "Import From Open Clip Art Library"
-msgstr "Importovať z knižnice Open Clip Art"
+msgstr "Importuje z knižnice Open Clip Art"
 
 #: ../src/filter-enums.cpp:20
 msgid "Blend"
@@ -5940,25 +5940,25 @@ msgstr "Zmeňte objekt ťahaním za úchopy."
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
-msgstr[0] "<b>%i</b> zo <b>%i</b> uzlov zvolených; %s. %s."
-msgstr[1] "<b>%i</b> zo <b>%i</b> uzlov zvolených; %s. %s."
-msgstr[2] "<b>%i</b> zo <b>%i</b> uzlov zvolených; %s. %s."
+msgstr[0] "Vybraný <b>%i</b> zo <b>%i</b> uzlov; %s. %s."
+msgstr[1] "Vybrané <b>%i</b> zo <b>%i</b> uzlov; %s. %s."
+msgstr[2] "Vybraných <b>%i</b> zo <b>%i</b> uzlov; %s. %s."
 
 #: ../src/nodepath.cpp:4480
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected in <b>%i</b> of <b>%i</b> subpaths. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected in <b>%i</b> of <b>%i</b> subpaths. %s."
-msgstr[0] "<b>%i</b> z <b>%i</b> uzlov vybraných v <b>%i</b> z <b>%i</b> podciest. %s."
-msgstr[1] "<b>%i</b> z <b>%i</b> uzlov vybraných v <b>%i</b> z <b>%i</b> podciest. %s."
-msgstr[2] "<b>%i</b> z <b>%i</b> uzlov vybraných v <b>%i</b> z <b>%i</b> podciest. %s."
+msgstr[0] "Vybraný <b>%i</b> z <b>%i</b> uzlov v <b>%i</b> z <b>%i</b> podciest. %s."
+msgstr[1] "Vybrané <b>%i</b> z <b>%i</b> uzlov v <b>%i</b> z <b>%i</b> podciest. %s."
+msgstr[2] "Vybraných <b>%i</b> z <b>%i</b> uzlov v <b>%i</b> z <b>%i</b> podciest. %s."
 
 #: ../src/nodepath.cpp:4486
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
-msgstr[0] "<b>%i</b> zo <b>%i</b> uzlov zvolených; %s."
-msgstr[1] "<b>%i</b> zo <b>%i</b> uzlov zvolených; %s."
-msgstr[2] "<b>%i</b> zo <b>%i</b> uzlov zvolených; %s."
+msgstr[0] "Vybraný <b>%i</b> zo <b>%i</b> uzlov; %s."
+msgstr[1] "Vybrané <b>%i</b> zo <b>%i</b> uzlov; %s."
+msgstr[2] "Vybraných <b>%i</b> zo <b>%i</b> uzlov; %s."
 
 #: ../src/object-edit.cpp:501
 msgid "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the vertical radius the same"
@@ -6318,7 +6318,7 @@ msgstr "Nemôžete zdvihnúť/znížiť objekty z <b>rozličných skupín</b> al
 
 #: ../src/selection-chemistry.cpp:704
 msgid "Select <b>object(s)</b> to raise to top."
-msgstr "Vyberte <b>objekt</b>, ktorý sa má presunúť na vrchol."
+msgstr "Vyberte <b>objekt</b>, ktorý sa má presunúť na vrch."
 
 #: ../src/selection-chemistry.cpp:727
 msgid "Raise to top"
@@ -6334,7 +6334,7 @@ msgstr "Presunúť nižšie"
 
 #: ../src/selection-chemistry.cpp:804
 msgid "Select <b>object(s)</b> to lower to bottom."
-msgstr "Vyberte <b>objekt</b>, ktorý sa má presunúť dole."
+msgstr "Vyberte <b>objekt</b>, ktorý sa má presunúť na spodok."
 
 #: ../src/selection-chemistry.cpp:839
 msgid "Lower to bottom"
@@ -11609,7 +11609,7 @@ msgstr "Exportuje dokument alebo výber ako bitmapový obrázok"
 
 #: ../src/verbs.cpp:2151
 msgid "Import a document from Open Clip Art Library"
-msgstr "Importovať dokument z knižnice Open Clip Art"
+msgstr "Importuje dokument z knižnice Open Clip Art"
 
 #: ../src/verbs.cpp:2152
 msgid "Export To Open Clip Art Library"
@@ -11798,7 +11798,7 @@ msgstr "Objekty na _zakončenie čiary"
 
 #: ../src/verbs.cpp:2202
 msgid "Convert selection to a line marker"
-msgstr "Konvertovať výber na zakončenie čiary"
+msgstr "Prevedie výber na zakončenie čiary"
 
 #. TRANSLATORS: Convert selection to a collection of guidelines
 #: ../src/verbs.cpp:2204
@@ -11807,7 +11807,7 @@ msgstr "Objekty na _vodidlá"
 
 #: ../src/verbs.cpp:2205
 msgid "Convert selected objects to a collection of guidelines aligned with their edges"
-msgstr "Previesť vybrané objekty na zbierku vodidiel zarovnaných po hranách"
+msgstr "Prevedie vybrané objekty na zbierku vodidiel zarovnaných po hranách"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: ../src/verbs.cpp:2207
@@ -11816,7 +11816,7 @@ msgstr "O_bjekty na vzorku"
 
 #: ../src/verbs.cpp:2208
 msgid "Convert selection to a rectangle with tiled pattern fill"
-msgstr "Skonvertuje výber na obdĺžnik vyplnený vzorkou"
+msgstr "Prevedie výber na obdĺžnik vyplnený vzorkou"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: ../src/verbs.cpp:2210
@@ -11912,7 +11912,7 @@ msgstr "Presunie výber na najvyššiu úroveň"
 
 #: ../src/verbs.cpp:2234
 msgid "Lower to _Bottom"
-msgstr "P_resunúť výber na spodok"
+msgstr "P_resunúť na spodok"
 
 #: ../src/verbs.cpp:2235
 msgid "Lower selection to bottom"
@@ -12533,11 +12533,11 @@ msgstr "Otvorí Nastavenia pre nástroj Zmena mierky"
 
 #: ../src/verbs.cpp:2438
 msgid "Dropper Preferences"
-msgstr "Nastavenie kvapkadla"
+msgstr "Nastavenie pipety"
 
 #: ../src/verbs.cpp:2439
 msgid "Open Preferences for the Dropper tool"
-msgstr "Otvorí Nastavenia pre nástroj Kvapkadlo"
+msgstr "Otvorí Nastavenia pre nástroj Pipeta"
 
 #: ../src/verbs.cpp:2440
 msgid "Connector Preferences"
@@ -13419,7 +13419,7 @@ msgstr "Výška výberu"
 
 #: ../src/widgets/select-toolbar.cpp:487
 msgid "Affect:"
-msgstr "Ovplyvniť:"
+msgstr "Vplyv:"
 
 #: ../src/widgets/select-toolbar.cpp:506
 msgid "Scale rounded corners"
@@ -15035,11 +15035,11 @@ msgstr "Odtiene"
 
 #: ../share/extensions/embedimage.inx.h:1
 msgid "Embed All Images"
-msgstr "Vkladať všetky vybrané obrázky"
+msgstr "Vložiť všetky obrázky"
 
 #: ../share/extensions/embedimage.inx.h:2
 msgid "Embed only selected images"
-msgstr "Vkladať iba vybrané obrázky"
+msgstr "Vložiť iba vybrané obrázky"
 
 #: ../share/extensions/eps_input.inx.h:1
 msgid "EPS Input"
