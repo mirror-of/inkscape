@@ -42,7 +42,7 @@ ParamString::~ParamString(void)
     the passed in value is duplicated using \c g_strdup().
 */
 const gchar *
-ParamString::set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node)
+ParamString::set (const gchar * in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
     if (in == NULL) return NULL; /* Can't have NULL string */
 
@@ -58,12 +58,14 @@ ParamString::set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node
 }
 
 /** \brief  Return the value as a string */
-Glib::ustring *
-ParamString::string (void)
+void
+ParamString::string (std::string &string)
 {
     if (_value == NULL)
-        return new Glib::ustring("");
-	return new Glib::ustring(_value);
+        return;
+
+    string += _value;
+    return;
 }
 
 /** \brief  Initialize the object, to do that, copy the data. */

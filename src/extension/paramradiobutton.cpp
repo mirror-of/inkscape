@@ -139,7 +139,7 @@ ParamRadioButton::~ParamRadioButton (void)
     the passed in value is duplicated using \c g_strdup().
 */
 const gchar *
-ParamRadioButton::set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node)
+ParamRadioButton::set (const gchar * in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
     if (in == NULL) return NULL; /* Can't have NULL string */
 
@@ -167,12 +167,11 @@ ParamRadioButton::set (const gchar * in, SPDocument * doc, Inkscape::XML::Node *
     \brief  A function to get the current value of the parameter in a string form
     \return A string with the 'value' as command line argument
 */
-Glib::ustring *
-ParamRadioButton::string (void)
+void
+ParamRadioButton::string (std::string &string)
 {
-    Glib::ustring * param_string = new Glib::ustring("");
-    *param_string += _value;
-    return param_string;
+    string += _value;
+    return;
 }
 
 /** \brief  A special radiobutton class to use in ParamRadioButton */
@@ -181,18 +180,19 @@ private:
     ParamRadioButton * _pref;
     SPDocument * _doc;
     Inkscape::XML::Node * _node;
+    sigc::signal<void> * _changeSignal;
 public:
     /** \brief  Build a string preference for the given parameter
         \param  pref  Where to put the radiobutton's string when it is selected.
     */
     ParamRadioButtonWdg ( Gtk::RadioButtonGroup& group, const Glib::ustring& label,
-                          ParamRadioButton * pref, SPDocument * doc, Inkscape::XML::Node * node ) :
-        Gtk::RadioButton(group, label), _pref(pref), _doc(doc), _node(node) {
+                          ParamRadioButton * pref, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal ) :
+        Gtk::RadioButton(group, label), _pref(pref), _doc(doc), _node(node), _changeSignal(changeSignal) {
         add_changesignal();
     };
     ParamRadioButtonWdg ( const Glib::ustring& label,
-                          ParamRadioButton * pref, SPDocument * doc, Inkscape::XML::Node * node ) :
-        Gtk::RadioButton(label), _pref(pref), _doc(doc), _node(node) {
+                          ParamRadioButton * pref, SPDocument * doc, Inkscape::XML::Node * node , sigc::signal<void> * changeSignal) :
+        Gtk::RadioButton(label), _pref(pref), _doc(doc), _node(node), _changeSignal(changeSignal) {
         add_changesignal();
     };
     void add_changesignal() {
@@ -212,6 +212,9 @@ ParamRadioButtonWdg::changed (void)
     if (this->get_active()) {
         Glib::ustring data = this->get_label();
         _pref->set(data.c_str(), _doc, _node);
+    }
+    if (_changeSignal != NULL) {
+        _changeSignal->emit();
     }
 }
 
@@ -239,11 +242,11 @@ ParamRadioButton::get_widget (SPDocument * doc, Inkscape::XML::Node * node, sigc
         optionentry * entr = reinterpret_cast<optionentry *>(list->data);
         Glib::ustring * text = entr->guitext;
         if (first) {
-            radio = Gtk::manage(new ParamRadioButtonWdg(*text, this, doc, node));
+            radio = Gtk::manage(new ParamRadioButtonWdg(*text, this, doc, node, changeSignal));
             group = radio->get_group();
             first = false;
         } else {
-            radio = Gtk::manage(new ParamRadioButtonWdg(group, *text, this, doc, node));
+            radio = Gtk::manage(new ParamRadioButtonWdg(group, *text, this, doc, node, changeSignal));
         }
         radio->show();
         vbox->pack_start(*radio, true, true);

@@ -98,7 +98,11 @@ struct interpreter_t {
 */
 static interpreter_t const interpreterTab[] = {
         {"perl",   "perl-interpreter",   "perl"   },
+#ifdef _WIN32
+        {"python", "python-interpreter", "pythonw" },
+#else
         {"python", "python-interpreter", "python" },
+#endif
         {"ruby",   "ruby-interpreter",   "ruby"   },
         {"shell",  "shell-interpreter",  "sh"     },
         { NULL,    NULL,                  NULL    }
@@ -453,19 +457,19 @@ Script::check(Inkscape::Extension::Extension *module)
 }
 
 class ScriptDocCache : public ImplementationDocumentCache {
-	friend class Script;
+    friend class Script;
 protected:
-	std::string _filename;
+    std::string _filename;
     int _tempfd;
 public:
-	ScriptDocCache (Inkscape::UI::View::View * view);
-	~ScriptDocCache ( );
+    ScriptDocCache (Inkscape::UI::View::View * view);
+    ~ScriptDocCache ( );
 };
 
 ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
-	ImplementationDocumentCache(view),
-	_filename(""),
-	_tempfd(0)
+    ImplementationDocumentCache(view),
+    _filename(""),
+    _tempfd(0)
 {
     try {
         _tempfd = Glib::file_open_tmp(_filename, "ink_ext_XXXXXX.svg");
@@ -481,7 +485,7 @@ ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
               Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
               view->doc(), _filename.c_str(), FALSE, FALSE, FALSE);
 
-	return;
+    return;
 }
 
 ScriptDocCache::~ScriptDocCache ( )
@@ -727,21 +731,21 @@ Script::save(Inkscape::Extension::Output *module,
 void
 Script::effect(Inkscape::Extension::Effect *module,
                Inkscape::UI::View::View *doc,
-			   ImplementationDocumentCache * docCache)
+               ImplementationDocumentCache * docCache)
 {
-	if (docCache == NULL) {
-		docCache = newDocCache(module, doc);
-	}
-	ScriptDocCache * dc = dynamic_cast<ScriptDocCache *>(docCache);
-	if (dc == NULL) {
-		printf("TOO BAD TO LIVE!!!");
-		exit(1);
-	}
+    if (docCache == NULL) {
+        docCache = newDocCache(module, doc);
+    }
+    ScriptDocCache * dc = dynamic_cast<ScriptDocCache *>(docCache);
+    if (dc == NULL) {
+        printf("TOO BAD TO LIVE!!!");
+        exit(1);
+    }
 
     SPDesktop *desktop = (SPDesktop *)doc;
     sp_namedview_document_from_window(desktop);
 
-	gchar * orig_output_extension = g_strdup(sp_document_repr_root(desktop->doc())->attribute("inkscape:output_extension"));
+    gchar * orig_output_extension = g_strdup(sp_document_repr_root(desktop->doc())->attribute("inkscape:output_extension"));
 
     std::list<std::string> params;
     module->paramListString(params);
@@ -807,9 +811,9 @@ Script::effect(Inkscape::Extension::Effect *module,
         mydoc->release();
         sp_namedview_update_layers_from_document(desktop);
 
-		sp_document_repr_root(desktop->doc())->setAttribute("inkscape:output_extension", orig_output_extension);
+        sp_document_repr_root(desktop->doc())->setAttribute("inkscape:output_extension", orig_output_extension);
     }
-	g_free(orig_output_extension);
+    g_free(orig_output_extension);
 
     return;
 }
@@ -1013,31 +1017,14 @@ Script::execute (const std::list<std::string> &in_command,
         } while(param_str.size() > 0);
     }
 
-    if (!(filein.empty())) {
-//        if(argv.size() == 1) {
-            argv.push_back(filein);
-/*        }
-        else {
-            std::string parameter_str = argv.back();
-            argv.pop_back();
-            //TODO: quote
-            parameter_str += " " + filein;
-            argv.push_back(parameter_str);
-        }
-*/
-    }
-
     for (std::list<std::string>::const_iterator i = in_params.begin();
             i != in_params.end(); i++) {
         argv.push_back(*i);
     }
 
-/*
-    for (std::vector<std::string>::const_iterator i = argv.begin();
-            i != argv.end(); i++) {
-        std::cout << "_" << *i << "_" << std::endl;
+    if (!(filein.empty())) {
+		argv.push_back(filein);
     }
-*/
 
     int stdout_pipe, stderr_pipe;
 

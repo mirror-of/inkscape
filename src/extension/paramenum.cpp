@@ -77,8 +77,6 @@ ParamComboBox::ParamComboBox (const gchar * name, const gchar * guitext, const g
                 const char * contents = sp_repr_children(child_repr)->content();
                 if (contents != NULL)
                     // don't translate when 'item' but do translate when '_item'
-                	// NOTE: internal extensions use build_from_mem and don't need _item but 
-                	//       still need to include if are to be localized                	
                      newguitext = new Glib::ustring( !strcmp(chname, "_item") ? _(contents) : contents );
                 else
                     continue;
@@ -141,7 +139,7 @@ ParamComboBox::~ParamComboBox (void)
     the passed in value is duplicated using \c g_strdup().
 */
 const gchar *
-ParamComboBox::set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node)
+ParamComboBox::set (const gchar * in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
     if (in == NULL) return NULL; /* Can't have NULL string */
 
@@ -174,12 +172,11 @@ ParamComboBox::changed (void) {
     \brief  A function to get the value of the parameter in string form
     \return A string with the 'value' as command line argument
 */
-Glib::ustring *
-ParamComboBox::string (void)
+void
+ParamComboBox::string (std::string &string)
 {
-    Glib::ustring * param_string = new Glib::ustring("");
-    *param_string += _value;
-    return param_string;
+    string += _value;
+    return;
 }
 
 

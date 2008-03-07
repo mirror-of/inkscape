@@ -74,7 +74,7 @@ ParamFloat::ParamFloat (const gchar * name, const gchar * guitext, const gchar *
     and \c pref_name() are used.
 */
 float
-ParamFloat::set (float in, SPDocument * doc, Inkscape::XML::Node * node)
+ParamFloat::set (float in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
     _value = in;
     if (_value > _max) _value = _max;
@@ -88,13 +88,13 @@ ParamFloat::set (float in, SPDocument * doc, Inkscape::XML::Node * node)
 }
 
 /** \brief  Return the value as a string */
-Glib::ustring *
-ParamFloat::string (void)
+void
+ParamFloat::string (std::string &string)
 {
     char startstring[G_ASCII_DTOSTR_BUF_SIZE];
     g_ascii_dtostr(startstring, G_ASCII_DTOSTR_BUF_SIZE, _value);
-    Glib::ustring * mystring = new Glib::ustring(startstring);
-    return mystring;
+    string += startstring;
+    return;
 }
 
 /** \brief  A class to make an adjustment that uses Extension params */
