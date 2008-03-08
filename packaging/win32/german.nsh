@@ -218,7 +218,7 @@ LangString lng_PurgePrefs ${LANG_GERMAN}  "behalte persönliche Inkscape-Vorgaben
 
 LangString lng_RETRY_CANCEL_DESC ${LANG_GERMAN} "$\n$\nWiederholen um fortzufahren oder Abbrechen zum sofortigen Beenden."
 
-LangString lng_ClearDirectoryBefore ${LANG_GERMAN} "${PRODUCT_NAME} kann nur in einem leeren Verzeichnis installiert werden. $INSTDIR ist nicht leer. Bitte löschen Sie den verzeichnisinhalt und versuchen Sie es erneut!$(lng_RETRY_CANCEL_DESC)"
+LangString lng_ClearDirectoryBefore ${LANG_GERMAN} "${PRODUCT_NAME} kann nur in einem leeren Verzeichnis installiert werden. $INSTDIR ist nicht leer. Bitte löschen Sie den Verzeichnisinhalt und versuchen Sie es erneut!$(lng_RETRY_CANCEL_DESC)"
 
 LangString lng_UninstallLogNotFound ${LANG_GERMAN} "Datei $INSTDIR\uninstall.log nicht gefunden!$\r$\nBitte deinstallieren Sie selbst durch Löschen von $INSTDIR!"
 
