@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-02-26 11:38+0100\n"
-"PO-Revision-Date: 2008-03-04 23:48+0100\n"
+"PO-Revision-Date: 2008-03-09 16:35+0100\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
-"Language-Team: Hungarian\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2899,9 +2899,8 @@ msgstr "Csúcsok:"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:38
 #: ../src/extension/internal/bitmap/sharpen.cpp:37
-#, fuzzy
 msgid "Sharpen"
-msgstr "Alakzatok"
+msgstr "Élesítés"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:44
 #, fuzzy
@@ -3195,9 +3194,8 @@ msgid "Shade selected bitmap(s) simulating distant light source."
 msgstr "A kijelölt bitkép(ek)"
 
 #: ../src/extension/internal/bitmap/sharpen.cpp:46
-#, fuzzy
 msgid "Sharpen selected bitmap(s)."
-msgstr "A kijelölt bitkép(ek)"
+msgstr "A kijelölt bitkép(ek) élesítése"
 
 #: ../src/extension/internal/bitmap/solarize.cpp:36
 #, fuzzy
@@ -3225,9 +3223,8 @@ msgid "Swirl"
 msgstr "Spirál"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:38
-#, fuzzy
 msgid "Degrees"
-msgstr "fok"
+msgstr "Fok"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:44
 #, fuzzy
@@ -3238,9 +3235,8 @@ msgstr "középpontA kijelölt bitkép(ek)"
 #: ../src/extension/internal/bitmap/threshold.cpp:37
 #: ../src/extension/internal/bitmap/threshold.cpp:39
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:45
-#, fuzzy
 msgid "Threshold"
-msgstr "Küszöb:"
+msgstr "Küszöb"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:45
 #, fuzzy
@@ -3249,17 +3245,15 @@ msgstr "A kijelölt bitkép(ek)"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:40
 msgid "Unsharp Mask"
-msgstr ""
+msgstr "Életlen maszk"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:51
-#, fuzzy
 msgid "Sharpen selected bitmap(s) using unsharp mask algorithms."
-msgstr "A kijelölt bitkép(ek)"
+msgstr "A kijelölt bitkép(ek) élesítése az \"életlen maszk\" eljárásokkal"
 
 #: ../src/extension/internal/bitmap/wave.cpp:37
-#, fuzzy
 msgid "Wave"
-msgstr "M_entés"
+msgstr "Hullám"
 
 #: ../src/extension/internal/bitmap/wave.cpp:39
 msgid "Amplitude"
@@ -3267,7 +3261,7 @@ msgstr ""
 
 #: ../src/extension/internal/bitmap/wave.cpp:40
 msgid "Wavelength"
-msgstr ""
+msgstr "Hullámhossz"
 
 #: ../src/extension/internal/bitmap/wave.cpp:46
 #, fuzzy
@@ -3298,9 +3292,8 @@ msgid "Generate from Path"
 msgstr "Létrehozás lánc alapján"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:171
-#, fuzzy
 msgid "Cairo PDF Output"
-msgstr "DXF-kimenet"
+msgstr "PDF-kimenet, Cairo"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:173
 msgid "Restrict to PDF version"
@@ -3320,99 +3313,82 @@ msgstr "Szövegek átalakítása láncokká"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:177
 #: ../src/extension/internal/cairo-ps-out.cpp:231
-#, fuzzy
 msgid "Convert blur effects to bitmaps"
 msgstr "Elmosási effektusok átalakítása bitképekké"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:178
 #: ../src/extension/internal/cairo-ps-out.cpp:232
-#, fuzzy
 msgid "Preferred resolution (DPI) of bitmaps"
-msgstr "A kívánt bitkép-felbontás (pont/hüvelykben)"
+msgstr "A kívánt bitkép-felbontás (DPI, azaz pont/hüvelyk)"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:182
-#, fuzzy
 msgid "PDF via Cairo (*.pdf)"
-msgstr "Dia-diagram (*.dia)"
+msgstr "PDF a Cairóval (*.pdf)"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:183
-#, fuzzy
 msgid "PDF File"
-msgstr "Fájl"
+msgstr "PDF-fájl"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:222
-#, fuzzy
 msgid "Cairo PS Output"
-msgstr "DXF-kimenet"
+msgstr "PS-kimenet, Cairo"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:224
 msgid "Restrict to PS level"
 msgstr "Adott PS szintre korlátozás"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:225
-#, fuzzy
 msgid "PostScript level 3"
-msgstr "PostScript-fájl"
+msgstr "PostScript, 3-as szint"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:227
-#, fuzzy
 msgid "PostScript level 2"
-msgstr "PostScript-fájl"
+msgstr "PostScript, 2-es szint"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:236
-#, fuzzy
 msgid "PostScript via Cairo (*.ps)"
-msgstr "PostScript (*.ps)"
+msgstr "PostScript a Cairóval (*.ps)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:237
 #: ../src/extension/internal/ps-out.cpp:90
-#, fuzzy
 msgid "PostScript File"
 msgstr "PostScript-fájl"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1685
-#, fuzzy
 msgid "EMF Input"
-msgstr "DXF-bemenet"
+msgstr "EMF-bemenet"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1690
-#, fuzzy
 msgid "Enhanced Metafiles (*.emf)"
-msgstr "Windows Metafile (*.wmf)"
+msgstr "Továbbfejlesztett metafájlok (*.emf)"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1691
 msgid "Enhanced Metafiles"
-msgstr ""
+msgstr "Továbbfejlesztett metafájlok"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1699
-#, fuzzy
 msgid "WMF Input"
-msgstr "WPG-bemenet"
+msgstr "WMF-bemenet"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1704
-#, fuzzy
 msgid "Windows Metafiles (*.wmf)"
-msgstr "Windows Metafile (*.wmf)"
+msgstr "Windows-metafájlok (*.wmf)"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1705
-#, fuzzy
 msgid "Windows Metafiles"
-msgstr "Windows Metafile-bemenet"
+msgstr "Windows-metafájlok"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1713
-#, fuzzy
 msgid "EMF Output"
-msgstr "DXF-kimenet"
+msgstr "EMF-kimenet"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1719
-#, fuzzy
 msgid "Enhanced Metafile (*.emf)"
-msgstr "Windows Metafile (*.wmf)"
+msgstr "Továbbfejlesztett metafájl (*.emf)"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:1720
-#, fuzzy
 msgid "Enhanced Metafile"
-msgstr "Téglalap módosítása"
+msgstr "Továbbfejlesztett metafájl"
 
 #: ../src/extension/internal/eps-out.cpp:89
 msgid "Encapsulated Postscript Output"
@@ -3529,19 +3505,16 @@ msgid "Print properties"
 msgstr "Nyomtatási tulajdonságok"
 
 #: ../src/extension/internal/pdf-cairo.cpp:145
-#, fuzzy
 msgid "Print using PDF operators"
-msgstr "Nyomtatás PostScript-műveletekkel"
+msgstr "Nyomtatás PDF-műveletekkel"
 
 #: ../src/extension/internal/pdf-cairo.cpp:147
-#, fuzzy
 msgid ""
 "Use PDF vector operators. The resulting image is usually smaller in file "
 "size and can be arbitrarily scaled, but patterns will be lost."
 msgstr ""
-"A PostScript vektorműveleteinek használata. Az így készített kép általában "
-"kisebb fájlméretű és tetszőlegesen méretezhető, viszont az átlátszóság és a "
-"minták elvesznek."
+"A PDF vektorműveleteinek használata. Az így készített kép általában "
+"kisebb fájlméretű és tetszőlegesen méretezhető, viszont a minták elvesznek."
 
 #: ../src/extension/internal/pdf-cairo.cpp:152
 #: ../src/extension/internal/ps.cpp:175
@@ -3592,9 +3565,8 @@ msgstr ""
 "következőt: \"| programnév argumentum ...\"."
 
 #: ../src/extension/internal/pdf-cairo.cpp:1021
-#, fuzzy
 msgid "PDF Print"
-msgstr "GNOME-nyomtatás"
+msgstr "PDF-nyomtatás"
 
 #. TRANSLATORS: The following are document crop settings for PDF import
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:54
@@ -3658,28 +3630,25 @@ msgstr "Csoport"
 
 #. Text options
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:114
-#, fuzzy
 msgid "Text handling:"
-msgstr "Helykihagyás beállítása:"
+msgstr "Szövegkezelés:"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:116
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:117
-#, fuzzy
 msgid "Import text as text"
-msgstr "Tördelt szöveg átalakítása normál szöveggé"
+msgstr "Szöveg importálása szövegként"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:120
-#, fuzzy
 msgid "Embed images"
-msgstr "Az összes kép beágyazása"
+msgstr "Képek beágyazása"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:123
 msgid "Import settings"
-msgstr ""
+msgstr "Importálási beállítások"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:240
 msgid "PDF Import Settings"
-msgstr ""
+msgstr "PDF-importálási beállítások"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:380
 msgid "pdfinput|medium"
@@ -3696,28 +3665,24 @@ msgid "very fine"
 msgstr "Kitöltés invertálása"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:729
-#, fuzzy
 msgid "PDF Input"
-msgstr "DXF-bemenet"
+msgstr "PDF-bemenet"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:734
-#, fuzzy
 msgid "Adobe PDF (*.pdf)"
-msgstr "AutoCAD DXF (*.dxf)"
+msgstr "Adobe PDF (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:735
 msgid "Adobe Portable Document Format"
-msgstr ""
+msgstr "Adobe Portable Document Format (PDF)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:742
-#, fuzzy
 msgid "AI Input"
-msgstr "AI 8.0-bemenet"
+msgstr "AI-bemenet"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:747
-#, fuzzy
 msgid "Adobe Illustrator 9.0 and above (*.ai)"
-msgstr "Adobe Illustrator 8.0 (*.ai)"
+msgstr "Adobe Illustrator 9.0 és újabbak (*.ai)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:748
 #, fuzzy
@@ -3739,9 +3704,8 @@ msgid "PovRay Raytracer File"
 msgstr "PovRay Raytracer-fájl"
 
 #: ../src/extension/internal/ps.cpp:146
-#, fuzzy
 msgid "Print Configuration"
-msgstr "Nyomtatási cél"
+msgstr "Nyomtatási beállítások"
 
 #: ../src/extension/internal/ps.cpp:168
 msgid "Print using PostScript operators"
@@ -3766,7 +3730,6 @@ msgid "Postscript Output"
 msgstr "PostScript-kimenet"
 
 #: ../src/extension/internal/ps-out.cpp:89
-#, fuzzy
 msgid "PostScript (*.ps)"
 msgstr "PostScript (*.ps)"
 
@@ -4077,14 +4040,12 @@ msgid "Turbulence"
 msgstr "Tűrés:"
 
 #: ../src/filter-enums.cpp:40
-#, fuzzy
 msgid "Source Graphic"
-msgstr "A forrás magassága"
+msgstr "Forrásgrafika"
 
 #: ../src/filter-enums.cpp:41
-#, fuzzy
 msgid "Source Alpha"
-msgstr "AlfaForrás"
+msgstr "Forrás-alfa"
 
 #: ../src/filter-enums.cpp:42
 msgid "Background Image"
@@ -4095,7 +4056,6 @@ msgid "Background Alpha"
 msgstr "Háttér-alfa"
 
 #: ../src/filter-enums.cpp:44
-#, fuzzy
 msgid "Fill Paint"
 msgstr "Kitöltési rajzolat"
 
@@ -5025,8 +4985,9 @@ msgid "Resizable"
 msgstr ""
 
 #: ../src/libgdl/gdl-dock-item.c:304
+#, fuzzy
 msgid "If set, the dock item can be resized when docked in a paned"
-msgstr ""
+msgstr "Ha az opció be van jelölve, akkor "
 
 #: ../src/libgdl/gdl-dock-item.c:311
 #, fuzzy
@@ -5045,8 +5006,9 @@ msgid "Locked"
 msgstr "Zárolás"
 
 #: ../src/libgdl/gdl-dock-item.c:321
+#, fuzzy
 msgid "If set, the dock item cannot be dragged around and it doesn't show a grip"
-msgstr ""
+msgstr "Ha az opció be van jelölve, akkor "
 
 #: ../src/libgdl/gdl-dock-item.c:329
 msgid "Preferred width"
@@ -9103,12 +9065,14 @@ msgid "Select an image to be used as feImage input"
 msgstr "Jelöljön ki egy képet és egy vagy több, felette levő alakzatot"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:778
+#, fuzzy
 msgid "This SVG filter effect does not require any parameters."
-msgstr ""
+msgstr "szűrőeffektus"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:784
+#, fuzzy
 msgid "This SVG filter effect is not yet implemented in Inkscape."
-msgstr ""
+msgstr "szűrőeffektus"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:975
 #, fuzzy
@@ -9128,30 +9092,26 @@ msgstr ""
 #. default z:
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
-#, fuzzy
 msgid "Location"
-msgstr "_Forgatás"
+msgstr "Hely"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "X coordinate"
-msgstr "X-koordináta:"
+msgstr "X-koordináta"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Y coordinate"
-msgstr "Y-koordináta:"
+msgstr "Y-koordináta"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Z coordinate"
-msgstr "X-koordináta:"
+msgstr "Z-koordináta"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
 #, fuzzy
@@ -9227,14 +9187,12 @@ msgid "_Effect"
 msgstr "E_ffektus"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1453
-#, fuzzy
 msgid "Connections"
-msgstr "Kapocs"
+msgstr "Kapcsolatok"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1569
-#, fuzzy
 msgid "Remove filter primitive"
-msgstr "szűrő"
+msgstr "Szűrőprimitív eltávolítása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1940
 #, fuzzy
@@ -9242,9 +9200,8 @@ msgid "Remove merge node"
 msgstr "csomópontokZöld eltávolítása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2056
-#, fuzzy
 msgid "Reorder filter primitive"
-msgstr "szűrő"
+msgstr "Szűrőprimitív átrendezése"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2092
 msgid "Add Effect:"
@@ -9255,34 +9212,30 @@ msgid "No effect selected"
 msgstr "Nincs kijelölve effektus"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2094
-#, fuzzy
 msgid "No filter selected"
-msgstr "Nincs kijelölve effektus"
+msgstr "Nincs kijelölve szűrő"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2129
-#, fuzzy
 msgid "Effect parameters"
-msgstr "<b>Effektus-paraméterek</b>"
+msgstr "Effektus-paraméterek"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2130
 msgid "Filter General Settings"
-msgstr ""
+msgstr "Általános szűrőbeállítások"
 
 #. default x:
 #. default y:
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
-#, fuzzy
 msgid "Coordinates"
-msgstr "Kurzorkoordináták"
+msgstr "Koordináták"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
-#, fuzzy
 msgid "X coordinate of the left corners of filter effects region"
-msgstr "A kijelölés klónjainak létrehozása és csempézése"
+msgstr "A szűrőeffektus-terület bal oldali sarkainak X-koordinátája"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2186
 msgid "Y coordinate of the upper corners of filter effects region"
-msgstr ""
+msgstr "A szűrőeffektus-terület felső sarkainak Y-koordinátája"
 
 #. default width:
 #. default height:
@@ -9292,14 +9245,12 @@ msgid "Dimensions"
 msgstr "Méretek"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
-#, fuzzy
 msgid "Width of filter effects region"
-msgstr "A kijelölés szélessége"
+msgstr "A szűrőeffektus-terület szélessége"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
-#, fuzzy
 msgid "Height of filter effects region"
-msgstr "A kijelölés magassága"
+msgstr "A szűrőeffektus-terület magassága"
 
 #. # end multiple scan
 #. ## end mode page
@@ -9438,8 +9389,9 @@ msgid "Preserve Alpha"
 msgstr "Alfa Megőrizve"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
+#, fuzzy
 msgid "If set, the alpha channel won't be altered by this filter primitive."
-msgstr ""
+msgstr "Ha az opció be van jelölve, akkor ez a szűrőprimitív nem módosítja az "
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
@@ -9566,10 +9518,11 @@ msgid "Exponent for specular term, larger is more \"shiny\"."
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2270
+#, fuzzy
 msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
-msgstr ""
+msgstr "Szűrőprimitív"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid "Base Frequency"
@@ -9591,14 +9544,16 @@ msgstr ""
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2285
 #, fuzzy
 msgid "Add filter primitive"
-msgstr "szűrő"
+msgstr "Szűrőprimitív"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2301
 #, fuzzy
 msgid ""
 "The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, "
 "multiply, darken and lighten."
-msgstr "szűrő KivetítésSzorzásSötétítésvilágosítás"
+msgstr ""
+"Szűrőprimitív "
+"KivetítésSzorzásSötétítésvilágosítás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2305
 #, fuzzy
@@ -9606,7 +9561,9 @@ msgid ""
 "The <b>feColorMatrix</b> filter primitive applies a matrix transformation to "
 "colour of each rendered pixel. This allows for effects like turning object "
 "to grayscale, modifying colour saturation and changing colour hue."
-msgstr "szűrőképpontobjektum effektus telítettségárnyalat "
+msgstr ""
+"Szűrőprimitív"
+"képpontobjektum effektus telítettségárnyalat "
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2309
 #, fuzzy
@@ -9616,8 +9573,9 @@ msgid ""
 "transfer functions, allowing operations like brightness and contrast "
 "adjustment, color balance, and thresholding."
 msgstr ""
+"Szűrőprimitív"
 "függvények"
-"szűrőAlfa"
+"Alfa"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2313
 #, fuzzy
@@ -9626,7 +9584,9 @@ msgid ""
 "the Porter-Duff blending modes or the aritmetic mode described in SVG "
 "standard. Porter-Duff blending modes are essentially logical operations "
 "between the corresponding pixel values of the images."
-msgstr "szűrőképpont"
+msgstr ""
+"Szűrőprimitív"
+"képpont"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2317
 #, fuzzy
@@ -9637,8 +9597,11 @@ msgid ""
 "be created using this filter primitive, the special gaussian blur primitive "
 "is faster and resolution-independent."
 msgstr ""
-"alkalmazszűrőeffektus "
-"Elmosás"
+"alkalmaz "
+"szűrőeffektus "
+"Szűrőprimitív"
+"Elmosás "
+"élesítés"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2321
 #, fuzzy
@@ -9647,7 +9610,9 @@ msgid ""
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
 "information: higher opacity areas are raised toward the viewer and lower "
 "opacity areas recede away from the viewer."
-msgstr "szűrőAlfa"
+msgstr ""
+"Szűrőprimitív"
+"Alfa"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2325
 #, fuzzy
@@ -9656,7 +9621,9 @@ msgid ""
 "first input using the second input as a displacement map, that shows from "
 "how far the pixel should come from. Classical examples are whirl and pinch "
 "effects."
-msgstr "szűrőképponteffektus"
+msgstr ""
+"Szűrőprimitív"
+"képponteffektus"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2329
 #, fuzzy
@@ -9664,7 +9631,9 @@ msgid ""
 "The <b>feFlood</b> filter primitive fills the region with a given color and "
 "opacity.  It is usually used as an input to other filters to apply color to "
 "a graphic."
-msgstr "szűrőalkalmazás"
+msgstr ""
+"Szűrőprimitív"
+"alkalmazás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2333
 #, fuzzy
@@ -9672,7 +9641,8 @@ msgid ""
 "The <b>feGaussianBlur</b> filter primitive uniformly blurs its input.  It is "
 "commonly used together with feOffset to create a drop shadow effect."
 msgstr ""
-"szűrőeffektus "
+"Szűrőprimitív"
+"effektus "
 "Elmosás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2337
@@ -9680,7 +9650,7 @@ msgstr ""
 msgid ""
 "The <b>feImage</b> filter primitive fills the region with an external image "
 "or another part of the document."
-msgstr "szűrő"
+msgstr "Szűrőprimitív"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2341
 #, fuzzy
@@ -9689,7 +9659,9 @@ msgid ""
 "inside the filter primitive to a single image. It uses normal alpha "
 "compositing for this. This is equivalent to using several feBlend primitives "
 "in 'normal' mode or several feComposite primitives in 'over' mode."
-msgstr "szűrőAlfa"
+msgstr ""
+"szűrőprimitív"
+"Alfa"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2345
 #, fuzzy
@@ -9697,7 +9669,9 @@ msgid ""
 "The <b>feMorphology</b> filter primitive provides erode and dilate effects. "
 "For single-colour objects erode makes the object thinner and dilate makes it "
 "thicker."
-msgstr "szűrőeffektusobjektum vastagítás"
+msgstr ""
+"szűrőprimitív"
+"effektusobjektum vastagítás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2349
 #, fuzzy
@@ -9705,7 +9679,9 @@ msgid ""
 "The <b>feOffset</b> filter primitive offsets the image by an user-defined "
 "amount. For example, this is useful for drop shadows, where the shadow is in "
 "a slightly different position than the actual object."
-msgstr "szűrőobjektum"
+msgstr ""
+"szűrőprimitív"
+"objektum"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2353
 #, fuzzy
@@ -9714,12 +9690,14 @@ msgid ""
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
 "information: higher opacity areas are raised toward the viewer and lower "
 "opacity areas recede away from the viewer."
-msgstr "szűrőAlfa"
+msgstr ""
+"szűrőprimitív"
+"Alfa"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2357
 #, fuzzy
 msgid "The <b>feTile</b> filter primitive tiles a region with its input graphic"
-msgstr "szűrő"
+msgstr "szűrőprimitív"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2361
 #, fuzzy
@@ -9727,17 +9705,19 @@ msgid ""
 "The <b>feTurbulence</b> filter primitive renders Perlin noise. This kind of "
 "noise is useful in simulating several nature phenomena like clouds, fire and "
 "smoke and in generating complex textures like marble or granite."
-msgstr "szűrő"
+msgstr "szűrőprimitív"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2379
 #, fuzzy
 msgid "Duplicate filter primitive"
-msgstr "szűrő kettőzése"
+msgstr "Szűrőprimitív kettőzése"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2432
 #, fuzzy
 msgid "Set filter primitive attribute"
-msgstr "szűrőTulajdonság"
+msgstr ""
+"szűrőprimitív"
+"Tulajdonság"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:146
 msgid "Mouse"
@@ -10611,15 +10591,16 @@ msgstr ""
 "megjelenítés"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:608
-#, fuzzy
 msgid "Show filter primitives infobox"
-msgstr "szűrőTulajdonság"
+msgstr "Információ megjelenítése a szűrőprimitívekről"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:610
 msgid ""
 "Show icons and descriptions for the filter primitives available at the "
 "filter effects dialog."
 msgstr ""
+"A szűrőeffektusok párbeszédablakában elérhető szűrőprimitívekhez "
+"tartozó ikonok és leírások megjelenítése"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:612
 msgid "Filters"
@@ -11796,7 +11777,7 @@ msgstr "kicsi"
 
 #: ../src/ui/widget/panel.cpp:122
 msgid "swatches|medium"
-msgstr ""
+msgstr "közepes"
 
 #: ../src/ui/widget/panel.cpp:123
 msgid "large"
@@ -11811,25 +11792,21 @@ msgid "List"
 msgstr "Lista"
 
 #: ../src/ui/widget/panel.cpp:171
-#, fuzzy
 msgid "Shape"
-msgstr "Alakzatok"
+msgstr "Alak"
 
 # May contain a short, human readable description of the resource as plain, unmarked text.
 #: ../src/ui/widget/panel.cpp:174
-#, fuzzy
 msgid "Tall"
-msgstr "Cím"
+msgstr "Magas"
 
 #: ../src/ui/widget/panel.cpp:175
-#, fuzzy
 msgid "Square"
-msgstr "Négyzetszerű vonalvég"
+msgstr "Négyzetszerű"
 
 #: ../src/ui/widget/panel.cpp:176
-#, fuzzy
 msgid "Wide"
-msgstr "El_rejtés"
+msgstr "Széles"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:25
 msgid "_Blend mode:"
@@ -12285,29 +12262,26 @@ msgid "Bitmap options"
 msgstr "Bitkép-beállítások"
 
 #: ../src/ui/widget/rendering-options.cpp:44
-#, fuzzy
 msgid "Preferred resolution of rendering, in dots per inch."
-msgstr "MegjelenítésA kívánt bitkép-felbontás (pont/hüvelykben)"
+msgstr "A megjelenítéskor használandó felbontás (pont/hüvelykben)"
 
 #: ../src/ui/widget/rendering-options.cpp:52
-#, fuzzy
 msgid ""
 "Render using Cairo vector operations.  The resulting image is usually "
 "smaller in file size and can be arbitrarily scaled, but some filter effects "
 "will not be correctly rendered."
 msgstr ""
-"A PostScript vektorműveleteinek használata. Az így készített kép általában "
-"kisebb fájlméretű és tetszőlegesen méretezhető, viszont az átlátszóság és a "
-"minták elvesznek."
+"Megjelenítés a Cairo rendszer vektorműveleteivel. Az így készített kép "
+"általában kisebb fájlméretű és tetszőlegesen méretezhető, viszont bizonyos "
+"szűrőeffektusok nem megfelelően lesznek megjelenítve."
 
 #: ../src/ui/widget/rendering-options.cpp:57
-#, fuzzy
 msgid ""
 "Render everything as bitmap.  The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
 msgstr ""
-"Minden objektum bitképként való nyomtatása. Az így készített kép általában "
+"Minden objektum bitképként való megjelenítése. Az így készített kép általában "
 "nagyobb fájlméretű, továbbá nem lehet tetszőlegesen nagyítani "
 "minőségveszteség nélkül, viszont az objektumok megjelenése megegyezik a "
 "képernyőn látottal."
@@ -15019,31 +14993,27 @@ msgstr "Mennyire lekerekítettek a sarkok (0: hegyesek)"
 
 # TODO: ellenőrizni
 #: ../src/widgets/toolbox.cpp:1966
-#, fuzzy
 msgid "NOT randomized"
-msgstr "Véletlenszerűség:"
+msgstr "nem véletlenszerűsített"
 
 #: ../src/widgets/toolbox.cpp:1966
 msgid "slightly irregular"
-msgstr ""
+msgstr "kissé szabálytalan"
 
 # TODO: ellenőrizni
 #: ../src/widgets/toolbox.cpp:1966
-#, fuzzy
 msgid "visibly randomized"
-msgstr "Véletlenszerűség:"
+msgstr "láthatóan véletlenszerűsített"
 
 # TODO: ellenőrizni
 #: ../src/widgets/toolbox.cpp:1966
-#, fuzzy
 msgid "strongly randomized"
-msgstr "Véletlenszerűség:"
+msgstr "erősen véletlenszerűsített"
 
 # TODO: ellenőrizni
 #: ../src/widgets/toolbox.cpp:1969
-#, fuzzy
 msgid "Randomized"
-msgstr "Véletlenszerűség:"
+msgstr "Véletlenszerűsített"
 
 # TODO: ellenőrizni
 #: ../src/widgets/toolbox.cpp:1969
@@ -16123,9 +16093,8 @@ msgstr "Negatív"
 
 # TODO: ellenőrizni
 #: ../share/extensions/color_randomize.inx.h:4
-#, fuzzy
 msgid "Randomize"
-msgstr "Véletlenszerűség:"
+msgstr "Véletlenszerűsítés"
 
 #: ../share/extensions/color_removeblue.inx.h:2
 msgid "Remove Blue"
@@ -16946,9 +16915,8 @@ msgid "Rotation (deg)"
 msgstr "elforgatás"
 
 #: ../share/extensions/spirograph.inx.h:8
-#, fuzzy
 msgid "Spirograph"
-msgstr "Spirál"
+msgstr "Spirográf"
 
 #: ../share/extensions/spirograph.inx.h:9
 msgid "d - Pen Radius (px)"
@@ -17310,23 +17278,20 @@ msgstr "Nyomtatási kép "
 msgid "Snap details"
 msgstr "Illesztés az objektum_láncokhoz"
 
-#, fuzzy
 msgid "If set, objects snap to the nearest object, regardless of distance"
 msgstr ""
-"Ha az opció be van jelölve, akkor az objektumok elmozdításkor illesztve "
-"lesznek a legközelebbi objektumhoz - függetlenül a távolságtól"
+"Ha az opció be van jelölve, akkor az objektumok a legközelebbi objektumhoz "
+"vannak illesztve - függetlenül a távolságtól"
 
-#, fuzzy
 msgid "If set, objects snap to the nearest grid line, regardless of distance"
 msgstr ""
-"Ha az opció be van jelölve, akkor az objektumok elmozdításkor illesztve "
-"lesznek a legközelebbi rácsvonalhoz - függetlenül a távolságtól"
+"Ha az opció be van jelölve, akkor az objektumok a legközelebbi rácsvonalhoz "
+"vannak illesztve - függetlenül a távolságtól"
 
-#, fuzzy
 msgid "If set, objects snap to the nearest guide, regardless of distance"
 msgstr ""
-"Ha az opció be van jelölve, akkor az objektumok elmozdításkor illesztve "
-"lesznek a legközelebbi segédvonalhoz - függetlenül a távolságtól"
+"Ha az opció be van jelölve, akkor az objektumok a legközelebbi segédvonalhoz "
+"vannak illesztve - függetlenül a távolságtól"
 
 #, fuzzy
 msgid "Gridtype"
