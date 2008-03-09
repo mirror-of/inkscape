@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-02-26 11:38+0100\n"
-"PO-Revision-Date: 2008-03-02 23:37+0100\n"
+"PO-Revision-Date: 2008-03-09 14:02+0100\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -437,11 +437,11 @@ msgstr "Znáhodniť vertikálnu mierku o túto percentuálnu hodnotu"
 
 #: ../src/dialogs/clonetiler.cpp:2166
 msgid "Whether row scaling is uniform (1), converge (<1) or diverge (>1)"
-msgstr "Či je riadky menia mierku rovnomerne (1), konvergujú (<1) alebo divergujú (>1)"
+msgstr "Či riadky menia mierku rovnomerne (1), konvergujú (<1) alebo divergujú (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:2173
 msgid "Whether column scaling is uniform (1), converge (<1) or diverge (>1)"
-msgstr "Či je stĺpce menia mierku rovnomerne (1), konvergujú (<1) alebo divergujú (>1)"
+msgstr "Či stĺpce menia mierku rovnomerne (1), konvergujú (<1) alebo divergujú (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:2181
 msgid "<b>Base:</b>"
@@ -719,7 +719,7 @@ msgstr "clonetiler|H"
 
 #: ../src/dialogs/clonetiler.cpp:2634
 msgid "Pick the hue of the color"
-msgstr "Vybrať odtieň farby"
+msgstr "Zvoľte odtieň farby"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
@@ -977,7 +977,7 @@ msgstr "<big><b>Veľkosť bitmapy</b></big>"
 #: ../src/dialogs/export.cpp:479
 #: ../src/ui/widget/page-sizer.cpp:301
 msgid "_Width:"
-msgstr "_Šírka:"
+msgstr "Ší_rka:"
 
 #: ../src/dialogs/export.cpp:479
 #: ../src/dialogs/export.cpp:495
@@ -1275,7 +1275,7 @@ msgstr "_ID: "
 #: ../src/dialogs/find.cpp:693
 #: ../src/ui/dialog/find.cpp:62
 msgid "Find objects by the value of the id attribute (exact or partial match)"
-msgstr "Hľadá objekty podľa hodnoty atribútu ID (presná alebo čiastočná zhoda)"
+msgstr "Hľadať objekty podľa hodnoty atribútu ID (presná alebo čiastočná zhoda)"
 
 #: ../src/dialogs/find.cpp:694
 #: ../src/ui/dialog/find.cpp:63
@@ -1285,7 +1285,7 @@ msgstr "_Štýl: "
 #: ../src/dialogs/find.cpp:694
 #: ../src/ui/dialog/find.cpp:63
 msgid "Find objects by the value of the style attribute (exact or partial match)"
-msgstr "Hľadá objekty podľa hodnoty atribútu štýl (presná alebo čiastočná zhoda)"
+msgstr "Hľadať objekty podľa hodnoty atribútu štýl (presná alebo čiastočná zhoda)"
 
 #: ../src/dialogs/find.cpp:695
 #: ../src/ui/dialog/find.cpp:64
@@ -1295,7 +1295,7 @@ msgstr "_Atribút: "
 #: ../src/dialogs/find.cpp:695
 #: ../src/ui/dialog/find.cpp:64
 msgid "Find objects by the name of an attribute (exact or partial match)"
-msgstr "Hľadá objekty podľa názvu atribútu (presná alebo čiastočná zhoda)"
+msgstr "Hľadať objekty podľa názvu atribútu (presná alebo čiastočná zhoda)"
 
 #: ../src/dialogs/find.cpp:709
 #: ../src/ui/dialog/find.cpp:65
@@ -1561,7 +1561,7 @@ msgstr "Dolu"
 
 #: ../src/dialogs/layers-panel.cpp:758
 msgid "Bot"
-msgstr "Naspodok"
+msgstr "Spod"
 
 #: ../src/dialogs/layers-panel.cpp:768
 msgid "X"
@@ -4048,7 +4048,7 @@ msgstr "Zalamovanie"
 #: ../src/widgets/sp-color-scales.cpp:398
 #: ../src/widgets/sp-color-scales.cpp:399
 msgid "Red"
-msgstr "_Červená"
+msgstr "Červená"
 
 #: ../src/filter-enums.cpp:102
 #: ../src/flood-context.cpp:251
@@ -4152,7 +4152,7 @@ msgstr "<b>Iba viditeľná časť ohraničenej oblasti bola vyplnená.</b> Ak ch
 #: ../src/flood-context.cpp:997
 #: ../src/flood-context.cpp:1157
 msgid "Fill bounded area"
-msgstr "Vyplňiť ohraničenú oblasť"
+msgstr "Vyplniť ohraničenú oblasť"
 
 #: ../src/flood-context.cpp:1017
 msgid "Set style on object"
@@ -10436,7 +10436,7 @@ msgstr "Zvislý posun (relatívny) alebo poloha (absolútna)"
 
 #: ../src/ui/dialog/transformation.cpp:85
 msgid "_Width"
-msgstr "_Šírka"
+msgstr "Ší_rka"
 
 #: ../src/ui/dialog/transformation.cpp:85
 msgid "Horizontal size (absolute or percentage of current)"
@@ -11697,7 +11697,7 @@ msgstr "Zmení mierku výberu aby sa zhodoval s veľkosťou kopírovaného objek
 
 #: ../src/verbs.cpp:2176
 msgid "Paste _Width"
-msgstr "Vložiť _šírku"
+msgstr "Vložiť ší_rku"
 
 #: ../src/verbs.cpp:2177
 msgid "Scale selection horizontally to match the width of the copied object"
@@ -12606,7 +12606,7 @@ msgstr "Zobrazí alebo skryje vodidlá (vodidlo vytvoríte ťahaním z pravítka
 
 #: ../src/verbs.cpp:2453
 msgid "Nex_t Zoom"
-msgstr "Nasledujúca ve_ľkosť"
+msgstr "_Nasledujúca veľkosť"
 
 #: ../src/verbs.cpp:2453
 msgid "Next zoom (from the history of zooms)"
@@ -12614,7 +12614,7 @@ msgstr "Nasledujúca veľkosť mierky zobrazenia (podľa histórie zmien mierky 
 
 #: ../src/verbs.cpp:2455
 msgid "Pre_vious Zoom"
-msgstr "Predchádzajúca veľkosť"
+msgstr "_Predchádzajúca veľkosť"
 
 #: ../src/verbs.cpp:2455
 msgid "Previous zoom (from the history of zooms)"
@@ -12679,7 +12679,7 @@ msgstr "Prepne do normálneho zobrazovacieho režimu"
 
 #: ../src/verbs.cpp:2474
 msgid "_Outline"
-msgstr "_Obrys"
+msgstr "_Obrysy"
 
 #: ../src/verbs.cpp:2475
 msgid "Switch to outline (wireframe) display mode"
@@ -12687,7 +12687,7 @@ msgstr "Prepne do režimu zobrazovania obrysov (drôtený model)"
 
 #: ../src/verbs.cpp:2476
 msgid "_Toggle"
-msgstr "_Prepnutie"
+msgstr "_Prepnúť"
 
 #: ../src/verbs.cpp:2477
 msgid "Toggle between normal and outline display modes"
@@ -12715,7 +12715,7 @@ msgstr "Zmení veľkosť mierky zobrazenia tak, aby sa strana zmestila do okna"
 
 #: ../src/verbs.cpp:2486
 msgid "Page _Width"
-msgstr "_Šírka strany"
+msgstr "Ší_rka strany"
 
 #: ../src/verbs.cpp:2487
 msgid "Zoom to fit page width in window"
@@ -12922,7 +12922,7 @@ msgstr "O _pamäti"
 
 #: ../src/verbs.cpp:2546
 msgid "Memory usage information"
-msgstr "Informácie o využití pamäte"
+msgstr "Informácie o využití pamäti"
 
 #: ../src/verbs.cpp:2547
 msgid "_About Inkscape"
