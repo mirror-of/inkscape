@@ -10,6 +10,7 @@ screens_DATA = \
 	about.pt_BR.svg \
 	about.ru.svg \
 	about.sk.svg \
+	about.sl.svg \
 	about.sr.svg \
 	about.sr@latin.svg 
 

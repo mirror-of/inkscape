@@ -20,6 +20,7 @@ tutorial_DATA = \
     tutorial-advanced.ja.svg \
     tutorial-advanced.pt_BR.svg \
     tutorial-advanced.ru.svg \
+    tutorial-advanced.sk.svg \
     tutorial-advanced.sl.svg \
     tutorial-advanced.vi.svg \
     tutorial-advanced.zh_CN.svg \

@@ -11476,7 +11476,7 @@ msgstr "tutorial-shapes.sk.svg"
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1805
 msgid "tutorial-advanced.svg"
-msgstr "tutorial-advanced.svg"
+msgstr "tutorial-advanced.sk.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1809
