@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-02-26 11:38+0100\n"
-"PO-Revision-Date: 2008-03-09 14:02+0100\n"
+"PO-Revision-Date: 2008-03-10 01:27+0100\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -771,7 +771,7 @@ msgstr "Invertovať zvolenú hodnotu"
 
 #: ../src/dialogs/clonetiler.cpp:2708
 msgid "3. Apply the value to the clones':"
-msgstr "3. Použiť hodnotu na klony:"
+msgstr "3. Použite hodnotu na klony:"
 
 #: ../src/dialogs/clonetiler.cpp:2718
 msgid "Presence"
@@ -1280,7 +1280,7 @@ msgstr "Hľadať objekty podľa hodnoty atribútu ID (presná alebo čiastočná
 #: ../src/dialogs/find.cpp:694
 #: ../src/ui/dialog/find.cpp:63
 msgid "_Style: "
-msgstr "_Štýl: "
+msgstr "Š_týl: "
 
 #: ../src/dialogs/find.cpp:694
 #: ../src/ui/dialog/find.cpp:63
@@ -1440,7 +1440,7 @@ msgstr "_Nastaviť"
 #. Create the label for the object label
 #: ../src/dialogs/item-properties.cpp:152
 msgid "_Label"
-msgstr "_Štítok"
+msgstr "Š_títok"
 
 #: ../src/dialogs/item-properties.cpp:161
 msgid "A freeform label for the object"
@@ -5600,7 +5600,7 @@ msgstr "Pýtať sa na výšku kresby alebo ak je zadané, objektu s --query-id"
 
 #: ../src/main.cpp:376
 msgid "List id,x,y,w,h for all objects"
-msgstr "Zobraziť id,x,y,w,h pre všetky objekty"
+msgstr "Zobraziť id,x,y,š,v pre všetky objekty"
 
 #: ../src/main.cpp:381
 msgid "The ID of the object whose dimensions are queried"
@@ -7310,11 +7310,11 @@ msgstr "Zrušiť tok textu"
 
 #: ../src/text-chemistry.cpp:482
 msgid "Select <b>flowed text(s)</b> to convert."
-msgstr "Vyberte <b>textový tok</b>, ktorý sa má skonvertovať."
+msgstr "Vyberte <b>textový tok</b>, ktorý sa má konvertovať."
 
 #: ../src/text-chemistry.cpp:500
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
-msgstr "Textový tok musí byť <b>viditeľný</b> aby ho bolo možné skonvertovať."
+msgstr "Textový tok musí byť <b>viditeľný</b> aby ho bolo možné konvertovať."
 
 #: ../src/text-chemistry.cpp:528
 msgid "Convert flowed text to text"
@@ -7754,7 +7754,7 @@ msgstr "_Licencia"
 #. should be in UTF-*8..
 #: ../src/ui/dialog/aboutbox.cpp:149
 msgid "about.svg"
-msgstr "about.svg"
+msgstr "about.sk.svg"
 
 #. TRANSLATORS: Put here your name (and other national contributors')
 #. one per line in the form of: name surname (email). Use \n for newline.
@@ -7782,7 +7782,7 @@ msgstr "Najmenšie vodorovné rozostupy (v px) medzi ohraničeniami"
 #: ../src/ui/dialog/align-and-distribute.cpp:467
 #: ../src/widgets/toolbox.cpp:2266
 msgid "H:"
-msgstr "Vodorovná medzera:"
+msgstr "V:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:475
 msgid "Minimum vertical gap (in px units) between bounding boxes"
@@ -7791,7 +7791,7 @@ msgstr "Najmenšie zvislé rozostupy (v px) medzi ohraničeniami"
 #. TRANSLATORS: Vertical gap
 #: ../src/ui/dialog/align-and-distribute.cpp:477
 msgid "V:"
-msgstr "Zvislá medzera:"
+msgstr "Z:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:505
 #: ../src/ui/dialog/align-and-distribute.cpp:782
@@ -7814,11 +7814,11 @@ msgstr "Znáhodniť pozície"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:732
 msgid "Distribute text baselines"
-msgstr "Rozložiť základne textu"
+msgstr "Rozmiestniť základne textu"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:752
 msgid "Align text baselines"
-msgstr "Zarovnanie základní textu"
+msgstr "Zarovnanť základne textu"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:783
 msgid "Connector network layout"
@@ -7858,7 +7858,7 @@ msgstr "Zarovnať spodky objektov k vrchu ukotvenia"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:813
 msgid "Align tops"
-msgstr "Zarovnanie vrchov"
+msgstr "Zarovnať vrchné strany"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:816
 msgid "Center on horizontal axis"
@@ -11585,7 +11585,7 @@ msgstr "Odstráni nepotrebné definície (ako farebné prechody alebo orezávaci
 
 #: ../src/verbs.cpp:2145
 msgid "Print Previe_w"
-msgstr "Ukážka pred tlačou"
+msgstr "Náhľad pred tlačou"
 
 #: ../src/verbs.cpp:2146
 msgid "Preview document printout"
@@ -12736,7 +12736,7 @@ msgstr "Nastavenia In_kscape..."
 
 #: ../src/verbs.cpp:2495
 msgid "Edit global Inkscape preferences"
-msgstr "Upravovať globálne nastavenia Inkscape"
+msgstr "Úprava globálnych nastavení Inkscape"
 
 #: ../src/verbs.cpp:2496
 msgid "_Document Properties..."
@@ -12744,7 +12744,7 @@ msgstr "_Vlastnosti dokumentu..."
 
 #: ../src/verbs.cpp:2497
 msgid "Edit properties of this document (to be saved with the document)"
-msgstr "Upravovať vlastnosti dokumentu (uložia sa s dokumentom)"
+msgstr "Úprava vlastností dokumentu (uložia sa s dokumentom)"
 
 #: ../src/verbs.cpp:2498
 msgid "Document _Metadata..."
@@ -12752,7 +12752,7 @@ msgstr "_Metadáta dokumentu..."
 
 #: ../src/verbs.cpp:2499
 msgid "Edit document metadata (to be saved with the document)"
-msgstr "Upravovať metadáta dokumentu (uložia sa s dokumentom)"
+msgstr "Úprava metadát dokumentu (uložia sa s dokumentom)"
 
 #: ../src/verbs.cpp:2500
 msgid "_Fill and Stroke..."
@@ -12760,7 +12760,7 @@ msgstr "Výp_lň a ťah..."
 
 #: ../src/verbs.cpp:2501
 msgid "Edit objects' colors, gradients, stroke width, arrowheads, dash patterns..."
-msgstr "Upravovať farby, farebné prechody, šírku ťahu, zakončenia, vzorky atď. objektov"
+msgstr "Úprava farieb, farebných prechodov, šírky ťahu, zakončení, vzorky atď. objektov"
 
 #. TRANSLATORS: "Swatches" means: color samples
 #: ../src/verbs.cpp:2503
@@ -12769,7 +12769,7 @@ msgstr "Vzorkovník..."
 
 #: ../src/verbs.cpp:2504
 msgid "Select colors from a swatches palette"
-msgstr "Nastaviť farby zo vzorkovníka"
+msgstr "Nastavenie farby zo vzorkovníka"
 
 #: ../src/verbs.cpp:2505
 msgid "Transfor_m..."
@@ -12777,7 +12777,7 @@ msgstr "Transfor_mácia..."
 
 #: ../src/verbs.cpp:2506
 msgid "Precisely control objects' transformations"
-msgstr "Vykonať precízne transformácie objektov"
+msgstr "Precízne transformácie objektov"
 
 #: ../src/verbs.cpp:2507
 msgid "_Align and Distribute..."
@@ -12785,7 +12785,7 @@ msgstr "Z_arovnanie a umiestnenie..."
 
 #: ../src/verbs.cpp:2508
 msgid "Align and distribute objects"
-msgstr "Zarovnaná a rozmiestneni objekty"
+msgstr "Zarovná a rozmiestni objekty"
 
 #: ../src/verbs.cpp:2509
 msgid "Undo _History..."
@@ -12797,7 +12797,7 @@ msgstr "História vrátení"
 
 #: ../src/verbs.cpp:2511
 msgid "_Text and Font..."
-msgstr "Text a pís_mo..."
+msgstr "_Text a písmo..."
 
 #: ../src/verbs.cpp:2512
 msgid "View and select font family, font size and other text properties"
@@ -12849,7 +12849,7 @@ msgstr "Vytvoriť dlaždicové klony..."
 
 #: ../src/verbs.cpp:2524
 msgid "Create multiple clones of selected object, arranging them into a pattern or scattering"
-msgstr "Vytvoriť viaceré klony vybraného objektu a zoradiť ich do vzoru alebo rozptýliť"
+msgstr "Vytvorenie viacerých klonov vybraného objektu a ich zoradenie ich do vzoru alebo rozptýlenie"
 
 #: ../src/verbs.cpp:2525
 msgid "_Object Properties..."
@@ -12857,7 +12857,7 @@ msgstr "Nastavenia objektu..."
 
 #: ../src/verbs.cpp:2526
 msgid "Edit the ID, locked and visible status, and other object properties"
-msgstr "Upravovať ID, stav zamknutý alebo viditeľný a iné vlastnosti objektu"
+msgstr "Úprava ID, stavu zamknutia alebo viditeľnosti a iných vlastností objektu"
 
 #: ../src/verbs.cpp:2529
 msgid "_Instant Messaging..."
@@ -12869,7 +12869,7 @@ msgstr "Klient Jabber pre správy"
 
 #: ../src/verbs.cpp:2531
 msgid "_Input Devices..."
-msgstr "Vstupné _zariadenia..."
+msgstr "Vstupné zar_iadenia..."
 
 #: ../src/verbs.cpp:2532
 msgid "Configure extended input devices, such as a graphics tablet"
@@ -12877,11 +12877,11 @@ msgstr "Konfigurovať rozšírené vstupné zariadenia ako grafický tablet"
 
 #: ../src/verbs.cpp:2533
 msgid "_Extensions..."
-msgstr "_Rozšírenia..."
+msgstr "Rozšír_enia..."
 
 #: ../src/verbs.cpp:2534
 msgid "Query information about extensions"
-msgstr "Získať informácie o rozšíreniach"
+msgstr "Získanie informácií o rozšíreniach"
 
 #: ../src/verbs.cpp:2535
 msgid "Layer_s..."
@@ -12889,7 +12889,7 @@ msgstr "Vr_stvy..."
 
 #: ../src/verbs.cpp:2536
 msgid "View Layers"
-msgstr "Zobrazí vrstvy"
+msgstr "Zobrazenie vrstiev"
 
 #: ../src/verbs.cpp:2537
 msgid "Path Effects..."
@@ -12897,7 +12897,7 @@ msgstr "Efekty ciest..."
 
 #: ../src/verbs.cpp:2538
 msgid "Manage path effects"
-msgstr "Spravovať efekty ciest"
+msgstr "Správa efektov ciest"
 
 #: ../src/verbs.cpp:2539
 msgid "Filter Effects..."
@@ -12905,7 +12905,7 @@ msgstr "Efekty filtra..."
 
 #: ../src/verbs.cpp:2540
 msgid "Manage SVG filter effects"
-msgstr "Spravovať SVG efekty filtra"
+msgstr "Sráva SVG efektov filtra"
 
 #. Help
 #: ../src/verbs.cpp:2543
@@ -13389,7 +13389,7 @@ msgstr "select_toolbar|Šírka"
 
 #: ../src/widgets/select-toolbar.cpp:443
 msgid "select_toolbar|W"
-msgstr "select_toolbar|W"
+msgstr "select_toolbar|Š"
 
 #: ../src/widgets/select-toolbar.cpp:445
 msgid "Width of selection"
@@ -13411,7 +13411,7 @@ msgstr "select_toolbar|Výška"
 
 #: ../src/widgets/select-toolbar.cpp:463
 msgid "select_toolbar|H"
-msgstr "select_toolbar|H"
+msgstr "select_toolbar|V"
 
 #: ../src/widgets/select-toolbar.cpp:465
 msgid "Height of selection"
@@ -13639,7 +13639,7 @@ msgstr "Vložiť uzol"
 
 #: ../src/widgets/toolbox.cpp:977
 msgid "Insert new nodes into selected segments"
-msgstr "Vložiť nové uzly do vybraných segmentov"
+msgstr "Vloží nové uzly do vybraných segmentov"
 
 #: ../src/widgets/toolbox.cpp:980
 msgid "Insert"
@@ -13647,7 +13647,7 @@ msgstr "Vložiť"
 
 #: ../src/widgets/toolbox.cpp:988
 msgid "Delete selected nodes"
-msgstr "Zmazať zvolené uzly"
+msgstr "Zmaže zvolené uzly"
 
 #: ../src/widgets/toolbox.cpp:998
 msgid "Join endnodes"
@@ -13655,7 +13655,7 @@ msgstr "Spojiť koncové uzly"
 
 #: ../src/widgets/toolbox.cpp:999
 msgid "Join selected endnodes"
-msgstr "Spojiť vybrané koncové uzly"
+msgstr "Spojí vybrané koncové uzly"
 
 #: ../src/widgets/toolbox.cpp:1002
 msgid "Join"
@@ -13667,7 +13667,7 @@ msgstr "Spojiť segment"
 
 #: ../src/widgets/toolbox.cpp:1010
 msgid "Join selected endnodes with a new segment"
-msgstr "Spojiť vybrané koncové uzly novým segmentom"
+msgstr "Spojí vybrané koncové uzly novým segmentom"
 
 #: ../src/widgets/toolbox.cpp:1019
 msgid "Delete Segment"
@@ -13675,15 +13675,15 @@ msgstr "Zmazať segment"
 
 #: ../src/widgets/toolbox.cpp:1020
 msgid "Split path between two non-endpoint nodes"
-msgstr "Rozdeliť cestu medzi dvomi vnútornými uzlami"
+msgstr "Rozdelí cestu medzi dvomi vnútornými uzlami"
 
 #: ../src/widgets/toolbox.cpp:1029
 msgid "Node Break"
-msgstr "Zlomená v uzle"
+msgstr "Zlomiť v uzle"
 
 #: ../src/widgets/toolbox.cpp:1030
 msgid "Break path at selected nodes"
-msgstr "Rozdeliť cestu v zvolenom uzle"
+msgstr "Rozdelí cestu v zvolenom uzle"
 
 #: ../src/widgets/toolbox.cpp:1039
 msgid "Node Cusp"
@@ -13691,7 +13691,7 @@ msgstr "Hrot v uzle"
 
 #: ../src/widgets/toolbox.cpp:1040
 msgid "Make selected nodes corner"
-msgstr "Konvertovať vybrané uzly na rohy"
+msgstr "Konvertuje vybrané uzly na rohy"
 
 #: ../src/widgets/toolbox.cpp:1049
 msgid "Node Smooth"
@@ -13699,7 +13699,7 @@ msgstr "Hladká v uzle"
 
 #: ../src/widgets/toolbox.cpp:1050
 msgid "Make selected nodes smooth"
-msgstr "Konvertovať vybrané uzly na rovné"
+msgstr "Konvertuje vybrané uzly na rovné"
 
 #: ../src/widgets/toolbox.cpp:1059
 msgid "Node Symmetric"
@@ -13707,7 +13707,7 @@ msgstr "Symetrická v uzle"
 
 #: ../src/widgets/toolbox.cpp:1060
 msgid "Make selected nodes symmetric"
-msgstr "Urobiť zvolené uzly symetrickými"
+msgstr "Urobí zvolené uzly symetrickými"
 
 #: ../src/widgets/toolbox.cpp:1069
 msgid "Node Line"
@@ -13715,7 +13715,7 @@ msgstr "Čiara s uzlami"
 
 #: ../src/widgets/toolbox.cpp:1070
 msgid "Make selected segments lines"
-msgstr "Konvertovať vybrané segmenty na čiary"
+msgstr "Konvertuje vybrané segmenty na čiary"
 
 #: ../src/widgets/toolbox.cpp:1079
 msgid "Node Curve"
@@ -13723,7 +13723,7 @@ msgstr "Krivka s uzlami"
 
 #: ../src/widgets/toolbox.cpp:1080
 msgid "Make selected segments curves"
-msgstr "Konvertovať vybrané segmenty na krivky"
+msgstr "Konvertuje vybrané segmenty na krivky"
 
 #: ../src/widgets/toolbox.cpp:1089
 msgid "Show Handles"
@@ -13731,7 +13731,7 @@ msgstr "Zobraziť úchopy"
 
 #: ../src/widgets/toolbox.cpp:1090
 msgid "Show the Bezier handles of selected nodes"
-msgstr "Zobraziť bézierove úchopy vybraných uzlov"
+msgstr "Zobrazí bézierove úchopy vybraných uzlov"
 
 #: ../src/widgets/toolbox.cpp:1114
 msgid "X coordinate:"
@@ -13942,7 +13942,7 @@ msgstr "Zmena obdĺžnika"
 
 #: ../src/widgets/toolbox.cpp:2249
 msgid "W:"
-msgstr "W:"
+msgstr "Š:"
 
 #: ../src/widgets/toolbox.cpp:2249
 msgid "Width of rectangle"
