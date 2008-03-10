@@ -365,10 +365,7 @@ sp_tref_description(SPItem *item)
             child_desc = "";
         }
 
-        char *ret = g_strdup_printf(
-                _("<b>Cloned character data</b>%s%s"),
-                (SP_IS_ITEM(referred) ? _(" from ") : ""),
-                child_desc);
+        char *ret = g_strdup_printf(_("<b>Cloned character data</b> from: %s"), child_desc);
         g_free(child_desc);
         return ret;
     } else {
