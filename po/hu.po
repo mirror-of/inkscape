@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-03-10 23:34+0100\n"
+"PO-Revision-Date: 2008-03-10 23:48+0100\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -9303,9 +9303,8 @@ msgstr "a konvolúciós mátrix magassága"
 #. default x:
 #. default y:
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
-#, fuzzy
 msgid "Target"
-msgstr "Cél (target):"
+msgstr "Cél"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
 #, fuzzy
@@ -9477,7 +9476,7 @@ msgstr "A kép forrása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 msgid "Delta X"
-msgstr "X-növekmény"
+msgstr "X változása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 msgid "This is how far the input image gets shifted to the right"
@@ -9485,7 +9484,7 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "Delta Y"
-msgstr "Y-növekmény"
+msgstr "Y változása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "This is how far the input image gets shifted downwards"
