@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-03-10 23:05+0100\n"
+"PO-Revision-Date: 2008-03-10 23:34+0100\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -3185,7 +3185,9 @@ msgstr "Az árnyék színe"
 #: ../src/extension/internal/bitmap/shade.cpp:49
 #, fuzzy
 msgid "Shade selected bitmap(s) simulating distant light source."
-msgstr "A kijelölt bitkép(ek)"
+msgstr ""
+"A kijelölt bitkép(ek) "
+"Fényforrás"
 
 #: ../src/extension/internal/bitmap/sharpen.cpp:46
 msgid "Sharpen selected bitmap(s)."
@@ -4073,19 +4075,16 @@ msgid "Matrix"
 msgstr "Mátrix"
 
 #: ../src/filter-enums.cpp:63
-#, fuzzy
 msgid "Saturate"
-msgstr "Telítettség"
+msgstr "Telítés"
 
 #: ../src/filter-enums.cpp:64
-#, fuzzy
 msgid "Hue Rotate"
-msgstr "árnyalatForgatás"
+msgstr "Árnyalatforgatás"
 
 #: ../src/filter-enums.cpp:65
-#, fuzzy
 msgid "Luminance to Alpha"
-msgstr "Alfa"
+msgstr "Fényességet alfává"
 
 #. File
 #: ../src/filter-enums.cpp:71 ../src/verbs.cpp:2128
@@ -4176,22 +4175,18 @@ msgid "Alpha"
 msgstr "Alfa"
 
 #: ../src/filter-enums.cpp:110
-#, fuzzy
 msgid "Erode"
-msgstr "Csomópont"
+msgstr "Zsugorítás"
 
 #: ../src/filter-enums.cpp:111
-#, fuzzy
 msgid "Dilate"
-msgstr "Dátum"
+msgstr "Nyújtás"
 
 #: ../src/filter-enums.cpp:117
-#, fuzzy
 msgid "Fractal Noise"
 msgstr "Fraktálzaj"
 
 #: ../src/filter-enums.cpp:124
-#, fuzzy
 msgid "Distant Light"
 msgstr "Távoli fény"
 
@@ -9056,9 +9051,8 @@ msgstr "Kijelölt SVG-elem"
 
 #. TODO: any image, not justy svg
 #: ../src/ui/dialog/filter-effects-dialog.cpp:686
-#, fuzzy
 msgid "Select an image to be used as feImage input"
-msgstr "Jelöljön ki egy képet és egy vagy több, felette levő alakzatot"
+msgstr "Válassza ki az \"feImage\" bemeneteként használandó képet"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:778
 msgid "This SVG filter effect does not require any parameters."
@@ -9070,17 +9064,18 @@ msgid "This SVG filter effect is not yet implemented in Inkscape."
 msgstr "szűrőeffektus"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:975
-#, fuzzy
 msgid "Light Source:"
-msgstr "Forrás"
+msgstr "Fényforrás:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:992
+#, fuzzy
 msgid "Direction angle for the light source on the XY plane, in degrees"
-msgstr ""
+msgstr "Fényforrás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:993
+#, fuzzy
 msgid "Direction angle for the light source on the YZ plane, in degrees"
-msgstr ""
+msgstr "Fényforrás"
 
 #. default x:
 #. default y:
@@ -9121,8 +9116,9 @@ msgstr ""
 "Kitevő"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
+#, fuzzy
 msgid "Exponent value controlling the focus for the light source"
-msgstr ""
+msgstr "Fényforrás"
 
 #. TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1005
@@ -9131,16 +9127,16 @@ msgid "Cone Angle"
 msgstr "Szög"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1005
+#, fuzzy
 msgid ""
 "This is the angle between the spot light axis (i.e. the axis between the "
 "light source and the point to which it is pointing at) and the spot light "
 "cone. No light is projected outside this cone."
-msgstr ""
+msgstr "Fényforrás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1065
-#, fuzzy
 msgid "New light source"
-msgstr "A forrás jobb oldali széle"
+msgstr "Új fényforrás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1106
 msgid "_Duplicate"
@@ -9359,7 +9355,7 @@ msgstr "Osztó"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2220
 msgid "Bias"
-msgstr ""
+msgstr "Eltolódás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2220
 msgid ""
@@ -9368,9 +9364,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
-#, fuzzy
 msgid "Edge Mode"
-msgstr "Üzemmód"
+msgstr "Szél-üzemmód"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
 msgid ""
@@ -9390,22 +9385,19 @@ msgstr "Ha az opció be van jelölve, akkor ez a szűrőprimitív nem módosítj
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
-#, fuzzy
 msgid "Diffuse Color"
-msgstr ""
-"Szórt"
-"Színek"
+msgstr "Szórt szín"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
+#, fuzzy
 msgid "Defines the color of the light source"
-msgstr ""
+msgstr "Fényforrás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
-#, fuzzy
 msgid "Surface Scale"
-msgstr "Négyzetszerű vonalvég"
+msgstr "Felületméretezés"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
@@ -9471,28 +9463,29 @@ msgid "The standard deviation for the blur operation."
 msgstr "Az elmosási művelet szórása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2247
+#, fuzzy
 msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
 msgstr ""
+"Zsugorítás"
+"Nyújtás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2251
 msgid "Source of Image"
 msgstr "A kép forrása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
-#, fuzzy
 msgid "Delta X"
-msgstr "Törlés"
+msgstr "X-növekmény"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 msgid "This is how far the input image gets shifted to the right"
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
-#, fuzzy
 msgid "Delta Y"
-msgstr "Törlés"
+msgstr "Y-növekmény"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "This is how far the input image gets shifted downwards"
@@ -9500,11 +9493,8 @@ msgstr ""
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
-#, fuzzy
 msgid "Specular Color"
-msgstr ""
-"Tükröződő"
-"szín"
+msgstr "Tükröződési szín"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2261
 #: ../share/extensions/interp.inx.h:2
@@ -9527,16 +9517,15 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid "Base Frequency"
-msgstr ""
+msgstr "Alapfrekvencia"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2272
 msgid "Octaves"
-msgstr ""
+msgstr "Oktávok"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2273
-#, fuzzy
 msgid "Seed"
-msgstr "Sebesség:"
+msgstr "Kezdőérték"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2273
 msgid "The starting number for the pseudo random number generator."
@@ -9656,7 +9645,10 @@ msgid ""
 "The <b>feMorphology</b> filter primitive provides erode and dilate effects. "
 "For single-colour objects erode makes the object thinner and dilate makes it "
 "thicker."
-msgstr "szűrőprimitíveffektusobjektum vastagítás"
+msgstr ""
+"szűrőprimitíveffektusobjektum vastagítás "
+"Zsugorítás"
+"Nyújtás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2349
 #, fuzzy
