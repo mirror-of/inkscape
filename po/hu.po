@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-03-10 21:11+0100\n"
+"PO-Revision-Date: 2008-03-10 23:05+0100\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -2689,9 +2689,8 @@ msgstr "Magasság"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:42
 #: ../src/filter-enums.cpp:32
-#, fuzzy
 msgid "Offset"
-msgstr "Peremobjektumok"
+msgstr "Eltolás"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:46
 #: ../src/extension/internal/bitmap/addNoise.cpp:57
@@ -2751,7 +2750,7 @@ msgstr "Gauss-zaj"
 #: ../src/extension/internal/bitmap/addNoise.cpp:49
 #, fuzzy
 msgid "Multiplicative Gaussian Noise"
-msgstr "zaj"
+msgstr "Gauss-zaj"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:50
 #, fuzzy
@@ -3566,23 +3565,23 @@ msgstr "PDF-nyomtatás"
 #. TRANSLATORS: The following are document crop settings for PDF import
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:54
 msgid "media box"
-msgstr ""
+msgstr "adathordozó (media)-téglalap"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:55
 msgid "crop box"
-msgstr ""
+msgstr "vágási (crop) téglalap"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:56
 msgid "trim box"
-msgstr ""
+msgstr "nyírási (trim) téglalap"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:57
 msgid "bleed box"
-msgstr ""
+msgstr "szivárgási (bleed) téglalap"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:58
 msgid "art box"
-msgstr ""
+msgstr "illusztrációs (art) téglalap"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:70
 msgid "Select page:"
@@ -3967,12 +3966,10 @@ msgid "Import From Open Clip Art Library"
 msgstr "Importálás az Open Clip Art Libraryből"
 
 #: ../src/filter-enums.cpp:20
-#, fuzzy
 msgid "Blend"
-msgstr "Kék"
+msgstr "Keverés"
 
 #: ../src/filter-enums.cpp:21
-#, fuzzy
 msgid "Color Matrix"
 msgstr "Színmátrix"
 
@@ -3981,43 +3978,40 @@ msgid "Component Transfer"
 msgstr ""
 
 #: ../src/filter-enums.cpp:23
-#, fuzzy
 msgid "Composite"
-msgstr "Összevonás"
+msgstr "Vegyítés"
 
 #: ../src/filter-enums.cpp:24
 msgid "Convolve Matrix"
-msgstr ""
+msgstr "Konvolúciós mátrix"
 
 #: ../src/filter-enums.cpp:25
 msgid "Diffuse Lighting"
-msgstr ""
+msgstr "Szórt (diffúz) fény"
 
 #: ../src/filter-enums.cpp:26
-#, fuzzy
 msgid "Displacement Map"
-msgstr "Maximális elmozdítás képpontban"
+msgstr "Elmozdítási leképezés"
 
 #: ../src/filter-enums.cpp:27
 msgid "Flood"
-msgstr ""
+msgstr "Területkitöltés"
 
 #: ../src/filter-enums.cpp:29 ../src/selection-describer.cpp:52
 msgid "Image"
 msgstr "Kép"
 
 #: ../src/filter-enums.cpp:30
-#, fuzzy
 msgid "Merge"
-msgstr "Mérés"
+msgstr "Összevonás"
 
 #: ../src/filter-enums.cpp:31
 msgid "Morphology"
-msgstr ""
+msgstr "Alakítás"
 
 #: ../src/filter-enums.cpp:33
 msgid "Specular Lighting"
-msgstr ""
+msgstr "Tükröződő fény"
 
 # May contain a short, human readable description of the resource as plain, unmarked text.
 #: ../src/filter-enums.cpp:34
@@ -4026,9 +4020,8 @@ msgid "Tile"
 msgstr "Cím"
 
 #: ../src/filter-enums.cpp:35 ../src/filter-enums.cpp:118
-#, fuzzy
 msgid "Turbulence"
-msgstr "Tűrés:"
+msgstr "Örvénylés"
 
 #: ../src/filter-enums.cpp:40
 msgid "Source Graphic"
@@ -4100,7 +4093,6 @@ msgid "Default"
 msgstr "Alapértelmezett"
 
 #: ../src/filter-enums.cpp:72
-#, fuzzy
 msgid "Over"
 msgstr "Felett"
 
@@ -4113,7 +4105,6 @@ msgid "Out"
 msgstr "Kívül"
 
 #: ../src/filter-enums.cpp:75
-#, fuzzy
 msgid "Atop"
 msgstr "Felül"
 
@@ -4930,27 +4921,27 @@ msgid "Iconify"
 msgstr "Ikonizálás"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
-#, fuzzy
 msgid "Iconify this dock"
-msgstr "Ikonizálás"
+msgstr "Ezen dokkolóablak ikonizálása"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
 msgid "Close"
 msgstr "Bezárás"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close this dock"
-msgstr "Ezen dokumentumablak bezárása"
+msgstr "Ezen dokkolóablak bezárása"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:706
 #: ../src/libgdl/gdl-dock-tablabel.c:128
+#, fuzzy
 msgid "Controlling dock item"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:707
+#, fuzzy
 msgid "Dockitem which 'owns' this grip"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:287
 #, fuzzy
@@ -4958,8 +4949,9 @@ msgid "Orientation"
 msgstr "Laptájolás:"
 
 #: ../src/libgdl/gdl-dock-item.c:288
+#, fuzzy
 msgid "Orientation of the docking item"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:303
 msgid "Resizable"
@@ -4968,7 +4960,9 @@ msgstr ""
 #: ../src/libgdl/gdl-dock-item.c:304
 #, fuzzy
 msgid "If set, the dock item can be resized when docked in a paned"
-msgstr "Ha az opció be van jelölve, akkor "
+msgstr ""
+"Ha az opció be van jelölve, akkor "
+"dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:311
 #, fuzzy
@@ -4976,10 +4970,11 @@ msgid "Item behavior"
 msgstr "Viselkedés"
 
 #: ../src/libgdl/gdl-dock-item.c:312
+#, fuzzy
 msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:320 ../src/libgdl/gdl-dock-master.c:148
 #, fuzzy
@@ -4989,15 +4984,18 @@ msgstr "Zárolás"
 #: ../src/libgdl/gdl-dock-item.c:321
 #, fuzzy
 msgid "If set, the dock item cannot be dragged around and it doesn't show a grip"
-msgstr "Ha az opció be van jelölve, akkor "
+msgstr ""
+"Ha az opció be van jelölve, akkor "
+"dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:329
 msgid "Preferred width"
 msgstr ""
 
 #: ../src/libgdl/gdl-dock-item.c:330
+#, fuzzy
 msgid "Preferred width for the dock item"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:336
 #, fuzzy
@@ -5005,15 +5003,17 @@ msgid "Preferred height"
 msgstr "Magasság:"
 
 #: ../src/libgdl/gdl-dock-item.c:337
+#, fuzzy
 msgid "Preferred height for the dock item"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:616
 #, c-format
+#, fuzzy
 msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-item.c:623
 #, c-format
@@ -5024,8 +5024,11 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-item.c:1345 ../src/libgdl/gdl-dock-item.c:1390
 #, c-format
+#, fuzzy
 msgid "Unsupported docking strategy %s in dock object of type %s"
 msgstr ""
+"dokkolás "
+"dokkolóablak"
 
 #. UnLock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1479
@@ -5053,15 +5056,20 @@ msgid "Default title"
 msgstr "_Alapértelmezett mértékegység:"
 
 #: ../src/libgdl/gdl-dock-master.c:142
+#, fuzzy
 msgid "Default title for newly created floating docks"
 msgstr ""
+"lebegő"
+"dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 #, fuzzy
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
-msgstr "feloldás"
+msgstr ""
+"dokkolóablak"
+"feloldás"
 
 #: ../src/libgdl/gdl-dock-master.c:157 ../src/libgdl/gdl-switcher.c:707
 #, fuzzy
@@ -5079,10 +5087,11 @@ msgid "Expand direction"
 msgstr "Sortávolság növelése"
 
 #: ../src/libgdl/gdl-dock-master.c:166
+#, fuzzy
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
 "given direction"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-master.c:781
 #, c-format
@@ -5093,10 +5102,11 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-master.c:954
 #, c-format
+#, fuzzy
 msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-notebook.c:134
 #: ../src/ui/dialog/align-and-distribute.cpp:907
@@ -5116,8 +5126,9 @@ msgid "Name"
 msgstr "Név"
 
 #: ../src/libgdl/gdl-dock-object.c:121
+#, fuzzy
 msgid "Unique name for identifying the dock object"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:128
 #, fuzzy
@@ -5127,7 +5138,9 @@ msgstr "Névtelen"
 #: ../src/libgdl/gdl-dock-object.c:129
 #, fuzzy
 msgid "Human readable name for the dock object"
-msgstr "Az objektum címkéje; kötetlen formátumú"
+msgstr ""
+"dokkolóablak"
+"Az objektum címkéje; kötetlen formátumú"
 
 #: ../src/libgdl/gdl-dock-object.c:135
 #, fuzzy
@@ -5135,49 +5148,56 @@ msgid "Stock Icon"
 msgstr "Képeket egymásra"
 
 #: ../src/libgdl/gdl-dock-object.c:136
+#, fuzzy
 msgid "Stock icon for the dock object"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:142
 msgid "Pixbuf Icon"
 msgstr ""
 
 #: ../src/libgdl/gdl-dock-object.c:143
+#, fuzzy
 msgid "Pixbuf icon for the dock object"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:148
 #, fuzzy
 msgid "Dock master"
-msgstr "Réteg zárolása"
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:149
+#, fuzzy
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:434
 #, c-format
+#, fuzzy
 msgid ""
 "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
 "hasn't implemented this method"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:563
 #, c-format
+#, fuzzy
 msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:570
 #, c-format
+#, fuzzy
 msgid "Cannot dock %p to %p because they belong to different masters"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-object.c:612
 #, c-format
+#, fuzzy
 msgid "Attempt to bind to %p an already bound dock object %p (current master: %p)"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-paned.c:132
 #, fuzzy
@@ -5194,10 +5214,11 @@ msgid "Sticky"
 msgstr "apró"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:144
+#, fuzzy
 msgid ""
 "Whether the placeholder will stick to its host or move up the hierarchy when "
 "the host is redocked"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:151
 #, fuzzy
@@ -5205,8 +5226,9 @@ msgid "Host"
 msgstr "nyújtva"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:152
+#, fuzzy
 msgid "The dock object this placeholder is attached to"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:159
 #, fuzzy
@@ -5214,10 +5236,11 @@ msgid "Next placement"
 msgstr "Új elemcsomópont"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:160
+#, fuzzy
 msgid ""
 "The position an item will be docked to our host if a request is made to dock "
 "to us"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:170
 msgid "Width for the widget when it's attached to the placeholder"
@@ -5233,8 +5256,11 @@ msgid "Floating Toplevel"
 msgstr "Lebegő"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:185
+#, fuzzy
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
 msgstr ""
+"lebegő"
+"dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:191
 #, fuzzy
@@ -5242,8 +5268,11 @@ msgid "X-Coordinate"
 msgstr "Kurzorkoordináták"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:192
+#, fuzzy
 msgid "X-Coordinate fow dock when floating"
 msgstr ""
+"lebegő"
+"dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:198
 #, fuzzy
@@ -5251,12 +5280,16 @@ msgid "Y-Coordinate"
 msgstr "Kurzorkoordináták"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:199
+#, fuzzy
 msgid "Y-Coordinate fow dock when floating"
 msgstr ""
+"lebegő"
+"dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:494
+#, fuzzy
 msgid "Attempt to dock a dock object to an unbound placeholder"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:618
 #, c-format
@@ -5271,8 +5304,9 @@ msgid ""
 msgstr ""
 
 #: ../src/libgdl/gdl-dock-tablabel.c:129
+#, fuzzy
 msgid "Dockitem which 'owns' this tablabel"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libgdl/gdl-dock.c:175 ../src/ui/dialog/inkscape-preferences.cpp:464
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
@@ -5280,20 +5314,32 @@ msgid "Floating"
 msgstr "Lebegő"
 
 #: ../src/libgdl/gdl-dock.c:176
+#, fuzzy
 msgid "Whether the dock is floating in its own window"
 msgstr ""
+"dokkolóablak "
+"lebegő"
 
 #: ../src/libgdl/gdl-dock.c:184
+#, fuzzy
 msgid "Default title for the newly created floating docks"
 msgstr ""
+"lebegő"
+"dokkolóablak"
 
 #: ../src/libgdl/gdl-dock.c:191
+#, fuzzy
 msgid "Width for the dock when it's of floating type"
 msgstr ""
+"dokkolóablak "
+"lebegő"
 
 #: ../src/libgdl/gdl-dock.c:199
+#, fuzzy
 msgid "Height for the dock when it's of floating type"
 msgstr ""
+"dokkolóablak "
+"lebegő"
 
 #: ../src/libgdl/gdl-dock.c:206
 #, fuzzy
@@ -5303,7 +5349,10 @@ msgstr "Lebegő"
 #: ../src/libgdl/gdl-dock.c:207
 #, fuzzy
 msgid "X coordinate for a floating dock"
-msgstr "A rács origójának X-koordinátája"
+msgstr ""
+"lebegő"
+"dokkolóablak"
+"A rács origójának X-koordinátája"
 
 #: ../src/libgdl/gdl-dock.c:214
 #, fuzzy
@@ -5313,12 +5362,16 @@ msgstr "Lebegő"
 #: ../src/libgdl/gdl-dock.c:215
 #, fuzzy
 msgid "Y coordinate for a floating dock"
-msgstr "A rács origójának Y-koordinátája"
+msgstr ""
+"lebegő"
+"dokkolóablak"
+"A rács origójának Y-koordinátája"
 
 #: ../src/libgdl/gdl-dock.c:499
 #, c-format
+#, fuzzy
 msgid "Dock #%d"
-msgstr ""
+msgstr "dokkolóablak"
 
 #: ../src/libnrtype/FontFactory.cpp:774
 msgid "Ignoring font without family that will crash Pango"
@@ -5354,7 +5407,6 @@ msgid "Stitch Sub-Paths"
 msgstr "Alláncok összevarrása"
 
 #: ../src/live_effects/effect.cpp:115
-#, fuzzy
 msgid "No effect"
 msgstr "Nincs effektus"
 
@@ -5551,12 +5603,10 @@ msgid "Scale the width of the pattern in units of its length"
 msgstr "A minta szélessége a minta hosszának arányában legyen méretezve"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:66
-#, fuzzy
 msgid "Spacing"
 msgstr "Helykihagyás"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:66
-#, fuzzy
 msgid "Space between copies of the pattern"
 msgstr "Helykihagyás a minta-másolatok között"
 
@@ -5626,27 +5676,24 @@ msgid "This effect does not support arcs yet, try to convert to path."
 msgstr "effektusátalakítása"
 
 #: ../src/live_effects/parameter/path.cpp:204
-#, fuzzy
 msgid "Paste path parameter"
-msgstr "Szélesség beillesztése egyenként"
+msgstr "Láncparaméter beillesztése"
 
 #: ../src/live_effects/parameter/path.cpp:208
 msgid "Clipboard does not contain a path."
 msgstr "A vágólap nem tartalmaz láncot."
 
 #: ../src/live_effects/parameter/point.cpp:87
-#, fuzzy
 msgid "Change point parameter"
-msgstr "Spirál módosítása"
+msgstr "Pontparaméter módosítása"
 
 #: ../src/live_effects/parameter/bool.cpp:71
 msgid "Change bool parameter"
 msgstr "Logikaiérték-paraméter módosítása"
 
 #: ../src/live_effects/parameter/random.cpp:137
-#, fuzzy
 msgid "Change random parameter"
-msgstr "véletlenszerűCsomópont-típus módosítása"
+msgstr "Véletlenszerű paraméter módosítása"
 
 #: ../src/main.cpp:218
 msgid "Print the Inkscape version number"
@@ -9000,14 +9047,12 @@ msgstr ""
 
 #. pack_start(_fromSVGElement, false, false);
 #: ../src/ui/dialog/filter-effects-dialog.cpp:614
-#, fuzzy
 msgid "Image File"
-msgstr "Kép"
+msgstr "Képfájl"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:617
-#, fuzzy
 msgid "Selected SVG Element"
-msgstr "Szakasz törlése"
+msgstr "Kijelölt SVG-elem"
 
 #. TODO: any image, not justy svg
 #: ../src/ui/dialog/filter-effects-dialog.cpp:686
@@ -9071,7 +9116,9 @@ msgstr "Pont"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
 #, fuzzy
 msgid "Specular Exponent"
-msgstr "Kitevő"
+msgstr ""
+"Tükröződő"
+"Kitevő"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
 msgid "Exponent value controlling the focus for the light source"
@@ -9142,7 +9189,9 @@ msgstr "Szűrőprimitív eltávolítása"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1940
 #, fuzzy
 msgid "Remove merge node"
-msgstr "csomópontokZöld eltávolítása"
+msgstr ""
+"összevonás"
+"csomópontokZöld eltávolítása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2056
 msgid "Reorder filter primitive"
@@ -9248,14 +9297,12 @@ msgid "K4"
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
-#, fuzzy
 msgid "width of the convolve matrix"
-msgstr "A minta szélessége"
+msgstr "a konvolúciós mátrix szélessége"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
-#, fuzzy
 msgid "height of the convolve matrix"
-msgstr "A kitöltendő téglalap magassága"
+msgstr "a konvolúciós mátrix magassága"
 
 #. default x:
 #. default y:
@@ -9265,16 +9312,18 @@ msgid "Target"
 msgstr "Cél (target):"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
+#, fuzzy
 msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
-msgstr ""
+msgstr "a konvolúciós mátrix"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
+#, fuzzy
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
-msgstr ""
+msgstr "a konvolúciós mátrix"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 #, fuzzy
@@ -9290,7 +9339,9 @@ msgid ""
 "effects. An identity matrix would lead to a motion blur effect (parallel to "
 "the matrix diagonal) while a matrix filled with a constant non-zero value "
 "would lead to a common blur effect."
-msgstr "Elmosás"
+msgstr ""
+"a konvolúciós mátrix"
+"Elmosás"
 
 #. TODO: svg spec: The default value is the sum of all values in kernelMatrix, with the exception that if the sum is zero, then the divisor is set to 1.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2219
@@ -9341,7 +9392,9 @@ msgstr "Ha az opció be van jelölve, akkor ez a szűrőprimitív nem módosítj
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
 #, fuzzy
 msgid "Diffuse Color"
-msgstr "Színek"
+msgstr ""
+"Szórt"
+"Színek"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
@@ -9363,14 +9416,14 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
-#, fuzzy
 msgid "Constant"
-msgstr "Kapcsolódás"
+msgstr "Konstans"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
+#, fuzzy
 msgid "This constant affects the Phong lighting model."
-msgstr ""
+msgstr "Konstans"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2228
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2262
@@ -9378,32 +9431,32 @@ msgid "Kernel Unit Length"
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2232
+#, fuzzy
 msgid "This defines the intensity of the displacement effect."
-msgstr ""
+msgstr "Elmozdítási"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
-#, fuzzy
 msgid "X displacement"
-msgstr "Maximális elmozdítás képpontban"
+msgstr "X-elmozdítás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
+#, fuzzy
 msgid "Color component that controls the displacement in the X direction"
-msgstr ""
+msgstr "Elmozdítás"
+
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2234
+msgid "Y displacement"
+msgstr "Y-elmozdítás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
 #, fuzzy
-msgid "Y displacement"
-msgstr "Maximális elmozdítás képpontban"
-
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2234
 msgid "Color component that controls the displacement in the Y direction"
-msgstr ""
+msgstr "Elmozdítás"
 
 #. default: black
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
-#, fuzzy
 msgid "Flood Color"
-msgstr "Fázis színe"
+msgstr "Területkitöltési szín"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
 msgid "The whole filter region will be filled with this color."
@@ -9424,9 +9477,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2251
-#, fuzzy
 msgid "Source of Image"
-msgstr "Lépések száma"
+msgstr "A kép forrása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
 #, fuzzy
@@ -9450,7 +9502,9 @@ msgstr ""
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
 #, fuzzy
 msgid "Specular Color"
-msgstr "Fázis színe"
+msgstr ""
+"Tükröződő"
+"szín"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2261
 #: ../share/extensions/interp.inx.h:2
@@ -9458,15 +9512,18 @@ msgid "Exponent"
 msgstr "Kitevő"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2261
+#, fuzzy
 msgid "Exponent for specular term, larger is more \"shiny\"."
-msgstr ""
+msgstr "Tükröződő"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2270
 #, fuzzy
 msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
-msgstr "Szűrőprimitív"
+msgstr ""
+"Szűrőprimitív "
+"Örvénylés"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid "Base Frequency"
@@ -9494,7 +9551,9 @@ msgstr "Szűrőprimitív felvétele"
 msgid ""
 "The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, "
 "multiply, darken and lighten."
-msgstr "Szűrőprimitív KivetítésSzorzásSötétítésvilágosítás"
+msgstr ""
+"Keverés"
+"Szűrőprimitív KivetítésSzorzásSötétítésvilágosítás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2305
 #, fuzzy
@@ -9520,7 +9579,10 @@ msgid ""
 "the Porter-Duff blending modes or the aritmetic mode described in SVG "
 "standard. Porter-Duff blending modes are essentially logical operations "
 "between the corresponding pixel values of the images."
-msgstr "Szűrőprimitívképpont"
+msgstr ""
+"Vegyítés"
+"Keverés "
+"Szűrőprimitívképpont"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2317
 #, fuzzy
@@ -9530,7 +9592,10 @@ msgid ""
 "sharpening, embossing and edge detection. Note that while gaussian blur can "
 "be created using this filter primitive, the special gaussian blur primitive "
 "is faster and resolution-independent."
-msgstr "alkalmaz szűrőeffektus SzűrőprimitívElmosás élesítés"
+msgstr ""
+"a konvolúciós mátrix"
+"alkalmaz szűrőeffektus SzűrőprimitívElmosás élesítés "
+"Gauss-elmosás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2321
 #, fuzzy
@@ -9548,7 +9613,9 @@ msgid ""
 "first input using the second input as a displacement map, that shows from "
 "how far the pixel should come from. Classical examples are whirl and pinch "
 "effects."
-msgstr "Szűrőprimitívképponteffektus"
+msgstr ""
+"Elmozdítás"
+"Szűrőprimitívképponteffektus"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2329
 #, fuzzy
@@ -9573,13 +9640,15 @@ msgid ""
 msgstr "Szűrőprimitív"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2341
-#, fuzzy
 msgid ""
 "The <b>feMerge</b> filter primitive composites several temporary images "
 "inside the filter primitive to a single image. It uses normal alpha "
 "compositing for this. This is equivalent to using several feBlend primitives "
 "in 'normal' mode or several feComposite primitives in 'over' mode."
-msgstr "szűrőprimitívAlfa"
+msgstr ""
+"szűrőprimitív "
+"Vegyítés"
+"Alfa"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2345
 #, fuzzy
@@ -9595,7 +9664,10 @@ msgid ""
 "The <b>feOffset</b> filter primitive offsets the image by an user-defined "
 "amount. For example, this is useful for drop shadows, where the shadow is in "
 "a slightly different position than the actual object."
-msgstr "szűrőprimitívobjektum"
+msgstr ""
+"szűrőprimitív "
+"Eltolás"
+"objektum"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2353
 #, fuzzy
@@ -16898,13 +16970,11 @@ msgstr "PostScript 3"
 msgid "Gri_d Arrange..."
 msgstr "Rácsra való i_gazítás..."
 
-#, fuzzy
 msgid "Convolve"
-msgstr "Konvolúció"
+msgstr "Konvolúció (elmosás)"
 
-#, fuzzy
 msgid "Start point jitter"
-msgstr "Kezdőpont"
+msgstr "Kezdőpont szórása"
 
 msgid "Snap nodes to grid lines, to guides, to paths, and to other nodes"
 msgstr ""
@@ -16929,13 +16999,11 @@ msgstr "Legyen figyelembe véve az objektum el_forgatási középpontja"
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Egyéb</b>"
 
-#, fuzzy
 msgid "Slope"
-msgstr "Burkológörbe"
+msgstr "Meredekség"
 
-#, fuzzy
 msgid "Intercept"
-msgstr "Interpolálás"
+msgstr "Metszéspont"
 
 msgid "Default metadata that will be used for new documents:"
 msgstr "Új dokumentumokhoz használt alapértelmezett metaadatok:"
