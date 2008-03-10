@@ -21,11 +21,11 @@ import inkex, simplepath, cubicsuperpath
 class MyEffect(inkex.Effect):
     def __init__(self):
         inkex.Effect.__init__(self)
-        self.dxf = ''
+        self.dxf = []
     def output(self):
-        print self.dxf
+        print "".join(self.dxf)
     def dxf_add(self, str):
-        self.dxf += str
+        self.dxf.append(str)
     def dxf_line(self,csp):
         line = "\n0\nLINE\n8\n2\n62\n4\n10\n%f\n20\n%f\n30\n0\n11\n%f\n21\n%f\n31\n0" % (csp[0][0],csp[0][1],csp[1][0],csp[1][1])
         self.dxf_add(line)
