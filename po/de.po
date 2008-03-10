@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-01-21 03:42-0200\n"
-"PO-Revision-Date: 2008-03-10 00:58+0100\n"
+"PO-Revision-Date: 2008-03-10 20:06+0100\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1063,9 +1063,9 @@ msgid "Export the bitmap file with these settings"
 msgstr "Bitmapdatei mit diesen Einstellungen exportieren"
 
 #: ../src/dialogs/export.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Batch export %d selected objects"
-msgstr "%d gewähltes Objekt auf einmal exportieren"
+msgstr "%d gewählte Objekte auf einmal exportieren"
 
 #: ../src/dialogs/export.cpp:1014
 msgid "Export in progress"
@@ -1363,9 +1363,8 @@ msgid "Rela_tive change"
 msgstr "_Relative Änderung"
 
 #: ../src/dialogs/guidelinedialog.cpp:48
-#, fuzzy
 msgid "Move and rotate guide relative to current settings"
-msgstr "Führungslinie relativ zur aktuellen Position verschieben"
+msgstr "Führungslinie relativ zu aktuellen Einstellungen verschieben und rotieren"
 
 #: ../src/dialogs/guidelinedialog.cpp:114
 msgid "Set guide properties"
@@ -2653,7 +2652,7 @@ msgstr "Höhe"
 msgid "Offset"
 msgstr "Versatz"
 
-# name des Effekte-submenü, das alle bitmap-effekte beinhält!
+# !!! Name des Effekte-Submenüs, das alle bitmap-effekte beinhaltet
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:46
 #: ../src/extension/internal/bitmap/addNoise.cpp:57
 #: ../src/extension/internal/bitmap/blur.cpp:44
@@ -2693,7 +2692,7 @@ msgstr "Bitmap"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:48
 msgid "Apply adaptive thresholding to selected bitmap(s)."
-msgstr ""
+msgstr "Adaptiven Schwellwert auf ausgewählte Bitmaps anwenden."
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:44
 msgid "Add Noise"
@@ -2917,9 +2916,8 @@ msgid "Implode"
 msgstr "Implodieren"
 
 #: ../src/extension/internal/bitmap/implode.cpp:44
-#, fuzzy
 msgid "Implode selected bitmap(s)."
-msgstr "Ausgewähltes Gitter entfernen."
+msgstr "Ausgewählte Bitmaps implodieren."
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:51
 msgid "Level (with Channel)"
@@ -3099,7 +3097,7 @@ msgstr "Solarisieren"
 
 #: ../src/extension/internal/bitmap/solarize.cpp:44
 msgid "Solarize selected bitmap(s), like overexposing photographic film."
-msgstr ""
+msgstr "Ausgewählte Bitmaps solarisieren (wie ein überbelichteter Film)."
 
 #: ../src/extension/internal/bitmap/spread.cpp:36
 msgid "Spread"
@@ -3140,7 +3138,7 @@ msgstr "Unscharf maskieren"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:51
 msgid "Sharpen selected bitmap(s) using unsharp mask algorithms."
-msgstr ""
+msgstr "Ausgewählte Bitmaps mit unscharfer Maskierung schärfen."
 
 #: ../src/extension/internal/bitmap/wave.cpp:37
 msgid "Wave"
@@ -3156,7 +3154,7 @@ msgstr "Wellenlänge"
 
 #: ../src/extension/internal/bitmap/wave.cpp:46
 msgid "Alter selected bitmap(s) along sine wave."
-msgstr ""
+msgstr "Ausgewählte Bitmaps entlang einer Sinuskurve modifizieren."
 
 #: ../src/extension/internal/bluredge.cpp:132
 msgid "Inset/Outset Halo"
@@ -3198,9 +3196,8 @@ msgstr "Texte in Pfade umwandeln"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:177
 #: ../src/extension/internal/cairo-ps-out.cpp:231
-#, fuzzy
 msgid "Convert blur effects to bitmaps"
-msgstr "Texte in Pfade umwandeln"
+msgstr "Weichzeichnereffekte in Bitmaps umwandeln"
 
 #: ../src/extension/internal/cairo-pdf-out.cpp:178
 #: ../src/extension/internal/cairo-ps-out.cpp:232
@@ -3658,21 +3655,21 @@ msgstr "Vektorgrafik-Format von Corel WordPerfect"
 
 #: ../src/extension/prefdialog.cpp:230
 msgid "Pin Dialog"
-msgstr "Pin Dialog"
+msgstr "Dialogfenster festhalten"
 
 #: ../src/extension/prefdialog.cpp:230
 msgid ""
 "Toggles whether the dialog stays for multiple executions or disappears after "
 "one"
-msgstr ""
+msgstr "Schaltet um, ob ein Dialog für mehrere Anwendungen offen bleibt oder nach jeder verschwindet."
 
 #: ../src/extension/prefdialog.cpp:231
 msgid "Live Preview"
-msgstr "Vorschau"
+msgstr "Live-Vorschau"
 
 #: ../src/extension/prefdialog.cpp:231
 msgid "Controls whether the effect settings are rendered live on canvas"
-msgstr ""
+msgstr "Ob die Effekt-Einstellungen unmittelbar auf der Zeichenfläche gezeigt werden"
 
 #. We can't call sp_ui_error_dialog because we may be
 #. running from the console, in which case calling sp_ui
@@ -3808,7 +3805,7 @@ msgid ""
 "Error exporting the document. Verify if the server name, username and "
 "password are correct. If the server have support for webdav and verify if "
 "you didn't forget to choose a license too."
-msgstr ""
+msgstr "Fehler beim Exportieren des Dokuments. Überprüfen Sie, ob Servername, Benutzername und Passwort korrekt sind. Wenn der Server WebDAV unterstützt, stellen Sie sicher, daß Sie auch eine Lizenz ausgewählt haben."
 
 #: ../src/file.cpp:1306
 msgid "Document exported..."
@@ -3828,7 +3825,7 @@ msgstr "Farbmatrix"
 
 #: ../src/filter-enums.cpp:22
 msgid "Component Transfer"
-msgstr ""
+msgstr "Komponenten-Übertragung"
 
 #: ../src/filter-enums.cpp:23
 msgid "Composite"
@@ -3860,7 +3857,7 @@ msgstr "Zusammenführen"
 
 #: ../src/filter-enums.cpp:31
 msgid "Morphology"
-msgstr ""
+msgstr "Morphologie"
 
 # !!! Glanzlichter?
 #: ../src/filter-enums.cpp:33
@@ -3959,11 +3956,12 @@ msgstr "Obenauf"
 
 #: ../src/filter-enums.cpp:75
 msgid "XOR"
-msgstr ""
+msgstr "XOR"
 
+# !!!
 #: ../src/filter-enums.cpp:76
 msgid "Arithmetic"
-msgstr ""
+msgstr "Arithmetik"
 
 #: ../src/filter-enums.cpp:82
 msgid "Identity"
@@ -4138,10 +4136,11 @@ msgstr "<b>Fokus</b> des radialen Farbverlaufs"
 msgid "Radial gradient <b>mid stop</b>"
 msgstr "<b>Zwischenfarbe</b> des radialen Farbverlaufs"
 
+# !!!
 #: ../src/gradient-context.cpp:160
-#, c-format
+#, c-format, fuzzy
 msgid "%s selected out of %d gradient handles on %d selected object(s)"
-msgstr ""
+msgstr "%s gewählt von %d Farbverlauf-Anfassern an %d ausgewählten Objekten"
 
 #: ../src/gradient-context.cpp:163
 #, fuzzy, c-format
@@ -4698,7 +4697,7 @@ msgstr "Kein Effekt"
 
 #: ../src/live_effects/effect.cpp:149
 msgid "An exception occurred during execution of the Path Effect."
-msgstr ""
+msgstr "Ein Fehler ist während der Ausführung des Pfadeffekts aufgetreten."
 
 #: ../src/live_effects/effect.cpp:327
 #, c-format
@@ -4710,9 +4709,8 @@ msgid "None of the applied path effect's parameters can be edited on-canvas."
 msgstr "Keine Parameter der auf den Pfad angewendeten Effekte können auf der Zeichenfläche verändert werden."
 
 #: ../src/live_effects/parameter/enum.h:49
-#, fuzzy
 msgid "Change enum parameter"
-msgstr "Zufallsparameter ändern"
+msgstr "enum-Parameter ändern"
 
 #: ../src/live_effects/lpe-gears.cpp:212
 msgid "Teeth"
@@ -4724,7 +4722,7 @@ msgstr "Zahl der Zähne"
 
 #: ../src/live_effects/lpe-gears.cpp:213
 msgid "Phi"
-msgstr ""
+msgstr "Phi"
 
 #: ../src/live_effects/lpe-gears.cpp:213
 msgid ""
@@ -4845,14 +4843,12 @@ msgid "Width of the pattern"
 msgstr "Breite des Musters"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:65
-#, fuzzy
 msgid "Width in units of length"
-msgstr "Breite der Halo in Pixeln"
+msgstr "Breite in Längeneinheiten"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:65
-#, fuzzy
 msgid "Scale the width of the pattern in units of its length"
-msgstr "Maximale Länge der Spitze (in Vielfachen der Konturlinienbreite)"
+msgstr "Die Breite des Musters in Einheiten seiner Länge skalieren"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:66
 msgid "Spacing"
@@ -4878,9 +4874,8 @@ msgid "Pattern is vertical"
 msgstr "Muster ist vertikal"
 
 #: ../src/live_effects/parameter/parameter.cpp:137
-#, fuzzy
 msgid "Change scalar parameter"
-msgstr "Deckkraft der Ebene ändern"
+msgstr "Skalar-Parameter ändern"
 
 #: ../src/live_effects/parameter/path.cpp:105
 #: ../src/live_effects/parameter/point.cpp:105
@@ -6045,7 +6040,7 @@ msgstr "<b>Objekt(e)</b> auswählen, um den Pfad-Effekt einzufügen."
 
 #: ../src/selection-chemistry.cpp:1280
 msgid "Clipboard does not contain a live path effect."
-msgstr ""
+msgstr "Die Zwischenablage enthält keinen Live-Pfadeffekt."
 
 #: ../src/selection-chemistry.cpp:1306
 msgid "Paste live path effect"
@@ -6204,9 +6199,8 @@ msgid "Select <b>object(s)</b> to convert to guides."
 msgstr "<b>Objekt(e)</b> auswählen, die in Führungslinien umgewandelt werden sollen."
 
 #: ../src/selection-chemistry.cpp:2480
-#, fuzzy
 msgid "Objects to guides"
-msgstr "Objekte in Füllmuster umwandeln"
+msgstr "Objekte in Führungslinien umwandeln"
 
 #: ../src/selection-chemistry.cpp:2497
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -7935,35 +7929,30 @@ msgid "Snap to n_odes"
 msgstr "An Objektkn_oten einrasten"
 
 #: ../src/ui/dialog/document-properties.cpp:107
-#, fuzzy
 msgid "Snap nodes and guides to object nodes"
-msgstr "Knoten an Objekten einrasten"
+msgstr "Knoten und Führungslinien an Objektenknoten einrasten"
 
 #: ../src/ui/dialog/document-properties.cpp:108
-#, fuzzy
 msgid "Snap to bounding bo_x edges"
-msgstr "_Umrandungsboxen am Gitter einrasten"
+msgstr "An Kanten der Umrandungsbo_xen einrasten"
 
 #: ../src/ui/dialog/document-properties.cpp:108
-#, fuzzy
 msgid "Snap bounding box corners and guides to bounding box edges"
-msgstr "_Umrandungsbox an Führungslinien einrasten"
+msgstr "Ecken von Umrandungsboxen und Führungslinien an Kanten von Umrandungsboxen einrasten"
 
 #: ../src/ui/dialog/document-properties.cpp:109
-#, fuzzy
 msgid "Snap to bounding box co_rners"
-msgstr "Zu verwendende Umrandungsbox:"
+msgstr "An E_cken der Umrandungsboxen einrasten"
 
 #: ../src/ui/dialog/document-properties.cpp:109
-#, fuzzy
 msgid "Snap bounding box corners to other bounding box corners"
-msgstr "_Umrandungsbox an Führungslinien einrasten"
+msgstr "Ecken von Umrandungsboxen an anderen Ecken von Umrandungsboxen einrasten"
 
 #. ---------------------------------------------------------------
 #. Applies to both nodes and guides, but not to bboxes, that's why its located here
 #: ../src/ui/dialog/document-properties.cpp:112
 msgid "Rotation _center"
-msgstr "Rotationsmittelpunkt"
+msgstr "Rotations_mittelpunkt"
 
 #: ../src/ui/dialog/document-properties.cpp:112
 msgid "Consider the rotation center of an object when snapping"
@@ -8344,9 +8333,8 @@ msgid "Remove filter primitive"
 msgstr "Filterprimitiv entfernen"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1724
-#, fuzzy
 msgid "Remove merge node"
-msgstr "Grün entfernen"
+msgstr "Vereinigungsknoten entfernen"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1840
 msgid "Reorder filter primitive"
@@ -8867,13 +8855,13 @@ msgstr "Ausgewählten Objekte zeigen Farbverlaufs-Anfasser an"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:234
 msgid "Conversion to guides uses edges instead of bounding box"
-msgstr ""
+msgstr "Umwandlung in Führungslinien benutzt Kanten anstelle der Umrandungsbox"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:235
 msgid ""
 "Converting an object to guides places these along the object's true edges "
 "(imitating the object's shape), not along the bounding box."
-msgstr ""
+msgstr "Beim Umwandeln eines Objekts in Führungslinien werden diese entlang der echten Objektkanten platziert, nicht entlang der der Umrandungsbox."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:242
 msgid "Ctrl+click dot size:"
@@ -8964,16 +8952,14 @@ msgid "Conversion to guides:"
 msgstr "In Führungslinien umwandeln:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:348
-#, fuzzy
 msgid "Keep objects after conversion to guides"
-msgstr ""
-"<b>Objekt(e)</b> auswählen, die in ein Füllmuster umgewandelt werden sollen."
+msgstr "Objekte nach Umwandlung in Führungslinien behalten"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:350
 msgid ""
 "When converting an object to guides, don't delete the object after the "
 "conversion."
-msgstr ""
+msgstr "Wenn ein Objekt in Führungslinien umgewandelt wird, wird das Objekt danach nicht gelöscht."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:352
 msgid "Width is in absolute units"
@@ -9839,9 +9825,8 @@ msgstr "Oversampling von Bitmaps:"
 # !!! called "Commands Bar" in other places
 #. consider moving this to an UI tab:
 #: ../src/ui/dialog/inkscape-preferences.cpp:896
-#, fuzzy
 msgid "Make the commands toolbar icons smaller"
-msgstr "Befehlsleiste kleiner machen"
+msgstr "Icons der Befehlsleiste kleiner machen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:898
 msgid ""
@@ -9850,18 +9835,13 @@ msgstr ""
 "Befehlsleiste in der Größe einer sekundären Werkzeugleiste darstellen "
 "(erfordert Neustart)"
 
-# !!! called "Commands Bar" in other places
 #: ../src/ui/dialog/inkscape-preferences.cpp:900
-#, fuzzy
 msgid "Make the main toolbar icons smaller"
-msgstr "Befehlsleiste kleiner machen"
+msgstr "Icons der Haupt-Werkzeugleiste kleiner machen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:902
-#, fuzzy
 msgid "Make the main tools use the 'secondary' toolbar size (requires restart)"
-msgstr ""
-"Befehlsleiste in der Größe einer sekundären Werkzeugleiste darstellen "
-"(erfordert Neustart)"
+msgstr "Werkzeuge in der Größe einer sekundären Werkzeugleiste darstellen (erfordert Neustart)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:905
 msgid "Maximum number of recent documents:"
@@ -11470,14 +11450,12 @@ msgstr "Objekt auswählen, mit dem der Klon verbunden ist"
 
 #. TRANSLATORS: Convert selection to a line marker
 #: ../src/verbs.cpp:2195
-#, fuzzy
 msgid "Objects to _Marker"
-msgstr "Objekte in Füllmuster umwandeln"
+msgstr "Objekte in _Markierungen umwandeln"
 
 #: ../src/verbs.cpp:2196
-#, fuzzy
 msgid "Convert selection to a line marker"
-msgstr "Die gewählten Objekte in die Zwischenablage verschieben"
+msgstr "Die gewählten Objekte in eine Markierung am Ende der Linie umwandeln"
 
 #. TRANSLATORS: Convert selection to a collection of guidelines
 #: ../src/verbs.cpp:2198
@@ -11841,7 +11819,6 @@ msgid "Gri_d Arrange..."
 msgstr "An_ordnen im Raster…"
 
 #: ../src/verbs.cpp:2308
-#, fuzzy
 msgid "Arrange selected objects in a grid pattern"
 msgstr "Ausgewählte Objekte im Raster anordnen"
 
@@ -13038,14 +13015,11 @@ msgid "Paint is undefined"
 msgstr "Farbe ist undefiniert"
 
 #: ../src/widgets/paint-selector.cpp:980
-#, fuzzy
 msgid ""
 "Use the <b>Node tool</b> to adjust position, scale, and rotation of the "
 "pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to "
 "create a new pattern from selection."
-msgstr ""
-"Benutze <b>Objekt » Füllmuster » Objekte in Füllmuster umwandeln</b>, um ein "
-"neues Füllmuster vom ausgewählten Objekt zu erzeugen."
+msgstr "Das <b>Knotenwerkzeug</b> ändert Position, Skalierung und Rotation des Musters auf der Zeichenfläche. <b>Objekt » Füllmuster » Objekte in Füllmuster umwandeln</b> benutzen, um ein neues Füllmuster vom ausgewählten Objekt zu erzeugen."
 
 #: ../src/widgets/select-toolbar.cpp:238
 msgid "Transform by toolbar"
@@ -13576,9 +13550,8 @@ msgid "twisted"
 msgstr "verdreht"
 
 #: ../src/widgets/toolbox.cpp:1942
-#, fuzzy
 msgid "slightly pinched"
-msgstr "(leicht wölbend)"
+msgstr "leicht abgeschnürt"
 
 #: ../src/widgets/toolbox.cpp:1942
 msgid "NOT rounded"
@@ -13711,9 +13684,8 @@ msgstr "Spitze Ecken"
 
 #. TODO: use the correct axis here, too
 #: ../src/widgets/toolbox.cpp:2498
-#, fuzzy
 msgid "3D Box: Change perspective (angle of infinite axis)"
-msgstr "3D-Box: Anzahl der Anfasser ändern"
+msgstr "3D-Box: Perspektive ändern (Winkel der unendlichen Achse)"
 
 #: ../src/widgets/toolbox.cpp:2567
 msgid "Angle in X direction"
@@ -13725,7 +13697,6 @@ msgstr "Winkel X:"
 
 #. Translators: PL is short for 'perspective line'
 #: ../src/widgets/toolbox.cpp:2569
-#, fuzzy
 msgid "Angle of PLs in X direction"
 msgstr "Winkel der Perspektivlinien in X-Richtung"
 
@@ -13819,9 +13790,8 @@ msgid "edge is denser"
 msgstr "Rand ist dichter"
 
 #: ../src/widgets/toolbox.cpp:2881
-#, fuzzy
 msgid "even"
-msgstr "Grün"
+msgstr "gleichmäßig"
 
 #: ../src/widgets/toolbox.cpp:2881
 msgid "center is denser"
@@ -13870,7 +13840,7 @@ msgstr "Radius der innersten Umdrehung (relativ zur Gesamtgröße der Spirale)"
 #. Width
 #: ../src/widgets/toolbox.cpp:3014
 msgid "(pinch tweak)"
-msgstr ""
+msgstr "(Abschnür-Tweak)"
 
 #: ../src/widgets/toolbox.cpp:3014 ../src/widgets/toolbox.cpp:3030
 #: ../src/widgets/toolbox.cpp:3191 ../src/widgets/toolbox.cpp:3319
@@ -13879,16 +13849,12 @@ msgid "(default)"
 msgstr "(Vorgabe)"
 
 #: ../src/widgets/toolbox.cpp:3014
-#, fuzzy
 msgid "(broad tweak)"
-msgstr "(breiter Strich)"
+msgstr "(breiter Tweak)"
 
 #: ../src/widgets/toolbox.cpp:3017
-#, fuzzy
 msgid "The width of the tweak area (relative to the visible canvas area)"
-msgstr ""
-"Breite des kalligrafischen Füllers (relativ zum sichtbaren "
-"Dokumentausschnitt)"
+msgstr "Breite des Tweak-Gebiets (relativ zum sichtbaren Dokumentausschnitt)"
 
 #. Force
 #: ../src/widgets/toolbox.cpp:3030
@@ -13969,14 +13935,12 @@ msgid "Paint the tool's color upon selected objects"
 msgstr "Malt mit der Farbe des Werkzeugs auf ausgewählte Objekte"
 
 #: ../src/widgets/toolbox.cpp:3099
-#, fuzzy
 msgid "Color jitter mode"
-msgstr "Knoten zittrig verteilen"
+msgstr "Farbvariations-Modus"
 
 #: ../src/widgets/toolbox.cpp:3100
-#, fuzzy
 msgid "Jitter the colors of selected objects"
-msgstr "Die gewählten Objekte vereinigen"
+msgstr "Die Farben der gewählten Objekte variieren"
 
 #: ../src/widgets/toolbox.cpp:3105
 msgid "Mode:"
@@ -14312,9 +14276,8 @@ msgstr ""
 "Füllerspitze zu beeinflussen"
 
 #: ../src/widgets/toolbox.cpp:3490
-#, fuzzy
 msgid "Reset all parameters to defaults"
-msgstr "Die Werte des aktuellen Reiters auf die Vorgabewerte setzen"
+msgstr "Alle Parameter auf Vorgabewerte setzen"
 
 #: ../src/widgets/toolbox.cpp:3572
 msgid "Arc: Change start/end"
@@ -14790,24 +14753,20 @@ msgstr ""
 "http://www.pstoedit.net/pstoedit"
 
 #: ../share/extensions/edge3d.inx.h:1
-#, fuzzy
 msgid "Blur height"
-msgstr "Höhe der Striche:"
+msgstr "Höhe der Weichzeichnung"
 
 #: ../share/extensions/edge3d.inx.h:2
-#, fuzzy
 msgid "Blur stdDeviation"
-msgstr "(leichte Abweichung)"
+msgstr "Standardabweichung der Weichzeichnung"
 
 #: ../share/extensions/edge3d.inx.h:3
-#, fuzzy
 msgid "Blur width"
-msgstr "Gleiche Breite"
+msgstr "Breite der Weichzeichnung"
 
 #: ../share/extensions/edge3d.inx.h:4
-#, fuzzy
 msgid "Edge 3D"
-msgstr "Kante weichzeichnen"
+msgstr "Kante 3D"
 
 #: ../share/extensions/edge3d.inx.h:5
 msgid "Illumination Angle"
@@ -15222,9 +15181,8 @@ msgid "Space between copies:"
 msgstr "Abstand zwischen Kopien:"
 
 #: ../share/extensions/perfectboundcover.inx.h:1
-#, fuzzy
 msgid "Bleed (in)"
-msgstr "Abgeschrägte Verbindung"
+msgstr "Schnittkantenüberlappung (Zoll)"
 
 #: ../share/extensions/perfectboundcover.inx.h:2
 msgid "Book Height (inches)"
@@ -15243,18 +15201,18 @@ msgstr "Breite des Buches (in Zoll)"
 msgid "Cover"
 msgstr "Deckel"
 
+# !!!
 #: ../share/extensions/perfectboundcover.inx.h:6
 msgid "Cover Thickness Measurement"
-msgstr ""
+msgstr "Maß für Deckel-Dicke"
 
 #: ../share/extensions/perfectboundcover.inx.h:7
 msgid "Generate Template"
 msgstr "Vorlage erzeugen"
 
 #: ../share/extensions/perfectboundcover.inx.h:8
-#, fuzzy
 msgid "Interior Pages"
-msgstr "Interpolieren"
+msgstr "Innere Seiten"
 
 #: ../share/extensions/perfectboundcover.inx.h:9
 msgid "Note: Bond Weight # calculations are a best-guess estimate."
@@ -15264,9 +15222,11 @@ msgstr ""
 msgid "Number of Pages"
 msgstr "Seitenzahl"
 
+# !!!
 #: ../share/extensions/perfectboundcover.inx.h:11
+#, fuzzy
 msgid "Paper Thickness Measurement"
-msgstr ""
+msgstr "Maß für Papierdicke"
 
 #: ../share/extensions/perfectboundcover.inx.h:12
 msgid "Perfect-Bound Cover"
