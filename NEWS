@@ -1,1 +1,2578 @@
-Inkscape 0.46 pre-release.  More here later.
+------------------------------------------------------------------------
+
+                             Inkscape 0.46
+
+------------------------------------------------------------------------
+
+   Highlights in this release:
+     * Paintbucket tool
+     * Tweak tool
+     * 3D Box tool
+     * Live path effects
+     * Color management
+     * New SVG filters and UI
+     * Native PDF and AI import
+     * XAML import/export
+     * Open Clip Art Library integration (import/export)
+     * Stock patterns
+     * Bitmap editing extension effects
+     * Full on-canvas gradient editing
+     * Engraver's Toolbox in the Calligraphic tool
+     * Touch selection
+     * Dockable dialogs
+     * Command-line access to verbs
+     * Snapping made usable
+     * "3D" / axonometric grid
+     * Angled guidelines
+     * Conversion of objects to guidelines
+     * Significant speed and interactivity improvements
+     * Hundreds of smaller features and bugfixes
+
+ Speed and interactivity
+
+     * In this version, Inkscape starts using the cairo library for
+       rendering. It is now used for outline mode display which, thanks to
+       using cairo and other optimizations, redraws faster by about 25%.
+       More impressive are memory savings: thanks to cairo, in outline
+       mode Inkscape now takes only about 50% of the memory used by 0.45
+       for the same file.
+
+     * Smart redraw directionality: With complex images and/or on slow
+       computers, you may have noticed that Inkscape redraws the screen
+       image in horizontal strips, and these strips are painted in order
+       from top to bottom. Now the redraw always starts at your mouse
+       cursor location and proceed upwards and downwards from it, so that
+       the area near the cursor is always redrawn first. This
+       significantly improves program's responsiveness in some situations.
+       For example, when you are node-editing part of a complex path, the
+       entire path needs to be redrawn on each change, but now this redraw
+       starts from the point you're working on. Moreover, the redraw is
+       interruptible, so each mouse movement starts new redraw from the
+       mouse cursor area. As a result, during such operations those parts
+       that you're working on redraw often and feel snappy and responsive,
+       while areas further away may lag behind more.
+
+     * Faster blur for exporting and high quality on-screen rendering:
+       Inkscape now uses an IIR (Infinite Impulse Response) filter for
+       blurring with large radius. This greatly improves the speed of blur
+       redraw at high zooms or in high-resolution export (or simply with
+       very large blur radius). On the other hand, the results are an
+       approximation to a true Gaussian blur, so a drawing may look
+       slightly different from the mathematically precise blur (usually
+       the differences are far from visible, though). This code is mainly
+       based on: Recursive Gaussian Derivative Filters by L.J. van Vliet,
+       I.T. Young and P.W. Verbeek (see the source code for more detailed
+       references).
+
+          Exporting drawings with blur was particularly slow in 0.45; some
+          files could take hours to export. Now this is fixed, in part by
+          the faster algorithm mentioned above and in part by a bugfix in
+          the export code. Now even the quite complex files with large
+          blurs export at high resolution in at most a few minutes.
+
+     * Minor improvements have been made to gradient rendering
+       performance.
+
+     * Dragging handles and nodes as well as dragging and transforming
+       objects by mouse became more responsive, so that working in complex
+       drawings and especially editing complex paths is noticeably easier.
+       In particular, this fixes the annoying latency issue where a node
+       or a handle could follow mouse cursor even after you release mouse
+       button after a drag.
+
+     * Moving objects, nodes, and gradient handles by cursor keys as well
+       as scaling and rotating objects from keyboard and zooming by keys
+       are much more responsive when working with complex slow-rendering
+       objects. Now, if you press and hold a key, your selection/zoom
+       level will quickly jump to the final position instead of going
+       through all the intermediate steps as before.
+
+     * Moving the cursor around in a file with large and complex paths has
+       become much snappier and more responsive. Previously, in extreme
+       cases Inkscape could freeze for seconds while catching up with the
+       mouse cursor; such delays are now eliminated.
+
+     * Several improvements make canvas panning and scrolling smoother and
+       more interactive in complex slow-rendering documents:
+
+          + When panning by the middle mouse button, Inkscape no longer
+            attempts to redraw the canvas while your mouse button is
+            pressed. Any redrawing only happens after you release the
+            mouse. As a result, the newly revealed parts of the canvas are
+            somewhat more "dirty" but the panning is smoother than before,
+            with few if any "hiccups".
+
+          + Redrawing the newly exposed parts of the canvas after
+            scrolling, especially diagonal scrolling, is now faster
+            because only the exposed areas are redrawn; before, this often
+            resulted in the entire screen being redrawn which was much
+            slower.
+
+          + Previously, if you started panning with middle button while
+            Inkscape is still redrawing screen in a complex drawing,
+            panning sometimes completely failed or moved canvas just a
+            little step. Now it is guaranteed to pan the canvas all the
+            way from mouse-press point to mouse-release point in any case,
+            even if sometimes it fails to show the intermediate positions.
+
+          + When pressing and holding Ctrl+arrows to scroll canvas,
+            Inkscape normally accelerates scrolling so that each next
+            scrolling step is bigger than the previous. Previously, in
+            complex drawings this acceleration sometimes got interrupted,
+            which made scrolling annoyingly bumpy and slow. Now this is
+            fixed so that scrolling is smoothly accelerated even in a
+            slow-rendering document.
+
+          + The default starting speed and acceleration of Ctrl+arrows
+            scrolling are slightly increased. (They are both settable in
+            Preferences.)
+
+     * Better responsiveness and more visual feedback in user interface:
+
+          + When you zoom, the zoom control on the right end of the
+            statusbar now updates immediately, not after screen redraw as
+            before.
+
+          + Many potentially slow commands (Save, Simplify, Combine, Break
+            Apart and others) now display a busy cursor and flash a
+            message in the statusbar (e.g. "Saving document...") while
+            they work.
+
+          + The statusbar messages displayed while you're drawing a shape
+            or a path in Pen tool do not lag behind the mouse movements.
+
+     * Combine and Convert to paths commands are now orders of magnitude
+       faster when applied to a selection with hundreds or thousands of
+       objects.
+
+     * The time it takes to snap to objects using the selector tool has
+       been reduced dramatically, which is most noticeable for snapping to
+       complex paths.
+
+ Tools
+
+ Paint Bucket tool
+
+   The new Paint Bucket tool works exactly as you would expect: click in
+   any area bounded on all sides and it will fill it with color. Being a
+   vector tool, however, Inkscape's Paint Bucket just creates a new path
+   that "fills in" the area in which you clicked.
+
+ How it works
+
+   It is important to note that the tool is perceptual, not geometric.
+   That is, when looking for the boundaries around the point you clicked,
+   it takes for such boundaries any visible color changes. This means that
+   filling will stop at gradients, blurs, and even the color boundaries in
+   imported bitmaps, but will ignore any paths or other objects that are
+   fully (or almost) transparent or for any other reason do not stand out
+   from the background. In short, it will work exactly as if you were
+   filling a rasterized version of your image in a bitmap editor like
+   Photoshop or GIMP - but will give you a vector object to work with.
+
+   For example, now you can scan a pencil sketch, import the bitmap into
+   Inkscape, and quickly fill all its cells with colors even without
+   tracing the bitmap first. This is a very convenient and interactive way
+   of digitizing your paper drawings, making the traditional bitmap
+   tracing unnecessary in many cases.
+
+   Internally, the tool works by performing a bitmap-based flood fill on a
+   rendered version of the visible canvas, then tracing the resulting fill
+   using potrace and placing the traced path into the document.
+
+   It places the rendered path onto the current layer, so you can have a
+   layer on top (for example, "Inks") and select the layer below
+   ("Colors") and do the fills so that they always appear below the Inks.
+
+   The resolution of the bitmap image used to perform the trace is
+   dependent upon your current zoom level -- the more zoomed in to an area
+   that you are, the higher the resolution of the bitmap-based flood fill.
+   So, if you are got a fill that is too imprecise, has rough corners, or
+   don't go into small nooks and appendices where it is supposed to go,
+   just undo, zoom in closer and repeat filling from the same point.
+   Conversely, if the fill leaks out through a small gap, zoom out to make
+   the gap less visible and fill again (or use the auto gap closing
+   parameter, see below).
+
+ Style
+
+   Like all object-creating tools, the Paint Bucket may use the last-set
+   style for the objects it creates (this is the default), or it can use
+   its own fixed style. You can switch between these modes on this tool's
+   page in Inkscape Preferences (Ctrl+Shift+P). As in all other tools, the
+   style swatch on the far right of the Controls bar shows the style that
+   will be used for the next fill object you create.
+
+ Controls
+
+   In the tool's Controls bar:
+     * Paint Bucket's perceptual fill can use either all visible colors or
+       specific color channels. Using the Fill by drop-down list, you can
+       restrict the fill algorithm to one the following channels:
+          + Red
+          + Green
+          + Blue
+          + Hue
+          + Saturation
+          + Lightness
+          + Alpha
+
+     * The Threshold (in per cent units) controls how large must be color
+       difference at a point (compared to the initial click point) to stop
+       the fill. Zero tolerance means only the area of strictly the same
+       color will be filled; the larger the tolerance, the easier it will
+       be for the fill to leak into adjacent different-color areas. The
+       default value is 10%.
+
+     * Using the Grow/shrink by parameter, you can control the amount of
+       inset/outset to be applied to the created fill path. Setting a
+       positive outset causes fill paths to be larger than the filled
+       bitmap area (good for eliminating anti-aliasing errors), while
+       setting a negative outset causes the path to be smaller. This works
+       much the same as the Outset and Inset path commands, except it's
+       done automatically after every fill.
+
+     * With the Close gaps parameter, you can make the Paint Bucket tool
+       ignore any gaps in the area boundaries that would normally cause
+       the fill to spill out of the desired area. There are four settings
+       to auto gap:
+          + None
+          + Small (close gaps up to 2 pixels in size)
+          + Medium (4 pixels)
+          + Large (6 pixels)
+
+          Note that setting this parameter to other than None may slow
+          down noticeably the filling of large areas.
+
+ Shortcuts
+
+   The tool's shortcuts are:
+     * Single click performs filling from the click point.
+
+     * Shift+click performs filling from the click point and then unions
+       the resulting path with the selected path. This way, if your first
+       attempt did not fill in all of the desired area, you can
+       Shift+click the remaining corner to fill it in separately and
+       combine the result with the result of the previous fill.
+
+     * Ctrl+click on an object simply changes that object's fill to the
+       current fill color of the tool, and Shift+Ctrl+click changes the
+       stroke to the current stroke color.
+
+     * Click and drag performs filling from all of the points that you
+       pass while dragging (you will see your path visualized by a red
+       line). From each point, the fill spreads to the neighbors with the
+       colors similar to that point - in other words, it's like clicking
+       with this tool at each point of the drag path and unioning the
+       results. This lets you easily fill an area occupied by a gradient
+       or blur - just drag from the darkest to the lightest points in the
+       area you want to fill.
+
+     * Alt+click and drag works similarly to simple drag, except from each
+       point of the drag path, the fill spreads to the neighbors (if any)
+       with the colors similar to the initial point (the point where you
+       started the drag). This lets you fill a series of similarly-colored
+       yet separated areas (for example, multiple cells in a cartoon) by
+       starting the drag in one of those areas, and alt+dragging the tool
+       through all the other areas.
+
+ Tweak tool
+
+   The Tweak tool is an exciting new way to edit drawings which largely
+   blurs the distinction between vector and raster editing. Instead of
+   meticulously selecting some objects and then performing an action on
+   the selection, you can now select all objects (or all objects you are
+   interested in) and apply the Tweak tool's brush to smoothly and
+   naturally change the shape or style of only those objects (or parts
+   thereof) that the brush touches.
+
+   The area of the tool's action - its brush - is marked by an
+   orange-colored circular outline that moves with your mouse cursor.
+   However, that area actually has no sharp boundaries; the power of the
+   tool's action falls off gradually, following a smooth bell-shaped
+   profile. This makes the tool act softly and smoothly.
+
+   The tool will work on any number of selected objects; for example, you
+   can select all (Ctrl+A) and "smear" your entire drawing by Push mode or
+   paint it by Color Paint mode. You can also apply it to groups of
+   objects; it will go into groups and act on individual objects inside
+   groups. If you're trying to use it without anything selected, it will
+   remind you by a statusbar message to select some objects.
+
+ Width
+
+   The width of the tool's brush, in the range from 1 to 100, can be
+   changed by the Width control in the tool's controls bar above the
+   canvas. You can also change width by Left and Right arrow keys (same as
+   in the Calligraphy tool) at any time (including during action) as well
+   as Home and End. Also, as in Calligraphy tool, the visible width of the
+   brush is independent of zoom; simply zooming in or out is often easier
+   than adjusting the width if you want to cover a smaller or larger area
+   of the drawing.
+
+ Force
+
+   The next control is Force which adjusts the power of the action, also
+   in the range from 1 to 100. You can also change width by Up and Down
+   arrow keys at any time (including during action).
+
+   If you have a pressure-sensitive tablet and your "Use pressure" button
+   on the right-hand end of the controls bar is on, then the force will
+   also depend on how hard you actually press your pen into your tablet,
+   changing in the range from zero to whatever you set in the Force
+   control. If all you have is a mouse, then the force will be constant
+   but still settable by the Force control.
+
+ Path editing modes
+
+   The Tweak tool has a number of modes, selectable by toggle buttons in
+   the tool's Controls bar and by keyboard shortcuts. Some of these modes
+   change the shapes of paths while others affect the colors of objects.
+   All these modes share the Width and Force controls but otherwise are
+   quite different. Let's look at the path editing modes first.
+
+   Unlike the Node tool, to edit paths with the Tweak tool you don't need
+   to worry about where the nodes of a path are and how to manipulate
+   them. You just apply the tool's brush to any point, and the selected
+   paths at that point will reshape smoothly and naturally - as if made of
+   soft jelly - regardless of where its nodes lie. If applied to a shape
+   or text object, the tool converts them to paths automatically.
+
+   While not very useful for technical drawings, tweaking paths will be
+   indispensable for artistic uses of Inkscape - cartoons, drawings,
+   sketches, anime, etc. This new functionality is somewhat similar to the
+   tools such as "Pucker" and "Bloat" in the latest versions of Adobe
+   Illustrator.
+
+   There are currently six path editing modes in the Tweak tool: Push,
+   Shrink, Grow, Attract, Repel, and Roughen.
+     * This default mode of the tool, Push, simply displaces the part of
+       the path under the cursor in the direction of the drag. The path
+       behaves like soft jelly, bending and bulging smoothly and
+       naturally. It's an easy way to produce various irregular, lifelike,
+       handmade-looking shapes starting from something as simple as an
+       ellipse or a calligraphic stroke. For parallel-stroke hatching
+       (engraving) done in the Calligraphy tool, pushing is an easy way to
+       bend, pinch, or curve the entire hatching uniformly.
+
+     * The Shrink and Grow are two opposite modes that move each point of
+       a path in a direction perpendicular to the path's surface at the
+       point, either inwards (Shrink) or outwards (Grow). This is similar
+       to the Inset and Outset commands, except that the Tweak tool can
+       act on a part of a path instead of the whole path.
+
+          For example, the visible lightness/darkness of an engraving
+          hatching may not exactly correspond to your artistic intention.
+          Also, the ends of Calligraphy pen strokes are often far from
+          ideal - they may be too blunt or have unsightly bends or blobs.
+          This is where the Tweak tool may help. Select all the strokes in
+          a hatching pattern and apply a light Shrink action where you
+          want the lines to become thinner (and the hatching to become
+          lighter), up until total disappearance. If you press hard,
+          shrinking works as an eraser, so you can easily clean the
+          strokes' ends to make them thin, sharp, and uniform. Conversely,
+          applying Grow makes strokes wider (i.e. the hatching becomes
+          darker).
+
+          Of course, shrinking and growing are useful not only for
+          calligraphic strokes. Same as with Push, with Shrink and Grow
+          you can sculpt any path, spawning smooth treacle-like appendages
+          with Inflating and carving holes with Melting. Unlike the "node
+          sculpting" mode in the Node tool, however, this does not require
+          adding new nodes to the shape.
+
+     * The Attract and Repel modes work by moving each affected point on a
+       path towards (Attract) or from (Repel) the cursor point. In some
+       cases this may look similar to Shrink and Grow, but the difference
+       is that shrinking/growing moves paths perpendicularly to the path
+       in each point, whereas attracting/repelling moves them to or from
+       the cursor regardless of the path shape. These modes are similar to
+       the Pinch effect in ; you can use them for various
+       central-symmetric distortions in parts of your paths.
+
+     * The Roughen mode does exactly this: roughens the edge of the path
+       without changing its overall shape. Slight roughening simply makes
+       the edge crooked and uneven; strong roughening tears and explodes
+       the edge into random blobs and splotches. Note that this operation,
+       especially with high Fidelity, adds a lot of nodes which increases
+       the size of your SVG document and may slow down Inkscape
+       considerably. In particular, pushing/melting/inflating of a
+       roughened path becomes much slower and more difficult, so it's
+       recommended to finalize the overall shape of a path first and
+       roughen it, if necessary, only as the final step.
+
+   See the screenshot at [136][1] for a few examples of using the path
+   editing modes of the Tweak tool.
+
+ Fidelity
+
+   Any tweaking of a path slightly distorts the entire path, including
+   even those parts that you didn't touch. These distortions are similar
+   to those that a Simplify command produces. The Fidelity value (also in
+   the range from 1 to 100, default is 50) allows you to control the
+   amount of these distortions. With a higher fidelity, the distortions
+   are less noticeable, but the path may end up having a lot of nodes
+   which inflates up the SVG size and slows down Inkscape.
+
+   The best value of Fidelity depends on the nature of your artwork. If
+   you're sculpting an amorphous blob, you can do with low fidelity of
+   about 20. If, however, you are pushing or inflating a text string (as a
+   single path) and want the letters outside the distorted area to remain
+   crisp and clean, you will need to raise fidelity to 80 or more.
+
+ Known problems
+
+   Known problems with the path editing modes in Tweak tool:
+    1. they don't work on open paths (an open path becomes closed if you
+       tweak it);
+    2. they are rather slow;
+    3. they quickly eat memory; and
+    4. they are sometimes buggy - thin calligraphic strokes may suddenly
+       disappear or change their shape drastically as you're melting or
+       inflating them.
+
+   For (4), it helps to increase Fidelity. Also, you can undo the bad
+   change and try again with less pressure on the pen - if you do your
+   thinning in several light touches instead of one heavy press, usually
+   you will be able to get the desired result without the buggy behavior.
+
+   Also, sometimes after roughening, further tweaking of a path becomes
+   impossible with this diagnostic:
+ WARNING **: Shape error in ConvertToShape: directedEulerian(a) == false
+
+   All these problems stem from the livarot library that we use for
+   geometric manipulation of paths. Fortunately, livarot is scheduled for
+   replacement by lib2geom, a new library now in development, so hopefully
+   these issues will be addressed then.
+
+ Color editing modes
+
+   The Color Paint and Color Jitter modes, unlike the path editing modes,
+   change the colors of objects instead of their shapes. Yet they share
+   enough common features with the path editing modes to be part of the
+   same tool: These modes also use a circular soft-edged brush controlled
+   by the Width and Force parameters on the Controls bar and affected by
+   the pen pressure (if you have a pressure-sensitive tablet).
+     * Color Paint applies the style of the tool to the selected objects
+       under the brush. The style of the tool is visible in the style
+       swatch at the rightmost end of the tool's control bar; it can be
+       changed by clicking on the color palette or by any other style
+       assignment command, such as Fill and Stroke dialog. (Note: unlike
+       all other tools, in Tweak tool in Color Paint mode you cannot
+       assign style directly to selected objects; any style-setting
+       command changes the tool's style instead.)
+
+          The fill from the tool's style applies to the fills of the
+          painted objects, and the stroke applies to the strokes. If the
+          tool's style has no fill or no stroke, it won't affect fills or
+          strokes, correspondingly. For example, if you want to color the
+          fills of objects blue but leave their strokes untouched, assign
+          blue fill to the tool's style (just click blue on the palette)
+          but set its stroke to None (middle-click the Stroke swatch in
+          the statusbar). Similarly, master opacity in the tool's style
+          affects master opacities of the touched objects (if the O
+          channel is on, see below).
+
+          This mode allows you to literally paint over objects, shifting
+          their colors towards the target style of the tool. For example,
+          if you paint with yellow fill over a blue-filled object, the
+          object will become greenish blue, then green, then yellowish
+          green, and end up being exactly the yellow color you're painting
+          with. This speed of this gradual transition depends on both
+          Force parameter and pen pressure; also, objects touched by the
+          periphery of the brush are less affected than those hit by the
+          brush center. Overall, using this tool is very similar to a soft
+          brush in a raster editor such as Gimp or Photoshop.
+
+     * Color Jitter mode does not apply any color, but instead jitters
+       (randomizes) the colors of the objects it touches. The force of the
+       action determines how strong is the randomization, i.e. how far the
+       colors deviate from the original values. This mode does not use the
+       tool's style.
+
+   Both modes work on flat fills and gradients; for gradients, the tool
+   takes into account not only the position of the entire object with
+   gradient, but also the position of each gradient stop relative to the
+   brush. This means that, for example, you can change the blue color only
+   in an object filled with blue-red gradient simply by painting over its
+   blue end with a brush small enough to not touch the red. (Note that
+   color tweaking does not create gradients on objects that used flat
+   color before, but only adjusts existing gradients in the drawing.)
+
+   See the screenshot at [140][2] for a few examples of using the color
+   editing modes of the Tweak tool.
+
+ Channels
+
+   Color Paint and Color Jitter honor the Channels control. This control
+   comprises the four buttons: H, S, L, and O, which allow you to turn on
+   and off the tool's action on the object's hue, saturation, lightness,
+   and opacity, correspondingly. For example, if you want to raise the
+   saturation of some part of your drawing without changing the hue,
+   select some maximum-saturation color (e.g. pure red) and turn off all
+   Channels buttons except S. Similarly, you can replace the hues without
+   affecting saturation or lightness (only H pressed), or lighten/darken
+   all colors without changing their hues and saturation (only L pressed).
+   Pressing O allows you to apply the master opacity from the tool's style
+   to the master opacity of objects (but not fill or stroke opacity).
+
+ Usage notes
+
+   Color painting with Tweak tool is similar, but not exactly analogous to
+   bitmap painting. Even though the tool itself works as a soft brush, it
+   still applies its color to vector objects, which behave as vector
+   objects usually do. For example, if you want to change the tint of the
+   face in your drawing, and if a hand in the drawing is part of the same
+   object as the face, that hand will change its tint too even if it's
+   located far from the point you are painting. (We foresee a "fracture"
+   command in one of the next versions of Inkscape which will help you
+   turn a monolithic object into a mosaic of small fragments that will be
+   then easy to paint with Tweak tool.) Still, even with this limitation,
+   color painting is a novel way of dealing with vector drawings which
+   allows you to quickly and intuitively make adjustments which would be
+   awkward and slow with traditional approach.
+
+   Drawings containing patterns or scatterings of small independent
+   objects are best suited for color painting with Tweak tool. Examples
+   include:
+     * freehand drawings with Calligraphy pen, consisting of many separate
+       strokes;
+
+     * gradient meshes imported from Adobe Illustrator files (Inkscape
+       renders these meshes as lattices of small polygons; while there's
+       no direct support for gradient meshes in Inkscape yet, color
+       painting on such lattices is almost as good);
+
+     * text converted to paths and with Break Apart command applied so
+       that each letter is a separate path;
+
+     * patterns made with the Tile Clones command; note that you need to
+       unset the fill and/or stroke on the original object and use the
+       Color tab to assign some initial color to the clones - this will
+       make them paintable with the Tweak tool without unlinking.
+
+   Moreover, color tweaking can be useful for compositions with a few
+   objects or even for single objects. Unlike all other color selection
+   methods, painting with the Tweak tool implements the color mixing
+   metaphor which is much more familiar to traditional artists than RGB
+   sliders or even the color wheel. For example, start with a rectagle of
+   pure blue color; then, pick different colors by Color Paint and apply
+   light touches with minimum Force and minimum pen pressure: add a little
+   green, a little brown, a little yellow, etc. until you have the exact
+   hue you need. Similarly, you can whiten or blacken any hue by admixing
+   white or black.
+
+   You can also use color tweaking to add a tint, darken/lighten,
+   saturate/desaturate, or color jitter your entire drawing. Just select
+   all in all layers, zoom out, choose a large brush width so it covers
+   all of the drawing, and apply a little color tweaking (with minimum
+   Force) that will therefore affect all visible objects.
+
+ Keyboard shortcuts
+
+     * W, Shift+F2: switch to the Tweak tool
+
+     * Shift+P: switch to the Push mode
+
+     * Shift+S: switch to the Shrink mode
+
+     * Shift+G: switch to the Grow mode
+
+     * Shift+A: switch to the Attract mode
+
+     * Shift+E: switch to the Repel mode
+
+     * Shift+R: switch to the Roughen mode
+
+     * Shift+C: switch to the Color Paint mode
+
+     * Shift+J: switch to the Color Jitter mode
+
+     * Left, Right, Home, End: change width
+
+     * Up, Down: change force
+
+     * mouse drag: act on selected path in the current mode
+
+     * Ctrl+mouse drag: temporarily switch to Shrink (while Ctrl is down)
+
+     * Shift+Ctrl+mouse drag: temporarily switch to Grow (while Shift+Ctrl
+       is down)
+
+ 3D Box tool
+
+   Inkscape is a two-dimensional drawing tool. However, very often it is
+   used to create drawings or objects that appear three-dimensional. The
+   new 3D box tool helps you create such drawings by automating the most
+   common operation: creating a box in a given 3D perspective. The tool
+   automatically ensures that all sides of the box lie on the
+   corresponding perspective lines. We're not going to compete with
+   Blender - but even simple things can go a long way.
+
+   Currently in the 3D Box tool you can:
+     * Draw a 3D box by dragging on canvas; Shift+drag without releasing
+       the mouse button to extrude in Z direction.
+
+     * Adjust any of its 3 dimensions by handles. The 4 handles on the
+       front X/Y side resize it, the four ones on the back X/Y side
+       expand/contract the box in Z direction. With Shift, the functions
+       of handles on front and back sides are reversed. With Ctrl, the
+       side-resizing handles snap to the coordinate axes or diagonals.
+
+     * Move a 3D box "in perspective" by dragging its center; without
+       modifiers, movement occurs within the XY-plane (press Ctrl to
+       constrain the movement to the directions of the coordinate axes or
+       diagonals), with Shift the box moves parallel to the Z-axis.
+
+     * Adjust the vanishing points of a perspective by dragging them on
+       the canvas (see below) or toggling their states; all boxes sharing
+       this perspective are affected by a vanishing point move.
+
+   When several boxes are selected, all vanishing points of their
+   associated perspectives are shown on the canvas. If vanishing points of
+   different perspectives coincide, they are combined in a single
+   "dragger". Moving this dragger moves all the vanishing points
+   simultaneously and transforms the associated boxes accordingly. Note
+   that some non-selected boxes may also be reshaped if their perspectives
+   share the same vanishing point. Pressing Shift while moving the dragger
+   can be used to only transform the selected boxes, separating their
+   perspectives from the non-selected ones'. On the other hand, when a
+   vanishing point being dragged comes close enough to another one, both
+   snap together and are combined in a single dragger.
+
+   In SVG, a 3D box is represented as a group (svg:g) with a special
+   extension attribute (in Inkscape's namespace); this group contains the
+   6 quadrilateral paths representing the sides of the box. Only the 3D
+   box tool treats this object as a box; for all other tools it is just a
+   group, so you can select any of the paths by Ctrl+click, apply any
+   style to it, delete it, etc. You can of course transform the entire box
+   or any face in it using Selector or Node tools.
+
+ Keyboard shortcuts
+
+     * X, Shift+F4: switch to the 3D box tool
+
+     * The various kinds of parentheses, namely [ ], ( ), { }, can be used
+       to rotate infinite (i.e., parallel) perspective lines in X-, Y-,
+       and Z-direction, respectively. Closing parentheses rotate clockwise
+       and opening parentheses rotate counterclockwise. The angle of
+       rotation is taken from the preferences. Pressing Alt reduces the
+       amount of rotation to 1 screen pixel.
+
+     * When the 3D box tool is active, Shift+X, Shift+Y, and Shift+Z
+       toggle perspective lines in the corresponding direction between
+       "converging" and "parallel".
+
+ Gradient Tool
+
+ Selecting multiple stops
+
+   More than one gradient stop can be selected at a time. Shortcuts for
+   working with multiple stop selections are generally modeled on the Node
+   tool.
+     * Add a stop to the selected stops by Shift+click.
+     * Press Ctrl+A to select all stops in the selected objects.
+     * Shift+drag around stops to add them to selection.
+
+   Multiple selected stops:
+     * Can be moved together by mouse drag or by arrow keys. For example,
+       creating a linear gradient, then press Ctrl+A to select all stops
+       and use arrow keys to move the entire gradient as a whole.
+     * Can be deleted at the same time by pressing Del.
+
+   An always up-to-date description of the current handle selection is
+   provided in the statusbar in the Gradient tool, including the number of
+   selected handles (and the type of the single selected handle), as well
+   as the total number of handles and selected objects.
+
+ Editing intermediate stops
+
+   Intermediate stops in gradients can be added, deleted, and edited on
+   canvas (previously this was only possible in the Gradient Editor
+   dialog).
+     * Stops can be added by double clicking or by Ctrl+Alt+Click on the
+       gradient line. Also, you can drag-and-drop a color from the palette
+       onto the gradient line to create a new stop with this color.
+       Dropping a color on an existing stop changes the color of that
+       stop.
+     * When two or more adjacent stops are selected, pressing Ins adds
+       stops in the middles of all selected stop intervals.
+     * Intermediate stops can be mousedragged or moved by arrow keys along
+       their gradient line, within the limits of the adjacent unselected
+       stops (or end handles).
+
+          + Dragging with Ctrl moves the selected stops snapping them to
+            1/10 fractions of the available range.
+          + Dragging with Alt moves the selected stops depending on how
+            close each one is to the stop being dragged, using a smooth
+            bell-like curve similar to the node sculpting feature in Node
+            tool. This makes it easy to approximate different gradient
+            profiles; for example, if you have a two-stop gradient that
+            you want to shape according to a curve profile, select both
+            ends of the gradient, press Ins a few times to add a number of
+            intermediate nodes, then Alt+drag a node in the middle to
+            smoothly profile the gradient.
+
+     * Stops can also be moved by arrow keys with all the regular
+       modifiers (Shift for 10x movement, Alt for pixel-size movement at
+       the current zoom, Shift+Alt for 10 pixels movement at the current
+       zoom).
+     * Stops can be deleted by Ctrl+Alt+Click on a stop or by the Del key
+       for all the selected stop(s).
+
+          + When you delete an end stop, the nearest intermediate stop
+            becomes the new end stop of the gradient (without moving -
+            i.e., the gradient span becomes shorter).
+          + When you delete an end stop and there are no intermediate
+            stops, the object will be painted with a solid fill taken from
+            the color & opacity of the remaining stop.
+
+     * Pressing Ctrl+L with some intermediate stops selected attempts to
+       simplify the selected portion of the gradient, removing those stops
+       that can be removed without too much change in the way the gradient
+       looks. In particular, new stops created by double-clicking or
+       pressing Ins initially do not change the appearance of the
+       gradient, so if you press Ctrl+L, all redundant stops that weren't
+       moved or repainted since creation will be deleted.
+
+ Style of gradient stops
+
+     * When you have one of the gradient handles selected, its style
+       (color and opacity) is reflected by the selected style indicator
+       (left of the statusbar) and the Fill&Stroke dialog. Previously,
+       opacity of a gradient handle was reflected as fill-opacity and
+       stroke-opacity; now it is reflected as master opacity (the "O:"
+       spinbutton in the selected style indicator, the "Master opacity"
+       slider in Fill&Stroke). This makes it much easier to view and
+       change opacity of gradient handles using only the selected style
+       indicator in the statusbar.
+
+          + When multiple gradient stops are selected, the selected style
+            indicator (in the statusbar) displays and controls the
+            averaged color and opacity of the selected stops.
+
+     * When one or more gradient stops are selected, using the Copy
+       command (Ctrl+C) copies to the clipboard the style (color and
+       opacity) of the selected stop or the averaged style of several
+       selected stops, not the entire object with gradient as before. This
+       means you can now copy/paste style between stops: select the source
+       stop(s), copy, select the destination stop(s), paste style
+       (Ctrl+Shift+V). With several selected stops, this also allows you
+       to easily average their colors and opacities by copying them and
+       pasting the style back onto them. (After that, redundant gradient
+       stops can be removed by simplification with Ctrl+L).
+     * If the selected object(s) have gradient in fill or stroke, the
+       selected style indicator in the bottom-left corner of the editing
+       window now displays a live gradient preview prefixed by R or L to
+       indicate Radial or Linear gradients (instead of displaying "L
+       Gradient" or "R Gradient" text labels as before). Also, this and
+       other similar widget now use italic font face to indicate None and
+       bold to indicate Unset.
+
+ Automatic duplication of gradients
+
+   When copy/pasting or duplicating an object with gradient, it now
+   automatically gets a copy of the original gradient, so modifying it
+   does not affect the source object's gradient anymore (before, you had
+   to press the Duplicate button on the Gradient controls bar for this).
+   The Duplicate button is therefore removed.
+
+   However, to accommodate the needs of users who have relied on sharing
+   the same gradient definition across objects, this behavior can be
+   optionally suppressed. The Prevent sharing of gradient definitions
+   checkbox on the Misc tab of Inkscape Preferences is by default checked;
+   if you uncheck it, Inkscape does not automatically copy gradient
+   definitions for new objects, which means that copy/pasting,
+   duplicating, pasting style, and explicit assignment of a gradient to an
+   object via the Gradient tool controls results in a shared gradient
+   definition, so that changing the colors or mid-stop positions of the
+   gradient on one object (but not changing the coordinates of the end
+   handles) affects all other objects that share the same definition.
+
+ Calligraphy tool: Engraver's Toolbox
+
+   Several new features were added to the Calligraphic pen to make
+   Inkscape capable of the ancient art of line engraving. Traditional
+   engraving is a very labour-intensive process, and while for a long time
+   it was the only practical way of reproducing lifelike images in
+   black-and-white print, about a century ago it was almost completely
+   displaced by automatic halftone screens. However, line engravings have
+   their characteristic charm, and there's no reason not to try to
+   resurrect this art form with the help of Inkscape.
+
+   A brief visual guide to the new functionality can be seen on these
+   screenshots:
+
+   http://inkscape.org/screenshots/gallery/inkscape-0.46-engraving1.png
+
+   http://inkscape.org/screenshots/gallery/inkscape-0.46-engraving2.png
+
+ Tracking a guide path with Ctrl
+
+   One of the most common operations in line engraving is hatching (or
+   sometimes cross-hatching when several hatching grids cross): filling a
+   space with many parallel straight or variously curved lines (usually of
+   varying width to represent a gradual shading). You could try to achieve
+   a similar effect with e.g. path interpolation (blending), but it is
+   rather cumbersome and limited; manual drawing of hatch lines, on the
+   other hand, is tedious and nearly impossible to do uniformly. Now
+   Inkscape provides "assisted hatching" by tracking a guide path,
+   allowing you to hatch quickly and uniformly and at the same time giving
+   you sufficient manual control over the process.
+
+   Here's how to do this. First, select the guide path that you will
+   track. It may be another calligraphic stroke, any path or shape, or
+   even a letter of a text object. Then switch to Calligraphic pen, select
+   the desired parameters (line width, angle, fixation etc.) and, before
+   starting to draw, press Ctrl. You will see a gray track circle centered
+   at your mouse pointer and touching the closest point on the selected
+   guide path. (If you have no guide path selected, a statusbar message
+   will tell you to select it.)
+
+   Now move your mouse close to the guide path, so that the track circle
+   radius is equal to the desired spacing of your hatch pattern, and start
+   drawing along the guide path. At that moment, the radius of the circle
+   gets locked; now the circle slides along the guide path - and the
+   actual stroke is drawn by the center of the tracking circle, not by
+   your mouse point. As a result, you are getting a smooth stroke going
+   parallel to the guide path and always at the same distance from it.
+
+   When the stroke is ready, release your mouse button (or lift your
+   tablet pen) but do not let go of the Ctrl key because as long as you
+   have it pressed, the tool remembers the hatch spacing you set when you
+   started drawing. Now, you have just created a new stroke and, as usual
+   with Inkscape tools, it gets selected instead of what was selected
+   before. In our case, this means that the newly drawn stroke itself
+   becomes the new guide path. Next, you can draw a second stroke along
+   the first one, then a third one along the second, etc. Eventually you
+   can fill any desired space with uniform hatching.
+
+   Alternatively, if you uncheck "Select new path" in the Calligraphy tool
+   preferences, newly created strokes will not be selected, so your
+   original guide path will be kept selected. In this mode, Inkscape will
+   increase the tracking distance after each created stroke so that you
+   can create uniformly spaced hatching by tracking a single guide path.
+
+   The attachment to the guide path is not absolute. If you stray your
+   mouse pointer far enough from the guide path, you will be able to tear
+   it off (the track circle turns from green to red) and move freely. This
+   is intentional; this feature allows you, for example, to continue
+   drawing a stroke past the end of a guide stroke, thus making your
+   hatching cover a wider area than the initial guide path. Special care
+   is taken to make such tearing off as smooth as possible and to suppress
+   violent jerks, but this is not always possible; the general advice is
+   to not try to hatch too fast. If jerking and unintended tearoffs still
+   bother you, try increasing the Mass parameter.
+
+   Also, special code is in place to prevent flipovers - accidental jumps
+   to the other side of the guide path. Brief flipovers are suppressed,
+   but if you intentionally go over to the other side and stay there,
+   eventually Inkscape will obey and your tracking stroke will also flip
+   over to follow you.
+
+   Tracking a guide also allows some slight feedback by gradually changing
+   the tracking distance in response to your drawing behavior. Thus, if
+   you're consistently trying to draw closer or farther from the guide
+   than the current tracking distance, the distance will correspondingly
+   decrease or increase, so you will get a hatching that is slightly
+   spacing in or out. (The effect is very slight, however, so as not to
+   become a nuisance.) Also, note that since tracking follows the edge of
+   the stroke, strokes of varying width (such as those tracing background,
+   see below) will result in gradual bending of the hatching pattern as
+   you proceed.
+
+ Tracing background by stroke width
+
+   There is a new toggle button on the Calligraphy tool's controls bar,
+   Trace background. When on, the width of your pen depends on the
+   lightness of the background under the stroke in each point, so that
+   white translates into the minimum stoke width (1) and black translates
+   to the maximum (which is set by the Width parameter). This can work
+   alone or in combination with pressure sensitivity, depending on whether
+   the "Use pressure" button is also toggled.
+
+   This feature allows you to not only hatch over an imported bitmap image
+   or any drawing, but to do so automatically reproducing the highlights
+   and shades of the background with your strokes becoming lighter and
+   heavier as needed.
+
+ Misc features
+
+     * For consistency with other drawing tools, drawing with Shift in
+       Calligraphy tool automatically unions the newly created stroke with
+       whatever paths were selected (and selects the result). Thus, you
+       can do a series of overlapping Shift+strokes to create one unioned
+       path object instead of separate objects as before.
+
+     * To facilitate changing the Width parameter, the Home/End keys in
+       Calligraphy tool switch you to the minimum (1) and maximum (100)
+       width, correspondingly. (This is in addition to the Left/Right
+       arrow keys that change Width by 1; remember also that you can press
+       Alt+X, type any width, and press Enter.)
+
+ Selector
+
+     * A new selection mode is available: selecting by touch. In this
+       mode, you draw a freehand path across the objects; when you release
+       mouse button, all objects that are touched by this path get
+       selected. This mode is very convenient in situations where you need
+       to select objects so intermingled that selecting them by the
+       rectangular rubberband is too difficult and so numerous that
+       click-selecting them one by one is too tedious.
+
+          To activate selecting by touch, whenever you are drawing a
+          rubberband rectangle, just press Alt to switch it to the touch
+          mode. The rectangle will disappear and a red touch path will be
+          shown instead. When dragging from an empty space, you can press
+          Alt first and then start to drag to get the touch mode (note
+          that your selection must be empty, otherwise Alt+dragging will
+          move the selected objects instead). To start a touch selection
+          from a point over an object, or to add to existing selection by
+          touching, press Shift+Alt and then start to drag.
+
+     * Previously, the only way to switch selection from scale mode to
+       rotate mode or back was to click on it, which was rather
+       inconvenient when the selected object is in a group or under other
+       objects. Now you can switch modes with keyboard as well by pressing
+       Shift+S in Selector tool.
+
+     * Draging the scale handles with Alt now scales selection by an
+       integer factor, i.e. up to 2, 3, 4, etc. times the original size or
+       down to 1/2. 1/3, 1/4, etc. of the original size (in any of the two
+       dimensions independently), as well as to -1/3, -1/2, -1, -2, -3,
+       etc. This way you can, for example, mirror any object around one of
+       the edges of its box. (This replaces the old and rarely used "slow"
+       scaling mode with Alt.)
+
+     * Horizontal/vertical flipping: So far, flipping a selection made it
+       flip within its bounding box, so that the latter remained fixed. In
+       the move/scale mode of the selector tool, this behaviour remains
+       unchanged. However, in rotate/shear mode flipping now happens about
+       an (imaginary) vertical/horizontal axis through the rotation
+       center. This is very handy, since the latter can be freely dragged
+       around and snaps to all kinds of objects if desired.
+
+ Node tool
+
+     * If any of the nodes in the currently selected path is mouseovered,
+       then horizontal/vertical flipping ('H' and 'V' keys), stepwise
+       rotation ('[' and ']' keys) and scaling ('<' and '>' keys) now all
+       use this specific node as center/axis. If there is no mouseovered
+       node, the center of the bounding box is used instead (as is
+       currently the case unconditionally). Nodes that are covered by one
+       of their handles are also detected as mouseovered.
+
+     * As a long-requested feature, two entry fields are added to the
+       toolbar which allow precise editing of the coordinates of selected
+       nodes.
+
+ Rectangle Tool
+
+     * Ctrl+dragging now also allows the creation of rectangles with sides
+       constrained to the golden ratio (approx. 1 : 1.618034), not only
+       integer ratios.
+
+ Ellipse Tool
+
+     * It is now easy to create ellipses/circles passing through
+       particular points. Normally, the starting and ending point of the
+       mouse drag mark the corners of the bounding box. Now the Alt
+       modifier can be used to enlarge the ellipse so that its
+       circumference passes through these two points.
+
+     * Ctrl+Alt+drag is an exception from this rule. It creates a perfect
+       circle whose diameter is defined by the starting and ending point
+       of the drag.
+
+ Pen/Pencil Tools
+
+   These tools can now create single dots by Ctrl+click on the canvas.
+   This creates a small circle filled with the current stroke color. The
+   radius can be set in the Preferences of the respective tools (it is
+   specified as a multiple of the current stroke width). Shift+Ctrl+click
+   creates a dot twice the specified size, and Alt+Ctrl+click varies the
+   size of the created dots randomly.
+
+ Dropper Tool
+
+   The shortcut 'D' is now used to toggle (not just switch to) the dropper
+   tool - much like space is used to toggle the selector tool. That is,
+   pressing 'D' a second time switches back to the tool used before.
+
+ SVG features
+
+ The tref element
+
+   Inkscape can now correctly open files with tref elements, and new tref
+   elements can be created manually in the XML editor.
+
+   The actual character data contained in a text element can either be
+   embedded directly, or it can be the character content of an element
+   referenced by a tref.
+
+   While the textual content from the referenced element will be stripped
+   of any markup before being used by the tref, the tref element can
+   itself have the same attributes as a tspan. In fact, when rendered, it
+   is as though the tref element is replaced by a tspan with the same
+   attributes, and the referenced character data is embedded in that
+   tspan.
+
+   The property xlink:href is used to refer to another element whose
+   character data will be used. Any element can be referred to except an
+   ancestor of the tref. When any of the text contained in the referred
+   element changes, the tref will immediately be updated to display the
+   new data.
+
+   Existing tref elements can be converted into tspan elements with Edit >
+   Clone > Unlink Clone. If more than one tref is contained within a
+   selection, all trefs will be converted into tspans. All attributes
+   applied to the tref will be retained in the new tspan.
+
+   A tref element can be mixed with any other elements allowed to be
+   contained by a text element.
+
+   The cloned character data rendered by the tref may not be edited, but
+   any characters surrounding it can be changed. Styles cannot be applied
+   to a subset of the cloned characters, but if all are selected, a style
+   can be applied to the tref.
+
+ SVG filters
+
+ New filters supported
+
+     * The feBlend filter primitive gives us image blending modes, like in
+       many image manipulation programs. These modes are screen, multiply,
+       darken and lighten. There's a caveat, though: when blending an
+       object against an semi-transparent background, the background will
+       be accumulated twice, resulting in thicker objects under the
+       bounding box of blended object. This is a limitation of current
+       version of SVG format, not a bug in Inkscape.
+
+     * The feColorMatrix filter primitive applies a matrix transformation
+       to colour of each rendered pixel. This allows for effects like
+       turning object to grayscale, modifying colour saturation and
+       changing colour hue.
+
+     * The feComposite filter primitive composites two images using one of
+       the Porter-Duff blending modes (described in paper Compositing
+       Digital Images by T. Porter and T. Duff, published in SIGGRAPH '84
+       Conference Proceedings, Association for Computing Machinery, Volume
+       18, Number 3, July 1984) or the aritmetic mode described in SVG
+       standard. Porter-Duff blending modes are essentially logical
+       operations between the images. For example, xor mode shows the
+       areas, where either one of the objects is, but not the areas where
+       both of the objects are. Arithmetic mode lets you specify
+       coefficients k1-k4 for blending equation (result colour) = k1 *
+       (first input colour) * (second input colour) + k2 * (first input
+       colour) + k3 * (second input colour) + k4.
+
+     * The feConvolveMatrix lets you specify a Convolution to be
+       applied on the image. Common effects created using convolution
+       matrices are blur, sharpening, embossing and edge detection.
+       There's a fairly good explanation and some example matrices at
+       www.gamedev.net/reference/programming/features/imageproc/page2
+       .asp. Note that while gaussian blur can be created using this
+       filter primitive, the special gaussian blur primitive is faster and
+       resolution-independent.
+
+     * Filter primitives feDiffuseLighting and feSpecularLighting create
+       lighting maps for the object in input image. SVG doesn't have
+       concept of third dimension, so these filters use alpha channel of
+       input image as a height map: the more opaque given point in input
+       image is, the nearer spectator it is considered to be. There exists
+       an example for using these in Inkscape distribution, in
+       share/examples/lighting_effects.svg or in SVN
+
+     * The feDisplacementMap filter primitive displaces the pixels in the
+       first input using the second input as a displacement map, that
+       shows from how far the pixel should come from. Classical examples
+       are whirl and pinch effects, that can be found in most image
+       manipulation programs and even in some screensavers, where this
+       kind off effect is moving around screen, twisting desktop beneath
+       it.
+
+     * The feFlood filter primitive fills its region with a given color
+       and opacity. It can be used as an auxiliary tool, usualy in
+       combination with other filter primitives, in order to facilitate
+       some common color handling operations.
+
+     * The feImage filter primitive allows using external images as part
+       of filtering chain. For example, one could use external image as a
+       displacement map for feDisplacementMap or as a height map for
+       lighting effects. Note that while SVG standard allows using other
+       parts of the SVG file in this filter primitive, the current
+       Inkscape implementation only allows external images.
+
+     * The feMerge filter primitive composites several temporary images
+       inside the filter primitive to a single image. It uses normal alpha
+       compositing for this. This is equivalent to using several feBlend
+       primitives in 'normal' mode or several feComposite primitives in
+       'over' -mode.
+
+     * The feMorphology filter primitive provides erode and dilate
+       effects, that are common in image manipulation programs. With
+       erode, darker and more transparent areas spread to lighter and more
+       opaque areas, whereas with dilate lighter and more opaque areas
+       spread to darker and more transparent areas. For single-colour
+       objects, this basically means, erode makes the object thinner and
+       dilate makes it thicker.
+
+     * The feOffset filter primitive offsets the image by an user-defined
+       amount. For example, this is useful for drop shadows, where the
+       shadow is in a slightly different position than the actual object.
+
+     * The feTurbulence filter primitive renders Perlin noise. This
+       kind of noise is useful in simulating several nature phenomena like
+       clouds, fire and smoke and in generating complex textures like
+       marble or granite.
+
+   See also wiki page Filter Effects for more info on filters in
+   Inkscape in general.
+
+ Filters UI
+
+     * New dialog for creating and modifying filter effects (Object>Filter
+       Effects...)
+     * The list at the left of the dialog displays all filters currently
+       in the document.
+          + New filters can be added with the Add button beneath the list
+          + Right-clicking a filter for the pop-up menu allows duplicating
+            or removing a filter.
+          + Double-clicking a filter will apply it to all selected objects
+          + A black dot is placed next to whatever filter is applied to
+            the selected objects. If more than one filter is in use by
+            selected objects, an unfilled dot is used instead.
+     * The second list, at the left of the dialog, displays the filter
+       primitives that are contained within the currently-selected filter.
+          + New primitives can be added by selecting the primitive type
+            from the combo box beneath the list, and then pressing the Add
+            button.
+          + Right-clicking a primitive for the pop-up menu allows
+            duplicating or removing a primitive.
+          + Primitives can be rearranged by clicking and dragging any
+            filter in the list.
+          + When a filter is selected, the Settings group at the bottom of
+            the dialog will change to display the attributes available for
+            that primitive. Changing a setting results in an immediate
+            update to the document.
+          + The "in" and "in2" attributes for filters that support them
+            are not shown in the Settings group. These input connections
+            are displayed graphically in the list, under the Connections
+            column.
+               o Inputs for a particular filter are displayed as
+                 triangles. Depending on the primitive type, there may be
+                 one or two inputs (or more for Merge primitives.)
+                 Connections can be created by clicking on a triangle and
+                 dragging.
+               o There are six standard input types that can be used for
+                 any primitive input; Source Graphic, Source Alpha,
+                 Background Image, Background Alpha, Fill Paint, and
+                 Stroke Paint. These are displayed vertically on the far
+                 right of the list. Click and drag from an input triangle
+                 to one of the standard inputs to connect them.
+               o Primitives can also be connected to other primitives by
+                 clicking an input triangle and dragging upwards to
+                 another primitive. A primitive can only be connected to
+                 one higher up the list.
+               o Single-clicking on an input triangle will unset it,
+                 returning it to the default. If it is on a Merge
+                 primitive, the input will be deleted.
+               o Merge inputs have an empty input at the end. Dragging a
+                 connection from this input will add a new input to the
+                 primitive.
+
+ Live Path Effects (LPE)
+
+   Live path effects (not to be confused with extension effects or SVG
+   filters) are a new way to non-destructively modify path and shape
+   objects. Path effects affect the path data of an object but not its
+   style. The original path is preserved and can be edited directly
+   on-canvas, and the path effect applied to it will be updated live.
+
+   In this version, we include several path effects that are analogous to
+   the corresponding extension effects (such as Path along Path effect and
+   Pattern along Path that replaces the extension of the same name). The
+   most important advantage of path effects is that they are, indeed, live
+   - you can still edit the original path and the effect will update in
+   real time (unlike the extension effects which were one-time one-way
+   transformations). In the future, we plan to reimplement most if not all
+   of path-changing extensions as live path effects.
+
+   Live path effects were developed by Johan Engelen as part of the GSoC
+   2007.
+
+ Details about operation
+
+   The following schematic tries to explain how LPE work.
+   original style  ------------>  output style
+   original path   -->  LPE  -->  output path
+                         ^
+                         |
+                     parameters
+
+   The original style and path are from the path that the effect is
+   applied on. The output is what is visible on screen. What is very
+   important to notice is that output style equals original style.
+
+   The parameters can be paths, numbers, points, text, in principle
+   anything.
+
+ Applying effects
+
+   Path effects are applied through the Path Effects dialog (opened from
+   the Path menu, or by pressing Ctrl+Shift+7. This dialog is also used
+   for controlling the effect's parameters and for removing effects.
+
+   When a path with a path effect applied is selected, the statusbar
+   description mentions that, for example "Path (4 nodes, path effect)".
+
+   There is a special Paste Path Effect command (Ctrl+7) that can be used
+   to copy effects from one path to another.
+
+ Editing effect parameters
+
+   When switching to the node edit tool (F2), the original path can be
+   edited. The original path is shown as a red helper path. Normal path
+   operations, like simplify, still work.
+
+   Some parameters of effects can be edited on-canvas. For example, path
+   parameters can be node-edited, by pressing the "edit on-canvas" button
+   in the Path Effects dialog. Press "7" to cycle through the different
+   on-canvas editable parameters. This way, one can edit the parameters
+   without opening the Path Effects dialog. The statusbar tells the name
+   of the parameters that is currently being shown.
+
+ Available effects
+
+ Path along path
+
+   The Path along Path effect can curve a path along another path. When
+   this effect is applied to a path, it can be bend along another path
+   (called bend path). With the node edit tool, both the original path and
+   the bend path can be changed on-canvas and the result is updated live.
+   This provides a direct equivalent of "vector brushes" or "skeletal
+   strokes" features in other vector editors.
+
+   In the effect's control panel in the Path Effects dialog, you can
+   select how many copies of the original path are put along the bend path
+   (either single or repeated) and whether it is stretched to fill the
+   bend path. In this dialog you'll also find a button to edit the bend
+   path on-canvas and a button to paste a new bend path from clipboard. A
+   possible workflow is this: you select and copy the new bend path to the
+   clipboard, then select the path you want to bend, apply the Path along
+   path effect, and paste the bend path with the paste button next to
+   'bend path'.
+
+   Example file: live-path-effects-pathalongpath.svg
+
+ Pattern along path
+
+   The Pattern along Path effect can curve a path along another path. When
+   this effect is applied to path A (called skeleton), another path B
+   (called pattern) can then be passed as a parameter. The result is that
+   path B is bent along path A. With the node edit tool, path A can be
+   changed on-canvas and the result is updated live. This provides a
+   direct equivalent of "vector brushes" or "skeletal strokes" features in
+   other vector editors.
+
+   In the effect's control panel in the Path Effects dialog, you can
+   select how many copies of the pattern are attached (either single or
+   repeated) and whether the pattern is stretched to fill the skeleton
+   path. You can also choose the pattern for the selected skeleton [either
+   directly or] by pasting it from clipboard (that is, you select and copy
+   to the clipboard the pattern, then select the skeleton, apply the Path
+   along path effect, and paste the pattern). The Scale width parameter
+   allows you to change the width of the pattern applied to the path.
+
+   Example file: live-path-effects-pathalongpath.svg
+
+ Stitch Subcurves
+
+   The Stitch Subcurves effect connects points from two subpaths of the
+   path with straight line or curved segments, i.e. the stitches. It looks
+   a lot like the Effect Lines from Expression 3. The result is also
+   referred to as "String Art". For some examples of string art, see
+   http://members.shaw.ca/jillbritton/string_art/jbstringart.htm.
+
+   The shape of the connecting paths can controlled by the stroke path
+   parameter. This could be used to draw 'hair-shaped' connecting paths
+   with sharp end-tips. Other controls include the number of paths, the
+   variation in spacing between the connecting paths (clustering) and also
+   whether the start and end points of the stitches should like exactly on
+   the original subcurves or can stray randomly around them. Finally the
+   width of the stroke path can be varied.
+
+   Note that this effect can only be applied to a path with two subpaths
+   in it, hence 'subcurve' in the name. Use Path > Combine to create such
+   a path from two separate paths.
+
+   Example file: live-path-effects-curvestitch.svg
+
+ Gears
+
+   The Gears effect is a toy effect. It generates a chain of
+   interconnected gears from the path that has the effect applied to it.
+   The nodes of the path define the centers of the gears. The first 3
+   nodes are special; the first defines the start angle of the chain, the
+   second defines the center of the first gear and the third knot
+   specifies the radius of the first gear. That is, to create a chain of 2
+   gears, you will need a path with 4 nodes; for 3 gears, 5 nodes, and so
+   on.
+
+   Example file: live-path-effects-gears.svg
+
+ Development of new effects
+
+   One of the goals of the Summer of Code project was to make it easy to
+   create new effects. There is a framework that greatly simplifies effect
+   implementation; very little code is needed to get the effect hooked
+   into Inkscape. This leaves valuable time for the actual effect to be
+   implemented. See the
+   http://wiki.inkscape.org/wiki/index.php/MakingLivePathEffects wiki
+   page for an explanation of how to get started with your own effect!
+
+ Extension effects
+
+ Live preview
+
+     * Live preview of effects: Using the async behavior (see below), as
+       soon as the parameters dialog for an effect is shown, the script is
+       executed in the background and the screen updates as soon as it's
+       finished. This can result is seemingly faster execution if no
+       parameters are changed. If some parameters are adjusted, the script
+       is restarted. This allows you to see immediately the effects of any
+       parameter change without pressing the OK button on the effect's
+       dialog.
+
+     * Spawn Glib API: Scripting extension have been moved to the Glib
+       spawn API to ensure that parameters and variables aren't
+       interpreted by a shell. This also means that scripting extensions
+       are executed in a separate process asynchronously allowing the GTK
+       main loop to continue to execute.
+
+     * Progress dialog: While an extension is working on a document, a
+       small dialog is shown allowing the user to cancel the execution.
+
+ New and improved effects
+
+     * The new Modify Path > Edge 3D extension creates black, grey and
+       white paths around a shape, then blurs and clips them for a 3D
+       effect.
+
+     * The new Generate from Path > Dimensions extension creates CAD style
+       dimensions that are basically arrows with lengths equal to
+       selection's bounding box and captions representing length.
+
+     * The new Render > Barcode extension creates a barcode.
+       Supported types include EAN13, EAN8, UPC-A, UPC-E, UPC-5, Code39,
+       Code39Ext, Code93, Code128, and RM4SCC.
+
+     * The new Render > Gear extension creates a mechanical gear
+       given the number of teeth, the circular pitch (in px units), and
+       the pressure angle.
+
+     * The new Render > Spirograph extension creates intricate
+       mathematical curves akin to the classic mechanical Spirograph
+       toy (see samples).
+
+     * A group of new effects in the Text submenu performs various case
+       conversions on selected text objects: converting to UPPERCASE,
+       lowercase, Sentence case, Title Case, as well as flipping case
+       (switching uppercase to lowercase and vice versa) and rANdoMiZInG
+       cAse. If no texts are selected, the effect works on all texts in
+       the document.
+
+     * Another effect in the Text submenu, Replace text, performs
+       search-and-replace on the selected text objects or (if nothing is
+       selected) on all texts in the document. Searching is case
+       sensitive. You can use this effect to globally delete all
+       occurrences of some text fragment by replacing it with empty
+       string. Conversely, if you search for an empty string and replace
+       it with some string, this string will be inserted after every
+       character of your text; for example, you can space out a text by
+       replacing in it an empty string with a single space.
+
+     * A new effect, Replace color in the Color submenu, simply replaces
+       one RRGGBB-specified color to another within selection or, if
+       there's no selection, in the entire document. As with other effects
+       in that submenu, the replacement affects fill, stroke, and gradient
+       colors, but not colors of bitmaps.
+
+     * The new Color > Randomize extension allows you to change the color
+       via hue, saturation and lightness check boxes. This is useful if
+       you want to colorize lots of shapes at the same time.
+
+     * The Whirl extension uses the center of view as the center of whirl,
+       so you don't have to enter the center coordinates numerically.
+
+     * The Render > Grid extension has got an extended range of grid
+       spacings, from 0.1 to 1000 px.
+
+     * The Render > Function Plotter extension can now plot using polar
+       coordinates.
+
+     * The Generate Template > Perfect-Bound Cover extension creates
+       templates for wraparound covers for perfect-bound books using US
+       size and paper weight measurements. This extension will resize the
+       document to include the width, height, spine width, and bleed
+       measurements that are provided to the extensions, so it should be
+       the first operation done before designing.
+
+ XSLT effects
+
+     * XSLT is now supported for input, output and effect extensions. This
+       is used to support the XAML file format (both import and export)
+       and the Adobe Illustrator SVG import which removes Adobe's stuff
+       from SVG.
+
+ ImageMagick effects
+
+   New raster operations available through the effects drop-down menu,
+   powered by the ImageMagick library. For any of these effects to work,
+   you need to have an image object selected in the drawing.
+     * Adaptive Threshold applies adaptive thresholding to the bitmap.
+       Average color of rectangle provided by width and height used as
+       threshold value. Use offset to apply a different threshold than the
+       average.
+
+     * Add Noise adds random noise of certain types to the bitmap.
+
+     * Blur blurs the bitmap, using radius as the amount of blur. Higher
+       radius means more blur. (Note that unlike the vector Gaussian blur
+       of objects, this bitmap blur will not extend the edges of the
+       image, so it may appear truncated at the edges.)
+
+     * Channel extracts the specified channel from the bitmap.
+
+     * Charcoal applies a charcoal drawing style to a bitmap. Radius
+       controls the width (or detail) of charcoal strokes. Higher radius
+       means lower detail. Sigma: the higher it is, the less defined the
+       charcoal is.
+
+     * Colorize overlays the bitmap with a given color at a given
+       intensity.
+
+     * Contrast lightly enhances the contrast (difference between lights
+       and darks) of a bitmap.
+
+     * Cycle Colormap cycles the colormap of a bitmap.
+
+     * Despeckle reduce the speckle noise in a bitmap.
+
+     * Edge hilights edges in a bitmap.
+
+     * Emboss embosses a bitmap, hilighting edges with 3D effect.
+
+     * Enhance enhance a bitmap, minimizing noise.
+
+     * Equalize equalizes a bitmap. Histogram equalization.
+
+     * Flop mirrors a bitmap, reflecting each scanline in the horizontal
+       direction.
+
+     * Gaussian Blur blurs a bitmap, more strongly than regular blur.
+
+     * Implode sucks everything towards the center of the bitmap.
+
+     * Level scales values falling between the given Black Point to White
+       Point range to the full color range.
+
+     * Level Channel acts the same way as level but for only one channel.
+
+     * Median Filter filters a a bitmap by replacing each pixel component
+       with the median color in a circular neighborhood
+
+     * Modulate adjusts the percent hue, saturation, and brightness of a
+       bitmap.
+
+     * Negate takes the inverse of a bitmap.
+
+     * Normalize normalizes a bitmap, expanding color range to the full
+       possible range of color.
+
+     * Oil Paint stylizes a bitmap so that it appears to be painted with
+       oils.
+
+     * Opacity modifies the opacity channel of a bitmap.
+
+     * Raise alters the lightness of the edges of a bitmap to create a
+       raised appearance, much like a frame.
+
+     * Reduce Noise reduces noise in a bitmap by using a noise peak
+       elimination filter.
+
+     * Shade shades a bitmap by simulating a distant light source
+
+     * Sharpen sharpens a bitmap.
+
+     * Solarize solarizes a bitmap, like overexposing photographic film.
+
+     * Spread randomly spread pixels in a bitmap within the radius of
+       amount.
+
+     * Swirl swirls the bitmap around the center point.
+
+     * Threshold thresholds a bitmap.
+
+     * Unsharpmask sharpens a bitmap using an unsharp mask algorithm.
+
+     * Wave alters a bitmap along the sine wave.
+
+   These effects are part of the Google Summer of Code 2007, coded by
+   Christopher Brown.
+
+ Misc
+
+     * All Python effects are switched from the old and unmaintained PyXML
+       library to the new powerful lxml library.
+
+     * A new parameter, precision is added to the parameter definitions in
+       the inx file format, allowing you to set the number of digits
+       in that parameter's spinbutton in the effect UI.
+
+ Stock patterns
+
+   Since a few versions ago, Inkscape supports patterns in fill and
+   stroke. However, up to now the only way to apply a pattern was by
+   creating it in the document using the Object(s) to Pattern command,
+   which wasn't very convenient. Now, if you switch an object's fill or
+   stroke to pattern using the Fill&Stroke dialog, you will get a
+   drop-down list with a number of predefined stock patterns that you can
+   apply simply by selecting them from the list:
+     * A selection of plain stripes differing by the ratio of the stripe
+       width to gap width (for example, the "Stripes 1:2" pattern has gaps
+       twice as wide as stripes), in the range from 4:1 to 1:64. All
+       stripes patterns are in two versions: with black stripes and with
+       white stripes (gaps are always transparent).
+
+     * Two checkerboard patterns with black and white odd squares (even
+       squares are transparent)
+
+     * Packed circles: a hexagonal pattern of black circles with
+       transparent gaps.
+
+     * Polka dots: a scattering of dots designed to look randomly but
+       evenly distributed so as to mask the regularity of the repeating
+       pattern. There are three size variants of this pattern (small,
+       medium, and large dots) and two color variants (black and white
+       dots).
+
+     * Wavy is a pattern of wavy lines.
+
+     * Camouflage is a green-toned protective pattern such as that used by
+       the military.
+
+     * Ermine is the traditional heraldic pattern representing stylized
+       stoat furs with black tails.
+
+     * Three bitmap patterns: sand, cloth, and old paint are based on
+       seamless photographic tiles and allow you to add some natural
+       texture to your drawing. All of them are grayscale, so you can make
+       objects with these textures semitransparent and overlay them over
+       other colored objects to "texturize" them.
+
+   After applying a stock pattern, switch to Node tool to edit the
+   location, scale, and rotation of the pattern via on-canvas handles.
+
+   All stock patterns are stored in the file patterns/patterns.svg in
+   Inkscape's share directory (typically /usr/share/inkscape on Linux,
+   inkscape-dir/share on Windows). You can add your own patterns to this
+   file or replace it with any other SVG file containing the patterns you
+   need.
+
+ Markers
+
+     * A new command, Objects to Marker, was added to the Object menu. It
+       converts the current selection into a marker. After you do it, the
+       selection is deleted, but the list of markers in the Fill and
+       Stroke dialog, Stroke style tab, now contains the new marker that
+       you can apply to paths.
+
+          + When creating the new marker, Inkscape assumes that the
+            original objects are oriented as they should be on a
+            horizontal path that goes from left to right. For example, if
+            you create a new arrowhead that you plan to use as an end
+            marker, make it point horizontally to the right before
+            converting it to marker.
+
+          + Similar to standard markers, the user-created marker will
+            scale up and down as you change the stroke width. Its initial
+            size (i.e. the size of the object that you have turned into a
+            marker) corresponds to the 1 px stroke.
+
+          + When you create a new marker, Inkscape uses the rotation
+            center of the (first) selected object as the anchor point,
+            i.e. the point which will coincide with the node to which that
+            marker is attached. By default, the rotation center is in the
+            center of the object's bounding box, which means the newly
+            created marker will be centered around its node. If you move
+            the rotation center, for example, to one of the corners of the
+            object, the new marker will touch its node by that corner.
+
+     * Several new UML markers were added to the standard set, including
+       filled and hollow diamonds and triangles.
+
+     * Master opacity did not apply to path markers as it should; this is
+       fixed.
+
+     * Stock markers, if used in the document, now appear in the "this
+       document's markers" section at the top of the marker lists in the
+       Fill & Stroke dialog. Before, any markers with stock IDs (including
+       markers modified by the user) were hidden, making it difficult to
+       work with modified stock markers.
+
+ Color management
+
+ Calibrated SVG color including CMYK
+
+   Inkscape now supports color-managed color definitions that use a
+   colorspace other than sRGB (for example Adobe RGB, or calibrated CMYK
+   colors). In the SVG file, this is done using the optional
+   "icc-color(...)" paint components as described in section 11.2
+   "Specifying paint" of the SVG 1.1 specification [203][3]. A fallback
+   sRGB value will be used, for non color-managed workflows. This allows
+   for the use of calibrated color spaces, including using CMYK values
+   that are preserved across applications.
+
+   The new CMS color selector tab allows these colors to be edited.
+
+ Display adjustment
+
+   In Inkscape Preferences, Color Management tab, there's are new options
+   for enabling display adjustment; you can select any calibration profile
+   (an ICC file) suitable for your display. Options for rendering intent
+   can also be chosen.
+
+ Per-window adjustment
+
+   Display adjustment is enabled and disabled per each editing window.
+   This allows for simultaneous viewing of adjusted and unadjusted views
+   of a single document by using multiple windows. There is a toggle at
+   the bottom-right corner of the scrollbars that allows for turning on
+   and off display adjustment. It also will be disabled to provide visible
+   feedback when no profile is set to be available for adjustment.
+
+ XICC Support
+
+   On X11-based systems (i.e. Unix and Mac OSX), use of [ICC Profiles
+   In X Specification] (or XICC) can be enabled. Support for version 0.2
+   of this specification has been implemented. Enabling this option by
+   choosing to retrieve profiles from the display will switch Inkscape to
+   using profiles attached to screens at runtime. These allow display
+   adjustment to be changed on the fly, and to be set and cleared
+   per-monitor. This is especially helpful with more than a single
+   monitor.
+
+   Other Open Source software such as GIMP support XICC. This allows
+   all aware applications to be adjusted by setting a profile only once.
+
+ Multi-monitor aware
+
+   When XICC support is enabled, windows will adjust to the proper profile
+   as they are moved across monitors. Also, as the windows are moved onto
+   monitors with no profile attached, the adjustment toggle will become
+   disabled. When the windows are moved onto screens that do have
+   profiles, the toggle will become enabled.
+
+ Soft Proofing
+
+   In Inkscape Preferences, Color Management tab, there's a new option for
+   enabling output device preview; you can select any calibration profile
+   (an ICC file) suitable for your output device. Options for rendering
+   intent can also be chosen, along with out of gamut warnings.
+
+ Grids, guides, snapping
+
+ Grids
+
+   Grids have undergone some big changes under-the-hood. These are the
+   visible changes:
+     * There is a new 3D/axonometric grid. It consists of three sets of
+       parallel lines, one vertical and others at angles of +30 and -30
+       degrees from the horizontal. The angles of these two latter sets
+       and the spacing of the grid are user-settable.
+
+     * A new tab in the Document Properties dialog, Grids, is devoted
+       solely to grids; the former grid/guide tab is renamed Guides and is
+       now used only for guides. On the Grids page, you can create and
+       manage grids of various types in your document; so far the two
+       types available are Rectangular (default) and Axonometric, but more
+       types may be added in the future.
+
+     * More than one grid can be active at the same time:
+
+          + Each grid can be enabled/disabled separately from the Document
+            Properties dialog.
+
+     * For each grid, you can hide it by unchecking the "Visible" checkbox
+       in the grid's tab, or disable snapping to it by unchecking
+       "Enabled". Note that you can have "Enabled" on and "Visible" off
+       (but not vice versa), in which case you snap to the invisible grid.
+
+     * Multiple views on the same document (i.e. different Inkscape
+       windows with the same document loaded) share the same grids, but
+       the grid can be turned on and off for each view separately. For
+       example, you could have a zoomed-out "overview" view without grids
+       showing. Duplicate that window and zoom in on some detail; then
+       grids can be shown only for that view, and snapping will only
+       happen in those views for which grids are enabled.
+
+     * The rectangular grid now has an option to show dots on gridline
+       intersections instead of solid lines.
+
+   From developer perspective:
+     * Implementation of new grids is much easier now by subclassing
+       CanvasGrid. Have a peek at how the rectangular grid is implemented
+       (CanvasXYGrid).
+     * Note that there is no longer "the grid", there might be several
+       grids active now!
+     * Grid information is now stored in SVG as a child of
+       sodipodi:namedview. Old files will be converted to this new format
+       automatically.
+     * An old bug is fixed: apparently the origin of the document
+       coordinate system used to be set to the origin of the grid. For
+       example, in 0.45.1 and before, specifying a grid origin of (20,20)
+       moved the origin or coordinates to that point, and the grid was
+       still starting at (0,0) in this moved coordinate system. This is
+       now disabled, and the coordinate origin is not affected by grid
+       origin.
+
+ Angled guidelines
+
+   Now, Inkscape also provides angled guidelines! Double click on a guide
+   to set its angle.
+     * When dragging a guideline off the rulers close to the end of the
+       ruler, the guideline will automatically be angled. The angle is set
+       depending on the grid.
+          + For the rectangular grid, the angle is 45 degrees.
+          + For the axonometric grid, the angle is matched to the grid.
+            When Ctrl is pressed, the angle is perpendicular to the grid
+            lines (useful for aligning gradients).
+
+ Creating guidelines from objects
+
+     * Selected objects can now be converted to guidelines. To do this,
+       either use the menu command "Object->Object to guides" or press
+       Shift+G in Selector tool (this shortcut also works in some other
+       tools, see below). The conversion process recurses into groups,
+       i.e. all objects in the current selection are converted regardless
+       if they are grouped or not.
+
+     * Created guides can be quickly deleted by Ctrl+clicking on them
+       (this is of course not restricted to guides created by the process
+       described above). Note that this only works in Selector and Node
+       tools, i.e., in contexts where guidelines can be manipulated with
+       the mouse.
+
+     * Paths are converted by creating one guide for each straight line
+       segment occurring in the path (whereas curved segments are not
+       taken into account). To make this conveniently accessible, the
+       shortcut Shift+G works in Pen and Pencil tools, too.
+
+     * For all other objects, conversion usually happens by placing the
+       guidelines around the object's bounding box (use the corresponding
+       checkbox in the "Tools" page of Inkscape Preferences to switch
+       between geometric and visual bounding box).
+
+     * For rectangles and 3D boxes there is a special option in their
+       preferences pages (checked by default) which instead allows the
+       guidelines to be placed along the object's edges so that they
+       imitate its true shape. This is especially useful when converting
+       rotated or skewed rectangles (to create guidelines in a special
+       position) or for creating 3D scenes containing other objects than
+       just boxes. The shortcut Shift+G works in these tools as well.
+
+ Snapping
+
+     * Snapping has been implemented or improved for:
+
+          + Newly created shapes
+
+          + Skewing of objects
+
+          + Handles of objects, incl. gradients
+
+          + Images, ellipses, and clones
+
+          + Text boxes, which snap to text baselines again
+
+          + Objects, for which snapping now optionally considers the
+            rotation center
+
+          + Objects, which now allow for constrained snapping
+
+          + Guides, which now snap while dragging them
+
+          + Axonometric grids
+
+          + Angled guide lines
+
+          + Bounding boxes, of which now all four corners snap
+
+     * Other snapping fixes and improvements include:
+
+          + It is now possible to snap to intersections of e.g. gridlines
+            with guidelines, and of line segments.
+
+          + The snapping preferences dialog has been restyled to make it
+            more intuitive.
+
+          + Inkscape now has a global snapping toggle, which has been
+            added to the view-menu and is accessible through a shortcut
+
+          + Inkscape now allows for controlling the snapping per grid when
+            multiple grids are being used
+
+          + Snapping distance is now set in screen pixels and is therefore
+            independent of zoom.
+
+          + Snapping of objects has been made more clean, by only snapping
+            bounding box corners to bounding boxes, and nodes to other
+            nodes and paths.
+
+          + The time it takes to snap to objects using the selector tool
+            has been reduced significantly.
+
+          + The bug where "node-to-node" snapping caused jerky movement of
+            nodes is fixed.
+
+          + The aspect ratio is correctly preserved while scaling objects
+            with snapping turned on.
+
+          + Only nodes at non-smooth parts of a path now snap.
+
+          + The confusing "Default transformations origin" option has been
+            removed. Now Inkscape always uses the opposite edge of the
+            object's bounding box as the transformation origin (though the
+            bounding box itself can now be different, see next item).
+
+          + A new preference option has been added to specify the kind of
+            bounding box to be used for transforming objects (see Inkscape
+            Preferences, Tools, Selector). You can choose between the
+            visual bounding box (which takes into account the stroke
+            width, markers, and blur margins; this is the default
+            behavior) or geometric bounding box (which encloses only the
+            path itself, disregarding stroke width).
+
+ Import/Export
+
+ PDF and AI import
+
+   In this version, Inkscape can natively (i.e. without any additional
+   software) import PDF files and the newer PDF-based Adobe Illustrator
+   files (starting from AI version 9.0).
+
+   Implemented features: The new import extension can import paths, text,
+   clippaths, masked or non-masked images, and softmasks. It supports
+   pattern fills (XStep and YStep attributes are ignored) as well as
+   linear and radial gradients (only those using sampled or exponential
+   functions). Gradient meshes are imported, but they get converted to
+   groups of small tiles (flat-colored paths) that approximate the mesh;
+   the user can adjust the precision of this approximation.
+
+   PDF import settings: After opening a PDF or AI document, the PDF Import
+   Settings dialog shows up. Here you can select:
+     * the page to be imported from a multipage PDF;
+
+     * the overall clip region (which can be none or set to any of the PDF
+       boxes, e.g. the crop box, the media box, the trim box, etc.);
+
+     * the precision for the approximation of gradient meshes; note that
+       setting this too high may result in a huge SVG file and slow
+       performance when importing files with gradient meshes;
+
+     * a checkbox controlling whether the images should be embedded into
+       the resulting SVG document or saved on the current path;
+
+     * a preview of the selected page (shown if poppler-cairo is present
+       on the system or if the selected page has a thumbnail embedded into
+       the PDF document).
+
+   Text editing tips: Any text imported from PDF or AI has each letter's
+   precise place on the page fixed. While this preserves the exact
+   appearance (e.g. justification of text blocks) of the imported
+   document, it makes editing such text difficult: deleting text fails to
+   contract the text line and inserting text fails to expand it, i.e.
+   typed letters overlay the existing letters. (However, you still can
+   replace a letter with another letter of about the same width, although
+   you may need to kern it into place with Alt+arrows.)
+
+   To work around this, select the text object you want to edit and use
+   Text > Remove manual kerns command. This will remove the exact
+   positioning information, so if the text block was justified it will
+   lose justification, but instead you will be able to edit it as usual.
+
+   Note that there is a way to select even a single line in a text block.
+   For this, open the XML editor, expand the <svg:text> tree branch
+   corresponding to your text, and select any of the <svg:tspan> objects
+   under it. Now you can remove manual kerns from this line only. After
+   you finish editing the line, you can manually justify it back, for
+   example by adding spaces, manual kerns (Alt+arrows), or by adjusting
+   letterspacing (select the whole line and use Alt+> or Alt+<).
+
+   The native PDF/AI importer is based on the poppler library and was
+   implemented by Miklós Erdélyi as part of the Google Summer of Code
+   2007.
+
+ PDF export
+
+     * A new cairo-based PDF exporter has been added to Inkscape (marked
+       as "Cairo PDF" in the export format list). Inkscape 0.46 can export
+       shapes, strokes, transparency, gradients, patterns, text, and
+       images correctly to cairo. While clipping paths and masks are known
+       to be faulty or missing. Also, unlike the old PDF exporter, the
+       cairo-based PDF export produces compressed PDF files that are
+       reasonably compact. cairo will write a PDF with vector graphics
+       when possible and fall back to raster graphics when needed. What
+       can be exported as vectors and how much of the image will be
+       rasterized when the fallback kicks in depends on your version of
+       cairo. cairo version 1.2 with the pdf backend compiled in is the
+       minimum requirement for any cairo-based PDF exports, but it is
+       highly recommended to use at least cairo 1.5.2 for quality PDF
+       export.
+
+     * A new cairo-based PostScript exporter has been added (marked as
+       "Cairo PS" in the export format list). The cairo PS backend is not
+       as mature as the PDF backend. It rasterizes a lot of its content.
+       Text output does not work where it works with the PDF backend.
+
+ CDR (CorelDraw) import
+
+   Inkscape can use UniConvertor if it's installed on your system to
+   import documents in CDR format (CorelDraw). This feature is Unix-only
+   at this time (since UniConvertor is Unix-only) and requires that you
+   have Python and UniConvertor installed. As of UniConvertor 1.1.1,
+   versions from 7 to X4 of the CDR format are supported, and text objects
+   are not converted.
+
+ XAML import/export
+
+     * Inkscape can import vector graphics portions of XAML documents, as
+       well as export its documents to XAML.
+
+ Adobe Illustrator SVG clean import
+
+     * Using this new import filter, Inkscape can open an SVG document
+       removing any elements and attributes in the namespaces that Adobe
+       Illustrator uses for its stuff. This will clean out everything
+       except the actual SVG content.
+
+ WMF import
+
+   Now Inkscape uses UniConvertor for opening WMF files, which results in
+   three noticable changes:
+    1. imported files are editable now
+    2. known rendering issues are resolved
+    3. WMF import works on all platforms where UniConvertor works
+       (including Windows)
+
+   Text objects are not supported by UniConvertor as of version 1.1.1.
+
+ Bitmap export
+
+     * Batch export: The Bitmap Export dialog (Ctrl+Shift+E) got a new
+       checkbox, Batch export all selected objects. This checkbox is
+       available when two or more objects are selected. If it is checked,
+       instead of exporting selection as a whole, Inkscape exports each
+       selected object separately into its own PNG file. This uses each
+       object's export hints (i.e. export filename and DPI) if they are
+       remembered from a previous export; otherwise, the filename is
+       created from the object ID and the DPI is 90 pixels per inch.
+       Caution: Unlike regular export, batch export overwrites all
+       existing PNG files without warning.
+
+          This makes it possible to implement all kinds of image slicing
+          and automated export scenarios. For example, if you are working
+          on a web site design, you can create a separate "export" layer.
+          In that layer, "slice" your web page image into separate areas
+          by creating invisible rectangles with no fill and no stroke.
+          Select each rectangle (by Tab/Shift+Tab, or by switching to
+          Outline mode where even an invisible rectangle can be selected
+          by clicking on its outline) and export it into the corresponding
+          filename (which gets saved as that object's export hint). After
+          that, if you do any changes to your graphics, it's very easy to
+          reexport all the slices: just switch to the "export" layer,
+          select all in that layer (Ctrl+A), and export with the Batch
+          export selected objects checkbox on.
+
+     * Hide all except selected: A new checkbox allows you to hide in the
+       exported image everything except selected object(s).
+
+     * The Export dialog automatically appends the .png extension to the
+       export filename you specify.
+
+ Open Clip Art Library import and export
+
+   [No information on this feature available]
+
+ Command line
+
+   Several new command line options are added that make Inkscape even more
+   scriptable and automatable than before.
+     * --verb-list will list all the Verb IDs and their names in Inkscape.
+       This makes writing your own menus and hotkeys much easier as you
+       can easily find out what the choices are.
+
+     * --verb followed by a verb ID allows you to specify a verb to be
+       called on every document opened by Inkscape initially from the
+       command line.
+
+     * --select followed by a node ID will allow you to add a node to the
+       list of selected objects.
+
+     * --query-all produces a comma delimited listing of all objects in
+       the document, with their x, y, height, and width values.
+
+   These options can be used, for example, for performance testing. You
+   could do something like this:
+$ time inkscape --verb=FileClose my_complex_file.svg
+
+   to measure the time it takes to load and display the file.
+
+   Of course, with the ability to select objects, it can be much more
+   useful than that. You can call extension effects, or any other verb,
+   then FileSave and FileClose to automate all kinds of operations on your
+   drawings.
+
+ User interface
+
+ Dockable dialogs
+
+   Inkscape's dialog handling has been reworked in this release to allow
+   dialogs to behave like dockable panels. The dock area that holds the
+   user's dialogs is located right of the canvas.
+
+   Dialogs placed in the dock can easily be rearranged, resized, stacked
+   in groups or iconified. Furthermore, a dialog can be dragged of the
+   dock to become a floating dock in itself--this allows other dialogs to
+   be dragged and dropped on it to form a floating group of dialogs.
+
+   The old dialog behavior (used in releases before 0.46) has been
+   preserved as an option, and if it is preferred, one can select it under
+   Windows > Dialog behavior in the Inkscape preferences dialog.
+
+ Known issues
+
+     * Some of Inkscape's dialogs are yet to be adapted to allow docking,
+       these include the "Text and Font" dialog, the "Tiled clones"
+       dialog, the "XML editor" and the "Object properties" dialog.
+
+     * Floating dialogs that are closed and later reopened might reappear
+       on positions slightly different than their original ones.
+
+     * Resizing dialogs that are placed in the dock can be a bit slow and
+       quirky.
+
+     * The total height of content the dock will in most cases remain the
+       same when a dialog is closed/iconified, i.e. the remaining docked
+       dialogs will fill the hole. This might not the desired behavior.
+
+ Settings
+
+   Three settings that control dockable dialogs behavior are present in
+   the preferences.xml file under a options group called dock:
+     * cancenterdock: controls if dialogs are allowed to be stacked on top
+       of each other to be ordered in groups. Valid values are "0" and
+       "1".
+
+     * dockbarstyle: controls what information is shown for iconified
+       dockable dialogs. "0" = icons only, "1" = text only, "2" = both
+       icons and text.
+
+     * switcherstyle: controls what information is shown for grouped
+       dockable dialogs. "0" = icons only, "1" = text only, "2" = both
+       icons and text.
+
+ Toolbars
+
+   Main toolbar on the left can now optionally use smaller buttons. With
+   the several new tools added in this version, this may help users with
+   small screens where the toolbar otherwise may not fit vertically. The
+   toggle is on the Misc tab of the Inkscape Preferences dialog.
+
+   Switching to stock GTK+ toolbars. This allows for the main window to be
+   made narrower, with toolbar items flowing into a popup menu as it is
+   resized.
+
+ File Dialogs
+
+   [No information on this feature available]
+
+ Swatches panel, color drag-and-drop
+
+     * Right-clicking a color swatch now opens a context menu which allows
+       you to apply the color to the fill or stroke of selection.
+
+     * Dragging colors from the color palette has been fixed and improved:
+
+          + Now the dropped color is applied to the object on which you
+            drop it, regardless of whether that object is selected or not.
+            This means you can change the color of only one object from
+            selection without having to select it separately. (If you want
+            to assign color to the entire selection, just click on the
+            color swatch on the palette, not drag it.)
+
+          + If an object has stroke and you drop the color over stroke,
+            the color is applied to stroke and not fill. (Another way to
+            always apply color to stroke is to Shift+drag it.)
+
+          + When gradient handles are active (e.g. in Gradient or Node
+            tools), you can drop a color onto the gradient line to create
+            a new gradient mid stop with this color, or drop a color onto
+            an existing stop to recolor that stop.
+
+          + A new submenu has been added to affect the shape of the
+            displayed swatches, allowing their preferred size to be made
+            thinner or wider. Among other things, this allows for more to
+            be seen on screen at once when made thinner.
+
+          + Sizing of the swatches has been corrected to be properly
+            progressive, and now go form smaller to larger on all
+            platforms.
+
+          + Space reserved for the scrollbar is no longer kept with
+            smaller palettes shown in the bottom of the main UI. This
+            allows for more working space when palettes with not many
+            entries are selected at smaller sizes.
+
+ Color gestures
+
+   A new method for quick and precise adjustment of colors is added in
+   this version: color gestures. It works on the selected objects by
+   grabbing the fill or stroke color swatch in the selected style
+   indicator (on the left of the statusbar) and dragging it in various
+   directions as described below. Note that this only works when the
+   swatch displays a flat color; it does not work for a swatch showing
+   "None", "N/A", or displaying a gradient (although you can select one or
+   more gradient stops in Gradient tool and color-adjust them by color
+   gestures just as you would do for objects). Color gestures can work on
+   fill or stroke, depending on which swatch in the selected color
+   indicator you drag.
+
+   Color gestures work in HSL color space. Dragging without any keyboard
+   modifiers adjusts the hue channel, dragging with Shift adjusts
+   saturation, and dragging with Ctrl adjusts lightness.
+
+   The adjustment is done by "rotating" the color swatch away from the
+   original direction which is assumed to be NE at 45 degrees (i.e. from
+   the swatch diagonally into the document window). Once you click and
+   drag the color swatch, imagine a diagonal line going from the point
+   where you clicked in the NE direction, across the entire Inkscape
+   window. By dragging below or to the right of that line, you decrease
+   the corresponding color channel, to the minimum at the lower edge of
+   the window; by dragging it above or to the left, you increase it, to
+   the maximum at the left edge of the window. If you hover your mouse
+   exactly over the 45 degrees line, the change will be zero.
+
+   Note that you can easily vary the precision of your adjustment. If you
+   drag close enough to the swatch, each small movement results in a big
+   change of the color. If you need a finer adjustment, just drag farther
+   away from the swatch, towards the center of the Inkscape window or even
+   to its upper right corner, where minute movements will produce very
+   small changes in the color. In fact, this method gives you more color
+   precision than even the color wheel in the Fill and Stroke dialog,
+   unless you expand that dialog to fill the entire screen which is rarely
+   practical.
+
+   The mouse cursor changes when you're doing color gestures, reflecting
+   the channel currently adjusted and indicating the directions for
+   increasing and decreasing the value. Also, watch the statusbar which
+   will indicate, as you drag, the channel you are adjusting, the original
+   value of that channel, the new value, and the difference.
+
+   You can switch channels while you drag. That is, you don't need to drag
+   it again and again from the swatch if you want to adjust all three
+   channels - you can do it all in one drag, by pressing and releasing
+   Ctrl and Shift as necessary. Note that when you change the keyboard
+   modifiers during drag, the position of the zero-change line is
+   temporarily changed to go through the current mouse position; this is
+   done so that there are no sudden changes in color if you are switching
+   modifiers away from the original 45-degree line.
+
+   The Alt modifier is special. Pressing Alt means "do nothing"; this
+   allows you to move the mouse, without releasing, to a more convenient
+   place from where to continue tweaking the color after letting go of
+   Alt. As with the other modifiers, releasing Alt temporarily redefines
+   the zero-change axis to go through the point where Alt was released.
+   For example, imagine you made your color darker by Ctrl+dragging
+   towards the bottom edge of the window and you now need to make it less
+   saturated. You cannot however Shift+drag it any lower because there's
+   just not enough room for that. In that situation, without releasing the
+   mouse, Alt+drag it upwards to a convenient spot and then Shift+drag
+   downwards as needed. Also, you can start dragging from the swatch with
+   Alt pressed to avoid changing the color while you take a more
+   convenient position for adjustments.
+
+   For example, you can select a green rectangle and first turn it into
+   greenish-blue by dragging away from the Fill swatch and slightly above
+   the 45 degrees line; then, without releasing the mouse, press Ctrl and
+   drag a bit to the right to darken the color; then press Shift, release
+   Ctrl, and adjust saturation. You can press or release Ctrl and Shift as
+   many times as necessary during a single drag; when you are finally
+   satisfied with your color, release the mouse to commit the change.
+
+   Apart from precise adjustments, you can use color gestures to very
+   quickly perform some common color transformations:
+     * Ctrl+drag the swatch to the right and down to paint all selected
+       objects black.
+
+     * Ctrl+drag the swatch upwards and to the left to paint all selected
+       objects white.
+
+     * Shift+drag the swatch to the right and down to desaturate the color
+       of selected objects.
+
+     * Shift+drag the swatch upwards and to the left to maximize
+       saturation of the color of selected objects.
+
+   Note that when several objects or gradient stops with different colors
+   are selected, the selected style indicator shows their averaged color.
+   If you adjust that color by gesturing, the changed color will be
+   assigned back to all selected objects/stops, in effect eliminating any
+   difference between them. If you want to adjust many different-colored
+   objects preserving their relative differences, use the color modes of
+   the Tweak tool or color adjustment extension effects.
+
+   This new technique requires some getting used to, but once you get the
+   idea it is quite convenient, fast, and precise.
+
+ Print dialog integration
+
+     * Print Dialog: The GTK Unix Print Dialog has been hooked up! From
+       the dialog, you can select any of the Postscript-capable printers
+       known to your system and configure them as with any other GTK
+       application.
+
+ Saving window geometry globally
+
+   Previously, window geometry (size and position of document windows)
+   could only be saved into the document (so that each document stored its
+   own window geometry). Now, a new option is added to save the geometry
+   of the last used window to the preferences and apply this geometry to
+   all new windows. Thus, with the "Save geometry to preferences" option
+   enabled, new windows will open with the shape of the most recent
+   previous window. This mode also remembers and restores the
+   maximized/fullscreen state (unlike geometry saved to documents).
+
+ Preserving zoom/view of reverted documents
+
+   When reverting files to their previously saved state, the current zoom
+   factor/panning is now retained (as opposed to reverted to the saved
+   state, too, as it was the case before). This less interrupts the
+   workflow when one is working on some detail in the drawing.
+
+ Bounding box option moved
+
+   The preferences option to select between "visual" and "geometric"
+   bounding box was moved in Inkscape Preferences dialog from the
+   "Selector" page to "Tools" page (since it applies more globally than
+   just in Selector tool).
+
+ New ways to scroll and zoom
+
+     * You can now enable Space+mouse drag to pan canvas, as it does in
+       Adobe Illustrator. This mode is enabled by the Left mouse button
+       pans when Space is pressed checkbox in the Scrolling tab of the
+       Inksape Preferences dialog. By default it is off and pressing the
+       spacebar key switches you to Selector and back, as it always did in
+       Inkscape.
+
+     * By default, rotating the mouse wheel scrolls the canvas vertically
+       and Ctrl+wheel zooms in and out. Now, if you turn on the Mouse
+       wheel zooms by default checkbox in the Scrolling tab of the Inksape
+       Preferences dialog, this behavior is reversed: mouse wheel zooms
+       without Ctrl and scrolls with Ctrl. This new mode should be
+       familiar for users of AutoCAD and CorelDraw.
+
+     * In the Zoom tool, right mouse button always zooms out instead of
+       calling the context menu (which is rather useless in this tool
+       anyway).
+
+ Using other keys in place of Alt
+
+     * Many Linux users have found the use of Alt-drag and Alt+click in
+       Inkscape problematical because this shortcut is often captured by
+       window managers. In 0.46, instead of disabling of the window
+       manager shortcut as suggested in the FAQ, you can change a
+       setting in your preferences.xml file called mapalt in the options
+       group. This numerical value ranges from 1 to 5; 1 indicates no
+       change, any other value refers to some special key on a keyboard,
+       such as Alt Gr, the Windows key, etc. The specific mapping of these
+       values to the keys on your keyboard can be viewed and/or editied by
+       xkeycaps, available from www.jwz.org. The value associated
+       with a particular key is shown in that program at the top of the
+       screen beside the word "Modifiers" when the mouse is held over a
+       key on the main display.
+
+ GTK theme on OS X
+
+   A GTK theme is now included in Inkscape.app bundle on OS X. If the user
+   does not have any personal customization (e.g. in a .gtkrc-2.0 file)
+   this theme is used. It reflects the OS X settings for "Appearance" and
+   "Highlight Color" set in System Preferences > Appearance.
+
+ Keyboard profiles
+
+   New profiles have been added:
+     * Corel DRAW X4 (corel-draw-x4.xml)
+     * Zoner Draw 5 (zoner-draw.xml)
+     * ACD Systems Canvas 11 (acd-canvas.xml)
+
+   Also, profile for Adobe Illustrator has been fixed and includes
+   bindings for tools now.
+
+   (To enable a profile, copy it into default.xml in the same directory,
+   overwriting the old file. To restore the default Inkscape set, copy
+   inkscape.xml into default.xml.)
+
+ Other changes and improvements
+
+     * Gnome VFS Improvements: Gnome VFS Non-Local files are now usable
+       through all of our file choosers in Open, Save and Export. This
+       compile-time option allowed people to open any Gnome-VFS-based URI
+       from the command-line in the past, but not non-local resources
+       (WebDAV, SFTP, etc) and this now allows for all the lovely
+       possibilities Gnome-VFS provides.
+
+     * In previous versions, Inkscape didn't allow you to group a single
+       object. Yet in some cases, this operation is useful (for example,
+       to blur the clipped edged of an object, or apply more than one
+       clippath/mask to an object). Now this limitation is removed; just
+       select any single object and group it to get a single-object group.
+
+     * The somewhat cryptic "F:" and "S:" labels in the selected style
+       indicator (at the left end of the statusbar) and in tool's style
+       swatches are now spelled out as Fill: and Stroke:. We believe this
+       makes the interface, even if less space-efficient, a bit more
+       friendly for newbies.
+
+     * The style swatches at the right end of object-creating tools'
+       control bars now open the Preferences page of the corresponding
+       tool when clicked. Also, now these swatches display a tooltip
+       explaining its purpose (e.g. "Style of new rectangles", "Style of
+       new calligraphic strokes", etc.)
+
+     * On the Scale tab of the Transform dialog, the numbers now show the
+       current size of selection, not size increment as before.
+       Correspondingly, with the % unit chosen, you see 100% displayed,
+       and to scale it up twice, you enter 200%, not 100% as before. This
+       is a more intuitive behavior and it's more consistent with how the
+       W/H controls work in the Selector tool.
+
+     * After dragging a curve segment in Node tool, Inkscape no longer
+       selects the two adjacent nodes if they were not selected before.
+
+     * The Tile Clones dialog now uses the object's defined rotation axis
+       (which can be freely moved by Selector tool and which is saved
+       separately for each object) for all rotations (including both
+       symmetry rotations and the Rotation tab rotations), scales, and
+       flips. This renders unnecessary the previous workarounds where you
+       had to group an object with another transparent object to affect
+       how it's rotated by the clone tiler.
+
+     * The Shift tab of the Tile Clones dialog has two new options:
+       Cumulate: when checked, each tile is shifted by the normal amount
+       plus the cumulative shifts of all previous tiles. This is useful
+       when placing tiles that are being scaled by a uniform amount.
+       Exlude tile: when checked, the tile width or height is not
+       automatically included in calculating the tile's shift. This is
+       useful when using the dialog to place clones on a circle or spiral
+       (rather than using a shift of -100%). It is also useful when
+       positioning tiles using the Exponent parameter.
+
+     * The Scale tab of the Tile Clones dialog has a new parameter: Base
+       that allows placing tiles along a logarithmic spiral (as often
+       found in nature). If the value is 0, the parameter is not used. Use
+       a value less than one for a converging spiral and a value of
+       greater than one for a diverging spiral. The actual scale is
+       calculated as base raised to the nominal scale power.
+
+     * In Pencil and Calligraphic tools, pressing Esc or Ctrl+Z while
+       drawing cancels the currently drawn path or stroke. When not
+       drawing, these keys work as before (Esc deselects, Ctrl+Z undoes
+       last action). (This is the same behavior as in the Pen tool where
+       it was introduced in a previous version.)
+
+     * A set of new verbs has been added to allow the user to easily
+       unlock all locked objects or unhide all hidden objects. There are
+       two variants one that operates on the current layer and its
+       children and one that operates globally. While searching for hidden
+       or locked object descendants of locked layers are ignored.
+
+     * Several more rotation snapping increments are available in the
+       Steps tab of the Inkscape Preferences dialog: 36, 22.5, 18, 12, and
+       0.5 degrees.
+
+     * The list of folder shortcuts in the Open dialog includes the folder
+       with Inkscape's SVG examples for easy access. Similarly, the Save
+       dialog has a shortcut for the user's own templates dialog making it
+       easy to save the current document as a template (if saved as
+       default.svg, it will be loaded every time you run Inkscape or
+       create new document with Ctrl+N; with any other name, it will be
+       added to the File > New submenu).
+
+     * For time-intensive operations such as Paint Bucket and Simplify,
+       the system's busy wait cursor is displayed to indicate to the user
+       that Inkscape is actively working, and not frozen.
+
+     * Several improvements in inkview: busy cursor is shown while loading
+       file, the button window stays on top and responds to keyboard
+       shortcuts; several memleaks stopped and bugs fixed. The "slideshow
+       mode" of the main inkscape application (-s or --slideshow command
+       line option) is removed; use inkview instead.
+
+     * In Document Metadata dialog, updated Creative Commons Licenses to
+       version 3.0.
+
+     * Preferences have been added for setting the default metadata and
+       licenses, so this information can be automatically filled in with
+       new documents.
+
+     * The built-in Potrace tracing engine is upgraded to version 1.8 with
+       some minor bugs fixed.
+
+     * File dialog windows (open/save) now have an Enable preview checkbox
+       which allows you to disable the preview pane.
+
+     * In the Calligraphic pen controls, the toggle button to enable
+       tablet pressure sensitivity is moved to the Width control, and the
+       button for tilt sensitivity is moved to Angle, to better reflect
+       what parameters these toggles affect.
+
+     * In Node and Gradient tools, using Tab/Shift+Tab to select
+       next/previous node or gradient handle scrolls the canvas if
+       necessary to show the selection.
+
+     * The option Import bitmap as <image> is removed; it was added
+       several versions ago to allow optionally importing images as
+       rectangles with image pattern, to make clipping the images easier.
+       Now that you can easily use clipping paths, as well as convert any
+       image to rectangle with pattern with Alt+I, this option is not
+       really necessary and removed to reduce confusion. Bitmaps are
+       always imported into SVG as an <image> element.
+
+     * Support has been added for stock patterns, in the same way that
+       stock markers were already supported. Adding patterns to
+       share/patterns/patterns.svg, and giving them a inkscape-stockid
+       attribute as found on the examples already there will make them
+       available in all Inkscape sessions from the patterns tab of the
+       fill & stroke dialog.
+
+     * New fontforge_glyph.svg template is added for font designers who
+       draw glyphs in Inkscape and import them into FontFoge. It is
+       1000x1000px large and has a horizontal guide at 200px to mark
+       border for descenders.
+
+     * Save dialogs have been modified to clarify that they Save as SVG,
+       so people using Inkscape to edit PDF, EPS, and other file formats
+       will be less confused at the default behavior when saving files.
+
+     * Inkscape application bundle on Mac OS X now has the possibility to
+       contain pre-compiled python modules (e.g. lxml, numpy, etc.) and to
+       use them without requiring any work from the user. Since Python
+       itself is shipped with Mac OS X, the user only has to drag and drop
+       Inkscape on its hard-drive and all the extensions will be
+       functional immediately.
+
+ Notable bugfixes
+
+   These are bugfixes compared to 0.45.1; for a list of fixes in 0.45.1
+   compared to 0.45, see 0.45.1 release notes.
+     * The sodipodi:docbase attribute is no longer added to the root <svg>
+       element. This attribute used to keep the latest directory that the
+       document was saved to, and thus represented a mild privacy
+       violation (i.e., by sharing your Inkscape SVG files you allowed
+       others to have a peek into your directory structure). Note,
+       however, that Inkscape does not remove this attribute from old
+       documents it opens; if you want you can remove it yourself.
+       Inkscape just no longer creates this attribute in new documents.
+
+     * A fix in the blur rendering code made exporting blurred objects to
+       bitmap much faster and fixed the disappearing of blurred objects in
+       exported bitmaps which happened for large objects in 0.45. The same
+       fix got rid of the rendering artefacts that sometimes appeared on
+       blurred objects during scrolling.
+
+     * Inkscape now properly quotes font-family values and therefore can
+       use fonts with various nonalphanumeric characters in their names,
+       which previously failed.
+
+     * If you have saved documents with a previous version of Inkscape
+       which used right-to-left text (e.g. Arabic, Hebrew) then the
+       paragraph alignment of non-flowed text has been reversed in this
+       release. This is due to a bug in previous versions - the new
+       behaviour is compliant with the SVG specification and compatible
+       with other editors and viewers. To correct your images, simply
+       reverse the paragraph alignment by selecting the text and clicking
+       the appropriate button on the toolbar.
+
+     * A large family of bugs was exterminated where an object's style
+       could only refer other objects (such as gradients, patterns, and
+       filters) that come after it in the document. Now any objects can be
+       referenced from a style regardless of their place in the document.
+       This fixed the disappearance of gradients/patterns/filters after
+       you undo an effect, as well as lots of assorted crashes and
+       misrenderings (mostly on non-Inkscape SVG files).
+
+     * On Windows, file opening/saving dialogs can no longer sink under
+       the main editor window (they now have the inkscape window set
+       correctly as their parent window).
+
+     * A regression in 0.45 caused crashes when undo or redo was attempted
+       before the previous action could complete (e.g. pressing ctrl+z
+       while you are still drawing a rectangle). This is now fixed.
+
+     * Previously, if there was a single invalid property in a style
+       attribute, the entire attribute was discarded, i.e. the object lost
+       all styling. Now Inkscape's behavior is more compliant to the CSS
+       specification: it ignores only the invalid property but reads in
+       all the rest.
+
+     * Several bugs are fixed in searching for linked images. Now moving
+       SVG documents with their associated images to a different place or
+       a different machine should work more reliably.
+
+     * Creative Commons Public Domain Declaration URI points to the right
+       location now.
+
+     * Text objects didn't display the pattern editing handles; fixed.
+
+     * On Windows, the Inkscape uninstaller deleted all files under the
+       install directory. This could lead to removing user-created files,
+       or even other program files not related to inkscape if the install
+       directory was C:\Program Files. The new uninstaller tracks all
+       installed files and asks for confirmation before deleting any other
+       files. However, installation and uninstallation process is now
+       slower.
+
+     * Clones were wrongly unlinked when their original was moved to
+       another layer; fixed.
+
+     * Previous versions had a problem on Windows Vista where selected
+       menu item was invisible. Now our Windows builds use a newer version
+       of GTK library which fixes this problem.
+
+     * Duplicating empty text objects that have just been created no
+       longer crashes. Also, the XML editor crash related to empty text
+       objects is fixed. A downside is that the SVG will become cluttered
+       with empty text objects as they are no longer automatically
+       removed. A better fix for the problem is planned.
+
+     * In Tile Clones dialog, the PMG symmetry group was created
+       incorrectly; it is now fixed.
+
+     * Serious usability issues with the font size field in the Text
+       tool's controls bar have been fixed.
+
+     * The rulers are now correctly scaled and will align nicely with
+       document coordinates, with or without the scrollbars displayed.
+
+ Known Issues
+
+     * Blend modes do not work correctly over transparent backgrounds.
+       (LP: #180890) A workaround is to place an opaque rectangle
+       underneath the bottom-most layer.
+
+
+For information on prior releases, please see:
+    http://wiki.inkscape.org/wiki/index.php/Inkscape
