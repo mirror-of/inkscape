@@ -120,28 +120,11 @@ CairoPdfOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const g
         g_warning("Parameter <textToPath> might not exists");
     }
 
-    bool old_blurToBitmap  = FALSE;
-    bool new_blurToBitmap  = FALSE;
-    try {
-        old_blurToBitmap  = ext->get_param_bool("blurToBitmap");
-        new_blurToBitmap  = mod->get_param_bool("blurToBitmap");
-        ext->set_param_bool("blurToBitmap", new_blurToBitmap);
-    }
-    catch(...) {
-        g_warning("Parameter <blurToBitmap> might not exists");
-    }
-
 	gchar * final_name;
 	final_name = g_strdup_printf("> %s", uri);
-	ret = pdf_print_document_to_file(doc, final_name, 0, new_textToPath, new_blurToBitmap);
+	ret = pdf_print_document_to_file(doc, final_name, 0, new_textToPath, false);
 	g_free(final_name);
 
-    try {
-        ext->set_param_bool("blurToBitmap", old_blurToBitmap);
-    }
-    catch(...) {
-        g_warning("Parameter <blurToBitmap> might not exists");
-    }
     try {
         ext->set_param_bool("textToPath", old_textToPath);
     }
@@ -174,8 +157,6 @@ CairoPdfOutput::init (void)
 				"<_item value='PDF14'>" N_("PDF 1.4") "</_item>\n"
             "</param>\n"
 			"<param name=\"textToPath\" gui-text=\"" N_("Convert texts to paths") "\" type=\"boolean\">false</param>\n"
-			"<param name=\"blurToBitmap\" gui-text=\"" N_("Convert blur effects to bitmaps") "\" type=\"boolean\">false</param>\n"
-            "<param name=\"resolution\" gui-text=\"" N_("Preferred resolution (DPI) of bitmaps") "\" type=\"int\" min=\"72\" max=\"2400\">90</param>\n"
             "<output>\n"
 				"<extension>.pdf</extension>\n"
 				"<mimetype>application/pdf</mimetype>\n"
