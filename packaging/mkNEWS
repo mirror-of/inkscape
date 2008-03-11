@@ -15,12 +15,11 @@ $rel =~ s/\.//;
 
 my @page = `lynx -dump $wiki/ReleaseNotes$rel`;
 
-print "$#page lines\n";
-
 my $seen_overview = 0;
 foreach my $line (@page) {
 
     $line =~ s/\[\[\d+\]edit\]//g;
+    $line =~ s/\[\d+\](\w+)/$1/g;
 
     last if $line =~ /^ Previous releases/;
 
