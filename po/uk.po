@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2008-03-12 14:38+0200\n"
-"PO-Revision-Date: 2008-02-11 21:13+0200\n"
+"POT-Creation-Date: 2008-03-13 11:36+0200\n"
+"PO-Revision-Date: 2008-03-12 18:55+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
 "MIME-Version: 1.0\n"
@@ -64,9 +64,8 @@ msgid "Create ellipse"
 msgstr "Створити еліпс"
 
 #: ../src/box3d.cpp:317
-#, fuzzy
 msgid "<b>3D Box</b>"
-msgstr "<b>Рамка</b>"
+msgstr "<b>Просторовий об’єкт</b>"
 
 #: ../src/box3d-context.cpp:450 ../src/box3d-context.cpp:457
 #: ../src/box3d-context.cpp:464 ../src/box3d-context.cpp:471
@@ -906,7 +905,7 @@ msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2949
 msgid " Re_move "
-msgstr " В_илуичити "
+msgstr " В_илучити "
 
 #: ../src/dialogs/clonetiler.cpp:2950
 msgid "Remove existing tiled clones of the selected object (siblings only)"
@@ -1069,10 +1068,10 @@ msgid "Export the bitmap file with these settings"
 msgstr "Експортувати файл з цими параметрами"
 
 #: ../src/dialogs/export.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Batch export %d selected object"
 msgid_plural "Batch export %d selected objects"
-msgstr[0] "Пакетний експорт %d виділених об'єктів"
+msgstr[0] "Пакетний експорт %d виділеного об'єкта"
 msgstr[1] "Пакетний експорт %d виділених об'єктів"
 msgstr[2] "Пакетний експорт %d виділених об'єктів"
 
@@ -1982,15 +1981,13 @@ msgstr "Встановлення стилю штриха"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/dialogs/swatches.cpp:269
-#, fuzzy
 msgid "Set fill"
-msgstr "Не заливати"
+msgstr "Встановлення заливання"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/dialogs/swatches.cpp:277
-#, fuzzy
 msgid "Set stroke"
-msgstr "Зняття штриха"
+msgstr "Встановлення штриха"
 
 #: ../src/dialogs/swatches.cpp:496
 msgid "Change color definition"
@@ -3270,9 +3267,8 @@ msgid "PDF File"
 msgstr "Файл PDF"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:222
-#, fuzzy
 msgid "Cairo PS Output"
-msgstr "Вивід у PDF за допомогою Cairo"
+msgstr "Вивід у PS за допомогою Cairo"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:224
 msgid "Restrict to PS level"
@@ -3596,7 +3592,7 @@ msgstr "Параметри імпорту PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:380
 msgid "pdfinput|medium"
-msgstr ""
+msgstr "середня"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:381
 msgid "fine"
@@ -3997,7 +3993,7 @@ msgstr "Колір штриха"
 #. TRANSLATORS: This is a context string, only put the word "Normal" in your translation
 #: ../src/filter-enums.cpp:52
 msgid "filterBlendMode|Normal"
-msgstr ""
+msgstr "Нормальний"
 
 #: ../src/filter-enums.cpp:53
 msgid "Multiply"
@@ -4166,26 +4162,26 @@ msgid "<b>Too much inset</b>, the result is empty."
 msgstr "<b>Надто багато вставок</b>, результат порожній."
 
 #: ../src/flood-context.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Area filled, path with <b>%d</b> node created and unioned with selection."
 msgid_plural ""
 "Area filled, path with <b>%d</b> nodes created and unioned with selection."
 msgstr[0] ""
-"Область заповнено, контур з <b>%d</b> вузлами створено та поєднано з "
-"виділеною областю."
+"Область заповнено, контур з <b>%d</b> вузом створено і поєднано з виділеною "
+"областю."
 msgstr[1] ""
-"Область заповнено, контур з <b>%d</b> вузлами створено та поєднано з "
+"Область заповнено, контур з <b>%d</b> вузлами створено і поєднано з "
 "виділеною областю."
 msgstr[2] ""
 "Область заповнено, контур з <b>%d</b> вузлами створено та поєднано з "
 "виділеною областю."
 
 #: ../src/flood-context.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Area filled, path with <b>%d</b> node created."
 msgid_plural "Area filled, path with <b>%d</b> nodes created."
-msgstr[0] "Область заповнено, створено шлях з <b>%d</b> вузлами."
+msgstr[0] "Область заповнено, створено шлях з <b>%d</b> вузлом."
 msgstr[1] "Область заповнено, створено шлях з <b>%d</b> вузлами."
 msgstr[2] "Область заповнено, створено шлях з <b>%d</b> вузлами."
 
@@ -4250,64 +4246,64 @@ msgstr "<b>Середня опорна точка</b> радіального г�
 
 #. TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a compound message
 #: ../src/gradient-context.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "%s selected"
-msgstr "Останній виділений"
+msgstr "%s вибрано"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/gradient-context.cpp:164 ../src/gradient-context.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid " out of %d gradient handle"
 msgid_plural " out of %d gradient handles"
-msgstr[0] "Перемістити вус градієнта"
-msgstr[1] "Перемістити вус градієнта"
-msgstr[2] "Перемістити вус градієнта"
+msgstr[0] " з %d важеля градієнта"
+msgstr[1] " з %d важелів градієнта"
+msgstr[2] " з %d важелів градієнта"
 
 #. TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
 #: ../src/gradient-context.cpp:165 ../src/gradient-context.cpp:174
 #: ../src/gradient-context.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid " on %d selected object"
 msgid_plural " on %d selected objects"
-msgstr[0] "Пакетний експорт %d виділених об'єктів"
-msgstr[1] "Пакетний експорт %d виділених об'єктів"
-msgstr[2] "Пакетний експорт %d виділених об'єктів"
+msgstr[0] " у %d виділеному об’єкті"
+msgstr[1] " у %d виділених об’єктах"
+msgstr[2] " у %d виділених об’єктах"
 
 #. TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
 #: ../src/gradient-context.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "One handle merging %d stop (drag with <b>Shift</b> to separate) selected"
 msgid_plural ""
 "One handle merging %d stops (drag with <b>Shift</b> to separate) selected"
 msgstr[0] ""
-"Один важіль вбирає %d опорних точок (перетягніть з клавішею <b>Shift</b>, "
-"щоб роз’єднати) обраних з %d важелів градієнта на %d обраних об’єктах"
+"Вибрано один важіль, що містить %d опорну точку (перетягніть з клавішею "
+"<b>Shift</b>, щоб роз’єднати)"
 msgstr[1] ""
-"Один важіль вбирає %d опорних точок (перетягніть з клавішею <b>Shift</b>, "
-"щоб роз’єднати) обраних з %d важелів градієнта на %d обраних об’єктах"
+"Вибрано один важіль, що містить %d опорних точок (перетягніть з клавішею "
+"<b>Shift</b>, щоб роз’єднати)"
 msgstr[2] ""
-"Один важіль вбирає %d опорних точок (перетягніть з клавішею <b>Shift</b>, "
-"щоб роз’єднати) обраних з %d важелів градієнта на %d обраних об’єктах"
+"Вибрано один важіль, що містить %d опорних точок (перетягніть з клавішею "
+"<b>Shift</b>, щоб роз’єднати)"
 
 #. TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
 #: ../src/gradient-context.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> gradient handle selected out of %d"
 msgid_plural "<b>%d</b> gradient handles selected out of %d"
-msgstr[0] "<b>%d</b> важелів градієнта обрано з %d на %d обраних об’єктах"
-msgstr[1] "<b>%d</b> важелів градієнта обрано з %d на %d обраних об’єктах"
-msgstr[2] "<b>%d</b> важелів градієнта обрано з %d на %d обраних об’єктах"
+msgstr[0] "Вибрано <b>%d</b> важіль градієнта з %d"
+msgstr[1] "Вибрано <b>%d</b> важелі градієнта з %d"
+msgstr[2] "Вибрано <b>%d</b> важелів градієнта з %d"
 
 #. TRANSLATORS: The plural refers to number of selected objects
 #: ../src/gradient-context.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "<b>No</b> gradient handles selected out of %d on %d selected object"
 msgid_plural ""
 "<b>No</b> gradient handles selected out of %d on %d selected objects"
-msgstr[0] "<b>Не</b> обрано важелів градієнта з %d на %d обраних об’єктах"
-msgstr[1] "<b>Не</b> обрано важелів градієнта з %d на %d обраних об’єктах"
-msgstr[2] "<b>Не</b> обрано важелів градієнта з %d на %d обраних об’єктах"
+msgstr[0] "<b>Жодного</b> важеля градієнта з %d в %d обраному об’єкті"
+msgstr[1] "<b>Жодного</b> важеля градієнта з %d в %d обраних об’єктах"
+msgstr[2] "<b>Жодного</b> важеля градієнта з %d в %d обраних об’єктах"
 
 #: ../src/gradient-context.cpp:385 ../src/gradient-context.cpp:478
 #: ../src/widgets/gradient-vector.cpp:735
@@ -4789,11 +4785,11 @@ msgstr "_Записати файл сеансу:"
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2630
 msgid "Shared SVG whiteboard tool."
-msgstr ""
+msgstr "Інструмент спільного малювання SVG."
 
 #: ../src/jabber_whiteboard/pedrogui.cpp:2631
 msgid "Based on the Pedro XMPP client"
-msgstr ""
+msgstr "Засновано на XMPP-клієнті Pedro"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
 msgid "Select a location and filename"
@@ -4836,104 +4832,100 @@ msgid "Move handle"
 msgstr "Перемістити вус"
 
 #: ../src/libgdl/gdl-dock-bar.c:108
-#, fuzzy
 msgid "Master"
-msgstr "Растрові зображення"
+msgstr "Господар"
 
 #: ../src/libgdl/gdl-dock-bar.c:109
 msgid "GdlDockMaster object which the dockbar widget is attached to"
-msgstr ""
+msgstr "Об’єкт GdlDockMaster, до якого закріплено віджет панелі"
 
 #: ../src/libgdl/gdl-dock-bar.c:116
-#, fuzzy
 msgid "Dockbar style"
-msgstr "Закріплюються до правого краю вікна"
+msgstr "Стиль панелі"
 
 #: ../src/libgdl/gdl-dock-bar.c:117
 msgid "Dockbar style to show items on it"
-msgstr ""
+msgstr "Стиль, у якому витримано елементи панелі"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify"
-msgstr ""
+msgstr "Згорнути"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify this dock"
-msgstr ""
+msgstr "Згорнут цю панель"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close"
-msgstr "_Закрити"
+msgstr "Закрити"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:397
-#, fuzzy
 msgid "Close this dock"
-msgstr "Закрити це вікно документу"
+msgstr "Закрити цю панель"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:706
 #: ../src/libgdl/gdl-dock-tablabel.c:128
 msgid "Controlling dock item"
-msgstr ""
+msgstr "Контролюючий елемент панелі"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:707
 msgid "Dockitem which 'owns' this grip"
-msgstr ""
+msgstr "Елемент, що є \"володарем\" цього"
 
 #: ../src/libgdl/gdl-dock-item.c:287
-#, fuzzy
 msgid "Orientation"
-msgstr "Орієнтація полотна:"
+msgstr "Орієнтація"
 
 #: ../src/libgdl/gdl-dock-item.c:288
 msgid "Orientation of the docking item"
-msgstr ""
+msgstr "Орієнтація закріпленого елемента"
 
 #: ../src/libgdl/gdl-dock-item.c:303
 msgid "Resizable"
-msgstr ""
+msgstr "Зі зміною розміру"
 
 #: ../src/libgdl/gdl-dock-item.c:304
 msgid "If set, the dock item can be resized when docked in a paned"
 msgstr ""
+"Якщо встановлено, розмір елемента панелі можна змінювати під час вбудовування"
 
 #: ../src/libgdl/gdl-dock-item.c:311
-#, fuzzy
 msgid "Item behavior"
-msgstr "Поведінка"
+msgstr "Поведінка панелі"
 
 #: ../src/libgdl/gdl-dock-item.c:312
 msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
 msgstr ""
+"Загальна поведінка елемента панелі (тобто, чи можна його рухати, замикати, "
+"інше)"
 
 #: ../src/libgdl/gdl-dock-item.c:320 ../src/libgdl/gdl-dock-master.c:148
-#, fuzzy
 msgid "Locked"
-msgstr "За_мкнути"
+msgstr "Замкнута"
 
 #: ../src/libgdl/gdl-dock-item.c:321
 msgid ""
 "If set, the dock item cannot be dragged around and it doesn't show a grip"
 msgstr ""
+"Якщо встановлено, елемент панелі не можна пересувати, він не показує ґратки"
 
 #: ../src/libgdl/gdl-dock-item.c:329
 msgid "Preferred width"
-msgstr ""
+msgstr "Бажана ширина"
 
 #: ../src/libgdl/gdl-dock-item.c:330
 msgid "Preferred width for the dock item"
-msgstr ""
+msgstr "Бажана ширина елемента панелі"
 
 #: ../src/libgdl/gdl-dock-item.c:336
-#, fuzzy
 msgid "Preferred height"
-msgstr "Висота джерела"
+msgstr "Бажана висота"
 
 #: ../src/libgdl/gdl-dock-item.c:337
 msgid "Preferred height for the dock item"
-msgstr ""
+msgstr "Бажана висота елемента панелі"
 
 #: ../src/libgdl/gdl-dock-item.c:616
 #, c-format
@@ -4941,6 +4933,8 @@ msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
 msgstr ""
+"Ви не можете додавати об’єкт (%p типу %s) всередину %s. Скористайтеся для "
+"цього GdlDock або іншим складеним об’єктом."
 
 #: ../src/libgdl/gdl-dock-item.c:623
 #, c-format
@@ -4948,70 +4942,70 @@ msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
 msgstr ""
+"Була спроба додати віджет типу %s до %s, але він може вмістити лише один "
+"віджет за раз; і вже містить віджет типу %s"
 
 #: ../src/libgdl/gdl-dock-item.c:1345 ../src/libgdl/gdl-dock-item.c:1390
 #, c-format
 msgid "Unsupported docking strategy %s in dock object of type %s"
-msgstr ""
+msgstr "Непідтримувана стратегія вбудовування %s у об’єкта типу %s"
 
 #. UnLock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1479
-#, fuzzy
 msgid "UnLock"
-msgstr "За_мкнути"
+msgstr "Відімкнути"
 
 #. Hide menuitem.
 #: ../src/libgdl/gdl-dock-item.c:1486
-#, fuzzy
 msgid "Hide"
-msgstr "С_ховати"
+msgstr "Сховати"
 
 #. Lock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1491
-#, fuzzy
 msgid "Lock"
-msgstr "За_мкнути"
+msgstr "Замкнути"
 
 #: ../src/libgdl/gdl-dock-item.c:1717
 #, c-format
 msgid "Attempt to bind an unbound item %p"
-msgstr ""
+msgstr "Спроба прив’язати неприв’язуваний елемент %p"
 
 #: ../src/libgdl/gdl-dock-master.c:141 ../src/libgdl/gdl-dock.c:183
-#, fuzzy
 msgid "Default title"
-msgstr "Типові о_диниці:"
+msgstr "Типовий заголовок"
 
 #: ../src/libgdl/gdl-dock-master.c:142
 msgid "Default title for newly created floating docks"
-msgstr ""
+msgstr "Типовий заголовок нових плаваючих панелей"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
+"Якщо встановлено 1, всі елементи панелей прив’язані до господаря "
+"замикаються; якщо встановлено 0, всі відмикаються; -1 позначає відсутність "
+"підпорядкованості серед елементів"
 
 #: ../src/libgdl/gdl-dock-master.c:157 ../src/libgdl/gdl-switcher.c:707
-#, fuzzy
 msgid "Switcher Style"
-msgstr "Зшивати елементи мозаїки"
+msgstr "Стиль перемикача"
 
 #: ../src/libgdl/gdl-dock-master.c:158 ../src/libgdl/gdl-switcher.c:708
-#, fuzzy
 msgid "Switcher buttons style"
-msgstr "Перемикання на наступний шар."
+msgstr "Стиль кнопок перемикача"
 
 #: ../src/libgdl/gdl-dock-master.c:165
-#, fuzzy
 msgid "Expand direction"
-msgstr "Збільшена відстань між рядками"
+msgstr "Розширити напрямок"
 
 #: ../src/libgdl/gdl-dock-master.c:166
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
 "given direction"
 msgstr ""
+"Дозволяє елементам провідної панелі поширювати вміщені у них об’єкти у "
+"заданому напрямку"
 
 #: ../src/libgdl/gdl-dock-master.c:781
 #, c-format
@@ -5019,6 +5013,8 @@ msgid ""
 "master %p: unable to add object %p[%s] to the hash.  There already is an "
 "item with that name (%p)."
 msgstr ""
+"господар %p: не вдалося додати об’єкт %p[%s] до хешу. У ньому вже є об’єкт з "
+"такою ж назвою (%p)."
 
 #: ../src/libgdl/gdl-dock-master.c:954
 #, c-format
@@ -5026,6 +5022,8 @@ msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
 msgstr ""
+"Новий контролер панелі, %p, є автоматичним. Лише створені вручну об’єкти "
+"панелей можна називати контролерами."
 
 #: ../src/libgdl/gdl-dock-notebook.c:134
 #: ../src/ui/dialog/align-and-distribute.cpp:907
@@ -5036,9 +5034,8 @@ msgid "Page"
 msgstr "Сторінка"
 
 #: ../src/libgdl/gdl-dock-notebook.c:135
-#, fuzzy
 msgid "The index of the current page"
-msgstr "Перейменувати поточний шар"
+msgstr "Індекс поточної сторінки"
 
 #: ../src/libgdl/gdl-dock-object.c:120 ../src/ui/widget/page-sizer.cpp:195
 msgid "Name"
@@ -5046,43 +5043,39 @@ msgstr "Назва"
 
 #: ../src/libgdl/gdl-dock-object.c:121
 msgid "Unique name for identifying the dock object"
-msgstr ""
+msgstr "Унікальна назва для ідентифікації об’єкта панелі"
 
 #: ../src/libgdl/gdl-dock-object.c:128
-#, fuzzy
 msgid "Long name"
-msgstr "Без назви"
+msgstr "Довга назва"
 
 #: ../src/libgdl/gdl-dock-object.c:129
-#, fuzzy
 msgid "Human readable name for the dock object"
-msgstr "Довільна позначка об'єкту"
+msgstr "Зрозуміла назва об’єкта панелі"
 
 #: ../src/libgdl/gdl-dock-object.c:135
-#, fuzzy
 msgid "Stock Icon"
-msgstr "Складати у стос"
+msgstr "Піктограма з набору"
 
 #: ../src/libgdl/gdl-dock-object.c:136
 msgid "Stock icon for the dock object"
-msgstr ""
+msgstr "Піктограма з набору для об’єкта панелі"
 
 #: ../src/libgdl/gdl-dock-object.c:142
 msgid "Pixbuf Icon"
-msgstr ""
+msgstr "Растрова піктограма"
 
 #: ../src/libgdl/gdl-dock-object.c:143
 msgid "Pixbuf icon for the dock object"
-msgstr ""
+msgstr "Растрова піктограма для об’єкта панелі"
 
 #: ../src/libgdl/gdl-dock-object.c:148
-#, fuzzy
 msgid "Dock master"
-msgstr "Замкнути шар"
+msgstr "Панель-господар"
 
 #: ../src/libgdl/gdl-dock-object.c:149
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "Провідна панель, до якої прив’язано об’єкт панелі"
 
 #: ../src/libgdl/gdl-dock-object.c:434
 #, c-format
@@ -5090,6 +5083,8 @@ msgid ""
 "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
 "hasn't implemented this method"
 msgstr ""
+"Виклик gdl_dock_object_dock у панелі %p (тип об’єкта %s), який не застосовує "
+"цього методу"
 
 #: ../src/libgdl/gdl-dock-object.c:563
 #, c-format
@@ -5097,101 +5092,105 @@ msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
 msgstr ""
+"Запит на операцію прив’язування у неприв’язуваному об’єкті %p. Програма може "
+"аварійно завершити роботу"
 
 #: ../src/libgdl/gdl-dock-object.c:570
 #, c-format
 msgid "Cannot dock %p to %p because they belong to different masters"
 msgstr ""
+"Не вдалося прив’язати %p до %p, оскільки вони належать різним господарям"
 
 #: ../src/libgdl/gdl-dock-object.c:612
 #, c-format
 msgid ""
 "Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
+"Спроба прив’язування до %p вже прив’язаного об’єкта %p (поточний господар: %"
+"p)"
 
 #: ../src/libgdl/gdl-dock-paned.c:132
-#, fuzzy
 msgid "Position"
-msgstr "Розміщення:"
+msgstr "Розташування"
 
 #: ../src/libgdl/gdl-dock-paned.c:133
 msgid "Position of the divider in pixels"
-msgstr ""
+msgstr "Розташування роздільника у пікселях"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:143
-#, fuzzy
 msgid "Sticky"
-msgstr "малюсінькі"
+msgstr "Липкий"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:144
 msgid ""
 "Whether the placeholder will stick to its host or move up the hierarchy when "
 "the host is redocked"
 msgstr ""
+"Визначає чи буде заповнювач прилипати до свого вузла, чи буде пересуватися "
+"вгору у ієрархії, якщо вузол пересувається"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:151
-#, fuzzy
 msgid "Host"
-msgstr "розтягнута"
+msgstr "Вузол"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:152
 msgid "The dock object this placeholder is attached to"
-msgstr ""
+msgstr "Об’єкт панелі, до якого прив’язано заповнювач"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:159
-#, fuzzy
 msgid "Next placement"
-msgstr "Розміщення зубцюватого колеса"
+msgstr "Наступне місце"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:160
 msgid ""
 "The position an item will be docked to our host if a request is made to dock "
 "to us"
 msgstr ""
+"Розташування елемента буде прикріплено до нашого вузла, якщо до нас надійде "
+"запит на прикріплення"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:170
 msgid "Width for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Ширина для віджетів під час з’єднання з заповнювачем"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:178
 msgid "Height for the widget when it's attached to the placeholder"
-msgstr ""
+msgstr "Висота для віджетів під час з’єднання з заповнювачем"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:184
-#, fuzzy
 msgid "Floating Toplevel"
-msgstr "Вільно переміщуються екраном"
+msgstr "Плаваюча верхня"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:185
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
-msgstr ""
+msgstr "Чи встановлюватиметься заповнювач для плаваючої верхньої панелі"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:191
-#, fuzzy
 msgid "X-Coordinate"
-msgstr "Координати"
+msgstr "Координата X"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:192
 msgid "X-Coordinate fow dock when floating"
-msgstr ""
+msgstr "X-координата панелі під час плавання"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:198
-#, fuzzy
 msgid "Y-Coordinate"
-msgstr "Координати"
+msgstr "Координата Y"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:199
 msgid "Y-Coordinate fow dock when floating"
-msgstr ""
+msgstr "Y-координата панелі під час плавання"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:494
 msgid "Attempt to dock a dock object to an unbound placeholder"
-msgstr ""
+msgstr "Спроба прив’язати об’єкт до неприв’язаного заповнювача"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:618
 #, c-format
 msgid "Got a detach signal from an object (%p) who is not our host %p"
 msgstr ""
+"Отримано сигнал від’єднання від об’єкта (%p), який не належить до нашого "
+"вузла %p"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:643
 #, c-format
@@ -5199,10 +5198,12 @@ msgid ""
 "Something weird happened while getting the child placement for %p from "
 "parent %p"
 msgstr ""
+"Сталося щось незрозуміле під час отримання дочірнього місця для %p від "
+"батьківського %p"
 
 #: ../src/libgdl/gdl-dock-tablabel.c:129
 msgid "Dockitem which 'owns' this tablabel"
-msgstr ""
+msgstr "Елемент панелі, що \"володіє\" цією міткою вкладки"
 
 #: ../src/libgdl/gdl-dock.c:175 ../src/ui/dialog/inkscape-preferences.cpp:464
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
@@ -5211,44 +5212,40 @@ msgstr "Вільно переміщуються екраном"
 
 #: ../src/libgdl/gdl-dock.c:176
 msgid "Whether the dock is floating in its own window"
-msgstr ""
+msgstr "Чи плаває панель у власному вікні"
 
 #: ../src/libgdl/gdl-dock.c:184
 msgid "Default title for the newly created floating docks"
-msgstr ""
+msgstr "Типовий заголовок нових плаваючих панелей"
 
 #: ../src/libgdl/gdl-dock.c:191
 msgid "Width for the dock when it's of floating type"
-msgstr ""
+msgstr "Ширина закріпленої панелі, якщо вона плаваюча"
 
 #: ../src/libgdl/gdl-dock.c:199
 msgid "Height for the dock when it's of floating type"
-msgstr ""
+msgstr "Висота закріпленої панелі, якщо вона плаваюча"
 
 #: ../src/libgdl/gdl-dock.c:206
-#, fuzzy
 msgid "Float X"
-msgstr "Вільно переміщуються екраном"
+msgstr "Плаваюча, X"
 
 #: ../src/libgdl/gdl-dock.c:207
-#, fuzzy
 msgid "X coordinate for a floating dock"
-msgstr "Координата X початку сітки"
+msgstr "Координата X плаваючої панелі"
 
 #: ../src/libgdl/gdl-dock.c:214
-#, fuzzy
 msgid "Float Y"
-msgstr "Вільно переміщуються екраном"
+msgstr "Плаваюча, Y"
 
 #: ../src/libgdl/gdl-dock.c:215
-#, fuzzy
 msgid "Y coordinate for a floating dock"
-msgstr "Координата Y початку сітки"
+msgstr "Координата Y плаваючої панелі"
 
 #: ../src/libgdl/gdl-dock.c:499
 #, c-format
 msgid "Dock #%d"
-msgstr ""
+msgstr "Прикріпити #%d"
 
 #: ../src/libnrtype/FontFactory.cpp:774
 msgid "Ignoring font without family that will crash Pango"
@@ -5405,20 +5402,16 @@ msgstr ""
 "довжини"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:57
-#, fuzzy
 msgid "Bend path"
-msgstr "Зігнути контур"
+msgstr "Контур вигину"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:57
-#, fuzzy
 msgid "Path along which to bend the original path"
-msgstr ""
-"Створити втягування/розтягування, динамічно пов'язане з початковим контуром"
+msgstr "Контур, за яким слід вигнути початковий контур"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:58
-#, fuzzy
 msgid "Width of the path"
-msgstr "Ширина візерунку"
+msgstr "Товщина контуру"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:65
@@ -5426,18 +5419,16 @@ msgid "Width in units of length"
 msgstr "Ширина у одиницях довжини"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:59
-#, fuzzy
 msgid "Scale the width of the path in units of its length"
-msgstr "Відображати ширину візерунку у одиницях його довжини"
+msgstr "Змінювати товщину контуру у одиницях його довжини"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
-#, fuzzy
 msgid "Original path is vertical"
-msgstr "Візерунок є вертикальним"
+msgstr "Початковий контур вертикальний"
 
 #: ../src/live_effects/lpe-pathalongpath.cpp:60
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
-msgstr ""
+msgstr "Повернути початковий контур на 90°, перш ніж вигинати його за контуром"
 
 #: ../src/live_effects/lpe-skeletalstrokes.cpp:53
 msgid "Single"
@@ -5503,13 +5494,12 @@ msgid "Pattern is vertical"
 msgstr "Візерунок є вертикальним"
 
 #: ../src/live_effects/lpe-slant.cpp:18
-#, fuzzy
 msgid "Slant factor"
-msgstr "Суцільний колір"
+msgstr "Коефіцієнт нахилу"
 
 #: ../src/live_effects/lpe-slant.cpp:18
 msgid "y = y + x*(slant factor)"
-msgstr ""
+msgstr "y = y + x*(коефіцієнт нахилу)"
 
 #: ../src/live_effects/lpe-slant.cpp:19 ../src/widgets/toolbox.cpp:4842
 msgid "Center"
@@ -5517,12 +5507,11 @@ msgstr "Центрувати"
 
 #: ../src/live_effects/lpe-slant.cpp:19
 msgid "The x-coord of this point is around which the slant will happen"
-msgstr ""
+msgstr "Координата X точки, навколо якої виконується нахил"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:21
-#, fuzzy
 msgid "Stack step"
-msgstr "Складати у стос"
+msgstr "Крок стосу"
 
 #: ../src/live_effects/parameter/parameter.cpp:138
 msgid "Change scalar parameter"
@@ -6209,9 +6198,8 @@ msgstr ""
 "<b>Ctrl</b> — фіксування напрямків країв або діагоналей"
 
 #: ../src/object-edit.cpp:685
-#, fuzzy
 msgid "Move the box in perspective"
-msgstr "Переміщення об’єкта у перспективу."
+msgstr "Переміщення об’єкта у перспективі"
 
 #: ../src/object-edit.cpp:863
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -6438,14 +6426,12 @@ msgid "Finishing freehand"
 msgstr "Контур створено"
 
 #: ../src/persp3d.cpp:334
-#, fuzzy
 msgid "Toggle vanishing point"
-msgstr "Об’єднати точки сходу"
+msgstr "Перемикання точки сходу"
 
 #: ../src/persp3d.cpp:345
-#, fuzzy
 msgid "Toggle multiple vanishing points"
-msgstr "Роз’єднати точки сходу"
+msgstr "Перемикання декількох точок сходу"
 
 #: ../src/preferences.cpp:59
 #, c-format
@@ -7389,14 +7375,13 @@ msgid "<b>Text</b> (%s, %s)"
 msgstr "<b>Текст</b> (%s, %s)"
 
 #: ../src/sp-tref.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Cloned character data</b> from: %s"
-msgstr "<b>Клон</b> від: %s"
+msgstr "<b>Клонований текст</b> з: %s"
 
 #: ../src/sp-tref.cpp:372
-#, fuzzy
 msgid "<b>Orphaned cloned character data</b>"
-msgstr "<b>Осиротілий клон</b>"
+msgstr "<b>Осиротілий клон тексту</b>"
 
 #: ../src/sp-tspan.cpp:285
 msgid "<b>Text span</b>"
@@ -7813,7 +7798,7 @@ msgstr "Друк тексту"
 
 #: ../src/text-editing.cpp:40
 msgid "You cannot edit <b>cloned character data</b>."
-msgstr ""
+msgstr "Змінювати <b>клонований текст</b> не можна."
 
 #: ../src/tools-switch.cpp:148
 msgid ""
@@ -8906,6 +8891,11 @@ msgid ""
 "component from the input is passed to the output. The last column does not "
 "depend on input colors, so can be used to adjust a constant component value."
 msgstr ""
+"Ця матриця визначає лінійне перетворення простору кольорів. Кожен з рядків "
+"впливає на одну компоненту кольору. Кожен стовпчик визначає рівень "
+"компонента з вхідного зображення, який перейде у вихідне. Останній стовпчик "
+"не залежить від вхідних кольорів, отже, може бути використаний для "
+"визначення сталого значення у компоненті."
 
 #. pack_start(_fromSVGElement, false, false);
 #: ../src/ui/dialog/filter-effects-dialog.cpp:614
@@ -8923,11 +8913,11 @@ msgstr "Оберіть зображення, що буде використан�
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:778
 msgid "This SVG filter effect does not require any parameters."
-msgstr ""
+msgstr "Цей примітив ефекту SVG не потребує параметрів."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:784
 msgid "This SVG filter effect is not yet implemented in Inkscape."
-msgstr ""
+msgstr "Цей фільтр ефекту SVG ще не реалізовано у Inkscape."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:975
 msgid "Light Source:"
@@ -8936,10 +8926,14 @@ msgstr "Джерело світла:"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:992
 msgid "Direction angle for the light source on the XY plane, in degrees"
 msgstr ""
+"Кут напрямку, під яким джерело світла знаходиться відносно площини XY (у "
+"градусах)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:993
 msgid "Direction angle for the light source on the YZ plane, in degrees"
 msgstr ""
+"Кут напрямку, під яким джерело світла знаходиться відносно площини YZ (у "
+"градусах)"
 
 #. default x:
 #. default y:
@@ -8952,23 +8946,20 @@ msgstr "Розташування"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "X coordinate"
-msgstr "X координата:"
+msgstr "Координата X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Y coordinate"
-msgstr "Y координата:"
+msgstr "Координата Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:996
 #: ../src/ui/dialog/filter-effects-dialog.cpp:999
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Z coordinate"
-msgstr "X координата:"
+msgstr "Координата Z"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
 msgid "Points At"
@@ -8980,7 +8971,7 @@ msgstr "Степінь відбиття"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
 msgid "Exponent value controlling the focus for the light source"
-msgstr ""
+msgstr "Показник експоненти, що керує фокусом джерела світла"
 
 #. TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1005
@@ -8993,6 +8984,9 @@ msgid ""
 "light source and the point to which it is pointing at) and the spot light "
 "cone. No light is projected outside this cone."
 msgstr ""
+"Це кут між віссю джерела світла (тобто віссю, що проходить крізь джерело "
+"світла і точку, на яку його спрямовано) і конусом прожектора. За межі конуса "
+"світло не проектується."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1065
 msgid "New light source"
@@ -9059,18 +9053,16 @@ msgid "No effect selected"
 msgstr "Не обрано жодного ефекту"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2094
-#, fuzzy
 msgid "No filter selected"
-msgstr "Не обрано жодного ефекту"
+msgstr "Не вибрано жодного фільтра"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2130
-#, fuzzy
 msgid "Effect parameters"
-msgstr "<b>Параметри ефекту</b>"
+msgstr "Параметры ефекту"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2131
 msgid "Filter General Settings"
-msgstr ""
+msgstr "Загальні параметри фільтра"
 
 #. default x:
 #. default y:
@@ -9079,13 +9071,12 @@ msgid "Coordinates"
 msgstr "Координати"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
-#, fuzzy
 msgid "X coordinate of the left corners of filter effects region"
-msgstr "Створити мозаїку з клонів виділеної ділянки"
+msgstr "Координата X лівих кутів області дії ефектів фільтра"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2187
 msgid "Y coordinate of the upper corners of filter effects region"
-msgstr ""
+msgstr "Координата X верхніх кутів області дії ефектів фільтра"
 
 #. default width:
 #. default height:
@@ -9095,14 +9086,12 @@ msgid "Dimensions"
 msgstr "Виміри"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2188
-#, fuzzy
 msgid "Width of filter effects region"
-msgstr "Ширина виділення"
+msgstr "Ширина області дії ефектів фільтра"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2188
-#, fuzzy
 msgid "Height of filter effects region"
-msgstr "Висота виділення"
+msgstr "Висота області дії ефектів фільтра"
 
 #. # end multiple scan
 #. ## end mode page
@@ -9118,6 +9107,9 @@ msgid ""
 "convenience shortcuts to allow commonly used color operations to be "
 "performed without specifying a complete matrix."
 msgstr ""
+"Тип матричної операції. Слово \"матриця\" означає, що буде надано повну "
+"матрицю значень розміром 5×4. Інші варіанти — це простий спосіб виконати "
+"найпростіші операції без визначення всієї матриці вручну."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2195
 msgid "Value(s)"
@@ -9141,6 +9133,9 @@ msgid ""
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
 "values of the first and second inputs respectively."
 msgstr ""
+"Якщо вибрано арифметичний оператор, кожен піксель результату буде обчислено "
+"за формулою k1*i1*i2 + k2*i1 + k3*i2 + k4, де i1 і i2 — значення пікселів "
+"першого і другого вхідних значень відповідно."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2210
 msgid "K2"
@@ -9155,14 +9150,12 @@ msgid "K4"
 msgstr "K4"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
-#, fuzzy
 msgid "width of the convolve matrix"
-msgstr "Ширина візерунку"
+msgstr "ширина матриці згортки"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
-#, fuzzy
 msgid "height of the convolve matrix"
-msgstr "Висота області, що заповнюється"
+msgstr "висота матриці згортки"
 
 #. default x:
 #. default y:
@@ -9175,12 +9168,16 @@ msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
+"Координата X кінцевої точки матриці згортки. Згортка застосовується до "
+"пікселів навколо цієї точки."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
+"Координата Y кінцевої точки матриці згортки. Згортка застосовується до "
+"пікселів навколо цієї точки."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2217
 msgid "Kernel"
@@ -9195,6 +9192,11 @@ msgid ""
 "the matrix diagonal) while a matrix filled with a constant non-zero value "
 "would lead to a common blur effect."
 msgstr ""
+"Ця матриця описує операцію згортки, яку буде застосовано до вхідного "
+"зображення з метою обчислення кольорів вихідного. Різні комбінації значень "
+"дадуть різні візуальні ефекти. Тотожна матриця дасть ефект розмивання рухом, "
+"у той час, як матриця, заповнена сталим ненульовим значенням дасть звичайний "
+"ефект розмивання."
 
 #. TODO: svg spec: The default value is the sum of all values in kernelMatrix, with the exception that if the sum is zero, then the divisor is set to 1.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2220
@@ -9208,6 +9210,10 @@ msgid ""
 "divisor that is the sum of all the matrix values tends to have an evening "
 "effect on the overall color intensity of the result."
 msgstr ""
+"Після застосування kernelMatrix до вхідного зображення з метою отримання "
+"числа, це число буде поділено на дільник для отримання остаточного значення "
+"кольору. Дільник, що є сумою всіх значень матриці, приглушує загальну "
+"інтенсивність кольорів остаточного зображення."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
 msgid "Bias"
@@ -9218,6 +9224,8 @@ msgid ""
 "This value is added to each component. This is useful to define a constant "
 "value as the zero response of the filter."
 msgstr ""
+"Це значення додається до кожного компонента. Корисно для задання сталої, як "
+"нульового відгуку фільтра."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 msgid "Edge Mode"
@@ -9229,6 +9237,9 @@ msgid ""
 "that the matrix operations can be applied when the kernel is positioned at "
 "or near the edge of the input image."
 msgstr ""
+"Визначає спосіб розширення вхідного зображення кольоровими пікселями так, "
+"щоб матричні операції могли працювати з ядром, розташованим на краю "
+"зображення або поблизу нього."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2223
 msgid "Preserve Alpha"
@@ -9236,7 +9247,7 @@ msgstr "Зберігати альфа-канал"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2223
 msgid "If set, the alpha channel won't be altered by this filter primitive."
-msgstr ""
+msgstr "Якщо встановлено, альфа-канал не буде змінено цим примітивом фільтра."
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
@@ -9246,7 +9257,7 @@ msgstr "Колір дифузії"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
 msgid "Defines the color of the light source"
-msgstr ""
+msgstr "Визначає колір джерела світла"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
@@ -9259,6 +9270,8 @@ msgid ""
 "This value amplifies the heights of the bump map defined by the input alpha "
 "channel"
 msgstr ""
+"Це значення визначає множник висоти карти рельєфу, що задається вхідним "
+"альфа-каналом"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2228
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2261
@@ -9268,7 +9281,7 @@ msgstr "Константа"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2228
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2261
 msgid "This constant affects the Phong lighting model."
-msgstr ""
+msgstr "Ця стала стосується моделі освітлення Фонга"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2229
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2263
@@ -9277,25 +9290,23 @@ msgstr "Одиниця довжини у ядрі"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
 msgid "This defines the intensity of the displacement effect."
-msgstr ""
+msgstr "Ця величина визначає інтенсивність ефекту зміщення."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
-#, fuzzy
 msgid "X displacement"
-msgstr "Карта зміщення"
+msgstr "Зміщення за X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
 msgid "Color component that controls the displacement in the X direction"
-msgstr ""
+msgstr "Компонент кольору, що керує зміщенням у напрямку осі X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2235
-#, fuzzy
 msgid "Y displacement"
-msgstr "Карта зміщення"
+msgstr "Зміщення за Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2235
 msgid "Color component that controls the displacement in the Y direction"
-msgstr ""
+msgstr "Компонент кольору, що керує зміщенням у напрямку осі Y"
 
 #. default: black
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2238
@@ -9304,7 +9315,7 @@ msgstr "Колір заливки"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2238
 msgid "The whole filter region will be filled with this color."
-msgstr ""
+msgstr "Всю область дії фільтра буде залито цим кольором."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2242
 msgid "Standard Deviation"
@@ -9312,13 +9323,15 @@ msgstr "Стандартне відхилення"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2242
 msgid "The standard deviation for the blur operation."
-msgstr ""
+msgstr "Стандартне відхилення під час виконання операції розмивання"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2248
 msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
 msgstr ""
+"Ерозія: виконує \"витончення\" вхідного зображення\n"
+"Розтягування: \"потовщує\" вхідне зображення"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2252
 msgid "Source of Image"
@@ -9326,19 +9339,19 @@ msgstr "Джерело зображення"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "Delta X"
-msgstr "Крок по X"
+msgstr "Крок за X"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "This is how far the input image gets shifted to the right"
-msgstr ""
+msgstr "Визначає як далеко вхідне зображення зміщується праворуч"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2256
 msgid "Delta Y"
-msgstr "Крок по Y"
+msgstr "Крок за Y"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2256
 msgid "This is how far the input image gets shifted downwards"
-msgstr ""
+msgstr "Визначає як далеко вхідне зображення зміщується донизу"
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
@@ -9352,13 +9365,15 @@ msgstr "Порядок"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2262
 msgid "Exponent for specular term, larger is more \"shiny\"."
-msgstr ""
+msgstr "Степінь відбиття: більше значення дає \"яскравіше\"."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
 msgstr ""
+"Позначає чи повинен примітив виконувати функцію створення турбулентності або "
+"шуму."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2272
 msgid "Base Frequency"
@@ -9374,7 +9389,7 @@ msgstr "Випадкове значення"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2274
 msgid "The starting number for the pseudo random number generator."
-msgstr ""
+msgstr "Початкове число для генератора псевдовипадкових чисел."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2286
 msgid "Add filter primitive"
@@ -9496,9 +9511,9 @@ msgid ""
 "in 'normal' mode or several feComposite primitives in 'over' mode."
 msgstr ""
 "Примітив фільтра <b>feMerge</b> об’єднує декілька тимчасових зображень "
-"всередині примітива фільтра у єдине зображення. Для об’єднання викорисовуєть "
-"звичайне складання з прозорістю. Еквівалентом цього фільтра є кратне "
-"застосування примітивів feBlend у 'звичайному' режимі або кратне "
+"всередині примітива фільтра у єдине зображення. Для об’єднання "
+"використовують звичайне складання з прозорістю. Еквівалентом цього фільтра є "
+"кратне застосування примітивів feBlend у 'звичайному' режимі або кратне "
 "застосування примітивів feComposite у 'над'-режимі."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2346
@@ -9508,7 +9523,7 @@ msgid ""
 "thicker."
 msgstr ""
 "Примітив фільтра <b>feMorphology</b> надає можливість використання ефектів "
-"ерозії та розширення. Для однокольрових об’єктів ерозія робить об’єкт "
+"ерозії та розширення. Для однокольорових об’єктів ерозія робить об’єкт "
 "меншим, а розширення — більшим."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2350
@@ -10398,15 +10413,16 @@ msgid "Lowest quality (considerable artifacts), but display is fastest"
 msgstr "Найнижча якість (значні похибки), але відображення найшвидше"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:608
-#, fuzzy
 msgid "Show filter primitives infobox"
-msgstr "Встановити атрибут примітива фільтра"
+msgstr "Показувати довідку з примітивів фільтра"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:610
 msgid ""
 "Show icons and descriptions for the filter primitives available at the "
 "filter effects dialog."
 msgstr ""
+"Показувати піктограми і описи для всіх примітивів фільтрів у діалозі ефектів "
+"фільтра"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:612
 msgid "Filters"
@@ -10919,7 +10935,7 @@ msgstr "Пароль:"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:401
 msgid "Error while reading the Open Clip Art RSS feed"
-msgstr ""
+msgstr "Помилка під час читання RSS-потоку Open Clip Art"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:439
 msgid ""
@@ -10932,12 +10948,11 @@ msgstr ""
 
 #: ../src/ui/dialog/ocaldialogs.cpp:453
 msgid "Server supplied malformed Clip Art feed"
-msgstr ""
+msgstr "Сервер передав зіпсований потік Clip Art"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:544
-#, fuzzy
 msgid "Search for:"
-msgstr "Пошук"
+msgstr "Шукати:"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:545
 msgid "No files matched your search"
@@ -10948,39 +10963,34 @@ msgid "Search"
 msgstr "Пошук"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:573
-#, fuzzy
 msgid "Files found"
-msgstr "Знайдено файлів"
+msgstr "Файлів знайдено"
 
 #: ../src/ui/dialog/print.cpp:86
 msgid "Could not open temporary PNG for bitmap printing"
-msgstr ""
+msgstr "Не вдалося відкрити тимчасовий файл PNG для растрового друку"
 
 #: ../src/ui/dialog/print.cpp:101
-#, fuzzy
 msgid "Could not set up Document"
-msgstr "Не вдається прочитати SVG-дані"
+msgstr "Не вдалося підготувати документ"
 
 #: ../src/ui/dialog/print.cpp:105
 msgid "Failed to set CairoRenderContext"
-msgstr ""
+msgstr "Не вдалося встановити CairoRenderContext"
 
 #. set up dialog title, based on document name
 #: ../src/ui/dialog/print.cpp:145
-#, fuzzy
 msgid "SVG Document"
-msgstr "Документ"
+msgstr "Документ SVG"
 
 #: ../src/ui/dialog/print.cpp:146
-#, fuzzy
 msgid "Print"
-msgstr "Пункт"
+msgstr "Друкувати"
 
 #. build custom preferences tab
 #: ../src/ui/dialog/print.cpp:169
-#, fuzzy
 msgid "Rendering"
-msgstr "Відтворити"
+msgstr "Тип друку"
 
 #: ../src/ui/dialog/scriptdialog.cpp:205
 msgid "_Execute Python"
@@ -11585,7 +11595,7 @@ msgstr "маленькі"
 
 #: ../src/ui/widget/panel.cpp:122
 msgid "swatches|medium"
-msgstr ""
+msgstr "середні"
 
 #: ../src/ui/widget/panel.cpp:123
 msgid "large"
@@ -11600,24 +11610,20 @@ msgid "List"
 msgstr "Список"
 
 #: ../src/ui/widget/panel.cpp:171
-#, fuzzy
 msgid "Shape"
-msgstr "Фігури"
+msgstr "Форма"
 
 #: ../src/ui/widget/panel.cpp:174
-#, fuzzy
 msgid "Tall"
-msgstr "Таблична"
+msgstr "Високі"
 
 #: ../src/ui/widget/panel.cpp:175
-#, fuzzy
 msgid "Square"
 msgstr "Квадратні"
 
 #: ../src/ui/widget/panel.cpp:176
-#, fuzzy
 msgid "Wide"
-msgstr "С_ховати"
+msgstr "Широкі"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:25
 msgid "_Blend mode:"
@@ -12049,61 +12055,56 @@ msgid "Opacity: %.3g"
 msgstr "Непрозорість: %.3g"
 
 #: ../src/ui/widget/preferences-widget.cpp:278
-#, fuzzy
 msgid "Reset"
-msgstr "С_кинути "
+msgstr "Скинути"
 
 #: ../src/ui/widget/random.cpp:123
 msgid ""
 "Reseed the random number generator; this creates a different sequence of "
 "random numbers."
 msgstr ""
+"Перезапустити генератор випадкових чисел, щоб створити іншу послідовність "
+"випадкових чисел."
 
 #: ../src/ui/widget/rendering-options.cpp:39
-#, fuzzy
 msgid "Vector"
-msgstr "Селектор"
+msgstr "Векторний"
 
 #: ../src/ui/widget/rendering-options.cpp:40
-#, fuzzy
 msgid "Bitmap"
-msgstr "Зміщення"
+msgstr "Растровий"
 
 #: ../src/ui/widget/rendering-options.cpp:41
-#, fuzzy
 msgid "Backend"
-msgstr "Тло"
+msgstr "Сервер"
 
 #: ../src/ui/widget/rendering-options.cpp:42
 msgid "Bitmap options"
-msgstr ""
+msgstr "Параметри растрового друку"
 
 #: ../src/ui/widget/rendering-options.cpp:44
-#, fuzzy
 msgid "Preferred resolution of rendering, in dots per inch."
-msgstr "Основна роздільна здатність (у точках на дюйм)"
+msgstr "Бажана роздільна здатність (у точках на дюйм)."
 
 #: ../src/ui/widget/rendering-options.cpp:52
-#, fuzzy
 msgid ""
 "Render using Cairo vector operations.  The resulting image is usually "
 "smaller in file size and can be arbitrarily scaled, but some filter effects "
 "will not be correctly rendered."
 msgstr ""
-"Використовувати векторні оператори PDF. В результаті зображення зазвичай має "
-"менший розмір файлу та може масштабуватись довільним чином, але візерунок "
-"буде втрачено."
+"Використовувати векторні операції Cairo. Остаточне зображення, зазвичай, має "
+"менший розмір, його розмір легко змінити, але деякі ефекти фільтрів не буде "
+"коректно відображено."
 
 #: ../src/ui/widget/rendering-options.cpp:57
-#, fuzzy
 msgid ""
 "Render everything as bitmap.  The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
 msgstr ""
-"Друкувати як растрове зображення. В результаті розмір файлу зображення буде "
-"більшим, та не зможе масштабуватись без втрати якості. Проте усі об'єкти "
-"будуть друкуватись так, як виглядають на екрані."
+"Відобразити у вигляді растру. Як правило, файл буде більшим, а отримане "
+"зображення не можна буде масштабувати без викривлень. Однак всі графічні "
+"елементи буде надруковано так, як вони виглядають на екрані."
 
 #: ../src/vanishing-point.cpp:124
 msgid "Split vanishing points"
@@ -14303,7 +14304,7 @@ msgstr "Перемістити текстури"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:110
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:219
 #: ../src/widgets/sp-color-scales.cpp:397
@@ -14362,9 +14363,8 @@ msgid "_K"
 msgstr "_K"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:234
-#, fuzzy
 msgid "Gray"
-msgstr "Сірими"
+msgstr "Сірий"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:237
 #: ../src/widgets/sp-color-icc-selector.cpp:238
@@ -14389,11 +14389,11 @@ msgstr "Жовтий"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:295
 msgid "Fix"
-msgstr ""
+msgstr "Виправити"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:298
 msgid "Fix RGB fallback to match icc-color() value."
-msgstr ""
+msgstr "Виправити нейтралізацію RGB до збігу з значенням icc-color()"
 
 #. Label
 #: ../src/widgets/sp-color-icc-selector.cpp:379
@@ -14696,7 +14696,7 @@ msgstr "гептаграма"
 
 #: ../src/widgets/toolbox.cpp:1927
 msgid "octagram"
-msgstr "октограма"
+msgstr "октаграма"
 
 #: ../src/widgets/toolbox.cpp:1927
 msgid "regular polygon"
@@ -15864,14 +15864,12 @@ msgstr ""
 "Inkscape.  Якщо його немає, ймовірно щось негаразд з Вашою збіркою Inkscape."
 
 #: ../share/extensions/dimension.inx.h:3
-#, fuzzy
 msgid "X Offset"
-msgstr "Зміщення"
+msgstr "Відступ за X"
 
 #: ../share/extensions/dimension.inx.h:4
-#, fuzzy
 msgid "Y Offset"
-msgstr "Зміщення"
+msgstr "Відступ за Y"
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Dot size"
@@ -16331,6 +16329,12 @@ msgid ""
 "in scaled drawings. For example, if 1 cm in the drawing equals 2.5 m in the "
 "real world, Scale must be set to 250."
 msgstr ""
+"За допомогою цього ефекту можна виміряти довжину вибраного контуру і додати "
+"до об’єкта обчислений результат у вигляді тексту. Кількість значущих цифр, "
+"можна змінити за допомогою поля \"Точність\". Параметр \"Відступ\" задає "
+"відстань між текстом і контуром. Параметр \"Масштаб\" можна використовувати "
+"для вимірювань масштабованих елементів. Наприклад, якщо на рисунку 1 см "
+"рівний 2,5 м, слід вказати 250."
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Angle"
@@ -16382,6 +16386,9 @@ msgid ""
 "pattern is the top most object in the selection. (groups of paths/shapes/"
 "clones... allowed)"
 msgstr ""
+"Цей ефект вигинає об’єкт візерунка вздовж довільного скелетного контуру. "
+"Візерунок є верхнім об’єктом у виділеному (можна використовувати групи "
+"контурів, форми, клони...)"
 
 #: ../share/extensions/perfectboundcover.inx.h:1
 msgid "Bleed (in)"
@@ -16389,7 +16396,7 @@ msgstr "Випуск під обрізання (у дюймах)"
 
 #: ../share/extensions/perfectboundcover.inx.h:2
 msgid "Bond Weight #"
-msgstr ""
+msgstr "Вага паперу"
 
 #: ../share/extensions/perfectboundcover.inx.h:3
 msgid "Book Height (inches)"
@@ -16405,7 +16412,7 @@ msgstr "Ширина книги (у дюймах)"
 
 #: ../share/extensions/perfectboundcover.inx.h:6
 msgid "Caliper (inches)"
-msgstr ""
+msgstr "Товщина листа (дюйми)"
 
 #: ../share/extensions/perfectboundcover.inx.h:7
 msgid "Cover"
@@ -16433,7 +16440,7 @@ msgstr "Кількість сторінок"
 
 #: ../share/extensions/perfectboundcover.inx.h:13
 msgid "Pages Per Inch (PPI)"
-msgstr ""
+msgstr "Сторінок на дюйм (ppi)"
 
 #: ../share/extensions/perfectboundcover.inx.h:14
 msgid "Paper Thickness Measurement"
@@ -16448,9 +16455,8 @@ msgid "Remove existing guides"
 msgstr "Вилучити існуючі напрямні"
 
 #: ../share/extensions/perfectboundcover.inx.h:18
-#, fuzzy
 msgid "Specify Width"
-msgstr "Ширина пера"
+msgstr "Визначте ширину:"
 
 #: ../share/extensions/perspective.inx.h:2
 msgid "Perspective"
@@ -16717,27 +16723,3 @@ msgstr "Імпорт метафайла Windows"
 #: ../share/extensions/xaml2svg.inx.h:3
 msgid "XAML Input"
 msgstr "Імпорт з XAML"
-
-#~ msgid "Preferred resolution (dpi) of bitmaps"
-#~ msgstr "Основна роздільна здатність картинок (у т/дюйм)"
-
-#~ msgid "medium"
-#~ msgstr "середні"
-
-#~ msgid "%s selected out of %d gradient handles on %d selected object"
-#~ msgid_plural "%s selected out of %d gradient handles on %d selected objects"
-#~ msgstr[0] "%s обрано з %d важелів градієнта на %d обраному об’єкті"
-#~ msgstr[1] "%s обрано з %d важелів градієнта на %d обраних об’єктах"
-#~ msgstr[2] "%s обрано з %d важелів градієнта на %d обраних об’єктах"
-
-#~ msgid "X Channel"
-#~ msgstr "Канал X"
-
-#~ msgid "Y Channel"
-#~ msgstr "Канал Y"
-
-#~ msgid "Search Tag"
-#~ msgstr "Дескриптор пошуку"
-
-#~ msgid "PLACEHOLDER, DO NOT TRANSLATE"
-#~ msgstr "PLACEHOLDER, DO NOT TRANSLATE"
