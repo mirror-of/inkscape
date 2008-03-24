@@ -1,7 +1,7 @@
-Index: extension/internal/cairo-render-context.cpp
+Index: src/extension/internal/cairo-render-context.cpp
 ===================================================================
---- extension/internal/cairo-render-context.cpp	(revision 18007)
-+++ extension/internal/cairo-render-context.cpp	(working copy)
+--- src/extension/internal/cairo-render-context.cpp	(revision 18007)
++++ src/extension/internal/cairo-render-context.cpp	(working copy)
 @@ -50,6 +50,7 @@
  #include "sp-pattern.h"
  #include "sp-mask.h"
@@ -78,10 +78,10 @@ Index: extension/internal/cairo-render-context.cpp
      return true;
  }
  
-Index: ui/dialog/print.cpp
+Index: src/ui/dialog/print.cpp
 ===================================================================
---- ui/dialog/print.cpp	(revision 18007)
-+++ ui/dialog/print.cpp	(working copy)
+--- src/ui/dialog/print.cpp	(revision 18007)
++++ src/ui/dialog/print.cpp	(working copy)
 @@ -28,6 +28,49 @@
  #include "svg/svg-color.h"
  

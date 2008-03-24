@@ -1,0 +1,219 @@
+Index: src/extension/implementation/script.cpp
+===================================================================
+--- src/extension/implementation/script.cpp	(revision 18007)
++++ src/extension/implementation/script.cpp	(working copy)
+@@ -472,7 +472,7 @@
+     _tempfd(0)
+ {
+     try {
+-        _tempfd = Glib::file_open_tmp(_filename, "ink_ext_XXXXXX.svg");
++        _tempfd = Inkscape::IO::file_open_tmp(_filename, "ink_ext_XXXXXX.svg");
+     } catch (...) {
+         /// \todo Popup dialog here
+         return;
+@@ -593,7 +593,7 @@
+     std::string tempfilename_out;
+     int tempfd_out = 0;
+     try {
+-        tempfd_out = Glib::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX");
++        tempfd_out = Inkscape::IO::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX");
+     } catch (...) {
+         /// \todo Popup dialog here
+         return NULL;
+@@ -667,7 +667,7 @@
+     std::string tempfilename_in;
+     int tempfd_in = 0;
+     try {
+-        tempfd_in = Glib::file_open_tmp(tempfilename_in, "ink_ext_XXXXXX");
++        tempfd_in = Inkscape::IO::file_open_tmp(tempfilename_in, "ink_ext_XXXXXX");
+     } catch (...) {
+         /// \todo Popup dialog here
+         return;
+@@ -764,7 +764,7 @@
+     std::string tempfilename_out;
+     int tempfd_out = 0;
+     try {
+-        tempfd_out = Glib::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX.svg");
++        tempfd_out = Inkscape::IO::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX.svg");
+     } catch (...) {
+         /// \todo Popup dialog here
+         return;
+Index: src/extension/implementation/xslt.cpp
+===================================================================
+--- src/extension/implementation/xslt.cpp	(revision 18007)
++++ src/extension/implementation/xslt.cpp	(working copy)
+@@ -195,7 +195,7 @@
+     std::string tempfilename_out;
+     int tempfd_out = 0;
+     try {
+-        tempfd_out = Glib::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX");
++        tempfd_out = Inkscape::IO::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX");
+     } catch (...) {
+         /// \todo Popup dialog here
+         return;
+Index: src/extension/init.cpp
+===================================================================
+--- src/extension/init.cpp	(revision 18007)
++++ src/extension/init.cpp	(working copy)
+@@ -234,7 +234,29 @@
+     if (Inkscape::Extension::Extension::search_path.size() == 0)
+     {
+ 	Inkscape::Extension::Extension::search_path.push_back(profile_path("extensions"));
++	
++#ifdef WIN32
++/* 
++ * The native Windows Save dialogs change the current directory of Inkscape to the path selected in the dialog
++ * Putting relative paths in the search_path breaks things after the Save dialog ha been shown
++ * Especially the XAML-save: https://bugs.launchpad.net/inkscape/+bug/168896
++ * This code inserts an absolute path based on the current working dir when Inkscape starts.
++ * Only included in WIN32 to avoid messing around with other platforms for the moment
++ * After testing on other platforms this code can be enabled on other platforms (it "should" not break anything).
++ */
++	gchar * cwd = g_get_current_dir();
++	gchar * fname = g_build_filename(
++       cwd,
++       g_strdup(INKSCAPE_EXTENSIONDIR),
++       NULL);
++    Glib::ustring filename = fname;
++    Inkscape::Extension::Extension::search_path.push_back(g_strdup(filename.c_str()));
++    g_free(cwd);
++    g_free(fname);
++#else
+ 	Inkscape::Extension::Extension::search_path.push_back(g_strdup(INKSCAPE_EXTENSIONDIR));
++#endif
++
+     }
+ 
+     for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
+Index: src/io/sys.cpp
+===================================================================
+--- src/io/sys.cpp	(revision 18007)
++++ src/io/sys.cpp	(working copy)
+@@ -16,6 +16,7 @@
+ #endif
+ 
+ #include <glib/gutils.h>
++#include <glibmm/fileutils.h>
+ #if GLIB_CHECK_VERSION(2,6,0)
+     #include <glib/gstdio.h>
+ #endif
+@@ -166,6 +167,51 @@
+     return retval;
+ }
+ 
++/* 
++ * Wrapper around Glib::file_open_tmp()
++ * Returns a handle to the temp file
++ * name_used contains the actual name used
++ * 
++ * Returns:
++ * A file handle (as from open()) to the file opened for reading and writing. 
++ * The file is opened in binary mode on platforms where there is a difference. 
++ * The file handle should be closed with close().
++ * 
++ * Note:
++ * On Windows Vista Glib::file_open_tmp fails with the current version of glibmm
++ * A special case is implemented for WIN32. This can be removed if the issue is fixed
++ * in future versions of glibmm 
++ * */
++int Inkscape::IO::file_open_tmp(std::string& name_used, const std::string& prefix)
++{
++#ifndef WIN32
++    return Glib::file_open_tmp(name_used, prefix);
++#else
++    /* Special case for WIN32 due to a bug in glibmm
++     * (only needed for Windows Vista, but since there is only one windows build all builds get the workaround)
++     * The workaround can be removed if the bug is fixed in glibmm
++     * 
++     * The code is mostly identical to the implementation in glibmm
++     * http://svn.gnome.org/svn/glibmm/branches/glibmm-2-12/glib/src/fileutils.ccg
++     * */
++    
++    std::string basename_template (prefix);
++    basename_template += "XXXXXX"; // this sillyness shouldn't be in the interface
++    
++    GError* error = 0;
++    gchar *buf_name_used;
++    
++    gint fileno = g_file_open_tmp(basename_template.c_str(), &buf_name_used, &error);
++    
++    if(error)
++        Glib::Error::throw_exception(error);
++    
++    name_used = g_strdup(buf_name_used);
++    g_free(buf_name_used);
++    return fileno;
++#endif
++}
++
+ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
+ {
+     bool exists = false;
+Index: src/io/sys.h
+===================================================================
+--- src/io/sys.h	(revision 18007)
++++ src/io/sys.h	(working copy)
+@@ -18,6 +18,7 @@
+ #include <glib/gtypes.h>
+ #include <glib/gdir.h>
+ #include <glib/gfileutils.h>
++#include <string>
+ 
+ /*#####################
+ ## U T I L I T Y
+@@ -32,6 +33,8 @@
+ 
+ int mkdir_utf8name( char const *utf8name );
+ 
++int file_open_tmp( std::string& name_used, const std::string& prefix );
++
+ bool file_test( char const *utf8name, GFileTest test );
+ 
+ GDir *dir_open(gchar const *utf8name, guint flags, GError **error);
+Index: src/ui/dialog/ocaldialogs.cpp
+===================================================================
+--- src/ui/dialog/ocaldialogs.cpp	(revision 18007)
++++ src/ui/dialog/ocaldialogs.cpp	(working copy)
+@@ -24,6 +24,7 @@
+ #include "interface.h"
+ #include "gc-core.h"
+ #include <dialogs/dialog-events.h>
++#include "io/sys.h"
+ 
+ namespace Inkscape
+ {
+@@ -285,7 +286,7 @@
+     // create file path
+     const std::string tmptemplate = "ocal-";
+     std::string tmpname;
+-    int fd = Glib::file_open_tmp(tmpname, tmptemplate);
++    int fd = Inkscape::IO::file_open_tmp(tmpname, tmptemplate);
+     if (fd<0) {
+         g_warning("Error creating temp file");
+         return;
+Index: src/ui/dialog/print.cpp
+===================================================================
+--- src/ui/dialog/print.cpp	(revision 18007)
++++ src/ui/dialog/print.cpp	(working copy)
+@@ -26,6 +26,7 @@
+ #include "unit-constants.h"
+ #include "helper/png-write.h"
+ #include "svg/svg-color.h"
++#include "io/sys.h"
+ 
+ 
+ static void
+@@ -46,7 +47,7 @@
+         std::string tmp_base = "inkscape-print-png-XXXXXX";
+ 
+         int tmp_fd;
+-        if ( (tmp_fd = Glib::file_open_tmp (tmp_png, tmp_base)) >= 0) {
++        if ( (tmp_fd = Inkscape::IO::file_open_tmp (tmp_png, tmp_base)) >= 0) {
+             close(tmp_fd);
+ 
+             guint32 bgcolor = 0x00000000;
+@@ -180,3 +181,4 @@
+ } // namespace UI
+ } // namespace Inkscape
+ 
++
