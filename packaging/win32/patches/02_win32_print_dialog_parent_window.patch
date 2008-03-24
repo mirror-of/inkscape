@@ -1,0 +1,30 @@
+Index: src/ui/dialog/print.cpp
+===================================================================
+--- src/ui/dialog/print.cpp	(revision 17966)
++++ src/ui/dialog/print.cpp	(working copy)
+@@ -170,9 +170,10 @@
+     gtk_print_operation_set_custom_tab_label (_printop, _("Rendering"));
+ }
+ 
+-Gtk::PrintOperationResult Print::run(Gtk::PrintOperationAction, Gtk::Window&)
++Gtk::PrintOperationResult Print::run(Gtk::PrintOperationAction, Gtk::Window &parent_window)
+ {
+-    gtk_print_operation_run (_printop, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, NULL, NULL);
++    gtk_print_operation_run (_printop, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
++	    parent_window.gobj(), NULL);
+     return Gtk::PRINT_OPERATION_RESULT_APPLY;
+ }
+ 
+Index: src/ui/dialog/print.h
+===================================================================
+--- src/ui/dialog/print.h	(revision 17966)
++++ src/ui/dialog/print.h	(working copy)
+@@ -43,7 +43,7 @@
+ class Print {
+ public:
+     Print(SPDocument *doc, SPItem *base);
+-    Gtk::PrintOperationResult run(Gtk::PrintOperationAction, Gtk::Window&);
++    Gtk::PrintOperationResult run(Gtk::PrintOperationAction, Gtk::Window &parent_window);
+ 
+ protected:
+ 

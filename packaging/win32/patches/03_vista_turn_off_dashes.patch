@@ -1,0 +1,118 @@
+Index: src/libgdl/gdl-dock-master.c
+===================================================================
+--- src/libgdl/gdl-dock-master.c	(revision 17979)
++++ src/libgdl/gdl-dock-master.c	(working copy)
+@@ -33,6 +33,9 @@
+ #include "gdl-dock-item.h"
+ #include "libgdlmarshal.h"
+ #include "libgdltypebuiltins.h"
++#ifdef WIN32
++#include "gdl-win32.h"
++#endif
+ 
+ /* ----- Private prototypes ----- */
+ 
+@@ -645,8 +648,20 @@
+             window, &values, GDK_GC_FUNCTION | GDK_GC_SUBWINDOW);
+     };
+ 
++#ifdef WIN32    
++    GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
++    if (is_os_vista())
++    {
++        // On Vista the dash-line is increadibly slow to draw, it takes several minutes to draw the tracking lines
++        // With GDK_LINE_SOLID it is parts of a second
++        // No performance issue on WinXP
++        lineStyle = GDK_LINE_SOLID;
++    }
++#else
++    GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
++#endif
+     gdk_gc_set_line_attributes (master->_priv->root_xor_gc, 1,
+-                                GDK_LINE_ON_OFF_DASH,
++                                lineStyle,
+                                 GDK_CAP_NOT_LAST,
+                                 GDK_JOIN_BEVEL);
+     
+Index: src/libgdl/gdl-win32.c
+===================================================================
+--- src/libgdl/gdl-win32.c	(revision 0)
++++ src/libgdl/gdl-win32.c	(revision 0)
+@@ -0,0 +1,42 @@
++/*
++ * Windows stuff
++ *
++ * Author:
++ *   Albin Sunnanbo
++ *   Based on code by Lauris Kaplinski <lauris@kaplinski.com> (/src/extension/internal/win32.cpp)
++ *
++ * This code is in public domain
++ */
++
++#ifdef HAVE_CONFIG_H
++# include "config.h"
++#endif
++
++#include "gdl-win32.h"
++
++/* Platform detection */
++gboolean
++is_os_vista()
++{
++	static gboolean initialized = FALSE;
++	static gboolean is_vista = FALSE;
++	static OSVERSIONINFOA osver;
++
++	if ( !initialized )
++	{
++		BOOL result;
++
++		initialized = TRUE;
++
++		memset (&osver, 0, sizeof(OSVERSIONINFOA));
++		osver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
++		result = GetVersionExA (&osver);
++		if (result)
++		{
++			if (osver.dwMajorVersion == WIN32_MAJORVERSION_VISTA)
++				is_vista = TRUE;
++		}
++	}
++
++	return is_vista;
++}
+Index: src/libgdl/gdl-win32.h
+===================================================================
+--- src/libgdl/gdl-win32.h	(revision 0)
++++ src/libgdl/gdl-win32.h	(revision 0)
+@@ -0,0 +1,30 @@
++#ifndef __INKSCAPE_GDL_WIN32_H__
++#define __INKSCAPE_GDL_WIN32_H__
++
++/*
++ * Windows stuff
++ *
++ * Author:
++ *   Albin Sunnanbo
++ *
++ * This code is in public domain
++ */
++
++
++
++#define WIN32_MAJORVERSION_VISTA               0x0006
++
++
++
++#include <config.h>
++#include <windows.h>
++#include <gdk/gdk.h>
++
++#ifndef WIN32
++#error "This file is only usable for Windows"
++#endif
++
++/* Platform detection */
++gboolean is_os_vista();
++
++#endif /* __INKSCAPE_GDL_WIN32_H__ */

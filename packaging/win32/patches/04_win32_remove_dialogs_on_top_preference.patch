@@ -1,0 +1,121 @@
+Index: src/dialogs/dialog-events.cpp
+===================================================================
+--- src/dialogs/dialog-events.cpp	(revision 17979)
++++ src/dialogs/dialog-events.cpp	(working copy)
+@@ -157,11 +157,8 @@
+ 
+     gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2 );
+ 
+-#ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+-    if (prefs_get_int_attribute ( "options.dialogsontopwin32", "value", 0))
+-        transient_policy = 2;
+-    else
+-        transient_policy = 0;
++#ifdef WIN32 // Win32 special code to enable transient dialogs
++    transient_policy = 2;
+ #endif
+ 
+     if (transient_policy) {
+@@ -186,11 +183,8 @@
+ {
+     gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
+ 
+-#ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+-    if (prefs_get_int_attribute ( "options.dialogsontopwin32", "value", 0))
+-        transient_policy = 2;
+-    else
+-        return;
++#ifdef WIN32 // Win32 special code to enable transient dialogs
++    transient_policy = 2;
+ #endif
+ 
+     if (!transient_policy)
+Index: src/ui/dialog/dock-behavior.cpp
+===================================================================
+--- src/ui/dialog/dock-behavior.cpp	(revision 17979)
++++ src/ui/dialog/dock-behavior.cpp	(working copy)
+@@ -218,11 +218,8 @@
+ {
+     gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
+ 
+-#ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+-    if (prefs_get_int_attribute ( "options.dialogsontopwin32", "value", 0))
+-        transient_policy = 2;
+-    else
+-        return;
++#ifdef WIN32 // Win32 special code to enable transient dialogs
++    transient_policy = 2;
+ #endif
+ 
+     if (!transient_policy)
+Index: src/ui/dialog/floating-behavior.cpp
+===================================================================
+--- src/ui/dialog/floating-behavior.cpp	(revision 17979)
++++ src/ui/dialog/floating-behavior.cpp	(working copy)
+@@ -97,11 +97,8 @@
+ {
+     gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
+ 
+-#ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+-    if (prefs_get_int_attribute ( "options.dialogsontopwin32", "value", 0))
+-        transient_policy = 2;
+-    else    
+-        return;
++#ifdef WIN32 // Win32 special code to enable transient dialogs
++    transient_policy = 2;
+ #endif        
+ 
+     if (!transient_policy) 
+Index: src/ui/dialog/inkscape-preferences.cpp
+===================================================================
+--- src/ui/dialog/inkscape-preferences.cpp	(revision 17979)
++++ src/ui/dialog/inkscape-preferences.cpp	(working copy)
+@@ -484,11 +484,6 @@
+     _win_ontop_normal.init ( _("Normal"), "options.transientpolicy", "value", 1, true, &_win_ontop_none);
+     _win_ontop_agressive.init ( _("Aggressive"), "options.transientpolicy", "value", 2, false, &_win_ontop_none);
+ 
+-// FIXME: Temporary Win32 special code to enable transient dialogs
+-#ifdef WIN32
+-    _win_ontop_win32.init ( _("Dialogs stay on top (experimental!)"), "options.dialogsontopwin32", "value", false);
+-#endif
+-
+     _page_windows.add_group_header( _("Saving window geometry (size and position):"));
+     _page_windows.add_line( false, "", _win_save_geom_off, "",
+                             _("Let the window manager determine placement of all windows"));
+@@ -503,17 +498,15 @@
+     _page_windows.add_line( true, "", _win_floating, "",
+                             _("Floating"));
+ 
+-    _page_windows.add_group_header( _("Dialogs on top:"));
+-#ifndef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
++#ifndef WIN32 // non-Win32 special code to enable transient dialogs
++	_page_windows.add_group_header( _("Dialogs on top:"));
++
+     _page_windows.add_line( true, "", _win_ontop_none, "",
+                             _("Dialogs are treated as regular windows"));
+     _page_windows.add_line( true, "", _win_ontop_normal, "",
+                             _("Dialogs stay on top of document windows"));
+     _page_windows.add_line( true, "", _win_ontop_agressive, "",
+                             _("Same as Normal but may work better with some window managers"));
+-#else
+-    _page_windows.add_line( false, "", _win_ontop_win32, "",
+-                            _("Whether dialogs should stay on top of document windows. Read the ReleaseNotes on this issue! (Rightclick the taskbar button and press 'Restore' to bring back a minimized document window)"));
+ #endif
+ 
+     _page_windows.add_group_header( _("Miscellaneous:"));
+Index: src/ui/dialog/inkscape-preferences.h
+===================================================================
+--- src/ui/dialog/inkscape-preferences.h	(revision 17979)
++++ src/ui/dialog/inkscape-preferences.h	(working copy)
+@@ -136,11 +136,6 @@
+     PrefRadioButton _win_save_geom_off, _win_save_geom, _win_save_geom_prefs;
+     PrefCheckButton _win_hide_task, _win_zoom_resize , _win_show_close;
+ 
+-// FIXME: Temporary Win32 special code to enable transient dialogs
+-#ifdef WIN32
+-    PrefCheckButton _win_ontop_win32;
+-#endif
+-
+     PrefCheckButton _calligrapy_use_abs_size;
+     PrefCheckButton _calligrapy_keep_selected;
+ 

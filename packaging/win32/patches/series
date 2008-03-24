@@ -1,0 +1,8 @@
+# === TODO ===
+# 168896:   TBD patch(es)    Save as XAML crashes
+# 187290:   TBD patch        Extensions not working on Windows
+
+01_win32_printing.patch
+02_win32_print_dialog_parent_window.patch
+03_vista_turn_off_dashes.patch
+04_win32_remove_dialogs_on_top_preference.patch
