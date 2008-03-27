@@ -1,8 +1,9 @@
-Index: src/dialogs/dialog-events.cpp
-===================================================================
---- src/dialogs/dialog-events.cpp	(revision 17979)
-+++ src/dialogs/dialog-events.cpp	(working copy)
-@@ -157,11 +157,8 @@
+Only in .: 04.patch
+diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/dialogs/dialog-events.cpp ./src/dialogs/dialog-events.cpp
+--- ..\inkscape_46_patch-1/src/dialogs/dialog-events.cpp	2008-03-27 16:03:57.953125000 +0100
++++ ./src/dialogs/dialog-events.cpp	2008-03-27 16:13:30.593750000 +0100
+@@ -156,13 +156,10 @@
+ #endif
  
      gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2 );
  
@@ -16,7 +17,9 @@ Index: src/dialogs/dialog-events.cpp
  #endif
  
      if (transient_policy) {
-@@ -186,11 +183,8 @@
+ 
+@@ -185,13 +182,10 @@
+                            SPDesktop *desktop, win_data *wd )
  {
      gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
  
@@ -30,29 +33,12 @@ Index: src/dialogs/dialog-events.cpp
  #endif
  
      if (!transient_policy)
-Index: src/ui/dialog/dock-behavior.cpp
-===================================================================
---- src/ui/dialog/dock-behavior.cpp	(revision 17979)
-+++ src/ui/dialog/dock-behavior.cpp	(working copy)
-@@ -218,11 +218,8 @@
- {
-     gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
- 
--#ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
--    if (prefs_get_int_attribute ( "options.dialogsontopwin32", "value", 0))
--        transient_policy = 2;
--    else
--        return;
-+#ifdef WIN32 // Win32 special code to enable transient dialogs
-+    transient_policy = 2;
- #endif
- 
-     if (!transient_policy)
-Index: src/ui/dialog/floating-behavior.cpp
-===================================================================
---- src/ui/dialog/floating-behavior.cpp	(revision 17979)
-+++ src/ui/dialog/floating-behavior.cpp	(working copy)
-@@ -97,11 +97,8 @@
+         return;
+diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/dock-behavior.cpp ./src/ui/dialog/dock-behavior.cpp
+--- ..\inkscape_46_patch-1/src/ui/dialog/dock-behavior.cpp	2008-03-27 16:04:56.906250000 +0100
++++ ./src/ui/dialog/dock-behavior.cpp	2008-03-27 16:14:34.421875000 +0100
+@@ -215,13 +215,10 @@
+ DockBehavior::onDesktopActivated(SPDesktop *desktop)
  {
      gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
  
@@ -66,23 +52,31 @@ Index: src/ui/dialog/floating-behavior.cpp
  #endif        
  
      if (!transient_policy) 
-Index: src/ui/dialog/inkscape-preferences.cpp
-===================================================================
---- src/ui/dialog/inkscape-preferences.cpp	(revision 17979)
-+++ src/ui/dialog/inkscape-preferences.cpp	(working copy)
-@@ -484,11 +484,6 @@
-     _win_ontop_normal.init ( _("Normal"), "options.transientpolicy", "value", 1, true, &_win_ontop_none);
-     _win_ontop_agressive.init ( _("Aggressive"), "options.transientpolicy", "value", 2, false, &_win_ontop_none);
+         return;
+diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/floating-behavior.cpp ./src/ui/dialog/floating-behavior.cpp
+--- ..\inkscape_46_patch-1/src/ui/dialog/floating-behavior.cpp	2008-03-27 16:04:57.093750000 +0100
++++ ./src/ui/dialog/floating-behavior.cpp	2008-03-27 16:15:15.703125000 +0100
+@@ -96,13 +96,10 @@
+ FloatingBehavior::onDesktopActivated (SPDesktop *desktop)
+ {
+     gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
  
--// FIXME: Temporary Win32 special code to enable transient dialogs
--#ifdef WIN32
--    _win_ontop_win32.init ( _("Dialogs stay on top (experimental!)"), "options.dialogsontopwin32", "value", false);
--#endif
--
-     _page_windows.add_group_header( _("Saving window geometry (size and position):"));
-     _page_windows.add_line( false, "", _win_save_geom_off, "",
-                             _("Let the window manager determine placement of all windows"));
-@@ -503,17 +498,15 @@
+-#ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+-    if (prefs_get_int_attribute ( "options.dialogsontopwin32", "value", 0))
+-        transient_policy = 2;
+-    else    
+-        return;
++#ifdef WIN32 // Win32 special code to enable transient dialogs
++    transient_policy = 2;
+ #endif        
+ 
+     if (!transient_policy) 
+         return;
+diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.cpp ./src/ui/dialog/inkscape-preferences.cpp
+--- ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.cpp	2008-03-27 16:04:56.687500000 +0100
++++ ./src/ui/dialog/inkscape-preferences.cpp	2008-03-27 16:19:14.843750000 +0100
+@@ -488,19 +488,17 @@
+                             _("Dockable"));
      _page_windows.add_line( true, "", _win_floating, "",
                              _("Floating"));
  
@@ -103,19 +97,21 @@ Index: src/ui/dialog/inkscape-preferences.cpp
  #endif
  
      _page_windows.add_group_header( _("Miscellaneous:"));
-Index: src/ui/dialog/inkscape-preferences.h
-===================================================================
---- src/ui/dialog/inkscape-preferences.h	(revision 17979)
-+++ src/ui/dialog/inkscape-preferences.h	(working copy)
-@@ -136,11 +136,6 @@
+ #ifndef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.h ./src/ui/dialog/inkscape-preferences.h
+--- ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.h	2008-03-27 16:04:57.125000000 +0100
++++ ./src/ui/dialog/inkscape-preferences.h	2008-03-27 16:19:42.250000000 +0100
+@@ -131,13 +131,8 @@
+     PrefRadioButton _win_ontop_none, _win_ontop_normal, _win_ontop_agressive;
      PrefRadioButton _win_save_geom_off, _win_save_geom, _win_save_geom_prefs;
      PrefCheckButton _win_hide_task, _win_zoom_resize , _win_show_close;
  
 -// FIXME: Temporary Win32 special code to enable transient dialogs
--#ifdef WIN32
--    PrefCheckButton _win_ontop_win32;
--#endif
+-#ifdef WIN32 
+-    PrefCheckButton _win_ontop_win32;   
+-#endif    
 -
      PrefCheckButton _calligrapy_use_abs_size;
      PrefCheckButton _calligrapy_keep_selected;
  
+     PrefCheckButton _connector_ignore_text;
