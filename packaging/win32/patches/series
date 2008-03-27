@@ -7,3 +7,4 @@
 04_win32_remove_dialogs_on_top_preference.patch
 05_save_as_xaml.patch
 06_environment_and_path_to_python.patch
+07_glib_spawn_workaround.patch
