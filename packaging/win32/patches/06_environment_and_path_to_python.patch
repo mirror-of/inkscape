@@ -1,0 +1,85 @@
+Only in .: 06_environment_and_path_to_python.patch
+diff -u3 -x .svn -r ..\inkscape_46_patch-1/src/extension/implementation/script.cpp ./src/extension/implementation/script.cpp
+--- ..\inkscape_46_patch-1/src/extension/implementation/script.cpp	2008-03-27 17:11:18.296875000 +0100
++++ ./src/extension/implementation/script.cpp	2008-03-28 00:16:30.796875000 +0100
+@@ -152,7 +152,7 @@
+     if (rt.getExeInfo(fullPath, path, exeName)) {
+         Glib::ustring interpPath = path;
+         interpPath.append("\\");
+-        interpPath.append(interpName);
++        interpPath.append(interpNameArg);
+         interpPath.append("\\");
+         interpPath.append(interpName);
+         interpPath.append(".exe");
+Only in ./src/extension/implementation: script.cpp.bak
+diff -u3 -x .svn -r ..\inkscape_46_patch-1/src/main.cpp ./src/main.cpp
+--- ..\inkscape_46_patch-1/src/main.cpp	2008-03-27 16:05:19.359375000 +0100
++++ ./src/main.cpp	2008-03-28 00:04:53.375000000 +0100
+@@ -413,6 +413,58 @@
+ static bool needToRecodeParams = true;
+ gchar* blankParam = "";
+ 
++#ifdef WIN32
++static int _win32_set_inkscape_env(char *argv0)
++{
++    CHAR szFullPath[_MAX_PATH];
++
++    CHAR szDrive[_MAX_DRIVE];
++    CHAR szDir[_MAX_DIR];
++    CHAR szFile[_MAX_FNAME];
++    CHAR szExt[_MAX_EXT];
++
++    std::string tmp;
++
++    if (GetModuleFileName(NULL, szFullPath, sizeof(szFullPath)) == 0) {
++        strcpy(szFullPath, argv0);
++    }
++
++    _splitpath(szFullPath, szDrive, szDir, szFile, szExt);
++    strcpy(szFullPath, szDrive);
++    strcat(szFullPath, szDir);
++
++    char *oldenv = getenv("PATH");
++    tmp = "PATH=";
++    tmp += szFullPath;
++    tmp += ";";
++    tmp += szFullPath;
++    tmp += "python;";
++    tmp += szFullPath;
++    tmp += "perl";
++    if(oldenv != NULL) {
++        tmp += ";";
++        tmp += oldenv;
++    }
++    _putenv(tmp.c_str());
++
++    oldenv = getenv("PYTHONPATH");
++    tmp = "PYTHONPATH=";
++    tmp += szFullPath;
++    tmp += "python;";
++    tmp += szFullPath;
++    tmp += "python\\Lib;";
++    tmp += szFullPath;
++    tmp += "python\\DLLs";
++    if(oldenv != NULL) {
++        tmp += ";";
++        tmp += oldenv;
++    }
++    _putenv(tmp.c_str());
++
++    return 0;
++}
++#endif
++
+ int
+ main(int argc, char **argv)
+ {
+@@ -425,6 +477,7 @@
+ 
+ #ifdef ENABLE_NLS
+ #ifdef WIN32
++	_win32_set_inkscape_env(argv[0]);
+     RegistryTool rt;
+     rt.setPathInfo();
+     gchar *pathBuf = g_strconcat(g_path_get_dirname(argv[0]), "\\", PACKAGE_LOCALE_DIR, NULL);
+Only in ./src: main.cpp.bak
