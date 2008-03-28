@@ -1,16 +1,18 @@
 Index: src/extension/internal/cairo-render-context.cpp
 ===================================================================
---- src/extension/internal/cairo-render-context.cpp	(revision 18007)
+--- src/extension/internal/cairo-render-context.cpp	(revision 18033)
 +++ src/extension/internal/cairo-render-context.cpp	(working copy)
-@@ -50,6 +50,7 @@
+@@ -50,6 +50,9 @@
  #include "sp-pattern.h"
  #include "sp-mask.h"
  #include "sp-clippath.h"
++#ifdef WIN32
 +#include "FontFactory.h" // USE_PANGO_WIN32
++#endif
  
  #include <unit-constants.h>
  
-@@ -73,6 +74,10 @@
+@@ -73,6 +76,10 @@
  #ifdef CAIRO_HAS_FT_FONT
  #include <cairo-ft.h>
  #endif
@@ -21,7 +23,7 @@ Index: src/extension/internal/cairo-render-context.cpp
  
  #include <pango/pangofc-fontmap.h>
  
-@@ -1421,16 +1426,33 @@
+@@ -1421,16 +1428,33 @@
  {
      // create a cairo_font_face from PangoFont
      double size = style->font_size.computed;
@@ -61,7 +63,7 @@ Index: src/extension/internal/cairo-render-context.cpp
          size = 12.0;
  
      // set the given font matrix
-@@ -1471,14 +1493,9 @@
+@@ -1471,14 +1495,9 @@
  
      cairo_restore(_cr);
  
@@ -80,9 +82,9 @@ Index: src/extension/internal/cairo-render-context.cpp
  
 Index: src/ui/dialog/print.cpp
 ===================================================================
---- src/ui/dialog/print.cpp	(revision 18007)
+--- src/ui/dialog/print.cpp	(revision 18033)
 +++ src/ui/dialog/print.cpp	(working copy)
-@@ -28,6 +28,49 @@
+@@ -28,6 +28,57 @@
  #include "svg/svg-color.h"
  
  
@@ -92,6 +94,8 @@ Index: src/ui/dialog/print.cpp
 +#include <commdlg.h>
 +#include <cairo.h>
 +#include <cairo-win32.h>
++
++
 +
 +static cairo_surface_t *
 +_cairo_win32_printing_surface_create (HDC hdc)
@@ -121,7 +125,13 @@ Index: src/ui/dialog/print.cpp
 +    SetWorldTransform (hdc, &xform);
 +
 +    surface = cairo_win32_printing_surface_create (hdc);
-+    cairo_surface_set_fallback_resolution (surface, x_dpi, y_dpi);
++    
++    /**
++		Read fallback dpi from device capabilities. Was a workaround for a bug patched
++		in cairo 1.5.14. Without this, fallback defaults to 300dpi, which is quite acceptable.
++		Going higher can cause spool size and memory problems.
++	*/
++    // cairo_surface_set_fallback_resolution (surface, x_dpi, y_dpi);
 +
 +    return surface;
 +}
@@ -132,7 +142,7 @@ Index: src/ui/dialog/print.cpp
  static void
  draw_page (GtkPrintOperation *operation,
             GtkPrintContext   *context,
-@@ -90,8 +133,22 @@
+@@ -90,8 +141,28 @@
          // Render as vectors
          Inkscape::Extension::Internal::CairoRenderer renderer;
          Inkscape::Extension::Internal::CairoRenderContext *ctx = renderer.createContext();
@@ -146,6 +156,12 @@ Index: src/ui/dialog/print.cpp
 +
 +        cairo_t *cr = gtk_print_context_get_cairo_context (context);
 +        cairo_surface_t *surface = cairo_get_target(cr);
++
++
++/**
++	Call cairo_win32_printing_surface directly as a workaround until GTK uses this call.
++	When GTK uses cairo_win32_printing_surface this automatically reverts.
++*/
 +#ifdef WIN32
 +        if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_WIN32) {
 +        HDC dc = cairo_win32_surface_get_dc (surface);
@@ -157,7 +173,7 @@ Index: src/ui/dialog/print.cpp
              ret = renderer.setupDocument (ctx, junk->_doc);
              if (ret) {
                  renderer.renderItem(ctx, junk->_base);
-@@ -149,14 +206,18 @@
+@@ -149,14 +220,18 @@
      gtk_print_operation_set_job_name (_printop, title.c_str());
  
      // set up paper size to match the document size
@@ -177,3 +193,8 @@ Index: src/ui/dialog/print.cpp
      // set up signals
      _workaround._doc = _doc;
      _workaround._base = _base;
+@@ -180,3 +255,4 @@
+ } // namespace UI
+ } // namespace Inkscape
+ 
++
