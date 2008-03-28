@@ -1,5 +1,6 @@
 # === TODO ===
-# 204779:   ?? (ref to 187290)
+more on printing 
+update cairo_dll
 
 01_win32_printing.patch
 02_win32_print_dialog_parent_window.patch
@@ -8,3 +9,4 @@
 05_save_as_xaml.patch
 06_environment_and_path_to_python.patch
 07_glib_spawn_workaround.patch
+08_handle_whitespaces_in_pathnames.patch
