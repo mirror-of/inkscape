@@ -1,6 +1,7 @@
-# === TODO ===
-more on printing 
-update cairo_dll
+apply following patches to the source tree
+------------------------------------------
+copy all filename.patch files to the inkscape base directory and
+"patch -p0 -f < filename.patch" for each file
 
 01_win32_printing.patch
 02_win32_print_dialog_parent_window.patch
@@ -10,3 +11,9 @@ update cairo_dll
 06_environment_and_path_to_python.patch
 07_glib_spawn_workaround.patch
 08_handle_whitespaces_in_pathnames.patch
+
+after compile copy following dll into inkscape directory
+--------------------------------------------------------
+libcairo-2.dll
+libpixman-1.dll
+libpng12.dll
