@@ -1,6 +1,7 @@
-diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/dialogs/dialog-events.cpp ./src/dialogs/dialog-events.cpp
---- ..\inkscape_46_patch-1/src/dialogs/dialog-events.cpp	2008-03-28 11:59:30.859375000 +0100
-+++ ./src/dialogs/dialog-events.cpp	2008-03-28 14:17:18.328125000 +0100
+Index: src/dialogs/dialog-events.cpp
+===================================================================
+--- src/dialogs/dialog-events.cpp	(revision 18070)
++++ src/dialogs/dialog-events.cpp	(working copy)
 @@ -156,13 +156,10 @@
  #endif
  
@@ -33,9 +34,10 @@ diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/dialogs/dialog-events.cpp ./src/d
  
      if (!transient_policy)
          return;
-diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/dock-behavior.cpp ./src/ui/dialog/dock-behavior.cpp
---- ..\inkscape_46_patch-1/src/ui/dialog/dock-behavior.cpp	2008-03-28 12:00:13.484375000 +0100
-+++ ./src/ui/dialog/dock-behavior.cpp	2008-03-28 14:17:18.328125000 +0100
+Index: src/ui/dialog/dock-behavior.cpp
+===================================================================
+--- src/ui/dialog/dock-behavior.cpp	(revision 18070)
++++ src/ui/dialog/dock-behavior.cpp	(working copy)
 @@ -215,13 +215,10 @@
  DockBehavior::onDesktopActivated(SPDesktop *desktop)
  {
@@ -52,9 +54,10 @@ diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/dock-behavior.cpp ./src
  
      if (!transient_policy) 
          return;
-diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/floating-behavior.cpp ./src/ui/dialog/floating-behavior.cpp
---- ..\inkscape_46_patch-1/src/ui/dialog/floating-behavior.cpp	2008-03-28 12:00:13.656250000 +0100
-+++ ./src/ui/dialog/floating-behavior.cpp	2008-03-28 14:17:18.328125000 +0100
+Index: src/ui/dialog/floating-behavior.cpp
+===================================================================
+--- src/ui/dialog/floating-behavior.cpp	(revision 18070)
++++ src/ui/dialog/floating-behavior.cpp	(working copy)
 @@ -96,13 +96,10 @@
  FloatingBehavior::onDesktopActivated (SPDesktop *desktop)
  {
@@ -71,9 +74,10 @@ diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/floating-behavior.cpp .
  
      if (!transient_policy) 
          return;
-diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.cpp ./src/ui/dialog/inkscape-preferences.cpp
---- ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.cpp	2008-03-28 12:00:13.000000000 +0100
-+++ ./src/ui/dialog/inkscape-preferences.cpp	2008-03-28 16:34:47.531250000 +0100
+Index: src/ui/dialog/inkscape-preferences.cpp
+===================================================================
+--- src/ui/dialog/inkscape-preferences.cpp	(revision 18070)
++++ src/ui/dialog/inkscape-preferences.cpp	(working copy)
 @@ -469,13 +469,8 @@
      _win_ontop_none.init ( _("None"), "options.transientpolicy", "value", 0, false, 0);
      _win_ontop_normal.init ( _("Normal"), "options.transientpolicy", "value", 1, true, &_win_ontop_none);
@@ -111,9 +115,10 @@ diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.cp
  
      _page_windows.add_group_header( _("Miscellaneous:"));
  #ifndef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
-diff -r -u4 -x .svn ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.h ./src/ui/dialog/inkscape-preferences.h
---- ..\inkscape_46_patch-1/src/ui/dialog/inkscape-preferences.h	2008-03-28 12:00:13.671875000 +0100
-+++ ./src/ui/dialog/inkscape-preferences.h	2008-03-28 14:17:18.343750000 +0100
+Index: src/ui/dialog/inkscape-preferences.h
+===================================================================
+--- src/ui/dialog/inkscape-preferences.h	(revision 18070)
++++ src/ui/dialog/inkscape-preferences.h	(working copy)
 @@ -131,13 +131,8 @@
      PrefRadioButton _win_ontop_none, _win_ontop_normal, _win_ontop_agressive;
      PrefRadioButton _win_save_geom_off, _win_save_geom, _win_save_geom_prefs;
