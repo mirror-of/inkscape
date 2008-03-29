@@ -2,7 +2,7 @@ Index: src/ui/dialog/print.cpp
 ===================================================================
 --- src/ui/dialog/print.cpp	(revision 17966)
 +++ src/ui/dialog/print.cpp	(working copy)
-@@ -170,9 +170,10 @@
+@@ -244,9 +244,10 @@
      gtk_print_operation_set_custom_tab_label (_printop, _("Rendering"));
  }
  
