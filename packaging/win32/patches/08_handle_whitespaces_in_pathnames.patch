@@ -1,8 +1,7 @@
-Only in ..\inkscape_46_patch-1: 07_glib_spawn_workaround.patch
-Only in .: 08_handle_whitespaces_in_pathnames.patch
-diff -u3 -x .svn -r ..\inkscape_46_patch-1/src/extension/implementation/script.cpp ./src/extension/implementation/script.cpp
---- ..\inkscape_46_patch-1/src/extension/implementation/script.cpp	2008-03-28 00:49:28.328125000 +0100
-+++ ./src/extension/implementation/script.cpp	2008-03-28 01:03:51.000000000 +0100
+Index: src/extension/implementation/script.cpp
+===================================================================
+--- src/extension/implementation/script.cpp	(revision 18070)
++++ src/extension/implementation/script.cpp	(working copy)
 @@ -376,8 +376,11 @@
                              resolveInterpreterExecutable(interpretstr);
                          command.insert(command.end(), interpretstr);
