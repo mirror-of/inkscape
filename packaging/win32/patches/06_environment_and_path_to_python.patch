@@ -1,7 +1,7 @@
-Only in .: 06_environment_and_path_to_python.patch
-diff -u3 -x .svn -r ..\inkscape_46_patch-1/src/extension/implementation/script.cpp ./src/extension/implementation/script.cpp
---- ..\inkscape_46_patch-1/src/extension/implementation/script.cpp	2008-03-27 17:11:18.296875000 +0100
-+++ ./src/extension/implementation/script.cpp	2008-03-28 00:16:30.796875000 +0100
+Index: src/extension/implementation/script.cpp
+===================================================================
+--- src/extension/implementation/script.cpp	(revision 18070)
++++ src/extension/implementation/script.cpp	(working copy)
 @@ -152,7 +152,7 @@
      if (rt.getExeInfo(fullPath, path, exeName)) {
          Glib::ustring interpPath = path;
@@ -11,10 +11,10 @@ diff -u3 -x .svn -r ..\inkscape_46_patch-1/src/extension/implementation/script.c
          interpPath.append("\\");
          interpPath.append(interpName);
          interpPath.append(".exe");
-Only in ./src/extension/implementation: script.cpp.bak
-diff -u3 -x .svn -r ..\inkscape_46_patch-1/src/main.cpp ./src/main.cpp
---- ..\inkscape_46_patch-1/src/main.cpp	2008-03-27 16:05:19.359375000 +0100
-+++ ./src/main.cpp	2008-03-28 00:04:53.375000000 +0100
+Index: src/main.cpp
+===================================================================
+--- src/main.cpp	(revision 18070)
++++ src/main.cpp	(working copy)
 @@ -413,6 +413,58 @@
  static bool needToRecodeParams = true;
  gchar* blankParam = "";
