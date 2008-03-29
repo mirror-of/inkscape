@@ -1,6 +1,6 @@
 Index: src/extension/implementation/script.cpp
 ===================================================================
---- src/extension/implementation/script.cpp	(revision 18007)
+--- src/extension/implementation/script.cpp	(revision 18070)
 +++ src/extension/implementation/script.cpp	(working copy)
 @@ -472,7 +472,7 @@
      _tempfd(0)
@@ -40,7 +40,7 @@ Index: src/extension/implementation/script.cpp
          return;
 Index: src/extension/implementation/xslt.cpp
 ===================================================================
---- src/extension/implementation/xslt.cpp	(revision 18007)
+--- src/extension/implementation/xslt.cpp	(revision 18070)
 +++ src/extension/implementation/xslt.cpp	(working copy)
 @@ -195,7 +195,7 @@
      std::string tempfilename_out;
@@ -53,7 +53,7 @@ Index: src/extension/implementation/xslt.cpp
          return;
 Index: src/extension/init.cpp
 ===================================================================
---- src/extension/init.cpp	(revision 18007)
+--- src/extension/init.cpp	(revision 18070)
 +++ src/extension/init.cpp	(working copy)
 @@ -234,7 +234,29 @@
      if (Inkscape::Extension::Extension::search_path.size() == 0)
@@ -87,7 +87,7 @@ Index: src/extension/init.cpp
      for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
 Index: src/io/sys.cpp
 ===================================================================
---- src/io/sys.cpp	(revision 18007)
+--- src/io/sys.cpp	(revision 18070)
 +++ src/io/sys.cpp	(working copy)
 @@ -16,6 +16,7 @@
  #endif
@@ -97,10 +97,12 @@ Index: src/io/sys.cpp
  #if GLIB_CHECK_VERSION(2,6,0)
      #include <glib/gstdio.h>
  #endif
-@@ -166,6 +167,51 @@
-     return retval;
- }
+@@ -164,6 +165,51 @@
+     DEBUG_MESSAGE( dumpMk, "leaving mkdir_utf8name( '%s' )[%d]", utf8name, (counter++) );
  
+     return retval;
++}
++
 +/* 
 + * Wrapper around Glib::file_open_tmp()
 + * Returns a handle to the temp file
@@ -144,14 +146,12 @@ Index: src/io/sys.cpp
 +    g_free(buf_name_used);
 +    return fileno;
 +#endif
-+}
-+
+ }
+ 
  bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
- {
-     bool exists = false;
 Index: src/io/sys.h
 ===================================================================
---- src/io/sys.h	(revision 18007)
+--- src/io/sys.h	(revision 18070)
 +++ src/io/sys.h	(working copy)
 @@ -18,6 +18,7 @@
  #include <glib/gtypes.h>
@@ -161,18 +161,18 @@ Index: src/io/sys.h
  
  /*#####################
  ## U T I L I T Y
-@@ -32,6 +33,8 @@
+@@ -31,6 +32,8 @@
+ FILE *fopen_utf8name( char const *utf8name, char const *mode );
  
  int mkdir_utf8name( char const *utf8name );
- 
-+int file_open_tmp( std::string& name_used, const std::string& prefix );
 +
++int file_open_tmp( std::string& name_used, const std::string& prefix );
+ 
  bool file_test( char const *utf8name, GFileTest test );
  
- GDir *dir_open(gchar const *utf8name, guint flags, GError **error);
 Index: src/ui/dialog/ocaldialogs.cpp
 ===================================================================
---- src/ui/dialog/ocaldialogs.cpp	(revision 18007)
+--- src/ui/dialog/ocaldialogs.cpp	(revision 18070)
 +++ src/ui/dialog/ocaldialogs.cpp	(working copy)
 @@ -24,6 +24,7 @@
  #include "interface.h"
@@ -193,7 +193,7 @@ Index: src/ui/dialog/ocaldialogs.cpp
          return;
 Index: src/ui/dialog/print.cpp
 ===================================================================
---- src/ui/dialog/print.cpp	(revision 18007)
+--- src/ui/dialog/print.cpp	(revision 18070)
 +++ src/ui/dialog/print.cpp	(working copy)
 @@ -26,6 +26,7 @@
  #include "unit-constants.h"
@@ -202,8 +202,8 @@ Index: src/ui/dialog/print.cpp
 +#include "io/sys.h"
  
  
- static void
-@@ -46,7 +47,7 @@
+ 
+@@ -97,7 +98,7 @@
          std::string tmp_base = "inkscape-print-png-XXXXXX";
  
          int tmp_fd;
@@ -212,8 +212,3 @@ Index: src/ui/dialog/print.cpp
              close(tmp_fd);
  
              guint32 bgcolor = 0x00000000;
-@@ -180,3 +181,4 @@
- } // namespace UI
- } // namespace Inkscape
- 
-+
