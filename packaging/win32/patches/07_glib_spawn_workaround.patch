@@ -1,7 +1,6 @@
-Index: src/extension/implementation/script.cpp
-===================================================================
---- src/extension/implementation/script.cpp	(revision 18070)
-+++ src/extension/implementation/script.cpp	(working copy)
+diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/extension/implementation/script.cpp ./src/extension/implementation/script.cpp
+--- ..\inkscape_46_patch-1/src/extension/implementation/script.cpp	2008-03-31 13:45:25.218750000 +0200
++++ ./src/extension/implementation/script.cpp	2008-03-31 13:43:58.812500000 +0200
 @@ -1029,7 +1029,7 @@
      int stdout_pipe, stderr_pipe;
  
@@ -11,11 +10,10 @@ Index: src/extension/implementation/script.cpp
                                       argv,  // arg v
                                       Glib::SPAWN_SEARCH_PATH /*| Glib::SPAWN_DO_NOT_REAP_CHILD*/,
                                       sigc::slot<void>(),
-Index: src/io/sys.cpp
-===================================================================
---- src/io/sys.cpp	(revision 18070)
-+++ src/io/sys.cpp	(working copy)
-@@ -28,11 +28,24 @@
+diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/io/sys.cpp ./src/io/sys.cpp
+--- ..\inkscape_46_patch-1/src/io/sys.cpp	2008-03-31 13:45:18.375000000 +0200
++++ ./src/io/sys.cpp	2008-03-31 14:09:40.781250000 +0200
+@@ -28,11 +28,38 @@
  
  #ifdef WIN32
  
@@ -25,6 +23,20 @@ Index: src/io/sys.cpp
 +
 +#include <process.h>	// declares spawn functions
 +#include <wchar.h>	// declares _wspawn functions
++#ifdef __cplusplus
++extern "C" {
++#endif
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnl	(int, const wchar_t*, const wchar_t*, ...);
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnle	(int, const wchar_t*, const wchar_t*, ...);
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnlp	(int, const wchar_t*, const wchar_t*, ...);
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnlpe	(int, const wchar_t*, const wchar_t*, ...);
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnv	(int, const wchar_t*, const wchar_t* const*);
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnve	(int, const wchar_t*, const wchar_t* const*, const wchar_t* const*);
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnvp	(int, const wchar_t*, const wchar_t* const*);
++_CRTIMP int __cdecl __MINGW_NOTHROW _wspawnvpe	(int, const wchar_t*, const wchar_t* const*, const wchar_t* const*);
++#ifdef __cplusplus
++}
++#endif
 +#include <unistd.h>
 +#include <glibmm/i18n.h>
 +#include <fcntl.h>
@@ -41,7 +53,7 @@ Index: src/io/sys.cpp
  
  //#define INK_DUMP_FILENAME_CONV 1
  #undef INK_DUMP_FILENAME_CONV
-@@ -307,6 +320,874 @@
+@@ -307,6 +334,874 @@
      return result;
  }
  
@@ -916,10 +928,9 @@ Index: src/io/sys.cpp
  
  gchar* Inkscape::IO::sanitizeString( gchar const * str )
  {
-Index: src/io/sys.h
-===================================================================
---- src/io/sys.h	(revision 18070)
-+++ src/io/sys.h	(working copy)
+diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/io/sys.h ./src/io/sys.h
+--- ..\inkscape_46_patch-1/src/io/sys.h	2008-03-31 13:45:18.390625000 +0200
++++ ./src/io/sys.h	2008-03-31 13:43:58.828125000 +0200
 @@ -18,6 +18,7 @@
  #include <glib/gtypes.h>
  #include <glib/gdir.h>
@@ -944,5 +955,3 @@ Index: src/io/sys.h
  }
  }
  
-Only in ./src/io: sys.h.bak
-Only in ./src: main.cpp.bak
