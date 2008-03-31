@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-03-10 23:48+0100\n"
+"PO-Revision-Date: 2008-03-31 23:21+0200\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -2733,7 +2733,9 @@ msgstr "Feljebb helyezés"
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:48
 #, fuzzy
 msgid "Apply adaptive thresholding to selected bitmap(s)."
-msgstr "alkalmazásA kijelölt bitkép(ek)"
+msgstr ""
+"Igazodó küszöb"
+"alkalmazásA kijelölt bitkép(ek)"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:44
 msgid "Add Noise"
@@ -2811,49 +2813,41 @@ msgstr "Réteg"
 
 #: ../src/extension/internal/bitmap/channel.cpp:50
 #: ../src/extension/internal/bitmap/levelChannel.cpp:54
-#, fuzzy
 msgid "Red Channel"
 msgstr "Vörös-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:51
 #: ../src/extension/internal/bitmap/levelChannel.cpp:55
-#, fuzzy
 msgid "Green Channel"
 msgstr "Zöld-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:52
 #: ../src/extension/internal/bitmap/levelChannel.cpp:56
-#, fuzzy
 msgid "Blue Channel"
 msgstr "Kék-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:53
 #: ../src/extension/internal/bitmap/levelChannel.cpp:57
-#, fuzzy
 msgid "Cyan Channel"
 msgstr "Ciánkék-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:54
 #: ../src/extension/internal/bitmap/levelChannel.cpp:58
-#, fuzzy
 msgid "Magenta Channel"
 msgstr "Bíbor-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:55
 #: ../src/extension/internal/bitmap/levelChannel.cpp:59
-#, fuzzy
 msgid "Yellow Channel"
 msgstr "Sárga-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:56
 #: ../src/extension/internal/bitmap/levelChannel.cpp:60
-#, fuzzy
 msgid "Black Channel"
 msgstr "Fekete-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:57
 #: ../src/extension/internal/bitmap/levelChannel.cpp:61
-#, fuzzy
 msgid "Opacity Channel"
 msgstr "Átlátszatlanság-csatorna"
 
@@ -2889,9 +2883,8 @@ msgid "Colorize selected bitmap(s) with specified color, using given opacity."
 msgstr "A kijelölt bitkép(ek) Átlátszatlanság"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:36
-#, fuzzy
 msgid "Contrast"
-msgstr "Csúcsok:"
+msgstr "Kontraszt"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:38
 #: ../src/extension/internal/bitmap/sharpen.cpp:37
@@ -2940,12 +2933,14 @@ msgstr "A kijelölt bitkép(ek)"
 
 #: ../src/extension/internal/bitmap/emboss.cpp:37
 msgid "Emboss"
-msgstr ""
+msgstr "Domborítás"
 
 #: ../src/extension/internal/bitmap/emboss.cpp:46
 #, fuzzy
 msgid "Emboss selected bitmap(s) -- hilight edges with 3D effect."
-msgstr "A kijelölt bitkép(ek) Háromdimenziós effektus"
+msgstr ""
+"A kijelölt bitkép(ek) domborítása"
+"Háromdimenziós effektus"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:34
 #, fuzzy
@@ -3054,7 +3049,6 @@ msgid "Modulate"
 msgstr "Üzemmód"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:41
-#, fuzzy
 msgid "Brightness"
 msgstr "Fényesség"
 
@@ -3080,7 +3074,10 @@ msgstr "Árnyalat"
 #: ../src/extension/internal/bitmap/modulate.cpp:49
 #, fuzzy
 msgid "Modulate percent hue, saturation, and brightness of selected bitmap(s)."
-msgstr "A kijelölt bitkép(ek) árnyalatának telítettség"
+msgstr ""
+"A kijelölt bitkép(ek) árnyalatának "
+"telítettség "
+"Fényesség"
 
 #: ../src/extension/internal/bitmap/negate.cpp:35
 #, fuzzy
@@ -3237,7 +3234,9 @@ msgstr "Küszöb"
 #: ../src/extension/internal/bitmap/threshold.cpp:45
 #, fuzzy
 msgid "Threshold selected bitmap(s)."
-msgstr "A kijelölt bitkép(ek)"
+msgstr ""
+"küszöb alkalmazása"
+"A kijelölt bitkép(ek)"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:40
 msgid "Unsharp Mask"
@@ -3977,7 +3976,7 @@ msgstr "Színmátrix"
 
 #: ../src/filter-enums.cpp:22
 msgid "Component Transfer"
-msgstr ""
+msgstr "Komponensátvitel"
 
 #: ../src/filter-enums.cpp:23
 msgid "Composite"
@@ -4017,9 +4016,8 @@ msgstr "Tükröződő fény"
 
 # May contain a short, human readable description of the resource as plain, unmarked text.
 #: ../src/filter-enums.cpp:34
-#, fuzzy
 msgid "Tile"
-msgstr "Cím"
+msgstr "Csempézés"
 
 #: ../src/filter-enums.cpp:35 ../src/filter-enums.cpp:118
 msgid "Turbulence"
@@ -4191,14 +4189,12 @@ msgid "Distant Light"
 msgstr "Távoli fény"
 
 #: ../src/filter-enums.cpp:125
-#, fuzzy
 msgid "Point Light"
-msgstr "Több fény"
+msgstr "Pontszerű fényforrás"
 
 #: ../src/filter-enums.cpp:126
-#, fuzzy
 msgid "Spot Light"
-msgstr "Több fény"
+msgstr "Reflektorszerű fényforrás"
 
 #: ../src/flood-context.cpp:249
 msgid "Visible Colors"
@@ -9033,12 +9029,13 @@ msgid "Stroke st_yle"
 msgstr "Körvonalstíl_us"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:504
+#, fuzzy
 msgid ""
 "This matrix determines a linear transform on colour space. Each line affects "
 "one of the color components. Each column determines how much of each color "
 "component from the input is passed to the output. The last column does not "
 "depend on input colors, so can be used to adjust a constant component value."
-msgstr ""
+msgstr "bemenet"
 
 #. pack_start(_fromSVGElement, false, false);
 #: ../src/ui/dialog/filter-effects-dialog.cpp:614
@@ -9268,29 +9265,30 @@ msgstr "Operátor"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2208
 msgid "K1"
-msgstr ""
+msgstr "K1"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2208
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2209
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2210
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2211
+#, fuzzy
 msgid ""
 "If the arithmetic operation is chosen, each result pixel is computed using "
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
 "values of the first and second inputs respectively."
-msgstr ""
+msgstr "bemenet"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2209
 msgid "K2"
-msgstr ""
+msgstr "K2"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2210
 msgid "K3"
-msgstr ""
+msgstr "K3"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2211
 msgid "K4"
-msgstr ""
+msgstr "K4"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
 msgid "width of the convolve matrix"
@@ -9321,9 +9319,9 @@ msgid ""
 msgstr "a konvolúciós mátrix"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
-#, fuzzy
+# kernel: konvolúciós mátrix
 msgid "Kernel"
-msgstr "Alávágás felfelé"
+msgstr "Kernel"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 #, fuzzy
@@ -9335,7 +9333,8 @@ msgid ""
 "the matrix diagonal) while a matrix filled with a constant non-zero value "
 "would lead to a common blur effect."
 msgstr ""
-"a konvolúciós mátrix"
+"a konvolúciós mátrix "
+"bemenet"
 "Elmosás"
 
 #. TODO: svg spec: The default value is the sum of all values in kernelMatrix, with the exception that if the sum is zero, then the divisor is set to 1.
@@ -9350,7 +9349,10 @@ msgid ""
 "number is divided by divisor to yield the final destination color value. A "
 "divisor that is the sum of all the matrix values tends to have an evening "
 "effect on the overall color intensity of the result."
-msgstr "Osztó"
+msgstr ""
+"Kernel"
+"bemenet"
+"Osztó"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2220
 msgid "Bias"
@@ -9367,11 +9369,14 @@ msgid "Edge Mode"
 msgstr "Szél-üzemmód"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
+#, fuzzy
 msgid ""
 "Determines how to extend the input image as necessary with color values so "
 "that the matrix operations can be applied when the kernel is positioned at "
 "or near the edge of the input image."
 msgstr ""
+"bemenet "
+"Kernel"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 msgid "Preserve Alpha"
@@ -9380,7 +9385,9 @@ msgstr "Alfa megőrzése"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 #, fuzzy
 msgid "If set, the alpha channel won't be altered by this filter primitive."
-msgstr "Ha az opció be van jelölve, akkor ez a szűrőprimitív nem módosítja az "
+msgstr ""
+"Ha az opció be van jelölve, akkor ez a szűrőprimitív nem módosítja az "
+"alfa-csatorna"
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
@@ -9400,10 +9407,13 @@ msgstr "Felületméretezés"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
+#, fuzzy
 msgid ""
 "This value amplifies the heights of the bump map defined by the input alpha "
 "channel"
 msgstr ""
+"bemenet"
+"alfa-csatorna"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
@@ -9419,7 +9429,7 @@ msgstr "Konstans"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2228
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2262
 msgid "Kernel Unit Length"
-msgstr ""
+msgstr "Kernelegység-hossz"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2232
 #, fuzzy
@@ -9467,7 +9477,8 @@ msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
 msgstr ""
-"Zsugorítás"
+"Zsugorítás "
+"bemenet"
 "Nyújtás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2251
@@ -9479,16 +9490,18 @@ msgid "Delta X"
 msgstr "X változása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
+#, fuzzy
 msgid "This is how far the input image gets shifted to the right"
-msgstr ""
+msgstr "bemenet"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "Delta Y"
 msgstr "Y változása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
+#, fuzzy
 msgid "This is how far the input image gets shifted downwards"
-msgstr ""
+msgstr "bemenet"
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
@@ -9535,45 +9548,50 @@ msgid "Add filter primitive"
 msgstr "Szűrőprimitív felvétele"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2301
-#, fuzzy
 msgid ""
 "The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, "
 "multiply, darken and lighten."
 msgstr ""
-"Keverés"
-"Szűrőprimitív KivetítésSzorzásSötétítésvilágosítás"
+"Az <b>feBlend</b> (keverés) szűrőprimitív 4 képkeverési módszert nyújt: "
+"kivetítés, szorzás, sötétítés és világosítás."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2305
-#, fuzzy
 msgid ""
 "The <b>feColorMatrix</b> filter primitive applies a matrix transformation to "
 "colour of each rendered pixel. This allows for effects like turning object "
 "to grayscale, modifying colour saturation and changing colour hue."
-msgstr "Szűrőprimitívképpontobjektum effektus telítettségárnyalat "
+msgstr ""
+"Az <b>feColorMatrix</b> (színmátrix) szűrőprimitív egy mátrixtranszformációt alkalmaz "
+"az összes megjelenített képpont színére. Ez olyan műveleteket tesz lehetővé, mint "
+"például egy objektum szürkeárnyalatossá alakítása, illetve a színtelítettség vagy "
+"a színárnyalat módosítása."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2309
-#, fuzzy
 msgid ""
 "The <b>feComponentTransfer</b> filter primitive manipulates the input's "
 "color components (red, green, blue, and alpha) according to particular "
 "transfer functions, allowing operations like brightness and contrast "
 "adjustment, color balance, and thresholding."
-msgstr "SzűrőprimitívfüggvényekAlfa"
+msgstr ""
+"Az <b>feComponentTransfer</b> (komponensátvitel) szűrőprimitív "
+"a bemenet színkomponenseit (vörös, zöld, kék és alfa) változtatja "
+"bizonyos átviteli függvényeknek megfelelően. Lehetővé tesz olyan "
+"műveleteket, mint például fényesség- és kontrasztállítás, "
+"színegyensúly, valamint küszöb alkalmazása."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2313
-#, fuzzy
 msgid ""
 "The <b>feComposite</b> filter primitive composites two images using one of "
 "the Porter-Duff blending modes or the aritmetic mode described in SVG "
 "standard. Porter-Duff blending modes are essentially logical operations "
 "between the corresponding pixel values of the images."
 msgstr ""
-"Vegyítés"
-"Keverés "
-"Szűrőprimitívképpont"
+"Az <b>feComposite</b> (vegyítés) szűrőprimitív két képet vegyít egymással "
+"valamelyik Porter-Duff-féle keverési eljárást vagy az SVG-szabványban leírt "
+"aritmetikai módszert használva. A Porter-Duff-féle keverési módszerek lényegében "
+"logikai műveletek a képek megfelelő képpont-értékei közt."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2317
-#, fuzzy
 msgid ""
 "The <b>feConvolveMatrix</b> lets you specify a Convolution to be applied on "
 "the image. Common effects created using convolution matrices are blur, "
@@ -9581,51 +9599,64 @@ msgid ""
 "be created using this filter primitive, the special gaussian blur primitive "
 "is faster and resolution-independent."
 msgstr ""
-"a konvolúciós mátrix"
-"alkalmaz szűrőeffektus SzűrőprimitívElmosás élesítés "
-"Gauss-elmosás"
+"Az <b>feConvolveMatrix</b> (konvolúciós mátrix) használatával konvolúciós "
+"effektusok alkalmazhatók a képre. Ebbe a körbe beletartozik például az "
+"elmosás, az élesítés, a domborítás és az élkeresés. Megjegyzés: bár elő "
+"lehet állítani Gauss-elmosást ezzel a szűrőprimitívvel is, a speciális "
+"\"Gauss-elmosás\" művelet gyorsabb és felbontásfüggetlen."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2321
-#, fuzzy
 msgid ""
 "The <b>feDiffuseLighting</b> and feSpecularLighting filter primitives create "
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
 "information: higher opacity areas are raised toward the viewer and lower "
 "opacity areas recede away from the viewer."
-msgstr "SzűrőprimitívAlfa"
+msgstr ""
+"Az <b>feDiffuseLighting</b> (szórt (diffúz) fény) és az feSpecularLighting "
+"(tükröződő fény) szűrőprimitívekkel \"domborított\" árnyékolás hozható létre. "
+"A bemenet alfa-csatornája adja a mélységi információt: a nagyobb átlátszatlanságú "
+"területek kiemelkednek a szemlélő felé, a kisebb átlátszatlanságúak pedig "
+"hátrébb helyezkednek el."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2325
-#, fuzzy
 msgid ""
 "The <b>feDisplacementMap</b> filter primitive displaces the pixels in the "
 "first input using the second input as a displacement map, that shows from "
 "how far the pixel should come from. Classical examples are whirl and pinch "
 "effects."
 msgstr ""
-"Elmozdítás"
-"Szűrőprimitívképponteffektus"
+"Az <b>feDisplacementMap</b> (elmozdítási leképezés) szűrőprimitív elmozdítja "
+"az első bemenet képpontjait úgy, hogy a második bemenetet használja elmozdítási "
+"leképezésként. A leképezés azt adja meg, hogy az adott képpontnak milyen "
+"távolságból kell érkeznie. Klasszikus példák a csavarási és az összehúzási "
+"effektusok."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2329
-#, fuzzy
 msgid ""
 "The <b>feFlood</b> filter primitive fills the region with a given color and "
 "opacity.  It is usually used as an input to other filters to apply color to "
 "a graphic."
-msgstr "Szűrőprimitívalkalmazás"
+msgstr ""
+"Az <b>feFlood</b> (területkitöltés) szűrőprimitív kitölti az adott területet "
+"a megadott színnel és átlátszatlansággal. Általában más szűrők "
+"bemeneteként használatos egy grafika színezésére."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2333
-#, fuzzy
 msgid ""
 "The <b>feGaussianBlur</b> filter primitive uniformly blurs its input.  It is "
 "commonly used together with feOffset to create a drop shadow effect."
-msgstr "Szűrőprimitíveffektus Elmosás"
+msgstr ""
+"Az <b>feGaussianBlur</b> (Gauss-elmosás) szűrőprimitív egyenletesen "
+"elmossa a bemenetet. Gyakran használatos az feOffset szűrőprimitívvel "
+"kombinálva \"vetett árnyék\" effektus előállítására."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2337
-#, fuzzy
 msgid ""
 "The <b>feImage</b> filter primitive fills the region with an external image "
 "or another part of the document."
-msgstr "Szűrőprimitív"
+msgstr ""
+"Az <b>feImage</b> (kép) szűrőprimitív kitölti az adott területet egy "
+"külső képpel vagy a dokumentum egyik részével."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2341
 msgid ""
@@ -9634,55 +9665,63 @@ msgid ""
 "compositing for this. This is equivalent to using several feBlend primitives "
 "in 'normal' mode or several feComposite primitives in 'over' mode."
 msgstr ""
-"szűrőprimitív "
-"Vegyítés"
-"Alfa"
+"Az <b>feMerge</b> (összevonás) szűrőprimitív több átmeneti képet "
+"vegyít egymással egyetlen képpé. Ehhez normál alfa-vegyítést használ. "
+"Ez egyenértékű több feBlend (keverés) primitív \"normál\" módban való "
+"használatával, illetve több feComposite (vegyítés) primitív "
+"\"felett\" módban való használatával."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2345
-#, fuzzy
 msgid ""
 "The <b>feMorphology</b> filter primitive provides erode and dilate effects. "
 "For single-colour objects erode makes the object thinner and dilate makes it "
 "thicker."
 msgstr ""
-"szűrőprimitíveffektusobjektum vastagítás "
-"Zsugorítás"
-"Nyújtás"
+"Az <b>feMorphology</b> (alakítás) szűrőprimitív zsugorítási és "
+"nyújtási effektusokat kínál. Egyszínű objektumok esetén a "
+"zsugorítás vékonyabbá teszi az objektumot, a nyújtás pedig "
+"vastagabbá."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2349
-#, fuzzy
 msgid ""
 "The <b>feOffset</b> filter primitive offsets the image by an user-defined "
 "amount. For example, this is useful for drop shadows, where the shadow is in "
 "a slightly different position than the actual object."
 msgstr ""
-"szűrőprimitív "
-"Eltolás"
-"objektum"
+"Az <b>feOffset</b> (eltolás) szűrőprimitív a felhasználó által "
+"megadott távolságra eltolja a képet. Ez hasznos például "
+"vetett árnyék készítéséhez, ahol az árnyék helye enyhén "
+"eltér az objektum helyétől."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2353
-#, fuzzy
 msgid ""
 "The feDiffuseLighting and <b>feSpecularLighting</b> filter primitives create "
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
 "information: higher opacity areas are raised toward the viewer and lower "
 "opacity areas recede away from the viewer."
-msgstr "szűrőprimitívAlfa"
+msgstr ""
+"Az feDiffuseLighting (szórt (diffúz) fény) és az <b>feSpecularLighting</b> "
+"(tükröződő fény) szűrőprimitívekkel \"domborított\" árnyékolás hozható létre. "
+"A bemenet alfa-csatornája adja a mélységi információt: a nagyobb átlátszatlanságú "
+"területek kiemelkednek a szemlélő felé, a kisebb átlátszatlanságúak pedig "
+"hátrébb helyezkednek el."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2357
-#, fuzzy
 msgid "The <b>feTile</b> filter primitive tiles a region with its input graphic"
 msgstr ""
-"szűrőprimitív "
-"Csempék"
+"Az <b>feTile</b> (csempézés) szűrőprimitív kicsempéz egy területet "
+"a bemeneti rajzzal."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2361
-#, fuzzy
 msgid ""
 "The <b>feTurbulence</b> filter primitive renders Perlin noise. This kind of "
 "noise is useful in simulating several nature phenomena like clouds, fire and "
 "smoke and in generating complex textures like marble or granite."
-msgstr "szűrőprimitív"
+msgstr ""
+"Az <b>feTurbulence</b> (örvénylés) szűrőprimitív Perlin-zajt jelenít meg. "
+"Ez a fajta zaj hasznos többek közt természeti jelenségek szimulálására, "
+"mint például felhők, tűz, illetve füst. Összetettebb textúrák is készíthetők "
+"vele, például márvány vagy gránit."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2379
 msgid "Duplicate filter primitive"
