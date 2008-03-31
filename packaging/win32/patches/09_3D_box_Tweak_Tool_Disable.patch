@@ -1,21 +1,24 @@
-Index: tweak-context.cpp
+Index: src/tweak-context.cpp
 ===================================================================
---- tweak-context.cpp	(revision 18087)
-+++ tweak-context.cpp	(working copy)
-@@ -339,8 +339,17 @@
+--- src/tweak-context.cpp	(revision 18087)
++++ src/tweak-context.cpp	(working copy)
+@@ -339,8 +339,18 @@
  
      if (SP_IS_BOX3D(item)) {
          // convert 3D boxes to ordinary groups before tweaking their shapes
-+    #ifdef WIN32           
+-        item = SP_ITEM(box3d_convert_to_group(SP_BOX3D(item)));
+-        selection->add(item);
++    #ifdef WIN32            
 +    //    FIXME: Disable tweak of 3D box for 0.46 WIN32 release - causes crash - LP #208738
 +    //    item = SP_ITEM(box3d_convert_to_group(SP_BOX3D(item)));
 +    //    selection->add(item);
 +          return did;
-+    #endif
-+    #ifndef WIN32           
++          
++    #else                
 +    //    FIXME: Leave tweak 3D box enable for non-WIN32 - since it only gives an error - LP #208738
-         item = SP_ITEM(box3d_convert_to_group(SP_BOX3D(item)));
-         selection->add(item);
++         item = SP_ITEM(box3d_convert_to_group(SP_BOX3D(item)));
++         selection->add(item);
++         
 +    #endif
      }
  
