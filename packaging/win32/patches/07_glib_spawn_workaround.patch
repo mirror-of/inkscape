@@ -1,6 +1,7 @@
-diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/extension/implementation/script.cpp ./src/extension/implementation/script.cpp
---- ..\inkscape_46_patch-1/src/extension/implementation/script.cpp	2008-03-31 13:45:25.218750000 +0200
-+++ ./src/extension/implementation/script.cpp	2008-03-31 13:43:58.812500000 +0200
+Index: src/extension/implementation/script.cpp
+===================================================================
+--- src/extension/implementation/script.cpp	(revision 18124)
++++ src/extension/implementation/script.cpp	(working copy)
 @@ -1029,7 +1029,7 @@
      int stdout_pipe, stderr_pipe;
  
@@ -10,9 +11,10 @@ diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/extension/implementation/script.c
                                       argv,  // arg v
                                       Glib::SPAWN_SEARCH_PATH /*| Glib::SPAWN_DO_NOT_REAP_CHILD*/,
                                       sigc::slot<void>(),
-diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/io/sys.cpp ./src/io/sys.cpp
---- ..\inkscape_46_patch-1/src/io/sys.cpp	2008-03-31 13:45:18.375000000 +0200
-+++ ./src/io/sys.cpp	2008-03-31 14:09:40.781250000 +0200
+Index: src/io/sys.cpp
+===================================================================
+--- src/io/sys.cpp	(revision 18124)
++++ src/io/sys.cpp	(working copy)
 @@ -28,11 +28,38 @@
  
  #ifdef WIN32
@@ -928,9 +930,10 @@ diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/io/sys.cpp ./src/io/sys.cpp
  
  gchar* Inkscape::IO::sanitizeString( gchar const * str )
  {
-diff -u3 -r -x .svn ..\inkscape_46_patch-1/src/io/sys.h ./src/io/sys.h
---- ..\inkscape_46_patch-1/src/io/sys.h	2008-03-31 13:45:18.390625000 +0200
-+++ ./src/io/sys.h	2008-03-31 13:43:58.828125000 +0200
+Index: src/io/sys.h
+===================================================================
+--- src/io/sys.h	(revision 18124)
++++ src/io/sys.h	(working copy)
 @@ -18,6 +18,7 @@
  #include <glib/gtypes.h>
  #include <glib/gdir.h>
