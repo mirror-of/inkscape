@@ -11,7 +11,7 @@ copy all filename.patch files to the inkscape base directory and
 06_environment_and_path_to_python.patch
 07_glib_spawn_workaround.patch
 08_handle_whitespaces_in_pathnames.patch
-09_3D_box_Tweak_Tool_Disable.patch
+09_fix_crash_with_tweak_tool_on_3d_boxes.patch
 
 after compile copy following dll into inkscape directory
 --------------------------------------------------------

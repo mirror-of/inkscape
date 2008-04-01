@@ -1,0 +1,72 @@
+Index: src/box3d.cpp
+===================================================================
+--- src/box3d.cpp	(revision 18149)
++++ src/box3d.cpp	(working copy)
+@@ -1336,7 +1336,7 @@ box3d_switch_perspectives(SPBox3D *box, 
+ 
+ /* Converts the 3D box to an ordinary SPGroup, adds it to the XML tree at the same position as
+    the original box and deletes the latter */
+-Inkscape::XML::Node *
++SPGroup *
+ box3d_convert_to_group(SPBox3D *box) {
+     SPDocument *doc = SP_OBJECT_DOCUMENT(box);
+     Inkscape::XML::Document *xml_doc = sp_document_repr_doc(doc);
+@@ -1378,7 +1378,7 @@ box3d_convert_to_group(SPBox3D *box) {
+ 
+     grepr->setAttribute("id", id);
+ 
+-    return grepr;
++    return SP_GROUP(doc->getObjectByRepr(grepr));
+ }
+ 
+ static inline void
+Index: src/box3d.h
+===================================================================
+--- src/box3d.h	(revision 18149)
++++ src/box3d.h	(working copy)
+@@ -77,7 +77,7 @@ void box3d_mark_transformed(SPBox3D *box
+ Persp3D *box3d_get_perspective(SPBox3D const *box);
+ void box3d_switch_perspectives(SPBox3D *box, Persp3D *old_persp, Persp3D *new_persp, bool recompute_corners = false);
+ 
+-Inkscape::XML::Node *box3d_convert_to_group(SPBox3D *box);
++SPGroup *box3d_convert_to_group(SPBox3D *box);
+ 
+ 
+ #endif /* __SP_BOX3D_H__ */
+Index: src/path-chemistry.cpp
+===================================================================
+--- src/path-chemistry.cpp	(revision 18149)
++++ src/path-chemistry.cpp	(working copy)
+@@ -297,7 +297,7 @@ sp_selected_path_to_curves0(gboolean int
+ 
+         if (SP_IS_BOX3D(item)) {
+             // convert 3D box to ordinary group of paths; replace the old element in 'selected' with the new group
+-            Inkscape::XML::Node *repr = box3d_convert_to_group(SP_BOX3D(item));
++            Inkscape::XML::Node *repr = SP_OBJECT_REPR(box3d_convert_to_group(SP_BOX3D(item)));
+             
+             if (repr) {
+                 to_select = g_slist_prepend (to_select, repr);
+Index: src/sp-item-group.cpp
+===================================================================
+--- src/sp-item-group.cpp	(revision 18149)
++++ src/sp-item-group.cpp	(working copy)
+@@ -329,14 +329,11 @@ sp_item_group_ungroup (SPGroup *group, G
+ 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
+ 	Inkscape::XML::Node *prepr = SP_OBJECT_REPR (pitem);
+ 
+-  if (SP_IS_BOX3D(gitem)) {
+-      grepr = box3d_convert_to_group(SP_BOX3D(gitem));
+-      if (grepr) {
+-          gitem = SP_ITEM(doc->getObjectByRepr(grepr));
+-          group = SP_GROUP(gitem);
+-      }
+-  }
+-
++        if (SP_IS_BOX3D(gitem)) {
++            group = box3d_convert_to_group(SP_BOX3D(gitem));
++            gitem = SP_ITEM(group);
++        }
++  
+ 	/* Step 1 - generate lists of children objects */
+ 	GSList *items = NULL;
+ 	GSList *objects = NULL;
