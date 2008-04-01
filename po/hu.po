@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-03-31 23:21+0200\n"
+"PO-Revision-Date: 2008-04-01 22:48+0200\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -3041,7 +3041,10 @@ msgstr "szűrő"
 msgid ""
 "Filter selected bitmap(s) by replacing each pixel component with the median "
 "color in a circular neighborhood."
-msgstr "szűrőképpontA kijelölt bitkép(ek)"
+msgstr ""
+"szűrő "
+"képpont "
+"A kijelölt bitkép(ek)"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:39
 #, fuzzy
@@ -5176,7 +5179,9 @@ msgstr "dokkolóablak"
 msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
-msgstr "dokkolóablak"
+msgstr ""
+"dokkolóablak "
+"művelet"
 
 #: ../src/libgdl/gdl-dock-object.c:570
 #, c-format
@@ -5196,8 +5201,9 @@ msgid "Position"
 msgstr "Pozíció:"
 
 #: ../src/libgdl/gdl-dock-paned.c:133
+#, fuzzy
 msgid "Position of the divider in pixels"
-msgstr ""
+msgstr "képpont"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:143
 #, fuzzy
@@ -5262,6 +5268,7 @@ msgstr "Kurzorkoordináták"
 #, fuzzy
 msgid "X-Coordinate fow dock when floating"
 msgstr ""
+"koordináta"
 "lebegő"
 "dokkolóablak"
 
@@ -5274,6 +5281,7 @@ msgstr "Kurzorkoordináták"
 #, fuzzy
 msgid "Y-Coordinate fow dock when floating"
 msgstr ""
+"koordináta"
 "lebegő"
 "dokkolóablak"
 
@@ -9029,13 +9037,17 @@ msgid "Stroke st_yle"
 msgstr "Körvonalstíl_us"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:504
-#, fuzzy
 msgid ""
 "This matrix determines a linear transform on colour space. Each line affects "
 "one of the color components. Each column determines how much of each color "
 "component from the input is passed to the output. The last column does not "
 "depend on input colors, so can be used to adjust a constant component value."
-msgstr "bemenet"
+msgstr ""
+"Ez a mátrix lineáris transzformációt ad meg a színtérre. Minden sor "
+"egy-egy színkomponenst befolyásol. Az oszlopok azt határozzák meg, hogy "
+"a bemenet adott színkomponensének mekkora része kerül a kimenetbe. "
+"Az utolsó oszlop nem függ a bemeneti színektől, így felhasználható egy "
+"állandó komponensérték beállítására."
 
 #. pack_start(_fromSVGElement, false, false);
 #: ../src/ui/dialog/filter-effects-dialog.cpp:614
@@ -9253,6 +9265,10 @@ msgid ""
 "convenience shortcuts to allow commonly used color operations to be "
 "performed without specifying a complete matrix."
 msgstr ""
+"A mátrixművelet típusát adja meg. A \"mátrix\" kulcsszó azt jelzi, "
+"hogy teljes, 5x4-es mátrix lesz megadva. A többi kulcsszó arra szolgál, "
+"hogy egyszerűsített módon (egy teljes mátrix megadása nélkül) lehessen "
+"végrehajtani bizonyos gyakran használt színműveleteket."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2194
 msgid "Value(s)"
@@ -9271,12 +9287,15 @@ msgstr "K1"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2209
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2210
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2211
-#, fuzzy
 msgid ""
 "If the arithmetic operation is chosen, each result pixel is computed using "
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
 "values of the first and second inputs respectively."
-msgstr "bemenet"
+msgstr ""
+"Ha az \"Aritmetikai művelet\" lehetőség van kiválasztva, akkor "
+"minden képpont a \"k1*i1*i2 + k2*i1 + k3*i2 + k4\" képlettel "
+"lesz kiszámítva, ahol i1 és i2 az első, illetve a második "
+"bemenet képpont-értéke."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2209
 msgid "K2"
@@ -9292,11 +9311,11 @@ msgstr "K4"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
 msgid "width of the convolve matrix"
-msgstr "a konvolúciós mátrix szélessége"
+msgstr "A konvolúciós mátrix szélessége"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2214
 msgid "height of the convolve matrix"
-msgstr "a konvolúciós mátrix magassága"
+msgstr "A konvolúciós mátrix magassága"
 
 #. default x:
 #. default y:
@@ -9305,18 +9324,20 @@ msgid "Target"
 msgstr "Cél"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
-#, fuzzy
 msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
-msgstr "a konvolúciós mátrix"
+msgstr ""
+"A célpont X-koordinátája a konvolúciós mátrixban. A konvolúció "
+"ezen pont körül lesz alkalmazva a képpontokra."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
-#, fuzzy
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
-msgstr "a konvolúciós mátrix"
+msgstr ""
+"A célpont Y-koordinátája a konvolúciós mátrixban. A konvolúció "
+"ezen pont körül lesz alkalmazva a képpontokra."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 # kernel: konvolúciós mátrix
@@ -9324,7 +9345,6 @@ msgid "Kernel"
 msgstr "Kernel"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
-#, fuzzy
 msgid ""
 "This matrix describes the convolve operation that is applied to the input "
 "image in order to calculate the pixel colors at the output. Different "
@@ -9333,9 +9353,13 @@ msgid ""
 "the matrix diagonal) while a matrix filled with a constant non-zero value "
 "would lead to a common blur effect."
 msgstr ""
-"a konvolúciós mátrix "
-"bemenet"
-"Elmosás"
+"Ez a mátrix adja meg azon konvolúciós műveletet, amely alkalmazva "
+"lesz a bemeneti képre a kimeneti képpont-színek kiszámításának "
+"céljából. A mátrix különféle érték-elrendezései "
+"különböző vizuális hatásokat eredményeznek. Az egységmátrix "
+"elmozdításos elmosást eredményez (a mátrix átlójával "
+"párhuzamosan), egy nullától eltérő konstanssal feltöltött "
+"mátrix pedig normál elmosást."
 
 #. TODO: svg spec: The default value is the sum of all values in kernelMatrix, with the exception that if the sum is zero, then the divisor is set to 1.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2219
@@ -9343,16 +9367,16 @@ msgid "Divisor"
 msgstr "Osztó"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2219
-#, fuzzy
 msgid ""
 "After applying the kernelMatrix to the input image to yield a number, that "
 "number is divided by divisor to yield the final destination color value. A "
 "divisor that is the sum of all the matrix values tends to have an evening "
 "effect on the overall color intensity of the result."
 msgstr ""
-"Kernel"
-"bemenet"
-"Osztó"
+"A kernelmátrix alkalmazva lesz a bemeneti képre, ez ad egy számot, "
+"majd ezen számot az osztóval elosztva létrejön a cél-színérték. "
+"Ha az osztó megegyezik a mátrix összes elemének összegével, azzal "
+"\"este\" hatás érhető el az eredmény színintenzitására."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2220
 msgid "Bias"
@@ -9375,6 +9399,7 @@ msgid ""
 "that the matrix operations can be applied when the kernel is positioned at "
 "or near the edge of the input image."
 msgstr ""
+"művelet"
 "bemenet "
 "Kernel"
 
