@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-04-01 22:48+0200\n"
+"PO-Revision-Date: 2008-04-04 00:17+0200\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -2894,7 +2894,9 @@ msgstr "Élesítés"
 #: ../src/extension/internal/bitmap/contrast.cpp:44
 #, fuzzy
 msgid "Enhance intensity differences in selected bitmap(s)."
-msgstr "A kijelölt bitkép(ek)"
+msgstr ""
+"A kijelölt bitkép(ek) "
+"intenzitás"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:36
 msgid "Cycle Colormap"
@@ -3169,13 +3171,12 @@ msgstr "Alakzatok"
 #: ../src/extension/internal/bitmap/shade.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:992
 msgid "Azimuth"
-msgstr ""
+msgstr "Azimut (irányszög)"
 
 #: ../src/extension/internal/bitmap/shade.cpp:42
 #: ../src/ui/dialog/filter-effects-dialog.cpp:993
-#, fuzzy
 msgid "Elevation"
-msgstr "Kapcsolat"
+msgstr "Emelkedési szög (eleváció)"
 
 #: ../src/extension/internal/bitmap/shade.cpp:43
 #, fuzzy
@@ -9077,14 +9078,12 @@ msgid "Light Source:"
 msgstr "Fényforrás:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:992
-#, fuzzy
 msgid "Direction angle for the light source on the XY plane, in degrees"
-msgstr "Fényforrás"
+msgstr "A fényforrás irányszöge az XY síkon (fokban)"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:993
-#, fuzzy
 msgid "Direction angle for the light source on the YZ plane, in degrees"
-msgstr "Fényforrás"
+msgstr "A fényforrás irányszöge az YZ síkon (fokban)"
 
 #. default x:
 #. default y:
@@ -9113,35 +9112,31 @@ msgid "Z coordinate"
 msgstr "Z-koordináta"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1002
-#, fuzzy
 msgid "Points At"
-msgstr "Pont"
+msgstr "Ide mutat"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
-#, fuzzy
 msgid "Specular Exponent"
-msgstr ""
-"Tükröződő"
-"Kitevő"
+msgstr "Tükröződési kitevő"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1003
-#, fuzzy
 msgid "Exponent value controlling the focus for the light source"
-msgstr "Fényforrás"
+msgstr "A fényforrás fókuszát meghatározó kitevőérték"
 
 #. TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1005
-#, fuzzy
 msgid "Cone Angle"
-msgstr "Szög"
+msgstr "Kúpszög"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1005
-#, fuzzy
 msgid ""
 "This is the angle between the spot light axis (i.e. the axis between the "
 "light source and the point to which it is pointing at) and the spot light "
 "cone. No light is projected outside this cone."
-msgstr "Fényforrás"
+msgstr ""
+"A reflektorszerű fény tengelye (azaz a fényforrás és a megvilágított pont "
+"által alkotott tengely) és a reflektorszerű fény kúpja által bezárt szög. "
+"Ezen kúpon kívüli helyre nem vetül fény."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1065
 msgid "New light source"
@@ -9387,32 +9382,33 @@ msgid ""
 "This value is added to each component. This is useful to define a constant "
 "value as the zero response of the filter."
 msgstr ""
+"Ez az érték hozzá lesz adva minden komponenshez. Ezzel megadható "
+"egy érték (konstans) a szűrő alaphatásaként."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
 msgid "Edge Mode"
 msgstr "Szél-üzemmód"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2221
-#, fuzzy
 msgid ""
 "Determines how to extend the input image as necessary with color values so "
 "that the matrix operations can be applied when the kernel is positioned at "
 "or near the edge of the input image."
 msgstr ""
-"művelet"
-"bemenet "
-"Kernel"
+"Megadja, hogy szükség esetén hogyan legyen kiterjesztve színértékekkel "
+"a bemeneti kép annak érdekében, hogy a mátrixműveletek alkalmazhatók "
+"legyenek, amikor a kernel a bemeneti kép szélénél vagy annak közelében "
+"van."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
 msgid "Preserve Alpha"
 msgstr "Alfa megőrzése"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2222
-#, fuzzy
 msgid "If set, the alpha channel won't be altered by this filter primitive."
 msgstr ""
-"Ha az opció be van jelölve, akkor ez a szűrőprimitív nem módosítja az "
-"alfa-csatorna"
+"Ha ez az opció be van jelölve, akkor ez a szűrőprimitív nem módosítja az "
+"alfa-csatornát"
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
@@ -9421,9 +9417,8 @@ msgstr "Szórt szín"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2225
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
-#, fuzzy
 msgid "Defines the color of the light source"
-msgstr "Fényforrás"
+msgstr "A fényforrás színét adja meg"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
@@ -9432,13 +9427,12 @@ msgstr "Felületméretezés"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2226
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2259
-#, fuzzy
 msgid ""
 "This value amplifies the heights of the bump map defined by the input alpha "
 "channel"
 msgstr ""
-"bemenet"
-"alfa-csatorna"
+"Ez az érték felerősíti a bemeneti alfa-csatorna által "
+"meghatározott buckaleképezés magasságait"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
@@ -9447,9 +9441,8 @@ msgstr "Konstans"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2227
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2260
-#, fuzzy
 msgid "This constant affects the Phong lighting model."
-msgstr "Konstans"
+msgstr "Ez a konstans a Phong világítási modellre van hatással"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2228
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2262
@@ -9457,27 +9450,24 @@ msgid "Kernel Unit Length"
 msgstr "Kernelegység-hossz"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2232
-#, fuzzy
 msgid "This defines the intensity of the displacement effect."
-msgstr "Elmozdítási"
+msgstr "Az elmozdítási effektus intenzitását adja meg"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
 msgid "X displacement"
 msgstr "X-elmozdítás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2233
-#, fuzzy
 msgid "Color component that controls the displacement in the X direction"
-msgstr "Elmozdítás"
+msgstr "Az X irányú elmozdítást megadó színkomponens"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
 msgid "Y displacement"
 msgstr "Y-elmozdítás"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2234
-#, fuzzy
 msgid "Color component that controls the displacement in the Y direction"
-msgstr "Elmozdítás"
+msgstr "Az Y irányú elmozdítást megadó színkomponens"
 
 #. default: black
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
@@ -9486,7 +9476,7 @@ msgstr "Területkitöltési szín"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2237
 msgid "The whole filter region will be filled with this color."
-msgstr ""
+msgstr "Ezzel a színnel lesz kitöltve a teljes szűrőterület"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2241
 msgid "Standard Deviation"
@@ -9497,14 +9487,12 @@ msgid "The standard deviation for the blur operation."
 msgstr "Az elmosási művelet szórása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2247
-#, fuzzy
 msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
 msgstr ""
-"Zsugorítás "
-"bemenet"
-"Nyújtás"
+"A zsugorítás \"vékonyabbá\" teszi a bemeneti képet,\n"
+"a nyújtás pedig \"kövérebbé\""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2251
 msgid "Source of Image"
@@ -9515,18 +9503,16 @@ msgid "Delta X"
 msgstr "X változása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2254
-#, fuzzy
 msgid "This is how far the input image gets shifted to the right"
-msgstr "bemenet"
+msgstr "Ilyen messzire lesz eltolva jobbra a bemeneti kép"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
 msgid "Delta Y"
 msgstr "Y változása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2255
-#, fuzzy
 msgid "This is how far the input image gets shifted downwards"
-msgstr "bemenet"
+msgstr "Ilyen messzire lesz eltolva lefelé a bemeneti kép"
 
 #. default: white
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2258
@@ -9539,18 +9525,18 @@ msgid "Exponent"
 msgstr "Kitevő"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2261
-#, fuzzy
 msgid "Exponent for specular term, larger is more \"shiny\"."
-msgstr "Tükröződő"
+msgstr ""
+"Kitevő a tükröződési értékhez (specular term). A nagyobb kitevő "
+"\"fényesebb\" hatást jelent."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2270
-#, fuzzy
 msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
 msgstr ""
-"Szűrőprimitív "
-"Örvénylés"
+"Azt adja meg, hogy a szűrőprimitív zaj- vagy örvényeffektust "
+"hozzon létre"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2271
 msgid "Base Frequency"
@@ -9566,7 +9552,7 @@ msgstr "Kezdőérték"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2273
 msgid "The starting number for the pseudo random number generator."
-msgstr ""
+msgstr "Az álvéletlenszám-generátor kezdőértéke"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2285
 msgid "Add filter primitive"
