@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-04-05 12:43+0200\n"
+"PO-Revision-Date: 2008-04-05 15:14+0200\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -4841,23 +4841,18 @@ msgid "Master"
 msgstr "Gazda"
 
 #: ../src/libgdl/gdl-dock-bar.c:109
-#, fuzzy
 msgid "GdlDockMaster object which the dockbar widget is attached to"
 msgstr ""
-"Dokkolósáv "
-"rögzít"
+"A GdlDockMaster-objektum, amelyhez a dokkolósáv típusú grafikus elem "
+"rögzítve van"
 
 #: ../src/libgdl/gdl-dock-bar.c:116
-#, fuzzy
 msgid "Dockbar style"
 msgstr "A dokkolósáv stílusa"
 
 #: ../src/libgdl/gdl-dock-bar.c:117
-#, fuzzy
 msgid "Dockbar style to show items on it"
-msgstr ""
-"Dokkolósáv "
-"elem"
+msgstr "Dokkolósáv-stílus az elemek megjelenítéséhez"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:395
 msgid "Iconify"
@@ -4877,85 +4872,68 @@ msgstr "Ezen dokkolóelem bezárása"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:706
 #: ../src/libgdl/gdl-dock-tablabel.c:128
-#, fuzzy
 msgid "Controlling dock item"
-msgstr "dokkolóelem"
+msgstr "A vezérlő dokkolóelem"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:707
-#, fuzzy
 msgid "Dockitem which 'owns' this grip"
-msgstr "Ezen lapcímkét birtokló dokkolóelem"
+msgstr "Ezen fogantyút birtokló dokkolóelem"
 
 #: ../src/libgdl/gdl-dock-item.c:287
-#, fuzzy
 msgid "Orientation"
-msgstr "Laptájolás:"
+msgstr "Tájolás"
 
 #: ../src/libgdl/gdl-dock-item.c:288
-#, fuzzy
 msgid "Orientation of the docking item"
-msgstr "dokkolóelem"
+msgstr "A dokkolóelem tájolása"
 
 #: ../src/libgdl/gdl-dock-item.c:303
 msgid "Resizable"
-msgstr ""
+msgstr "Átméretezhető"
 
 #: ../src/libgdl/gdl-dock-item.c:304
-#, fuzzy
 msgid "If set, the dock item can be resized when docked in a paned"
 msgstr ""
-"Ha az opció be van jelölve, akkor "
-"dokkolóelem"
+"Ha az opció be van jelölve, akkor a dokkolóelemet át lehet "
+"méretezni, amikor dokkolva van egy panelbe"
 
 #: ../src/libgdl/gdl-dock-item.c:311
-#, fuzzy
 msgid "Item behavior"
-msgstr ""
-"elem"
-"Viselkedés"
+msgstr "Az elem viselkedése"
 
 #: ../src/libgdl/gdl-dock-item.c:312
-#, fuzzy
 msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
-msgstr "dokkolóelem"
+msgstr ""
+"A dokkolóelem általános viselkedése (például lebeghet-e, illetve "
+"zárolt-e)"
 
 #: ../src/libgdl/gdl-dock-item.c:320 ../src/libgdl/gdl-dock-master.c:148
-#, fuzzy
 msgid "Locked"
-msgstr "Zárolás"
+msgstr "Zárolt"
 
 #: ../src/libgdl/gdl-dock-item.c:321
-#, fuzzy
 msgid "If set, the dock item cannot be dragged around and it doesn't show a grip"
 msgstr ""
-"Ha az opció be van jelölve, akkor "
-"dokkolóelem"
+"Ha az opció be van jelölve, akkor a dokkolóelem nem helyezhető át "
+"húzással és nincs fogantyúja"
 
 #: ../src/libgdl/gdl-dock-item.c:329
-#, fuzzy
 msgid "Preferred width"
-msgstr "szélesség"
+msgstr "Kívánt szélesség"
 
 #: ../src/libgdl/gdl-dock-item.c:330
-#, fuzzy
 msgid "Preferred width for the dock item"
-msgstr ""
-"dokkolóelem"
-"szélesség"
+msgstr "A dokkolóelem kívánt szélessége"
 
 #: ../src/libgdl/gdl-dock-item.c:336
-#, fuzzy
 msgid "Preferred height"
-msgstr "magasság"
+msgstr "Kívánt magasság"
 
 #: ../src/libgdl/gdl-dock-item.c:337
-#, fuzzy
 msgid "Preferred height for the dock item"
-msgstr ""
-"dokkolóelem"
-"magasság"
+msgstr "A dokkolóelem kívánt magassága"
 
 #: ../src/libgdl/gdl-dock-item.c:616
 #, c-format
@@ -4971,7 +4949,9 @@ msgstr "dokkolóobjektum"
 msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
-msgstr "Kísérlet történt"
+msgstr ""
+"Kísérlet történt "
+"grafikus elem"
 
 #: ../src/libgdl/gdl-dock-item.c:1345 ../src/libgdl/gdl-dock-item.c:1390
 #, c-format
@@ -5007,51 +4987,41 @@ msgstr ""
 "lekötés"
 
 #: ../src/libgdl/gdl-dock-master.c:141 ../src/libgdl/gdl-dock.c:183
-#, fuzzy
 msgid "Default title"
-msgstr "_Alapértelmezett mértékegység:"
+msgstr "Alapértelmezett cím"
 
 #: ../src/libgdl/gdl-dock-master.c:142
-#, fuzzy
 msgid "Default title for newly created floating docks"
-msgstr ""
-"lebegő"
-"dokkolóelem"
+msgstr "Az újonnan létrehozott lebegő dokkolóelemek alapértelmezett címe"
 
 #: ../src/libgdl/gdl-dock-master.c:149
-#, fuzzy
 msgid ""
 "If is set to 1, all the dock items bound to the master are locked; if it's "
 "0, all are unlocked; -1 indicates inconsistency among the items"
 msgstr ""
-"Gazda "
-"kötött"
-"dokkolóelem"
-"feloldás"
+"Ha 1-re van állítva, akkor a gazdához kötött összes dokkolóelem "
+"zárolt; ha 0-ra van állítva, akkor az összes feloldott állapotú; "
+"a -1 pedig azt jelzi, hogy inkonzisztencia van az elemek közt"
 
 #: ../src/libgdl/gdl-dock-master.c:157 ../src/libgdl/gdl-switcher.c:707
-#, fuzzy
 msgid "Switcher Style"
-msgstr "Alláncok összevarrása"
+msgstr "Kapcsolóstílus"
 
 #: ../src/libgdl/gdl-dock-master.c:158 ../src/libgdl/gdl-switcher.c:708
-#, fuzzy
 msgid "Switcher buttons style"
-msgstr "A következő rétegre való váltás megtörtént."
+msgstr "A kapcsolási gombok stílusa"
 
 #: ../src/libgdl/gdl-dock-master.c:165
-#, fuzzy
 msgid "Expand direction"
-msgstr "Sortávolság növelése"
+msgstr "Kiterjedési irány"
 
 #: ../src/libgdl/gdl-dock-master.c:166
-#, fuzzy
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
 "given direction"
 msgstr ""
-"Gazda"
-"dokkolóelem"
+"A tárolási dokkolóobjektumok kiterjesztésének engedélyezése "
+"a gazda dokkolóelemei számára a megadott irányban"
 
 #: ../src/libgdl/gdl-dock-master.c:781
 #, c-format
@@ -5080,18 +5050,16 @@ msgid "Page"
 msgstr "Lap"
 
 #: ../src/libgdl/gdl-dock-notebook.c:135
-#, fuzzy
 msgid "The index of the current page"
-msgstr "Az aktuális réteg átnevezése"
+msgstr "Az aktuális lap indexe"
 
 #: ../src/libgdl/gdl-dock-object.c:120 ../src/ui/widget/page-sizer.cpp:195
 msgid "Name"
 msgstr "Név"
 
 #: ../src/libgdl/gdl-dock-object.c:121
-#, fuzzy
 msgid "Unique name for identifying the dock object"
-msgstr "dokkolóobjektum"
+msgstr "A dokkolóobjektumot azonosító egyedi név"
 
 #: ../src/libgdl/gdl-dock-object.c:128
 msgid "Long name"
@@ -5204,20 +5172,12 @@ msgstr ""
 "hozzánk való dokkolásra"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:170
-#, fuzzy
 msgid "Width for the widget when it's attached to the placeholder"
-msgstr ""
-"szélesség "
-"rögzít"
-"helykitöltő"
+msgstr "A grafikus elem szélessége, amikor rögzítve van a helykitöltőhöz"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:178
-#, fuzzy
 msgid "Height for the widget when it's attached to the placeholder"
-msgstr ""
-"magasság "
-"rögzít"
-"helykitöltő"
+msgstr "A grafikus elem magassága, amikor rögzítve van a helykitöltőhöz"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:184
 msgid "Floating Toplevel"
@@ -5336,7 +5296,7 @@ msgstr "Ferdítés"
 
 #: ../src/live_effects/effect.cpp:54
 msgid "doEffect stack test"
-msgstr ""
+msgstr "doEffect-veremteszt"
 
 #: ../src/live_effects/effect.cpp:56
 msgid "Gears"
@@ -5575,14 +5535,12 @@ msgid "Center"
 msgstr "Középre igazítás"
 
 #: ../src/live_effects/lpe-slant.cpp:19
-#, fuzzy
 msgid "The x-coord of this point is around which the slant will happen"
-msgstr "Ferdítés"
+msgstr "Ezen pont X-koordinátája, amely körül a ferdítés történik"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:21
-#, fuzzy
 msgid "Stack step"
-msgstr "Képeket egymásra"
+msgstr "Veremlépés"
 
 #: ../src/live_effects/parameter/parameter.cpp:138
 msgid "Change scalar parameter"
@@ -9124,9 +9082,8 @@ msgid "Remove filter primitive"
 msgstr "Szűrőprimitív eltávolítása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1940
-#, fuzzy
 msgid "Remove merge node"
-msgstr "Összevonási csomópont eltávolítása"
+msgstr "Összekötési csomópont eltávolítása"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2056
 msgid "Reorder filter primitive"
