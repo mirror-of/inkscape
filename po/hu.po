@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-04-04 23:22+0200\n"
+"PO-Revision-Date: 2008-04-05 12:43+0200\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -2725,9 +2725,8 @@ msgstr "Eltolás"
 #: ../src/extension/internal/bitmap/threshold.cpp:43
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:49
 #: ../src/extension/internal/bitmap/wave.cpp:44
-#, fuzzy
 msgid "Raster"
-msgstr "Feljebb helyezés"
+msgstr "Raszter"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:48
 msgid "Apply adaptive thresholding to selected bitmap(s)."
@@ -2750,9 +2749,8 @@ msgid "Multiplicative Gaussian Noise"
 msgstr "Multiplikatív Gauss-zaj"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:50
-#, fuzzy
 msgid "Impulse Noise"
-msgstr "zaj"
+msgstr "Impulzus-zaj"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:51
 msgid "Laplacian Noise"
@@ -2788,9 +2786,8 @@ msgstr "Sugár"
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:40
 #: ../src/extension/internal/bitmap/sharpen.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:43
-#, fuzzy
 msgid "Sigma"
-msgstr "kicsi"
+msgstr "Szigma"
 
 #: ../src/extension/internal/bitmap/blur.cpp:46
 msgid "Blur selected bitmap(s)"
@@ -2847,24 +2844,20 @@ msgstr "Átlátszatlanság-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:58
 #: ../src/extension/internal/bitmap/levelChannel.cpp:62
-#, fuzzy
 msgid "Matte Channel"
-msgstr "csatorna"
+msgstr "Matt-csatorna"
 
 #: ../src/extension/internal/bitmap/channel.cpp:65
-#, fuzzy
 msgid "Extract specific channel from image."
-msgstr "Adott csatorna   a képből"
+msgstr "Adott csatorna kinyerése a képből"
 
 #: ../src/extension/internal/bitmap/charcoal.cpp:37
-#, fuzzy
 msgid "Charcoal"
-msgstr "Cairo"
+msgstr "Rajzszén"
 
 #: ../src/extension/internal/bitmap/charcoal.cpp:46
-#, fuzzy
 msgid "Apply charcoal stylization to selected bitmap(s)."
-msgstr "Transzformáció alkalmazása a kijelölésre bitkép(ek)hez"
+msgstr "Rajzszenes stilizálás alkalmazása a kijelölt bitkép(ek)re"
 
 #: ../src/extension/internal/bitmap/colorize.cpp:49
 msgid "Colorize"
@@ -2886,15 +2879,12 @@ msgid "Sharpen"
 msgstr "Élesítés"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:44
-#, fuzzy
 msgid "Enhance intensity differences in selected bitmap(s)."
-msgstr ""
-"Intenzitáskülönbségek "
-"a kijelölt bitkép(ek)ben"
+msgstr "Intenzitáskülönbségek erősítése a kijelölt bitkép(ek)ben"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:36
 msgid "Cycle Colormap"
-msgstr ""
+msgstr "Színtérkép eltolása"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:38
 #: ../src/extension/internal/bitmap/spread.cpp:38
@@ -2903,19 +2893,16 @@ msgid "Amount"
 msgstr "Mennyiség"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:44
-#, fuzzy
 msgid "Cycle colormap(s) of selected bitmap(s)."
-msgstr "A kijelölt bitkép(ek)"
+msgstr "A kijelölt bitkép(ek) színtérképének, illetve színtérképeinek eltolása"
 
 #: ../src/extension/internal/bitmap/despeckle.cpp:35
-#, fuzzy
 msgid "Despeckle"
-msgstr "Kijelölés megszü_ntetése"
+msgstr "Folttalanítás"
 
 #: ../src/extension/internal/bitmap/despeckle.cpp:42
-#, fuzzy
 msgid "Reduce speckle noise of selected bitmap(s)."
-msgstr "A kijelölt bitkép(ek) zaj"
+msgstr "A kijelölt bitkép(ek) folt-zajának csökkentése"
 
 #: ../src/extension/internal/bitmap/edge.cpp:36
 msgid "Edge"
@@ -2934,24 +2921,20 @@ msgid "Emboss selected bitmap(s) -- hilight edges with 3D effect."
 msgstr "A kijelölt bitkép(ek) domborítása - szélek kiemelése háromdimenziós effektussal"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:34
-#, fuzzy
 msgid "Enhance"
-msgstr "Mégsem"
+msgstr "Javítás"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:41
-#, fuzzy
 msgid "Enhance selected bitmap(s) -- minimize noise."
-msgstr "A kijelölt bitkép(ek) zaj"
+msgstr "A kijelölt bitkép(ek) javítása - a zaj minimalizálása"
 
 #: ../src/extension/internal/bitmap/equalize.cpp:34
-#, fuzzy
 msgid "Equalize"
-msgstr "Azonos szélesség"
+msgstr "Kiegyenlítés"
 
 #: ../src/extension/internal/bitmap/equalize.cpp:41
-#, fuzzy
 msgid "Equalize selected bitmap(s) -- histogram equalization."
-msgstr "A kijelölt bitkép(ek)"
+msgstr "A kijelölt bitkép(ek) kiegyenlítése - hisztogram-ekvalizálás"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:37
 #: ../src/filter-enums.cpp:28
@@ -2961,40 +2944,34 @@ msgstr "Gauss-elmosás"
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:39
 #: ../src/extension/internal/bitmap/implode.cpp:38
 #: ../src/extension/internal/bitmap/solarize.cpp:38
-#, fuzzy
 msgid "Factor"
-msgstr "Egyenletes szín"
+msgstr "Tényező"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:46
 msgid "Gaussian blur selected bitmap(s)."
 msgstr "Gauss-elmosás alkalmazása a kijelölt bitkép(ek)re"
 
 #: ../src/extension/internal/bitmap/implode.cpp:36
-#, fuzzy
 msgid "Implode"
-msgstr "Importálás"
+msgstr "Összeroppantás"
 
 #: ../src/extension/internal/bitmap/implode.cpp:44
-#, fuzzy
 msgid "Implode selected bitmap(s)."
-msgstr "A kijelölt bitkép(ek)"
+msgstr "A kijelölt bitkép(ek) összeroppantása"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:51
-#, fuzzy
 msgid "Level (with Channel)"
-msgstr "csatorna"
+msgstr "Szintbeállítás (csatorna)"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:64
 #: ../src/extension/internal/bitmap/level.cpp:42
-#, fuzzy
 msgid "Black Point"
-msgstr "Fekete kitöltés"
+msgstr "Feketepont"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:65
 #: ../src/extension/internal/bitmap/level.cpp:43
-#, fuzzy
 msgid "White Point"
-msgstr "Hegyes sarok"
+msgstr "Fehérpont"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:66
 #: ../src/extension/internal/bitmap/level.cpp:44
@@ -3002,43 +2979,42 @@ msgid "Gamma Correction"
 msgstr "Gamma-korrekció"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:72
-#, fuzzy
 msgid ""
 "Level the specified channel of selected bitmap(s) by scaling values falling "
 "between the given ranges to the full color range."
-msgstr "méretezésA kijelölt bitkép(ek) csatorna"
+msgstr ""
+"A kijelölt bitkép(ek) megadott csatornájának szintbeállítása "
+"az adott tartományokba eső értékeknek a teljes színtartományra "
+"való méretezésével"
 
 #: ../src/extension/internal/bitmap/level.cpp:40
-#, fuzzy
 msgid "Level"
-msgstr "Kerék"
+msgstr "Szintbeállítás"
 
 #: ../src/extension/internal/bitmap/level.cpp:50
-#, fuzzy
 msgid ""
 "Level selected bitmap(s) by scaling values falling between the given ranges "
 "to the full color range."
-msgstr "méretezésA kijelölt bitkép(ek)"
+msgstr ""
+"A kijelölt bitkép(ek) szintbeállítása az adott tartományokba eső "
+"értékeknek a teljes színtartományra való méretezésével"
 
 #: ../src/extension/internal/bitmap/medianFilter.cpp:36
-#, fuzzy
 msgid "Median Filter"
-msgstr "szűrő"
+msgstr "Mediánszűrő"
 
 #: ../src/extension/internal/bitmap/medianFilter.cpp:44
-#, fuzzy
 msgid ""
 "Filter selected bitmap(s) by replacing each pixel component with the median "
 "color in a circular neighborhood."
 msgstr ""
-"szűrő "
-"képpont "
-"A kijelölt bitkép(ek)"
+"A kijelölt bitkép(ek) szűrése úgy, hogy minden képpont-komponens "
+"helyettesítésre kerül az annak (kör alakú) környezetében levő "
+"színek mediánértékével"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:39
-#, fuzzy
 msgid "Modulate"
-msgstr "Üzemmód"
+msgstr "Színszabályzás"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:41
 msgid "Brightness"
@@ -3064,12 +3040,10 @@ msgid "Hue"
 msgstr "Árnyalat"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:49
-#, fuzzy
 msgid "Modulate percent hue, saturation, and brightness of selected bitmap(s)."
 msgstr ""
-"A kijelölt bitkép(ek) árnyalatának "
-"telítettség "
-"Fényesség"
+"A kijelölt bitkép(ek) árnyalatának, telítettségének és fényességének "
+"százalékos szabályzása"
 
 #: ../src/extension/internal/bitmap/negate.cpp:35
 msgid "Negate"
@@ -3113,9 +3087,8 @@ msgid "Raise"
 msgstr "Feljebb helyezés"
 
 #: ../src/extension/internal/bitmap/raise.cpp:43
-#, fuzzy
 msgid "Raised"
-msgstr "Feljebb helyezés"
+msgstr "Felemelve"
 
 #: ../src/extension/internal/bitmap/raise.cpp:49
 msgid ""
@@ -3126,9 +3099,8 @@ msgstr ""
 "feljebb emeltnek tűnjenek"
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:39
-#, fuzzy
 msgid "Reduce Noise"
-msgstr "zaj"
+msgstr "Zaj csökkentése"
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:41
 #: ../share/extensions/lindenmayer.inx.h:4
@@ -3136,24 +3108,24 @@ msgid "Order"
 msgstr "Rend"
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:47
-#, fuzzy
 msgid "Reduce noise in selected bitmap(s) using a noise peak elimination filter."
-msgstr "A kijelölt bitkép(ek) zaj szűrő"
+msgstr ""
+"Zaj csökkentése a kijelölt bitkép(ek)ben egy zajcsúcs-eltávolítási "
+"szűrővel"
 
 #: ../src/extension/internal/bitmap/sample.cpp:38
-#, fuzzy
 msgid "Sample"
-msgstr "Minták"
+msgstr "Mintakészítés"
 
 #: ../src/extension/internal/bitmap/sample.cpp:47
-#, fuzzy
 msgid "Alter the resolution of selected image by resizing it by given dimensions."
-msgstr "kijelölt"
+msgstr ""
+"A kijelölt kép felbontásának módosítása adott méretekre való "
+"átméretezéssel"
 
 #: ../src/extension/internal/bitmap/shade.cpp:39
-#, fuzzy
 msgid "Shade"
-msgstr "Alakzatok"
+msgstr "Árnyékolás"
 
 #: ../src/extension/internal/bitmap/shade.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:992
@@ -3166,54 +3138,48 @@ msgid "Elevation"
 msgstr "Emelkedési szög (eleváció)"
 
 #: ../src/extension/internal/bitmap/shade.cpp:43
-#, fuzzy
 msgid "Colored Shading"
-msgstr "Az árnyék színe"
+msgstr "Színes árnyékolás"
 
 #: ../src/extension/internal/bitmap/shade.cpp:49
-#, fuzzy
 msgid "Shade selected bitmap(s) simulating distant light source."
-msgstr ""
-"A kijelölt bitkép(ek) "
-"Fényforrás"
+msgstr "A kijelölt bitkép(ek) árnyékolása távoli fényforrást szimulálva"
 
 #: ../src/extension/internal/bitmap/sharpen.cpp:46
 msgid "Sharpen selected bitmap(s)."
 msgstr "A kijelölt bitkép(ek) élesítése"
 
 #: ../src/extension/internal/bitmap/solarize.cpp:36
-#, fuzzy
 msgid "Solarize"
-msgstr "Méret"
+msgstr "Nap-effektus"
 
 #: ../src/extension/internal/bitmap/solarize.cpp:44
-#, fuzzy
 msgid "Solarize selected bitmap(s), like overexposing photographic film."
-msgstr "A kijelölt bitkép(ek)"
+msgstr ""
+"Nap-effektus alkalmazása a kijelölt bitkép(ek)re - olyan hatás, mint "
+"amikor egy fotó túl van exponálva"
 
 #: ../src/extension/internal/bitmap/spread.cpp:36
-#, fuzzy
 msgid "Spread"
-msgstr "Spirál"
+msgstr "Szétterjesztés"
 
 #: ../src/extension/internal/bitmap/spread.cpp:44
-#, fuzzy
 msgid "Randomly spread pixels in selected bitmap(s), within the radius of 'amount.'"
-msgstr "véletlenszerűképpontA kijelölt bitkép(ek)"
+msgstr ""
+"A kijelölt bitkép(ek) képpontjainak véletlenszerű szétterjesztése "
+"a megadott mennyiség által meghatározott sugáron belül"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:36
-#, fuzzy
 msgid "Swirl"
-msgstr "Spirál"
+msgstr "Örvény"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:38
 msgid "Degrees"
 msgstr "Fok"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:44
-#, fuzzy
 msgid "Swirl selected bitmap(s) around center point."
-msgstr "középpontA kijelölt bitkép(ek)"
+msgstr "A kijelölt bitkép(ek) örvényszerű elcsavarása a középpont körül"
 
 #. TRANSLATORS: see http://docs.gimp.org/en/gimp-tool-threshold.html
 #: ../src/extension/internal/bitmap/threshold.cpp:37
@@ -3223,11 +3189,8 @@ msgid "Threshold"
 msgstr "Küszöb"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:45
-#, fuzzy
 msgid "Threshold selected bitmap(s)."
-msgstr ""
-"küszöb alkalmazása"
-"A kijelölt bitkép(ek)"
+msgstr "Küszöbérték szerinti színezés alkalmazása a kijelölt bitkép(ek)re"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:40
 msgid "Unsharp Mask"
@@ -3243,16 +3206,15 @@ msgstr "Hullám"
 
 #: ../src/extension/internal/bitmap/wave.cpp:39
 msgid "Amplitude"
-msgstr ""
+msgstr "Amplitúdó"
 
 #: ../src/extension/internal/bitmap/wave.cpp:40
 msgid "Wavelength"
 msgstr "Hullámhossz"
 
 #: ../src/extension/internal/bitmap/wave.cpp:46
-#, fuzzy
 msgid "Alter selected bitmap(s) along sine wave."
-msgstr "A kijelölt bitkép(ek) mentén"
+msgstr "A kijelölt bitkép(ek) módosítása szinuszhullám mentén"
 
 #: ../src/extension/internal/bluredge.cpp:132
 msgid "Inset/Outset Halo"
