@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-03-06 21:12-0800\n"
-"PO-Revision-Date: 2008-04-05 15:14+0200\n"
+"PO-Revision-Date: 2008-04-06 00:38+0200\n"
 "Last-Translator: Arpad Biro <biro.arpad gmail>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -4937,29 +4937,31 @@ msgstr "A dokkolóelem kívánt magassága"
 
 #: ../src/libgdl/gdl-dock-item.c:616
 #, c-format
-#, fuzzy
 msgid ""
 "You can't add a dock object (%p of type %s) inside a %s. Use a GdlDock or "
 "some other compound dock object."
-msgstr "dokkolóobjektum"
+msgstr ""
+"Dokkolóobjektum nem vehető fel (\"%p\", típus: \"%s\") egy \"%s\" "
+"típusú objektumba. Használjon GdlDock-ot vagy más összetett "
+"dokkolóobjektumot."
 
 #: ../src/libgdl/gdl-dock-item.c:623
 #, c-format
-#, fuzzy
 msgid ""
 "Attempting to add a widget with type %s to a %s, but it can only contain one "
 "widget at a time; it already contains a widget of type %s"
 msgstr ""
-"Kísérlet történt "
-"grafikus elem"
+"Kísérlet történt egy \"%s\" típusú grafikus elemnek egy "
+"\"%s\" típusú objektumba való felvételére, de az egyszerre csak "
+"egyetlen grafikus elemet tartalmazhat - már tartalmaz egy "
+"\"%s\" típusú grafikus elemet"
 
 #: ../src/libgdl/gdl-dock-item.c:1345 ../src/libgdl/gdl-dock-item.c:1390
 #, c-format
-#, fuzzy
 msgid "Unsupported docking strategy %s in dock object of type %s"
 msgstr ""
-"dokkolás "
-"dokkolóobjektum"
+"Nem támogatott dokkolási stratégia (\"%s\") egy \"%s\" típusú "
+"dokkolóobjektumban"
 
 #. UnLock menuitem
 #: ../src/libgdl/gdl-dock-item.c:1479
@@ -4978,13 +4980,8 @@ msgstr "Zárolás"
 
 #: ../src/libgdl/gdl-dock-item.c:1717
 #, c-format
-#, fuzzy
 msgid "Attempt to bind an unbound item %p"
-msgstr ""
-"Kísérlet történt"
-"kötetlen"
-"elem "
-"lekötés"
+msgstr "Kísérlet történt egy kötetlen elem (\"%p\") lekötésére"
 
 #: ../src/libgdl/gdl-dock-master.c:141 ../src/libgdl/gdl-dock.c:183
 msgid "Default title"
@@ -5025,21 +5022,21 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-master.c:781
 #, c-format
-#, fuzzy
 msgid ""
 "master %p: unable to add object %p[%s] to the hash.  There already is an "
 "item with that name (%p)."
 msgstr ""
-"Gazda"
-"elem"
+"\"%p\" gazda: \"%p\" [\"%s\"] objektum nem vehető fel a hasítótáblába. "
+"Már van ilyen nevű elem (\"%p\")."
 
 #: ../src/libgdl/gdl-dock-master.c:954
 #, c-format
-#, fuzzy
 msgid ""
 "The new dock controller %p is automatic.  Only manual dock objects should be "
 "named controller."
-msgstr "dokkolóobjektum"
+msgstr ""
+"A(z) \"%p\" azonosítójú új dokkolóelem-vezérlő automatikus. "
+"Csak kézi dokkolóobjektumokat volna szabad vezérlővé tenni."
 
 #: ../src/libgdl/gdl-dock-notebook.c:134
 #: ../src/ui/dialog/align-and-distribute.cpp:907
@@ -5079,12 +5076,11 @@ msgstr "A dokkolóobjektumhoz tartozó előregyártott ikon"
 
 #: ../src/libgdl/gdl-dock-object.c:142
 msgid "Pixbuf Icon"
-msgstr ""
+msgstr "Pixbuf-ikon"
 
 #: ../src/libgdl/gdl-dock-object.c:143
-#, fuzzy
 msgid "Pixbuf icon for the dock object"
-msgstr "dokkolóobjektum"
+msgstr "Pixbuf-ikon a dokkolóobjektumhoz"
 
 #: ../src/libgdl/gdl-dock-object.c:148
 msgid "Dock master"
@@ -5096,22 +5092,22 @@ msgstr "Azon dokkolási gazda, amelyhez ez a dokkolóobjektum hozzá van kötve"
 
 #: ../src/libgdl/gdl-dock-object.c:434
 #, c-format
-#, fuzzy
 msgid ""
 "Call to gdl_dock_object_dock in a dock object %p (object type is %s) which "
 "hasn't implemented this method"
-msgstr "dokkolóobjektum"
+msgstr ""
+"Hívás történt a \"gdl_dock_object_dock\" eljárásra "
+"\"%p\" dokkolóobjektumban (objektumtípus: \"%s\"), de az eljárás "
+"még nincs megvalósítva"
 
 #: ../src/libgdl/gdl-dock-object.c:563
 #, c-format
-#, fuzzy
 msgid ""
 "Dock operation requested in a non-bound object %p. The application might "
 "crash"
 msgstr ""
-"dokkolási"
-"művelet "
-"kötetlen"
+"Dokkolási művelet lett kérve \"%p\" kötetlen objektumban. Lehetséges, "
+"hogy az alkalmazás leáll."
 
 #: ../src/libgdl/gdl-dock-object.c:570
 #, c-format
@@ -5122,14 +5118,10 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-object.c:612
 #, c-format
-#, fuzzy
 msgid "Attempt to bind to %p an already bound dock object %p (current master: %p)"
 msgstr ""
-"Kísérlet történt"
-"hozzákötés"
-"kötött"
-"dokkolóobjektum "
-"Gazda"
+"Kísérlet történt arra, hogy \"%p\" gazdához hozzákötésre kerüljön "
+"a már kötött \"%p\" dokkolóobjektum (jelenlegi gazda: \"%p\")"
 
 #: ../src/libgdl/gdl-dock-paned.c:132
 msgid "Position"
@@ -5213,20 +5205,17 @@ msgstr ""
 #, c-format
 msgid "Got a detach signal from an object (%p) who is not our host %p"
 msgstr ""
-"Leválasztási jelzés érkezett egy olyan objektumtól (%p), amely "
-"nem a mi gazdánk (%p)"
+"Leválasztási jelzés érkezett egy olyan objektumtól (\"%p\"), amely "
+"nem a mi gazdánk (\"%p\")"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:643
 #, c-format
-#, fuzzy
 msgid ""
 "Something weird happened while getting the child placement for %p from "
 "parent %p"
 msgstr ""
-"Váratlan probléma lépett fel "
-"elhelyezés"
-"while getting the child placement for %p from "
-"parent %p"
+"Váratlan probléma lépett fel, amikor a program lekérdezte a "
+"gyerek-elhelyezést \"%p\" számára \"%p\" szülőtől"
 
 #: ../src/libgdl/gdl-dock-tablabel.c:129
 msgid "Dockitem which 'owns' this tablabel"
