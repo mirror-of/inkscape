@@ -1,0 +1,350 @@
+Index: share/extensions/ccx_input.inx
+===================================================================
+--- share/extensions/ccx_input.inx	(revision 0)
++++ share/extensions/ccx_input.inx	(revision 0)
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
++    <_name>Corel DRAW Compressed Exchange files input</_name>
++    <id>org.inkscape.input.ccx</id>
++    <dependency type="executable" location="path">uniconv</dependency>
++    <dependency type="executable" location="extensions">uniconv-ext.py</dependency>
++    <input>
++        <extension>.ccx</extension>
++        <mimetype>application/x-xccx</mimetype>
++        <_filetypename>Corel DRAW Compressed Exchange files (.ccx)</_filetypename>
++        <_filetypetooltip>Open compressed exchange files saved in Corel DRAW</_filetypetooltip>
++    </input>
++    <script>
++        <command reldir="extensions" interpreter="python">uniconv-ext.py</command>
++    </script>
++</inkscape-extension>
+Index: share/extensions/cdr_input.inx
+===================================================================
+--- share/extensions/cdr_input.inx	(revision 18352)
++++ share/extensions/cdr_input.inx	(working copy)
+@@ -1,16 +1,17 @@
+-<inkscape-extension>
+-    <_name>Corel DRAW Input</_name>
+-    <id>org.inkscape.input.cdr</id>
+-    <dependency type="executable" location="path">uniconv</dependency>
+-    <dependency type="executable" location="extensions">cdr2svg.sh</dependency>
+-    <input>
+-        <extension>.cdr</extension>
+-        <mimetype>image/x-xcdr</mimetype>
+-        <_filetypename>Corel DRAW 7-X4 files (*.cdr)</_filetypename>
+-        <_filetypetooltip>Open files saved in Corel DRAW 7-X4</_filetypetooltip>
+-        <output_extension>org.inkscape.output.cdr</output_extension>
+-    </input>
+-    <script>
+-        <command reldir="extensions">cdr2svg.sh</command>
+-    </script>
+-</inkscape-extension>
++<?xml version="1.0" encoding="UTF-8"?>
++<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
++    <_name>Corel DRAW Input</_name>
++    <id>org.inkscape.input.cdr</id>
++    <dependency type="executable" location="path">uniconv</dependency>
++    <dependency type="executable" location="extensions">uniconv-ext.py</dependency>
++    <input>
++        <extension>.cdr</extension>
++        <mimetype>image/x-xcdr</mimetype>
++        <_filetypename>Corel DRAW 7-X4 files (*.cdr)</_filetypename>
++        <_filetypetooltip>Open files saved in Corel DRAW 7-X4</_filetypetooltip>
++        <output_extension>org.inkscape.output.cdr</output_extension>
++    </input>
++    <script>
++        <command reldir="extensions" interpreter="python">uniconv-ext.py</command>
++    </script>
++</inkscape-extension>
+Index: share/extensions/cdt_input.inx
+===================================================================
+--- share/extensions/cdt_input.inx	(revision 0)
++++ share/extensions/cdt_input.inx	(revision 0)
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
++    <_name>Corel DRAW templates input</_name>
++    <id>org.inkscape.input.cdt</id>
++    <dependency type="executable" location="path">uniconv</dependency>
++    <dependency type="executable" location="extensions">uniconv-ext.py</dependency>
++    <input>
++        <extension>.cdt</extension>
++        <mimetype>application/x-xcdt</mimetype>
++        <_filetypename>Corel DRAW 7-13 template files (.cdt)</_filetypename>
++        <_filetypetooltip>Open files saved in Corel DRAW 7-13</_filetypetooltip>
++    </input>
++    <script>
++        <command reldir="extensions" interpreter="python">uniconv-ext.py</command>
++    </script>
++</inkscape-extension>
+Index: share/extensions/cgm_input.inx
+===================================================================
+--- share/extensions/cgm_input.inx	(revision 0)
++++ share/extensions/cgm_input.inx	(revision 0)
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
++    <_name>Computer Graphics Metafile files input</_name>
++    <id>org.inkscape.input.cgm</id>
++    <dependency type="executable" location="path">uniconv</dependency>
++    <dependency type="executable" location="extensions">uniconv-ext.py</dependency>
++    <input>
++        <extension>.cgm</extension>
++        <mimetype>application/x-xcgm</mimetype>
++        <_filetypename>Computer Graphics Metafile files (.cgm)</_filetypename>
++        <_filetypetooltip>Open Computer Graphics Metafile files</_filetypetooltip>
++    </input>
++    <script>
++        <command reldir="extensions" interpreter="python">uniconv-ext.py</command>
++    </script>
++</inkscape-extension>
+Index: share/extensions/cmx_input.inx
+===================================================================
+--- share/extensions/cmx_input.inx	(revision 0)
++++ share/extensions/cmx_input.inx	(revision 0)
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
++    <_name>Corel DRAW Presentation Exchange files input</_name>
++    <id>org.inkscape.input.cmx</id>
++    <dependency type="executable" location="path">uniconv</dependency>
++    <dependency type="executable" location="extensions">uniconv-ext.py</dependency>
++    <input>
++        <extension>.cmx</extension>
++        <mimetype>application/x-xcmx</mimetype>
++        <_filetypename>Corel DRAW Presentation Exchange files (.cmx)</_filetypename>
++        <_filetypetooltip>Open presentation exchange files saved in Corel DRAW</_filetypetooltip>
++    </input>
++    <script>
++        <command reldir="extensions" interpreter="python">uniconv-ext.py</command>
++    </script>
++</inkscape-extension>
+Index: share/extensions/sk1_input.inx
+===================================================================
+--- share/extensions/sk1_input.inx	(revision 0)
++++ share/extensions/sk1_input.inx	(revision 0)
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
++    <_name>sK1 vector graphics files input</_name>
++    <id>org.inkscape.input.sk1</id>
++    <dependency type="executable" location="path">uniconv</dependency>
++    <dependency type="executable" location="extensions">uniconv-ext.py</dependency>
++    <input>
++        <extension>.sk1</extension>
++        <mimetype>application/x-xsk1</mimetype>
++        <_filetypename>sK1 vector graphics files (.sk1)</_filetypename>
++        <_filetypetooltip>Open files saved in sK1 vector graphics editor</_filetypetooltip>
++    </input>
++    <script>
++        <command reldir="extensions" interpreter="python">uniconv-ext.py</command>
++    </script>
++</inkscape-extension>
+Index: share/extensions/uniconv-ext.py
+===================================================================
+--- share/extensions/uniconv-ext.py	(revision 0)
++++ share/extensions/uniconv-ext.py	(revision 0)
+@@ -0,0 +1,69 @@
++#!/usr/bin/env python
++
++"""
++uniconv-ext.py
++Python script for running UniConvertor in Inkscape extensions
++
++Copyright (C) 2008 Stephen Silver
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
++
++"""
++
++import os
++import random
++import subprocess
++import sys
++import tempfile
++
++# We need a filename ending in ".svg" for UniConvertor.
++# This is a hack.
++chars = list("0123456789abcdefghijklmnopqrstuvwxyz")
++while True:
++    random.shuffle(chars)
++    svgfile = os.path.join(tempfile.gettempdir(), ''.join(chars) + '.svg')
++    if not os.path.exists(svgfile):
++        break
++
++# Run UniConvertor, and determine our return code.
++try:
++    p = subprocess.Popen('uniconv "%s" "%s"' % (sys.argv[1], svgfile),
++                         shell=True, stderr=subprocess.PIPE)
++    err = p.stderr.read()
++    rc = p.wait()
++    if rc:
++        sys.stderr.write("UniConvertor failed: %s\n" % err)
++        rc = 1
++except Exception, inst:
++    sys.stderr.write("Spawn error: %s\n" % str(inst))
++    rc = 1
++
++# If successful, copy the SVG file to stdout.
++if rc == 0:
++    try:
++        f = open(svgfile, "rU")
++        for line in f:
++            sys.stdout.write(line)
++        f.close()
++    except IOError, inst:
++        sys.stderr.write("Error reading temporary SVG file: %s\n" % str(inst))
++        rc = 1
++
++# Clean up and return.
++try:
++    os.remove(svgfile)
++except Exception:
++    pass
++sys.exit(rc)
+Index: share/extensions/wmf_input.inx
+===================================================================
+--- share/extensions/wmf_input.inx	(revision 18352)
++++ share/extensions/wmf_input.inx	(working copy)
+@@ -1,8 +1,9 @@
+-<inkscape-extension>
++<?xml version="1.0" encoding="UTF-8"?>
++<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+     <_name>Windows Metafile Input</_name>
+     <id>org.inkscape.input.wmf</id>
+     <dependency type="executable" location="path">uniconv</dependency>
+-    <dependency type="executable" location="extensions">cdr2svg.sh</dependency>
++    <dependency type="executable" location="extensions">uniconv-ext.py</dependency>
+     <input>
+         <extension>.wmf</extension>
+         <mimetype>application/x-wmf</mimetype>
+@@ -10,6 +11,6 @@
+         <_filetypetooltip>A popular graphics file format for clipart</_filetypetooltip>
+     </input>
+     <script>
+-        <command reldir="extensions">cdr2svg.sh</command>
++        <command reldir="extensions" interpreter="python">uniconv-ext.py</command>
+     </script>
+ </inkscape-extension>
+Index: src/extension/dependency.cpp
+===================================================================
+--- src/extension/dependency.cpp	(revision 18352)
++++ src/extension/dependency.cpp	(working copy)
+@@ -213,17 +213,29 @@
+                             g_free(orig_path);
+                             return TRUE;
+                         }
++
+                         // give it a 2nd try with ".exe" added
+-                        gchar * final_name_exe = g_strdup_printf ("%s.exe", final_name);                        
++                        gchar * final_name_exe = g_strdup_printf("%s.exe", final_name);                        
+                         if (Glib::file_test(final_name_exe, filetest)) {
+                             g_free(final_name);
+                             g_free(final_name_exe);
+                             g_free(orig_path);
+                             return TRUE;
+                         }
++                        g_free(final_name_exe);
+ 
++                        // and a 3rd try with ".cmd" added (mainly for UniConvertor)
++                        gchar * final_name_cmd = g_strdup_printf("%s.cmd", final_name);
++                        if (Glib::file_test(final_name_cmd, filetest)) {
++                            g_free(final_name);
++                            g_free(final_name_cmd);
++                            g_free(orig_path);
++                            return TRUE;
++                        }
++                        g_free(final_name_cmd);
++
++                        // give up
+                         g_free(final_name);
+-                        g_free(final_name_exe);
+                     }
+ 
+                     g_free(orig_path);
+Index: src/main.cpp
+===================================================================
+--- src/main.cpp	(revision 18352)
++++ src/main.cpp	(working copy)
+@@ -413,6 +413,60 @@
+ static bool needToRecodeParams = true;
+ gchar* blankParam = "";
+ 
++#ifdef WIN32
++static int _win32_set_inkscape_env(char *argv0)
++{
++    CHAR szFullPath[_MAX_PATH];
++
++    CHAR szDrive[_MAX_DRIVE];
++    CHAR szDir[_MAX_DIR];
++    CHAR szFile[_MAX_FNAME];
++    CHAR szExt[_MAX_EXT];
++
++    std::string tmp;
++
++    if (GetModuleFileName(NULL, szFullPath, sizeof(szFullPath)) == 0) {
++        strcpy(szFullPath, argv0);
++    }
++
++    _splitpath(szFullPath, szDrive, szDir, szFile, szExt);
++    strcpy(szFullPath, szDrive);
++    strcat(szFullPath, szDir);
++
++    char *oldenv = getenv("PATH");
++    tmp = "PATH=";
++    tmp += szFullPath;
++    tmp += ";";
++    tmp += szFullPath;
++    tmp += "python;";
++    tmp += szFullPath;
++    tmp += "python\\Scripts;";  // for uniconv.cmd
++    tmp += szFullPath;
++    tmp += "perl";
++    if(oldenv != NULL) {
++        tmp += ";";
++        tmp += oldenv;
++    }
++    _putenv(tmp.c_str());
++
++    oldenv = getenv("PYTHONPATH");
++    tmp = "PYTHONPATH=";
++    tmp += szFullPath;
++    tmp += "python;";
++    tmp += szFullPath;
++    tmp += "python\\Lib;";
++    tmp += szFullPath;
++    tmp += "python\\DLLs";
++    if(oldenv != NULL) {
++        tmp += ";";
++        tmp += oldenv;
++    }
++    _putenv(tmp.c_str());
++
++    return 0;
++}
++#endif
++
+ int
+ main(int argc, char **argv)
+ {
+@@ -425,6 +479,7 @@
+ 
+ #ifdef ENABLE_NLS
+ #ifdef WIN32
++	_win32_set_inkscape_env(argv[0]);
+     RegistryTool rt;
+     rt.setPathInfo();
+     gchar *pathBuf = g_strconcat(g_path_get_dirname(argv[0]), "\\", PACKAGE_LOCALE_DIR, NULL);
