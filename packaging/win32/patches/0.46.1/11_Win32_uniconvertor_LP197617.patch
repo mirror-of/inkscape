@@ -1,3 +1,19 @@
+Index: share/extensions/cdr2svg.sh
+===================================================================
+--- share/extensions/cdr2svg.sh	(revision 18386)
++++ share/extensions/cdr2svg.sh	(working copy)
+@@ -1,11 +0,0 @@
+-#! /bin/sh
+-rc=0
+-TMPDIR="${TMPDIR-/tmp}"
+-TEMPFILENAME=`mktemp 2>/dev/null || echo "$TMPDIR/$$"`
+-TEMPFILENAME=${TEMPFILENAME}.svg
+-
+-uniconv "$1" "${TEMPFILENAME}" > /dev/null 2>&1 || rc=1
+-
+-cat < "${TEMPFILENAME}" || rc=1
+-rm -f "${TEMPFILENAME}"
+-exit $rc
 Index: share/extensions/ccx_input.inx
 ===================================================================
 --- share/extensions/ccx_input.inx	(revision 0)
@@ -21,7 +37,7 @@ Index: share/extensions/ccx_input.inx
 +</inkscape-extension>
 Index: share/extensions/cdr_input.inx
 ===================================================================
---- share/extensions/cdr_input.inx	(revision 18352)
+--- share/extensions/cdr_input.inx	(revision 18386)
 +++ share/extensions/cdr_input.inx	(working copy)
 @@ -1,16 +1,17 @@
 -<inkscape-extension>
@@ -217,7 +233,7 @@ Index: share/extensions/uniconv-ext.py
 +sys.exit(rc)
 Index: share/extensions/wmf_input.inx
 ===================================================================
---- share/extensions/wmf_input.inx	(revision 18352)
+--- share/extensions/wmf_input.inx	(revision 18386)
 +++ share/extensions/wmf_input.inx	(working copy)
 @@ -1,8 +1,9 @@
 -<inkscape-extension>
@@ -241,7 +257,7 @@ Index: share/extensions/wmf_input.inx
  </inkscape-extension>
 Index: src/extension/dependency.cpp
 ===================================================================
---- src/extension/dependency.cpp	(revision 18352)
+--- src/extension/dependency.cpp	(revision 18386)
 +++ src/extension/dependency.cpp	(working copy)
 @@ -213,17 +213,29 @@
                              g_free(orig_path);
@@ -277,74 +293,14 @@ Index: src/extension/dependency.cpp
                      g_free(orig_path);
 Index: src/main.cpp
 ===================================================================
---- src/main.cpp	(revision 18352)
+--- src/main.cpp	(revision 18386)
 +++ src/main.cpp	(working copy)
-@@ -413,6 +413,60 @@
- static bool needToRecodeParams = true;
- gchar* blankParam = "";
- 
-+#ifdef WIN32
-+static int _win32_set_inkscape_env(char *argv0)
-+{
-+    CHAR szFullPath[_MAX_PATH];
-+
-+    CHAR szDrive[_MAX_DRIVE];
-+    CHAR szDir[_MAX_DIR];
-+    CHAR szFile[_MAX_FNAME];
-+    CHAR szExt[_MAX_EXT];
-+
-+    std::string tmp;
-+
-+    if (GetModuleFileName(NULL, szFullPath, sizeof(szFullPath)) == 0) {
-+        strcpy(szFullPath, argv0);
-+    }
-+
-+    _splitpath(szFullPath, szDrive, szDir, szFile, szExt);
-+    strcpy(szFullPath, szDrive);
-+    strcat(szFullPath, szDir);
-+
-+    char *oldenv = getenv("PATH");
-+    tmp = "PATH=";
-+    tmp += szFullPath;
-+    tmp += ";";
-+    tmp += szFullPath;
-+    tmp += "python;";
-+    tmp += szFullPath;
+@@ -440,6 +440,8 @@
+     tmp += szFullPath;
+     tmp += "python;";
+     tmp += szFullPath;
 +    tmp += "python\\Scripts;";  // for uniconv.cmd
 +    tmp += szFullPath;
-+    tmp += "perl";
-+    if(oldenv != NULL) {
-+        tmp += ";";
-+        tmp += oldenv;
-+    }
-+    _putenv(tmp.c_str());
-+
-+    oldenv = getenv("PYTHONPATH");
-+    tmp = "PYTHONPATH=";
-+    tmp += szFullPath;
-+    tmp += "python;";
-+    tmp += szFullPath;
-+    tmp += "python\\Lib;";
-+    tmp += szFullPath;
-+    tmp += "python\\DLLs";
-+    if(oldenv != NULL) {
-+        tmp += ";";
-+        tmp += oldenv;
-+    }
-+    _putenv(tmp.c_str());
-+
-+    return 0;
-+}
-+#endif
-+
- int
- main(int argc, char **argv)
- {
-@@ -425,6 +479,7 @@
- 
- #ifdef ENABLE_NLS
- #ifdef WIN32
-+	_win32_set_inkscape_env(argv[0]);
-     RegistryTool rt;
-     rt.setPathInfo();
-     gchar *pathBuf = g_strconcat(g_path_get_dirname(argv[0]), "\\", PACKAGE_LOCALE_DIR, NULL);
+     tmp += "perl";
+     if(oldenv != NULL) {
+         tmp += ";";
