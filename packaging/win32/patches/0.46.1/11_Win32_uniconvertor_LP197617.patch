@@ -304,3 +304,23 @@ Index: src/main.cpp
      tmp += "perl";
      if(oldenv != NULL) {
          tmp += ";";
+Index: share/extensions/Makefile.am
+===================================================================
+--- share/extensions/Makefile.am	(revision 18386)
++++ share/extensions/Makefile.am	(working copy)
+@@ -14,7 +14,6 @@
+ extensions = \
+ 	addnodes.py \
+ 	bezmisc.py \
+-	cdr2svg.sh\
+ 	chardataeffect.py\
+ 	color_brighter.py\
+ 	color_custom.py\
+@@ -98,6 +97,7 @@
+ 	text_randomcase.py \
+ 	text_replace.py \
+ 	txt2svg.pl \
++	uniconv-ext.py \
+ 	webbrowser_askaquestion.py \
+ 	webbrowser_commandline.py \
+ 	webbrowser_faq.py\
