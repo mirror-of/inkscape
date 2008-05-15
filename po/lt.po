@@ -2,28 +2,31 @@
 # Copyright (C) 2000-2006 Free Software Foundation, Inc.
 # This file is distributed under the same license as the Inkscape package.
 # Andrius R. <knutux@gmail.com>, 2006.
+# Domas Jokubauskis <domasj@gmail.com>, 2008
+# Mantas Kriaučiūnas <mantas@akl.lt>, 2008
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2008-02-26 11:38+0100\n"
-"PO-Revision-Date: 2008-03-11 18:34+0300\n"
+"PO-Revision-Date: 2008-05-15 10:32+0300\n"
 "Last-Translator: Domas Jokubauskis <domasj@gmail.com>\n"
 "Language-Team: Lithuanian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2008-04-17 08:30+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
-msgstr "Kurti ir redaguoti SVG iliustraciją"
+msgstr "Kurti ir redaguoti vektorinius grafinius piešinius"
 
 #: ../inkscape.desktop.in.h:2
-#, fuzzy
 msgid "Inkscape Vector Graphics Editor"
-msgstr "Inkscape vektorinis SVG iliustratorius"
+msgstr "Vektorinės grafikos iliustratorius Inkscape"
 
 #: ../src/arc-context.cpp:339
 msgid "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
@@ -832,7 +835,7 @@ msgstr "Užpildomo stačiakampio aukštis"
 
 #: ../src/dialogs/clonetiler.cpp:2868
 msgid "Rows, columns: "
-msgstr "Eilutės, stulpeliai:"
+msgstr "Eilutės, stulpeliai: "
 
 #: ../src/dialogs/clonetiler.cpp:2869
 msgid "Create the specified number of rows and columns"
@@ -840,7 +843,7 @@ msgstr "Kurti nustatytą kiekį eilučių ir stulpelių"
 
 #: ../src/dialogs/clonetiler.cpp:2878
 msgid "Width, height: "
-msgstr "Plotis, aukštis:"
+msgstr "Plotis, aukštis: "
 
 #: ../src/dialogs/clonetiler.cpp:2879
 msgid "Fill the specified width and height with the tiling"
@@ -869,7 +872,7 @@ msgstr "Sukurti ir rikiuoti pažymėto objekto kopijas"
 #. So unclumping is the process of spreading a number of objects out more evenly.
 #: ../src/dialogs/clonetiler.cpp:2939
 msgid " _Unclump "
-msgstr "Sutva_rkyti"
+msgstr " Sutva_rkyti "
 
 #: ../src/dialogs/clonetiler.cpp:2940
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
@@ -877,7 +880,7 @@ msgstr "Išstumdyti kopijas taip, kad sumažėtų persidengimai (galima naudoti 
 
 #: ../src/dialogs/clonetiler.cpp:2946
 msgid " Re_move "
-msgstr "_Šalinti"
+msgstr " _Šalinti "
 
 #: ../src/dialogs/clonetiler.cpp:2947
 msgid "Remove existing tiled clones of the selected object (siblings only)"
@@ -885,7 +888,7 @@ msgstr "Šalinti egzistuojančias objekto rikiuotas kopijas"
 
 #: ../src/dialogs/clonetiler.cpp:2963
 msgid " R_eset "
-msgstr "Pra_dinės reikšmės"
+msgstr " Pra_dinės reikšmės "
 
 #. TRANSLATORS: "change" is a noun here
 #: ../src/dialogs/clonetiler.cpp:2965
@@ -1057,15 +1060,15 @@ msgid "Export in progress"
 msgstr "Eksportuojama"
 
 #: ../src/dialogs/export.cpp:1084
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %d files"
-msgstr "Eksportuojama %s (%d x %d)"
+msgstr "Eksportuojamas %d failai"
 
 #: ../src/dialogs/export.cpp:1124
 #: ../src/dialogs/export.cpp:1196
 #, c-format
 msgid "Could not export to filename %s.\n"
-msgstr "Nepavyko išeksportuoti failo %s.\n"
+msgstr "Nepavyko išeksportuoti į failą %s.\n"
 
 #: ../src/dialogs/export.cpp:1152
 msgid "You have to enter a filename"
@@ -4710,7 +4713,7 @@ msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
 msgstr ""
-"Inkscape veiks, bet naudojant numatytas nuostatas,\n"
+"Inkscape veiks, bet naudos numatytus nustatymus,\n"
 "ir jokie nustatymuose daryti keitimai nebus išsaugoti."
 
 #: ../src/inkscape.cpp:734
@@ -5920,7 +5923,7 @@ msgstr "_Lenta"
 
 #: ../src/menus-skeleton.h:241
 msgid "_Help"
-msgstr "Ž_inynas"
+msgstr "_Pagalba"
 
 #: ../src/menus-skeleton.h:245
 msgid "Tutorials"
@@ -6386,7 +6389,7 @@ msgid ""
 "%s is not a valid preferences file.\n"
 "%s"
 msgstr ""
-"%s – neteisingas nuostatų failas.\n"
+"%s – neteisingas nustatymų failas.\n"
 "%s"
 
 #: ../src/preferences.cpp:60
@@ -6394,8 +6397,8 @@ msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
 msgstr ""
-"Inkscape veiks su numatytomis nuostatomis.\n"
-"Naujos nuostatos nebus išsaugotos."
+"Inkscape veiks su numatytais nustatymais.\n"
+"Nauji nustatymai nebus išsaugoti."
 
 #: ../src/rect-context.cpp:384
 msgid "<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner circular"
@@ -9690,9 +9693,8 @@ msgstr ""
 #. Paint Bucket
 #: ../src/ui/dialog/inkscape-preferences.cpp:435
 #: ../src/verbs.cpp:2406
-#, fuzzy
 msgid "Paint Bucket"
-msgstr "Spausdinti dokumentą"
+msgstr "Užpildymo įrankis"
 
 #. Gradient
 #: ../src/ui/dialog/inkscape-preferences.cpp:444
@@ -12830,19 +12832,19 @@ msgstr ""
 #. Tool prefs
 #: ../src/verbs.cpp:2410
 msgid "Selector Preferences"
-msgstr "Žymeklio įrankio nustatos"
+msgstr "Žymėjimo įrankio nustatymai"
 
 #: ../src/verbs.cpp:2411
 msgid "Open Preferences for the Selector tool"
-msgstr "Atverti žymeklio įrankio nuostatas"
+msgstr "Atverti žymėjimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2412
 msgid "Node Tool Preferences"
-msgstr "Mazgų įrankio nuostatos"
+msgstr "Mazgų įrankio nustatymai"
 
 #: ../src/verbs.cpp:2413
 msgid "Open Preferences for the Node tool"
-msgstr "Atverti mazgų redagavimo įrankio nuostatas"
+msgstr "Atverti mazgų redagavimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2414
 #, fuzzy
@@ -12856,16 +12858,15 @@ msgstr "Atidaryti teksto įrankio nustatymus"
 
 #: ../src/verbs.cpp:2416
 msgid "Rectangle Preferences"
-msgstr "Stačiakampių įrankio nuostatos"
+msgstr "Stačiakampių įrankio nustatymai"
 
 #: ../src/verbs.cpp:2417
 msgid "Open Preferences for the Rectangle tool"
-msgstr "Atverti stačiakampių kūrimo įrankio nuostatas"
+msgstr "Atverti stačiakampių kūrimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2418
-#, fuzzy
 msgid "3D Box Preferences"
-msgstr "Teksto įrankio nustatymai"
+msgstr "Trimatės dėžutės nustatymai"
 
 #: ../src/verbs.cpp:2419
 #, fuzzy
@@ -12874,101 +12875,99 @@ msgstr "Atidaryti mazgų redagavimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2420
 msgid "Ellipse Preferences"
-msgstr "Elipsių įrankio nuostatos"
+msgstr "Elipsių įrankio nustatymai"
 
 #: ../src/verbs.cpp:2421
 msgid "Open Preferences for the Ellipse tool"
-msgstr "Atverti elipsių ir apskritimų kūrimo įrankio nuostatas"
+msgstr "Atverti elipsių ir apskritimų kūrimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2422
 msgid "Star Preferences"
-msgstr "Žvaigždžių įrankio nuostatos"
+msgstr "Žvaigždžių įrankio nustatymai"
 
 #: ../src/verbs.cpp:2423
 msgid "Open Preferences for the Star tool"
-msgstr "Atverti žvaigždžių ir daugiakampių kūrimo įrankio nuostatas"
+msgstr "Atverti žvaigždžių ir daugiakampių kūrimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2424
 msgid "Spiral Preferences"
-msgstr "Spiralių įrankio nuostatos"
+msgstr "Spiralių įrankio nustatymai"
 
 #: ../src/verbs.cpp:2425
 msgid "Open Preferences for the Spiral tool"
-msgstr "Atverti spiralės kūrimo įrankio nuostatas"
+msgstr "Atverti spiralės kūrimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2426
 msgid "Pencil Preferences"
-msgstr "Pieštuko įrankio nuostatos"
+msgstr "Pieštuko įrankio nustatymai"
 
 #: ../src/verbs.cpp:2427
 msgid "Open Preferences for the Pencil tool"
-msgstr "Atverti pieštuko įrankio nuostatas"
+msgstr "Atverti pieštuko įrankio nustatymus"
 
 #: ../src/verbs.cpp:2428
 msgid "Pen Preferences"
-msgstr "Rašiklio įrankio nuostatos"
+msgstr "Rašiklio įrankio nustatymai"
 
 #: ../src/verbs.cpp:2429
 msgid "Open Preferences for the Pen tool"
-msgstr "Atverti rašiklio įrankio nuostatas"
+msgstr "Atverti rašiklio įrankio nustatymus"
 
 #: ../src/verbs.cpp:2430
 msgid "Calligraphic Preferences"
-msgstr "Kaligrafijos įrankio nustatos"
+msgstr "Kaligrafijos įrankio nustatymai"
 
 #: ../src/verbs.cpp:2431
 msgid "Open Preferences for the Calligraphy tool"
-msgstr "Ativerti kaligrafijos įrankio nuostatas"
+msgstr "Ativerti kaligrafijos įrankio nustatymus"
 
 #: ../src/verbs.cpp:2432
 msgid "Text Preferences"
-msgstr "Teksto įrankio nuostatos"
+msgstr "Teksto įrankio nustatymai"
 
 #: ../src/verbs.cpp:2433
 msgid "Open Preferences for the Text tool"
-msgstr "Atverti teksto įrankio nuostatas"
+msgstr "Atverti teksto įrankio nustatymus"
 
 #: ../src/verbs.cpp:2434
 msgid "Gradient Preferences"
-msgstr "Gradiento įrankio nuostatos"
+msgstr "Gradiento įrankio nustatymai"
 
 #: ../src/verbs.cpp:2435
 msgid "Open Preferences for the Gradient tool"
-msgstr "Atverti gradiento įrankio nustatas"
+msgstr "Atverti gradiento įrankio nustatymus"
 
 #: ../src/verbs.cpp:2436
 msgid "Zoom Preferences"
-msgstr "Mastelio įrankio nuostatos"
+msgstr "Mastelio įrankio nustatymai"
 
 #: ../src/verbs.cpp:2437
 msgid "Open Preferences for the Zoom tool"
-msgstr "Atverti mastelio keitimo įrankio nuostatas"
+msgstr "Atverti mastelio keitimo įrankio nustatymus"
 
 #: ../src/verbs.cpp:2438
 msgid "Dropper Preferences"
-msgstr "Pipetės įrankio nustatos"
+msgstr "Pipetės įrankio nustatymai"
 
 #: ../src/verbs.cpp:2439
 msgid "Open Preferences for the Dropper tool"
-msgstr "Atverti pipetės įrankio nuostatas"
+msgstr "Atverti pipetės įrankio nustatymus"
 
 #: ../src/verbs.cpp:2440
 msgid "Connector Preferences"
-msgstr "Jungčių įrankio nustatos"
+msgstr "Jungčių įrankio nustatymai"
 
 #: ../src/verbs.cpp:2441
 msgid "Open Preferences for the Connector tool"
-msgstr "Atverti jungčių įrankio nuostatas"
+msgstr "Atverti jungčių įrankio nustatymus"
 
 #: ../src/verbs.cpp:2442
-#, fuzzy
 msgid "Paint Bucket Preferences"
-msgstr "Perėjimo įrankio nustatymai"
+msgstr "Užpildymo įrankio nustatymai"
 
 #: ../src/verbs.cpp:2443
-#, fuzzy
 msgid "Open Preferences for the Paint Bucket tool"
-msgstr "Atidaryti pieštuko įrankio nustatymus"
+msgstr "Atidaryti užpildymo įrankio nustatymus"
 
 #. Zoom/View
 #: ../src/verbs.cpp:2446
@@ -13149,19 +13148,19 @@ msgstr "Keisti mastelį, kad pažymėjimas tilptų lange"
 #. Dialogs
 #: ../src/verbs.cpp:2494
 msgid "In_kscape Preferences..."
-msgstr "In_kscape nuostatos..."
+msgstr "In_kscape nustatymai..."
 
 #: ../src/verbs.cpp:2495
 msgid "Edit global Inkscape preferences"
-msgstr "Keisti bendras Inkscape programos nuostatas"
+msgstr "Keisti bendras Inkscape programos nustatymus"
 
 #: ../src/verbs.cpp:2496
 msgid "_Document Properties..."
-msgstr "_Dokumento nuostatos..."
+msgstr "_Dokumento nustatymai..."
 
 #: ../src/verbs.cpp:2497
 msgid "Edit properties of this document (to be saved with the document)"
-msgstr "Keisti specifines dokumento nuostatas, kurios saugomos su dokumentu"
+msgstr "Keisti specifinius dokumento nustatymus, kurie saugomi su dokumentu"
 
 #: ../src/verbs.cpp:2498
 msgid "Document _Metadata..."
@@ -13218,7 +13217,7 @@ msgstr "_Tekstas ir šriftas..."
 
 #: ../src/verbs.cpp:2512
 msgid "View and select font family, font size and other text properties"
-msgstr "Žiūrėti ir keisti šrifto tipą, dydį bei kitas teksto nuostatas"
+msgstr "Žiūrėti ir keisti šrifto tipą, dydį bei kitus teksto nustatymus"
 
 #: ../src/verbs.cpp:2513
 msgid "_XML Editor..."
@@ -13290,7 +13289,7 @@ msgstr "Įvesties į_taisai..."
 
 #: ../src/verbs.cpp:2532
 msgid "Configure extended input devices, such as a graphics tablet"
-msgstr "Kontroliuoti įvesties įtaisų (pvz., planšetės) nuostatas"
+msgstr "Kontroliuoti įvesties įtaisų (pvz., planšetės) nustatymus"
 
 #: ../src/verbs.cpp:2533
 msgid "_Extensions..."
@@ -13422,7 +13421,7 @@ msgstr "Kartoti efektą"
 
 #: ../src/verbs.cpp:2571
 msgid "Repeat the last effect with the same settings"
-msgstr "Kartoti prieš tai atliktą efektą su tomis pačiomis nuostatomis"
+msgstr "Kartoti prieš tai atliktą efektą su tais pačiais nustatymais"
 
 #: ../src/verbs.cpp:2572
 msgid "Previous Effect Settings..."
@@ -13430,7 +13429,7 @@ msgstr "Taikytas efektas..."
 
 #: ../src/verbs.cpp:2573
 msgid "Repeat the last effect with new settings"
-msgstr "Kartoti prieš tai atliktą efektą keičiant nuostatas"
+msgstr "Kartoti prieš tai atliktą efektą keičiant nustatymus"
 
 #. Fit Page
 #: ../src/verbs.cpp:2576
@@ -14397,7 +14396,7 @@ msgstr "Atstatyti"
 #: ../src/widgets/toolbox.cpp:1985
 #: ../src/widgets/toolbox.cpp:2920
 msgid "Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"
-msgstr "Atstatyti pradines reikšmes (pradinės reikšmės keičiamos Inkscape nuostatose)"
+msgstr "Atstatyti pradines reikšmes (pradinės reikšmės keičiamos Inkscape nustatymuose)"
 
 #: ../src/widgets/toolbox.cpp:2057
 msgid "Change rectangle"
@@ -14623,9 +14622,8 @@ msgstr ""
 #: ../src/widgets/toolbox.cpp:3200
 #: ../src/widgets/toolbox.cpp:3328
 #: ../src/widgets/toolbox.cpp:3360
-#, fuzzy
 msgid "(default)"
-msgstr "Atstatyti"
+msgstr "(įprasta)"
 
 #: ../src/widgets/toolbox.cpp:3023
 #, fuzzy
@@ -15054,9 +15052,8 @@ msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr "Naudoti įvesties įrenginio pakrypimą plunksnos kampo nustatymui"
 
 #: ../src/widgets/toolbox.cpp:3499
-#, fuzzy
 msgid "Reset all parameters to defaults"
-msgstr "Atstatyti pradines dabartinio lapo reikšmes"
+msgstr "Atstatyti visus parametrus į pradinius"
 
 #: ../src/widgets/toolbox.cpp:3581
 msgid "Arc: Change start/end"
@@ -15989,9 +15986,8 @@ msgid "Caliper (inches)"
 msgstr ""
 
 #: ../share/extensions/perfectboundcover.inx.h:7
-#, fuzzy
 msgid "Cover"
-msgstr "Apimtis"
+msgstr "Viršelis"
 
 #: ../share/extensions/perfectboundcover.inx.h:8
 msgid "Cover Thickness Measurement"
@@ -16256,9 +16252,8 @@ msgid "Replace text..."
 msgstr "Pakeisti tekstą..."
 
 #: ../share/extensions/text_titlecase.inx.h:2
-#, fuzzy
 msgid "Title Case"
-msgstr "Pavadinimas"
+msgstr "Antraštės Forma"
 
 #: ../share/extensions/text_sentencecase.inx.h:1
 msgid "Sentence case"
