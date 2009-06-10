@@ -1,0 +1,14 @@
+01_mips
+02-poppler-0.8.3
+03-gtk-includes.dpatch
+03-chinese-inkscape
+04-only-use-valid-font-families-in-text-tool
+05_fix_latex_patch
+06_gcc-4.4
+07_cdr2svg
+08_skip-bad-utf-on-pdf-import
+100_svg_import_improvements.dpatch
+101_gtk_marshal.dpatch
+102_sp_pattern_painter_free.dpatch
+103_bitmap_type_print.dpatch
+104_gtk_zero_pagesize.dpatch

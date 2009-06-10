@@ -1,0 +1,35 @@
+Source: inkscape
+Section: graphics
+Priority: optional
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Wolfram Quester <wolfi@sigxcpu.org>
+Build-Depends: debhelper (>= 4.0.0), dpatch, intltool, libart-2.0-dev (>= 2.3.10), libboost1.35-dev, libgc-dev (>= 1:6.8), libglib2.0-dev, libgnomevfs2-dev, libgtk2.0-dev (>= 2.10.0), libgtkmm-2.4-dev, libgtkspell-dev, liblcms1-dev, libmagick++9-dev, libpango1.0-dev, libpng12-dev, libpoppler-glib-dev, libpopt-dev, libsigc++-2.0-dev (>= 2.0.16-2), libssl-dev, libtool, libwpg-dev, libxml-parser-perl, libxml2-dev (>= 2-2.4.24), libxslt1-dev, pkg-config, python-dev, zlib1g-dev, automake (>= 1.10)
+Vcs-Bzr: https://code.launchpad.net/~ubuntu-desktop/inkscape/ubuntu
+Homepage: http://inkscape.org/
+Standards-Version: 3.7.3
+
+Package: inkscape
+Architecture: any
+Depends: ${shlibs:Depends}
+Suggests: dia | dia-gnome, libgnomevfs2-extra, ruby, libsvg-perl, libxml-xql-perl, skencil, ttf-bitstream-vera, python, pstoedit
+Recommends: libwmf-bin, imagemagick, perlmagick, python-numpy, python-lxml, python-uniconvertor
+Description: vector-based drawing program
+ Inkscape loads and saves a subset of the SVG (Scalable Vector Graphics)
+ format, a standard maintained by the WWW consortium.
+ .
+ Inkscape user interface should be familiar from CorelDraw and similar
+ drawing programs. There are rectangles, ellipses, text items, bitmap
+ images and freehand curves.
+ As an added bonus, both vector and bitmap objects can have alpha
+ transparency and can be arbitrarily transformed.
+ .
+ Inkscape supports multiple opened files and multiple views per file.
+ Graphics can be printed and exported to png bitmaps.
+ .
+ Some of the import and export features are provided using the packages
+ dia, libwmf-bin, pstoedit, skencil, imagemagick, and perlmagick.
+ .
+ Other extensions use ruby, libxml-xql-perl, python-numpy, and python-lxml.
+ You must have these packages to make full use of all extensions and effects. 
+ .
+ Homepage: http://www.inkscape.org/
