@@ -15,4 +15,3 @@
 101_gtk_marshal.dpatch
 102_sp_pattern_painter_free.dpatch
 103_bitmap_type_print.dpatch
-104_gtk_zero_pagesize.dpatch

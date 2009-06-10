@@ -12,9 +12,6 @@ inkscape (0.46-9ubuntu1) UNRELEASED; urgency=low
         boxes.
     - debian/patches/103_bitmap_type_print.dpatch:
       - Bitmap-type print to printer and preview produces low resolution output.
-    - debian/patches/104_gtk_zero_pagesize.dpatch:
-      - Cherry pick from 0.47 SVN for the "color value limited to 245" bug
-      - Cherry pick from 0.47 SVN for other GtkAdjustment related warnings
     - debian/control:
       - Set python-lxml, python-numpy, python-uniconvertor as Recommends
       - Build-Depends on automake (>= 1.10), libboost1.35-dev
