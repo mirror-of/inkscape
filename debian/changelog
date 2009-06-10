@@ -1,3 +1,77 @@
+inkscape (0.46-9ubuntu1) UNRELEASED; urgency=low
+
+  * Merge from debian unstable, remaining changes: (LP: #385476)
+    - debian/patches/100_svg_import_improvements.dpatch:
+      - 'style' elements at the top level are not lost on import
+      - Contents of top-level 'defs' elements are not lost on import
+      - layers are unlocked when they are converted to ordinary groups
+    - debian/patches/101_gtk_marshal.dpatch:
+      - Fix build errors against gtk+-2.13.x
+    - debian/patches/102_sp_pattern_painter_free.dpatch:
+      - sp_pattern_painter_free that occurs when drawing gears and creating 3d
+        boxes.
+    - debian/patches/103_bitmap_type_print.dpatch:
+      - Bitmap-type print to printer and preview produces low resolution output.
+    - debian/patches/104_gtk_zero_pagesize.dpatch:
+      - Cherry pick from 0.47 SVN for the "color value limited to 245" bug
+      - Cherry pick from 0.47 SVN for other GtkAdjustment related warnings
+    - debian/control:
+      - Set python-lxml, python-numpy, python-uniconvertor as Recommends
+      - Build-Depends on automake (>= 1.10), libboost1.35-dev
+      - move pstoedit from Recommends to Suggests
+    - debian/rules:
+      - Handle parallel builds via -j
+      - Run intltool-update on build
+      - Add translation domain to .desktop files
+
+ -- Robert Ancell <robert.ancell@canonical.com>  Wed, 10 Jun 2009 17:18:44 +1000
+
+inkscape (0.46-9) unstable; urgency=low
+
+  * add 13_slider.dpatch by Marco Presi <marco.presi@sssup.it>
+    to allow the full range of values for r/g/b/alpha channels
+    (closes: #525100)
+  * upload sponsored by Guido Guenther <agx@debian.org>
+
+ -- Wolfram Quester <wolfi@sigxcpu.org>  Fri, 24 Apr 2009 18:35:32 +0200
+
+inkscape (0.46-8) unstable; urgency=low
+
+  * Try to workaround libpng-bug by 11_libpng.dpatch
+    (closes: #522477).
+  * upload sponsored by Guido Guenther <agx@debian.org>
+
+ -- Wolfram Quester <wolfi@sigxcpu.org>  Mon, 20 Apr 2009 19:26:39 +0200
+
+inkscape (0.46-7) unstable; urgency=low
+
+  * apply patch Arthur Loiret to fix GPREL16 relocation errors on
+    alpha (Closes: #521767).
+  * Acknowledge NMU for 0.46-5.1 by Josselin Mouette, which happened quite
+    parallel to the upload of 0.46-6
+  * raise Standards-Version to 3.8.1
+  * raise debhelper compat mode and dependency to 7
+  * add dh_desktop to install target in debian/rules
+    to fix lintian warning desktop-mimetype-without-update-call
+  * fix lintian warnings description-contains-homepage
+    and debian-rules-ignores-make-clean-error
+  * fix config changes in .diff.gz
+  * upload sponsored by Guido Guenther <agx@debian.org>
+
+ -- Wolfram Quester <wolfi@sigxcpu.org>  Thu, 02 Apr 2009 19:12:05 +0200
+
+inkscape (0.46-6) unstable; urgency=low
+
+  * fix typo: suggest python-uniconvertor instead of python-uniconverter
+    (Closes: #506217)
+  * add 09_gtk-clist.patch to work around a gtk bug (closes: #518633)
+    patch taken from https://bugs.launchpad.net/inkscape/+bug/238223
+  * upload sponsored by Guido Guenther <agx@debian.org>
+  * add 10_belarussian.dpatch by Hleb Valoshka
+    (closes: #514549)
+
+ -- Wolfram Quester <wolfi@sigxcpu.org>  Sun, 08 Mar 2009 12:16:45 +0100
+
 inkscape (0.46-5ubuntu4) jaunty; urgency=low
 
   * Add 104_gtk_zero_pagesize.dpatch:

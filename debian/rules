@@ -31,6 +31,7 @@ endif
 ifneq (,$(findstring $(DEB_HOST_ARCH),alpha))
   ALPHA_CXXFLAGS=-mieee
   ALPHA_CFLAGS=-mieee
+  ALPHA_LDFLAGS=-Wl,--no-relax
 endif
 
 # Handle DEB_BUILD_OPTIONS=parallel=N
@@ -46,6 +47,7 @@ config.status: configure patch
 
 	CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
 	CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)" 	  \
+	LDFLAGS="$(LDFLAGS) $(ALPHA_LDFLAGS)"			  \
 	./configure --host=$(DEB_HOST_GNU_TYPE)			  \
 	            --build=$(DEB_BUILD_GNU_TYPE)		  \
 		    --prefix=/usr				  \
@@ -55,18 +57,23 @@ config.status: configure patch
 		    --with-gnome-vfs				  \
 		    --enable-lcms				  \
 		    --enable-inkboard
-	touch configure-stamp
 
 
-build: config.status
+build:  config.status
 	dh_testdir
 	cd po; intltool-update -p
-	
+
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
+		
 	# compile the package...
 #	$(MAKE) -C src extension/plugin/libgimpgrad.la
 	$(MAKE) CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
 	        CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)"
-	touch build-stamp
 
 clean: clean-patched unpatch
 
@@ -77,12 +84,6 @@ clean-patched:
 
 	# cleaning up...
 	[ ! -f Makefile ] || $(MAKE) distclean
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
 	rm -f po/.intltool-merge-cache
 
 	-rm -f po/*.gmo po/messages
@@ -91,7 +92,7 @@ endif
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_installdirs
 
 	# Add here commands to install the package into debian/inkscape.
@@ -157,6 +158,7 @@ binary-arch: build install
 	dh_testroot
 	dh_installchangelogs ChangeLog
 	dh_installdocs
+	dh_desktop
 #	dh_installexamples
 #	dh_install
 	dh_installmenu
@@ -184,4 +186,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean clean-patched binary-indep binary-arch binary install
+.PHONY: build clean binary-indep binary-arch binary install
