@@ -1,4 +1,4 @@
-inkscape (0.46-9ubuntu1) UNRELEASED; urgency=low
+inkscape (0.46-9ubuntu1) karmic; urgency=low
 
   * Merge from debian unstable, remaining changes: (LP: #385476)
     - debian/patches/100_svg_import_improvements.dpatch:
