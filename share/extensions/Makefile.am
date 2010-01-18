@@ -89,6 +89,7 @@ extensions = \
 	perspective.py \
 	plt_output.py \
 	polyhedron_3d.py \
+	polygonarea.py \
 	printing-marks.py \
 	ps2dxf.sh \
 	ps2pdf-ext.py \
@@ -220,6 +221,7 @@ modules = \
 	plt_input.inx \
 	plt_output.inx \
 	polyhedron_3d.inx	\
+	polygonarea.inx \
 	printing-marks.inx \
 	ps_input.inx \
 	radiusrand.inx \
