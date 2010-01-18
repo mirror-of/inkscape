@@ -1,0 +1,50 @@
+<!--
+Copyright (C) 2010 Helmut Eller, meller333 <at> gmail.com.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 as published by
+the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+-->
+
+<inkscape-extension>  <!-- -*- xml -*- -->
+  <_name>Polygon Area</_name>
+  <id>foo.bar.poly.gon.area</id>
+  <dependency type="executable" 
+	      location="extensions">polygonarea.py</dependency>
+  <dependency type="executable" location="extensions">inkex.py</dependency>
+  <param name="unit" type="enum" _gui-text="Length Unit: ">
+    <item value="px">px</item>
+    <item value="pt">pt</item>
+    <item value="in">in</item>
+    <item value="ft">ft</item>
+    <item value="yd">yd</item>
+    <item value="mm">mm</item>
+    <item value="cm">cm</item>
+    <item value="m">m</item>
+    <item>km</item>
+  </param>
+  <param name="scale" type="float" min="1e-8" max="1e10" 
+	 _gui-text="Scale Factor (Drawing:Real Length) = 1:">
+    1
+  </param>
+  <param name="precision" type="int" min="0" max="25" 
+	 _gui-text="Decimal Places">
+    2
+  </param>
+
+  <effect>
+    <object-type>path</object-type>
+    <effects-menu>
+      <submenu _name="Visualize Path"/>
+    </effects-menu>
+  </effect>
+
+  <script>
+    <command reldir="extensions" interpreter="python">polygonarea.py</command>
+  </script>
+</inkscape-extension>
