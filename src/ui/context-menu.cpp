@@ -322,6 +322,16 @@ sp_item_create_link_osm_way(GtkMenuItem *menuitem, SPItem *item)
     Inkscape::XML::Document *xml_doc = sp_document_repr_doc(desktop->doc());
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:a");
 
+    /// now we set the title
+    repr->setAttribute("xlink:title","Openstreemap Way number %d");
+
+    // open in a new window!
+    repr->setAttribute("target","new");
+
+    // now we set the href
+    repr->setAttribute("xlink:href","http://www.openstreetmap.org/browse/way/%d");
+
+
     SP_OBJECT_REPR(SP_OBJECT_PARENT(item))->addChild(repr, SP_OBJECT_REPR(item));
     SPObject *object = SP_OBJECT_DOCUMENT(item)->getObjectByRepr(repr);
     g_return_if_fail(SP_IS_ANCHOR(object));
@@ -332,11 +342,6 @@ sp_item_create_link_osm_way(GtkMenuItem *menuitem, SPItem *item)
     repr->addChild(child, NULL);
     child->setAttribute("id", id);
 
-    /// now we set the title
-    child->setAttribute("xlink:title","test");
-
-    // now we set the href
-    child->setAttribute("xlink:href","http://openstreetmap.org");
 
     Inkscape::GC::release(repr);
     Inkscape::GC::release(child);
