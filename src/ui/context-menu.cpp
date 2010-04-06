@@ -87,6 +87,7 @@ sp_object_type_menu(GType type, SPObject *object, SPDesktop *desktop, GtkMenu *m
 static void sp_item_properties(GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_select_this(GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_create_link(GtkMenuItem *menuitem, SPItem *item);
+static void sp_item_create_link_osm_way(GtkMenuItem *menuitem, SPItem *item); // create a link to the osm way id in the clipboard
 static void sp_set_mask(GtkMenuItem *menuitem, SPItem *item);
 static void sp_release_mask(GtkMenuItem *menuitem, SPItem *item);
 static void sp_set_clip(GtkMenuItem *menuitem, SPItem *item);
@@ -121,6 +122,8 @@ sp_item_menu(SPObject *object, SPDesktop *desktop, GtkMenu *m)
     }
     gtk_widget_show(w);
     gtk_menu_append(GTK_MENU(m), w);
+
+
     /* Create link */
     w = gtk_menu_item_new_with_mnemonic(_("_Create Link"));
     gtk_object_set_data(GTK_OBJECT(w), "desktop", desktop);
@@ -128,6 +131,19 @@ sp_item_menu(SPObject *object, SPDesktop *desktop, GtkMenu *m)
     gtk_widget_set_sensitive(w, !SP_IS_ANCHOR(item));
     gtk_widget_show(w);
     gtk_menu_append(GTK_MENU(m), w);
+
+
+
+    /* Create link */
+    w = gtk_menu_item_new_with_mnemonic(_("_Create Link to OSM way ID in clipboard"));
+    gtk_object_set_data(GTK_OBJECT(w), "desktop", desktop);
+    gtk_signal_connect(GTK_OBJECT(w), "activate", GTK_SIGNAL_FUNC(sp_item_create_link_osm_way), item);
+    gtk_widget_set_sensitive(w, !SP_IS_ANCHOR(item));
+    gtk_widget_show(w);
+    gtk_menu_append(GTK_MENU(m), w);
+
+
+
     /* Set mask */
     w = gtk_menu_item_new_with_mnemonic(_("Set Mask"));
     gtk_object_set_data(GTK_OBJECT(w), "desktop", desktop);
@@ -291,6 +307,48 @@ sp_item_create_link(GtkMenuItem *menuitem, SPItem *item)
 
     sp_desktop_selection(desktop)->set(SP_ITEM(object));
 }
+
+
+// sp_item_create_link_osm_way
+static void
+sp_item_create_link_osm_way(GtkMenuItem *menuitem, SPItem *item)
+{
+    g_assert(SP_IS_ITEM(item));
+    g_assert(!SP_IS_ANCHOR(item));
+
+    SPDesktop *desktop = (SPDesktop*)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
+    g_return_if_fail(desktop != NULL);
+
+    Inkscape::XML::Document *xml_doc = sp_document_repr_doc(desktop->doc());
+    Inkscape::XML::Node *repr = xml_doc->createElement("svg:a");
+
+    SP_OBJECT_REPR(SP_OBJECT_PARENT(item))->addChild(repr, SP_OBJECT_REPR(item));
+    SPObject *object = SP_OBJECT_DOCUMENT(item)->getObjectByRepr(repr);
+    g_return_if_fail(SP_IS_ANCHOR(object));
+
+    const char *id = SP_OBJECT_REPR(item)->attribute("id");
+    Inkscape::XML::Node *child = SP_OBJECT_REPR(item)->duplicate(xml_doc);
+    SP_OBJECT(item)->deleteObject(false);
+    repr->addChild(child, NULL);
+    child->setAttribute("id", id);
+
+    /// now we set the title
+    child->setAttribute("xlink:title","test");
+
+    // now we set the href
+    child->setAttribute("xlink:href","http://openstreetmap.org");
+
+    Inkscape::GC::release(repr);
+    Inkscape::GC::release(child);
+
+    sp_document_done(SP_OBJECT_DOCUMENT(object), SP_VERB_NONE,
+                     _("Create link"));
+
+    sp_object_attributes_dialog(object, "SPAnchor");
+
+    sp_desktop_selection(desktop)->set(SP_ITEM(object));
+}
+
 
 /* SPGroup */
 
