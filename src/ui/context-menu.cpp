@@ -21,6 +21,20 @@
 #include "preferences.h"
 #include "ui/dialog/dialog-manager.h"
 
+
+/*
+  plan for the osm features :
+
+  1. be able to take the osm id from the clipboard (in josm ctrl c on an object) and create a link to that way.
+  2. be able to download the geometry of the osm object and add it as attributes of the object.
+  3. be able to assign geometries to points as well
+  4. be able to determine the coordinate of new items from the existing geometries (a 3d grid)
+  5. be able to copy new items from inkscape into josm
+
+*/
+// clipboard support for the osm features
+#include "ui/clipboard.h"
+
 static void sp_object_type_menu(GType type, SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 
 /* Append object-specific part to context menu */
@@ -322,14 +336,27 @@ sp_item_create_link_osm_way(GtkMenuItem *menuitem, SPItem *item)
     Inkscape::XML::Document *xml_doc = sp_document_repr_doc(desktop->doc());
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:a");
 
+    // get the node id from josm
+    Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
+    Glib::RefPtr<Gtk::Clipboard> clipboard(Gtk::Clipboard::get()); ///< Handle to the system wide clipboard - for convenience
+    Glib::ustring nodeid =     (clipboard->wait_for_text());
+
+    if (nodeid == "") {
+        nodeid = "TODO";
+    }
+
+    Glib::ustring title ("Openstreemap Way number " + nodeid  );
+
     /// now we set the title
-    repr->setAttribute("xlink:title","Openstreemap Way number %d");
+    repr->setAttribute("xlink:title",title.c_str ());
 
     // open in a new window!
     repr->setAttribute("target","new");
 
+    Glib::ustring href(    "http://www.openstreetmap.org/browse/way/" + nodeid);
+
     // now we set the href
-    repr->setAttribute("xlink:href","http://www.openstreetmap.org/browse/way/%d");
+    repr->setAttribute("xlink:href", href.c_str ());
 
 
     SP_OBJECT_REPR(SP_OBJECT_PARENT(item))->addChild(repr, SP_OBJECT_REPR(item));
