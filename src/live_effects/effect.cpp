@@ -75,7 +75,7 @@
 #include "live_effects/lpe-line_segment.h"
 #include "live_effects/lpe-recursiveskeleton.h"
 #include "live_effects/lpe-extrude.h"
-
+#include "live_effects/lpe-testcopy.h"
 
 namespace Inkscape {
 
@@ -120,6 +120,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {ROUGH_HATCHES,         N_("Hatches (rough)"),         "rough_hatches"},
     {SKETCH,                N_("Sketch"),                  "sketch"},
     {RULER,                 N_("Ruler"),                   "ruler"},
+    {TESTCOPY,              N_("Testcopy"),                "testcopy"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -236,6 +237,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case EXTRUDE:
             neweffect = static_cast<Effect*> ( new LPEExtrude(lpeobj) );
+            break;
+        case TESTCOPY:
+            neweffect = static_cast<Effect*> ( new LPETestcopy(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
