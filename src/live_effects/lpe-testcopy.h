@@ -63,8 +63,8 @@ private:
     LPETestcopy& operator=(const LPETestcopy&);
 };
 
-}; //namespace LivePathEffect
-}; //namespace Inkscape
+} //namespace LivePathEffect
+} //namespace Inkscape
 
 #endif
 

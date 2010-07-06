@@ -27,6 +27,7 @@ lpe-spiro.cpp
 lpe-tangent_to_curve.cpp
 lpe-test-doEffect-stack.cpp
 lpe-vonkoch.cpp
+lpe-testcopy.cpp
 lpe-dynastroke.cpp
 spiro.cpp
 ${live_effects_parameter_SRC}

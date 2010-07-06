@@ -51,13 +51,16 @@ LPETestcopy::~LPETestcopy()
  *  Choose to implement one of the doEffect functions. You can delete or comment out the others.
  */
 
-
+/*
 void
 LPETestcopy::doEffect (SPCurve * curve)
 {
     // spice this up to make the effect actually *do* something!
 }
 
+*/
+
+/*
 std::vector<Geom::Path>
 LPETestcopy::doEffect_path (std::vector<Geom::Path> const & path_in)
 {
@@ -69,8 +72,29 @@ LPETestcopy::doEffect_path (std::vector<Geom::Path> const & path_in)
 
         return path_out ;
 }
+*/
 
 
+Geom::Piecewise<Geom::D2<Geom::SBasis> >
+LPETestcopy::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
+{
+
+    using namespace Geom;
+
+
+    D2<Piecewise<SBasis> > patternd2 = make_cuts_independent(pwd2_in);
+    Piecewise<SBasis> x = Piecewise<SBasis>(patternd2[0]);
+    Piecewise<SBasis> y = Piecewise<SBasis>(patternd2[1]);
+
+
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > output = pwd2_in;   // spice this up to make the effect actually *do* something!
+//    Piecewise<D2<SBasis> > output = compose(x * 2, y * 2);
+
+    return output;
+}
+
+
+/*
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPETestcopy::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
 {
@@ -80,6 +104,7 @@ LPETestcopy::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
 
     return output;
 }
+*/
 
 /* ########################
  *  Define the classes for your knotholder handles here
