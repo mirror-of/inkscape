@@ -47,7 +47,7 @@ GuidelinePropertiesDialog::GuidelinePropertiesDialog(SPGuide *guide, SPDesktop *
   _adjustment_x(0.0, -1e6, 1e6, 1.0, 10.0, 10.0),  
   _adjustment_y(0.0, -1e6, 1e6, 1.0, 10.0, 10.0),  
   _adj_angle(0.0, -360, 360, 1.0, 10.0, 10.0),  
-  _unit_selector(NULL), _mode(true), _oldpos(0.,0.), _oldangle(0.0)
+  _unit_selector(NULL), _adjustment_mode(ABSOLUTE), _oldpos(0.,0.), _oldangle(0.0)
 {
 }
 
@@ -62,18 +62,20 @@ void GuidelinePropertiesDialog::showDialog(SPGuide *guide, SPDesktop *desktop) {
 
 void GuidelinePropertiesDialog::_modeChanged()
 {
-    _mode = !_relative_toggle.get_active();
-    if (!_mode) {
-        // relative
+    if(_relative_toggle.get_active()) {
+        _adjustment_mode = RELATIVE;
+
         _spin_angle.set_value(0);
 
         _spin_button_y.set_value(0);
         _spin_button_x.set_value(0);
-    } else {
-        // absolute
+    }
+    else {
+        _adjustment_mode = ABSOLUTE;
+
         _spin_angle.set_value(_oldangle);
 
-        SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(_unit_selector->gobj()));
+        SPUnit const & unit = * sp_unit_selector_get_unit(SP_UNIT_SELECTOR(_unit_selector->gobj()));
         gdouble const val_y = sp_pixels_get_units(_oldpos[Geom::Y], unit);
         _spin_button_y.set_value(val_y);
         gdouble const val_x = sp_pixels_get_units(_oldpos[Geom::X], unit);
@@ -81,11 +83,12 @@ void GuidelinePropertiesDialog::_modeChanged()
     }
 }
 
-void GuidelinePropertiesDialog::_onApply()
+void GuidelinePropertiesDialog::_onOK()
 {
     double deg_angle = _spin_angle.get_value();
-    if (!_mode)
+    if (_adjustment_mode == RELATIVE) {
         deg_angle += _oldangle;
+    }
     Geom::Point normal;
     if ( deg_angle == 90. || deg_angle == 270. || deg_angle == -90. || deg_angle == -270.) {
         normal = Geom::Point(1.,0.);
@@ -103,18 +106,14 @@ void GuidelinePropertiesDialog::_onApply()
     gdouble const raw_dist_y = _spin_button_y.get_value();
     gdouble const points_y = sp_units_get_pixels(raw_dist_y, unit);
     Geom::Point newpos(points_x, points_y);
-    if (!_mode)
+    if (_adjustment_mode == RELATIVE) {
         newpos += _oldpos;
+    }
 
     sp_guide_moveto(*_guide, newpos, true);
 
     sp_document_done(SP_OBJECT_DOCUMENT(_guide), SP_VERB_NONE, 
                      _("Set guide properties"));
-}
-
-void GuidelinePropertiesDialog::_onOK()
-{
-    _onApply();
 }
 
 void GuidelinePropertiesDialog::_onDelete()
@@ -131,17 +130,13 @@ void GuidelinePropertiesDialog::_response(gint response)
 	case Gtk::RESPONSE_OK:
             _onOK();
             break;
-	case -12:
+	case GUIDELINE_PROPERTIES_DELETE_GUIDE_RESPONSE_TYPE:
             _onDelete();
             break;
 	case Gtk::RESPONSE_CANCEL:
             break;
 	case Gtk::RESPONSE_DELETE_EVENT:
             break;
-/*	case GTK_RESPONSE_APPLY:
-        _onApply();
-        break;
-*/
 	default:
             g_assert_not_reached();
     }
@@ -150,7 +145,7 @@ void GuidelinePropertiesDialog::_response(gint response)
 void GuidelinePropertiesDialog::_setup() {
     set_title(_("Guideline"));
     add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-    add_button(Gtk::Stock::DELETE, -12);
+    add_button(Gtk::Stock::DELETE, GUIDELINE_PROPERTIES_DELETE_GUIDE_RESPONSE_TYPE);
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 
     Gtk::VBox *mainVBox = get_vbox();
@@ -190,19 +185,19 @@ void GuidelinePropertiesDialog::_setup() {
     sp_unit_selector_add_adjustment(SP_UNIT_SELECTOR(unit_selector), GTK_ADJUSTMENT(_adjustment_y.gobj()));
     _spin_button_x.configure(_adjustment_x, 1.0 , 3);
     _spin_button_x.set_numeric();
-    _spin_button_y.configure(_adjustment_y, 1.0 , 3);
-    _spin_button_y.set_numeric();
     _layout_table.attach(_label_X,
                          1, 2, 4, 5, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
     _layout_table.attach(_spin_button_x,
                          2, 3, 4, 5, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
+    gtk_signal_connect_object(GTK_OBJECT(_spin_button_x.gobj()), "activate", GTK_SIGNAL_FUNC(gtk_window_activate_default), gobj());
+
+    _spin_button_y.configure(_adjustment_y, 1.0 , 3);
+    _spin_button_y.set_numeric();
     _layout_table.attach(_label_Y,
                          1, 2, 5, 6, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
     _layout_table.attach(_spin_button_y,
                          2, 3, 5, 6, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
-    gtk_signal_connect_object(GTK_OBJECT(_spin_button_x.gobj()), "activate",
-                              GTK_SIGNAL_FUNC(gtk_window_activate_default),
-                              gobj());
+    gtk_signal_connect_object(GTK_OBJECT(_spin_button_y.gobj()), "activate", GTK_SIGNAL_FUNC(gtk_window_activate_default), gobj());
 
     _layout_table.attach(_label_units,
                          1, 2, 6, 7, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
@@ -217,7 +212,7 @@ void GuidelinePropertiesDialog::_setup() {
                          1, 2, 8, 9, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
     _layout_table.attach(_spin_angle,
                          2, 3, 8, 9, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
-
+    gtk_signal_connect_object(GTK_OBJECT(_spin_angle.gobj()), "activate", GTK_SIGNAL_FUNC(gtk_window_activate_default), gobj());
 
     // dialog
     set_default_response(Gtk::RESPONSE_OK);
@@ -250,15 +245,17 @@ void GuidelinePropertiesDialog::_setup() {
 
     _modeChanged(); // sets values of spinboxes.
 
-    if ( _oldangle == 90. || _oldangle == 270. || _oldangle == -90. || _oldangle == -270.) {
+    if (_guide->is_vertical()) {
         _spin_button_x.grab_focus();
-        _spin_button_x.select_region(0, 20);
-    } else if ( _oldangle == 0. || _oldangle == 180. || _oldangle == -180.) {
+        _spin_button_x.select_region(0, -1);
+    }
+    else if (_guide->is_horizontal()) {
         _spin_button_y.grab_focus();
-        _spin_button_y.select_region(0, 20);
-    } else {
+        _spin_button_y.select_region(0, -1);
+    }
+    else {
         _spin_angle.grab_focus();
-        _spin_angle.select_region(0, 20);
+        _spin_angle.select_region(0, -1);
     }
 
     set_position(Gtk::WIN_POS_MOUSE);

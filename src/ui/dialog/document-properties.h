@@ -34,127 +34,168 @@ namespace Inkscape {
 
 class DocumentProperties : public UI::Widget::Panel {
 public:
-    void  update();
-    static DocumentProperties &getInstance();
+    static DocumentProperties & getInstance();
     static void destroy();
 
-    void  update_gridspage();
+    void update();
+    void updateGridsPage();
 
 protected:
-    void  build_page();
-    void  build_grid();
-    void  build_guides();
-    void  build_snap();
-    void  build_gridspage();
+    class GuidesPage : public UI::Widget::NotebookPage {
+    public:
+        GuidesPage(SPDesktop * desktop, UI::Widget::Registry & widget_registry);
+        void close();
+        void update();
+
+    private:
+        GuidesPage(GuidesPage const &); // no copy
+        GuidesPage & operator=(GuidesPage const &); // no assign
+
+        class GuideListColumns : public Gtk::TreeModel::ColumnRecord {
+        public:
+            GuideListColumns() {
+                add(guide_column);
+                add(default_label_column);
+            }
+            Gtk::TreeModelColumn<SPGuide *> guide_column;
+            Gtk::TreeModelColumn<Glib::ustring> default_label_column;
+        };
+
+        Gtk::HBox * _createManagedSpacer();
+
+        void _activateSelectedGuide(Gtk::TreeModel::Path const & path, Gtk::TreeViewColumn * column);
+        void _createGuidesAroundPage();
+        void _deleteSelectedGuides();
+        void _populateGuideList();
+        void _updateSelectionStatus();
+
+        SPDesktop *                       _desktop;
+
+        UI::Widget::RegisteredCheckButton _show_guides_checkbox;
+        UI::Widget::RegisteredCheckButton _snap_to_guides_checkbox;
+
+        UI::Widget::RegisteredColorPicker _guide_color_picker;
+        UI::Widget::RegisteredColorPicker _highlighted_guide_color_picker;
+
+        Inkscape::XML::SignalObserver     _guides_observer;
+
+        GuideListColumns                  _guide_list_columns;
+        Glib::RefPtr<Gtk::ListStore>      _guide_list_store;
+        Gtk::TreeView                     _guide_list;
+        Gtk::ScrolledWindow               _guide_list_scroller;
+
+        Gtk::Button                       _delete_all_guides_button;
+        Gtk::Button                       _create_guides_around_page_button;
+    };
+
+    void  _buildPagePage();
+    void  _buildSnapPage();
+    void  _buildGridsPage();
 #if ENABLE_LCMS
-    void  build_cms();
+    void  _buildCmsPage();
 #endif // ENABLE_LCMS
-    void  build_scripting();
-    void  init();
+    void  _buildScriptingPage();
+    void  _init();
 
-    virtual void  on_response (int);
+    virtual void  _onResponse (int);
 #if ENABLE_LCMS
-    void  populate_available_profiles();
-    void  populate_linked_profiles_box();
-    void  linkSelectedProfile();
-    void  removeSelectedProfile();
-    void  linked_profiles_list_button_release(GdkEventButton* event);
-    void  cms_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
+    void  _populateAvailableProfiles();
+    void  _populateLinkedProfilesBox();
+    void  _linkSelectedProfile();
+    void  _removeSelectedProfile();
+    void  _linkedProfilesListButtonRelease(GdkEventButton * event);
+    void  _cmsCreatePopupMenu(Gtk::Widget & parent, sigc::slot<void> rem);
 #endif // ENABLE_LCMS
 
-    void  external_scripts_list_button_release(GdkEventButton* event);
-    void  populate_external_scripts_box();
-    void  addExternalScript();
-    void  removeExternalScript();
-    void  scripting_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
+    void _externalScriptsListButtonRelease(GdkEventButton * event);
+    void _populateExternalScriptsBox();
+    void _addExternalScript();
+    void _removeExternalScript();
+    void _scriptingCreatePopupMenu(Gtk::Widget & parent, sigc::slot<void> rem);
 
-    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void _handleActivateDesktop(Inkscape::Application *application, SPDesktop *desktop);
-    void _handleDeactivateDesktop(Inkscape::Application *application, SPDesktop *desktop);
+    void _handleDocumentReplaced(SPDesktop * desktop, SPDocument * document);
+    void _handleActivateDesktop(Inkscape::Application * application, SPDesktop * desktop);
+    void _handleDeactivateDesktop(Inkscape::Application * application, SPDesktop * desktop);
 
-    Inkscape::XML::SignalObserver _emb_profiles_observer, _ext_scripts_observer;
-    Gtk::Tooltips _tt;
-    Gtk::Notebook  _notebook;
+    Gtk::HBox & _createPageTabLabel(Glib::ustring const & label, char const * label_image);
 
-    UI::Widget::NotebookPage   _page_page;
-    UI::Widget::NotebookPage   _page_guides;
-    UI::Widget::NotebookPage   _page_snap;
-    UI::Widget::NotebookPage   _page_cms;
-    UI::Widget::NotebookPage   _page_scripting;
-    Gtk::VBox      _grids_vbox;
+    Inkscape::XML::SignalObserver     _linked_color_profiles_xml_observer;
+    Inkscape::XML::SignalObserver     _external_scripts_xml_observer;
 
-    UI::Widget::Registry _wr;
+    Gtk::Tooltips                     _tt;
+
+    Gtk::Notebook                     _notebook;
+
+    UI::Widget::NotebookPage          _page_page;
+    GuidesPage                        _guides_page;
+    Gtk::VBox                         _grids_page;
+    UI::Widget::NotebookPage          _snap_page;
+    UI::Widget::NotebookPage          _color_management_page;
+    UI::Widget::NotebookPage          _scripting_page;
+
+    UI::Widget::Registry              _widget_registry;
+
     //---------------------------------------------------------------
-    UI::Widget::RegisteredCheckButton _rcb_canb;
-    UI::Widget::RegisteredCheckButton _rcb_bord;
-    UI::Widget::RegisteredCheckButton _rcb_shad;
-    UI::Widget::RegisteredColorPicker _rcp_bg;
-    UI::Widget::RegisteredColorPicker _rcp_bord;
-    UI::Widget::RegisteredUnitMenu    _rum_deflt;
+    UI::Widget::RegisteredCheckButton _show_border_checkbox;
+    UI::Widget::RegisteredCheckButton _border_on_top_checkbox;
+    UI::Widget::RegisteredCheckButton _show_border_shadow_checkbox;
+    UI::Widget::RegisteredColorPicker _background_color_picker;
+    UI::Widget::RegisteredColorPicker _border_color_picker;
+    UI::Widget::RegisteredUnitMenu    _default_unit_menu;
     UI::Widget::PageSizer             _page_sizer;
     //---------------------------------------------------------------
-    UI::Widget::RegisteredCheckButton _rcb_sgui;
-    UI::Widget::RegisteredCheckButton _rcbsng;
-    UI::Widget::RegisteredColorPicker _rcp_gui;
-    UI::Widget::RegisteredColorPicker _rcp_hgui;
+    Gtk::Notebook                     _grids_notebook;
+    Gtk::HBox                         _create_grid_bbox;
+    Gtk::Label                        _create_grid_label;
+    Gtk::Button                       _create_grid_button;
+    Gtk::Button                       _remove_grid_button;
+    Gtk::ComboBoxText                 _create_grid_type_combo;
+    Gtk::Label                        _defined_grids_label;
+    Gtk::HBox                         _grids_spacer;
     //---------------------------------------------------------------
-    UI::Widget::ToleranceSlider       _rsu_sno;
-    UI::Widget::ToleranceSlider       _rsu_sn;
-    UI::Widget::ToleranceSlider       _rsu_gusn;
+    UI::Widget::ToleranceSlider       _snap_distance_controls;
+    UI::Widget::ToleranceSlider       _grid_snap_distance_controls;
+    UI::Widget::ToleranceSlider       _guide_snap_distance_controls;
     //---------------------------------------------------------------
-    Gtk::Menu   _menu;
-    Gtk::OptionMenu   _combo_avail;
-    Gtk::Button         _link_btn;
-    class LinkedProfilesColumns : public Gtk::TreeModel::ColumnRecord
+    Gtk::Menu                         _available_color_profiles_menu;
+    Gtk::OptionMenu                   _available_color_profiles_option_menu;
+    Gtk::Button                       _link_color_profile_button;
+    class LinkedColorProfileListColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
-            LinkedProfilesColumns()
-               { add(nameColumn); add(previewColumn);  }
-            Gtk::TreeModelColumn<Glib::ustring> nameColumn;
-            Gtk::TreeModelColumn<Glib::ustring> previewColumn;
+            LinkedColorProfileListColumns()
+               { add(name_column); add(preview_column);  }
+            Gtk::TreeModelColumn<Glib::ustring> name_column;
+            Gtk::TreeModelColumn<Glib::ustring> preview_column;
         };
-    LinkedProfilesColumns _LinkedProfilesListColumns;
-    Glib::RefPtr<Gtk::ListStore> _LinkedProfilesListStore;
-    Gtk::TreeView _LinkedProfilesList;
-    Gtk::ScrolledWindow _LinkedProfilesListScroller;
-    Gtk::Menu _EmbProfContextMenu;
-
+    LinkedColorProfileListColumns     _linked_color_profile_list_columns;
+    Glib::RefPtr<Gtk::ListStore>      _linked_color_profile_list_store;
+    Gtk::TreeView                     _linked_color_profile_list;
+    Gtk::ScrolledWindow               _linked_color_profile_list_scroller;
+    Gtk::Menu                         _linked_color_profile_list_context_menu;
     //---------------------------------------------------------------
-    Gtk::Button         _add_btn;
+    Gtk::Button                       _add_external_script_button;
     class ExternalScriptsColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
             ExternalScriptsColumns()
-               { add(filenameColumn); }
-            Gtk::TreeModelColumn<Glib::ustring> filenameColumn;
+               { add(filename_column); }
+            Gtk::TreeModelColumn<Glib::ustring> filename_column;
         };
-    ExternalScriptsColumns _ExternalScriptsListColumns;
-    Glib::RefPtr<Gtk::ListStore> _ExternalScriptsListStore;
-    Gtk::TreeView _ExternalScriptsList;
-    Gtk::ScrolledWindow _ExternalScriptsListScroller;
-    Gtk::Menu _ExternalScriptsContextMenu;
-    Gtk::Entry _script_entry;
-    //---------------------------------------------------------------
-
-    Gtk::Notebook   _grids_notebook;
-    Gtk::HBox       _grids_hbox_crea;
-    Gtk::Label      _grids_label_crea;
-    Gtk::Button     _grids_button_new;
-    Gtk::Button     _grids_button_remove;
-    Gtk::ComboBoxText _grids_combo_gridtype;
-    Gtk::Label      _grids_label_def;
-    Gtk::HBox       _grids_space;
-    //---------------------------------------------------------------
-
-    Gtk::HBox& _createPageTabLabel(const Glib::ustring& label, const char *label_image);
+    ExternalScriptsColumns            _external_script_list_columns;
+    Glib::RefPtr<Gtk::ListStore>      _external_script_list_store;
+    Gtk::TreeView                     _external_script_list;
+    Gtk::ScrolledWindow               _external_script_list_scroller;
+    Gtk::Menu                         _external_script_list_context_menu;
+    Gtk::Entry                        _script_entry;
 
 private:
     DocumentProperties();
     virtual ~DocumentProperties();
 
     // callback methods for buttons on grids page.
-    void onNewGrid();
-    void onRemoveGrid();
+    void _onNewGrid();
+    void _onRemoveGrid();
 };
 
 } // namespace Dialog

@@ -23,6 +23,8 @@
 #include "ui/widget/button.h"
 #include <2geom/point.h>
 
+#define GUIDELINE_PROPERTIES_DELETE_GUIDE_RESPONSE_TYPE -12
+
 namespace Inkscape {
 namespace UI {
 namespace Dialogs {
@@ -39,7 +41,6 @@ public:
 protected:
     void _setup();
 
-    void _onApply();
     void _onOK();
     void _onDelete();
 
@@ -47,6 +48,11 @@ protected:
     void _modeChanged();
 
 private:
+    typedef enum {
+        RELATIVE,
+        ABSOLUTE
+    } AdjustmentMode;
+
     GuidelinePropertiesDialog(GuidelinePropertiesDialog const &); // no copy
     GuidelinePropertiesDialog &operator=(GuidelinePropertiesDialog const &); // no assign
 
@@ -69,7 +75,7 @@ private:
     Gtk::SpinButton _spin_angle;
 
     Gtk::Widget *_unit_selector;
-    bool _mode;
+    AdjustmentMode _adjustment_mode;
     Geom::Point _oldpos;
     gdouble _oldangle;
 };

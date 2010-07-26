@@ -19,16 +19,25 @@
 # include <config.h>
 #endif
 
+#include "config.h"
+
+#include <gtkmm.h>
+
+#if ENABLE_LCMS
+#include <lcms.h>
+#endif // ENABLE_LCMS
+
 #include "display/canvas-grid.h"
 #include "document-properties.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "desktop.h"
-#include <gtkmm.h>
+#include "guides.h"
 #include "helper/units.h"
 #include "inkscape.h"
 #include "io/sys.h"
 #include "preferences.h"
+#include "sp-guide.h"
 #include "sp-namedview.h"
 #include "sp-object-repr.h"
 #include "sp-root.h"
@@ -41,8 +50,6 @@
 #include "xml/repr.h"
 
 #if ENABLE_LCMS
-#include <lcms.h>
-//#include "color-profile-fns.h"
 #include "color-profile.h"
 #endif // ENABLE_LCMS
 
@@ -73,74 +80,64 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
 };
 
 
-DocumentProperties &
-DocumentProperties::getInstance()
+DocumentProperties & DocumentProperties::getInstance()
 {
-    DocumentProperties &instance = *new DocumentProperties();
-    instance.init();
+    DocumentProperties & instance = *new DocumentProperties();
+    instance._init();
 
     return instance;
 }
 
 DocumentProperties::DocumentProperties()
     : UI::Widget::Panel ("", "/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
-      _page_page(1, 1, true, true), _page_guides(1, 1),
-      _page_snap(1, 1), _page_cms(1, 1), _page_scripting(1, 1),
+      _page_page(1, 1, true, true),
+      _guides_page(getDesktop(), _widget_registry),
+      _snap_page(1, 1),
+      _color_management_page(1, 1),
+      _scripting_page(1, 1),
     //---------------------------------------------------------------
-      _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false),
-      _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false),
-      _rcb_shad(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _wr, false),
-      _rcp_bg(_("Back_ground:"), _("Background color"), _("Color and transparency of the page background (also used for bitmap export)"), "pagecolor", "inkscape:pageopacity", _wr),
-      _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr),
-      _rum_deflt(_("Default _units:"), "inkscape:document-units", _wr),
-      _page_sizer(_wr),
+      _show_border_checkbox(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _widget_registry, false),
+      _border_on_top_checkbox(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _widget_registry, false),
+      _show_border_shadow_checkbox(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _widget_registry, false),
+      _background_color_picker(_("Back_ground:"), _("Background color"), _("Color and transparency of the page background (also used for bitmap export)"), "pagecolor", "inkscape:pageopacity", _widget_registry),
+      _border_color_picker(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _widget_registry),
+      _default_unit_menu(_("Default _units:"), "inkscape:document-units", _widget_registry),
+      _page_sizer(_widget_registry),
     //---------------------------------------------------------------
-      //General snap options
-      _rcb_sgui(_("Show _guides"), _("Show or hide guides"), "showguides", _wr),
-      _rcbsng(_("_Snap guides while dragging"), _("While dragging a guide, snap to object nodes or bounding box corners ('Snap to nodes' or 'snap to bounding box corners' must be enabled; only a small part of the guide near the cursor will snap)"),
-                  "inkscape:snap-from-guide", _wr),
-      _rcp_gui(_("Guide co_lor:"), _("Guideline color"), _("Color of guidelines"), "guidecolor", "guideopacity", _wr),
-      _rcp_hgui(_("_Highlight color:"), _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"), "guidehicolor", "guidehiopacity", _wr),
-    //---------------------------------------------------------------
-      _grids_label_crea("", Gtk::ALIGN_LEFT),
-      //TRANSLATORS: only translate "string" in "context|string".
-      // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
-      // "New" refers to grid
-      _grids_button_new(Q_("Grid|_New"), _("Create new grid.")),
-      _grids_button_remove(_("_Remove"), _("Remove selected grid.")),
-      _grids_label_def("", Gtk::ALIGN_LEFT)
+      _create_grid_label("", Gtk::ALIGN_LEFT),
+      _create_grid_button(Q_("Grid|_New"), _("Create new grid.")),
+      _remove_grid_button(_("_Remove"), _("Remove selected grid.")),
+      _defined_grids_label("", Gtk::ALIGN_LEFT)
     //---------------------------------------------------------------
 {
     _tt.enable();
     _getContents()->set_spacing (4);
     _getContents()->pack_start(_notebook, true, true);
 
-    _notebook.append_page(_page_page,      _("Page"));
-    _notebook.append_page(_page_guides,    _("Guides"));
-    _notebook.append_page(_grids_vbox,     _("Grids"));
-    _notebook.append_page(_page_snap,      _("Snap"));
-    _notebook.append_page(_page_cms, _("Color Management"));
-    _notebook.append_page(_page_scripting, _("Scripting"));
+    _notebook.append_page(_page_page,             _("Page"));
+    _notebook.append_page(_guides_page,           _("Guides"));
+    _notebook.append_page(_grids_page,            _("Grids"));
+    _notebook.append_page(_snap_page,             _("Snap"));
+    _notebook.append_page(_color_management_page, _("Color Management"));
+    _notebook.append_page(_scripting_page,        _("Scripting"));
 
-    build_page();
-    build_guides();
-    build_gridspage();
-    build_snap();
+    _buildPagePage();
+    _buildGridsPage();
+    _buildSnapPage();
 #if ENABLE_LCMS
-    build_cms();
+    _buildCmsPage();
 #endif // ENABLE_LCMS
-    build_scripting();
+    _buildScriptingPage();
 
-    _grids_button_new.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onNewGrid));
-    _grids_button_remove.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onRemoveGrid));
+    _create_grid_button.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::_onNewGrid));
+    _remove_grid_button.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::_onRemoveGrid));
 
     signalDocumentReplaced().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDocumentReplaced));
     signalActivateDesktop().connect(sigc::mem_fun(*this, &DocumentProperties::_handleActivateDesktop));
     signalDeactiveDesktop().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDeactivateDesktop));
 }
 
-void
-DocumentProperties::init()
+void DocumentProperties::_init()
 {
     update();
 
@@ -150,7 +147,7 @@ DocumentProperties::init()
     root->addListener (&_repr_events, this);
 
     show_all_children();
-    _grids_button_remove.hide();
+    _remove_grid_button.hide();
 }
 
 DocumentProperties::~DocumentProperties()
@@ -170,8 +167,7 @@ DocumentProperties::~DocumentProperties()
  * widget in columns 2-3; (non-0, 0) means label in columns 1-3; and
  * (non-0, non-0) means two widgets in columns 2 and 3.
 **/
-inline void
-attach_all(Gtk::Table &table, Gtk::Widget *const arr[], unsigned const n, int start = 0)
+inline void attach_all(Gtk::Table &table, Gtk::Widget *const arr[], unsigned const n, int start = 0)
 {
     for (unsigned i = 0, r = start; i < n; i += 2)
     {
@@ -212,8 +208,7 @@ attach_all(Gtk::Table &table, Gtk::Widget *const arr[], unsigned const n, int st
     }
 }
 
-void
-DocumentProperties::build_page()
+void DocumentProperties::_buildPagePage()
 {
     _page_page.show();
 
@@ -228,63 +223,40 @@ DocumentProperties::build_page()
     Gtk::Widget *const widget_array[] =
     {
         label_gen,         0,
-        0,                 &_rum_deflt,
-        _rcp_bg._label,    &_rcp_bg,
+        0,                 &_default_unit_menu,
+        _background_color_picker._label,    &_background_color_picker,
         0,                 0,
         label_for,         0,
         0,                 &_page_sizer,
         0,                 0,
         label_bor,         0,
-        0,                 &_rcb_canb,
-        0,                 &_rcb_bord,
-        0,                 &_rcb_shad,
-        _rcp_bord._label,  &_rcp_bord,
+        0,                 &_show_border_checkbox,
+        0,                 &_border_on_top_checkbox,
+        0,                 &_show_border_shadow_checkbox,
+        _border_color_picker._label,  &_border_color_picker,
     };
 
     attach_all(_page_page.table(), widget_array, G_N_ELEMENTS(widget_array));
 }
 
-void
-DocumentProperties::build_guides()
+void DocumentProperties::_buildSnapPage()
 {
-    _page_guides.show();
+    _snap_page.show();
 
-    Gtk::Label *label_gui = manage (new Gtk::Label);
-    label_gui->set_markup (_("<b>Guides</b>"));
-
-    Gtk::Widget *const widget_array[] =
-    {
-        label_gui,        0,
-        0,                &_rcb_sgui,
-        _rcp_gui._label,  &_rcp_gui,
-        _rcp_hgui._label, &_rcp_hgui,
-        0,                &_rcbsng,
-    };
-
-    attach_all(_page_guides.table(), widget_array, G_N_ELEMENTS(widget_array));
-}
-
-void
-DocumentProperties::build_snap()
-{
-    _page_snap.show();
-
-    _rsu_sno.init (_("Snap _distance"), _("Snap only when _closer than:"), _("Always snap"),
+    _snap_distance_controls.init(_("Snap _distance"), _("Snap only when _closer than:"), _("Always snap"),
                   _("Snapping distance, in screen pixels, for snapping to objects"), _("Always snap to objects, regardless of their distance"),
                   _("If set, objects only snap to another object when it's within the range specified below"),
-                  "objecttolerance", _wr);
+                  "objecttolerance", _widget_registry);
 
-    //Options for snapping to grids
-    _rsu_sn.init (_("Snap d_istance"), _("Snap only when c_loser than:"), _("Always snap"),
+    _grid_snap_distance_controls.init(_("Snap d_istance"), _("Snap only when c_loser than:"), _("Always snap"),
                   _("Snapping distance, in screen pixels, for snapping to grid"), _("Always snap to grids, regardless of the distance"),
                   _("If set, objects only snap to a grid line when it's within the range specified below"),
-                  "gridtolerance", _wr);
+                  "gridtolerance", _widget_registry);
 
-    //Options for snapping to guides
-    _rsu_gusn.init (_("Snap dist_ance"), _("Snap only when close_r than:"), _("Always snap"),
+    _guide_snap_distance_controls.init(_("Snap dist_ance"), _("Snap only when close_r than:"), _("Always snap"),
                 _("Snapping distance, in screen pixels, for snapping to guides"), _("Always snap to guides, regardless of the distance"),
                 _("If set, objects only snap to a guide when it's within the range specified below"),
-                "guidetolerance", _wr);
+                "guidetolerance", _widget_registry);
 
     Gtk::Label *label_o = manage (new Gtk::Label);
     label_o->set_markup (_("<b>Snap to objects</b>"));
@@ -296,21 +268,20 @@ DocumentProperties::build_snap()
     Gtk::Widget *const array[] =
     {
         label_o,            0,
-        0,                  _rsu_sno._vbox,
+        0,                  _snap_distance_controls._vbox,
         0,                  0,
         label_gr,           0,
-        0,                  _rsu_sn._vbox,
+        0,                  _grid_snap_distance_controls._vbox,
         0,                  0,
         label_gu,           0,
-        0,                  _rsu_gusn._vbox
+        0,                  _guide_snap_distance_controls._vbox
     };
 
-    attach_all(_page_snap.table(), array, G_N_ELEMENTS(array));
+    attach_all(_snap_page.table(), array, G_N_ELEMENTS(array));
  }
 
 #if ENABLE_LCMS
-static void
-lcms_profile_get_name (cmsHPROFILE   profile, const gchar **name)
+static void lcms_profile_get_name (cmsHPROFILE   profile, const gchar **name)
 {
   if (profile)
     {
@@ -328,11 +299,10 @@ lcms_profile_get_name (cmsHPROFILE   profile, const gchar **name)
     }
 }
 
-void
-DocumentProperties::populate_available_profiles(){
-    Glib::ListHandle<Gtk::Widget*> children = _menu.get_children();
+void DocumentProperties::_populateAvailableProfiles(){
+    Glib::ListHandle<Gtk::Widget*> children = _available_color_profiles_menu.get_children();
     for ( Glib::ListHandle<Gtk::Widget*>::iterator it2 = children.begin(); it2 != children.end(); ++it2 ) {
-        _menu.remove(**it2);
+        _available_color_profiles_menu.remove(**it2);
         delete(*it2);
     }
 
@@ -368,7 +338,7 @@ DocumentProperties::populate_available_profiles(){
                             hbox->pack_start(*lbl, true, true, 0);
                             mi->add(*hbox);
                             mi->show_all();
-                            _menu.append(*mi);
+                            _available_color_profiles_menu.append(*mi);
         //                    g_free((void*)name);
                             cmsCloseProfile(hProfile);
                         }
@@ -379,7 +349,7 @@ DocumentProperties::populate_available_profiles(){
             }
         }
     }
-    _menu.show_all();
+    _available_color_profiles_menu.show_all();
 }
 
 /**
@@ -415,26 +385,27 @@ static void sanitizeName( Glib::ustring& str )
     }
 }
 
-void
-DocumentProperties::linkSelectedProfile()
+/**
+ * Store this profile in the SVG document (create <color-profile> element in the XML)
+ */
+void DocumentProperties::_linkSelectedProfile()
 {
-//store this profile in the SVG document (create <color-profile> element in the XML)
     // TODO remove use of 'active' desktop
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop){
         g_warning("No active desktop");
     } else {
-        if (!_menu.get_active()){
+        if (!_available_color_profiles_menu.get_active()){
             g_warning("No color profile available.");
             return;
         }
         Inkscape::XML::Document *xml_doc = sp_document_repr_doc(desktop->doc());
         Inkscape::XML::Node *cprofRepr = xml_doc->createElement("svg:color-profile");
-        gchar* tmp = static_cast<gchar*>(_menu.get_active()->get_data("name"));
+        gchar* tmp = static_cast<gchar*>(_available_color_profiles_menu.get_active()->get_data("name"));
         Glib::ustring nameStr = tmp ? tmp : "profile"; // TODO add some auto-numbering to avoid collisions
         sanitizeName(nameStr);
         cprofRepr->setAttribute("name", nameStr.c_str());
-        cprofRepr->setAttribute("xlink:href", (gchar*) _menu.get_active()->get_data("filepath"));
+        cprofRepr->setAttribute("xlink:href", (gchar*) _available_color_profiles_menu.get_active()->get_data("filepath"));
 
         // Checks whether there is a defs element. Creates it when needed
         Inkscape::XML::Node *defsRepr = sp_repr_lookup_name(xml_doc, "svg:defs");
@@ -452,66 +423,65 @@ DocumentProperties::linkSelectedProfile()
         // inform the document, so we can undo
         sp_document_done(desktop->doc(), SP_VERB_EDIT_LINK_COLOR_PROFILE, _("Link Color Profile"));
 
-        populate_linked_profiles_box();
+        _populateLinkedProfilesBox();
     }
 }
 
-void
-DocumentProperties::populate_linked_profiles_box()
+void DocumentProperties::_populateLinkedProfilesBox()
 {
-    _LinkedProfilesListStore->clear();
+    _linked_color_profile_list_store->clear();
     const GSList *current = sp_document_get_resource_list( SP_ACTIVE_DOCUMENT, "iccprofile" );
-    if (current) _emb_profiles_observer.set(SP_OBJECT(current->data)->parent);
+    if (current) _linked_color_profiles_xml_observer.set(SP_OBJECT(current->data)->parent);
     while ( current ) {
         SPObject* obj = SP_OBJECT(current->data);
         Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
-        Gtk::TreeModel::Row row = *(_LinkedProfilesListStore->append());
-        row[_LinkedProfilesListColumns.nameColumn] = prof->name;
+        Gtk::TreeModel::Row row = *(_linked_color_profile_list_store->append());
+        row[_linked_color_profile_list_columns.name_column] = prof->name;
 //        row[_LinkedProfilesListColumns.previewColumn] = "Color Preview";
         current = g_slist_next(current);
     }
 }
 
-void DocumentProperties::external_scripts_list_button_release(GdkEventButton* event)
+void DocumentProperties::_externalScriptsListButtonRelease(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-        _ExternalScriptsContextMenu.popup(event->button, event->time);
+        _external_script_list_context_menu.popup(event->button, event->time);
     }
 }
 
-void DocumentProperties::linked_profiles_list_button_release(GdkEventButton* event)
+void DocumentProperties::_linkedProfilesListButtonRelease(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-        _EmbProfContextMenu.popup(event->button, event->time);
+        _linked_color_profile_list_context_menu.popup(event->button, event->time);
     }
 }
 
-void DocumentProperties::cms_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem)
+void DocumentProperties::_cmsCreatePopupMenu(Gtk::Widget& parent, sigc::slot<void> rem)
 {
     Gtk::MenuItem* mi = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::REMOVE));
-    _EmbProfContextMenu.append(*mi);
+    _linked_color_profile_list_context_menu.append(*mi);
     mi->signal_activate().connect(rem);
     mi->show();
-    _EmbProfContextMenu.accelerate(parent);
+    _linked_color_profile_list_context_menu.accelerate(parent);
 }
 
 
-void DocumentProperties::scripting_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem)
+void DocumentProperties::_scriptingCreatePopupMenu(Gtk::Widget& parent, sigc::slot<void> rem)
 {
     Gtk::MenuItem* mi = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::REMOVE));
-    _ExternalScriptsContextMenu.append(*mi);
+    _external_script_list_context_menu.append(*mi);
     mi->signal_activate().connect(rem);
     mi->show();
-    _ExternalScriptsContextMenu.accelerate(parent);
+    _external_script_list_context_menu.accelerate(parent);
 }
 
-void DocumentProperties::removeSelectedProfile(){
+void DocumentProperties::_removeSelectedProfile(){
     Glib::ustring name;
-    if(_LinkedProfilesList.get_selection()) {
-        Gtk::TreeModel::iterator i = _LinkedProfilesList.get_selection()->get_selected();
+    if(_linked_color_profile_list.get_selection()) {
+        Gtk::TreeModel::iterator i = _linked_color_profile_list.get_selection()->get_selected();
 
         if(i){
-            name = (*i)[_LinkedProfilesListColumns.nameColumn];
+            name = (*i)[_linked_color_profile_list_columns.name_column];
         } else {
             return;
         }
@@ -528,134 +498,134 @@ void DocumentProperties::removeSelectedProfile(){
         current = g_slist_next(current);
     }
 
-    populate_linked_profiles_box();
+    _populateLinkedProfilesBox();
 }
 
 void
-DocumentProperties::build_cms()
+DocumentProperties::_buildCmsPage()
 {
-    _page_cms.show();
+    _color_management_page.show();
 
     Gtk::Label *label_link= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_link->set_markup (_("<b>Linked Color Profiles:</b>"));
     Gtk::Label *label_avail = manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_avail->set_markup (_("<b>Available Color Profiles:</b>"));
 
-    _link_btn.set_label(_("Link Profile"));
+    _link_color_profile_button.set_label(_("Link Profile"));
 
-    _page_cms.set_spacing(4);
+    _color_management_page.set_spacing(4);
     gint row = 0;
 
     label_link->set_alignment(0.0);
-    _page_cms.table().attach(*label_link, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _color_management_page.table().attach(*label_link, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
-    _page_cms.table().attach(_LinkedProfilesListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _color_management_page.table().attach(_linked_color_profile_list_scroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
     spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_cms.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _color_management_page.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     label_avail->set_alignment(0.0);
-    _page_cms.table().attach(*label_avail, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _color_management_page.table().attach(*label_avail, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
-    _page_cms.table().attach(_combo_avail, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    _page_cms.table().attach(_link_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _color_management_page.table().attach(_available_color_profiles_option_menu, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _color_management_page.table().attach(_link_color_profile_button, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
-    populate_available_profiles();
+    _populateAvailableProfiles();
 
-    _combo_avail.set_menu(_menu);
-    _combo_avail.set_history(0);
-    _combo_avail.show_all();
+    _available_color_profiles_option_menu.set_menu(_available_color_profiles_menu);
+    _available_color_profiles_option_menu.set_history(0);
+    _available_color_profiles_option_menu.show_all();
 
     //# Set up the Linked Profiles combo box
-    _LinkedProfilesListStore = Gtk::ListStore::create(_LinkedProfilesListColumns);
-    _LinkedProfilesList.set_model(_LinkedProfilesListStore);
-    _LinkedProfilesList.append_column(_("Profile Name"), _LinkedProfilesListColumns.nameColumn);
+    _linked_color_profile_list_store = Gtk::ListStore::create(_linked_color_profile_list_columns);
+    _linked_color_profile_list.set_model(_linked_color_profile_list_store);
+    _linked_color_profile_list.append_column(_("Profile Name"), _linked_color_profile_list_columns.name_column);
 //    _LinkedProfilesList.append_column(_("Color Preview"), _LinkedProfilesListColumns.previewColumn);
-    _LinkedProfilesList.set_headers_visible(false);
+    _linked_color_profile_list.set_headers_visible(false);
 // TODO restore?    _LinkedProfilesList.set_fixed_height_mode(true);
 
-    populate_linked_profiles_box();
+    _populateLinkedProfilesBox();
 
-    _LinkedProfilesListScroller.add(_LinkedProfilesList);
-    _LinkedProfilesListScroller.set_shadow_type(Gtk::SHADOW_IN);
-    _LinkedProfilesListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-    _LinkedProfilesListScroller.set_size_request(-1, 90);
+    _linked_color_profile_list_scroller.add(_linked_color_profile_list);
+    _linked_color_profile_list_scroller.set_shadow_type(Gtk::SHADOW_IN);
+    _linked_color_profile_list_scroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+    _linked_color_profile_list_scroller.set_size_request(-1, 90);
 
-    _link_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::linkSelectedProfile));
+    _link_color_profile_button.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::_linkSelectedProfile));
 
-    _LinkedProfilesList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::linked_profiles_list_button_release));
-    cms_create_popup_menu(_LinkedProfilesList, sigc::mem_fun(*this, &DocumentProperties::removeSelectedProfile));
+    _linked_color_profile_list.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::_linkedProfilesListButtonRelease));
+    _cmsCreatePopupMenu(_linked_color_profile_list, sigc::mem_fun(*this, &DocumentProperties::_removeSelectedProfile));
 
     const GSList *current = sp_document_get_resource_list( SP_ACTIVE_DOCUMENT, "defs" );
     if (current) {
-        _emb_profiles_observer.set(SP_OBJECT(current->data)->parent);
+        _linked_color_profiles_xml_observer.set(SP_OBJECT(current->data)->parent);
     }
-    _emb_profiles_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_linked_profiles_box));
+    _linked_color_profiles_xml_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::_populateLinkedProfilesBox));
 }
 #endif // ENABLE_LCMS
 
 void
-DocumentProperties::build_scripting()
+DocumentProperties::_buildScriptingPage()
 {
-    _page_scripting.show();
+    _scripting_page.show();
 
     Gtk::Label *label_script= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_script->set_markup (_("<b>External script files:</b>"));
 
-    _add_btn.set_label(_("Add"));
+    _add_external_script_button.set_label(_("Add"));
 
-    _page_scripting.set_spacing(4);
+    _scripting_page.set_spacing(4);
     gint row = 0;
 
     label_script->set_alignment(0.0);
-    _page_scripting.table().attach(*label_script, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _scripting_page.table().attach(*label_script, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
-    _page_scripting.table().attach(_ExternalScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _scripting_page.table().attach(_external_script_list_scroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
     spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_scripting.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _scripting_page.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    _page_scripting.table().attach(_script_entry, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    _page_scripting.table().attach(_add_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _scripting_page.table().attach(_script_entry, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _scripting_page.table().attach(_add_external_script_button, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     //# Set up the External Scripts box
-    _ExternalScriptsListStore = Gtk::ListStore::create(_ExternalScriptsListColumns);
-    _ExternalScriptsList.set_model(_ExternalScriptsListStore);
-    _ExternalScriptsList.append_column(_("Filename"), _ExternalScriptsListColumns.filenameColumn);
-    _ExternalScriptsList.set_headers_visible(true);
+    _external_script_list_store = Gtk::ListStore::create(_external_script_list_columns);
+    _external_script_list.set_model(_external_script_list_store);
+    _external_script_list.append_column(_("Filename"), _external_script_list_columns.filename_column);
+    _external_script_list.set_headers_visible(true);
 // TODO restore?    _ExternalScriptsList.set_fixed_height_mode(true);
 
-    populate_external_scripts_box();
+    _populateExternalScriptsBox();
 
-    _ExternalScriptsListScroller.add(_ExternalScriptsList);
-    _ExternalScriptsListScroller.set_shadow_type(Gtk::SHADOW_IN);
-    _ExternalScriptsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-    _ExternalScriptsListScroller.set_size_request(-1, 90);
+    _external_script_list_scroller.add(_external_script_list);
+    _external_script_list_scroller.set_shadow_type(Gtk::SHADOW_IN);
+    _external_script_list_scroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+    _external_script_list_scroller.set_size_request(-1, 90);
 
-    _add_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::addExternalScript));
+    _add_external_script_button.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::_addExternalScript));
 
 #if ENABLE_LCMS
-    _ExternalScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::external_scripts_list_button_release));
-    scripting_create_popup_menu(_ExternalScriptsList, sigc::mem_fun(*this, &DocumentProperties::removeExternalScript));
+    _external_script_list.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::_externalScriptsListButtonRelease));
+    _scriptingCreatePopupMenu(_external_script_list, sigc::mem_fun(*this, &DocumentProperties::_removeExternalScript));
 #endif // ENABLE_LCMS
 
 //TODO: review this observers code:
     const GSList *current = sp_document_get_resource_list( SP_ACTIVE_DOCUMENT, "script" );
     if (current) {
-        _ext_scripts_observer.set(SP_OBJECT(current->data)->parent);
+        _external_scripts_xml_observer.set(SP_OBJECT(current->data)->parent);
     }
-    _ext_scripts_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_external_scripts_box));
+    _external_scripts_xml_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::_populateExternalScriptsBox));
 }
 
 
-void DocumentProperties::addExternalScript(){
+void DocumentProperties::_addExternalScript(){
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop){
         g_warning("No active desktop");
@@ -670,17 +640,17 @@ void DocumentProperties::addExternalScript(){
         // inform the document, so we can undo
         sp_document_done(desktop->doc(), SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT, _("Add external script..."));
 
-        populate_external_scripts_box();
+        _populateExternalScriptsBox();
     }
 }
 
-void DocumentProperties::removeExternalScript(){
+void DocumentProperties::_removeExternalScript(){
     Glib::ustring name;
-    if(_ExternalScriptsList.get_selection()) {
-        Gtk::TreeModel::iterator i = _ExternalScriptsList.get_selection()->get_selected();
+    if(_external_script_list.get_selection()) {
+        Gtk::TreeModel::iterator i = _external_script_list.get_selection()->get_selected();
 
         if(i){
-            name = (*i)[_ExternalScriptsListColumns.filenameColumn];
+            name = (*i)[_external_script_list_columns.filename_column];
         } else {
             return;
         }
@@ -697,21 +667,21 @@ void DocumentProperties::removeExternalScript(){
         current = g_slist_next(current);
     }
 
-    populate_external_scripts_box();
+    _populateExternalScriptsBox();
 
 }
 
-void DocumentProperties::populate_external_scripts_box(){
-    _ExternalScriptsListStore->clear();
+void DocumentProperties::_populateExternalScriptsBox(){
+    _external_script_list_store->clear();
     const GSList *current = sp_document_get_resource_list( SP_ACTIVE_DOCUMENT, "script" );
-    if (current) _ext_scripts_observer.set(SP_OBJECT(current->data)->parent);
+    if (current) _external_scripts_xml_observer.set(SP_OBJECT(current->data)->parent);
     while ( current ) {
         SPObject* obj = SP_OBJECT(current->data);
         SPScript* script = (SPScript*) obj;
         if (script->xlinkhref)
         {
-            Gtk::TreeModel::Row row = *(_ExternalScriptsListStore->append());
-            row[_ExternalScriptsListColumns.filenameColumn] = script->xlinkhref;
+            Gtk::TreeModel::Row row = *(_external_script_list_store->append());
+            row[_external_script_list_columns.filename_column] = script->xlinkhref;
         }
 
         current = g_slist_next(current);
@@ -722,7 +692,7 @@ void DocumentProperties::populate_external_scripts_box(){
 * Called for _updating_ the dialog (e.g. when a new grid was manually added in XML)
 */
 void
-DocumentProperties::update_gridspage()
+DocumentProperties::updateGridsPage()
 {
     SPDesktop *dt = getDesktop();
     SPNamedView *nv = sp_desktop_namedview(dt);
@@ -755,16 +725,16 @@ DocumentProperties::update_gridspage()
     _grids_notebook.show_all();
 
     if (grids_present)
-        _grids_button_remove.set_sensitive(true);
+        _remove_grid_button.set_sensitive(true);
     else
-        _grids_button_remove.set_sensitive(false);
+        _remove_grid_button.set_sensitive(false);
 }
 
 /**
  * Build grid page of dialog.
  */
 void
-DocumentProperties::build_gridspage()
+DocumentProperties::_buildGridsPage()
 {
     /// \todo FIXME: gray out snapping when grid is off.
     /// Dissenting view: you want snapping without grid.
@@ -773,27 +743,27 @@ DocumentProperties::build_gridspage()
     SPNamedView *nv = sp_desktop_namedview(dt);
     (void)nv;
 
-    _grids_label_crea.set_markup(_("<b>Creation</b>"));
-    _grids_label_def.set_markup(_("<b>Defined grids</b>"));
-    _grids_hbox_crea.pack_start(_grids_combo_gridtype, true, true);
-    _grids_hbox_crea.pack_start(_grids_button_new, true, true);
+    _create_grid_label.set_markup(_("<b>Creation</b>"));
+    _defined_grids_label.set_markup(_("<b>Defined grids</b>"));
+    _create_grid_bbox.pack_start(_create_grid_type_combo, true, true);
+    _create_grid_bbox.pack_start(_create_grid_button, true, true);
 
     for (gint t = 0; t <= GRID_MAXTYPENR; t++) {
-        _grids_combo_gridtype.append_text( CanvasGrid::getName( (GridType) t ) );
+        _create_grid_type_combo.append_text( CanvasGrid::getName( (GridType) t ) );
     }
-    _grids_combo_gridtype.set_active_text( CanvasGrid::getName(GRID_RECTANGULAR) );
+    _create_grid_type_combo.set_active_text( CanvasGrid::getName(GRID_RECTANGULAR) );
 
-    _grids_space.set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
+    _grids_spacer.set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
 
-    _grids_vbox.set_spacing(4);
-    _grids_vbox.pack_start(_grids_label_crea, false, false);
-    _grids_vbox.pack_start(_grids_hbox_crea, false, false);
-    _grids_vbox.pack_start(_grids_space, false, false);
-    _grids_vbox.pack_start(_grids_label_def, false, false);
-    _grids_vbox.pack_start(_grids_notebook, false, false);
-    _grids_vbox.pack_start(_grids_button_remove, false, false);
+    _grids_page.set_spacing(4);
+    _grids_page.pack_start(_create_grid_label, false, false);
+    _grids_page.pack_start(_create_grid_bbox, false, false);
+    _grids_page.pack_start(_grids_spacer, false, false);
+    _grids_page.pack_start(_defined_grids_label, false, false);
+    _grids_page.pack_start(_grids_notebook, false, false);
+    _grids_page.pack_start(_remove_grid_button, false, false);
 
-    update_gridspage();
+    updateGridsPage();
 }
 
 
@@ -804,23 +774,23 @@ DocumentProperties::build_gridspage()
 void
 DocumentProperties::update()
 {
-    if (_wr.isUpdating()) return;
+    if (_widget_registry.isUpdating()) return;
 
     SPDesktop *dt = getDesktop();
     SPNamedView *nv = sp_desktop_namedview(dt);
 
-    _wr.setUpdating (true);
+    _widget_registry.setUpdating (true);
     set_sensitive (true);
 
     //-----------------------------------------------------------page page
-    _rcp_bg.setRgba32 (nv->pagecolor);
-    _rcb_canb.setActive (nv->showborder);
-    _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
-    _rcp_bord.setRgba32 (nv->bordercolor);
-    _rcb_shad.setActive (nv->showpageshadow);
+    _background_color_picker.setRgba32 (nv->pagecolor);
+    _show_border_checkbox.setActive (nv->showborder);
+    _border_on_top_checkbox.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
+    _border_color_picker.setRgba32 (nv->bordercolor);
+    _show_border_shadow_checkbox.setActive (nv->showpageshadow);
 
     if (nv->doc_units)
-        _rum_deflt.setUnit (nv->doc_units);
+        _default_unit_menu.setUnit (nv->doc_units);
 
     double const doc_w_px = sp_document_width(sp_desktop_document(dt));
     double const doc_h_px = sp_document_height(sp_desktop_document(dt));
@@ -829,30 +799,27 @@ DocumentProperties::update()
 
     //-----------------------------------------------------------guide page
 
-    _rcb_sgui.setActive (nv->showguides);
-    _rcp_gui.setRgba32 (nv->guidecolor);
-    _rcp_hgui.setRgba32 (nv->guidehicolor);
-    _rcbsng.setActive(nv->snap_manager.snapprefs.getSnapModeGuide());
+    _guides_page.update();
 
     //-----------------------------------------------------------snap page
 
-    _rsu_sno.setValue (nv->snap_manager.snapprefs.getObjectTolerance());
-    _rsu_sn.setValue (nv->snap_manager.snapprefs.getGridTolerance());
-    _rsu_gusn.setValue (nv->snap_manager.snapprefs.getGuideTolerance());
+    _snap_distance_controls.setValue (nv->snap_manager.snapprefs.getObjectTolerance());
+    _grid_snap_distance_controls.setValue (nv->snap_manager.snapprefs.getGridTolerance());
+    _guide_snap_distance_controls.setValue (nv->snap_manager.snapprefs.getGuideTolerance());
 
 
     //-----------------------------------------------------------grids page
 
-    update_gridspage();
+    updateGridsPage();
 
     //------------------------------------------------Color Management page
 
 #if ENABLE_LCMS
-    populate_linked_profiles_box();
-    populate_available_profiles();
+    _populateLinkedProfilesBox();
+    _populateAvailableProfiles();
 #endif // ENABLE_LCMS
 
-    _wr.setUpdating (false);
+    _widget_registry.setUpdating (false);
 }
 
 // TODO: copied from fill-and-stroke.cpp factor out into new ui/widget file?
@@ -873,15 +840,15 @@ DocumentProperties::_createPageTabLabel(const Glib::ustring& label, const char *
 
 //--------------------------------------------------------------------
 
+// JGLASSMY: this is unused.  delete it.  it could be registered via Dialog::signal_response() if that were desired.
 void
-DocumentProperties::on_response (int id)
+DocumentProperties::_onResponse (int id)
 {
     if (id == Gtk::RESPONSE_DELETE_EVENT || id == Gtk::RESPONSE_CLOSE)
     {
-        _rcp_bg.closeWindow();
-        _rcp_bord.closeWindow();
-        _rcp_gui.closeWindow();
-        _rcp_hgui.closeWindow();
+        _background_color_picker.closeWindow();
+        _border_color_picker.closeWindow();
+        _guides_page.close();
     }
 
     if (id == Gtk::RESPONSE_CLOSE)
@@ -921,14 +888,14 @@ static void
 on_child_added(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node */*child*/, Inkscape::XML::Node */*ref*/, void *data)
 {
     if (DocumentProperties *dialog = static_cast<DocumentProperties *>(data))
-        dialog->update_gridspage();
+        dialog->updateGridsPage();
 }
 
 static void
 on_child_removed(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node */*child*/, Inkscape::XML::Node */*ref*/, void *data)
 {
     if (DocumentProperties *dialog = static_cast<DocumentProperties *>(data))
-        dialog->update_gridspage();
+        dialog->updateGridsPage();
 }
 
 
@@ -949,22 +916,20 @@ on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar
 ########################################################################*/
 
 void
-DocumentProperties::onNewGrid()
+DocumentProperties::_onNewGrid()
 {
     SPDesktop *dt = getDesktop();
     Inkscape::XML::Node *repr = SP_OBJECT_REPR(sp_desktop_namedview(dt));
     SPDocument *doc = sp_desktop_document(dt);
 
-    Glib::ustring typestring = _grids_combo_gridtype.get_active_text();
+    Glib::ustring typestring = _create_grid_type_combo.get_active_text();
     CanvasGrid::writeNewGridToRepr(repr, doc, CanvasGrid::getGridTypeFromName(typestring.c_str()));
 
     // toggle grid showing to ON:
     dt->showGrids(true);
 }
 
-
-void
-DocumentProperties::onRemoveGrid()
+void DocumentProperties::_onRemoveGrid()
 {
     gint pagenum = _grids_notebook.get_current_page();
     if (pagenum == -1) // no pages
@@ -989,6 +954,165 @@ DocumentProperties::onRemoveGrid()
     }
 }
 
+DocumentProperties::GuidesPage::GuidesPage(SPDesktop * desktop, UI::Widget::Registry & widget_registry)
+    : UI::Widget::NotebookPage(1, 1),
+      _desktop(desktop),
+      _show_guides_checkbox(_("Show _guides"), _("Show or hide guides"), "showguides", widget_registry),
+      _snap_to_guides_checkbox(_("_Snap guides while dragging"), _("While dragging a guide, snap to object nodes or bounding box corners ('Snap to nodes' or 'snap to bounding box corners' must be enabled; only a small part of the guide near the cursor will snap)"), "inkscape:snap-from-guide", widget_registry),
+      _guide_color_picker(_("Guide co_lor:"), _("Guideline color"), _("Color of guidelines"), "guidecolor", "guideopacity", widget_registry),
+      _highlighted_guide_color_picker(_("_Highlight color:"), _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"), "guidehicolor", "guidehiopacity", widget_registry),
+      _delete_all_guides_button(Q_("GuidesPage|_Delete"), _("Delete selected guides.")),
+      _create_guides_around_page_button(("Guides around _page"), _("Create a guide aligned with each of the four borders of the document."))
+{
+    Gtk::Label *guides_label = Gtk::manage(new Gtk::Label);
+    guides_label->set_markup(_("<b>Guides</b>"));
+
+    _guide_list_store = Gtk::ListStore::create(_guide_list_columns);
+    _guide_list.set_model(_guide_list_store);
+    _guide_list.append_column(_("ID"), _guide_list_columns.guide_column);
+    _guide_list.get_column(0)->set_visible(false);
+    _guide_list.append_column(_("Label"), _guide_list_columns.default_label_column);
+    _guide_list.set_headers_visible(true);
+    _guide_list.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
+    _guide_list_scroller.add(_guide_list);
+    _guide_list_scroller.set_shadow_type(Gtk::SHADOW_IN);
+    _guide_list_scroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+    _guide_list_scroller.set_size_request(-1, 150);
+
+    _guide_list.signal_row_activated().connect(sigc::mem_fun(*this, &DocumentProperties::GuidesPage::_activateSelectedGuide));
+    _guide_list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::GuidesPage::_updateSelectionStatus));
+
+    _delete_all_guides_button.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::GuidesPage::_deleteSelectedGuides));
+
+    _create_guides_around_page_button.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::GuidesPage::_createGuidesAroundPage));
+
+    Gtk::Widget *const widget_array[] =
+    {
+        guides_label,                             0,
+        0,                                        &_show_guides_checkbox,
+        _guide_color_picker._label,               &_guide_color_picker,
+        _highlighted_guide_color_picker._label,   &_highlighted_guide_color_picker,
+        0,                                        &_snap_to_guides_checkbox,
+        _createManagedSpacer(),                   0,
+        &_guide_list_scroller,                    0,
+        &_delete_all_guides_button,               0,
+        _createManagedSpacer(),                   0,
+        &_create_guides_around_page_button,       0
+    };
+
+    attach_all(table(), widget_array, G_N_ELEMENTS(widget_array));
+
+    _guides_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::GuidesPage::_populateGuideList));
+
+    _populateGuideList();
+}
+
+void DocumentProperties::GuidesPage::close()
+{
+    _guide_color_picker.closeWindow();
+    _highlighted_guide_color_picker.closeWindow();
+}
+
+void DocumentProperties::GuidesPage::update()
+{
+    SPNamedView const * namedView = sp_desktop_namedview(_desktop);
+
+    if(namedView) {
+        _show_guides_checkbox.setActive(namedView->showguides);
+        _snap_to_guides_checkbox.setActive(namedView->snap_manager.snapprefs.getSnapModeGuide());
+
+        _guide_color_picker.setRgba32(namedView->guidecolor);
+        _highlighted_guide_color_picker.setRgba32(namedView->guidehicolor);
+    }
+
+    _populateGuideList();
+}
+
+Gtk::HBox * DocumentProperties::GuidesPage::_createManagedSpacer()
+{
+    Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
+
+    return spacer;
+}
+
+void DocumentProperties::GuidesPage::_activateSelectedGuide(Gtk::TreeModel::Path const & path, Gtk::TreeViewColumn * column)
+{
+    SPGuide * selected_guide = (*(_guide_list_store->get_iter(path)))[_guide_list_columns.guide_column];
+
+    if(selected_guide) {
+        Inkscape::UI::Dialogs::GuidelinePropertiesDialog::showDialog(selected_guide, _desktop);
+    }
+}
+
+void DocumentProperties::GuidesPage::_createGuidesAroundPage()
+{
+    sp_guide_create_guides_around_page(_desktop);
+}
+
+//bool DocumentProperties::GuidesPage::_addGuideAtPath(Gtk::TreePath & path, std::list<SPGuide *> const & guide_list)
+//{
+//    SPGuide * selected_guide = (*(_guide_list_store->get_iter(path)))[_guide_list_columns.guide_column];
+//
+//    if(selected_guide) {
+//        Inkscape::UI::Dialogs::GuidelinePropertiesDialog::showDialog(selected_guide, _desktop);
+//    }
+//
+//    return true;
+//}
+
+void DocumentProperties::GuidesPage::_deleteSelectedGuides()
+{
+    std::list<SPGuide *> selected_guides;
+
+//    _guide_list.get_selection()->selected_foreach(sigc::bind(sigc::mem_fun(*this, _addGuideAtPath), selected_paths));
+
+    Glib::ListHandle<Gtk::TreeModel::Path, Gtk::TreePath_Traits> selected_paths = _guide_list.get_selection()->get_selected_rows();
+    for (Glib::ListHandle<Gtk::TreeModel::Path, Gtk::TreePath_Traits>::iterator selected_path_iterator = selected_paths.begin(); selected_path_iterator != selected_paths.end(); selected_path_iterator++) {
+        Gtk::TreeModel::Path path = *selected_path_iterator;
+
+        SPGuide * selected_guide = (*(_guide_list_store->get_iter(path)))[_guide_list_columns.guide_column];
+
+        selected_guides.push_back(selected_guide);
+    }
+
+    for (std::list<SPGuide *>::iterator guide_iterator = selected_guides.begin(); guide_iterator != selected_guides.end(); guide_iterator++) {
+        sp_guide_remove(*guide_iterator);
+    }
+
+    if (! selected_guides.empty()) {
+        sp_document_done(sp_desktop_document(_desktop), SP_VERB_DIALOG_NAMEDVIEW, _("Delete selected guide(s)"));
+    }
+}
+
+void DocumentProperties::GuidesPage::_populateGuideList()
+{
+    _guide_list_store->clear();
+
+    SPNamedView const * namedView = sp_desktop_namedview(_desktop);
+    if (namedView) {
+        _guides_observer.set(SP_NAMEDVIEW(namedView));
+
+        GSList const * current = namedView->guides;
+
+        while (current) {
+            SPGuide * guide = SP_GUIDE(current->data);
+
+            Gtk::TreeModel::Row newRow = *(_guide_list_store->append());
+            newRow[_guide_list_columns.guide_column] = guide;
+            newRow[_guide_list_columns.default_label_column] = Glib::ustring(guide->defaultLabel());
+
+            current = g_slist_next(current);
+        }
+    }
+
+    _updateSelectionStatus();
+}
+
+void DocumentProperties::GuidesPage::_updateSelectionStatus()
+{
+    _delete_all_guides_button.set_sensitive(_guide_list.get_selection() && _guide_list.get_selection()->count_selected_rows() > 0);
+}
 
 } // namespace Dialog
 } // namespace UI
