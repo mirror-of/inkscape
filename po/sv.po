@@ -6,6 +6,7 @@
 # Mattias Hultgren <mattias_hultgren@tele2.se>, 2005, 2006.
 # Henrik Larsson <henrik.p.larsson@gmail.com>, 2006, 2007.
 # Elias Norberg <elno0959 at student.su.se>, 2009
+# Jesper Öqvist <jesper@llbit.se>, 2009
 #
 msgid ""
 msgstr ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2010-06-08 21:39+0200\n"
 "PO-Revision-Date: 2009-10-13 23:42+0100\n"
-"Last-Translator: Elias Norberg <elno0959 at student.su.se>\n"
+"Last-Translator: Jesper Öqvist <jesper@llbit.se>\n"
 "Language-Team: Svenska <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +28,7 @@ msgstr "Lägg till noder"
 #: ../share/extensions/addnodes.inx.h:2
 #, fuzzy
 msgid "By max. segment length"
-msgstr "Maximal fältnamnslängd"
+msgstr "Maximal segmentlängd"
 
 #: ../share/extensions/addnodes.inx.h:3
 #, fuzzy
@@ -36,13 +37,13 @@ msgstr "Dela segmenten likformigt"
 
 #: ../share/extensions/addnodes.inx.h:4
 #, fuzzy
-msgid "Division method"
-msgstr "X-inmatningsmetod"
+msgid "Division method:"
+msgstr "Divisionsmetod:"
 
 #: ../share/extensions/addnodes.inx.h:5
 #, fuzzy
-msgid "Maximum segment length (px)"
-msgstr "Maximal längd på textfält"
+msgid "Maximum segment length (px):"
+msgstr "Maximal segmentlängd (px):"
 
 #: ../share/extensions/addnodes.inx.h:6
 #: ../share/extensions/convert2dashes.inx.h:2
@@ -61,7 +62,7 @@ msgstr "Ändra slinga"
 
 #: ../share/extensions/addnodes.inx.h:7
 #, fuzzy
-msgid "Number of segments"
+msgid "Number of segments:"
 msgstr "Antal segment:"
 
 #: ../share/extensions/ai_input.inx.h:1
@@ -317,7 +318,7 @@ msgstr "Konvertera till gråskala"
 
 #: ../share/extensions/dia.inx.h:1
 msgid "A diagram created with the program Dia"
-msgstr ""
+msgstr "Ett diagram skapat med programmet Dia"
 
 #: ../share/extensions/dia.inx.h:2
 #, fuzzy
@@ -334,6 +335,8 @@ msgid ""
 "In order to import Dia files, Dia itself must be installed.  You can get Dia "
 "at http://live.gnome.org/Dia"
 msgstr ""
+"För att kunna importera Dia-filer måste Dia självt vara installerat. Du kan ladda "
+"ner Dia från http://live.gnome.org/Dia"
 
 #: ../share/extensions/dia.inx.h:5
 msgid ""
@@ -341,6 +344,8 @@ msgid ""
 "If you do not have it, there is likely to be something wrong with your "
 "Inkscape installation."
 msgstr ""
+"Shell-skriptet dia2svg.sh bör vara installerat tillsammans med Inkscape. "
+"Om du inte har det, är det troligtvis något fel med din Inkscape-installation."
 
 #: ../share/extensions/dimension.inx.h:1
 msgid "Dimensions"
@@ -362,7 +367,7 @@ msgstr "Avstånd Y"
 #: ../share/extensions/dots.inx.h:1
 #, fuzzy
 msgid "Dot size"
-msgstr "Ctrl+klick punkstorlek:"
+msgstr "Punktstorlek"
 
 #: ../share/extensions/dots.inx.h:2
 #, fuzzy
@@ -948,7 +953,7 @@ msgstr "Underdelar"
 
 #: ../share/extensions/funcplot.inx.h:1
 msgid "Calculate first derivative numerically"
-msgstr ""
+msgstr "Beräkna förstaderivatan numeriskt"
 
 #: ../share/extensions/funcplot.inx.h:2
 #: ../share/extensions/param_curves.inx.h:1
@@ -984,11 +989,11 @@ msgstr "Funktioner"
 
 #: ../share/extensions/funcplot.inx.h:8
 msgid "Isotropic scaling (uses smallest of width/xrange or height/yrange)"
-msgstr ""
+msgstr "Isotropisk skalning (använder minsta utav bredd/xvidd eller höjd/yvidd)"
 
 #: ../share/extensions/funcplot.inx.h:9
 msgid "Multiply X range by 2*pi"
-msgstr ""
+msgstr "Multiplicera X-vidd med 2*pi"
 
 #: ../share/extensions/funcplot.inx.h:10
 #, fuzzy
@@ -1078,13 +1083,16 @@ msgstr "Vinkelomfång:"
 
 #: ../share/extensions/generate_voronoi.inx.h:1
 msgid "Average size of cell (px)"
-msgstr ""
+msgstr "Medelstorlek på cell (px)"
 
 #: ../share/extensions/generate_voronoi.inx.h:2
 msgid ""
 "Generate a random pattern of Voronoi cells. The pattern will be accessible "
 "in the Fill and Stroke dialog. You must select an object or a group."
 msgstr ""
+"Skapa ett slumpmönster med Voroni-celler. Mönstret blir tillgängligt "
+"i Fyllnad och Stryknings-rutan. Välj ett objekt eller en grupp."
+#TODO
 
 #: ../share/extensions/generate_voronoi.inx.h:4
 msgid ""
@@ -1096,7 +1104,8 @@ msgstr ""
 
 #: ../share/extensions/generate_voronoi.inx.h:5
 msgid "Size of Border (px)"
-msgstr ""
+msgstr "Kantstorlek (px)"
+#TODO
 
 #: ../share/extensions/generate_voronoi.inx.h:6
 #, fuzzy
@@ -1949,32 +1958,32 @@ msgstr "Sätt linjefärg till odefinierad"
 #: ../share/extensions/jessyInk_keyBindings.inx.h:33
 #, fuzzy
 msgid "Set path width to 1:"
-msgstr "Ställ in bredd:"
+msgstr "Ange bredd:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:34
 #, fuzzy
 msgid "Set path width to 3:"
-msgstr "Ställ in bredd:"
+msgstr "Ange bredd:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:35
 #, fuzzy
 msgid "Set path width to 5:"
-msgstr "Ställ in bredd:"
+msgstr "Ange bredd:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:36
 #, fuzzy
 msgid "Set path width to 7:"
-msgstr "Ställ in bredd:"
+msgstr "Ange bredd:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:37
 #, fuzzy
 msgid "Set path width to 9:"
-msgstr "Ställ in bredd:"
+msgstr "Ange bredd:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:38
 #, fuzzy
 msgid "Set path width to default:"
-msgstr "Ställ in som standard"
+msgstr "Ange som standard"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:39
 #, fuzzy
@@ -3156,7 +3165,8 @@ msgstr "Vertikal Punkt:"
 #, fuzzy
 msgid "Initial size"
 msgstr ""
-"  --heap <storlek>                   Ställ in initial storlek på högen\n"
+"  --heap <storlek>                   Ange ursprungsstorlek på heapen\n"
+# det är ingen vits att försvenska "heap" här
 
 #: ../share/extensions/rtree.inx.h:2
 #, fuzzy
@@ -8212,7 +8222,7 @@ msgstr "Radavstånd:"
 
 #: ../src/dialogs/text-edit.cpp:422
 msgid "Set as default"
-msgstr "Ställ in som standard"
+msgstr "Ange som standard"
 
 #: ../src/dialogs/text-edit.cpp:665 ../src/text-context.cpp:1500
 #, fuzzy
@@ -15764,8 +15774,8 @@ msgstr "Spara"
 msgid ""
 "Color: <b>%s</b>; <b>Click</b> to set fill, <b>Shift+click</b> to set stroke"
 msgstr ""
-"Färg: <b>%s</b>; <b>Klicka</b> för att sätta fyllnadsfärg, <b>Skift+klick</"
-"b> för att sätta linjefärg"
+"Färgkod: <b>%s</b>; <b>Klicka</b> för att använda som fyllnadsfärg, <b>Skift+klick</"
+"b> för att använda som linjefärg"
 
 #: ../src/ui/dialog/color-item.cpp:490
 msgid "Change color definition"
@@ -16350,7 +16360,7 @@ msgstr ""
 #: ../src/ui/dialog/filter-effects-dialog.cpp:944
 #, fuzzy
 msgid "Light Source:"
-msgstr "Ställ in färg på ljuskälla"
+msgstr "Färg på ljuskälla:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:961
 msgid "Direction angle for the light source on the XY plane, in degrees"
@@ -20657,12 +20667,12 @@ msgstr "Förhandsvisningstext"
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/ui/dialog/swatches.cpp:192
 msgid "Set fill"
-msgstr "Sätt fyllningsfärg"
+msgstr "Använd som fyllningsfärg"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/ui/dialog/swatches.cpp:200
 msgid "Set stroke"
-msgstr "Sätt linjefärg"
+msgstr "Använd som linjefärg"
 
 #: ../src/ui/dialog/swatches.cpp:225 ../src/widgets/gradient-selector.cpp:146
 #: ../src/widgets/gradient-toolbar.cpp:486
@@ -21964,7 +21974,7 @@ msgstr "Ingen"
 #: ../src/ui/widget/selected-style.cpp:1026
 #: ../src/ui/widget/selected-style.cpp:1027
 msgid "Nothing selected"
-msgstr "Inget markerat"
+msgstr "Ingen vald"
 
 #: ../src/ui/widget/selected-style.cpp:161
 #: ../src/ui/widget/style-swatch.cpp:296
@@ -24459,7 +24469,7 @@ msgstr ""
 #: ../src/widgets/ege-paint-def.cpp:70 ../src/widgets/ege-paint-def.cpp:92
 #: ../src/widgets/gradient-selector.cpp:169
 msgid "none"
-msgstr "ingen"
+msgstr "ingen f�rg"
 
 #: ../src/widgets/ege-paint-def.cpp:89
 #, fuzzy
