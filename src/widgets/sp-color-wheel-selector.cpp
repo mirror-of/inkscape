@@ -138,7 +138,7 @@ static void resizeHSVWheel( GtkHSV *hsv, GtkAllocation *allocation )
 static void handleWheelStyleSet(GtkHSV *hsv, GtkStyle* /*previous*/, gpointer /*userData*/)
 {
     GtkAllocation allocation = {0, 0, 0, 0};
-    //gtk_widget_get_allocation( GTK_WIDGET(hsv), &allocation );
+    gtk_widget_get_allocation( GTK_WIDGET(hsv), &allocation );
     resizeHSVWheel( hsv, &allocation );
 }
 
