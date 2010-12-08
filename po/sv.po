@@ -27214,11 +27214,11 @@ msgstr "Musinställningar"
 #: ../src/widgets/toolbox.cpp:8226
 #, fuzzy
 msgid "Curvature:"
-msgstr "Flikdeformering"
+msgstr "Flikdeformering:"
 
 #: ../src/widgets/toolbox.cpp:8227
 msgid "The amount of connectors curvature"
-msgstr ""
+msgstr "Mängd krökning runt förbindelser"
 
 #: ../src/widgets/toolbox.cpp:8237
 #, fuzzy
@@ -27283,7 +27283,7 @@ msgstr ""
 #: ../src/widgets/toolbox.cpp:8417
 #, fuzzy
 msgid "Fill by"
-msgstr "Fyll med:"
+msgstr "Fyll med"
 
 #: ../src/widgets/toolbox.cpp:8418
 msgid "Fill by:"
@@ -27292,7 +27292,7 @@ msgstr "Fyll med:"
 #: ../src/widgets/toolbox.cpp:8430
 #, fuzzy
 msgid "Fill Threshold"
-msgstr "_Blått tröskelvärde:"
+msgstr "Fyllnads-tröskelvärde:"
 
 #: ../src/widgets/toolbox.cpp:8431
 msgid ""
@@ -27305,7 +27305,7 @@ msgstr ""
 #: ../src/widgets/toolbox.cpp:8457
 #, fuzzy
 msgid "Grow/shrink by"
-msgstr "Öka/minska med:"
+msgstr "Öka/minska med"
 
 #: ../src/widgets/toolbox.cpp:8457
 msgid "Grow/shrink by:"
@@ -27315,16 +27315,16 @@ msgstr "Öka/minska med:"
 msgid ""
 "The amount to grow (positive) or shrink (negative) the created fill path"
 msgstr ""
-"Mängd att växa (positiv) eller krympa (negativ) den skapade fyllningsslingan"
+"Mängd att växa (positivt) eller krympa (negativt) den skapade fyllningsslingan"
 
 #: ../src/widgets/toolbox.cpp:8483
 #, fuzzy
 msgid "Close gaps"
-msgstr "Stäng öppningar:"
+msgstr "Slut öppningar:"
 
 #: ../src/widgets/toolbox.cpp:8484
 msgid "Close gaps:"
-msgstr "Stäng öppningar:"
+msgstr "Slut öppningar:"
 
 #: ../src/widgets/toolbox.cpp:8496
 msgid ""
@@ -27347,7 +27347,7 @@ msgstr ""
 #: ../share/extensions/render_barcode_datamatrix.inx.h:1
 #, fuzzy
 msgid "Barcode - Datamatrix"
-msgstr "Streckkodsdata:"
+msgstr "Streckkod - datamatris"
 
 #: ../share/extensions/render_barcode_datamatrix.inx.h:2
 #, fuzzy
@@ -27357,7 +27357,7 @@ msgstr "Färger"
 #: ../share/extensions/render_barcode_datamatrix.inx.h:4
 #, fuzzy
 msgid "Rows"
-msgstr "Rader:"
+msgstr "Rader"
 
 #: ../share/extensions/render_barcode_datamatrix.inx.h:5
 #, fuzzy
@@ -27367,24 +27367,24 @@ msgstr "Fyrkantig avslutning"
 #: ../share/extensions/text_sentencecase.inx.h:1
 #, fuzzy
 msgid "Sentence case"
-msgstr "Gör _skillnad på gemener/VERSALER"
+msgstr "_Skilj på gemener/VERSALER"
 
 #: ../share/extensions/wireframe_sphere.inx.h:1
 msgid "Hide lines behind the sphere"
-msgstr ""
+msgstr "Dölj linjer bakom sfären"
 
 #: ../share/extensions/wireframe_sphere.inx.h:2
 msgid "Lines of latitude"
-msgstr ""
+msgstr "Latitudlinjer"
 
 #: ../share/extensions/wireframe_sphere.inx.h:3
 msgid "Lines of longitude"
-msgstr ""
+msgstr "Longitudlinjer"
 
 #: ../share/extensions/wireframe_sphere.inx.h:4
 #, fuzzy
 msgid "Radius [px]"
-msgstr "Radie / bildpunkter"
+msgstr "Radie [px]"
 
 #: ../share/extensions/wireframe_sphere.inx.h:6
 #, fuzzy
@@ -27393,11 +27393,11 @@ msgstr "Rotation (grader)"
 
 #: ../share/extensions/wireframe_sphere.inx.h:7
 msgid "Tilt [deg]"
-msgstr ""
+msgstr "Tilt (grader)"
 
 #: ../share/extensions/wireframe_sphere.inx.h:8
 msgid "Wireframe Sphere"
-msgstr ""
+msgstr "Trådrams-sfär"
 
 #, fuzzy
 #~ msgid "Refresh the icons"
