@@ -6940,35 +6940,35 @@ msgstr "Omdirigera förbindelse"
 #: ../src/conn-avoid-ref.cpp:282
 #, fuzzy
 msgid "Remove a connection point"
-msgstr "Omdirigera förbindelse"
+msgstr "Ta bort förbindelsepunkt"
 
 #: ../src/live_effects/lpe-extrude.cpp:28
 #, fuzzy
 msgid "Direction"
-msgstr "Beskrivning"
+msgstr "Riktning"
 
 #: ../src/live_effects/lpe-extrude.cpp:28
 msgid "Defines the direction and magnitude of the extrusion"
-msgstr ""
+msgstr "Anger riktning och magnitud för utbuktnaden"
 
 #: ../src/sp-flowtext.cpp:378 ../src/sp-text.cpp:427
 #: ../src/text-context.cpp:1604
 #, fuzzy
 msgid " [truncated]"
-msgstr "Stympad Kub"
+msgstr " [stympad]"
 
 #: ../src/sp-flowtext.cpp:381
 #, fuzzy, c-format
 msgid "<b>Flowed text</b> (%d character%s)"
 msgid_plural "<b>Flowed text</b> (%d characters%s)"
-msgstr[0] "Konvertera flytande text till text"
+msgstr[0] "Konvertera flytande text till fix text"
 msgstr[1] "<b>Flytande text</b> (%d tecken)"
 
 #: ../src/sp-flowtext.cpp:383
 #, fuzzy, c-format
 msgid "<b>Linked flowed text</b> (%d character%s)"
 msgid_plural "<b>Linked flowed text</b> (%d characters%s)"
-msgstr[0] "Konvertera flytande text till text"
+msgstr[0] "Konvertera flytande text till fix text"
 msgstr[1] "<b>Länkad flytande text</b> (%d tecken)"
 
 #: ../src/arc-context.cpp:324
@@ -6976,8 +6976,8 @@ msgstr[1] "<b>Länkad flytande text</b> (%d tecken)"
 msgid ""
 "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
 msgstr ""
-"<b>Ctrl</b>: skapa cirkel eller ellips med heltalsförhållande, snap arc/"
-"segment angle"
+"<b>Ctrl</b>: skapa cirkel eller ellips med heltalsförhållande, justera båge-/"
+"segment-vinkel"
 
 #: ../src/arc-context.cpp:325 ../src/rect-context.cpp:369
 msgid "<b>Shift</b>: draw around the starting point"
@@ -7004,8 +7004,9 @@ msgstr ""
 
 #: ../src/arc-context.cpp:504
 msgid "Create ellipse"
-msgstr "Rita ellips"
+msgstr "Skapa ellips"
 
+# TODO
 #: ../src/box3d-context.cpp:440 ../src/box3d-context.cpp:447
 #: ../src/box3d-context.cpp:454 ../src/box3d-context.cpp:461
 #: ../src/box3d-context.cpp:468 ../src/box3d-context.cpp:475
@@ -7029,13 +7030,13 @@ msgstr "<b>3D-låda</b>"
 #: ../src/connector-context.cpp:236
 msgid "<b>Connection point</b>: click or drag to create a new connector"
 msgstr ""
-"<b>Förbindelsepunkt</b>: klicka och dra för att skapa en ny förbindelse"
+"<b>Förbindelsepunkt</b>: klicka eller dra för att skapa en ny förbindelse"
 
 #: ../src/connector-context.cpp:237
 #, fuzzy
 msgid "<b>Connection point</b>: click to select, drag to move"
 msgstr ""
-"<b>Förbindelsepunkt</b>: klicka och dra för att skapa en ny förbindelse"
+"<b>Förbindelsepunkt</b>: klicka för att markera, dra för att flytta"
 
 #: ../src/connector-context.cpp:781
 msgid "Creating new connector"
@@ -7043,12 +7044,12 @@ msgstr "Skapar ny förbindelse"
 
 #: ../src/connector-context.cpp:1159
 msgid "Connector endpoint drag cancelled."
-msgstr "Förflyttning av förbindelsens ändpunkt borttagen."
+msgstr "Förflyttning av förbindelsens ändpunkt avbruten."
 
 #: ../src/connector-context.cpp:1189
 #, fuzzy
 msgid "Connection point drag cancelled."
-msgstr "Förflyttning av förbindelsens ändpunkt borttagen."
+msgstr "Flyttning av förbindelsepunkt avbruten."
 
 #: ../src/connector-context.cpp:1307
 msgid "Reroute connector"
@@ -7070,7 +7071,7 @@ msgstr ""
 
 #: ../src/connector-context.cpp:1931
 msgid "Select <b>at least one non-connector object</b>."
-msgstr "Markera <b>minst ett objekt vilka inte är förbindelseobjekt</b>."
+msgstr "Markera <b>minst ett icke-förbindelseobjekt</b>."
 
 #: ../src/connector-context.cpp:1936 ../src/widgets/toolbox.cpp:8191
 msgid "Make connectors avoid selected objects"
@@ -7078,21 +7079,21 @@ msgstr "Gör så att förbindelser undviker markerade objekt"
 
 #: ../src/connector-context.cpp:1937 ../src/widgets/toolbox.cpp:8201
 msgid "Make connectors ignore selected objects"
-msgstr "Gör så att förbindelser ignorerar markerade objekt"
+msgstr "Låt förbindelser ignorerar markerade objekt"
 
 #: ../src/context-fns.cpp:36 ../src/context-fns.cpp:65
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
 msgstr ""
-"<b>Aktuellt lager är dolt</b>. Visa lagret för att kunna rita till det."
+"<b>Aktuellt lager är dolt</b>. Visa lagret för att kunna rita i det."
 
 #: ../src/context-fns.cpp:42 ../src/context-fns.cpp:71
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr "<b>Aktuellt lager är låst</b>. Lås upp för att kunna rita till det."
+msgstr "<b>Aktuellt lager är låst</b>. Lås upp för att kunna rita i det."
 
 #: ../src/desktop-events.cpp:189
 #, fuzzy
 msgid "Create guide"
-msgstr "Ny _guide..."
+msgstr "Skapa hjälplinje"
 
 #: ../src/desktop-events.cpp:402
 #, fuzzy
@@ -7103,12 +7104,12 @@ msgstr "Flytta hjälplinje"
 #: ../src/ui/dialog/guides.cpp:125
 #, fuzzy
 msgid "Delete guide"
-msgstr "Ny _guide..."
+msgstr "Radera hjälplinje"
 
 #: ../src/desktop-events.cpp:435
 #, fuzzy, c-format
 msgid "<b>Guideline</b>: %s"
-msgstr "Hjälplinje"
+msgstr "<b>Hjälplinje</b>: %s"
 
 #: ../src/desktop.cpp:843
 msgid "No previous zoom."
@@ -7141,7 +7142,7 @@ msgstr "Markera <b>ett objekt</b> för att slå isär brickkloner."
 
 #: ../src/dialogs/clonetiler.cpp:998
 msgid "Unclump tiled clones"
-msgstr "Sprid ut brickkloner"
+msgstr "Slå isär brickkloner"
 
 #: ../src/dialogs/clonetiler.cpp:1028
 msgid "Select <b>one object</b> whose tiled clones to remove."
@@ -7288,7 +7289,7 @@ msgstr "Horisontell förskjutning per kolumn (i % av brickans bredd)"
 
 #: ../src/dialogs/clonetiler.cpp:1986
 msgid "Randomize the horizontal shift by this percentage"
-msgstr "Slumpa den horisontella förskjutningen med detta procentantal"
+msgstr "Slumpa den horisontella förskjutningen med denna procentandel"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
 #: ../src/dialogs/clonetiler.cpp:1996
@@ -7308,7 +7309,7 @@ msgstr "Vertikal förskjutning per kolumn (i % av brickas höjd)"
 
 #: ../src/dialogs/clonetiler.cpp:2019
 msgid "Randomize the vertical shift by this percentage"
-msgstr "Slumpa den vertikala förskjutningen med detta procentantal"
+msgstr "Slumpa den vertikala förskjutningen med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2027 ../src/dialogs/clonetiler.cpp:2175
 msgid "<b>Exponent:</b>"
@@ -7316,11 +7317,11 @@ msgstr "<b>Exponent:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2034
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Rader sprids jämnt (1), konvergerar (<1) eller divergerar (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:2041
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Kolumner sprids jämnt (1), konvergerar (<1) eller divergerar(>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
 #: ../src/dialogs/clonetiler.cpp:2049 ../src/dialogs/clonetiler.cpp:2219
@@ -7331,11 +7332,11 @@ msgstr "<small>Alternera:</small>"
 
 #: ../src/dialogs/clonetiler.cpp:2055
 msgid "Alternate the sign of shifts for each row"
-msgstr "Alternera tecken för förskjutningar för varje rad"
+msgstr "Alternera tecken för förskjutningar varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2060
 msgid "Alternate the sign of shifts for each column"
-msgstr "Alternera tecken för förskjutningar för varje kolumn"
+msgstr "Alternera tecken för förskjutningar varje kolumn"
 
 #. TRANSLATORS: "Cumulate" is a verb here
 #: ../src/dialogs/clonetiler.cpp:2067 ../src/dialogs/clonetiler.cpp:2237
@@ -7351,7 +7352,7 @@ msgstr "Ackumulera förskjutningen för varje rad"
 msgid "Cumulate the shifts for each column"
 msgstr "Ackumulera förskjutningen för varje kolumn"
 
-#. TRANSLATORS: "Cumulate" is a verb here
+#. TRANSLATORS: "Exclude" is a verb here
 #: ../src/dialogs/clonetiler.cpp:2085
 msgid "<small>Exclude tile:</small>"
 msgstr "<small>Exkludera bricka:</small>"
@@ -7384,7 +7385,7 @@ msgstr "Horisontell skalning per kolumn (i % av brickans bredd)"
 
 #: ../src/dialogs/clonetiler.cpp:2136
 msgid "Randomize the horizontal scale by this percentage"
-msgstr "Slumpa den horisontella skalningen med detta procenttal"
+msgstr "Slumpa den horisontella skalningen med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2144
 msgid "<b>Scale Y:</b>"
@@ -7402,15 +7403,15 @@ msgstr "Vertikal skalning per kolumn (i % av brickans höjd)"
 
 #: ../src/dialogs/clonetiler.cpp:2167
 msgid "Randomize the vertical scale by this percentage"
-msgstr "Slumpa den vertikala skalningen med detta procenttal"
+msgstr "Slumpa den vertikala skalningen med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2182
 msgid "Whether row scaling is uniform (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Rader skalas likformigt (1), konvergerar (<1) eller divergerar (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:2189
 msgid "Whether column scaling is uniform (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Kolumner skalas likformigt (1), konvergerar (<1) eller divergerar (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:2197
 msgid "<b>Base:</b>"
@@ -7420,14 +7421,15 @@ msgstr "<b>Bas:</b>"
 msgid ""
 "Base for a logarithmic spiral: not used (0), converge (<1), or diverge (>1)"
 msgstr ""
+"Bas för en logaritmisk spiral: ej använd (0), konvergerande (<1), eller divergerande (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:2225
 msgid "Alternate the sign of scales for each row"
-msgstr "Alternera tecknet för skalningen för varje rad"
+msgstr "Alternera tecknet för skalningen varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2230
 msgid "Alternate the sign of scales for each column"
-msgstr "Alternera tecknet för skalningen för varje kolumn"
+msgstr "Alternera tecknet för skalningen varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2243
 msgid "Cumulate the scales for each row"
@@ -7457,15 +7459,15 @@ msgstr "Rotera brickorna med denna vinkel för varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2288
 msgid "Randomize the rotation angle by this percentage"
-msgstr "Slumpa rotationsvinkeln med detta procenttal"
+msgstr "Slumpa rotationsvinkeln med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2302
 msgid "Alternate the rotation direction for each row"
-msgstr "Alternera tecknet för rotationsriktningen för varje rad"
+msgstr "Alternera rotationsriktningen varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2307
 msgid "Alternate the rotation direction for each column"
-msgstr "Alternera tecknet för rotationsriktningen för varje kolumn"
+msgstr "Alternera rotationsriktningen varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2320
 msgid "Cumulate the rotation for each row"
@@ -7493,11 +7495,11 @@ msgstr "Gör brickorna oskarpa med detta procentantal för varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2364
 msgid "Randomize the tile blur by this percentage"
-msgstr "Slumpa brickornas oskärpa med detta procentantal"
+msgstr "Slumpa brickornas oskärpa med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2378
 msgid "Alternate the sign of blur change for each row"
-msgstr "Alternera tecknet på oskärpans förändring för varje rad"
+msgstr "Alternera tecknet på oskärpans förändring varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2383
 msgid "Alternate the sign of blur change for each column"
@@ -7505,7 +7507,7 @@ msgstr "Alternera tecknet på oskärpans förändring för varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2392
 msgid "<b>Fade out:</b>"
-msgstr "<b>Tona ut</b>"
+msgstr "<b>Tona ut:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2399
 msgid "Decrease tile opacity by this percentage for each row"
@@ -7517,15 +7519,15 @@ msgstr "Minska brickornas opacitet med detta procentvärde för varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2413
 msgid "Randomize the tile opacity by this percentage"
-msgstr "Slumpa brickornas opacitet med detta procentantal"
+msgstr "Slumpa brickornas opacitet med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2427
 msgid "Alternate the sign of opacity change for each row"
-msgstr "Alternera tecknet för opacitetsförändringen för varje rad"
+msgstr "Alternera tecknet för opacitetsförändringen varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2432
 msgid "Alternate the sign of opacity change for each column"
-msgstr "Alternera tecknet för opacitetsförändringen för varje kolumn"
+msgstr "Alternera tecknet för opacitetsförändringen varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2440
 msgid "Co_lor"
@@ -7533,19 +7535,19 @@ msgstr "Färg"
 
 #: ../src/dialogs/clonetiler.cpp:2445
 msgid "Initial color: "
-msgstr "Initial färg:"
+msgstr "Begynnelsefärg:"
 
 #: ../src/dialogs/clonetiler.cpp:2449
 msgid "Initial color of tiled clones"
-msgstr "Den initiala färgen på brickklonerna"
+msgstr "Begynnelsefärgen på brickklonerna"
 
 #: ../src/dialogs/clonetiler.cpp:2449
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke)"
 msgstr ""
-"Initial färg på kloner (fungerar endast ifall orginalet har en fyllnads- "
-"eller linjefärg som är odefinierad)"
+"Begynnelsefärg på kloner (fungerar endast om orginalet ej har egen fyllnads- "
+"eller linjefärg)"
 
 #: ../src/dialogs/clonetiler.cpp:2464
 msgid "<b>H:</b>"
@@ -7553,15 +7555,15 @@ msgstr "<b>N:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2471
 msgid "Change the tile hue by this percentage for each row"
-msgstr "Ändra brickornas nyans med detta procentvärde för varje rad"
+msgstr "Ändra brickornas nyans med denna procentandel för varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2478
 msgid "Change the tile hue by this percentage for each column"
-msgstr "Ändra brickornas nyans med detta procentvärde för varje kolumn"
+msgstr "Ändra brickornas nyans med denna procentandel för varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2485
 msgid "Randomize the tile hue by this percentage"
-msgstr "Slumpa brickornas nyans med detta procentantal"
+msgstr "Slumpa brickornas nyans med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2494
 msgid "<b>S:</b>"
@@ -7569,15 +7571,15 @@ msgstr "<b>M:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2501
 msgid "Change the color saturation by this percentage for each row"
-msgstr "Ändra brickornas färgmättnad med detta procentvärde för varje rad"
+msgstr "Ändra brickornas färgmättnad med denna procentandel för varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2508
 msgid "Change the color saturation by this percentage for each column"
-msgstr "Ändra brickornas färgmättnad med detta procentvärde för varje kolumn"
+msgstr "Ändra brickornas färgmättnad med denna procentandel för varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2515
 msgid "Randomize the color saturation by this percentage"
-msgstr "Slumpa brickornas mättnad med detta procentantal"
+msgstr "Slumpa brickornas mättnad med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2523
 msgid "<b>L:</b>"
@@ -7585,24 +7587,24 @@ msgstr "<b>I:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2530
 msgid "Change the color lightness by this percentage for each row"
-msgstr "Ändra brickornas färgintensitet med detta procentvärde för varje rad"
+msgstr "Ändra brickornas färgintensitet med denna procentandel för varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2537
 msgid "Change the color lightness by this percentage for each column"
 msgstr ""
-"Ändra brickornas färgintensitet med detta procentvärde för varje kolumn"
+"Ändra brickornas färgintensitet med denna procentandel för varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2544
 msgid "Randomize the color lightness by this percentage"
-msgstr "Slumpa brickornas intensitet med detta procentantal"
+msgstr "Slumpa brickornas intensitet med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2558
 msgid "Alternate the sign of color changes for each row"
-msgstr "Alternera tecken för färgförändringar för varje rad"
+msgstr "Alternera tecken för färgförändringar varje rad"
 
 #: ../src/dialogs/clonetiler.cpp:2563
 msgid "Alternate the sign of color changes for each column"
-msgstr "Alternera tecken för färgförändringar för varje kolumn"
+msgstr "Alternera tecken för färgförändringar varje kolumn"
 
 #: ../src/dialogs/clonetiler.cpp:2571
 msgid "_Trace"
@@ -7660,7 +7662,7 @@ msgstr "Hämta färgens blåa komponent"
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #: ../src/dialogs/clonetiler.cpp:2649
 msgid "clonetiler|H"
-msgstr "N"
+msgstr "clonetiler|N"
 
 #: ../src/dialogs/clonetiler.cpp:2650
 msgid "Pick the hue of the color"
@@ -7670,7 +7672,7 @@ msgstr "Hämta nyansen hos färgen"
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #: ../src/dialogs/clonetiler.cpp:2659
 msgid "clonetiler|S"
-msgstr "M"
+msgstr "clonetiler|M"
 
 #: ../src/dialogs/clonetiler.cpp:2660
 msgid "Pick the saturation of the color"
@@ -7680,7 +7682,7 @@ msgstr "Hämta mättnaden hos färgen"
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #: ../src/dialogs/clonetiler.cpp:2669
 msgid "clonetiler|L"
-msgstr "I"
+msgstr "clonetiler|I"
 
 #: ../src/dialogs/clonetiler.cpp:2670
 msgid "Pick the lightness of the color"
@@ -7705,7 +7707,7 @@ msgstr "Slumpa:"
 
 #: ../src/dialogs/clonetiler.cpp:2707
 msgid "Randomize the picked value by this percentage"
-msgstr "Slumpa det hämtade värdet med detta procentantal"
+msgstr "Slumpa det hämtade värdet med denna procentandel"
 
 #: ../src/dialogs/clonetiler.cpp:2714
 msgid "Invert:"
@@ -7744,8 +7746,8 @@ msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
 msgstr ""
-"Varje klons färg hämtas från den punkten (orginalet måste ha fyllnads- eller "
-"linjefärg odefinerad)"
+"Varje klons färg hämtas från den punkten (orginalet får ej ha egen fyllnads- eller "
+"linjefärg)"
 
 #: ../src/dialogs/clonetiler.cpp:2767
 msgid "Each clone's opacity is determined by the picked value in that point"
