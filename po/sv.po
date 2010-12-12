@@ -3564,7 +3564,7 @@ msgstr "Kalender"
 
 #: ../share/extensions/svgcalendar.inx.h:5
 msgid "Char Encoding"
-msgstr "Kodning"
+msgstr "Teckenkodning"
 
 #: ../share/extensions/svgcalendar.inx.h:6
 #: ../src/ui/dialog/tracedialog.cpp:515
@@ -3645,7 +3645,7 @@ msgstr "Lördag och Söndag"
 
 #: ../share/extensions/svgcalendar.inx.h:25
 msgid "Sun Mon Tue Wed Thu Fri Sat"
-msgstr "Sön Mån Tis Ons Tors Fre Lör"
+msgstr "Sön Mån Tis Ons Tor Fre Lör"
 
 #: ../share/extensions/svgcalendar.inx.h:26
 msgid "Sunday"
@@ -3716,7 +3716,7 @@ msgstr "Ersätt:"
 #: ../share/extensions/text_titlecase.inx.h:2
 #, fuzzy
 msgid "Title Case"
-msgstr "_Engelsk rubriksversalisering"
+msgstr "Engelsk rubriksversalisering"
 
 #: ../share/extensions/text_uppercase.inx.h:2
 msgid "UPPERCASE"
@@ -3780,7 +3780,7 @@ msgstr "Triangel"
 #: ../share/extensions/txt2svg.inx.h:1
 #, fuzzy
 msgid "ASCII Text"
-msgstr "Endast text"
+msgstr "ASCII-text"
 
 #: ../share/extensions/txt2svg.inx.h:2
 msgid "Text File (*.txt)"
@@ -3789,31 +3789,32 @@ msgstr "Textfil (*.txt)"
 #: ../share/extensions/txt2svg.inx.h:3
 #, fuzzy
 msgid "Text Input"
-msgstr "Inmatnings_metoder"
+msgstr "Textinput"
 
 #: ../share/extensions/webslicer_create_group.inx.h:1
 #: ../share/extensions/webslicer_create_rect.inx.h:2
 #, fuzzy
 msgid "Background color:"
-msgstr "Bakgrundsfärg"
+msgstr "Bakgrundsfärg:"
 
 #: ../share/extensions/webslicer_create_group.inx.h:2
 #: ../share/extensions/webslicer_create_rect.inx.h:17
 #, fuzzy
 msgid "HTML class attribute:"
-msgstr "Sätt attribut"
+msgstr "HTML klass-attribut:"
 
 #: ../share/extensions/webslicer_create_group.inx.h:3
 #: ../share/extensions/webslicer_create_rect.inx.h:18
 #, fuzzy
 msgid "HTML id attribute:"
-msgstr "Sätt attribut"
+msgstr "HTML id-attribut:"
 
 #: ../share/extensions/webslicer_create_group.inx.h:4
 #, fuzzy
 msgid "Height unit:"
-msgstr "Höjd"
+msgstr "Höjdenhet:"
 
+# TODO
 #: ../share/extensions/webslicer_create_group.inx.h:5
 msgid ""
 "Layout Group is only about to help a better code generation (if you need "
@@ -3823,25 +3824,24 @@ msgstr ""
 #: ../share/extensions/webslicer_create_group.inx.h:6
 #, fuzzy
 msgid "Percent (relative to parent size)"
-msgstr ""
-"Bredden på modifieringsområdet (relativt det synliga området av ritduken)"
+msgstr "Procent (relativt förälderstorlek)"
 
 #: ../share/extensions/webslicer_create_group.inx.h:7
 msgid "Pixel (fixed)"
-msgstr ""
+msgstr "Bildpunkt (fixerad)"
 
 #: ../share/extensions/webslicer_create_group.inx.h:8
 msgid "Set a layout group"
-msgstr ""
+msgstr "Ange en layout-grupp"
 
 #: ../share/extensions/webslicer_create_group.inx.h:9
 #, fuzzy
 msgid "Slicer"
-msgstr "Sprid ut"
+msgstr "Delare"
 
 #: ../share/extensions/webslicer_create_group.inx.h:10
 msgid "Undefined (relative to non-floating content size)"
-msgstr ""
+msgstr "Odefinierad (relativt icke-flytande innehålls storlek)"
 
 #: ../share/extensions/webslicer_create_group.inx.h:11
 #: ../share/extensions/webslicer_create_rect.inx.h:41
@@ -3855,22 +3855,27 @@ msgstr "Webb"
 #: ../share/extensions/webslicer_create_group.inx.h:12
 #, fuzzy
 msgid "Width unit:"
-msgstr "Bredd"
+msgstr "Breddenhet:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:1
 msgid ""
 "0 is the lowest image quality and highest compression, and 100 is the best "
 "quality but least effective compression"
 msgstr ""
+"0 är den lägsta bildkvalitén och högsta komprimeringsgraden, 100 är den "
+"bästa kvalitén och lägsta komprimeringsgraden"
 
+# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:3
 msgid "Background  no repeat (on parent group)"
 msgstr ""
 
+# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:4
 msgid "Background  repeat horizontally (on parent group)"
 msgstr ""
 
+# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:5
 msgid "Background  repeat vertically (on parent group)"
 msgstr ""
@@ -3878,79 +3883,80 @@ msgstr ""
 #: ../share/extensions/webslicer_create_rect.inx.h:6
 #, fuzzy
 msgid "Bottom and Center"
-msgstr "Sänk slingan till underst"
+msgstr "Botten, centrerat"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:7
 #, fuzzy
 msgid "Bottom and Left"
-msgstr "Sänk slingan till underst"
+msgstr "Botten, till vänster"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:8
 #, fuzzy
 msgid "Bottom and Right"
-msgstr "Sänk slingan till underst"
+msgstr "Botten, till höger"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:9
 #, fuzzy
 msgid "Create a slicer rectangle"
-msgstr "Rita rektangel"
+msgstr "Skapa delningsrektangel"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:10
 #, fuzzy
 msgid "DPI:"
-msgstr "DPI"
+msgstr "DPI:"
 
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx.h:12
 msgid "Force Dimension must be set as <width>x<height>"
-msgstr ""
+msgstr "Dimensioner måste anges som <bredd>x<höjd>"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:13
 #, fuzzy
 msgid "Force Dimension:"
-msgstr "Dimensioner"
+msgstr "Dimensioner:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:14
 #, fuzzy
 msgid "Format:"
-msgstr "Fraktal"
+msgstr "Format:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:15
 #, fuzzy
 msgid "GIF specific options"
-msgstr "SVG 1.1 specification"
+msgstr "GIF-specifika alternativ"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:19
 msgid "If set, this will replace DPI."
-msgstr ""
+msgstr "Om angett, ersätter detta DPI."
 
 #: ../share/extensions/webslicer_create_rect.inx.h:20
 #, fuzzy
 msgid "JPG specific options"
-msgstr "SVG 1.1 specification"
+msgstr "JPEG-specifika alternativ"
 
+# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:21
 #, fuzzy
 msgid "Layout disposition:"
-msgstr "Storlek och position"
+msgstr "Layout-disponering:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:22
 msgid "Left Floated Image"
-msgstr ""
+msgstr "Vänster-flytande bild"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:23
 msgid "Middle and Center"
-msgstr ""
+msgstr "Mitten, centrerat"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:24
 #, fuzzy
 msgid "Middle and Left"
-msgstr "Höj slingan till överst"
+msgstr "Mitten, till vänster"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:25
 #, fuzzy
 msgid "Middle and Right"
-msgstr "Sänk slingan till underst"
+msgstr "Mitten, till höger"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:26
 #: ../src/extension/extension.cpp:740 ../src/ui/dialog/input.cpp:586
@@ -3960,11 +3966,11 @@ msgstr "Namn:"
 #: ../share/extensions/webslicer_create_rect.inx.h:27
 #, fuzzy
 msgid "Non Positioned Image"
-msgstr "Upplösning:"
+msgstr "Icke positionerad bild:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:28
 msgid "Options for HTML export"
-msgstr ""
+msgstr "Alternativ för HTML-exportering"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:29
 #, fuzzy
@@ -3974,32 +3980,34 @@ msgstr "Paletten"
 #: ../share/extensions/webslicer_create_rect.inx.h:30
 #, fuzzy
 msgid "Palette size:"
-msgstr "Klista in storlek"
+msgstr "Palett-storlek:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:31
 #, fuzzy
 msgid "Position anchor:"
-msgstr "Position"
+msgstr "Placera ankare:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:32
 #, fuzzy
 msgid "Positioned Image"
-msgstr "Positioneringsmetod"
+msgstr "Positionerad Bild"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:33
 msgid "Positioned html block element with the image as Background"
-msgstr ""
+msgstr "Positionerat html block element med bild som bakgrund"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:34
 #, fuzzy
 msgid "Quality:"
-msgstr "_Avsluta"
+msgstr "Kvalité:"
 
+# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:35
 #, fuzzy
 msgid "Right Floated Image"
-msgstr "Höger vinkel"
+msgstr "Höger-flytande bild"
 
+# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:36
 msgid "Tiled Background (on parent group)"
 msgstr ""
@@ -4007,59 +4015,64 @@ msgstr ""
 #: ../share/extensions/webslicer_create_rect.inx.h:37
 #, fuzzy
 msgid "Top and Center"
-msgstr "Höj slingan till överst"
+msgstr "Topp, centrerat"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:38
 #, fuzzy
 msgid "Top and Left"
-msgstr "Höj slingan till överst"
+msgstr "Topp, till vänster"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:39
 #, fuzzy
 msgid "Top and right"
-msgstr "Tips och trick"
+msgstr "Topp, till höger"
 
 #: ../share/extensions/webslicer_export.inx.h:1
 msgid ""
 "All sliced images, and optionaly code, will be generated as you had "
 "configured and saved to one directory."
 msgstr ""
+"Alla uppdelade bilder, och eventuellt kod, kommer skapas som ni har "
+"valt och sparas till en mapp."
 
 #: ../share/extensions/webslicer_export.inx.h:2
 msgid "Create directory, if it does not exists"
-msgstr ""
+msgstr "Skapa mapp, om den ej existerar"
 
 #: ../share/extensions/webslicer_export.inx.h:3
 msgid "Directory path to export"
-msgstr ""
+msgstr "Sökväg till mapp för exportering"
 
 #: ../share/extensions/webslicer_export.inx.h:4
 msgid "Export layout pieces and HTML+CSS code"
-msgstr ""
+msgstr "Exportera layout-delar och HTML+CSS kod"
 
 #: ../share/extensions/webslicer_export.inx.h:6
 msgid "With HTML and CSS"
-msgstr ""
+msgstr "Med HTML och CSS"
 
+# TODO
 #: ../share/extensions/web-set-att.inx.h:1
 msgid "All selected ones set an attribute in the last one"
-msgstr ""
+msgstr "Alla markerade väljer ett attribut i den sista"
 
 #: ../share/extensions/web-set-att.inx.h:2
 #, fuzzy
 msgid "Attribute to set"
-msgstr "Lösenordet sattes till: "
+msgstr "Attribut att sätta"
 
+# TODO
 #: ../share/extensions/web-set-att.inx.h:3
 #: ../share/extensions/web-transmit-att.inx.h:3
 msgid "Compatibility with previews code to this event"
-msgstr ""
+msgstr "Kompatibilitet med förhandsgranskning kodas till denna händelse"
 
 #: ../share/extensions/web-set-att.inx.h:4
 msgid ""
 "If you want to set more than one attribute, you must separate this with a "
 "space, and only with a space."
 msgstr ""
+"Om ni vill ha mer än ett attribut, måste ni splittra dessa med endast ett mellanslag."
 
 #: ../share/extensions/web-set-att.inx.h:5
 #: ../share/extensions/web-transmit-att.inx.h:5 ../src/interface.cpp:1579
@@ -4070,36 +4083,36 @@ msgstr "Ersätt"
 #: ../share/extensions/web-transmit-att.inx.h:6
 #, fuzzy
 msgid "Run it after"
-msgstr "\"%c%s\" kräver någonting efter sig"
+msgstr "Kör det efter"
 
 #: ../share/extensions/web-set-att.inx.h:7
 #: ../share/extensions/web-transmit-att.inx.h:7
 #, fuzzy
 msgid "Run it before"
-msgstr "kör make clean innan make"
+msgstr "Kör det innan"
 
 #: ../share/extensions/web-set-att.inx.h:8
 #, fuzzy
 msgid "Set Attributes"
-msgstr "Extra attribut"
+msgstr "Ange attribut"
 
 #: ../share/extensions/web-set-att.inx.h:9
 #, fuzzy
 msgid "Source and destination of setting"
-msgstr "källan och målet är samma"
+msgstr "Källa och mål för inställning"
 
 #: ../share/extensions/web-set-att.inx.h:10
 msgid "The first selected sets an attribute in all others"
-msgstr ""
+msgstr "Det först valda sätter ett attribut i alla andra"
 
 #: ../share/extensions/web-set-att.inx.h:11
 msgid "The list of values must have the same size as the attributes list."
-msgstr ""
+msgstr "Listan på värden måste ha samma storlek som attributlistan."
 
 #: ../share/extensions/web-set-att.inx.h:12
 #: ../share/extensions/web-transmit-att.inx.h:10
 msgid "The next parameter is useful when you select more than two elements"
-msgstr ""
+msgstr "Nästa parameter är användbar när ni markerat mer än två element"
 
 #: ../share/extensions/web-set-att.inx.h:13
 #: ../share/extensions/web-transmit-att.inx.h:11
@@ -4107,22 +4120,27 @@ msgid ""
 "This effect adds a feature visible (or usable) only on a SVG enabled web "
 "browser (like Firefox)."
 msgstr ""
+"Denna effekt lägger till en egenskap som endast är synlig eller går att använda "
+"i en SVG-enabled webbläsare (såsom Firefox)."
 
 #: ../share/extensions/web-set-att.inx.h:14
 msgid ""
 "This effect sets one or more attributes in the second selected element, when "
 "a defined event occurs on the first selected element."
 msgstr ""
+"Denna effet sätter ett eller fler attribut i det andra markerade objektet, när "
+"en definierad händelse inträffar på det först markerade objektet."
 
 #: ../share/extensions/web-set-att.inx.h:15
 #, fuzzy
 msgid "Value to set"
-msgstr "Ställ in %s till värdet (%d): "
+msgstr "Värde att ställa in"
 
+# TODO
 #: ../share/extensions/web-set-att.inx.h:17
 #, fuzzy
 msgid "When should the set be done?"
-msgstr "När statusikonen ska visas"
+msgstr "När skall värdet sättas?"
 
 #: ../share/extensions/web-set-att.inx.h:18
 #: ../share/extensions/web-transmit-att.inx.h:16
@@ -4142,7 +4160,7 @@ msgstr "vid klick"
 #: ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "on element loaded"
-msgstr "när element blivit laddat"
+msgstr "när element laddats"
 
 #: ../share/extensions/web-set-att.inx.h:22
 #: ../share/extensions/web-transmit-att.inx.h:20
@@ -4174,46 +4192,50 @@ msgstr "när muspekaren är över"
 msgid "on mouse up"
 msgstr "vid musknapp upp"
 
+# TODO
 #: ../share/extensions/web-transmit-att.inx.h:1
 #, fuzzy
 msgid "All selected ones transmit to the last one"
-msgstr "Multipla markerade objekt har samma linje"
+msgstr "Alla markerade objekt överför till det sista"
 
 #: ../share/extensions/web-transmit-att.inx.h:2
 #, fuzzy
 msgid "Attribute to transmit"
-msgstr "Fel: Misslyckades med att skicka meddelade"
+msgstr "Attribut att överföra"
 
 #: ../share/extensions/web-transmit-att.inx.h:4
 msgid ""
 "If you want to transmit more than one attribute, you should separate this "
 "with a space, and only with a space."
 msgstr ""
+"Om ni vill överföra mer än ett attribut, bör ni avgränsa dessa med endast ett mellanslag."
 
 #: ../share/extensions/web-transmit-att.inx.h:8
 #, fuzzy
 msgid "Source and destination of transmitting"
-msgstr "källan och målet är samma"
+msgstr "Källa och mål för överföring"
 
 #: ../share/extensions/web-transmit-att.inx.h:9
 msgid "The first selected transmits to all others"
-msgstr ""
+msgstr "Det först markerade överför till alla andra"
 
 #: ../share/extensions/web-transmit-att.inx.h:12
 msgid ""
 "This effect transmits one or more attributes from the first selected element "
 "to the second when an event occurs."
 msgstr ""
+"Denna effekt överför ett eller flera attribut från det först valda elementet "
+"till det andra när en händelse inträffar."
 
 #: ../share/extensions/web-transmit-att.inx.h:13
 #, fuzzy
 msgid "Transmit Attributes"
-msgstr "Extra attribut"
+msgstr "Överför attribut"
 
 #: ../share/extensions/web-transmit-att.inx.h:15
 #, fuzzy
 msgid "When to transmit"
-msgstr "När fönster ska grupperas"
+msgstr "När skall överföring ske"
 
 #: ../share/extensions/whirl.inx.h:1
 #, fuzzy
@@ -4223,12 +4245,12 @@ msgstr "Virvelmängd"
 #: ../share/extensions/whirl.inx.h:3
 #, fuzzy
 msgid "Rotation is clockwise"
-msgstr "Växla till moturs"
+msgstr "Rotation går medurs"
 
 #: ../share/extensions/whirl.inx.h:4
 #, fuzzy
 msgid "Whirl"
-msgstr "_Virvla"
+msgstr "Virvla"
 
 #: ../share/extensions/wmf_input.inx.h:1
 #: ../share/extensions/wmf_output.inx.h:1
@@ -4239,7 +4261,7 @@ msgstr "Ett populärt filformat för clipart"
 #: ../share/extensions/wmf_output.inx.h:2
 #, fuzzy
 msgid "Windows Metafile (*.wmf)"
-msgstr "Rendera Windows metafil"
+msgstr "Windows Metafile (*.wmf)"
 
 #: ../share/extensions/wmf_input.inx.h:3
 #: ../share/extensions/wmf_output.inx.h:3
@@ -4247,10 +4269,11 @@ msgstr "Rendera Windows metafil"
 msgid "Windows Metafile Input"
 msgstr "Rendera Windows metafil"
 
+# TODO
 #: ../share/extensions/xaml2svg.inx.h:3
 #, fuzzy
 msgid "XAML Input"
-msgstr "Inmatnings_metoder"
+msgstr ""
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
@@ -4259,7 +4282,7 @@ msgstr "Skapa och redigera SVG-bilder"
 #: ../inkscape.desktop.in.h:2
 #, fuzzy
 msgid "Inkscape"
-msgstr "Avsluta Inkscape"
+msgstr "Inkscape"
 
 #: ../inkscape.desktop.in.h:3
 msgid "Inkscape Vector Graphics Editor"
@@ -4268,69 +4291,68 @@ msgstr "Vektorillustratören Inkscape"
 #: ../inkscape.desktop.in.h:4
 #, fuzzy
 msgid "Vector Graphics Editor"
-msgstr "Vektorillustratören Inkscape"
+msgstr "Vektorillustratör"
 
 #: ../share/extensions/dimension.py:99
 msgid "Unable to process this object.  Try changing it into a path first."
-msgstr ""
+msgstr "Kan inte behandla detta objekt.  Försök byta till en annan sökväg först."
 
 #. report to the Inkscape console using errormsg
 #: ../share/extensions/draw_from_triangle.py:175
 msgid "Side Length 'a'/px: "
-msgstr "Sidlängd 'a'/bildpunkter:"
+msgstr "Sidlängd 'a'/bildpunkter: "
 
 #: ../share/extensions/draw_from_triangle.py:176
 msgid "Side Length 'b'/px: "
-msgstr "Sidlängd 'b'/bildpunkter:"
+msgstr "Sidlängd 'b'/bildpunkter: "
 
 #: ../share/extensions/draw_from_triangle.py:177
 msgid "Side Length 'c'/px: "
-msgstr "Sidlängd 'c'/bildpunkter:"
+msgstr "Sidlängd 'c'/bildpunkter: "
 
 #: ../share/extensions/draw_from_triangle.py:178
 msgid "Angle 'A'/radians: "
-msgstr "Vinkel 'A'/radianer:"
+msgstr "Vinkel 'A'/radianer: "
 
 #: ../share/extensions/draw_from_triangle.py:179
 msgid "Angle 'B'/radians: "
-msgstr "Vinkel 'B'/radianer:"
+msgstr "Vinkel 'B'/radianer: "
 
 #: ../share/extensions/draw_from_triangle.py:180
 msgid "Angle 'C'/radians: "
-msgstr "Vinkel 'C'/radianer:"
+msgstr "Vinkel 'C'/radianer: "
 
+# TODO
 #: ../share/extensions/draw_from_triangle.py:181
 #, fuzzy
 msgid "Semiperimeter/px: "
 msgstr ""
-"px\n"
-"%\n"
-"följ"
 
 #: ../share/extensions/draw_from_triangle.py:182
 #, fuzzy
 msgid "Area /px^2: "
 msgstr ""
-"px\n"
-"%\n"
-"följ"
 
 #: ../share/extensions/dxf_outlines.py:34
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again."
 msgstr ""
+"Kunde inte importera numpy eller numpy.linalg-modulerna. Dessa moduler "
+"krävs av detta tillägg. Vänligen installera dem och försök igen."
 
 #: ../share/extensions/embedimage.py:75
 msgid ""
 "No xlink:href or sodipodi:absref attributes found, or they do not point to "
 "an existing file! Unable to embed image."
 msgstr ""
+"Inget xlink:href eller sodipodi:absref hittades, eller så pekar de på en "
+"icke-existerande fil! Kunde ej infoga bilder."
 
 #: ../share/extensions/embedimage.py:77
 #, fuzzy, python-format
 msgid "Sorry we could not locate %s"
-msgstr "Internt fel, kunde inta hitta delen %s"
+msgstr "Tyvärr kunde vi ej hitta %s"
 
 #: ../share/extensions/embedimage.py:102
 #, python-format
@@ -4346,17 +4368,20 @@ msgid ""
 "The export_gpl.py module requires PyXML.  Please download the latest version "
 "from http://pyxml.sourceforge.net/."
 msgstr ""
+"Modulen export_gpl.py kräver PyXML.  Vänligen ladda ner senaste versionen från "
+"http://pyxml.sourceforge.net/."
 
 #: ../share/extensions/extractimage.py:65
 #, python-format
 msgid "Image extracted to: %s"
-msgstr ""
+msgstr "Bild extraherad till: %s"
 
 #: ../share/extensions/extractimage.py:72
 #, fuzzy
 msgid "Unable to find image data."
-msgstr "Kunde inte skapa datakatalogen \"%s\": %s"
+msgstr "Kunde ej hitta bilddata."
 
+# TODO
 #: ../share/extensions/inkex.py:67
 msgid ""
 "The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore "
@@ -4365,6 +4390,7 @@ msgid ""
 "by a command like: sudo apt-get install python-lxml"
 msgstr ""
 
+# TODO
 #: ../share/extensions/inkex.py:230
 #, fuzzy, python-format
 msgid "No matching node for expression: %s"
@@ -4373,12 +4399,12 @@ msgstr "Ingen \"%s\"-pekare för denna nod."
 #: ../share/extensions/markers_strokepaint.py:41
 #, python-format
 msgid "No style attribute found for id: %s"
-msgstr ""
+msgstr "Inget stil-attribut hittades för id: %s"
 
 #: ../share/extensions/markers_strokepaint.py:56
 #, fuzzy, python-format
 msgid "unable to locate marker: %s"
-msgstr "Kunde inte hitta paketet %s"
+msgstr "Kunde inte hitta markör: %s"
 
 #: ../share/extensions/pathalongpath.py:197
 #: ../share/extensions/pathscatter.py:208
@@ -4389,8 +4415,9 @@ msgstr "Detta tillägg kräver två markerade slingor."
 #: ../share/extensions/pathmodifier.py:229
 #, python-format
 msgid "Please first convert objects to paths!  (Got [%s].)"
-msgstr ""
+msgstr "Vänligen konvertera objekt till slingor först! (Fick [%s].)"
 
+# TODO
 #: ../share/extensions/perspective.py:29
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
@@ -4406,12 +4433,15 @@ msgid ""
 "The first selected object is of type '%s'.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
+"Det först valda objektet har typ '%s'.\n"
+"Försök använda Slinga->Objekt till Slinga."
 
 #: ../share/extensions/perspective.py:74
 #: ../share/extensions/summersnight.py:50
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr ""
+"Detta tillägg kräver att den andra markerade slingan är fyra noder lång."
 
 #: ../share/extensions/perspective.py:99
 #: ../share/extensions/summersnight.py:82
@@ -4419,6 +4449,8 @@ msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
 msgstr ""
+"Det andra markerade objektet är en grupp, inte en slinga.\n"
+"Försök med Objekt->Avgruppera."
 
 #: ../share/extensions/perspective.py:101
 #: ../share/extensions/summersnight.py:84
@@ -4426,6 +4458,8 @@ msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
+"Det andra markerade objektet är inte en slinga.\n"
+"Försök med Slinga->Objekt till Slinga."
 
 #: ../share/extensions/perspective.py:104
 #: ../share/extensions/summersnight.py:87
@@ -4433,7 +4467,10 @@ msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
+"Det först valda objektet är inte en slinga.\n"
+"Försök med Slinga->Objekt till Slinga."
 
+# TODO
 #: ../share/extensions/polyhedron_3d.py:60
 msgid ""
 "Failed to import the numpy module. This module is required by this "
@@ -4441,6 +4478,7 @@ msgid ""
 "can be done with the command 'sudo apt-get install python-numpy'."
 msgstr ""
 
+# TODO
 #: ../share/extensions/polyhedron_3d.py:331
 msgid "No face data found in specified file."
 msgstr "Ingen sidoinformation hittad i den specificerade filen."
@@ -4466,7 +4504,7 @@ msgstr ""
 
 #: ../share/extensions/polyhedron_3d.py:516
 msgid "Internal Error. No view type selected\n"
-msgstr ""
+msgstr "Internt fel. Ingen vy-typ vald\n"
 
 #: ../share/extensions/summersnight.py:36
 msgid ""
@@ -4483,13 +4521,13 @@ msgstr "Kunde inte hitta filen: %s"
 
 #: ../share/extensions/uniconv_output.py:118
 msgid "You need to install the UniConvertor software.\n"
-msgstr ""
+msgstr "Ni måste installera programmet UniConvertor.\n"
 
 #: ../share/extensions/web-set-att.py:52
 #: ../share/extensions/web-transmit-att.py:48
 #, fuzzy
 msgid "You must select at least two elements."
-msgstr "Du måste välja åtminstone en nyckel.\n"
+msgstr "Du måste markera åtminstone två objekt.\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Matte jelly"
@@ -4524,8 +4562,9 @@ msgstr "Smart gelé"
 #: ../share/filters/filters.svg.h:208 ../share/filters/filters.svg.h:209
 #: ../share/filters/filters.svg.h:210 ../share/filters/filters.svg.h:211
 msgid "Bevels"
-msgstr "Kanter"
+msgstr "Fasning"
 
+# TODO kontroller?
 #: ../share/filters/filters.svg.h:3
 msgid "Same as Matte jelly but with more controls"
 msgstr "Samma som matt gelé, fast med fler kontroller"
@@ -4536,7 +4575,7 @@ msgstr "Metallgjutning"
 
 #: ../share/filters/filters.svg.h:4
 msgid "Smooth drop-like bevel with metallic finish"
-msgstr "Slät nedsänkt utfasning med metallisk finish"
+msgstr "Slät dropp-lik fasning med metallisk finish"
 
 #: ../share/filters/filters.svg.h:5
 msgid "Motion blur, horizontal"
@@ -4576,7 +4615,7 @@ msgstr "Spöke"
 
 #: ../share/filters/filters.svg.h:7
 msgid "Edges are partly feathered out"
-msgstr ""
+msgstr "Sidorna är delvis utsuddade"
 
 #: ../share/filters/filters.svg.h:8
 msgid "Cutout"
@@ -4594,7 +4633,7 @@ msgstr "Skuggor och Sken"
 
 #: ../share/filters/filters.svg.h:8
 msgid "Drop shadow under the cut-out of the shape"
-msgstr ""
+msgstr "Lägg skugga under konturen"
 
 #: ../share/filters/filters.svg.h:9
 msgid "Jigsaw piece"
@@ -4615,7 +4654,7 @@ msgstr "Gör kanter och innehåll grövre"
 #: ../share/filters/filters.svg.h:11
 #, fuzzy
 msgid "Rubber stamp"
-msgstr "Gummiband"
+msgstr "Gummistämpel"
 
 #: ../share/filters/filters.svg.h:11 ../share/filters/filters.svg.h:17
 #: ../share/filters/filters.svg.h:18 ../share/filters/filters.svg.h:19
@@ -4628,27 +4667,27 @@ msgstr "Gummiband"
 #: ../share/filters/filters.svg.h:217
 #, fuzzy
 msgid "Overlays"
-msgstr "Överdrag: "
+msgstr "Överdrag"
 
 #: ../share/filters/filters.svg.h:11
 #, fuzzy
 msgid "Random whiteouts inside"
-msgstr "%F%P: kan inte hitta %s inuti %s\n"
+msgstr "Slumpad utblekning inuti"
 
 #: ../share/filters/filters.svg.h:12
 #, fuzzy
 msgid "Ink bleed"
-msgstr "Blått bläck"
+msgstr "Bläckutsmetning"
 
 #: ../share/filters/filters.svg.h:12 ../share/filters/filters.svg.h:13
 #: ../share/filters/filters.svg.h:41 ../share/filters/filters.svg.h:166
 #, fuzzy
 msgid "Protrusions"
-msgstr "Position:"
+msgstr "Utstick"
 
 #: ../share/filters/filters.svg.h:12
 msgid "Inky splotches underneath the object"
-msgstr ""
+msgstr "Bläckfläckar under objektet"
 
 #: ../share/filters/filters.svg.h:13
 msgid "Fire"
@@ -4658,19 +4697,22 @@ msgstr "Eld"
 msgid "Edges of object are on fire"
 msgstr "Kanterna på objektet brinner"
 
+# TODO
 #: ../share/filters/filters.svg.h:14
 msgid "Bloom"
-msgstr "Blommning"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:14
 msgid "Soft, cushion-like bevel with matte highlights"
-msgstr ""
+msgstr "Mjuk, kudd-lik fas med matta ljuspunkter"
 
+# TODO
 #: ../share/filters/filters.svg.h:15
 #, fuzzy
 msgid "Ridged border"
-msgstr "L_ägg till ram"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:15
 msgid "Ridged border with inner bevel"
 msgstr ""
@@ -4690,20 +4732,22 @@ msgstr "Förvräng"
 #: ../share/filters/filters.svg.h:16
 #, fuzzy
 msgid "Horizontal rippling of edges"
-msgstr "Justera vänsterkanterna"
+msgstr "Hoirsontell krusning av kanterna"
 
+# TODO
 #: ../share/filters/filters.svg.h:17
 #, fuzzy
 msgid "Speckle"
-msgstr "Avmarkera"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:17
 msgid "Fill object with sparse translucent specks"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:18
 msgid "Oil slick"
-msgstr "Olja på vatten"
+msgstr "Oljefläck"
 
 #: ../share/filters/filters.svg.h:18
 msgid "Rainbow-colored semitransparent oily splotches"
@@ -4713,6 +4757,7 @@ msgstr "Rengbågsfärgade, halvgenomskinliga oljiga fläckar"
 msgid "Frost"
 msgstr "Frost"
 
+# TODO
 #: ../share/filters/filters.svg.h:19
 msgid "Flake-like white splotches"
 msgstr ""
@@ -4737,7 +4782,7 @@ msgstr "Leopardfläckar (objektet förlorar sin egen färg)"
 
 #: ../share/filters/filters.svg.h:21
 msgid "Zebra"
-msgstr "Sebra"
+msgstr "Zebra"
 
 #: ../share/filters/filters.svg.h:21
 msgid "Irregular vertical dark stripes (loses object's own color)"
@@ -4768,7 +4813,7 @@ msgstr "Bildeffekter"
 
 #: ../share/filters/filters.svg.h:23
 msgid "Sharpen edges and boundaries within the object, force=0.15"
-msgstr ""
+msgstr "Skärpa kanter och gränser inuti objektet, styrka=0.15"
 
 #: ../share/filters/filters.svg.h:24
 msgid "Sharpen more"
@@ -4776,7 +4821,7 @@ msgstr "Ännu skarpare"
 
 #: ../share/filters/filters.svg.h:24
 msgid "Sharpen edges and boundaries within the object, force=0.3"
-msgstr ""
+msgstr "Skärpa kanter och gränser inuti objektet, styrka=0.3"
 
 #: ../share/filters/filters.svg.h:25
 msgid "Oil painting"
@@ -4854,11 +4899,11 @@ msgstr "Ålder"
 
 #: ../share/filters/filters.svg.h:34
 msgid "Imitate aged photograph"
-msgstr "Imitera ett gamalt fotografi"
+msgstr "Imitera ett gammalt fotografi"
 
 #: ../share/filters/filters.svg.h:35
 msgid "Organic"
-msgstr "Organisk"
+msgstr "Organiskt"
 
 #: ../share/filters/filters.svg.h:35 ../share/filters/filters.svg.h:42
 #: ../share/filters/filters.svg.h:45 ../share/filters/filters.svg.h:61
@@ -4877,7 +4922,7 @@ msgstr "Texturer"
 
 #: ../share/filters/filters.svg.h:35
 msgid "Bulging, knotty, slick 3D surface"
-msgstr ""
+msgstr "Knölig, knottrig, glatt 3D-yta"
 
 #: ../share/filters/filters.svg.h:36
 msgid "Barbed wire"
@@ -4885,7 +4930,7 @@ msgstr "Taggtråd"
 
 #: ../share/filters/filters.svg.h:36
 msgid "Gray bevelled wires with drop shadows"
-msgstr "Gråa utfasade trådar med skuggning"
+msgstr "Gråa fasade trådar med skuggning"
 
 #: ../share/filters/filters.svg.h:37
 msgid "Swiss cheese"
@@ -4893,7 +4938,7 @@ msgstr "Schweizerost"
 
 #: ../share/filters/filters.svg.h:37
 msgid "Random inner-bevel holes"
-msgstr ""
+msgstr "Slumpad infasade hål"
 
 #: ../share/filters/filters.svg.h:38
 msgid "Blue cheese"
@@ -4909,7 +4954,7 @@ msgstr "Knapp"
 
 #: ../share/filters/filters.svg.h:39
 msgid "Soft bevel, slightly depressed middle"
-msgstr ""
+msgstr "Mjuk fasning, något intryckt mitt"
 
 #: ../share/filters/filters.svg.h:40
 #, fuzzy
@@ -4919,7 +4964,7 @@ msgstr "inskjutning"
 #: ../share/filters/filters.svg.h:40
 #, fuzzy
 msgid "Shadowy outer bevel"
-msgstr "Avfasningshöjd (skärpa)"
+msgstr "Skuggad yttre fasning"
 
 #: ../share/filters/filters.svg.h:41
 msgid "Dripping"
@@ -4927,7 +4972,7 @@ msgstr "Droppande"
 
 #: ../share/filters/filters.svg.h:41
 msgid "Random paint streaks downwards"
-msgstr ""
+msgstr "Stokastiska penseldrag nedåt"
 
 #: ../share/filters/filters.svg.h:42
 msgid "Jam spread"
@@ -4940,18 +4985,20 @@ msgstr "Glänsande klumpig marmelad"
 #: ../share/filters/filters.svg.h:43
 #, fuzzy
 msgid "Pixel smear"
-msgstr "Bildpunkts_höjd:"
+msgstr "Bildpunktsutsmetning"
 
 #: ../share/filters/filters.svg.h:43
 #, fuzzy
 msgid "Van Gogh painting effect for bitmaps"
-msgstr "Konvertera markerat objekt till slinga"
+msgstr "Van Gogh målningseffekt för bitmappar"
 
+# TODO
 #: ../share/filters/filters.svg.h:44
 #, fuzzy
 msgid "HSL Bumps"
-msgstr "Nyans (HSL)"
+msgstr "HSL Bumpar"
 
+# TODO
 #: ../share/filters/filters.svg.h:44 ../share/filters/filters.svg.h:46
 #: ../share/filters/filters.svg.h:97 ../share/filters/filters.svg.h:120
 #: ../share/filters/filters.svg.h:121 ../share/filters/filters.svg.h:123
@@ -4964,11 +5011,12 @@ msgstr "Nyans (HSL)"
 #: ../share/filters/filters.svg.h:213 ../share/filters/filters.svg.h:216
 #, fuzzy
 msgid "Bumps"
-msgstr "Sätt mask"
+msgstr "Bumpar"
 
+# TODO
 #: ../share/filters/filters.svg.h:44
 msgid "Highly flexible bump combining diffuse and specular lightings"
-msgstr ""
+msgstr "Högst flexibla bumpar med kombinerade diffus och spekulär ljussättning"
 
 #: ../share/filters/filters.svg.h:45
 msgid "Cracked glass"
@@ -4985,13 +5033,14 @@ msgstr "Största höjd för bumpar"
 
 #: ../share/filters/filters.svg.h:46
 msgid "Flexible bubbles effect with some displacement"
-msgstr ""
+msgstr "Flexibla bubblor med förskjutning"
 
 #: ../share/filters/filters.svg.h:47
 #, fuzzy
 msgid "Glowing bubble"
-msgstr "Tuggummi"
+msgstr "Skinande bubbla"
 
+# TODO
 #: ../share/filters/filters.svg.h:47 ../share/filters/filters.svg.h:52
 #: ../share/filters/filters.svg.h:53 ../share/filters/filters.svg.h:65
 #: ../share/filters/filters.svg.h:66 ../share/filters/filters.svg.h:68
@@ -5002,7 +5051,7 @@ msgstr "Suddiga kanter"
 
 #: ../share/filters/filters.svg.h:47
 msgid "Bubble effect with refraction and glow"
-msgstr ""
+msgstr "Bubbeleffekt med refraktion och sken"
 
 #: ../share/filters/filters.svg.h:48
 msgid "Neon"
@@ -5023,21 +5072,21 @@ msgstr "Smälter samman delar av ett objekt, med en blank utfasning och glöd"
 #: ../share/filters/filters.svg.h:50
 #, fuzzy
 msgid "Pressed steel"
-msgstr "Inte nedtryckt"
+msgstr "Pressad stål"
 
 #: ../share/filters/filters.svg.h:50
 #, fuzzy
 msgid "Pressed metal with a rolled edge"
-msgstr "Stjärnegenskaper"
+msgstr "Pressad metall med rullad kant"
 
 #: ../share/filters/filters.svg.h:51
 #, fuzzy
 msgid "Matte bevel"
-msgstr "Fasa kanter"
+msgstr "Matt fasning"
 
 #: ../share/filters/filters.svg.h:51
 msgid "Soft, pastel-colored, blurry bevel"
-msgstr ""
+msgstr "Mjuk, pastell-färgad, suddig fasning"
 
 #: ../share/filters/filters.svg.h:52
 msgid "Thin Membrane"
@@ -5045,72 +5094,73 @@ msgstr "Tunt membran"
 
 #: ../share/filters/filters.svg.h:52
 msgid "Thin like a soap membrane"
-msgstr ""
+msgstr "Tunnt likt ett membran av såpa"
 
 #: ../share/filters/filters.svg.h:53
 #, fuzzy
 msgid "Matte ridge"
-msgstr "Blå kam"
+msgstr "Matt kant"
 
 #: ../share/filters/filters.svg.h:53
 #, fuzzy
 msgid "Soft pastel ridge"
-msgstr "Mjuk radbrytning"
+msgstr "Mjuk pastellkant"
 
 #: ../share/filters/filters.svg.h:54
 #, fuzzy
 msgid "Glowing metal"
-msgstr "Black Metal"
+msgstr "Glödande metall"
 
 #: ../share/filters/filters.svg.h:54
 #, fuzzy
 msgid "Glowing metal texture"
-msgstr "Inverterar papperstexturen"
+msgstr "Glödande metalltextur"
 
 #: ../share/filters/filters.svg.h:55
 #, fuzzy
 msgid "Leaves"
-msgstr "Person lämnar chatt"
+msgstr "Löv"
 
 #: ../share/filters/filters.svg.h:55
 msgid "Leaves on the ground in Fall, or living foliage"
-msgstr ""
+msgstr "Löv på marken vid hösten, eller levande trädkronor"
 
 #: ../share/filters/filters.svg.h:56
 #, fuzzy
 msgid "Translucent"
-msgstr "Vinkel"
+msgstr "Genomskinlig"
 
 #: ../share/filters/filters.svg.h:56
 msgid "Illuminated translucent plastic or glass effect"
-msgstr ""
+msgstr "Upplyst genomskinlig plast eller glas effekt"
 
+# TODO
 #: ../share/filters/filters.svg.h:57
 #, fuzzy
 msgid "Cross-smooth"
-msgstr "Utjämnad palett"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:57
 #, fuzzy
 msgid "Blur inner borders and intersections"
-msgstr "Fäst vid rutnät"
+msgstr "Sudda ut innre kanter och korsningar"
 
 #: ../share/filters/filters.svg.h:58
 msgid "Iridescent beeswax"
-msgstr ""
+msgstr "Skimrande bivax"
 
 #: ../share/filters/filters.svg.h:58
 msgid "Waxy texture which keeps its iridescence through color fill change"
-msgstr ""
+msgstr "Vaxig textur som behåller sitt skimmer genom färg och fyllnadsändring"
 
 #: ../share/filters/filters.svg.h:59
 #, fuzzy
 msgid "Eroded metal"
-msgstr "Black Metal"
+msgstr "Rostig Metal"
 
 #: ../share/filters/filters.svg.h:59
 msgid "Eroded metal texture with ridges, grooves, holes and bumps"
-msgstr ""
+msgstr "Rostig metalltextur med kanter, skåror, hål och knölar"
 
 #: ../share/filters/filters.svg.h:60
 msgid "Cracked Lava"
@@ -5123,7 +5173,7 @@ msgstr "En vulkaniska texture, lite som läder"
 #: ../share/filters/filters.svg.h:61
 #, fuzzy
 msgid "Bark"
-msgstr "Svart"
+msgstr "Bark"
 
 #: ../share/filters/filters.svg.h:61
 msgid "Bark texture, vertical; use with deep colors"
@@ -5140,11 +5190,11 @@ msgstr "Stiliserad reptilskinnstextur"
 #: ../share/filters/filters.svg.h:63
 #, fuzzy
 msgid "Stone wall"
-msgstr "Bildvägg"
+msgstr "Stenvägg"
 
 #: ../share/filters/filters.svg.h:63
 msgid "Stone wall texture to use with not too saturated colors"
-msgstr ""
+msgstr "Stenväggstextur för användning med inte alltför mättade färger"
 
 #: ../share/filters/filters.svg.h:64
 msgid "Silk carpet"
@@ -5152,41 +5202,44 @@ msgstr "Silkesmatta"
 
 #: ../share/filters/filters.svg.h:64
 msgid "Silk carpet texture, horizontal stripes"
-msgstr ""
+msgstr "Silkmattetextur, horizontella ränder"
 
+# TODO
 #: ../share/filters/filters.svg.h:65
 #, fuzzy
 msgid "Refractive gel A"
-msgstr "Relativ flytt"
+msgstr "Refrativ gelé A"
 
 #: ../share/filters/filters.svg.h:65
 msgid "Gel effect with light refraction"
-msgstr ""
+msgstr "Geléeffekt med lätt refraktion"
 
 #: ../share/filters/filters.svg.h:66
 #, fuzzy
 msgid "Refractive gel B"
-msgstr "Relativ flytt"
+msgstr "Refraktiv gelé B"
 
 #: ../share/filters/filters.svg.h:66
 msgid "Gel effect with strong refraction"
-msgstr ""
+msgstr "Geléeffekt med stark refraktion"
 
 #: ../share/filters/filters.svg.h:67
 #, fuzzy
 msgid "Metallized paint"
-msgstr "Måla kanter"
+msgstr "Metallic färg"
 
 #: ../share/filters/filters.svg.h:67
 msgid ""
 "Metallized effect with a soft lighting, slightly translucent at the edges"
-msgstr ""
+msgstr "Mettalic färg-effekt med en mjuk ljussättning, svagt genomskinlig vid kanterna"
 
+# TODO
 #: ../share/filters/filters.svg.h:68
 #, fuzzy
 msgid "Dragee"
-msgstr "Skillnad:"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:68
 msgid "Gel Ridge with a pearlescent look"
 msgstr ""
@@ -5194,29 +5247,29 @@ msgstr ""
 #: ../share/filters/filters.svg.h:69
 #, fuzzy
 msgid "Raised border"
-msgstr "L_ägg till ram"
+msgstr "Upphöjd kant"
 
 #: ../share/filters/filters.svg.h:69
 msgid "Strongly raised border around a flat surface"
-msgstr ""
+msgstr "Starkt upphöjd kant runt en platt yta"
 
 #: ../share/filters/filters.svg.h:70
 #, fuzzy
 msgid "Metallized ridge"
-msgstr "Blå kam"
+msgstr "Metallisk kant"
 
 #: ../share/filters/filters.svg.h:70
 msgid "Gel Ridge metallized at its top"
-msgstr ""
+msgstr "Gelékant som är metallisk vid toppen"
 
 #: ../share/filters/filters.svg.h:71
 #, fuzzy
 msgid "Fat oil"
-msgstr "Oljemålning"
+msgstr "Tjock olja"
 
 #: ../share/filters/filters.svg.h:71
 msgid "Fat oil with some adjustable turbulence"
-msgstr ""
+msgstr "Tjock olja med justerbar turbulens"
 
 #: ../share/filters/filters.svg.h:72
 #: ../src/extension/internal/bitmap/colorize.cpp:49
@@ -5230,7 +5283,7 @@ msgstr "Blanda bild eller objekt med en färg och sätt ljus och kontrast"
 #: ../share/filters/filters.svg.h:73
 #, fuzzy
 msgid "Parallel hollow"
-msgstr "Parallella beräkningar"
+msgstr "Parallella hålor"
 
 #: ../share/filters/filters.svg.h:73 ../share/filters/filters.svg.h:74
 #: ../share/filters/filters.svg.h:75 ../share/filters/filters.svg.h:76
@@ -5244,86 +5297,88 @@ msgstr "Morfologi"
 
 #: ../share/filters/filters.svg.h:73
 msgid "A blurry hollow going parallel to the edge on the inside"
-msgstr ""
+msgstr "En suddig håla som går parallelt mot kanten på insidan"
 
 #: ../share/filters/filters.svg.h:74
 #, fuzzy
 msgid "Hole"
-msgstr "_Hålposition:"
+msgstr "Hål"
 
 #: ../share/filters/filters.svg.h:74
 msgid "Opens a smooth hole inside the shape"
-msgstr ""
+msgstr "Öppnar ett mjukt hål inuti formen"
 
 #: ../share/filters/filters.svg.h:75
 #, fuzzy
 msgid "Black hole"
-msgstr "_Hålposition:"
+msgstr "Svart hål"
 
 #: ../share/filters/filters.svg.h:75
 msgid "Creates a black light inside and outside"
-msgstr ""
+msgstr "Skapar ett svart ljus inuti och utanför"
 
 #: ../share/filters/filters.svg.h:76
 #, fuzzy
 msgid "Smooth outline"
-msgstr "3D-_kontur..."
+msgstr "Mjuk kontur"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Outlining the lines and smoothing their crossings"
-msgstr ""
+msgstr "Skapar en kontur runt linjerna, och mjukar till deras korsningar"
 
 #: ../share/filters/filters.svg.h:77
 #, fuzzy
 msgid "Cubes"
-msgstr "Numrera noder"
+msgstr "Kuber"
 
 #: ../share/filters/filters.svg.h:77
 msgid "Scattered cubes; adjust the Morphology primitive to vary size"
-msgstr ""
+msgstr "Utspridda kuber"
 
 #: ../share/filters/filters.svg.h:78
 #, fuzzy
 msgid "Peel off"
-msgstr "Blixt : Av"
+msgstr "Flagna av"
 
 #: ../share/filters/filters.svg.h:78
 msgid "Peeling painting on a wall"
-msgstr ""
+msgstr "Målning på vägg som flagnar av"
 
 #: ../share/filters/filters.svg.h:79
 #, fuzzy
 msgid "Gold splatter"
-msgstr "guldbrun"
+msgstr "Guldstänk"
 
+# TODO
 #: ../share/filters/filters.svg.h:79
 msgid "Splattered cast metal, with golden highlights"
-msgstr ""
+msgstr "Stänkt metall, med gyllene punkter"
 
 #: ../share/filters/filters.svg.h:80
 #, fuzzy
 msgid "Gold paste"
-msgstr "Klistra in _citat"
+msgstr "Guldsmet"
 
+# TODO
 #: ../share/filters/filters.svg.h:80
 msgid "Fat pasted cast metal, with golden highlights"
-msgstr ""
+msgstr "Tjock utspridd metall, med gyllene punkter"
 
 #: ../share/filters/filters.svg.h:81
 msgid "Crumpled plastic"
-msgstr ""
+msgstr "Skrynklad plast"
 
 #: ../share/filters/filters.svg.h:81
 msgid "Crumpled matte plastic, with melted edge"
-msgstr ""
+msgstr "Skrynklad matt plast, med smälta kanter"
 
 #: ../share/filters/filters.svg.h:82
 msgid "Enamel jewelry"
-msgstr ""
+msgstr "Emalj-smycke"
 
 #: ../share/filters/filters.svg.h:82
 msgid "Slightly cracked enameled texture"
-msgstr ""
+msgstr "Lätt sprucken emaljerad textur"
 
 #: ../share/filters/filters.svg.h:83
 #, fuzzy
@@ -5342,61 +5397,63 @@ msgstr "Grov och blank"
 msgid ""
 "Crumpled glossy paper effect which can be used for pictures as for objects"
 msgstr ""
+"Skrynklat blankt papper-effekt som kan användas för bilder och objekt"
 
 #: ../share/filters/filters.svg.h:85
 #, fuzzy
 msgid "In and Out"
-msgstr "Stäng och _logga ut"
+msgstr "In och Ut"
 
 #: ../share/filters/filters.svg.h:85
 msgid "Inner colorized shadow, outer black shadow"
-msgstr ""
+msgstr "Innre färgad skugga, yttre svart skugga"
 
 #: ../share/filters/filters.svg.h:86
 msgid "Air spray"
-msgstr ""
+msgstr "Luftpuff"
 
 #: ../share/filters/filters.svg.h:86
 msgid "Convert to small scattered particles with some thickness"
-msgstr ""
+msgstr "Omvandla till små utspridda partiklar med viss tjocklek"
 
 #: ../share/filters/filters.svg.h:87
 #, fuzzy
 msgid "Warm inside"
-msgstr "%F%P: kan inte hitta %s inuti %s\n"
+msgstr "Varm insida"
 
 #: ../share/filters/filters.svg.h:87
 msgid "Blurred colorized contour, filled inside"
-msgstr ""
+msgstr "Suddig färgad kontur, fylld inuti"
 
 #: ../share/filters/filters.svg.h:88
 #, fuzzy
 msgid "Cool outside"
-msgstr "Typ av utsida"
+msgstr "Sval utsida"
 
 #: ../share/filters/filters.svg.h:88
 msgid "Blurred colorized contour, empty inside"
-msgstr ""
+msgstr "Suddig färgad kontur, tom insida"
 
 #: ../share/filters/filters.svg.h:89
 #, fuzzy
 msgid "Electronic microscopy"
-msgstr "Elektroniskt visitkort"
+msgstr "Elektronisk mikroskopi"
 
 #: ../share/filters/filters.svg.h:89
 msgid ""
 "Bevel, crude light, discoloration and glow like in electronic microscopy"
 msgstr ""
+"Fasning, grovt ljus, missfärgning och sken likt en elektrisk mikroskopi"
 
 #: ../share/filters/filters.svg.h:90
 #, fuzzy
 msgid "Tartan"
-msgstr "Mål:"
+msgstr "Pläd"
 
 #: ../share/filters/filters.svg.h:90
 #, fuzzy
 msgid "Checkered tartan pattern"
-msgstr "Makromönsterlista"
+msgstr "Pläd med rutmönster"
 
 #: ../share/filters/filters.svg.h:91
 msgid "Invert hue"
@@ -5409,57 +5466,58 @@ msgstr "Invertera nyans, eller rotera den"
 #: ../share/filters/filters.svg.h:92
 #, fuzzy
 msgid "Inner outline"
-msgstr "3D-_kontur..."
+msgstr "Innre kontur"
 
 #: ../share/filters/filters.svg.h:92
 #, fuzzy
 msgid "Draws an outline around"
-msgstr "Ritar en svart kontur runt"
+msgstr "Ritar en kontur runt"
 
 #: ../share/filters/filters.svg.h:93
 #, fuzzy
 msgid "Outline, double"
-msgstr "Dubbelpilar"
+msgstr "Kontur, dubbel"
 
 #: ../share/filters/filters.svg.h:93
 msgid "Draws a smooth line inside colorized with the color it overlays"
-msgstr ""
+msgstr "Ritar en mjuk linje inuti, färgad med färgen som den täcker"
 
 #: ../share/filters/filters.svg.h:94
 #, fuzzy
 msgid "Fancy blur"
-msgstr "Mittpunkt för oskärpa"
+msgstr "Fin oskärpa"
 
 #: ../share/filters/filters.svg.h:94
 msgid "Smooth colorized contour which allows desaturation and hue rotation"
-msgstr ""
+msgstr "Mjukt färgad kontur som tillåter avmättnad och nyansrotation"
 
 #: ../share/filters/filters.svg.h:95
 #, fuzzy
 msgid "Glow"
-msgstr "_Skenradie:"
+msgstr "Sken"
 
 #: ../share/filters/filters.svg.h:95
 msgid "Glow of object's own color at the edges"
-msgstr ""
+msgstr "Sken av ett objekts egen färg vid kanterna"
 
 #: ../share/filters/filters.svg.h:96
 #, fuzzy
 msgid "Outline"
-msgstr "Konturer"
+msgstr "Kontur"
 
+# TODO formen
 #: ../share/filters/filters.svg.h:96
 msgid "Adds a glowing blur and removes the shape"
-msgstr ""
+msgstr "Lägger till en skinande oskärpa och tar bort formen"
 
 #: ../share/filters/filters.svg.h:97
 #, fuzzy
 msgid "Color emboss"
-msgstr "Färgläge"
+msgstr "Färgrelief"
 
 #: ../share/filters/filters.svg.h:97
 msgid "Classic or colorized emboss effect: grayscale, color and 3D relief"
-msgstr ""
+msgstr "Klassisk eller färglagd relief-effekt: gråskala, färg och 3D-relief"
 
 #: ../share/filters/filters.svg.h:98
 #: ../src/extension/internal/bitmap/solarize.cpp:38
@@ -5487,33 +5545,36 @@ msgstr ""
 msgid "Soft focus lens"
 msgstr "Rättar till linsförvrängning"
 
+# TODO
 #: ../share/filters/filters.svg.h:100
 msgid "Glowing image content without blurring it"
-msgstr ""
+msgstr "Gör bild skinande utan att oskärpa bilden"
 
 #: ../share/filters/filters.svg.h:101
 #, fuzzy
 msgid "Stained glass"
-msgstr "Glasplattor"
+msgstr "Glasmosaik"
 
 #: ../share/filters/filters.svg.h:101
 msgid "Illuminated stained glass effect"
-msgstr ""
+msgstr "Ilumminerad mosaik-effekt i glas"
 
 #: ../share/filters/filters.svg.h:102
 #, fuzzy
 msgid "Dark glass"
-msgstr "Glasplattor"
+msgstr "Mörk glasmosaik"
 
 #: ../share/filters/filters.svg.h:102
 msgid "Illuminated glass effect with light coming from beneath"
-msgstr ""
+msgstr "Ilumminerad mosaik-effekt i glas, med ljus kommande nedanifrån"
 
+# TODO
 #: ../share/filters/filters.svg.h:103
 #, fuzzy
 msgid "HSL Bumps alpha"
-msgstr "Färg till Alfa"
+msgstr "HSL Bumpar alpha"
 
+# TODO
 #: ../share/filters/filters.svg.h:103 ../share/filters/filters.svg.h:104
 #: ../share/filters/filters.svg.h:164 ../share/filters/filters.svg.h:165
 #: ../share/filters/filters.svg.h:177 ../share/filters/filters.svg.h:178
@@ -5523,20 +5584,21 @@ msgstr "Färg till Alfa"
 #: ../share/filters/filters.svg.h:204
 #, fuzzy
 msgid "Image effects, transparent"
-msgstr "Gör bilden transparent utanför objektet"
+msgstr "Bildeffekter, transparent"
 
+# TODO
 #: ../share/filters/filters.svg.h:103
 msgid "Same as HSL Bumps but with transparent highlights"
-msgstr ""
+msgstr "Samma som HSL Bumpar men med transparenta accentueringar"
 
 #: ../share/filters/filters.svg.h:104
 #, fuzzy
 msgid "Bubbly Bumps alpha"
-msgstr "Färg till Alfa"
+msgstr "Bubbliga bumpar alpha"
 
 #: ../share/filters/filters.svg.h:104
 msgid "Same as Bubbly Bumps but with transparent highlights"
-msgstr ""
+msgstr "Samma som Bubbliga Bumpar men med transparenta accentueringar"
 
 #: ../share/filters/filters.svg.h:105
 #, fuzzy
@@ -5547,16 +5609,18 @@ msgstr "Utjämna kanter"
 msgid ""
 "Smooth the outside of shapes and pictures without altering their contents"
 msgstr ""
+"Jämna ut utsidan av former och bilder utan att förändra deras innehåll"
 
 #: ../share/filters/filters.svg.h:106 ../share/filters/filters.svg.h:128
 #, fuzzy
 msgid "Torn edges"
-msgstr "Fasa kanter"
+msgstr "Rivna kanter"
 
 #: ../share/filters/filters.svg.h:106 ../share/filters/filters.svg.h:128
 msgid ""
 "Displace the outside of shapes and pictures without altering their content"
 msgstr ""
+"Förskjut utsidan av former och bilder utan att förändra deras innehåll"
 
 #: ../share/filters/filters.svg.h:107
 msgid "Feather"
@@ -5564,16 +5628,16 @@ msgstr "Fjäder"
 
 #: ../share/filters/filters.svg.h:107
 msgid "Blurred mask on the edge without altering the contents"
-msgstr ""
+msgstr "Oskärpemask till kanter utan förändring av innehållet"
 
 #: ../share/filters/filters.svg.h:108
 #, fuzzy
 msgid "Blur content"
-msgstr "C_ellinnehåll:"
+msgstr "Sudda innehållet"
 
 #: ../share/filters/filters.svg.h:108
 msgid "Blur the contents of objects, preserving the outline"
-msgstr ""
+msgstr "Sudda innehållet av objekt, förändra inte kanterna"
 
 #: ../share/filters/filters.svg.h:109
 msgid "Specular light"
@@ -5583,18 +5647,21 @@ msgstr "Spekulärt ljus"
 msgid "Basic specular bevel to use for building textures"
 msgstr "Enkel spekulär kant att använda för att bygga texturer"
 
+# TODO
 #: ../share/filters/filters.svg.h:110
 msgid "Roughen inside"
-msgstr "BGrovhetsläge"
+msgstr "Grov insida"
 
+# TODO
 #: ../share/filters/filters.svg.h:110
 msgid "Roughen all inside shapes"
-msgstr ""
+msgstr "Gör alla innre former grövre"
 
 #: ../share/filters/filters.svg.h:111
 msgid "Evanescent"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:111
 msgid ""
 "Blur the contents of objects, preserving the outline and adding progressive "
@@ -5620,11 +5687,11 @@ msgstr "Färglagda plumpar, som en grupp människor"
 #: ../share/filters/filters.svg.h:114
 #, fuzzy
 msgid "Scotland"
-msgstr "Ledigt"
+msgstr "Scotland"
 
 #: ../share/filters/filters.svg.h:114
 msgid "Colorized mountain tops out of the fog"
-msgstr ""
+msgstr "Färgade bergtoppar i dimman"
 
 #: ../share/filters/filters.svg.h:115
 msgid "Noise transparency"
@@ -5642,10 +5709,12 @@ msgstr "Fyll med brus"
 msgid "Basic noise fill texture; adjust color in Flood"
 msgstr "Enkel textur med brus; justera färgen i inställningarna för Fyll"
 
+# TODO
 #: ../share/filters/filters.svg.h:117
 msgid "Garden of Delights"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:117
 msgid ""
 "Phantasmagorical turbulent wisps, like Hieronymus Bosch's Garden of Delights"
@@ -5657,22 +5726,26 @@ msgstr "Diffust ljus"
 
 #: ../share/filters/filters.svg.h:118
 msgid "Basic diffuse bevel to use for building textures"
-msgstr ""
+msgstr "Enkel diffus fasning som kan användas för att skapa texturer"
 
+# TODO
 #: ../share/filters/filters.svg.h:119
 #, fuzzy
 msgid "Cutout Glow"
-msgstr "_Skenradie:"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:119
 msgid "In and out glow with a possible offset and colorizable flood"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:120
 #, fuzzy
 msgid "HSL Bumps, matte"
-msgstr "_HSL-färgmodell"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:120
 msgid ""
 "Same as HSL bumps but with a diffuse reflection instead of a specular one"
@@ -5681,11 +5754,11 @@ msgstr ""
 #: ../share/filters/filters.svg.h:121
 #, fuzzy
 msgid "Dark Emboss"
-msgstr "mörkblå"
+msgstr "Mörk relief"
 
 #: ../share/filters/filters.svg.h:121
 msgid "Emboss effect : 3D relief where white is replaced by black"
-msgstr ""
+msgstr "3D relief där vitt är ersatt med svart"
 
 #: ../share/filters/filters.svg.h:122
 msgid "Simple blur"
@@ -5696,11 +5769,13 @@ msgid "Simple Gaussian blur, same as the blur slider in Fill and Stroke dialog"
 msgstr ""
 "Enkel gaussisk oskärpa, samma som oskärpan i Fyllning och linje-dialogrutan"
 
+# TODO
 #: ../share/filters/filters.svg.h:123
 #, fuzzy
 msgid "Bubbly Bumps, matte"
-msgstr "Största höjd för bumpar"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:123
 msgid "Same as Bubbly Bumps but with a diffuse light instead of a specular one"
 msgstr ""
@@ -5716,25 +5791,29 @@ msgid ""
 "Emboss effect : Colors of the original images are preserved or modified by "
 "Blend"
 msgstr ""
+"Ciseleringseffekt: Färgerna för orginalbilden är bevarade eller modifiers av "
+"färgblandning"
 
+# TODO
 #: ../share/filters/filters.svg.h:125
 #, fuzzy
 msgid "Blotting paper"
-msgstr "Slut på papper"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:125
 #, fuzzy
 msgid "Inkblot on blotting paper"
-msgstr "Skrivare '%s' har nästan slut på papper."
+msgstr ""
 
 #: ../share/filters/filters.svg.h:126
 #, fuzzy
 msgid "Wax print"
-msgstr "Skriv ut dokument"
+msgstr "Vaxtryck"
 
 #: ../share/filters/filters.svg.h:126
 msgid "Wax print on tissue texture"
-msgstr ""
+msgstr "Vaxtryck på vävtextur"
 
 #: ../share/filters/filters.svg.h:127
 msgid "Inkblot"
@@ -5749,6 +5828,7 @@ msgstr "Bläckplump på näsduk eller grovt papper"
 msgid "Color outline, in"
 msgstr "Färg på slingkontur"
 
+# TODO
 #: ../share/filters/filters.svg.h:129
 msgid "A colorizable inner outline with adjustable width and blur"
 msgstr ""
@@ -5757,6 +5837,7 @@ msgstr ""
 msgid "Liquid"
 msgstr "Vätska"
 
+# TODO
 #: ../share/filters/filters.svg.h:130
 msgid "Colorizable filling with liquid transparency"
 msgstr ""
@@ -5769,11 +5850,13 @@ msgstr "Vattenfärg"
 msgid "Cloudy watercolor effect"
 msgstr "Vattenfärgseffekt"
 
+# TODO
 #: ../share/filters/filters.svg.h:132
 #, fuzzy
 msgid "Felt"
-msgstr "Text"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:132
 msgid ""
 "Felt like texture with color turbulence and slightly darker at the edges"
@@ -5791,32 +5874,38 @@ msgstr "Bläck på papper med turbulent färgförskjutning"
 msgid "Tinted rainbow"
 msgstr "Färgad regnbåge"
 
+# TODO
 #: ../share/filters/filters.svg.h:134
 msgid "Smooth rainbow colors melted along the edges and colorizable"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:135
 #, fuzzy
 msgid "Melted rainbow"
-msgstr "Färgad regnbåge"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:135
 msgid "Smooth rainbow colors slightly melted along the edges"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:136
 #, fuzzy
 msgid "Flex metal"
-msgstr "Black Metal"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:136
 msgid "Bright, polished uneven metal casting, colorizable"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:137
 #, fuzzy
 msgid "Comics draft"
-msgstr "Spara utkast"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:137 ../share/filters/filters.svg.h:138
 #: ../share/filters/filters.svg.h:139 ../share/filters/filters.svg.h:140
@@ -5828,50 +5917,61 @@ msgstr "Spara utkast"
 msgid "Non realistic 3D shaders"
 msgstr "Orealistiska 3D-skuggningar"
 
+# TODO
 #: ../share/filters/filters.svg.h:137
 msgid "Draft painted cartoon shading with a glassy look"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:138
 msgid "Comics fading"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:138
 msgid "Cartoon paint style with some fading at the edges"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:139
 #, fuzzy
 msgid "Smooth shader"
-msgstr "Utjämnad palett"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:139
 msgid "Smooth shading with a graphite pencil grey"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:140
 #, fuzzy
 msgid "Emboss shader"
-msgstr "Borstad aluminiumsskuggning"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:140
 msgid "Combination of smooth shading and embossing"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:141
 #, fuzzy
 msgid "Smooth shader dark"
 msgstr "Ljuset för mörkt"
 
+# TODO
 #: ../share/filters/filters.svg.h:141
 msgid "Dark version of non realistic smooth shading"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:142
 #, fuzzy
 msgid "Comics"
 msgstr "Kombinerat"
 
+# TODO
 #: ../share/filters/filters.svg.h:142
 msgid "Imitation of black and white cartoon shading"
 msgstr ""
@@ -5879,11 +5979,11 @@ msgstr ""
 #: ../share/filters/filters.svg.h:143
 #, fuzzy
 msgid "Satin"
-msgstr "Start:"
+msgstr "Sammet"
 
 #: ../share/filters/filters.svg.h:143
 msgid "Silky close to mother of pearl shading"
-msgstr ""
+msgstr "Silkeslikt, ungefär pärlfärg"
 
 #: ../share/filters/filters.svg.h:144
 #, fuzzy
@@ -5892,13 +5992,15 @@ msgstr "Glasplattor"
 
 #: ../share/filters/filters.svg.h:144
 msgid "Non realistic frosted glass imitation"
-msgstr ""
+msgstr "Orealistisk glasplatteimitation"
 
+# TODO
 #: ../share/filters/filters.svg.h:145
 #, fuzzy
 msgid "Smooth shader contour"
-msgstr "Borstad aluminiumsskuggning"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:145
 msgid "Contouring version of smooth shader"
 msgstr ""
@@ -5911,30 +6013,35 @@ msgstr "Aluminium"
 msgid "Brushed aluminium shader"
 msgstr "Borstad aluminiumsskuggning"
 
+# TODO
 #: ../share/filters/filters.svg.h:147
 #, fuzzy
 msgid "Comics fluid"
-msgstr "FLTK Fluid-fil"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:147
 #, fuzzy
 msgid "Fluid brushed cartoon drawing"
-msgstr "Linjär toning"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:148
 #, fuzzy
 msgid "Chrome"
 msgstr "Krombalans"
 
+# TODO
 #: ../share/filters/filters.svg.h:148
 msgid "Non realistic chrome shader with strong speculars"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:149
 #, fuzzy
 msgid "Chrome dark"
-msgstr "mörkblå"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:149
 msgid "Dark version of chrome shading with a ground reflection simulation"
 msgstr ""
@@ -5942,16 +6049,17 @@ msgstr ""
 #: ../share/filters/filters.svg.h:150
 #, fuzzy
 msgid "Wavy tartan"
-msgstr "Vågig vit"
+msgstr "Vågig pläd"
 
 #: ../share/filters/filters.svg.h:150
 msgid "Tartan pattern with a wavy displacement and bevel around the edges"
-msgstr ""
+msgstr "Plädmönster med en vågig förskjutning och fasning runt kanterna"
 
 #: ../share/filters/filters.svg.h:151
 msgid "3D marble"
 msgstr "3D marmor"
 
+# TODO
 #: ../share/filters/filters.svg.h:151
 msgid "3D warped marble texture"
 msgstr ""
@@ -5960,6 +6068,7 @@ msgstr ""
 msgid "3D wood"
 msgstr "3D trä"
 
+# TODO
 #: ../share/filters/filters.svg.h:152
 msgid "3D warped, fibered wood texture"
 msgstr ""
@@ -5967,8 +6076,9 @@ msgstr ""
 #: ../share/filters/filters.svg.h:153
 #, fuzzy
 msgid "3D mother of pearl"
-msgstr "3D Studio-bild"
+msgstr "3D pärla"
 
+# TODO
 #: ../share/filters/filters.svg.h:153
 msgid "3D warped, iridescent pearly shell texture"
 msgstr ""
@@ -5983,17 +6093,20 @@ msgstr "Tigerpälsmönster med veck och avfasning runt kanterna"
 
 #: ../share/filters/filters.svg.h:155
 msgid "Shaken liquid"
-msgstr ""
+msgstr "Skakad vätska"
 
+# TODO
 #: ../share/filters/filters.svg.h:155
 msgid "Colorizable filling with flow inside like transparency"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:156
 #, fuzzy
 msgid "Comics cream"
-msgstr "Gräddfärgade kulor"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:156
 msgid "Comics shader with creamy waves transparency"
 msgstr ""
@@ -6006,17 +6119,19 @@ msgstr "Svart ljus"
 msgid "Light areas turn to black"
 msgstr "Ljusa områden blir svarta"
 
+# TODO
 #: ../share/filters/filters.svg.h:158
 #, fuzzy
 msgid "Light eraser"
-msgstr "ljusblå"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:158 ../share/filters/filters.svg.h:195
 #: ../share/filters/filters.svg.h:197 ../share/filters/filters.svg.h:198
 #: ../share/filters/filters.svg.h:199
 #, fuzzy
 msgid "Transparency utilities"
-msgstr "Genomskinlighet för färgen."
+msgstr ""
 
 #: ../share/filters/filters.svg.h:158
 msgid "Make the lightest parts of the object progressively transparent"
@@ -6025,12 +6140,12 @@ msgstr ""
 #: ../share/filters/filters.svg.h:159
 #, fuzzy
 msgid "Noisy blur"
-msgstr "Mittpunkt för oskärpa"
+msgstr "Grov oskärpa"
 
 #: ../share/filters/filters.svg.h:159
 #, fuzzy
 msgid "Small-scale roughening and blurring to edges and content"
-msgstr "Vertikal radie på rundade hörn"
+msgstr "Grovhet och oskärpa på liten skala till kanter och innehåll"
 
 #: ../share/filters/filters.svg.h:160
 msgid "Film grain"
@@ -6038,52 +6153,62 @@ msgstr "Kornig film"
 
 #: ../share/filters/filters.svg.h:160
 msgid "Adds a small scale graininess"
-msgstr ""
+msgstr "Lägger till småskalig grynighet"
 
+# TODO
 #: ../share/filters/filters.svg.h:161
 #, fuzzy
 msgid "HSL Bumps, transparent"
-msgstr "_Gör omgivningen transparent"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:161
 msgid "Highly flexible specular bump with transparency"
 msgstr ""
 
+# TODO teckning/ritning?
 #: ../share/filters/filters.svg.h:162
 #: ../src/ui/dialog/align-and-distribute.cpp:926
 #: ../src/widgets/desktop-widget.cpp:1647
 msgid "Drawing"
 msgstr "Teckning"
 
+# TODO
 #: ../share/filters/filters.svg.h:162
 msgid ""
 "Give lead pencil or chromolithography or engraving or other effects to "
 "images and material filled objects"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:163
 #, fuzzy
 msgid "Velvet Bumps"
-msgstr "Största höjd för bumpar"
+msgstr "Sammetsbumpar"
 
+# TODO
 #: ../share/filters/filters.svg.h:163
 msgid "Gives Smooth Bumps velvet like"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:164
 #, fuzzy
 msgid "Alpha draw"
-msgstr "Rita en labyrint"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:164
 msgid "Gives a transparent drawing effect to bitmaps and materials"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:165
 #, fuzzy
 msgid "Alpha draw, color"
-msgstr "Färg till Alfa"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:165
 msgid "Gives a transparent color fill effect to bitmaps and materials"
 msgstr ""
@@ -6092,6 +6217,7 @@ msgstr ""
 msgid "Chewing gum"
 msgstr "Tuggummi"
 
+# TODO
 #: ../share/filters/filters.svg.h:166
 msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
@@ -6117,8 +6243,9 @@ msgstr "Ritar en färgad kontur runt"
 #: ../share/filters/filters.svg.h:169
 #, fuzzy
 msgid "Inner Shadow"
-msgstr "Skuggtyp"
+msgstr "Innre skugga"
 
+# TODO
 #: ../share/filters/filters.svg.h:169
 msgid "Adds a colorizable drop shadow inside"
 msgstr ""
@@ -6126,8 +6253,9 @@ msgstr ""
 #: ../share/filters/filters.svg.h:170
 #, fuzzy
 msgid "Dark and Glow"
-msgstr "Glöd målarinställningar"
+msgstr "Mörkt och glöd"
 
+# TODO
 #: ../share/filters/filters.svg.h:170
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
 msgstr ""
@@ -6135,26 +6263,31 @@ msgstr ""
 #: ../share/filters/filters.svg.h:171
 #, fuzzy
 msgid "Darken edges"
-msgstr "Fasa kanter"
+msgstr "Mörka kanter"
 
+# TODO
 #: ../share/filters/filters.svg.h:171
 msgid "Darken the edges with an inner blur"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:172
 #, fuzzy
 msgid "Warped rainbow"
 msgstr "Färgad regnbåge"
 
+# TODO
 #: ../share/filters/filters.svg.h:172
 msgid "Smooth rainbow colors warped along the edges and colorizable"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:173
 #, fuzzy
 msgid "Rough and dilate"
-msgstr "Grov och blank"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:173
 msgid "Create a turbulent contour around"
 msgstr ""
@@ -6166,7 +6299,7 @@ msgstr "Quadritone fantasi"
 #: ../share/filters/filters.svg.h:174
 #, fuzzy
 msgid "Replace hue by two colors"
-msgstr "Senast markerad"
+msgstr "Ersätt nyans med två färger"
 
 #: ../share/filters/filters.svg.h:175
 msgid "Old postcard"
@@ -6179,35 +6312,42 @@ msgstr "Lätt posterisering med kanter som på gamla vykort"
 #: ../share/filters/filters.svg.h:176
 #, fuzzy
 msgid "Fuzzy Glow"
-msgstr "_Skenradie:"
+msgstr "Suddigt sken"
 
+# TODO
 #: ../share/filters/filters.svg.h:176
 msgid "Overlays a semi-transparent shifted copy to a blurred one"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:177
 #, fuzzy
 msgid "Dots transparency"
-msgstr "Genomskinlighet för färgen."
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:177
 msgid "Gives a pointillist HSL sensitive transparency"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:178
 #, fuzzy
 msgid "Canvas transparency"
-msgstr "Genomskinlighet för färgen."
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:178
 msgid "Gives a canvas like HSL sensitive transparency."
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:179
 #, fuzzy
 msgid "Smear transparency"
-msgstr "Genomskinlighet för färgen."
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:179
 msgid ""
 "Paint objects with a transparent turbulence which turns around color edges"
@@ -6216,45 +6356,53 @@ msgstr ""
 #: ../share/filters/filters.svg.h:180
 #, fuzzy
 msgid "Thick paint"
-msgstr "Måla kanter"
+msgstr "Tjock färg"
 
+# TODO
 #: ../share/filters/filters.svg.h:180
 msgid "Thick painting effect with turbulence"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:181
 #, fuzzy
 msgid "Burst"
 msgstr "Utbrottsfärg"
 
+# TODO
 #: ../share/filters/filters.svg.h:181
 msgid "Burst balloon texture crumpled and with holes"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:182
 #, fuzzy
 msgid "Embossed leather"
-msgstr "horisontell flytt"
+msgstr "Graverat läder"
 
+# TODO
 #: ../share/filters/filters.svg.h:182
 msgid ""
 "Combine a HSL edges detection bump with a leathery or woody and colorizable "
 "texture"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:183
 #, fuzzy
 msgid "Carnaval"
-msgstr "Cyan"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:183
 msgid "White splotches evocating carnaval masks"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:184
 #, fuzzy
 msgid "Plastify"
-msgstr "Fördela"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:184
 msgid ""
@@ -6265,8 +6413,9 @@ msgstr ""
 #: ../share/filters/filters.svg.h:185
 #, fuzzy
 msgid "Plaster"
-msgstr "Klistra _in"
+msgstr "Gips"
 
+# TODO
 #: ../share/filters/filters.svg.h:185
 msgid ""
 "Combine a HSL edges detection bump with a matte and crumpled surface effect"
@@ -6275,8 +6424,9 @@ msgstr ""
 #: ../share/filters/filters.svg.h:186
 #, fuzzy
 msgid "Rough transparency"
-msgstr "Genomskinlighet för färgen."
+msgstr "Grov genomskinlighet"
 
+# TODO
 #: ../share/filters/filters.svg.h:186
 msgid "Adds a turbulent transparency which displaces pixels at the same time"
 msgstr ""
@@ -6285,24 +6435,29 @@ msgstr ""
 msgid "Gouache"
 msgstr "Gouache"
 
+# TODO
 #: ../share/filters/filters.svg.h:187
 msgid "Partly opaque water color effect with bleed"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:188
 #, fuzzy
 msgid "Alpha engraving"
-msgstr "Alfakanaler"
+msgstr "Alphagravering"
 
+# TODO
 #: ../share/filters/filters.svg.h:188
 msgid "Gives a transparent engraving effect with rough line and filling"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:189
 #, fuzzy
 msgid "Alpha draw, liquid"
-msgstr "Rita markeringlinje i "
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:189
 msgid "Gives a transparent fluid drawing effect with rough line and filling"
 msgstr ""
@@ -6315,19 +6470,23 @@ msgstr "Expressionism"
 msgid "Gives a fluid and wavy expressionist drawing effect to images"
 msgstr "Ger en vågig, expressionistisk målningseffekt på bilder"
 
+# TODO
 #: ../share/filters/filters.svg.h:191
 #, fuzzy
 msgid "Marbled ink"
-msgstr "Blått bläck"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:191
 msgid "Marbled transparency effect which conforms to image detected edges"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:192
 msgid "Thick acrylic"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:192
 msgid "Thick acrylic paint texture with high texture depth"
 msgstr ""
@@ -6335,109 +6494,128 @@ msgstr ""
 #: ../share/filters/filters.svg.h:193
 #, fuzzy
 msgid "Alpha engraving B"
-msgstr "Alfakanaler"
+msgstr "Alphagravering B"
 
+# TODO
 #: ../share/filters/filters.svg.h:193
 msgid ""
 "Gives a controllable roughness engraving effect to bitmaps and materials"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:194
 #, fuzzy
 msgid "Lapping"
-msgstr "Stjärna: Ändra rundning"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:194
 msgid "Something like a water noise"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:195
 #, fuzzy
 msgid "Monochrome transparency"
-msgstr "Genomskinlighet för färgen."
+msgstr "Enfärgad genomskinlighet"
 
+# TODO
 #: ../share/filters/filters.svg.h:195
 msgid "Convert to a colorizable transparent positive or negative"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:196
 msgid "Duotone"
-msgstr "Duotone"
+msgstr "Tvåton"
 
 #: ../share/filters/filters.svg.h:196
 msgid "Change colors to a duotone palette"
-msgstr "Ändra färger till en duotonepalette"
+msgstr "Ändra färger till en tvåtonspalett"
 
+# TODO
 #: ../share/filters/filters.svg.h:197
 #, fuzzy
 msgid "Light eraser, negative"
-msgstr "Negativfilmtyp"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:197
 msgid "Like Light eraser but converts to negative"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:198
 #, fuzzy
 msgid "Alpha repaint"
-msgstr "Alfakanaler"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:198
 #, fuzzy
 msgid "Repaint anything monochrome"
 msgstr "Använd monokrom förhandsgranskning"
 
+# TODO
 #: ../share/filters/filters.svg.h:199
 #, fuzzy
 msgid "Saturation map"
-msgstr "Radarkarta"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:199
 msgid ""
 "Creates an approximative semi-transparent and colorizable image of the "
 "saturation levels"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:200
 #, fuzzy
 msgid "Riddled"
-msgstr "Titel"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:200
 msgid "Riddle the surface and add bump to images"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:201
 msgid "Wrinkled varnish"
-msgstr ""
+msgstr "Skrynklad lack"
 
 #: ../share/filters/filters.svg.h:201
 msgid "Thick glossy and translucent paint texture with high depth"
-msgstr ""
+msgstr "Tjock glansig och genomskinlig färg-textur med stort djup"
 
+# TODO
 #: ../share/filters/filters.svg.h:202
 #, fuzzy
 msgid "Canvas Bumps"
-msgstr "Tillämpa rityta"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:202
 msgid "Canvas texture with an HSL sensitive height map"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:203
 #, fuzzy
 msgid "Canvas Bumps, matte"
-msgstr "Kantutjämningsläget i duken."
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:203
 msgid "Same as Canvas Bumps but with a diffuse light instead of a specular one"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:204
 #, fuzzy
 msgid "Canvas Bumps alpha"
-msgstr "Färg till Alfa"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:204
 msgid "Same as Canvas Bumps but with transparent highlights"
 msgstr ""
@@ -6454,6 +6632,7 @@ msgstr "Öka eller minska ljushet och kontrast"
 msgid "Clean edges"
 msgstr "Rena kanter"
 
+# TODO
 #: ../share/filters/filters.svg.h:206
 msgid ""
 "Removes or decreases glows and jaggeries around objects edges after applying "
@@ -6463,17 +6642,19 @@ msgstr ""
 #: ../share/filters/filters.svg.h:207
 #, fuzzy
 msgid "Bright metal"
-msgstr "Black Metal"
+msgstr "Ljus metall"
 
 #: ../share/filters/filters.svg.h:207
 msgid "Bright metallic effect for any color"
-msgstr ""
+msgstr "Ljus metallisk effekt för alla färger"
 
+# TODO
 #: ../share/filters/filters.svg.h:208
 #, fuzzy
 msgid "Deep colors plastic"
-msgstr "Förgrund / bakgrundsfärger"
+msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:208
 #, fuzzy
 msgid "Transparent plastic with deep colors"
@@ -6482,40 +6663,41 @@ msgstr "Barktextur, vertikal; använd med djupa färger"
 #: ../share/filters/filters.svg.h:209
 #, fuzzy
 msgid "Melted jelly, matte"
-msgstr "Mönsterfyllning"
+msgstr "Smält gelé, matt"
 
 #: ../share/filters/filters.svg.h:209
 msgid "Matte bevel with blurred edges"
-msgstr ""
+msgstr "Matt fasning med suddiga kanter"
 
 #: ../share/filters/filters.svg.h:210
 #, fuzzy
 msgid "Melted jelly"
-msgstr "Matt gelé"
+msgstr "Smält gelé"
 
 #: ../share/filters/filters.svg.h:210
 #, fuzzy
 msgid "Glossy bevel with blurred edges"
-msgstr "Stjärnegenskaper"
+msgstr "Glansig fasning med suddiga kanter"
 
 #: ../share/filters/filters.svg.h:211
 #, fuzzy
 msgid "Combined lighting"
-msgstr "Ljuseffekter"
+msgstr "Kombinerade ljus"
 
 #: ../share/filters/filters.svg.h:212
 msgid "Tinfoil"
-msgstr ""
+msgstr "Aluminiumfolie"
 
 #: ../share/filters/filters.svg.h:212
 msgid "Metallic foil effect combining two lighting types and variable crumple"
-msgstr ""
+msgstr "Metallisk folie-effekt som kombinerar två ljustyper och variabel skrynklighet"
 
 #: ../share/filters/filters.svg.h:213
 #, fuzzy
 msgid "Copper and chocolate"
-msgstr "Datum och Tid"
+msgstr "Koppar och choklad"
 
+# TODO
 #: ../share/filters/filters.svg.h:213
 msgid ""
 "Specular bump which can be easily converted from metallic to molded plastic "
@@ -6525,11 +6707,11 @@ msgstr ""
 #: ../share/filters/filters.svg.h:214
 #, fuzzy
 msgid "Inner Glow"
-msgstr "_Skenradie:"
+msgstr "Innre sken"
 
 #: ../share/filters/filters.svg.h:214
 msgid "Adds a colorizable glow inside"
-msgstr ""
+msgstr "Lägger till ett färgläggningsbart sken inuti"
 
 #: ../share/filters/filters.svg.h:215
 msgid "Soft colors"
@@ -6543,16 +6725,18 @@ msgstr ""
 #: ../share/filters/filters.svg.h:216
 #, fuzzy
 msgid "Relief print"
-msgstr "Skriv ut dokument"
+msgstr "Gravering"
 
+# TODO
 #: ../share/filters/filters.svg.h:216
 msgid "Bumps effect with a bevel, color flood and complex lighting"
 msgstr ""
 
+# TODO
 #: ../share/filters/filters.svg.h:217
 #, fuzzy
 msgid "Growing cells"
-msgstr "Antal celler:"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:217
 msgid "Random rounded living cells like fill"
@@ -6569,12 +6753,12 @@ msgstr "Övermätta färger som kan vara fluorescerande i riktiga världen"
 #: ../share/filters/filters.svg.h:219
 #, fuzzy
 msgid "Tritone"
-msgstr "Titel"
+msgstr "Treton"
 
 #: ../share/filters/filters.svg.h:219
 msgid "Create a tritone palette with hue selectable by flood"
 msgstr ""
-"Skapa en tritonspalett med nyans som kan väljas genom fyllnadsfärgen i "
+"Skapa en tretonspalett med nyans som kan väljas genom fyllnadsfärgen i "
 "effekteditorn"
 
 #: ../share/patterns/patterns.svg.h:2
@@ -6685,10 +6869,11 @@ msgstr "Schackbräde"
 msgid "Checkerboard white"
 msgstr "Schackbräde vitt"
 
+# TODO
 #: ../share/patterns/patterns.svg.h:29
 #, fuzzy
 msgid "Packed circles"
-msgstr "Okomprimerad paketerad YUV 4:1:0"
+msgstr "Packade cirklar"
 
 #: ../share/patterns/patterns.svg.h:30
 msgid "Polka dots, small"
