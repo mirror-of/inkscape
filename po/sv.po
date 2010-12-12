@@ -2191,27 +2191,29 @@ msgstr "Ta bort huvud-sidetilldelning"
 #: ../share/extensions/jessyInk_uninstall.inx.h:8
 #, fuzzy
 msgid "Remove script"
-msgstr "Ritar rutnät"
+msgstr "Ta bort skript"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:9
 #, fuzzy
 msgid "Remove transitions"
-msgstr "Ta bort transformering"
+msgstr "Ta bort övergångar"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:10
 #, fuzzy
 msgid "Remove views"
-msgstr "Ta bort Filter"
+msgstr "Ta bort vyer"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:11
 msgid ""
 "This extension allows you to uninstall the JessyInk script. Please see code."
 "google.com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg låter er avinstallera JessyInk-skriptet. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:12
 msgid "Uninstall/remove"
-msgstr ""
+msgstr "Avinstallera/ta bort"
 
 #: ../share/extensions/jessyInk_video.inx.h:3
 msgid ""
@@ -2219,32 +2221,38 @@ msgid ""
 "This element allows you to integrate a video into your JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg placerar ett JessyInk videoelement på den nuvarande sidan (lagret). "
+"Elementet låter er integrera en video i er JessyInk-presentation. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_video.inx.h:4
 #, fuzzy
 msgid "Video"
-msgstr "Vy"
+msgstr "Video"
 
 #: ../share/extensions/jessyInk_view.inx.h:1
 msgid "Choose order number 0 to set the initial view of a slide."
-msgstr ""
+msgstr "Välj ordningsnummer 0 för att ange den initiala vyn för en sida."
 
 #: ../share/extensions/jessyInk_view.inx.h:6
 #, fuzzy
 msgid "Remove view"
-msgstr "Ta bort röd"
+msgstr "Ta bort vy"
 
 #: ../share/extensions/jessyInk_view.inx.h:8
 msgid ""
 "This extension allows you to set, update and remove views for a JessyInk "
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg låter er ange, uppdatera och ta bort vyer för en JessyInk-presentation. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_view.inx.h:9
 #: ../share/extensions/polyhedron_3d.inx.h:52
 msgid "View"
 msgstr "Vy"
 
+# TODO
 #: ../share/extensions/lindenmayer.inx.h:1
 msgid ""
 "\n"
@@ -2275,7 +2283,7 @@ msgstr "Axiom"
 #: ../share/extensions/lindenmayer.inx.h:22
 #, fuzzy
 msgid "Axiom and rules"
-msgstr "blandade implicita regler och normala regler"
+msgstr "Axiom och regler"
 
 #: ../share/extensions/lindenmayer.inx.h:24
 msgid "L-system"
@@ -2352,8 +2360,8 @@ msgid ""
 "text. If a flowed text is selected, Lorem Ipsum is added to it; otherwise a "
 "new flowed text object, the size of the page, is created in a new layer."
 msgstr ""
-"Denna effekt skapar den vanliga \"Lorem Ipsum\" pseudolatin texten.Om en "
-"text är markerad så kommer Lorem Ipsum att läggas till, annars kommer ett "
+"Denna effekt skapar den vanliga \"Lorem Ipsum\" pseudolatin-texten. Om en "
+"text är markerad så kommer Lorem Ipsum att läggas till denna, annars kommer ett "
 "nytt textobjekt att skapas i ett nytt lager."
 
 #: ../share/extensions/markers_strokepaint.inx.h:1
@@ -2363,7 +2371,7 @@ msgstr "Färgmarkeringar som matchar linje"
 #: ../share/extensions/measure.inx.h:1
 #, fuzzy
 msgid "Area"
-msgstr "Armeniska (hy)"
+msgstr "Area"
 
 #: ../share/extensions/measure.inx.h:2
 msgid "Font size [px]"
@@ -2372,7 +2380,7 @@ msgstr "Typsnittsstorlek [px]"
 #: ../share/extensions/measure.inx.h:4
 #, fuzzy
 msgid "Length"
-msgstr "Längd:"
+msgstr "Längd"
 
 #. <param name="unit" type="string" _gui-text="Unit {km|m|cm|mm|in|px|pt}">mm</param>
 #: ../share/extensions/measure.inx.h:6
@@ -2390,7 +2398,7 @@ msgstr "Mät slinga"
 #: ../share/extensions/measure.inx.h:9
 #, fuzzy
 msgid "Measurement Type: "
-msgstr "Mät slinga"
+msgstr "Måttyp:"
 
 #: ../share/extensions/measure.inx.h:10
 msgid "Offset [px]"
@@ -2420,11 +2428,13 @@ msgid ""
 "Bezier curves. If a circle is used, the area may be too high by as much as "
 "0.03%."
 msgstr ""
-"Detta tillägg mäter längden på den valda slingan och lägger till den som en "
-"text-på-slinga med den valda enheten. Antalet signifikanta siffror kan "
-"ställas in med Precisionsfältet. Förskjutningsfältet stället in avståndet "
-"mellan text och slinga. Skalningsfaktorn kan användas för att göra mätningar "
-"på skalade ritningar. Till exempel, om 1 cm i ritningen är lika med 2,5 m i "
+"Detta tillägg mäter längden, och arean, på den valda slingan och lägger till den som en "
+"text-på-slinga med den valda enheten.\n"
+"            \n"
+"  * Antalet signifikanta siffror kan ställas in med Precisionsfältet.\n"
+"  * Förskjutningsfältet anger avståndet mellan text och slingan.\n"
+"  * Skalningsfaktorn kan användas för att göra mätningar på skalade ritningar. "
+"Till exempel, om 1 cm i ritningen är lika med 2,5 m i "
 "verkligheten skall Skalningsfaktorn sättas till 250."
 
 #: ../share/extensions/motion.inx.h:1 ../share/extensions/restack.inx.h:1
@@ -2434,54 +2444,57 @@ msgstr "Vinkel"
 #: ../share/extensions/motion.inx.h:3
 #, fuzzy
 msgid "Magnitude"
-msgstr "Magnitudskarta:"
+msgstr "Magnitud"
 
 #: ../share/extensions/motion.inx.h:4
 msgid "Motion"
 msgstr "Rörelse"
 
+# TODO
 #: ../share/extensions/outline2svg.inx.h:1
 #, fuzzy
 msgid "ASCII Text with outline markup"
 msgstr "Ersätt markeringen med textlagrets kontur"
 
+# TODO
 #: ../share/extensions/outline2svg.inx.h:2
 #, fuzzy
 msgid "Text Outline File (*.outline)"
-msgstr "Infoga textfil"
+msgstr ""
 
+# TODO
 #: ../share/extensions/outline2svg.inx.h:3
 #, fuzzy
 msgid "Text Outline Input"
-msgstr "Textfält för att ange datum"
+msgstr ""
 
 #: ../share/extensions/param_curves.inx.h:2
 #, fuzzy
 msgid "End t-value"
-msgstr "Ogiltigt värde ( %d )\n"
+msgstr "Slut t"
 
 #: ../share/extensions/param_curves.inx.h:4
 msgid "Isotropic scaling (uses smallest: width/xrange or height/yrange)"
-msgstr ""
+msgstr "Isotropisk skalning (använder minsta utav bredd/x-vidd eller höjd/y-vidd)"
 
 #: ../share/extensions/param_curves.inx.h:5
 msgid "Multiply t-range by 2*pi"
-msgstr ""
+msgstr "Multiplicera t-vidd med 2*pi"
 
 #: ../share/extensions/param_curves.inx.h:6
 #, fuzzy
 msgid "Parametric Curves"
-msgstr "Ändra kurvor"
+msgstr "Parametriska Kurvor"
 
 #: ../share/extensions/param_curves.inx.h:7
 #, fuzzy
 msgid "Range and Sampling"
-msgstr "Datum och Tid"
+msgstr "Vidd och Sampling"
 
 #: ../share/extensions/param_curves.inx.h:10
 #, fuzzy
 msgid "Samples"
-msgstr "Utjämna sampel"
+msgstr "Smplingar"
 
 #: ../share/extensions/param_curves.inx.h:11
 msgid ""
@@ -2490,41 +2503,45 @@ msgid ""
 "\n"
 "First derivatives are always determined numerically."
 msgstr ""
+"Välj en rektangel innan du anropar detta tillägg,\n"
+"den kommer bestämma X- och Y-skalan.\n"
+"\n"
+"Förstaderivator beräknas alltid numeriskt."
 
 #: ../share/extensions/param_curves.inx.h:24
 #, fuzzy
 msgid "Start t-value"
-msgstr "Ogiltigt värde ( %d )\n"
+msgstr "Start t"
 
 #: ../share/extensions/param_curves.inx.h:26
 #, fuzzy
 msgid "x-Function"
-msgstr "Funktion"
+msgstr "x-Funktion"
 
 #: ../share/extensions/param_curves.inx.h:27
 #, fuzzy
 msgid "x-value of rectangle's left"
-msgstr "Vänster"
+msgstr "x-värde för rektangelns vänstersida"
 
 #: ../share/extensions/param_curves.inx.h:28
 #, fuzzy
 msgid "x-value of rectangle's right"
-msgstr "Höger"
+msgstr "x-värde för rektangelns högersida"
 
 #: ../share/extensions/param_curves.inx.h:29
 #, fuzzy
 msgid "y-Function"
-msgstr "Funktion"
+msgstr "y-Funktion"
 
 #: ../share/extensions/param_curves.inx.h:30
 #, fuzzy
 msgid "y-value of rectangle's bottom"
-msgstr "gå till nederkanten"
+msgstr "y-värde för rektangelns botten"
 
 #: ../share/extensions/param_curves.inx.h:31
 #, fuzzy
 msgid "y-value of rectangle's top"
-msgstr "Minska från toppen"
+msgstr "y-värde för rektangelns topp"
 
 #: ../share/extensions/pathalongpath.inx.h:1
 msgid "Copies of the pattern:"
@@ -2559,13 +2576,13 @@ msgstr "Mönstret är vertikalt"
 #: ../src/live_effects/lpe-patternalongpath.cpp:54
 #, fuzzy
 msgid "Repeated"
-msgstr "repeterat nyckelvärde %s"
+msgstr "Upprepat"
 
 #: ../share/extensions/pathalongpath.inx.h:9
 #: ../src/live_effects/lpe-patternalongpath.cpp:55
 #, fuzzy
 msgid "Repeated, stretched"
-msgstr "repeterat nyckelvärde %s"
+msgstr "Upprepat, utsträckt"
 
 #: ../share/extensions/pathalongpath.inx.h:10
 msgid "Ribbon"
@@ -2575,13 +2592,13 @@ msgstr "Band"
 #: ../src/live_effects/lpe-patternalongpath.cpp:52
 #, fuzzy
 msgid "Single"
-msgstr "enkelt"
+msgstr "Enkelt"
 
 #: ../share/extensions/pathalongpath.inx.h:12
 #: ../src/live_effects/lpe-patternalongpath.cpp:53
 #, fuzzy
 msgid "Single, stretched"
-msgstr "Enkelklick"
+msgstr "Enkelt, utsträckt"
 
 #: ../share/extensions/pathalongpath.inx.h:13
 msgid "Snake"
@@ -2604,7 +2621,7 @@ msgid ""
 "pattern is the topmost object in the selection. (groups of paths/shapes/"
 "clones... allowed)"
 msgstr ""
-"Denna effekt böjer ett mönster längs \"skelett\"-slingor. Mönstret måste "
+"Denna effekt böjer ett mönster längs godtyckliga \"skelett\"-slingor. Mönstret måste "
 "vara det översta objektet i markeringen (grupper av slingor/former/kloner/"
 "etc. är tillåtet)."
 
@@ -2635,7 +2652,7 @@ msgstr "Sprid ut"
 
 #: ../share/extensions/pathscatter.inx.h:12
 msgid "Stretch spaces to fit skeleton length"
-msgstr ""
+msgstr "Sträck ut mellanrum för att passa skelettlängden"
 
 #: ../share/extensions/pathscatter.inx.h:14
 msgid ""
@@ -2643,77 +2660,80 @@ msgid ""
 "pattern must be the topmost object in the selection. Groups of paths, "
 "shapes, clones are allowed."
 msgstr ""
-"Denna effekt sprider ut ett mönster längs \"skelett\"-slingor. Mönstret "
+"Denna effekt sprider ut ett mönster längs godtyckliga \"skelett\"-slingor. Mönstret "
 "måste vara det översta objektet i markeringen. Grupper av slingor, former, "
 "kloner är tillåtet."
 
+# TODO
 #: ../share/extensions/perfectboundcover.inx.h:1
 #, fuzzy
 msgid "Bleed (in)"
-msgstr "I bruk"
+msgstr ""
 
+# TODO
 #: ../share/extensions/perfectboundcover.inx.h:2
 #, fuzzy
 msgid "Bond Weight #"
-msgstr "Skuggvikt (%)"
+msgstr "Antal Band"
 
 #: ../share/extensions/perfectboundcover.inx.h:3
 #, fuzzy
 msgid "Book Height (inches)"
-msgstr "System_övervakarhöjd: "
+msgstr "Bokhöjd (tum)"
 
 #: ../share/extensions/perfectboundcover.inx.h:4
 #, fuzzy
 msgid "Book Properties"
-msgstr "Egenskaper för adressboken"
+msgstr "Bokens Egenskaper"
 
 #: ../share/extensions/perfectboundcover.inx.h:5
 #, fuzzy
 msgid "Book Width (inches)"
-msgstr "System_övervakarbredd: "
+msgstr "Bokens Bredd (tum)"
 
 #: ../share/extensions/perfectboundcover.inx.h:6
 #, fuzzy
 msgid "Caliper (inches)"
-msgstr "Amerikanska (Fahrenheit, tum, osv.)"
+msgstr "Papperstjocklek (tum)"
 
 #: ../share/extensions/perfectboundcover.inx.h:7
 #, fuzzy
 msgid "Cover"
-msgstr "Täck"
+msgstr "Fodral"
 
 #: ../share/extensions/perfectboundcover.inx.h:8
 #, fuzzy
 msgid "Cover Thickness Measurement"
-msgstr "Lägg till försättssida"
+msgstr "Fodralets tjocklek"
 
 #: ../share/extensions/perfectboundcover.inx.h:9
 #, fuzzy
 msgid "Interior Pages"
-msgstr "Skriv ut sidor"
+msgstr "Interna Sidor"
 
 #: ../share/extensions/perfectboundcover.inx.h:10
 msgid "Note: Bond Weight # calculations are a best-guess estimate."
-msgstr ""
+msgstr "Notera: Beräkningar på antal band är estimerade."
 
 #: ../share/extensions/perfectboundcover.inx.h:11
 #, fuzzy
 msgid "Number of Pages"
-msgstr "Antal sidor"
+msgstr "Antal Sidor"
 
 #: ../share/extensions/perfectboundcover.inx.h:12
 #, fuzzy
 msgid "Pages Per Inch (PPI)"
-msgstr "Blad per sidlayout:"
+msgstr "Blad Per Tump (PPI)"
 
 #: ../share/extensions/perfectboundcover.inx.h:13
 #, fuzzy
 msgid "Paper Thickness Measurement"
-msgstr "#9-kuvert"
+msgstr "Pappertjocklek"
 
+# TODO
 #: ../share/extensions/perfectboundcover.inx.h:14
 msgid "Perfect-Bound Cover Template"
-msgstr ""
+msgstr "Perfekt Bundet Fodral-Mall"
 
 #: ../share/extensions/perfectboundcover.inx.h:15 ../src/helper/units.cpp:38
 msgid "Points"
@@ -2722,12 +2742,12 @@ msgstr "Punkter"
 #: ../share/extensions/perfectboundcover.inx.h:16
 #, fuzzy
 msgid "Remove existing guides"
-msgstr "_Ta bort alla guider"
+msgstr "Ta bort befintliga hjälplinjer"
 
 #: ../share/extensions/perfectboundcover.inx.h:18
 #, fuzzy
 msgid "Specify Width"
-msgstr "Bildbredd: %d\n"
+msgstr "Ange Bredd"
 
 #: ../share/extensions/perfectboundcover.inx.h:19
 #: ../src/widgets/sp-xmlview-attr-list.cpp:47
@@ -2742,38 +2762,42 @@ msgstr "Perspektiv"
 #: ../share/extensions/pixelsnap.inx.h:2
 #, fuzzy
 msgid "PixelSnap"
-msgstr "Bildpunkt"
+msgstr "BildpunktJustering"
 
 #: ../share/extensions/pixelsnap.inx.h:3
 msgid ""
 "Snap all paths in selection to pixels. Snaps borders to half-points and "
 "fills to full points"
 msgstr ""
+"Justera alla slingor i markering till bildpunkter. Justerar kanter till halv-punkter och "
+"ifyllnad till hela punkter."
 
+# TODO
 #: ../share/extensions/plt_input.inx.h:1
 #, fuzzy
 msgid "AutoCAD Plot Input"
-msgstr "In/ut-fel"
+msgstr ""
 
 #: ../share/extensions/plt_input.inx.h:2
 #: ../share/extensions/plt_output.inx.h:2
 msgid "HP Graphics Language Plot file [AutoCAD] (*.plt)"
-msgstr ""
+msgstr "HP Graphics Language Plot fil [AutoCAD] (*.plt)"
 
 #: ../share/extensions/plt_input.inx.h:3
 #, fuzzy
 msgid "Open HPGL plotter files"
-msgstr "Välj filer att öppna"
+msgstr "Öppna HPGL plotter-filer"
 
+# TODO
 #: ../share/extensions/plt_output.inx.h:1
 #, fuzzy
 msgid "AutoCAD Plot Output"
-msgstr "TV Utdata format"
+msgstr ""
 
 #: ../share/extensions/plt_output.inx.h:3
 #, fuzzy
 msgid "Save a file for plotters"
-msgstr "Välj originalfil för \"%s\""
+msgstr "Spara fil för plotters"
 
 #: ../share/extensions/polyhedron_3d.inx.h:1
 msgid "3D Polyhedron"
@@ -2782,7 +2806,7 @@ msgstr "3D-Polyeder"
 #: ../share/extensions/polyhedron_3d.inx.h:2
 #, fuzzy
 msgid "Clockwise wound object"
-msgstr "Sänk valt objekt"
+msgstr "Medsols bundet objekt"
 
 #: ../share/extensions/polyhedron_3d.inx.h:3
 msgid "Cube"
@@ -2798,7 +2822,7 @@ msgstr "Dodekaeder"
 
 #: ../share/extensions/polyhedron_3d.inx.h:6
 msgid "Draw back-facing polygons"
-msgstr "Rita bakomliggande polygoner"
+msgstr "Rita bakvända polygoner"
 
 #: ../share/extensions/polyhedron_3d.inx.h:7
 msgid "Edge-Specified"
@@ -2810,11 +2834,11 @@ msgstr "Kanter"
 
 #: ../share/extensions/polyhedron_3d.inx.h:9
 msgid "Face-Specified"
-msgstr "Sid-definierad"
+msgstr "Yt-definierad"
 
 #: ../share/extensions/polyhedron_3d.inx.h:10
 msgid "Faces"
-msgstr "Sidor"
+msgstr "Ytor"
 
 #: ../share/extensions/polyhedron_3d.inx.h:11
 msgid "Filename:"
@@ -2841,10 +2865,11 @@ msgstr "Fyllnadsopacitet, %:"
 msgid "Great Dodecahedron"
 msgstr "Stor Dodekaeder"
 
+# TODO
 #: ../share/extensions/polyhedron_3d.inx.h:18
 #, fuzzy
 msgid "Great Stellated Dodecahedron"
-msgstr "Engelska/Storbritannien (en_GB)"
+msgstr "Stor Stellated Dodekaeder"
 
 #: ../share/extensions/polyhedron_3d.inx.h:19
 msgid "Icosahedron"
@@ -2888,7 +2913,7 @@ msgstr "Objekttyp"
 
 #: ../share/extensions/polyhedron_3d.inx.h:29
 msgid "Object:"
-msgstr "Objekt"
+msgstr "Objekt:"
 
 #: ../share/extensions/polyhedron_3d.inx.h:30
 msgid "Octahedron"
@@ -2915,10 +2940,11 @@ msgstr "Skuggning"
 msgid "Show:"
 msgstr "Visa:"
 
+# TODO Triambic
 #: ../share/extensions/polyhedron_3d.inx.h:37
 #, fuzzy
 msgid "Small Triambic Icosahedron"
-msgstr "Stående (litet) batteri"
+msgstr "Liten Triambic Ikosaeder"
 
 #: ../share/extensions/polyhedron_3d.inx.h:38
 msgid "Snub Cube"
@@ -2968,7 +2994,7 @@ msgstr "Stympad Tetraeder"
 #: ../share/extensions/polyhedron_3d.inx.h:51
 #, fuzzy
 msgid "Vertices"
-msgstr "Vertikalt mittpunktsvärde"
+msgstr "Vertex"
 
 #: ../share/extensions/polyhedron_3d.inx.h:53
 msgid "X-Axis"
@@ -2986,15 +3012,17 @@ msgstr "Z-axeln"
 msgid "Z-sort faces by:"
 msgstr "Z-sortera sidor på:"
 
+# TODO
 #: ../share/extensions/printing-marks.inx.h:1
 #, fuzzy
 msgid "Bleed Margin"
-msgstr "Nederkant:"
+msgstr ""
 
+# TODO
 #: ../share/extensions/printing-marks.inx.h:2
 #, fuzzy
 msgid "Bleed Marks"
-msgstr "Konvertibla mark"
+msgstr ""
 
 #: ../share/extensions/printing-marks.inx.h:3
 #, fuzzy
@@ -3004,27 +3032,30 @@ msgstr "Undersida:"
 #: ../share/extensions/printing-marks.inx.h:4
 #, fuzzy
 msgid "Canvas"
-msgstr "Tillämpa rityta"
+msgstr "Duk"
 
+# TODO
 #: ../share/extensions/printing-marks.inx.h:5
 #, fuzzy
 msgid "Color Bars"
-msgstr "Rullningslister"
+msgstr ""
 
+# TODO
 #: ../share/extensions/printing-marks.inx.h:6
 #, fuzzy
 msgid "Crop Marks"
-msgstr "Konvertibla mark"
+msgstr ""
 
 #: ../share/extensions/printing-marks.inx.h:7
 #, fuzzy
 msgid "Left:"
 msgstr "Vänster:"
 
+# TODO
 #: ../share/extensions/printing-marks.inx.h:8
 #, fuzzy
 msgid "Marks"
-msgstr "Konvertibla mark"
+msgstr ""
 
 #. Label
 #: ../share/extensions/printing-marks.inx.h:9
@@ -3035,7 +3066,7 @@ msgstr "Offset:"
 #: ../share/extensions/printing-marks.inx.h:10
 #, fuzzy
 msgid "Page Information"
-msgstr "_Säkerhetsinformation för sidan"
+msgstr "Sidinformation"
 
 #: ../share/extensions/printing-marks.inx.h:11
 #, fuzzy
@@ -3045,12 +3076,12 @@ msgstr "Positioneringsmetod"
 #: ../share/extensions/printing-marks.inx.h:12
 #, fuzzy
 msgid "Printing Marks"
-msgstr "Konvertibla mark"
+msgstr "Tryckmärken"
 
 #: ../share/extensions/printing-marks.inx.h:13
 #, fuzzy
 msgid "Registration Marks"
-msgstr "Konvertibla mark"
+msgstr "Registreringsmärken"
 
 #: ../share/extensions/printing-marks.inx.h:15
 #, fuzzy
@@ -3065,15 +3096,17 @@ msgstr "Höger:"
 msgid "Selection"
 msgstr "Markering"
 
+# TODO
 #: ../share/extensions/printing-marks.inx.h:17
 #, fuzzy
 msgid "Set crop marks to"
-msgstr "%s: sätt %s till standardvärde: %s\n"
+msgstr ""
 
+# TODO
 #: ../share/extensions/printing-marks.inx.h:18
 #, fuzzy
 msgid "Star Target"
-msgstr "Målbas"
+msgstr "Startmål"
 
 #: ../share/extensions/printing-marks.inx.h:19
 #, fuzzy
@@ -3088,48 +3121,50 @@ msgstr "PostScript"
 #: ../share/extensions/ps_input.inx.h:2
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 msgid "PostScript (*.ps)"
-msgstr "PS romb"
+msgstr ""
 
 #: ../share/extensions/ps_input.inx.h:3
 #, fuzzy
 msgid "PostScript Input"
-msgstr "Inmatnings_metoder"
+msgstr "PostScript filinläsning"
 
 #: ../share/extensions/radiusrand.inx.h:1
 #, fuzzy
 msgid "Jitter nodes"
-msgstr "Lägg till noder"
+msgstr "Sprid noder"
 
 #: ../share/extensions/radiusrand.inx.h:2
 #, fuzzy
 msgid "Maximum displacement in X, px"
-msgstr "Maximal bredd i antal tecken"
+msgstr "Maximal förskjutning i X, bildpunkter"
 
 #: ../share/extensions/radiusrand.inx.h:3
 #, fuzzy
 msgid "Maximum displacement in Y, px"
-msgstr "Maximal bredd i antal tecken"
+msgstr "Maximal förskjutning i Y, bildpunkter"
 
 #: ../share/extensions/radiusrand.inx.h:5
 #, fuzzy
 msgid "Shift node handles"
-msgstr "Visa områdes_handtag"
+msgstr "Skifta nodhandtag"
 
 #: ../share/extensions/radiusrand.inx.h:6
 #, fuzzy
 msgid "Shift nodes"
-msgstr "Lägg till noder"
+msgstr "Skifta noder"
 
 #: ../share/extensions/radiusrand.inx.h:7
 msgid ""
 "This effect randomly shifts the nodes (and optionally node handles) of the "
 "selected path."
 msgstr ""
+"Denna effekt skiftar slumpmässigt noderna (alternativt nodhandtag) för den "
+"markerade slingan."
 
 #: ../share/extensions/radiusrand.inx.h:8
 #, fuzzy
 msgid "Use normal distribution"
-msgstr "Använd den normala textstorleken"
+msgstr "Använd normalfördelning"
 
 #: ../share/extensions/render_alphabetsoup.inx.h:1
 msgid "Alphabet Soup"
@@ -3141,7 +3176,7 @@ msgstr "Slumpfrö"
 
 #: ../share/extensions/render_barcode.inx.h:1
 msgid "Bar Height:"
-msgstr "Höjd:"
+msgstr "Streckhöjd:"
 
 #: ../share/extensions/render_barcode.inx.h:2
 msgid "Barcode"
@@ -3158,7 +3193,7 @@ msgstr "Streckkodstyp:"
 #: ../share/extensions/restack.inx.h:2
 #, fuzzy
 msgid "Arbitrary Angle:"
-msgstr "Rotera med en godtycklig vinkel"
+msgstr "Godtycklig Vinkel:"
 
 #: ../share/extensions/restack.inx.h:3
 msgid "Arrange"
@@ -3227,34 +3262,33 @@ msgstr "Vertikal Punkt:"
 #: ../share/extensions/rtree.inx.h:1
 #, fuzzy
 msgid "Initial size"
-msgstr ""
-"  --heap <storlek>                   Ange ursprungsstorlek på heapen\n"
-# det är ingen vits att försvenska "heap" här
+msgstr "Ursprungsstorlek"
 
 #: ../share/extensions/rtree.inx.h:2
 #, fuzzy
 msgid "Minimum size"
-msgstr "Minimistorlek:"
+msgstr "Minimistorlek"
 
 #: ../share/extensions/rtree.inx.h:3
 #, fuzzy
 msgid "Random Tree"
-msgstr "Trädvy"
+msgstr "Slumpat Träd"
 
+# TODO
 #: ../share/extensions/rubberstretch.inx.h:2
 #, fuzzy, no-c-format
 msgid "Curve (%):"
-msgstr "Böj efter kurva"
+msgstr "Böj efter kurva (%):"
 
 #: ../share/extensions/rubberstretch.inx.h:4
 #, fuzzy
 msgid "Rubber Stretch"
-msgstr "Sträck ut _NMI"
+msgstr "Gummitöjning"
 
 #: ../share/extensions/rubberstretch.inx.h:6
 #, fuzzy, no-c-format
 msgid "Strength (%):"
-msgstr "<b>Styrka:</b>"
+msgstr "Styrka (%):"
 
 #: ../share/extensions/scour.inx.h:1
 #, fuzzy
@@ -3264,8 +3298,9 @@ msgstr "Infoga bilder"
 #: ../share/extensions/scour.inx.h:2
 #, fuzzy
 msgid "Enable id stripping"
-msgstr "Aktivera fästpunkter"
+msgstr "Aktivera id-avlägsning"
 
+# TODO
 #: ../share/extensions/scour.inx.h:3
 #, fuzzy
 msgid "Enable viewboxing"
@@ -3273,7 +3308,7 @@ msgstr "Aktivera förhandsgranskning"
 
 #: ../share/extensions/scour.inx.h:4
 msgid "Group collapsing"
-msgstr ""
+msgstr "Grupp-sammanfällning"
 
 #: ../share/extensions/scour.inx.h:6
 #, fuzzy
@@ -3282,7 +3317,7 @@ msgstr "inskjutning"
 
 #: ../share/extensions/scour.inx.h:7
 msgid "Keep editor data"
-msgstr ""
+msgstr "Behåll editor-data"
 
 #: ../share/extensions/scour.inx.h:9
 msgid "Optimized SVG (*.svg)"
@@ -3291,12 +3326,12 @@ msgstr "Optimerad SVG (*.svg)"
 #: ../share/extensions/scour.inx.h:10
 #, fuzzy
 msgid "Optimized SVG Output"
-msgstr "TV Utdata format"
+msgstr "Optimerad SVG-utdata"
 
 #: ../share/extensions/scour.inx.h:12
 #, fuzzy
 msgid "Scalable Vector Graphics"
-msgstr "Rendera Scalable Vector Graphics"
+msgstr "Scalable Vector Graphics"
 
 #: ../share/extensions/scour.inx.h:13
 #, fuzzy
@@ -3306,27 +3341,28 @@ msgstr "Precision"
 #: ../share/extensions/scour.inx.h:14
 #, fuzzy
 msgid "Simplify colors"
-msgstr "Förenkla"
+msgstr "Förenkla färger"
 
 #: ../share/extensions/scour.inx.h:15
 #, fuzzy
 msgid "Space"
-msgstr "Avmarkera"
+msgstr "Mellanrum"
 
 #: ../share/extensions/scour.inx.h:16
 msgid "Strip xml prolog"
-msgstr ""
+msgstr "Förkasta xml prolog"
 
 #: ../share/extensions/scour.inx.h:17
 #, fuzzy
 msgid "Style to xml"
-msgstr " _Stil: "
+msgstr "xml-stil"
 
 #: ../share/extensions/scour.inx.h:18
 #, fuzzy
 msgid "Tab"
-msgstr "Tabell"
+msgstr "Tabb"
 
+# TODO
 #: ../share/extensions/scour.inx.h:20
 #, no-c-format
 msgid ""
@@ -3347,40 +3383,42 @@ msgstr ""
 #: ../share/extensions/sk1_input.inx.h:1
 #, fuzzy
 msgid "Open files saved in sK1 vector graphics editor"
-msgstr "Vektorillustratören Inkscape"
+msgstr "Öppna filer sparade i sK1 vektrografikeditor"
 
 #: ../share/extensions/sk1_input.inx.h:2
 #: ../share/extensions/sk1_output.inx.h:2
 #, fuzzy
 msgid "sK1 vector graphics files (.sk1)"
-msgstr "Rendera Scalable Vector Graphics"
+msgid "sK1 vektorgrafikfiler (.sk1)"
 
 #: ../share/extensions/sk1_input.inx.h:3
 msgid "sK1 vector graphics files input"
-msgstr ""
+msgstr "sK1 vektrografik-filinläsning"
 
 #: ../share/extensions/sk1_output.inx.h:1
 #, fuzzy
 msgid "File format for use in sK1 vector graphics editor"
-msgstr "Vektorillustratören Inkscape"
+msgstr "Filformat för användning i sK1 vektorgrafikeditor"
 
+# TODO
 #: ../share/extensions/sk1_output.inx.h:3
 msgid "sK1 vector graphics files output"
 msgstr ""
 
 #: ../share/extensions/sk_input.inx.h:1
 msgid "A diagram created with the program Sketch"
-msgstr ""
+msgstr "Ett diagram skapat med programmet Sketch"
 
 #: ../share/extensions/sk_input.inx.h:2
 #, fuzzy
 msgid "Sketch Diagram (*.sk)"
-msgstr "Skapa diagramförbindelser"
+msgstr "Sketch Diagram (*.sk)"
 
+# TODO
 #: ../share/extensions/sk_input.inx.h:3
 #, fuzzy
 msgid "Sketch Input"
-msgstr "Inmatnings_metoder"
+msgstr ""
 
 #: ../share/extensions/spirograph.inx.h:1
 msgid "Gear Placement"
@@ -3421,31 +3459,33 @@ msgstr "r - Kugghjulsradie (bildpunkter)"
 #: ../share/extensions/split.inx.h:1
 #, fuzzy
 msgid "Letters"
-msgstr "Vänster:"
+msgstr "Bokstäver"
 
 #: ../share/extensions/split.inx.h:3
 msgid "Preserve original text?"
-msgstr ""
+msgstr "Bevara orginaltext?"
 
 #: ../share/extensions/split.inx.h:4
 #, fuzzy
 msgid "Split text"
-msgstr "Ta bort text"
+msgstr "Dela text"
 
 #: ../share/extensions/split.inx.h:5
 msgid "Split:"
-msgstr ""
+msgstr "Delning:"
 
 #: ../share/extensions/split.inx.h:7
 msgid ""
 "This effect splits texts into different lines, words or letters. Select "
 "below how your text should be splitted."
 msgstr ""
+"Denna effekt delar upp text i rader, ord eller bokstäver. Välj "
+"nedan hur din text skall bli uppdelad."
 
 #: ../share/extensions/split.inx.h:8
 #, fuzzy
 msgid "Words"
-msgstr "Läge:"
+msgstr "Ord"
 
 #: ../share/extensions/straightseg.inx.h:1
 msgid "Behavior"
@@ -3459,25 +3499,27 @@ msgstr "Procent"
 #: ../share/extensions/straightseg.inx.h:4
 #, fuzzy
 msgid "Straighten Segments"
-msgstr "Antal segment:"
+msgstr "Räta ut Segment"
 
 #: ../share/extensions/summersnight.inx.h:1
 #, fuzzy
 msgid "Envelope"
-msgstr "DL-kuvert"
+msgstr "Kuvert"
 
 #: ../share/extensions/svg2xaml.inx.h:1 ../share/extensions/xaml2svg.inx.h:1
 msgid "Microsoft XAML (*.xaml)"
 msgstr "Microsoft XAML (*.xaml)"
 
+# TODO
 #: ../share/extensions/svg2xaml.inx.h:2 ../share/extensions/xaml2svg.inx.h:2
 msgid "Microsoft's GUI definition format"
 msgstr ""
 
+# TODO
 #: ../share/extensions/svg2xaml.inx.h:3
 #, fuzzy
 msgid "XAML Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../share/extensions/svg_and_media_zip_output.inx.h:1
 msgid "Compressed Inkscape SVG with media (*.zip)"
@@ -3489,12 +3531,15 @@ msgstr "Komprimerad Inkscape SVG med media (*.zip)"
 msgid ""
 "Inkscape's native file format compressed with Zip and including all media "
 "files"
-msgstr "Inbyggt filformat för Sodipodi och W3C-standard"
+msgstr ""
+"Inkscape's inbyggda filformat komprimerat med Zip och innehållande "
+"mediafiler"
 
+# TODO
 #: ../share/extensions/svg_and_media_zip_output.inx.h:3
 #, fuzzy
 msgid "ZIP Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../share/extensions/svgcalendar.inx.h:1
 msgid ""
