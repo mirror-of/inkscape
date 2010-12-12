@@ -1128,128 +1128,152 @@ msgstr "Spara Rutnät:"
 #: ../share/extensions/gimp_xcf.inx.h:4
 #, fuzzy
 msgid "Save Guides:"
-msgstr "Spara hjälplinjer"
+msgstr "Spara hjälplinjer:"
 
 #: ../share/extensions/grid_cartesian.inx.h:1
 #, fuzzy
 msgid "Border Thickness [px]"
-msgstr "Kanttjocklek [px]"
+msgstr "Linjetjocklek [px]"
 
 #: ../share/extensions/grid_cartesian.inx.h:2
 #, fuzzy
 msgid "Cartesian Grid"
 msgstr "Kartesiskt Rutnät"
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:3
 msgid "Halve X Subsubdiv. Frequency after 'n' Subdivs. (log only)"
-msgstr "Halvera X-divisionssfrekvens efter 'n' delningar (endast log)"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:4
 msgid "Halve Y Subsubdiv. Frequency after 'n' Subdivs. (log only)"
-msgstr "Halvera Y-divisionssfrekvens efter 'n' delningar (endast log)"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:5
 msgid "Logarithmic X Subdiv. (Base given by entry above)"
-msgstr "Logaritmisk X-division. (Baserad på givet fält ovan)"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:6
 msgid "Logarithmic Y Subdiv. (Base given by entry above)"
-msgstr "Logaritmisk Y-division. (Baserad på givet fält ovan)"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:7
 #, fuzzy
 msgid "Major X Division Spacing [px]"
-msgstr "Mellanrum mellan Större X-delningar [px]"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:8
 #, fuzzy
 msgid "Major X Division Thickness [px]"
-msgstr "Tjocklek på Större X-delningar [px]"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:9
 #, fuzzy
 msgid "Major X Divisions"
-msgstr "Större X-divisioner"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:10
 #, fuzzy
 msgid "Major Y Division Spacing [px]"
-msgstr "Vertikalt mellanrum mellan rader (i bildpunkter)"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:11
 #, fuzzy
 msgid "Major Y Division Thickness [px]"
-msgstr "Mått"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:12
 #, fuzzy
 msgid "Major Y Divisions"
-msgstr "Tidsdivisioner"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:13
 #, fuzzy
 msgid "Minor X Division Thickness [px]"
-msgstr "Mått"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:14
 #, fuzzy
 msgid "Minor Y Division Thickness [px]"
-msgstr "Mått"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:16
 msgid "Subdivisions per Major X Division"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:17
 msgid "Subdivisions per Major Y Division"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:18
 msgid "Subminor X Division Thickness [px]"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:19
 msgid "Subminor Y Division Thickness [px]"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:20
 #, fuzzy
 msgid "Subsubdivs. per X Subdivision"
-msgstr "Sidor per blad"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_cartesian.inx.h:21
 #, fuzzy
 msgid "Subsubdivs. per Y Subdivision"
-msgstr "Sidor per blad"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:1
 #, fuzzy
 msgid "Angle Divisions"
-msgstr "Tidsdivisioner"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:2
 #, fuzzy
 msgid "Angle Divisions at Centre"
-msgstr "Vinkel som etiketten roteras"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:3
 msgid "Centre Dot Diameter [px]"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:4
 #, fuzzy
 msgid "Circumferential Label Outset [px]"
-msgstr "Skjut ut markerade slingor med 1 px"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:5
 #, fuzzy
 msgid "Circumferential Label Size [px]"
-msgstr "Typsnittsstorlek för etikett"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:6
 #, fuzzy
 msgid "Circumferential Labels"
-msgstr "Malletiketter"
+msgstr ""
 
 #: ../share/extensions/grid_polar.inx.h:7
 #: ../src/extension/internal/bitmap/swirl.cpp:38
@@ -1257,36 +1281,44 @@ msgstr "Malletiketter"
 msgid "Degrees"
 msgstr "Grader"
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:8
 msgid "Logarithmic Subdiv. (Base given by entry above)"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:9
 msgid "Major Angular Division Thickness [px]"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:10
 #, fuzzy
 msgid "Major Circular Division Spacing [px]"
-msgstr "horisontell flytt"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:11
 msgid "Major Circular Division Thickness [px]"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:12
 #, fuzzy
 msgid "Major Circular Divisions"
-msgstr "%02i minutdivisioner"
+msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:13
 msgid "Minor Angle Division End 'n' Divs. Before Centre"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:14
 msgid "Minor Angular Division Thickness [px]"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:15
 msgid "Minor Circular Division Thickness [px]"
 msgstr ""
@@ -1311,12 +1343,14 @@ msgstr "Ingen"
 #: ../share/extensions/grid_polar.inx.h:17
 #, fuzzy
 msgid "Polar Grid"
-msgstr "Radieintervall för polärt rutnät:"
+msgstr "Polärt rutnät"
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:19
 msgid "Subdivisions per Major Angular Division"
 msgstr ""
 
+# TODO
 #: ../share/extensions/grid_polar.inx.h:20
 msgid "Subdivisions per Major Circular Division"
 msgstr ""
@@ -1364,12 +1398,12 @@ msgstr "Egen..."
 #: ../share/extensions/guides_creator.inx.h:11
 #, fuzzy
 msgid "Delete existing guides"
-msgstr "Lägg till ytterligare hjälplinjer"
+msgstr "Radera befintliga hjälplinjer"
 
 #: ../share/extensions/guides_creator.inx.h:12
 #, fuzzy
 msgid "Golden ratio"
-msgstr "Proportioner:"
+msgstr "Gyllene snittet"
 
 #: ../share/extensions/guides_creator.inx.h:13
 #, fuzzy
@@ -1379,27 +1413,28 @@ msgstr "Skapa hjälplinjer"
 #: ../share/extensions/guides_creator.inx.h:14
 #, fuzzy
 msgid "Horizontal guide each"
-msgstr "Lägg till horisontell hjälplinje"
+msgstr "Horisontell hjälplinje per"
 
 #: ../share/extensions/guides_creator.inx.h:16
 #, fuzzy
 msgid "Preset"
-msgstr "Förinställning för ljus:"
+msgstr "Förinställning"
 
+# TODO
 #: ../share/extensions/guides_creator.inx.h:18
 #, fuzzy
 msgid "Rule-of-third"
-msgstr "Infoga regel"
+msgstr ""
 
 #: ../share/extensions/guides_creator.inx.h:19
 #, fuzzy
 msgid "Start from edges"
-msgstr "Börja sök i första strängen"
+msgstr "Börja från sidorna"
 
 #: ../share/extensions/guides_creator.inx.h:20
 #, fuzzy
 msgid "Vertical guide each"
-msgstr "Lägg till vertikal hjälplinje"
+msgstr "Vertikal hjälplinje per"
 
 #: ../share/extensions/handles.inx.h:1
 msgid "Draw Handles"
@@ -1407,62 +1442,58 @@ msgstr "Rita handtag"
 
 #: ../share/extensions/hpgl_output.inx.h:1
 msgid "Export to an HP Graphics Language file"
-msgstr ""
+msgstr "Exportera till en HP Graphics Language-fil"
 
 #: ../share/extensions/hpgl_output.inx.h:2
 msgid "HP Graphics Language file (*.hpgl)"
-msgstr ""
+msgstr "HP Graphics Language-fil (*.hpgl)"
 
+# TODO
 #: ../share/extensions/hpgl_output.inx.h:3
 #, fuzzy
 msgid "HPGL Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../share/extensions/hpgl_output.inx.h:4
 #, fuzzy
 msgid "Mirror Y-axis"
-msgstr "Vinkel på X-axeln"
+msgstr "Spegla X-axeln"
 
 #: ../share/extensions/hpgl_output.inx.h:5
 #, fuzzy
 msgid "Pen number"
-msgstr "Pennans vinkel"
+msgstr "Pennummer"
 
 #: ../share/extensions/hpgl_output.inx.h:6
 #, fuzzy
 msgid "Plot invisible layers"
-msgstr "_Förkasta osynliga lager"
+msgstr "Plotta osynliga lager"
 
 #: ../share/extensions/hpgl_output.inx.h:7
 #, fuzzy
 msgid "Resolution (dpi)"
-msgstr "Skärmupplösning (punkter per tum)"
+msgstr "Skärmupplösning (dpi)"
 
 #: ../share/extensions/hpgl_output.inx.h:8
 #, fuzzy
 msgid "X-origin (px)"
-msgstr ""
-"px\n"
-"%\n"
-"följ"
+msgstr "X-origo (px)"
 
 #: ../share/extensions/hpgl_output.inx.h:9
 #, fuzzy
 msgid "Y-origin (px)"
-msgstr ""
-"px\n"
-"%\n"
-"följ"
+msgstr "Y-origo (px)"
 
+# TODO
 #: ../share/extensions/hpgl_output.inx.h:10
 #, fuzzy
 msgid "hpgl output flatness"
-msgstr "TV Utdata format"
+msgstr ""
 
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:1
 #, fuzzy
 msgid "Ask Us a Question"
-msgstr "Visa frågedialog"
+msgstr "Ställ en fråga"
 
 #: ../share/extensions/inkscape_help_commandline.inx.h:1
 msgid "Command Line Options"
@@ -1478,7 +1509,7 @@ msgstr "Förteckning över kortkommandon för tangenter och mus"
 
 #: ../share/extensions/inkscape_help_manual.inx.h:1
 msgid "Inkscape Manual"
-msgstr "Inkscape manual"
+msgstr "Inkscapemanual"
 
 #: ../share/extensions/inkscape_help_relnotes.inx.h:1
 msgid "New in This Version"
@@ -1499,7 +1530,7 @@ msgstr "Duplicera slutslingor"
 #: ../share/extensions/interp.inx.h:2
 #, fuzzy
 msgid "Exponent"
-msgstr "_Exponent:"
+msgstr "Exponent"
 
 #: ../share/extensions/interp.inx.h:4
 msgid "Interpolate"
@@ -1507,25 +1538,25 @@ msgstr "Interpolera"
 
 #: ../share/extensions/interp.inx.h:5
 msgid "Interpolate style"
-msgstr "Interpolera stil"
+msgstr "Interpolationsstil"
 
 #: ../share/extensions/interp.inx.h:6
 msgid "Interpolation method"
-msgstr "Interpolera metod"
+msgstr "Interpolationsmetod"
 
 #: ../share/extensions/interp.inx.h:7
 msgid "Interpolation steps"
-msgstr "Interpolera steg"
+msgstr "Interpolationssteg"
 
 #: ../share/extensions/interp_att_g.inx.h:1
 #, fuzzy
 msgid "Attribute to Interpolate"
-msgstr "Interpolera stil (experimentell)"
+msgstr "Attribut att interpolera"
 
 #: ../share/extensions/interp_att_g.inx.h:3
 #, fuzzy
 msgid "End Value"
-msgstr "Ogiltigt värde ( %d )\n"
+msgstr "Slutvärde"
 
 #: ../share/extensions/interp_att_g.inx.h:4
 #: ../src/ui/dialog/fill-and-stroke.cpp:57
@@ -1535,8 +1566,9 @@ msgstr "Fyllning"
 #: ../share/extensions/interp_att_g.inx.h:5
 #, fuzzy
 msgid "Float Number"
-msgstr "Antal bilder: %d\n"
+msgstr "Flyttal"
 
+# TODO
 #: ../share/extensions/interp_att_g.inx.h:7
 msgid ""
 "If you select \"Other\", you must know the SVG attributes to identify here "
@@ -1551,12 +1583,12 @@ msgstr "Heltal"
 #: ../share/extensions/interp_att_g.inx.h:9
 #, fuzzy
 msgid "Interpolate Attribute in a group"
-msgstr "Användaren finns inte i gruppen"
+msgstr "Interpolera attribut i en grupp"
 
 #: ../share/extensions/interp_att_g.inx.h:11
 #, fuzzy
 msgid "No Unit"
-msgstr "_Tryckenhet:"
+msgstr "Ingen Enhet"
 
 #: ../share/extensions/interp_att_g.inx.h:12
 #: ../src/dialogs/clonetiler.cpp:2615 ../src/dialogs/clonetiler.cpp:2764
@@ -1573,12 +1605,12 @@ msgstr "Annat"
 #: ../share/extensions/interp_att_g.inx.h:14
 #, fuzzy
 msgid "Other Attribute"
-msgstr "CONREF-attribut"
+msgstr "Annat Attribut"
 
 #: ../share/extensions/interp_att_g.inx.h:15
 #, fuzzy
 msgid "Other Attribute type"
-msgstr "\"%s\" är inte en giltig attributtyp"
+msgstr "Annan Attributtyp"
 
 #: ../share/extensions/interp_att_g.inx.h:16
 #: ../share/extensions/render_alphabetsoup.inx.h:4
@@ -1590,18 +1622,20 @@ msgstr "Skala"
 #: ../share/extensions/interp_att_g.inx.h:17
 #, fuzzy
 msgid "Start Value"
-msgstr "Ogiltigt värde ( %d )\n"
+msgstr "Startvärde"
 
 #: ../share/extensions/interp_att_g.inx.h:18
 #: ../share/extensions/polyhedron_3d.inx.h:43
 msgid "Style"
 msgstr "Stil"
 
+# TODO
 #: ../share/extensions/interp_att_g.inx.h:19
 #, fuzzy
 msgid "Tag"
-msgstr "Mär"
+msgstr ""
 
+# TODO
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid ""
 "This effect applies a value for any interpolatable attribute for all "
@@ -1617,28 +1651,31 @@ msgstr "Transformering"
 #: ../share/extensions/interp_att_g.inx.h:22
 #, fuzzy
 msgid "Translate X"
-msgstr "Translatera objekt"
+msgstr "Translatera X"
 
 #: ../share/extensions/interp_att_g.inx.h:23
 #, fuzzy
 msgid "Translate Y"
-msgstr "Translatera objekt"
+msgstr "Translatera Y"
 
 #: ../share/extensions/interp_att_g.inx.h:25
 #, fuzzy
 msgid "Where to apply?"
-msgstr "Sök var:"
+msgstr "Applicera var?"
 
+# remove?
 #: ../share/extensions/interp_att_g.inx.h:27
 #: ../share/extensions/web-set-att.inx.h:28
 #: ../share/extensions/web-transmit-att.inx.h:26
 msgid ""
 msgstr ""
 
+# TODO
 #: ../share/extensions/jessyInk_autoTexts.inx.h:1
 msgid "Auto-Text:"
 msgstr ""
 
+# TODO
 #: ../share/extensions/jessyInk_autoTexts.inx.h:2
 msgid "Auto-texts"
 msgstr ""
@@ -1660,12 +1697,12 @@ msgstr ""
 #: ../share/extensions/jessyInk_autoTexts.inx.h:5
 #, fuzzy
 msgid "None (remove)"
-msgstr "ta bort"
+msgstr "Ingen (tag bort)"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:6
 #, fuzzy
 msgid "Number of slides"
-msgstr "Antal prov per bildpunkt"
+msgstr "Antal sidor"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:7
 #: ../share/extensions/jessyInk_effects.inx.h:12
@@ -1675,16 +1712,16 @@ msgstr "Antal prov per bildpunkt"
 #: ../share/extensions/jessyInk_view.inx.h:7
 #, fuzzy
 msgid "Settings"
-msgstr "Start:"
+msgstr "Inställningar"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:8
 #, fuzzy
 msgid "Slide number"
-msgstr "Pennans vinkel"
+msgstr "Sidonummer"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:9
 msgid "Slide title"
-msgstr ""
+msgstr "Sidans titel"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:10
 msgid ""
@@ -1692,29 +1729,31 @@ msgid ""
 "JessyInk presentation. Please see code.google.com/p/jessyink for more "
 "details."
 msgstr ""
+"Detta tillägg låter er installera, uppdatera och ta bort auto-texter för en "
+"JessyInk-presentation. Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_effects.inx.h:1
 #: ../share/extensions/jessyInk_transitions.inx.h:1
 #, fuzzy
 msgid "Appear"
-msgstr "Bläckpenna"
+msgstr "Uppstå"
 
 #: ../share/extensions/jessyInk_effects.inx.h:2
 #, fuzzy
 msgid "Build-in effect"
-msgstr "Effektkanal"
+msgstr "Bygg-in effekt"
 
 #: ../share/extensions/jessyInk_effects.inx.h:3
 #, fuzzy
 msgid "Build-out effect"
-msgstr "Ingen effekt"
+msgstr "Bygg-ut effekt"
 
 #: ../share/extensions/jessyInk_effects.inx.h:4
 #: ../share/extensions/jessyInk_transitions.inx.h:3
 #: ../share/extensions/jessyInk_view.inx.h:2
 #, fuzzy
 msgid "Duration in seconds:"
-msgstr "Hämtningen är färdig"
+msgstr "Varaktighet i sekunder:"
 
 #: ../share/extensions/jessyInk_effects.inx.h:5
 #, fuzzy
@@ -1725,24 +1764,25 @@ msgstr "Effekter"
 #: ../share/extensions/jessyInk_transitions.inx.h:4
 #, fuzzy
 msgid "Fade"
-msgstr "Sidor"
+msgstr "Avmättning"
 
 #: ../share/extensions/jessyInk_effects.inx.h:9
 #, fuzzy
 msgid "None (default)"
-msgstr "(standard)"
+msgstr "Ingen (standard)"
 
 #: ../share/extensions/jessyInk_effects.inx.h:10
 #: ../share/extensions/jessyInk_view.inx.h:5
 #, fuzzy
 msgid "Order:"
-msgstr "Ordning"
+msgstr "Ordning:"
 
+# TODO
 #: ../share/extensions/jessyInk_effects.inx.h:11
 #: ../share/extensions/jessyInk_transitions.inx.h:8
 #, fuzzy
 msgid "Pop"
-msgstr "Överst"
+msgstr ""
 
 #: ../share/extensions/jessyInk_effects.inx.h:13
 msgid ""
@@ -1750,6 +1790,8 @@ msgid ""
 "JessyInk presentation. Please see code.google.com/p/jessyink for more "
 "details."
 msgstr ""
+"Detta tillägg låter er installera, uppdatera och ta bort effekter för en "
+"JessyInk-presentation. Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #. _settings->add_checkbutton(false, SP_ATTR_STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
 #: ../share/extensions/jessyInk_effects.inx.h:14
@@ -1767,19 +1809,21 @@ msgid ""
 "Creates a zip file containing pdfs or pngs of all slides of a JessyInk "
 "presentation."
 msgstr ""
+"Skapar en zip-fil med pdf- och png-filer för alla sidor av en "
+"JessyInk-presentation."
 
 #: ../share/extensions/jessyInk_export.inx.h:3
 msgid "JessyInk zipped pdf or png output"
-msgstr ""
+msgstr "JessyInk zippad pdf eller png output"
 
 #: ../share/extensions/jessyInk_export.inx.h:4
 msgid "JessyInk zipped pdf or png output (*.zip)"
-msgstr ""
+msgstr "JessyInk zipped pdf eller png output (*.zip)"
 
 #: ../share/extensions/jessyInk_export.inx.h:5
 #, fuzzy
 msgid "PDF"
-msgstr "PDF 1.4"
+msgstr ""
 
 #: ../share/extensions/jessyInk_export.inx.h:6
 msgid "PNG"
@@ -1796,10 +1840,13 @@ msgid ""
 "an export layer in your browser. Please see code.google.com/p/jessyink for "
 "more details."
 msgstr ""
+"Detta tillägg låter er exportera en JessyInk-presentation efter att ni skapat "
+"ett export-lager i er utforskare. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_install.inx.h:2
 msgid "Install/update"
-msgstr ""
+msgstr "Installera/uppdatera"
 
 #: ../share/extensions/jessyInk_install.inx.h:4
 msgid ""
@@ -1807,239 +1854,247 @@ msgid ""
 "to turn your SVG file into a presentation. Please see code.google.com/p/"
 "jessyink for more details."
 msgstr ""
+"Detta tillägg låter er installera eller uppdatera exportera en JessyInk-presentation efter att ni skapat "
+"ett export-lager i er utforskare. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:1
 #, fuzzy
 msgid "Add slide:"
-msgstr "vänster sida"
+msgstr "Använd sida:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:2
 #, fuzzy
 msgid "Back (with effects):"
-msgstr "Slingeffekter..."
+msgstr "Tillbaka (med effekter):"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:3
 msgid "Back (without effects):"
-msgstr ""
+msgstr "Tillbaka (utan effekter):"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:4
 #, fuzzy
 msgid "Decrease number of columns:"
-msgstr "Antal kolumner"
+msgstr "Minska antal kolumner:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:5
 #, fuzzy
 msgid "Drawing mode"
-msgstr "Teckning"
+msgstr "Ritläge"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:6
 #, fuzzy
 msgid "First slide:"
-msgstr "Först markerad"
+msgstr "Första sida:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:8
 #, fuzzy
 msgid "Increase number of columns:"
-msgstr "Antal kolumner"
+msgstr "Öka antal kolumner:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:9
 #, fuzzy
 msgid "Index mode"
-msgstr "Dra in nod"
+msgstr "Indexläge"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:11
 #, fuzzy
 msgid "Key bindings"
-msgstr "_Teckning"
+msgstr "Snabbtangenter"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:12
 #, fuzzy
 msgid "Last slide:"
-msgstr "Klista in storlek"
+msgstr "Sista sida:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:13
 #, fuzzy
 msgid "Next (with effects):"
-msgstr "Neonljuseffekt"
+msgstr "Nästa (med effekter):"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:14
 #, fuzzy
 msgid "Next (without effects):"
-msgstr "Neonljuseffekt"
+msgstr "Nästa (utan effekter):"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:15
 #, fuzzy
 msgid "Next page:"
-msgstr "Välj sida:"
+msgstr "Nästa sida:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:16
 #, fuzzy
 msgid "Previous page:"
-msgstr "Föregående effekt"
+msgstr "Föregående sida:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:17
 #, fuzzy
 msgid "Reset timer:"
-msgstr "_Centrera"
+msgstr "Återställ timer:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:18
 msgid "Select the slide above:"
-msgstr ""
+msgstr "Markera sidan ovan:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:19
 msgid "Select the slide below:"
-msgstr ""
+msgstr "Markera sidan under:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:20
 #, fuzzy
 msgid "Select the slide to the left:"
-msgstr "Välj fil att spara till"
+msgstr "Markera sidan till vänster:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:21
 #, fuzzy
 msgid "Select the slide to the right:"
-msgstr "Zooma för att passa hela sidan"
+msgstr "Markera sidan till höger:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:22
 #, fuzzy
 msgid "Set duration:"
-msgstr "Mättnad"
+msgstr "Ange varaktighet:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:23
 #, fuzzy
 msgid "Set number of columns to default:"
-msgstr "Antal kolumner"
+msgstr "Sätt antal kolumner till standard:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:24
 #, fuzzy
 msgid "Set path color to black:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till svart:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:25
 #, fuzzy
 msgid "Set path color to blue:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till blå:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:26
 #, fuzzy
 msgid "Set path color to cyan:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till cyan:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:27
 #, fuzzy
 msgid "Set path color to green:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till grön:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:28
 #, fuzzy
 msgid "Set path color to magenta:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till magenta:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:29
 #, fuzzy
 msgid "Set path color to orange:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till orange:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:30
 #, fuzzy
 msgid "Set path color to red:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till röd:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:31
 #, fuzzy
 msgid "Set path color to white:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till vit:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:32
 #, fuzzy
 msgid "Set path color to yellow:"
-msgstr "Sätt linjefärg till odefinierad"
+msgstr "Sätt slingfärg till gul:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:33
 #, fuzzy
 msgid "Set path width to 1:"
-msgstr "Ange bredd:"
+msgstr "Sätt slingbredd till 1:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:34
 #, fuzzy
 msgid "Set path width to 3:"
-msgstr "Ange bredd:"
+msgstr "Sätt slingbredd till 3:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:35
 #, fuzzy
 msgid "Set path width to 5:"
-msgstr "Ange bredd:"
+msgstr "Sätt slingbredd till 5:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:36
 #, fuzzy
 msgid "Set path width to 7:"
-msgstr "Ange bredd:"
+msgstr "Sätt slingbredd till 7:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:37
 #, fuzzy
 msgid "Set path width to 9:"
-msgstr "Ange bredd:"
+msgstr "Sätt slingbredd till 9:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:38
 #, fuzzy
 msgid "Set path width to default:"
-msgstr "Ange som standard"
+msgstr "Sätt slingbredd till standard:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:39
 #, fuzzy
 msgid "Slide mode"
-msgstr "Färgläge"
+msgstr "Slingläge"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:40
 #, fuzzy
 msgid "Switch to drawing mode:"
-msgstr "Ändra visningsläge till Normal"
+msgstr "Växla till ritläge:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:41
 #, fuzzy
 msgid "Switch to index mode:"
-msgstr "Växla till nästa lager"
+msgstr "Växla till indexläge:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:42
 #, fuzzy
 msgid "Switch to slide mode:"
-msgstr "Ändra visningsläge till Normal"
+msgstr "Växla till sidoläge:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:43
 msgid ""
 "This extension allows you customise the key bindings JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg låter er anpassa snabbtangenterna som JessyInk använder. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:44
 msgid "Toggle progress bar:"
-msgstr ""
+msgstr "Växla förloppsindikator:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:45
 #, fuzzy
 msgid "Undo last path segment:"
-msgstr "Ångra senaste åtgärd"
+msgstr "Ångra senaste slingsegmentet:"
 
+# TODO
 #: ../share/extensions/jessyInk_masterSlide.inx.h:2
 msgid "If no layer name is supplied, the master slide is unset."
-msgstr ""
+msgstr "Om inget lagernamn är angivet, förblir huvudsidan odefinierad."
 
 #: ../share/extensions/jessyInk_masterSlide.inx.h:4
 #, fuzzy
 msgid "Master slide"
-msgstr "Klista in storlek"
+msgstr "Huvudsida"
 
 #: ../share/extensions/jessyInk_masterSlide.inx.h:5
 #: ../share/extensions/jessyInk_transitions.inx.h:7
 #, fuzzy
 msgid "Name of layer:"
-msgstr "Byt namn på lager"
+msgstr "Lagrets namn:"
 
 #: ../share/extensions/jessyInk_masterSlide.inx.h:7
 msgid ""
 "This extension allows you to change the master slide JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg låter er ändra på huvudsidan som JessyInk använder. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #. File
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:1
@@ -2051,33 +2106,35 @@ msgstr "Standardalternativ"
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:2
 #, fuzzy
 msgid "Dragging/zoom"
-msgstr "Teckning"
+msgstr "Släpa/zooma"
 
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:5
 #, fuzzy
 msgid "Mouse handler"
-msgstr "Flytta handtag"
+msgstr "Mushanterare"
 
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:6
 #, fuzzy
 msgid "Mouse settings:"
-msgstr "Sidinställningar"
+msgstr "Musinställningar:"
 
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:7
 #, fuzzy
 msgid "No-click"
-msgstr "vid klick"
+msgstr "Ingen-klick"
 
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:8
 msgid ""
 "This extension allows you customise the mouse handler JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg låter er anpassa mushanteraren som JessyInk använder. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_summary.inx.h:3
 #, fuzzy
 msgid "Summary"
-msgstr "_Symmetri"
+msgstr "Sammanfattning"
 
 #: ../share/extensions/jessyInk_summary.inx.h:4
 msgid ""
@@ -2085,45 +2142,51 @@ msgid ""
 "effects and transitions contained in this SVG file. Please see code.google."
 "com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg låter er hämta information om JessyInk-skriptet samt "
+"effekter och övergångar i denna SVG-fil. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_transitions.inx.h:10
 msgid ""
 "This extension allows you to change the transition JessyInk uses for the "
 "selected layer. Please see code.google.com/p/jessyink for more details."
 msgstr ""
+"Detta tillägg låter er ändra övergången som JessyInk använder för det valda lagret. "
+"Vänligen se code.google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_transitions.inx.h:11
 msgid "Transition in effect"
-msgstr ""
+msgstr "Övergång i effekt"
 
 #: ../share/extensions/jessyInk_transitions.inx.h:12
 #, fuzzy
 msgid "Transition out effect"
-msgstr "Flytta slingeffekt upp"
+msgstr "Övergång ut-effekt"
 
 #: ../share/extensions/jessyInk_transitions.inx.h:13
 #, fuzzy
 msgid "Transitions"
-msgstr "Transformering"
+msgstr "Övergång"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:4
 msgid "Please select the parts of JessyInk you want to uninstall/remove."
-msgstr ""
+msgstr "Vänligen välj den del av JessyInk ni vill avinstallera/ta bort."
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:5
 #, fuzzy
 msgid "Remove auto-texts"
-msgstr "Penseldrags_täthet:"
+msgstr "Ta bort auto-texter"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:6
 #, fuzzy
 msgid "Remove effects"
-msgstr "Ta bort slingeffekt"
+msgstr "Ta bort effekter"
 
+# TODO
 #: ../share/extensions/jessyInk_uninstall.inx.h:7
 #, fuzzy
 msgid "Remove master slide assignment"
-msgstr "Ta bort mask från markering"
+msgstr "Ta bort huvud-sidetilldelning"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:8
 #, fuzzy
