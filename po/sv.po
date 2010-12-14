@@ -13615,6 +13615,8 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> to finish the path"
 msgstr ""
+"<b>Kurvsegment</b>: vinkel %3.2f&#176;, avstånd %s; med <b>Ctrl</b> för att "
+"snäppa vinkel, <b>Retur</b> för att avsluta slingan"
 
 #: ../src/pen-context.cpp:1286
 #, c-format
@@ -13622,6 +13624,8 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> to finish the path"
 msgstr ""
+"<b>Linjesegment</b>: vinkel %3.2f&#176;, avstånd %s; med <b>Ctrl</b> för att "
+"snäppa vinkel, <b>Retur</b> för att avsluta slingan"
 
 #: ../src/pen-context.cpp:1304
 #, c-format
@@ -13629,6 +13633,8 @@ msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr ""
+"<b>Kurvhandtag</b>: vinkel %3.2f&#176;, längd %s; med <b>Ctrl</b> för att "
+"snäppa vinkel"
 
 #: ../src/pen-context.cpp:1326
 #, c-format
@@ -13636,6 +13642,8 @@ msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
 "b> to snap angle, with <b>Shift</b> to move this handle only"
 msgstr ""
+"<b>Kurvhandtag, symmetriskt</b>: vinkel %3.2f&#176;, längd %s; med <b>Ctrl</b> för att "
+"snäppa vinkel, med <b>Skift</b> för att endast flytta handtaget"
 
 #: ../src/pen-context.cpp:1327
 #, c-format
@@ -13643,11 +13651,13 @@ msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle, with <b>Shift</b> to move this handle only"
 msgstr ""
+"<b>Kurvhandtag</b>: vinkel %3.2f&#176;, längd %s; med <b>Ctrl</b> för att "
+"snäppa vinkel, med <b>Skift</b> för att endast flytta handtaget"
 
 #: ../src/pen-context.cpp:1375
 #, fuzzy
 msgid "Drawing finished"
-msgstr "Hämtningen är färdig"
+msgstr "Ritande avslutat"
 
 #: ../src/pencil-context.cpp:393
 msgid "<b>Release</b> here to close and finish the path."
@@ -13656,7 +13666,7 @@ msgstr "<b>Släpp</b> här för att stänga och avsluta slingan."
 #: ../src/pencil-context.cpp:399
 #, fuzzy
 msgid "Drawing a freehand path"
-msgstr "Sökvägen är inte absolut"
+msgstr "Ritande av en frihandsslinga"
 
 #: ../src/pencil-context.cpp:404
 msgid "<b>Drag</b> to continue the path from this point."
@@ -13666,7 +13676,7 @@ msgstr "<b>Dra</b> för att fortsätta slingan från denna punkt."
 #: ../src/pencil-context.cpp:495
 #, fuzzy
 msgid "Finishing freehand"
-msgstr "Slutför skrivning"
+msgstr "Slutför frihand"
 
 #: ../src/pencil-context.cpp:601
 msgid ""
@@ -13679,15 +13689,15 @@ msgstr ""
 #: ../src/pencil-context.cpp:629
 #, fuzzy
 msgid "Finishing freehand sketch"
-msgstr "Rita frihandslinje"
+msgstr "Avslutar frihandsskiss"
 
 #: ../src/persp3d.cpp:345
 msgid "Toggle vanishing point"
-msgstr "Växla typ på flyktpunkt"
+msgstr "Växla försvinnande punkt"
 
 #: ../src/persp3d.cpp:356
 msgid "Toggle multiple vanishing points"
-msgstr ""
+msgstr "Växla multipla försvinnande punkter"
 
 #: ../src/preferences-skeleton.h:98
 msgid "Dip pen"
@@ -13757,12 +13767,12 @@ msgstr "Inställningsfilen %s kunde ej läsas."
 #: ../src/preferences.cpp:231
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
-msgstr ""
+msgstr "Inställningsfilen %s är ej ett giltigt XML-dokument."
 
 #: ../src/preferences.cpp:240
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
-msgstr "Filen %s är inte en giltig Inkscape-inställningsfil"
+msgstr "Filen %s är inte en giltig Inkscape-inställningsfil."
 
 #: ../src/rdf.cpp:172
 msgid "CC Attribution"
@@ -13790,16 +13800,16 @@ msgstr "CC Erkännande-IckeKommersiell-IngaBearbetningar"
 
 #: ../src/rdf.cpp:202
 msgid "Public Domain"
-msgstr "Public Domain"
+msgstr "Publik Domän"
 
 #: ../src/rdf.cpp:207
 msgid "FreeArt"
-msgstr ""
+msgstr "FreeArt"
 
 #: ../src/rdf.cpp:212
 #, fuzzy
 msgid "Open Font License"
-msgstr "Öppna typsnittsvalsdialogen"
+msgstr "Open Font License"
 
 #: ../src/rdf.cpp:229
 msgid "Title"
@@ -13807,7 +13817,7 @@ msgstr "Titel"
 
 #: ../src/rdf.cpp:230
 msgid "Name by which this document is formally known."
-msgstr "Det formella namnet på dokumentet"
+msgstr "Det formella namnet på dokumentet."
 
 #: ../src/rdf.cpp:232
 msgid "Date"
@@ -13823,12 +13833,12 @@ msgstr "Format"
 
 #: ../src/rdf.cpp:236
 msgid "The physical or digital manifestation of this document (MIME type)."
-msgstr ""
+msgstr "Den fysiska eller digitala yttringen av detta dokument (MIME-typ)."
 
 #: ../src/rdf.cpp:239
 #, fuzzy
 msgid "Type of document (DCMI Type)."
-msgstr "Dokumenttypdefinition"
+msgstr "Dokumenttyp (DCMI-typ)."
 
 #: ../src/rdf.cpp:242
 msgid "Creator"
@@ -13864,11 +13874,11 @@ msgstr ""
 
 #: ../src/rdf.cpp:252
 msgid "Identifier"
-msgstr "ID"
+msgstr "Identifierare"
 
 #: ../src/rdf.cpp:253
 msgid "Unique URI to reference this document."
-msgstr "Unikt URI för att referera till detta dokument"
+msgstr "Unikt URI för att referera till detta dokument."
 
 #: ../src/rdf.cpp:255 ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1438
 msgid "Source"
@@ -13876,7 +13886,7 @@ msgstr "Källa"
 
 #: ../src/rdf.cpp:256
 msgid "Unique URI to reference the source of this document."
-msgstr "Unikt URI som refererar till källan för detta dokument"
+msgstr "Unikt URI som refererar till källan för detta dokument."
 
 #: ../src/rdf.cpp:258
 msgid "Relation"
@@ -13907,7 +13917,7 @@ msgstr "Nyckelord"
 msgid ""
 "The topic of this document as comma-separated key words, phrases, or "
 "classifications."
-msgstr "Dokumentets ämnesinnehåll som nyckelord, fraser eller klassificeringar"
+msgstr "Dokumentets ämnesinnehåll som nyckelord, fraser eller klassificeringar."
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
@@ -13917,7 +13927,7 @@ msgstr "Täckning"
 
 #: ../src/rdf.cpp:270
 msgid "Extent or scope of this document."
-msgstr ""
+msgstr "Omfång för detta dokument."
 
 #: ../src/rdf.cpp:273 ../src/ui/widget/page-sizer.cpp:245
 msgid "Description"
@@ -13925,7 +13935,7 @@ msgstr "Beskrivning"
 
 #: ../src/rdf.cpp:274
 msgid "A short account of the content of this document."
-msgstr ""
+msgstr "En kort beskrivning av innehållet i detta dokument."
 
 #. FIXME: need to handle 1 agent per line of input
 #: ../src/rdf.cpp:278
@@ -13957,7 +13967,7 @@ msgstr "Fragment"
 
 #: ../src/rdf.cpp:290
 msgid "XML fragment for the RDF 'License' section."
-msgstr ""
+msgstr "XML-fragment för RDF 'License'-avdelning."
 
 #: ../src/rect-context.cpp:368
 msgid ""
@@ -14065,36 +14075,36 @@ msgstr ""
 #: ../src/select-context.cpp:902
 #, fuzzy
 msgid "Selected object is not a group. Cannot enter."
-msgstr "Markerat objekt är <b>inte en slinga</b>, kan inte förskjuta."
+msgstr "Markerat objekt är inte en grupp. Kan inte gå in i."
 
 #: ../src/selection-chemistry.cpp:304
 #, fuzzy
 msgid "Delete text"
-msgstr "Ta bort text"
+msgstr "Radera text"
 
 #: ../src/selection-chemistry.cpp:312
 msgid "<b>Nothing</b> was deleted."
-msgstr "<b>Inget</b> blev bort taget."
+msgstr "<b>Inget</b> blev raderat."
 
 #: ../src/selection-chemistry.cpp:330 ../src/text-context.cpp:1002
 #: ../src/ui/dialog/swatches.cpp:220 ../src/widgets/toolbox.cpp:1408
 #: ../src/widgets/toolbox.cpp:6174
 msgid "Delete"
-msgstr "Ta bort"
+msgstr "Radera"
 
 #: ../src/selection-chemistry.cpp:358
 msgid "Select <b>object(s)</b> to duplicate."
-msgstr "Markera <b>objekt</b> att dubblera."
+msgstr "Markera <b>objekt</b> att klona."
 
 #: ../src/selection-chemistry.cpp:450
 #, fuzzy
 msgid "Delete all"
-msgstr "_Ta bort alla"
+msgstr "Radera alla"
 
 #: ../src/selection-chemistry.cpp:636
 #, fuzzy
 msgid "Select <b>some objects</b> to group."
-msgstr "Välj den grupp med taggar som du vill använda"
+msgstr "Markera <b>några objekt</b> att gruppera."
 
 #: ../src/selection-chemistry.cpp:651 ../src/selection-describer.cpp:53
 msgid "Group"
@@ -14102,7 +14112,7 @@ msgstr "Grupp"
 
 #: ../src/selection-chemistry.cpp:665
 msgid "Select a <b>group</b> to ungroup."
-msgstr "Markera en <b>grupp</b> att avgruppera"
+msgstr "Markera en <b>grupp</b> att avgruppera."
 
 #: ../src/selection-chemistry.cpp:706
 msgid "<b>No groups</b> to ungroup in the selection."
@@ -14115,7 +14125,7 @@ msgstr "Avgruppera"
 #: ../src/selection-chemistry.cpp:802
 #, fuzzy
 msgid "Select <b>object(s)</b> to raise."
-msgstr "Markera <b>objekt</b> att höja till toppen."
+msgstr "Markera <b>objekt</b> att höja."
 
 #: ../src/selection-chemistry.cpp:808 ../src/selection-chemistry.cpp:870
 #: ../src/selection-chemistry.cpp:904 ../src/selection-chemistry.cpp:968
@@ -14130,7 +14140,7 @@ msgstr ""
 #: ../src/selection-chemistry.cpp:850
 #, fuzzy
 msgid "undo action|Raise"
-msgstr "Ångra den senaste åtgärden"
+msgstr "undo action|Höj"
 
 #: ../src/selection-chemistry.cpp:862
 msgid "Select <b>object(s)</b> to raise to top."
@@ -14179,23 +14189,23 @@ msgstr "Flytta slingeffekt upp"
 
 #: ../src/selection-chemistry.cpp:1108
 msgid "Select <b>object(s)</b> to remove live path effects from."
-msgstr ""
+msgstr "Markera <b>objekt</b> att ta bort slingeffekter från."
 
 #: ../src/selection-chemistry.cpp:1120
 #, fuzzy
 msgid "Remove live path effect"
-msgstr "Flytta slingeffekt upp"
+msgstr "Ta bort slingeffekt"
 
 #: ../src/selection-chemistry.cpp:1131
 #, fuzzy
 msgid "Select <b>object(s)</b> to remove filters from."
-msgstr "Höj markerade objekt överst"
+msgstr "Markera <b>objekt</b> att ta bort filter från."
 
 #: ../src/selection-chemistry.cpp:1141
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1342
 #, fuzzy
 msgid "Remove filter"
-msgstr "Namnlöst filter"
+msgstr "Ta bort filter"
 
 #: ../src/selection-chemistry.cpp:1150
 msgid "Paste size"
@@ -14249,12 +14259,12 @@ msgstr "Rotera"
 #: ../src/selection-chemistry.cpp:1627
 #, fuzzy
 msgid "Rotate by pixels"
-msgstr "Välj bildpunkter efter"
+msgstr "Rotera per bildpunkt"
 
 #: ../src/selection-chemistry.cpp:1682
 #, fuzzy
 msgid "Scale by whole factor"
-msgstr "Slumpa den horisontella skalningen med detta procenttal"
+msgstr "Skala per hel faktor"
 
 #: ../src/selection-chemistry.cpp:1697
 msgid "Move vertically"
@@ -14272,45 +14282,45 @@ msgstr "Flytta"
 #: ../src/selection-chemistry.cpp:1723
 #, fuzzy
 msgid "Move vertically by pixels"
-msgstr "Flytta runt bildpunkter slumpmässigt"
+msgstr "Flytta vertikalt per bildpunkter"
 
 #: ../src/selection-chemistry.cpp:1726
 #, fuzzy
 msgid "Move horizontally by pixels"
-msgstr "Flytta runt bildpunkter slumpmässigt"
+msgstr "Flytta horisontellt per bildpunkter"
 
 #: ../src/selection-chemistry.cpp:1854
 msgid "The selection has no applied path effect."
-msgstr "Markeringen har inga applicerade slingeffekter"
+msgstr "Markeringen har inga applicerade slingeffekter."
 
 #: ../src/selection-chemistry.cpp:2059
 msgid "action|Clone"
-msgstr "Klona"
+msgstr "action|Klona"
 
 #: ../src/selection-chemistry.cpp:2075
 #, fuzzy
 msgid "Select <b>clones</b> to relink."
-msgstr "Välj en fil att öppna"
+msgstr "Markera <b>kloner</b> att återlänka."
 
 #: ../src/selection-chemistry.cpp:2082
 #, fuzzy
 msgid "Copy an <b>object</b> to clipboard to relink clones to."
-msgstr "Markera ett <b>objekt</b> at klona."
+msgstr "Markera ett <b>objekt</b> att återlänka kloner till."
 
 #: ../src/selection-chemistry.cpp:2106
 #, fuzzy
 msgid "<b>No clones to relink</b> in the selection."
-msgstr "<b>Inga kloner att avlänka</b> i markeringen."
+msgstr "<b>Inga kloner att återlänka</b> i markeringen."
 
 #: ../src/selection-chemistry.cpp:2109
 #, fuzzy
 msgid "Relink clone"
-msgstr "Klona bild"
+msgstr "Återlänka klon"
 
 #: ../src/selection-chemistry.cpp:2123
 #, fuzzy
 msgid "Select <b>clones</b> to unlink."
-msgstr "Markera en <b>klon</b> att avlänka."
+msgstr "Markera <b>kloner</b> att avlänka."
 
 #: ../src/selection-chemistry.cpp:2172
 msgid "<b>No clones to unlink</b> in the selection."
@@ -14319,7 +14329,7 @@ msgstr "<b>Inga kloner att avlänka</b> i markeringen."
 #: ../src/selection-chemistry.cpp:2176
 #, fuzzy
 msgid "Unlink clone"
-msgstr "Markera en <b>klon</b> att avlänka."
+msgstr "Avlänka klon"
 
 #: ../src/selection-chemistry.cpp:2189
 msgid ""
