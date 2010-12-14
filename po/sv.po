@@ -11693,7 +11693,7 @@ msgstr "Position för avskiljaren i bildpunkter"
 #: ../src/libgdl/gdl-dock-placeholder.c:143
 #, fuzzy
 msgid "Sticky"
-msgstr "Klistrig"
+msgstr "Klibbig"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:144
 #, fuzzy
@@ -12300,77 +12300,83 @@ msgstr "Räknat i linjebredd"
 
 #: ../src/live_effects/lpe-knot.cpp:332
 msgid "Consider 'Interruption width' as a ratio of stroke width"
-msgstr "Se 'Interruption width' som förhållandet i linjebredd"
+msgstr "Se 'Mellanrumsbredd' som förhållandet i linjebredd"
 
 #: ../src/live_effects/lpe-knot.cpp:333
 msgid "Add the stroke width to the interruption size"
-msgstr ""
+msgstr "Lägg till linjebredd till mellanrumsbredd"
 
 #: ../src/live_effects/lpe-knot.cpp:334
 #, fuzzy
 msgid "Crossing path stroke width"
-msgstr "gånger nuvarande linjebredd"
+msgstr "Korsande slingas linjebredd"
 
 #: ../src/live_effects/lpe-knot.cpp:334
 msgid "Add crossed stroke width to the interruption size"
-msgstr ""
+msgstr "Lägg till korsad linjebredd till mellanrumsbredd"
 
+# TODO
 #: ../src/live_effects/lpe-knot.cpp:335
 #, fuzzy
 msgid "Switcher size"
-msgstr "Bildstorlek"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-knot.cpp:335
 #, fuzzy
 msgid "Orientation indicator/switcher size"
 msgstr "Storlek på kryss- eller radioindikator"
 
+# TODO
 #: ../src/live_effects/lpe-knot.cpp:336
 #, fuzzy
 msgid "Crossing Signs"
-msgstr "_Kopplar ifrån"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-knot.cpp:336
 #, fuzzy
 msgid "Crossings signs"
-msgstr "_Kopplar ifrån"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-knot.cpp:347
 msgid "Drag to select a crossing, click to flip it"
 msgstr ""
 
+# TODO
 #. / @todo Is this the right verb?
 #: ../src/live_effects/lpe-knot.cpp:640
 #, fuzzy
 msgid "Change knot crossing"
-msgstr "Ändra förbindelseavstånd"
+msgstr ""
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:61
 #, fuzzy
 msgid "Pattern source"
-msgstr "källkodspaket"
+msgstr "Mönsterkälla"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:61
 msgid "Path to put along the skeleton path"
-msgstr ""
+msgstr "Slinga att lägga längs skelettslingan"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:62
 #, fuzzy
 msgid "Pattern copies"
-msgstr "Anta_l kopior:"
+msgstr "Mönsterkopior"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:62
 msgid "How many pattern copies to place along the skeleton path"
-msgstr ""
+msgstr "Hur många mönsterkopier att placera längs skelltslinga"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:64
 #, fuzzy
 msgid "Width of the pattern"
-msgstr "GIMP-mönster"
+msgstr "Bredd för mönstret"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "Scale the width of the pattern in units of its length"
-msgstr ""
+msgstr "Skala bredden för mönstret i längdenheter"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:68
 #, fuzzy
@@ -12383,75 +12389,86 @@ msgid ""
 "Space between copies of the pattern. Negative values allowed, but are "
 "limited to -90% of pattern width."
 msgstr ""
+"Mellanrum mellan kopior av mönstret. Negativa värden är tillåtna, men "
+"begränsade till -90% av mönstrets bredd."
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:74
 #, fuzzy
 msgid "Offsets in unit of pattern size"
-msgstr "Objekttransformering"
+msgstr "Förskjutning, räknat i mönsterstorlekar"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:75
 msgid ""
 "Spacing, tangential and normal offset are expressed as a ratio of width/"
 "height"
 msgstr ""
+"Mellanrum, tangentiell och vinkelrät förskjutning uttrycks i förhållandet "
+"bredd/höjd"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:77
 msgid "Rotate pattern 90 deg before applying"
-msgstr ""
+msgstr "Rotera mönstret 90 grader innan tilldelning"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:79
 #, fuzzy
 msgid "Fuse nearby ends"
-msgstr "Bitmappen avslutades oväntat."
+msgstr "Sammanfoga närliggande slut"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:79
 msgid "Fuse ends closer than this number. 0 means don't fuse."
-msgstr ""
+msgstr "Sammanfoga slut som ligger närmre än detta avstånd. 0 blockerar sammanfogning."
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 #, fuzzy
 msgid "Frequency randomness"
-msgstr "Omstartsfrekvens (rader):"
+msgstr "Frekvensslumpning"
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 msgid "Variation of distance between hatches, in %."
 msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
 msgid "Growth"
-msgstr ""
+msgstr "Tillväxt"
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
 #, fuzzy
 msgid "Growth of distance between hatches."
-msgstr "Distans mellan vertikala rasterlinjer"
+msgstr ""
 
+# TODO
 #. FIXME: top/bottom names are inverted in the UI/svg and in the code!!
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
 msgid "Half-turns smoothness: 1st side, in"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
 msgid ""
 "Set smoothness/sharpness of path when reaching a 'bottom' half-turn. "
 "0=sharp, 1=default"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 #, fuzzy
 msgid "1st side, out"
-msgstr "FEL: ej i sekvens."
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 msgid ""
 "Set smoothness/sharpness of path when leaving a 'bottom' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:231
 #, fuzzy
 msgid "2nd side, in"
-msgstr "Listar filer i '%s'..."
+msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:231
 msgid ""
@@ -12459,125 +12476,149 @@ msgid ""
 "1=default"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:232
 #, fuzzy
 msgid "2nd side, out"
-msgstr "FEL: ej i sekvens."
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:232
 msgid ""
 "Set smoothness/sharpness of path when leaving a 'top' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Magnitude jitter: 1st side"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Randomly moves 'bottom' half-turns to produce magnitude variations."
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
 #, fuzzy
 msgid "2nd side"
-msgstr "vänster sida"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 msgid "Randomly moves 'top' half-turns to produce magnitude variations."
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid "Parallelism jitter: 1st side"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid ""
 "Add direction randomness by moving 'bottom' half-turns tangentially to the "
 "boundary."
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 msgid ""
 "Add direction randomness by randomly moving 'top' half-turns tangentially to "
 "the boundary."
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:237
 #, fuzzy
 msgid "Variance: 1st side"
-msgstr "Sidor per _blad:"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:237
 msgid "Randomness of 'bottom' half-turns smoothness"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
 msgid "Randomness of 'top' half-turns smoothness"
 msgstr ""
 
+# TODO
 #.
 #: ../src/live_effects/lpe-rough-hatches.cpp:240
 #, fuzzy
 msgid "Generate thick/thin path"
-msgstr "Skapa nytt SVG-dokument"
+msgstr "Skapa tjock/tunn slingas"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:240
 #, fuzzy
 msgid "Simulate a stroke of varying width"
-msgstr "gånger nuvarande linjebredd"
+msgstr "Simulera ett penseldrag med varierande tjocklek"
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 #, fuzzy
 msgid "Bend hatches"
-msgstr "Böj efter kurva"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Add a global bend to the hatches (slower)"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:242
 msgid "Thickness: at 1st side"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:242
 msgid "Width at 'bottom' half-turns"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:243
 #, fuzzy
 msgid "at 2nd side"
-msgstr "Sidor per _blad:"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:243
 msgid "Width at 'top' half-turns"
 msgstr ""
 
+# TODO
 #.
 #: ../src/live_effects/lpe-rough-hatches.cpp:245
 msgid "from 2nd to 1st side"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:245
 #, fuzzy
 msgid "Width from 'top' to 'bottom'"
 msgstr "Vertikal justering, från 0 (överst) till 1 (nederst)"
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:246
 msgid "from 1st to 2nd side"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:246
 #, fuzzy
 msgid "Width from 'bottom' to 'top'"
-msgstr "Vertikal justering, från 0 (överst) till 1 (nederst)"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:248
 #, fuzzy
 msgid "Hatches width and dir"
-msgstr "Lås bredd och höjd"
+msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:248
 msgid "Defines hatches frequency and direction"
@@ -12588,13 +12629,14 @@ msgstr ""
 #: ../src/live_effects/lpe-rough-hatches.cpp:251
 #, fuzzy
 msgid "Global bending"
-msgstr "Globala funktioner"
+msgstr "Global böjning"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:251
 msgid ""
 "Relative position to a reference point defines global bending direction and "
 "amount"
 msgstr ""
+"Relativ position till referenspunkt anger global böjningsriktning och mängd"
 
 #: ../src/live_effects/lpe-ruler.cpp:29 ../src/live_effects/lpe-ruler.cpp:37
 msgid "Both"
@@ -12618,162 +12660,174 @@ msgstr "Avståndsenhet"
 msgid "Distance between successive ruler marks"
 msgstr "Ställ in avståndet mellan vertikala rutnätslinjer"
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:45
 #, fuzzy
 msgid "Major length"
-msgstr "Nyckel_längd:"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:45
 msgid "Length of major ruler marks"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:46
 #, fuzzy
 msgid "Minor length"
-msgstr "Nyckel_längd:"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:46
 msgid "Length of minor ruler marks"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:47
 #, fuzzy
 msgid "Major steps"
-msgstr "Interpolera steg"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:47
 msgid "Draw a major mark every ... steps"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:48
 #, fuzzy
 msgid "Shift marks by"
-msgstr "källkod ändrad av"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:48
 msgid "Shift marks by this many steps"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:49
 #, fuzzy
 msgid "Mark direction"
-msgstr "Riktningsvektor"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:49
 msgid "Direction of marks (when viewing along the path from start to end)"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:50
 #, fuzzy
 msgid "Offset of first mark"
-msgstr "Markera upp^graderingsbar"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-ruler.cpp:51
 #, fuzzy
 msgid "Border marks"
-msgstr "Konvertibla mark"
+msgstr ""
 
 #: ../src/live_effects/lpe-ruler.cpp:51
 msgid "Choose whether to draw marks at the beginning and end of the path"
-msgstr ""
+msgstr "Ange huruvida markeringar ritas vid start och slut på slingan"
 
 #. initialise your parameters here:
 #. testpointA(_("Test Point A"), _("Test A"), "ptA", &wr, this, Geom::Point(100,100)),
 #: ../src/live_effects/lpe-sketch.cpp:35
 #, fuzzy
 msgid "Strokes"
-msgstr "CJK strokes"
+msgstr "Penseldrag"
 
 #: ../src/live_effects/lpe-sketch.cpp:35
 msgid "Draw that many approximating strokes"
-msgstr ""
+msgstr "Rita så många approximerande penseldrag"
 
 #: ../src/live_effects/lpe-sketch.cpp:36
 #, fuzzy
 msgid "Max stroke length"
-msgstr "Maximal fältnamnslängd"
+msgstr "Maximal penseldragslängd"
 
 #: ../src/live_effects/lpe-sketch.cpp:37
 #, fuzzy
 msgid "Maximum length of approximating strokes"
-msgstr "Maximal längd på textfält"
+msgstr "Maximal längd för approximerande penseldrag"
 
 #: ../src/live_effects/lpe-sketch.cpp:38
 #, fuzzy
 msgid "Stroke length variation"
-msgstr "Variationsväljartillägg"
+msgstr "Penseldragslängdvariation"
 
 #: ../src/live_effects/lpe-sketch.cpp:39
 msgid "Random variation of stroke length (relative to maximum length)"
-msgstr ""
+msgstr "Slumpmässig variation av penseldragslängd (relativt maximal längd)"
 
 #: ../src/live_effects/lpe-sketch.cpp:40
 #, fuzzy
 msgid "Max. overlap"
-msgstr "Fliköverlappning"
+msgstr "Max. överlapp"
 
 #: ../src/live_effects/lpe-sketch.cpp:41
 msgid "How much successive strokes should overlap (relative to maximum length)"
-msgstr ""
+msgstr "Hur mycket successiva penseldrag bör överlappa (relativt maximal längd)"
 
 #: ../src/live_effects/lpe-sketch.cpp:42
 #, fuzzy
 msgid "Overlap variation"
-msgstr "Färg_variation:"
+msgstr "Överlappningsvariation"
 
 #: ../src/live_effects/lpe-sketch.cpp:43
 msgid "Random variation of overlap (relative to maximum overlap)"
-msgstr ""
+msgstr "Slumpmässig variation av överlapp (relativt maximalt överlapp)"
 
 #: ../src/live_effects/lpe-sketch.cpp:44
 #, fuzzy
 msgid "Max. end tolerance"
-msgstr "Genomsnittlig tolerans för bitfrekvens"
+msgstr "Max. sluttolerans"
 
 #: ../src/live_effects/lpe-sketch.cpp:45
 msgid ""
 "Maximum distance between ends of original and approximating paths (relative "
 "to maximum length)"
 msgstr ""
+"Maximalt avstånd mellan slut på orginal- och approximerande slingor "
+"(relativt maximal längd)"
 
 #: ../src/live_effects/lpe-sketch.cpp:46
 #, fuzzy
 msgid "Average offset"
-msgstr "Rutnätsförskjutning"
+msgstr "Medelförskjutning"
 
 #: ../src/live_effects/lpe-sketch.cpp:47
 msgid "Average distance each stroke is away from the original path"
-msgstr ""
+msgstr "Medelavstånd från varje penseldrag till orginalslinga"
 
 #: ../src/live_effects/lpe-sketch.cpp:48
 #, fuzzy
 msgid "Max. tremble"
-msgstr "Max RGB"
+msgstr "Max. darr"
 
 #: ../src/live_effects/lpe-sketch.cpp:49
 #, fuzzy
 msgid "Maximum tremble magnitude"
-msgstr "Magnitudskarta:"
+msgstr "Maximal darr-magnitud"
 
 #: ../src/live_effects/lpe-sketch.cpp:50
 #, fuzzy
 msgid "Tremble frequency"
-msgstr "Omstartsfrekvens (rader):"
+msgstr "Darrfrekvens"
 
 #: ../src/live_effects/lpe-sketch.cpp:51
 msgid "Average number of tremble periods in a stroke"
-msgstr ""
+msgstr "Genomsnittligt antal darrperioder i ett penseldrag"
 
 #: ../src/live_effects/lpe-sketch.cpp:53
 #, fuzzy
 msgid "Construction lines"
-msgstr ""
-"Kommentarommentar (%i rader):\n"
-"%s\n"
+msgstr "Konstruktionslinjer"
 
 #: ../src/live_effects/lpe-sketch.cpp:54
 msgid "How many construction lines (tangents) to draw"
-msgstr ""
+msgstr "Hur många konstruktionsliner (tangenter) att rita"
 
 #: ../src/live_effects/lpe-sketch.cpp:56
 msgid ""
