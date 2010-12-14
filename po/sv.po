@@ -5143,7 +5143,7 @@ msgstr ""
 #: ../share/filters/filters.svg.h:57
 #, fuzzy
 msgid "Blur inner borders and intersections"
-msgstr "Sudda ut innre kanter och korsningar"
+msgstr "Sudda ut innre kanter och skärningar"
 
 #: ../share/filters/filters.svg.h:58
 msgid "Iridescent beeswax"
@@ -5324,7 +5324,7 @@ msgstr "Mjuk kontur"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Outlining the lines and smoothing their crossings"
-msgstr "Skapar en kontur runt linjerna, och mjukar till deras korsningar"
+msgstr "Skapar en kontur runt linjerna, och mjukar till deras skärningar"
 
 #: ../share/filters/filters.svg.h:77
 #, fuzzy
@@ -7813,7 +7813,7 @@ msgstr "Skapa brickkloner av markeringen"
 #. So unclumping is the process of spreading a number of objects out more evenly.
 #: ../src/dialogs/clonetiler.cpp:2955
 msgid " _Unclump "
-msgstr "Sprid _ut"
+msgstr "Sprid _ut jämnt"
 
 #: ../src/dialogs/clonetiler.cpp:2956
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
@@ -7827,11 +7827,11 @@ msgstr " Ta bort "
 
 #: ../src/dialogs/clonetiler.cpp:2963
 msgid "Remove existing tiled clones of the selected object (siblings only)"
-msgstr ""
+msgstr "Ta bort befintliga brickkloner av det markerade objektet (endast syskon)"
 
 #: ../src/dialogs/clonetiler.cpp:2979
 msgid " R_eset "
-msgstr "_Återställ"
+msgstr " _Återställ "
 
 #. TRANSLATORS: "change" is a noun here
 #: ../src/dialogs/clonetiler.cpp:2981
@@ -7839,6 +7839,8 @@ msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
 msgstr ""
+"Återställ alla skiftningar, skalningar, rotationer, opacitet och "
+"färg-ändringar i dialogrutan till noll"
 
 #: ../src/dialogs/export.cpp:146 ../src/verbs.cpp:2582
 msgid "_Page"
@@ -7902,7 +7904,7 @@ msgstr "bildpunkter med"
 
 #: ../src/dialogs/export.cpp:492
 msgid "dp_i"
-msgstr "punkter/tum"
+msgstr "punkter per tum (dpi)"
 
 #: ../src/dialogs/export.cpp:498 ../src/ui/widget/page-sizer.cpp:232
 msgid "_Height:"
@@ -7911,7 +7913,7 @@ msgstr "Höjd:"
 #: ../src/dialogs/export.cpp:509 ../src/ui/dialog/inkscape-preferences.cpp:825
 #: ../src/ui/dialog/inkscape-preferences.cpp:1243
 msgid "dpi"
-msgstr "punkter/tum"
+msgstr "punkter per tum (dpi)"
 
 #. true = has mnemonic
 #: ../src/dialogs/export.cpp:520
@@ -7931,12 +7933,12 @@ msgid ""
 "Export each selected object into its own PNG file, using export hints if any "
 "(caution, overwrites without asking!)"
 msgstr ""
-"Exportera varje valt objekt till sin egen PNG fil, använder exporttips om "
+"Exportera varje valt objekt till sin egen PNG-fil, använder exporttips om "
 "sådana finns (varning, skriver över utan att fråga!)"
 
 #: ../src/dialogs/export.cpp:631
 msgid "Hide all except selected"
-msgstr "Dölj alla utom markerad(e)"
+msgstr "Dölj alla utom markerade"
 
 #: ../src/dialogs/export.cpp:635
 msgid "In the exported image, hide all objects except those that are selected"
@@ -7954,8 +7956,8 @@ msgstr "Exportera bitmappen med dessa inställningar"
 #, c-format
 msgid "Batch export %d selected object"
 msgid_plural "Batch export %d selected objects"
-msgstr[0] "Exportera valt objekt automatiskt"
-msgstr[1] "Exportera %d valda objekt automatiskt"
+msgstr[0] "Exportera markerat objekt automatiskt"
+msgstr[1] "Exportera %d markerade objekt automatiskt"
 
 #: ../src/dialogs/export.cpp:1013
 msgid "Export in progress"
@@ -8011,7 +8013,7 @@ msgstr "delvis"
 
 #: ../src/dialogs/find.cpp:372 ../src/ui/dialog/find.cpp:447
 msgid "No objects found"
-msgstr "Inga objekt hittade"
+msgstr "Inga objekt hittades"
 
 #: ../src/dialogs/find.cpp:530
 msgid "T_ype: "
@@ -8028,12 +8030,12 @@ msgstr "Alla typer"
 #: ../src/dialogs/find.cpp:548 ../src/ui/dialog/find.cpp:70
 #, fuzzy
 msgid "Search all shapes"
-msgstr "Sök i alla kanaler"
+msgstr "Sök alla figurer"
 
 #: ../src/dialogs/find.cpp:548 ../src/ui/dialog/find.cpp:70
 #, fuzzy
 msgid "All shapes"
-msgstr "Geometriska former"
+msgstr "Alla geometriska former"
 
 #: ../src/dialogs/find.cpp:565 ../src/ui/dialog/find.cpp:71
 msgid "Search rectangles"
@@ -8046,7 +8048,7 @@ msgstr "Rektanglar"
 #: ../src/dialogs/find.cpp:570 ../src/ui/dialog/find.cpp:72
 #, fuzzy
 msgid "Search ellipses, arcs, circles"
-msgstr "Skapa cirklar, ellipser och bågar"
+msgstr "Sök ellipser, bågar, cirklar"
 
 #: ../src/dialogs/find.cpp:570 ../src/ui/dialog/find.cpp:72
 msgid "Ellipses"
@@ -8073,13 +8075,13 @@ msgstr "Spiraler"
 #: ../src/dialogs/find.cpp:593 ../src/ui/dialog/find.cpp:75
 #, fuzzy
 msgid "Search paths, lines, polylines"
-msgstr "# Inga \"vpath\"-sökvägar."
+msgstr "Sök slingor, linjer, polylinjer"
 
 #: ../src/dialogs/find.cpp:593 ../src/ui/dialog/find.cpp:75
 #: ../src/widgets/toolbox.cpp:2292
 #, fuzzy
 msgid "Paths"
-msgstr "Sökvägar"
+msgstr "Slingor"
 
 #: ../src/dialogs/find.cpp:598 ../src/ui/dialog/find.cpp:76
 msgid "Search text objects"
@@ -8107,7 +8109,7 @@ msgstr "Sök kloner"
 #: ../src/dialogs/find.cpp:612 ../src/ui/dialog/find.cpp:82
 #, fuzzy
 msgid "find|Clones"
-msgstr "Antal kloner"
+msgstr "find|Kloner"
 
 #: ../src/dialogs/find.cpp:617 ../src/ui/dialog/find.cpp:83
 msgid "Search images"
@@ -8116,12 +8118,12 @@ msgstr "Sök bilder"
 #: ../src/dialogs/find.cpp:622 ../src/ui/dialog/find.cpp:84
 #, fuzzy
 msgid "Search offset objects"
-msgstr "Sök textobjekt"
+msgstr "Sök avståndsobjekt"
 
 #: ../src/dialogs/find.cpp:622 ../src/ui/dialog/find.cpp:84
 #, fuzzy
 msgid "Offsets"
-msgstr "Avstånd (bildpunkter × 2)"
+msgstr "Avstånd"
 
 #: ../src/dialogs/find.cpp:687 ../src/ui/dialog/find.cpp:60
 msgid "_Text: "
@@ -8134,7 +8136,7 @@ msgstr "Hitta objekt med detta textinnehåll (exakt eller delvis träff)"
 #: ../src/dialogs/find.cpp:688 ../src/ui/dialog/find.cpp:61
 #, fuzzy
 msgid "_ID: "
-msgstr "ID"
+msgstr "_ID: "
 
 #: ../src/dialogs/find.cpp:688 ../src/ui/dialog/find.cpp:61
 msgid "Find objects by the value of the id attribute (exact or partial match)"
@@ -8179,11 +8181,11 @@ msgstr "Begränsa sökningen till aktuellt lager"
 
 #: ../src/dialogs/find.cpp:722 ../src/ui/dialog/find.cpp:66
 msgid "Include _hidden"
-msgstr "Inkludera gömda"
+msgstr "Inkludera dolda"
 
 #: ../src/dialogs/find.cpp:726 ../src/ui/dialog/find.cpp:66
 msgid "Include hidden objects in search"
-msgstr "Inkludera gömda objekt i sökningen"
+msgstr "Inkludera dolda objekt i sökningen"
 
 #: ../src/dialogs/find.cpp:731 ../src/ui/dialog/find.cpp:67
 msgid "Include l_ocked"
@@ -8219,15 +8221,14 @@ msgstr "Markera objekten som matchar alla fält du fyllt i"
 #: ../src/dialogs/item-properties.cpp:450
 #, fuzzy
 msgid "_Id"
-msgstr "ID"
+msgstr "_Id"
 
 #: ../src/dialogs/item-properties.cpp:129
 #, fuzzy
 msgid ""
 "The id= attribute (only letters, digits, and the characters .-_: allowed)"
 msgstr ""
-"tecknet \"%c\" ej tillåtet (endast tecken, siffror och tecknen \"%s\" "
-"tillåts)"
+"Id-attributet (endast engelska bokstäver, siffror och tecknen .-_: tillåtna)"
 
 #. Button for setting the object's id, label, title and description.
 #: ../src/dialogs/item-properties.cpp:143 ../src/verbs.cpp:2439
@@ -8243,7 +8244,7 @@ msgstr "_Etikett"
 #: ../src/dialogs/item-properties.cpp:161
 #, fuzzy
 msgid "A freeform label for the object"
-msgstr "Ogiltigt objekt för operationen"
+msgstr "En fri-form etikett för objektet"
 
 #. Create the label for the object title
 #: ../src/dialogs/item-properties.cpp:173
@@ -8283,7 +8284,7 @@ msgstr "_Interaktivitet"
 #: ../src/dialogs/item-properties.cpp:324
 #, fuzzy
 msgid "Ref"
-msgstr "Referens ref"
+msgstr "Ref"
 
 #: ../src/dialogs/item-properties.cpp:402
 msgid "Lock object"
@@ -8303,7 +8304,7 @@ msgstr "Visa objekt"
 
 #: ../src/dialogs/item-properties.cpp:445
 msgid "Id invalid! "
-msgstr "Ogiltigt ID!"
+msgstr "Ogiltigt Id!"
 
 #: ../src/dialogs/item-properties.cpp:447
 msgid "Id exists! "
@@ -8311,7 +8312,7 @@ msgstr "Id finns redan!"
 
 #: ../src/dialogs/item-properties.cpp:454
 msgid "Set object ID"
-msgstr "Sätt objektid"
+msgstr "Sätt objekt-ID"
 
 #: ../src/dialogs/item-properties.cpp:469
 msgid "Set object label"
@@ -8397,22 +8398,22 @@ msgstr "Egenskaper för %s"
 #: ../src/dialogs/spellcheck.cpp:444
 #, c-format
 msgid "<b>Finished</b>, <b>%d</b> words added to dictionary"
-msgstr ""
+msgstr "<b>Klar</b>, <b>%d</b> ord tillagda på ordlistan"
 
 #: ../src/dialogs/spellcheck.cpp:446
 #, fuzzy, c-format
 msgid "<b>Finished</b>, nothing suspicious found"
-msgstr "inga poster hittades för \"%s\"; ingenting togs bort"
+msgstr "<b>Klar</b>, ingenting suspekt hittades"
 
 #: ../src/dialogs/spellcheck.cpp:559
 #, fuzzy, c-format
 msgid "Not in dictionary (%s): <b>%s</b>"
-msgstr "Slå upp %s i ordboken"
+msgstr "Ej i ordboken: (%s): <b>%s</b>"
 
 #: ../src/dialogs/spellcheck.cpp:711
 #, fuzzy
 msgid "<i>Checking...</i>"
-msgstr "Kontrollerar..."
+msgstr "<i>Kontrollerar...</i>"
 
 #: ../src/dialogs/spellcheck.cpp:781
 #, fuzzy
@@ -8422,7 +8423,7 @@ msgstr "Kontrollera stavning..."
 #: ../src/dialogs/spellcheck.cpp:955
 #, fuzzy
 msgid "Suggestions:"
-msgstr "Förslag"
+msgstr "Förslag:"
 
 #: ../src/dialogs/spellcheck.cpp:967
 #, fuzzy
@@ -8432,16 +8433,16 @@ msgstr "_Acceptera"
 #: ../src/dialogs/spellcheck.cpp:967
 #, fuzzy
 msgid "Accept the chosen suggestion"
-msgstr "Acceptera kaka från %s?"
+msgstr "Acceptera valda förslag?"
 
 #: ../src/dialogs/spellcheck.cpp:969
 #, fuzzy
 msgid "_Ignore once"
-msgstr "_Förhandsgranska en gång"
+msgstr "_Ignorera en gång"
 
 #: ../src/dialogs/spellcheck.cpp:969
 msgid "Ignore this word only once"
-msgstr ""
+msgstr "Ignorera detta ord endast en gång"
 
 #: ../src/dialogs/spellcheck.cpp:971
 #, fuzzy
@@ -8451,7 +8452,7 @@ msgstr "_Ignorera"
 #: ../src/dialogs/spellcheck.cpp:971
 #, fuzzy
 msgid "Ignore this word in this session"
-msgstr "skärmsläckaren kör redan i denna session"
+msgstr "Ignorera detta ord i detta pass"
 
 #: ../src/dialogs/spellcheck.cpp:978
 #, fuzzy
@@ -8460,7 +8461,7 @@ msgstr "_Lägg till i ordboken"
 
 #: ../src/dialogs/spellcheck.cpp:978
 msgid "Add this word to the chosen dictionary"
-msgstr ""
+msgstr "Lägg till detta ord till den valda ordboken"
 
 #: ../src/dialogs/spellcheck.cpp:1002
 #, fuzzy
@@ -8470,7 +8471,7 @@ msgstr "_Stopp"
 #: ../src/dialogs/spellcheck.cpp:1002
 #, fuzzy
 msgid "Stop the check"
-msgstr "_Stavningskontrollera"
+msgstr "Avsluta kontrollen"
 
 #: ../src/dialogs/spellcheck.cpp:1004
 #, fuzzy
@@ -8480,7 +8481,7 @@ msgstr "Sta_rta"
 #: ../src/dialogs/spellcheck.cpp:1004
 #, fuzzy
 msgid "Start the check"
-msgstr "_Stavningskontrollera"
+msgstr "Starta stavningskontrollen"
 
 #: ../src/dialogs/text-edit.cpp:198
 msgid "Font"
@@ -8522,16 +8523,16 @@ msgstr "Ange som standard"
 #: ../src/dialogs/text-edit.cpp:665 ../src/text-context.cpp:1500
 #, fuzzy
 msgid "Set text style"
-msgstr "Stor textstil"
+msgstr "Ange textstil"
 
 #: ../src/dialogs/xml-tree.cpp:152
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
-msgstr "<b>Klicka</b> för att markera noder, <b>drag</b> för att ordna om"
+msgstr "<b>Klicka</b> för att markera noder, <b>dra</b> för att ordna om."
 
 #: ../src/dialogs/xml-tree.cpp:163
 #, fuzzy
 msgid "<b>Click</b> attribute to edit."
-msgstr "Klicka för att redigera den valda paletten"
+msgstr "<b>Klicka</b> attribut att redigera."
 
 #: ../src/dialogs/xml-tree.cpp:167
 #, c-format
@@ -8560,7 +8561,7 @@ msgstr "Duplicera nod"
 
 #: ../src/dialogs/xml-tree.cpp:347
 msgid "nodeAsInXMLdialogTooltip|Delete node"
-msgstr "Ta bort nod"
+msgstr "nodeAsInXMLdialogTooltip|Radera nod"
 
 #: ../src/dialogs/xml-tree.cpp:363 ../src/dialogs/xml-tree.cpp:1571
 msgid "Unindent node"
@@ -8580,7 +8581,7 @@ msgstr "Sänk nod"
 
 #: ../src/dialogs/xml-tree.cpp:447 ../src/dialogs/xml-tree.cpp:1444
 msgid "Delete attribute"
-msgstr "Ta bort attribut"
+msgstr "Radera attribut"
 
 #. TRANSLATORS: "Attribute" is a noun here
 #: ../src/dialogs/xml-tree.cpp:492
@@ -8622,21 +8623,21 @@ msgstr "Skapa"
 #: ../src/dialogs/xml-tree.cpp:1375
 #, fuzzy
 msgid "Create new element node"
-msgstr "Kunde inte skapa ny pixbuf"
+msgstr "Skapa ny elementnod"
 
 #: ../src/dialogs/xml-tree.cpp:1391
 #, fuzzy
 msgid "Create new text node"
-msgstr "Lägg till ny textersättning"
+msgstr "Skapa ny textnod"
 
 #: ../src/dialogs/xml-tree.cpp:1426
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
-msgstr "Tag bort nod"
+msgstr "nodeAsInXMLinHistoryDialog|Radera nod"
 
 #: ../src/dialogs/xml-tree.cpp:1473
 #, fuzzy
 msgid "Change attribute"
-msgstr "CONREF-attribut"
+msgstr "Ändra attribut"
 
 #: ../src/display/canvas-axonomgrid.cpp:396 ../src/display/canvas-grid.cpp:670
 msgid "Grid _units:"
@@ -8820,7 +8821,7 @@ msgstr "stödlinjers skärning"
 #: ../src/display/snap-indicator.cpp:89
 #, fuzzy
 msgid "guide origin"
-msgstr "Ny _guide..."
+msgstr "stödlinjeorigo"
 
 #: ../src/display/snap-indicator.cpp:92
 msgid "grid-guide intersection"
@@ -8829,12 +8830,12 @@ msgstr "skärning raster-stödlinje"
 #: ../src/display/snap-indicator.cpp:95
 #, fuzzy
 msgid "cusp node"
-msgstr "Tog bort %d nod(er):\n"
+msgstr "hörnnod"
 
 #: ../src/display/snap-indicator.cpp:98
 #, fuzzy
 msgid "smooth node"
-msgstr "Tog bort %d nod(er):\n"
+msgstr "utjämnad nod"
 
 #: ../src/display/snap-indicator.cpp:101
 msgid "path"
@@ -8843,7 +8844,7 @@ msgstr "slinga"
 #: ../src/display/snap-indicator.cpp:104
 #, fuzzy
 msgid "path intersection"
-msgstr "Skärning av slingor"
+msgstr "skärning av slingor"
 
 #: ../src/display/snap-indicator.cpp:107
 msgid "bounding box corner"
@@ -8888,12 +8889,12 @@ msgstr "sidans hörn"
 #: ../src/display/snap-indicator.cpp:137
 #, fuzzy
 msgid "convex hull corner"
-msgstr "en tom hörnplats"
+msgstr "hörn på konvext hölje"
 
 #: ../src/display/snap-indicator.cpp:140
 #, fuzzy
 msgid "quadrant point"
-msgstr "Accesspunkt:"
+msgstr "kvadrantpunkt"
 
 #: ../src/display/snap-indicator.cpp:143
 msgid "center"
@@ -8906,21 +8907,21 @@ msgstr "hörn"
 #: ../src/display/snap-indicator.cpp:149
 #, fuzzy
 msgid "text baseline"
-msgstr "Felaktig baseline"
+msgstr "textbaslinje"
 
 #: ../src/display/snap-indicator.cpp:152
 #, fuzzy
 msgid "constrained angle"
-msgstr "Upplösning:"
+msgstr "begränsad vinkel"
 
 #: ../src/display/snap-indicator.cpp:155
 #, fuzzy
 msgid "constraint"
-msgstr "Konstant"
+msgstr "begränsning"
 
 #: ../src/display/snap-indicator.cpp:168
 msgid "Bounding box corner"
-msgstr "Hörnet på begränsningsyta"
+msgstr "Hörne på begränsningsyta"
 
 #: ../src/display/snap-indicator.cpp:171
 msgid "Bounding box midpoint"
@@ -8933,12 +8934,12 @@ msgstr "Mittpunkt på sida av begränsningsyta"
 #: ../src/display/snap-indicator.cpp:177 ../src/ui/tool/node.cpp:1191
 #, fuzzy
 msgid "Smooth node"
-msgstr "Tog bort %d nod(er):\n"
+msgstr "Jämn nod"
 
 #: ../src/display/snap-indicator.cpp:180 ../src/ui/tool/node.cpp:1190
 #, fuzzy
 msgid "Cusp node"
-msgstr "Tog bort %d nod(er):\n"
+msgstr "Hörnnod"
 
 #: ../src/display/snap-indicator.cpp:183
 msgid "Line midpoint"
@@ -8967,21 +8968,21 @@ msgstr "Stödlinje"
 #: ../src/display/snap-indicator.cpp:202
 #, fuzzy
 msgid "Guide origin"
-msgstr "Ny _guide..."
+msgstr "Stödlinjes origo"
 
 #: ../src/display/snap-indicator.cpp:205
 #, fuzzy
 msgid "Convex hull corner"
-msgstr "en tom hörnplats"
+msgstr "Hörn på konvext hölje"
 
 #: ../src/display/snap-indicator.cpp:208
 #, fuzzy
 msgid "Quadrant point"
-msgstr "Accesspunkt:"
+msgstr "Kvadrantpunkt"
 
 #: ../src/display/snap-indicator.cpp:211
 msgid "Center"
-msgstr "Mittjustera"
+msgstr "Mittpunkt"
 
 #: ../src/display/snap-indicator.cpp:214
 msgid "Corner"
@@ -8990,11 +8991,11 @@ msgstr "Hörn"
 #: ../src/display/snap-indicator.cpp:217
 #, fuzzy
 msgid "Text baseline"
-msgstr "Felaktig baseline"
+msgstr "Textbaslinje"
 
 #: ../src/display/snap-indicator.cpp:220
 msgid "Multiple of grid spacing"
-msgstr ""
+msgstr "Multipel av stödrasteravstånd"
 
 #: ../src/display/snap-indicator.cpp:263
 msgid " to "
@@ -9019,13 +9020,13 @@ msgstr "Namnlöst dokument %d"
 #: ../src/draw-context.cpp:577
 #, fuzzy
 msgid "Path is closed."
-msgstr "Anslutningen är stängd"
+msgstr "Slingan är stängd."
 
 #. We hit bot start and end of single curve, closing paths
 #: ../src/draw-context.cpp:592
 #, fuzzy
 msgid "Closing path."
-msgstr "Sökväg nedåt"
+msgstr "Sluter slinga."
 
 #: ../src/draw-context.cpp:702
 msgid "Draw path"
@@ -9034,19 +9035,19 @@ msgstr "Rita slinga"
 #: ../src/draw-context.cpp:863
 #, fuzzy
 msgid "Creating single dot"
-msgstr "Rasterpunkt 32"
+msgstr "Skapar enkel punkt"
 
 #: ../src/draw-context.cpp:864
 #, fuzzy
 msgid "Create single dot"
-msgstr "Rasterpunkt 32"
+msgstr "Skapa enkel punkt"
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
 #: ../src/dropper-context.cpp:312
 #, c-format
 msgid " alpha %.3g"
-msgstr " transparens: %.3g"
+msgstr " alpha %.3g"
 
 #. where the color is picked, to show in the statusbar
 #: ../src/dropper-context.cpp:314
@@ -9062,7 +9063,7 @@ msgstr " under muspekaren"
 #. message, to show in the statusbar
 #: ../src/dropper-context.cpp:316
 msgid "<b>Release mouse</b> to set color."
-msgstr "<b>Släpp</b> för att sätta färg."
+msgstr "<b>Släpp musenknappen</b> för att sätta färg."
 
 #: ../src/dropper-context.cpp:316 ../src/tools-switch.cpp:215
 msgid ""
@@ -9083,24 +9084,25 @@ msgstr "Sätt vald färg"
 msgid ""
 "<b>Guide path selected</b>; start drawing along the guide with <b>Ctrl</b>"
 msgstr ""
+"<b>Hjälpslinga markerad</b>; börja rita längs hjälpslingan med <b>Ctrl</b>"
 
 #: ../src/dyna-draw-context.cpp:617
 msgid "<b>Select a guide path</b> to track with <b>Ctrl</b>"
-msgstr ""
+msgstr "<b>Markera en stödslinga</b> att spåra med <b>Ctrl</b>"
 
 #: ../src/dyna-draw-context.cpp:752
 msgid "Tracking: <b>connection to guide path lost!</b>"
-msgstr ""
+msgstr "Spårar: <b>förbindelse till hjälpslinga förlorad!</b>"
 
 #: ../src/dyna-draw-context.cpp:752
 #, fuzzy
 msgid "<b>Tracking</b> a guide path"
-msgstr "Sökvägen är inte absolut"
+msgstr "<b>Spårar</b> en hjälpslinga"
 
 #: ../src/dyna-draw-context.cpp:755
 #, fuzzy
 msgid "<b>Drawing</b> a calligraphic stroke"
-msgstr "Rita kalligrafiska linjer"
+msgstr "<b>Ritar</b> en kalligrafisk linje"
 
 #: ../src/dyna-draw-context.cpp:1044
 msgid "Draw calligraphic stroke"
@@ -9109,16 +9111,16 @@ msgstr "Rita kalligrafiska linjer"
 #: ../src/eraser-context.cpp:527
 #, fuzzy
 msgid "<b>Drawing</b> an eraser stroke"
-msgstr "(hastighet plattar ut linje)"
+msgstr "<b>Ritar</b> en sudd-linje"
 
 #: ../src/eraser-context.cpp:830
 #, fuzzy
 msgid "Draw eraser stroke"
-msgstr "Rita kalligrafiska linjer"
+msgstr "Rita sudd-linjer"
 
 #: ../src/event-context.cpp:615
 msgid "<b>Space+mouse drag</b> to pan canvas"
-msgstr ""
+msgstr "<b>Mellanslag+dra musen</b> för att panorera"
 
 #: ../src/event-log.cpp:37
 msgid "[Unchanged]"
@@ -9136,32 +9138,32 @@ msgstr "Gör o_m"
 #: ../src/extension/dependency.cpp:246
 #, fuzzy
 msgid "Dependency:"
-msgstr "Beroende av"
+msgstr "Beroende av:"
 
 #: ../src/extension/dependency.cpp:247
 #, fuzzy
 msgid "  type: "
-msgstr "Typ:"
+msgstr "  typ: "
 
 #: ../src/extension/dependency.cpp:248
 #, fuzzy
 msgid "  location: "
-msgstr "Plats"
+msgstr "  plats: "
 
 #: ../src/extension/dependency.cpp:249
 #, fuzzy
 msgid "  string: "
-msgstr "sträng"
+msgstr "  sträng: "
 
 #: ../src/extension/dependency.cpp:252
 #, fuzzy
 msgid "  description: "
-msgstr "Beskrivning"
+msgstr "  beskrivning: "
 
 #: ../src/extension/effect.cpp:39
 #, fuzzy
 msgid " (No preferences)"
-msgstr "Musinställningar"
+msgstr " (Inga inställningar)"
 
 #. This is some filler text, needs to change before relase
 #: ../src/extension/error-file.cpp:53
@@ -9173,11 +9175,17 @@ msgid ""
 "normally but those extensions will be unavailable.  For details to "
 "troubleshoot this problem, please refer to the error log located at: "
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Ett eller fler tillägg kunde ej laddas</"
+"span>\n"
+"\n"
+"De tillägg som ej kunde laddas har skippats. Inkscape kommer fortsätta "
+"köra som normalt men dessa tillägg kommer vara oåtkomliga. För hjälp att "
+"felsöka detta problem, vänligen se felloggen som finns på: "
 
 #: ../src/extension/error-file.cpp:63
 #, fuzzy
 msgid "Show dialog on startup"
-msgstr "Visa tips vid _uppstart"
+msgstr "Visa dialog vid _uppstart"
 
 #: ../src/extension/execution-env.cpp:134
 #, c-format
@@ -9191,18 +9199,20 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
+"  Detta orsakas av en importerare .inx-fil för detta tillägg.  En oegentlig "
+"inx-fil kan ha orsakats av felaktig Inkscape-installation."
 
 #: ../src/extension/extension.cpp:257
 msgid "an ID was not defined for it."
-msgstr ""
+msgstr "ett ID var ej definierat för det."
 
 #: ../src/extension/extension.cpp:261
 msgid "there was no name defined for it."
-msgstr ""
+msgstr "det fanns inget namn angivet för det."
 
 #: ../src/extension/extension.cpp:265
 msgid "the XML description of it got lost."
-msgstr ""
+msgstr "XML-beskrivning för det förlorades."
 
 #: ../src/extension/extension.cpp:269
 msgid "no implementation was defined for the extension."
@@ -9224,7 +9234,7 @@ msgstr "\" misslyckades att laddas eftersom "
 #: ../src/extension/extension.cpp:642
 #, c-format
 msgid "Could not create extension error log file '%s'"
-msgstr ""
+msgstr "Kunde ej skapa fel-loggen för tillägg '%s'"
 
 #: ../src/extension/extension.cpp:741
 msgid "ID:"
@@ -9243,12 +9253,12 @@ msgstr "Inläst"
 #: ../src/extension/extension.cpp:742
 #, fuzzy
 msgid "Unloaded"
-msgstr "Namnlös"
+msgstr "Nerstängd"
 
 #: ../src/extension/extension.cpp:742
 #, fuzzy
 msgid "Deactivated"
-msgstr "Skrivaren är inaktiverad"
+msgstr "Inaktiverad"
 
 #: ../src/extension/extension.cpp:773
 msgid ""
@@ -9256,6 +9266,9 @@ msgid ""
 "Inkscape website or ask on the mailing lists if you have questions regarding "
 "this extension."
 msgstr ""
+"Det finns för närvarande ingen hjälp för detta tillägg.  Vänligen se "
+"Inkscapes hemsida eller ställ en fråga på mailinglistan om du har frågor "
+"avseende detta tillägg."
 
 #: ../src/extension/implementation/script.cpp:990
 msgid ""
@@ -9269,7 +9282,7 @@ msgstr ""
 
 #: ../src/extension/init.cpp:276
 msgid "Null external module directory name.  Modules will not be loaded."
-msgstr ""
+msgstr "Null externt namn på modulmapp.  Moduler laddas ej."
 
 #: ../src/extension/init.cpp:290
 #: ../src/extension/internal/filter/filter-file.cpp:56
@@ -9278,11 +9291,13 @@ msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
 "will not be loaded."
 msgstr ""
+"Modulmapp (%s) är otilggänglig.  Externa moduler i denna mapp "
+"kommer ej att laddas."
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:38
 #, fuzzy
 msgid "Adaptive Threshold"
-msgstr "_Blått tröskelvärde:"
+msgstr "Adaptivt Tröskelvärde"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:42
 #: ../src/filter-enums.cpp:32 ../src/live_effects/effect.cpp:98
@@ -9330,7 +9345,7 @@ msgstr "Rastergrafik"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:48
 msgid "Apply adaptive thresholding to selected bitmap(s)."
-msgstr ""
+msgstr "Tillämpa adaptivt tröskelvärde på markerade bitmappsbilder."
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:44
 msgid "Add Noise"
@@ -9343,12 +9358,12 @@ msgstr "Typ"
 #: ../src/extension/internal/bitmap/addNoise.cpp:47
 #, fuzzy
 msgid "Uniform Noise"
-msgstr "Lägger till brus"
+msgstr "Likformigt Brus"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:48
 #, fuzzy
 msgid "Gaussian Noise"
-msgstr "Lägger till brus"
+msgstr "Gauss-brus"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:49
 #, fuzzy
@@ -9358,21 +9373,21 @@ msgstr "Ko_rrelerat brus"
 #: ../src/extension/internal/bitmap/addNoise.cpp:50
 #, fuzzy
 msgid "Impulse Noise"
-msgstr "Lägger till brus"
+msgstr "Impuls-brus"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:51
 #, fuzzy
 msgid "Laplacian Noise"
-msgstr "Lägger till brus"
+msgstr "Laplace-brus"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:52
 #, fuzzy
 msgid "Poisson Noise"
-msgstr "Lägger till brus"
+msgstr "Poisson-brus"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:59
 msgid "Add random noise to selected bitmap(s)."
-msgstr ""
+msgstr "Lägg till slumpat brus till markerade bitmappsbilder."
 
 #: ../src/extension/internal/bitmap/blur.cpp:37
 msgid "Blur"
@@ -9401,7 +9416,7 @@ msgstr "Skala"
 
 #: ../src/extension/internal/bitmap/blur.cpp:46
 msgid "Blur selected bitmap(s)"
-msgstr "Lägg på oskärpa på valda bitmappsbilder."
+msgstr "Lägg på oskärpa på markerade bitmappsbilder."
 
 #: ../src/extension/internal/bitmap/channel.cpp:47
 #: ../src/extension/internal/bitmap/levelChannel.cpp:53
@@ -9454,7 +9469,7 @@ msgstr "Svart kanal"
 #: ../src/extension/internal/bitmap/levelChannel.cpp:61
 #, fuzzy
 msgid "Opacity Channel"
-msgstr "Ställ in kanalopacitet"
+msgstr "Kanalopacitet"
 
 #: ../src/extension/internal/bitmap/channel.cpp:58
 #: ../src/extension/internal/bitmap/levelChannel.cpp:62
@@ -9464,7 +9479,7 @@ msgstr "Kanalblandare"
 
 #: ../src/extension/internal/bitmap/channel.cpp:65
 msgid "Extract specific channel from image."
-msgstr ""
+msgstr "Extrahera specifik kanal från bild."
 
 #: ../src/extension/internal/bitmap/charcoal.cpp:37
 msgid "Charcoal"
@@ -9473,11 +9488,11 @@ msgstr "Träkol"
 #: ../src/extension/internal/bitmap/charcoal.cpp:46
 #, fuzzy
 msgid "Apply charcoal stylization to selected bitmap(s)."
-msgstr "Verkställ transformeringen för att kopiera Ctrl+m"
+msgstr "Lägg till träkolstilisering till markerade bitmappsbilder."
 
 #: ../src/extension/internal/bitmap/colorize.cpp:57
 msgid "Colorize selected bitmap(s) with specified color, using given opacity."
-msgstr ""
+msgstr "Färga markerade bitmappsbilder med angiven färg och given opacitet."
 
 #: ../src/extension/internal/bitmap/contrast.cpp:39
 msgid "Contrast"
@@ -9490,12 +9505,12 @@ msgstr "Justera"
 #: ../src/extension/internal/bitmap/contrast.cpp:47
 #, fuzzy
 msgid "Increase or decrease contrast in bitmap(s)"
-msgstr "Öka eller minska ljushet och kontrast"
+msgstr "Öka eller minska kontrast i bitmappsbilder"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:36
 #, fuzzy
 msgid "Cycle Colormap"
-msgstr "Felaktig färgkarta"
+msgstr "Rotera färgkarta"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:38
 #: ../src/extension/internal/bitmap/spread.cpp:38
@@ -9507,13 +9522,15 @@ msgstr "Mängd"
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:44
 #, fuzzy
 msgid "Cycle colormap(s) of selected bitmap(s)."
-msgstr "Modifiera mättnadskanal för vald bitmapp(ar)."
+msgstr "Rotera färgkartor för vald bitmapp(ar)."
 
+# TODO
 #: ../src/extension/internal/bitmap/despeckle.cpp:35
 #, fuzzy
 msgid "Despeckle"
 msgstr "Damm och repor"
 
+# TODO
 #: ../src/extension/internal/bitmap/despeckle.cpp:42
 msgid "Reduce speckle noise of selected bitmap(s)."
 msgstr ""
@@ -9526,11 +9543,11 @@ msgstr "Kantig"
 #: ../src/extension/internal/bitmap/edge.cpp:44
 #, fuzzy
 msgid "Highlight edges of selected bitmap(s)."
-msgstr "Modifiera mättnadskanal för vald bitmapp(ar)."
+msgstr "Betona kanter för markerade bitmappar."
 
 #: ../src/extension/internal/bitmap/emboss.cpp:46
 msgid "Emboss selected bitmap(s) -- highlight edges with 3D effect."
-msgstr ""
+msgstr "Ciselera valda bitmappar -- betona kanter med 3D-effekt."
 
 #: ../src/extension/internal/bitmap/enhance.cpp:34
 #, fuzzy
@@ -9539,16 +9556,17 @@ msgstr "_Förbättra"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:41
 msgid "Enhance selected bitmap(s) -- minimize noise."
-msgstr ""
+msgstr "Förbättra markerade bitmappar -- minska brus."
 
 #: ../src/extension/internal/bitmap/equalize.cpp:34
 #, fuzzy
 msgid "Equalize"
 msgstr "Jämna ut"
 
+# TODO
 #: ../src/extension/internal/bitmap/equalize.cpp:41
 msgid "Equalize selected bitmap(s) -- histogram equalization."
-msgstr ""
+msgstr "Jämna ut markerade bitmappar -- histogram equalization."
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:37
 #: ../src/filter-enums.cpp:28
@@ -9563,7 +9581,7 @@ msgstr "Faktor"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:46
 msgid "Gaussian blur selected bitmap(s)."
-msgstr "Lägg på gaussisk oskärpa på valda bitmappsbilder."
+msgstr "Lägg på gaussisk oskärpa på markerade bitmappsbilder."
 
 #: ../src/extension/internal/bitmap/implode.cpp:36
 msgid "Implode"
@@ -9601,12 +9619,16 @@ msgid ""
 "Level selected bitmap(s) by scaling values falling between the given ranges "
 "to the full color range."
 msgstr ""
+"Justera färger i bitmappen genom att skala färgvärdena mellan de givna omfången "
+"till hela färgomfånget."
 
+# TODO
 #: ../src/extension/internal/bitmap/levelChannel.cpp:51
 #, fuzzy
 msgid "Level (with Channel)"
 msgstr "Nivå att börja med"
 
+# TODO
 #: ../src/extension/internal/bitmap/levelChannel.cpp:72
 msgid ""
 "Level the specified channel of selected bitmap(s) by scaling values falling "
@@ -9623,11 +9645,13 @@ msgid ""
 "Replace each pixel component with the median color in a circular "
 "neighborhood."
 msgstr ""
+"Ersätt varje pixelkomponent med färgmedianen i ett cirkulärt område."
 
+# TODO
 #: ../src/extension/internal/bitmap/modulate.cpp:39
 #, fuzzy
 msgid "HSB Adjust"
-msgstr "_Justera klockan"
+msgstr "HSB-Justering"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:43
 #, fuzzy
@@ -9681,6 +9705,7 @@ msgstr "Höj"
 msgid "Raised"
 msgstr "Höjd"
 
+# TODO
 #: ../src/extension/internal/bitmap/raise.cpp:49
 msgid ""
 "Alter lightness the edges of selected bitmap(s) to create a raised "
@@ -9694,17 +9719,19 @@ msgstr "Reducera brus"
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:47
 msgid ""
 "Reduce noise in selected bitmap(s) using a noise peak elimination filter."
-msgstr "Reducera brus i vald(a) bitmapp(ar) med ett brusspärr-filter."
+msgstr "Reducera brus i valda bitmappar med ett brusspärr-filter."
 
 #: ../src/extension/internal/bitmap/sample.cpp:38
 #, fuzzy
 msgid "Resample"
-msgstr "Form"
+msgstr "Ändra upplösning"
 
 #: ../src/extension/internal/bitmap/sample.cpp:47
 msgid ""
 "Alter the resolution of selected image by resizing it to the given pixel size"
 msgstr ""
+"Ändra upplösningen på den markerade bilden genom att skala om den till den givna "
+"bildpunktsstorleken."
 
 #: ../src/extension/internal/bitmap/shade.cpp:39
 #, fuzzy
@@ -9730,16 +9757,16 @@ msgstr "Färgskuggningstyp"
 
 #: ../src/extension/internal/bitmap/shade.cpp:49
 msgid "Shade selected bitmap(s) simulating distant light source."
-msgstr ""
+msgstr "Skugga den markerade bitmappen för att simulera avlägsen ljuskälla."
 
 #: ../src/extension/internal/bitmap/sharpen.cpp:46
 #, fuzzy
 msgid "Sharpen selected bitmap(s)."
-msgstr "Modifiera mättnadskanal för vald bitmapp(ar)."
+msgstr "Öka skärpa för markerad bitmapp."
 
 #: ../src/extension/internal/bitmap/solarize.cpp:46
 msgid "Solarize selected bitmap(s), like overexposing photographic film."
-msgstr ""
+msgstr "Solarisera de markerade bitmapparna, likt överexponerad fotografisk film."
 
 #: ../src/extension/internal/bitmap/spread.cpp:36
 #, fuzzy
@@ -9751,6 +9778,8 @@ msgid ""
 "Randomly scatter pixels in selected bitmap(s), within the given radius of "
 "the original position"
 msgstr ""
+"Stokastiskt sprid ut pixlar i markerade bitmappar, innanför den givna radien "
+"från orginalpositionen"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:36
 #, fuzzy
@@ -9760,7 +9789,7 @@ msgstr "Virvla"
 #: ../src/extension/internal/bitmap/swirl.cpp:44
 #, fuzzy
 msgid "Swirl selected bitmap(s) around center point."
-msgstr "Sänk markerade objekt en position"
+msgstr "Virvla markerade bitmappar runt mittpunkt."
 
 #. TRANSLATORS: see http://docs.gimp.org/en/gimp-tool-threshold.html
 #: ../src/extension/internal/bitmap/threshold.cpp:37
@@ -9772,7 +9801,7 @@ msgstr "Tröskelvärde"
 #: ../src/extension/internal/bitmap/threshold.cpp:45
 #, fuzzy
 msgid "Threshold selected bitmap(s)."
-msgstr "Modifiera mättnadskanal för vald bitmapp(ar)."
+msgstr "Applicera tröskelvärde på markerade bitmappar."
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:40
 #, fuzzy
@@ -9781,7 +9810,7 @@ msgstr "Oskarp mask"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:51
 msgid "Sharpen selected bitmap(s) using unsharp mask algorithms."
-msgstr ""
+msgstr "Öka skärpa för markerade bitmappar mha. oskarp mask-algoritmer."
 
 #: ../src/extension/internal/bitmap/wave.cpp:37
 #, fuzzy
@@ -9803,24 +9832,25 @@ msgstr "Våglängd"
 msgid "Alter selected bitmap(s) along sine wave."
 msgstr "Sänk markerade objekt en nivå"
 
+# TODO
 #: ../src/extension/internal/bluredge.cpp:134
 #, fuzzy
 msgid "Inset/Outset Halo"
-msgstr "Förskjutning med:"
+msgstr "Gloria"
 
 #: ../src/extension/internal/bluredge.cpp:136
 #, fuzzy
 msgid "Width in px of the halo"
-msgstr "Maximal bredd i antal tecken"
+msgstr "Bredd i bildpunkter för glorian"
 
 #: ../src/extension/internal/bluredge.cpp:137
 #, fuzzy
 msgid "Number of steps"
-msgstr "Interpolera steg"
+msgstr "Antal steg"
 
 #: ../src/extension/internal/bluredge.cpp:137
 msgid "Number of inset/outset copies of the object to make"
-msgstr ""
+msgstr "Antal kopior av objektet att skapa"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:327
 #: ../src/extension/internal/cairo-ps-out.cpp:365
@@ -9846,7 +9876,7 @@ msgstr "Konvertera text till slingor"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:334
 msgid "PS+LaTeX: Omit text in PS, and create LaTeX file"
-msgstr ""
+msgstr "PS+LaTeX: Exkludera text i PostScript, och skapa LaTeX-fil"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:335
 #: ../src/extension/internal/cairo-ps-out.cpp:373
@@ -9880,11 +9910,11 @@ msgstr "Begränsa export till objektet med ID"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:344
 msgid "PostScript File"
-msgstr "PostScript fil"
+msgstr "PostScrip-tfil"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:372
 msgid "EPS+LaTeX: Omit text in EPS, and create LaTeX file"
-msgstr ""
+msgstr "EPS+LaTeX: Exkludera text i EPS, och skapa LaTeX-fil"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:382
 msgid "Encapsulated PostScript File"
@@ -9900,52 +9930,52 @@ msgstr "PDF 1.4"
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:248
 msgid "PDF+LaTeX: Omit text in PDF, and create LaTeX file"
-msgstr ""
+msgstr "PDF+LaTeX: Exkludera text i PDF, och skapa LaTeX-fil"
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2401
 #, fuzzy
 msgid "EMF Input"
-msgstr "Inmatnings_metoder"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2406
 #, fuzzy
 msgid "Enhanced Metafiles (*.emf)"
-msgstr "Textförbättringsteknik"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2407
 #, fuzzy
 msgid "Enhanced Metafiles"
-msgstr "Bearbetad bild"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2415
 #, fuzzy
 msgid "WMF Input"
-msgstr "Inmatnings_metoder"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2420
 #, fuzzy
 msgid "Windows Metafiles (*.wmf)"
-msgstr "Microsoft WMF-fil"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2421
 #, fuzzy
 msgid "Windows Metafiles"
-msgstr "Antal fönster: %d\n"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2429
 #, fuzzy
 msgid "EMF Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2435
 #, fuzzy
 msgid "Enhanced Metafile (*.emf)"
-msgstr "Windows Enhanced Metafile-format"
+msgstr ""
 
 #: ../src/extension/internal/emf-win32-inout.cpp:2436
 #, fuzzy
 msgid "Enhanced Metafile"
-msgstr "Windows Enhanced Metafile-format"
+msgstr ""
 
 #: ../src/extension/internal/filter/drop-shadow.h:35
 #, fuzzy
@@ -9956,7 +9986,7 @@ msgstr "Skuggkastning"
 #: ../src/extension/internal/filter/drop-shadow.h:97
 #, fuzzy
 msgid "Blur radius, px"
-msgstr "Maximal utsmetningsradie"
+msgstr "Oskärperadie, px"
 
 #: ../src/extension/internal/filter/drop-shadow.h:38
 #: ../src/extension/internal/filter/drop-shadow.h:98
@@ -9964,19 +9994,19 @@ msgstr "Maximal utsmetningsradie"
 #: ../src/ui/widget/selected-style.cpp:1033
 #: ../src/ui/widget/selected-style.cpp:1034
 msgid "Opacity, %"
-msgstr "Transparens, %"
+msgstr "Opacitet, %"
 
 #: ../src/extension/internal/filter/drop-shadow.h:39
 #: ../src/extension/internal/filter/drop-shadow.h:99
 #, fuzzy
 msgid "Horizontal offset, px"
-msgstr "Typsnittsstorlek [px]"
+msgstr "Horizontellt avstånd, px"
 
 #: ../src/extension/internal/filter/drop-shadow.h:40
 #: ../src/extension/internal/filter/drop-shadow.h:100
 #, fuzzy
 msgid "Vertical offset, px"
-msgstr "Typsnittsstorlek [px]"
+msgstr "Vertikalt avstånd, px"
 
 #: ../src/extension/internal/filter/drop-shadow.h:44
 #: ../src/extension/internal/filter/drop-shadow.h:104
@@ -9990,13 +10020,15 @@ msgstr "Filter"
 #: ../src/extension/internal/filter/drop-shadow.h:48
 #, fuzzy
 msgid "Black, blurred drop shadow"
-msgstr "Utsmetningsradie för skuggkastning"
+msgstr "Svart, suddig skuggkastning"
 
+# TODO
 #: ../src/extension/internal/filter/drop-shadow.h:95
 #, fuzzy
 msgid "Drop Glow"
-msgstr "_Skenradie:"
+msgstr ""
 
+# TODO
 #: ../src/extension/internal/filter/drop-shadow.h:108
 msgid "White, blurred drop glow"
 msgstr ""
@@ -10004,7 +10036,7 @@ msgstr ""
 #: ../src/extension/internal/filter/filter-file.cpp:32
 #, fuzzy
 msgid "Bundled"
-msgstr "Rundad:"
+msgstr "Packad"
 
 #: ../src/extension/internal/filter/filter-file.cpp:33
 #, fuzzy
@@ -10013,63 +10045,65 @@ msgstr "Personligt"
 
 #: ../src/extension/internal/filter/filter-file.cpp:44
 msgid "Null external module directory name.  Filters will not be loaded."
-msgstr ""
+msgstr "Tomt externt modulmapp-namn. Filter kommer ej att laddas."
 
 #: ../src/extension/internal/filter/snow.h:32
 #, fuzzy
 msgid "Snow crest"
-msgstr "%.1f cm snö\n"
+msgstr Snötopp"
 
 #: ../src/extension/internal/filter/snow.h:34
 #, fuzzy
 msgid "Drift Size"
-msgstr "Bildstorlek"
+msgstr "Divstorlek"
 
 #: ../src/extension/internal/filter/snow.h:42
 #, fuzzy
 msgid "Snow has fallen on object"
-msgstr "Platta till objekt"
+msgstr "Snö har fallit på objekt"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:149
 #, fuzzy, c-format
 msgid "%s GDK pixbuf Input"
-msgstr "In/ut-fel"
+msgstr ""
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:151
 #, fuzzy
 msgid "Link or embed image:"
-msgstr "Infoga bilder"
+msgstr "Länka eller infoga bild:"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:152
 #, fuzzy
 msgid "embed"
-msgstr "Inbyggd"
+msgstr "infoga"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:153
 #, fuzzy
 msgid "link"
-msgstr "linjer"
+msgstr "länka"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:155
 msgid ""
 "Embed results in stand-alone, larger SVG files. Link references a file "
 "outside this SVG document and all files must be moved together."
 msgstr ""
+"Infoga resulterar i fristående, större SVG-filer. Länka skapar en referens "
+"till en fil utanför detta SVG-dokument och alla filer måste flyttas tillsammans."
 
 #: ../src/extension/internal/gimpgrad.cpp:274
 #, fuzzy
 msgid "GIMP Gradients"
-msgstr "Genomsök gradienter igen"
+msgstr "GIMP-gradienter"
 
 #: ../src/extension/internal/gimpgrad.cpp:279
 #, fuzzy
 msgid "GIMP Gradient (*.ggr)"
-msgstr "Vinkelstorleksgradient:"
+msgstr "GIMP-gradient (*.ggr)"
 
 #: ../src/extension/internal/gimpgrad.cpp:280
 #, fuzzy
 msgid "Gradients used in GIMP"
-msgstr "Inga gradienter i dokumentet"
+msgstr "Färggradienter använda i GIMP"
 
 #: ../src/extension/internal/grid.cpp:196 ../src/ui/widget/panel.cpp:112
 msgid "Grid"
@@ -10098,12 +10132,12 @@ msgstr "Vertikal förskjutning"
 #: ../src/extension/internal/grid.cpp:208
 #, fuzzy
 msgid "Draw a path which is a grid"
-msgstr "Utrymme som infogas mellan kolumner i rutnät"
+msgstr "Rita en slinga som är ett rutnät"
 
 #: ../src/extension/internal/javafx-out.cpp:966
 #, fuzzy
 msgid "JavaFX Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../src/extension/internal/javafx-out.cpp:971
 msgid "JavaFX (*.fx)"
@@ -10112,12 +10146,12 @@ msgstr "JavaFX (*.fx)"
 #: ../src/extension/internal/javafx-out.cpp:972
 #, fuzzy
 msgid "JavaFX Raytracer File"
-msgstr "Fel vid filradering"
+msgstr ""
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:105
 #, fuzzy
 msgid "LaTeX Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:110
 msgid "LaTeX With PSTricks macros (*.tex)"
@@ -10126,54 +10160,54 @@ msgstr "LaTeX med PSTricks-makron (*.tex)"
 #: ../src/extension/internal/latex-pstricks-out.cpp:111
 #, fuzzy
 msgid "LaTeX PSTricks File"
-msgstr "Fel vid filradering"
+msgstr ""
 
 #: ../src/extension/internal/latex-pstricks.cpp:349
 #, fuzzy
 msgid "LaTeX Print"
-msgstr "Skriv ut dokument"
+msgstr "LaTeX Utskrift"
 
 #: ../src/extension/internal/odf.cpp:2417
 #, fuzzy
 msgid "OpenDocument Drawing Output"
-msgstr "Aktivera skapandet av miniatyrbilder för OpenDocument-ritmallar"
+msgstr ""
 
 #: ../src/extension/internal/odf.cpp:2422
 #, fuzzy
 msgid "OpenDocument drawing (*.odg)"
-msgstr "Aktivera skapandet av miniatyrbilder för OpenDocument-ritmallar"
+msgstr ""
 
 #: ../src/extension/internal/odf.cpp:2423
 #, fuzzy
 msgid "OpenDocument drawing file"
-msgstr "Aktivera skapandet av miniatyrbilder för OpenDocument-ritmallar"
+msgstr ""
 
 #. TRANSLATORS: The following are document crop settings for PDF import
 #. more info: http://www.acrobatusers.com/tech_corners/javascript_corner/tips/2006/page_bounds/
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:56
 #, fuzzy
 msgid "media box"
-msgstr "_Postbox:"
+msgstr "MediaBox"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:57
 #, fuzzy
 msgid "crop box"
-msgstr "_Postbox:"
+msgstr "CropBox"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:58
 #, fuzzy
 msgid "trim box"
-msgstr "_Postbox:"
+msgstr "TrimBox"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:59
 #, fuzzy
 msgid "bleed box"
-msgstr "_Postbox:"
+msgstr "BleedBox"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:60
 #, fuzzy
 msgid "art box"
-msgstr "_Postbox:"
+msgstr "ArtBox"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:72
 msgid "Select page:"
@@ -10189,7 +10223,7 @@ msgstr "av %i"
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:92
 #, fuzzy
 msgid "Clip to:"
-msgstr "lägger %s till %s"
+msgstr "Beskär:"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:104
 msgid "Page settings"
@@ -10198,14 +10232,14 @@ msgstr "Sidinställningar"
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:106
 #, fuzzy
 msgid "Precision of approximating gradient meshes:"
-msgstr "Precision av approximerande gradientmesh:"
+msgstr "Noggrannhet för approximerande gradientmesh:"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:107
 msgid ""
 "<b>Note</b>: setting the precision too high may result in a large SVG file "
 "and slow performance."
 msgstr ""
-"<b>Notera</b>: att sätta precisionen för högt kan resultera i en stor SVG-"
+"<b>Notera</b>: att sätta noggrannheten för högt kan resultera i en stor SVG-"
 "fil och långsam prestanda"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:112
@@ -10243,7 +10277,7 @@ msgstr "Importinställningar för PDF"
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:396
 msgid "pdfinput|medium"
-msgstr "mellan"
+msgstr "pdfinput|mellan"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:397
 msgid "fine"
@@ -10256,7 +10290,7 @@ msgstr "mycket fin"
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:754
 #, fuzzy
 msgid "PDF Input"
-msgstr "Inmatnings_metoder"
+msgstr ""
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:759
 msgid "Adobe PDF (*.pdf)"
@@ -10281,7 +10315,7 @@ msgstr "Öppna filer som sparats med Adobe Illustrator 9.0 eller senare"
 #: ../src/extension/internal/pov-out.cpp:700
 #, fuzzy
 msgid "PovRay Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../src/extension/internal/pov-out.cpp:705
 msgid "PovRay (*.pov) (paths and shapes only)"
@@ -10290,7 +10324,7 @@ msgstr "PovRay (*.pov) (endast slingor och former)"
 #: ../src/extension/internal/pov-out.cpp:706
 #, fuzzy
 msgid "PovRay Raytracer File"
-msgstr "Fel vid filradering"
+msgstr ""
 
 #: ../src/extension/internal/svg.cpp:87
 msgid "SVG Input"
@@ -10299,7 +10333,7 @@ msgstr "SVG-indata"
 #: ../src/extension/internal/svg.cpp:92
 #, fuzzy
 msgid "Scalable Vector Graphic (*.svg)"
-msgstr "Rendera Scalable Vector Graphics"
+msgstr ""
 
 #: ../src/extension/internal/svg.cpp:93
 msgid "Inkscape native file format and W3C standard"
@@ -10308,7 +10342,7 @@ msgstr "Inbyggt filformat för Inkscape och W3C-standard"
 #: ../src/extension/internal/svg.cpp:101
 #, fuzzy
 msgid "SVG Output Inkscape"
-msgstr "Komprimerad Inkscape SVG (*.svgz)"
+msgstr ""
 
 #: ../src/extension/internal/svg.cpp:106
 msgid "Inkscape SVG (*.svg)"
@@ -10328,12 +10362,12 @@ msgstr "Vanlig SVG (*.svg)"
 
 #: ../src/extension/internal/svg.cpp:121
 msgid "Scalable Vector Graphics format as defined by the W3C"
-msgstr "Format för skalbar vektorgrafik som definierat av W3C"
+msgstr "Format för skalbar vektorgrafik som definierats av W3C"
 
 #: ../src/extension/internal/svgz.cpp:47
 #, fuzzy
 msgid "SVGZ Input"
-msgstr "Inmatnings_metoder"
+msgstr ""
 
 #: ../src/extension/internal/svgz.cpp:53 ../src/extension/internal/svgz.cpp:67
 msgid "Compressed Inkscape SVG (*.svgz)"
@@ -10346,7 +10380,7 @@ msgstr "SVG-filformat komprimerat med GZip"
 #: ../src/extension/internal/svgz.cpp:62 ../src/extension/internal/svgz.cpp:76
 #, fuzzy
 msgid "SVGZ Output"
-msgstr "Utskriftsfack"
+msgstr ""
 
 #: ../src/extension/internal/svgz.cpp:68
 msgid "Inkscape's native file format compressed with GZip"
@@ -10363,12 +10397,12 @@ msgstr "Format för skalbar vektorgrafik komprimerat med GZip"
 #: ../src/extension/internal/win32.cpp:485
 #, fuzzy
 msgid "Windows 32-bit Print"
-msgstr "[abi=32-bitars heltal, "
+msgstr "Windows 32-bit Utskrift"
 
 #: ../src/extension/internal/wpg-input.cpp:102
 #, fuzzy
 msgid "WPG Input"
-msgstr "Inmatnings_metoder"
+msgstr ""
 
 #: ../src/extension/internal/wpg-input.cpp:107
 msgid "WordPerfect Graphics (*.wpg)"
@@ -10384,7 +10418,7 @@ msgstr "Förhandsgranskning"
 
 #: ../src/extension/prefdialog.cpp:236
 msgid "Is the effect previewed live on canvas?"
-msgstr ""
+msgstr "Förhandsgranskas effekten i dokumentet?"
 
 #. We can't call sp_ui_error_dialog because we may be
 #. running from the console, in which case calling sp_ui
@@ -10397,7 +10431,7 @@ msgstr "Automatisk detektering av filformat misslyckades. Öppnar som SVG."
 #: ../src/file.cpp:147
 #, fuzzy
 msgid "default.svg"
-msgstr "Renderad SVG"
+msgstr "default.svg"
 
 #: ../src/file.cpp:265 ../src/file.cpp:1071
 #, c-format
@@ -10412,7 +10446,7 @@ msgstr "Dokumentet inte sparat ännu. Kan ej återställa."
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
-"Förändringar kommer gå förlorade! Är du säker på att du vill läsa in "
+"Ändringar kommer förloras! Är du säker att du vill läsa in "
 "dokument %s igen?"
 
 #: ../src/file.cpp:325
@@ -10425,12 +10459,12 @@ msgstr "Dokumentet ej återställt."
 
 #: ../src/file.cpp:477
 msgid "Select file to open"
-msgstr "Välj fil att öppna"
+msgstr "Välj en fil att öppna"
 
 #: ../src/file.cpp:564
 #, fuzzy
 msgid "Vacuum &lt;defs&gt;"
-msgstr "Med &lt;\\|&gt;-tangent"
+msgstr "Städa &lt;defs&gt;"
 
 #: ../src/file.cpp:569
 #, c-format
@@ -10450,7 +10484,7 @@ msgid ""
 "caused by an unknown filename extension."
 msgstr ""
 "Inget Inkscapetillägg hittat för att spara dokumentet (%s). Detta kan ha "
-"orsakats av en okänd filändelse"
+"orsakats av en okänd filändelse."
 
 #: ../src/file.cpp:606 ../src/file.cpp:614 ../src/file.cpp:622
 #: ../src/file.cpp:628 ../src/file.cpp:633
@@ -24997,7 +25031,7 @@ msgid ""
 "Any path self-intersections or subpaths create holes in the fill (fill-rule: "
 "evenodd)"
 msgstr ""
-"Varje slingas korsningar med sig själv eller delslingor skapar hål i "
+"Varje slingas skärningar med sig själv eller delslingor skapar hål i "
 "fyllningen (fyllningsregel: evenodd)"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
