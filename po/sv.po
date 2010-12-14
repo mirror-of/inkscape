@@ -12834,6 +12834,8 @@ msgid ""
 "Scale factor relating curvature and length of construction lines (try "
 "5*offset)"
 msgstr ""
+"Skalfaktor som relaterar böjning och längd för konstruktionslinje "
+"(prova 5*förskjutning)"
 
 #: ../src/live_effects/lpe-sketch.cpp:57
 msgid "Max. length"
@@ -12842,97 +12844,96 @@ msgstr "Max. längd"
 #: ../src/live_effects/lpe-sketch.cpp:57
 #, fuzzy
 msgid "Maximum length of construction lines"
-msgstr "Maximal längd på textfält"
+msgstr "Maximal längd på konstruktionslinjer"
 
 #: ../src/live_effects/lpe-sketch.cpp:58
 #, fuzzy
 msgid "Length variation"
-msgstr "Färg_variation:"
+msgstr "Längdvariation"
 
 #: ../src/live_effects/lpe-sketch.cpp:58
 msgid "Random variation of the length of construction lines"
-msgstr ""
+msgstr "Slumpmässig variation av längden för konstruktionslinjer"
 
 #: ../src/live_effects/lpe-sketch.cpp:59
 #, fuzzy
 msgid "Placement randomness"
-msgstr "Konversationsplacering"
+msgstr "Slumpad placering"
 
 #: ../src/live_effects/lpe-sketch.cpp:59
 msgid "0: evenly distributed construction lines, 1: purely random placement"
-msgstr ""
+msgstr "0: jämnt distribuerade konstruktionslinjer, 1: rent slumpade placeringar"
 
 #: ../src/live_effects/lpe-sketch.cpp:61
 #, fuzzy
 msgid "k_min"
-msgstr "Min (x+d, -)"
+msgstr "k_min"
 
 #: ../src/live_effects/lpe-sketch.cpp:61
 #, fuzzy
 msgid "min curvature"
-msgstr "Flikdeformering"
+msgstr "min böjning"
 
 #: ../src/live_effects/lpe-sketch.cpp:62
 #, fuzzy
 msgid "k_max"
-msgstr "Max (x+d, -)"
+msgstr "k_max"
 
 #: ../src/live_effects/lpe-sketch.cpp:62
 #, fuzzy
 msgid "max curvature"
-msgstr "Flikdeformering"
+msgstr "max böjning"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:46
 #, fuzzy
 msgid "Nb of generations"
-msgstr ""
-"l\n"
-"b\n"
-"c"
+msgstr "Antal generationer"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:46
 #, fuzzy
 msgid "Depth of the recursion --- keep low!!"
-msgstr "Rekursionsdjupet %d överskred det maximala djupet %d.\n"
+msgstr "Rekursionsdjupet --- behåll lågt!!"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:47
 #, fuzzy
 msgid "Generating path"
-msgstr "Sökväg nedåt"
+msgstr "Genererande slinga"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:47
 msgid "Path whose segments define the iterated transforms"
-msgstr ""
+msgstr "Slinga vars segment definierar den itererade transformen"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 #, fuzzy
 msgid "Use uniform transforms only"
-msgstr "Använd endast hårdvaruupplösningar"
+msgstr "Använd endast likformiga transformer"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:48
 msgid ""
 "2 consecutive segments are used to reverse/preserve orientation only "
 "(otherwise, they define a general transform)."
 msgstr ""
+"2 segment i följd används för att återställa/bibehålla endast orienteringen "
+"(annars definierar de en allmän transform)."
 
 #: ../src/live_effects/lpe-vonkoch.cpp:49
 #, fuzzy
 msgid "Draw all generations"
-msgstr "Lista alla filer"
+msgstr "Rita alla generationer"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:49
 msgid "If unchecked, draw only the last generation"
-msgstr ""
+msgstr "Om avmarkerad, rita endast den sista generationen"
 
 #. ,draw_boxes(_("Display boxes"), _("Display boxes instead of paths only"), "draw_boxes", &wr, this, true)
 #: ../src/live_effects/lpe-vonkoch.cpp:51
 #, fuzzy
 msgid "Reference segment"
-msgstr "  Segmentsektioner...\n"
+msgstr "Referenssegment"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:51
 msgid "The reference segment. Defaults to the horizontal midline of the bbox."
-msgstr ""
+msgstr "Referenssegmentet. Standard är den horisontella mittlinjen för begränsningsrutan."
 
 #. refA(_("Ref Start"), _("Left side middle of the reference box"), "refA", &wr, this),
 #. refB(_("Ref End"), _("Right side middle of the reference box"), "refB", &wr, this),
@@ -12940,91 +12941,91 @@ msgstr ""
 #: ../src/live_effects/lpe-vonkoch.cpp:55
 #, fuzzy
 msgid "Max complexity"
-msgstr "Max RGB"
+msgstr "Max komplexitet"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:55
 msgid "Disable effect if the output is too complex"
-msgstr ""
+msgstr "Stäng av effekt om utdatan är för komplex"
 
 #: ../src/live_effects/parameter/bool.cpp:69
 #, fuzzy
 msgid "Change bool parameter"
-msgstr "PTP ogiltig parameter"
+msgstr "Ändra boolsk parameter"
 
 #: ../src/live_effects/parameter/enum.h:50
 #, fuzzy
 msgid "Change enumeration parameter"
-msgstr "PTP ogiltig parameter"
+msgstr "Ändra enumerationsparameter"
 
 #: ../src/live_effects/parameter/parameter.cpp:139
 #, fuzzy
 msgid "Change scalar parameter"
-msgstr "PTP ogiltig parameter"
+msgstr "Ändra skalär parameter"
 
 #: ../src/live_effects/parameter/path.cpp:160
 #, fuzzy
 msgid "Edit on-canvas"
-msgstr "Kantutjämningsläget i duken."
+msgstr "Redigera på duken"
 
 #: ../src/live_effects/parameter/path.cpp:170
 #, fuzzy
 msgid "Copy path"
-msgstr "Hittade sökväg till arbetskopia"
+msgstr "Kopiera slinga"
 
 #: ../src/live_effects/parameter/path.cpp:180
 #, fuzzy
 msgid "Paste path"
-msgstr "Klistra in slingeffekt"
+msgstr "Klistra in slinga"
 
 #: ../src/live_effects/parameter/path.cpp:190
 #, fuzzy
 msgid "Link to path"
-msgstr "Markering till slinga"
+msgstr "Länka till slinga"
 
 #: ../src/live_effects/parameter/path.cpp:418
 #, fuzzy
 msgid "Paste path parameter"
-msgstr "Klistra in slingeffekt"
+msgstr "Klistra in slingparameter"
 
 #: ../src/live_effects/parameter/path.cpp:450
 #, fuzzy
 msgid "Link path parameter to path"
-msgstr "Sökväg till temporärkatalogen"
+msgstr "Länka slingparameter till slinga"
 
 #: ../src/live_effects/parameter/point.cpp:91
 #, fuzzy
 msgid "Change point parameter"
-msgstr "PTP ogiltig parameter"
+msgstr "Ändra punktparameter"
 
 #: ../src/live_effects/parameter/random.cpp:137
 #, fuzzy
 msgid "Change random parameter"
-msgstr "Slumpmässigt temaläge"
+msgstr "Ändra slumpparameter"
 
 #: ../src/live_effects/parameter/text.cpp:101
 #, fuzzy
 msgid "Change text parameter"
-msgstr "Ändra textkodningen"
+msgstr "Ändra textparameter"
 
 #: ../src/live_effects/parameter/unit.cpp:77
 #, fuzzy
 msgid "Change unit parameter"
-msgstr "Ändra bildenhet"
+msgstr "Ändra enhetsparameter"
 
 #: ../src/live_effects/parameter/vector.cpp:96
 #, fuzzy
 msgid "Change vector parameter"
-msgstr "Ändra textkodningen"
+msgstr "Ändra vektorparameter"
 
 #: ../src/main-cmdlineact.cpp:49
 #, c-format
 msgid "Unable to find verb ID '%s' specified on the command line.\n"
-msgstr ""
+msgstr "Kunde ej hitta verb ID '%s' specificerad på kommandoraden.\n"
 
 #: ../src/main-cmdlineact.cpp:61
 #, fuzzy, c-format
 msgid "Unable to find node ID: '%s'\n"
-msgstr "Kunde inte hitta delen id=\"%s\" för \"%s\""
+msgstr "Kunde ej hitta nod ID: '%s'\n"
 
 #: ../src/main.cpp:269
 msgid "Print the Inkscape version number"
@@ -13049,10 +13050,11 @@ msgstr "Öppna angivna dokument (flaggsträng kan utelämnas)"
 msgid "FILENAME"
 msgstr "FILNAMN"
 
+# pipe here is the UNIX term
 #: ../src/main.cpp:289
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
-"Skriv ut dokument till angiven utdatafil (använd \"| program\" för rör)"
+"Skriv ut dokument till angiven utdatafil (använd \"| program\" för pipe)"
 
 #: ../src/main.cpp:294
 msgid "Export document to a PNG file"
@@ -13063,6 +13065,8 @@ msgid ""
 "Resolution for exporting to bitmap and for rasterization of filters in PS/"
 "EPS/PDF (default 90)"
 msgstr ""
+"Upplösning för exportering till bitmapp och för resterisering av filter i PS/"
+"EPS/PDF (standard: 90)"
 
 #: ../src/main.cpp:300 ../src/ui/widget/rendering-options.cpp:43
 msgid "DPI"
@@ -13074,7 +13078,7 @@ msgid ""
 "Exported area in SVG user units (default is the page; 0,0 is lower-left "
 "corner)"
 msgstr ""
-"Exporterad area i millimeter (standard är hela dokumentet, 0,0 är nedre "
+"Exporterad area i SVG användarenheter (standard är hela dokumentet, 0,0 är nedre "
 "vänstra hörnet)"
 
 #: ../src/main.cpp:305
@@ -13084,24 +13088,26 @@ msgstr "x0:y0:x1:y1"
 #: ../src/main.cpp:309
 #, fuzzy
 msgid "Exported area is the entire drawing (not page)"
-msgstr "Exporterar"
+msgstr "Exporterad area är hela ritningen (inte sidan)"
 
 #: ../src/main.cpp:314
 #, fuzzy
 msgid "Exported area is the entire page"
-msgstr "Den valda arean att exportera är ogiltig"
+msgstr "Exporterad area är hela sidan"
 
 #: ../src/main.cpp:319
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr ""
+"Snäpp den exporterade bitmapp-arean utåt till närmast heltalsvärde (i SVG "
+"användarenheter)"
 
 #: ../src/main.cpp:324
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
-"Bredden på den exporterade bitmappsbilden i bildpunkter (åsidosätter punkter/"
-"tum)"
+"Bredden på den exporterade bitmappsbilden i bildpunkter "
+"(överskrider export-dpi)"
 
 #: ../src/main.cpp:325
 msgid "WIDTH"
@@ -13110,8 +13116,8 @@ msgstr "BREDD"
 #: ../src/main.cpp:329
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
-"Höjden på den exporterade bitmappsbilden i bildpunkter (åsidosätter punkter/"
-"tum)"
+"Höjden på den exporterade bitmappsbilden i bildpunkter "
+"(överskrider export-dpi)"
 
 #: ../src/main.cpp:330
 msgid "HEIGHT"
@@ -13120,7 +13126,7 @@ msgstr "HÖJD"
 #: ../src/main.cpp:334
 #, fuzzy
 msgid "The ID of the object to export"
-msgstr "Kan inte exportera nyckel till \"%s\""
+msgstr "ID för objektet att exportera"
 
 #: ../src/main.cpp:335 ../src/main.cpp:433
 msgid "ID"
@@ -13132,10 +13138,11 @@ msgstr "ID"
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
+"Exportera endast det objekt med export-id, dölj alla andra (endast med export-id)"
 
 #: ../src/main.cpp:346
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
-msgstr ""
+msgstr "Använd lagrade filnamn och DPI-ledtrådar vid exportering (endast med export-id)"
 
 #: ../src/main.cpp:351
 #, fuzzy
@@ -13183,6 +13190,9 @@ msgid ""
 "exported, putting the text on top of the PDF/PS/EPS file. Include the result "
 "in LaTeX like: \\input{latexfile.tex}"
 msgstr ""
+"Exportera PDF/PS/EPS utan text. Förutom PDF/PS/EPS-filen, kommer en LaTeX-fil "
+"exporteras som placerar texten ovan PDF/PS/EPS-filen. Inkludera resultatet i LaTeX "
+"likt: \\input{latexfile.tex}"
 
 #: ../src/main.cpp:387
 msgid "Export document to an Enhanced Metafile (EMF) File"
@@ -13197,6 +13207,8 @@ msgid ""
 "Render filtered objects without filters, instead of rasterizing (PS, EPS, "
 "PDF)"
 msgstr ""
+"Rendera filtrerade objekt utan filter, istället för rasterisering (PS, EPS, "
+"PDF)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:404
@@ -13204,6 +13216,7 @@ msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
+"Begär X-koordinat för ritningen eller, om specificerad, för objektet med --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:410
@@ -13211,6 +13224,7 @@ msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
+"Begär Y-koordinat för ritningen eller, om specificerad, för objektet med --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:416
@@ -13218,6 +13232,7 @@ msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
+"Begär bredd för ritningen eller, om specificerad, för objektet med --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:422
@@ -13225,50 +13240,50 @@ msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
+"Begär höjd för ritningen eller, om specificerad, för objektet med --query-id"
 
 #: ../src/main.cpp:427
 msgid "List id,x,y,w,h for all objects"
-msgstr ""
+msgstr "Lista id,x,y,bredd,höjd för alla objekt"
 
 #: ../src/main.cpp:432
 #, fuzzy
 msgid "The ID of the object whose dimensions are queried"
-msgstr ""
-"Bredden på den genererade bimappsbilden i bildpunkter (åsidosätter dpi)"
+msgstr "ID för det objekt vars dimensioner är begärda"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
 #: ../src/main.cpp:438
 msgid "Print out the extension directory and exit"
-msgstr ""
+msgstr "Skriv ut tilläggsmappen och avsluta"
 
 #: ../src/main.cpp:443
 msgid "Remove unused definitions from the defs section(s) of the document"
-msgstr ""
+msgstr "Ta bort oanvända definitioner från defs-sektionerna i dokumentet"
 
 #: ../src/main.cpp:448
 msgid "List the IDs of all the verbs in Inkscape"
-msgstr ""
+msgstr "Lista IDs för alla verb i Inkscape"
 
 #: ../src/main.cpp:453
 msgid "Verb to call when Inkscape opens."
-msgstr ""
+msgstr "Verb att anropa när Inkscape startas."
 
 #: ../src/main.cpp:454
 #, fuzzy
 msgid "VERB-ID"
-msgstr "Sensor-ID: %d.%d\n"
+msgstr "VERB-ID"
 
 #: ../src/main.cpp:458
 msgid "Object ID to select when Inkscape opens."
-msgstr ""
+msgstr "Objekt-ID att välja när Inkscape startas."
 
 #: ../src/main.cpp:459
 msgid "OBJECT-ID"
-msgstr "OBJEKTID"
+msgstr "OBJEKT-ID"
 
 #: ../src/main.cpp:463
 msgid "Start Inkscape in interactive shell mode."
-msgstr ""
+msgstr "Starta Inkscape i interaktiv konsoll-läge."
 
 #: ../src/main.cpp:796 ../src/main.cpp:1122
 #, fuzzy
@@ -13276,7 +13291,10 @@ msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
 "Available options:"
-msgstr "Användning: %s [flaggor] fil...\n"
+msgstr ""
+"[ALTERNATIV...] [FILNAMN...]\n"
+"\n"
+"Tillgängliga alternativ:"
 
 #. ## Add a menu for clear()
 #: ../src/menus-skeleton.h:16 ../src/ui/dialog/debug.cpp:74
@@ -13358,7 +13376,7 @@ msgstr "Tilläg_g"
 #: ../src/menus-skeleton.h:258
 #, fuzzy
 msgid "Whiteboa_rd"
-msgstr ":e kopian)"
+msgstr "Ritbord"
 
 #: ../src/menus-skeleton.h:262
 msgid "_Help"
@@ -13413,7 +13431,7 @@ msgstr ""
 #: ../src/object-edit.cpp:709
 #, fuzzy
 msgid "Move the box in perspective"
-msgstr "  m[ab]        - flytta fil(er) i arkivet\n"
+msgstr "Flytta lådan i perspektiv"
 
 #: ../src/object-edit.cpp:927
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -13476,10 +13494,11 @@ msgstr ""
 "Rulla ihop/rulla upp spiralen från <b>utsidan</b>; med <b>Ctrl</b> för att "
 "fästa vid vinkel; med <b>Alt</b> för att konvergera/divergera"
 
+# TODO
 #: ../src/object-edit.cpp:1319
 #, fuzzy
 msgid "Adjust the <b>offset distance</b>"
-msgstr "Relativt avstånd till horisont"
+msgstr "Justera <b>förskjutningsavståndet</b>"
 
 #: ../src/object-edit.cpp:1355
 #, fuzzy
@@ -13506,12 +13525,12 @@ msgstr "<b>Inga objekt</b> att konvertera till slingor i markeringen."
 #: ../src/path-chemistry.cpp:185
 #, fuzzy
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Klipp ut markerade objekt till urklipp"
+msgstr "Markera <b>slingor</b> för att dela upp."
 
 #: ../src/path-chemistry.cpp:189
 #, fuzzy
 msgid "Breaking apart paths..."
-msgstr "Slå ihop importerade slingor"
+msgstr "Delar upp slingor..."
 
 #: ../src/path-chemistry.cpp:276
 #, fuzzy
@@ -13521,12 +13540,12 @@ msgstr "Dela upp"
 #: ../src/path-chemistry.cpp:278
 #, fuzzy
 msgid "<b>No path(s)</b> to break apart in the selection."
-msgstr "<b>Inga objekt</b> att konvertera till slingor i markeringen."
+msgstr "<b>Inga slingor</b> att dela upp i markeringen."
 
 #: ../src/path-chemistry.cpp:290
 #, fuzzy
 msgid "Select <b>object(s)</b> to convert to path."
-msgstr "Konvertera markerat objekt till slinga"
+msgstr "Markera <b>objekt</b> att konvertera till slinga."
 
 #: ../src/path-chemistry.cpp:296
 msgid "Converting objects to paths..."
@@ -13543,7 +13562,7 @@ msgstr "<b>Inga objekt</b> att konvertera till slingor i markeringen."
 #: ../src/path-chemistry.cpp:588
 #, fuzzy
 msgid "Select <b>path(s)</b> to reverse."
-msgstr "Sökväg till temporärkatalogen"
+msgstr "Markera <b>slingor</b> att vända."
 
 #: ../src/path-chemistry.cpp:597
 msgid "Reversing paths..."
@@ -13556,27 +13575,27 @@ msgstr "Vänd slinga"
 #: ../src/path-chemistry.cpp:633
 #, fuzzy
 msgid "<b>No paths</b> to reverse in the selection."
-msgstr "<b>Inga slingor</b> att förskjuta i markeringen."
+msgstr "<b>Inga slingor</b> att vända i markeringen."
 
 #: ../src/pen-context.cpp:253 ../src/pencil-context.cpp:551
 #, fuzzy
 msgid "Drawing cancelled"
-msgstr "Operationen avbruten."
+msgstr "Ritande avslutat."
 
 #: ../src/pen-context.cpp:494 ../src/pencil-context.cpp:278
 #, fuzzy
 msgid "Continuing selected path"
-msgstr "Dela slinga vid markerade noder"
+msgstr "Fortsätter på markerad slinga"
 
 #: ../src/pen-context.cpp:504 ../src/pencil-context.cpp:286
 #, fuzzy
 msgid "Creating new path"
-msgstr "Släpp ny slinga"
+msgstr "Skapa ny slinga"
 
 #: ../src/pen-context.cpp:506 ../src/pencil-context.cpp:289
 #, fuzzy
 msgid "Appending to selected path"
-msgstr "Konvertera markerat objekt till slinga"
+msgstr "Lägger till på markerad slinga"
 
 #: ../src/pen-context.cpp:666
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
