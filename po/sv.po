@@ -10501,7 +10501,7 @@ msgstr ""
 #: ../src/file.cpp:621
 #, c-format
 msgid "File %s could not be saved."
-msgstr "Filen %s kunde ej sparas"
+msgstr "Filen %s kunde ej sparas."
 
 #: ../src/file.cpp:638
 msgid "Document saved."
@@ -10566,7 +10566,7 @@ msgstr "Färgmatris"
 #: ../src/filter-enums.cpp:22
 #, fuzzy
 msgid "Component Transfer"
-msgstr "Filöverföring"
+msgstr "Komponentöverföring"
 
 #: ../src/filter-enums.cpp:23
 msgid "Composite"
@@ -10612,12 +10612,12 @@ msgstr "Turbulens"
 #: ../src/filter-enums.cpp:40
 #, fuzzy
 msgid "Source Graphic"
-msgstr "Grafisk kantutjämning"
+msgstr "Källgrafik"
 
 #: ../src/filter-enums.cpp:41
 #, fuzzy
 msgid "Source Alpha"
-msgstr "Alfakanaler"
+msgstr "Käll-alfa"
 
 #: ../src/filter-enums.cpp:42
 #, fuzzy
@@ -10627,12 +10627,12 @@ msgstr "Bakgrundsbild"
 #: ../src/filter-enums.cpp:43
 #, fuzzy
 msgid "Background Alpha"
-msgstr "Alfakanaler"
+msgstr "Bakgrunds-alfa"
 
 #: ../src/filter-enums.cpp:44
 #, fuzzy
 msgid "Fill Paint"
-msgstr "Måla kanter"
+msgstr "Fyllnadsfärg"
 
 #: ../src/filter-enums.cpp:45
 #, fuzzy
@@ -10644,7 +10644,7 @@ msgstr "Linjefärg"
 #: ../src/filter-enums.cpp:53
 #, fuzzy
 msgid "filterBlendMode|Normal"
-msgstr "_Normal storlek"
+msgstr "filterBlendMode|Normal"
 
 #: ../src/filter-enums.cpp:54
 msgid "Multiply"
@@ -10669,7 +10669,7 @@ msgstr "Matris"
 
 #: ../src/filter-enums.cpp:64
 msgid "Saturate"
-msgstr "Mättare"
+msgstr "Mätta"
 
 #: ../src/filter-enums.cpp:65
 msgid "Hue Rotate"
@@ -10694,7 +10694,7 @@ msgstr "Ut"
 #: ../src/filter-enums.cpp:76
 #, fuzzy
 msgid "Atop"
-msgstr "Atop"
+msgstr "Ovan"
 
 #: ../src/filter-enums.cpp:77
 msgid "XOR"
@@ -10800,7 +10800,7 @@ msgstr "Stor"
 
 #: ../src/flood-context.cpp:469
 msgid "<b>Too much inset</b>, the result is empty."
-msgstr ""
+msgstr "<b>För mycket inskjutning</b>, resultatet är tomt."
 
 #: ../src/flood-context.cpp:509
 #, c-format
@@ -10839,11 +10839,11 @@ msgstr "Fyll i inhängnat område"
 #: ../src/flood-context.cpp:1142
 #, fuzzy
 msgid "Set style on object"
-msgstr "Okänt style_set \"%s\" i <%s>-element"
+msgstr "Sätt still på objekt"
 
 #: ../src/flood-context.cpp:1201
 msgid "<b>Draw over</b> areas to add to fill, hold <b>Alt</b> for touch fill"
-msgstr ""
+msgstr "<b>Rita över</b> för att lägga till fyllnad, håll <b>Alt</b> för direkt ifyllnad"
 
 #: ../src/gradient-context.cpp:132 ../src/gradient-drag.cpp:76
 msgid "Linear gradient <b>start</b>"
@@ -10948,7 +10948,7 @@ msgstr "Skapa standard gradient"
 
 #: ../src/gradient-context.cpp:588
 msgid "<b>Draw around</b> handles to select them"
-msgstr "<b>Dra runt</b> handtagen för att markera de"
+msgstr "<b>Dra runt</b> handtagen för att markera dem"
 
 #: ../src/gradient-context.cpp:695
 msgid "<b>Ctrl</b>: snap gradient angle"
@@ -10998,7 +10998,7 @@ msgstr ""
 
 #: ../src/gradient-drag.cpp:1112 ../src/gradient-drag.cpp:1119
 msgid " (stroke)"
-msgstr "(linje)"
+msgstr " (linje)"
 
 #: ../src/gradient-drag.cpp:1116
 #, c-format
@@ -11197,12 +11197,12 @@ msgstr "exfyrkanter"
 
 #: ../src/inkscape.cpp:328
 msgid "Autosaving documents..."
-msgstr "Sparar automatisk kopia av dokument..."
+msgstr "Autosparar dokument..."
 
 #: ../src/inkscape.cpp:399
 msgid "Autosave failed! Could not find inkscape extension to save document."
 msgstr ""
-"Automatisk säkerhetskopiering misslyckades! Kunde inte hitta inkscapetillägg "
+"Automatisk säkerhetskopiering misslyckades! Kunde inte hitta Inkscapetillägg "
 "för att att spara dokumentet."
 
 #: ../src/inkscape.cpp:402 ../src/inkscape.cpp:409
@@ -11288,7 +11288,7 @@ msgstr "Visa eller dölj statuslisten (längst ner i fönstret)"
 #: ../src/interface.cpp:960
 #, fuzzy, c-format
 msgid "Verb \"%s\" Unknown"
-msgstr "Okänt kommando eller verb"
+msgstr "Okänt verb \"%s\""
 
 #: ../src/interface.cpp:1002
 msgid "Open _Recent"
@@ -11298,38 +11298,38 @@ msgstr "Öppna senaste"
 #: ../src/interface.cpp:1103
 #, fuzzy, c-format
 msgid "Enter group #%s"
-msgstr "Ange namnet på gruppen"
+msgstr "Gå in i gruppen #%s"
 
 #: ../src/interface.cpp:1114
 #, fuzzy
 msgid "Go to parent"
-msgstr "Gå till papperskorgen"
+msgstr "Gå till förälder"
 
 #: ../src/interface.cpp:1205 ../src/interface.cpp:1291
 #: ../src/interface.cpp:1394 ../src/ui/widget/selected-style.cpp:468
 #, fuzzy
 msgid "Drop color"
-msgstr "Skuggkastningsfärg"
+msgstr "Släpp färg"
 
 #: ../src/interface.cpp:1244 ../src/interface.cpp:1354
 #, fuzzy
 msgid "Drop color on gradient"
-msgstr "Ändra gradient stoppfärg"
+msgstr "Släpp färg på gradient"
 
 #: ../src/interface.cpp:1407
 #, fuzzy
 msgid "Could not parse SVG data"
-msgstr "Kunde inte generera krypteringsdata: %s"
+msgstr "Kunde inte tolka SVG-data"
 
 #: ../src/interface.cpp:1446
 #, fuzzy
 msgid "Drop SVG"
-msgstr "Renderad SVG"
+msgstr "Släpp SVG"
 
 #: ../src/interface.cpp:1480
 #, fuzzy
 msgid "Drop bitmap image"
-msgstr "MacPaint Bitmap-bild"
+msgstr "Släpp bitmappbild"
 
 #: ../src/interface.cpp:1572
 #, c-format
@@ -11346,12 +11346,12 @@ msgstr ""
 
 #: ../src/knot.cpp:431
 msgid "Node or handle drag canceled."
-msgstr ""
+msgstr "Nod- eller handtags-flyttning avbruten."
 
 #: ../src/knotholder.cpp:150
 #, fuzzy
 msgid "Change handle"
-msgstr "Visa handtag"
+msgstr "Ändra handtag"
 
 #: ../src/knotholder.cpp:229
 msgid "Move handle"
@@ -11360,16 +11360,16 @@ msgstr "Flytta handtag"
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: ../src/knotholder.cpp:250
 msgid "<b>Move</b> the pattern fill inside the object"
-msgstr ""
+msgstr "<b>Flytta</b> mönsterfyllnad inuti objektet"
 
 #: ../src/knotholder.cpp:253
 #, fuzzy
 msgid "<b>Scale</b> the pattern fill; uniformly if with <b>Ctrl</b>"
-msgstr "Klipp ut markerade objekt till urklipp"
+msgstr "<b>Skala</b> mönsterfyllnaden, likformigt med <b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:256
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
-msgstr ""
+msgstr "<b>Rotera</b> mönsterfyllnaden, snäppt till fixa vinklar med <b>Ctrl</b>"
 
 #: ../src/libgdl/gdl-dock-bar.c:108
 #, fuzzy
@@ -11438,8 +11438,7 @@ msgstr "Storleksändringsbar"
 #, fuzzy
 msgid "If set, the dock item can be resized when docked in a panel"
 msgstr ""
-"Om detta är angivet kan objektets storlek ändras när det är dockat i en "
-"GtkPanel-widget"
+"Om detta är angivet kan objektets storlek ändras när det är dockat i en panel"
 
 #: ../src/libgdl/gdl-dock-item.c:311
 #, fuzzy
@@ -11559,11 +11558,13 @@ msgstr "Växlingsstil"
 msgid "Switcher buttons style"
 msgstr "Stil på växlingsknapparna"
 
+# TODO
 #: ../src/libgdl/gdl-dock-master.c:168
 #, fuzzy
 msgid "Expand direction"
 msgstr "Riktningsvektor"
 
+# TODO
 #: ../src/libgdl/gdl-dock-master.c:169
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
@@ -11633,12 +11634,12 @@ msgstr "Standardikon för dockobjektet"
 #: ../src/libgdl/gdl-dock-object.c:142
 #, fuzzy
 msgid "Pixbuf Icon"
-msgstr "Ikonnamn: %s\n"
+msgstr "Pixbuf-Ikon"
 
 #: ../src/libgdl/gdl-dock-object.c:143
 #, fuzzy
 msgid "Pixbuf icon for the dock object"
-msgstr "Standardikon för dockobjektet"
+msgstr "Pixbuf-ikon för dockobjektet"
 
 #: ../src/libgdl/gdl-dock-object.c:148
 #, fuzzy
@@ -11835,51 +11836,51 @@ msgstr "Y-koordinat för en flytande docka"
 #: ../src/libgdl/gdl-dock.c:499
 #, fuzzy, c-format
 msgid "Dock #%d"
-msgstr "Docka %d"
+msgstr "Docka #%d"
 
 #: ../src/libnrtype/FontFactory.cpp:897
 msgid "Ignoring font without family that will crash Pango"
-msgstr ""
+msgstr "Ignorerar typsnitt utan familj som kraschar Pango"
 
 #: ../src/live_effects/effect.cpp:87
 #, fuzzy
 msgid "doEffect stack test"
-msgstr "GtkHTML-testprogram"
+msgstr ""
 
 #: ../src/live_effects/effect.cpp:88
 #, fuzzy
 msgid "Angle bisector"
-msgstr "Vinkelomfång:"
+msgstr "Vinkeldelare"
 
 #. TRANSLATORS: boolean operations
 #: ../src/live_effects/effect.cpp:90
 #, fuzzy
 msgid "Boolops"
-msgstr "Färg"
+msgstr "Boolops"
 
 #: ../src/live_effects/effect.cpp:91
 msgid "Circle (by center and radius)"
-msgstr ""
+msgstr "Cirkel (genom mittpunkt och radie)"
 
 #: ../src/live_effects/effect.cpp:92
 #, fuzzy
 msgid "Circle by 3 points"
-msgstr "Visa kontrollpunkter"
+msgstr "Cirkel genom 3 punkter"
 
 #: ../src/live_effects/effect.cpp:93
 #, fuzzy
 msgid "Dynamic stroke"
-msgstr "Penseldrags_täthet:"
+msgstr "Dynamiskt penseldrag"
 
 #: ../src/live_effects/effect.cpp:95
 #, fuzzy
 msgid "Lattice Deformation"
-msgstr "Par-karta-gitter-utforskare"
+msgstr "Gallerdeformering"
 
 #: ../src/live_effects/effect.cpp:96
 #, fuzzy
 msgid "Line Segment"
-msgstr "  Segmentsektioner...\n"
+msgstr "Linjesegment"
 
 #: ../src/live_effects/effect.cpp:97
 #, fuzzy
@@ -11889,41 +11890,41 @@ msgstr "Spegla vågrätt"
 #: ../src/live_effects/effect.cpp:99
 #, fuzzy
 msgid "Parallel"
-msgstr "Parallella beräkningar"
+msgstr "Parallell"
 
 #: ../src/live_effects/effect.cpp:100
 #, fuzzy
 msgid "Path length"
-msgstr "Sökvägslängd överskreds"
+msgstr "Slinglängd"
 
 #: ../src/live_effects/effect.cpp:101
 msgid "Perpendicular bisector"
-msgstr ""
+msgstr "Vinkelrät delare"
 
 #: ../src/live_effects/effect.cpp:102
 #, fuzzy
 msgid "Perspective path"
-msgstr "Sökväg nedåt"
+msgstr "Perspektivväg"
 
 #: ../src/live_effects/effect.cpp:103
 #, fuzzy
 msgid "Rotate copies"
-msgstr "Anta_l kopior:"
+msgstr "Rotera kopior"
 
 #: ../src/live_effects/effect.cpp:104
 #, fuzzy
 msgid "Recursive skeleton"
-msgstr "Rekursiv hämtning:\n"
+msgstr "Rekursivt skelett"
 
 #: ../src/live_effects/effect.cpp:105
 #, fuzzy
 msgid "Tangent to curve"
-msgstr "Klicka för att sluta kurvan"
+msgstr "Tangent till kurva"
 
 #: ../src/live_effects/effect.cpp:106
 #, fuzzy
 msgid "Text label"
-msgstr "Texten på etiketten."
+msgstr "Textettikett"
 
 #. 0.46
 #: ../src/live_effects/effect.cpp:109
@@ -11942,16 +11943,16 @@ msgstr "Mönster längs slinga"
 #: ../src/live_effects/effect.cpp:112
 #, fuzzy
 msgid "Stitch Sub-Paths"
-msgstr "Slå ihop importerade slingor"
+msgstr "Slå ihop delslingor"
 
 #. 0.47
 #: ../src/live_effects/effect.cpp:114
 msgid "VonKoch"
-msgstr ""
+msgstr "VonKoch"
 
 #: ../src/live_effects/effect.cpp:115
 msgid "Knot"
-msgstr ""
+msgstr "Knut"
 
 #: ../src/live_effects/effect.cpp:116
 msgid "Construct grid"
@@ -11959,22 +11960,24 @@ msgstr "Skapa rutnät"
 
 #: ../src/live_effects/effect.cpp:117
 msgid "Spiro spline"
-msgstr ""
+msgstr "Spirallinje"
 
+# TODO
 #: ../src/live_effects/effect.cpp:118
 #, fuzzy
 msgid "Envelope Deformation"
-msgstr "DL-kuvert"
+msgstr ""
 
 #: ../src/live_effects/effect.cpp:119
 #, fuzzy
 msgid "Interpolate Sub-Paths"
-msgstr "Slå ihop importerade slingor"
+msgstr "Interpolera delslingor"
 
+# TODO
 #: ../src/live_effects/effect.cpp:120
 #, fuzzy
 msgid "Hatches (rough)"
-msgstr "Blå sträv"
+msgstr ""
 
 #: ../src/live_effects/effect.cpp:121
 msgid "Sketch"
@@ -11987,13 +11990,15 @@ msgstr "Linjal"
 #: ../src/live_effects/effect.cpp:278
 #, fuzzy
 msgid "Is visible?"
-msgstr "Verktygsraden är synlig"
+msgstr "Är synlig?"
 
 #: ../src/live_effects/effect.cpp:278
 msgid ""
 "If unchecked, the effect remains applied to the object but is temporarily "
 "disabled on canvas"
 msgstr ""
+"Om ej ikryssad förblir effekten tilldelad till objektet men är temporärt "
+"avstängd i dokumentet"
 
 #: ../src/live_effects/effect.cpp:299
 msgid "No effect"
@@ -12002,53 +12007,49 @@ msgstr "Ingen effekt"
 #: ../src/live_effects/effect.cpp:346
 #, c-format
 msgid "Please specify a parameter path for the LPE '%s' with %d mouse clicks"
-msgstr ""
+msgstr "Vänligen ange en parameterslinga för LPE '%s' med %d mus-klick"
 
 #: ../src/live_effects/effect.cpp:644
 #, fuzzy, c-format
 msgid "Editing parameter <b>%s</b>."
-msgstr "Ogiltig parameter."
+msgstr "Redigerar parameter <b>%s</b>."
 
 #: ../src/live_effects/effect.cpp:649
 msgid "None of the applied path effect's parameters can be edited on-canvas."
-msgstr ""
+msgstr "Ingen av de tilldelade effekternas parametrar kan editeras i dokumentet."
 
 #: ../src/live_effects/lpe-bendpath.cpp:55
 msgid "Bend path"
-msgstr ""
-"Spara och återställ fönsterinställningar för varje dokument (sparar "
-"inställningarna i dokumentet)"
+msgstr "Böj slinga"
 
 #: ../src/live_effects/lpe-bendpath.cpp:55
 #, fuzzy
 msgid "Path along which to bend the original path"
-msgstr ""
-"Skapa ett dynamiskt förskjutet objekt som är länkat till den ursprungliga "
-"slingan"
+msgstr "Slinga som skall böja ursprungsslingan"
 
 #: ../src/live_effects/lpe-bendpath.cpp:56
 #, fuzzy
 msgid "Width of the path"
-msgstr "Sökväg nedåt"
+msgstr "Slingans bredd"
 
 #: ../src/live_effects/lpe-bendpath.cpp:57
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #, fuzzy
 msgid "Width in units of length"
-msgstr "Bredden är i absoluta enheter"
+msgstr "Bredd i längdenheter"
 
 #: ../src/live_effects/lpe-bendpath.cpp:57
 msgid "Scale the width of the path in units of its length"
-msgstr ""
+msgstr "Skala bredden för slingan i längdenheter"
 
 #: ../src/live_effects/lpe-bendpath.cpp:58
 #, fuzzy
 msgid "Original path is vertical"
-msgstr "Sökvägen '%s' är inte absolut."
+msgstr "Ursprungsslingan är vertikal."
 
 #: ../src/live_effects/lpe-bendpath.cpp:58
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
-msgstr ""
+msgstr "Roterar orginalet 90 grader, innan den böjs längs böjningsslingan"
 
 #: ../src/live_effects/lpe-constructgrid.cpp:26
 msgid "Size X"
@@ -12069,60 +12070,68 @@ msgstr "Storleken på rutnätet längs Y-axeln"
 #: ../src/live_effects/lpe-curvestitch.cpp:42
 #, fuzzy
 msgid "Stitch path"
-msgstr "Sökväg nedåt"
+msgstr "Virka slinga"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:42
 msgid "The path that will be used as stitch."
-msgstr ""
+msgstr "Slingan som kommer användas för virkning."
 
 #: ../src/live_effects/lpe-curvestitch.cpp:43
 #, fuzzy
 msgid "Number of paths"
-msgstr "Antal slingor:"
+msgstr "Antal slingor"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:43
 #, fuzzy
 msgid "The number of paths that will be generated."
-msgstr "Antalet dagar som ett lösenord får användas:"
+msgstr "Antalet slingor som kommer skapas."
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:44
 #, fuzzy
 msgid "Start edge variance"
-msgstr "DoG kantidentifiering"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:44
 msgid ""
 "The amount of random jitter to move the start points of the stitches inside "
 "& outside the guide path"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:45
 #, fuzzy
 msgid "Start spacing variance"
-msgstr "Rullpilsmellanrum"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:45
 msgid ""
 "The amount of random shifting to move the start points of the stitches back "
 "& forth along the guide path"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:46
 #, fuzzy
 msgid "End edge variance"
-msgstr "DoG kantidentifiering"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:46
 msgid ""
 "The amount of randomness that moves the end points of the stitches inside & "
 "outside the guide path"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:47
 #, fuzzy
 msgid "End spacing variance"
-msgstr "Rullpilsmellanrum"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:47
 msgid ""
 "The amount of random shifting to move the end points of the stitches back & "
@@ -12134,85 +12143,88 @@ msgstr ""
 msgid "Scale width"
 msgstr "Skala linjebredd"
 
+# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:48
 #, fuzzy
 msgid "Scale the width of the stitch path"
-msgstr "Bredd på rullningslisten eller skalning"
+msgstr ""
 
 #: ../src/live_effects/lpe-curvestitch.cpp:49
 #, fuzzy
 msgid "Scale width relative to length"
-msgstr ""
-"Bredden på modifieringsområdet (relativt det synliga området av ritduken)"
+msgstr "Skala bredd relativt längd"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:49
 #, fuzzy
 msgid "Scale the width of the stitch path relative to its length"
-msgstr ""
-"Bredden på modifieringsområdet (relativt det synliga området av ritduken)"
+msgstr "Skala bredden på virkningsslingan relativt dess längd"
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:33
 #, fuzzy
 msgid "Top bend path"
-msgstr "Höj slingan till överst"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:33
 #, fuzzy
 msgid "Top path along which to bend the original path"
 msgstr ""
-"Skapa ett dynamiskt förskjutet objekt som är länkat till den ursprungliga "
-"slingan"
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:34
 #, fuzzy
 msgid "Right bend path"
-msgstr "Sökvägen är inte absolut"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:34
 #, fuzzy
 msgid "Right path along which to bend the original path"
 msgstr ""
-"Skapa ett dynamiskt förskjutet objekt som är länkat till den ursprungliga "
-"slingan"
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:35
 #, fuzzy
 msgid "Bottom bend path"
-msgstr "Sänk slingan till underst"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:35
 #, fuzzy
 msgid "Bottom path along which to bend the original path"
 msgstr ""
-"Skapa ett dynamiskt förskjutet objekt som är länkat till den ursprungliga "
-"slingan"
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:36
 #, fuzzy
 msgid "Left bend path"
-msgstr "Sökvägen är inte absolut"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:36
 #, fuzzy
 msgid "Left path along which to bend the original path"
 msgstr ""
-"Skapa ett dynamiskt förskjutet objekt som är länkat till den ursprungliga "
-"slingan"
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:37
 #, fuzzy
 msgid "Enable left & right paths"
-msgstr "Fyll (vänster till höger)"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:37
 msgid "Enable the left and right deformation paths"
 msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:38
 #, fuzzy
 msgid "Enable top & bottom paths"
-msgstr "Fyll (nederkant till överkant)"
+msgstr ""
 
+# TODO
 #: ../src/live_effects/lpe-envelope.cpp:38
 msgid "Enable the top and bottom deformation paths"
 msgstr ""
@@ -12220,34 +12232,34 @@ msgstr ""
 #: ../src/live_effects/lpe-gears.cpp:212
 #, fuzzy
 msgid "Teeth"
-msgstr "Inre tänder"
+msgstr "Tänder"
 
 #: ../src/live_effects/lpe-gears.cpp:212
 #, fuzzy
 msgid "The number of teeth"
-msgstr "Inre tänder"
+msgstr "Antal tänder"
 
 #: ../src/live_effects/lpe-gears.cpp:213
 msgid "Phi"
-msgstr ""
+msgstr "Phi"
 
 #: ../src/live_effects/lpe-gears.cpp:213
 msgid ""
 "Tooth pressure angle (typically 20-25 deg).  The ratio of teeth not in "
 "contact."
 msgstr ""
+"Tandtrycksvinkel (typiskt 20-25 grader). Förhållandet tänder som inte "
+"är i kontakt."
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 #, fuzzy
 msgid "Trajectory"
-msgstr "Enfärgad"
+msgstr "Trajektorie"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 #, fuzzy
 msgid "Path along which intermediate steps are created."
-msgstr ""
-"Skapa ett dynamiskt förskjutet objekt som är länkat till den ursprungliga "
-"slingan"
+msgstr "Slinga längs vilken mellanliggande steg är skapade."
 
 #: ../src/live_effects/lpe-interpolate.cpp:31
 #: ../src/ui/dialog/inkscape-preferences.cpp:249
@@ -12256,13 +12268,14 @@ msgstr "Steg"
 
 #: ../src/live_effects/lpe-interpolate.cpp:31
 msgid "Determines the number of steps from start to end path."
-msgstr ""
+msgstr "Bestämmer antal steg från start- till slut-slinga."
 
 #: ../src/live_effects/lpe-interpolate.cpp:32
 #, fuzzy
 msgid "Equidistant spacing"
-msgstr "Pilmellanrum"
+msgstr "Jämna mellanrum"
 
+# TODO
 #: ../src/live_effects/lpe-interpolate.cpp:32
 msgid ""
 "If true, the spacing between intermediates is constant along the length of "
@@ -12274,20 +12287,20 @@ msgstr ""
 #: ../src/live_effects/lpe-knot.cpp:331
 #, fuzzy
 msgid "Fixed width"
-msgstr "_Fast bredd:"
+msgstr "_Fast bredd"
 
 #: ../src/live_effects/lpe-knot.cpp:331
 msgid "Size of hidden region of lower string"
-msgstr ""
+msgstr "Storlek på dold region av lägre sträng"
 
 #: ../src/live_effects/lpe-knot.cpp:332
 #, fuzzy
 msgid "In units of stroke width"
-msgstr "Bredden är i absoluta enheter"
+msgstr "Räknat i linjebredd"
 
 #: ../src/live_effects/lpe-knot.cpp:332
 msgid "Consider 'Interruption width' as a ratio of stroke width"
-msgstr ""
+msgstr "Se 'Interruption width' som förhållandet i linjebredd"
 
 #: ../src/live_effects/lpe-knot.cpp:333
 msgid "Add the stroke width to the interruption size"
