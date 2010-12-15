@@ -1,4 +1,4 @@
-﻿# Translation of Inkscape to Swedish.
+# Translation of Inkscape to Swedish.
 # This file is distributed under the same license as the Inkscape package.
 # Copyright (C) 2000-2006 Free Software Foundation, Inc.
 # Andreas Hyden <a.hyden@cyberpoint.se>, 2000.
@@ -1621,20 +1621,19 @@ msgstr "Translatera Y"
 msgid "Where to apply?"
 msgstr "Applicera var?"
 
-# remove?
 #: ../share/extensions/interp_att_g.inx.h:27
 #: ../share/extensions/web-set-att.inx.h:28
 #: ../share/extensions/web-transmit-att.inx.h:26
-msgid ""
-msgstr ""
+msgid "••••••••••••••••••••••••••••••••••••••••••••••••"
+msgstr "••••••••••••••••••••••••••••••••••••••••••••••••"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:1
 msgid "Auto-Text:"
-msgstr ""
+msgstr "Auto-text:"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:2
 msgid "Auto-texts"
-msgstr ""
+msgstr "Auto-texter"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:4
 #: ../share/extensions/jessyInk_effects.inx.h:8
@@ -1648,7 +1647,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_video.inx.h:2
 #: ../share/extensions/jessyInk_view.inx.h:4
 msgid "JessyInk"
-msgstr ""
+msgstr "JessyInk"
 
 #: ../share/extensions/jessyInk_autoTexts.inx.h:5
 #, fuzzy
@@ -3331,7 +3330,7 @@ msgstr "Öppna filer sparade i sK1 vektrografikeditor"
 #: ../share/extensions/sk1_output.inx.h:2
 #, fuzzy
 msgid "sK1 vector graphics files (.sk1)"
-msgid "sK1 vektorgrafikfiler (.sk1)"
+msgstr "sK1 vektorgrafikfiler (.sk1)"
 
 #: ../share/extensions/sk1_input.inx.h:3
 msgid "sK1 vector graphics files input"
@@ -9855,7 +9854,7 @@ msgstr "Tomt externt modulmapp-namn. Filter kommer ej att laddas."
 #: ../src/extension/internal/filter/snow.h:32
 #, fuzzy
 msgid "Snow crest"
-msgstr Snötopp"
+msgstr "Snötopp"
 
 #: ../src/extension/internal/filter/snow.h:34
 #, fuzzy
@@ -16468,7 +16467,7 @@ msgstr "Målbredd"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1367
 #, fuzzy
 msgid "Destination height"
-msgstr "Målhöjd
+msgstr "Målhöjd"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1368
 #, fuzzy
@@ -25294,7 +25293,7 @@ msgstr "Färghanterad"
 #: ../src/widgets/sp-color-notebook.cpp:347
 #, fuzzy
 msgid "Out of gamut!"
-msgstr "Utanför färgomfång""
+msgstr "Utanför färgomfång"
 
 #: ../src/widgets/sp-color-notebook.cpp:355
 #, fuzzy
