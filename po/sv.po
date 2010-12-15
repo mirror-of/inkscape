@@ -8848,7 +8848,7 @@ msgstr "skärning av slingor"
 
 #: ../src/display/snap-indicator.cpp:107
 msgid "bounding box corner"
-msgstr "hörnet på begränsningsyta"
+msgstr "hörnet på begränsningslåda"
 
 #: ../src/display/snap-indicator.cpp:110
 msgid "bounding box side"
@@ -8876,11 +8876,11 @@ msgstr "handtag"
 
 #: ../src/display/snap-indicator.cpp:128
 msgid "bounding box side midpoint"
-msgstr "mittpunkt på begränsningsytas sida"
+msgstr "mittpunkt på begränsningslådas sida"
 
 #: ../src/display/snap-indicator.cpp:131
 msgid "bounding box midpoint"
-msgstr "mittpunkt på begränsningsyta"
+msgstr "mittpunkt på begränsningslåda"
 
 #: ../src/display/snap-indicator.cpp:134
 msgid "page corner"
@@ -8921,15 +8921,15 @@ msgstr "begränsning"
 
 #: ../src/display/snap-indicator.cpp:168
 msgid "Bounding box corner"
-msgstr "Hörne på begränsningsyta"
+msgstr "Hörne på begränsningslåda"
 
 #: ../src/display/snap-indicator.cpp:171
 msgid "Bounding box midpoint"
-msgstr "Mittpunkt på begränsningsyta"
+msgstr "Mittpunkt på begränsningslåda"
 
 #: ../src/display/snap-indicator.cpp:174
 msgid "Bounding box side midpoint"
-msgstr "Mittpunkt på sida av begränsningsyta"
+msgstr "Mittpunkt på sida av begränsningslåda"
 
 #: ../src/display/snap-indicator.cpp:177 ../src/ui/tool/node.cpp:1191
 #, fuzzy
@@ -15363,12 +15363,12 @@ msgstr ""
 #: ../src/text-context.cpp:841
 #, fuzzy
 msgid "No-break space"
-msgstr "Icke-brytande mellanslag"
+msgstr "Icke-brytande mellanrum"
 
 #: ../src/text-context.cpp:843
 #, fuzzy
 msgid "Insert no-break space"
-msgstr "Lägg till icke-brytande mellanslag"
+msgstr "Lägg till icke-brytande mellanrum"
 
 #: ../src/text-context.cpp:880
 msgid "Make bold"
@@ -18390,7 +18390,7 @@ msgstr "Byt verktyg när olika enheter används på ritbordet (penna, sudd, mus)
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:195
 msgid "Scrolling"
-msgstr "Rullning"
+msgstr "Panorering"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:197
 msgid "Mouse wheel scrolls by:"
@@ -18410,7 +18410,7 @@ msgstr "Ctrl+piltangenter"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:201
 msgid "Scroll by:"
-msgstr "Rulla med:"
+msgstr "Panorera med:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:202
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
@@ -18426,7 +18426,7 @@ msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
 msgstr ""
-"När man håller Ctrl+piltangent nedtryckt kommer rullningshastigheten att öka "
+"När man håller Ctrl+piltangent nedtryckt kommer panoreringshastigheten att öka "
 "(0 stänger av acceleration)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:206
@@ -18442,7 +18442,7 @@ msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
 msgstr ""
-"Hur snabbt ritytan rullar när man drar utanför ritytans kant (0 för att "
+"Hur snabbt ritytan panorerar när man drar utanför ritytans kant (0 för att "
 "stänga av automatisk panorering)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:211
@@ -18635,7 +18635,7 @@ msgstr "Visa markeringstecken"
 #: ../src/ui/dialog/inkscape-preferences.cpp:281
 msgid ""
 "Whether selected objects display a selection cue (the same as in selector)"
-msgstr "Hurvida valda objekt visar ett markeringstecken (samma som i markera)"
+msgstr "Hurvida valda objekt visar ett markeringstecken (samma som i Markera)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:287
 msgid "Enable gradient editing"
@@ -18647,7 +18647,7 @@ msgstr "Hurvida valda objekt visar kontroller för editering av gradienter"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:293
 msgid "Conversion to guides uses edges instead of bounding box"
-msgstr "Konvertering till guider använder kanter istället för begränsningsyta"
+msgstr "Konvertering till hjälplinjer använder kanter istället för begränsningslåda"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:294
 #, fuzzy
@@ -18657,7 +18657,7 @@ msgid ""
 msgstr ""
 "Konvertering av ett objekt till guider placerar dessa längs med objektets "
 "sanna kanter (imiterandes objektets form), istället för längs med "
-"begränsningsytan"
+"begränsningslådan"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:301
 msgid "Ctrl+click dot size:"
@@ -18676,13 +18676,14 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:317
 #, fuzzy
 msgid "<b>No objects selected</b> to take the style from."
-msgstr "Konvertera markerat objekt till slinga"
+msgstr "<b>Inga objekt markerade</b> att ta stil från."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:326
 msgid ""
 "<b>More than one object selected.</b>  Cannot take style from multiple "
 "objects."
 msgstr ""
+"<b>Fler än ett objekt markerat.</b> Kan ej ta stil från multipla objekt."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:359
 msgid "Create new objects with:"
@@ -18705,6 +18706,8 @@ msgid ""
 "Each tool may store its own style to apply to the newly created objects. Use "
 "the button below to set it."
 msgstr ""
+"Varje verktyg kan lagra sin egen stil att använda på nyskapade objekt. "
+"använd knappen nedan för att ange den."
 
 #. style swatch
 #: ../src/ui/dialog/inkscape-preferences.cpp:376
@@ -18714,11 +18717,11 @@ msgstr "Ta från markering"
 #: ../src/ui/dialog/inkscape-preferences.cpp:381
 #, fuzzy
 msgid "This tool's style of new objects"
-msgstr "Redigera typsnittsstilen hos markerade objekt"
+msgstr "Detta verktygs stil för nya objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:388
 msgid "Remember the style of the (first) selected object as this tool's style"
-msgstr ""
+msgstr "Kom ihåg stilen av det (först) markerade objekt som detta verktygs stil"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:393
 #, fuzzy
@@ -18727,32 +18730,32 @@ msgstr "Verktyg"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:396
 msgid "Bounding box to use:"
-msgstr "Begränsningsyta som används:"
+msgstr "begränsningslåda som används:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:397
 msgid "Visual bounding box"
-msgstr "Visuell begränsningsyta"
+msgstr "Visuell begränsningslåda"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:399
 msgid "This bounding box includes stroke width, markers, filter margins, etc."
 msgstr ""
-"Denna begränsningsyta inkluderar linjebredd, markörer, filtermarginaler, etc."
+"Denna begränsningslåda inkluderar linjebredd, markörer, filtermarginaler, etc."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:400
 msgid "Geometric bounding box"
-msgstr "Geometrisk begränsningsyta"
+msgstr "Geometrisk begränsningslåda"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:402
 msgid "This bounding box includes only the bare path"
-msgstr "Denna begränsningsyta inkluderar endast slingan"
+msgstr "Denna begränsningslåda inkluderar endast slingan"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:404
 msgid "Conversion to guides:"
-msgstr "Konvertering till guider:"
+msgstr "Konvertering till hjälplinjer:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:405
 msgid "Keep objects after conversion to guides"
-msgstr "Ha kvar objekt efter konvertering till guider"
+msgstr "Ha kvar objekt efter konvertering till hjälplinjer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:407
 #, fuzzy
@@ -18760,7 +18763,7 @@ msgid ""
 "When converting an object to guides, don't delete the object after the "
 "conversion"
 msgstr ""
-"Vid konvertering av ett objekt till guider, ta inte bort objektet efter "
+"Vid konvertering av ett objekt till hjälplinjer, ta inte bort objektet efter "
 "konverteringen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:408
@@ -18773,7 +18776,7 @@ msgid ""
 "Treat groups as a single object during conversion to guides rather than "
 "converting each child separately"
 msgstr ""
-"Behandla grupper som ett enda objekt vid konvertering till guider istället "
+"Behandla grupper som ett enda objekt vid konvertering till hjälplinjer istället "
 "för att konvertera varje underobjekt separat."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:412
@@ -18807,15 +18810,15 @@ msgstr "Objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:424
 msgid "Show the actual objects when moving or transforming"
-msgstr ""
+msgstr "Visa det faktiska objektet när det flyttas och transformeras"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:425
 msgid "Box outline"
-msgstr "Konturer"
+msgstr "Lådkonturer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:427
 msgid "Show only a box outline of the objects when moving or transforming"
-msgstr ""
+msgstr "Visa endast lådkonturer för objekt som flyttas eller transformeras"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:428
 msgid "Per-object selection cue:"
@@ -18823,7 +18826,7 @@ msgstr "Markeringstecken som visas per objekt:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:431
 msgid "No per-object selection indication"
-msgstr ""
+msgstr "Inga markeringstecken per objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:432
 #, fuzzy
@@ -18832,7 +18835,7 @@ msgstr "_Markera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:434
 msgid "Each selected object has a diamond mark in the top left corner"
-msgstr ""
+msgstr "Varje markerat objekt har en diamantmarkör i övre vänstra hörnet"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:435
 #, fuzzy
@@ -18841,7 +18844,7 @@ msgstr "Låda"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:437
 msgid "Each selected object displays its bounding box"
-msgstr ""
+msgstr "Varje markerat objekt visar sin begränsningslåda"
 
 #. Node
 #: ../src/ui/dialog/inkscape-preferences.cpp:440
@@ -18851,7 +18854,7 @@ msgstr "Nod"
 #: ../src/ui/dialog/inkscape-preferences.cpp:443
 #, fuzzy
 msgid "Path outline"
-msgstr "Slingkontur:"
+msgstr "Slingkontur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:444
 msgid "Path outline color"
@@ -18865,46 +18868,52 @@ msgstr "Välj färgen som används för att visa slingans kontur"
 #: ../src/ui/dialog/inkscape-preferences.cpp:446
 #, fuzzy
 msgid "Always show outline"
-msgstr "Visa _penselkontur"
+msgstr "Visa alltid kontur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:447
 msgid "Show outlines for all paths, not only invisible paths"
-msgstr ""
+msgstr "Visa kontur för alla slingor, inte bara osynliga slingor"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:448
 msgid "Update outline when dragging nodes"
-msgstr ""
+msgstr "Uppdatera kontur när noder flyttas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:449
 msgid ""
 "Update the outline when dragging or transforming nodes; if this is off, the "
 "outline will only update when completing a drag"
 msgstr ""
+"Uppdatera konturen när noder flyttas eller transformeras; om detta är av, "
+"kommer konturer endast uppdateras när en flytt är slutförd"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:450
 msgid "Update paths when dragging nodes"
-msgstr ""
+msgstr "Uppdatera slingor när noder flyttas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:451
 msgid ""
 "Update paths when dragging or transforming nodes; if this is off, paths will "
 "only be updated when completing a drag"
 msgstr ""
+"Uppdatera slingor när noder flyttas eller transformeras; om detta är av, "
+"uppdateras slingor endast när en flytt är slutförd"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:452
 msgid "Show path direction on outlines"
-msgstr ""
+msgstr "Visa slingriktning på konturer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:453
 msgid ""
 "Visualize the direction of selected paths by drawing small arrows in the "
 "middle of each outline segment"
 msgstr ""
+"Visualisera riktningen för markerade slingor genom att rita små pilar "
+"i mitten av varje kontursegment"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:454
 #, fuzzy
 msgid "Show temporary path outline"
-msgstr "3D-_kontur..."
+msgstr "Visa tillfällig slingkontur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:455
 #, fuzzy
@@ -18916,11 +18925,11 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:456
 #, fuzzy
 msgid "Show temporary outline for selected paths"
-msgstr "Färg på slingkontur"
+msgstr "Visa tillfällig kontur för markerade slingor"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:457
 msgid "Show temporary outline even when a path is selected for editing"
-msgstr ""
+msgstr "Visa tillfällig kontur även när en slinga är markerad för att redigeras"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:459
 msgid "Flash time"
@@ -18940,28 +18949,30 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:460
 #, fuzzy
 msgid "Editing preferences"
-msgstr "Musinställningar"
+msgstr "Redigeringsalternativ"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:461
 #, fuzzy
 msgid "Show transform handles for single nodes"
-msgstr "Visa Bezier-handtagen för markerade noder"
+msgstr "Visa transformhandtag för enstaka noder"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:462
 #, fuzzy
 msgid "Show transform handles even when only a single node is selected"
-msgstr "Visa Bezier-handtagen för markerade noder"
+msgstr "Visa transformhandtag även när endast en nod är markerad"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:463
 #, fuzzy
 msgid "Deleting nodes preserves shape"
-msgstr "Ta bort noder och behåll form"
+msgstr "Avlägsning av noder bevarar form"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:464
 msgid ""
 "Move handles next to deleted nodes to resemble original shape; hold Ctrl to "
 "get the other behavior"
 msgstr ""
+"Flytta handtag nära den borttagna noden så att den ursprungliga formen efterliknas; "
+"håll Ctrl för att få motsatt beteende"
 
 #. Tweak
 #: ../src/ui/dialog/inkscape-preferences.cpp:467 ../src/verbs.cpp:2457
@@ -18976,7 +18987,7 @@ msgstr "Rita objekt med:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:473 ../src/verbs.cpp:2459
 #, fuzzy
 msgid "Spray"
-msgstr "Spiral"
+msgstr "Sprutmålning"
 
 #. Zoom
 #: ../src/ui/dialog/inkscape-preferences.cpp:478
@@ -19046,16 +19057,17 @@ msgstr "Sudd"
 #: ../src/ui/dialog/inkscape-preferences.cpp:543 ../src/verbs.cpp:2493
 #, fuzzy
 msgid "LPE Tool"
-msgstr "Verktygsalternativ"
+msgstr "Slingeffektverktyg"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:552
 msgid "Show font samples in the drop-down list"
-msgstr ""
+msgstr "Visa förhandsgranskning av typsnitt i rullisten"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:553
 msgid ""
 "Show font samples alongside font names in the drop-down list in Text bar"
 msgstr ""
+"Visa prov på typsnittet bredvid typsnittens namn i rullisten i Text bar"
 
 #. Gradient
 #: ../src/ui/dialog/inkscape-preferences.cpp:558 ../src/verbs.cpp:2479
@@ -19098,7 +19110,7 @@ msgstr "Dockningsbara"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:581
 msgid "Dialogs are hidden in taskbar"
-msgstr ""
+msgstr "Dialogrutor döljs i aktivetsfältet"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:582
 msgid "Zoom when window is resized"
@@ -19117,7 +19129,7 @@ msgstr "Normal"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:586
 msgid "Aggressive"
-msgstr ""
+msgstr "Aggressiv"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:588
 msgid "Saving window geometry (size and position):"
@@ -19132,7 +19144,7 @@ msgid ""
 "Remember and use the last window's geometry (saves geometry to user "
 "preferences)"
 msgstr ""
-"Kom ihår och använd det senaste fönstrets inställningar (sparar "
+"Kom ihåg och använd det senaste fönstrets inställningar (sparar "
 "inställningar i användarprofilen)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:594
@@ -19186,7 +19198,7 @@ msgstr "Övrigt:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:626
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
-msgstr ""
+msgstr "Om dialogrutors fönster är dolda i fönsterhanterarens aktivitetsfält"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:629
 msgid ""
@@ -19194,6 +19206,9 @@ msgid ""
 "(this is the default which can be changed in any window using the button "
 "above the right scrollbar)"
 msgstr ""
+"Zooma ritningen när dokumentfönstret skalas om, för att bevara samma synliga "
+"area (detta är standardalternativet, vilket kan ändras i varje fönster med knappen "
+"ovanför den högra rullisten)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:631
 msgid "Whether dialog windows have a close button (requires restart)"
@@ -19206,66 +19221,68 @@ msgstr "Fönster"
 #: ../src/ui/dialog/inkscape-preferences.cpp:637
 #, fuzzy
 msgid "Move in parallel"
-msgstr "  m[ab]        - flytta fil(er) i arkivet\n"
+msgstr "Flytta parallellt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:639
 #, fuzzy
 msgid "Stay unmoved"
-msgstr "Stanna överst"
+msgstr "Förblir oflyttade"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:641
 #, fuzzy
 msgid "Move according to transform"
-msgstr "Skapa utdata som anges i %1."
+msgstr "Flyttade beroende på transform"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:643
 #, fuzzy
 msgid "Are unlinked"
-msgstr "Det finns"
+msgstr "Avlänkade"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:645
 #, fuzzy
 msgid "Are deleted"
-msgstr "Raderade %d signatur.\n"
+msgstr "Raderade"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:648
 msgid "When the original moves, its clones and linked offsets:"
-msgstr ""
+msgstr "När orginalet flyttas, blir dess kloner och länkade förskjutningar:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:650
 msgid "Clones are translated by the same vector as their original"
-msgstr ""
+msgstr "Kloner är flyttade med samma vektor som deras orginal"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:652
 msgid "Clones preserve their positions when their original is moved"
-msgstr ""
+msgstr "Kloner bevarar sin position när deras orignal flyttas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:654
 msgid ""
 "Each clone moves according to the value of its transform= attribute; for "
 "example, a rotated clone will move in a different direction than its original"
 msgstr ""
+"Varje klon flyttas enligt värdet av dess transform= attribut, t.ex. "
+"om en roterad klon vill flytta i en annan riktning än dess orginal"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:655
 msgid "When the original is deleted, its clones:"
-msgstr ""
+msgstr "När orginalet tas bort, blir klonerna:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:657
 msgid "Orphaned clones are converted to regular objects"
-msgstr ""
+msgstr "Föräldralösa kloner konverteras till vanliga objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:659
 msgid "Orphaned clones are deleted along with their original"
-msgstr ""
+msgstr "Föräldralösa kloner raderas tillsammans med orginalen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:661
 msgid "When duplicating original+clones:"
-msgstr ""
+msgstr "När orginal+kloner dupliceras:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:663
 #, fuzzy
 msgid "Relink duplicated clones"
-msgstr "Skapa kloner som brickor..."
+msgstr "Länka om duplicerade kloner"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:665
 msgid ""
@@ -19273,6 +19290,9 @@ msgid ""
 "(possibly in groups), relink the duplicated clone to the duplicated original "
 "instead of the old original"
 msgstr ""
+"När en markering som innehåller både en klon och dess orginal (eventuellt "
+"i grupper) dupliceras, länka den duplicerade klonen till det duplicerade orginalet "
+"istället för det gamla orginalet"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:668
@@ -19282,67 +19302,71 @@ msgstr "Kloner"
 #: ../src/ui/dialog/inkscape-preferences.cpp:673
 msgid "When applying, use the topmost selected object as clippath/mask"
 msgstr ""
+"Vid applicering, använd det översta markerade objektet som beskärningsslinga/mask"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:675
 msgid ""
 "Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
+"Avmarkera detta för att använda botten på markerat objekt som beskärningsslinga eller mask"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:676
 msgid "Remove clippath/mask object after applying"
-msgstr ""
+msgstr "Ta bort beskärningsslinga/mask efter applicering"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:678
 msgid ""
 "After applying, remove the object used as the clipping path or mask from the "
 "drawing"
 msgstr ""
+"Efter applicering, ta bort det objekt som användes som beskärningsslinga eller mask "
+"från ritningen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:680
 msgid "Before applying clippath/mask:"
-msgstr ""
+msgstr "Innan applicering av beskärningsslinga/mask:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:682
 msgid "Do not group clipped/masked objects"
-msgstr ""
+msgstr "Gruppera inte beskuret/maskerat objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:683
 msgid "Enclose every clipped/masked object in its own group"
-msgstr ""
+msgstr "Inneslut varje beskuret/maskerat objekt i dess egen grupp"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:684
 msgid "Put all clipped/masked objects into one group"
-msgstr ""
+msgstr "Placera alla beskurna/maskerade objekt i en grupp"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:687
 msgid "Apply clippath/mask to every object"
-msgstr ""
+msgstr "Applicera beskärningsslinga/mask till varje objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:690
 msgid "Apply clippath/mask to groups containing single object"
-msgstr ""
+msgstr "Applicera beskärningsslinga/mask till grupper av endast ett objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:693
 msgid "Apply clippath/mask to group containing all objects"
-msgstr ""
+msgstr "Applicera beskärningsslinga/mask till en grupp med alla objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:695
 msgid "After releasing clippath/mask:"
-msgstr ""
+msgstr "Efter avfärdning av beskärningsslinga/mask:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:697
 #, fuzzy
 msgid "Ungroup automatically created groups"
-msgstr "Avgruppera markerad(e) grupp(er)"
+msgstr "Avgruppera automatiskt skapade grupper"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:699
 msgid "Ungroup groups created when setting clip/mask"
-msgstr ""
+msgstr "Avgruppera grupper som skapats genom att sätta beskärning/mask"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:701
 #, fuzzy
 msgid "Clippaths and masks"
-msgstr "Applicera lagermask"
+msgstr "Beskärningsslingor och masker"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:706
 #: ../src/widgets/select-toolbar.cpp:544
@@ -19373,7 +19397,7 @@ msgstr "Bevarande"
 #: ../src/ui/dialog/inkscape-preferences.cpp:714
 #: ../src/widgets/select-toolbar.cpp:545
 msgid "When scaling objects, scale the stroke width by the same proportion"
-msgstr "Skala linjebredden när objekt skalas"
+msgstr "Skala linjebredden med samma andel när objekt skalas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:716
 #: ../src/widgets/select-toolbar.cpp:556
@@ -19399,10 +19423,12 @@ msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
 msgstr ""
+"Om möjligt, applicera transformation till objekt utan att lägga till ett "
+"transform= attribut"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:725
 msgid "Always store transformation as a transform= attribute on objects"
-msgstr ""
+msgstr "Lagra alltid transformation som ett transform= attribut på objekt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:727
 msgid "Transforms"
@@ -19476,18 +19502,20 @@ msgstr "Kvalité på filtereffekter vid visning:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:781
 #, fuzzy
 msgid "Show filter primitives infobox"
-msgstr "Ta bort attribut"
+msgstr "Visa grundfilter inforuta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:783
 msgid ""
 "Show icons and descriptions for the filter primitives available at the "
 "filter effects dialog"
 msgstr ""
+"Visa ikoner och beskrivningar för grundfilter som finns tillgängliga i "
+"filtereffekt-rutan"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:787
 #, fuzzy
 msgid "Number of Threads:"
-msgstr "Antal rader"
+msgstr "Antal Trådar:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:787
 #: ../src/ui/dialog/inkscape-preferences.cpp:1349
@@ -19498,6 +19526,7 @@ msgstr "(kräver omstart)"
 msgid ""
 "Configure number of processors/threads to use with rendering of gaussian blur"
 msgstr ""
+"Ställ in antal processorkärnor/trådar att använda för rendering av gaussisk oskärpa"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:796
 msgid "Select in all layers"
@@ -19526,23 +19555,23 @@ msgstr "Avmarkera vid byte av lager"
 #: ../src/ui/dialog/inkscape-preferences.cpp:803
 #, fuzzy
 msgid "Ctrl+A, Tab, Shift+Tab:"
-msgstr "Ctrl+Skift byter layout."
+msgstr "Ctrl+A, Tab, Skift+Tab:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:805
 msgid "Make keyboard selection commands work on objects in all layers"
-msgstr "Tangentbordsmarkeringskommandon arbetar med objekt i alla lager"
+msgstr "Tangentbordsmarkeringskommandon fungerar på objekt i alla lager"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:807
 msgid "Make keyboard selection commands work on objects in current layer only"
 msgstr ""
-"Tangentbordsmarkeringskommandon arbetar endast med objekt i aktivt lager"
+"Tangentbordsmarkeringskommandon fungerar endast på objekt i aktivt lager"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:809
 msgid ""
 "Make keyboard selection commands work on objects in current layer and all "
 "its sublayers"
 msgstr ""
-"Tangentbordsmarkeringskommandon arbetar endast med objekt i aktivt lager, "
+"Tangentbordsmarkeringskommandon fungerar endast på objekt i aktivt lager, "
 "samt alla underliggande lager"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:811
@@ -19574,12 +19603,12 @@ msgstr "Markering"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:825
 msgid "Default export resolution:"
-msgstr "Standardexportupplösning:"
+msgstr "Standard exportupplösning:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:826
 #, fuzzy
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
-msgstr "Föredragen upplösning (punkter per tum) av bitmappsbild"
+msgstr "Föredragen bitmappsupplösning (punkter per tum) i exportrutan"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:828
 msgid "Open Clip Art Library Server Name:"
@@ -19591,7 +19620,7 @@ msgid ""
 "The server name of the Open Clip Art Library webdav server; it's used by the "
 "Import and Export to OCAL function"
 msgstr ""
-"Adressen till Open Clip Art Library's webdavserver.Den används av Import och "
+"Adressen till Open Clip Art Library's webdav-server. Den används av Import och "
 "Export till OCAL-funktionen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:831
@@ -19615,7 +19644,7 @@ msgstr "Lösenordet för inloggning i Open Clip Art Library"
 #: ../src/ui/dialog/inkscape-preferences.cpp:837
 #, fuzzy
 msgid "Import/Export"
-msgstr "Export klar.\n"
+msgstr "Importering/Exportering"
 
 #. TRANSLATORS: see http://www.newsandtech.com/issues/2004/03-04/pt/03-04_rendering.htm
 #: ../src/ui/dialog/inkscape-preferences.cpp:887
@@ -19635,7 +19664,7 @@ msgstr "Absolut kolorimetri"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:891
 msgid "(Note: Color management has been disabled in this build)"
-msgstr ""
+msgstr "(Notera: Färghantering har stängts av i denna version)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:895
 #, fuzzy
@@ -19648,6 +19677,8 @@ msgid ""
 "The ICC profile to use to calibrate display output.\n"
 "Searched directories:%s"
 msgstr ""
+"ICC-profilen att använda för kalibrering av display.\n"
+"Sökta mappar:%s"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:906
 #, fuzzy
@@ -19657,22 +19688,22 @@ msgstr "Profil_namn:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:911
 #, fuzzy
 msgid "Retrieve profile from display"
-msgstr "Hämta prenumrationer från server"
+msgstr "Hämta profil från display"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:914
 #, fuzzy
 msgid "Retrieve profiles from those attached to displays via XICC"
-msgstr "Hämta prenumrationer från server"
+msgstr "Hämta profiler för de som anslutits till displayer via XICC"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:916
 #, fuzzy
 msgid "Retrieve profiles from those attached to displays"
-msgstr "Hämta prenumrationer från server"
+msgstr "Hämta profiler från de som anslutits till display"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:921
 #, fuzzy
 msgid "Display rendering intent:"
-msgstr "_Visa återgivningsmetod:"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:922
 msgid "The rendering intent to use to calibrate display output"
@@ -19681,17 +19712,17 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:924
 #, fuzzy
 msgid "Proofing"
-msgstr "Proportion"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:926
 #, fuzzy
 msgid "Simulate output on screen"
-msgstr "På skärm: %d (Fönsterhanterare: %s)\n"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:928
 #, fuzzy
 msgid "Simulates output of target device"
-msgstr "Alternativ ljudutgångsenhet"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:930
 #, fuzzy
@@ -19705,26 +19736,26 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:937
 #, fuzzy
 msgid "Out of gamut warning color:"
-msgstr "Markera färger utanför färgomfång"
+msgstr "Färg för utanför-färgomfång-varning:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:938
 #, fuzzy
 msgid "Selects the color used for out of gamut warning"
-msgstr "Välj färgen som används för att visa slingans kontur"
+msgstr "Välj färgen som används för att visa utanför-färgomfång-varningen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:940
 #, fuzzy
 msgid "Device profile:"
-msgstr "Profil_namn:"
+msgstr "Enhetsprofil:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:941
 msgid "The ICC profile to use to simulate device output"
-msgstr ""
+msgstr "ICC-profilen att simulera enhets-output med"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:944
 #, fuzzy
 msgid "Device rendering intent:"
-msgstr "_Visa återgivningsmetod:"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:945
 msgid "The rendering intent to use to calibrate device output"
@@ -19738,20 +19769,20 @@ msgstr "Svartpunkts_kompensation"
 #: ../src/ui/dialog/inkscape-preferences.cpp:949
 #, fuzzy
 msgid "Enables black point compensation"
-msgstr "Svartpunkts_kompensation"
+msgstr "Aktiverar svartpunktskompensation"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:951
 #, fuzzy
 msgid "Preserve black"
-msgstr "Svartvit"
+msgstr "Bevara svart"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:956
 msgid "(LittleCMS 1.15 or later required)"
-msgstr ""
+msgstr "(LittleCMS 1.15 eller senare krävs)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:958
 msgid "Preserve K channel in CMYK -> CMYK transforms"
-msgstr ""
+msgstr "Bevara K-kanalen i CMYK -> CMYK transformationer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:971
 #: ../src/widgets/sp-color-icc-selector.cpp:306
@@ -19917,7 +19948,7 @@ msgstr "Numerisk precision:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1098
 msgid "Significant figures of the values written to the SVG file"
-msgstr ""
+msgstr "Signifikanta siffror för värden som skrivs till SVG-filen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1101
 msgid "Minimum exponent:"
@@ -20213,7 +20244,7 @@ msgstr "Mindre"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1133
 #, fuzzy
 msgid "Toolbox icon size:"
-msgstr "Ikonstorlek i verktygslisten"
+msgstr "Ikonstorlek i verktygslisten:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1134
 msgid "Set the size for the tool icons (requires restart)"
@@ -20244,7 +20275,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:1145
 #, fuzzy
 msgid "Work-around color sliders not drawing"
-msgstr "Gå runt färgreglage som ej ritas"
+msgstr "Kringgå färgreglage som ej ritas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1147
 #, fuzzy
@@ -20252,7 +20283,7 @@ msgid ""
 "When on, will attempt to work around bugs in certain GTK themes drawing "
 "color sliders"
 msgstr ""
-"När aktiverad, försöker Inkscape gå runt fel i vissa GTK-teman som rör "
+"När aktiverad, försöker Inkscape kinrggå fel i vissa GTK-teman som rör "
 "ritandet av färgreglage"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1153
@@ -20287,13 +20318,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1166
 msgid "Enable dynamic relayout for incomplete sections"
-msgstr ""
+msgstr "Aktivera dynamisk omdisponering för inkompletta sektioner"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1168
 msgid ""
 "When on, will allow dynamic layout of components that are not completely "
 "finished being refactored"
 msgstr ""
+"När aktivt, tillåts dynamisk disponering av komponenter som inte är "
+"helt färdigjustade"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1171
 msgid "Interface"
@@ -20309,6 +20342,9 @@ msgid ""
 "directory where the currently open document is; when it's off, it will open "
 "in the directory where you last saved a file using that dialog"
 msgstr ""
+"När detta alternativ är aktivt, kommer \"Spara som..\" rutan alltid öppnas i den "
+"mapp där det aktuella dokumentet finns; när det är inaktivt kommer den att öppnas "
+"i den mapp där ni senast sparade en fil med den dialogrutan"
 
 #. Autosave options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1183
@@ -20320,7 +20356,7 @@ msgid ""
 "Automatically save the current document(s) at a given interval, thus "
 "minimizing loss in case of a crash"
 msgstr ""
-"Spara automatiskt de nuvarande dokumentet/dokumenten efter ett givet "
+"Spara automatiskt de aktiva dokumenten efter ett givet "
 "intervall, för att minimera förlusterna vid en krash"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1186
@@ -20336,7 +20372,7 @@ msgstr ""
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #: ../src/ui/dialog/inkscape-preferences.cpp:1190
 msgid "filesystem|Path:"
-msgstr "Sökväg:"
+msgstr "filesystem|Sökväg:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1190
 msgid "The directory where autosaves will be written"
@@ -20403,7 +20439,7 @@ msgstr "Språk:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1299
 msgid "Set the main spell check language"
-msgstr ""
+msgstr "Ange det huvudsakliga språket för stavningskontroll"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1302
 msgid "Second language:"
@@ -20414,6 +20450,8 @@ msgid ""
 "Set the second spell check language; checking will only stop on words "
 "unknown in ALL chosen languages"
 msgstr ""
+"Ange det andra språket för stavningskontroll; kontroll kommer endast att stanna på ord "
+"som är okända i VARJE valt språk"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1306
 msgid "Third language:"
@@ -20424,6 +20462,8 @@ msgid ""
 "Set the third spell check language; checking will only stop on words unknown "
 "in ALL chosen languages"
 msgstr ""
+"Ange det trede språket för stavningskontroll; kontroll kommer endast att stanna på ord "
+"som är okända i VARJE valt språk"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1309
 msgid "Ignore words with digits"
@@ -20431,15 +20471,15 @@ msgstr "Ignorera ord med siffror"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1311
 msgid "Ignore words containing digits, such as \"R2D2\""
-msgstr ""
+msgstr "Ignorear ord som innehåller siffror, så som \"C3P0\""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1313
 msgid "Ignore words in ALL CAPITALS"
-msgstr ""
+msgstr "Ignorera ord i VERSALER"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1315
 msgid "Ignore words in all capitals, such as \"IUPAC\""
-msgstr ""
+msgstr "Ignorerar ord som är skrivna endast i versaler, t.ex. \"HAL\""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1317
 msgid "Spellcheck"
@@ -20536,21 +20576,21 @@ msgstr "Systemdata:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1378
 #, fuzzy
 msgid "PIXMAP: "
-msgstr "Pixmap"
+msgstr "PIXMAP: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1382
 #, fuzzy
 msgid "DATA: "
-msgstr "  Data:                              %s\n"
+msgstr "DATA: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1386
 #, fuzzy
 msgid "UI: "
-msgstr "Konfigurera användargränssnitt"
+msgstr "UI: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1395
 msgid "Icon theme: "
-msgstr "Ikontema:"
+msgstr "Ikontema: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1410
 msgid "System info"
@@ -20576,7 +20616,7 @@ msgstr "Fönster"
 
 #: ../src/ui/dialog/input.cpp:524
 msgid "Test Area"
-msgstr ""
+msgstr "Testyta"
 
 #: ../src/ui/dialog/input.cpp:578 ../src/ui/dialog/input.cpp:728
 #, fuzzy
@@ -20586,27 +20626,27 @@ msgstr "Taggtråd"
 #: ../src/ui/dialog/input.cpp:596
 #, fuzzy
 msgid "Link:"
-msgstr "Linje"
+msgstr "Linje:"
 
 #: ../src/ui/dialog/input.cpp:611
 #, fuzzy
 msgid "Axes count:"
-msgstr "Mängd"
+msgstr ""
 
 #: ../src/ui/dialog/input.cpp:634
 #, fuzzy
 msgid "axis:"
-msgstr "Radie:"
+msgstr ""
 
 #: ../src/ui/dialog/input.cpp:646
 #, fuzzy
 msgid "Button count:"
-msgstr "Knapp"
+msgstr ""
 
 #: ../src/ui/dialog/input.cpp:732
 #, fuzzy
 msgid "Tablet"
-msgstr "Tabell"
+msgstr "Rityta"
 
 #: ../src/ui/dialog/input.cpp:752 ../src/ui/dialog/input.cpp:1430
 msgid "pad"
@@ -20690,7 +20730,7 @@ msgstr "Ny"
 #: ../src/ui/dialog/layers.cpp:641
 #, fuzzy
 msgid "layers|Top"
-msgstr "_Överst"
+msgstr "layers|_Överst"
 
 #: ../src/ui/dialog/layers.cpp:647
 msgid "Up"
@@ -20699,12 +20739,12 @@ msgstr "Upp"
 #: ../src/ui/dialog/layers.cpp:653
 #, fuzzy
 msgid "Dn"
-msgstr "Epost \"%Dn\" i %p (%i)"
+msgstr "Ner"
 
 #: ../src/ui/dialog/layers.cpp:659
 #, fuzzy
 msgid "Bot"
-msgstr "Robot"
+msgstr "Botten"
 
 #: ../src/ui/dialog/layers.cpp:669
 msgid "X"
@@ -20714,12 +20754,12 @@ msgstr "X"
 #: ../src/ui/dialog/livepatheffect-editor.cpp:79
 #, fuzzy
 msgid "Apply new effect"
-msgstr "Verkställ tecknad effekt"
+msgstr "Applicera ny effekt"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:80
 #, fuzzy
 msgid "Current effect"
-msgstr "Effektkanal"
+msgstr "Nuvarande effekt"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:81
 msgid "Effect list"
@@ -20728,30 +20768,30 @@ msgstr "Effektlista"
 #: ../src/ui/dialog/livepatheffect-editor.cpp:270
 #, fuzzy
 msgid "Unknown effect is applied"
-msgstr "ändringsloggformatet %s okänt"
+msgstr "Okänd effekt är applicerad"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:273
 #, fuzzy
 msgid "No effect applied"
-msgstr "Ingen effekt vald"
+msgstr "Ingen effekt applicerad"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:277
 msgid "Item is not a path or shape"
-msgstr ""
+msgstr "Objekt är inte en slinga eller figur"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:281
 msgid "Only one item can be selected"
-msgstr ""
+msgstr "Endast ett objekt kan markeras"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:285
 #, fuzzy
 msgid "Empty selection"
-msgstr "Färgval"
+msgstr "Tom markering"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:309
 #, fuzzy
 msgid "Unknown effect"
-msgstr "ändringsloggformatet %s okänt"
+msgstr "Okänd effekt"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:376
 msgid "Create and apply path effect"
@@ -20775,12 +20815,12 @@ msgstr "Aktivera slingeffekt"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:465
 msgid "Deactivate path effect"
-msgstr "Deaktivera slingeffekt"
+msgstr "Avaktivera slingeffekt"
 
 #: ../src/ui/dialog/memory.cpp:94
 #, fuzzy
 msgid "Heap"
-msgstr "_Hjälp"
+msgstr "Hög"
 
 #: ../src/ui/dialog/memory.cpp:95
 #, fuzzy
@@ -20820,20 +20860,24 @@ msgid ""
 "Enable log display by setting dialogs.debug 'redirect' attribute to 1 in "
 "preferences.xml"
 msgstr ""
+"Aktivera logg-visning genom att sätta dialogs.debug 'redirect' attribut till 1 "
+"i preferences.xml"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:422
 msgid "Error while reading the Open Clip Art RSS feed"
-msgstr ""
+msgstr "Fel uppstod vid inläsning av Open Clip Art RSS feed"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:461
 msgid ""
 "Failed to receive the Open Clip Art Library RSS feed. Verify if the server "
 "name is correct in Configuration->Import/Export (e.g.: openclipart.org)"
 msgstr ""
+"Kunde inte ta emot Open Clip Art Library RSS feed. Verifiera att servernamnet "
+"är korrekt i Inställningar->Importering/Exportering (t.ex: openclipart.org)"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:475
 msgid "Server supplied malformed Clip Art feed"
-msgstr ""
+msgstr "Server uppgav felformarterad Clip Art feed"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:566
 msgid "Search for:"
@@ -20841,7 +20885,7 @@ msgstr "Sök efter:"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:567
 msgid "No files matched your search"
-msgstr ""
+msgstr "Inga filer matchade din sökning"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:578
 msgid "Search"
@@ -20853,7 +20897,7 @@ msgstr "Filer hittade"
 
 #: ../src/ui/dialog/print.cpp:97
 msgid "Could not open temporary PNG for bitmap printing"
-msgstr ""
+msgstr "Kunde ej öppna tillfällig PNG för bitmapputskrift"
 
 #: ../src/ui/dialog/print.cpp:140
 #, fuzzy
@@ -20863,13 +20907,13 @@ msgstr "Kunde inte öppna hjälpdokument"
 #: ../src/ui/dialog/print.cpp:144
 #, fuzzy
 msgid "Failed to set CairoRenderContext"
-msgstr "pam_set_item() misslyckades\n"
+msgstr "Kunde ej ställa in CairoRenderContext"
 
 #. set up dialog title, based on document name
 #: ../src/ui/dialog/print.cpp:184
 #, fuzzy
 msgid "SVG Document"
-msgstr "Skriv ut dokument"
+msgstr "SVG-dokument"
 
 #: ../src/ui/dialog/print.cpp:185
 msgid "Print"
@@ -20942,95 +20986,95 @@ msgstr "Fel"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:121
 #, fuzzy
 msgid "Set SVG Font attribute"
-msgstr "Ställ in som programtypsnitt"
+msgstr "Ange SVG Typsnittsattribut"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:174
 #, fuzzy
 msgid "Adjust kerning value"
-msgstr "Justera skalvärdet"
+msgstr "Justera kerning-värde"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:364
 #, fuzzy
 msgid "Family Name:"
-msgstr "Efternamn"
+msgstr "Familjnamn:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:374
 #, fuzzy
 msgid "Set width:"
-msgstr "Ställ in bredd:"
+msgstr "Ange bredd:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:433
 #, fuzzy
 msgid "glyph"
-msgstr "Alfa"
+msgstr "tecken"
 
 #. SPGlyph* glyph =
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
 #, fuzzy
 msgid "Add glyph"
-msgstr "Schemalagd: att läggas till\n"
+msgstr "Lägg till tecken"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:481
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:525
 #, fuzzy
 msgid "Select a <b>path</b> to define the curves of a glyph"
-msgstr "Markera <b>slinga</b> att förskjuta."
+msgstr "Markera en <b>slinga</b> för att ange kurvorna i ett tecken"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:489
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:533
 #, fuzzy
 msgid "The selected object does not have a <b>path</b> description."
-msgstr "Markerat objekt är <b>inte en slinga</b>, kan inte förskjuta."
+msgstr "Det markerade objektet har ingen <b>slingbeskrivning</b>."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:504
 msgid "No glyph selected in the SVGFonts dialog."
-msgstr ""
+msgstr "Inget tecken markerat i SVG Typsnitt-rutan."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:509
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:551
 #, fuzzy
 msgid "Set glyph curves"
-msgstr "Byt plats på kurvorna"
+msgstr "Ställ in teckenkurvor"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:570
 #, fuzzy
 msgid "Reset missing-glyph"
-msgstr "Katalogen \"%s\" saknas"
+msgstr "Återställ saknat-tecken"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:585
 #, fuzzy
 msgid "Edit glyph name"
-msgstr "Redigera lagrets namn"
+msgstr "Redigera teckennamn"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:598
 #, fuzzy
 msgid "Set glyph unicode"
-msgstr "Unicode (UTF-1_6 LE)"
+msgstr "Ställ in unicode-tecken"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:608
 #, fuzzy
 msgid "Remove font"
-msgstr "Typsnittsval"
+msgstr "Ta bort typsnitt"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:623
 #, fuzzy
 msgid "Remove glyph"
-msgstr "kan inte ta bort %s"
+msgstr "Ta bort tecken"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:638
 #, fuzzy
 msgid "Remove kerning pair"
-msgstr "Generera nyckelpar"
+msgstr "Ta bort kerning-par"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:648
 #, fuzzy
 msgid "Missing Glyph:"
-msgstr "Revision saknas"
+msgstr "Saknat Tecken:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:652
 #, fuzzy
 msgid "From selection..."
-msgstr "Initiera från _markering"
+msgstr "Från markering..."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:654
 #: ../src/ui/widget/preferences-widget.cpp:590
@@ -21040,68 +21084,68 @@ msgstr "Återställ"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:665
 #, fuzzy
 msgid "Glyph name"
-msgstr "Albumnamn"
+msgstr "Teckennamn"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:666
 #, fuzzy
 msgid "Matching string"
-msgstr "ordagrann strängjämförelse"
+msgstr "Matchningssträng"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:669
 #, fuzzy
 msgid "Add Glyph"
-msgstr "Schemalagd: att läggas till\n"
+msgstr "Lägg till tecken"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:676
 #, fuzzy
 msgid "Get curves from selection..."
-msgstr "Ta bort markeringen från arkivet"
+msgstr "Hämta kurvor från markering..."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:726
 #, fuzzy
 msgid "Add kerning pair"
-msgstr "Generera nyckelpar"
+msgstr "Lägg till kerning-par"
 
 #. Kerning Setup:
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:734
 #, fuzzy
 msgid "Kerning Setup:"
-msgstr "Sidinställning"
+msgstr "Kerning-inställning:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:736
 #, fuzzy
 msgid "1st Glyph:"
-msgstr "Första till tionde"
+msgstr "Första Tecken:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:738
 #, fuzzy
 msgid "2nd Glyph:"
-msgstr "ogiltig AFFI-glyph-identifierare %1"
+msgstr "Andra Tecken:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:741
 #, fuzzy
 msgid "Add pair"
-msgstr "Schemalagd: att läggas till\n"
+msgstr "Lägg till par"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:753
 #, fuzzy
 msgid "First Unicode range"
-msgstr "Färgområdes_mappning..."
+msgstr "Första Unicode-område"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:754
 #, fuzzy
 msgid "Second Unicode range"
-msgstr "Färgområdes_mappning..."
+msgstr "Andra Unicode-område"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:761
 #, fuzzy
 msgid "Kerning value:"
-msgstr "Ogiltigt värde ( %d )\n"
+msgstr "Kerning-värde:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:819
 #, fuzzy
 msgid "Set font family"
-msgstr "Typsnittsfamilj inställd"
+msgstr "Ange typsnittsfamilj"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:828
 msgid "font"
@@ -21111,7 +21155,7 @@ msgstr "typsnitt"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:842
 #, fuzzy
 msgid "Add font"
-msgstr "Typsnittsval"
+msgstr "Lägg till typsnitt"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:862
 #, fuzzy
@@ -21121,27 +21165,27 @@ msgstr "_Typsnitt"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:870
 #, fuzzy
 msgid "_Global Settings"
-msgstr "Använd globala proxyinställningar"
+msgstr "Globala inställningar"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:871
 msgid "_Glyphs"
-msgstr ""
+msgstr "Tecken"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:872
 #, fuzzy
 msgid "_Kerning"
-msgstr "_Teckning"
+msgstr "Kerning"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:879
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:880
 #, fuzzy
 msgid "Sample Text"
-msgstr "Endast text"
+msgstr "Exempeltext"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:884
 #, fuzzy
 msgid "Preview Text:"
-msgstr "Förhandsvisningstext"
+msgstr "Förhandsvisningstext:"
 
 #. TRANSLATORS: An item in context menu on a colour in the swatches
 #: ../src/ui/dialog/swatches.cpp:192
@@ -21170,7 +21214,7 @@ msgstr "Palett-bibliotek (%s) är inte tillgängligt."
 #: ../src/ui/dialog/tile.cpp:348
 #, fuzzy
 msgid "Arrange in a grid"
-msgstr "Storleken på rutnätet längs X-axeln"
+msgstr "Fördela i ett rutnät"
 
 #: ../src/ui/dialog/tile.cpp:658
 msgid "Rows:"
@@ -21232,7 +21276,7 @@ msgstr "Horisontellt mellanrum mellan kolumner (i bildpunkter)"
 #. ## The OK button
 #: ../src/ui/dialog/tile.cpp:869
 msgid "tileClonesDialog|Arrange"
-msgstr "Gruppera"
+msgstr "tileClonesDialog|Gruppera"
 
 #: ../src/ui/dialog/tile.cpp:870
 msgid "Arrange selected objects"
@@ -21245,16 +21289,16 @@ msgstr "Gruppera markerade objekt"
 #. brightness
 #: ../src/ui/dialog/tracedialog.cpp:406
 msgid "Brightness cutoff"
-msgstr "Ljusstyrka"
+msgstr "Ljusstyrkeavskärning"
 
 #: ../src/ui/dialog/tracedialog.cpp:410
 msgid "Trace by a given brightness level"
-msgstr ""
+msgstr "Kalkera vid en given ljusnivå"
 
 #: ../src/ui/dialog/tracedialog.cpp:418
 #, fuzzy
 msgid "Brightness cutoff for black/white"
-msgstr "Kalibrerar för svart- och vitnivå."
+msgstr "Ljusstyrkeavskärning för svart/vitt"
 
 #: ../src/ui/dialog/tracedialog.cpp:425
 msgid "Single scan: creates a path"
@@ -21272,7 +21316,7 @@ msgstr "Kalkera med optimal kantdetektering med J. Canny's algoritm"
 
 #: ../src/ui/dialog/tracedialog.cpp:451
 msgid "Brightness cutoff for adjacent pixels (determines edge thickness)"
-msgstr ""
+msgstr "Ljusstyrkeavskärning för intilliggande bildpunkter (bestämmer kanttjocklek)"
 
 #. quantization
 #. TRANSLATORS: Color Quantization: the process of reducing the number
@@ -21284,12 +21328,12 @@ msgstr "Färgreducering"
 
 #: ../src/ui/dialog/tracedialog.cpp:467
 msgid "Trace along the boundaries of reduced colors"
-msgstr ""
+msgstr "Kalkera längs kanterna för reducerade färger"
 
 #: ../src/ui/dialog/tracedialog.cpp:475
 #, fuzzy
 msgid "The number of reduced colors"
-msgstr "Antal unika färger: %d"
+msgstr "Antal reducerade färger"
 
 #: ../src/ui/dialog/tracedialog.cpp:477
 msgid "Colors:"
@@ -21308,11 +21352,11 @@ msgstr "Invertera svarta och vita regioner"
 #. # begin multiple scan
 #: ../src/ui/dialog/tracedialog.cpp:497
 msgid "Brightness steps"
-msgstr "Ljusstyrka"
+msgstr "Ljusstyrkesteg"
 
 #: ../src/ui/dialog/tracedialog.cpp:501
 msgid "Trace the given number of brightness levels"
-msgstr ""
+msgstr "Kalkera det givna antalet ljusstyrkenivåer"
 
 #: ../src/ui/dialog/tracedialog.cpp:508
 msgid "Scans:"
@@ -21321,11 +21365,11 @@ msgstr "Omgångar:"
 #: ../src/ui/dialog/tracedialog.cpp:511
 #, fuzzy
 msgid "The desired number of scans"
-msgstr "Maximalt antal bilder: %d\n"
+msgstr "Det önskade antalet omgångar"
 
 #: ../src/ui/dialog/tracedialog.cpp:519
 msgid "Trace the given number of reduced colors"
-msgstr ""
+msgstr "Kalkera det givna antalet reducerade färger"
 
 #: ../src/ui/dialog/tracedialog.cpp:523
 msgid "Grays"
@@ -21343,19 +21387,21 @@ msgstr "Jämna ut"
 
 #: ../src/ui/dialog/tracedialog.cpp:536
 msgid "Apply Gaussian blur to the bitmap before tracing"
-msgstr ""
+msgstr "Använd Gaussisk oskärpa på bitmappen innan kalkering"
 
 #. TRANSLATORS: "Stack" is a verb here
 #: ../src/ui/dialog/tracedialog.cpp:539
 #, fuzzy
 msgid "Stack scans"
-msgstr "Stackspill"
+msgstr "Överlagra scans"
 
 #: ../src/ui/dialog/tracedialog.cpp:542
 msgid ""
 "Stack scans on top of one another (no gaps) instead of tiling (usually with "
 "gaps)"
 msgstr ""
+"Lagra scans ovanpå varandra (utan mellanrum) istället för att sprida ut "
+"(vanligtvis utan rutnät)"
 
 #: ../src/ui/dialog/tracedialog.cpp:545
 msgid "Remove background"
@@ -21374,28 +21420,28 @@ msgstr "Flera omgångar: skapar en grupp av slingor"
 #: ../src/ui/dialog/tracedialog.cpp:569
 #, fuzzy
 msgid "Suppress speckles"
-msgstr "Skriv ingen utdata."
+msgstr "Avlägsna fläckar"
 
 #: ../src/ui/dialog/tracedialog.cpp:571
 msgid "Ignore small spots (speckles) in the bitmap"
-msgstr ""
+msgstr "Ignorera små fläckar i bitmappen"
 
 #: ../src/ui/dialog/tracedialog.cpp:579
 msgid "Speckles of up to this many pixels will be suppressed"
-msgstr ""
+msgstr "Fläckar upp till detta antal pixlar kommer att ignoreras"
 
 #: ../src/ui/dialog/tracedialog.cpp:584
 #, fuzzy
 msgid "Smooth corners"
-msgstr "_Runda hörn..."
+msgstr "_Runda hörn"
 
 #: ../src/ui/dialog/tracedialog.cpp:586
 msgid "Smooth out sharp corners of the trace"
-msgstr ""
+msgstr "Runda av skarpa hörn i kalkeringen"
 
 #: ../src/ui/dialog/tracedialog.cpp:595
 msgid "Increase this to smooth corners more"
-msgstr ""
+msgstr "Öka detta för att jämna ut hörnen mer"
 
 #: ../src/ui/dialog/tracedialog.cpp:599
 msgid "Optimize paths"
@@ -21403,13 +21449,15 @@ msgstr "Optimera slingor"
 
 #: ../src/ui/dialog/tracedialog.cpp:602
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
-msgstr ""
+msgstr "Försök att optimera slingor genom att slå ihop närliggande Bezier-kurvsegment"
 
 #: ../src/ui/dialog/tracedialog.cpp:610
 msgid ""
 "Increase this to reduce the number of nodes in the trace by more aggressive "
 "optimization"
 msgstr ""
+"Öka detta för att reducera antalet noder i kalkeringen genom mer aggressiv "
+"optimering"
 
 #: ../src/ui/dialog/tracedialog.cpp:611
 msgid "Tolerance:"
@@ -21424,6 +21472,11 @@ msgid ""
 "\n"
 "http://potrace.sourceforge.net"
 msgstr ""
+"Inkscapes bitmappkalkering\n"
+"baseras på Potrace,\n"
+"skapad av Peter Selinger\n"
+"\n"
+"http://potrace.sourceforge.net"
 
 #: ../src/ui/dialog/tracedialog.cpp:630
 msgid "Credits"
@@ -21433,11 +21486,11 @@ msgstr "Tack till"
 #. ## SIOX
 #: ../src/ui/dialog/tracedialog.cpp:644
 msgid "SIOX foreground selection"
-msgstr "SIOX förgrundsval"
+msgstr "SIOX förgrundsmarkering"
 
 #: ../src/ui/dialog/tracedialog.cpp:647
 msgid "Cover the area you want to select as the foreground"
-msgstr ""
+msgstr "Täck ytan du vill markera som förgrund"
 
 #. ## preview
 #: ../src/ui/dialog/tracedialog.cpp:652
@@ -21449,6 +21502,8 @@ msgid ""
 "Preview the intermediate bitmap with the current settings, without actual "
 "tracing"
 msgstr ""
+"Förhandsgranska den mellanliggande bitmappen med nuvarande inställningar, utan "
+"faktisk kalkering"
 
 #: ../src/ui/dialog/tracedialog.cpp:662
 msgid "Preview"
@@ -21462,7 +21517,7 @@ msgstr "Bearbetar pågående begäran"
 #: ../src/ui/dialog/tracedialog.cpp:683
 #, fuzzy
 msgid "Execute the trace"
-msgstr "Fraktalspåra"
+msgstr "Utför kalkeringen"
 
 #: ../src/ui/dialog/transformation.cpp:82
 #: ../src/ui/dialog/transformation.cpp:92
@@ -21471,7 +21526,7 @@ msgstr "_Horisontell"
 
 #: ../src/ui/dialog/transformation.cpp:82
 msgid "Horizontal displacement (relative) or position (absolute)"
-msgstr ""
+msgstr "Horisontell förskjutning (relativt) eller position (absolut)"
 
 #: ../src/ui/dialog/transformation.cpp:84
 #: ../src/ui/dialog/transformation.cpp:94
@@ -21480,7 +21535,7 @@ msgstr "_Vertikal"
 
 #: ../src/ui/dialog/transformation.cpp:84
 msgid "Vertical displacement (relative) or position (absolute)"
-msgstr ""
+msgstr "Vertikal förskjutning (relativt) eller position (absolut)"
 
 #: ../src/ui/dialog/transformation.cpp:86
 msgid "_Width"
@@ -21488,7 +21543,7 @@ msgstr "_Bredd"
 
 #: ../src/ui/dialog/transformation.cpp:86
 msgid "Horizontal size (absolute or percentage of current)"
-msgstr ""
+msgstr "Horisontell storlek (absolut eller procent av nuvarande)"
 
 #: ../src/ui/dialog/transformation.cpp:88
 msgid "_Height"
@@ -21496,7 +21551,7 @@ msgstr "_Höjd"
 
 #: ../src/ui/dialog/transformation.cpp:88
 msgid "Vertical size (absolute or percentage of current)"
-msgstr ""
+msgstr "Vertikal storlek (absolut eller procent av nuvarande)"
 
 #: ../src/ui/dialog/transformation.cpp:90
 msgid "A_ngle"
@@ -21505,19 +21560,23 @@ msgstr "V_inkel"
 #: ../src/ui/dialog/transformation.cpp:90
 #, fuzzy
 msgid "Rotation angle (positive = counterclockwise)"
-msgstr "Rotationsvinkeln runt X-axeln"
+msgstr "Rotationsvinkeln (positiv = moturs)"
 
 #: ../src/ui/dialog/transformation.cpp:92
 msgid ""
 "Horizontal skew angle (positive = counterclockwise), or absolute "
 "displacement, or percentage displacement"
 msgstr ""
+"Horisontell skevningsvinkel (positiv = moturs), eller absolut "
+"förflyttning, eller procentuell förflyttning"
 
 #: ../src/ui/dialog/transformation.cpp:94
 msgid ""
 "Vertical skew angle (positive = counterclockwise), or absolute displacement, "
 "or percentage displacement"
 msgstr ""
+"Vertikal skevningsvinkel (positiv = moturs), eller absolut förflyttning, "
+"eller procentuell förflyttning"
 
 #: ../src/ui/dialog/transformation.cpp:97
 msgid "Transformation matrix element A"
@@ -21546,44 +21605,50 @@ msgstr "Transformationsmatris element F"
 #: ../src/ui/dialog/transformation.cpp:104
 #, fuzzy
 msgid "Rela_tive move"
-msgstr "Kan inte flytta \"%s\" till \"%s\""
+msgstr "Relativ flytt"
 
 #: ../src/ui/dialog/transformation.cpp:104
 msgid ""
 "Add the specified relative displacement to the current position; otherwise, "
 "edit the current absolute position directly"
 msgstr ""
+"Lägg till den specificerade relativa förflyttningen till den nuvarande positionen; annars, "
+"redigera den nuvarande absoluta positionen direkt"
 
 #: ../src/ui/dialog/transformation.cpp:105
 #, fuzzy
 msgid "Scale proportionally"
-msgstr "Beauforts skala"
+msgstr "Skala proportionellt"
 
 #: ../src/ui/dialog/transformation.cpp:105
 msgid "Preserve the width/height ratio of the scaled objects"
-msgstr ""
+msgstr "Bevara bredd/höjd-förhållandet hos det skalade objektet"
 
 #: ../src/ui/dialog/transformation.cpp:106
 #, fuzzy
 msgid "Apply to each _object separately"
-msgstr "Applicera stilen av det kopierade objektet på markering"
+msgstr "Applicera till varje objekt separat"
 
 #: ../src/ui/dialog/transformation.cpp:106
 msgid ""
 "Apply the scale/rotate/skew to each selected object separately; otherwise, "
 "transform the selection as a whole"
 msgstr ""
+"Applicera skalan/rotationen/skevningen till varje markerat objekt separat; "
+"annars, transformera markeringen som en helhet"
 
 #: ../src/ui/dialog/transformation.cpp:107
 #, fuzzy
 msgid "Edit c_urrent matrix"
-msgstr "Användardefinierad färgmatris."
+msgstr "Redigera nuvarande matris"
 
 #: ../src/ui/dialog/transformation.cpp:107
 msgid ""
 "Edit the current transform= matrix; otherwise, post-multiply transform= by "
 "this matrix"
 msgstr ""
+"Redigera det nuvarande transform=-matris; annars, efter-multiplicera transform= med "
+"denna matris"
 
 #: ../src/ui/dialog/transformation.cpp:117
 msgid "_Move"
@@ -21600,26 +21665,26 @@ msgstr "_Rotera"
 #: ../src/ui/dialog/transformation.cpp:126
 #, fuzzy
 msgid "Ske_w"
-msgstr "Snedställ"
+msgstr "Skeva"
 
 #: ../src/ui/dialog/transformation.cpp:129
 msgid "Matri_x"
-msgstr ""
+msgstr "Matris"
 
 #: ../src/ui/dialog/transformation.cpp:153
 #, fuzzy
 msgid "Reset the values on the current tab to defaults"
-msgstr "Återställ dialogfönstret till standardvärden - Ctrl+r"
+msgstr "Återställ värdena i denna flik till standardvärden"
 
 #: ../src/ui/dialog/transformation.cpp:160
 #, fuzzy
 msgid "Apply transformation to selection"
-msgstr "Applicera stilen av det kopierade objektet på markering"
+msgstr "Applicera transformation till markeringen"
 
 #: ../src/ui/dialog/transformation.cpp:846
 #, fuzzy
 msgid "Edit transformation matrix"
-msgstr "Användardefinierad färgmatris."
+msgstr "Redigera transformationsmatrisen"
 
 #: ../src/ui/tool/curve-drag-point.cpp:100
 #, fuzzy
@@ -25910,7 +25975,7 @@ msgstr "Aktivera fästpunkter"
 
 #: ../src/widgets/toolbox.cpp:2238
 msgid "Bounding box"
-msgstr "Begränsningsyta"
+msgstr "begränsningslåda"
 
 #: ../src/widgets/toolbox.cpp:2238
 msgid "Snap bounding box corners"
@@ -27274,7 +27339,7 @@ msgstr ""
 #: ../src/widgets/toolbox.cpp:6030
 #, fuzzy
 msgid "Show limiting bounding box"
-msgstr "mittpunkt på begränsningsytas sida"
+msgstr "mittpunkt på begränsningslådas sida"
 
 #: ../src/widgets/toolbox.cpp:6031
 msgid "Show bounding box (used to cut infinite lines)"
@@ -28404,7 +28469,7 @@ msgstr "Trådrams-sfär"
 #~ msgstr "Avbryt"
 
 #~ msgid "bounding box"
-#~ msgstr "begränsningsyta"
+#~ msgstr "begränsningslåda"
 
 #~ msgid ""
 #~ "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
