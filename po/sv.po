@@ -13693,11 +13693,11 @@ msgstr "Avslutar frihandsskiss"
 
 #: ../src/persp3d.cpp:345
 msgid "Toggle vanishing point"
-msgstr "Växla försvinnande punkt"
+msgstr "Växla flyktpunkt"
 
 #: ../src/persp3d.cpp:356
 msgid "Toggle multiple vanishing points"
-msgstr "Växla multipla försvinnande punkter"
+msgstr "Växla multipla flyktpunkter"
 
 #: ../src/preferences-skeleton.h:98
 msgid "Dip pen"
@@ -21684,7 +21684,7 @@ msgstr "Applicera transformation till markeringen"
 #: ../src/ui/dialog/transformation.cpp:846
 #, fuzzy
 msgid "Edit transformation matrix"
-msgstr "Redigera transformationsmatrisen"
+msgstr "Redigera transformationsmatris"
 
 #: ../src/ui/tool/curve-drag-point.cpp:100
 #, fuzzy
@@ -21699,16 +21699,13 @@ msgstr "Lägg till nod"
 #, fuzzy
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: click to toggle segment selection"
-msgstr ""
-"<b>Skift</b>: klicka för att markera eller avmarkera; dra för att välja "
-"flera objekt samtidigt"
+msgstr "<b>Skift</b>: klicka för att växla segmentmarkering"
 
 #: ../src/ui/tool/curve-drag-point.cpp:171
 #, fuzzy
 msgctxt "Path segment tip"
 msgid "<b>Ctrl+Alt</b>: click to insert a node"
-msgstr ""
-"<b>Förbindelsepunkt</b>: klicka och dra för att skapa en ny förbindelse"
+msgstr "<b>Ctrl+Alt</b>: klicka för att infoga en nod"
 
 #: ../src/ui/tool/curve-drag-point.cpp:175
 msgctxt "Path segment tip"
@@ -21716,6 +21713,9 @@ msgid ""
 "<b>Linear segment</b>: drag to convert to a Bezier segment, doubleclick to "
 "insert node, click to select (more: Shift, Ctrl+Alt)"
 msgstr ""
+"<b>Rakt segment</b>: dra för att konvertera till ett Bezier-segment, "
+"dubbelklicka för att infoga nod, klicka för att markera (mer: Skift, "
+"Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:179
 msgctxt "Path segment tip"
@@ -21723,6 +21723,8 @@ msgid ""
 "<b>Bezier segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Shift, Ctrl+Alt)"
 msgstr ""
+"<b>Bezier-segment</b>: dra för att forma segment, dubbelklicka för att "
+"infoga nod, klicka för att markera (mer: Skift, Ctrl+Alt)"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:227
 msgid "Change node type"
@@ -21731,7 +21733,7 @@ msgstr "Byt nodtyp"
 #: ../src/ui/tool/multi-path-manipulator.cpp:235
 #, fuzzy
 msgid "Straighten segments"
-msgstr "Antal segment:"
+msgstr "Räta ut segment"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:237
 #, fuzzy
@@ -21746,17 +21748,17 @@ msgstr "Lägg till noder"
 #: ../src/widgets/toolbox.cpp:1415
 #, fuzzy
 msgid "Join nodes"
-msgstr "Lägg till noder"
+msgstr "Sammanfoga noder"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:313
 #: ../src/widgets/toolbox.cpp:1426
 #, fuzzy
 msgid "Break nodes"
-msgstr "Lägg till noder"
+msgstr "Bryt isär noder"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:320
 msgid "Delete nodes"
-msgstr "Ta bort noder"
+msgstr "Radera noder"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:618
 msgid "Move nodes"
@@ -21765,12 +21767,12 @@ msgstr "Flytta noder"
 #: ../src/ui/tool/multi-path-manipulator.cpp:621
 #, fuzzy
 msgid "Move nodes horizontally"
-msgstr "Maximera fönstret horisontellt"
+msgstr "Flytta noder horisontellt"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:625
 #, fuzzy
 msgid "Move nodes vertically"
-msgstr "Maximera fönstret vertikalt"
+msgstr "Flytta noder vertikalt"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:629
 #: ../src/ui/tool/multi-path-manipulator.cpp:632
@@ -21781,7 +21783,7 @@ msgstr "Rotera noder"
 #: ../src/ui/tool/multi-path-manipulator.cpp:642
 #, fuzzy
 msgid "Scale nodes uniformly"
-msgstr "Skala noder"
+msgstr "Skala noder likformigt"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:639
 msgid "Scale nodes"
@@ -21790,22 +21792,22 @@ msgstr "Skala noder"
 #: ../src/ui/tool/multi-path-manipulator.cpp:646
 #, fuzzy
 msgid "Scale nodes horizontally"
-msgstr "Maximera fönstret horisontellt"
+msgstr "Skala noder horisontellt"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:650
 #, fuzzy
 msgid "Scale nodes vertically"
-msgstr "Maximera fönstret vertikalt"
+msgstr "Skala noder vertikalt"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:654
 #, fuzzy
 msgid "Flip nodes horizontally"
-msgstr "Vänd horisontellt"
+msgstr "Spegla noder horisontellt"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:657
 #, fuzzy
 msgid "Flip nodes vertically"
-msgstr "Vänd vertikalt"
+msgstr "Spegla noder vertikalt"
 
 #: ../src/ui/tool/node-tool.cpp:537
 msgctxt "Node tool tip"
@@ -21813,12 +21815,14 @@ msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
 "selection"
 msgstr ""
+"<b>Skift</b>: dra för att lägga till noder till markeringen, klicka för att växla "
+"objektmarkering"
 
 #: ../src/ui/tool/node-tool.cpp:541
 #, fuzzy
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
-msgstr "<b>Skift</b>: rita runt mittpunkten"
+msgstr "<b>Skift</b>: dra för att lägga till noder till markeringen"
 
 #: ../src/ui/tool/node-tool.cpp:551
 #, c-format
@@ -21827,6 +21831,8 @@ msgid ""
 "<b>%u of %u nodes</b> selected. Drag to select nodes, click to edit only "
 "this object (more: Shift)"
 msgstr ""
+"<b>%u av %u noder</b> markerade. Dra för att markera noder, clicka för "
+"att redigera endast detta objekt (mer: Skift)"
 
 #: ../src/ui/tool/node-tool.cpp:557
 #, c-format
@@ -21835,58 +21841,61 @@ msgid ""
 "<b>%u of %u nodes</b> selected. Drag to select nodes, click clear the "
 "selection"
 msgstr ""
+"<b>%u av %u noder</b> markerade. Dra för att markera noder, klicka för "
+"att tömma markeringen"
 
 #: ../src/ui/tool/node-tool.cpp:565
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
-msgstr ""
+msgstr "Dra för att markera noder, klicka för att redigera endast detta objekt"
 
 #: ../src/ui/tool/node-tool.cpp:568
 #, fuzzy
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
-msgstr "Skapa brickkloner av markeringen"
+msgstr "Dra för att markera noder, klicka för att tömma markeringen"
 
 #: ../src/ui/tool/node-tool.cpp:573
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
-msgstr ""
+msgstr "Dra för att markera objekt att redigera, klicka för att redigera detta "
+"objekt (mer: Skift)"
 
 #: ../src/ui/tool/node-tool.cpp:576
 #, fuzzy
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
-msgstr "Konvertera markerat objekt till slinga"
+msgstr "Dra för att markera objekt att redigera"
 
 #: ../src/ui/tool/node.cpp:207
 #, fuzzy
 msgid "Cusp node handle"
-msgstr "Flytta nodhandtag"
+msgstr "Hörnnodhandtag"
 
 #: ../src/ui/tool/node.cpp:208
 #, fuzzy
 msgid "Smooth node handle"
-msgstr "Visa områdes_handtag"
+msgstr "Mjukt nodhandtag"
 
 #: ../src/ui/tool/node.cpp:209
 #, fuzzy
 msgid "Symmetric node handle"
-msgstr "Visa områdes_handtag"
+msgstr "Symmetriskt nodhandtag"
 
 #: ../src/ui/tool/node.cpp:210
 #, fuzzy
 msgid "Auto-smooth node handle"
-msgstr "Flytta nodhandtag"
+msgstr "Auto-jämna nodhandtag"
 
 #: ../src/ui/tool/node.cpp:341
 msgctxt "Path handle tip"
 msgid "more: Shift, Ctrl, Alt"
-msgstr ""
+msgstr "mer: Skift, Ctrl, Alt"
 
 #: ../src/ui/tool/node.cpp:343
 msgctxt "Path handle tip"
 msgid "more: Ctrl, Alt"
-msgstr ""
+msgstr "mer: Ctrl, Alt"
 
 #: ../src/ui/tool/node.cpp:349
 #, c-format
@@ -21895,6 +21904,8 @@ msgid ""
 "<b>Shift+Ctrl+Alt</b>: preserve length and snap rotation angle to %g° "
 "increments while rotating both handles"
 msgstr ""
+"<b>Skift+Ctrl+Alt</b>: bevara längden och fäst rotationsvinkeln till %g° "
+"inkrement under rotation av båda handtagen"
 
 #: ../src/ui/tool/node.cpp:354
 #, c-format
@@ -21902,19 +21913,19 @@ msgctxt "Path handle tip"
 msgid ""
 "<b>Ctrl+Alt</b>: preserve length and snap rotation angle to %g° increments"
 msgstr ""
+"<b>Ctrl+Alt</b>: bevara längd och fäst rotationsvinkel till %g° inkrement"
 
 #: ../src/ui/tool/node.cpp:360
 #, fuzzy
 msgctxt "Path handle tip"
 msgid "<b>Shift+Alt</b>: preserve handle length and rotate both handles"
 msgstr ""
-"<b>Skift</b>: markera/avmarkera noder, avaktivera fästpunkter, rotera båda "
-"handtagen"
+"<b>Skift+Alt</b>: bevara handtagslängd och rotera båda handtagen"
 
 #: ../src/ui/tool/node.cpp:363
 msgctxt "Path handle tip"
 msgid "<b>Alt</b>: preserve handle length while dragging"
-msgstr ""
+msgstr "<b>Alt</b>: bevara handtagslängd under flyttning"
 
 #: ../src/ui/tool/node.cpp:370
 #, fuzzy, c-format
@@ -21923,76 +21934,75 @@ msgid ""
 "<b>Shift+Ctrl</b>: snap rotation angle to %g° increments and rotate both "
 "handles"
 msgstr ""
-"<b>Skift</b>: markera/avmarkera noder, avaktivera fästpunkter, rotera båda "
-"handtagen"
+"<b>Skift+Ctrl</b>: fäst rotationsvinkel till %g° inkrement och rotera "
+"båda handtagen"
 
 #: ../src/ui/tool/node.cpp:374
 #, c-format
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: snap rotation angle to %g° increments, click to retract"
-msgstr ""
+msgstr "<b>Ctrl</b>: fäst rotationsvinke till %g° inkrement, klicka för att "
+"dra in"
 
 #: ../src/ui/tool/node.cpp:379
 #, fuzzy
 msgctxt "Path hande tip"
 msgid "<b>Shift</b>: rotate both handles by the same angle"
-msgstr "<b>Skift</b>: rita runt mittpunkten"
+msgstr "<b>Skift</b>: rotera båda handtagen med samma vinkel"
 
 #: ../src/ui/tool/node.cpp:386
 #, c-format
 msgctxt "Path handle tip"
 msgid "<b>Auto node handle</b>: drag to convert to smooth node (%s)"
-msgstr ""
+msgstr "<b>Auto nodhandtag</b>: dra för att konvertera till jämn nod (%s)"
 
 #: ../src/ui/tool/node.cpp:389
 #, c-format
 msgctxt "Path handle tip"
 msgid "<b>%s</b>: drag to shape the segment (%s)"
-msgstr ""
+msgstr "<b>%s</b>: dra för att forma segmenten (%s)"
 
 #: ../src/ui/tool/node.cpp:405
 #, c-format
 msgctxt "Path handle tip"
 msgid "Move handle by %s, %s; angle %.2f°, length %s"
-msgstr ""
+msgstr "Flytta hantag med %s, %s; vinkel %.2f°, längd %s"
 
 #: ../src/ui/tool/node.cpp:1144
 #, fuzzy
 msgctxt "Path node tip"
 msgid "<b>Shift</b>: drag out a handle, click to toggle selection"
 msgstr ""
-"<b>Skift</b>: klicka för att markera eller avmarkera; dra för att välja "
-"flera objekt samtidigt"
+"<b>Skift</b>: dra ut handtag, klicka för att växla markering"
 
 #: ../src/ui/tool/node.cpp:1146
 #, fuzzy
 msgctxt "Path node tip"
 msgid "<b>Shift</b>: click to toggle selection"
 msgstr ""
-"<b>Skift</b>: klicka för att markera eller avmarkera; dra för att välja "
-"flera objekt samtidigt"
+"<b>Skift</b>: klicka för att markera eller avmarkera"
 
 #: ../src/ui/tool/node.cpp:1151
 msgctxt "Path node tip"
 msgid "<b>Ctrl+Alt</b>: move along handle lines, click to delete node"
-msgstr ""
+msgstr "<b>Ctrl+Alt</b>: flytta längs hantagslinjer, klicka för att radera nod"
 
 #: ../src/ui/tool/node.cpp:1154
 msgctxt "Path node tip"
 msgid "<b>Ctrl</b>: move along axes, click to change node type"
-msgstr ""
+msgstr "<b>Ctrl</b>: flytta längs axlar, klicka för att ändra nodtyp"
 
 #: ../src/ui/tool/node.cpp:1158
 #, fuzzy
 msgctxt "Path node tip"
 msgid "<b>Alt</b>: sculpt nodes"
-msgstr "<b>Ctrl</b>: fäst vid vinkel"
+msgstr "<b>Alt</b>: forma nod"
 
 #: ../src/ui/tool/node.cpp:1166
 #, c-format
 msgctxt "Path node tip"
 msgid "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"
-msgstr ""
+msgstr "<b>%s</b>: dra för att forma slingan (mer: Skift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1169
 #, c-format
@@ -22001,6 +22011,8 @@ msgid ""
 "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles "
 "(more: Shift, Ctrl, Alt)"
 msgstr ""
+"<b>%s</b>: dra för att forma slingan, klicka för att växla skalning-/rotations-handtag "
+"(mer: Skift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1172
 #, c-format
@@ -22009,32 +22021,34 @@ msgid ""
 "<b>%s</b>: drag to shape the path, click to select only this node (more: "
 "Shift, Ctrl, Alt)"
 msgstr ""
+"<b>%s</b>: dra för att forma slingan, klicka för att markera endast denna nod "
+"(mer: Skift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1180
 #, fuzzy, c-format
 msgctxt "Path node tip"
 msgid "Move node by %s, %s"
-msgstr "Flytta noder"
+msgstr "Flytta nod med %s, %s"
 
 #: ../src/ui/tool/node.cpp:1192
 #, fuzzy
 msgid "Symmetric node"
-msgstr "symmetrisk"
+msgstr "symmetrisk nod"
 
 #: ../src/ui/tool/node.cpp:1193
 #, fuzzy
 msgid "Auto-smooth node"
-msgstr "Tog bort %d nod(er):\n"
+msgstr "Auto-jämna nod"
 
 #: ../src/ui/tool/path-manipulator.cpp:763
 #, fuzzy
 msgid "Scale handle"
-msgstr "Skala noder"
+msgstr "Skala handtag"
 
 #: ../src/ui/tool/path-manipulator.cpp:787
 #, fuzzy
 msgid "Rotate handle"
-msgstr "Visa handtag"
+msgstr "Rotera handtag"
 
 #. We need to call MPM's method because it could have been our last node
 #: ../src/ui/tool/path-manipulator.cpp:1290 ../src/widgets/toolbox.cpp:1404
@@ -22044,60 +22058,61 @@ msgstr "Ta bort nod"
 #: ../src/ui/tool/path-manipulator.cpp:1305
 #, fuzzy
 msgid "Cycle node type"
-msgstr "Byt nodtyp"
+msgstr "Växla nodtyp"
 
 #: ../src/ui/tool/path-manipulator.cpp:1319
 #, fuzzy
 msgid "Drag handle"
-msgstr "Rita handtag"
+msgstr "Dra handtag"
 
 #: ../src/ui/tool/path-manipulator.cpp:1328
 #, fuzzy
 msgid "Retract handle"
-msgstr "Visa handtag"
+msgstr "Dra tillbaka handtag"
 
 #: ../src/ui/tool/transform-handle-set.cpp:137
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Shift+Ctrl</b>: scale uniformly about the rotation center"
-msgstr "<b>Skift</b>: rita runt mittpunkten"
+msgstr "<b>Skift+Ctrl</b>: skala likformigt runt rotationscentrum"
 
 #: ../src/ui/tool/transform-handle-set.cpp:139
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Ctrl:</b> scale uniformly"
-msgstr "<b>Ctrl</b>: fäst vid vinkel"
+msgstr "<b>Ctrl</b>: skala likformigt"
 
 #: ../src/ui/tool/transform-handle-set.cpp:144
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid ""
 "<b>Shift+Alt</b>: scale using an integer ratio about the rotation center"
-msgstr "<b>Skift</b>: rita gradient runt startpunkten"
+msgstr ""
+"<b>Skift+Alt</b>: skala med heltalsförhållande runt rotationscentrum"
 
 #: ../src/ui/tool/transform-handle-set.cpp:146
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Shift</b>: scale from the rotation center"
-msgstr "<b>Skift</b>: rita runt mittpunkten"
+msgstr "<b>Skift</b>: skala från rotationscentrum"
 
 #: ../src/ui/tool/transform-handle-set.cpp:149
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Alt</b>: scale using an integer ratio"
-msgstr "<b>Alt</b>: lås spiralens radie"
+msgstr "<b>Alt</b>: skala med heltalsförhållande"
 
 #: ../src/ui/tool/transform-handle-set.cpp:151
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Scale handle</b>: drag to scale the selection"
-msgstr "<b>Inga slingor</b> att förskjuta i markeringen."
+msgstr "<b>Slinghandtag</b>: dra för att skala markering"
 
 #: ../src/ui/tool/transform-handle-set.cpp:156
 #, c-format
 msgctxt "Transform handle tip"
 msgid "Scale by %.2f%% x %.2f%%"
-msgstr ""
+msgstr "Skala med %.2f%% x %.2f%%"
 
 #: ../src/ui/tool/transform-handle-set.cpp:311
 #, c-format
@@ -22106,18 +22121,19 @@ msgid ""
 "<b>Shift+Ctrl</b>: rotate around the opposite corner and snap angle to %f° "
 "increments"
 msgstr ""
+"<b>Skift+Ctrl</b>: rotera runt motsatt hörn och fäst vinkel till %f° inkrement"
 
 #: ../src/ui/tool/transform-handle-set.cpp:314
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Shift</b>: rotate around the opposite corner"
-msgstr "<b>Skift</b>: rita runt mittpunkten"
+msgstr "<b>Skift</b>: rotera runt motsatt hörn"
 
 #: ../src/ui/tool/transform-handle-set.cpp:318
 #, fuzzy, c-format
 msgctxt "Transform handle tip"
 msgid "<b>Ctrl</b>: snap angle to %f° increments"
-msgstr "<b>Ctrl</b>: fäst vid vinkel"
+msgstr "<b>Ctrl</b>: fäst vinkel till %f° inkrement"
 
 #: ../src/ui/tool/transform-handle-set.cpp:320
 msgctxt "Transform handle tip"
@@ -22125,13 +22141,14 @@ msgid ""
 "<b>Rotation handle</b>: drag to rotate the selection around the rotation "
 "center"
 msgstr ""
+"<b>Rotationshandtag</b>: dra för att rotera markeringen runt rotationscentrum"
 
 #. event
 #: ../src/ui/tool/transform-handle-set.cpp:325
 #, fuzzy, c-format
 msgctxt "Transform handle tip"
 msgid "Rotate by %.2f°"
-msgstr "Välj bildpunkter efter"
+msgstr "Rotera med %.2f°"
 
 #: ../src/ui/tool/transform-handle-set.cpp:419
 #, c-format
@@ -22140,41 +22157,43 @@ msgid ""
 "<b>Shift+Ctrl</b>: skew about the rotation center with snapping to %f° "
 "increments"
 msgstr ""
+"<b>Skift+Ctrl</b>: skeva runt rotationscentrum och fäst vid %f° inkrement"
 
 #: ../src/ui/tool/transform-handle-set.cpp:422
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Shift</b>: skew about the rotation center"
-msgstr "<b>Skift</b>: rita runt mittpunkten"
+msgstr "<b>Skift</b>: skeva runt rotationscentrum"
 
 #: ../src/ui/tool/transform-handle-set.cpp:426
 #, fuzzy, c-format
 msgctxt "Transform handle tip"
 msgid "<b>Ctrl</b>: snap skew angle to %f° increments"
-msgstr "<b>Ctrl</b>: fäst vid vinkel"
+msgstr "<b>Ctrl</b>: fäst skevnadsvinkel till %f° inkrement"
 
 #: ../src/ui/tool/transform-handle-set.cpp:429
 msgctxt "Transform handle tip"
 msgid ""
 "<b>Skew handle</b>: drag to skew (shear) selection about the opposite handle"
 msgstr ""
+"<b>Skevhandtag</b>: dra för att skeva markeringen runt motsatt handtag"
 
 #: ../src/ui/tool/transform-handle-set.cpp:435
 #, fuzzy, c-format
 msgctxt "Transform handle tip"
 msgid "Skew horizontally by %.2f°"
-msgstr "Flytta runt bildpunkter slumpmässigt"
+msgstr "Skeva horisontellt med %.2f°"
 
 #: ../src/ui/tool/transform-handle-set.cpp:438
 #, fuzzy, c-format
 msgctxt "Transform handle tip"
 msgid "Skew vertically by %.2f°"
-msgstr "Flytta runt bildpunkter slumpmässigt"
+msgstr "Skeva vertikalt med %.2f°"
 
 #: ../src/ui/tool/transform-handle-set.cpp:479
 msgctxt "Transform handle tip"
 msgid "<b>Rotation center</b>: drag to change the origin of transforms"
-msgstr ""
+msgstr "<b>Rotationscentrum</b>: dra för att ändra origo för transformationer"
 
 #: ../src/ui/view/edit-widget.cpp:330 ../src/ui/view/edit-widget.cpp:335
 #: ../src/ui/view/edit-widget.cpp:343 ../src/ui/view/edit-widget.cpp:348
@@ -22187,7 +22206,7 @@ msgstr ""
 #: ../src/ui/view/edit-widget.cpp:871 ../src/ui/view/edit-widget.cpp:992
 #, fuzzy
 msgid "PLACEHOLDER, do not translate"
-msgstr "Behöver ingen bekräftelse"
+msgstr "PLACEHOLDER, do not translate"
 
 #: ../src/ui/view/edit-widget.cpp:1051 ../src/widgets/desktop-widget.cpp:383
 #, fuzzy
@@ -22197,7 +22216,7 @@ msgstr "Zooma bild när fönsterstorlek ändras"
 #: ../src/ui/view/edit-widget.cpp:1072 ../src/widgets/desktop-widget.cpp:507
 #, fuzzy
 msgid "Cursor coordinates"
-msgstr "P_olära koordinater..."
+msgstr "Muspekarkoordinater"
 
 #: ../src/ui/view/edit-widget.cpp:1082 ../src/widgets/desktop-widget.cpp:522
 msgid "Z:"
@@ -22269,7 +22288,7 @@ msgstr "Aktuellt lager:"
 #: ../src/ui/widget/layer-selector.cpp:566
 #, fuzzy
 msgid "(root)"
-msgstr "(root)"
+msgstr "(rot)"
 
 #: ../src/ui/widget/licensor.cpp:35
 msgid "Proprietary"
@@ -22278,7 +22297,7 @@ msgstr "Proprietär"
 #: ../src/ui/widget/licensor.cpp:38
 #, fuzzy
 msgid "MetadataLicence|Other"
-msgstr "Andra inställningar"
+msgstr "MetadataLicence|Andra inställningar"
 
 #: ../src/ui/widget/object-composite-settings.cpp:172
 msgid "Change blur"
@@ -22304,12 +22323,12 @@ msgstr "Pappershöjd"
 
 #: ../src/ui/widget/page-sizer.cpp:233
 msgid "T_op margin:"
-msgstr ""
+msgstr "Övre marginal:"
 
 #: ../src/ui/widget/page-sizer.cpp:233
 #, fuzzy
 msgid "Top margin"
-msgstr "Månadernas marginal"
+msgstr "Övre marginal"
 
 #: ../src/ui/widget/page-sizer.cpp:234
 #, fuzzy
@@ -22319,7 +22338,7 @@ msgstr "Vänster:"
 #: ../src/ui/widget/page-sizer.cpp:234
 #, fuzzy
 msgid "Left margin"
-msgstr "Väster vinkel"
+msgstr "Väster marginal"
 
 #: ../src/ui/widget/page-sizer.cpp:235
 #, fuzzy
@@ -22329,7 +22348,7 @@ msgstr "Höger:"
 #: ../src/ui/widget/page-sizer.cpp:235
 #, fuzzy
 msgid "Right margin"
-msgstr "Höger vinkel"
+msgstr "Höger marginal"
 
 #: ../src/ui/widget/page-sizer.cpp:236
 #, fuzzy
@@ -22339,12 +22358,12 @@ msgstr "Undersida:"
 #: ../src/ui/widget/page-sizer.cpp:236
 #, fuzzy
 msgid "Bottom margin"
-msgstr "Månadernas marginal"
+msgstr "Nedre marginal"
 
 #: ../src/ui/widget/page-sizer.cpp:286
 #, fuzzy
 msgid "Orientation:"
-msgstr "Orientering"
+msgstr "Orientering:"
 
 #: ../src/ui/widget/page-sizer.cpp:289
 msgid "_Landscape"
@@ -22361,7 +22380,7 @@ msgstr "Egen storlek"
 
 #: ../src/ui/widget/page-sizer.cpp:324
 msgid "Resi_ze page to content..."
-msgstr ""
+msgstr "Skala om sidans innehåll..."
 
 #: ../src/ui/widget/page-sizer.cpp:350
 #, fuzzy
@@ -22388,7 +22407,7 @@ msgstr "Lista"
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #: ../src/ui/widget/panel.cpp:136
 msgid "swatches|Size"
-msgstr "Storlek"
+msgstr "swatches|Storlek"
 
 #: ../src/ui/widget/panel.cpp:140
 msgid "tiny"
@@ -22403,7 +22422,7 @@ msgstr "liten"
 #. "medium" indicates size of colour swatches
 #: ../src/ui/widget/panel.cpp:145
 msgid "swatchesHeight|medium"
-msgstr "medel"
+msgstr "swatchesHeight|medel"
 
 #: ../src/ui/widget/panel.cpp:146
 msgid "large"
@@ -22417,7 +22436,7 @@ msgstr "enorm"
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #: ../src/ui/widget/panel.cpp:171
 msgid "swatches|Width"
-msgstr "Bredd"
+msgstr "swatches|Bredd"
 
 #: ../src/ui/widget/panel.cpp:175
 msgid "narrower"
@@ -22432,7 +22451,7 @@ msgstr "smal"
 #. "medium" indicates width of colour swatches
 #: ../src/ui/widget/panel.cpp:180
 msgid "swatchesWidth|medium"
-msgstr "medel"
+msgstr "swatchesWidth|medel"
 
 #: ../src/ui/widget/panel.cpp:181
 msgid "wide"
@@ -22447,7 +22466,7 @@ msgstr "bredare"
 #. "Wrap" indicates how colour swatches are displayed
 #: ../src/ui/widget/panel.cpp:215
 msgid "swatches|Wrap"
-msgstr "Visa flera rader"
+msgstr "swatches|Visa flera rader"
 
 #: ../src/ui/widget/random.cpp:123
 msgid ""
@@ -22802,7 +22821,7 @@ msgstr ""
 #: ../src/ui/widget/selected-style.cpp:1290
 #, fuzzy
 msgid "Adjust hue"
-msgstr "Justera nyans och mättnad"
+msgstr "Justera nyans"
 
 #: ../src/ui/widget/selected-style.cpp:1292
 #, c-format
@@ -22827,7 +22846,7 @@ msgstr ""
 #: ../src/ui/widget/spin-slider.cpp:120
 #, fuzzy
 msgid "sliders|Link"
-msgstr "Infoga _länk"
+msgstr "sliders|Länk"
 
 #: ../src/ui/widget/style-swatch.cpp:269
 msgid "L Gradient"
@@ -22860,7 +22879,7 @@ msgstr "T:%.3g"
 #: ../src/ui/widget/style-swatch.cpp:341
 #, c-format
 msgid "O:.%d"
-msgstr ""
+msgstr "T:.%d"
 
 #: ../src/ui/widget/style-swatch.cpp:346
 #, c-format
@@ -22870,12 +22889,12 @@ msgstr "Transparens: %.3g"
 #: ../src/vanishing-point.cpp:123
 #, fuzzy
 msgid "Split vanishing points"
-msgstr "Visa kontrollpunkter"
+msgstr "Splittra flyktpunkter"
 
 #: ../src/vanishing-point.cpp:168
 #, fuzzy
 msgid "Merge vanishing points"
-msgstr "Visa kontrollpunkter"
+msgstr "Slå samman flyktpunkter"
 
 #: ../src/vanishing-point.cpp:224
 msgid "3D box: Move vanishing point"
@@ -22929,7 +22948,7 @@ msgstr "Växlade till nästa lager."
 
 #: ../src/verbs.cpp:1105
 msgid "Cannot go past last layer."
-msgstr ""
+msgstr "Kan ej gå förbi lager."
 
 #: ../src/verbs.cpp:1114
 msgid "Switch to previous layer"
@@ -22941,7 +22960,7 @@ msgstr "Växlade till föregående lager."
 
 #: ../src/verbs.cpp:1117
 msgid "Cannot go before first layer."
-msgstr ""
+msgstr "Kan ej gå innan första lager."
 
 #: ../src/verbs.cpp:1134 ../src/verbs.cpp:1230 ../src/verbs.cpp:1262
 #: ../src/verbs.cpp:1268
@@ -22976,7 +22995,7 @@ msgstr "Sänk lager"
 
 #: ../src/verbs.cpp:1185
 msgid "Cannot move layer any further."
-msgstr ""
+msgstr "Kan inte flytta lager något mer."
 
 #: ../src/verbs.cpp:1199 ../src/verbs.cpp:1217
 #, fuzzy, c-format
@@ -23004,7 +23023,7 @@ msgstr "Raderade lagret."
 #: ../src/verbs.cpp:1271
 #, fuzzy
 msgid "Toggle layer solo"
-msgstr "Växla synlighet för aktuellt lager"
+msgstr "Växla solo-lager"
 
 #: ../src/verbs.cpp:1332
 msgid "Flip horizontally"
@@ -23020,49 +23039,49 @@ msgstr "Vänd vertikalt"
 #: ../src/verbs.cpp:1861
 #, fuzzy
 msgid "tutorial-basic.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1865
 #, fuzzy
 msgid "tutorial-shapes.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-shapes.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1869
 #, fuzzy
 msgid "tutorial-advanced.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-advanced.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1873
 #, fuzzy
 msgid "tutorial-tracing.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-tracing.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1877
 #, fuzzy
 msgid "tutorial-calligraphy.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-calligraphy.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1881
 #, fuzzy
 msgid "tutorial-interpolate.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-interpolate.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1885
 #, fuzzy
 msgid "tutorial-elements.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-elements.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1889
 #, fuzzy
 msgid "tutorial-tips.svg"
-msgstr "komprimerad SVG-bild"
+msgstr "tutorial-tips.svg"
 
 #: ../src/verbs.cpp:2165 ../src/verbs.cpp:2696
 msgid "Unlock all objects in the current layer"
@@ -23153,7 +23172,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2212
 msgid "Print Previe_w"
-msgstr "Förhandsgranska"
+msgstr "Förhandsgranska för utskrift"
 
 #: ../src/verbs.cpp:2213
 msgid "Preview document printout"
@@ -23242,7 +23261,7 @@ msgstr "Klistra _in"
 
 #: ../src/verbs.cpp:2238
 msgid "Paste objects from clipboard to mouse point, or paste text"
-msgstr "Klistra in objekt från urklipp till muspekare eller klistra in text"
+msgstr "Klistra in objekt från urklipp vid muspekare eller klistra in text"
 
 #: ../src/verbs.cpp:2239
 msgid "Paste _Style"
@@ -23345,7 +23364,7 @@ msgstr "Ta bort alla filter från markerade objekt"
 
 #: ../src/verbs.cpp:2261
 msgid "_Delete"
-msgstr "_Ta bort"
+msgstr "Radera"
 
 #: ../src/verbs.cpp:2262
 msgid "Delete selection"
@@ -23381,11 +23400,11 @@ msgstr ""
 #: ../src/verbs.cpp:2269
 #, fuzzy
 msgid "Relink to Copied"
-msgstr "Kopierade bildpunkter till urklipp"
+msgstr "Länka till Kopierad"
 
 #: ../src/verbs.cpp:2270
 msgid "Relink the selected clones to the object currently on the clipboard"
-msgstr ""
+msgstr "Länka den markerade klonen till det nuvarande urklippet"
 
 #: ../src/verbs.cpp:2271
 msgid "Select _Original"
@@ -23433,7 +23452,7 @@ msgstr "Extrahera objekt från en fyllning med brickmönster"
 #: ../src/verbs.cpp:2281
 #, fuzzy
 msgid "Clea_r All"
-msgstr "Alla blad"
+msgstr "Töm Alla"
 
 #: ../src/verbs.cpp:2282
 msgid "Delete all objects from document"
@@ -23476,7 +23495,7 @@ msgstr "Markera alla objekt i alla synliga och olåsta lager"
 #: ../src/verbs.cpp:2291
 #, fuzzy
 msgid "Select Next"
-msgstr "Välj nästa"
+msgstr "Markera nästa"
 
 #: ../src/verbs.cpp:2292
 #, fuzzy
@@ -23486,7 +23505,7 @@ msgstr "Markera alla objekt eller alla noder"
 #: ../src/verbs.cpp:2293
 #, fuzzy
 msgid "Select Previous"
-msgstr "Välj föregående"
+msgstr "Markera föregående"
 
 #: ../src/verbs.cpp:2294
 #, fuzzy
@@ -23512,11 +23531,11 @@ msgstr "Skapa fyra stödlinjer längs med sidans kanter"
 #: ../src/verbs.cpp:2299
 #, fuzzy
 msgid "Next Path Effect Parameter"
-msgstr "Flytta slingeffekt upp"
+msgstr "Nästa slingeffektparameter"
 
 #: ../src/verbs.cpp:2300
 msgid "Show next Path Effect parameter for editing"
-msgstr ""
+msgstr "Visa nästa slingeffektparameter för redigering"
 
 #. Selection
 #: ../src/verbs.cpp:2303
@@ -23561,7 +23580,7 @@ msgstr "Gruppera markerade objekt"
 
 #: ../src/verbs.cpp:2314
 msgid "Ungroup selected groups"
-msgstr "Avgruppera markerad(e) grupp(er)"
+msgstr "Avgruppera markerade grupper"
 
 #: ../src/verbs.cpp:2316
 msgid "_Put on Path"
@@ -23628,7 +23647,7 @@ msgstr "Dela upp nedre slingan i delar"
 #. Advanced tutorial for more info
 #: ../src/verbs.cpp:2337
 msgid "Cut _Path"
-msgstr "Dela i slingor"
+msgstr "Dela Slinga"
 
 #: ../src/verbs.cpp:2338
 msgid "Cut the bottom path's stroke into pieces, removing fill"
@@ -23734,7 +23753,7 @@ msgstr ""
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: ../src/verbs.cpp:2374
 msgid "_Trace Bitmap..."
-msgstr "Kalkera bitmappsbild"
+msgstr "Kalkera bitmappsbild..."
 
 #: ../src/verbs.cpp:2375
 msgid "Create one or more paths from a bitmap by tracing it"
@@ -23742,7 +23761,7 @@ msgstr "Skapa en eller fler slingor från bitmappsbild med kalkering"
 
 #: ../src/verbs.cpp:2376
 msgid "_Make a Bitmap Copy"
-msgstr "Skapa bitmappsbild"
+msgstr "Skapa en Bitmappskopia"
 
 #: ../src/verbs.cpp:2377
 msgid "Export selection to a bitmap and insert it into document"
@@ -23777,7 +23796,7 @@ msgstr "Gruppera markerade objekt i ett rutnätsmönster"
 #. Layer
 #: ../src/verbs.cpp:2387
 msgid "_Add Layer..."
-msgstr "Lägg till lager"
+msgstr "Lägg till lager..."
 
 #: ../src/verbs.cpp:2388
 msgid "Create a new layer"
@@ -23879,7 +23898,7 @@ msgstr "Visa eller dölj statusrad"
 #: ../src/verbs.cpp:2412
 #, fuzzy
 msgid "Solo the current layer"
-msgstr "Radera det aktuella lagret"
+msgstr "Visa endast aktuellt lager"
 
 #. Object
 #: ../src/verbs.cpp:2415
@@ -23970,7 +23989,7 @@ msgstr ""
 #: ../src/verbs.cpp:2442
 #, fuzzy
 msgid "Edit mask"
-msgstr "R_edigera lagermask"
+msgstr "R_edigera mask"
 
 #: ../src/verbs.cpp:2443 ../src/verbs.cpp:2449
 msgid "_Release"
@@ -23984,17 +24003,17 @@ msgstr "Ta bort mask från markering"
 msgid ""
 "Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
-"Tillämpa klippväg på markering (genom att använda det översta objektet som "
-"klippväg)"
+"Tillämpa beskärning på markering (genom att använda det översta objektet som "
+"beskärningsslinga)"
 
 #: ../src/verbs.cpp:2448
 #, fuzzy
 msgid "Edit clipping path"
-msgstr "Frisläpp klippslinga"
+msgstr "Redigera beskärningsslinga"
 
 #: ../src/verbs.cpp:2450
 msgid "Remove clipping path from selection"
-msgstr "Ta bort klippväg från markering"
+msgstr "Ta bort beskärningsslinga från markering"
 
 #. Tools
 #: ../src/verbs.cpp:2453
@@ -24028,7 +24047,7 @@ msgstr "Skapa rektanglar och kvadrater"
 
 #: ../src/verbs.cpp:2464
 msgid "Create 3D boxes"
-msgstr "Skapa 3D lådor"
+msgstr "Skapa 3D-lådor"
 
 #: ../src/verbs.cpp:2466
 msgid "Create circles, ellipses, and arcs"
@@ -24081,16 +24100,16 @@ msgstr "Fyll begränsade ytor"
 #: ../src/verbs.cpp:2489
 #, fuzzy
 msgid "LPE Edit"
-msgstr "Redigera palett"
+msgstr "Redigera slingeffekt"
 
 #: ../src/verbs.cpp:2490
 #, fuzzy
 msgid "Edit Path Effect parameters"
-msgstr "Flytta slingeffekt upp"
+msgstr "Redigera slingeffektparametrar"
 
 #: ../src/verbs.cpp:2492
 msgid "Erase existing paths"
-msgstr "Sudda bort existerande slingor"
+msgstr "Radera befintliga slingor"
 
 #: ../src/verbs.cpp:2494
 #, fuzzy
@@ -24101,201 +24120,201 @@ msgstr "Skapa geometriska former"
 #: ../src/verbs.cpp:2496
 #, fuzzy
 msgid "Selector Preferences"
-msgstr "Musinställningar"
+msgstr "Markörinställningar"
 
 #: ../src/verbs.cpp:2497
 #, fuzzy
 msgid "Open Preferences for the Selector tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för markeringsverktyget"
 
 #: ../src/verbs.cpp:2498
 #, fuzzy
 msgid "Node Tool Preferences"
-msgstr "Inställningar för teckenpalett"
+msgstr "Nodverktygsinställningar"
 
 #: ../src/verbs.cpp:2499
 #, fuzzy
 msgid "Open Preferences for the Node tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för nodverktyget"
 
 #: ../src/verbs.cpp:2500
 #, fuzzy
 msgid "Tweak Tool Preferences"
-msgstr "Inställningar för teckenpalett"
+msgstr "Omformarinställningar"
 
 #: ../src/verbs.cpp:2501
 #, fuzzy
 msgid "Open Preferences for the Tweak tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för omformningsverktyget"
 
 #: ../src/verbs.cpp:2502
 #, fuzzy
 msgid "Spray Tool Preferences"
-msgstr "Musinställningar"
+msgstr "Sprutmålningsinställningar"
 
 #: ../src/verbs.cpp:2503
 #, fuzzy
 msgid "Open Preferences for the Spray tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för sprutmålningsverktyget"
 
 #: ../src/verbs.cpp:2504
 msgid "Rectangle Preferences"
-msgstr "Rektangelegenskaper"
+msgstr "Rektangelverktygsinställningar"
 
 #: ../src/verbs.cpp:2505
 #, fuzzy
 msgid "Open Preferences for the Rectangle tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för rektangelverktyget"
 
 #: ../src/verbs.cpp:2506
 #, fuzzy
 msgid "3D Box Preferences"
-msgstr "Inställningar för teckenpalett"
+msgstr "3D-lådeinställningar"
 
 #: ../src/verbs.cpp:2507
 #, fuzzy
 msgid "Open Preferences for the 3D Box tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna inställningar för 3D-lådeverktyget"
 
 #: ../src/verbs.cpp:2508
 #, fuzzy
 msgid "Ellipse Preferences"
-msgstr "Musinställningar"
+msgstr "Ellipsverktygsinställningar"
 
 #: ../src/verbs.cpp:2509
 #, fuzzy
 msgid "Open Preferences for the Ellipse tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för ellipsverktyget"
 
 #: ../src/verbs.cpp:2510
 #, fuzzy
 msgid "Star Preferences"
-msgstr "Musinställningar"
+msgstr "Stjärnverktygsinställningar"
 
 #: ../src/verbs.cpp:2511
 #, fuzzy
 msgid "Open Preferences for the Star tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna inställningar för stjärnverktyget"
 
 #: ../src/verbs.cpp:2512
 #, fuzzy
 msgid "Spiral Preferences"
-msgstr "Musinställningar"
+msgstr "Spiralverktygsinställningar"
 
 #: ../src/verbs.cpp:2513
 #, fuzzy
 msgid "Open Preferences for the Spiral tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna inställningar för sprialverktyget"
 
 #: ../src/verbs.cpp:2514
 #, fuzzy
 msgid "Pencil Preferences"
-msgstr "Musinställningar"
+msgstr "Inställningar för Blyertspennan"
 
 #: ../src/verbs.cpp:2515
 #, fuzzy
 msgid "Open Preferences for the Pencil tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för blyertspennan"
 
 #: ../src/verbs.cpp:2516
 #, fuzzy
 msgid "Pen Preferences"
-msgstr "Musinställningar"
+msgstr "Inställningar för pennan"
 
 #: ../src/verbs.cpp:2517
 #, fuzzy
 msgid "Open Preferences for the Pen tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna inställningar för pennan"
 
 #: ../src/verbs.cpp:2518
 #, fuzzy
 msgid "Calligraphic Preferences"
-msgstr "Musinställningar"
+msgstr "Kalligrafiska Inställningar"
 
 #: ../src/verbs.cpp:2519
 #, fuzzy
 msgid "Open Preferences for the Calligraphy tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för kalligrafiverktyget"
 
 #: ../src/verbs.cpp:2520
 #, fuzzy
 msgid "Text Preferences"
-msgstr "Musinställningar"
+msgstr "Textinställningar"
 
 #: ../src/verbs.cpp:2521
 #, fuzzy
 msgid "Open Preferences for the Text tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för textverktyget"
 
 #: ../src/verbs.cpp:2522
 #, fuzzy
 msgid "Gradient Preferences"
-msgstr "Musinställningar"
+msgstr "Gradientinställningar"
 
 #: ../src/verbs.cpp:2523
 #, fuzzy
 msgid "Open Preferences for the Gradient tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för gradientverktyget"
 
 #: ../src/verbs.cpp:2524
 #, fuzzy
 msgid "Zoom Preferences"
-msgstr "Musinställningar"
+msgstr "Zoominställningar"
 
 #: ../src/verbs.cpp:2525
 #, fuzzy
 msgid "Open Preferences for the Zoom tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna inställningar för zoomverktyget"
 
 #: ../src/verbs.cpp:2526
 #, fuzzy
 msgid "Dropper Preferences"
-msgstr "Musinställningar"
+msgstr "Pipettinställningar"
 
 #: ../src/verbs.cpp:2527
 #, fuzzy
 msgid "Open Preferences for the Dropper tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för pipettverktyget"
 
 #: ../src/verbs.cpp:2528
 #, fuzzy
 msgid "Connector Preferences"
-msgstr "Musinställningar"
+msgstr "Förbindelseinställningar"
 
 #: ../src/verbs.cpp:2529
 #, fuzzy
 msgid "Open Preferences for the Connector tool"
-msgstr "Konfigurationsverktyg för Evolution Connector för Microsoft Exchange"
+msgstr "Öppna alternativ för förbindelseverktyget"
 
 #: ../src/verbs.cpp:2530
 #, fuzzy
 msgid "Paint Bucket Preferences"
-msgstr "Stil på objekt fyllda med Färgburk"
+msgstr "Färgburksinställningar"
 
 #: ../src/verbs.cpp:2531
 #, fuzzy
 msgid "Open Preferences for the Paint Bucket tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för färgburksverktyget"
 
 #: ../src/verbs.cpp:2532
 #, fuzzy
 msgid "Eraser Preferences"
-msgstr "Musinställningar"
+msgstr "Suddinställningar"
 
 #: ../src/verbs.cpp:2533
 #, fuzzy
 msgid "Open Preferences for the Eraser tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för suddverktyget"
 
 #: ../src/verbs.cpp:2534
 #, fuzzy
 msgid "LPE Tool Preferences"
-msgstr "Inställningar för teckenpalett"
+msgstr "Slingeffektverktygsinställningar"
 
 #: ../src/verbs.cpp:2535
 #, fuzzy
 msgid "Open Preferences for the LPETool tool"
-msgstr "Sodipodi-bildspel"
+msgstr "Öppna alternativ för slingeffektverktyget"
 
 #. Zoom/View
 #: ../src/verbs.cpp:2538
@@ -24350,7 +24369,7 @@ msgstr ""
 #: ../src/verbs.cpp:2544
 #, fuzzy
 msgid "Toggle snapping on or off"
-msgstr "Sätter på eller av lampan."
+msgstr "Växla fästning till närmaste punkt på eller av"
 
 #: ../src/verbs.cpp:2545
 msgid "Nex_t Zoom"
@@ -24407,7 +24426,7 @@ msgstr "Fönsterfokusläge"
 
 #: ../src/verbs.cpp:2559
 msgid "Remove excess toolbars to focus on drawing"
-msgstr ""
+msgstr "Ta bort överflödiga verktygsfält"
 
 #: ../src/verbs.cpp:2561
 msgid "Duplic_ate Window"
@@ -24420,12 +24439,12 @@ msgstr "Öppna ett nytt fönster med samma dokument"
 #: ../src/verbs.cpp:2563
 #, fuzzy
 msgid "_New View Preview"
-msgstr "_Förhandsgranskning av nya namn:"
+msgstr "Ny förhandsgranskning"
 
 #: ../src/verbs.cpp:2564
 #, fuzzy
 msgid "New View Preview"
-msgstr "_Förhandsgranskning av nya namn:"
+msgstr "Ny förhandsgranskning"
 
 #. "view_new_preview"
 #: ../src/verbs.cpp:2566
@@ -24455,12 +24474,12 @@ msgstr "Ändra visningsläge till Kontur"
 #: ../src/verbs.cpp:2572
 #, fuzzy
 msgid "_Print Colors Preview"
-msgstr "Förhandsgranska"
+msgstr "Tryckfärgsförhandsgranskning"
 
 #: ../src/verbs.cpp:2573
 #, fuzzy
 msgid "Switch to print colors preview mode"
-msgstr "Ändra visningsläge till Normal"
+msgstr "Ändra till tryckfärgsförhandsgranskning-läge"
 
 #: ../src/verbs.cpp:2574
 msgid "_Toggle"
@@ -24468,7 +24487,7 @@ msgstr "Växla"
 
 #: ../src/verbs.cpp:2575
 msgid "Toggle between normal and outline display modes"
-msgstr "Växla visningsläge mellan Normal ock Kontur"
+msgstr "Växla mellan normal och kontur-visningsläge"
 
 #: ../src/verbs.cpp:2577
 #, fuzzy
@@ -24478,7 +24497,7 @@ msgstr "Färghanterad display"
 #: ../src/verbs.cpp:2578
 #, fuzzy
 msgid "Toggle color-managed display for this document window"
-msgstr "Stäng dokumentfönster"
+msgstr "Växla färghanterad visning för detta dokumentfönster"
 
 #: ../src/verbs.cpp:2580
 msgid "Ico_n Preview..."
@@ -24517,7 +24536,7 @@ msgstr "In_kscape-inställningar..."
 
 #: ../src/verbs.cpp:2593
 msgid "Edit global Inkscape preferences"
-msgstr "Ändra globala Inkscape-inställningar"
+msgstr "Redigera globala Inkscape-inställningar"
 
 #: ../src/verbs.cpp:2594
 msgid "_Document Properties..."
@@ -24525,7 +24544,7 @@ msgstr "_Dokumentegenskaper..."
 
 #: ../src/verbs.cpp:2595
 msgid "Edit properties of this document (to be saved with the document)"
-msgstr "Ändra dokumentets egenskaper (kommer att sparas med dokumentet)"
+msgstr "Redigera dokumentets egenskaper (kommer att sparas med dokumentet)"
 
 #: ../src/verbs.cpp:2596
 msgid "Document _Metadata..."
@@ -24533,7 +24552,7 @@ msgstr "Dokumentets _metadata..."
 
 #: ../src/verbs.cpp:2597
 msgid "Edit document metadata (to be saved with the document)"
-msgstr "Ändra dokumentets metadata (kommer att sparas med dokumentet)"
+msgstr "Redigera dokumentets metadata (kommer att sparas med dokumentet)"
 
 #: ../src/verbs.cpp:2598
 msgid "_Fill and Stroke..."
@@ -24543,16 +24562,16 @@ msgstr "Fyllning och linje..."
 msgid ""
 "Edit objects' colors, gradients, stroke width, arrowheads, dash patterns..."
 msgstr ""
-"Ändra objekts färger, gradienter, linjebredd, linjeslut och linjestil..."
+"Redigera objekts färger, gradienter, linjebredd, linjeslut och linjestil..."
 
 #: ../src/verbs.cpp:2600
 msgid "Glyphs..."
-msgstr ""
+msgstr "Tecken..."
 
 #: ../src/verbs.cpp:2601
 #, fuzzy
 msgid "Select characters from a glyphs palette"
-msgstr "Välj färger från en färgpalett"
+msgstr "Välj tecken från en teckenpalett"
 
 #. TRANSLATORS: "Swatches" means: color samples
 #: ../src/verbs.cpp:2603
@@ -24561,7 +24580,7 @@ msgstr "Färgprover..."
 
 #: ../src/verbs.cpp:2604
 msgid "Select colors from a swatches palette"
-msgstr "Välj färger från en färgpalett"
+msgstr "Välj färger från en färgprovspalett"
 
 #: ../src/verbs.cpp:2605
 msgid "Transfor_m..."
@@ -24569,7 +24588,7 @@ msgstr "Transfor_mera..."
 
 #: ../src/verbs.cpp:2606
 msgid "Precisely control objects' transformations"
-msgstr "Transformera objekt"
+msgstr "Nogrann styrning av objekts transformationer"
 
 #: ../src/verbs.cpp:2607
 msgid "_Align and Distribute..."
@@ -24581,16 +24600,16 @@ msgstr "Justera och distribuera objekt"
 
 #: ../src/verbs.cpp:2609
 msgid "_Spray options..."
-msgstr ""
+msgstr "Sprutmålningsalternativ..."
 
 #: ../src/verbs.cpp:2610
 #, fuzzy
 msgid "Some options for the spray"
-msgstr "Färg på slingkontur"
+msgstr "Några alternativ för sprutmålning"
 
 #: ../src/verbs.cpp:2611
 msgid "Undo _History..."
-msgstr "Ångrings_historik"
+msgstr "Ångrings_historik..."
 
 #: ../src/verbs.cpp:2612
 msgid "Undo History"
@@ -24684,7 +24703,7 @@ msgstr "Objektegenskaper..."
 #: ../src/verbs.cpp:2632
 msgid "Edit the ID, locked and visible status, and other object properties"
 msgstr ""
-"Ändra objekt id, låsnings och synlighetsstatus och andra objektegenskaper"
+"Redigera objekt-ID, låsnings och synlighetsstatus och andra objektegenskaper"
 
 #. #ifdef WITH_INKBOARD
 #. new DialogVerb(SP_VERB_XMPP_CLIENT, "DialogXmppClient",
@@ -24701,7 +24720,7 @@ msgstr "Konfigurera utökade inmatningsenheter, som t ex ritplatta"
 #: ../src/verbs.cpp:2639
 #, fuzzy
 msgid "_Extensions..."
-msgstr "Utökningar"
+msgstr "Tillägg..."
 
 #: ../src/verbs.cpp:2640
 #, fuzzy
@@ -24727,12 +24746,12 @@ msgstr "Hantera, editera och applicera slingeffekter"
 #: ../src/verbs.cpp:2645
 #, fuzzy
 msgid "Filter Editor..."
-msgstr "Redigerare för Nätverkshanterare"
+msgstr "Filterredigerare..."
 
 #: ../src/verbs.cpp:2646
 #, fuzzy
 msgid "Manage, edit, and apply SVG filters"
-msgstr "Hantera, editera och applicera slingeffekter"
+msgstr "Hantera, editera och applicera SVG-filter"
 
 #: ../src/verbs.cpp:2647
 msgid "SVG Font Editor..."
@@ -24745,12 +24764,13 @@ msgstr "Redigera SVG-typsnitt"
 #: ../src/verbs.cpp:2649
 #, fuzzy
 msgid "Print Colors..."
-msgstr "Skriv _ut..."
+msgstr "Skriv ut Färger..."
 
 #: ../src/verbs.cpp:2650
 msgid ""
 "Select which color separations to render in Print Colors Preview rendermode"
 msgstr ""
+"Markera de färgerdelningar som skall renderas i Färgutskriftsförhandsgransknings-läge"
 
 #. Help
 #: ../src/verbs.cpp:2653
@@ -24759,7 +24779,7 @@ msgstr "Om tillägg"
 
 #: ../src/verbs.cpp:2654
 msgid "Information on Inkscape extensions"
-msgstr "Information om Inkscape tillägg"
+msgstr "Information om Inkscape-tillägg"
 
 #: ../src/verbs.cpp:2655
 msgid "About _Memory"
@@ -24783,50 +24803,50 @@ msgstr "Inkscapes version, skapare och licens"
 #: ../src/verbs.cpp:2663
 #, fuzzy
 msgid "Inkscape: _Basic"
-msgstr "Huvudalternativ"
+msgstr "Inkscape: Grundläggande"
 
 #: ../src/verbs.cpp:2664
 #, fuzzy
 msgid "Getting started with Inkscape"
-msgstr "SVG-format med Inkscape-tillägg"
+msgstr "Att börja med Inkscape"
 
 #. "tutorial_basic"
 #: ../src/verbs.cpp:2665
 #, fuzzy
 msgid "Inkscape: _Shapes"
-msgstr "Geometriska former"
+msgstr "Inkscape: Figurer"
 
 #: ../src/verbs.cpp:2666
 msgid "Using shape tools to create and edit shapes"
-msgstr ""
+msgstr "Användning av figurverktygen för att skapa och redigera figurer"
 
 #: ../src/verbs.cpp:2667
 #, fuzzy
 msgid "Inkscape: _Advanced"
-msgstr "Avancerade inställningar"
+msgstr "Inkscape: Avancerat"
 
 #: ../src/verbs.cpp:2668
 #, fuzzy
 msgid "Advanced Inkscape topics"
-msgstr "Visa _alla ämnen"
+msgstr "Avancerade Inkscape-ämnen"
 
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: ../src/verbs.cpp:2670
 #, fuzzy
 msgid "Inkscape: T_racing"
-msgstr "Om Inkscape"
+msgstr "Inkscape: Kalkering"
 
 #: ../src/verbs.cpp:2671
 #, fuzzy
 msgid "Using bitmap tracing"
-msgstr "Spårar väg till %s"
+msgstr "Användning av bitmapp-kalkering"
 
 #. "tutorial_tracing"
 #: ../src/verbs.cpp:2672
 #, fuzzy
 msgid "Inkscape: _Calligraphy"
-msgstr "Om Inkscape"
+msgstr "Inkscape: Kalligrafi"
 
 #: ../src/verbs.cpp:2673
 #, fuzzy
@@ -24836,21 +24856,21 @@ msgstr "Bläckverktyg: Kalligrafi-liknande målning"
 #: ../src/verbs.cpp:2674
 #, fuzzy
 msgid "Inkscape: _Interpolate"
-msgstr "Geometriska former"
+msgstr "Inkscape: Interpolering"
 
 #: ../src/verbs.cpp:2675
 msgid "Using the interpolate extension"
-msgstr ""
+msgstr "Anävndning av interpoleringstillägget"
 
 #. "tutorial_interpolate"
 #: ../src/verbs.cpp:2676
 #, fuzzy
 msgid "_Elements of Design"
-msgstr "Anpassad laddning:"
+msgstr "Delar av Design"
 
 #: ../src/verbs.cpp:2677
 msgid "Principles of design in the tutorial form"
-msgstr ""
+msgstr "Principer för design i vägledningsform"
 
 #. "tutorial_design"
 #: ../src/verbs.cpp:2678
@@ -24882,12 +24902,12 @@ msgstr "Repetera det senaste tillägget med nya inställningar"
 #: ../src/verbs.cpp:2689
 #, fuzzy
 msgid "Fit the page to the current selection"
-msgstr "Begränsa sökningen till aktuell markering"
+msgstr "Passa sidan till aktuell markering"
 
 #: ../src/verbs.cpp:2691
 #, fuzzy
 msgid "Fit the page to the drawing"
-msgstr "Zooma för att passa hela sidan"
+msgstr "Passa sidan till hela teckningen"
 
 #: ../src/verbs.cpp:2693
 #, fuzzy
@@ -24895,7 +24915,7 @@ msgid ""
 "Fit the page to the current selection or the drawing if there is no selection"
 msgstr ""
 "Anpassa sidstorleken till nuvarande markering, eller hela teckningen ifall "
-"det finns någon markering"
+"det inte finns någon markering"
 
 #. LockAndHide
 #: ../src/verbs.cpp:2695
@@ -24922,12 +24942,12 @@ msgstr "Tilldela ICC-färgprofil"
 #: ../src/verbs.cpp:2706
 #, fuzzy
 msgid "Remove Color Profile"
-msgstr "Information om färgprofil"
+msgstr "Ta bort färgprofil"
 
 #: ../src/verbs.cpp:2707
 #, fuzzy
 msgid "Remove a linked ICC color profile"
-msgstr "Konvertera till ICC-färgprofil"
+msgstr "Ta bort en länkad ICC-färgprofil"
 
 #: ../src/widgets/dash-selector.cpp:62
 msgid "Dash pattern"
@@ -24950,17 +24970,17 @@ msgstr ""
 #: ../src/widgets/desktop-widget.cpp:623
 #, fuzzy, c-format
 msgid "%s: %d (outline) - Inkscape"
-msgstr "Om Inkscape"
+msgstr "%s: %d (kontur) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:625
 #, fuzzy, c-format
 msgid "%s: %d (no filters) - Inkscape"
-msgstr "Om Inkscape"
+msgstr "%s: %d (inga filter) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:627
 #, fuzzy, c-format
 msgid "%s: %d (print colors preview) - Inkscape"
-msgstr "Om Inkscape"
+msgstr "%s: %d (utskrift färgförhandsgranskning) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:629
 #, c-format
@@ -24970,17 +24990,17 @@ msgstr "%s: %d - Inkscape"
 #: ../src/widgets/desktop-widget.cpp:633
 #, fuzzy, c-format
 msgid "%s (outline) - Inkscape"
-msgstr "Om Inkscape"
+msgstr "%s (kontur) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:635
 #, fuzzy, c-format
 msgid "%s (no filters) - Inkscape"
-msgstr "Om Inkscape"
+msgstr "%s (inga filter) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:637
 #, fuzzy, c-format
 msgid "%s (print colors preview) - Inkscape"
-msgstr "Om Inkscape"
+msgstr "%s (utskrift färgförhandsgranskning) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:639
 #, c-format
@@ -24990,12 +25010,12 @@ msgstr "%s - Inkscape"
 #: ../src/widgets/desktop-widget.cpp:801
 #, fuzzy
 msgid "Color-managed display is <b>enabled</b> in this window"
-msgstr "Stäng dokumentfönster"
+msgstr "Färghanterad display är <b>aktiverad</b> i detta fönster"
 
 #: ../src/widgets/desktop-widget.cpp:803
 #, fuzzy
 msgid "Color-managed display is <b>disabled</b> in this window"
-msgstr "Stäng dokumentfönster"
+msgstr "Färghanterad display är <b>inaktiverad</b> i detta fönster"
 
 #: ../src/widgets/desktop-widget.cpp:914
 #, fuzzy, c-format
@@ -25013,7 +25033,7 @@ msgstr ""
 #: ../src/widgets/ege-paint-def.cpp:70 ../src/widgets/ege-paint-def.cpp:92
 #: ../src/widgets/gradient-selector.cpp:169
 msgid "none"
-msgstr "ingen frg"
+msgstr "ingen"
 
 #: ../src/widgets/ege-paint-def.cpp:89
 #, fuzzy
@@ -25031,27 +25051,27 @@ msgstr "Sätt fyllningsfärg"
 #: ../src/widgets/fill-style.cpp:421 ../src/widgets/fill-style.cpp:500
 #, fuzzy
 msgid "Set stroke color"
-msgstr "Sätt linjefärg från färgpalett"
+msgstr "Sött linjefärg"
 
 #: ../src/widgets/fill-style.cpp:587
 #, fuzzy
 msgid "Set gradient on fill"
-msgstr "Skapa gradient i fyllningen"
+msgstr "Sätt gradient i fyllningen"
 
 #: ../src/widgets/fill-style.cpp:587
 #, fuzzy
 msgid "Set gradient on stroke"
-msgstr "Skapa gradient i linjen"
+msgstr "Sätt gradient i linjen"
 
 #: ../src/widgets/fill-style.cpp:647
 #, fuzzy
 msgid "Set pattern on fill"
-msgstr "Fyll bakgrund med mönster"
+msgstr "Sätt mönsterfyllnad"
 
 #: ../src/widgets/fill-style.cpp:648
 #, fuzzy
 msgid "Set pattern on stroke"
-msgstr "Inga träffar med mönstret \"%s\".\n"
+msgstr "Sätt mönster i linje"
 
 #. Family frame
 #: ../src/widgets/font-selector.cpp:157
@@ -25063,7 +25083,7 @@ msgstr "Typsnittsfamilj"
 #. Style frame
 #: ../src/widgets/font-selector.cpp:190
 msgid "fontselector|Style"
-msgstr "Stil"
+msgstr "fontselector|Stil"
 
 #: ../src/widgets/font-selector.cpp:228
 msgid "Font size:"
@@ -25077,6 +25097,7 @@ msgstr "Typsnittsstorlek:"
 msgid "AaBbCcIiPpQq12369$¢?.;/()"
 msgstr "AaBbCcIiPpQqÅåÄäÖö12368.;/()"
 
+# TODO
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: ../src/widgets/gradient-selector.cpp:163
 msgid ""
@@ -25089,12 +25110,12 @@ msgstr ""
 #: ../src/widgets/gradient-selector.cpp:173
 #, fuzzy
 msgid "reflected"
-msgstr "Först markerad"
+msgstr "speglad"
 
 #: ../src/widgets/gradient-selector.cpp:177
 #, fuzzy
 msgid "direct"
-msgstr "Direktmeddelande"
+msgstr "direkt"
 
 #: ../src/widgets/gradient-selector.cpp:185
 #, fuzzy
@@ -25182,7 +25203,7 @@ msgstr "Inga stopp i gradient"
 
 #: ../src/widgets/gradient-vector.cpp:670
 msgid "Change gradient stop offset"
-msgstr "Ändra gradient stopp offset"
+msgstr "Ändra gradient stopp-avstånd"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
 #: ../src/widgets/gradient-vector.cpp:808
@@ -25208,7 +25229,7 @@ msgstr "Stoppfärg"
 
 #: ../src/widgets/gradient-vector.cpp:902
 msgid "Gradient editor"
-msgstr "Gradienteditor"
+msgstr "Gradientredigerare"
 
 #: ../src/widgets/gradient-vector.cpp:1201
 msgid "Change gradient stop color"
@@ -25234,7 +25255,7 @@ msgstr "Radiell gradient"
 #: ../src/widgets/paint-selector.cpp:241
 #, fuzzy
 msgid "Swatch"
-msgstr "Skiss"
+msgstr "Färgprov"
 
 #: ../src/widgets/paint-selector.cpp:243
 msgid "Unset paint (make it undefined so it can be inherited)"
@@ -25282,12 +25303,12 @@ msgstr ""
 #: ../src/widgets/paint-selector.cpp:1103
 #, fuzzy
 msgid "Swatch fill"
-msgstr "Sätt fyllningsfärg"
+msgstr "Färgprov-fyllning"
 
 #: ../src/widgets/select-toolbar.cpp:247
 #, fuzzy
 msgid "Transform by toolbar"
-msgstr "Inaktivera verktygsradsredigering"
+msgstr "Transformera med verktygsfält"
 
 #: ../src/widgets/select-toolbar.cpp:304
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
@@ -25347,12 +25368,12 @@ msgstr ""
 #: ../src/widgets/select-toolbar.cpp:460
 #, fuzzy
 msgid "select toolbar|X position"
-msgstr "X-position"
+msgstr "select toolbar|X-position"
 
 #: ../src/widgets/select-toolbar.cpp:460
 #, fuzzy
 msgid "select toolbar|X"
-msgstr "X"
+msgstr "select toolbar|X"
 
 #: ../src/widgets/select-toolbar.cpp:462
 msgid "Horizontal coordinate of selection"
@@ -25363,12 +25384,12 @@ msgstr "Markeringens horisontella koordinat"
 #: ../src/widgets/select-toolbar.cpp:468
 #, fuzzy
 msgid "select toolbar|Y position"
-msgstr "Y-position"
+msgstr "select toolbar|Y-position"
 
 #: ../src/widgets/select-toolbar.cpp:468
 #, fuzzy
 msgid "select toolbar|Y"
-msgstr "Y"
+msgstr "select toolbar|Y"
 
 #: ../src/widgets/select-toolbar.cpp:470
 msgid "Vertical coordinate of selection"
@@ -25379,12 +25400,12 @@ msgstr "Markeringens vertikala koordinat"
 #: ../src/widgets/select-toolbar.cpp:476
 #, fuzzy
 msgid "select toolbar|Width"
-msgstr "Bredd"
+msgstr "select toolbar|Bredd"
 
 #: ../src/widgets/select-toolbar.cpp:476
 #, fuzzy
 msgid "select toolbar|W"
-msgstr "B"
+msgstr "select toolbar|B"
 
 #: ../src/widgets/select-toolbar.cpp:478
 msgid "Width of selection"
@@ -25403,12 +25424,12 @@ msgstr "Ändra både bredd och höjd enligt samma proprotioner när låst"
 #: ../src/widgets/select-toolbar.cpp:497
 #, fuzzy
 msgid "select toolbar|Height"
-msgstr "Höjd"
+msgstr "select toolbar|Höjd"
 
 #: ../src/widgets/select-toolbar.cpp:497
 #, fuzzy
 msgid "select toolbar|H"
-msgstr "H"
+msgstr "select toolbar|H"
 
 #: ../src/widgets/select-toolbar.cpp:499
 msgid "Height of selection"
@@ -25423,21 +25444,23 @@ msgid ""
 "Control whether or not to scale stroke widths, scale rectangle corners, "
 "transform gradient fills, and transform pattern fills with the object"
 msgstr ""
+"Kontroller huruvida linjebredd, rektangelhörn, gradientfyllning och "
+"mönsterfyllning transformeras tillsammans med objektet"
 
 #: ../src/widgets/select-toolbar.cpp:555
 #, fuzzy
 msgid "Scale rounded corners"
-msgstr "Horisontell radie på rundade hörn"
+msgstr "Skala rundade hörn"
 
 #: ../src/widgets/select-toolbar.cpp:566
 #, fuzzy
 msgid "Move gradients"
-msgstr "Genomsök gradienter igen"
+msgstr "Flytta gradienter"
 
 #: ../src/widgets/select-toolbar.cpp:577
 #, fuzzy
 msgid "Move patterns"
-msgstr "Diffraktionsmönster"
+msgstr "Flytta mönster"
 
 #: ../src/widgets/sp-color-gtkselector.cpp:50
 #, fuzzy
@@ -25446,7 +25469,7 @@ msgstr "System"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:111
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 #: ../src/widgets/sp-color-icc-selector.cpp:220
 #: ../src/widgets/sp-color-scales.cpp:411
@@ -25540,22 +25563,22 @@ msgstr "_A"
 #: ../src/widgets/sp-color-wheel-selector.cpp:157
 #, fuzzy
 msgid "Alpha (opacity)"
-msgstr "Bildopacitet"
+msgstr "Alfa (opacitet)"
 
 #: ../src/widgets/sp-color-notebook.cpp:339
 #, fuzzy
 msgid "Color Managed"
-msgstr "Färghantering"
+msgstr "Färghanterad"
 
 #: ../src/widgets/sp-color-notebook.cpp:347
 #, fuzzy
 msgid "Out of gamut!"
-msgstr "Markera färger utanför färgomfång"
+msgstr "Utanför färgomfång""
 
 #: ../src/widgets/sp-color-notebook.cpp:355
 #, fuzzy
 msgid "Too much ink!"
-msgstr "Zooma in"
+msgstr "För mycket bläck!"
 
 #. Create RGBA entry and color preview
 #: ../src/widgets/sp-color-notebook.cpp:362
@@ -25585,7 +25608,7 @@ msgstr "Namnlös"
 #: ../src/widgets/sp-color-wheel-selector.cpp:62
 #, fuzzy
 msgid "Wheel"
-msgstr "_Hjul:"
+msgstr "_Hjul"
 
 #: ../src/widgets/sp-xmlview-attr-list.cpp:46
 msgid "Attribute"
@@ -25594,26 +25617,26 @@ msgstr "Attribut"
 #: ../src/widgets/sp-xmlview-content.cpp:169
 #, fuzzy
 msgid "Type text in a text node"
-msgstr "Ingen meny i noden \"%s\"."
+msgstr "Skriv text i en textnod"
 
 #: ../src/widgets/stroke-style.cpp:502
 #, fuzzy
 msgid "Set markers"
-msgstr "Slutmarkörer:"
+msgstr "Sätt markörer"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
 #. Stroke width
 #: ../src/widgets/stroke-style.cpp:677
 msgid "StrokeWidth|Width:"
-msgstr "Bredd:"
+msgstr "StrokeWidth|Bredd:"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
 #: ../src/widgets/stroke-style.cpp:715
 msgid "Join:"
-msgstr "Hörn:"
+msgstr "Sammanfoga:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
@@ -25767,35 +25790,35 @@ msgstr "Stil på objekt fyllda med Färgburk"
 #: ../src/widgets/toolbox.cpp:989
 #, fuzzy
 msgid "Default interface setup"
-msgstr "Standard"
+msgstr "Standard gränssnittskonfigurering"
 
 #: ../src/widgets/toolbox.cpp:995
 msgid "Set the custom task"
-msgstr ""
+msgstr "Sätt eget jobb"
 
 #: ../src/widgets/toolbox.cpp:1000
 #, fuzzy
 msgid "Wide"
-msgstr "Göm"
+msgstr "Bred"
 
 #: ../src/widgets/toolbox.cpp:1001
 msgid "Setup for widescreen work"
-msgstr ""
+msgstr "Konfigurera för vidskärmsjobb"
 
 #: ../src/widgets/toolbox.cpp:1004
 #, fuzzy
 msgid "Task"
-msgstr "Maskera"
+msgstr "Jobb"
 
 #: ../src/widgets/toolbox.cpp:1005
 #, fuzzy
 msgid "Task:"
-msgstr "Maskera"
+msgstr "Jobb:"
 
 #: ../src/widgets/toolbox.cpp:1393
 #, fuzzy
 msgid "Insert node"
-msgstr "Tog bort %d nod(er):\n"
+msgstr "Infoga nod"
 
 #: ../src/widgets/toolbox.cpp:1394
 msgid "Insert new nodes into selected segments"
@@ -25807,7 +25830,7 @@ msgstr "Infoga"
 
 #: ../src/widgets/toolbox.cpp:1405
 msgid "Delete selected nodes"
-msgstr "Ta bort markerade noder"
+msgstr "Radera markerade noder"
 
 #: ../src/widgets/toolbox.cpp:1416
 #, fuzzy
@@ -25825,8 +25848,7 @@ msgstr "Dela slinga vid markerade noder"
 #: ../src/widgets/toolbox.cpp:1437
 #, fuzzy
 msgid "Join with segment"
-msgstr ""
-"  -j, --join-existing         slå ihop meddelanden med existerande fil\n"
+msgstr "Anslut med segment"
 
 #: ../src/widgets/toolbox.cpp:1438
 msgid "Join selected endnodes with a new segment"
@@ -25834,16 +25856,16 @@ msgstr "Anslut markerade ändnoder med nytt segment"
 
 #: ../src/widgets/toolbox.cpp:1447
 msgid "Delete segment"
-msgstr "Ta bort segment"
+msgstr "Radera segment"
 
 #: ../src/widgets/toolbox.cpp:1448
 msgid "Delete segment between two non-endpoint nodes"
-msgstr "Ta bort segment mellan två noder som ej är ändnoder"
+msgstr "Radera segment mellan två noder som ej är ändnoder"
 
 #: ../src/widgets/toolbox.cpp:1457
 #, fuzzy
 msgid "Node Cusp"
-msgstr "Tog bort %d nod(er):\n"
+msgstr "Hörnnod"
 
 #: ../src/widgets/toolbox.cpp:1458
 msgid "Make selected nodes corner"
@@ -25852,7 +25874,7 @@ msgstr "Gör markerade noder till hörn"
 #: ../src/widgets/toolbox.cpp:1467
 #, fuzzy
 msgid "Node Smooth"
-msgstr "Utjämnad palett"
+msgstr "Mjuk/jämn nod"
 
 #: ../src/widgets/toolbox.cpp:1468
 msgid "Make selected nodes smooth"
@@ -25861,7 +25883,7 @@ msgstr "Gör markerade noder mjuka"
 #: ../src/widgets/toolbox.cpp:1477
 #, fuzzy
 msgid "Node Symmetric"
-msgstr "--symmetric [filnamn]"
+msgstr "Symmetrisk nod"
 
 #: ../src/widgets/toolbox.cpp:1478
 msgid "Make selected nodes symmetric"
@@ -25870,25 +25892,25 @@ msgstr "Gör markerade noder symmetriska"
 #: ../src/widgets/toolbox.cpp:1487
 #, fuzzy
 msgid "Node Auto"
-msgstr "Blixt : Auto"
+msgstr "Auto-nod"
 
 #: ../src/widgets/toolbox.cpp:1488
 msgid "Make selected nodes auto-smooth"
-msgstr "Gör markerade noder mjuka"
+msgstr "Gör markerade noder automatiskt mjuka"
 
 #: ../src/widgets/toolbox.cpp:1497
 #, fuzzy
 msgid "Node Line"
-msgstr "okänd rad"
+msgstr "Rak nod"
 
 #: ../src/widgets/toolbox.cpp:1498
 msgid "Make selected segments lines"
-msgstr "Gör markerade segment till linjer"
+msgstr "Gör markerade segment till raka linjer"
 
 #: ../src/widgets/toolbox.cpp:1507
 #, fuzzy
 msgid "Node Curve"
-msgstr "Böj efter kurva"
+msgstr "Kurvnod"
 
 #: ../src/widgets/toolbox.cpp:1508
 msgid "Make selected segments curves"
@@ -25897,12 +25919,12 @@ msgstr "Gör markerade segment till kurvor"
 #: ../src/widgets/toolbox.cpp:1517
 #, fuzzy
 msgid "Show Transform Handles"
-msgstr "Visa handtag"
+msgstr "Visa transformhandtag"
 
 #: ../src/widgets/toolbox.cpp:1518
 #, fuzzy
 msgid "Show transformation handles for selected nodes"
-msgstr "Visa Bezier-handtagen för markerade noder"
+msgstr "Visa transformhandtag för markerade noder"
 
 #: ../src/widgets/toolbox.cpp:1528
 msgid "Show Handles"
@@ -25916,42 +25938,42 @@ msgstr "Visa Bezier-handtagen för markerade noder"
 #: ../src/widgets/toolbox.cpp:1539
 #, fuzzy
 msgid "Show Outline"
-msgstr "Visa _penselkontur"
+msgstr "Visa Kontur"
 
 #: ../src/widgets/toolbox.cpp:1540
 #, fuzzy
 msgid "Show path outline (without path effects)"
-msgstr "Färg på slingkontur"
+msgstr "Färg på slingkontur (utan slingeffekter)"
 
 #: ../src/widgets/toolbox.cpp:1550
 #, fuzzy
 msgid "Next path effect parameter"
-msgstr "Flytta slingeffekt upp"
+msgstr "Nästa slingeffektparameter"
 
 #: ../src/widgets/toolbox.cpp:1551
 #, fuzzy
 msgid "Show next editable path effect parameter"
-msgstr "Flytta slingeffekt upp"
+msgstr "Visa nästa redigerbara slingeffektparameter"
 
 #: ../src/widgets/toolbox.cpp:1561
 #, fuzzy
 msgid "Edit clipping paths"
-msgstr "Frisläpp klippslinga"
+msgstr "Redigera beskärningsslinga"
 
 #: ../src/widgets/toolbox.cpp:1562
 #, fuzzy
 msgid "Show clipping path(s) of selected object(s)"
-msgstr "Slut på minne vid registrering av objektsökvägen \"%s\""
+msgstr "Visa beskärningsslingor för markerade objekt"
 
 #: ../src/widgets/toolbox.cpp:1572
 #, fuzzy
 msgid "Edit masks"
-msgstr "R_edigera lagermask"
+msgstr "R_edigera masker"
 
 #: ../src/widgets/toolbox.cpp:1573
 #, fuzzy
 msgid "Show mask(s) of selected object(s)"
-msgstr "Blanda färgerna på markerade objekt"
+msgstr "Visa masker för markerade objekt"
 
 #: ../src/widgets/toolbox.cpp:1587
 msgid "X coordinate:"
@@ -25975,43 +25997,43 @@ msgstr "Aktivera fästpunkter"
 
 #: ../src/widgets/toolbox.cpp:2238
 msgid "Bounding box"
-msgstr "begränsningslåda"
+msgstr "Begränsningslåda"
 
 #: ../src/widgets/toolbox.cpp:2238
 msgid "Snap bounding box corners"
-msgstr "Fäst begränsningsytors hörn"
+msgstr "Fäst mot begränsningslådors hörn"
 
 #: ../src/widgets/toolbox.cpp:2247
 msgid "Bounding box edges"
-msgstr "Begränsningsytors kanter"
+msgstr "Begränsningslådors kanter"
 
 #: ../src/widgets/toolbox.cpp:2247
 msgid "Snap to edges of a bounding box"
-msgstr "Fäst mot kanterna på begränsningsytor"
+msgstr "Fäst mot kanterna på begränsningslådor"
 
 #: ../src/widgets/toolbox.cpp:2256
 msgid "Bounding box corners"
-msgstr "Begränsningsytors hörn"
+msgstr "Begränsningslådors hörn"
 
 #: ../src/widgets/toolbox.cpp:2256
 msgid "Snap to bounding box corners"
-msgstr "Fäst mot begränsningsytors hörn"
+msgstr "Fäst mot begränsningslådors hörn"
 
 #: ../src/widgets/toolbox.cpp:2265
 msgid "BBox Edge Midpoints"
-msgstr "B-Ytors Kantmittpunkter"
+msgstr "Begränsningslådors Kantmittpunkter"
 
 #: ../src/widgets/toolbox.cpp:2265
 msgid "Snap from and to midpoints of bounding box edges"
-msgstr "Fäst från och till mittpunkten på begränsningsytors kanter"
+msgstr "Fäst från och till mittpunkten på begränsningslådors kanter"
 
 #: ../src/widgets/toolbox.cpp:2275
 msgid "BBox Centers"
-msgstr "B-Ytors Mittpunkter"
+msgstr "Begränsningslådors Mittpunkter"
 
 #: ../src/widgets/toolbox.cpp:2275
 msgid "Snapping from and to centers of bounding boxes"
-msgstr "Fäst från och till mittpunkten på begränsningsytor"
+msgstr "Fäst från och till mittpunkten på begränsningslådor"
 
 #: ../src/widgets/toolbox.cpp:2284
 msgid "Snap nodes or handles"
@@ -26051,11 +26073,11 @@ msgstr "Linjemittpunkter"
 
 #: ../src/widgets/toolbox.cpp:2328
 msgid "Snap from and to midpoints of line segments"
-msgstr ""
+msgstr "Fäst från och till linjesegments mittpunkter"
 
 #: ../src/widgets/toolbox.cpp:2337
 msgid "Object Centers"
-msgstr "Objekts mittpunkter"
+msgstr "Objektmittpunkter"
 
 #: ../src/widgets/toolbox.cpp:2337
 msgid "Snap from and to centers of objects"
@@ -26091,15 +26113,15 @@ msgstr "Stjärna: Ändra antalet hörn"
 
 #: ../src/widgets/toolbox.cpp:2624
 msgid "Star: Change spoke ratio"
-msgstr "Stjärna: Ändra bas/spets förhållande"
+msgstr "Stjärna: Ändra bas/spets-förhållande"
 
 #: ../src/widgets/toolbox.cpp:2668
 msgid "Make polygon"
-msgstr "Gör polygon"
+msgstr "Rita polygon"
 
 #: ../src/widgets/toolbox.cpp:2668
 msgid "Make star"
-msgstr "Gör stjärna"
+msgstr "Rita stjärna"
 
 #: ../src/widgets/toolbox.cpp:2705
 msgid "Star: Change rounding"
@@ -26148,7 +26170,7 @@ msgstr "Antal hörn i en polygon eller stjärna"
 #: ../src/widgets/toolbox.cpp:2980
 #, fuzzy
 msgid "thin-ray star"
-msgstr "Stjärna antal punkter"
+msgstr "tunnspetsad tjärna"
 
 #: ../src/widgets/toolbox.cpp:2980
 msgid "pentagram"
@@ -26168,7 +26190,7 @@ msgstr "oktagram"
 
 #: ../src/widgets/toolbox.cpp:2980
 msgid "regular polygon"
-msgstr "Vanlig polygon"
+msgstr "vanlig polygon"
 
 #: ../src/widgets/toolbox.cpp:2983
 #, fuzzy
@@ -26183,7 +26205,7 @@ msgstr "Spetsförhållande:"
 #. Base radius is the same for the closest handle.
 #: ../src/widgets/toolbox.cpp:2986
 msgid "Base radius to tip radius ratio"
-msgstr ""
+msgstr "Basradie till spetsradie-förhållande"
 
 #: ../src/widgets/toolbox.cpp:3004
 msgid "stretched"
@@ -26252,7 +26274,7 @@ msgstr "starkt slumpade"
 #: ../src/widgets/toolbox.cpp:3022
 #, fuzzy
 msgid "Randomized"
-msgstr "Slumpade:"
+msgstr "Slumpade"
 
 #: ../src/widgets/toolbox.cpp:3022
 msgid "Randomized:"
@@ -26352,7 +26374,7 @@ msgstr "Typ av FP i X-riktning"
 
 #: ../src/widgets/toolbox.cpp:3653
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
-msgstr "Växla VP i X-riktning mellan 'ändlig' och 'oändlig' (=parallell)"
+msgstr "Växla FP i X-riktning mellan 'ändlig' och 'oändlig' (=parallell)"
 
 #: ../src/widgets/toolbox.cpp:3668
 msgid "Angle in Y direction"
@@ -26365,7 +26387,7 @@ msgstr "Vinkel Y:"
 #. Translators: PL is short for 'perspective line'
 #: ../src/widgets/toolbox.cpp:3670
 msgid "Angle of PLs in Y direction"
-msgstr "Vinkel på PLs i Y-ritkning"
+msgstr "Vinkel på perspektivlinjer i Y-ritkning"
 
 #. Translators: VP is short for 'vanishing point'
 #: ../src/widgets/toolbox.cpp:3691
@@ -26374,7 +26396,7 @@ msgstr "Typ av FP i Y-riktning"
 
 #: ../src/widgets/toolbox.cpp:3692
 msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
-msgstr "Växla VP i Y-riktning mellan 'ändlig' och 'oändlig' (=parallell)"
+msgstr "Växla FP i Y-riktning mellan 'ändlig' och 'oändlig' (=parallell)"
 
 #: ../src/widgets/toolbox.cpp:3707
 msgid "Angle in Z direction"
@@ -26383,7 +26405,7 @@ msgstr "Vinkel i Z-riktning"
 #. Translators: PL is short for 'perspective line'
 #: ../src/widgets/toolbox.cpp:3709
 msgid "Angle of PLs in Z direction"
-msgstr "Vinkel på PLs i Z-riktning"
+msgstr "Vinkel på perspektivlinjer i Z-riktning"
 
 #. Translators: VP is short for 'vanishing point'
 #: ../src/widgets/toolbox.cpp:3730
@@ -26392,7 +26414,7 @@ msgstr "Typ av FP i Z-riktning"
 
 #: ../src/widgets/toolbox.cpp:3731
 msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
-msgstr "Växla VP i Z-riktning mellan 'ändlig' och 'oändlig' (=parallell)"
+msgstr "Växla FP i Z-riktning mellan 'ändlig' och 'oändlig' (=parallell)"
 
 #: ../src/widgets/toolbox.cpp:3788
 msgid "Change spiral"
@@ -26446,7 +26468,7 @@ msgstr "mitten är mycket tätare"
 #: ../src/widgets/toolbox.cpp:3944
 #, fuzzy
 msgid "Divergence"
-msgstr "Skillnad:"
+msgstr "Skillnad"
 
 #: ../src/widgets/toolbox.cpp:3944
 msgid "Divergence:"
@@ -26498,7 +26520,7 @@ msgstr "Skapa en Spiroslinga"
 
 #: ../src/widgets/toolbox.cpp:4045
 msgid "Zigzag"
-msgstr ""
+msgstr "Sick-sack"
 
 #: ../src/widgets/toolbox.cpp:4046
 msgid "Create a sequence of straight line segments"
@@ -26579,11 +26601,11 @@ msgstr ""
 #. Width
 #: ../src/widgets/toolbox.cpp:4310
 msgid "(pinch tweak)"
-msgstr "(modifierad en smula)"
+msgstr "(nyp ihop)"
 
 #: ../src/widgets/toolbox.cpp:4310
 msgid "(broad tweak)"
-msgstr "(bred modifiering)"
+msgstr "(bred ut)"
 
 #: ../src/widgets/toolbox.cpp:4313
 msgid "The width of the tweak area (relative to the visible canvas area)"
@@ -26615,7 +26637,7 @@ msgstr "Styrkan på modifieringåtgärden"
 #: ../src/widgets/toolbox.cpp:4348
 #, fuzzy
 msgid "Move mode"
-msgstr "Färgläge"
+msgstr "Flytta"
 
 #: ../src/widgets/toolbox.cpp:4349
 msgid "Move objects in any direction"
@@ -26624,7 +26646,7 @@ msgstr "Flytta objekt i vilken riktning som helst"
 #: ../src/widgets/toolbox.cpp:4355
 #, fuzzy
 msgid "Move in/out mode"
-msgstr "EJ i fyll läge"
+msgstr "Flytta in/ut"
 
 #: ../src/widgets/toolbox.cpp:4356
 msgid "Move objects towards cursor; with Shift from cursor"
@@ -26633,7 +26655,7 @@ msgstr "Flytta objekt mot muspekaren; med Skift från pekaren"
 #: ../src/widgets/toolbox.cpp:4362
 #, fuzzy
 msgid "Move jitter mode"
-msgstr "Färgblandningsläge"
+msgstr "Slumpflyttning"
 
 #: ../src/widgets/toolbox.cpp:4363
 msgid "Move objects in random directions"
@@ -26642,7 +26664,7 @@ msgstr "Flytta objekt i slumpmässiga riktningar"
 #: ../src/widgets/toolbox.cpp:4369
 #, fuzzy
 msgid "Scale mode"
-msgstr "Färgläge"
+msgstr "Skalning"
 
 #: ../src/widgets/toolbox.cpp:4370
 msgid "Shrink objects, with Shift enlarge"
@@ -26651,7 +26673,7 @@ msgstr "Förminska objekt, med Skift för att förstora"
 #: ../src/widgets/toolbox.cpp:4376
 #, fuzzy
 msgid "Rotate mode"
-msgstr "Färgläge"
+msgstr "Rotation"
 
 #: ../src/widgets/toolbox.cpp:4377
 msgid "Rotate objects, with Shift counterclockwise"
@@ -26660,7 +26682,7 @@ msgstr "Rotera objekt, med Skift moturs"
 #: ../src/widgets/toolbox.cpp:4383
 #, fuzzy
 msgid "Duplicate/delete mode"
-msgstr "Nuvarande läge: Kameraläge\n"
+msgstr "Duplicera/radera"
 
 #: ../src/widgets/toolbox.cpp:4384
 msgid "Duplicate objects, with Shift delete"
@@ -26668,7 +26690,7 @@ msgstr "Duplicera objekt, med Skift ta bort"
 
 #: ../src/widgets/toolbox.cpp:4390
 msgid "Push mode"
-msgstr "Tryckläge"
+msgstr "Tryck"
 
 #: ../src/widgets/toolbox.cpp:4391
 msgid "Push parts of paths in any direction"
@@ -26677,7 +26699,7 @@ msgstr "Flytta delar av slinga i valfri riktning"
 #: ../src/widgets/toolbox.cpp:4397
 #, fuzzy
 msgid "Shrink/grow mode"
-msgstr "Öka/minska med:"
+msgstr "Förstora/förminska"
 
 #: ../src/widgets/toolbox.cpp:4398
 msgid "Shrink (inset) parts of paths; with Shift grow (outset)"
@@ -26686,7 +26708,7 @@ msgstr ""
 
 #: ../src/widgets/toolbox.cpp:4404
 msgid "Attract/repel mode"
-msgstr "Attraherings-/repelleringsläge"
+msgstr "Attrahering/repellering"
 
 #: ../src/widgets/toolbox.cpp:4405
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
@@ -26695,7 +26717,7 @@ msgstr ""
 
 #: ../src/widgets/toolbox.cpp:4411
 msgid "Roughen mode"
-msgstr "Grovhetsläge"
+msgstr "Gör grövre"
 
 #: ../src/widgets/toolbox.cpp:4412
 msgid "Roughen parts of paths"
@@ -26703,7 +26725,7 @@ msgstr "Gör delar av slingor grövre"
 
 #: ../src/widgets/toolbox.cpp:4418
 msgid "Color paint mode"
-msgstr "Färgmålningsläge"
+msgstr "Färgmålning"
 
 #: ../src/widgets/toolbox.cpp:4419
 msgid "Paint the tool's color upon selected objects"
@@ -26711,7 +26733,7 @@ msgstr "Måla verktygets färg på markerade objekt"
 
 #: ../src/widgets/toolbox.cpp:4425
 msgid "Color jitter mode"
-msgstr "Färgblandningsläge"
+msgstr "Färggitter"
 
 #: ../src/widgets/toolbox.cpp:4426
 msgid "Jitter the colors of selected objects"
@@ -26719,7 +26741,7 @@ msgstr "Blanda färgerna på markerade objekt"
 
 #: ../src/widgets/toolbox.cpp:4432
 msgid "Blur mode"
-msgstr "Oskärpeläge"
+msgstr "Oskärpa"
 
 #: ../src/widgets/toolbox.cpp:4433
 msgid "Blur selected objects more; with Shift, blur less"
@@ -26776,11 +26798,11 @@ msgstr "(fin och många noder)"
 
 #: ../src/widgets/toolbox.cpp:4538
 msgid "Fidelity"
-msgstr "Naturtrogenhet"
+msgstr "Noggrannhet"
 
 #: ../src/widgets/toolbox.cpp:4538
 msgid "Fidelity:"
-msgstr "Naturtrogenhet:"
+msgstr "Noggrannhet:"
 
 #: ../src/widgets/toolbox.cpp:4539
 msgid ""
@@ -26805,12 +26827,12 @@ msgstr ""
 #: ../src/widgets/toolbox.cpp:4630
 #, fuzzy
 msgid "(narrow spray)"
-msgstr "smalare"
+msgstr "(smal stråle)"
 
 #: ../src/widgets/toolbox.cpp:4630
 #, fuzzy
 msgid "(broad spray)"
-msgstr "(bred linje)"
+msgstr "(bred stråle)"
 
 #: ../src/widgets/toolbox.cpp:4633
 #, fuzzy
@@ -26822,115 +26844,115 @@ msgstr ""
 #: ../src/widgets/toolbox.cpp:4646
 #, fuzzy
 msgid "(minimum mean)"
-msgstr "(minimal styrka)"
+msgstr "(minimal median)"
 
 #: ../src/widgets/toolbox.cpp:4646
 #, fuzzy
 msgid "(maximum mean)"
-msgstr "(maximal tröghet)"
+msgstr "(maximal median)"
 
 #: ../src/widgets/toolbox.cpp:4649
 #, fuzzy
 msgid "Focus"
-msgstr "anvkoord"
+msgstr "Fokus"
 
 #: ../src/widgets/toolbox.cpp:4649
 #, fuzzy
 msgid "Focus:"
-msgstr "Styrka:"
+msgstr "Fokus:"
 
 #: ../src/widgets/toolbox.cpp:4649
 msgid "0 to spray a spot. Increase to enlarge the ring radius."
-msgstr ""
+msgstr "0 för att spruta en punkt. Öka för att förstora ringens radie."
 
 #. Standard_deviation
 #: ../src/widgets/toolbox.cpp:4662
 #, fuzzy
 msgid "(minimum scatter)"
-msgstr "(minimal styrka)"
+msgstr "(minimal utspridning)"
 
 #: ../src/widgets/toolbox.cpp:4662
 #, fuzzy
 msgid "(maximum scatter)"
-msgstr "(maximal skakning)"
+msgstr "(maximal utspridning)"
 
 #: ../src/widgets/toolbox.cpp:4668
 #, fuzzy
 msgid "Toolbox|Scatter"
-msgstr "Sprid ut"
+msgstr "Toolbox|Sprid ut"
 
 #: ../src/widgets/toolbox.cpp:4668
 #, fuzzy
 msgid "Toolbox|Scatter:"
-msgstr "Sprid ut"
+msgstr "Toolbox|Sprid ut:"
 
 #: ../src/widgets/toolbox.cpp:4668
 msgid "Increase to scatter sprayed objects."
-msgstr ""
+msgstr "Öka för att sprida ut målade objekt."
 
 #: ../src/widgets/toolbox.cpp:4687
 #, fuzzy
 msgid "Spray copies of the initial selection"
-msgstr "Verkställ transformeringen för att kopiera Ctrl+m"
+msgstr "Måla kopior av den ursprungliga markeringen"
 
 #: ../src/widgets/toolbox.cpp:4694
 #, fuzzy
 msgid "Spray clones of the initial selection"
-msgstr "Skapa brickkloner av markeringen"
+msgstr "Måla kloner av den ursprungliga markeringen"
 
 #: ../src/widgets/toolbox.cpp:4700
 #, fuzzy
 msgid "Spray single path"
-msgstr "Sudda bort existerande slingor"
+msgstr "Måla endast en slinga"
 
 #: ../src/widgets/toolbox.cpp:4701
 msgid "Spray objects in a single path"
-msgstr ""
+msgstr "Måla ojbekt i endast en slinga"
 
 #. Population
 #: ../src/widgets/toolbox.cpp:4725
 msgid "(low population)"
-msgstr ""
+msgstr "(låg population)"
 
 #: ../src/widgets/toolbox.cpp:4725
 #, fuzzy
 msgid "(high population)"
-msgstr "(lätt avvikelse)"
+msgstr "(hög population)"
 
 #: ../src/widgets/toolbox.cpp:4728
 #, fuzzy
 msgid "Amount:"
-msgstr "Mängd"
+msgstr "Mängd:"
 
 #: ../src/widgets/toolbox.cpp:4729
 msgid "Adjusts the number of items sprayed per clic."
-msgstr ""
+msgstr "Justera antalet objekt som målas per click."
 
 #: ../src/widgets/toolbox.cpp:4745
 #, fuzzy
 msgid ""
 "Use the pressure of the input device to alter the amount of sprayed objects."
-msgstr "Använd trycket på inmatningsenheten för att påverka bredden på pennan"
+msgstr "Använd trycket på inmatningsenheten för att påverka mängden målade objekt."
 
 #. Rotation
 #: ../src/widgets/toolbox.cpp:4754
 msgid "(low rotation variation)"
-msgstr ""
+msgstr "(låg rotationsvariation)"
 
 #: ../src/widgets/toolbox.cpp:4754
 #, fuzzy
 msgid "(high rotation variation)"
-msgstr "(lätt avvikelse)"
+msgstr "(hög rotationsvariation)"
 
 #: ../src/widgets/toolbox.cpp:4757
 #, fuzzy
 msgid "Rotation"
-msgstr "_Rotation"
+msgstr "Rotation"
 
 #: ../src/widgets/toolbox.cpp:4757
 #, fuzzy
 msgid "Rotation:"
-msgstr "_Rotation"
+msgstr "Rotation:"
 
 #: ../src/widgets/toolbox.cpp:4759
 #, no-c-format
@@ -26938,27 +26960,29 @@ msgid ""
 "Variation of the rotation of the sprayed objects. 0% for the same rotation "
 "than the original object."
 msgstr ""
+"Variationen för rotationen hos de målade objekten. 0% för att ha samma "
+"rotation som orginalobjektet."
 
 #. Scale
 #: ../src/widgets/toolbox.cpp:4772
 #, fuzzy
 msgid "(low scale variation)"
-msgstr "Variationsväljartillägg"
+msgstr "(låg skalvariation)"
 
 #: ../src/widgets/toolbox.cpp:4772
 #, fuzzy
 msgid "(high scale variation)"
-msgstr "(lätt avvikelse)"
+msgstr "(hög skalvariation)"
 
 #: ../src/widgets/toolbox.cpp:4778
 #, fuzzy
 msgid "Toolbox|Scale"
-msgstr "Verktygslådan"
+msgstr "Toolbox|Skala"
 
 #: ../src/widgets/toolbox.cpp:4778
 #, fuzzy
 msgid "Toolbox|Scale:"
-msgstr "Verktygslådan"
+msgstr "Toolbox|Skala:"
 
 #: ../src/widgets/toolbox.cpp:4780
 #, no-c-format
@@ -26966,6 +26990,8 @@ msgid ""
 "Variation in the scale of the sprayed objects. 0% for the same scale than "
 "the original object."
 msgstr ""
+"Variation i skala hos de målade objekten. 0% för att få samma skala som "
+"orginalobjektet."
 
 #: ../src/widgets/toolbox.cpp:4954
 msgid "No preset"
@@ -27211,6 +27237,8 @@ msgid ""
 "Trace the lightness of the background by the width of the pen (white - "
 "minimum width, black - maximum width)"
 msgstr ""
+"Kalkera ljusstyrkan hos bakgrunden med bredden på pennan (vitt - "
+"minimal bredd, svart - maximal bredd)"
 
 #: ../src/widgets/toolbox.cpp:5282
 msgid "Use the pressure of the input device to alter the width of the pen"
@@ -27274,7 +27302,7 @@ msgstr "Gör hel"
 
 #: ../src/widgets/toolbox.cpp:5651
 msgid "Make the shape a whole ellipse, not arc or segment"
-msgstr ""
+msgstr "Gör figuren till en hel ellips, inte en båge eller ett segment"
 
 #: ../src/widgets/toolbox.cpp:5729
 msgid "Pick opacity"
@@ -27343,7 +27371,7 @@ msgstr "mittpunkt på begränsningslådas sida"
 
 #: ../src/widgets/toolbox.cpp:6031
 msgid "Show bounding box (used to cut infinite lines)"
-msgstr ""
+msgstr "Visa begränsningslåda (avnänd för att beskära oändliga linjer)"
 
 #: ../src/widgets/toolbox.cpp:6042
 #, fuzzy
@@ -27355,30 +27383,32 @@ msgstr "Ta bort klippväg från markering"
 msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
-msgstr "Fäst vid hjälplinjer"
+msgstr ""
+"Sätt begränsande låda (använd för att beskära oändliga linjer) till "
+"begränsningslådan för aktuell markering"
 
 #: ../src/widgets/toolbox.cpp:6055
 #, fuzzy
 msgid "Choose a line segment type"
-msgstr "Färgningstyp för segment"
+msgstr "Välj en linjesegmenttyp"
 
 #: ../src/widgets/toolbox.cpp:6071
 #, fuzzy
 msgid "Display measuring info"
-msgstr "Visa informationsdialog"
+msgstr "Visa mätinformation"
 
 #: ../src/widgets/toolbox.cpp:6072
 msgid "Display measuring info for selected items"
-msgstr ""
+msgstr "Visa mätinformation för markerade objekt"
 
 #: ../src/widgets/toolbox.cpp:6092
 #, fuzzy
 msgid "Open LPE dialog"
-msgstr "Filöppnande_dialog"
+msgstr "Öppna slingeffektruta"
 
 #: ../src/widgets/toolbox.cpp:6093
 msgid "Open LPE dialog (to adapt parameters numerically)"
-msgstr ""
+msgstr "Öppna slingeffektruta (för att anpassa parametrarna numeriskt)"
 
 #: ../src/widgets/toolbox.cpp:6157
 #, fuzzy
@@ -27387,7 +27417,7 @@ msgstr "Bredden på kalligrafipennan (reletivt synliga området på ritduken)"
 
 #: ../src/widgets/toolbox.cpp:6175
 msgid "Delete objects touched by the eraser"
-msgstr ""
+msgstr "Radera objekt som vidrörs av sudden"
 
 #: ../src/widgets/toolbox.cpp:6181
 #, fuzzy
@@ -27397,51 +27427,51 @@ msgstr "Klipp ut"
 #: ../src/widgets/toolbox.cpp:6182
 #, fuzzy
 msgid "Cut out from objects"
-msgstr "Ta bort alla objekt från dokumentet"
+msgstr "Klipp ut från objekt"
 
 #: ../src/widgets/toolbox.cpp:6431
 #, fuzzy
 msgid "Text: Change font family"
-msgstr "Lokal ändring av typsnitt"
+msgstr "Text: Ändra typsnittsfamilj"
 
 #: ../src/widgets/toolbox.cpp:6478
 #, fuzzy
 msgid "Text: Change font size"
-msgstr "Grundstorlek för tecken (punkter)"
+msgstr "Text: Ändra typstorlek"
 
 #: ../src/widgets/toolbox.cpp:6624
 #, fuzzy
 msgid "Text: Change font style"
-msgstr "Använd/använd inte skrivmaskinstypsnitt"
+msgstr "Text: Ändra stil"
 
 #: ../src/widgets/toolbox.cpp:6701
 msgid "Text: Change superscript or subscript"
-msgstr ""
+msgstr "Text: Ändra superscript till subscript"
 
 #: ../src/widgets/toolbox.cpp:6845
 #, fuzzy
 msgid "Text: Change alignment"
-msgstr "Ändra textkodningen"
+msgstr "Text: Ändra justering"
 
 #: ../src/widgets/toolbox.cpp:6884
 #, fuzzy
 msgid "Text: Change line-height"
-msgstr "Ändra textkodningen"
+msgstr "Text: Ändra radhöjd"
 
 #: ../src/widgets/toolbox.cpp:6923
 #, fuzzy
 msgid "Text: Change word-spacing"
-msgstr "Ändra textkodningen"
+msgstr "Text: Ändra ordmellanrum"
 
 #: ../src/widgets/toolbox.cpp:6962
 #, fuzzy
 msgid "Text: Change letter-spacing"
-msgstr "Justera teckenmellanrum"
+msgstr "Text: Ändra bokstavsmellanrum"
 
 #: ../src/widgets/toolbox.cpp:7007
 #, fuzzy
 msgid "Text: Change dx (kern)"
-msgstr "Grundstorlek för tecken (punkter)"
+msgstr "Text: Ändra dx (kern)"
 
 #: ../src/widgets/toolbox.cpp:7038
 #, fuzzy
@@ -27474,7 +27504,7 @@ msgstr "Välj typsnittsfamilj (Alt-X för att ändra)"
 #. Enable entry completion
 #: ../src/widgets/toolbox.cpp:7486
 msgid "Font not found on system"
-msgstr "Typsnitt hittades ej"
+msgstr "Typsnitt hittades ej på detta system"
 
 #: ../src/widgets/toolbox.cpp:7518
 #, fuzzy
@@ -27495,17 +27525,17 @@ msgstr "Växla Fetstil"
 #. Label
 #: ../src/widgets/toolbox.cpp:7532
 msgid "Toggle bold or normal weight"
-msgstr "Växla fetstil"
+msgstr "Växla fetstil eller normal"
 
 #. Name
 #: ../src/widgets/toolbox.cpp:7544
 msgid "Toggle Italic/Oblique"
-msgstr "Växla Kursiv"
+msgstr "Växla Kursiv/Sned"
 
 #. Label
 #: ../src/widgets/toolbox.cpp:7545
 msgid "Toggle italic/oblique style"
-msgstr "Växla kursiv stil"
+msgstr "Växla kursiv/sned stil"
 
 #. Name
 #: ../src/widgets/toolbox.cpp:7557
@@ -27599,7 +27629,7 @@ msgstr "Radhöjd"
 #: ../src/widgets/toolbox.cpp:7690
 #, fuzzy
 msgid "Line:"
-msgstr "Linje:"
+msgstr "Rad:"
 
 #. short label
 #: ../src/widgets/toolbox.cpp:7691
@@ -27658,15 +27688,13 @@ msgstr "Avstånd mellan bokstäver (px)"
 #: ../src/widgets/toolbox.cpp:7782
 #, fuzzy
 msgid "Kerning"
-msgstr ""
-# eng == sv i det här fallet
+msgstr "Kerning"
 
 #. label
 #: ../src/widgets/toolbox.cpp:7783
 #, fuzzy
 msgid "Kern:"
-msgstr ""
-# eng == sv i det här fallet
+msgstr "Kern:"
 
 #. short label
 #: ../src/widgets/toolbox.cpp:7784
@@ -27750,29 +27778,26 @@ msgstr "Ortogonal"
 
 #: ../src/widgets/toolbox.cpp:8212
 msgid "Make connector orthogonal or polyline"
-msgstr "Gör förbindelser ortogonala mot polygonlinje"
-# TODO
+msgstr "Gör förbindelse ortogonala eller polyline"
 
 #: ../src/widgets/toolbox.cpp:8226
 #, fuzzy
 msgid "Connector Curvature"
-msgstr "Förbindelserundning"
+msgstr "Förbindelsekrökning"
 
 #: ../src/widgets/toolbox.cpp:8226
 #, fuzzy
 msgid "Curvature:"
 msgstr "Krökning:"
-# TODO
 
 #: ../src/widgets/toolbox.cpp:8227
 msgid "The amount of connectors curvature"
-msgstr "Mängd krökning runt förbindelser"
-# TODO
+msgstr "Mängd förbindelsekrökning"
 
 #: ../src/widgets/toolbox.cpp:8237
 #, fuzzy
 msgid "Connector Spacing"
-msgstr "Ändra förbindelseavstånd"
+msgstr "Förbindelseavstånd"
 
 #: ../src/widgets/toolbox.cpp:8237
 msgid "Spacing:"
@@ -27809,25 +27834,25 @@ msgstr "Gör så att förbindelser med ändmarkeringar (pilar) pekar nedåt"
 
 #: ../src/widgets/toolbox.cpp:8289
 msgid "Do not allow overlapping shapes"
-msgstr "Tillåt ine överlappande figurer"
+msgstr "Tillåt ej överlappande figurer"
 
 #: ../src/widgets/toolbox.cpp:8304
 #, fuzzy
 msgid "New connection point"
-msgstr "Ändra förbindelseavstånd"
+msgstr "Ny förbindelsepunkt"
 
 #: ../src/widgets/toolbox.cpp:8305
 msgid "Add a new connection point to the currently selected item"
-msgstr ""
+msgstr "Lägg till en ny förbindelsepunkt till det markerade objektet"
 
 #: ../src/widgets/toolbox.cpp:8316
 #, fuzzy
 msgid "Remove connection point"
-msgstr "Omdirigera förbindelse"
+msgstr "Ta bort förbindelsepunkt"
 
 #: ../src/widgets/toolbox.cpp:8317
 msgid "Remove the currently selected connection point"
-msgstr ""
+msgstr "Ta bort den markerade förbindelsepunkten"
 
 #: ../src/widgets/toolbox.cpp:8417
 #, fuzzy
@@ -27869,7 +27894,7 @@ msgstr ""
 #: ../src/widgets/toolbox.cpp:8483
 #, fuzzy
 msgid "Close gaps"
-msgstr "Slut öppningar:"
+msgstr "Slut öppningar"
 
 #: ../src/widgets/toolbox.cpp:8484
 msgid "Close gaps:"
@@ -27901,7 +27926,7 @@ msgstr "Streckkod - datamatris"
 #: ../share/extensions/render_barcode_datamatrix.inx.h:2
 #, fuzzy
 msgid "Cols"
-msgstr "Färger"
+msgstr "Kolumner"
 
 #: ../share/extensions/render_barcode_datamatrix.inx.h:4
 #, fuzzy
@@ -27911,12 +27936,12 @@ msgstr "Rader"
 #: ../share/extensions/render_barcode_datamatrix.inx.h:5
 #, fuzzy
 msgid "Square Size / px"
-msgstr "Fyrkantig avslutning"
+msgstr "Kvadratisk Storlek / px"
 
 #: ../share/extensions/text_sentencecase.inx.h:1
 #, fuzzy
 msgid "Sentence case"
-msgstr "_Skilj på gemener/VERSALER"
+msgstr "Engelsk meningsversalisering"
 
 #: ../share/extensions/wireframe_sphere.inx.h:1
 msgid "Hide lines behind the sphere"
@@ -27938,15 +27963,15 @@ msgstr "Radie [px]"
 #: ../share/extensions/wireframe_sphere.inx.h:6
 #, fuzzy
 msgid "Rotation [deg]"
-msgstr "Rotation (grader)"
+msgstr "Rotation [grader]"
 
 #: ../share/extensions/wireframe_sphere.inx.h:7
 msgid "Tilt [deg]"
-msgstr "Tilt (grader)"
+msgstr "Tilt [grader]"
 
 #: ../share/extensions/wireframe_sphere.inx.h:8
 msgid "Wireframe Sphere"
-msgstr "Trådrams-sfär"
+msgstr "Trådramssfär"
 
 #, fuzzy
 #~ msgid "Refresh the icons"
