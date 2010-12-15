@@ -1092,7 +1092,6 @@ msgid ""
 msgstr ""
 "Skapa ett slumpmönster med Voroni-celler. Mönstret blir tillgängligt "
 "i Fyllnad och Stryknings-rutan. Välj ett objekt eller en grupp."
-# TODO
 
 #: ../share/extensions/generate_voronoi.inx.h:4
 msgid ""
@@ -1105,7 +1104,6 @@ msgstr ""
 #: ../share/extensions/generate_voronoi.inx.h:5
 msgid "Size of Border (px)"
 msgstr "Kantstorlek (px)"
-# TODO
 
 #: ../share/extensions/generate_voronoi.inx.h:6
 #, fuzzy
@@ -1140,136 +1138,112 @@ msgstr "Linjetjocklek [px]"
 msgid "Cartesian Grid"
 msgstr "Kartesiskt Rutnät"
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:3
 msgid "Halve X Subsubdiv. Frequency after 'n' Subdivs. (log only)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:4
 msgid "Halve Y Subsubdiv. Frequency after 'n' Subdivs. (log only)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:5
 msgid "Logarithmic X Subdiv. (Base given by entry above)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:6
 msgid "Logarithmic Y Subdiv. (Base given by entry above)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:7
 #, fuzzy
 msgid "Major X Division Spacing [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:8
 #, fuzzy
 msgid "Major X Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:9
 #, fuzzy
 msgid "Major X Divisions"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:10
 #, fuzzy
 msgid "Major Y Division Spacing [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:11
 #, fuzzy
 msgid "Major Y Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:12
 #, fuzzy
 msgid "Major Y Divisions"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:13
 #, fuzzy
 msgid "Minor X Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:14
 #, fuzzy
 msgid "Minor Y Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:16
 msgid "Subdivisions per Major X Division"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:17
 msgid "Subdivisions per Major Y Division"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:18
 msgid "Subminor X Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:19
 msgid "Subminor Y Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:20
 #, fuzzy
 msgid "Subsubdivs. per X Subdivision"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_cartesian.inx.h:21
 #, fuzzy
 msgid "Subsubdivs. per Y Subdivision"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:1
 #, fuzzy
 msgid "Angle Divisions"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:2
 #, fuzzy
 msgid "Angle Divisions at Centre"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:3
 msgid "Centre Dot Diameter [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:4
 #, fuzzy
 msgid "Circumferential Label Outset [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:5
 #, fuzzy
 msgid "Circumferential Label Size [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:6
 #, fuzzy
 msgid "Circumferential Labels"
@@ -1281,44 +1255,36 @@ msgstr ""
 msgid "Degrees"
 msgstr "Grader"
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:8
 msgid "Logarithmic Subdiv. (Base given by entry above)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:9
 msgid "Major Angular Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:10
 #, fuzzy
 msgid "Major Circular Division Spacing [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:11
 msgid "Major Circular Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:12
 #, fuzzy
 msgid "Major Circular Divisions"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:13
 msgid "Minor Angle Division End 'n' Divs. Before Centre"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:14
 msgid "Minor Angular Division Thickness [px]"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:15
 msgid "Minor Circular Division Thickness [px]"
 msgstr ""
@@ -1345,12 +1311,10 @@ msgstr "Ingen"
 msgid "Polar Grid"
 msgstr "Polärt rutnät"
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:19
 msgid "Subdivisions per Major Angular Division"
 msgstr ""
 
-# TODO
 #: ../share/extensions/grid_polar.inx.h:20
 msgid "Subdivisions per Major Circular Division"
 msgstr ""
@@ -1420,7 +1384,6 @@ msgstr "Horisontell hjälplinje per"
 msgid "Preset"
 msgstr "Förinställning"
 
-# TODO
 #: ../share/extensions/guides_creator.inx.h:18
 #, fuzzy
 msgid "Rule-of-third"
@@ -1448,7 +1411,6 @@ msgstr "Exportera till en HP Graphics Language-fil"
 msgid "HP Graphics Language file (*.hpgl)"
 msgstr "HP Graphics Language-fil (*.hpgl)"
 
-# TODO
 #: ../share/extensions/hpgl_output.inx.h:3
 #, fuzzy
 msgid "HPGL Output"
@@ -1484,7 +1446,6 @@ msgstr "X-origo (px)"
 msgid "Y-origin (px)"
 msgstr "Y-origo (px)"
 
-# TODO
 #: ../share/extensions/hpgl_output.inx.h:10
 #, fuzzy
 msgid "hpgl output flatness"
@@ -1568,7 +1529,6 @@ msgstr "Fyllning"
 msgid "Float Number"
 msgstr "Flyttal"
 
-# TODO
 #: ../share/extensions/interp_att_g.inx.h:7
 msgid ""
 "If you select \"Other\", you must know the SVG attributes to identify here "
@@ -1629,13 +1589,11 @@ msgstr "Startvärde"
 msgid "Style"
 msgstr "Stil"
 
-# TODO
 #: ../share/extensions/interp_att_g.inx.h:19
 #, fuzzy
 msgid "Tag"
 msgstr ""
 
-# TODO
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid ""
 "This effect applies a value for any interpolatable attribute for all "
@@ -1670,12 +1628,10 @@ msgstr "Applicera var?"
 msgid ""
 msgstr ""
 
-# TODO
 #: ../share/extensions/jessyInk_autoTexts.inx.h:1
 msgid "Auto-Text:"
 msgstr ""
 
-# TODO
 #: ../share/extensions/jessyInk_autoTexts.inx.h:2
 msgid "Auto-texts"
 msgstr ""
@@ -1777,7 +1733,6 @@ msgstr "Ingen (standard)"
 msgid "Order:"
 msgstr "Ordning:"
 
-# TODO
 #: ../share/extensions/jessyInk_effects.inx.h:11
 #: ../share/extensions/jessyInk_transitions.inx.h:8
 #, fuzzy
@@ -2252,7 +2207,6 @@ msgstr ""
 msgid "View"
 msgstr "Vy"
 
-# TODO
 #: ../share/extensions/lindenmayer.inx.h:1
 msgid ""
 "\n"
@@ -2456,13 +2410,11 @@ msgstr "Rörelse"
 msgid "ASCII Text with outline markup"
 msgstr "Ersätt markeringen med textlagrets kontur"
 
-# TODO
 #: ../share/extensions/outline2svg.inx.h:2
 #, fuzzy
 msgid "Text Outline File (*.outline)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/outline2svg.inx.h:3
 #, fuzzy
 msgid "Text Outline Input"
@@ -2664,7 +2616,6 @@ msgstr ""
 "måste vara det översta objektet i markeringen. Grupper av slingor, former, "
 "kloner är tillåtet."
 
-# TODO
 #: ../share/extensions/perfectboundcover.inx.h:1
 #, fuzzy
 msgid "Bleed (in)"
@@ -2772,7 +2723,6 @@ msgstr ""
 "Justera alla slingor i markering till bildpunkter. Justerar kanter till halv-punkter och "
 "ifyllnad till hela punkter."
 
-# TODO
 #: ../share/extensions/plt_input.inx.h:1
 #, fuzzy
 msgid "AutoCAD Plot Input"
@@ -2788,7 +2738,6 @@ msgstr "HP Graphics Language Plot fil [AutoCAD] (*.plt)"
 msgid "Open HPGL plotter files"
 msgstr "Öppna HPGL plotter-filer"
 
-# TODO
 #: ../share/extensions/plt_output.inx.h:1
 #, fuzzy
 msgid "AutoCAD Plot Output"
@@ -3012,13 +2961,11 @@ msgstr "Z-axeln"
 msgid "Z-sort faces by:"
 msgstr "Z-sortera sidor på:"
 
-# TODO
 #: ../share/extensions/printing-marks.inx.h:1
 #, fuzzy
 msgid "Bleed Margin"
 msgstr ""
 
-# TODO
 #: ../share/extensions/printing-marks.inx.h:2
 #, fuzzy
 msgid "Bleed Marks"
@@ -3034,13 +2981,11 @@ msgstr "Undersida:"
 msgid "Canvas"
 msgstr "Duk"
 
-# TODO
 #: ../share/extensions/printing-marks.inx.h:5
 #, fuzzy
 msgid "Color Bars"
 msgstr ""
 
-# TODO
 #: ../share/extensions/printing-marks.inx.h:6
 #, fuzzy
 msgid "Crop Marks"
@@ -3051,7 +2996,6 @@ msgstr ""
 msgid "Left:"
 msgstr "Vänster:"
 
-# TODO
 #: ../share/extensions/printing-marks.inx.h:8
 #, fuzzy
 msgid "Marks"
@@ -3096,7 +3040,6 @@ msgstr "Höger:"
 msgid "Selection"
 msgstr "Markering"
 
-# TODO
 #: ../share/extensions/printing-marks.inx.h:17
 #, fuzzy
 msgid "Set crop marks to"
@@ -3362,7 +3305,6 @@ msgstr "xml-stil"
 msgid "Tab"
 msgstr "Tabb"
 
-# TODO
 #: ../share/extensions/scour.inx.h:20
 #, no-c-format
 msgid ""
@@ -3400,7 +3342,6 @@ msgstr "sK1 vektrografik-filinläsning"
 msgid "File format for use in sK1 vector graphics editor"
 msgstr "Filformat för användning i sK1 vektorgrafikeditor"
 
-# TODO
 #: ../share/extensions/sk1_output.inx.h:3
 msgid "sK1 vector graphics files output"
 msgstr ""
@@ -3414,7 +3355,6 @@ msgstr "Ett diagram skapat med programmet Sketch"
 msgid "Sketch Diagram (*.sk)"
 msgstr "Sketch Diagram (*.sk)"
 
-# TODO
 #: ../share/extensions/sk_input.inx.h:3
 #, fuzzy
 msgid "Sketch Input"
@@ -3510,12 +3450,10 @@ msgstr "Kuvert"
 msgid "Microsoft XAML (*.xaml)"
 msgstr "Microsoft XAML (*.xaml)"
 
-# TODO
 #: ../share/extensions/svg2xaml.inx.h:2 ../share/extensions/xaml2svg.inx.h:2
 msgid "Microsoft's GUI definition format"
 msgstr ""
 
-# TODO
 #: ../share/extensions/svg2xaml.inx.h:3
 #, fuzzy
 msgid "XAML Output"
@@ -3535,7 +3473,6 @@ msgstr ""
 "Inkscape's inbyggda filformat komprimerat med Zip och innehållande "
 "mediafiler"
 
-# TODO
 #: ../share/extensions/svg_and_media_zip_output.inx.h:3
 #, fuzzy
 msgid "ZIP Output"
@@ -3814,7 +3751,6 @@ msgstr "HTML id-attribut:"
 msgid "Height unit:"
 msgstr "Höjdenhet:"
 
-# TODO
 #: ../share/extensions/webslicer_create_group.inx.h:5
 msgid ""
 "Layout Group is only about to help a better code generation (if you need "
@@ -3865,17 +3801,14 @@ msgstr ""
 "0 är den lägsta bildkvalitén och högsta komprimeringsgraden, 100 är den "
 "bästa kvalitén och lägsta komprimeringsgraden"
 
-# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:3
 msgid "Background  no repeat (on parent group)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:4
 msgid "Background  repeat horizontally (on parent group)"
 msgstr ""
 
-# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:5
 msgid "Background  repeat vertically (on parent group)"
 msgstr ""
@@ -4007,7 +3940,6 @@ msgstr "Kvalité:"
 msgid "Right Floated Image"
 msgstr "Höger-flytande bild"
 
-# TODO
 #: ../share/extensions/webslicer_create_rect.inx.h:36
 msgid "Tiled Background (on parent group)"
 msgstr ""
@@ -4269,7 +4201,6 @@ msgstr "Windows Metafile (*.wmf)"
 msgid "Windows Metafile Input"
 msgstr "Rendera Windows metafil"
 
-# TODO
 #: ../share/extensions/xaml2svg.inx.h:3
 #, fuzzy
 msgid "XAML Input"
@@ -4322,7 +4253,6 @@ msgstr "Vinkel 'B'/radianer: "
 msgid "Angle 'C'/radians: "
 msgstr "Vinkel 'C'/radianer: "
 
-# TODO
 #: ../share/extensions/draw_from_triangle.py:181
 #, fuzzy
 msgid "Semiperimeter/px: "
@@ -4381,7 +4311,6 @@ msgstr "Bild extraherad till: %s"
 msgid "Unable to find image data."
 msgstr "Kunde ej hitta bilddata."
 
-# TODO
 #: ../share/extensions/inkex.py:67
 msgid ""
 "The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore "
@@ -4417,7 +4346,6 @@ msgstr "Detta tillägg kräver två markerade slingor."
 msgid "Please first convert objects to paths!  (Got [%s].)"
 msgstr "Vänligen konvertera objekt till slingor först! (Fick [%s].)"
 
-# TODO
 #: ../share/extensions/perspective.py:29
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
@@ -4470,7 +4398,6 @@ msgstr ""
 "Det först valda objektet är inte en slinga.\n"
 "Försök med Slinga->Objekt till Slinga."
 
-# TODO
 #: ../share/extensions/polyhedron_3d.py:60
 msgid ""
 "Failed to import the numpy module. This module is required by this "
@@ -4697,7 +4624,6 @@ msgstr "Eld"
 msgid "Edges of object are on fire"
 msgstr "Kanterna på objektet brinner"
 
-# TODO
 #: ../share/filters/filters.svg.h:14
 msgid "Bloom"
 msgstr ""
@@ -4706,13 +4632,11 @@ msgstr ""
 msgid "Soft, cushion-like bevel with matte highlights"
 msgstr "Mjuk, kudd-lik fas med matta ljuspunkter"
 
-# TODO
 #: ../share/filters/filters.svg.h:15
 #, fuzzy
 msgid "Ridged border"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:15
 msgid "Ridged border with inner bevel"
 msgstr ""
@@ -4734,13 +4658,11 @@ msgstr "Förvräng"
 msgid "Horizontal rippling of edges"
 msgstr "Hoirsontell krusning av kanterna"
 
-# TODO
 #: ../share/filters/filters.svg.h:17
 #, fuzzy
 msgid "Speckle"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:17
 msgid "Fill object with sparse translucent specks"
 msgstr ""
@@ -4757,7 +4679,6 @@ msgstr "Rengbågsfärgade, halvgenomskinliga oljiga fläckar"
 msgid "Frost"
 msgstr "Frost"
 
-# TODO
 #: ../share/filters/filters.svg.h:19
 msgid "Flake-like white splotches"
 msgstr ""
@@ -5134,7 +5055,6 @@ msgstr "Genomskinlig"
 msgid "Illuminated translucent plastic or glass effect"
 msgstr "Upplyst genomskinlig plast eller glas effekt"
 
-# TODO
 #: ../share/filters/filters.svg.h:57
 #, fuzzy
 msgid "Cross-smooth"
@@ -5233,13 +5153,11 @@ msgid ""
 "Metallized effect with a soft lighting, slightly translucent at the edges"
 msgstr "Mettalic färg-effekt med en mjuk ljussättning, svagt genomskinlig vid kanterna"
 
-# TODO
 #: ../share/filters/filters.svg.h:68
 #, fuzzy
 msgid "Dragee"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:68
 msgid "Gel Ridge with a pearlescent look"
 msgstr ""
@@ -5661,7 +5579,6 @@ msgstr "Gör alla innre former grövre"
 msgid "Evanescent"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:111
 msgid ""
 "Blur the contents of objects, preserving the outline and adding progressive "
@@ -5709,12 +5626,10 @@ msgstr "Fyll med brus"
 msgid "Basic noise fill texture; adjust color in Flood"
 msgstr "Enkel textur med brus; justera färgen i inställningarna för Fyll"
 
-# TODO
 #: ../share/filters/filters.svg.h:117
 msgid "Garden of Delights"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:117
 msgid ""
 "Phantasmagorical turbulent wisps, like Hieronymus Bosch's Garden of Delights"
@@ -5728,24 +5643,20 @@ msgstr "Diffust ljus"
 msgid "Basic diffuse bevel to use for building textures"
 msgstr "Enkel diffus fasning som kan användas för att skapa texturer"
 
-# TODO
 #: ../share/filters/filters.svg.h:119
 #, fuzzy
 msgid "Cutout Glow"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:119
 msgid "In and out glow with a possible offset and colorizable flood"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:120
 #, fuzzy
 msgid "HSL Bumps, matte"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:120
 msgid ""
 "Same as HSL bumps but with a diffuse reflection instead of a specular one"
@@ -5769,13 +5680,11 @@ msgid "Simple Gaussian blur, same as the blur slider in Fill and Stroke dialog"
 msgstr ""
 "Enkel gaussisk oskärpa, samma som oskärpan i Fyllning och linje-dialogrutan"
 
-# TODO
 #: ../share/filters/filters.svg.h:123
 #, fuzzy
 msgid "Bubbly Bumps, matte"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:123
 msgid "Same as Bubbly Bumps but with a diffuse light instead of a specular one"
 msgstr ""
@@ -5794,13 +5703,11 @@ msgstr ""
 "Ciseleringseffekt: Färgerna för orginalbilden är bevarade eller modifiers av "
 "färgblandning"
 
-# TODO
 #: ../share/filters/filters.svg.h:125
 #, fuzzy
 msgid "Blotting paper"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:125
 #, fuzzy
 msgid "Inkblot on blotting paper"
@@ -5828,7 +5735,6 @@ msgstr "Bläckplump på näsduk eller grovt papper"
 msgid "Color outline, in"
 msgstr "Färg på slingkontur"
 
-# TODO
 #: ../share/filters/filters.svg.h:129
 msgid "A colorizable inner outline with adjustable width and blur"
 msgstr ""
@@ -5837,7 +5743,6 @@ msgstr ""
 msgid "Liquid"
 msgstr "Vätska"
 
-# TODO
 #: ../share/filters/filters.svg.h:130
 msgid "Colorizable filling with liquid transparency"
 msgstr ""
@@ -5850,13 +5755,11 @@ msgstr "Vattenfärg"
 msgid "Cloudy watercolor effect"
 msgstr "Vattenfärgseffekt"
 
-# TODO
 #: ../share/filters/filters.svg.h:132
 #, fuzzy
 msgid "Felt"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:132
 msgid ""
 "Felt like texture with color turbulence and slightly darker at the edges"
@@ -5874,34 +5777,28 @@ msgstr "Bläck på papper med turbulent färgförskjutning"
 msgid "Tinted rainbow"
 msgstr "Färgad regnbåge"
 
-# TODO
 #: ../share/filters/filters.svg.h:134
 msgid "Smooth rainbow colors melted along the edges and colorizable"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:135
 #, fuzzy
 msgid "Melted rainbow"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:135
 msgid "Smooth rainbow colors slightly melted along the edges"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:136
 #, fuzzy
 msgid "Flex metal"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:136
 msgid "Bright, polished uneven metal casting, colorizable"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:137
 #, fuzzy
 msgid "Comics draft"
@@ -5917,39 +5814,32 @@ msgstr ""
 msgid "Non realistic 3D shaders"
 msgstr "Orealistiska 3D-skuggningar"
 
-# TODO
 #: ../share/filters/filters.svg.h:137
 msgid "Draft painted cartoon shading with a glassy look"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:138
 msgid "Comics fading"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:138
 msgid "Cartoon paint style with some fading at the edges"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:139
 #, fuzzy
 msgid "Smooth shader"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:139
 msgid "Smooth shading with a graphite pencil grey"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:140
 #, fuzzy
 msgid "Emboss shader"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:140
 msgid "Combination of smooth shading and embossing"
 msgstr ""
@@ -5960,7 +5850,6 @@ msgstr ""
 msgid "Smooth shader dark"
 msgstr "Ljuset för mörkt"
 
-# TODO
 #: ../share/filters/filters.svg.h:141
 msgid "Dark version of non realistic smooth shading"
 msgstr ""
@@ -5971,7 +5860,6 @@ msgstr ""
 msgid "Comics"
 msgstr "Kombinerat"
 
-# TODO
 #: ../share/filters/filters.svg.h:142
 msgid "Imitation of black and white cartoon shading"
 msgstr ""
@@ -5994,13 +5882,11 @@ msgstr "Glasplattor"
 msgid "Non realistic frosted glass imitation"
 msgstr "Orealistisk glasplatteimitation"
 
-# TODO
 #: ../share/filters/filters.svg.h:145
 #, fuzzy
 msgid "Smooth shader contour"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:145
 msgid "Contouring version of smooth shader"
 msgstr ""
@@ -6013,13 +5899,11 @@ msgstr "Aluminium"
 msgid "Brushed aluminium shader"
 msgstr "Borstad aluminiumsskuggning"
 
-# TODO
 #: ../share/filters/filters.svg.h:147
 #, fuzzy
 msgid "Comics fluid"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:147
 #, fuzzy
 msgid "Fluid brushed cartoon drawing"
@@ -6030,18 +5914,15 @@ msgstr ""
 msgid "Chrome"
 msgstr "Krombalans"
 
-# TODO
 #: ../share/filters/filters.svg.h:148
 msgid "Non realistic chrome shader with strong speculars"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:149
 #, fuzzy
 msgid "Chrome dark"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:149
 msgid "Dark version of chrome shading with a ground reflection simulation"
 msgstr ""
@@ -6059,7 +5940,6 @@ msgstr "Plädmönster med en vågig förskjutning och fasning runt kanterna"
 msgid "3D marble"
 msgstr "3D marmor"
 
-# TODO
 #: ../share/filters/filters.svg.h:151
 msgid "3D warped marble texture"
 msgstr ""
@@ -6068,7 +5948,6 @@ msgstr ""
 msgid "3D wood"
 msgstr "3D trä"
 
-# TODO
 #: ../share/filters/filters.svg.h:152
 msgid "3D warped, fibered wood texture"
 msgstr ""
@@ -6078,7 +5957,6 @@ msgstr ""
 msgid "3D mother of pearl"
 msgstr "3D pärla"
 
-# TODO
 #: ../share/filters/filters.svg.h:153
 msgid "3D warped, iridescent pearly shell texture"
 msgstr ""
@@ -6095,18 +5973,15 @@ msgstr "Tigerpälsmönster med veck och avfasning runt kanterna"
 msgid "Shaken liquid"
 msgstr "Skakad vätska"
 
-# TODO
 #: ../share/filters/filters.svg.h:155
 msgid "Colorizable filling with flow inside like transparency"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:156
 #, fuzzy
 msgid "Comics cream"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:156
 msgid "Comics shader with creamy waves transparency"
 msgstr ""
@@ -6119,13 +5994,11 @@ msgstr "Svart ljus"
 msgid "Light areas turn to black"
 msgstr "Ljusa områden blir svarta"
 
-# TODO
 #: ../share/filters/filters.svg.h:158
 #, fuzzy
 msgid "Light eraser"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:158 ../share/filters/filters.svg.h:195
 #: ../share/filters/filters.svg.h:197 ../share/filters/filters.svg.h:198
 #: ../share/filters/filters.svg.h:199
@@ -6155,25 +6028,21 @@ msgstr "Kornig film"
 msgid "Adds a small scale graininess"
 msgstr "Lägger till småskalig grynighet"
 
-# TODO
 #: ../share/filters/filters.svg.h:161
 #, fuzzy
 msgid "HSL Bumps, transparent"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:161
 msgid "Highly flexible specular bump with transparency"
 msgstr ""
 
-# TODO teckning/ritning?
 #: ../share/filters/filters.svg.h:162
 #: ../src/ui/dialog/align-and-distribute.cpp:926
 #: ../src/widgets/desktop-widget.cpp:1647
 msgid "Drawing"
 msgstr "Teckning"
 
-# TODO
 #: ../share/filters/filters.svg.h:162
 msgid ""
 "Give lead pencil or chromolithography or engraving or other effects to "
@@ -6186,29 +6055,24 @@ msgstr ""
 msgid "Velvet Bumps"
 msgstr "Sammetsbumpar"
 
-# TODO
 #: ../share/filters/filters.svg.h:163
 msgid "Gives Smooth Bumps velvet like"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:164
 #, fuzzy
 msgid "Alpha draw"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:164
 msgid "Gives a transparent drawing effect to bitmaps and materials"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:165
 #, fuzzy
 msgid "Alpha draw, color"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:165
 msgid "Gives a transparent color fill effect to bitmaps and materials"
 msgstr ""
@@ -6217,7 +6081,6 @@ msgstr ""
 msgid "Chewing gum"
 msgstr "Tuggummi"
 
-# TODO
 #: ../share/filters/filters.svg.h:166
 msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
@@ -6245,7 +6108,6 @@ msgstr "Ritar en färgad kontur runt"
 msgid "Inner Shadow"
 msgstr "Innre skugga"
 
-# TODO
 #: ../share/filters/filters.svg.h:169
 msgid "Adds a colorizable drop shadow inside"
 msgstr ""
@@ -6255,7 +6117,6 @@ msgstr ""
 msgid "Dark and Glow"
 msgstr "Mörkt och glöd"
 
-# TODO
 #: ../share/filters/filters.svg.h:170
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
 msgstr ""
@@ -6265,29 +6126,24 @@ msgstr ""
 msgid "Darken edges"
 msgstr "Mörka kanter"
 
-# TODO
 #: ../share/filters/filters.svg.h:171
 msgid "Darken the edges with an inner blur"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:172
 #, fuzzy
 msgid "Warped rainbow"
 msgstr "Färgad regnbåge"
 
-# TODO
 #: ../share/filters/filters.svg.h:172
 msgid "Smooth rainbow colors warped along the edges and colorizable"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:173
 #, fuzzy
 msgid "Rough and dilate"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:173
 msgid "Create a turbulent contour around"
 msgstr ""
@@ -6314,40 +6170,33 @@ msgstr "Lätt posterisering med kanter som på gamla vykort"
 msgid "Fuzzy Glow"
 msgstr "Suddigt sken"
 
-# TODO
 #: ../share/filters/filters.svg.h:176
 msgid "Overlays a semi-transparent shifted copy to a blurred one"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:177
 #, fuzzy
 msgid "Dots transparency"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:177
 msgid "Gives a pointillist HSL sensitive transparency"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:178
 #, fuzzy
 msgid "Canvas transparency"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:178
 msgid "Gives a canvas like HSL sensitive transparency."
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:179
 #, fuzzy
 msgid "Smear transparency"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:179
 msgid ""
 "Paint objects with a transparent turbulence which turns around color edges"
@@ -6358,7 +6207,6 @@ msgstr ""
 msgid "Thick paint"
 msgstr "Tjock färg"
 
-# TODO
 #: ../share/filters/filters.svg.h:180
 msgid "Thick painting effect with turbulence"
 msgstr ""
@@ -6369,7 +6217,6 @@ msgstr ""
 msgid "Burst"
 msgstr "Utbrottsfärg"
 
-# TODO
 #: ../share/filters/filters.svg.h:181
 msgid "Burst balloon texture crumpled and with holes"
 msgstr ""
@@ -6380,25 +6227,21 @@ msgstr ""
 msgid "Embossed leather"
 msgstr "Graverat läder"
 
-# TODO
 #: ../share/filters/filters.svg.h:182
 msgid ""
 "Combine a HSL edges detection bump with a leathery or woody and colorizable "
 "texture"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:183
 #, fuzzy
 msgid "Carnaval"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:183
 msgid "White splotches evocating carnaval masks"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:184
 #, fuzzy
 msgid "Plastify"
@@ -6415,7 +6258,6 @@ msgstr ""
 msgid "Plaster"
 msgstr "Gips"
 
-# TODO
 #: ../share/filters/filters.svg.h:185
 msgid ""
 "Combine a HSL edges detection bump with a matte and crumpled surface effect"
@@ -6426,7 +6268,6 @@ msgstr ""
 msgid "Rough transparency"
 msgstr "Grov genomskinlighet"
 
-# TODO
 #: ../share/filters/filters.svg.h:186
 msgid "Adds a turbulent transparency which displaces pixels at the same time"
 msgstr ""
@@ -6435,29 +6276,24 @@ msgstr ""
 msgid "Gouache"
 msgstr "Gouache"
 
-# TODO
 #: ../share/filters/filters.svg.h:187
 msgid "Partly opaque water color effect with bleed"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:188
 #, fuzzy
 msgid "Alpha engraving"
 msgstr "Alphagravering"
 
-# TODO
 #: ../share/filters/filters.svg.h:188
 msgid "Gives a transparent engraving effect with rough line and filling"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:189
 #, fuzzy
 msgid "Alpha draw, liquid"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:189
 msgid "Gives a transparent fluid drawing effect with rough line and filling"
 msgstr ""
@@ -6470,23 +6306,19 @@ msgstr "Expressionism"
 msgid "Gives a fluid and wavy expressionist drawing effect to images"
 msgstr "Ger en vågig, expressionistisk målningseffekt på bilder"
 
-# TODO
 #: ../share/filters/filters.svg.h:191
 #, fuzzy
 msgid "Marbled ink"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:191
 msgid "Marbled transparency effect which conforms to image detected edges"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:192
 msgid "Thick acrylic"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:192
 msgid "Thick acrylic paint texture with high texture depth"
 msgstr ""
@@ -6496,19 +6328,16 @@ msgstr ""
 msgid "Alpha engraving B"
 msgstr "Alphagravering B"
 
-# TODO
 #: ../share/filters/filters.svg.h:193
 msgid ""
 "Gives a controllable roughness engraving effect to bitmaps and materials"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:194
 #, fuzzy
 msgid "Lapping"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:194
 msgid "Something like a water noise"
 msgstr ""
@@ -6519,7 +6348,6 @@ msgstr ""
 msgid "Monochrome transparency"
 msgstr "Enfärgad genomskinlighet"
 
-# TODO
 #: ../share/filters/filters.svg.h:195
 msgid "Convert to a colorizable transparent positive or negative"
 msgstr ""
@@ -6532,18 +6360,15 @@ msgstr "Tvåton"
 msgid "Change colors to a duotone palette"
 msgstr "Ändra färger till en tvåtonspalett"
 
-# TODO
 #: ../share/filters/filters.svg.h:197
 #, fuzzy
 msgid "Light eraser, negative"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:197
 msgid "Like Light eraser but converts to negative"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:198
 #, fuzzy
 msgid "Alpha repaint"
@@ -6555,26 +6380,22 @@ msgstr ""
 msgid "Repaint anything monochrome"
 msgstr "Använd monokrom förhandsgranskning"
 
-# TODO
 #: ../share/filters/filters.svg.h:199
 #, fuzzy
 msgid "Saturation map"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:199
 msgid ""
 "Creates an approximative semi-transparent and colorizable image of the "
 "saturation levels"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:200
 #, fuzzy
 msgid "Riddled"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:200
 msgid "Riddle the surface and add bump to images"
 msgstr ""
@@ -6587,35 +6408,29 @@ msgstr "Skrynklad lack"
 msgid "Thick glossy and translucent paint texture with high depth"
 msgstr "Tjock glansig och genomskinlig färg-textur med stort djup"
 
-# TODO
 #: ../share/filters/filters.svg.h:202
 #, fuzzy
 msgid "Canvas Bumps"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:202
 msgid "Canvas texture with an HSL sensitive height map"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:203
 #, fuzzy
 msgid "Canvas Bumps, matte"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:203
 msgid "Same as Canvas Bumps but with a diffuse light instead of a specular one"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:204
 #, fuzzy
 msgid "Canvas Bumps alpha"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:204
 msgid "Same as Canvas Bumps but with transparent highlights"
 msgstr ""
@@ -6632,7 +6447,6 @@ msgstr "Öka eller minska ljushet och kontrast"
 msgid "Clean edges"
 msgstr "Rena kanter"
 
-# TODO
 #: ../share/filters/filters.svg.h:206
 msgid ""
 "Removes or decreases glows and jaggeries around objects edges after applying "
@@ -6648,7 +6462,6 @@ msgstr "Ljus metall"
 msgid "Bright metallic effect for any color"
 msgstr "Ljus metallisk effekt för alla färger"
 
-# TODO
 #: ../share/filters/filters.svg.h:208
 #, fuzzy
 msgid "Deep colors plastic"
@@ -6697,7 +6510,6 @@ msgstr "Metallisk folie-effekt som kombinerar två ljustyper och variabel skrynk
 msgid "Copper and chocolate"
 msgstr "Koppar och choklad"
 
-# TODO
 #: ../share/filters/filters.svg.h:213
 msgid ""
 "Specular bump which can be easily converted from metallic to molded plastic "
@@ -6727,12 +6539,10 @@ msgstr ""
 msgid "Relief print"
 msgstr "Gravering"
 
-# TODO
 #: ../share/filters/filters.svg.h:216
 msgid "Bumps effect with a bevel, color flood and complex lighting"
 msgstr ""
 
-# TODO
 #: ../share/filters/filters.svg.h:217
 #, fuzzy
 msgid "Growing cells"
@@ -9530,7 +9340,6 @@ msgstr "Rotera färgkartor för vald bitmapp(ar)."
 msgid "Despeckle"
 msgstr "Damm och repor"
 
-# TODO
 #: ../src/extension/internal/bitmap/despeckle.cpp:42
 msgid "Reduce speckle noise of selected bitmap(s)."
 msgstr ""
@@ -9628,7 +9437,6 @@ msgstr ""
 msgid "Level (with Channel)"
 msgstr "Nivå att börja med"
 
-# TODO
 #: ../src/extension/internal/bitmap/levelChannel.cpp:72
 msgid ""
 "Level the specified channel of selected bitmap(s) by scaling values falling "
@@ -9705,7 +9513,6 @@ msgstr "Höj"
 msgid "Raised"
 msgstr "Höjd"
 
-# TODO
 #: ../src/extension/internal/bitmap/raise.cpp:49
 msgid ""
 "Alter lightness the edges of selected bitmap(s) to create a raised "
@@ -10022,13 +9829,11 @@ msgstr "Filter"
 msgid "Black, blurred drop shadow"
 msgstr "Svart, suddig skuggkastning"
 
-# TODO
 #: ../src/extension/internal/filter/drop-shadow.h:95
 #, fuzzy
 msgid "Drop Glow"
 msgstr ""
 
-# TODO
 #: ../src/extension/internal/filter/drop-shadow.h:108
 msgid "White, blurred drop glow"
 msgstr ""
@@ -11564,7 +11369,6 @@ msgstr "Stil på växlingsknapparna"
 msgid "Expand direction"
 msgstr "Riktningsvektor"
 
-# TODO
 #: ../src/libgdl/gdl-dock-master.c:169
 msgid ""
 "Allow the master's dock items to expand their container dock objects in the "
@@ -11962,7 +11766,6 @@ msgstr "Skapa rutnät"
 msgid "Spiro spline"
 msgstr "Spirallinje"
 
-# TODO
 #: ../src/live_effects/effect.cpp:118
 #, fuzzy
 msgid "Envelope Deformation"
@@ -11973,7 +11776,6 @@ msgstr ""
 msgid "Interpolate Sub-Paths"
 msgstr "Interpolera delslingor"
 
-# TODO
 #: ../src/live_effects/effect.cpp:120
 #, fuzzy
 msgid "Hatches (rough)"
@@ -12086,52 +11888,44 @@ msgstr "Antal slingor"
 msgid "The number of paths that will be generated."
 msgstr "Antalet slingor som kommer skapas."
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:44
 #, fuzzy
 msgid "Start edge variance"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:44
 msgid ""
 "The amount of random jitter to move the start points of the stitches inside "
 "& outside the guide path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:45
 #, fuzzy
 msgid "Start spacing variance"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:45
 msgid ""
 "The amount of random shifting to move the start points of the stitches back "
 "& forth along the guide path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:46
 #, fuzzy
 msgid "End edge variance"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:46
 msgid ""
 "The amount of randomness that moves the end points of the stitches inside & "
 "outside the guide path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:47
 #, fuzzy
 msgid "End spacing variance"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:47
 msgid ""
 "The amount of random shifting to move the end points of the stitches back & "
@@ -12143,7 +11937,6 @@ msgstr ""
 msgid "Scale width"
 msgstr "Skala linjebredd"
 
-# TODO
 #: ../src/live_effects/lpe-curvestitch.cpp:48
 #, fuzzy
 msgid "Scale the width of the stitch path"
@@ -12159,72 +11952,60 @@ msgstr "Skala bredd relativt längd"
 msgid "Scale the width of the stitch path relative to its length"
 msgstr "Skala bredden på virkningsslingan relativt dess längd"
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:33
 #, fuzzy
 msgid "Top bend path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:33
 #, fuzzy
 msgid "Top path along which to bend the original path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:34
 #, fuzzy
 msgid "Right bend path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:34
 #, fuzzy
 msgid "Right path along which to bend the original path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:35
 #, fuzzy
 msgid "Bottom bend path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:35
 #, fuzzy
 msgid "Bottom path along which to bend the original path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:36
 #, fuzzy
 msgid "Left bend path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:36
 #, fuzzy
 msgid "Left path along which to bend the original path"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:37
 #, fuzzy
 msgid "Enable left & right paths"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:37
 msgid "Enable the left and right deformation paths"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:38
 #, fuzzy
 msgid "Enable top & bottom paths"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-envelope.cpp:38
 msgid "Enable the top and bottom deformation paths"
 msgstr ""
@@ -12275,7 +12056,6 @@ msgstr "Bestämmer antal steg från start- till slut-slinga."
 msgid "Equidistant spacing"
 msgstr "Jämna mellanrum"
 
-# TODO
 #: ../src/live_effects/lpe-interpolate.cpp:32
 msgid ""
 "If true, the spacing between intermediates is constant along the length of "
@@ -12315,7 +12095,6 @@ msgstr "Korsande slingas linjebredd"
 msgid "Add crossed stroke width to the interruption size"
 msgstr "Lägg till korsad linjebredd till mellanrumsbredd"
 
-# TODO
 #: ../src/live_effects/lpe-knot.cpp:335
 #, fuzzy
 msgid "Switcher size"
@@ -12327,24 +12106,20 @@ msgstr ""
 msgid "Orientation indicator/switcher size"
 msgstr "Storlek på kryss- eller radioindikator"
 
-# TODO
 #: ../src/live_effects/lpe-knot.cpp:336
 #, fuzzy
 msgid "Crossing Signs"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-knot.cpp:336
 #, fuzzy
 msgid "Crossings signs"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-knot.cpp:347
 msgid "Drag to select a crossing, click to flip it"
 msgstr ""
 
-# TODO
 #. / @todo Is this the right verb?
 #: ../src/live_effects/lpe-knot.cpp:640
 #, fuzzy
@@ -12423,7 +12198,6 @@ msgstr "Sammanfoga slut som ligger närmre än detta avstånd. 0 blockerar samma
 msgid "Frequency randomness"
 msgstr "Frekvensslumpning"
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:226
 msgid "Variation of distance between hatches, in %."
 msgstr ""
@@ -12432,39 +12206,33 @@ msgstr ""
 msgid "Growth"
 msgstr "Tillväxt"
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:227
 #, fuzzy
 msgid "Growth of distance between hatches."
 msgstr ""
 
-# TODO
 #. FIXME: top/bottom names are inverted in the UI/svg and in the code!!
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
 msgid "Half-turns smoothness: 1st side, in"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:229
 msgid ""
 "Set smoothness/sharpness of path when reaching a 'bottom' half-turn. "
 "0=sharp, 1=default"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 #, fuzzy
 msgid "1st side, out"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:230
 msgid ""
 "Set smoothness/sharpness of path when leaving a 'bottom' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:231
 #, fuzzy
 msgid "2nd side, in"
@@ -12476,30 +12244,25 @@ msgid ""
 "1=default"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:232
 #, fuzzy
 msgid "2nd side, out"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:232
 msgid ""
 "Set smoothness/sharpness of path when leaving a 'top' half-turn. 0=sharp, "
 "1=default"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Magnitude jitter: 1st side"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Randomly moves 'bottom' half-turns to produce magnitude variations."
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
@@ -12507,47 +12270,39 @@ msgstr ""
 msgid "2nd side"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 msgid "Randomly moves 'top' half-turns to produce magnitude variations."
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid "Parallelism jitter: 1st side"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:235
 msgid ""
 "Add direction randomness by moving 'bottom' half-turns tangentially to the "
 "boundary."
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:236
 msgid ""
 "Add direction randomness by randomly moving 'top' half-turns tangentially to "
 "the boundary."
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:237
 #, fuzzy
 msgid "Variance: 1st side"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:237
 msgid "Randomness of 'bottom' half-turns smoothness"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:238
 msgid "Randomness of 'top' half-turns smoothness"
 msgstr ""
 
-# TODO
 #.
 #: ../src/live_effects/lpe-rough-hatches.cpp:240
 #, fuzzy
@@ -12559,39 +12314,32 @@ msgstr "Skapa tjock/tunn slingas"
 msgid "Simulate a stroke of varying width"
 msgstr "Simulera ett penseldrag med varierande tjocklek"
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 #, fuzzy
 msgid "Bend hatches"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Add a global bend to the hatches (slower)"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:242
 msgid "Thickness: at 1st side"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:242
 msgid "Width at 'bottom' half-turns"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:243
 #, fuzzy
 msgid "at 2nd side"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:243
 msgid "Width at 'top' half-turns"
 msgstr ""
 
-# TODO
 #.
 #: ../src/live_effects/lpe-rough-hatches.cpp:245
 msgid "from 2nd to 1st side"
@@ -12603,18 +12351,15 @@ msgstr ""
 msgid "Width from 'top' to 'bottom'"
 msgstr "Vertikal justering, från 0 (överst) till 1 (nederst)"
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:246
 msgid "from 1st to 2nd side"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:246
 #, fuzzy
 msgid "Width from 'bottom' to 'top'"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-rough-hatches.cpp:248
 #, fuzzy
 msgid "Hatches width and dir"
@@ -12660,68 +12405,56 @@ msgstr "Avståndsenhet"
 msgid "Distance between successive ruler marks"
 msgstr "Ställ in avståndet mellan vertikala rutnätslinjer"
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:45
 #, fuzzy
 msgid "Major length"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:45
 msgid "Length of major ruler marks"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:46
 #, fuzzy
 msgid "Minor length"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:46
 msgid "Length of minor ruler marks"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:47
 #, fuzzy
 msgid "Major steps"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:47
 msgid "Draw a major mark every ... steps"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:48
 #, fuzzy
 msgid "Shift marks by"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:48
 msgid "Shift marks by this many steps"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:49
 #, fuzzy
 msgid "Mark direction"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:49
 msgid "Direction of marks (when viewing along the path from start to end)"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:50
 #, fuzzy
 msgid "Offset of first mark"
 msgstr ""
 
-# TODO
 #: ../src/live_effects/lpe-ruler.cpp:51
 #, fuzzy
 msgid "Border marks"
@@ -16879,7 +16612,6 @@ msgstr "Exponentvärde som kontrollerar fokus för ljuskällan"
 msgid "Cone Angle"
 msgstr "Konvinkel"
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:974
 msgid ""
 "This is the angle between the spot light axis (i.e. the axis between the "
@@ -17054,14 +16786,12 @@ msgstr "bredd på faltningsmatrisen"
 msgid "height of the convolve matrix"
 msgstr "höjd på faltningsmatrisen"
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2197
 msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
 msgstr ""
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2197
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
@@ -17075,7 +16805,6 @@ msgstr ""
 msgid "Kernel:"
 msgstr "Kärna:"
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2199
 msgid ""
 "This matrix describes the convolve operation that is applied to the input "
@@ -17092,7 +16821,6 @@ msgstr ""
 msgid "Divisor:"
 msgstr "Delare:"
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2201
 msgid ""
 "After applying the kernelMatrix to the input image to yield a number, that "
@@ -17101,13 +16829,11 @@ msgid ""
 "effect on the overall color intensity of the result."
 msgstr ""
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2202
 #, fuzzy
 msgid "Bias:"
 msgstr ""
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2202
 msgid ""
 "This value is added to each component. This is useful to define a constant "
@@ -17184,24 +16910,20 @@ msgstr "Skala:"
 msgid "This defines the intensity of the displacement effect."
 msgstr ""
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
 #, fuzzy
 msgid "X displacement:"
 msgstr ""
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2215
 msgid "Color component that controls the displacement in the X direction"
 msgstr ""
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 #, fuzzy
 msgid "Y displacement:"
 msgstr ""
 
-# TODO
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2216
 msgid "Color component that controls the displacement in the Y direction"
 msgstr ""
@@ -25097,7 +24819,6 @@ msgstr "Typsnittsstorlek:"
 msgid "AaBbCcIiPpQq12369$¢?.;/()"
 msgstr "AaBbCcIiPpQqÅåÄäÖö12368.;/()"
 
-# TODO
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: ../src/widgets/gradient-selector.cpp:163
 msgid ""
