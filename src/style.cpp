@@ -1365,7 +1365,9 @@ sp_style_merge_baseline_shift_from_parent(SPIBaselineShift &child, SPIBaselineSh
                                           SPIFontSize const &pfont_size)
 {
     /* 'baseline-shift' */
-    if (!child.set || child.inherit) {
+    if (!child.set) {
+        child.computed = 0; //no inheritance
+    } else if (child.inherit) {
         /* Inherit the computed value.  Reference: http://www.w3.org/TR/SVG11/styling.html#Inheritance */
         child.computed = parent.computed;  // Does this make sense (applying a shift a second time)?
     } else if (child.type == SP_BASELINE_SHIFT_LITERAL) {
