@@ -1504,7 +1504,8 @@ void FilterEffectsDialog::PrimitiveList::update()
                 //XML Tree being used directly here while it shouldn't be.
                 row[_columns.type_id] = FPConverter.get_id_from_key(prim->getRepr()->name());
                 row[_columns.type] = _(FPConverter.get_label(row[_columns.type_id]).c_str());
-                row[_columns.id] = prim->getId();
+                // we get null ids here from redo
+                row[_columns.id] = prim->getId()?prim->getId():"<null>";
 
                 if(prim == active_prim) {
                     get_selection()->select(row);
