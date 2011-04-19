@@ -76,19 +76,6 @@
 
 using Inkscape::DocumentUndo;
 
-/* Drag and Drop */
-typedef enum {
-    URI_LIST,
-    SVG_XML_DATA,
-    SVG_DATA,
-    PNG_DATA,
-    JPEG_DATA,
-    IMAGE_DATA,
-    APP_X_INKY_COLOR,
-    APP_X_COLOR,
-    APP_OSWB_COLOR,
-} ui_drop_target_info;
-
 static GtkTargetEntry ui_drop_target_entries [] = {
     {(gchar *)"text/uri-list",                0, URI_LIST        },
     {(gchar *)"image/svg+xml",                0, SVG_XML_DATA    },
@@ -1123,6 +1110,9 @@ sp_ui_drag_data_received(GtkWidget *widget,
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    printf("%s\n", "RECEIVED!");
+    printf("%d\n", info);
 
     switch (info) {
 #if ENABLE_MAGIC_COLORS

@@ -1824,6 +1824,9 @@ DialogVerb::perform(SPAction *action, void *data, void */*pdata*/)
         case SP_VERB_DIALOG_ITEM:
             sp_item_dialog();
             break;
+        case SP_VERB_DIALOG_GALLERY:
+            dt->_dlg_mgr->showDialog("Gallery");
+            break;
 /*#ifdef WITH_INKBOARD
         case SP_VERB_XMPP_CLIENT:
         {
@@ -2678,6 +2681,8 @@ Verb *Verb::_base_verbs[] = {
                    N_("Create multiple clones of selected object, arranging them into a pattern or scattering"), INKSCAPE_ICON_DIALOG_TILE_CLONES),
     new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogObjectProperties", N_("_Object Properties..."),
                    N_("Edit the ID, locked and visible status, and other object properties"), INKSCAPE_ICON_DIALOG_OBJECT_PROPERTIES),
+    new DialogVerb(SP_VERB_DIALOG_GALLERY, "Gallery", N_("Gallery"),
+                   N_("Show gallery"), INKSCAPE_ICON_GALLERY),
 /*#ifdef WITH_INKBOARD
     new DialogVerb(SP_VERB_XMPP_CLIENT, "DialogXmppClient",
                    N_("_Instant Messaging..."), N_("Jabber Instant Messaging Client"), NULL),

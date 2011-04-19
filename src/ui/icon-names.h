@@ -140,6 +140,8 @@
     "document-import"
 #define INKSCAPE_ICON_DOCUMENT_IMPORT_OCAL \
     "document-import-ocal"
+#define INKSCAPE_ICON_GALLERY \
+    "gallery"
 #define INKSCAPE_ICON_DOCUMENT_METADATA \
     "document-metadata"
 #define INKSCAPE_ICON_DOCUMENT_OPEN_RECENT \

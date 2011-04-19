@@ -31,6 +31,7 @@ static char const menus_skeleton[] =
 "       <verb verb-id=\"FileImportFromOCAL\" />\n"
 //"       <verb verb-id=\"FileExportToOCAL\" />\n"
 #endif
+"       <verb verb-id=\"Gallery\" />\n"
 "       <separator/>\n"
 "       <verb verb-id=\"FilePrint\" />\n"
 "       <separator/>\n"

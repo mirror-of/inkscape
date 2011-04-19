@@ -25,6 +25,7 @@
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/filter-effects-dialog.h"
 #include "ui/dialog/find.h"
+#include "ui/dialog/gallery.h"
 #include "ui/dialog/glyphs.h"
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/input.h"
@@ -98,6 +99,7 @@ DialogManager::DialogManager() {
         registerFactory("FillAndStroke",       &create<FillAndStroke,        FloatingBehavior>);
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  FloatingBehavior>);
         registerFactory("Find",                &create<Find,                 FloatingBehavior>);
+        registerFactory("Gallery",             &create<Gallery,              FloatingBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          FloatingBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     FloatingBehavior>);
         registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
@@ -126,6 +128,7 @@ DialogManager::DialogManager() {
         registerFactory("FillAndStroke",       &create<FillAndStroke,        DockBehavior>);
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  DockBehavior>);
         registerFactory("Find",                &create<Find,                 DockBehavior>);
+        registerFactory("Gallery",             &create<Gallery,              DockBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          DockBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     DockBehavior>);
         registerFactory("InkscapePreferences", &create<InkscapePreferences,  DockBehavior>);

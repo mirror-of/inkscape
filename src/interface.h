@@ -20,6 +20,19 @@
 #include "forward.h"
 #include "sp-item.h"
 
+/* Drag and Drop */
+typedef enum {
+    URI_LIST,
+    SVG_XML_DATA,
+    SVG_DATA,
+    PNG_DATA,
+    JPEG_DATA,
+    IMAGE_DATA,
+    APP_X_INKY_COLOR,
+    APP_X_COLOR,
+    APP_OSWB_COLOR,
+} ui_drop_target_info;
+
 /**
  *  Create a new document window.
  */

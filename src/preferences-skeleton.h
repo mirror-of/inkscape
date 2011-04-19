@@ -181,6 +181,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"filtereffects\"/>\n"
 "    <group id=\"textandfont\"/>\n"
 "    <group id=\"transformation\" applyseparately=\"0\"/>\n"
+"    <group id=\"gallery\" directory=\"\"/>\n"
 "    <group id=\"align\"/>\n"
 "    <group id=\"xml\"/>\n"
 "    <group id=\"find\"/>\n"
