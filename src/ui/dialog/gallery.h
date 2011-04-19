@@ -58,8 +58,9 @@ class Gallery : public UI::Widget::Panel {
             Glib::RefPtr<Gio::File> directory);
         void on_enumerator_file_ready(const Glib::RefPtr<Gio::AsyncResult>& result,
             Glib::RefPtr<Gio::FileEnumerator> enumerator, Glib::RefPtr<Gio::File> directory);
+        void on_enumerator_closed(const Glib::RefPtr<Gio::AsyncResult>& result,
+            Glib::RefPtr<Gio::FileEnumerator> enumerator);
         void update_treeview(Glib::RefPtr<Gio::File> directory);
-        void create_input_extension_map();
         void on_treeview_row_activated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
         void on_button_import_clicked();
         void on_treeview_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,

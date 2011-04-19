@@ -1111,9 +1111,6 @@ sp_ui_drag_data_received(GtkWidget *widget,
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    printf("%s\n", "RECEIVED!");
-    printf("%d\n", info);
-
     switch (info) {
 #if ENABLE_MAGIC_COLORS
         case APP_X_INKY_COLOR:

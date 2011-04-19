@@ -211,6 +211,29 @@ DB::get_input_list (DB::InputList &ou_list)
 }
 
 /**
+	\brief  Creates a map of all the Input extensions and their Input objects
+
+	A convenience function that takes the list from the \c get_input_list
+	function and wraps it into a map.
+*/
+std::map<Glib::ustring, Input*> &
+DB::get_input_map(std::map<Glib::ustring, Input*> &map)
+{
+	InputList extension_list;
+	get_input_list(extension_list);
+
+	for (InputList::iterator current_item = extension_list.begin();
+		current_item != extension_list.end(); current_item++)
+	{
+		Input* input = *current_item;
+		Glib::ustring extension = Glib::ustring::ustring(input->get_extension());
+		map[extension] = input;
+	}
+
+	return map;
+}
+
+/**
 	\brief  Creates a list of all the Output extensions
 	\param  ou_list  The list that is used to put all the extensions in
 
