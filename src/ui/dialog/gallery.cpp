@@ -106,6 +106,9 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
         update_treeview(directory);
     }
 
+    has_fallback_icon = (Gtk::IconTheme::get_default()->lookup_icon("image-x-generic",
+                        THUMBNAIL_SIZE, Gtk::ICON_LOOKUP_FORCE_SIZE) != 0);
+
     on_treeview_selection_changed();
     vbox->show_all();
 }
@@ -246,13 +249,23 @@ void Gallery::on_button_import_clicked()
 
 Glib::RefPtr<Gdk::Pixbuf> Gallery::create_thumbnail(std::string file_path)
 {
+    // Try to get a thumbnail of the file
     Glib::RefPtr<Gdk::Pixbuf> initial_pixbuf;
     try {
         initial_pixbuf = Gdk::Pixbuf::create_from_file(file_path, THUMBNAIL_SIZE,
             THUMBNAIL_SIZE, true);
+    // If there is an error, try to use the fallback image icon
     } catch(Glib::Error) {
-        initial_pixbuf = Gtk::IconTheme::get_default()->load_icon("image-x-generic",
-            THUMBNAIL_SIZE);
+        if (has_fallback_icon) {
+            initial_pixbuf = Gtk::IconTheme::get_default()->load_icon("image-x-generic",
+                THUMBNAIL_SIZE);
+    // Otherwise just return a blank pixbuf at the correct size
+        } else {
+            initial_pixbuf = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, true, 8,
+                THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+            initial_pixbuf->fill(0);
+            return initial_pixbuf;
+        }
     }
 
     int pixbuf_width = initial_pixbuf->get_width();

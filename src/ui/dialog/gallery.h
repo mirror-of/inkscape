@@ -44,6 +44,7 @@ class Gallery : public UI::Widget::Panel {
     
     private:
         int THUMBNAIL_SIZE;
+        bool has_fallback_icon;
     
         Gtk::FileChooserButton *filechooserbutton;
         Gtk::TreeView* treeview;
