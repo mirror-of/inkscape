@@ -66,6 +66,7 @@ class Gallery : public UI::Widget::Panel {
         void on_treeview_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,
             Gtk::SelectionData& selection_data, guint target_id, guint etime);
         Glib::RefPtr<Gdk::Pixbuf> create_thumbnail(std::string file_path);
+        void on_treeview_selection_changed();
 };
 
 } // namespace Dialog

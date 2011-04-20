@@ -91,6 +91,8 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
             sigc::mem_fun(*this, &Gallery::on_filechooserbutton_current_folder_changed));
     treeview->signal_row_activated().connect(
             sigc::mem_fun(*this, &Gallery::on_treeview_row_activated));
+    treeview->get_selection()->signal_changed().connect(
+            sigc::mem_fun(*this, &Gallery::on_treeview_selection_changed));
     button_import->signal_clicked().connect(
             sigc::mem_fun(*this, &Gallery::on_button_import_clicked));
 
@@ -103,7 +105,8 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
         filechooserbutton->set_file(directory);
         update_treeview(directory);
     }
-    
+
+    on_treeview_selection_changed();
     vbox->show_all();
 }
 
@@ -288,6 +291,18 @@ void Gallery::on_treeview_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,
     std::vector<Glib::ustring> uri_list;
     uri_list.push_back(file->get_uri());
     selection_data.set_uris(uri_list);
+}
+
+/*
+ * Handle the event when the user changes their selection on the TreeView
+ */
+
+void Gallery::on_treeview_selection_changed()
+{
+    // Get selected row
+    Gtk::TreeModel::iterator selected_iter = treeview->get_selection()->get_selected();
+    bool row_is_selected = (selected_iter != 0);
+    button_import->set_sensitive(row_is_selected);
 }
 
 
