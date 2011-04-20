@@ -96,18 +96,19 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
     button_import->signal_clicked().connect(
             sigc::mem_fun(*this, &Gallery::on_button_import_clicked));
 
+    has_fallback_icon = (Gtk::IconTheme::get_default()->lookup_icon("image-x-generic",
+                        THUMBNAIL_SIZE, Gtk::ICON_LOOKUP_FORCE_SIZE) != 0);
+
     // Go back to the last folder it opened
     Inkscape::Preferences *preferences = Inkscape::Preferences::get();
     Glib::ustring directory_path = preferences->getString("/dialogs/gallery/directory");
+    
     bool directory_exists = Glib::file_test(directory_path, Glib::FILE_TEST_EXISTS);
     if (!directory_path.empty() && directory_exists) {
         Glib::RefPtr<Gio::File> directory = Gio::File::create_for_path(directory_path);
-        filechooserbutton->set_file(directory);
+        filechooserbutton->set_current_folder(directory->get_path());
         update_treeview(directory);
     }
-
-    has_fallback_icon = (Gtk::IconTheme::get_default()->lookup_icon("image-x-generic",
-                        THUMBNAIL_SIZE, Gtk::ICON_LOOKUP_FORCE_SIZE) != 0);
 
     on_treeview_selection_changed();
     vbox->show_all();
@@ -118,10 +119,10 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
  */
 
 void Gallery::on_filechooserbutton_current_folder_changed()
-{
+{   
     Inkscape::Preferences *preferences = Inkscape::Preferences::get();
-    Glib::RefPtr<Gio::File> new_directory = filechooserbutton->get_file();
-    Glib::ustring new_directory_path = Glib::ustring::ustring(new_directory->get_path());
+    Glib::ustring new_directory_path = filechooserbutton->get_current_folder();
+    Glib::RefPtr<Gio::File> new_directory = Gio::File::create_for_path(new_directory_path);
     Glib::ustring old_directory_path = preferences->getString("/dialogs/gallery/directory");
 
     // Only browse it the selected folder if the user is not re-selecting it
