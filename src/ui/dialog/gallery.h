@@ -45,13 +45,15 @@ class Gallery : public UI::Widget::Panel {
     private:
         int THUMBNAIL_SIZE;
         bool has_fallback_icon;
+        bool updating_model;
     
         Gtk::FileChooserButton *filechooserbutton;
         Gtk::TreeView* treeview;
         Glib::RefPtr<Gtk::ListStore> model;
         ModelColumns columns;
         Gtk::Button *button_import;
-        Gtk::Button *button_refresh;
+
+        Glib::RefPtr<Gio::FileMonitor> directory_monitor;
     
         std::map<Glib::ustring, Inkscape::Extension::Input*> extension_input_map;
     
@@ -62,14 +64,17 @@ class Gallery : public UI::Widget::Panel {
             Glib::RefPtr<Gio::FileEnumerator> enumerator, Glib::RefPtr<Gio::File> directory);
         void on_enumerator_closed(const Glib::RefPtr<Gio::AsyncResult>& result,
             Glib::RefPtr<Gio::FileEnumerator> enumerator);
-        void update_treeview(Glib::ustring directory_path);
+        void update_treeview(Glib::ustring directory_path, bool update_monitor = true);
+        void update_directory_monitor(Glib::RefPtr<Gio::File> directory);
         void on_treeview_row_activated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
         void on_button_import_clicked();
         void on_treeview_drag_data_get(const Glib::RefPtr<Gdk::DragContext>&,
             Gtk::SelectionData& selection_data, guint target_id, guint etime);
         Glib::RefPtr<Gdk::Pixbuf> create_thumbnail(std::string file_path);
         void on_treeview_selection_changed();
-        void on_button_refresh_clicked();
+        void on_directory_monitor_changed(const Glib::RefPtr<Gio::File>& file1,
+            const Glib::RefPtr<Gio::File>& file2, Gio::FileMonitorEvent event_type,
+            Glib::RefPtr<Gio::File> directory);
 };
 
 } // namespace Dialog

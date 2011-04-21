@@ -1,8 +1,8 @@
-/** @file
- * @brief Gallery - A dialog that provides a method to open a folder containing
+/*
+ * Gallery - A dialog that provides a method to open a folder containing
  * frequently used files import them quickly and easily using various methods.
- */
-/* Authors:
+ *
+ * Authors:
  *   Andrew Higginson
  *
  * Copyright (C) 2011
@@ -41,11 +41,8 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
 
     // Creation
     Gtk::Box* vbox = _getContents();
-    Gtk::HBox* hbox_navigation = new Gtk::HBox(false, 3);
     filechooserbutton = new Gtk::FileChooserButton();
     button_import = new Gtk::Button(_("Import"));
-    button_refresh = new Gtk::Button();
-    Gtk::Image* image_refresh = new Gtk::Image(Gtk::Stock::REFRESH, Gtk::ICON_SIZE_BUTTON);
     Gtk::HButtonBox* hbuttonbox = new Gtk::HButtonBox(Gtk::BUTTONBOX_END, 6);
     Gtk::ScrolledWindow* scrolledwindow = new Gtk::ScrolledWindow();
     treeview = new Gtk::TreeView();
@@ -68,16 +65,13 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
     // Packing
     scrolledwindow->add(*treeview);
     hbuttonbox->pack_start(*button_import, false, false);
-    hbox_navigation->pack_start(*filechooserbutton, true, true);
-    hbox_navigation->pack_start(*button_refresh, false, false);
-    vbox->pack_start(*hbox_navigation, false, false);
+    vbox->pack_start(*filechooserbutton, false, false);
     vbox->pack_start(*scrolledwindow, true, true);
     vbox->pack_start(*hbuttonbox, false, false);
 
     // Properties
     vbox->set_spacing(12);
     vbox->set_border_width(12);
-    button_refresh->add(*image_refresh);
     filechooserbutton->set_action(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
     scrolledwindow->set_shadow_type(Gtk::SHADOW_IN);
     scrolledwindow->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
@@ -101,11 +95,10 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
             sigc::mem_fun(*this, &Gallery::on_treeview_selection_changed));
     button_import->signal_clicked().connect(
             sigc::mem_fun(*this, &Gallery::on_button_import_clicked));
-    button_refresh->signal_clicked().connect(
-            sigc::mem_fun(*this, &Gallery::on_button_refresh_clicked));
 
     has_fallback_icon = (Gtk::IconTheme::get_default()->lookup_icon("image-x-generic",
                         THUMBNAIL_SIZE, Gtk::ICON_LOOKUP_FORCE_SIZE) != 0);
+    updating_model = false;
 
     // Go back to the last folder it opened
     Inkscape::Preferences *preferences = Inkscape::Preferences::get();
@@ -134,7 +127,6 @@ void Gallery::on_filechooserbutton_current_folder_changed()
     // Only browse it the selected folder if the user is not re-selecting it
     if (old_directory_path.empty() || new_directory_path != old_directory_path) {
         update_treeview(new_directory_path);
-        preferences->setString("/dialogs/gallery/directory", new_directory_path);
     }
 }
 
@@ -142,13 +134,42 @@ void Gallery::on_filechooserbutton_current_folder_changed()
  * Re-create the treeview by enumerating the children of the selected directory
  */
 
-void Gallery::update_treeview(Glib::ustring directory_path)
+void Gallery::update_treeview(Glib::ustring directory_path, bool update_monitor)
 {
+    Inkscape::Preferences *preferences = Inkscape::Preferences::get();
+    preferences->setString("/dialogs/gallery/directory", directory_path);
+    
     Glib::RefPtr<Gio::File> directory = Gio::File::create_for_path(directory_path);
-    model->clear();
-    directory->enumerate_children_async(
+
+    if (update_monitor) {
+        update_directory_monitor(directory);
+    }
+
+    // Only update the model when nothing else is updating it
+    if (!updating_model) {
+        updating_model = true;
+        model->clear();
+        directory->enumerate_children_async(
+            sigc::bind< Glib::RefPtr<Gio::File> >(
+                sigc::mem_fun(*this, &Gallery::on_directory_enumerated),
+            directory));
+    }
+}
+
+/*
+ * Re-create the treeview by enumerating the children of the selected directory
+ */
+
+void Gallery::update_directory_monitor(Glib::RefPtr<Gio::File> directory)
+{
+    if (directory_monitor != 0) {
+        directory_monitor->cancel();
+    }
+    
+    directory_monitor = directory->monitor_directory();
+    directory_monitor->signal_changed().connect(
         sigc::bind< Glib::RefPtr<Gio::File> >(
-            sigc::mem_fun(*this, &Gallery::on_directory_enumerated),
+            sigc::mem_fun(*this, &Gallery::on_directory_monitor_changed),
         directory));
 }
 
@@ -190,6 +211,7 @@ void Gallery::on_enumerator_file_ready(const Glib::RefPtr<Gio::AsyncResult>& res
             sigc::bind< Glib::RefPtr<Gio::FileEnumerator> >(
                 sigc::mem_fun(*this, &Gallery::on_enumerator_closed),
             enumerator));
+        updating_model = false;
         return;
     }
     
@@ -327,13 +349,19 @@ void Gallery::on_treeview_selection_changed()
 }
 
 /*
- * Handle the event when the user clicks the Refresh button
+ * Handle the event when something has changed about the current directory
  */
 
-void Gallery::on_button_refresh_clicked()
+void Gallery::on_directory_monitor_changed(const Glib::RefPtr<Gio::File>& file1,
+    const Glib::RefPtr<Gio::File>& file2, Gio::FileMonitorEvent event_type,
+    Glib::RefPtr<Gio::File> directory)
 {
-    Glib::ustring current_directory = filechooserbutton->get_current_folder();
-    update_treeview(current_directory);
+    if (event_type == Gio::FILE_MONITOR_EVENT_DELETED ||
+        event_type == Gio::FILE_MONITOR_EVENT_CREATED ||
+        event_type == Gio::FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED)
+    {
+        update_treeview(directory->get_path(), false);
+    }
 }
 
 
