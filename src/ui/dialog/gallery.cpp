@@ -41,16 +41,16 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
 
     // Creation
     Gtk::Box* vbox = _getContents();
-    filechooserbutton = new Gtk::FileChooserButton();
-    button_import = new Gtk::Button(_("Import"));
-    Gtk::HButtonBox* hbuttonbox = new Gtk::HButtonBox(Gtk::BUTTONBOX_END, 6);
-    Gtk::ScrolledWindow* scrolledwindow = new Gtk::ScrolledWindow();
-    treeview = new Gtk::TreeView();
+    filechooserbutton = Gtk::manage(new Gtk::FileChooserButton());
+    button_import = Gtk::manage(new Gtk::Button(_("Import")));
+    Gtk::HButtonBox* hbuttonbox = Gtk::manage(new Gtk::HButtonBox(Gtk::BUTTONBOX_END, 6));
+    Gtk::ScrolledWindow* scrolledwindow = Gtk::manage(new Gtk::ScrolledWindow());
+    treeview = Gtk::manage(new Gtk::TreeView());
     /// TreeView
     model = Gtk::ListStore::create(columns);
     treeview->append_column(_("Thumbnail"), columns.thumbnail);
-    Gtk::TreeViewColumn* column_name = new Gtk::TreeViewColumn(_("Name"));
-    Gtk::CellRendererText* cr_text = new Gtk::CellRendererText();
+    Gtk::TreeViewColumn* column_name = Gtk::manage(new Gtk::TreeViewColumn(_("Name")));
+    Gtk::CellRendererText* cr_text = Gtk::manage(new Gtk::CellRendererText());
     cr_text->set_property("ellipsize", Pango::ELLIPSIZE_END);
     column_name->pack_start(*cr_text, true);
     column_name->add_attribute(*cr_text, "text", columns.name);
@@ -59,6 +59,9 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
     std::list<Gtk::TargetEntry> drag_targets;
     drag_targets.push_back(Gtk::TargetEntry("text/uri-list", Gtk::TARGET_SAME_APP, URI_LIST));
     THUMBNAIL_SIZE = 32;
+    has_fallback_icon = (Gtk::IconTheme::get_default()->lookup_icon("image-x-generic",
+                        THUMBNAIL_SIZE, Gtk::ICON_LOOKUP_FORCE_SIZE) != 0);
+    updating_model = false;
 
     Inkscape::Extension::db.get_input_map(extension_input_map);
 
@@ -97,9 +100,8 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
     treeview->signal_drag_data_get().connect(sigc::mem_fun(*this,
               &Gallery::on_treeview_drag_data_get));
 
-    has_fallback_icon = (Gtk::IconTheme::get_default()->lookup_icon("image-x-generic",
-                        THUMBNAIL_SIZE, Gtk::ICON_LOOKUP_FORCE_SIZE) != 0);
-    updating_model = false;
+    on_treeview_selection_changed();
+    vbox->show_all();
 
     // Go back to the last folder it opened
     Inkscape::Preferences *preferences = Inkscape::Preferences::get();
@@ -110,9 +112,6 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
         filechooserbutton->set_current_folder(directory_path);
         update_treeview(directory_path);
     }
-
-    on_treeview_selection_changed();
-    vbox->show_all();
 }
 
 /*
