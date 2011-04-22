@@ -146,6 +146,8 @@ void Gallery::update_treeview(Glib::ustring directory_path, bool update_monitor)
         update_directory_monitor(directory);
     }
 
+    filechooserbutton->set_tooltip_text(directory_path);
+
     // Only update the model when nothing else is updating it
     if (!updating_model) {
         updating_model = true;
