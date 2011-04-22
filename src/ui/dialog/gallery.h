@@ -27,6 +27,12 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+enum {
+    COLUMN_THUMBNAIL,
+    COLUMN_NAME,
+    COLUMN_FILE
+};
+
 class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns();

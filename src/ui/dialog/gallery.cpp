@@ -83,8 +83,7 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
     treeview->set_enable_search(true);
     treeview->set_search_column(columns.name);
     treeview->enable_model_drag_source(drag_targets);
-    treeview->signal_drag_data_get().connect(sigc::mem_fun(*this,
-              &Gallery::on_treeview_drag_data_get));
+    treeview->set_tooltip_column(COLUMN_NAME);
 
     // Signals
     filechooserbutton->signal_current_folder_changed().connect(
@@ -95,6 +94,8 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
             sigc::mem_fun(*this, &Gallery::on_treeview_selection_changed));
     button_import->signal_clicked().connect(
             sigc::mem_fun(*this, &Gallery::on_button_import_clicked));
+    treeview->signal_drag_data_get().connect(sigc::mem_fun(*this,
+              &Gallery::on_treeview_drag_data_get));
 
     has_fallback_icon = (Gtk::IconTheme::get_default()->lookup_icon("image-x-generic",
                         THUMBNAIL_SIZE, Gtk::ICON_LOOKUP_FORCE_SIZE) != 0);
