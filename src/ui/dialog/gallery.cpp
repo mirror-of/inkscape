@@ -41,8 +41,12 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
 
     // Creation
     Gtk::Box* vbox = _getContents();
+    Gtk::HBox* hbox_navigation = Gtk::manage(new Gtk::HBox(false, 3));
     filechooserbutton = Gtk::manage(new Gtk::FileChooserButton());
     button_import = Gtk::manage(new Gtk::Button(_("Import")));
+    button_refresh = Gtk::manage(new Gtk::Button());
+    Gtk::Image* image_refresh = Gtk::manage(new Gtk::Image(Gtk::Stock::REFRESH,
+        Gtk::ICON_SIZE_BUTTON));
     Gtk::HButtonBox* hbuttonbox = Gtk::manage(new Gtk::HButtonBox(Gtk::BUTTONBOX_END, 6));
     Gtk::ScrolledWindow* scrolledwindow = Gtk::manage(new Gtk::ScrolledWindow());
     treeview = Gtk::manage(new Gtk::TreeView());
@@ -68,7 +72,10 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
     // Packing
     scrolledwindow->add(*treeview);
     hbuttonbox->pack_start(*button_import, false, false);
-    vbox->pack_start(*filechooserbutton, false, false);
+    hbox_navigation->pack_start(*filechooserbutton, true, true);
+    hbox_navigation->pack_start(*button_refresh, false, false);
+    button_refresh->add(*image_refresh);
+    vbox->pack_start(*hbox_navigation, false, false);
     vbox->pack_start(*scrolledwindow, true, true);
     vbox->pack_start(*hbuttonbox, false, false);
 
@@ -99,6 +106,8 @@ Gallery::Gallery() : UI::Widget::Panel ("", "/dialogs/gallery", SP_VERB_DIALOG_G
             sigc::mem_fun(*this, &Gallery::on_button_import_clicked));
     treeview->signal_drag_data_get().connect(sigc::mem_fun(*this,
               &Gallery::on_treeview_drag_data_get));
+    button_refresh->signal_clicked().connect(
+            sigc::mem_fun(*this, &Gallery::on_button_refresh_clicked));
 
     on_treeview_selection_changed();
     vbox->show_all();
@@ -134,17 +143,12 @@ void Gallery::on_filechooserbutton_current_folder_changed()
  * Re-create the treeview by enumerating the children of the selected directory
  */
 
-void Gallery::update_treeview(Glib::ustring directory_path, bool update_monitor)
+void Gallery::update_treeview(Glib::ustring directory_path)
 {
     Inkscape::Preferences *preferences = Inkscape::Preferences::get();
     preferences->setString("/dialogs/gallery/directory", directory_path);
     
     Glib::RefPtr<Gio::File> directory = Gio::File::create_for_path(directory_path);
-
-    if (update_monitor) {
-        update_directory_monitor(directory);
-    }
-
     filechooserbutton->set_tooltip_text(directory_path);
 
     // Only update the model when nothing else is updating it
@@ -156,23 +160,6 @@ void Gallery::update_treeview(Glib::ustring directory_path, bool update_monitor)
                 sigc::mem_fun(*this, &Gallery::on_directory_enumerated),
             directory));
     }
-}
-
-/*
- * Re-create the treeview by enumerating the children of the selected directory
- */
-
-void Gallery::update_directory_monitor(Glib::RefPtr<Gio::File> directory)
-{
-    if (directory_monitor != 0) {
-        directory_monitor->cancel();
-    }
-    
-    directory_monitor = directory->monitor_directory();
-    directory_monitor->signal_changed().connect(
-        sigc::bind< Glib::RefPtr<Gio::File> >(
-            sigc::mem_fun(*this, &Gallery::on_directory_monitor_changed),
-        directory));
 }
 
 /*
@@ -351,19 +338,13 @@ void Gallery::on_treeview_selection_changed()
 }
 
 /*
- * Handle the event when something has changed about the current directory
+ * Handle the event when the user clicks the Refresh button
  */
 
-void Gallery::on_directory_monitor_changed(const Glib::RefPtr<Gio::File>& file1,
-    const Glib::RefPtr<Gio::File>& file2, Gio::FileMonitorEvent event_type,
-    Glib::RefPtr<Gio::File> directory)
+void Gallery::on_button_refresh_clicked()
 {
-    if (event_type == Gio::FILE_MONITOR_EVENT_DELETED ||
-        event_type == Gio::FILE_MONITOR_EVENT_CREATED ||
-        event_type == Gio::FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED)
-    {
-        update_treeview(directory->get_path(), false);
-    }
+    Glib::ustring current_directory = filechooserbutton->get_current_folder();
+    update_treeview(current_directory);
 }
 
 
