@@ -2681,7 +2681,7 @@ Verb *Verb::_base_verbs[] = {
                    N_("Create multiple clones of selected object, arranging them into a pattern or scattering"), INKSCAPE_ICON_DIALOG_TILE_CLONES),
     new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogObjectProperties", N_("_Object Properties..."),
                    N_("Edit the ID, locked and visible status, and other object properties"), INKSCAPE_ICON_DIALOG_OBJECT_PROPERTIES),
-    new DialogVerb(SP_VERB_DIALOG_GALLERY, "DialogGallery", N_("Gallery"),
+    new DialogVerb(SP_VERB_DIALOG_GALLERY, "DialogGallery", N_("_Gallery"),
                    N_("Show gallery"), INKSCAPE_ICON_GALLERY),
 /*#ifdef WITH_INKBOARD
     new DialogVerb(SP_VERB_XMPP_CLIENT, "DialogXmppClient",

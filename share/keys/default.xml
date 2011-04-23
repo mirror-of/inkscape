@@ -67,6 +67,8 @@ override) the bindings in the main default.xml.
   <bind key="e" modifiers="Ctrl,Shift" action="FileExport" display="true" />
   <bind key="E" modifiers="Ctrl,Shift" action="FileExport" />
 
+  <bind action="DialogGallery" />
+
   <bind action="FileVacuum" />
 
   <bind key="w" modifiers="Ctrl" action="FileClose" display="true" />
