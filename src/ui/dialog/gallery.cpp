@@ -206,14 +206,19 @@ void Gallery::on_enumerator_file_ready(const Glib::RefPtr<Gio::AsyncResult>& res
     
     Glib::ustring file_name = Glib::ustring::ustring(file_info->get_name());
     Glib::ustring file_extension = Inkscape::IO::get_file_extension(file_name);
-    bool filetype_supported = (extension_input_map.find(file_extension) != extension_input_map.end());
+
+    bool extension_supported = (extension_input_map.find(file_extension)
+                                != extension_input_map.end());
+
+    Glib::RefPtr<Gio::File> file = directory->get_child(file_name);
+    std::string file_path = file->get_path();
+
+    bool is_regular_file = Glib::file_test(file_path, Glib::FILE_TEST_IS_REGULAR);
+    
 
     // If the filetype is supported, add the file, its thumbnail and its name to the TreeView
-    if (filetype_supported) {
-        Glib::RefPtr<Gio::File> file = directory->get_child(file_name);
-        std::string file_path = file->get_path();
+    if (extension_supported && is_regular_file) {
         Glib::RefPtr<Gdk::Pixbuf> pixbuf = create_thumbnail(file_path);
-
         Gtk::TreeModel::iterator iter = model->append();
         iter->set_value(columns.thumbnail, pixbuf);
         iter->set_value(columns.name, file_name);
