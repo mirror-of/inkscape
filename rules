@@ -42,12 +42,15 @@ ifneq (,$(filter parallel=%,$(subst $(,), ,$(DEB_BUILD_OPTIONS))))
   MAKEFLAGS += -j$(NUMJOBS)
 endif
 
-configure:
+# Set some version info, to remove bzr as build-depend.
+BZR_REVNO = `dpkg-parsechangelog | awk -F+ '/^Version/ {print $2}'`
+
+configure: patch
 	dh_testdir
 
 	./autogen.sh
 
-config.status: configure patch
+config.status: configure
 	dh_testdir
 
 	CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
