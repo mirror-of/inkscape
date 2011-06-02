@@ -13,7 +13,7 @@
  inkscape-version.cpp: $(inkscape_version_deps)
  	VER_PREFIX="$(VERSION)";\
 -	VER_BZRREV=" r`bzr revno`"; \
-+	VER_BZRREV=" r`dpkg-parsechangelog -l../debian/changelog | $(AWK) -F+ '/^Version/ {print $2}'`";\
++	VER_BZRREV=" r`dpkg-parsechangelog -l../debian/changelog | $(AWK) -F'+' '/^Version/ {print $2}'`";\
  	if test ! -z "`bzr status -S -V $(srcdir)`"; then \
  	    VER_CUSTOM=" custom"; \
  	fi; \
