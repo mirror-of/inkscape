@@ -6,15 +6,17 @@
 
 @DPATCH@
 
---- old/src/Makefile.am	2011-05-30 18:39:07.344376000 +1000
-+++ new/src/Makefile.am	2011-06-02 12:46:10.582282137 +1000
-@@ -236,7 +236,7 @@
+--- old/src/Makefile.am	2011-06-04 12:06:35.437400814 +1000
++++ new/src/Makefile.am	2011-06-04 12:07:32.293910329 +1000
+@@ -236,8 +236,8 @@
  # someone updates the BZR working directory.
  inkscape-version.cpp: $(inkscape_version_deps)
  	VER_PREFIX="$(VERSION)";\
 -	VER_BZRREV=" r`bzr revno`"; \
-+	VER_BZRREV=" r`dpkg-parsechangelog -l../debian/changelog | $(AWK) -F'+' '/^Version/ {print $2}'`";\
- 	if test ! -z "`bzr status -S -V $(srcdir)`"; then \
+-	if test ! -z "`bzr status -S -V $(srcdir)`"; then \
++	VER_BZRREV=" r$(shell dpkg-parsechangelog -l$(top_srcdir)/debian/changelog | egrep '^Version:' | cut -f2 -d '+')"; \
++	if test ! -z "$(shell bzr status -S -V $(top_srcdir))"; then \
  	    VER_CUSTOM=" custom"; \
  	fi; \
+ 	VERSION="$$VER_PREFIX$$VER_BZRREV$$VER_CUSTOM"; \
 
