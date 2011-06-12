@@ -24,7 +24,6 @@ noinst_LIBRARIES =	\
 	dom/libdom.a		\
 	libcroco/libcroco.a	\
 	libavoid/libavoid.a	\
-	libgdl/libgdl.a		\
 	libcola/libcola.a	\
 	libvpsc/libvpsc.a	\
 	livarot/libvarot.a	\
@@ -121,7 +120,6 @@ include io/Makefile_insert
 #include pedro/Makefile_insert
 #include jabber_whiteboard/Makefile_insert
 include libcroco/Makefile_insert
-include libgdl/Makefile_insert
 include libnr/Makefile_insert
 include libnrtype/Makefile_insert
 include libavoid/Makefile_insert
@@ -166,7 +164,6 @@ EXTRA_DIST +=	\
 	io/doc2html.xsl 	\
 	pedro/makefile.in	\
 	jabber_whiteboard/makefile.in	\
-	libgdl/makefile.in	\
 	libcroco/makefile.in	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\

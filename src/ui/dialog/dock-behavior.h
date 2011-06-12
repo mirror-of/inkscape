@@ -21,7 +21,7 @@
 
 #include "ui/widget/dock-item.h"
 
-#include "libgdl/libgdl.h"
+#include <gdl/gdl.h>
 
 #include "behavior.h"
 
