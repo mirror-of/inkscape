@@ -1,3 +1,28 @@
+inkscape (0.49~devel+10296) oneiric; urgency=low
+
+  * Adopted packaging code upstream.  Thanks to Peter for all your hard work!
+  * Removed debian/watch - not needed in native package
+  * Added debian/README.source.gz - Description of dpatch system
+  * debian/control:
+    - Wrap lines
+    - Added Depends: ${misc:depends}
+    - Added myself, Peter and Wolfi to Uploaders, and switched Maintainer to 
+      Inkscape devs
+    - Suggest transfig to allow import of xfig files
+    - Drop useless suggestions of python, skencil and ttf-bitstream-vera
+    - Add Build-Depends on dh-translations, libwpd-dev (>= 0.9.0),
+      libaspell-dev
+    - Bump Build-Depends version libwpg-dev (>= 0.2.0)
+    - Drop Build-Depends libssl-dev
+    - Recommends aspell
+  * debian/rules:
+    - Add dh_translations to binary-arch rule
+    - Drop manual addition of translation keys to desktop entry files
+    - Drop setting of script permissions.  This is handled upstream.
+    - Enable parallel builds.
+
+ -- Alex Valavanis <valavanisalex@gmail.com>  Mon, 13 Jun 2011 10:43:04 +0100
+
 inkscape (0.49~devel+10241) lucid; urgency=low
 
   * Merge upstream r10241.
