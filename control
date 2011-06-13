@@ -7,7 +7,7 @@ Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
            Alex Valavanis <valavanisalex@gmail.com>
 Build-Depends: debhelper (>= 7.0.0), 
-               dh-translation,
+               dh-translations,
                dpatch, 
                intltool, 
                libart-2.0-dev (>= 2.3.10), 
