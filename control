@@ -40,7 +40,7 @@ Build-Depends: debhelper (>= 7.0.0),
                bzr
 Standards-Version: 3.9.2
 
-Package: inkscape
+Package: inkscape-trunk
 Architecture: any
 Homepage: http://www.inkscape.org/
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -58,6 +58,7 @@ Recommends: aspell,
             python-numpy, 
             python-lxml, 
             python-uniconvertor
+Conflicts: inkscape
 Description: vector-based drawing program
  Inkscape loads and saves a subset of the SVG (Scalable Vector Graphics)
  format, a standard maintained by the WWW consortium.
