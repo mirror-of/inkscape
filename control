@@ -6,7 +6,7 @@ Maintainer: Inkscape developers <inkscape-devel@lists.sourceforge.net>
 Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
            Alex Valavanis <valavanisalex@gmail.com>
-Build-Depends: debhelper (>= 7.0.0), 
+Build-Depends: debhelper (>= 8.0.0), 
                dh-translations,
                dpatch, 
                intltool, 
