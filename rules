@@ -39,8 +39,9 @@ ifneq (,$(filter parallel=%,$(subst $(,), ,$(DEB_BUILD_OPTIONS))))
 endif
 
 
-config.status: configure 
+config.status:
 	dh_testdir
+	./autogen.sh
 
 	CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
 	CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)" 	  \
@@ -91,9 +92,9 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/inkscape.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape
-	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape/etc/bash_completion.d/inkscape
-	chmod a+x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/xaml2svg/
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape-trunk
+	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape-trunk/etc/bash_completion.d/inkscape
+	chmod a+x $(CURDIR)/debian/inkscape-trunk/usr/share/inkscape/extensions/xaml2svg/
 
 # Build architecture-independent files here.
 binary-indep: build install
