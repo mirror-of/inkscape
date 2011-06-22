@@ -105,12 +105,12 @@ install: build
 	dh_prep
 	dh_installdirs
 
-	# Add here commands to install the package into debian/inkscape.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape
-	# install -o root -g root -m 644 $(CURDIR)/debian/inkscape.xpm $(CURDIR)/debian/inkscape/usr/share/pixmaps/inkscape.xpm
-	install -o root -g root -m 644 $(CURDIR)/debian/inkscape.applications $(CURDIR)/debian/inkscape/usr/share/application-registry/inkscape.applications
-	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape/etc/bash_completion.d/inkscape
-	chmod a+x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/xaml2svg/
+	# Add here commands to install the package into debian/inkscape-trunk.
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape-trunk/
+	# install -o root -g root -m 644 $(CURDIR)/debian/inkscape.xpm $(DESTDIR)/usr/share/pixmaps/inkscape.xpm
+	install -o root -g root -m 644 $(CURDIR)/debian/inkscape.applications $(DESTDIR)/usr/share/application-registry/inkscape.applications
+	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(DESTDIR)/etc/bash_completion.d/inkscape
+	chmod a+x $(DESTDIR)/usr/share/inkscape/extensions/xaml2svg/
 
 # Build architecture-independent files here.
 binary-indep: build install
