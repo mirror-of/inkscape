@@ -38,15 +38,8 @@ ifneq (,$(filter parallel=%,$(subst $(,), ,$(DEB_BUILD_OPTIONS))))
   MAKEFLAGS += -j$(NUMJOBS)
 endif
 
-# Set some version info, to remove bzr as build-depend.
-BZR_REVNO = `dpkg-parsechangelog | awk -F+ '/^Version/ {print $2}'`
 
-configure: 
-	dh_testdir
-
-	./autogen.sh
-
-config.status: configure
+config.status: configure 
 	dh_testdir
 
 	CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
@@ -58,10 +51,8 @@ config.status: configure
 		    --datadir=\$${prefix}/share			  \
 		    --mandir=\$${prefix}/share/man		  \
 		    --infodir=\$${prefix}/share/info		  \
-		    --with-gnome-vfs				\
-		    --enable-lcms					\
-		    --enable-poppler-cairo			\
-			--enable-dbusapi=yes
+		    --with-gnome-vfs				  \
+		    --enable-lcms
 
 
 build:  config.status
@@ -79,10 +70,7 @@ endif
 	$(MAKE) CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
 	        CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)"
 
-	# Update language files.
-	# cd po; intltool-update -p
-
-clean: clean-patched 
+clean: clean-patched
 
 clean-patched:
 	dh_testdir
@@ -92,7 +80,7 @@ clean-patched:
 	# cleaning up...
 	[ ! -f Makefile ] || $(MAKE) distclean
 	rm -f po/.intltool-merge-cache
-	rm -f ltmain.sh
+
 	-rm -f po/*.gmo po/messages
 	dh_clean 
 
@@ -102,12 +90,10 @@ install: build
 	dh_prep
 	dh_installdirs
 
-	# Add here commands to install the package into debian/inkscape-trunk.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape-trunk/
-	# install -o root -g root -m 644 $(CURDIR)/debian/inkscape.xpm $(DESTDIR)/usr/share/pixmaps/inkscape.xpm
-	install -o root -g root -m 644 $(CURDIR)/debian/inkscape.applications $(DESTDIR)/usr/share/application-registry/inkscape.applications
-	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(DESTDIR)/etc/bash_completion.d/inkscape
-	chmod a+x $(DESTDIR)/usr/share/inkscape/extensions/xaml2svg/
+	# Add here commands to install the package into debian/inkscape.
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape
+	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape/etc/bash_completion.d/inkscape
+	chmod a+x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/xaml2svg/
 
 # Build architecture-independent files here.
 binary-indep: build install
