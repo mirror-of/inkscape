@@ -377,7 +377,7 @@ Glib::ustring Inkscape::IO::get_file_extension(Glib::ustring path)
     try {
         return path.substr(period_location);
     } catch (std::exception) {
-        return Glib::ustring::ustring("");
+        return Glib::ustring("");
     }
 }
 

@@ -204,7 +204,7 @@ void Gallery::on_enumerator_file_ready(const Glib::RefPtr<Gio::AsyncResult>& res
         return;
     }
     
-    Glib::ustring file_name = Glib::ustring::ustring(file_info->get_name());
+    Glib::ustring file_name = file_info->get_name();
     Glib::ustring file_extension = Inkscape::IO::get_file_extension(file_name);
 
     bool extension_supported = (extension_input_map.find(file_extension)

@@ -226,7 +226,7 @@ DB::get_input_map(std::map<Glib::ustring, Input*> &map)
 		current_item != extension_list.end(); current_item++)
 	{
 		Input* input = *current_item;
-		Glib::ustring extension = Glib::ustring::ustring(input->get_extension());
+		Glib::ustring extension = Glib::ustring(input->get_extension());
 		map[extension] = input;
 	}
 
