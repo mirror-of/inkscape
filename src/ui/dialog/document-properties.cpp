@@ -86,7 +86,7 @@ DocumentProperties::DocumentProperties()
     : UI::Widget::Panel ("", "/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page(1, 1, true, true), _page_guides(1, 1),
       _page_snap(1, 1), _page_cms(1, 1), _page_scripting(1, 1),
-      _page_external_scripts(1, 1), _page_embedded_scripts(1, 1),
+      _page_external_scripts(1, 1), _page_embedded_scripts(1, 1, true, true),
     //---------------------------------------------------------------
       _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false),
       _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false),
@@ -655,7 +655,7 @@ DocumentProperties::build_scripting()
     _page_embedded_scripts.table().attach(*label_embedded_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    _page_embedded_scripts.table().attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _page_embedded_scripts.table().attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
     _EmbeddedContentScroller.add(_EmbeddedContent);
     _EmbeddedContentScroller.set_shadow_type(Gtk::SHADOW_IN);
