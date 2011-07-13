@@ -66,12 +66,16 @@ protected:
     void  external_scripts_list_button_release(GdkEventButton* event);
     void  embedded_scripts_list_button_release(GdkEventButton* event);
     void  populate_script_lists();
+    void  populate_object_list();
+    void  populate_object_list_aux(SPObject *obj);
     void  addExternalScript();
     void  addEmbeddedScript();
     void  removeExternalScript();
     void  removeEmbeddedScript();
     void  changeEmbeddedScript();
     void  editEmbeddedScript();
+    void  changeObjectScript();
+    void  changeObjectScriptAux(SPObject *obj, Glib::ustring id);
     void  external_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
     void  embedded_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
 
@@ -92,6 +96,7 @@ protected:
     Gtk::Notebook _scripting_notebook;
     UI::Widget::NotebookPage _page_external_scripts;
     UI::Widget::NotebookPage _page_embedded_scripts;
+    UI::Widget::NotebookPage _page_object_list;
 
     Gtk::VBox      _grids_vbox;
 
@@ -150,17 +155,29 @@ protected:
             Gtk::TreeModelColumn<Glib::ustring> idColumn;
         };
     EmbeddedScriptsColumns _EmbeddedScriptsListColumns;
+    class ObjectScriptsColumns : public Gtk::TreeModel::ColumnRecord
+        {
+        public:
+            ObjectScriptsColumns()
+               { add(idColumn); }
+            Gtk::TreeModelColumn<Glib::ustring> idColumn;
+        };
+    ObjectScriptsColumns _ObjectScriptsListColumns;
     Glib::RefPtr<Gtk::ListStore> _ExternalScriptsListStore;
     Glib::RefPtr<Gtk::ListStore> _EmbeddedScriptsListStore;
+    Glib::RefPtr<Gtk::ListStore> _ObjectScriptsListStore;
     Gtk::TreeView _ExternalScriptsList;
     Gtk::TreeView _EmbeddedScriptsList;
+    Gtk::TreeView _ObjectScriptsList;
     Gtk::ScrolledWindow _ExternalScriptsListScroller;
     Gtk::ScrolledWindow _EmbeddedScriptsListScroller;
+    Gtk::ScrolledWindow _ObjectScriptsListScroller;
     Gtk::Menu _ExternalScriptsContextMenu;
     Gtk::Menu _EmbeddedScriptsContextMenu;
     Gtk::Entry _script_entry;
     Gtk::TextView _EmbeddedContent;
     Gtk::ScrolledWindow _EmbeddedContentScroller;
+    Gtk::Entry _events_entry[10];
     //---------------------------------------------------------------
 
     Gtk::Notebook   _grids_notebook;

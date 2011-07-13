@@ -41,6 +41,7 @@
 #include "widgets/icon.h"
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
+#include "../../widgets/sp-attribute-widget.h"
 
 #if ENABLE_LCMS
 #include "color-profile.h"
@@ -72,6 +73,7 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
     NULL  // order_changed
 };
 
+const gchar* int_labels[10] = {"onclick", "onmouseover", "onmouseout", "onmousedown", "onmouseup", "onmousemove","onfocusin", "onfocusout", "onactivate", "onload"};
 
 DocumentProperties &
 DocumentProperties::getInstance()
@@ -87,6 +89,7 @@ DocumentProperties::DocumentProperties()
       _page_page(1, 1, true, true), _page_guides(1, 1),
       _page_snap(1, 1), _page_cms(1, 1), _page_scripting(1, 1),
       _page_external_scripts(1, 1), _page_embedded_scripts(1, 1, true, true),
+      _page_object_list(1, 1, true, true),
     //---------------------------------------------------------------
       _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false),
       _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false),
@@ -580,6 +583,7 @@ DocumentProperties::build_scripting()
 
     _scripting_notebook.append_page(_page_external_scripts, _("External scripts"));
     _scripting_notebook.append_page(_page_embedded_scripts, _("Embedded scripts"));
+    _scripting_notebook.append_page(_page_object_list, _("Objects with script events"));
 
     //# External scripts tab
     _page_external_scripts.show();
@@ -665,7 +669,46 @@ DocumentProperties::build_scripting()
     _EmbeddedScriptsList.signal_cursor_changed().connect(sigc::mem_fun(*this, &DocumentProperties::changeEmbeddedScript));
     _EmbeddedContent.get_buffer()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::editEmbeddedScript));
 
+
+    //# Objects with script events tab
+    _page_object_list.show();
+
+    _page_object_list.set_spacing(4);
+    row = 0;
+
+    Gtk::HBox* spacer_object = Gtk::manage(new Gtk::HBox());
+    spacer_object->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
+    _page_object_list.table().attach(*spacer_object, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    row++;
+
+    //# Set up the Object Scripts box
+    _page_object_list.table().attach(_ObjectScriptsListScroller, 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+
+    _ObjectScriptsListStore = Gtk::ListStore::create(_ObjectScriptsListColumns);
+    _ObjectScriptsList.set_model(_ObjectScriptsListStore);
+    _ObjectScriptsList.append_column(_("Object id"), _ObjectScriptsListColumns.idColumn);
+    _ObjectScriptsList.set_headers_visible(true);
+
+    _ObjectScriptsList.signal_cursor_changed().connect(sigc::mem_fun(*this, &DocumentProperties::changeObjectScript));
+
+    //# Display the events
+    Gtk::Label *_events_labels[10];
+
+    Gtk::Table _events_table;
+    _page_object_list.table().attach(_events_table, 1, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+    while(row<10)
+    {
+        _events_labels[row] = manage (new Gtk::Label(int_labels[row], Gtk::ALIGN_RIGHT));
+
+        _events_table.attach(*_events_labels[row], 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+        _events_table.attach(_events_entry[row], 1, 2, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+        row++;
+    }
+
+    // Must be done after we have the lists, but before we add them
     populate_script_lists();
+    populate_object_list();
 
     _ExternalScriptsListScroller.add(_ExternalScriptsList);
     _ExternalScriptsListScroller.set_shadow_type(Gtk::SHADOW_IN);
@@ -680,6 +723,11 @@ DocumentProperties::build_scripting()
     _EmbeddedScriptsListScroller.set_size_request(-1, 90);
 
     _new_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::addEmbeddedScript));
+
+    _ObjectScriptsListScroller.add(_ObjectScriptsList);
+    _ObjectScriptsListScroller.set_shadow_type(Gtk::SHADOW_IN);
+    _ObjectScriptsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+    _ObjectScriptsListScroller.set_size_request(-1, 90);
 
 
 #if ENABLE_LCMS
@@ -881,6 +929,53 @@ void DocumentProperties::editEmbeddedScript(){
     }
 }
 
+void DocumentProperties::changeObjectScript(){
+    Glib::ustring id;
+    if(_ObjectScriptsList.get_selection()) {
+        Gtk::TreeModel::iterator i = _ObjectScriptsList.get_selection()->get_selected();
+
+        if(i){
+            id = (*i)[_ObjectScriptsListColumns.idColumn];
+        } else {
+            return;
+        }
+    }
+
+    for (int i=0; i<10; i++) {
+        _events_entry[i].get_buffer()->set_text("");
+    }
+
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop){
+        g_warning("No active desktop");
+    } else {
+        //Inkscape::XML::Node *root = sp_desktop_document(getDesktop())->getRoot()->getRepr();
+        Inkscape::XML::Node *root = desktop->doc()->getReprDoc()->root();
+        SPObject *obj = SP_OBJECT(root);
+        changeObjectScriptAux(obj, id);
+    }
+}
+
+void DocumentProperties::changeObjectScriptAux(SPObject *obj, Glib::ustring id){
+    if (obj == 0) return;
+    //XML Tree being used directly here while it shouldn't be.
+    Inkscape::XML::Node *repr = obj->getRepr();
+    if (repr == 0) return;
+
+    if (id == obj->getId()){
+        for (int i=0; i<10; i++) {
+            if ( repr->attribute(int_labels[i]) ) {
+                _events_entry[i].get_buffer()->set_text( repr->attribute(int_labels[i]) );
+            }
+        }
+    } else {
+        SPObject *child = obj->children;
+        for (; child; child = child->next) {
+            populate_object_list_aux(child);
+        }
+    }
+}
+
 void DocumentProperties::populate_script_lists(){
     _ExternalScriptsListStore->clear();
     _EmbeddedScriptsListStore->clear();
@@ -901,6 +996,45 @@ void DocumentProperties::populate_script_lists(){
         }
 
         current = g_slist_next(current);
+    }
+}
+
+void DocumentProperties::populate_object_list(){
+    _ObjectScriptsListStore->clear();
+
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop){
+        g_warning("No active desktop");
+    } else {
+        //Inkscape::XML::Node *root = sp_desktop_document(getDesktop())->getRoot()->getRepr();
+        Inkscape::XML::Node *root = desktop->doc()->getReprDoc()->root();
+        SPObject *obj = SP_OBJECT(root);
+
+        populate_object_list_aux(obj);
+    }
+}
+
+void DocumentProperties::populate_object_list_aux(SPObject *obj){
+    if (obj == 0) return;
+    //XML Tree being used directly here while it shouldn't be.
+    Inkscape::XML::Node *repr = obj->getRepr();
+    if (repr == 0) return;
+
+    bool events_present = false;
+    for (int i=0; i<10; i++) {
+        if ( repr->attribute(int_labels[i]) ) {
+            events_present = true;
+            break;
+        }
+    }
+    if (events_present) {
+        Gtk::TreeModel::Row row = *(_ObjectScriptsListStore->append());
+        row[_ObjectScriptsListColumns.idColumn] = obj->getId();
+    }
+
+    SPObject *child = obj->children;
+    for (; child; child = child->next) {
+        populate_object_list_aux(child);
     }
 }
 
