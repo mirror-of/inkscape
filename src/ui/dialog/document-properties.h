@@ -76,6 +76,7 @@ protected:
     void  editEmbeddedScript();
     void  changeObjectScript();
     void  changeObjectScriptAux(SPObject *obj, Glib::ustring id);
+    void  changeGlobalEvents();
     void  external_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
     void  embedded_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
 
@@ -97,6 +98,7 @@ protected:
     UI::Widget::NotebookPage _page_external_scripts;
     UI::Widget::NotebookPage _page_embedded_scripts;
     UI::Widget::NotebookPage _page_object_list;
+    UI::Widget::NotebookPage _page_global_events;
 
     Gtk::VBox      _grids_vbox;
 
@@ -178,6 +180,7 @@ protected:
     Gtk::TextView _EmbeddedContent;
     Gtk::ScrolledWindow _EmbeddedContentScroller;
     Gtk::Entry _events_entry[10];
+    Gtk::Entry _global_entry[10];
     //---------------------------------------------------------------
 
     Gtk::Notebook   _grids_notebook;
