@@ -733,6 +733,14 @@ DocumentProperties::build_scripting()
     row++;
 
     //# Events list
+    GtkWidget* int_table;
+    SPObject *obj = SP_OBJECT(SP_ACTIVE_DOCUMENT->getRoot());
+
+    int_table = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
+    _page_global_events.table().attach(*Glib::wrap(int_table), 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+
+    /*
     Gtk::Label *_global_labels[10];
     for (int i=0; i<10; i++) {
         _global_labels[i] = manage (new Gtk::Label(int_labels[i], Gtk::ALIGN_RIGHT));
@@ -741,8 +749,7 @@ DocumentProperties::build_scripting()
         //_global_entry[i].signal_insert_at_cursor().connect(sigc::mem_fun(*this, &DocumentProperties::changeGlobalEvents));
         row++;
     }
-
-
+    */
     // Must be done after we have the lists, but before we add them
     populate_script_lists();
     populate_object_list();

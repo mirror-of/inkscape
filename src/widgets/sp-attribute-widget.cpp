@@ -21,7 +21,6 @@
 
 #include "sp-attribute-widget.h"
 #include "inkscape.h"
-//#include <glibmm/regex.h>
 #include <glib.h>
 
 using Inkscape::DocumentUndo;
