@@ -458,7 +458,8 @@ GtkWidget *
 sp_attribute_table_new ( SPObject *object,
                          gint num_attr,
                          const gchar **labels,
-                         const gchar **attributes )
+                         const gchar **attributes,
+                         bool script)
 {
     SPAttributeTable *spat;
 
@@ -468,7 +469,7 @@ sp_attribute_table_new ( SPObject *object,
 
     spat = (SPAttributeTable*)g_object_new (SP_TYPE_ATTRIBUTE_TABLE, NULL);
 
-    sp_attribute_table_set_object (spat, object, num_attr, labels, attributes);
+    sp_attribute_table_set_object (spat, object, num_attr, labels, attributes, script);
 
     return GTK_WIDGET (spat);
 
@@ -504,7 +505,8 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
                                 SPObject *object,
                                 gint num_attr,
                                 const gchar **labels,
-                                const gchar **attributes )
+                                const gchar **attributes,
+                                bool script)
 {
 
     g_return_if_fail (spat != NULL);
@@ -566,7 +568,7 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
         spat->entries = g_new0 (GtkWidget *, num_attr);
         /* Fill rows */
         for (i = 0; i < num_attr; i++) {
-            GtkWidget *w;
+            GtkWidget *w, *w2;
             const gchar *val;
 
             spat->attributes[i] = g_strdup (attributes[i]);
@@ -577,16 +579,24 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
                                GTK_FILL,
                                (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                                XPAD, YPAD );
-            w = gtk_entry_new ();
-            gtk_widget_show (w);
             val = object->getRepr()->attribute(attributes[i]);
-            gtk_entry_set_text (GTK_ENTRY (w), val ? val : (const gchar *) "");
+            if (!script) {
+                w = gtk_entry_new ();
+                w2 = w;
+            } else {
+                w = gtk_combo_box_text_new_with_entry ();
+                w2 = gtk_bin_get_child ( GTK_BIN (w) );
+                if (val) gtk_combo_box_text_append_text ( GTK_COMBO_BOX_TEXT (w), val);
+                // Find all functions and add to the combo box
+            }
+            gtk_widget_show (w);
+            gtk_entry_set_text (GTK_ENTRY (w2), val ? val : (const gchar *) "");
             gtk_table_attach ( GTK_TABLE (spat->table), w, 1, 2, i, i + 1,
                                (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                                (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                                XPAD, YPAD );
-            spat->entries[i] = w;
-            g_signal_connect ( G_OBJECT (w), "changed",
+            spat->entries[i] = w2;
+            g_signal_connect ( G_OBJECT (w2), "changed",
                                G_CALLBACK (sp_attribute_table_entry_changed),
                                spat );
         }

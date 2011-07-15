@@ -360,7 +360,7 @@ sp_item_widget_setup ( SPWidget *spw, Inkscape::Selection *selection )
 
         const gchar* int_labels[10] = {"onclick", "onmouseover", "onmouseout", "onmousedown", "onmouseup", "onmousemove","onfocusin", "onfocusout", "onactivate", "onload"};
 
-        int_table = sp_attribute_table_new (obj, 10, int_labels, int_labels);
+        int_table = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
         gtk_widget_show_all (int_table);
         g_object_set_data(G_OBJECT(spw), "interactivity_table", int_table);
 

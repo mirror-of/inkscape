@@ -103,14 +103,16 @@ GType sp_attribute_table_get_type (void);
 
 GtkWidget *sp_attribute_table_new ( SPObject *object, gint num_attr, 
                                     const gchar **labels, 
-                                    const gchar **attributes );
+                                    const gchar **attributes,
+                                    bool script = false );
 GtkWidget *sp_attribute_table_new_repr ( Inkscape::XML::Node *repr, gint num_attr, 
                                          const gchar **labels, 
                                          const gchar **attributes );
 void sp_attribute_table_set_object ( SPAttributeTable *spw, 
                                      SPObject *object, gint num_attr, 
                                      const gchar **labels, 
-                                     const gchar **attrs );
+                                     const gchar **attrs,
+                                     bool script = false );
 void sp_attribute_table_set_repr ( SPAttributeTable *spw, 
                                    Inkscape::XML::Node *repr, gint num_attr, 
                                    const gchar **labels, 
