@@ -689,13 +689,8 @@ DocumentProperties::build_scripting()
     row++;
 
     //# Display the events
-    Gtk::Label *_events_labels[10];
-
-    for (int i=0; i<10; i++) {
-        _events_labels[i] = manage (new Gtk::Label(int_labels[i], Gtk::ALIGN_RIGHT));
-        _page_object_list.table().attach(*_events_labels[i], 2, 3, row + i, row + i + 1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK, 0, 0);
-        _page_object_list.table().attach(_events_entry[i], 3, 4, row + i, row + i + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    }
+    object_table = gtk_table_new (2, 10, true);
+    _page_object_list.table().attach(*Glib::wrap(object_table), 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
     //# Set up the Object Scripts box
     _page_object_list.table().attach(_ObjectScriptsListScroller, 0, 2, row, row + 10, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
@@ -740,16 +735,7 @@ DocumentProperties::build_scripting()
     _page_global_events.table().attach(*Glib::wrap(int_table), 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
 
-    /*
-    Gtk::Label *_global_labels[10];
-    for (int i=0; i<10; i++) {
-        _global_labels[i] = manage (new Gtk::Label(int_labels[i], Gtk::ALIGN_RIGHT));
-        _page_global_events.table().attach(*_global_labels[i], 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-        _page_global_events.table().attach(_global_entry[i], 1, 4, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-        //_global_entry[i].signal_insert_at_cursor().connect(sigc::mem_fun(*this, &DocumentProperties::changeGlobalEvents));
-        row++;
-    }
-    */
+
     // Must be done after we have the lists, but before we add them
     populate_script_lists();
     populate_object_list();
@@ -772,20 +758,6 @@ DocumentProperties::build_scripting()
     _ObjectScriptsListScroller.set_shadow_type(Gtk::SHADOW_IN);
     _ObjectScriptsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
     _ObjectScriptsListScroller.set_size_request(-1, 90);
-
-
-    // Get the global events
-    {
-        //XML Tree being used directly here while it shouldn't be.
-        Inkscape::XML::Node *repr = sp_desktop_document(getDesktop())->getRoot()->getRepr();
-        if (repr) {
-            for (int i=0; i<10; i++) {
-                if ( repr->attribute(int_labels[i]) ) {
-                    _global_entry[i].get_buffer()->set_text( repr->attribute(int_labels[i]) );
-                }
-            }
-        }
-    }
 
 
 #if ENABLE_LCMS
@@ -999,19 +971,8 @@ void DocumentProperties::changeObjectScript(){
         }
     }
 
-    for (int i=0; i<10; i++) {
-        _events_entry[i].get_buffer()->set_text("");
-    }
-
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!desktop){
-        g_warning("No active desktop");
-    } else {
-        //Inkscape::XML::Node *root = sp_desktop_document(getDesktop())->getRoot()->getRepr();
-        Inkscape::XML::Node *root = desktop->doc()->getReprDoc()->root();
-        SPObject *obj = SP_OBJECT(root);
-        changeObjectScriptAux(obj, id);
-    }
+    SPObject *obj = SP_OBJECT(SP_ACTIVE_DOCUMENT->getRoot());
+    changeObjectScriptAux(obj, id);
 }
 
 void DocumentProperties::changeObjectScriptAux(SPObject *obj, Glib::ustring id){
@@ -1021,11 +982,10 @@ void DocumentProperties::changeObjectScriptAux(SPObject *obj, Glib::ustring id){
     if (repr == 0) return;
 
     if (id == obj->getId()){
-        for (int i=0; i<10; i++) {
-            if ( repr->attribute(int_labels[i]) ) {
-                _events_entry[i].get_buffer()->set_text( repr->attribute(int_labels[i]) );
-            }
-        }
+        // Remakes the interface
+        gtk_widget_unrealize (object_table);
+        object_table = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
+        //TODO: free the memory
     } else {
         SPObject *child = obj->children;
         for (; child; child = child->next) {
@@ -1059,17 +1019,8 @@ void DocumentProperties::populate_script_lists(){
 
 void DocumentProperties::populate_object_list(){
     _ObjectScriptsListStore->clear();
-
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!desktop){
-        g_warning("No active desktop");
-    } else {
-        //Inkscape::XML::Node *root = sp_desktop_document(getDesktop())->getRoot()->getRepr();
-        Inkscape::XML::Node *root = desktop->doc()->getReprDoc()->root();
-        SPObject *obj = SP_OBJECT(root);
-
-        populate_object_list_aux(obj);
-    }
+    SPObject *obj = SP_OBJECT(SP_ACTIVE_DOCUMENT->getRoot());
+    populate_object_list_aux(obj);
 }
 
 void DocumentProperties::populate_object_list_aux(SPObject *obj){
@@ -1093,25 +1044,6 @@ void DocumentProperties::populate_object_list_aux(SPObject *obj){
     SPObject *child = obj->children;
     for (; child; child = child->next) {
         populate_object_list_aux(child);
-    }
-}
-
-void DocumentProperties::changeGlobalEvents(){
-    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "svg" );
-    SPObject* obj = SP_OBJECT(current->data);
-
-    //XML Tree being used directly here while it shouldn't be.
-    Inkscape::XML::Node *repr = obj->getRepr();
-    if (repr){
-        const gchar *text;
-        for (int i=0; i<10; i++) {
-            text = _global_entry[i].get_text().data();
-            if (!*text)
-                text = NULL;
-            repr->setAttribute(int_labels[i], text, false);
-            // inform the document, so we can undo
-            //DocumentUndo::done(spat->src.object->document, SP_VERB_NONE, _("Set attribute"));
-        }
     }
 }
 
@@ -1191,30 +1123,6 @@ DocumentProperties::build_gridspage()
     _grids_vbox.pack_start(_grids_button_remove, false, false);
 
     update_gridspage();
-
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-    // Get the global events
-    {
-        //XML Tree being used directly here while it shouldn't be.
-        Inkscape::XML::Node *repr = sp_desktop_document(getDesktop())->getRoot()->getRepr();
-        if (repr) {
-            for (int i=0; i<10; i++) {
-                if ( repr->attribute(int_labels[i]) ) {
-                    _global_entry[i].get_buffer()->set_text( repr->attribute(int_labels[i]) );
-                }
-            }
-        }
-    }
 }
 
 
