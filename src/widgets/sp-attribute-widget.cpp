@@ -20,6 +20,9 @@
 #include <sigc++/adaptors/bind.h>
 
 #include "sp-attribute-widget.h"
+#include "inkscape.h"
+//#include <glibmm/regex.h>
+#include <glib.h>
 
 using Inkscape::DocumentUndo;
 
@@ -588,6 +591,49 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
                 w2 = gtk_bin_get_child ( GTK_BIN (w) );
                 if (val) gtk_combo_box_text_append_text ( GTK_COMBO_BOX_TEXT (w), val);
                 // Find all functions and add to the combo box
+                const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+                while ( current ) {
+                    SPObject* obj = SP_OBJECT(current->data);
+                    int count=0;
+                    for ( SPObject *child = obj->children ; child; child = child->next ) {
+                        count++;
+                    }
+                    if (count>1)
+                        g_warning("TODO: Found a script element with multiple (%d) child nodes! We must implement support for that!", count);
+
+                    //XML Tree being used directly here while it shouldn't be.
+                    SPObject* child = obj->firstChild();
+                    //TODO: shouldnt we get all children instead of simply the first child?
+
+                    if (child && child->getRepr()){
+                        const gchar* content = child->getRepr()->content();
+                        if (content){
+                            // Parse the script content to get the functions
+                            GRegex *regex;
+                            GMatchInfo *match_info;
+
+                            // vim style: function\s*\(\w*\)\s*(\(.*\))
+                            regex = g_regex_new ("function\\s*(\\w*)\\s*\\((.*?)\\)", (GRegexCompileFlags)0, (GRegexMatchFlags)0, NULL);
+                            g_regex_match (regex, content, (GRegexMatchFlags)0, &match_info);
+                            gchar *function;
+                            gchar *params;
+                            while (g_match_info_matches (match_info))
+                            {
+                                function = g_match_info_fetch (match_info, 1);
+                                params = g_match_info_fetch (match_info, 2);
+                                gtk_combo_box_text_append_text ( GTK_COMBO_BOX_TEXT (w), g_strconcat(function, " (", params, ")", NULL) );
+                                g_match_info_next (match_info, NULL);
+                                g_free (function);
+                                g_free (params);
+                            }
+                            g_match_info_free (match_info);
+                            g_regex_unref (regex);
+
+                        }
+                    }
+                    current = g_slist_next(current);
+                }
+
             }
             gtk_widget_show (w);
             gtk_entry_set_text (GTK_ENTRY (w2), val ? val : (const gchar *) "");
