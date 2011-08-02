@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document>
+	<Folder>
+		<name>monde</name>
+		<open>1</open>
+		<Placemark>
+			<name>Sans titre - Trajet</name>
+			<styleUrl>#msn_ylw-pushpin00</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<coordinates>
+2.328735169173783,50.99098347661589,0 1.939879599846932,50.95290354479823,0 6.07608623537034,46.38762461012988,0 6.102492885944002,46.5201900839377,0 6.356917438465915,49.47921006175431,0 4.176723982212366,50.03964519363036,0 2.464975417093001,51.00349748471994,0  </coordinates>
+			</LineString>
+		</Placemark>
+	</Folder>
+
+  </Document>
+</kml>
+
