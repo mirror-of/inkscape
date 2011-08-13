@@ -14,7 +14,9 @@
 #include "macros.h"
 #include "document.h"
 #include "sp-object.h"
+#include "sp-script.h"
 #include <glibmm/i18n.h>
+#include <cstdio>
 
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
@@ -22,6 +24,10 @@
 #include "sp-attribute-widget.h"
 #include "inkscape.h"
 #include <glib.h>
+#include <fstream>
+#include <string>
+#include <list>
+#include <map>
 
 using Inkscape::DocumentUndo;
 
@@ -502,6 +508,8 @@ sp_attribute_table_new_repr ( Inkscape::XML::Node *repr,
 #define XPAD 4
 #define YPAD 0
 
+//TODO: maybe store the script contents on the SPScript objects
+std::map<std::string,std::string> external_scripts;
 void
 sp_attribute_table_set_object ( SPAttributeTable *spat,
                                 SPObject *object,
@@ -568,6 +576,73 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
         /* Arrays */
         spat->attributes = g_new0 (gchar *, num_attr);
         spat->entries = g_new0 (GtkWidget *, num_attr);
+        /* Find all functions on the scripts */
+        std::list<std::string> functions;
+        if (script)
+        {
+            const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+            while ( current ) {
+                SPObject* obj = SP_OBJECT(current->data);
+                int count=0;
+                for ( SPObject *child = obj->children ; child; child = child->next ) {
+                    count++;
+                }
+                if (count>1)
+                    g_warning("TODO: Found a script element with multiple (%d) child nodes! We must implement support for that!", count);
+
+                //XML Tree being used directly here while it shouldn't be.
+                SPObject* child = obj->firstChild();
+                SPScript* script = (SPScript*) obj;
+                //TODO: shouldnt we get all children instead of simply the first child?
+                const gchar* content = NULL;
+
+                if (script->xlinkhref) {
+                    const gchar* address[2];
+                    std::string text;
+                    address[0] = script->xlinkhref;
+                    // Relative path
+                    address[1] = g_strconcat(SP_ACTIVE_DOCUMENT->getBase(), "/", script->xlinkhref, NULL);
+                    for (int i=0; i<2; i++) {
+                        std::ifstream in(address[i]);
+                        text.assign( (std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()) );
+                        in.close();
+                        if (!text.empty()) break;
+                    }
+                    if (!text.empty())
+                        external_scripts[ script->xlinkhref ] = text.c_str();
+                    content = external_scripts[ script->xlinkhref ].c_str();
+                } else {
+                    // Embedded script
+                    content = child->getRepr()->content();
+                }
+
+                if (content){
+                    // Parse the script content to get the functions
+                    GRegex *regex;
+                    GMatchInfo *match_info;
+
+                    // vim style: function\s*\(\w*\)\s*(\(.*\))
+                    regex = g_regex_new ("function\\s*(\\w*)\\s*\\((.*?)\\)", (GRegexCompileFlags)0, (GRegexMatchFlags)0, NULL);
+                    g_regex_match (regex, content, (GRegexMatchFlags)0, &match_info);
+                    gchar *function;
+                    gchar *params;
+                    while (g_match_info_matches (match_info))
+                    {
+                        function = g_match_info_fetch (match_info, 1);
+                        params = g_match_info_fetch (match_info, 2);
+                        functions.push_back( g_strconcat(function, " (", params, ")", NULL) );
+                        g_match_info_next (match_info, NULL);
+                        g_free (function);
+                        g_free (params);
+                    }
+                    g_match_info_free (match_info);
+                    g_regex_unref (regex);
+                    //delete[] content;
+                }
+                current = g_slist_next(current);
+            }
+            functions.sort();
+        }
         /* Fill rows */
         for (i = 0; i < num_attr; i++) {
             GtkWidget *w, *w2;
@@ -589,50 +664,11 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
                 w = gtk_combo_box_text_new_with_entry ();
                 w2 = gtk_bin_get_child ( GTK_BIN (w) );
                 if (val) gtk_combo_box_text_append_text ( GTK_COMBO_BOX_TEXT (w), val);
-                // Find all functions and add to the combo box
-                const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
-                while ( current ) {
-                    SPObject* obj = SP_OBJECT(current->data);
-                    int count=0;
-                    for ( SPObject *child = obj->children ; child; child = child->next ) {
-                        count++;
-                    }
-                    if (count>1)
-                        g_warning("TODO: Found a script element with multiple (%d) child nodes! We must implement support for that!", count);
-
-                    //XML Tree being used directly here while it shouldn't be.
-                    SPObject* child = obj->firstChild();
-                    //TODO: shouldnt we get all children instead of simply the first child?
-
-                    if (child && child->getRepr()){
-                        const gchar* content = child->getRepr()->content();
-                        if (content){
-                            // Parse the script content to get the functions
-                            GRegex *regex;
-                            GMatchInfo *match_info;
-
-                            // vim style: function\s*\(\w*\)\s*(\(.*\))
-                            regex = g_regex_new ("function\\s*(\\w*)\\s*\\((.*?)\\)", (GRegexCompileFlags)0, (GRegexMatchFlags)0, NULL);
-                            g_regex_match (regex, content, (GRegexMatchFlags)0, &match_info);
-                            gchar *function;
-                            gchar *params;
-                            while (g_match_info_matches (match_info))
-                            {
-                                function = g_match_info_fetch (match_info, 1);
-                                params = g_match_info_fetch (match_info, 2);
-                                gtk_combo_box_text_append_text ( GTK_COMBO_BOX_TEXT (w), g_strconcat(function, " (", params, ")", NULL) );
-                                g_match_info_next (match_info, NULL);
-                                g_free (function);
-                                g_free (params);
-                            }
-                            g_match_info_free (match_info);
-                            g_regex_unref (regex);
-
-                        }
-                    }
-                    current = g_slist_next(current);
+                // add functions to the combo box
+                std::list<std::string>::iterator i;
+                for (i=functions.begin(); i!=functions.end(); i++) {
+                    gtk_combo_box_text_append_text ( GTK_COMBO_BOX_TEXT (w), i->c_str() );
                 }
-
             }
             gtk_widget_show (w);
             gtk_entry_set_text (GTK_ENTRY (w2), val ? val : (const gchar *) "");
