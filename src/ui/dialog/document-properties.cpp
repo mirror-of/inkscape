@@ -623,6 +623,12 @@ DocumentProperties::build_scripting()
     //# Embedded scripts tab
     _page_embedded_scripts.show();
 
+    embedded_paned.pack1(embedded_table1);
+    embedded_paned.pack2(embedded_table2);
+    embedded_paned.set_position(60);
+
+    _page_embedded_scripts.table().attach(embedded_paned, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+
     Gtk::Label *label_embedded= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_embedded->set_markup (_("<b>Embedded script files:</b>"));
 
@@ -632,17 +638,17 @@ DocumentProperties::build_scripting()
     row = 0;
 
     label_embedded->set_alignment(0.0);
-    _page_embedded_scripts.table().attach(*label_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    embedded_table1.attach(*label_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
-    _page_embedded_scripts.table().attach(_EmbeddedScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    embedded_table1.attach(_EmbeddedScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
 
     Gtk::HBox* spacer_embedded = Gtk::manage(new Gtk::HBox());
     spacer_embedded->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_embedded_scripts.table().attach(*spacer_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    embedded_table1.attach(*spacer_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    _page_embedded_scripts.table().attach(_new_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    embedded_table1.attach(_new_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     //# Set up the Embedded Scripts box
@@ -653,14 +659,15 @@ DocumentProperties::build_scripting()
 // TODO restore?    _EmbeddedScriptsList.set_fixed_height_mode(true);
 
     //# Set up the Embedded Scripts content box
+    row = 0;
     Gtk::Label *label_embedded_content= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_embedded_content->set_markup (_("<b>Content:</b>"));
 
     label_embedded_content->set_alignment(0.0);
-    _page_embedded_scripts.table().attach(*label_embedded_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    embedded_table2.attach(*label_embedded_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    _page_embedded_scripts.table().attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    embedded_table2.attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
     _EmbeddedContentScroller.add(_EmbeddedContent);
     _EmbeddedContentScroller.set_shadow_type(Gtk::SHADOW_IN);
@@ -750,7 +757,7 @@ DocumentProperties::build_scripting()
     _EmbeddedScriptsListScroller.add(_EmbeddedScriptsList);
     _EmbeddedScriptsListScroller.set_shadow_type(Gtk::SHADOW_IN);
     _EmbeddedScriptsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-    _EmbeddedScriptsListScroller.set_size_request(-1, 90);
+    //_EmbeddedScriptsListScroller.set_size_request(-1, 90);
 
     _new_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::addEmbeddedScript));
 

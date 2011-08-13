@@ -179,6 +179,9 @@ protected:
     Gtk::TextView _EmbeddedContent;
     Gtk::ScrolledWindow _EmbeddedContentScroller;
     GtkWidget* object_table;
+    Gtk::VPaned embedded_paned;
+    Gtk::Table embedded_table1;
+    Gtk::Table embedded_table2;
     //---------------------------------------------------------------
 
     Gtk::Notebook   _grids_notebook;
@@ -218,3 +221,4 @@ private:
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+
