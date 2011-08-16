@@ -42,6 +42,8 @@
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
 #include "../../widgets/sp-attribute-widget.h"
+#include <fstream>
+#include <string>
 
 #if ENABLE_LCMS
 #include "color-profile.h"
@@ -90,6 +92,7 @@ DocumentProperties::DocumentProperties()
       _page_snap(1, 1), _page_cms(1, 1), _page_scripting(1, 1),
       _page_external_scripts(1, 1), _page_embedded_scripts(1, 1, true, true),
       _page_object_list(1, 1), _page_global_events(1, 1),
+      _page_embed_unembed_scripts(1, 1, true, true),
     //---------------------------------------------------------------
       _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false),
       _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false),
@@ -580,7 +583,9 @@ DocumentProperties::build_scripting()
 
     _page_scripting.set_spacing (4);
     _page_scripting.pack_start(_scripting_notebook, true, true);
+    _scripting_notebook.set_scrollable(true);
 
+    _scripting_notebook.append_page(_page_embed_unembed_scripts, _("Embed/unembed scripts"));
     _scripting_notebook.append_page(_page_external_scripts, _("External scripts"));
     _scripting_notebook.append_page(_page_embedded_scripts, _("Embedded scripts"));
     _scripting_notebook.append_page(_page_object_list, _("Objects with script events"));
@@ -743,6 +748,53 @@ DocumentProperties::build_scripting()
 
 
 
+    //# Embed/unembed scripts tab
+    _page_embed_unembed_scripts.show();
+
+    embed_unembed_paned.pack1(embed_unembed_table1);
+    embed_unembed_paned.pack2(embed_unembed_table2);
+    _page_embed_unembed_scripts.set_spacing(4);
+    row = 0;
+    
+
+    _page_embed_unembed_scripts.table().attach(embed_unembed_paned, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+
+    Gtk::Label *label_enbed_unembed= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
+    label_enbed_unembed->set_markup (_("<b>Enbed/unembed Scripts:</b>"));
+    label_enbed_unembed->set_alignment(0.0);
+    embed_unembed_table1.attach(*label_enbed_unembed, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    row++;
+/*
+    Gtk::Label *label_enbed_unembed_desc= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
+    label_enbed_unembed_desc->set_line_wrap();
+    label_enbed_unembed_desc->set_markup (_("This interface lets you embed or unembed scripts.\n\nIf it is an embedded script, a file will be created on the SVG document folder, using the script id as the file name.\nIf it is an external script, its content will be copied to an embedded script, using the file name as the script id."));
+    label_enbed_unembed_desc->set_alignment(0.0);
+    embed_unembed_table1.attach(*label_enbed_unembed_desc, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    row++;
+*/
+
+    embed_unembed_table1.attach(_EmbeddedScriptsListScroller2, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    row++;
+    embed_unembed_table2.attach(_ExternalScriptsListScroller2, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+
+    _unembed_btn.set_label(_("Save to an external file"));
+    embed_unembed_table1.attach(_unembed_btn, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embed_btn.set_label(_("Embed"));
+    embed_unembed_table2.attach(_embed_btn, 0, 1, 1, 2, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+    //# Set up the Embedded Scripts box
+    _EmbeddedScriptsListStore2 = Gtk::ListStore::create(_EmbeddedScriptsListColumns2);
+    _EmbeddedScriptsList2.set_model(_EmbeddedScriptsListStore);
+    _EmbeddedScriptsList2.append_column(_("Script id"), _EmbeddedScriptsListColumns2.idColumn);
+    _EmbeddedScriptsList2.set_headers_visible(true);
+
+    //# Set up the External Scripts box
+    _ExternalScriptsListStore2 = Gtk::ListStore::create(_ExternalScriptsListColumns);
+    _ExternalScriptsList2.set_model(_ExternalScriptsListStore);
+    _ExternalScriptsList2.append_column(_("Filename"), _ExternalScriptsListColumns2.filenameColumn);
+    _ExternalScriptsList2.set_headers_visible(true);
+
+
     // Must be done after we have the lists, but before we add them
     populate_script_lists();
     populate_object_list();
@@ -766,6 +818,14 @@ DocumentProperties::build_scripting()
     _ObjectScriptsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
     _ObjectScriptsListScroller.set_size_request(-1, 90);
 
+    _EmbeddedScriptsListScroller2.add(_EmbeddedScriptsList2);
+    _EmbeddedScriptsListScroller2.set_shadow_type(Gtk::SHADOW_IN);
+    _EmbeddedScriptsListScroller2.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+    _unembed_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::unembedScript));
+    _ExternalScriptsListScroller2.add(_ExternalScriptsList2);
+    _ExternalScriptsListScroller2.set_shadow_type(Gtk::SHADOW_IN);
+    _ExternalScriptsListScroller2.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+    _embed_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::embedScript));
 
 #if ENABLE_LCMS
     _ExternalScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::external_scripts_list_button_release));
@@ -836,8 +896,7 @@ void DocumentProperties::removeExternalScript(){
     while ( current ) {
         SPObject* obj = SP_OBJECT(current->data);
         SPScript* script = (SPScript*) obj;
-        if (name == script->xlinkhref){
-
+        if (name == script->xlinkhref && script->xlinkhref){
             //XML Tree being used directly here while it shouldn't be.
             Inkscape::XML::Node *repr = obj->getRepr();
             if (repr){
@@ -999,6 +1058,138 @@ void DocumentProperties::changeObjectScriptAux(SPObject *obj, Glib::ustring id){
             changeObjectScriptAux(child, id);
         }
     }
+}
+
+void DocumentProperties::embedScript(){
+    // Get the script link
+    Glib::ustring name;
+    if(_ExternalScriptsList2.get_selection()) {
+        Gtk::TreeModel::iterator i = _ExternalScriptsList2.get_selection()->get_selected();
+
+        if(i){
+            name = (*i)[_ExternalScriptsListColumns2.filenameColumn];
+        } else {
+            return;
+        }
+    }
+    
+    // Generate the id of the new embedded script
+    Glib::ustring id = name;
+    Glib::ustring base = SP_ACTIVE_DOCUMENT->getBase();
+    if ( !id.find(base) )
+        id.erase(0, base.size()+1);
+    if (SP_ACTIVE_DOCUMENT->getObjectById(id.c_str()) != NULL) {
+        Gtk::Window window;
+        Gtk::MessageDialog dialog(window, _("Error"));
+        dialog.set_secondary_text(_("There is already a script with this Id."));
+        dialog.run();
+        return;
+    }
+
+    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    while ( current ) {
+        SPObject* obj = SP_OBJECT(current->data);
+        SPScript* script = (SPScript*) obj;
+        if (name == script->xlinkhref && script->xlinkhref){
+            // Try to get its content
+            const gchar* address[2];
+            std::string text;
+            address[0] = script->xlinkhref;
+            // Relative path
+            address[1] = g_strconcat(SP_ACTIVE_DOCUMENT->getBase(), "/", script->xlinkhref, NULL);
+            for (int i=0; i<2; i++) {
+                std::ifstream in(address[i]);
+                text.assign( (std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()) );
+                in.close();
+                if (!text.empty()) break;
+            }
+
+            if (text.empty()) {
+                Gtk::Window window;
+                Gtk::MessageDialog dialog(window, _("Error"));
+                dialog.set_secondary_text( g_strconcat(_("Could not read file \""), script->xlinkhref, _("\"."), NULL) );
+                dialog.run();
+                return;
+            } else { 
+                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+                if (!desktop){
+                    g_warning("No active desktop");
+                } else {
+                    Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+                    Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");
+                    scriptRepr->addChild(xml_doc->createTextNode(text.c_str()), NULL);
+                    scriptRepr->setAttribute("id", id.c_str());
+                    xml_doc->root()->addChild(scriptRepr, NULL);
+
+                    /* remove the external script */
+                    Inkscape::XML::Node *repr = obj->getRepr();
+                    if (repr){
+                        sp_repr_unparent(repr);
+
+                        // inform the document, so we can undo
+                        DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_EMBED_SCRIPT, _("Embed script"));
+                    }
+                }
+            }
+        }
+        current = g_slist_next(current);
+    }
+
+    populate_script_lists();
+}
+
+void DocumentProperties::unembedScript(){
+    Glib::ustring id;
+    if(_EmbeddedScriptsList2.get_selection()) {
+        Gtk::TreeModel::iterator i = _EmbeddedScriptsList2.get_selection()->get_selected();
+
+        if(i){
+            id = (*i)[_EmbeddedScriptsListColumns2.idColumn];
+        } else {
+            return;
+        }
+    }
+
+    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    while ( current ) {
+        SPObject* obj = SP_OBJECT(current->data);
+        if (id == obj->getId()){
+
+            int count=0;
+            for ( SPObject *child = obj->children ; child; child = child->next )
+            {
+                count++;
+            }
+
+            if (count>1)
+                g_warning("TODO: Found a script element with multiple (%d) child nodes! We must implement support for that!", count);
+
+            //XML Tree being used directly here while it shouldn't be.
+            SPObject* child = obj->firstChild();
+            //TODO: shouldnt we get all children instead of simply the first child?
+
+            if (child && child->getRepr()){
+                std::ofstream out( g_strconcat(SP_ACTIVE_DOCUMENT->getBase(), "/", obj->getId(), NULL) );
+                out << child->getRepr()->content();;
+                out.close();
+                Inkscape::XML::Document *xml_doc = SP_ACTIVE_DESKTOP->doc()->getReprDoc();
+                Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");
+                scriptRepr->setAttribute("xlink:href", obj->getId());
+
+                xml_doc->root()->addChild(scriptRepr, NULL);
+            }
+            Inkscape::XML::Node *repr = obj->getRepr();
+            if (repr){
+                sp_repr_unparent(repr);
+
+                // inform the document, so we can undo
+                DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_UNEMBED_SCRIPT, _("Unembed script"));
+            }
+        }
+        current = g_slist_next(current);
+    }
+
+    populate_script_lists();
 }
 
 void DocumentProperties::populate_script_lists(){

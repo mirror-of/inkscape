@@ -74,6 +74,8 @@ protected:
     void  removeEmbeddedScript();
     void  changeEmbeddedScript();
     void  editEmbeddedScript();
+    void  embedScript();
+    void  unembedScript();
     void  changeObjectScript();
     void  changeObjectScriptAux(SPObject *obj, Glib::ustring id);
     void  external_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
@@ -98,6 +100,7 @@ protected:
     UI::Widget::NotebookPage _page_embedded_scripts;
     UI::Widget::NotebookPage _page_object_list;
     UI::Widget::NotebookPage _page_global_events;
+    UI::Widget::NotebookPage _page_embed_unembed_scripts;
 
     Gtk::VBox      _grids_vbox;
 
@@ -140,6 +143,8 @@ protected:
     //---------------------------------------------------------------
     Gtk::Button         _add_btn;
     Gtk::Button         _new_btn;
+    Gtk::Button         _embed_btn;
+    Gtk::Button         _unembed_btn;
     class ExternalScriptsColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
@@ -148,6 +153,7 @@ protected:
             Gtk::TreeModelColumn<Glib::ustring> filenameColumn;
         };
     ExternalScriptsColumns _ExternalScriptsListColumns;
+    ExternalScriptsColumns _ExternalScriptsListColumns2;
     class EmbeddedScriptsColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
@@ -156,6 +162,7 @@ protected:
             Gtk::TreeModelColumn<Glib::ustring> idColumn;
         };
     EmbeddedScriptsColumns _EmbeddedScriptsListColumns;
+    EmbeddedScriptsColumns _EmbeddedScriptsListColumns2;
     class ObjectScriptsColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
@@ -167,12 +174,18 @@ protected:
     Glib::RefPtr<Gtk::ListStore> _ExternalScriptsListStore;
     Glib::RefPtr<Gtk::ListStore> _EmbeddedScriptsListStore;
     Glib::RefPtr<Gtk::ListStore> _ObjectScriptsListStore;
+    Glib::RefPtr<Gtk::ListStore> _ExternalScriptsListStore2;
+    Glib::RefPtr<Gtk::ListStore> _EmbeddedScriptsListStore2;
     Gtk::TreeView _ExternalScriptsList;
     Gtk::TreeView _EmbeddedScriptsList;
     Gtk::TreeView _ObjectScriptsList;
+    Gtk::TreeView _ExternalScriptsList2;
+    Gtk::TreeView _EmbeddedScriptsList2;
     Gtk::ScrolledWindow _ExternalScriptsListScroller;
     Gtk::ScrolledWindow _EmbeddedScriptsListScroller;
     Gtk::ScrolledWindow _ObjectScriptsListScroller;
+    Gtk::ScrolledWindow _ExternalScriptsListScroller2;
+    Gtk::ScrolledWindow _EmbeddedScriptsListScroller2;
     Gtk::Menu _ExternalScriptsContextMenu;
     Gtk::Menu _EmbeddedScriptsContextMenu;
     Gtk::Entry _script_entry;
@@ -182,6 +195,9 @@ protected:
     Gtk::VPaned embedded_paned;
     Gtk::Table embedded_table1;
     Gtk::Table embedded_table2;
+    Gtk::VPaned embed_unembed_paned;
+    Gtk::Table embed_unembed_table1;
+    Gtk::Table embed_unembed_table2;
     //---------------------------------------------------------------
 
     Gtk::Notebook   _grids_notebook;
