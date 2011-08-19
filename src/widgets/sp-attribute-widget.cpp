@@ -613,7 +613,8 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
                     content = external_scripts[ script->xlinkhref ].c_str();
                 } else {
                     // Embedded script
-                    content = child->getRepr()->content();
+                    if (child && child->getRepr())
+                        content = child->getRepr()->content();
                 }
 
                 if (content){
@@ -642,6 +643,7 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
                 current = g_slist_next(current);
             }
             functions.sort();
+            functions.unique();
         }
         /* Fill rows */
         for (i = 0; i < num_attr; i++) {

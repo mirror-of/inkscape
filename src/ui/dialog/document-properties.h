@@ -191,13 +191,16 @@ protected:
     Gtk::Entry _script_entry;
     Gtk::TextView _EmbeddedContent;
     Gtk::ScrolledWindow _EmbeddedContentScroller;
-    GtkWidget* object_table;
-    Gtk::VPaned embedded_paned;
-    Gtk::Table embedded_table1;
-    Gtk::Table embedded_table2;
-    Gtk::VPaned embed_unembed_paned;
-    Gtk::Table embed_unembed_table1;
-    Gtk::Table embed_unembed_table2;
+    GtkWidget* _object_events_container;
+    GtkWidget* _object_events;
+    GtkWidget* _global_events_container;
+    GtkWidget* _global_events;
+    Gtk::VPaned _embedded_paned;
+    Gtk::Table _embedded_table1;
+    Gtk::Table _embedded_table2;
+    Gtk::VPaned _embed_unembed_paned;
+    Gtk::Table _embed_unembed_table1;
+    Gtk::Table _embed_unembed_table2;
     //---------------------------------------------------------------
 
     Gtk::Notebook   _grids_notebook;

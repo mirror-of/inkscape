@@ -41,6 +41,7 @@
 #include "widgets/icon.h"
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
+#include "select-context.h"
 #include "../../widgets/sp-attribute-widget.h"
 #include <fstream>
 #include <string>
@@ -628,11 +629,11 @@ DocumentProperties::build_scripting()
     //# Embedded scripts tab
     _page_embedded_scripts.show();
 
-    embedded_paned.pack1(embedded_table1);
-    embedded_paned.pack2(embedded_table2);
-    embedded_paned.set_position(60);
+    _embedded_paned.pack1(_embedded_table1);
+    _embedded_paned.pack2(_embedded_table2);
+    _embedded_paned.set_position(60);
 
-    _page_embedded_scripts.table().attach(embedded_paned, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _page_embedded_scripts.table().attach(_embedded_paned, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
     Gtk::Label *label_embedded= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_embedded->set_markup (_("<b>Embedded script files:</b>"));
@@ -643,17 +644,17 @@ DocumentProperties::build_scripting()
     row = 0;
 
     label_embedded->set_alignment(0.0);
-    embedded_table1.attach(*label_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embedded_table1.attach(*label_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
-    embedded_table1.attach(_EmbeddedScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _embedded_table1.attach(_EmbeddedScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
 
     Gtk::HBox* spacer_embedded = Gtk::manage(new Gtk::HBox());
     spacer_embedded->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    embedded_table1.attach(*spacer_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embedded_table1.attach(*spacer_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    embedded_table1.attach(_new_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embedded_table1.attach(_new_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     //# Set up the Embedded Scripts box
@@ -669,10 +670,10 @@ DocumentProperties::build_scripting()
     label_embedded_content->set_markup (_("<b>Content:</b>"));
 
     label_embedded_content->set_alignment(0.0);
-    embedded_table2.attach(*label_embedded_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embedded_table2.attach(*label_embedded_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    embedded_table2.attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _embedded_table2.attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
     _EmbeddedContentScroller.add(_EmbeddedContent);
     _EmbeddedContentScroller.set_shadow_type(Gtk::SHADOW_IN);
@@ -700,10 +701,6 @@ DocumentProperties::build_scripting()
     _page_object_list.table().attach(*spacer_object, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    //# Display the events
-    object_table = gtk_table_new (2, 10, true);
-    _page_object_list.table().attach(*Glib::wrap(object_table), 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-
     //# Set up the Object Scripts box
     _page_object_list.table().attach(_ObjectScriptsListScroller, 0, 2, row, row + 10, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
@@ -713,6 +710,13 @@ DocumentProperties::build_scripting()
     _ObjectScriptsList.set_headers_visible(true);
 
     _ObjectScriptsList.signal_cursor_changed().connect(sigc::mem_fun(*this, &DocumentProperties::changeObjectScript));
+
+
+    //# Display the events
+    _object_events_container = gtk_table_new (1, 1, TRUE);
+    _page_object_list.table().attach(*Glib::wrap(_object_events_container), 3, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _object_events = NULL;
+    changeObjectScript();
 
 
     //# Global events tab
@@ -740,47 +744,48 @@ DocumentProperties::build_scripting()
     row++;
 
     //# Events list
-    GtkWidget* int_table;
-    SPObject *obj = SP_OBJECT(SP_ACTIVE_DOCUMENT->getRoot());
+    _global_events_container = gtk_table_new (1, 1, TRUE);
+    _page_global_events.table().attach(*Glib::wrap(_global_events_container), 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
-    int_table = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
-    _page_global_events.table().attach(*Glib::wrap(int_table), 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    SPObject *obj = SP_OBJECT(SP_ACTIVE_DOCUMENT->getRoot());
+    _global_events = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
+    gtk_container_add (GTK_CONTAINER (_global_events_container), _global_events);
 
 
 
     //# Embed/unembed scripts tab
     _page_embed_unembed_scripts.show();
 
-    embed_unembed_paned.pack1(embed_unembed_table1);
-    embed_unembed_paned.pack2(embed_unembed_table2);
+    _embed_unembed_paned.pack1(_embed_unembed_table1);
+    _embed_unembed_paned.pack2(_embed_unembed_table2);
     _page_embed_unembed_scripts.set_spacing(4);
     row = 0;
     
 
-    _page_embed_unembed_scripts.table().attach(embed_unembed_paned, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _page_embed_unembed_scripts.table().attach(_embed_unembed_paned, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
     Gtk::Label *label_enbed_unembed= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_enbed_unembed->set_markup (_("<b>Enbed/unembed Scripts:</b>"));
     label_enbed_unembed->set_alignment(0.0);
-    embed_unembed_table1.attach(*label_enbed_unembed, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embed_unembed_table1.attach(*label_enbed_unembed, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 /*
     Gtk::Label *label_enbed_unembed_desc= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_enbed_unembed_desc->set_line_wrap();
     label_enbed_unembed_desc->set_markup (_("This interface lets you embed or unembed scripts.\n\nIf it is an embedded script, a file will be created on the SVG document folder, using the script id as the file name.\nIf it is an external script, its content will be copied to an embedded script, using the file name as the script id."));
     label_enbed_unembed_desc->set_alignment(0.0);
-    embed_unembed_table1.attach(*label_enbed_unembed_desc, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embed_unembed_table1.attach(*label_enbed_unembed_desc, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 */
 
-    embed_unembed_table1.attach(_EmbeddedScriptsListScroller2, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _embed_unembed_table1.attach(_EmbeddedScriptsListScroller2, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
-    embed_unembed_table2.attach(_ExternalScriptsListScroller2, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _embed_unembed_table2.attach(_ExternalScriptsListScroller2, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
     _unembed_btn.set_label(_("Save to an external file"));
-    embed_unembed_table1.attach(_unembed_btn, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embed_unembed_table1.attach(_unembed_btn, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     _embed_btn.set_label(_("Embed"));
-    embed_unembed_table2.attach(_embed_btn, 0, 1, 1, 2, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embed_unembed_table2.attach(_embed_btn, 0, 1, 1, 2, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
     //# Set up the Embedded Scripts box
     _EmbeddedScriptsListStore2 = Gtk::ListStore::create(_EmbeddedScriptsListColumns2);
@@ -1048,10 +1053,18 @@ void DocumentProperties::changeObjectScriptAux(SPObject *obj, Glib::ustring id){
     if (repr == 0) return;
 
     if (id == obj->getId()){
-        // Remakes the interface
-        gtk_widget_unrealize (object_table);
-        object_table = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
-        //TODO: free the memory
+        Inkscape::Selection *selection = sp_desktop_selection(SP_ACTIVE_DESKTOP);
+        selection->set(obj);
+/*
+        // Display its events
+        if (_object_events){
+            gtk_container_remove(GTK_CONTAINER(_object_events_container), _object_events);
+        }
+        _object_events = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
+        gtk_widget_show_all (_object_events);
+
+        gtk_container_add (GTK_CONTAINER (_object_events_container), _object_events);
+*/
     } else {
         SPObject *child = obj->children;
         for (; child; child = child->next) {
@@ -1213,6 +1226,15 @@ void DocumentProperties::populate_script_lists(){
 
         current = g_slist_next(current);
     }
+
+    // Update the SVG root object interface
+    SPObject *obj = SP_OBJECT(SP_ACTIVE_DOCUMENT->getRoot());
+    if (_global_events){
+        gtk_container_remove(GTK_CONTAINER(_global_events_container), _global_events);
+    }
+    _global_events = sp_attribute_table_new (obj, 10, int_labels, int_labels, true);
+    gtk_widget_show_all (_global_events);
+    gtk_container_add (GTK_CONTAINER (_global_events_container), _global_events);
 }
 
 void DocumentProperties::populate_object_list(){
@@ -1235,8 +1257,10 @@ void DocumentProperties::populate_object_list_aux(SPObject *obj){
         }
     }
     if (events_present) {
-        Gtk::TreeModel::Row row = *(_ObjectScriptsListStore->append());
-        row[_ObjectScriptsListColumns.idColumn] = obj->getId();
+        if(obj!=SP_OBJECT(SP_ACTIVE_DOCUMENT->getRoot())) {
+            Gtk::TreeModel::Row row = *(_ObjectScriptsListStore->append());
+            row[_ObjectScriptsListColumns.idColumn] = obj->getId();
+        }
     }
 
     SPObject *child = obj->children;
