@@ -448,6 +448,13 @@ void DocumentProperties::embedded_scripts_list_button_release(GdkEventButton* ev
     }
 }
 
+void DocumentProperties::embedded_scripts_list_button_release2(GdkEventButton* event)
+{
+    if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+        _EmbeddedScriptsContextMenu2.popup(event->button, event->time);
+    }
+}
+
 void DocumentProperties::linked_profiles_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
@@ -481,6 +488,16 @@ void DocumentProperties::embedded_create_popup_menu(Gtk::Widget& parent, sigc::s
     mi->signal_activate().connect(rem);
     mi->show();
     _EmbeddedScriptsContextMenu.accelerate(parent);
+}
+
+void DocumentProperties::embedded_create_popup_menu2(Gtk::Widget& parent, sigc::slot<void> ren)
+{
+    Gtk::MenuItem* mi = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::EDIT));
+    mi->set_label(_("Rename"));
+    _EmbeddedScriptsContextMenu2.append(*mi);
+    mi->signal_activate().connect(ren);
+    mi->show();
+    _EmbeddedScriptsContextMenu2.accelerate(parent);
 }
 
 void DocumentProperties::removeSelectedProfile(){
@@ -838,6 +855,9 @@ DocumentProperties::build_scripting()
 
     _EmbeddedScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::embedded_scripts_list_button_release));
     embedded_create_popup_menu(_EmbeddedScriptsList, sigc::mem_fun(*this, &DocumentProperties::removeEmbeddedScript));
+
+    _EmbeddedScriptsList2.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::embedded_scripts_list_button_release2));
+    embedded_create_popup_menu2(_EmbeddedScriptsList2, sigc::mem_fun(*this, &DocumentProperties::renameEmbeddedScript));
 #endif // ENABLE_LCMS
 
 //TODO: review this observers code:
@@ -938,6 +958,70 @@ void DocumentProperties::removeEmbeddedScript(){
             Inkscape::XML::Node *repr = obj->getRepr();
             if (repr){
                 sp_repr_unparent(repr);
+
+                // inform the document, so we can undo
+                DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, _("Remove embedded script"));
+            }
+        }
+        current = g_slist_next(current);
+    }
+
+    populate_script_lists();
+}
+
+void DocumentProperties::renameEmbeddedScript(){
+    Gtk::Window window;
+    Gtk::Entry id_entry;
+    Gtk::Dialog dialog(_("Rename"), window);
+    Gtk::Label *label = manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
+    label->set_markup(_("Please insert the new Id:"));
+
+    dialog.get_vbox()->pack_start(*label);
+    dialog.get_vbox()->pack_start(id_entry);
+    dialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.show_all_children();
+    // Enter = OK
+    dialog.set_default_response(Gtk::RESPONSE_OK);
+    id_entry.set_activates_default();
+
+    Glib::ustring id;
+    if(_EmbeddedScriptsList.get_selection()) {
+        Gtk::TreeModel::iterator i = _EmbeddedScriptsList2.get_selection()->get_selected();
+
+        if(i){
+            id = (*i)[_EmbeddedScriptsListColumns2.idColumn];
+        } else {
+            return;
+        }
+    }
+    id_entry.set_text(id);
+
+    int btn_press;
+    while(1) {
+        btn_press = dialog.run();
+        if ( btn_press != Gtk::RESPONSE_OK || id_entry.get_text().empty() || id_entry.get_text() == id )
+            return;
+
+        if (SP_ACTIVE_DOCUMENT->getObjectById(id_entry.get_text().c_str()) != NULL) {
+            Gtk::Window window;
+            Gtk::MessageDialog dialog(window, _("Error"));
+            dialog.set_secondary_text(_("There is already a script with this Id."));
+            dialog.run();
+        } else {
+            break;
+        }
+    }
+
+    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    while ( current ) {
+        SPObject* obj = SP_OBJECT(current->data);
+        if (id == obj->getId()){
+
+            //XML Tree being used directly here while it shouldn't be.
+            Inkscape::XML::Node *repr = obj->getRepr();
+            if (repr){
+                repr->setAttribute("id", id_entry.get_text().c_str());
 
                 // inform the document, so we can undo
                 DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, _("Remove embedded script"));

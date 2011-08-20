@@ -65,6 +65,7 @@ protected:
 
     void  external_scripts_list_button_release(GdkEventButton* event);
     void  embedded_scripts_list_button_release(GdkEventButton* event);
+    void  embedded_scripts_list_button_release2(GdkEventButton* event);
     void  populate_script_lists();
     void  populate_object_list();
     void  populate_object_list_aux(SPObject *obj);
@@ -72,6 +73,7 @@ protected:
     void  addEmbeddedScript();
     void  removeExternalScript();
     void  removeEmbeddedScript();
+    void  renameEmbeddedScript();
     void  changeEmbeddedScript();
     void  editEmbeddedScript();
     void  embedScript();
@@ -80,6 +82,7 @@ protected:
     void  changeObjectScriptAux(SPObject *obj, Glib::ustring id);
     void  external_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
     void  embedded_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
+    void  embedded_create_popup_menu2(Gtk::Widget& parent, sigc::slot<void> rem);
 
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleActivateDesktop(Inkscape::Application *application, SPDesktop *desktop);
@@ -145,6 +148,7 @@ protected:
     Gtk::Button         _new_btn;
     Gtk::Button         _embed_btn;
     Gtk::Button         _unembed_btn;
+    Gtk::Button         _rename_btn;
     class ExternalScriptsColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
@@ -188,7 +192,9 @@ protected:
     Gtk::ScrolledWindow _EmbeddedScriptsListScroller2;
     Gtk::Menu _ExternalScriptsContextMenu;
     Gtk::Menu _EmbeddedScriptsContextMenu;
+    Gtk::Menu _EmbeddedScriptsContextMenu2;
     Gtk::Entry _script_entry;
+    Gtk::Entry _rename_entry;
     Gtk::TextView _EmbeddedContent;
     Gtk::ScrolledWindow _EmbeddedContentScroller;
     GtkWidget* _object_events_container;
