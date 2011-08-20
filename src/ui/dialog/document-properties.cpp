@@ -1404,6 +1404,11 @@ DocumentProperties::update()
 #endif // ENABLE_LCMS
 
     _wr.setUpdating (false);
+
+    //---------------------------------------------------------scripts page
+
+    populate_script_lists();
+    populate_object_list();
 }
 
 // TODO: copied from fill-and-stroke.cpp factor out into new ui/widget file?
