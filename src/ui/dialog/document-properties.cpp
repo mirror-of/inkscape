@@ -616,23 +616,25 @@ DocumentProperties::build_scripting()
     label_external->set_markup (_("<b>External script files:</b>"));
 
     _add_btn.set_label(_("Add"));
+    _file_btn.set_label(_("..."));
 
-    _page_external_scripts.set_spacing(4);
+    _page_external_scripts.set_spacing(5);
     gint row = 0;
 
     label_external->set_alignment(0.0);
-    _page_external_scripts.table().attach(*label_external, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _page_external_scripts.table().attach(*label_external, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
-    _page_external_scripts.table().attach(_ExternalScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _page_external_scripts.table().attach(_ExternalScriptsListScroller, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
 
     Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
     spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_external_scripts.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _page_external_scripts.table().attach(*spacer, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     _page_external_scripts.table().attach(_script_entry, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    _page_external_scripts.table().attach(_add_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _page_external_scripts.table().attach(_file_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _page_external_scripts.table().attach(_add_btn, 3, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     //# Set up the External Scripts box
@@ -851,6 +853,7 @@ DocumentProperties::build_scripting()
     _ExternalScriptsListScroller.set_size_request(-1, 90);
 
     _add_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::addExternalScript));
+    _file_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::selectExternalScript));
 
     _EmbeddedScriptsListScroller.add(_EmbeddedScriptsList);
     _EmbeddedScriptsListScroller.set_shadow_type(Gtk::SHADOW_IN);
@@ -892,23 +895,36 @@ DocumentProperties::build_scripting()
     _scripts_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_script_lists));
 }
 
+void DocumentProperties::selectExternalScript(){
+    Gtk::FileChooserDialog dialog("Please choose a javascript file", Gtk::FILE_CHOOSER_ACTION_OPEN);
+    if(SP_ACTIVE_DOCUMENT->getBase())
+        dialog.set_current_folder(SP_ACTIVE_DOCUMENT->getBase());
+    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
+
+    int result = dialog.run();
+    if(result == Gtk::RESPONSE_OK)
+        _script_entry.set_text( dialog.get_filename() );
+}
 
 void DocumentProperties::addExternalScript(){
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop){
         g_warning("No active desktop");
     } else {
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");
-        scriptRepr->setAttribute("xlink:href", (gchar*) _script_entry.get_text().c_str());
-        _script_entry.set_text("");
+        if (!_script_entry.get_text().empty()) {
+            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+            Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");
+            scriptRepr->setAttribute("xlink:href", (gchar*) _script_entry.get_text().c_str());
+            _script_entry.set_text("");
 
-        xml_doc->root()->addChild(scriptRepr, NULL);
+            xml_doc->root()->addChild(scriptRepr, NULL);
 
-        // inform the document, so we can undo
-        DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT, _("Add external script..."));
+            // inform the document, so we can undo
+            DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT, _("Add external script..."));
 
-        populate_script_lists();
+            populate_script_lists();
+        }
     }
 }
 
@@ -1048,7 +1064,7 @@ void DocumentProperties::renameEmbeddedScript(){
                 repr->setAttribute("id", id_entry.get_text().c_str());
 
                 // inform the document, so we can undo
-                DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, _("Remove embedded script"));
+                DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_RENAME_EMBEDDED_SCRIPT, _("Remove embedded script"));
             }
         }
         current = g_slist_next(current);

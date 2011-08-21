@@ -71,6 +71,7 @@ protected:
     void  populate_object_list_aux(SPObject *obj);
     void  addExternalScript();
     void  addEmbeddedScript();
+    void  selectExternalScript();
     void  removeExternalScript();
     void  removeEmbeddedScript();
     void  renameEmbeddedScript();
@@ -145,6 +146,7 @@ protected:
 
     //---------------------------------------------------------------
     Gtk::Button         _add_btn;
+    Gtk::Button         _file_btn;
     Gtk::Button         _new_btn;
     Gtk::Button         _embed_btn;
     Gtk::Button         _unembed_btn;
