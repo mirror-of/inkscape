@@ -626,9 +626,9 @@ DocumentProperties::build_scripting()
     _page_external_scripts.table().attach(_ExternalScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
 
-    Gtk::HBox* spacer_external = Gtk::manage(new Gtk::HBox());
-    spacer_external->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_external_scripts.table().attach(*spacer_external, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
+    _page_external_scripts.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     _page_external_scripts.table().attach(_script_entry, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
@@ -666,13 +666,17 @@ DocumentProperties::build_scripting()
     _embedded_table1.attach(_EmbeddedScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
 
-    Gtk::HBox* spacer_embedded = Gtk::manage(new Gtk::HBox());
-    spacer_embedded->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _embedded_table1.attach(*spacer_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
+    _embedded_table1.attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     _embedded_table1.attach(_new_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
+
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y/2);
+    _embedded_table1.attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
     //# Set up the Embedded Scripts box
     _EmbeddedScriptsListStore = Gtk::ListStore::create(_EmbeddedScriptsListColumns);
@@ -683,6 +687,10 @@ DocumentProperties::build_scripting()
 
     //# Set up the Embedded Scripts content box
     row = 0;
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y/2);
+    _embedded_table2.attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
     Gtk::Label *label_embedded_content= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_embedded_content->set_markup (_("<b>Content:</b>"));
 
@@ -711,11 +719,6 @@ DocumentProperties::build_scripting()
     label_object->set_markup (_("<b>Objects with script events:</b>"));
     label_object->set_alignment(0.0);
     _page_object_list.table().attach(*label_object, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    row++;
-
-    Gtk::HBox* spacer_object = Gtk::manage(new Gtk::HBox());
-    spacer_object->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_object_list.table().attach(*spacer_object, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     //# Set up the Object Scripts box
@@ -762,9 +765,9 @@ DocumentProperties::build_scripting()
     _page_global_events.table().attach(*label_global_desc, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    Gtk::HBox* spacer_global = Gtk::manage(new Gtk::HBox());
-    spacer_global->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_global_events.table().attach(*spacer_global, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
+    _page_global_events.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
     //# Events list
@@ -804,12 +807,26 @@ DocumentProperties::build_scripting()
 
     _embed_unembed_table1.attach(_AutoUnembedScriptsListScroller, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
-    _embed_unembed_table2.attach(_AutoEmbedScriptsListScroller, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
 
     _unembed_btn.set_label(_("Save to an external file"));
     _embed_unembed_table1.attach(_unembed_btn, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    row++;
+
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y/2);
+    _embed_unembed_table1.attach(*spacer, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+    row=0;
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y/2);
+    _embed_unembed_table2.attach(*spacer, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    row++;
+
+    _embed_unembed_table2.attach(_AutoEmbedScriptsListScroller, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    row++;
+
     _embed_btn.set_label(_("Embed"));
-    _embed_unembed_table2.attach(_embed_btn, 0, 1, 1, 2, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _embed_unembed_table2.attach(_embed_btn, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
     //# Set up the Embedded Scripts box
     _AutoUnembedListStore = Gtk::ListStore::create(_EmbeddedScriptsListColumns2);
