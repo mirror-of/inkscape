@@ -629,30 +629,40 @@ DocumentProperties::build_scripting()
     //# External scripts tab
     _page_external_scripts.show();
     
+    _external_paned.pack1(_external_table1);
+    _external_paned.pack2(_external_table2);
+    _external_paned.set_position(60);
+
+    _page_external_scripts.table().attach(_external_paned, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+
     Gtk::Label *label_external= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label_external->set_markup (_("<b>External script files:</b>"));
 
     _add_btn.set_label(_("Add"));
     _file_btn.set_label(_("..."));
 
-    _page_external_scripts.set_spacing(5);
+    _page_external_scripts.set_spacing(4);
     gint row = 0;
 
     label_external->set_alignment(0.0);
-    _page_external_scripts.table().attach(*label_external, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _external_table1.attach(*label_external, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
-    _page_external_scripts.table().attach(_ExternalScriptsListScroller, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+    _external_table1.attach(_ExternalScriptsListScroller, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
     row++;
 
     Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
     spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_external_scripts.table().attach(*spacer, 0, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _external_table1.attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
 
-    _page_external_scripts.table().attach(_script_entry, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    _page_external_scripts.table().attach(_file_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    _page_external_scripts.table().attach(_add_btn, 3, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _external_table1.attach(_script_entry, 0, 2, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _external_table1.attach(_file_btn, 2, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _external_table1.attach(_add_btn, 3, 4, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
     row++;
+
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y/2);
+    _external_table1.attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
     //# Set up the External Scripts box
     _ExternalScriptsListStore = Gtk::ListStore::create(_ExternalScriptsListColumns);
@@ -660,6 +670,30 @@ DocumentProperties::build_scripting()
     _ExternalScriptsList.append_column(_("Filename"), _ExternalScriptsListColumns.filenameColumn);
     _ExternalScriptsList.set_headers_visible(true);
 // TODO restore?    _ExternalScriptsList.set_fixed_height_mode(true);
+
+    //# Set up the External Scripts content box
+    row = 0;
+    spacer = Gtk::manage(new Gtk::HBox());
+    spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y/2);
+    _external_table2.attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+    Gtk::Label *label_external_content= manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
+    label_external_content->set_markup (_("<b>Content:</b>"));
+
+    label_external_content->set_alignment(0.0);
+    _external_table2.attach(*label_external_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    row++;
+
+    _external_table2.attach(_ExternalContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND, 0, 0);
+
+    _ExternalContentScroller.add(_ExternalContent);
+    _ExternalContentScroller.set_shadow_type(Gtk::SHADOW_IN);
+    _ExternalContentScroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _ExternalContentScroller.set_size_request(-1, -1);
+
+    _ExternalScriptsList.signal_cursor_changed().connect(sigc::mem_fun(*this, &DocumentProperties::changeExternalScript));
+    _ExternalContent.get_buffer()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::editExternalScript));
+    _ExternalContent.set_sensitive(false);
 
 
     //# Embedded scripts tab
@@ -726,6 +760,7 @@ DocumentProperties::build_scripting()
 
     _EmbeddedScriptsList.signal_cursor_changed().connect(sigc::mem_fun(*this, &DocumentProperties::changeEmbeddedScript));
     _EmbeddedContent.get_buffer()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::editEmbeddedScript));
+    _EmbeddedContent.set_sensitive(false);
 
 
     //# Objects with script events tab
@@ -848,7 +883,7 @@ DocumentProperties::build_scripting()
     _embed_unembed_table2.attach(_embed_btn, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
     //# Set up the Embedded Scripts box
-    _AutoUnembedListStore = Gtk::ListStore::create(_AutoUnembedScriptsListColumns);
+    _AutoUnembedScriptsListStore = Gtk::ListStore::create(_AutoUnembedScriptsListColumns);
     _AutoUnembedScriptsList.set_model(_EmbeddedScriptsListStore);
     _AutoUnembedScriptsList.append_column(_("Script id"), _AutoUnembedScriptsListColumns.idColumn);
     _AutoUnembedScriptsList.set_headers_visible(true);
@@ -1203,6 +1238,50 @@ void DocumentProperties::changeEmbeddedScript(){
 
     if (voidscript)
         _EmbeddedContent.get_buffer()->set_text("");
+
+    _EmbeddedContent.set_sensitive(true);
+}
+
+void DocumentProperties::changeExternalScript(){
+    Glib::ustring href;
+    if(_ExternalScriptsList.get_selection()) {
+        Gtk::TreeModel::iterator i = _ExternalScriptsList.get_selection()->get_selected();
+
+        if(i){
+            href = (*i)[_ExternalScriptsListColumns.filenameColumn];
+        } else {
+            return;
+        }
+    }
+
+    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    while ( current ) {
+        SPObject* obj = SP_OBJECT(current->data);
+        SPScript* script = (SPScript*) obj;
+
+        if (script->xlinkhref && script->xlinkhref == href) {
+            const gchar* address[2];
+            std::string text;
+            address[0] = script->xlinkhref;
+            // Relative path
+            address[1] = g_strconcat(SP_ACTIVE_DOCUMENT->getBase(), "/", script->xlinkhref, NULL);
+            for (int i=0; i<2; i++) {
+                std::ifstream in(address[i]);
+                text.assign( (std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()) );
+                in.close();
+                if (!text.empty()) break;
+            }
+            if (!text.empty()) {
+                _ExternalContent.get_buffer()->set_text( text.c_str() );
+                _ExternalContent.set_sensitive(true);
+            } else {
+                _ExternalContent.get_buffer()->set_text(_("Could not open the file"));
+                _ExternalContent.set_sensitive(false);
+                
+            }
+        }
+        current = g_slist_next(current);
+    }
 }
 
 void DocumentProperties::editEmbeddedScript(){
@@ -1234,6 +1313,34 @@ void DocumentProperties::editEmbeddedScript(){
 
                 // inform the document, so we can undo
                 DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_EMBEDDED_SCRIPT, _("Edit embedded script"));
+            }
+        }
+        current = g_slist_next(current);
+    }
+}
+
+void DocumentProperties::editExternalScript(){
+    Glib::ustring href;
+    if(_ExternalScriptsList.get_selection()) {
+        Gtk::TreeModel::iterator i = _ExternalScriptsList.get_selection()->get_selected();
+
+        if(i){
+            href = (*i)[_ExternalScriptsListColumns.filenameColumn];
+        } else {
+            return;
+        }
+    }
+
+    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    while ( current ) {
+        SPObject* obj = SP_OBJECT(current->data);
+        SPScript* script = (SPScript*) obj;
+
+        if (script->xlinkhref && script->xlinkhref == href) {
+            if (!_ExternalContent.get_buffer()->get_text().empty()) {
+                std::ofstream out( script->xlinkhref );
+                out << _ExternalContent.get_buffer()->get_text();
+                out.close();
             }
         }
         current = g_slist_next(current);
@@ -1392,7 +1499,7 @@ void DocumentProperties::unembedScript(){
 
             if (child && child->getRepr()){
                 std::ofstream out( g_strconcat(SP_ACTIVE_DOCUMENT->getBase(), "/", obj->getId(), NULL) );
-                out << child->getRepr()->content();;
+                out << child->getRepr()->content();
                 out.close();
                 Inkscape::XML::Document *xml_doc = SP_ACTIVE_DESKTOP->doc()->getReprDoc();
                 Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");

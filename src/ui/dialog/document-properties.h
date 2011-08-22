@@ -78,7 +78,9 @@ protected:
     void  renameEmbeddedScript();
     void  renameExternalScript();
     void  changeEmbeddedScript();
+    void  changeExternalScript();
     void  editEmbeddedScript();
+    void  editExternalScript();
     void  embedScript();
     void  unembedScript();
     void  changeObjectScript();
@@ -184,7 +186,7 @@ protected:
     Glib::RefPtr<Gtk::ListStore> _EmbeddedScriptsListStore;
     Glib::RefPtr<Gtk::ListStore> _ObjectScriptsListStore;
     Glib::RefPtr<Gtk::ListStore> _AutoEmbedScriptsListStore;
-    Glib::RefPtr<Gtk::ListStore> _AutoUnembedListStore;
+    Glib::RefPtr<Gtk::ListStore> _AutoUnembedScriptsListStore;
     Gtk::TreeView _ExternalScriptsList;
     Gtk::TreeView _EmbeddedScriptsList;
     Gtk::TreeView _ObjectScriptsList;
@@ -203,14 +205,19 @@ protected:
     Gtk::Entry _rename_entry;
     Gtk::Entry _href_entry;
     Gtk::TextView _EmbeddedContent;
+    Gtk::TextView _ExternalContent;
     Gtk::ScrolledWindow _EmbeddedContentScroller;
+    Gtk::ScrolledWindow _ExternalContentScroller;
     GtkWidget* _object_events_container;
     GtkWidget* _object_events;
     GtkWidget* _global_events_container;
     GtkWidget* _global_events;
     Gtk::VPaned _embedded_paned;
+    Gtk::VPaned _external_paned;
     Gtk::Table _embedded_table1;
     Gtk::Table _embedded_table2;
+    Gtk::Table _external_table1;
+    Gtk::Table _external_table2;
     Gtk::VPaned _embed_unembed_paned;
     Gtk::Table _embed_unembed_table1;
     Gtk::Table _embed_unembed_table2;
