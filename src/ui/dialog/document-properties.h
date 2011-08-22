@@ -65,7 +65,8 @@ protected:
 
     void  external_scripts_list_button_release(GdkEventButton* event);
     void  embedded_scripts_list_button_release(GdkEventButton* event);
-    void  embedded_scripts_list_button_release2(GdkEventButton* event);
+    void  auto_unembed_scripts_list_button_release(GdkEventButton* event);
+    void  auto_embed_scripts_list_button_release(GdkEventButton* event);
     void  populate_script_lists();
     void  populate_object_list();
     void  populate_object_list_aux(SPObject *obj);
@@ -75,6 +76,7 @@ protected:
     void  removeExternalScript();
     void  removeEmbeddedScript();
     void  renameEmbeddedScript();
+    void  renameExternalScript();
     void  changeEmbeddedScript();
     void  editEmbeddedScript();
     void  embedScript();
@@ -83,7 +85,8 @@ protected:
     void  changeObjectScriptAux(SPObject *obj, Glib::ustring id);
     void  external_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
     void  embedded_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
-    void  embedded_create_popup_menu2(Gtk::Widget& parent, sigc::slot<void> rem);
+    void  auto_unembed_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
+    void  auto_embed_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
 
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleActivateDesktop(Inkscape::Application *application, SPDesktop *desktop);
@@ -159,7 +162,7 @@ protected:
             Gtk::TreeModelColumn<Glib::ustring> filenameColumn;
         };
     ExternalScriptsColumns _ExternalScriptsListColumns;
-    ExternalScriptsColumns _ExternalScriptsListColumns2;
+    ExternalScriptsColumns _AutoEmbedScriptsListColumns;
     class EmbeddedScriptsColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
@@ -168,7 +171,7 @@ protected:
             Gtk::TreeModelColumn<Glib::ustring> idColumn;
         };
     EmbeddedScriptsColumns _EmbeddedScriptsListColumns;
-    EmbeddedScriptsColumns _EmbeddedScriptsListColumns2;
+    EmbeddedScriptsColumns _AutoUnembedScriptsListColumns;
     class ObjectScriptsColumns : public Gtk::TreeModel::ColumnRecord
         {
         public:
@@ -195,6 +198,7 @@ protected:
     Gtk::Menu _ExternalScriptsContextMenu;
     Gtk::Menu _EmbeddedScriptsContextMenu;
     Gtk::Menu _AutoUnembedScriptsContextMenu;
+    Gtk::Menu _AutoEmbedScriptsContextMenu;
     Gtk::Entry _script_entry;
     Gtk::Entry _rename_entry;
     Gtk::TextView _EmbeddedContent;

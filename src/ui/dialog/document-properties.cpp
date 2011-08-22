@@ -448,10 +448,17 @@ void DocumentProperties::embedded_scripts_list_button_release(GdkEventButton* ev
     }
 }
 
-void DocumentProperties::embedded_scripts_list_button_release2(GdkEventButton* event)
+void DocumentProperties::auto_unembed_scripts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
         _AutoUnembedScriptsContextMenu.popup(event->button, event->time);
+    }
+}
+
+void DocumentProperties::auto_embed_scripts_list_button_release(GdkEventButton* event)
+{
+    if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+        _AutoEmbedScriptsContextMenu.popup(event->button, event->time);
     }
 }
 
@@ -490,7 +497,7 @@ void DocumentProperties::embedded_create_popup_menu(Gtk::Widget& parent, sigc::s
     _EmbeddedScriptsContextMenu.accelerate(parent);
 }
 
-void DocumentProperties::embedded_create_popup_menu2(Gtk::Widget& parent, sigc::slot<void> ren)
+void DocumentProperties::auto_unembed_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> ren)
 {
     Gtk::MenuItem* mi = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::EDIT));
     mi->set_label(_("Rename"));
@@ -498,6 +505,16 @@ void DocumentProperties::embedded_create_popup_menu2(Gtk::Widget& parent, sigc::
     mi->signal_activate().connect(ren);
     mi->show();
     _AutoUnembedScriptsContextMenu.accelerate(parent);
+}
+
+void DocumentProperties::auto_embed_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> ren)
+{
+    Gtk::MenuItem* mi = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::EDIT));
+    mi->set_label(_("Change"));
+    _AutoEmbedScriptsContextMenu.append(*mi);
+    mi->signal_activate().connect(ren);
+    mi->show();
+    _AutoEmbedScriptsContextMenu.accelerate(parent);
 }
 
 void DocumentProperties::removeSelectedProfile(){
@@ -831,15 +848,15 @@ DocumentProperties::build_scripting()
     _embed_unembed_table2.attach(_embed_btn, 0, 1, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
 
     //# Set up the Embedded Scripts box
-    _AutoUnembedListStore = Gtk::ListStore::create(_EmbeddedScriptsListColumns2);
+    _AutoUnembedListStore = Gtk::ListStore::create(_AutoUnembedScriptsListColumns);
     _AutoUnembedScriptsList.set_model(_EmbeddedScriptsListStore);
-    _AutoUnembedScriptsList.append_column(_("Script id"), _EmbeddedScriptsListColumns2.idColumn);
+    _AutoUnembedScriptsList.append_column(_("Script id"), _AutoUnembedScriptsListColumns.idColumn);
     _AutoUnembedScriptsList.set_headers_visible(true);
 
     //# Set up the External Scripts box
     _AutoEmbedScriptsListStore = Gtk::ListStore::create(_ExternalScriptsListColumns);
     _AutoEmbedScriptsList.set_model(_ExternalScriptsListStore);
-    _AutoEmbedScriptsList.append_column(_("Filename"), _ExternalScriptsListColumns2.filenameColumn);
+    _AutoEmbedScriptsList.append_column(_("Filename"), _AutoEmbedScriptsListColumns.filenameColumn);
     _AutoEmbedScriptsList.set_headers_visible(true);
 
 
@@ -883,8 +900,11 @@ DocumentProperties::build_scripting()
     _EmbeddedScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::embedded_scripts_list_button_release));
     embedded_create_popup_menu(_EmbeddedScriptsList, sigc::mem_fun(*this, &DocumentProperties::removeEmbeddedScript));
 
-    _AutoUnembedScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::embedded_scripts_list_button_release2));
-    embedded_create_popup_menu2(_AutoUnembedScriptsList, sigc::mem_fun(*this, &DocumentProperties::renameEmbeddedScript));
+    _AutoUnembedScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::auto_unembed_scripts_list_button_release));
+    auto_unembed_create_popup_menu(_AutoUnembedScriptsList, sigc::mem_fun(*this, &DocumentProperties::renameEmbeddedScript));
+
+    _AutoEmbedScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::auto_embed_scripts_list_button_release));
+    auto_embed_create_popup_menu(_AutoEmbedScriptsList, sigc::mem_fun(*this, &DocumentProperties::renameExternalScript));
 #endif // ENABLE_LCMS
 
 //TODO: review this observers code:
@@ -1030,7 +1050,7 @@ void DocumentProperties::renameEmbeddedScript(){
         Gtk::TreeModel::iterator i = _AutoUnembedScriptsList.get_selection()->get_selected();
 
         if(i){
-            id = (*i)[_EmbeddedScriptsListColumns2.idColumn];
+            id = (*i)[_AutoUnembedScriptsListColumns.idColumn];
         } else {
             return;
         }
@@ -1064,9 +1084,66 @@ void DocumentProperties::renameEmbeddedScript(){
                 repr->setAttribute("id", id_entry.get_text().c_str());
 
                 // inform the document, so we can undo
-                DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_RENAME_EMBEDDED_SCRIPT, _("Remove embedded script"));
+                DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_RENAME_EMBEDDED_SCRIPT, _("Rename embedded script"));
             }
         }
+        current = g_slist_next(current);
+    }
+
+    populate_script_lists();
+}
+
+void DocumentProperties::renameExternalScript(){
+    Gtk::Window window;
+    Gtk::Entry href_entry;
+    Gtk::Dialog dialog(_("Change"), window);
+    Gtk::Label *label = manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
+    label->set_markup(_("Please insert the new link:"));
+
+    dialog.get_vbox()->pack_start(*label);
+    dialog.get_vbox()->pack_start(href_entry);
+    dialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.show_all_children();
+    // Enter = OK
+    dialog.set_default_response(Gtk::RESPONSE_OK);
+    href_entry.set_activates_default();
+//TODO: btn "..."
+
+    Glib::ustring href;
+    if(_EmbeddedScriptsList.get_selection()) {
+        Gtk::TreeModel::iterator i = _AutoEmbedScriptsList.get_selection()->get_selected();
+
+        if(i){
+            href = (*i)[_AutoEmbedScriptsListColumns.filenameColumn];
+        } else {
+            return;
+        }
+    }
+    href_entry.set_text(href);
+
+    int btn_press = dialog.run();
+    if ( btn_press != Gtk::RESPONSE_OK || href_entry.get_text().empty() || href_entry.get_text() == href )
+        return;
+
+    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
+    while ( current ) {
+        SPObject* obj = SP_OBJECT(current->data);
+        SPScript* script = (SPScript*) obj;
+        int count=0;
+        for ( SPObject *child = obj->children ; child; child = child->next ) {
+            count++;
+        }
+        if (count>1)
+            g_warning("TODO: Found a script element with multiple (%d) child nodes! We must implement support for that!", count);
+
+        if (script->xlinkhref && script->xlinkhref == href) {
+            obj->getRepr()->setAttribute("xlink:href", href_entry.get_text().c_str());
+
+            // inform the document, so we can undo
+            DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_RENAME_EXTERNAL_SCRIPT, _("Rename external script"));
+        }
+
         current = g_slist_next(current);
     }
 
@@ -1203,7 +1280,7 @@ void DocumentProperties::embedScript(){
         Gtk::TreeModel::iterator i = _AutoEmbedScriptsList.get_selection()->get_selected();
 
         if(i){
-            name = (*i)[_ExternalScriptsListColumns2.filenameColumn];
+            name = (*i)[_AutoEmbedScriptsListColumns.filenameColumn];
         } else {
             return;
         }
@@ -1280,7 +1357,7 @@ void DocumentProperties::unembedScript(){
         Gtk::TreeModel::iterator i = _AutoUnembedScriptsList.get_selection()->get_selected();
 
         if(i){
-            id = (*i)[_EmbeddedScriptsListColumns2.idColumn];
+            id = (*i)[_AutoUnembedScriptsListColumns.idColumn];
         } else {
             return;
         }
