@@ -1468,6 +1468,14 @@ void DocumentProperties::embedScript(){
 }
 
 void DocumentProperties::unembedScript(){
+    if(!SP_ACTIVE_DOCUMENT->getBase()) {
+        Gtk::Window window;
+        Gtk::MessageDialog dialog(window, _("Error"));
+        dialog.set_secondary_text(_("Please save the document before unembedding scripts."));
+        dialog.run();
+        return;
+    }
+
     Glib::ustring id;
     if(_AutoUnembedScriptsList.get_selection()) {
         Gtk::TreeModel::iterator i = _AutoUnembedScriptsList.get_selection()->get_selected();
