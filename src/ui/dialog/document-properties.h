@@ -201,6 +201,7 @@ protected:
     Gtk::Menu _AutoEmbedScriptsContextMenu;
     Gtk::Entry _script_entry;
     Gtk::Entry _rename_entry;
+    Gtk::Entry _href_entry;
     Gtk::TextView _EmbeddedContent;
     Gtk::ScrolledWindow _EmbeddedContentScroller;
     GtkWidget* _object_events_container;

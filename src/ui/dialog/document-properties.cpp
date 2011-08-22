@@ -923,8 +923,13 @@ void DocumentProperties::selectExternalScript(){
     dialog.add_button(_("Select"), Gtk::RESPONSE_OK);
 
     int result = dialog.run();
-    if(result == Gtk::RESPONSE_OK)
-        _script_entry.set_text( dialog.get_filename() );
+    if(result == Gtk::RESPONSE_OK) {
+        int page = _scripting_notebook.get_current_page();
+        if(_scripting_notebook.get_nth_page(page) == (Gtk::Widget*) &_page_embed_unembed_scripts)
+            _href_entry.set_text( dialog.get_filename() );
+        else
+            _script_entry.set_text( dialog.get_filename() );
+    }
 }
 
 void DocumentProperties::addExternalScript(){
@@ -1095,20 +1100,24 @@ void DocumentProperties::renameEmbeddedScript(){
 
 void DocumentProperties::renameExternalScript(){
     Gtk::Window window;
-    Gtk::Entry href_entry;
     Gtk::Dialog dialog(_("Change"), window);
     Gtk::Label *label = manage (new Gtk::Label("", Gtk::ALIGN_LEFT));
     label->set_markup(_("Please insert the new link:"));
+    Gtk::HBox form;
+    Gtk::Button file_btn;
 
     dialog.get_vbox()->pack_start(*label);
-    dialog.get_vbox()->pack_start(href_entry);
+    form.pack_start(_href_entry);
+    file_btn.set_label(_("..."));
+    file_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::selectExternalScript));
+    form.pack_start(file_btn);
+    dialog.get_vbox()->pack_start(form);
     dialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
     dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
     dialog.show_all_children();
     // Enter = OK
     dialog.set_default_response(Gtk::RESPONSE_OK);
-    href_entry.set_activates_default();
-//TODO: btn "..."
+    _href_entry.set_activates_default();
 
     Glib::ustring href;
     if(_EmbeddedScriptsList.get_selection()) {
@@ -1120,10 +1129,10 @@ void DocumentProperties::renameExternalScript(){
             return;
         }
     }
-    href_entry.set_text(href);
+    _href_entry.set_text(href);
 
     int btn_press = dialog.run();
-    if ( btn_press != Gtk::RESPONSE_OK || href_entry.get_text().empty() || href_entry.get_text() == href )
+    if ( btn_press != Gtk::RESPONSE_OK || _href_entry.get_text().empty() || _href_entry.get_text() == href )
         return;
 
     const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
@@ -1138,7 +1147,7 @@ void DocumentProperties::renameExternalScript(){
             g_warning("TODO: Found a script element with multiple (%d) child nodes! We must implement support for that!", count);
 
         if (script->xlinkhref && script->xlinkhref == href) {
-            obj->getRepr()->setAttribute("xlink:href", href_entry.get_text().c_str());
+            obj->getRepr()->setAttribute("xlink:href", _href_entry.get_text().c_str());
 
             // inform the document, so we can undo
             DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_RENAME_EXTERNAL_SCRIPT, _("Rename external script"));
