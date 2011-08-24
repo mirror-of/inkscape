@@ -26,15 +26,18 @@ namespace XML {
  * @brief Text node, e.g. "Some text" in &lt;group&gt;Some text&lt;/group&gt;
  */
 struct TextNode : public SimpleNode {
-    TextNode(Util::ptr_shared<char> content, Document *doc)
+    TextNode(Util::ptr_shared<char> content, Document *doc, bool is_cdata)
     : SimpleNode(g_quark_from_static_string("string"), doc)
     {
         setContent(content);
+        cdata = is_cdata;
     }
     TextNode(TextNode const &other, Document *doc)
     : SimpleNode(other, doc) {}
 
     Inkscape::XML::NodeType type() const { return Inkscape::XML::TEXT_NODE; }
+    
+    bool cdata;
 
 protected:
     SimpleNode *_duplicate(Document* doc) const { return new TextNode(*this, doc); }

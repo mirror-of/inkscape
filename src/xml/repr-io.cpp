@@ -33,6 +33,7 @@
 #include "extension/extension.h"
 
 #include "preferences.h"
+#include "text-node.h"
 
 using Inkscape::IO::Writer;
 using Inkscape::Util::List;
@@ -497,7 +498,10 @@ sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gchar *default_
             return NULL; // we do not preserve all-whitespace nodes unless we are asked to
         }
 
-        return xml_doc->createTextNode(reinterpret_cast<gchar *>(node->content));
+        bool is_cdata = false;
+        if (node->type == XML_CDATA_SECTION_NODE) is_cdata = true;
+
+        return xml_doc->createTextNode(reinterpret_cast<gchar *>(node->content), is_cdata);
     }
 
     if (node->type == XML_COMMENT_NODE) {
@@ -849,7 +853,10 @@ void sp_repr_write_stream( Node *repr, Writer &out, gint indent_level,
 {
     switch (repr->type()) {
         case Inkscape::XML::TEXT_NODE: {
-            repr_quote_write( out, repr->content() );
+            if ( dynamic_cast<Inkscape::XML::TextNode*>(repr)->cdata )
+                out.writeString( g_strconcat("<![CDATA[", repr->content(), "]]>", NULL) );
+            else
+                repr_quote_write( out, repr->content() );
             break;
         }
         case Inkscape::XML::COMMENT_NODE: {

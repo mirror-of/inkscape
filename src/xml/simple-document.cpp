@@ -54,8 +54,8 @@ Node *SimpleDocument::createElement(char const *name) {
     return new ElementNode(g_quark_from_string(name), this);
 }
 
-Node *SimpleDocument::createTextNode(char const *content) {
-    return new TextNode(Util::share_string(content), this);
+Node *SimpleDocument::createTextNode(char const *content, bool is_cdata) {
+    return new TextNode(Util::share_string(content), this, is_cdata);
 }
 
 Node *SimpleDocument::createComment(char const *content) {

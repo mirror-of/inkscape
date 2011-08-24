@@ -43,7 +43,7 @@ public:
     Inkscape::XML::Event *commitUndoable();
 
     Node *createElement(char const *name);
-    Node *createTextNode(char const *content);
+    Node *createTextNode(char const *content, bool is_cdata=false);
     Node *createComment(char const *content);
     Node *createPI(char const *target, char const *content);
 

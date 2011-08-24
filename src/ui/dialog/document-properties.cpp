@@ -1307,7 +1307,7 @@ void DocumentProperties::editEmbeddedScript(){
             if (repr){
                 SPObject *child;
                 while (NULL != (child = obj->firstChild())) child->deleteObject();
-                obj->appendChildRepr(xml_doc->createTextNode(_EmbeddedContent.get_buffer()->get_text().c_str()));
+                obj->appendChildRepr(xml_doc->createTextNode(_EmbeddedContent.get_buffer()->get_text().c_str(), true));
 
                 //TODO repr->set_content(_EmbeddedContent.get_buffer()->get_text());
 
@@ -1446,7 +1446,7 @@ void DocumentProperties::embedScript(){
                 } else {
                     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
                     Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");
-                    scriptRepr->addChild(xml_doc->createTextNode(text.c_str()), NULL);
+                    scriptRepr->addChild(xml_doc->createTextNode(text.c_str(), true), NULL);
                     scriptRepr->setAttribute("id", id.c_str());
                     xml_doc->root()->addChild(scriptRepr, NULL);
 
