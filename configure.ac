@@ -15,6 +15,10 @@ AC_INIT([inkscape],
 
 AC_CANONICAL_HOST
 AC_CONFIG_SRCDIR([src/main.cpp])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
+
 AM_INIT_AUTOMAKE([dist-zip dist-bzip2 tar-pax])
 
 AC_ARG_ENABLE([lsb], AS_HELP_STRING([--enable-lsb], [LSB-compatible build configuration]), [
@@ -24,9 +28,6 @@ AC_ARG_ENABLE([lsb], AS_HELP_STRING([--enable-lsb], [LSB-compatible build config
   CXX=lsbc++
   export CC CXX
 ])
-
-AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_MACRO_DIR([m4])
 
 AC_LANG(C++)
 AC_PROG_CXX
