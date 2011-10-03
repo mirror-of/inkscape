@@ -29,12 +29,15 @@ AC_PROG_CXX
 AC_PROG_CC
 AM_PROG_AS
 AC_PROG_RANLIB
-AC_PROG_LIBTOOL
 AC_HEADER_STDC
 INK_BZR_SNAPSHOT_BUILD
 
 dnl If automake 1.11 shave the output to look nice
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
+# Initialize libtool
+LT_PREREQ([2.2])
+LT_INIT
 
 dnl These next few lines are needed only while libcroco is in our source tree.
 AC_PROG_CC
