@@ -27,6 +27,7 @@ if test -z $INTLTOOLIZE; then
         exit 1
 fi
 
+autopoint --force
 AUTOPOINT='intltoolize --automake --copy' autoreconf --force --install --verbose
 
 cd $olddir
