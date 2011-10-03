@@ -1,13 +1,17 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.68])
+AC_PREREQ([2.64])
 
 # Always use 0.xx+devel instead of 0.xxdevel for the version, e.g. 0.46+devel.
 # Rationale: (i) placate simple version comparison software such as
 # `dpkg --compare-versions'.  (ii) We don't always know what the next
 # version is going to be called until about the time we release it
 # (whereas we always know what the previous version was called).
-AC_INIT([inkscape],[0.48+devel])
+AC_INIT([inkscape],
+        [0.48+devel],
+        [http://bugs.launchpad.net/inkscape/+filebug],
+        [inkscape],
+        [http://inkscape.org/])
 
 AC_CANONICAL_HOST
 AC_CONFIG_SRCDIR([src/main.cpp])
