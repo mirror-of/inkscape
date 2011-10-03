@@ -22,6 +22,7 @@ AC_ARG_ENABLE([lsb], AS_HELP_STRING([--enable-lsb], [LSB-compatible build config
 ])
 
 AM_CONFIG_HEADER(config.h)
+AC_CONFIG_MACRO_DIR([m4])
 
 AC_LANG(C++)
 AC_ISC_POSIX
@@ -96,9 +97,6 @@ if test "$GCC" = "yes"; then
 
   # C++-specific flags are defined further below.  Look for CXXFLAGS...
 fi
-
-dnl Honor aclocal flags
-ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 dnl Verify our GCC version
 if test "x$GXX" = "xyes"; then
