@@ -1,6 +1,6 @@
-inkscape (0.48.2-0ubuntu1~maverick1) maverick-backports; urgency=low
+inkscape (0.48.2-0ubuntu1~lucid1) lucid-backports; urgency=low
 
-  * Backport for Maverick (LP: #844697)
+  * Backport for Lucid (LP: #844697)
   * debian/control: 
     - Drop build-dependency on specific libwpd/libwpg version.
     - Drop build-dependency on dh-translations.
