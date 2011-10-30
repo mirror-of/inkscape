@@ -6,6 +6,9 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+# use dpatch:
+include /usr/share/dpatch/dpatch.make
+
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
@@ -39,9 +42,8 @@ ifneq (,$(filter parallel=%,$(subst $(,), ,$(DEB_BUILD_OPTIONS))))
 endif
 
 
-config.status:
+config.status: configure patch
 	dh_testdir
-	./autogen.sh
 
 	CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
 	CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)" 	  \
@@ -58,6 +60,7 @@ config.status:
 
 build:  config.status
 	dh_testdir
+	cd po; intltool-update -p
 
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
 	cp -f /usr/share/misc/config.sub config.sub
@@ -71,7 +74,8 @@ endif
 	$(MAKE) CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
 	        CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)"
 
-clean: clean-patched
+clean: clean-patched unpatch
+	chmod 644 $(CURDIR)/debian/patches/*
 
 clean-patched:
 	dh_testdir
@@ -92,9 +96,9 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/inkscape.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape-trunk
-	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape-trunk/etc/bash_completion.d/inkscape
-	chmod a+x $(CURDIR)/debian/inkscape-trunk/usr/share/inkscape/extensions/xaml2svg/
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape
+	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape/etc/bash_completion.d/inkscape
+	chmod a+x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/xaml2svg/
 
 # Build architecture-independent files here.
 binary-indep: build install
