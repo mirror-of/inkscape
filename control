@@ -1,63 +1,63 @@
 Source: inkscape
 Section: graphics
 Priority: optional
-Vcs-git: git://git.debian.org/git/collab-maint/inkscape.git
-Vcs-Browser: http://git.debian.org/?p=git/collab-maint/inkscape.git
 Homepage: http://www.inkscape.org/
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-XSBC-Original-Maintainer: Wolfram Quester <wolfi@sigxcpu.org>
+Maintainer: Inkscape developers <inkscape-devel@lists.sourceforge.net> 
+Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
+           Wolfram Quester <wolfi@sigxcpu.org>,
+           Alex Valavanis <valavanisalex@gmail.com>
 Build-Depends: autoconf,
                automake,
-               debhelper (>= 7.0.0),
-               dpatch,
-               intltool,
-               libart-2.0-dev (>= 2.3.10),
+               debhelper (>= 8.0.0), 
+               intltool, 
+               libart-2.0-dev (>= 2.3.10), 
                libaspell-dev,
-               libboost-dev,
-               libgc-dev (>= 1:6.8),
-               libglib2.0-dev,
-               libgnomevfs2-dev,
+               libboost-dev, 
+               libgc-dev (>= 1:6.8), 
+               libglib2.0-dev, 
+               libgnomevfs2-dev, 
                libgtk2.0-dev (>= 2.10.0),
-               libgtkmm-2.4-dev,
-               libgtkspell-dev,
-               libgsl0-dev,
-               liblcms1-dev,
-               libmagick++-dev,
-               libpango1.0-dev,
-               libpng12-dev,
-               libpoppler-glib-dev,
-               libpopt-dev,
-               libsigc++-2.0-dev (>= 2.0.16-2),
-               libtool,
-               libwpd-dev,
-               libwpg-dev,
-               libxml-parser-perl,
-               libxml2-dev (>= 2-2.4.24),
-               libxslt1-dev,
-               pkg-config,
-               python-dev,
-               zlib1g-dev
-Standards-Version: 3.8.1
+               libgtkmm-2.4-dev, 
+               libgtkspell-dev, 
+               libgsl0-dev, 
+               liblcms1-dev, 
+               libmagick++-dev, 
+               libpango1.0-dev, 
+               libpng12-dev, 
+               libpoppler-glib-dev, 
+               libpopt-dev, 
+               libsigc++-2.0-dev (>= 2.0.16-2), 
+               libtool, 
+               libwpd-dev (>= 0.9.0), 
+               libwpg-dev (>= 0.2.0), 
+               libxml-parser-perl, 
+               libxml2-dev (>= 2-2.4.24), 
+               libxslt1-dev, 
+               pkg-config, 
+               python-dev, 
+               zlib1g-dev 
+Standards-Version: 3.9.2
 
-Package: inkscape
+Package: inkscape-trunk
 Architecture: any
 Homepage: http://www.inkscape.org/
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Suggests: dia | dia-gnome,
-          ruby,
-          libgnomevfs2-extra,
-          libsvg-perl,
-          libxml-xql-perl,
-          pstoedit,
-          transfig
+Suggests: dia | dia-gnome, 
+          ruby, 
+          libgnomevfs2-extra, 
+          libsvg-perl, 
+          libxml-xql-perl, 
+          transfig,
+          pstoedit
 Recommends: aspell,
-            libwmf-bin,
-            imagemagick,
-            python-numpy,
-            python-lxml,
-            python-uniconvertor,
-            perlmagick
-Description: vector-based drawing program
+            imagemagick, 
+            libwmf-bin, 
+            perlmagick, 
+            python-numpy, 
+            python-lxml, 
+            python-uniconvertor
+Conflicts: inkscape
+Description: vector-based drawing program (trunk build)
  Inkscape loads and saves a subset of the SVG (Scalable Vector Graphics)
  format, a standard maintained by the WWW consortium.
  .
@@ -69,6 +69,11 @@ Description: vector-based drawing program
  .
  Inkscape supports multiple opened files and multiple views per file.
  Graphics can be printed and exported to png bitmaps.
+ .
+ This package provides a build of the latest upstream trunk version to give
+ a preview of the latest features and bug-fixes.  Those who would like a
+ stable, and fully-supported package should use the "inkscape" package
+ instead.
  .
  Some of the import and export features are provided using the packages
  dia, libwmf-bin, pstoedit, skencil, imagemagick, and perlmagick.
