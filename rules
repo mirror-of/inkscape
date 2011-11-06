@@ -7,7 +7,7 @@
 export DH_VERBOSE=1
 
 %:
-	dh $@
+	dh $@ --with bash-completion
 
 override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
@@ -17,16 +17,3 @@ override_dh_auto_configure:
 	dh_auto_configure
 
 override_dh_auto_test:
-
-
-#install: build
-#	dh_testdir
-#	dh_testroot
-#	dh_prep
-#	dh_installdirs
-#
-	# Add here commands to install the package into debian/inkscape.
-#	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape-trunk
-#	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape-trunk/etc/bash_completion.d/inkscape
-#	chmod a+x $(CURDIR)/debian/inkscape-trunk/usr/share/inkscape/extensions/xaml2svg/
-
