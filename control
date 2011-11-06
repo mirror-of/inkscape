@@ -41,7 +41,6 @@ Standards-Version: 3.9.2
 
 Package: inkscape-trunk
 Architecture: any
-Homepage: http://www.inkscape.org/
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: dia | dia-gnome, 
           ruby, 
