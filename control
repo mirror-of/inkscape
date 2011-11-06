@@ -8,6 +8,7 @@ Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Alex Valavanis <valavanisalex@gmail.com>
 Build-Depends: autoconf,
                automake,
+               dh-autoreconf,
                debhelper (>= 7.0.0), 
                intltool, 
                libart-2.0-dev (>= 2.3.10), 
