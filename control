@@ -35,6 +35,7 @@ Build-Depends: autoconf,
                libxslt1-dev, 
                pkg-config, 
                python-dev, 
+               python-support,
                zlib1g-dev 
 Standards-Version: 3.9.2
 
@@ -53,6 +54,7 @@ Recommends: aspell,
             imagemagick, 
             libwmf-bin, 
             perlmagick, 
+            ${python:Depends},
             python-numpy, 
             python-lxml, 
             python-uniconvertor
