@@ -4,7 +4,7 @@
 # provided by Joey Hess via dh_make.
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 %:
 	dh $@
@@ -15,6 +15,8 @@ override_dh_auto_clean:
 override_dh_auto_configure:
 	./autogen.sh
 	dh_auto_configure
+
+override_dh_auto_test:
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
