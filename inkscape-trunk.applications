@@ -1,4 +1,4 @@
-inkscape
+inkscape-trunk
 	command=inkscape
 	name=inkscape
 	can_open_multiple_files=true
