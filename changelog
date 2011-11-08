@@ -1,3 +1,9 @@
+inkscape-trunk (1:0.48+devel+10730+28) precise; urgency=low
+
+  * Rename src package to inkscape-trunk
+
+ -- Alex Valavanis <valavanisalex@gmail.com>  Tue, 08 Nov 2011 10:25:45 +0000
+
 inkscape (1:0.48+devel+10326+10) natty; urgency=low
 
   * Renamed package to inkscape-trunk
