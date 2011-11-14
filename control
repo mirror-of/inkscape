@@ -4,7 +4,37 @@ Priority: optional
 Homepage: http://www.inkscape.org/
 Maintainer: Peter Lieverdink <ubuntu@cafuego.net>
 XSBC-Original-Maintainer: Wolfram Quester <wolfi@sigxcpu.org>
-Build-Depends: debhelper (>= 7.0.0), dpatch, intltool, libart-2.0-dev (>= 2.3.10), libboost-dev, libgc-dev (>= 1:6.8), libglib2.0-dev, libgnomevfs2-dev, libgtk2.0-dev (>= 2.10.0), libgtkmm-2.4-dev, libgtkspell-dev, liblcms1-dev, libmagick++-dev, libpango1.0-dev, libpng12-dev, libpoppler-glib-dev, libpopt-dev, libsigc++-2.0-dev (>= 2.0.16-2), libssl-dev, libtool, libwpg-dev, libxml-parser-perl, libxml2-dev (>= 2-2.4.24), libxslt1-dev, pkg-config, python-dev, zlib1g-dev, automake (>= 1.10), libgsl0-dev, bzr
+Build-Depends: debhelper (>= 7.0.0),
+               dpatch,
+               intltool,
+               libart-2.0-dev (>= 2.3.10),
+               libboost-dev,
+               libgc-dev (>= 1:6.8),
+               libglib2.0-dev,
+               libgnomevfs2-dev,
+               libgtk2.0-dev (>= 2.10.0),
+               libgtkmm-2.4-dev,
+               libgtkspell-dev,
+               libcairo2-dev (>= 1.10.0),
+               liblcms1-dev,
+               libmagick++-dev,
+               libpango1.0-dev,
+               libpng12-dev,
+               libpoppler-glib-dev,
+               libpopt-dev,
+               libsigc++-2.0-dev (>= 2.0.16-2),
+               libssl-dev,
+               libtool,
+               libwpg-dev,
+               libxml-parser-perl,
+               libxml2-dev (>= 2-2.4.24),
+               libxslt1-dev,
+               pkg-config,
+               python-dev,
+               zlib1g-dev,
+               automake (>= 1.10),
+               libgsl0-dev,
+               bzr
 Standards-Version: 3.8.1
 
 Package: inkscape
