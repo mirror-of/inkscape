@@ -53,7 +53,7 @@ Inkscape::Text::Layout const * te_get_layout (SPItem const *item)
     return NULL;
 }
 
-static void te_update_layout_now (SPItem *item)
+void te_update_layout_now (SPItem *item)
 {
     if (SP_IS_TEXT(item))
         SP_TEXT(item)->rebuildLayout();
