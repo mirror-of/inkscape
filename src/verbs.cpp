@@ -1001,6 +1001,7 @@ void EditVerb::perform(SPAction *action, void *data)
 void SelectionVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (!dt)
         return;
@@ -1056,6 +1057,44 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_SLICE:
             sp_selected_path_slice(dt);
             break;
+
+        case SP_VERB_SELECTION_GROW:
+        { // FIXME these and the other grow/shrink they should use gobble_key_events.
+            // the problem is how to get access to which key, if any, to gobble.
+            Inkscape::Selection *selection = sp_desktop_selection(dt);
+            sp_selection_scale(selection, prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
+            break;
+        }
+        case SP_VERB_SELECTION_GROW_SCREEN:
+        {
+            Inkscape::Selection *selection = sp_desktop_selection(dt);
+            sp_selection_scale_screen(selection, 2);
+            break;
+        }
+        case SP_VERB_SELECTION_GROW_DOUBLE:
+        {
+            Inkscape::Selection *selection = sp_desktop_selection(dt);
+            sp_selection_scale_times(selection, 2);
+            break;
+        }
+        case SP_VERB_SELECTION_SHRINK:
+        {
+            Inkscape::Selection *selection = sp_desktop_selection(dt);
+            sp_selection_scale(selection, -prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
+            break;
+        }
+        case SP_VERB_SELECTION_SHRINK_SCREEN:
+        {
+            Inkscape::Selection *selection = sp_desktop_selection(dt);
+            sp_selection_scale_screen(selection, -2);
+            break;
+        }
+        case SP_VERB_SELECTION_SHRINK_HALVE:
+        {
+            Inkscape::Selection *selection = sp_desktop_selection(dt);
+            sp_selection_scale_times(selection, 0.5);
+            break;
+        }
 
         case SP_VERB_SELECTION_OFFSET:
             sp_selected_path_offset(dt);
@@ -1646,6 +1685,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         {
             gint mul = 1 + gobble_key_events(
                  GDK_KP_Subtract, 0); // with any mask
+             // FIXME what if zoom out is bound to something other than subtract?
             // While drawing with the pen/pencil tool, zoom away from the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -2287,6 +2327,18 @@ Verb *Verb::_base_verbs[] = {
                       N_("Raise selection one step"), INKSCAPE_ICON("selection-raise")),
     new SelectionVerb(SP_VERB_SELECTION_LOWER, "SelectionLower", N_("_Lower"),
                       N_("Lower selection one step"), INKSCAPE_ICON("selection-lower")),
+    new SelectionVerb(SP_VERB_SELECTION_GROW, "SelectionGrow", N_("_Grow"),
+                      N_("Make selected objects bigger"), INKSCAPE_ICON("selection-grow")),
+    new SelectionVerb(SP_VERB_SELECTION_GROW_SCREEN, "SelectionGrowScreen", N_("_Grow on screen"),
+                      N_("Make selected objects bigger relative to screen"), INKSCAPE_ICON("selection-grow-screen")),
+    new SelectionVerb(SP_VERB_SELECTION_GROW_DOUBLE, "SelectionGrowDouble", N_("_Double size"),
+                      N_("Double the size of selected objects"), INKSCAPE_ICON("selection-grow-double")),
+    new SelectionVerb(SP_VERB_SELECTION_SHRINK, "SelectionShrink", N_("_Shrink"),
+                      N_("Make selected objects smaller"), INKSCAPE_ICON("selection-shrink")),
+    new SelectionVerb(SP_VERB_SELECTION_SHRINK_SCREEN, "SelectionShrinkScreen", N_("_Shrink on screen"),
+                      N_("Make selected objects smaller relative to screen"), INKSCAPE_ICON("selection-shrink-screen")),
+    new SelectionVerb(SP_VERB_SELECTION_SHRINK_HALVE, "SelectionShrinkHalve", N_("_Halve size"),
+                      N_("Halve the size of selected objects"), INKSCAPE_ICON("selection-shrink-halve")),
     new SelectionVerb(SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("_Group"),
                       N_("Group selected objects"), INKSCAPE_ICON("object-group")),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),

@@ -119,6 +119,9 @@ override) the bindings in the main default.xml.
 
   <bind action="ArcPrefs" />
 
+  <bind key="m" action="ToolMeasure" />
+  <bind key="M" action="ToolMeasure" display="true" />
+
   <bind key="F9" modifiers="Shift" action="ToolStar" />
   <bind key="asterisk" modifiers="Shift" action="ToolStar" /> 	 
   <bind key="asterisk" action="ToolStar" /> 	 
@@ -362,9 +365,18 @@ override) the bindings in the main default.xml.
 
   <bind key="Page_Up" action="SelectionRaise" display="true" />
   <bind key="KP_Page_Up" action="SelectionRaise" />
-
   <bind key="Page_Down" action="SelectionLower" display="true" />
   <bind key="KP_Page_Down" action="SelectionLower" />
+
+  <bind key="comma" action="SelectionShrink" display="true" />
+  <bind key="comma" modifiers="Alt" action="SelectionShrinkScreen" />
+  <bind key="comma" modifiers="Ctrl" action="SelectionShrinkHalve" />
+  <bind key="period" action="SelectionGrow" display="true" />
+  <bind key="period" modifiers="Alt" action="SelectionGrowScreen" />
+  <bind key="period" modifiers="Ctrl" action="SelectionGrowDouble" />
+
+
+
 
   <bind key="g" modifiers="Ctrl" action="SelectionGroup" display="true" />
   <bind key="G" modifiers="Ctrl" action="SelectionGroup" />
@@ -588,5 +600,14 @@ override) the bindings in the main default.xml.
   <!-- You can also assign keys to individual effects. The action should be set to he
   effect id from the .inx file, for example "org.ekips.filter.addnodes" for the Add
   Nodes effect. -->
+
+ <bind key="g" modifiers="Ctrl,Alt" action="org.inkscape.typography.newglyphlayer" display="true"/>
+ <bind key="G" modifiers="Ctrl,Alt" action="org.inkscape.typography.newglyphlayer"/>
+
+ <bind key="h" modifiers="Ctrl,Alt" action="org.inkscape.typography.previousglyphlayer" display="true"/>
+ <bind key="H" modifiers="Ctrl,Alt" action="org.inkscape.typography.previousglyphlayer"/>
+
+ <bind key="j" modifiers="Ctrl,Alt" action="org.inkscape.typography.nextglyphlayer" display="true"/>
+ <bind key="J" modifiers="Ctrl,Alt" action="org.inkscape.typography.nextglyphlayer"/>
 
 </keys>
