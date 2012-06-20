@@ -156,6 +156,9 @@ sp_text_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
     object->readAttr( "dy" );
     object->readAttr( "rotate" );
 
+    //==z==
+    repr->setAttribute("inkscape:text-property","manage_lines");
+
     if (((SPObjectClass *) text_parent_class)->build)
         ((SPObjectClass *) text_parent_class)->build(object, doc, repr);
 
@@ -324,6 +327,19 @@ static Inkscape::XML::Node *sp_text_write(SPObject *object, Inkscape::XML::Docum
             if (crepr) {
                 l = g_slist_prepend (l, crepr);
             }
+
+            //==z==
+            /*if (SP_IS_TSPAN(child))
+            {
+                    if (child->next()==NULL)
+                    {
+                        Inkscape::XML::Node *node =
+                                doc->createTextNode("->");
+                        repr->removeChild((Inkscape::XML::Node*)child);
+                        repr->addChild(node, NULL);
+                    }
+            }*/
+            //==z==e
         }
         while (l) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
@@ -353,6 +369,8 @@ static Inkscape::XML::Node *sp_text_write(SPObject *object, Inkscape::XML::Docum
     } else {
         text->getRepr()->setAttribute("sodipodi:linespacing", NULL);
     }
+
+    //repr->setAttribute("inkscape:text-property",NULL);
 
     if (((SPObjectClass *) (text_parent_class))->write) {
         ((SPObjectClass *) (text_parent_class))->write (object, xml_doc, repr, flags);

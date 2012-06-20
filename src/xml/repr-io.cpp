@@ -37,6 +37,7 @@
 
 #include "preferences.h"
 
+
 using Inkscape::IO::Writer;
 using Inkscape::Util::List;
 using Inkscape::Util::cons;
@@ -585,6 +586,7 @@ static void sp_repr_save_writer(Document *doc, Inkscape::IO::Writer *out,
          repr; repr = repr->next())
     {
         Inkscape::XML::NodeType const node_type = repr->type();
+
         if ( node_type == Inkscape::XML::ELEMENT_NODE ) {
             sp_repr_write_stream_root_element(repr, *out, TRUE, default_ns, inlineattrs, indent,
                                               old_href_abs_base, new_href_abs_base);
