@@ -12,6 +12,7 @@
 #include "selection-chemistry.h"
 #include "sp-image.h"
 #include "document-undo.h"
+#include "unit-constants.h"
 #include <set>
 
 namespace Inkscape {
@@ -77,22 +78,35 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 
         double width = gdk_pixbuf_get_width(pb);
         double height = gdk_pixbuf_get_height(pb);
+        double defaultxdpi = prefs->getDouble("/dialogs/export/defaultxdpi/value", PX_PER_IN);
+        double xscale = 1;
+        double yscale = 1;
         gchar const *str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
         if ( str ) {
             gint dpi = atoi(str);
             if ( dpi > 0 && dpi != 72 ) {
-                double scale = 72.0 / (double)dpi;
-                width *= scale;
+                xscale = 72.0 / (double)dpi;
             }
+            fprintf(stderr, "gdkpixbuf-input: got DpiX from pixbuf: %i for x-scale %g\n", dpi, xscale);
+        } else {
+            xscale = 90.0 / defaultxdpi;
+            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from export preference: %g for x-scale: %g\n", defaultxdpi, xscale);
         }
+        width *= xscale;
+
         str = gdk_pixbuf_get_option( pb, "Inkscape::DpiY" );
         if ( str ) {
             gint dpi = atoi(str);
             if ( dpi > 0 && dpi != 72 ) {
-                double scale = 72.0 / (double)dpi;
-                height *= scale;
+                yscale = 72.0 / (double)dpi;
             }
+            fprintf(stderr, "gdkpixbuf-input: got DpiY from pixbuf: %i for y-scale %g\n", dpi, yscale);
+        } else {
+            yscale = 90.0 / defaultxdpi;
+            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from export preference: %g for y-scale: %g\n", defaultxdpi, yscale);
         }
+        height *= yscale;
+        
 
         // Create image node
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
