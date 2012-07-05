@@ -1326,8 +1326,8 @@ void InkscapePreferences::initPageBitmaps()
                            _("Automatically reload linked images when file is changed on disk"));
     _misc_bitmap_editor.init("/options/bitmapeditor/value", true);
     _page_bitmaps.add_line( false, _("Bitmap editor:"), _misc_bitmap_editor, "", "", true);
-    _importexport_export.init("/dialogs/export/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
-    _page_bitmaps.add_line( false, _("Default export resolution:"), _importexport_export, _("dpi"),
+    _importexport_export_res.init("/dialogs/export/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
+    _page_bitmaps.add_line( false, _("Default export resolution:"), _importexport_export_res, _("dpi"),
                             _("Default bitmap resolution (in dots per inch) in the Export dialog"), false);
     _bitmap_copy_res.init("/options/createbitmap/resolution", 1.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
     _page_bitmaps.add_line( false, _("Resolution for Create Bitmap Copy:"), _bitmap_copy_res, _("dpi"),
