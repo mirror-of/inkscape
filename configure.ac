@@ -208,7 +208,7 @@ fi
 dnl ******************************
 dnl Check for libpng 
 dnl ******************************
-AC_CHECK_LIB(png, png_read_info, [AC_CHECK_HEADER(png.h, png_ok=yes, png_ok=yes)], png_ok=no, -lz -lm)
+AC_CHECK_LIB(png, png_read_info, [AC_CHECK_HEADER(png.h, png_ok=yes, png_ok=no)], png_ok=no, -lz -lm)
 if test "x$png_ok" != "xyes"; then
 	AC_MSG_ERROR([libpng >= 1.2 is needed to compile inkscape])
 fi
