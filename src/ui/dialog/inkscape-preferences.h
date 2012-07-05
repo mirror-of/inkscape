@@ -281,6 +281,7 @@ protected:
     UI::Widget::PrefCheckButton _sel_layer_deselects;
 
     UI::Widget::PrefSpinButton  _importexport_export_res;
+    UI::Widget::PrefSpinButton  _importexport_import_res;
     UI::Widget::PrefSlider      _snap_delay;
     UI::Widget::PrefSlider      _snap_weight;
 

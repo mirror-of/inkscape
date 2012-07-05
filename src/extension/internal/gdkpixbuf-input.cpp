@@ -78,7 +78,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 
         double width = gdk_pixbuf_get_width(pb);
         double height = gdk_pixbuf_get_height(pb);
-        double defaultxdpi = prefs->getDouble("/dialogs/export/defaultxdpi/value", PX_PER_IN);
+        double defaultxdpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", PX_PER_IN);
         double xscale = 1;
         double yscale = 1;
         gchar const *str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
@@ -90,7 +90,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             fprintf(stderr, "gdkpixbuf-input: got DpiX from pixbuf: %i for x-scale %g\n", dpi, xscale);
         } else {
             xscale = 90.0 / defaultxdpi;
-            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from export preference: %g for x-scale: %g\n", defaultxdpi, xscale);
+            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from import preference: %g for x-scale: %g\n", defaultxdpi, xscale);
         }
         width *= xscale;
 
@@ -103,7 +103,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             fprintf(stderr, "gdkpixbuf-input: got DpiY from pixbuf: %i for y-scale %g\n", dpi, yscale);
         } else {
             yscale = 90.0 / defaultxdpi;
-            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from export preference: %g for y-scale: %g\n", defaultxdpi, yscale);
+            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from import preference: %g for y-scale: %g\n", defaultxdpi, yscale);
         }
         height *= yscale;
         

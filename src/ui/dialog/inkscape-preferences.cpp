@@ -1338,6 +1338,9 @@ void InkscapePreferences::initPageBitmaps()
         _bitmap_import.init("/dialogs/import/link", labels, values, G_N_ELEMENTS(values), "ask");
         _page_bitmaps.add_line( false, _("Bitmap import:"), _bitmap_import, "", "", false);
     }
+    _importexport_import_res.init("/dialogs/import/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
+    _page_bitmaps.add_line( false, _("Default import resolution:"), _importexport_import_res, _("dpi"),
+                            _("Default bitmap resolution (in dots per inch) for bitmap import"), false);
 
     this->AddPage(_page_bitmaps, _("Bitmaps"), PREFS_PAGE_BITMAPS);
 }
