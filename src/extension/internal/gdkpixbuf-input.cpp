@@ -13,6 +13,7 @@
 #include "sp-image.h"
 #include "document-undo.h"
 #include "unit-constants.h"
+#include "image-resolution.h"
 #include <set>
 
 namespace Inkscape {
@@ -79,18 +80,23 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         double width = gdk_pixbuf_get_width(pb);
         double height = gdk_pixbuf_get_height(pb);
         double defaultxdpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", PX_PER_IN);
+        ImageResolution *ir = 0;
         double xscale = 1;
         double yscale = 1;
+
         gchar const *str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
         if ( str ) {
             gint dpi = atoi(str);
             if ( dpi > 0 && dpi != 72 ) {
                 xscale = 72.0 / (double)dpi;
             }
-            fprintf(stderr, "gdkpixbuf-input: got DpiX from pixbuf: %i for x-scale %g\n", dpi, xscale);
         } else {
-            xscale = 90.0 / defaultxdpi;
-            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from import preference: %g for x-scale: %g\n", defaultxdpi, xscale);
+            if (!ir)
+                ir = new ImageResolution(uri);
+            if (ir->ok())
+                xscale = 90.0 / ir->x();
+            else
+                xscale = 90.0 / defaultxdpi;
         }
         width *= xscale;
 
@@ -100,13 +106,18 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             if ( dpi > 0 && dpi != 72 ) {
                 yscale = 72.0 / (double)dpi;
             }
-            fprintf(stderr, "gdkpixbuf-input: got DpiY from pixbuf: %i for y-scale %g\n", dpi, yscale);
         } else {
-            yscale = 90.0 / defaultxdpi;
-            fprintf(stderr, "gdkpixbuf-input: got defaultxdpi from import preference: %g for y-scale: %g\n", defaultxdpi, yscale);
+            if (!ir)
+                ir = new ImageResolution(uri);
+            if (ir->ok())
+                yscale = 90.0 / ir->y();
+            else
+                yscale = 90.0 / defaultxdpi;
         }
         height *= yscale;
-        
+
+        if (ir)
+            delete ir;
 
         // Create image node
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();

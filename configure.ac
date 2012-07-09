@@ -213,6 +213,15 @@ if test "x$png_ok" != "xyes"; then
 	AC_MSG_ERROR([libpng >= 1.2 is needed to compile inkscape])
 fi
 
+dnl ******************************
+dnl Check for libexif
+dnl ******************************
+AC_CHECK_LIB(exif, exif_data_new_from_file, [AC_CHECK_HEADER(libexif/exif-data.h, exif_ok=yes, exif_ok=no)], exif_ok=no, -lm)
+if test "x$exif_ok" = "xyes"; then
+   LIBS="-lexif $LIBS"
+   AC_DEFINE(HAVE_EXIF, 1, [Use libexif])
+fi
+
 dnl Handle possible dlopen requirement for libgc
 dnl Isn't this internal to something in autoconf?  Couldn't find it...
 AC_CHECK_LIB([dld], [shl_load], [lt_cv_dlopen="shl_load" lt_cv_dlopen_libs="-dld"], [AC_CHECK_FUNC([dlopen],
