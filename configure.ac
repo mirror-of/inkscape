@@ -222,6 +222,15 @@ if test "x$exif_ok" = "xyes"; then
    AC_DEFINE(HAVE_EXIF, 1, [Use libexif])
 fi
 
+dnl ******************************
+dnl Check for libjpeg
+dnl ******************************
+AC_CHECK_LIB(jpeg, jpeg_CreateDecompress, [AC_CHECK_HEADER(jpeglib.h, jpeg_ok=yes, jpeg_ok=no)], jpeg_ok=no)
+if test "x$jpeg_ok" = "xyes"; then
+   LIBS="-ljpeg $LIBS"
+   AC_DEFINE(HAVE_JPEG, 1, [Use libjpeg])
+fi
+
 dnl Handle possible dlopen requirement for libgc
 dnl Isn't this internal to something in autoconf?  Couldn't find it...
 AC_CHECK_LIB([dld], [shl_load], [lt_cv_dlopen="shl_load" lt_cv_dlopen_libs="-dld"], [AC_CHECK_FUNC([dlopen],

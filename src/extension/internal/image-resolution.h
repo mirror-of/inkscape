@@ -29,6 +29,8 @@ private:
 private:
   void readpng(char const *fn);
   void readexif(char const *fn);
+  void readexiv(char const *fn);
+  void readjfif(char const *fn);
 };
 
 }

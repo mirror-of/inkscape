@@ -17,15 +17,9 @@
 #ifdef HAVE_EXIF
 #define IR_TRY_EXIF 1
 #endif
-
-#if IR_TRY_PNG
-#include <png.h>
-#endif
-#if IR_TRY_EXIF
-#include <math.h>
-#include <libexif/exif-data.h>
-#elif IR_TRY_EXIV
-#include <exiv2/exiv2.hpp>
+#define IR_TRY_EXIV 0
+#ifdef HAVE_JPEG
+#define IR_TRY_JFIF 1
 #endif
 
 namespace Inkscape {
@@ -35,17 +29,13 @@ namespace Internal {
 ImageResolution::ImageResolution(char const *fn) {
   ok_ = false;
 
-#if IR_TRY_PNG
   readpng(fn);
-#endif
-  
-#if IR_TRY_EXIF  
   if (!ok_)
     readexif(fn);
-#elif IR_TRY_EXIV
   if (!ok_)
-    readexif(fn);
-#endif
+    readexiv(fn);
+  if (!ok_)
+    readjfif(fn);
 }
 
 bool ImageResolution::ok() const {
@@ -60,8 +50,12 @@ double ImageResolution::y() const {
   return y_;
 }
 
+  
+  
 #if IR_TRY_PNG
 
+#include <png.h>
+  
 static bool haspngheader(FILE *fp) {
   unsigned char header[8];
   if (fread(header, 1, 8, fp)!=8)
@@ -121,12 +115,15 @@ void ImageResolution::readpng(char const *fn) {
 #else
 
 // Dummy implementation
-void ImageResolution::readpng(char const *fn) {
+void ImageResolution::readpng(char const *) {
 }
 
 #endif
 
 #if IR_TRY_EXIF
+
+#include <math.h>
+#include <libexif/exif-data.h>
 
 static double exifDouble(ExifEntry *entry, ExifByteOrder byte_order) {
   switch (entry->format) {
@@ -188,10 +185,17 @@ void ImageResolution::readexif(char const *fn) {
   exif_data_free(ed);
 }
 
-#elif IR_TRY_EXIV
+#else
 
-// Implementation using libexiv2
-void ImageResolution::readexif(char const *fn) {
+// Dummy implementation
+void ImageResolution::readexif(char const *) {
+}
+ 
+#endif
+  
+#if IR_TRY_EXIV
+
+void ImageResolution::readexiv(char const *fn) {
   Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(fn);
   if (!image.get())
     return;
@@ -230,14 +234,85 @@ void ImageResolution::readexif(char const *fn) {
   }
   ok_ = havex && havey;
 }
+
 #else
 
 // Dummy implementation
-void ImageResolution::readexif(char const *fn) {
+void ImageResolution::readexiv(char const *) {
 }
 
 #endif
 
+#if IR_TRY_JFIF
+
+#include <jpeglib.h>
+#include <setjmp.h>
+
+static void irjfif_error_exit(j_common_ptr cinfo) {
+  longjmp(*(jmp_buf*)cinfo->client_data, 1);
+}
+
+static void irjfif_emit_message(j_common_ptr, int) {
+}
+
+static void irjfif_output_message(j_common_ptr) {
+}
+
+static void irjfif_format_message(j_common_ptr, char *) {
+}
+
+static void irjfif_reset(j_common_ptr) {
+}
+
+void ImageResolution::readjfif(char const *fn) {
+  FILE *ifd = fopen(fn, "rb");
+  if (!ifd)
+    return;
+
+  struct jpeg_decompress_struct cinfo;
+  jmp_buf jbuf;
+  struct jpeg_error_mgr jerr;
+  bool constr = false;
+
+  if (setjmp(jbuf)) {
+    fclose(ifd);
+    if (constr)
+      jpeg_destroy_decompress(&cinfo);
+    return;
+  }
+  
+  cinfo.err = jpeg_std_error(&jerr);
+  jpeg_create_decompress(&cinfo);
+  jerr.error_exit = &irjfif_error_exit;
+  jerr.emit_message = &irjfif_emit_message;
+  jerr.output_message = &irjfif_output_message;
+  jerr.format_message = &irjfif_format_message;
+  jerr.reset_error_mgr = &irjfif_reset;
+  cinfo.client_data = (void*)&jbuf;
+  constr = true;
+
+  jpeg_stdio_src(&cinfo, ifd);
+  jpeg_read_header(&cinfo, TRUE);
+
+  if (cinfo.density_unit==1) {
+    x_ = cinfo.X_density;
+    y_ = cinfo.Y_density;
+    ok_ = true;
+  }
+
+  constr = false;
+  jpeg_destroy_decompress(&cinfo);
+  fclose(ifd);
+}
+				 
+#else
+
+// Dummy implementation
+void ImageResolution::readjfif(char const *) {
+}
+
+#endif
+  
 }
 }
 }
