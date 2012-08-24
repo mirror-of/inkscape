@@ -1,178 +1,217 @@
-#!/bin/sh
-#
-# USAGE
-# osx-dmg [-s] -p /path/to/Inkscape.app
-#
-# The script creates a read-write disk image, 
-# copies Inkscape in it, customizes its appearance using a 
-# previously created .DS_Store file (inkscape.ds_store),
-# and then compresses the disk image for distribution.
-#
-# AUTHORS
-#	Jean-Olivier Irisson <jo.irisson@gmail.com>
-#	Michael Wybrow <mjwybrow@users.sourceforge.net>
-#
-# Copyright (C) 2006-2007
-# Released under GNU GPL, read the file 'COPYING' for more information
-#
-#
-# How to update the disk image layout:
-# ------------------------------------
-#
-# Modify the 'dmg_background.svg' file and generate a new 
-# 'dmg_background.png' file.
-#
-# Update the AppleScript file 'dmg_set_style.scpt'.
-#
-# Run this script with the '-s' option.  It will apply the
-# 'dmg_set_style.scpt' AppleScript file, and then prompt the
-# user to check the window size and position before writing
-# a new 'inkscape.ds_store' file to work around a bug in Finder
-# and AppleScript.  The updated 'inkscape.ds_store' will need 
-# to be commited to the repository when this is done.
-#
+#! /bin/bash
 
-# Defaults
-set_ds_store=false
-ds_store_file="inkscape.ds_store"
-package=""
-rw_name="RWinkscape.dmg"
-volume_name="Inkscape"
-tmp_dir="/tmp/dmg-$$"
-auto_open_opt=
+# This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+# General Public License as published by the Free Software Foundation; either version 2 of the License,
+# or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+# the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with this program; if not,
+# write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ 
 
-# Help message
-#----------------------------------------------------------
-help()
-{
-echo "
-Create a custom dmg file to distribute Inkscape
+# Create a read-only disk image of the contents of a folder
+#
+# Usage: make-diskimage <image_file>
+#                       <src_folder>
+#                       <volume_name>
+#                       <applescript>
+#                       <artpath>
+#                       <eula_resource_file>
 
-\033[1mUSAGE\033[0m
-	$0 [-s] -p /path/to/Inkscape.app
+set -e;
 
-\033[1mOPTIONS\033[0m
-	\033[1m-h,--help\033[0m 
-		display this help message
-	\033[1m-s\033[0m
-		set a new apperance (do not actually creates a bundle)
-	\033[1m-p,--package\033[0m
-		set the path to the Inkscape.app that should be copie
-		in the dmg
-"
+function pure_version() {
+  echo '1.0.0.2'
 }
 
-# Parse command line arguments
-while [ "$1" != "" ]
-do
-	case $1 in
-	  	-h|--help)
-			help
-			exit 0 ;;
-	  	-s)
-			set_ds_store=true ;;
-	  	-p|--package)
-			package="$2"
-			shift 1 ;;
-		*)
-			echo "Invalid command line option" 
-			exit 2 ;;
-	esac
-	shift 1
+function version() {
+  echo "create-dmg $(pure_version)"
+}
+
+function usage() {
+  version
+  echo "Creates a fancy DMG file."
+  echo "Usage:  $(basename $0) options... image.dmg source_folder"
+  echo "All contents of source_folder will be copied into the disk image."
+  echo "Options:"
+  echo "  --volname name"
+  echo "      set volume name (displayed in the Finder sidebar and window title)"
+  echo "  --volicon icon.icns"
+  echo "      set volume icon"
+  echo "  --background pic.png"
+  echo "      set folder background image (provide png, gif, jpg)"
+  echo "  --window-pos x y"
+  echo "      set position the folder window"
+  echo "  --window-size width height"
+  echo "      set size of the folder window"
+  echo "  --icon-size icon_size"
+  echo "      set window icons size (up to 128)"
+  echo "  --icon file_name x y"
+  echo "      set position of the file's icon"
+  echo "  --custom-icon file_name custom_icon_or_sample_file x y"
+  echo "      set position and custom icon"
+  echo "  --app-drop-link x y"
+  echo "      make a drop link to Applications, at location x,y"
+  echo "  --version         show tool version number"
+  echo "  -h, --help        display this help"
+  exit 0
+}
+
+WINX=10
+WINY=60
+WINW=500
+WINH=350
+ICON_SIZE=128
+
+while test "${1:0:1}" = "-"; do
+  case $1 in
+    --volname)
+      VOLUME_NAME="$2"
+      shift; shift;;
+    --volicon)
+      VOLUME_ICON_FILE="$2"
+      shift; shift;;
+    --background)
+      BACKGROUND_FILE="$2"
+      BACKGROUND_FILE_NAME="$(basename $BACKGROUND_FILE)"
+      BACKGROUND_CLAUSE="set background picture of opts to file \".background:$BACKGROUND_FILE_NAME\""
+      shift; shift;;
+    --icon-size)
+      ICON_SIZE="$2"
+      shift; shift;;
+    --window-pos)
+      WINX=$2; WINY=$3
+      shift; shift; shift;;
+    --window-size)
+      WINW=$2; WINH=$3
+      shift; shift; shift;;
+    --icon)
+      POSITION_CLAUSE="${POSITION_CLAUSE}set position of item \"$2\" to {$3, $4}
+"
+      shift; shift; shift; shift;;
+    --custom-icon)
+      shift; shift; shift; shift; shift;;
+    -h | --help)
+      usage;;
+    --version)
+      version; exit 0;;
+    --pure-version)
+      pure_version; exit 0;;
+    --app-drop-link)
+      APPLICATION_LINK=$2
+      APPLICATION_CLAUSE="set position of item \"Applications\" to {$2, $3}
+"
+      shift; shift; shift;;
+    -*)
+      echo "Unknown option $1. Run with --help for help."
+      exit 1;;
+  esac
 done
 
-# Safety checks
-if [ ! -e "$package" ]; then
-	echo "Cannot find package: $package"
-	exit 1
+test -z "$2" && {
+  echo "Not enough arguments. Invoke with --help for help."
+  exit 1
+}
+
+DMG_PATH="$1"
+DMG_DIRNAME="$(dirname "$DMG_PATH")"
+DMG_DIR="$(cd $DMG_DIRNAME > /dev/null; pwd)"
+DMG_NAME="$(basename "$DMG_PATH")"
+DMG_TEMP_NAME="$DMG_DIR/rw.${DMG_NAME}"
+SRC_FOLDER="$(cd "$2" > /dev/null; pwd)"
+test -z "$VOLUME_NAME" && VOLUME_NAME="$(basename "$DMG_PATH" .dmg)"
+
+AUX_PATH="$(cd "$(dirname $0)"; pwd)/support"
+
+test -d "$AUX_PATH" || {
+  echo "Cannot find support directory: $AUX_PATH"
+  exit 1
+}
+
+if [ -f "$SRC_FOLDER/.DS_Store" ]; then
+    echo "Deleting any .DS_Store in source folder"
+    rm "$SRC_FOLDER/.DS_Store"
 fi
 
-echo "\n\033[1mCREATE INKSCAPE DISK IMAGE\033[0m\n"
+# Create the image
+echo "Creating disk image..."
+test -f "${DMG_TEMP_NAME}" && rm -f "${DMG_TEMP_NAME}"
+ACTUAL_SIZE=`du -sm "$SRC_FOLDER" | sed -e 's/	.*//g'`
+DISK_IMAGE_SIZE=$(expr $ACTUAL_SIZE + 20)
+hdiutil create -srcfolder "$SRC_FOLDER" -volname "${VOLUME_NAME}" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${DISK_IMAGE_SIZE}m "${DMG_TEMP_NAME}"
 
-# Create temp directory with desired contents of the release volume.
-rm -rf "$tmp_dir"
-mkdir "$tmp_dir"
+# mount it
+echo "Mounting disk image..."
+MOUNT_DIR="/Volumes/${VOLUME_NAME}"
+echo "Mount directory: $MOUNT_DIR"
+DEV_NAME=$(hdiutil attach -readwrite -noverify -noautoopen "${DMG_TEMP_NAME}" | egrep '^/dev/' | sed 1q | awk '{print $1}')
+echo "Device name:     $DEV_NAME"
 
-echo "\033[1mCopying files to temp directory\033[0m"
-# Inkscape itself
-# copy Inkscape.app
-cp -rf "$package" "$tmp_dir"/
-# link to Applications in order to drag and drop inkscape onto it
-ln -sf /Applications "$tmp_dir"/
-
-# Copy a background image inside a hidden directory so the image file itself won't be shown.
-mkdir "$tmp_dir/.background"
-cp dmg_background.png "$tmp_dir/.background/background.png"
-
-# If the appearance settings are not to be modified we just copy them
-if [ ${set_ds_store} = "false" ]; then
-	# Copy the .DS_Store file which contains information about
-	# window size, appearance, etc.  Most of this can be set
-	# with Apple script but involves user intervention so we
-	# just keep a copy of the correct settings and use that instead.
-	cp $ds_store_file "$tmp_dir/.DS_Store"
-	auto_open_opt=-noautoopen
+if ! test -z "$BACKGROUND_FILE"; then
+  echo "Copying background file..."
+  test -d "$MOUNT_DIR/.background" || mkdir "$MOUNT_DIR/.background"
+  cp "$BACKGROUND_FILE" "$MOUNT_DIR/.background/$BACKGROUND_FILE_NAME"
 fi
 
-# Create a new RW image from the temp directory.
-echo "\033[1mCreating a temporary disk image\033[0m"
-rm -f "$rw_name"
-/usr/bin/hdiutil create -srcfolder "$tmp_dir" -volname "$volume_name" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW "$rw_name"
-
-# We're finished with the temp directory, remove it.
-rm -rf "$tmp_dir"
-
-# Mount the created image.
-MOUNT_DIR="/Volumes/$volume_name"
-DEV_NAME=`/usr/bin/hdiutil attach -readwrite -noverify $auto_open_opt  "$rw_name" | egrep '^/dev/' | sed 1q | awk '{print $1}'`
-
-# Have the disk image window open automatically when mounted.
-bless -openfolder /Volumes/$volume_name
-
-# In case the apperance has to be modified, mount the image and apply the base settings to it via Applescript
-if [ ${set_ds_store} = "true" ]; then
-	/usr/bin/osascript dmg_set_style.scpt
-
-	open "/Volumes/$volume_name"
-	# BUG: one needs to move and close the window manually for the
-	# changes in appearance to be retained... 
-        echo " 
-        ************************************** 
-        *  Please move the disk image window * 
-        *    to the center of the screen     *  
-        *   then close it and press enter    * 
-        ************************************** 
-        " 
-        read -e DUMB
-
-	# .DS_Store files aren't written till the disk is unmounted, or finder is restarted.
-	hdiutil detach "$DEV_NAME"
-	auto_open_opt=-noautoopen
-	DEV_NAME=`/usr/bin/hdiutil attach -readwrite -noverify $auto_open_opt  "$rw_name" | egrep '^/dev/' | sed 1q | awk '{print $1}'`
-	echo
-	echo "New $ds_store_file file written. Re-run $0 without the -s option to use it"
-	cp /Volumes/$volume_name/.DS_Store ./$ds_store_file
-	SetFile -a v ./$ds_store_file
-
-	# Unmount the disk image.
-	hdiutil detach "$DEV_NAME"
-	rm -f "$rw_name"
-
-	exit 0
+if ! test -z "$APPLICATION_LINK"; then
+  echo "making link to Applications dir"
+  echo $MOUNT_DIR
+  ln -s /Applications "$MOUNT_DIR/Applications"
 fi
 
-# Unmount the disk image.
-hdiutil detach "$DEV_NAME"
-
-# Create the offical release image by compressing the RW one.
-echo "\033[1mCompressing the final disk image\033[0m"
-img_name="Inkscape.dmg"
-# TODO make this a command line option
-if [ -e "$img_name" ]; then
-	echo "$img_name already exists."
-	rm -i "$img_name"
+if ! test -z "$VOLUME_ICON_FILE"; then
+  echo "Copying volume icon file '$VOLUME_ICON_FILE'..."
+  cp "$VOLUME_ICON_FILE" "$MOUNT_DIR/.VolumeIcon.icns"
+  SetFile -c icnC "$MOUNT_DIR/.VolumeIcon.icns"
 fi
-/usr/bin/hdiutil convert "$rw_name" -format UDZO -imagekey zlib-level=9 -o "$img_name"
-rm -f "$rw_name"
 
+# run applescript
+APPLESCRIPT=$(mktemp -t createdmg)
+cat "$AUX_PATH/template.applescript" | sed -e "s/WINX/$WINX/g" -e "s/WINY/$WINY/g" -e "s/WINW/$WINW/g" -e "s/WINH/$WINH/g" -e "s/BACKGROUND_CLAUSE/$BACKGROUND_CLAUSE/g" -e "s/ICON_SIZE/$ICON_SIZE/g" | perl -pe  "s/POSITION_CLAUSE/$POSITION_CLAUSE/g" | perl -pe "s/APPLICATION_CLAUSE/$APPLICATION_CLAUSE/g" >"$APPLESCRIPT"
+
+echo "Running Applescript: /usr/bin/osascript \"${APPLESCRIPT}\" \"${VOLUME_NAME}\""
+"/usr/bin/osascript" "${APPLESCRIPT}" "${VOLUME_NAME}" || true
+echo "Done running the applescript..."
+sleep 4
+
+rm "$APPLESCRIPT"
+
+# make sure it's not world writeable
+echo "Fixing permissions..."
+chmod -Rf go-w "${MOUNT_DIR}" &> /dev/null || true
+echo "Done fixing permissions."
+
+# make the top window open itself on mount:
+if [ -x /usr/local/bin/openUp ]; then
+    echo "Applying openUp..."
+    /usr/local/bin/openUp "${MOUNT_DIR}"
+fi
+
+if ! test -z "$VOLUME_ICON_FILE"; then
+   # tell the volume that it has a special file attribute
+   SetFile -a C "$MOUNT_DIR"
+fi
+
+# unmount
+echo "Unmounting disk image..."
+hdiutil detach "${DEV_NAME}"
+
+# compress image
+echo "Compressing disk image..."
+hdiutil convert "${DMG_TEMP_NAME}" -format UDZO -imagekey zlib-level=9 -o "${DMG_DIR}/${DMG_NAME}"
+rm -f "${DMG_TEMP_NAME}"
+
+# adding EULA resources
+if [ ! -z "${EULA_RSRC}" -a "${EULA_RSRC}" != "-null-" ]; then
+        echo "adding EULA resources"
+        hdiutil unflatten "${DMG_DIR}/${DMG_NAME}"
+        /Developer/Tools/ResMerger -a "${EULA_RSRC}" -o "${DMG_DIR}/${DMG_NAME}"
+        hdiutil flatten "${DMG_DIR}/${DMG_NAME}"
+fi
+
+echo "Disk image done"
 exit 0
+

@@ -325,7 +325,7 @@ then
 	fi
 
 	# Create app bundle
-	./osx-app.sh $STRIP -b $INSTALLPREFIX/bin/inkscape -p $SRCROOT/Info.plist $PYTHON_MODULES
+	gtk-mac-bundler Inkscape.bundle
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nApplication bundle creation failed"
@@ -345,7 +345,7 @@ function checkversion {
 if [[ "$DISTRIB" == "t" ]]
 then
 	# Create dmg bundle
-	./osx-dmg.sh -p "Inkscape.app"
+	./osx-dmg.sh --volname "Inkscape.dmg" --volicon "Resources/Inkscape.icns" --window-size 500 250 --background dmg_background.png --icon-size 64 --icon Inkscape.app 375 100 --app-drop-link 125 100 Inkscape.dmg Inkscape.app
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nDisk image creation failed"
@@ -362,7 +362,6 @@ Build system information:
 	OS X Version  $OSXVERSION
 	Architecture  $ARCH
 	MacPorts Ver  `port version | cut -f2 -d \ `
-	GCC           `$CXX --version | grep GCC`
 Included dependency versions:
 	GTK           `checkversion gtk+-2.0`
 	GTKmm         `checkversion gtkmm-2.4`
