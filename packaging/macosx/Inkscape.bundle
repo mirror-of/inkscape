@@ -22,6 +22,12 @@
   <!-- <binary>${prefix}/lib/pango/${pkg:pango:pango_module_version}/modules</binary> -->
   <binary>${prefix}/lib/gdk-pixbuf-2.0/${pkg:gdk-pixbuf-2.0:gdk_pixbuf_binary_version}/loaders</binary>
   <binary>${prefix}/lib/gnome-vfs-2.0/modules</binary>
+  <binary dest="${bundle}/Contents/Resources/python/site-package/lxml/etree.so">
+    ${prefix}/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lxml/etree.so
+  </binary>
+  <binary dest="${bundle}/Contents/Resources/python/site-package/lxml/objectify.so">
+    ${prefix}/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lxml/objectify.so
+  </binary>
 
   <!-- Any additional data, like images, or Glade files -->
   <data dest="${bundle}/Contents/Resources">
@@ -44,6 +50,9 @@
   </data>
   <data dest="${bundle}/Contents/Resources/etc">
     ${prefix}/etc/gnome-vfs-mime-magic
+  </data>
+  <data dest="${bundle}/Contents/Resources/python/site-package/lxml">
+    ${prefix}/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lxml
   </data>
 
 </app-bundle>
