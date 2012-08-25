@@ -4,6 +4,7 @@
 ./autom4te.cache
 ./btool.exe
 ./build
+./Build
 ./build.dep
 ./compile
 ./compile.lst
@@ -150,3 +151,4 @@ share/palettes/palettes.h
 ltmain.sh@
 backup.bzr
 mkinstalldirs
+.DS_Store
