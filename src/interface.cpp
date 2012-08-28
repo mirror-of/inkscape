@@ -83,6 +83,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
+#ifdef WITH_MAC_INTEGRATION
+#include <gtkmacintegration/gtkosxapplication.h>
+#endif
+
 using Inkscape::DocumentUndo;
 
 /* Drag and Drop */
@@ -270,6 +274,13 @@ sp_create_window(SPViewWidget *vw, gboolean editable)
     if ( SP_IS_DESKTOP_WIDGET(vw) ) {
         inkscape_reactivate_desktop(SP_DESKTOP_WIDGET(vw)->desktop);
     }
+#ifdef WITH_MAC_INTEGRATION
+    // The window must be visible for the menu integration to work
+    GtkOSXApplication *theApp = (GtkOSXApplication *) g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
+    SPDesktopWidget *dtw = reinterpret_cast<SPDesktopWidget*>(vw);
+    gtk_widget_hide (dtw->menubar);
+    gtk_osxapplication_set_menu_bar(theApp, GTK_MENU_SHELL(dtw->menubar));
+#endif
 }
 
 void

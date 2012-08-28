@@ -122,6 +122,10 @@
 #include "sp-flowtext.h"
 #include "text-editing.h"
 
+#ifdef WITH_MAC_INTEGRATION
+#include <gtkmacintegration/gtkosxapplication.h>
+#endif
+
 enum {
     SP_ARG_NONE,
     SP_ARG_NOGUI,
@@ -941,6 +945,10 @@ sp_main_gui(int argc, char const **argv)
 {
     Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
 
+#ifdef WITH_MAC_INTEGRATION
+    GtkOSXApplication *theApp = (GtkOSXApplication *) g_object_new(GTK_TYPE_OSX_APPLICATION, NULL);
+#endif
+
     GSList *fl = NULL;
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
@@ -987,6 +995,10 @@ sp_main_gui(int argc, char const **argv)
     if (create_new) {
         sp_file_new_default();
     }
+
+#ifdef WITH_MAC_INTEGRATION
+    gtk_osxapplication_ready(theApp); //Must be called a little before main_instance.run()
+#endif
 
     Glib::signal_idle().connect(sigc::ptr_fun(&Inkscape::CmdLineAction::idle));
     main_instance.run();
