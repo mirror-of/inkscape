@@ -54,5 +54,8 @@
   <data dest="${bundle}/Contents/Resources/python/site-package/lxml">
     ${prefix}/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lxml
   </data>
+  <data dest="${bundle}/Contents/Resources/share/mime">
+    ${prefix}/share/mime
+  </data>
 
 </app-bundle>
