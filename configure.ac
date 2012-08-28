@@ -835,6 +835,18 @@ AC_MSG_CHECKING([for GTK+ backend target])
 gtk_backend_target=`pkg-config --variable=target gtk+-2.0`
 AC_MSG_RESULT($gtk_backend_target)
 
+# If GTK+ backend is quartz, check if gtk-mac-integration is available
+if test "x$gtk_backend_target" = xquartz; then
+  PKG_CHECK_MODULES(GTK_MAC, gtk-mac-integration, gtk_mac=yes, gtk_mac=no)
+  AC_SUBST(GTK_MAC_LIBS)
+  AC_SUBST(GTK_MAC_CFLAGS)
+  if test "x$gtk_mac" = "xyes"; then
+    AC_DEFINE(GTKOSXAPPLICATION, 1, [Integration with OSX])
+    INKSCAPE_LIBS="$INKSCAPE_LIBS $GTK_MAC_LIBS"
+    INKSCAPE_CFLAGS="$INKSCAPE_CFLAGS $GTK_MAC_CFLAGS"
+  fi
+fi
+
 # Add X11 library if needed
 if test "x$gtk_backend_target" = "xx11"; then
   INKSCAPE_LIBS="$INKSCAPE_LIBS -lX11"
