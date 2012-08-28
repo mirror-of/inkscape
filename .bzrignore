@@ -154,3 +154,4 @@ mkinstalldirs
 .DS_Store
 share/attributes/Makefile
 share/extensions/ink2canvas/Makefile
+packaging/macosx/Inkscape.app
