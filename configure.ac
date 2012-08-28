@@ -837,13 +837,13 @@ AC_MSG_RESULT($gtk_backend_target)
 
 # If GTK+ backend is quartz, check if gtk-mac-integration is available
 if test "x$gtk_backend_target" = xquartz; then
-  PKG_CHECK_MODULES(GTK_MAC, gtk-mac-integration, gtk_mac=yes, gtk_mac=no)
-  AC_SUBST(GTK_MAC_LIBS)
-  AC_SUBST(GTK_MAC_CFLAGS)
+  PKG_CHECK_MODULES(GTK_MAC_INTEGRATION, gtk-mac-integration, gtk_mac=yes, gtk_mac=no)
+  AC_SUBST(GTK_MAC_INTEGRATION_LIBS)
+  AC_SUBST(GTK_MAC_INTEGRATION_CFLAGS)
   if test "x$gtk_mac" = "xyes"; then
-    AC_DEFINE(GTKOSXAPPLICATION, 1, [Integration with OSX])
-    INKSCAPE_LIBS="$INKSCAPE_LIBS $GTK_MAC_LIBS"
-    INKSCAPE_CFLAGS="$INKSCAPE_CFLAGS $GTK_MAC_CFLAGS"
+    AC_DEFINE(WITH_MAC_INTEGRATION, 1, [Integration with OSX])
+    INKSCAPE_LIBS="$INKSCAPE_LIBS $GTK_MAC_INTEGRATION_LIBS"
+    INKSCAPE_CFLAGS="$INKSCAPE_CFLAGS $GTK_MAC_INTEGRATION_CFLAGS"
   fi
 fi
 
