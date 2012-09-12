@@ -112,44 +112,9 @@ install: build
 	install -o root -g root -m 644 $(CURDIR)/debian/inkscape.applications $(CURDIR)/debian/inkscape/usr/share/application-registry/inkscape.applications
 	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape/etc/bash_completion.d/inkscape
 	chmod a+x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/xaml2svg/
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_randomcase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_lesssaturation.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/__init__.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/spirograph.inx
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_desaturate.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Base.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code128.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_randomize.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_custom.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code93.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_lowercase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code39.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_removeblue.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code39Ext.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_removered.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/EAN8.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_morelight.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_uppercase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_replace.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_brighter.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_lesshue.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/UPCA.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/RM4CC.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_rgbbarrel.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/UPCE.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_replace.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/EAN13.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_removegreen.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_morehue.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_grayscale.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_lesslight.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_sentencecase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/render_barcode.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_darker.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_flipcase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_moresaturation.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_negative.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_titlecase.py
+	for e in $$(find debian/inkscape/usr/share/inkscape/extensions/ -type f -name "*.py" ); do \
+	    chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/$$e
+	done;
 
 	# Add translation domain to .desktop files
 	DOMAIN=$$(grep --max-count 1 '^GETTEXT_PACKAGE[[:space:]]*=' $(CURDIR)/po/Makefile | sed 's/^.*=[[:space:]]\([^[:space:]]\)/\1/'); \
