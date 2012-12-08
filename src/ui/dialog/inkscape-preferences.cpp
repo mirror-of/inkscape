@@ -492,7 +492,7 @@ void InkscapePreferences::initPageTools()
     this->AddPage(_page_dropper, _("Dropper"), iter_tools, PREFS_PAGE_TOOLS_DROPPER);
     this->AddSelcueCheckbox(_page_dropper, "/tools/dropper", true);
     this->AddGradientCheckbox(_page_dropper, "/tools/dropper", true);
-    
+
     //Connector
     this->AddPage(_page_connector, _("Connector"), iter_tools, PREFS_PAGE_TOOLS_CONNECTOR);
     this->AddSelcueCheckbox(_page_connector, "/tools/connector", true);
@@ -614,7 +614,7 @@ void InkscapePreferences::initPageUI()
 
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, 0);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
-    
+
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
@@ -1264,28 +1264,28 @@ void InkscapePreferences::initPageBehavior()
     _mask_mask_remove.init ( _("Remove clippath/mask object after applying"), "/options/maskobject/remove", true);
     _page_mask.add_line(false, "", _mask_mask_remove, "",
                         _("After applying, remove the object used as the clipping path or mask from the drawing"));
-    
+
     _page_mask.add_group_header( _("Before applying"));
-    
+
     _mask_grouping_none.init( _("Do not group clipped/masked objects"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_NONE, true, 0);
     _mask_grouping_separate.init( _("Enclose every clipped/masked object in its own group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_SEPARATE, false, &_mask_grouping_none);
     _mask_grouping_all.init( _("Put all clipped/masked objects into one group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_ALL, false, &_mask_grouping_none);
-    
+
     _page_mask.add_line(true, "", _mask_grouping_none, "",
                         _("Apply clippath/mask to every object"));
-    
+
     _page_mask.add_line(true, "", _mask_grouping_separate, "",
                         _("Apply clippath/mask to groups containing single object"));
-    
+
     _page_mask.add_line(true, "", _mask_grouping_all, "",
                         _("Apply clippath/mask to group containing all objects"));
-                        
+
     _page_mask.add_group_header( _("After releasing"));
-    
+
     _mask_ungrouping.init ( _("Ungroup automatically created groups"), "/options/maskobject/ungrouping", true);
     _page_mask.add_line(true, "", _mask_ungrouping, "",
                         _("Ungroup groups created when setting clip/mask"));
-    
+
     this->AddPage(_page_mask, _("Clippaths and masks"), iter_behavior, PREFS_PAGE_BEHAVIOR_MASKS);
 
 
@@ -1736,15 +1736,15 @@ void InkscapePreferences::initPageSpellcheck()
 
     /* the returned pointer should _not_ need to be deleted */
     AspellDictInfoList *dlist = get_aspell_dict_info_list(config);
-    
+
     /* config is no longer needed */
     delete_aspell_config(config);
-    
+
     AspellDictInfoEnumeration *dels = aspell_dict_info_list_elements(dlist);
-    
+
     languages.push_back(Glib::ustring(_("None")));
     langValues.push_back(Glib::ustring(""));
-    
+
     const AspellDictInfo *entry;
     int en_index = 0;
     int i = 0;

@@ -80,7 +80,7 @@ grid_canvasitem_get_type (void)
             (GInstanceInitFunc) grid_canvasitem_init,
 	    NULL
 	};
-        
+
 	grid_canvasitem_type = g_type_register_static(SPCanvasItem::getType(), "GridCanvasItem", &grid_canvasitem_info, GTypeFlags(0));
     }
     return grid_canvasitem_type;
