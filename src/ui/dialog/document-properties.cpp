@@ -1120,6 +1120,8 @@ void DocumentProperties::update_gridspage()
             case GRID_AXONOMETRIC:
                 icon = "grid-axonometric";
                 break;
+            case GRID_POLYGONAL:
+                icon = "grid-polygonal";
             default:
                 break;
         }

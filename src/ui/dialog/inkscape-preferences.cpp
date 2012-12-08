@@ -698,6 +698,7 @@ void InkscapePreferences::initPageUI()
     _page_grids.add_line( true, "", _grids_notebook, "", "", false);
     _grids_notebook.append_page(_grids_xy,     CanvasGrid::getName( GRID_RECTANGULAR ));
     _grids_notebook.append_page(_grids_axonom, CanvasGrid::getName( GRID_AXONOMETRIC ));
+    _grids_notebook.append_page(_grids_ngon,   CanvasGrid::getName( GRID_POLYGONAL ));
         _grids_xy_units.init("/options/grids/xy/units");
         _grids_xy.add_line( false, _("Grid units:"), _grids_xy_units, "", "", false);
         _grids_xy_origin_x.init("/options/grids/xy/origin_x", -10000.0, 10000.0, 0.1, 1.0, 0.0, false, false);
@@ -744,6 +745,29 @@ void InkscapePreferences::initPageUI()
         _grids_axonom.add_line( false, _("Major grid line color:"), _grids_axonom_empcolor, "", _("Color used for major (highlighted) grid lines"), false);
         _grids_axonom_empspacing.init("/options/grids/axonom/empspacing", 1.0, 1000.0, 1.0, 5.0, 5.0, true, false);
         _grids_axonom.add_line( false, _("Major grid line every:"), _grids_axonom_empspacing, "", "", false);
+
+    // CanvasNGonGrid properties:
+        _grids_ngon_units.init("/options/grids/ngon/units");
+        _grids_ngon.add_line( false, _("Grid units:"), _grids_ngon_units, "", "", false);
+        _grids_ngon_origin_x.init("/options/grids/ngon/origin_x", -10000.0, 10000.0, 0.1, 1.0, 0.0, false, false);
+        _grids_ngon_origin_y.init("/options/grids/ngon/origin_y", -10000.0, 10000.0, 0.1, 1.0, 0.0, false, false);
+        _grids_ngon_origin_x.set_digits(5);
+        _grids_ngon_origin_y.set_digits(5);
+        _grids_ngon.add_line( false, _("Origin X:"), _grids_ngon_origin_x, "", _("X coordinate of grid origin"), false);
+        _grids_ngon.add_line( false, _("Origin Y:"), _grids_ngon_origin_y, "", _("Y coordinate of grid origin"), false);
+        _grids_ngon_spacing_y.init("/options/grids/ngon/spacing_y", -10000.0, 10000.0, 0.1, 1.0, 1.0, false, false);
+        _grids_ngon_spacing_y.set_digits(5);
+        _grids_ngon.add_line( false, _("Spacing Y:"), _grids_ngon_spacing_y, "", _("Base length of z-axis"), false);
+        _grids_ngon_angle_x.init("/options/grids/ngon/angle_x", -360.0, 360.0, 1.0, 10.0, 30.0, false, false);
+        _grids_ngon_angle_z.init("/options/grids/ngon/angle_z", -360.0, 360.0, 1.0, 10.0, 30.0, false, false);
+        _grids_ngon.add_line( false, _("Angle X:"), _grids_ngon_angle_x, "", _("Angle of x-axis"), false);
+        _grids_ngon.add_line( false, _("Angle Z:"), _grids_ngon_angle_z, "", _("Angle of z-axis"), false);
+        _grids_ngon_color.init(_("Minor grid line color:"), "/options/grids/ngon/color", 0x0000ff20);
+        _grids_ngon.add_line( false, _("Minor grid line color:"), _grids_ngon_color, "", _("Color used for normal grid lines"), false);
+        _grids_ngon_empcolor.init(_("Major grid line color:"), "/options/grids/ngon/empcolor", 0x0000ff40);
+        _grids_ngon.add_line( false, _("Major grid line color:"), _grids_ngon_empcolor, "", _("Color used for major (highlighted) grid lines"), false);
+        _grids_ngon_empspacing.init("/options/grids/ngon/empspacing", 1.0, 1000.0, 1.0, 5.0, 5.0, true, false);
+        _grids_ngon.add_line( false, _("Major grid line every:"), _grids_ngon_empspacing, "", "", false);
 
     this->AddPage(_page_grids, _("Grids"), iter_ui, PREFS_PAGE_UI_GRIDS);
 

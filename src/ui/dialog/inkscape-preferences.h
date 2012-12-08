@@ -378,6 +378,7 @@ protected:
     UI::Widget::PrefRadioButton     _grids_emphasize_on_zoom;
     UI::Widget::DialogPage          _grids_xy;
     UI::Widget::DialogPage          _grids_axonom;
+    UI::Widget::DialogPage          _grids_ngon;
     // CanvasXYGrid properties:
         UI::Widget::PrefUnit            _grids_xy_units;
         UI::Widget::PrefSpinButton      _grids_xy_origin_x;
@@ -398,6 +399,16 @@ protected:
         UI::Widget::PrefColorPicker     _grids_axonom_color;
         UI::Widget::PrefColorPicker     _grids_axonom_empcolor;
         UI::Widget::PrefSpinButton      _grids_axonom_empspacing;
+    // CanvasNGonGrid properties:
+        UI::Widget::PrefUnit            _grids_ngon_units;
+        UI::Widget::PrefSpinButton      _grids_ngon_origin_x;
+        UI::Widget::PrefSpinButton      _grids_ngon_origin_y;
+        UI::Widget::PrefSpinButton      _grids_ngon_spacing_y;
+        UI::Widget::PrefSpinButton      _grids_ngon_angle_x;
+        UI::Widget::PrefSpinButton      _grids_ngon_angle_z;
+        UI::Widget::PrefColorPicker     _grids_ngon_color;
+        UI::Widget::PrefColorPicker     _grids_ngon_empcolor;
+        UI::Widget::PrefSpinButton      _grids_ngon_empspacing;
 
     // SVG Output page:
     UI::Widget::PrefCheckButton   _svgoutput_usenamedcolors;

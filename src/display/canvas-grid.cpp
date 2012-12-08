@@ -26,6 +26,7 @@
 #include "display/cairo-utils.h"
 #include "display/canvas-axonomgrid.h"
 #include "display/canvas-grid.h"
+#include "display/canvas-ngongrid.h"
 #include "display/sp-canvas-group.h"
 #include "document.h"
 #include "helper/units.h"
@@ -46,11 +47,13 @@ namespace Inkscape {
 
 static gchar const *const grid_name[] = {
     N_("Rectangular grid"),
-    N_("Axonometric grid")
+    N_("Axonometric grid"),
+    N_("Polygonal grid")
 };
 static gchar const *const grid_svgname[] = {
     "xygrid",
-    "axonomgrid"
+    "axonomgrid",
+    "ngongrid"
 };
 
 
@@ -277,6 +280,8 @@ CanvasGrid::NewGrid(SPNamedView * nv, Inkscape::XML::Node * repr, SPDocument * d
             return dynamic_cast<CanvasGrid*>(new CanvasXYGrid(nv, repr, doc));
         case GRID_AXONOMETRIC:
             return dynamic_cast<CanvasGrid*>(new CanvasAxonomGrid(nv, repr, doc));
+        case GRID_POLYGONAL:
+            return dynamic_cast<CanvasGrid*>(new CanvasNGonGrid(nv, repr, doc));
     }
 
     return NULL;

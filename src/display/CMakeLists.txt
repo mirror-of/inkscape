@@ -5,6 +5,7 @@ set(display_SRC
 	canvas-axonomgrid.cpp
 	canvas-bpath.cpp
 	canvas-grid.cpp
+	canvas-ngongrid.cpp
 	canvas-temporary-item-list.cpp
 	canvas-temporary-item.cpp
 	canvas-text.cpp

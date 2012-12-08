@@ -30,9 +30,10 @@ class Node;
 
 enum GridType {
     GRID_RECTANGULAR = 0,
-    GRID_AXONOMETRIC = 1
+    GRID_AXONOMETRIC = 1,
+    GRID_POLYGONAL = 2
 };
-#define GRID_MAXTYPENR 1
+#define GRID_MAXTYPENR 2
 
 #define INKSCAPE_TYPE_GRID_CANVASITEM            (Inkscape::grid_canvasitem_get_type ())
 #define INKSCAPE_GRID_CANVASITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INKSCAPE_TYPE_GRID_CANVASITEM, GridCanvasItem))
