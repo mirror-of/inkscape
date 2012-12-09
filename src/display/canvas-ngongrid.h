@@ -36,9 +36,10 @@ public:
     int sections;         /**< Number of grid sections */
     double lengthx;       /**< Step size along concentric polygons */
     double lengthy;       /**< Step size along semi-radius lines */
-    double angle_deg;     /**< Angle of rotation (degrees) */
-    double angle_rad;     /**< Angle of rotation (radians) */
-    double tan_angle;     /**< tan(angle) */
+    double angle_deg;     /**< Angle of rotation */
+    double se_angle_deg;  /**< Half of section arc (degrees) */
+    double se_angle_rad;  /**< Half of section arc (radians) */
+    double se_tan;        /**< tan(se_angle) */
 
     bool scaled;          /**< Whether the grid is in scaled mode */
 
@@ -46,10 +47,8 @@ protected:
     friend class CanvasNGonGridSnapper;
 
     Geom::Point ow;         /**< Transformed origin by the affine for the zoom */
-    double lyw;           /**< Transformed length y by the affine for the zoom */
-    double lxw_x;
-    double lxw_z;
-    double spacing_ylines;
+    double lxw;             /**< Transformed length x by the affine for the zoom */
+    double lyw;             /**< Transformed length y by the affine for the zoom */
 
     Geom::Point sw;          /**< the scaling factors of the affine transform */
 
@@ -60,6 +59,8 @@ private:
     CanvasNGonGrid& operator=(const CanvasNGonGrid&);
 
     void updateWidgets();
+
+    void renderSection (SPCanvasBuf *buf, double section_angle_deg, guint32 _empcolor);
 };
 
 

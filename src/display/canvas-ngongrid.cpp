@@ -42,29 +42,25 @@
 #include "helper/units.h"
 
 
-enum Dim3 { X=0, Y, Z };
-
 /**
  * This function calls Cairo to render a line on a particular canvas buffer.
  * Coordinates are interpreted as SCREENcoordinates
  */
 static void
-sp_cngongrid_drawline (SPCanvasBuf *buf, gint x0, gint y0, gint x1, gint y1, guint32 rgba)
+sp_cngongrid_drawline (SPCanvasBuf *buf, gdouble x0, gdouble y0, gdouble x1, gdouble y1, guint32 rgba)
 {
+    // Prevent aliasing of horizontal/vertical lines
+    if (Geom::are_near(x0, x1)) {
+        x0 = round(x0);
+        x1 = round(x1);
+    }
+    if (Geom::are_near(y0, y1)) {
+        y0 = round(y0);
+        y1 = round(y1);
+    }
+    // TODO clip to viewport?
     cairo_move_to(buf->ct, 0.5 + x0, 0.5 + y0);
     cairo_line_to(buf->ct, 0.5 + x1, 0.5 + y1);
-    ink_cairo_set_source_rgba32(buf->ct, rgba);
-    cairo_stroke(buf->ct);
-}
-
-static void
-sp_grid_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba)
-{
-    if ((x < buf->rect.left()) || (x >= buf->rect.right()))
-        return;
-
-    cairo_move_to(buf->ct, 0.5 + x, 0.5 + ys);
-    cairo_line_to(buf->ct, 0.5 + x, 0.5 + ye);
     ink_cairo_set_source_rgba32(buf->ct, rgba);
     cairo_stroke(buf->ct);
 }
@@ -128,8 +124,10 @@ CanvasNGonGrid::CanvasNGonGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr,
     color = prefs->getInt("/options/grids/ngon/color", 0x0000ff20);
     empcolor = prefs->getInt("/options/grids/ngon/empcolor", 0x0000ff40);
     empspacing = prefs->getInt("/options/grids/ngon/empspacing", 5);
-    angle_rad = Geom::deg_to_rad(angle_deg);
-    tan_angle = tan(angle_rad);
+
+    se_angle_deg = 180.0 / sections;
+    se_angle_rad = Geom::deg_to_rad(se_angle_deg);
+    se_tan = tan(se_angle_rad);
 
     snapper = new CanvasNGonGridSnapper(this, &namedview->snap_manager, 0);
 
@@ -235,6 +233,9 @@ CanvasNGonGrid::readRepr()
       sections = atoi(value);
       if (sections < 3) sections = 3;
       if (sections > 360) sections = 360;
+      se_angle_deg = 180.0 / sections;
+      se_angle_rad = Geom::deg_to_rad(se_angle_deg);
+      se_tan = tan(se_angle_rad);
     }
 
     if ( (value = repr->attribute("spacingx")) ) {
@@ -251,10 +252,8 @@ CanvasNGonGrid::readRepr()
 
     if ( (value = repr->attribute("rotation")) ) {
         angle_deg = g_ascii_strtod(value, NULL);
-        if (angle_deg < 0.) angle_deg = 0.;
-        if (angle_deg > 89.0) angle_deg = 89.0;
-        angle_rad = Geom::deg_to_rad(angle_deg);
-        tan_angle = tan(angle_rad);
+        double max_angle = 360.0 / sections;
+        if (fabs(angle_deg) > max_angle) angle_deg = fmod(angle_deg, max_angle);
     }
 
     if ( (value = repr->attribute("color")) ) {
@@ -462,7 +461,8 @@ CanvasNGonGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 {
     ow = origin * affine;
     sw = Geom::Point(fabs(affine[0]),fabs(affine[3]));
-    sw *= lengthy;
+    sw[Geom::X] *= lengthx;
+    sw[Geom::Y] *= lengthy;
 
     scaled = false;
 
@@ -484,10 +484,8 @@ CanvasNGonGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 
     }
 
-    spacing_ylines = sw[Geom::X] /(tan_angle + tan_angle);
-    lyw            = sw[Geom::Y];
-    lxw_x          = Geom::are_near(tan_angle,0.) ? Geom::infinity() : sw[Geom::X] / tan_angle;
-    lxw_z          = Geom::are_near(tan_angle,0.) ? Geom::infinity() : sw[Geom::X] / tan_angle;
+    lxw = sw[Geom::X];
+    lyw = sw[Geom::Y];
 
     if (empspacing == 0) {
         scaled = true;
@@ -512,9 +510,19 @@ CanvasNGonGrid::Render (SPCanvasBuf *buf)
     cairo_set_line_width(buf->ct, 1.0);
     cairo_set_line_cap(buf->ct, CAIRO_LINE_CAP_SQUARE);
 
-    // gc = gridcoordinates (the coordinates calculated from the grids origin 'grid->ow'.
-    // sc = screencoordinates ( for example "buf->rect.left()" is in screencoordinates )
-    // bc = buffer patch coordinates (x=0 on left side of page, y=0 on bottom of page)
+    double angle_step = 360.0 / sections;
+    for (int s = 0; s < sections; ++s) {
+        renderSection(buf, (s * angle_step) - angle_deg, _empcolor);
+    }
+
+    cairo_restore(buf->ct);
+}
+
+void
+CanvasNGonGrid::renderSection (SPCanvasBuf *buf, double section_angle_deg, guint32 _empcolor)
+{
+    // pc = preimagecoordinates (the coordinates of the section before rotation)
+    // gc = gridcoordinates (the coordinates calculated from the grids origin 'grid->ow')
 
     // tl = topleft ; br = bottomright
     Geom::Point buf_tl_gc;
@@ -524,105 +532,66 @@ CanvasNGonGrid::Render (SPCanvasBuf *buf)
     buf_br_gc[Geom::X] = buf->rect.right()  - ow[Geom::X];
     buf_br_gc[Geom::Y] = buf->rect.bottom() - ow[Geom::Y];
 
-    // render the three separate line groups representing the main-axes
+    double const section_angle_rad = Geom::deg_to_rad(section_angle_deg);
+    double const section_sin = sin(section_angle_rad);
+    double const section_cos = cos(section_angle_rad);
 
-    // x-axis always goes from topleft to bottomright. (0,0) - (1,1)
-    gdouble const xintercept_y_bc = (buf_tl_gc[Geom::X] * tan_angle) - buf_tl_gc[Geom::Y] ;
-    gdouble const xstart_y_sc = ( xintercept_y_bc - floor(xintercept_y_bc/lyw)*lyw ) + buf->rect.top();
-    gint const xlinestart = round( (xstart_y_sc - buf_tl_gc[Geom::X]*tan_angle - ow[Geom::Y]) / lyw );
-    gint xlinenum = xlinestart;
-    // lines starting on left side.
-    for (gdouble y = xstart_y_sc; y < buf->rect.bottom(); y += lyw, xlinenum++) {
-        gint const x0 = buf->rect.left();
-        gint const y0 = round(y);
-        gint x1 = x0 + round( (buf->rect.bottom() - y) / tan_angle );
-        gint y1 = buf->rect.bottom();
-        if ( Geom::are_near(tan_angle,0.) ) {
-            x1 = buf->rect.right();
-            y1 = y0;
-        }
+    gdouble xmax = 25; // TODO compute from viewport intersection - DON'T FLOOR
+    if (xmax <= 0) return; // Section is entirely out of viewport
 
-        if (!scaled && (xlinenum % empspacing) != 0) {
-            sp_cngongrid_drawline (buf, x0, y0, x1, y1, color);
-        } else {
-            sp_cngongrid_drawline (buf, x0, y0, x1, y1, _empcolor);
-        }
-    }
-    // lines starting from top side
-    if (!Geom::are_near(tan_angle,0.))
+    gdouble ymin = ceil(-10); // TODO compute from viewport intersection
+    gdouble ymax = floor(10); // TODO compute from viewport intersection
+
+    gdouble const lxmax = xmax * lxw;
+    gdouble const xbound = (xmax + 0.5) * lyw;
+    gdouble const ybound = (ymax + 0.5) * lyw;
+
+    // Render section edge line
     {
-        gdouble const xstart_x_sc = buf->rect.left() + (lxw_x - (xstart_y_sc - buf->rect.top()) / tan_angle) ;
-        xlinenum = xlinestart-1;
-        for (gdouble x = xstart_x_sc; x < buf->rect.right(); x += lxw_x, xlinenum--) {
-            gint const y0 = buf->rect.top();
-            gint const y1 = buf->rect.bottom();
-            gint const x0 = round(x);
-            gint const x1 = x0 + round( (y1 - y0) / tan_angle );
-
-            if (!scaled && (xlinenum % empspacing) != 0) {
-                sp_cngongrid_drawline (buf, x0, y0, x1, y1, color);
-            } else {
-                sp_cngongrid_drawline (buf, x0, y0, x1, y1, _empcolor);
-            }
-        }
+        gdouble const pc_x = lxmax;
+        gdouble const pc_y = lxmax * se_tan;
+        gdouble const gc_x1 = ( (pc_x * section_cos) - (pc_y * section_sin) ) + ow[Geom::X];
+        gdouble const gc_y1 = ( (pc_x * section_sin) + (pc_y * section_cos) ) + ow[Geom::Y];
+        sp_cngongrid_drawline (buf, ow[Geom::X], ow[Geom::Y], gc_x1, gc_y1, color);
     }
 
-    // y-axis lines (vertical)
-    gdouble const ystart_x_sc = floor (buf_tl_gc[Geom::X] / spacing_ylines) * spacing_ylines + ow[Geom::X];
-    gint const  ylinestart = round((ystart_x_sc - ow[Geom::X]) / spacing_ylines);
-    gint ylinenum = ylinestart;
-    for (gdouble x = ystart_x_sc; x < buf->rect.right(); x += spacing_ylines, ylinenum++) {
-        gint const x0 = round(x);
-
-        if (!scaled && (ylinenum % empspacing) != 0) {
-            sp_grid_vline (buf, x0, buf->rect.top(), buf->rect.bottom() - 1, color);
-        } else {
-            sp_grid_vline (buf, x0, buf->rect.top(), buf->rect.bottom() - 1, _empcolor);
-        }
+    // Render semi-radius lines
+    gint xlinenum = ymin;
+    for (gdouble y = ymin * lyw; y <= ybound; y += lyw, xlinenum++) {
+        // Compute points in preimage coordinates
+        gdouble const pc_x0 = fabs(y) / se_tan;
+        gdouble const pc_x1 = lxmax;
+        if (pc_x1 <= pc_x0) continue;
+        // Compute points in grid coordinates (with rotation applied)
+        gdouble const ys = y * section_sin;
+        gdouble const yc = y * section_cos;
+        gdouble const gc_x0 = ( (pc_x0 * section_cos) - ys ) + ow[Geom::X];
+        gdouble const gc_x1 = ( (pc_x1 * section_cos) - ys ) + ow[Geom::X];
+        gdouble const gc_y0 = ( (pc_x0 * section_sin) + yc ) + ow[Geom::Y];
+        gdouble const gc_y1 = ( (pc_x1 * section_sin) + yc ) + ow[Geom::Y];
+        // Draw segment
+        guint32 const _color = ( (!scaled && (xlinenum % empspacing) != 0) ? color : _empcolor);
+        sp_cngongrid_drawline (buf, gc_x0, gc_y0, gc_x1, gc_y1, _color);
     }
 
-    // z-axis always goes from bottomleft to topright. (0,1) - (1,0)
-    gdouble const zintercept_y_bc = (buf_tl_gc[Geom::X] * -tan_angle) - buf_tl_gc[Geom::Y] ;
-    gdouble const zstart_y_sc = ( zintercept_y_bc - floor(zintercept_y_bc/lyw)*lyw ) + buf->rect.top();
-    gint const  zlinestart = round( (zstart_y_sc + buf_tl_gc[Geom::X]*tan_angle - ow[Geom::Y]) / lyw );
-    gint zlinenum = zlinestart;
-    // lines starting from left side
-    gdouble next_y = zstart_y_sc;
-    for (gdouble y = zstart_y_sc; y < buf->rect.bottom(); y += lyw, zlinenum++, next_y = y) {
-        gint const x0 = buf->rect.left();
-        gint const y0 = round(y);
-        gint x1 = x0 + round( (y - buf->rect.top() ) / tan_angle );
-        gint y1 = buf->rect.top();
-        if ( Geom::are_near(tan_angle,0.) ) {
-            x1 = buf->rect.right();
-            y1 = y0;
-        }
-
-        if (!scaled && (zlinenum % empspacing) != 0) {
-            sp_cngongrid_drawline (buf, x0, y0, x1, y1, color);
-        } else {
-            sp_cngongrid_drawline (buf, x0, y0, x1, y1, _empcolor);
-        }
+    // Render concentric lines
+    gint ylinenum = 1;
+    for (gdouble x = lxw; x < xbound; x += lxw, ylinenum++) {
+        // Compute points in preimage coordinates
+        gdouble const pc_y = x * se_tan;
+        // Compute points in grid coordinates (with rotation applied)
+        gdouble const xs = x * section_sin;
+        gdouble const xc = x * section_cos;
+        gdouble const ys = pc_y * section_sin;
+        gdouble const yc = pc_y * section_cos;
+        gdouble const gc_x0 = xc + ys + ow[Geom::X];
+        gdouble const gc_x1 = xc - ys + ow[Geom::X];
+        gdouble const gc_y0 = xs - yc + ow[Geom::Y];
+        gdouble const gc_y1 = xs + yc + ow[Geom::Y];
+        // Draw segment
+        guint32 const _color = ( (!scaled && (ylinenum % empspacing) != 0) ? color : _empcolor);
+        sp_cngongrid_drawline (buf, gc_x0, gc_y0, gc_x1, gc_y1, _color);
     }
-    // draw lines from bottom-up
-    if (!Geom::are_near(tan_angle,0.))
-    {
-        gdouble const zstart_x_sc = buf->rect.left() + (next_y - buf->rect.bottom()) / tan_angle ;
-        for (gdouble x = zstart_x_sc; x < buf->rect.right(); x += lxw_z, zlinenum++) {
-            gint const y0 = buf->rect.bottom();
-            gint const y1 = buf->rect.top();
-            gint const x0 = round(x);
-            gint const x1 = x0 + round(buf->rect.height() / tan_angle );
-
-            if (!scaled && (zlinenum % empspacing) != 0) {
-                sp_cngongrid_drawline (buf, x0, y0, x1, y1, color);
-            } else {
-                sp_cngongrid_drawline (buf, x0, y0, x1, y1, _empcolor);
-            }
-        }
-    }
-
-    cairo_restore(buf->ct);
 }
 
 CanvasNGonGridSnapper::CanvasNGonGridSnapper(CanvasNGonGrid *grid, SnapManager *sm, Geom::Coord const d) : LineSnapper(sm, d)
@@ -659,7 +628,7 @@ CanvasNGonGridSnapper::_getSnapLines(Geom::Point const &p) const
 
     if (getSnapVisibleOnly()) {
         // Only snapping to visible grid lines
-        spacing_h = grid->spacing_ylines; // this is the spacing of the visible grid lines measured in screen pixels
+        spacing_h = grid->lxw; // horizontal
         spacing_v = grid->lyw; // vertical
         // convert screen pixels to px
         // FIXME: after we switch to snapping dist in screen pixels, this will be unnecessary
@@ -670,11 +639,12 @@ CanvasNGonGridSnapper::_getSnapLines(Geom::Point const &p) const
         }
     } else {
         // Snapping to any grid line, whether it's visible or not
-        spacing_h = grid->lengthy  /(grid->tan_angle + grid->tan_angle);
+        spacing_h = grid->lengthx;
         spacing_v = grid->lengthy;
 
     }
 
+    /*
     // In an axonometric grid, any point will be surrounded by 6 grid lines:
     // - 2 vertical grid lines, one left and one right from the point
     // - 2 angled z grid lines, one above and one below the point
@@ -746,6 +716,7 @@ CanvasNGonGridSnapper::_getSnapLines(Geom::Point const &p) const
         s.push_back(std::make_pair(norm_x, Geom::Point(grid->origin[Geom::X], y_proj_along_x_max)));
         s.push_back(std::make_pair(Geom::Point(1, 0), Geom::Point(x_min, 0)));
     }
+    */
 
     return s;
 }
