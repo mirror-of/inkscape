@@ -121,18 +121,15 @@ CanvasNGonGrid::CanvasNGonGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr,
         gridunit = &sp_unit_get_by_id(SP_UNIT_PX);
     origin[Geom::X] = sp_units_get_pixels( prefs->getDouble("/options/grids/ngon/origin_x", 0.0), *gridunit );
     origin[Geom::Y] = sp_units_get_pixels( prefs->getDouble("/options/grids/ngon/origin_y", 0.0), *gridunit );
+    sections = prefs->getInt("/options/grids/ngon/sect_n", 8);
+    lengthx = sp_units_get_pixels( prefs->getDouble("/options/grids/ngon/spacing_x", 1.0), *gridunit );
+    lengthy = sp_units_get_pixels( prefs->getDouble("/options/grids/ngon/spacing_y", 1.0), *gridunit );
+    angle_deg = prefs->getDouble("/options/grids/ngon/rotation", 0.0);
     color = prefs->getInt("/options/grids/ngon/color", 0x0000ff20);
     empcolor = prefs->getInt("/options/grids/ngon/empcolor", 0x0000ff40);
     empspacing = prefs->getInt("/options/grids/ngon/empspacing", 5);
-    lengthy = sp_units_get_pixels( prefs->getDouble("/options/grids/ngon/spacing_y", 1.0), *gridunit );
-    angle_deg[X] = prefs->getDouble("/options/grids/ngon/angle_x", 30.0);
-    angle_deg[Z] = prefs->getDouble("/options/grids/ngon/angle_z", 30.0);
-    angle_deg[Y] = 0;
-
-    angle_rad[X] = Geom::deg_to_rad(angle_deg[X]);
-    tan_angle[X] = tan(angle_rad[X]);
-    angle_rad[Z] = Geom::deg_to_rad(angle_deg[Z]);
-    tan_angle[Z] = tan(angle_rad[Z]);
+    angle_rad = Geom::deg_to_rad(angle_deg);
+    tan_angle = tan(angle_rad);
 
     snapper = new CanvasNGonGridSnapper(this, &namedview->snap_manager, 0);
 
@@ -234,26 +231,30 @@ CanvasNGonGrid::readRepr()
         origin[Geom::Y] = sp_units_get_pixels(origin[Geom::Y], *(gridunit));
     }
 
+    if ( (value = repr->attribute("sections")) ) {
+      sections = atoi(value);
+      if (sections < 3) sections = 3;
+      if (sections > 360) sections = 360;
+    }
+
+    if ( (value = repr->attribute("spacingx")) ) {
+        sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &lengthx, &gridunit);
+        lengthx = sp_units_get_pixels(lengthx, *(gridunit));
+        if (lengthx < 0.0500) lengthx = 0.0500;
+    }
+
     if ( (value = repr->attribute("spacingy")) ) {
         sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &lengthy, &gridunit);
         lengthy = sp_units_get_pixels(lengthy, *(gridunit));
         if (lengthy < 0.0500) lengthy = 0.0500;
     }
 
-    if ( (value = repr->attribute("gridanglex")) ) {
-        angle_deg[X] = g_ascii_strtod(value, NULL);
-        if (angle_deg[X] < 0.) angle_deg[X] = 0.;
-        if (angle_deg[X] > 89.0) angle_deg[X] = 89.0;
-        angle_rad[X] = Geom::deg_to_rad(angle_deg[X]);
-        tan_angle[X] = tan(angle_rad[X]);
-    }
-
-    if ( (value = repr->attribute("gridanglez")) ) {
-        angle_deg[Z] = g_ascii_strtod(value, NULL);
-        if (angle_deg[Z] < 0.) angle_deg[Z] = 0.;
-        if (angle_deg[Z] > 89.0) angle_deg[Z] = 89.0;
-        angle_rad[Z] = Geom::deg_to_rad(angle_deg[Z]);
-        tan_angle[Z] = tan(angle_rad[Z]);
+    if ( (value = repr->attribute("rotation")) ) {
+        angle_deg = g_ascii_strtod(value, NULL);
+        if (angle_deg < 0.) angle_deg = 0.;
+        if (angle_deg > 89.0) angle_deg = 89.0;
+        angle_rad = Geom::deg_to_rad(angle_deg);
+        tan_angle = tan(angle_rad);
     }
 
     if ( (value = repr->attribute("color")) ) {
@@ -324,12 +325,14 @@ _wr.setUpdating (true);
             _("_Origin X:"), _("X coordinate of grid origin"), "originx", *_rumg, _wr, repr, doc) );
     Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("O_rigin Y:"), _("Y coordinate of grid origin"), "originy", *_rumg, _wr, repr, doc) );
+    Inkscape::UI::Widget::RegisteredScalar *_rsu_ns = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
+            _("_Number of sections:"), "", "sections", _wr, repr, doc ) );
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sx = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+            _("Spacing _X:"), _("Distance between concentric grid polygons"), "spacingx", *_rumg, _wr, repr, doc) );
     Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
-            _("Spacing _Y:"), _("Base length of z-axis"), "spacingy", *_rumg, _wr, repr, doc) );
-    Inkscape::UI::Widget::RegisteredScalar *_rsu_ax = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
-            _("Angle X:"), _("Angle of x-axis"), "gridanglex", _wr, repr, doc ) );
-    Inkscape::UI::Widget::RegisteredScalar *_rsu_az = Gtk::manage(  new Inkscape::UI::Widget::RegisteredScalar(
-            _("Angle Z:"), _("Angle of z-axis"), "gridanglez", _wr, repr, doc ) );
+            _("Spacing _Y:"), _("Distance between semi-radial grid lines"), "spacingy", *_rumg, _wr, repr, doc) );
+    Inkscape::UI::Widget::RegisteredScalar *_rsu_ar = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
+            _("Ro_tation:"), _("Angle of axis rotation"), "rotation", _wr, repr, doc ) );
 
     Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol = Gtk::manage(
         new Inkscape::UI::Widget::RegisteredColorPicker(
@@ -351,22 +354,32 @@ _wr.setUpdating (true);
     _rsu_oy->setDigits(5);
     _rsu_oy->setIncrements(0.1, 1.0);
 
+    _rsu_ns->setDigits(0);
+    _rsu_ns->setIncrements(1, 3);
+
+    _rsu_sx->setDigits(5);
+    _rsu_sx->setIncrements(0.1, 1.0);
+
     _rsu_sy->setDigits(5);
     _rsu_sy->setIncrements(0.1, 1.0);
+
+    _rsu_ar->setDigits(5);
+    _rsu_ar->setIncrements(0.5, 5.0);
 
 _wr.setUpdating (false);
 
     Gtk::Widget const *const widget_array[] = {
-        0,       _rumg,
+        0,                  _rumg,
         0,                  _rsu_ox,
         0,                  _rsu_oy,
+        0,                  _rsu_ns,
+        0,                  _rsu_sx,
         0,                  _rsu_sy,
-        0,                  _rsu_ax,
-        0,                  _rsu_az,
-        _rcp_gcol->_label,   _rcp_gcol,
+        0,                  _rsu_ar,
+        _rcp_gcol->_label,  _rcp_gcol,
         0,                  0,
-        _rcp_gmcol->_label,  _rcp_gmcol,
-        0,                   _rsi,
+        _rcp_gmcol->_label, _rcp_gmcol,
+        0,                  _rsi,
     };
 
     attach_all (*table, widget_array, sizeof(widget_array));
@@ -381,12 +394,15 @@ _wr.setUpdating (false);
     val = origin[Geom::Y];
     val = sp_pixels_get_units (val, *(gridunit));
     _rsu_oy->setValue (val);
+    _rsu_ns->setValue (sections);
+    val = lengthx;
+    double gridx = sp_pixels_get_units (val, *(gridunit));
+    _rsu_sx->setValue (gridx);
     val = lengthy;
     double gridy = sp_pixels_get_units (val, *(gridunit));
     _rsu_sy->setValue (gridy);
 
-    _rsu_ax->setValue(angle_deg[X]);
-    _rsu_az->setValue(angle_deg[Z]);
+    _rsu_ar->setValue(angle_deg);
 
     _rcp_gcol->setRgba32 (color);
     _rcp_gmcol->setRgba32 (empcolor);
@@ -416,20 +432,22 @@ CanvasNGonGrid::updateWidgets()
     gdouble val;
     val = origin[Geom::X];
     val = sp_pixels_get_units (val, *(gridunit));
-    _rsu_ox.setValue (val);
+    _rsu_ox->setValue (val);
     val = origin[Geom::Y];
     val = sp_pixels_get_units (val, *(gridunit));
-    _rsu_oy.setValue (val);
+    _rsu_oy->setValue (val);
+    val = lengthx;
+    double gridx = sp_pixels_get_units (val, *(gridunit));
+    _rsu_sx->setValue (gridx);
     val = lengthy;
     double gridy = sp_pixels_get_units (val, *(gridunit));
-    _rsu_sy.setValue (gridy);
+    _rsu_sy->setValue (gridy);
 
-    _rsu_ax.setValue(angle_deg[X]);
-    _rsu_az.setValue(angle_deg[Z]);
+    _rsu_ar->setValue(angle_deg);
 
-    _rcp_gcol.setRgba32 (color);
-    _rcp_gmcol.setRgba32 (empcolor);
-    _rsi.setValue (empspacing);
+    _rcp_gcol->setRgba32 (color);
+    _rcp_gmcol->setRgba32 (empcolor);
+    _rsi->setValue (empspacing);
 
     _wr.setUpdating (false);
 
@@ -466,10 +484,10 @@ CanvasNGonGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 
     }
 
-    spacing_ylines = sw[Geom::X] /(tan_angle[X] + tan_angle[Z]);
+    spacing_ylines = sw[Geom::X] /(tan_angle + tan_angle);
     lyw            = sw[Geom::Y];
-    lxw_x          = Geom::are_near(tan_angle[X],0.) ? Geom::infinity() : sw[Geom::X] / tan_angle[X];
-    lxw_z          = Geom::are_near(tan_angle[Z],0.) ? Geom::infinity() : sw[Geom::X] / tan_angle[Z];
+    lxw_x          = Geom::are_near(tan_angle,0.) ? Geom::infinity() : sw[Geom::X] / tan_angle;
+    lxw_z          = Geom::are_near(tan_angle,0.) ? Geom::infinity() : sw[Geom::X] / tan_angle;
 
     if (empspacing == 0) {
         scaled = true;
@@ -509,17 +527,17 @@ CanvasNGonGrid::Render (SPCanvasBuf *buf)
     // render the three separate line groups representing the main-axes
 
     // x-axis always goes from topleft to bottomright. (0,0) - (1,1)
-    gdouble const xintercept_y_bc = (buf_tl_gc[Geom::X] * tan_angle[X]) - buf_tl_gc[Geom::Y] ;
+    gdouble const xintercept_y_bc = (buf_tl_gc[Geom::X] * tan_angle) - buf_tl_gc[Geom::Y] ;
     gdouble const xstart_y_sc = ( xintercept_y_bc - floor(xintercept_y_bc/lyw)*lyw ) + buf->rect.top();
-    gint const xlinestart = round( (xstart_y_sc - buf_tl_gc[Geom::X]*tan_angle[X] - ow[Geom::Y]) / lyw );
+    gint const xlinestart = round( (xstart_y_sc - buf_tl_gc[Geom::X]*tan_angle - ow[Geom::Y]) / lyw );
     gint xlinenum = xlinestart;
     // lines starting on left side.
     for (gdouble y = xstart_y_sc; y < buf->rect.bottom(); y += lyw, xlinenum++) {
         gint const x0 = buf->rect.left();
         gint const y0 = round(y);
-        gint x1 = x0 + round( (buf->rect.bottom() - y) / tan_angle[X] );
+        gint x1 = x0 + round( (buf->rect.bottom() - y) / tan_angle );
         gint y1 = buf->rect.bottom();
-        if ( Geom::are_near(tan_angle[X],0.) ) {
+        if ( Geom::are_near(tan_angle,0.) ) {
             x1 = buf->rect.right();
             y1 = y0;
         }
@@ -531,15 +549,15 @@ CanvasNGonGrid::Render (SPCanvasBuf *buf)
         }
     }
     // lines starting from top side
-    if (!Geom::are_near(tan_angle[X],0.))
+    if (!Geom::are_near(tan_angle,0.))
     {
-        gdouble const xstart_x_sc = buf->rect.left() + (lxw_x - (xstart_y_sc - buf->rect.top()) / tan_angle[X]) ;
+        gdouble const xstart_x_sc = buf->rect.left() + (lxw_x - (xstart_y_sc - buf->rect.top()) / tan_angle) ;
         xlinenum = xlinestart-1;
         for (gdouble x = xstart_x_sc; x < buf->rect.right(); x += lxw_x, xlinenum--) {
             gint const y0 = buf->rect.top();
             gint const y1 = buf->rect.bottom();
             gint const x0 = round(x);
-            gint const x1 = x0 + round( (y1 - y0) / tan_angle[X] );
+            gint const x1 = x0 + round( (y1 - y0) / tan_angle );
 
             if (!scaled && (xlinenum % empspacing) != 0) {
                 sp_cngongrid_drawline (buf, x0, y0, x1, y1, color);
@@ -564,18 +582,18 @@ CanvasNGonGrid::Render (SPCanvasBuf *buf)
     }
 
     // z-axis always goes from bottomleft to topright. (0,1) - (1,0)
-    gdouble const zintercept_y_bc = (buf_tl_gc[Geom::X] * -tan_angle[Z]) - buf_tl_gc[Geom::Y] ;
+    gdouble const zintercept_y_bc = (buf_tl_gc[Geom::X] * -tan_angle) - buf_tl_gc[Geom::Y] ;
     gdouble const zstart_y_sc = ( zintercept_y_bc - floor(zintercept_y_bc/lyw)*lyw ) + buf->rect.top();
-    gint const  zlinestart = round( (zstart_y_sc + buf_tl_gc[Geom::X]*tan_angle[Z] - ow[Geom::Y]) / lyw );
+    gint const  zlinestart = round( (zstart_y_sc + buf_tl_gc[Geom::X]*tan_angle - ow[Geom::Y]) / lyw );
     gint zlinenum = zlinestart;
     // lines starting from left side
     gdouble next_y = zstart_y_sc;
     for (gdouble y = zstart_y_sc; y < buf->rect.bottom(); y += lyw, zlinenum++, next_y = y) {
         gint const x0 = buf->rect.left();
         gint const y0 = round(y);
-        gint x1 = x0 + round( (y - buf->rect.top() ) / tan_angle[Z] );
+        gint x1 = x0 + round( (y - buf->rect.top() ) / tan_angle );
         gint y1 = buf->rect.top();
-        if ( Geom::are_near(tan_angle[Z],0.) ) {
+        if ( Geom::are_near(tan_angle,0.) ) {
             x1 = buf->rect.right();
             y1 = y0;
         }
@@ -587,14 +605,14 @@ CanvasNGonGrid::Render (SPCanvasBuf *buf)
         }
     }
     // draw lines from bottom-up
-    if (!Geom::are_near(tan_angle[Z],0.))
+    if (!Geom::are_near(tan_angle,0.))
     {
-        gdouble const zstart_x_sc = buf->rect.left() + (next_y - buf->rect.bottom()) / tan_angle[Z] ;
+        gdouble const zstart_x_sc = buf->rect.left() + (next_y - buf->rect.bottom()) / tan_angle ;
         for (gdouble x = zstart_x_sc; x < buf->rect.right(); x += lxw_z, zlinenum++) {
             gint const y0 = buf->rect.bottom();
             gint const y1 = buf->rect.top();
             gint const x0 = round(x);
-            gint const x1 = x0 + round(buf->rect.height() / tan_angle[Z] );
+            gint const x1 = x0 + round(buf->rect.height() / tan_angle );
 
             if (!scaled && (zlinenum % empspacing) != 0) {
                 sp_cngongrid_drawline (buf, x0, y0, x1, y1, color);
@@ -652,7 +670,7 @@ CanvasNGonGridSnapper::_getSnapLines(Geom::Point const &p) const
         }
     } else {
         // Snapping to any grid line, whether it's visible or not
-        spacing_h = grid->lengthy  /(grid->tan_angle[X] + grid->tan_angle[Z]);
+        spacing_h = grid->lengthy  /(grid->tan_angle + grid->tan_angle);
         spacing_v = grid->lengthy;
 
     }
@@ -667,16 +685,16 @@ CanvasNGonGridSnapper::_getSnapLines(Geom::Point const &p) const
     Geom::Coord x_min = Inkscape::Util::round_to_lower_multiple_plus(p[Geom::X], spacing_h, grid->origin[Geom::X]);
 
     // Calculate the y coordinate of the intersection of the angled grid lines with the y-axis
-    double y_proj_along_z = p[Geom::Y] - grid->tan_angle[Z]*(p[Geom::X] - grid->origin[Geom::X]);
-    double y_proj_along_x = p[Geom::Y] + grid->tan_angle[X]*(p[Geom::X] - grid->origin[Geom::X]);
+    double y_proj_along_z = p[Geom::Y] - grid->tan_angle*(p[Geom::X] - grid->origin[Geom::X]);
+    double y_proj_along_x = p[Geom::Y] + grid->tan_angle*(p[Geom::X] - grid->origin[Geom::X]);
     double y_proj_along_z_max = Inkscape::Util::round_to_upper_multiple_plus(y_proj_along_z, spacing_v, grid->origin[Geom::Y]);
     double y_proj_along_z_min = Inkscape::Util::round_to_lower_multiple_plus(y_proj_along_z, spacing_v, grid->origin[Geom::Y]);
     double y_proj_along_x_max = Inkscape::Util::round_to_upper_multiple_plus(y_proj_along_x, spacing_v, grid->origin[Geom::Y]);
     double y_proj_along_x_min = Inkscape::Util::round_to_lower_multiple_plus(y_proj_along_x, spacing_v, grid->origin[Geom::Y]);
 
     // Calculate the versor for the angled grid lines
-    Geom::Point vers_x = Geom::Point(1, -grid->tan_angle[X]);
-    Geom::Point vers_z = Geom::Point(1, grid->tan_angle[Z]);
+    Geom::Point vers_x = Geom::Point(1, -grid->tan_angle);
+    Geom::Point vers_z = Geom::Point(1, grid->tan_angle);
 
     // Calculate the normal for the angled grid lines
     Geom::Point norm_x = Geom::rot90(vers_x);

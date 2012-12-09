@@ -33,10 +33,12 @@ public:
     void readRepr();
     void onReprAttrChanged (Inkscape::XML::Node * repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive);
 
-    double lengthy;       /**< The lengths of the primary y-axis */
-    double angle_deg[3];  /**< Angle of each axis (note that angle[2] == 0) */
-    double angle_rad[3];  /**< Angle of each axis (note that angle[2] == 0) */
-    double tan_angle[3];  /**< tan(angle[.]) */
+    int sections;         /**< Number of grid sections */
+    double lengthx;       /**< Step size along concentric polygons */
+    double lengthy;       /**< Step size along semi-radius lines */
+    double angle_deg;     /**< Angle of rotation (degrees) */
+    double angle_rad;     /**< Angle of rotation (radians) */
+    double tan_angle;     /**< tan(angle) */
 
     bool scaled;          /**< Whether the grid is in scaled mode */
 

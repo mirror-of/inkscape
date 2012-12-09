@@ -403,9 +403,10 @@ protected:
         UI::Widget::PrefUnit            _grids_ngon_units;
         UI::Widget::PrefSpinButton      _grids_ngon_origin_x;
         UI::Widget::PrefSpinButton      _grids_ngon_origin_y;
+        UI::Widget::PrefSpinButton      _grids_ngon_sect_n;
+        UI::Widget::PrefSpinButton      _grids_ngon_spacing_x;
         UI::Widget::PrefSpinButton      _grids_ngon_spacing_y;
-        UI::Widget::PrefSpinButton      _grids_ngon_angle_x;
-        UI::Widget::PrefSpinButton      _grids_ngon_angle_z;
+        UI::Widget::PrefSpinButton      _grids_ngon_rotation;
         UI::Widget::PrefColorPicker     _grids_ngon_color;
         UI::Widget::PrefColorPicker     _grids_ngon_empcolor;
         UI::Widget::PrefSpinButton      _grids_ngon_empspacing;
