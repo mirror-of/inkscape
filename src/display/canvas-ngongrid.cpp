@@ -65,6 +65,27 @@ sp_cngongrid_drawline (SPCanvasBuf *buf, gdouble x0, gdouble y0, gdouble x1, gdo
     cairo_stroke(buf->ct);
 }
 
+static gdouble
+distance(gdouble x, gdouble y, double dx, double dy)
+{
+    return (dy * x) - (dx * y);
+}
+
+static gdouble
+find_bound(Geom::Rect const &rect, double dx, double dy, gdouble const & (*bound_func)(gdouble const &, gdouble const &))
+{
+    // Note: Y+ is DOWN, not up!
+    if ( (dx > 0.0) == (dy > 0.0) ) { // Interesting points are bottom-left, top-right
+        gdouble const a = distance(rect.left(), rect.bottom(), dx, dy);
+        gdouble const b = distance(rect.right(), rect.top(), dx, dy);
+        return bound_func(a, b);
+    } else { // Interesting points are top-left, bottom-right
+        gdouble const a = distance(rect.left(), rect.top(), dx, dy);
+        gdouble const b = distance(rect.right(), rect.bottom(), dx, dy);
+        return bound_func(a, b);
+    }
+}
+
 namespace Inkscape {
 
 
@@ -524,27 +545,22 @@ CanvasNGonGrid::renderSection (SPCanvasBuf *buf, double section_angle_deg, guint
     // pc = preimagecoordinates (the coordinates of the section before rotation)
     // gc = gridcoordinates (the coordinates calculated from the grids origin 'grid->ow')
 
-    // tl = topleft ; br = bottomright
-    Geom::Point buf_tl_gc;
-    Geom::Point buf_br_gc;
-    buf_tl_gc[Geom::X] = buf->rect.left()   - ow[Geom::X];
-    buf_tl_gc[Geom::Y] = buf->rect.top()    - ow[Geom::Y];
-    buf_br_gc[Geom::X] = buf->rect.right()  - ow[Geom::X];
-    buf_br_gc[Geom::Y] = buf->rect.bottom() - ow[Geom::Y];
+    Geom::Rect buf_gc(buf->rect);
+    buf_gc -= ow;
 
     double const section_angle_rad = Geom::deg_to_rad(section_angle_deg);
     double const section_sin = sin(section_angle_rad);
     double const section_cos = cos(section_angle_rad);
 
-    gdouble xmax = 25; // TODO compute from viewport intersection - DON'T FLOOR
+    gdouble xmax = find_bound(buf_gc, -section_sin, section_cos, &std::max) / lxw;
     if (xmax <= 0) return; // Section is entirely out of viewport
 
-    gdouble ymin = ceil(-10); // TODO compute from viewport intersection
-    gdouble ymax = floor(10); // TODO compute from viewport intersection
+    gdouble ymin = find_bound(buf_gc, -section_cos, -section_sin, &std::min) / lyw;
+    gdouble ymax = find_bound(buf_gc, -section_cos, -section_sin, &std::max) / lyw;
 
     gdouble const lxmax = xmax * lxw;
-    gdouble const xbound = (xmax + 0.5) * lyw;
-    gdouble const ybound = (ymax + 0.5) * lyw;
+    gdouble const xbound = (floor(xmax) + 0.5) * lxw;
+    gdouble const ybound = (floor(ymax) + 0.5) * lyw;
 
     // Render section edge line
     {
@@ -556,6 +572,7 @@ CanvasNGonGrid::renderSection (SPCanvasBuf *buf, double section_angle_deg, guint
     }
 
     // Render semi-radius lines
+    ymin = ceil(ymin);
     gint xlinenum = ymin;
     for (gdouble y = ymin * lyw; y <= ybound; y += lyw, xlinenum++) {
         // Compute points in preimage coordinates
