@@ -58,7 +58,7 @@ sp_cngongrid_drawline (SPCanvasBuf *buf, gdouble x0, gdouble y0, gdouble x1, gdo
         y0 = round(y0);
         y1 = round(y1);
     }
-    // TODO clip to viewport?
+    //TODO: clip to viewport?
     cairo_move_to(buf->ct, 0.5 + x0, 0.5 + y0);
     cairo_line_to(buf->ct, 0.5 + x1, 0.5 + y1);
     ink_cairo_set_source_rgba32(buf->ct, rgba);
@@ -533,6 +533,7 @@ CanvasNGonGrid::Render (SPCanvasBuf *buf)
 
     double angle_step = 360.0 / sections;
     for (int s = 0; s < sections; ++s) {
+        //TODO: get angles from origin to viewport corners, use to test if section needs to be rendered
         renderSection(buf, (s * angle_step) - angle_deg, _empcolor);
     }
 
@@ -552,6 +553,7 @@ CanvasNGonGrid::renderSection (SPCanvasBuf *buf, double section_angle_deg, guint
     double const section_sin = sin(section_angle_rad);
     double const section_cos = cos(section_angle_rad);
 
+    gdouble xmin = find_bound(buf_gc, -section_sin, section_cos, &std::min) / lxw;
     gdouble xmax = find_bound(buf_gc, -section_sin, section_cos, &std::max) / lxw;
     if (xmax <= 0) return; // Section is entirely out of viewport
 
@@ -592,8 +594,9 @@ CanvasNGonGrid::renderSection (SPCanvasBuf *buf, double section_angle_deg, guint
     }
 
     // Render concentric lines
-    gint ylinenum = 1;
-    for (gdouble x = lxw; x < xbound; x += lxw, ylinenum++) {
+    xmin = std::max(1.0, ceil(xmin));
+    gint ylinenum = xmin;
+    for (gdouble x = xmin * lxw; x < xbound; x += lxw, ylinenum++) {
         // Compute points in preimage coordinates
         gdouble const pc_y = x * se_tan;
         // Compute points in grid coordinates (with rotation applied)
