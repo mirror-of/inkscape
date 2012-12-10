@@ -36,7 +36,8 @@ public:
     int sections;         /**< Number of grid sections */
     double lengthx;       /**< Step size along concentric polygons */
     double lengthy;       /**< Step size along semi-radius lines */
-    double angle_deg;     /**< Angle of rotation */
+    double angle_deg;     /**< Angle of rotation (degrees) */
+    double angle_rad;     /**< Angle of rotation (radians) */
     double se_angle_deg;  /**< Half of section arc (degrees) */
     double se_angle_rad;  /**< Half of section arc (radians) */
     double se_tan;        /**< tan(se_angle) */

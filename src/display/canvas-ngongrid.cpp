@@ -146,6 +146,7 @@ CanvasNGonGrid::CanvasNGonGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr,
     empcolor = prefs->getInt("/options/grids/ngon/empcolor", 0x0000ff40);
     empspacing = prefs->getInt("/options/grids/ngon/empspacing", 5);
 
+    angle_rad = Geom::deg_to_rad(angle_deg);
     se_angle_deg = 180.0 / sections;
     se_angle_rad = Geom::deg_to_rad(se_angle_deg);
     se_tan = tan(se_angle_rad);
@@ -275,6 +276,7 @@ CanvasNGonGrid::readRepr()
         angle_deg = g_ascii_strtod(value, NULL);
         double max_angle = 360.0 / sections;
         if (fabs(angle_deg) > max_angle) angle_deg = fmod(angle_deg, max_angle);
+        angle_rad = Geom::deg_to_rad(angle_deg);
     }
 
     if ( (value = repr->attribute("color")) ) {
@@ -661,82 +663,47 @@ CanvasNGonGridSnapper::_getSnapLines(Geom::Point const &p) const
         // Snapping to any grid line, whether it's visible or not
         spacing_h = grid->lengthx;
         spacing_v = grid->lengthy;
-
     }
 
-    /*
-    // In an axonometric grid, any point will be surrounded by 6 grid lines:
-    // - 2 vertical grid lines, one left and one right from the point
-    // - 2 angled z grid lines, one above and one below the point
-    // - 2 angled x grid lines, one above and one below the point
+    // In a polygonal grid, any point will be surrounded by 6 grid lines:
+    // - 4 lines of a section grid
+    // - 2 lines of the section edges
+    // Of these, we use the closer section edge, and the closer each of the grid X and Y lines
 
-    // Calculate the x coordinate of the vertical grid lines
-    Geom::Coord x_max = Inkscape::Util::round_to_upper_multiple_plus(p[Geom::X], spacing_h, grid->origin[Geom::X]);
-    Geom::Coord x_min = Inkscape::Util::round_to_lower_multiple_plus(p[Geom::X], spacing_h, grid->origin[Geom::X]);
+    // Calculate what section the point is in
+    Geom::Point gc_point = p - grid->origin;
+    double point_angle_rad;
+    bool const x_is_zero = Geom::are_near(gc_point[Geom::X], 0.);
+    bool const y_is_zero = Geom::are_near(gc_point[Geom::Y], 0.);
+    if (Geom::are_near(p, grid->origin))
+        point_angle_rad = 0;
+    else
+        point_angle_rad = Geom::atan2(gc_point);
+    double const section_ratio = (point_angle_rad - grid->angle_rad - grid->se_angle_rad) / (2.0 * M_PI);
+    int const section = floor( grid->sections * section_ratio ) + 1;
 
-    // Calculate the y coordinate of the intersection of the angled grid lines with the y-axis
-    double y_proj_along_z = p[Geom::Y] - grid->tan_angle*(p[Geom::X] - grid->origin[Geom::X]);
-    double y_proj_along_x = p[Geom::Y] + grid->tan_angle*(p[Geom::X] - grid->origin[Geom::X]);
-    double y_proj_along_z_max = Inkscape::Util::round_to_upper_multiple_plus(y_proj_along_z, spacing_v, grid->origin[Geom::Y]);
-    double y_proj_along_z_min = Inkscape::Util::round_to_lower_multiple_plus(y_proj_along_z, spacing_v, grid->origin[Geom::Y]);
-    double y_proj_along_x_max = Inkscape::Util::round_to_upper_multiple_plus(y_proj_along_x, spacing_v, grid->origin[Geom::Y]);
-    double y_proj_along_x_min = Inkscape::Util::round_to_lower_multiple_plus(y_proj_along_x, spacing_v, grid->origin[Geom::Y]);
+    // Compute spacing-unit vectors for section
+    double const section_angle_rad = (2.0 * section * grid->se_angle_rad) + grid->angle_rad;
+    double const section_sin = sin(section_angle_rad);
+    double const section_cos = cos(section_angle_rad);
+    Geom::Point const gc_nx(-section_sin, section_cos);
+    Geom::Point const gc_ny( section_cos, section_sin);
+    Geom::Point const gc_sx = gc_ny * spacing_h;
+    Geom::Point const gc_sy = gc_nx * spacing_v;
 
-    // Calculate the versor for the angled grid lines
-    Geom::Point vers_x = Geom::Point(1, -grid->tan_angle);
-    Geom::Point vers_z = Geom::Point(1, grid->tan_angle);
+    // Get point in section pre-image space
+    double const pc_x = ( (gc_point[Geom::Y] * section_sin) + (gc_point[Geom::X] * section_cos) ) / spacing_h;
+    double const pc_y = ( (gc_point[Geom::Y] * section_cos) - (gc_point[Geom::X] * section_sin) ) / spacing_v;
 
-    // Calculate the normal for the angled grid lines
-    Geom::Point norm_x = Geom::rot90(vers_x);
-    Geom::Point norm_z = Geom::rot90(vers_z);
+    // Add the nearer section edge line
+    double const section_edge_angle_rad = section_angle_rad + ( (pc_y > 0.0 ? 1.0 : -1.0) * grid->se_angle_rad);
+    Geom::Point const section_edge_norm(-sin(section_edge_angle_rad), cos(section_edge_angle_rad));
+    s.push_back( std::make_pair(section_edge_norm, grid->origin) );
 
-    // The four angled grid lines form a parallelogram, enclosing the point
-    // One of the two vertical grid lines divides this parallelogram in two triangles
-    // We will now try to find out in which half (i.e. triangle) our point is, and return
-    // only the three grid lines defining that triangle
-
-    // The vertical grid line is at the intersection of two angled grid lines.
-    // Now go find that intersection!
-    Geom::Point p_x(0, y_proj_along_x_max);
-    Geom::Line line_x(p_x, p_x + vers_x);
-    Geom::Point p_z(0, y_proj_along_z_max);
-    Geom::Line line_z(p_z, p_z + vers_z);
-
-    Geom::OptCrossing inters = Geom::OptCrossing(); // empty by default
-    try
-    {
-        inters = Geom::intersection(line_x, line_z);
-    }
-    catch (Geom::InfiniteSolutions &e)
-    {
-        // We're probably dealing with parallel lines; this is useless!
-        return s;
-    }
-
-    // Determine which half of the parallelogram to use
-    bool use_left_half = true;
-    bool use_right_half = true;
-
-    if (inters) {
-        Geom::Point inters_pt = line_x.pointAt((*inters).ta);
-        use_left_half = (p[Geom::X] - grid->origin[Geom::X]) < inters_pt[Geom::X];
-        use_right_half = !use_left_half;
-    }
-
-    // Return the three grid lines which define the triangle that encloses our point
-    // If we didn't find an intersection above, all 6 grid lines will be returned
-    if (use_left_half) {
-        s.push_back(std::make_pair(norm_z, Geom::Point(grid->origin[Geom::X], y_proj_along_z_max)));
-        s.push_back(std::make_pair(norm_x, Geom::Point(grid->origin[Geom::X], y_proj_along_x_min)));
-        s.push_back(std::make_pair(Geom::Point(1, 0), Geom::Point(x_max, 0)));
-    }
-
-    if (use_right_half) {
-        s.push_back(std::make_pair(norm_z, Geom::Point(grid->origin[Geom::X], y_proj_along_z_min)));
-        s.push_back(std::make_pair(norm_x, Geom::Point(grid->origin[Geom::X], y_proj_along_x_max)));
-        s.push_back(std::make_pair(Geom::Point(1, 0), Geom::Point(x_min, 0)));
-    }
-    */
+    // Add the two nearer lines of the grid square
+    Geom::Point const gc_corner = (gc_sx * round(pc_x)) + (gc_sy * round(pc_y));
+    s.push_back( std::make_pair(gc_nx, gc_corner) );
+    s.push_back( std::make_pair(gc_ny, gc_corner) );
 
     return s;
 }
