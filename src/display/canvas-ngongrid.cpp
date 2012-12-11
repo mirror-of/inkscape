@@ -701,7 +701,7 @@ CanvasNGonGridSnapper::_getSnapLines(Geom::Point const &p) const
     s.push_back( std::make_pair(section_edge_norm, grid->origin) );
 
     // Add the two nearer lines of the grid square
-    Geom::Point const gc_corner = (gc_sx * round(pc_x)) + (gc_sy * round(pc_y));
+    Geom::Point const gc_corner = (gc_sx * round(pc_x)) + (gc_sy * round(pc_y)) + grid->origin;
     s.push_back( std::make_pair(gc_nx, gc_corner) );
     s.push_back( std::make_pair(gc_ny, gc_corner) );
 
