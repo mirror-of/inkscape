@@ -41,7 +41,7 @@ Build-Depends: autoconf,
                python-dev, 
                python-support,
                zlib1g-dev 
-Standards-Version: 3.9.3
+Standards-Version: 3.9.4
 
 Package: inkscape-trunk
 Architecture: any
