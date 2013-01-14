@@ -720,9 +720,9 @@ dnl ******************************
 
 AC_ARG_ENABLE(dbusapi,
        [  --enable-dbusapi       compile with support for DBus interface],
-       enable_dbusapi=$enableval,enable_dbusapi=no)
+       enable_dbusapi=$enableval,enable_dbusapi=yes)
 
-with_dbus="no"
+with_dbus="yes"
 if test "x$enable_dbusapi" = "xyes"; then
 	PKG_CHECK_MODULES(DBUS, dbus-glib-1, with_dbus=yes, with_dbus=no)
 	if test "x$with_dbus" = "xyes"; then
