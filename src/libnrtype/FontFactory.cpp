@@ -371,6 +371,11 @@ Glib::ustring font_factory::ConstructFontSpecification(PangoFontDescription *fon
 
         pango_font_description_unset_fields (copy, PANGO_FONT_MASK_SIZE);
         char * copyAsString = pango_font_description_to_string(copy);
+
+		// if there is a comma at the end, remove it, e.g. 'Aller Light,' becomes 'Aller Light' (bug #595432)
+		int casLength = strlen(copyAsString);
+		if (casLength && (copyAsString[casLength-1] == ',')) copyAsString[casLength-1] = 0;
+
         pangoString = copyAsString;
         g_free(copyAsString);
         copyAsString = 0;
