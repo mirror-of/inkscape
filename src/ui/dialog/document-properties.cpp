@@ -106,6 +106,10 @@ DocumentProperties::DocumentProperties()
       _rcp_bg(_("Back_ground color:"), _("Background color"), _("Color of the page background. Note: transparency setting ignored while editing but used when exporting to bitmap."), "pagecolor", "inkscape:pageopacity", _wr),
       _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr),
       _rum_deflt(_("Default _units:"), "inkscape:document-units", _wr),
+      _rlr_off_x(_("Ruler Origin X:"), _("Origin of ruler coordinate system [default units]"), "inkscape:ruleroffsetx", _rum_deflt, _wr),
+      _rlr_off_y(_("Ruler Origin Y:"), _("Origin of ruler coordinate system [default units]"), "inkscape:ruleroffsety", _rum_deflt, _wr),
+      _rlr_mul_x(_("Ruler Multiplier X:"), _("Ruler values are default units multiplied with this number"), "inkscape:rulermultiplierx", _wr),
+      _rlr_mul_y(_("Ruler Multiplier Y:"), _("Ruler values are default units multiplied with this number"), "inkscape:rulermultipliery", _wr),
       _page_sizer(_wr),
     //---------------------------------------------------------------
       //General snap options
@@ -160,6 +164,14 @@ DocumentProperties::DocumentProperties()
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     build_scripting();
     build_metadata();
+
+    //// TODO: this should be here? but also sets values to 0, shouldn't _wr.setUpdating(true) prevent this?? for now this code is moved elsewhere
+    //// set precision and values of scalar entry boxes for ruler scaling and offset, TODO: move this to constructor and use some updating bool
+    //_rlr_mul_x.setDigits(5);
+    //_rlr_mul_y.setDigits(5);
+    //_rlr_off_x.setDigits(5);
+    //_rlr_off_y.setDigits(5);
+
     _wr.setUpdating (false);
 
     _grids_button_new.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::onNewGrid));
@@ -245,6 +257,8 @@ void DocumentProperties::build_page()
 
     Gtk::Label* label_gen = manage (new Gtk::Label);
     label_gen->set_markup (_("<b>General</b>"));
+    Gtk::Label* label_rul = manage (new Gtk::Label);
+    label_rul->set_markup (_("<b>Ruler Coordinate System</b>"));
     Gtk::Label* label_col = manage (new Gtk::Label);
     label_col->set_markup (_("<b>Color</b>"));
     Gtk::Label* label_bor = manage (new Gtk::Label);
@@ -257,6 +271,11 @@ void DocumentProperties::build_page()
     {
         label_gen,         0,
         0,                 &_rum_deflt,
+        label_rul,         0,
+        0,                 &_rlr_off_x,
+        0,                 &_rlr_off_y,
+        0,                 &_rlr_mul_x,
+        0,                 &_rlr_mul_y,
         label_col,         0,
         _rcp_bg._label,    &_rcp_bg,
         0,                 0,
@@ -1185,6 +1204,16 @@ void DocumentProperties::update()
     set_sensitive (true);
 
     //-----------------------------------------------------------page page
+    _rlr_mul_x.setValue (nv->rulermultiplierx);
+    _rlr_mul_y.setValue (nv->rulermultipliery);
+    _rlr_off_x.setValueKeepUnit (nv->ruleroffsetx, "px");
+    _rlr_off_y.setValueKeepUnit (nv->ruleroffsety, "px");
+    // set precision and values of scalar entry boxes for ruler scaling and offset, TODO: move this to constructor and use some updating bool
+    _rlr_mul_x.setDigits(5);
+    _rlr_mul_y.setDigits(5);
+    _rlr_off_x.setDigits(5);
+    _rlr_off_y.setDigits(5);
+
     _rcp_bg.setRgba32 (nv->pagecolor);
     _rcb_canb.setActive (nv->showborder);
     _rcb_bord.setActive (nv->borderlayer == SP_BORDER_LAYER_TOP);
@@ -1285,6 +1314,28 @@ void DocumentProperties::save_default_metadata()
    }
 }
 
+void DocumentProperties::fire_setoffset_to_top()
+{
+    /* */
+//    sp_desktop_namedview(desktop)->ruleroffsety = 100; //TODO
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (!dt) {
+        return;
+    }
+    SPDocument *doc;
+    SPNamedView *nv;
+    Inkscape::XML::Node *nv_repr;
+	
+    if ((doc = sp_desktop_document(SP_ACTIVE_DESKTOP))
+        && (nv = sp_document_namedview(doc, 0))
+        && (nv_repr = nv->getRepr())) {
+
+        sp_repr_set_svg_double(nv_repr, "ruleroffsety", 100); // TODO
+
+    }
+
+}
 
 void DocumentProperties::_handleDocumentReplaced(SPDesktop* desktop, SPDocument *document)
 {

@@ -45,6 +45,11 @@ struct SPNamedView : public SPObjectGroup {
     unsigned int showpageshadow : 1;
     unsigned int borderlayer : 2;
 
+    double rulermultiplierx;
+    double rulermultipliery;
+    double ruleroffsetx;
+    double ruleroffsety;
+
     double zoom;
     double cx;
     double cy;

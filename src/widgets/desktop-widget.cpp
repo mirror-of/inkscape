@@ -85,8 +85,6 @@ using ege::AppearTimeTracker;
 #ifdef WITH_INKBOARD
 #endif
 
-
-
 enum {
     ACTIVATE,
     DEACTIVATE,
@@ -1281,11 +1279,11 @@ void
 SPDesktopWidget::setCoordinateStatus(Geom::Point p)
 {
     gchar *cstr;
-    cstr = g_strdup_printf("<tt>%7.2f </tt>", dt2r * p[Geom::X]);
+    cstr = g_strdup_printf("<tt>%7.2f </tt>", ruler_multiplier_x * (dt2r * (p[Geom::X] - fabs(ruler_multiplier_x) * ruler_origin[Geom::X])));
     gtk_label_set_markup( GTK_LABEL(this->coord_status_x), cstr );
     g_free(cstr);
 
-    cstr = g_strdup_printf("<tt>%7.2f </tt>", dt2r * p[Geom::Y]);
+    cstr = g_strdup_printf("<tt>%7.2f </tt>", ruler_multiplier_y * (dt2r * (p[Geom::Y] - fabs(ruler_multiplier_y) * ruler_origin[Geom::Y])));
     gtk_label_set_markup( GTK_LABEL(this->coord_status_y), cstr );
     g_free(cstr);
 }
@@ -1671,7 +1669,11 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
     dtw->dt2r = 1.0 / namedview->doc_units->unittobase;
 
-    dtw->ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
+	if (namedview->rulermultiplierx == 0) namedview->rulermultiplierx = 0.000001;
+	if (namedview->rulermultipliery == 0) namedview->rulermultipliery = 0.000001;
+    dtw->ruler_origin = Geom::Point(namedview->ruleroffsetx / fabs(namedview->rulermultiplierx), namedview->ruleroffsety / fabs(namedview->rulermultipliery));
+	dtw->ruler_multiplier_x = namedview->rulermultiplierx;
+	dtw->ruler_multiplier_y = namedview->rulermultipliery;
 
     dtw->desktop = new SPDesktop();
     dtw->stub = new SPDesktopWidget::WidgetStub (dtw);
@@ -1720,15 +1722,15 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 {
     Geom::Rect viewbox = dtw->desktop->get_display_area();
 
-    double lower_x = dtw->dt2r * (viewbox.left()  - dtw->ruler_origin[Geom::X]);
-    double upper_x = dtw->dt2r * (viewbox.right() - dtw->ruler_origin[Geom::X]);
+    double lower_x = dtw->ruler_multiplier_x * dtw->dt2r * (viewbox.left()  - fabs(dtw->ruler_multiplier_x) * dtw->ruler_origin[Geom::X]);
+    double upper_x = dtw->ruler_multiplier_x * dtw->dt2r * (viewbox.right() - fabs(dtw->ruler_multiplier_x) * dtw->ruler_origin[Geom::X]);
     sp_ruler_set_range(SP_RULER(dtw->hruler),
 	      	       lower_x,
 		       upper_x,
 		       (upper_x - lower_x));
 
-    double lower_y = dtw->dt2r * (viewbox.bottom() - dtw->ruler_origin[Geom::Y]);
-    double upper_y = dtw->dt2r * (viewbox.top()    - dtw->ruler_origin[Geom::Y]);
+    double lower_y = dtw->ruler_multiplier_y * dtw->dt2r * (viewbox.bottom() - fabs(dtw->ruler_multiplier_y) * dtw->ruler_origin[Geom::Y]);
+    double upper_y = dtw->ruler_multiplier_y * dtw->dt2r * (viewbox.top()    - fabs(dtw->ruler_multiplier_y) * dtw->ruler_origin[Geom::Y]);
     sp_ruler_set_range(SP_RULER(dtw->vruler),
                        lower_y,
 		       upper_y,
@@ -1742,7 +1744,11 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         this->dt2r = 1.0 / nv->doc_units->unittobase;
-        this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
+		if (nv->rulermultiplierx == 0) nv->rulermultiplierx = 0.000001;
+		if (nv->rulermultipliery == 0) nv->rulermultipliery = 0.000001;
+        this->ruler_origin = Geom::Point(nv->ruleroffsetx / fabs(nv->rulermultiplierx), nv->ruleroffsety / fabs(nv->rulermultipliery));
+		this->ruler_multiplier_x = nv->rulermultiplierx;
+		this->ruler_multiplier_y = nv->rulermultipliery;
 
         sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDefaultMetric());
         sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDefaultMetric());

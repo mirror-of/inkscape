@@ -92,6 +92,7 @@ protected:
     void  embedded_create_popup_menu(Gtk::Widget& parent, sigc::slot<void> rem);
     void  load_default_metadata();
     void  save_default_metadata();
+    void  fire_setoffset_to_top();
 
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleActivateDesktop(Inkscape::Application *application, SPDesktop *desktop);
@@ -123,6 +124,11 @@ protected:
     UI::Widget::RegisteredColorPicker _rcp_bg;
     UI::Widget::RegisteredColorPicker _rcp_bord;
     UI::Widget::RegisteredUnitMenu    _rum_deflt;
+    UI::Widget::RegisteredScalarUnit  _rlr_off_x; // ruler offset
+    UI::Widget::RegisteredScalarUnit  _rlr_off_y;
+    //Gtk::Button                       _rlr_setoffs_top;
+    UI::Widget::RegisteredScalar      _rlr_mul_x; // ruler multiplier
+    UI::Widget::RegisteredScalar      _rlr_mul_y;
     UI::Widget::PageSizer             _page_sizer;
     //---------------------------------------------------------------
     UI::Widget::RegisteredCheckButton _rcb_sgui;

@@ -111,7 +111,8 @@ struct SPDesktopWidget {
     GtkWidget *canvas_tbl;
 
     Geom::Point ruler_origin;
-    double dt2r;
+    double dt2r; // desktop to ruler scaling (?)
+	double ruler_multiplier_x, ruler_multiplier_y; // additional multiplier
 
     GtkAdjustment *hadj, *vadj;
 

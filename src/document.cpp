@@ -397,6 +397,14 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
             prefs->getDouble("/template/base/gridtolerance", 10.0));
         sp_repr_set_svg_double(rnew, "guidetolerance",
             prefs->getDouble("/template/base/guidetolerance", 10.0));
+        sp_repr_set_svg_double(rnew, "inkscape:rulermultiplierx",
+            prefs->getDouble("/template/base/inkscape:rulermultiplierx", 1.0));
+        sp_repr_set_svg_double(rnew, "inkscape:rulermultipliery",
+            prefs->getDouble("/template/base/inkscape:rulermultipliery", 1.0));
+        sp_repr_set_svg_double(rnew, "inkscape:ruleroffsetx",
+            prefs->getDouble("/template/base/inkscape:ruleroffsetx", 0.0));
+        sp_repr_set_svg_double(rnew, "inkscape:ruleroffsety",
+            prefs->getDouble("/template/base/inkscape:ruleroffsety", 0.0));
         sp_repr_set_svg_double(rnew, "inkscape:pageopacity",
             prefs->getDouble("/template/base/inkscape:pageopacity", 0.0));
         sp_repr_set_int(rnew, "inkscape:pageshadow",
