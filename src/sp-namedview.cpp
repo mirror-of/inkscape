@@ -197,6 +197,10 @@ static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape:
         (* ((SPObjectClass *) (sp_namedview_parent_class))->build)(object, document, repr);
     }
 
+    object->readAttr( "inkscape:rulermultiplierx" );
+    object->readAttr( "inkscape:rulermultipliery" );
+    object->readAttr( "inkscape:ruleroffsetx" );
+    object->readAttr( "inkscape:ruleroffsety" );
     object->readAttr( "inkscape:document-units" );
     object->readAttr( "units" );
     object->readAttr( "viewonly" );
@@ -209,10 +213,6 @@ static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape:
     object->readAttr( "guideopacity" );
     object->readAttr( "guidehicolor" );
     object->readAttr( "guidehiopacity" );
-    object->readAttr( "inkscape:rulermultiplierx" );
-    object->readAttr( "inkscape:rulermultipliery" );
-    object->readAttr( "inkscape:ruleroffsetx" );
-    object->readAttr( "inkscape:ruleroffsety" );
     object->readAttr( "showborder" );
     object->readAttr( "inkscape:showpageshadow" );
     object->readAttr( "borderlayer" );
@@ -364,24 +364,6 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             for (GSList *l = nv->guides; l != NULL; l = l->next) {
                 g_object_set(G_OBJECT(l->data), "hicolor", nv->guidehicolor, NULL);
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SP_ATTR_RULERMULTIPLIERX:
-            nv->rulermultiplierx = (value) ? g_ascii_strtod(value, NULL) : 1.0;
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SP_ATTR_RULERMULTIPLIERY:
-            nv->rulermultipliery = (value) ? g_ascii_strtod(value, NULL) : 1.0;
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SP_ATTR_RULEROFFSETX:
-            nv->ruleroffsetx = (value) ? g_ascii_strtod(value, NULL) : 0.0;
-			nv->ruleroffsetx = sp_convert_distance_full(nv->ruleroffsetx, *nv->doc_units, sp_unit_get_by_id(SP_UNIT_PX));
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SP_ATTR_RULEROFFSETY:
-            nv->ruleroffsety = (value) ? g_ascii_strtod(value, NULL) : 0.0;
-			nv->ruleroffsety = sp_convert_distance_full(nv->ruleroffsety, *nv->doc_units, sp_unit_get_by_id(SP_UNIT_PX));
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_SHOWBORDER:
@@ -556,6 +538,24 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
     case SP_ATTR_INKSCAPE_CONNECTOR_SPACING:
             nv->connector_spacing = value ? g_ascii_strtod(value, NULL) :
                     defaultConnSpacing;
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SP_ATTR_INKSCAPE_RULERMULTIPLIERX:
+            nv->rulermultiplierx = (value) ? g_ascii_strtod(value, NULL) : 1.0;
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SP_ATTR_INKSCAPE_RULERMULTIPLIERY:
+            nv->rulermultipliery = (value) ? g_ascii_strtod(value, NULL) : 1.0;
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SP_ATTR_INKSCAPE_RULEROFFSETX:
+            nv->ruleroffsetx = (value) ? g_ascii_strtod(value, NULL) : 0.0;
+			nv->ruleroffsetx = sp_convert_distance_full(nv->ruleroffsetx, *nv->doc_units, sp_unit_get_by_id(SP_UNIT_PX));
+            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
+    case SP_ATTR_INKSCAPE_RULEROFFSETY:
+            nv->ruleroffsety = (value) ? g_ascii_strtod(value, NULL) : 0.0;
+			nv->ruleroffsety = sp_convert_distance_full(nv->ruleroffsety, *nv->doc_units, sp_unit_get_by_id(SP_UNIT_PX));
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_DOCUMENT_UNITS: {

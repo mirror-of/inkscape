@@ -461,7 +461,7 @@
         </flags>
     </rc>
     <link command="${arch}g++" out="${build}/inkscape.exe"
-              strip="true" symfile="${build}/inkscape.dbg"
+              strip="false" symfile="${build}/inkscape.dbg"
               stripcommand="${archutil}strip"
               objcopycommand="${archutil}objcopy">
        <flags>

@@ -23,6 +23,7 @@
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/textview.h>
 
+#include "ui/widget/ruler-coords.h"
 #include "ui/widget/page-sizer.h"
 #include "ui/widget/registered-widget.h"
 #include "ui/widget/registry.h"
@@ -118,17 +119,12 @@ protected:
 
     UI::Widget::Registry _wr;
     //---------------------------------------------------------------
+    UI::Widget::RulerCoordSystem      _ruler_coords;
     UI::Widget::RegisteredCheckButton _rcb_canb;
     UI::Widget::RegisteredCheckButton _rcb_bord;
     UI::Widget::RegisteredCheckButton _rcb_shad;
     UI::Widget::RegisteredColorPicker _rcp_bg;
     UI::Widget::RegisteredColorPicker _rcp_bord;
-    UI::Widget::RegisteredUnitMenu    _rum_deflt;
-    UI::Widget::RegisteredScalarUnit  _rlr_off_x; // ruler offset
-    UI::Widget::RegisteredScalarUnit  _rlr_off_y;
-    //Gtk::Button                       _rlr_setoffs_top;
-    UI::Widget::RegisteredScalar      _rlr_mul_x; // ruler multiplier
-    UI::Widget::RegisteredScalar      _rlr_mul_y;
     UI::Widget::PageSizer             _page_sizer;
     //---------------------------------------------------------------
     UI::Widget::RegisteredCheckButton _rcb_sgui;
