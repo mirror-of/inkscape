@@ -135,7 +135,6 @@ RegisteredUnitMenu::on_changed()
     _wr->setUpdating (true);
 
     write_to_xml(os.str().c_str());
-g_message("### rsm:on_val_changed 1, writing to xml: %s", os.str().c_str());
 
     _wr->setUpdating (false);
 }
@@ -172,7 +171,6 @@ RegisteredScalarUnit::RegisteredScalarUnit (const Glib::ustring& label, const Gl
 void
 RegisteredScalarUnit::on_value_changed()
 {
-g_message("### rsu:on_val_changed 1, setP = %i", setProgrammatically);
 	if (setProgrammatically) {
         setProgrammatically = false;
 
@@ -185,7 +183,6 @@ g_message("### rsu:on_val_changed 1, setP = %i", setProgrammatically);
         if (!ignoreSetProgrammatically) return;
     }
 
-g_message("### rsu:on_val_changed 2, isUpd = %i", _wr->isUpdating());
     if (_wr->isUpdating())
         return;
 
@@ -197,9 +194,7 @@ g_message("### rsu:on_val_changed 2, isUpd = %i", _wr->isUpdating());
         os << _um->getUnitAbbr();
 
     write_to_xml(os.str().c_str());
-g_message("### rsu:on_val_changed 2.5, writing to xml: %s", os.str().c_str());
     _wr->setUpdating (false);
-g_message("### rsu:on_val_changed 3");
 }
 
 

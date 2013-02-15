@@ -116,7 +116,6 @@ void ScalarUnit::setValue(double number, Glib::ustring const &units)
 {
     g_assert(_unit_menu != NULL);
     _unit_menu->setUnit(units);
-g_message("### su::setvalue: %f", number);
     Scalar::setValue(number);
 }
 

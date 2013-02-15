@@ -57,59 +57,26 @@ public:
     void init();
     void updateWidgetsFromDoc();
 
-
-/*
-    void setDim (double w, double h, bool changeList=true);
-    void updateFitMarginsUI(Inkscape::XML::Node *nv_repr);
-*/
-
-/*
-    // The origin in default units in cartesian coordinate system?
-    double originX, originY;
-
-    // The units (px, pt, mm, etc) of this specification
-    SPUnitId unit;
-*/
-
 protected:
 
-//    void fire_fit_canvas_to_selection_or_drawing();
-    
     RegisteredUnitMenu    _rum_deflt;
     RegisteredScalarUnit  _rsu_off_x; // ruler offset
     RegisteredScalarUnit  _rsu_off_y;
-    //Gtk::Button                       _rlr_setoffs_top;
     RegisteredScalar      _rs_mul_x; // ruler multiplier
     RegisteredScalar      _rs_mul_y;
 
+
 /*
-    //### Portrait or landscape orientation
-    Gtk::HBox           _orientationBox;
-    Gtk::Label          _orientationLabel;
-    Gtk::RadioButton    _portraitButton;
-    Gtk::RadioButton    _landscapeButton;
-    //callbacks
+ some copied code snippets for later use
+
+//    void fire_fit_canvas_to_selection_or_drawing();
+    //Gtk::Button                       _rlr_setoffs_top;
     void on_portrait();
     void on_landscape();
     sigc::connection    _portrait_connection;
     sigc::connection    _landscape_connection;
 
-    //### Custom size frame
     Gtk::Frame           _customFrame;
-
-#if WITH_GTKMM_3_0
-    Gtk::Grid            _customDimTable;
-#else
-    Gtk::Table           _customDimTable;
-#endif
-
-    RegisteredUnitMenu   _dimensionUnits;
-    RegisteredScalarUnit _dimensionWidth;
-    RegisteredScalarUnit _dimensionHeight;
-    GList *              _dimTabOrderGList;
-
-    //### Fit Page options
-    Gtk::Expander        _fitPageMarginExpander;
 
 #if WITH_GTKMM_3_0
     Gtk::Grid            _marginTable;
@@ -117,32 +84,16 @@ protected:
     Gtk::Table           _marginTable;
 #endif
 
-    Gtk::Alignment       _marginTopAlign;
-    Gtk::Alignment       _marginLeftAlign;
-    Gtk::Alignment       _marginRightAlign;
-    Gtk::Alignment       _marginBottomAlign;
-    RegisteredScalar     _marginTop;
-    RegisteredScalar     _marginLeft;
-    RegisteredScalar     _marginRight;
-    RegisteredScalar     _marginBottom;
     Gtk::Alignment       _fitPageButtonAlign;
     Gtk::Button          _fitPageButton;
-    bool                 _lockMarginUpdate;
 */
 
     //callbacks
-    void on_value_changed();
-    void on_unit_changed();
+//    void on_value_changed();
+//    void on_unit_changed();
 //    sigc::connection    _changedw_connection;
 //    sigc::connection    _changedh_connection;
-/*
- *
-     sigc::connection _changed_offx_connection;
-    sigc::connection _changed_offy_connection;
-    sigc::connection _changed_mulx_connection;
-    sigc::connection _changed_muly_connection;
-    sigc::connection _changed_docunits_connection;
-*/
+
     Registry            *_widgetRegistry;
 };
 
