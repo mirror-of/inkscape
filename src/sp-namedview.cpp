@@ -197,11 +197,15 @@ static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape:
         (* ((SPObjectClass *) (sp_namedview_parent_class))->build)(object, document, repr);
     }
 
-    object->readAttr( "inkscape:rulermultiplierx" );
-    object->readAttr( "inkscape:rulermultipliery" );
-    object->readAttr( "inkscape:ruleroffsetx" );
-    object->readAttr( "inkscape:ruleroffsety" );
+g_message("### sp nv build reading units and mul and offs 0");
     object->readAttr( "inkscape:document-units" );
+g_message("### sp nv build reading units and mul and offs 1");
+    object->readAttr( "inkscape:rulermultiplierx" );
+g_message("### sp nv build reading units and mul and offs 2");
+    object->readAttr( "inkscape:rulermultipliery" );
+    object->readAttr( "inkscape:ruleroffsetx" ); // must be read after document units
+    object->readAttr( "inkscape:ruleroffsety" ); // must be read after document units
+g_message("### sp nv build reading units and mul and offs 3");
     object->readAttr( "units" );
     object->readAttr( "viewonly" );
     object->readAttr( "showguides" );
@@ -294,6 +298,7 @@ static void sp_namedview_release(SPObject *object)
 
 static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *value)
 {
+    SPUnit const &unit_px(sp_unit_get_by_id(SP_UNIT_PX));
     SPNamedView *nv = SP_NAMEDVIEW(object);
 
     switch (key) {
@@ -541,7 +546,8 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_RULERMULTIPLIERX:
-            nv->rulermultiplierx = (value) ? g_ascii_strtod(value, NULL) : 1.0;
+g_message("### sp set multipl x to %s", (value)?value:"");
+    	    nv->rulermultiplierx = (value) ? g_ascii_strtod(value, NULL) : 1.0;
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_RULERMULTIPLIERY:
@@ -549,13 +555,35 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_RULEROFFSETX:
-            nv->ruleroffsetx = (value) ? g_ascii_strtod(value, NULL) : 0.0;
-			nv->ruleroffsetx = sp_convert_distance_full(nv->ruleroffsetx, *nv->doc_units, sp_unit_get_by_id(SP_UNIT_PX));
+g_message("### sp set ruler offs x to %s", (value)?value:"");
+            //nv->ruleroffsetx = (value) ? g_ascii_strtod(value, NULL) : 0.0;
+            //g_assert(nv->doc_units);
+           	//nv->ruleroffsetx = sp_convert_distance_full(nv->ruleroffsetx, *nv->doc_units, unit_px); // interpret value in doc_units
+            //sp_nv_read_length(value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &origin[Geom::X], &gridunit);
+            //origin[Geom::X] = sp_units_get_pixels(origin[Geom::X], *(gridunit));
+            nv->ruleroffsetx = 0;
+            if (value) {
+            	SPUnit const *rUnit = &sp_unit_get_by_id(SP_UNIT_PX);
+            	if (sp_str_to_length(value, &nv->ruleroffsetx, &rUnit)) {
+            		// interpret value in doc_units
+            		nv->ruleroffsetx = sp_convert_distance_full(nv->ruleroffsetx, *rUnit, unit_px);
+            	};
+            }
+g_message("### sp set ruler offs x, nv->offsx=%f", nv->ruleroffsetx);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_RULEROFFSETY:
-            nv->ruleroffsety = (value) ? g_ascii_strtod(value, NULL) : 0.0;
-			nv->ruleroffsety = sp_convert_distance_full(nv->ruleroffsety, *nv->doc_units, sp_unit_get_by_id(SP_UNIT_PX));
+            //nv->ruleroffsety = (value) ? g_ascii_strtod(value, NULL) : 0.0;
+            //g_assert(nv->doc_units);
+           	//nv->ruleroffsety = sp_convert_distance_full(nv->ruleroffsety, *nv->doc_units, unit_px); // interpret value in doc_units
+			nv->ruleroffsety = 0;
+			if (value) {
+				SPUnit const *rUnit = &sp_unit_get_by_id(SP_UNIT_PX);
+				if (sp_str_to_length(value, &nv->ruleroffsety, &rUnit)) {
+					// interpret value in doc_units
+					nv->ruleroffsety = sp_convert_distance_full(nv->ruleroffsety, *rUnit, unit_px);
+				};
+			}
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_DOCUMENT_UNITS: {

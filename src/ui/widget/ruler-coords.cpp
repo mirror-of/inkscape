@@ -78,10 +78,10 @@ namespace Widget {
 RulerCoordSystem::RulerCoordSystem(Registry & _wr)
     : Gtk::VBox(false,4),
       _rum_deflt(_("Default _units:"), "inkscape:document-units", _wr),
-      _rsu_off_x(_("Ruler Origin X:"), _("Origin of ruler coordinate system [default units]"), "inkscape:ruleroffsetx", _rum_deflt, _wr),
-      _rsu_off_y(_("Ruler Origin Y:"), _("Origin of ruler coordinate system [default units]"), "inkscape:ruleroffsety", _rum_deflt, _wr),
-      _rs_mul_x(_("Ruler Multiplier X:"), _("Ruler values are default units multiplied with this number"), "inkscape:rulermultiplierx", _wr),
-      _rs_mul_y(_("Ruler Multiplier Y:"), _("Ruler values are default units multiplied with this number"), "inkscape:rulermultipliery", _wr),
+      _rsu_off_x(_("Ruler Origin X:"), _("Origin of ruler coordinate system [default units]"), "inkscape:ruleroffsetx", _rum_deflt, _wr, NULL, NULL, true),
+      _rsu_off_y(_("Ruler Origin Y:"), _("Origin of ruler coordinate system [default units]"), "inkscape:ruleroffsety", _rum_deflt, _wr, NULL, NULL, true),
+      _rs_mul_x(_("Ruler Multiplier X:"), _("Ruler values are default units multiplied with this number"), "inkscape:rulermultiplierx", _wr, NULL, NULL, true),
+      _rs_mul_y(_("Ruler Multiplier Y:"), _("Ruler values are default units multiplied with this number"), "inkscape:rulermultipliery", _wr, NULL, NULL, true),
 /*
       _dimensionUnits( _("U_nits:"), "units", _wr ),
       _dimensionWidth( _("_Width:"), _("Width of paper"), "width", _dimensionUnits, _wr ),
@@ -106,7 +106,7 @@ g_message("### rcs() 2");
 
     pack_start(_rum_deflt, false, false, 0);
     pack_start(_rsu_off_x, false, false, 0);
-    pack_start(_rsu_off_y, false, false, 0);
+    pack_start(_rsu_off_y, false, false, 4);
     pack_start(_rs_mul_x, false, false, 0);
     pack_start(_rs_mul_y, false, false, 0);
 
@@ -266,6 +266,12 @@ g_message("### rcs() 3");
     0,                 &_rs_mul_x,
     0,                 &_rs_mul_y,
 */
+/*
+_rsu_off_x.setProgrammatically = false;
+_rsu_off_y.setProgrammatically = false;
+_rs_mul_x.setProgrammatically = false;
+_rs_mul_y.setProgrammatically = false;
+*/
 }
 
 
@@ -294,6 +300,14 @@ RulerCoordSystem::init ()
 */
 //    unit    = SP_UNIT_PX;
 
+g_message("### rcs:init() 0");
+/*
+	_changed_offx_connection = _rsu_off_x.signal_value_changed().connect (sigc::mem_fun (*this, &RulerCoordSystem::on_value_changed));
+	_changed_offy_connection = _rsu_off_y.signal_value_changed().connect (sigc::mem_fun (*this, &RulerCoordSystem::on_value_changed));
+	_changed_mulx_connection = _rs_mul_x.signal_value_changed().connect (sigc::mem_fun (*this, &RulerCoordSystem::on_value_changed));
+	_changed_muly_connection = _rs_mul_y.signal_value_changed().connect (sigc::mem_fun (*this, &RulerCoordSystem::on_value_changed));
+	_changed_docunits_connection = _rum_deflt.getUnitMenu()->signal_changed().connect (sigc::mem_fun (*this, &RulerCoordSystem::on_unit_changed));
+*/
 g_message("### rcs:init() 1");
 
     show_all_children();
@@ -305,17 +319,25 @@ g_message("### rcs:init() 2");
  */
 void
 RulerCoordSystem::updateWidgetsFromDoc() {
-	g_message("### rcs:updatewfd() 1");
-/*
- *     static bool _called = false;
+g_message("### rcs:updatewfd() 1");
+
+    static bool _called = false;
     if (_called) {
         return;
     }
 
     _called = true;
-
+g_message("### rcs:updatewfd() 2");
+/*
     _changedw_connection.block();
     _changedh_connection.block();
+*/
+/*
+	_changed_offx_connection.block();
+	_changed_offy_connection.block();
+	_changed_mulx_connection.block();
+	_changed_muly_connection.block();
+	_changed_docunits_connection.block();
 */
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
     SPNamedView *nv = sp_desktop_namedview(dt);
@@ -324,14 +346,29 @@ RulerCoordSystem::updateWidgetsFromDoc() {
         _rum_deflt.setUnit (nv->doc_units);
     _rs_mul_x.setValue (nv->rulermultiplierx);
     _rs_mul_y.setValue (nv->rulermultipliery);
-    _rsu_off_x.setValueKeepUnit (nv->ruleroffsetx, "px");
+    _rsu_off_x.setValueKeepUnit (nv->ruleroffsetx, "px"); // todo: check: is "px" correct?
     _rsu_off_y.setValueKeepUnit (nv->ruleroffsety, "px");
+
+    g_message("### rcs:updatewfd() 3");
+/*
+    _rsu_off_x.setProgrammatically = false;
+    _rsu_off_y.setProgrammatically = false;
+    _rs_mul_x.setProgrammatically = false;
+    _rs_mul_y.setProgrammatically = false;
+*/
 /*
     _changedw_connection.unblock();
     _changedh_connection.unblock();
-
-    _called = false;
 */
+/*
+	_changed_offx_connection.unblock();
+	_changed_offy_connection.unblock();
+	_changed_mulx_connection.unblock();
+	_changed_muly_connection.unblock();
+	_changed_docunits_connection.unblock();
+*/
+    _called = false;
+
 }
 
 
@@ -464,6 +501,16 @@ RulerCoordSystem::fire_fit_canvas_to_selection_or_drawing()
 */
 
 
+void
+RulerCoordSystem::on_unit_changed()
+{
+g_message("### rcs:on_unit_changed() 1");
+//_rsu_off_x.setProgrammatically = false;
+//_rsu_off_y.setProgrammatically = false;
+//_rs_mul_x.setProgrammatically = false;
+//_rs_mul_y.setProgrammatically = false;
+}
+
 /**
  * Callback for the dimension widgets
  */
@@ -473,7 +520,45 @@ RulerCoordSystem::on_value_changed()
 g_message("### rcs:on_val_changed() 1");
     if (_widgetRegistry->isUpdating()) return;
 
-g_message("### rcs:on_val_changed() 1");
+
+/*
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (!dt) {
+        return;
+    }
+    SPDocument *doc;
+    SPNamedView *nv;
+    Inkscape::XML::Node *nv_repr;
+
+    if ((doc = sp_desktop_document(SP_ACTIVE_DESKTOP))
+        && (nv = sp_document_namedview(doc, 0))) {
+
+
+        nv->rulermultiplierx = _rs_mul_x.getValue();
+        nv->rulermultipliery = _rs_mul_y.getValue();
+        nv->ruleroffsetx = _rsu_off_x.getValue("px");
+        nv->ruleroffsety = _rsu_off_y.getValue("px");
+
+    g_message("### rcs:on_val_changed() 2");
+
+    }
+
+    Verb *verb = Verb::get( SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING );
+    if (verb) {
+        SPAction *action = verb->get_action(dt);
+        if (action) {
+            sp_action_perform(action, NULL);
+        }
+    }
+*/
+
+/*
+    nv->rulermultiplierx = _rs_mul_x.getValue();
+    nv->rulermultipliery = _rs_mul_y.getValue();
+    nv->ruleroffsetx = _rsu_off_x.getValue("px");
+    nv->ruleroffsety = _rsu_off_y.getValue("px");
+*/
+g_message("### rcs:on_val_changed() 3");
 
 /*
     setDim (_dimensionWidth.getValue("px"),

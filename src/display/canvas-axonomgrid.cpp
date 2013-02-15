@@ -145,7 +145,7 @@ CanvasAxonomGrid::~CanvasAxonomGrid ()
 
 
 /* fixme: Collect all these length parsing methods and think common sane API */
-
+// todo: maybe use sp_str_to_length() in units.h
 static gboolean sp_nv_read_length(gchar const *str, guint base, gdouble *val, SPUnit const **unit)
 {
     if (!str) {

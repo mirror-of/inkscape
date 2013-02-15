@@ -129,6 +129,7 @@ void Scalar::setRange(double min, double max)
 void Scalar::setValue(double value)
 {
     g_assert(_widget != NULL);
+g_message("### s:setValue: %f", value);
     setProgrammatically = true; // callback is supposed to reset back, if it cares
     static_cast<SpinButton*>(_widget)->set_value(value);
 }

@@ -135,6 +135,7 @@ RegisteredUnitMenu::on_changed()
     _wr->setUpdating (true);
 
     write_to_xml(os.str().c_str());
+g_message("### rsm:on_val_changed 1, writing to xml: %s", os.str().c_str());
 
     _wr->setUpdating (false);
 }
@@ -149,12 +150,15 @@ RegisteredScalarUnit::~RegisteredScalarUnit()
     _value_changed_connection.disconnect();
 }
 
-RegisteredScalarUnit::RegisteredScalarUnit (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, const RegisteredUnitMenu &rum, Registry& wr, Inkscape::XML::Node* repr_in, SPDocument *doc_in)
+RegisteredScalarUnit::RegisteredScalarUnit (const Glib::ustring& label, const Glib::ustring& tip,
+		                 const Glib::ustring& key, const RegisteredUnitMenu &rum, Registry& wr,
+		                 Inkscape::XML::Node* repr_in, SPDocument *doc_in, bool ignoreSetProgrammatically)
     : RegisteredWidget<ScalarUnit>(label, tip, UNIT_TYPE_LINEAR, "", "", rum.getUnitMenu()),
       _um(0)
 {
     init_parent(key, wr, repr_in, doc_in);
 
+    this->ignoreSetProgrammatically = ignoreSetProgrammatically;
     setProgrammatically = false;
 
     initScalar (-1e6, 1e6);
@@ -168,11 +172,20 @@ RegisteredScalarUnit::RegisteredScalarUnit (const Glib::ustring& label, const Gl
 void
 RegisteredScalarUnit::on_value_changed()
 {
-    if (setProgrammatically) {
+g_message("### rsu:on_val_changed 1, setP = %i", setProgrammatically);
+	if (setProgrammatically) {
         setProgrammatically = false;
-        return;
+
+        // vaifrax: I think in some cases like for the ruler coordinate system
+        //          widgets, a return here and the 'setUpdating' mechanism
+        //          are a doubled functionality leading to ignore the correct
+        //          updates. I tried to work around this with partial success.
+        //          Introducing 'ignoreSetProgrammatically' seems to be the
+        //          easiest fix.
+        if (!ignoreSetProgrammatically) return;
     }
 
+g_message("### rsu:on_val_changed 2, isUpd = %i", _wr->isUpdating());
     if (_wr->isUpdating())
         return;
 
@@ -184,8 +197,9 @@ RegisteredScalarUnit::on_value_changed()
         os << _um->getUnitAbbr();
 
     write_to_xml(os.str().c_str());
-
+g_message("### rsu:on_val_changed 2.5, writing to xml: %s", os.str().c_str());
     _wr->setUpdating (false);
+g_message("### rsu:on_val_changed 3");
 }
 
 
@@ -200,11 +214,12 @@ RegisteredScalar::~RegisteredScalar()
 
 RegisteredScalar::RegisteredScalar ( const Glib::ustring& label, const Glib::ustring& tip,
                          const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
-                         SPDocument * doc_in )
+                         SPDocument * doc_in, bool ignoreSetProgrammatically )
     : RegisteredWidget<Scalar>(label, tip)
 {
     init_parent(key, wr, repr_in, doc_in);
 
+    this->ignoreSetProgrammatically = ignoreSetProgrammatically;
     setProgrammatically = false;
 
     setRange (-1e6, 1e6);
@@ -218,7 +233,7 @@ RegisteredScalar::on_value_changed()
 {
     if (setProgrammatically) {
         setProgrammatically = false;
-        return;
+        if (!ignoreSetProgrammatically) return; // see comment above from RegisteredScalarUnit
     }
 
     if (_wr->isUpdating()) {

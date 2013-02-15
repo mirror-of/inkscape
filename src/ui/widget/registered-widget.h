@@ -184,12 +184,14 @@ public:
                            const RegisteredUnitMenu &rum,
                            Registry& wr,
                            Inkscape::XML::Node* repr_in = NULL,
-                           SPDocument *doc_in = NULL );
+                           SPDocument *doc_in = NULL,
+                           bool ignoreSetProgrammatically = false ); // see comment in registered-widget.cpp, RegisteredScalarUnit::on_value_changed()
 
 protected:
     sigc::connection  _value_changed_connection;
     UnitMenu         *_um;
     void on_value_changed();
+    bool ignoreSetProgrammatically;
 };
 
 class RegisteredScalar : public RegisteredWidget<Scalar> {
@@ -200,11 +202,13 @@ public:
             const Glib::ustring& key,
             Registry& wr,
             Inkscape::XML::Node* repr_in = NULL,
-            SPDocument *doc_in = NULL );
+            SPDocument *doc_in = NULL,
+            bool ignoreSetProgrammatically = false ); // see comment in registered-widget.cpp, RegisteredScalarUnit::on_value_changed()
 
 protected:
     sigc::connection  _value_changed_connection;
     void on_value_changed();
+    bool ignoreSetProgrammatically;
 };
 
 class RegisteredText : public RegisteredWidget<Text> {

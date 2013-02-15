@@ -1278,7 +1278,7 @@ SPDesktopWidget::disableInteraction()
 void
 SPDesktopWidget::setCoordinateStatus(Geom::Point p)
 {
-    gchar *cstr;
+	gchar *cstr;
     cstr = g_strdup_printf("<tt>%7.2f </tt>", ruler_multiplier_x * (dt2r * (p[Geom::X] - fabs(ruler_multiplier_x) * ruler_origin[Geom::X])));
     gtk_label_set_markup( GTK_LABEL(this->coord_status_x), cstr );
     g_free(cstr);
@@ -1674,6 +1674,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->ruler_origin = Geom::Point(namedview->ruleroffsetx / fabs(namedview->rulermultiplierx), namedview->ruleroffsety / fabs(namedview->rulermultipliery));
 	dtw->ruler_multiplier_x = namedview->rulermultiplierx;
 	dtw->ruler_multiplier_y = namedview->rulermultipliery;
+g_message("### desktop::createInst 1 ruler orign: %f %f", dtw->ruler_origin[Geom::X], dtw->ruler_origin[Geom::Y]);
 
     dtw->desktop = new SPDesktop();
     dtw->stub = new SPDesktopWidget::WidgetStub (dtw);
@@ -1746,12 +1747,14 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         this->dt2r = 1.0 / nv->doc_units->unittobase;
 		if (nv->rulermultiplierx == 0) nv->rulermultiplierx = 0.000001;
 		if (nv->rulermultipliery == 0) nv->rulermultipliery = 0.000001;
-        this->ruler_origin = Geom::Point(nv->ruleroffsetx / fabs(nv->rulermultiplierx), nv->ruleroffsety / fabs(nv->rulermultipliery));
+g_message("### desktop::namedviewModified 1 nvrx,y: %f %f", nv->ruleroffsetx, nv->ruleroffsety);
+		this->ruler_origin = Geom::Point(nv->ruleroffsetx / fabs(nv->rulermultiplierx), nv->ruleroffsety / fabs(nv->rulermultipliery));
 		this->ruler_multiplier_x = nv->rulermultiplierx;
 		this->ruler_multiplier_y = nv->rulermultipliery;
 
         sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDefaultMetric());
         sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDefaultMetric());
+g_message("### desktop::namedviewModified 2 ruler orign: %f %f", ruler_origin[Geom::X], ruler_origin[Geom::Y]);
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),

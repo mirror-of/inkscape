@@ -57,6 +57,7 @@ public:
     void init();
     void updateWidgetsFromDoc();
 
+
 /*
     void setDim (double w, double h, bool changeList=true);
     void updateFitMarginsUI(Inkscape::XML::Node *nv_repr);
@@ -129,13 +130,20 @@ protected:
     bool                 _lockMarginUpdate;
 */
 
-    //callback
+    //callbacks
     void on_value_changed();
+    void on_unit_changed();
 //    sigc::connection    _changedw_connection;
 //    sigc::connection    _changedh_connection;
-
+/*
+ *
+     sigc::connection _changed_offx_connection;
+    sigc::connection _changed_offy_connection;
+    sigc::connection _changed_mulx_connection;
+    sigc::connection _changed_muly_connection;
+    sigc::connection _changed_docunits_connection;
+*/
     Registry            *_widgetRegistry;
-
 };
 
 } // namespace Widget

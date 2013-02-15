@@ -24,6 +24,7 @@
 #include <glibmm/i18n.h>
 #include "unit-constants.h"
 #include "svg/svg-length.h"
+#include <ctype.h> // for isspace()
 
 /* todo: use some fancy unit program */
 
@@ -215,6 +216,38 @@ sp_pixels_get_units(gdouble const pixels, SPUnit const &unit)
         g_warning("Different unit bases: No exact unit conversion available");
         return pixels / unit.unittobase;
     }
+}
+
+// partially copied from sp_nv_read_length() in canvas-*grid.cpp code
+// todo: check whether to use it there, too. The code exists 3 times now!
+gboolean sp_str_to_length(gchar const *str, double *val, SPUnit const **unit)
+{
+    if (!str) {
+        return FALSE;
+    }
+
+    gchar *u;
+    double v = g_ascii_strtod(str, &u);
+    if (!u) {
+        return FALSE;
+    }
+    while (isspace(*u)) {
+        u += 1;
+    }
+
+    *val = v;
+
+    if (!*u) {
+        /* No unit specified - keep default */
+        return TRUE;
+    }
+
+    SPUnit const* un = sp_unit_get_by_abbreviation((const gchar*) u);
+    if (un != NULL) {
+    	*unit = un;
+    	return TRUE;
+    }
+    return FALSE;
 }
 
 bool
