@@ -58,6 +58,8 @@ ink_common_sources +=	\
 	ui/widget/rendering-options.h            \
 	ui/widget/rotateable.h            \
 	ui/widget/rotateable.cpp            \
+	ui/widget/ruler-coords.cpp	\
+	ui/widget/ruler-coords.h	\
 	ui/widget/scalar-unit.cpp	\
 	ui/widget/scalar-unit.h		\
 	ui/widget/scalar.cpp		\
