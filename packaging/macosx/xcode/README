@@ -1,0 +1,11 @@
+# This folder contains an Inkscape solution containing an inkscape project
+# plus an inscape app project. Inkscape is the default binary, and InkscapeApp 
+# is meant to eventually contain the inkscape mac app.
+# Make sure you have all the dependancies installed on your machine.
+# Easiest way is to run:
+sudo port install inkscape
+sh autogen.sh
+make
+
+# After these 3 commands, you should be able to work from the Xcode Solution.
+

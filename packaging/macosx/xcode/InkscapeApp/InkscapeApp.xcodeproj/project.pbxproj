@@ -1,0 +1,465 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C6844257170033DE003669E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6844256170033DE003669E6 /* Cocoa.framework */; };
+		C6844261170033DE003669E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C684425F170033DE003669E6 /* InfoPlist.strings */; };
+		C6844263170033DE003669E6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C6844262170033DE003669E6 /* main.m */; };
+		C6844267170033DE003669E6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = C6844265170033DE003669E6 /* Credits.rtf */; };
+		C684426A170033DE003669E6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6844269170033DE003669E6 /* AppDelegate.m */; };
+		C684426D170033DE003669E6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C684426B170033DE003669E6 /* MainMenu.xib */; };
+		C6844275170033DE003669E6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6844274170033DE003669E6 /* SenTestingKit.framework */; };
+		C6844276170033DE003669E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6844256170033DE003669E6 /* Cocoa.framework */; };
+		C684427E170033DE003669E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C684427C170033DE003669E6 /* InfoPlist.strings */; };
+		C6844281170033DE003669E6 /* InkscapeAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C6844280170033DE003669E6 /* InkscapeAppTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C6844277170033DE003669E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C684424B170033DE003669E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C6844252170033DE003669E6;
+			remoteInfo = InkscapeApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C6844253170033DE003669E6 /* InkscapeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InkscapeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6844256170033DE003669E6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		C6844259170033DE003669E6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		C684425A170033DE003669E6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		C684425B170033DE003669E6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C684425E170033DE003669E6 /* InkscapeApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "InkscapeApp-Info.plist"; sourceTree = "<group>"; };
+		C6844260170033DE003669E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C6844262170033DE003669E6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C6844264170033DE003669E6 /* InkscapeApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "InkscapeApp-Prefix.pch"; sourceTree = "<group>"; };
+		C6844266170033DE003669E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		C6844268170033DE003669E6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C6844269170033DE003669E6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C684426C170033DE003669E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		C6844273170033DE003669E6 /* InkscapeAppTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InkscapeAppTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6844274170033DE003669E6 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		C684427B170033DE003669E6 /* InkscapeAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "InkscapeAppTests-Info.plist"; sourceTree = "<group>"; };
+		C684427D170033DE003669E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C684427F170033DE003669E6 /* InkscapeAppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InkscapeAppTests.h; sourceTree = "<group>"; };
+		C6844280170033DE003669E6 /* InkscapeAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InkscapeAppTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C6844250170033DE003669E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6844257170033DE003669E6 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C684426F170033DE003669E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6844275170033DE003669E6 /* SenTestingKit.framework in Frameworks */,
+				C6844276170033DE003669E6 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C684424A170033DE003669E6 = {
+			isa = PBXGroup;
+			children = (
+				C684425C170033DE003669E6 /* InkscapeApp */,
+				C6844279170033DE003669E6 /* InkscapeAppTests */,
+				C6844255170033DE003669E6 /* Frameworks */,
+				C6844254170033DE003669E6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C6844254170033DE003669E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C6844253170033DE003669E6 /* InkscapeApp.app */,
+				C6844273170033DE003669E6 /* InkscapeAppTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6844255170033DE003669E6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C6844256170033DE003669E6 /* Cocoa.framework */,
+				C6844274170033DE003669E6 /* SenTestingKit.framework */,
+				C6844258170033DE003669E6 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C6844258170033DE003669E6 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C6844259170033DE003669E6 /* AppKit.framework */,
+				C684425A170033DE003669E6 /* CoreData.framework */,
+				C684425B170033DE003669E6 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		C684425C170033DE003669E6 /* InkscapeApp */ = {
+			isa = PBXGroup;
+			children = (
+				C6844268170033DE003669E6 /* AppDelegate.h */,
+				C6844269170033DE003669E6 /* AppDelegate.m */,
+				C684426B170033DE003669E6 /* MainMenu.xib */,
+				C684425D170033DE003669E6 /* Supporting Files */,
+			);
+			path = InkscapeApp;
+			sourceTree = "<group>";
+		};
+		C684425D170033DE003669E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C684425E170033DE003669E6 /* InkscapeApp-Info.plist */,
+				C684425F170033DE003669E6 /* InfoPlist.strings */,
+				C6844262170033DE003669E6 /* main.m */,
+				C6844264170033DE003669E6 /* InkscapeApp-Prefix.pch */,
+				C6844265170033DE003669E6 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C6844279170033DE003669E6 /* InkscapeAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				C684427F170033DE003669E6 /* InkscapeAppTests.h */,
+				C6844280170033DE003669E6 /* InkscapeAppTests.m */,
+				C684427A170033DE003669E6 /* Supporting Files */,
+			);
+			path = InkscapeAppTests;
+			sourceTree = "<group>";
+		};
+		C684427A170033DE003669E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C684427B170033DE003669E6 /* InkscapeAppTests-Info.plist */,
+				C684427C170033DE003669E6 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C6844252170033DE003669E6 /* InkscapeApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C6844284170033DE003669E6 /* Build configuration list for PBXNativeTarget "InkscapeApp" */;
+			buildPhases = (
+				C684424F170033DE003669E6 /* Sources */,
+				C6844250170033DE003669E6 /* Frameworks */,
+				C6844251170033DE003669E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = InkscapeApp;
+			productName = InkscapeApp;
+			productReference = C6844253170033DE003669E6 /* InkscapeApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C6844272170033DE003669E6 /* InkscapeAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C6844287170033DE003669E6 /* Build configuration list for PBXNativeTarget "InkscapeAppTests" */;
+			buildPhases = (
+				C684426E170033DE003669E6 /* Sources */,
+				C684426F170033DE003669E6 /* Frameworks */,
+				C6844270170033DE003669E6 /* Resources */,
+				C6844271170033DE003669E6 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C6844278170033DE003669E6 /* PBXTargetDependency */,
+			);
+			name = InkscapeAppTests;
+			productName = InkscapeAppTests;
+			productReference = C6844273170033DE003669E6 /* InkscapeAppTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C684424B170033DE003669E6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Inkscape;
+			};
+			buildConfigurationList = C684424E170033DE003669E6 /* Build configuration list for PBXProject "InkscapeApp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C684424A170033DE003669E6;
+			productRefGroup = C6844254170033DE003669E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C6844252170033DE003669E6 /* InkscapeApp */,
+				C6844272170033DE003669E6 /* InkscapeAppTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C6844251170033DE003669E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6844261170033DE003669E6 /* InfoPlist.strings in Resources */,
+				C6844267170033DE003669E6 /* Credits.rtf in Resources */,
+				C684426D170033DE003669E6 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C6844270170033DE003669E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C684427E170033DE003669E6 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C6844271170033DE003669E6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C684424F170033DE003669E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6844263170033DE003669E6 /* main.m in Sources */,
+				C684426A170033DE003669E6 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C684426E170033DE003669E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6844281170033DE003669E6 /* InkscapeAppTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C6844278170033DE003669E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C6844252170033DE003669E6 /* InkscapeApp */;
+			targetProxy = C6844277170033DE003669E6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C684425F170033DE003669E6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C6844260170033DE003669E6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C6844265170033DE003669E6 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C6844266170033DE003669E6 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		C684426B170033DE003669E6 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C684426C170033DE003669E6 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		C684427C170033DE003669E6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C684427D170033DE003669E6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C6844282170033DE003669E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C6844283170033DE003669E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C6844285170033DE003669E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InkscapeApp/InkscapeApp-Prefix.pch";
+				INFOPLIST_FILE = "InkscapeApp/InkscapeApp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C6844286170033DE003669E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InkscapeApp/InkscapeApp-Prefix.pch";
+				INFOPLIST_FILE = "InkscapeApp/InkscapeApp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C6844288170033DE003669E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/InkscapeApp.app/Contents/MacOS/InkscapeApp";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InkscapeApp/InkscapeApp-Prefix.pch";
+				INFOPLIST_FILE = "InkscapeAppTests/InkscapeAppTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		C6844289170033DE003669E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/InkscapeApp.app/Contents/MacOS/InkscapeApp";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "InkscapeApp/InkscapeApp-Prefix.pch";
+				INFOPLIST_FILE = "InkscapeAppTests/InkscapeAppTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C684424E170033DE003669E6 /* Build configuration list for PBXProject "InkscapeApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6844282170033DE003669E6 /* Debug */,
+				C6844283170033DE003669E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C6844284170033DE003669E6 /* Build configuration list for PBXNativeTarget "InkscapeApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6844285170033DE003669E6 /* Debug */,
+				C6844286170033DE003669E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C6844287170033DE003669E6 /* Build configuration list for PBXNativeTarget "InkscapeAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6844288170033DE003669E6 /* Debug */,
+				C6844289170033DE003669E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C684424B170033DE003669E6 /* Project object */;
+}
