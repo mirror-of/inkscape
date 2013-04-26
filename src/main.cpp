@@ -148,6 +148,7 @@ enum {
     SP_ARG_EXPORT_PS,
     SP_ARG_EXPORT_EPS,
     SP_ARG_EXPORT_PDF,
+    SP_ARG_EXPORT_PDF_VERSION,
     SP_ARG_EXPORT_LATEX,
 #ifdef WIN32
     SP_ARG_EXPORT_EMF,
@@ -201,6 +202,7 @@ static gchar *sp_export_svg = NULL;
 static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
 static gchar *sp_export_pdf = NULL;
+static gchar *sp_export_pdf_version = NULL;
 #ifdef WIN32
 static gchar *sp_export_emf = NULL;
 #endif //WIN32
@@ -245,6 +247,7 @@ static void resetCommandlineGlobals() {
         sp_export_ps = NULL;
         sp_export_eps = NULL;
         sp_export_pdf = NULL;
+        sp_export_pdf_version = NULL;
 #ifdef WIN32
         sp_export_emf = NULL;
 #endif //WIN32
@@ -385,6 +388,12 @@ struct poptOption options[] = {
      POPT_ARG_STRING, &sp_export_pdf, SP_ARG_EXPORT_PDF,
      N_("Export document to a PDF file"),
      N_("FILENAME")},
+
+    {"export-pdf-version", 0,
+     POPT_ARG_STRING, &sp_export_pdf_version, SP_ARG_EXPORT_PDF_VERSION,
+     // TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
+     N_("Export PDF to given version. (hint: make sure to input the exact string found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"),
+     N_("PDF_VERSION")},
 
     {"export-latex", 0,
      POPT_ARG_NONE, &sp_export_latex, SP_ARG_EXPORT_LATEX,
@@ -1637,6 +1646,21 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
         margin = g_ascii_strtod(sp_export_margin, NULL);
     }
     (*i)->set_param_float("bleed", margin);
+
+    if(sp_export_pdf_version) {
+        const gchar *param_name="PDFversion";
+        try{
+            gchar const *level= (*i)->set_param_enum(param_name, sp_export_pdf_version);
+            if((level != NULL) && (g_ascii_strcasecmp(sp_export_pdf_version, level) != 0))
+                g_warning("desired PDF export version \"%s\" not supported (hint: input the exact string found in pdf export dialog in the command line), using: %s instead!",
+                          sp_export_pdf_version,level);
+        } catch (...) {
+            // can be thrown along the way:
+            // throw Extension::param_not_exist();
+            // throw Extension::param_not_enum_param();
+            g_warning("Parameter or Enum \"%s\" might not exist",param_name);
+        }
+    }
 
     //check if specified directory exists
     if (!Inkscape::IO::file_directory_exists(uri)) {

@@ -101,6 +101,8 @@ public:
 
     gchar const *set_optiongroup(gchar const *in, SPDocument * doc, Inkscape::XML::Node *node);
 
+    gchar const *set_enum(gchar const * in, SPDocument * doc, Inkscape::XML::Node *node);
+
     gchar const *set_string(gchar const * in, SPDocument * doc, Inkscape::XML::Node * node);
 
     guint32 set_color(guint32 in, SPDocument * doc, Inkscape::XML::Node * node);

@@ -269,6 +269,11 @@ public:
                                         SPDocument * doc = 0,
                                         Inkscape::XML::Node * node = 0);
 
+    gchar const *    set_param_enum   (gchar const * name,
+                                       gchar const * value,
+                                       SPDocument * doc = 0x0,
+                                       Inkscape::XML::Node * node = 0x0);
+
     guint32          set_param_color  (const gchar * name,
                                        guint32 color,
                                        SPDocument *   doc = NULL,

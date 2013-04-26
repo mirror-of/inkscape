@@ -247,6 +247,15 @@ gchar const * Parameter::set_optiongroup( gchar const * in, SPDocument * doc, In
     return param->set(in, doc, node);
 }
 
+gchar const *Parameter::set_enum( gchar const * in, SPDocument * doc, Inkscape::XML::Node * node )
+{
+    ParamComboBox *param = dynamic_cast<ParamComboBox *>(this);
+    if (!param) {
+        throw Extension::param_not_enum_param();
+    }
+    return param->set(in, doc, node);
+}
+
 
 /** Wrapper to cast to the object and use it's function. */
 guint32

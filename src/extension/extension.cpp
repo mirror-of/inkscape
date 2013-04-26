@@ -597,6 +597,13 @@ Extension::set_param_optiongroup(gchar const * name, gchar const * value, SPDocu
     return param->set_optiongroup(value, doc, node);
 }
 
+gchar const *
+Extension::set_param_enum(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node)
+{
+    Parameter * param = get_param(name);
+    return param->set_enum(value, doc, node);
+}
+
 
 /**
     \return   The passed in value
