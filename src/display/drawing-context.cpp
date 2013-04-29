@@ -118,7 +118,8 @@ void DrawingContext::path(Geom::PathVector const &pv) {
     feed_pathvector_to_cairo(_ct, pv);
 }
 
-void DrawingContext::paint(double alpha) {
+void DrawingContext::paint(double alpha, bool antialiasing) {
+	if(!antialiasing) cairo_set_antialias(_ct,CAIRO_ANTIALIAS_NONE);
     if (alpha == 1.0) cairo_paint(_ct);
     else cairo_paint_with_alpha(_ct, alpha);
 }

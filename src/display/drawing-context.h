@@ -71,7 +71,7 @@ public:
     void newSubpath() { cairo_new_sub_path(_ct); }
     void path(Geom::PathVector const &pv);
 
-    void paint(double alpha = 1.0);
+    void paint(double alpha = 1.0, bool antialiasing = true);
     void fill() { cairo_fill(_ct); }
     void fillPreserve() { cairo_fill_preserve(_ct); }
     void stroke() { cairo_stroke(_ct); }

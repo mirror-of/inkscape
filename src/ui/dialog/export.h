@@ -177,6 +177,11 @@ private:
     void onHideExceptSelected ();
 
     /**
+     * Antialiasing selected callback
+     */
+    void onAntialiasingSelected ();
+
+    /**
      * Area width value changed callback
      */
     void onAreaWidthChange   ();
@@ -344,6 +349,9 @@ private:
 
     Gtk::HBox hide_box;
     Inkscape::UI::Widget::CheckButton    hide_export;
+
+	Gtk::HBox antialiasingBox;
+	Inkscape::UI::Widget::CheckButton antialiasingSelector;
 
     Inkscape::UI::Widget::CheckButton closeWhenDone;
 

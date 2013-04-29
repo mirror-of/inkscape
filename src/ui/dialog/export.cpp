@@ -166,6 +166,8 @@ Export::Export (void) :
     batch_export(_("B_atch export all selected objects"), _("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)")),
     hide_box(false, 5),
     hide_export(_("Hide a_ll except selected"), _("In the exported image, hide all objects except those that are selected")),
+	antialiasingBox(false, 3),
+	antialiasingSelector(_("Antialiasing"),_("Activates antialiasing for current export")),
     closeWhenDone(_("Close when complete"), _("Once the export completes, close this dialog")),
     button_box(false, 3),
     export_label(_("_Export"), 1),
@@ -336,6 +338,9 @@ Export::Export (void) :
     hide_export.set_active (prefs->getBool("/dialogs/export/hideexceptselected/value", false));
     hide_box.pack_start(hide_export, false, false);
 
+    antialiasingSelector.set_sensitive(true);
+    antialiasingSelector.set_active (prefs->getBool("/dialogs/export/antialiasing/value", true));
+    antialiasingBox.pack_start(antialiasingSelector, false, false);
 
     /* Export Button row */
     button_box.set_border_width(3);
@@ -355,6 +360,7 @@ Export::Export (void) :
     contents->pack_start(singleexport_box);
     contents->pack_start(batch_box);
     contents->pack_start(hide_box);
+    contents->pack_start(antialiasingBox);
     contents->pack_end(button_box, false, 0);
     contents->pack_end(_prog, Gtk::PACK_EXPAND_WIDGET);
 
@@ -366,6 +372,7 @@ Export::Export (void) :
     batch_export.signal_clicked().connect(sigc::mem_fun(*this, &Export::onBatchClicked));
     export_button.signal_clicked().connect(sigc::mem_fun(*this, &Export::onExport));
     hide_export.signal_clicked().connect(sigc::mem_fun(*this, &Export::onHideExceptSelected));
+    antialiasingSelector.signal_clicked().connect(sigc::mem_fun(*this, &Export::onAntialiasingSelected));
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Export::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
@@ -979,6 +986,10 @@ void Export::onHideExceptSelected ()
     prefs->setBool("/dialogs/export/hideexceptselected/value", hide_export.get_active());
 }
 
+void Export::onAntialiasingSelected ()
+{
+    prefs->setBool("/dialogs/export/antialiasing/value", antialiasingSelector.get_active());
+}
 /// Called when export button is clicked
 void Export::onExport ()
 {
@@ -991,6 +1002,7 @@ void Export::onExport ()
     bool exportSuccessful = false;
 
     bool hide = hide_export.get_active ();
+	bool antialiasing = antialiasingSelector.get_active ();
     if (batch_export.get_active ()) {
         // Batch export of selected objects
 
@@ -1142,7 +1154,8 @@ void Export::onExport ()
                                                  nv->pagecolor,
                                                  onProgressCallback, (void*)prog_dlg,
                                                  FALSE,
-                                                 hide ? const_cast<GSList *>(sp_desktop_selection(desktop)->itemList()) : NULL
+                                                 hide ? const_cast<GSList *>(sp_desktop_selection(desktop)->itemList()) : NULL,
+												 antialiasing
             );
         if (status == EXPORT_ERROR) {
             gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());

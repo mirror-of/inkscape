@@ -124,8 +124,8 @@ void PngTextList::add(gchar const* key, gchar const* text)
 static bool
 sp_png_write_rgba_striped(SPDocument *doc,
                           gchar const *filename, unsigned long int width, unsigned long int height, double xdpi, double ydpi,
-                          int (* get_rows)(guchar const **rows, void **to_free, int row, int num_rows, void *data),
-                          void *data)
+                          int (* get_rows)(guchar const **rows, void **to_free, int row, int num_rows, void *data, bool antialiasing),
+                          void *data, bool antialiasing = true)
 {
     struct SPEBP *ebp = (struct SPEBP *) data;
     FILE *fp;
@@ -276,7 +276,7 @@ sp_png_write_rgba_striped(SPDocument *doc,
     r = 0;
     while (r < static_cast<png_uint_32>(height)) {
         void *to_free;
-        int n = get_rows((unsigned char const **) row_pointers, &to_free, r, height-r, data);
+        int n = get_rows((unsigned char const **) row_pointers, &to_free, r, height-r, data, antialiasing);
         if (!n) break;
         png_write_rows(png_ptr, row_pointers, n);
         g_free(to_free);
@@ -309,7 +309,7 @@ sp_png_write_rgba_striped(SPDocument *doc,
  *
  */
 static int
-sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, void *data)
+sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, void *data, bool antialiasing = true)
 {
     struct SPEBP *ebp = (struct SPEBP *) data;
 
@@ -337,7 +337,7 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
     Inkscape::DrawingContext ct(s, bbox.min());
     ct.setSource(ebp->background);
     ct.setOperator(CAIRO_OPERATOR_SOURCE);
-    ct.paint();
+    ct.paint(1, antialiasing);
     ct.setOperator(CAIRO_OPERATOR_OVER);
 
     /* Render */
@@ -386,10 +386,11 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 unsigned long bgcolor,
                                 unsigned int (*status) (float, void *),
                                 void *data, bool force_overwrite,
-                                GSList *items_only)
+                                GSList *items_only,
+								bool antialiasing)
 {
     return sp_export_png_file(doc, filename, Geom::Rect(Geom::Point(x0,y0),Geom::Point(x1,y1)),
-                              width, height, xdpi, ydpi, bgcolor, status, data, force_overwrite, items_only);
+                              width, height, xdpi, ydpi, bgcolor, status, data, force_overwrite, items_only, antialiasing);
 }
 
 ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
@@ -398,7 +399,8 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 unsigned long bgcolor,
                                 unsigned (*status)(float, void *),
                                 void *data, bool force_overwrite,
-                                GSList *items_only)
+                                GSList *items_only,
+								bool antialiasing)
 {
     g_return_val_if_fail(doc != NULL, EXPORT_ERROR);
     g_return_val_if_fail(filename != NULL, EXPORT_ERROR);
@@ -469,7 +471,7 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
     ebp.px = g_try_new(guchar, 4 * ebp.sheight * width);
 
     if (ebp.px) {
-        write_status = sp_png_write_rgba_striped(doc, filename, width, height, xdpi, ydpi, sp_export_get_rows, &ebp);
+        write_status = sp_png_write_rgba_striped(doc, filename, width, height, xdpi, ydpi, sp_export_get_rows, &ebp, antialiasing);
         g_free(ebp.px);
     }
 
