@@ -428,7 +428,7 @@ Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Ink
 }
 
 /**
- * This is useful to find out, if a given string "value" is selectable in a ComboBox.
+ * This is useful to find out, if a given string \c value is selectable in a ComboBox named \cname.
  * 
  * @param name The name of the enum parameter to get.
  * @param doc The document to look in for document specific parameters.

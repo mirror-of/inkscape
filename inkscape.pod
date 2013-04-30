@@ -273,9 +273,8 @@ export area is that object's bounding box, but can be set to page by --export-ar
 
 Select the PDF version of the exported PDF file. This option basically
 exposes the PDF version selector found in the PDF-export dialog of the
-GUI. You must provide the exact string from that combo-box, e.g. "PDF 1.4".
-The default inkscape export PDF version is identical to the one found
-in the GUI.
+GUI. You must provide one of the versions from that combo-box,
+e.g. "1.4". The default pdf export version is "1.4".
 
 =item B<--export-latex>
 
