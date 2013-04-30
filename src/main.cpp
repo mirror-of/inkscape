@@ -1650,10 +1650,12 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
     if(sp_export_pdf_version) {
         const gchar *param_name="PDFversion";
         try{
-            gchar const *level= (*i)->set_param_enum(param_name, sp_export_pdf_version);
-            if((level != NULL) && (g_ascii_strcasecmp(sp_export_pdf_version, level) != 0))
-                g_warning("desired PDF export version \"%s\" not supported (hint: input the exact string found in pdf export dialog in the command line), using: %s instead!",
-                          sp_export_pdf_version,level);
+            // first, check if the given pdf version is selectable in the ComboBox
+            if((*i)->get_param_enum_contains("PDFversion", sp_export_pdf_version))
+                (*i)->set_param_enum(param_name, sp_export_pdf_version);
+            else
+                g_warning("Desired PDF export version \"%s\" not supported! Hint: input the exact string found in pdf export dialog in the command line.",
+                          sp_export_pdf_version);
         } catch (...) {
             // can be thrown along the way:
             // throw Extension::param_not_exist();

@@ -88,8 +88,10 @@ public:
     gchar const *get_enum(SPDocument const *doc, Inkscape::XML::Node const *node) const;
 
     /** Wrapper to cast to the object and use it's function. */
-    gchar const *get_optiongroup(SPDocument const * doc, Inkscape::XML::Node const *node) const;
+    bool get_enum_contains(gchar const * value, SPDocument const *doc, Inkscape::XML::Node const *node) const;
 
+    /** Wrapper to cast to the object and use it's function. */
+    gchar const *get_optiongroup(SPDocument const * doc, Inkscape::XML::Node const *node) const;
 
     /** Wrapper to cast to the object and use it's function. */
     bool set_bool(bool in, SPDocument * doc, Inkscape::XML::Node * node);

@@ -427,6 +427,21 @@ Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Ink
     return param->get_enum(doc, node);
 }
 
+/**
+ * This is useful to find out, if a given string "value" is selectable in a ComboBox.
+ * 
+ * @param name The name of the enum parameter to get.
+ * @param doc The document to look in for document specific parameters.
+ * @param node The node to look in for a specific parameter.
+ * @return true if value exists, false if not
+ */
+bool
+Extension::get_param_enum_contains(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node)
+{
+    Parameter * param = get_param(name);
+    return param->get_enum_contains(value, doc, node);
+}
+
 gchar const *
 Extension::get_param_optiongroup( gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node)
 {

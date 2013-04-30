@@ -244,6 +244,11 @@ public:
                                         SPDocument const *   doc = 0,
                                         Inkscape::XML::Node const * node = 0);
 
+    bool             get_param_enum_contains(gchar const * name,
+                                             gchar const * value,
+                                             SPDocument  * doc = 0x0,
+                                             Inkscape::XML::Node * node = 0x0);
+
     bool             set_param_bool   (const gchar * name,
                                        bool          value,
                                        SPDocument *   doc = NULL,
