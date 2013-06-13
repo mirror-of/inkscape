@@ -1892,7 +1892,9 @@ SPDesktop::show_dialogs()
     std::map<int, Glib::ustring>::const_iterator iter;
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_LAYERS, "/dialogs/layers") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_FILL_STROKE, "/dialogs/fillstroke") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_EXTENSIONEDITOR, "/dialogs/extensioneditor") );
+	////###
+	mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_RECOLOR_ARTWORK, "/dialogs/recolorartwork") );
+	mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_EXTENSIONEDITOR, "/dialogs/extensioneditor") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "/dialogs/align") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_METADATA, "/dialogs/documentmetadata") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_NAMEDVIEW, "/dialogs/documentoptions") );

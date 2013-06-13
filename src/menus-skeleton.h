@@ -182,6 +182,7 @@ static char const menus_skeleton[] =
 "   <submenu name=\"" N_("_Object") "\">\n"
 "       <verb verb-id=\"DialogFillStroke\" />\n"
 "       <verb verb-id=\"DialogObjectProperties\" />\n"
+"       <verb verb-id=\"DialogRecolorArtwork\" />\n"
 "       <verb verb-id=\"DialogSymbols\" />\n"
 "       <separator/>\n"
 "       <verb verb-id=\"SelectionGroup\" />\n"

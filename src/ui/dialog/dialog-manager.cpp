@@ -19,11 +19,15 @@
 
 #include "ui/dialog/dialog-manager.h"
 
+
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/document-metadata.h"
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/extension-editor.h"
 #include "ui/dialog/fill-and-stroke.h"
+//---
+#include "ui/dialog/recolor-artwork.h"
+//---
 #include "ui/dialog/filter-effects-dialog.h"
 #include "ui/dialog/find.h"
 #include "ui/dialog/glyphs.h"
@@ -102,6 +106,7 @@ DialogManager::DialogManager() {
         registerFactory("DocumentProperties",  &create<DocumentProperties,   FloatingBehavior>);
         registerFactory("ExtensionEditor",     &create<ExtensionEditor,      FloatingBehavior>);
         registerFactory("FillAndStroke",       &create<FillAndStroke,        FloatingBehavior>);
+		registerFactory("RecolorArtwork",       &create<RecolorArtwork,        FloatingBehavior>);
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  FloatingBehavior>);
         registerFactory("Find",                &create<Find,                 FloatingBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          FloatingBehavior>);
@@ -136,6 +141,9 @@ DialogManager::DialogManager() {
         registerFactory("DocumentProperties",  &create<DocumentProperties,   DockBehavior>);
         registerFactory("ExtensionEditor",     &create<ExtensionEditor,      DockBehavior>);
         registerFactory("FillAndStroke",       &create<FillAndStroke,        DockBehavior>);
+		//---
+		registerFactory("RecolorArtwork",       &create<RecolorArtwork,        DockBehavior>);
+        //---
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  DockBehavior>);
         registerFactory("Find",                &create<Find,                 DockBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          DockBehavior>);

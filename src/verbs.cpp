@@ -26,6 +26,7 @@
 
 
 #ifdef HAVE_CONFIG_H
+
 # include "config.h"
 #endif
 
@@ -1913,6 +1914,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_FILL_STROKE:
             dt->_dlg_mgr->showDialog("FillAndStroke");
             break;
+		case SP_VERB_DIALOG_RECOLOR_ARTWORK:
+            dt->_dlg_mgr->showDialog("RecolorArtwork");
+            break;
         case SP_VERB_DIALOG_GLYPHS:
             dt->_dlg_mgr->showDialog("Glyphs");
             break;
@@ -1995,7 +1999,7 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_PRINT_COLORS_PREVIEW:
             dt->_dlg_mgr->showDialog("PrintColorsPreviewDialog");
             break;
-
+		
         default:
             break;
     }
@@ -2751,6 +2755,8 @@ Verb *Verb::_base_verbs[] = {
                    N_("Edit document metadata (to be saved with the document)"), INKSCAPE_ICON("document-metadata") ),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."), INKSCAPE_ICON("dialog-fill-and-stroke")),
+	new DialogVerb(SP_VERB_DIALOG_RECOLOR_ARTWORK, "DialogRecolorArtwork", N_("R_ecolor Artwork..."),
+                   N_("Description of Recolor Artwork..."), INKSCAPE_ICON("dialog-fill-and-stroke")),
     new DialogVerb(SP_VERB_DIALOG_GLYPHS, "DialogGlyphs", N_("Gl_yphs..."),
                    N_("Select characters from a glyphs palette"), GTK_STOCK_SELECT_FONT),
     // TRANSLATORS: "Swatches" means: color samples

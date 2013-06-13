@@ -11,7 +11,7 @@
       <menuitem action='SaveAs'/>
       <separator/>
       <menuitem action='Import'/>
-      <menuitem action='Export'/>
+	  <menuitem action='Export'/>
       <separator/>
       <menuitem action='Print'/>
       <menuitem action='PrintPreview'/>
@@ -115,8 +115,9 @@
       <menuitem action='LayerToBottom'/>
     </menu>
     <menu action='MenuObject'>
-      <menuitem action='FillAndStroke'/>
       <menuitem action='ObjectProperties'/>
+	  <menuitem action='RecolorArtwork'/>
+	  <menuitem action='FillAndStroke'/>
       <separator/>
       <menuitem action='Group'/>
       <menuitem action='Ungroup'/>

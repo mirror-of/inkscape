@@ -598,6 +598,10 @@ override) the bindings in the main default.xml.
 
   <bind key="f" modifiers="Ctrl,Shift" action="DialogFillStroke" display="true" />
   <bind key="F" modifiers="Ctrl,Shift" action="DialogFillStroke" />
+  
+  <bind key="r" modifiers="Ctrl,Shift" action="DialogRecolorArtwork" display="true" />
+  <bind key="R" modifiers="Ctrl,Shift" action="DialogRecolorArtwork" />
+
 
   <bind key="f" modifiers="Ctrl" action="DialogFind" display="true" />
   <bind key="F" modifiers="Ctrl" action="DialogFind" />
