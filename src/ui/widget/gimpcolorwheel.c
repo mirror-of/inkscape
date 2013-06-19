@@ -63,8 +63,8 @@
 typedef enum
 {
   DRAG_NONE,
-  DRAG_H,
-  DRAG_SV
+  DRAG_HS,
+  DRAG_V
 } DragMode;
 
 /* Private part of the GimpColorWheel structure */
@@ -77,10 +77,12 @@ typedef struct
 
   /* ring_width is this fraction of size */
   gdouble ring_fraction;
+  //-- Don't need ring fraction anymore as the Wheel is painted completely.
 
   /* Size and ring width */
   gint size;
   gint ring_width;
+  //-- Don't need ring fraction anymore as the Wheel is painted completely.
 
   /* Window for capturing events */
   GdkWindow *window;
@@ -89,6 +91,7 @@ typedef struct
   DragMode mode;
 
   guint focus_on_ring : 1;
+  //-- Should be renamed to focus_on_wheel
 } GimpColorWheelPrivate;
 
 enum
@@ -241,6 +244,7 @@ gimp_color_wheel_init (GimpColorWheel *wheel)
   priv->ring_fraction = DEFAULT_FRACTION;
   priv->size          = DEFAULT_SIZE;
   priv->ring_width    = DEFAULT_RING_WIDTH;
+  //-- Again ring_fraction and ring_width will not be needed
 }
 
 static void
@@ -292,6 +296,7 @@ gimp_color_wheel_realize (GtkWidget *widget)
                       GDK_POINTER_MOTION_MASK |
                       GDK_ENTER_NOTIFY_MASK   |
                       GDK_LEAVE_NOTIFY_MASK);
+   //-- The events that will be reported. Consider Scrollup and down for hue values.
 
   attr_mask = GDK_WA_X | GDK_WA_Y;
 
@@ -477,7 +482,7 @@ hsv_to_rgb (gdouble *h,
 }
 
 /* Computes the vertices of the saturation/value triangle */
-static void
+/*static void
 compute_triangle (GimpColorWheel *wheel,
                   gint           *hx,
                   gint           *hy,
@@ -509,8 +514,12 @@ compute_triangle (GimpColorWheel *wheel,
   *vx = floor (center_x + cos (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
   *vy = floor (center_y - sin (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
 }
+*/
+//-- Shall not be needed for Recoloe Artwork Wheel.
 
 /* Computes whether a point is inside the hue ring */
+//-- question its very existence ? Because the focus_on_ring gint
+//-- was just to make sure the hue was being changed.
 static gboolean
 is_in_ring (GimpColorWheel *wheel,
             gdouble         x,
@@ -521,7 +530,8 @@ is_in_ring (GimpColorWheel *wheel,
   gdouble                dx, dy, dist;
   gdouble                center_x;
   gdouble                center_y;
-  gdouble                inner, outer;
+  gdouble                /*inner,*/ outer;
+  //-- Inner not needed in Recolor Artwork wheel.
 
   gtk_widget_get_allocation (GTK_WIDGET (wheel), &allocation);
 
@@ -529,16 +539,50 @@ is_in_ring (GimpColorWheel *wheel,
   center_y = allocation.height / 2.0;
 
   outer = priv->size / 2.0;
-  inner = outer - priv->ring_width;
+  //inner = outer - priv->ring_width;
+  //-- Inner not needed in Recolor Artwork wheel.
 
   dx = x - center_x;
   dy = center_y - y;
   dist = dx * dx + dy * dy;
-
-  return (dist >= inner * inner && dist <= outer * outer);
+  //g_printf("%d",(dist <= outer * outer));
+  //g_printf("Checked\n");
+  //-- Utility functon to check
+  
+  return (/*dist >= inner * inner*/dist <= outer * outer);
 }
 
-/* Computes a saturation/value pair based on the mouse coordinates */
+/*Computes a saturation value based the new recolor artwork wheel*/
+static double
+compute_s (GimpColorWheel *wheel,
+            gdouble         x,
+            gdouble         y
+            /* gdouble        *s */)
+{
+  GimpColorWheelPrivate *priv = wheel->priv;
+  GtkAllocation          allocation;
+  gdouble                dx, dy, dist;
+  gdouble                center_x;
+  gdouble                center_y;
+  gdouble                outer;
+  
+  gtk_widget_get_allocation (GTK_WIDGET (wheel), &allocation);
+
+  center_x = allocation.width / 2.0;
+  center_y = allocation.height / 2.0;
+
+  outer = priv->size / 2.0;
+  
+  dx = x - center_x;
+  dy = center_y - y;
+  dist = dx * dx + dy * dy;
+  return  ( sqrt(dist) / (outer) );
+  //g_printf("%ll",*s);
+  //g_printf("Checked11\n");
+  //-- Utility function to check working but doesn't work.
+  }            
+
+/* Computes a saturation/value pair based on the mouse coordinates 
 static void
 compute_sv (GimpColorWheel *wheel,
             gdouble         x,
@@ -627,10 +671,12 @@ compute_sv (GimpColorWheel *wheel,
             *s = 1.0;
         }
     }
-}
+    compute_s(wheel,x,y,&s);
+}*/
+//-- No HSV traingle => no compute_sv needed.
 
 /* Computes whether a point is inside the saturation/value triangle */
-static gboolean
+/*static gboolean
 is_in_triangle (GimpColorWheel *wheel,
                 gdouble         x,
                 gdouble         y)
@@ -647,6 +693,8 @@ is_in_triangle (GimpColorWheel *wheel,
 
   return (s >= 0.0 && v >= 0.0 && s + v <= 1.0);
 }
+*/
+//-- No HSV traingle => no need to check if mouse inside the HSV triangle.
 
 /* Computes a value based on the mouse coordinates */
 static double
@@ -674,6 +722,45 @@ compute_v (GimpColorWheel *wheel,
 
   return angle / (2.0 * G_PI);
 }
+//--TODO: Remove this function to add a bar that controls the brightness.
+//-- the new compute_hs function is what should be replaced
+
+static void
+compute_hs (GimpColorWheel *wheel,
+           gdouble         x,
+           gdouble         y,
+           gdouble *h,
+           gdouble *s)
+{
+  GimpColorWheelPrivate *priv = wheel->priv;
+  GtkAllocation allocation;
+  gdouble       center_x;
+  gdouble       center_y;
+  gdouble       dx, dy, dist;
+  gdouble       angle;
+  gdouble       outer;
+  
+
+  gtk_widget_get_allocation (GTK_WIDGET (wheel), &allocation);
+
+  center_x = allocation.width / 2.0;
+  center_y = allocation.height / 2.0;
+  
+  outer=priv->size / 2.0;
+
+  dx = x - center_x;
+  dy = center_y - y;
+  dist = dx * dx + dy * dy;
+
+  angle = atan2 (dy, dx);
+  if (angle < 0.0)
+    angle += 2.0 * G_PI;
+
+  *h = angle / (2.0 * G_PI);
+  *s = sqrt(dist) / (outer);
+}
+//-- Added Utility function that shall be used in recolor artwork
+//-- 2:05 PM 6/19/2013 yet to be tested
 
 static void
 set_cross_grab (GimpColorWheel *wheel,
@@ -705,6 +792,7 @@ set_cross_grab (GimpColorWheel *wheel,
   gdk_cursor_unref (cursor);
 #endif
 }
+//-- purpose unclear
 
 static gboolean gimp_color_wheel_grab_broken(GtkWidget *widget, GdkEventGrabBroken *event)
 {
@@ -726,6 +814,7 @@ gimp_color_wheel_button_press (GtkWidget      *widget,
   gdouble                x, y;
 
   if (priv->mode != DRAG_NONE || event->button != 1)
+  //-- event->button != 1 ? GdkDestroy ?? Why put here ??
     return FALSE;
 
   x = event->x;
@@ -733,12 +822,12 @@ gimp_color_wheel_button_press (GtkWidget      *widget,
 
   if (is_in_ring (wheel, x, y))
     {
-      priv->mode = DRAG_H;
+      priv->mode = DRAG_HS;
       set_cross_grab (wheel, event->time);
 
       gimp_color_wheel_set_color (wheel,
                                   compute_v (wheel, x, y),
-                                  priv->s,
+                                  compute_s (wheel, x, y),
                                   priv->v);
 
       gtk_widget_grab_focus (widget);
@@ -747,7 +836,7 @@ gimp_color_wheel_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  if (is_in_triangle (wheel, x, y))
+  /*if (is_in_triangle (wheel, x, y))
     {
       gdouble s, v;
 
@@ -761,7 +850,7 @@ gimp_color_wheel_button_press (GtkWidget      *widget,
       priv->focus_on_ring = FALSE;
 
       return TRUE;
-    }
+    }*/
 
   return FALSE;
 }
@@ -788,18 +877,18 @@ gimp_color_wheel_button_release (GtkWidget      *widget,
   x = event->x;
   y = event->y;
 
-  if (mode == DRAG_H)
+  if (mode == DRAG_HS)
     {
       gimp_color_wheel_set_color (wheel,
-                                  compute_v (wheel, x, y), priv->s, priv->v);
+                                  compute_v (wheel, x, y), compute_s (wheel, x, y), priv->v);
     }
-  else if (mode == DRAG_SV)
+  /*else if (mode == DRAG_SV)
     {
       gdouble s, v;
 
       compute_sv (wheel, x, y, &s, &v);
       gimp_color_wheel_set_color (wheel, priv->h, s, v);
-    }
+    }*/
   else
     g_assert_not_reached ();
 
@@ -829,20 +918,20 @@ gimp_color_wheel_motion (GtkWidget      *widget,
   x = event->x;
   y = event->y;
 
-  if (priv->mode == DRAG_H)
+  if (priv->mode == DRAG_HS)
     {
       gimp_color_wheel_set_color (wheel,
-                                  compute_v (wheel, x, y), priv->s, priv->v);
+                                  compute_v (wheel, x, y), compute_s (wheel, x, y), priv->v);
       return TRUE;
     }
-  else if (priv->mode == DRAG_SV)
+  /*else if (priv->mode == DRAG_SV)
     {
       gdouble s, v;
 
       compute_sv (wheel, x, y, &s, &v);
       gimp_color_wheel_set_color (wheel, priv->h, s, v);
       return TRUE;
-    }
+    }*/
 
   g_assert_not_reached ();
 
@@ -868,7 +957,7 @@ paint_ring (GimpColorWheel *wheel,
   gdouble                dx, dy, dist;
   gdouble                center_x;
   gdouble                center_y;
-  gdouble                inner, outer;
+  gdouble                inner, outer, sat_thres;
   guint32               *buf, *p;
   gdouble                angle;
   gdouble                hue;
@@ -890,7 +979,8 @@ paint_ring (GimpColorWheel *wheel,
   center_y = height / 2.0;
 
   outer = priv->size / 2.0;
-  inner = outer - priv->ring_width;
+  inner = 0;//outer - priv->ring_width;
+  sat_thres=0.35*outer;
 
   /* Create an image initialized with the ring colors */
 
@@ -920,7 +1010,15 @@ paint_ring (GimpColorWheel *wheel,
           hue = angle / (2.0 * G_PI);
 
           r = hue;
-          g = 1.0;
+   //TODO: Cleanup ? Decide !!       
+		  //if (dist<=sat_thres*sat_thres) 
+		    //{
+			  g = (sqrt(dist)) / outer;
+			//}
+		  //else
+		    //{
+		    //  g=1.0;
+		    //}
           b = 1.0;
           hsv_to_rgb (&r, &g, &b);
 
@@ -949,11 +1047,11 @@ paint_ring (GimpColorWheel *wheel,
   else
     cairo_set_source_rgb (source_cr, 1.0, 1.0, 1.0);
 
-  cairo_move_to (source_cr, center_x, center_y);
-  cairo_line_to (source_cr,
+  //cairo_move_to (source_cr, center_x, center_y);
+  /*cairo_line_to (source_cr,
                  center_x + cos (priv->h * 2.0 * G_PI) * priv->size / 2,
-                 center_y - sin (priv->h * 2.0 * G_PI) * priv->size / 2);
-  cairo_stroke (source_cr);
+                 center_y - sin (priv->h * 2.0 * G_PI) * priv->size / 2);*/
+  //cairo_stroke (source_cr);
   cairo_destroy (source_cr);
 
   /* Draw the ring using the source image */
@@ -963,13 +1061,13 @@ paint_ring (GimpColorWheel *wheel,
   cairo_set_source_surface (cr, source, 0, 0);
   cairo_surface_destroy (source);
 
-  cairo_set_line_width (cr, priv->ring_width);
+  //cairo_set_line_width (cr, priv->ring_width);
   cairo_new_path (cr);
   cairo_arc (cr,
              center_x, center_y,
              priv->size / 2.0 - priv->ring_width / 2.0,
              0, 2 * G_PI);
-  cairo_stroke (cr);
+  cairo_fill (cr);
 
   cairo_restore (cr);
 
@@ -1003,8 +1101,91 @@ get_color (gdouble  h,
  */
 #define PAD 3
 
-/* Paints the HSV triangle */
+/*Paints the nodes*/
 static void
+paint_nodes (GimpColorWheel *wheel,
+                cairo_t        *cr,
+                gboolean        draw_focus)
+{
+  GtkWidget             *widget = GTK_WIDGET (wheel);
+  GimpColorWheelPrivate *priv   = wheel->priv;
+  //cairo_surface_t       *source;
+  //-- Don't think will need this.
+  gdouble                r, g, b;
+  gdouble                center_x;
+  gdouble                center_y;
+  gdouble                xx, yy, dist, outer;
+  gdouble                width, height;
+
+#if GTK_CHECK_VERSION(3,0,0)
+  GtkWidget             *widget = GTK_WIDGET (wheel);
+  GtkStyleContext       *context;
+  width  = gtk_widget_get_allocated_width  (widget);
+  height = gtk_widget_get_allocated_height (widget);
+#else
+  GtkAllocation          allocation;
+  gchar                 *detail;  
+  gtk_widget_get_allocation (GTK_WIDGET (wheel), &allocation);
+  width  = allocation.width;
+  height = allocation.height;
+#endif
+  
+  center_x = width  / 2.0;
+  center_y = height / 2.0;
+  
+  outer = priv->size / 2.0;
+  
+  r = priv->h;
+  g = priv->s;
+  b = priv->v;
+  //hsv_to_rgb (&r, &g, &b);
+  
+  dist = outer * g ;
+  
+  xx = center_x + cos (priv->h * 2.0 * G_PI) * dist;
+  yy = center_y - sin (priv->h * 2.0 * G_PI) * dist;
+    
+#if GTK_CHECK_VERSION(3,0,0)
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+#endif
+
+  hsv_to_rgb (&r, &g, &b);
+
+  if (INTENSITY (r, g, b) > 0.5)
+    {
+#if GTK_CHECK_VERSION(3,0,0)
+      gtk_style_context_add_class (context, "light-area-focus");
+#else
+      detail = "colorwheel_light";
+#endif
+      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+    }
+  else
+    {
+#if GTK_CHECK_VERSION(3,0,0)
+      gtk_style_context_add_class (context, "dark-area-focus");
+#else
+      detail = "colorwheel_dark";
+#endif
+      cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
+    }
+
+#define RADIUS 4
+#define FOCUS_RADIUS 6
+    
+  cairo_new_path (cr);  
+  cairo_arc (cr, xx, yy, RADIUS, 0, 2 * G_PI);
+  cairo_stroke (cr);
+
+#if GTK_CHECK_VERSION(3,0,0)
+  gtk_style_context_restore (context);
+#endif
+}
+  
+/* Paints the HSV triangle */
+/*static void
 paint_triangle (GimpColorWheel *wheel,
                 cairo_t        *cr,
                 gboolean        draw_focus)
@@ -1012,13 +1193,13 @@ paint_triangle (GimpColorWheel *wheel,
   GtkWidget             *widget = GTK_WIDGET (wheel);
   GimpColorWheelPrivate *priv   = wheel->priv;
   gint                   hx, hy, sx, sy, vx, vy; /* HSV vertices */
-  gint                   x1, y1, r1, g1, b1; /* First vertex in scanline order */
-  gint                   x2, y2, r2, g2, b2; /* Second vertex */
-  gint                   x3, y3, r3, g3, b3; /* Third vertex */
-  gint                   t;
+  /*gint                   x1, y1, r1, g1, b1; /* First vertex in scanline order */
+  /*gint                   x2, y2, r2, g2, b2; /* Second vertex */
+  /*gint                   x3, y3, r3, g3, b3; /* Third vertex */
+  /*gint                   t;
   guint32               *buf, *p, c;
   gint                   xl, xr, rl, rr, gl, gr, bl, br; /* Scanline data */
-  gint                   xx, yy;
+  /*gint                   xx, yy;
   gint                   x_interp, y_interp;
   gint                   x_start, x_end;
   cairo_surface_t       *source;
@@ -1041,7 +1222,7 @@ paint_triangle (GimpColorWheel *wheel,
 
   /* Compute triangle's vertices */
 
-  compute_triangle (wheel, &hx, &hy, &sx, &sy, &vx, &vy);
+  /*compute_triangle (wheel, &hx, &hy, &sx, &sy, &vx, &vy);
 
   x1 = hx;
   y1 = hy;
@@ -1084,7 +1265,7 @@ paint_triangle (GimpColorWheel *wheel,
 
   /* Shade the triangle */
 
-  stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
+  /*stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
   buf = g_new (guint32, height * stride / 4);
 
   for (yy = 0; yy < height; yy++)
@@ -1157,7 +1338,7 @@ paint_triangle (GimpColorWheel *wheel,
 
   /* Draw a triangle with the image as a source */
 
-  cairo_set_source_surface (cr, source, 0, 0);
+  /*cairo_set_source_surface (cr, source, 0, 0);
   cairo_surface_destroy (source);
 
   cairo_move_to (cr, x1, y1);
@@ -1170,7 +1351,7 @@ paint_triangle (GimpColorWheel *wheel,
 
   /* Draw value marker */
 
-  xx = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
+  /*xx = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
   yy = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5);
 
   r = priv->h;
@@ -1212,7 +1393,7 @@ paint_triangle (GimpColorWheel *wheel,
 
   /* Draw focus outline */
 
-  if (draw_focus && ! priv->focus_on_ring)
+  /*if (draw_focus && ! priv->focus_on_ring)
     {
       gint focus_width;
       gint focus_pad;
@@ -1245,7 +1426,9 @@ paint_triangle (GimpColorWheel *wheel,
   gtk_style_context_restore (context);
 #endif
 }
-
+*/
+//-- Very well coded , well written function, sadly of no use now. 
+//-- Will help you in drawing the nodes which are to be enabled for dragging.
 #if GTK_CHECK_VERSION(3,2,0)
 static gboolean
 gimp_color_wheel_draw (GtkWidget *widget,
@@ -1256,9 +1439,10 @@ gimp_color_wheel_draw (GtkWidget *widget,
   gboolean               draw_focus;
 
   draw_focus = gtk_widget_has_visible_focus (widget);
+  //-- Purpose in code ??
 
   paint_ring (wheel, cr);
-  paint_triangle (wheel, cr, draw_focus);
+  paint_nodes (wheel, cr, draw_focus);
 
   if (draw_focus && priv->focus_on_ring)
     {
@@ -1296,8 +1480,9 @@ gimp_color_wheel_expose (GtkWidget      *widget,
   draw_focus = gtk_widget_has_focus (widget);
   
   paint_ring (wheel, cr);
-  paint_triangle (wheel, cr, draw_focus);
-
+  //paint_triangle (wheel, cr, draw_focus);
+  paint_nodes (wheel, cr, draw_focus);
+  
   cairo_destroy (cr);
   
   if (draw_focus && priv->focus_on_ring)
@@ -1522,65 +1707,80 @@ gimp_color_wheel_is_adjusting (GimpColorWheel *wheel)
 }
 
 static void
-gimp_color_wheel_move (GimpColorWheel   *wheel,
+gimp_color_wheel_move (GimpColorWheel   *wheel, 
                        GtkDirectionType  dir)
 {
   GimpColorWheelPrivate *priv = wheel->priv;
+  GtkAllocation allocation;
   gdouble                hue, sat, val;
-  gint                   hx, hy, sx, sy, vx, vy; /* HSV vertices */
-  gint                   x, y; /* position in triangle */
+  //gint                   hx, hy, sx, sy, vx, vy; /* HSV vertices */
+  //gint                   x, y; /* position in triangle */
+  gdouble                angle;
+  gdouble                dist;
+  gdouble                center_x;
+  gdouble                center_y;
+  gdouble                outer;
 
   hue = priv->h;
   sat = priv->s;
   val = priv->v;
+  
+  outer=priv->size / 2.0;
+  
+  angle = hue * 2.0 * G_PI;
+  
+  
 
-  compute_triangle (wheel, &hx, &hy, &sx, &sy, &vx, &vy);
+  //compute_triangle (wheel, &hx, &hy, &sx, &sy, &vx, &vy);
 
-  x = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
+  /* x = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
   y = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5);
-
+ */
+  
+  
+ 
 #define HUE_DELTA 0.002
   switch (dir)
     {
     case GTK_DIR_UP:
       if (priv->focus_on_ring)
         hue += HUE_DELTA;
-      else
+      /* else
         {
           y -= 1;
           compute_sv (wheel, x, y, &sat, &val);
-        }
+        } */
       break;
 
     case GTK_DIR_DOWN:
       if (priv->focus_on_ring)
         hue -= HUE_DELTA;
-      else
+      /* else
         {
           y += 1;
           compute_sv (wheel, x, y, &sat, &val);
-        }
+        } */
       break;
 
     case GTK_DIR_LEFT:
       if (priv->focus_on_ring)
         hue += HUE_DELTA;
-      else
+      /* else
         {
           x -= 1;
           compute_sv (wheel, x, y, &sat, &val);
-        }
+        } */
       break;
 
     case GTK_DIR_RIGHT:
       if (priv->focus_on_ring)
         hue -= HUE_DELTA
           ;
-      else
+      /* else
         {
           x += 1;
           compute_sv (wheel, x, y, &sat, &val);
-        }
+        } */
       break;
 
     default:
