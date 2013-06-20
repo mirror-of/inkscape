@@ -1175,7 +1175,10 @@ paint_nodes (GimpColorWheel *wheel,
 #define RADIUS 4
 #define FOCUS_RADIUS 6
     
-  cairo_new_path (cr);  
+  cairo_move_to(cr,center_x, center_y);
+  cairo_line_to (cr,xx,yy);
+  cairo_stroke (cr);
+  cairo_new_path (cr);
   cairo_arc (cr, xx, yy, RADIUS, 0, 2 * G_PI);
   cairo_stroke (cr);
 
@@ -1740,6 +1743,7 @@ gimp_color_wheel_move (GimpColorWheel   *wheel,
   
  
 #define HUE_DELTA 0.002
+#define SAT_DELTA 0.001
   switch (dir)
     {
     case GTK_DIR_UP:
@@ -1764,7 +1768,7 @@ gimp_color_wheel_move (GimpColorWheel   *wheel,
 
     case GTK_DIR_LEFT:
       if (priv->focus_on_ring)
-        hue += HUE_DELTA;
+        sat -= SAT_DELTA;
       /* else
         {
           x -= 1;
@@ -1774,8 +1778,7 @@ gimp_color_wheel_move (GimpColorWheel   *wheel,
 
     case GTK_DIR_RIGHT:
       if (priv->focus_on_ring)
-        hue -= HUE_DELTA
-          ;
+        sat += SAT_DELTA;
       /* else
         {
           x += 1;

@@ -39,10 +39,15 @@ protected:
     gboolean _updating : 1;
     gboolean _dragging : 1;
     GtkAdjustment* _adj; // Channel adjustment
+    GtkAdjustment* _adjB; // Brightness adjustment
     GtkWidget* _wheel;
     GtkWidget* _slider;
+    GtkWidget* _sliderB;
     GtkWidget* _sbtn; // Spinbutton
+    GtkWidget* _sbtnB; // Spinbutton for Brightness value
     GtkWidget* _label; // Label
+    GtkWidget* _labelB; // Label for Brightness value
+
 
 private:
     // By default, disallow copy constructor and assignment operator

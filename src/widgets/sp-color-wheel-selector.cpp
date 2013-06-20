@@ -77,19 +77,26 @@ ColorWheelSelector::ColorWheelSelector( SPColorSelector* csel )
       _updating( FALSE ),
       _dragging( FALSE ),
       _adj(0),
+      _adjB(0),
       _wheel(0),
       _slider(0),
+      _sliderB(0),
       _sbtn(0),
-      _label(0)
+      _sbtnB(0),
+      _label(0),
+      _labelB(0)
 {
 }
 
 ColorWheelSelector::~ColorWheelSelector()
 {
     _adj = 0;
+    _adjB = 0;
     _wheel = 0;
     _sbtn = 0;
+    _sbtnB = 0;
     _label = 0;
+    _labelB = 0;
 }
 
 void sp_color_wheel_selector_init (SPColorWheelSelector *cs)
@@ -112,7 +119,7 @@ void ColorWheelSelector::init()
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidget *t = gtk_grid_new();
 #else
-    GtkWidget *t = gtk_table_new (5, 3, FALSE);
+    GtkWidget *t = gtk_table_new (6, 3, FALSE);
 #endif
 
     gtk_widget_show (t);
@@ -199,6 +206,73 @@ void ColorWheelSelector::init()
     gtk_table_attach (GTK_TABLE (t), _sbtn, 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
 #endif
 
+    row++;
+    
+    /*New SLider for Brightness Value */
+    /* Label */
+    _labelB = gtk_label_new_with_mnemonic (_("_B:"));
+    gtk_misc_set_alignment (GTK_MISC (_labelB), 1.0, 0.5);
+    gtk_widget_show (_labelB);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_labelB, XPAD);
+    gtk_widget_set_margin_right(_labelB, XPAD);
+    gtk_widget_set_margin_top(_labelB, YPAD);
+    gtk_widget_set_margin_bottom(_labelB, YPAD);
+    gtk_widget_set_halign(_label, GTK_ALIGN_FILL);
+    gtk_widget_set_valign(_label, GTK_ALIGN_FILL);
+    gtk_grid_attach(GTK_GRID(t), _labelB, 0, row, 1, 1);
+#else
+    gtk_table_attach (GTK_TABLE (t), _labelB, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+#endif
+
+    /* Adjustment */
+    _adjB = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
+
+    /* Slider */
+    _sliderB = sp_color_slider_new (_adjB);
+    gtk_widget_set_tooltip_text (_sliderB, _("Lightness or Brightness in HSV"));
+    gtk_widget_show (_sliderB);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_sliderB, XPAD);
+    gtk_widget_set_margin_right(_sliderB, XPAD);
+    gtk_widget_set_margin_top(_sliderB, YPAD);
+    gtk_widget_set_margin_bottom(_sliderB, YPAD);
+    gtk_widget_set_hexpand(_sliderB, TRUE);
+    gtk_widget_set_halign(_sliderB, GTK_ALIGN_FILL);
+    gtk_widget_set_valign(_sliderB, GTK_ALIGN_FILL);
+    gtk_grid_attach(GTK_GRID(t), _sliderB, 1, row, 1, 1);
+#else
+    gtk_table_attach(GTK_TABLE (t), _sliderB, 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
+#endif
+
+    sp_color_slider_set_colors (SP_COLOR_SLIDER (_sliderB),
+                                SP_RGBA32_F_COMPOSE (1.0, 1.0, 0.0, 1.0),
+                                SP_RGBA32_F_COMPOSE (1.0, 1.0, 0.5, 1.0),
+                                SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 1.0));
+
+
+    /* Spinbutton */
+    _sbtnB = gtk_spin_button_new (GTK_ADJUSTMENT (_adjB), 1.0, 0);
+    gtk_widget_set_tooltip_text (_sbtnB, _("Lightness or Brightness in HSV"));
+    sp_dialog_defocus_on_enter (_sbtnB);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(_labelB), _sbtnB);
+    gtk_widget_show (_sbtnB);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_sbtnB, XPAD);
+    gtk_widget_set_margin_right(_sbtnB, XPAD);
+    gtk_widget_set_margin_top(_sbtnB, YPAD);
+    gtk_widget_set_margin_bottom(_sbtnB, YPAD);
+    gtk_widget_set_halign(_sbtnB, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(_sbtnB, GTK_ALIGN_CENTER);
+    gtk_grid_attach(GTK_GRID(t), _sbtnB, 2, row, 1, 1);
+#else
+    gtk_table_attach (GTK_TABLE (t), _sbtnB, 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
+#endif
+    
+
     /* Signals */
     g_signal_connect (G_OBJECT (_adj), "value_changed",
                         G_CALLBACK (_adjustmentChanged), _csel);
@@ -212,6 +286,18 @@ void ColorWheelSelector::init()
 
     g_signal_connect( G_OBJECT(_wheel), "changed",
                         G_CALLBACK (_wheelChanged), _csel );
+
+    /* Signals for Lightness Bar */                      
+    g_signal_connect (G_OBJECT (_adjB), "value_changed",
+                        G_CALLBACK (_adjustmentChanged), _csel);
+
+    g_signal_connect (G_OBJECT (_sliderB), "grabbed",
+                        G_CALLBACK (_sliderGrabbed), _csel);
+    g_signal_connect (G_OBJECT (_sliderB), "released",
+                        G_CALLBACK (_sliderReleased), _csel);
+    g_signal_connect (G_OBJECT (_sliderB), "changed",
+                        G_CALLBACK (_sliderChanged), _csel);
+
 }
 
 static void sp_color_wheel_selector_dispose(GObject *object)
@@ -251,19 +337,30 @@ void ColorWheelSelector::_colorChanged()
     g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, color.v.c[0], color.v.c[1], color.v.c[2], alpha );
 #endif
     _updating = TRUE;
-    {
+    //{
         float hsv[3] = {0,0,0};
         sp_color_rgb_to_hsv_floatv(hsv, _color.v.c[0], _color.v.c[1], _color.v.c[2]);
         gimp_color_wheel_set_color( GIMP_COLOR_WHEEL(_wheel), hsv[0], hsv[1], hsv[2] );
-    }
+    //}
+    //-- don't know why blocking this achieves anything.
 
     guint32 start = _color.toRGBA32( 0x00 );
     guint32 mid = _color.toRGBA32( 0x7f );
     guint32 end = _color.toRGBA32( 0xff );
+    
+    float rgb[3]={0,0,0};
+    sp_color_hsv_to_rgb_floatv(rgb, hsv[0], hsv[1], 0.0);
+    guint32 startB = SP_RGBA32_F_COMPOSE (rgb[0], rgb[1], rgb[2], 1.0);
+    sp_color_hsv_to_rgb_floatv(rgb, hsv[0], hsv[1], 0.5);
+    guint32 midB = SP_RGBA32_F_COMPOSE (rgb[0], rgb[1], rgb[2], 1.0);
+    sp_color_hsv_to_rgb_floatv(rgb, hsv[0], hsv[1], 1.0);
+    guint32 endB = SP_RGBA32_F_COMPOSE (rgb[0], rgb[1], rgb[2], 1.0);
 
     sp_color_slider_set_colors(SP_COLOR_SLIDER(_slider), start, mid, end);
+    sp_color_slider_set_colors(SP_COLOR_SLIDER(_sliderB), startB, midB, endB);
 
     ColorScales::setScaled(_adj, _alpha);
+    ColorScales::setScaled(_adjB, hsv[2]);
 
     _updating = FALSE;
 }
@@ -342,8 +439,19 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
     guint32 start = color.toRGBA32( 0x00 );
     guint32 mid = color.toRGBA32( 0x7f );
     guint32 end = color.toRGBA32( 0xff );
+    
+    //-- handles that the lightness bar also changes everytime the wheel is changed.
+    sp_color_hsv_to_rgb_floatv(rgb, h, s, 0.0); //-- Left most (Black)
+    guint32 startL = SP_RGBA32_F_COMPOSE (rgb[0], rgb[1], rgb[2], 1.0);
+    sp_color_hsv_to_rgb_floatv(rgb, h, s, 0.5); //-- Mid
+    guint32 midL = SP_RGBA32_F_COMPOSE (rgb[0], rgb[1], rgb[2], 1.0);
+    sp_color_hsv_to_rgb_floatv(rgb, h, s, 1.0);//-- Rightmost (Hue)
+    guint32 endL = SP_RGBA32_F_COMPOSE (rgb[0], rgb[1], rgb[2], 1.0);
+    //-- end
 
     sp_color_slider_set_colors (SP_COLOR_SLIDER(wheelSelector->_slider), start, mid, end);
+    sp_color_slider_set_colors (SP_COLOR_SLIDER(wheelSelector->_sliderB), startL, midL, endL);
+    
 
     preserve_icc(&color, cs);
     wheelSelector->_updateInternals( color, wheelSelector->_alpha, gimp_color_wheel_is_adjusting(wheel) );

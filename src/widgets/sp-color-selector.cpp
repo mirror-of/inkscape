@@ -163,6 +163,7 @@ ColorSelector::ColorSelector( SPColorSelector* csel )
     : _csel(csel),
       _color( 0 ),
       _alpha(1.0),
+      _brightness(1.0), //-- added for the additional brightness value
       _held(FALSE),
       virgin(true)
 {
