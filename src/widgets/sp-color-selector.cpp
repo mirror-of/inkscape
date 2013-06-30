@@ -10,6 +10,9 @@
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include "sp-color-selector.h"
+// --
+#include <glib/gprintf.h>
+// --
 
 enum {
     GRABBED,
@@ -33,6 +36,7 @@ static GtkVBoxClass *parent_class;
 static guint csel_signals[LAST_SIGNAL] = {0};
 
 double ColorSelector::_epsilon = 1e-4;
+double _epsilonB = 1e-8;
 
 GType sp_color_selector_get_type( void )
 {
@@ -200,6 +204,11 @@ gfloat ColorSelector::getAlpha() const
     return _alpha;
 }
 
+gfloat ColorSelector::getBrightness() const
+{
+    return _brightness;
+}
+
 #include "svg/svg-icc-color.h"
 
 /**
@@ -256,14 +265,17 @@ void ColorSelector::_grabbed()
 
 void ColorSelector::_released()
 {
-    _held = false;
+    _held = FALSE;
 #ifdef DUMP_CHANGE_INFO
     g_message("%s:%d: About to signal %s in %s", __FILE__, __LINE__,
                "RELEASED",
                FOO_NAME(_csel));
 #endif
+    //g_printf("Inside _released(), about to emit RELEASED and CHANGED\n");
     g_signal_emit(G_OBJECT(_csel), csel_signals[RELEASED], 0);
     g_signal_emit(G_OBJECT(_csel), csel_signals[CHANGED], 0);
+    //g_printf("Inside _released(), emitted RELEASED and CHANGED\n");
+    
 }
 
 // Called from subclasses to update color and broadcast if needed
@@ -281,7 +293,10 @@ void ColorSelector::_updateInternals( const SPColor& color, gfloat alpha, gboole
     if ( colorDifferent )
     {
         _color = color;
+        float hsv[3]={0,0,0};
+        sp_color_rgb_to_hsv_floatv( hsv, _color.v.c[0], _color.v.c[1], _color.v.c[2]);
         _alpha = alpha;
+        _brightness = hsv[2];
     }
 
     if ( grabbed )
@@ -311,6 +326,59 @@ void ColorSelector::_updateInternals( const SPColor& color, gfloat alpha, gboole
                    color.toRGBA32( alpha ), (color.icc?color.icc->colorProfile.c_str():"<null>"), FOO_NAME(_csel));
 #endif
         g_signal_emit(G_OBJECT(_csel), csel_signals[_held ? CHANGED : DRAGGED], 0);
+    }
+}
+
+void ColorSelector::_updateBrightness( const SPColor& color, gfloat bright, gboolean held )
+{
+    g_return_if_fail( ( 0.0 <= bright ) && ( bright <= 1.0 ) );
+    gboolean colorDifferent = ( ( !color.isClose( _color, _epsilon ) ) || ( fabs((_brightness) - (bright)) >= _epsilonB ) );
+
+    gboolean grabbed = held && !_held;
+    gboolean released = !held && _held;
+
+    // Store these before emmiting any signals
+    _held = held;
+    if ( colorDifferent )
+    {
+        /* _color = color; */
+        SPColor prev_color = color ;
+        float hsv[3] = {0,0,0} ;
+        sp_color_rgb_to_hsv_floatv( hsv, prev_color.v.c[0], prev_color.v.c[1], prev_color.v.c[2]);
+        hsv[2] = bright ;
+        //float rgb[3] = {0,0,0} ;
+        sp_color_hsv_to_rgb_floatv( prev_color.v.c, hsv[0], hsv[1], hsv[2]);
+        _color = prev_color ;
+        _brightness = bright;
+    }
+
+    if ( grabbed )
+    {
+#ifdef DUMP_CHANGE_INFO
+        g_message("%s:%d: About to signal %s to color %08x::%s in %s", __FILE__, __LINE__,
+                   "GRABBED",
+                   color.toRGBA32( alpha ), (color.icc?color.icc->colorProfile.c_str():"<null>"), FOO_NAME(_csel));
+#endif
+        g_signal_emit(G_OBJECT(_csel), csel_signals[GRABBED], 0);
+    }
+    else if ( released )
+    {
+#ifdef DUMP_CHANGE_INFO
+        g_message("%s:%d: About to signal %s to color %08x::%s in %s", __FILE__, __LINE__,
+                   "RELEASED",
+                   color.toRGBA32( alpha ), (color.icc?color.icc->colorProfile.c_str():"<null>"), FOO_NAME(_csel));
+#endif
+        g_signal_emit(G_OBJECT(_csel), csel_signals[RELEASED], 0);
+    }
+
+    if ( colorDifferent || released )
+    {
+#ifdef DUMP_CHANGE_INFO
+        g_message("%s:%d: About to signal %s to color %08x::%s in %s", __FILE__, __LINE__,
+                   (_held ? "CHANGED" : "DRAGGED" ),
+                   color.toRGBA32( alpha ), (color.icc?color.icc->colorProfile.c_str():"<null>"), FOO_NAME(_csel));
+#endif
+        g_signal_emit(G_OBJECT(_csel), csel_signals[_held ? CHANGED : DRAGGED ], 0);
     }
 }
 

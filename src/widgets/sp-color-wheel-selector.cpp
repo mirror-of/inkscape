@@ -10,7 +10,9 @@
 #include "sp-color-icc-selector.h"
 #include "../svg/svg-icc-color.h"
 #include "ui/widget/gimpcolorwheel.h"
-
+// --
+#include <glib/gprintf.h>
+// --
 G_BEGIN_DECLS
 
 static void sp_color_wheel_selector_class_init (SPColorWheelSelectorClass *klass);
@@ -287,7 +289,7 @@ void ColorWheelSelector::init()
     g_signal_connect( G_OBJECT(_wheel), "changed",
                         G_CALLBACK (_wheelChanged), _csel );
 
-    /* Signals for Lightness Bar */                      
+    /* Signals for Brightness */                      
     g_signal_connect (G_OBJECT (_adjB), "value_changed",
                         G_CALLBACK (_adjustmentChanged), _csel);
 
@@ -347,6 +349,7 @@ void ColorWheelSelector::_colorChanged()
     guint32 start = _color.toRGBA32( 0x00 );
     guint32 mid = _color.toRGBA32( 0x7f );
     guint32 end = _color.toRGBA32( 0xff );
+    //g_printf("\n---Changed the alpha colors1---\n");
     
     float rgb[3]={0,0,0};
     sp_color_hsv_to_rgb_floatv(rgb, hsv[0], hsv[1], 0.0);
@@ -356,12 +359,14 @@ void ColorWheelSelector::_colorChanged()
     sp_color_hsv_to_rgb_floatv(rgb, hsv[0], hsv[1], 1.0);
     guint32 endB = SP_RGBA32_F_COMPOSE (rgb[0], rgb[1], rgb[2], 1.0);
 
+    ColorScales::setScaled(_adj, _alpha);
+    //g_printf("\n%f",_brightness);
+    _brightness = hsv[2];
+    ColorScales::setScaled(_adjB, _brightness);
+
     sp_color_slider_set_colors(SP_COLOR_SLIDER(_slider), start, mid, end);
     sp_color_slider_set_colors(SP_COLOR_SLIDER(_sliderB), startB, midB, endB);
-
-    ColorScales::setScaled(_adj, _alpha);
-    ColorScales::setScaled(_adjB, hsv[2]);
-
+    
     _updating = FALSE;
 }
 
@@ -382,8 +387,10 @@ void ColorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorW
     wheelSelector->_updating = TRUE;
 
     preserve_icc(&wheelSelector->_color, cs);
+    wheelSelector->_updateBrightness( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adjB ), wheelSelector->_dragging );
     wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
-
+    
+    //g_printf("\n---Adjustment Changed---\n");
     wheelSelector->_updating = FALSE;
 }
 
@@ -396,7 +403,9 @@ void ColorWheelSelector::_sliderGrabbed( SPColorSlider *slider, SPColorWheelSele
         wheelSelector->_grabbed();
 
         preserve_icc(&wheelSelector->_color, cs);
-        wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+        wheelSelector->_updateBrightness( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adjB ), wheelSelector->_dragging );
+        wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );       
+
     }
 }
 
@@ -409,7 +418,9 @@ void ColorWheelSelector::_sliderReleased( SPColorSlider *slider, SPColorWheelSel
         wheelSelector->_released();
 
         preserve_icc(&wheelSelector->_color, cs);
+        wheelSelector->_updateBrightness( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adjB ), wheelSelector->_dragging );
         wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+        
     }
 }
 
@@ -417,9 +428,11 @@ void ColorWheelSelector::_sliderChanged( SPColorSlider *slider, SPColorWheelSele
 {
     (void)slider;
     ColorWheelSelector* wheelSelector = static_cast<ColorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
-
+    
     preserve_icc(&wheelSelector->_color, cs);
+    wheelSelector->_updateBrightness( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adjB ), wheelSelector->_dragging );
     wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+    
 }
 
 void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs )
@@ -430,6 +443,7 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
     gdouble s = 0;
     gdouble v = 0;
     gimp_color_wheel_get_color( wheel, &h, &s, &v );
+    //v = (wheelSelector)->getBrightness();;
     
     float rgb[3] = {0,0,0};
     sp_color_hsv_to_rgb_floatv (rgb, h, s, v); 
@@ -439,6 +453,7 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
     guint32 start = color.toRGBA32( 0x00 );
     guint32 mid = color.toRGBA32( 0x7f );
     guint32 end = color.toRGBA32( 0xff );
+    //g_printf("\n---Changed the alpha colors2:Wheel changed---\n");
     
     //-- handles that the lightness bar also changes everytime the wheel is changed.
     sp_color_hsv_to_rgb_floatv(rgb, h, s, 0.0); //-- Left most (Black)
@@ -454,7 +469,15 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
     
 
     preserve_icc(&color, cs);
+    wheelSelector->_updateBrightness( color, wheelSelector->_brightness, gimp_color_wheel_is_adjusting(wheel) );  
     wheelSelector->_updateInternals( color, wheelSelector->_alpha, gimp_color_wheel_is_adjusting(wheel) );
+    
+    /*SPDocument *document = sp_desktop_document(desktop);
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
+    GSList const *items = selection->itemList();*/
+    //g_printf("\n _wheelChanged executed \n"); :P
+
 }
 
 

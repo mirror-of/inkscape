@@ -1019,7 +1019,7 @@ paint_ring (GimpColorWheel *wheel,
 		    //{
 		    //  g=1.0;
 		    //}
-          b = 1.0;
+          b = 1.0;//-- priv->v; //-- to be added later
           hsv_to_rgb (&r, &g, &b);
 
           *p++ = (((int)floor (r * 255 + 0.5) << 16) |

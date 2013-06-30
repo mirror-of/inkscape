@@ -21,6 +21,7 @@ public:
 
     void setAlpha( gfloat alpha );
     gfloat getAlpha() const;
+    gfloat getBrightness() const;
 
     void setColorAlpha( const SPColor& color, gfloat alpha, bool emit = false );
     void getColorAlpha( SPColor &color, gfloat &alpha ) const;
@@ -32,6 +33,9 @@ protected:
     void _grabbed();
     void _released();
     void _updateInternals( const SPColor& color, gfloat alpha, gboolean held );
+    //--
+    void _updateBrightness( const SPColor& color, gfloat bright, gboolean held );
+    //--
     gboolean _isHeld() const { return _held; }
 
     virtual void _colorChanged();
