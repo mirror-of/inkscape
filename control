@@ -46,7 +46,9 @@ Standards-Version: 3.9.4
 
 Package: inkscape-trunk
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         inkscape-trunk-data
 Suggests: dia | dia-gnome, 
           ruby, 
           libgnomevfs2-extra, 
@@ -83,3 +85,9 @@ Description: vector-based drawing program (trunk build)
  This package provides a daily build of the latest development version of 
  Inkscape. It provides access to all the newest features, but is not 
  recommended for users wanting stable and bug-free software!
+
+Package: inkscape-trunk-data
+Architecture: all
+Depends: ${misc:Depends}
+Description: Data files for Inkscape
+ This package contains architecture-independent data files for use with Inkscape.
