@@ -7,7 +7,7 @@
 export DH_VERBOSE=1
 
 %:
-	dh $@ --with bash-completion
+	dh $@ --with bash-completion --parallel
 
 override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
