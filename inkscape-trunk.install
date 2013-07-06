@@ -1,6 +1,5 @@
 debian/inkscape-trunk.xpm usr/share/pixmaps/
 debian/inkscape-trunk.applications usr/share/application-registry/
-etc/
 usr/bin/
 usr/lib/
 usr/share/applications/inkscape.desktop
