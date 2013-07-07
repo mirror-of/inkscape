@@ -43,9 +43,24 @@ Standards-Version: 3.8.1
 Package: inkscape
 Architecture: any
 Homepage: http://www.inkscape.org/
-Depends: ${shlibs:Depends}
-Suggests: dia | dia-gnome, ruby, libgnomevfs2-extra, libsvg-perl, libxml-xql-perl, python, skencil, ttf-bitstream-vera, pstoedit
-Recommends: libwmf-bin, imagemagick, perlmagick, python-numpy, python-lxml, python-uniconvertor
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         inkscape-data
+Suggests: dia | dia-gnome,
+          ruby,
+          libgnomevfs2-extra,
+          libsvg-perl,
+          libxml-xql-perl,
+          python,
+          skencil,
+          ttf-bitstream-vera,
+          pstoedit
+Recommends: libwmf-bin,
+            imagemagick,
+            perlmagick,
+            python-numpy,
+            python-lxml,
+            python-uniconvertor
 Description: vector-based drawing program
  Inkscape loads and saves a subset of the SVG (Scalable Vector Graphics)
  format, a standard maintained by the WWW consortium.
@@ -63,4 +78,13 @@ Description: vector-based drawing program
  dia, libwmf-bin, pstoedit, skencil, imagemagick, and perlmagick.
  .
  Other extensions use ruby, libxml-xql-perl, python-numpy, and python-lxml.
- You must have these packages to make full use of all extensions and effects. 
+ You must have these packages to make full use of all extensions and effects.
+
+Package: inkscape-data
+Architecture: all
+Depends: ${misc:Depends},
+         ${python:Depends},
+         ruby | ruby-interpreter
+Description: Data files for Inkscape
+ This package contains architecture-independent data files, tutorials and
+ extensions for use with Inkscape.
