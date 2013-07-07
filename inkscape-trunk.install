@@ -3,4 +3,3 @@ debian/inkscape-trunk.applications usr/share/application-registry/
 usr/bin/
 usr/share/applications/inkscape.desktop
 usr/share/man/
-usr/share/menu/
