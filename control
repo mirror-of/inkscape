@@ -88,6 +88,9 @@ Description: vector-based drawing program (trunk build)
 
 Package: inkscape-trunk-data
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends},
+         ${python:Depends},
+         ruby | ruby-interpreter
 Description: Data files for Inkscape
- This package contains architecture-independent data files for use with Inkscape.
+ This package contains architecture-independent data files, tutorials and
+ extensions for use with Inkscape.
