@@ -29,6 +29,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+
+
 #ifndef __GIMP_COLOR_WHEEL_H__
 #define __GIMP_COLOR_WHEEL_H__
 
@@ -40,7 +42,6 @@ G_BEGIN_DECLS
 #define GIMP_IS_COLOR_WHEEL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GIMP_TYPE_COLOR_WHEEL))
 #define GIMP_IS_COLOR_WHEEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GIMP_TYPE_COLOR_WHEEL))
 #define GIMP_COLOR_WHEEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GIMP_TYPE_COLOR_WHEEL, GimpColorWheelClass))
-
 
 typedef struct _GimpColorWheel      GimpColorWheel;
 typedef struct _GimpColorWheelClass GimpColorWheelClass;
@@ -56,7 +57,7 @@ struct _GimpColorWheel
 struct _GimpColorWheelClass
 {
   GtkWidgetClass parent_class;
-
+  
   /* Notification signals */
   void (* changed) (GimpColorWheel   *wheel);
 
@@ -70,7 +71,6 @@ struct _GimpColorWheelClass
   void (*_gimp_reserved3) (void);
   void (*_gimp_reserved4) (void);
 };
-
 
 GType       gimp_color_wheel_get_type          (void) G_GNUC_CONST;
 GtkWidget * gimp_color_wheel_new               (void);
