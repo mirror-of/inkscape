@@ -40,6 +40,8 @@ ink_common_sources +=		\
 	ui/dialog/filedialogimpl-win32.h	\
 	ui/dialog/fill-and-stroke.cpp		\
 	ui/dialog/fill-and-stroke.h		\
+	ui/dialog/recolor-artwork.cpp		\
+	ui/dialog/recolor-artwork.h		\
 	ui/dialog/filter-effects-dialog.cpp	\
 	ui/dialog/filter-effects-dialog.h	\
 	ui/dialog/find.cpp			\
