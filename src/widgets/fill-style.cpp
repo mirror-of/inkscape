@@ -78,6 +78,8 @@ public:
     void setFillrule( SPPaintSelector::FillRule mode );
 
     void setDesktop(SPDesktop *desktop);
+	
+	void funcRecolor();
 
 private:
     static void paintModeChangeCB(SPPaintSelector *psel, SPPaintSelector::Mode mode, FillNStroke *self);
@@ -194,6 +196,24 @@ void FillNStroke::selectionModifiedCB( guint flags )
     }
 }
 
+void FillNStroke::funcRecolor()
+{
+	Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
+    GSList const *items = selection->itemList();
+    g_printf("\n\n\t\t Prinitng the id's of Selected objects ");
+    for (GSList const *i = items; i != NULL; i = i->next) 
+    {
+        SPObject *obj=reinterpret_cast<SPObject *>(i->data);
+        Inkscape::XML::Node* obj_repr = obj->getRepr();
+        SPCSSAttr* obj_css = sp_repr_css_attr( obj_repr , "style" );
+        sp_repr_css_set_property ( obj_css , "fill", "#00ff00");
+        Glib::ustring str;
+        sp_repr_css_write_string (obj_css, str);
+        obj_repr->setAttribute ("style", str.c_str(), TRUE);
+    }
+}
+
 void FillNStroke::setDesktop(SPDesktop *desktop)
 {
     if (this->desktop != desktop) {
@@ -282,6 +302,7 @@ void FillNStroke::performUpdate()
 
             if (targPaint.set && targPaint.isColor()) {
                 psel->setColorAlpha(targPaint.value.color, SP_SCALE24_TO_FLOAT(targOpacity.value));
+				funcRecolor();
             } else if (targPaint.set && targPaint.isPaintserver()) {
 
                 SPPaintServer *server = (kind == FILL) ? query->getFillPaintServer() : query->getStrokePaintServer();
