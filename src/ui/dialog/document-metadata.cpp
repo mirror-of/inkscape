@@ -92,7 +92,6 @@ DocumentMetadata::DocumentMetadata()
     signalActivateDesktop().connect(sigc::mem_fun(*this, &DocumentMetadata::_handleActivateDesktop));
     signalDeactiveDesktop().connect(sigc::mem_fun(*this, &DocumentMetadata::_handleDeactivateDesktop));
 
-    build_metadata();
 }
 
 void
@@ -113,85 +112,6 @@ DocumentMetadata::~DocumentMetadata()
 
     for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); ++it)
         delete (*it);
-}
-
-void
-DocumentMetadata::build_metadata()
-{
-    using Inkscape::UI::Widget::EntityEntry;
-
-    _page_metadata1.show();
-
-    Gtk::Label *label = manage (new Gtk::Label);
-    label->set_markup (_("<b>Dublin Core Entities</b>"));
-    label->set_alignment (0.0);
-
-#if WITH_GTKMM_3_0
-    label->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata1.attach(*label, 0, 0, 3, 1);
-#else
-    _page_metadata1.attach(*label, 0,3,0,1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-#endif
-
-     /* add generic metadata entry areas */
-    struct rdf_work_entity_t * entity;
-    int row = 1;
-    for (entity = rdf_work_entities; entity && entity->name; entity++, row++) {
-        if ( entity->editable == RDF_EDIT_GENERIC ) {
-            EntityEntry *w = EntityEntry::create (entity, _wr);
-            _rdflist.push_back (w);
-            Gtk::HBox *space = manage (new Gtk::HBox);
-            space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-
-#if WITH_GTKMM_3_0
-            space->set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1.attach(*space, 0, row, 1, 1);
-
-            w->_label.set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1.attach(w->_label, 1, row, 1, 1);
-
-            w->_packable->set_hexpand();
-            w->_packable->set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1.attach(*w->_packable, 2, row, 1, 1);
-#else
-            _page_metadata1.attach(*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata1.attach(w->_label, 1,2, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata1.attach(*w->_packable, 2,3, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-#endif
-        }
-    }
-
-    _page_metadata2.show();
-
-    row = 0;
-    Gtk::Label *llabel = manage (new Gtk::Label);
-    llabel->set_markup (_("<b>License</b>"));
-    llabel->set_alignment (0.0);
-
-#if WITH_GTKMM_3_0
-    llabel->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2.attach(*llabel, 0, row, 3, 1);
-#else
-    _page_metadata2.attach(*llabel, 0,3, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-#endif
-
-    /* add license selector pull-down and URI */
-    ++row;
-    _licensor.init (_wr);
-    Gtk::HBox *space = manage (new Gtk::HBox);
-    space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-
-#if WITH_GTKMM_3_0
-    space->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2.attach(*space, 0, row, 1, 1);
-
-    _licensor.set_hexpand();
-    _licensor.set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2.attach(_licensor, 1, row, 2, 1);
-#else
-    _page_metadata2.attach(*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    _page_metadata2.attach(_licensor, 1,3, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-#endif
 }
 
 /**

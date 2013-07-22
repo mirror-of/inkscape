@@ -52,7 +52,6 @@ public:
     static void destroy();
 
 protected:
-    void  build_metadata();
     void  init();
 
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
