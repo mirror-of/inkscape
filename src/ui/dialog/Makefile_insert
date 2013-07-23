@@ -22,8 +22,6 @@ ink_common_sources +=		\
 	ui/dialog/dialog-manager.h		\
 	ui/dialog/dock-behavior.cpp		\
 	ui/dialog/dock-behavior.h		\
-	ui/dialog/document-metadata.cpp  	\
-	ui/dialog/document-metadata.h    	\
 	ui/dialog/document-properties.cpp	\
 	ui/dialog/document-properties.h		\
 	ui/dialog/export.cpp		\
