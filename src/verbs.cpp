@@ -1945,10 +1945,6 @@ void DialogVerb::perform(SPAction *action, void *data)
             //sp_display_dialog();
             dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
-        case SP_VERB_DIALOG_METADATA:
-            // sp_desktop_dialog();
-            dt->_dlg_mgr->showDialog("DocumentMetadata");
-            break;
         case SP_VERB_DIALOG_NAMEDVIEW:
             // sp_desktop_dialog();
             dt->_dlg_mgr->showDialog("DocumentProperties");
