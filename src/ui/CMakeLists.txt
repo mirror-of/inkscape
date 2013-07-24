@@ -31,7 +31,6 @@ set(ui_SRC
 	dialog/dialog-manager.cpp
 	dialog/dialog.cpp
 	dialog/dock-behavior.cpp
-	dialog/document-metadata.cpp
 	dialog/document-properties.cpp
 	dialog/export.cpp
 	dialog/extension-editor.cpp
@@ -142,7 +141,6 @@ set(ui_SRC
 	dialog/dialog-manager.h
 	dialog/dialog.h
 	dialog/dock-behavior.h
-	dialog/document-metadata.h
 	dialog/document-properties.h
 	dialog/export.h
 	dialog/extension-editor.h
