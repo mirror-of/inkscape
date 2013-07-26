@@ -53,6 +53,8 @@
 #include "fill-style.h"
 #include "fill-n-stroke-factory.h"
 
+#include "svg-color.h"
+
 
 // These can be deleted once we sort out the libart dependence.
 
@@ -196,6 +198,13 @@ void FillNStroke::selectionModifiedCB( guint flags )
     }
 }
 
+/*void hex_to_rgb (char const *hex, gdouble &rgb[])
+{
+	guint32 rgb32 = sp_svg_read_color( sp_repr_css_property( obj_css, "fill", "#ababab") , 0xF0F8FF );
+        
+}
+*/
+
 void FillNStroke::funcRecolor()
 {
 	Inkscape::Selection *selection = sp_desktop_selection(desktop);
@@ -207,7 +216,14 @@ void FillNStroke::funcRecolor()
         SPObject *obj=reinterpret_cast<SPObject *>(i->data);
         Inkscape::XML::Node* obj_repr = obj->getRepr();
         SPCSSAttr* obj_css = sp_repr_css_attr( obj_repr , "style" );
-        sp_repr_css_set_property ( obj_css , "fill", "#00ff00");
+		g_printf ( "Color of %s is: %s\n", obj->getId() , sp_repr_css_property( obj_css, "fill", "#ababab") );
+		guint32 rgb32 = sp_svg_read_color( sp_repr_css_property( obj_css, "fill", "#ababab") , 0xF0F8FF );
+		SPColor color = SPColor (rgb32);
+		float rgb[3];
+		sp_color_get_rgb_floatv(&color, rgb);
+		
+        //-- function that writes the new change. 
+		//sp_repr_css_set_property ( obj_css , "fill", "#00ff00");
         Glib::ustring str;
         sp_repr_css_write_string (obj_css, str);
         obj_repr->setAttribute ("style", str.c_str(), TRUE);

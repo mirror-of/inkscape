@@ -59,10 +59,6 @@
 /* Default ring width */
 #define DEFAULT_RING_WIDTH 10
 
-//--
-/* Maximum Selectable objects for recoloring */
-#define RECOLOR_MAX_OBJECTS 5
-
 /*Outer Radius of Node*/
 #define NODE_RADIUS_OUTER 8
 
@@ -110,7 +106,10 @@ typedef struct
   gint size;
   gint ring_width;
   //-- Don't need ring fraction anymore as the Wheel is painted completely.
-
+  
+  //-- Adding a dynamic RecolorWheelNode array for creation on selected objects.
+  RecolorWheelNode* _recolorNodes;
+  
   /* Window for capturing events */
   GdkWindow *window;
 
@@ -171,28 +170,31 @@ G_DEFINE_TYPE (GimpColorWheel, gimp_color_wheel, GTK_TYPE_WIDGET)
 
 #define parent_class gimp_color_wheel_parent_class
 
-static void
-recolor_wheel_nodes_init()
+void
+recolor_wheel_nodes_init(GtkWidget *widget , int obj_list_size /* = RECOLOR_MAX_OBJECTS*/ )
 {
-    int i;
-    for(i=0; i< RECOLOR_MAX_OBJECTS ; i++)
+    GimpColorWheel        *wheel = GIMP_COLOR_WHEEL (widget);
+	GimpColorWheelPrivate *priv  = wheel->priv;
+	//priv->_recolorNodes = (RecolorWheelNode**)malloc(sizeof(RecolorWheelNode*) * obj_list_size) ;
+	int i;
+    for(i=0; i< obj_list_size ; i++)
     {   
-        _nodes[i] = (RecolorWheelNode*)malloc(sizeof(RecolorWheelNode));
+        //_nodes[i] = (RecolorWheelNode*)malloc(sizeof(RecolorWheelNode));
         //g_snprintf(_nodes[i]->_id,10,"obj %d",i); //wasn't working at all.
-        _nodes[i]->_id = i;
-        _nodes[i]->_color[0]=0.0;
-        _nodes[i]->_color[1]=0.0;
-        _nodes[i]->_color[2]=0.0;
-        _nodes[i]->x=0;
-        _nodes[i]->y=0;
-        _nodes[i]->main=0;
+        priv->_recolorNodes[i]->_id = i;
+        priv->_recolorNodes[i]->_color[0]=0.0;
+        priv->_recolorNodes[i]->_color[1]=0.0;
+        priv->_recolorNodes[i]->_color[2]=0.0;
+        priv->_recolorNodes[i]->x=0;
+        priv->_recolorNodes[i]->y=0;
+        priv->_recolorNodes[i]->main=0;
     }
 }
 
-static void
+void
 recolor_wheel_nodes_check()
 {
-    g_printf("\n\t\tChecking nodes ");
+    /* g_printf("\n\t\tChecking nodes ");
     int i;
     for(i=0; i< RECOLOR_MAX_OBJECTS ; i++)
     {   
@@ -200,13 +202,13 @@ recolor_wheel_nodes_check()
                   _nodes[i]->_color[2],_nodes[i]->x,_nodes[i]->y
                   );
     }
-    g_printf("\n\t\tOver!-----");
+    g_printf("\n\t\tOver!-----"); */
     
     
 }
 
 /*Initialize RecolorWheelNode*/
-static void
+void
 recolor_wheel_node_set_color (RecolorWheelNode* node, gfloat h, gfloat s, gfloat v)
 {
     node->_color[0] = h;
@@ -245,8 +247,6 @@ gimp_color_wheel_class_init (GimpColorWheelClass *class)
 
   wheel_class->move                  = gimp_color_wheel_move;
   
-  recolor_wheel_nodes_init();
-
   wheel_signals[CHANGED] =
     g_signal_new ("changed",
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -266,14 +266,7 @@ gimp_color_wheel_class_init (GimpColorWheelClass *class)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_DIRECTION_TYPE);
   
-  //-- added for simulation
-      recolor_wheel_node_set_color(_nodes[0], 0.65, 0.5, 0.33);
-      recolor_wheel_node_set_color(_nodes[1], 0.12, 0.67, 0.45);
-      recolor_wheel_node_set_color(_nodes[2], 1.0, 0.54, 0.167);
-      recolor_wheel_node_set_color(_nodes[3], 0.34, 0.91, 0.43);
-      recolor_wheel_node_set_color(_nodes[4], 1.0, 0.27, 0.88);
-  //--
-  
+   
   binding_set = gtk_binding_set_by_class (class);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, 0,
@@ -306,7 +299,8 @@ gimp_color_wheel_class_init (GimpColorWheelClass *class)
                                 G_TYPE_ENUM, GTK_DIR_LEFT);
 
   g_type_class_add_private (object_class, sizeof (GimpColorWheelPrivate));
-}
+  
+ }
 
 static void
 gimp_color_wheel_init (GimpColorWheel *wheel)
@@ -317,16 +311,18 @@ gimp_color_wheel_init (GimpColorWheel *wheel)
                                       GimpColorWheelPrivate);
 
   wheel->priv = priv;
+  //priv->_recolorNodes = (RecolorWheelNode**)malloc(sizeof(RecolorWheelNode*) * 5); 
+  
+  g_message(" succesfull initialisation ");
 
   gtk_widget_set_has_window (GTK_WIDGET (wheel), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (wheel), TRUE);
-
   priv->ring_fraction = DEFAULT_FRACTION;
   priv->size          = DEFAULT_SIZE;
   priv->ring_width    = DEFAULT_RING_WIDTH;
   //-- Again ring_fraction and ring_width will not be needed
   //--
-  
+  //recolor_wheel_nodes_init( GTK_WIDGET (wheel), RECOLOR_MAX_OBJECTS );
   //--
 }
 
@@ -392,6 +388,9 @@ gimp_color_wheel_realize (GtkWidget *widget)
   gdk_window_set_user_data (priv->window, wheel);
 
   gtk_widget_style_attach (widget);
+  
+  recolor_wheel_nodes_init( GTK_WIDGET (wheel), RECOLOR_MAX_OBJECTS );
+  
 }
 
 static void
@@ -656,12 +655,13 @@ is_in_recolor_node (GimpColorWheel *wheel,
   
   for(iter = 0 ; iter < RECOLOR_MAX_OBJECTS ; iter++)
   {
-#define RECOLOR_DELTA 25
+	RecolorWheelNode* temp = priv->_recolorNodes[iter] ;
+  #define RECOLOR_DELTA 25
      g_printf("iteration of %d",iter); 
-     if ( (abs((int)(x-_nodes[iter]->x) ) < RECOLOR_DELTA) && (abs((int) ( y-_nodes[iter]->y) ) < RECOLOR_DELTA) )
+     if ( (abs((int)(x-temp->x) ) < RECOLOR_DELTA) && (abs((int) ( y-temp->y) ) < RECOLOR_DELTA) )
      {   
         //g_printf("\ni=%d id=%d x=%6.2f _x=%6.2f y=%6.2f _y=%6.2f",iter,_nodes[iter]->_id,x,_nodes[iter]->x,y,_nodes[iter]->y);
-        activeNode = _nodes[iter];
+        //activeNode = temp[iter];
         g_printf("\n");
         return TRUE;
      }
@@ -969,7 +969,7 @@ gimp_color_wheel_motion (GtkWidget      *widget,
 
 static void
 paint_recolor_nodes_to_wheel (GimpColorWheel *wheel,
-                              cairo_t        *cr )
+														   cairo_t        *cr )
 {
   //g_printf("\nPainting nodes");
   GtkWidget             *widget = GTK_WIDGET (wheel);
@@ -979,8 +979,8 @@ paint_recolor_nodes_to_wheel (GimpColorWheel *wheel,
   gdouble                center_y;
   gdouble                xx, yy, dist, outer;
   gdouble                width, height;
-  gfloat                 hsv[3];
-  gint                   iter;   
+  gfloat                    hsv[3];
+  gint                       iter;   
 
 #if GTK_CHECK_VERSION(3,0,0)
   GtkWidget             *widget = GTK_WIDGET (wheel);
@@ -989,7 +989,7 @@ paint_recolor_nodes_to_wheel (GimpColorWheel *wheel,
   height = gtk_widget_get_allocated_height (widget);
 #else
   GtkAllocation          allocation;
-  gchar                 *detail;  
+  gchar                     *detail;  
   gtk_widget_get_allocation (GTK_WIDGET (wheel), &allocation);
   width  = allocation.width;
   height = allocation.height;
@@ -1004,18 +1004,18 @@ paint_recolor_nodes_to_wheel (GimpColorWheel *wheel,
   {
   
     //rgb_to_hsv_floatv(hsv, _nodes[iter]->_color[0], _nodes[iter]->_color[1], _nodes[iter]->_color[2]);
+    RecolorWheelNode* temp = priv -> _recolorNodes[ iter ] ;
+    dist = temp->_color[1] * outer ;
     
-    dist = _nodes[iter]->_color[1] * outer ;
+    xx = center_x + cos (temp->_color[0] * 2.0 * G_PI) * dist;
+    yy = center_y - sin (temp->_color[0] * 2.0 * G_PI) * dist;
     
-    xx = center_x + cos (_nodes[iter]->_color[0] * 2.0 * G_PI) * dist;
-    yy = center_y - sin (_nodes[iter]->_color[0] * 2.0 * G_PI) * dist;
+    temp->x = (gfloat)xx;
+    temp->y = (gfloat)yy;
     
-    _nodes[iter]->x = (gfloat)xx;
-    _nodes[iter]->y = (gfloat)yy;
-    
-    r = _nodes[iter]->_color[0];
-    g = _nodes[iter]->_color[1];
-    b = _nodes[iter]->_color[2];
+    r = temp->_color[0];
+    g = temp->_color[1];
+    b = temp->_color[2];
     hsv_to_rgb (&r, &g, &b);
     
 #if GTK_CHECK_VERSION(3,0,0)

@@ -43,6 +43,11 @@ G_BEGIN_DECLS
 #define GIMP_IS_COLOR_WHEEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GIMP_TYPE_COLOR_WHEEL))
 #define GIMP_COLOR_WHEEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GIMP_TYPE_COLOR_WHEEL, GimpColorWheelClass))
 
+//--
+/* Maximum Selectable objects for recoloring. Right now just a hack to get things working. */
+#define RECOLOR_MAX_OBJECTS 5
+
+
 typedef struct _GimpColorWheel      GimpColorWheel;
 typedef struct _GimpColorWheelClass GimpColorWheelClass;
 
@@ -89,6 +94,11 @@ void        gimp_color_wheel_set_ring_fraction (GimpColorWheel *wheel,
 gdouble     gimp_color_wheel_get_ring_fraction (GimpColorWheel *wheel);
 
 gboolean    gimp_color_wheel_is_adjusting      (GimpColorWheel *wheel);
+
+//-- Added for functionality of recolor nodes.
+void recolor_wheel_nodes_init(GtkWidget *widget, int obj_list_size/* = RECOLOR_MAX_OBJECTS */);
+
+
 
 G_END_DECLS
 
