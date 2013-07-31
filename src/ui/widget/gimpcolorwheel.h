@@ -43,13 +43,25 @@ G_BEGIN_DECLS
 #define GIMP_IS_COLOR_WHEEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GIMP_TYPE_COLOR_WHEEL))
 #define GIMP_COLOR_WHEEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GIMP_TYPE_COLOR_WHEEL, GimpColorWheelClass))
 
-//--
-/* Maximum Selectable objects for recoloring. Right now just a hack to get things working. */
-#define RECOLOR_MAX_OBJECTS 5
+#include "recolor-wheel-node.h"
 
 
 typedef struct _GimpColorWheel      GimpColorWheel;
 typedef struct _GimpColorWheelClass GimpColorWheelClass;
+/* typedef struct _RecolorWheelNode   RecolorWheelNode;
+
+struct _RecolorWheelNode
+{
+    gint     _id; //for the object id in XML Tree.
+    //SPColor color; //for the color value. (Not declared, so not used)
+    gdouble      x;
+    gdouble      y;
+    gfloat     _color[3];
+    gboolean   main;
+    gboolean   dragging;
+};
+ */
+
 
 struct _GimpColorWheel
 {
@@ -95,9 +107,11 @@ gdouble     gimp_color_wheel_get_ring_fraction (GimpColorWheel *wheel);
 
 gboolean    gimp_color_wheel_is_adjusting      (GimpColorWheel *wheel);
 
-//-- Added for functionality of recolor nodes.
-void recolor_wheel_nodes_init(GtkWidget *widget, int obj_list_size/* = RECOLOR_MAX_OBJECTS */);
+void            recolor_wheel_nodes_init();
 
+void            recolor_wheel_node_set_color (RecolorWheelNode* node, gfloat h, gfloat s, gfloat v);
+
+void set_recolor_nodes_from_objList (RecolorNodeExchangeData* temp[ ] ,int selObj) ;
 
 
 G_END_DECLS

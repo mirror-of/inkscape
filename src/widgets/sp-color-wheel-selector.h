@@ -7,6 +7,7 @@
 #include "../color.h"
 #include "sp-color-slider.h"
 #include "sp-color-selector.h"
+#include "recolor-wheel-node.h"
 
 
 
@@ -31,10 +32,11 @@ protected:
     static void _sliderReleased( SPColorSlider *slider, SPColorWheelSelector *cs );
     static void _sliderChanged( SPColorSlider *slider, SPColorWheelSelector *cs );
     static void _wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs );
-
+    
     static void _fooChanged( GtkWidget foo, SPColorWheelSelector *cs );
-
+    
     void _recalcColor( gboolean changing );
+    void setupRecolorNodes (
 
     gboolean _updating : 1;
     gboolean _dragging : 1;
@@ -47,6 +49,10 @@ protected:
     GtkWidget* _sbtnB; // Spinbutton for Brightness value
     GtkWidget* _label; // Label
     GtkWidget* _labelB; // Label for Brightness value
+    RecolorWheelNode** _nodes;
+    RecolorWheelNode* activeNode ; /* = NULL */ 
+    gint selObj ;
+
 
 
 private:
