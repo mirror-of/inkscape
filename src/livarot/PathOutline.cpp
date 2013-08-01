@@ -156,7 +156,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                     rev->SubContractOutline (0, rev->descr_cmd.size(),
                                              dest, calls,  0.0025 * width * width, width,
                                              join, butt, miter, false, false, endPos, endButt);
-                    Geom::Point endNor=endButt.ccw();
+                    Geom::Point endNor=endButt.ccw(); 
                     if (butt == butt_round) {
                         dest->ArcTo (endPos+width*endNor,  1.0001 * width, 1.0001 * width, 0.0, true, true);
                     }  else if (butt == butt_square) {
@@ -186,7 +186,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                     } else {
                         dest->LineTo (endPos+width*endNor);
                     }
-                    dest->Close ();
+                    dest->Close();
                 }
             } // if (curD > lastM)
         } // if (curP > lastM + 1)

@@ -1964,7 +1964,7 @@ int SPCanvasImpl::sp_canvas_paint_rect_internal(PaintRectSetup const *setup, Geo
     // this returns control to the idle loop and allows Inkscape to process user input
     // (potentially interrupting the redraw); as soon as Inkscape has some more idle time,
     // it will get back and finish painting what remains to paint.
-    if (elapsed > 1000) {
+    if (elapsed > 100000) {
 
         // Interrupting redraw isn't always good.
         // For example, when you drag one node of a big path, only the buffer containing

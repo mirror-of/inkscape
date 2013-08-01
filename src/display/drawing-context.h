@@ -88,9 +88,11 @@ public:
     void setSource(cairo_pattern_t *source) { cairo_set_source(_ct, source); }
     void setSource(cairo_surface_t *surface, double x, double y) {
         cairo_set_source_surface(_ct, surface, x, y);
+        cairo_pattern_set_filter(cairo_get_source(_ct), CAIRO_FILTER_NEAREST);
     }
     void setSource(double r, double g, double b, double a = 1.0) {
         cairo_set_source_rgba(_ct, r, g, b, a);
+        cairo_pattern_set_filter(cairo_get_source(_ct), CAIRO_FILTER_NEAREST);
     }
     void setSource(guint32 rgba);
     void setSource(DrawingSurface *s);

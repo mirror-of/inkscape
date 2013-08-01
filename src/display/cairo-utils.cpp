@@ -379,6 +379,7 @@ ink_cairo_set_source_argb32_pixbuf(cairo_t *ct, GdkPixbuf *pb, double x, double 
 {
     cairo_surface_t *pbs = ink_cairo_surface_create_for_argb32_pixbuf(pb);
     cairo_set_source_surface(ct, pbs, x, y);
+    cairo_pattern_set_filter(cairo_get_source(ct), CAIRO_FILTER_NEAREST);
     cairo_surface_destroy(pbs);
 }
 
@@ -428,6 +429,7 @@ ink_cairo_surface_copy(cairo_surface_t *s)
         // generic implementation
         cairo_t *ct = cairo_create(ns);
         cairo_set_source_surface(ct, s, 0, 0);
+        cairo_pattern_set_filter(cairo_get_source(ct), CAIRO_FILTER_NEAREST);
         cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
         cairo_paint(ct);
         cairo_destroy(ct);
@@ -469,6 +471,7 @@ ink_cairo_extract_alpha(cairo_surface_t *s)
 
     cairo_t *ct = cairo_create(alpha);
     cairo_set_source_surface(ct, s, 0, 0);
+    cairo_pattern_set_filter(cairo_get_source(ct), CAIRO_FILTER_NEAREST);
     cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(ct);
     cairo_destroy(ct);
