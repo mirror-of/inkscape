@@ -41,6 +41,7 @@ Build-Depends: autoconf,
                pkg-config,
                python-dev,
                python-lxml,
+               python-numpy,
                python-support,
                zlib1g-dev
 Standards-Version: 3.9.4
