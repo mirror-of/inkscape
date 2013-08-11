@@ -1,5 +1,4 @@
-debian/inkscape-trunk.xpm usr/share/pixmaps/
-debian/inkscape-trunk.applications usr/share/application-registry/
-usr/bin/
-usr/share/applications/inkscape.desktop
-usr/share/man/
+debian/inkscape-trunk.xpm                               usr/share/pixmaps
+debian/inkscape-trunk.applications                      usr/share/application-registry
+install-default/usr/bin/                                usr
+install-default/usr/share/applications/inkscape.desktop usr/share/applications
