@@ -1,0 +1,5 @@
+?package(inkscape-trunk-gtk3): needs="X11" section="Applications/Graphics"\
+  hints="Vector"\
+  title="Inkscape" command="/usr/bin/inkscape"\
+  icon="/usr/share/pixmaps/inkscape-trunk-gtk3.xpm"\
+  longtitle="Vector based drawing program"

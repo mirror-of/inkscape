@@ -20,11 +20,15 @@ Build-Depends: autoconf,
                libboost-dev,
                libcairo2-dev (>=1.10),
                libgc-dev (>= 1:6.8),
+               libgdl-3-dev (>= 3.3.4),
                libglib2.0-dev,
                libgnomevfs2-dev,
                libgtk2.0-dev (>= 2.10.0),
+               libgtk-3-dev (>= 3.2),
                libgtkmm-2.4-dev,
+               libgtkmm-3.0-dev (>= 3.2),
                libgtkspell-dev,
+               libgtkspell-3-dev,
                libgsl0-dev,
                liblcms2-dev | liblcms1-dev,
                libmagick++-dev,
@@ -67,7 +71,8 @@ Recommends: aspell,
             python-numpy, 
             python-lxml, 
             python-uniconvertor
-Conflicts: inkscape
+Conflicts: inkscape,
+           inkscape-trunk-gtk3
 Description: vector-based drawing program (trunk build)
  Inkscape is an illustration editor which has everything you need to create
  professional-quality computer art.  You can use it to make diagrams and 
@@ -88,6 +93,51 @@ Description: vector-based drawing program (trunk build)
  This package provides a daily build of the latest development version of 
  Inkscape. It provides access to all the newest features, but is not 
  recommended for users wanting stable and bug-free software!
+
+Package: inkscape-trunk-gtk3
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         inkscape-trunk-data
+Suggests: dia | dia-gnome, 
+          ruby, 
+          libgnomevfs2-extra, 
+          libsvg-perl, 
+          libxml-xql-perl, 
+          transfig,
+          pstoedit
+Recommends: aspell,
+            imagemagick, 
+            libwmf-bin, 
+            perlmagick, 
+            ${python:Depends},
+            python-numpy, 
+            python-lxml, 
+            python-uniconvertor
+Conflicts: inkscape,
+           inkscape-trunk
+Description: vector-based drawing program (EXPERIMENTAL GTK+3 trunk build)
+ Inkscape is an illustration editor which has everything you need to create
+ professional-quality computer art.  You can use it to make diagrams and 
+ illustrations, technical drawings, web graphics, clip art, icons and logos.
+ A collection of hands-on tutorials show you how to combine lines, shapes, and
+ text of different styles to build up a picture.
+ .
+ A selection of powerful vector graphics editing tools comes as standard. There
+ is excellent support for paths, gradients, layers, alpha transparency, and 
+ text flow control. An extensive library of filters allows you to apply 
+ realistic effects, and extensions allow you to work with bitmaps, barcodes 
+ and printing marks, amongst other things.
+ .
+ Most of the common vector formats are supported, including PDF, Adobe 
+ Illustrator and AutoCAD files, and it has unrivalled support for the SVG web 
+ graphics standard.
+ .
+ This package provides a daily build of the latest development version of 
+ Inkscape. It provides access to all the newest features, but is not 
+ recommended for users wanting stable and bug-free software! This package is 
+ build using EXPERIMENTAL support for Gtk+ 3, and there are currently many 
+ known bugs!
 
 Package: inkscape-trunk-data
 Architecture: all
