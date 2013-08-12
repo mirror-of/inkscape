@@ -20,7 +20,7 @@ Build-Depends: autoconf,
                libboost-dev,
                libcairo2-dev (>=1.10),
                libgc-dev (>= 1:6.8),
-               libgdl-3-dev (>= 3.3.4)
+               libgdl-3-dev (>= 3.3.4),
                libglib2.0-dev,
                libgnomevfs2-dev,
                libgtk2.0-dev (>= 2.10.0),
