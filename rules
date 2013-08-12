@@ -11,17 +11,21 @@ export DH_VERBOSE=1
 
 override_dh_auto_clean:
 	dh_auto_clean --builddirectory=build-default
+	dh_auto_clean --builddirectory=build-gtk3
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 override_dh_auto_configure:
 	export NOCONFIGURE=true && ./autogen.sh
 	dh_auto_configure --builddirectory=build-default
+	dh_auto_configure --builddirectory=build-gtk3 -- --enable-gtk3-experimental
 
 override_dh_auto_build:
 	dh_auto_build --builddirectory=build-default
+	dh_auto_build --builddirectory=build-gtk3
 
 override_dh_auto_test:
 	dh_auto_test --builddirectory=build-default
+	dh_auto_test --builddirectory=build-gtk3
 
 
 # Rule for installing files from the build directories to (temporary)
@@ -29,3 +33,4 @@ override_dh_auto_test:
 # the relevant packages
 override_dh_auto_install:
 	dh_auto_install --builddirectory=build-default --destdir=debian/tmp/install-default
+	dh_auto_install --builddirectory=build-gtk3    --destdir=debian/tmp/install-gtk3
