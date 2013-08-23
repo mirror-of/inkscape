@@ -72,6 +72,7 @@
 #include "tools-switch.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
+#include "ui/dialog/crash-recovery.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/extensions.h"
@@ -2048,7 +2049,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_PRINT_COLORS_PREVIEW:
             dt->_dlg_mgr->showDialog("PrintColorsPreviewDialog");
             break;
-
+        case SP_VERB_DIALOG_CRASH_RECOVERY:
+            dt->_dlg_mgr->showDialog("CrashRecovery");
+            break;
         default:
             break;
     }
@@ -2857,6 +2860,8 @@ Verb *Verb::_base_verbs[] = {
                    N_("Select which color separations to render in Print Colors Preview rendermode"), NULL),
     new DialogVerb(SP_VERB_DIALOG_EXPORT, "DialogExport", N_("_Export PNG Image..."),
                 N_("Export this document or a selection as a PNG image"), INKSCAPE_ICON("document-export")),
+    new DialogVerb(SP_VERB_DIALOG_CRASH_RECOVERY, "CrashRecovery", N_("_Crash Recovery..."),
+                 N_("Recover files after a crash"),GTK_STOCK_OPEN),
     // Help
     new HelpVerb(SP_VERB_HELP_ABOUT_EXTENSIONS, "HelpAboutExtensions", N_("About E_xtensions"),
                  N_("Information on Inkscape extensions"), NULL),

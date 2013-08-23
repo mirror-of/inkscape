@@ -20,6 +20,7 @@
 #include "ui/dialog/dialog-manager.h"
 
 #include "ui/dialog/align-and-distribute.h"
+#include "ui/dialog/crash-recovery.h"
 #include "ui/dialog/document-metadata.h"
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/extension-editor.h"
@@ -97,6 +98,7 @@ DialogManager::DialogManager() {
 
     if (dialogs_type == FLOATING) {
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
+        registerFactory("CrashRecovery",       &create<CrashRecovery,        FloatingBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     FloatingBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   FloatingBehavior>);
         registerFactory("ExtensionEditor",     &create<ExtensionEditor,      FloatingBehavior>);
@@ -130,6 +132,7 @@ DialogManager::DialogManager() {
     } else {
 
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   DockBehavior>);
+        registerFactory("CrashRecovery",       &create<CrashRecovery,        DockBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     DockBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   DockBehavior>);
         registerFactory("ExtensionEditor",     &create<ExtensionEditor,      DockBehavior>);
