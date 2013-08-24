@@ -36,8 +36,9 @@ protected:
     static void _fooChanged( GtkWidget foo, SPColorWheelSelector *cs );
     
     void _recalcColor( gboolean changing );
-    void setupRecolorNodes (
-
+    //======================
+    //void setupRecolorNodes (
+    //======================
     gboolean _updating : 1;
     gboolean _dragging : 1;
     GtkAdjustment* _adj; // Channel adjustment

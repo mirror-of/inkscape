@@ -28,6 +28,7 @@
 #include <gtkmm/table.h>
 
 #include "recolor-artwork.h"
+#include "recolor-artwork-widget.h"
 
 
 namespace Inkscape {
@@ -118,7 +119,7 @@ RecolorArtwork::_savePagePref(guint page_num)
 void
 RecolorArtwork::_layoutPageRC()
 {
-    recolorWdgt = manage(/*sp_recolor_artwork_widget_new()*/sp_fill_style_widget_new());	//function name important
+    recolorWdgt = Gtk::manage(/*sp_recolor_artwork_widget_new()*/recolor_artwork_widget_new());	//function name important
 	//####
 #if WITH_GTKMM_3_0
     _pageRC->table().attach(*recolorWdgt, 0, 0, 1, 1);

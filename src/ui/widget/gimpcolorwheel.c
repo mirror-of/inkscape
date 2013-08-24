@@ -323,9 +323,6 @@ gimp_color_wheel_init (GimpColorWheel *wheel)
   priv->size          = DEFAULT_SIZE;
   priv->ring_width    = DEFAULT_RING_WIDTH;
   //-- Again ring_fraction and ring_width will not be needed
-  //--
-  
-  //--
 }
 
 static void
