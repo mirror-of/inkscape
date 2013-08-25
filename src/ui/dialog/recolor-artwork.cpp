@@ -86,7 +86,7 @@ void RecolorArtwork::setTargetDesktop(SPDesktop *desktop)
     if (targetDesktop != desktop) {
         targetDesktop = desktop;
 		if (recolorWdgt) {
-            sp_fill_style_widget_set_desktop(recolorWdgt, desktop);
+            recolor_artwork_widget_set_desktop(recolorWdgt, desktop);
 			//std::cout<<"OOO";
         }
 		/*if (recolorWdgt) {
@@ -119,7 +119,7 @@ RecolorArtwork::_savePagePref(guint page_num)
 void
 RecolorArtwork::_layoutPageRC()
 {
-    recolorWdgt = Gtk::manage(/*sp_recolor_artwork_widget_new()*/recolor_artwork_widget_new());	//function name important
+    recolorWdgt = manage(/*sp_recolor_artwork_widget_new()*/recolor_artwork_widget_new());	//function name important
 	//####
 #if WITH_GTKMM_3_0
     _pageRC->table().attach(*recolorWdgt, 0, 0, 1, 1);

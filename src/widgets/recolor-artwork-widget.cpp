@@ -48,19 +48,19 @@ Gtk::Widget *recolor_artwork_widget_new(void)
 
 namespace Inkscape {
 
-class RecolorArtwork : public Gtk::VBox
+class RecolorArtworkWidget : public Gtk::VBox
 {
-    public:
-    RecolorArtwork ();
-    ~RecolorArtwork ();
+public:
+    RecolorArtworkWidget ();
+    ~RecolorArtworkWidget ();
     
     void setDesktop(SPDesktop *desktop);
     
     void hookUp_NodeData(); //decide parameters.
     
-    private:
-    static void paintChangedCB(RecolorSelector *rsel, RecolorArtwork *self);
-    static void paintDraggedCB(RecolorSelector *rsel, RecolorArtwork *self);
+private:
+    static void paintChangedCB(RecolorWheelSelector *rsel, RecolorArtworkWidget *self);
+    static void paintDraggedCB(RecolorWheelSelector *rsel, RecolorArtworkWidget *self);
     static gboolean dragDelayCB(gpointer data);
 
     void selectionModifiedCB(guint flags);
@@ -73,7 +73,7 @@ class RecolorArtwork : public Gtk::VBox
 
     SPDesktop *desktop;
     //SPPaintSelector *psel;  //DO WE NEED THIS IN THE NEW IMPLEMENTATION ?
-    RecolorSelector *rsel;
+    GtkWidget *rsel;
     guint32 lastDrag;
     guint dragId;
     bool update;   
@@ -87,7 +87,7 @@ class RecolorArtwork : public Gtk::VBox
 
 void recolor_artwork_widget_set_desktop(Gtk::Widget *widget, SPDesktop *desktop)
 {
-    Inkscape::RecolorArtwork *ra = dynamic_cast<Inkscape::RecolorArtwork*>(widget);
+    Inkscape::RecolorArtworkWidget *ra = dynamic_cast<Inkscape::RecolorArtworkWidget*>(widget);
     if (ra) {
         ra->setDesktop(desktop);
     }
@@ -100,12 +100,12 @@ namespace Inkscape {
  */
 Gtk::Widget *Inkscape::Widgets::createRecolorArtworkWidget( )
 {
-    RecolorArtwork *filler = new RecolorArtwork();
+    RecolorArtworkWidget *filler = new RecolorArtworkWidget();
 
     return filler;
 }
 
-RecolorArtwork::RecolorArtwork( ) :
+RecolorArtworkWidget::RecolorArtworkWidget( ) :
     Gtk::VBox(),
     desktop(0),
     //psel(0),  //yet to be decided.
@@ -118,7 +118,7 @@ RecolorArtwork::RecolorArtwork( ) :
     selectModifiedConn(),
     eventContextConn()
 {   
-    rsel = recolor_selector_new();
+    rsel = sp_recolor_wheel_selector_new();
     gtk_widget_show(GTK_WIDGET(rsel));
     gtk_container_add(GTK_CONTAINER(gobj()), GTK_WIDGET(rsel));
     
@@ -133,7 +133,7 @@ RecolorArtwork::RecolorArtwork( ) :
     performUpdate();
 }
 
-RecolorArtwork::~RecolorArtwork()
+RecolorArtworkWidget::~RecolorArtworkWidget()
 {
     if (dragId) {
         g_source_remove(dragId);
@@ -149,7 +149,7 @@ RecolorArtwork::~RecolorArtwork()
 /**
  * On signal modified, invokes an update of the fill or stroke style paint object.
  */
-void RecolorArtwork::selectionModifiedCB( guint flags )
+void RecolorArtworkWidget::selectionModifiedCB( guint flags )
 {
     if (flags & ( SP_OBJECT_MODIFIED_FLAG |
                    SP_OBJECT_PARENT_MODIFIED_FLAG |
@@ -161,7 +161,7 @@ void RecolorArtwork::selectionModifiedCB( guint flags )
     }
 }
 
-void RecolorArtwork::setDesktop(SPDesktop *desktop)
+void RecolorArtworkWidget::setDesktop(SPDesktop *desktop)
 {
     if (this->desktop != desktop) {
         if (dragId) {
@@ -176,12 +176,12 @@ void RecolorArtwork::setDesktop(SPDesktop *desktop)
         }
         this->desktop = desktop;
         if (desktop && desktop->selection) {
-            selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &RecolorArtwork::performUpdate)));
-            subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &RecolorArtwork::performUpdate)));
-            eventContextConn = desktop->connectEventContextChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &RecolorArtwork::eventContextCB), (SPEventContext *)NULL)));
+            selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &RecolorArtworkWidget::performUpdate)));
+            subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &RecolorArtworkWidget::performUpdate)));
+            eventContextConn = desktop->connectEventContextChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &RecolorArtworkWidget::eventContextCB), (SPEventContext *)NULL)));
 
             // Must check flags, so can't call performUpdate() directly.
-            selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &RecolorArtwork::selectionModifiedCB)));
+            selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &RecolorArtworkWidget::selectionModifiedCB)));
         }
         performUpdate();
     }
@@ -190,7 +190,7 @@ void RecolorArtwork::setDesktop(SPDesktop *desktop)
 /**
  *  See if there is a possible subselection can be used.
  */
-void RecolorArtwork::eventContextCB(SPDesktop * /*desktop*/, SPEventContext * /*eventcontext*/)
+void RecolorArtworkWidget::eventContextCB(SPDesktop * /*desktop*/, SPEventContext * /*eventcontext*/)
 {
     performUpdate();
 }
@@ -201,7 +201,7 @@ void RecolorArtwork::eventContextCB(SPDesktop * /*desktop*/, SPEventContext * /*
  *
  * @param sel Selection to use, or NULL.
  */
-void RecolorArtwork::performUpdate()
+void RecolorArtworkWidget::performUpdate()
 {
     if ( update || !desktop ) {
         return;
@@ -289,8 +289,8 @@ void RecolorArtwork::performUpdate()
     update = false;
 }
 
-void RecolorArtwork::paintDraggedCB(RecolorSelector * /*rsel*/,
-                                                         RecolorArtwork *self )
+void RecolorArtworkWidget::paintDraggedCB(RecolorWheelSelector * /*rsel*/,
+                                                         RecolorArtworkWidget *self )
 {
 #ifdef SP_FS_VERBOSE
     g_message("paintDraggedCB(psel, spw:%p)", self);
@@ -301,11 +301,11 @@ void RecolorArtwork::paintDraggedCB(RecolorSelector * /*rsel*/,
 }
 
 
-gboolean RecolorArtwork::dragDelayCB(gpointer data)
+gboolean RecolorArtworkWidget::dragDelayCB(gpointer data)
 {
     gboolean keepGoing = TRUE;
     if (data) {
-        RecolorArtwork *self = reinterpret_cast<RecolorArtwork*>(data);
+        RecolorArtworkWidget *self = reinterpret_cast<RecolorArtworkWidget*>(data);
         if (!self->update) {
             if (self->dragId) {
                 g_source_remove(self->dragId);
@@ -328,7 +328,7 @@ gboolean RecolorArtwork::dragDelayCB(gpointer data)
  * this was flakey and didn't buy us almost anything. So now it does the same as _changed, except
  * lumps all its changes for undo.
  */
-void RecolorArtwork::dragFromPaint()
+void RecolorArtworkWidget::dragFromPaint()
 {
     if (!desktop || update) {
         return;
@@ -382,7 +382,7 @@ This is called (at least) when:
 3  you changed a gradient selector parameter (e.g. spread)
 Must update repr.
  */
-void RecolorArtwork::paintChangedCB( RecolorSelector * /*psel*/, RecolorArtwork *self )
+void RecolorArtworkWidget::paintChangedCB( RecolorWheelSelector * /*psel*/, RecolorArtworkWidget *self )
 {
 #ifdef SP_FS_VERBOSE
     g_message("paintChangedCB(psel, spw:%p)", self);
@@ -392,7 +392,7 @@ void RecolorArtwork::paintChangedCB( RecolorSelector * /*psel*/, RecolorArtwork 
      }
 }
 
-void RecolorArtwork::updateFromPaint()
+void RecolorArtworkWidget::updateFromPaint()
 {
     if (!desktop) {
         return;

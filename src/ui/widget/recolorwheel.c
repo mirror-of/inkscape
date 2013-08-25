@@ -1,45 +1,3 @@
-/* HSV color selector for GTK+
- *
- * Copyright (C) 1999 The Free Software Foundation
- *
- * Authors: Simon Budig <Simon.Budig@unix-ag.org> (original code)
- *          Federico Mena-Quintero <federico@gimp.org> (cleanup for GTK+)
- *          Jonathan Blandford <jrb@redhat.com> (cleanup for GTK+)
- *          Michael Natterer <mitch@gimp.org> (ported back to GIMP)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- */
-
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
- */
-
-/*
- * This widget was adopted by Inkscape by Alex Valavanis <valavanisalex@gmail.com>
- * on 2013-01-08.  Last merges with GIMP code were applied using the following
- * commits from the GIMP git repository at 
- * http://git.gnome.org/browse/gimp/tree/modules/gimpcolorwheel.c
- *
- * Gtk+ 2 code merge: commit 632c5 (2013-01-06)
- * Gtk+ 3 code merge: commit bcfc6, gtk3-port branch (2013-01-06)
- */
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -69,8 +27,8 @@
 #define NODE_RADIUS_INNER 4
 //--
 
-RecolorWheelNode* _nodes[RECOLOR_MAX_OBJECTS];
-RecolorWheelNode* activeNode = NULL ;
+RecolorWheelNode* _nodes1[RECOLOR_MAX_OBJECTS];
+RecolorWheelNode* _activeNode = NULL ;
 
 /* Dragging modes */
 typedef enum
@@ -158,32 +116,32 @@ G_DEFINE_TYPE (RecolorWheel, recolor_wheel, GTK_TYPE_WIDGET)
 
 #define parent_class recolor_wheel_parent_class
 
-void recolor_wheel_nodes_init()
+void recolor_wheel_nodes_init1()
 {
     int i;
     for(i=0; i< RECOLOR_MAX_OBJECTS ; i++)
     {   
-        _nodes[i] = (RecolorWheelNode*)malloc(sizeof(RecolorWheelNode));
-        //g_snprintf(_nodes[i]->_id,10,"obj %d",i); //wasn't working at all.
-        _nodes[i]->_id = i;
-        _nodes[i]->_color[0]=0.0;
-        _nodes[i]->_color[1]=0.0;
-        _nodes[i]->_color[2]=0.0;
-        _nodes[i]->x=0;
-        _nodes[i]->y=0;
-        _nodes[i]->main=0;
+        _nodes1[i] = (RecolorWheelNode*)malloc(sizeof(RecolorWheelNode));
+        //g_snprintf(_nodes1[i]->_id,10,"obj %d",i); //wasn't working at all.
+        _nodes1[i]->_id = i;
+        _nodes1[i]->_color[0]=0.0;
+        _nodes1[i]->_color[1]=0.0;
+        _nodes1[i]->_color[2]=0.0;
+        _nodes1[i]->x=0;
+        _nodes1[i]->y=0;
+        _nodes1[i]->main=0;
     }
 }
 
 static void
-recolor_wheel_nodes_check()
+recolor_wheel_nodes_check1()
 {
     g_printf("\n\t\tChecking nodes ");
     int i;
     for(i=0; i< RECOLOR_MAX_OBJECTS ; i++)
     {   
-        g_printf("\n Id = %d\n r = %6.3f\n g = %6.3f\n b = %6.3f\n x = %f\n y = %f\n", i, _nodes[i]->_color[0],_nodes[i]->_color[1],
-                  _nodes[i]->_color[2],_nodes[i]->x,_nodes[i]->y
+        g_printf("\n Id = %d\n r = %6.3f\n g = %6.3f\n b = %6.3f\n x = %f\n y = %f\n", i, _nodes1[i]->_color[0],_nodes1[i]->_color[1],
+                  _nodes1[i]->_color[2],_nodes1[i]->x,_nodes1[i]->y
                   );
     }
     g_printf("\n\t\tOver!-----");
@@ -191,21 +149,21 @@ recolor_wheel_nodes_check()
     
 }
 
-void set_recolor_nodes_from_objList (RecolorNodeExchangeData* temp[ ], int selObj )
+void set_recolor_nodes_from_objList1 (RecolorNodeExchangeData* temp[ ], int selObj )
 {
     
     int i;
      for(i=0; i< selObj ; i++)
     {   
-        recolor_wheel_node_set_color( _nodes[i] , temp[i]->h ,  temp[i]->s , temp[i]->v);  
+        recolor_wheel_node_set_color1( _nodes1[i] , temp[i]->h ,  temp[i]->s , temp[i]->v);  
     }
     for ( i=selObj+1; i <  RECOLOR_MAX_OBJECTS ; i++ )
-        recolor_wheel_node_set_color( _nodes[i] , 0.0, 0.0, 0.0);  
+        recolor_wheel_node_set_color1( _nodes1[i] , 0.0, 0.0, 0.0);  
     
 }
 
 /*Initialize RecolorWheelNode*/
-void recolor_wheel_node_set_color (RecolorWheelNode* node, gfloat h, gfloat s, gfloat v)
+void recolor_wheel_node_set_color1 (RecolorWheelNode* node, gfloat h, gfloat s, gfloat v)
 {
     node->_color[0] = h;
     node->_color[1] = s;
@@ -243,7 +201,7 @@ recolor_wheel_class_init (RecolorWheelClass *class)
 
   wheel_class->move                  = recolor_wheel_move;
   
-  recolor_wheel_nodes_init();
+  recolor_wheel_nodes_init1();
 
   wheel_signals[CHANGED] =
     g_signal_new ("changed",
@@ -265,11 +223,11 @@ recolor_wheel_class_init (RecolorWheelClass *class)
                   GTK_TYPE_DIRECTION_TYPE);
   
   //-- added for simulation
-      recolor_wheel_node_set_color(_nodes[0], 0.65, 0.5, 0.33);
-      recolor_wheel_node_set_color(_nodes[1], 0.12, 0.67, 0.45);
-      recolor_wheel_node_set_color(_nodes[2], 1.0, 0.54, 0.167);
-      recolor_wheel_node_set_color(_nodes[3], 0.34, 0.91, 0.43);
-      recolor_wheel_node_set_color(_nodes[4], 1.0, 0.27, 0.88);
+      recolor_wheel_node_set_color1(_nodes1[0], 0.65, 0.5, 0.33);
+      recolor_wheel_node_set_color1(_nodes1[1], 0.12, 0.67, 0.45);
+      recolor_wheel_node_set_color1(_nodes1[2], 1.0, 0.54, 0.167);
+      recolor_wheel_node_set_color1(_nodes1[3], 0.34, 0.91, 0.43);
+      recolor_wheel_node_set_color1(_nodes1[4], 1.0, 0.27, 0.88);
   //--
   
   binding_set = gtk_binding_set_by_class (class);
@@ -656,10 +614,10 @@ is_in_recolor_node (RecolorWheel *wheel,
   {
 #define RECOLOR_DELTA 25
      g_printf("iteration of %d",iter); 
-     if ( (abs((int)(x-_nodes[iter]->x) ) < RECOLOR_DELTA) && (abs((int) ( y-_nodes[iter]->y) ) < RECOLOR_DELTA) )
+     if ( (abs((int)(x-_nodes1[iter]->x) ) < RECOLOR_DELTA) && (abs((int) ( y-_nodes1[iter]->y) ) < RECOLOR_DELTA) )
      {   
-        //g_printf("\ni=%d id=%d x=%6.2f _x=%6.2f y=%6.2f _y=%6.2f",iter,_nodes[iter]->_id,x,_nodes[iter]->x,y,_nodes[iter]->y);
-        activeNode = _nodes[iter];
+        //g_printf("\ni=%d id=%d x=%6.2f _x=%6.2f y=%6.2f _y=%6.2f",iter,_nodes1[iter]->_id,x,_nodes1[iter]->x,y,_nodes1[iter]->y);
+        _activeNode = _nodes1[iter];
         g_printf("\n");
         return TRUE;
      }
@@ -807,8 +765,8 @@ static gboolean recolor_wheel_grab_broken(GtkWidget *widget, GdkEventGrabBroken 
 
 static void recolor_drag_node( RecolorWheel *wheel, gdouble x, gdouble y)
 {
-  activeNode->x = x;
-  activeNode->y = y;
+  _activeNode->x = x;
+  _activeNode->y = y;
   
   gdouble        h, s, v;
   
@@ -816,9 +774,9 @@ static void recolor_drag_node( RecolorWheel *wheel, gdouble x, gdouble y)
   
   //hsv_to_rgb (&h, &s, &v);
   
-  activeNode->_color[0] = h;
-  activeNode->_color[1] = s;
-  activeNode->_color[2] = v;  
+  _activeNode->_color[0] = h;
+  _activeNode->_color[1] = s;
+  _activeNode->_color[2] = v;  
 }
 
 static gboolean
@@ -917,7 +875,7 @@ recolor_wheel_button_release (GtkWidget      *widget,
                               event->time);
 #endif
   
-  recolor_wheel_nodes_check();
+  recolor_wheel_nodes_check1();
   
   return TRUE;
 }
@@ -1001,19 +959,19 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
   for( iter=0; iter < RECOLOR_MAX_OBJECTS ; iter++)
   {
   
-    //rgb_to_hsv_floatv(hsv, _nodes[iter]->_color[0], _nodes[iter]->_color[1], _nodes[iter]->_color[2]);
+    //rgb_to_hsv_floatv(hsv, _nodes1[iter]->_color[0], _nodes1[iter]->_color[1], _nodes1[iter]->_color[2]);
     
-    dist = _nodes[iter]->_color[1] * outer ;
+    dist = _nodes1[iter]->_color[1] * outer ;
     
-    xx = center_x + cos (_nodes[iter]->_color[0] * 2.0 * G_PI) * dist;
-    yy = center_y - sin (_nodes[iter]->_color[0] * 2.0 * G_PI) * dist;
+    xx = center_x + cos (_nodes1[iter]->_color[0] * 2.0 * G_PI) * dist;
+    yy = center_y - sin (_nodes1[iter]->_color[0] * 2.0 * G_PI) * dist;
     
-    _nodes[iter]->x = (gfloat)xx;
-    _nodes[iter]->y = (gfloat)yy;
+    _nodes1[iter]->x = (gfloat)xx;
+    _nodes1[iter]->y = (gfloat)yy;
     
-    r = _nodes[iter]->_color[0];
-    g = _nodes[iter]->_color[1];
-    b = _nodes[iter]->_color[2];
+    r = _nodes1[iter]->_color[0];
+    g = _nodes1[iter]->_color[1];
+    b = _nodes1[iter]->_color[2];
     hsv_to_rgb (&r, &g, &b);
     
 #if GTK_CHECK_VERSION(3,0,0)
