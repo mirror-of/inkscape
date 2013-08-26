@@ -20,6 +20,8 @@ class RecolorWheelSelector: public ColorSelector
 public:
     RecolorWheelSelector( SPColorSelector* csel );
     virtual ~RecolorWheelSelector();
+    
+    GtkWidget* getWheel ();
 
     virtual void init();
 
@@ -53,8 +55,6 @@ protected:
     /* RecolorWheelNode** _nodes;
     RecolorWheelNode* activeNode ;  = NULL */  
     gint selObj ;
-
-
 
 private:
     // By default, disallow copy constructor and assignment operator

@@ -108,7 +108,6 @@ Gtk::Widget *Inkscape::Widgets::createRecolorArtworkWidget( )
 RecolorArtworkWidget::RecolorArtworkWidget( ) :
     Gtk::VBox(),
     desktop(0),
-    //psel(0),  //yet to be decided.
     rsel(0),
     lastDrag(0),
     dragId(0),
@@ -215,9 +214,39 @@ void RecolorArtworkWidget::performUpdate()
     }
 
     update = true;
+    
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    GSList  const *items = NULL;
+    //int selObj = 0;
+    
+    if ( selection ) 
+    {
+        items = selection->itemList();
+        //selObj = g_slist_length (const_cast<GSList*>(items)); 
+        
+        RecolorWheel* wheel = (RecolorWheel*) (((RecolorWheelSelector*)(rsel))->getWheel()) ;
+        RecolorWheelNode temp;   
+                
+        for (GSList const *i = items; i != NULL; i = i->next) 
+        {
+            SPObject *obj=reinterpret_cast<SPObject *>(i->data);
+            Inkscape::XML::Node* obj_repr = obj->getRepr();
+            SPCSSAttr* obj_css = sp_repr_css_attr( obj_repr , "style" );
+            
+            guint32 rgb32 = sp_svg_read_color( sp_repr_css_property( obj_css, "fill", "#ababab") , 0xF0F8FF );
+            SPColor color = SPColor (rgb32);
+            
+            float rgb[3] , hsv[3];
+            sp_color_get_rgb_floatv (&color, rgb);
+            sp_color_rgb_to_hsv_floatv (hsv , temp._color[0] , temp._color[1] , temp._color[2] );
+            
+            add_node_to_recolor_wheel (wheel, obj->getId() , temp );                       
+        }
+            
+    }   
 
     // create temporary style
-    // SPStyle *query = sp_style_new(desktop->doc());
+    SPStyle *query = sp_style_new(desktop->doc());
 
     // // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if any, or selection
     // int result = sp_desktop_query_style(desktop, query, (kind == FILL) ? QUERY_STYLE_PROPERTY_FILL : QUERY_STYLE_PROPERTY_STROKE);

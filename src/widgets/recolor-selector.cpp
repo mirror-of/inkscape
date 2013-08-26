@@ -343,6 +343,11 @@ static void preserve_icc(SPColor *color, SPRecolorWheelSelector *cs){
     color->icc = selector->getColor().icc ? new SVGICCColor(*selector->getColor().icc) : 0;
 }
 
+GtkWidget* RecolorWheelSelector::getWheel ()
+{
+    return _wheel ;
+}
+
 void RecolorWheelSelector::_colorChanged()
 {
 #ifdef DUMP_CHANGE_INFO
