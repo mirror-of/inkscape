@@ -215,10 +215,12 @@ void RecolorArtworkWidget::performUpdate()
 
     update = true;
     
+    
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
     GSList  const *items = NULL;
     //int selObj = 0;
-    
+    g_printf("\nWe are here: performUpdate() ! ");
+  
     if ( selection ) 
     {
         items = selection->itemList();

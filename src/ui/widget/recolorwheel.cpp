@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib.h>
+#include <glib/gprintf.h>
 
 #include <map>
 #include <string>
@@ -255,12 +257,17 @@ recolor_wheel_class_init (RecolorWheelClass *klass)
 static void
 recolor_wheel_init (RecolorWheel *wheel)
 {
+  g_printf("\nWe are here: recolor_wheel_init (RecolorWheel *wheel) ! ");
+  
   RecolorWheelPrivate *priv;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
                                       RecolorWheelPrivate);
 
   wheel->priv = (RecolorWheelPrivate*)priv;
+  priv = (RecolorWheelPrivate*)wheel->priv ;
+  new (&(priv->nodes)) std::map<std::string,RecolorWheelNode>();
+  //priv->nodes = new std::map<std::string,RecolorWheelNode>();
 
   gtk_widget_set_has_window (GTK_WIDGET (wheel), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (wheel), TRUE);
@@ -272,6 +279,8 @@ recolor_wheel_init (RecolorWheel *wheel)
   //--
   
   //--
+  g_printf("\nWe are here: recolor_wheel_init (RecolorWheel *wheel) Ending....! ");
+  
 }
 
 static void
@@ -945,11 +954,10 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
   center_y = height / 2.0;
   
   outer = priv->size / 2.0;
-  
+  g_printf("\nWe are here: paint_nodes() ! ");
   for (std::map<std::string,RecolorWheelNode>::iterator iter = priv->nodes.begin(); iter != priv->nodes.end(); ++iter)
   {
   
-    //rgb_to_hsv_floatv(hsv, _nodes1[iter]->_color[0], _nodes1[iter]->_color[1], _nodes1[iter]->_color[2]);
     
     dist = (*iter).second._color[1] * outer ;
     
