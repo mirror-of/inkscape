@@ -21,7 +21,7 @@ public:
     RecolorWheelSelector( SPColorSelector* csel );
     virtual ~RecolorWheelSelector();
     
-    GtkWidget* getWheel ();
+    GtkWidget* getWheel (SPRecolorWheelSelector *cs);
 
     virtual void init();
 

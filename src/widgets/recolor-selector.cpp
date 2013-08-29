@@ -333,6 +333,7 @@ GtkWidget *sp_recolor_wheel_selector_new()
 {
     SPRecolorWheelSelector *csel = SP_RECOLOR_WHEEL_SELECTOR(g_object_new (SP_TYPE_RECOLOR_WHEEL_SELECTOR, NULL));
 
+
     return GTK_WIDGET (csel);
 }
 
@@ -343,9 +344,14 @@ static void preserve_icc(SPColor *color, SPRecolorWheelSelector *cs){
     color->icc = selector->getColor().icc ? new SVGICCColor(*selector->getColor().icc) : 0;
 }
 
-GtkWidget* RecolorWheelSelector::getWheel ()
+GtkWidget* RecolorWheelSelector::getWheel (SPRecolorWheelSelector *cs)
 {
-    return _wheel ;
+    RecolorWheelSelector* wheelSelector = static_cast<RecolorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
+    
+    //if (wheelSelector->_updating) return;
+
+    //wheelSelector->_updating = TRUE;
+    return GTK_WIDGET(wheelSelector->_wheel) ;
 }
 
 void RecolorWheelSelector::_colorChanged()

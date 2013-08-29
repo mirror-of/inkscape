@@ -121,14 +121,14 @@ RecolorArtworkWidget::RecolorArtworkWidget( ) :
     gtk_widget_show(GTK_WIDGET(rsel));
     gtk_container_add(GTK_CONTAINER(gobj()), GTK_WIDGET(rsel));
     
-    g_signal_connect( G_OBJECT(rsel), "dragged",
+    /* g_signal_connect( G_OBJECT(rsel), "dragged",
                       G_CALLBACK(paintDraggedCB),
                       this );
 
     g_signal_connect( G_OBJECT(rsel), "changed",
                       G_CALLBACK(paintChangedCB),
                       this );
-    
+     */
     performUpdate();
 }
 
@@ -156,6 +156,47 @@ void RecolorArtworkWidget::selectionModifiedCB( guint flags )
 #ifdef SP_FS_VERBOSE
         g_message("selectionModifiedCB(%d) on %p", flags, this);
 #endif
+    
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    GSList  const *items = NULL;
+    
+    //RecolorWheel* wheel = (RecolorWheel*) (((RecolorWheelSelector*)(rsel))->getWheel()) ;
+    RecolorWheel* wheel = RECOLOR_WHEEL ( (  reinterpret_cast<RecolorWheelSelector*> (rsel) )->getWheel(SP_RECOLOR_WHEEL_SELECTOR(rsel) ) ) ;
+    
+    
+    if ( RECOLOR_IS_COLOR_WHEEL(wheel) )
+        g_printf("\nWe are here: performUpdate(): YES Bitch, its a wheel ! ");
+  
+    RecolorWheelNode temp;   
+        
+    g_printf("\nWe are here: performUpdate() ! ");
+  
+    if ( selection ) 
+    {
+        g_printf("\nWe are here: performUpdate() -> if ( selection ) { .... } ! ");
+  
+        items = selection->itemList();
+                     
+        for (GSList const *i = items; i != NULL; i = i->next) 
+        {
+            SPObject *obj=reinterpret_cast<SPObject *>(i->data);
+            Inkscape::XML::Node* obj_repr = obj->getRepr();
+            SPCSSAttr* obj_css = sp_repr_css_attr( obj_repr , "style" );
+            
+            guint32 rgb32 = sp_svg_read_color( sp_repr_css_property( obj_css, "fill", "#ababab") , 0xF0F8FF );
+            SPColor color = SPColor (rgb32);
+            
+            float rgb[3] , hsv[3];
+            sp_color_get_rgb_floatv (&color, rgb);
+            sp_color_rgb_to_hsv_floatv (temp._color , rgb[0] , rgb[1] , rgb[2] );
+            
+            g_printf("\nWe are here: performUpdate() -> colors(%f,%f,%f) { .... } ! ", temp._color[0] , temp._color[1] , temp._color[2] );
+            
+            add_node_to_recolor_wheel (wheel, obj->getId() , temp );                       
+        }
+            
+    }   
+
         performUpdate();
     }
 }
@@ -218,11 +259,15 @@ void RecolorArtworkWidget::performUpdate()
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
     GSList  const *items = NULL;
     
-    RecolorWheel* wheel = (RecolorWheel*) (((RecolorWheelSelector*)(rsel))->getWheel()) ;
+    RecolorWheel* wheel = RECOLOR_WHEEL ( (  reinterpret_cast<RecolorWheelSelector*> (rsel) )->getWheel(SP_RECOLOR_WHEEL_SELECTOR(rsel) ) ) ;
+    
+    
+    //if ( RECOLOR_IS_COLOR_WHEEL(wheel) )
+      //  g_printf("\nWe are here: performUpdate(): YES Bitch, its a wheel ! ");
+  
     RecolorWheelNode temp;   
         
-    g_printf("\nWe are here: performUpdate() ! ");
-  
+    
     if ( selection ) 
     {
         g_printf("\nWe are here: performUpdate() -> if ( selection ) { .... } ! ");
@@ -238,14 +283,22 @@ void RecolorArtworkWidget::performUpdate()
             guint32 rgb32 = sp_svg_read_color( sp_repr_css_property( obj_css, "fill", "#ababab") , 0xF0F8FF );
             SPColor color = SPColor (rgb32);
             
-            float rgb[3] , hsv[3];
+            float rgb[3] ;
             sp_color_get_rgb_floatv (&color, rgb);
-            sp_color_rgb_to_hsv_floatv (hsv , temp._color[0] , temp._color[1] , temp._color[2] );
+            sp_color_rgb_to_hsv_floatv (temp._color , rgb[0] , rgb[1] , rgb[2] );
             
-            //add_node_to_recolor_wheel (wheel, obj->getId() , temp );                       
+            //g_printf("\nWe are here: performUpdate() -> colors(%f,%f,%f) { .... } ! ", temp._color[0] , temp._color[1] , temp._color[2] );
+            
+            add_node_to_recolor_wheel (wheel, obj->getId() , temp );
+            g_printf("\n\n%s\n\n ",  obj->getId() );
+            
         }
             
-    }   
+    }
+    else   
+    {
+        remove_all_nodes_recolor_wheel( wheel );
+    }
 
     // create temporary style
     //SPStyle *query = sp_style_new(desktop->doc());

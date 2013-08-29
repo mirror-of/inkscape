@@ -126,8 +126,43 @@ G_DEFINE_TYPE (RecolorWheel, recolor_wheel, GTK_TYPE_WIDGET)
 
 void add_node_to_recolor_wheel (RecolorWheel *wheel, std::string name, RecolorWheelNode node)
 {
-    RecolorWheelPrivate *priv  = (RecolorWheelPrivate*) wheel->priv;
-    priv->nodes.insert( std::pair<std::string,RecolorWheelNode>(name,node) );
+   //g_printf("\nWe are here: add_node_to_recolor_wheel (RecolorWheel *wheel) ! ");
+   
+   if ( !wheel)
+   {
+        //g_printf("\nWe are here: add_node_to_recolor_wheel ()-> Wheel is NULL! ");
+        return;
+   }
+   
+   RecolorWheelPrivate *priv;
+
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
+                                      RecolorWheelPrivate);
+
+  // wheel->priv = (RecolorWheelPrivate*)priv;
+  // priv = (RecolorWheelPrivate*)wheel->priv ;
+  
+  if ( !priv)
+   {
+        //g_printf("\nWe are here: add_node_to_recolor_wheel ()-> priv is NULL! ");
+        return;
+   }
+  
+  priv->nodes.insert( std::pair<std::string,RecolorWheelNode>(name,node) );
+  g_printf("\nWe are here: add_node_to_recolor_wheel (): Size: %d ", priv->nodes.size() );
+  
+  
+}
+
+void remove_all_nodes_recolor_wheel (RecolorWheel *wheel)
+{
+    if ( !wheel) return;
+
+    RecolorWheelPrivate *priv;
+
+    priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
+                                      RecolorWheelPrivate);
+    priv->nodes.clear();
 }
 
 void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name)
@@ -264,8 +299,8 @@ recolor_wheel_init (RecolorWheel *wheel)
   priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
                                       RecolorWheelPrivate);
 
-  wheel->priv = (RecolorWheelPrivate*)priv;
-  priv = (RecolorWheelPrivate*)wheel->priv ;
+  wheel->priv = static_cast<RecolorWheelPrivate*>(priv);
+  priv = static_cast<RecolorWheelPrivate*>(wheel->priv) ;
   new (&(priv->nodes)) std::map<std::string,RecolorWheelNode>();
   //priv->nodes = new std::map<std::string,RecolorWheelNode>();
 
@@ -954,12 +989,13 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
   center_y = height / 2.0;
   
   outer = priv->size / 2.0;
+  
   g_printf("\nWe are here: paint_nodes() ! ");
   for (std::map<std::string,RecolorWheelNode>::iterator iter = priv->nodes.begin(); iter != priv->nodes.end(); ++iter)
   {
   
     
-    dist = (*iter).second._color[1] * outer ;
+    dist = ( (*iter).second._color[1] )* outer ;
     
     xx = center_x + cos ((*iter).second._color[0] * 2.0 * G_PI) * dist;
     yy = center_y - sin ((*iter).second._color[0] * 2.0 * G_PI) * dist;

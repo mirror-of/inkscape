@@ -105,6 +105,9 @@ void add_node_to_recolor_wheel (RecolorWheel *wheel, std::string name, RecolorWh
 
 void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name);
 
+void remove_all_nodes_recolor_wheel (RecolorWheel *wheel);
+
+
 
 G_END_DECLS
 
