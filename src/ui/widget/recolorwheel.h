@@ -87,10 +87,6 @@ void        recolor_wheel_get_color         (RecolorWheel *wheel,
                                                 gdouble        *s,
                                                 gdouble        *v);
 
-void        recolor_wheel_set_ring_fraction (RecolorWheel *wheel,
-                                                gdouble         fraction);
-gdouble     recolor_wheel_get_ring_fraction (RecolorWheel *wheel);
-
 gboolean    recolor_wheel_is_adjusting      (RecolorWheel *wheel);
 
 //=============================

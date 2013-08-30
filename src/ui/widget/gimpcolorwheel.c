@@ -1343,7 +1343,6 @@ gimp_color_wheel_expose (GtkWidget      *widget,
   draw_focus = gtk_widget_has_focus (widget);
   
   paint_ring (wheel, cr);
-  //paint_nodes (wheel, cr, draw_focus);
   paint_recolor_nodes_to_wheel(wheel ,cr);
   
   cairo_destroy (cr);

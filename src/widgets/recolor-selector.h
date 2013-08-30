@@ -52,10 +52,7 @@ protected:
     GtkWidget* _sbtnB; // Spinbutton for Brightness value
     GtkWidget* _label; // Label
     GtkWidget* _labelB; // Label for Brightness value
-    /* RecolorWheelNode** _nodes;
-    RecolorWheelNode* activeNode ;  = NULL */  
-    gint selObj ;
-
+    
 private:
     // By default, disallow copy constructor and assignment operator
     RecolorWheelSelector( const RecolorWheelSelector& obj );

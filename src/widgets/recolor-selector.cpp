@@ -22,8 +22,8 @@ static void sp_recolor_wheel_selector_dispose(GObject *object);
 static void sp_recolor_wheel_selector_show_all (GtkWidget *widget);
 static void sp_recolor_wheel_selector_hide(GtkWidget *widget);
 
-
 G_END_DECLS
+
 
 static SPColorSelectorClass *parent_class;
 
@@ -86,15 +86,9 @@ RecolorWheelSelector::RecolorWheelSelector( SPColorSelector* csel )
       _sbtn(0),
       _sbtnB(0),
       _label(0),
-      _labelB(0),
-      //_nodes(0),
-      //activeNode(0),
-      selObj(0)
+      _labelB(0)
 {
-    //_nodes = (RecolorWheelNode** )malloc(sizeof(RecolorWheelNode*) * 1 );
-    /*_nodes = new RecolorWheelNode*[1];
-    activeNode = NULL;
-    selObj = 0; */
+    
 }
 
 RecolorWheelSelector::~RecolorWheelSelector()
@@ -106,9 +100,6 @@ RecolorWheelSelector::~RecolorWheelSelector()
     _sbtnB = 0;
     _label = 0;
     _labelB = 0;
-    //_nodes = 0;
-    //activeNode = 0;
-    selObj = 0;
 }
 
 void sp_recolor_wheel_selector_init (SPRecolorWheelSelector *cs)
@@ -333,7 +324,6 @@ GtkWidget *sp_recolor_wheel_selector_new()
 {
     SPRecolorWheelSelector *csel = SP_RECOLOR_WHEEL_SELECTOR(g_object_new (SP_TYPE_RECOLOR_WHEEL_SELECTOR, NULL));
 
-
     return GTK_WIDGET (csel);
 }
 
@@ -348,9 +338,6 @@ GtkWidget* RecolorWheelSelector::getWheel (SPRecolorWheelSelector *cs)
 {
     RecolorWheelSelector* wheelSelector = static_cast<RecolorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
     
-    //if (wheelSelector->_updating) return;
-
-    //wheelSelector->_updating = TRUE;
     return GTK_WIDGET(wheelSelector->_wheel) ;
 }
 
@@ -493,14 +480,7 @@ void RecolorWheelSelector::_wheelChanged( RecolorWheel *wheel, SPRecolorWheelSel
     wheelSelector->_updateBrightness( color, wheelSelector->_brightness, recolor_wheel_is_adjusting(wheel) );  
     wheelSelector->_updateInternals( color, wheelSelector->_alpha, recolor_wheel_is_adjusting(wheel) );
     
-    /*SPDocument *document = sp_desktop_document(desktop);
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
-    GSList const *items = selection->itemList();*/
-    //g_printf("\n _wheelChanged executed \n"); :P
-
 }
-
 
 /*
   Local Variables:

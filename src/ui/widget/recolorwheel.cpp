@@ -16,6 +16,8 @@
 /* Default ring fraction */
 #define DEFAULT_FRACTION 0.1
 
+#define ADJ_WHEEL_RADIUS 0.97
+
 /* Default width/height */
 #define DEFAULT_SIZE 100
 
@@ -54,16 +56,11 @@ typedef struct
   gdouble v;
 
   std::map<std::string,RecolorWheelNode> nodes;
-    
-/* ring_width is this fraction of size */
-  gdouble ring_fraction;
-  //-- Don't need ring fraction anymore as the Wheel is painted completely.
+  std::map<std::string,RecolorWheelNode>::iterator  active_node;
 
   /* Size and ring width */
   gint size;
-  gint ring_width;
-  //-- Don't need ring fraction anymore as the Wheel is painted completely.
-
+  
   /* Window for capturing events */
   GdkWindow *window;
   
@@ -139,10 +136,7 @@ void add_node_to_recolor_wheel (RecolorWheel *wheel, std::string name, RecolorWh
   priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
                                       RecolorWheelPrivate);
 
-  // wheel->priv = (RecolorWheelPrivate*)priv;
-  // priv = (RecolorWheelPrivate*)wheel->priv ;
-  
-  if ( !priv)
+   if ( !priv)
    {
         //g_printf("\nWe are here: add_node_to_recolor_wheel ()-> priv is NULL! ");
         return;
@@ -167,8 +161,7 @@ void remove_all_nodes_recolor_wheel (RecolorWheel *wheel)
 
 void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name)
 {
-    RecolorWheelPrivate *priv  = (RecolorWheelPrivate*) wheel->priv;
-
+    RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
     std::map<std::string,RecolorWheelNode>::iterator iter;
     iter = priv->nodes.find(name);
     priv->nodes.erase( iter );   
@@ -247,14 +240,6 @@ recolor_wheel_class_init (RecolorWheelClass *klass)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_DIRECTION_TYPE);
   
-  //-- added for simulation
-      /* recolor_wheel_node_set_color1(_nodes1[0], 0.65, 0.5, 0.33);
-      recolor_wheel_node_set_color1(_nodes1[1], 0.12, 0.67, 0.45);
-      recolor_wheel_node_set_color1(_nodes1[2], 1.0, 0.54, 0.167);
-      recolor_wheel_node_set_color1(_nodes1[3], 0.34, 0.91, 0.43);
-      recolor_wheel_node_set_color1(_nodes1[4], 1.0, 0.27, 0.88); */
-  //--
-  
   binding_set = gtk_binding_set_by_class (klass);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, (GdkModifierType) 0,
@@ -301,19 +286,14 @@ recolor_wheel_init (RecolorWheel *wheel)
 
   wheel->priv = static_cast<RecolorWheelPrivate*>(priv);
   priv = static_cast<RecolorWheelPrivate*>(wheel->priv) ;
+  
   new (&(priv->nodes)) std::map<std::string,RecolorWheelNode>();
-  //priv->nodes = new std::map<std::string,RecolorWheelNode>();
-
+  
   gtk_widget_set_has_window (GTK_WIDGET (wheel), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (wheel), TRUE);
 
-  priv->ring_fraction = DEFAULT_FRACTION;
   priv->size          = DEFAULT_SIZE;
-  priv->ring_width    = DEFAULT_RING_WIDTH;
-  //-- Again ring_fraction and ring_width will not be needed
-  //--
   
-  //--
   g_printf("\nWe are here: recolor_wheel_init (RecolorWheel *wheel) Ending....! ");
   
 }
@@ -322,8 +302,8 @@ static void
 recolor_wheel_map (GtkWidget *widget)
 {
   RecolorWheel        *wheel = RECOLOR_WHEEL (widget);
-  RecolorWheelPrivate *priv  = (RecolorWheelPrivate*) wheel->priv;
-
+  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
+  
   GTK_WIDGET_CLASS (parent_class)->map (widget);
 
   gdk_window_show (priv->window);
@@ -333,8 +313,8 @@ static void
 recolor_wheel_unmap (GtkWidget *widget)
 {
   RecolorWheel        *wheel = RECOLOR_WHEEL (widget);
-  RecolorWheelPrivate *priv  = (RecolorWheelPrivate*) wheel->priv;
-
+  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
+  
   gdk_window_hide (priv->window);
 
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);
@@ -344,7 +324,7 @@ static void
 recolor_wheel_realize (GtkWidget *widget)
 {
   RecolorWheel        *wheel = RECOLOR_WHEEL (widget);
-  RecolorWheelPrivate *priv  = (RecolorWheelPrivate*) wheel->priv;
+  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
   GtkAllocation          allocation;
   GdkWindowAttr          attr;
   gint                   attr_mask;
@@ -386,8 +366,7 @@ static void
 recolor_wheel_unrealize (GtkWidget *widget)
 {
   RecolorWheel        *wheel = RECOLOR_WHEEL (widget);
-  RecolorWheelPrivate *priv  = (RecolorWheelPrivate*) wheel->priv;
-
+  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
   gdk_window_set_user_data (priv->window, NULL);
   gdk_window_destroy (priv->window);
   priv->window = NULL;
@@ -450,7 +429,7 @@ recolor_wheel_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
 {
   RecolorWheel        *wheel = RECOLOR_WHEEL (widget);
-  RecolorWheelPrivate *priv  = (RecolorWheelPrivate*) wheel->priv;
+  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
   gint                   focus_width;
   gint                   focus_pad;
 
@@ -463,8 +442,6 @@ recolor_wheel_size_allocate (GtkWidget     *widget,
 
   priv->size = MIN (allocation->width  - 2 * (focus_width + focus_pad),
                     allocation->height - 2 * (focus_width + focus_pad));
-
-  priv->ring_width = priv->size * priv->ring_fraction;
 
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (priv->window,
@@ -596,7 +573,7 @@ is_in_ring (RecolorWheel *wheel,
             gdouble         x,
             gdouble         y)
 {
-  RecolorWheelPrivate *priv =(RecolorWheelPrivate*) wheel->priv;
+  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
   GtkAllocation          allocation;
   gdouble                dx, dy, dist;
   gdouble                center_x;
@@ -610,9 +587,7 @@ is_in_ring (RecolorWheel *wheel,
   center_y = allocation.height / 2.0;
 
   outer = priv->size / 2.0;
-  //inner = outer - priv->ring_width;
-  //-- Inner not needed in Recolor Artwork wheel.
-
+  
   dx = x - center_x;
   dy = center_y - y;
   dist = dx * dx + dy * dy;
@@ -627,8 +602,7 @@ is_in_recolor_node (RecolorWheel *wheel,
                         gdouble         x,
                         gdouble         y)
 {
-  RecolorWheelPrivate   *priv = (RecolorWheelPrivate*)wheel->priv;
-  GtkAllocation               allocation;
+  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);GtkAllocation               allocation;
   gdouble                       dx, dy, dist;
   gdouble                       center_x;
   gdouble                       center_y;
@@ -640,7 +614,7 @@ is_in_recolor_node (RecolorWheel *wheel,
   center_x = allocation.width / 2.0;
   center_y = allocation.height / 2.0;
 
-  outer = priv->size / 2.0;
+  outer = ADJ_WHEEL_RADIUS*priv->size / 2.0;
   
   for (std::map<std::string,RecolorWheelNode>::iterator it = priv->nodes.begin(); it != priv->nodes.end(); ++it)
   {
@@ -652,7 +626,7 @@ is_in_recolor_node (RecolorWheel *wheel,
         
         //g_printf("\ni=%d id=%d x=%6.2f _x=%6.2f y=%6.2f _y=%6.2f",iter,_nodes1[iter]->_id,x,_nodes1[iter]->x,y,_nodes1[iter]->y);
         
-        //_activeNode = &((*it).second);
+        priv->active_node = it ;
         return TRUE;
      }
   }
@@ -678,7 +652,7 @@ compute_s (RecolorWheel *wheel,
   center_x = allocation.width / 2.0;
   center_y = allocation.height / 2.0;
 
-  outer = priv->size / 2.0;
+  outer = ADJ_WHEEL_RADIUS*priv->size / 2.0;
   
   dx = x - center_x;
   dy = center_y - y;
@@ -737,7 +711,7 @@ compute_hs (RecolorWheel *wheel,
   center_x = allocation.width / 2.0;
   center_y = allocation.height / 2.0;
   
-  outer=priv->size / 2.0;
+  outer=ADJ_WHEEL_RADIUS * priv->size / 2.0;
 
   dx = x - center_x;
   dy = center_y - y;
@@ -988,7 +962,7 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
   center_x = width  / 2.0;
   center_y = height / 2.0;
   
-  outer = priv->size / 2.0;
+  outer = ADJ_WHEEL_RADIUS*priv->size / 2.0;
   
   g_printf("\nWe are here: paint_nodes() ! ");
   for (std::map<std::string,RecolorWheelNode>::iterator iter = priv->nodes.begin(); iter != priv->nodes.end(); ++iter)
@@ -997,8 +971,8 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
     
     dist = ( (*iter).second._color[1] )* outer ;
     
-    xx = center_x + cos ((*iter).second._color[0] * 2.0 * G_PI) * dist;
-    yy = center_y - sin ((*iter).second._color[0] * 2.0 * G_PI) * dist;
+    xx = center_x + cos ( ( (*iter).second._color[0] )* 2.0 * G_PI) * dist;
+    yy = center_y - sin ( ( (*iter).second._color[0] )* 2.0 * G_PI) * dist;
     
     (*iter).second.x = (gfloat)xx;
     (*iter).second.y = (gfloat)yy;
@@ -1084,7 +1058,7 @@ paint_ring (RecolorWheel *wheel,
   center_x = width  / 2.0;
   center_y = height / 2.0;
 
-  outer = priv->size / 2.0;
+  outer = ADJ_WHEEL_RADIUS*priv->size / 2.0;
   sat_thres=0.35*outer;
 
   /* Create an image initialized with the ring colors */
@@ -1101,7 +1075,7 @@ paint_ring (RecolorWheel *wheel,
           dx = xx - center_x;
 
           dist = dx * dx + dy * dy;
-          if ( dist > ((outer+1) * (outer+1)) )
+          if ( dist > ((outer/*+1*/) * (outer/*+1*/)) )
             {
               *p++ = 0;
               continue;
@@ -1162,7 +1136,7 @@ paint_ring (RecolorWheel *wheel,
   cairo_new_path (cr);
   cairo_arc (cr,
              center_x, center_y,
-             priv->size / 2.0 - priv->ring_width / 2.0,
+             outer,
              0, 2 * G_PI);
   cairo_fill (cr);
 
@@ -1230,7 +1204,7 @@ paint_nodes (RecolorWheel *wheel,
   center_x = width  / 2.0;
   center_y = height / 2.0;
   
-  outer = priv->size / 2.0;
+  outer = ADJ_WHEEL_RADIUS*priv->size / 2.0;
   
   r = priv->h;
   g = priv->s;
@@ -1495,50 +1469,6 @@ recolor_wheel_get_color (RecolorWheel *wheel,
 }
 
 /**
- * recolor_wheel_set_ring_fraction:
- * @ring: A wheel color selector
- * @fraction: Ring fraction
- *
- * Sets the ring fraction of a wheel color selector.
- *
- * Since: GIMP 2.10
- */
-void
-recolor_wheel_set_ring_fraction (RecolorWheel *hsv,
-                                    gdouble         fraction)
-{
-  RecolorWheelPrivate *priv;
-
-  g_return_if_fail (RECOLOR_IS_COLOR_WHEEL (hsv));
-
-  priv = (RecolorWheelPrivate*) hsv->priv;
-
-  priv->ring_fraction = CLAMP (fraction, 0.01, 0.99);
-
-  gtk_widget_queue_draw (GTK_WIDGET (hsv));
-}
-
-/**
- * recolor_wheel_get_ring_fraction:
- * @ring: A wheel color selector
- *
- * Returns value: The ring fraction of the wheel color selector.
- *
- * Since: GIMP 2.10
- */
-gdouble
-recolor_wheel_get_ring_fraction (RecolorWheel *wheel)
-{
-  RecolorWheelPrivate *priv;
-
-  g_return_val_if_fail (RECOLOR_IS_COLOR_WHEEL (wheel), DEFAULT_FRACTION);
-
-  priv = (RecolorWheelPrivate*) wheel->priv;
-
-  return priv->ring_fraction;
-}
-
-/**
  * recolor_wheel_is_adjusting:
  * @hsv: A #RecolorWheel
  *
@@ -1581,7 +1511,7 @@ recolor_wheel_move (RecolorWheel   *wheel,
   sat = priv->s;
   val = priv->v;
   
-  outer=priv->size / 2.0;
+  outer=ADJ_WHEEL_RADIUS*priv->size / 2.0;
   
 #define HUE_DELTA 0.002
 #define SAT_DELTA 0.001
