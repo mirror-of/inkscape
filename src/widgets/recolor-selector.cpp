@@ -24,8 +24,19 @@ static void sp_recolor_wheel_selector_hide(GtkWidget *widget);
 
 G_END_DECLS
 
+/*enum {
+
+    GRABBED,
+    DRAGGED,
+    RELEASED,
+    CHANGED,
+    LAST_SIGNAL
+};*/
+
 
 static SPColorSelectorClass *parent_class;
+//static guint rsel_signals[LAST_SIGNAL] = {0};
+
 
 #define XPAD 4
 #define YPAD 1
@@ -72,6 +83,36 @@ static void sp_recolor_wheel_selector_class_init(SPRecolorWheelSelectorClass *kl
 
     widget_class->show_all = sp_recolor_wheel_selector_show_all;
     widget_class->hide = sp_recolor_wheel_selector_hide;
+    
+    /*rsel_signals[GRABBED] =  g_signal_new("grabbed",
+                                            G_TYPE_FROM_CLASS(object_class),
+                                            (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
+                                            G_STRUCT_OFFSET(SPRecolorWheelSelectorClass, grabbed),
+                                            NULL, NULL,
+                                            g_cclosure_marshal_VOID__VOID,
+                                            G_TYPE_NONE, 0);
+    rsel_signals[DRAGGED] =  g_signal_new("dragged",
+                                            G_TYPE_FROM_CLASS(object_class),
+                                            (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
+                                            G_STRUCT_OFFSET(SPRecolorWheelSelectorClass, dragged),
+                                            NULL, NULL,
+                                            g_cclosure_marshal_VOID__VOID,
+                                            G_TYPE_NONE, 0);
+    rsel_signals[RELEASED] = g_signal_new("released",
+                                            G_TYPE_FROM_CLASS(object_class),
+                                            (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
+                                            G_STRUCT_OFFSET(SPRecolorWheelSelectorClass, released),
+                                            NULL, NULL,
+                                            g_cclosure_marshal_VOID__VOID,
+                                            G_TYPE_NONE, 0);
+    rsel_signals[CHANGED] =  g_signal_new("changed",
+                                            G_TYPE_FROM_CLASS(object_class),
+                                            (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
+                                            G_STRUCT_OFFSET(SPRecolorWheelSelectorClass, changed),
+                                            NULL, NULL,
+                                            g_cclosure_marshal_VOID__VOID,
+                                            G_TYPE_NONE, 0);*/
+        
 }
 
 RecolorWheelSelector::RecolorWheelSelector( SPColorSelector* csel )

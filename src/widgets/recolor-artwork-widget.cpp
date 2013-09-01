@@ -157,6 +157,9 @@ void RecolorArtworkWidget::selectionModifiedCB( guint flags )
         g_message("selectionModifiedCB(%d) on %p", flags, this);
 #endif
     
+    g_printf ("selectionModifiedCB(%d) on %p", flags, this);
+    //g_signal_emit_by_name(G_OBJECT(rsel), "changed");
+    
     performUpdate();
     
     }
@@ -236,7 +239,7 @@ void RecolorArtworkWidget::performUpdate()
     
     if ( selection ) 
     {
-        g_printf("\nWe are here: performUpdate() -> if ( selection ) { .... } ! ");
+        //g_printf("\nWe are here: performUpdate() -> if ( selection ) { .... } ! ");
   
         items = selection->itemList();
                      
@@ -256,7 +259,7 @@ void RecolorArtworkWidget::performUpdate()
             //g_printf("\nWe are here: performUpdate() -> colors(%f,%f,%f) { .... } ! ", temp._color[0] , temp._color[1] , temp._color[2] );
             
             add_node_to_recolor_wheel (wheel, obj->getId() , temp );
-            g_printf("\n\n%s\n\n ",  obj->getId() );
+            //g_printf("\n\n%s\n\n ",  obj->getId() );
             
         }
             
@@ -449,12 +452,7 @@ void RecolorArtworkWidget::updateFromPaint()
     }
     update = true;
 
-    SPDocument *document = sp_desktop_document(desktop);
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
-    GSList const *items = selection->itemList();
-
-    // switch (psel->mode) {
+     // switch (psel->mode) {
         // case SPPaintSelector::MODE_EMPTY:
             // // This should not happen.
             // g_warning( "file %s: line %d: Paint %d should not emit 'changed'",

@@ -13,30 +13,16 @@
 #include <math.h>
 #include "recolor-wheel-node.h"
 
-/* Default ring fraction */
-#define DEFAULT_FRACTION 0.1
-
 #define ADJ_WHEEL_RADIUS 0.97
 
 /* Default width/height */
 #define DEFAULT_SIZE 100
-
-/* Default ring width */
-#define DEFAULT_RING_WIDTH 10
-
-//--
-/* Maximum Selectable objects for recoloring */
-#define RECOLOR_MAX_OBJECTS 5
 
 /*Outer Radius of Node*/
 #define NODE_RADIUS_OUTER 8
 
 /*Inner Radius of Node*/
 #define NODE_RADIUS_INNER 4
-//--
-
-//RecolorWheelNode* _nodes1[RECOLOR_MAX_OBJECTS];
-RecolorWheelNode* _activeNode = NULL ;
 
 /* Dragging modes */
 typedef enum
@@ -56,7 +42,7 @@ typedef struct
   gdouble v;
 
   std::map<std::string,RecolorWheelNode> nodes;
-  std::map<std::string,RecolorWheelNode>::iterator  active_node;
+  std::string  active_node;
 
   /* Size and ring width */
   gint size;
@@ -67,7 +53,7 @@ typedef struct
   /* Dragging mode */
   DragMode mode;
 
-  guint focus_on_ring : 1;
+  guint focus_on_wheel : 1;
   //-- Should be renamed to focus_on_wheel
    
 } RecolorWheelPrivate;
@@ -136,13 +122,13 @@ void add_node_to_recolor_wheel (RecolorWheel *wheel, std::string name, RecolorWh
   priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
                                       RecolorWheelPrivate);
 
-   if ( !priv)
-   {
+   if ( !priv)   {
         //g_printf("\nWe are here: add_node_to_recolor_wheel ()-> priv is NULL! ");
         return;
    }
   
   priv->nodes.insert( std::pair<std::string,RecolorWheelNode>(name,node) );
+  
   g_printf("\nWe are here: add_node_to_recolor_wheel (): Size: %d ", priv->nodes.size() );
   
   
@@ -157,38 +143,30 @@ void remove_all_nodes_recolor_wheel (RecolorWheel *wheel)
     priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
                                       RecolorWheelPrivate);
     priv->nodes.clear();
+
+    g_printf("\nWe are here: remove_all_nodes_recolor_wheel (): Size: %d ", priv->nodes.size() );
+    
+    priv->active_node.clear();
+  
 }
 
 void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name)
 {
-    RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
+    if ( !wheel || name.empty() ) return;
+
+    RecolorWheelPrivate *priv;
+
+    priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
+                                      RecolorWheelPrivate);
+                                      
     std::map<std::string,RecolorWheelNode>::iterator iter;
     iter = priv->nodes.find(name);
-    priv->nodes.erase( iter );   
+    priv->nodes.erase( iter );
+    
+    if( priv->nodes.empty() )
+    priv->active_node.clear() ;
+        
 }
-
-
-static void
-recolor_wheel_nodes_check1()
-{
-    //g_printf("\n\t\tChecking nodes ");
-    int i;
-    for(i=0; i< RECOLOR_MAX_OBJECTS ; i++)
-    {   
-        //g_printf("\n Id = %d\n r = %6.3f\n g = %6.3f\n b = %6.3f\n x = %f\n y = %f\n", i, _nodes1[i]->_color[0],_nodes1[i]->_color[1],
-        //          _nodes1[i]->_color[2],_nodes1[i]->x,_nodes1[i]->y
-         //         );
-    }
-    //g_printf("\n\t\tOver!-----");    
-}
-
-/*Initialize RecolorWheelNode*/
-void recolor_wheel_node_set_color1 (RecolorWheelNode* node, gfloat h, gfloat s, gfloat v)
-{
-    node->_color[0] = h;
-    node->_color[1] = s;
-    node->_color[2] = v;
-} 
 
 static void
 recolor_wheel_class_init (RecolorWheelClass *klass)
@@ -287,7 +265,8 @@ recolor_wheel_init (RecolorWheel *wheel)
   wheel->priv = static_cast<RecolorWheelPrivate*>(priv);
   priv = static_cast<RecolorWheelPrivate*>(wheel->priv) ;
   
-  new (&(priv->nodes)) std::map<std::string,RecolorWheelNode>();
+  new (&(priv->nodes)) std::map< std::string , RecolorWheelNode>();
+  new (&(priv->active_node)) std::string();
   
   gtk_widget_set_has_window (GTK_WIDGET (wheel), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (wheel), TRUE);
@@ -566,10 +545,10 @@ hsv_to_rgb (gdouble *h,
 }
 
 /* Computes whether a point is inside the hue ring */
-//-- question its very existence ? Because the focus_on_ring gint
+//-- question its very existence ? Because the focus_on_wheel gint
 //-- was just to make sure the hue was being changed.
 static gboolean
-is_in_ring (RecolorWheel *wheel,
+is_in_wheel (RecolorWheel *wheel,
             gdouble         x,
             gdouble         y)
 {
@@ -595,19 +574,39 @@ is_in_ring (RecolorWheel *wheel,
   return ( dist <= outer * outer );
 }
 
+static void
+recolor_node_drag (RecolorWheel *wheel,
+                        gdouble         x,
+                        gdouble         y)
+{
+    RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
+    
+    std::map<std::string,RecolorWheelNode>::iterator iter = priv->nodes.end();
+    
+    if (priv->active_node.empty()) return;
+    iter = priv->nodes.find(priv->active_node);
 
+    (*iter).second.x = x;
+    (*iter).second.y = y;
+    
+    gdouble        h, s, v;
+    recolor_wheel_get_color(wheel, &h, &s, &v);
+
+    (*iter).second._color[0] = h;
+    (*iter).second._color[1] = s;
+    (*iter).second._color[2] = v;
+}
 
 static gboolean
 is_in_recolor_node (RecolorWheel *wheel,
                         gdouble         x,
                         gdouble         y)
 {
-  RecolorWheelPrivate   *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);GtkAllocation               allocation;
-  gdouble                       dx, dy, dist;
+  RecolorWheelPrivate           *priv = static_cast<RecolorWheelPrivate*>(wheel->priv);
+  GtkAllocation                 allocation;
   gdouble                       center_x;
   gdouble                       center_y;
   gdouble                       outer;
-  gint                             iter;
   
   gtk_widget_get_allocation (GTK_WIDGET (wheel), &allocation);
 
@@ -626,7 +625,7 @@ is_in_recolor_node (RecolorWheel *wheel,
         
         //g_printf("\ni=%d id=%d x=%6.2f _x=%6.2f y=%6.2f _y=%6.2f",iter,_nodes1[iter]->_id,x,_nodes1[iter]->x,y,_nodes1[iter]->y);
         
-        priv->active_node = it ;
+        priv->active_node = (*it).first ;
         return TRUE;
      }
   }
@@ -771,22 +770,6 @@ static gboolean recolor_wheel_grab_broken(GtkWidget *widget, GdkEventGrabBroken 
     return TRUE;
 }
 
-static void recolor_drag_node( RecolorWheel *wheel, gdouble x, gdouble y)
-{
-  _activeNode->x = x;
-  _activeNode->y = y;
-  
-  gdouble        h, s, v;
-  
-  recolor_wheel_get_color(wheel, &h, &s, &v);
-  
-  //hsv_to_rgb (&h, &s, &v);
-  
-  _activeNode->_color[0] = h;
-  _activeNode->_color[1] = s;
-  _activeNode->_color[2] = v;  
-}
-
 static gboolean
 recolor_wheel_button_press (GtkWidget      *widget,
                                GdkEventButton *event)
@@ -807,35 +790,20 @@ recolor_wheel_button_press (GtkWidget      *widget,
       priv->mode = DRAG_RECOLOR_NODE;
                 
       set_cross_grab (wheel, event->time);
-
-      
+              
       recolor_wheel_set_color (wheel,
                                   compute_v (wheel, x, y),
                                   compute_s (wheel, x, y),
                                   priv->v);
+        
+      
       
       gtk_widget_grab_focus (widget);
-      priv->focus_on_ring = TRUE;
+      priv->focus_on_wheel = TRUE;
 
       return TRUE;
     }
     
-    
-  /*if (is_in_triangle (wheel, x, y))
-    {
-      gdouble s, v;
-
-      priv->mode = DRAG_SV;
-      set_cross_grab (wheel, event->time);
-
-      compute_sv (wheel, x, y, &s, &v);
-      recolor_wheel_set_color (wheel, priv->h, s, v);
-
-      gtk_widget_grab_focus (widget);
-      priv->focus_on_ring = FALSE;
-
-      return TRUE;
-    }*/
   return FALSE;
 }
 
@@ -871,6 +839,13 @@ recolor_wheel_button_release (GtkWidget      *widget,
       recolor_wheel_set_color (wheel,
                                   compute_v (wheel, x, y), compute_s (wheel, x, y), priv->v);
       //recolor_drag_node(wheel, x, y);
+      if ( priv->active_node.empty() ) 
+          g_printf( "\n recolor_wheel_button_press():  Active Node is NULL");
+      else
+        recolor_node_drag(wheel, x, y);
+    //else        
+      //g_printf( "\n recolor_wheel_button_press():  Active Node: %s" , *((priv->active_node)->first).c_str() );
+    
     }
   else
     g_assert_not_reached ();
@@ -882,8 +857,6 @@ recolor_wheel_button_release (GtkWidget      *widget,
   gdk_display_pointer_ungrab (gdk_window_get_display (event->window),
                               event->time);
 #endif
-  
-  recolor_wheel_nodes_check1();
   
   return TRUE;
 }
@@ -903,8 +876,6 @@ recolor_wheel_motion (GtkWidget      *widget,
   x = event->x;
   y = event->y;
   
-  gint id ;
-  
   if (priv->mode == DRAG_RECOLOR_NODE)
   {
      recolor_wheel_set_color (wheel,
@@ -912,9 +883,8 @@ recolor_wheel_motion (GtkWidget      *widget,
                                       compute_s (wheel, x, y),
                                       priv->v);
         
-    recolor_drag_node(wheel, x, y);
     gtk_widget_grab_focus (widget);
-    priv->focus_on_ring = TRUE;
+    priv->focus_on_wheel = TRUE;
 
     return TRUE;
   }
@@ -936,16 +906,13 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
                               cairo_t        *cr )
 {
   //g_printf("\nPainting nodes");
-  GtkWidget             *widget = GTK_WIDGET (wheel);
   RecolorWheelPrivate *priv = (RecolorWheelPrivate*) wheel->priv;
   gdouble                r, g, b;
   gdouble                center_x;
   gdouble                center_y;
   gdouble                xx, yy, dist, outer;
   gdouble                width, height;
-  gfloat                 hsv[3];
-  gint                   iter;   
-
+  
 #if GTK_CHECK_VERSION(3,0,0)
   GtkWidget             *widget = GTK_WIDGET (wheel);
   GtkStyleContext       *context;
@@ -953,7 +920,6 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
   height = gtk_widget_get_allocated_height (widget);
 #else
   GtkAllocation          allocation;
-  gchar                 *detail;  
   gtk_widget_get_allocation (GTK_WIDGET (wheel), &allocation);
   width  = allocation.width;
   height = allocation.height;
@@ -964,7 +930,7 @@ paint_recolor_nodes_to_wheel (RecolorWheel *wheel,
   
   outer = ADJ_WHEEL_RADIUS*priv->size / 2.0;
   
-  g_printf("\nWe are here: paint_nodes() ! ");
+  g_printf("\nWe are here: paint_nodes() Size of %d:! ", priv->nodes.size() );
   for (std::map<std::string,RecolorWheelNode>::iterator iter = priv->nodes.begin(); iter != priv->nodes.end(); ++iter)
   {
   
@@ -1276,7 +1242,7 @@ recolor_wheel_draw (GtkWidget *widget,
   //paint_nodes (wheel, cr, draw_focus);
   paint_recolor_nodes_to_wheel(wheel, cr);
 
-  if (draw_focus && priv->focus_on_ring)
+  if (draw_focus && priv->focus_on_wheel)
     {
       GtkStyleContext *context = gtk_widget_get_style_context (widget);
 
@@ -1317,7 +1283,7 @@ recolor_wheel_expose (GtkWidget      *widget,
   
   cairo_destroy (cr);
   
-  if (draw_focus && priv->focus_on_ring)
+  if (draw_focus && priv->focus_on_wheel)
     gtk_paint_focus (gtk_widget_get_style (widget),
                      gtk_widget_get_window (widget),
                      gtk_widget_get_state (widget),
@@ -1342,9 +1308,9 @@ recolor_wheel_focus (GtkWidget        *widget,
   if (!gtk_widget_has_focus (widget))
     {
       if (dir == GTK_DIR_TAB_BACKWARD)
-        priv->focus_on_ring = FALSE;
+        priv->focus_on_wheel = FALSE;
       else
-        priv->focus_on_ring = TRUE;
+        priv->focus_on_wheel = TRUE;
 
       gtk_widget_grab_focus (widget);
       return TRUE;
@@ -1353,31 +1319,31 @@ recolor_wheel_focus (GtkWidget        *widget,
   switch (dir)
     {
     case GTK_DIR_UP:
-      if (priv->focus_on_ring)
+      if (priv->focus_on_wheel)
         return FALSE;
       else
-        priv->focus_on_ring = TRUE;
+        priv->focus_on_wheel = TRUE;
       break;
 
     case GTK_DIR_DOWN:
-      if (priv->focus_on_ring)
-        priv->focus_on_ring = FALSE;
+      if (priv->focus_on_wheel)
+        priv->focus_on_wheel = FALSE;
       else
         return FALSE;
       break;
 
     case GTK_DIR_LEFT:
     case GTK_DIR_TAB_BACKWARD:
-      if (priv->focus_on_ring)
+      if (priv->focus_on_wheel)
         return FALSE;
       else
-        priv->focus_on_ring = TRUE;
+        priv->focus_on_wheel = TRUE;
       break;
 
     case GTK_DIR_RIGHT:
     case GTK_DIR_TAB_FORWARD:
-      if (priv->focus_on_ring)
-        priv->focus_on_ring = FALSE;
+      if (priv->focus_on_wheel)
+        priv->focus_on_wheel = FALSE;
       else
         return FALSE;
       break;
@@ -1501,10 +1467,6 @@ recolor_wheel_move (RecolorWheel   *wheel,
 {
   RecolorWheelPrivate *priv =(RecolorWheelPrivate*) wheel->priv;
   gdouble                hue, sat, val;
-  gdouble                angle;
-  gdouble                dist;
-  gdouble                center_x;
-  gdouble                center_y;
   gdouble                outer;
 
   hue = priv->h;
@@ -1519,22 +1481,22 @@ recolor_wheel_move (RecolorWheel   *wheel,
   switch (dir)
     {
     case GTK_DIR_UP:
-      if (priv->focus_on_ring)
+      if (priv->focus_on_wheel)
         hue += HUE_DELTA;
       break;
 
     case GTK_DIR_DOWN:
-      if (priv->focus_on_ring)
+      if (priv->focus_on_wheel)
         hue -= HUE_DELTA;
       break;
 
     case GTK_DIR_LEFT:
-      if (priv->focus_on_ring)
+      if (priv->focus_on_wheel)
         sat -= SAT_DELTA;
       break;
 
     case GTK_DIR_RIGHT:
-      if (priv->focus_on_ring)
+      if (priv->focus_on_wheel)
         sat += SAT_DELTA;
       break;
 

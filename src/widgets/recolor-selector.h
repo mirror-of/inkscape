@@ -73,6 +73,12 @@ struct SPRecolorWheelSelector {
 
 struct SPRecolorWheelSelectorClass {
     SPColorSelectorClass parent_class;
+    
+    void (* grabbed) (SPRecolorWheelSelectorClass *psel);
+    void (* dragged) (SPRecolorWheelSelectorClass *psel);
+    void (* released) (SPRecolorWheelSelectorClass *psel);
+    void (* changed) (SPRecolorWheelSelectorClass *psel);
+
 };
 
 GType sp_recolor_wheel_selector_get_type (void);

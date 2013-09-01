@@ -86,15 +86,8 @@ ColorWheelSelector::ColorWheelSelector( SPColorSelector* csel )
       _sbtn(0),
       _sbtnB(0),
       _label(0),
-      _labelB(0),
-      _nodes(0),
-      activeNode(0),
-      selObj(0)
+      _labelB(0)
 {
-    //_nodes = (RecolorWheelNode** )malloc(sizeof(RecolorWheelNode*) * 1 );
-    /*_nodes = new RecolorWheelNode*[1];
-    activeNode = NULL;
-    selObj = 0; */
 }
 
 ColorWheelSelector::~ColorWheelSelector()
@@ -106,9 +99,6 @@ ColorWheelSelector::~ColorWheelSelector()
     _sbtnB = 0;
     _label = 0;
     _labelB = 0;
-    _nodes = 0;
-    activeNode = 0;
-    selObj = 0;
 }
 
 void sp_color_wheel_selector_init (SPColorWheelSelector *cs)

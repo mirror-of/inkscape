@@ -91,10 +91,6 @@ gboolean    recolor_wheel_is_adjusting      (RecolorWheel *wheel);
 
 //=============================
 //void            recolor_wheel_nodes_init();
-
-void            recolor_wheel_node_set_color (RecolorWheelNode* node, gfloat h, gfloat s, gfloat v);
-
-void set_recolor_nodes_from_objList (RecolorNodeExchangeData* temp[ ] ,int selObj) ;
 //=============================
 
 void add_node_to_recolor_wheel (RecolorWheel *wheel, std::string name, RecolorWheelNode node);
