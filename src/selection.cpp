@@ -94,6 +94,7 @@ void Selection::_emitModified(guint flags) {
 }
 
 void Selection::_emitChanged(bool persist_selection_context/* = false */) {
+    printf("Selection Changed\n");
     if (persist_selection_context) {
         if (NULL == _selection_context) {
             _selection_context = desktop()->currentLayer();
@@ -180,6 +181,7 @@ void Selection::_add(SPObject *obj) {
     _removeObjectAncestors(obj);
 
     _objs = g_slist_prepend(_objs, obj);
+    _notifySelected(obj, true);
 
     add_3D_boxes_recursively(obj);
 
@@ -234,6 +236,7 @@ void Selection::_remove(SPObject *obj) {
     remove_3D_boxes_recursively(obj);
 
     _objs = g_slist_remove(_objs, obj);
+    _notifySelected(obj, false);
 }
 
 void Selection::setList(GSList const *list) {
@@ -481,6 +484,13 @@ void Selection::_removeObjectAncestors(SPObject *obj) {
             }
             parent = parent->parent;
         }
+}
+
+void Selection::_notifySelected(SPObject *o, bool selected){
+    o->selected(this, selected);
+    for(SPObject *it = o->firstChild(); it; it=it->getNext()){
+        _notifySelected(it, selected);
+    }
 }
 
 SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {

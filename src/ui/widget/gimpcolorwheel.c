@@ -165,13 +165,12 @@ void recolor_wheel_nodes_init()
     {   
         _nodes[i] = (RecolorWheelNode*)malloc(sizeof(RecolorWheelNode));
         //g_snprintf(_nodes[i]->_id,10,"obj %d",i); //wasn't working at all.
-        _nodes[i]->_id = i;
         _nodes[i]->_color[0]=0.0;
         _nodes[i]->_color[1]=0.0;
         _nodes[i]->_color[2]=0.0;
         _nodes[i]->x=0;
         _nodes[i]->y=0;
-        _nodes[i]->main=0;
+        _nodes[i]->unpublished=0;
     }
 }
 
@@ -188,19 +187,6 @@ recolor_wheel_nodes_check()
     }
     g_printf("\n\t\tOver!-----");
     
-    
-}
-
-void set_recolor_nodes_from_objList (RecolorNodeExchangeData* temp[ ], int selObj )
-{
-    
-    int i;
-     for(i=0; i< selObj ; i++)
-    {   
-        recolor_wheel_node_set_color( _nodes[i] , temp[i]->h ,  temp[i]->s , temp[i]->v);  
-    }
-    for ( i=selObj+1; i <  RECOLOR_MAX_OBJECTS ; i++ )
-        recolor_wheel_node_set_color( _nodes[i] , 0.0, 0.0, 0.0);  
     
 }
 
@@ -339,6 +325,7 @@ gimp_color_wheel_map (GtkWidget *widget)
 static void
 gimp_color_wheel_unmap (GtkWidget *widget)
 {
+  g_printf( "\n We are here: gimp_color_wheel_unmap() ");
   GimpColorWheel        *wheel = GIMP_COLOR_WHEEL (widget);
   GimpColorWheelPrivate *priv  = wheel->priv;
 
@@ -851,22 +838,6 @@ gimp_color_wheel_button_press (GtkWidget      *widget,
       return TRUE;
     }
     
-    
-  /*if (is_in_triangle (wheel, x, y))
-    {
-      gdouble s, v;
-
-      priv->mode = DRAG_SV;
-      set_cross_grab (wheel, event->time);
-
-      compute_sv (wheel, x, y, &s, &v);
-      gimp_color_wheel_set_color (wheel, priv->h, s, v);
-
-      gtk_widget_grab_focus (widget);
-      priv->focus_on_ring = FALSE;
-
-      return TRUE;
-    }*/
   return FALSE;
 }
 

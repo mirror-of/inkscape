@@ -202,57 +202,57 @@ void FillNStroke::selectionModifiedCB( guint flags )
 
 void FillNStroke::funcRecolor(/* int selObj */)
 {
-	Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    RecolorNodeExchangeData** temp = NULL;
-    int selObj =0;
-    GSList  const *items = NULL;
-    if(selection) {
-    items = selection->itemList();
-    selObj = g_slist_length (const_cast<GSList*>(items));    
-    } else {
-    selObj = 0;
-    }
+	// Inkscape::Selection *selection = sp_desktop_selection(desktop);
+ //    RecolorNodeExchangeData** temp = NULL;
+ //    int selObj =0;
+ //    GSList  const *items = NULL;
+ //    if(selection) {
+ //    items = selection->itemList();
+ //    selObj = g_slist_length (const_cast<GSList*>(items));    
+ //    } else {
+ //    selObj = 0;
+ //    }
     
-    if (selObj != 0 ) {
-    temp = (RecolorNodeExchangeData**)malloc(sizeof(RecolorNodeExchangeData*)*selObj);
-    } else {
-    temp = NULL;
-    }
+ //    if (selObj != 0 ) {
+ //    temp = (RecolorNodeExchangeData**)malloc(sizeof(RecolorNodeExchangeData*)*selObj);
+ //    } else {
+ //    temp = NULL;
+ //    }
     
-    if (temp)
-    {
-        int k=0;
-        //g_printf("\n\n\t\t Prinitng the id's of Selected objects ");
-        for (GSList const *i = items; i != NULL; i = i->next) 
-        {
-            SPObject *obj=reinterpret_cast<SPObject *>(i->data);
-            Inkscape::XML::Node* obj_repr = obj->getRepr();
-            SPCSSAttr* obj_css = sp_repr_css_attr( obj_repr , "style" );
-            //g_printf ( "Color of %s is: %s\n", obj->getId() , sp_repr_css_property( obj_css, "fill", "#ababab") );
-            guint32 rgb32 = sp_svg_read_color( sp_repr_css_property( obj_css, "fill", "#ababab") , 0xF0F8FF );
-            SPColor color = SPColor (rgb32);
+ //    if (temp)
+ //    {
+ //        int k=0;
+ //        //g_printf("\n\n\t\t Prinitng the id's of Selected objects ");
+ //        for (GSList const *i = items; i != NULL; i = i->next) 
+ //        {
+ //            SPObject *obj=reinterpret_cast<SPObject *>(i->data);
+ //            Inkscape::XML::Node* obj_repr = obj->getRepr();
+ //            SPCSSAttr* obj_css = sp_repr_css_attr( obj_repr , "style" );
+ //            //g_printf ( "Color of %s is: %s\n", obj->getId() , sp_repr_css_property( obj_css, "fill", "#ababab") );
+ //            guint32 rgb32 = sp_svg_read_color( sp_repr_css_property( obj_css, "fill", "#ababab") , 0xF0F8FF );
+ //            SPColor color = SPColor (rgb32);
             
-            float rgb[3] , hsv[3];
-            sp_color_get_rgb_floatv (&color, rgb);
-            sp_color_rgb_to_hsv_floatv (hsv , rgb[0] , rgb[1] , rgb[2] );
+ //            float rgb[3] , hsv[3];
+ //            sp_color_get_rgb_floatv (&color, rgb);
+ //            sp_color_rgb_to_hsv_floatv (hsv , rgb[0] , rgb[1] , rgb[2] );
             
-            g_stpcpy (temp[k]->id ,obj->getId() );       
-            temp[k]->h = hsv[0];
-            temp[k]->s = hsv[1];
-            temp[k]->v = hsv[2];
+ //            g_stpcpy (temp[k]->id ,obj->getId() );       
+ //            temp[k]->h = hsv[0];
+ //            temp[k]->s = hsv[1];
+ //            temp[k]->v = hsv[2];
             
-            //-- function that writes the new change. 
-            //sp_repr_css_set_property ( obj_css , "fill", "#00ff00");
-            /* Glib::ustring str;
-            sp_repr_css_write_string (obj_css, str);
-            obj_repr->setAttribute ("style", str.c_str(), TRUE);
-             */
+ //            //-- function that writes the new change. 
+ //            //sp_repr_css_set_property ( obj_css , "fill", "#00ff00");
+ //            /* Glib::ustring str;
+ //            sp_repr_css_write_string (obj_css, str);
+ //            obj_repr->setAttribute ("style", str.c_str(), TRUE);
+ //             */
              
-             k++;
-        }
+ //             k++;
+ //        }
         
-        //set_recolor_nodes_from_objList (temp, selObj) ;
-    }
+ //        //set_recolor_nodes_from_objList (temp, selObj) ;
+ //    }
 }
 
 void FillNStroke::setDesktop(SPDesktop *desktop)

@@ -24,18 +24,18 @@ static void sp_recolor_wheel_selector_hide(GtkWidget *widget);
 
 G_END_DECLS
 
-/*enum {
+enum {
 
     GRABBED,
     DRAGGED,
     RELEASED,
     CHANGED,
     LAST_SIGNAL
-};*/
+};
 
 
 static SPColorSelectorClass *parent_class;
-//static guint rsel_signals[LAST_SIGNAL] = {0};
+static guint rsel_signals[LAST_SIGNAL] = {0};
 
 
 #define XPAD 4
@@ -84,7 +84,7 @@ static void sp_recolor_wheel_selector_class_init(SPRecolorWheelSelectorClass *kl
     widget_class->show_all = sp_recolor_wheel_selector_show_all;
     widget_class->hide = sp_recolor_wheel_selector_hide;
     
-    /*rsel_signals[GRABBED] =  g_signal_new("grabbed",
+    rsel_signals[GRABBED] =  g_signal_new("grabbed",
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPRecolorWheelSelectorClass, grabbed),
@@ -111,7 +111,7 @@ static void sp_recolor_wheel_selector_class_init(SPRecolorWheelSelectorClass *kl
                                             G_STRUCT_OFFSET(SPRecolorWheelSelectorClass, changed),
                                             NULL, NULL,
                                             g_cclosure_marshal_VOID__VOID,
-                                            G_TYPE_NONE, 0);*/
+                                            G_TYPE_NONE, 0);
         
 }
 
@@ -438,8 +438,11 @@ void RecolorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPReco
     preserve_icc(&wheelSelector->_color, cs);
     wheelSelector->_updateBrightness( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adjB ), wheelSelector->_dragging );
     wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+    wheelSelector->_colorChanged();
+
+    //g_signal_emit_by_name(GTK_WIDGET(wheelSelector->_wheel),"changed");
+    //was added in the wake of updating the color inside the nodes. Doesn't seem to work.
     
-    //g_printf("\n---Adjustment Changed---\n");
     wheelSelector->_updating = FALSE;
 }
 
@@ -469,7 +472,9 @@ void RecolorWheelSelector::_sliderReleased( SPColorSlider *slider, SPRecolorWhee
         preserve_icc(&wheelSelector->_color, cs);
         wheelSelector->_updateBrightness( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adjB ), wheelSelector->_dragging );
         wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
-        
+        //g_signal_emit_by_name(GTK_WIDGET(wheelSelector->_wheel),"changed");
+        //was added in the wake of updating the color inside the nodes. Doesn't seem to work.
+    
     }
 }
 
@@ -481,7 +486,7 @@ void RecolorWheelSelector::_sliderChanged( SPColorSlider *slider, SPRecolorWheel
     preserve_icc(&wheelSelector->_color, cs);
     wheelSelector->_updateBrightness( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adjB ), wheelSelector->_dragging );
     wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
-    
+    wheelSelector->_colorChanged();
 }
 
 void RecolorWheelSelector::_wheelChanged( RecolorWheel *wheel, SPRecolorWheelSelector *cs )

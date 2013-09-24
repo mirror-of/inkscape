@@ -138,6 +138,7 @@ RecolorArtworkWidget::~RecolorArtworkWidget()
         g_source_remove(dragId);
         dragId = 0;
     }
+    
     rsel = 0;
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
@@ -157,11 +158,9 @@ void RecolorArtworkWidget::selectionModifiedCB( guint flags )
         g_message("selectionModifiedCB(%d) on %p", flags, this);
 #endif
     
-    g_printf ("selectionModifiedCB(%d) on %p", flags, this);
-    //g_signal_emit_by_name(G_OBJECT(rsel), "changed");
+    //g_printf ("selectionModifiedCB(%d)", flags);
     
-    performUpdate();
-    
+        performUpdate();
     }
 }
 
@@ -211,16 +210,17 @@ void RecolorArtworkWidget::performUpdate()
         return;
     }
 
-    if ( dragId ) {
+    /*if ( dragId ) {
         // local change; do nothing, but reset the flag
         g_source_remove(dragId);
         dragId = 0;
         return;
-    }
+    }*/
 
     update = true;
-    
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
+    Inkscape::Selection *selection = NULL ;
+    selection = sp_desktop_selection(desktop);
     GSList  const *items = NULL;
     
     RecolorWheel* wheel = RECOLOR_WHEEL ( (  reinterpret_cast<RecolorWheelSelector*> (rsel) )->getWheel(SP_RECOLOR_WHEEL_SELECTOR(rsel) ) ) ;
@@ -266,6 +266,7 @@ void RecolorArtworkWidget::performUpdate()
     }
     else   
     {
+        g_printf("\n\n\nWe are here: performUpdate() -> if ( selection ) else() { .... } ! \n\n\n");
         remove_all_nodes_recolor_wheel( wheel );
     }
 
@@ -443,6 +444,8 @@ void RecolorArtworkWidget::paintChangedCB( RecolorWheelSelector * /*psel*/, Reco
     if (self && !self->update) {
         self->updateFromPaint();
      }
+     //g_printf ("paintChangedCB");
+    
 }
 
 void RecolorArtworkWidget::updateFromPaint()

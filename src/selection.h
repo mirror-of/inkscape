@@ -330,6 +330,8 @@ private:
     SPObject *_objectForXMLNode(XML::Node *repr) const;
     /** Releases an active layer object that is being removed. */
     void _releaseContext(SPObject *obj);
+    /** Notify all descendants of an object about their selection status **/
+    void _notifySelected(SPObject *o, bool selected);
 
     mutable GSList *_objs;
     mutable GSList *_reprs;

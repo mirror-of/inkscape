@@ -43,6 +43,7 @@ protected:
     //======================
     gboolean _updating : 1;
     gboolean _dragging : 1;
+    gint _count ;
     GtkAdjustment* _adj; // Channel adjustment
     GtkAdjustment* _adjB; // Brightness adjustment
     GtkWidget* _wheel;
@@ -74,10 +75,10 @@ struct SPRecolorWheelSelector {
 struct SPRecolorWheelSelectorClass {
     SPColorSelectorClass parent_class;
     
-    void (* grabbed) (SPRecolorWheelSelectorClass *psel);
-    void (* dragged) (SPRecolorWheelSelectorClass *psel);
-    void (* released) (SPRecolorWheelSelectorClass *psel);
-    void (* changed) (SPRecolorWheelSelectorClass *psel);
+    void (* grabbed) (SPRecolorWheelSelectorClass *rsel);
+    void (* dragged) (SPRecolorWheelSelectorClass *rsel);
+    void (* released) (SPRecolorWheelSelectorClass *rsel);
+    void (* changed) (SPRecolorWheelSelectorClass *rsel);
 
 };
 

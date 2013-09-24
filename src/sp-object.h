@@ -62,6 +62,7 @@ class SPCSSAttr;
 struct SPStyle;
 
 namespace Inkscape {
+class Selection;
 namespace XML {
 class Node;
 struct Document;
@@ -624,6 +625,24 @@ public:
         return _modified_signal.connect(slot);
     }
 
+    /**
+     * Connects to the modification notification signal
+     *
+     * @param slot the slot to connect
+     *
+     * @return the connection formed thereby
+     */
+    sigc::connection connectSelected(sigc::slot<void, SPObject *, Inkscape::Selection *, bool> slot) {
+        return _selected_signal.connect(slot);
+    }
+
+    /**
+     * Emit a "selected" signal
+     */
+    void selected(Inkscape::Selection *selection, bool selected){
+        _selected_signal.emit(this, selection, selected);
+    }
+
     /** Sends the delete signal to all children of this object recursively */
     void _sendDeleteSignalRecursive();
 
@@ -644,6 +663,7 @@ public:
     sigc::signal<void, SPObject *> _release_signal;
     sigc::signal<void, SPObject *> _delete_signal;
     sigc::signal<void, SPObject *> _position_changed_signal;
+    sigc::signal<void, SPObject *, Inkscape::Selection *, bool> _selected_signal;
     sigc::signal<void, SPObject *, unsigned int> _modified_signal;
     SPObject *_successor;
     CollectionPolicy _collection_policy;

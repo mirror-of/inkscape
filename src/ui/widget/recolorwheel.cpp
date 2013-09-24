@@ -46,6 +46,7 @@ typedef struct
 
   /* Size and ring width */
   gint size;
+  guint _count;
   
   /* Window for capturing events */
   GdkWindow *window;
@@ -128,10 +129,8 @@ void add_node_to_recolor_wheel (RecolorWheel *wheel, std::string name, RecolorWh
    }
   
   priv->nodes.insert( std::pair<std::string,RecolorWheelNode>(name,node) );
-  
-  g_printf("\nWe are here: add_node_to_recolor_wheel (): Size: %d ", priv->nodes.size() );
-  
-  
+  priv->_count++;
+  //g_printf("\nWe are here: add_node_to_recolor_wheel (): Size: %d ", priv->nodes.size() );
 }
 
 void remove_all_nodes_recolor_wheel (RecolorWheel *wheel)
@@ -147,7 +146,7 @@ void remove_all_nodes_recolor_wheel (RecolorWheel *wheel)
     g_printf("\nWe are here: remove_all_nodes_recolor_wheel (): Size: %d ", priv->nodes.size() );
     
     priv->active_node.clear();
-  
+    priv->_count = 0;
 }
 
 void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name)
@@ -161,11 +160,14 @@ void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name)
                                       
     std::map<std::string,RecolorWheelNode>::iterator iter;
     iter = priv->nodes.find(name);
+    
+    if(iter!=priv->nodes.end())
     priv->nodes.erase( iter );
     
     if( priv->nodes.empty() )
     priv->active_node.clear() ;
-        
+
+    priv->_count--;        
 }
 
 static void
@@ -272,7 +274,9 @@ recolor_wheel_init (RecolorWheel *wheel)
   gtk_widget_set_can_focus (GTK_WIDGET (wheel), TRUE);
 
   priv->size          = DEFAULT_SIZE;
-  
+  priv->v = 1.0;
+  priv->_count = 0;
+    
   g_printf("\nWe are here: recolor_wheel_init (RecolorWheel *wheel) Ending....! ");
   
 }
@@ -586,15 +590,21 @@ recolor_node_drag (RecolorWheel *wheel,
     if (priv->active_node.empty()) return;
     iter = priv->nodes.find(priv->active_node);
 
-    (*iter).second.x = x;
-    (*iter).second.y = y;
-    
-    gdouble        h, s, v;
-    recolor_wheel_get_color(wheel, &h, &s, &v);
+    if (iter!=priv->nodes.end())
+    {  
+      (*iter).second.x = x;
+      (*iter).second.y = y;
+      (*iter).second.unpublished = 1;
+      
+      gdouble        h, s, v;
+      
+      recolor_wheel_get_color(wheel, &h, &s, &v);
 
-    (*iter).second._color[0] = h;
-    (*iter).second._color[1] = s;
-    (*iter).second._color[2] = v;
+      (*iter).second._color[0] = (gfloat)h;
+      (*iter).second._color[1] = (gfloat)s;
+      (*iter).second._color[2] = (gfloat)v;
+      g_printf("We are in: recolor_node_drag():%f %f %f ", (*iter).second._color[0],(*iter).second._color[1],(*iter).second._color[2]);
+    }
 }
 
 static gboolean
@@ -662,7 +672,7 @@ compute_s (RecolorWheel *wheel,
 
 /* Computes a value based on the mouse coordinates */
 static double
-compute_v (RecolorWheel *wheel,
+compute_h (RecolorWheel *wheel,
            gdouble         x,
            gdouble         y)
 {
@@ -686,8 +696,6 @@ compute_v (RecolorWheel *wheel,
 
   return angle / (2.0 * G_PI);
 }
-//--TODO: Remove this function to add a bar that controls the brightness.
-//-- the new compute_hs function is what should be replaced
 
 static void
 compute_hs (RecolorWheel *wheel,
@@ -792,11 +800,9 @@ recolor_wheel_button_press (GtkWidget      *widget,
       set_cross_grab (wheel, event->time);
               
       recolor_wheel_set_color (wheel,
-                                  compute_v (wheel, x, y),
+                                  compute_h (wheel, x, y),
                                   compute_s (wheel, x, y),
-                                  priv->v);
-        
-      
+                                  priv->v); 
       
       gtk_widget_grab_focus (widget);
       priv->focus_on_wheel = TRUE;
@@ -828,21 +834,12 @@ recolor_wheel_button_release (GtkWidget      *widget,
   x = event->x;
   y = event->y;
 
-  /*if (mode == DRAG_HS)
-    {
-      recolor_wheel_set_color (wheel,
-                                  compute_v (wheel, x, y), compute_s (wheel, x, y), priv->v);   
-    }
-  */
   if (mode == DRAG_RECOLOR_NODE)
     {
       recolor_wheel_set_color (wheel,
-                                  compute_v (wheel, x, y), compute_s (wheel, x, y), priv->v);
+                                  compute_h (wheel, x, y), compute_s (wheel, x, y), priv->v);
       //recolor_drag_node(wheel, x, y);
-      if ( priv->active_node.empty() ) 
-          g_printf( "\n recolor_wheel_button_press():  Active Node is NULL");
-      else
-        recolor_node_drag(wheel, x, y);
+      
     //else        
       //g_printf( "\n recolor_wheel_button_press():  Active Node: %s" , *((priv->active_node)->first).c_str() );
     
@@ -858,6 +855,8 @@ recolor_wheel_button_release (GtkWidget      *widget,
                               event->time);
 #endif
   
+  g_printf("\nWe are in: recolor_wheel_button_release(): %f %f %f",priv->h,priv->s,priv->v);
+
   return TRUE;
 }
 
@@ -879,10 +878,13 @@ recolor_wheel_motion (GtkWidget      *widget,
   if (priv->mode == DRAG_RECOLOR_NODE)
   {
      recolor_wheel_set_color (wheel,
-                                      compute_v (wheel, x, y),
+                                      compute_h (wheel, x, y),
                                       compute_s (wheel, x, y),
                                       priv->v);
-        
+    if ( priv->active_node.empty() ) 
+          g_printf( "\n recolor_wheel_button_press():  Active Node is NULL");
+      else
+        recolor_node_drag(wheel, x, y);    
     gtk_widget_grab_focus (widget);
     priv->focus_on_wheel = TRUE;
 
@@ -892,7 +894,7 @@ recolor_wheel_motion (GtkWidget      *widget,
   /*else if (priv->mode == DRAG_HS)
     {
       recolor_wheel_set_color (wheel,
-                                  compute_v (wheel, x, y), compute_s (wheel, x, y), priv->v);
+                                  compute_h (wheel, x, y), compute_s (wheel, x, y), priv->v);
       return TRUE;
     }*/
   

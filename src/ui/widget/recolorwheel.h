@@ -99,6 +99,10 @@ void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name);
 
 void remove_all_nodes_recolor_wheel (RecolorWheel *wheel);
 
+guint get_sel_obj (RecolorWheel *wheel);
+guint get_priv_count (RecolorWheel *wheel);
+
+
 
 
 G_END_DECLS

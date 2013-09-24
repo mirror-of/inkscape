@@ -111,9 +111,6 @@ void            recolor_wheel_nodes_init();
 
 void            recolor_wheel_node_set_color (RecolorWheelNode* node, gfloat h, gfloat s, gfloat v);
 
-void set_recolor_nodes_from_objList (RecolorNodeExchangeData* temp[ ] ,int selObj) ;
-
-
 G_END_DECLS
 
 #endif /* __GIMP_COLOR_WHEEL_H__ */
