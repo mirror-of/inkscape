@@ -94,7 +94,6 @@ void Selection::_emitModified(guint flags) {
 }
 
 void Selection::_emitChanged(bool persist_selection_context/* = false */) {
-    printf("Selection Changed\n");
     if (persist_selection_context) {
         if (NULL == _selection_context) {
             _selection_context = desktop()->currentLayer();

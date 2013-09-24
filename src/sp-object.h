@@ -1,3 +1,8 @@
+// --
+#include <glib/gprintf.h>
+// --
+
+
 #ifndef SP_OBJECT_H_SEEN
 #define SP_OBJECT_H_SEEN
 
@@ -641,6 +646,10 @@ public:
      */
     void selected(Inkscape::Selection *selection, bool selected){
         _selected_signal.emit(this, selection, selected);
+        if( selected)
+            g_printf("\n\n\nObject added to selection\n\n\n");
+        else
+            g_printf("\n\n\nObject removed from selection\n\n\n");
     }
 
     /** Sends the delete signal to all children of this object recursively */
