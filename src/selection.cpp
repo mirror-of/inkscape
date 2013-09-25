@@ -180,6 +180,7 @@ void Selection::_add(SPObject *obj) {
     _removeObjectAncestors(obj);
 
     _objs = g_slist_prepend(_objs, obj);
+    obj->_added_to_selection_signal.emit(obj, this);
     _notifySelected(obj, true);
 
     add_3D_boxes_recursively(obj);
@@ -235,6 +236,7 @@ void Selection::_remove(SPObject *obj) {
     remove_3D_boxes_recursively(obj);
 
     _objs = g_slist_remove(_objs, obj);
+    obj->_removed_from_selection_signal.emit(obj, this);
     _notifySelected(obj, false);
 }
 

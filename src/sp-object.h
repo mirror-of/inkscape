@@ -673,6 +673,8 @@ public:
     sigc::signal<void, SPObject *> _delete_signal;
     sigc::signal<void, SPObject *> _position_changed_signal;
     sigc::signal<void, SPObject *, Inkscape::Selection *, bool> _selected_signal;
+    sigc::signal<void, SPObject *, Inkscape::Selection *> _added_to_selection_signal;
+    sigc::signal<void, SPObject *, Inkscape::Selection *> _removed_from_selection_signal;
     sigc::signal<void, SPObject *, unsigned int> _modified_signal;
     SPObject *_successor;
     CollectionPolicy _collection_policy;

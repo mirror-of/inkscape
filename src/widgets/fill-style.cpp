@@ -108,6 +108,7 @@ private:
     guint dragId;
     bool update;
     sigc::connection selectChangedConn;
+    sigc::connection selectedConn;
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
     sigc::connection eventContextConn;
