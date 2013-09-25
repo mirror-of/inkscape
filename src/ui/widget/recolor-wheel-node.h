@@ -7,6 +7,7 @@ struct _RecolorWheelNode
     gdouble      y;
     gfloat     _color[3];
     gboolean   unpublished;
+    //sigc::signal<void,std::string,gfloat[3],_RecolorWheelNode> _node_updated_signal;
     //gboolean   dragging;
 };
 

@@ -13,6 +13,11 @@
 #include <math.h>
 #include "recolor-wheel-node.h"
 
+#include <sigc++/connection.h>
+#include <sigc++/functors/slot.h>
+#include <sigc++/signal.h>
+#include <color.h>
+
 #define ADJ_WHEEL_RADIUS 0.97
 
 /* Default width/height */
@@ -55,8 +60,9 @@ typedef struct
   DragMode mode;
 
   guint focus_on_wheel : 1;
-  //-- Should be renamed to focus_on_wheel
-   
+  
+  sigc::signal<void, std::string, gfloat*> _node_released_signal;
+  
 } RecolorWheelPrivate;
 
 enum
@@ -65,6 +71,8 @@ enum
   MOVE,
   LAST_SIGNAL
 };
+
+//sigc::signal<void, std::string, SPColor> _node_released_signal;
 
 static void     recolor_wheel_map            (GtkWidget          *widget);
 static void     recolor_wheel_unmap          (GtkWidget          *widget);
@@ -108,6 +116,15 @@ G_DEFINE_TYPE (RecolorWheel, recolor_wheel, GTK_TYPE_WIDGET)
 
 #define parent_class recolor_wheel_parent_class
 
+/*void connectNodeReleased( RecolorWheel *wheel, sigc::slot<void, std::string, SPColor kolor> slot , sigc::connection Conn)
+{
+  
+  RecolorWheelPrivate *priv;
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
+                                      RecolorWheelPrivate);
+  Conn = (priv->_node_released_signal).connect(slot);
+}
+*/
 void add_node_to_recolor_wheel (RecolorWheel *wheel, std::string name, RecolorWheelNode node)
 {
    //g_printf("\nWe are here: add_node_to_recolor_wheel (RecolorWheel *wheel) ! ");
@@ -168,6 +185,16 @@ void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name)
     priv->active_node.clear() ;
 
     priv->_count--;        
+}
+
+sigc::connection connectNodeReleased(sigc::slot<void, std::string, gfloat*> slot, RecolorWheel *wheel)
+{
+
+  RecolorWheelPrivate *priv;
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (wheel, RECOLOR_TYPE_COLOR_WHEEL,
+                                      RecolorWheelPrivate);
+  return (priv->_node_released_signal).connect(slot);
+
 }
 
 static void
@@ -603,6 +630,15 @@ recolor_node_drag (RecolorWheel *wheel,
       (*iter).second._color[0] = (gfloat)h;
       (*iter).second._color[1] = (gfloat)s;
       (*iter).second._color[2] = (gfloat)v;
+      
+      float _rgb[3];
+      hsv_to_rgb(&h,&s,&v);
+      _rgb[0] = h;
+      _rgb[1] = s;
+      _rgb[2] = v;
+      
+      priv->_node_released_signal.emit( iter->first, _rgb );
+
       g_printf("We are in: recolor_node_drag():%f %f %f ", (*iter).second._color[0],(*iter).second._color[1],(*iter).second._color[2]);
     }
 }
@@ -1369,7 +1405,7 @@ GtkWidget*
 recolor_wheel_new (void)
 {
   return (GtkWidget*) (g_object_new (RECOLOR_TYPE_COLOR_WHEEL, NULL));
-}
+} 
 
 /**
  * recolor_wheel_set_color:

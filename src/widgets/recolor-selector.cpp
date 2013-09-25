@@ -25,7 +25,6 @@ static void sp_recolor_wheel_selector_hide(GtkWidget *widget);
 G_END_DECLS
 
 enum {
-
     GRABBED,
     DRAGGED,
     RELEASED,
@@ -474,7 +473,6 @@ void RecolorWheelSelector::_sliderReleased( SPColorSlider *slider, SPRecolorWhee
         wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
         //g_signal_emit_by_name(GTK_WIDGET(wheelSelector->_wheel),"changed");
         //was added in the wake of updating the color inside the nodes. Doesn't seem to work.
-    
     }
 }
 

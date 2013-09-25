@@ -8,6 +8,10 @@
 #include "sp-color-slider.h"
 #include "sp-color-selector.h"
 #include "recolor-wheel-node.h"
+#include <sigc++/connection.h>
+#include <sigc++/functors/slot.h>
+#include <sigc++/signal.h>
+
 
 
 
@@ -22,6 +26,8 @@ public:
     virtual ~RecolorWheelSelector();
     
     GtkWidget* getWheel (SPRecolorWheelSelector *cs);
+
+    sigc::signal<void, std::string, SPColor> _node_released_signal;
 
     virtual void init();
 

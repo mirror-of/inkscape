@@ -29,7 +29,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-
+#include <sigc++/sigc++.h>
 
 #ifndef __RECOLOR_WHEEL_H__
 #define __RECOLOR_WHEEL_H__
@@ -44,6 +44,10 @@ G_BEGIN_DECLS
 #define RECOLOR_WHEEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), RECOLOR_TYPE_COLOR_WHEEL, RecolorWheelClass))
 
 #include "recolor-wheel-node.h"
+#include <sigc++/connection.h>
+#include <sigc++/functors/slot.h>
+#include <sigc++/signal.h>
+#include <color.h>
 
 
 typedef struct _RecolorWheel      RecolorWheel;
@@ -100,10 +104,10 @@ void remove_node_to_recolor_wheel (RecolorWheel *wheel, std::string name);
 void remove_all_nodes_recolor_wheel (RecolorWheel *wheel);
 
 guint get_sel_obj (RecolorWheel *wheel);
+
 guint get_priv_count (RecolorWheel *wheel);
 
-
-
+sigc::connection connectNodeReleased(sigc::slot<void, std::string, gfloat*> slot, RecolorWheel *wheel);
 
 G_END_DECLS
 
