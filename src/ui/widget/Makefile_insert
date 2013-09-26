@@ -49,7 +49,10 @@ ink_common_sources +=	\
 	ui/widget/preferences-widget.h   \
 	ui/widget/random.cpp \
 	ui/widget/random.h   \
-	ui/widget/registered-widget.cpp \
+	ui/widget/recolorwheel.cpp	\
+	ui/widget/recolorwheel.h	\
+	ui/widget/recolor-wheel-node.h	\
+ 	ui/widget/registered-widget.cpp \
 	ui/widget/registered-widget.h   \
 	ui/widget/registered-enums.h   \
 	ui/widget/registry.cpp          \

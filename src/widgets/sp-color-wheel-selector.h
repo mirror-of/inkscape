@@ -7,8 +7,8 @@
 #include "../color.h"
 #include "sp-color-slider.h"
 #include "sp-color-selector.h"
-#include "recolor-wheel-node.h"
-
+#include "ui/widget/recolor-wheel-node.h"
+ 
 
 
 typedef struct _GimpColorWheel GimpColorWheel;

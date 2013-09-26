@@ -27,9 +27,8 @@
 
 #include <gtkmm/table.h>
 
-#include "recolor-artwork.h"
-#include "recolor-artwork-widget.h"
-
+#include "ui/dialog/recolor-artwork.h"
+#include "widgets/recolor-artwork-widget.h"
 
 namespace Inkscape {
 namespace UI {

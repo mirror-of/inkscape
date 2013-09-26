@@ -52,6 +52,10 @@ ink_common_sources +=	\
 	widgets/paintbucket-toolbar.h	\
 	widgets/pencil-toolbar.cpp	\
 	widgets/pencil-toolbar.h	   \
+	widgets/recolor-artwork-widget.cpp	\
+	widgets/recolor-artwork-widget.h	\
+	widgets/recolor-selector.cpp	\
+	widgets/recolor-selector.h	\
 	widgets/rect-toolbar.cpp	\
 	widgets/rect-toolbar.h	   \
 	widgets/ruler.cpp		\

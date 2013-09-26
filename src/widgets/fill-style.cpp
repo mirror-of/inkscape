@@ -53,9 +53,9 @@
 #include "fill-style.h"
 #include "fill-n-stroke-factory.h"
 
-#include "recolor-wheel-node.h"
-#include "svg-color.h"
-#include "gimpcolorwheel.h"
+#include "ui/widget/recolor-wheel-node.h"
+#include "svg/svg-color.h"
+#include "ui/widget/gimpcolorwheel.h"
 
 
 // These can be deleted once we sort out the libart dependence.
@@ -108,7 +108,6 @@ private:
     guint dragId;
     bool update;
     sigc::connection selectChangedConn;
-    sigc::connection selectedConn;
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
     sigc::connection eventContextConn;

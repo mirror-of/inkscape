@@ -33,13 +33,11 @@
 
 
 #include "recolor-artwork-widget.h"
-//#include "fill-n-stroke-factory.h"
 
-#include "recolor-wheel-node.h"
-#include "svg-color.h"
-#include "recolorwheel.h"
-#include "recolor-selector.h"
-//===
+#include "ui/widget/recolor-wheel-node.h"
+#include "svg/svg-color.h"
+#include "ui/widget/recolorwheel.h"
+#include "widgets/recolor-selector.h"
 
 Gtk::Widget *recolor_artwork_widget_new(void)
 {

@@ -7,7 +7,7 @@
 #include "../color.h"
 #include "sp-color-slider.h"
 #include "sp-color-selector.h"
-#include "recolor-wheel-node.h"
+#include "ui/widget/recolor-wheel-node.h"
 #include <sigc++/connection.h>
 #include <sigc++/functors/slot.h>
 #include <sigc++/signal.h>
