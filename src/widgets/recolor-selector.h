@@ -11,9 +11,7 @@
 #include <sigc++/connection.h>
 #include <sigc++/functors/slot.h>
 #include <sigc++/signal.h>
-
-
-
+#include <color.h>
 
 typedef struct _RecolorWheel RecolorWheel;
 struct SPRecolorWheelSelector;
@@ -27,7 +25,7 @@ public:
     
     GtkWidget* getWheel (SPRecolorWheelSelector *cs);
 
-    sigc::signal<void, std::string, SPColor> _node_released_signal;
+    sigc::signal<void, std::string, float*> _updateObject;
 
     virtual void init();
 
@@ -59,6 +57,9 @@ protected:
     GtkWidget* _sbtnB; // Spinbutton for Brightness value
     GtkWidget* _label; // Label
     GtkWidget* _labelB; // Label for Brightness value
+
+    SPColor color;
+    float alpha;
     
 private:
     // By default, disallow copy constructor and assignment operator

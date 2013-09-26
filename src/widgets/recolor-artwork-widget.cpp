@@ -242,13 +242,13 @@ void RecolorArtworkWidget::_removeNode(SPObject* obj)
 void RecolorArtworkWidget::_reflectNodeChange(std::string _id, gfloat* _rgb)
 {
     g_printf("\n======\nModify things man !!!\n=======\n");
-    /*if ( update || !desktop ) {
+    if ( update || !desktop ) {
         return;
-    }*/
+    }
 
     //dragId deleted, look for need.
 
-    //update = true;
+    update = true;
 
     Inkscape::Selection *selection = NULL ;
     selection = sp_desktop_selection(desktop);
@@ -286,7 +286,9 @@ void RecolorArtworkWidget::_reflectNodeChange(std::string _id, gfloat* _rgb)
             }
 
         }
-    }    
+    }
+    update = false;
+    
 }
 /**
  * Gets the active fill or stroke style property, then sets the appropriate

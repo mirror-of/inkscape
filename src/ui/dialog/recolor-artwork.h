@@ -27,32 +27,33 @@ namespace Dialog {
 
 class RecolorArtwork : public UI::Widget::Panel {
 public:
-    RecolorArtwork();
-    virtual ~RecolorArtwork();
+  RecolorArtwork();
+  virtual ~RecolorArtwork();
 
-    static RecolorArtwork &getInstance() { return *new RecolorArtwork(); }
+  static RecolorArtwork &getInstance() { return *new RecolorArtwork(); }
 
 
-    virtual void setDesktop(SPDesktop *desktop);
+  virtual void setDesktop(SPDesktop *desktop);
 
-    void selectionChanged(Inkscape::Application *inkscape,
+  void selectionChanged(Inkscape::Application *inkscape,
                           Inkscape::Selection *selection);
 						  
 	void showPageRC();		//Right now named as Page because only one Page to show.
 
 protected:
-    Gtk::Notebook _notebook;
+  Gtk::Notebook _notebook;
 
-    UI::Widget::NotebookPage *_pageRC;
+  UI::Widget::NotebookPage *_pageRC;
     
-    UI::Widget::StyleSubject::Selection  _subject;
-    UI::Widget::ObjectCompositeSettings  _composite_settings;
+  UI::Widget::StyleSubject::Selection  _subject;
+  UI::Widget::ObjectCompositeSettings  _composite_settings;
 
 	Gtk::HBox &_createPageTabLabel(const Glib::ustring &label,
                                    const char *label_image);
 
-    void _layoutPageRC();
+  void _layoutPageRC();
 	void _savePagePref(guint page_num);
+
 #if WITH_GTKMM_3_0
     void _onSwitchPage(Gtk::Widget *page, guint pagenum);
 #else
@@ -68,8 +69,8 @@ private:
     DesktopTracker deskTrack;
     SPDesktop *targetDesktop;
     Gtk::Widget *recolorWdgt;
-	//name of main widget responsible for chnages.
-	sigc::connection desktopChangeConn;
+	  //name of main widget responsible for chnages.
+	   sigc::connection desktopChangeConn;
 
 };
 

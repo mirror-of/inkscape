@@ -126,7 +126,9 @@ RecolorWheelSelector::RecolorWheelSelector( SPColorSelector* csel )
       _sbtn(0),
       _sbtnB(0),
       _label(0),
-      _labelB(0)
+      _labelB(0),
+      color(0),
+      alpha(0)
 {
     
 }
