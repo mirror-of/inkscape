@@ -1,3 +1,11 @@
+inkscape-trunk (1:0.48+devel+10730+28ubuntu1) precise; urgency=low
+
+  * Bump build depends to 1.12.16-0ubuntu1 so we build against the cairo
+    and pixman packages in the PPA.  These include a fix for downscaled
+    bitmap images.
+
+ -- Bryce Harrington <bryce@ubuntu.com>  Sat, 28 Sep 2013 13:28:10 -0700
+
 inkscape-trunk (1:0.48+devel+10730+28) precise; urgency=low
 
   * Rename src package to inkscape-trunk
