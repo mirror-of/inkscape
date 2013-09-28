@@ -1,4 +1,4 @@
-inkscape-trunk (1:0.48+devel+10730+28ubuntu1) precise; urgency=low
+inkscape-trunk (1:0.48+devel+12609) precise; urgency=low
 
   * Bump build depends to 1.12.16-0ubuntu1 so we build against the cairo
     and pixman packages in the PPA.  These include a fix for downscaled
