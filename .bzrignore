@@ -211,3 +211,7 @@ share/palettes/palettes.h
 ltmain.sh
 backup.bzr
 mkinstalldirs
+./InkscapeQuirk.config
+./InkscapeQuirk.includes
+./InkscapeQuirk.files
+./InkscapeQuirk.creator

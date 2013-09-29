@@ -851,6 +851,31 @@ else
 	AC_MSG_CHECKING([Aspell not found, spell checker will be disabled])
 fi
 
+dnl *********************************
+dnl   Allow experimental Smil
+dnl *********************************
+AC_ARG_ENABLE(smil-experimental,
+  AS_HELP_STRING([--enable-smil-experimental], [enable compilation with SMIL (Gtk2 EXPERIMENTAL - Gtk3 N/A)]),
+  [enable_smil=$enableval], [enable_smil=no])
+
+with_smil=no
+if test "x$enable_smil" = "xyes"; then
+  with_smil=yes
+  AC_DEFINE(WITH_SMIL,1,[Build with SMIL])
+  AC_MSG_RESULT([checking for SMIL dependency : GtkSourceView])
+  
+  PKG_CHECK_MODULES(GTK_SOURCE_VIEW, gtksourceview-2.0 >= 2.0, gtksourceview=yes, gtksourceview=no)
+  if test "x$gtksourceview" != "xyes"; then
+      AC_MSG_ERROR([--enable-smil-experimental was specified, but appropriate libgtksourceview-2.0 development packages could not be found
+> sudo apt-get install gtksourceview2.0-dev])
+  fi
+fi
+AC_SUBST(GTK_SOURCE_VIEW_CFLAGS)
+AC_SUBST(GTK_SOURCE_VIEW_LIBS)
+AM_CONDITIONAL(WITH_SMIL, test "x$enable_smil" = "xyes")
+
+
+
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
 sp_save_LIBS=$LIBS
 LIBS="$LIBS $INKSCAPE_LIBS"
@@ -1122,3 +1147,52 @@ Configuration:
         Libcdr:                   ${with_libcdr}
         Doing Local Install:      ${with_localinstall}
 "
+
+extra_binary="Extrat Binary:"
+extra_binary+="
+        test:                  no"
+extra_binary+="
+      Inkview:                  yes"
+if test "x$with_smil" = "xyes"; then
+extra_binary+="
+      InkPlay:                  ${with_smil}"
+fi
+
+experimental="Experimental:"
+if test "x$with_gtkmm_3_0" = "xyes"; then
+experimental+="
+        Gtk3:                     ${with_gtkmm_3_0}"
+else
+    if test "x$with_smil" = "xyes"; then
+experimental+="
+        Smil:                     ${with_smil}"
+    fi
+fi
+
+
+echo "
+Configuration:
+
+        Source code location:     ${srcdir}
+        Destination path prefix:  ${prefix}
+        Compiler:                 ${CXX}
+        CPPFLAGS:                 ${CPPFLAGS}
+        CXXFLAGS:                 ${CXXFLAGS}
+        CFLAGS:                   ${CFLAGS}
+        LDFLAGS:                  ${LDFLAGS}
+
+        Use gnome-vfs:            ${gnome_vfs}
+        Use openoffice files:     ${ij}
+        Use relocation support:   ${enable_binreloc}
+        Enable LittleCms:         ${enable_lcms}
+        Enable DBUS:              ${with_dbus} 
+        Enable Poppler-Cairo:     ${enable_poppler_cairo}
+        ImageMagick Magick++:     ${magick_ok}
+        Libwpg:                   ${with_libwpg}
+        Libvisio:                 ${with_libvisio}
+        Libcdr:                   ${with_libcdr}
+        Doing Local Install:      ${with_localinstall}
+        
+${experimental}
+        
+${extra_binary}"
