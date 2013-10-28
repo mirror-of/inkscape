@@ -140,6 +140,7 @@ static std::vector<Glib::ustring> splitByWhitespace(gchar const *value) {
     return parts;
 }
 
+#define INKSCAPEFEATURE    "http://www.inkscape.org/feature#"
 #define SVG11FEATURE    "http://www.w3.org/TR/SVG11/feature#"
 #define SVG10FEATURE    "org.w3c."
 
@@ -250,6 +251,9 @@ static bool evaluateSingleFeature(gchar const *value) {
     found = strstr(value, SVG10FEATURE);
     if ( value == found )
         return evaluateSVG10Feature(found + strlen(SVG10FEATURE));
+    found = strstr(value, INKSCAPEFEATURE);
+    if ( value == found )
+        return true;
     return false;
 }
 

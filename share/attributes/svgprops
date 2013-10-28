@@ -278,7 +278,7 @@
 
 "requiredExtensions" - "a","altGlyph","animate","animateColor","animateMotion","animateTransform","circle","clipPath","cursor","defs","ellipse","foreignObject","g","image","line","mask","path","pattern","polygon","polyline","rect","set","svg","switch","text","textPath","tref","tspan","use"
 
-"requiredFeatures" - "a","altGlyph","animate","animateColor","animateMotion","animateTransform","circle","clipPath","cursor","defs","ellipse","foreignObject","g","image","line","mask","path","pattern","polygon","polyline","rect","set","svg","switch","text","textPath","tref","tspan","use"
+"requiredFeatures" - "a","altGlyph","animate","animateColor","animateMotion","animateTransform","circle","clipPath","cursor","defs","ellipse","flowRoot","foreignObject","g","image","line","mask","path","pattern","polygon","polyline","rect","set","svg","switch","text","textPath","tref","tspan","use"
 
 "restart" - "animate","animateColor","animateMotion","animateTransform","set"
 

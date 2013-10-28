@@ -844,6 +844,20 @@ public:
 	virtual void read_content();
 };
 
+/**
+ * @brief Run a function on an SPObject and all of its descendents (parent-first)
+ * @param parent The object to visit
+ * @param fun The function to run.  If the function returns false, the
+ * traversal will not visit this object's children
+ */
+template <typename T> void visit (SPObject* parent, T fun) {
+    if (fun(parent)) {
+        for (SPObject *child = parent->children ; child && child != parent ;
+            child = child->getNext() ) {
+            visit(child, fun);
+        }
+    }
+}
 
 /**
  * Compares height of objects in tree.

@@ -12,6 +12,9 @@
 #define SP_FLOWTEXT(obj) (dynamic_cast<SPFlowtext*>((SPObject*)obj))
 #define SP_IS_FLOWTEXT(obj) (dynamic_cast<const SPFlowtext*>((SPObject*)obj) != NULL)
 
+//This feature URL is totally bogus, because flowRoot isn't part of any current or
+//proposed SVG standard.
+#define FLOWROOT_FEATURE "http://www.inkscape.org/feature#FlowRoot"
 
 namespace Inkscape {
 

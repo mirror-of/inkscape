@@ -24,8 +24,14 @@
 #include "extension/output.h"
 #include <vector>
 #include "xml/attribute-record.h"
-#include "sp-root.h"
+#include "xml/event-fns.h"
 #include "document.h"
+#include "factory.h"
+#include "sp-factory.h"
+#include "sp-root.h"
+#include "sp-switch.h"
+#include "sp-text.h"
+#include "sp-flowtext.h"
 
 #ifdef WITH_GNOME_VFS
 # include <libgnomevfs/gnome-vfs.h>
@@ -42,7 +48,7 @@ using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::Node;
 
-
+void flowText(SPDocument* orig, SPDocument* doc);
 
 static void pruneExtendedAttributes( Inkscape::XML::Node *repr )
 {
@@ -234,29 +240,161 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
       || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE)
       || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVGZ_INKSCAPE));
 
-    Inkscape::XML::Document *rdoc = NULL;
     Inkscape::XML::Node *repr = NULL;
-    if (exportExtensions) {
-        repr = doc->getReprRoot();
-    } else {
-        rdoc = sp_repr_document_new ("svg:svg");
-        repr = rdoc->root();
-        repr = doc->getRoot()->updateRepr(rdoc, repr, SP_OBJECT_WRITE_BUILD);
+    SPDocument* newDoc = NULL;
 
+    newDoc = SPDocument::createNewDoc(0, 0, true);
+    repr = doc->getRoot()->updateRepr(newDoc->getReprDoc(),
+            newDoc->getReprRoot(), SP_OBJECT_WRITE_BUILD);
+
+    if (!exportExtensions) {
         pruneExtendedAttributes(repr);
     }
+
+    flowText(doc, newDoc);
 
     if (!sp_repr_save_rebased_file(repr->document(), filename, SP_SVG_NS_URI,
                                    doc->getBase(), filename)) {
         throw Inkscape::Extension::Output::save_failed();
     }
 
-    if (!exportExtensions) {
-        Inkscape::GC::release(rdoc);
-    }
-
+    delete newDoc;
     return;
 }
+
+class FlowTextReplacer {
+
+private:
+    SPDocument* document;
+
+    //we need this nonsense so that we can get a correctly-laid-out flowtext
+    SPDocument* oldDocument;
+    Inkscape::XML::Document* xml_document;
+
+    Inkscape::XML::Node* getBasicText(SPFlowtext* flowtext) const {
+        //This is probably an insane way to get a SPFlowtext with the correct layout, but I
+        //can't figure out another way.
+        SPObject* original_object = oldDocument->getObjectById(flowtext->getId());
+        SPFlowtext* original_flowtext = SP_FLOWTEXT(original_object);
+        flowtext->layout = original_flowtext->layout;
+        Inkscape::XML::Node* basic_text = flowtext->getAsText();
+        return basic_text;
+    }
+
+    SPItem* makeBasicTextItem(Inkscape::XML::Node* basic_text,
+            SPItem* item) const {
+        SPItem* new_item =
+                reinterpret_cast<SPItem*>(SPFactory::instance().createObject(
+                        NodeTraits::get_type_string(*basic_text)));
+        new_item->invoke_build(document, basic_text, TRUE);
+        new_item->doWriteTransform(basic_text, item->transform);
+        new_item->updateRepr();
+        return new_item;
+    }
+
+public:
+
+    FlowTextReplacer (SPDocument* oldDocument, SPDocument* document) :
+        document (document),
+        oldDocument (oldDocument) {
+        xml_document = document->getReprDoc();
+    }
+
+    bool operator () (SPObject* obj) const {
+        SPItem* item = SP_ITEM(obj);
+        if (!item)
+            return true;
+
+        /* This might be a switch or a flowtext.  If it's a flowtext, we need to wrap it
+         * in a switch.  If it's a switch with <flowtext, text>, we need to update the
+         * text.
+        */
+
+        if (SP_IS_FLOWTEXT(item)) {
+            SPFlowtext* flowtext = SP_FLOWTEXT(item);
+
+            Inkscape::XML::Node* basic_text = getBasicText(flowtext);
+            if (!basic_text) {
+                //this shouldn't happen, but when it does, there's
+                //nothing we can do about it.
+                g_warning("Could not get basic text from flowed text for %s", item->getId());
+                return false;
+            }
+
+            Inkscape::XML::Node* flowtext_repr = flowtext->getRepr();
+            Inkscape::XML::Node* parent = flowtext_repr->parent();
+
+            Inkscape::XML::Node *switch_repr = xml_document->createElement("svg:switch");
+            parent->addChild(switch_repr, flowtext_repr);
+
+            //duplicate the flowtext so that we can place it into the switch
+            Inkscape::XML::Node* flowtext_dup = flowtext_repr->duplicate(xml_document);
+
+            flowtext_dup->setAttribute("requiredFeatures", FLOWROOT_FEATURE);
+
+            SPObject* switch_obj = document->getObjectByRepr(switch_repr);
+            switch_repr->addChild(flowtext_dup, NULL);
+            switch_repr->addChild(basic_text, flowtext_dup);
+            makeBasicTextItem(basic_text, item);
+
+            flowtext_dup->release();
+
+            //remove the old flowtext
+            parent->removeChild(flowtext_repr);
+
+            flowtext->deleteObject();
+        } else {
+            if (!SP_IS_SWITCH(item)) {
+                return true;
+            }
+
+            Inkscape::XML::Node* switch_repr = item->getRepr();
+            SPObject* text = NULL;
+            SPFlowtext* flowtext = NULL;
+
+            for (SPObject* child = item->firstChild(); child; child = child->getNext()) {
+                if (SP_IS_FLOWTEXT(child)) {
+                    flowtext = SP_FLOWTEXT(child);
+                } else if (SP_IS_TEXT(child)) {
+                    text = child;
+                }
+            }
+            if (!flowtext) {
+                //this switch doesn't contain a flowtext directly, so we don't need to think
+                //about it.
+                return true;
+            }
+
+            Inkscape::XML::Node* basic_text = getBasicText(flowtext);
+            if (!basic_text) {
+                //this shouldn't happen, but when it does, there's
+                //nothing we can do about it.
+                g_warning("Could not get basic text from flowed text for %s", item->getId());
+                return false;
+            }
+
+            //remove the text, because we're going to reconstruct it and add it back
+            if (text) {
+                switch_repr->removeChild(text->getRepr());
+                text->deleteObject();
+            }
+
+            flowtext->setAttribute("requiredFeatures", FLOWROOT_FEATURE);
+
+            switch_repr->addChild(basic_text, flowtext->getRepr());
+            makeBasicTextItem(basic_text, flowtext);
+        }
+
+        return false;
+    }
+};
+
+void flowText(SPDocument *oldDoc, SPDocument* doc) {
+
+    visit(doc->getRoot(), FlowTextReplacer(oldDoc, doc));
+
+}
+
 
 } } }  /* namespace inkscape, module, implementation */
 
