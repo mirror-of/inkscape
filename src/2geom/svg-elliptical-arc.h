@@ -115,6 +115,7 @@ public:
     }
 #endif
     virtual D2<SBasis> toSBasis() const {
+        //std::cout << "EllipticalArc::toSBasis" << std::endl;
         if (isDegenerate()) return chord().toSBasis();
         return EllipticalArc::toSBasis();
     }
@@ -135,9 +136,11 @@ operator<< (std::basic_ostream<charT> & os, const SVGEllipticalArc & ea)
 {
     os << "{ cx: " << ea.center(X) << ", cy: " <<  ea.center(Y)
        << ", rx: " << ea.ray(X) << ", ry: " << ea.ray(Y)
-       << ", rot angle: " << decimal_round(rad_to_deg(ea.rotationAngle()),2)
-       << ", start angle: " << decimal_round(rad_to_deg(ea.initialAngle()),2)
-       << ", end angle: " << decimal_round(rad_to_deg(ea.finalAngle()),2)
+       << ", rot: " << decimal_round(rad_to_deg(ea.rotationAngle()),2)
+       << ", start: " << decimal_round(rad_to_deg(ea.initialAngle()),2)
+       << ", end: " << decimal_round(rad_to_deg(ea.finalAngle()),2)
+       << ", sweep: " << ea.sweep()
+       << ", " << ea.sweepAngle()
        << " }";
 
     return os;

@@ -471,6 +471,7 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
 Inkscape::XML::Node *
 sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 {
+    std::cout << "sp_selected_item_to_curved_repr" << std::endl;
     if (!item)
         return NULL;
 
@@ -553,6 +554,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(item)) {
         curve = SP_SHAPE(item)->getCurve();
+        std::cout << "  " << sp_svg_write_path(curve->get_pathvector()) << std::endl;
     } 
 
     if (!curve)

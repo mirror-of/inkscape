@@ -21,6 +21,7 @@
 #include <2geom/rect.h>
 #include <2geom/coord.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <2geom/svg-elliptical-arc.h>
 #include <math.h> // for M_PI
 
 using Geom::X;
@@ -464,6 +465,7 @@ pathv_matrix_point_bbox_wind_distance (Geom::PathVector const & pathv, Geom::Aff
 Geom::PathVector
 pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv )
 {
+    std::cout << "pathv_to_linear_and_cubic_beziers" << std::endl;
     Geom::PathVector output;
 
     for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
@@ -475,6 +477,13 @@ pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv )
             if (is_straight_curve(*cit)) {
                 Geom::LineSegment l(cit->initialPoint(), cit->finalPoint());
                 output.back().append(l);
+            }
+            else if(Geom::SVGEllipticalArc const *svg_elliptical_arc = dynamic_cast<Geom::SVGEllipticalArc const*>(&*cit)) {
+                std::vector<Geom::CubicBezier> cbs = svg_elliptical_arc->toCubicBezier();
+                for(std::vector<int>::size_type i = 0; i != cbs.size(); i++) {
+                    Geom::CubicBezier cb = cbs[i];
+                    output.back().append(cb);
+                }
             } else {
                 Geom::BezierCurve const *curve = dynamic_cast<Geom::BezierCurve const *>(&*cit);
                 if (curve && curve->order() == 3) {

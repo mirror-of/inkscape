@@ -476,13 +476,17 @@ void SPGenericEllipse::set_shape()
         curve = new SPCurve(pb.peek());
     }
 
-    // gchar *str = sp_svg_write_path(curve->get_pathvector());
-    // std::cout << "  path: " << str << std::endl;
-    // g_free(str);
+    gchar *str = sp_svg_write_path(curve->get_pathvector());
+    std::cout << "  path: " << str << std::endl;
+    g_free(str);
 
     // Stretching / moving the calculated shape to fit the actual dimensions.
     Geom::Affine aff = Geom::Scale(rx.computed, ry.computed) * Geom::Translate(cx.computed, cy.computed);
     curve->transform(aff);
+    gchar *str1 = sp_svg_write_path(curve->get_pathvector());
+    std::cout << "  path: " << str1 << std::endl;
+    g_free(str1);
+
 
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/

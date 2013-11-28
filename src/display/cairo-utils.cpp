@@ -25,6 +25,7 @@
 #include <2geom/path.h>
 #include <2geom/transforms.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <2geom/svg-elliptical-arc.h>
 #include "color.h"
 #include "style.h"
 #include "helper/geom-curves.h"
@@ -555,10 +556,38 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
             }
         }
     }
-//    else if(Geom::SVGEllipticalArc const *svg_elliptical_arc = dynamic_cast<Geom::SVGEllipticalArc *>(c)) {
-//        //TODO: get at the innards and spit them out to cairo
-//    }
+    else if(Geom::SVGEllipticalArc const *svg_elliptical_arc = dynamic_cast<Geom::SVGEllipticalArc const*>(&c)) {
+        // Cairo (and PostScript/PDF) does not have an elliptical arc path element.
+        // For circular paths use "arc". For Elliptical paths use "curve" (Bezier).
+        std::cout << "\nfeed_curve_to_cairo: elliptical arc detected!" << std::endl;
+        double cx = svg_elliptical_arc->center(Geom::X);
+        double cy = svg_elliptical_arc->center(Geom::Y);
+        double rx = svg_elliptical_arc->ray(Geom::X);
+        double ry = svg_elliptical_arc->ray(Geom::Y);
+        double angle1 = svg_elliptical_arc->initialAngle();
+        double angle2 = svg_elliptical_arc->finalAngle();
+        bool   sweep  = svg_elliptical_arc->sweep();
+        std::cout << *svg_elliptical_arc << std::endl;
+        if( rx == ry ) {
+            if( sweep ) {
+                std::cout << "  Using cairo_arc (clockwise)" << std::endl;
+                cairo_arc( cr, cx, cy, rx, angle1, angle2 );
+            } else {
+                std::cout << "  Using cairo_arc_negative" << std::endl;
+                cairo_arc_negative( cr, cx, cy, rx, angle1, angle2 );
+            }
+        } else {
+
+            std::vector<Geom::CubicBezier> cbs = svg_elliptical_arc->toCubicBezier();
+            for(std::vector<int>::size_type i = 0; i != cbs.size(); i++) {
+                Geom::CubicBezier cb = cbs[i];
+                std::vector<Geom::Point> points = cb.points();
+                cairo_curve_to(cr, points[1][0], points[1][1], points[2][0], points[2][1], points[3][0], points[3][1]);
+            }
+        }
+    }
     else {
+
         //this case handles sbasis as well as all other curve types
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c.toSBasis(), 0.1);
 

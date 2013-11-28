@@ -33,11 +33,12 @@
 #include <cfloat>
 #include <limits>
 #include <memory>
+#include <math.h>
 
 #include <2geom/elliptical-arc.h>
 #include <2geom/ellipse.h>
 #include <2geom/sbasis-geometric.h>
-#include <2geom/bezier-curve.h>
+//#include <2geom/bezier-curve.h>
 #include <2geom/poly.h>
 #include <2geom/transforms.h>
 #include <2geom/utils.h>
@@ -885,6 +886,64 @@ D2<SBasis> EllipticalArc::toSBasis() const
     return arc;
 }
 
+std::vector<CubicBezier> EllipticalArc::toCubicBezier() const
+{
+    std::cout << "EllipticalArc::toCubicBezier()" << std::endl;
+
+    double rot = rotationAngle().radians();
+    double dir = sweep() ? 1 : -1;
+    double ai = initialAngle().radians();
+    double af = finalAngle().radians();
+    double a1 = ai;
+    double ad = sweepAngle();
+    double kappa = 0.551915;  // See http://spencermortensen.com/articles/bezier-circle/
+
+    std::vector<CubicBezier> arcs;
+    bool first = true;
+    bool last = false;
+    do {
+        double a2 = af;
+        if( ad > M_PI/2 ) {
+            std::cout << "  splitting angle: " << ad << "  dir: " << dir << std::endl;
+            // Arc too long... divide
+            a2 = a1 + dir * M_PI/2;  // FIX ME: use multipls of M_PI/2
+            ad -= M_PI/2;
+        } else {
+            // Arc less than M_PI/2, need to calculate kappa
+            kappa = 0;
+            if( ad != 0 ) kappa = 4.0/3.0 * (1.0 - std::cos( ad/2 ))/(std::sin( ad/2 ));
+            last = true;
+        }
+
+        Point h0, h1, h2, h3;
+        if( first ) {
+            h0 = initialPoint();
+        } else {
+            h0 = pointAtAngle( a1 );
+        }
+        if( last ) {
+            h3 = finalPoint();
+        } else {
+            h3 = pointAtAngle( a2 );
+        }
+        h1[X] = h0[X] + dir * kappa * ( std::cos(rot)*-rays()[X]*std::sin(a1) - std::sin(rot)* rays()[Y]*std::cos(a1));
+        h1[Y] = h0[Y] + dir * kappa * ( std::sin(rot)*-rays()[X]*std::sin(a1) + std::cos(rot)* rays()[Y]*std::cos(a1));
+        h2[X] = h3[X] - dir * kappa * ( std::cos(rot)*-rays()[X]*std::sin(a2) - std::sin(rot)* rays()[Y]*std::cos(a2));
+        h2[Y] = h3[Y] - dir * kappa * ( std::sin(rot)*-rays()[X]*std::sin(a2) + std::cos(rot)* rays()[Y]*std::cos(a2));
+
+        CubicBezier arc( h0, h1, h2, h3 );
+        arcs.push_back(arc);
+        std::cout << "  " << initialAngle().degrees() << "  " << finalAngle().degrees();
+        std::cout << "  angle: " << ad << "  kappa: " << kappa << "  rot: " << rot << std::endl;
+        std::cout << "  " << arc[0] << "  " << arc[1] << "  " << arc[2] << ", " << arc[3] << std::endl; 
+        // Prepare for next pass
+        a1 = a2;
+        first = false;
+    }
+    while (!last);
+
+    return arcs;
+}
 
 Curve *EllipticalArc::transformed(Affine const& m) const
 {

@@ -236,6 +236,7 @@ public:
     virtual std::vector<Point> pointAndDerivatives(Coord t, unsigned int n) const;
 
     virtual D2<SBasis> toSBasis() const;
+    virtual std::vector<CubicBezier> toCubicBezier() const;
     virtual double valueAt(Coord t, Dim2 d) const {
     	return valueAtAngle(angleAt(t), d);
     }
