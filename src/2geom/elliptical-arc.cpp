@@ -896,33 +896,60 @@ std::vector<CubicBezier> EllipticalArc::toCubicBezier() const
     double af = finalAngle().radians();
     double a1 = ai;
     double ad = sweepAngle();
-    double kappa = 0.551915;  // See http://spencermortensen.com/articles/bezier-circle/
 
     std::vector<CubicBezier> arcs;
     bool first = true;
     bool last = false;
+    std::cout << "  initial angles: " << ad << "  dir: " << dir << "  ai: " << ai << "  af: " << af << std::endl;
     do {
         double a2 = af;
-        if( ad > M_PI/2 ) {
-            std::cout << "  splitting angle: " << ad << "  dir: " << dir << std::endl;
+        double al = ad;
+        double tolerance = 0.001; // So rounding errors don't generate extra points.
+        if( ad > (M_PI/2 + tolerance) ) {
             // Arc too long... divide
-            a2 = a1 + dir * M_PI/2;  // FIX ME: use multipls of M_PI/2
-            ad -= M_PI/2;
+
+            // Find next point on minor/major axis (a2 == a1 if a1 on minor/major axis, we'll fix this below)
+            if( dir < 0 ) {
+                a2 = floor( a1/(M_PI/2) ) * M_PI/2;
+            } else {
+                a2 = ceil( a1/(M_PI/2) ) * M_PI/2;
+            }
+
+            al = fabs( a1 - a2 );  // Length of arc
+
+            if( al < tolerance ) {
+                // Length too short
+                al += M_PI/2;
+                a2 += dir * M_PI/2;
+            }
+
+            ad -= al;  // Remaining arc, ad cannot be negative
+            assert( ad >= 0.0 );
+            if( ad < tolerance ) {
+                // Draw arc to end
+                al += ad;
+                a2 = af;
+                last = true;
+            }
+
+            std::cout << "  splitting angle: " << ad << "  dir: " << dir << "  a1: " << a1 << " a2: " << a2 << std::endl;
         } else {
-            // Arc less than M_PI/2, need to calculate kappa
-            kappa = 0;
-            if( ad != 0 ) kappa = 4.0/3.0 * (1.0 - std::cos( ad/2 ))/(std::sin( ad/2 ));
+            // Arc <= M_PI/2
             last = true;
         }
 
+        // One can do slightly better than this calculation, see: http://spencermortensen.com/articles/bezier-circle/
+        double kappa = 0.0;
+        if( al > 0 ) kappa = 4.0/3.0 * (1.0 - std::cos( al/2 ))/(std::sin( al/2 ));
+
         Point h0, h1, h2, h3;
         if( first ) {
-            h0 = initialPoint();
+            h0 = initialPoint(); // Insure first point doesn't move
         } else {
             h0 = pointAtAngle( a1 );
         }
         if( last ) {
-            h3 = finalPoint();
+            h3 = finalPoint(); // Insure last point doesn't move
         } else {
             h3 = pointAtAngle( a2 );
         }
@@ -936,7 +963,8 @@ std::vector<CubicBezier> EllipticalArc::toCubicBezier() const
         std::cout << "  " << initialAngle().degrees() << "  " << finalAngle().degrees();
         std::cout << "  angle: " << ad << "  kappa: " << kappa << "  rot: " << rot << std::endl;
         std::cout << "  " << arc[0] << "  " << arc[1] << "  " << arc[2] << ", " << arc[3] << std::endl; 
-        // Prepare for next pass
+
+        // Prepare for next arc section
         a1 = a2;
         first = false;
     }
