@@ -7,7 +7,7 @@
 #export DH_VERBOSE=1
 
 # use dpatch:
-include /usr/share/dpatch/dpatch.make
+# include /usr/share/dpatch/dpatch.make
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
@@ -45,7 +45,7 @@ endif
 # Set some version info, to remove bzr as build-depend.
 BZR_REVNO = `dpkg-parsechangelog | awk -F+ '/^Version/ {print $2}'`
 
-configure: patch
+configure:
 	dh_testdir
 
 	./autogen.sh
@@ -86,7 +86,7 @@ endif
 	# Update language files.
 	# cd po; intltool-update -p
 
-clean: clean-patched unpatch
+clean: clean-patched
 
 clean-patched:
 	dh_testdir
