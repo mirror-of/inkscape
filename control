@@ -40,6 +40,15 @@ Build-Depends: debhelper (>= 7.0.0),
                bzr
 Standards-Version: 3.8.1
 
+Package: inkscape-data
+Architecture: all
+Depends: ${misc:Depends},
+         ${python:Depends},
+         ruby | ruby-interpreter
+Description: Data files for Inkscape
+ This package contains architecture-independent data files, tutorials and
+ extensions for use with Inkscape.
+
 Package: inkscape
 Architecture: any
 Homepage: http://www.inkscape.org/
@@ -80,11 +89,3 @@ Description: vector-based drawing program
  Other extensions use ruby, libxml-xql-perl, python-numpy, and python-lxml.
  You must have these packages to make full use of all extensions and effects.
 
-Package: inkscape-data
-Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         ruby | ruby-interpreter
-Description: Data files for Inkscape
- This package contains architecture-independent data files, tutorials and
- extensions for use with Inkscape.
