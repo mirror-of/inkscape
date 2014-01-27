@@ -8,71 +8,76 @@ Maintainer: Inkscape developers <inkscape-devel@lists.sourceforge.net>
 Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
            Alex Valavanis <valavanisalex@gmail.com>
-Build-Depends: autoconf,
-               automake,
-               autopoint,
-               bash-completion,
-               debhelper (>= 8.0.0),
-               gimp,
-               intltool,
-               libart-2.0-dev (>= 2.3.10),
-               libaspell-dev,
-               libboost-dev,
-               libcairo2-dev (>=1.12.16),
-               libgc-dev (>= 1:6.8),
-               libgdl-3-dev (>= 3.3.4),
-               libglib2.0-dev,
-               libgnomevfs2-dev,
-               libgtk2.0-dev (>= 2.10.0),
-               libgtk-3-dev (>= 3.2),
-               libgtkmm-2.4-dev,
-               libgtkmm-3.0-dev (>= 3.2),
-               libgtkspell-dev,
-               libgtkspell-3-dev | libgtkspell3-3-dev,
-               libgsl0-dev,
-               liblcms2-dev | liblcms1-dev,
-               libmagick++-dev,
-               libpango1.0-dev,
-               libpng12-dev,
-               libpoppler-glib-dev,
-               libpopt-dev,
-               libsigc++-2.0-dev (>= 2.0.16-2),
-               libtool,
-               libwpd-dev,
-               libwpg-dev,
-               libxml-parser-perl,
-               libxml2-dev (>= 2-2.4.24),
-               libxslt1-dev,
-               pkg-config,
-               python-dev,
-               python-lxml,
-               python-numpy,
-               python-support,
-               zlib1g-dev
+Build-Depends:
+ autoconf,
+ automake,
+ autopoint,
+ bash-completion,
+ debhelper (>= 8.0.0),
+ gimp,
+ intltool,
+ libart-2.0-dev (>= 2.3.10),
+ libaspell-dev,
+ libboost-dev,
+ libcairo2-dev (>=1.12.16),
+ libgc-dev (>= 1:6.8),
+ libgdl-3-dev (>= 3.3.4),
+ libglib2.0-dev,
+ libgnomevfs2-dev,
+ libgtk2.0-dev (>= 2.10.0),
+ libgtk-3-dev (>= 3.2),
+ libgtkmm-2.4-dev,
+ libgtkmm-3.0-dev (>= 3.2),
+ libgtkspell-dev,
+ libgtkspell-3-dev | libgtkspell3-3-dev,
+ libgsl0-dev,
+ liblcms2-dev,
+ libmagick++-dev,
+ libpango1.0-dev,
+ libpng12-dev,
+ libpoppler-glib-dev,
+ libpopt-dev,
+ libsigc++-2.0-dev (>= 2.0.16-2),
+ libtool,
+ libwpd-dev,
+ libwpg-dev,
+ libxml-parser-perl,
+ libxml2-dev (>= 2-2.4.24),
+ libxslt1-dev,
+ pkg-config,
+ python-dev,
+ python-lxml,
+ python-numpy,
+ python-support,
+ zlib1g-dev
 Standards-Version: 3.9.5
 
 Package: inkscape-trunk
 Architecture: any
-Depends: ${shlibs:Depends},
-         ${misc:Depends},
-         inkscape-trunk-data
-Suggests: dia | dia-gnome, 
-          ruby, 
-          libgnomevfs2-extra, 
-          libsvg-perl, 
-          libxml-xql-perl, 
-          transfig,
-          pstoedit
-Recommends: aspell,
-            imagemagick, 
-            libwmf-bin, 
-            perlmagick, 
-            ${python:Depends},
-            python-numpy, 
-            python-lxml, 
-            python-uniconvertor
-Conflicts: inkscape,
-           inkscape-trunk-gtk3
+Depends:
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+ inkscape-trunk-data
+Recommends:
+ aspell,
+ imagemagick, 
+ libwmf-bin, 
+ perlmagick, 
+ python-numpy, 
+ python-lxml, 
+ python-uniconvertor
+Suggests:
+ dia | dia-gnome, 
+ ruby, 
+ libgnomevfs2-extra, 
+ libsvg-perl, 
+ libxml-xql-perl, 
+ transfig,
+ pstoedit
+Conflicts:
+ inkscape,
+ inkscape-trunk-gtk3
 Description: vector-based drawing program (trunk build)
  Inkscape is an illustration editor which has everything you need to create
  professional-quality computer art.  You can use it to make diagrams and 
@@ -96,26 +101,30 @@ Description: vector-based drawing program (trunk build)
 
 Package: inkscape-trunk-gtk3
 Architecture: any
-Depends: ${shlibs:Depends},
-         ${misc:Depends},
-         inkscape-trunk-data
-Suggests: dia | dia-gnome, 
-          ruby, 
-          libgnomevfs2-extra, 
-          libsvg-perl, 
-          libxml-xql-perl, 
-          transfig,
-          pstoedit
-Recommends: aspell,
-            imagemagick, 
-            libwmf-bin, 
-            perlmagick, 
-            ${python:Depends},
-            python-numpy, 
-            python-lxml, 
-            python-uniconvertor
-Conflicts: inkscape,
-           inkscape-trunk
+Depends:
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends},
+ inkscape-trunk-data
+Recommends:
+ aspell,
+ imagemagick, 
+ libwmf-bin, 
+ perlmagick, 
+ python-numpy, 
+ python-lxml, 
+ python-uniconvertor
+Suggests:
+ dia | dia-gnome, 
+ ruby, 
+ libgnomevfs2-extra, 
+ libsvg-perl, 
+ libxml-xql-perl, 
+ transfig,
+ pstoedit
+Conflicts:
+ inkscape,
+ inkscape-trunk
 Description: vector-based drawing program (EXPERIMENTAL GTK+3 trunk build)
  Inkscape is an illustration editor which has everything you need to create
  professional-quality computer art.  You can use it to make diagrams and 
@@ -141,9 +150,10 @@ Description: vector-based drawing program (EXPERIMENTAL GTK+3 trunk build)
 
 Package: inkscape-trunk-data
 Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         ruby | ruby-interpreter
+Depends:
+ ${misc:Depends},
+ ${python:Depends},
+ ruby | ruby-interpreter
 Description: Data files for Inkscape
  This package contains architecture-independent data files, tutorials and
  extensions for use with Inkscape.
