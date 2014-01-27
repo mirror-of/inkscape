@@ -49,7 +49,7 @@ Build-Depends: autoconf,
                python-numpy,
                python-support,
                zlib1g-dev
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 
 Package: inkscape-trunk
 Architecture: any
