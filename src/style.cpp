@@ -661,15 +661,6 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         sp_style_merge_from_style_string(style, val);
     }
 
-    if (object) {
-        sp_style_merge_from_object_stylesheet(style, object);
-    } else {
-        /** \todo No stylesheet information. Find out under what circumstances
-         * this occurs, and handle accordingly.  (If we really wanted to, we
-         * could probably get stylesheets by going through repr->doc.)
-         */
-    }
-
     /* 2. Presentation attributes */
     /* Attributes are only read in if not already set in a style sheet or style attribute above. */
 
@@ -866,11 +857,13 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     SPS_READ_PENUM_IF_UNSET(&style->shape_rendering, repr, "shape-rendering", enum_shape_rendering, true);
     SPS_READ_PENUM_IF_UNSET(&style->text_rendering,  repr, "text-rendering",  enum_text_rendering,  true);
 
-    /* 3. Merge from parent */
     if (object) {
+        /* 3. Merge from parent */
         if (object->parent) {
             sp_style_merge_from_parent(style, object->parent->style);
         }
+        /* 4 Merge from stylesheet */
+        sp_style_merge_from_object_stylesheet(style, object);
     } else {
         if (repr->parent()) {
             /// \todo fixme: This is not the prettiest thing (Lauris)
@@ -1540,8 +1533,11 @@ sp_style_merge_from_object_stylesheet(SPStyle *const style, SPObject const *cons
     g_return_if_fail(status == CR_OK);
     /// \todo Check what errors can occur, and handle them properly.
     if (props) {
-        sp_style_merge_from_props(style, props);
+        SPStyle *css_style = sp_style_new(NULL);
+        sp_style_merge_from_props(css_style, props);
         cr_prop_list_destroy(props);
+        sp_style_merge_from_parent(style, css_style);
+        sp_style_unref(css_style);
     }
 }
 
