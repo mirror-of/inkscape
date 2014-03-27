@@ -20,6 +20,8 @@
 
 #include <stddef.h>
 #include <sigc++/connection.h>
+#include <iostream>
+#include <vector>
 
 namespace Inkscape {
 namespace XML {
@@ -27,18 +29,55 @@ class Node;
 }
 }
 
-/// An SVG style object.
-struct SPStyle {
-    int refcount;
+#include "libcroco/cr-declaration.h"
+#include "libcroco/cr-prop-list.h"
+//struct CRDeclaration;
+//struct CRPropList;
 
+/// An SVG style object.
+class SPStyle {
+
+public:
+    SPStyle(SPDocument *document = NULL); // emf, wmf export uses without document
+    SPStyle(SPObject *object);
+    ~SPStyle();
+    void clear();
+    void read(SPObject *object, Inkscape::XML::Node *repr);
+    void read_from_object(SPObject *object);
+    void read_from_prefs(Glib::ustring const &path);
+    void read_if_unset( gint id, gchar const *val );
+    Glib::ustring write( guint const flags, SPStyle const *const base = NULL ) const;
+    void cascade( SPStyle const *const parent );
+    void merge(   SPStyle const *const parent );
+    bool operator==(const SPStyle& rhs);
+
+    int ref()   { ++refcount; return refcount; }
+    int unref() { --refcount; return refcount; }
+
+//FIXME: Make private
+public:
+    void merge_string( gchar const *const p );
+    void merge_decl_list( CRDeclaration const *const decl_list );
+    void merge_decl(      CRDeclaration const *const decl );
+    void merge_props( CRPropList *const props );
+    void merge_object_stylesheet( SPObject const *const object );
+
+// FIXME: Make private
+public:
+    int refcount;
+    static int count;
+
+public:
     /** Object we are attached to */
     SPObject *object;
     /** Document we are associated with */
     SPDocument *document;
 
-    /** Our text style component */
-    SPTextStyle *text;
-    unsigned text_private : 1;
+    /// Pointers to all the properties (for looping through them)
+    std::vector<SPIBase *> properties;
+
+    /** Our font style component */
+    SPFontStyle *text; // FIXME: Break into font, font-family, ...
 
     /* CSS2 */
     /* Font */
@@ -57,15 +96,14 @@ struct SPStyle {
     SPILength text_indent;
     /** text alignment (css2 16.2) (not to be confused with text-anchor) */
     SPIEnum text_align;
-    /** text decoration (css2 16.3.1) is now handled as a subset of css3 2.4 */
-    //    SPITextDecoration      text_decoration; 
-    
+    /** text decoration (css2 16.3.1) */
+    SPITextDecoration      text_decoration; 
     /** CSS 3 2.1, 2.2, 2.3 */
     /** Not done yet, test_decoration3        = css3 2.4*/
     SPITextDecorationLine  text_decoration_line;
+    SPITextDecorationStyle text_decoration_style;  // SPIEnum? Only one can be set at time.
+    //SPIColor               text_decoration_color; FIXME
     SPIPaint               text_decoration_color;
-    SPITextDecorationStyle text_decoration_style;
-
     // used to implement text_decoration, not saved to or read from SVG file
     SPITextDecorationData  text_decoration_data;
 
@@ -122,6 +160,7 @@ struct SPStyle {
     SPIEnum blend_mode;
 
     /** color */
+    // SPIColor color; FIXME
     SPIPaint color;
     /** color-interpolation */
     SPIEnum color_interpolation;
@@ -186,46 +225,46 @@ struct SPStyle {
     sigc::connection fill_ps_modified_connection;
     sigc::connection stroke_ps_modified_connection;
 
-    SPObject *getFilter() { return (filter.href) ? filter.href->getObject() : NULL; }
-    SPObject const *getFilter() const { return (filter.href) ? filter.href->getObject() : NULL; }
-    gchar const *getFilterURI() const { return (filter.href) ? filter.href->getURI()->toString() : NULL; }
+    SPObject       *getFilter()          { return (filter.href) ? filter.href->getObject() : NULL; }
+    SPObject const *getFilter()    const { return (filter.href) ? filter.href->getObject() : NULL; }
+    gchar    const *getFilterURI() const { return (filter.href) ? filter.href->getURI()->toString() : NULL; }
 
-    SPPaintServer *getFillPaintServer() { return (fill.value.href) ? fill.value.href->getObject() : NULL; }
-    SPPaintServer const *getFillPaintServer() const { return (fill.value.href) ? fill.value.href->getObject() : NULL; }
-    gchar const *getFillURI() const { return (fill.value.href) ? fill.value.href->getURI()->toString() : NULL; }
+    SPPaintServer       *getFillPaintServer()         { return (fill.value.href) ? fill.value.href->getObject() : NULL; }
+    SPPaintServer const *getFillPaintServer()   const { return (fill.value.href) ? fill.value.href->getObject() : NULL; }
+    gchar         const *getFillURI()           const { return (fill.value.href) ? fill.value.href->getURI()->toString() : NULL; }
 
-    SPPaintServer *getStrokePaintServer() { return (stroke.value.href) ? stroke.value.href->getObject() : NULL; }
+    SPPaintServer       *getStrokePaintServer()       { return (stroke.value.href) ? stroke.value.href->getObject() : NULL; }
     SPPaintServer const *getStrokePaintServer() const { return (stroke.value.href) ? stroke.value.href->getObject() : NULL; }
-    gchar const  *getStrokeURI() const { return (stroke.value.href) ? stroke.value.href->getURI()->toString() : NULL; }
+    gchar        const  *getStrokeURI()         const { return (stroke.value.href) ? stroke.value.href->getURI()->toString() : NULL; }
 };
 
-SPStyle *sp_style_new(SPDocument *document);
+SPStyle *sp_style_new(SPDocument *document); // SPStyle::SPStyle( SPDocument *document = NULL );
 
-SPStyle *sp_style_new_from_object(SPObject *object);
+SPStyle *sp_style_new_from_object(SPObject *object); // SPStyle::SPStyle( SPObject *object );
 
-SPStyle *sp_style_ref(SPStyle *style);
+SPStyle *sp_style_ref(SPStyle *style); // SPStyle::ref();
 
-SPStyle *sp_style_unref(SPStyle *style);
+SPStyle *sp_style_unref(SPStyle *style); // SPStyle::unref();
 
-void sp_style_read_from_object(SPStyle *style, SPObject *object);
+void sp_style_read_from_object(SPStyle *style, SPObject *object); //SPStyle::read( SPObject * object);
 
-void sp_style_read_from_prefs(SPStyle *style, Glib::ustring const &path);
+void sp_style_read_from_prefs(SPStyle *style, Glib::ustring const &path); // SPStyle::read( ... );
 
-void sp_style_merge_from_style_string(SPStyle *style, gchar const *p);
+void sp_style_merge_from_style_string(SPStyle *style, gchar const *p); // SPStyle::merge( ... );?
 
-void sp_style_merge_from_parent(SPStyle *style, SPStyle const *parent);
+void sp_style_merge_from_parent(SPStyle *style, SPStyle const *parent); // SPStyle::cascade( ... );
 
-void sp_style_merge_from_dying_parent(SPStyle *style, SPStyle const *parent);
+void sp_style_merge_from_dying_parent(SPStyle *style, SPStyle const *parent); // SPStyle::merge( ... )
 
-gchar *sp_style_write_string(SPStyle const *style, guint flags = SP_STYLE_FLAG_IFSET);
+gchar *sp_style_write_string(SPStyle const *style, guint flags = SP_STYLE_FLAG_IFSET);//SPStyle::write
 
-gchar *sp_style_write_difference(SPStyle const *from, SPStyle const *to);
+gchar *sp_style_write_difference(SPStyle const *from, SPStyle const *to); // SPStyle::write
 
-void sp_style_set_to_uri_string (SPStyle *style, bool isfill, const gchar *uri);
+void sp_style_set_to_uri_string (SPStyle *style, bool isfill, const gchar *uri); // ?
 
-gchar const *sp_style_get_css_unit_string(int unit);
-double sp_style_css_size_px_to_units(double size, int unit);
-double sp_style_css_size_units_to_px(double size, int unit);
+gchar const *sp_style_get_css_unit_string(int unit);  // No change?
+double sp_style_css_size_px_to_units(double size, int unit); // No change?
+double sp_style_css_size_units_to_px(double size, int unit); // No change?
 
 
 SPCSSAttr *sp_css_attr_from_style (SPStyle const *const style, guint flags);
@@ -254,3 +293,4 @@ Glib::ustring css2_escape_quote(gchar const *val);
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+ 
