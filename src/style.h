@@ -38,43 +38,49 @@ class Node;
 class SPStyle {
 
 public:
-    SPStyle(SPDocument *document = NULL); // emf, wmf export uses without document
-    SPStyle(SPObject *object);
+    
+    SPStyle(SPDocument *document = NULL, SPObject *object = NULL);// document is ignored if valid object given
     ~SPStyle();
     void clear();
     void read(SPObject *object, Inkscape::XML::Node *repr);
-    void read_from_object(SPObject *object);
-    void read_from_prefs(Glib::ustring const &path);
-    void read_if_unset( gint id, gchar const *val );
+    void readFromObject(SPObject *object);
+    void readFromPrefs(Glib::ustring const &path);
+    void readIfUnset( gint id, gchar const *val );
     Glib::ustring write( guint const flags, SPStyle const *const base = NULL ) const;
     void cascade( SPStyle const *const parent );
     void merge(   SPStyle const *const parent );
     bool operator==(const SPStyle& rhs);
 
-    int ref()   { ++refcount; return refcount; }
-    int unref() { --refcount; return refcount; }
+    int ref()   { ++_refcount; return _refcount; }
+    int unref() { --_refcount; return _refcount; }
 
 //FIXME: Make private
 public:
-    void merge_string( gchar const *const p );
-    void merge_decl_list( CRDeclaration const *const decl_list );
-    void merge_decl(      CRDeclaration const *const decl );
-    void merge_props( CRPropList *const props );
-    void merge_object_stylesheet( SPObject const *const object );
+    void _mergeString( gchar const *const p );  // Rename to readFromString?
+private:
+    void _mergeDeclList( CRDeclaration const *const decl_list );
+    void _mergeDecl(      CRDeclaration const *const decl );
+    void _mergeProps( CRPropList *const props );
+    void _mergeObjectStylesheet( SPObject const *const object );
+
+private:
+    int _refcount;
+    static int _count; // Poor man's leak detector
 
 // FIXME: Make private
-public:
-    int refcount;
-    static int count;
-
 public:
     /** Object we are attached to */
     SPObject *object;
     /** Document we are associated with */
     SPDocument *document;
 
+private:
     /// Pointers to all the properties (for looping through them)
-    std::vector<SPIBase *> properties;
+    std::vector<SPIBase *> _properties;
+
+public:
+
+    /* ----------------------- THE PROPERTIES ------------------------- */
 
     /** Our font style component */
     SPFontStyle *text; // FIXME: Break into font, font-family, ...
@@ -96,14 +102,14 @@ public:
     SPILength text_indent;
     /** text alignment (css2 16.2) (not to be confused with text-anchor) */
     SPIEnum text_align;
+
     /** text decoration (css2 16.3.1) */
     SPITextDecoration      text_decoration; 
     /** CSS 3 2.1, 2.2, 2.3 */
     /** Not done yet, test_decoration3        = css3 2.4*/
     SPITextDecorationLine  text_decoration_line;
     SPITextDecorationStyle text_decoration_style;  // SPIEnum? Only one can be set at time.
-    //SPIColor               text_decoration_color; FIXME
-    SPIPaint               text_decoration_color;
+    SPIColor               text_decoration_color;
     // used to implement text_decoration, not saved to or read from SVG file
     SPITextDecorationData  text_decoration_data;
 
@@ -131,14 +137,6 @@ public:
     /** Anchor of the text (svg1.1 10.9.1) */
     SPIEnum text_anchor;
 
-    /* Misc attributes */
-    unsigned clip_set : 1;
-    unsigned color_set : 1;
-    unsigned cursor_set : 1;
-    unsigned overflow_set : 1;
-    unsigned clip_path_set : 1;
-    unsigned mask_set : 1;
-
     /** clip-rule: 0 nonzero, 1 evenodd */
     SPIEnum clip_rule;
 
@@ -161,7 +159,7 @@ public:
 
     /** color */
     // SPIColor color; FIXME
-    SPIPaint color;
+    SPIColor color;
     /** color-interpolation */
     SPIEnum color_interpolation;
     /** color-interpolation-filters */
@@ -215,6 +213,8 @@ public:
     /** enable-background, used for defining where filter effects get
      * their background image */
     SPIEnum enable_background;
+
+    /* ----------------------- END PROPERTIES ------------------------- */
 
     /// style belongs to a cloned object
     bool cloned;

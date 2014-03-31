@@ -96,6 +96,10 @@ public:
             TestCase("overflow:visible"),                        // SPIEnum
             TestCase("overflow:auto"),                           // SPIEnum
 
+            TestCase("color:#ff0000"),
+            TestCase("color:blue",             "color:#0000ff"),
+            // TestCase("color:currentColor"),  SVG 1.1 does not allow color value 'currentColor'
+
             // Not directly read
             TestCase("font:bold 12px Arial",
                      "font-size:12px;font-style:normal;font-variant:normal;font-weight:bold;line-height:normal;font-family:Arial"),
@@ -195,6 +199,7 @@ public:
         };
 
         for ( gint i = 0; cases[i].src; i++ ) {
+            // std::cout << "Test one: " << i << std::endl;
             SPStyle *style = sp_style_new(_doc);
             TS_ASSERT(style);
             if ( style ) {
@@ -280,8 +285,12 @@ public:
             // Default is not set by class... value is NULL which cannot be compared
             // TestCase("font-family:sans-serif",  "",                       true ), // Default
 
+            // SPIColor
+            TestCase("color:blue",              "color:blue",               true ),
+            TestCase("color:blue",              "color:red",                false),
+            TestCase("color:red",               "color:#ff0000",            true ),
+
             // SPIPaint
-            TestCase("fill:none",               "fill:none",               true ),
             TestCase("fill:blue",               "fill:blue",               true ),
             TestCase("fill:blue",               "fill:red",                false),
             TestCase("fill:currentColor",       "fill:currentColor",       true ),
@@ -342,6 +351,7 @@ public:
             TestCase(0,0,0)
         };
         for ( gint i = 0; cases[i].src; i++ ) {
+            // std::cout << "Test two: " << i << std::endl;
             SPStyle *style_src = sp_style_new(_doc);
             TS_ASSERT(style_src);
             SPStyle *style_dst = sp_style_new(_doc);
@@ -452,6 +462,7 @@ public:
             TestCase(0,0,0)
         };
         for ( gint i = 0; cases[i].parent; i++ ) {
+            // std::cout << "Test three: " << i << std::endl;
             SPStyle *style_parent = sp_style_new(_doc);
             TS_ASSERT(style_parent);
             SPStyle *style_child = sp_style_new(_doc);

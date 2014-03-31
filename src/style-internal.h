@@ -28,11 +28,6 @@
 
 #include <vector>
 
-// Remove after creating style-internal.cpp
-//#include <string.h>
-// TEMP
-#include <iostream>
-
 struct SPStyleEnum;
 
 static const unsigned SP_STYLE_FLAG_ALWAYS (1 << 2);
@@ -108,12 +103,12 @@ static const unsigned SP_STYLE_FLAG_IFDIFF (1 << 1);
 class SPIBase {
 
 public:
-    SPIBase( Glib::ustring name, bool inherits = true ) : name(name), inherits(inherits),
+    SPIBase( Glib::ustring const &name, bool inherits = true ) : name(name), inherits(inherits),
       set(false), inherit(false), style_att(false), style(NULL) {};
     virtual ~SPIBase() {};
     virtual void read( gchar const *str ) = 0;
-    virtual void read_if_unset( gchar const *str ) { if( !set ) read( str ); }
-    virtual void read_attribute( Inkscape::XML::Node *repr ) { read_if_unset( repr->attribute( name.c_str() ) ); }
+    virtual void readIfUnset( gchar const *str ) { if( !set ) read( str ); }
+    virtual void readAttribute( Inkscape::XML::Node *repr ) { readIfUnset( repr->attribute( name.c_str() ) ); }
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPIBase const *const base = NULL ) const = 0;
     virtual void clear() { set = false, inherit = false; };
@@ -142,7 +137,7 @@ public:
     unsigned inherits : 1;    // Property inherits by default from parent.
     unsigned set : 1;         // Property has been explicitly set (vs. inherited).
     unsigned inherit : 1;     // Property value set to 'inherit'.
-    unsigned style_att : 1;   // Read from style attribute (vs. style-sheet).
+    unsigned style_att : 2;   // Source (attribute, style attribute, style-sheet). NOT USED YET FIX ME
 
 // To do: make private after g_asserts removed
 public:
@@ -153,20 +148,19 @@ public:
 class SPIFloat : public SPIBase {
 
 public:
-    SPIFloat() : SPIBase( "no_name_float" ), data(0), value(0.0) {};
+    SPIFloat() : SPIBase( "anonymous_float" ), value(0.0) {};
     SPIFloat( Glib::ustring name, float value_default  = 0.0 )
-        : SPIBase( name ), data(0), value(value_default), value_default(value_default) {};
+        : SPIBase( name ), value(value_default), value_default(value_default) {};
     virtual ~SPIFloat() {};
     virtual void read( gchar const *str );
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPIBase const *const base = NULL ) const;
-    virtual void clear() { SPIBase::clear(); data = 0, value = value_default; };
+    virtual void clear() { SPIBase::clear(); value = value_default; };
     virtual void cascade( SPIBase* const parent );
     virtual void merge(   SPIBase* const parent );
 
     SPIFloat& operator=(const SPIFloat& rhs) {
         SPIBase::operator=(rhs);
-        data          = rhs.data;
         value         = rhs.value;
         value_default = value_default;
         return *this;
@@ -177,7 +171,6 @@ public:
 
 // To do: make private
 public:
-    unsigned data : 30; // TODO: Doesn't seem to be used
     float value;
 
 private:
@@ -219,7 +212,7 @@ static const unsigned SP_SCALE24_MAX = 0xff0000;
 class SPIScale24 : public SPIBase {
 
 public:
-    SPIScale24() : SPIBase( "no_name_scale24" ), value(0) {};
+    SPIScale24() : SPIBase( "anonymous_scale24" ), value(0) {};
     SPIScale24( Glib::ustring name, unsigned value = 0, bool inherits = true )
         : SPIBase( name, inherits ), value(value), value_default(value) {};
     virtual ~SPIScale24() {};
@@ -269,7 +262,7 @@ enum SPCSSUnit {
 class SPILength : public SPIBase {
 
 public:
-    SPILength() : SPIBase( "no_name_length" ), unit(SP_CSS_UNIT_NONE), value(0), computed(0) {};
+    SPILength() : SPIBase( "anonymous_length" ), unit(SP_CSS_UNIT_NONE), value(0), computed(0) {};
     SPILength( Glib::ustring name, unsigned value = 0 )
         : SPIBase( name ), unit(SP_CSS_UNIT_NONE),
           value(value), computed(value), value_default(value) {};
@@ -309,7 +302,7 @@ private:
 class SPILengthOrNormal : public SPILength {
 
 public:
-    SPILengthOrNormal() : SPILength( "no_name_length" ), normal(true) {};
+    SPILengthOrNormal() : SPILength( "anonymous_length" ), normal(true) {};
     SPILengthOrNormal( Glib::ustring name, unsigned value = 0 )
         : SPILength( name, value ), normal(true) {};
     virtual ~SPILengthOrNormal() {};
@@ -331,7 +324,7 @@ public:
 
 // To do: make private
 public:
-    unsigned normal : 1;
+    bool normal : 1;
 };
 
 
@@ -341,7 +334,7 @@ class SPIEnum : public SPIBase {
 
 public:
     SPIEnum() :
-        SPIBase( "no_name_enum" ), enums( NULL ), value(0), computed(0) {};
+        SPIBase( "anonymous_enum" ), enums( NULL ), value(0), computed(0) {};
     SPIEnum( Glib::ustring name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
         SPIBase( name, inherits ), enums( enums ), value(value), computed(value),
         value_default(value), computed_default(value) {};
@@ -388,20 +381,19 @@ class SPIString : public SPIBase {
 
 public:
     SPIString() :
-        SPIBase( "no_name_string" ), data(0), value(NULL) {};
+        SPIBase( "anonymous_string" ), value(NULL) {};
     SPIString( Glib::ustring name ) :
-        SPIBase( name ) , data(0), value(NULL) {};
+        SPIBase( name ) , value(NULL) {};
     virtual ~SPIString() { g_free(value); };
     virtual void read( gchar const *str );
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPIBase const *const base = NULL ) const;
-    virtual void clear() { SPIBase::clear(); data=0; g_free( value ); value = NULL; };
+    virtual void clear() { SPIBase::clear(); g_free( value ); value = NULL; };
     virtual void cascade( SPIBase* const parent );
     virtual void merge(   SPIBase* const parent );
 
     SPIString& operator=(const SPIString& rhs) {
         SPIBase::operator=(rhs);
-        data             = rhs.data;
         value            = rhs.value?g_strdup(rhs.value):NULL;
         return *this;
     }
@@ -411,7 +403,6 @@ public:
 
 // To do: make private, convert value to Glib::ustring
 public:
-    unsigned data : 30; // Used?
     gchar *value;
 };
 
@@ -419,7 +410,7 @@ public:
 class SPIColor : public SPIBase {
 
 public:
-    SPIColor() : SPIBase( "no_name_color" ), currentcolor(false) { value.color.set(0); }
+    SPIColor() : SPIBase( "anonymous_color" ), currentcolor(false) { value.color.set(0); }
     SPIColor( Glib::ustring name ) : SPIBase( name ), currentcolor(false) { value.color.set(0); }
     virtual ~SPIColor() {}
     virtual void read( gchar const *str );
@@ -443,7 +434,7 @@ public:
     void setColor( SPColor const& color ) {      value.color = color;        }
 
 public:
-    unsigned int currentcolor : 1;
+    bool currentcolor : 1;
     // FIXME: remove structure and derive SPIPaint from this class.
     struct {
          SPColor color;
@@ -459,7 +450,7 @@ public:
 class SPIPaint : public SPIBase {
 
 public:
-    SPIPaint() : SPIBase( "no_name_paint" ), currentcolor(false), colorSet(false), noneSet(false) {
+    SPIPaint() : SPIBase( "anonymous_paint" ), currentcolor(false), colorSet(false), noneSet(false) {
         value.href = NULL;
         clear();
     };
@@ -507,9 +498,9 @@ public:
 
 // To do: make private
 public:
-    unsigned int currentcolor : 1;
-    unsigned int colorSet : 1;
-    unsigned int noneSet : 1;
+    bool currentcolor : 1;
+    bool colorSet : 1;
+    bool noneSet : 1;
     struct {
          SPPaintServerReference *href;
          SPColor color;
@@ -757,10 +748,10 @@ public:
 
 // To do: make private
 public:
-    unsigned underline : 1;
-    unsigned overline : 1;
-    unsigned line_through : 1;
-    unsigned blink : 1;    // "Conforming user agents are not required to support this value." yay!
+    bool underline : 1;
+    bool overline : 1;
+    bool line_through : 1;
+    bool blink : 1;    // "Conforming user agents are not required to support this value." yay!
 };
 
 // CSS3 2.2
@@ -792,11 +783,11 @@ public:
 
 // To do: make private
 public:
-    unsigned solid : 1;
-    unsigned isdouble : 1;  // cannot use "double" as it is a reserved keyword
-    unsigned dotted : 1;
-    unsigned dashed : 1;
-    unsigned wavy : 1;
+    bool solid : 1;
+    bool isdouble : 1;  // cannot use "double" as it is a reserved keyword
+    bool dotted : 1;
+    bool dashed : 1;
+    bool wavy : 1;
 };
 
 

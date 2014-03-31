@@ -727,10 +727,10 @@ SPIString::operator==(const SPIBase& rhs) {
 
 // SPIColor -------------------------------------------------------------
 
-// This class is not yet being used. It should be used for 'color', 'text-decoration-color',
-// 'flood-color', 'lighting-color', and 'stop-color'. (The last three have yet to be implemented.)
+// Used for 'color', 'text-decoration-color', 'flood-color', 'lighting-color', and 'stop-color'.
+// (The last three have yet to be implemented.)
+// CSS3: 'currentcolor' is allowed value and is equal to inherit for the 'color' property. 
 // FIXME: We should preserve named colors, hsl colors, etc.
-// FIXME: CSS3: 'currentcolor' is allowed value and is equal to inherit for the 'color' property. 
 void SPIColor::read( gchar const *str ) {
 
     if( !str ) return;
@@ -746,6 +746,8 @@ void SPIColor::read( gchar const *str ) {
         currentcolor = true;
         if( name.compare( "color") == 0 ) {
             inherit = true;  // CSS3
+        } else {
+            value.color = style->color.value.color;
         }
     } else {
         guint32 const rgb0 = sp_svg_read_color(str, 0xff);
@@ -775,6 +777,7 @@ SPIColor::write( guint const flags, SPIBase const *const base) const {
         } else {
             char color_buf[8];
             sp_svg_write_color(color_buf, sizeof(color_buf), this->value.color.toRGBA32( 0 ));
+            css << color_buf;
 
             if (this->value.color.icc) {
                 if ( !css.str().empty() ) {
@@ -881,7 +884,7 @@ SPIPaint::read( gchar const *str ) {
     //     std::cout << "     object: " << (style->object?"present":"null") << std::endl;
     //     if( style->object )
     //         std::cout << "       : " << (style->object->getId()?style->object->getId():"no ID")
-    //               << " document: " << (style->object->document?"yes":"no") << std::endl;
+    //                   << " document: " << (style->object->document?"yes":"no") << std::endl;
     // }
 
     if(!str ) return;
@@ -900,12 +903,12 @@ SPIPaint::read( gchar const *str ) {
         // Read any URL first. The other values can be stand-alone or backup to the URL.
 
         if ( strneq(str, "url", 3) ) {
-            // FIXME: Remove once SPIColor is used instead
-            if( this == &(style->color) || this == &(style->text_decoration_color) ) {
-                std::cerr << "SPIPaint::read(): Attempting to use 'url' with '" 
-                          << name << "'" << std::endl;
-                return;
-            }
+            // // FIXME: Remove once SPIColor is used instead
+            // if( this == &(style->color) || this == &(style->text_decoration_color) ) {
+            //     std::cerr << "SPIPaint::read(): Attempting to use 'url' with '" 
+            //               << name << "'" << std::endl;
+            //     return;
+            // }
 
             // FIXME: THE FOLLOWING CODE SHOULD BE PUT IN A PRIVATE FUNCTION FOR REUSE
             gchar *uri = extract_uri( str, &str );
@@ -950,11 +953,11 @@ SPIPaint::read( gchar const *str ) {
             ++str;
         }
 
-        if (streq(str, "currentColor") && (this != &style->color)) {
+        if (streq(str, "currentColor")) {
             set = TRUE;
             currentcolor = TRUE;
             value.color = style->color.value.color;
-        } else if (streq(str, "none") && (this != &style->color)) {
+        } else if (streq(str, "none")) {
             set = TRUE;
             noneSet = TRUE;
         } else {

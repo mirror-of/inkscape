@@ -66,7 +66,7 @@ using std::vector;
 
 struct SPStyleEnum;
 
-int SPStyle::count = 0;
+int SPStyle::_count = 0;
 
 /*#########################
 ## FORWARD DECLARATIONS
@@ -78,7 +78,10 @@ void sp_style_stroke_paint_server_ref_changed(SPObject *old_ref, SPObject *ref, 
 static void sp_style_object_release(SPObject *object, SPStyle *style);
 static CRSelEng *sp_repr_sel_eng();
 
-SPStyle::SPStyle(SPDocument *document_in) :
+// C++11 allows one constructor to call another... might be useful. The original C code
+// had separate calls to create SPStyle, one with only SPDocument and the other with only
+// SPObject as parameters.
+SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
     // Unimplemented SVG 1.1: alignment-baseline, clip, clip-path, color-profile, cursor,
     // dominant-baseline, flood-color, flood-opacity, font-size-adjust,
@@ -166,10 +169,10 @@ SPStyle::SPStyle(SPDocument *document_in) :
 
     enable_background("enable-background", enum_enable_background, SP_CSS_BACKGROUND_ACCUMULATE, false)
 {
-    // std::cout << "\nSPStyle::SPStyle( SPDocument ): Entrance: (" << count << ")" << std::endl;
-    document = document_in;
-    // if( document ) std::cout << "SPStyle::SPStyle: have document" << std::endl;
-    // else           std::cout << "SPStyle::SPStyle: don't have document" << std::endl;
+    // std::cout << "SPStyle::SPStyle( SPDocument ): Entrance: (" << _count << ")" << std::endl;
+    // std::cout << "                      Document: " << (document_in?"present":"null") << std::endl;
+    // std::cout << "                        Object: "
+    //           << (object_in?(object_in->getId()?object_in->getId():"id null"):"object null") << std::endl;
 
     static bool first = true;
     if( first ) {
@@ -179,17 +182,32 @@ SPStyle::SPStyle(SPDocument *document_in) :
         std::cout << "     SPIScale24: " << sizeof(SPIScale24) << std::endl;
         std::cout << "      SPILength: " << sizeof(SPILength) << std::endl;
         std::cout << "  SPILengthOrNormal: " << sizeof(SPILengthOrNormal) << std::endl;
+        std::cout << "       SPIColor: " << sizeof(SPIColor) << std::endl;
         std::cout << "       SPIPaint: " << sizeof(SPIPaint) << std::endl;
+        std::cout << "  SPITextDecorationLine" << sizeof(SPITextDecorationLine) << std::endl;
         std::cout << "   Glib::ustring:" << sizeof(Glib::ustring) << std::endl;
+        std::cout << "        SPColor: " << sizeof(SPColor) << std::endl;
         first = false;
     }
 
-    ++count; // Poor man's memory leak detector
+    ++_count; // Poor man's memory leak detector
 
-    refcount = 1;
-    object = NULL;
+    _refcount = 1;
 
     cloned = false;
+
+    object = object_in;
+    if( object ) {
+        g_assert( SP_IS_OBJECT(object) );
+        document = object->document;
+        release_connection =
+            object->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_style_object_release), this));
+
+        cloned = object->cloned;
+
+    } else {
+        document = document_in;
+    }
 
     new (&release_connection) sigc::connection();
     new (&filter_modified_connection) sigc::connection();
@@ -232,104 +250,86 @@ SPStyle::SPStyle(SPDocument *document_in) :
     // This might be too resource hungary... but for now it possible to loop over properties
 
     // Must be before 'fill', 'stroke', 'text-decoration-color', ...
-    properties.push_back( &color );
+    _properties.push_back( &color );
 
     // Must be before properties that need to know em, ex size (SPILength, SPILenghtOrNormal)
-    properties.push_back( &font_size ); 
+    _properties.push_back( &font_size ); 
 
-    properties.push_back( &font_style );
-    properties.push_back( &font_variant );
-    properties.push_back( &font_weight );
-    properties.push_back( &font_stretch );
-    properties.push_back( &text_indent );
-    properties.push_back( &text_align );
+    _properties.push_back( &font_style );
+    _properties.push_back( &font_variant );
+    _properties.push_back( &font_weight );
+    _properties.push_back( &font_stretch );
+    _properties.push_back( &text_indent );
+    _properties.push_back( &text_align );
 
-    properties.push_back( &text_decoration );
-    properties.push_back( &text_decoration_line );
-    properties.push_back( &text_decoration_style );
-    properties.push_back( &text_decoration_color );
+    _properties.push_back( &text_decoration );
+    _properties.push_back( &text_decoration_line );
+    _properties.push_back( &text_decoration_style );
+    _properties.push_back( &text_decoration_color );
 
-    properties.push_back( &line_height );
-    properties.push_back( &letter_spacing );
-    properties.push_back( &word_spacing );
-    properties.push_back( &text_transform );
+    _properties.push_back( &line_height );
+    _properties.push_back( &letter_spacing );
+    _properties.push_back( &word_spacing );
+    _properties.push_back( &text_transform );
 
-    properties.push_back( &direction );
-    properties.push_back( &block_progression );
-    properties.push_back( &writing_mode );
-    properties.push_back( &baseline_shift );
-    properties.push_back( &text_anchor );
+    _properties.push_back( &direction );
+    _properties.push_back( &block_progression );
+    _properties.push_back( &writing_mode );
+    _properties.push_back( &baseline_shift );
+    _properties.push_back( &text_anchor );
 
-    properties.push_back( &clip_rule );
-    properties.push_back( &display );
-    properties.push_back( &overflow );
-    properties.push_back( &visibility );
-    properties.push_back( &opacity );
+    _properties.push_back( &clip_rule );
+    _properties.push_back( &display );
+    _properties.push_back( &overflow );
+    _properties.push_back( &visibility );
+    _properties.push_back( &opacity );
 
-    properties.push_back( &isolation );
-    properties.push_back( &blend_mode );
+    _properties.push_back( &isolation );
+    _properties.push_back( &blend_mode );
 
-    properties.push_back( &color_interpolation );
-    properties.push_back( &color_interpolation_filters );
+    _properties.push_back( &color_interpolation );
+    _properties.push_back( &color_interpolation_filters );
 
-    properties.push_back( &fill );
-    properties.push_back( &fill_opacity );
-    properties.push_back( &fill_rule );
+    _properties.push_back( &fill );
+    _properties.push_back( &fill_opacity );
+    _properties.push_back( &fill_rule );
 
-    properties.push_back( &stroke );
-    properties.push_back( &stroke_width );
-    properties.push_back( &stroke_linecap );
-    properties.push_back( &stroke_linejoin );
-    properties.push_back( &stroke_miterlimit );
-    properties.push_back( &stroke_dasharray );
-    properties.push_back( &stroke_dashoffset );
-    properties.push_back( &stroke_opacity );
+    _properties.push_back( &stroke );
+    _properties.push_back( &stroke_width );
+    _properties.push_back( &stroke_linecap );
+    _properties.push_back( &stroke_linejoin );
+    _properties.push_back( &stroke_miterlimit );
+    _properties.push_back( &stroke_dasharray );
+    _properties.push_back( &stroke_dashoffset );
+    _properties.push_back( &stroke_opacity );
 
-    properties.push_back( &marker[SP_MARKER_LOC] );      
-    properties.push_back( &marker[SP_MARKER_LOC_START] );
-    properties.push_back( &marker[SP_MARKER_LOC_MID] );  
-    properties.push_back( &marker[SP_MARKER_LOC_END] );  
+    _properties.push_back( &marker[SP_MARKER_LOC] );      
+    _properties.push_back( &marker[SP_MARKER_LOC_START] );
+    _properties.push_back( &marker[SP_MARKER_LOC_MID] );  
+    _properties.push_back( &marker[SP_MARKER_LOC_END] );  
 
-    properties.push_back( &paint_order );
+    _properties.push_back( &paint_order );
 
-    properties.push_back( &filter );
-    properties.push_back( &filter_blend_mode );
-    properties.push_back( &filter_gaussianBlur_deviation );
+    _properties.push_back( &filter );
+    _properties.push_back( &filter_blend_mode );
+    _properties.push_back( &filter_gaussianBlur_deviation );
 
-    properties.push_back( &color_rendering );
-    properties.push_back( &image_rendering );
-    properties.push_back( &shape_rendering );
-    properties.push_back( &text_rendering );
+    _properties.push_back( &color_rendering );
+    _properties.push_back( &image_rendering );
+    _properties.push_back( &shape_rendering );
+    _properties.push_back( &text_rendering );
 
-    properties.push_back( &enable_background );
+    _properties.push_back( &enable_background );
 
-    // properties.push_back( &text->font );  We could have a preference to select 'font' shorthand
-    properties.push_back( &text->font_family ); // Must be first as other values depend on it ('ex')
-    properties.push_back( &text->font_specification );
-}
-
-SPStyle::SPStyle( SPObject *object_in) {
-
-    std::cout << "\nSPStyle::SPstyle( SPObject ): Entrance"
-              << (object_in?(object_in->getId()?object_in->getId():"id null"):"object null") << std::endl;
-    // g_return_val_if_fail(object_in != NULL, NULL);
-    // g_return_val_if_fail(SP_IS_OBJECT(object_in), NULL);
-    if( !object_in ) return;
-
-    SPStyle( object_in->document );
-
-    object = object_in;
-
-    release_connection = object->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_style_object_release), this));
-
-    if (object->cloned) {
-        cloned = true;
-    }
+    // _properties.push_back( &text->font );  We could have a preference to select 'font' shorthand
+    _properties.push_back( &text->font_family ); // Must be first as other values depend on it ('ex')
+    _properties.push_back( &text->font_specification );
 }
 
 SPStyle::~SPStyle() {
 
-    --count; // Poor man's memory leak detector.
+    // std::cout << "SPStyle::~SPStyle" << std::endl;
+    --_count; // Poor man's memory leak detector.
 
     // Remove connections
     release_connection.disconnect();
@@ -352,7 +352,7 @@ SPStyle::~SPStyle() {
     fill_ps_modified_connection.~connection();
     stroke_ps_modified_connection.~connection();
 
-    properties.clear();
+    _properties.clear();
     delete text;
 
     // std::cout << "SPStyle::~SPstyle(): Exit\n" << std::endl;
@@ -368,7 +368,7 @@ void clear_property( SPIBase* p ) {
 void
 SPStyle::clear() {
 
-    for_each( properties.begin(), properties.end(), clear_property );
+    for_each( _properties.begin(), _properties.end(), clear_property );
 
     // Release connection to object, created in sp_style_new_from_object()
     release_connection.disconnect();
@@ -432,21 +432,21 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     // std::cout << " MERGING STYLE ATTRIBUTE" << std::endl;
     gchar const *val = repr->attribute("style");
     if( val != NULL && *val ) {
-        merge_string( val );
+        _mergeString( val );
     }
 
     /* 2 Style sheet */
     // std::cout << " MERGING OBJECT STYLESHEET" << std::endl;
     if (object) {
-        merge_object_stylesheet( object );
+        _mergeObjectStylesheet( object );
     } else {
         // std::cerr << "SPStyle::read: No object! Can not read style sheet" << std::endl;
     }
 
     /* 3 Presentation attributes */
     // std::cout << " MERGING PRESENTATION ATTRIBUTES" << std::endl;
-    for(std::vector<SPIBase*>::size_type i = 0; i != properties.size(); ++i) {
-        properties[i]->read_attribute( repr );
+    for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
+        _properties[i]->readAttribute( repr );
     }
 
     /* 4 Cascade from parent */
@@ -469,9 +469,9 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
 
 // Matches void sp_style_read_from_object(SPStyle *style, SPObject *object);
 void
-SPStyle::read_from_object( SPObject *object ) {
+SPStyle::readFromObject( SPObject *object ) {
 
-    // std::cout << "SPStyle::read_from_object: "<< (object->getId()?object->getId():"null")<< std::endl;
+    // std::cout << "SPStyle::readFromObject: "<< (object->getId()?object->getId():"null")<< std::endl;
 
     g_return_if_fail(object != NULL);
     g_return_if_fail(SP_IS_OBJECT(object));
@@ -484,22 +484,22 @@ SPStyle::read_from_object( SPObject *object ) {
 
 // Matches sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
 void
-SPStyle::read_if_unset( gint id, gchar const *val ) {
+SPStyle::readIfUnset( gint id, gchar const *val ) {
 
-    // std::cout << "SPStyle::read_if_unset: Entrance: " << (val?val:"null") << std::endl;
+    // std::cout << "SPStyle::readIfUnset: Entrance: " << (val?val:"null") << std::endl;
     // To Do: If it is not too slow, use std::map instead of std::vector inorder to remove switch()
     // (looking up SP_PROP_xxxx already uses a hash).
     g_return_if_fail(val != NULL);
 
     switch (id) {
         case SP_PROP_INKSCAPE_FONT_SPEC:
-            text->font_specification.read_if_unset( val );
+            text->font_specification.readIfUnset( val );
             break;
         case SP_PROP_FONT_FAMILY:
-            text->font_family.read_if_unset( val );
+            text->font_family.readIfUnset( val );
             break;
         case SP_PROP_FONT_SIZE:
-            font_size.read_if_unset( val );
+            font_size.readIfUnset( val );
             break;
         case SP_PROP_FONT_SIZE_ADJUST:
             if (strcmp(val, "none") != 0) {
@@ -507,16 +507,16 @@ SPStyle::read_if_unset( gint id, gchar const *val ) {
             }
             break;
         case SP_PROP_FONT_STYLE:
-            font_style.read_if_unset( val );
+            font_style.readIfUnset( val );
             break;
         case SP_PROP_FONT_VARIANT:
-            font_variant.read_if_unset( val );
+            font_variant.readIfUnset( val );
             break;
         case SP_PROP_FONT_WEIGHT:
-            font_weight.read_if_unset( val );
+            font_weight.readIfUnset( val );
             break;
         case SP_PROP_FONT_STRETCH:
-            font_stretch.read_if_unset( val );
+            font_stretch.readIfUnset( val );
             break;
         case SP_PROP_FONT:
             // TO DO: Create SPIFont class as wrapper for individual font properties
@@ -540,7 +540,7 @@ SPStyle::read_if_unset( gint id, gchar const *val ) {
 
                         os >> param;
                         lparam = param.lowercase();
-                        line_height.read_if_unset( lparam.c_str() );
+                        line_height.readIfUnset( lparam.c_str() );
 
                     } else {
 
@@ -590,67 +590,67 @@ SPStyle::read_if_unset( gint id, gchar const *val ) {
                 std::string val_s = val;
                 std::string family = val_s.substr( val_s.find( param ) );
 
-                text->font_family.read_if_unset( family.c_str() );
+                text->font_family.readIfUnset( family.c_str() );
 
                 // Set all properties to their default values per CSS 2.1 spec if not already set
-                font_size.read_if_unset( "medium" );
-                font_style.read_if_unset( "normal" );
-                font_variant.read_if_unset( "normal" );
-                font_weight.read_if_unset( "normal" );
-                line_height.read_if_unset( "normal" );
+                font_size.readIfUnset( "medium" );
+                font_style.readIfUnset( "normal" );
+                font_variant.readIfUnset( "normal" );
+                font_weight.readIfUnset( "normal" );
+                line_height.readIfUnset( "normal" );
             }
 
             break;
 
             /* Text */
         case SP_PROP_TEXT_INDENT:
-            text_indent.read_if_unset( val );
+            text_indent.readIfUnset( val );
             break;
         case SP_PROP_TEXT_ALIGN:
-            text_align.read_if_unset( val );
+            text_align.readIfUnset( val );
             break;
         case SP_PROP_TEXT_DECORATION:
-            text_decoration.read_if_unset( val );
+            text_decoration.readIfUnset( val );
             break;
         case SP_PROP_TEXT_DECORATION_LINE:
-            text_decoration_line.read_if_unset( val );
+            text_decoration_line.readIfUnset( val );
             break;
         case SP_PROP_TEXT_DECORATION_STYLE:
-            text_decoration_style.read_if_unset( val );
+            text_decoration_style.readIfUnset( val );
             break;
         case SP_PROP_TEXT_DECORATION_COLOR:
-            text_decoration_color.read_if_unset( val );
+            text_decoration_color.readIfUnset( val );
             break;
         case SP_PROP_LINE_HEIGHT:
-            line_height.read_if_unset( val );
+            line_height.readIfUnset( val );
             break;
         case SP_PROP_LETTER_SPACING:
-            letter_spacing.read_if_unset( val );
+            letter_spacing.readIfUnset( val );
             break;
         case SP_PROP_WORD_SPACING:
-            word_spacing.read_if_unset( val );
+            word_spacing.readIfUnset( val );
             break;
         case SP_PROP_TEXT_TRANSFORM:
-            text_transform.read_if_unset( val );
+            text_transform.readIfUnset( val );
             break;
             /* Text (css3) */
         case SP_PROP_DIRECTION:
-            direction.read_if_unset( val );
+            direction.readIfUnset( val );
             break;
         case SP_PROP_BLOCK_PROGRESSION:
-            block_progression.read_if_unset( val );
+            block_progression.readIfUnset( val );
             break;
         case SP_PROP_WRITING_MODE:
-            writing_mode.read_if_unset( val );
+            writing_mode.readIfUnset( val );
             break;
         case SP_PROP_TEXT_ANCHOR:
-            text_anchor.read_if_unset( val );
+            text_anchor.readIfUnset( val );
             break;
         case SP_PROP_BASELINE_SHIFT:
-            baseline_shift.read_if_unset( val );
+            baseline_shift.readIfUnset( val );
             break;
         case SP_PROP_TEXT_RENDERING:
-            text_rendering.read_if_unset( val );
+            text_rendering.readIfUnset( val );
             break;
         case SP_PROP_ALIGNMENT_BASELINE:
             g_warning("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
@@ -672,25 +672,25 @@ SPStyle::read_if_unset( gint id, gchar const *val ) {
             g_warning("Unimplemented style property SP_PROP_CLIP: value: %s", val);
             break;
         case SP_PROP_COLOR:
-            color.read_if_unset( val );
+            color.readIfUnset( val );
             break;
         case SP_PROP_CURSOR:
             g_warning("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
             break;
         case SP_PROP_DISPLAY:
-            display.read_if_unset( val );
+            display.readIfUnset( val );
             break;
         case SP_PROP_OVERFLOW:
-            overflow.read_if_unset( val );
+            overflow.readIfUnset( val );
             break;
         case SP_PROP_VISIBILITY:
-            visibility.read_if_unset( val );
+            visibility.readIfUnset( val );
             break;
         case SP_PROP_ISOLATION:
-            isolation.read_if_unset( val );
+            isolation.readIfUnset( val );
             break;
         case SP_PROP_BLEND_MODE:
-            blend_mode.read_if_unset( val );
+            blend_mode.readIfUnset( val );
             break;
 
             /* SVG */
@@ -708,7 +708,7 @@ SPStyle::read_if_unset( gint id, gchar const *val ) {
             this->object->getRepr()->setAttribute("clip-path", val);
             break;
         case SP_PROP_CLIP_RULE:
-            clip_rule.read_if_unset( val );
+            clip_rule.readIfUnset( val );
             break;
         case SP_PROP_MASK:
             /** \todo
@@ -720,14 +720,14 @@ SPStyle::read_if_unset( gint id, gchar const *val ) {
             this->object->getRepr()->setAttribute("mask", val);
             break;
         case SP_PROP_OPACITY:
-            opacity.read_if_unset( val );
+            opacity.readIfUnset( val );
             break;
         case SP_PROP_ENABLE_BACKGROUND:
-            enable_background.read_if_unset( val );
+            enable_background.readIfUnset( val );
             break;
             /* Filter */
         case SP_PROP_FILTER:
-            if( !filter.inherit ) filter.read_if_unset( val );
+            if( !filter.inherit ) filter.readIfUnset( val );
             break;
         case SP_PROP_FLOOD_COLOR:
             g_warning("Unimplemented style property SP_PROP_FLOOD_COLOR: value: %s", val);
@@ -752,80 +752,80 @@ SPStyle::read_if_unset( gint id, gchar const *val ) {
             /* Paint */
         case SP_PROP_COLOR_INTERPOLATION:
             // We read it but issue warning
-            color_interpolation.read_if_unset( val );
+            color_interpolation.readIfUnset( val );
             if( color_interpolation.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
                 g_warning("Inkscape currently only supports color-interpolation = sRGB");
             }
             break;
         case SP_PROP_COLOR_INTERPOLATION_FILTERS:
-            color_interpolation_filters.read_if_unset( val );
+            color_interpolation_filters.readIfUnset( val );
             break;
         case SP_PROP_COLOR_PROFILE:
             g_warning("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
             break;
         case SP_PROP_COLOR_RENDERING:
-            color_rendering.read_if_unset( val );
+            color_rendering.readIfUnset( val );
             break;
         case SP_PROP_FILL:
-            fill.read_if_unset( val );
+            fill.readIfUnset( val );
             break;
         case SP_PROP_FILL_OPACITY:
-            fill_opacity.read_if_unset( val );
+            fill_opacity.readIfUnset( val );
             break;
         case SP_PROP_FILL_RULE:
-            fill_rule.read_if_unset( val );
+            fill_rule.readIfUnset( val );
             break;
         case SP_PROP_IMAGE_RENDERING:
-            image_rendering.read_if_unset( val );
+            image_rendering.readIfUnset( val );
             break;
         case SP_PROP_MARKER:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */ 
-            marker[SP_MARKER_LOC].read_if_unset( val );
+            marker[SP_MARKER_LOC].readIfUnset( val );
             break;
         case SP_PROP_MARKER_START:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker[SP_MARKER_LOC_START].read_if_unset( val );
+            marker[SP_MARKER_LOC_START].readIfUnset( val );
             break;
         case SP_PROP_MARKER_MID:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker[SP_MARKER_LOC_MID].read_if_unset( val );
+            marker[SP_MARKER_LOC_MID].readIfUnset( val );
             break;
         case SP_PROP_MARKER_END:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker[SP_MARKER_LOC_END].read_if_unset( val );
+            marker[SP_MARKER_LOC_END].readIfUnset( val );
             break;
         case SP_PROP_SHAPE_RENDERING:
-            shape_rendering.read_if_unset( val );
+            shape_rendering.readIfUnset( val );
             break;
         case SP_PROP_STROKE:
-            stroke.read_if_unset( val );
+            stroke.readIfUnset( val );
             break;
         case SP_PROP_STROKE_WIDTH:
-            stroke_width.read_if_unset( val );
+            stroke_width.readIfUnset( val );
             break;
         case SP_PROP_STROKE_DASHARRAY:
-            stroke_dasharray.read_if_unset( val );
+            stroke_dasharray.readIfUnset( val );
             break;
         case SP_PROP_STROKE_DASHOFFSET:
-            stroke_dashoffset.read_if_unset( val );
+            stroke_dashoffset.readIfUnset( val );
             break;
         case SP_PROP_STROKE_LINECAP:
-            stroke_linecap.read_if_unset( val );
+            stroke_linecap.readIfUnset( val );
             break;
         case SP_PROP_STROKE_LINEJOIN:
-            stroke_linejoin.read_if_unset( val );
+            stroke_linejoin.readIfUnset( val );
             break;
         case SP_PROP_STROKE_MITERLIMIT:
-            stroke_miterlimit.read_if_unset( val );
+            stroke_miterlimit.readIfUnset( val );
             break;
         case SP_PROP_STROKE_OPACITY:
-            stroke_opacity.read_if_unset( val );
+            stroke_opacity.readIfUnset( val );
             break;
         case SP_PROP_PAINT_ORDER:
-            paint_order.read_if_unset( val );
+            paint_order.readIfUnset( val );
             break;
         default:
-            g_warning("SPIStyle::read_if_unset(): Invalid style property id: %d value: %s", id, val);
+            g_warning("SPIStyle::readIfUnset(): Invalid style property id: %d value: %s", id, val);
             break;
     }
 }
@@ -836,11 +836,11 @@ SPStyle::write( guint const flags, SPStyle const *const base ) const {
     // std::cout << "SPStyle::write" << std::endl;
 
     Glib::ustring style_string;
-    for(std::vector<SPIBase*>::size_type i = 0; i != properties.size(); ++i) {
+    for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
         if( base != NULL ) {
-            style_string += properties[i]->write( flags, base->properties[i] );
+            style_string += _properties[i]->write( flags, base->_properties[i] );
         } else {
-            style_string += properties[i]->write( flags, NULL );
+            style_string += _properties[i]->write( flags, NULL );
         }
     }
 
@@ -855,8 +855,8 @@ SPStyle::write( guint const flags, SPStyle const *const base ) const {
 void
 SPStyle::cascade( SPStyle const *const parent ) {
     // std::cout << "SPStyle::cascade" << std::endl;
-    for(std::vector<SPIBase*>::size_type i = 0; i != properties.size(); ++i) {
-        properties[i]->cascade( parent->properties[i] );
+    for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
+        _properties[i]->cascade( parent->_properties[i] );
     }
 }
 
@@ -864,8 +864,8 @@ SPStyle::cascade( SPStyle const *const parent ) {
 void
 SPStyle::merge( SPStyle const *const parent ) {
     // std::cout << "SPStyle::merge" << std::endl;
-    for(std::vector<SPIBase*>::size_type i = 0; i != properties.size(); ++i) {
-        properties[i]->merge( parent->properties[i] );
+    for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
+        _properties[i]->merge( parent->_properties[i] );
     }
 }
 
@@ -874,50 +874,50 @@ bool
 SPStyle::operator==(const SPStyle& rhs) {
 
     // Uncomment for testing
-    // for(std::vector<SPIBase*>::size_type i = 0; i != properties.size(); ++i) {
-    //     if( *properties[i] != *rhs.properties[i])
-    //     std::cout << properties[i]->name << ": "
-    //               << properties[i]->write(SP_STYLE_FLAG_ALWAYS,NULL) << " " 
-    //               << rhs.properties[i]->write(SP_STYLE_FLAG_ALWAYS,NULL)
-    //               << (*properties[i]  == *rhs.properties[i]) << std::endl;
+    // for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
+    //     if( *_properties[i] != *rhs._properties[i])
+    //     std::cout << _properties[i]->name << ": "
+    //               << _properties[i]->write(SP_STYLE_FLAG_ALWAYS,NULL) << " " 
+    //               << rhs._properties[i]->write(SP_STYLE_FLAG_ALWAYS,NULL)
+    //               << (*_properties[i]  == *rhs._properties[i]) << std::endl;
     // }
 
-    for(std::vector<SPIBase*>::size_type i = 0; i != properties.size(); ++i) {
-        if( *properties[i] != *rhs.properties[i]) return false;
+    for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
+        if( *_properties[i] != *rhs._properties[i]) return false;
     }
     return true;
 }
 
 void
-SPStyle::merge_string( gchar const *const p ) {
+SPStyle::_mergeString( gchar const *const p ) {
 
-    // std::cout << "SPStyle::merge_string: " << (p?p:"null") << std::endl;
+    // std::cout << "SPStyle::_mergeString: " << (p?p:"null") << std::endl;
     CRDeclaration *const decl_list
         = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
     if (decl_list) {
-        merge_decl_list( decl_list );
+        _mergeDeclList( decl_list );
         cr_declaration_destroy(decl_list);
     }
 }
 
 void
-SPStyle::merge_decl_list( CRDeclaration const *const decl_list ) {
+SPStyle::_mergeDeclList( CRDeclaration const *const decl_list ) {
 
-    // std::cout << "SPStyle::merge_decl_list" << std::endl;
+    // std::cout << "SPStyle::_mergeDeclList" << std::endl;
 
     // In reverse order, as later declarations to take precedence over earlier ones.
     // (Properties are only set if not previously set. See:
     // Ref: http://www.w3.org/TR/REC-CSS2/cascade.html#cascading-order point 4.)
     if (decl_list->next) {
-        merge_decl_list( decl_list->next );
+        _mergeDeclList( decl_list->next );
     }
-    merge_decl( decl_list );
+    _mergeDecl( decl_list );
 }
 
 void
-SPStyle::merge_decl(  CRDeclaration const *const decl ) {
+SPStyle::_mergeDecl(  CRDeclaration const *const decl ) {
 
-    // std::cout << "SPStyle::merge_decl" << std::endl;
+    // std::cout << "SPStyle::_mergeDecl" << std::endl;
 
     unsigned const prop_idx = sp_attribute_lookup(decl->property->stryng->str);
     if (prop_idx != SP_ATTR_INVALID) {
@@ -928,29 +928,29 @@ SPStyle::merge_decl(  CRDeclaration const *const decl ) {
          */
         guchar *const str_value_unsigned = cr_term_to_string(decl->value);
         gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
-        read_if_unset( prop_idx, str_value );
+        readIfUnset( prop_idx, str_value );
         g_free(str_value);
     }
 }
 
 void
-SPStyle::merge_props( CRPropList *const props ) {
+SPStyle::_mergeProps( CRPropList *const props ) {
 
-    // std::cout << "SPStyle::merge_props" << std::endl;
+    // std::cout << "SPStyle::_mergeProps" << std::endl;
 
     // In reverse order, as later declarations to take precedence over earlier ones.
     if (props) {
-        merge_props( cr_prop_list_get_next( props ) );
+        _mergeProps( cr_prop_list_get_next( props ) );
         CRDeclaration *decl = NULL;
         cr_prop_list_get_decl(props, &decl);
-        merge_decl( decl );
+        _mergeDecl( decl );
     }
 }
 
 void
-SPStyle::merge_object_stylesheet( SPObject const *const object ) {
+SPStyle::_mergeObjectStylesheet( SPObject const *const object ) {
 
-    // std::cout << "SPStyle::merge_object_stylesheet: " << (object->getId()?object->getId():"null") << std::endl;
+    // std::cout << "SPStyle::_mergeObjectStylesheet: " << (object->getId()?object->getId():"null") << std::endl;
 
     static CRSelEng *sel_eng = NULL;
     if (!sel_eng) {
@@ -967,7 +967,7 @@ SPStyle::merge_object_stylesheet( SPObject const *const object ) {
     g_return_if_fail(status == CR_OK);
     /// \todo Check what errors can occur, and handle them properly.
     if (props) {
-        merge_props(props);
+        _mergeProps(props);
         cr_prop_list_destroy(props);
     }
 }
@@ -1115,14 +1115,7 @@ sp_style_new_from_object(SPObject *object)
     g_return_val_if_fail(object != NULL, NULL);
     g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
 
-    SPStyle *style = sp_style_new( object->document );
-    style->object = object;
-    style->release_connection = object->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_style_object_release), style));
-
-    if (object->cloned) {
-        style->cloned = true;
-    }
-
+    SPStyle *const style = new SPStyle( NULL, object );
     return style;
 }
 
@@ -1134,9 +1127,8 @@ SPStyle *
 sp_style_ref(SPStyle *style)
 {
     g_return_val_if_fail(style != NULL, NULL);
-    g_return_val_if_fail(style->refcount > 0, NULL);
 
-    style->refcount += 1;
+    style->ref(); // Increase ref count
 
     return style;
 }
@@ -1150,11 +1142,7 @@ SPStyle *
 sp_style_unref(SPStyle *style)
 {
     g_return_val_if_fail(style != NULL, NULL);
-    g_return_val_if_fail(style->refcount > 0, NULL);
-
-    style->refcount -= 1;
-
-    if (style->refcount < 1) {
+    if (style->unref() < 1) {
         delete style;
         return NULL;
     }
@@ -1261,13 +1249,7 @@ sp_style_merge_from_style_string(SPStyle *const style, gchar const *const p)
      * Why does it say "including", what else is allowed in the style
      * attribute value?
      */
-
-    CRDeclaration *const decl_list
-        = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
-    if (decl_list) {
-        style->merge_decl_list( decl_list );
-        cr_declaration_destroy(decl_list);
-    }
+    style->_mergeString( p );
 }
 
 /** Indexed by SP_CSS_FONT_SIZE_blah.   These seem a bit small */
