@@ -41,27 +41,28 @@ Build-Depends:
  zlib1g-dev 
 Standards-Version: 3.9.5
 
-Package: inkscape-trunk
+Package: inkscape
 Architecture: any
-Homepage: http://www.inkscape.org/
 Depends:
  ${shlibs:Depends},
  ${misc:Depends}
-Suggests: dia | dia-gnome, 
-          ruby, 
-          libgnomevfs2-extra, 
-          libsvg-perl, 
-          libxml-xql-perl, 
-          transfig,
-          pstoedit
-Recommends: aspell,
-            imagemagick, 
-            libwmf-bin, 
-            perlmagick, 
-            python-numpy, 
-            python-lxml, 
-            python-uniconvertor
-Conflicts: inkscape
+Recommends:
+ aspell,
+ imagemagick,
+ libwmf-bin,
+ perlmagick,
+ python-numpy,
+ python-lxml,
+ python-uniconvertor
+Suggests:
+ dia | dia-gnome,
+ ruby,
+ libgnomevfs2-extra,
+ libsvg-perl,
+ libxml-xql-perl,
+ transfig,
+ pstoedit
+Conflicts: inkscape-trunk
 Description: vector-based drawing program (trunk build)
  Inkscape is an illustration editor which has everything you need to create
  professional-quality computer art.  You can use it to make diagrams and 
