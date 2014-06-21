@@ -46,8 +46,9 @@ Standards-Version: 3.9.5
 Package: inkscape
 Architecture: any
 Depends:
- ${shlibs:Depends},
- ${misc:Depends}
+ ${misc:Depends},
+ ${python:Depends},
+ ${shlibs:Depends}
 Recommends:
  aspell,
  imagemagick,
