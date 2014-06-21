@@ -2,46 +2,51 @@ Source: inkscape
 Section: graphics
 Priority: optional
 Homepage: http://www.inkscape.org/
+Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
+Vcs-bzr: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 Maintainer: Inkscape developers <inkscape-devel@lists.sourceforge.net> 
 Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
            Alex Valavanis <valavanisalex@gmail.com>
-Build-Depends: autoconf,
-               automake,
-               debhelper (>= 7.0.0), 
-               intltool, 
-               libart-2.0-dev (>= 2.3.10), 
-               libaspell-dev,
-               libboost-dev, 
-               libgc-dev (>= 1:6.8), 
-               libglib2.0-dev, 
-               libgnomevfs2-dev, 
-               libgtk2.0-dev (>= 2.10.0),
-               libgtkmm-2.4-dev, 
-               libgtkspell-dev, 
-               libgsl0-dev, 
-               liblcms1-dev, 
-               libmagick++-dev, 
-               libpango1.0-dev, 
-               libpng12-dev, 
-               libpoppler-glib-dev, 
-               libpopt-dev, 
-               libsigc++-2.0-dev (>= 2.0.16-2), 
-               libtool, 
-               libwpd-dev, 
-               libwpg-dev, 
-               libxml-parser-perl, 
-               libxml2-dev (>= 2-2.4.24), 
-               libxslt1-dev, 
-               pkg-config, 
-               python-dev, 
-               zlib1g-dev 
-Standards-Version: 3.9.2
+Build-Depends:
+ autoconf,
+ automake,
+ debhelper (>= 8.0.0), 
+ intltool, 
+ libart-2.0-dev (>= 2.3.10), 
+ libaspell-dev,
+ libboost-dev, 
+ libgc-dev (>= 1:6.8), 
+ libglib2.0-dev, 
+ libgnomevfs2-dev, 
+ libgtk2.0-dev (>= 2.10.0),
+ libgtkmm-2.4-dev, 
+ libgtkspell-dev, 
+ libgsl0-dev, 
+ liblcms1-dev, 
+ libmagick++-dev, 
+ libpango1.0-dev, 
+ libpng12-dev, 
+ libpoppler-glib-dev, 
+ libpopt-dev, 
+ libsigc++-2.0-dev (>= 2.0.16-2), 
+ libtool, 
+ libwpd-dev, 
+ libwpg-dev, 
+ libxml-parser-perl, 
+ libxml2-dev (>= 2-2.4.24), 
+ libxslt1-dev, 
+ pkg-config, 
+ python-dev, 
+ zlib1g-dev 
+Standards-Version: 3.9.5
 
 Package: inkscape-trunk
 Architecture: any
 Homepage: http://www.inkscape.org/
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends}
 Suggests: dia | dia-gnome, 
           ruby, 
           libgnomevfs2-extra, 
