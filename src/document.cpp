@@ -1517,7 +1517,7 @@ static void vacuum_document_recursive(SPObject *obj)
  */
 unsigned int SPDocument::vacuumDocument()
 {
-    unsigned int start = objects_in_document(this); // Could be const?
+    unsigned int const start = objects_in_document(this);
     unsigned int end = start;
     unsigned int newend = start;
 
@@ -1547,7 +1547,7 @@ bool SPDocument::isSeeking() const {
  *
  * @param[in] modified True if the document has been modified.
  */
-void SPDocument::setModifiedSinceSave(bool modified) {
+void SPDocument::setModifiedSinceSave(bool const modified) {
     this->modified_since_save = modified;
     if (SP_ACTIVE_DESKTOP) {
         Gtk::Window *parent = SP_ACTIVE_DESKTOP->getToplevel();
