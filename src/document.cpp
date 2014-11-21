@@ -1462,6 +1462,13 @@ sp_document_resource_list_free(gpointer /*key*/, gpointer value, gpointer /*data
     return TRUE;
 }
 
+/**
+ * Count the siblings of an object (plus the object itself).
+ *
+ * @param [in] obj Pointer to the object which siblings shall be counted.
+ * @param [inout] Number of objects counted so far (in previous iterations / recursion levels)
+ * @return Number of siblings (plus the object itself)
+ */
 static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
 {
     count++; // obj itself
@@ -1473,11 +1480,22 @@ static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
     return count;
 }
 
+/**
+ * Count the number of objects in a given document recursively using the count_objects_recursive helper function
+ * 
+ * @param[in] document Pointer to the document for counting objects
+ * @return Numer of objects in the document
+ */
 static unsigned int objects_in_document(SPDocument *document)
 {
     return count_objects_recursive(document->getRoot(), 0);
 }
 
+/**
+ * Remove unused definitions etc. recursively from an object and its siblings
+ *
+ * @param[inout] obj Object which shall be "cleaned"
+ */
 static void vacuum_document_recursive(SPObject *obj)
 {
     if (SP_IS_DEFS(obj)) {
@@ -1492,9 +1510,14 @@ static void vacuum_document_recursive(SPObject *obj)
     }
 }
 
+/**
+ * Remove unused definitions etc. recursively from an entire document.
+ *
+ * @return Number of removed objects
+ */
 unsigned int SPDocument::vacuumDocument()
 {
-    unsigned int start = objects_in_document(this);
+    unsigned int start = objects_in_document(this); // Could be const?
     unsigned int end = start;
     unsigned int newend = start;
 
@@ -1510,6 +1533,7 @@ unsigned int SPDocument::vacuumDocument()
         newend = objects_in_document(this);
 
     } while (iterations < 100 && newend < end);
+	// We stop if vacuum_document_recursive doesn't remove any more objects or after 100 iterations, whichever occurs first.
 
     return start - newend;
 }
@@ -1518,6 +1542,11 @@ bool SPDocument::isSeeking() const {
     return priv->seeking;
 }
 
+/**
+ * Indicate to the user if the document has been modified since the last save by displaying a "*" in front of the name of the file in the window title.
+ *
+ * @param[in] modified True if the document has been modified.
+ */
 void SPDocument::setModifiedSinceSave(bool modified) {
     this->modified_since_save = modified;
     if (SP_ACTIVE_DESKTOP) {

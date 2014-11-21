@@ -79,13 +79,17 @@ Inkscape::XML::NodeEventVector object_event_vector = {
     SPObject::repr_order_changed
 };
 
-// A friend class used to set internal members on SPObject so as to not expose settors in SPObject's public API
+/**
+ * A friend class used to set internal members on SPObject so as to not expose settors in SPObject's public API
+ */
 class SPObjectImpl
 {
 public:
 
 /**
  * Null's the id member of an SPObject without attempting to free prior contents.
+ *
+ * @param[inout] obj Pointer to the object which's id shall be nulled.
  */
     static void setIdNull( SPObject* obj ) {
         if (obj) {
@@ -95,6 +99,9 @@ public:
 
 /**
  * Sets the id member of an object, freeing any prior content.
+ *
+ * @param[inout] obj Pointer to the object which's id shall be set.
+ * @param[in] id New id
  */
     static void setId( SPObject* obj, gchar const* id ) {
         if (obj && (id != obj->id) ) {
@@ -112,6 +119,9 @@ public:
 static gchar *sp_object_get_unique_id(SPObject    *object,
                                       gchar const *defid);
 
+/**
+ * Constructor, sets all attributes to default values.
+ */
 SPObject::SPObject()
     : cloned(0), uflags(0), mflags(0), hrefcount(0), _total_hrefcount(0),
       document(NULL), parent(NULL), children(NULL), _last_child(NULL),
@@ -133,6 +143,9 @@ SPObject::SPObject()
     this->style = sp_style_new_from_object(this);
 }
 
+/**
+ * Destructor, frees the used memory and unreferences a potential successor of the object.
+ */
 SPObject::~SPObject() {
     g_free(this->_label);
     g_free(this->_default_label);
