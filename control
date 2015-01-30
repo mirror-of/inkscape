@@ -41,6 +41,7 @@ Build-Depends:
  libxslt1-dev,
  pkg-config,
  python-dev,
+ python-lxml,
  zlib1g-dev
 Standards-Version: 3.9.5
 
