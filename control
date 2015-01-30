@@ -42,6 +42,7 @@ Build-Depends:
  pkg-config,
  python-dev,
  python-lxml,
+ python-numpy,
  zlib1g-dev
 Standards-Version: 3.9.5
 
