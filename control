@@ -26,7 +26,7 @@ Build-Depends:
  libgtkmm-2.4-dev,
  libgtkspell-dev,
  libgsl0-dev,
- liblcms1-dev,
+ liblcms2-dev,
  libmagick++-dev,
  libpango1.0-dev,
  libpng12-dev,
