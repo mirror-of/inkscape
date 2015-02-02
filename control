@@ -72,7 +72,7 @@ Suggests:
  transfig,
  pstoedit
 Conflicts: inkscape-trunk
-Description: vector-based drawing program (trunk build)
+Description: vector-based drawing program
  Inkscape is an illustration editor which has everything you need to create
  professional-quality computer art.  You can use it to make diagrams and 
  illustrations, technical drawings, web graphics, clip art, icons and logos.
