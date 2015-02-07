@@ -52,7 +52,7 @@ Build-Depends:
  python-numpy,
  python-support,
  zlib1g-dev
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 
 Package: inkscape-trunk
 Architecture: any
