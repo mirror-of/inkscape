@@ -155,6 +155,8 @@ Depends:
  ${misc:Depends},
  ${python:Depends},
  ruby | ruby-interpreter
+Conflicts:
+ inkscape
 Description: Data files for Inkscape
  This package contains architecture-independent data files, tutorials and
  extensions for use with Inkscape.
