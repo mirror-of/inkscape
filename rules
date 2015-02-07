@@ -7,7 +7,10 @@
 export DH_VERBOSE=1
 
 %:
-	dh $@ --with bash-completion,python2 --parallel
+	dh $@ --with autoreconf,bash-completion,python2 --parallel
+
+override_dh_autoreconf:
+	dh_autoreconf ./autogen.sh
 
 override_dh_auto_clean:
 	dh_auto_clean --builddirectory=build-default
@@ -15,7 +18,6 @@ override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 override_dh_auto_configure:
-	export NOCONFIGURE=true && ./autogen.sh
 	dh_auto_configure --builddirectory=build-default
 	dh_auto_configure --builddirectory=build-gtk3 -- --enable-gtk3-experimental
 
