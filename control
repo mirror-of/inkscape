@@ -27,6 +27,7 @@ Build-Depends:
  libgtk2.0-dev (>= 2.10.0),
  libgtkmm-2.4-dev,
  libgtkspell-dev,
+ libicu-dev,
  liblcms2-dev,
  libmagick++-dev,
  libpango1.0-dev,
