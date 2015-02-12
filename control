@@ -32,6 +32,7 @@ Build-Depends:
  libgtkspell-dev,
  libgtkspell-3-dev | libgtkspell3-3-dev,
  libgsl0-dev,
+ libicu-dev,
  liblcms2-dev,
  libmagick++-dev,
  libpango1.0-dev,
