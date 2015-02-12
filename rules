@@ -18,8 +18,8 @@ override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 override_dh_auto_configure:
-	dh_auto_configure --builddirectory=build-default
-	dh_auto_configure --builddirectory=build-gtk3 -- --enable-gtk3-experimental
+	dh_auto_configure --builddirectory=build-default -- --enable-dbusapi
+	dh_auto_configure --builddirectory=build-gtk3 -- --enable-dbusapi --enable-gtk3-experimental
 
 override_dh_auto_build:
 	dh_auto_build --builddirectory=build-default
