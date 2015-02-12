@@ -13,7 +13,7 @@ Build-Depends:
  automake,
  autopoint,
  bash-completion,
- debhelper (>= 8.0.0),
+ debhelper (>= 9),
  gimp,
  intltool,
  libart-2.0-dev (>= 2.3.10),
