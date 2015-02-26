@@ -33,7 +33,7 @@
 #include <map>
 
 #include "uri.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 
 #include <glibmm/ustring.h>
 

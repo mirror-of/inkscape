@@ -12,7 +12,7 @@
 #define INKSCAPE_UI_WIDGET_ATTR_WIDGET_H
 
 #include "attributes.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "xml/node.h"
 
 namespace Inkscape {

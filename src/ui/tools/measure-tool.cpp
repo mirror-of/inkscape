@@ -16,9 +16,9 @@
 #include "util/units.h"
 #include "macros.h"
 #include "display/curve.h"
-#include "sp-shape.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
 #include "text-editing.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
@@ -40,7 +40,7 @@
 #include <2geom/crossing.h>
 #include <2geom/angle.h>
 #include "snap.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "enums.h"
 #include "ui/control-manager.h"
 #include "knot-enums.h"

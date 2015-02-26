@@ -9,8 +9,8 @@
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include "ui/dialog-events.h"
-#include "sp-color-scales.h"
-#include "sp-color-slider.h"
+#include "widgets/sp-color-scales.h"
+#include "widgets/sp-color-slider.h"
 #include "svg/svg-icc-color.h"
 
 #define CSC_CHANNEL_R (1 << 0)

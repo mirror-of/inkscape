@@ -15,7 +15,7 @@
 #include <string>
 #include <iostream>
 
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "display/curve.h"
 #include "2geom/line.h"
 #include "2geom/crossing.h"
@@ -23,8 +23,8 @@
 #include "helper/geom-curves.h"
 #include "svg/stringstream.h"
 #include "conn-avoid-ref.h"
-#include "sp-conn-end.h"
-#include "sp-path.h"
+#include "objects/sp-conn-end.h"
+#include "objects/sp-path.h"
 #include "libavoid/router.h"
 #include "libavoid/connector.h"
 #include "libavoid/geomtypes.h"
@@ -34,8 +34,8 @@
 #include "desktop.h"
 
 #include "document-undo.h"
-#include "sp-namedview.h"
-#include "sp-item-group.h"
+#include "objects/sp-namedview.h"
+#include "objects/sp-item-group.h"
 #include "inkscape.h"
 #include "verbs.h"
 #include <glibmm/i18n.h>

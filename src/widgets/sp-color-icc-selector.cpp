@@ -11,9 +11,9 @@
 #include <vector>
 
 #include "ui/dialog-events.h"
-#include "sp-color-icc-selector.h"
-#include "sp-color-scales.h"
-#include "sp-color-slider.h"
+#include "widgets/sp-color-icc-selector.h"
+#include "widgets/sp-color-scales.h"
+#include "widgets/sp-color-slider.h"
 #include "svg/svg-icc-color.h"
 #include "colorspace.h"
 #include "document.h"
@@ -23,7 +23,7 @@
 #define noDEBUG_LCMS
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-#include "color-profile.h"
+#include "objects/color-profile.h"
 #include "cms-system.h"
 #include "color-profile-cms-fns.h"
 

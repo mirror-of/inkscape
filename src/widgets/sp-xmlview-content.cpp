@@ -14,7 +14,7 @@
 #include <glibmm/i18n.h>
 
 #include "xml/node-event-vector.h"
-#include "sp-xmlview-content.h"
+#include "widgets/sp-xmlview-content.h"
 #include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"

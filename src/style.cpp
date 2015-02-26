@@ -40,7 +40,7 @@
 #include "extract-uri.h"
 #include "uri-references.h"
 #include "uri.h"
-#include "sp-paint-server.h"
+#include "objects/sp-paint-server.h"
 #include "streq.h"
 #include "strneq.h"
 #include "style.h"
@@ -51,7 +51,7 @@
 #include "macros.h"
 #include "preferences.h"
 
-#include "sp-filter-reference.h"
+#include "objects/sp-filter-reference.h"
 
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>

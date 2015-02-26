@@ -24,7 +24,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "document.h"
 #include "document-undo.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "desktop.h"
 
 #include "desktop-style.h"
@@ -33,9 +33,9 @@
 #include "snap.h"
 #include "selection.h"
 #include "ui/tools/select-tool.h"
-#include "sp-item.h"
-#include "sp-item-transform.h"
-#include "sp-root.h"
+#include "objects/sp-item.h"
+#include "objects/sp-item-transform.h"
+#include "objects/sp-root.h"
 #include "seltrans-handles.h"
 #include "seltrans.h"
 #include "selection-chemistry.h"

@@ -17,7 +17,7 @@
 
 #include <glib.h>
 
-#include "sp-canvas-item.h"
+#include "display/sp-canvas-item.h"
 
 struct SPCanvasBPath;
 struct SPCanvasBPathClass;

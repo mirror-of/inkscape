@@ -7,174 +7,6 @@ set(main_SRC
 	main.cpp
 )
 
-set(sp_SRC
-	attribute-rel-css.cpp
-	attribute-rel-svg.cpp
-	attribute-rel-util.cpp
-	sp-anchor.cpp
-	sp-clippath.cpp
-	sp-conn-end-pair.cpp
-	sp-conn-end.cpp
-	sp-cursor.cpp
-	sp-defs.cpp
-	sp-desc.cpp
-	sp-ellipse.cpp
-	sp-factory.cpp
-	sp-filter-primitive.cpp
-	sp-filter-reference.cpp
-	sp-filter.cpp
-	sp-flowdiv.cpp
-	sp-flowregion.cpp
-	sp-flowtext.cpp
-	sp-font-face.cpp
-	sp-font.cpp
-	sp-glyph-kerning.cpp
-	sp-glyph.cpp
-	sp-gradient-reference.cpp
-	sp-gradient.cpp
-	sp-guide.cpp
-	sp-hatch.cpp
-	sp-hatch-path.cpp
-	sp-image.cpp
-	sp-item-group.cpp
-	sp-item-notify-moveto.cpp
-	sp-item-rm-unsatisfied-cns.cpp
-	sp-item-transform.cpp
-	sp-item-update-cns.cpp
-	sp-item.cpp
-	sp-line.cpp
-	sp-linear-gradient.cpp
-	sp-lpe-item.cpp
-	sp-marker.cpp
-	sp-mask.cpp
-	sp-mesh-array.cpp
-	sp-mesh-gradient.cpp
-	sp-mesh-patch.cpp
-	sp-mesh-row.cpp
-	sp-metadata.cpp
-	sp-missing-glyph.cpp
-	sp-namedview.cpp
-	sp-object-group.cpp
-	sp-object.cpp
-	sp-offset.cpp
-	sp-paint-server.cpp
-	sp-path.cpp
-	sp-pattern.cpp
-	sp-polygon.cpp
-	sp-polyline.cpp
-	sp-radial-gradient.cpp
-	sp-rect.cpp
-	sp-root.cpp
-	sp-script.cpp
-	sp-shape.cpp
-	sp-solid-color.cpp
-	sp-spiral.cpp
-	sp-star.cpp
-	sp-stop.cpp
-	sp-string.cpp
-	sp-style-elem.cpp
-	sp-switch.cpp
-	sp-symbol.cpp
-	sp-text.cpp
-	sp-title.cpp
-	sp-tref-reference.cpp
-	sp-tref.cpp
-	sp-tspan.cpp
-	sp-use-reference.cpp
-	sp-use.cpp
-	splivarot.cpp
-	viewbox.cpp
-
-	# -------
-	# Headers
-	attribute-rel-css.h
-	attribute-rel-svg.h
-	attribute-rel-util.h
-	sp-anchor.h
-	sp-clippath.h
-	sp-conn-end-pair.h
-	sp-conn-end.h
-	sp-cursor.h
-	sp-defs.h
-	sp-desc.h
-	sp-ellipse.h
-	sp-factory.h
-	sp-filter-primitive.h
-	sp-filter-reference.h
-	sp-filter-units.h
-	sp-filter.h
-	sp-flowdiv.h
-	sp-flowregion.h
-	sp-flowtext.h
-	sp-font-face.h
-	sp-font.h
-	sp-glyph-kerning.h
-	sp-glyph.h
-	sp-gradient-reference.h
-	sp-gradient-spread.h
-	sp-gradient-test.h
-	sp-gradient-units.h
-	sp-gradient-vector.h
-	sp-gradient.h
-	sp-guide-attachment.h
-	sp-guide-constraint.h
-	sp-guide.h
-	sp-hatch.h
-	sp-hatch-path.h
-	sp-image.h
-	sp-item-group.h
-	sp-item-notify-moveto.h
-	sp-item-rm-unsatisfied-cns.h
-	sp-item-transform.h
-	sp-item-update-cns.h
-	sp-item.h
-	sp-line.h
-	sp-linear-gradient.h
-	sp-lpe-item.h
-	sp-marker.h
-	sp-marker-loc.h
-	sp-mask.h
-	sp-mesh-array.h
-	sp-mesh-gradient.h
-	sp-mesh-patch.h
-	sp-mesh-row.h
-	sp-metadata.h
-	sp-missing-glyph.h
-	sp-namedview.h
-	sp-object-group.h
-	sp-object.h
-	sp-offset.h
-	sp-paint-server-reference.h
-	sp-paint-server.h
-	sp-path.h
-	sp-pattern.h
-	sp-polygon.h
-	sp-polyline.h
-	sp-radial-gradient.h
-	sp-rect.h
-	sp-root.h
-	sp-script.h
-	sp-shape.h
-	sp-solid-color.h
-	sp-spiral.h
-	sp-star.h
-	sp-stop.h
-	sp-string.h
-	sp-style-elem-test.h
-	sp-style-elem.h
-	sp-switch.h
-	sp-symbol.h
-	sp-text.h
-	sp-textpath.h
-	sp-title.h
-	sp-tref-reference.h
-	sp-tref.h
-	sp-tspan.h
-	sp-use-reference.h
-	sp-use.h
-	viewbox.h
-)
-
 set(inkscape_SRC
 	attributes.cpp
 	axis-manip.cpp
@@ -257,6 +89,8 @@ set(inkscape_SRC
 	snapped-line.cpp
 	snapped-point.cpp
 	snapper.cpp
+	sp-cursor.cpp
+	splivarot.cpp
 	style.cpp
 	style-internal.cpp
 	svg-view-widget.cpp
@@ -400,6 +234,7 @@ set(inkscape_SRC
 	snapped-line.h
 	snapped-point.h
 	snapper.h
+	sp-cursor.h
 	splivarot.h
 	streq.h
 	strneq.h

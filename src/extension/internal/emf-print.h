@@ -19,7 +19,7 @@
 #include <libuemf/uemf.h>
 #include "extension/internal/metafile-print.h"
 
-#include "sp-gradient.h"
+#include "objects/sp-gradient.h"
 #include "splivarot.h"             // pieces for union on shapes
 #include "display/canvas-bpath.h"  // for SPWindRule
 

@@ -17,7 +17,7 @@
 #define EXTENSION_INTERNAL_CAIRO_PS_OUT_H
 
 #include "extension/implementation/implementation.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 
 #ifdef HAVE_CAIRO_PDF
 

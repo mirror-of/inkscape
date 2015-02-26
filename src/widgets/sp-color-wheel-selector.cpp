@@ -5,10 +5,10 @@
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include "ui/dialog-events.h"
-#include "sp-color-wheel-selector.h"
-#include "sp-color-scales.h"
-#include "sp-color-slider.h"
-#include "sp-color-icc-selector.h"
+#include "widgets/sp-color-wheel-selector.h"
+#include "widgets/sp-color-scales.h"
+#include "widgets/sp-color-slider.h"
+#include "widgets/sp-color-icc-selector.h"
 #include "../svg/svg-icc-color.h"
 #include "ui/widget/gimpcolorwheel.h"
 

@@ -16,9 +16,9 @@
 
 #include "live_effects/lpe-lattice.h"
 
-#include "sp-shape.h"
-#include "sp-item.h"
-#include "sp-path.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-item.h"
+#include "objects/sp-path.h"
 #include "display/curve.h"
 #include "svg/svg.h"
 

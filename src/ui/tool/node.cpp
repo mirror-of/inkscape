@@ -21,7 +21,7 @@
 #include "preferences.h"
 #include "snap.h"
 #include "snap-preferences.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "ui/control-manager.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"

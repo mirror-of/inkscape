@@ -32,7 +32,7 @@
 #include <extension/extension.h>
 #include "preferences.h"
 #include "document-private.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 
 #include "notebook.h"
 

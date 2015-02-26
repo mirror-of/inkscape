@@ -8,7 +8,7 @@
  */
 
 #include "document-private.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 
 #include "patheffect.h"
 #include "db.h"

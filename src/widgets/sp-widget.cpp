@@ -16,7 +16,7 @@
 #include "macros.h"
 #include "document.h"
 #include "inkscape.h"
-#include "sp-widget.h"
+#include "widgets/sp-widget.h"
 #include "helper/sp-marshal.h"
 
 using Inkscape::SPWidgetImpl;

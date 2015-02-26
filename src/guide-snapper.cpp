@@ -11,9 +11,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "desktop.h"
-#include "sp-guide.h"
+#include "objects/sp-guide.h"
 
 Inkscape::GuideSnapper::GuideSnapper(SnapManager *sm, Geom::Coord const d) : LineSnapper(sm, d)
 {

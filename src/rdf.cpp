@@ -16,9 +16,9 @@
 
 #include "xml/repr.h"
 #include "rdf.h"
-#include "sp-item-group.h"
+#include "objects/sp-item-group.h"
 #include "inkscape.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 #include "preferences.h"
 
 /*

@@ -10,10 +10,10 @@
 #include "live_effects/parameter/enum.h"
 #include "live_effects/pathoutlineprovider.h"
 
-#include "sp-shape.h"
+#include "objects/sp-shape.h"
 #include "style.h"
 #include "xml/repr.h"
-#include "sp-paint-server.h"
+#include "objects/sp-paint-server.h"
 #include "svg/svg-color.h"
 #include "desktop-style.h"
 #include "svg/css-ostringstream.h"

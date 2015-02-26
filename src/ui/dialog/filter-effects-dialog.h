@@ -17,7 +17,7 @@
 
 #include "attributes.h"
 #include "ui/widget/panel.h"
-#include "sp-filter.h"
+#include "objects/sp-filter.h"
 #include "ui/widget/combo-enums.h"
 #include "ui/widget/spin-slider.h"
 #include "ui/widget/spin-scale.h"

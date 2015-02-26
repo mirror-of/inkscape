@@ -11,7 +11,7 @@
 
 #include "xml/repr.h"
 #include "xml/node-event-vector.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "attributes.h"
 #include "document.h"
 #include "document-private.h"

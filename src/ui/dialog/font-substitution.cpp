@@ -34,14 +34,14 @@
 
 #include "xml/repr.h"
 
-#include "sp-defs.h"
-#include "sp-root.h"
-#include "sp-text.h"
-#include "sp-textpath.h"
-#include "sp-flowtext.h"
-#include "sp-flowdiv.h"
-#include "sp-tspan.h"
-#include "sp-tref.h"
+#include "objects/sp-defs.h"
+#include "objects/sp-root.h"
+#include "objects/sp-text.h"
+#include "objects/sp-textpath.h"
+#include "objects/sp-flowtext.h"
+#include "objects/sp-flowdiv.h"
+#include "objects/sp-tspan.h"
+#include "objects/sp-tref.h"
 #include "style.h"
 #include "text-editing.h"
 

@@ -9,7 +9,7 @@
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
-#include "sp-color-selector.h"
+#include "widgets/sp-color-selector.h"
 
 enum {
     GRABBED,

@@ -22,9 +22,9 @@
 # include <config.h>
 #endif
 #include "pov-out.h"
-#include <inkscape.h>
-#include <inkscape-version.h>
-#include <sp-path.h>
+#include "inkscape.h"
+#include "inkscape-version.h"
+#include "objects/sp-path.h"
 #include <style.h>
 #include <display/curve.h>
 #include <extension/system.h>
@@ -35,7 +35,7 @@
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include <io/sys.h>
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 #include <string>
 #include <stdio.h>

@@ -10,14 +10,10 @@
  * Released under GNU GPL
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#include "sp-canvas-item.h"
-#include "sp-canvas.h"
-#include "sp-canvas-util.h"
-#include "sp-ctrlquadr.h"
+#include "display/sp-canvas-item.h"
+#include "display/sp-canvas.h"
+#include "display/sp-canvas-util.h"
+#include "display/sp-ctrlquadr.h"
 #include "display/cairo-utils.h"
 #include "color.h"
 

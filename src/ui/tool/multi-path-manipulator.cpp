@@ -20,7 +20,7 @@
 #include "live_effects/lpeobject.h"
 #include "message-stack.h"
 #include "preferences.h"
-#include "sp-path.h"
+#include "objects/sp-path.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"

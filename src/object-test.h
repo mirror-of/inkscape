@@ -8,10 +8,10 @@
 #include <vector>
 
 #include "document.h"
-#include "sp-item-group.h"
-#include "sp-object.h"
-#include "sp-path.h"
-#include "sp-root.h"
+#include "objects/sp-item-group.h"
+#include "objects/sp-object.h"
+#include "objects/sp-path.h"
+#include "objects/sp-root.h"
 #include "xml/document.h"
 #include "xml/node.h"
 

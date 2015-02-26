@@ -17,8 +17,8 @@
 
 #include "live_effects/lpe-curvestitch.h"
 
-#include "sp-item.h"
-#include "sp-path.h"
+#include "objects/sp-item.h"
+#include "objects/sp-path.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
 

@@ -18,7 +18,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-gradient.h"
+#include "objects/sp-gradient.h"
 
 class SPCSSAttr;
 class SPItem;

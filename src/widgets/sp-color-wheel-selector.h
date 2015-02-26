@@ -3,7 +3,7 @@
 
 #include <gtk/gtk.h>
 
-#include "sp-color-selector.h"
+#include "widgets/sp-color-selector.h"
 
 typedef struct _GimpColorWheel GimpColorWheel;
 struct SPColorSlider;

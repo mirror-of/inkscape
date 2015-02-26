@@ -17,14 +17,14 @@
 
 #include "knot-holder-entity.h"
 #include "knotholder.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "style.h"
 #include "preferences.h"
 #include "macros.h"
-#include "sp-pattern.h"
+#include "objects/sp-pattern.h"
 #include "snap.h"
 #include "desktop.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include <2geom/affine.h>
 #include <2geom/transforms.h>
 

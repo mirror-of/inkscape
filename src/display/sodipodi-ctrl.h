@@ -8,7 +8,7 @@
  */
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "sp-canvas-item.h"
+#include "display/sp-canvas-item.h"
 #include "enums.h"
 
 

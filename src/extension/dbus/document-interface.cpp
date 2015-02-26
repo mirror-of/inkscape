@@ -39,9 +39,9 @@
 #include "print.h" //IO
 #include "selection-chemistry.h"// lots of selection functions
 #include "selection.h" //selection struct
-#include "sp-ellipse.h"
-#include "sp-object.h"
-#include "sp-root.h"
+#include "objects/sp-ellipse.h"
+#include "objects/sp-object.h"
+#include "objects/sp-root.h"
 #include "style.h" //style_write
 #include "util/units.h"
 

@@ -36,7 +36,7 @@
 #include "display/canvas-bpath.h"
 #include "display/canvas-text.h"
 #include "message-stack.h"
-#include "sp-path.h"
+#include "objects/sp-path.h"
 #include "util/units.h"
 
 #include "ui/tools/lpe-tool.h"

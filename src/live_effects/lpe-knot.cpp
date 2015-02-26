@@ -12,8 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-shape.h"
-#include "sp-path.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-path.h"
 #include "display/curve.h"
 #include "live_effects/lpe-knot.h"
 #include "svg/svg.h"

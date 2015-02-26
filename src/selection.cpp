@@ -28,12 +28,11 @@
 #include "xml/repr.h"
 #include "preferences.h"
 
-#include "sp-shape.h"
-#include "sp-path.h"
-#include "sp-item-group.h"
-#include "box3d.h"
-#include "box3d.h"
-#include "persp3d.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-path.h"
+#include "objects/sp-item-group.h"
+#include "objects/box3d.h"
+#include "objects/persp3d.h"
 
 #include <sigc++/functors/mem_fun.h>
 

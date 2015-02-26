@@ -34,8 +34,8 @@
 
 #include <2geom/coord.h>
 #include <2geom/point.h>
-#include "sp-shape.h"
-#include "sp-text.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-text.h"
 #include "live_effects/effect.h"
 
 #include "verbs.h"

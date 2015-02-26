@@ -30,7 +30,7 @@
 
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
-#include "sp-text.h"
+#include "objects/sp-text.h"
 
 #ifdef HAVE_ASPELL
 #include <aspell.h>

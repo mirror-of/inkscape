@@ -27,7 +27,7 @@
 #include "desktop.h"
 
 #include "selection.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "util/glib-list-iterators.h"
 
 #include "extension/effect.h"

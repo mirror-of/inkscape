@@ -39,7 +39,7 @@
 #include "widgets/ink-action.h"
 #include "preferences.h"
 #include "selection.h"
-#include "sp-spiral.h"
+#include "objects/sp-spiral.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/uxmanager.h"

@@ -30,7 +30,7 @@
 #include "document-undo.h"
 #include "desktop.h"
 
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 
 #include "registry.h"
 #include "tolerance-slider.h"

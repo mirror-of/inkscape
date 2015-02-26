@@ -33,8 +33,8 @@
 #include "document.h" // for SPDocumentUndo::done()
 #include "document-undo.h"
 #include "libnrtype/font-instance.h"
-#include "sp-flowtext.h"
-#include "sp-text.h"
+#include "objects/sp-flowtext.h"
+#include "objects/sp-text.h"
 #include "verbs.h"
 #include "widgets/font-selector.h"
 #include "text-editing.h"

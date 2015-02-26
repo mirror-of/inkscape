@@ -39,7 +39,7 @@
 #include "widgets/ege-select-one-action.h"
 #include "widgets/ink-action.h"
 #include "selection.h"
-#include "sp-star.h"
+#include "objects/sp-star.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/tools/star-tool.h"

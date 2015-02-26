@@ -16,14 +16,14 @@
 
 #include <2geom/coord.h>
 #include <2geom/transforms.h>
-#include "sp-canvas-util.h"
-#include "sp-ctrlpoint.h"
+#include "display/sp-canvas-util.h"
+#include "display/sp-ctrlpoint.h"
 #include "guideline.h"
 #include "display/cairo-utils.h"
 
 #include "inkscape.h" // for inkscape_active_desktop()
 #include "desktop.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "display/sp-canvas.h"
 #include "ui/control-manager.h"
 

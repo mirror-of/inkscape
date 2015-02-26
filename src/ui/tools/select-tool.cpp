@@ -39,13 +39,13 @@
 #endif
 #include "desktop.h"
 
-#include "sp-root.h"
+#include "objects/sp-root.h"
 #include "preferences.h"
 #include "ui/tools-switch.h"
 #include "message-stack.h"
 #include "selection-describer.h"
 #include "seltrans.h"
-#include "box3d.h"
+#include "objects/box3d.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
 #include "display/drawing-item.h"

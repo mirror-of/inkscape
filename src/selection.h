@@ -23,7 +23,7 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include "inkgc/gc-soft-ptr.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 
 
 class SPDesktop;

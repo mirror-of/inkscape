@@ -2,7 +2,7 @@
 #include "dir-util.h"
 #include "../document.h"  /* Unfortunately there's a separate xml/document.h. */
 #include "io/sys.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "streq.h"
 #include "util/share.h"
 #include "xml/attribute-record.h"

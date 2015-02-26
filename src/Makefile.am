@@ -113,11 +113,10 @@ include extension/Makefile_insert
 include extension/dbus/Makefile_insert
 include extension/implementation/Makefile_insert
 include extension/internal/Makefile_insert
-include filters/Makefile_insert
 include helper/Makefile_insert
 include io/Makefile_insert
-include libcroco/Makefile_insert
 include inkgc/Makefile_insert
+include libcroco/Makefile_insert
 include libgdl/Makefile_insert
 include libnrtype/Makefile_insert
 include libavoid/Makefile_insert
@@ -127,6 +126,8 @@ include live_effects/parameter/Makefile_insert
 include libvpsc/Makefile_insert
 include libcola/Makefile_insert
 include libuemf/Makefile_insert
+include objects/Makefile_insert
+include objects/filters/Makefile_insert
 include svg/Makefile_insert
 include widgets/Makefile_insert
 include debug/Makefile_insert

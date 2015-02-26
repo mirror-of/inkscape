@@ -13,7 +13,7 @@
 #ifndef INKSCAPE_LPE_KNOT_H
 #define INKSCAPE_LPE_KNOT_H
 
-#include "sp-item-group.h"
+#include "objects/sp-item-group.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpegroupbbox.h"
 #include "live_effects/parameter/parameter.h"

@@ -15,7 +15,7 @@
 #include <2geom/path.h>
 #include <2geom/sbasis-to-bezier.h>
 
-#include "sp-lpe-item.h"
+#include "objects/sp-lpe-item.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 

@@ -20,7 +20,7 @@
 #include "helper/action-context.h"
 #include "preferences.h"
 #include "path-chemistry.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 
 #include "util/glib-list-iterators.h"
 

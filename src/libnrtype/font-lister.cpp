@@ -17,8 +17,8 @@
 #include "document.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "sp-object.h"
-#include "sp-root.h"
+#include "objects/sp-object.h"
+#include "objects/sp-root.h"
 #include "xml/repr.h"
 
 #include <glibmm/regex.h>

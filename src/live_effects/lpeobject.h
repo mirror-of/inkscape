@@ -9,7 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
  
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "effect-enum.h"
 
 namespace Inkscape {

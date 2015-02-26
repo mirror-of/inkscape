@@ -39,11 +39,11 @@
 #include "2geom/hvlinesegment.h"
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 
 #include "style.h"
 #include "inkscape-version.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 #include "util/units.h"
 
@@ -51,11 +51,11 @@
 #include "extension/print.h"
 #include "document.h"
 #include "path-prefix.h"
-#include "sp-pattern.h"
-#include "sp-image.h"
-#include "sp-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-linear-gradient.h"
+#include "objects/sp-pattern.h"
+#include "objects/sp-image.h"
+#include "objects/sp-gradient.h"
+#include "objects/sp-radial-gradient.h"
+#include "objects/sp-linear-gradient.h"
 #include "display/cairo-utils.h"
 
 #include "splivarot.h"             // pieces for union on shapes

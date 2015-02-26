@@ -30,7 +30,7 @@
 #include "document-undo.h"
 #include "desktop.h"
 #include "ui/view/view.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 
 #include "display/sp-canvas.h"
 

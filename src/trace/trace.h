@@ -24,7 +24,7 @@
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
 #include <vector>
-#include <sp-shape.h>
+#include "objects/sp-shape.h"
 
 class SPImage;
 class  SPItem;

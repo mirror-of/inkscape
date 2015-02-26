@@ -13,7 +13,7 @@
 #include <string>
 
 #include "xml/node-event-vector.h"
-#include "sp-xmlview-tree.h"
+#include "widgets/sp-xmlview-tree.h"
 
 struct NodeData {
 	SPXMLViewTree * tree;

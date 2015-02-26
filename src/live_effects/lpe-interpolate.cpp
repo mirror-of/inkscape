@@ -20,7 +20,7 @@
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-geometric.h>
 
-#include "sp-path.h"
+#include "objects/sp-path.h"
 #include "display/curve.h"
 
 namespace Inkscape {

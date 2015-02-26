@@ -22,7 +22,7 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "path-reference.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 
 namespace Inkscape {
 

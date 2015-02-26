@@ -17,8 +17,8 @@
 
 #include <glib.h>
 #include "extension/implementation/implementation.h"
-#include <document.h>
-#include <sp-gradient.h>
+#include "document.h"
+#include "objects/sp-gradient.h"
 
 namespace Inkscape
 {

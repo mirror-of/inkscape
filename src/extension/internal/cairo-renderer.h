@@ -24,7 +24,7 @@
 
 //#include "libnrtype/font-instance.h"
 #include "style.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include <cairo.h>
 
 class SPClipPath;

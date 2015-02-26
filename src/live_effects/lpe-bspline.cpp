@@ -26,14 +26,14 @@
 #include "ui/widget/scalar.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
-#include "sp-path.h"
+#include "objects/sp-path.h"
 #include "style.h"
 #include "document-private.h"
 #include "document.h"
 #include "document-undo.h"
 #include "verbs.h"
-#include "sp-lpe-item.h"
-#include "sp-namedview.h"
+#include "objects/sp-lpe-item.h"
+#include "objects/sp-namedview.h"
 #include "display/sp-canvas.h"
 #include <typeinfo>
 #include <vector>

@@ -28,7 +28,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "desktop.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 
 #include <gtkmm/checkbutton.h>
 

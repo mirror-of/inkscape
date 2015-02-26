@@ -7,7 +7,7 @@
 
 #include "live_effects/lpegroupbbox.h"
 
-#include "sp-item.h"
+#include "objects/sp-item.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

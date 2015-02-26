@@ -25,10 +25,10 @@
 #include <gtkmm/entry.h>
 
 #include "inkscape.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "rdf.h"
 #include "ui/widget/registry.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 #include "document-undo.h"
 #include "document-private.h"
 #include "preferences.h"

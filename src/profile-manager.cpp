@@ -11,7 +11,7 @@
 
 #include "profile-manager.h"
 #include "document.h"
-#include "color-profile.h"
+#include "objects/color-profile.h"
 
 #include <cstring>
 

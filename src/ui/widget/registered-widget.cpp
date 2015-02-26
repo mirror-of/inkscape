@@ -39,7 +39,7 @@
 #include "desktop.h"
 
 
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 namespace Inkscape {
 namespace UI {

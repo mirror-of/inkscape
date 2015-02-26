@@ -21,8 +21,8 @@
 #include <gtkmm/label.h>
 
 #include "uri.h"
-#include "sp-shape.h"
-#include "sp-text.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-text.h"
 #include "display/curve.h"
 #include "live_effects/effect.h"
 

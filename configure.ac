@@ -1121,7 +1121,7 @@ src/extension/implementation/makefile
 src/extension/internal/makefile
 src/extension/makefile
 src/extension/dbus/wrapper/inkdbus.pc
-src/filters/makefile
+src/objects/filters/makefile
 src/helper/makefile
 src/io/makefile
 src/libcroco/makefile

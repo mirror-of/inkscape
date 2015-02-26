@@ -15,7 +15,7 @@
 #include <string>
 
 #include "document.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "uri.h"
 #include "uri-references.h"
 #include "extract-uri.h"

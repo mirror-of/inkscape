@@ -24,10 +24,10 @@
 #include "filter-chemistry.h"
 #include "filter-enums.h"
 
-#include "filters/blend.h"
-#include "filters/gaussian-blur.h"
-#include "sp-filter.h"
-#include "sp-filter-reference.h"
+#include "objects/filters/blend.h"
+#include "objects/filters/gaussian-blur.h"
+#include "objects/sp-filter.h"
+#include "objects/sp-filter-reference.h"
 #include "svg/css-ostringstream.h"
 
 #include "xml/repr.h"

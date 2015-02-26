@@ -16,9 +16,9 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/lpe-mirror_symmetry.h"
-#include <sp-path.h>
-#include <display/curve.h>
-#include <svg/path-string.h>
+#include "objects/sp-path.h"
+#include "display/curve.h"
+#include "svg/path-string.h"
 
 #include <2geom/path.h>
 #include <2geom/transforms.h>

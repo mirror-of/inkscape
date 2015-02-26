@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <map>
 #include <2geom/transforms.h>
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "unclump.h"
 
 #include <glib.h>

@@ -20,7 +20,7 @@
 #include <2geom/point.h>
 #include "ui/tools/tool-base.h"
 
-#include "sp-rect.h"
+#include "objects/sp-rect.h"
 
 namespace Inkscape {
 namespace UI {

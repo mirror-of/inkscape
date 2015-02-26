@@ -41,7 +41,7 @@
 #include "mod360.h"
 #include "preferences.h"
 #include "selection.h"
-#include "sp-ellipse.h"
+#include "objects/sp-ellipse.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/uxmanager.h"

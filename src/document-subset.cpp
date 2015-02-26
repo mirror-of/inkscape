@@ -11,7 +11,7 @@
 #include "gc-finalized.h"
 #include "document-subset.h"
 #include "document.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 
 #include <glib.h>
 

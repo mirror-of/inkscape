@@ -15,7 +15,7 @@
  */
 
 #include <2geom/point.h>
-#include "sp-canvas-item.h"
+#include "display/sp-canvas-item.h"
 
 #define SP_TYPE_GUIDELINE (sp_guideline_get_type())
 #define SP_GUIDELINE(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_GUIDELINE, SPGuideLine))

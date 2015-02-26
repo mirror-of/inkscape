@@ -42,7 +42,7 @@
 
 #include "desktop-events.h"
 #include "desktop-style.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "selection.h"
 #include "ui/interface.h"
 #include "macros.h"
@@ -56,7 +56,7 @@
 #include "ui/tools/lpe-tool.h"
 #include "ui/tool/control-point.h"
 #include "ui/shape-editor.h"
-#include "sp-guide.h"
+#include "objects/sp-guide.h"
 #include "color.h"
 #include "knot.h"
 #include "knot-ptr.h"

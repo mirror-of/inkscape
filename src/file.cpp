@@ -57,7 +57,7 @@
 #include "rdf.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "style.h"
 #include "ui/view/view-widget.h"
 #include "uri.h"

@@ -24,7 +24,7 @@
 
 #include <extension/extension.h>
 #include "document-private.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include <color.h>
 #include "widgets/sp-color-selector.h"
 #include "widgets/sp-color-notebook.h"

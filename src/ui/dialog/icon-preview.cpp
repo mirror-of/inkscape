@@ -41,7 +41,7 @@
 #include "inkscape.h"
 #include "preferences.h"
 #include "selection.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 #include "xml/repr.h"
 #include "verbs.h"
 

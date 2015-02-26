@@ -38,12 +38,12 @@
 
 //#include "display/drawing-item.h"
 //#include "display/drawing.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "display/canvas-arena.h"
 
 #include "filedialog.h"
 
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 #include <zlib.h>
 #include <cairomm/win32_surface.h>

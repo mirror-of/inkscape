@@ -18,7 +18,7 @@
 #include <utility>
 #include <2geom/transforms.h>
 
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "snap.h"
 #include "snap-enums.h"
 #include "snapped-line.h"
@@ -30,7 +30,7 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "selection.h"
-#include "sp-guide.h"
+#include "objects/sp-guide.h"
 #include "preferences.h"
 #include "ui/tools/tool-base.h"
 #include "helper/mathfns.h"

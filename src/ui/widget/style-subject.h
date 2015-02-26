@@ -13,7 +13,7 @@
 #include "util/glib-list-iterators.h"
 #include <boost/optional.hpp>
 #include <2geom/rect.h>
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 

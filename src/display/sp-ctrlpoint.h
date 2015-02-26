@@ -12,7 +12,7 @@
  * Released under GNU GPL
  */
 
-#include "sp-canvas-item.h"
+#include "display/sp-canvas-item.h"
 
 class SPItem;
 

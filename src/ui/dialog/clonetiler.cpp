@@ -44,9 +44,9 @@
 #include "message-stack.h"
 #include "preferences.h"
 #include "selection.h"
-#include "sp-filter.h"
-#include "sp-namedview.h"
-#include "sp-use.h"
+#include "objects/sp-filter.h"
+#include "objects/sp-namedview.h"
+#include "objects/sp-use.h"
 #include "style.h"
 #include "svg/svg-color.h"
 #include "svg/svg.h"
@@ -56,7 +56,7 @@
 #include "verbs.h"
 #include "widgets/icon.h"
 #include "xml/repr.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;

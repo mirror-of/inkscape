@@ -14,7 +14,7 @@
 
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/color-picker.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 namespace Inkscape {
 namespace UI {

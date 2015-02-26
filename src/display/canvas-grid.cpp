@@ -34,7 +34,7 @@
 
 #include "ui/widget/registered-widget.h"
 #include "desktop.h"
-#include "sp-canvas-util.h"
+#include "display/sp-canvas-util.h"
 #include "helper/mathfns.h"
 
 #include "display/cairo-utils.h"
@@ -45,9 +45,9 @@
 #include "util/units.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "sp-namedview.h"
-#include "sp-object.h"
-#include "sp-root.h"
+#include "objects/sp-namedview.h"
+#include "objects/sp-object.h"
+#include "objects/sp-root.h"
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 #include "helper/mathfns.h"

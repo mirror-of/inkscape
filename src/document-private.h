@@ -18,8 +18,8 @@
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 #include "xml/event-fns.h"
-#include "sp-defs.h"
-#include "sp-root.h"
+#include "objects/sp-defs.h"
+#include "objects/sp-root.h"
 #include "document.h"
 
 #include "composite-undo-stack-observer.h"

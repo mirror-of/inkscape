@@ -36,8 +36,8 @@
 #include "ui/clipboard.h"
 // required for linking to other paths
 #include "uri.h"
-#include "sp-shape.h"
-#include "sp-text.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-text.h"
 #include "display/curve.h"
 
 #include "ui/tools/node-tool.h"

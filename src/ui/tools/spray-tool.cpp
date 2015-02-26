@@ -39,17 +39,17 @@
 #include <boost/optional.hpp>
 #include "xml/repr.h"
 #include "context-fns.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "inkscape.h"
 
 #include "splivarot.h"
-#include "sp-item-group.h"
-#include "sp-shape.h"
-#include "sp-path.h"
+#include "objects/sp-item-group.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-path.h"
 #include "path-chemistry.h"
 
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
 #include "display/sp-canvas.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
@@ -59,8 +59,8 @@
 #include <2geom/transforms.h>
 #include "preferences.h"
 #include "style.h"
-#include "box3d.h"
-#include "sp-item-transform.h"
+#include "objects/box3d.h"
+#include "objects/sp-item-transform.h"
 #include "filter-chemistry.h"
 
 #include "ui/tools/spray-tool.h"

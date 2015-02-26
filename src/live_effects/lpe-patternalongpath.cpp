@@ -6,7 +6,7 @@
 
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpeobject.h"
-#include "sp-shape.h"
+#include "objects/sp-shape.h"
 #include "display/curve.h"
 #include "svg/svg.h"
 #include "ui/widget/scalar.h"

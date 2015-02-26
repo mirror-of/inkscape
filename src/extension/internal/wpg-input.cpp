@@ -48,7 +48,7 @@
 #include "extension/system.h"
 #include "extension/input.h"
 #include "document.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 #include "util/units.h"
 #include <cstring>
 

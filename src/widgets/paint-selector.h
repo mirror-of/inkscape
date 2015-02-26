@@ -16,8 +16,8 @@
 
 #include "color.h"
 #include "fill-or-stroke.h"
-#include "sp-gradient-spread.h"
-#include "sp-gradient-units.h"
+#include "objects/sp-gradient-spread.h"
+#include "objects/sp-gradient-units.h"
 
 class SPGradient;
 class SPDesktop;

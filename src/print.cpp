@@ -22,10 +22,10 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "document.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "extension/print.h"
 #include "extension/system.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 
 unsigned int

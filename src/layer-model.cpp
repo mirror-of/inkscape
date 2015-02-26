@@ -29,11 +29,11 @@
 #include "layer-fns.h"
 #include "layer-model.h"
 #include "object-hierarchy.h"
-#include "sp-defs.h"
-#include "sp-item.h"
-#include "sp-item-group.h"
-#include "sp-object.h"
-#include "sp-root.h"
+#include "objects/sp-defs.h"
+#include "objects/sp-item.h"
+#include "objects/sp-item-group.h"
+#include "objects/sp-object.h"
+#include "objects/sp-root.h"
 #include <glib.h>
 #include <glibmm/i18n.h>
 #include <sigc++/functors/ptr_fun.h>

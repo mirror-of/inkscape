@@ -25,7 +25,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "layer-manager.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "ui/icon-names.h"
 #include "ui/widget/layer-selector.h"
 #include "util/filter-list.h"

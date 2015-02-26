@@ -44,7 +44,7 @@
 #include "display/nr-filter-gaussian.h"
 #include "display/nr-filter-types.h"
 #include "cms-system.h"
-#include "color-profile.h"
+#include "objects/color-profile.h"
 #include "display/canvas-grid.h"
 #include "path-prefix.h"
 #include "io/resource.h"

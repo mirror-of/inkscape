@@ -23,11 +23,11 @@
 
 #include <glibmm/miscutils.h>
 #include "javafx-out.h"
-#include <inkscape.h>
-#include <inkscape-version.h>
-#include <sp-path.h>
-#include <sp-linear-gradient.h>
-#include <sp-radial-gradient.h>
+#include "inkscape.h"
+#include "inkscape-version.h"
+#include "objects/sp-path.h"
+#include "objects/sp-linear-gradient.h"
+#include "objects/sp-radial-gradient.h"
 #include <style.h>
 #include <display/curve.h>
 #include <display/canvas-bpath.h>
@@ -40,7 +40,7 @@
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include <io/sys.h>
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 #include <string>
 #include <stdio.h>

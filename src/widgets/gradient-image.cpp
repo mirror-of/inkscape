@@ -15,7 +15,7 @@
 #include "display/cairo-utils.h"
 #include "gradient-image.h"
 #include "macros.h"
-#include "sp-gradient.h"
+#include "objects/sp-gradient.h"
 
 #define VBLOCK 16
 

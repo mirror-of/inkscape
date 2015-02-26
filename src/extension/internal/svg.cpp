@@ -17,7 +17,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "svg.h"
 #include "file.h"
 #include "extension/system.h"
@@ -25,7 +25,7 @@
 #include <vector>
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 #include "document.h"
 
 #ifdef WITH_GNOME_VFS

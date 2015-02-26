@@ -16,7 +16,7 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/lpe-tangent_to_curve.h"
-#include "sp-path.h"
+#include "objects/sp-path.h"
 #include "display/curve.h"
 
 #include <2geom/path.h>

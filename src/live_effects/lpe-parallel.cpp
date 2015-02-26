@@ -14,7 +14,7 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/lpe-parallel.h"
-#include "sp-shape.h"
+#include "objects/sp-shape.h"
 #include "display/curve.h"
 
 #include <2geom/path.h>

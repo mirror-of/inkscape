@@ -21,10 +21,10 @@
 
 #include <gtk/gtk.h>
 #include <2geom/transforms.h>
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "selection.h"
 #include "inkscape.h"
-#include "sp-rect.h"
+#include "objects/sp-rect.h"
 #include "document-private.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"

@@ -12,7 +12,7 @@
  */
 #include "display/nr-filter-image.h"
 #include "document.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing.h"

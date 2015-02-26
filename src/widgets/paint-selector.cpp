@@ -29,16 +29,16 @@
 #endif
 
 #include "widgets/swatch-selector.h"
-#include "sp-pattern.h"
+#include "objects/sp-pattern.h"
 #include <glibmm/i18n.h>
 #include "widgets/icon.h"
 #include "widgets/widget-sizes.h"
 #include "xml/repr.h"
 
-#include "sp-color-notebook.h"
-#include "sp-linear-gradient.h"
-#include "sp-mesh-gradient.h"
-#include "sp-radial-gradient.h"
+#include "widgets/sp-color-notebook.h"
+#include "objects/sp-linear-gradient.h"
+#include "objects/sp-mesh-gradient.h"
+#include "objects/sp-radial-gradient.h"
 /* fixme: Move it from dialogs to here */
 #include "gradient-selector.h"
 #include <inkscape.h>

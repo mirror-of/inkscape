@@ -2,7 +2,7 @@
 #define SEEN_SP_COLOR_ICC_SELECTOR_H
 
 #include <glib.h>
-#include "sp-color-selector.h"
+#include "widgets/sp-color-selector.h"
 
 namespace Inkscape {
 class ColorProfile;

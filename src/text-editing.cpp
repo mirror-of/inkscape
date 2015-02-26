@@ -31,13 +31,13 @@
 #include "xml/attribute-record.h"
 #include "xml/sp-css-attr.h"
 
-#include "sp-textpath.h"
-#include "sp-flowtext.h"
-#include "sp-flowdiv.h"
-#include "sp-flowregion.h"
-#include "sp-item-group.h"
-#include "sp-tref.h"
-#include "sp-tspan.h"
+#include "objects/sp-textpath.h"
+#include "objects/sp-flowtext.h"
+#include "objects/sp-flowdiv.h"
+#include "objects/sp-flowregion.h"
+#include "objects/sp-item-group.h"
+#include "objects/sp-tref.h"
+#include "objects/sp-tspan.h"
 
 #include "text-editing.h"
 

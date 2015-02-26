@@ -11,7 +11,7 @@
  */
 
 #include "snapper.h"
-#include "sp-path.h"
+#include "objects/sp-path.h"
 #include "splivarot.h"
 #include "snap-candidate.h"
 

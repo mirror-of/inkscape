@@ -20,7 +20,7 @@
 
 #include "ui/tools/tool-base.h"
 
-#include "sp-widget.h"
+#include "widgets/sp-widget.h"
 #include "widget-sizes.h"
 #include "spinbutton-events.h"
 

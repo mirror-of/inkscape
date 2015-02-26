@@ -14,7 +14,7 @@
 #include "ui/view/view.h"
 
 #include "selection.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "desktop.h"
 #include "implementation/implementation.h"
 #include "effect.h"

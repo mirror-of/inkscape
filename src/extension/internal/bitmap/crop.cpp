@@ -11,7 +11,7 @@
 
 #include "crop.h"
 #include "selection-chemistry.h"
-#include "sp-item-transform.h"
+#include "objects/sp-item-transform.h"
 #include <Magick++.h>
 
 namespace Inkscape {

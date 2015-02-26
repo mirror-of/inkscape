@@ -25,9 +25,9 @@
 #include "selection.h"
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
-#include "sp-item.h"
-#include "sp-shape.h"
-#include "sp-image.h"
+#include "objects/sp-item.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-image.h"
 #include <2geom/transforms.h>
 #include "verbs.h"
 

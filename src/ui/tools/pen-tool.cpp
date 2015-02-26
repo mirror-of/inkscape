@@ -24,7 +24,7 @@
 #include "verbs.h"
 
 #include "ui/tools/pen-tool.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "desktop.h"
 
 #include "selection.h"
@@ -33,7 +33,7 @@
 #include "message-stack.h"
 #include "message-context.h"
 #include "preferences.h"
-#include "sp-path.h"
+#include "objects/sp-path.h"
 #include "display/sp-canvas.h"
 #include "display/curve.h"
 #include "pixmaps/cursor-pen.xpm"

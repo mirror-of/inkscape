@@ -10,8 +10,8 @@
  * Released under GNU GPL
  */
 
-#include "sp-canvas-util.h"
-#include "sp-ctrlpoint.h"
+#include "display/sp-canvas-util.h"
+#include "display/sp-ctrlpoint.h"
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"

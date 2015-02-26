@@ -7,7 +7,7 @@
  */
 
 #include <2geom/transforms.h>
-#include "sp-canvas-util.h"
+#include "display/sp-canvas-util.h"
 #include "sodipodi-ctrl.h"
 #include "display/cairo-utils.h"
 #include "display/sp-canvas.h"

@@ -23,7 +23,7 @@
 #include "display/sp-canvas.h"
 #include "document.h"
 #include "document-undo.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 
@@ -33,7 +33,7 @@
 #include "desktop.h"
 #include "message-context.h"
 #include "pixmaps/cursor-3dbox.xpm"
-#include "box3d.h"
+#include "objects/box3d.h"
 #include "ui/tools/box3d-tool.h"
 #include <glibmm/i18n.h>
 #include "xml/repr.h"
@@ -43,8 +43,8 @@
 #include "desktop-style.h"
 #include "transf_mat_3x4.h"
 #include "perspective-line.h"
-#include "persp3d.h"
-#include "box3d-side.h"
+#include "objects/persp3d.h"
+#include "objects/box3d-side.h"
 #include "document-private.h"
 #include "line-geometry.h"
 #include "ui/shape-editor.h"

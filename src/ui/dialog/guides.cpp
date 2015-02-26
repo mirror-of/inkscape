@@ -22,8 +22,8 @@
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "sp-guide.h"
-#include "sp-namedview.h"
+#include "objects/sp-guide.h"
+#include "objects/sp-namedview.h"
 
 #include "ui/tools/tool-base.h"
 #include "widgets/desktop-widget.h"

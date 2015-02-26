@@ -9,7 +9,7 @@
 
 #include <cxxtest/TestSuite.h>
 
-#include "sp-marker-loc.h"
+#include "objects/sp-marker-loc.h"
 
 class MarkerTest : public CxxTest::TestSuite
 {

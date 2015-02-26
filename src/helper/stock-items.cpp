@@ -25,10 +25,10 @@
 #include "path-prefix.h"
 
 #include <xml/repr.h>
-#include "sp-gradient.h"
+#include "objects/sp-gradient.h"
 #include "document-private.h"
-#include "sp-pattern.h"
-#include "sp-marker.h"
+#include "objects/sp-pattern.h"
+#include "objects/sp-marker.h"
 #include "desktop.h"
 #include "inkscape.h"
 

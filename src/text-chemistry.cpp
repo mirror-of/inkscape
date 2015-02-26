@@ -20,8 +20,8 @@
 #include <glibmm/i18n.h>
 
 #include "xml/repr.h"
-#include "sp-rect.h"
-#include "sp-textpath.h"
+#include "objects/sp-rect.h"
+#include "objects/sp-textpath.h"
 #include "inkscape.h"
 #include "desktop.h"
 #include "document.h"
@@ -32,10 +32,10 @@
 
 #include "text-editing.h"
 #include "text-chemistry.h"
-#include "sp-flowtext.h"
-#include "sp-flowregion.h"
-#include "sp-flowdiv.h"
-#include "sp-tspan.h"
+#include "objects/sp-flowtext.h"
+#include "objects/sp-flowregion.h"
+#include "objects/sp-flowdiv.h"
+#include "objects/sp-tspan.h"
 #include "verbs.h"
 
 using Inkscape::DocumentUndo;

@@ -13,9 +13,9 @@
 
 #include "display/nr-light.h"
 #include "display/nr-3dutils.h"
-#include "filters/distantlight.h"
-#include "filters/pointlight.h"
-#include "filters/spotlight.h"
+#include "objects/filters/distantlight.h"
+#include "objects/filters/pointlight.h"
+#include "objects/filters/spotlight.h"
 #include "color.h"
 
 namespace Inkscape {

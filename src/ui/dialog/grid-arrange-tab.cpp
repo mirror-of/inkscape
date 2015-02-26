@@ -35,10 +35,10 @@
 #include "selection.h"
 #include "document.h"
 #include "document-undo.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "widgets/icon.h"
 #include "desktop.h"
-//#include "sp-item-transform.h" FIXME
+//#include "objects/sp-item-transform.h" FIXME
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 
 /*

@@ -15,7 +15,7 @@
 #include <sstream>
 #include <string.h>
 
-#include "sp-canvas-util.h"
+#include "display/sp-canvas-util.h"
 #include "canvas-text.h"
 #include "display/cairo-utils.h"
 #include "desktop.h"

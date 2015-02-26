@@ -21,10 +21,10 @@
 
 #include "color.h"
 #include "svg/svg-icc-color.h"
-#include "sp-marker-loc.h"
-#include "sp-filter.h"
-#include "sp-filter-reference.h"
-#include "sp-paint-server-reference.h"
+#include "objects/sp-marker-loc.h"
+#include "objects/sp-filter.h"
+#include "objects/sp-filter-reference.h"
+#include "objects/sp-paint-server-reference.h"
 #include "uri.h"
 #include "xml/repr.h"
 

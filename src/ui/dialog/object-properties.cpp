@@ -35,8 +35,8 @@
 #include "inkscape.h"
 #include "selection.h"
 #include "desktop.h"
-#include "sp-item.h"
-#include "sp-image.h"
+#include "objects/sp-item.h"
+#include "objects/sp-image.h"
 #include "xml/repr.h"
 #include <glibmm/i18n.h>
 

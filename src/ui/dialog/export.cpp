@@ -55,18 +55,18 @@
 #include "document.h"
 #include "document-undo.h"
 
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "selection.h"
 #include "file.h"
 #include "macros.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "selection-chemistry.h"
 
 #include "ui/dialog-events.h"
 #include "preferences.h"
 #include "verbs.h"
 #include "ui/interface.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 #include "extension/output.h"
 #include "extension/db.h"

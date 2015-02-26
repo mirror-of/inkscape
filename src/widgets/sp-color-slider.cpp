@@ -11,8 +11,8 @@
  */
 
 #include <gtk/gtk.h>
-#include "sp-color-scales.h"
-#include "sp-color-slider.h"
+#include "widgets/sp-color-scales.h"
+#include "widgets/sp-color-slider.h"
 #include "preferences.h"
 
 #define SLIDER_WIDTH 96

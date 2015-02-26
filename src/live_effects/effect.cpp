@@ -64,7 +64,7 @@
 #include "live_effects/lpe-fillet-chamfer.h"
 
 #include "xml/node-event-vector.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "attributes.h"
 #include "message-stack.h"
 #include "desktop.h"
@@ -76,7 +76,7 @@
 #include "ui/tools/pen-tool.h"
 #include "ui/tools-switch.h"
 #include "knotholder.h"
-#include "sp-lpe-item.h"
+#include "objects/sp-lpe-item.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/parameter/parameter.h"
 #include <glibmm/ustring.h>

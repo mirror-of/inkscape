@@ -19,8 +19,8 @@
 #include "gc-anchored.h"
 #include "knotholder.h"
 #include "ui/object-edit.h"
-#include "sp-item.h"
-#include "sp-object.h"
+#include "objects/sp-item.h"
+#include "objects/sp-object.h"
 #include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
 

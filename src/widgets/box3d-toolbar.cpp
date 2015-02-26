@@ -31,7 +31,7 @@
 #include <glibmm/i18n.h>
 
 #include "box3d-toolbar.h"
-#include "box3d.h"
+#include "objects/box3d.h"
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -39,7 +39,7 @@
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ink-action.h"
 #include "inkscape.h"
-#include "persp3d.h"
+#include "objects/persp3d.h"
 #include "selection.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"

@@ -13,13 +13,13 @@
 #include <gtkmm.h>
 #include <glibmm/i18n.h>
 
-#include "persp3d.h"
+#include "objects/persp3d.h"
 //#include "transf_mat_3x4.h"
 #include "document.h"
 #include "document-private.h"
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpeobject.h"
-#include "sp-item-group.h"
+#include "objects/sp-item-group.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 #include "desktop.h"

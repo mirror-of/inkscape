@@ -21,8 +21,8 @@
 #include "display/sodipodi-ctrlrect.h"
 #include "libnrtype/Layout-TNG.h"
 #include "text-editing.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
 #include "preferences.h"
 #include "selcue.h"
 

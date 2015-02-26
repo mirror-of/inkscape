@@ -13,7 +13,7 @@
 #include "gdkpixbuf-input.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
-#include "sp-image.h"
+#include "objects/sp-image.h"
 #include "util/units.h"
 #include <set>
 

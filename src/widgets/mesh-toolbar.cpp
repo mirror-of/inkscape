@@ -44,7 +44,7 @@
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "gradient-drag.h"
-#include "sp-mesh-gradient.h"
+#include "objects/sp-mesh-gradient.h"
 #include "gradient-chemistry.h"
 #include "gradient-selector.h"
 #include "selection.h"
@@ -56,7 +56,7 @@
 #include "widgets/ink-action.h"
 #include "widgets/ink-comboboxentry-action.h"
 
-#include "sp-stop.h"
+#include "objects/sp-stop.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
 #include "desktop-style.h"

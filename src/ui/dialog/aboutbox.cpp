@@ -32,7 +32,7 @@
 #include "path-prefix.h"
 #include "document.h"
 #include "svg-view-widget.h"
-#include "sp-text.h"
+#include "objects/sp-text.h"
 #include "text-editing.h"
 #include "util/units.h"
 

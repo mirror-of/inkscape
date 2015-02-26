@@ -49,9 +49,9 @@
 #include "ui/interface.h"
 #include "macros.h"
 #include "preferences.h"
-#include "sp-image.h"
-#include "sp-item.h"
-#include "sp-namedview.h"
+#include "objects/sp-image.h"
+#include "objects/sp-item.h"
+#include "objects/sp-namedview.h"
 #include "ui/dialog/swatches.h"
 #include "ui/icon-names.h"
 #include "ui/widget/dock.h"
@@ -59,7 +59,7 @@
 #include "ui/widget/selected-style.h"
 #include "ui/uxmanager.h"
 #include "util/ege-appear-time-tracker.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 // We're in the "widgets" directory, so no need to explicitly prefix these:
 #include "button.h"

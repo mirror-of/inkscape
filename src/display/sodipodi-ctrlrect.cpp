@@ -15,7 +15,7 @@
  */
 
 #include "sodipodi-ctrlrect.h"
-#include "sp-canvas-util.h"
+#include "display/sp-canvas-util.h"
 #include "display/cairo-utils.h"
 #include "display/sp-canvas.h"
 

@@ -34,31 +34,31 @@
 #include <2geom/pathvector.h>
 #include <2geom/rect.h>
 #include <2geom/curves.h>
-#include <sp-clippath.h>
+#include "objects/sp-clippath.h"
 
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "util/units.h"
 
 #include "style.h"
 #include "inkscape-version.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 #include "extension/system.h"
 #include "extension/print.h"
 #include "document.h"
 #include "path-prefix.h"
-#include "sp-pattern.h"
-#include "sp-image.h"
-#include "sp-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-linear-gradient.h"
+#include "objects/sp-pattern.h"
+#include "objects/sp-image.h"
+#include "objects/sp-gradient.h"
+#include "objects/sp-radial-gradient.h"
+#include "objects/sp-linear-gradient.h"
 #include "display/cairo-utils.h"
-#include "sp-shape.h"
+#include "objects/sp-shape.h"
 
 #include "splivarot.h"             // pieces for union on shapes
-#include "2geom/svg-path-parser.h" // to get from SVG text to Geom::Path
+#include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
 #include "display/canvas-bpath.h"  // for SPWindRule
 
 #include "emf-print.h"

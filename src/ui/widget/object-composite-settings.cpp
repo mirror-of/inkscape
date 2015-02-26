@@ -25,7 +25,7 @@
 #include "inkscape.h"
 #include "selection.h"
 #include "style.h"
-#include "sp-item.h"
+#include "objects/sp-item.h"
 #include "svg/css-ostringstream.h"
 #include "verbs.h"
 #include "xml/repr.h"

@@ -19,8 +19,8 @@
 
 #include "stroke-style.h"
 #include "gradient-chemistry.h"
-#include "sp-gradient.h"
-#include "sp-stop.h"
+#include "objects/sp-gradient.h"
+#include "objects/sp-stop.h"
 #include "svg/svg-color.h"
 #include "util/units.h"
 #include "ui/widget/unit-menu.h"

@@ -29,14 +29,14 @@
 #include <2geom/rect.h>
 
 #include <glibmm/i18n.h>
-#include "sp-item.h"
-#include "sp-item-group.h"
+#include "objects/sp-item.h"
+#include "objects/sp-item-group.h"
 #include "style.h"
-#include "sp-root.h"
-#include "sp-use.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "sp-rect.h"
+#include "objects/sp-root.h"
+#include "objects/sp-use.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
+#include "objects/sp-rect.h"
 #include "text-editing.h"
 
 #include "util/units.h"

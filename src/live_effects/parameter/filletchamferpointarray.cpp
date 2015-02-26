@@ -21,7 +21,7 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "knotholder.h"
-#include "sp-lpe-item.h"
+#include "objects/sp-lpe-item.h"
 #include "selection.h"
 
 // needed for on-canvas editting:

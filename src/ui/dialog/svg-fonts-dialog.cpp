@@ -28,15 +28,15 @@
 #include "svg/svg.h"
 #include "xml/node.h"
 #include "xml/repr.h"
-#include "sp-font-face.h"
+#include "objects/sp-font-face.h"
 #include "desktop.h"
 
 #include "display/nr-svgfonts.h"
 #include "verbs.h"
-#include "sp-glyph.h"
-#include "sp-missing-glyph.h"
-#include "sp-font.h"
-#include "sp-glyph-kerning.h"
+#include "objects/sp-glyph.h"
+#include "objects/sp-missing-glyph.h"
+#include "objects/sp-font.h"
+#include "objects/sp-glyph-kerning.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>

@@ -6,7 +6,7 @@
 
 #include "node-observer.h"
 #include "node.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 
 namespace Inkscape {
 namespace XML {

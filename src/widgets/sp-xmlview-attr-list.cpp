@@ -17,8 +17,8 @@
 #include <glibmm/i18n.h>
 
 #include "helper/sp-marshal.h"
-#include "../xml/node-event-vector.h"
-#include "sp-xmlview-attr-list.h"
+#include "xml/node-event-vector.h"
+#include "widgets/sp-xmlview-attr-list.h"
 
 #if GTK_CHECK_VERSION(3,0,0)
 static void sp_xmlview_attr_list_destroy(GtkWidget * object);

@@ -22,10 +22,10 @@
 
 #include "macros.h"
 #include "display/sp-canvas.h"
-#include "sp-spiral.h"
+#include "objects/sp-spiral.h"
 #include "document.h"
 #include "document-undo.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "selection.h"
 
 #include "snap.h"

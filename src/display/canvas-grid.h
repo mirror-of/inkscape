@@ -8,7 +8,7 @@
 #ifndef INKSCAPE_CANVAS_GRID_H
 #define INKSCAPE_CANVAS_GRID_H
 
-#include "sp-canvas-item.h"
+#include "display/sp-canvas-item.h"
 #include "ui/widget/registry.h"
 #include "line-snapper.h"
 

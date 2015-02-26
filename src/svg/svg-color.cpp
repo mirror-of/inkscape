@@ -34,7 +34,7 @@
 
 #include "color.h"
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-#include "color-profile.h"
+#include "objects/color-profile.h"
 #include "document.h"
 #include "inkscape.h"
 #include "profile-manager.h"

@@ -43,7 +43,7 @@
 #include "selection.h"
 #include "preferences.h"
 
-#include "sp-image.h"
+#include "objects/sp-image.h"
 #include "display/cairo-utils.h"
 #include "libdepixelize/kopftracer2011.h"
 #include <algorithm>

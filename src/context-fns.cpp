@@ -6,8 +6,8 @@
 #include "message-context.h"
 #include "message-stack.h"
 #include "snap.h"
-#include "sp-item.h"
-#include "sp-namedview.h"
+#include "objects/sp-item.h"
+#include "objects/sp-namedview.h"
 #include "ui/tools/tool-base.h"
 
 static const double midpt_1_goldenratio = (1 + goldenratio) / 2;

@@ -20,13 +20,13 @@
 
 #include "extract-uri.h"
 #include "id-clash.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "style.h"
-#include "sp-paint-server.h"
+#include "objects/sp-paint-server.h"
 #include "xml/node.h"
 #include "xml/repr.h"
-#include "sp-root.h"
-#include "sp-gradient.h"
+#include "objects/sp-root.h"
+#include "objects/sp-gradient.h"
 
 typedef enum { REF_HREF, REF_STYLE, REF_URL, REF_CLIPBOARD } ID_REF_TYPE;
 

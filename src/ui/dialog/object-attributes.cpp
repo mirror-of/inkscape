@@ -24,8 +24,8 @@
 #include "desktop.h"
 
 #include "macros.h"
-#include "sp-anchor.h"
-#include "sp-image.h"
+#include "objects/sp-anchor.h"
+#include "objects/sp-image.h"
 #include "verbs.h"
 #include "xml/repr.h"
 #include "ui/dialog/object-attributes.h"

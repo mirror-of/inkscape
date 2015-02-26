@@ -45,8 +45,8 @@ extern "C" {
 #include "document-undo.h"
 #include "selection.h"
 #include "style.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
 #include "text-editing.h"
 #include "ui/icon-names.h"
 #include "preferences.h"
@@ -58,7 +58,7 @@ extern "C" {
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include "util/units.h"
-#include "sp-textpath.h"
+#include "objects/sp-textpath.h"
 
 namespace Inkscape {
 namespace UI {

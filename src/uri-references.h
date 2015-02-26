@@ -19,7 +19,7 @@
 #include <sigc++/trackable.h>
 
 #include "bad-uri-exception.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 
 namespace Inkscape {
 

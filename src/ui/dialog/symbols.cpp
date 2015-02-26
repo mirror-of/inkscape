@@ -55,10 +55,10 @@
 
 #include "document.h"
 #include "inkscape.h"
-#include "sp-root.h"
-#include "sp-use.h"
-#include "sp-defs.h"
-#include "sp-symbol.h"
+#include "objects/sp-root.h"
+#include "objects/sp-use.h"
+#include "objects/sp-defs.h"
+#include "objects/sp-symbol.h"
 #include "widgets/icon.h"
 
 #ifdef WITH_LIBVISIO

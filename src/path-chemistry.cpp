@@ -25,9 +25,9 @@
 #include "color.h"
 #include <glib.h>
 #include <glibmm/i18n.h>
-#include "sp-path.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "objects/sp-path.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
 #include "text-editing.h"
 #include "style.h"
 #include "desktop.h"
@@ -36,7 +36,7 @@
 #include "message-stack.h"
 #include "selection.h"
 
-#include "box3d.h"
+#include "objects/box3d.h"
 #include <2geom/pathvector.h>
 #include "selection-chemistry.h"
 #include "path-chemistry.h"

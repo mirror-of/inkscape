@@ -37,7 +37,7 @@
 #include "rubberband.h"
 #include "selection.h"
 #include "snap.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "verbs.h"
 
 // Gradient specific
@@ -48,7 +48,7 @@
 
 // Mesh specific
 #include "ui/tools/mesh-tool.h"
-#include "sp-mesh-gradient.h"
+#include "objects/sp-mesh-gradient.h"
 #include "display/sp-ctrlcurve.h"
 
 using Inkscape::DocumentUndo;

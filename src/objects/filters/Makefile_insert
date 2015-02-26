@@ -1,0 +1,46 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+ink_common_sources +=	\
+	objects/filters/blend.cpp				\
+	objects/filters/blend.h					\
+	objects/filters/colormatrix.cpp				\
+	objects/filters/colormatrix.h				\
+	objects/filters/componenttransfer.cpp			\
+	objects/filters/componenttransfer-funcnode.cpp		\
+	objects/filters/componenttransfer-funcnode.h		\
+	objects/filters/componenttransfer.h			\
+	objects/filters/composite.cpp				\
+	objects/filters/composite.h				\
+	objects/filters/convolvematrix.cpp			\
+	objects/filters/convolvematrix.h			\
+	objects/filters/diffuselighting.cpp			\
+	objects/filters/diffuselighting.h			\
+	objects/filters/displacementmap.cpp			\
+	objects/filters/displacementmap.h			\
+	objects/filters/distantlight.cpp			\
+	objects/filters/distantlight.h				\
+	objects/filters/flood.cpp				\
+	objects/filters/flood.h					\
+	objects/filters/gaussian-blur.cpp			\
+	objects/filters/gaussian-blur.h				\
+	objects/filters/image.cpp				\
+	objects/filters/image.h					\
+	objects/filters/merge.cpp				\
+	objects/filters/merge.h					\
+	objects/filters/mergenode.cpp				\
+	objects/filters/mergenode.h				\
+	objects/filters/morphology.cpp				\
+	objects/filters/morphology.h				\
+	objects/filters/offset.cpp				\
+	objects/filters/offset.h				\
+	objects/filters/pointlight.cpp				\
+	objects/filters/pointlight.h				\
+	objects/filters/specularlighting.cpp			\
+	objects/filters/specularlighting.h			\
+	objects/filters/spotlight.cpp				\
+	objects/filters/spotlight.h				\
+	objects/filters/tile.cpp				\
+	objects/filters/tile.h					\
+	objects/filters/turbulence.cpp				\
+	objects/filters/turbulence.h
+

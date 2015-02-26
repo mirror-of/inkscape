@@ -10,14 +10,10 @@ ink_common_sources +=	\
 	attribute-rel-util.cpp attribute-rel-util.h			\
 	axis-manip.cpp axis-manip.h					\
 	bad-uri-exception.h						\
-	box3d.cpp box3d.h						\
-	box3d-side.cpp box3d-side.h					\
 	brokenimage.xpm							\
 	cms-color-types.h						\
 	cms-system.h							\
 	color.cpp color.h						\
-	color-profile.cpp color-profile.h				\
-	color-profile-cms-fns.h						\
 	color-rgba.h							\
 	colorspace.h							\
 	composite-undo-stack-observer.cpp				\
@@ -79,8 +75,6 @@ ink_common_sources +=	\
 	object-snapper.cpp object-snapper.h				\
 	path-chemistry.cpp path-chemistry.h				\
 	path-prefix.h							\
-	persp3d.cpp persp3d.h						\
-	persp3d-reference.cpp persp3d-reference.h			\
 	perspective-line.cpp perspective-line.h				\
 	preferences.cpp preferences.h					\
 	preferences-skeleton.h						\
@@ -108,91 +102,9 @@ ink_common_sources +=	\
 	snapped-line.cpp snapped-line.h					\
 	snapped-point.cpp snapped-point.h				\
 	snapper.cpp snapper.h						\
-	snap-preferences.cpp snap-preferences.h				\
-	sp-anchor.cpp sp-anchor.h					\
-	sp-clippath.cpp sp-clippath.h					\
-	sp-conn-end.cpp sp-conn-end.h					\
-	sp-conn-end-pair.cpp sp-conn-end-pair.h				\
 	sp-cursor.cpp sp-cursor.h					\
-	sp-defs.cpp sp-defs.h						\
-	sp-desc.cpp sp-desc.h						\
-	sp-ellipse.cpp sp-ellipse.h					\
-	sp-factory.h sp-factory.cpp					\
-	sp-filter.cpp sp-filter.h number-opt-number.h			\
-	sp-filter-primitive.cpp	sp-filter-primitive.h			\
-	sp-filter-reference.cpp	sp-filter-reference.h			\
-	sp-filter-units.h						\
-	sp-flowdiv.h sp-flowdiv.cpp					\
-	sp-flowregion.h sp-flowregion.cpp				\
-	sp-flowtext.h sp-flowtext.cpp					\
-        sp-font.cpp sp-font.h						\
-        sp-font-face.cpp sp-font-face.h					\
-        sp-glyph.cpp sp-glyph.h						\
-        sp-glyph-kerning.cpp sp-glyph-kerning.h				\
-	sp-gradient.cpp sp-gradient.h					\
-	sp-gradient-reference.cpp sp-gradient-reference.h		\
-	sp-gradient-spread.h						\
-	sp-gradient-units.h						\
-	sp-gradient-vector.h						\
-	sp-guide-attachment.h						\
-	sp-guide-constraint.h						\
-	sp-guide.cpp sp-guide.h						\
-	sp-hatch.cpp sp-hatch.h                     \
-	sp-hatch-path.cpp sp-hatch-path.h           \
-	sp-image.cpp sp-image.h						\
-	sp-item.cpp sp-item.h						\
-	sp-item-group.cpp sp-item-group.h				\
-	sp-item-notify-moveto.cpp sp-item-notify-moveto.h		\
-	sp-item-rm-unsatisfied-cns.cpp sp-item-rm-unsatisfied-cns.h	\
-	sp-item-transform.cpp sp-item-transform.h			\
-	sp-item-update-cns.cpp sp-item-update-cns.h			\
-	sp-linear-gradient.cpp sp-linear-gradient.h			\
-	sp-line.cpp sp-line.h						\
 	splivarot.cpp splivarot.h					\
-	sp-lpe-item.cpp sp-lpe-item.h					\
-	sp-marker.cpp sp-marker.h					\
-	sp-marker-loc.h							\
-	sp-mask.cpp sp-mask.h						\
-	sp-metadata.cpp sp-metadata.h					\
-	sp-mesh-array.cpp sp-mesh-array.h				\
-	sp-mesh-gradient.cpp sp-mesh-gradient.h				\
-	sp-mesh-patch.cpp sp-mesh-patch.h				\
-	sp-mesh-row.cpp sp-mesh-row.h					\
-        sp-missing-glyph.cpp sp-missing-glyph.h \
-	sp-namedview.cpp sp-namedview.h		\
-	sp-object.cpp sp-object.h		\
-	sp-object-group.cpp sp-object-group.h	\
-	sp-offset.cpp sp-offset.h		\
-	sp-paint-server.cpp sp-paint-server.h	\
-	sp-paint-server-reference.h		\
-	sp-path.cpp sp-path.h			\
-	sp-pattern.cpp sp-pattern.h		\
-	sp-polygon.cpp sp-polygon.h		\
-	sp-polyline.cpp sp-polyline.h		\
-	sp-radial-gradient.cpp sp-radial-gradient.h			\
-	sp-rect.cpp sp-rect.h			\
-	sp-root.cpp sp-root.h			\
-	sp-script.cpp sp-script.h		\
-	sp-shape.cpp sp-shape.h			\
-	sp-solid-color.cpp sp-solid-color.h	\
-	sp-spiral.cpp sp-spiral.h		\
-	sp-star.cpp sp-star.h			\
-	sp-stop.cpp sp-stop.h			\
-	sp-string.cpp sp-string.h		\
-	sp-style-elem.cpp sp-style-elem.h	\
-	sp-switch.cpp sp-switch.h		\
-	sp-symbol.cpp sp-symbol.h		\
-	sp-tag.cpp sp-tag.h			\
-	sp-tag-use.cpp sp-tag-use.h		\
-	sp-tag-use-reference.cpp sp-tag-use-reference.h			\
-	sp-text.cpp sp-text.h			\
-	sp-textpath.h				\
-	sp-title.cpp sp-title.h			\
-	sp-tref.cpp sp-tref.h			\
-	sp-tref-reference.cpp sp-tref-reference.h			\
-	sp-tspan.cpp sp-tspan.h			\
-	sp-use.cpp sp-use.h			\
-	sp-use-reference.cpp sp-use-reference.h	\
+	snap-preferences.cpp snap-preferences.h				\
 	streq.h					\
 	strneq.h				\
 	style.cpp style.h			\
@@ -213,8 +125,7 @@ ink_common_sources +=	\
 	uri-references.cpp uri-references.h	\
 	vanishing-point.cpp vanishing-point.h	\
 	verbs.cpp verbs.h			\
-	version.cpp version.h			\
-	viewbox.cpp viewbox.h
+	version.cpp version.h
 
 # Additional dependencies
 

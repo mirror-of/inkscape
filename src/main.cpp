@@ -63,12 +63,12 @@
 #include "document.h"
 #include "layer-model.h"
 #include "selection.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "ui/interface.h"
 #include "print.h"
 #include "color.h"
-#include "sp-item.h"
-#include "sp-root.h"
+#include "objects/sp-item.h"
+#include "objects/sp-root.h"
 
 #include "svg/svg.h"
 #include "svg/svg-color.h"
@@ -77,8 +77,8 @@
 #include "inkscape.h"
 #include "inkscape-version.h"
 
-#include "sp-namedview.h"
-#include "sp-guide.h"
+#include "objects/sp-namedview.h"
+#include "objects/sp-guide.h"
 #include "xml/repr.h"
 
 #include "io/sys.h"
@@ -127,8 +127,8 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "path-chemistry.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
 #include "text-editing.h"
 
 enum {

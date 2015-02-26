@@ -18,7 +18,7 @@
 
 #include <glib.h>
 #include "extension/implementation/implementation.h"
-#include <sp-path.h>
+#include "objects/sp-path.h"
 
 
 namespace Inkscape

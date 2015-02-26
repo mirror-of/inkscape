@@ -17,22 +17,22 @@
 
 
 
-#include "sp-item.h"
-#include "sp-rect.h"
-#include "box3d.h"
-#include "sp-ellipse.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
-#include "sp-offset.h"
-#include "sp-flowtext.h"
+#include "objects/sp-item.h"
+#include "objects/sp-rect.h"
+#include "objects/box3d.h"
+#include "objects/sp-ellipse.h"
+#include "objects/sp-star.h"
+#include "objects/sp-spiral.h"
+#include "objects/sp-offset.h"
+#include "objects/sp-flowtext.h"
 #include "preferences.h"
 #include "style.h"
 #include "desktop.h"
 
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "live_effects/effect.h"
-#include "sp-pattern.h"
-#include "sp-path.h"
+#include "objects/sp-pattern.h"
+#include "objects/sp-path.h"
 #include <glibmm/i18n.h>
 #include "ui/object-edit.h"
 #include "xml/repr.h"

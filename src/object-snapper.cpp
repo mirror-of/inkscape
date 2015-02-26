@@ -20,22 +20,22 @@
 #include <2geom/line.h>
 #include <2geom/circle.h>
 #include "document.h"
-#include "sp-namedview.h"
-#include "sp-image.h"
-#include "sp-item-group.h"
-#include "sp-item.h"
-#include "sp-use.h"
+#include "objects/sp-namedview.h"
+#include "objects/sp-image.h"
+#include "objects/sp-item-group.h"
+#include "objects/sp-item.h"
+#include "objects/sp-use.h"
 #include "display/curve.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "objects/sp-text.h"
+#include "objects/sp-flowtext.h"
 #include "text-editing.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
+#include "objects/sp-clippath.h"
+#include "objects/sp-mask.h"
 #include "helper/geom-curves.h"
 #include "desktop.h"
-#include "sp-root.h"
+#include "objects/sp-root.h"
 
 Inkscape::ObjectSnapper::ObjectSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)

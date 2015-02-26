@@ -14,7 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-canvas-item.h"
+#include "display/sp-canvas-item.h"
 
 class SPItem;
 class SPDesktop;

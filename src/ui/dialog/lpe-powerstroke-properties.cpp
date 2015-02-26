@@ -33,8 +33,8 @@
 #include "layer-manager.h"
 #include "message-stack.h"
 
-#include "sp-object.h"
-#include "sp-item.h"
+#include "objects/sp-object.h"
+#include "objects/sp-item.h"
 #include "verbs.h"
 #include "selection.h"
 #include "selection-chemistry.h"

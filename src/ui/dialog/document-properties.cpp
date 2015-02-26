@@ -32,9 +32,9 @@
 #include "io/sys.h"
 #include "preferences.h"
 #include "ui/shape-editor.h"
-#include "sp-namedview.h"
-#include "sp-root.h"
-#include "sp-script.h"
+#include "objects/sp-namedview.h"
+#include "objects/sp-root.h"
+#include "objects/sp-script.h"
 #include "style.h"
 #include "svg/stringstream.h"
 #include "ui/tools-switch.h"
@@ -51,7 +51,7 @@
 #include "ui/widget/entity-entry.h"
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-#include "color-profile.h"
+#include "objects/color-profile.h"
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 #include <gtkmm/imagemenuitem.h>

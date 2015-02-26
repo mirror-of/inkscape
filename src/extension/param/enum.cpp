@@ -29,7 +29,7 @@
 #include "xml/node.h"
 #include "extension/extension.h"
 #include "document-private.h"
-#include "sp-object.h"
+#include "objects/sp-object.h"
 #include "enum.h"
 #include "preferences.h"
 

@@ -8,8 +8,8 @@
 
 #include "live_effects/parameter/path-reference.h"
 
-#include "sp-shape.h"
-#include "sp-text.h"
+#include "objects/sp-shape.h"
+#include "objects/sp-text.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

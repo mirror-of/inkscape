@@ -20,9 +20,9 @@
 #include "ui/widget/color-preview.h"
 
 #include "style.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-pattern.h"
+#include "objects/sp-linear-gradient.h"
+#include "objects/sp-radial-gradient.h"
+#include "objects/sp-pattern.h"
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
 #include "widgets/widget-sizes.h"

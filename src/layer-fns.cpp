@@ -15,7 +15,7 @@
 #endif
 
 #include "document.h"
-#include "sp-item-group.h"
+#include "objects/sp-item-group.h"
 #include "xml/repr.h"
 #include "util/find-last-if.h"
 #include "layer-fns.h"

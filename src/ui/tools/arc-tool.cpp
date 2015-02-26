@@ -24,10 +24,10 @@
 #include "macros.h"
 #include <glibmm/i18n.h>
 #include "display/sp-canvas.h"
-#include "sp-ellipse.h"
+#include "objects/sp-ellipse.h"
 #include "document.h"
 #include "document-undo.h"
-#include "sp-namedview.h"
+#include "objects/sp-namedview.h"
 #include "selection.h"
 
 #include "snap.h"

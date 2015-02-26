@@ -27,7 +27,7 @@
 #include <inkscape.h>
 #include "desktop.h"
 #include "message-stack.h"
-#include <sp-path.h>
+#include "objects/sp-path.h"
 #include <svg/path-string.h>
 #include "curve.h"
 #include "bitmap.h"
