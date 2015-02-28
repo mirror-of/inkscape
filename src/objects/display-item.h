@@ -8,6 +8,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+// Look ma! No #include s!
+
 namespace Geom {
 class Affine;
 class Point;

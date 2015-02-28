@@ -88,6 +88,7 @@ set(objects_SRC
 	color-profile.h
 	color-profile-test.h
 	display-item.h
+	guidable.h
 	persp3d.h
 	sp-anchor.h
 	sp-clippath.h
