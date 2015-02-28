@@ -11,6 +11,7 @@ ink_common_sources += \
 	objects/color-profile.cpp	\
 	objects/color-profile.h	\
 	objects/color-profile-test.h	\
+	objects/display-item.h  \
 	objects/persp3d.cpp	\
 	objects/persp3d.h	\
 	objects/persp3d-reference.cpp   \

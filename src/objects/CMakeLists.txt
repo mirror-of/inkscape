@@ -87,6 +87,7 @@ set(objects_SRC
 	box3d-side.h
 	color-profile.h
 	color-profile-test.h
+	display-item.h
 	persp3d.h
 	sp-anchor.h
 	sp-clippath.h
