@@ -20,14 +20,14 @@
 #include "objects/sp-guide-attachment.h"
 
 typedef unsigned int guint32;
-extern "C" {
-    typedef void (*GCallback) (void);
-    typedef struct _GSList GSList;
+
+namespace Inkscape {
+namespace Objects {
+class Guidable;
+}
 }
 
 class SPDesktop;
-struct SPCanvas;
-struct SPCanvasGroup;
 
 #define SP_GUIDE(obj) (dynamic_cast<SPGuide*>((SPObject*)obj))
 #define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj) != NULL)
@@ -55,12 +55,13 @@ public:
 
     static SPGuide *createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::Point const &pt2);
 
-    void showSPGuide(SPCanvasGroup *group, GCallback handler);
-    void hideSPGuide(SPCanvas *canvas);
-    void showSPGuide(); // argument-free versions
+    void addGuidable(Inkscape::Objects::Guidable *g); // takes ownership of g
+    void removeGuidable(void const *key); // removes the guidable with the specified key
+
+    void showSPGuide();
     void hideSPGuide();
 
-    void sensitize(SPCanvas *canvas, bool sensitive);
+    void sensitize(bool sensitive);
 
     bool isHorizontal() const { return (normal_to_line[Geom::X] == 0.); };
     bool isVertical() const { return (normal_to_line[Geom::Y] == 0.); };
@@ -77,7 +78,7 @@ protected:
     virtual void set(unsigned int key, const char* value);
 
     char* label;
-    GSList *views; // contains an object of type SPGuideline (see display/guideline.cpp for definition)
+    std::vector<Inkscape::Objects::Guidable *> views;
     Geom::Point normal_to_line;
     Geom::Point point_on_line;
 

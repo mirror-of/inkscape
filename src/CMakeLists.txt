@@ -12,6 +12,7 @@ set(inkscape_SRC
 	axis-manip.cpp
 	box3d-side.cpp
 	box3d.cpp
+	canvas-guidable.cpp
 	color-profile.cpp
 	color.cpp
 	composite-undo-stack-observer.cpp
@@ -117,6 +118,7 @@ set(inkscape_SRC
 	bad-uri-exception.h
 	box3d-side.h
 	box3d.h
+	canvas-guidable.h
 	cms-color-types.h
 	cms-system.h
 	color-profile-cms-fns.h

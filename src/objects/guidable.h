@@ -18,6 +18,8 @@ namespace Objects {
 
 class Guidable {
 public:
+    virtual ~Guidable() {}
+
     virtual void hide() = 0;
     virtual void hide_origin() = 0;
 
@@ -30,10 +32,11 @@ public:
     virtual void set_normal(Geom::Point const& normal) = 0;
     virtual void set_sensitive(bool sensitive) = 0;
 
+    virtual void const *get_key() const = 0;
+    virtual void set_key(void *) = 0;
 protected:
     Guidable() {}
-    virtual ~Guidable() {}
-}
+};
 
 }
 }

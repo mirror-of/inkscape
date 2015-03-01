@@ -11,6 +11,7 @@ ink_common_sources +=	\
 	axis-manip.cpp axis-manip.h					\
 	bad-uri-exception.h						\
 	brokenimage.xpm							\
+	canvas-guidable.cpp canvas-guidable.h				\
 	cms-color-types.h						\
 	cms-system.h							\
 	color.cpp color.h						\

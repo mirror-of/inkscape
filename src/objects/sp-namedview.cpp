@@ -37,6 +37,7 @@
 #include "desktop.h"
 #include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "objects/sp-root.h"
+#include "canvas-guidable.h"
 #include <gtkmm/window.h>
 
 using Inkscape::DocumentUndo;
@@ -654,7 +655,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
         }
 
         if (SP_IS_GUIDE(no)) {
-            SPGuide *g = (SPGuide *) no;
+            SPGuide *g = SP_GUIDE(no);
             this->guides = g_slist_prepend(this->guides, g);
 
             //g_object_set(G_OBJECT(g), "color", this->guidecolor, "hicolor", this->guidehicolor, NULL);
@@ -663,13 +664,18 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
 
             if (this->editable) {
                 for (GSList *l = this->views; l != NULL; l = l->next) {
-                    g->SPGuide::showSPGuide(static_cast<SPDesktop*>(l->data)->guides, (GCallback) sp_dt_guide_event);
+                    SPDesktop *desktop = static_cast<SPDesktop *>(l->data);
 
-                    if (static_cast<SPDesktop*>(l->data)->guides_active) {
-                        g->sensitize((static_cast<SPDesktop*> (l->data))->getCanvas(), TRUE);
+                    CanvasGuidable *gd = new CanvasGuidable(desktop->getGuides());
+                    gd->set_key(desktop);
+                    g_signal_connect(G_OBJECT(gd->guide), "event", (GCallback)sp_dt_guide_event, g);
+                    g->addGuidable(gd); // SPGuide takes ownership of the item
+
+                    if (desktop->guides_active) {
+                        g->sensitize(true);
                     }
 
-                    sp_namedview_show_single_guide(SP_GUIDE(g), this->showguides);
+                    sp_namedview_show_single_guide(g, this->showguides);
                 }
             }
         }
@@ -722,11 +728,16 @@ Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inksca
 void SPNamedView::show(SPDesktop *desktop)
 {
     for (GSList *l = guides; l != NULL; l = l->next) {
-        SP_GUIDE(l->data)->showSPGuide( desktop->guides, (GCallback) sp_dt_guide_event);
+        SPGuide *g = dynamic_cast<SPGuide *>(static_cast<SPObject *>(l->data));
+
+        CanvasGuidable *gd = new CanvasGuidable(desktop->getGuides());
+        gd->set_key(desktop);
+        g_signal_connect(G_OBJECT(gd->guide), "event", (GCallback)sp_dt_guide_event, g);
+        g->addGuidable(gd); // SPGuide takes ownership of the item
         if (desktop->guides_active) {
-            SP_GUIDE(l->data)->sensitize(desktop->getCanvas(), TRUE);
+            g->sensitize(true);
         }
-        sp_namedview_show_single_guide(SP_GUIDE(l->data), showguides);
+        sp_namedview_show_single_guide(g, showguides);
     }
 
     views = g_slist_prepend(views, desktop);
@@ -921,7 +932,7 @@ void SPNamedView::hide(SPDesktop const *desktop)
     g_assert(g_slist_find(views, desktop));
 
     for (GSList *l = guides; l != NULL; l = l->next) {
-        SP_GUIDE(l->data)->hideSPGuide(desktop->getCanvas());
+        SP_GUIDE(l->data)->removeGuidable(desktop);
     }
 
     views = g_slist_remove(views, desktop);
@@ -932,10 +943,10 @@ void SPNamedView::activateGuides(void* desktop, bool active)
     g_assert(desktop != NULL);
     g_assert(g_slist_find(views, desktop));
 
-    SPDesktop *dt = static_cast<SPDesktop*>(desktop);
+    //SPDesktop *dt = static_cast<SPDesktop*>(desktop);
 
     for (GSList *l = guides; l != NULL; l = l->next) {
-        SP_GUIDE(l->data)->sensitize(dt->getCanvas(), active);
+        SP_GUIDE(l->data)->sensitize(active);
     }
 }
 

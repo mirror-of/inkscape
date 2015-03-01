@@ -28,6 +28,7 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "attributes.h"
+#include "objects/guidable.h"
 #include "objects/sp-guide.h"
 #include "objects/sp-item-notify-moveto.h"
 #include "objects/sp-item.h"
@@ -45,12 +46,12 @@
 #include "verbs.h"
 
 using Inkscape::DocumentUndo;
+using Inkscape::Objects::Guidable;
 using std::vector;
 
 SPGuide::SPGuide()
     : SPObject()
     , label(NULL)
-    , views(NULL)
     , normal_to_line(Geom::Point(0.,1.))
     , point_on_line(Geom::Point(0.,0.))
     , color(0x0000ff7f)
@@ -61,8 +62,8 @@ void SPGuide::setColor(guint32 c)
 {
     color = c;
 
-    for (GSList *l = this->views; l != NULL; l = l->next) {
-        sp_guideline_set_color(SP_GUIDELINE(l->data), this->color);
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        (*i)->set_color(this->color);
     }
 }
 
@@ -80,10 +81,10 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
 
 void SPGuide::release()
 {
-    while (this->views) {
-        sp_guideline_delete(SP_GUIDELINE(this->views->data));
-        this->views = g_slist_remove(this->views, this->views->data);
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        delete *i;
     }
+    views.clear();
 
     if (this->document) {
         // Unregister ourselves
@@ -258,61 +259,55 @@ void sp_guide_delete_all_guides(SPDesktop *dt)
     DocumentUndo::done(doc, SP_VERB_NONE, _("Delete All Guides"));
 }
 
-void SPGuide::showSPGuide(SPCanvasGroup *group, GCallback handler)
+void SPGuide::addGuidable(Guidable *guide)
 {
-    SPCanvasItem *item = sp_guideline_new(group, label, point_on_line, normal_to_line);
+    guide->set_position(point_on_line);
+    guide->set_normal(normal_to_line);
+    guide->set_label(label);
+    guide->set_color(color);
+    views.push_back(guide);
+
+    /*SPCanvasItem *item = sp_guideline_new(group, label, point_on_line, normal_to_line);
     sp_guideline_set_color(SP_GUIDELINE(item), color);
 
     g_signal_connect(G_OBJECT(item), "event", G_CALLBACK(handler), this);
 
-    views = g_slist_prepend(views, item);
+    views = g_slist_prepend(views, item);*/
 }
 
 void SPGuide::showSPGuide()
 {
-    for (GSList *v = views; v != NULL; v = v->next) {
-        sp_canvas_item_show(SP_CANVAS_ITEM(v->data));
-        sp_canvas_item_show(SP_CANVAS_ITEM(SP_GUIDELINE(v->data)->origin));
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        (*i)->show();
+        (*i)->show_origin();
     }
 }
 
-void SPGuide::hideSPGuide(SPCanvas *canvas)
+void SPGuide::removeGuidable(void const *key)
 {
-    g_assert(canvas != NULL);
-    g_assert(SP_IS_CANVAS(canvas));
-
-    for (GSList *l = views; l != NULL; l = l->next) {
-        if (canvas == SP_CANVAS_ITEM(l->data)->canvas) {
-            sp_guideline_delete(SP_GUIDELINE(l->data));
-            views = g_slist_remove(views, l->data);
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        if ((*i)->get_key() == key) {
+            delete *i;
+            views.erase(i);
             return;
         }
     }
-
     assert(false);
 }
 
 void SPGuide::hideSPGuide()
 {
-    for (GSList *v = views; v != NULL; v = v->next) {
-        sp_canvas_item_hide(SP_CANVAS_ITEM(v->data));
-        sp_canvas_item_hide(SP_CANVAS_ITEM(SP_GUIDELINE(v->data)->origin));
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        (*i)->hide();
+        (*i)->hide_origin();
     }
 }
 
-void SPGuide::sensitize(SPCanvas *canvas, bool sensitive)
+void SPGuide::sensitize(bool sensitive)
 {
-    g_assert(canvas != NULL);
-    g_assert(SP_IS_CANVAS(canvas));
-
-    for (GSList *l = views; l != NULL; l = l->next) {
-        if (canvas == SP_CANVAS_ITEM(l->data)->canvas) {
-            sp_guideline_set_sensitive(SP_GUIDELINE(l->data), sensitive);
-            return;
-        }
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        (*i)->set_sensitive(sensitive);
     }
-
-    assert(false);
 }
 
 Geom::Point SPGuide::getPositionFrom(Geom::Point const &pt) const
@@ -332,9 +327,12 @@ double SPGuide::getDistanceFrom(Geom::Point const &pt) const
  */
 void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
 {
-    for (GSList *l = views; l != NULL; l = l->next) {
-        sp_guideline_set_position(SP_GUIDELINE(l->data), point_on_line);
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        (*i)->set_position(point_on_line);
     }
+    /*for (GSList *l = views; l != NULL; l = l->next) {
+        sp_guideline_set_position(SP_GUIDELINE(l->data), point_on_line);
+    }*/
 
     /* Calling sp_repr_set_point must precede calling sp_item_notify_moveto in the commit
        case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
@@ -378,9 +376,12 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
  */
 void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
 {
-    for (GSList *l = this->views; l != NULL; l = l->next) {
-        sp_guideline_set_normal(SP_GUIDELINE(l->data), normal_to_line);
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        (*i)->set_normal(normal_to_line);
     }
+    /*for (GSList *l = this->views; l != NULL; l = l->next) {
+        sp_guideline_set_normal(SP_GUIDELINE(l->data), normal_to_line);
+    }*/
 
     /* Calling sp_repr_set_svg_point must precede calling sp_item_notify_moveto in the commit
        case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
@@ -404,9 +405,7 @@ void SPGuide::set_color(const unsigned r, const unsigned g, const unsigned b, bo
 {
     this->color = (r << 24) | (g << 16) | (b << 8) | 0x7f;
 
-    if (views) {
-        sp_guideline_set_color(SP_GUIDELINE(views->data), this->color);
-    }
+    setColor(this->color);
 
     if (commit) {
         std::ostringstream os;
@@ -418,8 +417,8 @@ void SPGuide::set_color(const unsigned r, const unsigned g, const unsigned b, bo
 
 void SPGuide::set_label(const char* label, bool const commit)
 {
-    if (views) {
-        sp_guideline_set_label(SP_GUIDELINE(views->data), label);
+    for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
+        (*i)->set_label(label);
     }
 
     if (commit) {
@@ -485,14 +484,14 @@ void sp_guide_remove(SPGuide *guide)
 {
     g_assert(SP_IS_GUIDE(guide));
 
-    for (vector<SPGuideAttachment>::const_iterator i(guide->attached_items.begin()),
+    /*for (vector<SPGuideAttachment>::const_iterator i(guide->attached_items.begin()),
              iEnd(guide->attached_items.end());
          i != iEnd; ++i)
     {
         SPGuideAttachment const &att = *i;
         remove_last(att.item->constraints, SPGuideConstraint(guide, att.snappoint_ix));
     }
-    guide->attached_items.clear();
+    guide->attached_items.clear();*/
 
     //XML Tree being used directly while it shouldn't be.
     sp_repr_unparent(guide->getRepr());
