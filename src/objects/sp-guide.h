@@ -56,7 +56,7 @@ public:
     static SPGuide *createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::Point const &pt2);
 
     void addGuidable(Inkscape::Objects::Guidable *g); // takes ownership of g
-    void removeGuidable(void const *key); // removes the guidable with the specified key
+    void removeGuidable(void const *key); // destroys the guidable with the specified key
 
     void showSPGuide();
     void hideSPGuide();

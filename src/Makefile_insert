@@ -4,6 +4,7 @@ ink_common_sources +=	\
 	util/find-last-if.h					\
 	util/longest-common-suffix.h				\
 	remove-last.h					\
+	arena-drawable.h arena-drawable.cpp				\
 	attributes.cpp attributes.h					\
 	attribute-rel-svg.cpp attribute-rel-svg.h			\
 	attribute-rel-css.cpp attribute-rel-css.h			\

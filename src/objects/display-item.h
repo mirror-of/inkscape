@@ -37,7 +37,7 @@ class DrawableText;
 class Drawable
 {
 public:
-    virtual DrawableText *createText();
+    virtual DrawableText *createText() = 0;
     virtual DrawableGroup *createGroup() = 0;
     virtual DrawableShape *createShape() = 0;
     virtual DrawableImage *createImage() = 0;
@@ -50,11 +50,12 @@ public:
  */
 class DrawableItem {
 public:
+    virtual ~DrawableItem() {}
     virtual void setStyle(SPStyle *style, SPStyle *context_style = 0) = 0;
+    virtual void setChildrenStyle(SPStyle *context_style) = 0;
 
 protected:
     DrawableItem() {}
-    virtual ~DrawableItem() {}
 };
 
 /**
@@ -63,11 +64,11 @@ protected:
 class DrawableGroup : public DrawableItem
 {
 public:
+    virtual ~DrawableGroup() {}
     virtual void setChildTransform(Geom::Affine const &new_trans) = 0;
 
 protected:
     DrawableGroup() {}
-    virtual ~DrawableGroup() {}
 };
 
 /**
@@ -76,11 +77,11 @@ protected:
 class DrawableShape : public DrawableItem
 {
 public:
+    virtual ~DrawableShape() {}
     virtual void setPath(SPCurve *curve) = 0;
 
 protected:
     DrawableShape() {}
-    virtual ~DrawableShape() {}
 };
 
 /**
@@ -90,11 +91,11 @@ protected:
 class DrawableGlyphs : public DrawableItem
 {
 public:
-    virtual void setGlyph(font_instance *font, int glyph, Geom::Affine const &trans);
+    virtual ~DrawableGlyphs() {}
+    virtual void setGlyph(font_instance *font, int glyph, Geom::Affine const &trans) = 0;
 
 protected:
     DrawableGlyphs() {}
-    virtual ~DrawableGlyphs() {}
 };
 
 /**
@@ -103,13 +104,13 @@ protected:
 class DrawableText : public DrawableGroup
 {
 public:
+    virtual ~DrawableText() {}
     virtual void clear() = 0;
     virtual bool addComponent(font_instance *font, int glyph, Geom::Affine const &trans, 
         float width, float ascent, float descent, float phase_length) = 0;
 
 protected:
     DrawableText() {}
-    virtual ~DrawableText() {}
 };
 
 /**
@@ -118,6 +119,7 @@ protected:
 class DrawableImage : public DrawableItem
 {
 public:
+    virtual ~DrawableImage() {}
     virtual void setPixbuf(Inkscape::Pixbuf *pb) = 0;
     virtual void setScale(double sx, double sy) = 0;
     virtual void setOrigin(Geom::Point const &o) = 0;
@@ -126,12 +128,12 @@ public:
 
 protected:
     DrawableImage() {}
-    virtual ~DrawableImage() {}
 };
 
 class DrawablePattern : public DrawableGroup
 {
 public:
+    virtual ~DrawablePattern() {}
     /**
      * Set the transformation from pattern to user coordinate systems.
      * @see SPPattern description for explanation of coordinate systems.
@@ -151,7 +153,6 @@ public:
 
 protected:
     DrawablePattern() {}
-    virtual ~DrawablePattern() {}
 };
 
 } // namespace Objects

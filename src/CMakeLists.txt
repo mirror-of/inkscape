@@ -8,10 +8,9 @@ set(main_SRC
 )
 
 set(inkscape_SRC
+	arena-drawable.cpp
 	attributes.cpp
 	axis-manip.cpp
-	box3d-side.cpp
-	box3d.cpp
 	canvas-guidable.cpp
 	color-profile.cpp
 	color.cpp
@@ -64,8 +63,6 @@ set(inkscape_SRC
 	object-hierarchy.cpp
 	object-snapper.cpp
 	path-chemistry.cpp
-	persp3d-reference.cpp
-	persp3d.cpp
 	perspective-line.cpp
 	preferences.cpp
 	prefix.cpp
@@ -112,6 +109,7 @@ set(inkscape_SRC
 	MultiPrinter.h
 	PylogFormatter.h
 	TRPIFormatter.h
+	arena-drawable.h
 	attributes-test.h
 	attributes.h
 	axis-manip.h
