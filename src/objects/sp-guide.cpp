@@ -266,13 +266,6 @@ void SPGuide::addGuidable(Guidable *guide)
     guide->set_label(label);
     guide->set_color(color);
     views.push_back(guide);
-
-    /*SPCanvasItem *item = sp_guideline_new(group, label, point_on_line, normal_to_line);
-    sp_guideline_set_color(SP_GUIDELINE(item), color);
-
-    g_signal_connect(G_OBJECT(item), "event", G_CALLBACK(handler), this);
-
-    views = g_slist_prepend(views, item);*/
 }
 
 void SPGuide::showSPGuide()
@@ -330,9 +323,6 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
     for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
         (*i)->set_position(point_on_line);
     }
-    /*for (GSList *l = views; l != NULL; l = l->next) {
-        sp_guideline_set_position(SP_GUIDELINE(l->data), point_on_line);
-    }*/
 
     /* Calling sp_repr_set_point must precede calling sp_item_notify_moveto in the commit
        case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
@@ -379,9 +369,6 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
     for (std::vector<Guidable *>::iterator i = views.begin(), e = views.end(); i != e; ++i) {
         (*i)->set_normal(normal_to_line);
     }
-    /*for (GSList *l = this->views; l != NULL; l = l->next) {
-        sp_guideline_set_normal(SP_GUIDELINE(l->data), normal_to_line);
-    }*/
 
     /* Calling sp_repr_set_svg_point must precede calling sp_item_notify_moveto in the commit
        case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
