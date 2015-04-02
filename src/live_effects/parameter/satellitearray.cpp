@@ -255,6 +255,19 @@ void SatelliteArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                       _knot_shape, _knot_mode, _knot_color);
             knotholder->add(e);
         }
+        
+        if (_effectType == BSPLINE) {
+            const gchar *tip;
+            tip = _("<b>BSpline</b>: <b>Ctrl+Click</b> toggle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+
+            BSplineKnotHolderEntity *e =
+                new BSplineKnotHolderEntity(this, iPlus);
+            e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),
+                      _knot_shape, _knot_mode, _knot_color);
+            knotholder->add(e);
+        }
     }
     if (mirror == true) {
         addKnotHolderEntities(knotholder, desktop, item, false);
@@ -501,6 +514,93 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Geom::Satellite satellite)
     if (splpeitem) {
         sp_lpe_item_update_patheffect(splpeitem, false, false);
     }
+}
+
+BSplineKnotHolderEntity::BSplineKnotHolderEntity(
+    SatelliteArrayParam *p, size_t index)
+    : _pparam(p), _index(index) {}
+
+void BSplineKnotHolderEntity::knot_set(Point const &p,
+        Point const &/*origin*/,
+        guint state)
+{
+    Geom::Point s = snap_knot_position(p, state);
+    size_t index = _index;
+    if (_index >= _pparam->_vector.size()) {
+        index = _index - _pparam->_vector.size();
+    }
+    if (!valid_index(index)) {
+        return;
+    }
+
+    if (!_pparam->_last_pointwise) {
+        return;
+    }
+
+    Geom::Satellite satellite = _pparam->_vector.at(index);
+    if (!satellite.active || satellite.hidden) {
+        return;
+    }
+    Geom::Pointwise *pointwise = _pparam->_last_pointwise;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
+    Pathinfo path_info(pwd2);
+    if (_pparam->_vector.size() <= _index) {
+        boost::optional<size_t> d2_prev_index = path_info.previous(index);
+        if (d2_prev_index) {
+            Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
+            double amount = Geom::nearest_point(s, d2_in);
+            satellite.amount = 1-amount;
+        }
+    } else {
+        satellite.setPosition(s, pwd2[index]);
+    }
+    _pparam->_vector.at(index) = satellite;
+    SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(item);
+    if (splpeitem) {
+        sp_lpe_item_update_patheffect(splpeitem, false, false);
+    }
+}
+
+Geom::Point BSplineKnotHolderEntity::knot_get() const
+{
+    Geom::Point tmp_point;
+    size_t index = _index;
+    if (_index >= _pparam->_vector.size()) {
+        index = _index - _pparam->_vector.size();
+    }
+    if (!valid_index(index)) {
+        return Point(infinity(), infinity());
+    }
+    Geom::Satellite satellite = _pparam->_vector.at(index);
+    if (!_pparam->_last_pointwise) {
+        return Point(infinity(), infinity());
+    }
+    if (!satellite.active || satellite.hidden) {
+        return Point(infinity(), infinity());
+    }
+    Geom::Pointwise *pointwise = _pparam->_last_pointwise;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
+    Pathinfo path_info(pwd2);
+    if (pwd2.size() <= index) {
+        return Point(infinity(), infinity());
+    }
+    this->knot->show();
+    if (_index >= _pparam->_vector.size()) {
+        tmp_point = satellite.getPosition(pwd2[index]);
+        boost::optional<size_t> d2_prev_index = path_info.previous(index);
+        if (d2_prev_index) {
+            Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
+            tmp_point = d2_in.valueAt(1-satellite.amount);
+        }
+    } else {
+        tmp_point = satellite.getPosition(pwd2[index]);
+    }
+    Geom::Point const canvas_point = tmp_point;
+    return canvas_point;
+}
+
+void BSplineKnotHolderEntity::knot_click(guint state)
+{
 }
 
 } /* namespace LivePathEffect */

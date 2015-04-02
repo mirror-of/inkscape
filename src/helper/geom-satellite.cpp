@@ -239,7 +239,7 @@ void Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
 void Satellite::setSatelliteType(gchar const *A)
 {
     std::map<std::string, SatelliteType> GcharMapToSatelliteType =
-        boost::assign::map_list_of("F", F)("IF", IF)("C", C)("IC", IC)("KO", KO);
+        boost::assign::map_list_of("F", F)("IF", IF)("C", C)("IC", IC)("BS", BS)("KO", KO);
     satelliteType = GcharMapToSatelliteType.find(std::string(A))->second;
 }
 
@@ -249,7 +249,7 @@ void Satellite::setSatelliteType(gchar const *A)
 gchar const *Satellite::getSatelliteTypeGchar() const
 {
     std::map<SatelliteType, gchar const *> SatelliteTypeToGcharMap =
-        boost::assign::map_list_of(F, "F")(IF, "IF")(C, "C")(IC, "IC")(KO, "KO");
+        boost::assign::map_list_of(F, "F")(IF, "IF")(C, "C")(IC, "IC")(BS, "BS")(KO, "KO");
     return SatelliteTypeToGcharMap.at(satelliteType);
 }
 

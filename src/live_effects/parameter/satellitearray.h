@@ -29,6 +29,7 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 class FilletChamferKnotHolderEntity;
+class BSplineKnotHolderEntity;
 
 class SatelliteArrayParam : public ArrayParam<Geom::Satellite> {
 public:
@@ -64,6 +65,7 @@ public:
                             guint32 color);
 
     friend class FilletChamferKnotHolderEntity;
+    friend class BSplineKnotHolderEntity;
     friend class LPEFilletChamfer;
 
 protected:
@@ -106,7 +108,30 @@ public:
         return (_pparam->_vector.size() > index);
     }
     ;
+private:
+    SatelliteArrayParam *_pparam;
+    size_t _index;
+};
 
+class BSplineKnotHolderEntity : public KnotHolderEntity {
+public:
+    BSplineKnotHolderEntity(SatelliteArrayParam *p, size_t index);
+    virtual ~BSplineKnotHolderEntity()
+    {
+        _pparam->knoth = NULL;
+    }
+
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin,
+                          guint state);
+    virtual Geom::Point knot_get() const;
+    virtual void knot_click(guint state);
+    /** Checks whether the index falls within the size of the parameter's vector
+     */
+    bool valid_index(size_t index) const
+    {
+        return (_pparam->_vector.size() > index);
+    }
+    ;
 private:
     SatelliteArrayParam *_pparam;
     size_t _index;

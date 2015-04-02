@@ -204,7 +204,12 @@ void Handle::move(Geom::Point const &new_pos)
 void Handle::setPosition(Geom::Point const &p)
 {
     if(_pm().isBSpline()){
-        ControlPoint::setPosition(_parent->position());
+        _pm().recalculateIsBSpline();
+        if(_pm().isBSpline()){
+            ControlPoint::setPosition(_parent->position());
+        } else {
+            ControlPoint::setPosition(p);
+        }
     } else {
         ControlPoint::setPosition(p);
     }

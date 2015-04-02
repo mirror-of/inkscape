@@ -88,9 +88,17 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     Geom::Point offset0 = ((1-weight)/(3*t*(1-t)*(1-t))) * delta;
     Geom::Point offset1 = (weight/(3*t*t*(1-t))) * delta;
 
-    //modified so that, if the trace is bspline, it only acts if the SHIFT key is pressed
-    first->front()->move(first->front()->position() + offset0);
-    second->back()->move(second->back()->position() + offset1);
+    if(!_pm.isBSpline()){
+        first->front()->move(first->front()->position() + offset0);
+        second->back()->move(second->back()->position() + offset1);
+    }else if(weight>=0.8){
+        second->move(second->position() + delta);
+    }else if(weight<=0.2){
+        first->move(first->position() + delta);
+    }else{
+        first->move(first->position() + delta);
+        second->move(second->position() + delta);
+    }
     _pm.update();
 }
 

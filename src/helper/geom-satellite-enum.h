@@ -20,6 +20,7 @@ enum SatelliteType {
     IF,    //Inverse Fillet
     C,     //Chamfer
     IC,    //Inverse Chamfer
+    BS,    //BSpline
     KO     // Invalid Satellite)
 };
 

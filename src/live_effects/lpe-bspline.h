@@ -7,7 +7,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "live_effects/effect.h"
-
+#include "live_effects/parameter/satellitearray.h"
 #include <vector>
 
 namespace Inkscape {
@@ -33,7 +33,7 @@ public:
     virtual void toMakeCusp();
     virtual void toWeight();
 
-    // TODO make this private
+    SatelliteArrayParam satellites_param;
     ScalarParam steps;
 
 private:
@@ -42,6 +42,9 @@ private:
     BoolParam onlySelected;
     ScalarParam weight;
     Geom::PathVector hp;
+
+    Geom::Pointwise *pointwise;
+    double segment_size;
 
     LPEBSpline(const LPEBSpline &);
     LPEBSpline &operator=(const LPEBSpline &);
