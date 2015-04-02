@@ -15,6 +15,8 @@
 
 #include "live_effects/parameter/parameter.h"
 
+#include "helper/geom-satellite.h"
+#include "helper/geom-satellite-enum.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 
@@ -88,13 +90,43 @@ protected:
     size_t _default_size;
 
     void writesvg(SVGOStringStream &str, std::vector<StorageType> const &vector) const {
-        for (unsigned int i = 0; i < vector.size(); ++i) {
+        for (size_t i = 0; i < vector.size(); ++i) {
             if (i != 0) {
                 // separate items with pipe symbol
                 str << " | ";
             }
-            str << vector[i];
+            writesvgData(str,vector[i]);
         }
+    }
+    
+    void writesvgData(SVGOStringStream &str, float const &nVector) const {
+        str << nVector;
+    }
+
+    void writesvgData(SVGOStringStream &str, double const &nVector) const {
+        str << nVector;
+    }
+
+    void writesvgData(SVGOStringStream &str, Geom::Point const &nVector) const {
+        str << nVector;
+    }
+
+    void writesvgData(SVGOStringStream &str, Geom::Satellite const &nVector) const {
+        str << nVector.getSatelliteTypeGchar();
+        str << ",";
+        str << nVector.isTime;
+        str << ",";
+        str << nVector.active;
+        str << ",";
+        str << nVector.hasMirror;
+        str << ",";
+        str << nVector.hidden;
+        str << ",";
+        str << nVector.amount;
+        str << ",";
+        str << nVector.angle;
+        str << ",";
+        str << nVector.steps;
     }
 
     StorageType readsvg(const gchar * str);

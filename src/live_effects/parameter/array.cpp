@@ -5,16 +5,42 @@
  */
 
 #include "live_effects/parameter/array.h"
-
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-
+#include "helper-fns.h"
 #include <2geom/coord.h>
 #include <2geom/point.h>
 
 namespace Inkscape {
 
 namespace LivePathEffect {
+
+//TODO: move maybe to svg-lenght.cpp
+unsigned int
+sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
+    if (!str) {
+        return 0;
+    }
+    gchar ** strarray = g_strsplit(str, ",", 8);
+    if(strarray[7] && !strarray[8]){
+        sat->setSatelliteType(g_strstrip(strarray[0]));
+        sat->isTime = strncmp(strarray[1],"1",1) == 0;
+        sat->active = strncmp(strarray[2],"1",1) == 0;
+        sat->hasMirror = strncmp(strarray[3],"1",1) == 0;
+        sat->hidden = strncmp(strarray[4],"1",1) == 0;
+        double amount,angle;
+        float stepsTmp;
+        sp_svg_number_read_d(strarray[5], &amount);
+        sp_svg_number_read_d(strarray[6], &angle);
+        sp_svg_number_read_f(strarray[7], &stepsTmp);
+        unsigned int steps = (unsigned int)stepsTmp;
+        sat->amount = amount;
+        sat->angle = angle;
+        sat->steps = steps;
+        g_strfreev (strarray);
+        return 1;
+    }
+    g_strfreev (strarray);
+    return 0;
+}
 
 template <>
 double
@@ -47,6 +73,18 @@ ArrayParam<Geom::Point>::readsvg(const gchar * str)
         return Geom::Point(newx, newy);
     }
     return Geom::Point(Geom::infinity(),Geom::infinity());
+}
+
+template <>
+Geom::Satellite
+ArrayParam<Geom::Satellite >::readsvg(const gchar * str)
+{
+    Geom::Satellite sat;
+    if (sp_svg_satellite_read_d(str, &sat)) {
+        return sat;
+    }
+    Geom::Satellite satellite(Geom::F, true, false, false, true, 0.0, 0.0, 0);
+    return satellite;
 }
 
 } /* namespace LivePathEffect */

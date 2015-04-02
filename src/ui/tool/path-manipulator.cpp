@@ -56,9 +56,6 @@ enum PathChange {
 };
 
 } // anonymous namespace
-const double handleCubicGap = 0.01;
-const double noPower = 0.0;
-const double defaultStartPower = 0.3334;
 
 
 /**
@@ -669,15 +666,6 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         nl.erase(start);
         start = next;
     }
-    // if we are removing, we readjust the handlers
-    if(isBSpline()){
-        if(start.prev()){
-            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),start.prev()->back()));
-        }
-        if(end){
-            end->back()->setPosition(BSplineHandleReposition(end->back(),end->front()));
-        }
-    }
 
     return del_len;
 }
@@ -999,36 +987,9 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
 
         // set new handle positions
         Node *n = new Node(_multi_path_manipulator._path_data.node_data, seg2[0]);
-        if(!isBSpline()){
-            n->back()->setPosition(seg1[2]);
-            n->front()->setPosition(seg2[1]);
-            n->setType(NODE_SMOOTH, false);
-        } else {
-            Geom::D2< Geom::SBasis > SBasisInsideNodes;
-            SPCurve *lineInsideNodes = new SPCurve();
-            if(second->back()->isDegenerate()){
-                lineInsideNodes->moveto(n->position());
-                lineInsideNodes->lineto(second->position());
-                SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
-                Geom::Point next = SBasisInsideNodes.valueAt(defaultStartPower);
-                next = Geom::Point(next[Geom::X] + handleCubicGap,next[Geom::Y] + handleCubicGap);
-                lineInsideNodes->reset();
-                n->front()->setPosition(next);
-            }else{
-                n->front()->setPosition(seg2[1]);
-            }
-            if(first->front()->isDegenerate()){
-                lineInsideNodes->moveto(n->position());
-                lineInsideNodes->lineto(first->position());
-                SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
-                Geom::Point previous = SBasisInsideNodes.valueAt(defaultStartPower);
-                previous = Geom::Point(previous[Geom::X] + handleCubicGap,previous[Geom::Y] + handleCubicGap);
-                n->back()->setPosition(previous);
-            }else{
-                n->back()->setPosition(seg1[2]);
-            }
-            n->setType(NODE_CUSP, false);
-        }
+        n->back()->setPosition(seg1[2]);
+        n->front()->setPosition(seg2[1]);
+        n->setType(NODE_SMOOTH, false);
         inserted = list.insert(insert_at, n);
 
         first->front()->move(seg1[1]);
@@ -1251,63 +1212,6 @@ void PathManipulator::recalculateIsBSpline(){
 
 bool PathManipulator::isBSpline() const {
     return  _is_bspline;
-}
-
-// returns the corresponding strength to the position of the handlers
-double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2)
-{
-    using Geom::X;
-    using Geom::Y;
-    if(h2){
-        h = h2;
-    }
-    double pos = noPower;
-    Node *n = h->parent();
-    Node * nextNode = NULL;
-    nextNode = n->nodeToward(h);
-    if(nextNode){
-        SPCurve *lineInsideNodes = new SPCurve();
-        lineInsideNodes->moveto(n->position());
-        lineInsideNodes->lineto(nextNode->position());
-        if(!are_near(h->position(), n->position())){
-            pos = Geom::nearest_point(Geom::Point(h->position()[X] - handleCubicGap, h->position()[Y] - handleCubicGap), *lineInsideNodes->first_segment());
-        }
-    }
-    if (pos == noPower && !h2){
-        return BSplineHandlePosition(h, h->other());
-    }
-    return pos;
-}
-
-// give the location for the handler in the corresponding position
-Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, Handle *h2)
-{
-    double pos = this->BSplineHandlePosition(h, h2);
-    return BSplineHandleReposition(h,pos);
-}
-
-// give the location for the handler to the specified position
-Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
-    using Geom::X;
-    using Geom::Y;
-    Geom::Point ret = h->position();
-    Node *n = h->parent();
-    Geom::D2< Geom::SBasis > SBasisInsideNodes;
-    SPCurve *lineInsideNodes = new SPCurve();
-    Node * nextNode = NULL;
-    nextNode = n->nodeToward(h);
-    if(nextNode && pos != noPower){
-        lineInsideNodes->moveto(n->position());
-        lineInsideNodes->lineto(nextNode->position());
-        SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
-        ret = SBasisInsideNodes.valueAt(pos);
-        ret = Geom::Point(ret[X] + handleCubicGap,ret[Y] + handleCubicGap);
-    }else{
-        if(pos == noPower){
-            ret = n->position();
-        }
-    }
-    return ret;
 }
 
 /** Construct the geometric representation of nodes and handles, update the outline

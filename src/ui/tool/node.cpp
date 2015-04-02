@@ -60,11 +60,6 @@ Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
 namespace Inkscape {
 namespace UI {
 
-/*const double handleCubicGap = 0.01;*/
-const double noPower = 0.0;
-const double defaultStartPower = 0.3334;
-/*const double defaultEndPower = 0.6667;*/
-
 ControlPoint::ColorSet Node::node_colors = {
     {0xbfbfbf00, 0x000000ff}, // normal fill, stroke
     {0xff000000, 0x000000ff}, // mouseover fill, stroke
@@ -174,11 +169,6 @@ void Handle::move(Geom::Point const &new_pos)
         }
         setPosition(new_pos);
 
-        //move the handler and its oposite the same proportion
-        if(_pm().isBSpline()){
-            setPosition(_pm().BSplineHandleReposition(this,this));
-            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
-        }
         return;
     }
 
@@ -190,13 +180,6 @@ void Handle::move(Geom::Point const &new_pos)
         Geom::Point new_delta = (Geom::dot(delta, direction)
             / Geom::L2sq(direction)) * direction;
         setRelativePos(new_delta);
-
-        //move the handler and its oposite the same proportion
-        if(_pm().isBSpline()){ 
-            setPosition(_pm().BSplineHandleReposition(this,this));
-            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
-        }
-        
         return;
     }
 
@@ -216,17 +199,15 @@ void Handle::move(Geom::Point const &new_pos)
     default: break;
     }
     setPosition(new_pos);
-
-    // moves the handler and its oposite the same proportion
-    if(_pm().isBSpline()){
-        setPosition(_pm().BSplineHandleReposition(this,this));
-        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
-    }
 }
 
 void Handle::setPosition(Geom::Point const &p)
 {
-    ControlPoint::setPosition(p);
+    if(_pm().isBSpline()){
+        ControlPoint::setPosition(_parent->position());
+    } else {
+        ControlPoint::setPosition(p);
+    }
     _handle_line->setCoords(_parent->position(), position());
 
     // update degeneration info and visibility
@@ -299,25 +280,13 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
         default: break;
         }
         break;
-    // new double click event to set the handlers of a node to the default proportion, defaultStartPower% 
-    case GDK_2BUTTON_PRESS:
-        handle_2button_press();
-        break;
-    
+
     default: break;
     }
 
     return ControlPoint::_eventHandler(event_context, event);
 }
 
-//this function moves the handler and its oposite to the default proportion of defaultStartPower
-void Handle::handle_2button_press(){
-    if(_pm().isBSpline()){
-        setPosition(_pm().BSplineHandleReposition(this,defaultStartPower));
-        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),defaultStartPower));
-        _pm().update();
-    }
-}
 
 bool Handle::grabbed(GdkEventMotion *)
 {
@@ -370,18 +339,11 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             ctrl_constraint = Inkscape::Snapper::SnapConstraint(parent_pos, parent_pos - perp_pos);
         }
         new_pos = result;
-        // moves the handler and its oposite in X fixed positions depending on parameter "steps with control" 
-        // by default in live BSpline
-        if(_pm().isBSpline()){
-            setPosition(new_pos);
-            int steps = _pm().BSplineGetSteps();
-            new_pos=_pm().BSplineHandleReposition(this,ceilf(_pm().BSplineHandlePosition(this,this)*steps)/steps);
-        }
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
     //if the snap adjustment is activated and it is not bspline
-    if (snap && !_pm().isBSpline()) {
+    if (snap ) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
@@ -420,10 +382,6 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             // restore the position
             other()->setPosition(_saved_other_pos);
         }
-    }
-    //if it is bspline but SHIFT or CONTROL are not pressed it fixes it in the original position
-    if(_pm().isBSpline() && !held_shift(*event) && !held_control(*event)){
-        new_pos=_last_drag_origin();
     }
     move(new_pos); // needed for correct update, even though it's redundant
     _pm().update();
@@ -485,17 +443,13 @@ Glib::ustring Handle::_getTip(unsigned state) const
     char const *more;
     // a trick to mark as bspline if the node has no strength, we are going to use it later
     // to show the appropiate messages. We cannot do it in any different way becasue the function is constant
-    Handle *h = const_cast<Handle *>(this);
-    bool isBSpline = _pm().isBSpline();
     bool can_shift_rotate = _parent->type() == NODE_CUSP && !other()->isDegenerate();
-    if (can_shift_rotate && !isBSpline) {
+    if (can_shift_rotate) {
         more = C_("Path handle tip", "more: Shift, Ctrl, Alt");
-    } else if(isBSpline){
-        more = C_("Path handle tip", "more: Ctrl");
-    }else {
+    } else {
         more = C_("Path handle tip", "more: Ctrl, Alt");
     }
-    if (state_held_alt(state) && !isBSpline) {
+    if (state_held_alt(state)) {
         if (state_held_control(state)) {
             if (state_held_shift(state) && can_shift_rotate) {
                 return format_tip(C_("Path handle tip",
@@ -518,24 +472,18 @@ Glib::ustring Handle::_getTip(unsigned state) const
         }
     } else {
         if (state_held_control(state)) {
-            if (state_held_shift(state) && can_shift_rotate && !isBSpline) {
+            if (state_held_shift(state) && can_shift_rotate) {
                 return format_tip(C_("Path handle tip",
                     "<b>Shift+Ctrl</b>: snap rotation angle to %g° increments and rotate both handles"),
                     snap_increment_degrees());
-            } else if(isBSpline){
-                return format_tip(C_("Path handle tip",
-                    "<b>Ctrl</b>: Move handle by his actual steps in BSpline Live Effect"));
-            }else{
+            } else{
                 return format_tip(C_("Path handle tip",
                     "<b>Ctrl</b>: snap rotation angle to %g° increments, click to retract"),
                     snap_increment_degrees());
             }
-        } else if (state_held_shift(state) && can_shift_rotate && !isBSpline) {
+        } else if (state_held_shift(state) && can_shift_rotate) {
             return C_("Path hande tip",
                 "<b>Shift</b>: rotate both handles by the same angle");
-        } else if(state_held_shift(state) && isBSpline){
-            return C_("Path hande tip",
-                "<b>Shift</b>: move handle");
         }
     }
 
@@ -544,13 +492,8 @@ Glib::ustring Handle::_getTip(unsigned state) const
         return format_tip(C_("Path handle tip",
             "<b>Auto node handle</b>: drag to convert to smooth node (%s)"), more);
     default:
-        if(!isBSpline){
-            return format_tip(C_("Path handle tip",
+        return format_tip(C_("Path handle tip",
                 "<b>Auto node handle</b>: drag to convert to smooth node (%s)"), more);
-        }else{
-            return format_tip(C_("Path handle tip",
-                "<b>BSpline node handle</b>: Shift to drag, double click to reset (%s). %g power"),more,_pm().BSplineHandlePosition(h,NULL));
-        }
     }
 }
 
@@ -626,25 +569,6 @@ void Node::move(Geom::Point const &new_pos)
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
 
-    // save the previous nodes strength to apply it again once the node is moved 
-    double nodeWeight = noPower;
-    double nextNodeWeight = noPower;
-    double prevNodeWeight = noPower;
-    Node *n = this;
-    Node * nextNode = n->nodeToward(n->front());
-    Node * prevNode = n->nodeToward(n->back());
-    nodeWeight = fmax(_pm().BSplineHandlePosition(n->front()),_pm().BSplineHandlePosition(n->back()));
-    if(prevNode){
-        if(prevNode->isEndNode()){
-            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front(),prevNode->front());
-        }
-    }
-    if(nextNode){
-        if(nextNode->isEndNode()){
-            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->back(),nextNode->back());
-        }
-    }
-
     setPosition(new_pos);
 
     _front.setPosition(_front.position() + delta);
@@ -654,50 +578,12 @@ void Node::move(Geom::Point const &new_pos)
     // with the segment
     _fixNeighbors(old_pos, new_pos);
 
-    // move the affected handlers. First the node ones, later the adjoining ones.
-    if(_pm().isBSpline()){
-        _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
-        _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
-        if(prevNode){
-            if(prevNode->isEndNode()){
-                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNodeWeight));
-            }else{
-                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNode->back()));
-            }
-        }
-        if(nextNode){
-            if(nextNode->isEndNode()){
-                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNodeWeight));
-            }else{
-                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNode->front()));
-            }
-        }
-    }
 }
 
 void Node::transform(Geom::Affine const &m)
 {
 
     Geom::Point old_pos = position();
-
-    // save the previous nodes strength to apply it again once the node is moved 
-    double nodeWeight = noPower;
-    double nextNodeWeight = noPower;
-    double prevNodeWeight = noPower;
-    Node *n = this;
-    Node * nextNode = n->nodeToward(n->front());
-    Node * prevNode = n->nodeToward(n->back());
-    nodeWeight = _pm().BSplineHandlePosition(n->front());
-    if(prevNode){
-        if(prevNode->isEndNode()){
-            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front(),prevNode->front());
-        }
-    }
-    if(nextNode){
-        if(nextNode->isEndNode()){
-            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->back(),nextNode->back());
-        }
-    }
 
     setPosition(position() * m);
     _front.setPosition(_front.position() * m);
@@ -707,25 +593,6 @@ void Node::transform(Geom::Affine const &m)
      * but smooth nodes at ends of linear segments and auto nodes need special treatment */
     _fixNeighbors(old_pos, position());
 
-    // move the involved handlers, first the node ones, later the adjoining ones 
-    if(_pm().isBSpline()){
-        _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
-        _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
-        if(prevNode){
-            if(prevNode->isEndNode()){
-                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNodeWeight));
-            }else{
-                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNode->back()));
-            }
-        }
-        if(nextNode){
-            if(nextNode->isEndNode()){
-                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNodeWeight));
-            }else{
-                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNode->front()));
-            }
-        }
-    }
 }
 
 Geom::Rect Node::bounds() const
@@ -912,16 +779,6 @@ void Node::setType(NodeType type, bool update_handles)
             }
             break;
         default: break;
-        }
-        /* in node type changes, about bspline traces, we can mantain them with noPower power in border mode,
-           or we give them the default power in curve mode */
-        if(_pm().isBSpline()){
-            double weight = noPower;
-            if(_pm().BSplineHandlePosition(this->front()) != noPower ){
-                weight = defaultStartPower;
-            }
-            _front.setPosition(_pm().BSplineHandleReposition(this->front(),weight));
-            _back.setPosition(_pm().BSplineHandleReposition(this->back(),weight));
         }
     }
     _type = type;
@@ -1170,11 +1027,6 @@ void Node::_setState(State state)
         case STATE_CLICKED:
             mgr.setActive(_canvas_item, true);
             mgr.setPrelight(_canvas_item, false);
-            //this shows the handlers when selecting the nodes
-            if(_pm().isBSpline()){
-                this->front()->setPosition(_pm().BSplineHandleReposition(this->front()));
-                this->back()->setPosition(_pm().BSplineHandleReposition(this->back()));
-            }
             break;
     }
     SelectableControlPoint::_setState(state);
@@ -1433,9 +1285,6 @@ Node *Node::nodeAwayFrom(Handle *h)
 
 Glib::ustring Node::_getTip(unsigned state) const
 {
-    bool isBSpline = _pm().isBSpline();
-    Handle *h = const_cast<Handle *>(&_front);
-    Handle *h2 = const_cast<Handle *>(&_back);
     if (state_held_shift(state)) {
         bool can_drag_out = (_next() && _front.isDegenerate()) || (_prev() && _back.isDegenerate());
         if (can_drag_out) {
@@ -1465,24 +1314,16 @@ Glib::ustring Node::_getTip(unsigned state) const
     // No modifiers: assemble tip from node type
     char const *nodetype = node_type_to_localized_string(_type);
     if (_selection.transformHandlesEnabled() && selected()) {
-        if (_selection.size() == 1 && !isBSpline) {
+        if (_selection.size() == 1) {
             return format_tip(C_("Path node tip",
                 "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"), nodetype);
-        }else if(_selection.size() == 1){
+        }else {
             return format_tip(C_("Path node tip",
-                "<b>BSpline node</b>: drag to shape the path (more: Shift, Ctrl, Alt). %g power"),_pm().BSplineHandlePosition(h,h2));
+                "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles (more: Shift, Ctrl, Alt)"), nodetype);
         }
-        return format_tip(C_("Path node tip",
-            "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles (more: Shift, Ctrl, Alt)"), nodetype);
     }
-    if (!isBSpline) {
-        return format_tip(C_("Path node tip",
+    return format_tip(C_("Path node tip",
             "<b>%s</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt)"), nodetype);
-    }else{
-        return format_tip(C_("Path node tip",
-            "<b>BSpline node</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt). %g power"),_pm().BSplineHandlePosition(h,h2));
-    
-    }
 }
 
 Glib::ustring Node::_getDragTip(GdkEventMotion */*event*/) const

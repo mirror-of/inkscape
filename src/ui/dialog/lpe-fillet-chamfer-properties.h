@@ -10,7 +10,7 @@
 
 #include <2geom/point.h>
 #include <gtkmm.h>
-#include "live_effects/parameter/filletchamferpointarray.h"
+#include "live_effects/parameter/satellitearray.h"
 
 class SPDesktop;
 
@@ -23,22 +23,24 @@ public:
     FilletChamferPropertiesDialog();
     virtual ~FilletChamferPropertiesDialog();
 
-    Glib::ustring getName() const {
+    Glib::ustring getName() const
+    {
         return "LayerPropertiesDialog";
     }
 
-    static void showDialog(SPDesktop *desktop, Geom::Point knotpoint,
+    static void showDialog(SPDesktop *desktop, double _amount,
                            const Inkscape::LivePathEffect::
-                           FilletChamferPointArrayParamKnotHolderEntity *pt,
-                           const gchar *unit,
-                           bool use_distance,
-                           bool aprox_radius,
-                           Glib::ustring documentUnit);
+                           FilletChamferKnotHolderEntity *pt,
+                           const gchar *_unit,
+                           bool _use_distance,
+                           bool _aprox_radius,
+                           Glib::ustring _documentUnit,
+                           Geom::Satellite _satellite);
 
 protected:
 
     SPDesktop *_desktop;
-    Inkscape::LivePathEffect::FilletChamferPointArrayParamKnotHolderEntity *
+    Inkscape::LivePathEffect::FilletChamferKnotHolderEntity *
     _knotpoint;
 
     Gtk::Label _fillet_chamfer_position_label;
@@ -53,40 +55,45 @@ protected:
 
     Gtk::Table _layout_table;
     bool _position_visible;
-    double _index;
 
     Gtk::Button _close_button;
     Gtk::Button _apply_button;
 
     sigc::connection _destroy_connection;
 
-    static FilletChamferPropertiesDialog &_instance() {
+    static FilletChamferPropertiesDialog &_instance()
+    {
         static FilletChamferPropertiesDialog instance;
         return instance;
     }
 
-    void _set_desktop(SPDesktop *desktop);
-    void _set_pt(const Inkscape::LivePathEffect::
-                FilletChamferPointArrayParamKnotHolderEntity *pt);
-    void _set_unit(const gchar *abbr);
-    void _set_document_unit(Glib::ustring abbr);
-    void _set_use_distance(bool use_knot_distance);
-    void _set_aprox(bool aprox_radius);
-    void _apply();
-    void _close();
-    bool _flexible;
-    const gchar *unit;
-    Glib::ustring document_unit;
-    bool use_distance;
-    bool aprox;
-    void _set_knot_point(Geom::Point knotpoint);
+    void _setDesktop(SPDesktop *desktop);
+    void _setPt(const Inkscape::LivePathEffect::
+                FilletChamferKnotHolderEntity *pt);
+    void _setUnit(const gchar *abbr);
+    void _setDocumentUnit(Glib::ustring abbr);
+    void _setUseDistance(bool use_knot_distance);
+    void _setAprox(bool aprox_radius);
+    void _setAmount(double amount);
+    void _setSatellite(Geom::Satellite satellite);
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 
     bool _handleKeyEvent(GdkEventKey *event);
     void _handleButtonEvent(GdkEventButton *event);
 
+    void _apply();
+    void _close();
+    bool _flexible;
+    Geom::Satellite _satellite;
+    const gchar *_unit;
+    Glib::ustring _document_unit;
+    bool _use_distance;
+    double _amount;
+    bool _aprox;
+
+
     friend class Inkscape::LivePathEffect::
-            FilletChamferPointArrayParamKnotHolderEntity;
+        FilletChamferKnotHolderEntity;
 
 private:
     FilletChamferPropertiesDialog(

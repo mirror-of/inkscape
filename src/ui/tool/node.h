@@ -120,7 +120,6 @@ public:
 protected:
 
     Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent);
-    virtual void handle_2button_press();
     virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
     virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
     virtual bool grabbed(GdkEventMotion *event);
