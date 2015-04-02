@@ -13,6 +13,7 @@
 #include "sp-path.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
+#include "knotholder.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -81,6 +82,9 @@ void LPEBSpline::doBeforeEffect (SPLPEItem const* lpeitem)
         if(sats.empty()){
             doOnApply(lpeitem);
             sats = satellites_param.data();
+        }
+        if (satellites_param.knoth) {
+            satellites_param.knoth->update_knots();
         }
         if (pointwise && c->get_segment_count() != segment_size && segment_size != 0) {
             pointwise->recalculateForNewPwd2(pwd2_in);
@@ -167,6 +171,8 @@ void LPEBSpline::doOnApply(SPLPEItem const* lpeitem)
 void LPEBSpline::doEffect(SPCurve *curve)
 {
 
+    Geom::PathVector const pathv = curve->get_pathvector();
+    hp.push_back(pathv[0]);
     if (curve->get_segment_count() < 1){
         return;
     }
@@ -274,7 +280,6 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 previousNode = node;
                 node = SBasisHelper.valueAt(0.5);
                 weight_1 = sats[path_info.first(counter)].amount;
-                Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
                 nCurve->curveto(pointAt1, pointAt2, node);
             }
             if(!are_near(node,curve_it1->finalPoint()) && helper_size > 0.0){
@@ -294,7 +299,7 @@ void LPEBSpline::doEffect(SPCurve *curve)
     }
     if(helper_size > 0.0){
         Geom::PathVector const pathv = curve->get_pathvector();
-         hp.push_back(pathv[0]);
+        hp.push_back(pathv[0]);
     }
 }
 

@@ -67,6 +67,7 @@ public:
     friend class FilletChamferKnotHolderEntity;
     friend class BSplineKnotHolderEntity;
     friend class LPEFilletChamfer;
+    friend class LPEBSpline;
 
 protected:
     KnotHolder *knoth;
