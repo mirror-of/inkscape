@@ -170,8 +170,6 @@ void LPEBSpline::doOnApply(SPLPEItem const* lpeitem)
 void LPEBSpline::doEffect(SPCurve *curve)
 {
 
-    Geom::PathVector const pathv = curve->get_pathvector();
-    hp.push_back(pathv[0]);
     if (curve->get_segment_count() < 1){
         return;
     }
@@ -183,9 +181,10 @@ void LPEBSpline::doEffect(SPCurve *curve)
     size_t counter = 0;
     for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
             path_it != original_pathv.end(); ++path_it) {
-        if (path_it->empty())
+        if (path_it->empty()){
             continue;
-
+        }
+        hp.push_back(*path_it);
         Geom::Path::const_iterator curve_it1 = path_it->begin();
         Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
         Geom::Path::const_iterator curve_endit = path_it->end_default();
