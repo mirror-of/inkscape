@@ -14,6 +14,7 @@
 #include "svg/svg.h"
 #include "xml/repr.h"
 #include "knotholder.h"
+#include "preferences.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -56,7 +57,10 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
     helper_size.param_set_digits(2);
 }
 
-LPEBSpline::~LPEBSpline() {}
+LPEBSpline::~LPEBSpline() {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/nodes/show_handles", 1);
+}
 
 void LPEBSpline::doBeforeEffect (SPLPEItem const* lpeitem)
 {
@@ -318,6 +322,8 @@ LPEBSpline::drawHandle(Geom::Point p, double helper_size)
 void
 LPEBSpline::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/nodes/show_handles", 0);
     hp_vec.push_back(hp);
 }
 Gtk::Widget *LPEBSpline::newWidget()

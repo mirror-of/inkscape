@@ -878,6 +878,9 @@ Handle *PathManipulator::_chooseHandle(Node *n, int which)
 /** Set the visibility of handles. */
 void PathManipulator::showHandles(bool show)
 {
+    if(isBSpline()){
+        return;
+    }
     if (show == _show_handles) return;
     if (show) {
         for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {

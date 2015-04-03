@@ -203,16 +203,7 @@ void Handle::move(Geom::Point const &new_pos)
 
 void Handle::setPosition(Geom::Point const &p)
 {
-    if(_pm().isBSpline()){
-        _pm().recalculateIsBSpline();
-        if(_pm().isBSpline()){
-            ControlPoint::setPosition(_parent->position());
-        } else {
-            ControlPoint::setPosition(p);
-        }
-    } else {
-        ControlPoint::setPosition(p);
-    }
+    ControlPoint::setPosition(p);
     _handle_line->setCoords(_parent->position(), position());
 
     // update degeneration info and visibility
