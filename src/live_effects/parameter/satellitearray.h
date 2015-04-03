@@ -109,6 +109,7 @@ public:
         return (_pparam->_vector.size() > index);
     }
     ;
+
 private:
     SatelliteArrayParam *_pparam;
     size_t _index;

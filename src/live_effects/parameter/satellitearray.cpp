@@ -254,9 +254,7 @@ void SatelliteArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
             e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),
                       _knot_shape, _knot_mode, _knot_color);
             knotholder->add(e);
-        }
-        
-        if (_effectType == BSPLINE) {
+        } else if (_effectType == BSPLINE) {
             const gchar *tip;
             tip = _("<b>BSpline</b>: <b>Ctrl+Click</b> toggle type, "
                         "<b>Shift+Click</b> open dialog, "
@@ -268,6 +266,7 @@ void SatelliteArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                       _knot_shape, _knot_mode, _knot_color);
             knotholder->add(e);
         }
+        
     }
     if (mirror == true) {
         addKnotHolderEntities(knotholder, desktop, item, false);
