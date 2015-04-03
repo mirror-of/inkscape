@@ -14,7 +14,6 @@
 #include "svg/svg.h"
 #include "xml/repr.h"
 #include "knotholder.h"
-#include "preferences.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -35,7 +34,7 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
       ignoreCusp(_("Ignore cusp nodes"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
       onlySelected(_("Change only selected nodes"), _("Change only selected nodes"), "onlySelected", &wr, this, false),
       weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, defaultStartPower),
-      pointwise(NULL), segment_size(0)
+      pointwise(NULL)
 {
     registerParameter(&satellites_param);
     registerParameter(&weight);
@@ -58,8 +57,6 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
 }
 
 LPEBSpline::~LPEBSpline() {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/nodes/show_handles", 1);
 }
 
 void LPEBSpline::doBeforeEffect (SPLPEItem const* lpeitem)
@@ -90,12 +87,10 @@ void LPEBSpline::doBeforeEffect (SPLPEItem const* lpeitem)
         if (satellites_param.knoth) {
             satellites_param.knoth->update_knots();
         }
-        if (pointwise && c->get_segment_count() != segment_size && segment_size != 0) {
-            pointwise->recalculateForNewPwd2(pwd2_in);
-            segment_size = c->get_segment_count();
+        if (pointwise && c->get_segment_count() != sats.size()) {
+            pointwise->recalculateForNewPwd2(pwd2_in, original_pathv);
         } else {
             pointwise = new Pointwise(pwd2_in, sats);
-            segment_size = c->get_segment_count();
         }
         satellites_param.setPointwise(pointwise);
     } else {
@@ -322,8 +317,6 @@ LPEBSpline::drawHandle(Geom::Point p, double helper_size)
 void
 LPEBSpline::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/nodes/show_handles", 0);
     hp_vec.push_back(hp);
 }
 Gtk::Widget *LPEBSpline::newWidget()

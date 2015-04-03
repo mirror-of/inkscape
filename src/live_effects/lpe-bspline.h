@@ -44,7 +44,6 @@ private:
     Geom::PathVector hp;
 
     Geom::Pointwise *pointwise;
-    double segment_size;
 
     LPEBSpline(const LPEBSpline &);
     LPEBSpline &operator=(const LPEBSpline &);

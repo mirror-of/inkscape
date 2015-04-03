@@ -203,6 +203,13 @@ void Handle::move(Geom::Point const &new_pos)
 
 void Handle::setPosition(Geom::Point const &p)
 {
+    if(!are_near(p, _parent->position(), 0.01)){
+        _pm().recalculateIsBSpline();
+        if(_pm().isBSpline()){
+            return;
+        }
+    }
+
     ControlPoint::setPosition(p);
     _handle_line->setCoords(_parent->position(), position());
 
