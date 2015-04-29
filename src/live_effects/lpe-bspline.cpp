@@ -24,16 +24,16 @@ namespace LivePathEffect {
 const double HANDLE_CUBIC_GAP = 0.01;
 const double NO_POWER = 0.0;
 const double DEFAULT_START_POWER = 0.3334;
-const double DEFAULT_END_POWER = 0.6667;
+
 
 LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
       satellites_param(_("pair_array_param"), _("pair_array_param"), "satellites_param", &wr, this),
       steps(_("Steps with CTRL:"), _("Change number of steps with CTRL pressed"), "steps", &wr, this, 2),
       helper_size(_("Helper size:"), _("Helper size"), "helper_size", &wr, this, 0),
-      ignoreCusp(_("Ignore cusp nodes"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
-      onlySelected(_("Change only selected nodes"), _("Change only selected nodes"), "onlySelected", &wr, this, false),
-      weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, defaultStartPower),
+      ignore_cusp(_("Ignore cusp nodes"), _("Change ignoring cusp nodes"), "ignore_cusp", &wr, this, true),
+      only_selected(_("Change only selected nodes"), _("Change only selected nodes"), "only_selected", &wr, this, false),
+      weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, DEFAULT_START_POWER),
       pointwise(NULL)
 {
     registerParameter(&satellites_param);
@@ -220,14 +220,14 @@ void LPEBSpline::doEffect(SPCurve *curve)
             in->lineto(curve_it1->finalPoint());
             
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
-            SBasisIn = in->first_segment()->toSBasis();
+            sbasis_in = in->first_segment()->toSBasis();
             double weight_1 = sats[counter].amount;
-            pointAt1 = SBasisIn.valueAt(weight_1);
+            point_at1 = sbasis_in.valueAt(weight_1);
             double weight_2 = 1;
-            pointAt2 = SBasisIn.valueAt(weight_2);
+            point_at2 = sbasis_in.valueAt(weight_2);
             if(sats.size() > counter + 1){
                 weight_2 = sats[counter + 1].amount;
-                pointAt2 = SBasisIn.valueAt(1-weight_2);
+                point_at2 = sbasis_in.valueAt(1-weight_2);
             }
             in->reset();
             delete in;
@@ -235,10 +235,10 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 SPCurve *out = new SPCurve();
                 out->moveto(curve_it2->initialPoint());
                 out->lineto(curve_it2->finalPoint());
-                SBasisOut = out->first_segment()->toSBasis();
-                nextPointAt1 = SBasisOut.valueAt(0);
+                sbasis_out = out->first_segment()->toSBasis();
+                next_point_at1 = sbasis_out.valueAt(0);
                 if(sats.size() > counter + 1){
-                    nextPointAt1 = SBasisOut.valueAt(weight_2);
+                    next_point_at1 = sbasis_out.valueAt(weight_2);
                 }
                 out->reset();
                 delete out;
@@ -260,12 +260,12 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 lineHelper->lineto(SBasisEnd.valueAt(1-weight_1));
                 end->reset();
                 delete end;
-                SBasisHelper = lineHelper->first_segment()->toSBasis();
+                sbasis_helper = lineHelper->first_segment()->toSBasis();
                 lineHelper->reset();
                 delete lineHelper;
-                node = SBasisHelper.valueAt(0.5);
-                nCurve->curveto(pointAt1, SBasisHelper.valueAt(1), node);
-                nCurve->move_endpoints(node, node);
+                node = sbasis_helper.valueAt(0.5);
+                curve_n->curveto(point_at1, sbasis_helper.valueAt(1), node);
+                curve_n->move_endpoints(node, node);
 
             } else if ( curve_it2 == curve_endit) {
                 curve_n->curveto(point_at1, point_at2, curve_it1->finalPoint());
@@ -278,9 +278,9 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 line_helper->reset();
                 delete line_helper;
                 previousNode = node;
-                node = SBasisHelper.valueAt(0.5);
+                node = sbasis_helper.valueAt(0.5);
                 weight_1 = sats[path_info.first(counter)].amount;
-                nCurve->curveto(pointAt1, pointAt2, node);
+                curve_n->curveto(point_at1, point_at2, node);
             }
             if(!are_near(node,curve_it1->finalPoint()) && helper_size > 0.0) {
                 drawHandle(node, helper_size);
@@ -408,7 +408,7 @@ void LPEBSpline::changeWeight(double weight_ammount)
     SPPath *path = dynamic_cast<SPPath *>(sp_lpe_item);
     if(path) {
         SPCurve *curve = path->get_curve_for_edit();
-<       gchar *str = sp_svg_write_path(curve->get_pathvector());
+        gchar *str = sp_svg_write_path(curve->get_pathvector());
         path->getRepr()->setAttribute("inkscape:original-d", str);
     }
 }

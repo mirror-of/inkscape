@@ -204,8 +204,8 @@ void Handle::move(Geom::Point const &new_pos)
 void Handle::setPosition(Geom::Point const &p)
 {
     if(!are_near(p, _parent->position(), 0.01)){
-        _pm().recalculateIsBSpline();
-        if(_pm().isBSpline()){
+        _pm()._recalculateIsBSpline();
+        if(_pm()._isBSpline()){
             return;
         }
     }

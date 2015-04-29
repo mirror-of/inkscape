@@ -107,8 +107,8 @@ private:
 
     void _createControlPointsFromGeometry();
 
-    void recalculateIsBSpline();
-    bool isBSpline() const;
+    void _recalculateIsBSpline();
+    bool _isBSpline() const;
     void _createGeometryFromControlPoints(bool alert_LPE = false);
     unsigned _deleteStretch(NodeList::iterator first, NodeList::iterator last, bool keep_shape);
     std::string _createTypeString();
