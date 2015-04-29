@@ -58,6 +58,7 @@ enum PathChange {
 } // anonymous namespace
 
 
+
 /**
  * Notifies the path manipulator when something changes the path being edited
  * (e.g. undo / redo)
@@ -149,7 +150,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
 
     _createControlPointsFromGeometry();
     //Define if the path is BSpline on construction
-    recalculateIsBSpline();
+    _recalculateIsBSpline();
 }
 
 PathManipulator::~PathManipulator()
@@ -1179,16 +1180,16 @@ void PathManipulator::_createControlPointsFromGeometry()
 }
 
 //determines if the trace has a bspline effect and the number of steps that it takes
-int PathManipulator::BSplineGetSteps() const {
+int PathManipulator::_bsplineGetSteps() const {
 
     LivePathEffect::LPEBSpline const *lpe_bsp = NULL;
 
     SPLPEItem * path = dynamic_cast<SPLPEItem *>(_path);
     if (path){
         if(path->hasPathEffect()){
-            Inkscape::LivePathEffect::Effect const *thisEffect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
-            if(thisEffect){
-                lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline const*>(thisEffect->getLPEObj()->get_lpe());
+            Inkscape::LivePathEffect::Effect const *this_effect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+            if(this_effect){
+                lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline const*>(this_effect->getLPEObj()->get_lpe());
             }
         }
     }
@@ -1200,10 +1201,10 @@ int PathManipulator::BSplineGetSteps() const {
 }
 
 // determines if the trace has bspline effect
-void PathManipulator::recalculateIsBSpline(){
+void PathManipulator::_recalculateIsBSpline(){
     if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()) {
-        Inkscape::LivePathEffect::Effect const *thisEffect = _path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
-        if(thisEffect){
+        Inkscape::LivePathEffect::Effect const *this_effect = _path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        if(this_effect){
             _is_bspline = true;
             return;
         }
@@ -1211,7 +1212,7 @@ void PathManipulator::recalculateIsBSpline(){
     _is_bspline = false;
 }
 
-bool PathManipulator::isBSpline() const {
+bool PathManipulator::_isBSpline() const {
     return  _is_bspline;
 }
 
@@ -1223,7 +1224,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
 {
     Geom::PathBuilder builder;
     //Refresh if is bspline some times -think on path change selection, this value get lost
-    recalculateIsBSpline();
+    _recalculateIsBSpline();
     for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end(); ) {
         SubpathPtr subpath = *spi;
         if (subpath->empty()) {
@@ -1253,9 +1254,9 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     if (alert_LPE) {
         /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
         if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()) {
-            Inkscape::LivePathEffect::Effect* thisEffect = _path->getPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
-            if(thisEffect){
-                LivePathEffect::LPEPowerStroke *lpe_pwr = dynamic_cast<LivePathEffect::LPEPowerStroke*>(thisEffect->getLPEObj()->get_lpe());
+            Inkscape::LivePathEffect::Effect* this_effect = _path->getPathEffectOfType(Inkscape::LivePathEffect::POWERSTROKE);
+            if(this_effect){
+                LivePathEffect::LPEPowerStroke *lpe_pwr = dynamic_cast<LivePathEffect::LPEPowerStroke*>(this_effect->getLPEObj()->get_lpe());
                 if (lpe_pwr) {
                     lpe_pwr->adjustForNewPath(pathv);
                 }

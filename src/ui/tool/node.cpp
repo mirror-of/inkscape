@@ -290,7 +290,6 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
     return ControlPoint::_eventHandler(event_context, event);
 }
 
-
 bool Handle::grabbed(GdkEventMotion *)
 {
     _saved_other_pos = other()->position();
