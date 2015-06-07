@@ -85,6 +85,7 @@ public:
     void setPosition(int pos);
 
     char const *attribute(char const *key) const;
+    std::vector<const gchar *>attributes() const;
     void setAttribute(char const *key, char const *value, bool is_interactive=false);
     bool matchAttributeName(char const *partial_name) const;
 

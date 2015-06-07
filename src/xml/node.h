@@ -81,7 +81,7 @@ public:
     Node() {}
     virtual ~Node() {}
 
-    void *_wrapper; //Manually added
+    void *_wrapper;
 
     /**
      * @name Retrieve information about the node
@@ -158,6 +158,8 @@ public:
      *       or something similar with a custom allocator
      */
     virtual Inkscape::Util::List<AttributeRecord const> attributeList() const=0;
+
+    virtual std::vector<const gchar *>attributes() const;
 
     /**
      * @brief Check whether this node has any attribute that matches a string
@@ -402,6 +404,8 @@ public:
      * @param key The attribute to use as the identity attribute
      */
     virtual void mergeFrom(Node const *src, char const *key)=0;
+
+    virtual void overwriteWith(Node const *src)=0;
     
     /*@}*/
 

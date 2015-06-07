@@ -216,8 +216,8 @@ private:
     SPObject& operator=(const SPObject&);
 
     char *id; /* Our very own unique id */
-    Inkscape::XML::Node *repr; /* Our xml representation */
 public:
+    Inkscape::XML::Node *repr; /* Our xml representation */
     int refCount;
     std::list<SPObject*> hrefList;
 
