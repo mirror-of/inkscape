@@ -78,6 +78,7 @@ static void paintbucket_offset_changed(GtkAdjustment *adj, GObject *tbl)
 {
     UnitTracker* tracker = static_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
     Unit const *unit = tracker->getActiveUnit();
+    g_return_if_fail(unit != NULL);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Don't adjust the offset value because we're saving the

@@ -33,6 +33,7 @@ noinst_LIBRARIES =	\
 	libvpsc/libvpsc.a		\
 	livarot/libvarot.a		\
 	2geom/lib2geom.a		\
+	pybind/libpybind.a		\
 	libdepixelize/libdepixelize.a	\
 	util/libutil.a			\
 	libinkversion.a
@@ -53,7 +54,9 @@ all_libs =			\
 	$(DBUS_LIBS)		\
 	$(GDL_LIBS)             \
 	$(IMAGEMAGICK_LIBS)     \
-	$(X11_LIBS)
+	$(X11_LIBS)             \
+        $(PYTHON_LIBS)          \
+        $(PYGTK20_LIBS)
 
 # Add sources common for Inkscape and Inkview to this variable.
 ink_common_sources =
@@ -86,7 +89,9 @@ AM_CPPFLAGS =	\
 	-DPOTRACE=\"potrace\"	\
 	$(INKSCAPE_CFLAGS) \
 	$(WIN32_CFLAGS) \
-	$(X11_CFLAGS)
+	$(X11_CFLAGS) \
+        $(PYTHON_CFLAGS) \
+        $(PYGTK20_CFLAGS)
 
 CXXTEST_TEMPLATE = $(srcdir)/cxxtest-template.tpl
 CXXTESTGENFLAGS = --root --have-eh --template=$(CXXTEST_TEMPLATE)
@@ -141,11 +146,13 @@ include ui/widget/Makefile_insert
 include util/Makefile_insert
 include trace/Makefile_insert
 include 2geom/Makefile_insert
+include pybind/Makefile_insert
 include libdepixelize/Makefile_insert
 
 # Extra files not mentioned as sources to include in the source tarball
 EXTRA_DIST +=	\
 	2geom/makefile.in	\
+	pybind/makefile.in	\
 	debug/makefile.in	\
 	display/makefile.in	\
 	extension/implementation/makefile.in	\

@@ -378,6 +378,84 @@ fi
 AM_CONDITIONAL(INKJAR, test "$with_ij" = "yes")
 
 dnl ******************************
+dnl Python checking
+dnl ******************************
+
+AC_MSG_CHECKING(for Python development environment)
+AC_ARG_WITH(python,
+            AC_HELP_STRING([--with-python], [use Python for embedded scripting (EXPERIMENTAL)]),
+            [with_python=$withval], [with_python=skipped])
+
+if test "x$with_python" = "xyes"; then
+    checkPYTHON_CFLAGS=`python-config --cflags|sed -e 's/-O.//g' -e 's/-g//g' 2> /dev/null`
+    if test "$?" -gt "0"; then
+        with_python="no"
+    else
+        checkPYTHON_LIBS=`python-config --libs 2> /dev/null`
+        if test "$?" -gt "0"; then
+            with_python="no"
+        else
+            with_python="yes"
+        fi
+    fi
+fi
+AC_MSG_RESULT([$with_python])
+if test "x$with_python" = "xyes"; then
+    # Test that we actually have the python libraries installed
+    oldCFLAGS="$CFLAGS"
+    oldLIBS="$LIBS"
+    CFLAGS="$CFLAGS $checkPYTHON_CFLAGS"
+    LIBS="$LIBS $checkPYTHON_LIBS"
+    AC_CHECK_FUNC([Py_Initialize],[
+        PYTHON_CFLAGS="$checkPYTHON_CFLAGS"
+        PYTHON_LIBS="$checkPYTHON_LIBS"
+        AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
+        ],[
+        with_python="no"
+        ])
+    CFLAGS="$oldCFLAGS"
+    LIBS="$oldLIBS"
+fi
+AM_CONDITIONAL(WITH_PYTHON, test "x$with_python" = "xyes")
+AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_LIBS)
+
+dnl ******************************
+dnl Check Cython
+dnl ******************************
+
+if test "x$with_python" = "xyes"; then
+    AC_CHECK_TOOL([CYTHON], [cython])
+    if test "x$CYTHON" = "x"; then
+        AC_MSG_ERROR([--with-python was specified, but cython could not be foun
+d])
+    fi
+fi
+if test "x$with_python" = "xyes"; then
+   cython_version=$("$CYTHON" -V 2>&1 | sed 's/Cython version //')
+   if test "$cython_version" \< "0.13"; then
+      AC_MSG_ERROR([Invalid version, Cython is version $cython_version < 0.13])
+   fi
+fi
+AC_SUBST(CYTHON)
+
+dnl ******************************
+dnl Check pygtk-2.0
+dnl ******************************
+
+if test "x$with_python" = "xyes"; then
+   PKG_CHECK_MODULES(PYGTK20, pygtk-2.0 >= 2.15, pygtk20=yes, pygtk20=no)
+   if test "x$pygtk20" = "xno"; then
+       AC_MSG_ERROR([--with-python was specified, but pygtk-2.0 could not be fo
+und])
+   else
+       AC_DEFINE([ENABLE_PYGTK20], 1, [use pygtk-2.0 for pybind])
+   fi
+fi
+AC_SUBST(PYGTK20_CFLAGS)
+AC_SUBST(PYGTK20_LIBS)
+
+dnl ******************************
 dnl LittleCms checking
 dnl ******************************
 
@@ -1143,6 +1221,7 @@ src/util/makefile
 src/widgets/makefile
 src/xml/makefile
 src/2geom/makefile
+src/pybind/makefile
 doc/Makefile
 po/Makefile.in
 share/Makefile

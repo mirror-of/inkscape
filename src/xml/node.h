@@ -20,6 +20,7 @@
 
 #include <glibmm/ustring.h>
 #include "gc-anchored.h"
+#include <vector>
 #include "util/list.h"
 
 namespace Inkscape {
@@ -79,6 +80,8 @@ class Node : public Inkscape::GC::Anchored {
 public:
     Node() {}
     virtual ~Node() {}
+
+    void *_wrapper; //Manually added
 
     /**
      * @name Retrieve information about the node

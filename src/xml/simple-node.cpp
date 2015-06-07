@@ -240,6 +240,17 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
     return NULL;
 }
 
+std::vector<const gchar *>SimpleNode::attributes() const {
+    std::vector<const gchar *> temp;
+    // argh - purge this Util::List nonsense from XML classes fast
+    // Eeyup
+    List<AttributeRecord const> alist = _attributes;
+    for (; alist; ++alist) {
+        temp.push_back( g_quark_to_string(alist->key));
+    }
+    return temp;
+}
+
 unsigned SimpleNode::position() const {
     g_return_val_if_fail(_parent != NULL, 0);
     return _parent->_childPosition(*this);
@@ -680,6 +691,27 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key) {
         setAttribute(g_quark_to_string(iter->key), iter->value);
     }
 }
+
+void SimpleNode::overwriteWith(Node const *src) {
+    g_return_if_fail(src != NULL);
+    g_assert(src != this);
+
+    setContent(src->content());
+
+    Node *destchild = this->firstChild();
+    for ( Node const *child = src->firstChild() ; child != NULL ; child = child->next() )
+    {
+        destchild->overwriteWith(child);
+        destchild = destchild->next();
+    }
+
+    for ( List<AttributeRecord const> iter = src->attributeList() ;
+          iter ; ++iter )
+    {
+        setAttribute(g_quark_to_string(iter->key), iter->value);
+    }
+}
+
 
 }
 

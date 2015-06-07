@@ -93,6 +93,8 @@ public:
 
     void mergeFrom(Node const *src, char const *key);
 
+    void overwriteWith(Node const *src);
+
     Inkscape::Util::List<AttributeRecord const> attributeList() const {
         return _attributes;
     }
