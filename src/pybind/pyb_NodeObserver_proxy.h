@@ -5,7 +5,7 @@
 
 #include "xml/node-observer.h"
 #include "xml/node.h"
-#include "gc-managed.h"
+#include "inkgc/gc-managed.h"
 #include "gc-finalized.h"
 
 namespace Inkscape {
@@ -21,7 +21,7 @@ using Inkscape::XML::Node;
  * reference to PyObject in constructor and destructor to keep PyObject from
  * recycling whenever it is used by a subject.
  *
- * \see gc-managed.h and gc-finalized.h
+ * \see inkgc/gc-managed.h and gc-finalized.h
  */
 class NodeObserver_proxy: public Inkscape::XML::NodeObserver,
                           public Inkscape::GC::Managed<>,

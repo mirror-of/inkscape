@@ -3,7 +3,7 @@
 
 #include <Python.h>
 
-#include "gc-core.h"
+#include "inkgc/gc-core.h"
 
 /*! \brief Class to maintain reference of Python object from Inkscape.
  *

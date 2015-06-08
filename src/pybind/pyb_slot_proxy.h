@@ -3,7 +3,7 @@
 
 #include <Python.h>
 
-#include "gc-managed.h"
+#include "inkgc/gc-managed.h"
 #include "gc-finalized.h"
 #include "sigc++/sigc++.h"
 

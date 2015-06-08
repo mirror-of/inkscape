@@ -1,4 +1,4 @@
-cdef extern from "gc-core.h" namespace "Inkscape::GC":
+cdef extern from "inkgc/gc-core.h" namespace "Inkscape::GC":
     cppclass Core:
         int general_register_disappearing_link(void **p_ptr, void *base)
 
