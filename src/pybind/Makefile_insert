@@ -1,0 +1,26 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+pybind/all: pybind/libpybind.a
+
+pybind_libpybind_a_SOURCES = \
+		   pybind/pybind.cpp \
+		   pybind/pybInkscape.cpp \
+		   pybind/pyb_NodeObserver_proxy.cpp \
+		   pybind/pyb_slot_proxy.cpp \
+		   pybind/pybgc.cpp
+
+pybind/%.cpp: pybind/%.pyx
+	cython --cplus -a $< -o $@
+
+pybind/pybInkscape.cpp: pybind/pygobject.pxd	\
+			pybind/pybSPDesktop.pxd	\
+			pybind/pybInkscape.pxd	\
+                        pybind/pybApplication.pxd \
+			pybind/pybNodeObserver.pxd \
+			pybind/pybXML.pxd \
+			pybind/pybDocument.pxd \
+			pybind/pybNode.pxd \
+			pybind/pybVerb.pxd \
+			pybind/pybView.pxd \
+			pybind/pybSelection.pxd \
+			pybind/pybindtools.pxd
