@@ -1,9 +1,10 @@
 # -*- mode: python; indnent-tabs-mode: t; tab-width: 8; c-basic-offset: 4; -*-
 # vim: sw=4:ts=8:sts=4
 from cpython cimport bool
-from cython.operator cimport dereference as deref, address as addr
+from cython.operator cimport dereference as deref, address as addr, preincrement
 from cpython.ref cimport PyTypeObject
 from libcpp.list cimport list as cpplist
+from libcpp.vector cimport vector
 from cpython.cobject cimport PyCObject_AsVoidPtr, PyCObject_Check
 from cpython.cobject cimport PyCObject_FromVoidPtr
 from cpython cimport PyObject, Py_INCREF, Py_DECREF
@@ -12,10 +13,10 @@ from pygobject cimport G_OBJECT_TYPE, C_PyGPointer, g_quark_to_string, g_quark_f
 from pybXML cimport Node, Document, ElementNode
 from pybSelection cimport Selection, const_GSList
 from pybNodeObserver cimport NodeObserver_proxy, NodeObserver
+from pybApplication cimport Application, SPDesktop_p
 cimport pybXML
 cimport pybSPDesktop
 cimport pybInkscape
-cimport pybApplication
 cimport pybVerb
 cimport pybgc
 cimport pybindtools
@@ -61,13 +62,13 @@ cdef class PYSelection(object):
         return wrapper
 
     def list(self):
-        cdef const_GSList *lst = self._thisptr.list()
         objs = []
-        while lst != NULL:
-            obj = <pybSPDesktop.SPObject *>(lst.data)
-            wrapper = wrapobjtonode(obj)
+        vect = <const vector[pybSPDesktop.SPObject *]> self._thisptr.list()
+        cdef vector[pybSPDesktop.SPObject *].iterator it = vect.begin()
+        while it != vect.end(): 
+            wrapper = wrapobjtonode(deref(it))
             objs.append(wrapper)
-            lst = <const_GSList *>lst.next
+            preincrement(it)
         return objs
 
 cdef class PYNode(object):
@@ -677,22 +678,31 @@ cdef class PYSPDesktop(PYView):
         elif op == 5:
             return self._thisptr >= other._thisptr
 
-
-cdef class Inkscape(GObject):
-    #
-    # Inkscape support these glib signals.
-    #
+cdef class PYInkscape(object):
+    cdef Application *_thisptr
+    #To add
     signal_names = ['modify_selection', 'change_selection',
                     'change_subselection', 'set_selection',
                     'set_eventcontext', 'activate_desktop',
                     'deactivate_desktop', 'shut_down',
                     'dialogs_hide', 'dialogs_unhide',
                     'external_change']
+    
+    def __init__(self, ptr_co = None, *args):
+        pass
+        """
+        if not ptr_co:
+            _repr = <Application *>Application.instance()
+        else:
+            assert PyCObject_Check(ptr_co)
+            _repr = <Application *>PyCObject_AsVoidPtr(ptr_co)
+        self._thisptr = _repr
+        """
 
     def get_all_desktops(self):
         cdef cpplist[SPDesktop_p] listbuf
-        pybInkscape.inkscape_get_all_desktops(listbuf)
-        
+        Application.instance().get_all_desktops(listbuf)
+
         ret = []
         itr = listbuf.begin()
         while itr == listbuf.end():
@@ -713,17 +723,12 @@ cdef class Inkscape(GObject):
         dsk_co = PyCObject_FromVoidPtr(SP_ACTIVE_DESKTOP, NULL)
         dsk = PYSPDesktop(dsk_co)
         return dsk
-
-    cdef Application *_get_C_inkscape(self):
-        return <Application *>pygobject_get(self)
-    
+  
     def refresh_display(self):
-        _inkscape = self._get_C_inkscape()
-        pybInkscape.inkscape_refresh_display(_inkscape)
+        Application.instance().refresh_display()
     
     def exit(self):
-        _inkscape = self._get_C_inkscape()
-        pybInkscape.inkscape_exit(_inkscape)
+        Application.instance().exit()
 
 cdef class PYSPAction:
     cdef pybVerb.SPAction *_thisptr
@@ -919,67 +924,9 @@ def test():
 def version():
     print "Wed Apr 29 20:10 version"
 
-## \page reg_gobject_class How PyGObject works?
-#
-# If you want to register a gobject type with PyGObject to integrated
-# it with PyGObject, you can call
-# gobject._PyGObject_API.register_class() to register a PyTypeObject
-# as the wrapper of the type specified by a GType value.  And, when
-# you have an GObject with specified type, you can call
-# gobject._PyGObject_API.newgobj() to generate a wrapper from the
-# associated PyTypeObject.  The PyTypeObject must inherit
-# PyGObjectType, it means struct of instances of the specified have
-# with PyGObject as first field.
-#
-# gobject._PyGObject_API is actually an CObject, its content is with
-# _PyGObject_Functions type. (see pygobject.h) So, it can only used by
-# native module by casting it to _PyGObject_Functions.  It is a set of
-# functions that PyGObject provided to other modules to cowork with
-# PyGObject.
-#
-# PyGObject would use inheritance of GObject to create inheritance
-# tree of wrappers.  So, inheritance specified in your PyTypeObject is
-# useless.  PyGObject would also generate a dummy type for wrappers of
-# GObjects that the programmer does not specified a wrapper type for
-# them.
-#
-# The C function gobject._PyGObject_API.gobject_get() is used to
-# return associated GObject of a wrapper.  So, you wrapper code can
-# use it to get associated GObject.
-#
-# PyGObject will try to keep one-to-one mapping between any GObject
-# and associated wrapper.  It also keep consistent of reference
-# counter.  So, you don't have to care about it.
-#
-# PyGObject does not call tp_new and tp_init of PyTypeObject of a
-# wrapper type.  Calling tp_new and tp_init is defined by object
-# protocol of Python.  It is implemented by type 'type' of Python.
-# So, when you call on a type object, tp_call of PyTypeObject of type
-# 'type' would be called to run the protocol and return an object.
-# But, native code does not works like this, especially PyGObject.
-# So, you can not relys on tp_new and tp_init.
-#
-# Cython rely on tp_new and tp_init.  And, __cinit__ used by Cython is
-# called in tp_new.  So, avoid to use __init__, __new__, and __cinit__
-# for wrapper types.
-
 cdef _create_inkscape_wrapper():
-    global inkscape, gobj_api
-    
-    #
-    # gobject._PyGObject_API is a set of C functions exposed by pygtk.
-    # It provides capabilities to integrate other GObjects provided by
-    # other library binding.
-    #
-    _gobj_api = PyCObject_AsVoidPtr(gobject._PyGObject_API)
-    gobj_api = <_PyGObject_Functions *>_gobj_api
-    g_inkscape = pybInkscape.inkscape_get_instance()
-
-    #
-    # Register GObject classes for Inkscape
-    #
-    wrapper = gobj_api.newgobj(<C_GObject *>g_inkscape)
-    return wrapper
+    inkscape_app = PYInkscape()
+    return inkscape_app
 
 cdef _PyGObject_Functions *gobj_api
 

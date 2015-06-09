@@ -159,7 +159,7 @@ public:
      */
     virtual Inkscape::Util::List<AttributeRecord const> attributeList() const=0;
 
-    virtual std::vector<const gchar *>attributes() const;
+    virtual std::vector<const gchar *>attributes() const=0;
 
     /**
      * @brief Check whether this node has any attribute that matches a string

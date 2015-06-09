@@ -1,5 +1,6 @@
 from pygobject cimport GSList
 from pybNode cimport Node
+from libcpp.vector cimport vector
 
 cdef extern from "desktop.h":
     cppclass SPDesktop
@@ -10,7 +11,7 @@ cdef extern from "selection.h" namespace "Inkscape":
     cppclass Selection:
         SPDesktop *desktop()
         SPObject *activeContext()
-        const_GSList *list()
+        vector[SPObject *] *list()
         void toggle(SPObject *)
         void clear()
         #void add(SPObject *, bool)
