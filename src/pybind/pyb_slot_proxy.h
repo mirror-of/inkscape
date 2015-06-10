@@ -10,11 +10,14 @@
 namespace Inkscape {
 namespace pybind {
 
-class slot_proxy: public Inkscape::GC::Managed<>,
-		  public Inkscape::GC::Finalized {
+/*class slot_proxy: public Inkscape::GC::Managed<>,
+		  public Inkscape::GC::Finalized {*/
+class slot_proxy{
     PyObject *py_obj;
     
-    void run(void);
+    void run0(void);
+    void run1(void*);
+    void run2(void*, int);
     
 public:
     slot_proxy(PyObject *obj): py_obj(obj) {
@@ -23,7 +26,9 @@ public:
     ~slot_proxy() {
 	Py_DECREF(py_obj);
     }
-    sigc::slot0<void> get_slot(void);
+    sigc::slot0<void> get_slot_0(void);
+    sigc::slot1<void,void*> get_slot_1(void);
+    void connect(char *);
 };
 
 }

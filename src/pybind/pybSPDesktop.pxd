@@ -79,7 +79,9 @@ ctypedef slot_type res_slot_type
 cdef extern from "pybind/pyb_slot_proxy.h" namespace "Inkscape::pybind":
     cppclass slot_proxy:
         slot_proxy(object obj)
-        res_slot_type get_slot()
+        res_slot_type get_slot_0()
+        res_slot_type get_slot_1()
+        void connect(char *)
 
 cdef extern from "glibmm/ustring.h" namespace "Glib":
     cppclass ustring:
