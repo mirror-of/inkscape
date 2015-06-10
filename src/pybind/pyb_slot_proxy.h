@@ -10,8 +10,6 @@
 namespace Inkscape {
 namespace pybind {
 
-/*class slot_proxy: public Inkscape::GC::Managed<>,
-		  public Inkscape::GC::Finalized {*/
 class slot_proxy{
     PyObject *py_obj;
     

@@ -12,6 +12,11 @@ Inkscape::pybind::slot_proxy::get_slot_0(void) {
     return sigc::mem_fun(this, &Inkscape::pybind::slot_proxy::run0);
 }
 
+sigc::slot1<void, void*>
+Inkscape::pybind::slot_proxy::get_slot_1(void) {
+    return sigc::mem_fun(this, &Inkscape::pybind::slot_proxy::run1);
+}
+
 void
 Inkscape::pybind::slot_proxy::run1(void* arg1) {
     PyObject_CallFunctionObjArgs(py_obj, PyCObject_FromVoidPtr(arg1, NULL), NULL);
@@ -20,11 +25,6 @@ Inkscape::pybind::slot_proxy::run1(void* arg1) {
 void
 Inkscape::pybind::slot_proxy::run2(void* arg1, int arg2) {
     PyObject_CallFunctionObjArgs(py_obj, PyCObject_FromVoidPtr(arg1, NULL), arg2, NULL);
-}
-
-sigc::slot1<void, void*>
-Inkscape::pybind::slot_proxy::get_slot_1(void) {
-    return sigc::mem_fun(this, &Inkscape::pybind::slot_proxy::run1);
 }
 
 void

@@ -22,7 +22,6 @@ cimport pybVerb
 cimport pybgc
 cimport pybindtools
 import gobject
-from libc.stdio cimport printf
 
 
 cdef class PYNodeObserver
@@ -931,7 +930,6 @@ cdef class Slot:
     cdef pybSPDesktop.slot_proxy *_thisptr
     def __cinit__(self, signal_name, callback):
         self.callback = callback
-        #print("Makeing slot")
         if signal_name in ["activate_desktop", "deactivate_desktop", "subselection_changed"]:
            self._thisptr = new pybSPDesktop.slot_proxy(self.desktop_callback)
         elif signal_name in ["selection_changed", "selection_set"]:
@@ -939,22 +937,16 @@ cdef class Slot:
         else:
            self._thisptr = new pybSPDesktop.slot_proxy(self.callback)
         self._thisptr.connect(signal_name)
-        print("Proxy connected\n")
 
     def __dealloc__(self):
-        #print("Deallocating a Slot and proxy")
         del self._thisptr
 
     def desktop_callback(self, desktop_co):
-        #print("Callback wrapper called")
         pydesktop = PYSPDesktop(desktop_co)
-        #print("Got PYSPDesktop")
         self.callback(pydesktop)
 
     def selection_callback(self, selection_co, flags = None):
-        #print("Callback wrapper called")
         pyselection = PYSelection(selection_co)
-        #print("Got PYSelection")
         self.callback(pyselection)
 
 def connect(signal_name, callback):

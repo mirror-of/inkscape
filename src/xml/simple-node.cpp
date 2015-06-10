@@ -242,8 +242,6 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
 
 std::vector<const gchar *>SimpleNode::attributes() const {
     std::vector<const gchar *> temp;
-    // argh - purge this Util::List nonsense from XML classes fast
-    // Eeyup
     List<AttributeRecord const> alist = _attributes;
     for (; alist; ++alist) {
         temp.push_back( g_quark_to_string(alist->key));
