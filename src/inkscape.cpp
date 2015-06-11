@@ -25,7 +25,9 @@
 #include <gtkmm/messagedialog.h>
 #include "debug/simple-event.h"
 #include "debug/event-tracker.h"
-#include "pybind/pybind.h"
+#ifdef WITH_PYTHON
+# include "pybind/pybind.h"
+#endif
 
 #ifndef WIN32
 # define HAS_PROC_SELF_EXE  //to get path of executable
@@ -466,8 +468,10 @@ Application::Application(const char* argv, bool use_gui) :
         trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
     }
 
+#ifdef WITH_PYTHON
     /* Initialize pybind */
     Inkscape::PyBind::init();
+#endif
 
     /* Initialize the extensions */
     Inkscape::Extension::init();

@@ -1286,8 +1286,9 @@ Configuration:
         Enable DBUS:              ${with_dbus} 
         Enable Poppler-Cairo:     ${enable_poppler_cairo}
         ImageMagick Magick++:     ${magick_ok}
+        With Python bindings:     ${with_python}
         Libwpg:                   ${with_libwpg}
         Libvisio:                 ${with_libvisio}
         Libcdr:                   ${with_libcdr}
         Doing Local Install:      ${with_localinstall}
-"
+" 

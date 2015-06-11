@@ -1,5 +1,7 @@
 ## Makefile.am fragment sourced by src/Makefile.am.
 
+if WITH_PYTHON
+
 pybind/all: pybind/libpybind.a
 
 pybind_libpybind_a_SOURCES = \
@@ -24,3 +26,5 @@ pybind/pybInkscape.cpp: pybind/pygobject.pxd	\
 			pybind/pybView.pxd \
 			pybind/pybSelection.pxd \
 			pybind/pybindtools.pxd
+
+endif
