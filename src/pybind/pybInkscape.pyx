@@ -1,5 +1,6 @@
 # -*- mode: python; indnent-tabs-mode: t; tab-width: 8; c-basic-offset: 4; -*-
 # vim: sw=4:ts=8:sts=4
+cimport pybSPDesktop
 from cpython cimport bool
 from cython.operator cimport dereference as deref, address as addr, preincrement
 from cpython.ref cimport PyTypeObject
@@ -16,7 +17,6 @@ from pybNodeObserver cimport NodeObserver_proxy, NodeObserver
 from pybApplication cimport Application, SPDesktop_p
 cimport pybApplication
 cimport pybXML
-cimport pybSPDesktop
 cimport pybInkscape
 cimport pybVerb
 cimport pybgc

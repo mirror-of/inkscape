@@ -1,10 +1,10 @@
+cimport pygobject
 from libcpp.list cimport list as clist
 from pybApplication cimport Application
 from pybXML cimport Node, Document
 from pybView cimport View
 from pybSelection cimport Selection
 from pygobject cimport C_GObject, gchar
-cimport pygobject
 
 cdef extern from "document.h":
     cppclass SPDocument

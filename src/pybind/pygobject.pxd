@@ -1,5 +1,9 @@
 from cpython.ref cimport PyTypeObject, PyObject
 
+#gtkmm inclusion hack!
+cdef extern from "gtkmm/box.h" namespace "Gtk":
+    pass
+
 cdef extern from "pygobject.h":
     ctypedef char gchar
     ctypedef char cgchar "const gchar"
