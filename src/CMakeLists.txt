@@ -481,6 +481,7 @@ add_subdirectory(util)
 add_subdirectory(widgets)
 add_subdirectory(xml)
 add_subdirectory(2geom)
+add_subdirectory(pybind)
 
 
 # Directories containing lists files that describe building internal libraries
@@ -540,6 +541,7 @@ target_link_libraries(inkscape
 	livarot_LIB
 	uemf_LIB
 	2geom_LIB
+	pybind_LIB
 	depixelize_LIB
 	util_LIB
 	gc_LIB

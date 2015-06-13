@@ -85,21 +85,28 @@ macro(INKSCAPE_PKG_CONFIG_FIND PREFIX MODNAME VERSION PATH_NAME PATH_SUFFIXE LIB
 			${PATH_SUFFIXE}
 	)
 
-	find_library(${PREFIX}_LIBRARY
-		NAMES
+        if (LIB_NAME)
+		find_library(${PREFIX}_LIBRARY
+			NAMES
 			${LIB_NAME}
-		PATHS
-			${_${PREFIX}_LIBDIR}
-			/usr/lib
-			/usr/local/lib
-			/opt/local/lib
-			/sw/lib
-	)
+			PATHS
+				${_${PREFIX}_LIBDIR}
+				/usr/lib
+				/usr/local/lib
+				/opt/local/lib
+				/sw/lib
+		)
 
-	if (${PREFIX}_LIBRARY)
-		set(${PREFIX}_FOUND TRUE)
-		set(${PREFIX}_VERSION ${_${PREFIX}_VERSION})
-	endif (${PREFIX}_LIBRARY)
+		if (${PREFIX}_LIBRARY)
+			set(${PREFIX}_FOUND TRUE)
+			set(${PREFIX}_VERSION ${_${PREFIX}_VERSION})
+		endif (${PREFIX}_LIBRARY)
+        else (LIB_NAME)
+	        if (${PREFIX}_INCLUDE_DIR)
+			set(${PREFIX}_FOUND TRUE)
+			set(${PREFIX}_VERSION ${_${PREFIX}_VERSION})
+	        endif(${PREFIX}_INCLUDE_DIR)
+        endif(LIB_NAME)
 
 	set(${PREFIX}_INCLUDE_DIRS
 		${${PREFIX}_INCLUDE_DIR}
@@ -118,9 +125,16 @@ macro(INKSCAPE_PKG_CONFIG_FIND PREFIX MODNAME VERSION PATH_NAME PATH_SUFFIXE LIB
 
 	if (${PREFIX}_FOUND)
 		if (NOT ${PREFIX}_FIND_QUIETLY)
-			message(STATUS "Found ${MODNAME}: ${${PREFIX}_LIBRARIES}")
+                        if (LIB_NAME)
+				message(STATUS "Found ${MODNAME}: ${${PREFIX}_LIBRARIES}")
+			else (LIB_NAME)
+				message(STATUS "Found ${MODNAME} include: ${${PREFIX}_INCLUDE_DIR}")
+			endif (LIB_NAME)
 		endif (NOT ${PREFIX}_FIND_QUIETLY)
 	else (${PREFIX}_FOUND)
+                if (NOT ${PREFIX}_FIND_QUIETLY)
+			message(STATUS "${MODNAME} not found")
+		endif (NOT ${PREFIX}_FIND_QUIETLY)
 		if (${PREFIX}_FIND_REQUIRED)
 			message(FATAL_ERROR "Could not find ${MODNAME}")
 		endif (${PREFIX}_FIND_REQUIRED)

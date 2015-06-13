@@ -74,6 +74,7 @@ endif()
 # Options
 # -----------------------------------------------------------------------------
 option(WITH_DBUS "Compile with support for DBus interface" OFF)
+option(WITH_PYTHON "Use Python for embedded scripting" ON)
 option(ENABLE_LCMS "Compile with LCMS support" ON)
 option(WITH_GNOME_VFS "Compile with support for Gnome VFS" ON)
 #option(WITH_INKJAR "Enable support for openoffice files (SVG jars)" ON)
