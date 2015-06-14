@@ -250,7 +250,7 @@ class __Pyx_FakeReference {
 #include "stdexcept"
 #include "typeinfo"
 #include "gtkmm/box.h"
-#include <pygobject.h>
+#include "pygobject.h"
 #include "xml/node-observer.h"
 #include "pybind/pyb_NodeObserver_proxy.h"
 #include <vector>
