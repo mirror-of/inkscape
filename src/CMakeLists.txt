@@ -240,7 +240,6 @@ set(inkscape_SRC
 	print.cpp
 	profile-manager.cpp
 	proj_pt.cpp
-        #pybind/pybind.cpp
 	rdf.cpp
 	removeoverlap.cpp
 	resource-manager.cpp
@@ -368,7 +367,6 @@ set(inkscape_SRC
 	print.h
 	profile-manager.h
 	proj_pt.h
-        #pybind/pybind.h
 	rdf.h
 	remove-last.h
 	removeoverlap.h
@@ -496,7 +494,9 @@ add_subdirectory(libvpsc)
 add_subdirectory(livarot)
 add_subdirectory(libnrtype)
 add_subdirectory(libdepixelize)
-add_subdirectory(pybind)
+if (WITH_PYTHON)
+  add_subdirectory(pybind)
+endif (WITH_PYTHON)
 
 
 get_property(inkscape_global_SRC GLOBAL PROPERTY inkscape_global_SRC)

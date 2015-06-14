@@ -96,12 +96,15 @@ macro(INKSCAPE_PKG_CONFIG_FIND_INCLUDE PREFIX MODNAME VERSION PATH_NAME PATH_SUF
 
 	if (${PREFIX}_FOUND)
 		if (NOT ${PREFIX}_FIND_QUIETLY)
-			message(STATUS "Found ${MODNAME}: ${${PREFIX}_LIBRARIES}")
+			message(STATUS "Found ${MODNAME} include: ${${PREFIX}_LIBRARIES}")
 		endif (NOT ${PREFIX}_FIND_QUIETLY)
 	else (${PREFIX}_FOUND)
 		if (${PREFIX}_FIND_REQUIRED)
-			message(FATAL_ERROR "Could not find ${MODNAME}")
-		endif (${PREFIX}_FIND_REQUIRED)
+			message(FATAL_ERROR "Could not find include dir for ${MODNAME}")
+
+		elseif (NOT ${PREFIX}_FIND_QUIETLY)
+			message(STATUS "Include for ${MODNAME} not found")
+		endif ()
 	endif (${PREFIX}_FOUND)
 
 	# show the <PREFIX>_INCLUDE_DIRS and <PREFIX>_LIBRARIES variables only in the advanced view
@@ -167,7 +170,9 @@ macro(INKSCAPE_PKG_CONFIG_FIND PREFIX MODNAME VERSION PATH_NAME PATH_SUFFIXE LIB
 	else (${PREFIX}_FOUND)
 		if (${PREFIX}_FIND_REQUIRED)
 			message(FATAL_ERROR "Could not find ${MODNAME}")
-		endif (${PREFIX}_FIND_REQUIRED)
+		elseif (NOT ${PREFIX}_FIND_QUIETLY)
+			message(STATUS "${MODNAME} not found.")
+		endif ()
 	endif (${PREFIX}_FOUND)
 
 	# show the <PREFIX>_INCLUDE_DIRS and <PREFIX>_LIBRARIES variables only in the advanced view
