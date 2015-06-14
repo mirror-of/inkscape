@@ -12,7 +12,7 @@ pybind_libpybind_a_SOURCES = \
 		   pybind/pybgc.cpp
 
 pybind/%.cpp: pybind/%.pyx
-	cython --cplus -a $< -o $@
+	$(CYTHON) --cplus -a $< -o $@
 
 pybind/pybInkscape.cpp: pybind/pygobject.pxd	\
 			pybind/pybSPDesktop.pxd	\
