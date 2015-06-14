@@ -23,10 +23,7 @@ else (PYGTK_INCLUDE_DIRS)
 	# in the FIND_PATH() and FIND_LIBRARY() calls
 	find_package(PkgConfig)
 	if (PKG_CONFIG_FOUND)
-		INKSCAPE_PKG_CONFIG_FIND(PYGTK pygtk-2.0 0 pygobject.h pygtk-2.0 FALSE)
-		if (PYGTK_FOUND)
-			set(PYGTK_INCLUDE_DIRS ${PYGTK_INCLUDE_DIRS})
-		endif (PYGTK_FOUND)
+		INKSCAPE_PKG_CONFIG_FIND_INCLUDE(PYGTK pygtk-2.0 0 pygobject.h pygtk-2.0)
 	endif (PKG_CONFIG_FOUND)
 endif (PYGTK_INCLUDE_DIRS)
 

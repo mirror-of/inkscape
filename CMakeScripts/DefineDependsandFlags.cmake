@@ -237,7 +237,6 @@ if(WITH_PYTHON)
         message("with python: " ${WITH_PYTHON})
 	if(WITH_PYTHON)
 		list(APPEND INKSCAPE_LIBS pybind_LIB)
-		add_subdirectory(pybind)
 	endif()
 endif()
 # ----------------------------------------------------------------------------
