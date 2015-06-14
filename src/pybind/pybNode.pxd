@@ -44,7 +44,6 @@ cdef extern from "xml/node.h" namespace "Inkscape::XML":
         void removeSubtreeObserver(NodeObserver &observer)
         Node *duplicate(void *doc)
 
-#Manually added
 cdef extern from "xml/element-node.h" namespace "Inkscape::XML":
     cppclass ElementNode(Node):
         ElementNode (int code, Document *doc)
