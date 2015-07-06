@@ -1,0 +1,29 @@
+Description: Remove embedding of the build date to allow a reproducible build.
+ https://wiki.debian.org/ReproducibleBuilds for more information
+Author: Mattia Rizzolo <mattia@mapreri.org>
+Forwarded: no
+Last-Update: 2015-06-05
+
+
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -2178,7 +2178,7 @@
+                 break;
+             }
+             case SP_ARG_VERSION: {
+-                printf("Inkscape %s (%s)\n", Inkscape::version_string, __DATE__);
++                printf("Inkscape %s\n", Inkscape::version_string);
+                 exit(0);
+                 break;
+             }
+--- a/src/extension/internal/emf-print.cpp
++++ b/src/extension/internal/emf-print.cpp
+@@ -205,7 +205,7 @@
+     } else {
+         p = ansi_uri;
+     }
+-    snprintf(buff, sizeof(buff) - 1, "Inkscape %s (%s)\1%s\1", Inkscape::version_string, __DATE__, p);
++    snprintf(buff, sizeof(buff) - 1, "Inkscape %s \1%s\1", Inkscape::version_string, p);
+     uint16_t *Description = U_Utf8ToUtf16le(buff, 0, NULL);
+     int cbDesc = 2 + wchar16len(Description);      // also count the final terminator
+     (void) U_Utf16leEdit(Description, '\1', '\0'); // swap the temporary \1 characters for nulls

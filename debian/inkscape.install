@@ -1,0 +1,2 @@
+debian/inkscape.applications usr/share/application-registry/
+debian/inkscape.xpm usr/share/pixmaps/

@@ -1,22 +1,10 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
-# debian/rules  for inkscape derived from a sample 
-# provided by Joey Hess via dh_make.
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+DESTDIR = $(CURDIR)/debian/inkscape
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
-# use dpatch:
-include /usr/share/dpatch/dpatch.make
-
-# These are used for cross-compiling and for saving the configure script
-# from having to guess our platform (since we know it already)
-DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
-DEB_HOST_ARCH       ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
-
-CFLAGS = -Wall -g
-CXXFLAGS = -Wall -g
+CFLAGS += -Wall
+CXXFLAGS += -Wall
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
   CFLAGS += -O0
@@ -25,165 +13,18 @@ else
   CFLAGS += -O2
   CXXFLAGS += -O2
 endif
-ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-  INSTALL_PROGRAM += -s
-endif
-ifneq (,$(findstring $(DEB_HOST_ARCH),alpha))
-  ALPHA_CXXFLAGS=-mieee
-  ALPHA_CFLAGS=-mieee
-  ALPHA_LDFLAGS=-Wl,--no-relax
-endif
 
-# Handle DEB_BUILD_OPTIONS=parallel=N
-, := ,
-ifneq (,$(filter parallel=%,$(subst $(,), ,$(DEB_BUILD_OPTIONS))))
-  NUMJOBS := $(patsubst parallel=%,%,$(filter parallel=%,$(subst $(,), ,$(DEB_BUILD_OPTIONS))))
-  MAKEFLAGS += -j$(NUMJOBS)
-endif
+%:
+	dh $@ --buildsystem=autoconf --parallel --with autotools_dev,python2
 
+override_dh_auto_configure:
+	dh_auto_configure \
+		--buildsystem=autoconf -- \
+		--with-gnome-vfs \
+		--enable-lcms
 
-config.status: configure patch
-	dh_testdir
-
-	CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
-	CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)" 	  \
-	LDFLAGS="$(LDFLAGS) $(ALPHA_LDFLAGS)"			  \
-	./configure --host=$(DEB_HOST_GNU_TYPE)			  \
-	            --build=$(DEB_BUILD_GNU_TYPE)		  \
-		    --prefix=/usr				  \
-		    --datadir=\$${prefix}/share			  \
-		    --mandir=\$${prefix}/share/man		  \
-		    --infodir=\$${prefix}/share/info		  \
-		    --with-gnome-vfs				  \
-		    --enable-lcms				  \
-		    --enable-inkboard
-
-
-build:  config.status
-	dh_testdir
-	cd po; intltool-update -p
-
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
-		
-	# compile the package...
-#	$(MAKE) -C src extension/plugin/libgimpgrad.la
-	$(MAKE) CXXFLAGS="$(CXXFLAGS) $(MIPS_CXXFLAGS) $(ALPHA_CXXFLAGS)" \
-	        CFLAGS="$(CFLAGS) $(MIPS_CFLAGS) $(ALPHA_CFLAGS)"
-
-clean: clean-patched unpatch
-
-clean-patched:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp 
-
-	# cleaning up...
-	[ ! -f Makefile ] || $(MAKE) distclean
-	rm -f po/.intltool-merge-cache
-
-	-rm -f po/*.gmo po/messages
-	dh_clean 
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
-	# Add here commands to install the package into debian/inkscape.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/inkscape
-	install -o root -g root -m 644 $(CURDIR)/debian/inkscape.xpm $(CURDIR)/debian/inkscape/usr/share/pixmaps/inkscape.xpm
-	install -o root -g root -m 644 $(CURDIR)/debian/inkscape.applications $(CURDIR)/debian/inkscape/usr/share/application-registry/inkscape.applications
-	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash $(CURDIR)/debian/inkscape/etc/bash_completion.d/inkscape
-	chmod a+x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/xaml2svg/
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/ps2pdf.cmd
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_randomcase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_lesssaturation.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/__init__.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/spirograph.inx
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_desaturate.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Base.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code128.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_randomize.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_custom.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code93.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_lowercase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code39.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_removeblue.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/Code39Ext.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_removered.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/EAN8.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_morelight.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_uppercase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_replace.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_brighter.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_lesshue.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/UPCA.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/RM4CC.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_rgbbarrel.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/UPCE.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_replace.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/Barcode/EAN13.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_removegreen.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_morehue.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_grayscale.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_lesslight.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_sentencecase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/render_barcode.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_darker.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_flipcase.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_moresaturation.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/color_negative.py
-	chmod -x $(CURDIR)/debian/inkscape/usr/share/inkscape/extensions/text_titlecase.py
-
-	# Add translation domain to .desktop files
-	DOMAIN=$$(grep --max-count 1 '^GETTEXT_PACKAGE[[:space:]]*=' $(CURDIR)/po/Makefile | sed 's/^.*=[[:space:]]\([^[:space:]]\)/\1/'); \
-	for d in $$(find debian/inkscape -type f -name "*.desktop" ); do \
-	    echo "Adding translation domain $$DOMAIN to $$d..."; \
-	    echo "X-Ubuntu-Gettext-Domain=$$DOMAIN" >> $$d; \
-	done;
-
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs ChangeLog
-	dh_installdocs
-	dh_desktop
-#	dh_installexamples
-#	dh_install
-	dh_installmenu
-#	dh_installdebconf
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
-	dh_installmime
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
-#	dh_installman
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-#	dh_perl
-#	dh_python
-#	dh_makeshlibs
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-
-.PHONY: build clean binary-indep binary-arch binary install
+override_dh_install:
+	install -D -o root -g root -m 644 $(CURDIR)/debian/inkscape.bash \
+		$(DESTDIR)/etc/bash_completion.d/inkscape
+	dh_install
+	dh_translations
