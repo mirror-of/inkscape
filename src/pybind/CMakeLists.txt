@@ -35,7 +35,7 @@ set(pybInkscape_cython_SRC
 )
 
 add_custom_command( OUTPUT pybInkscape.cpp
-    COMMAND $(CYTHON_EXECUTABLE) --cplus -a ${CMAKE_CURRENT_SOURCE_DIR}/pybInkscape.pyx -o pybInkscape.cpp
+    COMMAND ${CYTHON_EXECUTABLE} --cplus -a ${CMAKE_CURRENT_SOURCE_DIR}/pybInkscape.pyx -o pybInkscape.cpp
     COMMENT "Generating cpp file from cython..." 
     DEPENDS ${pybInkscape_cython_SRC})
 
