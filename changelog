@@ -1,3 +1,9 @@
+inkscape (0.91.0+48) wily; urgency=low
+
+  * Rebuild for new wily package naming
+
+ -- Alex Valavanis <valavanisalex@gmail.com>  Mon, 19 Oct 2015 15:02:00 +0100
+
 inkscape (1:0.48+devel+10326+10) natty; urgency=low
 
   * Renamed package to inkscape-trunk
