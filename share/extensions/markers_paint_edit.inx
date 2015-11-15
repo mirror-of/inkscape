@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+
+  <_name>Color and Edit Markers</_name>
+  <id>org.inkscape.effect.markers.paint_edit</id>
+
+  <dependency type="executable" location="extensions">markers_paint_edit.py</dependency>
+  <dependency type="executable" location="extensions">inkex.py</dependency>
+
+  <param name='tab' type="notebook">
+
+    <page name='object' _gui-text="Color from Object">
+      <param name="header_marker_paint" type="description" appearance="header">Marker Paint:</param>
+      <param name="marker_fill" type="enum" _gui-text="Fill:">
+        <_item value="stroke">Match object stroke</_item>
+        <_item value="fill">Match object fill</_item>
+        <_item value="keep">Keep</_item>
+        <_item value="none">None</_item>
+      </param>
+      <param name="marker_stroke" type="enum" _gui-text="Stroke:">
+        <_item value="stroke">Match object stroke</_item>
+        <_item value="fill">Match object fill</_item>
+        <_item value="keep">Keep</_item>
+        <_item value="none">None</_item>
+      </param>
+      <param name="header_color_options" type="description" appearance="header">Options:</param>
+      <param name="context" type="boolean" _gui-text="Use context paint (SVG2)">false</param>
+      <param name="invert" type="boolean" _gui-text="Swap object's fill and stroke colors">false</param>
+      <param name="alpha" type="boolean" _gui-text="Pick alpha from object">true</param>
+      <param name="modify_for_object" type="boolean" gui-text="Modify marker(s) in-place" gui-description="No forking of markers before modifying; only supported for color changes.">False</param>
+    </page>
+
+    <page name='custom' _gui-text="Custom Color">
+      <param name="colortab" type="notebook">
+
+        <page name="fill_page" _gui-text="Marker fill">
+          <param name="fill_type" type="enum" _gui-text="Paint:">
+            <_item value="assign">Custom color (below)</_item>
+            <_item value="cstroke">Context stroke (SVG2)</_item>
+            <_item value="cfill">Context fill (SVG2)</_item>
+            <_item value="keep">Keep</_item>
+            <_item value="none">None</_item>
+          </param>
+          <param name="fill_color" gui-text="Fill color" type="color">-1</param>
+        </page>
+
+        <page name="stroke_page" _gui-text="Marker stroke">
+          <param name="stroke_type" type="enum" _gui-text="Paint:">
+            <_item value="assign">Custom color (below)</_item>
+            <_item value="cstroke">Context stroke (SVG2)</_item>
+            <_item value="cfill">Context fill (SVG2)</_item>
+            <_item value="keep">Keep</_item>
+            <_item value="none">None</_item>
+          </param>
+          <param name="stroke_color" gui-text="Stroke color" type="color">255</param>
+        </page>
+
+      </param>
+      <param name="modify_for_custom" type="boolean" gui-text="Modify marker(s) in-place" gui-description="No forking of markers before modifying; only supported for color changes.">False</param>
+    </page>
+
+    <page name='apply_edit' _gui-text="Apply / Edit">
+      <param name="apply_edit_tab" type="notebook">
+
+        <page name="apply" _gui-text="Apply Marker">
+          <param name="header_properties" type="description" appearance="header" _gui-description="select path first, marker second">Marker Properties:</param>
+          <param name="scale" type="boolean" _gui-text="Scale with stroke width">true</param>
+          <param name="orient" type="boolean" _gui-text="Auto-orient marker to line" _gui-description="overrides angle">true</param>
+          <param name="angle" type="float" min="-360.0" max="360.0" precision="1" appearance="minimal" _gui-text="Angle (if not auto-oriented):" _gui-description="only used if not oriented to line">0</param>
+        </page>
+
+        <page name="edit" _gui-text="Edit Marker">
+          <param name="edit_desc" type="description">Copy marker(s) to current layer</param>
+        </page>
+
+      </param>
+      <param name="header_position" type="description" appearance="header">Marker Positions:</param>
+      <param name="start" type="boolean" _gui-text="Start-points">true</param>
+      <param name="mid" type="boolean" _gui-text="Mid-points">true</param>
+      <param name="end" type="boolean" _gui-text="End-points">false</param>
+    </page>
+
+  </param>
+
+  <effect needs-document="true" needs-live-preview="true">
+    <effects-menu hidden="false">
+      <submenu name="Modify Path" />
+    </effects-menu>
+  </effect>
+
+  <script>
+    <command reldir="extensions" interpreter="python">markers_paint_edit.py</command>
+  </script>
+
+</inkscape-extension>
