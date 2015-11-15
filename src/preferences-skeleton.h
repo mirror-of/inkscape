@@ -373,6 +373,10 @@ static char const preferences_skeleton[] =
 "    <group id=\"workarounds\"\n"
 "           colorsontop=\"0\"\n"
 "           partialdynamic=\"0\"/>\n"
+"    <group id=\"markers\"\n"
+"           colorStockMarkers=\"0\"\n"      // disable hack for marker color
+"           colorCustomMarkers=\"0\"\n"     // disabled by default
+"           colorUpdateMarkers=\"0\" />\n"  // disable hack for marker color
 "  </group>\n"
 "\n"
 "  <group id=\"extensions\">"
