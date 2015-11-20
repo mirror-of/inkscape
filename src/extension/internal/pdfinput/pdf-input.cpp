@@ -62,6 +62,10 @@
 
 #include <gdkmm/general.h>
 
+#ifdef ENABLE_OSX_APP_LOCATIONS
+#include "path-prefix.h"
+#endif
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -687,7 +691,8 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         // FIXES: Inkscape bug #956282, #1264793
         // TODO: report RFE upstream (full relocation support for OS X packaging)
         //
-        gchar const *poppler_datadir = g_getenv("POPPLER_DATADIR");
+        gchar const *poppler_datadir = OSX_APP_DATADIR( "/poppler" );
+        //g_message("poppler_datadir: %s", poppler_datadir);
         if (poppler_datadir != NULL) {
             globalParams = new GlobalParams(poppler_datadir);
         } else {
