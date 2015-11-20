@@ -26,17 +26,6 @@ BASE="$(echo "$TOP" | sed -e 's/\/Contents\/Resources.*$//')"
 source "${TOP}/xdg_setup.sh"
 source "${TOP}/alert_fccache.sh"
 
-# FIXME: Inkscape needs better relocation support for OS X (get rid of the relative 
-# path hack in src/path-prefix.h for osxapp-enabled builds). Until then, below change
-# of working directory is required:
-#
-# Due to changes after 0.48, we have to change working directory in the script named 'inkscape':
-# recursive calls to inkscape from python-based extensions otherwise cause the app to hang or
-# fail (for python-based extensions, inkscape changes the working directory to the 
-# script's directory, and inkscape launched by python script thus can't find resources
-# like the now essential 'units.xml' in INKSCAPE_UIDIR relative to the working directory).
-cd "$BASE" || exit 1
-
 # don't prepend to $PATH in recursive calls:
 if [ -z "$INK_PATH_ORIG" ]; then
 

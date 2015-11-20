@@ -24,4 +24,5 @@ source "${CWD}/alert_fccache.sh"
 #
 # See related FIXME in bin/inkscape for requirements to merge the two scripts.
 
+cd "$HOME"
 exec "$CWD/bin/inkscape" "$@"

@@ -129,4 +129,21 @@ char *win32_relative_path(const char *childPath);
 
 #endif
 
+#ifdef ENABLE_OSX_APP_LOCATIONS
+
+#ifdef WITH_MAC_INTEGRATION
+#include <gtkmacintegration/gtkosxapplication.h>
+#else
+#include <mach-o/dyld.h>
+#endif /* WITH_MAC_INTEGRATION */
+
+#include <glib.h>
+#include <glibmm/ustring.h>
+
+char *osxapp_relative_path(const char *childPath);
+
+#define OSX_APP_DATADIR(suffix) (osxapp_relative_path(suffix))
+
+#endif /* ENABLE_OSX_APP_LOCATIONS */
+
 #endif /* _PREFIX_H_ */

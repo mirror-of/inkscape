@@ -491,5 +491,81 @@ char *win32_relative_path(const char *childPath)
 
 
 
+#ifdef ENABLE_OSX_APP_LOCATIONS
+
+/*
+ * Provide a similar mechanism for osxapp.  Enable a macro,
+ * OSX_APP_DATADIR, that can look up subpaths for inkscape resources 
+ */ 
+
+static Glib::ustring osxapp_getDataDir()
+{
+    const gchar *dir = NULL;
+#ifdef WITH_MAC_INTEGRATION  // Quartz-based app bundle with gtk-mac-integration
+    const gchar *bundleId = gtkosx_application_get_bundle_id();
+
+    if (bundleId) {
+        dir = g_build_filename(gtkosx_application_get_resource_path(), "share", NULL);
+    } else  {
+        dir = INKSCAPE_DATADIR;
+    }
+#else // for X11- or Quartz-based app bundle without gtk-mac-integration
+    char exe_path[PATH_MAX + 1];
+    uint32_t  bufsize = sizeof(exe_path);
+    gchar *real_path;
+    gchar *bin_dir;
+
+    if ( _NSGetExecutablePath(exe_path, &bufsize) == 0 ) {
+        real_path = realpath(exe_path, NULL);
+        if (real_path) {
+            bin_dir = g_path_get_dirname(real_path);
+#ifdef GDK_WINDOWING_QUARTZ
+            // from Inkscape.app/Contents/MacOS
+            //   to Inkscape.app/Contents/Resources/share
+            dir = g_build_path(G_DIR_SEPARATOR_S, g_path_get_dirname(bin_dir), "Resources", "share", NULL);
+#else
+            // from Inkscape.app/Contents/Resources/bin
+            //   to Inkscape.app/Contents/Resources/share
+            dir = g_build_path(G_DIR_SEPARATOR_S, g_path_get_dirname(bin_dir), "share", NULL);
+#endif /* GDK_WINDOWING_QUARTZ */
+            //g_message("DataDir: %s", dir);
+            g_free(real_path);
+            g_free(bin_dir);
+        }
+    }
+#endif /* WITH_MAC_INTEGRATION */
+    Glib::ustring ret( dir );
+    return ret;
+}
+
+
+static Glib::ustring osxapp_getResourcePath(const Glib::ustring &childPath)
+{
+    Glib::ustring dir = osxapp_getDataDir();
+    if (childPath.size() > 0) {
+        dir += childPath;
+    }
+    return dir;
+}
+
+/*
+ * This is the visible utility function
+ */ 
+char *osxapp_relative_path(const char *childPath)
+{
+    static char *returnPath = 0;
+    if (!childPath)
+        childPath = "";
+    Glib::ustring resourcePath = osxapp_getResourcePath(childPath);
+    if (returnPath)
+        free(returnPath);
+    returnPath = strdup(resourcePath.c_str());
+    return returnPath;
+}
+
+#endif /* ENABLE_OSX_APP_LOCATIONS */
+
+
+
 
 #endif /* _PREFIX_C */

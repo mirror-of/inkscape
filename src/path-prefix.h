@@ -66,23 +66,23 @@
 #    define CREATE_PALETTESDIR    WIN32_DATADIR("create\\swatches")
 #    define CREATE_PATTERNSDIR    WIN32_DATADIR("create\\patterns\\vector")
 #  elif defined ENABLE_OSX_APP_LOCATIONS
-#    define INKSCAPE_APPICONDIR   "Contents/Resources/share/pixmaps"
-#    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
-#    define INKSCAPE_BINDDIR      "Contents/Resources/share/inkscape/bind"
-#    define INKSCAPE_EXAMPLESDIR  "Contents/Resources/share/inkscape/examples"
-#    define INKSCAPE_EXTENSIONDIR "Contents/Resources/share/inkscape/extensions"
-#    define INKSCAPE_FILTERDIR    "Contents/Resources/share/inkscape/filters"
-#    define INKSCAPE_GRADIENTSDIR "Contents/Resources/share/inkscape/gradients"
-#    define INKSCAPE_KEYSDIR      "Contents/Resources/share/inkscape/keys"
-#    define INKSCAPE_PIXMAPDIR    "Contents/Resources/share/inkscape/icons"
-#    define INKSCAPE_MARKERSDIR   "Contents/Resources/share/inkscape/markers"
-#    define INKSCAPE_PALETTESDIR  "Contents/Resources/share/inkscape/palettes"
-#    define INKSCAPE_PATTERNSDIR  "Contents/Resources/share/inkscape/patterns"
-#    define INKSCAPE_SCREENSDIR   "Contents/Resources/share/inkscape/screens"
-#    define INKSCAPE_SYMBOLSDIR   "Contents/Resources/share/inkscape/symbols"
-#    define INKSCAPE_TUTORIALSDIR "Contents/Resources/share/inkscape/tutorials"
-#    define INKSCAPE_TEMPLATESDIR "Contents/Resources/share/inkscape/templates"
-#    define INKSCAPE_UIDIR        "Contents/Resources/share/inkscape/ui"
+#    define INKSCAPE_APPICONDIR   OSX_APP_DATADIR( "/pixmaps" )
+#    define INKSCAPE_ATTRRELDIR   OSX_APP_DATADIR( "/inkscape/attributes" )
+#    define INKSCAPE_BINDDIR      OSX_APP_DATADIR( "/inkscape/bind" )
+#    define INKSCAPE_EXAMPLESDIR  OSX_APP_DATADIR( "/inkscape/examples" )
+#    define INKSCAPE_EXTENSIONDIR OSX_APP_DATADIR( "/inkscape/extensions" )
+#    define INKSCAPE_FILTERDIR    OSX_APP_DATADIR( "/inkscape/filters" )
+#    define INKSCAPE_GRADIENTSDIR OSX_APP_DATADIR( "/inkscape/gradients" )
+#    define INKSCAPE_KEYSDIR      OSX_APP_DATADIR( "/inkscape/keys" )
+#    define INKSCAPE_PIXMAPDIR    OSX_APP_DATADIR( "/inkscape/icons" )
+#    define INKSCAPE_MARKERSDIR   OSX_APP_DATADIR( "/inkscape/markers" )
+#    define INKSCAPE_PALETTESDIR  OSX_APP_DATADIR( "/inkscape/palettes" )
+#    define INKSCAPE_PATTERNSDIR  OSX_APP_DATADIR( "/inkscape/patterns" )
+#    define INKSCAPE_SCREENSDIR   OSX_APP_DATADIR( "/inkscape/screens" )
+#    define INKSCAPE_SYMBOLSDIR   OSX_APP_DATADIR( "/inkscape/symbols" )
+#    define INKSCAPE_TUTORIALSDIR OSX_APP_DATADIR( "/inkscape/tutorials" )
+#    define INKSCAPE_TEMPLATESDIR OSX_APP_DATADIR( "/inkscape/templates" )
+#    define INKSCAPE_UIDIR        OSX_APP_DATADIR( "/inkscape/ui" )
 //CREATE V0.1 support
 #    define CREATE_GRADIENTSDIR  "/Library/Application Support/create/gradients/gimp"
 #    define CREATE_PALETTESDIR   "/Library/Application Support/create/swatches"

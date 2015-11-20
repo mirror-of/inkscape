@@ -1987,7 +1987,15 @@ void InkscapePreferences::initPageSystem()
         _sys_tmp_files.set_editable(false);
         _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
 
+#ifdef ENABLE_BINRELOC
+        _sys_data.set_text( BR_DATADIR("") );
+#elif defined WIN32
+        _sys_data.set_text( WIN32_DATADIR("share") );
+#elif defined ENABLE_OSX_APP_LOCATIONS
+        _sys_data.set_text( OSX_APP_DATADIR("") );
+#else
         _sys_data.set_text( INKSCAPE_DATADIR );
+#endif
         _sys_data.set_editable(false);
         _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
 
