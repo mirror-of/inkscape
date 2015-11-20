@@ -35,7 +35,8 @@ if [ -z "$INK_PATH_ORIG" ]; then
 	#	Fink
 	#	MacPorts (former DarwinPorts)
 	#	LaTeX distribution for Mac OS X
-	PATH_OTHER="/usr/texbin:/opt/local/bin:/sw/bin/:/usr/local/bin"
+	#	LaTeX distribution for OS X El Capitan
+	PATH_OTHER="/Library/TeX/texbin:/usr/texbin:/opt/local/bin:/sw/bin/:/usr/local/bin"
 
 	# Put /usr/bin at beginning of path so we make sure we use Apple's python 
 	# over one that may be installed be Macports, Fink or some other means.
@@ -85,7 +86,6 @@ export GVFS_REMOTE_VOLUME_MONITOR_IGNORE=1
 export GVFS_DISABLE_FUSE=1
 export XDG_DATA_DIRS="$TOP/share"
 export ASPELL_CONF="prefix $TOP;"
-export POPPLER_DATADIR="$TOP/share/poppler"
 
 # no DBUS for now
 unset DBUS_LAUNCHD_SESSION_BUS_SOCKET
@@ -101,15 +101,13 @@ export INKSCAPE_SHAREDIR="$TOP/share/inkscape"
 export INKSCAPE_PLUGINDIR="$TOP/lib/inkscape"
 export INKSCAPE_LOCALEDIR="$TOP/share/locale"
 
-# Handle the case where the directory storing Inkscape has special characters
-# ('#', '&', '|') in the name.  These need to be escaped to work properly for 
-# various configuration files.
-ESCAPEDTOP=`echo "$TOP" | sed 's/#/\\\\\\\\#/' | sed 's/&/\\\\\\&/g' | sed 's/|/\\\\\\|/g'`
-
 # Set GTK theme (only if there is no .gtkrc-2.0 in the user's home)
 if [[ ! -e "$HOME/.gtkrc-2.0" ]]; then
-	export GTK2_RC_FILES="$ESCAPEDTOP/etc/gtk-2.0/gtkrc"
+	export GTK2_RC_FILES="$TOP/etc/gtk-2.0/gtkrc"
 fi
+
+# ----------------------------
+# FIXME language detection and conversion into supported locale
 
 # If the AppleCollationOrder preference doesn't exist, we fall back to using
 # the AppleLocale preference.
@@ -146,6 +144,9 @@ fi
 [ $_DEBUG ] && echo "Setting Language: $LANG" 1>&2
 export LC_ALL="$LANG"
 
+# end FIXME language detection
+# ----------------------------
+
 case "$INK_DEBUG" in
 	gdb)
 		EXEC="gdb --args" ;;
@@ -159,6 +160,7 @@ esac
 unset INK_DEBUG # ignore for recursive calls
 
 if [ "x$INK_DEBUG_SHELL" != "x" ]; then
+	unset INK_DEBUG_SHELL  # ignore for recursive calls
 	exec bash
 else
 	$EXEC "$CWD/inkscape-bin" "$@"
