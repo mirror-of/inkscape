@@ -42,8 +42,7 @@
 // Apple stuff
 
 // Note: including Carbon prevents building the launcher app in x86_64
-//       used for StandardAlert in RequestUserAttention(), 
-//       RedFatalAlert()
+//       used for StandardAlert in RedFatalAlert()
 #include <Carbon/Carbon.h>
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -103,8 +102,6 @@ static OSErr AppOpenDocAEHandler(const AppleEvent *theAppleEvent,
                                  AppleEvent *reply, long refCon);
 static OSErr AppOpenAppAEHandler(const AppleEvent *theAppleEvent,
                                  AppleEvent *reply, long refCon);
-static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
-                                 EventRef theEvent, void *userData);
 static OSErr AppReopenAppAEHandler(const AppleEvent *theAppleEvent,
                                    AppleEvent *reply, long refCon);
 
@@ -146,7 +143,6 @@ extern char **environ;
 int main(int argc, char* argv[])
 {
     OSErr err = noErr;
-    EventTypeSpec FCCacheEvents = { kEventClassRedFatalAlert, kEventKindFCCacheFailed };
 
     InitCursor();
 
@@ -165,16 +161,12 @@ int main(int argc, char* argv[])
                                  NewAEEventHandlerUPP(AppReopenAppAEHandler),
                                  0, false);
     
-    err += InstallEventHandler(GetApplicationEventTarget(),
-                               NewEventHandlerUPP(FCCacheFailedHandler), 1,
-                               &FCCacheEvents, NULL, NULL);
-
     if (err) RedFatalAlert("\pInitialization Error",
                            "\pError initing Apple Event handlers.");
 
     //create the menu bar
-    if (err = LoadMenuBar(NULL)) RedFatalAlert("\pInitialization Error",
-                                               "\pError loading MenuBar.nib.");
+    if ((err = LoadMenuBar(NULL))) RedFatalAlert("\pInitialization Error",
+                                                 "\pError loading MenuBar.nib.");
     
     GetParameters(); //load data from files containing exec settings
 
@@ -188,86 +180,15 @@ int main(int argc, char* argv[])
 #pragma mark -
 
 
-static void RequestUserAttention(void)
-{
-    NMRecPtr notificationRequest = (NMRecPtr) NewPtr(sizeof(NMRec));
-
-    memset(notificationRequest, 0, sizeof(*notificationRequest));
-    notificationRequest->qType = nmType;
-    notificationRequest->nmMark = 1;
-    notificationRequest->nmIcon = 0;
-    notificationRequest->nmSound = 0;
-    notificationRequest->nmStr = NULL;
-    notificationRequest->nmResp = NULL;
-
-    verify_noerr(NMInstall(notificationRequest));
-}
-
-
-static void ShowFirstStartWarningDialog(void)
-{
-    SInt16 itemHit;
-
-    AlertStdAlertParamRec params;
-    params.movable = true;
-    params.helpButton = false;
-    params.filterProc = NULL;
-    params.defaultText = (void *) kAlertDefaultOKText;
-    params.cancelText = NULL;
-    params.otherText = NULL;
-    params.defaultButton = kAlertStdAlertOKButton;
-    params.cancelButton = kAlertStdAlertCancelButton;
-    params.position = kWindowDefaultPosition;
-
-    StandardAlert(kAlertNoteAlert, "\pInkscape on Mac OS X",
-            "\pWhile Inkscape is open, its windows can be displayed or hidden by displaying or hiding the X11 application.\n\nThe first time this version of Inkscape is run it may take several minutes before the main window is displayed while font caches are built.",
-            &params, &itemHit);
-}
-
-
-//////////////////////////////////
-// Handler for when fontconfig caches need to be generated
-// TODO: remove (alert and touch moved to launcher script)
-//////////////////////////////////
-static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall, 
-                                 EventRef theEvent, void *userData)
-{
-
-    pthread_join(tid, NULL);
-    if (odtid) pthread_join(odtid, NULL);
-
-    // Bounce Inkscape Dock icon
-    RequestUserAttention();
-    // Need to show warning to the user, then carry on.
-    ShowFirstStartWarningDialog();
-
-    // Note that we've seen the warning.
-    system("test -d \"$HOME/.cache/inkscape\" || mkdir -p \"$HOME/.cache/inkscape\"; "
-           "touch \"$HOME/.cache/inkscape/.fccache-new\"");
-    // Rerun now.
-    OSErr err = ExecuteScript(scriptPath, &pid);
-    ExitToShell();
-
-    return noErr;
-}
-
-
 ///////////////////////////////////
 // Execution thread starts here
 ///////////////////////////////////
 static void *Execute (void *arg)
 {
-    EventRef event;
-    
     taskDone = false;
     
-    OSErr err = ExecuteScript(scriptPath, &pid);
-    if (err == (OSErr)12) {
-        CreateEvent(NULL, kEventClassRedFatalAlert, kEventKindFCCacheFailed, 0,
-                    kEventAttributeNone, &event);
-        PostEventToQueue(GetMainEventQueue(), event, kEventPriorityHigh);
-    }
-    else ExitToShell();
+    ExecuteScript(scriptPath, &pid);
+    ExitToShell();
     return 0;
 }
 
@@ -407,8 +328,8 @@ OSErr LoadMenuBar (char *appName)
     OSErr err;
     IBNibRef nibRef;
     
-    if (err = CreateNibReference(CFSTR("MenuBar"), &nibRef)) return err;
-    if (err = SetMenuBarFromNib(nibRef, CFSTR("MenuBar"))) return err;
+    if ((err = CreateNibReference(CFSTR("MenuBar"), &nibRef))) return err;
+    if ((err = SetMenuBarFromNib(nibRef, CFSTR("MenuBar")))) return err;
     DisposeNibReference(nibRef);
 
     return noErr;
