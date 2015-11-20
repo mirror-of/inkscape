@@ -501,10 +501,9 @@ char *win32_relative_path(const char *childPath)
 static Glib::ustring osxapp_getDataDir()
 {
     const gchar *dir = NULL;
-#ifdef WITH_MAC_INTEGRATION  // Quartz-based app bundle with gtk-mac-integration
-    const gchar *bundleId = gtkosx_application_get_bundle_id();
 
-    if (bundleId) {
+#ifdef WITH_MAC_INTEGRATION  // Quartz-based app bundle with gtk-mac-integration
+    if (gtkosx_application_get_bundle_id()) {
         dir = g_build_filename(gtkosx_application_get_resource_path(), "share", NULL);
     } else  {
         dir = INKSCAPE_DATADIR;
