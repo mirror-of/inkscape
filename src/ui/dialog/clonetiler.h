@@ -15,6 +15,8 @@
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/color-picker.h"
 #include "sp-root.h"
+#include "ui/widget/scalar-unit.h"
+#include "ui/widget/button.h"
 
 namespace Inkscape {
 namespace UI {
@@ -107,6 +109,56 @@ protected:
             int    rotate_cumulatei,  int    rotate_cumulatej
             );
 
+
+    // Shift page
+    UI::Widget::UnitMenu        _units_shift;
+    
+    UI::Widget::ScalarUnit      _scalar_shift_x_row;
+    UI::Widget::ScalarUnit      _scalar_shift_x_column;
+    UI::Widget::ScalarUnit      _scalar_shift_x_randomize;
+    
+    UI::Widget::ScalarUnit      _scalar_shift_y_row;
+    UI::Widget::ScalarUnit      _scalar_shift_y_column;
+    UI::Widget::ScalarUnit      _scalar_shift_y_randomize;
+
+    UI::Widget::Scalar          _scalar_shift_exponent_row;
+    UI::Widget::Scalar          _scalar_shift_exponent_column;
+
+    UI::Widget::CheckButton     _check_shift_alternate_row;
+    UI::Widget::CheckButton     _check_shift_alternate_column;
+    UI::Widget::CheckButton     _check_shift_cumulate_row;
+    UI::Widget::CheckButton     _check_shift_cumulate_column;
+    UI::Widget::CheckButton     _check_shift_exclude_row;
+    UI::Widget::CheckButton     _check_shift_exclude_column;
+
+    // Scale page
+    UI::Widget::UnitMenu        _units_scale;
+
+    UI::Widget::ScalarUnit      _scalar_scale_x_row;
+    UI::Widget::ScalarUnit      _scalar_scale_x_column;
+    UI::Widget::ScalarUnit      _scalar_scale_x_randomize;
+
+    UI::Widget::ScalarUnit      _scalar_scale_y_row;
+    UI::Widget::ScalarUnit      _scalar_scale_y_column;
+    UI::Widget::ScalarUnit      _scalar_scale_y_randomize;
+
+    UI::Widget::Scalar          _scalar_scale_exponent_row;
+    UI::Widget::Scalar          _scalar_scale_exponent_column;
+    UI::Widget::Scalar          _scalar_scale_base_row;
+    UI::Widget::Scalar          _scalar_scale_base_column;
+
+    UI::Widget::CheckButton     _check_scale_alternate_row;
+    UI::Widget::CheckButton     _check_scale_alternate_column;
+    UI::Widget::CheckButton     _check_scale_cumulate_row;
+    UI::Widget::CheckButton     _check_scale_cumulate_column;
+    
+    void prepareScalarUnit(UI::Widget::ScalarUnit &item, const char* attr, double def);
+    void prepareScalar(UI::Widget::Scalar &item, const char* attr, double def);
+    void prepareCheckButton(UI::Widget::CheckButton &item, const char* attr);
+    void prepareUnitMenu(UI::Widget::UnitMenu &item, const char* attr, Glib::ustring def);
+
+    // Signal handlers
+    void onUnitValueChanged(UI::Widget::ScalarUnit& item, const char* attr);
 
 private:
     CloneTiler(CloneTiler const &d);

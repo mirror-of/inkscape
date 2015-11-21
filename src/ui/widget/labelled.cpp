@@ -36,7 +36,10 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
         _icon = sp_icon_get_icon(icon.c_str(), Inkscape::ICON_SIZE_LARGE_TOOLBAR);
         pack_start(*Gtk::manage(_icon), Gtk::PACK_SHRINK);
     }
-    pack_start(*Gtk::manage(_label), Gtk::PACK_EXPAND_WIDGET, 6);
+    if (label != "") {
+        // The label takes up some space otherwise.
+        pack_start(*Gtk::manage(_label), Gtk::PACK_EXPAND_WIDGET, 6);
+    }
     pack_start(*Gtk::manage(_widget), Gtk::PACK_SHRINK, 6);
     if (mnemonic) {
         _label->set_mnemonic_widget(*_widget);

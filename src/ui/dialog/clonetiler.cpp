@@ -81,7 +81,48 @@ CloneTiler::CloneTiler () :
     dlg(NULL),
     desktop(NULL),
     deskTrack(),
-    table_row_labels(NULL)
+    table_row_labels(NULL),
+
+    // Shift page
+    _scalar_shift_x_row         ("", _("Shift in x coordinate per row"), UNIT_TYPE_LINEAR, "", "", &_units_shift),
+    _scalar_shift_x_column      ("", _("Shift in x coordinate per column"), UNIT_TYPE_LINEAR, "", "", &_units_shift),
+    _scalar_shift_x_randomize   ("", _("Randomization of x coordinate per shift"), UNIT_TYPE_LINEAR, "", "", &_units_shift),
+    
+    _scalar_shift_y_row         ("", _("Shift in y coordinate per row"), UNIT_TYPE_LINEAR, "", "", &_units_shift),
+    _scalar_shift_y_column      ("", _("Shift in y coordinate per column"), UNIT_TYPE_LINEAR, "", "", &_units_shift),
+    _scalar_shift_y_randomize   ("", _("Randomization of y coordinate per shift"), UNIT_TYPE_LINEAR, "", "", &_units_shift),
+
+    _scalar_shift_exponent_row     ("", _("Whether rows are spaced evenly (1), diverge (> 1) or converge (< 1)"), UNIT_TYPE_DIMENSIONLESS, "", ""),
+    _scalar_shift_exponent_column  ("", _("Whether columns are spaced evenly (1), diverge (> 1) or converge (< 1)"), UNIT_TYPE_DIMENSIONLESS, "", ""),
+    
+    _check_shift_alternate_row     ("", _("Alternate sign of shifts for each row")),
+    _check_shift_alternate_column  ("", _("Alternate sign of shifts for each column")),
+    _check_shift_cumulate_row      ("", _("Combine shifts cumulatively for each row")),
+    _check_shift_cumulate_column   ("", _("Combine shifts cumulatively for each column")),
+    _check_shift_exclude_row       ("", _("Exclude tile width from row shifts")),
+    _check_shift_exclude_column    ("", _("Exclude tile height from column shifts")),
+
+
+    // Scale page
+    _scalar_scale_x_row           ("", _("Horizontal scale per row"), UNIT_TYPE_LINEAR, "", "", &_units_scale),
+    _scalar_scale_x_column        ("", _("Horizontal scale per column"), UNIT_TYPE_LINEAR, "", "", &_units_scale),
+    _scalar_scale_x_randomize     ("", _("Randomize the horizontal scale"), UNIT_TYPE_LINEAR, "", "", &_units_scale),
+
+    _scalar_scale_y_row           ("", _("Vertical scale per row"), UNIT_TYPE_LINEAR, "", "", &_units_scale),
+    _scalar_scale_y_column        ("", _("Vertical scale per column"), UNIT_TYPE_LINEAR, "", "", &_units_scale),
+    _scalar_scale_y_randomize     ("", _("Randomize the vertical scale"), UNIT_TYPE_LINEAR, "", "", &_units_scale),
+
+    _scalar_scale_exponent_row    ("", _("Whether row scaling is uniform (1), converges (< 1) or diverges (> 1)"), UNIT_TYPE_DIMENSIONLESS, "", ""),
+    _scalar_scale_exponent_column ("", _("Whether column scaling is uniform (1), converges (< 1) or diverges (> 1)"), UNIT_TYPE_DIMENSIONLESS, "", ""),
+
+    _scalar_scale_base_row        ("", _("Base for a logarithmic spiral: not used (0), convergent (< 1) or divergent (> 1)"), UNIT_TYPE_DIMENSIONLESS, "", ""),
+    _scalar_scale_base_column     ("", _("Base for a logarithmic spiral: not used (0), convergent (< 1) or divergent (> 1)"), UNIT_TYPE_DIMENSIONLESS, "", ""),
+
+    _check_scale_alternate_row     ("", _("Alternate sign of scales across rows")),
+    _check_scale_alternate_column  ("", _("Alternate sign of scales across columns")),
+    _check_scale_cumulate_row      ("", _("Cumulate scales across rows")),
+    _check_scale_cumulate_column   ("", _("Cumulate scales across columns"))
+
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
@@ -173,14 +214,15 @@ CloneTiler::CloneTiler () :
 
         table_row_labels = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 
-        // Shift
+        // Shift page
         {
             GtkWidget *vb = clonetiler_new_tab (nb, _("S_hift"));
 
             GtkWidget *table = clonetiler_table_x_y_rand (3);
             gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, 0);
-
-            // X
+            prepareUnitMenu(_units_shift, "shiftx_per_j", "px");
+            
+            // X Label
             {
                 GtkWidget *l = gtk_label_new ("");
                     // TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
@@ -190,59 +232,40 @@ CloneTiler::CloneTiler () :
                 clonetiler_table_attach (table, l, 1, 2, 1);
             }
 
-            {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                   _("Horizontal shift per row (in % of tile width)"), "shiftx_per_j",
-                   -10000, 10000, "%");
-                clonetiler_table_attach (table, l, 0, 2, 2);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                   _("Horizontal shift per column (in % of tile width)"), "shiftx_per_i",
-                   -10000, 10000, "%");
-                clonetiler_table_attach (table, l, 0, 2, 3);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (_("Randomize the horizontal shift by this percentage"), "shiftx_rand",
-                                                   0, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 2, 4);
-            }
-
-            // Y
+            // Y Label
             {
                 GtkWidget *l = gtk_label_new ("");
-                    // TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
+                    // TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
                     // xgettext:no-c-format
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Shift Y:</b>"));
                 gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 3, 1);
             }
 
+            // X and Y Shifts
             {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                                                   _("Vertical shift per row (in % of tile height)"), "shifty_per_j",
-                                                   -10000, 10000, "%");
-                clonetiler_table_attach (table, l, 0, 3, 2);
+                prepareScalarUnit(_scalar_shift_x_row, "shiftx_per_j", 0);
+                prepareScalarUnit(_scalar_shift_x_column, "shiftx_per_i", 0);
+                prepareScalarUnit(_scalar_shift_x_randomize, "shiftx_rand", 0);
+                prepareScalarUnit(_scalar_shift_y_row, "shifty_per_j", 0);
+                prepareScalarUnit(_scalar_shift_y_column, "shifty_per_i", 0);
+                prepareScalarUnit(_scalar_shift_y_randomize, "shifty_rand", 0);
+
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_x_row.gobj(), 0, 2, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_x_column.gobj(), 0, 2, 3);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_x_randomize.gobj(), 0, 2, 4);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_y_row.gobj(), 0, 3, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_y_column.gobj(), 0, 3, 3);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_y_randomize.gobj(), 0, 3, 4);
             }
 
+            // UnitMenu
             {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                                                   _("Vertical shift per column (in % of tile height)"), "shifty_per_i",
-                                                   -10000, 10000, "%");
-                clonetiler_table_attach (table, l, 0, 3, 3);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (
-                                                   _("Randomize the vertical shift by this percentage"), "shifty_rand",
-                                                   0, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 3, 4);
+                GtkWidget *l = gtk_label_new("");
+                gtk_label_set_markup(GTK_LABEL(l), _("<b>Units:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);                
+                clonetiler_table_attach(table, l, 1, 4, 1);
+                clonetiler_table_attach(table, (GtkWidget*)_units_shift.gobj(), 0, 4, 2);
             }
 
             // Exponent
@@ -250,86 +273,72 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Exponent:</b>"));
                 gtk_size_group_add_widget(table_row_labels, l);
-                clonetiler_table_attach (table, l, 1, 4, 1);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (
-                                                   _("Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"), "shifty_exp",
-                                                   0, 10, "", true);
-                clonetiler_table_attach (table, l, 0, 4, 2);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (
-                                                   _("Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"), "shiftx_exp",
-                                                   0, 10, "", true);
-                clonetiler_table_attach (table, l, 0, 4, 3);
-            }
-
-            { // alternates
-                GtkWidget *l = gtk_label_new ("");
-                // TRANSLATORS: "Alternate" is a verb here
-                gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
-                gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 5, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox (_("Alternate the sign of shifts for each row"), "shifty_alternate");
-                clonetiler_table_attach (table, l, 0, 5, 2);
+                prepareScalar(_scalar_shift_exponent_row, "shifty_exp", 1);
+                prepareScalar(_scalar_shift_exponent_column, "shiftx_exp", 1);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_exponent_row.gobj(), 0, 5, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_shift_exponent_column.gobj(), 0, 5, 3);
             }
 
+            // Alternate
             {
-                GtkWidget *l = clonetiler_checkbox (_("Alternate the sign of shifts for each column"), "shiftx_alternate");
-                clonetiler_table_attach (table, l, 0, 5, 3);
-            }
-
-            { // Cumulate
                 GtkWidget *l = gtk_label_new ("");
-                // TRANSLATORS: "Cumulate" is a verb here
-                gtk_label_set_markup (GTK_LABEL(l), _("<small>Cumulate:</small>"));
+                // TRANSLATORS: "Alternate" is a verb here
+                gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
                 gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 6, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox (_("Cumulate the shifts for each row"), "shifty_cumulate");
-                clonetiler_table_attach (table, l, 0, 6, 2);
+                prepareCheckButton(_check_shift_alternate_row, "shifty_alternate");
+                prepareCheckButton(_check_shift_alternate_column, "shiftx_alternate");
+                clonetiler_table_attach (table, (GtkWidget*)_check_shift_alternate_row.gobj(), 0.5, 6, 2);
+                clonetiler_table_attach (table, (GtkWidget*)_check_shift_alternate_column.gobj(), 0.5, 6, 3);                
             }
 
+            // Cumulate
             {
-                GtkWidget *l = clonetiler_checkbox (_("Cumulate the shifts for each column"), "shiftx_cumulate");
-                clonetiler_table_attach (table, l, 0, 6, 3);
-            }
-
-            { // Exclude tile width and height in shift
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Cumulate" is a verb here
-                gtk_label_set_markup (GTK_LABEL(l), _("<small>Exclude tile:</small>"));
+                gtk_label_set_markup (GTK_LABEL(l), _("<small>Cumulate:</small>"));
                 gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 7, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox (_("Exclude tile height in shift"), "shifty_excludeh");
-                clonetiler_table_attach (table, l, 0, 7, 2);
+                prepareCheckButton(_check_shift_cumulate_row, "shifty_cumulate");
+                prepareCheckButton(_check_shift_cumulate_column, "shiftx_cumulate");
+                clonetiler_table_attach (table, (GtkWidget*)_check_shift_cumulate_row.gobj(), 0.5, 7, 2);
+                clonetiler_table_attach (table, (GtkWidget*)_check_shift_cumulate_column.gobj(), 0.5, 7, 3);                
+            }
+
+            // Exclude
+            {
+                GtkWidget *l = gtk_label_new ("");
+                gtk_label_set_markup (GTK_LABEL(l), _("<small>Exclude tile:</small>"));
+                gtk_size_group_add_widget(table_row_labels, l);
+                clonetiler_table_attach (table, l, 1, 8, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox (_("Exclude tile width in shift"), "shiftx_excludew");
-                clonetiler_table_attach (table, l, 0, 7, 3);
+                prepareCheckButton(_check_shift_exclude_row, "shifty_excludeh");
+                prepareCheckButton(_check_shift_exclude_column, "shiftx_excludew");
+                clonetiler_table_attach (table, (GtkWidget*)_check_shift_exclude_row.gobj(), 0.5, 8, 2);
+                clonetiler_table_attach (table, (GtkWidget*)_check_shift_exclude_column.gobj(), 0.5, 8, 3);                
             }
 
         }
 
-
-        // Scale
+        // Scale page
         {
             GtkWidget *vb = clonetiler_new_tab (nb, _("Sc_ale"));
 
             GtkWidget *table = clonetiler_table_x_y_rand (2);
             gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, 0);
+            prepareUnitMenu(_units_scale, "scalex_per_j", "px");
 
             // X
             {
@@ -339,28 +348,6 @@ CloneTiler::CloneTiler () :
                 clonetiler_table_attach (table, l, 1, 2, 1);
             }
 
-            {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                                                   _("Horizontal scale per row (in % of tile width)"), "scalex_per_j",
-                                                   -100, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 2, 2);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                                                   _("Horizontal scale per column (in % of tile width)"), "scalex_per_i",
-                                                   -100, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 2, 3);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (_("Randomize the horizontal scale by this percentage"), "scalex_rand",
-                                                   0, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 2, 4);
-            }
-
             // Y
             {
                 GtkWidget *l = gtk_label_new ("");
@@ -368,47 +355,45 @@ CloneTiler::CloneTiler () :
                 gtk_size_group_add_widget(table_row_labels, l);
                 clonetiler_table_attach (table, l, 1, 3, 1);
             }
-
+            
             {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                                                   _("Vertical scale per row (in % of tile height)"), "scaley_per_j",
-                                                   -100, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 3, 2);
+                prepareScalarUnit(_scalar_scale_x_row, "scalex_per_j", 0);
+                prepareScalarUnit(_scalar_scale_x_column, "scalex_per_i", 0);
+                prepareScalarUnit(_scalar_scale_x_randomize, "scalex_rand", 0);
+                prepareScalarUnit(_scalar_scale_y_row, "scaley_per_j", 0);
+                prepareScalarUnit(_scalar_scale_y_column, "scaley_per_i", 0);
+                prepareScalarUnit(_scalar_scale_y_randomize, "scaley_rand", 0);
+
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_x_row.gobj(), 0, 2, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_x_column.gobj(), 0, 2, 3);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_x_randomize.gobj(), 0, 2, 4);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_y_row.gobj(), 0, 3, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_y_column.gobj(), 0, 3, 3);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_y_randomize.gobj(), 0, 3, 4);
             }
 
+            // UnitMenu
             {
-                GtkWidget *l = clonetiler_spinbox (
-                    // xgettext:no-c-format
-                                                   _("Vertical scale per column (in % of tile height)"), "scaley_per_i",
-                                                   -100, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 3, 3);
+                GtkWidget *l = gtk_label_new("");
+                gtk_label_set_markup(GTK_LABEL(l), _("<b>Units:</b>"));
+                gtk_size_group_add_widget(table_row_labels, l);                
+                clonetiler_table_attach(table, l, 1, 4, 1);
+                clonetiler_table_attach(table, (GtkWidget*)_units_scale.gobj(), 0, 4, 2);
             }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (_("Randomize the vertical scale by this percentage"), "scaley_rand",
-                                                   0, 1000, "%");
-                clonetiler_table_attach (table, l, 0, 3, 4);
-            }
-
+            
             // Exponent
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Exponent:</b>"));
                 gtk_size_group_add_widget(table_row_labels, l);
-                clonetiler_table_attach (table, l, 1, 4, 1);
+                clonetiler_table_attach (table, l, 1, 5, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_spinbox (_("Whether row scaling is uniform (1), converge (<1) or diverge (>1)"), "scaley_exp",
-                                                   0, 10, "", true);
-                clonetiler_table_attach (table, l, 0, 4, 2);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (_("Whether column scaling is uniform (1), converge (<1) or diverge (>1)"), "scalex_exp",
-                                                   0, 10, "", true);
-                clonetiler_table_attach (table, l, 0, 4, 3);
+                prepareScalar(_scalar_scale_exponent_row, "scaley_exp", 1);
+                prepareScalar(_scalar_scale_exponent_column, "scalex_exp", 1);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_exponent_row.gobj(), 0, 5, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_exponent_column.gobj(), 0, 5, 3);
             }
 
             // Logarithmic (as in logarithmic spiral)
@@ -416,19 +401,14 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Base:</b>"));
                 gtk_size_group_add_widget(table_row_labels, l);
-                clonetiler_table_attach (table, l, 1, 5, 1);
+                clonetiler_table_attach (table, l, 1, 6, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_spinbox (_("Base for a logarithmic spiral: not used (0), converge (<1), or diverge (>1)"), "scaley_log",
-                                                   0, 10, "", false);
-                clonetiler_table_attach (table, l, 0, 5, 2);
-            }
-
-            {
-                GtkWidget *l = clonetiler_spinbox (_("Base for a logarithmic spiral: not used (0), converge (<1), or diverge (>1)"), "scalex_log",
-                                                   0, 10, "", false);
-                clonetiler_table_attach (table, l, 0, 5, 3);
+                prepareScalar(_scalar_scale_base_row, "scaley_log", 0);
+                prepareScalar(_scalar_scale_base_column, "scalex_log", 0);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_base_row.gobj(), 0, 6, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_scalar_scale_base_column.gobj(), 0, 6, 3);
             }
 
             { // alternates
@@ -436,17 +416,14 @@ CloneTiler::CloneTiler () :
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
                 gtk_size_group_add_widget(table_row_labels, l);
-                clonetiler_table_attach (table, l, 1, 6, 1);
+                clonetiler_table_attach (table, l, 1, 7, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox (_("Alternate the sign of scales for each row"), "scaley_alternate");
-                clonetiler_table_attach (table, l, 0, 6, 2);
-            }
-
-            {
-                GtkWidget *l = clonetiler_checkbox (_("Alternate the sign of scales for each column"), "scalex_alternate");
-                clonetiler_table_attach (table, l, 0, 6, 3);
+                prepareCheckButton(_check_scale_alternate_row, "scaley_alternate");
+                prepareCheckButton(_check_scale_alternate_column, "scalex_alternate");
+                clonetiler_table_attach(table, (GtkWidget*)_check_scale_alternate_row.gobj(), 0.5, 7, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_check_scale_alternate_column.gobj(), 0.5, 7, 3);                
             }
 
             { // Cumulate
@@ -454,22 +431,17 @@ CloneTiler::CloneTiler () :
                 // TRANSLATORS: "Cumulate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Cumulate:</small>"));
                 gtk_size_group_add_widget(table_row_labels, l);
-                clonetiler_table_attach (table, l, 1, 7, 1);
+                clonetiler_table_attach (table, l, 1, 8, 1);
             }
 
             {
-                GtkWidget *l = clonetiler_checkbox (_("Cumulate the scales for each row"), "scaley_cumulate");
-                clonetiler_table_attach (table, l, 0, 7, 2);
+                prepareCheckButton(_check_scale_cumulate_row, "scaley_cumulate");
+                prepareCheckButton(_check_scale_cumulate_column, "scalex_cumulate");
+                clonetiler_table_attach(table, (GtkWidget*)_check_scale_cumulate_row.gobj(), 0.5, 8, 2);
+                clonetiler_table_attach(table, (GtkWidget*)_check_scale_cumulate_column.gobj(), 0.5, 8, 3);                
             }
-
-            {
-                GtkWidget *l = clonetiler_checkbox (_("Cumulate the scales for each column"), "scalex_cumulate");
-                clonetiler_table_attach (table, l, 0, 7, 3);
-            }
-
         }
-
-
+        
         // Rotation
         {
             GtkWidget *vb = clonetiler_new_tab (nb, _("_Rotation"));
@@ -1322,6 +1294,68 @@ void CloneTiler::setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
     deskTrack.setBase(desktop);
+}
+
+void CloneTiler::prepareScalarUnit(UI::Widget::ScalarUnit &item, const char* attr, double def) {
+    item.initScalar(-1e5, 1e5);
+    item.setDigits(3);
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double number = prefs->getDouble(prefs_path + attr, def);
+    Glib::ustring unit = prefs->getUnit(prefs_path + attr);
+    
+    item.setValue(number, unit);
+    item.signal_value_changed().connect(
+        sigc::bind(sigc::mem_fun(*this, &CloneTiler::onUnitValueChanged), sigc::ref(item), attr)
+        );
+}
+
+void CloneTiler::prepareScalar(UI::Widget::Scalar &item, const char* attr, double def) {
+    item.setRange(-1e5, 1e5);
+    item.setDigits(3);
+    item.setIncrements(0.01, 1);
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double number = prefs->getDouble(prefs_path + attr, def);
+    
+    item.setValue(number);
+    item.signal_value_changed().connect(
+        sigc::bind(&CloneTiler::clonetiler_value_changed,
+                   (GtkAdjustment*)((Gtk::SpinButton*)item.getWidget())->get_adjustment()->gobj(),
+                   (gpointer)attr)
+        );
+}
+
+void CloneTiler::prepareCheckButton(UI::Widget::CheckButton &item, const char* attr) {
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool state = prefs->getBool(prefs_path + attr);
+
+    item.set_active(state);
+    
+    item.signal_toggled().connect(
+        sigc::bind(&CloneTiler::clonetiler_checkbox_toggled,
+                   (GtkToggleButton*)item.gobj(),
+                   (gpointer*)attr)
+        );
+}
+
+void CloneTiler::prepareUnitMenu(UI::Widget::UnitMenu &item, const char* attr, Glib::ustring def) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring unit = prefs->getUnit(prefs_path + attr);
+    
+    if (unit == "") unit = def;
+
+    item.setUnitType(UNIT_TYPE_DIMENSIONLESS);
+    item.setUnitType(UNIT_TYPE_LINEAR);
+    item.setUnit(unit);
+}
+
+void CloneTiler::onUnitValueChanged(UI::Widget::ScalarUnit &item, const char* attr) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring unit_abbr = item.getUnit()->abbr;
+    double number = item.getValue(unit_abbr);
+    prefs->setDoubleUnit(prefs_path + attr, number, unit_abbr);
 }
 
 void CloneTiler::setTargetDesktop(SPDesktop *desktop)
@@ -2258,90 +2292,9 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
 
     clonetiler_remove (NULL, dlg, false);
 
-    double scale_units = Inkscape::Util::Quantity::convert(1, "px", &desktop->getDocument()->getSVGUnit());
-
-    double shiftx_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_i", 0, -10000, 10000);
-    double shifty_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_per_i", 0, -10000, 10000);
-    double shiftx_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_j", 0, -10000, 10000);
-    double shifty_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_per_j", 0, -10000, 10000);
-    double shiftx_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_rand", 0, 0, 1000);
-    double shifty_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_rand", 0, 0, 1000);
-    double shiftx_exp   =        prefs->getDoubleLimited(prefs_path + "shiftx_exp",   1, 0, 10);
-    double shifty_exp   =        prefs->getDoubleLimited(prefs_path + "shifty_exp", 1, 0, 10);
-    bool   shiftx_alternate =    prefs->getBool(prefs_path + "shiftx_alternate");
-    bool   shifty_alternate =    prefs->getBool(prefs_path + "shifty_alternate");
-    bool   shiftx_cumulate  =    prefs->getBool(prefs_path + "shiftx_cumulate");
-    bool   shifty_cumulate  =    prefs->getBool(prefs_path + "shifty_cumulate");
-    bool   shiftx_excludew  =    prefs->getBool(prefs_path + "shiftx_excludew");
-    bool   shifty_excludeh  =    prefs->getBool(prefs_path + "shifty_excludeh");
-
-    double scalex_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "scalex_per_i", 0, -100, 1000);
-    double scaley_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "scaley_per_i", 0, -100, 1000);
-    double scalex_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "scalex_per_j", 0, -100, 1000);
-    double scaley_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "scaley_per_j", 0, -100, 1000);
-    double scalex_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "scalex_rand",  0, 0, 1000);
-    double scaley_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "scaley_rand",  0, 0, 1000);
-    double scalex_exp   =        prefs->getDoubleLimited(prefs_path + "scalex_exp",   1, 0, 10);
-    double scaley_exp   =        prefs->getDoubleLimited(prefs_path + "scaley_exp",   1, 0, 10);
-    double scalex_log       =    prefs->getDoubleLimited(prefs_path + "scalex_log",   0, 0, 10);
-    double scaley_log       =    prefs->getDoubleLimited(prefs_path + "scaley_log",   0, 0, 10);
-    bool   scalex_alternate =    prefs->getBool(prefs_path + "scalex_alternate");
-    bool   scaley_alternate =    prefs->getBool(prefs_path + "scaley_alternate");
-    bool   scalex_cumulate  =    prefs->getBool(prefs_path + "scalex_cumulate");
-    bool   scaley_cumulate  =    prefs->getBool(prefs_path + "scaley_cumulate");
-
-    double rotate_per_i =        prefs->getDoubleLimited(prefs_path + "rotate_per_i", 0, -180, 180);
-    double rotate_per_j =        prefs->getDoubleLimited(prefs_path + "rotate_per_j", 0, -180, 180);
-    double rotate_rand =  0.01 * prefs->getDoubleLimited(prefs_path + "rotate_rand", 0, 0, 100);
-    bool   rotate_alternatei   = prefs->getBool(prefs_path + "rotate_alternatei");
-    bool   rotate_alternatej   = prefs->getBool(prefs_path + "rotate_alternatej");
-    bool   rotate_cumulatei    = prefs->getBool(prefs_path + "rotate_cumulatei");
-    bool   rotate_cumulatej    = prefs->getBool(prefs_path + "rotate_cumulatej");
-
-    double blur_per_i =   0.01 * prefs->getDoubleLimited(prefs_path + "blur_per_i", 0, 0, 100);
-    double blur_per_j =   0.01 * prefs->getDoubleLimited(prefs_path + "blur_per_j", 0, 0, 100);
-    bool   blur_alternatei =     prefs->getBool(prefs_path + "blur_alternatei");
-    bool   blur_alternatej =     prefs->getBool(prefs_path + "blur_alternatej");
-    double blur_rand =    0.01 * prefs->getDoubleLimited(prefs_path + "blur_rand", 0, 0, 100);
-
-    double opacity_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "opacity_per_i", 0, 0, 100);
-    double opacity_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "opacity_per_j", 0, 0, 100);
-    bool   opacity_alternatei =   prefs->getBool(prefs_path + "opacity_alternatei");
-    bool   opacity_alternatej =   prefs->getBool(prefs_path + "opacity_alternatej");
-    double opacity_rand =  0.01 * prefs->getDoubleLimited(prefs_path + "opacity_rand", 0, 0, 100);
-
-    Glib::ustring initial_color =    prefs->getString(prefs_path + "initial_color");
-    double hue_per_j =        0.01 * prefs->getDoubleLimited(prefs_path + "hue_per_j", 0, -100, 100);
-    double hue_per_i =        0.01 * prefs->getDoubleLimited(prefs_path + "hue_per_i", 0, -100, 100);
-    double hue_rand  =        0.01 * prefs->getDoubleLimited(prefs_path + "hue_rand", 0, 0, 100);
-    double saturation_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "saturation_per_j", 0, -100, 100);
-    double saturation_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "saturation_per_i", 0, -100, 100);
-    double saturation_rand =  0.01 * prefs->getDoubleLimited(prefs_path + "saturation_rand", 0, 0, 100);
-    double lightness_per_j =  0.01 * prefs->getDoubleLimited(prefs_path + "lightness_per_j", 0, -100, 100);
-    double lightness_per_i =  0.01 * prefs->getDoubleLimited(prefs_path + "lightness_per_i", 0, -100, 100);
-    double lightness_rand =   0.01 * prefs->getDoubleLimited(prefs_path + "lightness_rand", 0, 0, 100);
-    bool   color_alternatej = prefs->getBool(prefs_path + "color_alternatej");
-    bool   color_alternatei = prefs->getBool(prefs_path + "color_alternatei");
-
-    int    type = prefs->getInt(prefs_path + "symmetrygroup", 0);
     bool   keepbbox = prefs->getBool(prefs_path + "keepbbox", true);
-    int    imax = prefs->getInt(prefs_path + "imax", 2);
-    int    jmax = prefs->getInt(prefs_path + "jmax", 2);
-
-    bool   fillrect = prefs->getBool(prefs_path + "fillrect");
-    double fillwidth = scale_units*prefs->getDoubleLimited(prefs_path + "fillwidth", 50, 0, 1e6);
-    double fillheight = scale_units*prefs->getDoubleLimited(prefs_path + "fillheight", 50, 0, 1e6);
-
     bool   dotrace = prefs->getBool(prefs_path + "dotrace");
-    int    pick = prefs->getInt(prefs_path + "pick");
-    bool   pick_to_presence = prefs->getBool(prefs_path + "pick_to_presence");
-    bool   pick_to_size = prefs->getBool(prefs_path + "pick_to_size");
-    bool   pick_to_color = prefs->getBool(prefs_path + "pick_to_color");
-    bool   pick_to_opacity = prefs->getBool(prefs_path + "pick_to_opacity");
-    double rand_picked = 0.01 * prefs->getDoubleLimited(prefs_path + "rand_picked", 0, 0, 100);
-    bool   invert_picked = prefs->getBool(prefs_path + "invert_picked");
-    double gamma_picked = prefs->getDoubleLimited(prefs_path + "gamma_picked", 0, -10, 10);
-
+    
     SPItem *item = dynamic_cast<SPItem *>(obj);
     if (dotrace) {
         clonetiler_trace_setup (desktop->getDocument(), 1.0, item);
@@ -2352,6 +2305,9 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
     double h = 0;
     double x0 = 0;
     double y0 = 0;
+
+    Util::Unit svg_unit = desktop->getDocument()->getSVGUnit();
+    double scale_units = Inkscape::Util::Quantity::convert(1, "px", &svg_unit);
 
     if (keepbbox &&
         obj_repr->attribute("inkscape:tile-w") &&
@@ -2395,6 +2351,129 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
             x0 = y0 = 0;
         }
     }
+
+    /* Now we have w and h in SVG units. */
+    
+    Glib::ustring svg_unit_abbr = svg_unit.abbr;
+    double prefactor_w = 1.0/w;
+    double prefactor_h = 1.0/h;
+
+    const Util::Unit *shift_unit = unit_table.getUnit(prefs->getUnit(prefs_path + "shiftx_per_i"));
+    if (!shift_unit->isAbsolute()) {
+        // Deal with dimensionless (percentage) shift.
+        svg_unit_abbr = "%";
+        prefactor_w = prefactor_h = 0.01;
+    }
+    
+    // double scale_units = Inkscape::Util::Quantity::convert(1, "px", &desktop->getDocument()->getSVGUnit());
+
+    // double shiftx_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_i", 0, -10000, 10000);
+    // double shifty_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_per_i", 0, -10000, 10000);
+    // double shiftx_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_j", 0, -10000, 10000);
+    // double shifty_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_per_j", 0, -10000, 10000);
+    // double shiftx_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_rand", 0, 0, 1000);
+    // double shifty_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_rand", 0, 0, 1000);
+
+    /* Get quantities in px since width and height will be sent in px. */
+    double shiftx_per_i = prefactor_w * prefs->getDouble(prefs_path + "shiftx_per_i", 0, svg_unit_abbr);
+    double shifty_per_i = prefactor_h * prefs->getDouble(prefs_path + "shifty_per_i", 0, svg_unit_abbr);
+    double shiftx_per_j = prefactor_w * prefs->getDouble(prefs_path + "shiftx_per_j", 0, svg_unit_abbr);
+    double shifty_per_j = prefactor_h * prefs->getDouble(prefs_path + "shifty_per_j", 0, svg_unit_abbr);
+
+    double shiftx_rand  = prefactor_w * prefs->getDouble(prefs_path + "shiftx_rand", 0, svg_unit_abbr);
+    double shifty_rand  = prefactor_h * prefs->getDouble(prefs_path + "shifty_rand", 0, svg_unit_abbr);
+
+    double shiftx_exp   =        prefs->getDoubleLimited(prefs_path + "shiftx_exp",   1, 0, 10);
+    double shifty_exp   =        prefs->getDoubleLimited(prefs_path + "shifty_exp", 1, 0, 10);
+    bool   shiftx_alternate =    prefs->getBool(prefs_path + "shiftx_alternate");
+    bool   shifty_alternate =    prefs->getBool(prefs_path + "shifty_alternate");
+    bool   shiftx_cumulate  =    prefs->getBool(prefs_path + "shiftx_cumulate");
+    bool   shifty_cumulate  =    prefs->getBool(prefs_path + "shifty_cumulate");
+    bool   shiftx_excludew  =    prefs->getBool(prefs_path + "shiftx_excludew");
+    bool   shifty_excludeh  =    prefs->getBool(prefs_path + "shifty_excludeh");
+
+    const Util::Unit *scale_unit = unit_table.getUnit(prefs->getUnit(prefs_path + "scalex_per_i"));
+    if (scale_unit->isAbsolute()) {
+        svg_unit_abbr = svg_unit.abbr;
+        prefactor_w = 1.0/w;
+        prefactor_h = 1.0/h;
+    } else {
+        prefactor_w = prefactor_h = 0.01;
+        svg_unit_abbr = "%";
+    }
+    
+    // double scalex_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "scalex_per_i", 0, -100, 1000);
+    // double scaley_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "scaley_per_i", 0, -100, 1000);
+    // double scalex_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "scalex_per_j", 0, -100, 1000);
+    // double scaley_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "scaley_per_j", 0, -100, 1000);
+    // double scalex_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "scalex_rand",  0, 0, 1000);
+    // double scaley_rand  = 0.01 * prefs->getDoubleLimited(prefs_path + "scaley_rand",  0, 0, 1000);
+
+    double scalex_per_i = prefactor_w * prefs->getDouble(prefs_path + "scalex_per_i", 0, svg_unit_abbr);
+    double scaley_per_i = prefactor_h * prefs->getDouble(prefs_path + "scaley_per_i", 0, svg_unit_abbr);
+    double scalex_per_j = prefactor_w * prefs->getDouble(prefs_path + "scalex_per_j", 0, svg_unit_abbr);
+    double scaley_per_j = prefactor_h * prefs->getDouble(prefs_path + "scaley_per_j", 0, svg_unit_abbr);
+    double scalex_rand  = prefactor_w * prefs->getDouble(prefs_path + "scalex_rand",  0, svg_unit_abbr);
+    double scaley_rand  = prefactor_h * prefs->getDouble(prefs_path + "scaley_rand",  0, svg_unit_abbr);
+    
+    double scalex_exp   =        prefs->getDoubleLimited(prefs_path + "scalex_exp",   1, 0, 10);
+    double scaley_exp   =        prefs->getDoubleLimited(prefs_path + "scaley_exp",   1, 0, 10);
+    double scalex_log       =    prefs->getDoubleLimited(prefs_path + "scalex_log",   0, 0, 10);
+    double scaley_log       =    prefs->getDoubleLimited(prefs_path + "scaley_log",   0, 0, 10);
+    bool   scalex_alternate =    prefs->getBool(prefs_path + "scalex_alternate");
+    bool   scaley_alternate =    prefs->getBool(prefs_path + "scaley_alternate");
+    bool   scalex_cumulate  =    prefs->getBool(prefs_path + "scalex_cumulate");
+    bool   scaley_cumulate  =    prefs->getBool(prefs_path + "scaley_cumulate");
+
+    double rotate_per_i =        prefs->getDoubleLimited(prefs_path + "rotate_per_i", 0, -180, 180);
+    double rotate_per_j =        prefs->getDoubleLimited(prefs_path + "rotate_per_j", 0, -180, 180);
+    double rotate_rand =  0.01 * prefs->getDoubleLimited(prefs_path + "rotate_rand", 0, 0, 100);
+    bool   rotate_alternatei   = prefs->getBool(prefs_path + "rotate_alternatei");
+    bool   rotate_alternatej   = prefs->getBool(prefs_path + "rotate_alternatej");
+    bool   rotate_cumulatei    = prefs->getBool(prefs_path + "rotate_cumulatei");
+    bool   rotate_cumulatej    = prefs->getBool(prefs_path + "rotate_cumulatej");
+
+    double blur_per_i =   0.01 * prefs->getDoubleLimited(prefs_path + "blur_per_i", 0, 0, 100);
+    double blur_per_j =   0.01 * prefs->getDoubleLimited(prefs_path + "blur_per_j", 0, 0, 100);
+    bool   blur_alternatei =     prefs->getBool(prefs_path + "blur_alternatei");
+    bool   blur_alternatej =     prefs->getBool(prefs_path + "blur_alternatej");
+    double blur_rand =    0.01 * prefs->getDoubleLimited(prefs_path + "blur_rand", 0, 0, 100);
+
+    double opacity_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "opacity_per_i", 0, 0, 100);
+    double opacity_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "opacity_per_j", 0, 0, 100);
+    bool   opacity_alternatei =   prefs->getBool(prefs_path + "opacity_alternatei");
+    bool   opacity_alternatej =   prefs->getBool(prefs_path + "opacity_alternatej");
+    double opacity_rand =  0.01 * prefs->getDoubleLimited(prefs_path + "opacity_rand", 0, 0, 100);
+
+    Glib::ustring initial_color =    prefs->getString(prefs_path + "initial_color");
+    double hue_per_j =        0.01 * prefs->getDoubleLimited(prefs_path + "hue_per_j", 0, -100, 100);
+    double hue_per_i =        0.01 * prefs->getDoubleLimited(prefs_path + "hue_per_i", 0, -100, 100);
+    double hue_rand  =        0.01 * prefs->getDoubleLimited(prefs_path + "hue_rand", 0, 0, 100);
+    double saturation_per_j = 0.01 * prefs->getDoubleLimited(prefs_path + "saturation_per_j", 0, -100, 100);
+    double saturation_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "saturation_per_i", 0, -100, 100);
+    double saturation_rand =  0.01 * prefs->getDoubleLimited(prefs_path + "saturation_rand", 0, 0, 100);
+    double lightness_per_j =  0.01 * prefs->getDoubleLimited(prefs_path + "lightness_per_j", 0, -100, 100);
+    double lightness_per_i =  0.01 * prefs->getDoubleLimited(prefs_path + "lightness_per_i", 0, -100, 100);
+    double lightness_rand =   0.01 * prefs->getDoubleLimited(prefs_path + "lightness_rand", 0, 0, 100);
+    bool   color_alternatej = prefs->getBool(prefs_path + "color_alternatej");
+    bool   color_alternatei = prefs->getBool(prefs_path + "color_alternatei");
+
+    int    type = prefs->getInt(prefs_path + "symmetrygroup", 0);
+    int    imax = prefs->getInt(prefs_path + "imax", 2);
+    int    jmax = prefs->getInt(prefs_path + "jmax", 2);
+
+    bool   fillrect = prefs->getBool(prefs_path + "fillrect");
+    double fillwidth = scale_units*prefs->getDoubleLimited(prefs_path + "fillwidth", 50, 0, 1e6);
+    double fillheight = scale_units*prefs->getDoubleLimited(prefs_path + "fillheight", 50, 0, 1e6);
+
+    int    pick = prefs->getInt(prefs_path + "pick");
+    bool   pick_to_presence = prefs->getBool(prefs_path + "pick_to_presence");
+    bool   pick_to_size = prefs->getBool(prefs_path + "pick_to_size");
+    bool   pick_to_color = prefs->getBool(prefs_path + "pick_to_color");
+    bool   pick_to_opacity = prefs->getBool(prefs_path + "pick_to_opacity");
+    double rand_picked = 0.01 * prefs->getDoubleLimited(prefs_path + "rand_picked", 0, 0, 100);
+    bool   invert_picked = prefs->getBool(prefs_path + "invert_picked");
+    double gamma_picked = prefs->getDoubleLimited(prefs_path + "gamma_picked", 0, -10, 10);
 
     Geom::Point cur(0, 0);
     Geom::Rect bbox_original (Geom::Point (x0, y0), Geom::Point (x0 + w, y0 + h));
