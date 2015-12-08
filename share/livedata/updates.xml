@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+ <channel>
+  <title>Inkscape Default Alerts</title>
+  <link>http://www.inkscape.org/alerts/</link>
+  <description>What is going on in the Inkscape community</description>
+  <pubDate>Sat, 04 Apr 2015 00:01:59 +0000</pubDate>
+
+  <item>
+    <title>Welcome to Inkscape</title>
+    <link>https://inkscape.org</link>
+    <description>Thank you for installing inkscape, please consider supporting inkscape development and becoming involved over on our website.</description>
+    <!--After 5 minutes of running-->
+    <pubDate>5m</pubDate>
+  </item>
+
+  <item>
+    <title>Support Inkscape</title>
+    <link>https://inkscape.org/support/donate/</link>
+    <description>Please support inkscape by becoming a contribing memeber.</description>
+    <pubDate>2w</pubDate>
+  </item>
+ </channel>
+</rss> 

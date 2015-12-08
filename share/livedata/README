@@ -1,0 +1,9 @@
+This directory contains data which is for some core inkscape function
+but which is downloaded from the inkscape website. 
+
+updates.xml - A list of initial updates to show the user.
+
+The data files are loaded at runtime. The default location is
+'inkscape_data_dir/livedata'. They can be user overridden in the user
+directory, but will often be downloaded to the user directory
+automatically.
