@@ -1,0 +1,360 @@
+%{
+/*
+ * Factory for SPObject tree
+ *
+ * Authors:
+ *   Markus Engel
+ *   Liam P. White
+ *
+ * Copyright (C) 2013-2016 Authors
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+#include "sp-factory.h"
+
+// objects
+#include "box3d.h"
+#include "box3d-side.h"
+#include "color-profile.h"
+#include "persp3d.h"
+#include "sp-anchor.h"
+#include "sp-clippath.h"
+#include "sp-defs.h"
+#include "sp-desc.h"
+#include "sp-ellipse.h"
+#include "sp-filter.h"
+#include "sp-flowdiv.h"
+#include "sp-flowregion.h"
+#include "sp-flowtext.h"
+#include "sp-font.h"
+#include "sp-font-face.h"
+#include "sp-glyph.h"
+#include "sp-glyph-kerning.h"
+#include "sp-guide.h"
+#include "sp-hatch.h"
+#include "sp-hatch-path.h"
+#include "sp-image.h"
+#include "sp-item-group.h"
+#include "sp-line.h"
+#include "sp-linear-gradient.h"
+#include "sp-marker.h"
+#include "sp-mask.h"
+#include "sp-mesh.h"
+#include "sp-mesh-patch.h"
+#include "sp-mesh-row.h"
+#include "sp-metadata.h"
+#include "sp-missing-glyph.h"
+#include "sp-namedview.h"
+#include "sp-object.h"
+#include "sp-offset.h"
+#include "sp-path.h"
+#include "sp-pattern.h"
+#include "sp-polygon.h"
+#include "sp-polyline.h"
+#include "sp-radial-gradient.h"
+#include "sp-rect.h"
+#include "sp-root.h"
+#include "sp-script.h"
+#include "sp-solid-color.h"
+#include "sp-spiral.h"
+#include "sp-star.h"
+#include "sp-stop.h"
+#include "sp-string.h"
+#include "sp-style-elem.h"
+#include "sp-switch.h"
+#include "sp-symbol.h"
+#include "sp-tag.h"
+#include "sp-tag-use.h"
+#include "sp-text.h"
+#include "sp-textpath.h"
+#include "sp-title.h"
+#include "sp-tref.h"
+#include "sp-tspan.h"
+#include "sp-use.h"
+#include "live_effects/lpeobject.h"
+
+// filters
+#include "filters/blend.h"
+#include "filters/colormatrix.h"
+#include "filters/componenttransfer.h"
+#include "filters/componenttransfer-funcnode.h"
+#include "filters/composite.h"
+#include "filters/convolvematrix.h"
+#include "filters/diffuselighting.h"
+#include "filters/displacementmap.h"
+#include "filters/distantlight.h"
+#include "filters/flood.h"
+#include "filters/gaussian-blur.h"
+#include "filters/image.h"
+#include "filters/merge.h"
+#include "filters/mergenode.h"
+#include "filters/morphology.h"
+#include "filters/offset.h"
+#include "filters/pointlight.h"
+#include "filters/specularlighting.h"
+#include "filters/spotlight.h"
+#include "filters/tile.h"
+#include "filters/turbulence.h"
+
+#define NEW_OBJECT_FUNC(derived) \
+    static SPObject *create_##derived() { return new derived; }
+
+struct factory_object {
+    char const *name;
+    SPObject *(*create_func)();
+};
+
+factory_object const *get_object_create_func(char const *str, unsigned int len);
+
+SPObject *SPFactory::createObject(std::string const& id)
+{
+    SPObject *ret = NULL;
+    if (id.empty()) return ret;
+
+    factory_object const *obj = get_object_create_func(id.c_str(), id.length());
+    if (obj) {
+        ret = obj->create_func();
+    } else {
+        fprintf(stderr, "WARNING: unknown type: %s\n", id.c_str());
+    }
+    
+    return ret;
+}
+
+std::string NodeTraits::get_type_string(Inkscape::XML::Node const &node)
+{
+    std::string name;
+
+    switch (node.type()) {
+    case Inkscape::XML::TEXT_NODE:
+        name = "string";
+        break;
+
+    case Inkscape::XML::ELEMENT_NODE: {
+        char const *const sptype = node.attribute("sodipodi:type");
+
+        if (sptype) {
+            name = sptype;
+        } else {
+            name = node.name();
+        }
+        break;
+    }
+    default:
+        name = "";
+        break;
+    }
+
+    return name;
+}
+
+// objects
+
+NEW_OBJECT_FUNC(SPBox3D);
+NEW_OBJECT_FUNC(Box3DSide);
+NEW_OBJECT_FUNC(Persp3D);
+NEW_OBJECT_FUNC(SPAnchor);
+NEW_OBJECT_FUNC(SPClipPath);
+NEW_OBJECT_FUNC(SPDefs);
+NEW_OBJECT_FUNC(SPDesc);
+NEW_OBJECT_FUNC(SPFilter);
+NEW_OBJECT_FUNC(SPFlowdiv);
+NEW_OBJECT_FUNC(SPFlowtspan);
+NEW_OBJECT_FUNC(SPFlowpara);
+NEW_OBJECT_FUNC(SPFlowline);
+NEW_OBJECT_FUNC(SPFlowregionbreak);
+NEW_OBJECT_FUNC(SPFlowregion);
+NEW_OBJECT_FUNC(SPFlowregionExclude);
+NEW_OBJECT_FUNC(SPFlowtext);
+NEW_OBJECT_FUNC(SPFont);
+NEW_OBJECT_FUNC(SPFontFace);
+NEW_OBJECT_FUNC(SPGlyph);
+NEW_OBJECT_FUNC(SPHkern);
+NEW_OBJECT_FUNC(SPVkern);
+NEW_OBJECT_FUNC(SPGuide);
+NEW_OBJECT_FUNC(SPHatch);
+NEW_OBJECT_FUNC(SPHatchPath);
+NEW_OBJECT_FUNC(SPImage);
+NEW_OBJECT_FUNC(SPGroup);
+NEW_OBJECT_FUNC(SPLine);
+NEW_OBJECT_FUNC(SPLinearGradient);
+NEW_OBJECT_FUNC(SPMarker);
+NEW_OBJECT_FUNC(SPMask);
+NEW_OBJECT_FUNC(SPMesh);
+NEW_OBJECT_FUNC(SPMeshpatch);
+NEW_OBJECT_FUNC(SPMeshrow);
+NEW_OBJECT_FUNC(SPMetadata);
+NEW_OBJECT_FUNC(SPMissingGlyph);
+NEW_OBJECT_FUNC(SPNamedView);
+NEW_OBJECT_FUNC(SPOffset);
+NEW_OBJECT_FUNC(SPPath);
+NEW_OBJECT_FUNC(SPPattern);
+NEW_OBJECT_FUNC(SPPolygon);
+NEW_OBJECT_FUNC(SPPolyLine);
+NEW_OBJECT_FUNC(SPRadialGradient);
+NEW_OBJECT_FUNC(SPRect);
+NEW_OBJECT_FUNC(SPRoot);
+NEW_OBJECT_FUNC(SPScript);
+NEW_OBJECT_FUNC(SPSolidColor);
+NEW_OBJECT_FUNC(SPSpiral);
+NEW_OBJECT_FUNC(SPStar);
+NEW_OBJECT_FUNC(SPStop);
+NEW_OBJECT_FUNC(SPString);
+NEW_OBJECT_FUNC(SPStyleElem);
+NEW_OBJECT_FUNC(SPSwitch);
+NEW_OBJECT_FUNC(SPSymbol);
+NEW_OBJECT_FUNC(SPTag);
+NEW_OBJECT_FUNC(SPTagUse);
+NEW_OBJECT_FUNC(SPText);
+NEW_OBJECT_FUNC(SPTitle);
+NEW_OBJECT_FUNC(SPTRef);
+NEW_OBJECT_FUNC(SPTSpan);
+NEW_OBJECT_FUNC(SPTextPath);
+NEW_OBJECT_FUNC(SPUse);
+NEW_OBJECT_FUNC(LivePathEffectObject);
+NEW_OBJECT_FUNC(SPObject);
+
+static SPObject *create_nothing()      { return NULL; }
+static SPObject *create_ColorProfile() { return new Inkscape::ColorProfile; }
+static SPObject *create_ellipse() {
+    SPGenericEllipse *e = new SPGenericEllipse;
+    e->type = SP_GENERIC_ELLIPSE_ELLIPSE;
+    return e;
+}
+static SPObject *create_circle() {
+    SPGenericEllipse *e = new SPGenericEllipse;
+    e->type = SP_GENERIC_ELLIPSE_CIRCLE;
+    return e;
+}
+static SPObject *create_arc() {
+    SPGenericEllipse *e = new SPGenericEllipse;
+    e->type = SP_GENERIC_ELLIPSE_ARC;
+    return e;
+}
+
+// filters
+
+NEW_OBJECT_FUNC(SPFeBlend);
+NEW_OBJECT_FUNC(SPFeColorMatrix);
+NEW_OBJECT_FUNC(SPFeComponentTransfer);
+NEW_OBJECT_FUNC(SPFeComposite);
+NEW_OBJECT_FUNC(SPFeConvolveMatrix);
+NEW_OBJECT_FUNC(SPFeDiffuseLighting);
+NEW_OBJECT_FUNC(SPFeDisplacementMap);
+NEW_OBJECT_FUNC(SPFeDistantLight);
+NEW_OBJECT_FUNC(SPFeFlood);
+NEW_OBJECT_FUNC(SPGaussianBlur);
+NEW_OBJECT_FUNC(SPFeImage);
+NEW_OBJECT_FUNC(SPFeMerge);
+NEW_OBJECT_FUNC(SPFeMergeNode);
+NEW_OBJECT_FUNC(SPFeMorphology);
+NEW_OBJECT_FUNC(SPFeOffset);
+NEW_OBJECT_FUNC(SPFePointLight);
+NEW_OBJECT_FUNC(SPFeSpecularLighting);
+NEW_OBJECT_FUNC(SPFeSpotLight);
+NEW_OBJECT_FUNC(SPFeTile);
+NEW_OBJECT_FUNC(SPFeTurbulence);
+
+static SPObject *create_SPFeFuncNode_R() { return new SPFeFuncNode(SPFeFuncNode::R); }
+static SPObject *create_SPFeFuncNode_G() { return new SPFeFuncNode(SPFeFuncNode::G); }
+static SPObject *create_SPFeFuncNode_B() { return new SPFeFuncNode(SPFeFuncNode::B); }
+static SPObject *create_SPFeFuncNode_A() { return new SPFeFuncNode(SPFeFuncNode::A); }
+%}
+%language=ANSI-C
+%define lookup-function-name get_object_create_func
+struct factory_object
+%%
+inkscape:box3d,     create_SPBox3D
+inkscape:box3dside, create_Box3DSide
+inkscape:persp3d,   create_Persp3D
+svg:color-profile,  create_ColorProfile
+svg:a,              create_SPAnchor
+svg:clipPath,       create_SPClipPath
+svg:defs,           create_SPDefs
+svg:desc,           create_SPDesc
+svg:ellipse,        create_ellipse
+svg:circle,         create_circle
+arc,                create_arc
+svg:filter,         create_SPFilter
+svg:flowDiv,        create_SPFlowdiv
+svg:flowSpan,       create_SPFlowtspan
+svg:flowPara,       create_SPFlowpara
+svg:flowLine,       create_SPFlowline
+svg:flowRegion,     create_SPFlowregion
+svg:flowRegionBreak,  create_SPFlowregionbreak
+svg:flowRegionExclude, create_SPFlowregionExclude
+svg:flowRoot,       create_SPFlowtext
+svg:font,           create_SPFont
+svg:font-face,      create_SPFontFace
+svg:glyph,          create_SPGlyph
+svg:hkern,          create_SPHkern
+svg:vkern,          create_SPVkern
+sodipodi:guide,     create_SPGuide
+svg:hatch,          create_SPHatch
+svg:hatchPath,      create_SPHatchPath
+svg:image,          create_SPImage
+svg:g,              create_SPGroup
+svg:line,           create_SPLine
+svg:linearGradient, create_SPLinearGradient
+svg:marker,         create_SPMarker
+svg:mask,           create_SPMask
+svg:mesh,           create_SPMesh
+svg:meshpatch,      create_SPMeshpatch
+svg:meshrow,        create_SPMeshrow
+svg:metadata,       create_SPMetadata
+svg:missing-glyph,  create_SPMissingGlyph
+sodipodi:namedview, create_SPNamedView
+inkscape:offset,    create_SPOffset
+svg:path,           create_SPPath
+svg:pattern,        create_SPPattern
+svg:polygon,        create_SPPolygon
+svg:polyline,       create_SPPolyLine
+svg:radialGradient, create_SPRadialGradient
+svg:rect,           create_SPRect
+svg:svg,            create_SPRoot
+svg:script,         create_SPScript
+svg:solidColor,     create_SPSolidColor
+spiral,             create_SPSpiral
+star,               create_SPStar
+svg:stop,           create_SPStop
+string,             create_SPString
+svg:style,          create_SPStyleElem
+svg:switch,         create_SPSwitch
+svg:symbol,         create_SPSymbol
+inkscape:tag,       create_SPTag
+inkscape:tagref,    create_SPTagUse
+svg:text,           create_SPText
+svg:title,          create_SPTitle
+svg:tref,           create_SPTRef
+svg:tspan,          create_SPTSpan
+svg:textPath,       create_SPTextPath
+svg:use,            create_SPUse
+inkscape:path-effect, create_LivePathEffectObject
+svg:feBlend,        create_SPFeBlend
+svg:feColorMatrix,  create_SPFeColorMatrix
+svg:feComponentTransfer, create_SPFeComponentTransfer
+svg:feFuncR,        create_SPFeFuncNode_R
+svg:feFuncG,        create_SPFeFuncNode_G
+svg:feFuncB,        create_SPFeFuncNode_B
+svg:feFuncA,        create_SPFeFuncNode_A
+svg:feComposite,    create_SPFeComposite
+svg:feConvolveMatrix, create_SPFeConvolveMatrix
+svg:feDiffuseLighting, create_SPFeDiffuseLighting
+svg:feDisplacementMap, create_SPFeDisplacementMap
+svg:feDistantLight, create_SPFeDistantLight
+svg:feFlood,        create_SPFeFlood
+svg:feGaussianBlur, create_SPGaussianBlur
+svg:feImage,        create_SPFeImage
+svg:feMerge,        create_SPFeMerge
+svg:feMergeNode,    create_SPFeMergeNode
+svg:feMorphology,   create_SPFeMorphology
+svg:feOffset,       create_SPFeOffset
+svg:fePointLight,   create_SPFePointLight
+svg:feSpecularLighting, create_SPFeSpecularLighting
+svg:feSpotLight,    create_SPFeSpotLight
+svg:feTile,         create_SPFeTile
+svg:feTurbulence,   create_SPFeTurbulence
+inkscape:grid,      create_SPObject
+rdf:RDF,            create_nothing
+inkscape:clipboard, create_nothing
+inkscape:_templateinfo, create_nothing
