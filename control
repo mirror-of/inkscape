@@ -15,6 +15,7 @@ Build-Depends:
  bash-completion,
  debhelper (>= 9),
  dh-autoreconf,
+ dh-python,
  gimp,
  intltool,
  libart-2.0-dev (>= 2.3.10),
