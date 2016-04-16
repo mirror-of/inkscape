@@ -327,6 +327,7 @@ static void canvas_tbl_size_allocate(GtkWidget    * /*widget*/,
                                      gpointer      data)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data); 
+    sp_desktop_widget_update_notifiers(dtw);
     sp_desktop_widget_update_rulers(dtw);
 }
 
@@ -408,11 +409,77 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #endif
 
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *tbl = gtk_grid_new();
+    dtw->canvas_tbl = gtk_grid_new();
+
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
+#else
+    GtkWidget *tbl = gtk_table_new(2, 3, FALSE);
+    dtw->canvas_tbl = gtk_table_new(4, 3, FALSE);
+
+    gtk_table_attach(GTK_TABLE(dtw->canvas_tbl), dtw->guides_lock, 0, 1, 1, 2, 
+                     GTK_FILL, GTK_FILL, 0, 0);
+#endif
+    g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
+    gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl, TRUE, TRUE, 1 );
+
+    Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
+
+    /* Notifier */
+    #if GTK_CHECK_VERSION(3,0,0)
+      dtw->notifier = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    #else
+      dtw->notifier = gtk_hbox_new (FALSE, 0);
+    #endif
+
+    dtw->notifier_box = gtk_event_box_new();
+    gtk_widget_set_tooltip_text (dtw->notifier_box, _("Inkscape Notifications provide a way to introduce you to inkscape and keep you up to date with community events and new releases. If you wish to turn this feature off, please go to Inkscape's preferences."));
+
+    gtk_container_add (GTK_CONTAINER (dtw->notifier_box), dtw->notifier);
+
+    // XXX This needs to be an icon (from a set of possible alert icons)
+    GtkWidget *note_icon = gtk_image_new_from_file ("/home/doctormo/Projects/inkscape/inkscape/share/icons/alert_welcome.svg");
+    gtk_misc_set_alignment (GTK_MISC (note_icon), 0.5, 0.5);
+    gtk_misc_set_padding (GTK_MISC (note_icon), 10, 10);
+    gtk_box_pack_start( GTK_BOX(dtw->notifier), note_icon, FALSE, FALSE, 2);
+
+    GtkWidget *note_label = gtk_label_new (NULL);
+    gtk_label_set_ellipsize (GTK_LABEL(note_label), PANGO_ELLIPSIZE_END);
+    gtk_misc_set_alignment (GTK_MISC (note_label), 0.0, 0.5);
+    gtk_misc_set_padding (GTK_MISC (note_label), 15, 15);
+    gtk_label_set_markup (GTK_LABEL (note_label), "NO_NOTIFICATION_ERROR");
+    gtk_box_pack_start( GTK_BOX(dtw->notifier), note_label, TRUE, TRUE, 2);
+
+#if GTK_CHECK_VERSION(3,10,0)
+    GtkWidget *note_buttons = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    GtkWidget *note_close = gtk_button_new_from_icon_name(INKSCAPE_ICON("gtk-close"), GTK_ICON_SIZE_BUTTON);
+#else
+    GtkWidget *note_buttons = gtk_vbox_new (FALSE, 0);
+    GtkWidget *note_close = gtk_button_new();
+    GtkWidget *note_close_img = gtk_image_new_from_icon_name(INKSCAPE_ICON("gtk-close"), GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image(GTK_BUTTON(note_close), note_close_img);
+
+#endif
+    gtk_button_set_relief(GTK_BUTTON(note_close), GTK_RELIEF_NONE);
+    gtk_widget_set_can_focus(note_close, false);
+    gtk_widget_set_tooltip_text (note_close, gettext("Close this notification"));
+
+    gtk_box_pack_start(GTK_BOX(note_buttons), note_close, FALSE, FALSE, 5);
+
+    gtk_box_pack_end(GTK_BOX(dtw->notifier), note_buttons, FALSE, FALSE, 5);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->notifier_box, 2, 0, 1, 1);
+#else
+    gtk_table_attach(GTK_TABLE(dtw->canvas_tbl), dtw->notifier_box, 0, 2, 0, 1, 
+                     GTK_FILL, GTK_FILL, 0, 0);
+#endif
+
     /* Horizontal ruler */
     GtkWidget *eventbox = gtk_event_box_new ();
     dtw->hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
     dtw->hruler_box = eventbox;
-    Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
     sp_ruler_set_unit(SP_RULER(dtw->hruler), pt);
     gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(pt->name_plural.c_str()));
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
@@ -421,28 +488,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 
 #if GTK_CHECK_VERSION(3,0,0)
-    GtkWidget *tbl = gtk_grid_new();
-    dtw->canvas_tbl = gtk_grid_new();
-    
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 1, 0, 1, 1);
 #else
-    GtkWidget *tbl = gtk_table_new(2, 3, FALSE);
-    dtw->canvas_tbl = gtk_table_new(3, 3, FALSE);
-   
-    gtk_table_attach(GTK_TABLE(dtw->canvas_tbl),
-                     dtw->guides_lock,
-                     0, 1,     0, 1, 
-		     GTK_FILL, GTK_FILL, 
-		     0,        0);
-    gtk_table_attach(GTK_TABLE(dtw->canvas_tbl),
-                 eventbox,
-                 1, 2,     0, 1, 
-	     GTK_FILL, GTK_FILL, 
-	     0,        0);
+    gtk_table_attach(GTK_TABLE(dtw->canvas_tbl), eventbox, 1, 2, 1, 2,
+                     GTK_FILL, GTK_FILL, 0, 0);
 #endif
-    g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
-    gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl, TRUE, TRUE, 1 );
 
     /* Vertical ruler */
     eventbox = gtk_event_box_new ();
@@ -455,13 +505,10 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 0, 1, 2, 2);
 #else
-    gtk_table_attach(GTK_TABLE (dtw->canvas_tbl),
-                     eventbox,
-		     0, 1,     1, 2,
-                     GTK_FILL, GTK_FILL,
-                     0,        0);
+    gtk_table_attach(GTK_TABLE (dtw->canvas_tbl), eventbox, 0, 1, 2, 3,
+                     GTK_FILL, GTK_FILL, 0, 0);
 #endif
 
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
@@ -471,16 +518,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // Horizontal scrollbar
     dtw->hadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
 
-
-
-
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->hscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (dtw->hadj));
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->hscrollbar, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->hscrollbar, 1, 2, 2, 2);
     dtw->vscrollbar_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 #else
     dtw->hscrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (dtw->hadj));
-    gtk_table_attach(GTK_TABLE (dtw->canvas_tbl), dtw->hscrollbar, 1, 2, 2, 3,
+    gtk_table_attach(GTK_TABLE (dtw->canvas_tbl), dtw->hscrollbar, 1, 2, 3, 4,
             GTK_FILL, GTK_SHRINK,
             0, 0);
     dtw->vscrollbar_box = gtk_vbox_new (FALSE, 0);
@@ -510,7 +554,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #if GTK_CHECK_VERSION(3,0,0)
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->vscrollbar_box, 2, 0, 1, 2);
 #else
-    gtk_table_attach(GTK_TABLE(dtw->canvas_tbl), dtw->vscrollbar_box, 2, 3, 0, 2,
+    gtk_table_attach(GTK_TABLE(dtw->canvas_tbl), dtw->vscrollbar_box, 2, 3, 1, 3,
             GTK_SHRINK, GTK_FILL,
             0, 0);
 #endif
@@ -546,9 +590,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_grid_attach( GTK_GRID(dtw->canvas_tbl), dtw->cms_adjust, 2, 2, 1, 1);
+    gtk_grid_attach( GTK_GRID(dtw->canvas_tbl), dtw->cms_adjust, 2, 2, 2, 2);
 #else
-    gtk_table_attach( GTK_TABLE(dtw->canvas_tbl), dtw->cms_adjust, 2, 3, 2, 3,
+    gtk_table_attach( GTK_TABLE(dtw->canvas_tbl), dtw->cms_adjust, 2, 3, 3, 4,
             (GtkAttachOptions)(GTK_SHRINK),
             (GtkAttachOptions)(GTK_SHRINK),
             0, 0);
@@ -595,9 +639,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #if GTK_CHECK_VERSION(3,0,0)
     gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas), TRUE);
     gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas), TRUE);
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 1, 2, 2);
 #else
-    gtk_table_attach (GTK_TABLE (dtw->canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 2, 1, 2, (GtkAttachOptions)(GTK_FILL | GTK_EXPAND), (GtkAttachOptions)(GTK_FILL | GTK_EXPAND), 0, 0);
+    gtk_table_attach (GTK_TABLE (dtw->canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 2, 2, 3, (GtkAttachOptions)(GTK_FILL | GTK_EXPAND), (GtkAttachOptions)(GTK_FILL | GTK_EXPAND), 0, 0);
 #endif
 
     /* Dock */
@@ -626,9 +670,10 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #if GTK_CHECK_VERSION(3,0,0)
         gtk_widget_set_hexpand(GTK_WIDGET(paned->gobj()), TRUE);
         gtk_widget_set_vexpand(GTK_WIDGET(paned->gobj()), TRUE);
-        gtk_grid_attach(GTK_GRID(tbl), GTK_WIDGET (paned->gobj()), 1, 1, 1, 1);
+        gtk_grid_attach(GTK_GRID(tbl), GTK_WIDGET (paned->gobj()), 1, 1, 2, 2);
 #else
-        gtk_table_attach (GTK_TABLE (tbl), GTK_WIDGET (paned->gobj()), 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
+        gtk_table_attach (GTK_TABLE (tbl), GTK_WIDGET (paned->gobj()), 1, 2, 2, 3,
+                          (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                           (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
 #endif
 
@@ -636,9 +681,10 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #if GTK_CHECK_VERSION(3,0,0)
         gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas_tbl), TRUE);
         gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas_tbl), TRUE);
-        gtk_grid_attach(GTK_GRID(tbl), GTK_WIDGET (dtw->canvas_tbl), 1, 1, 1, 1);
+        gtk_grid_attach(GTK_GRID(tbl), GTK_WIDGET (dtw->canvas_tbl), 1, 1, 2, 2);
 #else
-        gtk_table_attach (GTK_TABLE (tbl), GTK_WIDGET (dtw->canvas_tbl), 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
+        gtk_table_attach (GTK_TABLE (tbl), GTK_WIDGET (dtw->canvas_tbl), 1, 2, 2, 3,
+                          (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                           (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
 #endif
     }
@@ -806,6 +852,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
                       "size-allocate",
                       G_CALLBACK (canvas_tbl_size_allocate),
                       dtw);
+
+    // Notifier is hidden by default
+    gtk_widget_hide(dtw->notifier);
 }
 
 /**
@@ -1753,6 +1802,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->selected_style->setDesktop(dtw->desktop);
 
     /* Once desktop is set, we can update rulers */
+    sp_desktop_widget_update_notifiers (dtw);
     sp_desktop_widget_update_rulers (dtw);
     sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), namedview->lockguides );
 
@@ -1783,6 +1833,11 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     return dtw;
 }
 
+void
+sp_desktop_widget_update_notifiers (SPDesktopWidget *dtw)
+{
+    // Do something here XXX
+}
 
 void
 sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)

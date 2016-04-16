@@ -13,6 +13,7 @@
  */
 
 #include <gtkmm/window.h>
+#include <gtkmm/builder.h>
 #include "message.h"
 #include "ui/view/view-widget.h"
 #include "ui/view/edit-widget-interface.h"
@@ -40,6 +41,7 @@ void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
 void sp_desktop_widget_maximize(SPDesktopWidget *dtw);
 void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_zoom(SPDesktopWidget *dtw);
+void sp_desktop_widget_update_notifiers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
@@ -88,6 +90,10 @@ struct SPDesktopWidget {
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
+    /* Update Notifier */
+    GtkWidget *notifier;
+    GtkWidget *notifier_box;
+
     GtkWidget *guides_lock;
     GtkWidget *sticky_zoom;
     GtkWidget *cms_adjust;
@@ -112,6 +118,7 @@ struct SPDesktopWidget {
     /** A table for displaying the canvas, rulers etc */
     GtkWidget *canvas_tbl;
 
+    Geom::Point notifier_origin;
     Geom::Point ruler_origin;
     double dt2r;
 
@@ -173,6 +180,8 @@ struct SPDesktopWidget {
             { sp_dtw_desktop_activate (_dtw); }
         virtual void deactivateDesktop()
             { sp_dtw_desktop_deactivate (_dtw); }
+        virtual void updateNotifiers()
+            { sp_desktop_widget_update_notifiers (_dtw); }
         virtual void updateRulers()
             { sp_desktop_widget_update_rulers (_dtw); }
         virtual void updateScrollbars (double scale)
