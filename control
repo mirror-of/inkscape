@@ -39,7 +39,7 @@ Build-Depends:
  liblcms2-dev,
  libmagick++-dev,
  libpango1.0-dev,
- libpng12-dev,
+ libpng-dev,
  libpoppler-glib-dev,
  libpoppler-private-dev,
  libpopt-dev,
