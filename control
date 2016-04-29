@@ -51,7 +51,7 @@ Build-Depends:
  python-lxml,
  python-numpy,
  zlib1g-dev
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 
 Package: inkscape
 Architecture: any
