@@ -5,14 +5,14 @@
 # Alessio Frusciante <algol@firenze.linux.it>, 2002-2003.
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <lucab@debian.org>, 2005-2009.
-# Firas Hanife <FirasHanife@gmail.com>, 2014.
+# Firas Hanife <FirasHanife@gmail.com>, 2014-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.91\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2015-11-14 17:53+0100\n"
-"PO-Revision-Date: 2014-11-18 18:00+0100\n"
+"POT-Creation-Date: 2016-04-25 13:00+0200\n"
+"PO-Revision-Date: 2016-04-25 13:00+0200\n"
 "Last-Translator: Firas Hanife <FirasHanife@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -9377,7 +9377,7 @@ msgid "Dockitem which 'owns' this grip"
 msgstr "Pannello a cui appartiene questa scheda"
 
 #. Name
-#: ../src/libgdl/gdl-dock-item.c:298 ../src/widgets/ruler.cpp:191
+#: ../src/libgdl/gdl-dock-item.c:298 ../src/widgets/ruler.cpp:197
 #: ../src/widgets/text-toolbar.cpp:1424
 #: ../share/extensions/gcodetools_graffiti.inx.h:9
 #: ../share/extensions/gcodetools_orientation_points.inx.h:2
@@ -9609,7 +9609,7 @@ msgstr ""
 "Tentativo di agganciare a %p un pannello %p già collegato (master attuale: "
 "%p)"
 
-#: ../src/libgdl/gdl-dock-paned.c:130 ../src/widgets/ruler.cpp:229
+#: ../src/libgdl/gdl-dock-paned.c:130 ../src/widgets/ruler.cpp:235
 msgid "Position"
 msgstr "Posizione"
 
@@ -10700,7 +10700,7 @@ msgstr "Distanza tra le tacche del righello"
 msgid "Unit:"
 msgstr "Unità:"
 
-#: ../src/live_effects/lpe-ruler.cpp:42 ../src/widgets/ruler.cpp:201
+#: ../src/live_effects/lpe-ruler.cpp:42 ../src/widgets/ruler.cpp:207
 msgid "Unit"
 msgstr "Unità"
 
@@ -27983,40 +27983,40 @@ msgstr "Non arrotondato"
 msgid "Make corners sharp"
 msgstr "Rende gli angoli spigolosi"
 
-#: ../src/widgets/ruler.cpp:192
+#: ../src/widgets/ruler.cpp:198
 msgid "The orientation of the ruler"
 msgstr "Orientazione del righello"
 
-#: ../src/widgets/ruler.cpp:202
+#: ../src/widgets/ruler.cpp:208
 msgid "Unit of the ruler"
 msgstr "Unità del righello"
 
-#: ../src/widgets/ruler.cpp:209
+#: ../src/widgets/ruler.cpp:215
 msgid "Lower"
 msgstr "Inferiore"
 
-#: ../src/widgets/ruler.cpp:210
+#: ../src/widgets/ruler.cpp:216
 msgid "Lower limit of ruler"
 msgstr "Limite inferiore del righello"
 
-#: ../src/widgets/ruler.cpp:219
+#: ../src/widgets/ruler.cpp:225
 msgid "Upper"
 msgstr "Superiore"
 
-#: ../src/widgets/ruler.cpp:220
+#: ../src/widgets/ruler.cpp:226
 msgid "Upper limit of ruler"
 msgstr "Limite superiore del righello"
 
-#: ../src/widgets/ruler.cpp:230
+#: ../src/widgets/ruler.cpp:236
 #, fuzzy
 msgid "Position of mark on the ruler"
 msgstr "Posizione lungo la curva"
 
-#: ../src/widgets/ruler.cpp:239
+#: ../src/widgets/ruler.cpp:245
 msgid "Max Size"
 msgstr "Dimensione massima"
 
-#: ../src/widgets/ruler.cpp:240
+#: ../src/widgets/ruler.cpp:246
 msgid "Maximum size of the ruler"
 msgstr "Dimensione massima del righello"
 
