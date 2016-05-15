@@ -1629,12 +1629,11 @@ char const *Node::node_type_to_localized_string(NodeType type)
 
 bool Node::_is_line_segment(Node *first, Node *second)
 {
-    // TODO handle arc mode here
     if (!first || !second) return false;
     if (first->_next() == second)
-        return first->_front.isDegenerate() && second->_back.isDegenerate();
+        return first->_front.isDegenerate() && second->_back.isDegenerate() && first->_arc_rx.isDegenerate()  && first->_arc_ry.isDegenerate();
     if (second->_next() == first)
-        return second->_front.isDegenerate() && first->_back.isDegenerate();
+        return second->_front.isDegenerate() && first->_back.isDegenerate() && second->_arc_rx.isDegenerate()  && second->_arc_ry.isDegenerate();
     return false;
 }
 
