@@ -81,6 +81,9 @@ public:
     void reverseSubpaths(bool selected_only);
     void setSegmentType(SegmentType);
 
+    void setArcSegmentLarge(bool large);
+    void toggleArcSegmentSweep();
+
     void scaleHandle(Node *n, int which, int dir, bool pixel);
     void rotateHandle(Node *n, int which, int dir, bool pixel);
 

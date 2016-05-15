@@ -28,7 +28,8 @@ enum NodeType {
 /** Types of segments supported in the node tool. */
 enum SegmentType {
     SEGMENT_STRAIGHT, ///< Straight linear segment
-    SEGMENT_CUBIC_BEZIER ///< Bezier curve with two control points
+    SEGMENT_CUBIC_BEZIER, ///< Bezier curve with two control points
+    SEGMENT_ELIPTICAL_ARC ///< Eliptical arc (two radii, rotation, size flag, direction flag)
 };
 
 } // namespace UI

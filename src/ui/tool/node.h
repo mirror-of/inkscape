@@ -29,6 +29,7 @@
 
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
+#include <2geom/elliptical-arc.h>
 #include "ui/tool/selectable-control-point.h"
 #include "snapped-point.h"
 #include "ui/tool/node-types.h"
@@ -100,6 +101,7 @@ public:
     virtual ~Handle();
     inline Geom::Point relativePos() const;
     inline double length() const;
+    inline Geom::Angle angle() const;
     bool isDegenerate() const { return _degenerate; } // True if the handle is retracted, i.e. has zero length.
 
     virtual void setVisible(bool);
@@ -107,7 +109,10 @@ public:
 
     virtual void setPosition(Geom::Point const &p);
     inline void setRelativePos(Geom::Point const &p);
+    virtual void setOffset(Geom::Point const &offset);
     void setLength(double len);
+    void setAngle(Geom::Angle a);
+    void setAngleAndLength(Geom::Angle a, double len);
     void retract();
     void setDirection(Geom::Point const &from, Geom::Point const &to);
     void setDirection(Geom::Point const &dir);
@@ -139,6 +144,8 @@ private:
     // so a naked pointer is OK and allows setting it during Node's construction
     SPCtrlLine *_handle_line;
     bool _degenerate; // True if the handle is retracted, i.e. has zero length. This is used often internally so it makes sense to cache this
+
+    Geom::Point _offset;
 
     /**
      * Control point of a cubic Bezier curve in a path.
@@ -183,6 +190,10 @@ public:
     void showHandles(bool v);
 
     void updateHandles();
+    void updateArcHandleConstriants(Handle *constraint);
+    void moveArcHandles(Geom::Point lineBetweenNodes, double lenX, double lenY, Geom::Angle rotX, Geom::Angle rotY);
+
+    void retractArcHandles();
 
 
     /**
@@ -195,6 +206,10 @@ public:
     bool isEndNode() const;
     Handle *front() { return &_front; }
     Handle *back()  { return &_back;  }
+    Handle *arc_rx() { return &_arc_rx; }
+    Handle *arc_ry() { return &_arc_ry; }
+    bool *arc_large() { return &_arc_large; }
+    bool *arc_sweep() { return &_arc_sweep; }
 
     /**
      * Gets the handle that faces the given adjacent node.
@@ -278,6 +293,11 @@ private:
     // as a line segment
     Handle _front; ///< Node handle in the backward direction of the path
     Handle _back; ///< Node handle in the forward direction of the path
+    // The arc control points and flags relate to an arc starting at this node and ending at the next node
+    Handle _arc_rx; ///< Handle for controling the x radius and rotation of the elipse (in eliptical arc mode)
+    Handle _arc_ry; ///< Handle for controling the y radius and rotation of the elipse (in eliptical arc mode)
+    bool _arc_large; ///< Flag that determines if arc mode is shallow or bulge
+    bool _arc_sweep; ///< Flag that determines the direction of an arc's sweep
     NodeType _type; ///< Type of node - cusp, smooth...
     bool _handles_shown;
     static ColorSet node_colors;
@@ -489,13 +509,16 @@ private:
 
 // define inline Handle funcs after definition of Node
 inline Geom::Point Handle::relativePos() const {
-    return position() - _parent->position();
+    return position() - (_parent->position() + _offset);
 }
 inline void Handle::setRelativePos(Geom::Point const &p) {
-    setPosition(_parent->position() + p);
+    setPosition(_parent->position() + _offset + p);
 }
 inline double Handle::length() const {
     return relativePos().length();
+}
+inline Geom::Angle Handle::angle() const {
+    return Geom::Angle(position() - _parent->position() - _offset);
 }
 inline PathManipulator &Handle::_pm() {
     return _parent->_pm();

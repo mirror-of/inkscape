@@ -801,7 +801,10 @@ void PathManipulator::reverseSubpaths(bool selected_only)
     }
 }
 
-/** Make selected segments curves / lines. */
+// \todo The three functions setSegmentType, setArcSegmentLarge, setArcSegmentSweep could be
+// refactored to share the code that iterates over all selected segments.
+
+/** Make selected segments curves / lines / arcs. */
 void PathManipulator::setSegmentType(SegmentType type)
 {
     if (_num_selected == 0) return;
@@ -811,10 +814,12 @@ void PathManipulator::setSegmentType(SegmentType type)
             if (!(k && j->selected() && k->selected())) continue;
             switch (type) {
             case SEGMENT_STRAIGHT:
-                if (j->front()->isDegenerate() && k->back()->isDegenerate())
+                if ((j->front()->isDegenerate() && k->back()->isDegenerate())
+                    && (j->arc_rx()->isDegenerate() && j->arc_ry()->isDegenerate()))
                     break;
                 j->front()->move(*j);
                 k->back()->move(*k);
+                j->retractArcHandles();
                 break;
             case SEGMENT_CUBIC_BEZIER:
                 if (!j->front()->isDegenerate() || !k->back()->isDegenerate())
@@ -822,7 +827,58 @@ void PathManipulator::setSegmentType(SegmentType type)
                 // move both handles to 1/3 of the line
                 j->front()->move(j->position() + (k->position() - j->position()) / 3);
                 k->back()->move(k->position() + (j->position() - k->position()) / 3);
+                j->arc_rx()->move(*j);
+                j->arc_ry()->move(*j);
+                j->retractArcHandles();
                 break;
+            case SEGMENT_ELIPTICAL_ARC:
+                if (!(j->front()->isDegenerate() && k->back()->isDegenerate())){
+                    j->front()->move(*j);
+                    k->back()->move(*k);
+                }
+
+                if (j->arc_rx()->isDegenerate() && j->arc_ry()->isDegenerate()){
+                    Geom::Point midPointOffset = ((k->position() - j->position()) / 2);
+                    Geom::Point handleOrigin = j->position()+midPointOffset;
+
+                    j->arc_rx()->setOffset(midPointOffset);
+                    j->arc_ry()->setOffset(midPointOffset);
+                    j->arc_rx()->move(j->position() + ((k->position() - handleOrigin) / 2));
+                    j->updateArcHandleConstriants(j->arc_rx());
+                }
+                break;
+            }
+        }
+    }
+}
+
+/** Set the large flag on selected arcs */
+void PathManipulator::setArcSegmentLarge(bool large){
+    if (_num_selected == 0) return;
+    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
+        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+            NodeList::iterator k = j.next();
+            if (!(k && j->selected() && k->selected())) continue;
+            // This code executes for every selected segment
+            if (!j->arc_rx()->isDegenerate() || !j->arc_ry()->isDegenerate()){
+                // This code executes for every selected ARC segment
+                *(j->arc_large()) = large;
+            }
+        }
+    }
+}
+
+/** Set the sweep flag on selected arcs */
+void PathManipulator::toggleArcSegmentSweep(){
+    if (_num_selected == 0) return;
+    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
+        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+            NodeList::iterator k = j.next();
+            if (!(k && j->selected() && k->selected())) continue;
+            // This code executes for every selected segment
+            if (!j->arc_rx()->isDegenerate() || !j->arc_ry()->isDegenerate()){
+                // This code executes for every selected ARC segment
+                *(j->arc_sweep()) = !*j->arc_sweep();
             }
         }
     }
@@ -1149,7 +1205,8 @@ void PathManipulator::_createControlPointsFromGeometry()
 
     // sanitize pathvector and store it in SPCurve,
     // so that _updateDragPoint doesn't crash on paths with naked movetos
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(_spcurve->get_pathvector());
+    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers_and_arcs(_spcurve->get_pathvector());
+
     for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
         // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
         // When we erase an element, the next one slides into position,
@@ -1198,6 +1255,15 @@ void PathManipulator::_createControlPointsFromGeometry()
             {
                 previous_node->front()->setPosition((*bezier)[1]);
                 current_node ->back() ->setPosition((*bezier)[2]);
+            }
+            Geom::EllipticalArc const *arc = dynamic_cast<Geom::EllipticalArc const*>(&*cit);
+            if (arc)
+            {
+                Geom::Coord angleX = arc->rotationAngle();
+                Geom::Coord angleY = angleX + Geom::rad_from_deg(90);
+                previous_node->moveArcHandles(current_node->position() - previous_node->position(), arc->ray(Geom::X), arc->ray(Geom::Y), angleX, angleY);
+                *(previous_node->arc_large()) = arc->largeArc();
+                *(previous_node->arc_sweep()) = arc->sweep();
             }
             previous_node = current_node;
         }
@@ -1397,16 +1463,33 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
  * @relates PathManipulator */
 void build_segment(Geom::PathBuilder &builder, Node *prev_node, Node *cur_node)
 {
-    if (cur_node->back()->isDegenerate() && prev_node->front()->isDegenerate())
-    {
-        // NOTE: It seems like the renderer cannot correctly handle vline / hline segments,
-        // and trying to display a path using them results in funny artifacts.
-        builder.lineTo(cur_node->position());
-    } else {
-        // this is a bezier segment
-        builder.curveTo(
-            prev_node->front()->position(),
-            cur_node->back()->position(),
+    if (prev_node->arc_rx()->isDegenerate() || prev_node->arc_ry()->isDegenerate() ){
+        // This is not an eliptical arc, check if it is a straight line or bezier
+        if (cur_node->back()->isDegenerate() && prev_node->front()->isDegenerate())
+        {
+            // NOTE: It seems like the renderer cannot correctly handle vline / hline segments,
+            // and trying to display a path using them results in funny artifacts.
+            builder.lineTo(cur_node->position());
+        } else {
+            // this is a bezier segment
+            builder.curveTo(
+                prev_node->front()->position(),
+                cur_node->back()->position(),
+                cur_node->position());
+        }
+    }
+    else{
+        // This is an eliptical arc, get the x and y set by the xy handle
+        Geom::Coord rx = prev_node->arc_rx()->length();
+        Geom::Coord ry = prev_node->arc_ry()->length();
+        Geom::Angle rot = prev_node->arc_rx()->angle();
+
+        builder.arcTo(
+            rx,
+            ry,
+            rot,
+            *prev_node->arc_large(),
+            *prev_node->arc_sweep(),
             cur_node->position());
     }
 }

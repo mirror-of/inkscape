@@ -456,6 +456,48 @@ pathv_matrix_point_bbox_wind_distance (Geom::PathVector const & pathv, Geom::Aff
 
 //#################################################################################
 
+/**
+ * Converts all segments in all paths to Geom::LineSegment or Geom::HLineSegment or
+ * Geom::VLineSegment or Geom::CubicBezier or Geom::EllipticalArc.
+ */
+Geom::PathVector
+pathv_to_linear_and_cubic_beziers_and_arcs( Geom::PathVector const &pathv )
+{
+    Geom::PathVector output;
+
+    for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
+        output.push_back( Geom::Path() );
+        output.back().setStitching(true);
+        output.back().start( pit->initialPoint() );
+
+        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+            if (is_straight_curve(*cit)) {
+                Geom::LineSegment l(cit->initialPoint(), cit->finalPoint());
+                output.back().append(l);
+            } else {
+                Geom::EllipticalArc const *arc = dynamic_cast<Geom::EllipticalArc const *>(&*cit);
+                if (arc){
+                    output.back().append(arc->duplicate());
+                }
+                else{
+                    Geom::BezierCurve const *curve = dynamic_cast<Geom::BezierCurve const *>(&*cit);
+                    if (curve && curve->order() == 3) {
+                        Geom::CubicBezier b((*curve)[0], (*curve)[1], (*curve)[2], (*curve)[3]);
+                        output.back().append(b);
+                    } else {
+                        // convert all other curve types to cubicbeziers
+                        Geom::Path cubicbezier_path = Geom::cubicbezierpath_from_sbasis(cit->toSBasis(), 0.1);
+                        cubicbezier_path.close(false);
+                        output.back().append(cubicbezier_path);
+                    }
+                }
+            }
+        }
+        output.back().close( pit->closed() );
+    }
+    return output;
+}
+
 /*
  * Converts all segments in all paths to Geom::LineSegment or Geom::HLineSegment or
  * Geom::VLineSegment or Geom::CubicBezier.

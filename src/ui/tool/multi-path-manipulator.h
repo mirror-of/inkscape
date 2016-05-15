@@ -51,6 +51,9 @@ public:
     void setNodeType(NodeType t);
     void setSegmentType(SegmentType t);
 
+    void setArcSegmentLarge(bool large);
+    void toggleArcSegmentSweep();
+
     void insertNodesAtExtrema(ExtremumType extremum);
     void insertNodes();
     void insertNode(Geom::Point pt);

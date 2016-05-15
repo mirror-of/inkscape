@@ -25,6 +25,7 @@ void pathv_matrix_point_bbox_wind_distance ( Geom::PathVector const & pathv, Geo
                                              Geom::Rect *bbox, int *wind, Geom::Coord *dist,
                                              Geom::Coord tolerance, Geom::Rect const *viewbox);
 
+Geom::PathVector pathv_to_linear_and_cubic_beziers_and_arcs( Geom::PathVector const &pathv );
 Geom::PathVector pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv );
 Geom::PathVector pathv_to_linear( Geom::PathVector const &pathv, double maxdisp );
 Geom::PathVector pathv_to_cubicbezier( Geom::PathVector const &pathv);

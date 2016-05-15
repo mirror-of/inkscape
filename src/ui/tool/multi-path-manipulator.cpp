@@ -319,11 +319,38 @@ void MultiPathManipulator::setSegmentType(SegmentType type)
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::setSegmentType, type);
-    if (type == SEGMENT_STRAIGHT) {
-        _done(_("Straighten segments"));
-    } else {
-        _done(_("Make segments curves"));
+    switch (type){
+        case SEGMENT_STRAIGHT:
+            _done(_("Straighten segments"));
+            break;
+        case SEGMENT_CUBIC_BEZIER:
+            _done(_("Make segments curves"));
+            break;
+        case SEGMENT_ELIPTICAL_ARC:
+            _done(_("Make segments arcs"));
+            break;
+        default:
+            g_error("Unknown segment type");
     }
+}
+
+void MultiPathManipulator::setArcSegmentLarge(bool large)
+{
+    if (_selection.empty()) return;
+    invokeForAll(&PathManipulator::setArcSegmentLarge, large);
+    if (large){
+        _done(_("Make arc segments bulge"));
+    }
+    else{
+        _done(_("Make arc segments shallow"));
+    }
+}
+
+void MultiPathManipulator::toggleArcSegmentSweep()
+{
+    if (_selection.empty()) return;
+    invokeForAll(&PathManipulator::toggleArcSegmentSweep);
+    _done(_("Flip arc segments"));
 }
 
 void MultiPathManipulator::insertNodes()

@@ -1109,6 +1109,29 @@ http://www.inkscape.org/</dc:description>
 <use xlink:href="#rect4374" height="1250" width="1250" id="use5756" y="0" x="0" transform="translate(-5.018707,-0.0241656)" />
 <use xlink:href="#rect4374" height="1250" width="1250" id="use5758" y="0" x="0" transform="translate(6.0238,-11.02417)" />
 </g>
+<g id="node-segment-elliptical-arc" transform="translate(673.00134,25.751197)" inkscape:label="#node_curve">
+<path style="fill:none;stroke:#646464;stroke-width:1.00000024;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" d="m -38.600913,188.52882 a 6.0591792,7.0458508 48.505394 1 1 7.123238,-5.61527" id="path10679-5" sodipodi:nodetypes="cc" inkscape:connector-curvature="0" />
+<rect y="175" x="-45" height="16" width="16" id="rect10681-3" style="color:#000000;display:inline;fill:none;stroke:none;stroke-width:1;marker:none" />
+<use xlink:href="#rect4374" height="1250" width="1250" id="use5745-8" y="0" x="0" transform="translate(-1.0764281,-0.01573529)" />
+<use xlink:href="#rect4374" height="1250" width="1250" id="use5747-9" y="0" x="0" transform="translate(5.9949619,-5.5106093)" />
+</g>
+<g id="node-segment-elliptical-arc-bulge" transform="translate(693.93498,25.748197)" inkscape:label="#node_curve">
+<rect y="175" x="-45" height="16" width="16" id="rect10681-3-6" style="color:#000000;display:inline;fill:none;stroke:none;stroke-width:1;marker:none" />
+<path style="fill:none;stroke:#646464;stroke-width:1.00000024;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" d="m -37.870441,189.45456 a 6.0591792,7.0458508 48.505394 1 1 7.123238,-5.61527" id="path10679-5-2" sodipodi:nodetypes="cc" inkscape:connector-curvature="0" />
+<path style="fill:none;stroke:#ff8080;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:1, 2;stroke-dashoffset:0;stroke-opacity:1" d="m -37.870438,189.45456 a 6.0591792,7.0458508 48.505394 0 1 7.12324,-5.61527" id="path10679-5-2-8" sodipodi:nodetypes="cc" inkscape:connector-curvature="0" />
+</g>
+<g id="node-segment-elliptical-arc-flip" transform="translate(736.50086,25.748197)" inkscape:label="#node_curve">
+<rect y="175" x="-45" height="16" width="16" id="rect10681-3-67" style="color:#000000;display:inline;fill:none;stroke:none;stroke-width:1;marker:none" />
+<path style="fill:none;stroke:#646464;stroke-width:1.00000024;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" d="m -40.865556,188.5577 a 5.0424426,7.9529262 56.470438 1 1 7.281336,-12.07083" id="path10679-5-5" sodipodi:nodetypes="cc" inkscape:connector-curvature="0" />
+<path style="fill:none;stroke:#ff5555;stroke-width:1.00000024;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" d="m -40.866246,188.55761 a 5.0424427,7.9529265 56.470438 1 0 7.28134,-12.07083" id="path10679-5-5-6" sodipodi:nodetypes="cc" inkscape:connector-curvature="0" />
+<use xlink:href="#path4376" height="1250" width="1250" id="use5754-7" y="0" x="0" transform="rotate(90,-38.492674,181.50732)" />
+<use xlink:href="#path4376" height="1250" width="1250" id="use5754-7-9" y="0" x="0" transform="matrix(0,1,1,0,-217.00767,220)" />
+</g>
+<g id="node-segment-elliptical-arc-shallow" transform="translate(714.9873,25.748197)" inkscape:label="#node_curve">
+<rect y="175" x="-45" height="16" width="16" id="rect10681-3-6-6" style="color:#000000;display:inline;fill:none;stroke:none;stroke-width:1;marker:none" />
+<path style="fill:none;stroke:#646464;stroke-width:1.00000024;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1" d="m -37.870441,189.45456 a 6.0591792,7.0458508 48.505394 0 1 7.123238,-5.61527" id="path10679-5-2-3" sodipodi:nodetypes="cc" inkscape:connector-curvature="0" />
+<path style="fill:none;stroke:#ff8080;stroke-width:1.00000024;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:1.00000024, 2.00000048;stroke-dashoffset:0;stroke-opacity:1" d="m -37.870438,189.45456 a 6.0591792,7.0458508 48.505394 1 1 7.12324,-5.61527" id="path10679-5-2-8-2" sodipodi:nodetypes="cc" inkscape:connector-curvature="0" />
+</g>
 <g id="object-to-path" transform="translate(280.041,-149.9465)" inkscape:label="#object_tocurve">
 <path style="fill:none;stroke:#646464;stroke-width:1.0000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" d="M -37.0131,188.9855 C -35.0131,192.9855 -27.81159,188.3079 -29.81159,185.3079 -31.10674,183.3652 -39.24159,185.6729 -42.56979,183.4541 -45.56979,181.4541 -45.12074,174.9746 -40.0534,175.5422 -35.41611,176.0661 -38.62555,185.7606 -37.0131,188.9855 Z" id="path4438" sodipodi:nodetypes="cssss" inkscape:connector-curvature="0" />
 <rect y="175" x="-45" height="16" width="16" id="rect4440" style="color:#000000;fill:none" />

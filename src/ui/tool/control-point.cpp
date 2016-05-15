@@ -225,7 +225,6 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
 {
     // NOTE the static variables below are shared for all points!
     // TODO handle clicks and drags from other buttons too
-
     if (event == NULL)
     {
         return false;
