@@ -9,10 +9,7 @@ export DH_VERBOSE=1
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
 %:
-	dh $@ --with autoreconf,bash-completion,python2 --parallel
-
-override_dh_autoreconf:
-	dh_autoreconf ./autogen.sh
+	dh $@ --buildsystem=cmake --with bash-completion,python2 --parallel
 
 override_dh_auto_clean:
 	dh_auto_clean --builddirectory=build-default
@@ -20,8 +17,8 @@ override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 override_dh_auto_configure:
-	dh_auto_configure --builddirectory=build-default -- --enable-dbusapi
-	dh_auto_configure --builddirectory=build-gtk3 -- --enable-dbusapi --enable-gtk3-experimental
+	dh_auto_configure --builddirectory=build-default -- -DWITH_DBUS=ON
+	dh_auto_configure --builddirectory=build-gtk3    -- -DWITH_DBUS=ON -DWITH_GTK3_EXPERIMENTAL=ON
 
 override_dh_auto_build:
 	dh_auto_build --builddirectory=build-default
