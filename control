@@ -9,12 +9,9 @@ Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
            Alex Valavanis <valavanisalex@gmail.com>
 Build-Depends:
- autoconf,
- automake,
- autopoint,
  bash-completion,
+ cmake,
  debhelper (>= 9),
- dh-autoreconf,
  dh-python,
  gimp,
  intltool,
