@@ -17,9 +17,6 @@ override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 override_dh_auto_configure:
-	# First download a copy of the Googletest framework
-	# TODO: Maybe this should be included in the source package?
-	sh ./download-gtest.sh
 	dh_auto_configure --builddirectory=build-default -- -DWITH_DBUS=ON
 	dh_auto_configure --builddirectory=build-gtk3    -- -DWITH_DBUS=ON -DWITH_GTK3_EXPERIMENTAL=ON
 
