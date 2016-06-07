@@ -53,6 +53,7 @@ Build-Depends:
  python-dev,
  python-lxml,
  python-numpy,
+ wget,
  zlib1g-dev
 Standards-Version: 3.9.8
 
