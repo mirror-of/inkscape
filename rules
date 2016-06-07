@@ -17,8 +17,8 @@ override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
 
 override_dh_auto_configure:
-	dh_auto_configure --builddirectory=build-default -- -DWITH_DBUS=ON
-	dh_auto_configure --builddirectory=build-gtk3    -- -DWITH_DBUS=ON -DWITH_GTK3_EXPERIMENTAL=ON
+	dh_auto_configure --builddirectory=build-default -- -DWITH_DBUS=ON -DGMOCK_DIR="/usr/src/gmock"
+	dh_auto_configure --builddirectory=build-gtk3    -- -DWITH_DBUS=ON -DGMOCK_DIR="/usr/src/gmock" -DWITH_GTK3_EXPERIMENTAL=ON
 
 override_dh_auto_build:
 	dh_auto_build --builddirectory=build-default
