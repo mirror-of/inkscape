@@ -25,13 +25,8 @@ override_dh_auto_build:
 	dh_auto_build --builddirectory=build-gtk3
 
 override_dh_auto_test:
-	# This hack is needed because dh_auto_test tries to use the "make test" target first,
-	# which currently fails in trunk
-	cd build-default
-	make check
-	cd ../build-gtk3
-	make check
-	cd ..
+	dh_auto_test --builddirectory=build-default
+	dh_auto_test --builddirectory=build-gtk3
 
 # Rule for installing files from the build directories to (temporary)
 # installation folders.  From there, we can subsequently copy all the files into
