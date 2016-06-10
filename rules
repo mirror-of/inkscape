@@ -25,6 +25,7 @@ override_dh_auto_build:
 	dh_auto_build --builddirectory=build-gtk3
 
 override_dh_auto_test:
+	export CTEST_OUTPUT_ON_FAILURE=1
 	dh_auto_test --builddirectory=build-default
 	dh_auto_test --builddirectory=build-gtk3
 
