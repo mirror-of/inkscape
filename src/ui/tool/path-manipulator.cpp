@@ -1501,8 +1501,9 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         }
         if (subpath->closed()) {
             // Here we link the last and first node if the path is closed.
-            // If the last segment is Bezier, we add it.
-            if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate()) {
+            // If the last segment is Bezier or arc, we add it.
+            if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate()
+                || !prev->arc_rx()->isDegenerate() || !prev->arc_ry()->isDegenerate()) {
                 build_segment(builder, prev.ptr(), subpath->begin().ptr());
             }
             // if that segment is linear, we just call closePath().
