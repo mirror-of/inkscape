@@ -15,6 +15,7 @@
 #include <memory>
 #include <2geom/pathvector.h>
 #include <2geom/affine.h>
+#include <2geom/sbasis-to-bezier.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include "ui/tool/node.h"
@@ -100,6 +101,7 @@ public:
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
     NodeList::iterator extremeNode(NodeList::iterator origin, bool search_selected,
         bool search_unselected, bool closest);
+    void replaceSegmentWithPath(NodeList::iterator segment, Geom::Path newPath);
 
     int _bsplineGetSteps() const;
     // this is necessary for Tab-selection in MultiPathManipulator

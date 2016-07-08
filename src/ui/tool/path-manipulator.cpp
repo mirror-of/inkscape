@@ -21,6 +21,7 @@
 #include <2geom/bezier-curve.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
+#include <2geom/pathvector.h>
 #include <glibmm/i18n.h>
 #include "ui/tool/path-manipulator.h"
 #include "desktop.h"
@@ -822,8 +823,18 @@ void PathManipulator::setSegmentType(SegmentType type)
                 j->retractArcHandles();
                 break;
             case SEGMENT_CUBIC_BEZIER:
-                if (!j->front()->isDegenerate() || !k->back()->isDegenerate())
+                if (!j->front()->isDegenerate() || !k->back()->isDegenerate()){
+                    // Already a cubic bezier
                     break;
+                }
+                if (!j->arc_rx()->isDegenerate() || !j->arc_ry()->isDegenerate()){
+                    // This is an elliptical arc that is being converted to a cubic bezier
+                    // Generate the bezier path and use it to replace the current segment
+                    Geom::Path cubicbezier_path = Geom::cubicbezierpath_from_sbasis(j->getEllipticalArc().toSBasis(), 0.1);
+                    replaceSegmentWithPath(j, cubicbezier_path);
+                    break;
+                }
+                
                 // move both handles to 1/3 of the line
                 j->front()->move(j->position() + (k->position() - j->position()) / 3);
                 k->back()->move(k->position() + (j->position() - k->position()) / 3);
@@ -1148,6 +1159,75 @@ NodeList::iterator PathManipulator::extremeNode(NodeList::iterator origin, bool 
         }
     }
     return match;
+}
+
+/** Replace a segment with a path.
+ * @param segment The segment to replace
+ * @param newPath The path to insert in place of 'segment'
+ *
+ * Currently, newPath must be composed only of cubic beziers, the caller must
+ * ensure that the path only contains cubic beziers (until other segments are
+ * implemented in this function)  */
+void PathManipulator::replaceSegmentWithPath(NodeList::iterator segment, Geom::Path newPath)
+{
+    if (!segment) throw std::invalid_argument("Invalid iterator for replacement");
+    NodeList &list = NodeList::get(segment);
+    NodeList::iterator second = segment.next();
+    if (!second) throw std::invalid_argument("Replace after last node in open path");
+
+    // Retract all handles relating to this segment
+    segment->retractArcHandles();
+    segment->front()->retract();
+    
+    // get the insertion point
+    NodeList::iterator insert_at = segment;
+    ++insert_at;
+
+    // Keep the previous node handy to update its handles when needed
+    Node *prevNode = &(*insert_at);
+
+    // Path is to be inserted in reverse order
+    Geom::Path reversedPath = newPath.reversed();
+
+    // Iterate over the path
+    for (Geom::Path::iterator i = reversedPath.begin(); i != reversedPath.end(); ++i){
+        const Geom::Curve & thisCurve = *i;
+
+        // Try converting to a bezier
+        const Geom::BezierCurve * bezier = dynamic_cast<const Geom::BezierCurve*>(&thisCurve);
+        if (bezier) {
+            // Check order of bezier (currently only cubic beziers are supported)
+            if (bezier->order() == 3)
+            {
+                // Create one new node
+                Node *newNode = new Node(_multi_path_manipulator._path_data.node_data, bezier->finalPoint());
+                // Set the control points for this node and the previous node
+                newNode->front() ->setPosition((*bezier)[2]);
+                prevNode->back()->setPosition((*bezier)[1]);
+                // All new nodes are smooth
+                newNode->setType(NODE_SMOOTH, false);
+
+                // Insert new node
+                list.insert(insert_at, newNode);
+                // Move along to next node
+                prevNode = newNode;
+                insert_at--;
+            }
+            else{
+                // TODO, Is there a better exception to raise here?
+                // TODO, implement this if needed in future
+                throw std::invalid_argument("Only cubic bezier curves are implemented in PathManipulator::replaceSegment."
+                    " newPath contains beziers with order!=3.");
+            }
+        }
+        else{
+            // Not a bezier
+            // TODO, Is there a better exception to raise here?
+            // TODO, implement this if needed in future
+            throw std::invalid_argument("Only cubic bezier curves are implemented in PathManipulator::replaceSegment."
+                " newPath contains non-bezier segments.");
+        }
+    }
 }
 
 /** Called by the XML observer when something else than us modifies the path. */

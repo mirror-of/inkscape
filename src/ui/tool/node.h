@@ -210,6 +210,7 @@ public:
     Handle *arc_ry() { return &_arc_ry; }
     bool *arc_large() { return &_arc_large; }
     bool *arc_sweep() { return &_arc_sweep; }
+    Geom::EllipticalArc getEllipticalArc();
 
     /**
      * Gets the handle that faces the given adjacent node.

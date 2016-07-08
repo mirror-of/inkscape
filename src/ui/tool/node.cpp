@@ -1500,6 +1500,15 @@ Inkscape::SnapCandidatePoint Node::snapCandidatePoint()
     return SnapCandidatePoint(position(), _snapSourceType(), _snapTargetType());
 }
 
+Geom::EllipticalArc Node::getEllipticalArc(){
+    // Must have a next node for this to be an arc
+    if (not _next()) return Geom::EllipticalArc();
+    Geom::Point r = Geom::Point(_arc_rx.length(), _arc_ry.length());
+    Geom::Coord rot = _arc_rx.angle();
+    // Create an arc and return it
+    return Geom::EllipticalArc(position(), r, rot, _arc_large, _arc_sweep, _next()->position());
+}
+
 Handle *Node::handleToward(Node *to)
 {
     if (_next() == to) {
