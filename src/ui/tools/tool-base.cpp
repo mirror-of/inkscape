@@ -1085,7 +1085,7 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
                               Geom::Point(event->button.x, event->button.y), FALSE, FALSE);
 
     /* fixme: This is not what I want but works for now (Lauris) */
-    if (event->type == GDK_KEY_PRESS) {
+    if (event->type == GDK_KEY_PRESS && !desktop->getSelection()->isEmpty()) {
         item = desktop->getSelection()->itemList().front();
     }
 
