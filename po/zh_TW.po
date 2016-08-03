@@ -12371,7 +12371,7 @@ msgstr "動態偏移"
 #: ../src/sp-offset.cpp:347
 #, c-format
 msgid "%s by %f pt"
-msgstr "以 %f pt %s"
+msgstr "%s 偏移 %f pt"
 
 #: ../src/sp-offset.cpp:348
 msgid "outset"
