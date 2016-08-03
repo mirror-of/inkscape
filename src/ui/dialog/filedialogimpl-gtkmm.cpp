@@ -125,6 +125,7 @@ void findExpanderWidgets(Gtk::Container *parent, std::vector<Gtk::Expander *> &r
 
 bool SVGPreview::setDocument(SPDocument *doc)
 {
+    return true; //Temporary fix to bug #1607698
     if (document)
         document->doUnref();
 
