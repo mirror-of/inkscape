@@ -70,6 +70,10 @@ option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
 option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_GTK3_EXPERIMENTAL "Enable compilation with GTK+3 (EXPERIMENTAL!)" OFF)
 
+option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
+
+include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
+
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
@@ -100,6 +104,14 @@ endif()
 #
 # end badness
 # -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# Relocatable Binary
+# -----------------------------------------------------------------------------
+
+if (ENABLE_BINRELOC)
+	add_definitions(-DENABLE_BINRELOC)
+endif()
 
 # -----------------------------------------------------------------------------
 # Dist Target
