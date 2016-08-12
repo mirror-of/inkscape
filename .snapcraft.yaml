@@ -13,7 +13,7 @@ description: |
  
  We also aim to maintain a thriving user and developer community by using
  open, community-oriented development.
-confinement: devmode # use "strict" to enforce system access only via declared interfaces
+confinement: strict
 
 parts:
   inkscape:
