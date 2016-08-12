@@ -41,6 +41,7 @@ parts:
       - libpoppler-glib-dev
       - libpoppler-private-dev
       - libpopt-dev
+      - libpotrace-dev
       - librevenge-dev
       - libsigc++-2.0-dev
       - libtool
