@@ -22,6 +22,7 @@ tutorial_DATA = \
     potrace-nl.png \
     potrace.png \
     potrace-pl.png \
+    potrace-pt.png \
     potrace-pt_BR.png \
     potrace-ru.png \
     potrace-sk.png \
@@ -45,6 +46,7 @@ tutorial_DATA = \
     tutorial-advanced.ja.svg \
     tutorial-advanced.nl.svg \
     tutorial-advanced.pl.svg \
+    tutorial-advanced.pt.svg \
     tutorial-advanced.pt_BR.svg \
     tutorial-advanced.ru.svg \
     tutorial-advanced.sk.svg \
@@ -73,6 +75,7 @@ tutorial_DATA = \
     tutorial-basic.nl.svg \
     tutorial-basic.nn.svg \
     tutorial-basic.pl.svg \
+    tutorial-basic.pt.svg \
     tutorial-basic.pt_BR.svg \
     tutorial-basic.ru.svg \
     tutorial-basic.sk.svg \
@@ -96,6 +99,7 @@ tutorial_DATA = \
     tutorial-calligraphy.ja.svg \
     tutorial-calligraphy.nl.svg \
     tutorial-calligraphy.pl.svg \
+    tutorial-calligraphy.pt.svg \
     tutorial-calligraphy.pt_BR.svg \
     tutorial-calligraphy.ru.svg \
     tutorial-calligraphy.sk.svg \
@@ -116,6 +120,7 @@ tutorial_DATA = \
     tutorial-elements.ja.svg \
     tutorial-elements.nl.svg \
     tutorial-elements.pl.svg \
+    tutorial-elements.pt.svg \
     tutorial-elements.pt_BR.svg \
     tutorial-elements.ru.svg \
     tutorial-elements.sk.svg \
@@ -130,6 +135,7 @@ tutorial_DATA = \
     tutorial-interpolate.ja.svg \
     tutorial-interpolate.nl.svg \
     tutorial-interpolate.pl.svg \
+    tutorial-interpolate.pt.svg \
     tutorial-interpolate.pt_BR.svg \
     tutorial-interpolate.ru.svg \
     tutorial-interpolate.sk.svg \
@@ -152,6 +158,7 @@ tutorial_DATA = \
     tutorial-shapes.ja.svg \
     tutorial-shapes.nl.svg \
     tutorial-shapes.pl.svg \
+    tutorial-shapes.pt.svg \
     tutorial-shapes.pt_BR.svg \
     tutorial-shapes.ru.svg \
     tutorial-shapes.sk.svg \
@@ -175,6 +182,7 @@ tutorial_DATA = \
     tutorial-tips.it.svg \
     tutorial-tips.nl.svg \
     tutorial-tips.pl.svg \
+    tutorial-tips.pt.svg \
     tutorial-tips.pt_BR.svg \
     tutorial-tips.ru.svg \
     tutorial-tips.sk.svg \
@@ -196,6 +204,7 @@ tutorial_DATA = \
     tutorial-tracing.ja.svg \
     tutorial-tracing.nl.svg \
     tutorial-tracing.pl.svg \
+    tutorial-tracing.pt.svg \
     tutorial-tracing.pt_BR.svg \
     tutorial-tracing.ru.svg \
     tutorial-tracing.sk.svg \
@@ -206,6 +215,7 @@ tutorial_DATA = \
     tutorial-tracing-pixelart.el.svg \
     tutorial-tracing-pixelart.fr.svg \
     tutorial-tracing-pixelart.nl.svg \
+    tutorial-tracing-pixelart.pt.svg \
     tutorial-tracing-pixelart.zh_TW.svg \
     tux.png
 
