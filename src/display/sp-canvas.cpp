@@ -958,7 +958,7 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     canvas->_tiles=NULL;
     canvas->_tLeft=canvas->_tTop=canvas->_tRight=canvas->_tBottom=0;
-    canvas->_tile_h=canvas->_tile_h=0;
+    canvas->_tile_h=canvas->_tile_w=0;
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
@@ -982,7 +982,7 @@ void SPCanvas::shutdownTransients()
     if (_tiles) g_free(_tiles);
     _tiles = NULL;
     _tLeft = _tTop = _tRight = _tBottom = 0;
-    _tile_h = _tile_h = 0;
+    _tile_h = _tile_w = 0;
 
     if (_grabbed_item) {
         _grabbed_item = NULL;
@@ -2173,7 +2173,7 @@ void SPCanvas::resizeTiles(int nl, int nt, int nr, int nb)
     if ( nl >= nr || nt >= nb ) {
         if (_tiles) g_free(_tiles);
         _tLeft = _tTop = _tRight = _tBottom = 0;
-        _tile_h = _tile_h = 0;
+        _tile_h = _tile_w = 0;
         _tiles = NULL;
         return;
     }
@@ -2201,7 +2201,7 @@ void SPCanvas::resizeTiles(int nl, int nt, int nr, int nb)
     _tRight = tr;
     _tBottom = tb;
     _tile_h = nh;
-    _tile_h = nv;
+    _tile_w = nv;
 }
 
 void SPCanvas::dirtyRect(Geom::IntRect const &area) {
