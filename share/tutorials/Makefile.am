@@ -117,6 +117,7 @@ tutorial_DATA = \
     tutorial-elements.fr.svg \
     tutorial-elements.hu.svg \
     tutorial-elements.id.svg \
+    tutorial-elements.it.svg \
     tutorial-elements.ja.svg \
     tutorial-elements.nl.svg \
     tutorial-elements.pl.svg \
