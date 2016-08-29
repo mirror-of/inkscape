@@ -164,6 +164,9 @@ NodeTool::~NodeTool() {
     if (this->helperpath_tmpitem) {
         this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
     }
+    if (this->helperpath_tmpitem_highlight) {
+        this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem_highlight);
+    }
     this->_selection_changed_connection.disconnect();
     //this->_selection_modified_connection.disconnect();
     this->_mouseover_changed_connection.disconnect();
@@ -244,13 +247,13 @@ void NodeTool::setup() {
     );
 
     this->helperpath_tmpitem = NULL;
+    this->helperpath_tmpitem_highlight = NULL;
     this->cursor_drag = false;
     this->show_transform_handles = true;
     this->single_node_transform_handles = false;
     this->flash_tempitem = NULL;
     this->flashed_item = NULL;
     this->_last_over = NULL;
-    this->helperpath_tmpitem = NULL;
 
     // read prefs before adding items to selection to prevent momentarily showing the outline
     sp_event_context_read(this, "show_handles");
@@ -288,7 +291,11 @@ void  NodeTool::update_helperpath () {
         this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
         this->helperpath_tmpitem = NULL;
     }
-
+    if (this->helperpath_tmpitem_highlight) {
+        this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem_highlight);
+        this->helperpath_tmpitem_highlight = NULL;
+    }    
+    
     if (SP_IS_LPE_ITEM(selection->singleItem())) {
         Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(selection->singleItem())->getCurrentLPE();
         if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
@@ -311,6 +318,11 @@ void  NodeTool::update_helperpath () {
                 cc->reset();
             }
             if (!c->is_empty()) {
+                SPCanvasItem *helperpath_highlight = sp_canvas_bpath_new(this->desktop->getTempGroup(), c);
+                sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath_highlight), 0xffffff9A, 2.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+                sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath_highlight), 0, SP_WIND_RULE_NONZERO);
+                sp_canvas_item_affine_absolute(helperpath_highlight, selection->singleItem()->i2dt_affine());
+                this->helperpath_tmpitem_highlight = this->desktop->add_temporary_canvasitem(helperpath_highlight, 0);
                 SPCanvasItem *helperpath = sp_canvas_bpath_new(this->desktop->getTempGroup(), c);
                 sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath), 0x0000ff9A, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
                 sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath), 0, SP_WIND_RULE_NONZERO);
@@ -477,9 +489,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY: {
-        this->update_helperpath();
         combine_motion_events(desktop->canvas, event->motion, 0);
-        this->update_helperpath();
         SPItem *over_item = sp_event_context_find_item (desktop, event_point(event->button),
                 FALSE, TRUE);
 

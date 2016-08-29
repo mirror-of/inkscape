@@ -74,6 +74,7 @@
 #include "xml/document.h"
 #include <glibmm/i18n.h>
 #include "ui/tools/pen-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
 #include "knotholder.h"
 #include "sp-lpe-item.h"
@@ -471,6 +472,7 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
         sp_lpe_item->apply_to_clippath(sp_lpe_item);
         sp_lpe_item->apply_to_mask(sp_lpe_item);
     }
+    update_helperpath();
 }
 
 /**
@@ -649,6 +651,21 @@ Effect::getCanvasIndicators(SPLPEItem const* lpeitem)
     }
 
     return hp_vec;
+}
+
+/**
+ * Call to a method on nodetool to update the helper path from the effect
+ */
+void
+Effect::update_helperpath() {
+    using namespace Inkscape::UI;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        if (tools_isactive(desktop, TOOLS_NODES)) {
+            Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+            nt->update_helperpath();
+        }
+    }
 }
 
 /**
