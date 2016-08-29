@@ -97,8 +97,8 @@ parts:
 
 apps:
   inkscape:
-    command: snapcraft.sh desktop-launch inkscape
+    command: desktop-launch ${SNAP}/snapcraft.sh inkscape
     plugs: [home, unity7, gsettings]
   viewer:
-    command: snapcraft.sh desktop-launch inkview
+    command: desktop-launch ${SNAP}/snapcraft.sh inkview
     plugs: [home, unity7, gsettings]
