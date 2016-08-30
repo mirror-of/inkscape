@@ -11,6 +11,8 @@ fi
 export GNOME_VFS_MODULE_CONFIG_PATH="${SNAP}/etc/gnome-vfs-2.0/modules"
 export GNOME_VFS_MODULE_PATH="${SNAP}/usr/lib/${ARCH}/gnome-vfs-2.0/modules"
 
+export GTK_PATH="${SNAP}/usr/lib/${ARCH}/gtk-2.0/"
+
 export INKSCAPE_PORTABLE_PROFILE_DIR="${SNAP_USER_DATA}"
 export INKSCAPE_LOCALEDIR="${SNAP}/share/locale/"
 
