@@ -90,10 +90,8 @@ parts:
       - -lib/inkscape/*.a
     after: [desktop/gtk2]
   snapcraft-wrapper:
-    plugin: copy
-    files:
-      packaging/snappy/snapcraft.sh: snapcraft.sh
-      README: lib/share/README
+    plugin: dump
+    source: packaging/snappy/
 
 apps:
   inkscape:
