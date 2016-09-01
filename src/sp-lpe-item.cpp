@@ -210,9 +210,6 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
  * returns true when LPE was successful.
  */
 bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
-    if (!this) {
-        return false;
-    }
 
     if (!curve) {
         return false;
