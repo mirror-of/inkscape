@@ -94,7 +94,7 @@ void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-
+    original_bbox(lpeitem);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
@@ -108,14 +108,14 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     }
     line_separation.setPoints(point_a, point_b);
     if ( mode == MT_X || mode == MT_Y ) {
-        start_point.param_setValue(point_a);
-        end_point.param_setValue(point_b);
+        start_point.param_setValue(point_a, true);
+        end_point.param_setValue(point_b, true);
         center_point = Geom::middle_point(point_a, point_b);
     } else if ( mode == MT_FREE) {
         if(!are_near(previous_center,center_point, 0.01)) {
             Geom::Point trans = center_point - previous_center;
-            start_point.param_setValue(start_point * trans);
-            end_point.param_setValue(end_point * trans);
+            start_point.param_setValue(start_point * trans, true);
+            end_point.param_setValue(end_point * trans, true);
             line_separation.setPoints(start_point, end_point);
         } else {
             center_point = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
@@ -127,10 +127,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Rect view_box_rect = doc->getViewBox();
             Geom::Point sp = Geom::Point(view_box_rect.width()/2.0, 0);
             sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
-            start_point.param_setValue(sp);
+            start_point.param_setValue(sp, true);
             Geom::Point ep = Geom::Point(view_box_rect.width()/2.0, view_box_rect.height());
             ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
-            end_point.param_setValue(ep);
+            end_point.param_setValue(ep, true);
             center_point = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
             line_separation.setPoints(start_point, end_point);
         }
@@ -140,15 +140,27 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Rect view_box_rect = doc->getViewBox();
             Geom::Point sp = Geom::Point(0, view_box_rect.height()/2.0);
             sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
-            start_point.param_setValue(sp);
+            start_point.param_setValue(sp, true);
             Geom::Point ep = Geom::Point(view_box_rect.width(), view_box_rect.height()/2.0);
             ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
-            end_point.param_setValue(ep);
+            end_point.param_setValue(ep, true);
             center_point = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
             line_separation.setPoints(start_point, end_point);
         }
     }
     previous_center = center_point;
+}
+
+void
+LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
+{
+    center_point *= postmul;
+    previous_center = center_point;
+    // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
+    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+        Parameter * param = *it;
+        param->param_transform_multiply(postmul, set);
+    }
 }
 
 void
