@@ -95,6 +95,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
+    if (center_point == Geom::Point()) {
+        center_point = middle_point(start_point, end_point);
+        previous_center = center_point;
+    }
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
@@ -173,9 +177,9 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
-    start_point.param_setValue(point_a);
+    start_point.param_setValue(point_a, true);
     start_point.param_update_default(point_a);
-    end_point.param_setValue(point_b);
+    end_point.param_setValue(point_b, true);
     end_point.param_update_default(point_b);
     center_point = point_c;
     previous_center = center_point;
