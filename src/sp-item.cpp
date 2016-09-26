@@ -69,6 +69,7 @@
 
 #define noSP_ITEM_DEBUG_IDLE
 
+//#define OBJECT_TRACE
 
 static SPItemView*          sp_item_view_list_remove(SPItemView     *list,
                                                      SPItemView     *view);
@@ -710,6 +711,10 @@ void SPItem::update(SPCtx* ctx, guint flags) {
 
 void SPItem::modified(unsigned int /*flags*/)
 {
+#ifdef OBJECT_TRACE
+    objectTrace( "SPItem::modified" );
+    objectTrace( "SPItem::modified", false );
+#endif
 }
 
 Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

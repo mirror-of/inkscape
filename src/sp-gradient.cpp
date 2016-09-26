@@ -22,6 +22,7 @@
  */
 
 #define noSP_GRADIENT_VERBOSE
+//#define OBJECT_TRACE
 
 #include <cstring>
 #include <string>
@@ -235,7 +236,7 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
         state(2),
         vector() {
 
-	this->has_patches = 0;
+    this->has_patches = 0;
 
     this->ref = new SPGradientReference(this);
     this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(SPGradient::gradientRefChanged), this));
@@ -325,6 +326,12 @@ void SPGradient::release()
  */
 void SPGradient::set(unsigned key, gchar const *value)
 {
+#ifdef OBJECT_TRACE
+    std::stringstream temp;
+    temp << "SPGradient::set: " << key  << " " << (value?value:"null");
+    objectTrace( temp.str() );
+#endif
+
     switch (key) {
         case SP_ATTR_GRADIENTUNITS:
             if (value) {
@@ -416,6 +423,10 @@ void SPGradient::set(unsigned key, gchar const *value)
             SPPaintServer::set(key, value);
             break;
     }
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::set", false );
+#endif
 }
 
 /**
@@ -505,29 +516,24 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
  */
 void SPGradient::modified(guint flags)
 {
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::modified" );
+#endif
+
     if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
-        // CPPIFY
-        // This comparison has never worked (i. e. always evaluated to false),
-        // the right value would have been SP_TYPE_MESH
-        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
-//        if (!SP_IS_MESH(this)) {
-//            this->invalidateVector();
-//        } else {
-//            this->invalidateArray();
-//        }
-        this->invalidateVector();
+        if (SP_IS_MESH(this)) {
+            this->invalidateArray();
+        } else {
+            this->invalidateVector();
+        }
     }
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-        // CPPIFY
-        // see above
-        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
-//        if (!SP_IS_MESH(this)) {
-//            this->ensureVector();
-//        } else {
-//            this->ensureArray();
-//        }
-        this->ensureVector();
+        if (SP_IS_MESH(this)) {
+            this->ensureArray();
+        } else {
+            this->ensureVector();
+        }
     }
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -553,6 +559,10 @@ void SPGradient::modified(guint flags)
 
         sp_object_unref(child);
     }
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::modified", false );
+#endif
 }
 
 SPStop* SPGradient::getFirstStop()
@@ -582,6 +592,10 @@ int SPGradient::getStopCount() const
  */
 Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::write" );
+#endif
+
     SPPaintServer::write(xml_doc, repr, flags);
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
@@ -652,6 +666,9 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
         repr->setAttribute( "osb:paint", 0 );
     }
 
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::write", false );
+#endif
     return repr;
 }
 
@@ -904,7 +921,7 @@ bool SPGradient::invalidateArray()
 
     if (array.built) {
         array.built = false;
-        array.clear();
+        // array.clear();
         ret = true;
     }
 
@@ -1020,33 +1037,6 @@ void SPGradient::rebuildArray()
     }
 
     array.read( SP_MESH( this ) );
-
-    has_patches = false;
-    for ( SPObject *ro = firstChild() ; ro ; ro = ro->getNext() ) {
-        if (SP_IS_MESHROW(ro)) {
-            has_patches = true;
-            // std::cout << "  Has Patches" << std::endl;
-            break;
-        }
-    }
-
-    // MESH_FIXME: TO PROPERLY COPY
-    SPGradient *reffed = ref->getObject();
-    if ( !hasPatches() && reffed ) {
-        std::cout << "SPGradient::rebuildArray(): reffed array    NOT IMPLEMENTED!!!" << std::endl;
-        /* Copy array from referenced gradient */
-        array.built = true;   // Prevent infinite recursion.
-        reffed->ensureArray();
-        // if (!reffed->array.nodes.empty()) {
-        //     array.built = reffed->array.built;
-        //     for( uint i = 0; i < reffed->array.nodes.size(); ++i ) {
-        //         array.nodes[i].assign(reffed->array.nodes[i].begin(), reffed->array.nodes[i].end());
-
-        //         // FILL ME
-        //     }
-        //     return;
-        // }
-    }
 }
 
 Geom::Affine
