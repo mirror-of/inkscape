@@ -113,7 +113,10 @@ TextEdit::TextEdit()
     text_sep.set_orientation(Gtk::ORIENTATION_VERTICAL);
 #endif
 
+    /* Separator before spacing_combo */
+    /* Commented out (not needed if spacing_combo is hidden)
     layout_hbox.pack_start(text_sep, false, false, 10);
+    */
 
     /* Line Spacing */
     /* Commented out as this does not handle non-percentage values
@@ -131,9 +134,11 @@ TextEdit::TextEdit()
     gtk_widget_set_tooltip_text (px, _("Spacing between baselines (percent of font size)"));
     gtk_widget_set_tooltip_text (spacing_combo, _("Spacing between baselines (percent of font size)"));
     layout_hbox.pack_start(*Gtk::manage(Glib::wrap(spacing_combo)), false, false);
+    */
+
+    // add layout_hbox (with align and direction buttons, spacing_combo)
     layout_frame.set_padding(4,4,4,4);
     layout_frame.add(layout_hbox);
-    */
 
     // Text start Offset
     {
