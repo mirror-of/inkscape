@@ -581,7 +581,7 @@ SPStop* SPMeshPatchI::getStopPtr( guint i ) {
 
     assert( i < 4 );
 
-    SPStop* stop = nullptr;
+    SPStop* stop = NULL;
     switch ( i ) {
         case 0:
             stop = (*nodes)[ row   ][ col   ]->stop;
