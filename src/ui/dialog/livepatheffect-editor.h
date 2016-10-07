@@ -48,9 +48,6 @@ public:
     void onSelectionChanged(Inkscape::Selection *sel);
     virtual void on_effect_selection_changed();
     void setDesktop(SPDesktop *desktop);
-    
-    // void add_entry(const char* name );
-    void effect_list_reload(SPLPEItem *lpeitem);
 
 private:
 
@@ -71,6 +68,9 @@ private:
     void showParams(LivePathEffect::Effect& effect);
     void showText(Glib::ustring const &str);
     void selectInList(LivePathEffect::Effect* effect);
+
+    // void add_entry(const char* name );
+    void effect_list_reload(SPLPEItem *lpeitem);
 
     // callback methods for buttons on grids page.
     void onAdd();

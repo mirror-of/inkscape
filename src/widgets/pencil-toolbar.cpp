@@ -52,8 +52,6 @@
 #include "live_effects/effect-enum.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
-#include "sp-lpe-item.h"
-#include "ui/dialog/livepatheffect-editor.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
@@ -242,8 +240,9 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(obj, "desktop"));
     std::vector<SPItem *> selected = desktop->getSelection()->itemList();
+    SPLPEItem* lpeitem = NULL;
     for (std::vector<SPItem *>::iterator it(selected.begin()); it != selected.end(); ++it){
-        SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*it);
+        lpeitem = dynamic_cast<SPLPEItem*>(*it);
         if (lpeitem && lpeitem->hasPathEffect()){
             PathEffectList lpelist = lpeitem->getEffectList();
             PathEffectList::iterator i;
@@ -264,14 +263,18 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
                                 lpeitem->removeCurrentPathEffect(false);
                                 shape->setCurve(c,0);
                             }
-                            Inkscape::UI::Dialog::LivePathEffectEditor *lpeeditor = new Inkscape::UI::Dialog::LivePathEffectEditor();
-                            lpeeditor->effect_list_reload(lpeitem);
+                            desktop->getSelection()->remove(lpeitem->getRepr());
+                            desktop->getSelection()->add(lpeitem->getRepr());
                             break;
                         }
                     }
                 }
             }
         }
+    }
+    if (lpeitem) {
+        desktop->getSelection()->remove(lpeitem->getRepr());
+        desktop->getSelection()->add(lpeitem->getRepr());
     }
 }
 
