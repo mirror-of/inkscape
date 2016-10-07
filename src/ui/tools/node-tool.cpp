@@ -291,13 +291,11 @@ void  NodeTool::update_helperpath () {
     if (SP_IS_LPE_ITEM(selection->singleItem())) {
         Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(selection->singleItem())->getCurrentLPE();
         if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
-            Inkscape::UI::ControlPointSelection::Set &selectionNodes = _selected_nodes->allPoints();
+            Inkscape::UI::ControlPointSelection *selectionNodes = _selected_nodes;
             std::vector<Geom::Point> selectedNodesPositions;
-            for (Inkscape::UI::ControlPointSelection::Set::iterator i = selectionNodes.begin(); i != selectionNodes.end(); ++i) {
-                if ((*i)->selected()) {
-                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
-                    selectedNodesPositions.push_back(n->position());
-                }
+            for (Inkscape::UI::ControlPointSelection::iterator i = selectionNodes->begin(); i != selectionNodes->end(); ++i) {
+                Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
+                selectedNodesPositions.push_back(n->position());
             }
             lpe->setSelectedNodePoints(selectedNodesPositions);
             lpe->setCurrentZoom(this->desktop->current_zoom());
@@ -476,6 +474,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY: {
+        update_helperpath();
         combine_motion_events(desktop->canvas, event->motion, 0);
         SPItem *over_item = sp_event_context_find_item (desktop, event_point(event->button),
                 FALSE, TRUE);
@@ -740,7 +739,7 @@ void NodeTool::select_point(Geom::Point const &/*sel*/, GdkEventButton *event) {
     if (event->button != 1) {
         return;
     }
-
+    
     Inkscape::Selection *selection = this->desktop->selection;
 
     SPItem *item_clicked = sp_event_context_find_item (this->desktop, event_point(*event),
