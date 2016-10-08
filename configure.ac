@@ -1141,6 +1141,7 @@ share/extensions/alphabet_soup/Makefile
 share/extensions/Barcode/Makefile
 share/extensions/Poly3DObjects/Makefile
 share/extensions/test/Makefile
+share/extensions/test/svg/Makefile
 share/extensions/xaml2svg/Makefile
 share/extensions/ink2canvas/Makefile
 share/filters/Makefile
