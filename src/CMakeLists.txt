@@ -487,6 +487,10 @@ set(inkscape_SRC
 #add_inkscape_lib(sp_LIB "${sp_SRC}")
 #add_inkscape_lib(inkscape_LIB "${inkscape_SRC}")
 
+set(inkview_SRC
+  inkview.cpp
+)
+
 if(WIN32)
   # Sources for the inkscape executable on Windows.
   set(main_SRC
@@ -500,8 +504,10 @@ if(WIN32)
   # Add the platform specific resource files (enabling the app icon).
   if(${HAVE_MINGW64})
     list(APPEND main_SRC inkscape-x64.rc)
+    list(APPEND inkview_SRC inkview-x64.rc)
   else()
     list(APPEND main_SRC inkscape.rc)
+    list(APPEND inkview_SRC inkview.rc)
   endif()
 else()
   set(main_SRC main.cpp)
@@ -512,7 +518,7 @@ add_library(inkscape_base SHARED ${inkscape_SRC} ${sp_SRC})
 
 # make executables for inkscape and inkview
 add_executable(inkscape ${main_SRC})
-add_executable(inkview inkview.cpp)
+add_executable(inkview ${inkview_SRC})
 
 add_dependencies(inkscape inkscape_version)
 
