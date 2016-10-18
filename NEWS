@@ -1,4 +1,4 @@
-583 lines
+663 lines
 Inkscape 0.92
 
 (definitely not released yet - AnnouncePlanning092)
@@ -6,6 +6,27 @@ Inkscape 0.92
 Release highlights
 
 Released on «YYYY-MM-DD».
+
+  • The new Object dialog allows to select, label, hide and lock any object in
+    the drawing from a dialog that lists them all
+  • Selection sets make it possible to 'group' objects together regardless of
+    document structure
+  • Guides can now be locked to avoid accidental movement
+  • Several new path effects have been added, among them Envelope/Perspective,
+    Lattice Deformation, Mirror and Rotate Copies
+  • There are several new extensions (e.g. a seamless pattern extension) and a
+    new filter (colorblindness simulation) included in the release, many old
+    extensions have been updated or got new features
+  • Many SVG2 and CSS3 properties are now supported for rendering (e.g.
+    paint-order, mix-blend-mode)
+  • Spray tool and measure tool received a set of nifty new features
+  • Interactive smoothing for lines created with the Pencil tool
+  • BSplines (and more) are available for the Pen tool
+  • Checkerboard background can be used to more easily see object
+    transparencies
+
+[Please, if someone knows that any of these will not be in the release, remove
+them from the list. Should we add the font features, too?]
 
 Manipulating Objects
 
@@ -25,6 +46,35 @@ Selection Sets Dialog
 
 New dialog that allows the creation of selection sets that are not affected by
 document structure.
+
+Usage:
+
+  • Open Dialog with 'Object > Selection sets'
+
+  • To create a new selection set:
+
+ 1. Click on the '+' button at the bottom of the dialog to create a new
+    selection set (double-click on its label to edit)
+
+  • To add objects to a selection set:
+
+ 1. select object on the canvas
+ 2. in the 'Selection sets' dialog click on the '+' icon before the selection
+    set in the list
+
+  • To select all objects of a selection set:
+
+ 1. deselect any existing selection and click on the selection set in the list
+
+  • To remove an object from a selection set
+
+ 1. select the selection set in the dialog
+ 2. click on 'Items' to show all objects in the set
+ 3. select an object on the canvas or in the Items list in the dialog
+ 4. click on the 'Delete' icon (trashbin) before the object in the list
+
+  • To delete a selection set, select it in the list and click on the '-'
+    button at the bottom of the dialog
 
 Text
 
@@ -51,11 +101,16 @@ Converting text to a path will save the text in the 'aria-label' attribute.
 This is useful for accessibility and could eventually be used by Inkscape to
 reconstruct the text.
 
+Other
+
+Line height setting now allows you to select a unit.
+
 Live Path Effects
 
-Now some suitable LPE's are applied to clips and mask.
-Helper lines come again to live
-Added to pen/pencil shape combo box the option to add a bend path directly
+  • Now some suitable LPEs can be applied to clips and masks.
+  • Helper lines come again to life.
+  • The option to add a bend path directly was added to the pen/pencil shape
+    combo box.
 
 Spiro Live
 
@@ -63,10 +118,11 @@ Spiro Live
 
 Extended video: <https://www.youtube.com/watch?v=bFakiI5f0-Y>
 
-Based in Spiro Live Path Effect, now show result while drawing.
+Based upon Spiro Live Path Effect, now shows the result while drawing.
 
-  • Nodes cusp (SHIFT) and Spiro.
-  • Handle append path on cusp and Spiro mode whith helper preview path.
+  • Cusp nodes can be created by holding down the Shift key.
+  • When you append a path in cusp and Spiro mode, the helper preview path will
+    be displayed.
 
 Spirolive.gif
 
@@ -78,14 +134,16 @@ Extended video <https://www.youtube.com/watch?v=vwV0DHvA-OE>
 
 Pen & Node mode
 
-Use BSpline Live Effect while creating and editing paths.
+Uses the BSpline Live Path Effect while creating and editing paths.
 
-  • Pen and Pencil use
-  • Modes cusp(SHIFT) and BSpline while drawing.
-  • Handle append parhs with preview helper path.
-  • Handle weight of bspline (node tool) with handle movement. SHIFT key
-    required.
-  • Handle custom weight snaps with CTRL
+  • Works with Pen and Pencil tool directly.
+  • Create cusp nodes by holding down the Shift key (Pen/Bézier tool only).
+  • When a path is appended, a preview helper path will also be shown.
+  • Hold down Shift key and drag on a handle to change the weight of a bspline
+    in node tool.
+  • Custom weight steps are applied by holding CTRL down and dragging on a
+    handle with the node tool (no Shift key required).
+  • Double-click on a handle resets weight to default
 
 Bspline.gif Bspline2.gif
 
@@ -94,18 +152,20 @@ Live Path Effect mode
 Bspline3.gif
  
 
-The options in the Live effect dialog give you control on bspline paths.
+The options in the Live Path Effect dialog give you full control over bspline
+paths.
 
-  • Set to Default weight (0.3333 time of his curve segment).
-  • Make cusp nodes.
-  • Numeric input for weight.
-  • Steps with CONTROL snaps in node/handle editing.
-  • Ignore cusp nodes, affect to all other widgets changes and, for example,
-    retain cusp nodes when you change the power.
-  • Change only selected nodes, affect to all other widgets changes.
-  • Show a helper path whith the final shape and the generated new nodes.
-
- 
+  • Option to set to Default weight (0.3333 times curve segment)
+  • Option to make nodes cusp
+  • Numeric input for weight
+  • Option to set number of Steps with CTRL to quickly snap the weight in node/
+    handle editing
+  • Apply changes if weight ... applies changes in the widgets to all nodes
+    with weight == 0 or weight > 0 or both, for example, retains cusp nodes
+    when you change the weight and have unselected "Apply changes if weight ==
+    0".
+  • Change only selected nodes applies to all other widgets changes.
+  • Shows a helper path with the final shape and the generated new nodes.
 
 Roughen
 
@@ -115,13 +175,13 @@ Roughen.png
 
 Extended video: https://www.youtube.com/watch?v=130Dbt0juvY
 
-This filter is a semi-clone of two extensions, ("add nodes" and "jitter nodes")
-+ handle units.
+This path effect is a semi-clone of two extensions, ("add nodes" and "jitter
+nodes") and handles units.
 
-The parameters are similar to both extensions + a global randomizer.
+The parameters are similar to both extensions and adds a global randomizer.
 
-  • Apply to paths, shapes and groups.
-  • Apply to clip and masks -if are vectors-
+  • Can be applied to paths, shapes and groups.
+  • Can be applied to clips and masks, if they are vector objects.
 
 Roughen.gif
 
@@ -133,15 +193,19 @@ Simplify.png
 
 Extended video: https://www.youtube.com/watch?v=gaWujN_iTSk
 
-Send the simplify command to a non-destructive live path effect.
+Simplifies a vector element using a non-destructive live path effect.
 
-  • Use on paths, shapes and groups of them.
-  • Apply to clip and masks -if are vectors-
-  • User can change modify the threshold -preferences dialog- used by a numeric
-    parameter.
-  • Apply Simplify on stack.
+  • Can be used on paths, shapes and groups of these.
+  • Can be applied to clips and masks, if they are vector objects
+  • The effect's threshold can be modified in the preferences dialog, by
+    setting a numeric parameter.
+  • Apply Simplify multiple times in the same LPE.
 
 Simplify.gif
+
+This path effect can optionally be applied directly via the pencil/freehand
+drawing tool's tool bar when creating a new path. It then replaces the normal
+smoothing (which would be a destructive operation).
 
 Perspective/Envelope
 
@@ -151,11 +215,11 @@ Perspective-envelope.png
 
 Extended video: https://www.youtube.com/watch?v=CjKGatyxTZ8
 
-Apply both deformations by 4 points.
+Both deformations can be applied by specifying 4 points.
 
-  • Two modes, perspective and envelope.
-  • Apply on paths, shapes and groups.
-  • Apply on vector clips and mask
+  • Two modes, perspective and envelope
+  • Can be used on paths, shapes and groups.
+  • Also works with vector clips and masks.
 
 Perspective-envelope.gif
 
@@ -168,11 +232,10 @@ Latice2.png
 Extended video: https://www.youtube.com/watch?v=YlK9L88_tWE
 Symmetry video: https://www.youtube.com/watch?v=jhuVjqFA6ig
 
-Add deformations by a mesh.
-Vertical,horizontal or both symmetry.
-
-  • Apply to paths, shapes and groups.
-  • Apply to vector clips and mask
+  • Deforms an object by handles arranged in a mesh
+  • Optionally deforms symmetrically along vertical or horizontal axis or both.
+  • Can be applied to paths, shapes and groups.
+  • Also works on vector clips and masks.
 
 Latice2.gif
 
@@ -184,12 +247,13 @@ ShowHandles.png
 
 Extended video: https://www.youtube.com/watch?v=h9ul_PR9XYo
 
-A LPE version of Show Handles extension.
+An LPE version of the Show Handles extension.
 
-  • Work on paths, shapes and groups.
-  • Work on clones
-  • Node and Handle shapes resizeables
-  • If not a clone, is a destructive LPE, dont save styles, work on a copy!
+  • Works on paths, shapes and groups.
+  • Works on clones.
+  • Node and Handle shapes are resizeable
+  • If not applied to a clone, this is a destructive LPE, it does not save
+    styles, better work on a copy!
 
 ShowHandles.gif
 
@@ -201,15 +265,18 @@ TransformByTwoKnots.png
 Extended video: https://www.youtube.com/watch?v=ZLmYdWoXXIw
 Extended video (Elastic rubber): https://www.youtube.com/watch?v=lOWTeZC_LjM
 
-Transform a element by two control points. You can position the control points
-by bounding box or by original path node index. Thanks Ivan Louette for the
-idea of the effect.
+Transforms an element by two control points (e.g. moving, skewing, resizing and
+rotation). You can position the control points on the bounding box edge
+midpoints or by the index of the nodes of the original path. Thanks to Ivan
+Louette for the idea for this effect!
 
-  • Work on paths, shapes and groups with less power.
-  • Allow snapping of both control points
-  • Allow fix angle or distance.
-  • Elastic mode to simulate a flex path
-  • From original width, set the control points based on bounding box
+  • Works on paths, shapes. With groups you have limited features constrained
+    to bounding box.
+  • Allows snapping of both control points.
+  • Allows to fix angle or distance.
+  • Elastic mode to simulate a rubber band path.
+  • Two bounding box edge midpoints can be used as control points if 'From
+    original width' is active.
 
 TransformByTwoKnots.gif
 
@@ -222,23 +289,23 @@ Extended video (partial fuse path): https://www.youtube.com/watch?v=UpI8gRbkTu4
 Extended video (live editing): https://www.youtube.com/watch?v=fBQpvfgT4mE
 Extended video (kaleidoscope): https://www.youtube.com/watch?v=LfMixSKy3Eo
 
-Transform a element by two control points. You can position the control points
-by bounding box or by original path node index. Thanks Ivan Louette for the
-idea of the effect.
+Arranges identical elements dynamically on an arc or circle.
 
-  • Work on paths, shapes and groups.
-  • Allow fuse the result to make kaleidoscope
-  • Allow non 360 fuse.
-  • Live editing
+  • Works on paths, shapes and groups of paths.
+  • Allows to fuse the result to create kaleidoscope-like effects
+  • Allows to arrange the copies on an arc when the 360° copies checkbox is not
+    checked.
+  • Live editing.
 
-Mirror Simmetry
+Mirror Symmetry
 
 Extended video: https://www.youtube.com/watch?v=m1sj4AeU3Yo
-Mirror a item
+Mirrors an item dynamically.
 
-  • Work on paths, shapes and groups.
-  • Allow fuse result
-  • Different mirror line: Free, X, Y, Middle Document[X], Middle Document[Y]
+  • Works on paths, shapes and groups.
+  • Allows to fuse the result.
+  • Different mirror lines: Free, bounding box center X, bounding box center Y,
+    Document center X, Document center Y.
 
 Spray tool
 
@@ -252,18 +319,18 @@ Extended video 5 (Trace -clones- dialog): https://www.youtube.com/watch?v=
 Zn3vzf-yA_w
 todo: a video showing all features joined
 
-  • New mode eraser
-  • Add more pressure toggles
-  • No overlap option with optional multiple elements
-  • No overlap between colors
+  • New eraser mode
+  • More pressure toggles added
+  • "No overlap" option with optional multiple elements
+  • "No overlap" option between different background colors
   • Configurable offset for overlaps
   • Color picker from center or average area
-  • Apply color picked to fill
-  • Apply color picked to stroke
+  • Apply picked color to fill
+  • Apply picked color to stroke
   • Invert picked colors
-  • Spray over transparent
-  • Spray over non-transparent
-  • Allow picker enabled sprays to use "Trace Clones" options
+  • Spray over transparent background areas
+  • Spray over non-transparent background areas
+  • Makes use of "Trace the drawing" options from Tiled Clones dialog
 
 Measure tool
 
@@ -279,14 +346,6 @@ Extended video: https://www.youtube.com/watch?v=OE0cVDGCzbM
   • Measure only current layer
   • Add precision
   • Add scale
-
-Geometric Construction Tool
-
-  • Helps to create: line segments, circles by specific points, parallels,
-    perpendicular lines, angle bisectors, mirrored paths by applying a Live
-    Path Effect.
-
-[Needs usage instructions!]
 
 Align and Distribute
 
@@ -305,7 +364,8 @@ New
 
   • Render > Seamless Pattern (Screencast)
   • Images > Set Image Attributes (Bug #1357808)
-  • Render > NiceCharts (github repo, not maintained
+  • Render > NiceCharts (github repo, not maintained)
+  • Arrange > Deep Ungroup (Bug #171117)
 
 Plotter Driver
 
@@ -347,6 +407,10 @@ Miscellaneous Improvements
     selected objects.
   • Render > Random Tree has new option to omit redundant segments.
   • Visualize Path > Measure Path has additional text layout options.
+  • Render > Barcode was updated with new EAN2 code and extended EAN13 with
+    automatic EAN2 and EAN5 additions
+  • Color > Randomize now allows to set the range for randomization, and (with
+    some limits) can now also randomize opacity
 
 Extension Development
 
@@ -369,6 +433,10 @@ All selectable licences have been updated to most current version.
 Filter Editor
 
 Filter list now displays how often a filter is used.
+
+Menus
+
+  • 'Resize page to selection' added to Edit menu, shortcut: Shift+Ctrl+R
 
 Other user interface
 
@@ -409,7 +477,8 @@ SVG and CSS
   • The new CSS 3 'mix-blend-mode' and 'isolation' properties are implemented,
     allowing setting the blend mode between objects without using filters.
   • The new SVG 2 'paint-order' property is now supported. This allows setting
-    the order in which the fill, stroke, and markers are drawn.
+    the order in which the fill, stroke, and markers are drawn (buttons will be
+    available in the Fill and Stroke dialog).
   • The new SVG 2 'mesh' paint server is supported, including bicubic
     auto-smoothing. A primitive GUI is available.
   • The SVG 1.1 'text-decoration' property is now rendered (underlines, strike
@@ -441,6 +510,14 @@ Kashmiri (Perso-Arabic and Devanagari), Kokani (Roman and Devanagari scripts),
 Maithili, Malayalam, Manipuri (Meetei Mayek and Bengali scripts), Marathi,
 Odia, Santali (Devnagari and Ol-Chiki scripts), Sanskrit, Sindhi, Tamil, Urdu
 (Perso-Arabic and Devanagari scripts).
+
+Notable Bugfixes
+
+[Please fill in]
+
+Known Issues
+
+[ Please fill in - unit change, extension]
 
 
 For information on prior releases, please see:
