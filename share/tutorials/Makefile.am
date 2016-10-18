@@ -7,29 +7,29 @@ tutorial_DATA = \
     gpl-2.svg \
     making_markers.svg \
     oldguitar.jpg \
-    potrace-be.png \
-    potrace-ca.png \
-    potrace-de.png \
-    potrace-el.png \
-    potrace-en.png \
-    potrace-es.png \
-    potrace-eu.png \
-    potrace-fr.png \
-    potrace-gl.png \
-    potrace-hu.png \
-    potrace-id.png \
-    potrace-ja.png \
-    potrace-nl.png \
+    potrace.be.png \
+    potrace.ca.png \
+    potrace.de.png \
+    potrace.el.png \
+    potrace.en.png \
+    potrace.es.png \
+    potrace.eu.png \
+    potrace.fr.png \
+    potrace.gl.png \
+    potrace.hu.png \
+    potrace.id.png \
+    potrace.ja.png \
+    potrace.nl.png \
     potrace.png \
-    potrace-pl.png \
-    potrace-pt.png \
-    potrace-pt_BR.png \
-    potrace-ru.png \
-    potrace-sk.png \
-    potrace-sl.png \
-    potrace-vi.png \
-    potrace-zh_CN.png \
-    potrace-zh_TW.png \
+    potrace.pl.png \
+    potrace.pt.png \
+    potrace.pt_BR.png \
+    potrace.ru.png \
+    potrace.sk.png \
+    potrace.sl.png \
+    potrace.vi.png \
+    potrace.zh_CN.png \
+    potrace.zh_TW.png \
     tutorial-advanced.svg \
     tutorial-advanced.be.svg \
     tutorial-advanced.ca.svg \
