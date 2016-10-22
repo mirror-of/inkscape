@@ -193,10 +193,14 @@ if(WIN32)
     plugins
     share
     DESTINATION ${CMAKE_INSTALL_PREFIX}
-    PATTERN Adwaita EXCLUDE          # NOTE: The theme is not used on Windows.
+    PATTERN Adwaita EXCLUDE               # NOTE: The theme is not used on Windows.
     PATTERN hicolor/index.theme EXCLUDE   # NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.
     PATTERN CMakeLists.txt EXCLUDE
     PATTERN *.am EXCLUDE)
+
+  # Generate a dummy file in hicolor/index.theme to avoid bug 1635207
+  file(GENERATE OUTPUT ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/index.theme
+    CONTENT "[Icon Theme]\nName=hicolor\nDirectories=")
 
   install(DIRECTORY ${DEVLIBS_PATH}/share/themes
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
