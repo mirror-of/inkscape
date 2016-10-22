@@ -509,6 +509,11 @@ if(WIN32)
     list(APPEND main_SRC inkscape.rc)
     list(APPEND inkview_SRC inkview.rc)
   endif()
+  
+  # Build the windows MS-DOS console executable.
+  add_executable(inkscape_com winconsole.cpp)
+  set_target_properties(inkscape_com
+                        PROPERTIES LINK_FLAGS "-mconsole")
 else()
   set(main_SRC main.cpp)
 endif()

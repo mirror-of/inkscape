@@ -12,6 +12,12 @@ if(WIN32)
     DESTINATION ${CMAKE_INSTALL_PREFIX}
   )
 
+  install(PROGRAMS
+	${EXECUTABLE_OUTPUT_PATH}/inkscape_com.exe
+	DESTINATION ${CMAKE_INSTALL_PREFIX}
+	RENAME inkscape.com
+  )
+
   install(FILES
     ${LIBRARY_OUTPUT_PATH}/libinkscape_base.dll
     ${LIBRARY_OUTPUT_PATH}/libgrid2.dll
