@@ -1,4 +1,8 @@
 
+SUBDIRS = \
+	EuphoriaScriptRegularExtended \
+	LinLibertine 
+
 brandingdir = $(datadir)/inkscape/branding
 iconsdir = $(datadir)/inkscape/icons
 
@@ -8,9 +12,7 @@ branding_DATA =  \
 	inkscape-flat.svg \
 	inkscape-text.svg \
 	sodipodi.svg \
-	LinLibertine_DR.otf \
-	EuphoriaScript-Regular.otf \
-	tux.svg 
+	tux.svg
 
 icons_DATA = \
 	inkscape.svg
