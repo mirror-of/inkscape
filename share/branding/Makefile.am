@@ -1,8 +1,4 @@
 
-SUBDIRS = \
-	EuphoriaScriptRegularExtended \
-	LinLibertine 
-
 brandingdir = $(datadir)/inkscape/branding
 iconsdir = $(datadir)/inkscape/icons
 
