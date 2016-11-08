@@ -9665,15 +9665,13 @@ msgstr "Modifica il numero di passi delle maniglie con CTRL premuto"
 #: ../src/live_effects/lpe-bspline.cpp:31
 #: ../src/live_effects/lpe-simplify.cpp:32
 #: ../src/live_effects/lpe-transform_2pts.cpp:43
-#, fuzzy
 msgid "Helper size:"
-msgstr "_Dimensione maniglia:"
+msgstr "Dimensione ausilio:"
 
 #: ../src/live_effects/lpe-bspline.cpp:31
 #: ../src/live_effects/lpe-simplify.cpp:32
-#, fuzzy
 msgid "Helper size"
-msgstr "_Dimensione maniglia:"
+msgstr "Dimensione ausilio"
 
 #: ../src/live_effects/lpe-bspline.cpp:32
 msgid "Apply changes if weight = 0%"
@@ -10056,13 +10054,12 @@ msgstr ""
 "denti non in contatto."
 
 #: ../src/live_effects/lpe-gears.cpp:216
-#, fuzzy
 msgid "Min Radius:"
-msgstr "Raggio:"
+msgstr "Raggio minimo:"
 
 #: ../src/live_effects/lpe-gears.cpp:216
 msgid "Minimun radius, low values can be slow"
-msgstr ""
+msgstr "Raggio minimo, valori piccoli possono rallentarne l'esecuzione"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Trajectory:"
@@ -11009,19 +11006,16 @@ msgid "By max. segment size"
 msgstr "Per lunghezza massima segmento"
 
 #: ../src/live_effects/lpe-roughen.cpp:38
-#, fuzzy
 msgid "Along nodes"
-msgstr "Unisci nodi"
+msgstr "Accompagna nodi"
 
 #: ../src/live_effects/lpe-roughen.cpp:39
-#, fuzzy
 msgid "Rand"
-msgstr "Casualmente"
+msgstr "Casuale"
 
 #: ../src/live_effects/lpe-roughen.cpp:40
-#, fuzzy
 msgid "Retract"
-msgstr "Estrai"
+msgstr "Angolare"
 
 #. initialise your parameters here:
 #: ../src/live_effects/lpe-roughen.cpp:49
@@ -11055,12 +11049,12 @@ msgstr "Casualità generale"
 #: ../src/live_effects/lpe-roughen.cpp:61
 #, fuzzy
 msgid "Handles"
-msgstr "Maniglia"
+msgstr "Maniglie"
 
 #: ../src/live_effects/lpe-roughen.cpp:61
 #, fuzzy
 msgid "Handles options"
-msgstr "Posizione casuale"
+msgstr "Opzioni maniglie"
 
 #: ../src/live_effects/lpe-roughen.cpp:63
 #: ../share/extensions/jitternodes.inx.h:5
@@ -11068,22 +11062,20 @@ msgid "Shift nodes"
 msgstr "Sposta nodi"
 
 #: ../src/live_effects/lpe-roughen.cpp:65
-#, fuzzy
 msgid "Fixed displacement"
-msgstr "Spostamento X:"
+msgstr "Spostamento fissato"
 
 #: ../src/live_effects/lpe-roughen.cpp:65
 msgid "Fixed displacement, 1/3 of segment length"
-msgstr ""
+msgstr "Spostamento fissato a 1/3 della lunghezza del segmento"
 
 #: ../src/live_effects/lpe-roughen.cpp:67
-#, fuzzy
 msgid "Spray Tool friendly"
-msgstr "Preferenze strumento spray"
+msgstr "Migliora comportamento con strumento spray"
 
 #: ../src/live_effects/lpe-roughen.cpp:67
 msgid "For use with spray tool in copy mode"
-msgstr ""
+msgstr "Da utilizzare con lo strumento spray in modalità spruzza copie"
 
 #: ../src/live_effects/lpe-roughen.cpp:121
 msgid "<b>Add nodes</b> Subdivide each segment"
@@ -11238,17 +11230,14 @@ msgstr ""
 "personalizzato a esso applicato. Per evitare ciò, premere Annulla."
 
 #: ../src/live_effects/lpe-simplify.cpp:29
-#, fuzzy
 msgid "Steps:"
 msgstr "Passi:"
 
 #: ../src/live_effects/lpe-simplify.cpp:29
-#, fuzzy
 msgid "Change number of simplify steps "
-msgstr "Stella: cambia numero di vertici"
+msgstr "Cambia numero di passi per la semplificazione"
 
 #: ../src/live_effects/lpe-simplify.cpp:30
-#, fuzzy
 msgid "Roughly threshold:"
 msgstr "Soglia:"
 
@@ -11258,7 +11247,7 @@ msgstr "Smussa angoli:"
 
 #: ../src/live_effects/lpe-simplify.cpp:31
 msgid "Max degree difference on handles to perform a smooth"
-msgstr ""
+msgstr "Differenza massima tra angoli maniglie per applicare smussatura"
 
 #: ../src/live_effects/lpe-simplify.cpp:33
 #, fuzzy
@@ -11495,19 +11484,16 @@ msgid "End point of the taper"
 msgstr "Variazione punto finale"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:31
-#, fuzzy
 msgid "Elastic"
-msgstr "Plastilina"
+msgstr "Elastico"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:31
-#, fuzzy
 msgid "Elastic transform mode"
-msgstr "Seleziona e trasforma oggetti"
+msgstr "Trasformazione nodi elastica"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
-#, fuzzy
 msgid "From original width"
-msgstr "Clona tracciato originale"
+msgstr "Da larghezza originale"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
 msgid "Lock length"
