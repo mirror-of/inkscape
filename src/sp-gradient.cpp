@@ -236,8 +236,6 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
         state(2),
         vector() {
 
-    this->has_patches = 0;
-
     this->ref = new SPGradientReference(this);
     this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(SPGradient::gradientRefChanged), this));
 
@@ -257,6 +255,7 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
     this->spread_set = FALSE;
 
     this->has_stops = FALSE;
+    this->has_patches = FALSE;
 
     this->vector.built = false;
     this->vector.stops.clear();
@@ -281,6 +280,17 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
         if (SP_IS_STOP(ochild)) {
             this->has_stops = TRUE;
             break;
+        }
+        if (SP_IS_MESHROW(ochild)) {
+            for ( SPObject *ochild2 = ochild->firstChild() ; ochild2 ; ochild2 = ochild2->getNext() ) {
+                if (SP_IS_MESHPATCH(ochild2)) {
+                    this->has_patches = TRUE;
+                    break;
+                }
+            }
+            if (this->has_patches == TRUE) {
+                break;
+            }
         }
     }
 
@@ -477,6 +487,9 @@ void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
             }
         }
     }
+    if ( ochild && SP_IS_MESHROW(ochild) ) {
+        this->has_patches = TRUE;
+    }
 
     /// \todo Fixme: should we schedule "modified" here?
     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -496,6 +509,17 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
         if (SP_IS_STOP(ochild)) {
             this->has_stops = TRUE;
             break;
+        }
+        if (SP_IS_MESHROW(ochild)) {
+            for ( SPObject *ochild2 = ochild->firstChild() ; ochild2 ; ochild2 = ochild2->getNext() ) {
+                if (SP_IS_MESHPATCH(ochild2)) {
+                    this->has_patches = TRUE;
+                    break;
+                }
+            }
+            if (this->has_patches == TRUE) {
+                break;
+            }
         }
     }
 
@@ -772,6 +796,14 @@ static bool has_stopsFN(SPGradient const *gr)
 }
 
 /**
+ * True if gradient has patches (i.e. a mesh).
+ */
+static bool has_patchesFN(SPGradient const *gr)
+{
+    return gr->hasPatches();
+}
+
+/**
  * True if gradient has spread set.
  */
 static bool has_spread_set(SPGradient const *gr)
@@ -796,6 +828,16 @@ SPGradient *SPGradient::getVector(bool force_vector)
     if (force_vector) {
         src = sp_gradient_ensure_vector_normalized(src);
     }
+    return src;
+}
+
+SPGradient *SPGradient::getArray(bool force_vector)
+{
+    SPGradient * src = chase_hrefs(this, has_patchesFN);
+
+    // if (force_vector) {
+    //     src = sp_gradient_ensure_vector_normalized(src);
+    // }
     return src;
 }
 
@@ -1037,6 +1079,7 @@ void SPGradient::rebuildArray()
     }
 
     array.read( SP_MESHGRADIENT( this ) );
+    has_patches = array.patch_columns() > 0;
 }
 
 Geom::Affine
@@ -1137,6 +1180,20 @@ sp_gradient_create_preview_pattern(SPGradient *gr, double width)
         {
             cairo_pattern_add_color_stop_rgba(pat, i->offset,
               i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity);
+        }
+    } else {
+
+        // For the moment, use the top row of nodes for preview.
+        unsigned columns = gr->array.patch_columns();
+
+        double offset = 1.0/double(columns);
+
+        pat = cairo_pattern_create_linear(0, 0, width, 0);
+
+        for (unsigned i = 0; i < columns+1; ++i) {
+            SPMeshNode* node = gr->array.node( 0, i*3 );
+            cairo_pattern_add_color_stop_rgba(pat, i*offset,
+              node->color.v.c[0], node->color.v.c[1], node->color.v.c[2], node->opacity);
         }
     }
 
