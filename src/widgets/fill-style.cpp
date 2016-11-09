@@ -40,6 +40,7 @@
 #include "inkscape.h"
 #include "selection.h"
 #include "sp-linear-gradient.h"
+#include "sp-mesh-gradient.h"
 #include "sp-pattern.h"
 #include "sp-radial-gradient.h"
 #include "style.h"
@@ -299,6 +300,14 @@ void FillNStroke::performUpdate()
                     SPRadialGradient *rg = SP_RADIALGRADIENT(server);
                     psel->setGradientProperties( rg->getUnits(),
                                                  rg->getSpread() );
+#ifdef WITH_MESH
+                } else if (SP_IS_MESHGRADIENT(server)) {
+                    SPGradient *array = SP_MESHGRADIENT(server)->getArray();
+                    psel->setGradientMesh( array );
+
+                    SPMeshGradient *mg = SP_MESHGRADIENT(server);
+                    psel->setMeshProperties( mg->getUnits() );
+#endif
                 } else if (SP_IS_PATTERN(server)) {
                     SPPattern *pat = SP_PATTERN(server)->rootPattern();
                     psel->updatePatternList( pat );
