@@ -456,38 +456,33 @@ sp_mesh_context_fit_mesh_in_bbox (MeshTool *rc)
         SPItem *item = *i;
         SPStyle *style = item->style;
 
-        if (style && (style->fill.isPaintserver())) {
-            SPPaintServer *server = item->style->getFillPaintServer();
-            if ( SP_IS_MESHGRADIENT(server) ) {
+        if (style) {
 
-                SPMeshGradient *gradient = SP_MESHGRADIENT(server);
-                SPCurve * outline = gradient->array.outline_path();
-                Geom::OptRect mesh_bbox = outline->get_pathvector().boundsExact();
-                outline->unref();
-                Geom::OptRect item_bbox = item->geometricBounds();
+            if (style->fill.isPaintserver()) {
+                SPPaintServer *server = item->style->getFillPaintServer();
+                if ( SP_IS_MESHGRADIENT(server) ) {
 
-                if ((*mesh_bbox).width() == 0) {
-                    continue;
-                }            
-                if ((*mesh_bbox).height() == 0) {
-                    continue;
-                }
-                double scale_x = (*item_bbox).width() /(*mesh_bbox).width() ;
-                double scale_y = (*item_bbox).height()/(*mesh_bbox).height();
-
-                Geom::Translate t1(-(*mesh_bbox).min());
-                Geom::Scale scale(scale_x,scale_y);
-                Geom::Translate t2((*item_bbox).min());
-                Geom::Affine transform = t1 * scale * t2;
-                if (!transform.isIdentity() ) {
-                    gradient->array.transform(transform);
-                    gradient->array.write( gradient );
-                    gradient->requestModified(SP_OBJECT_MODIFIED_FLAG);
-                    changed = true;
+                    Geom::OptRect item_bbox = item->geometricBounds();
+                    SPMeshGradient *gradient = SP_MESHGRADIENT(server);
+                    if (gradient->array.fill_box( item_bbox )) {
+                        changed = true;
+                    }
                 }
             }
+
+            if (style->stroke.isPaintserver()) {
+                SPPaintServer *server = item->style->getStrokePaintServer();
+                if ( SP_IS_MESHGRADIENT(server) ) {
+
+                    Geom::OptRect item_bbox = item->visualBounds();
+                    SPMeshGradient *gradient = SP_MESHGRADIENT(server);
+                    if (gradient->array.fill_box( item_bbox )) {
+                        changed = true;
+                    }
+                }
+            }
+
         }
-   
     }
     if (changed) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
