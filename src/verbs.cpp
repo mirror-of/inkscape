@@ -1597,6 +1597,9 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_UNSET_CLIPPATH:
             sel->unsetMask(true);
             break;
+        case SP_VERB_OBJECT_INTERSECT_CLIPPATH:
+            sel->intersectClip(true);
+            break;
         default:
             break;
     }
@@ -2776,6 +2779,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Edit clipping path"), INKSCAPE_ICON("path-clip-edit")),
     new ObjectVerb(SP_VERB_OBJECT_UNSET_CLIPPATH, "ObjectUnSetClipPath", N_("_Release"),
                  N_("Remove clipping path from selection"), NULL),
+    new ObjectVerb(SP_VERB_OBJECT_INTERSECT_CLIPPATH, "ObjectIntersectClipPath", N_("_Intersect"),
+                 N_("Intersect clipped objects with their clipping paths"), NULL),
     // Tag
     new TagVerb(SP_VERB_TAG_NEW, "TagNew", N_("_New"),
                  N_("Create new selection set"), NULL),

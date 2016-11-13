@@ -375,18 +375,20 @@ static void sp_selection_delete_impl(std::vector<SPItem*> const &items, bool pro
 }
 
 
-void ObjectSet::deleteItems()
+void ObjectSet::deleteItems(const bool skip_undo)
 {
     if(desktop() && tools_isactive(desktop(), TOOLS_TEXT)){
-         if (Inkscape::UI::Tools::sp_text_delete_selection(desktop()->event_context)) {
-            DocumentUndo::done(desktop()->getDocument(), SP_VERB_CONTEXT_TEXT,
-                               _("Delete text"));
+        if (Inkscape::UI::Tools::sp_text_delete_selection(desktop()->event_context)) {
+            if (!skip_undo) {
+                DocumentUndo::done(desktop()->getDocument(), SP_VERB_CONTEXT_TEXT,
+                                   _("Delete text"));
+            }
             return;
-         }
+        }
     }
     
-        if (isEmpty()) {
-            selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
+    if (isEmpty()) {
+        selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
         return;
     }
     std::vector<SPItem*> selected(items().begin(), items().end());
@@ -403,9 +405,10 @@ void ObjectSet::deleteItems()
          */
         tools_switch( d, tools_active( d ) );
     }
-    if(document())
-            DocumentUndo::done(document(), SP_VERB_EDIT_DELETE,
+    if(document() && !skip_undo) {
+        DocumentUndo::done(document(), SP_VERB_EDIT_DELETE,
                            _("Delete"));
+    }
 
 }
 
@@ -4142,6 +4145,73 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
         }
     }
 }
+
+bool ObjectSet::intersectClip(const bool skip_undo) {
+    bool did = false;
+
+    std::vector<SPItem*> items_(items().begin(), items().end());
+    ObjectSet tmp_set(document());
+    for (auto& it : items_) {
+        if (SP_IS_GROUP(it)) {
+            std::vector<SPObject*> c = it->childList(false);
+            tmp_set.setList(c);
+            did = tmp_set.intersectClip(true) || did;
+            continue;
+        }
+        if (!SP_IS_SHAPE(it) && !SP_IS_TEXT(it) && !SP_IS_FLOWTEXT(it)) {
+            continue;
+        }
+        // We check if the object itself is clipped.
+        // If it is we remove the clip and call pathIntersect on the resulting two objects.
+        Inkscape::URIReference *clip = it->clip_ref;
+        if (nullptr != clip && nullptr != clip->getObject()) {
+            tmp_set.set(it);
+            tmp_set.unsetMask(true, true);
+            tmp_set.pathIntersect(true);
+            if (tmp_set.size() > 1) {
+                tmp_set.setMask(true, true);
+            }
+            it = tmp_set.singleItem();
+            did = true;
+        }
+
+        for (SPObject *clip_candidate = it->parent; NULL != clip_candidate && NULL != clip_candidate->parent; ) {
+            // We need to save the parent object before we continue because we might destroy the item completely
+            SPObject *next_clip_candidate = clip_candidate->parent;
+
+            clip = SP_ITEM(clip_candidate)->clip_ref;
+            if (nullptr != clip && nullptr != clip->getObject()) {
+                tmp_set.set(clip_candidate);
+                tmp_set.duplicate(true);
+                tmp_set.unsetMask(true, true);
+                std::vector<SPItem*> ancestor_items(tmp_set.items().begin(), tmp_set.items().end());
+                if (2 != ancestor_items.size()) {
+                    std::cerr << "Unclipping an ancestor of the current object unexpectedly gives " << ancestor_items.size() << " objects instead of 2, aborting." << std::endl;
+                    break;
+                }
+                tmp_set.set(ancestor_items[0]);
+                tmp_set.deleteItems(true);
+                tmp_set.set(ancestor_items[1]);
+                tmp_set.add(it);
+                tmp_set.pathIntersect(true);
+                if (tmp_set.size() > 1) {
+                    tmp_set.setMask(true, true);
+                }
+                it = tmp_set.singleItem();
+                did = true;
+            }
+            clip_candidate = next_clip_candidate;
+        }
+    }
+    tmp_set.setList(items_);
+
+    if (!skip_undo) {
+        DocumentUndo::done(document(), SP_VERB_OBJECT_INTERSECT_CLIPPATH,
+                           _("Intersect clipped objects with their clipping paths"));
+    }
+    return did;
+}
+
 
 /**
  * \param with_margins margins defined in the xml under <sodipodi:namedview>

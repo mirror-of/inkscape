@@ -196,6 +196,7 @@ static char const menus_skeleton[] =
 "       <submenu name=\"" N_("Cli_p") "\">\n"
 "           <verb verb-id=\"ObjectSetClipPath\" />\n"
 "           <verb verb-id=\"ObjectUnSetClipPath\" />\n"
+"           <verb verb-id=\"ObjectIntersectClipPath\" />\n"
 "       </submenu>\n"
 "       <submenu name=\"" N_("Mas_k") "\">\n"
 "           <verb verb-id=\"ObjectSetMask\" />\n"

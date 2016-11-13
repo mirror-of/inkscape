@@ -350,7 +350,7 @@ public:
 
     //item groups operations
     //in selection-chemistry.cpp
-    void deleteItems();
+    void deleteItems(const bool skip_undo = false);
     void duplicate(bool suppressDone = false, bool duplicateLayer = false);
     void clone();
 
@@ -366,6 +366,16 @@ public:
      * @return true if anything was unlinked, otherwise false.
      */
     bool unlinkRecursive(const bool skip_undo = false);
+    /**
+     * @brief Replace every object by the intersection of the object
+     * and all clips which might have an effect on the object.
+     * @param skip_undo If skip_undo is true the method does not call
+     * DocumentUndo::done after finishing the operation.
+     * Set to true when calling as part of a larger method
+     * to avoid cluttering the Inkscape undo history.
+     * @return True if any objects have been modified, otherwise false.
+     */
+    bool intersectClip(const bool skip_undo = false);
     void relink();
     void cloneOriginal();
     void cloneOriginalPathLPE();

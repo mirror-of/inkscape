@@ -565,6 +565,86 @@ TEST_F(ObjectSetTest, unlinkRecursiveAdvanced) {
     SetUpTestCase();
 }
 
+#include <boost/optional/optional_io.hpp>
+
+TEST_F(ObjectSetTest, intersectClip) {
+    //*
+    r1->setPosition(0,0,10,10);
+    r2->setPosition(0,0,10,10);
+    r3->setPosition(0,0,10,10);
+    // */
+    std::cout << "R1: " << r1->getRect() << std::endl
+              << "R2: " << r2->getRect() << std::endl
+              << "R3: " << r3->getRect() << std::endl;
+    set->set(r1.get());
+    std::cout << "Set contains only r1:" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    double offset_x = set->geometricBounds()->left();
+    double offset_y = set->geometricBounds()->top();
+    set->moveRelative(-offset_x, -offset_y);
+    std::cout << "Moved the set with ObjectSet::moveRelative(" << -offset_x << ", " << -offset_y << ")" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+
+    set->set(r2.get());
+    std::cout << "Set contains only r2:" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    offset_x = set->geometricBounds()->left();
+    offset_y = set->geometricBounds()->top();
+    set->moveRelative(-offset_x, -offset_y);
+    std::cout << "Moved the set with ObjectSet::moveRelative(" << -offset_x << ", " << -offset_y << ")" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    set->add(r1.get());
+    std::cout << "Add r1 to the set" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    set->group();//r1-3 are now invalid (grouping makes copies)
+    r1.release();
+    r2.release();
+
+    std::cout << "Grouped the set" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    set->moveRelative(-5,-5);
+    std::cout << "Moved relative by (-5,-5)" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    set->add(r3.get());
+    std::cout << "Added r3" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    EXPECT_EQ(2, set->size());
+    set->setMask(true, false, true);
+    r3.release();
+    std::cout << "Set the clip. This should mean that the group consisting of r1 and r2 is clipped by r3." << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    EXPECT_EQ(1, set->size());
+
+    set->intersectClip(true);
+
+    EXPECT_EQ(1, set->size());
+
+    std::cout << "Applied intersectClip" << std::endl;
+    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
+              << "Visual bounds: " << set->visualBounds() << std::endl;
+
+    TearDownTestCase();
+    SetUpTestCase();
+}
+
 TEST_F(ObjectSetTest, ZOrder) {
     //sp_object_compare_position_bool == true iff "r1<r2" iff r1 is "before" r2 in the file, ie r1 is lower than r2
     EXPECT_TRUE(sp_object_compare_position_bool(r1.get(),r2.get()));
