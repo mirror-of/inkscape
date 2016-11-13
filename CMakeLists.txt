@@ -189,10 +189,9 @@ endif()
 # -----------------------------------------------------------------------------
 # Installation
 # -----------------------------------------------------------------------------
-if(NOT WIN32)
-  # this should probably be done no matter what the platform is, just set SHARE_INSTALL first
-  add_subdirectory(share)
-endif()
+# TODO: Make this install files to the correct location on WIN32 (i.e. set SHARE_INSTALL first)
+#       We currently copy all files in /share in Install.cmake again
+add_subdirectory(share)
 	
 include(CMakeScripts/Install.cmake)
 
