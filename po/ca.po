@@ -10080,7 +10080,7 @@ msgid "Min Radius:"
 msgstr "Radi mínim:"
 
 #: ../src/live_effects/lpe-gears.cpp:216
-msgid "Minimun radius, low values can be slow"
+msgid "Minimum radius, low values can be slow"
 msgstr "Radi mínim, els valors baixos poden ser lents"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30

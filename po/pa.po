@@ -10839,7 +10839,7 @@ msgid "Min Radius:"
 msgstr "ਉਭਾਰੋ(_R)"
 
 #: ../src/live_effects/lpe-gears.cpp:216
-msgid "Minimun radius, low values can be slow"
+msgid "Minimum radius, low values can be slow"
 msgstr ""
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
