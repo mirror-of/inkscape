@@ -2,7 +2,7 @@
 # Ukrainian translation of Inkscape.
 # This file is distributed under the same license as the Inkscape package.
 # Copyright (C) 2001, 2007, 2008, 2009 Free Software Foundation, Inc.
-#
+# 
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2007.
 # Alex <pilipchukap@rambler.ru>, 2005.
@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-11-13 16:11+0100\n"
+"POT-Creation-Date: 2016-10-21 22:04+0200\n"
 "PO-Revision-Date: 2016-06-13 13:50+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
@@ -5590,7 +5590,7 @@ msgstr "Непрозорість"
 
 #: ../src/extension/internal/bitmap/opacity.cpp:40
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2924
-#: ../src/ui/dialog/objects.cpp:1636 ../src/widgets/dropper-toolbar.cpp:83
+#: ../src/ui/dialog/objects.cpp:1629 ../src/widgets/dropper-toolbar.cpp:83
 msgid "Opacity:"
 msgstr "Непрозорість:"
 
@@ -6103,7 +6103,7 @@ msgstr "Колір підсвічення"
 #: ../src/extension/internal/filter/distort.h:95
 #: ../src/extension/internal/filter/distort.h:204
 #: ../src/extension/internal/filter/filter-file.cpp:151
-#: ../src/extension/internal/filter/filter.cpp:212
+#: ../src/extension/internal/filter/filter.cpp:211
 #: ../src/extension/internal/filter/image.h:61
 #: ../src/extension/internal/filter/morphology.h:75
 #: ../src/extension/internal/filter/morphology.h:202
@@ -8018,7 +8018,7 @@ msgstr "Відтворення"
 #: ../src/extension/internal/grid.cpp:210
 #: ../src/ui/dialog/document-properties.cpp:163
 #: ../src/ui/dialog/inkscape-preferences.cpp:832
-#: ../src/widgets/toolbox.cpp:1896
+#: ../src/widgets/toolbox.cpp:1894
 msgid "Grids"
 msgstr "Сітки"
 
@@ -8671,7 +8671,7 @@ msgid "Arithmetic"
 msgstr "Арифметичний"
 
 #: ../src/filter-enums.cpp:120 ../src/selection-chemistry.cpp:545
-#: ../src/ui/dialog/objects.cpp:1900
+#: ../src/ui/dialog/objects.cpp:1893
 msgid "Duplicate"
 msgstr "Дублювати"
 
@@ -8708,15 +8708,15 @@ msgstr "Точкове джерело"
 msgid "Spot Light"
 msgstr "Прожектор"
 
-#: ../src/gradient-chemistry.cpp:1617
+#: ../src/gradient-chemistry.cpp:1586
 msgid "Invert gradient colors"
 msgstr "Інвертувати кольори градієнта"
 
-#: ../src/gradient-chemistry.cpp:1644
+#: ../src/gradient-chemistry.cpp:1613
 msgid "Reverse gradient"
 msgstr "Обернути градієнт"
 
-#: ../src/gradient-chemistry.cpp:1658 ../src/widgets/gradient-selector.cpp:222
+#: ../src/gradient-chemistry.cpp:1627 ../src/widgets/gradient-selector.cpp:222
 msgid "Delete swatch"
 msgstr "Вилучити зразок"
 
@@ -8752,15 +8752,15 @@ msgstr "<b>Фокус</b> радіального градієнта"
 msgid "Radial gradient <b>mid stop</b>"
 msgstr "<b>Середня опорна точка</b> радіального градієнта"
 
-#: ../src/gradient-drag.cpp:104 ../src/ui/tools/mesh-tool.cpp:97
+#: ../src/gradient-drag.cpp:104 ../src/ui/tools/mesh-tool.cpp:93
 msgid "Mesh gradient <b>corner</b>"
 msgstr "<b>Кут</b> сіткового градієнта"
 
-#: ../src/gradient-drag.cpp:105 ../src/ui/tools/mesh-tool.cpp:98
+#: ../src/gradient-drag.cpp:105 ../src/ui/tools/mesh-tool.cpp:94
 msgid "Mesh gradient <b>handle</b>"
 msgstr "<b>Вус</b> сіткового градієнта"
 
-#: ../src/gradient-drag.cpp:106 ../src/ui/tools/mesh-tool.cpp:99
+#: ../src/gradient-drag.cpp:106 ../src/ui/tools/mesh-tool.cpp:95
 msgid "Mesh gradient <b>tensor</b>"
 msgstr "<b>Тензор</b> сіткового градієнта"
 
@@ -9754,65 +9754,6 @@ msgstr "Розмір з_а Y:"
 msgid "The size of the grid in Y direction."
 msgstr "Розмір сітки у напрямку вісі Y."
 
-#: ../src/live_effects/lpe-copy_rotate.cpp:65
-msgid "Origin"
-msgstr "Центр"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:65
-msgid "Origin of the rotation"
-msgstr "Центр обертання"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:66
-#, fuzzy
-msgid "Starting:"
-msgstr "Початок:"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:66
-msgid "Angle of the first copy"
-msgstr "Кут для першої копії"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:67
-#, fuzzy
-msgid "Rotation angle:"
-msgstr "Початковий кут"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:67
-msgid "Angle between two successive copies"
-msgstr "Кут між двома послідовними копіями"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:68
-msgid "Number of copies:"
-msgstr "Кількість копій:"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:68
-msgid "Number of copies of the original path"
-msgstr "Кількість копій початкового контуру"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:69
-msgid "360º Copies"
-msgstr ""
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:69
-msgid "No rotation angle, fixed to 360º"
-msgstr ""
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:70
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:73
-msgid "Fuse paths"
-msgstr "Об’єднати контури"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:70
-msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
-msgstr ""
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:431
-msgid "Adjust the starting angle"
-msgstr "Корекція початкового кута"
-
-#: ../src/live_effects/lpe-copy_rotate.cpp:437
-msgid "Adjust the rotation angle"
-msgstr "Корекція кута повороту"
-
 #: ../src/live_effects/lpe-curvestitch.cpp:41
 msgid "Stitch path:"
 msgstr "Зшиваючий контур:"
@@ -10116,7 +10057,7 @@ msgid "Min Radius:"
 msgstr "Радіус:"
 
 #: ../src/live_effects/lpe-gears.cpp:216
-msgid "Minimum radius, low values can be slow"
+msgid "Minimun radius, low values can be slow"
 msgstr ""
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
@@ -10630,69 +10571,6 @@ msgstr "Показати точки"
 #: ../src/live_effects/lpe-lattice2.cpp:283
 msgid "Hide Points"
 msgstr "Приховати точки"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:35
-msgid "Vertical Page Center"
-msgstr "Центр сторінки за вертикаллю"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:36
-msgid "Horizontal Page Center"
-msgstr "Центр сторінки за горизонталлю"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:37
-msgid "Free from reflection line"
-msgstr "Довільно від лінії відбиття"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:38
-msgid "X from middle knot"
-msgstr "За X від середнього вузла"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:39
-msgid "Y from middle knot"
-msgstr "За Y від середнього вузла"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:71
-#: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
-msgid "Mode"
-msgstr "Режим"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:71
-msgid "Symmetry move mode"
-msgstr "Режим симетричного пересування"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:72
-msgid "Discard original path?"
-msgstr "Відкинути початковий контур?"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:72
-msgid "Check this to only keep the mirrored part of the path"
-msgstr ""
-"Позначте цей пункт, щоб програма зберегла лише віддзеркалену частину контуру"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:73
-msgid "Fuse original and the reflection into a single path"
-msgstr "Об’єднати оригінал і відбиток у єдиний контур"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-#, fuzzy
-msgid "Opposite fuse"
-msgstr "Змішування протилежностей"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-msgid "Picks the other side of the mirror as the original"
-msgstr "Визначає зображення по той бік дзеркала як оригінал"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:75
-msgid "Start mirror line"
-msgstr "Початок лінії віддзеркалення"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:76
-msgid "End mirror line"
-msgstr "Кінець лінії віддзеркалення"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:353
-msgid "Adjust the center"
-msgstr "Скоригувати центр"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:53
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -11782,12 +11660,12 @@ msgid "Remove Path"
 msgstr "Вилучити контур"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:179
-#: ../src/ui/dialog/objects.cpp:1861
+#: ../src/ui/dialog/objects.cpp:1854
 msgid "Move Down"
 msgstr "Пересунути нижче"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:191
-#: ../src/ui/dialog/objects.cpp:1869
+#: ../src/ui/dialog/objects.cpp:1862
 msgid "Move Up"
 msgstr "Пересунути вище"
 
@@ -12671,7 +12549,7 @@ msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "У позначеному <b>немає груп</b>."
 
 #: ../src/selection-chemistry.cpp:901 ../src/sp-item-group.cpp:659
-#: ../src/ui/dialog/objects.cpp:1923
+#: ../src/ui/dialog/objects.cpp:1916
 msgid "Ungroup"
 msgstr "Розгрупувати"
 
@@ -13002,7 +12880,7 @@ msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr ""
 "Оберіть <b>об'єкт(и)</b> для створення з них контуру вирізання або маски."
 
-#: ../src/selection-chemistry.cpp:3850 ../src/ui/dialog/objects.cpp:1929
+#: ../src/selection-chemistry.cpp:3850 ../src/ui/dialog/objects.cpp:1922
 msgid "Create Clip Group"
 msgstr "Створити групу-обгортку"
 
@@ -13258,22 +13136,22 @@ msgstr "до %s"
 msgid "without URI"
 msgstr "без адреси"
 
-#: ../src/sp-ellipse.cpp:357
+#: ../src/sp-ellipse.cpp:356
 msgid "Segment"
 msgstr "Відрізок"
 
-#: ../src/sp-ellipse.cpp:359
+#: ../src/sp-ellipse.cpp:358
 msgid "Arc"
 msgstr "Дуга"
 
 #. Ellipse
-#: ../src/sp-ellipse.cpp:362 ../src/sp-ellipse.cpp:369
+#: ../src/sp-ellipse.cpp:361 ../src/sp-ellipse.cpp:368
 #: ../src/ui/dialog/inkscape-preferences.cpp:421
 #: ../src/widgets/pencil-toolbar.cpp:178
 msgid "Ellipse"
 msgstr "Еліпс"
 
-#: ../src/sp-ellipse.cpp:366
+#: ../src/sp-ellipse.cpp:365
 msgid "Circle"
 msgstr "Коло"
 
@@ -13361,7 +13239,7 @@ msgstr "[помилкове посилання]: %s"
 msgid "%d &#215; %d: %s"
 msgstr "%d &#215; %d: %s"
 
-#: ../src/sp-item-group.cpp:318 ../src/ui/dialog/objects.cpp:1922
+#: ../src/sp-item-group.cpp:318 ../src/ui/dialog/objects.cpp:1915
 msgid "Group"
 msgstr "Згрупувати"
 
@@ -13818,41 +13696,41 @@ msgid "Trace: Done. %ld nodes created"
 msgstr "Векторизація: Завершено. Створено %ld вузлів."
 
 #. check whether something is selected
-#: ../src/ui/clipboard.cpp:262
+#: ../src/ui/clipboard.cpp:261
 msgid "Nothing was copied."
 msgstr "Нічого не було скопійовано."
 
-#: ../src/ui/clipboard.cpp:393 ../src/ui/clipboard.cpp:607
-#: ../src/ui/clipboard.cpp:636
+#: ../src/ui/clipboard.cpp:392 ../src/ui/clipboard.cpp:606
+#: ../src/ui/clipboard.cpp:635
 msgid "Nothing on the clipboard."
 msgstr "У буфері обміну нічого немає."
 
-#: ../src/ui/clipboard.cpp:451
+#: ../src/ui/clipboard.cpp:450
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Позначте <b>об'єкти(и)</b> для застосування стилю."
 
-#: ../src/ui/clipboard.cpp:462 ../src/ui/clipboard.cpp:479
+#: ../src/ui/clipboard.cpp:461 ../src/ui/clipboard.cpp:478
 msgid "No style on the clipboard."
 msgstr "У буфері обміну немає стилів."
 
-#: ../src/ui/clipboard.cpp:504
+#: ../src/ui/clipboard.cpp:503
 msgid "Select <b>object(s)</b> to paste size to."
 msgstr "Оберіть <b>об'єкт(и)</b> для застосування розміру."
 
-#: ../src/ui/clipboard.cpp:511
+#: ../src/ui/clipboard.cpp:510
 msgid "No size on the clipboard."
 msgstr "У буфері обміну немає розмірів."
 
-#: ../src/ui/clipboard.cpp:568
+#: ../src/ui/clipboard.cpp:567
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr "Оберіть <b>об'єкти</b> для застосування ефекту динамічного контуру."
 
 #. no_effect:
-#: ../src/ui/clipboard.cpp:594
+#: ../src/ui/clipboard.cpp:593
 msgid "No effect on the clipboard."
 msgstr "У буфері обміну немає ефектів."
 
-#: ../src/ui/clipboard.cpp:613 ../src/ui/clipboard.cpp:650
+#: ../src/ui/clipboard.cpp:612 ../src/ui/clipboard.cpp:649
 msgid "Clipboard does not contain a path."
 msgstr "У буфері обміну відсутній контур."
 
@@ -13970,7 +13848,7 @@ msgid "Rearrange"
 msgstr "Перевпорядкувати"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:941
-#: ../src/widgets/toolbox.cpp:1798
+#: ../src/widgets/toolbox.cpp:1796
 msgid "Nodes"
 msgstr "Вузли"
 
@@ -15230,7 +15108,7 @@ msgstr "Ви_лучити"
 msgid "Remove selected grid."
 msgstr "Вилучити вибрану сітку."
 
-#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1905
+#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1903
 msgid "Guides"
 msgstr "Напрямні"
 
@@ -15345,7 +15223,7 @@ msgid "<b>Embedded script files:</b>"
 msgstr "<b>Файли вбудованих скриптів:</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:885
-#: ../src/ui/dialog/objects.cpp:1901
+#: ../src/ui/dialog/objects.cpp:1894
 msgid "New"
 msgstr "Створити"
 
@@ -16755,7 +16633,7 @@ msgstr "Спіралі"
 msgid "Search spirals"
 msgstr "Шукати спіралі"
 
-#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1806
+#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1804
 msgid "Paths"
 msgstr "Контури"
 
@@ -20195,7 +20073,7 @@ msgid "_Zoom in/out by:"
 msgstr "Крок _масштабування:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1335
-#: ../src/ui/dialog/objects.cpp:1637
+#: ../src/ui/dialog/objects.cpp:1630
 #: ../src/ui/widget/filter-effect-chooser.cpp:27
 msgid "%"
 msgstr "%"
@@ -21438,49 +21316,49 @@ msgstr "Встановити рівень непрозорості об’єкт
 msgid "Set object blend mode"
 msgstr "Встановити режим змішування об’єкта"
 
-#: ../src/ui/dialog/objects.cpp:1565
+#: ../src/ui/dialog/objects.cpp:1558
 msgid "Set object blur"
 msgstr "Встановити розмиття об’єкта"
 
-#: ../src/ui/dialog/objects.cpp:1628
+#: ../src/ui/dialog/objects.cpp:1621
 msgctxt "Visibility"
 msgid "V"
 msgstr "В"
 
-#: ../src/ui/dialog/objects.cpp:1629
+#: ../src/ui/dialog/objects.cpp:1622
 msgctxt "Lock"
 msgid "L"
 msgstr "Б"
 
-#: ../src/ui/dialog/objects.cpp:1630
+#: ../src/ui/dialog/objects.cpp:1623
 msgctxt "Type"
 msgid "T"
 msgstr "Т"
 
-#: ../src/ui/dialog/objects.cpp:1631
+#: ../src/ui/dialog/objects.cpp:1624
 msgctxt "Clip and mask"
 msgid "CM"
 msgstr "МО"
 
-#: ../src/ui/dialog/objects.cpp:1632
+#: ../src/ui/dialog/objects.cpp:1625
 msgctxt "Highlight"
 msgid "HL"
 msgstr "П"
 
-#: ../src/ui/dialog/objects.cpp:1633
+#: ../src/ui/dialog/objects.cpp:1626
 msgid "Label"
 msgstr "Мітка"
 
 #. In order to get tooltips on header, we must create our own label.
-#: ../src/ui/dialog/objects.cpp:1675
+#: ../src/ui/dialog/objects.cpp:1668
 msgid "Toggle visibility of Layer, Group, or Object."
 msgstr "Увімкнути або вимкнути видимість шару, групи або об’єкта."
 
-#: ../src/ui/dialog/objects.cpp:1688
+#: ../src/ui/dialog/objects.cpp:1681
 msgid "Toggle lock of Layer, Group, or Object."
 msgstr "Увімкнути або вимкнути блокування шару, групи або об’єкта."
 
-#: ../src/ui/dialog/objects.cpp:1700
+#: ../src/ui/dialog/objects.cpp:1693
 msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
@@ -21488,11 +21366,11 @@ msgstr ""
 "Тип: шар, група чи об’єкт. Клацання на піктограмі шару або групи перемикає "
 "між цими двома типами."
 
-#: ../src/ui/dialog/objects.cpp:1719
+#: ../src/ui/dialog/objects.cpp:1712
 msgid "Is object clipped and/or masked?"
 msgstr "Чи є об’єкт обрізаним або замаскованим?"
 
-#: ../src/ui/dialog/objects.cpp:1730
+#: ../src/ui/dialog/objects.cpp:1723
 msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
@@ -21500,7 +21378,7 @@ msgstr ""
 "Колір підсвічування контурів інструмента «Вузол». Клацніть для встановлення. "
 "Якщо рівень прозорості є нульовим, використовується успадкований колір."
 
-#: ../src/ui/dialog/objects.cpp:1741
+#: ../src/ui/dialog/objects.cpp:1734
 msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
@@ -21508,83 +21386,83 @@ msgstr ""
 "Мітка шару, групи або об’єкта (inkscape:label). Двічі клацніть для "
 "встановлення. Типовою міткою є рядок «id» об’єкта."
 
-#: ../src/ui/dialog/objects.cpp:1838
+#: ../src/ui/dialog/objects.cpp:1831
 msgid "Add layer..."
 msgstr "Додати шар…"
 
-#: ../src/ui/dialog/objects.cpp:1845
+#: ../src/ui/dialog/objects.cpp:1838
 msgid "Remove object"
 msgstr "Вилучити об’єкт"
 
-#: ../src/ui/dialog/objects.cpp:1853
+#: ../src/ui/dialog/objects.cpp:1846
 msgid "Move To Bottom"
 msgstr "Пересунути вниз"
 
-#: ../src/ui/dialog/objects.cpp:1877
+#: ../src/ui/dialog/objects.cpp:1870
 msgid "Move To Top"
 msgstr "Пересунути нагору"
 
-#: ../src/ui/dialog/objects.cpp:1885
+#: ../src/ui/dialog/objects.cpp:1878
 msgid "Collapse All"
 msgstr "Згорнути все"
 
-#: ../src/ui/dialog/objects.cpp:1899
+#: ../src/ui/dialog/objects.cpp:1892
 msgid "Rename"
 msgstr "Перейменувати"
 
-#: ../src/ui/dialog/objects.cpp:1905
+#: ../src/ui/dialog/objects.cpp:1898
 msgid "Solo"
 msgstr "Соло"
 
-#: ../src/ui/dialog/objects.cpp:1906
+#: ../src/ui/dialog/objects.cpp:1899
 msgid "Show All"
 msgstr "Показати все"
 
-#: ../src/ui/dialog/objects.cpp:1907
+#: ../src/ui/dialog/objects.cpp:1900
 msgid "Hide All"
 msgstr "Сховати все"
 
-#: ../src/ui/dialog/objects.cpp:1911
+#: ../src/ui/dialog/objects.cpp:1904
 msgid "Lock Others"
 msgstr "Заблокувати інше"
 
-#: ../src/ui/dialog/objects.cpp:1912
+#: ../src/ui/dialog/objects.cpp:1905
 msgid "Lock All"
 msgstr "Заблокувати все"
 
 #. LockAndHide
-#: ../src/ui/dialog/objects.cpp:1913 ../src/verbs.cpp:3011
+#: ../src/ui/dialog/objects.cpp:1906 ../src/verbs.cpp:3011
 msgid "Unlock All"
 msgstr "Розблокувати все"
 
-#: ../src/ui/dialog/objects.cpp:1917
+#: ../src/ui/dialog/objects.cpp:1910
 msgid "Up"
 msgstr "Вище"
 
-#: ../src/ui/dialog/objects.cpp:1918
+#: ../src/ui/dialog/objects.cpp:1911
 msgid "Down"
 msgstr "Нижче"
 
-#: ../src/ui/dialog/objects.cpp:1927
+#: ../src/ui/dialog/objects.cpp:1920
 msgid "Set Clip"
 msgstr "Встановити обрізання"
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-#: ../src/ui/dialog/objects.cpp:1933
+#: ../src/ui/dialog/objects.cpp:1926
 msgid "Unset Clip"
 msgstr "Скасувати обрізання"
 
 #. Set mask
-#: ../src/ui/dialog/objects.cpp:1937 ../src/ui/interface.cpp:1754
+#: ../src/ui/dialog/objects.cpp:1930 ../src/ui/interface.cpp:1754
 msgid "Set Mask"
 msgstr "Встановити маскування"
 
-#: ../src/ui/dialog/objects.cpp:1938
+#: ../src/ui/dialog/objects.cpp:1931
 msgid "Unset Mask"
 msgstr "Скасувати маскування"
 
-#: ../src/ui/dialog/objects.cpp:1960
+#: ../src/ui/dialog/objects.cpp:1953
 msgid "Select Highlight Color"
 msgstr "Виберіть колір підсвічування"
 
@@ -24058,29 +23936,29 @@ msgstr ""
 "b> — для заповнення дотиком"
 
 #. We hit green anchor, closing Green-Blue-Red
-#: ../src/ui/tools/freehand-base.cpp:674 ../src/ui/tools/freehand-base.cpp:756
+#: ../src/ui/tools/freehand-base.cpp:661
 msgid "Path is closed."
 msgstr "Контур замкнено."
 
 #. We hit bot start and end of single curve, closing paths
-#: ../src/ui/tools/freehand-base.cpp:689
+#: ../src/ui/tools/freehand-base.cpp:676
 msgid "Closing path."
 msgstr "Закривається контур."
 
-#: ../src/ui/tools/freehand-base.cpp:833
+#: ../src/ui/tools/freehand-base.cpp:825
 msgid "Draw path"
 msgstr "Малювання контуру"
 
-#: ../src/ui/tools/freehand-base.cpp:986
+#: ../src/ui/tools/freehand-base.cpp:978
 msgid "Creating single dot"
 msgstr "Створення одиночної точки"
 
-#: ../src/ui/tools/freehand-base.cpp:987
+#: ../src/ui/tools/freehand-base.cpp:979
 msgid "Create single dot"
 msgstr "Створити одиночну точку"
 
 #. TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a compound message
-#: ../src/ui/tools/gradient-tool.cpp:121 ../src/ui/tools/mesh-tool.cpp:124
+#: ../src/ui/tools/gradient-tool.cpp:121 ../src/ui/tools/mesh-tool.cpp:120
 #, c-format
 msgid "%s selected"
 msgstr "%s вибрано"
@@ -24096,8 +23974,8 @@ msgstr[2] " з %d вусів градієнта"
 
 #. TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
 #: ../src/ui/tools/gradient-tool.cpp:124 ../src/ui/tools/gradient-tool.cpp:133
-#: ../src/ui/tools/gradient-tool.cpp:140 ../src/ui/tools/mesh-tool.cpp:127
-#: ../src/ui/tools/mesh-tool.cpp:138 ../src/ui/tools/mesh-tool.cpp:146
+#: ../src/ui/tools/gradient-tool.cpp:140 ../src/ui/tools/mesh-tool.cpp:123
+#: ../src/ui/tools/mesh-tool.cpp:134 ../src/ui/tools/mesh-tool.cpp:142
 #, c-format
 msgid " on %d selected object"
 msgid_plural " on %d selected objects"
@@ -24106,7 +23984,7 @@ msgstr[1] " у %d позначених об'єктах"
 msgstr[2] " у %d позначених об'єктах"
 
 #. TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
-#: ../src/ui/tools/gradient-tool.cpp:130 ../src/ui/tools/mesh-tool.cpp:134
+#: ../src/ui/tools/gradient-tool.cpp:130 ../src/ui/tools/mesh-tool.cpp:130
 #, c-format
 msgid ""
 "One handle merging %d stop (drag with <b>Shift</b> to separate) selected"
@@ -24149,7 +24027,7 @@ msgstr "Спростити градієнт"
 msgid "Create default gradient"
 msgstr "Створити типовий градієнт"
 
-#: ../src/ui/tools/gradient-tool.cpp:569 ../src/ui/tools/mesh-tool.cpp:628
+#: ../src/ui/tools/gradient-tool.cpp:569 ../src/ui/tools/mesh-tool.cpp:564
 msgid "<b>Draw around</b> handles to select them"
 msgstr "<b>Обведіть</b> вуса, щоб вибрати їх"
 
@@ -24161,7 +24039,7 @@ msgstr "<b>Ctrl</b>: обмежити кут градієнта"
 msgid "<b>Shift</b>: draw gradient around the starting point"
 msgstr "<b>Shift</b>: малювати навколо початкової точки"
 
-#: ../src/ui/tools/gradient-tool.cpp:946 ../src/ui/tools/mesh-tool.cpp:1055
+#: ../src/ui/tools/gradient-tool.cpp:946 ../src/ui/tools/mesh-tool.cpp:980
 #, c-format
 msgid "<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle"
 msgid_plural "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"
@@ -24169,7 +24047,7 @@ msgstr[0] "<b>Градієнт</b> для %d об'єкта; <b>Ctrl</b> обме
 msgstr[1] "<b>Градієнт</b> для %d об'єктів; <b>Ctrl</b> обмежує кут"
 msgstr[2] "<b>Градієнт</b> для %d об'єктів; <b>Ctrl</b> обмежує кут"
 
-#: ../src/ui/tools/gradient-tool.cpp:950 ../src/ui/tools/mesh-tool.cpp:1059
+#: ../src/ui/tools/gradient-tool.cpp:950 ../src/ui/tools/mesh-tool.cpp:984
 msgid "Select <b>objects</b> on which to create gradient."
 msgstr "Позначте <b>об'єкти</b> до яких буде застосовано градієнт."
 
@@ -24216,7 +24094,7 @@ msgid "Crossing %lu"
 msgstr "Перетин %lu"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
-#: ../src/ui/tools/mesh-tool.cpp:126 ../src/ui/tools/mesh-tool.cpp:137
+#: ../src/ui/tools/mesh-tool.cpp:122 ../src/ui/tools/mesh-tool.cpp:133
 #, c-format
 msgid " out of %d mesh handle"
 msgid_plural " out of %d mesh handles"
@@ -24224,7 +24102,7 @@ msgstr[0] " з %d елемента керування сіткою"
 msgstr[1] " з %d елементів керування сіткою"
 msgstr[2] " з %d елементів керування сіткою"
 
-#: ../src/ui/tools/mesh-tool.cpp:144
+#: ../src/ui/tools/mesh-tool.cpp:140
 #, c-format
 msgid "<b>%d</b> mesh handle selected out of %d"
 msgid_plural "<b>%d</b> mesh handles selected out of %d"
@@ -24233,7 +24111,7 @@ msgstr[1] "Вибрано <b>%d</b> елементи керування сітк
 msgstr[2] "Вибрано <b>%d</b> елементів керування сіткою з %d"
 
 #. TRANSLATORS: The plural refers to number of selected objects
-#: ../src/ui/tools/mesh-tool.cpp:151
+#: ../src/ui/tools/mesh-tool.cpp:147
 #, c-format
 msgid "<b>No</b> mesh handles selected out of %d on %d selected object"
 msgid_plural "<b>No</b> mesh handles selected out of %d on %d selected objects"
@@ -24244,44 +24122,43 @@ msgstr[1] ""
 msgstr[2] ""
 "<b>Жодного</b> елемента керування сіткою з %d у %d вибраних об'єктах"
 
-#: ../src/ui/tools/mesh-tool.cpp:319
+#: ../src/ui/tools/mesh-tool.cpp:315
 msgid "Split mesh row/column"
 msgstr "Розділити рядок або стовпчик сітки"
 
-#: ../src/ui/tools/mesh-tool.cpp:405
+#: ../src/ui/tools/mesh-tool.cpp:401
 msgid "Toggled mesh path type."
 msgstr "Перемкнений тип контуру сітки."
 
-#: ../src/ui/tools/mesh-tool.cpp:409
+#: ../src/ui/tools/mesh-tool.cpp:405
 msgid "Approximated arc for mesh side."
 msgstr "Наближена дуга бічного краю сітки."
 
-#: ../src/ui/tools/mesh-tool.cpp:413
+#: ../src/ui/tools/mesh-tool.cpp:409
 msgid "Toggled mesh tensors."
 msgstr "Перемкнені тензори сітки."
 
-#: ../src/ui/tools/mesh-tool.cpp:417
+#: ../src/ui/tools/mesh-tool.cpp:413
 msgid "Smoothed mesh corner color."
 msgstr "Колір згладженого кута сітки."
 
-#: ../src/ui/tools/mesh-tool.cpp:421
+#: ../src/ui/tools/mesh-tool.cpp:417
 msgid "Picked mesh corner color."
 msgstr "Вибраний колір кута сітки."
 
-#: ../src/ui/tools/mesh-tool.cpp:489
-#, fuzzy
-msgid "Fit mesh inside bounding box."
-msgstr "Використовує видиму рамку"
+#: ../src/ui/tools/mesh-tool.cpp:492
+msgid "Create default mesh"
+msgstr "Створити типову сітку"
 
-#: ../src/ui/tools/mesh-tool.cpp:779
+#: ../src/ui/tools/mesh-tool.cpp:715
 msgid "FIXME<b>Ctrl</b>: snap mesh angle"
 msgstr "<b>Ctrl</b>: прилипання до кута сітки"
 
-#: ../src/ui/tools/mesh-tool.cpp:780
+#: ../src/ui/tools/mesh-tool.cpp:716
 msgid "FIXME<b>Shift</b>: draw mesh around the starting point"
 msgstr "<b>Shift</b>: намалювати навколо початкової точки сітку"
 
-#: ../src/ui/tools/mesh-tool.cpp:1049
+#: ../src/ui/tools/mesh-tool.cpp:974
 msgid "Create mesh"
 msgstr "Створити сітку"
 
@@ -25439,8 +25316,8 @@ msgid "Document license updated"
 msgstr "Оновлено умови ліцензування документа"
 
 #: ../src/ui/widget/object-composite-settings.cpp:47
-#: ../src/ui/widget/selected-style.cpp:1124
-#: ../src/ui/widget/selected-style.cpp:1125
+#: ../src/ui/widget/selected-style.cpp:1118
+#: ../src/ui/widget/selected-style.cpp:1119
 msgid "Opacity (%)"
 msgstr "Непрозорість (у %)"
 
@@ -25449,8 +25326,8 @@ msgid "Change blur"
 msgstr "Зміна розмивання"
 
 #: ../src/ui/widget/object-composite-settings.cpp:200
-#: ../src/ui/widget/selected-style.cpp:948
-#: ../src/ui/widget/selected-style.cpp:1250
+#: ../src/ui/widget/selected-style.cpp:942
+#: ../src/ui/widget/selected-style.cpp:1244
 msgid "Change opacity"
 msgstr "Зміна непрозорості"
 
@@ -25737,8 +25614,8 @@ msgid "N/A"
 msgstr "Н/Д"
 
 #: ../src/ui/widget/selected-style.cpp:182
-#: ../src/ui/widget/selected-style.cpp:1117
-#: ../src/ui/widget/selected-style.cpp:1118
+#: ../src/ui/widget/selected-style.cpp:1111
+#: ../src/ui/widget/selected-style.cpp:1112
 #: ../src/widgets/gradient-toolbar.cpp:162
 msgid "Nothing selected"
 msgstr "Нічого не позначено"
@@ -25766,7 +25643,7 @@ msgid "No stroke"
 msgstr "Без штриха"
 
 #: ../src/ui/widget/selected-style.cpp:193
-#: ../src/ui/widget/style-swatch.cpp:302 ../src/widgets/paint-selector.cpp:233
+#: ../src/ui/widget/style-swatch.cpp:302 ../src/widgets/paint-selector.cpp:231
 msgid "Pattern"
 msgstr "Заповнення візерунком"
 
@@ -25841,14 +25718,14 @@ msgstr "<b>Не встановлено</b>"
 #: ../src/ui/widget/selected-style.cpp:238
 #: ../src/ui/widget/selected-style.cpp:296
 #: ../src/ui/widget/selected-style.cpp:574
-#: ../src/ui/widget/style-swatch.cpp:328 ../src/widgets/fill-style.cpp:815
+#: ../src/ui/widget/style-swatch.cpp:328 ../src/widgets/fill-style.cpp:703
 msgid "Unset fill"
 msgstr "Не заливати"
 
 #: ../src/ui/widget/selected-style.cpp:238
 #: ../src/ui/widget/selected-style.cpp:296
 #: ../src/ui/widget/selected-style.cpp:590
-#: ../src/ui/widget/style-swatch.cpp:328 ../src/widgets/fill-style.cpp:815
+#: ../src/ui/widget/style-swatch.cpp:328 ../src/widgets/fill-style.cpp:703
 msgid "Unset stroke"
 msgstr "Зняття штриха"
 
@@ -25911,7 +25788,7 @@ msgid "Paste color"
 msgstr "Вставити колір"
 
 #: ../src/ui/widget/selected-style.cpp:287
-#: ../src/ui/widget/selected-style.cpp:873
+#: ../src/ui/widget/selected-style.cpp:867
 msgid "Swap fill and stroke"
 msgstr "Поміняти місцями кольори заповнення та штриха"
 
@@ -25926,12 +25803,12 @@ msgid "Make stroke opaque"
 msgstr "Зробити штрихи непрозорими"
 
 #: ../src/ui/widget/selected-style.cpp:300
-#: ../src/ui/widget/selected-style.cpp:556 ../src/widgets/fill-style.cpp:514
+#: ../src/ui/widget/selected-style.cpp:556 ../src/widgets/fill-style.cpp:503
 msgid "Remove fill"
 msgstr "Вилучити заповнення"
 
 #: ../src/ui/widget/selected-style.cpp:300
-#: ../src/ui/widget/selected-style.cpp:565 ../src/widgets/fill-style.cpp:514
+#: ../src/ui/widget/selected-style.cpp:565 ../src/widgets/fill-style.cpp:503
 msgid "Remove stroke"
 msgstr "Вилучити штрих"
 
@@ -25983,36 +25860,36 @@ msgstr "Вставити заповнення"
 msgid "Paste stroke"
 msgstr "Вставити штрих"
 
-#: ../src/ui/widget/selected-style.cpp:975
+#: ../src/ui/widget/selected-style.cpp:969
 msgid "Change stroke width"
 msgstr "Змінити товщину штриха"
 
-#: ../src/ui/widget/selected-style.cpp:1078
+#: ../src/ui/widget/selected-style.cpp:1072
 msgid ", drag to adjust"
 msgstr ", налаштуйте шляхом перетягування"
 
-#: ../src/ui/widget/selected-style.cpp:1163
+#: ../src/ui/widget/selected-style.cpp:1157
 #, c-format
 msgid "Stroke width: %.5g%s%s"
 msgstr "Товщина штриха: %.5g%s%s"
 
-#: ../src/ui/widget/selected-style.cpp:1167
+#: ../src/ui/widget/selected-style.cpp:1161
 msgid " (averaged)"
 msgstr " (осереднений)"
 
-#: ../src/ui/widget/selected-style.cpp:1193
+#: ../src/ui/widget/selected-style.cpp:1187
 msgid "0 (transparent)"
 msgstr "0 (прозорий)"
 
-#: ../src/ui/widget/selected-style.cpp:1217
+#: ../src/ui/widget/selected-style.cpp:1211
 msgid "100% (opaque)"
 msgstr "100% (непрозорий)"
 
-#: ../src/ui/widget/selected-style.cpp:1391
+#: ../src/ui/widget/selected-style.cpp:1385
 msgid "Adjust alpha"
 msgstr "Скоригувати канал прозорості"
 
-#: ../src/ui/widget/selected-style.cpp:1393
+#: ../src/ui/widget/selected-style.cpp:1387
 #, c-format
 msgid ""
 "Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</"
@@ -26023,11 +25900,11 @@ msgstr ""
 "%.3g); скористайтеся <b>Ctrl</b> для зміни освітленості;<b>Shift</b> — для "
 "зміни насиченості, без модифікаторів — виправлення відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1397
+#: ../src/ui/widget/selected-style.cpp:1391
 msgid "Adjust saturation"
 msgstr "Корекція насиченості"
 
-#: ../src/ui/widget/selected-style.cpp:1399
+#: ../src/ui/widget/selected-style.cpp:1393
 #, c-format
 msgid ""
 "Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
@@ -26038,11 +25915,11 @@ msgstr ""
 "скористайтеся <b>Ctrl</b> для корекції освітленості, <b>Alt</b> — для зміни "
 "прозорості, без модифікаторів – корекція відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1403
+#: ../src/ui/widget/selected-style.cpp:1397
 msgid "Adjust lightness"
 msgstr "Корекція освітленості"
 
-#: ../src/ui/widget/selected-style.cpp:1405
+#: ../src/ui/widget/selected-style.cpp:1399
 #, c-format
 msgid ""
 "Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
@@ -26053,11 +25930,11 @@ msgstr ""
 "скористайтеся <b>Shift</b> для зміни насиченості, <b>Alt</b> — для зміни "
 "прозорості, без модифікаторів — виправлення відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1409
+#: ../src/ui/widget/selected-style.cpp:1403
 msgid "Adjust hue"
 msgstr "Корекція відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1411
+#: ../src/ui/widget/selected-style.cpp:1405
 #, c-format
 msgid ""
 "Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</"
@@ -26068,12 +25945,12 @@ msgstr ""
 "скористайтеся <b>Shift</b> для зміни насиченості, <b>Alt</b> — для зміни "
 "прозорості, а <b>Ctrl</b> для зміни освітленості"
 
-#: ../src/ui/widget/selected-style.cpp:1529
-#: ../src/ui/widget/selected-style.cpp:1543
+#: ../src/ui/widget/selected-style.cpp:1523
+#: ../src/ui/widget/selected-style.cpp:1537
 msgid "Adjust stroke width"
 msgstr "Скоригувати товщину штриха"
 
-#: ../src/ui/widget/selected-style.cpp:1530
+#: ../src/ui/widget/selected-style.cpp:1524
 #, c-format
 msgid "Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"
 msgstr ""
@@ -29272,41 +29149,31 @@ msgstr "Збільшення веде до відставання гумки т�
 msgid "Break apart cut items"
 msgstr "Розділити обрізані елементи"
 
-#: ../src/widgets/fill-style.cpp:367
+#: ../src/widgets/fill-style.cpp:356
 msgid "Change fill rule"
 msgstr "Зміна правила заповнення"
 
-#: ../src/widgets/fill-style.cpp:451 ../src/widgets/fill-style.cpp:529
+#: ../src/widgets/fill-style.cpp:440 ../src/widgets/fill-style.cpp:518
 msgid "Set fill color"
 msgstr "Встановлення кольору заповнення"
 
-#: ../src/widgets/fill-style.cpp:451 ../src/widgets/fill-style.cpp:529
+#: ../src/widgets/fill-style.cpp:440 ../src/widgets/fill-style.cpp:518
 msgid "Set stroke color"
 msgstr "Встановлення кольору штрихів"
 
-#: ../src/widgets/fill-style.cpp:627
+#: ../src/widgets/fill-style.cpp:616
 msgid "Set gradient on fill"
 msgstr "Створити градієнт у заповненні"
 
-#: ../src/widgets/fill-style.cpp:627
+#: ../src/widgets/fill-style.cpp:616
 msgid "Set gradient on stroke"
 msgstr "Створити градієнт у штриху"
 
-#: ../src/widgets/fill-style.cpp:727
-#, fuzzy
-msgid "Set mesh on fill"
-msgstr "Встановлення візерунку для заповнення"
-
-#: ../src/widgets/fill-style.cpp:727
-#, fuzzy
-msgid "Set mesh on stroke"
-msgstr "Додати візерунок до штриха"
-
-#: ../src/widgets/fill-style.cpp:788
+#: ../src/widgets/fill-style.cpp:676
 msgid "Set pattern on fill"
 msgstr "Встановлення візерунку для заповнення"
 
-#: ../src/widgets/fill-style.cpp:789
+#: ../src/widgets/fill-style.cpp:677
 msgid "Set pattern on stroke"
 msgstr "Додати візерунок до штриха"
 
@@ -29344,7 +29211,7 @@ msgid "Edit gradient"
 msgstr "Змінити градієнт"
 
 #: ../src/widgets/gradient-selector.cpp:281
-#: ../src/widgets/paint-selector.cpp:235
+#: ../src/widgets/paint-selector.cpp:233
 msgid "Swatch"
 msgstr "Зразок"
 
@@ -29401,27 +29268,27 @@ msgstr "радіальний"
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "Створити радіальний (еліптичний чи круговий) градієнт"
 
-#: ../src/widgets/gradient-toolbar.cpp:1044 ../src/widgets/mesh-toolbar.cpp:411
+#: ../src/widgets/gradient-toolbar.cpp:1044 ../src/widgets/mesh-toolbar.cpp:387
 msgid "New:"
 msgstr "Створити:"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:434
+#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:410
 msgid "fill"
 msgstr "заповнення"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:434
+#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:410
 msgid "Create gradient in the fill"
 msgstr "Створити градієнт у заповненні"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:438
+#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:414
 msgid "stroke"
 msgstr "штрих"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:438
+#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:414
 msgid "Create gradient in the stroke"
 msgstr "Створити градієнт у штриху"
 
-#: ../src/widgets/gradient-toolbar.cpp:1074 ../src/widgets/mesh-toolbar.cpp:441
+#: ../src/widgets/gradient-toolbar.cpp:1074 ../src/widgets/mesh-toolbar.cpp:417
 msgid "on:"
 msgstr "на:"
 
@@ -29520,8 +29387,7 @@ msgstr "Зв'язати градієнти"
 msgid "Link gradients to change all related gradients"
 msgstr "Зв'язати градієнти, щоб вони змінювалися у всіх пов'язаних градієнтів"
 
-#: ../src/widgets/gradient-vector.cpp:317 ../src/widgets/paint-selector.cpp:947
-#: ../src/widgets/paint-selector.cpp:1311
+#: ../src/widgets/gradient-vector.cpp:317 ../src/widgets/paint-selector.cpp:965
 #: ../src/widgets/stroke-marker-selector.cpp:154
 msgid "No document selected"
 msgstr "Документ не вибрано"
@@ -29778,130 +29644,120 @@ msgstr "Позначити розмірність"
 msgid "Convert to item"
 msgstr "Перетворити на об’єкт"
 
-#: ../src/widgets/mesh-toolbar.cpp:320
+#: ../src/widgets/mesh-toolbar.cpp:318
 msgid "Set mesh type"
 msgstr "Встановити тип сітки"
 
-#: ../src/widgets/mesh-toolbar.cpp:372
-msgid ""
-"Mesh gradients are part of SVG 2:\n"
-"* Syntax may change.\n"
-"* Web browser implementation is not guaranteed.\n"
-"\n"
-"For web: convert to bitmap (Edit->Make bitmap copy).\n"
-"For print: export to PDF."
-msgstr ""
-
-#: ../src/widgets/mesh-toolbar.cpp:404
+#: ../src/widgets/mesh-toolbar.cpp:380
 msgid "normal"
 msgstr "звичайне"
 
-#: ../src/widgets/mesh-toolbar.cpp:404
+#: ../src/widgets/mesh-toolbar.cpp:380
 msgid "Create mesh gradient"
 msgstr "Створити сітковий градієнт"
 
-#: ../src/widgets/mesh-toolbar.cpp:408
+#: ../src/widgets/mesh-toolbar.cpp:384
 msgid "conical"
 msgstr "конічний"
 
-#: ../src/widgets/mesh-toolbar.cpp:408
+#: ../src/widgets/mesh-toolbar.cpp:384
 msgid "Create conical gradient"
 msgstr "Створити конічний градієнт"
 
-#: ../src/widgets/mesh-toolbar.cpp:463
+#: ../src/widgets/mesh-toolbar.cpp:439
 msgid "Rows"
 msgstr "Рядки"
 
-#: ../src/widgets/mesh-toolbar.cpp:463
+#: ../src/widgets/mesh-toolbar.cpp:439
 #: ../share/extensions/guides_creator.inx.h:5
 #: ../share/extensions/layout_nup.inx.h:12
 msgid "Rows:"
 msgstr "Рядків:"
 
-#: ../src/widgets/mesh-toolbar.cpp:463
+#: ../src/widgets/mesh-toolbar.cpp:439
 msgid "Number of rows in new mesh"
 msgstr "Кількість рядків у новій сітці"
 
-#: ../src/widgets/mesh-toolbar.cpp:479
+#: ../src/widgets/mesh-toolbar.cpp:455
 msgid "Columns"
 msgstr "Стовпчики"
 
-#: ../src/widgets/mesh-toolbar.cpp:479
+#: ../src/widgets/mesh-toolbar.cpp:455
 #: ../share/extensions/guides_creator.inx.h:4
 msgid "Columns:"
 msgstr "Стовпчиків:"
 
-#: ../src/widgets/mesh-toolbar.cpp:479
+#: ../src/widgets/mesh-toolbar.cpp:455
 msgid "Number of columns in new mesh"
 msgstr "Кількість стовпчиків у новій сітці"
 
-#: ../src/widgets/mesh-toolbar.cpp:493
+#: ../src/widgets/mesh-toolbar.cpp:469
 msgid "Edit Fill"
 msgstr "Редагувати заповнення"
 
-#: ../src/widgets/mesh-toolbar.cpp:494
+#: ../src/widgets/mesh-toolbar.cpp:470
 msgid "Edit fill mesh"
 msgstr "Редагування сітки заповнення"
 
-#: ../src/widgets/mesh-toolbar.cpp:505
+#: ../src/widgets/mesh-toolbar.cpp:481
 msgid "Edit Stroke"
 msgstr "Редагування штриха"
 
-#: ../src/widgets/mesh-toolbar.cpp:506
+#: ../src/widgets/mesh-toolbar.cpp:482
 msgid "Edit stroke mesh"
 msgstr "Редагування сітки штриха"
 
-#: ../src/widgets/mesh-toolbar.cpp:517 ../src/widgets/node-toolbar.cpp:521
+#: ../src/widgets/mesh-toolbar.cpp:493 ../src/widgets/node-toolbar.cpp:521
 msgid "Show Handles"
 msgstr "Показувати елементи керування"
 
-#: ../src/widgets/mesh-toolbar.cpp:518
+#: ../src/widgets/mesh-toolbar.cpp:494
 msgid "Show side and tensor handles"
 msgstr "Показати бічний елемент та елемент керування тензором"
 
-#: ../src/widgets/mesh-toolbar.cpp:533 ../src/widgets/mesh-toolbar.cpp:534
+#: ../src/widgets/mesh-toolbar.cpp:509
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
 msgstr "ПОПЕРЕДЖЕННЯ: синтаксична конструкція сітки SVG змінюється"
 
-#: ../src/widgets/mesh-toolbar.cpp:548
+#: ../src/widgets/mesh-toolbar.cpp:519
 msgctxt "Type"
 msgid "Coons"
 msgstr "Коонса"
 
-#: ../src/widgets/mesh-toolbar.cpp:551
+#: ../src/widgets/mesh-toolbar.cpp:522
 msgid "Bicubic"
 msgstr "Бікубічний"
 
-#: ../src/widgets/mesh-toolbar.cpp:553
+#: ../src/widgets/mesh-toolbar.cpp:524
 msgid "Coons"
 msgstr "Коонса"
 
-#: ../src/widgets/mesh-toolbar.cpp:554
+#: ../src/widgets/mesh-toolbar.cpp:525
 msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr ""
 "Коонса: без згладжування. Бікубічний: згладжування упоперек до меж фрагмента."
 
-#: ../src/widgets/mesh-toolbar.cpp:556 ../src/widgets/pencil-toolbar.cpp:381
+#: ../src/widgets/mesh-toolbar.cpp:527 ../src/widgets/pencil-toolbar.cpp:381
 msgid "Smoothing:"
 msgstr "Згладжування:"
 
-#: ../src/widgets/mesh-toolbar.cpp:566
+#: ../src/widgets/mesh-toolbar.cpp:537
 msgid "Toggle Sides"
 msgstr "Перемикання сторін"
 
-#: ../src/widgets/mesh-toolbar.cpp:567
+#: ../src/widgets/mesh-toolbar.cpp:538
 msgid "Toggle selected sides between Beziers and lines."
 msgstr "Перемикання позначених сторін з кривих Безьє на прямі і навпаки."
 
-#: ../src/widgets/mesh-toolbar.cpp:570
+#: ../src/widgets/mesh-toolbar.cpp:541
 msgid "Toggle side:"
 msgstr "Перемикання сторони:"
 
-#: ../src/widgets/mesh-toolbar.cpp:577
+#: ../src/widgets/mesh-toolbar.cpp:548
 msgid "Make elliptical"
 msgstr "Зробити еліптичним"
 
-#: ../src/widgets/mesh-toolbar.cpp:578
+#: ../src/widgets/mesh-toolbar.cpp:549
 msgid ""
 "Make selected sides elliptical by changing length of handles. Works best if "
 "handles already approximate ellipse."
@@ -29909,36 +29765,21 @@ msgstr ""
 "Зробити позначені сторони еліптичними шляхом зміни довжини вусів. Найкраще "
 "працює, якщо вуса вже дають приблизно еліптичну криву."
 
-#: ../src/widgets/mesh-toolbar.cpp:581
+#: ../src/widgets/mesh-toolbar.cpp:552
 msgid "Make elliptical:"
 msgstr "Зробити еліптичним:"
 
-#: ../src/widgets/mesh-toolbar.cpp:588
+#: ../src/widgets/mesh-toolbar.cpp:559
 msgid "Pick colors:"
 msgstr "Вибір кольорів:"
 
-#: ../src/widgets/mesh-toolbar.cpp:589
+#: ../src/widgets/mesh-toolbar.cpp:560
 msgid "Pick colors for selected corner nodes from underneath mesh."
 msgstr "Взяти кольори для позначених кутових вузлів із базової сітки."
 
-#: ../src/widgets/mesh-toolbar.cpp:592
+#: ../src/widgets/mesh-toolbar.cpp:563
 msgid "Pick Color"
 msgstr "Вибрати колір"
-
-#: ../src/widgets/mesh-toolbar.cpp:600
-#, fuzzy
-msgid "Scale mesh to bounding box:"
-msgstr "Показати контур-обгортку"
-
-#: ../src/widgets/mesh-toolbar.cpp:601
-#, fuzzy
-msgid "Scale mesh to fit inside bounding box."
-msgstr "Показати контур-обгортку"
-
-#: ../src/widgets/mesh-toolbar.cpp:604
-#, fuzzy
-msgid "Fit mesh"
-msgstr "Редагування сітки заповнення"
 
 #: ../src/widgets/node-toolbar.cpp:341
 msgid "Insert node"
@@ -30140,34 +29981,34 @@ msgstr "Y координата:"
 msgid "Y coordinate of selected node(s)"
 msgstr "Y-координата вибраних вузлів"
 
-#: ../src/widgets/paint-selector.cpp:221
+#: ../src/widgets/paint-selector.cpp:219
 msgid "No paint"
 msgstr "Немає заповнення"
 
-#: ../src/widgets/paint-selector.cpp:223
+#: ../src/widgets/paint-selector.cpp:221
 msgid "Flat color"
 msgstr "Суцільний колір"
 
-#: ../src/widgets/paint-selector.cpp:225
+#: ../src/widgets/paint-selector.cpp:223
 msgid "Linear gradient"
 msgstr "Лінійний градієнт"
 
-#: ../src/widgets/paint-selector.cpp:227
+#: ../src/widgets/paint-selector.cpp:225
 msgid "Radial gradient"
 msgstr "Радіальний градієнт"
 
-#: ../src/widgets/paint-selector.cpp:230
+#: ../src/widgets/paint-selector.cpp:228
 msgid "Mesh gradient"
 msgstr "Сітковий градієнт"
 
-#: ../src/widgets/paint-selector.cpp:237
+#: ../src/widgets/paint-selector.cpp:235
 msgid "Unset paint (make it undefined so it can be inherited)"
 msgstr ""
 "Прибрати заповнення (зробити його невизначеним, щоб воно могло "
 "успадковуватись)"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-#: ../src/widgets/paint-selector.cpp:254
+#: ../src/widgets/paint-selector.cpp:252
 msgid ""
 "Any path self-intersections or subpaths create holes in the fill (fill-rule: "
 "evenodd)"
@@ -30176,52 +30017,47 @@ msgstr ""
 "(fill-rule: evenodd)"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-#: ../src/widgets/paint-selector.cpp:265
+#: ../src/widgets/paint-selector.cpp:263
 msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
 msgstr ""
 "Заповнення має дірку, лише якщо внутрішній підконтур напрямлений у "
 "протилежному напрямку відносно зовнішнього (fill-rule: nonzero)"
 
-#: ../src/widgets/paint-selector.cpp:615
+#: ../src/widgets/paint-selector.cpp:605
 msgid "<b>No objects</b>"
 msgstr "<b>Немає об'єктів</b>"
 
-#: ../src/widgets/paint-selector.cpp:626
+#: ../src/widgets/paint-selector.cpp:616
 msgid "<b>Multiple styles</b>"
 msgstr "<b>Множинні стилі</b>"
 
-#: ../src/widgets/paint-selector.cpp:637
+#: ../src/widgets/paint-selector.cpp:627
 msgid "<b>Paint is undefined</b>"
 msgstr "<b>Заповнення не визначено</b>"
 
-#: ../src/widgets/paint-selector.cpp:648
+#: ../src/widgets/paint-selector.cpp:638
 msgid "<b>No paint</b>"
 msgstr "<b>Немає заповнення</b>"
 
-#: ../src/widgets/paint-selector.cpp:732
+#: ../src/widgets/paint-selector.cpp:722
 msgid "<b>Flat color</b>"
 msgstr "<b>Суцільний колір</b>"
 
 #. sp_gradient_selector_set_mode(SP_GRADIENT_SELECTOR(gsel), SP_GRADIENT_SELECTOR_MODE_LINEAR);
-#: ../src/widgets/paint-selector.cpp:796
+#: ../src/widgets/paint-selector.cpp:791
 msgid "<b>Linear gradient</b>"
 msgstr "<b>Лінійний градієнт</b>"
 
-#: ../src/widgets/paint-selector.cpp:799
+#: ../src/widgets/paint-selector.cpp:794
 msgid "<b>Radial gradient</b>"
 msgstr "<b>Радіальний градієнт</b>"
 
-#: ../src/widgets/paint-selector.cpp:1080
-msgid "Use the <b>Mesh tool</b> to modify the mesh."
-msgstr ""
+#: ../src/widgets/paint-selector.cpp:799
+msgid "<b>Mesh gradient</b>"
+msgstr "<b>Сітковий градієнт</b>"
 
-#: ../src/widgets/paint-selector.cpp:1093
-#, fuzzy
-msgid "<b>Mesh fill</b>"
-msgstr "<b>Заливання за зразком</b>"
-
-#: ../src/widgets/paint-selector.cpp:1444
+#: ../src/widgets/paint-selector.cpp:1098
 msgid ""
 "Use the <b>Node tool</b> to adjust position, scale, and rotation of the "
 "pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to "
@@ -30232,11 +30068,11 @@ msgstr ""
 "Візерунок &gt; Об'єкти у візерунок</b>, щоб створити новий візерунок з "
 "позначеної області."
 
-#: ../src/widgets/paint-selector.cpp:1457
+#: ../src/widgets/paint-selector.cpp:1111
 msgid "<b>Pattern fill</b>"
 msgstr "<b>Заповнення візерунком</b>"
 
-#: ../src/widgets/paint-selector.cpp:1551
+#: ../src/widgets/paint-selector.cpp:1205
 msgid "<b>Swatch fill</b>"
 msgstr "<b>Заливання за зразком</b>"
 
@@ -30839,6 +30675,10 @@ msgstr "Вилучити розкидані об’єкти"
 #: ../src/widgets/spray-toolbar.cpp:384
 msgid "Delete sprayed items from selection"
 msgstr "Вилучити розкидані об’єкти з позначеного"
+
+#: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
+msgid "Mode"
+msgstr "Режим"
 
 #. Population
 #: ../src/widgets/spray-toolbar.cpp:408
@@ -31611,133 +31451,133 @@ msgstr "Ще не визначено"
 msgid "Style of Paint Bucket fill objects"
 msgstr "Стиль нових об'єктів, що створені інструментом заповнення"
 
-#: ../src/widgets/toolbox.cpp:1752
+#: ../src/widgets/toolbox.cpp:1750
 msgid "Bounding box"
 msgstr "Рамка-обгортка"
 
-#: ../src/widgets/toolbox.cpp:1752
+#: ../src/widgets/toolbox.cpp:1750
 msgid "Snap bounding boxes"
 msgstr "Прилипання до рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1761
+#: ../src/widgets/toolbox.cpp:1759
 msgid "Bounding box edges"
 msgstr "Краї рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1761
+#: ../src/widgets/toolbox.cpp:1759
 msgid "Snap to edges of a bounding box"
 msgstr "Прилипання до країв рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1770
+#: ../src/widgets/toolbox.cpp:1768
 msgid "Bounding box corners"
 msgstr "Кути рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1770
+#: ../src/widgets/toolbox.cpp:1768
 msgid "Snap bounding box corners"
 msgstr "Прилипання до кутів рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1779
+#: ../src/widgets/toolbox.cpp:1777
 msgid "BBox Edge Midpoints"
 msgstr "Середні точки країв рамки-обгортки"
 
-#: ../src/widgets/toolbox.cpp:1779
+#: ../src/widgets/toolbox.cpp:1777
 msgid "Snap midpoints of bounding box edges"
 msgstr "Прилипання до середніх точок країв рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1789
+#: ../src/widgets/toolbox.cpp:1787
 msgid "BBox Centers"
 msgstr "Центри рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1789
+#: ../src/widgets/toolbox.cpp:1787
 msgid "Snapping centers of bounding boxes"
 msgstr "Прилипання до центрів рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1798
+#: ../src/widgets/toolbox.cpp:1796
 msgid "Snap nodes, paths, and handles"
 msgstr "Прилипання до вузлів, контурів та вусів"
 
-#: ../src/widgets/toolbox.cpp:1806
+#: ../src/widgets/toolbox.cpp:1804
 msgid "Snap to paths"
 msgstr "Прилипання до контурів"
 
-#: ../src/widgets/toolbox.cpp:1815
+#: ../src/widgets/toolbox.cpp:1813
 msgid "Path intersections"
 msgstr "Перетин контурів"
 
-#: ../src/widgets/toolbox.cpp:1815
+#: ../src/widgets/toolbox.cpp:1813
 msgid "Snap to path intersections"
 msgstr "Прилипання до перетинів контурів"
 
-#: ../src/widgets/toolbox.cpp:1824
+#: ../src/widgets/toolbox.cpp:1822
 msgid "To nodes"
 msgstr "До вузлів"
 
-#: ../src/widgets/toolbox.cpp:1824
+#: ../src/widgets/toolbox.cpp:1822
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr "Прилипання до вузлів-вершин, зокрема кутів прямокутників"
 
-#: ../src/widgets/toolbox.cpp:1833
+#: ../src/widgets/toolbox.cpp:1831
 msgid "Smooth nodes"
 msgstr "Гладкі вузли"
 
-#: ../src/widgets/toolbox.cpp:1833
+#: ../src/widgets/toolbox.cpp:1831
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr "Прилипання до гладких вузлів, зокрема вершин еліпсів"
 
-#: ../src/widgets/toolbox.cpp:1842
+#: ../src/widgets/toolbox.cpp:1840
 msgid "Line Midpoints"
 msgstr "Середні точки лінії"
 
-#: ../src/widgets/toolbox.cpp:1842
+#: ../src/widgets/toolbox.cpp:1840
 msgid "Snap midpoints of line segments"
 msgstr "Прилипання до середніх точок сегментів лінії"
 
-#: ../src/widgets/toolbox.cpp:1851
+#: ../src/widgets/toolbox.cpp:1849
 msgid "Others"
 msgstr "Інші"
 
-#: ../src/widgets/toolbox.cpp:1851
+#: ../src/widgets/toolbox.cpp:1849
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 "Прилипання до інших точок (центрів, початків напрямних, опорних точок "
 "градієнтів тощо)"
 
-#: ../src/widgets/toolbox.cpp:1859
+#: ../src/widgets/toolbox.cpp:1857
 msgid "Object Centers"
 msgstr "Центри об'єктів"
 
-#: ../src/widgets/toolbox.cpp:1859
+#: ../src/widgets/toolbox.cpp:1857
 msgid "Snap centers of objects"
 msgstr "Прилипання до центрів об'єктів"
 
-#: ../src/widgets/toolbox.cpp:1868
+#: ../src/widgets/toolbox.cpp:1866
 msgid "Rotation Centers"
 msgstr "Центри обертання"
 
-#: ../src/widgets/toolbox.cpp:1868
+#: ../src/widgets/toolbox.cpp:1866
 msgid "Snap an item's rotation center"
 msgstr "Прилипання до центру обертання елемента"
 
-#: ../src/widgets/toolbox.cpp:1877
+#: ../src/widgets/toolbox.cpp:1875
 msgid "Text baseline"
 msgstr "Базова лінія тексту"
 
-#: ../src/widgets/toolbox.cpp:1877
+#: ../src/widgets/toolbox.cpp:1875
 msgid "Snap text anchors and baselines"
 msgstr "Прилипання до прив'язок тексту та центрів об'єктів"
 
-#: ../src/widgets/toolbox.cpp:1887
+#: ../src/widgets/toolbox.cpp:1885
 msgid "Page border"
 msgstr "Межа сторінки"
 
-#: ../src/widgets/toolbox.cpp:1887
+#: ../src/widgets/toolbox.cpp:1885
 msgid "Snap to the page border"
 msgstr "Прилипання до межі сторінки"
 
-#: ../src/widgets/toolbox.cpp:1896
+#: ../src/widgets/toolbox.cpp:1894
 msgid "Snap to grids"
 msgstr "Прилипання до сітки"
 
-#: ../src/widgets/toolbox.cpp:1905
+#: ../src/widgets/toolbox.cpp:1903
 msgid "Snap guides"
 msgstr "Прилипання до напрямних"
 
@@ -39651,14 +39491,116 @@ msgstr "Популярний графічний формат для кліпар
 msgid "XAML Input"
 msgstr "Імпорт з XAML"
 
+#~ msgid "Origin"
+#~ msgstr "Центр"
+
+#~ msgid "Origin of the rotation"
+#~ msgstr "Центр обертання"
+
+#, fuzzy
+#~ msgid "Starting:"
+#~ msgstr "Початок:"
+
+#~ msgid "Angle of the first copy"
+#~ msgstr "Кут для першої копії"
+
+#, fuzzy
+#~ msgid "Rotation angle:"
+#~ msgstr "Початковий кут"
+
+#~ msgid "Angle between two successive copies"
+#~ msgstr "Кут між двома послідовними копіями"
+
+#~ msgid "Number of copies:"
+#~ msgstr "Кількість копій:"
+
+#~ msgid "Number of copies of the original path"
+#~ msgstr "Кількість копій початкового контуру"
+
+#~ msgid "Fuse paths"
+#~ msgstr "Об’єднати контури"
+
+#~ msgid "Adjust the starting angle"
+#~ msgstr "Корекція початкового кута"
+
+#~ msgid "Adjust the rotation angle"
+#~ msgstr "Корекція кута повороту"
+
+#~ msgid "Vertical Page Center"
+#~ msgstr "Центр сторінки за вертикаллю"
+
+#~ msgid "Horizontal Page Center"
+#~ msgstr "Центр сторінки за горизонталлю"
+
+#~ msgid "Free from reflection line"
+#~ msgstr "Довільно від лінії відбиття"
+
+#~ msgid "X from middle knot"
+#~ msgstr "За X від середнього вузла"
+
+#~ msgid "Y from middle knot"
+#~ msgstr "За Y від середнього вузла"
+
+#~ msgid "Symmetry move mode"
+#~ msgstr "Режим симетричного пересування"
+
+#~ msgid "Discard original path?"
+#~ msgstr "Відкинути початковий контур?"
+
+#~ msgid "Check this to only keep the mirrored part of the path"
+#~ msgstr ""
+#~ "Позначте цей пункт, щоб програма зберегла лише віддзеркалену частину "
+#~ "контуру"
+
+#~ msgid "Fuse original and the reflection into a single path"
+#~ msgstr "Об’єднати оригінал і відбиток у єдиний контур"
+
+#, fuzzy
+#~ msgid "Opposite fuse"
+#~ msgstr "Змішування протилежностей"
+
+#~ msgid "Picks the other side of the mirror as the original"
+#~ msgstr "Визначає зображення по той бік дзеркала як оригінал"
+
+#~ msgid "Start mirror line"
+#~ msgstr "Початок лінії віддзеркалення"
+
+#~ msgid "End mirror line"
+#~ msgstr "Кінець лінії віддзеркалення"
+
+#~ msgid "Adjust the center"
+#~ msgstr "Скоригувати центр"
+
+#, fuzzy
+#~ msgid "Fit mesh inside bounding box."
+#~ msgstr "Використовує видиму рамку"
+
+#, fuzzy
+#~ msgid "Set mesh on fill"
+#~ msgstr "Встановлення візерунку для заповнення"
+
+#, fuzzy
+#~ msgid "Set mesh on stroke"
+#~ msgstr "Додати візерунок до штриха"
+
+#, fuzzy
+#~ msgid "Scale mesh to bounding box:"
+#~ msgstr "Показати контур-обгортку"
+
+#, fuzzy
+#~ msgid "Scale mesh to fit inside bounding box."
+#~ msgstr "Показати контур-обгортку"
+
+#, fuzzy
+#~ msgid "Fit mesh"
+#~ msgstr "Редагування сітки заповнення"
+
+#, fuzzy
+#~ msgid "<b>Mesh fill</b>"
+#~ msgstr "<b>Заливання за зразком</b>"
+
 #~ msgid "Spacing between baselines (percent of font size)"
 #~ msgstr "Інтервал між базовими лініями (у відсотках щодо розміру шрифту)"
-
-#~ msgid "Create default mesh"
-#~ msgstr "Створити типову сітку"
-
-#~ msgid "<b>Mesh gradient</b>"
-#~ msgstr "<b>Сітковий градієнт</b>"
 
 #~ msgid "Area (px^2): "
 #~ msgstr "Площа (у пк²): "
