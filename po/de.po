@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-11-13 16:11+0100\n"
-"PO-Revision-Date: 2016-10-20 22:55+0100\n"
+"PO-Revision-Date: 2016-11-13 22:28+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -1388,7 +1388,7 @@ msgstr "Struktur von dicker Acrylfarbe mit stark unebener Oberfläche"
 
 #: ../share/filters/filters.svg.h:514
 msgid "Alpha Engraving B"
-msgstr "Alphagravur B"
+msgstr "Alpha-Gravur B"
 
 #: ../share/filters/filters.svg.h:516
 msgid ""
@@ -1597,7 +1597,7 @@ msgstr "Leinwand"
 
 #: ../share/filters/filters.svg.h:608 ../share/filters/filters.svg.h:616
 msgid "Painting canvas emboss effect"
-msgstr "Malerei Leinwand-Prägeeffekt"
+msgstr "Malereileinwand-Prägeeffekt"
 
 #: ../share/filters/filters.svg.h:610
 msgid "Plasticine"
@@ -6974,7 +6974,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1377
 msgid "Nudge CMY"
-msgstr "Präzisionsausrichtung RGB"
+msgstr "Präzisionsausrichtung CMY"
 
 #: ../src/extension/internal/filter/color.h:1381
 msgid "Cyan offset"
@@ -9748,18 +9748,16 @@ msgid "Origin of the rotation"
 msgstr "Rotationszentrum"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
-#, fuzzy
 msgid "Starting:"
-msgstr "Anfang:"
+msgstr "Startwinkel:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Angle of the first copy"
 msgstr "Winkel der ersten Kopie"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
-#, fuzzy
 msgid "Rotation angle:"
-msgstr "Startwinkel"
+msgstr "Drehwinkel:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 msgid "Angle between two successive copies"
@@ -9775,21 +9773,22 @@ msgstr "Anzahl der Kopien des Originalpfades"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "360º Copies"
-msgstr ""
+msgstr "Vollständiger Kreis"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "No rotation angle, fixed to 360º"
-msgstr ""
+msgstr "Kein Drehwinkel, immer 360°."
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:73
-#, fuzzy
 msgid "Fuse paths"
-msgstr "Pfad erweitern"
+msgstr "Pfade verschmelzen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
 msgstr ""
+"Pfade werden miteinander verschmolzen, für Ergebnisse Füllregel 'evenodd' "
+"verwenden"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:431
 msgid "Adjust the starting angle"
@@ -10094,13 +10093,12 @@ msgid ""
 msgstr "Zahnflankenwinkel (typ. 20-25°)."
 
 #: ../src/live_effects/lpe-gears.cpp:216
-#, fuzzy
 msgid "Min Radius:"
-msgstr "Radius:"
+msgstr "Minimaler Radius:"
 
 #: ../src/live_effects/lpe-gears.cpp:216
 msgid "Minimum radius, low values can be slow"
-msgstr ""
+msgstr "Minimaler Radius, kleine Werte können langsam sein"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Trajectory:"
@@ -10188,7 +10186,7 @@ msgstr "Gehrung"
 
 #: ../src/live_effects/lpe-jointype.cpp:34
 msgid "Miter Clip"
-msgstr "Gehrungslimit"
+msgstr "Gestutzte Gehrung"
 
 #. {LINEJOIN_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"}, // disabled because doesn't work well
 #: ../src/live_effects/lpe-jointype.cpp:35
@@ -10619,27 +10617,24 @@ msgid "Hide Points"
 msgstr "Punkte ausblenden"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:35
-#, fuzzy
 msgid "Vertical Page Center"
-msgstr "Erkennung vertikaler Kanten"
+msgstr "Vertikaler Mittelpunkt der Seite"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:36
-#, fuzzy
 msgid "Horizontal Page Center"
-msgstr "Horizontale Kantenerkennung"
+msgstr "Horizontaler Mittelpunkt der Seite"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:37
-#, fuzzy
 msgid "Free from reflection line"
-msgstr "Aus Auswahlgruppe entfernen"
+msgstr "Spiegelachse frei verschiebbar"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:38
 msgid "X from middle knot"
-msgstr ""
+msgstr "Objektrahmenmitte X"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:39
 msgid "Y from middle knot"
-msgstr ""
+msgstr "Objektrahmenmitte Y"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:71
 #: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
@@ -10647,9 +10642,8 @@ msgid "Mode"
 msgstr "Modus"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:71
-#, fuzzy
 msgid "Symmetry move mode"
-msgstr "symmetrischer Knoten"
+msgstr "Symmetriemodus beim Verschieben"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:72
 msgid "Discard original path?"
@@ -10662,30 +10656,27 @@ msgstr "Aktivieren um den gespiegelten Teil des Pfades zu behalten"
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:73
 msgid "Fuse original and the reflection into a single path"
 msgstr ""
+"Verschmilzt den Originalpfad und sein Spiegelbild zu einem einzigen Pfad"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-#, fuzzy
 msgid "Opposite fuse"
-msgstr "Gegensätze mischen"
+msgstr "Umgekehrte Verschmelzung"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-#, fuzzy
 msgid "Picks the other side of the mirror as the original"
-msgstr "Klone werden mit demselben Vektor wie das Original verschoben."
+msgstr "Das Spiegelbild wird beim Verschmelzen als Originalpfad angesehen."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:75
-#, fuzzy
 msgid "Start mirror line"
-msgstr "Anfangspunkt"
+msgstr "Anfang der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:76
 msgid "End mirror line"
-msgstr ""
+msgstr "Ende der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:353
-#, fuzzy
 msgid "Adjust the center"
-msgstr "<b>Versatz-Abstand</b> anpassen"
+msgstr "Achse verschieben"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:53
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -12988,7 +12979,7 @@ msgstr "Wählen Sie <b>Objekte</b> zum Konvertieren in ein Symbol aus."
 
 #: ../src/selection-chemistry.cpp:3188
 msgid "Group to symbol"
-msgstr "Gruppieren zum Symbol"
+msgstr "Gruppe zu Symbol"
 
 #: ../src/selection-chemistry.cpp:3207
 msgid "Select a <b>symbol</b> to extract objects from."
@@ -20252,7 +20243,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1321
 msgid "Compass-like display of angles"
-msgstr "Anzeige von Winkeln wie bei einem Kompaß"
+msgstr "Anzeige von Winkeln wie bei einem Kompass"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1323
 msgid ""
@@ -20981,7 +20972,7 @@ msgstr "Anzahl Tasten:"
 
 #: ../src/ui/dialog/input.cpp:1010
 msgid "Tablet"
-msgstr "Grafiktablet"
+msgstr "Grafiktablett"
 
 #: ../src/ui/dialog/input.cpp:1039 ../src/ui/dialog/input.cpp:1928
 msgid "pad"
@@ -23232,26 +23223,25 @@ msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "<b>Höhe</b> der Ellipse anpassen; <b>Strg</b> erzeugt einen Kreis"
 
 #: ../src/ui/object-edit.cpp:1004
-#, fuzzy
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"<b>Anfangspunkt</b> des Bogens oder Kreissegments setzen; <b>Strg</b> rastet "
-"den Winkel ein; ziehen <b>innerhalb</b> der Ellipse erzeugt einen Kreisbogen "
-"- <b>außerhalb</b> ein Kreissegment"
+"<b>Anfangspunkt</b> des Kreisbogens/-segments setzen; <b>Umschalt</b> "
+"verschiebt mit <b>Endpunkt</b>; <b>Strg</b> rastet Winkel ein; Ziehen "
+"<b>innerhalb</b> der Ellipse erzeugt Kreisbogen, <b>außerhalb</b> erzeugt "
+"Kreissegment"
 
 #: ../src/ui/object-edit.cpp:1010
-#, fuzzy
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"<b>Endpunkt</b> des Bogens/Kreissegments setzen; <b>Strg</b> rastet Winkel "
-"ein; Ziehen <b>innerhalb</b> der Ellipse erzeugt einen Kreisbogen - "
-"<b>außerhalb</b> ein Kreissegment"
+"<b>Endpunkt</b> des Kreisbogens/-segments setzen; <b>Umschalt</b> verschiebt "
+"mit <b>Endpunkt</b>; <b>Strg</b> rastet Winkel ein; Ziehen <b>innerhalb</b> "
+"der Ellipse erzeugt Kreisbogen, <b>außerhalb</b> erzeugt Kreissegment"
 
 #: ../src/ui/object-edit.cpp:1157
 msgid ""
@@ -24377,9 +24367,8 @@ msgid "Picked mesh corner color."
 msgstr "Farbe für Gitterecke wählen"
 
 #: ../src/ui/tools/mesh-tool.cpp:489
-#, fuzzy
 msgid "Fit mesh inside bounding box."
-msgstr "Verwendet den visuellen Objektrahmen"
+msgstr "Verlaufsgitter in Objektrahmen einpassen."
 
 #: ../src/ui/tools/mesh-tool.cpp:779
 msgid "FIXME<b>Ctrl</b>: snap mesh angle"
@@ -26584,7 +26573,7 @@ msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the &lt;"
 "defs&gt; of the document"
 msgstr ""
-"Unbenutzte Definitionen (z.B. Farbverläufe oder Ausschneidepfade) aus den "
+"Unbenutzte Definitionen (z. B. Farbverläufe oder Ausschneidepfade) aus den "
 "&lt;defs&gt; des Dokuments entfernen"
 
 #: ../src/verbs.cpp:2443
@@ -27260,7 +27249,8 @@ msgstr ""
 
 #: ../src/verbs.cpp:2629
 msgid "Create one or more paths from a bitmap by tracing it"
-msgstr "Erzeuge einen oder mehrere Pfade durch das Nachzeichnen eines Bitmaps"
+msgstr ""
+"Erzeuge einen oder mehrere Pfade durch das Nachzeichnen einer Rastergrafik"
 
 #: ../src/verbs.cpp:2632
 msgid "Trace Pixel Art..."
@@ -27462,7 +27452,7 @@ msgstr "Aktuelle Ebene sperren/entsperren"
 
 #: ../src/verbs.cpp:2684
 msgid "Toggle lock on current layer"
-msgstr "Sperre auf aktuellen Layer umschalten"
+msgstr "Aktuelle Ebene sperren oder entsperren"
 
 #: ../src/verbs.cpp:2685
 msgid "_Show/hide Current Layer"
@@ -27519,7 +27509,7 @@ msgid ""
 "Put text into a frame (path or shape), creating a flowed text linked to the "
 "frame object"
 msgstr ""
-"Text in einen Rahmen setzen (Pfad oder Form), so daß ein mit seinem Rahmen "
+"Text in einen Rahmen setzen (Pfad oder Form), so dass ein mit seinem Rahmen "
 "verbundener Fließtext erzeugt wird"
 
 #: ../src/verbs.cpp:2703
@@ -27718,7 +27708,7 @@ msgstr "Farbverläufe erstellen und bearbeiten"
 #: ../src/verbs.cpp:2759
 msgctxt "ContextVerb"
 msgid "Mesh"
-msgstr "Gitterverlauf"
+msgstr "Verlaufsgitter"
 
 #: ../src/verbs.cpp:2760
 msgid "Create and edit meshes"
@@ -28406,7 +28396,7 @@ msgstr "_Eingabegeräte..."
 
 #: ../src/verbs.cpp:2943
 msgid "Configure extended input devices, such as a graphics tablet"
-msgstr "Erweiterte Eingabegeräte konfigurieren, wie z.B. Grafiktabletts"
+msgstr "Erweiterte Eingabegeräte konfigurieren, wie z. B. Grafiktabletts"
 
 #: ../src/verbs.cpp:2944
 msgid "_Extensions..."
@@ -28442,7 +28432,7 @@ msgstr "Tags anzeigen"
 
 #: ../src/verbs.cpp:2952
 msgid "Path E_ffects ..."
-msgstr "Pfade_ffekte ..."
+msgstr "Pfade_ffekte..."
 
 #: ../src/verbs.cpp:2953
 msgid "Manage, edit, and apply path effects"
@@ -29302,11 +29292,11 @@ msgstr "%s%s - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:1111
 msgid "Locked all guides"
-msgstr "Alle Ebenen gesperret"
+msgstr "Alle Hilfslinien gesperrt"
 
 #: ../src/widgets/desktop-widget.cpp:1113
 msgid "Unlocked all guides"
-msgstr "Alle Ebenen entsperret"
+msgstr "Alle Hilfslinien entsperrt"
 
 # ???
 #: ../src/widgets/desktop-widget.cpp:1130
@@ -29448,14 +29438,12 @@ msgid "Set gradient on stroke"
 msgstr "Farbverlauf für die Kontur setzen"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on fill"
-msgstr "Muster für die Füllung setzen"
+msgstr "Verlaufsgitter für die Füllung setzen"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on stroke"
-msgstr "Muster für die Kontur setzen"
+msgstr "Verlaufsgitter für die Kontur setzen"
 
 #: ../src/widgets/fill-style.cpp:788
 msgid "Set pattern on fill"
@@ -29954,6 +29942,13 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Verlaufsgitter sind Teil der SVG2-Spezifikation:\n"
+"* Syntax ändert sich möglicherweise.\n"
+"* Unterstützung im Webbrowser kann nicht garantiert werden\n"
+"\n"
+"Für Verwendung im Web: Zu Bitmap konvertieren (Bearbeiten -> Bitmap-Kopie "
+"erstellen).\n"
+"Zum Drucken: als PDF exportieren."
 
 #: ../src/widgets/mesh-toolbar.cpp:404
 msgid "normal"
@@ -30091,19 +30086,17 @@ msgid "Pick Color"
 msgstr "Farbe übernehmen"
 
 #: ../src/widgets/mesh-toolbar.cpp:600
-#, fuzzy
 msgid "Scale mesh to bounding box:"
-msgstr "Objektrahmen anzeigen"
+msgstr "Verlaufsgitter auf Größe des Objektrahmens skalieren:"
 
 #: ../src/widgets/mesh-toolbar.cpp:601
-#, fuzzy
 msgid "Scale mesh to fit inside bounding box."
-msgstr "Objektrahmen anzeigen"
+msgstr ""
+"Größe des Verlaufsgitters so ändern, dass es in den Objektrahmen passt."
 
 #: ../src/widgets/mesh-toolbar.cpp:604
-#, fuzzy
 msgid "Fit mesh"
-msgstr "Füllungsgitter bearbeiten"
+msgstr "Verlaufsgitter einpassen"
 
 #: ../src/widgets/node-toolbar.cpp:341
 msgid "Insert node"
@@ -30371,11 +30364,12 @@ msgstr "<b>Radialer Farbverlauf</b>"
 #: ../src/widgets/paint-selector.cpp:1080
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
 msgstr ""
+"Das Verlaufsgitter kann mit dem <b>Verlaufsgitterwerkzeug</b> bearbeitet "
+"werden."
 
 #: ../src/widgets/paint-selector.cpp:1093
-#, fuzzy
 msgid "<b>Mesh fill</b>"
-msgstr "<b>Farbmuster</b>"
+msgstr "<b>Füllung mit Verlaufsgitter</b>"
 
 #: ../src/widgets/paint-selector.cpp:1444
 msgid ""
@@ -32132,40 +32126,38 @@ msgstr ""
 "umzuwandeln."
 
 #: ../share/extensions/draw_from_triangle.py:179
-#, fuzzy
 msgid "Side Length 'a' ("
-msgstr "Seitenlänge 'a' (px):"
+msgstr "Seitenlänge 'a' ("
 
 #: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy
 msgid "Side Length 'b' ("
-msgstr "Seitenlänge 'b' (px):"
+msgstr "Seitenlänge 'b' ("
 
 #: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy
 msgid "Side Length 'c' ("
-msgstr "Seitenlänge 'c' (px):"
+msgstr "Seitenlänge 'c' ("
 
+# Spaces important!
+# Maybe rewrite draw_from_triangle.py in future to exclude spaces from localizable string
 #: ../share/extensions/draw_from_triangle.py:182
 msgid "Angle 'A' (radians): "
-msgstr "Winkel A in Radiant:"
+msgstr "Winkel A in Radiant: "
 
 #: ../share/extensions/draw_from_triangle.py:183
 msgid "Angle 'B' (radians): "
-msgstr "Winkel B in Radiant:"
+msgstr "Winkel B in Radiant: "
 
 #: ../share/extensions/draw_from_triangle.py:184
 msgid "Angle 'C' (radians): "
-msgstr "Winkel C in Radiant:"
+msgstr "Winkel C in Radiant: "
 
 #: ../share/extensions/draw_from_triangle.py:185
 msgid "Semiperimeter (px): "
-msgstr "Halbdurchmesser in px:"
+msgstr "Halbdurchmesser in px: "
 
 #: ../share/extensions/draw_from_triangle.py:186
-#, fuzzy
 msgid "Area ("
-msgstr "Fläche"
+msgstr "Fläche ("
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -34537,7 +34529,7 @@ msgstr ""
 "\"Erstelle Flächenversatz\": Erstellt verschiedene Inkscape-Versatzobjekte, "
 "um die originale Pfadfläche bis zur maximalen \"Breite der Fläche\" zu "
 "füllen. Die dabei erstellten Umrisse reichen von \"1/2 D\" bis zur gesamten "
-"\"Breite der Fläche\" in \"D\" breitenSchritten, wobei D von der nächsten "
+"\"Breite der Fläche\" in \"D\" breiten Schritten, wobei D von der nächsten "
 "Werkzeugdefinition genommen wird (Wert für \"Werkzeugdurchmesser\"). Es wird "
 "nur ein einziger Versatz erstellt, wenn die \"Bereichsbreite\" gleich \"1/2 D"
 "\" ist."
@@ -36134,10 +36126,10 @@ msgstr "Verknüpfung folgen"
 msgid "Ask Us a Question"
 msgstr "Fragen Sie uns"
 
+# do we have a German link here? (Redirects to English Launchpad anyway so doesn't really matter, though)
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:2
-#, fuzzy
 msgid "https://inkscape.org/en/ask/"
-msgstr "http://inkscape.org/doc/keys092.de.html"
+msgstr "https://inkscape.org/en/ask/"
 
 #: ../share/extensions/inkscape_help_commandline.inx.h:1
 msgid "Command Line Options"
@@ -39828,14 +39820,14 @@ msgstr "Ein beliebtes Dateiformat für Clipart"
 msgid "XAML Input"
 msgstr "XAML einlesen"
 
-#~ msgid "Spacing between baselines (percent of font size)"
-#~ msgstr "Abstand zwischen Grundlinien (Prozent der Schriftgröße)"
-
 #~ msgid "Create default mesh"
 #~ msgstr "Standardgitter erstellen"
 
 #~ msgid "<b>Mesh gradient</b>"
 #~ msgstr "<b>Verlaufsgitter</b>"
+
+#~ msgid "Spacing between baselines (percent of font size)"
+#~ msgstr "Abstand zwischen Grundlinien (Prozent der Schriftgröße)"
 
 #~ msgid "Area (px^2): "
 #~ msgstr "Fläche (px^2):"
