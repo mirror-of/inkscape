@@ -15,13 +15,12 @@
 # Nicolas Dufour <nicoduf@yahoo.fr>, 2008-2016.
 # Sylvain Chiron <chironsylvain@orange.fr>, 2016.
 #
-#: ../src/ui/dialog/clonetiler.cpp:1010
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-11-13 16:11+0100\n"
-"PO-Revision-Date: 2016-07-17 00:29+0200\n"
+"PO-Revision-Date: 2016-11-13 22:34+0100\n"
 "Last-Translator: Sylvain Chiron <chironsylvain@orange.fr>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
@@ -30,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Bookmarks: 46,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -9807,18 +9806,16 @@ msgid "Origin of the rotation"
 msgstr "Origine de la rotation"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
-#, fuzzy
 msgid "Starting:"
-msgstr "Début :"
+msgstr "Départ :"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Angle of the first copy"
 msgstr "Angle de la première copie"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
-#, fuzzy
 msgid "Rotation angle:"
-msgstr "Angle de départ"
+msgstr "Angle de rotation :"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 msgid "Angle between two successive copies"
@@ -9834,21 +9831,22 @@ msgstr "Nombre de copies du chemin original"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "360º Copies"
-msgstr ""
+msgstr "Copies sur 360°"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "No rotation angle, fixed to 360º"
-msgstr ""
+msgstr "Pas d'angle de rotation, fixé à 360°"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:73
-#, fuzzy
 msgid "Fuse paths"
-msgstr "Dilater le chemin"
+msgstr "Fondre les chemins"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
 msgstr ""
+"Fondre les chemins selon une ligne adjointe ; utilisez fill-rule: evenodd "
+"pour obtenir le meilleur résultat"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:431
 msgid "Adjust the starting angle"
@@ -10160,13 +10158,12 @@ msgstr ""
 "fraction des dents qui ne sont pas en contact."
 
 #: ../src/live_effects/lpe-gears.cpp:216
-#, fuzzy
 msgid "Min Radius:"
-msgstr "Rayon :"
+msgstr "Rayon min. :"
 
 #: ../src/live_effects/lpe-gears.cpp:216
 msgid "Minimum radius, low values can be slow"
-msgstr ""
+msgstr "Rayon minimum ; les valeurs faibles peuvent nécessiter du temps"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Trajectory:"
@@ -10255,7 +10252,7 @@ msgstr "Raccordé"
 
 #: ../src/live_effects/lpe-jointype.cpp:34
 msgid "Miter Clip"
-msgstr "Limite du raccord"
+msgstr "Raccordé et coupé"
 
 #. {LINEJOIN_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"}, // disabled because doesn't work well
 #: ../src/live_effects/lpe-jointype.cpp:35
@@ -10288,7 +10285,7 @@ msgstr "Carrée"
 #: ../src/live_effects/lpe-jointype.cpp:45
 #: ../src/live_effects/lpe-powerstroke.cpp:153
 msgid "Peak"
-msgstr "En arête"
+msgstr "Sur l'arête"
 
 #: ../src/live_effects/lpe-jointype.cpp:54
 msgid "Thickness of the stroke"
@@ -10684,27 +10681,24 @@ msgid "Hide Points"
 msgstr "Masquer les points"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:35
-#, fuzzy
 msgid "Vertical Page Center"
-msgstr "Détection des bords verticale"
+msgstr "Centre X de la page"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:36
-#, fuzzy
 msgid "Horizontal Page Center"
-msgstr "Détection des bords horizontale"
+msgstr "Centre Y de la page"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:37
-#, fuzzy
 msgid "Free from reflection line"
-msgstr "Retirer de l'ensemble de sélection"
+msgstr "Sans ligne de réflexion"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:38
 msgid "X from middle knot"
-msgstr ""
+msgstr "X du nœud du milieu"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:39
 msgid "Y from middle knot"
-msgstr ""
+msgstr "Y du nœud du milieu"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:71
 #: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
@@ -10712,46 +10706,40 @@ msgid "Mode"
 msgstr "Mode"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:71
-#, fuzzy
 msgid "Symmetry move mode"
-msgstr "Nœud symétrique"
+msgstr "Mode de déplacement par symétrie"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:72
-#, fuzzy
 msgid "Discard original path?"
-msgstr "Remplacer le chemin original"
+msgstr "Retirer le chemin original ?"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:72
 msgid "Check this to only keep the mirrored part of the path"
-msgstr ""
+msgstr "Cochez cette case pour ne conserver que la version reflétée du chemin"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:73
 msgid "Fuse original and the reflection into a single path"
-msgstr ""
+msgstr "Fondre l'original et le reflet en un chemin unique"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-#, fuzzy
 msgid "Opposite fuse"
-msgstr "Mélanger les opposés"
+msgstr "Fondu opposé"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-#, fuzzy
 msgid "Picks the other side of the mirror as the original"
-msgstr "Les clones sont déplacés du même vecteur que leur original"
+msgstr "Prend l'autre côté du miroir comme original"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:75
-#, fuzzy
 msgid "Start mirror line"
-msgstr "Point de départ"
+msgstr "Ligne miroir de départ"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:76
 msgid "End mirror line"
-msgstr ""
+msgstr "Ligne miroir de fin"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:353
-#, fuzzy
 msgid "Adjust the center"
-msgstr "Ajuster <b>la distance d'offset</b>"
+msgstr "Ajuster le centre"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:53
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -23337,26 +23325,26 @@ msgstr ""
 "Ajuster la <b>hauteur</b> de l'ellipse; <b>Ctrl</b> pour en faire un cercle"
 
 #: ../src/ui/object-edit.cpp:1004
-#, fuzzy
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Positionner le <b>point de départ</b> de l'arc ou du camembert ; <b>Ctrl</b> "
-"pour tourner par incréments ; déplacer <b>vers l'intérieur</b> de l'ellipse "
-"pour un arc, <b>vers l'extérieur</b> pour un camembert"
+"Positionner le <b>point de départ</b> de l'arc ou du segment ; <b>Maj</b> "
+"pour déplacer avec le <b>point final</b> ; <b>Ctrl</b> pour tourner par "
+"incréments ; déplacer <b>à l'intérieur</b> de l'ellipse pour obtenir un arc, "
+"<b>à l'extérieur</b> pour un segment"
 
 #: ../src/ui/object-edit.cpp:1010
-#, fuzzy
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Positionner le <b>point final</b> de l'arc ou du camembert; <b>Ctrl</b> pour "
-"tourner par incréments; déplacer <b>vers l'intérieur</b> de l'ellipse pour "
-"un arc, <b>vers l'extérieur</b> pour un camembert"
+"Positionner le <b>point final</b> de l'arc ou du segment ; <b>Maj</b> pour "
+"déplacer avec le <b>point de départ</b> ; <b>Ctrl</b> pour tourner par "
+"incréments ; déplacer <b>à l'intérieur</b> de l'ellipse pour obtenir un arc, "
+"<b>à l'extérieur</b> pour un segment"
 
 #: ../src/ui/object-edit.cpp:1157
 msgid ""
@@ -24503,9 +24491,8 @@ msgid "Picked mesh corner color."
 msgstr "Couleur de coin de filet choisie."
 
 #: ../src/ui/tools/mesh-tool.cpp:489
-#, fuzzy
 msgid "Fit mesh inside bounding box."
-msgstr "Utilise la boîte englobante visuelle"
+msgstr "Ajuster le filet dans la boîte englobante."
 
 #: ../src/ui/tools/mesh-tool.cpp:779
 msgid "FIXME<b>Ctrl</b>: snap mesh angle"
@@ -29577,14 +29564,12 @@ msgid "Set gradient on stroke"
 msgstr "Appliquer un dégradé au contour"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on fill"
-msgstr "Appliquer un motif au fond"
+msgstr "Appliquer un filet au fond"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on stroke"
-msgstr "Appliquer un motif au contour"
+msgstr "Appliquer un filet au contour"
 
 #: ../src/widgets/fill-style.cpp:788
 msgid "Set pattern on fill"
@@ -30076,6 +30061,13 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Les filets de dégradé font partie de la spécification SVG 2 :\n"
+"* La syntaxe peut être amenée à changer.\n"
+"* Le support par les navigateurs n'est pas garanti.\n"
+"\n"
+"Pour le web : convertissez en matriciel (Édition > Créer une copie "
+"matricielle).\n"
+"Pour l'impression : exportez en PDF."
 
 #: ../src/widgets/mesh-toolbar.cpp:404
 msgid "normal"
@@ -30212,19 +30204,16 @@ msgid "Pick Color"
 msgstr "Capturer une couleur"
 
 #: ../src/widgets/mesh-toolbar.cpp:600
-#, fuzzy
 msgid "Scale mesh to bounding box:"
-msgstr "Montrer la boîte englobante"
+msgstr "Redimensionner le filet à la taille de la boîte englobante :"
 
 #: ../src/widgets/mesh-toolbar.cpp:601
-#, fuzzy
 msgid "Scale mesh to fit inside bounding box."
-msgstr "Montrer la boîte englobante limite"
+msgstr "Redimensionner le filet afin qu'il rentre dans la boîte englobante."
 
 #: ../src/widgets/mesh-toolbar.cpp:604
-#, fuzzy
 msgid "Fit mesh"
-msgstr "Éditer le fond du filet"
+msgstr "Ajuster le filet"
 
 #: ../src/widgets/node-toolbar.cpp:341
 msgid "Insert node"
@@ -30494,12 +30483,11 @@ msgstr "<b>Dégradé radial</b>"
 
 #: ../src/widgets/paint-selector.cpp:1080
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
-msgstr ""
+msgstr "Utilisez l'<b>outil Filet de dégradé</b> pour modifier le filet."
 
 #: ../src/widgets/paint-selector.cpp:1093
-#, fuzzy
 msgid "<b>Mesh fill</b>"
-msgstr "<b>Remplissage par échantillon</b>"
+msgstr "<b>Fond en filet</b>"
 
 #: ../src/widgets/paint-selector.cpp:1444
 msgid ""
@@ -32258,19 +32246,16 @@ msgstr ""
 "chemin."
 
 #: ../share/extensions/draw_from_triangle.py:179
-#, fuzzy
 msgid "Side Length 'a' ("
-msgstr "Longueur du côté a (px) :"
+msgstr "Longueur du côté « a » ("
 
 #: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy
 msgid "Side Length 'b' ("
-msgstr "Longueur du côté b (px) :"
+msgstr "Longueur du côté « b » ("
 
 #: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy
 msgid "Side Length 'c' ("
-msgstr "Longueur du côté c (px) :"
+msgstr "Longueur du côté « c » ("
 
 #: ../share/extensions/draw_from_triangle.py:182
 msgid "Angle 'A' (radians): "
@@ -32289,9 +32274,8 @@ msgid "Semiperimeter (px): "
 msgstr "Demi-périmètre (px) :"
 
 #: ../share/extensions/draw_from_triangle.py:186
-#, fuzzy
 msgid "Area ("
-msgstr "Zone"
+msgstr "Zone ("
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -36246,9 +36230,8 @@ msgid "Ask Us a Question"
 msgstr "Nous poser une _question"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:2
-#, fuzzy
 msgid "https://inkscape.org/en/ask/"
-msgstr "http://inkscape.org/doc/keys092.fr.html"
+msgstr "https://inkscape.org/en/ask/"
 
 #: ../share/extensions/inkscape_help_commandline.inx.h:1
 msgid "Command Line Options"
