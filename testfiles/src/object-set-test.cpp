@@ -572,74 +572,77 @@ TEST_F(ObjectSetTest, intersectClip) {
     r1->setPosition(0,0,10,10);
     r2->setPosition(0,0,10,10);
     r3->setPosition(0,0,10,10);
-    // */
-    std::cout << "R1: " << r1->getRect() << std::endl
-              << "R2: " << r2->getRect() << std::endl
-              << "R3: " << r3->getRect() << std::endl;
+
     set->set(r1.get());
-    std::cout << "Set contains only r1:" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+    EXPECT_EQ(1, set->size());
 
-    double offset_x = set->geometricBounds()->left();
-    double offset_y = set->geometricBounds()->top();
-    set->moveRelative(-offset_x, -offset_y);
-    std::cout << "Moved the set with ObjectSet::moveRelative(" << -offset_x << ", " << -offset_y << ")" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+    const double bounds_threshold = 1e-10;
+
+    Geom::OptRect bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    EXPECT_NEAR(bounds->top(),     0, bounds_threshold);
+    EXPECT_NEAR(bounds->bottom(), 10, bounds_threshold);
+    EXPECT_NEAR(bounds->left(),    0, bounds_threshold);
+    EXPECT_NEAR(bounds->right(),  10, bounds_threshold);
+    std::cout << "Added r1:" << std::endl << bounds << std::endl << std::endl;
+
+    set->moveRelative(10, 10);
+
+    bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    EXPECT_NEAR(bounds->top(),   -10, bounds_threshold);
+    EXPECT_NEAR(bounds->bottom(),  0, bounds_threshold);
+    EXPECT_NEAR(bounds->left(),   10, bounds_threshold);
+    EXPECT_NEAR(bounds->right(),  20, bounds_threshold);
+    std::cout << "moved relative (10,10):" << std::endl << bounds << std::endl << std::endl;
+
+    set->add(r2.get());
+    EXPECT_EQ(2, set->size());
 
 
-    set->set(r2.get());
-    std::cout << "Set contains only r2:" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+    bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    EXPECT_NEAR(bounds->top(),   -10, bounds_threshold);
+    EXPECT_NEAR(bounds->bottom(), 10, bounds_threshold);
+    EXPECT_NEAR(bounds->left(),    0, bounds_threshold);
+    EXPECT_NEAR(bounds->right(),  20, bounds_threshold);
+    std::cout << "Added r2:" << std::endl << bounds << std::endl << std::endl;
 
-    offset_x = set->geometricBounds()->left();
-    offset_y = set->geometricBounds()->top();
-    set->moveRelative(-offset_x, -offset_y);
-    std::cout << "Moved the set with ObjectSet::moveRelative(" << -offset_x << ", " << -offset_y << ")" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
-
-    set->add(r1.get());
-    std::cout << "Add r1 to the set" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
-
-    set->group();//r1-3 are now invalid (grouping makes copies)
+    set->group();//r1-2 are now invalid (grouping makes copies)
     r1.release();
     r2.release();
+    EXPECT_EQ(1, set->size());
 
-    std::cout << "Grouped the set" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+
+    bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    std::cout << "grouped:" << std::endl << bounds << std::endl << std::endl;
 
     set->moveRelative(-5,-5);
-    std::cout << "Moved relative by (-5,-5)" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
+    EXPECT_EQ(1, set->size());
+
+
+    bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    std::cout << "moved relative (-5,-5):" << std::endl << bounds << std::endl << std::endl;
+
 
     set->add(r3.get());
-    std::cout << "Added r3" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
-
     EXPECT_EQ(2, set->size());
+
+
+    bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    std::cout << "Added r3:" << std::endl << bounds << std::endl << std::endl;
+
+
     set->setMask(true, false, true);
     r3.release();
-    std::cout << "Set the clip. This should mean that the group consisting of r1 and r2 is clipped by r3." << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl << std::endl;
-
     EXPECT_EQ(1, set->size());
+
+    std::cout << "Set mask:" << std::endl << bounds << std::endl << std::endl;
+
+
 
     set->intersectClip(true);
 
-    EXPECT_EQ(1, set->size());
+    std::cout << "called intersectClip:" << std::endl << bounds << std::endl << std::endl;
 
-    std::cout << "Applied intersectClip" << std::endl;
-    std::cout << "Geometric bounds: " << set->geometricBounds() << std::endl
-              << "Visual bounds: " << set->visualBounds() << std::endl;
+    EXPECT_EQ(1, set->size());
 
     TearDownTestCase();
     SetUpTestCase();
