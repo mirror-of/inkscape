@@ -124,6 +124,41 @@ bool containsClone(ObjectSet* set) {
     return false;
 }
 
+testing::AssertionResult EqualRect(const Geom::OptRect a, const Geom::OptRect b, const double threshold = 1e-10) {
+    std::stringstream errors;
+    bool hasErrors = false;
+
+    if (std::abs(a->left() - b->left()) > threshold) {
+        hasErrors = true;
+        errors << "The difference (" << std::abs(a->left() - b->left())
+               << ") between a->top() (=" << a->left() << ") and b->top() (="
+               << b->left() << ") exceeds " << threshold << std::endl;
+    }
+    if (std::abs(a->right() - b->right()) > threshold) {
+        hasErrors = true;
+        errors << "The difference (" << std::abs(a->right() - b->right())
+               << ") between a->top() (=" << a->right() << ") and b->top() (="
+               << b->right() << ") exceeds " << threshold << std::endl;
+    }
+    if (std::abs(a->top() - b->top()) > threshold) {
+        hasErrors = true;
+        errors << "The difference (" << std::abs(a->top() - b->top())
+               << ") between a->top() (=" << a->top() << ") and b->top() (="
+               << b->top() << ") exceeds " << threshold << std::endl;
+    }
+    if (std::abs(a->bottom() - b->bottom()) > threshold) {
+        hasErrors = true;
+        errors << "The difference (" << std::abs(a->bottom() - b->bottom())
+               << ") between a->top() (=" << a->bottom() << ") and b->top() (="
+               << b->bottom() << ") exceeds " << threshold << std::endl;
+    }
+
+    if (hasErrors) {
+        return testing::AssertionFailure() << errors.str();
+    }
+    return testing::AssertionSuccess() << "The rects are identical up to a threshold of " << threshold;
+}
+
 TEST_F(ObjectSetTest, Basics) {
     EXPECT_EQ(0, set->size());
     set->add(A);
@@ -454,7 +489,7 @@ TEST_F(ObjectSetTest, unlinkRecursiveBasic) {
     EXPECT_FALSE(containsClone(set));
     set->duplicate();
     EXPECT_FALSE(containsClone(set));
-        EXPECT_EQ(9, _doc->getRoot()->children.size());//metadata, defs, namedview, and those 3x2 rects.
+    EXPECT_EQ(9, _doc->getRoot()->children.size());//metadata, defs, namedview, and those 3x2 rects.
     EXPECT_EQ(3, set->size());
     EXPECT_FALSE(set->includes(r1.get()));
     set->deleteItems();
@@ -643,6 +678,134 @@ TEST_F(ObjectSetTest, intersectClip) {
     std::cout << "called intersectClip:" << std::endl << bounds << std::endl << std::endl;
 
     EXPECT_EQ(1, set->size());
+
+    TearDownTestCase();
+    SetUpTestCase();
+}
+
+TEST_F(ObjectSetTest, documentBounds) {
+    //*
+    r1->setPosition(0,0,10,10);
+    r2->setPosition(0,0,10,10);
+    r3->setPosition(0,0,10,10);
+
+    set->set(r1.get());
+
+    Geom::OptRect g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    Geom::OptRect v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    Geom::OptRect a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "Added r1:" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    Geom::OptRect expected_rect(0, 0, 10, 10);
+    EXPECT_TRUE(EqualRect(g_bounds, expected_rect));
+
+    set->moveRelative(10, 10);
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "moveRelative(10, 10):" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    expected_rect = Geom::OptRect(10, -10, 20, 0);
+    EXPECT_TRUE(EqualRect(g_bounds, expected_rect));
+
+    set->group();
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "group():" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    // Grouping shouldn't change the bounds, therefore no new rect coordinates
+    EXPECT_TRUE(EqualRect(g_bounds, expected_rect));
+
+
+    set->moveRelative(-10, -10);
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "moveRelative(-10, -10):" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    expected_rect = Geom::OptRect(0, 0, 10, 10);
+    EXPECT_TRUE(EqualRect(g_bounds, expected_rect));
+
+    set->moveRelative(10, 10);
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "moveRelative(10, 10):" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    expected_rect = Geom::OptRect(10, -10, 20, 0);
+    EXPECT_TRUE(EqualRect(g_bounds, expected_rect));
+
+
+    set->add(r2.get());
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "add r2:" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    expected_rect = Geom::OptRect(0, -10, 20, 10);
+    EXPECT_TRUE(EqualRect(g_bounds, expected_rect));
+
+    set->group();
+
+    r1.release();
+    r2.release();
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "group():" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    // Grouping shouldn't change the bounds, therefore no new rect coordinates
+    // This fails atm, no clear idea why.
+    EXPECT_TRUE(EqualRect(g_bounds, expected_rect));
+
+    set->moveRelative(10, 10);
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "moveRelative(10, 10):" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
+    set->moveRelative(-10, -10);
+
+    g_bounds = set->documentBounds(SPItem::GEOMETRIC_BBOX);
+    v_bounds = set->documentBounds(SPItem::VISUAL_BBOX);
+    a_bounds = set->documentBounds(SPItem::APPROXIMATE_BBOX);
+    std::cout << "moveRelative(-10, -10):" << std::endl
+              << g_bounds << std::endl
+              << v_bounds << std::endl
+              << a_bounds << std::endl << std::endl;
+
 
     TearDownTestCase();
     SetUpTestCase();

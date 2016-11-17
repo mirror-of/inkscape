@@ -373,7 +373,7 @@ void SPItem::moveTo(SPItem *target, bool intoafter) {
 }
 
 void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPItem* object = this;
+    SPItem* object = this;
 
     object->readAttr( "style" );
     object->readAttr( "transform" );
@@ -1529,6 +1529,7 @@ gint SPItem::emitEvent(SPEvent &event)
 void SPItem::set_item_transform(Geom::Affine const &transform_matrix)
 {
     if (!Geom::are_near(transform_matrix, transform, 1e-18)) {
+        bbox_valid = false;
         transform = transform_matrix;
         /* The SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a
            transformation.  It's apparently not used anywhere else. */
@@ -1595,6 +1596,7 @@ Geom::Affine SPItem::i2dt_affine() const
 
 void SPItem::set_i2d_affine(Geom::Affine const &i2dt)
 {
+    bbox_valid = false;
     Geom::Affine dt2p; /* desktop to item parent transform */
     if (parent) {
         dt2p = static_cast<SPItem *>(parent)->i2dt_affine().inverse();
