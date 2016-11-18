@@ -299,4 +299,4 @@ Exec=inkscape %F
 TryExec=inkscape
 Terminal=false
 StartupNotify=true
-Icon=inkscape.svg
+Icon=${SNAP}/meta/gui/inkscape.svg
