@@ -9738,33 +9738,28 @@ msgid "Origin"
 msgstr "Origine"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:65
-#, fuzzy
 msgid "Origin of the rotation"
-msgstr "Ignora rotazione immagini"
+msgstr "Origine della rotazione"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
-#, fuzzy
 msgid "Starting:"
 msgstr "Inizio:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
-#, fuzzy
 msgid "Angle of the first copy"
-msgstr "Lingua del contenuto intellettuale della risorsa"
+msgstr "Angolo della prima copia"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
-#, fuzzy
 msgid "Rotation angle:"
-msgstr "Angolo di rotazione"
+msgstr "Angolo di rotazione:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 msgid "Angle between two successive copies"
 msgstr "Angolo tra due copie successive"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
-#, fuzzy
 msgid "Number of copies:"
-msgstr "Numero di copia"
+msgstr "Numero di copie:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
 msgid "Number of copies of the original path"
@@ -9772,26 +9767,25 @@ msgstr "Numero di copie del tracciato originale"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "360º Copies"
-msgstr ""
+msgstr "Copie a 360°"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "No rotation angle, fixed to 360º"
-msgstr ""
+msgstr "Nessun angolo di rotazione, fissato a 360°"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:73
-#, fuzzy
 msgid "Fuse paths"
-msgstr "Estrudi tracciato"
+msgstr "Fondi tracciati"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
+#, fuzzy
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
-msgstr ""
+msgstr "Fonde i tracciati "
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:431
-#, fuzzy
 msgid "Adjust the starting angle"
-msgstr "Modifica saturazione"
+msgstr "Modifica l'angolo di partenza"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:437
 msgid "Adjust the rotation angle"
@@ -10642,27 +10636,24 @@ msgid "Hide Points"
 msgstr "Nascondi punti"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:35
-#, fuzzy
 msgid "Vertical Page Center"
-msgstr "Rilevamento bordi verticali"
+msgstr "Centro verticale pagina"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:36
-#, fuzzy
 msgid "Horizontal Page Center"
-msgstr "Rilevamento bordi orizzontali"
+msgstr "Centro orizzontale pagina"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:37
-#, fuzzy
 msgid "Free from reflection line"
-msgstr "Rimuove selezione dal set"
+msgstr "Libera dalla linea di riflessione"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:38
 msgid "X from middle knot"
-msgstr ""
+msgstr "Lungo asse X"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:39
 msgid "Y from middle knot"
-msgstr ""
+msgstr "Lungo asse Y"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:71
 #: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
@@ -10670,14 +10661,12 @@ msgid "Mode"
 msgstr "Modalità"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:71
-#, fuzzy
 msgid "Symmetry move mode"
-msgstr "Nodo simmetrico"
+msgstr "Modalità di spostamento simmetrico"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:72
-#, fuzzy
 msgid "Discard original path?"
-msgstr "Sostituisci testo"
+msgstr "Scarta il tracciato originale"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:72
 msgid "Check this to only keep the mirrored part of the path"
@@ -10686,26 +10675,23 @@ msgstr ""
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:73
 msgid "Fuse original and the reflection into a single path"
-msgstr ""
+msgstr "Fonde il tracciato originale e quello riflesso in un unico tracciato"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-#, fuzzy
 msgid "Opposite fuse"
-msgstr "Miscela opposti"
+msgstr "Fusione opposta"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-#, fuzzy
 msgid "Picks the other side of the mirror as the original"
-msgstr "I cloni vengono traslati dello stesso vettore dell'originale"
+msgstr "Fonde considerando il tracciato riflesso come originale"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:75
-#, fuzzy
 msgid "Start mirror line"
-msgstr "Punto iniziale"
+msgstr "Inizio linea riflessione"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:76
 msgid "End mirror line"
-msgstr ""
+msgstr "Fine linea riflessione"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:353
 #, fuzzy
@@ -11681,7 +11667,7 @@ msgstr "Ultimo nodo"
 #: ../src/live_effects/lpe-transform_2pts.cpp:43
 #, fuzzy
 msgid "Rotation helper size"
-msgstr "Centro di rotazione"
+msgstr "Dimensione ausilio di rotazione"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:196
 #, fuzzy
@@ -11880,18 +11866,16 @@ msgstr "Modifica parametri casuali"
 
 #: ../src/live_effects/parameter/text.cpp:101
 msgid "Change text parameter"
-msgstr "Cambia parametri testo"
+msgstr "Cambia parametro testo"
 
 #: ../src/live_effects/parameter/togglebutton.cpp:114
-#, fuzzy
 msgid "Change togglebutton parameter"
-msgstr "Cambia parametri testo"
+msgstr "Cambia bottone parametro"
 
 #: ../src/live_effects/parameter/transformedpoint.cpp:98
 #: ../src/live_effects/parameter/vector.cpp:99
-#, fuzzy
 msgid "Change vector parameter"
-msgstr "Cambia parametri testo"
+msgstr "Cambia parametro vettoriale"
 
 #: ../src/live_effects/parameter/unit.cpp:80
 msgid "Change unit parameter"
@@ -29875,9 +29859,8 @@ msgid "Scale the results"
 msgstr "Scala i risultati della misurazione"
 
 #: ../src/widgets/measure-toolbar.cpp:329
-#, fuzzy
 msgid "The offset size"
-msgstr "Spostamento rosso"
+msgstr "Dimensione dello spostamento della misurazione"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
