@@ -431,6 +431,7 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
 
                     case MG_CORNER_SIDE_ARC:
                         DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Approximated arc for mesh side."));
+                        drag->local_change = true; // Don't create new draggers.
                         break;
 
                     case MG_CORNER_TENSOR_TOGGLE:
@@ -439,10 +440,12 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
 
                     case MG_CORNER_COLOR_SMOOTH:
                         DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Smoothed mesh corner color."));
+                        drag->local_change = true;
                         break;
 
                     case MG_CORNER_COLOR_PICK:
                         DocumentUndo::done(doc, SP_VERB_CONTEXT_MESH, _("Picked mesh corner color."));
+                        drag->local_change = true;
                         break;
 
                     case MG_CORNER_INSERT:
@@ -455,7 +458,9 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
             }
         }
     }
-    drag->updateDraggers();
+
+    // Not needed. Update is done via gr_drag_sel_modified().
+    // drag->updateDraggers();
 
 }
 
