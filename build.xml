@@ -215,7 +215,7 @@
         //#define WITH_SVG2                  1
         //#define WITH_CSSCOMPOSITE          1
         //#define WITH_CSSBLEND              1
-        //#define WITH_MESH                  1
+        #define WITH_MESH                  1
 
         #define HAVE_ASPELL                   1
         
