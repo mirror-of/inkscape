@@ -191,7 +191,6 @@ if(WIN32)
     doc
     modules
     plugins
-    share
     DESTINATION ${CMAKE_INSTALL_PREFIX}
     PATTERN Adwaita EXCLUDE               # NOTE: The theme is not used on Windows.
     PATTERN hicolor/index.theme EXCLUDE   # NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.

@@ -58,7 +58,7 @@ option(WITH_SVG2 "Compile with support for new SVG2 features" ON)
 option(WITH_LPETOOL "Compile with LPE Tool and experimental LPEs enabled" OFF)
 #option(WITH_INKJAR "Enable support for openoffice files (SVG jars)" ON)
 option(WITH_OPENMP "Compile with OpenMP support" ON)
-option(WITH_MESH "Comple with the SVG2 Mesh tool visible in the toolbox" OFF)
+option(WITH_MESH "Comple with the SVG2 Mesh tool visible in the toolbox" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
 
@@ -189,8 +189,6 @@ endif()
 # -----------------------------------------------------------------------------
 # Installation
 # -----------------------------------------------------------------------------
-# TODO: Make this install files to the correct location on WIN32 (i.e. set SHARE_INSTALL first)
-#       We currently copy all files in /share in Install.cmake again
 add_subdirectory(share)
 	
 include(CMakeScripts/Install.cmake)
