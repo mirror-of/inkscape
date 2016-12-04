@@ -150,7 +150,7 @@ def boxunion(b1,b2):
     if b1 is None:
         return b2
     elif b2 is None:
-        return b1    
+        return b1
     else:
         return((min(b1[0],b2[0]), max(b1[1],b2[1]), min(b1[2],b2[2]), max(b1[3],b2[3])))
 
@@ -203,9 +203,18 @@ def cubicExtrema(y0, y1, y2, y3):
             cmax = max(cmax, y)
     return cmin, cmax
 
+def isNondrawing(node):
+    if node.tag in [ inkex.addNS('defs', 'svg'), 'defs', inkex.addNS('metadata', 'svg'), 'metadata' ]:
+        return True
+    if node.xpath('namespace-uri()') not in [ 'http://www.w3.org/2000/svg', '']:
+        return True
+    return False
+
 def computeBBox(aList,mat=[[1,0,0],[0,1,0]]):
     bbox=None
     for node in aList:
+        if isNondrawing(node):
+            continue
         m = parseTransform(node.get('transform'))
         m = composeTransform(mat,m)
         #TODO: text not supported!
@@ -236,7 +245,7 @@ def computeBBox(aList,mat=[[1,0,0],[0,1,0]]):
             d = 'M %f %f ' % (x1, cy) + \
                 'A' + rx + ',' + ry + ' 0 1 0 %f,%f' % (x2, cy) + \
                 'A' + rx + ',' + ry + ' 0 1 0 %f,%f' % (x1, cy)
- 
+
         if d is not None:
             p = cubicsuperpath.parsePath(d)
             applyTransformToPath(m,p)
@@ -247,7 +256,7 @@ def computeBBox(aList,mat=[[1,0,0],[0,1,0]]):
             path = '//*[@id="%s"]' % refid[1:]
             refnode = node.xpath(path)
             bbox=boxunion(computeBBox(refnode,m),bbox)
-            
+
         bbox=boxunion(computeBBox(node,m),bbox)
     return bbox
 
