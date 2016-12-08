@@ -14,15 +14,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "live_effects/lpe-mirror_symmetry.h"
-#include <sp-path.h>
 #include <display/curve.h>
 #include <svg/path-string.h>
 #include "helper/geom.h"
-#include <2geom/path.h>
 #include <2geom/path-intersection.h>
-#include <2geom/transforms.h>
-#include <2geom/affine.h>
-#include "inkscape.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

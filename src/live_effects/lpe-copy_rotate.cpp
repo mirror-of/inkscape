@@ -15,9 +15,6 @@
 #include <2geom/path-intersection.h>
 #include <2geom/sbasis-to-bezier.h>
 #include "live_effects/lpe-copy_rotate.h"
-#include <2geom/path.h>
-#include <2geom/transforms.h>
-#include <2geom/angle.h>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -124,11 +121,6 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 void
 LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-//    if(fuse_paths) {
-//        Geom::Coord angle  = Geom::deg_from_rad(atan(-postmul[1]/postmul[0]));
-//        angle += starting_angle;
-//        starting_angle.param_set_value(angle);
-//    }
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
 
     for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
