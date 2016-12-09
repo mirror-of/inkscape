@@ -17,9 +17,9 @@
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/bool.h"
 #include "live_effects/lpegroupbbox.h"
+#include "2geom/point.h"
 
 #include <vector>
-#include "2geom/point.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

@@ -2,6 +2,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm.h>
 #include "live_effects/lpe-simplify.h"
 #include "display/curve.h"
 #include "live_effects/parameter/parameter.h"
