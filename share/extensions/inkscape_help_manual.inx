@@ -4,7 +4,7 @@
   <id>org.inkscape.help.manual</id>
   <dependency type="executable" location="extensions">launch_webbrowser.py</dependency>
   <!-- i18n. Please don't translate it unless a page exists in your language -->
-  <_param name="url" gui-hidden="true" type="string">http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php</_param>
+  <_param name="url" gui-hidden="true" type="string">http://tavmjong.org/INKSCAPE/MANUAL/html/index.php</_param>
   <effect needs-document="false">
     <object-type>all</object-type>
     <effects-menu hidden="true" />
