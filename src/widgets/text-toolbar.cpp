@@ -239,8 +239,7 @@ static void sp_text_fontsize_value_changed( Ink_ComboBoxEntry_Action *act, GObje
         Inkscape::Selection *selection = desktop->getSelection();
         std::vector<SPItem*> itemlist=selection->itemList();
         for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end(); ++i){
-            if (dynamic_cast<SPText *>(*i) ||
-                dynamic_cast<SPFlowtext *>(*i)) {
+            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
                 SPItem *item = *i;
 
                 // Scale by inverse of accumulated paraent transform
@@ -249,7 +248,6 @@ static void sp_text_fontsize_value_changed( Ink_ComboBoxEntry_Action *act, GObje
                 Geom::Affine const local(item->i2doc_affine());
                 double const ex(local.descrim());
                 if ( (ex != 0.0) && (ex != 1.0) ) {
-                    std::cout << "Scaling by: " << 1/ex << std::endl;
                     sp_css_attr_scale(css_set, 1/ex);
                 }
 
@@ -601,10 +599,21 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
         Inkscape::Selection *selection = desktop->getSelection();
         std::vector<SPItem*> itemlist=selection->itemList();
         for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end(); ++i){
-            if (dynamic_cast<SPText *>(*i) ||
-                dynamic_cast<SPFlowtext *>(*i)) {
+            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
                 SPItem *item = *i;
-                item->changeCSS(css,"style");
+
+                // Scale by inverse of accumulated paraent transform
+                SPCSSAttr *css_set = sp_repr_css_attr_new();
+                sp_repr_css_merge(css_set, css);
+                Geom::Affine const local(item->i2doc_affine());
+                double const ex(local.descrim());
+                if ( (ex != 0.0) && (ex != 1.0) ) {
+                    sp_css_attr_scale(css_set, 1/ex);
+                }
+
+                item->changeCSS(css_set,"style");
+
+                sp_repr_css_attr_unref(css_set);
             }
         }
     } else {
