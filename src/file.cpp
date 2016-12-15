@@ -412,6 +412,8 @@ bool sp_file_open(const Glib::ustring &uri,
                 // std::cout << "Absolute SVG units in root? " << (need_fix_viewbox?"true":"false") << std::endl;
                 // std::cout << "User units in root? "         << (need_fix_units  ?"true":"false") << std::endl;
 
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
                 if (!root->viewBox_set && need_fix_viewbox) {
 
                     Glib::ustring msg = _(
@@ -433,7 +435,8 @@ bool sp_file_open(const Glib::ustring &uri,
 #endif
 
                     Gtk::CheckButton backupButton( _("Create backup file (in same directory).") );
-                    backupButton.set_active();
+                    bool backup = prefs->getBool("/options/dpifixbackup", true);
+                    backupButton.set_active( backup );
                     backupButton.show();
 
 #if WITH_GTKMM_3_0
@@ -447,7 +450,9 @@ bool sp_file_open(const Glib::ustring &uri,
                     scaleDialog.add_button(_("Ignore"),          3);
 
                     gint response = scaleDialog.run();
-                    bool backup = backupButton.get_active();
+                    backup = backupButton.get_active();
+                    prefs->setBool("/options/dpifixbackup", backup);
+
                     if ( backup && response != 3) {
                         sp_file_save_backup( uri );
                     }
@@ -479,7 +484,6 @@ bool sp_file_open(const Glib::ustring &uri,
                         // }
 
                         // Save preferences
-                        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                         bool transform_stroke      = prefs->getBool("/options/transform/stroke", true);
                         bool transform_rectcorners = prefs->getBool("/options/transform/rectcorners", true);
                         bool transform_pattern     = prefs->getBool("/options/transform/pattern", true);
@@ -529,7 +533,8 @@ bool sp_file_open(const Glib::ustring &uri,
 #endif
 
                     Gtk::CheckButton backupButton( _("Create backup file (in same directory).") );
-                    backupButton.set_active();
+                    bool backup = prefs->getBool("/options/dpifixbackup", true);
+                    backupButton.set_active( backup );
                     backupButton.show();
 
 #if WITH_GTKMM_3_0
@@ -543,7 +548,9 @@ bool sp_file_open(const Glib::ustring &uri,
                     scaleDialog.add_button(_("Ignore"),         3);
 
                     gint response = scaleDialog.run();
-                    bool backup = backupButton.get_active();
+                    backup = backupButton.get_active();
+                    prefs->setBool("/options/dpifixbackup", backup);
+
                     if ( backup && response != 3) {
                         sp_file_save_backup( uri );
                     }
@@ -594,7 +601,6 @@ bool sp_file_open(const Glib::ustring &uri,
                         if (!root->viewBox_set) {
 
                             // Save preferences
-                            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                             bool transform_stroke      = prefs->getBool("/options/transform/stroke", true);
                             bool transform_rectcorners = prefs->getBool("/options/transform/rectcorners", true);
                             bool transform_pattern     = prefs->getBool("/options/transform/pattern", true);
