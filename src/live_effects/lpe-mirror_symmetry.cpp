@@ -118,7 +118,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         start_point.param_setValue(point_a);
         end_point.param_setValue(point_b);
     }
-    line_separation.setPoints(point_a, point_b);
     if ( mode == MT_X || mode == MT_Y ) {
         start_point.param_setValue(point_a, true);
         end_point.param_setValue(point_b, true);
@@ -127,9 +126,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Point trans = center_point - previous_center;
             start_point.param_setValue(start_point * trans, true);
             end_point.param_setValue(end_point * trans, true);
-            line_separation.setPoints(start_point, end_point);
-        } else {
-            line_separation.setPoints(start_point, end_point);
         }
     } else if ( mode == MT_V){
         if(SP_ACTIVE_DESKTOP){
@@ -141,7 +137,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Point ep = Geom::Point(view_box_rect.width()/2.0, view_box_rect.height());
             ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
             end_point.param_setValue(ep, true);
-            line_separation.setPoints(start_point, end_point);
         }
     } else { //horizontal page
         if(SP_ACTIVE_DESKTOP){
@@ -153,7 +148,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Point ep = Geom::Point(view_box_rect.width(), view_box_rect.height()/2.0);
             ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
             end_point.param_setValue(ep, true);
-            line_separation.setPoints(start_point, end_point);
         }
     }
     previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
@@ -202,24 +196,8 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         path_out = pathv_to_linear_and_cubic_beziers(path_in);
     }
 
-    Geom::Point point_a(line_separation.initialPoint());
-    Geom::Point point_b(line_separation.finalPoint());
-
-    Geom::Translate m1(point_a[0], point_a[1]);
-    double hyp = Geom::distance(point_a, point_b);
-    double cos = 0;
-    double sin = 0;
-    if (hyp > 0) {
-        cos = (point_b[0] - point_a[0]) / hyp;
-        sin = (point_b[1] - point_a[1]) / hyp;
-    }
-    Geom::Affine m2(cos, -sin, sin, cos, 0.0, 0.0);
-    Geom::Scale sca(1.0, -1.0);
-
-    Geom::Affine m = m1.inverse() * m2;
-    m = m * sca;
-    m = m * m2.inverse();
-    m = m * m1;
+    Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
+    Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
 
     if (fuse_paths && !discard_orig_path) {
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
