@@ -58,7 +58,6 @@ option(WITH_SVG2 "Compile with support for new SVG2 features" ON)
 option(WITH_LPETOOL "Compile with LPE Tool and experimental LPEs enabled" OFF)
 #option(WITH_INKJAR "Enable support for openoffice files (SVG jars)" ON)
 option(WITH_OPENMP "Compile with OpenMP support" ON)
-option(WITH_MESH "Comple with the SVG2 Mesh tool visible in the toolbox" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
 
@@ -265,7 +264,6 @@ message("WITH_IMAGE_MAGICK:       ${WITH_IMAGE_MAGICK}")
 message("WITH_LIBCDR:             ${WITH_LIBCDR}")
 message("WITH_LIBVISIO:           ${WITH_LIBVISIO}")
 message("WITH_LIBWPG:             ${WITH_LIBWPG}")
-message("WITH_MESH:               ${WITH_MESH}")
 message("WITH_NLS:                ${WITH_NLS}")
 message("WITH_OPENMP:             ${WITH_OPENMP}")
 message("WITH_PROFILING:          ${WITH_PROFILING}")
