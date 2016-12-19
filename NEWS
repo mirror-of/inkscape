@@ -1,12 +1,15 @@
-914 lines
+967 lines
 Inkscape 0.92
 
-(definitely not released yet - AnnouncePlanning092)
+(Definitely not released yet — AnnouncePlanning092)
 
 Release highlights
 
 Released on «YYYY-MM-DD».
 
+  • Mesh Gradients are now supported.
+  • Many SVG2 and CSS3 properties are now supported (e.g. paint-order,
+    mix-blend-mode). Not all are available from the GUI.
   • The new Object dialog allows to select, label, hide and lock any object in
     the drawing from a dialog that lists them all
   • Selection sets make it possible to 'group' objects together regardless of
@@ -17,8 +20,6 @@ Released on «YYYY-MM-DD».
   • There are several new extensions (e.g. a seamless pattern extension) and a
     new filter (colorblindness simulation) included in the release, many old
     extensions have been updated or got new features
-  • Many SVG2 and CSS3 properties are now supported for rendering (e.g.
-    paint-order, mix-blend-mode)
   • Spray tool and measure tool received a set of nifty new features
   • Interactive smoothing for lines created with the Pencil tool
   • BSplines (and more) are available for the Pen tool
@@ -29,9 +30,17 @@ Important changes
 
   • The default resolution was changed from 90dpi to 96dpi, to match the CSS
     standard. For more background information, please see the Wiki article
-    about handling of units in Inkscape. [The best way to convert images that
-    have been created with old Inkscape versions still needs to be decided and
-    worked on, see release blocker bug report.]
+    about handling of units in Inkscape. Inkscape 0.92 will attempt to identify
+    'legacy' Inkscape files that need to be converted. If such a file is
+    detected, the user will be offered three options:
+     1. Set 'viewBox'. Inkscape will add an appropriate 'viewBox' which will do
+        a global scaling of the document. It will also adjust the document
+        width and height if necessary.
+     2. Scale elements. Inkscape will scale each internal element.
+     3. Ignore. Do nothing. This is an appropriate choice for documents meant
+        for screen display.
+
+        [See release blocker bug report for more details.]
 
   • For developers and packagers, the switch from autotools to CMake is a
     relevant change (users who do not compile their own version will not be
@@ -65,29 +74,27 @@ Usage:
   • Open Dialog with 'Object > Selection sets'
 
   • To create a new selection set:
-
- 1. Click on the '+' button at the bottom of the dialog to create a new
-    selection set (double-click on its label to edit)
+     1. click on the '+' button at the bottom of the dialog (double-click on
+        its label to edit)
 
   • To add objects to a selection set:
-
- 1. select object on the canvas
- 2. in the 'Selection sets' dialog click on the '+' icon before the selection
-    set in the list
+     1. select object on the canvas
+     2. in the 'Selection sets' dialog click on the '+' icon before the
+        selection set in the list
 
   • To select all objects of a selection set:
-
- 1. deselect any existing selection and click on the selection set in the list
+     1. deselect any existing selection and click on the selection set in the
+        list
 
   • To remove an object from a selection set
+     1. select the selection set in the dialog
+     2. click on 'Items' to show all objects in the set
+     3. select an object on the canvas or in the Items list in the dialog
+     4. click on the 'Delete' icon (trashbin) before the object in the list
 
- 1. select the selection set in the dialog
- 2. click on 'Items' to show all objects in the set
- 3. select an object on the canvas or in the Items list in the dialog
- 4. click on the 'Delete' icon (trashbin) before the object in the list
-
-  • To delete a selection set, select it in the list and click on the '-'
-    button at the bottom of the dialog
+  • To delete a selection set:
+     1. select it in the list and click on the '-' button at the bottom of the
+        dialog
 
 Text
 
@@ -115,9 +122,39 @@ Converting text to a path will save the text in the 'aria-label' attribute.
 This is useful for accessibility and could eventually be used by Inkscape to
 reconstruct the text.
 
-Other
+Line Spacing
 
-Line height setting now allows you to select a unit.
+Line spacing in Inkscape now follows the CSS standard for the 'line-height'
+property. Note the following points:
+
+  • The minimum spacing between lines is determined by the 'strut' value. This
+    is determined by the product of the 'font-size' and 'line-height' values on
+    the outermost text element. These values are shown and can be set when the
+    "Outer Style" button is enabled in the Text Tool's Tool Control bar. To set
+    the 'strut' to zero, set the outer style 'line-height' to zero.
+
+  • The unit for 'line-height' can now be chosen. Previous versions of Inkscape
+    used a unitless value. When the value is unitless, the line spacing is
+    recalculated for each change in font size. This is the most commonly
+    expected behavior. When the value has a unit, the line spacing is
+    calculated at the point where the CSS 'line-height' property is defined and
+    that value is used regardless of following changes in font size. This
+    however, will not always lead to evenly spaced lines due to the
+    idiosyncrasies of how line spacing is calculated in CSS. (See Tav's write
+    up CSS Text Line Spacing Exposed for the details.)
+
+  • When the "Outer Style" button is not enabled, the "Font size" and "Line
+    height" boxes show the values of either the selected text or at the cursor
+    point (if no text is selected). Changes in font size and line spacing will
+    be applied to the selected text or to the whole text object (if no text is
+    selected). Unlike other styling properties (e.g. fill color), there is no
+    visual indicator of which characters have a particular 'line-height' value.
+    One can step through character by character with the cursor to determine a
+    span of characters with the same 'line-height' value.
+
+  • To create a set of evenly spaced lines regardless of font size, set the
+    'strut' value to the desired line spacing and then set the inner
+    'line-height' values to zero.
 
 Live Path Effects
 
@@ -159,8 +196,9 @@ Bspline.gif Bspline2.gif
 
 Live Path Effect mode
 
-Bspline3.gif
+[170px-Bspline3]
  
+Bspline LPE
 
 The options in the Live Path Effect dialog give you full control over bspline
 paths.
@@ -179,8 +217,9 @@ paths.
 
 Roughen
 
-Roughen.png
+[170px-Roughen]
  
+Roughen LPE
 
 Extended video: https://www.youtube.com/watch?v=130Dbt0juvY
 
@@ -196,8 +235,9 @@ Roughen.gif
 
 Simplify
 
-Simplify.png
+[170px-Simplify]
  
+Simplify LPE
 
 Extended video: https://www.youtube.com/watch?v=gaWujN_iTSk
 
@@ -217,8 +257,9 @@ smoothing (which would be a destructive operation).
 
 Perspective/Envelope
 
-Perspective-envelope.png
+[170px-Perspective-envel]
  
+Perspective/Envelope LPE
 
 Extended video: https://www.youtube.com/watch?v=CjKGatyxTZ8
 
@@ -232,8 +273,9 @@ Perspective-envelope.gif
 
 Lattice Deformation 2
 
-Latice2.png
+[170px-Latice2]
  
+Lattice Deformation 2 LPE
 
 Extended video: https://www.youtube.com/watch?v=YlK9L88_tWE
 Symmetry video: https://www.youtube.com/watch?v=jhuVjqFA6ig
@@ -247,8 +289,9 @@ Latice2.gif
 
 Show Handles
 
-ShowHandles.png
+[170px-ShowHandles]
  
+Show Handles LPE
 
 Extended video: https://www.youtube.com/watch?v=h9ul_PR9XYo
 
@@ -264,8 +307,9 @@ ShowHandles.gif
 
 Transform by two points
 
-TransformByTwoKnots.png
+[170px-TransformByTwoKno]
  
+Transform by 2 points LPE
 
 Extended video: https://www.youtube.com/watch?v=ZLmYdWoXXIw
 Extended video (Elastic rubber): https://www.youtube.com/watch?v=lOWTeZC_LjM
@@ -289,7 +333,7 @@ Rotate copies
 
 [170px-LPERotateCopies]
  
-Rotate Copies LPE
+Rotate copies LPE
 
 Extended video (partial fuse path): https://www.youtube.com/watch?v=UpI8gRbkTu4
 Extended video (live editing): https://www.youtube.com/watch?v=fBQpvfgT4mE
@@ -310,6 +354,7 @@ Mirror Symmetry
 Mirror LPE
 
 Extended video: https://www.youtube.com/watch?v=m1sj4AeU3Yo
+
 Mirrors an item dynamically.
 
   • Works on paths, shapes and groups.
@@ -379,8 +424,9 @@ Fill between Strokes
  
 Fill Between Strokes LPE
 
-  • Similar to 'Fill between Many', but can only be used on two open paths, to
-    fill them seamlessly.
+Similar to 'Fill between Many', but can only be used on two open paths, to fill
+them seamlessly.
+
   • Requires a 'container' path, which will turn into the fill after the first
     path has been added to the LPE.
   • Connects one couple of path ends with a stroke, if the path that functions
@@ -492,6 +538,12 @@ Extended video: https://www.youtube.com/watch?v=OE0cVDGCzbM
   • Measure global
   • Measure only current layer
   • Change precision
+
+Gradient tool
+
+  • To accomodate for keyboards that do not have an Insert key, the keyboard
+    combination Shift+I can now also be used to insert a new stop into a
+    gradient.
 
 Align and Distribute
 
@@ -681,7 +733,7 @@ SVG and CSS
     through, etc.). CSS 3 'text-decoration' properties are also rendered.
   • The new SVG 2 'hatch' paint server is now supported.
   • The CSS 'white-space' property is now supported. Use of this property was
-    added in SVG 2 to replace the now deprecated 'xml;space' attribute.
+    added in SVG 2 to replace the now deprecated 'xml:space' attribute.
   • The SVG 1.1 'textLength" and 'textAdjust' attributes are implemented,
     however, there is no GUI for these attributes.
   • Rendering of the Component Transfer filter primitive has been corrected.
@@ -708,14 +760,15 @@ New UI translations for Assamese, Bodo, Dogri, Gujarati, Hindi, Icelandic,
 Kannada, Kashmiri (Perso-Arabic and Devanagari), Konkani (Latin and Devanagari
 scripts), Maithili, Malayalam, Manipuri (Meetei Mayek and Bengali scripts),
 Marathi, Odia, Santali (Devanagari and Ol-Chiki scripts), Sanskrit, Sindhi,
-Tamil, Urdu (Perso-Arabic and Devanagari scripts). Many other translations have
-been updated and improved.
+Tamil, Urdu (Perso-Arabic and Devanagari scripts).
+
+Many other translations have been updated and improved.
 
 Notable Bugfixes
 
   • Severe performance issues on MS Windows, 64bit Inkscape builds on systems
     with Intel graphic cards (hiding the rulers was a workaround for Inkscape
-    0.91). (bug #1351597)
+    0.91) (bug #1351597)
   • On MS Windows, 64bit Inkscape builds, printing may result in mostly black
     pages when partial opacity is used in the document (bug #1418865)
   • Printing offsets page (Windows) (bug #918319)
@@ -734,13 +787,12 @@ Notable Bugfixes
   • Text rendering cuts off trailing character (bug #1283194, bug #1450675)
   • Paste style - markers are omitted (bug #1467674)
   • DXF export doesn't support <line> and <circle> elements (bug #1474347, bug
-    #1489320
+    #1489320)
   • Crash when importing raster images of different file types (bug #1467103)
-  • Filter effects and blur quality options broken (bug #1512729) (This means
-    if you had your filter effects set for Average in 0.91, you may need to
-    reset to Better or Best in 0.92 to have the same quality of display.)
+  • Filter effects and blur quality options broken (bug #1512729) (To get the
+    same render quality in 0.92 as you had in 0.91, you need to set filter
+    effects quality to 'Better' and the blur quality to 'Average'.)
   • Shape: 'Triangle in' and 'Triangle out' are identical (bug #1525401)
-
 
 Many other crashes, memory leaks and lots of little things have also been
 fixed. For an exhaustive list of bugs that have been fixed, please see the
@@ -756,7 +808,7 @@ Known Issues
   • The opacity indicator isn't initialized correctly (0% opacity even when the
     object is fully opaque, bug #1463078, will be fixed in 0.93)
 
-[Please fill in - unit change, extension]
+[Please fill in]
 
 
 For information on prior releases, please see:
