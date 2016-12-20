@@ -39,8 +39,8 @@ pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &
 
 LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this),
-    starting_point("hidden", "hidden", "starting_point", &wr, this),
+    origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this, _("Adjust origin of rotation")),
+    starting_point(_("Start point"), _("Starting point to define start angle"), "starting_point", &wr, this, _("Adjust starting point to define start angle")),
     starting_angle(_("Starting:"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
     rotation_angle(_("Rotation angle:"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
     num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
