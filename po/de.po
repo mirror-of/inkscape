@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-11-13 22:28+0100\n"
+"PO-Revision-Date: 2016-12-21 03:59+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -7857,7 +7857,7 @@ msgstr "Verknüpfen"
 #: ../src/extension/internal/gdkpixbuf-input.cpp:200
 #, c-format
 msgid "Image DPI:"
-msgstr "Auflösung des Bildes (DPI):"
+msgstr "Auflösung des Bildes (dpi):"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:200
 #, c-format
@@ -8374,24 +8374,28 @@ msgid ""
 "either setting the SVG 'viewBox' to compensate or by scaling\n"
 "all the elements in the drawing."
 msgstr ""
+"In älteren Inkscape-Dateien entspricht 1 Zoll = 90 px. Der\n"
+"CSS-Standard fordert ein Verhältnis von 1 Zoll = 96 px. Elemente in der\n"
+"Zeichnung werden möglicherweise zu klein dargestellt. Dies\n"
+"kann korrigiert werden, indem entweder das 'viewBox'-Attribut\n"
+"so gesetzt wird, dass es das Missverhältnis ausgleicht oder \n"
+"indem die Größe aller Elemente in der Zeichnung angepasst wird."
 
 #: ../src/file.cpp:425 ../src/file.cpp:523
 msgid "Old Inkscape file detected (90 DPI)"
-msgstr ""
+msgstr "Alte Inkscape-Datei mit Auflösung von 90 dpi erkannt"
 
 #: ../src/file.cpp:437 ../src/file.cpp:535
-#, fuzzy
 msgid "Create backup file (in same directory)."
-msgstr "Kann Profilverzeichnis %s nicht erstellen."
+msgstr "Erstelle Sicherheitskopie (im selben Verzeichnis)."
 
 #: ../src/file.cpp:448 ../src/file.cpp:546 ../src/ui/widget/page-sizer.cpp:958
 msgid "Set 'viewBox'"
 msgstr "'viewBox' festlegen"
 
 #: ../src/file.cpp:449 ../src/file.cpp:547
-#, fuzzy
 msgid "Scale elements"
-msgstr "Skalierungsmodus"
+msgstr "Größe der Elemente ändern"
 
 # Related to 'Make connectors ignore selected objects'
 #: ../src/file.cpp:450 ../src/file.cpp:548
@@ -8407,13 +8411,20 @@ msgid ""
 "Internal scaling can be handled either by setting the SVG 'viewBox'\n"
 "attribute to compensate or by scaling all objects in the drawing."
 msgstr ""
+"In älteren Inkscape-Dateien entspricht 1 Zoll = 90 px. Der\n"
+"CSS-Standard fordert ein Verhältnis von 1 Zoll = 96 px. Zeichnungen, die in\n"
+"einer physischen Größe dargestellt werden sollen (z.B. Letter\n"
+"oder A4), werden zu klein aussehen. Dies kann korrigiert\n"
+"werden, indem die Größe der Zeichnung angepasst wird.\n"
+"Die interne Größe kann entweder durch das Festlegen eines\n"
+"ausgleichenden 'viewBox'-Attributes oder durch das Anpassen\n"
+"der Größe aller Elemente in der Zeichnung korrigiert werden."
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
 #: ../src/file.cpp:722
-#, fuzzy
 msgid "Update Document"
-msgstr "Das Dokument speichern"
+msgstr "Dokument aktualisieren"
 
 #: ../src/file.cpp:738
 msgid "Broken links have been changed to point to existing files."
@@ -8835,7 +8846,7 @@ msgstr " (Kontur)"
 #: ../src/gradient-drag.cpp:1482
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s für: %s%s"
 
 #: ../src/gradient-drag.cpp:1489
 #, c-format
@@ -9812,9 +9823,8 @@ msgid "Origin of the rotation"
 msgstr "Rotationszentrum"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:42
-#, fuzzy
 msgid "Adjust origin of rotation"
-msgstr "Rotationszentrum"
+msgstr "Rotationszentrum anpassen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
 #: ../src/live_effects/lpe-transform_2pts.cpp:37
@@ -9822,14 +9832,12 @@ msgid "Start point"
 msgstr "Anfangspunkt"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Starting point to define start angle"
-msgstr "Startpunkt der Verjüngung"
+msgstr "Anfangspunkt für den Anfangswinkel"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Adjust starting point to define start angle"
-msgstr "Anpassen des Startwinkels"
+msgstr "Anfangspunkt anpassen, um den Anfangswinkel zu bestimmen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:44
 msgid "Starting:"
@@ -9871,8 +9879,8 @@ msgstr "Pfade verschmelzen"
 #: ../src/live_effects/lpe-copy_rotate.cpp:48
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
 msgstr ""
-"Pfade werden miteinander verschmolzen, für Ergebnisse Füllregel 'evenodd' "
-"verwenden"
+"Pfade werden miteinander verschmolzen, für optimale Ergebnisse Füllregel "
+"'evenodd' verwenden"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:41
 msgid "Stitch path:"
@@ -10747,28 +10755,24 @@ msgid "Start mirror line"
 msgstr "Anfang der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Adjust start of mirroring"
-msgstr "Sättigung anpassen"
+msgstr "Anfangspunkt der Spiegelachse ändern"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
 msgid "End mirror line"
 msgstr "Ende der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
-#, fuzzy
 msgid "Adjust end of mirroring"
-msgstr "Einstellen des Ursprungs"
+msgstr "Endpunkt der Spiegelachse ändern"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Center mirror line"
-msgstr "Anfang der Spiegelachse"
+msgstr "Zentrum der Spiegelung"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Adjust center of mirroring"
-msgstr "Einstellen des Ursprungs"
+msgstr "Zentrum der Spiegelung ändern"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:53
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -18733,7 +18737,6 @@ msgid "Kannada (kn)"
 msgstr "Kannada (kn)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
-#, fuzzy
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
 msgstr "Kashmiri in erweiterter arabischer Schrift (ks@aran)"
 
@@ -24445,9 +24448,8 @@ msgid "Picked mesh corner color."
 msgstr "Farbe für Gitterecke wählen"
 
 #: ../src/ui/tools/mesh-tool.cpp:478
-#, fuzzy
 msgid "Inserted new row or column."
-msgstr "Hinzugefügte Patchreihe oder Spalte"
+msgstr "Neue Reihe oder Spalte hinzugefügt."
 
 #: ../src/ui/tools/mesh-tool.cpp:548
 msgid "Fit mesh inside bounding box."
@@ -27783,7 +27785,7 @@ msgstr "Verlaufsgitter"
 
 #: ../src/verbs.cpp:2760
 msgid "Create and edit meshes"
-msgstr "Gitter erstellen und bearbeiten"
+msgstr "Verlaufsgitter erstellen und bearbeiten"
 
 #: ../src/verbs.cpp:2761
 msgctxt "ContextVerb"
@@ -31505,9 +31507,8 @@ msgid "Text: Change font style"
 msgstr "Text: Schriftstil ändern"
 
 #: ../src/widgets/text-toolbar.cpp:345
-#, fuzzy
 msgid "Text: Unset line height."
-msgstr "Text: Linienhöhe ändern"
+msgstr "Text: Zeilenhöhe nicht setzen."
 
 #: ../src/widgets/text-toolbar.cpp:422
 msgid "Text: Change superscript or subscript"
@@ -31792,20 +31793,20 @@ msgstr "Zeichendrehung (Grad)"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2159
-#, fuzzy
 msgid "Unset line height"
-msgstr "Zeilen rechts ausrichten"
+msgstr "Zeilenhöhe aufheben"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2160
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
+"Wenn aktiviert, wird die Zeilenhöhe nur für die Auswahl gesetzt. Klicken, um "
+"die gesetzte Zeilenhöhe zu entfernen."
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2172
-#, fuzzy
 msgid "Show outer style"
-msgstr "Schattige Außenschräge"
+msgstr "Stil des gesamten Textobjektes anzeigen"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2173
@@ -31814,6 +31815,9 @@ msgid ""
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
+"Zeigt die Stileinstellungen, die für das gesamte Textobjekt gesetzt wurden, "
+"an. Die Werte für Schriftgröße und Zeilenhöhe des Textobjektes bestimmen den "
+"minimal möglichen Abstand zwischen zwei Zeilen im Text."
 
 #: ../src/widgets/toolbox.cpp:186
 msgid "Color/opacity used for color tweaking"
@@ -33704,21 +33708,21 @@ msgstr "Pfad visualisieren"
 
 #: ../share/extensions/docinfo.inx.h:1
 msgid "DOC Info"
-msgstr ""
+msgstr "Dokumenteninfo"
 
 #: ../share/extensions/docinfo.inx.h:2
-#, fuzzy
 msgid "Show page info"
-msgstr "_Rand der Seite anzeigen"
+msgstr "Informationen zum Dokument anzeigen"
 
+# Not visible in GUI...
 #: ../share/extensions/docinfo.inx.h:3
-#, fuzzy
 msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
-"Schließen Sie diesen Tab, wenn Sie eine Liste der verwendeten/gefundenen "
-"Schriftarten sehen möchten."
+"Wenn dieser Reiter gewählt ist, kann man sich vor der Anwendung des"
+" DPI-Wechslers Informationen zum Dokument "
+"angezeigen lassen."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -33756,11 +33760,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr ""
+msgstr "90 dpi zu 96 dpi"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr ""
+msgstr "96 dpi zu 90 dpi"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 msgid "Draw From Triangle"
@@ -36278,7 +36282,6 @@ msgstr "Inkscape-Handbuch"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_manual.inx.h:3
-#, fuzzy
 msgid "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
 msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
 
