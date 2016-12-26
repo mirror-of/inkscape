@@ -6004,7 +6004,6 @@ msgid "Map all fill patterns to standard EMF hatches"
 msgstr ""
 
 #: ../src/extension/internal/emf-inout.cpp:3627
-#, fuzzy
 msgid "Ignore image rotations"
 msgstr "Ignora rotazione immagini"
 
@@ -8369,24 +8368,26 @@ msgid ""
 "either setting the SVG 'viewBox' to compensate or by scaling\n"
 "all the elements in the drawing."
 msgstr ""
+"Il vecchio formato di Inkscape usa 1in = 90px. CSS richiede 1in == 96px.\n"
+"I disegni potrebbero essere troppo piccoli. Per risolvere il problema è\n"
+"possibile impostare la 'viewBox' del file SVG o riscalare gli oggetti nel\n"
+"progetto."
 
 #: ../src/file.cpp:425 ../src/file.cpp:523
 msgid "Old Inkscape file detected (90 DPI)"
-msgstr ""
+msgstr "Rilevato vecchio file di Inkscape (90 DPI)"
 
 #: ../src/file.cpp:437 ../src/file.cpp:535
-#, fuzzy
 msgid "Create backup file (in same directory)."
-msgstr "Impossibile creare la cartella di profilo %s."
+msgstr "Crea file di backup (nella stessa cartella)."
 
 #: ../src/file.cpp:448 ../src/file.cpp:546 ../src/ui/widget/page-sizer.cpp:958
 msgid "Set 'viewBox'"
 msgstr "Imposta 'viewBox'"
 
 #: ../src/file.cpp:449 ../src/file.cpp:547
-#, fuzzy
 msgid "Scale elements"
-msgstr "Modalità ridimensionamento"
+msgstr "Scala elementi"
 
 #: ../src/file.cpp:450 ../src/file.cpp:548
 #: ../src/widgets/connector-toolbar.cpp:317
@@ -8401,13 +8402,18 @@ msgid ""
 "Internal scaling can be handled either by setting the SVG 'viewBox'\n"
 "attribute to compensate or by scaling all objects in the drawing."
 msgstr ""
+"Il vecchio formato di Inkscape usa 1in = 90px. CSS richiede 1in == 96px.\n"
+"I progetti impostati per corrispondere alla dimensione fisica (e.g. Letter o\n"
+"A4) sarebbero troppo piccoli. Riscalare il progetto può risolvere il\n"
+"problema.\n"
+"Il riscalamento interno può essere impostato modificando la 'viewBox' del\n"
+"file SVG o riscalando gli oggetti nel progetto."
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
 #: ../src/file.cpp:722
-#, fuzzy
 msgid "Update Document"
-msgstr "Salva il documento"
+msgstr "Aggiorna documento"
 
 #: ../src/file.cpp:738
 msgid "Broken links have been changed to point to existing files."
@@ -8797,13 +8803,12 @@ msgstr "<b>Maniglia</b> del gradiente a maglia"
 
 #: ../src/gradient-drag.cpp:108 ../src/ui/tools/gradient-tool.cpp:104
 #: ../src/ui/tools/mesh-tool.cpp:115
-#, fuzzy
 msgid "Mesh gradient <b>tensor</b>"
-msgstr "<b>Fine</b> del gradiente a maglia"
+msgstr "<b>Tensore</b> del gradiente a maglia"
 
 #: ../src/gradient-drag.cpp:566
 msgid "Added patch row or column"
-msgstr ""
+msgstr "Aggiungi riga o colonna alla maglia"
 
 #: ../src/gradient-drag.cpp:809
 msgid "Merge gradient handles"
@@ -8835,7 +8840,7 @@ msgstr " (contorno)"
 #: ../src/gradient-drag.cpp:1482
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s di: %s%s"
 
 #: ../src/gradient-drag.cpp:1489
 #, c-format
@@ -9691,9 +9696,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bendpath.cpp:178
 #: ../src/live_effects/lpe-patternalongpath.cpp:279
-#, fuzzy
 msgid "Change the width"
-msgstr "Modifica larghezza contorno"
+msgstr "Modifica larghezza"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:24
 #: ../src/live_effects/lpe-clone-original.cpp:18
@@ -9804,9 +9808,8 @@ msgid "Origin of the rotation"
 msgstr "Origine della rotazione"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:42
-#, fuzzy
 msgid "Adjust origin of rotation"
-msgstr "Origine della rotazione"
+msgstr "Modifica origine della rotazione"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
 #: ../src/live_effects/lpe-transform_2pts.cpp:37
@@ -9814,14 +9817,12 @@ msgid "Start point"
 msgstr "Punto iniziale"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Starting point to define start angle"
-msgstr "Punto iniziale della rastrematura"
+msgstr "Angolo iniziale della prima copia"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Adjust starting point to define start angle"
-msgstr "Modifica l'angolo di partenza"
+msgstr "Modifica angolo iniziale della prima copia"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:44
 msgid "Starting:"
@@ -9950,12 +9951,11 @@ msgstr ""
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:77
 msgid "Five points required for constructing an ellipse"
-msgstr ""
+msgstr "Sono necessari 5 punti per costruire un'ellisse"
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:162
-#, fuzzy
 msgid "No ellipse found for specified points"
-msgstr "Nessuna informazione per gli spigoli trovata nel file specificato."
+msgstr "Nessuna ellisse trovata per i punti specificati"
 
 #: ../src/live_effects/lpe-envelope.cpp:31
 msgid "Top bend path:"
@@ -14651,13 +14651,12 @@ msgid "Initial color of tiled clones"
 msgstr "Colore iniziale dei cloni in serie"
 
 #: ../src/ui/dialog/clonetiler.cpp:665
-#, fuzzy
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke or on spray tool in copy mode)"
 msgstr ""
 "Colore iniziale dei cloni (funziona solo se l'originale non possiede "
-"riempimenti o bordi)"
+"riempimenti o bordi o lo strumento spray è in modalità copia)"
 
 #: ../src/ui/dialog/clonetiler.cpp:680
 msgid "<b>H:</b>"
@@ -16658,13 +16657,12 @@ msgstr ""
 "l'osservatore, mentre aree con opacità minore vengono allontanate."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3042
-#, fuzzy
 msgid ""
 "The <b>feTile</b> filter primitive tiles a region with an input graphic. The "
 "source tile is defined by the filter primitive subregion of the input."
 msgstr ""
-"Il filtro <b>feImage</b> riempie una regione con un'immagine esterna o "
-"un'altra parte del documento."
+"Il filtro <b>feTile</b> pittura una regione con la grafica in input. La "
+"regione sorgente è definita dalla regione di input del filtro."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3046
 msgid ""
@@ -23259,26 +23257,26 @@ msgstr ""
 "Modifica l'<b>altezza</b> dell'ellisse, con <b>Ctrl</b> per farne un cerchio"
 
 #: ../src/ui/object-edit.cpp:1004
-#, fuzzy
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Posiziona il <b>punto iniziale</b> dell'arco o del segmento; con <b>Ctrl</b> "
-"per far scattare l'angolo; trascina <b>dentro</b> l'ellisse per un arco, "
-"<b>fuori</b> per un segmento"
+"Posiziona il <b>punto iniziale</b> dell'arco o del segmento; con <b>Maiusc</"
+"b> per muovere il <b>punto finale</b>; con <b>Ctrl</b> per far scattare "
+"l'angolo; trascina <b>dentro</b> l'ellisse per un arco, <b>fuori</b> per un "
+"segmento"
 
 #: ../src/ui/object-edit.cpp:1010
-#, fuzzy
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Posiziona il <b>punto finale</b> dell'arco o del segmento; con <b>Ctrl</b> "
-"per far scattare l'angolo; trascina <b>dentro</b> l'ellisse per un arco, "
-"<b>fuori</b> per un segmento"
+"Posiziona il <b>punto finale</b> dell'arco o del segmento; con <b>Maiusc</b> "
+"per muovere il <b>punto iniziale</b>; con <b>Ctrl</b> per far scattare "
+"l'angolo; trascina <b>dentro</b> l'ellisse per un arco, <b>fuori</b> per un "
+"segmento"
 
 #: ../src/ui/object-edit.cpp:1157
 msgid ""
@@ -23328,10 +23326,9 @@ msgid "Drag curve"
 msgstr "Trascina curva"
 
 #: ../src/ui/tool/curve-drag-point.cpp:192
-#, fuzzy
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: drag to open or move BSpline handles"
-msgstr "<b>Maiusc</b>: trascina per aggiungere nodi alla selezione"
+msgstr "<b>Maiusc</b>: trascina per muovere le maniglie BSpline"
 
 #: ../src/ui/tool/curve-drag-point.cpp:196
 msgctxt "Path segment tip"
@@ -23539,6 +23536,7 @@ msgstr ""
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
 msgstr ""
+"<b>Ctrl</b>: aggancia la maniglia secondo i passi definiti per LPE BSpline"
 
 #: ../src/ui/tool/node.cpp:532
 #, c-format
@@ -23873,7 +23871,7 @@ msgid ""
 "<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or "
 "segment. <b>Click</b> to select."
 msgstr ""
-"<b>Trascina</b> per creare un ellisse. <b>Trascina i controlli</b> per farne "
+"<b>Trascina</b> per creare un'ellisse. <b>Trascina i controlli</b> per farne "
 "un arco o un segmento. <b>Clicca</b> per selezionare."
 
 #: ../src/ui/tools-switch.cpp:108
@@ -24388,14 +24386,14 @@ msgstr[1] "<b>%d</b> maniglie del gradiente a maglia selezionate su %d"
 
 #. TRANSLATORS: The plural refers to number of selected objects
 #: ../src/ui/tools/mesh-tool.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "<b>No</b> mesh handles selected out of %d on %d selected object"
 msgid_plural "<b>No</b> mesh handles selected out of %d on %d selected objects"
 msgstr[0] ""
-"<b>Nessuna</b> maniglia di gradiente selezionata su %d per %d oggetto nella "
+"<b>Nessuna</b> maniglia del gradiente selezionata su %d per %d oggetto nella "
 "selezione"
 msgstr[1] ""
-"<b>Nessuna</b> maniglia di gradiente selezionata su %d per %d oggetti nella "
+"<b>Nessuna</b> maniglia del gradiente selezionata su %d per %d oggetti nella "
 "selezione"
 
 #: ../src/ui/tools/mesh-tool.cpp:360
@@ -24404,11 +24402,11 @@ msgstr ""
 
 #: ../src/ui/tools/mesh-tool.cpp:453
 msgid "Toggled mesh path type."
-msgstr ""
+msgstr "Commuta tipo tracciato gradiente"
 
 #: ../src/ui/tools/mesh-tool.cpp:458
 msgid "Approximated arc for mesh side."
-msgstr ""
+msgstr "Approssima lato gradiente ad arco"
 
 #: ../src/ui/tools/mesh-tool.cpp:463
 msgid "Toggled mesh tensors."
@@ -24420,9 +24418,8 @@ msgid "Smoothed mesh corner color."
 msgstr "Shader liscio contornato"
 
 #: ../src/ui/tools/mesh-tool.cpp:473
-#, fuzzy
 msgid "Picked mesh corner color."
-msgstr "Preleva l'opacità del colore"
+msgstr "Preleva colore angolo del gradiente a maglia"
 
 #: ../src/ui/tools/mesh-tool.cpp:478
 #, fuzzy
@@ -24430,9 +24427,8 @@ msgid "Inserted new row or column."
 msgstr "Aumenta il numero di colonne:"
 
 #: ../src/ui/tools/mesh-tool.cpp:548
-#, fuzzy
 msgid "Fit mesh inside bounding box."
-msgstr "Usa il riquadro visivo"
+msgstr "Adatta gradiente alla dimensione del riquadro"
 
 #: ../src/ui/tools/mesh-tool.cpp:1189
 msgid "Create mesh"
@@ -28771,7 +28767,7 @@ msgstr "Rendi intero"
 
 #: ../src/widgets/arc-toolbar.cpp:381
 msgid "Make the shape a whole ellipse, not arc or segment"
-msgstr "Rende la forma in un ellisse intero, non un arco o un segmento"
+msgstr "Rende la forma in un'ellisse intero, non un arco o un segmento"
 
 #. TODO: use the correct axis here, too
 #: ../src/widgets/box3d-toolbar.cpp:233
@@ -30003,18 +29999,16 @@ msgid "Edit Fill"
 msgstr "Modifica riempimento"
 
 #: ../src/widgets/mesh-toolbar.cpp:488
-#, fuzzy
 msgid "Edit fill mesh"
-msgstr "Modifica riempimento..."
+msgstr "Modifica gradiente riempimento"
 
 #: ../src/widgets/mesh-toolbar.cpp:500
 msgid "Edit Stroke"
 msgstr "Modifica contorno"
 
 #: ../src/widgets/mesh-toolbar.cpp:501
-#, fuzzy
 msgid "Edit stroke mesh"
-msgstr "Modifica contorno..."
+msgstr "Modifica gradiente contorno"
 
 #: ../src/widgets/mesh-toolbar.cpp:513 ../src/widgets/node-toolbar.cpp:521
 msgid "Show Handles"
@@ -30023,6 +30017,8 @@ msgstr "Mostra maniglie"
 #: ../src/widgets/mesh-toolbar.cpp:530 ../src/widgets/mesh-toolbar.cpp:531
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
 msgstr ""
+"ATTENZIONE: la sintassi di SVG per i gradienti a maglia è soggetta a "
+"cambiamenti"
 
 #: ../src/widgets/mesh-toolbar.cpp:545
 msgctxt "Type"
@@ -30046,13 +30042,12 @@ msgid "Smoothing:"
 msgstr "Smussamento:"
 
 #: ../src/widgets/mesh-toolbar.cpp:563
-#, fuzzy
 msgid "Toggle Sides"
-msgstr "Al_terna"
+msgstr "Commuta lati"
 
 #: ../src/widgets/mesh-toolbar.cpp:564
 msgid "Toggle selected sides between Beziers and lines."
-msgstr ""
+msgstr "Commuta i lati selezionati tra Bezier e linee."
 
 #: ../src/widgets/mesh-toolbar.cpp:567
 #, fuzzy
@@ -30069,6 +30064,8 @@ msgid ""
 "Make selected sides elliptical by changing length of handles. Works best if "
 "handles already approximate ellipse."
 msgstr ""
+"Rende i lati selezionati ellittici modificando la lunghezza delle maniglie. "
+"Funziona al meglio se le maniglie già approssimano un'ellisse."
 
 #: ../src/widgets/mesh-toolbar.cpp:578
 #, fuzzy
@@ -30076,28 +30073,26 @@ msgid "Make elliptical:"
 msgstr "Imposta corsivo"
 
 #: ../src/widgets/mesh-toolbar.cpp:585
-#, fuzzy
 msgid "Pick colors:"
-msgstr "Colore punti"
+msgstr "Preleva colori:"
 
 #: ../src/widgets/mesh-toolbar.cpp:586
 msgid "Pick colors for selected corner nodes from underneath mesh."
 msgstr ""
+"Preleva i colori degli angoli selezionati dagli oggetti sotto al gradiente."
 
 #: ../src/widgets/mesh-toolbar.cpp:589
-#, fuzzy
 msgid "Pick Color"
-msgstr "Colore riempimento"
+msgstr "Preleva colore"
 
 #: ../src/widgets/mesh-toolbar.cpp:597
-#, fuzzy
 msgid "Scale mesh to bounding box:"
-msgstr "Mostra il riquadro"
+msgstr "Ridimensiona gradiente al riquadro"
 
 #: ../src/widgets/mesh-toolbar.cpp:598
-#, fuzzy
 msgid "Scale mesh to fit inside bounding box."
-msgstr "Mostra riquadro limite"
+msgstr ""
+"Ridimensiona il gradiente per adattarsi ai bordi del riquadro."
 
 #: ../src/widgets/mesh-toolbar.cpp:601
 #, fuzzy
@@ -30456,7 +30451,7 @@ msgstr "Bezier"
 
 #: ../src/widgets/pencil-toolbar.cpp:105
 msgid "Create regular Bezier path"
-msgstr "Crea tracciato Bezier normalr"
+msgstr "Crea tracciato Bezier normale"
 
 #: ../src/widgets/pencil-toolbar.cpp:112
 msgid "Create Spiro path"
@@ -31445,9 +31440,8 @@ msgid "Text: Change font style"
 msgstr "Testo: Cambia stile"
 
 #: ../src/widgets/text-toolbar.cpp:345
-#, fuzzy
 msgid "Text: Unset line height."
-msgstr "Testo: Cambia spaziatura linee"
+msgstr "Testo: Disabilita spaziatura linee"
 
 #: ../src/widgets/text-toolbar.cpp:422
 msgid "Text: Change superscript or subscript"
@@ -31729,14 +31723,15 @@ msgstr "Rotazione carattere (gradi)"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2159
-#, fuzzy
 msgid "Unset line height"
-msgstr "Allinea linee a destra"
+msgstr "Disabilita spaziatura linee"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2160
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
+"Se abilitato, la spaziatura è impostata su parte della selezione. Clicca per "
+"disabilitare."
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2172
@@ -33596,11 +33591,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr ""
+msgstr "DPI 90 a 96"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr ""
+msgstr "DPI 96 a 90"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 msgid "Draw From Triangle"
@@ -36005,9 +36000,8 @@ msgid "Ask Us a Question"
 msgstr "Domande e risposte"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:2
-#, fuzzy
 msgid "https://inkscape.org/en/ask/"
-msgstr "http://inkscape.org/doc/keys092.html"
+msgstr "https://inkscape.org/en/ask/"
 
 #: ../share/extensions/inkscape_help_commandline.inx.h:1
 msgid "Command Line Options"
@@ -36037,9 +36031,8 @@ msgstr "Manuale di Inkscape"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_manual.inx.h:3
-#, fuzzy
 msgid "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
-msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
+msgstr "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
 
 #: ../share/extensions/inkscape_help_relnotes.inx.h:1
 msgid "New in This Version"
