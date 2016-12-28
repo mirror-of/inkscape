@@ -14,12 +14,12 @@
 
 #include "attributes.h"
 #include "svg/svg.h"
-#include "filters/composite.h"
 #include "helper-fns.h"
 #include "xml/repr.h"
 #include "display/nr-filter.h"
 #include "display/nr-filter-composite.h"
 #include "sp-filter.h"
+#include "filters/composite.h"
 
 SPFeComposite::SPFeComposite()
     : SPFilterPrimitive(), composite_operator(COMPOSITE_DEFAULT),
