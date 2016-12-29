@@ -294,8 +294,6 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             }
 
             if (!moved) {
-                knot->grabbed_signal.emit(knot, event->motion.state);
-
                 knot->setFlag(SP_KNOT_DRAGGING, TRUE);
             }
 
