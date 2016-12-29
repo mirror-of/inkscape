@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-12-22 20:55+0200\n"
+"PO-Revision-Date: 2016-12-29 16:43+0200\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -8874,7 +8874,7 @@ msgstr "Nastavenia stránky:"
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:129
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:124
 msgid "Precision of approximating gradient meshes:"
-msgstr "Presnosť aproximácie mriežok farebných prechodov:"
+msgstr "Presnosť aproximácie sieťkových farebných prechodov:"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:130
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:125
@@ -8897,7 +8897,7 @@ msgid ""
 msgstr ""
 "Import pomocou externej knižnice. Text sa skladá zo skupiny obsahujúcich "
 "naklonované znaky, kde každý znak je cesta. Obrázky sa ukladajú interne. "
-"Siete spôsobujú, že sa celý dokument vykreslí ako rastrový obrázok."
+"Sieťky spôsobujú, že sa celý dokument vykreslí ako rastrový obrázok."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:136
 msgid "Internal import"
@@ -8910,7 +8910,7 @@ msgid ""
 "the precision set below."
 msgstr ""
 "Import pomocou internej knižnice (založenej na knižnici Poppler). Text sa "
-"uloží ako text, ale netlačiteľné znaky chýbajú. Siete sa prevedú na "
+"uloží ako text, ale netlačiteľné znaky chýbajú. Sieťky sa prevedú na "
 "dlaždice, ktorých počet závisí od nižšie zvolenej presnosti."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:148
@@ -9452,12 +9452,10 @@ msgid "Overlay"
 msgstr "Prekrytie"
 
 #: ../src/filter-enums.cpp:59 ../src/filter-enums.cpp:58
-#, fuzzy
 msgid "Color Dodge"
 msgstr "Farebné uhnutie"
 
 #: ../src/filter-enums.cpp:60 ../src/filter-enums.cpp:59
-#, fuzzy
 msgid "Color Burn"
 msgstr "Farebné opálenie"
 
@@ -10315,7 +10313,7 @@ msgstr "Textový štítok"
 
 #: ../src/live_effects/effect.cpp:116
 msgid "Fillet/Chamfer"
-msgstr ""
+msgstr "Zaoblenie/úkos"
 
 #. 0.46
 #: ../src/live_effects/effect.cpp:119 ../src/live_effects/effect.cpp:106
@@ -10923,9 +10921,8 @@ msgstr "Otočí smer druhej cesty"
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:41
 #: ../src/widgets/text-toolbar.cpp:1908
 #: ../share/extensions/render_barcode_qrcode.inx.h:5
-#, fuzzy
 msgid "Auto"
-msgstr "Automatické ukladanie"
+msgstr "Automaticky"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:42
 msgid "Force arc"
@@ -11325,213 +11322,263 @@ msgstr "Aktualizovať počas pohybovania uzlov (môže byť pomalé)"
 
 #: ../src/live_effects/lpe-lattice2.cpp:50
 msgid "Control 0:"
-msgstr ""
+msgstr "Control 0:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:50
 msgid "Control 0 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 0 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:51
 msgid "Control 1:"
-msgstr ""
+msgstr "Control 1:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:51
 msgid "Control 1 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 1 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:52
 msgid "Control 2:"
-msgstr ""
+msgstr "Control 2:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:52
 msgid "Control 2 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 2 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:53
 msgid "Control 3:"
-msgstr ""
+msgstr "Control 3:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:53
 msgid "Control 3 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 3 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:54
 msgid "Control 4:"
-msgstr ""
+msgstr "Control 4:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:54
 msgid "Control 4 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 4 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:55
 msgid "Control 5:"
-msgstr ""
+msgstr "Control 5:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:55
 msgid "Control 5 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 5 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:56
 msgid "Control 6:"
-msgstr ""
+msgstr "Control 6:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:56
 msgid "Control 6 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 6 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:57
 msgid "Control 7:"
-msgstr ""
+msgstr "Control 7:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:57
 msgid "Control 7 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 7 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:58
 msgid "Control 8x9:"
-msgstr ""
+msgstr "Control 8x9:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:58
 msgid ""
 "Control 8x9 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 8x9 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:59
 msgid "Control 10x11:"
-msgstr ""
+msgstr "Control 10x11:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:59
 msgid ""
 "Control 10x11 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 10x11 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva "
+"pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:60
 msgid "Control 12:"
-msgstr ""
+msgstr "Control 12:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:60
 msgid "Control 12 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 12 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:61
 msgid "Control 13:"
-msgstr ""
+msgstr "Control 13:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:61
 msgid "Control 13 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 13 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:62
 msgid "Control 14:"
-msgstr ""
+msgstr "Control 14:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:62
 msgid "Control 14 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 14 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:63
 msgid "Control 15:"
-msgstr ""
+msgstr "Control 15:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:63
 msgid "Control 15 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 15 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:64
 msgid "Control 16:"
-msgstr ""
+msgstr "Control 16:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:64
 msgid "Control 16 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 16 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:65
 msgid "Control 17:"
-msgstr ""
+msgstr "Control 17:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:65
 msgid "Control 17 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 17 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:66
 msgid "Control 18:"
-msgstr ""
+msgstr "Control 18:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:66
 msgid "Control 18 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 18 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:67
 msgid "Control 19:"
-msgstr ""
+msgstr "Control 19:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:67
 msgid "Control 19 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 19 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva pozdĺž "
+"osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:68
 msgid "Control 20x21:"
-msgstr ""
+msgstr "Control 20x21:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:68
 msgid ""
 "Control 20x21 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 20x21 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva "
+"pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:69
 msgid "Control 22x23:"
-msgstr ""
+msgstr "Control 22x23:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:69
 msgid ""
 "Control 22x23 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 22x23 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva "
+"pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:70
 msgid "Control 24x26:"
-msgstr ""
+msgstr "Control 24x26:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:70
 msgid ""
 "Control 24x26 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 24x26 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva "
+"pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:71
 msgid "Control 25x27:"
-msgstr ""
+msgstr "Control 25x27:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:71
 msgid ""
 "Control 25x27 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 25x27 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva "
+"pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:72
 msgid "Control 28x30:"
-msgstr ""
+msgstr "Control 28x30:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:72
 msgid ""
 "Control 28x30 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 28x30 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva "
+"pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:73
 msgid "Control 29x31:"
-msgstr ""
+msgstr "Control 29x31:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:73
 msgid ""
 "Control 29x31 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
+"Control 29x31 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: presúva "
+"pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:74
 msgid "Control 32x33x34x35:"
-msgstr ""
+msgstr "Control 32x33x34x35:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:74
 msgid ""
 "Control 32x33x34x35 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along "
 "axes"
 msgstr ""
+"Control 32x33x34x35 - <b>Ctrl+Alt+kliknutie</b>: obnoví, <b>Ctrl</b>: "
+"presúva pozdĺž osí"
 
 #: ../src/live_effects/lpe-lattice2.cpp:239
 msgid "Reset grid"
@@ -12487,39 +12534,39 @@ msgstr "Šírka ťahu:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:73
 msgid "The (non-tapered) width of the path"
-msgstr ""
+msgstr "Šírka (nezúženej) cesty:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:74
 msgid "Start offset:"
-msgstr ""
+msgstr "Počiatočný posun:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:74
 msgid "Taper distance from path start"
-msgstr ""
+msgstr "Vzdialenosť zúženia od začiatku cesty"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:75
 msgid "End offset:"
-msgstr ""
+msgstr "Konečný posun:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:75
 msgid "The ending position of the taper"
-msgstr ""
+msgstr "Koncová pozícia zúženia"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:76
 msgid "Taper smoothing:"
-msgstr ""
+msgstr "Vyhladzovanie zúženia"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:76
 msgid "Amount of smoothing to apply to the tapers"
-msgstr ""
+msgstr "Množstvo vyhladzovania, ktoré použiť na zúženia"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:77
 msgid "Join type:"
-msgstr ""
+msgstr "Typ spojenia:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:77
 msgid "Join type for non-smooth nodes"
-msgstr ""
+msgstr "Typ spojenia nehladkých uzlov"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:78
 msgid "Limit for miter joins"
@@ -12527,75 +12574,75 @@ msgstr ""
 
 #: ../src/live_effects/lpe-taperstroke.cpp:447
 msgid "Start point of the taper"
-msgstr ""
+msgstr "Začiatočný bod zúženia"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:451
 msgid "End point of the taper"
-msgstr ""
+msgstr "Koncový bod zúženia"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:31
 msgid "Elastic"
-msgstr ""
+msgstr "Elastický"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:31
 msgid "Elastic transform mode"
-msgstr ""
+msgstr "Elastický režim transformácie"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
 msgid "From original width"
-msgstr ""
+msgstr "Z pôvodnej šírky"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
 msgid "Lock length"
-msgstr ""
+msgstr "Zamknúť dĺžku"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
 msgid "Lock length to current distance"
-msgstr ""
+msgstr "Zamknúť dĺžku na aktuálnu vzdialenosť"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:34
 msgid "Lock angle"
-msgstr ""
+msgstr "Zamknúť uhol"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:35
 msgid "Flip horizontal"
-msgstr ""
+msgstr "Preklopiť vodorovne"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:36
 msgid "Flip vertical"
-msgstr ""
+msgstr "Preklopiť zvisle"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
 msgid "End point"
-msgstr ""
+msgstr "Koncový bod"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:39
 msgid "Stretch"
-msgstr ""
+msgstr "Natiahnuť"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:39
 msgid "Stretch the result"
-msgstr ""
+msgstr "Natiahnuť výsledok"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:40
 msgid "Offset from knots"
-msgstr ""
+msgstr "Posunutie od uzlov"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 msgid "First Knot"
-msgstr ""
+msgstr "Prvý uzol"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:42
 msgid "Last Knot"
-msgstr ""
+msgstr "Posledný uzol"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:43
 msgid "Rotation helper size"
-msgstr ""
+msgstr "Veľkosť pomocníka pri otáčaní"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:196
 msgid "Change index of knot"
-msgstr ""
+msgstr "Zmeniť index uzla"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:349
 #: ../src/ui/dialog/inkscape-preferences.cpp:1618
@@ -13100,10 +13147,12 @@ msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
 msgstr ""
+"Zadajte názov zbernice D-Bus, na ktorej počúvať správy (predvolený je "
+"org.inkscape)"
 
 #: ../src/main.cpp:506 ../src/main.cpp:501
 msgid "BUS-NAME"
-msgstr ""
+msgstr "NÁZOV-ZBERNICE"
 
 #: ../src/main.cpp:511 ../src/main.cpp:506
 msgid "List the IDs of all the verbs in Inkscape"
@@ -13115,7 +13164,7 @@ msgstr "Sloveso, ktoré sa má zavolať, keď sa Inkscape otvorí."
 
 #: ../src/main.cpp:517 ../src/main.cpp:512
 msgid "VERB-ID"
-msgstr "VERB-ID"
+msgstr "ID-SLOVESA"
 
 #: ../src/main.cpp:521 ../src/main.cpp:516
 msgid "Object ID to select when Inkscape opens."
@@ -13123,7 +13172,7 @@ msgstr "ID objektu, ktorý sa má vybrať, keď sa Inkscape otvorí."
 
 #: ../src/main.cpp:522 ../src/main.cpp:517
 msgid "OBJECT-ID"
-msgstr "OBJECT-ID"
+msgstr "ID-OBJEKTU"
 
 #: ../src/main.cpp:526 ../src/main.cpp:521
 msgid "Start Inkscape in interactive shell mode."
@@ -13442,7 +13491,7 @@ msgstr "Dátum:"
 msgid ""
 "A point or period of time associated with an event in the lifecycle of the "
 "resource"
-msgstr ""
+msgstr "Bod alebo časové obdobie spojené s udalosťou v životnom cykle zdroja"
 
 #: ../src/rdf.cpp:241 ../share/extensions/webslicer_create_rect.inx.h:3
 msgid "Format:"
@@ -13450,11 +13499,11 @@ msgstr "Formát:"
 
 #: ../src/rdf.cpp:242
 msgid "The file format, physical medium, or dimensions of the resource"
-msgstr ""
+msgstr "Formát súboru, fyzické médium alebo rozmery zdroja"
 
 #: ../src/rdf.cpp:245
 msgid "The nature or genre of the resource"
-msgstr ""
+msgstr "Povaha alebo žáner zdroja"
 
 #: ../src/rdf.cpp:248
 msgid "Creator:"
@@ -13470,7 +13519,7 @@ msgstr "Práva:"
 
 #: ../src/rdf.cpp:252
 msgid "Information about rights held in and over the resource"
-msgstr ""
+msgstr "Informácie o právach ohľadne zdroja"
 
 #: ../src/rdf.cpp:254
 msgid "Publisher:"
@@ -13486,11 +13535,11 @@ msgstr "Identifikátor:"
 
 #: ../src/rdf.cpp:259
 msgid "An unambiguous reference to the resource within a given context"
-msgstr ""
+msgstr "Jednoznačný odkaz na zdroj v danom kontexte"
 
 #: ../src/rdf.cpp:262
 msgid "A related resource from which the described resource is derived"
-msgstr ""
+msgstr "Súvisiaci zdroj, z ktorého je popisovaný zdroj odvodený"
 
 #: ../src/rdf.cpp:264
 msgid "Relation:"
@@ -13528,6 +13577,8 @@ msgid ""
 "The spatial or temporal topic of the resource, the spatial applicability of "
 "the resource, or the jurisdiction under which the resource is relevant"
 msgstr ""
+"Priestorová alebo časová téma zdroja, priestorová relevantnosť zdroja alebo "
+"jurisdikcia, v ktorej je zdroj relevantný"
 
 #: ../src/rdf.cpp:279
 msgid "Description:"
@@ -13618,15 +13669,15 @@ msgstr "Zoskupiť"
 
 #: ../src/selection-chemistry.cpp:798
 msgid "<b>No objects selected</b> to pop out of group."
-msgstr ""
+msgstr "<b>Neboli vybrané objekty</b>, ktoré sa majú vyňať zo skupiny."
 
 #: ../src/selection-chemistry.cpp:808
 msgid "Selection <b>not in a group</b>."
-msgstr ""
+msgstr "Výber <b>sa nenachádza v skupine</b>."
 
 #: ../src/selection-chemistry.cpp:822
 msgid "Pop selection from group"
-msgstr ""
+msgstr "Vyňať výber zo skupiny"
 
 #: ../src/selection-chemistry.cpp:830 ../src/selection-chemistry.cpp:788
 msgid "Select a <b>group</b> to ungroup."
@@ -13843,10 +13894,9 @@ msgid "Select an <b>object</b> to clone."
 msgstr "Vyberte <b>objekt</b>, ktorý sa má klonovať."
 
 #: ../src/selection-chemistry.cpp:2637 ../src/selection-chemistry.cpp:2580
-#, fuzzy
 msgctxt "Action"
 msgid "Clone"
-msgstr "Klonované"
+msgstr "Klonovať"
 
 #: ../src/selection-chemistry.cpp:2651 ../src/selection-chemistry.cpp:2596
 msgid "Select <b>clones</b> to relink."
@@ -13906,7 +13956,7 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2912
 msgid "Select path(s) to fill."
-msgstr ""
+msgstr "Vyberte cesty, ktoré chcete vyplniť."
 
 #: ../src/selection-chemistry.cpp:2930 ../src/selection-chemistry.cpp:2859
 msgid "Select <b>object(s)</b> to convert to marker."
@@ -13988,7 +14038,7 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:3850 ../src/ui/dialog/objects.cpp:1929
 msgid "Create Clip Group"
-msgstr ""
+msgstr "Vytvor_iť orezávaciu skupinu"
 
 #: ../src/selection-chemistry.cpp:3879 ../src/selection-chemistry.cpp:3692
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
@@ -14068,7 +14118,7 @@ msgstr " vo %s"
 
 #: ../src/selection-describer.cpp:177 ../src/selection-describer.cpp:167
 msgid " hidden in definitions"
-msgstr ""
+msgstr " skryté v definíciách"
 
 #: ../src/selection-describer.cpp:179 ../src/selection-describer.cpp:169
 #, c-format
@@ -14120,8 +14170,9 @@ msgstr "Použite <b>Shift+D</b> na vyhľadanie rámca"
 #, c-format
 msgid "<b>%1$i</b> objects selected of type %2$s"
 msgid_plural "<b>%1$i</b> objects selected of types %2$s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vybraný <b>%1$i</b> objekt typu %2$s"
+msgstr[1] "vybrané <b>%1$i</b> objekty typu %2$s"
+msgstr[2] "vybraných <b>%1$i</b> objektov typu %2$s"
 
 #: ../src/selection-describer.cpp:246 ../src/selection-describer.cpp:225
 #, c-format
@@ -14240,7 +14291,7 @@ msgstr "Vyberte súbor, ktorý chcete importovať"
 #: ../src/sp-anchor.cpp:111 ../src/sp-anchor.cpp:125
 #, c-format
 msgid "to %s"
-msgstr ""
+msgstr "do %s"
 
 #: ../src/sp-anchor.cpp:115 ../src/sp-anchor.cpp:129
 msgid "without URI"
@@ -14514,7 +14565,6 @@ msgstr "Podmienená skupina"
 #: ../share/extensions/text_titlecase.inx.h:2
 #: ../share/extensions/text_uppercase.inx.h:2 ../src/sp-text.cpp:325
 #: ../src/verbs.cpp:328
-#, fuzzy
 msgid "Text"
 msgstr "Text"
 
@@ -14557,7 +14607,7 @@ msgstr "Klon"
 #: ../src/sp-use.cpp:237 ../src/sp-use.cpp:239
 #, c-format
 msgid "called %s"
-msgstr ""
+msgstr "zvaný %s"
 
 #: ../src/sp-use.cpp:248 ../src/sp-use.cpp:239
 msgid "Unnamed Symbol"
@@ -14572,7 +14622,7 @@ msgstr "..."
 #: ../src/sp-use.cpp:266 ../src/sp-use.cpp:257
 #, c-format
 msgid "of: %s"
-msgstr ""
+msgstr "z: %s"
 
 #: ../src/splivarot.cpp:71 ../src/splivarot.cpp:77 ../src/splivarot.cpp:70
 #: ../src/splivarot.cpp:76
@@ -14780,9 +14830,8 @@ msgstr "Nemôžete upravovať <b>klonované znakové dáta</b>."
 #: ../src/trace/potrace/inkscape-potrace.cpp:574
 #: ../src/trace/potrace/inkscape-potrace.cpp:512
 #: ../src/trace/potrace/inkscape-potrace.cpp:575
-#, fuzzy
 msgid "Trace: %1.  %2 nodes"
-msgstr "Vektorizácia: %d.  %ld uzlov"
+msgstr "Vektorizácia: %1.  %2 uzlov"
 
 #: ../src/trace/trace.cpp:59 ../src/trace/trace.cpp:124
 #: ../src/trace/trace.cpp:132 ../src/trace/trace.cpp:225
@@ -14939,10 +14988,9 @@ msgstr "Najmenšie vodorovné rozostupy (v px) medzi ohraničeniami"
 #. TRANSLATORS: "H:" stands for horizontal gap
 #: ../src/ui/dialog/align-and-distribute.cpp:463
 #: ../src/ui/dialog/align-and-distribute.cpp:422
-#, fuzzy
 msgctxt "Gap"
 msgid "_H:"
-msgstr "_H:"
+msgstr "_Vod.:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:471
 #: ../src/ui/dialog/align-and-distribute.cpp:430
@@ -14952,10 +15000,9 @@ msgstr "Najmenšie zvislé rozostupy (v px) medzi ohraničeniami"
 #. TRANSLATORS: Vertical gap
 #: ../src/ui/dialog/align-and-distribute.cpp:473
 #: ../src/ui/dialog/align-and-distribute.cpp:432
-#, fuzzy
 msgctxt "Gap"
 msgid "_V:"
-msgstr "Zvislá medzera:"
+msgstr "_Zvis.:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:508
 #: ../src/ui/dialog/align-and-distribute.cpp:940
@@ -14975,9 +15022,8 @@ msgstr "Rozmiestniť sieť konektorov"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:632
 #: ../src/ui/dialog/align-and-distribute.cpp:592
-#, fuzzy
 msgid "Exchange Positions"
-msgstr "Znáhodniť pozície"
+msgstr "Vymeniť pozície"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:666
 #: ../src/ui/dialog/align-and-distribute.cpp:626
@@ -15001,9 +15047,8 @@ msgstr "Zarovnanie základní textu"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:939
 #: ../src/ui/dialog/align-and-distribute.cpp:854
-#, fuzzy
 msgid "Rearrange"
-msgstr "Rozmiestniť"
+msgstr "Zmeniť rozmiestnenie"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:941
 #: ../src/widgets/toolbox.cpp:1803
@@ -15020,9 +15065,8 @@ msgstr "Relatívne k: "
 
 #: ../src/ui/dialog/align-and-distribute.cpp:957
 #: ../src/ui/dialog/align-and-distribute.cpp:871
-#, fuzzy
 msgid "_Treat selection as group: "
-msgstr "Pracovať s výberom ako so skupinou:"
+msgstr "_Pracovať s výberom ako so skupinou:"
 
 #. Align
 #: ../src/ui/dialog/align-and-distribute.cpp:963 ../src/verbs.cpp:3036
@@ -15231,27 +15275,25 @@ msgstr "Najmenší objekt"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1091
 #: ../src/ui/dialog/align-and-distribute.cpp:1005
-#, fuzzy
 msgid "Selection Area"
-msgstr "Výber"
+msgstr "Oblasť výberu"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1097
 msgid "Middle of selection"
-msgstr ""
+msgstr "Stred výberu"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1098
 msgid "Min value"
-msgstr ""
+msgstr "Min. hodnota"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1099
 msgid "Max value"
-msgstr ""
+msgstr "Max. hodnota"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:40
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:138
-#, fuzzy
 msgid "Edit profile"
-msgstr "Profil zariadenia:"
+msgstr "Upraviť profil"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:53
 msgid "Profile name:"
@@ -15262,9 +15304,8 @@ msgid "Save"
 msgstr "Uložiť"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:134
-#, fuzzy
 msgid "Add profile"
-msgstr "Pridať filter"
+msgstr "Pridať profil"
 
 #: ../src/ui/dialog/clonetiler.cpp:110 ../src/ui/dialog/clonetiler.cpp:112
 msgid "_Symmetry"
@@ -15637,6 +15678,8 @@ msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke or on spray tool in copy mode)"
 msgstr ""
+"Počiatočná farba klonov (funguje iba v prípade, že originál nemá nastavenú "
+"výplň alebo ťah alebo pri nástroji Spej v režime kopírovania)"
 
 #: ../src/ui/dialog/clonetiler.cpp:680 ../src/ui/dialog/clonetiler.cpp:682
 msgid "<b>H:</b>"
@@ -15700,13 +15743,15 @@ msgstr "_Vektorizácia"
 
 #: ../src/ui/dialog/clonetiler.cpp:788
 msgid "Trace the drawing under the clones/sprayed items"
-msgstr ""
+msgstr "Vektorizovať kresbu pod klonmi/nasprejovanými položkami"
 
 #: ../src/ui/dialog/clonetiler.cpp:792
 msgid ""
 "For each clone/sprayed item, pick a value from the drawing in its location "
 "and apply it"
 msgstr ""
+"Pre každý klon/nasprejovanú položku vybrať hodnotu z kresby na jeho mieste a "
+"použiť ju"
 
 #: ../src/ui/dialog/clonetiler.cpp:811 ../src/ui/dialog/clonetiler.cpp:815
 msgid "1. Pick from the drawing:"
@@ -15850,7 +15895,7 @@ msgstr ""
 
 #: ../src/ui/dialog/clonetiler.cpp:1011
 msgid "Apply to tiled clones:"
-msgstr ""
+msgstr "Použiť na dlaždicové klony:"
 
 #: ../src/ui/dialog/clonetiler.cpp:1052 ../src/ui/dialog/clonetiler.cpp:1044
 msgid "How many rows in the tiling"
@@ -16082,25 +16127,25 @@ msgstr "<b>Licencia</b>"
 #. ---------------------------------------------------------------
 #: ../src/ui/dialog/document-properties.cpp:118
 #: ../src/ui/dialog/document-properties.cpp:111
-#, fuzzy
 msgid "Use antialiasing"
-msgstr "Antialiasing"
+msgstr "Použiť antialiasing"
 
 #: ../src/ui/dialog/document-properties.cpp:118
 #: ../src/ui/dialog/document-properties.cpp:111
-#, fuzzy
 msgid "If unset, no antialiasing will be done on the drawing"
-msgstr "Ak je voľba nastavená, okraj je na vrchole kresby"
+msgstr "Ak nie je voľba nastavená, na kresbu sa nepoužije antialiasing"
 
 #: ../src/ui/dialog/document-properties.cpp:119
 msgid "Checkerboard background"
-msgstr ""
+msgstr "Šachovnicové pozadie"
 
 #: ../src/ui/dialog/document-properties.cpp:119
 msgid ""
 "If set, use checkerboard for background, otherwise use background color at "
 "full opacity."
 msgstr ""
+"Ak nie je voľba nastavená, na pozadí sa použije vzor šachovnice, inak sa "
+"použije farba pozadia s plným krytím."
 
 #: ../src/ui/dialog/document-properties.cpp:120
 #: ../src/ui/dialog/document-properties.cpp:112
@@ -16135,9 +16180,8 @@ msgstr ""
 
 #: ../src/ui/dialog/document-properties.cpp:123
 #: ../src/ui/dialog/document-properties.cpp:115
-#, fuzzy
 msgid "Back_ground color:"
-msgstr "Farba pozadia:"
+msgstr "Farba po_zadia:"
 
 #: ../src/ui/dialog/document-properties.cpp:123
 msgid ""
@@ -16145,6 +16189,9 @@ msgid ""
 "editing if 'Checkerboard background' unset (but used when exporting to "
 "bitmap)."
 msgstr ""
+"Farba pozadia stránky. Pozn.: nastavenie priesvitnosti sa počas úprav "
+"ignoruje v prípade, že nie je voľba „Šachovnicové pozadie“ nastavená (ale "
+"použije sa pri exporte do bitmapy)."
 
 #: ../src/ui/dialog/document-properties.cpp:124
 #: ../src/ui/dialog/document-properties.cpp:116
@@ -16163,7 +16210,7 @@ msgstr "Farba okraja stránky"
 
 #: ../src/ui/dialog/document-properties.cpp:125
 msgid "Display _units:"
-msgstr ""
+msgstr "Zobrazované _jednotky:"
 
 #. ---------------------------------------------------------------
 #. General snap options
@@ -16405,7 +16452,7 @@ msgstr "<b>Veľkosť stránky</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:336
 msgid "<b>Background</b>"
-msgstr ""
+msgstr "<b>Pozadie</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:339
 msgid "<b>Border</b>"
@@ -16498,7 +16545,7 @@ msgstr "<b>Externé súbory skriptov:</b>"
 #: ../src/ui/dialog/document-properties.cpp:808
 #: ../src/ui/dialog/document-properties.cpp:754
 msgid "Add the current file name or browse for a file"
-msgstr ""
+msgstr "Pridať aktuálny názov súboru alebo vybrať súbor"
 
 #: ../src/ui/dialog/document-properties.cpp:811
 #: ../src/ui/dialog/document-properties.cpp:888
@@ -16522,7 +16569,6 @@ msgstr "<b>Vnorené súbory skriptov:</b>"
 #: ../src/ui/dialog/document-properties.cpp:885
 #: ../src/ui/dialog/objects.cpp:1901
 #: ../src/ui/dialog/document-properties.cpp:843
-#, fuzzy
 msgid "New"
 msgstr "Nový"
 
@@ -16609,7 +16655,7 @@ msgstr "Odstrániť mriežku"
 
 #: ../src/ui/dialog/document-properties.cpp:1795
 msgid "Changed default display unit"
-msgstr ""
+msgstr "Zmenená predvolená zobrazovacia jednotka"
 
 #: ../src/ui/dialog/export.cpp:147 ../src/verbs.cpp:2887
 #: ../src/ui/dialog/export.cpp:152 ../src/verbs.cpp:2796
@@ -16743,7 +16789,7 @@ msgstr "Exportovať súbor bitmapy s týmito nastaveniami"
 
 #: ../src/ui/dialog/export.cpp:479
 msgid "bitmap"
-msgstr ""
+msgstr "bitmapa"
 
 #: ../src/ui/dialog/export.cpp:614 ../src/ui/dialog/export.cpp:612
 #, c-format
@@ -17951,6 +17997,8 @@ msgid ""
 "The <b>feTile</b> filter primitive tiles a region with an input graphic. The "
 "source tile is defined by the filter primitive subregion of the input."
 msgstr ""
+"Primitíva filtra <b>feTile</b> vydláždi oblasť vstupnou grafikou. Zdrojovú "
+"dlaždicu definuje podoblasť vstupu s primitívou filtra."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3046
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3008
@@ -19136,11 +19184,11 @@ msgstr "Na_staviť rozostup:"
 
 #: ../src/ui/dialog/guides.cpp:47
 msgid "Lo_cked"
-msgstr ""
+msgstr "Zam_knuté"
 
 #: ../src/ui/dialog/guides.cpp:47
 msgid "Lock the movement of guides"
-msgstr ""
+msgstr "Zamknúť presúvanie vodidiel"
 
 #: ../src/ui/dialog/guides.cpp:48 ../src/ui/dialog/guides.cpp:47
 msgid "Rela_tive change"
@@ -19258,15 +19306,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
 msgid "Base simplify:"
-msgstr ""
+msgstr "Základné zjednodušenie:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
 msgid "on dynamic LPE simplify"
-msgstr ""
+msgstr "pri dynamickom zjednodušení LPE"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:214
 msgid "Base simplify of dynamic LPE based simplify"
-msgstr ""
+msgstr "Základné zjednodušenie pri dynamickom zjednodušení LPE"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:229
 #: ../src/ui/dialog/inkscape-preferences.cpp:220
@@ -19635,10 +19683,9 @@ msgstr "Lupa"
 #. Measure
 #: ../src/ui/dialog/inkscape-preferences.cpp:399 ../src/verbs.cpp:2763
 #: ../src/ui/dialog/inkscape-preferences.cpp:387 ../src/verbs.cpp:2678
-#, fuzzy
 msgctxt "ContextVerb"
 msgid "Measure"
-msgstr "Mierka"
+msgstr "Merať"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:401
 #: ../src/ui/dialog/inkscape-preferences.cpp:389
@@ -19927,7 +19974,7 @@ msgstr "arménčina (hy)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:538
 msgid "Assamese (as)"
-msgstr ""
+msgstr "ásámčina (as)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:538
 #: ../src/ui/dialog/inkscape-preferences.cpp:522
@@ -20005,7 +20052,7 @@ msgstr "dánčina (da)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:541
 msgid "Dogri (doi)"
-msgstr ""
+msgstr "dógrí (doi)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:541
 #: ../src/ui/dialog/inkscape-preferences.cpp:525
@@ -20084,7 +20131,7 @@ msgstr "galícijčina (gl)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:545
 msgid "Gujarati (gu)"
-msgstr ""
+msgstr "gudžarátčina (gu)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:546
 #: ../src/ui/dialog/inkscape-preferences.cpp:528
@@ -20093,7 +20140,7 @@ msgstr "hebrejčina (he)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:546
 msgid "Hindi (hi)"
-msgstr ""
+msgstr "hindčina (hi)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:546
 #: ../src/ui/dialog/inkscape-preferences.cpp:528
@@ -20102,7 +20149,7 @@ msgstr "maďarčina (hu)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:547
 msgid "Icelandic (is)"
-msgstr ""
+msgstr "islandčina (is)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:547
 #: ../src/ui/dialog/inkscape-preferences.cpp:529
@@ -20126,15 +20173,15 @@ msgstr "japončina (ja)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Kannada (kn)"
-msgstr ""
+msgstr "kannadčina (kn)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
-msgstr ""
+msgstr "kašmírčina v perzsko-arabskom skripte (ks@aran)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Kashmiri in Devanagari script (ks@deva)"
-msgstr ""
+msgstr "kašmírčina v skripte Devanagari (ks@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 #: ../src/ui/dialog/inkscape-preferences.cpp:529
@@ -20148,11 +20195,11 @@ msgstr "rwandčina (rw)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Konkani (kok)"
-msgstr ""
+msgstr "konkánčina (kok)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Konkani in Latin script (kok@latin)"
-msgstr ""
+msgstr "konkánčina v latinke (kok@latin)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 #: ../src/ui/dialog/inkscape-preferences.cpp:529
@@ -20176,23 +20223,23 @@ msgstr "macedónčina (mk)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 msgid "Maithili (mai)"
-msgstr ""
+msgstr "maithilčina (mai)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 msgid "Malayalam (ml)"
-msgstr ""
+msgstr "malajálamčina (ml)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 msgid "Manipuri (mni)"
-msgstr ""
+msgstr "manípurčina (mni)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 msgid "Manipuri in Bengali script (mni@beng)"
-msgstr ""
+msgstr "manípurčina v bengálskom skripte (mni@beng)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 msgid "Marathi (mr)"
-msgstr ""
+msgstr "maráthčina (mr)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 #: ../src/ui/dialog/inkscape-preferences.cpp:530
@@ -20250,15 +20297,15 @@ msgstr "ruština (ru)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:556
 msgid "Sanskrit (sa)"
-msgstr ""
+msgstr "sanskrit (sa)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:556
 msgid "Santali (sat)"
-msgstr ""
+msgstr "santalčina (sat)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:556
 msgid "Santali in Devanagari script (sat@deva)"
-msgstr ""
+msgstr "santalčina v skripte Devanagari (sat@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:556
 #: ../src/ui/dialog/inkscape-preferences.cpp:532
@@ -20272,11 +20319,11 @@ msgstr "srbčina v latinke (sr@latin)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:557
 msgid "Sindhi (sd)"
-msgstr ""
+msgstr "sindhčina (sd)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:557
 msgid "Sindhi in Devanagari script (sd@deva)"
-msgstr ""
+msgstr "sindhčina v skripte Devanagari (sd@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:557
 #: ../src/ui/dialog/inkscape-preferences.cpp:532
@@ -20305,7 +20352,7 @@ msgstr "švédčina (sv)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:558
 msgid "Tamil (ta)"
-msgstr ""
+msgstr "tamilčina (ta)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:558
 #: ../src/ui/dialog/inkscape-preferences.cpp:533
@@ -20329,7 +20376,7 @@ msgstr "ukrajinčina (uk)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:559
 msgid "Urdu (ur)"
-msgstr ""
+msgstr "urdčina (ur)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:560
 #: ../src/ui/dialog/inkscape-preferences.cpp:533
@@ -20349,30 +20396,27 @@ msgstr "Nastaviť jazyk menu a formát čísel"
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
 msgctxt "Icon size"
 msgid "Larger"
-msgstr ""
+msgstr "Väčšia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
 #: ../src/ui/dialog/inkscape-preferences.cpp:569
 #: ../src/ui/dialog/inkscape-preferences.cpp:649
-#, fuzzy
 msgctxt "Icon size"
 msgid "Large"
-msgstr "veľký"
+msgstr "Veľká"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
 #: ../src/ui/dialog/inkscape-preferences.cpp:569
 #: ../src/ui/dialog/inkscape-preferences.cpp:649
-#, fuzzy
 msgctxt "Icon size"
 msgid "Small"
-msgstr "malý"
+msgstr "Malá"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
 #: ../src/ui/dialog/inkscape-preferences.cpp:569
-#, fuzzy
 msgctxt "Icon size"
 msgid "Smaller"
-msgstr "menší"
+msgstr "Menšia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:621
 #: ../src/ui/dialog/inkscape-preferences.cpp:573
@@ -20597,12 +20641,12 @@ msgstr "Agresívny"
 #: ../src/ui/dialog/inkscape-preferences.cpp:697
 msgctxt "Window size"
 msgid "Small"
-msgstr ""
+msgstr "Malá"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:697
 msgctxt "Window size"
 msgid "Large"
-msgstr ""
+msgstr "Veľká"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:697
 #: ../src/ui/dialog/inkscape-preferences.cpp:649
@@ -20890,6 +20934,10 @@ msgid ""
 "it's off, each will open in the directory where you last saved a file using "
 "it"
 msgstr ""
+"Ak je táto voľba zapnutá, dialógy „Uložiť ako...“ a „Uložiť kópiu...“ sa "
+"vždy otvoria v adresári, kde sa nachádza práve otvorený dokument. Ak je "
+"voľba vypnutí, otvoria sa v adresári, kde ste uložili súbor, keď ste dialóg "
+"naposledy použili."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:890
 #: ../src/ui/dialog/inkscape-preferences.cpp:842
@@ -21575,7 +21623,7 @@ msgstr "Vlastné zakončenia čiar vyfarbiť rovnakou farbou ako objekt"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1138
 #: ../src/ui/dialog/inkscape-preferences.cpp:1348
 msgid "Update marker color when object color changes"
-msgstr ""
+msgstr "Aktualizovať farbu značky, keď sa zmení farba objektu"
 
 #. Selecting options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1189
@@ -21847,11 +21895,13 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1261
 msgid "Mouse move pans when Space is pressed"
-msgstr ""
+msgstr "Pohyb myši posúva plátno ak je stlačený medzerník"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1263
 msgid "When on, pressing and holding Space and dragging pans canvas"
 msgstr ""
+"Keď je voľba zapnutá, stlačenie a podržanie medzerníka zároveň s pohybom "
+"myši posúva plátno"
 
 #.
 #. _scroll_space.init ( _("Left mouse button pans when Space is pressed"), "/options/spacepans/value", false);
@@ -21881,7 +21931,7 @@ msgstr "Posúvanie"
 #. Snapping options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1270
 msgid "Snap indicator"
-msgstr ""
+msgstr "Indikátor prichytávania"
 
 #. Snapping options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1272
@@ -21896,17 +21946,18 @@ msgstr "Po prichytení je na prichytenom bode nakreslený symbol"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1279
 msgid "Snap indicator persistence (in seconds):"
-msgstr ""
+msgstr "Pretrvanie indikátora prichytávania (v sekundách):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1280
 msgid ""
 "Controls how long the snap indicator message will be shown, before it "
 "disappears"
 msgstr ""
+"Ovláda ako dlho bude zobrazená indikačná správa prichytávania, než zmizne"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1282
 msgid "What should snap"
-msgstr ""
+msgstr "Čo sa má prichytávať"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1284
 #: ../src/ui/dialog/inkscape-preferences.cpp:1232
@@ -21955,11 +22006,11 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1296
 msgid "Delayed snap"
-msgstr ""
+msgstr "Oneskorené prichytávanie"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1299
 msgid "Delay (in seconds):"
-msgstr ""
+msgstr "Oneskorenie (v sekundách):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1300
 #: ../src/ui/dialog/inkscape-preferences.cpp:1230
@@ -22090,7 +22141,6 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1332
 #: ../src/ui/dialog/inkscape-preferences.cpp:1274
-#, fuzzy
 msgid "Steps"
 msgstr "Kroky"
 
@@ -22283,6 +22333,8 @@ msgid ""
 "Stroke color same as object, fill color either object fill color or marker "
 "fill color"
 msgstr ""
+"Farba ťahu je rovnaká ako objektu, farba výplne buď farba výplne objektu "
+"alebo farba zakončenia"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1408
 #: ../share/extensions/hershey.inx.h:27
@@ -22300,7 +22352,7 @@ msgstr "Vyčistenie dokumentu"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1354
 #: ../src/ui/dialog/inkscape-preferences.cpp:1356
 msgid "Remove unused swatches when doing a document cleanup"
-msgstr ""
+msgstr "Odstrániť nepoužité farby vzorkovníka pri čistení dokumentu"
 
 #. tooltip
 #: ../src/ui/dialog/inkscape-preferences.cpp:1415
@@ -22343,6 +22395,9 @@ msgid ""
 "Set the amount of memory per document which can be used to store rendered "
 "parts of the drawing for later reuse; set to zero to disable caching"
 msgstr ""
+"Nastaví množstvo pamäte na dokument, ktorá sa použije na ukladanie "
+"vykreslených častí kresby na neskoršie opätovné použitie. Vyrovnávaciu pamäť "
+"vypnete, ak nastavíte hodnotu nula."
 
 #. blur quality
 #. filter quality
@@ -22501,12 +22556,13 @@ msgstr "Rozlíšenie, ktoré použije príkaz Vytvoriť bitmapovú kópiu"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1501
 #: ../src/ui/dialog/inkscape-preferences.cpp:1443
 msgid "Ask about linking and scaling when importing"
-msgstr ""
+msgstr "Spýtať sa na odkazovanie a zmenu mierky pri importe"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1503
 #: ../src/ui/dialog/inkscape-preferences.cpp:1445
 msgid "Pop-up linking and scaling dialog when importing bitmap image."
 msgstr ""
+"Vyvojá dialóg odkazovania a zmeny mierky pri importe bitmapových obrázkov."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1509
 #: ../src/ui/dialog/inkscape-preferences.cpp:1451
@@ -22565,6 +22621,8 @@ msgid ""
 "Select a file of predefined shortcuts to use. Any customized shortcuts you "
 "create will be added separately to "
 msgstr ""
+"Vyberte, ktorý súbor preddefinovaých klávesových skratiek sa má použiť. "
+"Akékoľvek vlastné klávesové skratky, ktoré vytvoríte budú pridané oddelene"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1547
 #: ../src/ui/dialog/inkscape-preferences.cpp:1489
@@ -22931,15 +22989,15 @@ msgstr "Žiadna"
 
 #: ../src/ui/dialog/knot-properties.cpp:59
 msgid "Position X:"
-msgstr ""
+msgstr "Poloha X:"
 
 #: ../src/ui/dialog/knot-properties.cpp:66
 msgid "Position Y:"
-msgstr ""
+msgstr "Poloha Y:"
 
 #: ../src/ui/dialog/knot-properties.cpp:120
 msgid "Modify Knot Position"
-msgstr ""
+msgstr "Zmeniť pozíciu uzla"
 
 #: ../src/ui/dialog/knot-properties.cpp:121
 #: ../src/ui/dialog/layer-properties.cpp:411
@@ -22952,12 +23010,12 @@ msgstr "_Presunúť"
 #: ../src/ui/dialog/knot-properties.cpp:180
 #, c-format
 msgid "Position X (%s):"
-msgstr ""
+msgstr "Poloha X (%s):"
 
 #: ../src/ui/dialog/knot-properties.cpp:181
 #, c-format
 msgid "Position Y (%s):"
-msgstr ""
+msgstr "Poloha Y (%s):"
 
 #: ../src/ui/dialog/layer-properties.cpp:55
 msgid "Layer name:"
@@ -23052,7 +23110,7 @@ msgstr "Zamknúť ostatné vrstvy"
 
 #: ../src/ui/dialog/layers.cpp:730
 msgid "Move layer"
-msgstr ""
+msgstr "Presunúť vrstvu"
 
 #: ../src/ui/dialog/layers.cpp:892 ../src/ui/dialog/layers.cpp:884
 msgctxt "Layers"
@@ -23173,19 +23231,19 @@ msgstr "Deaktivovať efekt živej cesty"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:53
 msgid "Radius (pixels):"
-msgstr ""
+msgstr "Radius (v pixeloch):"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:65
 msgid "Chamfer subdivisions:"
-msgstr ""
+msgstr "Podrozdelenia úkosu:"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:136
 msgid "Modify Fillet-Chamfer"
-msgstr ""
+msgstr "Zmeniť zaoblenie/úkos"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:137
 msgid "_Modify"
-msgstr ""
+msgstr "Z_meniť"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:201
 msgid "Radius"
@@ -23193,23 +23251,23 @@ msgstr "Polomer"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:203
 msgid "Radius approximated"
-msgstr ""
+msgstr "Aproximovaný polomer"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:206
 msgid "Knot distance"
-msgstr ""
+msgstr "Vzdialenosť uzlov"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:213
 msgid "Position (%):"
-msgstr ""
+msgstr "Poloha (%):"
 
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:216
 msgid "%1:"
-msgstr ""
+msgstr "%1:"
 
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:122
 msgid "Modify Node Position"
-msgstr ""
+msgstr "Zmeniť pozíciu uzla"
 
 #: ../src/ui/dialog/memory.cpp:96
 msgid "Heap"
@@ -23252,11 +23310,11 @@ msgstr "Pripravený."
 
 #: ../src/ui/dialog/messages.cpp:174
 msgid "Log capture started."
-msgstr ""
+msgstr "Záznam bol spustený."
 
 #: ../src/ui/dialog/messages.cpp:203
 msgid "Log capture stopped."
-msgstr ""
+msgstr "Záznam bol zastavený."
 
 #: ../src/ui/dialog/new-from-template.cpp:27
 #: ../src/ui/dialog/new-from-template.cpp:24
@@ -23266,7 +23324,7 @@ msgstr "Vytvoriť zo šablóny"
 #: ../src/ui/dialog/new-from-template.cpp:29
 #: ../src/ui/dialog/new-from-template.cpp:26
 msgid "New From Template"
-msgstr ""
+msgstr "Nový dokument zo šablóny"
 
 #: ../src/ui/dialog/object-attributes.cpp:47
 msgid "Href:"
@@ -23404,7 +23462,7 @@ msgstr "Nastaviť popis objektu"
 
 #: ../src/ui/dialog/object-properties.cpp:535
 msgid "Set image rendering option"
-msgstr ""
+msgstr "Nastaviť voľbu vykresľovania obrázka"
 
 #: ../src/ui/dialog/object-properties.cpp:554
 #: ../src/ui/dialog/object-properties.cpp:552
@@ -23428,77 +23486,77 @@ msgstr "Odkryť objekt"
 
 #: ../src/ui/dialog/objects.cpp:874
 msgid "Unhide objects"
-msgstr ""
+msgstr "Odkryť objekty"
 
 #: ../src/ui/dialog/objects.cpp:874
 msgid "Hide objects"
-msgstr ""
+msgstr "Skryť objekty"
 
 #: ../src/ui/dialog/objects.cpp:894
 msgid "Lock objects"
-msgstr ""
+msgstr "Zamknúť objekty"
 
 #: ../src/ui/dialog/objects.cpp:894
 msgid "Unlock objects"
-msgstr ""
+msgstr "Odomknúť objekty"
 
 #: ../src/ui/dialog/objects.cpp:906
 msgid "Layer to group"
-msgstr ""
+msgstr "Vrstvu na skupinu"
 
 #: ../src/ui/dialog/objects.cpp:906
 msgid "Group to layer"
-msgstr ""
+msgstr "Skupinu na vrstvu"
 
 #: ../src/ui/dialog/objects.cpp:1104
 msgid "Moved objects"
-msgstr ""
+msgstr "Presunuté objekty"
 
 #: ../src/ui/dialog/objects.cpp:1353 ../src/ui/dialog/tags.cpp:853
 #: ../src/ui/dialog/tags.cpp:860
 msgid "Rename object"
-msgstr ""
+msgstr "Premenovať objekt"
 
 #: ../src/ui/dialog/objects.cpp:1459
 msgid "Set object highlight color"
-msgstr ""
+msgstr "Nastaviť farbu zvýraznenia objektu"
 
 #: ../src/ui/dialog/objects.cpp:1469
 msgid "Set object opacity"
-msgstr ""
+msgstr "Nastaviť krytie objektu"
 
 #: ../src/ui/dialog/objects.cpp:1502
 msgid "Set object blend mode"
-msgstr ""
+msgstr "Nastaviť režim zmiešavania objektu"
 
 #: ../src/ui/dialog/objects.cpp:1565
 msgid "Set object blur"
-msgstr ""
+msgstr "Nastaviť rozostrenie objektu"
 
 #: ../src/ui/dialog/objects.cpp:1628
 msgctxt "Visibility"
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: ../src/ui/dialog/objects.cpp:1629
 msgctxt "Lock"
 msgid "L"
-msgstr ""
+msgstr "Z"
 
 #: ../src/ui/dialog/objects.cpp:1630
 msgctxt "Type"
 msgid "T"
-msgstr ""
+msgstr "T"
 
 #: ../src/ui/dialog/objects.cpp:1631
 msgctxt "Clip and mask"
 msgid "CM"
-msgstr ""
+msgstr "OM"
 
 #: ../src/ui/dialog/objects.cpp:1632
 msgctxt "Highlight"
 msgid "HL"
-msgstr ""
+msgstr "ZV"
 
 #: ../src/ui/dialog/objects.cpp:1633
 msgid "Label"
@@ -23507,77 +23565,83 @@ msgstr "Blok textu"
 #. In order to get tooltips on header, we must create our own label.
 #: ../src/ui/dialog/objects.cpp:1675
 msgid "Toggle visibility of Layer, Group, or Object."
-msgstr ""
+msgstr "Prepnúť viditeľnosť vrstvy, skupiny alebo objektu."
 
 #: ../src/ui/dialog/objects.cpp:1688
 msgid "Toggle lock of Layer, Group, or Object."
-msgstr ""
+msgstr "Prepnúť zamknutie vrstvy, skupiny alebo objektu."
 
 #: ../src/ui/dialog/objects.cpp:1700
 msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
 msgstr ""
+"Typ: vrstva, skupina alebo objekt. Kliknutím na ikonu vrstvy alebo skupiny "
+"prepnete medzi týmito dvomi typmi."
 
 #: ../src/ui/dialog/objects.cpp:1719
 msgid "Is object clipped and/or masked?"
-msgstr ""
+msgstr "Je objekt orezaný alebo maskovaný?"
 
 #: ../src/ui/dialog/objects.cpp:1730
 msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
 msgstr ""
+"Farba zvýraznenia obrysu v nástroji Uzol. Kliknutím nastavíte. Ak alfa je "
+"nula, použije sa zdedená farba."
 
 #: ../src/ui/dialog/objects.cpp:1741
 msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
 msgstr ""
+"Označenie vrstvy/skupiny/objektu (inkscape:label). Dvojitým kliknutím "
+"nastavíte. Predvolená hodnota je ID objektu."
 
 #: ../src/ui/dialog/objects.cpp:1838
 msgid "Add layer..."
-msgstr ""
+msgstr "Pridať vrstvu..."
 
 #: ../src/ui/dialog/objects.cpp:1845
 msgid "Remove object"
-msgstr ""
+msgstr "Odstrániť objekt"
 
 #: ../src/ui/dialog/objects.cpp:1853
 msgid "Move To Bottom"
-msgstr ""
+msgstr "Presunúť na spodok"
 
 #: ../src/ui/dialog/objects.cpp:1877
 msgid "Move To Top"
-msgstr ""
+msgstr "Presunúť na vrch"
 
 #: ../src/ui/dialog/objects.cpp:1885
 msgid "Collapse All"
-msgstr ""
+msgstr "Zbaliť všetky"
 
 #: ../src/ui/dialog/objects.cpp:1899
 msgid "Rename"
-msgstr ""
+msgstr "Premenovať"
 
 #: ../src/ui/dialog/objects.cpp:1905
 msgid "Solo"
-msgstr ""
+msgstr "Sólo"
 
 #: ../src/ui/dialog/objects.cpp:1906
 msgid "Show All"
-msgstr ""
+msgstr "Zobraziť všetky"
 
 #: ../src/ui/dialog/objects.cpp:1907
 msgid "Hide All"
-msgstr ""
+msgstr "Skryť všetky"
 
 #: ../src/ui/dialog/objects.cpp:1911
 msgid "Lock Others"
-msgstr ""
+msgstr "Zamknúť ostatné"
 
 #: ../src/ui/dialog/objects.cpp:1912
 msgid "Lock All"
-msgstr ""
+msgstr "Zamknúť všetky"
 
 #. LockAndHide
 #: ../src/ui/dialog/objects.cpp:1913 ../src/verbs.cpp:3011
@@ -23587,21 +23651,21 @@ msgstr "Odomknúť všetko"
 
 #: ../src/ui/dialog/objects.cpp:1917
 msgid "Up"
-msgstr ""
+msgstr "Hore"
 
 #: ../src/ui/dialog/objects.cpp:1918
 msgid "Down"
-msgstr ""
+msgstr "Dolu"
 
 #: ../src/ui/dialog/objects.cpp:1927
 msgid "Set Clip"
-msgstr ""
+msgstr "Nastaviť orezanie"
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
 #: ../src/ui/dialog/objects.cpp:1933
 msgid "Unset Clip"
-msgstr ""
+msgstr "Zrušiť orezanie"
 
 #. Set mask
 #: ../src/ui/dialog/objects.cpp:1937 ../src/ui/interface.cpp:1754
@@ -23611,15 +23675,15 @@ msgstr "Nastaviť masku"
 
 #: ../src/ui/dialog/objects.cpp:1938
 msgid "Unset Mask"
-msgstr ""
+msgstr "Zrušiť masku"
 
 #: ../src/ui/dialog/objects.cpp:1960
 msgid "Select Highlight Color"
-msgstr ""
+msgstr "Nastaviť farbu zvýraznenia"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:715
 msgid "Clipart found"
-msgstr ""
+msgstr "Klipart bol nájdený"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:764
 msgid "Downloading image..."
@@ -23675,47 +23739,47 @@ msgstr "Zatvoriť"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:190
 msgid "_Curves (multiplier):"
-msgstr ""
+msgstr "_Krivky (násobiteľ):"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:193
 msgid "Favors connections that are part of a long curve"
-msgstr ""
+msgstr "Uprednostňuje spojenia, ktoré sú súčasťou dlhšej krivky"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:204
 msgid "_Islands (weight):"
-msgstr ""
+msgstr "_Ostrovčeky (váha):"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:207
 msgid "Avoid single disconnected pixels"
-msgstr ""
+msgstr "Vynúť sa samostatným pixelom"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:209
 msgid "A constant vote value"
-msgstr ""
+msgstr "Konštantná hodnota hlasu"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:219
 msgid "Sparse pixels (window _radius):"
-msgstr ""
+msgstr "Riedke pixely (polome_r okna):"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:228
 msgid "The radius of the window analyzed"
-msgstr ""
+msgstr "Polomer analyzovaného okna"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:229
 msgid "Sparse pixels (_multiplier):"
-msgstr ""
+msgstr "Riedke pixely (_násobiteľ):"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:240
 msgid "Favors connections that are part of foreground color"
-msgstr ""
+msgstr "Uprednostňuje spojenia, ktoré sú súčasťou farby popredia"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:246
 msgid "The heuristic computed vote will be multiplied by this value"
-msgstr ""
+msgstr "Hlas vypočítaný heuristikou sa vynásobí touto hodnotou"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:259
 msgid "Heuristics"
-msgstr ""
+msgstr "Heuristika"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:266
 msgid "_Voronoi diagram"
@@ -23768,6 +23832,10 @@ msgid ""
 "\n"
 "Continue the procedure (without saving)?"
 msgstr ""
+"Zdá sa, že obrázok je príliš veľký. Proces môže trvať dlhšiu dobu. Je "
+"rozumné uložiť dokument predtým, než budete pokračovať.\n"
+"\n"
+"Pokračovať bez uloženia?"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:499
 msgid "Trace pixel art"
@@ -23776,32 +23844,32 @@ msgstr "Vektorizovať sprite"
 #: ../src/ui/dialog/polar-arrange-tab.cpp:41
 msgctxt "Polar arrange tab"
 msgid "Y coordinate of the center"
-msgstr ""
+msgstr "Súradnica Y stredu"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:42
 msgctxt "Polar arrange tab"
 msgid "X coordinate of the center"
-msgstr ""
+msgstr "Súradnica X stredu"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:43
 msgctxt "Polar arrange tab"
 msgid "Y coordinate of the radius"
-msgstr ""
+msgstr "Súradnica Y polomeru"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:44
 msgctxt "Polar arrange tab"
 msgid "X coordinate of the radius"
-msgstr ""
+msgstr "Súradnica X polomeru"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:45
 msgctxt "Polar arrange tab"
 msgid "Starting angle"
-msgstr ""
+msgstr "Počiatočný uhol"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:46
 msgctxt "Polar arrange tab"
 msgid "End angle"
-msgstr ""
+msgstr "Koncový uhol"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:48
 #: ../src/ui/dialog/polar-arrange-tab.cpp:43
@@ -23847,14 +23915,12 @@ msgstr "Parametrizované:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:83
 #: ../src/ui/dialog/polar-arrange-tab.cpp:78
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Center X/Y:"
 msgstr "Stred X/Y:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:105
 #: ../src/ui/dialog/polar-arrange-tab.cpp:91
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Radius X/Y:"
 msgstr "Polomer X/Y:"
@@ -23997,20 +24063,20 @@ msgstr "Nastaviť šírku:"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:454
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:455
 msgid "glyph"
-msgstr "graféma"
+msgstr "znak"
 
 #. SPGlyph* glyph =
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:486
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:487
 msgid "Add glyph"
-msgstr "Pridať grafému"
+msgstr "Pridať znak"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:520
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:562
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:521
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:563
 msgid "Select a <b>path</b> to define the curves of a glyph"
-msgstr "Vybrať <b>cestu</b> na definíciu kriviek grafémy."
+msgstr "Vybrať <b>cestu</b> na definíciu kriviek znaku."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:528
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:570
@@ -24022,29 +24088,29 @@ msgstr "Zvolený objekt nemá popis <b>cesty</b>."
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:535
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:536
 msgid "No glyph selected in the SVGFonts dialog."
-msgstr "V dialógu SVGFonts nebola vybraná žiadna graféma."
+msgstr "V dialógu SVGFonts nebol vybraný žiadny znak."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:546
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:585
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:547
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:586
 msgid "Set glyph curves"
-msgstr "Nastaviť krivky grafémy"
+msgstr "Nastaviť krivky znaku"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:605
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:606
 msgid "Reset missing-glyph"
-msgstr "Obnoviť chýbajúcu grafému"
+msgstr "Obnoviť chýbajúci znak"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:621
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:622
 msgid "Edit glyph name"
-msgstr "Upraviť názov grafémy"
+msgstr "Upraviť názov znaku"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:635
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:636
 msgid "Set glyph unicode"
-msgstr "Nastaviť kód Unicode grafémy"
+msgstr "Nastaviť kód znaku Unicode"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:647
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:648
@@ -24054,7 +24120,7 @@ msgstr "Odstrániť písmo"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:664
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:665
 msgid "Remove glyph"
-msgstr "Odstrániť grafému"
+msgstr "Odstrániť znak"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:681
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:682
@@ -24064,7 +24130,7 @@ msgstr "Odstrániť kerningovú dvojicu"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:691
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:692
 msgid "Missing Glyph:"
-msgstr "Chýbajúca graféma:"
+msgstr "Chýbajúci znak"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:695
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:696
@@ -24074,7 +24140,7 @@ msgstr "Z výberu..."
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:708
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:709
 msgid "Glyph name"
-msgstr "Názov grafémy"
+msgstr "Názov znaku"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:709
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:710
@@ -24084,7 +24150,7 @@ msgstr "Zodpovedajúci reťazec"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:712
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:713
 msgid "Add Glyph"
-msgstr "Pridať grafému"
+msgstr "Pridať znak"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:719
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:720
@@ -24105,12 +24171,12 @@ msgstr "Nastavenie kerningu"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:778
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:779
 msgid "1st Glyph:"
-msgstr "1. graféma:"
+msgstr "1. znak:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:780
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:781
 msgid "2nd Glyph:"
-msgstr "2. graféma:"
+msgstr "2. znak:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:783
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:784
@@ -24161,7 +24227,7 @@ msgstr "_Globálne nastavenia"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:920
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:921
 msgid "_Glyphs"
-msgstr "_Grafémy"
+msgstr "_Znaky"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:921
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:922
@@ -24308,7 +24374,7 @@ msgstr "Autor: "
 
 #: ../src/ui/dialog/text-edit.cpp:72
 msgid "_Variants"
-msgstr ""
+msgstr "_Varianty"
 
 #: ../src/ui/dialog/text-edit.cpp:73 ../src/ui/dialog/text-edit.cpp:72
 msgid "Set as _default"
@@ -24833,7 +24899,7 @@ msgstr "Otočenie v smere hodinových ručičiek"
 #: ../src/ui/dialog/transformation.cpp:973
 #: ../src/ui/dialog/transformation.cpp:997
 msgid "Transform matrix is singular, <b>not used</b>."
-msgstr ""
+msgstr "Transformačná matica je singulárna, <b>nepoužitá</b>."
 
 #: ../src/ui/dialog/transformation.cpp:1010
 #: ../src/ui/dialog/transformation.cpp:1012
@@ -25048,7 +25114,7 @@ msgstr "Zadajte skupinu #%1"
 #. Pop selection out of group
 #: ../src/ui/interface.cpp:1528
 msgid "_Pop selection out of group"
-msgstr ""
+msgstr "Vyňať výber zo sku_piny"
 
 #. Item dialog
 #: ../src/ui/interface.cpp:1656 ../src/verbs.cpp:2940
@@ -25107,7 +25173,7 @@ msgstr "Uvoľniť masku"
 #. SSet Clip Group
 #: ../src/ui/interface.cpp:1776
 msgid "Create Clip G_roup"
-msgstr ""
+msgstr "Vytvoriť o_rezávaciu skupinu"
 
 #. Set Clip
 #: ../src/ui/interface.cpp:1783 ../src/interface.cpp:1761
@@ -25306,13 +25372,12 @@ msgstr ""
 "s <b>Alt</b> konvergovať/divergovať"
 
 #: ../src/ui/object-edit.cpp:1364 ../src/object-edit.cpp:1303
-#, fuzzy
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"
 msgstr ""
 "Zbaliť/rozbaliť špirálu <b>zvonka</b>; s <b>Ctrl</b> prichytávanie k uhlu; "
-"so <b>Shift</b> zmena mierky/otáčanie"
+"so <b>Shift</b> zmena mierky/otáčanie; s <b>Alt</b> zamknutie polomeru"
 
 #: ../src/ui/object-edit.cpp:1413 ../src/object-edit.cpp:1348
 msgid "Adjust the <b>offset distance</b>"
@@ -25330,7 +25395,7 @@ msgstr "Ťahať krivku"
 #: ../src/ui/tool/curve-drag-point.cpp:192
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: drag to open or move BSpline handles"
-msgstr ""
+msgstr "<b>Shift</b>: ťahaním otvoríte alebo presuniete úchopy BSpline"
 
 #: ../src/ui/tool/curve-drag-point.cpp:196
 #: ../src/ui/tool/curve-drag-point.cpp:167
@@ -25350,6 +25415,8 @@ msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Shift, Ctrl+Alt)"
 msgstr ""
+"<b>úsek BSpline</b>: ťahaním tvarujete úsek, dvojitým kliknutím vložíte "
+"uzol, kliknutím vyberiete (ďalšie: Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:209
 #: ../src/ui/tool/curve-drag-point.cpp:175
@@ -25507,7 +25574,7 @@ msgstr "ďalšie: Shift, Ctrl, Alt"
 #: ../src/ui/tool/node.cpp:496
 msgctxt "Path handle tip"
 msgid "more: Ctrl"
-msgstr ""
+msgstr "ďalšie: Ctrl"
 
 #: ../src/ui/tool/node.cpp:498 ../src/ui/tool/node.cpp:434
 msgctxt "Path handle tip"
@@ -25555,7 +25622,7 @@ msgstr ""
 #: ../src/ui/tool/node.cpp:529
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
-msgstr ""
+msgstr "<b>Ctrl</b>: Prichytávať úchop ku krokom definovaným v LPE BSpline"
 
 #: ../src/ui/tool/node.cpp:532 ../src/ui/tool/node.cpp:465
 #, c-format
@@ -25572,7 +25639,7 @@ msgstr "<b>Shift</b>: otáčať oba úchopy o rovnaký uhol"
 #: ../src/ui/tool/node.cpp:540
 msgctxt "Path hande tip"
 msgid "<b>Shift</b>: move handle"
-msgstr ""
+msgstr "<b>Shift</b>: presunúť úchop"
 
 #: ../src/ui/tool/node.cpp:547 ../src/ui/tool/node.cpp:551
 #: ../src/ui/tool/node.cpp:477
@@ -25588,6 +25655,8 @@ msgid ""
 "<b>BSpline node handle</b>: Shift to drag, double click to reset (%s). %g "
 "power"
 msgstr ""
+"<b>Úchop uzla BSpline</b>: pomocou Shift ťaháte, dvojitým kliknutím obnovíte "
+"(%s). %g sila"
 
 #: ../src/ui/tool/node.cpp:574 ../src/ui/tool/node.cpp:500
 #, c-format
@@ -25633,6 +25702,8 @@ msgid ""
 "<b>BSpline node</b>: drag to shape the path (more: Shift, Ctrl, Alt). %g "
 "power"
 msgstr ""
+"<b>Uzol BSpline</b>: ťahaním tvarujete cestu (ďalšie: Shift, Ctrl, Alt). %g "
+"sila"
 
 #: ../src/ui/tool/node.cpp:1454 ../src/ui/tool/node.cpp:1295
 #, c-format
@@ -25661,6 +25732,8 @@ msgid ""
 "<b>BSpline node</b>: drag to shape the path, click to select only this node "
 "(more: Shift, Ctrl, Alt). %g power"
 msgstr ""
+"<b>Uzol BSpline</b>: ťahaním tvarujete cestu, kliknutím vyberiete iba tento "
+"uzol (ďalšie: Shift, Ctrl, Alt). %g sila"
 
 #: ../src/ui/tool/node.cpp:1474 ../src/ui/tool/node.cpp:1309
 #, c-format
@@ -25853,29 +25926,28 @@ msgid "<b>Rotation center</b>: drag to change the origin of transforms"
 msgstr "<b>Stred otáčania</b>: ťahaním zmeníte počiatok transformácií"
 
 #: ../src/ui/tools-switch.cpp:101 ../src/tools-switch.cpp:91
-#, fuzzy
 msgid ""
 "<b>Click</b> to Select and Transform objects, <b>Drag</b> to select many "
 "objects."
-msgstr "<b>Kliknutím</b> vyberte uzly, <b>ťahaním</b> preskupte."
+msgstr ""
+"<b>Kliknutím</b> vyberte a transformujete objekty, <b>ťahaním</b> vyberiete "
+"viaceré objekty."
 
 #: ../src/ui/tools-switch.cpp:102 ../src/tools-switch.cpp:92
-#, fuzzy
 msgid "Modify selected path points (nodes) directly."
-msgstr "Zjednoduší vybrané cesty (odstráni nadbytočné uzly)"
+msgstr "Zjednoduší vybrané body cesty (uzly) priamo."
 
 #: ../src/ui/tools-switch.cpp:103 ../src/tools-switch.cpp:93
 msgid "To tweak a path by pushing, select it and drag over it."
 msgstr "Cestu doladíte tlačením tak, že ju vyberiete a ťaháte ponad ňu myšou."
 
 #: ../src/ui/tools-switch.cpp:104 ../src/tools-switch.cpp:94
-#, fuzzy
 msgid ""
 "<b>Drag</b>, <b>click</b> or <b>click and scroll</b> to spray the selected "
 "objects."
 msgstr ""
-"<b>Ťahaním</b>, <b>kliknutím</b> alebo <b>posunutím</b> nasprejujete vybrané "
-"objekty."
+"<b>Ťahaním</b>, <b>kliknutím</b> alebo <b>kliknutím a posunutím</b> "
+"nasprejujete vybrané objekty."
 
 #: ../src/ui/tools-switch.cpp:105 ../src/tools-switch.cpp:95
 msgid ""
@@ -25963,13 +26035,12 @@ msgstr ""
 "vybraných objektoch. <b>Ťahaním úchopov</b> doladíte farebný prechod."
 
 #: ../src/ui/tools-switch.cpp:115 ../src/tools-switch.cpp:105
-#, fuzzy
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a mesh on selected objects, "
 "<b>drag handles</b> to adjust meshes."
 msgstr ""
-"<b>Ťahaním</b> alebo <b>dvojitým kliknutím</b> vytvoríte farebný prechod na "
-"vybraných objektoch. <b>Ťahaním úchopov</b> doladíte farebný prechod."
+"<b>Ťahaním</b> alebo <b>dvojitým kliknutím</b> vytvoríte sieť na vybraných "
+"objektoch. <b>Ťahaním úchopov</b> doladíte mriežku."
 
 #: ../src/ui/tools-switch.cpp:116 ../src/tools-switch.cpp:106
 msgid ""
@@ -26406,11 +26477,11 @@ msgstr "Vyberte z panelu nástrojov konštrukčný nástroj."
 #. create the knots
 #: ../src/ui/tools/measure-tool.cpp:349
 msgid "Measure start, <b>Shift+Click</b> for position dialog"
-msgstr ""
+msgstr "Merať začiatok, <b>Shift+Click</b> vyvolá dialóg polohy"
 
 #: ../src/ui/tools/measure-tool.cpp:355
 msgid "Measure end, <b>Shift+Click</b> for position dialog"
-msgstr ""
+msgstr "Merať koniec, <b>Shift+Click</b> vyvolá dialóg polohy"
 
 #: ../src/ui/tools/measure-tool.cpp:746 ../share/extensions/measure.inx.h:2
 msgid "Measure"
@@ -26418,28 +26489,28 @@ msgstr "Mierka"
 
 #: ../src/ui/tools/measure-tool.cpp:751
 msgid "Base"
-msgstr ""
+msgstr "Základ"
 
 #: ../src/ui/tools/measure-tool.cpp:760
 msgid "Add guides from measure tool"
-msgstr ""
+msgstr "Pridať vodidlá z nástroja na meranie"
 
 #: ../src/ui/tools/measure-tool.cpp:780
 msgid "Keep last measure on the canvas, for reference"
-msgstr ""
+msgstr "Ponechať posledné meranie na plátne pre porovnanie"
 
 #: ../src/ui/tools/measure-tool.cpp:800
 msgid "Convert measure to items"
-msgstr ""
+msgstr "Konvertovať meranie na položky"
 
 #: ../src/ui/tools/measure-tool.cpp:838
 msgid "Add global measure line"
-msgstr ""
+msgstr "Pridať globálnu meraciu úsečku"
 
 #: ../src/ui/tools/measure-tool.cpp:1289 ../src/ui/tools/measure-tool.cpp:1291
 #, c-format
 msgid "Crossing %lu"
-msgstr ""
+msgstr "Pretína %lu"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/ui/tools/mesh-tool.cpp:142 ../src/ui/tools/mesh-tool.cpp:153
@@ -26465,14 +26536,14 @@ msgstr[2] "Vybraných <b>%d</b> z %d úchopov sieťky"
 msgid "<b>No</b> mesh handles selected out of %d on %d selected object"
 msgid_plural "<b>No</b> mesh handles selected out of %d on %d selected objects"
 msgstr[0] ""
-"Žiaden z %d úchopov farebných prechodov nebol vybraný na %d vybraných "
-"objektoch"
+"Žiaden z %d úchopov sieťkových farebných prechodov nebol vybraný na %d "
+"vybraných objektoch"
 msgstr[1] ""
-"Žiaden z %d úchopov farebných prechodov nebol vybraný na %d vybraných "
-"objektoch"
+"Žiaden z %d úchopov sieťkových farebných prechodov nebol vybraný na %d "
+"vybraných objektoch"
 msgstr[2] ""
-"Žiaden z %d úchopov farebných prechodov nebol vybraný na %d vybraných "
-"objektoch"
+"Žiaden z %d úchopov sieťkových farebných prechodov nebol vybraný na %d "
+"vybraných objektoch"
 
 #: ../src/ui/tools/mesh-tool.cpp:360 ../src/ui/tools/mesh-tool.cpp:321
 msgid "Split mesh row/column"
@@ -26480,7 +26551,7 @@ msgstr "Rozdeliť riadok/stĺpec sieťky"
 
 #: ../src/ui/tools/mesh-tool.cpp:453 ../src/ui/tools/mesh-tool.cpp:407
 msgid "Toggled mesh path type."
-msgstr "Prepnutý typ cesty mriežky."
+msgstr "Prepnutý typ cesty sieťky."
 
 #: ../src/ui/tools/mesh-tool.cpp:458 ../src/ui/tools/mesh-tool.cpp:411
 msgid "Approximated arc for mesh side."
@@ -26488,7 +26559,7 @@ msgstr "Aproximovaný oblúk okraja sieťky."
 
 #: ../src/ui/tools/mesh-tool.cpp:463 ../src/ui/tools/mesh-tool.cpp:415
 msgid "Toggled mesh tensors."
-msgstr "Prepnuté tenzory mriežky."
+msgstr "Prepnuté tenzory sieťk."
 
 #: ../src/ui/tools/mesh-tool.cpp:468 ../src/ui/tools/mesh-tool.cpp:419
 msgid "Smoothed mesh corner color."
@@ -26500,15 +26571,15 @@ msgstr "Vybraná farba rohu sieťky."
 
 #: ../src/ui/tools/mesh-tool.cpp:478
 msgid "Inserted new row or column."
-msgstr ""
+msgstr "Vložený nový riadok alebo stĺpec."
 
 #: ../src/ui/tools/mesh-tool.cpp:548
 msgid "Fit mesh inside bounding box."
-msgstr ""
+msgstr "Vmestiť sieťku do ohraničenia."
 
 #: ../src/ui/tools/mesh-tool.cpp:1189
 msgid "Create mesh"
-msgstr ""
+msgstr "Vytvoriť sieťku"
 
 #: ../src/ui/tools/node-tool.cpp:644 ../src/ui/tools/node-tool.cpp:594
 msgctxt "Node tool tip"
@@ -27069,9 +27140,8 @@ msgid "Type text"
 msgstr "Napísať text"
 
 #: ../src/ui/tools/tool-base.cpp:705 ../src/ui/tools/tool-base.cpp:704
-#, fuzzy
 msgid "<b>Space+mouse move</b> to pan canvas"
-msgstr "<b>Medzerník+ťahanie myšou</b> posúva plátno"
+msgstr "<b>Medzerník+pohyb myšou</b> posúva plátno"
 
 #: ../src/ui/tools/tweak-tool.cpp:166 ../src/ui/tools/tweak-tool.cpp:174
 #, c-format
@@ -27395,9 +27465,8 @@ msgid "CMYK"
 msgstr "CMYK"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:26
-#, fuzzy
 msgid "_Blur:"
-msgstr "Rozostrenie:"
+msgstr "_Rozostrenie:"
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:29
 #: ../src/ui/widget/filter-effect-chooser.cpp:27
@@ -27407,270 +27476,279 @@ msgstr "Rozostrenie (%)"
 #: ../src/ui/widget/font-variants.cpp:38
 msgctxt "Font variant"
 msgid "Ligatures"
-msgstr ""
+msgstr "Ligatúry"
 
 #: ../src/ui/widget/font-variants.cpp:39
 msgctxt "Font variant"
 msgid "Common"
-msgstr ""
+msgstr "Bežné"
 
 #: ../src/ui/widget/font-variants.cpp:40
 msgctxt "Font variant"
 msgid "Discretionary"
-msgstr ""
+msgstr "Diskrétne"
 
 #: ../src/ui/widget/font-variants.cpp:41
 msgctxt "Font variant"
 msgid "Historical"
-msgstr ""
+msgstr "Historické"
 
 #: ../src/ui/widget/font-variants.cpp:42
 msgctxt "Font variant"
 msgid "Contextual"
-msgstr ""
+msgstr "Kontextové"
 
 #: ../src/ui/widget/font-variants.cpp:44
 msgctxt "Font variant"
 msgid "Position"
-msgstr ""
+msgstr "Pozičné"
 
 #: ../src/ui/widget/font-variants.cpp:45 ../src/ui/widget/font-variants.cpp:50
 msgctxt "Font variant"
 msgid "Normal"
-msgstr ""
+msgstr "Normálne"
 
 #: ../src/ui/widget/font-variants.cpp:46
 msgctxt "Font variant"
 msgid "Subscript"
-msgstr ""
+msgstr "Dolný index"
 
 #: ../src/ui/widget/font-variants.cpp:47
 msgctxt "Font variant"
 msgid "Superscript"
-msgstr ""
+msgstr "Horný index"
 
 #: ../src/ui/widget/font-variants.cpp:49
 msgctxt "Font variant"
 msgid "Capitals"
-msgstr ""
+msgstr "Kapitálky"
 
 #: ../src/ui/widget/font-variants.cpp:51
 msgctxt "Font variant"
 msgid "Small"
-msgstr ""
+msgstr "Malé"
 
 #: ../src/ui/widget/font-variants.cpp:52
 msgctxt "Font variant"
 msgid "All small"
-msgstr ""
+msgstr "Všetky malé"
 
 #: ../src/ui/widget/font-variants.cpp:53
 msgctxt "Font variant"
 msgid "Petite"
-msgstr ""
+msgstr "Drobné"
 
 #: ../src/ui/widget/font-variants.cpp:54
 msgctxt "Font variant"
 msgid "All petite"
-msgstr ""
+msgstr "Všetky drobné"
 
 #: ../src/ui/widget/font-variants.cpp:55
 msgctxt "Font variant"
 msgid "Unicase"
-msgstr ""
+msgstr "Unicase"
 
 #: ../src/ui/widget/font-variants.cpp:56
 msgctxt "Font variant"
 msgid "Titling"
-msgstr ""
+msgstr "Titulky"
 
 #: ../src/ui/widget/font-variants.cpp:58
 msgctxt "Font variant"
 msgid "Numeric"
-msgstr ""
+msgstr "Číselné"
 
 #: ../src/ui/widget/font-variants.cpp:59
 msgctxt "Font variant"
 msgid "Lining"
-msgstr ""
+msgstr "Číslovky na riadku"
 
 #: ../src/ui/widget/font-variants.cpp:60
 msgctxt "Font variant"
 msgid "Old Style"
-msgstr ""
+msgstr "Číslovky v starom štýle"
 
 #: ../src/ui/widget/font-variants.cpp:61
 msgctxt "Font variant"
 msgid "Default Style"
-msgstr ""
+msgstr "Predvolený štýl"
 
 #: ../src/ui/widget/font-variants.cpp:62
 msgctxt "Font variant"
 msgid "Proportional"
-msgstr ""
+msgstr "Proporcionálne"
 
 #: ../src/ui/widget/font-variants.cpp:63
 msgctxt "Font variant"
 msgid "Tabular"
-msgstr ""
+msgstr "Tabuľkové"
 
 #: ../src/ui/widget/font-variants.cpp:64
 msgctxt "Font variant"
 msgid "Default Width"
-msgstr ""
+msgstr "Predvolená šírka"
 
 #: ../src/ui/widget/font-variants.cpp:65
 msgctxt "Font variant"
 msgid "Diagonal"
-msgstr ""
+msgstr "Diagonálne"
 
 #: ../src/ui/widget/font-variants.cpp:66
 msgctxt "Font variant"
 msgid "Stacked"
-msgstr ""
+msgstr "Skladané"
 
 #: ../src/ui/widget/font-variants.cpp:67
 msgctxt "Font variant"
 msgid "Default Fractions"
-msgstr ""
+msgstr "Predvolené zlomky"
 
 #: ../src/ui/widget/font-variants.cpp:68
 msgctxt "Font variant"
 msgid "Ordinal"
-msgstr ""
+msgstr "Poradové"
 
 #: ../src/ui/widget/font-variants.cpp:69
 msgctxt "Font variant"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Nula s prečiarknutím"
 
 #: ../src/ui/widget/font-variants.cpp:71
 msgctxt "Font variant"
 msgid "Feature Settings"
-msgstr ""
+msgstr "Nastavenie vlastností"
 
 #: ../src/ui/widget/font-variants.cpp:72
 msgctxt "Font variant"
 msgid "Selection has different Feature Settings!"
-msgstr ""
+msgstr "Výber má odlišné nastavenie vlastností!"
 
 #: ../src/ui/widget/font-variants.cpp:85
 msgid "Common ligatures. On by default. OpenType tables: 'liga', 'clig'"
-msgstr ""
+msgstr "Bežné ligatúry. Štandardne zapnuté. Tabuľky OpenType: „liga“, „clig“"
 
 #: ../src/ui/widget/font-variants.cpp:87
 msgid "Discretionary ligatures. Off by default. OpenType table: 'dlig'"
-msgstr ""
+msgstr "Diskrétne ligatúry. Štandardne vypnuté. Tabuľky OpenType: „dlig“"
 
 #: ../src/ui/widget/font-variants.cpp:89
 msgid "Historical ligatures. Off by default. OpenType table: 'hlig'"
-msgstr ""
+msgstr "Historické ligatúry. Štandardne vypnuté. Tabuľky OpenType: „hlig“"
 
 #: ../src/ui/widget/font-variants.cpp:91
 msgid "Contextual forms. On by default. OpenType table: 'calt'"
-msgstr ""
+msgstr "Kontextové tvary. Štandardne zapnuté. Tabuľky OpenType: „calt“"
 
 #. Position ----------------------------------
 #. Add tooltips
 #: ../src/ui/widget/font-variants.cpp:112
 msgid "Normal position."
-msgstr ""
+msgstr "Normálna pozícia"
 
 #: ../src/ui/widget/font-variants.cpp:113
 msgid "Subscript. OpenType table: 'subs'"
-msgstr ""
+msgstr "Dolný index. Tabuľka OpenType: „subs“"
 
 #: ../src/ui/widget/font-variants.cpp:114
 msgid "Superscript. OpenType table: 'sups'"
-msgstr ""
+msgstr "Horný index. Tabuľka OpenType: „sups“"
 
 #. Caps ----------------------------------
 #. Add tooltips
 #: ../src/ui/widget/font-variants.cpp:138
 msgid "Normal capitalization."
-msgstr ""
+msgstr "Normálna veľkosť písmen."
 
 #: ../src/ui/widget/font-variants.cpp:139
 msgid "Small-caps (lowercase). OpenType table: 'smcp'"
-msgstr ""
+msgstr "Malé kapitálky (malé písmená). Tabuľka OpenType: „smcp“"
 
 #: ../src/ui/widget/font-variants.cpp:140
 msgid ""
 "All small-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'smcp'"
 msgstr ""
+"Všetky malé kapitálky (veľké a malé písmená). Tabuľky OpenType: „c2sc“ a "
+"„smcp“"
 
 #: ../src/ui/widget/font-variants.cpp:141
 msgid "Petite-caps (lowercase). OpenType table: 'pcap'"
-msgstr ""
+msgstr "Drobné kapitálky (malé písmená). Tabuľka OpenType: „pcap“"
 
 #: ../src/ui/widget/font-variants.cpp:142
 msgid ""
 "All petite-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'pcap'"
 msgstr ""
+"Všetky drobné kapitálky (veľké a malé písmená). Tabuľky OpenType: „c2sc“ a "
+"„pcap“"
 
 #: ../src/ui/widget/font-variants.cpp:143
 msgid ""
 "Unicase (small caps for uppercase, normal for lowercase). OpenType table: "
 "'unic'"
 msgstr ""
+"Unicase (malé písmená - malé kapitálky, veľké písmená - normálne). Tabuľka "
+"OpenType: „unic“"
 
 #: ../src/ui/widget/font-variants.cpp:144
 msgid ""
 "Titling caps (lighter-weight uppercase for use in titles). OpenType table: "
 "'titl'"
 msgstr ""
+"Nadpisové kapitálky (veľké písmená s nižšou váhou na použitie v nadpisoch). "
+"Tabuľka OpenType: „titl“"
 
 #. Numeric ------------------------------
 #. Add tooltips
 #: ../src/ui/widget/font-variants.cpp:180
 msgid "Normal style."
-msgstr ""
+msgstr "Normálny štýl."
 
 #: ../src/ui/widget/font-variants.cpp:181
 msgid "Lining numerals. OpenType table: 'lnum'"
-msgstr ""
+msgstr "Číslovky na riadku. Tabuľka OpenType: „lnum“"
 
 #: ../src/ui/widget/font-variants.cpp:182
 msgid "Old style numerals. OpenType table: 'onum'"
-msgstr ""
+msgstr "Číslovky v starom štýle. Tabuľka OpenType: „onum“"
 
 #: ../src/ui/widget/font-variants.cpp:183
 msgid "Normal widths."
-msgstr ""
+msgstr "Normálne šírky."
 
 #: ../src/ui/widget/font-variants.cpp:184
 msgid "Proportional width numerals. OpenType table: 'pnum'"
-msgstr ""
+msgstr "Číslovky s proporcionálnou šírkou. Tabuľka OpenType: „pnum“"
 
 #: ../src/ui/widget/font-variants.cpp:185
 msgid "Same width numerals. OpenType table: 'tnum'"
-msgstr ""
+msgstr "Číslovky s rovnakou šírkou. Tabuľka OpenType: „tnum“"
 
 #: ../src/ui/widget/font-variants.cpp:186
 msgid "Normal fractions."
-msgstr ""
+msgstr "Normálne zlomky."
 
 #: ../src/ui/widget/font-variants.cpp:187
 msgid "Diagonal fractions. OpenType table: 'frac'"
-msgstr ""
+msgstr "Diagonálne zlomky. Tabuľka OpenType: „frac“"
 
 #: ../src/ui/widget/font-variants.cpp:188
 msgid "Stacked fractions. OpenType table: 'afrc'"
-msgstr ""
+msgstr "Skladané zlomky. Tabuľka OpenType: „afrc“"
 
 #: ../src/ui/widget/font-variants.cpp:189
 msgid "Ordinals (raised 'th', etc.). OpenType table: 'ordn'"
-msgstr ""
+msgstr "Radové (horný index „st“, „nd“, „rd“, „th“). Tabuľka OpenType: „ordn“"
 
 #: ../src/ui/widget/font-variants.cpp:190
 msgid "Slashed zeros. OpenType table: 'zero'"
-msgstr ""
+msgstr "Nula s prečiarknutím. Tabuľka OpenType: „zero“"
 
 #. Feature settings ---------------------
 #. Add tooltips
 #: ../src/ui/widget/font-variants.cpp:240
 msgid "Feature settings in CSS form. No sanity checking is performed."
 msgstr ""
+"Nastavenie vlastností vo forme CSS. Žiadna kontrola platnosti sa nevykonáva."
 
 #: ../src/ui/widget/layer-selector.cpp:118
 msgid "Toggle current layer visibility"
@@ -27701,7 +27779,7 @@ msgstr "Iná"
 
 #: ../src/ui/widget/licensor.cpp:72
 msgid "Document license updated"
-msgstr ""
+msgstr "Licencia dokumentu bola aktualizovaná"
 
 #: ../src/ui/widget/object-composite-settings.cpp:47
 #: ../src/ui/widget/selected-style.cpp:1124
@@ -27772,19 +27850,19 @@ msgstr "Spodný okraj"
 
 #: ../src/ui/widget/page-sizer.cpp:244
 msgid "Scale _x:"
-msgstr ""
+msgstr "Mierka _x:"
 
 #: ../src/ui/widget/page-sizer.cpp:244
 msgid "Scale X"
-msgstr ""
+msgstr "Mierka X"
 
 #: ../src/ui/widget/page-sizer.cpp:245
 msgid "Scale _y:"
-msgstr ""
+msgstr "Mierka _y:"
 
 #: ../src/ui/widget/page-sizer.cpp:245
 msgid "Scale Y"
-msgstr ""
+msgstr "Mierka Y"
 
 #: ../src/ui/widget/page-sizer.cpp:323 ../src/ui/widget/page-sizer.cpp:296
 msgid "Orientation:"
@@ -27825,10 +27903,13 @@ msgid ""
 "scaling in Inkscape. To set a non-uniform scaling, set the 'viewBox' "
 "directly."
 msgstr ""
+"Hoci SVG umožňuje nerovnomernú zmenu veľkosti, v Inkscape sa odporúča "
+"používať iba rovnomernú zmenu veľkosti. Ak chcete nastaviť nerovnomernú "
+"zmenu veľkosti, nastavte priamo „viewBox“."
 
 #: ../src/ui/widget/page-sizer.cpp:483
 msgid "_Viewbox..."
-msgstr ""
+msgstr "_Viewbox..."
 
 #: ../src/ui/widget/page-sizer.cpp:590 ../src/ui/widget/page-sizer.cpp:490
 msgid "Set page size"
@@ -27836,11 +27917,11 @@ msgstr "Nastaviť veľkosť stránky:"
 
 #: ../src/ui/widget/page-sizer.cpp:836
 msgid "User units per "
-msgstr ""
+msgstr "Používateľských jednotiek na "
 
 #: ../src/ui/widget/page-sizer.cpp:932
 msgid "Set page scale"
-msgstr ""
+msgstr "Nastaviť mierku stránky"
 
 #: ../src/ui/widget/panel.cpp:116
 msgid "List"
@@ -28109,15 +28190,15 @@ msgstr "Ťah radiálnym farebným prechodom"
 
 #: ../src/ui/widget/selected-style.cpp:219
 msgid "<b>M</b>"
-msgstr ""
+msgstr "<b>M</b>"
 
 #: ../src/ui/widget/selected-style.cpp:222
 msgid "Mesh gradient fill"
-msgstr ""
+msgstr "Výplň sieťkovým farebným prechodom"
 
 #: ../src/ui/widget/selected-style.cpp:222
 msgid "Mesh gradient stroke"
-msgstr ""
+msgstr "Ťah sieťkovým farebným prechodom"
 
 #: ../src/ui/widget/selected-style.cpp:230
 #: ../src/ui/widget/selected-style.cpp:216
@@ -28478,7 +28559,7 @@ msgstr "Šírka ťahu: %.5g%s"
 #: ../src/ui/widget/style-swatch.cpp:364 ../src/ui/widget/style-swatch.cpp:363
 #, c-format
 msgid "O: %2.0f"
-msgstr ""
+msgstr "O: %2.0f"
 
 #: ../src/ui/widget/style-swatch.cpp:369 ../src/ui/widget/style-swatch.cpp:368
 #, c-format
@@ -28557,9 +28638,8 @@ msgid "Tag"
 msgstr "Značka"
 
 #: ../src/verbs.cpp:251 ../src/verbs.cpp:232
-#, fuzzy
 msgid "Context"
-msgstr "Kontrast"
+msgstr "Kontext"
 
 #: ../src/verbs.cpp:270 ../src/verbs.cpp:2297
 #: ../share/extensions/jessyInk_view.inx.h:1
@@ -28569,9 +28649,8 @@ msgid "View"
 msgstr "Zobraziť"
 
 #: ../src/verbs.cpp:290 ../src/verbs.cpp:271
-#, fuzzy
 msgid "Dialog"
-msgstr "Pripnúť dialóg"
+msgstr "Dialóg"
 
 #: ../src/verbs.cpp:1275 ../src/verbs.cpp:1227
 msgid "Switch to next layer"
@@ -28655,24 +28734,20 @@ msgid "Deleted layer."
 msgstr "Vrstva odstránená."
 
 #: ../src/verbs.cpp:1429 ../src/verbs.cpp:1411
-#, fuzzy
 msgid "Show all layers"
-msgstr "Vybrať vo všetkých vrstvách"
+msgstr "Zobraziť všetky vrstvy"
 
 #: ../src/verbs.cpp:1434 ../src/verbs.cpp:1416
-#, fuzzy
 msgid "Hide all layers"
-msgstr "Skryť vrstvu"
+msgstr "Skryť všetky vrstvy"
 
 #: ../src/verbs.cpp:1439 ../src/verbs.cpp:1421
-#, fuzzy
 msgid "Lock all layers"
-msgstr "Vybrať vo všetkých vrstvách"
+msgstr "Zamknúť všetky vrstvy"
 
 #: ../src/verbs.cpp:1453 ../src/verbs.cpp:1435
-#, fuzzy
 msgid "Unlock all layers"
-msgstr "Odomknúť vrstvu"
+msgstr "Odomknúť všetky vrstvy"
 
 #: ../src/verbs.cpp:1537 ../src/verbs.cpp:1519
 msgid "Flip horizontally"
@@ -28685,11 +28760,11 @@ msgstr "Preklopiť zvisle"
 #: ../src/verbs.cpp:1590
 #, c-format
 msgid "Set %d"
-msgstr ""
+msgstr "Nastaviť %d"
 
 #: ../src/verbs.cpp:1599 ../src/verbs.cpp:2729
 msgid "Create new selection set"
-msgstr ""
+msgstr "Vytvoriť novú sadu výberu"
 
 #. TRANSLATORS: If you have translated the tutorial-basic.en.svgz file to your language,
 #. then translate this string as "tutorial-basic.LANG.svgz" (where LANG is your language
@@ -28716,7 +28791,7 @@ msgstr "tutorial-tracing.sk.svg"
 #: ../src/verbs.cpp:2194 ../src/verbs.cpp:2120
 #, fuzzy
 msgid "tutorial-tracing-pixelart.svg"
-msgstr "tutorial-tracing.sk.svg"
+msgstr "tutorial-tracing-pixelart.sk.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:2198 ../src/verbs.cpp:2124
@@ -28887,7 +28962,7 @@ msgstr "Ukončí Inkscape"
 
 #: ../src/verbs.cpp:2456
 msgid "New from _Template..."
-msgstr ""
+msgstr "Nový dokumen_t zo šablóny..."
 
 #: ../src/verbs.cpp:2457 ../src/verbs.cpp:2383
 msgid "Create new project from template"
@@ -29254,11 +29329,11 @@ msgstr "Zmaže všetky vodidlá v dokumente"
 
 #: ../src/verbs.cpp:2546
 msgid "Lock All Guides"
-msgstr ""
+msgstr "Zamknúť všetky vodidlá"
 
 #: ../src/verbs.cpp:2546 ../src/widgets/desktop-widget.cpp:404
 msgid "Toggle lock of all guides in the document"
-msgstr ""
+msgstr "Prepnúť zamknutie všetkých vodidiel v tomto dokumente"
 
 #: ../src/verbs.cpp:2547 ../src/verbs.cpp:2472
 msgid "Create _Guides Around the Page"
@@ -29319,11 +29394,11 @@ msgstr "Zruší zoskupenie výberu"
 
 #: ../src/verbs.cpp:2565
 msgid "_Pop selected objects out of group"
-msgstr ""
+msgstr "Vyňať vybrané objekty zo sku_piny"
 
 #: ../src/verbs.cpp:2566
 msgid "Pop selected objects out of group"
-msgstr ""
+msgstr "Vyňať vybrané objekty zo skupiny"
 
 #: ../src/verbs.cpp:2568 ../src/verbs.cpp:2491
 msgid "_Put on Path"
@@ -29811,11 +29886,11 @@ msgstr ""
 
 #: ../src/verbs.cpp:2721
 msgid "Create Cl_ip Group"
-msgstr ""
+msgstr "Vytvor_iť orezávaciu skupinu"
 
 #: ../src/verbs.cpp:2722
 msgid "Creates a clip group using the selected objects as a base"
-msgstr ""
+msgstr "Vytvorí orezávaciu skupinu, pričom ako základ použije vybrané objekty"
 
 #: ../src/verbs.cpp:2724 ../src/verbs.cpp:2641
 msgid "Edit clipping path"
@@ -30504,11 +30579,11 @@ msgstr ""
 #. FIXME: Probably better to either use something from the icon naming spec or ship our own "select-font" icon
 #: ../src/verbs.cpp:2906 ../src/verbs.cpp:2815
 msgid "Gl_yphs..."
-msgstr "Grafém_y..."
+msgstr "Znak_y..."
 
 #: ../src/verbs.cpp:2907 ../src/verbs.cpp:2816
 msgid "Select characters from a glyphs palette"
-msgstr "Vybrať znaky zo vzorkovníka grafém"
+msgstr "Vybrať znaky zo vzorkovníka znakov"
 
 #. FIXME: Probably better to either use something from the icon naming spec or ship our own "select-color" icon
 #. TRANSLATORS: "Swatches" means: color samples
@@ -30658,19 +30733,19 @@ msgstr "Zobrazí vrstvy"
 
 #: ../src/verbs.cpp:2948
 msgid "Object_s..."
-msgstr ""
+msgstr "Objekt_y..."
 
 #: ../src/verbs.cpp:2949
 msgid "View Objects"
-msgstr ""
+msgstr "Zobraziť objekty"
 
 #: ../src/verbs.cpp:2950
 msgid "Selection se_ts..."
-msgstr ""
+msgstr "Sady _výberu..."
 
 #: ../src/verbs.cpp:2951
 msgid "View Tags"
-msgstr ""
+msgstr "Zobraziť značky"
 
 #: ../src/verbs.cpp:2952 ../src/verbs.cpp:2857
 msgid "Path E_ffects ..."
@@ -30848,7 +30923,7 @@ msgstr "Veľkosť strany podľa kresby"
 
 #: ../src/verbs.cpp:3008
 msgid "_Resize Page to Selection"
-msgstr ""
+msgstr "P_rispôsobiť veľkosť strany výberu"
 
 #: ../src/verbs.cpp:3009 ../src/verbs.cpp:2910
 msgid ""
@@ -31547,11 +31622,11 @@ msgstr "%s%s - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:1111
 msgid "Locked all guides"
-msgstr ""
+msgstr "Zamknuté všetky vodidlá"
 
 #: ../src/widgets/desktop-widget.cpp:1113
 msgid "Unlocked all guides"
-msgstr ""
+msgstr "Odomknuté všetky vodidlá"
 
 #: ../src/widgets/desktop-widget.cpp:1130
 #: ../src/widgets/desktop-widget.cpp:1051
@@ -31657,7 +31732,7 @@ msgstr "Vystrihnúť z objektov"
 #. Width
 #: ../src/widgets/eraser-toolbar.cpp:151
 msgid "(no width)"
-msgstr ""
+msgstr "(žiadna šírka)"
 
 #: ../src/widgets/eraser-toolbar.cpp:155 ../src/widgets/eraser-toolbar.cpp:129
 msgid "The width of the eraser pen (relative to the visible canvas area)"
@@ -31665,15 +31740,15 @@ msgstr "Šírka gumy (v pomere k ploche viditeľného plátna)"
 
 #: ../src/widgets/eraser-toolbar.cpp:171
 msgid "Eraser Mass"
-msgstr ""
+msgstr "Hmotnosť gumy"
 
 #: ../src/widgets/eraser-toolbar.cpp:172
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
-msgstr ""
+msgstr "Zväčšite, aby sa guma oneskorovala akoby ju spomaľovala zotrvačnosť"
 
 #: ../src/widgets/eraser-toolbar.cpp:186 ../src/widgets/eraser-toolbar.cpp:187
 msgid "Break apart cut items"
-msgstr ""
+msgstr "Rozdeliť prerezané položky"
 
 #: ../src/widgets/fill-style.cpp:367 ../src/widgets/fill-style.cpp:362
 msgid "Change fill rule"
@@ -31699,11 +31774,11 @@ msgstr "Nastaviť farebný prechod ťahu"
 
 #: ../src/widgets/fill-style.cpp:727
 msgid "Set mesh on fill"
-msgstr ""
+msgstr "Nastaviť sieťku pri výplni"
 
 #: ../src/widgets/fill-style.cpp:727
 msgid "Set mesh on stroke"
-msgstr ""
+msgstr "Nastaviť sieťku pri ťahu"
 
 #: ../src/widgets/fill-style.cpp:788 ../src/widgets/fill-style.cpp:685
 msgid "Set pattern on fill"
@@ -32039,27 +32114,28 @@ msgstr "Zmeniť farbu priehradky farebného prechodu"
 
 #: ../src/widgets/image-menu-item.c:151
 msgid "Image widget"
-msgstr ""
+msgstr "Ovládací prvok obrázka"
 
 #: ../src/widgets/image-menu-item.c:152
 msgid "Child widget to appear next to the menu text"
-msgstr ""
+msgstr "Podriadený prvok obrázka, ktorý sa objaví vedľa textu ponuky"
 
 #: ../src/widgets/image-menu-item.c:167
 msgid "Use stock"
-msgstr ""
+msgstr "Použiť predvolený"
 
 #: ../src/widgets/image-menu-item.c:168
 msgid "Whether to use the label text to create a stock menu item"
-msgstr ""
+msgstr "Či použiť text s označením na vytvorenie predvolenej položky ponuky"
 
 #: ../src/widgets/image-menu-item.c:183
 msgid "Accel Group"
-msgstr ""
+msgstr "Skupina akcelerátora"
 
 #: ../src/widgets/image-menu-item.c:184
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr ""
+"Skupina akcelerátora, ktorá sa použije na predvolené klávesy akcelerátorov"
 
 #: ../src/widgets/lpe-toolbar.cpp:233
 msgid "Closed"
@@ -32137,35 +32213,35 @@ msgstr "Otvoriť dialóg Živých ciest (na numerické prispôsobenie parametrov
 
 #: ../src/widgets/measure-toolbar.cpp:157
 msgid "Start and end measures inactive."
-msgstr ""
+msgstr "Začiatočné a koncové meranie neaktívne."
 
 #: ../src/widgets/measure-toolbar.cpp:159
 msgid "Start and end measures active."
-msgstr ""
+msgstr "Začiatočné a koncové meranie neaktívne."
 
 #: ../src/widgets/measure-toolbar.cpp:175
 msgid "Show all crossings."
-msgstr ""
+msgstr "Zobraziť všetky pretnutia."
 
 #: ../src/widgets/measure-toolbar.cpp:177
 msgid "Show visible crossings."
-msgstr ""
+msgstr "Zobraziť viditeľné pretnutia."
 
 #: ../src/widgets/measure-toolbar.cpp:193
 msgid "Use all layers in the measure."
-msgstr ""
+msgstr "Použiť pri meraní všetky vrstvy."
 
 #: ../src/widgets/measure-toolbar.cpp:195
 msgid "Use current layer in the measure."
-msgstr ""
+msgstr "Použiť pri meraní aktuálnu vrstvu."
 
 #: ../src/widgets/measure-toolbar.cpp:211
 msgid "Compute all elements."
-msgstr ""
+msgstr "Vypočítať všetky prvky."
 
 #: ../src/widgets/measure-toolbar.cpp:213
 msgid "Compute max length."
-msgstr ""
+msgstr "Vypočítať max. dĺžku."
 
 #: ../src/widgets/measure-toolbar.cpp:274 ../src/widgets/text-toolbar.cpp:1729
 #: ../src/widgets/measure-toolbar.cpp:86 ../src/widgets/text-toolbar.cpp:1275
@@ -32196,72 +32272,72 @@ msgstr "Presnosť:"
 
 #: ../src/widgets/measure-toolbar.cpp:303
 msgid "Decimal precision of measure"
-msgstr ""
+msgstr "Desatinná presnosť merania"
 
 #: ../src/widgets/measure-toolbar.cpp:315
 msgid "Scale %"
-msgstr ""
+msgstr "Mierka v %"
 
 #: ../src/widgets/measure-toolbar.cpp:315
 msgid "Scale %:"
-msgstr ""
+msgstr "Mierka v %:"
 
 #: ../src/widgets/measure-toolbar.cpp:316
 msgid "Scale the results"
-msgstr ""
+msgstr "Mierka výsledkov"
 
 #: ../src/widgets/measure-toolbar.cpp:329
 msgid "The offset size"
-msgstr ""
+msgstr "Veľkosť posunutia"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
 msgid "Ignore first and last"
-msgstr ""
+msgstr "Ignorovať prvé a posledné"
 
 #: ../src/widgets/measure-toolbar.cpp:352
 #: ../src/widgets/measure-toolbar.cpp:353
 msgid "Show hidden intersections"
-msgstr ""
+msgstr "Zobraziť skryté priesečníky"
 
 #: ../src/widgets/measure-toolbar.cpp:363
 #: ../src/widgets/measure-toolbar.cpp:364
 msgid "Show measures between items"
-msgstr ""
+msgstr "Zobraziť miery medzi položkami"
 
 #: ../src/widgets/measure-toolbar.cpp:374
 #: ../src/widgets/measure-toolbar.cpp:375
 msgid "Measure all layers"
-msgstr ""
+msgstr "Merať všetky vrstvy"
 
 #: ../src/widgets/measure-toolbar.cpp:385
 #: ../src/widgets/measure-toolbar.cpp:386
 msgid "Reverse measure"
-msgstr ""
+msgstr "Obrátiť meranie"
 
 #: ../src/widgets/measure-toolbar.cpp:395
 #: ../src/widgets/measure-toolbar.cpp:396
 msgid "Phantom measure"
-msgstr ""
+msgstr "Fantómové meranie"
 
 #: ../src/widgets/measure-toolbar.cpp:405
 #: ../src/widgets/measure-toolbar.cpp:406
 msgid "To guides"
-msgstr ""
+msgstr "K vodidlám"
 
 #: ../src/widgets/measure-toolbar.cpp:415
 #: ../src/widgets/measure-toolbar.cpp:416
 msgid "Mark Dimension"
-msgstr ""
+msgstr "Označiť rozmer"
 
 #: ../src/widgets/measure-toolbar.cpp:425
 #: ../src/widgets/measure-toolbar.cpp:426
 msgid "Convert to item"
-msgstr ""
+msgstr "Konvertovať na položku"
 
 #: ../src/widgets/mesh-toolbar.cpp:293
 msgid "Set mesh type"
-msgstr ""
+msgstr "Nastaviť typ sieťky"
 
 #: ../src/widgets/mesh-toolbar.cpp:366
 msgid ""
@@ -32272,6 +32348,12 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Sieťkové farebné prechody sú súčasťou SVG 2:\n"
+"* Syntax sa môže zmeniť.\n"
+"* implementácia vo webových prehliadačoch nie je zaručená.\n"
+"\n"
+"Pre web: konvertujete na bitmapu (Upraviť -> Vytvoriť bitmapovú kópiu).\n"
+"Pre tlač: exportujte do PDF."
 
 #: ../src/widgets/mesh-toolbar.cpp:398 ../src/widgets/mesh-toolbar.cpp:204
 msgid "normal"
@@ -32340,7 +32422,7 @@ msgstr "Zobraziť úchopy"
 
 #: ../src/widgets/mesh-toolbar.cpp:530 ../src/widgets/mesh-toolbar.cpp:531
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr ""
+msgstr "UPOZORNENIE: Syntax sieťky v SVG sa môže zmeniť"
 
 #: ../src/widgets/mesh-toolbar.cpp:545
 msgctxt "Type"
@@ -32366,53 +32448,55 @@ msgstr "Vyhladzovanie:"
 
 #: ../src/widgets/mesh-toolbar.cpp:563
 msgid "Toggle Sides"
-msgstr ""
+msgstr "Prepnúť strany"
 
 #: ../src/widgets/mesh-toolbar.cpp:564
 msgid "Toggle selected sides between Beziers and lines."
-msgstr ""
+msgstr "Prepnúť vybrané strany medzi bézierovymi krivkami a čiarami."
 
 #: ../src/widgets/mesh-toolbar.cpp:567
 msgid "Toggle side:"
-msgstr ""
+msgstr "Prepnúť stranu:"
 
 #: ../src/widgets/mesh-toolbar.cpp:574
 msgid "Make elliptical"
-msgstr ""
+msgstr "Urobiť eliptické"
 
 #: ../src/widgets/mesh-toolbar.cpp:575
 msgid ""
 "Make selected sides elliptical by changing length of handles. Works best if "
 "handles already approximate ellipse."
 msgstr ""
+"Urobí vybrané strany eliptické zmenou dĺžky úchopov. Funguje najlepšie ak "
+"úchopy už aproximujú elipsu."
 
 #: ../src/widgets/mesh-toolbar.cpp:578
 msgid "Make elliptical:"
-msgstr ""
+msgstr "Urobiť eliptické:"
 
 #: ../src/widgets/mesh-toolbar.cpp:585
 msgid "Pick colors:"
-msgstr ""
+msgstr "Vybrať farby:"
 
 #: ../src/widgets/mesh-toolbar.cpp:586
 msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr ""
+msgstr "Vybrať farby vybraných rohových uzlov spod sieťky."
 
 #: ../src/widgets/mesh-toolbar.cpp:589
 msgid "Pick Color"
-msgstr ""
+msgstr "Vybrať farbu"
 
 #: ../src/widgets/mesh-toolbar.cpp:597
 msgid "Scale mesh to bounding box:"
-msgstr ""
+msgstr "Zmeniť veľkosť sieťky na ohraničenie."
 
 #: ../src/widgets/mesh-toolbar.cpp:598
 msgid "Scale mesh to fit inside bounding box."
-msgstr ""
+msgstr "Zmeniť veľkosť sieťky, aby sa vošla do ohraničenia."
 
 #: ../src/widgets/mesh-toolbar.cpp:601
 msgid "Fit mesh"
-msgstr ""
+msgstr "Vmestiť sieťku"
 
 #: ../src/widgets/node-toolbar.cpp:341
 msgid "Insert node"
@@ -32624,7 +32708,7 @@ msgstr "Radiálny farebný prechod"
 
 #: ../src/widgets/paint-selector.cpp:230
 msgid "Mesh gradient"
-msgstr ""
+msgstr "Sieťkovým farebným prechodom"
 
 #: ../src/widgets/paint-selector.cpp:237 ../src/widgets/paint-selector.cpp:246
 msgid "Unset paint (make it undefined so it can be inherited)"
@@ -32677,11 +32761,11 @@ msgstr "<b>Radiálny farebný prechod</b>"
 
 #: ../src/widgets/paint-selector.cpp:1080
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
-msgstr ""
+msgstr "Sieťku zmeníte pomocou <b>nástroja Sieťka</b>."
 
 #: ../src/widgets/paint-selector.cpp:1093
 msgid "<b>Mesh fill</b>"
-msgstr ""
+msgstr "<b>Výplň sieťkou</b>"
 
 #: ../src/widgets/paint-selector.cpp:1444
 #: ../src/widgets/paint-selector.cpp:1055
@@ -32782,7 +32866,7 @@ msgstr "Vytvorenie špirály"
 
 #: ../src/widgets/pencil-toolbar.cpp:118
 msgid "Create BSpline path"
-msgstr ""
+msgstr "Vytvorenie cesty BSpline"
 
 #: ../src/widgets/pencil-toolbar.cpp:124 ../src/widgets/pencil-toolbar.cpp:111
 msgid "Zigzag"
@@ -32823,11 +32907,11 @@ msgstr "Zo schránky"
 
 #: ../src/widgets/pencil-toolbar.cpp:180
 msgid "Bend from clipboard"
-msgstr ""
+msgstr "Ohnúť zo schránky"
 
 #: ../src/widgets/pencil-toolbar.cpp:181
 msgid "Last applied"
-msgstr ""
+msgstr "Posledné použité"
 
 #: ../src/widgets/pencil-toolbar.cpp:206 ../src/widgets/pencil-toolbar.cpp:207
 #: ../src/widgets/pencil-toolbar.cpp:184 ../src/widgets/pencil-toolbar.cpp:185
@@ -32859,16 +32943,16 @@ msgid ""
 "Reset pencil parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
-"Nastaviť parametre tvaru na štandardné hodnoty (použite Nastavenia Inkscape "
-"> Nástroje na zmenu štandardných hodnôt)"
+"Nastaviť parametre tvaru na štandardné hodnoty (použite Nastavenia Inkscape >"
+" Nástroje na zmenu štandardných hodnôt)"
 
 #: ../src/widgets/pencil-toolbar.cpp:413 ../src/widgets/pencil-toolbar.cpp:414
 msgid "LPE based interactive simplify"
-msgstr ""
+msgstr "Interaktívne zjednodušenie založené na LPE"
 
 #: ../src/widgets/pencil-toolbar.cpp:424 ../src/widgets/pencil-toolbar.cpp:425
 msgid "LPE simplify flatten"
-msgstr ""
+msgstr "Zjednodušenie LPE sploštením"
 
 #: ../src/widgets/rect-toolbar.cpp:125 ../src/widgets/rect-toolbar.cpp:122
 msgid "Change rectangle"
@@ -32876,16 +32960,15 @@ msgstr "Zmena obdĺžnika"
 
 #: ../src/widgets/rect-toolbar.cpp:317 ../src/widgets/rect-toolbar.cpp:315
 msgid "W:"
-msgstr "W:"
+msgstr "Š:"
 
 #: ../src/widgets/rect-toolbar.cpp:317 ../src/widgets/rect-toolbar.cpp:315
 msgid "Width of rectangle"
 msgstr "Šírka obdĺžnika"
 
 #: ../src/widgets/rect-toolbar.cpp:334 ../src/widgets/rect-toolbar.cpp:332
-#, fuzzy
 msgid "H:"
-msgstr "Vodorovná medzera:"
+msgstr "V:"
 
 #: ../src/widgets/rect-toolbar.cpp:334 ../src/widgets/rect-toolbar.cpp:332
 msgid "Height of rectangle"
@@ -33039,7 +33122,6 @@ msgstr "X:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:443 ../src/widgets/select-toolbar.cpp:500
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
 msgstr "Vodorovné súradnice výberu"
@@ -33058,7 +33140,6 @@ msgstr "Y:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:462 ../src/widgets/select-toolbar.cpp:506
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
 msgstr "Zvislé súradnice výberu"
@@ -33077,7 +33158,6 @@ msgstr "Š:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:481 ../src/widgets/select-toolbar.cpp:512
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Width of selection"
 msgstr "Šírka výberu"
@@ -33104,7 +33184,6 @@ msgstr "V:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:513 ../src/widgets/select-toolbar.cpp:531
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Height of selection"
 msgstr "Výška výberu"
@@ -33230,8 +33309,8 @@ msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
-"Nastaviť parametre tvaru na štandardné hodnoty (použite Nastavenia Inkscape "
-"> Nástroje na zmenu štandardných hodnôt)"
+"Nastaviť parametre tvaru na štandardné hodnoty (použite Nastavenia Inkscape >"
+" Nástroje na zmenu štandardných hodnôt)"
 
 #. Width
 #: ../src/widgets/spray-toolbar.cpp:294 ../src/widgets/spray-toolbar.cpp:113
@@ -33248,7 +33327,7 @@ msgstr "Šírka plochy spreja (v pomere k ploche viditeľného plátna)"
 
 #: ../src/widgets/spray-toolbar.cpp:312
 msgid "Use the pressure of the input device to alter the width of spray area"
-msgstr ""
+msgstr "Použiť tlak vstupného zariadenia na zmenu šírky oblasti sprejovania"
 
 #: ../src/widgets/spray-toolbar.cpp:323 ../src/widgets/spray-toolbar.cpp:129
 msgid "(maximum mean)"
@@ -33307,11 +33386,11 @@ msgstr "Sprejovať objekty v jedinej ceste"
 
 #: ../src/widgets/spray-toolbar.cpp:383
 msgid "Delete sprayed items"
-msgstr ""
+msgstr "Zmazať sprejované položky"
 
 #: ../src/widgets/spray-toolbar.cpp:384
 msgid "Delete sprayed items from selection"
-msgstr ""
+msgstr "Zmazať sprejované položky z výberu"
 
 #. Population
 #: ../src/widgets/spray-toolbar.cpp:408 ../src/widgets/spray-toolbar.cpp:205
@@ -33383,65 +33462,70 @@ msgstr ""
 
 #: ../src/widgets/spray-toolbar.cpp:477
 msgid "Use the pressure of the input device to alter the scale of new items"
-msgstr ""
+msgstr "Použiť tlak vstupného zariadenia na zmenu mierky nových položiek"
 
 #: ../src/widgets/spray-toolbar.cpp:489 ../src/widgets/spray-toolbar.cpp:490
 msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
 msgstr ""
+"Vyberte farbu z kresby. Ak chcete pokročilé efekty, môžete použiť dialóg "
+"vektorizácie dlaždicových klonov. V Režime klonov musia byť uvoľnené pôvodné "
+"farby výplne alebo ťahu."
 
 #: ../src/widgets/spray-toolbar.cpp:502 ../src/widgets/spray-toolbar.cpp:503
 msgid "Pick from center instead average area."
-msgstr ""
+msgstr "Vybrať zo stredu namiesto priemeru oblasti."
 
 #: ../src/widgets/spray-toolbar.cpp:515 ../src/widgets/spray-toolbar.cpp:516
 msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr ""
+"Invertovaná hodnota výberu so zachovaním farby v pokročilom režime "
+"vektorizácie"
 
 #: ../src/widgets/spray-toolbar.cpp:528 ../src/widgets/spray-toolbar.cpp:529
 msgid "Apply picked color to fill"
-msgstr ""
+msgstr "Použiť vybranú farbu na výplň"
 
 #: ../src/widgets/spray-toolbar.cpp:541 ../src/widgets/spray-toolbar.cpp:542
 msgid "Apply picked color to stroke"
-msgstr ""
+msgstr "Použiť vybranú farbu na ťah"
 
 #: ../src/widgets/spray-toolbar.cpp:554 ../src/widgets/spray-toolbar.cpp:555
 msgid "No overlap between colors"
-msgstr ""
+msgstr "Žiaden prekryv medzi farbami"
 
 #: ../src/widgets/spray-toolbar.cpp:567 ../src/widgets/spray-toolbar.cpp:568
 msgid "Apply over transparent areas"
-msgstr ""
+msgstr "Použiť na priesvitné oblasti"
 
 #: ../src/widgets/spray-toolbar.cpp:580 ../src/widgets/spray-toolbar.cpp:581
 msgid "Apply over no transparent areas"
-msgstr ""
+msgstr "Použiť na nepriesvitné oblasti"
 
 #: ../src/widgets/spray-toolbar.cpp:593 ../src/widgets/spray-toolbar.cpp:594
 msgid "Prevent overlapping objects"
-msgstr ""
+msgstr "Zabrániť prekrývajúcim sa objektom"
 
 #: ../src/widgets/spray-toolbar.cpp:605
 msgid "(minimum offset)"
-msgstr ""
+msgstr "(minimálne posunutie)"
 
 #: ../src/widgets/spray-toolbar.cpp:605
 msgid "(maximum offset)"
-msgstr ""
+msgstr "(maximálne posunutie)"
 
 #: ../src/widgets/spray-toolbar.cpp:608
 msgid "Offset %"
-msgstr ""
+msgstr "Posunutie %"
 
 #: ../src/widgets/spray-toolbar.cpp:608
 msgid "Offset %:"
-msgstr ""
+msgstr "Posunutie %:"
 
 #: ../src/widgets/spray-toolbar.cpp:609
 msgid "Increase to segregate objects more (value in percent)"
-msgstr ""
+msgstr "Zväčšením viac oddialite objekty (hodnota v percentách)"
 
 #: ../src/widgets/star-toolbar.cpp:103 ../src/widgets/star-toolbar.cpp:102
 msgid "Star: Change number of corners"
@@ -33703,27 +33787,27 @@ msgstr "Štvorcové zakončenie"
 
 #: ../src/widgets/stroke-style.cpp:392
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Výplň, ťah, zakončenia"
 
 #: ../src/widgets/stroke-style.cpp:396
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Ťah, výplň, zakončenia"
 
 #: ../src/widgets/stroke-style.cpp:400
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Výplň, zakončenia, ťah"
 
 #: ../src/widgets/stroke-style.cpp:408
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Zakončenia, výplň, ťah"
 
 #: ../src/widgets/stroke-style.cpp:412
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Ťah, zakončenia, výplň"
 
 #: ../src/widgets/stroke-style.cpp:416
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "Zakončenia, ťah, výplň"
 
 #: ../src/widgets/stroke-style.cpp:534 ../src/widgets/stroke-style.cpp:494
 msgid "Set markers"
@@ -33757,7 +33841,7 @@ msgstr "Text: Zmeniť štýl písma"
 
 #: ../src/widgets/text-toolbar.cpp:345
 msgid "Text: Unset line height."
-msgstr ""
+msgstr "Text: Uvoľniť výšku riadka"
 
 #: ../src/widgets/text-toolbar.cpp:422 ../src/widgets/text-toolbar.cpp:349
 msgid "Text: Change superscript or subscript"
@@ -33773,7 +33857,7 @@ msgstr "Text: Zmeniť výšku riadka"
 
 #: ../src/widgets/text-toolbar.cpp:827
 msgid "Text: Change line-height unit"
-msgstr ""
+msgstr "Text: Zmeniť jednotku výšky riadka"
 
 #: ../src/widgets/text-toolbar.cpp:876 ../src/widgets/text-toolbar.cpp:586
 msgid "Text: Change word-spacing"
@@ -33797,7 +33881,7 @@ msgstr "Text: Zmeniť otočenie"
 
 #: ../src/widgets/text-toolbar.cpp:1076
 msgid "Text: Change writing mode"
-msgstr ""
+msgstr "Text: Zmeniť režim zápisu"
 
 #: ../src/widgets/text-toolbar.cpp:1130 ../src/widgets/text-toolbar.cpp:784
 msgid "Text: Change orientation"
@@ -33869,49 +33953,49 @@ msgstr "Vodorovné"
 
 #: ../src/widgets/text-toolbar.cpp:1866
 msgid "Vertical — RL"
-msgstr ""
+msgstr "Zvislé - PĽ"
 
 #: ../src/widgets/text-toolbar.cpp:1867
 msgid "Vertical text — lines: right to left"
-msgstr ""
+msgstr "Zvislý text - čiary: sprava doľava"
 
 #: ../src/widgets/text-toolbar.cpp:1873
 msgid "Vertical — LR"
-msgstr ""
+msgstr "Zvislé - ĽP"
 
 #: ../src/widgets/text-toolbar.cpp:1874
 msgid "Vertical text — lines: left to right"
-msgstr ""
+msgstr "Zvislý text - čiary: zľava doprava"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:1879
 msgid "Writing mode"
-msgstr ""
+msgstr "Režim písania"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:1880
 msgid "Block progression"
-msgstr ""
+msgstr "Blokovať priebeh"
 
 #: ../src/widgets/text-toolbar.cpp:1909
 msgid "Auto glyph orientation"
-msgstr ""
+msgstr "Automatická orientácia znakov"
 
 #: ../src/widgets/text-toolbar.cpp:1916
 msgid "Upright"
-msgstr ""
+msgstr "Vzpriamené"
 
 #: ../src/widgets/text-toolbar.cpp:1917
 msgid "Upright glyph orientation"
-msgstr ""
+msgstr "Vzpriamená orientácia znakov"
 
 #: ../src/widgets/text-toolbar.cpp:1924
 msgid "Sideways"
-msgstr ""
+msgstr "Do boku"
 
 #: ../src/widgets/text-toolbar.cpp:1925
 msgid "Sideways glyph orientation"
-msgstr ""
+msgstr "Orientácia znakov do boku"
 
 #. Name
 #. Label
@@ -33922,7 +34006,7 @@ msgstr "Orientácia textu"
 #. Label
 #: ../src/widgets/text-toolbar.cpp:1932
 msgid "Text (glyph) orientation in vertical text."
-msgstr ""
+msgstr "Orientácia textu (znakov) vo zvislom texte."
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:1965 ../src/widgets/text-toolbar.cpp:1442
@@ -33953,7 +34037,7 @@ msgstr "Riadok:"
 #. short label
 #: ../src/widgets/text-toolbar.cpp:1972
 msgid "Spacing between baselines (times font size)"
-msgstr ""
+msgstr "Rozostupy medzi základnými linkami (krát veľkosť písma)"
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:2004 ../src/widgets/text-toolbar.cpp:2035
@@ -34044,17 +34128,19 @@ msgstr "Otočenie znaku (stupne)"
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2159
 msgid "Unset line height"
-msgstr ""
+msgstr "Uvoľniť výšku riadka"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2160
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
+"Ak je voľba zapnutá, výška riadka sa nastaví v časti výberu. Kliknutím "
+"uvoľníte."
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2172
 msgid "Show outer style"
-msgstr ""
+msgstr "Zobraziť vonkajší štýl"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2173
@@ -34063,6 +34149,8 @@ msgid ""
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
+"Zobrazí štýl najvonkajšieho prvku. Hodnoty „font-size“ a „line-height“ "
+"najvonkajšieho textového prvku určujú minimálne rozostupy riadkov v bloku."
 
 #: ../src/widgets/toolbox.cpp:186 ../src/widgets/toolbox.cpp:182
 msgid "Color/opacity used for color tweaking"
@@ -35030,8 +35118,8 @@ msgid ""
 msgstr ""
 "Skript JessyInk nie je nainštalovaný v tomto súbore SVG alebo má inú verziu "
 "ako rozšírenie JessyInk. Vyberte „Nainštalovať/aktualizovať...“ z menu "
-"„Rozšírenia“ - „JessyInk“ a nainštalujte alebo aktualizujte skript "
-"JessyInk.\n"
+"„Rozšírenia“ - „JessyInk“ a nainštalujte alebo aktualizujte skript JessyInk."
+"\n"
 
 #: ../share/extensions/jessyInk_autoTexts.py:47
 #: ../share/extensions/jessyInk_autoTexts.py:48
@@ -36387,19 +36475,19 @@ msgstr "použiť typ výstupu čiar LWPOLYLINE"
 
 #: ../share/extensions/dxf_outlines.inx.h:5
 msgid "Base unit:"
-msgstr ""
+msgstr "Základná jednotka:"
 
 #: ../share/extensions/dxf_outlines.inx.h:6
 msgid "Character Encoding:"
-msgstr ""
+msgstr "Kódovanie znakov:"
 
 #: ../share/extensions/dxf_outlines.inx.h:7
 msgid "Layer export selection:"
-msgstr ""
+msgstr "Výber exportu vrstvy:"
 
 #: ../share/extensions/dxf_outlines.inx.h:8
 msgid "Layer match name:"
-msgstr ""
+msgstr "Názov vrstvy:"
 
 #: ../share/extensions/dxf_outlines.inx.h:9
 msgid "pt"
@@ -36560,69 +36648,69 @@ msgstr "Vkladať vybrané obrázky"
 
 #: ../share/extensions/empty_business_card.inx.h:1
 msgid "Business Card"
-msgstr ""
+msgstr "Vizitka"
 
 #: ../share/extensions/empty_business_card.inx.h:2
 msgid "Business card size:"
-msgstr ""
+msgstr "Veľkosť vizitky:"
 
 #: ../share/extensions/empty_desktop.inx.h:1
 msgid "Desktop"
-msgstr ""
+msgstr "Pozadie plochy"
 
 #: ../share/extensions/empty_desktop.inx.h:2
 msgid "Desktop size:"
-msgstr ""
+msgstr "Veľkosť pozadia:"
 
 #. Maximum size is '16k'
 #: ../share/extensions/empty_desktop.inx.h:4
 #: ../share/extensions/empty_generic.inx.h:2
 #: ../share/extensions/empty_video.inx.h:4
 msgid "Custom Width:"
-msgstr ""
+msgstr "Vlastná šírka:"
 
 #: ../share/extensions/empty_desktop.inx.h:5
 #: ../share/extensions/empty_generic.inx.h:3
 #: ../share/extensions/empty_video.inx.h:5
 msgid "Custom Height:"
-msgstr ""
+msgstr "Vlastná výška:"
 
 #: ../share/extensions/empty_dvd_cover.inx.h:1
 msgid "DVD Cover"
-msgstr ""
+msgstr "Obal DVD"
 
 #: ../share/extensions/empty_dvd_cover.inx.h:2
 msgid "DVD spine width:"
-msgstr ""
+msgstr "Šírka chrbta DVD:"
 
 #: ../share/extensions/empty_dvd_cover.inx.h:3
 msgid "DVD cover bleed (mm):"
-msgstr ""
+msgstr "Presah obalu DVD (mm):"
 
 #: ../share/extensions/empty_generic.inx.h:1
 msgid "Generic Canvas"
-msgstr ""
+msgstr "Všeobecné plátno"
 
 #: ../share/extensions/empty_generic.inx.h:4
 msgid "SVG Unit:"
-msgstr ""
+msgstr "Jednotka SVG:"
 
 #: ../share/extensions/empty_generic.inx.h:5
 msgid "Canvas background:"
-msgstr ""
+msgstr "Pozadie plátna:"
 
 #: ../share/extensions/empty_generic.inx.h:6
 #: ../share/extensions/empty_page.inx.h:5
 msgid "Hide border"
-msgstr ""
+msgstr "Skryť okraj"
 
 #: ../share/extensions/empty_icon.inx.h:1
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: ../share/extensions/empty_icon.inx.h:2
 msgid "Icon size:"
-msgstr ""
+msgstr "Veľkosť ikony:"
 
 #: ../share/extensions/empty_page.inx.h:2
 msgid "Page size:"
@@ -36634,15 +36722,15 @@ msgstr "Orientácia stránky:"
 
 #: ../share/extensions/empty_page.inx.h:4
 msgid "Page background:"
-msgstr ""
+msgstr "Pozadie stránky:"
 
 #: ../share/extensions/empty_video.inx.h:1
 msgid "Video Screen"
-msgstr ""
+msgstr "Plátno videa"
 
 #: ../share/extensions/empty_video.inx.h:2
 msgid "Video size:"
-msgstr ""
+msgstr "Veľkosť videa:"
 
 #: ../share/extensions/eps_input.inx.h:1
 msgid "EPS Input"
@@ -38049,7 +38137,7 @@ msgstr "Vysadzať tento text"
 
 #: ../share/extensions/hershey.inx.h:7
 msgid "Write glyph table"
-msgstr "Zapísať tabuľku grafém"
+msgstr "Zapísať tabuľku znakov"
 
 #: ../share/extensions/hershey.inx.h:8
 msgid "Sans 1-stroke"
@@ -38201,6 +38289,8 @@ msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the X axis "
 "(Default: 1016.0)"
 msgstr ""
+"O koľko krokov sa súradnicový zapisovač pohne, keď sa pohne o 1 palec po osi "
+"X (Predvolené: 1016.0)"
 
 #: ../share/extensions/hpgl_input.inx.h:5
 #: ../share/extensions/hpgl_output.inx.h:6
@@ -38215,6 +38305,8 @@ msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the Y axis "
 "(Default: 1016.0)"
 msgstr ""
+"O koľko krokov sa súradnicový zapisovač pohne, keď sa pohne o 1 palec po osi "
+"Y (Predvolené: 1016.0)"
 
 #: ../share/extensions/hpgl_input.inx.h:7
 msgid "Show movements between paths"
@@ -38231,9 +38323,8 @@ msgid "HP Graphics Language file (*.hpgl)"
 msgstr "HP Graphics Language súbor (*.hpgl)"
 
 #: ../share/extensions/hpgl_input.inx.h:10
-#, fuzzy
 msgid "Import an HP Graphics Language file"
-msgstr "Exportovať do súboru HP Graphics Language"
+msgstr "Importovať súbor HP Graphics Language"
 
 #: ../share/extensions/hpgl_output.inx.h:1
 msgid "HPGL Output"
@@ -38249,7 +38340,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx.h:3
 #: ../share/extensions/plotter.inx.h:31 ../share/extensions/plotter.inx.h:22
 msgid "Plotter Settings "
-msgstr "Nastavenia plotra"
+msgstr "Nastavenia súradnicového zapisovača"
 
 #: ../share/extensions/hpgl_output.inx.h:8
 #: ../share/extensions/plotter.inx.h:36 ../share/extensions/plotter.inx.h:27
@@ -38284,6 +38375,10 @@ msgid ""
 "(depending on your plotter model), set to 0 to omit command; most plotters "
 "ignore this command (Default: 0)"
 msgstr ""
+"Rýchlosť pohybu pera v centimetroch alebo milimetroch za sekundu (v "
+"závislosti od modelu súradnicového zapisovača). Ak nastavíte 0, vynechá "
+"príkaz. Väčšina súradnicových zapisovačov tento príkaz ignoruje. (Predvolené:"
+" 0)"
 
 #: ../share/extensions/hpgl_output.inx.h:14
 msgid "Rotation (°, Clockwise):"
@@ -39593,56 +39688,54 @@ msgid "Length Unit:"
 msgstr "Jednotka dĺžky:"
 
 #: ../share/extensions/measure.inx.h:18 ../share/extensions/measure.inx.h:12
-#, fuzzy
 msgctxt "measure extension"
 msgid "Area"
 msgstr "Plocha"
 
 #: ../share/extensions/measure.inx.h:19 ../share/extensions/measure.inx.h:13
-#, fuzzy
 msgctxt "measure extension"
 msgid "Center of Mass"
-msgstr "Hmotnosť pera"
+msgstr "Ťažisko"
 
 #: ../share/extensions/measure.inx.h:21
 msgid "Text on Path, Start"
-msgstr ""
+msgstr "Text na ceste, začiatok"
 
 #: ../share/extensions/measure.inx.h:22
 msgid "Text on Path, Middle"
-msgstr ""
+msgstr "Text na ceste, stred"
 
 #: ../share/extensions/measure.inx.h:23
 msgid "Text on Path, End"
-msgstr ""
+msgstr "Text na ceste, koniec"
 
 #: ../share/extensions/measure.inx.h:24
 msgid "Fixed Text, Start of Path"
-msgstr ""
+msgstr "Pevný text, začiatok cesty"
 
 #: ../share/extensions/measure.inx.h:25
 msgid "Fixed Text, Center of BBox"
-msgstr ""
+msgstr "Pevný text, stred ohraničenia"
 
 #: ../share/extensions/measure.inx.h:26
 msgid "Fixed Text, Center of Mass"
-msgstr ""
+msgstr "Pevný text, ťažisko"
 
 #: ../share/extensions/measure.inx.h:28
 msgid "Center"
-msgstr ""
+msgstr "Stred"
 
 #: ../share/extensions/measure.inx.h:30
 msgid "Start of Path"
-msgstr ""
+msgstr "Začiatok cesty"
 
 #: ../share/extensions/measure.inx.h:31
 msgid "Center of BBox"
-msgstr ""
+msgstr "Stred ohraničenia"
 
 #: ../share/extensions/measure.inx.h:32
 msgid "Center of Mass"
-msgstr ""
+msgstr "Ťažisko"
 
 #: ../share/extensions/measure.inx.h:35 ../share/extensions/measure.inx.h:18
 #, no-c-format
@@ -39676,7 +39769,7 @@ msgstr ""
 
 #: ../share/extensions/merge_styles.inx.h:1
 msgid "Merge Styles into CSS"
-msgstr ""
+msgstr "Zlúčiť štýly do CSS"
 
 #: ../share/extensions/merge_styles.inx.h:2
 msgid ""
@@ -39688,12 +39781,11 @@ msgstr ""
 
 #: ../share/extensions/merge_styles.inx.h:3
 msgid "New Class Name:"
-msgstr ""
+msgstr "Nový názov triedy:"
 
 #: ../share/extensions/merge_styles.inx.h:4
-#, fuzzy
 msgid "Stylesheet"
-msgstr "Štýl"
+msgstr "Sada štýlov"
 
 #: ../share/extensions/motion.inx.h:1
 msgid "Motion"
@@ -39704,18 +39796,16 @@ msgid "Magnitude:"
 msgstr "Magnitúda:"
 
 #: ../share/extensions/new_glyph_layer.inx.h:1
-#, fuzzy
 msgid "2 - Add Glyph Layer"
-msgstr "Pridať grafému"
+msgstr "2 - Pridať vrstvu znakov"
 
 #: ../share/extensions/new_glyph_layer.inx.h:2
-#, fuzzy
 msgid "Unicode character:"
-msgstr "Vložiť znak Unicode"
+msgstr "Znak Unicode"
 
 #: ../share/extensions/next_glyph_layer.inx.h:1
 msgid "View Next Glyph"
-msgstr ""
+msgstr "Zobraziť ďalší znak"
 
 #: ../share/extensions/nicechart.inx.h:1
 msgid "NiceCharts"
@@ -39723,147 +39813,147 @@ msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:2
 msgid "Data"
-msgstr ""
+msgstr "Dáta"
 
 #: ../share/extensions/nicechart.inx.h:3
 msgid "Data from file"
-msgstr ""
+msgstr "Dáta zo súboru"
 
 #: ../share/extensions/nicechart.inx.h:5
 msgid "Delimiter:"
-msgstr ""
+msgstr "Oddeľovač:"
 
 #: ../share/extensions/nicechart.inx.h:6
 msgid "Column that contains the keys:"
-msgstr ""
+msgstr "Stĺpec obsahujúci kľúč:"
 
 #: ../share/extensions/nicechart.inx.h:7
 msgid "Column that contains the values:"
-msgstr ""
+msgstr "Stĺpec obsahujúci hodnoty:"
 
 #: ../share/extensions/nicechart.inx.h:8
 msgid "File encoding (e.g. utf-8):"
-msgstr ""
+msgstr "Kódovanie súboru (napr. utf-8):"
 
 #: ../share/extensions/nicechart.inx.h:9
 msgid "First line contains headings"
-msgstr ""
+msgstr "Prvý riadok obsahuje hlavičky stĺpcov"
 
 #: ../share/extensions/nicechart.inx.h:10
 msgid "Direct input"
-msgstr ""
+msgstr "Priamy vstup"
 
 #: ../share/extensions/nicechart.inx.h:11
 msgid "Data:"
-msgstr ""
+msgstr "Dáta:"
 
 #: ../share/extensions/nicechart.inx.h:12
 msgid "Enter the full path to a CSV file:"
-msgstr ""
+msgstr "Zadajte úplnú cestu k súboru CSV:"
 
 #: ../share/extensions/nicechart.inx.h:13
 msgid "Type in comma separated values:"
-msgstr ""
+msgstr "Napíšte hodnoty oddelené čiarkami:"
 
 #: ../share/extensions/nicechart.inx.h:14
 msgid "(format like this: apples:3,bananas:5)"
-msgstr ""
+msgstr "(v takomto formáte: jablká:3,banány:5)"
 
 #: ../share/extensions/nicechart.inx.h:15
 msgid "Labels"
-msgstr ""
+msgstr "Označenia"
 
 #: ../share/extensions/nicechart.inx.h:16
 msgid "Font:"
-msgstr ""
+msgstr "Písmo:"
 
 #: ../share/extensions/nicechart.inx.h:18
 msgid "Font color:"
-msgstr ""
+msgstr "Farba písma:"
 
 #: ../share/extensions/nicechart.inx.h:19
 msgid "Charts"
-msgstr ""
+msgstr "Grafy"
 
 #: ../share/extensions/nicechart.inx.h:20
 msgid "Draw horizontally"
-msgstr ""
+msgstr "Kresliť vodorovne"
 
 #: ../share/extensions/nicechart.inx.h:21
 msgid "Bar length:"
-msgstr ""
+msgstr "Dĺžka stĺpca:"
 
 #: ../share/extensions/nicechart.inx.h:22
 msgid "Bar width:"
-msgstr ""
+msgstr "Šírka stĺpca:"
 
 #: ../share/extensions/nicechart.inx.h:23
 msgid "Pie radius:"
-msgstr ""
+msgstr "Polomer koláča:"
 
 #: ../share/extensions/nicechart.inx.h:24
 msgid "Bar offset:"
-msgstr ""
+msgstr "Posunutie stĺpca:"
 
 #: ../share/extensions/nicechart.inx.h:26
 msgid "Offset between chart and labels:"
-msgstr ""
+msgstr "Rozostup medzi grafom a označeniami:"
 
 #: ../share/extensions/nicechart.inx.h:27
 msgid "Offset between chart and chart title:"
-msgstr ""
+msgstr "Rozostup medzi grafom a nadpisom grafu:"
 
 #: ../share/extensions/nicechart.inx.h:28
 msgid "Work around aliasing effects (creates overlapping segments)"
-msgstr ""
+msgstr "Obídenie efektov aliasingu (vytvorí presahujúce časti)"
 
 #: ../share/extensions/nicechart.inx.h:29
 msgid "Color scheme:"
-msgstr ""
+msgstr "Schéma farieb:"
 
 #: ../share/extensions/nicechart.inx.h:30
 msgid "Custom colors:"
-msgstr ""
+msgstr "Vlastné farby:"
 
 #: ../share/extensions/nicechart.inx.h:31
 msgid "Reverse color scheme"
-msgstr ""
+msgstr "Obrátiť schému farieb:"
 
 #: ../share/extensions/nicechart.inx.h:32
 msgid "Drop shadow"
-msgstr ""
+msgstr "Vrhané tiene"
 
 #: ../share/extensions/nicechart.inx.h:37
 msgid "SAP"
-msgstr ""
+msgstr "SAP"
 
 #: ../share/extensions/nicechart.inx.h:38
 msgid "Values"
-msgstr ""
+msgstr "Hodnoty"
 
 #: ../share/extensions/nicechart.inx.h:39
 msgid "Show values"
-msgstr ""
+msgstr "Zobraziť hodnoty"
 
 #: ../share/extensions/nicechart.inx.h:40
 msgid "Chart type:"
-msgstr ""
+msgstr "Typ grafu:"
 
 #: ../share/extensions/nicechart.inx.h:41
 msgid "Bar chart"
-msgstr ""
+msgstr "Stĺpcový graf"
 
 #: ../share/extensions/nicechart.inx.h:42
 msgid "Pie chart"
-msgstr ""
+msgstr "Koláčový graf"
 
 #: ../share/extensions/nicechart.inx.h:43
 msgid "Pie chart (percentage)"
-msgstr ""
+msgstr "Koláčový graf (percentá)"
 
 #: ../share/extensions/nicechart.inx.h:44
 msgid "Stacked bar chart"
-msgstr ""
+msgstr "Skladaný stĺpcový graf"
 
 #: ../share/extensions/param_curves.inx.h:1
 msgid "Parametric Curves"
@@ -39882,29 +39972,24 @@ msgid "End t-value:"
 msgstr "Koncová hodnota t:"
 
 #: ../share/extensions/param_curves.inx.h:5
-#, fuzzy
 msgid "Multiply t-range by 2*pi"
-msgstr "Násobiť rozsah t hodnotou 2*pi:"
+msgstr "Násobiť rozsah t hodnotou 2*pi"
 
 #: ../share/extensions/param_curves.inx.h:6
-#, fuzzy
 msgid "X-value of rectangle's left:"
-msgstr "hodnota x ľavej strany obdĺžnika:"
+msgstr "hodnota X ľavej strany obdĺžnika:"
 
 #: ../share/extensions/param_curves.inx.h:7
-#, fuzzy
 msgid "X-value of rectangle's right:"
-msgstr "hodnota x pravej strany obdĺžnika:"
+msgstr "hodnota X pravej strany obdĺžnika:"
 
 #: ../share/extensions/param_curves.inx.h:8
-#, fuzzy
 msgid "Y-value of rectangle's bottom:"
-msgstr "hodnota y spodku obdĺžnika:"
+msgstr "hodnota Y spodku obdĺžnika:"
 
 #: ../share/extensions/param_curves.inx.h:9
-#, fuzzy
 msgid "Y-value of rectangle's top:"
-msgstr "hodnota y vrchu obdĺžnika:"
+msgstr "hodnota Y vrchu obdĺžnika:"
 
 #: ../share/extensions/param_curves.inx.h:10
 msgid "Samples:"
@@ -39920,14 +40005,12 @@ msgstr ""
 "Prvé derivácie sa vždy určujú numericky."
 
 #: ../share/extensions/param_curves.inx.h:26
-#, fuzzy
 msgid "X-Function:"
-msgstr "Funkcia x:"
+msgstr "Funkcia X:"
 
 #: ../share/extensions/param_curves.inx.h:27
-#, fuzzy
 msgid "Y-Function:"
-msgstr "Funkcia x:"
+msgstr "Funkcia Y:"
 
 #: ../share/extensions/pathalongpath.inx.h:1
 msgid "Pattern along Path"
@@ -39975,15 +40058,14 @@ msgid "Ribbon"
 msgstr "Stuha"
 
 #: ../share/extensions/pathalongpath.inx.h:17
-#, fuzzy
 msgid ""
 "This effect scatters or bends a pattern along arbitrary \"skeleton\" paths. "
 "The pattern is the topmost object in the selection. Groups of paths, shapes "
 "or clones are allowed."
 msgstr ""
-"Tento efekt roztrúsi vzorový objekt pozdĺž ľubovoľnej „kostry“, ktorou je "
-"cesta. Vzorka je najvrchnejší objekt výberu. Skupiny ciest/tvarov/klonov sú "
-"povolené."
+"Tento efekt roztrúsi alebo ohne vzorový objekt pozdĺž ľubovoľnej „kostry“, "
+"ktorou je cesta. Vzorka musí byť najvrchnejší objekt výberu. Je povolené "
+"použiť skupiny ciest, tvarov alebo klonov."
 
 #: ../share/extensions/pathscatter.inx.h:3
 msgid "Follow path orientation"
@@ -40032,8 +40114,8 @@ msgid ""
 "shapes, clones are allowed."
 msgstr ""
 "Tento efekt roztrúsi vzorový objekt pozdĺž ľubovoľnej „kostry“, ktorou je "
-"cesta. Vzorka je najvrchnejší objekt výberu. Skupiny ciest/tvarov/klonov sú "
-"povolené."
+"cesta. Vzorka je najvrchnejší objekt výberu. Je povolené použiť skupiny "
+"ciest, tvarov alebo klonov."
 
 #: ../share/extensions/perfectboundcover.inx.h:1
 msgid "Perfect-Bound Cover Template"
@@ -40121,41 +40203,42 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx.h:1
 msgid "Plot"
-msgstr ""
+msgstr "Vykresliť"
 
 #: ../share/extensions/plotter.inx.h:2
 msgid ""
 "Please make sure that all objects you want to plot are converted to paths."
 msgstr ""
+"Prosím, uistite sa, že všetky objekty, ktoré chcete vykresliť sú prevedené "
+"na cesty."
 
 #: ../share/extensions/plotter.inx.h:3
-#, fuzzy
 msgid "Connection Settings "
-msgstr "Konektory"
+msgstr "Nastavenie spojenia"
 
 #: ../share/extensions/plotter.inx.h:4
-#, fuzzy
 msgid "Serial port:"
-msgstr "Zvislý bod:"
+msgstr "Sériový port:"
 
 #: ../share/extensions/plotter.inx.h:5
 msgid ""
 "The port of your serial connection, on Windows something like 'COM1', on "
 "Linux something like: '/dev/ttyUSB0' (Default: COM1)"
 msgstr ""
+"Port vášho sériového spojenia. Vo Windows niečo ako „COM1“, v Linuxe niečo "
+"ako: „/dev/ttyUSB0“ (Predvolené: COM1)"
 
 #: ../share/extensions/plotter.inx.h:6
-#, fuzzy
 msgid "Serial baud rate:"
-msgstr "Zvislé rozostrenie:"
+msgstr "Rýchlosť linky v baudoch:"
 
 #: ../share/extensions/plotter.inx.h:7
 msgid "The Baud rate of your serial connection (Default: 9600)"
-msgstr ""
+msgstr "Rýchlosť vašej sériovej linky v baudoch: (Predvolenáá: 9600)"
 
 #: ../share/extensions/plotter.inx.h:8
 msgid "Serial byte size:"
-msgstr ""
+msgstr "Veľkosť bajtu:"
 
 #: ../share/extensions/plotter.inx.h:10
 #, no-c-format
@@ -40163,10 +40246,12 @@ msgid ""
 "The Byte size of your serial connection, 99% of all plotters use the default "
 "setting (Default: 8 Bits)"
 msgstr ""
+"Veľkosť bajtu sériového spojenia. 99 % všetkých súradnicových zapisovačov "
+"používa predvolené nastavenie (Predvolená: 8 bitov)"
 
 #: ../share/extensions/plotter.inx.h:11
 msgid "Serial stop bits:"
-msgstr ""
+msgstr "Stop bity:"
 
 #: ../share/extensions/plotter.inx.h:13
 #, no-c-format
@@ -40174,10 +40259,12 @@ msgid ""
 "The Stop bits of your serial connection, 99% of all plotters use the default "
 "setting (Default: 1 Bit)"
 msgstr ""
+"Stop bity sériového spojenia. 99 % všetkých súradnicových zapisovačov "
+"používa predvolené nastavenie (Predvolená: 1 bit)"
 
 #: ../share/extensions/plotter.inx.h:14
 msgid "Serial parity:"
-msgstr ""
+msgstr "Sériová parita:"
 
 #: ../share/extensions/plotter.inx.h:16
 #, no-c-format
@@ -40185,66 +40272,73 @@ msgid ""
 "The Parity of your serial connection, 99% of all plotters use the default "
 "setting (Default: None)"
 msgstr ""
+"Parita sériového spojenia. 99 % všetkých súradnicových zapisovačov používa "
+"predvolené nastavenie (Predvolená: žiadna)"
 
 #: ../share/extensions/plotter.inx.h:17
 msgid "Serial flow control:"
-msgstr ""
+msgstr "Riadenie toku:"
 
 #: ../share/extensions/plotter.inx.h:18 ../share/extensions/plotter.inx.h:9
 msgid ""
 "The Software / Hardware flow control of your serial connection (Default: "
 "Software)"
 msgstr ""
+"Riadenie toku vášho sériového spojenia: softvérové/hardvérové (Predvolená: "
+"softvérové)"
 
 #: ../share/extensions/plotter.inx.h:19 ../share/extensions/plotter.inx.h:10
-#, fuzzy
 msgid "Command language:"
-msgstr "Druhý jazyk:"
+msgstr "Príkazový jazyk:"
 
 #: ../share/extensions/plotter.inx.h:20 ../share/extensions/plotter.inx.h:11
 msgid "The command language to use (Default: HPGL)"
-msgstr ""
+msgstr "Príkazový jazyk, ktorý sa má použiť (Predvolený: HPGL)"
 
 #: ../share/extensions/plotter.inx.h:21 ../share/extensions/plotter.inx.h:12
 msgid "Software (XON/XOFF)"
-msgstr ""
+msgstr "softvérové (XON/XOFF)"
 
 #: ../share/extensions/plotter.inx.h:22 ../share/extensions/plotter.inx.h:13
-#, fuzzy
 msgid "Hardware (RTS/CTS)"
-msgstr "Hardvér"
+msgstr "hardvérové (RTS/CTS)"
 
 #: ../share/extensions/plotter.inx.h:23 ../share/extensions/plotter.inx.h:14
 msgid "Hardware (DSR/DTR + RTS/CTS)"
-msgstr ""
+msgstr "hardvérové (DSR/DTR + RTS/CTS)"
 
 #: ../share/extensions/plotter.inx.h:25 ../share/extensions/plotter.inx.h:16
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: ../share/extensions/plotter.inx.h:26 ../share/extensions/plotter.inx.h:17
 msgid "DMPL"
-msgstr ""
+msgstr "DMPL"
 
 #: ../share/extensions/plotter.inx.h:27
 msgid "KNK Plotter (HPGL variant)"
-msgstr ""
+msgstr "KNK Plotter (variant HPGL)"
 
 #: ../share/extensions/plotter.inx.h:28 ../share/extensions/plotter.inx.h:19
 msgid ""
 "Using wrong settings can under certain circumstances cause Inkscape to "
 "freeze. Always save your work before plotting!"
 msgstr ""
+"Použitie nesprávnych nastavení môže za istých okolností spôsobiť zamrznutie "
+"Inkscape. Vždy svoju prácu najskôr uložte."
 
 #: ../share/extensions/plotter.inx.h:29 ../share/extensions/plotter.inx.h:20
 msgid ""
 "This can be a physical serial connection or a USB-to-Serial bridge. Ask your "
 "plotter manufacturer for drivers if needed."
 msgstr ""
+"Toto môže byť fyzické sériové spojenie alebo most z USB na sériové spojenie. "
+"Ak je to potrebné, vyžiadajte si ovládače od dodávateľa vášho súradnicového "
+"zapisovača."
 
 #: ../share/extensions/plotter.inx.h:30 ../share/extensions/plotter.inx.h:21
 msgid "Parallel (LPT) connections are not supported."
-msgstr ""
+msgstr "Paralelné spojenia (LPT) nie sú podporované."
 
 #: ../share/extensions/plotter.inx.h:41 ../share/extensions/plotter.inx.h:32
 msgid ""
@@ -40252,22 +40346,27 @@ msgid ""
 "(depending on your plotter model), set to 0 to omit command. Most plotters "
 "ignore this command. (Default: 0)"
 msgstr ""
+"Rýchlosť pohybu pera v centimetroch alebo milimetroch za sekundu (v "
+"závislosti na modeli súradnicového zapisovača). Ak nastavíte 0, vynechá "
+"príkaz. Väčšina súradnicových zapisovačov tento príkaz ignoruje. (Predvolené:"
+" 0)"
 
 #: ../share/extensions/plotter.inx.h:42 ../share/extensions/plotter.inx.h:33
-#, fuzzy
 msgid "Rotation (°, clockwise):"
-msgstr "Otočenie v smere hodinových ručičiek"
+msgstr "Otočenie (°, v smere hodinových ručičiek):"
 
 #: ../share/extensions/plotter.inx.h:62 ../share/extensions/plotter.inx.h:52
-#, fuzzy
 msgid "Show debug information"
-msgstr "Informácie o využití pamäte"
+msgstr "Zobraziť ladiace informácie"
 
 #: ../share/extensions/plotter.inx.h:63 ../share/extensions/plotter.inx.h:53
 msgid ""
 "Check this to get verbose information about the plot without actually "
 "sending something to the plotter (A.k.a. data dump) (Default: Unchecked)"
 msgstr ""
+"Dátový výpis - sem sa pozrite ak chcete zistiť podrobnejšie informácie o "
+"výkrese bez toho, aby ste v skutočnosti niečo posielali do súradnicového "
+"zapisovača (predvolené: neoznačené)"
 
 #: ../share/extensions/plt_input.inx.h:1
 msgid "AutoCAD Plot Input"
@@ -40280,7 +40379,7 @@ msgstr "Súbor HP Graphics Language Plot [AutoCAD] (*.plt)"
 
 #: ../share/extensions/plt_input.inx.h:3
 msgid "Open HPGL plotter files"
-msgstr "Otvoriť súbory plotra HPGL"
+msgstr "Otvoriť súbory súradnicového zapisovača HPGL"
 
 #: ../share/extensions/plt_output.inx.h:1
 msgid "AutoCAD Plot Output"
@@ -40288,7 +40387,7 @@ msgstr "Výstup AutoCAD Plot"
 
 #: ../share/extensions/plt_output.inx.h:3
 msgid "Save a file for plotters"
-msgstr "Uložiť súbor pre plotre"
+msgstr "Uložiť súbor pre súradnicové zapisovače"
 
 #: ../share/extensions/polyhedron_3d.inx.h:1
 msgid "3D Polyhedron"
@@ -40495,14 +40594,12 @@ msgid "Mean"
 msgstr "Stred"
 
 #: ../share/extensions/previous_glyph_layer.inx.h:1
-#, fuzzy
 msgid "View Previous Glyph"
-msgstr "Predošlá stránka:"
+msgstr "Zobraziť predošlý znak"
 
 #: ../share/extensions/print_win32_vector.inx.h:1
-#, fuzzy
 msgid "Win32 Vector Print"
-msgstr "Tlač 32-bitových Windows"
+msgstr "Vektorová tlač Win32"
 
 #: ../share/extensions/printing_marks.inx.h:1
 msgid "Printing Marks"
@@ -40558,7 +40655,7 @@ msgstr "Písmenková polievka"
 
 #: ../share/extensions/render_barcode.inx.h:1
 msgid "Classic"
-msgstr ""
+msgstr "Klasický"
 
 #: ../share/extensions/render_barcode.inx.h:2
 msgid "Barcode Type:"
@@ -40579,9 +40676,8 @@ msgid "Barcode"
 msgstr "Čiarový kód"
 
 #: ../share/extensions/render_barcode_datamatrix.inx.h:1
-#, fuzzy
 msgid "Datamatrix"
-msgstr "Čiarový kód - Datamatrix"
+msgstr "Datamatrix"
 
 #: ../share/extensions/render_barcode_datamatrix.inx.h:3
 #: ../share/extensions/render_barcode_qrcode.inx.h:4
@@ -40594,7 +40690,7 @@ msgstr "Veľkosť štvorca (px):"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:1
 msgid "QR Code"
-msgstr ""
+msgstr "QR kód"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:2
 msgid "See http://www.denso-wave.com/qrcode/index-e.html for details"
@@ -40609,55 +40705,49 @@ msgstr ""
 "chýb"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:7
-#, fuzzy
 msgid "Error correction level:"
-msgstr "Zrkadlový odraz"
+msgstr "Úroveň korekcie chýb:"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:9
 #, no-c-format
 msgid "L (Approx. 7%)"
-msgstr "L (Pribl. 7%)"
+msgstr "L (cca 7 %)"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:11
 #, no-c-format
 msgid "M (Approx. 15%)"
-msgstr "M (Pribl. 15%)"
+msgstr "M (cca 15 %)"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:13
 #, no-c-format
 msgid "Q (Approx. 25%)"
-msgstr "Q (Pribl. 25%)"
+msgstr "Q (cca 25 %)"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:15
 #, no-c-format
 msgid "H (Approx. 30%)"
-msgstr "H (Pribl. 30%)"
+msgstr "H (cca 30 %)"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:17
-#, fuzzy
 msgid "Square size (px):"
 msgstr "Veľkosť štvorca (px):"
 
 #: ../share/extensions/render_gear_rack.inx.h:1
-#, fuzzy
 msgid "Rack Gear"
 msgstr "Ozubenie"
 
 #: ../share/extensions/render_gear_rack.inx.h:2
-#, fuzzy
 msgid "Rack Length:"
-msgstr "Dĺžka:"
+msgstr "Dĺžka ozubenia:"
 
 #: ../share/extensions/render_gear_rack.inx.h:3
-#, fuzzy
 msgid "Tooth Spacing:"
-msgstr "Vodorovné rozostupy:"
+msgstr "Rozostupy ozubenia:"
 
 # http://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 #: ../share/extensions/render_gear_rack.inx.h:4
-#, fuzzy
 msgid "Contact Angle:"
-msgstr "Gergonov trojuholník"
+msgstr "Uhol dotyku:"
 
 #: ../share/extensions/render_gear_rack.inx.h:6
 #: ../share/extensions/render_gears.inx.h:1
@@ -40669,23 +40759,20 @@ msgid "Number of teeth:"
 msgstr "Počet zubov:"
 
 #: ../share/extensions/render_gears.inx.h:3
-#, fuzzy
 msgid "Circular pitch (tooth size):"
-msgstr "Kruhový rozostup (px):"
+msgstr "Kruhová výška (veľkosť zubu):"
 
 #: ../share/extensions/render_gears.inx.h:4
-#, fuzzy
 msgid "Pressure angle (degrees):"
-msgstr "Uhol tlaku:"
+msgstr "Uhol tlaku (v stupňoch):"
 
 #: ../share/extensions/render_gears.inx.h:5
 msgid "Diameter of center hole (0 for none):"
 msgstr "Priemer diery v strede (0 znamená žiadna):"
 
 #: ../share/extensions/render_gears.inx.h:10
-#, fuzzy
 msgid "Unit of measurement for both circular pitch and center diameter."
-msgstr "Jednotky priemeru aj kruhového rozostupu."
+msgstr "Jednotka merania kruhovej výšky aj polomeru stredu."
 
 #: ../share/extensions/replace_font.inx.h:1
 msgid "Replace font"
@@ -40696,14 +40783,12 @@ msgid "Find and Replace font"
 msgstr "Nájsť a nahradiť písmo"
 
 #: ../share/extensions/replace_font.inx.h:3
-#, fuzzy
 msgid "Find font: "
-msgstr "Nájsť toto písmo:"
+msgstr "Nájsť písmo:"
 
 #: ../share/extensions/replace_font.inx.h:4
-#, fuzzy
 msgid "Replace with: "
-msgstr "A nahradiť čím:"
+msgstr "Nahradiť za:"
 
 #: ../share/extensions/replace_font.inx.h:5
 msgid "Replace all fonts with: "
@@ -40737,23 +40822,23 @@ msgstr "Znova naskladať"
 
 #: ../share/extensions/restack.inx.h:2
 msgid "Based on Position"
-msgstr ""
+msgstr "Podľa polohy"
 
 #: ../share/extensions/restack.inx.h:3
 msgid "Presets"
-msgstr ""
+msgstr "Predvoľby"
 
 #: ../share/extensions/restack.inx.h:6
 msgid "Horizontal:"
-msgstr ""
+msgstr "Vodorovne:"
 
 #: ../share/extensions/restack.inx.h:7
 msgid "Vertical:"
-msgstr ""
+msgstr "Zvisle:"
 
 #: ../share/extensions/restack.inx.h:8
 msgid "Restack Direction"
-msgstr ""
+msgstr "Smer preskladania"
 
 #: ../share/extensions/restack.inx.h:9 ../share/extensions/restack.inx.h:3
 msgid "Left to Right (0)"
@@ -40781,7 +40866,7 @@ msgstr "Radiálne smerom dnu"
 
 #: ../share/extensions/restack.inx.h:15
 msgid "Object Reference Point"
-msgstr ""
+msgstr "Referenčný bod objektu"
 
 #: ../share/extensions/restack.inx.h:17
 #: ../share/extensions/text_extract.inx.h:9
@@ -40805,19 +40890,19 @@ msgstr "Spodok"
 
 #: ../share/extensions/restack.inx.h:21
 msgid "Based on Z-Order"
-msgstr ""
+msgstr "Podľa zvislého poradia"
 
 #: ../share/extensions/restack.inx.h:22
 msgid "Restack Mode"
-msgstr ""
+msgstr "Režim preskladania"
 
 #: ../share/extensions/restack.inx.h:23
 msgid "Reverse Z-Order"
-msgstr ""
+msgstr "Opačné zvislé poradie"
 
 #: ../share/extensions/restack.inx.h:24
 msgid "Shuffle Z-Order"
-msgstr ""
+msgstr "Náhodné zvislé poradie"
 
 #: ../share/extensions/restack.inx.h:26
 msgid ""
@@ -40847,7 +40932,7 @@ msgstr "Minimálna veľkosť:"
 
 #: ../share/extensions/rtree.inx.h:4
 msgid "Omit redundant segments"
-msgstr ""
+msgstr "Vynechať nadbytočné úseky"
 
 #: ../share/extensions/rtree.inx.h:5
 msgid "Lift pen for backward steps"
