@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-11-13 22:34+0100\n"
+"POT-Creation-Date: 2016-12-20 02:01+0100\n"
+"PO-Revision-Date: 2016-12-21 20:54+0100\n"
 "Last-Translator: Sylvain Chiron <chironsylvain@orange.fr>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
@@ -167,7 +167,7 @@ msgstr "Tampon en caoutchouc"
 #: ../share/filters/filters.svg.h:723
 #: ../src/extension/internal/filter/overlays.h:80
 msgid "Overlays"
-msgstr "Superpositions"
+msgstr "Recouvrements"
 
 #: ../share/filters/filters.svg.h:20
 msgid "Random whiteouts inside"
@@ -8436,45 +8436,39 @@ msgid ""
 "either setting the SVG 'viewBox' to compensate or by scaling\n"
 "all the elements in the drawing."
 msgstr ""
+"Auparavant, Inkscape utilisait l'équivalence 1 in = 90 px.\n"
+"Le standard CSS exige que 1 in = 96 px. Les éléments du dessin\n"
+"seront peut-être plus petits que souhaité.\n"
+"Cela peut-être corrigé soit en définissant la « zone de vue »\n"
+"(viewBox SVG) pour compenser ou en redimensionnant\n"
+"l'ensemble des éléments du dessin."
 
 #: ../src/file.cpp:425 ../src/file.cpp:523
 msgid "Old Inkscape file detected (90 DPI)"
-msgstr ""
+msgstr "Document Inkscape à 90 PPP détecté"
 
 #: ../src/file.cpp:437 ../src/file.cpp:535
-#, fuzzy
 msgid "Create backup file (in same directory)."
-msgstr "Impossible de créer le dossier de profil %s."
+msgstr "Créer un fichier de récupération (dans le même répertoire)."
 
 #: ../src/file.cpp:448 ../src/file.cpp:546 ../src/ui/widget/page-sizer.cpp:958
 msgid "Set 'viewBox'"
 msgstr "Définir la « zone de vue »"
 
 #: ../src/file.cpp:449 ../src/file.cpp:547
-#, fuzzy
 msgid "Scale elements"
-msgstr "Mode redimensionnement"
+msgstr "Redimensionner les éléments"
 
 #: ../src/file.cpp:450 ../src/file.cpp:548
 #: ../src/widgets/connector-toolbar.cpp:317
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: ../src/file.cpp:517
-msgid ""
-"Old Inkscape files use 1in == 90px. CSS requires 1in == 96px.\n"
-"Drawings meant to match a physical size (e.g. Letter or A4)\n"
-"will be too small. Scaling the drawing can correct for this.\n"
-"Internal scaling can be handled either by setting the SVG 'viewBox'\n"
-"attribute to compensate or by scaling all objects in the drawing."
-msgstr ""
-
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
 #: ../src/file.cpp:722
-#, fuzzy
 msgid "Update Document"
-msgstr "Enregistrer le document"
+msgstr "Mettre à jour le document"
 
 #: ../src/file.cpp:738
 msgid "Broken links have been changed to point to existing files."
@@ -8661,7 +8655,7 @@ msgstr "Teinture du contour"
 #. New in Compositing and Blending Level 1
 #: ../src/filter-enums.cpp:58
 msgid "Overlay"
-msgstr "Superposition"
+msgstr "Recouvrement"
 
 #: ../src/filter-enums.cpp:59
 msgid "Color Dodge"
@@ -8896,7 +8890,7 @@ msgstr " (contour)"
 #: ../src/gradient-drag.cpp:1482
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s pour : %s%s"
 
 #: ../src/gradient-drag.cpp:1489
 #, c-format
@@ -9870,9 +9864,8 @@ msgid "Origin of the rotation"
 msgstr "Origine de la rotation"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:42
-#, fuzzy
 msgid "Adjust origin of rotation"
-msgstr "Origine de la rotation"
+msgstr "Ajuster l'origine de la rotation"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
 #: ../src/live_effects/lpe-transform_2pts.cpp:37
@@ -9880,14 +9873,12 @@ msgid "Start point"
 msgstr "Point de départ"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Starting point to define start angle"
-msgstr "Point de départ de l'effilage"
+msgstr "Point de départ pour définir l'angle de départ"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Adjust starting point to define start angle"
-msgstr "Ajuster l'angle de départ"
+msgstr "Ajuster le point de départ pour définir l'angle de départ"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:44
 msgid "Starting:"
@@ -10807,31 +10798,27 @@ msgstr "Prend l'autre côté du miroir comme original"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
 msgid "Start mirror line"
-msgstr "Ligne miroir de départ"
+msgstr "Début de l'axe de réflexion"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Adjust start of mirroring"
-msgstr "Ajuster la saturation"
+msgstr "Ajuster le début de la réflexion"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
 msgid "End mirror line"
-msgstr "Ligne miroir de fin"
+msgstr "Fin de l'axe de réflexion"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
-#, fuzzy
 msgid "Adjust end of mirroring"
-msgstr "Ajuster l'origine"
+msgstr "Ajuster la fin de la réflexion"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Center mirror line"
-msgstr "Ligne miroir de départ"
+msgstr "Centre de l'axe de réflexion"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Adjust center of mirroring"
-msgstr "Ajuster l'origine"
+msgstr "Ajuster le centre de la réflexion"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:53
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -16624,8 +16611,8 @@ msgid ""
 "The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, "
 "multiply, darken and lighten."
 msgstr ""
-"<b>feBlend</b> fournit quatre modes de fondu d'image : produit, "
-"superposition, obscurcir et éclaircir."
+"<b>feBlend</b> fournit quatre modes de fondu d'image : superposition, "
+"produit, obscurcir et éclaircir."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2990
 msgid ""
@@ -18810,13 +18797,12 @@ msgid "Kannada (kn)"
 msgstr "Kannada (kn)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
-#, fuzzy
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
-msgstr "Kashmiri, script Perso-Arabique (ks@aran)"
+msgstr "Kashmiri, écriture perso-arabe (ks@aran)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Kashmiri in Devanagari script (ks@deva)"
-msgstr "Kashmiri, script Devanagari (ks@deva)"
+msgstr "Kashmiri, écriture dévanagarie (ks@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Khmer (km)"
@@ -18832,7 +18818,7 @@ msgstr "Konkani (kok)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Konkani in Latin script (kok@latin)"
-msgstr "Konkani en alphabet latin (kok@latin)"
+msgstr "Konkani, alphabet latin (kok@latin)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Korean (ko)"
@@ -18864,7 +18850,7 @@ msgstr "Manipuri (mni)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 msgid "Manipuri in Bengali script (mni@beng)"
-msgstr "Manipuri, script Bengali (mni@beng)"
+msgstr "Manipuri, écriture bengalie (mni@beng)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:551
 msgid "Marathi (mr)"
@@ -18924,7 +18910,7 @@ msgstr "Santali (sat)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:556
 msgid "Santali in Devanagari script (sat@deva)"
-msgstr "Santali en script Devanagari (sat@deva)"
+msgstr "Santali, écriture dévanagarie (sat@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:556
 msgid "Serbian (sr)"
@@ -18932,7 +18918,7 @@ msgstr "Serbe (sr)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:556
 msgid "Serbian in Latin script (sr@latin)"
-msgstr "Serbe en alphabet latin (sr@latin)"
+msgstr "Serbe, alphabet latin (sr@latin)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:557
 msgid "Sindhi (sd)"
@@ -18940,7 +18926,7 @@ msgstr "Sindhi (sd)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:557
 msgid "Sindhi in Devanagari script (sd@deva)"
-msgstr "Sindhi en script Devanagari (sd@deva)"
+msgstr "Sindhi, écriture dévanagarie (sd@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:557
 msgid "Slovak (sk)"
@@ -24569,9 +24555,8 @@ msgid "Picked mesh corner color."
 msgstr "Couleur de coin de filet choisie."
 
 #: ../src/ui/tools/mesh-tool.cpp:478
-#, fuzzy
 msgid "Inserted new row or column."
-msgstr "Ligne ou colonne réparatrice ajoutée"
+msgstr "Ligne ou colonne ajoutée."
 
 #: ../src/ui/tools/mesh-tool.cpp:548
 msgid "Fit mesh inside bounding box."
@@ -31623,9 +31608,8 @@ msgid "Text: Change font style"
 msgstr "Texte : modifier le style de la police"
 
 #: ../src/widgets/text-toolbar.cpp:345
-#, fuzzy
 msgid "Text: Unset line height."
-msgstr "Texte : modifier la hauteur de ligne"
+msgstr "Texte : supprimer la valeur de hauteur de ligne"
 
 #: ../src/widgets/text-toolbar.cpp:422
 msgid "Text: Change superscript or subscript"
@@ -31907,20 +31891,19 @@ msgstr "Rotation des caractères (degrés)"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2159
-#, fuzzy
 msgid "Unset line height"
-msgstr "Aligner les lignes à droite"
+msgstr "Supprimer la valeur de hauteur de ligne"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2160
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
+"Si activé, la hauteur de ligne est définie sur une partie de la sélection."
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2172
-#, fuzzy
 msgid "Show outer style"
-msgstr "Biseau extérieur ombré"
+msgstr "Afficher le style extérieur"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2173
@@ -31929,6 +31912,9 @@ msgid ""
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
+"Affiche le style de l'élément texte le plus à l'extérieur. Sa taille de "
+"police et sa hauteur de ligne déterminent l'espacement minimum entre les "
+"lignes dans le bloc."
 
 #: ../src/widgets/toolbox.cpp:186
 msgid "Color/opacity used for color tweaking"
@@ -33825,21 +33811,19 @@ msgstr "Visualisation de chemin"
 
 #: ../share/extensions/docinfo.inx.h:1
 msgid "DOC Info"
-msgstr ""
+msgstr "Infos du doc"
 
 #: ../share/extensions/docinfo.inx.h:2
-#, fuzzy
 msgid "Show page info"
-msgstr "Afficher la _bordure de page"
+msgstr "Afficher les informations sur la page"
 
 #: ../share/extensions/docinfo.inx.h:3
-#, fuzzy
 msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
-"Choisissez cet onglet pour lister les polices utilisées ou trouvées dans le "
-"document."
+"Choisissez cet onglet pour consulter les informations sur la page avant "
+"d'appliquer le changement de résolution (PPP)."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -33878,11 +33862,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr ""
+msgstr "De 90 à 96 PPP"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr ""
+msgstr "De 96 à 90 PPP"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 msgid "Draw From Triangle"
@@ -34748,7 +34732,7 @@ msgstr "Largeur de la zone :"
 
 #: ../share/extensions/gcodetools_area.inx.h:4
 msgid "Area tool overlap (0..0.9):"
-msgstr "Superposition d'outil de zone (0 à 0,9) :"
+msgstr "Recouvrement d'outil de zone (0 à 0,9) :"
 
 #: ../share/extensions/gcodetools_area.inx.h:5
 msgid ""
@@ -36380,9 +36364,8 @@ msgstr "Manuel d'_Inkscape"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_manual.inx.h:3
-#, fuzzy
 msgid "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
-msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html_fr/index.html"
+msgstr "http://tavmjong.org/INKSCAPE/MANUAL/html_fr/"
 
 #: ../share/extensions/inkscape_help_relnotes.inx.h:1
 msgid "New in This Version"
