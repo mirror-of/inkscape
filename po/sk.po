@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-12-30 01:22+0200\n"
+"PO-Revision-Date: 2016-12-30 14:31+0200\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -29599,8 +29599,7 @@ msgstr "Vektorizovať sprite..."
 
 #: ../src/verbs.cpp:2633 ../src/verbs.cpp:2552
 msgid "Create paths using Kopf-Lischinski algorithm to vectorize pixel art"
-msgstr ""
-"Vytvorí cesty pomocou algoritmu Kopf-Lischinski na vektorizáciu spritov"
+msgstr "Vytvorí cesty pomocou algoritmu Kopf-Lischinski na vektorizáciu spritov"
 
 #: ../src/verbs.cpp:2634 ../src/verbs.cpp:2553
 msgid "Make a _Bitmap Copy"
@@ -30877,7 +30876,7 @@ msgstr "Používanie vektorizácie bitmáp"
 #. "tutorial_tracing"
 #: ../src/verbs.cpp:2986 ../src/verbs.cpp:2887
 msgid "Inkscape: Tracing Pixel Art"
-msgstr "Inkscape: _Vektorizácia spritov"
+msgstr "Inkscape: Vektorizácia spritov"
 
 #: ../src/verbs.cpp:2987 ../src/verbs.cpp:2888
 msgid "Using Trace Pixel Art dialog"
@@ -35697,9 +35696,9 @@ msgid ""
 msgstr ""
 "Musíte si nainštalovať softvér UniConvertor.\n"
 "Na GNU/Linux: nainštalujte si balík python-uniconvertor.\n"
-"Na Windows: Stiahite si ho z "
+"Na Windows: Stiahnite si ho z "
 "http://sk1project.org/modules.php?name=Products&product=uniconvertor a "
-"nainštalujte ho do svojho Pythonu, ktorý používa Inkscape"
+"nainštalujte ho do svojho Pythonu, ktorý používa Inkscape\n"
 
 #: ../share/extensions/voronoi2svg.py:205
 #: ../share/extensions/voronoi2svg.py:215
@@ -39579,6 +39578,7 @@ msgstr ""
 "rozloženia.\n"
 "    * Okraje rozloženia: biely priestor okolo každej časti rozloženia.\n"
 "    * Výplň rozloženia: vnútorná výplň každej časti rozloženia.\n"
+"      "
 
 #: ../share/extensions/layout_nup.inx.h:36
 #: ../share/extensions/perfectboundcover.inx.h:20
