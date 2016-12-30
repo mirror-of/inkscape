@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-07-20 21:13+0300\n"
+"POT-Creation-Date: 2016-12-30 19:47+0200\n"
+"PO-Revision-Date: 2016-12-30 23:28+0200\n"
 "Last-Translator: Jānis Eisaks <je@dv.lv>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -34,6 +34,9 @@ msgid ""
 "Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector "
 "Graphics (SVG) file format."
 msgstr ""
+"Atvērtā koda vektorgrafikas redaktors ar līdzīgām iespējām kā Illustrator, "
+"CorelDraw vai Xara X, un kas izmanto W3C standarta mērogojamās vektoru "
+"grafikas (SVG) datnes formātu."
 
 #: ../inkscape.appdata.xml.in.h:4
 msgid ""
@@ -685,7 +688,8 @@ msgstr "Melnais caurums"
 #: ../share/filters/filters.svg.h:279 ../share/filters/filters.svg.h:835
 #: ../share/filters/filters.svg.h:839 ../share/filters/filters.svg.h:843
 #: ../src/extension/internal/filter/morphology.h:76
-#: ../src/extension/internal/filter/morphology.h:203 ../src/filter-enums.cpp:32
+#: ../src/extension/internal/filter/morphology.h:203
+#: ../src/filter-enums.cpp:32
 msgid "Morphology"
 msgstr "Morfoloģija"
 
@@ -5070,7 +5074,8 @@ msgstr "Pielāgojamais slieksnis"
 #: ../src/ui/widget/page-sizer.cpp:249
 #: ../src/widgets/calligraphy-toolbar.cpp:430
 #: ../src/widgets/eraser-toolbar.cpp:154 ../src/widgets/spray-toolbar.cpp:297
-#: ../src/widgets/tweak-toolbar.cpp:128 ../share/extensions/foldablebox.inx.h:2
+#: ../src/widgets/tweak-toolbar.cpp:128
+#: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "Platums:"
 
@@ -6521,13 +6526,15 @@ msgid "Transparency type:"
 msgstr "Caurspīdīguma tips:"
 
 #: ../src/extension/internal/filter/bumps.h:353
-#: ../src/extension/internal/filter/morphology.h:176 ../src/filter-enums.cpp:91
+#: ../src/extension/internal/filter/morphology.h:176
+#: ../src/filter-enums.cpp:91
 msgid "Atop"
 msgstr "Virs"
 
 #: ../src/extension/internal/filter/bumps.h:354
 #: ../src/extension/internal/filter/distort.h:70
-#: ../src/extension/internal/filter/morphology.h:174 ../src/filter-enums.cpp:89
+#: ../src/extension/internal/filter/morphology.h:174
+#: ../src/filter-enums.cpp:89
 msgid "In"
 msgstr "Pēc"
 
@@ -7045,7 +7052,8 @@ msgid "Felt Feather"
 msgstr "Filca spalvas"
 
 #: ../src/extension/internal/filter/distort.h:71
-#: ../src/extension/internal/filter/morphology.h:175 ../src/filter-enums.cpp:90
+#: ../src/extension/internal/filter/morphology.h:175
+#: ../src/filter-enums.cpp:90
 msgid "Out"
 msgstr "Ārā"
 
@@ -7240,11 +7248,13 @@ msgstr "Slēpt attēlu"
 msgid "Composite type:"
 msgstr "Saliktais tips:"
 
-#: ../src/extension/internal/filter/morphology.h:173 ../src/filter-enums.cpp:88
+#: ../src/extension/internal/filter/morphology.h:173
+#: ../src/filter-enums.cpp:88
 msgid "Over"
 msgstr "Pāri"
 
-#: ../src/extension/internal/filter/morphology.h:177 ../src/filter-enums.cpp:92
+#: ../src/extension/internal/filter/morphology.h:177
+#: ../src/filter-enums.cpp:92
 msgid "XOR"
 msgstr "XOR"
 
@@ -7318,8 +7328,8 @@ msgstr "Aizpildīt ar troksni"
 #: ../src/ui/dialog/tracedialog.cpp:747
 #: ../share/extensions/color_HSL_adjust.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
-#: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
-#: ../share/extensions/dxf_input.inx.h:2
+#: ../share/extensions/color_randomize.inx.h:2
+#: ../share/extensions/dots.inx.h:2 ../share/extensions/dxf_input.inx.h:2
 #: ../share/extensions/dxf_outlines.inx.h:2
 #: ../share/extensions/gcodetools_area.inx.h:29
 #: ../share/extensions/gcodetools_engraving.inx.h:7
@@ -7917,13 +7927,15 @@ msgstr "Vertikālā nobīde:"
 #: ../src/extension/internal/grid.cpp:209
 #: ../src/ui/dialog/inkscape-preferences.cpp:1527
 #: ../share/extensions/draw_from_triangle.inx.h:58
-#: ../share/extensions/eqtexsvg.inx.h:4 ../share/extensions/foldablebox.inx.h:9
+#: ../share/extensions/eqtexsvg.inx.h:4
+#: ../share/extensions/foldablebox.inx.h:9
 #: ../share/extensions/funcplot.inx.h:38
 #: ../share/extensions/grid_cartesian.inx.h:23
 #: ../share/extensions/grid_isometric.inx.h:11
 #: ../share/extensions/grid_polar.inx.h:22
 #: ../share/extensions/guides_creator.inx.h:25
-#: ../share/extensions/hershey.inx.h:52 ../share/extensions/layout_nup.inx.h:35
+#: ../share/extensions/hershey.inx.h:52
+#: ../share/extensions/layout_nup.inx.h:35
 #: ../share/extensions/lindenmayer.inx.h:34
 #: ../share/extensions/nicechart.inx.h:45
 #: ../share/extensions/param_curves.inx.h:30
@@ -8274,7 +8286,8 @@ msgid "Map all fill patterns to standard WMF hatches"
 msgstr "Kartēt visas aizpildījuma faktūras pret standarta WMF iesvītrojumiem"
 
 #: ../src/extension/internal/wmf-inout.cpp:3208
-#: ../share/extensions/wmf_input.inx.h:2 ../share/extensions/wmf_output.inx.h:2
+#: ../share/extensions/wmf_input.inx.h:2
+#: ../share/extensions/wmf_output.inx.h:2
 msgid "Windows Metafile (*.wmf)"
 msgstr "Windows Metafile (*.wmf)"
 
@@ -8317,25 +8330,26 @@ msgid ""
 "either setting the SVG 'viewBox' to compensate or by scaling\n"
 "all the elements in the drawing."
 msgstr ""
+"Vecais Inkscape formāts izmanto 1in == 90px. CSS nepieciešams\n"
+" 1in == 96px. Attēla elementi var būt pārāk mazi. To ar labot ar \n"
+"vai nu  iestatot SVG 'skatrāmi', lai to kompensētu vai mērogojot\n"
+"visus attēla elementus."
 
 #: ../src/file.cpp:425 ../src/file.cpp:523
 msgid "Old Inkscape file detected (90 DPI)"
-msgstr ""
+msgstr "Konstatēta veca Inkscape datne (90 DPI)"
 
 #: ../src/file.cpp:437 ../src/file.cpp:535
-#, fuzzy
 msgid "Create backup file (in same directory)."
-msgstr "Nav iespējams izveidot profila mapi %s."
+msgstr "Izveidot datnes rezerves kopiju (tajā pašā mapē)."
 
 #: ../src/file.cpp:448 ../src/file.cpp:546 ../src/ui/widget/page-sizer.cpp:958
-#, fuzzy
 msgid "Set 'viewBox'"
-msgstr "-- Nav uzstādīts --"
+msgstr "Iestatīt 'skatrāmi'"
 
 #: ../src/file.cpp:449 ../src/file.cpp:547
-#, fuzzy
 msgid "Scale elements"
-msgstr "Mērogošanas režīms"
+msgstr "Mērogot elementus"
 
 #: ../src/file.cpp:450 ../src/file.cpp:548
 #: ../src/widgets/connector-toolbar.cpp:317
@@ -8350,13 +8364,17 @@ msgid ""
 "Internal scaling can be handled either by setting the SVG 'viewBox'\n"
 "attribute to compensate or by scaling all objects in the drawing."
 msgstr ""
+"Vecais Inkscape formāts izmanto 1in == 90px. CSS nepieciešams\n"
+"1in == 96px. Attēli, kuriem jāatbilst fiziskam lielumam, (piemēram A4), \n"
+"būs pārāk mazi To ar labot, mērogojot attēlu. Iekšēju mērogošanu \n"
+"var īstenot vai nu  iestatot SVG 'skatrāmi', lai to kompensētu vai\n"
+"mērogojot visus attēla elementus."
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
 #: ../src/file.cpp:722
-#, fuzzy
 msgid "Update Document"
-msgstr "Saglabāt dokumentu"
+msgstr "Atsvaidzināt dokumentu"
 
 #: ../src/file.cpp:738
 msgid "Broken links have been changed to point to existing files."
@@ -8594,7 +8612,8 @@ msgstr "Griezt nokrāsu"
 msgid "Luminance to Alpha"
 msgstr "Spilgtumu par alfa"
 
-#: ../src/filter-enums.cpp:87 ../share/extensions/jessyInk_mouseHandler.inx.h:3
+#: ../src/filter-enums.cpp:87
+#: ../share/extensions/jessyInk_mouseHandler.inx.h:3
 #: ../share/extensions/jessyInk_transitions.inx.h:7
 #: ../share/extensions/measure.inx.h:20 ../share/extensions/nicechart.inx.h:33
 msgid "Default"
@@ -8775,7 +8794,7 @@ msgstr "(apmale)"
 #: ../src/gradient-drag.cpp:1482
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s priekš: %s%s"
 
 #: ../src/gradient-drag.cpp:1489
 #, c-format
@@ -8922,7 +8941,8 @@ msgstr "Ikonizēt šo doku"
 msgid "Close this dock"
 msgstr "Aizvērt šo doku"
 
-#: ../src/libgdl/gdl-dock-item-grip.c:723 ../src/libgdl/gdl-dock-tablabel.c:125
+#: ../src/libgdl/gdl-dock-item-grip.c:723
+#: ../src/libgdl/gdl-dock-tablabel.c:125
 msgid "Controlling dock item"
 msgstr "Vadošā doka elements"
 
@@ -9088,7 +9108,8 @@ msgstr "Pašreizējās lapas indekss"
 #: ../src/libgdl/gdl-dock-object.c:125
 #: ../src/live_effects/parameter/originalpatharray.cpp:82
 #: ../src/ui/dialog/inkscape-preferences.cpp:1561
-#: ../src/ui/widget/page-sizer.cpp:285 ../src/widgets/gradient-selector.cpp:150
+#: ../src/ui/widget/page-sizer.cpp:285
+#: ../src/widgets/gradient-selector.cpp:150
 #: ../src/widgets/sp-xmlview-attr-list.cpp:49
 msgid "Name"
 msgstr "Nosaukums"
@@ -9451,15 +9472,12 @@ msgid "Show handles"
 msgstr "Rādīt turus"
 
 #: ../src/live_effects/effect.cpp:144 ../src/widgets/pencil-toolbar.cpp:117
-#, fuzzy
 msgid "BSpline"
-msgstr "Pienstikls"
+msgstr "B-Splains"
 
 #: ../src/live_effects/effect.cpp:145
-#, fuzzy
 msgid "Join type"
-msgstr ""
-"Lūdzu, ņemiet vērā, ka dažas datubāzes var neatbalstīt šo savienojuma tipu."
+msgstr "Salaiduma tips"
 
 #: ../src/live_effects/effect.cpp:146
 msgid "Taper stroke"
@@ -9658,15 +9676,13 @@ msgstr "Mainiet soļu skaitu, turot nospiestu CTRL"
 #: ../src/live_effects/lpe-bspline.cpp:31
 #: ../src/live_effects/lpe-simplify.cpp:33
 #: ../src/live_effects/lpe-transform_2pts.cpp:43
-#, fuzzy
 msgid "Helper size:"
-msgstr "Subversion palīgprogramma"
+msgstr "Palīga izmērs:"
 
 #: ../src/live_effects/lpe-bspline.cpp:31
 #: ../src/live_effects/lpe-simplify.cpp:33
-#, fuzzy
 msgid "Helper size"
-msgstr "Subversion palīgprogramma"
+msgstr "Palīga izmērs"
 
 #: ../src/live_effects/lpe-bspline.cpp:32
 msgid "Apply changes if weight = 0%"
@@ -9737,9 +9753,8 @@ msgid "Origin of the rotation"
 msgstr "Griešanas sākumpunkts"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:42
-#, fuzzy
 msgid "Adjust origin of rotation"
-msgstr "Griešanas sākumpunkts"
+msgstr "Pieskaņojiet griešanas sākumpunktu"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
 #: ../src/live_effects/lpe-transform_2pts.cpp:37
@@ -9747,17 +9762,14 @@ msgid "Start point"
 msgstr "Sākumpunkts"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Starting point to define start angle"
-msgstr "Smailinājuma sākumpunkts"
+msgstr "Izejas punkts sākuma leņķa noteikšanai"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Adjust starting point to define start angle"
-msgstr "Pieskaņot sākuma leņki"
+msgstr "Pielāgojiet izejas punktu, lai definētu sākuma leņķi"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:44
-#, fuzzy
 msgid "Starting:"
 msgstr "Sākums:"
 
@@ -9766,9 +9778,8 @@ msgid "Angle of the first copy"
 msgstr "Pirmās kopijas leņkis"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:45
-#, fuzzy
 msgid "Rotation angle:"
-msgstr "Sākuma leņķis"
+msgstr "Griešanas leņķis:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:45
 msgid "Angle between two successive copies"
@@ -9784,21 +9795,22 @@ msgstr "Sākotnējā ceļa kopiju skaits"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:47
 msgid "360º Copies"
-msgstr ""
+msgstr "360º Kopijas"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:47
 msgid "No rotation angle, fixed to 360º"
-msgstr ""
+msgstr "Nav griešanas leņķa, fiksēti 360º"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:48
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
-#, fuzzy
 msgid "Fuse paths"
-msgstr "Pagarināt ceļu"
+msgstr "Apvienot ceļus"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:48
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
 msgstr ""
+"Apvienojiet ceļu gar palīglīniju, labākam rezultātam izmantojiet "
+"aizpildījuma veidu: evenodd"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:41
 msgid "Stitch path:"
@@ -9955,14 +9967,12 @@ msgid "Second path from which to take the original path data"
 msgstr "Otrais ceļš, no kura ņemt sākotnējos ceļa datus"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
-#, fuzzy
 msgid "Reverse Second"
-msgstr "Ot_rādi"
+msgstr "Apgriezt otro"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
-#, fuzzy
 msgid "Reverses the second path order"
-msgstr "Pagriezt krāsu pārejas virzienu uz pretējo pusi"
+msgstr "Apgriež otrā ceļa kārtību"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:41
 #: ../src/widgets/text-toolbar.cpp:1908
@@ -9971,14 +9981,12 @@ msgid "Auto"
 msgstr "Auto"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:42
-#, fuzzy
 msgid "Force arc"
-msgstr "Spēks"
+msgstr "Piespiedu loks"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:43
-#, fuzzy
 msgid "Force bezier"
-msgstr "Bezjē"
+msgstr "Piespiedu Bezjē"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:53
 msgid "Fillet point"
@@ -10025,14 +10033,12 @@ msgid "Chamfer steps"
 msgstr "Nokāpes fazītes soļi"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:63
-#, fuzzy
 msgid "Helper size with direction:"
-msgstr "Režģa izmērs X virzienā."
+msgstr "Palīga izmērs ar virzienu:"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:63
-#, fuzzy
 msgid "Helper size with direction"
-msgstr "Režģa izmērs X virzienā."
+msgstr "Palīga izmērs ar virzienu"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:103
 msgid "IMPORTANT! New version soon..."
@@ -10064,20 +10070,17 @@ msgid "Inverse chamfer"
 msgstr "Otrādā nokāpes fazīte"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:247
-#, fuzzy
 msgid "Convert to fillet"
-msgstr "Pārveidot uz Breilu"
+msgstr "Pārveidot pa apcilni"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:254
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:278
-#, fuzzy
 msgid "Convert to inverse fillet"
-msgstr "Pārveidot uz Breilu"
+msgstr "Pārveidot par inverso apcilni"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:270
-#, fuzzy
 msgid "Convert to chamfer"
-msgstr "Pārveidot par strīpiņām"
+msgstr "Pārveidot par nokāpes fazīti"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:290
 msgid "Knots and helper paths refreshed"
@@ -10103,13 +10106,12 @@ msgstr ""
 "Zobu spiediena leņķis (parasti - 20-25 gr). Kontaktā neesošu zobu attiecība."
 
 #: ../src/live_effects/lpe-gears.cpp:216
-#, fuzzy
 msgid "Min Radius:"
-msgstr "Rādiuss:"
+msgstr "Min. rādiuss:"
 
 #: ../src/live_effects/lpe-gears.cpp:216
 msgid "Minimum radius, low values can be slow"
-msgstr ""
+msgstr "Minimālais rādiuss, mazas vērtības var būt lēnas"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Trajectory:"
@@ -10196,9 +10198,8 @@ msgid "Miter"
 msgstr "Salaidums"
 
 #: ../src/live_effects/lpe-jointype.cpp:34
-#, fuzzy
 msgid "Miter Clip"
-msgstr "Šķautņu asums:"
+msgstr "Apgrieztais salaidums"
 
 #. {LINEJOIN_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"}, // disabled because doesn't work well
 #: ../src/live_effects/lpe-jointype.cpp:35
@@ -10268,19 +10269,16 @@ msgid "Miter limit:"
 msgstr "Salaiduma ierobežojums"
 
 #: ../src/live_effects/lpe-jointype.cpp:59
-#, fuzzy
 msgid "Maximum length of the miter join (in units of stroke width)"
 msgstr "Slaiduma maksimālais garums (apmales vienībās)"
 
 #: ../src/live_effects/lpe-jointype.cpp:60
-#, fuzzy
 msgid "Force miter"
-msgstr "Salaidums"
+msgstr "Piespiedu salaidums"
 
 #: ../src/live_effects/lpe-jointype.cpp:60
-#, fuzzy
 msgid "Overrides the miter limit and forces a join."
-msgstr "Overrides the miter limit and forces a join."
+msgstr "Apiet salaiduma ierobežojumu un izveido salaidumu"
 
 #. initialise your parameters here:
 #: ../src/live_effects/lpe-knot.cpp:351
@@ -10352,7 +10350,7 @@ msgstr "Spoguļot pārvietojumus pa vertikāli"
 
 #: ../src/live_effects/lpe-lattice2.cpp:49
 msgid "Update while moving knots (maybe slow)"
-msgstr ""
+msgstr "Atsvaidzināt pārvietojot mezglus (var būt lēni)"
 
 #: ../src/live_effects/lpe-lattice2.cpp:50
 msgid "Control 0:"
@@ -10628,27 +10626,24 @@ msgid "Hide Points"
 msgstr "Slēpt punktus"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:30
-#, fuzzy
 msgid "Vertical Page Center"
-msgstr "Vertikālais punkts:"
+msgstr "Vertikālais lapas centrs"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:31
-#, fuzzy
 msgid "Horizontal Page Center"
-msgstr "Horizontālais punkts:"
+msgstr "Horizontālais lapas centrs"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:32
-#, fuzzy
 msgid "Free from reflection line"
-msgstr "Aizvākt no atlases kopas"
+msgstr "Brīvs no spoguļlīnijas"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:33
 msgid "X from middle knot"
-msgstr ""
+msgstr "X no vidējā mezgla"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:34
 msgid "Y from middle knot"
-msgstr ""
+msgstr "Y no vidējā mezgla"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:41
 #: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
@@ -10656,9 +10651,8 @@ msgid "Mode"
 msgstr "Režīms"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:41
-#, fuzzy
 msgid "Symmetry move mode"
-msgstr "Simetrisks mezgls"
+msgstr "Simetrijas pārvietošanas režīms"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:42
 msgid "Discard original path?"
@@ -10670,46 +10664,39 @@ msgstr "Atzīmējiet šo, lai saglabātu tikai atspoguļoto ceļa daļu"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
 msgid "Fuse original and the reflection into a single path"
-msgstr ""
+msgstr "Apvienot oriģinālu un atspulgu vienā ceļā"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
-#, fuzzy
 msgid "Opposite fuse"
-msgstr "Sapludināt pretējos"
+msgstr "Pretējais apvienojums"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
-#, fuzzy
 msgid "Picks the other side of the mirror as the original"
-msgstr "Kloni tiek nobīdīti gar to pašu vektoru, kā to oriģināls"
+msgstr "Kā oriģināls tiek izmantots atspulgs"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Start mirror line"
-msgstr "Sākumpunkts"
+msgstr "Spoguļa līnijas sākums"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Adjust start of mirroring"
-msgstr "Pieskaņot piesātinājumu"
+msgstr "Pielāgojiet spoguļattēlošanas sākumu"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
 msgid "End mirror line"
-msgstr ""
+msgstr "Spoguļa līnijas beigas"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
-#, fuzzy
 msgid "Adjust end of mirroring"
-msgstr "Pieskaņot sākumu"
+msgstr "Pielāgojiet spoguļattēlošanas beigas"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Center mirror line"
-msgstr "Sākumpunkts"
+msgstr "Centrēt spoguļa līniju"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Adjust center of mirroring"
-msgstr "Pieskaņot sākumu"
+msgstr "Pielāgojiet spoguļattēlošanas centru"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:53
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -11136,9 +11123,8 @@ msgid "By max. segment size"
 msgstr "Pēc maks. segmenta izmēra"
 
 #: ../src/live_effects/lpe-roughen.cpp:39
-#, fuzzy
 msgid "Along nodes"
-msgstr "Savienot mezglus"
+msgstr "Gar mezgliem"
 
 #: ../src/live_effects/lpe-roughen.cpp:40
 #, fuzzy
@@ -11146,9 +11132,8 @@ msgid "Rand"
 msgstr "Rands"
 
 #: ../src/live_effects/lpe-roughen.cpp:41
-#, fuzzy
 msgid "Retract"
-msgstr "Izslēgšanās atraušanu skaits"
+msgstr "Atvilkt"
 
 #. initialise your parameters here:
 #: ../src/live_effects/lpe-roughen.cpp:50
@@ -11176,9 +11161,8 @@ msgid "Max. displacement in Y"
 msgstr "Maks. pārvietojums gar Y"
 
 #: ../src/live_effects/lpe-roughen.cpp:60
-#, fuzzy
 msgid "Global randomize"
-msgstr "_Sajaukt"
+msgstr "Globālā sajaukšana"
 
 #: ../src/live_effects/lpe-roughen.cpp:62
 msgid "Handles"
@@ -11194,14 +11178,12 @@ msgid "Shift nodes"
 msgstr "Pārbīdīt mezglus"
 
 #: ../src/live_effects/lpe-roughen.cpp:66
-#, fuzzy
 msgid "Fixed displacement"
-msgstr "X nobīde:"
+msgstr "Fiksēta nobīde"
 
 #: ../src/live_effects/lpe-roughen.cpp:66
-#, fuzzy
 msgid "Fixed displacement, 1/3 of segment length"
-msgstr "X nobīde:"
+msgstr "Fiksēta nobīde, 1/3 no segmenta garuma"
 
 #: ../src/live_effects/lpe-roughen.cpp:68
 msgid "Spray Tool friendly"
@@ -11270,7 +11252,8 @@ msgstr "Iezīmes attālu_ms:"
 msgid "Distance between successive ruler marks"
 msgstr "Attālums starp blakus esošām mērjoslas aizzīmēm"
 
-#: ../src/live_effects/lpe-ruler.cpp:42 ../share/extensions/foldablebox.inx.h:7
+#: ../src/live_effects/lpe-ruler.cpp:42
+#: ../share/extensions/foldablebox.inx.h:7
 #: ../share/extensions/interp_att_g.inx.h:9
 #: ../share/extensions/layout_nup.inx.h:3
 #: ../share/extensions/printing_marks.inx.h:11
@@ -11387,14 +11370,12 @@ msgid "Simplifying paths (separately)"
 msgstr "Vienkāršo ceļus (atsevišķi)"
 
 #: ../src/live_effects/lpe-simplify.cpp:36
-#, fuzzy
 msgid "Just coalesce"
-msgstr "Tikai tagad..."
+msgstr "Tikai savienot"
 
 #: ../src/live_effects/lpe-simplify.cpp:36
-#, fuzzy
 msgid "Simplify just coalesce"
-msgstr "Vienkāršot:"
+msgstr "Vienkāršot - tikai savienot"
 
 #. initialise your parameters here:
 #. testpointA(_("Test Point A"), _("Test A"), "ptA", &wr, this, Geom::Point(100,100)),
@@ -11574,20 +11555,16 @@ msgid "Amount of smoothing to apply to the tapers"
 msgstr "Smailinajuma gludinājuma lielums"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:77
-#, fuzzy
 msgid "Join type:"
-msgstr ""
-"Lūdzu, ņemiet vērā, ka dažas datubāzes var neatbalstīt šo savienojuma tipu."
+msgstr "Slaiduma tips:"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:77
-#, fuzzy
 msgid "Join type for non-smooth nodes"
-msgstr "Auto-gludais mezgls"
+msgstr "Salaiduma tips nenogludinātiem mezgliem"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:78
-#, fuzzy
 msgid "Limit for miter joins"
-msgstr "Šķautņu asums:"
+msgstr "Salaiduma ierobežojums"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:447
 msgid "Start point of the taper"
@@ -11606,19 +11583,16 @@ msgid "Elastic transform mode"
 msgstr "Elastīgās pārveidošanas režīms"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
-#, fuzzy
 msgid "From original width"
-msgstr "Klonēt sākotnējo ceļu"
+msgstr "No oriģinālā platuma"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
-#, fuzzy
 msgid "Lock length"
 msgstr "Slēgt garumu"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
-#, fuzzy
 msgid "Lock length to current distance"
-msgstr "Aizslēdz vai atslēdz pašreizējo slāni"
+msgstr "Noslēgt garumu vienādu ar pašreizējo attālumu"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:34
 msgid "Lock angle"
@@ -11645,9 +11619,8 @@ msgid "Stretch the result"
 msgstr "Izstiept rezultātu"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:40
-#, fuzzy
 msgid "Offset from knots"
-msgstr "Pārbīdes punkti"
+msgstr "Nobīde no mezgliem"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 msgid "First Knot"
@@ -11658,9 +11631,8 @@ msgid "Last Knot"
 msgstr "Pēdējais mezgls"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:43
-#, fuzzy
 msgid "Rotation helper size"
-msgstr "Griešanās centrs"
+msgstr "Griešanas palīga lielums"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:196
 msgid "Change index of knot"
@@ -11866,9 +11838,8 @@ msgid "Change text parameter"
 msgstr "Mainīt teksta poarametru"
 
 #: ../src/live_effects/parameter/togglebutton.cpp:114
-#, fuzzy
 msgid "Change togglebutton parameter"
-msgstr "Mainīt piespiedu punkta parametru"
+msgstr "Mainīt pārslēgšanas pogas parametru"
 
 #: ../src/live_effects/parameter/transformedpoint.cpp:98
 #: ../src/live_effects/parameter/vector.cpp:99
@@ -12038,13 +12009,12 @@ msgid "Export document to an EPS file"
 msgstr "Eksportēt dokumentu EPS datnē"
 
 #: ../src/main.cpp:412
-#, fuzzy
 msgid ""
 "Choose the PostScript Level used to export. Possible choices are 2 and 3 "
 "(the default)"
 msgstr ""
-"Izvēlieties Postscript līmeni, ko izmantot eksportam. Iespējas ir divas - 2 "
-"(noklusētais) un 3."
+"Izvēlieties Postscript līmeni, ko izmantot eksportam. Iespējas ir 2 un 3 "
+"(noklusētais)."
 
 #: ../src/main.cpp:414
 msgid "PS Level"
@@ -12637,7 +12607,8 @@ msgstr "<b>Nekas</b> nav izdzēst."
 #: ../src/widgets/eraser-toolbar.cpp:120
 #: ../src/widgets/gradient-toolbar.cpp:1181
 #: ../src/widgets/gradient-toolbar.cpp:1195
-#: ../src/widgets/gradient-toolbar.cpp:1209 ../src/widgets/node-toolbar.cpp:401
+#: ../src/widgets/gradient-toolbar.cpp:1209
+#: ../src/widgets/node-toolbar.cpp:401
 msgid "Delete"
 msgstr "Dzēst"
 
@@ -12665,15 +12636,15 @@ msgstr "Grupēt"
 
 #: ../src/selection-chemistry.cpp:798
 msgid "<b>No objects selected</b> to pop out of group."
-msgstr ""
+msgstr "<b>Nav atlasīti</b> no grupas izceļami objekti."
 
 #: ../src/selection-chemistry.cpp:808
 msgid "Selection <b>not in a group</b>."
-msgstr ""
+msgstr "Atlase <b>nav grupā</b>."
 
 #: ../src/selection-chemistry.cpp:822
 msgid "Pop selection from group"
-msgstr ""
+msgstr "Izcelt atlasīto ārā no gru_pas"
 
 #: ../src/selection-chemistry.cpp:830
 msgid "Select a <b>group</b> to ungroup."
@@ -13515,8 +13486,8 @@ msgstr "Grupēšana pēc nosacījuma"
 
 #: ../src/sp-text.cpp:354 ../src/verbs.cpp:347
 #: ../share/extensions/lorem_ipsum.inx.h:8
-#: ../share/extensions/replace_font.inx.h:11 ../share/extensions/split.inx.h:10
-#: ../share/extensions/text_braille.inx.h:2
+#: ../share/extensions/replace_font.inx.h:11
+#: ../share/extensions/split.inx.h:10 ../share/extensions/text_braille.inx.h:2
 #: ../share/extensions/text_extract.inx.h:14
 #: ../share/extensions/text_flipcase.inx.h:2
 #: ../share/extensions/text_lowercase.inx.h:2
@@ -14163,15 +14134,15 @@ msgstr "Atlasītais laukums"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1097
 msgid "Middle of selection"
-msgstr ""
+msgstr "Atlases vidus"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1098
 msgid "Min value"
-msgstr ""
+msgstr "Min. vērtība"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1099
 msgid "Max value"
-msgstr ""
+msgstr "Maks. vērtība"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:40
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:138
@@ -14555,6 +14526,8 @@ msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke or on spray tool in copy mode)"
 msgstr ""
+"Klonu sākotnējā krāsa (darbojas tikai tad, ja oriģinālam nav iestatīts "
+"aizpildījums vai apmale vai arī smidzināšanas rīks darbojas kopēšanas režīmā)"
 
 #: ../src/ui/dialog/clonetiler.cpp:680
 msgid "<b>H:</b>"
@@ -14627,6 +14600,8 @@ msgid ""
 "For each clone/sprayed item, pick a value from the drawing in its location "
 "and apply it"
 msgstr ""
+"Katram klonētajam/izsmidzinātajam objektam izvēlieties vērtību no attēla tā "
+"atrašanās vietā un pielietojiet to."
 
 #: ../src/ui/dialog/clonetiler.cpp:811
 msgid "1. Pick from the drawing:"
@@ -14760,7 +14735,7 @@ msgstr ""
 
 #: ../src/ui/dialog/clonetiler.cpp:1011
 msgid "Apply to tiled clones:"
-msgstr ""
+msgstr "Pielieto klonētā raksta elementiem:"
 
 #: ../src/ui/dialog/clonetiler.cpp:1052
 msgid "How many rows in the tiling"
@@ -15224,7 +15199,8 @@ msgstr "_Aizvākt"
 msgid "Remove selected grid."
 msgstr "Aizvākt izvēlēto režģi."
 
-#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1910
+#: ../src/ui/dialog/document-properties.cpp:162
+#: ../src/widgets/toolbox.cpp:1910
 msgid "Guides"
 msgstr "Palīglīnijas"
 
@@ -15663,7 +15639,8 @@ msgstr "Informācija"
 #: ../share/extensions/jitternodes.inx.h:12
 #: ../share/extensions/layout_nup.inx.h:24
 #: ../share/extensions/lindenmayer.inx.h:13
-#: ../share/extensions/lorem_ipsum.inx.h:6 ../share/extensions/measure.inx.h:33
+#: ../share/extensions/lorem_ipsum.inx.h:6
+#: ../share/extensions/measure.inx.h:33
 #: ../share/extensions/pathalongpath.inx.h:16
 #: ../share/extensions/pathscatter.inx.h:18
 #: ../share/extensions/restack.inx.h:25 ../share/extensions/split.inx.h:8
@@ -16538,13 +16515,13 @@ msgstr ""
 "caurspīdīgāki - attālinānti."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3042
-#, fuzzy
 msgid ""
 "The <b>feTile</b> filter primitive tiles a region with an input graphic. The "
 "source tile is defined by the filter primitive subregion of the input."
 msgstr ""
-"<b>feImage</b> filtra primitīvs aizpilda apgabalu ar ārējā attēla vai citu "
-"dokumenta daļu kopijām."
+"<b>feTile</b> filtra primitīvs aizpilda apgabalu ar izejas raksta "
+"elementiem. Izejas raksta elements tiek noteikts ar filtra primitīva ievades "
+"attēla apakšapgabalu."
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:3046
 msgid ""
@@ -17703,11 +17680,11 @@ msgstr "Ie_statīt atstarpes:"
 
 #: ../src/ui/dialog/guides.cpp:47
 msgid "Lo_cked"
-msgstr ""
+msgstr "Slē_gts"
 
 #: ../src/ui/dialog/guides.cpp:47
 msgid "Lock the movement of guides"
-msgstr ""
+msgstr "Slēgt palīglīniju pārvietošanu"
 
 #: ../src/ui/dialog/guides.cpp:48
 msgid "Rela_tive change"
@@ -18548,9 +18525,8 @@ msgid "Kannada (kn)"
 msgstr "Kannadas (kn)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
-#, fuzzy
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
-msgstr "Kašmiru peso-arābiskā rakstībā (ks@aran)"
+msgstr "Kašmiru perso-arābiskā rakstībā (ks@aran)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Kashmiri in Devanagari script (ks@deva)"
@@ -18569,9 +18545,8 @@ msgid "Konkani (kok)"
 msgstr "Konkani (kok)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
-#, fuzzy
 msgid "Konkani in Latin script (kok@latin)"
-msgstr "Serbu latīniskais (sr@latin)"
+msgstr "Konkani latīņu rakstībā (kok@latin)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Korean (ko)"
@@ -18627,7 +18602,7 @@ msgstr "Norvēģu Nynorsk (Norvēģija)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:553
 msgid "Odia (or)"
-msgstr ""
+msgstr "Odia (vai)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:554
 msgid "Panjabi (pa)"
@@ -18740,25 +18715,22 @@ msgstr "Iestatiet valodu izvēlnēm un skaitļu formātiem"
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
 msgctxt "Icon size"
 msgid "Larger"
-msgstr ""
+msgstr "Lielākas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
-#, fuzzy
 msgctxt "Icon size"
 msgid "Large"
 msgstr "Lielas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
-#, fuzzy
 msgctxt "Icon size"
 msgid "Small"
 msgstr "Mazas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
-#, fuzzy
 msgctxt "Icon size"
 msgid "Smaller"
-msgstr "Mazāks"
+msgstr "Mazākas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:621
 msgid "Toolbox icon size:"
@@ -19987,9 +19959,8 @@ msgstr "Ritināšana"
 
 #. Snapping options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1270
-#, fuzzy
 msgid "Snap indicator"
-msgstr "Ieslēgt piesaistes rādītāju"
+msgstr "Piesaistes  indikators"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1272
 msgid "Enable snap indicator"
@@ -20001,17 +19972,18 @@ msgstr "Pēc piesaistes, piesaistes punktā tiek attēlots simbols"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1279
 msgid "Snap indicator persistence (in seconds):"
-msgstr ""
+msgstr "Piesaistes indikatora darbības laiks (sekundēs):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1280
 msgid ""
 "Controls how long the snap indicator message will be shown, before it "
 "disappears"
 msgstr ""
+"Nosaka, cik ilgi pievilkšanas indikatora paziņojums tiek attēlots uz ekrāna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1282
 msgid "What should snap"
-msgstr ""
+msgstr "Kas būtu jāpievelk"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1284
 msgid "Only snap the node closest to the pointer"
@@ -20050,14 +20022,12 @@ msgstr ""
 "atrašanās vietai, nevis pievilkt ierobežojošajai līnijai mezgla projekciju"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1296
-#, fuzzy
 msgid "Delayed snap"
-msgstr "Vienmēr pievilkt"
+msgstr "Aizkavētā pievilkšana"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1299
-#, fuzzy
 msgid "Delay (in seconds):"
-msgstr "Aiz_ture (milisekundēs):"
+msgstr "Aizture (sekundēs):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1300
 msgid ""
@@ -20863,7 +20833,8 @@ msgstr "X slīpums"
 msgid "Y tilt"
 msgstr "Y slīpums"
 
-#: ../src/ui/dialog/input.cpp:1616 ../src/ui/widget/color-wheel-selector.cpp:29
+#: ../src/ui/dialog/input.cpp:1616
+#: ../src/ui/widget/color-wheel-selector.cpp:29
 msgid "Wheel"
 msgstr "Ritenis"
 
@@ -21396,13 +21367,11 @@ msgid "Set object blur"
 msgstr "Iestatiet objekta aizmiglošanu"
 
 #: ../src/ui/dialog/objects.cpp:1628
-#, fuzzy
 msgctxt "Visibility"
 msgid "V"
 msgstr "V"
 
 #: ../src/ui/dialog/objects.cpp:1629
-#, fuzzy
 msgctxt "Lock"
 msgid "L"
 msgstr "L"
@@ -21418,7 +21387,6 @@ msgid "CM"
 msgstr "CM"
 
 #: ../src/ui/dialog/objects.cpp:1632
-#, fuzzy
 msgctxt "Highlight"
 msgid "HL"
 msgstr "HL"
@@ -21441,6 +21409,8 @@ msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
 msgstr ""
+"Tips: slānis, grupa vai objekts. Klikšķinot uz Slāņa vai Grupas ikonas "
+"pārslēdz starp šie diviem tipiem."
 
 #: ../src/ui/dialog/objects.cpp:1719
 msgid "Is object clipped and/or masked?"
@@ -21457,6 +21427,8 @@ msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
 msgstr ""
+"Slāņā/grupas/objekta etiķete (inkscape:label). Dubultklikšķis, lai "
+"uzstādītu. Noklusētā vērtība ir objekta 'id'."
 
 #: ../src/ui/dialog/objects.cpp:1838
 msgid "Add layer..."
@@ -21516,16 +21488,14 @@ msgid "Down"
 msgstr "Lejup"
 
 #: ../src/ui/dialog/objects.cpp:1927
-#, fuzzy
 msgid "Set Clip"
-msgstr "Pielietot apgriešanas kontūru"
+msgstr "Iestatīt apgriešanas kontūru"
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
 #: ../src/ui/dialog/objects.cpp:1933
-#, fuzzy
 msgid "Unset Clip"
-msgstr "Pielietot apgriešanas kontūru"
+msgstr "Atiestatīt apgriešanas kontūru"
 
 #. Set mask
 #: ../src/ui/dialog/objects.cpp:1937 ../src/ui/interface.cpp:1754
@@ -21670,15 +21640,18 @@ msgstr "Kopfa-Lišinska algoritms"
 msgid "Output"
 msgstr "Izvade"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:297 ../src/ui/dialog/tracedialog.cpp:814
+#: ../src/ui/dialog/pixelartdialog.cpp:297
+#: ../src/ui/dialog/tracedialog.cpp:814
 msgid "Reset all settings to defaults"
 msgstr "Atiestatīt visus iestatījumus uz noklusētajiem"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:302 ../src/ui/dialog/tracedialog.cpp:819
+#: ../src/ui/dialog/pixelartdialog.cpp:302
+#: ../src/ui/dialog/tracedialog.cpp:819
 msgid "Abort a trace in progress"
 msgstr "Atcelt notiekošo vektorizēšanu"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:306 ../src/ui/dialog/tracedialog.cpp:823
+#: ../src/ui/dialog/pixelartdialog.cpp:306
+#: ../src/ui/dialog/tracedialog.cpp:823
 msgid "Execute the trace"
 msgstr "Izpildīt vektorizēšanu"
 
@@ -22049,7 +22022,8 @@ msgid "Preview Text:"
 msgstr "Teksta priekšskatījums:"
 
 #: ../src/ui/dialog/swatches.cpp:202 ../src/ui/tools/gradient-tool.cpp:366
-#: ../src/ui/tools/gradient-tool.cpp:464 ../src/widgets/gradient-vector.cpp:801
+#: ../src/ui/tools/gradient-tool.cpp:464
+#: ../src/widgets/gradient-vector.cpp:801
 msgid "Add gradient stop"
 msgstr "Pievienot krāsu pārejas pieturpunktu"
 
@@ -22849,7 +22823,7 @@ msgstr "Ievadiet (ieejiet) grupu(ā) #%1"
 #. Pop selection out of group
 #: ../src/ui/interface.cpp:1528
 msgid "_Pop selection out of group"
-msgstr ""
+msgstr "Izcelt atlasīto ārā no gru_pas"
 
 #. Item dialog
 #: ../src/ui/interface.cpp:1656 ../src/verbs.cpp:2940
@@ -23055,26 +23029,24 @@ msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Mainīt elipses <b>augstumu</b>, ar <b>Ctrl</b> - pārveidot par riņķi"
 
 #: ../src/ui/object-edit.cpp:1004
-#, fuzzy
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Novietojiet loka vai segmenta <b>sākumpunktu</b>; ar <b>Ctrl</b> - pievilkt "
-"leņķim; lai iegūtu loku, velciet elipses <b>iekšpusē</b>; lai iegūtu sektoru "
-"- <b>ārpusē</b>"
+"Novietojiet loka vai sektora <b>sākuma punktu</b>; ar <b>Shift</b> "
+"pārvietojiet kopā ar <b>beigu punktu</b>; ar <b>Ctrl</b> pievilkt leņķim; "
+"velciet elipses<b>iekšpusē</b>, lai iegūtu loku, <b>ārpusē</b> - sektoru"
 
 #: ../src/ui/object-edit.cpp:1010
-#, fuzzy
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Novietojiet loka vai segmenta <b>beigu punktu</b>; ar <b>Ctrl</b> - pievilkt "
-"leņķim; lai iegūtu loku, velciet elipses <b>iekšpusē</b>; lai iegūtu sektoru "
-"- <b>ārpusē</b>"
+"Novietojiet loka vai sektora <b>beigu punktu</b>; ar <b>Shift</b> "
+"pārvietojiet kopā ar <b>sākuma punktu</b>; ar <b>Ctrl</b> pievilkt leņķim; "
+"velciet elipses<b>iekšpusē</b>, lai iegūtu loku, <b>ārpusē</b> - sektoru"
 
 #: ../src/ui/object-edit.cpp:1157
 msgid ""
@@ -23122,10 +23094,9 @@ msgid "Drag curve"
 msgstr "Vilkt līkni"
 
 #: ../src/ui/tool/curve-drag-point.cpp:192
-#, fuzzy
 msgctxt "Path segment tip"
 msgid "<b>Shift</b>: drag to open or move BSpline handles"
-msgstr "<b>Shift</b>: pārvietot turi"
+msgstr "<b>Shift</b>: velciet, lai atvērtu vai pārvietotu B-splaina turus"
 
 #: ../src/ui/tool/curve-drag-point.cpp:196
 msgctxt "Path segment tip"
@@ -23138,13 +23109,12 @@ msgid "<b>Ctrl+Alt</b>: click to insert a node"
 msgstr "<b>Ctrl+Alt</b>: uzklikšķiniet, lai pievienotu mezglu"
 
 #: ../src/ui/tool/curve-drag-point.cpp:204
-#, fuzzy
 msgctxt "Path segment tip"
 msgid ""
 "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert "
 "node, click to select (more: Shift, Ctrl+Alt)"
 msgstr ""
-"<b>Bezjē posms</b>: velciet, lai veidotu posmu, dubultklikšķis - lai "
+"<b>B-splaina posms</b>: velciet, lai veidotu posmu, dubultklikšķis - lai "
 "pievienotu mezglu, klikšķis - lai atlasītu (vairāk: Shift, Ctrl+Alt)"
 
 #: ../src/ui/tool/curve-drag-point.cpp:209
@@ -23332,6 +23302,8 @@ msgstr ""
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
 msgstr ""
+"<b>Ctrl</b>: pievilkt turi pie soļiem, kas noteikti ar B-splaina ceļa (LPE) "
+"efektu"
 
 #: ../src/ui/tool/node.cpp:532
 #, c-format
@@ -23358,12 +23330,14 @@ msgid "<b>Auto node handle</b>: drag to convert to smooth node (%s)"
 msgstr "<b>Auto mezgla turis</b>: velciet, lai pārvērstu par gludo mezglu (%s)"
 
 #: ../src/ui/tool/node.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgctxt "Path handle tip"
 msgid ""
 "<b>BSpline node handle</b>: Shift to drag, double click to reset (%s). %g "
 "power"
-msgstr "<b>Auto mezgla turis</b>: velciet, lai pārvērstu par gludo mezglu (%s)"
+msgstr ""
+"<b>B-splaina mezgla turis</b>: Shift, lai vilktu, dubultklikšķis - "
+"atiestatīt (%s). %g pakāpe"
 
 #: ../src/ui/tool/node.cpp:574
 #, c-format
@@ -23406,12 +23380,14 @@ msgid "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"
 msgstr "<b>%s</b>: velciet, lai veidotu ceļu (vairāk: Shift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1451
-#, fuzzy, c-format
+#, c-format
 msgctxt "Path node tip"
 msgid ""
 "<b>BSpline node</b>: drag to shape the path (more: Shift, Ctrl, Alt). %g "
 "power"
-msgstr "<b>%s</b>: velciet, lai veidotu ceļu (vairāk: Shift, Ctrl, Alt)"
+msgstr ""
+"<b>B-splaina mezgls</b>: velciet, lai veidotu ceļu (vairāk: Shift, Ctrl, "
+"Alt). %g pakāpe"
 
 #: ../src/ui/tool/node.cpp:1454
 #, c-format
@@ -23434,14 +23410,14 @@ msgstr ""
 "mezglu (vairāk: Shift, Ctrl, Alt)"
 
 #: ../src/ui/tool/node.cpp:1461
-#, fuzzy, c-format
+#, c-format
 msgctxt "Path node tip"
 msgid ""
 "<b>BSpline node</b>: drag to shape the path, click to select only this node "
 "(more: Shift, Ctrl, Alt). %g power"
 msgstr ""
-"<b>%s</b>: velciet, lai veidotu ceļu; uzklikšķiniet, lai atlasītu tikai šo "
-"mezglu (vairāk: Shift, Ctrl, Alt)"
+"<b>B-splaina mezgls</b>: velciet, lai veidotu ceļu, uzklikšķiniet, lai "
+"atlasītu tikai šo mezglu (vairāk: Shift, Ctrl, Alt). %g pakāpe"
 
 #: ../src/ui/tool/node.cpp:1474
 #, c-format
@@ -23470,7 +23446,8 @@ msgid "Rotate handle"
 msgstr "Griešanas turis "
 
 #. We need to call MPM's method because it could have been our last node
-#: ../src/ui/tool/path-manipulator.cpp:1558 ../src/widgets/node-toolbar.cpp:397
+#: ../src/ui/tool/path-manipulator.cpp:1558
+#: ../src/widgets/node-toolbar.cpp:397
 msgid "Delete node"
 msgstr "Dzēst mezglu"
 
@@ -24122,11 +24099,11 @@ msgstr "Izvēlieties konstruēšanas rīku no rīkjoslas."
 #. create the knots
 #: ../src/ui/tools/measure-tool.cpp:349
 msgid "Measure start, <b>Shift+Click</b> for position dialog"
-msgstr ""
+msgstr "Mērījuma sākums, <b>Shift+Click</b> novietojuma dialoglodziņam"
 
 #: ../src/ui/tools/measure-tool.cpp:355
 msgid "Measure end, <b>Shift+Click</b> for position dialog"
-msgstr ""
+msgstr "Mērījuma beigas, <b>Shift+Click</b> novietojuma dialoglodziņam"
 
 #: ../src/ui/tools/measure-tool.cpp:746 ../share/extensions/measure.inx.h:2
 msgid "Measure"
@@ -24138,24 +24115,24 @@ msgstr "Bāze"
 
 #: ../src/ui/tools/measure-tool.cpp:760
 msgid "Add guides from measure tool"
-msgstr ""
+msgstr "Pievieno palīglīnijas no mērīšanas rīka"
 
 #: ../src/ui/tools/measure-tool.cpp:780
 msgid "Keep last measure on the canvas, for reference"
-msgstr ""
+msgstr "Saglabāt pēdējo mērījumu uz audekla (atsaucei)"
 
 #: ../src/ui/tools/measure-tool.cpp:800
 msgid "Convert measure to items"
-msgstr ""
+msgstr "Pārvērst mērījumu par objektiem"
 
 #: ../src/ui/tools/measure-tool.cpp:838
 msgid "Add global measure line"
-msgstr ""
+msgstr "Pievienot globālu mērījuma līniju"
 
 #: ../src/ui/tools/measure-tool.cpp:1289 ../src/ui/tools/measure-tool.cpp:1291
 #, c-format
 msgid "Crossing %lu"
-msgstr ""
+msgstr "Šķērso %lu"
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/ui/tools/mesh-tool.cpp:142 ../src/ui/tools/mesh-tool.cpp:153
@@ -24211,14 +24188,12 @@ msgid "Picked mesh corner color."
 msgstr "Izvēlētā tīkla stūra krāsa."
 
 #: ../src/ui/tools/mesh-tool.cpp:478
-#, fuzzy
 msgid "Inserted new row or column."
-msgstr "Pievienota papildu rinda vai sleja"
+msgstr "Ievietotā jaunā rindā vai sleja."
 
 #: ../src/ui/tools/mesh-tool.cpp:548
-#, fuzzy
 msgid "Fit mesh inside bounding box."
-msgstr "Izmanto vizuālo robežrāmi"
+msgstr "Ietilpināt tīklu robežrāmī"
 
 #: ../src/ui/tools/mesh-tool.cpp:1189
 msgid "Create mesh"
@@ -24334,6 +24309,8 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Līknes posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Ctrl</b> "
+"pievilkt leņķim, <b>Enter</b> vai <b>Shift+Enter</b> pabeidz ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1798
 #, c-format
@@ -24341,6 +24318,8 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Līnijas posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Ctrl</b> "
+"pievilkt leņķim, <b>Enter</b> vai <b>Shift+Enter</b> pabeidz ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1801
 #, c-format
@@ -24348,6 +24327,8 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</"
 "b> make a cusp node, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Līknes posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Shift+Ctrl</b> "
+"izveido asu mezglu, <b>Enter</b> vai <b>Shift+Enter</b> pabeidz ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1802
 #, c-format
@@ -24355,6 +24336,8 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</b> "
 "make a cusp node, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Līnijas posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Shift+Ctrl</b> "
+"izveido asu mezglu, <b>Enter</b> vai <b>Shift+Enter</b> pabeidz ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1819
 #, c-format
@@ -25081,10 +25064,9 @@ msgid "Common"
 msgstr "Kopīgs"
 
 #: ../src/ui/widget/font-variants.cpp:40
-#, fuzzy
 msgctxt "Font variant"
 msgid "Discretionary"
-msgstr "Virziens"
+msgstr "Ierobežoti"
 
 #: ../src/ui/widget/font-variants.cpp:41
 msgctxt "Font variant"
@@ -25127,32 +25109,29 @@ msgid "Small"
 msgstr "Mazs"
 
 #: ../src/ui/widget/font-variants.cpp:52
-#, fuzzy
 msgctxt "Font variant"
 msgid "All small"
-msgstr "Visi attēli"
+msgstr "Visi mazi"
 
 #: ../src/ui/widget/font-variants.cpp:53
 msgctxt "Font variant"
 msgid "Petite"
-msgstr ""
+msgstr "Petite"
 
 #: ../src/ui/widget/font-variants.cpp:54
-#, fuzzy
 msgctxt "Font variant"
 msgid "All petite"
-msgstr "Visi neaktīvi"
+msgstr "Visi mazi"
 
 #: ../src/ui/widget/font-variants.cpp:55
 msgctxt "Font variant"
 msgid "Unicase"
-msgstr ""
+msgstr "Unicase"
 
 #: ../src/ui/widget/font-variants.cpp:56
-#, fuzzy
 msgctxt "Font variant"
 msgid "Titling"
-msgstr "Burāšana"
+msgstr "Titling"
 
 #: ../src/ui/widget/font-variants.cpp:58
 msgctxt "Font variant"
@@ -25160,10 +25139,9 @@ msgid "Numeric"
 msgstr "Skaitlisks"
 
 #: ../src/ui/widget/font-variants.cpp:59
-#, fuzzy
 msgctxt "Font variant"
 msgid "Lining"
-msgstr "Sašaurināšanās:"
+msgstr "Lining"
 
 #: ../src/ui/widget/font-variants.cpp:60
 msgctxt "Font variant"
@@ -25196,22 +25174,19 @@ msgid "Diagonal"
 msgstr "Diagonāls"
 
 #: ../src/ui/widget/font-variants.cpp:66
-#, fuzzy
 msgctxt "Font variant"
 msgid "Stacked"
-msgstr "Aizmugure"
+msgstr "Stacked"
 
 #: ../src/ui/widget/font-variants.cpp:67
-#, fuzzy
 msgctxt "Font variant"
 msgid "Default Fractions"
-msgstr "Noklusētie režģa iestatījumi"
+msgstr "Noklusētās daļas"
 
 #: ../src/ui/widget/font-variants.cpp:68
-#, fuzzy
 msgctxt "Font variant"
 msgid "Ordinal"
-msgstr "Kārtas skaitļa vārds"
+msgstr "Kārtas skaitļi"
 
 #: ../src/ui/widget/font-variants.cpp:69
 msgctxt "Font variant"
@@ -25219,15 +25194,14 @@ msgid "Slashed Zero"
 msgstr "Pārsvītrota nulle"
 
 #: ../src/ui/widget/font-variants.cpp:71
-#, fuzzy
 msgctxt "Font variant"
 msgid "Feature Settings"
-msgstr "Lapas iestatījumi"
+msgstr "Feature Settings"
 
 #: ../src/ui/widget/font-variants.cpp:72
 msgctxt "Font variant"
 msgid "Selection has different Feature Settings!"
-msgstr ""
+msgstr "Atlase satur atšķirīgu Feature Settings!"
 
 #: ../src/ui/widget/font-variants.cpp:85
 msgid "Common ligatures. On by default. OpenType tables: 'liga', 'clig'"
@@ -25238,6 +25212,7 @@ msgstr ""
 #: ../src/ui/widget/font-variants.cpp:87
 msgid "Discretionary ligatures. Off by default. OpenType table: 'dlig'"
 msgstr ""
+"Ierobežotās ligatūras. Pēc noklusējuma - atslēgtas. OpenType tabula: 'dlig'"
 
 #: ../src/ui/widget/font-variants.cpp:89
 msgid "Historical ligatures. Off by default. OpenType table: 'hlig'"
@@ -25271,33 +25246,37 @@ msgstr "Normāla kapitalizācija."
 
 #: ../src/ui/widget/font-variants.cpp:139
 msgid "Small-caps (lowercase). OpenType table: 'smcp'"
-msgstr ""
+msgstr "Kapiteļi (mazie). OpenType tabula: 'smcp'"
 
 #: ../src/ui/widget/font-variants.cpp:140
 msgid ""
 "All small-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'smcp'"
-msgstr ""
+msgstr "Visi kapiteļi (lielie un mazie). OpenType tabulas: 'c2sc' un 'smcp'"
 
 #: ../src/ui/widget/font-variants.cpp:141
 msgid "Petite-caps (lowercase). OpenType table: 'pcap'"
-msgstr ""
+msgstr "Mazie kapiteļi (mazie). OpenType tabula: 'pcap'"
 
 #: ../src/ui/widget/font-variants.cpp:142
 msgid ""
 "All petite-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'pcap'"
 msgstr ""
+"Visi mazie kapiteļi (lielie un mazie). OpenType tabulas: 'c2sc' un 'pcap'"
 
 #: ../src/ui/widget/font-variants.cpp:143
 msgid ""
 "Unicase (small caps for uppercase, normal for lowercase). OpenType table: "
 "'unic'"
 msgstr ""
+"Unicase (kapiteļi lielajiem un parastie - mazajiem). OpenType tabula: 'unic'"
 
 #: ../src/ui/widget/font-variants.cpp:144
 msgid ""
 "Titling caps (lighter-weight uppercase for use in titles). OpenType table: "
 "'titl'"
 msgstr ""
+"Virsrakstu kapiteļi (vieglāki lielie lietošanai virsrakstos). OpenType "
+"tabula: 'titl'"
 
 #. Numeric ------------------------------
 #. Add tooltips
@@ -25307,11 +25286,11 @@ msgstr "Normālais stils."
 
 #: ../src/ui/widget/font-variants.cpp:181
 msgid "Lining numerals. OpenType table: 'lnum'"
-msgstr ""
+msgstr "Līdzināti cipari. OpenType tabula: 'lnum'"
 
 #: ../src/ui/widget/font-variants.cpp:182
 msgid "Old style numerals. OpenType table: 'onum'"
-msgstr ""
+msgstr "Vecā stila skaitļi.OpenType tabula: 'onum'"
 
 #: ../src/ui/widget/font-variants.cpp:183
 msgid "Normal widths."
@@ -25319,16 +25298,15 @@ msgstr "Normāli platumi."
 
 #: ../src/ui/widget/font-variants.cpp:184
 msgid "Proportional width numerals. OpenType table: 'pnum'"
-msgstr ""
+msgstr "Proporcionāla platuma skaitļi. OpenType tabula: 'pnum'"
 
 #: ../src/ui/widget/font-variants.cpp:185
 msgid "Same width numerals. OpenType table: 'tnum'"
-msgstr ""
+msgstr "Vienāda platuma skaitļi.OpenType tabula: 'tnum'"
 
 #: ../src/ui/widget/font-variants.cpp:186
-#, fuzzy
 msgid "Normal fractions."
-msgstr "Neņemt vērā attēla griešanu"
+msgstr "Parastas daļas."
 
 #: ../src/ui/widget/font-variants.cpp:187
 msgid "Diagonal fractions. OpenType table: 'frac'"
@@ -25336,11 +25314,11 @@ msgstr "Diagonālie daļskaitļi. OpenType tabula: 'frac'"
 
 #: ../src/ui/widget/font-variants.cpp:188
 msgid "Stacked fractions. OpenType table: 'afrc'"
-msgstr ""
+msgstr "Daudzlīmeņu daļas. OpenType tabula: 'afrc'"
 
 #: ../src/ui/widget/font-variants.cpp:189
 msgid "Ordinals (raised 'th', etc.). OpenType table: 'ordn'"
-msgstr ""
+msgstr "Kārtas skaitļi ('th' augšrakstā utml.). OpenType tabula: 'ordn'"
 
 #: ../src/ui/widget/font-variants.cpp:190
 msgid "Slashed zeros. OpenType table: 'zero'"
@@ -25500,9 +25478,8 @@ msgstr ""
 "tieši."
 
 #: ../src/ui/widget/page-sizer.cpp:483
-#, fuzzy
 msgid "_Viewbox..."
-msgstr "Skatīt"
+msgstr "_Skatrāmis..."
 
 #: ../src/ui/widget/page-sizer.cpp:590
 msgid "Set page size"
@@ -25513,9 +25490,8 @@ msgid "User units per "
 msgstr "Lietotāja vienības katrā"
 
 #: ../src/ui/widget/page-sizer.cpp:932
-#, fuzzy
 msgid "Set page scale"
-msgstr "Lapu komplekts"
+msgstr "Iestatīt lapas mērogu"
 
 #: ../src/ui/widget/panel.cpp:116
 msgid "List"
@@ -26877,11 +26853,11 @@ msgstr "Atgrupēt iezīmētās grupas"
 
 #: ../src/verbs.cpp:2565
 msgid "_Pop selected objects out of group"
-msgstr ""
+msgstr "Izcelt atlasītos objektu ārā no gru_pas"
 
 #: ../src/verbs.cpp:2566
 msgid "Pop selected objects out of group"
-msgstr ""
+msgstr "Izcelt atlasītos objektu ārā no grupas"
 
 #: ../src/verbs.cpp:2568
 msgid "_Put on Path"
@@ -28403,7 +28379,7 @@ msgstr "Pielāgot lapu zīmējumam"
 
 #: ../src/verbs.cpp:3008
 msgid "_Resize Page to Selection"
-msgstr ""
+msgstr "_Pielāgot lapas izmēru atlasei"
 
 #: ../src/verbs.cpp:3009
 msgid ""
@@ -29180,15 +29156,15 @@ msgstr "Dzēšgumijas platums (attiecībā pret redzamo auduma laukumu)"
 
 #: ../src/widgets/eraser-toolbar.cpp:171
 msgid "Eraser Mass"
-msgstr ""
+msgstr "Dzēšgumijas masa"
 
 #: ../src/widgets/eraser-toolbar.cpp:172
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
-msgstr ""
+msgstr "Palieliniet, lai dzēšgumija aizkavētos it kā tai būtu inerce"
 
 #: ../src/widgets/eraser-toolbar.cpp:186 ../src/widgets/eraser-toolbar.cpp:187
 msgid "Break apart cut items"
-msgstr ""
+msgstr "Sašķelt izgrieztos objektus"
 
 #: ../src/widgets/fill-style.cpp:367
 msgid "Change fill rule"
@@ -29211,14 +29187,12 @@ msgid "Set gradient on stroke"
 msgstr "Iestatīt apmales krāsu pāreju"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on fill"
-msgstr "Iestatīt aizpildījuma faktūru"
+msgstr "Iestatiet režģi aizpildījumam"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on stroke"
-msgstr "Iestatīt apmales faktūru"
+msgstr "Iestatiet režģi apmalei"
 
 #: ../src/widgets/fill-style.cpp:788
 msgid "Set pattern on fill"
@@ -29319,27 +29293,33 @@ msgstr "radiāls"
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "Izveidot radiālu (eliptisku vai riņķveida) krāsu pāreju"
 
-#: ../src/widgets/gradient-toolbar.cpp:1044 ../src/widgets/mesh-toolbar.cpp:405
+#: ../src/widgets/gradient-toolbar.cpp:1044
+#: ../src/widgets/mesh-toolbar.cpp:405
 msgid "New:"
 msgstr "Jauns:"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:428
+#: ../src/widgets/gradient-toolbar.cpp:1067
+#: ../src/widgets/mesh-toolbar.cpp:428
 msgid "fill"
 msgstr "aizpildīt"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:428
+#: ../src/widgets/gradient-toolbar.cpp:1067
+#: ../src/widgets/mesh-toolbar.cpp:428
 msgid "Create gradient in the fill"
 msgstr "Izveidot krāsu pāreju aizpildījumā"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:432
+#: ../src/widgets/gradient-toolbar.cpp:1071
+#: ../src/widgets/mesh-toolbar.cpp:432
 msgid "stroke"
 msgstr "apmale"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:432
+#: ../src/widgets/gradient-toolbar.cpp:1071
+#: ../src/widgets/mesh-toolbar.cpp:432
 msgid "Create gradient in the stroke"
 msgstr "Izveidot krāsu pāreju uz apmales"
 
-#: ../src/widgets/gradient-toolbar.cpp:1074 ../src/widgets/mesh-toolbar.cpp:435
+#: ../src/widgets/gradient-toolbar.cpp:1074
+#: ../src/widgets/mesh-toolbar.cpp:435
 msgid "on:"
 msgstr "uz:"
 
@@ -29439,7 +29419,8 @@ msgstr "Saistīt krāsu pārejas"
 msgid "Link gradients to change all related gradients"
 msgstr "Sasaistīt krāsu pārejas, lai mainītu visas saistītās krāsu pārejas"
 
-#: ../src/widgets/gradient-vector.cpp:317 ../src/widgets/paint-selector.cpp:947
+#: ../src/widgets/gradient-vector.cpp:317
+#: ../src/widgets/paint-selector.cpp:947
 #: ../src/widgets/paint-selector.cpp:1311
 #: ../src/widgets/stroke-marker-selector.cpp:154
 msgid "No document selected"
@@ -29481,11 +29462,11 @@ msgstr "Mainīt krāsu pārejas pieturpunkta krāsu"
 
 #: ../src/widgets/image-menu-item.c:151
 msgid "Image widget"
-msgstr ""
+msgstr "Attēla logdaļa"
 
 #: ../src/widgets/image-menu-item.c:152
 msgid "Child widget to appear next to the menu text"
-msgstr ""
+msgstr "Atvasinātā logdaļa, kurai jāparādās blakus izvēlnes tekstam"
 
 #: ../src/widgets/image-menu-item.c:167
 msgid "Use stock"
@@ -29577,11 +29558,11 @@ msgstr "Atvērt LPE dialoglodziņu (lai pieskaņotu parametrus skaitliski)"
 
 #: ../src/widgets/measure-toolbar.cpp:157
 msgid "Start and end measures inactive."
-msgstr ""
+msgstr "Sākuma un beigu mērījumi neaktīvi."
 
 #: ../src/widgets/measure-toolbar.cpp:159
 msgid "Start and end measures active."
-msgstr ""
+msgstr "Sākuma un beigu mērījumi aktīvi."
 
 #: ../src/widgets/measure-toolbar.cpp:175
 msgid "Show all crossings."
@@ -29593,11 +29574,11 @@ msgstr "Rādīt redzamās krustošanās."
 
 #: ../src/widgets/measure-toolbar.cpp:193
 msgid "Use all layers in the measure."
-msgstr ""
+msgstr "Mērīšanai izmantot visus slāņus."
 
 #: ../src/widgets/measure-toolbar.cpp:195
 msgid "Use current layer in the measure."
-msgstr ""
+msgstr "Mērīšanai izmantot pašreizējo slāni."
 
 #: ../src/widgets/measure-toolbar.cpp:211
 msgid "Compute all elements."
@@ -29656,12 +29637,12 @@ msgstr "Neņemt vērā pirmo un pēdējo"
 #: ../src/widgets/measure-toolbar.cpp:352
 #: ../src/widgets/measure-toolbar.cpp:353
 msgid "Show hidden intersections"
-msgstr ""
+msgstr "Rādīt slēptās krustošanās"
 
 #: ../src/widgets/measure-toolbar.cpp:363
 #: ../src/widgets/measure-toolbar.cpp:364
 msgid "Show measures between items"
-msgstr ""
+msgstr "Rādīt mērījumus starp objektiem"
 
 #: ../src/widgets/measure-toolbar.cpp:374
 #: ../src/widgets/measure-toolbar.cpp:375
@@ -29671,17 +29652,17 @@ msgstr "Mērīt visos slāņos"
 #: ../src/widgets/measure-toolbar.cpp:385
 #: ../src/widgets/measure-toolbar.cpp:386
 msgid "Reverse measure"
-msgstr ""
+msgstr "Reversā mērīšana"
 
 #: ../src/widgets/measure-toolbar.cpp:395
 #: ../src/widgets/measure-toolbar.cpp:396
 msgid "Phantom measure"
-msgstr ""
+msgstr "Spoku lineāls"
 
 #: ../src/widgets/measure-toolbar.cpp:405
 #: ../src/widgets/measure-toolbar.cpp:406
 msgid "To guides"
-msgstr ""
+msgstr "Pie palīglīnijām"
 
 #: ../src/widgets/measure-toolbar.cpp:415
 #: ../src/widgets/measure-toolbar.cpp:416
@@ -29691,7 +29672,7 @@ msgstr ""
 #: ../src/widgets/measure-toolbar.cpp:425
 #: ../src/widgets/measure-toolbar.cpp:426
 msgid "Convert to item"
-msgstr ""
+msgstr "Pārveidot par objektu"
 
 #: ../src/widgets/mesh-toolbar.cpp:293
 msgid "Set mesh type"
@@ -29774,10 +29755,11 @@ msgstr "Rādīt turus"
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
 msgstr "BRĪDINĀJUMS: Tīkla SVG sintakse tiks mainīta"
 
+# Coons=koniskās krāsu pārejas
 #: ../src/widgets/mesh-toolbar.cpp:545
 msgctxt "Type"
 msgid "Coons"
-msgstr ""
+msgstr "Koni"
 
 #: ../src/widgets/mesh-toolbar.cpp:548
 msgid "Bicubic"
@@ -29785,29 +29767,28 @@ msgstr "Bikubisks"
 
 #: ../src/widgets/mesh-toolbar.cpp:550
 msgid "Coons"
-msgstr ""
+msgstr "Koni"
 
 #: ../src/widgets/mesh-toolbar.cpp:551
 msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr ""
+"Koni: bez nogludinājuma. Bi-kubiskie: nogludinājums gar gabalu savienojumiem"
 
 #: ../src/widgets/mesh-toolbar.cpp:553 ../src/widgets/pencil-toolbar.cpp:381
 msgid "Smoothing:"
 msgstr "Nogludināšana:"
 
 #: ../src/widgets/mesh-toolbar.cpp:563
-#, fuzzy
 msgid "Toggle Sides"
-msgstr "Ieslēgt augšrakstu"
+msgstr "Pārslēgt malas"
 
 #: ../src/widgets/mesh-toolbar.cpp:564
 msgid "Toggle selected sides between Beziers and lines."
-msgstr ""
+msgstr "Parslēgt atlasītās malas starp Bezjē un parastajām līnijām."
 
 #: ../src/widgets/mesh-toolbar.cpp:567
-#, fuzzy
 msgid "Toggle side:"
-msgstr "Pārslēgt fokusēšanas režīmu"
+msgstr "Pārslēgt malu:"
 
 #: ../src/widgets/mesh-toolbar.cpp:574
 msgid "Make elliptical"
@@ -29818,39 +29799,36 @@ msgid ""
 "Make selected sides elliptical by changing length of handles. Works best if "
 "handles already approximate ellipse."
 msgstr ""
+"Padariet atlasītās malas eliptiskas, mainot turu garumu. Vislabāk darbojas, "
+"ja turi ir jau tuvināti elipsei."
 
 #: ../src/widgets/mesh-toolbar.cpp:578
 msgid "Make elliptical:"
 msgstr "Pārveidot par elipsi:"
 
 #: ../src/widgets/mesh-toolbar.cpp:585
-#, fuzzy
 msgid "Pick colors:"
-msgstr "Punktu krāsa"
+msgstr "Izvēlieties krāsas"
 
 #: ../src/widgets/mesh-toolbar.cpp:586
 msgid "Pick colors for selected corner nodes from underneath mesh."
 msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:589
-#, fuzzy
 msgid "Pick Color"
-msgstr "Aizpildījuma krāsa"
+msgstr "Izvēlieties krāsu"
 
 #: ../src/widgets/mesh-toolbar.cpp:597
-#, fuzzy
 msgid "Scale mesh to bounding box:"
-msgstr "Rādīt robežrāmi"
+msgstr "Ietilpināt tīklu robežrāmī:"
 
 #: ../src/widgets/mesh-toolbar.cpp:598
-#, fuzzy
 msgid "Scale mesh to fit inside bounding box."
-msgstr "Rādīt ierobežojošo robežrāmi"
+msgstr "Mērogot tīklu, lai tas ietilptu robežrāmī."
 
 #: ../src/widgets/mesh-toolbar.cpp:601
-#, fuzzy
 msgid "Fit mesh"
-msgstr "Labot aizpildījuma tīklu"
+msgstr "Ietilpināt tīklu"
 
 #: ../src/widgets/node-toolbar.cpp:341
 msgid "Insert node"
@@ -30117,12 +30095,11 @@ msgstr "<b>Radiāla krāsu pāreja</b>"
 
 #: ../src/widgets/paint-selector.cpp:1080
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
-msgstr ""
+msgstr "Izmantojiet <b>Režģa rīku</b> lai mainīti režģi."
 
 #: ../src/widgets/paint-selector.cpp:1093
-#, fuzzy
 msgid "<b>Mesh fill</b>"
-msgstr "<b>Paletes aizpildījums</b>"
+msgstr "<b>Režģa aizpildījums</b>"
 
 #: ../src/widgets/paint-selector.cpp:1444
 msgid ""
@@ -30212,9 +30189,8 @@ msgid "Create Spiro path"
 msgstr "Izveidot spirāles ceļu"
 
 #: ../src/widgets/pencil-toolbar.cpp:118
-#, fuzzy
 msgid "Create BSpline path"
-msgstr "Nevarē izveidot keša ceļu"
+msgstr "Izveidot B-splaina ceļu"
 
 #: ../src/widgets/pencil-toolbar.cpp:124
 msgid "Zigzag"
@@ -30254,9 +30230,8 @@ msgid "From clipboard"
 msgstr "No starpliktuves"
 
 #: ../src/widgets/pencil-toolbar.cpp:180
-#, fuzzy
 msgid "Bend from clipboard"
-msgstr "No starpliktuves"
+msgstr "Liekt no starpliktuves"
 
 #: ../src/widgets/pencil-toolbar.cpp:181
 msgid "Last applied"
@@ -30296,11 +30271,11 @@ msgstr ""
 
 #: ../src/widgets/pencil-toolbar.cpp:413 ../src/widgets/pencil-toolbar.cpp:414
 msgid "LPE based interactive simplify"
-msgstr ""
+msgstr "LPE balstīta interaktīva vienkāršošana"
 
 #: ../src/widgets/pencil-toolbar.cpp:424 ../src/widgets/pencil-toolbar.cpp:425
 msgid "LPE simplify flatten"
-msgstr ""
+msgstr "LPE vienkāršot placinot"
 
 #: ../src/widgets/rect-toolbar.cpp:125
 msgid "Change rectangle"
@@ -30471,7 +30446,7 @@ msgstr "X:"
 #: ../src/widgets/select-toolbar.cpp:443
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
-msgstr ""
+msgstr "Atlases horizontālā koordināte"
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:460
@@ -30489,7 +30464,7 @@ msgstr "Y:"
 #: ../src/widgets/select-toolbar.cpp:462
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
-msgstr ""
+msgstr "Atlases vertikālā koordināte"
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:479
@@ -30507,7 +30482,7 @@ msgstr "P:"
 #: ../src/widgets/select-toolbar.cpp:481
 msgctxt "Select toolbar"
 msgid "Width of selection"
-msgstr ""
+msgstr "Atlases platums"
 
 #: ../src/widgets/select-toolbar.cpp:499
 msgid "Lock width and height"
@@ -30533,7 +30508,7 @@ msgstr "H:"
 #: ../src/widgets/select-toolbar.cpp:513
 msgctxt "Select toolbar"
 msgid "Height of selection"
-msgstr ""
+msgstr "Atlases augstums"
 
 #: ../src/widgets/select-toolbar.cpp:575
 msgid "Scale rounded corners"
@@ -30808,6 +30783,7 @@ msgstr ""
 #: ../src/widgets/spray-toolbar.cpp:477
 msgid "Use the pressure of the input device to alter the scale of new items"
 msgstr ""
+"Izmantojiet spiedienu spēku uz ievadierīci, lai mainītu jauno objektu mērogu"
 
 #: ../src/widgets/spray-toolbar.cpp:489 ../src/widgets/spray-toolbar.cpp:490
 msgid ""
@@ -30817,7 +30793,7 @@ msgstr ""
 
 #: ../src/widgets/spray-toolbar.cpp:502 ../src/widgets/spray-toolbar.cpp:503
 msgid "Pick from center instead average area."
-msgstr ""
+msgstr "Paņemt no centra, nevis vispārējā laukuma."
 
 #: ../src/widgets/spray-toolbar.cpp:515 ../src/widgets/spray-toolbar.cpp:516
 msgid "Inverted pick value, retaining color in advanced trace mode"
@@ -31127,27 +31103,27 @@ msgstr "Stūrains, noslēgts gals"
 
 #: ../src/widgets/stroke-style.cpp:392
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "Aizpildījums, apmale, marķieri"
 
 #: ../src/widgets/stroke-style.cpp:396
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "Apmale, aizpildījums, marķieri"
 
 #: ../src/widgets/stroke-style.cpp:400
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "Aizpildījums, marķieri, apmale"
 
 #: ../src/widgets/stroke-style.cpp:408
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "Marķieri, aizpildījums, apmale"
 
 #: ../src/widgets/stroke-style.cpp:412
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "Apmale, marķieri, aizpildījums"
 
 #: ../src/widgets/stroke-style.cpp:416
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "Marķieri, apmale, aizpildījums"
 
 #: ../src/widgets/stroke-style.cpp:534
 msgid "Set markers"
@@ -31178,9 +31154,8 @@ msgid "Text: Change font style"
 msgstr "Teksts: mainīt fonta stilu"
 
 #: ../src/widgets/text-toolbar.cpp:345
-#, fuzzy
 msgid "Text: Unset line height."
-msgstr "Teksts: mainīt rindas augstumu"
+msgstr "Teksts: atiestatīt rindas augstumu"
 
 #: ../src/widgets/text-toolbar.cpp:422
 msgid "Text: Change superscript or subscript"
@@ -31196,7 +31171,7 @@ msgstr "Teksts: mainīt rindas augstumu"
 
 #: ../src/widgets/text-toolbar.cpp:827
 msgid "Text: Change line-height unit"
-msgstr ""
+msgstr "Teksts: mainīt rindas augstuma vienības"
 
 #: ../src/widgets/text-toolbar.cpp:876
 msgid "Text: Change word-spacing"
@@ -31318,23 +31293,23 @@ msgstr ""
 
 #: ../src/widgets/text-toolbar.cpp:1909
 msgid "Auto glyph orientation"
-msgstr ""
+msgstr "Automātiskā glifu orientācija"
 
 #: ../src/widgets/text-toolbar.cpp:1916
 msgid "Upright"
-msgstr ""
+msgstr "Vertikāli"
 
 #: ../src/widgets/text-toolbar.cpp:1917
 msgid "Upright glyph orientation"
-msgstr ""
+msgstr "Vertikāla gifu orinetācija"
 
 #: ../src/widgets/text-toolbar.cpp:1924
 msgid "Sideways"
-msgstr ""
+msgstr "Uz sāniem"
 
 #: ../src/widgets/text-toolbar.cpp:1925
 msgid "Sideways glyph orientation"
-msgstr ""
+msgstr "Glifu orientācija uz sāniem"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:1931
@@ -31344,7 +31319,7 @@ msgstr "Teksta orientācija"
 #. Label
 #: ../src/widgets/text-toolbar.cpp:1932
 msgid "Text (glyph) orientation in vertical text."
-msgstr ""
+msgstr "Teksta (glifu) orientācija vertikālā tekstā."
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:1965
@@ -31374,7 +31349,7 @@ msgstr "Rinda:"
 #. short label
 #: ../src/widgets/text-toolbar.cpp:1972
 msgid "Spacing between baselines (times font size)"
-msgstr ""
+msgstr "Atstarpe starp rindām (fonta izmēra reizēs)"
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:2004 ../src/widgets/text-toolbar.cpp:2035
@@ -31462,20 +31437,20 @@ msgstr "Rakstzīmju pagrieziens (grādos)"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2159
-#, fuzzy
 msgid "Unset line height"
-msgstr "Rindas augstums"
+msgstr "Atiestatīt rindas augstumu"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2160
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
+"Ja iespējots, rindas augstums tiek iestatīts daļai atlasītā. Uzklikšķiniet, "
+"lai atiestatītu."
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2172
-#, fuzzy
 msgid "Show outer style"
-msgstr "Ēnots ārējais slīpums"
+msgstr "Rādīt ārējo stilu"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2173
@@ -31484,6 +31459,8 @@ msgid ""
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
+"Rādīt vistālākā teksta elementa stilu. Vistālākā teksta elementa 'font-size' "
+"un 'line-height' vērtības nosaka minimālo rindas atstarpes lielumu blokā."
 
 #: ../src/widgets/toolbox.cpp:186
 msgid "Color/opacity used for color tweaking"
@@ -31807,7 +31784,6 @@ msgstr "Krāsu režīmā iedarboties uz objekta nokrāsu"
 
 #. TRANSLATORS:  "H" here stands for hue
 #: ../src/widgets/tweak-toolbar.cpp:291
-#, fuzzy
 msgctxt "Hue"
 msgid "H"
 msgstr "H"
@@ -31818,10 +31794,9 @@ msgstr "Krāsu režīmā iedarboties uz objekta piesātinājumu"
 
 #. TRANSLATORS: "S" here stands for Saturation
 #: ../src/widgets/tweak-toolbar.cpp:307
-#, fuzzy
 msgctxt "Saturation"
 msgid "S"
-msgstr "D"
+msgstr "S"
 
 #: ../src/widgets/tweak-toolbar.cpp:319
 msgid "In color mode, act on objects' lightness"
@@ -31829,7 +31804,6 @@ msgstr "Krāsu režīmā iedarboties uz objekta gaišumu"
 
 #. TRANSLATORS: "L" here stands for Lightness
 #: ../src/widgets/tweak-toolbar.cpp:323
-#, fuzzy
 msgctxt "Lightness"
 msgid "L"
 msgstr "L"
@@ -31840,7 +31814,6 @@ msgstr "Krāsu režīmā iedarboties uz objekta necauspīdīgumu"
 
 #. TRANSLATORS: "O" here stands for Opacity
 #: ../src/widgets/tweak-toolbar.cpp:339
-#, fuzzy
 msgctxt "Opacity"
 msgid "O"
 msgstr "O"
@@ -31878,7 +31851,7 @@ msgstr ""
 
 #: ../share/extensions/convert2dashes.py:56
 msgid "Total number of objects not converted: {}\n"
-msgstr ""
+msgstr "Kopējais nepārveidoto objektu skaits: {}\n"
 
 #: ../share/extensions/dimension.py:108
 msgid "Please select an object."
@@ -31890,19 +31863,16 @@ msgstr ""
 "Šo objektu nav iespējams apstrādāt. Mēģiniet to vispirms pārveidot par ceļu."
 
 #: ../share/extensions/draw_from_triangle.py:179
-#, fuzzy
 msgid "Side Length 'a' ("
-msgstr "Malas garums 'a' (px): "
+msgstr "Malas garums 'a' ("
 
 #: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy
 msgid "Side Length 'b' ("
-msgstr "Malas garums 'b' (px): "
+msgstr "Malas garums 'b' ("
 
 #: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy
 msgid "Side Length 'c' ("
-msgstr "Malas garums 'c' (px): "
+msgstr "Malas garums 'c' ("
 
 #: ../share/extensions/draw_from_triangle.py:182
 msgid "Angle 'A' (radians): "
@@ -31921,9 +31891,8 @@ msgid "Semiperimeter (px): "
 msgstr "Pusperimetrs (px):"
 
 #: ../share/extensions/draw_from_triangle.py:186
-#, fuzzy
 msgid "Area ("
-msgstr "Apgabals"
+msgstr "Laukums ("
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -32402,7 +32371,6 @@ msgstr ""
 "\n"
 
 #: ../share/extensions/jessyInk_autoTexts.py:53
-#, python-brace-format
 msgid ""
 "Node with id '{0}' is not a suitable text node and was therefore ignored.\n"
 "\n"
@@ -32435,7 +32403,6 @@ msgstr ""
 "pamatslaida izvēle.\n"
 
 #: ../share/extensions/jessyInk_summary.py:68
-#, python-brace-format
 msgid "JessyInk script version {0} installed."
 msgstr "JessyInk skripts ar versijas numuru {0} uzstādīts."
 
@@ -32460,7 +32427,6 @@ msgstr ""
 "Slaids {0!s}:"
 
 #: ../share/extensions/jessyInk_summary.py:93
-#, python-brace-format
 msgid "{0}Layer name: {1}"
 msgstr "{0}Slāņa nosaukums: {1}"
 
@@ -32469,7 +32435,6 @@ msgid "{0}Transition in: {1} ({2!s} s)"
 msgstr "{0}Parādīšanās pāreja: {1} ({2!s} s)"
 
 #: ../share/extensions/jessyInk_summary.py:103
-#, python-brace-format
 msgid "{0}Transition in: {1}"
 msgstr "{0}Parādīšanās pāreja: {1}"
 
@@ -32478,12 +32443,10 @@ msgid "{0}Transition out: {1} ({2!s} s)"
 msgstr "{0}Izgaišanas pāreja: {1} ({2!s} s)"
 
 #: ../share/extensions/jessyInk_summary.py:112
-#, python-brace-format
 msgid "{0}Transition out: {1}"
 msgstr "{0}Izgaišanas pāreja: {1}"
 
 #: ../share/extensions/jessyInk_summary.py:119
-#, python-brace-format
 msgid ""
 "\n"
 "{0}Auto-texts:"
@@ -32492,12 +32455,10 @@ msgstr ""
 "{0}Auto-teksti:"
 
 #: ../share/extensions/jessyInk_summary.py:122
-#, python-brace-format
 msgid "{0}\t\"{1}\" (object id \"{2}\") will be replaced by \"{3}\"."
 msgstr "{0}\t\"{1}\" (objekta id \"{2}\") tiks aizvietots ar \"{3}\"."
 
 #: ../share/extensions/jessyInk_summary.py:167
-#, python-brace-format
 msgid ""
 "\n"
 "{0}Initial effect (order number {1}):"
@@ -32514,12 +32475,10 @@ msgstr ""
 "{0}efekts {1!s} (kārtas numurs {2}):"
 
 #: ../share/extensions/jessyInk_summary.py:173
-#, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
 msgstr "{0}\tSkats tiks iestatīts atbilstoši objektam \"{1}\""
 
 #: ../share/extensions/jessyInk_summary.py:175
-#, python-brace-format
 msgid "{0}\tObject \"{1}\""
 msgstr "{0}\tObjekts \"{1}\""
 
@@ -32532,7 +32491,6 @@ msgid " will disappear"
 msgstr " pazudīs"
 
 #: ../share/extensions/jessyInk_summary.py:183
-#, python-brace-format
 msgid " using effect \"{0}\""
 msgstr "  izmantojot efektu \"{0}\""
 
@@ -32598,7 +32556,8 @@ msgid "Area is zero, cannot calculate Center of Mass"
 msgstr "Laukums ir vienāds ar nulli, nav iespējams aprēķināt smaguma centru"
 
 #: ../share/extensions/pathalongpath.py:207
-#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:50
+#: ../share/extensions/pathscatter.py:226
+#: ../share/extensions/perspective.py:50
 msgid "This extension requires two selected paths."
 msgstr "Šim paplašinājumam nepieciešami divi atlasīti ceļi."
 
@@ -32637,7 +32596,8 @@ msgstr ""
 "veidīgā sistēmā tas ir paveicams ar komandu sudo apt-get install python-"
 "numpy."
 
-#: ../share/extensions/perspective.py:58 ../share/extensions/summersnight.py:49
+#: ../share/extensions/perspective.py:58
+#: ../share/extensions/summersnight.py:49
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
@@ -32646,14 +32606,16 @@ msgstr ""
 "Pirmā atlasītā objekta tips ir '%s'.\n"
 "Mēģiniet izmantot darbību Ceļš->Objektu par ceļu."
 
-#: ../share/extensions/perspective.py:65 ../share/extensions/summersnight.py:57
+#: ../share/extensions/perspective.py:65
+#: ../share/extensions/summersnight.py:57
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr ""
 "Šim paplašinājuma ir nepieciešams, lai otrais atlasītais ceļš būtu četrus "
 "mezglus garš."
 
-#: ../share/extensions/perspective.py:91 ../share/extensions/summersnight.py:90
+#: ../share/extensions/perspective.py:91
+#: ../share/extensions/summersnight.py:90
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
@@ -32661,7 +32623,8 @@ msgstr ""
 "Otrais atlasītais objekts ir grupa, nevis ceļš.\n"
 "Mēģiniet izmantot darbību Objekts ->Atgrupēt."
 
-#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:92
+#: ../share/extensions/perspective.py:93
+#: ../share/extensions/summersnight.py:92
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -32669,7 +32632,8 @@ msgstr ""
 "Otrais atlasītais objekts nav ceļš.\n"
 "Mēģiniet izmantot darbību Ceļš->Objektu par ceļu."
 
-#: ../share/extensions/perspective.py:96 ../share/extensions/summersnight.py:95
+#: ../share/extensions/perspective.py:96
+#: ../share/extensions/summersnight.py:95
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -32687,7 +32651,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.py:146
 msgid "pySerial is not installed. Please follow these steps:"
-msgstr ""
+msgstr "pySerial nav uzstādīts. Izpildiet sekojošus soļus:"
 
 #: ../share/extensions/plotter.py:147
 msgid "1. Download and extract (unzip) this file to your local harddisk:"
@@ -32706,7 +32670,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.py:151
 msgid "3. Close and restart Inkscape."
-msgstr ""
+msgstr "3. Aizveriet un palaidiet Inkscape"
 
 #: ../share/extensions/plotter.py:200
 msgid ""
@@ -33209,22 +33173,22 @@ msgstr "Dažādot"
 #: ../share/extensions/color_randomize.inx.h:4
 #, no-c-format
 msgid "Hue range (%)"
-msgstr ""
+msgstr "Nokrāsas diapazons (%)"
 
 #: ../share/extensions/color_randomize.inx.h:6
 #, no-c-format
 msgid "Saturation range (%)"
-msgstr ""
+msgstr "Piesātinājuma diapazons (%)"
 
 #: ../share/extensions/color_randomize.inx.h:8
 #, no-c-format
 msgid "Lightness range (%)"
-msgstr ""
+msgstr "Gaišuma diapazons (%)"
 
 #: ../share/extensions/color_randomize.inx.h:10
 #, no-c-format
 msgid "Opacity range (%)"
-msgstr ""
+msgstr "Necaurspīdības diapazons (%)"
 
 #: ../share/extensions/color_randomize.inx.h:12
 msgid ""
@@ -33346,20 +33310,17 @@ msgstr "Vizualizēt ceļu"
 
 #: ../share/extensions/docinfo.inx.h:1
 msgid "DOC Info"
-msgstr ""
+msgstr "DOC Info"
 
 #: ../share/extensions/docinfo.inx.h:2
-#, fuzzy
 msgid "Show page info"
-msgstr "Rādīt lapas malas"
+msgstr "Rādīt lapas informāciju"
 
 #: ../share/extensions/docinfo.inx.h:3
-#, fuzzy
 msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
-"Izvēlieties šo šķirkli, ja vēlaties aplūkot izmantoto/atrasto fontu sarakstu."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -33396,11 +33357,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr ""
+msgstr "DPI 90 uz 96"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr ""
+msgstr "DPI 96 uz 90"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 msgid "Draw From Triangle"
@@ -35223,7 +35184,6 @@ msgid "Regular guides"
 msgstr "Regulāras palīglīnijas"
 
 #: ../share/extensions/guides_creator.inx.h:3
-#, fuzzy
 msgid "Guides preset:"
 msgstr "Palīglīniju priekšiestatījumi:"
 
@@ -35505,12 +35465,14 @@ msgstr ""
 "pārliecinieties, ka ir uzstādīts UniConverter un tad mēģiniet atvērt vēlreiz."
 
 #: ../share/extensions/hpgl_input.inx.h:3
-#: ../share/extensions/hpgl_output.inx.h:4 ../share/extensions/plotter.inx.h:32
+#: ../share/extensions/hpgl_output.inx.h:4
+#: ../share/extensions/plotter.inx.h:32
 msgid "Resolution X (dpi):"
 msgstr "Izšķirtspēja X (dpi):"
 
 #: ../share/extensions/hpgl_input.inx.h:4
-#: ../share/extensions/hpgl_output.inx.h:5 ../share/extensions/plotter.inx.h:33
+#: ../share/extensions/hpgl_output.inx.h:5
+#: ../share/extensions/plotter.inx.h:33
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the X axis "
 "(Default: 1016.0)"
@@ -35519,12 +35481,14 @@ msgstr ""
 "1016.0)"
 
 #: ../share/extensions/hpgl_input.inx.h:5
-#: ../share/extensions/hpgl_output.inx.h:6 ../share/extensions/plotter.inx.h:34
+#: ../share/extensions/hpgl_output.inx.h:6
+#: ../share/extensions/plotter.inx.h:34
 msgid "Resolution Y (dpi):"
 msgstr "Izšķirtspēja Y (dpi):"
 
 #: ../share/extensions/hpgl_input.inx.h:6
-#: ../share/extensions/hpgl_output.inx.h:7 ../share/extensions/plotter.inx.h:35
+#: ../share/extensions/hpgl_output.inx.h:7
+#: ../share/extensions/plotter.inx.h:35
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the Y axis "
 "(Default: 1016.0)"
@@ -35565,15 +35529,18 @@ msgstr ""
 "ceļiem. Lūdzu, izmantojiet plotera paplašinājumu (Paplašinājumu izvēlnē), "
 "lai plotētu tieši ploteri izmantojot seriālo savienojumu."
 
-#: ../share/extensions/hpgl_output.inx.h:3 ../share/extensions/plotter.inx.h:31
+#: ../share/extensions/hpgl_output.inx.h:3
+#: ../share/extensions/plotter.inx.h:31
 msgid "Plotter Settings "
 msgstr "Plotera iestatījumi"
 
-#: ../share/extensions/hpgl_output.inx.h:8 ../share/extensions/plotter.inx.h:36
+#: ../share/extensions/hpgl_output.inx.h:8
+#: ../share/extensions/plotter.inx.h:36
 msgid "Pen number:"
 msgstr "Spalvas numurs:"
 
-#: ../share/extensions/hpgl_output.inx.h:9 ../share/extensions/plotter.inx.h:37
+#: ../share/extensions/hpgl_output.inx.h:9
+#: ../share/extensions/plotter.inx.h:37
 msgid "The number of the pen (tool) to use (Standard: '1')"
 msgstr "Izmantojamās spalvas (rīka) numurs. (Noklusētais: '1')"
 
@@ -35761,20 +35728,21 @@ msgstr "Pamata"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:5
-#, fuzzy
 msgid "Support non-uniform scaling"
 msgstr "Atbalstīt nevienādu mērogošanu"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:7
 msgid "Render images blocky"
-msgstr ""
+msgstr "Renderēt attēlus graudainus"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:9
 msgid ""
 "Render all bitmap images like in older Inskcape versions. Available options:"
 msgstr ""
+"Renderēt visus bitkaršu attēlus kā vecās Inkscape versijās. Iespējamie "
+"varianti:"
 
 #. image aspect ratio
 #: ../share/extensions/image_attributes.inx.h:11
@@ -35793,9 +35761,8 @@ msgstr "meetOrSlice:"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:17
-#, fuzzy
 msgid "Scope:"
-msgstr "Darbības lauks"
+msgstr "Darbības lauks:"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:19
@@ -35825,9 +35792,8 @@ msgid "Image rendering attribute:"
 msgstr "Attēla renderēšanas atribūts:"
 
 #: ../share/extensions/image_attributes.inx.h:27
-#, fuzzy
 msgid "Apply attribute to parent group of selection"
-msgstr "Pielietot pārveidojumu atlasītajam"
+msgstr "Pielietot atribūtu atlasītā vecāka grupai"
 
 #: ../share/extensions/image_attributes.inx.h:28
 msgid "Apply attribute to SVG root"
@@ -35854,9 +35820,8 @@ msgid "Ask Us a Question"
 msgstr "Uzdodiet jautājumu"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:2
-#, fuzzy
 msgid "https://inkscape.org/en/ask/"
-msgstr "http://inkscape.org/doc/keys091.html"
+msgstr "https://inkscape.org/en/ask/"
 
 #: ../share/extensions/inkscape_help_commandline.inx.h:1
 msgid "Command Line Options"
@@ -35878,7 +35843,7 @@ msgstr "Pogu un peles komandu saraksts"
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_keys.inx.h:3
 msgid "http://inkscape.org/doc/keys092.html"
-msgstr ""
+msgstr "http://inkscape.org/doc/keys092.html"
 
 #: ../share/extensions/inkscape_help_manual.inx.h:1
 msgid "Inkscape Manual"
@@ -35886,9 +35851,8 @@ msgstr "Inkscape rokasgrāmata:"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_manual.inx.h:3
-#, fuzzy
 msgid "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
-msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
+msgstr "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
 
 #: ../share/extensions/inkscape_help_relnotes.inx.h:1
 msgid "New in This Version"
@@ -35897,7 +35861,7 @@ msgstr "Kas jauns šajā versijā"
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_relnotes.inx.h:3
 msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92"
-msgstr ""
+msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92"
 
 #: ../share/extensions/inkscape_help_reportabug.inx.h:1
 msgid "Report a Bug"
@@ -35927,12 +35891,13 @@ msgstr "Dubultot beigu ceļus"
 msgid "Interpolate style"
 msgstr "Interpolēt stilu"
 
-#: ../share/extensions/interp.inx.h:7 ../share/extensions/interp_att_g.inx.h:10
-#, fuzzy
+#: ../share/extensions/interp.inx.h:7
+#: ../share/extensions/interp_att_g.inx.h:10
 msgid "Use Z-order"
-msgstr "Izcelta mala"
+msgstr "Izmantot Z-kārtību"
 
-#: ../share/extensions/interp.inx.h:8 ../share/extensions/interp_att_g.inx.h:11
+#: ../share/extensions/interp.inx.h:8
+#: ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
 msgstr ""
 
@@ -36529,23 +36494,23 @@ msgstr "Pārbīdīt mezglu turus"
 
 #: ../share/extensions/jitternodes.inx.h:7
 msgid "Distribution of the displacements:"
-msgstr ""
+msgstr "Nobīžu sadalījums:"
 
 #: ../share/extensions/jitternodes.inx.h:8
 msgid "Uniform"
-msgstr ""
+msgstr "Vienmērīgs"
 
 #: ../share/extensions/jitternodes.inx.h:9
 msgid "Pareto"
-msgstr ""
+msgstr "Pareto"
 
 #: ../share/extensions/jitternodes.inx.h:10
 msgid "Gaussian"
-msgstr ""
+msgstr "Gausa"
 
 #: ../share/extensions/jitternodes.inx.h:11
 msgid "Log-normal"
-msgstr ""
+msgstr "Logaritmiski normālā"
 
 #: ../share/extensions/jitternodes.inx.h:13
 msgid ""
@@ -36864,9 +36829,8 @@ msgid "Text anchor:"
 msgstr "Teksta enkurs:"
 
 #: ../share/extensions/measure.inx.h:10
-#, fuzzy
 msgid "Fixed Text"
-msgstr "Teksta aizpildījums"
+msgstr "Fiksēts teksts"
 
 #: ../share/extensions/measure.inx.h:11
 msgid "Angle (°):"
@@ -36916,7 +36880,7 @@ msgstr "Fiksēts teksts, ceļa sākums"
 
 #: ../share/extensions/measure.inx.h:25
 msgid "Fixed Text, Center of BBox"
-msgstr ""
+msgstr "Fiksēts teksts, centrēts robežrāmī"
 
 #: ../share/extensions/measure.inx.h:26
 msgid "Fixed Text, Center of Mass"
@@ -36931,9 +36895,8 @@ msgid "Start of Path"
 msgstr "Ceļa sākums:"
 
 #: ../share/extensions/measure.inx.h:31
-#, fuzzy
 msgid "Center of BBox"
-msgstr "Smaguma centrs"
+msgstr "Robežrāmja centrs"
 
 #: ../share/extensions/measure.inx.h:32
 msgid "Center of Mass"
@@ -37018,99 +36981,99 @@ msgstr "Skatīt nākošo glifu"
 
 #: ../share/extensions/nicechart.inx.h:1
 msgid "NiceCharts"
-msgstr ""
+msgstr "Jaukās diagrammas"
 
 #: ../share/extensions/nicechart.inx.h:2
 msgid "Data"
-msgstr ""
+msgstr "Dati"
 
 #: ../share/extensions/nicechart.inx.h:3
 msgid "Data from file"
-msgstr ""
+msgstr "Dati no datnes"
 
 #: ../share/extensions/nicechart.inx.h:5
 msgid "Delimiter:"
-msgstr ""
+msgstr "Atdalītājs:"
 
 #: ../share/extensions/nicechart.inx.h:6
 msgid "Column that contains the keys:"
-msgstr ""
+msgstr "Sleja, kas satur atslēgas:"
 
 #: ../share/extensions/nicechart.inx.h:7
 msgid "Column that contains the values:"
-msgstr ""
+msgstr "Sleja, kas satur vērtības:"
 
 #: ../share/extensions/nicechart.inx.h:8
 msgid "File encoding (e.g. utf-8):"
-msgstr ""
+msgstr "Datnes kodējums (piem. utf-8):"
 
 #: ../share/extensions/nicechart.inx.h:9
 msgid "First line contains headings"
-msgstr ""
+msgstr "Pirmā rinda satur galvenes"
 
 #: ../share/extensions/nicechart.inx.h:10
 msgid "Direct input"
-msgstr ""
+msgstr "Tiešā ievade"
 
 #: ../share/extensions/nicechart.inx.h:11
 msgid "Data:"
-msgstr ""
+msgstr "Dati:"
 
 #: ../share/extensions/nicechart.inx.h:12
 msgid "Enter the full path to a CSV file:"
-msgstr ""
+msgstr "Ievadiet pilnu ceļu līdz CSV datnei:"
 
 #: ../share/extensions/nicechart.inx.h:13
 msgid "Type in comma separated values:"
-msgstr ""
+msgstr "Ievadiet ar komatu atdalītas vērtības:"
 
 #: ../share/extensions/nicechart.inx.h:14
 msgid "(format like this: apples:3,bananas:5)"
-msgstr ""
+msgstr "(formāts, līdzīgs šim: āboli:3,banāni:5)"
 
 #: ../share/extensions/nicechart.inx.h:15
 msgid "Labels"
-msgstr ""
+msgstr "Etiķetes"
 
 #: ../share/extensions/nicechart.inx.h:16
 msgid "Font:"
-msgstr ""
+msgstr "Fonts: "
 
 #: ../share/extensions/nicechart.inx.h:18
 msgid "Font color:"
-msgstr ""
+msgstr "Fonta krāsa:"
 
 #: ../share/extensions/nicechart.inx.h:19
 msgid "Charts"
-msgstr ""
+msgstr "Diagrammas"
 
 #: ../share/extensions/nicechart.inx.h:20
 msgid "Draw horizontally"
-msgstr ""
+msgstr "Zīmet horizontāli"
 
 #: ../share/extensions/nicechart.inx.h:21
 msgid "Bar length:"
-msgstr ""
+msgstr "Joslas garums:"
 
 #: ../share/extensions/nicechart.inx.h:22
 msgid "Bar width:"
-msgstr ""
+msgstr "Joslas platums:"
 
 #: ../share/extensions/nicechart.inx.h:23
 msgid "Pie radius:"
-msgstr ""
+msgstr "Sektora rādiuss:"
 
 #: ../share/extensions/nicechart.inx.h:24
 msgid "Bar offset:"
-msgstr ""
+msgstr "Joslas nobīde:"
 
 #: ../share/extensions/nicechart.inx.h:26
 msgid "Offset between chart and labels:"
-msgstr ""
+msgstr "Attālums starp diagrammu un etiķetēm:"
 
 #: ../share/extensions/nicechart.inx.h:27
 msgid "Offset between chart and chart title:"
-msgstr ""
+msgstr "Attālums star diagrammu un diagrammas virsrakstu:"
 
 #: ../share/extensions/nicechart.inx.h:28
 msgid "Work around aliasing effects (creates overlapping segments)"
@@ -37118,51 +37081,51 @@ msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:29
 msgid "Color scheme:"
-msgstr ""
+msgstr "Krāsu shēma"
 
 #: ../share/extensions/nicechart.inx.h:30
 msgid "Custom colors:"
-msgstr ""
+msgstr "Pielāgotās krāsas:"
 
 #: ../share/extensions/nicechart.inx.h:31
 msgid "Reverse color scheme"
-msgstr ""
+msgstr "Invertēt krāsu shēmu"
 
 #: ../share/extensions/nicechart.inx.h:32
 msgid "Drop shadow"
-msgstr ""
+msgstr "Pievienot ēnu"
 
 #: ../share/extensions/nicechart.inx.h:37
 msgid "SAP"
-msgstr ""
+msgstr "SAP"
 
 #: ../share/extensions/nicechart.inx.h:38
 msgid "Values"
-msgstr ""
+msgstr "Vērtības"
 
 #: ../share/extensions/nicechart.inx.h:39
 msgid "Show values"
-msgstr ""
+msgstr "Rādīt vērtības"
 
 #: ../share/extensions/nicechart.inx.h:40
 msgid "Chart type:"
-msgstr ""
+msgstr "Diagrammas tips"
 
 #: ../share/extensions/nicechart.inx.h:41
 msgid "Bar chart"
-msgstr ""
+msgstr "Joslu diagramma"
 
 #: ../share/extensions/nicechart.inx.h:42
 msgid "Pie chart"
-msgstr ""
+msgstr "Sektoru diagramma"
 
 #: ../share/extensions/nicechart.inx.h:43
 msgid "Pie chart (percentage)"
-msgstr ""
+msgstr "Sektoru diagramma (procenti)"
 
 #: ../share/extensions/nicechart.inx.h:44
 msgid "Stacked bar chart"
-msgstr ""
+msgstr "Apvienoto joslu diagramma"
 
 #: ../share/extensions/param_curves.inx.h:1
 msgid "Parametric Curves"
@@ -37578,7 +37541,8 @@ msgstr ""
 msgid "AutoCAD Plot Input"
 msgstr "AutoCAD Plot ievade"
 
-#: ../share/extensions/plt_input.inx.h:2 ../share/extensions/plt_output.inx.h:2
+#: ../share/extensions/plt_input.inx.h:2
+#: ../share/extensions/plt_output.inx.h:2
 msgid "HP Graphics Language Plot file [AutoCAD] (*.plt)"
 msgstr "HP Graphics Language plotera datne [AutoCAD] (*.plt)"
 
@@ -38026,9 +37990,8 @@ msgid "Restack"
 msgstr "Pārkārtot"
 
 #: ../share/extensions/restack.inx.h:2
-#, fuzzy
 msgid "Based on Position"
-msgstr "Mainīt mezgla pozīciju"
+msgstr "Balstīts uz novietojumu"
 
 #: ../share/extensions/restack.inx.h:3
 msgid "Presets"
@@ -38071,9 +38034,8 @@ msgid "Radial Inward"
 msgstr "Radiāli uz iekšu"
 
 #: ../share/extensions/restack.inx.h:15
-#, fuzzy
 msgid "Object Reference Point"
-msgstr "ieejas-izejas atskaites punkts"
+msgstr "Objekta atskaites punkts"
 
 #: ../share/extensions/restack.inx.h:17
 #: ../share/extensions/text_extract.inx.h:9
@@ -38094,23 +38056,20 @@ msgid "Bottom"
 msgstr "Apakša"
 
 #: ../share/extensions/restack.inx.h:21
-#, fuzzy
 msgid "Based on Z-Order"
-msgstr "Izcelta mala"
+msgstr "Balstīts uz Z-kārtību"
 
 #: ../share/extensions/restack.inx.h:22
 msgid "Restack Mode"
 msgstr "Pārkārtošanas režīms"
 
 #: ../share/extensions/restack.inx.h:23
-#, fuzzy
 msgid "Reverse Z-Order"
-msgstr "Apgriezt krāsu pāreju otrādi"
+msgstr "Pretējā Z-kārtība"
 
 #: ../share/extensions/restack.inx.h:24
-#, fuzzy
 msgid "Shuffle Z-Order"
-msgstr "Izcelta mala"
+msgstr "Sajaukt Z-kārtību"
 
 #: ../share/extensions/restack.inx.h:26
 msgid ""
@@ -38138,13 +38097,12 @@ msgid "Minimum size:"
 msgstr "Minimālais izmērs:"
 
 #: ../share/extensions/rtree.inx.h:4
-#, fuzzy
 msgid "Omit redundant segments"
-msgstr "Iztaisnot posmus"
+msgstr "Izlaist liekos posmus"
 
 #: ../share/extensions/rtree.inx.h:5
 msgid "Lift pen for backward steps"
-msgstr ""
+msgstr "Pacelt spalvu atpakaļgājienā"
 
 #: ../share/extensions/rubberstretch.inx.h:1
 msgid "Rubber Stretch"
@@ -38229,11 +38187,11 @@ msgstr ""
 
 #: ../share/extensions/scour.inx.h:15
 msgid "Keep unreferenced definitions"
-msgstr ""
+msgstr "Saglabāt neizmantotās definīcijas"
 
 #: ../share/extensions/scour.inx.h:16
 msgid "Keep element definitions that are not currently used in the SVG"
-msgstr ""
+msgstr "Saglabā pašreiz SVG neizmantoto elementu definīcijas"
 
 #: ../share/extensions/scour.inx.h:17
 msgid "Work around renderer bugs"
@@ -38244,10 +38202,12 @@ msgid ""
 "Works around some common renderer bugs (mainly libRSVG) at the cost of a "
 "slightly larger SVG file."
 msgstr ""
+"Ļauj apiet dažas renderēšanas kļūdas (pamatā libRSVG), nedaudz palielinot "
+"datnes izmēru."
 
 #: ../share/extensions/scour.inx.h:20
 msgid "Remove the XML declaration"
-msgstr ""
+msgstr "Aizvākt XML deklarāciju"
 
 #: ../share/extensions/scour.inx.h:21
 msgid ""
@@ -38255,6 +38215,9 @@ msgid ""
 "especially if special characters are used in the document) from the file "
 "header."
 msgstr ""
+"Aizvāc XML deklarāciju (kas nav obligāta, taču jābūt definētai, īpaši "
+"gadījumos, ja dokumentā ir izmantotas speciālās rakstzīmes) no datnes "
+"galvenes."
 
 #: ../share/extensions/scour.inx.h:22
 msgid "Remove metadata"
@@ -38273,7 +38236,7 @@ msgstr "Dzēst komentārus"
 
 #: ../share/extensions/scour.inx.h:25
 msgid "Remove all XML comments from output."
-msgstr ""
+msgstr "Aizvākt visus XML komentārus no izvades."
 
 #: ../share/extensions/scour.inx.h:26
 msgid "Embed raster images"
@@ -38298,7 +38261,7 @@ msgstr ""
 
 #: ../share/extensions/scour.inx.h:31
 msgid "Format output with line-breaks and indentation"
-msgstr ""
+msgstr "Formatēt izvadi ar rindu aplaušanu un atkāpēm"
 
 #: ../share/extensions/scour.inx.h:32
 msgid ""
@@ -38306,10 +38269,13 @@ msgid ""
 "to hand-edit the SVG file you can disable this option to bring down the file "
 "size even more at the cost of clarity."
 msgstr ""
+"Izveidot skaisti formatētu izvadi, ietverot rindu aplauzumus. Ja Jūs "
+"netaisāties labot SVG datni pašrocīgi, varat atspējot šo papildiespēju, "
+"tādējādi samazinot vēl vairāk samazinot datnes izmēru uz lasāmības rēķina."
 
 #: ../share/extensions/scour.inx.h:33
 msgid "Indentation characters:"
-msgstr ""
+msgstr "Atkāpju rakstzīmes:"
 
 #: ../share/extensions/scour.inx.h:34
 msgid ""
@@ -38317,20 +38283,25 @@ msgid ""
 "Specify \"None\" to disable indentation. This option has no effect if "
 "\"Format output with line-breaks and indentation\" is disabled."
 msgstr ""
+"Atkāpes tips, ko izmantot izvades sakārtošanai līmeņos. Norādiet \"None\", "
+"lai atslēgtu atkāpes. Šī papildiespēja nedarbojas, ja \"Formatēt izvadi ar "
+"rindu aplaušanu un atkāpēm\" ir atspējota."
 
 #: ../share/extensions/scour.inx.h:35
 msgid "Depth of indentation:"
-msgstr ""
+msgstr "Atkāpes dziļums:"
 
 #: ../share/extensions/scour.inx.h:36
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
 msgstr ""
+"Izvēlētās atkāpes dziļums. Piemēram, ja izvēlēsieties \"2\", katram līmenim "
+"tiek piemērota papildu 2 tukšumus/tabulatorus liela atkāpe."
 
 #: ../share/extensions/scour.inx.h:37
 msgid "Strip the \"xml:space\" attribute from the root SVG element"
-msgstr ""
+msgstr "Izgriezt \"xml:space\" atribūtu no SVG saknes elementa"
 
 #: ../share/extensions/scour.inx.h:38
 msgid ""
@@ -38338,15 +38309,17 @@ msgid ""
 "root SVG element which instructs the SVG editor not to change whitespace in "
 "the document at all (and therefore overrides the options above)."
 msgstr ""
+"Tas ir noderīgi, ja ievades datne iestata \"xml:space='preserve'\" SVG "
+"saknes elementā, kas aizliedz SVG redaktoram mainīt atstarpes dokumentā (un "
+"tādējādi apiet iepriekšējās papildiespējas)."
 
 #: ../share/extensions/scour.inx.h:39
-#, fuzzy
 msgid "Document options"
-msgstr "Dokumenta"
+msgstr "Dokumenta papildiespējas"
 
 #: ../share/extensions/scour.inx.h:40
 msgid "Pretty-printing"
-msgstr ""
+msgstr "Smukā-druka"
 
 #: ../share/extensions/scour.inx.h:41
 msgid "Space"
@@ -38374,6 +38347,8 @@ msgid ""
 "Remove all unreferenced IDs from elements. Those are not needed for "
 "rendering."
 msgstr ""
+"Aizvākt visus neizmantotos ID no elementiem. Tie nav nepieciešami "
+"renderēšanai."
 
 #: ../share/extensions/scour.inx.h:47
 msgid "Shorten IDs"
@@ -38385,18 +38360,22 @@ msgid ""
 "shortest values to the most-referenced elements. For instance, "
 "\"linearGradient5621\" will become \"a\" if it is the most used element."
 msgstr ""
+"Samaziniet ID garumu, izmantojot tikai mazos burtus, piešķirot visīsākos "
+"nosaukumus visbiežāk izmantotajiem elementiem. Piemēram, "
+"\"linearGradient5621\" kļūs par \"a\" , ja tas ir visbiežāk izmantotais "
+"elements."
 
 #: ../share/extensions/scour.inx.h:49
 msgid "Prefix shortened IDs with:"
-msgstr ""
+msgstr "Priedēklis saīsinātajiem ID:"
 
 #: ../share/extensions/scour.inx.h:50
 msgid "Prepend shortened IDs with the specified prefix."
-msgstr ""
+msgstr "Papildināt saīsinātos ID ar īpašu priedēkli."
 
 #: ../share/extensions/scour.inx.h:51
 msgid "Preserve manually created IDs not ending with digits"
-msgstr ""
+msgstr "Saglabāt ar roku izveidotos ID nosaukumus, kas nebeidzas ar skaitļiem"
 
 #: ../share/extensions/scour.inx.h:52
 msgid ""
@@ -38435,9 +38414,8 @@ msgid "Scalable Vector Graphics"
 msgstr "Mērogojamo vektoru grafika"
 
 #: ../share/extensions/seamless_pattern.inx.h:1
-#, fuzzy
 msgid "Seamless Pattern"
-msgstr "Pa_darīt viengabalainu"
+msgstr "Bezšuvju raksts"
 
 #: ../share/extensions/seamless_pattern.inx.h:2
 #: ../share/extensions/seamless_pattern_procedural.inx.h:2
@@ -38451,12 +38429,11 @@ msgstr "Pielāgot augstums (piks.):"
 
 #: ../share/extensions/seamless_pattern.inx.h:4
 msgid "This extension overwrites the current document"
-msgstr ""
+msgstr "Šis paplašinājums pārrakstīs atvērto dokumentu"
 
 #: ../share/extensions/seamless_pattern_procedural.inx.h:1
-#, fuzzy
 msgid "Seamless Pattern Procedural"
-msgstr "Pa_darīt viengabalainu"
+msgstr "Bezšuvju raksta prodedūra"
 
 #: ../share/extensions/setup_typography_canvas.inx.h:1
 msgid "1 - Setup Typography Canvas"
@@ -38486,7 +38463,8 @@ msgstr "Apakšgarums:"
 msgid "sK1 vector graphics files input"
 msgstr "sK1 vektoru grafikas datņu ievade"
 
-#: ../share/extensions/sk1_input.inx.h:2 ../share/extensions/sk1_output.inx.h:2
+#: ../share/extensions/sk1_input.inx.h:2
+#: ../share/extensions/sk1_output.inx.h:2
 msgid "sK1 vector graphics files (*.sk1)"
 msgstr "sK1 vektoru grafikas datnes (.sk1)"
 
@@ -38956,23 +38934,23 @@ msgstr "No malas c un leņķiem a, b"
 
 #: ../share/extensions/ungroup_deep.inx.h:1
 msgid "Deep Ungroup"
-msgstr ""
+msgstr "Dziļā atgrupēšana"
 
 #: ../share/extensions/ungroup_deep.inx.h:2
 msgid "Ungroup all groups in the selected object."
-msgstr ""
+msgstr "Atgrupēt visas grupas atlasītajā objektā."
 
 #: ../share/extensions/ungroup_deep.inx.h:3
 msgid "Starting Depth"
-msgstr ""
+msgstr "Sākuma dziļums"
 
 #: ../share/extensions/ungroup_deep.inx.h:4
 msgid "Stopping Depth (from top)"
-msgstr ""
+msgstr "Beigu dziļums (no augšas)"
 
 #: ../share/extensions/ungroup_deep.inx.h:5
 msgid "Depth to Keep (from bottom)"
-msgstr ""
+msgstr "Konstantais dziļums (no apakšas)"
 
 #: ../share/extensions/voronoi2svg.inx.h:1
 msgid "Voronoi Diagram"
@@ -38992,7 +38970,7 @@ msgstr "Rādīt robežrāmi"
 
 #: ../share/extensions/voronoi2svg.inx.h:6
 msgid "Triangles color"
-msgstr ""
+msgstr "Trīsstūru krāsa"
 
 #: ../share/extensions/voronoi2svg.inx.h:7
 msgid "Delaunay Triangulation"
@@ -39016,15 +38994,15 @@ msgstr ""
 
 #: ../share/extensions/voronoi2svg.inx.h:13
 msgid "Default (Stroke black and no fill)"
-msgstr ""
+msgstr "Noklusētais (Melna apmale bez aizpildījuma)"
 
 #: ../share/extensions/voronoi2svg.inx.h:14
 msgid "Triangles with item color"
-msgstr ""
+msgstr "Trīsstūri ar objekta krāsu"
 
 #: ../share/extensions/voronoi2svg.inx.h:15
 msgid "Triangles with item color (random on apply)"
-msgstr ""
+msgstr "Trīsstūri ar objekta krāsu (nenoteikti pielietojot)"
 
 #: ../share/extensions/voronoi2svg.inx.h:17
 msgid ""
@@ -39450,11 +39428,13 @@ msgstr "Slīpums (gr):"
 msgid "Hide lines behind the sphere"
 msgstr "Slēpt aiz lodes esošās līnijas"
 
-#: ../share/extensions/wmf_input.inx.h:1 ../share/extensions/wmf_output.inx.h:1
+#: ../share/extensions/wmf_input.inx.h:1
+#: ../share/extensions/wmf_output.inx.h:1
 msgid "Windows Metafile Input"
 msgstr "Windows Metafile ievade"
 
-#: ../share/extensions/wmf_input.inx.h:3 ../share/extensions/wmf_output.inx.h:3
+#: ../share/extensions/wmf_input.inx.h:3
+#: ../share/extensions/wmf_output.inx.h:3
 msgid "A popular graphics file format for clipart"
 msgstr "Bieži lietots galeriju attēlu grafiskais formāts "
 
@@ -39462,12 +39442,8 @@ msgstr "Bieži lietots galeriju attēlu grafiskais formāts "
 msgid "XAML Input"
 msgstr "XAML ievade"
 
-#~ msgid "Adjust the rotation angle"
-#~ msgstr "Pieskaņot griešanas leņki"
-
-#, fuzzy
-#~ msgid "Adjust the center"
-#~ msgstr "Pieskaņot nobīdi"
+#~ msgid "Kashmiri in Peso-Arabic script (ks@aran)"
+#~ msgstr "Kašmiru peso-arābiskā rakstībā (ks@aran)"
 
 #~ msgid "Enable dynamic relayout for incomplete sections"
 #~ msgstr "Atļaut nepabeigtu nodaļu dinamisku pārkārtošanu"
@@ -39478,6 +39454,27 @@ msgstr "XAML ievade"
 #~ msgstr ""
 #~ "Ja atļauts, ieslēdz vēl nepabeigtu komponentu dinamisku pārkārtošanu "
 
+#~ msgid ""
+#~ "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> "
+#~ "to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
+#~ "segment"
+#~ msgstr ""
+#~ "Novietojiet loka vai segmenta <b>sākumpunktu</b>; ar <b>Ctrl</b> - "
+#~ "pievilkt leņķim; lai iegūtu loku, velciet elipses <b>iekšpusē</b>; lai "
+#~ "iegūtu sektoru - <b>ārpusē</b>"
+
+#~ msgid ""
+#~ "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
+#~ "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
+#~ "segment"
+#~ msgstr ""
+#~ "Novietojiet loka vai segmenta <b>beigu punktu</b>; ar <b>Ctrl</b> - "
+#~ "pievilkt leņķim; lai iegūtu loku, velciet elipses <b>iekšpusē</b>; lai "
+#~ "iegūtu sektoru - <b>ārpusē</b>"
+
+#~ msgid "Create default mesh"
+#~ msgstr "Izveidot noklusēto tīklu"
+
 #~ msgid "FIXME<b>Ctrl</b>: snap mesh angle"
 #~ msgstr "LABOT<b>Ctrl</b>: piesaistes tīkla leņķis"
 
@@ -39487,14 +39484,23 @@ msgstr "XAML ievade"
 #~ msgid "Show side and tensor handles"
 #~ msgstr "Rādīt malas un tenzora turus"
 
-#~ msgid "Create default mesh"
-#~ msgstr "Izveidot noklusēto tīklu"
-
 #~ msgid "<b>Mesh gradient</b>"
 #~ msgstr "<b>Režģtīkla krāsu pāreja</b>"
 
+#~ msgid "Side Length 'a' (px): "
+#~ msgstr "Malas garums 'a' (px): "
+
+#~ msgid "Side Length 'b' (px): "
+#~ msgstr "Malas garums 'b' (px): "
+
+#~ msgid "Side Length 'c' (px): "
+#~ msgstr "Malas garums 'c' (px): "
+
 #~ msgid "Area (px^2): "
 #~ msgstr "Laukums (px^2): "
+
+#~ msgid "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
+#~ msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
 
 #, fuzzy
 #~ msgctxt "Path handle tip"
@@ -39585,6 +39591,9 @@ msgstr "XAML ievade"
 #~ "2. Atarhivējiet \"serial\" apakšmapi no zip arhīva sekojošā mapē: C:"
 #~ "\\[Program files]\\inkscape\\python\\Lib\\\n"
 #~ "3. Pārstartējiet Inkscape."
+
+#~ msgid "http://inkscape.org/doc/keys091.html"
+#~ msgstr "http://inkscape.org/doc/keys091.html"
 
 #~ msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
 #~ msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
@@ -39802,6 +39811,12 @@ msgstr "XAML ievade"
 
 #~ msgid "Arbitrary Angle"
 #~ msgstr "Patvaļīgs leņķis"
+
+#~ msgid "Horizontal Point:"
+#~ msgstr "Horizontālais punkts:"
+
+#~ msgid "Vertical Point:"
+#~ msgstr "Vertikālais punkts:"
 
 #~ msgid "Ignore cusp nodes"
 #~ msgstr "Neņemt vērā asos mezglus"
@@ -40835,6 +40850,12 @@ msgstr "XAML ievade"
 #~ msgid "Determines which kind of boolop will be performed."
 #~ msgstr "Nosaka veicamās Bula operācijas."
 
+#~ msgid "Adjust the starting angle"
+#~ msgstr "Pieskaņot sākuma leņki"
+
+#~ msgid "Adjust the rotation angle"
+#~ msgstr "Pieskaņot griešanas leņki"
+
 #~ msgid "Elliptic Pen"
 #~ msgstr "Eliptiskā spalva"
 
@@ -40964,6 +40985,9 @@ msgstr "XAML ievade"
 #~ msgid "Handle to control the distance of the offset from the curve"
 #~ msgstr "Vadības turis nobīdes attāluma no līknes vadībai "
 
+#~ msgid "Adjust the offset"
+#~ msgstr "Pieskaņot nobīdi"
+
 #~ msgid "Specifies the left end of the parallel"
 #~ msgstr "Nosaka paralēles kreiso galu"
 
@@ -41008,6 +41032,9 @@ msgstr "XAML ievade"
 #~ "the right side"
 #~ msgstr ""
 #~ "Ja iespējots, novieto ceļu pa kreisi no iedomāta rāmja, citādi - pa labi"
+
+#~ msgid "Adjust the origin"
+#~ msgstr "Pieskaņot sākumu"
 
 #~ msgid "Iterations:"
 #~ msgstr "Atkārtojumi:"
