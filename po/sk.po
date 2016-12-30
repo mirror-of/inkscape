@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-12-29 16:43+0200\n"
+"PO-Revision-Date: 2016-12-30 01:22+0200\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -5404,7 +5404,7 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
-"  Toto spôsobil nesprávny .inx súbor tohto rozšírenia.  Nesprávny .inx súbor "
+"  Toto spôsobil nesprávny .inx súbor tohto rozšírenia. Nesprávny súbor .inx "
 "mohla spôsobiť chybná inštalácia Inkscape."
 
 #: ../src/extension/extension.cpp:277 ../src/extension/extension.cpp:281
@@ -5443,7 +5443,7 @@ msgstr "“ sa nepodarilo načítať, lebo "
 #: ../src/extension/extension.cpp:670 ../src/extension/extension.cpp:674
 #, c-format
 msgid "Could not create extension error log file '%s'"
-msgstr "Nepodarilo sa vytvoriť súbor so záznamom  „%s“ pre rozšírenie"
+msgstr "Nepodarilo sa vytvoriť súbor so záznamom „%s“ pre rozšírenie"
 
 #: ../src/extension/extension.cpp:778
 #: ../share/extensions/webslicer_create_rect.inx.h:2
@@ -9668,7 +9668,7 @@ msgstr "Sieťkový farebný prechod - <b>tenzor</b>"
 
 #: ../src/gradient-drag.cpp:566 ../src/gradient-drag.cpp:567
 msgid "Added patch row or column"
-msgstr ""
+msgstr "Pridaný riadok alebo stĺpec záplaty"
 
 #: ../src/gradient-drag.cpp:809 ../src/gradient-drag.cpp:797
 msgid "Merge gradient handles"
@@ -9690,8 +9690,8 @@ msgid ""
 "%s %d for: %s%s; drag with <b>Ctrl</b> to snap offset; click with <b>Ctrl"
 "+Alt</b> to delete stop"
 msgstr ""
-"%s %d pre: %s%s; ťahanie s <b>Ctrl</b> prichytáva k posunu, s <b>Ctrl+Alt</"
-"b> zmaže priehradku"
+"%s %d pre: %s%s; ťahanie s <b>Ctrl</b> prichytáva k posunu, s "
+"<b>Ctrl+Alt</b> zmaže priehradku"
 
 #: ../src/gradient-drag.cpp:1476 ../src/gradient-drag.cpp:1485
 #: ../src/gradient-drag.cpp:1492 ../src/gradient-drag.cpp:1430
@@ -10348,7 +10348,7 @@ msgstr "Zostrojiť mriežku"
 
 #: ../src/live_effects/effect.cpp:127 ../src/live_effects/effect.cpp:114
 msgid "Spiro spline"
-msgstr "Špirálová drážka"
+msgstr "Spiro spline"
 
 #: ../src/live_effects/effect.cpp:128 ../src/live_effects/effect.cpp:115
 msgid "Envelope Deformation"
@@ -11115,7 +11115,7 @@ msgstr ""
 #: ../src/live_effects/lpe-powerstroke.cpp:138
 #: ../src/live_effects/lpe-powerstroke.cpp:192
 msgid "Centripetal Catmull-Rom"
-msgstr ""
+msgstr "Dostredivá spine krivka Catmull-Rom"
 
 #: ../src/live_effects/lpe-interpolate_points.cpp:37
 #: ../src/live_effects/lpe-powerstroke.cpp:180
@@ -11138,7 +11138,7 @@ msgstr ""
 #: ../src/live_effects/lpe-taperstroke.cpp:63
 #: ../src/live_effects/lpe-powerstroke.cpp:221
 msgid "Beveled"
-msgstr "Vrstvenie"
+msgstr "Skosený (bevel)"
 
 #: ../src/live_effects/lpe-jointype.cpp:32
 #: ../src/live_effects/lpe-jointype.cpp:43
@@ -11147,18 +11147,18 @@ msgstr "Vrstvenie"
 #: ../src/widgets/star-toolbar.cpp:534
 #: ../src/live_effects/lpe-powerstroke.cpp:222
 msgid "Rounded"
-msgstr "Zaoblené"
+msgstr "Zaoblené (round)"
 
 #: ../src/live_effects/lpe-jointype.cpp:33
 #: ../src/live_effects/lpe-powerstroke.cpp:171
 #: ../src/live_effects/lpe-taperstroke.cpp:65
 #: ../src/live_effects/lpe-powerstroke.cpp:225
 msgid "Miter"
-msgstr "Ostrý spoj"
+msgstr "Ostrý spoj (miter)"
 
 #: ../src/live_effects/lpe-jointype.cpp:34
 msgid "Miter Clip"
-msgstr ""
+msgstr "Ostrý spoj orezaný (miter-clip)"
 
 #. {LINEJOIN_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"}, // disabled because doesn't work well
 #: ../src/live_effects/lpe-jointype.cpp:35
@@ -15792,7 +15792,6 @@ msgstr "Zvoľte Modrú farebnú zložku"
 #. TRANSLATORS:  "H" here stands for hue
 #: ../src/ui/dialog/clonetiler.cpp:868 ../src/ui/dialog/clonetiler.cpp:872
 #: ../src/widgets/tweak-toolbar.cpp:291
-#, fuzzy
 msgctxt "Clonetiler color hue"
 msgid "H"
 msgstr "H"
@@ -15804,7 +15803,6 @@ msgstr "Vybrať odtieň farby"
 #. TRANSLATORS: "S" here stands for Saturation
 #: ../src/ui/dialog/clonetiler.cpp:876 ../src/ui/dialog/clonetiler.cpp:880
 #: ../src/widgets/tweak-toolbar.cpp:307
-#, fuzzy
 msgctxt "Clonetiler color saturation"
 msgid "S"
 msgstr "S"
@@ -15816,7 +15814,6 @@ msgstr "Zvoľte sýtosť farby"
 #. TRANSLATORS: "L" here stands for Lightness
 #: ../src/ui/dialog/clonetiler.cpp:884 ../src/ui/dialog/clonetiler.cpp:888
 #: ../src/widgets/tweak-toolbar.cpp:323
-#, fuzzy
 msgctxt "Clonetiler color lightness"
 msgid "L"
 msgstr "L"
@@ -18403,7 +18400,7 @@ msgstr ""
 #: ../src/ui/dialog/glyphs.cpp:69 ../src/ui/dialog/glyphs.cpp:161
 #: ../share/extensions/hershey.inx.h:22
 msgid "Cyrillic"
-msgstr ""
+msgstr "Azbuka"
 
 #: ../src/ui/dialog/glyphs.cpp:70
 msgid "Deseret"
@@ -18423,7 +18420,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:74
 msgid "Gothic"
-msgstr ""
+msgstr "Gothic"
 
 #: ../src/ui/dialog/glyphs.cpp:75
 msgid "Greek"
@@ -23408,6 +23405,13 @@ msgid ""
 "Note that this behaviour is not defined in the SVG 1.1 specification and not "
 "all browsers follow this interpretation."
 msgstr ""
+"Vlastnosť „image-rendering“ (vykresľovanie obrazu) môže ovplyvniť, akým "
+"spôsobom sa bitová mapa zväčší:\n"
+"        „auto“ bez preferencií;\n"
+"\t„optimizeQuality“ hladké zväčšenie;\n"
+"\t„optimizeSpeed“ kockaté zväčšenie.\n"
+"Všimnite si, že toto správanie nie je definovaný v špecifikácii SVG 1.1 a "
+"nie všetky prehliadače dodržiavajú túto interpretáciu."
 
 #. Hide
 #: ../src/ui/dialog/object-properties.cpp:293
@@ -24305,7 +24309,7 @@ msgstr "Zobraziť menej ikon v riadku."
 
 #: ../src/ui/dialog/symbols.cpp:254 ../src/ui/dialog/symbols.cpp:258
 msgid "Toggle 'fit' symbols in icon space."
-msgstr ""
+msgstr "Prepnúť „umiestňovanie“ symbolov do priestoru ikony."
 
 #: ../src/ui/dialog/symbols.cpp:266 ../src/ui/dialog/symbols.cpp:270
 msgid "Make symbols smaller by zooming out."
@@ -24322,27 +24326,27 @@ msgstr "Nepomenované symboly"
 #: ../src/ui/dialog/tags.cpp:270 ../src/ui/dialog/tags.cpp:569
 #: ../src/ui/dialog/tags.cpp:683 ../src/ui/dialog/tags.cpp:946
 msgid "Remove from selection set"
-msgstr ""
+msgstr "Odstrániť zo sady výberu"
 
 #: ../src/ui/dialog/tags.cpp:427
 msgid "Items"
-msgstr ""
+msgstr "Položky"
 
 #: ../src/ui/dialog/tags.cpp:666 ../src/ui/dialog/tags.cpp:944
 msgid "Add selection to set"
-msgstr ""
+msgstr "Pridať výber do sady"
 
 #: ../src/ui/dialog/tags.cpp:824
 msgid "Moved sets"
-msgstr ""
+msgstr "Presunuté sady"
 
 #: ../src/ui/dialog/tags.cpp:1004
 msgid "Add a new selection set"
-msgstr ""
+msgstr "Pridať novú sadu výberu"
 
 #: ../src/ui/dialog/tags.cpp:1013
 msgid "Remove Item/Set"
-msgstr ""
+msgstr "Odstrániť položku/sadu"
 
 #: ../src/ui/dialog/template-widget.cpp:37
 msgid "More info"
@@ -25337,6 +25341,9 @@ msgid ""
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
+"Poloha <b>počiatočného bodu</b> oblúku alebo segmentu; s <b>Shift</b> "
+"posuniete s <b>koncovým bodom</b>; s <b>Ctrl</b> prichytávanie k uhlu; "
+"ťahanie <b>vnútri</b> elipsy urobí oblúk, <b>mimo</b> urobí segment"
 
 #: ../src/ui/object-edit.cpp:1010
 msgid ""
@@ -25344,6 +25351,9 @@ msgid ""
 "move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
+"Poloha <b>koncového bodu</b> oblúku alebo segmentu; s <b>Shift</b> posuniete "
+"s <b>počiatočným bodom</b>; s <b>Ctrl</b> prichytávanie k uhlu; ťahanie "
+"<b>vnútri</b> elipsy urobí oblúk, <b>mimo</b> urobí segment"
 
 #: ../src/ui/object-edit.cpp:1157 ../src/object-edit.cpp:1101
 msgid ""
@@ -26669,6 +26679,8 @@ msgid ""
 "<b>Click</b> or <b>click and drag</b> to close and finish the path. Shift"
 "+Click make a cusp node"
 msgstr ""
+"<b>Kliknutím</b> alebo <b>kliknutím a ťahaním</b> zatvoríte a dokončíte "
+"cestu. Shift+kliknutím vytvoríte hrotový uzol"
 
 #: ../src/ui/tools/pen-tool.cpp:654 ../src/ui/tools/pen-tool.cpp:586
 msgid ""
@@ -26682,6 +26694,8 @@ msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point. "
 "Shift+Click make a cusp node"
 msgstr ""
+"<b>Kliknutím</b> alebo <b>kliknutím a ťahaním</b> budete pokračovať v ceste "
+"od tohto bodu. Shift+kliknutím vytvoríte hrotový uzol"
 
 #: ../src/ui/tools/pen-tool.cpp:1797
 #, c-format
@@ -26689,6 +26703,8 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Úsek krivky</b>: uhol %3.2f&#176;, vzdialenosť %s; s <b>Ctrl</b> "
+"prichytávanie k uhlu; s <b>Enter</b> alebo <b>Shift+Enter</b> ukončíte cestu"
 
 #: ../src/ui/tools/pen-tool.cpp:1798
 #, c-format
@@ -26696,6 +26712,8 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Úsek čiary</b>: uhol %3.2f&#176;, vzdialenosť %s; s <b>Ctrl</b> "
+"prichytávanie k uhlu; s <b>Enter</b> alebo <b>Shift+Enter</b> ukončíte cestu"
 
 #: ../src/ui/tools/pen-tool.cpp:1801
 #, c-format
@@ -26703,6 +26721,9 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</"
 "b> make a cusp node, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Úsek krivky</b>: uhol %3.2f&#176;, vzdialenosť %s; s "
+"<b>Shift+kliknutím</b> vytvoríte hrotový uzol; <b>Enter</b> na ukončenie "
+"cesty"
 
 #: ../src/ui/tools/pen-tool.cpp:1802
 #, c-format
@@ -26710,6 +26731,8 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</b> "
 "make a cusp node, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
+"<b>Úsek čiary</b>: uhol %3.2f&#176;, vzdialenosť %s; <b>Shift+kliknutím</b> "
+"vytvoríte hrotový uzol; <b>Enter</b> na ukončenie cesty"
 
 #: ../src/ui/tools/pen-tool.cpp:1819 ../src/ui/tools/pen-tool.cpp:1228
 #, c-format
@@ -26895,7 +26918,7 @@ msgstr ""
 
 #: ../src/ui/tools/spiral-tool.cpp:411 ../src/ui/tools/spiral-tool.cpp:421
 msgid "Create spiral"
-msgstr "Vytvorenie špirály"
+msgstr "Vytvorenie spiro spline"
 
 #: ../src/ui/tools/spray-tool.cpp:214 ../src/ui/tools/tweak-tool.cpp:159
 #: ../src/ui/tools/spray-tool.cpp:192 ../src/ui/tools/tweak-tool.cpp:167
@@ -28546,10 +28569,9 @@ msgid "Stroke: %06x/%.3g"
 msgstr "Ťah: %06x/%.3g"
 
 #: ../src/ui/widget/style-swatch.cpp:321 ../src/ui/widget/style-swatch.cpp:320
-#, fuzzy
 msgctxt "Fill and stroke"
 msgid "<i>None</i>"
-msgstr "<i>žiadna</i>"
+msgstr "<i>Žiadna</i>"
 
 #: ../src/ui/widget/style-swatch.cpp:348 ../src/ui/widget/style-swatch.cpp:347
 #, c-format
@@ -29980,7 +30002,7 @@ msgstr "Špirála"
 
 #: ../src/verbs.cpp:2748 ../src/verbs.cpp:2663
 msgid "Create spirals"
-msgstr "Vytvorenie špirál"
+msgstr "Vytvorenie spiro splines"
 
 #: ../src/verbs.cpp:2749 ../src/verbs.cpp:2664
 msgctxt "ContextVerb"
@@ -32427,19 +32449,20 @@ msgstr "UPOZORNENIE: Syntax sieťky v SVG sa môže zmeniť"
 #: ../src/widgets/mesh-toolbar.cpp:545
 msgctxt "Type"
 msgid "Coons"
-msgstr ""
+msgstr "Coonsove"
 
 #: ../src/widgets/mesh-toolbar.cpp:548
 msgid "Bicubic"
-msgstr ""
+msgstr "bikubické"
 
 #: ../src/widgets/mesh-toolbar.cpp:550
 msgid "Coons"
-msgstr ""
+msgstr "Coonsove"
 
 #: ../src/widgets/mesh-toolbar.cpp:551
 msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr ""
+"Coonsove: bez vyhladzovania. Bikubické: vyhladzovanie cez hranice povrchov."
 
 #: ../src/widgets/mesh-toolbar.cpp:553 ../src/widgets/pencil-toolbar.cpp:381
 #: ../src/widgets/pencil-toolbar.cpp:272
@@ -32708,7 +32731,7 @@ msgstr "Radiálny farebný prechod"
 
 #: ../src/widgets/paint-selector.cpp:230
 msgid "Mesh gradient"
-msgstr "Sieťkovým farebným prechodom"
+msgstr "Sieťkový farebný prechod"
 
 #: ../src/widgets/paint-selector.cpp:237 ../src/widgets/paint-selector.cpp:246
 msgid "Unset paint (make it undefined so it can be inherited)"
@@ -32728,7 +32751,7 @@ msgstr ""
 msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
 msgstr ""
-"Výplň je pevná ak nie je podcesta v opačne orientovaná (fill-rule: nonzero)"
+"Výplň je pevná ak nie je podcesta opačne orientovaná (fill-rule: nonzero)"
 
 #: ../src/widgets/paint-selector.cpp:615 ../src/widgets/paint-selector.cpp:590
 msgid "<b>No objects</b>"
@@ -32862,7 +32885,7 @@ msgstr "Tvorba Bézierovej cesty"
 
 #: ../src/widgets/pencil-toolbar.cpp:112 ../src/widgets/pencil-toolbar.cpp:104
 msgid "Create Spiro path"
-msgstr "Vytvorenie špirály"
+msgstr "Vytvorenie spiro spline"
 
 #: ../src/widgets/pencil-toolbar.cpp:118
 msgid "Create BSpline path"
@@ -34259,7 +34282,7 @@ msgstr "K uzlom"
 
 #: ../src/widgets/toolbox.cpp:1829 ../src/widgets/toolbox.cpp:1754
 msgid "Snap cusp nodes, incl. rectangle corners"
-msgstr ""
+msgstr "Prichytávať hrotové uzly, vrátane rohov obdĺžnika"
 
 #: ../src/widgets/toolbox.cpp:1838 ../src/widgets/toolbox.cpp:1763
 msgid "Smooth nodes"
@@ -34267,7 +34290,7 @@ msgstr "Hladké uzly"
 
 #: ../src/widgets/toolbox.cpp:1838 ../src/widgets/toolbox.cpp:1763
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
-msgstr ""
+msgstr "Prichytávať hladké uzly, vrátane kvadrantových bodov elíps"
 
 #: ../src/widgets/toolbox.cpp:1847 ../src/widgets/toolbox.cpp:1772
 msgid "Line Midpoints"
@@ -34478,7 +34501,7 @@ msgstr "V režime farieb vykonať zmeny odtieňa objektu"
 #: ../src/widgets/tweak-toolbar.cpp:291
 msgctxt "Hue"
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: ../src/widgets/tweak-toolbar.cpp:303
 msgid "In color mode, act on objects' saturation"
@@ -34488,7 +34511,7 @@ msgstr "V režime farieb vykonať zmeny sýtosti objektu"
 #: ../src/widgets/tweak-toolbar.cpp:307
 msgctxt "Saturation"
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: ../src/widgets/tweak-toolbar.cpp:319
 msgid "In color mode, act on objects' lightness"
@@ -34498,7 +34521,7 @@ msgstr "V režime farieb vykonať zmeny jasu objektu"
 #: ../src/widgets/tweak-toolbar.cpp:323
 msgctxt "Lightness"
 msgid "L"
-msgstr ""
+msgstr "L"
 
 #: ../src/widgets/tweak-toolbar.cpp:335
 msgid "In color mode, act on objects' opacity"
@@ -34506,7 +34529,6 @@ msgstr "V režime farieb vykonať zmeny priesvitnosti objektu"
 
 #. TRANSLATORS: "O" here stands for Opacity
 #: ../src/widgets/tweak-toolbar.cpp:339
-#, fuzzy
 msgctxt "Opacity"
 msgid "O"
 msgstr "O"
@@ -34542,7 +34564,7 @@ msgstr "Použiť tlak vstupného zariadenia na zmenu sily činnosti ladenia"
 
 #: ../share/extensions/convert2dashes.py:56
 msgid "Total number of objects not converted: {}\n"
-msgstr ""
+msgstr "Celkový počet neskonvertovaných objektov: {}\n"
 
 #: ../share/extensions/dimension.py:108 ../share/extensions/dimension.py:109
 msgid "Please select an object."
@@ -34555,15 +34577,15 @@ msgstr ""
 
 #: ../share/extensions/draw_from_triangle.py:179
 msgid "Side Length 'a' ("
-msgstr ""
+msgstr "Dĺžka strany „a“ ("
 
 #: ../share/extensions/draw_from_triangle.py:180
 msgid "Side Length 'b' ("
-msgstr ""
+msgstr "Dĺžka strany „b“ ("
 
 #: ../share/extensions/draw_from_triangle.py:181
 msgid "Side Length 'c' ("
-msgstr ""
+msgstr "Dĺžka strany „c“ ("
 
 #: ../share/extensions/draw_from_triangle.py:182
 #: ../share/extensions/draw_from_triangle.py:183
@@ -34587,7 +34609,7 @@ msgstr "Polobvod (px): "
 
 #: ../share/extensions/draw_from_triangle.py:186
 msgid "Area ("
-msgstr ""
+msgstr "Plocha ("
 
 #: ../share/extensions/dxf_input.py:530 ../share/extensions/dxf_input.py:504
 #, python-format
@@ -34671,12 +34693,16 @@ msgstr "Musia byť vybrané aspoň 2 cesty"
 msgid ""
 "x-interval cannot be zero. Please modify 'Start X value' or 'End X value'"
 msgstr ""
+"x-interval nemôže byť nula. Prosím zmeňte „Počiatočná hodnota X:“ alebo "
+"„Koncová hodnota X:“"
 
 #: ../share/extensions/funcplot.py:58
 msgid ""
 "y-interval cannot be zero. Please modify 'Y value of rectangle's top' or 'Y "
 "value of rectangle's bottom'"
 msgstr ""
+"y-interval nemôže byť nula. Prosím zmeňte „Hodnota Y vrchu obdĺžnika:“ alebo "
+"„Hodnota Y spodku obdĺžnika:“"
 
 #: ../share/extensions/funcplot.py:313 ../share/extensions/funcplot.py:315
 msgid "Please select a rectangle"
@@ -35006,6 +35032,7 @@ msgstr "Prosím, vyberte objekt"
 #: ../share/extensions/gimp_xcf.py:37
 msgid "Inkscape must be installed and set in your path variable."
 msgstr ""
+"Inkscape  musí byť nainštalovaný a nastavený v premennej prostredia PATH."
 
 #: ../share/extensions/gimp_xcf.py:41 ../share/extensions/gimp_xcf.py:39
 msgid "Gimp must be installed and set in your path variable."
@@ -35030,7 +35057,7 @@ msgstr "Posuny"
 
 #: ../share/extensions/hpgl_decoder.py:43
 msgid "Pen "
-msgstr ""
+msgstr "Pero"
 
 #. issue error if no hpgl data found
 #: ../share/extensions/hpgl_input.py:56 ../share/extensions/hpgl_input.py:58
@@ -35064,6 +35091,13 @@ msgid ""
 "Technical details:\n"
 "%s"
 msgstr ""
+"inkex.py vyžaduje fantastický lxml wrapper pre libxml2 a teda toto "
+"rozšírenie. Prosím, stiahnite a nainštalujte jeho najnovšiu verziu z "
+"http://cheeseshop.python.org/pypi/lxml/ alebo prostredníctvom vášho správcu "
+"balíčkov príkazom ako: sudo apt-get install python-lxml\n"
+"\n"
+"Technické podrobnosti:\n"
+"%s"
 
 #: ../share/extensions/inkex.py:184 ../share/extensions/inkex.py:169
 #, python-format
@@ -35464,26 +35498,29 @@ msgstr ""
 
 #: ../share/extensions/plotter.py:146
 msgid "pySerial is not installed. Please follow these steps:"
-msgstr ""
+msgstr "pySerial nie je nainštalovaný. Prosím, postupujte nasledovne:"
 
 #: ../share/extensions/plotter.py:147
 msgid "1. Download and extract (unzip) this file to your local harddisk:"
-msgstr ""
+msgstr "1. Stiahnite a rozbaľte tento súbor (zip) na váš lokálny pevný disk:"
 
 #: ../share/extensions/plotter.py:149
 msgid ""
 "2. Copy the \"serial\" folder (Can be found inside the just extracted folder)"
 msgstr ""
+"2. Skopírujte priečinok „serial“ (nájdete ho v práve rozbalenom priečinku)"
 
 #: ../share/extensions/plotter.py:150
 msgid ""
 "   into the following Inkscape folder: C:\\[Program files]\\inkscape\\python"
 "\\Lib\\"
 msgstr ""
+"   do nasledujúceho priečinka Inkscape: C:\\[Program "
+"files]\\inkscape\\python\\Lib\\"
 
 #: ../share/extensions/plotter.py:151
 msgid "3. Close and restart Inkscape."
-msgstr ""
+msgstr "3. Zatvorte a znovu spustite Inkscape."
 
 #: ../share/extensions/plotter.py:200 ../share/extensions/plotter.py:163
 msgid ""
@@ -35626,7 +35663,7 @@ msgstr "Prosím, zadajte náhradné písmo do poľa nahradenia všetkých výsky
 
 #: ../share/extensions/restack.py:75
 msgid "There is no selection to restack."
-msgstr ""
+msgstr "Neexistuje žiadny výber, ktorý by bolo možné preskladať."
 
 #: ../share/extensions/summersnight.py:41
 #: ../share/extensions/summersnight.py:44
@@ -35658,6 +35695,11 @@ msgid ""
 "http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
 "and install into your Inkscape's Python location\n"
 msgstr ""
+"Musíte si nainštalovať softvér UniConvertor.\n"
+"Na GNU/Linux: nainštalujte si balík python-uniconvertor.\n"
+"Na Windows: Stiahite si ho z "
+"http://sk1project.org/modules.php?name=Products&product=uniconvertor a "
+"nainštalujte ho do svojho Pythonu, ktorý používa Inkscape"
 
 #: ../share/extensions/voronoi2svg.py:205
 #: ../share/extensions/voronoi2svg.py:215
@@ -35717,7 +35759,7 @@ msgstr "Adresár „%s“ neexistuje."
 
 #: ../share/extensions/webslicer_export.py:76
 msgid "No slicer layer found."
-msgstr ""
+msgstr "Nenašla sa vrstva krájača."
 
 #: ../share/extensions/webslicer_export.py:106
 #: ../share/extensions/webslicer_export.py:102
@@ -36010,22 +36052,22 @@ msgstr "Náhodná"
 #: ../share/extensions/color_randomize.inx.h:4
 #, no-c-format
 msgid "Hue range (%)"
-msgstr ""
+msgstr "Rozsah odtieňa (%)"
 
 #: ../share/extensions/color_randomize.inx.h:6
 #, no-c-format
 msgid "Saturation range (%)"
-msgstr ""
+msgstr "Rozsah sýtosti (%)"
 
 #: ../share/extensions/color_randomize.inx.h:8
 #, no-c-format
 msgid "Lightness range (%)"
-msgstr ""
+msgstr "Rozsah svetlosti (%)"
 
 #: ../share/extensions/color_randomize.inx.h:10
 #, no-c-format
 msgid "Opacity range (%)"
-msgstr ""
+msgstr "Rozsah krytia (%)"
 
 #: ../share/extensions/color_randomize.inx.h:12
 msgid ""
@@ -36033,6 +36075,9 @@ msgid ""
 "only for objects and groups). Change the range values to limit the distance "
 "between the original color and the randomized one."
 msgstr ""
+"Náhodne vyberie odtieň, sýtosť, svetlosť alebo krytie (náhodné krytie len "
+"pri objektoch a skupinách). Zmenou hodnoty rozsahu obmedzíte vzdialenosť "
+"medzi pôvodnou farbou a náhodnou farbou."
 
 #: ../share/extensions/color_removeblue.inx.h:1
 msgid "Remove Blue"
@@ -36129,7 +36174,7 @@ msgstr "Posun Y:"
 
 #: ../share/extensions/dimension.inx.h:4
 msgid "Bounding box type:"
-msgstr ""
+msgstr "Typ ohraničenia:"
 
 #: ../share/extensions/dimension.inx.h:5
 msgid "Geometric"
@@ -36147,17 +36192,19 @@ msgstr "Zobraziť cestu"
 
 #: ../share/extensions/docinfo.inx.h:1
 msgid "DOC Info"
-msgstr ""
+msgstr "DOC Info"
 
 #: ../share/extensions/docinfo.inx.h:2
 msgid "Show page info"
-msgstr ""
+msgstr "Zobraziť informácie o stránke"
 
 #: ../share/extensions/docinfo.inx.h:3
 msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
+"Vyberte túto kartu ak chcete zobraziť informácie o stránke predtým, než "
+"použijete Prepínač DPI."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -36196,11 +36243,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr ""
+msgstr "DPI 90 na 96"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr ""
+msgstr "DPI 96 na 90"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 msgid "Draw From Triangle"
@@ -36412,11 +36459,11 @@ msgstr "Vstup DXF"
 
 #: ../share/extensions/dxf_input.inx.h:3
 msgid "Method of Scaling:"
-msgstr ""
+msgstr "Metóda zmeny mierky:"
 
 #: ../share/extensions/dxf_input.inx.h:4
 msgid "Manual scale factor:"
-msgstr ""
+msgstr "Manuálna mierka:"
 
 #: ../share/extensions/dxf_input.inx.h:5
 msgid "Manual x-axis origin (mm):"
@@ -36450,6 +36497,15 @@ msgid ""
 "- layers are preserved only on File->Open, not Import.\n"
 "- limited support for BLOCKS, use AutoCAD Explode Blocks instead, if needed."
 msgstr ""
+"- AutoCAD Release 13 a novší.\n"
+"- na manuálnu zmenu mierky predpokladá, že kresba dxf je v mm.\n"
+"- predpokladá, že kresba svg je v pixeloch pri 96 DPI.\n"
+"- mierky a pôvodu použiť len na manuálnu zmenu mierky.\n"
+"- „Automatická mierka“ vmestí kresbu na šírku strany A4.\n"
+"- „Čítať zo súboru“ používa premennú $MEASUREMENT.\n"
+"- vrstvy sú zachované len pri Súbor -> Otvoriť, nie pri Importovať.\n"
+"- obmedzená podpora pre BLOCK; ak treba, namiesto toho použite funkciu "
+"AutoCAD Explode Blocks."
 
 #: ../share/extensions/dxf_input.inx.h:19
 #: ../share/extensions/dxf_input.inx.h:17
@@ -36582,6 +36638,19 @@ msgid ""
 "- You can choose to export all layers, only visible ones or by name match "
 "(case insensitive and use comma ',' as separator)"
 msgstr ""
+" - Formát DXF AutoCAD Release 14.\n"
+" - Parameter Základná jednotka určuje, v akých jednotkách sa vypisujú "
+"súradnice (96 px = 1 palec).\n"
+" - Podporované typy prvkov\n"
+"   - cesty (čiary a krivky spline)\n"
+"   - obdĺžniky\n"
+"   - klony (krížový odkaz na pôvodný sa stratí)\n"
+" - Výstup ROBO-Master spline je špecializovaný spline, ktorý dokážu čítať "
+"iba prehliadače ROBO-Master a AutoDesk, nie Inkscape.\n"
+" - Výstup LWPOLYLINE je viacnásobne-prepojená lomená čiara; vypnite ju aj "
+"chcete používať staršiu verziu výstupu LINE.\n"
+" - Môžete sa rozhodnúť exportovať všetky vrstvy, iba viditeľné alebo podľa "
+"názvu (nerozlišuje veľkosť písmen a používa čiarku „,“ ako oddeľovač)"
 
 #: ../share/extensions/dxf_outlines.inx.h:34
 msgid "Desktop Cutting Plotter (AutoCAD DXF R14) (*.dxf)"
@@ -37486,7 +37555,7 @@ msgstr "Veľkosť náhľadu (px):"
 
 #: ../share/extensions/gcodetools_graffiti.inx.h:8
 msgid "Preview's paint emmit (pts/s):"
-msgstr ""
+msgstr "Paint emmit náhľadu (pts/s):"
 
 #: ../share/extensions/gcodetools_graffiti.inx.h:10
 #: ../share/extensions/gcodetools_orientation_points.inx.h:3
@@ -38050,37 +38119,31 @@ msgstr "Okraje"
 
 #: ../share/extensions/guides_creator.inx.h:17
 msgid "Margins preset:"
-msgstr ""
+msgstr "Predvoľby okrajov:"
 
 #: ../share/extensions/guides_creator.inx.h:18
-#, fuzzy
 msgid "Header margin:"
-msgstr "Ľavý okraj"
+msgstr "Okraj hlavičky:"
 
 #: ../share/extensions/guides_creator.inx.h:19
-#, fuzzy
 msgid "Footer margin:"
-msgstr "H_orný okraj:"
+msgstr "Okraj pätičky:"
 
 #: ../share/extensions/guides_creator.inx.h:20
-#, fuzzy
 msgid "Left margin:"
-msgstr "Ľavý okraj"
+msgstr "Ľavý okraj:"
 
 #: ../share/extensions/guides_creator.inx.h:21
-#, fuzzy
 msgid "Right margin:"
-msgstr "Pravý okraj"
+msgstr "Pravý okraj:"
 
 #: ../share/extensions/guides_creator.inx.h:22
-#, fuzzy
 msgid "Left book page"
-msgstr "Ľavý uhol:"
+msgstr "Ľavá stránka knihy"
 
 #: ../share/extensions/guides_creator.inx.h:23
-#, fuzzy
 msgid "Right book page"
-msgstr "Pravý uhol:"
+msgstr "Pravá stránka knihy"
 
 #: ../share/extensions/guides_creator.inx.h:24
 msgctxt "Margin"
@@ -38108,9 +38171,8 @@ msgid "Draw Handles"
 msgstr "Kreslenie úchopov"
 
 #: ../share/extensions/hershey.inx.h:1
-#, fuzzy
 msgid "Hershey Text"
-msgstr "Umelecký text"
+msgstr "Hershey Text"
 
 #: ../share/extensions/hershey.inx.h:2
 msgid "Render Text"
@@ -38148,91 +38210,80 @@ msgid "Sans bold"
 msgstr "Bezpätkové hrubé"
 
 #: ../share/extensions/hershey.inx.h:10
-#, fuzzy
 msgid "Serif medium"
-msgstr "stredný"
+msgstr "Pätkové stredný"
 
 #: ../share/extensions/hershey.inx.h:11
 msgid "Serif medium italic"
-msgstr ""
+msgstr "Pätkové stredné kurzíva"
 
 #: ../share/extensions/hershey.inx.h:12
 msgid "Serif bold italic"
-msgstr ""
+msgstr "Pätkové hrubé kurzíva"
 
 #: ../share/extensions/hershey.inx.h:13
-#, fuzzy
 msgid "Serif bold"
-msgstr "Tučný"
+msgstr "Pätkové hrubé"
 
 #: ../share/extensions/hershey.inx.h:14
-#, fuzzy
 msgid "Script 1-stroke"
-msgstr "Nastaviť ťah"
+msgstr "Písané 1-ťahové"
 
 #: ../share/extensions/hershey.inx.h:15
-#, fuzzy
 msgid "Script 1-stroke (alt)"
-msgstr "Hrubé-tenké ťahy (rýchle)"
+msgstr "Písané 1-ťahové (alternatívne)"
 
 #: ../share/extensions/hershey.inx.h:16
-#, fuzzy
 msgid "Script medium"
-msgstr "Skript:"
+msgstr "Písané stredné"
 
 #: ../share/extensions/hershey.inx.h:17
 msgid "Gothic English"
-msgstr ""
+msgstr "Gothic anglické"
 
 #: ../share/extensions/hershey.inx.h:18
 msgid "Gothic German"
-msgstr ""
+msgstr "Gothic nemecké"
 
 #: ../share/extensions/hershey.inx.h:19
 msgid "Gothic Italian"
-msgstr ""
+msgstr "Gothic talianske"
 
 #: ../share/extensions/hershey.inx.h:20
-#, fuzzy
 msgid "Greek 1-stroke"
-msgstr "Nastaviť ťah"
+msgstr "Grécke 1-ťahové"
 
 #: ../share/extensions/hershey.inx.h:21
-#, fuzzy
 msgid "Greek medium"
-msgstr "stredný"
+msgstr "Grécke stredné"
 
 #: ../share/extensions/hershey.inx.h:23
-#, fuzzy
 msgid "Japanese"
-msgstr "japončina (ja)"
+msgstr "Japonské"
 
 #: ../share/extensions/hershey.inx.h:24
-#, fuzzy
 msgid "Astrology"
-msgstr "Morfológia"
+msgstr "Astrológia"
 
 #: ../share/extensions/hershey.inx.h:25
 msgid "Math (lower)"
-msgstr ""
+msgstr "Matematika (nižšia)"
 
 #: ../share/extensions/hershey.inx.h:26
-#, fuzzy
 msgid "Math (upper)"
-msgstr "cesta (kolmo)"
+msgstr "Matematika (vyššia)"
 
 #: ../share/extensions/hershey.inx.h:28
-#, fuzzy
 msgid "Meteorology"
-msgstr "Morfológia"
+msgstr "Meteorológia"
 
 #: ../share/extensions/hershey.inx.h:29
 msgid "Music"
-msgstr ""
+msgstr "Hudba"
 
 #: ../share/extensions/hershey.inx.h:30
 msgid "Symbolic"
-msgstr ""
+msgstr "Symboly"
 
 #: ../share/extensions/hershey.inx.h:31
 msgid ""
@@ -38241,6 +38292,10 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+" \n"
+"\n"
+"\n"
+"\n"
 
 #: ../share/extensions/hershey.inx.h:36
 msgid "About..."
@@ -38264,6 +38319,20 @@ msgid ""
 "For additional information, please visit:\n"
 "  www.evilmadscientist.com/go/hershey"
 msgstr ""
+"\n"
+"Toto rozšírenie vykresľuje riadok textu pomocou\n"
+"písiem „Hershey“ pre súradnicové zapisovače,\n"
+"odvodené od NBS SP-424 1976-04, „Príspevok\n"
+"k technikám sadzania pomocou počítača: tabuľky\n"
+"súradníc pre Hersheyho repertoár písiem typu\n"
+"Occidental a grafických symbolov.“\n"
+"\n"
+"Toto nie sú tradičné „obrysové“ písma, ale\n"
+"„jednoťahové“ písma alebo písma na „gravírovanie“,\n"
+"kde znak je tvorený ťahom (a nie výplňou).\n"
+"\n"
+"Ďalšie informácie nájdete na adrese:\n"
+"  www.evilmadscientist.com/go/hershey"
 
 #: ../share/extensions/hpgl_input.inx.h:1
 msgid "HPGL Input"
@@ -38275,6 +38344,9 @@ msgid ""
 "other HPGL files please change their file extension to .plt, make sure you "
 "have UniConverter installed and open them again."
 msgstr ""
+"Prosím, pamätajte, že môžete otvoriť iba súbory HPGL, ktoré zapísal "
+"Inkscape. Ak chcete otvoriť iný súbor HPGL, zmeňte príponu súboru na .plt, "
+"uistite sa, že máte nainštalovaný UniConverter a znovu ho otvorte."
 
 #: ../share/extensions/hpgl_input.inx.h:3
 #: ../share/extensions/hpgl_output.inx.h:4
@@ -38310,11 +38382,13 @@ msgstr ""
 
 #: ../share/extensions/hpgl_input.inx.h:7
 msgid "Show movements between paths"
-msgstr ""
+msgstr "Zobraziť pohyby medzi cestami"
 
 #: ../share/extensions/hpgl_input.inx.h:8
 msgid "Check this to show movements between paths (Default: Unchecked)"
 msgstr ""
+"Túto voľbu označte, ak chcete zobraziť pohyby medzi cestami (predvolené: "
+"neoznačené)"
 
 #: ../share/extensions/hpgl_input.inx.h:9
 #: ../share/extensions/hpgl_output.inx.h:35
@@ -38336,6 +38410,9 @@ msgid ""
 "Please use the plotter extension (Extensions menu) to plot directly over a "
 "serial connection."
 msgstr ""
+"Prosím, uistite sa, že všetky objekty, ktoré chcete uložiť sú prevedené na "
+"cesty. Na vykresľovanie priamo na súradnicovom zapisovači cez sériové "
+"pripojenie použite rozšírenie plotter (z ponuky Rozšírenia)."
 
 #: ../share/extensions/hpgl_output.inx.h:3
 #: ../share/extensions/plotter.inx.h:31 ../share/extensions/plotter.inx.h:22
@@ -38350,7 +38427,7 @@ msgstr "Číslo pera:"
 #: ../share/extensions/hpgl_output.inx.h:9
 #: ../share/extensions/plotter.inx.h:37 ../share/extensions/plotter.inx.h:28
 msgid "The number of the pen (tool) to use (Standard: '1')"
-msgstr ""
+msgstr "Číslo pera (nástroja), ktorý použiť (predvolené: 1)"
 
 #: ../share/extensions/hpgl_output.inx.h:10
 #: ../share/extensions/plotter.inx.h:38 ../share/extensions/plotter.inx.h:29
@@ -38363,11 +38440,14 @@ msgid ""
 "The amount of force pushing down the pen in grams, set to 0 to omit command; "
 "most plotters ignore this command (Default: 0)"
 msgstr ""
+"Množstvo sily tlačiacej pero nadol v gramoch, nastavením na 0 vynecháte "
+"príkaz; Väčšina súradnicových zapisovačov tento príkaz ignoruje (predvolené: "
+"0)"
 
 #: ../share/extensions/hpgl_output.inx.h:12
 #: ../share/extensions/plotter.inx.h:40 ../share/extensions/plotter.inx.h:31
 msgid "Pen speed (cm/s or mm/s):"
-msgstr ""
+msgstr "Rýchlosť pera (cm/s alebo mm/s):"
 
 #: ../share/extensions/hpgl_output.inx.h:13
 msgid ""
@@ -38387,7 +38467,7 @@ msgstr "Otočenie (°, v smere hodinových ručičiek):"
 #: ../share/extensions/hpgl_output.inx.h:15
 #: ../share/extensions/plotter.inx.h:43 ../share/extensions/plotter.inx.h:34
 msgid "Rotation of the drawing (Default: 0°)"
-msgstr ""
+msgstr "Otočenie kresby (predvolená: 0°)"
 
 #: ../share/extensions/hpgl_output.inx.h:16
 #: ../share/extensions/plotter.inx.h:44 ../share/extensions/plotter.inx.h:35
@@ -38398,6 +38478,8 @@ msgstr "Zrkadlovo otočiť os X"
 #: ../share/extensions/plotter.inx.h:45 ../share/extensions/plotter.inx.h:36
 msgid "Check this to mirror the X axis (Default: Unchecked)"
 msgstr ""
+"Označte túto voľbu ak chcete zrkadlovo prevrátiť os X (predvolené: "
+"neoznačené)"
 
 #: ../share/extensions/hpgl_output.inx.h:18
 #: ../share/extensions/plotter.inx.h:46 ../share/extensions/plotter.inx.h:37
@@ -38408,6 +38490,8 @@ msgstr "Zrkadlovo otočiť os Y"
 #: ../share/extensions/plotter.inx.h:47 ../share/extensions/plotter.inx.h:38
 msgid "Check this to mirror the Y axis (Default: Unchecked)"
 msgstr ""
+"Označte túto voľbu ak chcete zrkadlovo prevrátiť os Y (predvolené: "
+"neoznačené)"
 
 #: ../share/extensions/hpgl_output.inx.h:20
 #: ../share/extensions/plotter.inx.h:48 ../share/extensions/plotter.inx.h:39
@@ -38419,6 +38503,8 @@ msgstr "Centrovať nulový bod"
 msgid ""
 "Check this if your plotter uses a centered zero point (Default: Unchecked)"
 msgstr ""
+"Označte túto voľbu ak váš súradnicový zapisovač používa centrovaný bod nula "
+"(predvolené: neoznačené)"
 
 #: ../share/extensions/hpgl_output.inx.h:22
 #: ../share/extensions/plotter.inx.h:50
@@ -38427,21 +38513,24 @@ msgid ""
 "each pen, name the layers \"Pen 1\", \"Pen 2\", etc., and put your drawings "
 "in the corresponding layers. This overrules the pen number option above."
 msgstr ""
+"Ak chcete použiť viaceré perá vášho perového súradnicového zapisovača, "
+"vytvorte samostatnú vrstvu pre každé pero, nazvite vrstvy „Pen 1“, „Pen 2“, "
+"atď. a umiestnite svoje kresby do zodpovedajúcich vrstiev. Táto voľba má "
+"prednosť pred vyššie uvedenou voľbou Číslo pera."
 
 #: ../share/extensions/hpgl_output.inx.h:23
 #: ../share/extensions/plotter.inx.h:51
 #: ../share/extensions/hpgl_output.inx.h:22
 #: ../share/extensions/plotter.inx.h:41
-#, fuzzy
 msgid "Plot Features "
-msgstr "Pero"
+msgstr "Možnosti vykresľovania"
 
 #: ../share/extensions/hpgl_output.inx.h:24
 #: ../share/extensions/plotter.inx.h:52
 #: ../share/extensions/hpgl_output.inx.h:23
 #: ../share/extensions/plotter.inx.h:42
 msgid "Overcut (mm):"
-msgstr ""
+msgstr "Overcut (mm):"
 
 #: ../share/extensions/hpgl_output.inx.h:25
 #: ../share/extensions/plotter.inx.h:53
@@ -38451,11 +38540,14 @@ msgid ""
 "The distance in mm that will be cut over the starting point of the path to "
 "prevent open paths, set to 0.0 to omit command (Default: 1.00)"
 msgstr ""
+"Vzdialenosť v mm, ktorá bude prekonaná nad počiatočným bodom cesty, aby sa "
+"predišlo otvoreným cestám. Nastavte na 0.0 ak chcete príkaz vynechať. "
+"(predvolené: 1.00)"
 
 #: ../share/extensions/hpgl_output.inx.h:26
 #: ../share/extensions/plotter.inx.h:54
 msgid "Tool (Knife) offset correction (mm):"
-msgstr ""
+msgstr "Kompenzácia posunutia nástroja (noža) (mm):"
 
 #: ../share/extensions/hpgl_output.inx.h:27
 #: ../share/extensions/plotter.inx.h:55
@@ -38465,11 +38557,13 @@ msgid ""
 "The offset from the tool tip to the tool axis in mm, set to 0.0 to omit "
 "command (Default: 0.25)"
 msgstr ""
+"Posunutie od špičky nástroja po os nástroja v mm. Nastavte na 0.0 ak chcete "
+"príkaz vynechať. (predvolené: 0.25)"
 
 #: ../share/extensions/hpgl_output.inx.h:28
 #: ../share/extensions/plotter.inx.h:56
 msgid "Precut"
-msgstr ""
+msgstr "Precut"
 
 #: ../share/extensions/hpgl_output.inx.h:29
 #: ../share/extensions/plotter.inx.h:57
@@ -38479,6 +38573,9 @@ msgid ""
 "Check this to cut a small line before the real drawing starts to correctly "
 "align the tool orientation. (Default: Checked)"
 msgstr ""
+"Označte túto voľbu ak chcete urobiť malú čiaru pred začiatkom samotného "
+"vykresľovania, aby sa správne zarovnala orientácia nástroja. (Predvolené: "
+"označené)"
 
 #: ../share/extensions/hpgl_output.inx.h:30
 #: ../share/extensions/plotter.inx.h:58
@@ -38495,6 +38592,8 @@ msgid ""
 "Curves are divided into lines, this number controls how fine the curves will "
 "be reproduced, the smaller the finer (Default: '1.2')"
 msgstr ""
+"Krivky sú rozdelené na čiary. Toto číslo určuje, ako jemne budú krivky "
+"reprodukované. Čím menšie, tým jemnejšie. (predvolené: 1.2)"
 
 #: ../share/extensions/hpgl_output.inx.h:32
 #: ../share/extensions/plotter.inx.h:60
@@ -38512,6 +38611,10 @@ msgid ""
 "if used). If unchecked you have to make sure that all parts of your drawing "
 "are within the document border! (Default: Checked)"
 msgstr ""
+"Označte túto voľbu ak chcete automaticky zarovnať kresbu na nulový bod (plus "
+"kompenzácia nástroja, ak je nastavená). Ak voľba nie je označená, budete sa "
+"musieť uistiť, že všetky časti kresby sú v rámci ohraničenia dokumentu! "
+"(Predvolené: označené)"
 
 #: ../share/extensions/hpgl_output.inx.h:34
 #: ../share/extensions/plotter.inx.h:64
@@ -38521,6 +38624,9 @@ msgid ""
 "All these settings depend on the plotter you use, for more information "
 "please consult the manual or homepage for your plotter."
 msgstr ""
+"Všetky tieto nastavenia závisia na tom, aký súradnicový zapisovač používate. "
+"Ďalšie informácie nájdete v príručke alebo na domovskej stránke vášho "
+"súradnicového zapisovača."
 
 #: ../share/extensions/hpgl_output.inx.h:36
 #: ../share/extensions/hpgl_output.inx.h:35
@@ -38529,83 +38635,85 @@ msgstr "Exportovať do súboru HP Graphics Language"
 
 #: ../share/extensions/image_attributes.inx.h:1
 msgid "Set Image Attributes"
-msgstr ""
+msgstr "Nastaviť atribúty obrázka"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:3
 msgid "Basic"
-msgstr ""
+msgstr "Základné"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:5
 msgid "Support non-uniform scaling"
-msgstr ""
+msgstr "Podporovať nerovnomernú zmenu mierky"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:7
 msgid "Render images blocky"
-msgstr ""
+msgstr "Vykresľovať kockované obrázky"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:9
 msgid ""
 "Render all bitmap images like in older Inskcape versions. Available options:"
 msgstr ""
+"Vykresľovať všetky bitmapové obrázky ako v starších verziách Inskcape. "
+"Dostupné možnosti:"
 
 #. image aspect ratio
 #: ../share/extensions/image_attributes.inx.h:11
 msgid "Image Aspect Ratio"
-msgstr ""
+msgstr "Pomer strán obrazu"
 
 #. image aspect ratio
 #: ../share/extensions/image_attributes.inx.h:13
 msgid "preserveAspectRatio attribute:"
-msgstr ""
+msgstr "atribút preserveAspectRatio:"
 
 #. image aspect ratio
 #: ../share/extensions/image_attributes.inx.h:15
 msgid "meetOrSlice:"
-msgstr ""
+msgstr "meetOrSlice:"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:17
 msgid "Scope:"
-msgstr ""
+msgstr "Rozsah:"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:19
 msgid "Unset"
-msgstr ""
+msgstr "nenastavený"
 
 #: ../share/extensions/image_attributes.inx.h:20
 msgid "Change only selected image(s)"
-msgstr ""
+msgstr "Zmeniť iba vybrané obrázky"
 
 #: ../share/extensions/image_attributes.inx.h:21
 msgid "Change all images in selection"
-msgstr ""
+msgstr "Zmeniť všetky obrázky vo výbere"
 
 #: ../share/extensions/image_attributes.inx.h:22
 msgid "Change all images in document"
-msgstr ""
+msgstr "Zmeniť všetky obrázky v dokumente"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:24
 msgid "Image Rendering Quality"
-msgstr ""
+msgstr "Kvalita vykresľovania obrázka"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:26
 msgid "Image rendering attribute:"
-msgstr ""
+msgstr "Atribút vykresľovanie obrázka:"
 
 #: ../share/extensions/image_attributes.inx.h:27
 msgid "Apply attribute to parent group of selection"
-msgstr ""
+msgstr "Použiť atribút na nadradenú skupinu výberu"
 
 #: ../share/extensions/image_attributes.inx.h:28
 msgid "Apply attribute to SVG root"
-msgstr ""
+msgstr "Použiť atribút na koreň SVG"
 
 #: ../share/extensions/ink2canvas.inx.h:1
 msgid "Convert to html5 canvas"
@@ -38702,12 +38810,12 @@ msgstr "Interpolovať štýl"
 #: ../share/extensions/interp.inx.h:7
 #: ../share/extensions/interp_att_g.inx.h:10
 msgid "Use Z-order"
-msgstr ""
+msgstr "Použiť zvislé poradie"
 
 #: ../share/extensions/interp.inx.h:8
 #: ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
-msgstr ""
+msgstr "Riešenie obráteného poradia výberu v cykloch Živého náhľadu"
 
 #: ../share/extensions/interp_att_g.inx.h:1
 msgid "Interpolate Attribute in a group"
@@ -38889,9 +38997,8 @@ msgid "Appear"
 msgstr "Vzhľad"
 
 #: ../share/extensions/jessyInk_effects.inx.h:9
-#, fuzzy
 msgid "Fade in"
-msgstr "Stmievačka/roztmievačka"
+msgstr "Roztmievačka"
 
 # TODO: check
 #: ../share/extensions/jessyInk_effects.inx.h:10
@@ -38904,9 +39011,8 @@ msgid "Build-out effect"
 msgstr "Efekt vystavania"
 
 #: ../share/extensions/jessyInk_effects.inx.h:12
-#, fuzzy
 msgid "Fade out"
-msgstr "<b>Do stratena:</b>"
+msgstr "Stmievačka"
 
 #: ../share/extensions/jessyInk_effects.inx.h:14
 msgid ""
@@ -39320,23 +39426,23 @@ msgstr "Posunúť úchopy uzlov"
 
 #: ../share/extensions/jitternodes.inx.h:7
 msgid "Distribution of the displacements:"
-msgstr ""
+msgstr "Rozdelenie posunutia:"
 
 #: ../share/extensions/jitternodes.inx.h:8
 msgid "Uniform"
-msgstr ""
+msgstr "Rovnomerné"
 
 #: ../share/extensions/jitternodes.inx.h:9
 msgid "Pareto"
-msgstr ""
+msgstr "Paretovo"
 
 #: ../share/extensions/jitternodes.inx.h:10
 msgid "Gaussian"
-msgstr ""
+msgstr "Gaussovské"
 
 #: ../share/extensions/jitternodes.inx.h:11
 msgid "Log-normal"
-msgstr ""
+msgstr "Log-normálne"
 
 #: ../share/extensions/jitternodes.inx.h:13
 #: ../share/extensions/radiusrand.inx.h:9
@@ -39349,7 +39455,7 @@ msgstr ""
 
 #: ../share/extensions/layers2svgfont.inx.h:1
 msgid "3 - Convert Glyph Layers to SVG Font"
-msgstr ""
+msgstr "3 - Previesť vrstvy znakov na písmo SVG"
 
 #: ../share/extensions/layers2svgfont.inx.h:2
 #: ../share/extensions/new_glyph_layer.inx.h:3
@@ -39357,28 +39463,24 @@ msgstr ""
 #: ../share/extensions/previous_glyph_layer.inx.h:2
 #: ../share/extensions/setup_typography_canvas.inx.h:7
 #: ../share/extensions/svgfont2layers.inx.h:3
-#, fuzzy
 msgid "Typography"
-msgstr "Spirograf"
+msgstr "Typografia"
 
 #: ../share/extensions/layout_nup.inx.h:1
 msgid "N-up layout"
-msgstr ""
+msgstr "Rozloženie N strán na jednej strane"
 
 #: ../share/extensions/layout_nup.inx.h:2
-#, fuzzy
 msgid "Page dimensions"
-msgstr "Rozmery"
+msgstr "Rozmery strany"
 
 #: ../share/extensions/layout_nup.inx.h:4
-#, fuzzy
 msgid "Size X:"
-msgstr "Veľkosť X"
+msgstr "Veľkosť X:"
 
 #: ../share/extensions/layout_nup.inx.h:5
-#, fuzzy
 msgid "Size Y:"
-msgstr "Veľkosť Y"
+msgstr "Veľkosť Y:"
 
 #: ../share/extensions/layout_nup.inx.h:6
 #: ../share/extensions/printing_marks.inx.h:13
@@ -39401,14 +39503,12 @@ msgid "Right:"
 msgstr "Vpravo:"
 
 #: ../share/extensions/layout_nup.inx.h:10
-#, fuzzy
 msgid "Page margins"
-msgstr "Ľavý okraj"
+msgstr "Okraje strán"
 
 #: ../share/extensions/layout_nup.inx.h:11
-#, fuzzy
 msgid "Layout dimensions"
-msgstr "Charakter rozloženia:"
+msgstr "Rozmery rozloženia"
 
 #: ../share/extensions/layout_nup.inx.h:13
 msgid "Cols:"
@@ -39416,17 +39516,15 @@ msgstr "Stĺp:"
 
 #: ../share/extensions/layout_nup.inx.h:14
 msgid "Auto calculate layout size"
-msgstr ""
+msgstr "Automatický výpočet veľkosti rozloženia"
 
 #: ../share/extensions/layout_nup.inx.h:15
-#, fuzzy
 msgid "Layout padding"
-msgstr "Charakter rozloženia:"
+msgstr "Výplň rozloženia"
 
 #: ../share/extensions/layout_nup.inx.h:16
-#, fuzzy
 msgid "Layout margins"
-msgstr "Ľavý okraj"
+msgstr "Okraje rozloženia"
 
 #: ../share/extensions/layout_nup.inx.h:17
 #: ../share/extensions/printing_marks.inx.h:2
@@ -39434,33 +39532,28 @@ msgid "Marks"
 msgstr "Značky"
 
 #: ../share/extensions/layout_nup.inx.h:18
-#, fuzzy
 msgid "Place holder"
-msgstr "Čierna diera"
+msgstr "Vyhradené miesto"
 
 #: ../share/extensions/layout_nup.inx.h:19
-#, fuzzy
 msgid "Cutting marks"
-msgstr "Značky pre tlač"
+msgstr "Značky na rezanie"
 
 #: ../share/extensions/layout_nup.inx.h:20
 msgid "Padding guide"
-msgstr ""
+msgstr "Vodidlo výplne"
 
 #: ../share/extensions/layout_nup.inx.h:21
-#, fuzzy
 msgid "Margin guide"
-msgstr "Posunúť vodidlo"
+msgstr "Vodidlo okraja"
 
 #: ../share/extensions/layout_nup.inx.h:22
-#, fuzzy
 msgid "Padding box"
-msgstr "Ohraničenie"
+msgstr "Obdĺžnik výplne"
 
 #: ../share/extensions/layout_nup.inx.h:23
-#, fuzzy
 msgid "Margin box"
-msgstr "ohraničenie diela"
+msgstr "Obdĺžnik okraja"
 
 #: ../share/extensions/layout_nup.inx.h:25
 msgid ""
@@ -39475,6 +39568,17 @@ msgid ""
 "    * Layout padding: inner padding for each part of the layout.\n"
 "      "
 msgstr ""
+"\n"
+"Parametre:\n"
+"    * Veľkosť stránky: šírka a výška.\n"
+"    * Okraje stránky: priestor naviac okolo každej stránky.\n"
+"    * Riadky a stĺpce rozloženia.\n"
+"    * Veľkosť rozloženia: šírka a výška, automaticky vypočítané ak jedna z "
+"nich je 0.\n"
+"    * Automatický výpočet veľkosti rozloženia: Nepoužiť hodnoty veľkosti "
+"rozloženia.\n"
+"    * Okraje rozloženia: biely priestor okolo každej časti rozloženia.\n"
+"    * Výplň rozloženia: vnútorná výplň každej časti rozloženia.\n"
 
 #: ../share/extensions/layout_nup.inx.h:36
 #: ../share/extensions/perfectboundcover.inx.h:20
@@ -39590,51 +39694,42 @@ msgstr ""
 "novej vrstve vytvorí nový objekt textového toku vo veľkosti stránky."
 
 #: ../share/extensions/markers_strokepaint.inx.h:1
-#, fuzzy
 msgid "Color Markers"
-msgstr "Panely farieb"
+msgstr "Farebné zakončenia"
 
 #: ../share/extensions/markers_strokepaint.inx.h:2
-#, fuzzy
 msgid "From object"
-msgstr "Bez objektov"
+msgstr "Z objektu"
 
 #: ../share/extensions/markers_strokepaint.inx.h:3
-#, fuzzy
 msgid "Marker type:"
-msgstr "Značkovadlo"
+msgstr "Typ zakončenia:"
 
 #: ../share/extensions/markers_strokepaint.inx.h:4
-#, fuzzy
 msgid "Invert fill and stroke colors"
-msgstr "Nastaviť farbu ťahu"
+msgstr "Invertovať farby výplne a ťahu"
 
 #: ../share/extensions/markers_strokepaint.inx.h:5
-#, fuzzy
 msgid "Assign alpha"
 msgstr "Priradiť krytie"
 
 #: ../share/extensions/markers_strokepaint.inx.h:6
 msgid "solid"
-msgstr ""
+msgstr "pevné"
 
 #: ../share/extensions/markers_strokepaint.inx.h:7
-#, fuzzy
 msgid "filled"
-msgstr "bez výplne"
+msgstr "vyplnené"
 
 #: ../share/extensions/markers_strokepaint.inx.h:10
-#, fuzzy
 msgid "Assign fill color"
 msgstr "Nastaviť farbu výplne"
 
 #: ../share/extensions/markers_strokepaint.inx.h:11
-#, fuzzy
 msgid "Stroke"
-msgstr "Ťah:"
+msgstr "Ťah"
 
 #: ../share/extensions/markers_strokepaint.inx.h:12
-#, fuzzy
 msgid "Assign stroke color"
 msgstr "Nastaviť farbu ťahu"
 
@@ -39648,28 +39743,28 @@ msgstr "Typ merania:"
 
 #: ../share/extensions/measure.inx.h:4
 msgid "Text Presets"
-msgstr ""
+msgstr "Predvoľby textu"
 
 #: ../share/extensions/measure.inx.h:6
 msgid "Text on Path"
-msgstr ""
+msgstr "Text na ceste"
 
 #: ../share/extensions/measure.inx.h:8
 #, no-c-format
 msgid "Offset (%)"
-msgstr ""
+msgstr "Posunutie (%)"
 
 #: ../share/extensions/measure.inx.h:9
 msgid "Text anchor:"
-msgstr ""
+msgstr "Ukotvenie textu:"
 
 #: ../share/extensions/measure.inx.h:10
 msgid "Fixed Text"
-msgstr ""
+msgstr "Pevný text"
 
 #: ../share/extensions/measure.inx.h:11
 msgid "Angle (°):"
-msgstr ""
+msgstr "Uhol (°):"
 
 #: ../share/extensions/measure.inx.h:12 ../share/extensions/measure.inx.h:6
 msgid "Font size (px):"
@@ -39778,6 +39873,10 @@ msgid ""
 "inline style attributes. Please use a name which best describes the kinds of "
 "objects and their common context for best effect."
 msgstr ""
+"Všetky vybrané uzly budú zoskupené a ich spoločné atribúty štýlu vytvoria "
+"novú triedu. Táto trieda nahradí existujúce inline atribúty štýlu. Najlepší "
+"účinok dosiahnete aj použijete názov, ktorý najlepšie popisuje typy objektov "
+"a ich spoločný kontext."
 
 #: ../share/extensions/merge_styles.inx.h:3
 msgid "New Class Name:"
@@ -39809,7 +39908,7 @@ msgstr "Zobraziť ďalší znak"
 
 #: ../share/extensions/nicechart.inx.h:1
 msgid "NiceCharts"
-msgstr ""
+msgstr "Grafy NiceCharts"
 
 #: ../share/extensions/nicechart.inx.h:2
 msgid "Data"
@@ -40203,7 +40302,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx.h:1
 msgid "Plot"
-msgstr "Vykresliť"
+msgstr "Súradnicový zapisovač"
 
 #: ../share/extensions/plotter.inx.h:2
 msgid ""
@@ -40911,6 +41010,10 @@ msgid ""
 "objects inside a single selected group, or a selection of multiple objects "
 "on the current drawing level (layer or group)."
 msgstr ""
+"Toto rozšírenie sa zmení zvislé poradie objektov na základe ich pozície na "
+"plátne alebo ich aktuálneho zvislého poradia. Výber: Rozšírenie preuspriada "
+"objekty v rámci jednej vybranej skupiny alebo výber viacerých objektov na "
+"aktuálnej úrovni kreslenia (vrstva alebo skupina)."
 
 #: ../share/extensions/restack.inx.h:27
 #: ../share/extensions/ungroup_deep.inx.h:6
@@ -40936,7 +41039,7 @@ msgstr "Vynechať nadbytočné úseky"
 
 #: ../share/extensions/rtree.inx.h:5
 msgid "Lift pen for backward steps"
-msgstr ""
+msgstr "Zdvihnúť pero pri krokoch späť"
 
 #: ../share/extensions/rubberstretch.inx.h:1
 msgid "Rubber Stretch"
@@ -40958,7 +41061,7 @@ msgstr "Optimalizovaný výstup SVG"
 
 #: ../share/extensions/scour.inx.h:3
 msgid "Number of significant digits for coordinates:"
-msgstr ""
+msgstr "Počet platných číslic súradníc:"
 
 #: ../share/extensions/scour.inx.h:4
 msgid ""
@@ -40968,48 +41071,58 @@ msgid ""
 "\"3\" is specified, the coordinate 3.14159 is output as 3.14 while the "
 "coordinate 123.675 is output as 124."
 msgstr ""
+"Určuje počet platných číslic, ktoré by mali mať súradnice na výstupe. "
+"Pamätajte, že platné číslice *neznamenajú* počet desatinných miest, ale "
+"celkový počet číslic na výstupe. Napríklad ak je uvedená hodnota „3“, "
+"súradnica 3.14159 bude na výstupe uvedená ako 3.14 a súradnica 123.675 ako "
+"124."
 
 #: ../share/extensions/scour.inx.h:5 ../share/extensions/scour.inx.h:3
-#, fuzzy
 msgid "Shorten color values"
-msgstr "Mäkké farby"
+msgstr "Skrátenie hodnôt farieb"
 
 #: ../share/extensions/scour.inx.h:6
 msgid ""
 "Convert all color specifications to #RRGGBB (or #RGB where applicable) "
 "format."
 msgstr ""
+"Prevedie všetky určenia farieb na formát #RRGGBB (alebo na #RGB kde sa dá)."
 
 #: ../share/extensions/scour.inx.h:7 ../share/extensions/scour.inx.h:4
-#, fuzzy
 msgid "Convert CSS attributes to XML attributes"
-msgstr "Vkladať XML atribúty inline"
+msgstr "Prevedie atribúty CSS na atribúty XML"
 
 #: ../share/extensions/scour.inx.h:8
 msgid ""
 "Convert styles from style tags and inline style=\"\" declarations into XML "
 "attributes."
 msgstr ""
+"Prevedie štýly zo štýlov značiek a inline deklarácií style=\"\" na atribúty "
+"XML."
 
 #: ../share/extensions/scour.inx.h:9
 msgid "Collapse groups"
-msgstr ""
+msgstr "Zbaliť skupiny"
 
 #: ../share/extensions/scour.inx.h:10
 msgid ""
 "Remove useless groups, promoting their contents up one level. Requires "
 "\"Remove unused IDs\" to be set."
 msgstr ""
+"Odstráni zbytočné skupiny a ich obsah povýši o úroveň vyššie. Vyžaduje, aby "
+"bola voľba zapnutá „Odstrániť nepoužité ID“."
 
 #: ../share/extensions/scour.inx.h:11 ../share/extensions/scour.inx.h:6
 msgid "Create groups for similar attributes"
-msgstr ""
+msgstr "Vytvoriť skupiny pre podobné atribúty"
 
 #: ../share/extensions/scour.inx.h:12
 msgid ""
 "Create groups for runs of elements having at least one attribute in common "
 "(e.g. fill-color, stroke-opacity, ...)."
 msgstr ""
+"Vytvorí skupiny pre postupnosti prvkov, ktoré majú aspoň jeden spoločný "
+"atribút (napr. fill-color, stroke-opacity, ...)."
 
 #: ../share/extensions/scour.inx.h:13 ../share/extensions/scour.inx.h:8
 msgid "Keep editor data"
@@ -41020,14 +41133,16 @@ msgid ""
 "Don't remove editor-specific elements and attributes. Currently supported: "
 "Inkscape, Sodipodi and Adobe Illustrator."
 msgstr ""
+"Neodstráni prvky a atribúty špecifických editorov. Momentálne podporované: "
+"Inkscape, Sodipodi a Adobe Illustrator."
 
 #: ../share/extensions/scour.inx.h:15
 msgid "Keep unreferenced definitions"
-msgstr ""
+msgstr "Ponechať nereferencované definície"
 
 #: ../share/extensions/scour.inx.h:16
 msgid "Keep element definitions that are not currently used in the SVG"
-msgstr ""
+msgstr "Ponechať definície prvkov, ktoré v SVG momentálne nie sú použité"
 
 #: ../share/extensions/scour.inx.h:17 ../share/extensions/scour.inx.h:11
 msgid "Work around renderer bugs"
@@ -41038,10 +41153,12 @@ msgid ""
 "Works around some common renderer bugs (mainly libRSVG) at the cost of a "
 "slightly larger SVG file."
 msgstr ""
+"Obchádza niektoré bežné chyby vykresľovačov (hlavne libRSVG) za cenu mierne "
+"väčšieho súboru SVG."
 
 #: ../share/extensions/scour.inx.h:20
 msgid "Remove the XML declaration"
-msgstr ""
+msgstr "Odstrániť deklaráciu XML"
 
 #: ../share/extensions/scour.inx.h:21
 msgid ""
@@ -41049,11 +41166,12 @@ msgid ""
 "especially if special characters are used in the document) from the file "
 "header."
 msgstr ""
+"Odstraňuje z hlavičky súboru deklaráciu XML (ktorá je nepovinná, ale mala by "
+"sa používať, najmä ak sa v dokumente používajú špeciálne znaky)."
 
 #: ../share/extensions/scour.inx.h:22 ../share/extensions/scour.inx.h:9
-#, fuzzy
 msgid "Remove metadata"
-msgstr "Odstrániť červenú"
+msgstr "Odstrániť metadáta"
 
 #: ../share/extensions/scour.inx.h:23
 msgid ""
@@ -41061,25 +41179,29 @@ msgid ""
 "include license and author information, alternate versions for non-SVG-"
 "enabled browsers, etc."
 msgstr ""
+"Odstráni značky metadát spolu s všetkými informáciami, ktoré obsahujú, medzi "
+"ktorými môžu byť informácie o licencii a autorovi, alternatívnych verziách "
+"pre prehliadače nepodporujúce SVG, atď."
 
 #: ../share/extensions/scour.inx.h:24 ../share/extensions/scour.inx.h:10
-#, fuzzy
 msgid "Remove comments"
-msgstr "Odstrániť písmo"
+msgstr "Odstrániť komentáre"
 
 #: ../share/extensions/scour.inx.h:25
 msgid "Remove all XML comments from output."
-msgstr ""
+msgstr "Odstráni všetky komentáre XML z výstupu."
 
 #: ../share/extensions/scour.inx.h:26
 msgid "Embed raster images"
-msgstr ""
+msgstr "Vkladať rastrové obrázky"
 
 #: ../share/extensions/scour.inx.h:27
 msgid ""
 "Resolve external references to raster images and embed them as Base64-"
 "encoded data URLs."
 msgstr ""
+"Preloží externé odkazy na rastrové obrázky a vloží ich vo forme dát v URL s "
+"kódovaním Base64."
 
 #: ../share/extensions/scour.inx.h:28 ../share/extensions/scour.inx.h:12
 msgid "Enable viewboxing"
@@ -41091,10 +41213,12 @@ msgid ""
 "Set page size to 100%/100% (full width and height of the display area) and "
 "introduce a viewBox specifying the drawings dimensions."
 msgstr ""
+"Nastaviť veľkosť strany na 100 % / 100 % (celú šírku a výšku zobrazenej "
+"oblasti) a zavedie viewBox určujúci kresby rozmery."
 
 #: ../share/extensions/scour.inx.h:31
 msgid "Format output with line-breaks and indentation"
-msgstr ""
+msgstr "Formátovať výstup so zalomením riadkov a odsadením"
 
 #: ../share/extensions/scour.inx.h:32
 msgid ""
@@ -41102,10 +41226,13 @@ msgid ""
 "to hand-edit the SVG file you can disable this option to bring down the file "
 "size even more at the cost of clarity."
 msgstr ""
+"Vytvorí pekne formátovaný výstup so zalomením riadkov. Ak nemáte v úmysle "
+"ručne upravovať súbor SVG, môžete túto možnosť vypnúť a tým znížiť veľkosť "
+"súboru na úkor jeho zrozumiteľnosti."
 
 #: ../share/extensions/scour.inx.h:33
 msgid "Indentation characters:"
-msgstr ""
+msgstr "Znaky odsadenia:"
 
 #: ../share/extensions/scour.inx.h:34
 msgid ""
@@ -41113,20 +41240,25 @@ msgid ""
 "Specify \"None\" to disable indentation. This option has no effect if "
 "\"Format output with line-breaks and indentation\" is disabled."
 msgstr ""
+"Typ odsadenie, ktorý sa použije pre každú úroveň vnorenia na výstupe. "
+"Zadajte „Žiadne“ ak chcete vypnúť odsadenie. Táto voľba nemá žiadny vplyv, "
+"ak je vypnutá voľba „Formátovať výstup so zalomením riadkov a odsadením“."
 
 #: ../share/extensions/scour.inx.h:35
 msgid "Depth of indentation:"
-msgstr ""
+msgstr "Hĺbka odsadenia:"
 
 #: ../share/extensions/scour.inx.h:36
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
 msgstr ""
+"Hĺbka zvoleného druhu odsadenia. Napr. ak zvolíte „2“, každá úroveň vnorenia "
+"na výstupe bude odsadená o dve ďalšie medzery či tabulátory."
 
 #: ../share/extensions/scour.inx.h:37
 msgid "Strip the \"xml:space\" attribute from the root SVG element"
-msgstr ""
+msgstr "Odstrániť atribút „xml:space“ z koreňového elementu SVG"
 
 #: ../share/extensions/scour.inx.h:38
 msgid ""
@@ -41134,14 +41266,17 @@ msgid ""
 "root SVG element which instructs the SVG editor not to change whitespace in "
 "the document at all (and therefore overrides the options above)."
 msgstr ""
+"To je užitočné, ak vstupný súbor určuje v koreňovom prvku SVG "
+"„xml:space='preserve'“, čo inštruuje editor SVG, aby v dokumente vôbec "
+"nemenil medzery (a preto prekonáva vyššie uvedené voľby)."
 
 #: ../share/extensions/scour.inx.h:39
 msgid "Document options"
-msgstr ""
+msgstr "Možnosti dokumentu"
 
 #: ../share/extensions/scour.inx.h:40
 msgid "Pretty-printing"
-msgstr ""
+msgstr "Formátovanie výstupu"
 
 #: ../share/extensions/scour.inx.h:41 ../share/extensions/scour.inx.h:16
 msgid "Space"
@@ -41152,28 +41287,29 @@ msgid "Tab"
 msgstr "Tabulátor"
 
 #: ../share/extensions/scour.inx.h:43 ../share/extensions/scour.inx.h:18
-#, fuzzy
 msgctxt "Indent"
 msgid "None"
-msgstr "Žiadny"
+msgstr "Žiadne"
 
 #: ../share/extensions/scour.inx.h:44
 msgid "IDs"
-msgstr ""
+msgstr "ID-čka"
 
 #: ../share/extensions/scour.inx.h:45
 msgid "Remove unused IDs"
-msgstr ""
+msgstr "Odstrániť nepoužívané ID"
 
 #: ../share/extensions/scour.inx.h:46
 msgid ""
 "Remove all unreferenced IDs from elements. Those are not needed for "
 "rendering."
 msgstr ""
+"Odstráni všetky ID bez referencií z prvkov. Tie nie sú na vykresľovanie "
+"potrebné."
 
 #: ../share/extensions/scour.inx.h:47 ../share/extensions/scour.inx.h:21
 msgid "Shorten IDs"
-msgstr ""
+msgstr "Skrátiť ID-čka"
 
 #: ../share/extensions/scour.inx.h:48
 msgid ""
@@ -41181,18 +41317,21 @@ msgid ""
 "shortest values to the most-referenced elements. For instance, "
 "\"linearGradient5621\" will become \"a\" if it is the most used element."
 msgstr ""
+"Minimalizuje dĺžku ID použitím len malých písmen. Pridelí najkratšie hodnoty "
+"najčastejšie referencovaným prvkom. Napríklad z „linearGradient5621“ sa "
+"stane „a“ ak je najpoužívanejším prvkom."
 
 #: ../share/extensions/scour.inx.h:49
 msgid "Prefix shortened IDs with:"
-msgstr ""
+msgstr "Predpona skrátených identifikátorov:"
 
 #: ../share/extensions/scour.inx.h:50
 msgid "Prepend shortened IDs with the specified prefix."
-msgstr ""
+msgstr "Pridá zadanú predponu pred skrátené identifikátory."
 
 #: ../share/extensions/scour.inx.h:51
 msgid "Preserve manually created IDs not ending with digits"
-msgstr ""
+msgstr "Zachovať manuálne vytvorené ID, ktoré nekončia číslicami"
 
 #: ../share/extensions/scour.inx.h:52
 msgid ""
@@ -41201,24 +41340,30 @@ msgid ""
 "preserved while numbered IDs (as they are generated by most SVG editors "
 "including Inkscape) will be removed/shortened."
 msgstr ""
+"Popisné identifikátory, ktoré boli manuálne vytvorené, aby referencovali "
+"alebo označovali konkrétne prvky alebo skupiny (napr. #arrowStart, #arrowEnd "
+"alebo #textLabels) sa zachovajú, pričom číslované ID (aké generuje väčšina "
+"editorov SVG vrátane Inkscape) budú odstránené/skrátené."
 
 #: ../share/extensions/scour.inx.h:53
 msgid "Preserve the following IDs:"
-msgstr ""
+msgstr "Zachovať nasledujúce ID:"
 
 #: ../share/extensions/scour.inx.h:54
 msgid "A comma-separated list of IDs that are to be preserved."
-msgstr ""
+msgstr "Zoznam identifikátorov, ktoré sa majú zachovať, oddelený čiarkami."
 
 #: ../share/extensions/scour.inx.h:55
 msgid "Preserve IDs starting with:"
-msgstr ""
+msgstr "Zachovať ID začínajúce na:"
 
 #: ../share/extensions/scour.inx.h:56
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr ""
+"Zachová všetky identifikátory, ktoré začínajú zadanou predponou (napr. ak "
+"uvediete „vlajka“, zachovajú sa ID „vlajka-sk“, „vlajka-en“, atď.)."
 
 #: ../share/extensions/scour.inx.h:57 ../share/extensions/scour.inx.h:47
 msgid "Optimized SVG (*.svg)"
@@ -41230,64 +41375,58 @@ msgstr "Scalable Vector Graphic"
 
 #: ../share/extensions/seamless_pattern.inx.h:1
 msgid "Seamless Pattern"
-msgstr ""
+msgstr "Hladký vzor"
 
 #: ../share/extensions/seamless_pattern.inx.h:2
 #: ../share/extensions/seamless_pattern_procedural.inx.h:2
 msgid "Custom Width (px):"
-msgstr ""
+msgstr "Vlastná šírka (px):"
 
 #: ../share/extensions/seamless_pattern.inx.h:3
 #: ../share/extensions/seamless_pattern_procedural.inx.h:3
 msgid "Custom Height (px):"
-msgstr ""
+msgstr "Vlastná výška (px):"
 
 #: ../share/extensions/seamless_pattern.inx.h:4
 msgid "This extension overwrites the current document"
-msgstr ""
+msgstr "Toto rozšírenie prepíše aktuálny dokument"
 
 #: ../share/extensions/seamless_pattern_procedural.inx.h:1
 msgid "Seamless Pattern Procedural"
-msgstr ""
+msgstr "Hladký procedurálny vzor"
 
 #: ../share/extensions/setup_typography_canvas.inx.h:1
 msgid "1 - Setup Typography Canvas"
-msgstr "1 - nastavenie typografického plátna"
+msgstr "1 - Nastavenie typografického plátna"
 
 #: ../share/extensions/setup_typography_canvas.inx.h:2
-#, fuzzy
 msgid "Em-size:"
-msgstr "Veľkosť:"
+msgstr "Veľkosť em:"
 
 #: ../share/extensions/setup_typography_canvas.inx.h:3
-#, fuzzy
 msgid "Ascender:"
-msgstr "Vykresliť"
+msgstr "Stúpanie:"
 
 #: ../share/extensions/setup_typography_canvas.inx.h:4
-#, fuzzy
 msgid "Caps Height:"
-msgstr "Výška čiary:"
+msgstr "Výška kapitálok:"
 
 #: ../share/extensions/setup_typography_canvas.inx.h:5
-#, fuzzy
 msgid "X-Height:"
-msgstr "Výška:"
+msgstr "Výška X:"
 
 #: ../share/extensions/setup_typography_canvas.inx.h:6
-#, fuzzy
 msgid "Descender:"
-msgstr "Závislosť:"
+msgstr "Klesanie"
 
 #: ../share/extensions/sk1_input.inx.h:1
 msgid "sK1 vector graphics files input"
-msgstr "Vstup vektorové grafické súbory sK1"
+msgstr "sVstup vektorové grafické súbory sK1"
 
 #: ../share/extensions/sk1_input.inx.h:2
 #: ../share/extensions/sk1_output.inx.h:2
-#, fuzzy
 msgid "sK1 vector graphics files (*.sk1)"
-msgstr "Vektorové grafické súbory sK1 (.sk1)"
+msgstr "Súbory vektorovej grafiky sK1 (.sk1)"
 
 #: ../share/extensions/sk1_input.inx.h:3
 msgid "Open files saved in sK1 vector graphics editor"
@@ -41393,14 +41532,12 @@ msgid "Envelope"
 msgstr "Obálka"
 
 #: ../share/extensions/svg2fxg.inx.h:1
-#, fuzzy
 msgid "FXG Output"
-msgstr "Výstup SVG"
+msgstr "Výstup FXG"
 
 #: ../share/extensions/svg2fxg.inx.h:2
-#, fuzzy
 msgid "Flash XML Graphics (*.fxg)"
-msgstr "Súbor Grafika XFIG (*.fig)"
+msgstr "Súbor Grafika Flash (*.fxg)"
 
 #: ../share/extensions/svg2fxg.inx.h:3
 msgid "Adobe's XML Graphics file format"
@@ -41412,7 +41549,7 @@ msgstr "Výstup XAML"
 
 #: ../share/extensions/svg2xaml.inx.h:2
 msgid "Silverlight compatible XAML"
-msgstr ""
+msgstr "XAML kompatibilné so Silverlight"
 
 #: ../share/extensions/svg2xaml.inx.h:3 ../share/extensions/xaml2svg.inx.h:2
 msgid "Microsoft XAML (*.xaml)"
@@ -41423,19 +41560,16 @@ msgid "Microsoft's GUI definition format"
 msgstr "Microsoft GUI definition format"
 
 #: ../share/extensions/svg_and_media_zip_output.inx.h:1
-#, fuzzy
 msgid "Compressed Inkscape SVG with media export"
-msgstr "Komprimovaný SVG Inkscape s multimédiami (*.zip)"
+msgstr "Komprimovaný SVG Inkscape s exportom multimédií"
 
 #: ../share/extensions/svg_and_media_zip_output.inx.h:2
-#, fuzzy
 msgid "Image zip directory:"
-msgstr "Neplatný pracovný adresár: %s"
+msgstr "Adresár zip obrázka:"
 
 #: ../share/extensions/svg_and_media_zip_output.inx.h:3
-#, fuzzy
 msgid "Add font list"
-msgstr "Pridať písmo"
+msgstr "Pridať zoznam písiem"
 
 #: ../share/extensions/svg_and_media_zip_output.inx.h:4
 msgid "Compressed Inkscape SVG with media (*.zip)"
@@ -41466,14 +41600,12 @@ msgid "Fill empty day boxes with next month's days"
 msgstr "Vyplniť prázdne polia dní názvami dní v nasledujúcom mesiaci"
 
 #: ../share/extensions/svgcalendar.inx.h:6
-#, fuzzy
 msgid "Show week number"
-msgstr "Číslo snímky"
+msgstr "Zobraziť číslo týždňa"
 
 #: ../share/extensions/svgcalendar.inx.h:7
-#, fuzzy
 msgid "Week start day:"
-msgstr "Deň, kedy začína týždeň"
+msgstr "Deň, kedy začína týždeň:"
 
 #: ../share/extensions/svgcalendar.inx.h:8
 msgid "Weekend:"
@@ -41540,9 +41672,8 @@ msgid "Next month day color:"
 msgstr "Farba dňa ďalšieho mesiaca:"
 
 #: ../share/extensions/svgcalendar.inx.h:26
-#, fuzzy
 msgid "Week number color:"
-msgstr "Farba dňa v týždni:"
+msgstr "Farba čísla týždňa:"
 
 #: ../share/extensions/svgcalendar.inx.h:27
 msgid "Localization"
@@ -41557,9 +41688,8 @@ msgid "Day names:"
 msgstr "Názvy dní:"
 
 #: ../share/extensions/svgcalendar.inx.h:30
-#, fuzzy
 msgid "Week number column name:"
-msgstr "Znížiť počet stĺpcov:"
+msgstr "Názov stĺpca s číslom týždňa:"
 
 #: ../share/extensions/svgcalendar.inx.h:31
 msgid "Char Encoding:"
@@ -41587,7 +41717,7 @@ msgstr "Názvy dní musia začínať od nedele."
 
 #: ../share/extensions/svgcalendar.inx.h:36
 msgid "Wk"
-msgstr ""
+msgstr "Týž"
 
 #: ../share/extensions/svgcalendar.inx.h:37
 msgid ""
@@ -41598,89 +41728,80 @@ msgstr ""
 "http://docs.python.org/library/codecs.html#standard-encodings"
 
 #: ../share/extensions/svgfont2layers.inx.h:1
-#, fuzzy
 msgid "Convert SVG Font to Glyph Layers"
-msgstr "Invertovať vo všetkých vrstvách"
+msgstr "Previesť písmo SVG na vrstvy znakov"
 
 #: ../share/extensions/svgfont2layers.inx.h:2
 msgid "Load only the first 30 glyphs (Recommended)"
 msgstr "Načítať len prvých 30 symbolov (odporúča sa)"
 
 #: ../share/extensions/synfig_output.inx.h:1
-#, fuzzy
 msgid "Synfig Output"
-msgstr "Výstup SVG"
+msgstr "Výstup Synfig"
 
 #: ../share/extensions/synfig_output.inx.h:2
 msgid "Synfig Animation (*.sif)"
-msgstr ""
+msgstr "Animácia Synfig (*.sif)"
 
 #: ../share/extensions/synfig_output.inx.h:3
 msgid "Synfig Animation written using the sif-file exporter extension"
-msgstr ""
+msgstr "Animácia Synfig zapísaná pomocou rozšírenia na export súboru sif"
 
 #: ../share/extensions/tar_layers.inx.h:1
 msgid "Collection of SVG files One per root layer"
-msgstr ""
+msgstr "Kolekcia súborov SVG, jeden pre každú koreňovú vrstvu"
 
 #: ../share/extensions/tar_layers.inx.h:2
 msgid "Layers as Separate SVG (*.tar)"
-msgstr ""
+msgstr "Vrstvy ako samostatné SVG (*.tar)"
 
 #: ../share/extensions/tar_layers.inx.h:3
 msgid ""
 "Each layer split into it's own svg file and collected as a tape archive (tar "
 "file)"
 msgstr ""
+"Každú vrstvu rozdeliť na vlastný súbor SVG a zhromaždiť ich do súboru tar"
 
 #: ../share/extensions/text_braille.inx.h:1
 msgid "Convert to Braille"
 msgstr "Konvertovať na Brailleovo"
 
 #: ../share/extensions/text_extract.inx.h:1
-#, fuzzy
 msgid "Extract"
-msgstr "Extrahovať obrázok"
+msgstr "Extrahovať"
 
 #: ../share/extensions/text_extract.inx.h:2
 #: ../share/extensions/text_merge.inx.h:2
-#, fuzzy
 msgid "Text direction:"
-msgstr "Smer značky"
+msgstr "Smer textu:"
 
 #: ../share/extensions/text_extract.inx.h:3
 #: ../share/extensions/text_merge.inx.h:3
-#, fuzzy
 msgid "Left to right"
-msgstr "Zľava doprava (0)"
+msgstr "Zľava doprava"
 
 #: ../share/extensions/text_extract.inx.h:4
 #: ../share/extensions/text_merge.inx.h:4
-#, fuzzy
 msgid "Bottom to top"
-msgstr "Odspodu navrch (90)"
+msgstr "Zdola navrch"
 
 #: ../share/extensions/text_extract.inx.h:5
 #: ../share/extensions/text_merge.inx.h:5
-#, fuzzy
 msgid "Right to left"
-msgstr "Sprava doľava (180)"
+msgstr "Zľava doprava"
 
 #: ../share/extensions/text_extract.inx.h:6
 #: ../share/extensions/text_merge.inx.h:6
-#, fuzzy
 msgid "Top to bottom"
-msgstr "Presunúť na spodok"
+msgstr "Zhora nadol"
 
 #: ../share/extensions/text_extract.inx.h:7
 #: ../share/extensions/text_merge.inx.h:7
-#, fuzzy
 msgid "Horizontal point:"
 msgstr "Vodorovný bod:"
 
 #: ../share/extensions/text_extract.inx.h:11
 #: ../share/extensions/text_merge.inx.h:11
-#, fuzzy
 msgid "Vertical point:"
 msgstr "Zvislý bod:"
 
@@ -41694,9 +41815,8 @@ msgstr "oBRÁTENÁ vEĽKOSŤ pÍSMEN"
 #: ../share/extensions/text_sentencecase.inx.h:3
 #: ../share/extensions/text_titlecase.inx.h:3
 #: ../share/extensions/text_uppercase.inx.h:3
-#, fuzzy
 msgid "Change Case"
-msgstr "Zmeniť úchop"
+msgstr "Zmeniť veľkosť písmen"
 
 #: ../share/extensions/text_lowercase.inx.h:1
 msgid "lowercase"
@@ -41704,9 +41824,8 @@ msgstr "malé písmená"
 
 #. <param name="flowtext" type="boolean" _gui-text="Flow text">false</param>
 #: ../share/extensions/text_merge.inx.h:15
-#, fuzzy
 msgid "Keep style"
-msgstr "Nastaviť štýl textu"
+msgstr "Zachovať štýl"
 
 #: ../share/extensions/text_randomcase.inx.h:1
 msgid "rANdOm CasE"
@@ -41774,26 +41893,25 @@ msgstr "Zo strany c a uhlov a, b"
 
 #: ../share/extensions/ungroup_deep.inx.h:1
 msgid "Deep Ungroup"
-msgstr ""
+msgstr "Hĺbkové zrušenie zoskupenia"
 
 #: ../share/extensions/ungroup_deep.inx.h:2
 msgid "Ungroup all groups in the selected object."
-msgstr ""
+msgstr "Zrušiť zoskupenie všetkých skupín vo vybranom objekte."
 
 #: ../share/extensions/ungroup_deep.inx.h:3
 msgid "Starting Depth"
-msgstr ""
+msgstr "Počiatočná hĺbka"
 
 #: ../share/extensions/ungroup_deep.inx.h:4
 msgid "Stopping Depth (from top)"
-msgstr ""
+msgstr "Hĺbka zastavenia (zhora)"
 
 #: ../share/extensions/ungroup_deep.inx.h:5
 msgid "Depth to Keep (from bottom)"
-msgstr ""
+msgstr "Akú hĺbku zachovať (zdola)"
 
 #: ../share/extensions/voronoi2svg.inx.h:1
-#, fuzzy
 msgid "Voronoi Diagram"
 msgstr "Voroného diagram"
 
@@ -41802,28 +41920,24 @@ msgid "Type of diagram:"
 msgstr "Typ diagramu:"
 
 #: ../share/extensions/voronoi2svg.inx.h:4
-#, fuzzy
 msgid "Bounding box of the diagram:"
-msgstr "Typ ohraničenia:"
+msgstr "Ohraničenie diagramu:"
 
 #: ../share/extensions/voronoi2svg.inx.h:5
-#, fuzzy
 msgid "Show the bounding box"
-msgstr "Zobraziť limitné ohraničenie"
+msgstr "Zobraziť ohraničenie"
 
 #: ../share/extensions/voronoi2svg.inx.h:6
 msgid "Triangles color"
-msgstr ""
+msgstr "Farby trojuholníkov"
 
 #: ../share/extensions/voronoi2svg.inx.h:7
 #: ../share/extensions/voronoi2svg.inx.h:6
-#, fuzzy
 msgid "Delaunay Triangulation"
-msgstr "Odmietnuť pozvanie"
+msgstr "Delaunayova triangulácia"
 
 #: ../share/extensions/voronoi2svg.inx.h:8
 #: ../share/extensions/voronoi2svg.inx.h:7
-#, fuzzy
 msgid "Voronoi and Delaunay"
 msgstr "Voroného a Delaunayov"
 
@@ -41834,25 +41948,24 @@ msgstr "Možnosti Voroného diagramu"
 
 #: ../share/extensions/voronoi2svg.inx.h:11
 #: ../share/extensions/voronoi2svg.inx.h:10
-#, fuzzy
 msgid "Automatic from selected objects"
-msgstr "Zoskupí zvolené objekty"
+msgstr "Automaticky z vybraných objektov"
 
 #: ../share/extensions/voronoi2svg.inx.h:12
 msgid "Options for Delaunay Triangulation"
-msgstr ""
+msgstr "Možnosti Delaunayho triangulácie"
 
 #: ../share/extensions/voronoi2svg.inx.h:13
 msgid "Default (Stroke black and no fill)"
-msgstr ""
+msgstr "Predvolené (čierny ťah, bez výplne)"
 
 #: ../share/extensions/voronoi2svg.inx.h:14
 msgid "Triangles with item color"
-msgstr ""
+msgstr "Trojuholníky s farbu položky"
 
 #: ../share/extensions/voronoi2svg.inx.h:15
 msgid "Triangles with item color (random on apply)"
-msgstr ""
+msgstr "Trojuholníky s farbu položky (náhodne pri použití)"
 
 #: ../share/extensions/voronoi2svg.inx.h:17
 #: ../share/extensions/voronoi2svg.inx.h:12
@@ -42241,7 +42354,6 @@ msgid "With HTML and CSS"
 msgstr "S HTML a CSS"
 
 #: ../share/extensions/webslicer_export.inx.h:7
-#, fuzzy
 msgid ""
 "All sliced images, and optionally - code, will be generated as you had "
 "configured and saved to one directory."
