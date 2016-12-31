@@ -526,7 +526,7 @@ void AboutBox::initStrings() {
 "Ivan Masár <helix84@centrum.sk>, 2006-2014. \n"
 "Ivan Řihošek <irihosek@seznam.cz>, 2014.\n"
 "Iñaki Larrañaga <dooteo@euskalgnu.org>, 2006.\n"
-"Jānis Eisaks <jancs@dv.lv>, 2012-2014.\n"
+"Jānis Eisaks <jancs@dv.lv>, 2012-2017.\n"
 "Jeffrey Steve Borbón Sanabria <jeff_kerokid@yahoo.com>, 2005.\n"
 "Jesper Öqvist <jesper@llbit.se>, 2010, 2011.\n"
 "Joaquim Perez i Noguer <noguer@gmail.com>, 2008-2009.\n"

@@ -1,6 +1,6 @@
 # Latvian translation for Inkscape.
 # This file is distributed under the same license as the Inkscape package.
-# Jānis Eisaks <jancs@dv.lv>, 2012-2015.
+# Jānis Eisaks <jancs@dv.lv>, 2012-2017.
 # Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2014.
 #
 msgid ""
