@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-30 19:47+0200\n"
-"PO-Revision-Date: 2016-12-30 23:28+0200\n"
+"PO-Revision-Date: 2016-12-31 14:27+0200\n"
 "Last-Translator: Jānis Eisaks <je@dv.lv>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -46,6 +46,12 @@ msgid ""
 "trace bitmaps and much more. We also aim to maintain a thriving user and "
 "developer community by using open, community-oriented development."
 msgstr ""
+"Inkscape atbalsta dažādas paplašinātas SVG iespējas (marķieri, kloni, alfa "
+"sajaukšanu utml.), pievēršot lielu uzmanību lietotāja saskarnei. Ir ļoti "
+"vienkārši rediģēt mezglus, veikt sarežģītas darbības ar ceļiem, vektorizēt "
+"bitkartes un daudz ko citu. Mēs tāpat cenšamies uzturēt plaukstošu lietotāju "
+"un izstrādātāju kopienu, izmantojot atvērtu, uz kopienu orientētu izstrādes "
+"procesu."
 
 #: ../inkscape.appdata.xml.in.h:5
 msgid "Main application window"
@@ -8060,6 +8066,9 @@ msgid ""
 "glyphs where each glyph is a path. Images are stored internally. Meshes "
 "cause entire document to be rendered as a raster image."
 msgstr ""
+"Importēt izmantojot ārējo bibliotēku. Teks sastāv no klonētu glifu, kur "
+"katrs glifs ir ceļš, grupām. Attēli tiek saglabāti iekšēji. Tīkls liek "
+"renderēt visu dokumentu kā rastra attēlu."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:136
 msgid "Internal import"
@@ -8071,6 +8080,9 @@ msgid ""
 "white space is missing. Meshes are converted to tiles, the number depends on "
 "the precision set below."
 msgstr ""
+"Importēt, izmantojot iekšējo (Poppler atvasināto) bibliotēku. Teksts tiek "
+"saglabāts kā teksts bez atstarpēm. Tīkli tiek pārveidoti par raksta "
+"elementiem, kuru skaits ir atkarīgs no zemāk norādītās precizitātes."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:148
 msgid "rough"
@@ -10808,7 +10820,7 @@ msgstr "Aploksnes deformācija"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:47
 msgid "Overflow perspective"
-msgstr ""
+msgstr "Pārpludināt perspektīvu"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:48
 msgid "Type"
@@ -11127,9 +11139,8 @@ msgid "Along nodes"
 msgstr "Gar mezgliem"
 
 #: ../src/live_effects/lpe-roughen.cpp:40
-#, fuzzy
 msgid "Rand"
-msgstr "Rands"
+msgstr "Sajaukt"
 
 #: ../src/live_effects/lpe-roughen.cpp:41
 msgid "Retract"
@@ -11207,7 +11218,7 @@ msgstr "<b>Pastiprināt raupjumu</b> Pievienot papildu raupjuma slāni"
 
 #: ../src/live_effects/lpe-roughen.cpp:149
 msgid "<b>Options</b> Modify options to rough"
-msgstr ""
+msgstr "<b>Papildiespējas</b> Mainiet raupjošanas papildiespējas"
 
 #: ../src/live_effects/lpe-ruler.cpp:25 ../share/extensions/measure.inx.h:27
 #: ../share/extensions/restack.inx.h:16
@@ -11349,9 +11360,8 @@ msgid "Change number of simplify steps "
 msgstr "Norādiet vienkāršošanas soļu skaitu"
 
 #: ../src/live_effects/lpe-simplify.cpp:31
-#, fuzzy
 msgid "Roughly threshold:"
-msgstr "Apmēram iezīmējiet izvelkamo objektu"
+msgstr "Raupjošanas slieksnis:"
 
 #: ../src/live_effects/lpe-simplify.cpp:32
 msgid "Smooth angles:"
@@ -11359,7 +11369,7 @@ msgstr "Nogludināt leņķus:"
 
 #: ../src/live_effects/lpe-simplify.cpp:32
 msgid "Max degree difference on handles to perform a smooth"
-msgstr ""
+msgstr "Maksimālā atšķirība turos izlīdzināšanas veikšanai"
 
 #: ../src/live_effects/lpe-simplify.cpp:34
 msgid "Paths separately"
@@ -14593,7 +14603,7 @@ msgstr "Vek_torizācija"
 
 #: ../src/ui/dialog/clonetiler.cpp:788
 msgid "Trace the drawing under the clones/sprayed items"
-msgstr ""
+msgstr "Vektorizēt attēlu zem klonētajiem/izsmidzinātajiem objektiem"
 
 #: ../src/ui/dialog/clonetiler.cpp:792
 msgid ""
@@ -15014,6 +15024,9 @@ msgid ""
 "editing if 'Checkerboard background' unset (but used when exporting to "
 "bitmap)."
 msgstr ""
+"Lapas fona krāsa. Piezīme: caurspīdīguma iestatījums rediģējot netiek ņemts "
+"vērā, ja 'Šaha dēļa fons' ir atiestatīts (taču izmanto eksportam uz "
+"bitkartēm)."
 
 #: ../src/ui/dialog/document-properties.cpp:124
 msgid "Border _color:"
@@ -17804,15 +17817,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
 msgid "Base simplify:"
-msgstr ""
+msgstr "Pamata vienkāršošana:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
 msgid "on dynamic LPE simplify"
-msgstr ""
+msgstr "uz dinamiskās ceļa (LPE) efekta vienkāršošanas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:214
 msgid "Base simplify of dynamic LPE based simplify"
-msgstr ""
+msgstr "Balstīt vienkāršošanu  uz dinamiskas ceļa (LPE) efekta vienkāršošanas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:229
 msgid "<b>No objects selected</b> to take the style from."
@@ -19935,11 +19948,13 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1261
 msgid "Mouse move pans when Space is pressed"
-msgstr ""
+msgstr "Peles kustības panoramē, ja nospiests atstarpes taustiņš"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1263
 msgid "When on, pressing and holding Space and dragging pans canvas"
 msgstr ""
+"Ja iespējots, turot nospiestu atstarpes taustiņu peles kustības panoramē "
+"audeklu"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1264
 msgid "Mouse wheel zooms by default"
@@ -21421,6 +21436,8 @@ msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
 msgstr ""
+"Izcelt aprišu krāsu Mezglu rīkā. Uzklikšķiniet, lai ievadītu. Ja alfa ir 0, "
+"izmanto pārmantoto krāsu."
 
 #: ../src/ui/dialog/objects.cpp:1741
 msgid ""
@@ -25328,7 +25345,7 @@ msgstr "Pārsvītrotas nulles. OpenType tabula: 'zero'"
 #. Add tooltips
 #: ../src/ui/widget/font-variants.cpp:240
 msgid "Feature settings in CSS form. No sanity checking is performed."
-msgstr ""
+msgstr "Iezīmju iestatījumi CSS formā. Saprātīgums netiek pārbaudīts."
 
 #: ../src/ui/widget/layer-selector.cpp:118
 msgid "Toggle current layer visibility"
@@ -29470,19 +29487,19 @@ msgstr "Atvasinātā logdaļa, kurai jāparādās blakus izvēlnes tekstam"
 
 #: ../src/widgets/image-menu-item.c:167
 msgid "Use stock"
-msgstr ""
+msgstr "Lietot krājumu"
 
 #: ../src/widgets/image-menu-item.c:168
 msgid "Whether to use the label text to create a stock menu item"
-msgstr ""
+msgstr "Vai izmantot etiķetes tekstu krājumu izvēlnes vienuma veidošanai"
 
 #: ../src/widgets/image-menu-item.c:183
 msgid "Accel Group"
-msgstr ""
+msgstr "Paātrinājuma grupa"
 
 #: ../src/widgets/image-menu-item.c:184
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr ""
+msgstr "Paātrinājuma grupa, ko izmantot krājuma paātrinājuma taustiņiem"
 
 #: ../src/widgets/lpe-toolbar.cpp:233
 msgid "Closed"
@@ -29667,7 +29684,7 @@ msgstr "Pie palīglīnijām"
 #: ../src/widgets/measure-toolbar.cpp:415
 #: ../src/widgets/measure-toolbar.cpp:416
 msgid "Mark Dimension"
-msgstr ""
+msgstr "Atzīmes izmēri"
 
 #: ../src/widgets/measure-toolbar.cpp:425
 #: ../src/widgets/measure-toolbar.cpp:426
@@ -29687,6 +29704,12 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Mezglu krāsu pārejas ir daļa no SVG 2:\n"
+"* Sintakse var mainīties.\n"
+"* Tīmekļa pārlūku atbalsts nav garantēts.\n"
+"\n"
+"Tīmeklim: pārvērtiet par bitkarti (Labot->Izveidot bitkartes kopiju).\n"
+"Drukāšanai: eksportējiet uz PDF."
 
 #: ../src/widgets/mesh-toolbar.cpp:398
 msgid "normal"
@@ -29812,7 +29835,7 @@ msgstr "Izvēlieties krāsas"
 
 #: ../src/widgets/mesh-toolbar.cpp:586
 msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr ""
+msgstr "Izvēlieties krāsu atlasītajiem stūra mezgliem no apakšā esošā tīkla"
 
 #: ../src/widgets/mesh-toolbar.cpp:589
 msgid "Pick Color"
@@ -30790,6 +30813,9 @@ msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
 msgstr ""
+"Izvēlieties krāsas no attēla.  Sarežģītākiem efektiem varat izmantot klonu "
+"raksta vektorizēšanas dialoglodziņu. Klonēšanas režīmā sākotnējām "
+"aizpildījuma vai apmales krāsām jābūt atiestatītām."
 
 #: ../src/widgets/spray-toolbar.cpp:502 ../src/widgets/spray-toolbar.cpp:503
 msgid "Pick from center instead average area."
@@ -30798,6 +30824,8 @@ msgstr "Paņemt no centra, nevis vispārējā laukuma."
 #: ../src/widgets/spray-toolbar.cpp:515 ../src/widgets/spray-toolbar.cpp:516
 msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr ""
+"Inversa izvēlētā vērtība, saglabājot krāsu paplašinātajā vektorizēšanas "
+"režīmā"
 
 #: ../src/widgets/spray-toolbar.cpp:528 ../src/widgets/spray-toolbar.cpp:529
 msgid "Apply picked color to fill"
@@ -31289,7 +31317,7 @@ msgstr "Rakstīšanas režīms"
 #. Label
 #: ../src/widgets/text-toolbar.cpp:1880
 msgid "Block progression"
-msgstr ""
+msgstr "Bloka virzība"
 
 #: ../src/widgets/text-toolbar.cpp:1909
 msgid "Auto glyph orientation"
@@ -32315,6 +32343,14 @@ msgid ""
 "Technical details:\n"
 "%s"
 msgstr ""
+"Fantastikais libxml2 ietinums lxml ir nepieciešams inkex.py, tālab arī "
+"pastāv šis paplašinajums. Lūdzu, lejupielādējiet un uzstādiet jaunāko "
+"versiju no  http://cheeseshop.python.org/pypi/lxml/, vai uzstādot to, "
+"izmantojot pakotņu vadības sistēmu ar komandu: sudo apt-get install python-"
+"lxml\n"
+"\n"
+"Tehniskas detaļas:\n"
+"%s"
 
 #: ../share/extensions/inkex.py:184
 #, python-format
@@ -32655,18 +32691,19 @@ msgstr "pySerial nav uzstādīts. Izpildiet sekojošus soļus:"
 
 #: ../share/extensions/plotter.py:147
 msgid "1. Download and extract (unzip) this file to your local harddisk:"
-msgstr ""
+msgstr "1. Lejupielādējiet un atpakojiet šo datni uz Jūsu lokālā cietā diska:"
 
 #: ../share/extensions/plotter.py:149
 msgid ""
 "2. Copy the \"serial\" folder (Can be found inside the just extracted folder)"
-msgstr ""
+msgstr "2. Nokopējiet mapi \"serial\" (atrodama tikko atpakotajā mapē)"
 
 #: ../share/extensions/plotter.py:150
 msgid ""
 "   into the following Inkscape folder: C:\\[Program files]\\inkscape\\python"
 "\\Lib\\"
 msgstr ""
+"   uz sekojošo Inkscape mapi: C:\\[Program files]\\inkscape\\python\\Lib\\"
 
 #: ../share/extensions/plotter.py:151
 msgid "3. Close and restart Inkscape."
@@ -32793,9 +32830,8 @@ msgid "Please enter a replacement font in the replace all box."
 msgstr "Lūdzu, ievadiet aizvietojošo fontu atbilstošā 'Aizvietot visu' laukā."
 
 #: ../share/extensions/restack.py:75
-#, fuzzy
 msgid "There is no selection to restack."
-msgstr "Nav interpolējamas atlases."
+msgstr "Nav pārkārtojamas atlases."
 
 #: ../share/extensions/summersnight.py:41
 msgid ""
@@ -32878,9 +32914,8 @@ msgid "The directory \"%s\" does not exists."
 msgstr "Mape \"%s\" nepstāv."
 
 #: ../share/extensions/webslicer_export.py:76
-#, fuzzy
 msgid "No slicer layer found."
-msgstr "Nav pašreizējā slāņa."
+msgstr "Nav atrasts griešanas slānis."
 
 #: ../share/extensions/webslicer_export.py:106
 #, python-format
@@ -33196,6 +33231,9 @@ msgid ""
 "only for objects and groups). Change the range values to limit the distance "
 "between the original color and the randomized one."
 msgstr ""
+"Brīvi izmaina nokrāsu, piesātinājumu, gaišumu un/vai necaurspīdību "
+"(necaurspīdību maina tikai objektiem un grupām). Mainiet diapazona lielumu, "
+"lai ierobežotu sākotnējās mainītās krāsas atšķirību."
 
 #: ../share/extensions/color_removeblue.inx.h:1
 msgid "Remove Blue"
@@ -33321,6 +33359,8 @@ msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
+"Izvēlieties šo šķirkli, ja vēlaties redzēs lapas informāciju pirms DPI "
+"pārslēdzēja izmantošanas."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -33645,14 +33685,12 @@ msgid "Character Encoding:"
 msgstr "Rakstzīmju kodējums:"
 
 #: ../share/extensions/dxf_outlines.inx.h:7
-#, fuzzy
 msgid "Layer export selection:"
-msgstr "Eksportējamā slāņa atlasīšana"
+msgstr "Eksportējamā slāņa atlasīšana:"
 
 #: ../share/extensions/dxf_outlines.inx.h:8
-#, fuzzy
 msgid "Layer match name:"
-msgstr "Slāņa nosaukuma atbilstība"
+msgstr "Slāņa nosaukuma atbilstība:"
 
 #: ../share/extensions/dxf_outlines.inx.h:9
 msgid "pt"
@@ -35899,7 +35937,7 @@ msgstr "Izmantot Z-kārtību"
 #: ../share/extensions/interp.inx.h:8
 #: ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
-msgstr ""
+msgstr "Apkārtceļš reversajai atlases kārtībai Dzīvā priekšskatījuma ciklos"
 
 #: ../share/extensions/interp_att_g.inx.h:1
 msgid "Interpolate Attribute in a group"
@@ -37077,7 +37115,7 @@ msgstr "Attālums star diagrammu un diagrammas virsrakstu:"
 
 #: ../share/extensions/nicechart.inx.h:28
 msgid "Work around aliasing effects (creates overlapping segments)"
-msgstr ""
+msgstr "Apiet kropļojošos efektus (izveido pārklājošos posmus/segmentus)"
 
 #: ../share/extensions/nicechart.inx.h:29
 msgid "Color scheme:"
@@ -38078,6 +38116,10 @@ msgid ""
 "objects inside a single selected group, or a selection of multiple objects "
 "on the current drawing level (layer or group)."
 msgstr ""
+"Šis paplašinājums maina objektu z-kārtību, balstoties uz uz tā novietojuma "
+"uz audekla vai arī esošās z-kārtības. Atlase: paplašinājums pārkārto vai nu "
+"objektus vienas atlasītās grupas ietvaros vai arī atlasītus vairākus "
+"objektus pašreizējā slānī vai grupā."
 
 #: ../share/extensions/restack.inx.h:27
 #: ../share/extensions/ungroup_deep.inx.h:6
@@ -38124,7 +38166,7 @@ msgstr "Optimizēta SVG izvade"
 
 #: ../share/extensions/scour.inx.h:3
 msgid "Number of significant digits for coordinates:"
-msgstr ""
+msgstr "Zīmīgo ciparu skaits koordinātēm:"
 
 #: ../share/extensions/scour.inx.h:4
 msgid ""
@@ -38134,6 +38176,10 @@ msgid ""
 "\"3\" is specified, the coordinate 3.14159 is output as 3.14 while the "
 "coordinate 123.675 is output as 124."
 msgstr ""
+"Nosaka koordinātēm izmantojamo zīmīgo ciparu skaitu. Ņemiet vērā, ka zīmīgo "
+"ciparu skaits NAV zīmju skaits aiz komata, bet kopējais ciparu skaits. "
+"Piemēram, ja tas ir noteikts kā \"3\", koordināte 3.14159 tiks izvadīta kā "
+"3.14, kamēr koordināte 123.675 - kā 124."
 
 #: ../share/extensions/scour.inx.h:5
 msgid "Shorten color values"
@@ -38144,6 +38190,7 @@ msgid ""
 "Convert all color specifications to #RRGGBB (or #RGB where applicable) "
 "format."
 msgstr ""
+"Pārvērst visas krāsu specifikācijas #RRGGBB (vai #RGB, kur iederas) formātā."
 
 #: ../share/extensions/scour.inx.h:7
 msgid "Convert CSS attributes to XML attributes"
@@ -38154,6 +38201,8 @@ msgid ""
 "Convert styles from style tags and inline style=\"\" declarations into XML "
 "attributes."
 msgstr ""
+"Pārvērst stilus un stilu tagiem un iekļautajām style=\"\" deklarācijām par "
+"XML atribūtiem."
 
 #: ../share/extensions/scour.inx.h:9
 msgid "Collapse groups"
@@ -38164,6 +38213,8 @@ msgid ""
 "Remove useless groups, promoting their contents up one level. Requires "
 "\"Remove unused IDs\" to be set."
 msgstr ""
+"Aizvākt nevajadzīgas grupas, pārvietojot to saturu par vienu līmeni uz "
+"augšu. Jābūt iespējotam \"Aizvākt neizmantotos ID\"."
 
 #: ../share/extensions/scour.inx.h:11
 msgid "Create groups for similar attributes"
@@ -38174,6 +38225,8 @@ msgid ""
 "Create groups for runs of elements having at least one attribute in common "
 "(e.g. fill-color, stroke-opacity, ...)."
 msgstr ""
+"Izveido elementu grupas ar vismaz vienu kopīgu atribūtu (piemēram "
+"aizpildījuma krāsu, apmales necaurspīdību, ...)"
 
 #: ../share/extensions/scour.inx.h:13
 msgid "Keep editor data"
@@ -38184,6 +38237,8 @@ msgid ""
 "Don't remove editor-specific elements and attributes. Currently supported: "
 "Inkscape, Sodipodi and Adobe Illustrator."
 msgstr ""
+"Neaizvākt redaktoram specifiskus elementus un atribūtus. Šobrīd atbalstīti: "
+"Inkscape, Sodipodi un Adobe Illustrator."
 
 #: ../share/extensions/scour.inx.h:15
 msgid "Keep unreferenced definitions"
@@ -38229,6 +38284,9 @@ msgid ""
 "include license and author information, alternate versions for non-SVG-"
 "enabled browsers, etc."
 msgstr ""
+"Aizvākt metadatu tagus kopā ar tajos esošo informāciju, kas var saturēt "
+"licences un autora informāciju, alternatīvās versijas SVG neuzturošiem "
+"pārlūkiem utml."
 
 #: ../share/extensions/scour.inx.h:24
 msgid "Remove comments"
@@ -38247,6 +38305,8 @@ msgid ""
 "Resolve external references to raster images and embed them as Base64-"
 "encoded data URLs."
 msgstr ""
+"Atrisināt ārējās atsauces uz rastra attēliem un iegult tās kā Base64-kodētas "
+"datu URL."
 
 #: ../share/extensions/scour.inx.h:28
 msgid "Enable viewboxing"
@@ -38258,6 +38318,8 @@ msgid ""
 "Set page size to 100%/100% (full width and height of the display area) and "
 "introduce a viewBox specifying the drawings dimensions."
 msgstr ""
+"Iestatiet lapas izmēru 100%/100% (pilns ekrāna platums un augstums) un "
+"definējiet skatrāmi, norādot zīmējuma izmērus."
 
 #: ../share/extensions/scour.inx.h:31
 msgid "Format output with line-breaks and indentation"
@@ -38384,6 +38446,10 @@ msgid ""
 "preserved while numbered IDs (as they are generated by most SVG editors "
 "including Inkscape) will be removed/shortened."
 msgstr ""
+"Aprakstošie, ar roku izveidotie IDs , ko izmanto atsaucēm uz specifiskiem "
+"elementiem vai grupām (piem. #arrowStart, #arrowEnd vai #textLabels), tiks "
+"saglabāti, kamēr numurētie IDs (ko ģenerē vairums SVG redaktoru, ieskaitot "
+"Inkscape) tiks aizvākti vai saīsināti."
 
 #: ../share/extensions/scour.inx.h:53
 msgid "Preserve the following IDs:"
@@ -38990,7 +39056,7 @@ msgstr "Automātiski no izvēlētajiem objektiem"
 
 #: ../share/extensions/voronoi2svg.inx.h:12
 msgid "Options for Delaunay Triangulation"
-msgstr ""
+msgstr "Delonē triangulācijas papildiespējas"
 
 #: ../share/extensions/voronoi2svg.inx.h:13
 msgid "Default (Stroke black and no fill)"
