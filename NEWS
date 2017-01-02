@@ -1,58 +1,73 @@
-967 lines
-Inkscape 0.92
+                             Inkscape 0.92
 
-(Definitely not released yet — AnnouncePlanning092)
+                     -~=  Released 2017-01-01  =~-
 
-Release highlights
 
-Released on «YYYY-MM-DD».
 
-  • Mesh Gradients are now supported.
++----------------------------------------------------------------------+
+|                          Release Highlights                          |
++----------------------------------------------------------------------+
+
+  • Mesh Gradients are now supported.  See
+    http://wiki.inkscape.org/wiki/index.php/Mesh_Gradients
   • Many SVG2 and CSS3 properties are now supported (e.g. paint-order,
     mix-blend-mode). Not all are available from the GUI.
-  • The new Object dialog allows to select, label, hide and lock any object in
-    the drawing from a dialog that lists them all
-  • Selection sets make it possible to 'group' objects together regardless of
-    document structure
+  • The new Object dialog allows to select, label, hide and lock any
+    object in the drawing from a dialog that lists them all
+  • Selection sets make it possible to 'group' objects together
+    regardless of document structure
   • Guides can now be locked to avoid accidental movement
-  • Several new path effects have been added, among them Envelope/Perspective,
-    Lattice Deformation, Mirror and Rotate Copies
-  • There are several new extensions (e.g. a seamless pattern extension) and a
-    new filter (colorblindness simulation) included in the release, many old
-    extensions have been updated or got new features
+  • Several new path effects have been added, among them
+    Envelope/Perspective, Lattice Deformation, Mirror and Rotate Copies
+  • There are several new extensions (e.g. a seamless pattern extension)
+    and a new filter (colorblindness simulation) included in the
+    release, many old extensions have been updated or got new features
   • Spray tool and measure tool received a set of nifty new features
   • Interactive smoothing for lines created with the Pencil tool
   • BSplines (and more) are available for the Pen tool
   • Checkerboard background can be used to more easily see object
     transparencies
 
-Important changes
 
-  • The default resolution was changed from 90dpi to 96dpi, to match the CSS
-    standard. For more background information, please see the Wiki article
-    about handling of units in Inkscape. Inkscape 0.92 will attempt to identify
-    'legacy' Inkscape files that need to be converted. If such a file is
-    detected, the user will be offered three options:
-     1. Set 'viewBox'. Inkscape will add an appropriate 'viewBox' which will do
-        a global scaling of the document. It will also adjust the document
-        width and height if necessary.
+
++----------------------------------------------------------------------+
+|                          Important Changes                           |
++----------------------------------------------------------------------+
+
+  • The default resolution was changed from 90dpi to 96dpi, to match the
+    CSS standard. For more background information, please see the Wiki
+    article about handling of units in Inkscape. Inkscape 0.92 will
+    attempt to identify 'legacy' Inkscape files that need to be
+    converted. If such a file is detected, the user will be offered
+    three options:
+
+     1. Set 'viewBox'. Inkscape will add an appropriate 'viewBox' which
+        will do a global scaling of the document. It will also adjust
+        the document width and height if necessary.
      2. Scale elements. Inkscape will scale each internal element.
-     3. Ignore. Do nothing. This is an appropriate choice for documents meant
-        for screen display.
+     3. Ignore. Do nothing. This is an appropriate choice for documents
+        meant for screen display.
 
-        [See release blocker bug report for more details.]
+    For more details, please see:
+    https://bugs.launchpad.net/inkscape/+bug/1389723
 
   • For developers and packagers, the switch from autotools to CMake is a
-    relevant change (users who do not compile their own version will not be
-    affected). While the old system is still available for 0.92, it is now also
-    possible to compile Inkscape using CMake (Background info about why this
-    change was made and How to work with CMake).
+    relevant change (users who do not compile their own version will not
+    be affected). While the old system is still available for 0.92, it
+    is now also possible to compile Inkscape using CMake.  CMake builds
+    faster, has a less esoteric scripting language, and has better
+    support for building on Windows; for more detailed rationale please
+    see http://wiki.inkscape.org/wiki/index.php/CMake.
 
-Manipulating Objects
+
+
++----------------------------------------------------------------------+
+|                         Manipulating Objects                         |
++----------------------------------------------------------------------+
 
 Objects Dialog
-
-New dialog for manipulating the object tree.
+==============
+New dialog for manipulating the object tree (Imported from Ponyscape).
 
   • Drag and drop reordering of objects.
   • Lock, and hide one or more items.
@@ -62,14 +77,10 @@ New dialog for manipulating the object tree.
   • Ability to change highlight color of objects.
   • Ability to set blend mode per object.
 
-Imported from Ponyscape.
+Selection Sets Dialog: New dialog that allows the creation of selection
+sets that are not affected by document structure.
 
-Selection Sets Dialog
-
-New dialog that allows the creation of selection sets that are not affected by
-document structure.
-
-Usage:
+   Usage:
 
   • Open Dialog with 'Object > Selection sets'
 
@@ -96,17 +107,22 @@ Usage:
      1. select it in the list and click on the '-' button at the bottom of the
         dialog
 
-Text
+
+
++----------------------------------------------------------------------+
+|                                 Text                                 |
++----------------------------------------------------------------------+
 
 Font Features
-
+=============
 It is now possible to take advantage of OpenType tables to select alternative
 glyphs from a font. For this, a third tab ('Variants') has been added to the
 'Text and Font' dialog. Note that browser support is still limited. Inkscape
 must also be linked with a recent version of the Pango library.
 
-Vertical Text
 
+Vertical Text
+=============
 Support for vertical text layout has been improved.
 
   • The default behavior for Latin bases glyphs has been changed. They are now
@@ -116,14 +132,16 @@ Support for vertical text layout has been improved.
   • The CSS 3 values for the 'writing-mode' property are supported in
     rendering. Saving still uses the deprecated SVG 1.1 values.
 
-Accessibility
 
+Accessibility
+=============
 Converting text to a path will save the text in the 'aria-label' attribute.
 This is useful for accessibility and could eventually be used by Inkscape to
 reconstruct the text.
 
-Line Spacing
 
+Line Spacing
+============
 Line spacing in Inkscape now follows the CSS standard for the 'line-height'
 property. Note the following points:
 
@@ -156,15 +174,20 @@ property. Note the following points:
     'strut' value to the desired line spacing and then set the inner
     'line-height' values to zero.
 
-Live Path Effects
+
+
++----------------------------------------------------------------------+
+|                          Live Path Effects                           |
++----------------------------------------------------------------------+
 
   • Now some suitable LPEs can be applied to clips and masks.
   • Helper lines come again to life.
   • The option to add a bend path directly was added to the pen/pencil shape
     combo box.
 
-Spiro Live
 
+Spiro Live
+==========
 Extended video: https://www.youtube.com/watch?v=bFakiI5f0-Y
 
 Based upon Spiro Live Path Effect, now shows the result while drawing.
@@ -173,15 +196,14 @@ Based upon Spiro Live Path Effect, now shows the result while drawing.
   • When you append a path in cusp and Spiro mode, the helper preview path will
     be displayed.
 
-Spirolive.gif
+
 
 BSpline
-
+=======
 Extended video https://www.youtube.com/watch?v=vwV0DHvA-OE
 
-Pen & Node mode
-
-Uses the BSpline Live Path Effect while creating and editing paths.
+Pen & Node mode: Uses the BSpline Live Path Effect while creating and
+editing paths.
 
   • Works with Pen and Pencil tool directly.
   • Create cusp nodes by holding down the Shift key (Pen/Bézier tool only).
@@ -192,16 +214,8 @@ Uses the BSpline Live Path Effect while creating and editing paths.
     handle with the node tool (no Shift key required).
   • Double-click on a handle resets weight to default
 
-Bspline.gif Bspline2.gif
-
-Live Path Effect mode
-
-[170px-Bspline3]
- 
-Bspline LPE
-
-The options in the Live Path Effect dialog give you full control over bspline
-paths.
+Live Path Effect mode: The options in the Live Path Effect dialog give
+you full control over bspline paths.
 
   • Option to set to Default weight (0.3333 times curve segment)
   • Option to make nodes cusp
@@ -215,30 +229,22 @@ paths.
   • Change only selected nodes applies to all other widgets changes.
   • Shows a helper path with the final shape and the generated new nodes.
 
+
 Roughen
-
-[170px-Roughen]
- 
-Roughen LPE
-
+=======
 Extended video: https://www.youtube.com/watch?v=130Dbt0juvY
 
-This path effect is a semi-clone of two extensions, ("add nodes" and "jitter
-nodes") and handles units.
+This path effect is a semi-clone of two extensions, ("add nodes" and
+"jitter nodes") and handles units.
 
 The parameters are similar to both extensions and adds a global randomizer.
 
   • Can be applied to paths, shapes and groups.
   • Can be applied to clips and masks, if they are vector objects.
 
-Roughen.gif
 
 Simplify
-
-[170px-Simplify]
- 
-Simplify LPE
-
+========
 Extended video: https://www.youtube.com/watch?v=gaWujN_iTSk
 
 Simplifies a vector element using a non-destructive live path effect.
@@ -249,18 +255,13 @@ Simplifies a vector element using a non-destructive live path effect.
     setting a numeric parameter.
   • Apply Simplify multiple times in the same LPE.
 
-Simplify.gif
-
 This path effect can optionally be applied directly via the pencil/freehand
 drawing tool's tool bar when creating a new path. It then replaces the normal
 smoothing (which would be a destructive operation).
 
+
 Perspective/Envelope
-
-[170px-Perspective-envel]
- 
-Perspective/Envelope LPE
-
+====================
 Extended video: https://www.youtube.com/watch?v=CjKGatyxTZ8
 
 Both deformations can be applied by specifying 4 points.
@@ -269,14 +270,9 @@ Both deformations can be applied by specifying 4 points.
   • Can be used on paths, shapes and groups.
   • Also works with vector clips and masks.
 
-Perspective-envelope.gif
 
 Lattice Deformation 2
-
-[170px-Latice2]
- 
-Lattice Deformation 2 LPE
-
+=====================
 Extended video: https://www.youtube.com/watch?v=YlK9L88_tWE
 Symmetry video: https://www.youtube.com/watch?v=jhuVjqFA6ig
 
@@ -285,14 +281,9 @@ Symmetry video: https://www.youtube.com/watch?v=jhuVjqFA6ig
   • Can be applied to paths, shapes and groups.
   • Also works on vector clips and masks.
 
-Latice2.gif
 
 Show Handles
-
-[170px-ShowHandles]
- 
-Show Handles LPE
-
+============
 Extended video: https://www.youtube.com/watch?v=h9ul_PR9XYo
 
 An LPE version of the Show Handles extension.
@@ -303,14 +294,9 @@ An LPE version of the Show Handles extension.
   • If not applied to a clone, this is a destructive LPE, it does not save
     styles, better work on a copy!
 
-ShowHandles.gif
 
 Transform by two points
-
-[170px-TransformByTwoKno]
- 
-Transform by 2 points LPE
-
+=======================
 Extended video: https://www.youtube.com/watch?v=ZLmYdWoXXIw
 Extended video (Elastic rubber): https://www.youtube.com/watch?v=lOWTeZC_LjM
 
@@ -327,14 +313,9 @@ Louette for the idea for this effect!
   • Two bounding box edge midpoints can be used as control points if 'From
     original width' is active.
 
-TransformByTwoKnots.gif
 
 Rotate copies
-
-[170px-LPERotateCopies]
- 
-Rotate copies LPE
-
+=============
 Extended video (partial fuse path): https://www.youtube.com/watch?v=UpI8gRbkTu4
 Extended video (live editing): https://www.youtube.com/watch?v=fBQpvfgT4mE
 Extended video (kaleidoscope): https://www.youtube.com/watch?v=LfMixSKy3Eo
@@ -347,12 +328,9 @@ Arranges identical elements dynamically on an arc or circle.
     checked.
   • Live editing.
 
+
 Mirror Symmetry
-
-[170px-LPEMirror]
- 
-Mirror LPE
-
+===============
 Extended video: https://www.youtube.com/watch?v=m1sj4AeU3Yo
 
 Mirrors an item dynamically.
@@ -362,12 +340,9 @@ Mirrors an item dynamically.
   • Different mirror lines: Free, bounding box center X, bounding box center Y,
     Document center X, Document center Y.
 
+
 Attach Path
-
-[80px-LPEAt]
- 
-Attach Path LPE
-
+===========
 Connect a path to another path (optionally at each end), by attaching it to a
 specified location on the other path (specified as in <node number>.<fraction
 of segment length>, or by dragging a handle).
@@ -379,31 +354,22 @@ This LPE makes it possible for the first time to have 'crossings' between paths
 that move with the path when it is modified, which isn't possible within the
 SVG specification.
 
+
 Bounding Box
-
-[80px-LPEBo]
- 
-Bounding Box LPE
-
+============
 An arbitrary path can be used to serve as a bounding box rectangle for the path
 that is linked. It will follow all transformations of the linked path. This
 can, for example, be used to provide a background for exporting as png.
 
+
 Ellipse by 5 Points
-
-[80px-LPEEl]
- 
-Ellipse by 5 Points LPE
-
+===================
 An ellipse will be constructed, whose circumference will go through each of the
 nodes of a 5-node path.
 
+
 Fill between Many
-
-[80px-LPEFi]
- 
-Fill Between Many LPE
-
+=================
 Adds a fill to a collection of independent open paths, connecting their ends
 with straight lines.
 
@@ -418,12 +384,9 @@ Now it is possible to apply the kind of path effects which only work on a path
 without subpaths (PowerStroke, Taper Stroke, ...) to the single paths (see
 image for an example).
 
+
 Fill between Strokes
-
-[80px-LPEFi]
- 
-Fill Between Strokes LPE
-
+====================
 Similar to 'Fill between Many', but can only be used on two open paths, to fill
 them seamlessly.
 
@@ -433,12 +396,9 @@ them seamlessly.
     as a container has a stroke set.
   • Can also be used to apply a duplicate stroke.
 
+
 Interpolate Points
-
-[80px-LPEIn]
- 
-Interpolate Points LPE variations
-
+==================
 This LPE redraws all path segments, using one of the following interpolation
 methods:
 
@@ -448,12 +408,9 @@ methods:
   • Linear
   • SpiroInterpolator
 
+
 Join Type
-
-[80px-LPEJo]
- 
-Join Type LPE variations
-
+=========
 The LPE allows you to set the type of connection to be used on cusp nodes and
 path end caps.
 
@@ -474,12 +431,9 @@ path end caps.
   • Set Miter limit
   • Set stroke width
 
+
 Taper Stroke
-
-[80px-LPETa]
- 
-Taper Stroke LPE variations
-
+============
 Draw tapered strokes with different settings for open paths without subpaths.
 
   • Change width of stroke ends with handles on both ends, or by entering
@@ -492,21 +446,20 @@ Draw tapered strokes with different settings for open paths without subpaths.
       □ Miter
       □ Rounded
 
-Pen / Bézier tool
 
+Pen / Bézier tool
+=================
   • New shortcut to automatically close a path when it is being drawn: Shift +
     Enter
 
-Spray tool
 
+Spray tool
+==========
 Extended video 1 (No overlap): https://www.youtube.com/watch?v=uehj4ATOWos
-Extended video 2 (No overlap multiple items): https://www.youtube.com/watch?v=
-1eTG2U3qlb4
-Extended video 3 (Over visible, pick color): https://www.youtube.com/watch?v=
-aTdKu7mAZE8
+Extended video 2 (No overlap multiple items): https://www.youtube.com/watch?v=1eTG2U3qlb4
+Extended video 3 (Over visible, pick color): https://www.youtube.com/watch?v=aTdKu7mAZE8
 Extended video 4 (Pressure): https://www.youtube.com/watch?v=kWdQnxd_z30
-Extended video 5 (Trace -clones- dialog): https://www.youtube.com/watch?v=
-Zn3vzf-yA_w
+Extended video 5 (Trace -clones- dialog): https://www.youtube.com/watch?v=Zn3vzf-yA_w
 
   • New eraser mode
   • More pressure toggles added
@@ -521,8 +474,9 @@ Zn3vzf-yA_w
   • Spray over non-transparent background areas
   • Makes use of "Trace the drawing" options from Tiled Clones dialog
 
-Measure tool
 
+Measure tool
+============
 Extended video: https://www.youtube.com/watch?v=OE0cVDGCzbM
 
   • Measure is kept until a new one is made (only visible when using measure
@@ -539,27 +493,32 @@ Extended video: https://www.youtube.com/watch?v=OE0cVDGCzbM
   • Measure only current layer
   • Change precision
 
-Gradient tool
 
+Gradient tool
+=============
   • To accomodate for keyboards that do not have an Insert key, the keyboard
     combination Shift+I can now also be used to insert a new stop into a
     gradient.
 
-Align and Distribute
 
+Align and Distribute
+====================
   • NEW: drop-down chooser with options to align nodes relative to each other
     in node editing mode.
 
-Import / Export
+
++----------------------------------------------------------------------+
+|                           Import / Export                            |
++----------------------------------------------------------------------+
 
 Export PDF / EPS / PS
-
+=====================
   • The default PostScript level for exporting from the command line changes
     from 2 to 3 (consistent with the user interface PS exporter which defaults
     to level 3). Level 3 is required for gradient support.
 
 Export Optimized SVG
-
+====================
   • Completely redesigned settings dialog
   • Starting with version 0.92, Inkscape uses the Scour version installed on
     the system (e.g. via "pip install scour") instead of a bundled version so
@@ -569,26 +528,30 @@ Export Optimized SVG
     bundled with Inkscape 0.91)
 
 Export to PNG
-
+=============
   • PNG file extension is now enforced, to prevent exporting with invalid /
     misleading file extensions.
 
-Extensions
+
+
++----------------------------------------------------------------------+
+|                              Extensions                              |
++----------------------------------------------------------------------+
 
 New
-
+===
   • Render > Seamless Pattern (Screencast)
   • Images > Set Image Attributes (Bug #1357808, can be used to fix the scaling
-    problem of raster images in SVGs created with previous Inkscape versions)
+    problem of raster images in SVGs created with previous Inkscape
+    versions)
   • Render > NiceCharts (github repo, not maintained)
   • Arrange > Deep Ungroup (Bug #171117)
 
+
 Plotter Driver
-
-Multiple Pens
-
-The Plotter driver (Extensions -> Export -> Plot) can now handle multiple pens
-to create colorful drawings on Pen Plotters:
+==============
+Multiple Pens: The Plotter driver (Extensions -> Export -> Plot) can now
+handle multiple pens to create colorful drawings on Pen Plotters:
 
   • Create a layer for every pen to use and move the corresponding drawings
     into it
@@ -596,29 +559,32 @@ to create colorful drawings on Pen Plotters:
     number corresponds to the pen number the plotter should use
   • The layer name always overrides the standard pen setting in the plot menu
 
-Serial Connection
+Serial Connection: The connection settings now allow you to specify
+rarely used serial connection settings like byte size, stop bits and
+parity. Most plotters use the default settings, so only change these if
+you know what you are doing.
 
-The connection settings now allow you to specify rarely used serial connection
-settings like byte size, stop bits and parity. Most plotters use the default
-settings, so only change these if you know what you are doing.
 
 HPGL Export
-
+===========
 The HPGL export (File -> Save as -> HP Grafics Language file) has now the same
 multiple pens feature as the #Plotter Driver.
 
-HPGL Import
 
+HPGL Import
+===========
 The HPGL import (File -> Open -> Select .hpgl file) can now import multiple
 pens into corresponding layers, see #Plotter Driver for more information.
 
-PDF Import
 
+PDF Import
+==========
 The image 'interpolate' value is now used to determine how to display bitmaps
 (interpolated or blocky).
 
-Miscellaneous Improvements
 
+Miscellaneous Improvements
+==========================
   • Arrange > Restack has new options to reverse and shuffle the z-order of
     selected objects.
   • Render > Random Tree has new option to omit redundant segments.
@@ -630,20 +596,25 @@ Miscellaneous Improvements
   • Modify Path > Jitter nodes was partially rewritten and now also supports
     Pareto and Log-Normal distributions.
 
-Extension Development
 
+Extension Development
+=====================
   • It is now possible for an extension to retrieve a list of selected nodes
     (See Bug #171287 for an example extension).
 
-Filters / Blend Modes
+
++----------------------------------------------------------------------+
+|                        Filters / Blend Modes                         |
++----------------------------------------------------------------------+
 
 New Filters
-
+===========
   • Color > Color Blindness filter allows to simulate different color blindness
     conditions.
 
-New Blend Modes
 
+New Blend Modes
+===============
 Blend Modes can now be applied to single objects as well as to layers.
 
 In addition to the previously available modes 'Multiply', 'Screen', 'Darken'
@@ -661,17 +632,25 @@ and 'Lighten', the following modes are now available:
   • Color
   • Luminosity
 
-Other dialogs
+
+
++----------------------------------------------------------------------+
+|                            Other dialogs                             |
++----------------------------------------------------------------------+
 
 Document Properties: Licences
-
+=============================
 All selectable licences have been updated to most current version.
 
-Filter Editor
 
+Filter Editor
+=============
 Filter list now displays how often a filter is used.
 
-Menus
+
++----------------------------------------------------------------------+
+|                                Menus                                 |
++----------------------------------------------------------------------+
 
   • 'Resize page to selection' added to Edit menu, shortcut: Shift+Ctrl+R
   • 'Pop selection out of group' available in context menu of objects which are
@@ -681,10 +660,14 @@ Menus
     that group with a clone of itself. This allows for quick creation of, for
     example, inset shadows.
 
-Other user interface
+
+
++----------------------------------------------------------------------+
+|                         Other user interface                         |
++----------------------------------------------------------------------+
 
 Node Snapping
-
+=============
 Snapping in the node tool has been improved:
 
   • When double clicking to insert new nodes, the position of these new nodes
@@ -692,27 +675,35 @@ Snapping in the node tool has been improved:
   • When grabbing a segment of a path and dragging it to deform it, the pointer
     will now snap
 
-Checkerboard Background
 
+Checkerboard Background
+=======================
 It is now possible to use a checkerboard background when editing. This allows
 one to clearly see the transparency of objects.
 
-View Box
 
+View Box
+========
 One can now set the SVG 'viewBox' attribute from the GUI. This attribute sets
 the scale of the drawing by determining the real-world value of the SVG user
 unit (pixel size).
 
-Lock Guides
 
+Lock Guides
+===========
 Now guides can be locked and unlocked globally or individually.
 
-Panning
 
+Panning
+=======
 Panning with space bar can now be deactivated in the Preferences (uncheck
 Behavior > Scrolling > Mouse Move pans when Space is pressed).
 
-SVG and CSS
+
+
++----------------------------------------------------------------------+
+|                             SVG and CSS                              |
++----------------------------------------------------------------------+
 
   • The 'marker-orientation' property now recognizes units ('deg', 'rad',
     'grad' and 'turn').
@@ -744,7 +735,10 @@ SVG and CSS
 New SVG 2 and CSS 3 features are generally not enabled in the GUI until
 widespread support in browsers.
 
-New dependencies
+
++----------------------------------------------------------------------+
+|                           New dependencies                           |
++----------------------------------------------------------------------+
 
   • The Paintbucket and Trace Bitmap tools now use an external copy of the
     Potrace library, which is available in many Linux distributions or can be
@@ -754,7 +748,11 @@ New dependencies
     management (version may be outdated) or from the scour project github site.
     For Windows versions, the module is included.
 
-Translations
+
+
++----------------------------------------------------------------------+
+|                             Translations                             |
++----------------------------------------------------------------------+
 
 New UI translations for Assamese, Bodo, Dogri, Gujarati, Hindi, Icelandic,
 Kannada, Kashmiri (Perso-Arabic and Devanagari), Konkani (Latin and Devanagari
@@ -764,11 +762,15 @@ Tamil, Urdu (Perso-Arabic and Devanagari scripts).
 
 Many other translations have been updated and improved.
 
-Notable Bugfixes
 
-  • Severe performance issues on MS Windows, 64bit Inkscape builds on systems
-    with Intel graphic cards (hiding the rulers was a workaround for Inkscape
-    0.91) (bug #1351597)
+
++----------------------------------------------------------------------+
+|                           Notable Bugfixes                           |
++----------------------------------------------------------------------+
+
+  • Severe performance issues on MS Windows, 64bit Inkscape builds on
+    systems with Intel graphic cards (hiding the rulers was a workaround
+    for Inkscape 0.91) (bug #1351597)
   • On MS Windows, 64bit Inkscape builds, printing may result in mostly black
     pages when partial opacity is used in the document (bug #1418865)
   • Printing offsets page (Windows) (bug #918319)
@@ -794,12 +796,16 @@ Notable Bugfixes
     effects quality to 'Better' and the blur quality to 'Average'.)
   • Shape: 'Triangle in' and 'Triangle out' are identical (bug #1525401)
 
-Many other crashes, memory leaks and lots of little things have also been
-fixed. For an exhaustive list of bugs that have been fixed, please see the
-milestones page for Inkscape 0.92 and the milestones page for the (not
-released) Inkscape version 0.91.1.
+Many other crashes, memory leaks and lots of little things have also
+been fixed. For an exhaustive list of bugs that have been fixed, please
+see the milestones page for Inkscape 0.92 and the milestones page for
+the (not released) Inkscape version 0.91.1.
 
-Known Issues
+
+
++----------------------------------------------------------------------+
+|                             Known Issues                             |
++----------------------------------------------------------------------+
 
   • Fonts that are loaded by font managing software on Windows are not
     available for selection in Inkscape (bug #1416674)
@@ -807,9 +813,13 @@ Known Issues
     dock is clicked on (bug #1270295, will be fixed in 0.93)
   • The opacity indicator isn't initialized correctly (0% opacity even when the
     object is fully opaque, bug #1463078, will be fixed in 0.93)
+  • For some texts, the line height that is used for displaying the text in
+    0.91 doesn't correspond to the one that is used in 0.92, so line height is
+    larger than it should be (as a workaround, there is an extension available
+    that can fix those texts).
 
-[Please fill in]
 
-
+------------------------------------------------------------------------
 For information on prior releases, please see:
     http://wiki.inkscape.org/wiki/index.php/Inkscape
+------------------------------------------------------------------------
