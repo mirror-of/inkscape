@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the Inkscape package.
 # Zdenko Podobný <zdpo@mailbox.sk>, 2003, 2004.
 # Ján Pulmann <jan.pulmann@gmail.com>, 2012.
-# Ivan Masár <helix84@centrum.sk>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
+# Ivan Masár <helix84@centrum.sk>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 # Slovak terminology used in Inkscape:
 # http://wiki.inkscape.org/wiki/index.php/InkscapeTerminology/sk
 msgid ""
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-12-30 14:31+0200\n"
+"PO-Revision-Date: 2017-01-05 12:50+0200\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -12570,7 +12570,7 @@ msgstr "Typ spojenia nehladkých uzlov"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:78
 msgid "Limit for miter joins"
-msgstr ""
+msgstr "Obmedzenie ostrého spoja"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:447
 msgid "Start point of the taper"
@@ -13817,7 +13817,7 @@ msgstr "Vyberte <b>objekt</b>, ktorý sa má presunúť."
 #: ../src/selection-chemistry.cpp:1472 ../src/verbs.cpp:2658
 #: ../src/selection-chemistry.cpp:1416 ../src/verbs.cpp:2577
 msgid "Move selection to layer"
-msgstr "Presunúť výber do vrstvy"
+msgstr "Presunie výber do vrstvy"
 
 #. An SVG element cannot have a transform. We could change 'x' and 'y' in response
 #. to a translation... but leave that for another day.
@@ -14762,7 +14762,7 @@ msgstr "Textový tok musí byť <b>viditeľný</b> aby ho bolo možné dať na c
 #: ../src/text-chemistry.cpp:182 ../src/verbs.cpp:2569
 #: ../src/text-chemistry.cpp:185 ../src/verbs.cpp:2492
 msgid "Put text on path"
-msgstr "Umiestniť text na cestu"
+msgstr "Umiestni text na cestu"
 
 #: ../src/text-chemistry.cpp:194 ../src/text-chemistry.cpp:197
 msgid "Select <b>a text on path</b> to remove it from path."
@@ -14929,7 +14929,7 @@ msgstr "O Inkscape"
 
 #: ../src/ui/dialog/aboutbox.cpp:91
 msgid "_Splash"
-msgstr "_Splash"
+msgstr "_Obrázok"
 
 #: ../src/ui/dialog/aboutbox.cpp:95
 msgid "_Authors"
@@ -29473,7 +29473,7 @@ msgid ""
 "Create exclusive OR of selected paths (those parts that belong to only one "
 "path)"
 msgstr ""
-"Vytvorí „zvláštne alebo“ (XOR) vybraných ciest (časti, ktoré patria iba "
+"Vytvorí „vylučujúce alebo“ (XOR) vybraných ciest (časti, ktoré patria iba "
 "jednej ceste)"
 
 #: ../src/verbs.cpp:2585 ../src/verbs.cpp:2508
@@ -30924,7 +30924,7 @@ msgstr "Predošlé rozšíre_nie"
 
 #: ../src/verbs.cpp:2999 ../src/verbs.cpp:2900
 msgid "Repeat the last extension with the same settings"
-msgstr "Zopakovať posledný efekt rozšírenia s rovnakými nastaveniami"
+msgstr "Zopakuje posledný efekt rozšírenia s rovnakými nastaveniami"
 
 #: ../src/verbs.cpp:3000 ../src/verbs.cpp:2901
 msgid "_Previous Extension Settings..."
@@ -30932,7 +30932,7 @@ msgstr "Nastavenia _predošlého rozšírenia..."
 
 #: ../src/verbs.cpp:3001 ../src/verbs.cpp:2902
 msgid "Repeat the last extension with new settings"
-msgstr "Zopakovať posledný efekt rozšírenia s novými nastaveniami"
+msgstr "Zopakuje posledný efekt rozšírenia s novými nastaveniami"
 
 #: ../src/verbs.cpp:3005 ../src/verbs.cpp:2906
 msgid "Fit the page to the current selection"
