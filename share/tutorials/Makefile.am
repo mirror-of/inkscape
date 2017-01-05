@@ -7,6 +7,15 @@ tutorial_DATA = \
     gpl-2.svg \
     making_markers.svg \
     oldguitar.jpg \
+    pixelart-dialog.de.png \
+    pixelart-dialog.el.png \
+    pixelart-dialog.en.png \
+    pixelart-dialog.fr.png \
+    pixelart-dialog.nl.png \
+    pixelart-dialog.png \
+    pixelart-dialog.pt.png \
+    pixelart-dialog.sk.png \
+    pixelart-dialog.zh_TW.png \
     potrace.be.png \
     potrace.ca.png \
     potrace.de.png \
@@ -217,6 +226,7 @@ tutorial_DATA = \
     tutorial-tracing-pixelart.fr.svg \
     tutorial-tracing-pixelart.nl.svg \
     tutorial-tracing-pixelart.pt.svg \
+    tutorial-tracing-pixelart.sk.svg \
     tutorial-tracing-pixelart.zh_TW.svg \
     tux.png
 
