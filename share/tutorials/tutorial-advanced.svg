@@ -638,9 +638,9 @@ of the cursor. Here is the same heading again, this time with manual adjustments
 for visually uniform letter positioning:
 </flowDiv>
  </flowRoot>
- <text id="advanced-f15-en.svgtext1649" sodipodi:linespacing="110.00000%" transform="translate(10)" line-height="110.00000%" xml:space="preserve" font-size="5.5762" y="4.2368875" x="66.563278" font-family="serif" sodipodi:insensitive="true" fill="#000000"><tspan id="advanced-f15-en.svgtspan1651" sodipodi:role="line" y="4.2368875" x="66.563278">Letter spacing decreased, some letter pairs manually kerned</tspan></text>
- <text id="advanced-f15-en.svgtext2406" xml:space="preserve" transform="translate(10)" font-size="33.6" y="34.802681" x="67.866859" font-family="serif" fill="#000000"><tspan id="advanced-f15-en.svgtspan1647" style="letter-spacing:-1.2479" dx="0 0 -0.1418031 -0.42540932 -0.42540932 0.42540932 0.42540932 -0.87514824 1.1344248 -0.5672124 -0.5672124">Inspiration</tspan></text>
- <rect id="d0e663" display="none" height="1e3px" width="288" y="0INVALID" x="10"/>
+ <text id="advanced-f15-en.svgtext1649" sodipodi:linespacing="110.00000%" transform="translate(10 4472.7)" line-height="110.00000%" xml:space="preserve" font-size="5.5762" y="4.2368875" x="66.563278" font-family="serif" sodipodi:insensitive="true" fill="#000000"><tspan id="advanced-f15-en.svgtspan1651" sodipodi:role="line" y="4.2368875" x="66.563278">Letter spacing decreased, some letter pairs manually kerned</tspan></text>
+ <text id="advanced-f15-en.svgtext2406" xml:space="preserve" transform="translate(10 4472.7)" font-size="33.6" y="34.802681" x="67.866859" font-family="serif" fill="#000000"><tspan id="advanced-f15-en.svgtspan1647" style="letter-spacing:-1.2479" dx="0 0 -0.1418031 -0.42540932 -0.42540932 0.42540932 0.42540932 -0.87514824 1.1344248 -0.5672124 -0.5672124">Inspiration</tspan></text>
+ <rect id="d0e663" display="none" height="1e3px" width="288" y="4526.5" x="10"/>
  <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e663"/>
@@ -650,8 +650,8 @@ for visually uniform letter positioning:
 <flowSpan font-weight="bold">Alt+Up</flowSpan> or <flowSpan font-weight="bold">Alt+Down</flowSpan>:
 </flowDiv>
  </flowRoot>
- <text id="advanced-f16-en.svgtext1731" xml:space="preserve" transform="translate(10)" font-size="33.6" y="32.078743" x="67.866859" font-family="serif" fill="#000000"><tspan id="advanced-f16-en.svgtspan1732" style="letter-spacing:-1.2479" dx="0 -3.4339702 -1.746122 -1.4281086 -2.0297282 -1.981069 -3.9864676 -3.8832457 -1.2720536 -2.1715312 -1.5699117" dy="0 0.0056477566 6.8183579 -6.6178179 0 -6.4172778 6.0161972 -5.8156576 5.8156576 -3.4091773 2.8075578">Inspiration</tspan></text>
- <rect id="d0e688" display="none" height="1e3px" width="288" y="0INVALID" x="10"/>
+ <text id="advanced-f16-en.svgtext1731" xml:space="preserve" transform="translate(10 4563)" font-size="33.6" y="32.078743" x="67.866859" font-family="serif" fill="#000000"><tspan id="advanced-f16-en.svgtspan1732" style="letter-spacing:-1.2479" dx="0 -3.4339702 -1.746122 -1.4281086 -2.0297282 -1.981069 -3.9864676 -3.8832457 -1.2720536 -2.1715312 -1.5699117" dy="0 0.0056477566 6.8183579 -6.6178179 0 -6.4172778 6.0161972 -5.8156576 5.8156576 -3.4091773 2.8075578">Inspiration</tspan></text>
+ <rect id="d0e688" display="none" height="1e3px" width="288" y="4611.2" x="10"/>
  <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e688"/>
@@ -664,7 +664,7 @@ disadvantage to the “text as text” approach is that you need to have the ori
 installed on any system where you want to open that SVG document.
 </flowDiv>
  </flowRoot>
- <rect id="d0e694" display="none" height="1e3px" width="288" y="0INVALID" x="10"/>
+ <rect id="d0e694" display="none" height="1e3px" width="288" y="4692.9" x="10"/>
  <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e694"/>
@@ -677,10 +677,10 @@ As in Selector, pressing <flowSpan font-weight="bold">Shift</flowSpan> with any 
 produces 10 times greater effect than without Shift.
 </flowDiv>
  </flowRoot>
- <text style="writing-mode:lr" font-weight="bold" font-size="8" y="NaN" x="10" font-family="sans-serif" fill="#000000">
-  <tspan y="NaN" x="10">XML editor</tspan>
+ <text style="writing-mode:lr" font-weight="bold" font-size="8" y="4776.739445" x="10" font-family="sans-serif" fill="#000000">
+  <tspan y="4776.739445" x="10">XML editor</tspan>
  </text>
- <rect id="d0e715" display="none" height="1e3px" width="288" y="0INVALID" x="10"/>
+ <rect id="d0e715" display="none" height="1e3px" width="288" y="4781.9" x="10"/>
  <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e715"/>
@@ -694,10 +694,10 @@ interactively, and it allows you to do tricks that would be impossible with regu
 editing tools.
 </flowDiv>
  </flowRoot>
- <text style="writing-mode:lr" font-weight="bold" font-size="8" y="NaN" x="10" font-family="sans-serif" fill="#000000">
-  <tspan y="NaN" x="10">Conclusion</tspan>
+ <text style="writing-mode:lr" font-weight="bold" font-size="8" y="4887.074917" x="10" font-family="sans-serif" fill="#000000">
+  <tspan y="4887.074917" x="10">Conclusion</tspan>
  </text>
- <rect id="d0e727" display="none" height="1e3px" width="288" y="0INVALID" x="10"/>
+ <rect id="d0e727" display="none" height="1e3px" width="288" y="4892.3" x="10"/>
  <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e727"/>
@@ -707,7 +707,7 @@ enjoyed it. Don&apos;t be afraid to experiment and share what you create. Please
 versions, and help from user and developer communities.
 </flowDiv>
  </flowRoot>
- <g transform="translate(0)">
+ <g transform="translate(0 4941.9)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="linearGradient2465" y2="-7528.7" xlink:href="#linearGradient841" gradientUnits="userSpaceOnUse" x2="76.847" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" y1="-7656.4" x1="76.847" inkscape:collect="always"/>
    <filter id="filter56" height="1.2" width="1.2" color-interpolation-filters="sRGB" y="-.1" x="-.1" inkscape:label="Drop shadow, custom">
