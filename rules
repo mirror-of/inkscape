@@ -8,9 +8,13 @@ export DH_VERBOSE=1
 
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
+# Drop the --parallel flag as soon as we bump to compat 10
+# We can do this once we drop support for Ubuntu Xenial and earlier
 %:
-	dh $@ --buildsystem cmake \
-	      --with bash-completion,gnome,python2
+	dh $@ \
+		--buildsystem cmake \
+		--parallel          \
+		--with bash-completion,gnome,python2
 
 override_dh_gnome_clean:
 	dh_gnome_clean --no-control
