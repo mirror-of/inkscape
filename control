@@ -1,9 +1,6 @@
 Source: inkscape
 Section: graphics
 Priority: optional
-Homepage: http://www.inkscape.org/
-Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
-Vcs-bzr: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 Maintainer: Inkscape developers <inkscape-devel@lists.sourceforge.net> 
 Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
@@ -12,7 +9,6 @@ Build-Depends:
  bash-completion,
  cmake,
  debhelper (>= 10),
- dh-autoreconf,
  dh-python,
  gimp,
  libart-2.0-dev (>= 2.3.10),
@@ -48,9 +44,11 @@ Build-Depends:
  pkg-config,
  python-dev,
  python-lxml,
- python-numpy,
  zlib1g-dev
 Standards-Version: 3.9.8
+Homepage: http://www.inkscape.org/
+Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
+Vcs-bzr: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 
 Package: inkscape
 Architecture: any
