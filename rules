@@ -10,6 +10,9 @@ export DH_VERBOSE=1
 	dh $@ --buildsystem cmake \
 	      --with bash-completion,python2
 
+override_dh_gnome_clean:
+	dh_gnome_clean --no-control
+
 # No need for autoreconf in CMake builds
 override_dh_autoreconf:
 
