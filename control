@@ -63,8 +63,9 @@ Recommends:
  imagemagick,
  libwmf-bin,
  perlmagick,
- python-numpy,
  python-lxml,
+ python-numpy,
+ python-scour,
  python-uniconvertor
 Suggests:
  dia | dia-gnome,
