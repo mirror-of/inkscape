@@ -19,6 +19,7 @@ Build-Depends:
  libaspell-dev,
  libboost-dev,
  libcdr-dev,
+ libdbus-1-dev,
  libdbus-glib-1-dev,
  libgc-dev (>= 1:6.8),
  libglib2.0-dev,
