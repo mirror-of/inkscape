@@ -13,7 +13,7 @@ Build-Depends:
  automake,
  autopoint,
  bash-completion,
- debhelper (>= 9),
+ debhelper (>= 10),
  dh-autoreconf,
  dh-python,
  gimp,
