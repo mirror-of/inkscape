@@ -8,25 +8,22 @@ export DH_VERBOSE=1
 
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
+# Drop the --parallel flag as soon as we bump to compat 10
+# We can do this once we drop support for Ubuntu Xenial and earlier
 %:
-	dh $@ --buildsystem=cmake --with bash-completion,python2 --parallel
+	dh $@ \
+		--buildsystem cmake \
+		--parallel          \
+		--with bash-completion,python2
 
-override_dh_auto_clean:
-	dh_auto_clean --builddirectory=build-default
-	[ ! -f Makefile ] || $(MAKE) distclean
+# No need for autoreconf in CMake builds
+override_dh_autoreconf:
 
 override_dh_auto_configure:
-	dh_auto_configure --builddirectory=build-default -- -DWITH_DBUS=ON -DGMOCK_DIR="/usr/src/gmock"
-
-override_dh_auto_build:
-	dh_auto_build --builddirectory=build-default
+	dh_auto_configure --   \
+		-DWITH_DBUS=ON \
+		-DGMOCK_DIR="/usr/src/gmock"
 
 override_dh_auto_test:
 	export CTEST_OUTPUT_ON_FAILURE=1
-	dh_auto_test --builddirectory=build-default
-
-# Rule for installing files from the build directories to (temporary)
-# installation folders.  From there, we can subsequently copy all the files into
-# the relevant packages
-override_dh_auto_install:
-	dh_auto_install --builddirectory=build-default --destdir=debian/tmp/install-default
+	dh_auto_test
