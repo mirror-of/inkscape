@@ -24,8 +24,7 @@ override_dh_autoreconf:
 
 override_dh_auto_configure:
 	dh_auto_configure --   \
-		-DWITH_DBUS=ON \
-		-DGMOCK_DIR="/usr/src/gmock"
+		-DWITH_DBUS=ON
 
 override_dh_auto_test:
 	export CTEST_OUTPUT_ON_FAILURE=1
