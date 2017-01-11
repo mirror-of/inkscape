@@ -1,0 +1,5 @@
+# These are spelling errors that were inherited from the upstream libcroco/libavoid packages
+# We have not fixed them in Inkscape, so as to minimise the delta with upstream
+inkscape-trunk: spelling-error-in-binary usr/lib/inkscape/libinkscape_base.so Instanciation Instantiation
+inkscape-trunk: spelling-error-in-binary usr/lib/inkscape/libinkscape_base.so Unknow Unknown
+inkscape-trunk: spelling-error-in-binary usr/lib/inkscape/libinkscape_base.so occured occurred
