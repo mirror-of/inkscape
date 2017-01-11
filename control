@@ -1,9 +1,6 @@
 Source: inkscape-trunk
 Section: graphics
 Priority: optional
-Homepage: http://www.inkscape.org/
-Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
-Vcs-bzr: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 Maintainer: Inkscape developers <inkscape-devel@lists.sourceforge.net> 
 Uploaders: Peter Lieverdink <ubuntu@cafuego.net>,
            Wolfram Quester <wolfi@sigxcpu.org>,
@@ -15,17 +12,17 @@ Build-Depends:
  dh-python,
  gimp,
  google-mock,
- intltool,
+ gnome-pkg-tools,
  libart-2.0-dev (>= 2.3.10),
  libaspell-dev,
  libboost-dev,
  libcairo2-dev (>=1.12.16),
  libcdr-dev,
+ libdbus-1-dev,
  libdbus-glib-1-dev,
  libgc-dev (>= 1:6.8),
  libgdl-3-dev (>= 3.4),
  libglib2.0-dev,
- libgnomevfs2-dev,
  libgtk-3-dev (>= 3.8),
  libgtkmm-3.0-dev (>= 3.8),
  libgtkspell3-3-dev,
@@ -48,12 +45,13 @@ Build-Depends:
  libxml2-dev (>= 2-2.4.24),
  libxslt1-dev,
  pkg-config,
- python,
  python-dev,
  python-lxml,
- python-numpy,
  zlib1g-dev
 Standards-Version: 3.9.8
+Homepage: http://www.inkscape.org/
+Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
+Vcs-bzr: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
 
 Package: inkscape-trunk
 Architecture: any

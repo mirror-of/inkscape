@@ -14,7 +14,10 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 	dh $@ \
 		--buildsystem cmake \
 		--parallel          \
-		--with bash-completion,python2
+		--with bash-completion,gnome,python2
+
+override_dh_gnome_clean:
+	dh_gnome_clean --no-control
 
 # No need for autoreconf in CMake builds
 override_dh_autoreconf:
