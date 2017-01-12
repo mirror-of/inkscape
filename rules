@@ -29,3 +29,8 @@ override_dh_auto_configure:
 override_dh_auto_test:
 	export CTEST_OUTPUT_ON_FAILURE=1
 	dh_auto_test
+
+# Don't run scour, there is no need for it at all, and the defaults are not
+# appropriate for Inkscape's SVGs
+# https://bugs.launchpad.net/ubuntu/+source/inkscape/+bug/1638373
+override_dh_scour:
