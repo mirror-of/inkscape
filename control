@@ -10,7 +10,6 @@ Build-Depends:
  cmake,
  debhelper (>= 9),
  dh-python,
- gimp,
  google-mock,
  gnome-pkg-tools,
  libart-2.0-dev (>= 2.3.10),
