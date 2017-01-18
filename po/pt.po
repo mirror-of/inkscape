@@ -12153,7 +12153,7 @@ msgstr "Exportar documento para um ficheiro PDF"
 #: ../src/main.cpp:424
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "Exportar o PDF na versão especificada. Dica: confirme se introduziu a "
 "expressão exata encontrada na janela de exportar PDF, por exemplo \"PDF "

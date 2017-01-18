@@ -13052,7 +13052,7 @@ msgstr "Exportovať dokument do PDF súboru"
 #: ../src/main.cpp:424 ../src/main.cpp:419
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "Exportovať PDF danej verzie. (Tip: Uistite sa, že zadávate presne rovnaký "
 "reťazec ako v dialógovom okne exportu PDF, napr „PDF 1.4“, ktorý spĺňa PDF-a)"

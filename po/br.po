@@ -12213,7 +12213,7 @@ msgstr "Ezporzhiañ an teul davit ur restr PDF"
 #: ../src/main.cpp:424
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "Ezporzhiañ ar PDF gant an handelv lavaret. (tun : bezit sur hoc'h eus "
 "enanket an hedad spis kavet e boestad emziviz ezporzhiañ ar PDF, dle  \"PDF "

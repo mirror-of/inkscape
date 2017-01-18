@@ -11957,10 +11957,10 @@ msgstr "Export document to a PDF file"
 #: ../src/main.cpp:424
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialogue, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialogue, e.g. \"1.4\" which is PDF-a conformant)"
 
 #: ../src/main.cpp:425
 msgid "PDF_VERSION"

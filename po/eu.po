@@ -12262,7 +12262,7 @@ msgstr "Esportatu dokumentua PDF fitxategira"
 #: ../src/main.cpp:424
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "Esportatu PDFa emandako bertsiora (argibidea: ziurtatu zaitez PDFa "
 "esportatzeko elkarrizketa-koadroan aurkitzen den sarrera berdina ematen "

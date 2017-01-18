@@ -12105,10 +12105,10 @@ msgstr "ドキュメントを PDF ファイルにエクスポート"
 #: ../src/main.cpp:424
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "指定されたバージョンの PDF でエキスポートする。(ヒント: PDF エキスポートダイ"
-"アログで確認できる正確な文字列を指定すること。例: \"PDF 1.4\" は PDF-a に準"
+"アログで確認できる正確な文字列を指定すること。例: \"1.4\" は PDF-a に準"
 "拠)"
 
 #: ../src/main.cpp:425

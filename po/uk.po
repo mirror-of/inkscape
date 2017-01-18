@@ -12129,10 +12129,10 @@ msgstr "Експортувати документ у файл формату PDF
 #: ../src/main.cpp:424
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "Експортувати PDF у форматі вказаної версії. (Підказка: вам слід ввести рядок "
-"з діалогового вікна експортування PDF точно (приклад: \"PDF 1.4\"), щоб "
+"з діалогового вікна експортування PDF точно (приклад: \"1.4\"), щоб "
 "зберегти сумісність зі стандартом PDF-a)"
 
 #: ../src/main.cpp:425

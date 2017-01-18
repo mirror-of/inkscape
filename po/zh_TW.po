@@ -11911,7 +11911,7 @@ msgstr "將文件匯出成 PDF 檔"
 #: ../src/main.cpp:424
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
-"found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"
+"found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 "匯出成給定版本的 PDF。(提示：確認匯入的精確字串可在 PDF 匯出對話窗裡找到，例"
 "如「PDF 1.4」為 PDF 相容版本)"
