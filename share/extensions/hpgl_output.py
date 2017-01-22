@@ -24,6 +24,7 @@ import sys
 import hpgl_encoder
 import inkex
 
+inkex.localize()
 
 class HpglOutput(inkex.Effect):
 
