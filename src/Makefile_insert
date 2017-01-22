@@ -40,7 +40,7 @@ ink_common_sources +=	\
 	enums.h								\
 	event-log.cpp event-log.h event.h				\
 	extract-uri.cpp extract-uri.h					\
-	file.cpp file.h							\
+	file.cpp file-update.cpp file.h					\
 	fill-or-stroke.h						\
 	filter-chemistry.cpp filter-chemistry.h				\
 	filter-enums.cpp filter-enums.h					\

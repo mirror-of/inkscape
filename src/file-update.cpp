@@ -140,8 +140,9 @@ void sp_file_fix_run_recursive(void (*f)(SPObject *), SPObject *o)
     }
 }
 
-void fix_update(SPObject *o) { o->requestModified(SP_OBJECT_MODIFIED_FLAG); }
-
+// does not work :(
+void fix_update(SPObject *o) { 
+}
 
 void sp_file_fix_text(SPDocument *doc)
 {
