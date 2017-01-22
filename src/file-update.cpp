@@ -118,6 +118,8 @@ void fix_font_size(SPObject *o){
 
 
 
+
+
 // helper function
 void sp_file_fix_run_recursive(void (*f)(SPObject*), SPObject* o){
     if(SP_IS_TEXT(o) || SP_IS_FLOWTEXT(o))
@@ -129,11 +131,17 @@ void sp_file_fix_run_recursive(void (*f)(SPObject*), SPObject* o){
     }
 }
 
+void fix_update(SPObject *o){
+    o->requestModified(SP_OBJECT_MODIFIED_FLAG);
+}
+
+
 void sp_file_fix_text(SPDocument *doc){
     sp_file_fix_run_recursive(fix_blank_line, doc->getRoot());
     sp_file_fix_run_recursive(fix_line_spacing, doc->getRoot());
     sp_file_fix_run_recursive(fix_font_name, doc->getRoot());
     sp_file_fix_run_recursive(fix_font_size, doc->getRoot());
+    sp_file_fix_run_recursive(fix_update, doc->getRoot());
 }
 
 
