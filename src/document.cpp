@@ -50,6 +50,7 @@
 #include "display/drawing-item.h"
 #include "document-private.h"
 #include "document-undo.h"
+#include "file.h"
 #include "id-clash.h"
 #include "inkscape.h"
 #include "inkscape-version.h"
@@ -452,7 +453,9 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));
     document->oldSignalsConnected = true;
-
+   if ( sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {//FIX LINE HEIGHT
+       sp_file_fix_text(document);
+   }
     return document;
 }
 

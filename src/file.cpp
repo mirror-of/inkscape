@@ -719,10 +719,14 @@ bool sp_file_open(const Glib::ustring &uri,
                 }  // Look for SPNamedView and SPDefs loop
 
                 // desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
-                DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE, _("Update Document"));
+                // DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE, _("Update Document"));
 
             }  // If old Inkscape version
         }  // If use_gui
+        
+        if ( sp_version_inside_range( root->version.inkscape, 0, 1, 0, 92 ) ) {//FIX LINE HEIGHT
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE, _("Update Document"));
+        }
 
         // resize the window to match the document properties
         sp_namedview_window_from_document(desktop);
