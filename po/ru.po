@@ -7,14 +7,14 @@
 # Alexey Remizov <alexey@remizov.pp.ru>, 2004.
 # bulia byak <buliabyak@users.sf.net>, 2004.
 # Александр Прокудин <alexandre.prokoudine@gmail.com>, 2004-2015, 2015.
-# Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2015, 2016.
+# Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2015, 2016, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-12-21 01:15+0100\n"
-"PO-Revision-Date: 2016-10-22 02:43+0300\n"
+"PO-Revision-Date: 2017-01-22 20:17+0300\n"
 "Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
 "Language-Team: русский <>\n"
 "Language: ru\n"
@@ -9072,7 +9072,7 @@ msgstr "Заголовок по умолчанию"
 
 #: ../src/libgdl/gdl-dock-master.c:142
 msgid "Default title for newly created floating docks"
-msgstr "Default title for newly created floating docks"
+msgstr "Заголовок по умолчанию для новых плавающих панелей"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 msgid ""
@@ -9301,7 +9301,7 @@ msgstr "Плавает ли панель в собственном окне"
 
 #: ../src/libgdl/gdl-dock.c:185
 msgid "Default title for the newly created floating docks"
-msgstr "Обычное название для новых плавающих панелей"
+msgstr "Заголовок по умолчанию для новых плавающих панелей"
 
 #: ../src/libgdl/gdl-dock.c:192
 msgid "Width for the dock when it's of floating type"
@@ -12331,7 +12331,7 @@ msgstr "Выделите <b>контур(ы)</b> для разбиения."
 
 #: ../src/path-chemistry.cpp:200
 msgid "Breaking apart paths..."
-msgstr "Выполняется разбиение контуров..."
+msgstr "Выполняется рассоединение контуров..."
 
 #: ../src/path-chemistry.cpp:282
 msgid "Break apart"
@@ -17921,11 +17921,11 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
 msgid "Base simplify:"
-msgstr ""
+msgstr "Степень сглаживания"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
 msgid "on dynamic LPE simplify"
-msgstr ""
+msgstr "в динамическом эффекте упрощения"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:214
 msgid "Base simplify of dynamic LPE based simplify"
@@ -23307,7 +23307,7 @@ msgstr "Соединение узлов"
 #: ../src/ui/tool/multi-path-manipulator.cpp:424
 #: ../src/widgets/node-toolbar.cpp:419
 msgid "Break nodes"
-msgstr "Разбить узлы"
+msgstr "Рассоединить узлы"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:431
 msgid "Delete nodes"
@@ -27211,7 +27211,7 @@ msgstr "Объединить несколько контуров в один"
 #. Advanced tutorial for more info
 #: ../src/verbs.cpp:2640
 msgid "Break _Apart"
-msgstr "_Разбить"
+msgstr "_Рассоединять"
 
 #: ../src/verbs.cpp:2641
 msgid "Break selected paths into subpaths"
@@ -29320,9 +29320,8 @@ msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr "Увеличение значения затормаживает перо, словно оно очень инертно"
 
 #: ../src/widgets/eraser-toolbar.cpp:186 ../src/widgets/eraser-toolbar.cpp:187
-#, fuzzy
 msgid "Break apart cut items"
-msgstr "Разбиение"
+msgstr "Рассоединять разрезанные объекты"
 
 #: ../src/widgets/fill-style.cpp:367
 msgid "Change fill rule"
@@ -30258,9 +30257,8 @@ msgid "Use the <b>Mesh tool</b> to modify the mesh."
 msgstr ""
 
 #: ../src/widgets/paint-selector.cpp:1093
-#, fuzzy
 msgid "<b>Mesh fill</b>"
-msgstr "<b>Заливка образцом</b>"
+msgstr "<b>Сеточная заливка</b>"
 
 #: ../src/widgets/paint-selector.cpp:1444
 msgid ""
@@ -38511,9 +38509,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:35
-#, fuzzy
 msgid "Depth of indentation:"
-msgstr "Функция глубины:"
+msgstr "Размер отступа:"
 
 #: ../share/extensions/scour.inx.h:36
 msgid ""
@@ -39156,9 +39153,8 @@ msgid "From Side c and Angles a, b"
 msgstr "Из стороны c и углов a, b"
 
 #: ../share/extensions/ungroup_deep.inx.h:1
-#, fuzzy
 msgid "Deep Ungroup"
-msgstr "Разгруппировать"
+msgstr "Разгруппировать до конца"
 
 #: ../share/extensions/ungroup_deep.inx.h:2
 #, fuzzy
@@ -39166,18 +39162,16 @@ msgid "Ungroup all groups in the selected object."
 msgstr "Создать группу обтравки, используя выделенные объекты как базу"
 
 #: ../share/extensions/ungroup_deep.inx.h:3
-#, fuzzy
 msgid "Starting Depth"
-msgstr "Начало контура:"
+msgstr "Начальная глубина"
 
 #: ../share/extensions/ungroup_deep.inx.h:4
-#, fuzzy
 msgid "Stopping Depth (from top)"
-msgstr "Убрать обтравочный контур из выделения"
+msgstr "Конечная глубина (от верха)"
 
 #: ../share/extensions/ungroup_deep.inx.h:5
 msgid "Depth to Keep (from bottom)"
-msgstr ""
+msgstr "Какую вложенность сохранить (от низа)"
 
 #: ../share/extensions/voronoi2svg.inx.h:1
 msgid "Voronoi Diagram"
@@ -39223,7 +39217,7 @@ msgstr "Триангуляция Делоне"
 
 #: ../share/extensions/voronoi2svg.inx.h:13
 msgid "Default (Stroke black and no fill)"
-msgstr ""
+msgstr "По умолчанию (чёрная обводка, без заливки)"
 
 #: ../share/extensions/voronoi2svg.inx.h:14
 #, fuzzy
