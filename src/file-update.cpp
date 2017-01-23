@@ -42,6 +42,7 @@ void fix_blank_line(SPObject *o)
     SPILengthOrNormal lineheight = o->style->line_height;
     vector<SPObject *> cl = o->childList(false);
     Inkscape::Text::Layout::iterator pos = te_get_layout((SPItem *)(o))->begin();
+    bool beginning = true;
     for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i)) {
@@ -52,10 +53,14 @@ void fix_blank_line(SPObject *o)
                 gchar *l = g_strdup_printf("%f", lineheight.value);
                 gchar *f = g_strdup_printf("%f", fontsize.value);
                 i->style->line_height.readIfUnset(l);
-                i->style->font_size.read(f);
+                if (!beginning)
+                    i->style->font_size.read(f);
+                else
+                    i->style->font_size.readIfUnset(f);
                 g_free(l);
                 g_free(f);
             } else {
+                beginning = false;
                 fontsize = i->style->font_size;
                 lineheight = o->style->line_height;
             }
