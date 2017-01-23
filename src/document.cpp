@@ -453,8 +453,8 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));
     document->oldSignalsConnected = true;
-   if ( sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {//FIX LINE HEIGHT
-       sp_file_fix_text(document);
+    if ( (!sp_do_not_fix_pre_92) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+        sp_file_fix_text(document);
    }
     return document;
 }

@@ -68,6 +68,7 @@
 
 extern char *optarg;
 extern int  optind, opterr;
+bool sp_do_not_fix_pre_92 = false;
 
 struct SPSlideShow {
     char **slides;
