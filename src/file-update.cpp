@@ -142,6 +142,8 @@ void sp_file_fix_run_recursive(void (*f)(SPObject *), SPObject *o)
 
 // does not work :(
 void fix_update(SPObject *o) { 
+    o->style->write();
+    o->updateRepr();
 }
 
 void sp_file_fix_text(SPDocument *doc)
