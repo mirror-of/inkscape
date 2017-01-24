@@ -134,14 +134,14 @@ void fix_font_size(SPObject *o)
 
 
 // helper function
-void sp_file_fix_run_recursive(void (*f)(SPObject *), SPObject *o)
+void sp_file_text_run_recursive(void (*f)(SPObject *), SPObject *o)
 {
     if (SP_IS_TEXT(o) || SP_IS_FLOWTEXT(o))
         f(o);
     else {
         vector<SPObject *> cl = o->childList(false);
         for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
-            sp_file_fix_run_recursive(f, *ci);
+            sp_file_text_run_recursive(f, *ci);
     }
 }
 
@@ -153,11 +153,11 @@ void fix_update(SPObject *o) {
 
 void sp_file_fix_text(SPDocument *doc)
 {
-    sp_file_fix_run_recursive(fix_blank_line, doc->getRoot());
-    sp_file_fix_run_recursive(fix_line_spacing, doc->getRoot());
-    sp_file_fix_run_recursive(fix_font_name, doc->getRoot());
-    sp_file_fix_run_recursive(fix_font_size, doc->getRoot());
-    sp_file_fix_run_recursive(fix_update, doc->getRoot());
+    sp_file_text_run_recursive(fix_blank_line, doc->getRoot());
+    sp_file_text_run_recursive(fix_line_spacing, doc->getRoot());
+    sp_file_text_run_recursive(fix_font_name, doc->getRoot());
+    sp_file_text_run_recursive(fix_font_size, doc->getRoot());
+    sp_file_text_run_recursive(fix_update, doc->getRoot());
 }
 
 
