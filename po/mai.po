@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-12-21 01:15+0100\n"
+"POT-Creation-Date: 2017-01-24 21:21+0100\n"
 "PO-Revision-Date: 2011-05-13 10:30+0530\n"
 "Last-Translator: Sangeeta <sk@gma.co>\n"
 "Language-Team: Maithili\n"
@@ -2184,1178 +2184,1178 @@ msgstr "डाक आइटम केँ नियंत्रित कएल �
 msgid "Sharp multiple contour for objects"
 msgstr "वस्तु क' केंद्र सँ आओर ओतए तक काटू "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:2
 msgctxt "Palette"
 msgid "Black"
 msgstr "करिया"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:3
 #, no-c-format
 msgctxt "Palette"
 msgid "90% Gray"
 msgstr "90% धूसर  "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:4
 #, no-c-format
 msgctxt "Palette"
 msgid "80% Gray"
 msgstr "80% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:5
 #, no-c-format
 msgctxt "Palette"
 msgid "70% Gray"
 msgstr "70% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:6
 #, no-c-format
 msgctxt "Palette"
 msgid "60% Gray"
 msgstr "60% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:7
 #, no-c-format
 msgctxt "Palette"
 msgid "50% Gray"
 msgstr "50% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:8
 #, no-c-format
 msgctxt "Palette"
 msgid "40% Gray"
 msgstr "40% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:9
 #, no-c-format
 msgctxt "Palette"
 msgid "30% Gray"
 msgstr "30% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:10
 #, no-c-format
 msgctxt "Palette"
 msgid "20% Gray"
 msgstr "20% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:11
 #, no-c-format
 msgctxt "Palette"
 msgid "10% Gray"
 msgstr "10% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:12
 #, no-c-format
 msgctxt "Palette"
 msgid "7.5% Gray"
 msgstr "7.5% धूसर"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:13
 #, no-c-format
 msgctxt "Palette"
 msgid "5% Gray"
 msgstr "5% धूसर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:14
 #, no-c-format
 msgctxt "Palette"
 msgid "2.5% Gray"
 msgstr "2.5% धूसर"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:15
 msgctxt "Palette"
 msgid "White"
 msgstr "उज्जर "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:16
 msgctxt "Palette"
 msgid "Maroon (#800000)"
 msgstr "गहिरा लाल (#800000) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:17
 msgctxt "Palette"
 msgid "Red (#FF0000)"
 msgstr "लाल (#FF0000) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:18
 msgctxt "Palette"
 msgid "Olive (#808000)"
 msgstr "जैतून (#808000) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:19
 msgctxt "Palette"
 msgid "Yellow (#FFFF00)"
 msgstr "पिअर (#FFFF00) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:20
 msgctxt "Palette"
 msgid "Green (#008000)"
 msgstr "हरिअर (#008000) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:21
 msgctxt "Palette"
 msgid "Lime (#00FF00)"
 msgstr "लाइम (#00FF00) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:22
 msgctxt "Palette"
 msgid "Teal (#008080)"
 msgstr "चैती (#008080) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:23
 msgctxt "Palette"
 msgid "Aqua (#00FFFF)"
 msgstr "अक्वा (#00FFFF) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:24
 msgctxt "Palette"
 msgid "Navy (#000080)"
 msgstr "नेवी (#000080) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:25
 msgctxt "Palette"
 msgid "Blue (#0000FF)"
 msgstr "नीला (#0000FF) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:26
 msgctxt "Palette"
 msgid "Purple (#800080)"
 msgstr "जामुनी (#800080) "
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:27
 msgctxt "Palette"
 msgid "Fuchsia (#FF00FF)"
 msgstr "फूहड़ (#FF00FF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:28
 msgctxt "Palette"
 msgid "black (#000000)"
 msgstr "करिया (#000000) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:29
 msgctxt "Palette"
 msgid "dimgray (#696969)"
 msgstr "मद्धिम धूसर (#696969) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:30
 msgctxt "Palette"
 msgid "gray (#808080)"
 msgstr "धूसर (#808080) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:31
 msgctxt "Palette"
 msgid "darkgray (#A9A9A9)"
 msgstr "गहिर धूसर (#A9A9A9) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:32
 msgctxt "Palette"
 msgid "silver (#C0C0C0)"
 msgstr "सिल्वर (#C0C0C0) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:33
 msgctxt "Palette"
 msgid "lightgray (#D3D3D3)"
 msgstr "हल्का धूसर (#D3D3D3) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:34
 msgctxt "Palette"
 msgid "gainsboro (#DCDCDC)"
 msgstr "गेन्सबोरो (#DCDCDC) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:35
 msgctxt "Palette"
 msgid "whitesmoke (#F5F5F5)"
 msgstr "उजरा धुइयाँ (#F5F5F5) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:36
 msgctxt "Palette"
 msgid "white (#FFFFFF)"
 msgstr "उज्जर (#FFFFFF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:37
 msgctxt "Palette"
 msgid "rosybrown (#BC8F8F)"
 msgstr "गुलाबी भूरा (#BC8F8F) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:38
 msgctxt "Palette"
 msgid "indianred (#CD5C5C)"
 msgstr "भारतीय लाल (#CD5C5C) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:39
 msgctxt "Palette"
 msgid "brown (#A52A2A)"
 msgstr "भूरा (#A52A2A) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:40
 msgctxt "Palette"
 msgid "firebrick (#B22222)"
 msgstr "अग्निसह इंट (#B22222) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:41
 msgctxt "Palette"
 msgid "lightcoral (#F08080)"
 msgstr "हल्का मूंगा (#F08080) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:42
 msgctxt "Palette"
 msgid "maroon (#800000)"
 msgstr "गहिरा लाल (#800000) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:43
 msgctxt "Palette"
 msgid "darkred (#8B0000)"
 msgstr "गहिरा लाल (#8B0000) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:44
 msgctxt "Palette"
 msgid "red (#FF0000)"
 msgstr "लाल (#FF0000) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:45
 msgctxt "Palette"
 msgid "snow (#FFFAFA)"
 msgstr "बर्फ (#FFFAFA) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:46
 msgctxt "Palette"
 msgid "mistyrose (#FFE4E1)"
 msgstr "धुंधला गुलाबी (#FFE4E1) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:47
 msgctxt "Palette"
 msgid "salmon (#FA8072)"
 msgstr "सालमन (#FA8072) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:48
 msgctxt "Palette"
 msgid "tomato (#FF6347)"
 msgstr "टमाटर (#FF6347) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:49
 msgctxt "Palette"
 msgid "darksalmon (#E9967A)"
 msgstr "गहिर सालमन (#E9967A) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:50
 msgctxt "Palette"
 msgid "coral (#FF7F50)"
 msgstr "मूंगा (#FF7F50) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:51
 msgctxt "Palette"
 msgid "orangered (#FF4500)"
 msgstr "नारंगी लाल (#FF4500) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:52
 msgctxt "Palette"
 msgid "lightsalmon (#FFA07A)"
 msgstr "हल्का सालमन (#FFA07A) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:53
 msgctxt "Palette"
 msgid "sienna (#A0522D)"
 msgstr "सिएना (#A0522D) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:54
 msgctxt "Palette"
 msgid "seashell (#FFF5EE)"
 msgstr "सीप (#FFF5EE) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:55
 msgctxt "Palette"
 msgid "chocolate (#D2691E)"
 msgstr "लेमनचूस (#D2691E) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:56
 msgctxt "Palette"
 msgid "saddlebrown (#8B4513)"
 msgstr "जीन जहिना भूरा (#8B4513) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:57
 msgctxt "Palette"
 msgid "sandybrown (#F4A460)"
 msgstr "रेतीला भूरा (#F4A460) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:58
 msgctxt "Palette"
 msgid "peachpuff (#FFDAB9)"
 msgstr "पीच पफ (#FFDAB9) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:59
 msgctxt "Palette"
 msgid "peru (#CD853F)"
 msgstr "पेरू (#CD853F) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:60
 msgctxt "Palette"
 msgid "linen (#FAF0E6)"
 msgstr "लिनेन (#FAF0E6) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:61
 msgctxt "Palette"
 msgid "bisque (#FFE4C4)"
 msgstr "बिस्क (#FFE4C4) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:62
 msgctxt "Palette"
 msgid "darkorange (#FF8C00)"
 msgstr "गहिर नारंगी (#FF8C00) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:63
 msgctxt "Palette"
 msgid "burlywood (#DEB887)"
 msgstr "बर्लीवुड (#DEB887) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:64
 msgctxt "Palette"
 msgid "tan (#D2B48C)"
 msgstr "पिअर भूरा (#D2B48C) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:65
 msgctxt "Palette"
 msgid "antiquewhite (#FAEBD7)"
 msgstr "प्राचीन उज्जर (#FAEBD7) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:66
 msgctxt "Palette"
 msgid "navajowhite (#FFDEAD)"
 msgstr "नवाजो उज्जर (#FFDEAD) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:67
 msgctxt "Palette"
 msgid "blanchedalmond (#FFEBCD)"
 msgstr "रक्तहीन बादामी (#FFEBCD) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:68
 msgctxt "Palette"
 msgid "papayawhip (#FFEFD5)"
 msgstr "पपीताव्हिप (#FFEFD5) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:69
 msgctxt "Palette"
 msgid "moccasin (#FFE4B5)"
 msgstr "मोकासिन (#FFE4B5) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:70
 msgctxt "Palette"
 msgid "orange (#FFA500)"
 msgstr "नारंगी (#FFA500) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:71
 msgctxt "Palette"
 msgid "wheat (#F5DEB3)"
 msgstr "गेहुंआ (#F5DEB3) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:72
 msgctxt "Palette"
 msgid "oldlace (#FDF5E6)"
 msgstr "ओल्डलेस (#FDF5E6) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:73
 msgctxt "Palette"
 msgid "floralwhite (#FFFAF0)"
 msgstr "फूल जेहन उज्जर (#FFFAF0) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:74
 msgctxt "Palette"
 msgid "darkgoldenrod (#B8860B)"
 msgstr "गहिर सुनहरा राड (#B8860B) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:75
 msgctxt "Palette"
 msgid "goldenrod (#DAA520)"
 msgstr "सुनहरा राड (#DAA520) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:76
 msgctxt "Palette"
 msgid "cornsilk (#FFF8DC)"
 msgstr "कार्नसिल्क (#FFF8DC) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:77
 msgctxt "Palette"
 msgid "gold (#FFD700)"
 msgstr "सोना (#FFD700) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:78
 msgctxt "Palette"
 msgid "khaki (#F0E68C)"
 msgstr "खाकी (#F0E68C) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:79
 msgctxt "Palette"
 msgid "lemonchiffon (#FFFACD)"
 msgstr "लेमन सिफोन (#FFFACD) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:80
 msgctxt "Palette"
 msgid "palegoldenrod (#EEE8AA)"
 msgstr "फीका सुनहरा राड (#EEE8AA) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:81
 msgctxt "Palette"
 msgid "darkkhaki (#BDB76B)"
 msgstr "गहिर खाकी (#BDB76B) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:82
 msgctxt "Palette"
 msgid "beige (#F5F5DC)"
 msgstr "मटमैला (#F5F5DC) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:83
 msgctxt "Palette"
 msgid "lightgoldenrodyellow (#FAFAD2)"
 msgstr "हल्का सुनहरा राड पिअर (#FAFAD2) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:84
 msgctxt "Palette"
 msgid "olive (#808000)"
 msgstr "जैतून (#808000) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:85
 msgctxt "Palette"
 msgid "yellow (#FFFF00)"
 msgstr "पिअर (#FFFF00) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:86
 msgctxt "Palette"
 msgid "lightyellow (#FFFFE0)"
 msgstr "हल्का पिअर (#FFFFE0) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:87
 msgctxt "Palette"
 msgid "ivory (#FFFFF0)"
 msgstr "हाथी दांत (#FFFFF0) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:88
 msgctxt "Palette"
 msgid "olivedrab (#6B8E23)"
 msgstr "जैतून फीका (#6B8E23) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:89
 msgctxt "Palette"
 msgid "yellowgreen (#9ACD32)"
 msgstr "पिअर-हरिअर (#9ACD32) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:90
 msgctxt "Palette"
 msgid "darkolivegreen (#556B2F)"
 msgstr "गहिर जैतून हरिअर (#556B2F) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:91
 msgctxt "Palette"
 msgid "greenyellow (#ADFF2F)"
 msgstr "हरिअर-पिअर (#ADFF2F) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:92
 msgctxt "Palette"
 msgid "chartreuse (#7FFF00)"
 msgstr "चार्टरीयूज (#7FFF00) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:93
 msgctxt "Palette"
 msgid "lawngreen (#7CFC00)"
 msgstr "मैदानी हरिअर (#7CFC00) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:94
 msgctxt "Palette"
 msgid "darkseagreen (#8FBC8F)"
 msgstr "गहिर समुद्री हरिअर (#8FBC8F) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:95
 msgctxt "Palette"
 msgid "forestgreen (#228B22)"
 msgstr "जंगली हरिअर (#228B22) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:96
 msgctxt "Palette"
 msgid "limegreen (#32CD32)"
 msgstr "लाइम हरिअर (#32CD32) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:97
 msgctxt "Palette"
 msgid "lightgreen (#90EE90)"
 msgstr "हल्का हरिअर (#90EE90) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:98
 msgctxt "Palette"
 msgid "palegreen (#98FB98)"
 msgstr "फीका हरिअर (#98FB98) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:99
 msgctxt "Palette"
 msgid "darkgreen (#006400)"
 msgstr "गहिर हरिअर (#006400) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:100
 msgctxt "Palette"
 msgid "green (#008000)"
 msgstr "हरिअर (#008000) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:101
 msgctxt "Palette"
 msgid "lime (#00FF00)"
 msgstr "लाइम (#00FF00) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:102
 msgctxt "Palette"
 msgid "honeydew (#F0FFF0)"
 msgstr "मधुरस (#F0FFF0) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:103
 msgctxt "Palette"
 msgid "seagreen (#2E8B57)"
 msgstr "समुद्री हरिअर (#2E8B57) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:104
 msgctxt "Palette"
 msgid "mediumseagreen (#3CB371)"
 msgstr "मध्यम समुद्री हरिअर (#3CB371) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:105
 msgctxt "Palette"
 msgid "springgreen (#00FF7F)"
 msgstr "बसंती हरिअर (#00FF7F) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:106
 msgctxt "Palette"
 msgid "mintcream (#F5FFFA)"
 msgstr "मिंटक्रीम (#F5FFFA) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:107
 msgctxt "Palette"
 msgid "mediumspringgreen (#00FA9A)"
 msgstr "मध्यम बसंती हरिअर (#00FA9A) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:108
 msgctxt "Palette"
 msgid "mediumaquamarine (#66CDAA)"
 msgstr "मध्यम अक्वामरीन (#66CDAA) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:109
 msgctxt "Palette"
 msgid "aquamarine (#7FFFD4)"
 msgstr "अक्वामरीन (#7FFFD4) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:110
 msgctxt "Palette"
 msgid "turquoise (#40E0D0)"
 msgstr "फिरोजी (#40E0D0) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:111
 msgctxt "Palette"
 msgid "lightseagreen (#20B2AA)"
 msgstr "हल्का समुद्री हरिअर (#20B2AA) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:112
 msgctxt "Palette"
 msgid "mediumturquoise (#48D1CC)"
 msgstr "मध्यम फिरोजी (#48D1CC) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:113
 msgctxt "Palette"
 msgid "darkslategray (#2F4F4F)"
 msgstr "गहिर स्लेटी धूसर (#2F4F4F) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:114
 msgctxt "Palette"
 msgid "paleturquoise (#AFEEEE)"
 msgstr "फीका फिरोजी (#AFEEEE) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:115
 msgctxt "Palette"
 msgid "teal (#008080)"
 msgstr "चैती (#008080) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:116
 msgctxt "Palette"
 msgid "darkcyan (#008B8B)"
 msgstr "गहिर स्यान (#008B8B) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:117
 msgctxt "Palette"
 msgid "cyan (#00FFFF)"
 msgstr "स्यान (#00FFFF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:118
 msgctxt "Palette"
 msgid "lightcyan (#E0FFFF)"
 msgstr "हल्का स्यान (#E0FFFF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:119
 msgctxt "Palette"
 msgid "azure (#F0FFFF)"
 msgstr "आसमानी (#F0FFFF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:120
 msgctxt "Palette"
 msgid "darkturquoise (#00CED1)"
 msgstr "गहिर फिरोजा (#00CED1) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:121
 msgctxt "Palette"
 msgid "cadetblue (#5F9EA0)"
 msgstr "कैडेटब्लू (#5F9EA0) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:122
 msgctxt "Palette"
 msgid "powderblue (#B0E0E6)"
 msgstr "पाउडरब्लू (#B0E0E6) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:123
 msgctxt "Palette"
 msgid "lightblue (#ADD8E6)"
 msgstr "हल्का नीला (#ADD8E6) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:124
 msgctxt "Palette"
 msgid "deepskyblue (#00BFFF)"
 msgstr "गहिर आसमानी नीला (#00BFFF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:125
 msgctxt "Palette"
 msgid "skyblue (#87CEEB)"
 msgstr "आसमानी नीला (#87CEEB) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:126
 msgctxt "Palette"
 msgid "lightskyblue (#87CEFA)"
 msgstr "हल्का आसमानी नीला (#87CEFA) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:127
 msgctxt "Palette"
 msgid "steelblue (#4682B4)"
 msgstr "स्टीलब्लू (#4682B4) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:128
 msgctxt "Palette"
 msgid "aliceblue (#F0F8FF)"
 msgstr "एलिसब्लू (#F0F8FF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:129
 msgctxt "Palette"
 msgid "dodgerblue (#1E90FF)"
 msgstr "चालबाज नीला (#1E90FF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:130
 msgctxt "Palette"
 msgid "slategray (#708090)"
 msgstr "स्लेटी धूसर (#708090) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:131
 msgctxt "Palette"
 msgid "lightslategray (#778899)"
 msgstr "हल्का स्लेटी धूसर (#778899) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:132
 msgctxt "Palette"
 msgid "lightsteelblue (#B0C4DE)"
 msgstr "हल्का स्टीलब्लू (#B0C4DE) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:133
 msgctxt "Palette"
 msgid "cornflowerblue (#6495ED)"
 msgstr "कार्नफ्लावरब्लू (#6495ED) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:134
 msgctxt "Palette"
 msgid "royalblue (#4169E1)"
 msgstr "रायल ब्लू (#4169E1) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:135
 msgctxt "Palette"
 msgid "midnightblue (#191970)"
 msgstr "मिडनाइट ब्लू (#191970) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:136
 msgctxt "Palette"
 msgid "lavender (#E6E6FA)"
 msgstr "हल्का बैंगनी रंग (#E6E6FA) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:137
 msgctxt "Palette"
 msgid "navy (#000080)"
 msgstr "नेवी (#000080) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:138
 msgctxt "Palette"
 msgid "darkblue (#00008B)"
 msgstr "गहिर नीला (#00008B) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:139
 msgctxt "Palette"
 msgid "mediumblue (#0000CD)"
 msgstr "मध्यम नीला (#0000CD) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:140
 msgctxt "Palette"
 msgid "blue (#0000FF)"
 msgstr "नीला (#0000FF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:141
 msgctxt "Palette"
 msgid "ghostwhite (#F8F8FF)"
 msgstr "भूतिया उज्जर (#F8F8FF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:142
 msgctxt "Palette"
 msgid "slateblue (#6A5ACD)"
 msgstr "स्लेटी नीला (#6A5ACD) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:143
 msgctxt "Palette"
 msgid "darkslateblue (#483D8B)"
 msgstr "गहिर स्लेटी नीला (#483D8B) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:144
 msgctxt "Palette"
 msgid "mediumslateblue (#7B68EE)"
 msgstr "मध्यम स्लेटी नीला (#7B68EE) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:145
 msgctxt "Palette"
 msgid "mediumpurple (#9370DB)"
 msgstr "मध्यम जामुनी (#9370DB) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:146
 msgctxt "Palette"
 msgid "blueviolet (#8A2BE2)"
 msgstr "नीला बैंगनी (#8A2BE2) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:147
 msgctxt "Palette"
 msgid "indigo (#4B0082)"
 msgstr "गहिर नीला (#4B0082) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:148
 msgctxt "Palette"
 msgid "darkorchid (#9932CC)"
 msgstr "गहिर आर्किड (#9932CC) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:149
 msgctxt "Palette"
 msgid "darkviolet (#9400D3)"
 msgstr "गहिर बैंगनी (#9400D3) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:150
 msgctxt "Palette"
 msgid "mediumorchid (#BA55D3)"
 msgstr "मध्यम आर्किड (#BA55D3) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:151
 msgctxt "Palette"
 msgid "thistle (#D8BFD8)"
 msgstr "भटकटैया (#D8BFD8) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:152
 msgctxt "Palette"
 msgid "plum (#DDA0DD)"
 msgstr "लाल-हरिअर रंग (#DDA0DD) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:153
 msgctxt "Palette"
 msgid "violet (#EE82EE)"
 msgstr "बैंगनी (#EE82EE) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:154
 msgctxt "Palette"
 msgid "purple (#800080)"
 msgstr "जामुनी (#800080) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:155
 msgctxt "Palette"
 msgid "darkmagenta (#8B008B)"
 msgstr "गहिर मैजेंटा (#8B008B) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:156
 msgctxt "Palette"
 msgid "magenta (#FF00FF)"
 msgstr "मैजेंटा (#FF00FF) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:157
 msgctxt "Palette"
 msgid "orchid (#DA70D6)"
 msgstr "आर्किड (#DA70D6) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:158
 msgctxt "Palette"
 msgid "mediumvioletred (#C71585)"
 msgstr "मध्यम बैंगनी लाल (#C71585) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:159
 msgctxt "Palette"
 msgid "deeppink (#FF1493)"
 msgstr "गहिर गुलाबी (#FF1493) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:160
 msgctxt "Palette"
 msgid "hotpink (#FF69B4)"
 msgstr "तेज गुलाबी (#FF69B4) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:161
 msgctxt "Palette"
 msgid "lavenderblush (#FFF0F5)"
 msgstr "लैवेंडरब्लश (#FFF0F5) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:162
 msgctxt "Palette"
 msgid "palevioletred (#DB7093)"
 msgstr "फीका बैंगनी लाल (#DB7093) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:163
 msgctxt "Palette"
 msgid "crimson (#DC143C)"
 msgstr "रक्तिम (#DC143C) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:164
 msgctxt "Palette"
 msgid "pink (#FFC0CB)"
 msgstr "गुलाबी (#FFC0CB) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:165
 msgctxt "Palette"
 msgid "lightpink (#FFB6C1)"
 msgstr "हल्का गुलाबी (#FFB6C1) "
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:166
 msgctxt "Palette"
 msgid "rebeccapurple (#663399)"
 msgstr ""
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:167
 msgctxt "Palette"
 msgid "Butter 1"
 msgstr "मक्खन 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:168
 msgctxt "Palette"
 msgid "Butter 2"
 msgstr "मक्खन 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:169
 msgctxt "Palette"
 msgid "Butter 3"
 msgstr "मक्खन 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:170
 msgctxt "Palette"
 msgid "Chameleon 1"
 msgstr "गिरगिट 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:171
 msgctxt "Palette"
 msgid "Chameleon 2"
 msgstr "गिरगिट 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:172
 msgctxt "Palette"
 msgid "Chameleon 3"
 msgstr "गिरगिट 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:173
 msgctxt "Palette"
 msgid "Orange 1"
 msgstr "नारंगी 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:174
 msgctxt "Palette"
 msgid "Orange 2"
 msgstr "नारंगी 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:175
 msgctxt "Palette"
 msgid "Orange 3"
 msgstr "नारंगी 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:176
 msgctxt "Palette"
 msgid "Sky Blue 1"
 msgstr "आसमानी नीला 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:177
 msgctxt "Palette"
 msgid "Sky Blue 2"
 msgstr "आसमानी नीला 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:178
 msgctxt "Palette"
 msgid "Sky Blue 3"
 msgstr "आसमानी नीला 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:179
 msgctxt "Palette"
 msgid "Plum 1"
 msgstr "लाल-हरिअर 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:180
 msgctxt "Palette"
 msgid "Plum 2"
 msgstr "लाल-हरिअर 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:181
 msgctxt "Palette"
 msgid "Plum 3"
 msgstr "लाल-हरिअर 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:182
 msgctxt "Palette"
 msgid "Chocolate 1"
 msgstr "लेमनचूस 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:183
 msgctxt "Palette"
 msgid "Chocolate 2"
 msgstr "लेमनचूस 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:184
 msgctxt "Palette"
 msgid "Chocolate 3"
 msgstr "लेमनचूस 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:185
 msgctxt "Palette"
 msgid "Scarlet Red 1"
 msgstr "रक्तिम लाल 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:186
 msgctxt "Palette"
 msgid "Scarlet Red 2"
 msgstr "रक्तिम लाल 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:187
 msgctxt "Palette"
 msgid "Scarlet Red 3"
 msgstr "रक्तिम लाल 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:188
 #, fuzzy
 msgctxt "Palette"
 msgid "Snowy White"
 msgstr "उज्जर "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:189
 msgctxt "Palette"
 msgid "Aluminium 1"
 msgstr "एल्यूमीनियम 1 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:190
 msgctxt "Palette"
 msgid "Aluminium 2"
 msgstr "एल्यूमीनियम 2 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:191
 msgctxt "Palette"
 msgid "Aluminium 3"
 msgstr "एल्यूमीनियम 3 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:192
 msgctxt "Palette"
 msgid "Aluminium 4"
 msgstr "एल्यूमीनियम 4 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:193
 msgctxt "Palette"
 msgid "Aluminium 5"
 msgstr "एल्यूमीनियम 5 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:194
 msgctxt "Palette"
 msgid "Aluminium 6"
 msgstr "एल्यूमीनियम 6 "
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:195
 #, fuzzy
 msgctxt "Palette"
@@ -3526,1085 +3526,1085 @@ msgstr "कपड़ा (बिटमैप)"
 msgid "Old paint (bitmap)"
 msgstr "पुरान पेंट (बिटमैप)"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:2
-msgctxt "Symbol"
-msgid "AIGA Symbol Signs"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:3 ../share/symbols/symbols.h:4
-#: ../share/symbols/symbols.h:281 ../share/symbols/symbols.h:282
-msgctxt "Symbol"
-msgid "Telephone"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:5 ../share/symbols/symbols.h:6
-msgctxt "Symbol"
-msgid "Mail"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:7 ../share/symbols/symbols.h:8
-#, fuzzy
-msgctxt "Symbol"
-msgid "Currency Exchange"
-msgstr "वर्तमान स्तर "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:9 ../share/symbols/symbols.h:10
-msgctxt "Symbol"
-msgid "Currency Exchange - Euro"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:11 ../share/symbols/symbols.h:12
-msgctxt "Symbol"
-msgid "Cashier"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:13 ../share/symbols/symbols.h:14
-#: ../share/symbols/symbols.h:213 ../share/symbols/symbols.h:214
-#, fuzzy
-msgctxt "Symbol"
-msgid "First Aid"
-msgstr "पहिला स्लाइड: "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
-msgctxt "Symbol"
-msgid "Lost and Found"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
-msgctxt "Symbol"
-msgid "Coat Check"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
-msgctxt "Symbol"
-msgid "Baggage Lockers"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
-msgctxt "Symbol"
-msgid "Escalator"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
-msgctxt "Symbol"
-msgid "Escalator Down"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
-msgctxt "Symbol"
-msgid "Escalator Up"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
-msgctxt "Symbol"
-msgid "Stairs"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:29 ../share/symbols/symbols.h:30
-msgctxt "Symbol"
-msgid "Stairs Down"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:31 ../share/symbols/symbols.h:32
-msgctxt "Symbol"
-msgid "Stairs Up"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:33 ../share/symbols/symbols.h:34
-#, fuzzy
-msgctxt "Symbol"
-msgid "Elevator"
-msgstr "उन्नयन  "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:35 ../share/symbols/symbols.h:36
-msgctxt "Symbol"
-msgid "Toilets - Men"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:37 ../share/symbols/symbols.h:38
-msgctxt "Symbol"
-msgid "Toilets - Women"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:39 ../share/symbols/symbols.h:40
-msgctxt "Symbol"
-msgid "Toilets"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:41 ../share/symbols/symbols.h:42
-msgctxt "Symbol"
-msgid "Nursery"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
-msgctxt "Symbol"
-msgid "Drinking Fountain"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
-#, fuzzy
-msgctxt "Symbol"
-msgid "Waiting Room"
-msgstr "पेंटिंग"
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
-#: ../share/symbols/symbols.h:231 ../share/symbols/symbols.h:232
-#, fuzzy
-msgctxt "Symbol"
-msgid "Information"
-msgstr "जानकारी "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:49 ../share/symbols/symbols.h:50
-#, fuzzy
-msgctxt "Symbol"
-msgid "Hotel Information"
-msgstr "पृष्ठ केर जानकारी "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
-#, fuzzy
-msgctxt "Symbol"
-msgid "Air Transportation"
-msgstr "रूपांतरण "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
-msgctxt "Symbol"
-msgid "Heliport"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
-msgctxt "Symbol"
-msgid "Taxi"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
-#, fuzzy
-msgctxt "Symbol"
-msgid "Bus"
-msgstr "धब्बा"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
-#, fuzzy
-msgctxt "Symbol"
-msgid "Ground Transportation"
-msgstr "रूपांतरण "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
-#, fuzzy
-msgctxt "Symbol"
-msgid "Rail Transportation"
-msgstr "रूपांतरण "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
-#, fuzzy
-msgctxt "Symbol"
-msgid "Water Transportation"
-msgstr "रूपांतरण "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
-msgctxt "Symbol"
-msgid "Car Rental"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
-msgctxt "Symbol"
-msgid "Restaurant"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
-msgctxt "Symbol"
-msgid "Coffeeshop"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
-#, fuzzy
-msgctxt "Symbol"
-msgid "Bar"
-msgstr "वृक्ष केर छाल"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
-msgctxt "Symbol"
-msgid "Shops"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
-msgctxt "Symbol"
-msgid "Barber Shop - Beauty Salon"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
-msgctxt "Symbol"
-msgid "Barber Shop"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
-msgctxt "Symbol"
-msgid "Beauty Salon"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
-msgctxt "Symbol"
-msgid "Ticket Purchase"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
-msgctxt "Symbol"
-msgid "Baggage Check In"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
-msgctxt "Symbol"
-msgid "Baggage Claim"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
-#, fuzzy
-msgctxt "Symbol"
-msgid "Customs"
-msgstr "परंपरा"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
-#, fuzzy
-msgctxt "Symbol"
-msgid "Immigration"
-msgstr "विन्यास"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
-#, fuzzy
-msgctxt "Symbol"
-msgid "Departing Flights"
-msgstr "लक्ष्य केर उँचाइ "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
-msgctxt "Symbol"
-msgid "Arriving Flights"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
-msgctxt "Symbol"
-msgid "Smoking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
-msgctxt "Symbol"
-msgid "No Smoking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
-#: ../share/symbols/symbols.h:245 ../share/symbols/symbols.h:246
-msgctxt "Symbol"
-msgid "Parking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
-msgctxt "Symbol"
-msgid "No Parking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
-msgctxt "Symbol"
-msgid "No Dogs"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:105 ../share/symbols/symbols.h:106
-msgctxt "Symbol"
-msgid "No Entry"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:107 ../share/symbols/symbols.h:108
-msgctxt "Symbol"
-msgid "Exit"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:109 ../share/symbols/symbols.h:110
-msgctxt "Symbol"
-msgid "Fire Extinguisher"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:111 ../share/symbols/symbols.h:112
-#, fuzzy
-msgctxt "Symbol"
-msgid "Right Arrow"
-msgstr "दायाँ "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:113 ../share/symbols/symbols.h:114
-msgctxt "Symbol"
-msgid "Forward and Right Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:115 ../share/symbols/symbols.h:116
-#, fuzzy
-msgctxt "Symbol"
-msgid "Up Arrow"
-msgstr "तीर क' चिह्न "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:117 ../share/symbols/symbols.h:118
-msgctxt "Symbol"
-msgid "Forward and Left Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:119 ../share/symbols/symbols.h:120
-#, fuzzy
-msgctxt "Symbol"
-msgid "Left Arrow"
-msgstr "तीर क' चिह्न "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:121 ../share/symbols/symbols.h:122
-msgctxt "Symbol"
-msgid "Left and Down Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:123 ../share/symbols/symbols.h:124
-#, fuzzy
-msgctxt "Symbol"
-msgid "Down Arrow"
-msgstr "तीर क' चिह्न "
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:125 ../share/symbols/symbols.h:126
-msgctxt "Symbol"
-msgid "Right and Down Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:127 ../share/symbols/symbols.h:128
-msgctxt "Symbol"
-msgid "NPS Wheelchair Accessible - 1996"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:129 ../share/symbols/symbols.h:130
-msgctxt "Symbol"
-msgid "NPS Wheelchair Accessible"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:131 ../share/symbols/symbols.h:132
-msgctxt "Symbol"
-msgid "New Wheelchair Accessible"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:133
-msgctxt "Symbol"
-msgid "Word Balloons"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:134
-msgctxt "Symbol"
-msgid "Thought Balloon"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:135
-msgctxt "Symbol"
-msgid "Dream Speaking"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:136
-#, fuzzy
-msgctxt "Symbol"
-msgid "Rounded Balloon"
-msgstr "राउंड जुड़ल"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:137
-#, fuzzy
-msgctxt "Symbol"
-msgid "Squared Balloon"
-msgstr "वर्गाकार टोपी "
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:138
-msgctxt "Symbol"
-msgid "Over the Phone"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:139
-msgctxt "Symbol"
-msgid "Hip Balloon"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:140
-#, fuzzy
-msgctxt "Symbol"
-msgid "Circle Balloon"
-msgstr "वृत्त "
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:141
-msgctxt "Symbol"
-msgid "Exclaim Balloon"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:142
-msgctxt "Symbol"
-msgid "Flow Chart Shapes"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:143
-#, fuzzy
-msgctxt "Symbol"
-msgid "Process"
-msgstr "पोस्ट-प्रोसेसर: "
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:144
-#, fuzzy
-msgctxt "Symbol"
-msgid "Input/Output"
-msgstr "आउटपुट "
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:145
-#, fuzzy
-msgctxt "Symbol"
-msgid "Document"
-msgstr "दस्ताबेज"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:146
-#, fuzzy
-msgctxt "Symbol"
-msgid "Manual Operation"
-msgstr "गणितीय आपरेटर"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:147
-#, fuzzy
-msgctxt "Symbol"
-msgid "Preparation"
-msgstr "पूर्व-संतृप्ति:"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:148
-#, fuzzy
-msgctxt "Symbol"
-msgid "Merge"
-msgstr "विलय "
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:149
-#, fuzzy
-msgctxt "Symbol"
-msgid "Decision"
-msgstr "सुस्पष्टता: "
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:150
-msgctxt "Symbol"
-msgid "Magnetic Tape"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:151
-#, fuzzy
-msgctxt "Symbol"
-msgid "Display"
-msgstr "डिस्प्ले मोड (_D)"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:152
-msgctxt "Symbol"
-msgid "Auxiliary Operation"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:153
-#, fuzzy
-msgctxt "Symbol"
-msgid "Manual Input"
-msgstr "EMF इनपुट "
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:154
-#, fuzzy
-msgctxt "Symbol"
-msgid "Extract"
-msgstr "छवि केँ बाहर निकालू "
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:155
-msgctxt "Symbol"
-msgid "Terminal/Interrupt"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:156
-msgctxt "Symbol"
-msgid "Punched Card"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:157
-msgctxt "Symbol"
-msgid "Punch Tape"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:158
-msgctxt "Symbol"
-msgid "Online Storage"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:159
-msgctxt "Symbol"
-msgid "Keying"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:160
-msgctxt "Symbol"
-msgid "Sort"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:161
-#, fuzzy
-msgctxt "Symbol"
-msgid "Connector"
-msgstr "संयोजक"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:162
-#, fuzzy
-msgctxt "Symbol"
-msgid "Off-Page Connector"
-msgstr "संयोजक"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:163
-msgctxt "Symbol"
-msgid "Transmittal Tape"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:164
-msgctxt "Symbol"
-msgid "Communication Link"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:165
-#, fuzzy
-msgctxt "Symbol"
-msgid "Collate"
-msgstr "लेमनचूस 1 "
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:166
-msgctxt "Symbol"
-msgid "Comment/Annotation"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:167
-msgctxt "Symbol"
-msgid "Core"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:168
-msgctxt "Symbol"
-msgid "Predefined Process"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:169
-msgctxt "Symbol"
-msgid "Magnetic Disk (Database)"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:170
-msgctxt "Symbol"
-msgid "Magnetic Drum (Direct Access)"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:171
-msgctxt "Symbol"
-msgid "Offline Storage"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:172
-msgctxt "Symbol"
-msgid "Logical Or"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:173
-msgctxt "Symbol"
-msgid "Logical And"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:174
-msgctxt "Symbol"
-msgid "Delay"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:175
-msgctxt "Symbol"
-msgid "Loop Limit Begin"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:176
-msgctxt "Symbol"
-msgid "Loop Limit End"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:177
-#, fuzzy
-msgctxt "Symbol"
-msgid "Logic Symbols"
-msgstr "अक्षर जेहन संकेत"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:178
-msgctxt "Symbol"
-msgid "Xnor Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:179
-msgctxt "Symbol"
-msgid "Xor Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:180
-msgctxt "Symbol"
-msgid "Nor Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:181
-msgctxt "Symbol"
-msgid "Or Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:182
-msgctxt "Symbol"
-msgid "Nand Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:183
-msgctxt "Symbol"
-msgid "And Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:184
-msgctxt "Symbol"
-msgid "Buffer"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:185
-msgctxt "Symbol"
-msgid "Not Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:186
-msgctxt "Symbol"
-msgid "Buffer Small"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:187
-msgctxt "Symbol"
-msgid "Not Gate Small"
-msgstr ""
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:188
 msgctxt "Symbol"
 msgid "United States National Park Service Map Symbols"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:189 ../share/symbols/symbols.h:190
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:3 ../share/symbols/symbols.h:4
 #, fuzzy
 msgctxt "Symbol"
 msgid "Airport"
 msgstr "आयात"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:191 ../share/symbols/symbols.h:192
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:5 ../share/symbols/symbols.h:6
 msgctxt "Symbol"
 msgid "Amphitheatre"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:193 ../share/symbols/symbols.h:194
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:7 ../share/symbols/symbols.h:8
 msgctxt "Symbol"
 msgid "Bicycle Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:195 ../share/symbols/symbols.h:196
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:9 ../share/symbols/symbols.h:10
 msgctxt "Symbol"
 msgid "Boat Launch"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:197 ../share/symbols/symbols.h:198
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:11 ../share/symbols/symbols.h:12
 msgctxt "Symbol"
 msgid "Boat Tour"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:199 ../share/symbols/symbols.h:200
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:13 ../share/symbols/symbols.h:14
 #, fuzzy
 msgctxt "Symbol"
 msgid "Bus Stop"
 msgstr "थामू (_S)"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:201 ../share/symbols/symbols.h:202
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
 msgctxt "Symbol"
 msgid "Campfire"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:203 ../share/symbols/symbols.h:204
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
 #, fuzzy
 msgctxt "Symbol"
 msgid "Campground"
 msgstr "कैप राउंडिंग "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:205 ../share/symbols/symbols.h:206
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
 msgctxt "Symbol"
 msgid "CanoeAccess"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:207 ../share/symbols/symbols.h:208
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
 msgctxt "Symbol"
 msgid "Crosscountry Ski Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:209 ../share/symbols/symbols.h:210
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
 msgctxt "Symbol"
 msgid "Downhill Skiing"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:211 ../share/symbols/symbols.h:212
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
 #, fuzzy
 msgctxt "Symbol"
 msgid "Drinking Water"
 msgstr "प्रिंटिंग चिह्न "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:215 ../share/symbols/symbols.h:216
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
+#: ../share/symbols/symbols.h:172 ../share/symbols/symbols.h:173
+#, fuzzy
+msgctxt "Symbol"
+msgid "First Aid"
+msgstr "पहिला स्लाइड: "
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:29 ../share/symbols/symbols.h:30
 msgctxt "Symbol"
 msgid "Fishing"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:217 ../share/symbols/symbols.h:218
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:31 ../share/symbols/symbols.h:32
 msgctxt "Symbol"
 msgid "Food Service"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:219 ../share/symbols/symbols.h:220
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:33 ../share/symbols/symbols.h:34
 msgctxt "Symbol"
 msgid "Four Wheel Drive Road"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:221 ../share/symbols/symbols.h:222
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:35 ../share/symbols/symbols.h:36
 #, fuzzy
 msgctxt "Symbol"
 msgid "Gas Station"
 msgstr "कम संतृप्ति "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:223 ../share/symbols/symbols.h:224
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:37 ../share/symbols/symbols.h:38
 #, fuzzy
 msgctxt "Symbol"
 msgid "Golfing"
 msgstr "प्रूफिंग"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:225 ../share/symbols/symbols.h:226
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:39 ../share/symbols/symbols.h:40
 msgctxt "Symbol"
 msgid "Horseback Riding"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:227 ../share/symbols/symbols.h:228
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:41 ../share/symbols/symbols.h:42
 msgctxt "Symbol"
 msgid "Hospital"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:229 ../share/symbols/symbols.h:230
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
 #, fuzzy
 msgctxt "Symbol"
 msgid "Ice Skating"
 msgstr "सैटिन "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:233 ../share/symbols/symbols.h:234
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
+#: ../share/symbols/symbols.h:206 ../share/symbols/symbols.h:207
+#, fuzzy
+msgctxt "Symbol"
+msgid "Information"
+msgstr "जानकारी "
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
 msgctxt "Symbol"
 msgid "Litter Receptacle"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:235 ../share/symbols/symbols.h:236
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:49 ../share/symbols/symbols.h:50
 msgctxt "Symbol"
 msgid "Lodging"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:237 ../share/symbols/symbols.h:238
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
 msgctxt "Symbol"
 msgid "Marina"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:239 ../share/symbols/symbols.h:240
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
 msgctxt "Symbol"
 msgid "Motorbike Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:241 ../share/symbols/symbols.h:242
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
 #, fuzzy
 msgctxt "Symbol"
 msgid "Radiator Water"
 msgstr "विकिरण"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:243 ../share/symbols/symbols.h:244
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
 msgctxt "Symbol"
 msgid "Recycling"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:247 ../share/symbols/symbols.h:248
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
+#: ../share/symbols/symbols.h:258 ../share/symbols/symbols.h:259
+msgctxt "Symbol"
+msgid "Parking"
+msgstr ""
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
 msgctxt "Symbol"
 msgid "Pets On Leash"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:249 ../share/symbols/symbols.h:250
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
 msgctxt "Symbol"
 msgid "Picnic Area"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:251 ../share/symbols/symbols.h:252
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
 msgctxt "Symbol"
 msgid "Post Office"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:253 ../share/symbols/symbols.h:254
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
 #, fuzzy
 msgctxt "Symbol"
 msgid "Ranger Station"
 msgstr "आवर्तन"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:255 ../share/symbols/symbols.h:256
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
 #, fuzzy
 msgctxt "Symbol"
 msgid "RV Campground"
 msgstr "कैप राउंडिंग "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:257 ../share/symbols/symbols.h:258
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
 msgctxt "Symbol"
 msgid "Restrooms"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:259 ../share/symbols/symbols.h:260
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
 #, fuzzy
 msgctxt "Symbol"
 msgid "Sailing"
 msgstr "स्क्रालिंग"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:261 ../share/symbols/symbols.h:262
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
 msgctxt "Symbol"
 msgid "Sanitary Disposal Station"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:263 ../share/symbols/symbols.h:264
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
 #, fuzzy
 msgctxt "Symbol"
 msgid "Scuba Diving"
 msgstr "वृत्ताकार विभाजन "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:265 ../share/symbols/symbols.h:266
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
 msgctxt "Symbol"
 msgid "Self Guided Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:267 ../share/symbols/symbols.h:268
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
 #, fuzzy
 msgctxt "Symbol"
 msgid "Shelter"
 msgstr "फिल्टर "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:269 ../share/symbols/symbols.h:270
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
 #, fuzzy
 msgctxt "Symbol"
 msgid "Showers"
 msgstr "देखाउ: "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:271 ../share/symbols/symbols.h:272
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
 #, fuzzy
 msgctxt "Symbol"
 msgid "Sledding"
 msgstr "शेडिंग "
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:273 ../share/symbols/symbols.h:274
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
 msgctxt "Symbol"
 msgid "SnowmobileTrail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:275 ../share/symbols/symbols.h:276
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
 #, fuzzy
 msgctxt "Symbol"
 msgid "Stable"
 msgstr "तालिका"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:277 ../share/symbols/symbols.h:278
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
 msgctxt "Symbol"
 msgid "Store"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:279 ../share/symbols/symbols.h:280
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
 msgctxt "Symbol"
 msgid "Swimming"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:283 ../share/symbols/symbols.h:284
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
+#: ../share/symbols/symbols.h:162 ../share/symbols/symbols.h:163
+msgctxt "Symbol"
+msgid "Telephone"
+msgstr ""
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
 msgctxt "Symbol"
 msgid "Emergency Telephone"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:285 ../share/symbols/symbols.h:286
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
 #, fuzzy
 msgctxt "Symbol"
 msgid "Trailhead"
 msgstr "ब्रेल"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:287 ../share/symbols/symbols.h:288
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
 msgctxt "Symbol"
 msgid "Wheelchair Accessible"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:289 ../share/symbols/symbols.h:290
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
 msgctxt "Symbol"
 msgid "Wind Surfing"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:291
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:105
 msgctxt "Symbol"
 msgid "Blank"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:106
+msgctxt "Symbol"
+msgid "Flow Chart Shapes"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:107
+#, fuzzy
+msgctxt "Symbol"
+msgid "Process"
+msgstr "पोस्ट-प्रोसेसर: "
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:108
+#, fuzzy
+msgctxt "Symbol"
+msgid "Input/Output"
+msgstr "आउटपुट "
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:109
+#, fuzzy
+msgctxt "Symbol"
+msgid "Document"
+msgstr "दस्ताबेज"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:110
+#, fuzzy
+msgctxt "Symbol"
+msgid "Manual Operation"
+msgstr "गणितीय आपरेटर"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:111
+#, fuzzy
+msgctxt "Symbol"
+msgid "Preparation"
+msgstr "पूर्व-संतृप्ति:"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:112
+#, fuzzy
+msgctxt "Symbol"
+msgid "Merge"
+msgstr "विलय "
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:113
+#, fuzzy
+msgctxt "Symbol"
+msgid "Decision"
+msgstr "सुस्पष्टता: "
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:114
+msgctxt "Symbol"
+msgid "Magnetic Tape"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:115
+#, fuzzy
+msgctxt "Symbol"
+msgid "Display"
+msgstr "डिस्प्ले मोड (_D)"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:116
+msgctxt "Symbol"
+msgid "Auxiliary Operation"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:117
+#, fuzzy
+msgctxt "Symbol"
+msgid "Manual Input"
+msgstr "EMF इनपुट "
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:118
+#, fuzzy
+msgctxt "Symbol"
+msgid "Extract"
+msgstr "छवि केँ बाहर निकालू "
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:119
+msgctxt "Symbol"
+msgid "Terminal/Interrupt"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:120
+msgctxt "Symbol"
+msgid "Punched Card"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:121
+msgctxt "Symbol"
+msgid "Punch Tape"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:122
+msgctxt "Symbol"
+msgid "Online Storage"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:123
+msgctxt "Symbol"
+msgid "Keying"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:124
+msgctxt "Symbol"
+msgid "Sort"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:125
+#, fuzzy
+msgctxt "Symbol"
+msgid "Connector"
+msgstr "संयोजक"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:126
+#, fuzzy
+msgctxt "Symbol"
+msgid "Off-Page Connector"
+msgstr "संयोजक"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:127
+msgctxt "Symbol"
+msgid "Transmittal Tape"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:128
+msgctxt "Symbol"
+msgid "Communication Link"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:129
+#, fuzzy
+msgctxt "Symbol"
+msgid "Collate"
+msgstr "लेमनचूस 1 "
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:130
+msgctxt "Symbol"
+msgid "Comment/Annotation"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:131
+msgctxt "Symbol"
+msgid "Core"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:132
+msgctxt "Symbol"
+msgid "Predefined Process"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:133
+msgctxt "Symbol"
+msgid "Magnetic Disk (Database)"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:134
+msgctxt "Symbol"
+msgid "Magnetic Drum (Direct Access)"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:135
+msgctxt "Symbol"
+msgid "Offline Storage"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:136
+msgctxt "Symbol"
+msgid "Logical Or"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:137
+msgctxt "Symbol"
+msgid "Logical And"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:138
+msgctxt "Symbol"
+msgid "Delay"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:139
+msgctxt "Symbol"
+msgid "Loop Limit Begin"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:140
+msgctxt "Symbol"
+msgid "Loop Limit End"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:141
+msgctxt "Symbol"
+msgid "Word Balloons"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:142
+msgctxt "Symbol"
+msgid "Thought Balloon"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:143
+msgctxt "Symbol"
+msgid "Dream Speaking"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:144
+#, fuzzy
+msgctxt "Symbol"
+msgid "Rounded Balloon"
+msgstr "राउंड जुड़ल"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:145
+#, fuzzy
+msgctxt "Symbol"
+msgid "Squared Balloon"
+msgstr "वर्गाकार टोपी "
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:146
+msgctxt "Symbol"
+msgid "Over the Phone"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:147
+msgctxt "Symbol"
+msgid "Hip Balloon"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:148
+#, fuzzy
+msgctxt "Symbol"
+msgid "Circle Balloon"
+msgstr "वृत्त "
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:149
+msgctxt "Symbol"
+msgid "Exclaim Balloon"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:150
+#, fuzzy
+msgctxt "Symbol"
+msgid "Logic Symbols"
+msgstr "अक्षर जेहन संकेत"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:151
+msgctxt "Symbol"
+msgid "Xnor Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:152
+msgctxt "Symbol"
+msgid "Xor Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:153
+msgctxt "Symbol"
+msgid "Nor Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:154
+msgctxt "Symbol"
+msgid "Or Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:155
+msgctxt "Symbol"
+msgid "Nand Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:156
+msgctxt "Symbol"
+msgid "And Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:157
+msgctxt "Symbol"
+msgid "Buffer"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:158
+msgctxt "Symbol"
+msgid "Not Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:159
+msgctxt "Symbol"
+msgid "Buffer Small"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:160
+msgctxt "Symbol"
+msgid "Not Gate Small"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:161
+msgctxt "Symbol"
+msgid "AIGA Symbol Signs"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:164 ../share/symbols/symbols.h:165
+msgctxt "Symbol"
+msgid "Mail"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:166 ../share/symbols/symbols.h:167
+#, fuzzy
+msgctxt "Symbol"
+msgid "Currency Exchange"
+msgstr "वर्तमान स्तर "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:168 ../share/symbols/symbols.h:169
+msgctxt "Symbol"
+msgid "Currency Exchange - Euro"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:170 ../share/symbols/symbols.h:171
+msgctxt "Symbol"
+msgid "Cashier"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:174 ../share/symbols/symbols.h:175
+msgctxt "Symbol"
+msgid "Lost and Found"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:176 ../share/symbols/symbols.h:177
+msgctxt "Symbol"
+msgid "Coat Check"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:178 ../share/symbols/symbols.h:179
+msgctxt "Symbol"
+msgid "Baggage Lockers"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:180 ../share/symbols/symbols.h:181
+msgctxt "Symbol"
+msgid "Escalator"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:182 ../share/symbols/symbols.h:183
+msgctxt "Symbol"
+msgid "Escalator Down"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:184 ../share/symbols/symbols.h:185
+msgctxt "Symbol"
+msgid "Escalator Up"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:186 ../share/symbols/symbols.h:187
+msgctxt "Symbol"
+msgid "Stairs"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:188 ../share/symbols/symbols.h:189
+msgctxt "Symbol"
+msgid "Stairs Down"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:190 ../share/symbols/symbols.h:191
+msgctxt "Symbol"
+msgid "Stairs Up"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:192 ../share/symbols/symbols.h:193
+#, fuzzy
+msgctxt "Symbol"
+msgid "Elevator"
+msgstr "उन्नयन  "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:194 ../share/symbols/symbols.h:195
+msgctxt "Symbol"
+msgid "Toilets - Men"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:196 ../share/symbols/symbols.h:197
+msgctxt "Symbol"
+msgid "Toilets - Women"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:198 ../share/symbols/symbols.h:199
+msgctxt "Symbol"
+msgid "Toilets"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:200 ../share/symbols/symbols.h:201
+msgctxt "Symbol"
+msgid "Nursery"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:202 ../share/symbols/symbols.h:203
+msgctxt "Symbol"
+msgid "Drinking Fountain"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:204 ../share/symbols/symbols.h:205
+#, fuzzy
+msgctxt "Symbol"
+msgid "Waiting Room"
+msgstr "पेंटिंग"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:208 ../share/symbols/symbols.h:209
+#, fuzzy
+msgctxt "Symbol"
+msgid "Hotel Information"
+msgstr "पृष्ठ केर जानकारी "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:210 ../share/symbols/symbols.h:211
+#, fuzzy
+msgctxt "Symbol"
+msgid "Air Transportation"
+msgstr "रूपांतरण "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:212 ../share/symbols/symbols.h:213
+msgctxt "Symbol"
+msgid "Heliport"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:214 ../share/symbols/symbols.h:215
+msgctxt "Symbol"
+msgid "Taxi"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:216 ../share/symbols/symbols.h:217
+#, fuzzy
+msgctxt "Symbol"
+msgid "Bus"
+msgstr "धब्बा"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:218 ../share/symbols/symbols.h:219
+#, fuzzy
+msgctxt "Symbol"
+msgid "Ground Transportation"
+msgstr "रूपांतरण "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:220 ../share/symbols/symbols.h:221
+#, fuzzy
+msgctxt "Symbol"
+msgid "Rail Transportation"
+msgstr "रूपांतरण "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:222 ../share/symbols/symbols.h:223
+#, fuzzy
+msgctxt "Symbol"
+msgid "Water Transportation"
+msgstr "रूपांतरण "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:224 ../share/symbols/symbols.h:225
+msgctxt "Symbol"
+msgid "Car Rental"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:226 ../share/symbols/symbols.h:227
+msgctxt "Symbol"
+msgid "Restaurant"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:228 ../share/symbols/symbols.h:229
+msgctxt "Symbol"
+msgid "Coffeeshop"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:230 ../share/symbols/symbols.h:231
+#, fuzzy
+msgctxt "Symbol"
+msgid "Bar"
+msgstr "वृक्ष केर छाल"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:232 ../share/symbols/symbols.h:233
+msgctxt "Symbol"
+msgid "Shops"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:234 ../share/symbols/symbols.h:235
+msgctxt "Symbol"
+msgid "Barber Shop - Beauty Salon"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:236 ../share/symbols/symbols.h:237
+msgctxt "Symbol"
+msgid "Barber Shop"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:238 ../share/symbols/symbols.h:239
+msgctxt "Symbol"
+msgid "Beauty Salon"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:240 ../share/symbols/symbols.h:241
+msgctxt "Symbol"
+msgid "Ticket Purchase"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:242 ../share/symbols/symbols.h:243
+msgctxt "Symbol"
+msgid "Baggage Check In"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:244 ../share/symbols/symbols.h:245
+msgctxt "Symbol"
+msgid "Baggage Claim"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:246 ../share/symbols/symbols.h:247
+#, fuzzy
+msgctxt "Symbol"
+msgid "Customs"
+msgstr "परंपरा"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:248 ../share/symbols/symbols.h:249
+#, fuzzy
+msgctxt "Symbol"
+msgid "Immigration"
+msgstr "विन्यास"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:250 ../share/symbols/symbols.h:251
+#, fuzzy
+msgctxt "Symbol"
+msgid "Departing Flights"
+msgstr "लक्ष्य केर उँचाइ "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:252 ../share/symbols/symbols.h:253
+msgctxt "Symbol"
+msgid "Arriving Flights"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:254 ../share/symbols/symbols.h:255
+msgctxt "Symbol"
+msgid "Smoking"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:256 ../share/symbols/symbols.h:257
+msgctxt "Symbol"
+msgid "No Smoking"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:260 ../share/symbols/symbols.h:261
+msgctxt "Symbol"
+msgid "No Parking"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:262 ../share/symbols/symbols.h:263
+msgctxt "Symbol"
+msgid "No Dogs"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:264 ../share/symbols/symbols.h:265
+msgctxt "Symbol"
+msgid "No Entry"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:266 ../share/symbols/symbols.h:267
+msgctxt "Symbol"
+msgid "Exit"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:268 ../share/symbols/symbols.h:269
+msgctxt "Symbol"
+msgid "Fire Extinguisher"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:270 ../share/symbols/symbols.h:271
+#, fuzzy
+msgctxt "Symbol"
+msgid "Right Arrow"
+msgstr "दायाँ "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:272 ../share/symbols/symbols.h:273
+msgctxt "Symbol"
+msgid "Forward and Right Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:274 ../share/symbols/symbols.h:275
+#, fuzzy
+msgctxt "Symbol"
+msgid "Up Arrow"
+msgstr "तीर क' चिह्न "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:276 ../share/symbols/symbols.h:277
+msgctxt "Symbol"
+msgid "Forward and Left Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:278 ../share/symbols/symbols.h:279
+#, fuzzy
+msgctxt "Symbol"
+msgid "Left Arrow"
+msgstr "तीर क' चिह्न "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:280 ../share/symbols/symbols.h:281
+msgctxt "Symbol"
+msgid "Left and Down Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:282 ../share/symbols/symbols.h:283
+#, fuzzy
+msgctxt "Symbol"
+msgid "Down Arrow"
+msgstr "तीर क' चिह्न "
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:284 ../share/symbols/symbols.h:285
+msgctxt "Symbol"
+msgid "Right and Down Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:286 ../share/symbols/symbols.h:287
+msgctxt "Symbol"
+msgid "NPS Wheelchair Accessible - 1996"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:288 ../share/symbols/symbols.h:289
+msgctxt "Symbol"
+msgid "NPS Wheelchair Accessible"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:290 ../share/symbols/symbols.h:291
+msgctxt "Symbol"
+msgid "New Wheelchair Accessible"
 msgstr ""
 
 #: ../share/templates/templates.h:1
@@ -4617,6 +4617,19 @@ msgstr ""
 
 #: ../share/templates/templates.h:1
 msgid "CD label 120x120 disc disk"
+msgstr ""
+
+#: ../share/templates/templates.h:1
+#, fuzzy
+msgid "No Layers"
+msgstr "स्तर "
+
+#: ../share/templates/templates.h:1
+msgid "Empty sheet with no layers"
+msgstr ""
+
+#: ../share/templates/templates.h:1
+msgid "no layers empty"
 msgstr ""
 
 #: ../share/templates/templates.h:1
@@ -4642,19 +4655,6 @@ msgstr ""
 
 #: ../share/templates/templates.h:1
 msgid "guidelines typography canvas"
-msgstr ""
-
-#: ../share/templates/templates.h:1
-#, fuzzy
-msgid "No Layers"
-msgstr "स्तर "
-
-#: ../share/templates/templates.h:1
-msgid "Empty sheet with no layers"
-msgstr ""
-
-#: ../share/templates/templates.h:1
-msgid "no layers empty"
 msgstr ""
 
 #. 3D box
@@ -5086,22 +5086,22 @@ msgstr "विभिन्न ग्रिड स्पेसिंग "
 msgid " to "
 msgstr "केँ"
 
-#: ../src/document.cpp:526
+#: ../src/document.cpp:529
 #, c-format
 msgid "New document %d"
 msgstr "नवीन दस्ताबेज %d "
 
-#: ../src/document.cpp:531
+#: ../src/document.cpp:534
 #, c-format
 msgid "Memory document %d"
 msgstr "मेमरी दस्ताबेज %d"
 
-#: ../src/document.cpp:560
+#: ../src/document.cpp:563
 #, fuzzy
 msgid "Memory document %1"
 msgstr "मेमरी दस्ताबेज %d"
 
-#: ../src/document.cpp:859
+#: ../src/document.cpp:862
 #, c-format
 msgid "Unnamed document %d"
 msgstr "अनामित दस्ताबेज %d"
@@ -6081,54 +6081,54 @@ msgstr "पृष्ठ चुनू:"
 msgid "out of %i"
 msgstr "%i मे सँ "
 
-#: ../src/extension/internal/cdr-input.cpp:293
+#: ../src/extension/internal/cdr-input.cpp:300
 msgid "Corel DRAW Input"
 msgstr "कोरल DRAW इनपुट "
 
-#: ../src/extension/internal/cdr-input.cpp:298
+#: ../src/extension/internal/cdr-input.cpp:305
 msgid "Corel DRAW 7-X4 files (*.cdr)"
 msgstr "कोरल DRAW 7-X4 फाइल (*.cdr)"
 
-#: ../src/extension/internal/cdr-input.cpp:299
+#: ../src/extension/internal/cdr-input.cpp:306
 msgid "Open files saved in Corel DRAW 7-X4"
 msgstr "कोरल DRAW 7-X4 मे सहेजल गेल फाइल केँ खोलू "
 
-#: ../src/extension/internal/cdr-input.cpp:306
+#: ../src/extension/internal/cdr-input.cpp:313
 msgid "Corel DRAW templates input"
 msgstr "कोरल DRAW टेम्पलेट इनपुट"
 
-#: ../src/extension/internal/cdr-input.cpp:311
+#: ../src/extension/internal/cdr-input.cpp:318
 #, fuzzy
 msgid "Corel DRAW 7-13 template files (*.cdt)"
 msgstr "कोरल DRAW 7-13 टेम्पलेट फाइल (.cdt)"
 
-#: ../src/extension/internal/cdr-input.cpp:312
+#: ../src/extension/internal/cdr-input.cpp:319
 msgid "Open files saved in Corel DRAW 7-13"
 msgstr "कोरल DRAW 7-13 मे सहेजल गेल फाइल केँ खोलू"
 
-#: ../src/extension/internal/cdr-input.cpp:319
+#: ../src/extension/internal/cdr-input.cpp:326
 msgid "Corel DRAW Compressed Exchange files input"
 msgstr "कोरल DRAW कंप्रेस्ड एक्सचेंज फाइल क' इनपुट"
 
-#: ../src/extension/internal/cdr-input.cpp:324
+#: ../src/extension/internal/cdr-input.cpp:331
 #, fuzzy
 msgid "Corel DRAW Compressed Exchange files (*.ccx)"
 msgstr "कोरल DRAW कंप्रेस्ड एक्सचेंज फाइल (.ccx)"
 
-#: ../src/extension/internal/cdr-input.cpp:325
+#: ../src/extension/internal/cdr-input.cpp:332
 msgid "Open compressed exchange files saved in Corel DRAW"
 msgstr "कोरल DRAW मे सहेजल गेल कंप्रेस्ड एक्सचेंज फाइल केँ खोलू"
 
-#: ../src/extension/internal/cdr-input.cpp:332
+#: ../src/extension/internal/cdr-input.cpp:339
 msgid "Corel DRAW Presentation Exchange files input"
 msgstr "Corel DRAW प्रेजेंटेशन एक्सचेंज फाइल क' इनपुट "
 
-#: ../src/extension/internal/cdr-input.cpp:337
+#: ../src/extension/internal/cdr-input.cpp:344
 #, fuzzy
 msgid "Corel DRAW Presentation Exchange files (*.cmx)"
 msgstr "Corel DRAW प्रेजेंटेशन एक्सचेंज फाइल (.cmx)"
 
-#: ../src/extension/internal/cdr-input.cpp:338
+#: ../src/extension/internal/cdr-input.cpp:345
 msgid "Open presentation exchange files saved in Corel DRAW"
 msgstr "Corel DRAW मे सहेजन गेल प्रेजेंटेशन एक्सचेंज फाइल केँ खोलू "
 
@@ -8355,7 +8355,7 @@ msgstr "प्रस्तुत करू "
 #: ../src/extension/internal/grid.cpp:210
 #: ../src/ui/dialog/document-properties.cpp:163
 #: ../src/ui/dialog/inkscape-preferences.cpp:827
-#: ../src/widgets/toolbox.cpp:1901
+#: ../src/widgets/toolbox.cpp:1900
 msgid "Grids"
 msgstr "ग्रिड "
 
@@ -8616,54 +8616,54 @@ msgstr "संपीड़ित सरल SVG (*.svgz) "
 msgid "Scalable Vector Graphics format compressed with GZip"
 msgstr "GZip सँ संपीड़ित मापनीय सदिश आलेखी प्रारूप"
 
-#: ../src/extension/internal/vsd-input.cpp:296
+#: ../src/extension/internal/vsd-input.cpp:303
 #, fuzzy
 msgid "VSD Input"
 msgstr "PDF इनपुट "
 
-#: ../src/extension/internal/vsd-input.cpp:301
+#: ../src/extension/internal/vsd-input.cpp:308
 #, fuzzy
 msgid "Microsoft Visio Diagram (*.vsd)"
 msgstr "Dia रेखाचित्र (*.dia)"
 
-#: ../src/extension/internal/vsd-input.cpp:302
+#: ../src/extension/internal/vsd-input.cpp:309
 msgid "File format used by Microsoft Visio 6 and later"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:309
+#: ../src/extension/internal/vsd-input.cpp:316
 #, fuzzy
 msgid "VDX Input"
 msgstr "DXF इनपुट "
 
-#: ../src/extension/internal/vsd-input.cpp:314
+#: ../src/extension/internal/vsd-input.cpp:321
 #, fuzzy
 msgid "Microsoft Visio XML Diagram (*.vdx)"
 msgstr "माइक्रोसाफ्ट XAML (*.xaml)"
 
-#: ../src/extension/internal/vsd-input.cpp:315
+#: ../src/extension/internal/vsd-input.cpp:322
 msgid "File format used by Microsoft Visio 2010 and later"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:322
+#: ../src/extension/internal/vsd-input.cpp:329
 #, fuzzy
 msgid "VSDM Input"
 msgstr "EMF इनपुट "
 
-#: ../src/extension/internal/vsd-input.cpp:327
+#: ../src/extension/internal/vsd-input.cpp:334
 msgid "Microsoft Visio 2013 drawing (*.vsdm)"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:328
-#: ../src/extension/internal/vsd-input.cpp:341
+#: ../src/extension/internal/vsd-input.cpp:335
+#: ../src/extension/internal/vsd-input.cpp:348
 msgid "File format used by Microsoft Visio 2013 and later"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:335
+#: ../src/extension/internal/vsd-input.cpp:342
 #, fuzzy
 msgid "VSDX Input"
 msgstr "DXF इनपुट "
 
-#: ../src/extension/internal/vsd-input.cpp:340
+#: ../src/extension/internal/vsd-input.cpp:347
 msgid "Microsoft Visio 2013 drawing (*.vsdx)"
 msgstr ""
 
@@ -8698,15 +8698,15 @@ msgstr "विंडोज मेटाफाइल (*.wmf) "
 msgid "Windows Metafile"
 msgstr "विंडोज मेटाफाइल"
 
-#: ../src/extension/internal/wpg-input.cpp:144
+#: ../src/extension/internal/wpg-input.cpp:151
 msgid "WPG Input"
 msgstr "WPG इनपुट"
 
-#: ../src/extension/internal/wpg-input.cpp:149
+#: ../src/extension/internal/wpg-input.cpp:156
 msgid "WordPerfect Graphics (*.wpg)"
 msgstr "वर्डपरफेक्ट आलेखी (*.wpg) "
 
-#: ../src/extension/internal/wpg-input.cpp:150
+#: ../src/extension/internal/wpg-input.cpp:157
 msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "कोरल वर्डपरफेक्ट द्वारा प्रयुक्त सदिश आलेखी प्रारूप "
 
@@ -8777,7 +8777,7 @@ msgstr "दस्ताबेज केँ सहेजू "
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 
-#: ../src/file.cpp:749 ../src/file.cpp:1694
+#: ../src/file.cpp:749 ../src/file.cpp:1698
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "माँगल गेल फाइल %s लोड करबा मे विफल रहल."
@@ -8850,7 +8850,7 @@ msgid "Document saved."
 msgstr "फाइल केँ सहेज लेल गेल. "
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:1284 ../src/file.cpp:1853
+#: ../src/file.cpp:1284 ../src/file.cpp:1857
 #, fuzzy
 msgid "drawing"
 msgstr "ड्राइंग%s "
@@ -8876,20 +8876,20 @@ msgstr "कोनो भी बदलाव केँ सहेजनाइ ज�
 msgid "Saving document..."
 msgstr "दस्ताबेज केँ सहेजल जाए रहल अछि..."
 
-#: ../src/file.cpp:1691 ../src/ui/dialog/inkscape-preferences.cpp:1500
+#: ../src/file.cpp:1695 ../src/ui/dialog/inkscape-preferences.cpp:1500
 #: ../src/ui/dialog/ocaldialogs.cpp:1244
 msgid "Import"
 msgstr "आयात"
 
-#: ../src/file.cpp:1741
+#: ../src/file.cpp:1745
 msgid "Select file to import"
 msgstr "आयात क' लेल फाइल चुनू "
 
-#: ../src/file.cpp:1874
+#: ../src/file.cpp:1878
 msgid "Select file to export to"
 msgstr "एकटा फाइल चुनू जकरामे निर्यात कएल जाएनाइ अछि "
 
-#: ../src/file.cpp:2127
+#: ../src/file.cpp:2131
 #, fuzzy
 msgid "Import Clip Art"
 msgstr "आयात/निर्यात"
@@ -9300,7 +9300,7 @@ msgstr ""
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "निम्नलिखित दस्ताबेज क' स्वचालित बैकअप असफल रहल:\n"
 
-#: ../src/knot.cpp:350
+#: ../src/knot.cpp:348
 msgid "Node or handle drag canceled."
 msgstr "नोड अथवा हैंडल सँ धींचनाइ रद्द कए देल गेल  "
 
@@ -10044,7 +10044,7 @@ msgid "Path along which to bend the original path"
 msgstr "ओ पथ जकरा सँग मूल पथ केँ मोड़ल जाएत  "
 
 #: ../src/live_effects/lpe-bendpath.cpp:71
-#: ../src/live_effects/lpe-patternalongpath.cpp:64
+#: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../src/ui/dialog/export.cpp:285 ../src/ui/dialog/transformation.cpp:73
 #: ../src/ui/widget/page-sizer.cpp:237
 msgid "_Width:"
@@ -10071,7 +10071,7 @@ msgid "Rotates the original 90 degrees, before bending it along the bend path"
 msgstr "मूल 90 डिग्री केँ मोड़ पथ क' सँग मोड़ए सँ पहिने एकरा घुमबैत अछि  "
 
 #: ../src/live_effects/lpe-bendpath.cpp:178
-#: ../src/live_effects/lpe-patternalongpath.cpp:279
+#: ../src/live_effects/lpe-patternalongpath.cpp:281
 #, fuzzy
 msgid "Change the width"
 msgstr "स्ट्रोक क' चओड़ाइ केँ बदलू "
@@ -11177,61 +11177,61 @@ msgstr "DXF बिंदु "
 msgid "Adjust center of mirroring"
 msgstr "आभा केँ समायोजित करू "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:53
+#: ../src/live_effects/lpe-patternalongpath.cpp:54
 #: ../share/extensions/pathalongpath.inx.h:10
 msgid "Single"
 msgstr "एकल "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:54
+#: ../src/live_effects/lpe-patternalongpath.cpp:55
 #: ../share/extensions/pathalongpath.inx.h:11
 msgid "Single, stretched"
 msgstr "एकल, विस्तारित "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:55
+#: ../src/live_effects/lpe-patternalongpath.cpp:56
 #: ../share/extensions/pathalongpath.inx.h:12
 msgid "Repeated"
 msgstr "दोहराबल गेल"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:56
+#: ../src/live_effects/lpe-patternalongpath.cpp:57
 #: ../share/extensions/pathalongpath.inx.h:13
 msgid "Repeated, stretched"
 msgstr "दोहराबल गेल, विस्तारित"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:62
+#: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Pattern source:"
 msgstr "प्रारूप स्रोत:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:62
+#: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Path to put along the skeleton path"
 msgstr "स्केलेटन पथ क' सँग राखए क' लेल पथ"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:64
+#: ../src/live_effects/lpe-patternalongpath.cpp:65
 msgid "Width of the pattern"
 msgstr "प्रारूप केर चओड़ाइ "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:65
+#: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "Pattern copies:"
 msgstr "प्रारूप केर कापी:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:65
+#: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "How many pattern copies to place along the skeleton path"
 msgstr "प्रारूप केर कतेक कापी केँ स्केलेटन पथ क' सँग राखनाइ अछि "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:67
+#: ../src/live_effects/lpe-patternalongpath.cpp:68
 #, fuzzy
 msgid "Wid_th in units of length"
 msgstr "नमाइ क' एकाइ मे चओड़ाइ "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:68
+#: ../src/live_effects/lpe-patternalongpath.cpp:69
 msgid "Scale the width of the pattern in units of its length"
 msgstr "प्रारूप केर चओड़ाइ केँ एकर नमाइ केर एकाइ मे मापू"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:70
+#: ../src/live_effects/lpe-patternalongpath.cpp:71
 #, fuzzy
 msgid "Spa_cing:"
 msgstr "स्पेसिंग:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:72
+#: ../src/live_effects/lpe-patternalongpath.cpp:73
 #, no-c-format
 msgid ""
 "Space between copies of the pattern. Negative values allowed, but are "
@@ -11240,43 +11240,43 @@ msgstr ""
 "प्रारूप केर प्रति क' बीच खाली स्थान. नकारात्मक मान स्वीकार्य, मुदा प्रारूप केर चओड़ाइ क' "
 "-90% तक सीमित. "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:74
+#: ../src/live_effects/lpe-patternalongpath.cpp:75
 #, fuzzy
 msgid "No_rmal offset:"
 msgstr "सामान्य ओफसेट:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:75
+#: ../src/live_effects/lpe-patternalongpath.cpp:76
 #, fuzzy
 msgid "Tan_gential offset:"
 msgstr "टेंजेंटियल ओफसेट:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:76
+#: ../src/live_effects/lpe-patternalongpath.cpp:77
 #, fuzzy
 msgid "Offsets in _unit of pattern size"
 msgstr "प्रारूप आकार केर एकाइ मे ओफसेट"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:77
+#: ../src/live_effects/lpe-patternalongpath.cpp:78
 msgid ""
 "Spacing, tangential and normal offset are expressed as a ratio of width/"
 "height"
 msgstr ""
 "स्पेसिंग, टेंजेंटियल आओर सामान्य ओफसेट केँ चओड़ाइ/उँचाइ क' अनुपात क' रूप मे व्यक्त कएल जाएत अछि"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:79
+#: ../src/live_effects/lpe-patternalongpath.cpp:80
 #, fuzzy
 msgid "Pattern is _vertical"
 msgstr "प्रारूप लंबवत अछि "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:79
+#: ../src/live_effects/lpe-patternalongpath.cpp:80
 msgid "Rotate pattern 90 deg before applying"
 msgstr "प्रयोग कएल जाए सँ पहिने प्रारूप केँ 90 डिग्री घुमाबू "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:81
+#: ../src/live_effects/lpe-patternalongpath.cpp:82
 #, fuzzy
 msgid "_Fuse nearby ends:"
 msgstr "नजदीकी सिरा केँ मिलाबू: "
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:81
+#: ../src/live_effects/lpe-patternalongpath.cpp:82
 msgid "Fuse ends closer than this number. 0 means don't fuse."
 msgstr "एहि संख्या क' करीब क' सिरा केँ मिलाबू. 0 क' मतलब अछि नहि मिलाबू."
 
@@ -12399,38 +12399,38 @@ msgstr "कमांड लाइन पर निर्दिष्ट क्�
 msgid "Unable to find node ID: '%s'\n"
 msgstr "नोड ID: '%s' क' पता लगैबा मे असमर्थ.\n"
 
-#: ../src/main.cpp:300
+#: ../src/main.cpp:301
 msgid "Print the Inkscape version number"
 msgstr "Inkscape संस्करण संख्या केँ प्रिंट करू "
 
-#: ../src/main.cpp:305
+#: ../src/main.cpp:306
 msgid "Do not use X server (only process files from console)"
 msgstr "X सर्वर क' उपयोग ना करू (फाइल केर प्रक्रिया केवल कंसोल सँ आगाँ बढ़ाउ)   "
 
-#: ../src/main.cpp:310
+#: ../src/main.cpp:311
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "X सर्वर क' उपयोग करबाक कोसिस करू (जँ $DISPLAY नियत नहि कएल गेल हुए तइयो)"
 
-#: ../src/main.cpp:315
+#: ../src/main.cpp:316
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "निर्दिष्ट दस्ताबेज(सभ) केँ खोलू (विकल्प स्ट्रिंग केँ छोड़ि देल जाए सकैत अछि) "
 
-#: ../src/main.cpp:316 ../src/main.cpp:321 ../src/main.cpp:326
-#: ../src/main.cpp:398 ../src/main.cpp:403 ../src/main.cpp:408
-#: ../src/main.cpp:419 ../src/main.cpp:435 ../src/main.cpp:440
+#: ../src/main.cpp:317 ../src/main.cpp:322 ../src/main.cpp:327
+#: ../src/main.cpp:399 ../src/main.cpp:404 ../src/main.cpp:409
+#: ../src/main.cpp:420 ../src/main.cpp:436 ../src/main.cpp:441
 msgid "FILENAME"
 msgstr "FILENAME"
 
-#: ../src/main.cpp:320
+#: ../src/main.cpp:321
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "दस्ताबेज(सभ) केँ निर्दिष्ट आउटपुट फाइल मे प्रिंट करू (पैप क' लेल '| प्रोग्राम' क' उपयोग करू)"
 
-#: ../src/main.cpp:325
+#: ../src/main.cpp:326
 msgid "Export document to a PNG file"
 msgstr "दस्ताबेज केँ एकटा PNG फाइल मे निर्यात करू"
 
-#: ../src/main.cpp:330
+#: ../src/main.cpp:331
 #, fuzzy
 msgid ""
 "Resolution for exporting to bitmap and for rasterization of filters in PS/"
@@ -12439,11 +12439,11 @@ msgstr ""
 "बिटमैप मे निर्यात क' लेल आओर PS/EPS/PDF (पूर्वनिर्धारित 90) मे फिल्टर क' रेस्टराइजेशन क' "
 "लेल रिजोल्यूशन"
 
-#: ../src/main.cpp:331 ../src/ui/widget/rendering-options.cpp:37
+#: ../src/main.cpp:332 ../src/ui/widget/rendering-options.cpp:37
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:335
+#: ../src/main.cpp:336
 msgid ""
 "Exported area in SVG user units (default is the page; 0,0 is lower-left "
 "corner)"
@@ -12451,123 +12451,123 @@ msgstr ""
 "SVG प्रयोक्ता एकाइ मे निर्यातित क्षेत्र (पृष्ठ पूर्वनिर्धारित अछि; 0,0 निचला-बायाँ कोना "
 "अछि)"
 
-#: ../src/main.cpp:336
+#: ../src/main.cpp:337
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:340
+#: ../src/main.cpp:341
 msgid "Exported area is the entire drawing (not page)"
 msgstr "निर्यातित क्षेत्र संपूर्ण रेखाचित्र अछि (पृष्ठ नहि) "
 
-#: ../src/main.cpp:345
+#: ../src/main.cpp:346
 msgid "Exported area is the entire page"
 msgstr "निर्यातित क्षेत्र संपूर्ण पृष्ठ अछि "
 
-#: ../src/main.cpp:350
+#: ../src/main.cpp:351
 msgid "Only for PS/EPS/PDF, sets margin in mm around exported area (default 0)"
 msgstr ""
 
-#: ../src/main.cpp:351 ../src/main.cpp:393
+#: ../src/main.cpp:352 ../src/main.cpp:394
 msgid "VALUE"
 msgstr "VALUE"
 
-#: ../src/main.cpp:355
+#: ../src/main.cpp:356
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr "बिटमैप निर्यात क्षेत्र केँ बाहर केर तरफ सबसँ नजदीकी पूर्णांक मान मे काटू "
 
-#: ../src/main.cpp:360
+#: ../src/main.cpp:361
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "निर्यातित बिटमैप केर चओड़ाइ पिक्सेल्स मे (निर्यात-dpi केँ निरस्त करैत अछि)"
 
-#: ../src/main.cpp:361
+#: ../src/main.cpp:362
 msgid "WIDTH"
 msgstr "WIDTH"
 
-#: ../src/main.cpp:365
+#: ../src/main.cpp:366
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "निर्यातित बिटमैप केर उँचाइ पिक्सेल्स मे (निर्यात-dpi केँ निरस्त करैत अछि)"
 
-#: ../src/main.cpp:366
+#: ../src/main.cpp:367
 msgid "HEIGHT"
 msgstr "HEIGHT"
 
-#: ../src/main.cpp:370
+#: ../src/main.cpp:371
 msgid "The ID of the object to export"
 msgstr "निर्यात क' लेल वस्तु की ID"
 
-#: ../src/main.cpp:371 ../src/main.cpp:484
+#: ../src/main.cpp:372 ../src/main.cpp:485
 #: ../src/ui/dialog/inkscape-preferences.cpp:1564
 msgid "ID"
 msgstr "ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:377
+#: ../src/main.cpp:378
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "सिर्फ वस्तु केँ निर्यात-आईडी क' सँग निर्यात करू, आन सबहि केँ नुकाए दिअ' (केवल निर्यात-आईडी "
 "क' सँग) "
 
-#: ../src/main.cpp:382
+#: ../src/main.cpp:383
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "निर्यात करैत समय संग्रहित फाइलनाम आओर DPI सुराग क' प्रयोग करू (निर्यात-आईडी क' सँग)  "
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:388
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr "निर्यातित बिटमैप क' पृष्ठभूमि रंग (कोनो भी SVG-समर्थित रंग स्ट्रिंग) "
 
-#: ../src/main.cpp:388
+#: ../src/main.cpp:389
 msgid "COLOR"
 msgstr "COLOR"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:393
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr "निर्यातित बिटमैप केर पृष्ठभूमि अस्पष्टता (अथवा तँ 0.0 सँ 1.0, अथवा 1 to 255) "
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:398
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "दस्ताबेज केँ सरल SVG फाइल मे निर्यात करू (कोनो सोडीपोडी अथवा Inkscape नामस्थान नहि)"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:403
 msgid "Export document to a PS file"
 msgstr "दस्ताबेज केँ एकटा PS फाइल मे निर्यात करू"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:408
 msgid "Export document to an EPS file"
 msgstr "दस्ताबेज केँ एकटा PS फाइल मे निर्यात करू"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:413
 msgid ""
 "Choose the PostScript Level used to export. Possible choices are 2 and 3 "
 "(the default)"
 msgstr ""
 
-#: ../src/main.cpp:414
+#: ../src/main.cpp:415
 #, fuzzy
 msgid "PS Level"
 msgstr "बराबर करू"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:419
 msgid "Export document to a PDF file"
 msgstr "दस्ताबेज केँ एकटा PDF फाइल मे निर्यात करू"
 
 #. TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:424
+#: ../src/main.cpp:425
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
 "found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 
-#: ../src/main.cpp:425
+#: ../src/main.cpp:426
 msgid "PDF_VERSION"
 msgstr ""
 
-#: ../src/main.cpp:429
+#: ../src/main.cpp:430
 msgid ""
 "Export PDF/PS/EPS without text. Besides the PDF/PS/EPS, a LaTeX file is "
 "exported, putting the text on top of the PDF/PS/EPS file. Include the result "
@@ -12577,28 +12577,28 @@ msgstr ""
 "फाइल क' शीर्ष पर राखैत हुए एकटा LaTeX फाइल निर्यात कएल जाएत अछि. परिणाम केँ एहि "
 "तरह LaTeX मे सामिल करू: \\input{latexfile.tex} "
 
-#: ../src/main.cpp:434
+#: ../src/main.cpp:435
 msgid "Export document to an Enhanced Metafile (EMF) File"
 msgstr "दस्ताबेज केँ एकटा विस्तारित मेटाफाइल (EMF) फाइल मे निर्यात करू"
 
-#: ../src/main.cpp:439
+#: ../src/main.cpp:440
 #, fuzzy
 msgid "Export document to a Windows Metafile (WMF) File"
 msgstr "दस्ताबेज केँ एकटा विस्तारित मेटाफाइल (EMF) फाइल मे निर्यात करू"
 
-#: ../src/main.cpp:444
+#: ../src/main.cpp:445
 #, fuzzy
 msgid "Convert text object to paths on export (PS, EPS, PDF, SVG)"
 msgstr "निर्यात पर पाठ वस्तु केँ पथ मे बदलू (PS, EPS, PDF)"
 
-#: ../src/main.cpp:449
+#: ../src/main.cpp:450
 msgid ""
 "Render filtered objects without filters, instead of rasterizing (PS, EPS, "
 "PDF)"
 msgstr "फ़िल्टर्ड वस्तु केँ रेस्टराइज करबाक बजाय फिल्टर क' बिनु प्रस्तुत करू (PS, EPS, PDF)  "
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:455
+#: ../src/main.cpp:456
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -12607,7 +12607,7 @@ msgstr ""
 "क्वेरी-आईडी केर मदद सँ पूछू."
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:461
+#: ../src/main.cpp:462
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -12616,7 +12616,7 @@ msgstr ""
 "क्वेरी-आईडी की मदद सँ पूछू."
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:467
+#: ../src/main.cpp:468
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
@@ -12625,7 +12625,7 @@ msgstr ""
 "आईडी केर मदद सँ पूछू."
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:473
+#: ../src/main.cpp:474
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
@@ -12633,62 +12633,66 @@ msgstr ""
 "ड्राइंग केर उँचाइ क' संबंधमे पूछू अथवा, जँ निर्दिष्ट अछि तँ वस्तु केर उँचाइ क' संबंधमे --क्वेरी-"
 "आईडी केर मदद सँ पूछू."
 
-#: ../src/main.cpp:478
+#: ../src/main.cpp:479
 msgid "List id,x,y,w,h for all objects"
 msgstr "सबहि वस्तु क' लेल id,x,y,w,h केँ सूचीबद्ध करू "
 
-#: ../src/main.cpp:483
+#: ../src/main.cpp:484
 msgid "The ID of the object whose dimensions are queried"
 msgstr "ओहि वस्तु केर ID जकरा आयाम क' संबंधमे पूछल जाएत अछि"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:489
+#: ../src/main.cpp:490
 msgid "Print out the extension directory and exit"
 msgstr "विस्तार डायरेक्टरी क' प्रिंट आउट लिअ' आओर बाहर निकलू "
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:495
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "अप्रयुक्त परिभाषा केँ दस्ताबेज क' परिभाषा क' खंड(सभ) सँ हटाउ"
 
-#: ../src/main.cpp:500
+#: ../src/main.cpp:501
 msgid "Enter a listening loop for D-Bus messages in console mode"
 msgstr ""
 
-#: ../src/main.cpp:505
+#: ../src/main.cpp:506
 msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
 msgstr ""
 
-#: ../src/main.cpp:506
+#: ../src/main.cpp:507
 msgid "BUS-NAME"
 msgstr ""
 
-#: ../src/main.cpp:511
+#: ../src/main.cpp:512
 msgid "List the IDs of all the verbs in Inkscape"
 msgstr "Inkscape मे सबहि क्रियाओं की IDs केँ सूचीबद्ध करू"
 
-#: ../src/main.cpp:516
+#: ../src/main.cpp:517
 msgid "Verb to call when Inkscape opens."
 msgstr "Inkscape क' खुलैत समय बुलाबै क' लेल क्रिया  "
 
-#: ../src/main.cpp:517
+#: ../src/main.cpp:518
 msgid "VERB-ID"
 msgstr "VERB-ID"
 
-#: ../src/main.cpp:521
+#: ../src/main.cpp:522
 msgid "Object ID to select when Inkscape opens."
 msgstr "Inkscape क' खुलैत समय चुनै क' लेल वस्तु ID "
 
-#: ../src/main.cpp:522
+#: ../src/main.cpp:523
 msgid "OBJECT-ID"
 msgstr "OBJECT-ID"
 
-#: ../src/main.cpp:526
+#: ../src/main.cpp:527
 msgid "Start Inkscape in interactive shell mode."
 msgstr "Inkscape केँ इंटरएक्टिव शेल मोड मे आरंभ करू. "
 
-#: ../src/main.cpp:876 ../src/main.cpp:1349
+#: ../src/main.cpp:532
+msgid "Prevents automatic fix of pre-92 files on opening them."
+msgstr ""
+
+#: ../src/main.cpp:882 ../src/main.cpp:1355
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -13899,26 +13903,26 @@ msgstr "<b>समूह</b>  <b>%d</b> वस्तुक"
 msgid "of <b>%d</b> objects"
 msgstr "<b>समूह</b>  <b>%d</b> वस्तुक"
 
-#: ../src/sp-item.cpp:1035 ../src/verbs.cpp:213
+#: ../src/sp-item.cpp:1036 ../src/verbs.cpp:213
 msgid "Object"
 msgstr "वस्तु"
 
-#: ../src/sp-item.cpp:1047
+#: ../src/sp-item.cpp:1048
 #, c-format
 msgid "%s; <i>clipped</i>"
 msgstr "%s;  <i>काटल गेल  </i> "
 
-#: ../src/sp-item.cpp:1053
+#: ../src/sp-item.cpp:1054
 #, c-format
 msgid "%s; <i>masked</i>"
 msgstr "%s; <i> मास्क कएल गेल </i>"
 
-#: ../src/sp-item.cpp:1063
+#: ../src/sp-item.cpp:1064
 #, c-format
 msgid "%s; <i>filtered (%s)</i>"
 msgstr "%s; <i> फिल्टर कएल गेल (%s) </i>"
 
-#: ../src/sp-item.cpp:1065
+#: ../src/sp-item.cpp:1066
 #, c-format
 msgid "%s; <i>filtered</i>"
 msgstr "%s;  <i>फिल्टर कएल गेल </i>"
@@ -14496,7 +14500,7 @@ msgid "Rearrange"
 msgstr "पुनःव्यवस्थित करू "
 
 #: ../src/ui/dialog/align-and-distribute.cpp:941
-#: ../src/widgets/toolbox.cpp:1803
+#: ../src/widgets/toolbox.cpp:1802
 msgid "Nodes"
 msgstr "नोड "
 
@@ -15754,7 +15758,7 @@ msgstr "हटाउ (_R)"
 msgid "Remove selected grid."
 msgstr "चुनलका ग्रिड केँ हटाउ "
 
-#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1910
+#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1909
 msgid "Guides"
 msgstr "गाइड"
 
@@ -17333,7 +17337,7 @@ msgstr "सर्पिल"
 msgid "Search spirals"
 msgstr "सर्पिल केँ खोजू "
 
-#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1811
+#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1810
 msgid "Paths"
 msgstr "पथ "
 
@@ -22450,13 +22454,13 @@ msgstr ""
 #: ../src/ui/dialog/polar-arrange-tab.cpp:52
 #, fuzzy
 msgctxt "Polar arrange tab"
-msgid "Object's bounding box:"
+msgid "Objects' bounding boxes:"
 msgstr "विजुअल बाउंडिंग बक्सा "
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
 #, fuzzy
 msgctxt "Polar arrange tab"
-msgid "Object's rotational center"
+msgid "Objects' rotational centers"
 msgstr "वस्तु क' रोटेसन केंद्र"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:64
@@ -30501,8 +30505,8 @@ msgstr ""
 
 #: ../src/widgets/measure-toolbar.cpp:329
 #, fuzzy
-msgid "The offset size"
-msgstr "प्रारूप ओफसेट "
+msgid "Mark dimension offset"
+msgstr "डाइमेंशन "
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
@@ -32470,140 +32474,140 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "पेंट बकेट फिल वस्तु क' स्टाइल "
 
-#: ../src/widgets/toolbox.cpp:1757
+#: ../src/widgets/toolbox.cpp:1756
 msgid "Bounding box"
 msgstr "बाउंडडिंग बक्सा "
 
-#: ../src/widgets/toolbox.cpp:1757
+#: ../src/widgets/toolbox.cpp:1756
 #, fuzzy
 msgid "Snap bounding boxes"
 msgstr "बाउंडिंग बक्सा क' कोना केँ काटू "
 
-#: ../src/widgets/toolbox.cpp:1766
+#: ../src/widgets/toolbox.cpp:1765
 msgid "Bounding box edges"
 msgstr "बाउंडिंग बक्सा क' किनार "
 
-#: ../src/widgets/toolbox.cpp:1766
+#: ../src/widgets/toolbox.cpp:1765
 msgid "Snap to edges of a bounding box"
 msgstr "बाउंडिंग बक्सा क' किनारी मे काटू "
 
-#: ../src/widgets/toolbox.cpp:1775
+#: ../src/widgets/toolbox.cpp:1774
 msgid "Bounding box corners"
 msgstr "बाउंडिंग बक्सा क' कोना "
 
-#: ../src/widgets/toolbox.cpp:1775
+#: ../src/widgets/toolbox.cpp:1774
 msgid "Snap bounding box corners"
 msgstr "बाउंडिंग बक्सा क' कोना केँ काटू "
 
-#: ../src/widgets/toolbox.cpp:1784
+#: ../src/widgets/toolbox.cpp:1783
 msgid "BBox Edge Midpoints"
 msgstr "बीबाक्स किनारा क' मध्यबिंदु "
 
-#: ../src/widgets/toolbox.cpp:1784
+#: ../src/widgets/toolbox.cpp:1783
 #, fuzzy
 msgid "Snap midpoints of bounding box edges"
 msgstr "बाउंडिंग बक्सा क' किनारी क' मध्य बिंदु सँ आओर ओतए तक काटू "
 
-#: ../src/widgets/toolbox.cpp:1794
+#: ../src/widgets/toolbox.cpp:1793
 msgid "BBox Centers"
 msgstr "बीबाक्स क' केंद्र "
 
-#: ../src/widgets/toolbox.cpp:1794
+#: ../src/widgets/toolbox.cpp:1793
 #, fuzzy
 msgid "Snapping centers of bounding boxes"
 msgstr "बाउंडिंग बक्सा क' केंद्र सँ आओर ओतए तक काटनाइ "
 
-#: ../src/widgets/toolbox.cpp:1803
+#: ../src/widgets/toolbox.cpp:1802
 #, fuzzy
 msgid "Snap nodes, paths, and handles"
 msgstr "नोड अथवा हैंडल केँ काटू "
 
-#: ../src/widgets/toolbox.cpp:1811
+#: ../src/widgets/toolbox.cpp:1810
 msgid "Snap to paths"
 msgstr "पथ तक काटू "
 
-#: ../src/widgets/toolbox.cpp:1820
+#: ../src/widgets/toolbox.cpp:1819
 msgid "Path intersections"
 msgstr "पथ प्रतिच्छेदन "
 
-#: ../src/widgets/toolbox.cpp:1820
+#: ../src/widgets/toolbox.cpp:1819
 msgid "Snap to path intersections"
 msgstr "पथ प्रतिच्छेदन तक काटू "
 
-#: ../src/widgets/toolbox.cpp:1829
+#: ../src/widgets/toolbox.cpp:1828
 msgid "To nodes"
 msgstr "नोड तक "
 
-#: ../src/widgets/toolbox.cpp:1829
+#: ../src/widgets/toolbox.cpp:1828
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1838
+#: ../src/widgets/toolbox.cpp:1837
 msgid "Smooth nodes"
 msgstr "चिक्कन नोड "
 
-#: ../src/widgets/toolbox.cpp:1838
+#: ../src/widgets/toolbox.cpp:1837
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1847
+#: ../src/widgets/toolbox.cpp:1846
 msgid "Line Midpoints"
 msgstr "लाइन मध्यबिंदु "
 
-#: ../src/widgets/toolbox.cpp:1847
+#: ../src/widgets/toolbox.cpp:1846
 #, fuzzy
 msgid "Snap midpoints of line segments"
 msgstr "लाइन सेगमेंट क' मध्यबिंदु सँ आओर ओतए तक काटू  "
 
-#: ../src/widgets/toolbox.cpp:1856
+#: ../src/widgets/toolbox.cpp:1855
 #, fuzzy
 msgid "Others"
 msgstr "आन "
 
-#: ../src/widgets/toolbox.cpp:1856
+#: ../src/widgets/toolbox.cpp:1855
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1864
+#: ../src/widgets/toolbox.cpp:1863
 msgid "Object Centers"
 msgstr "वस्तु क' केंद्र "
 
-#: ../src/widgets/toolbox.cpp:1864
+#: ../src/widgets/toolbox.cpp:1863
 #, fuzzy
 msgid "Snap centers of objects"
 msgstr "वस्तु क' केंद्र सँ आओर ओतए तक काटू "
 
-#: ../src/widgets/toolbox.cpp:1873
+#: ../src/widgets/toolbox.cpp:1872
 msgid "Rotation Centers"
 msgstr "घुमाव केंद्र "
 
-#: ../src/widgets/toolbox.cpp:1873
+#: ../src/widgets/toolbox.cpp:1872
 #, fuzzy
 msgid "Snap an item's rotation center"
 msgstr "एकटा आइटम क' घुमाव केंद्र सँ आओर ओतए तक काटू "
 
-#: ../src/widgets/toolbox.cpp:1882
+#: ../src/widgets/toolbox.cpp:1881
 msgid "Text baseline"
 msgstr "लिखावट क' आधार  "
 
-#: ../src/widgets/toolbox.cpp:1882
+#: ../src/widgets/toolbox.cpp:1881
 #, fuzzy
 msgid "Snap text anchors and baselines"
 msgstr "पाठ बेसलाइन केँ संरेखित करू "
 
-#: ../src/widgets/toolbox.cpp:1892
+#: ../src/widgets/toolbox.cpp:1891
 msgid "Page border"
 msgstr "पेज बार्डर  "
 
-#: ../src/widgets/toolbox.cpp:1892
+#: ../src/widgets/toolbox.cpp:1891
 msgid "Snap to the page border"
 msgstr "पेज बार्डर तक काटू"
 
-#: ../src/widgets/toolbox.cpp:1901
+#: ../src/widgets/toolbox.cpp:1900
 msgid "Snap to grids"
 msgstr "ग्रिड तक काटू "
 
-#: ../src/widgets/toolbox.cpp:1910
+#: ../src/widgets/toolbox.cpp:1909
 #, fuzzy
 msgid "Snap guides"
 msgstr "गाइड तक काटू "
@@ -32835,41 +32839,45 @@ msgstr "कृपया एकटा वस्तु चुनू."
 msgid "Unable to process this object.  Try changing it into a path first."
 msgstr "एहि वस्तु क' प्रक्रमण मे असमर्थ. पहिने एकटा पथ मे एकरा बदलै क' कोसिस करू."
 
-#: ../share/extensions/draw_from_triangle.py:179
-#, fuzzy
-msgid "Side Length 'a' ("
+#: ../share/extensions/draw_from_triangle.py:180
+#, fuzzy, python-brace-format
+msgid "Side Length 'a' ({0}): {1}"
 msgstr "किनार क' नमाइ 'a' (px):"
 
-#: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy
-msgid "Side Length 'b' ("
+#: ../share/extensions/draw_from_triangle.py:181
+#, fuzzy, python-brace-format
+msgid "Side Length 'b' ({0}): {1}"
 msgstr "किनार क' नमाइ 'b' (px):"
 
-#: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy
-msgid "Side Length 'c' ("
+#: ../share/extensions/draw_from_triangle.py:182
+#, fuzzy, python-brace-format
+msgid "Side Length 'c' ({0}): {1}"
 msgstr "किनार क' नमाइ 'c' (px):"
 
-#: ../share/extensions/draw_from_triangle.py:182
-msgid "Angle 'A' (radians): "
+#: ../share/extensions/draw_from_triangle.py:183
+#, fuzzy
+msgid "Angle 'A' (radians): {}"
 msgstr "कोण 'A' (रेडियन):"
 
-#: ../share/extensions/draw_from_triangle.py:183
-msgid "Angle 'B' (radians): "
+#: ../share/extensions/draw_from_triangle.py:184
+#, fuzzy
+msgid "Angle 'B' (radians): {}"
 msgstr "कोण 'B' (रेडियन):"
 
-#: ../share/extensions/draw_from_triangle.py:184
-msgid "Angle 'C' (radians): "
-msgstr "कोण 'C' (रेडियन):"
-
 #: ../share/extensions/draw_from_triangle.py:185
-msgid "Semiperimeter (px): "
-msgstr "सेमीपेरीमीटर (px) "
+#, fuzzy
+msgid "Angle 'C' (radians): {}"
+msgstr "कोण 'C' (रेडियन):"
 
 #: ../share/extensions/draw_from_triangle.py:186
 #, fuzzy
-msgid "Area ("
-msgstr "क्षेत्र "
+msgid "Semiperimeter (px): {}"
+msgstr "सेमीपेरीमीटर (px) "
+
+#: ../share/extensions/draw_from_triangle.py:187
+#, fuzzy, python-brace-format
+msgid "Area ({0}^2): {1}"
+msgstr "क्षेत्रफल (px^2):  "
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -32878,7 +32886,7 @@ msgid ""
 "to Release 13 format using QCad."
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:47
+#: ../share/extensions/dxf_outlines.py:49
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again."
@@ -32886,13 +32894,13 @@ msgstr ""
 "numpy अथवा numpy.linalg मोड्यूलसभक आयात करबामे विफल रहल. एहि मोड्यूल केर आवश्यकता "
 "एहि विस्तार सँ होइछ. कृपया ओकरा संस्थापित करू आओर फिनु सँ कोसिस करू."
 
-#: ../share/extensions/dxf_outlines.py:313
+#: ../share/extensions/dxf_outlines.py:315
 msgid ""
 "Error: Field 'Layer match name' must be filled when using 'By name match' "
 "option"
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:354
+#: ../share/extensions/dxf_outlines.py:356
 #, python-format
 msgid "Warning: Layer '%s' not found!"
 msgstr ""
@@ -33258,18 +33266,18 @@ msgid "Pen "
 msgstr "कलम क' द्रव्यमान "
 
 #. issue error if no hpgl data found
-#: ../share/extensions/hpgl_input.py:56
+#: ../share/extensions/hpgl_input.py:58
 msgid "No HPGL data found."
 msgstr ""
 
-#: ../share/extensions/hpgl_input.py:64
+#: ../share/extensions/hpgl_input.py:66
 msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
 msgstr ""
 
 #. issue error if no paths found
-#: ../share/extensions/hpgl_output.py:57
+#: ../share/extensions/hpgl_output.py:56
 msgid ""
 "No paths where found. Please convert all objects you want to save into paths."
 msgstr ""
@@ -33512,7 +33520,7 @@ msgstr "आईडी क' लेल कोनो स्टाइल विशे
 msgid "unable to locate marker: %s"
 msgstr "मार्कर केर पता लगैबा मे असमर्थ: %s "
 
-#: ../share/extensions/measure.py:58
+#: ../share/extensions/measure.py:61
 #, fuzzy
 msgid ""
 "Failed to import the numpy modules. These modules are required by this "
@@ -33523,12 +33531,12 @@ msgstr ""
 "एहि विस्तार क' लेल होइछ. कृपया ओकरा संस्थापित करू आओर फिनु सँ कोसिस करू. डेबियन-जेहन "
 "सिस्टम पर sudo apt-get install python-numpy कमांड सँ एहन कएल जाए सकैत अछि.  "
 
-#: ../share/extensions/measure.py:120
+#: ../share/extensions/measure.py:123
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr ""
 
 #: ../share/extensions/pathalongpath.py:207
-#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:50
+#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:52
 msgid "This extension requires two selected paths."
 msgstr "एहि विस्तार क' लेल दुइ टा चुनलका पथ केर जरूरत अछि."
 
@@ -33551,7 +33559,7 @@ msgstr ""
 msgid "Please first convert objects to paths!  (Got [%s].)"
 msgstr "कृपया पहिने पथ क' लेल वस्तु केँ बदलू! (Got [%s].) "
 
-#: ../share/extensions/perspective.py:42
+#: ../share/extensions/perspective.py:44
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again.  On a Debian-"
@@ -33562,7 +33570,7 @@ msgstr ""
 "एहि विस्तार क' लेल होइछ. कृपया ओकरा संस्थापित करू आओर फिनु सँ कोसिस करू. डेबियन-जेहन "
 "सिस्टम पर sudo apt-get install python-numpy कमांड सँ एहन कएल जाए सकैत अछि.  "
 
-#: ../share/extensions/perspective.py:58 ../share/extensions/summersnight.py:49
+#: ../share/extensions/perspective.py:60 ../share/extensions/summersnight.py:49
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
@@ -33571,12 +33579,12 @@ msgstr ""
 "पहला चुनलका वस्तु '%s' प्रकार केर अछि. \n"
 "पथ->पथ क' लेल वस्तु, प्रक्रिया क' उपयोग करबाक कोसिस करू."
 
-#: ../share/extensions/perspective.py:65 ../share/extensions/summersnight.py:57
+#: ../share/extensions/perspective.py:67 ../share/extensions/summersnight.py:57
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr "एहि विस्तार क' लेल ई जरूरी अछि जे दोसर चुनलका पथ चार नोड नमहर भेल."
 
-#: ../share/extensions/perspective.py:91 ../share/extensions/summersnight.py:90
+#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:90
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
@@ -33584,7 +33592,7 @@ msgstr ""
 "दोसर चुनलका वस्तु एकटा समूह अछि, एकटा पथ नहि. \n"
 "वस्तु->अनग्रुप प्रक्रिया केर उपयोग करबाक कोसिस करू."
 
-#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:92
+#: ../share/extensions/perspective.py:95 ../share/extensions/summersnight.py:92
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -33592,7 +33600,7 @@ msgstr ""
 "दोसर चुनलका वस्तु एकटा पथ नहि अछि. \n"
 "पथ->पथ क' लेल वस्तु, प्रक्रिया क' उपयोग करबाक कोसिस करू."
 
-#: ../share/extensions/perspective.py:96 ../share/extensions/summersnight.py:95
+#: ../share/extensions/perspective.py:98 ../share/extensions/summersnight.py:95
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -33635,7 +33643,7 @@ msgid ""
 "and the settings are correct."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:64
+#: ../share/extensions/polyhedron_3d.py:67
 msgid ""
 "Failed to import the numpy module. This module is required by this "
 "extension. Please install it and try again.  On a Debian-like system this "
@@ -33645,24 +33653,24 @@ msgstr ""
 "कृपया एकरा संस्थापित करू आओर फिनु सँ कोसिस करू. डेबियन-जेहन सिस्टम पर ‘sudo apt-get "
 "install python-numpy’ कमांड सँ एहन कएल जाए सकैत अछि."
 
-#: ../share/extensions/polyhedron_3d.py:335
+#: ../share/extensions/polyhedron_3d.py:338
 msgid "No face data found in specified file."
 msgstr "निर्दिष्ट फाइल मे कोनो फेस आँकड़ा नहि भेटल."
 
-#: ../share/extensions/polyhedron_3d.py:336
+#: ../share/extensions/polyhedron_3d.py:339
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr "मोडल फाइल टैब मे \"निर्दिष्ट एज\" क' चयन करबा केर कोसिस करू.\n"
 
-#: ../share/extensions/polyhedron_3d.py:342
+#: ../share/extensions/polyhedron_3d.py:345
 msgid "No edge data found in specified file."
 msgstr "निर्दिष्ट फाइल मे कोनो एज आँकड़ा नहि भेटल."
 
-#: ../share/extensions/polyhedron_3d.py:343
+#: ../share/extensions/polyhedron_3d.py:346
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr "मोडल फाइल टैब मे \"निर्दिष्ट फेस\" केर चयन करबा क' कोसिस करू.\n"
 
 #. we cannot generate a list of faces from the edges without a lot of computation
-#: ../share/extensions/polyhedron_3d.py:522
+#: ../share/extensions/polyhedron_3d.py:525
 msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
@@ -33670,7 +33678,7 @@ msgstr ""
 "फेस आँकड़ा नहि भेटल. ई सुनिश्चित कए लिअ' जे फाइल मे फेस आँकड़ा मोजुद अछि आओर जाँच कए लिअ' "
 "जे फाइल केँ \"मोडल फाइल\" टैब क' तहत \"निर्दिष्ट-फेस\" केर रूप मे आयात कएल गेल अछि.\n"
 
-#: ../share/extensions/polyhedron_3d.py:524
+#: ../share/extensions/polyhedron_3d.py:527
 msgid "Internal Error. No view type selected\n"
 msgstr "भीतरका त्रुटि. कोनो दृश्य प्रकार नहि चुनल गेल\n"
 
@@ -33769,13 +33777,14 @@ msgstr "एहि फाइलक पता नहि लगाओल जाए 
 msgid "You must select a correct system encoding."
 msgstr "अहाँक कम सँ कम दुइ टा तत्व क' चयन करै पड़त."
 
-#: ../share/extensions/uniconv-ext.py:54
-#: ../share/extensions/uniconv_output.py:121
+#: ../share/extensions/uniconv-ext.py:55
+#: ../share/extensions/uniconv_output.py:122
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
 "For Windows: download it from\n"
-"http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
+"https://sk1project.net/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
 "and install into your Inkscape's Python location\n"
 msgstr ""
 
@@ -40499,6 +40508,14 @@ msgid "XAML Input"
 msgstr "XAML इनपुट"
 
 #, fuzzy
+#~ msgid "The offset size"
+#~ msgstr "प्रारूप ओफसेट "
+
+#, fuzzy
+#~ msgid "Area ("
+#~ msgstr "क्षेत्र "
+
+#, fuzzy
 #~ msgid "Adjust the rotation angle"
 #~ msgstr "संतृप्ति केँ समायोजित करू"
 
@@ -40535,9 +40552,6 @@ msgstr "XAML इनपुट"
 #, fuzzy
 #~ msgid "<b>Mesh gradient</b>"
 #~ msgstr "<b>खंड<b>"
-
-#~ msgid "Area (px^2): "
-#~ msgstr "क्षेत्रफल (px^2):  "
 
 #~ msgid ""
 #~ "Select <b>exactly 2 paths</b> to perform difference, division, or path "

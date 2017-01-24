@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-12-21 01:15+0100\n"
+"POT-Creation-Date: 2017-01-24 21:21+0100\n"
 "PO-Revision-Date: 2012-03-17 22:50+0530\n"
 "Last-Translator: \n"
 "Language-Team: Malayalam <info.gist@cdac.in>\n"
@@ -2175,1357 +2175,1357 @@ msgstr "ഡോക് ഇനത്തെ നിയന്ത്രിക്കു�
 msgid "Sharp multiple contour for objects"
 msgstr "വസ്തുക്കളുടെ മദ്ധ്യത്തില്‍ നിന്നും അതിലേക്കും ചിത്രമെടുക്കുക"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:2
 #, fuzzy
 msgctxt "Palette"
 msgid "Black"
 msgstr "കറുപ്പ്"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:3
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "90% Gray"
 msgstr "90% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:4
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "80% Gray"
 msgstr "80% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:5
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "70% Gray"
 msgstr "70% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:6
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "60% Gray"
 msgstr "60% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:7
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "50% Gray"
 msgstr "50% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:8
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "40% Gray"
 msgstr "40% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:9
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "30% Gray"
 msgstr "30% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:10
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "20% Gray"
 msgstr "20% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:11
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "10% Gray"
 msgstr "10% ചാരനിറം"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:12
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "7.5% Gray"
 msgstr "7.5% ഗ്രേ"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:13
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "5% Gray"
 msgstr "7.5% ഗ്രേ"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:14
 #, fuzzy, no-c-format
 msgctxt "Palette"
 msgid "2.5% Gray"
 msgstr "7.5% ഗ്രേ"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:15
 #, fuzzy
 msgctxt "Palette"
 msgid "White"
 msgstr "വെളുപ്പ്"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:16
 #, fuzzy
 msgctxt "Palette"
 msgid "Maroon (#800000)"
 msgstr "മറൂണ്‍(#800000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:17
 #, fuzzy
 msgctxt "Palette"
 msgid "Red (#FF0000)"
 msgstr "ചുവപ്പ്(#FF0000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:18
 #, fuzzy
 msgctxt "Palette"
 msgid "Olive (#808000)"
 msgstr "ഒലിവ്(#808000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:19
 #, fuzzy
 msgctxt "Palette"
 msgid "Yellow (#FFFF00)"
 msgstr "മഞ്ഞ(#FFFF00)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:20
 #, fuzzy
 msgctxt "Palette"
 msgid "Green (#008000)"
 msgstr "പച്ച(#008000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:21
 #, fuzzy
 msgctxt "Palette"
 msgid "Lime (#00FF00)"
 msgstr "ലൈം (#00FF00)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:22
 #, fuzzy
 msgctxt "Palette"
 msgid "Teal (#008080)"
 msgstr "ടീല്‍ (#008080)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:23
 #, fuzzy
 msgctxt "Palette"
 msgid "Aqua (#00FFFF)"
 msgstr "അക്വ(#00FFFF)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:24
 #, fuzzy
 msgctxt "Palette"
 msgid "Navy (#000080)"
 msgstr "നേവി (#000080)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:25
 #, fuzzy
 msgctxt "Palette"
 msgid "Blue (#0000FF)"
 msgstr "നീല(#0000FF)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:26
 #, fuzzy
 msgctxt "Palette"
 msgid "Purple (#800080)"
 msgstr "പര്‍പ്പിള്‍ (#800080)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:27
 #, fuzzy
 msgctxt "Palette"
 msgid "Fuchsia (#FF00FF)"
 msgstr "ഫുച്സ്യ (#FF00FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:28
 #, fuzzy
 msgctxt "Palette"
 msgid "black (#000000)"
 msgstr "കറുപ്പ്(#000000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:29
 #, fuzzy
 msgctxt "Palette"
 msgid "dimgray (#696969)"
 msgstr "മങ്ങിയ ചാരനിറം (#696969)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:30
 #, fuzzy
 msgctxt "Palette"
 msgid "gray (#808080)"
 msgstr "ചാരനിറം(#808080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:31
 #, fuzzy
 msgctxt "Palette"
 msgid "darkgray (#A9A9A9)"
 msgstr "ഇരുണ്ട ചാരനിറം(#A9A9A9)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:32
 #, fuzzy
 msgctxt "Palette"
 msgid "silver (#C0C0C0)"
 msgstr "വെള്ളി(#C0C0C0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:33
 #, fuzzy
 msgctxt "Palette"
 msgid "lightgray (#D3D3D3)"
 msgstr "ഇളം ചാരനിറം(#D3D3D3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:34
 #, fuzzy
 msgctxt "Palette"
 msgid "gainsboro (#DCDCDC)"
 msgstr "ഗ്രെയിന്‍സ്ബോറൊ (#DCDCDC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:35
 #, fuzzy
 msgctxt "Palette"
 msgid "whitesmoke (#F5F5F5)"
 msgstr "വെളുത്ത പുക (#F5F5F5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:36
 #, fuzzy
 msgctxt "Palette"
 msgid "white (#FFFFFF)"
 msgstr "വെളുപ്പ്(#FFFFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:37
 #, fuzzy
 msgctxt "Palette"
 msgid "rosybrown (#BC8F8F)"
 msgstr "റോസു കലര്‍ന്ന തവിട്ടുനിറം  (#BC8F8F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:38
 #, fuzzy
 msgctxt "Palette"
 msgid "indianred (#CD5C5C)"
 msgstr "ഇന്ഡ്യന്‍ ചുവപ്പ് (#CD5C5C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:39
 #, fuzzy
 msgctxt "Palette"
 msgid "brown (#A52A2A)"
 msgstr "തവിട്ടു നിറം(#A52A2A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:40
 #, fuzzy
 msgctxt "Palette"
 msgid "firebrick (#B22222)"
 msgstr "ചുടുകട്ട (#B22222)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:41
 #, fuzzy
 msgctxt "Palette"
 msgid "lightcoral (#F08080)"
 msgstr "ഇളം പവിഴം (#F08080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:42
 #, fuzzy
 msgctxt "Palette"
 msgid "maroon (#800000)"
 msgstr "മറൂണ്‍ (#800000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:43
 #, fuzzy
 msgctxt "Palette"
 msgid "darkred (#8B0000)"
 msgstr "കടും ചുവപ്പ് (#8B0000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:44
 #, fuzzy
 msgctxt "Palette"
 msgid "red (#FF0000)"
 msgstr "ചുവപ്പ്(#FF0000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:45
 #, fuzzy
 msgctxt "Palette"
 msgid "snow (#FFFAFA)"
 msgstr "മഞ്ഞ് (#FFFAFA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:46
 #, fuzzy
 msgctxt "Palette"
 msgid "mistyrose (#FFE4E1)"
 msgstr "മിസ്റ്റി റോസ് (#FFE4E1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:47
 #, fuzzy
 msgctxt "Palette"
 msgid "salmon (#FA8072)"
 msgstr "സാല്‍മൺ (#FA8072)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:48
 #, fuzzy
 msgctxt "Palette"
 msgid "tomato (#FF6347)"
 msgstr "തക്കാളി  നിറം(#FF6347)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:49
 #, fuzzy
 msgctxt "Palette"
 msgid "darksalmon (#E9967A)"
 msgstr "ഇരുണ്ട സാല്‍മണ്‍ (#E9967A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:50
 #, fuzzy
 msgctxt "Palette"
 msgid "coral (#FF7F50)"
 msgstr "പവിഴം (#FF7F50)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:51
 #, fuzzy
 msgctxt "Palette"
 msgid "orangered (#FF4500)"
 msgstr "ഓറഞ്ച് ചുവപ്പ്"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:52
 #, fuzzy
 msgctxt "Palette"
 msgid "lightsalmon (#FFA07A)"
 msgstr "ഇളം സാല്‍മൺ (#FFA07A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:53
 #, fuzzy
 msgctxt "Palette"
 msgid "sienna (#A0522D)"
 msgstr "സിയന്ന (#A0522D)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:54
 #, fuzzy
 msgctxt "Palette"
 msgid "seashell (#FFF5EE)"
 msgstr "കടല്‍കക്ക(#FFF5EE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:55
 #, fuzzy
 msgctxt "Palette"
 msgid "chocolate (#D2691E)"
 msgstr "ചോക്ലേറ്റ് (#D2691E)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:56
 #, fuzzy
 msgctxt "Palette"
 msgid "saddlebrown (#8B4513)"
 msgstr "സാഡില്‍ തവിട്ട് നിറം  (#8B4513)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:57
 #, fuzzy
 msgctxt "Palette"
 msgid "sandybrown (#F4A460)"
 msgstr "ചന്ദന തവിട്ട്നിറം (#F4A460)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:58
 #, fuzzy
 msgctxt "Palette"
 msgid "peachpuff (#FFDAB9)"
 msgstr "പീച്ച് പഫ് (#FFDAB9)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:59
 #, fuzzy
 msgctxt "Palette"
 msgid "peru (#CD853F)"
 msgstr "പെറു (#CD853F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:60
 #, fuzzy
 msgctxt "Palette"
 msgid "linen (#FAF0E6)"
 msgstr "ലിനന്‍ (#FAF0E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:61
 #, fuzzy
 msgctxt "Palette"
 msgid "bisque (#FFE4C4)"
 msgstr "ബിസ്ക്യു (#FFE4C4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:62
 #, fuzzy
 msgctxt "Palette"
 msgid "darkorange (#FF8C00)"
 msgstr "ഇരുണ്ട ഓറഞ്ച് (#FF8C00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:63
 #, fuzzy
 msgctxt "Palette"
 msgid "burlywood (#DEB887)"
 msgstr "വീര്‍ത്ത മര നിറം (#DEB887)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:64
 #, fuzzy
 msgctxt "Palette"
 msgid "tan (#D2B48C)"
 msgstr "ടാന്‍ (#D2B48C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:65
 #, fuzzy
 msgctxt "Palette"
 msgid "antiquewhite (#FAEBD7)"
 msgstr "പ്രാചീന വെള്ള (#FAEBD7)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:66
 #, fuzzy
 msgctxt "Palette"
 msgid "navajowhite (#FFDEAD)"
 msgstr "നവജോ വെളുപ്പ് (#FFDEAD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:67
 #, fuzzy
 msgctxt "Palette"
 msgid "blanchedalmond (#FFEBCD)"
 msgstr "ബ്ലാച്ച്ഡ് ആല്‍മണ്ട് (#FFEBCD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:68
 #, fuzzy
 msgctxt "Palette"
 msgid "papayawhip (#FFEFD5)"
 msgstr "പാപായവിപ്പ് (#FFEFD5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:69
 #, fuzzy
 msgctxt "Palette"
 msgid "moccasin (#FFE4B5)"
 msgstr "മൃദുചര്‍മ്മപാദുകം  (#FFE4B5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:70
 #, fuzzy
 msgctxt "Palette"
 msgid "orange (#FFA500)"
 msgstr "ഓറഞ്ച് (#FFA500)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:71
 #, fuzzy
 msgctxt "Palette"
 msgid "wheat (#F5DEB3)"
 msgstr "ഗോതമ്പ് നിറം (#F5DEB3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:72
 #, fuzzy
 msgctxt "Palette"
 msgid "oldlace (#FDF5E6)"
 msgstr "പഴയനാട നിറം(#FDF5E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:73
 #, fuzzy
 msgctxt "Palette"
 msgid "floralwhite (#FFFAF0)"
 msgstr "പുഷ്പവെളുപ്പ്(#FFFAF0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:74
 #, fuzzy
 msgctxt "Palette"
 msgid "darkgoldenrod (#B8860B)"
 msgstr "ഇരുണ്ടസ്വര്‍ണ്ണദണ്ഡ് (#B8860B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:75
 #, fuzzy
 msgctxt "Palette"
 msgid "goldenrod (#DAA520)"
 msgstr "സ്വര്‍ണ്ണദണ്ഡ്  (#DAA520)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:76
 #, fuzzy
 msgctxt "Palette"
 msgid "cornsilk (#FFF8DC)"
 msgstr "ചോളപ്പട്ട് (#FFF8DC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:77
 #, fuzzy
 msgctxt "Palette"
 msgid "gold (#FFD700)"
 msgstr "സ്വര്‍ണനിറം  (#FFD700)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:78
 #, fuzzy
 msgctxt "Palette"
 msgid "khaki (#F0E68C)"
 msgstr "കാക്കി  (#F0E68C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:79
 #, fuzzy
 msgctxt "Palette"
 msgid "lemonchiffon (#FFFACD)"
 msgstr "ലെമൺചിഫോൺ (#FFFACD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:80
 #, fuzzy
 msgctxt "Palette"
 msgid "palegoldenrod (#EEE8AA)"
 msgstr "വിളറിയ സ്വര്‍ണ്ണദണ്ഡ്  (#EEE8AA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:81
 #, fuzzy
 msgctxt "Palette"
 msgid "darkkhaki (#BDB76B)"
 msgstr "ഇരുണ്ട കാക്കി  (#BDB76B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:82
 #, fuzzy
 msgctxt "Palette"
 msgid "beige (#F5F5DC)"
 msgstr "ബെയ്ജ് (#F5F5DC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:83
 #, fuzzy
 msgctxt "Palette"
 msgid "lightgoldenrodyellow (#FAFAD2)"
 msgstr "ഇളം ഗോള്‍ഡന്‍ റോഡ് യെല്ലോ (#FAFAD2)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:84
 #, fuzzy
 msgctxt "Palette"
 msgid "olive (#808000)"
 msgstr "ഒലിവ്(#808000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:85
 #, fuzzy
 msgctxt "Palette"
 msgid "yellow (#FFFF00)"
 msgstr "മഞ്ഞ(#FFFF00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:86
 #, fuzzy
 msgctxt "Palette"
 msgid "lightyellow (#FFFFE0)"
 msgstr "ഇളം മഞ്ഞ (#FFFFE0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:87
 #, fuzzy
 msgctxt "Palette"
 msgid "ivory (#FFFFF0)"
 msgstr "ആനക്കൊമ്പ് (#FFFFF0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:88
 #, fuzzy
 msgctxt "Palette"
 msgid "olivedrab (#6B8E23)"
 msgstr "ഒലിവ്ഡ്രാഗ് (#6B8E23)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:89
 #, fuzzy
 msgctxt "Palette"
 msgid "yellowgreen (#9ACD32)"
 msgstr "മഞ്ഞ കലര്‍ന്ന പച്ച (#9ACD32)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:90
 #, fuzzy
 msgctxt "Palette"
 msgid "darkolivegreen (#556B2F)"
 msgstr "ഇരുണ്ടഒലിവ്പച്ച (#556B2F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:91
 #, fuzzy
 msgctxt "Palette"
 msgid "greenyellow (#ADFF2F)"
 msgstr "പച്ച കലര്‍ന്ന മഞ്ഞ (#ADFF2F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:92
 #, fuzzy
 msgctxt "Palette"
 msgid "chartreuse (#7FFF00)"
 msgstr "ചാര്‍ട്ട്രിയൂസ് (#7FFF00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:93
 #, fuzzy
 msgctxt "Palette"
 msgid "lawngreen (#7CFC00)"
 msgstr "പുല്‍തകിടിപച്ച (#7CFC00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:94
 #, fuzzy
 msgctxt "Palette"
 msgid "darkseagreen (#8FBC8F)"
 msgstr "ഇരുണ്ട കടല്‍പച്ച  (#8FBC8F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:95
 #, fuzzy
 msgctxt "Palette"
 msgid "forestgreen (#228B22)"
 msgstr "വനപ്പച്ച (#228B22)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:96
 #, fuzzy
 msgctxt "Palette"
 msgid "limegreen (#32CD32)"
 msgstr "ലൈം പച്ച (#32CD32)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:97
 #, fuzzy
 msgctxt "Palette"
 msgid "lightgreen (#90EE90)"
 msgstr "ഇളം പച്ച(#90EE90)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:98
 #, fuzzy
 msgctxt "Palette"
 msgid "palegreen (#98FB98)"
 msgstr "വിളറിയ പച്ച(#98FB98)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:99
 #, fuzzy
 msgctxt "Palette"
 msgid "darkgreen (#006400)"
 msgstr "ഇരുണ്ട പച്ച (#006400)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:100
 #, fuzzy
 msgctxt "Palette"
 msgid "green (#008000)"
 msgstr "പച്ച (#008000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:101
 #, fuzzy
 msgctxt "Palette"
 msgid "lime (#00FF00)"
 msgstr "ലൈം (#00FF00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:102
 #, fuzzy
 msgctxt "Palette"
 msgid "honeydew (#F0FFF0)"
 msgstr "തേന്‍തുള്ളി (#F0FFF0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:103
 #, fuzzy
 msgctxt "Palette"
 msgid "seagreen (#2E8B57)"
 msgstr "കടല്‍ പച്ച  (#2E8B57)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:104
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumseagreen (#3CB371)"
 msgstr "ഇടത്തരം കടല്‍ പച്ച (#3CB371)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:105
 #, fuzzy
 msgctxt "Palette"
 msgid "springgreen (#00FF7F)"
 msgstr "വസന്ത പച്ച(#00FF7F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:106
 #, fuzzy
 msgctxt "Palette"
 msgid "mintcream (#F5FFFA)"
 msgstr "മിന്റ് ക്രീം  (#F5FFFA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:107
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumspringgreen (#00FA9A)"
 msgstr "ഇടത്തരം വസന്ത പച്ച(#00FA9A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:108
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumaquamarine (#66CDAA)"
 msgstr "ഇടത്തരം അക്വാമറൈന്‍ (#66CDAA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:109
 #, fuzzy
 msgctxt "Palette"
 msgid "aquamarine (#7FFFD4)"
 msgstr "അക്വാമറൈന്‍ (#7FFFD4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:110
 #, fuzzy
 msgctxt "Palette"
 msgid "turquoise (#40E0D0)"
 msgstr "ഹരിതനീലിമ  (#40E0D0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:111
 #, fuzzy
 msgctxt "Palette"
 msgid "lightseagreen (#20B2AA)"
 msgstr "ഇളം കടല്‍പച്ച(#20B2AA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:112
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumturquoise (#48D1CC)"
 msgstr "ഇടത്തരം ഹരിതനീലിമ (#48D1CC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:113
 #, fuzzy
 msgctxt "Palette"
 msgid "darkslategray (#2F4F4F)"
 msgstr "ഇരുണ്ട സ്ലേറ്റ്ചാരനിറം (#2F4F4F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:114
 #, fuzzy
 msgctxt "Palette"
 msgid "paleturquoise (#AFEEEE)"
 msgstr "വിളറിയ ഹരിതനീലമ (#AFEEEE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:115
 #, fuzzy
 msgctxt "Palette"
 msgid "teal (#008080)"
 msgstr "ടീല്‍ (#008080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:116
 #, fuzzy
 msgctxt "Palette"
 msgid "darkcyan (#008B8B)"
 msgstr "ഇരുണ്ട സിയന്‍ (#008B8B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:117
 #, fuzzy
 msgctxt "Palette"
 msgid "cyan (#00FFFF)"
 msgstr "സിയന്‍ (#00FFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:118
 #, fuzzy
 msgctxt "Palette"
 msgid "lightcyan (#E0FFFF)"
 msgstr "ഇളം സിയന്‍  (#E0FFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:119
 #, fuzzy
 msgctxt "Palette"
 msgid "azure (#F0FFFF)"
 msgstr "ആകാശനീലിമ (#F0FFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:120
 #, fuzzy
 msgctxt "Palette"
 msgid "darkturquoise (#00CED1)"
 msgstr "ഇരുണ്ട ഹരിതനീലിമ (#00CED1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:121
 #, fuzzy
 msgctxt "Palette"
 msgid "cadetblue (#5F9EA0)"
 msgstr "കാഡറ്റ് നീല (#5F9EA0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:122
 #, fuzzy
 msgctxt "Palette"
 msgid "powderblue (#B0E0E6)"
 msgstr "പൊടിനീല (#B0E0E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:123
 #, fuzzy
 msgctxt "Palette"
 msgid "lightblue (#ADD8E6)"
 msgstr "ഇളം നീല (#ADD8E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:124
 #, fuzzy
 msgctxt "Palette"
 msgid "deepskyblue (#00BFFF)"
 msgstr "കടുത്ത ആകാശനീല (#00BFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:125
 #, fuzzy
 msgctxt "Palette"
 msgid "skyblue (#87CEEB)"
 msgstr "ആകാശനീലിമ (#87CEEB)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:126
 #, fuzzy
 msgctxt "Palette"
 msgid "lightskyblue (#87CEFA)"
 msgstr "ഇളം ആകാശനീലിമ  (#87CEFA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:127
 #, fuzzy
 msgctxt "Palette"
 msgid "steelblue (#4682B4)"
 msgstr "ഉരുക്ക് നീല(#4682B4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:128
 #, fuzzy
 msgctxt "Palette"
 msgid "aliceblue (#F0F8FF)"
 msgstr "ആലീസ് നീല (#F0F8FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:129
 #, fuzzy
 msgctxt "Palette"
 msgid "dodgerblue (#1E90FF)"
 msgstr "ഡോഡ്ജെര്‍ നീല (#1E90FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:130
 #, fuzzy
 msgctxt "Palette"
 msgid "slategray (#708090)"
 msgstr "സ്ലേറ്റ് ചാരനിറം (#708090)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:131
 #, fuzzy
 msgctxt "Palette"
 msgid "lightslategray (#778899)"
 msgstr "ഇളം സ്ലേറ്റ് ചാരനിറം (#778899)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:132
 #, fuzzy
 msgctxt "Palette"
 msgid "lightsteelblue (#B0C4DE)"
 msgstr "ഇളം ഉരുക്ക്നീല (#B0C4DE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:133
 #, fuzzy
 msgctxt "Palette"
 msgid "cornflowerblue (#6495ED)"
 msgstr "കോണ്‍ഫ്ലവര്‍ നീലനിറം (#6495ED)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:134
 #, fuzzy
 msgctxt "Palette"
 msgid "royalblue (#4169E1)"
 msgstr "രാജകീയ നീല  (#4169E1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:135
 #, fuzzy
 msgctxt "Palette"
 msgid "midnightblue (#191970)"
 msgstr "അര്‍ദ്ധരാത്രി നീല (#191970)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:136
 #, fuzzy
 msgctxt "Palette"
 msgid "lavender (#E6E6FA)"
 msgstr "ലാവെന്റര്‍  (#E6E6FA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:137
 #, fuzzy
 msgctxt "Palette"
 msgid "navy (#000080)"
 msgstr "നേവി (#000080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:138
 #, fuzzy
 msgctxt "Palette"
 msgid "darkblue (#00008B)"
 msgstr "ഇരുണ്ട നീല (#00008B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:139
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumblue (#0000CD)"
 msgstr "ഇടത്തരം നീല (#0000CD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:140
 #, fuzzy
 msgctxt "Palette"
 msgid "blue (#0000FF)"
 msgstr "നീലനിറം(#0000FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:141
 #, fuzzy
 msgctxt "Palette"
 msgid "ghostwhite (#F8F8FF)"
 msgstr "പ്രേത വെളുപ്പ് (#F8F8FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:142
 #, fuzzy
 msgctxt "Palette"
 msgid "slateblue (#6A5ACD)"
 msgstr "സ്ലേറ്റ് നീല (#6A5ACD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:143
 #, fuzzy
 msgctxt "Palette"
 msgid "darkslateblue (#483D8B)"
 msgstr "ഇരുണ്ട സ്ലേറ്റ് നീല (#483D8B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:144
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumslateblue (#7B68EE)"
 msgstr "ഇടത്തരം സ്ലേറ്റ് നീല (#7B68EE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:145
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumpurple (#9370DB)"
 msgstr "ഇടത്തരം പര്‍പ്പിള്‍  (#9370DB)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:146
 #, fuzzy
 msgctxt "Palette"
 msgid "blueviolet (#8A2BE2)"
 msgstr "നീലവയലറ്റ് (#8A2BE2)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:147
 #, fuzzy
 msgctxt "Palette"
 msgid "indigo (#4B0082)"
 msgstr "ഇന്റിഗോ (#4B0082)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:148
 #, fuzzy
 msgctxt "Palette"
 msgid "darkorchid (#9932CC)"
 msgstr "ഇരുണ്ട ഓര്‍ക്കിഡ്  (#9932CC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:149
 #, fuzzy
 msgctxt "Palette"
 msgid "darkviolet (#9400D3)"
 msgstr "ഇരുണ്ട വയലറ്റ് (#9400D3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:150
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumorchid (#BA55D3)"
 msgstr "ഇടത്തരം ഓര്‍ക്കിഡ്(#BA55D3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:151
 #, fuzzy
 msgctxt "Palette"
 msgid "thistle (#D8BFD8)"
 msgstr "കാരമുള്ള്  (#D8BFD8)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:152
 #, fuzzy
 msgctxt "Palette"
 msgid "plum (#DDA0DD)"
 msgstr "പ്ലം  (#DDA0DD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:153
 #, fuzzy
 msgctxt "Palette"
 msgid "violet (#EE82EE)"
 msgstr "വയലറ്റ് (#EE82EE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:154
 #, fuzzy
 msgctxt "Palette"
 msgid "purple (#800080)"
 msgstr "പര്‍പ്പിള്‍ (#800080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:155
 #, fuzzy
 msgctxt "Palette"
 msgid "darkmagenta (#8B008B)"
 msgstr "ഇരുണ്ട മജന്ത (#8B008B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:156
 #, fuzzy
 msgctxt "Palette"
 msgid "magenta (#FF00FF)"
 msgstr "മജന്ത  (#FF00FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:157
 #, fuzzy
 msgctxt "Palette"
 msgid "orchid (#DA70D6)"
 msgstr "ഓര്‍ക്കിഡ് (#DA70D6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:158
 #, fuzzy
 msgctxt "Palette"
 msgid "mediumvioletred (#C71585)"
 msgstr "ഇടത്തരം വയലറ്റ് ചുവപ്പ്  (#C71585)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:159
 #, fuzzy
 msgctxt "Palette"
 msgid "deeppink (#FF1493)"
 msgstr "കടും പിങ്ക് (#FF1493)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:160
 #, fuzzy
 msgctxt "Palette"
 msgid "hotpink (#FF69B4)"
 msgstr "ഊഷ്മളമായ പിങ്ക് നിറം (#FF69B4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:161
 #, fuzzy
 msgctxt "Palette"
 msgid "lavenderblush (#FFF0F5)"
 msgstr "ലാവെന്‍ജര്‍ബ്ലഷ് (#FFF0F5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:162
 #, fuzzy
 msgctxt "Palette"
 msgid "palevioletred (#DB7093)"
 msgstr "വിളറിയ വയലറ്റ് ചുവപ്പ് (#DB7093)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:163
 #, fuzzy
 msgctxt "Palette"
 msgid "crimson (#DC143C)"
 msgstr "ക്രിംസണ്‍  (#DC143C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:164
 #, fuzzy
 msgctxt "Palette"
 msgid "pink (#FFC0CB)"
 msgstr "പിങ്ക്  (#FFC0CB)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:165
 #, fuzzy
 msgctxt "Palette"
 msgid "lightpink (#FFB6C1)"
 msgstr "ഇളം പിങ്ക് (#FFB6C1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:166
 msgctxt "Palette"
 msgid "rebeccapurple (#663399)"
 msgstr ""
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:167
 #, fuzzy
 msgctxt "Palette"
 msgid "Butter 1"
 msgstr "വെണ്ണ 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:168
 #, fuzzy
 msgctxt "Palette"
 msgid "Butter 2"
 msgstr "വെണ്ണ 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:169
 #, fuzzy
 msgctxt "Palette"
 msgid "Butter 3"
 msgstr "വെണ്ണ 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:170
 #, fuzzy
 msgctxt "Palette"
 msgid "Chameleon 1"
 msgstr "ഓന്ത് 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:171
 #, fuzzy
 msgctxt "Palette"
 msgid "Chameleon 2"
 msgstr "ഓന്ത് 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:172
 #, fuzzy
 msgctxt "Palette"
 msgid "Chameleon 3"
 msgstr "ഓന്ത് 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:173
 #, fuzzy
 msgctxt "Palette"
 msgid "Orange 1"
 msgstr "ഓറഞ്ച് 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:174
 #, fuzzy
 msgctxt "Palette"
 msgid "Orange 2"
 msgstr "ഓറഞ്ച് 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:175
 #, fuzzy
 msgctxt "Palette"
 msgid "Orange 3"
 msgstr "ഓറഞ്ച് 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:176
 #, fuzzy
 msgctxt "Palette"
 msgid "Sky Blue 1"
 msgstr "ആകാശത്തിന്റെ നീലനിറം 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:177
 #, fuzzy
 msgctxt "Palette"
 msgid "Sky Blue 2"
 msgstr "ആകാശത്തിന്റെ നീലനിറം 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:178
 #, fuzzy
 msgctxt "Palette"
 msgid "Sky Blue 3"
 msgstr "ആകാശത്തിന്റെ നീലനിറം 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:179
 #, fuzzy
 msgctxt "Palette"
 msgid "Plum 1"
 msgstr "പ്ലം 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:180
 #, fuzzy
 msgctxt "Palette"
 msgid "Plum 2"
 msgstr "പ്ലം 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:181
 #, fuzzy
 msgctxt "Palette"
 msgid "Plum 3"
 msgstr "പ്ലം 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:182
 #, fuzzy
 msgctxt "Palette"
 msgid "Chocolate 1"
 msgstr "ചോക്ലേറ്റ് 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:183
 #, fuzzy
 msgctxt "Palette"
 msgid "Chocolate 2"
 msgstr "ചോക്ലേറ്റ് 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:184
 #, fuzzy
 msgctxt "Palette"
 msgid "Chocolate 3"
 msgstr "ചോക്ലേറ്റ് 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:185
 #, fuzzy
 msgctxt "Palette"
 msgid "Scarlet Red 1"
 msgstr "കടും ചുവപ്പായ ചുവപ്പ് 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:186
 #, fuzzy
 msgctxt "Palette"
 msgid "Scarlet Red 2"
 msgstr "കടും ചുവപ്പായ ചുവപ്പ് 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:187
 #, fuzzy
 msgctxt "Palette"
 msgid "Scarlet Red 3"
 msgstr "കടും ചുവപ്പായ ചുവപ്പ് 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:188
 #, fuzzy
 msgctxt "Palette"
 msgid "Snowy White"
 msgstr "വെളുപ്പ്"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:189
 #, fuzzy
 msgctxt "Palette"
 msgid "Aluminium 1"
 msgstr "അലുമിനിയം 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:190
 #, fuzzy
 msgctxt "Palette"
 msgid "Aluminium 2"
 msgstr "അലുമിനിയം 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:191
 #, fuzzy
 msgctxt "Palette"
 msgid "Aluminium 3"
 msgstr "അലുമിനിയം 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:192
 #, fuzzy
 msgctxt "Palette"
 msgid "Aluminium 4"
 msgstr "അലുമിനിയം 4"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:193
 #, fuzzy
 msgctxt "Palette"
 msgid "Aluminium 5"
 msgstr "അലുമിനിയം 5"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:194
 #, fuzzy
 msgctxt "Palette"
 msgid "Aluminium 6"
 msgstr "അലുമിനിയം 6"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:195
 #, fuzzy
 msgctxt "Palette"
@@ -3696,1085 +3696,1085 @@ msgstr "തുണി (ബിറ്റ്മാപ്പ്)"
 msgid "Old paint (bitmap)"
 msgstr "എണ്ണച്ചായം (ബിറ്റ് മാപ്പ്)"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:2
-msgctxt "Symbol"
-msgid "AIGA Symbol Signs"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:3 ../share/symbols/symbols.h:4
-#: ../share/symbols/symbols.h:281 ../share/symbols/symbols.h:282
-msgctxt "Symbol"
-msgid "Telephone"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:5 ../share/symbols/symbols.h:6
-msgctxt "Symbol"
-msgid "Mail"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:7 ../share/symbols/symbols.h:8
-#, fuzzy
-msgctxt "Symbol"
-msgid "Currency Exchange"
-msgstr "ഇപ്പോള്‍ ഉപയോഗിക്കുന്നലയര്‍"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:9 ../share/symbols/symbols.h:10
-msgctxt "Symbol"
-msgid "Currency Exchange - Euro"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:11 ../share/symbols/symbols.h:12
-msgctxt "Symbol"
-msgid "Cashier"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:13 ../share/symbols/symbols.h:14
-#: ../share/symbols/symbols.h:213 ../share/symbols/symbols.h:214
-#, fuzzy
-msgctxt "Symbol"
-msgid "First Aid"
-msgstr "ആദ്യത്തെ സ്ലൈഡ്:"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
-msgctxt "Symbol"
-msgid "Lost and Found"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
-msgctxt "Symbol"
-msgid "Coat Check"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
-msgctxt "Symbol"
-msgid "Baggage Lockers"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
-msgctxt "Symbol"
-msgid "Escalator"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
-msgctxt "Symbol"
-msgid "Escalator Down"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
-msgctxt "Symbol"
-msgid "Escalator Up"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
-msgctxt "Symbol"
-msgid "Stairs"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:29 ../share/symbols/symbols.h:30
-msgctxt "Symbol"
-msgid "Stairs Down"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:31 ../share/symbols/symbols.h:32
-msgctxt "Symbol"
-msgid "Stairs Up"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:33 ../share/symbols/symbols.h:34
-#, fuzzy
-msgctxt "Symbol"
-msgid "Elevator"
-msgstr "ആരോഹണം"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:35 ../share/symbols/symbols.h:36
-msgctxt "Symbol"
-msgid "Toilets - Men"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:37 ../share/symbols/symbols.h:38
-msgctxt "Symbol"
-msgid "Toilets - Women"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:39 ../share/symbols/symbols.h:40
-msgctxt "Symbol"
-msgid "Toilets"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:41 ../share/symbols/symbols.h:42
-msgctxt "Symbol"
-msgid "Nursery"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
-msgctxt "Symbol"
-msgid "Drinking Fountain"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
-#, fuzzy
-msgctxt "Symbol"
-msgid "Waiting Room"
-msgstr "പെയിന്‍റിങ്"
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
-#: ../share/symbols/symbols.h:231 ../share/symbols/symbols.h:232
-#, fuzzy
-msgctxt "Symbol"
-msgid "Information"
-msgstr "വിവരങ്ങള്‍"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:49 ../share/symbols/symbols.h:50
-#, fuzzy
-msgctxt "Symbol"
-msgid "Hotel Information"
-msgstr "താളിന്‍റെ വിവരം"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
-#, fuzzy
-msgctxt "Symbol"
-msgid "Air Transportation"
-msgstr "പരിവര്‍ത്തനം"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
-msgctxt "Symbol"
-msgid "Heliport"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
-msgctxt "Symbol"
-msgid "Taxi"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
-#, fuzzy
-msgctxt "Symbol"
-msgid "Bus"
-msgstr "മൂടല്‍"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
-#, fuzzy
-msgctxt "Symbol"
-msgid "Ground Transportation"
-msgstr "പരിവര്‍ത്തനം"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
-#, fuzzy
-msgctxt "Symbol"
-msgid "Rail Transportation"
-msgstr "പരിവര്‍ത്തനം"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
-#, fuzzy
-msgctxt "Symbol"
-msgid "Water Transportation"
-msgstr "പരിവര്‍ത്തനം"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
-msgctxt "Symbol"
-msgid "Car Rental"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
-msgctxt "Symbol"
-msgid "Restaurant"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
-msgctxt "Symbol"
-msgid "Coffeeshop"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
-#, fuzzy
-msgctxt "Symbol"
-msgid "Bar"
-msgstr "മരത്തൊലി"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
-msgctxt "Symbol"
-msgid "Shops"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
-msgctxt "Symbol"
-msgid "Barber Shop - Beauty Salon"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
-msgctxt "Symbol"
-msgid "Barber Shop"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
-msgctxt "Symbol"
-msgid "Beauty Salon"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
-msgctxt "Symbol"
-msgid "Ticket Purchase"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
-msgctxt "Symbol"
-msgid "Baggage Check In"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
-msgctxt "Symbol"
-msgid "Baggage Claim"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
-#, fuzzy
-msgctxt "Symbol"
-msgid "Customs"
-msgstr "പതിവ്"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
-#, fuzzy
-msgctxt "Symbol"
-msgid "Immigration"
-msgstr "രൂപങ്ങള്‍"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
-#, fuzzy
-msgctxt "Symbol"
-msgid "Departing Flights"
-msgstr "ഉദ്ധിഷ്ടസ്ഥാനത്തെ ഉയരം"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
-msgctxt "Symbol"
-msgid "Arriving Flights"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
-msgctxt "Symbol"
-msgid "Smoking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
-msgctxt "Symbol"
-msgid "No Smoking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
-#: ../share/symbols/symbols.h:245 ../share/symbols/symbols.h:246
-msgctxt "Symbol"
-msgid "Parking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
-msgctxt "Symbol"
-msgid "No Parking"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
-msgctxt "Symbol"
-msgid "No Dogs"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:105 ../share/symbols/symbols.h:106
-msgctxt "Symbol"
-msgid "No Entry"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:107 ../share/symbols/symbols.h:108
-msgctxt "Symbol"
-msgid "Exit"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:109 ../share/symbols/symbols.h:110
-msgctxt "Symbol"
-msgid "Fire Extinguisher"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:111 ../share/symbols/symbols.h:112
-#, fuzzy
-msgctxt "Symbol"
-msgid "Right Arrow"
-msgstr "വലത്"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:113 ../share/symbols/symbols.h:114
-msgctxt "Symbol"
-msgid "Forward and Right Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:115 ../share/symbols/symbols.h:116
-#, fuzzy
-msgctxt "Symbol"
-msgid "Up Arrow"
-msgstr "ആരോകള്‍"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:117 ../share/symbols/symbols.h:118
-msgctxt "Symbol"
-msgid "Forward and Left Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:119 ../share/symbols/symbols.h:120
-#, fuzzy
-msgctxt "Symbol"
-msgid "Left Arrow"
-msgstr "ആരോകള്‍"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:121 ../share/symbols/symbols.h:122
-msgctxt "Symbol"
-msgid "Left and Down Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:123 ../share/symbols/symbols.h:124
-#, fuzzy
-msgctxt "Symbol"
-msgid "Down Arrow"
-msgstr "ആരോകള്‍"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:125 ../share/symbols/symbols.h:126
-msgctxt "Symbol"
-msgid "Right and Down Arrow"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:127 ../share/symbols/symbols.h:128
-msgctxt "Symbol"
-msgid "NPS Wheelchair Accessible - 1996"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:129 ../share/symbols/symbols.h:130
-msgctxt "Symbol"
-msgid "NPS Wheelchair Accessible"
-msgstr ""
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:131 ../share/symbols/symbols.h:132
-msgctxt "Symbol"
-msgid "New Wheelchair Accessible"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:133
-msgctxt "Symbol"
-msgid "Word Balloons"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:134
-msgctxt "Symbol"
-msgid "Thought Balloon"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:135
-msgctxt "Symbol"
-msgid "Dream Speaking"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:136
-#, fuzzy
-msgctxt "Symbol"
-msgid "Rounded Balloon"
-msgstr "വൃത്താകാരമായി യോജിപ്പിക്കുന്നത്"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:137
-#, fuzzy
-msgctxt "Symbol"
-msgid "Squared Balloon"
-msgstr "സമചതുര ക്യാപ്പ്"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:138
-msgctxt "Symbol"
-msgid "Over the Phone"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:139
-msgctxt "Symbol"
-msgid "Hip Balloon"
-msgstr ""
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:140
-#, fuzzy
-msgctxt "Symbol"
-msgid "Circle Balloon"
-msgstr "വട്ടം"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:141
-msgctxt "Symbol"
-msgid "Exclaim Balloon"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:142
-msgctxt "Symbol"
-msgid "Flow Chart Shapes"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:143
-#, fuzzy
-msgctxt "Symbol"
-msgid "Process"
-msgstr "പോസ്റ്റ്-പ്രോസസര്‍ :"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:144
-#, fuzzy
-msgctxt "Symbol"
-msgid "Input/Output"
-msgstr "ഔട്ട് പുട്ട്"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:145
-#, fuzzy
-msgctxt "Symbol"
-msgid "Document"
-msgstr "ലിഖിതം"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:146
-#, fuzzy
-msgctxt "Symbol"
-msgid "Manual Operation"
-msgstr "കണക്കിലെ പ്രവര്‍ത്തകര്‍"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:147
-#, fuzzy
-msgctxt "Symbol"
-msgid "Preparation"
-msgstr "പൂരിതത്തിന് മുമ്പ്:"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:148
-#, fuzzy
-msgctxt "Symbol"
-msgid "Merge"
-msgstr "സംയോജനം"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:149
-#, fuzzy
-msgctxt "Symbol"
-msgid "Decision"
-msgstr "പ്രിസിഷന്‍"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:150
-msgctxt "Symbol"
-msgid "Magnetic Tape"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:151
-#, fuzzy
-msgctxt "Symbol"
-msgid "Display"
-msgstr "പ്രദര്‍ശിപ്പിക്കുന്ന രീതി(_D)"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:152
-msgctxt "Symbol"
-msgid "Auxiliary Operation"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:153
-#, fuzzy
-msgctxt "Symbol"
-msgid "Manual Input"
-msgstr "EMF ഇന്‍പുട്ട്"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:154
-#, fuzzy
-msgctxt "Symbol"
-msgid "Extract"
-msgstr "പ്രതിബിംബം എക്സ്ട്രാക്റ്റ് ചെയ്യുക"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:155
-msgctxt "Symbol"
-msgid "Terminal/Interrupt"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:156
-msgctxt "Symbol"
-msgid "Punched Card"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:157
-msgctxt "Symbol"
-msgid "Punch Tape"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:158
-msgctxt "Symbol"
-msgid "Online Storage"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:159
-msgctxt "Symbol"
-msgid "Keying"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:160
-msgctxt "Symbol"
-msgid "Sort"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:161
-#, fuzzy
-msgctxt "Symbol"
-msgid "Connector"
-msgstr "കണക്ടര്‍"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:162
-#, fuzzy
-msgctxt "Symbol"
-msgid "Off-Page Connector"
-msgstr "കണക്ടര്‍"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:163
-msgctxt "Symbol"
-msgid "Transmittal Tape"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:164
-msgctxt "Symbol"
-msgid "Communication Link"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:165
-#, fuzzy
-msgctxt "Symbol"
-msgid "Collate"
-msgstr "ചോക്ലേറ്റ് 1"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:166
-msgctxt "Symbol"
-msgid "Comment/Annotation"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:167
-msgctxt "Symbol"
-msgid "Core"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:168
-msgctxt "Symbol"
-msgid "Predefined Process"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:169
-msgctxt "Symbol"
-msgid "Magnetic Disk (Database)"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:170
-msgctxt "Symbol"
-msgid "Magnetic Drum (Direct Access)"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:171
-msgctxt "Symbol"
-msgid "Offline Storage"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:172
-msgctxt "Symbol"
-msgid "Logical Or"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:173
-msgctxt "Symbol"
-msgid "Logical And"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:174
-msgctxt "Symbol"
-msgid "Delay"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:175
-msgctxt "Symbol"
-msgid "Loop Limit Begin"
-msgstr ""
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:176
-msgctxt "Symbol"
-msgid "Loop Limit End"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:177
-#, fuzzy
-msgctxt "Symbol"
-msgid "Logic Symbols"
-msgstr "അക്ഷരു പോലുള്ള ചിഹ്നങ്ങള്‍"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:178
-msgctxt "Symbol"
-msgid "Xnor Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:179
-msgctxt "Symbol"
-msgid "Xor Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:180
-msgctxt "Symbol"
-msgid "Nor Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:181
-msgctxt "Symbol"
-msgid "Or Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:182
-msgctxt "Symbol"
-msgid "Nand Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:183
-msgctxt "Symbol"
-msgid "And Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:184
-msgctxt "Symbol"
-msgid "Buffer"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:185
-msgctxt "Symbol"
-msgid "Not Gate"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:186
-msgctxt "Symbol"
-msgid "Buffer Small"
-msgstr ""
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:187
-msgctxt "Symbol"
-msgid "Not Gate Small"
-msgstr ""
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:188
 msgctxt "Symbol"
 msgid "United States National Park Service Map Symbols"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:189 ../share/symbols/symbols.h:190
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:3 ../share/symbols/symbols.h:4
 #, fuzzy
 msgctxt "Symbol"
 msgid "Airport"
 msgstr "ഇംപോര്‍ട്ട്"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:191 ../share/symbols/symbols.h:192
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:5 ../share/symbols/symbols.h:6
 msgctxt "Symbol"
 msgid "Amphitheatre"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:193 ../share/symbols/symbols.h:194
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:7 ../share/symbols/symbols.h:8
 msgctxt "Symbol"
 msgid "Bicycle Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:195 ../share/symbols/symbols.h:196
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:9 ../share/symbols/symbols.h:10
 msgctxt "Symbol"
 msgid "Boat Launch"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:197 ../share/symbols/symbols.h:198
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:11 ../share/symbols/symbols.h:12
 msgctxt "Symbol"
 msgid "Boat Tour"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:199 ../share/symbols/symbols.h:200
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:13 ../share/symbols/symbols.h:14
 #, fuzzy
 msgctxt "Symbol"
 msgid "Bus Stop"
 msgstr "നിര്‍ത്തുക(_S)"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:201 ../share/symbols/symbols.h:202
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
 msgctxt "Symbol"
 msgid "Campfire"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:203 ../share/symbols/symbols.h:204
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
 #, fuzzy
 msgctxt "Symbol"
 msgid "Campground"
 msgstr "ക്യാപ് റൌണ്ടിംഗ്"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:205 ../share/symbols/symbols.h:206
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
 msgctxt "Symbol"
 msgid "CanoeAccess"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:207 ../share/symbols/symbols.h:208
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
 msgctxt "Symbol"
 msgid "Crosscountry Ski Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:209 ../share/symbols/symbols.h:210
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
 msgctxt "Symbol"
 msgid "Downhill Skiing"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:211 ../share/symbols/symbols.h:212
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
 #, fuzzy
 msgctxt "Symbol"
 msgid "Drinking Water"
 msgstr "അച്ചടിയുടെ അടയാളങ്ങള്‍"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:215 ../share/symbols/symbols.h:216
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
+#: ../share/symbols/symbols.h:172 ../share/symbols/symbols.h:173
+#, fuzzy
+msgctxt "Symbol"
+msgid "First Aid"
+msgstr "ആദ്യത്തെ സ്ലൈഡ്:"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:29 ../share/symbols/symbols.h:30
 msgctxt "Symbol"
 msgid "Fishing"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:217 ../share/symbols/symbols.h:218
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:31 ../share/symbols/symbols.h:32
 msgctxt "Symbol"
 msgid "Food Service"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:219 ../share/symbols/symbols.h:220
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:33 ../share/symbols/symbols.h:34
 msgctxt "Symbol"
 msgid "Four Wheel Drive Road"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:221 ../share/symbols/symbols.h:222
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:35 ../share/symbols/symbols.h:36
 #, fuzzy
 msgctxt "Symbol"
 msgid "Gas Station"
 msgstr "കുറഞ്ഞ സാച്ചുറേഷന്‍"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:223 ../share/symbols/symbols.h:224
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:37 ../share/symbols/symbols.h:38
 #, fuzzy
 msgctxt "Symbol"
 msgid "Golfing"
 msgstr "പ്രൂഫിംഗ്"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:225 ../share/symbols/symbols.h:226
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:39 ../share/symbols/symbols.h:40
 msgctxt "Symbol"
 msgid "Horseback Riding"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:227 ../share/symbols/symbols.h:228
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:41 ../share/symbols/symbols.h:42
 msgctxt "Symbol"
 msgid "Hospital"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:229 ../share/symbols/symbols.h:230
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
 #, fuzzy
 msgctxt "Symbol"
 msgid "Ice Skating"
 msgstr "സതിന്‍"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:233 ../share/symbols/symbols.h:234
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
+#: ../share/symbols/symbols.h:206 ../share/symbols/symbols.h:207
+#, fuzzy
+msgctxt "Symbol"
+msgid "Information"
+msgstr "വിവരങ്ങള്‍"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
 msgctxt "Symbol"
 msgid "Litter Receptacle"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:235 ../share/symbols/symbols.h:236
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:49 ../share/symbols/symbols.h:50
 msgctxt "Symbol"
 msgid "Lodging"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:237 ../share/symbols/symbols.h:238
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
 msgctxt "Symbol"
 msgid "Marina"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:239 ../share/symbols/symbols.h:240
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
 msgctxt "Symbol"
 msgid "Motorbike Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:241 ../share/symbols/symbols.h:242
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
 #, fuzzy
 msgctxt "Symbol"
 msgid "Radiator Water"
 msgstr "റേഡിയേഷന്‍"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:243 ../share/symbols/symbols.h:244
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
 msgctxt "Symbol"
 msgid "Recycling"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:247 ../share/symbols/symbols.h:248
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
+#: ../share/symbols/symbols.h:258 ../share/symbols/symbols.h:259
+msgctxt "Symbol"
+msgid "Parking"
+msgstr ""
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
 msgctxt "Symbol"
 msgid "Pets On Leash"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:249 ../share/symbols/symbols.h:250
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
 msgctxt "Symbol"
 msgid "Picnic Area"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:251 ../share/symbols/symbols.h:252
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
 msgctxt "Symbol"
 msgid "Post Office"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:253 ../share/symbols/symbols.h:254
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
 #, fuzzy
 msgctxt "Symbol"
 msgid "Ranger Station"
 msgstr "കറക്കം"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:255 ../share/symbols/symbols.h:256
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
 #, fuzzy
 msgctxt "Symbol"
 msgid "RV Campground"
 msgstr "ക്യാപ് റൌണ്ടിംഗ്"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:257 ../share/symbols/symbols.h:258
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
 msgctxt "Symbol"
 msgid "Restrooms"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:259 ../share/symbols/symbols.h:260
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
 #, fuzzy
 msgctxt "Symbol"
 msgid "Sailing"
 msgstr "സ്ക്രോളിംഗ്"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:261 ../share/symbols/symbols.h:262
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
 msgctxt "Symbol"
 msgid "Sanitary Disposal Station"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:263 ../share/symbols/symbols.h:264
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
 #, fuzzy
 msgctxt "Symbol"
 msgid "Scuba Diving"
 msgstr "വൃത്താകാരമായ വിഭജനങ്ങള്‍"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:265 ../share/symbols/symbols.h:266
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
 msgctxt "Symbol"
 msgid "Self Guided Trail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:267 ../share/symbols/symbols.h:268
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
 #, fuzzy
 msgctxt "Symbol"
 msgid "Shelter"
 msgstr "ഫില്‍റ്റര്‍"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:269 ../share/symbols/symbols.h:270
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
 #, fuzzy
 msgctxt "Symbol"
 msgid "Showers"
 msgstr "ദൃശ്യമാക്കുക:"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:271 ../share/symbols/symbols.h:272
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
 #, fuzzy
 msgctxt "Symbol"
 msgid "Sledding"
 msgstr "നിറഭേദം വരുത്തുക"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:273 ../share/symbols/symbols.h:274
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
 msgctxt "Symbol"
 msgid "SnowmobileTrail"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:275 ../share/symbols/symbols.h:276
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
 #, fuzzy
 msgctxt "Symbol"
 msgid "Stable"
 msgstr "പട്ടിക"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:277 ../share/symbols/symbols.h:278
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
 msgctxt "Symbol"
 msgid "Store"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:279 ../share/symbols/symbols.h:280
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
 msgctxt "Symbol"
 msgid "Swimming"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:283 ../share/symbols/symbols.h:284
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
+#: ../share/symbols/symbols.h:162 ../share/symbols/symbols.h:163
+msgctxt "Symbol"
+msgid "Telephone"
+msgstr ""
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
 msgctxt "Symbol"
 msgid "Emergency Telephone"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:285 ../share/symbols/symbols.h:286
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
 #, fuzzy
 msgctxt "Symbol"
 msgid "Trailhead"
 msgstr "ബ്രൈലി"
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:287 ../share/symbols/symbols.h:288
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
 msgctxt "Symbol"
 msgid "Wheelchair Accessible"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:289 ../share/symbols/symbols.h:290
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
 msgctxt "Symbol"
 msgid "Wind Surfing"
 msgstr ""
 
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:291
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:105
 msgctxt "Symbol"
 msgid "Blank"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:106
+msgctxt "Symbol"
+msgid "Flow Chart Shapes"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:107
+#, fuzzy
+msgctxt "Symbol"
+msgid "Process"
+msgstr "പോസ്റ്റ്-പ്രോസസര്‍ :"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:108
+#, fuzzy
+msgctxt "Symbol"
+msgid "Input/Output"
+msgstr "ഔട്ട് പുട്ട്"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:109
+#, fuzzy
+msgctxt "Symbol"
+msgid "Document"
+msgstr "ലിഖിതം"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:110
+#, fuzzy
+msgctxt "Symbol"
+msgid "Manual Operation"
+msgstr "കണക്കിലെ പ്രവര്‍ത്തകര്‍"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:111
+#, fuzzy
+msgctxt "Symbol"
+msgid "Preparation"
+msgstr "പൂരിതത്തിന് മുമ്പ്:"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:112
+#, fuzzy
+msgctxt "Symbol"
+msgid "Merge"
+msgstr "സംയോജനം"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:113
+#, fuzzy
+msgctxt "Symbol"
+msgid "Decision"
+msgstr "പ്രിസിഷന്‍"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:114
+msgctxt "Symbol"
+msgid "Magnetic Tape"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:115
+#, fuzzy
+msgctxt "Symbol"
+msgid "Display"
+msgstr "പ്രദര്‍ശിപ്പിക്കുന്ന രീതി(_D)"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:116
+msgctxt "Symbol"
+msgid "Auxiliary Operation"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:117
+#, fuzzy
+msgctxt "Symbol"
+msgid "Manual Input"
+msgstr "EMF ഇന്‍പുട്ട്"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:118
+#, fuzzy
+msgctxt "Symbol"
+msgid "Extract"
+msgstr "പ്രതിബിംബം എക്സ്ട്രാക്റ്റ് ചെയ്യുക"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:119
+msgctxt "Symbol"
+msgid "Terminal/Interrupt"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:120
+msgctxt "Symbol"
+msgid "Punched Card"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:121
+msgctxt "Symbol"
+msgid "Punch Tape"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:122
+msgctxt "Symbol"
+msgid "Online Storage"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:123
+msgctxt "Symbol"
+msgid "Keying"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:124
+msgctxt "Symbol"
+msgid "Sort"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:125
+#, fuzzy
+msgctxt "Symbol"
+msgid "Connector"
+msgstr "കണക്ടര്‍"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:126
+#, fuzzy
+msgctxt "Symbol"
+msgid "Off-Page Connector"
+msgstr "കണക്ടര്‍"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:127
+msgctxt "Symbol"
+msgid "Transmittal Tape"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:128
+msgctxt "Symbol"
+msgid "Communication Link"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:129
+#, fuzzy
+msgctxt "Symbol"
+msgid "Collate"
+msgstr "ചോക്ലേറ്റ് 1"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:130
+msgctxt "Symbol"
+msgid "Comment/Annotation"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:131
+msgctxt "Symbol"
+msgid "Core"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:132
+msgctxt "Symbol"
+msgid "Predefined Process"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:133
+msgctxt "Symbol"
+msgid "Magnetic Disk (Database)"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:134
+msgctxt "Symbol"
+msgid "Magnetic Drum (Direct Access)"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:135
+msgctxt "Symbol"
+msgid "Offline Storage"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:136
+msgctxt "Symbol"
+msgid "Logical Or"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:137
+msgctxt "Symbol"
+msgid "Logical And"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:138
+msgctxt "Symbol"
+msgid "Delay"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:139
+msgctxt "Symbol"
+msgid "Loop Limit Begin"
+msgstr ""
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:140
+msgctxt "Symbol"
+msgid "Loop Limit End"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:141
+msgctxt "Symbol"
+msgid "Word Balloons"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:142
+msgctxt "Symbol"
+msgid "Thought Balloon"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:143
+msgctxt "Symbol"
+msgid "Dream Speaking"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:144
+#, fuzzy
+msgctxt "Symbol"
+msgid "Rounded Balloon"
+msgstr "വൃത്താകാരമായി യോജിപ്പിക്കുന്നത്"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:145
+#, fuzzy
+msgctxt "Symbol"
+msgid "Squared Balloon"
+msgstr "സമചതുര ക്യാപ്പ്"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:146
+msgctxt "Symbol"
+msgid "Over the Phone"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:147
+msgctxt "Symbol"
+msgid "Hip Balloon"
+msgstr ""
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:148
+#, fuzzy
+msgctxt "Symbol"
+msgid "Circle Balloon"
+msgstr "വട്ടം"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:149
+msgctxt "Symbol"
+msgid "Exclaim Balloon"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:150
+#, fuzzy
+msgctxt "Symbol"
+msgid "Logic Symbols"
+msgstr "അക്ഷരു പോലുള്ള ചിഹ്നങ്ങള്‍"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:151
+msgctxt "Symbol"
+msgid "Xnor Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:152
+msgctxt "Symbol"
+msgid "Xor Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:153
+msgctxt "Symbol"
+msgid "Nor Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:154
+msgctxt "Symbol"
+msgid "Or Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:155
+msgctxt "Symbol"
+msgid "Nand Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:156
+msgctxt "Symbol"
+msgid "And Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:157
+msgctxt "Symbol"
+msgid "Buffer"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:158
+msgctxt "Symbol"
+msgid "Not Gate"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:159
+msgctxt "Symbol"
+msgid "Buffer Small"
+msgstr ""
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:160
+msgctxt "Symbol"
+msgid "Not Gate Small"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:161
+msgctxt "Symbol"
+msgid "AIGA Symbol Signs"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:164 ../share/symbols/symbols.h:165
+msgctxt "Symbol"
+msgid "Mail"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:166 ../share/symbols/symbols.h:167
+#, fuzzy
+msgctxt "Symbol"
+msgid "Currency Exchange"
+msgstr "ഇപ്പോള്‍ ഉപയോഗിക്കുന്നലയര്‍"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:168 ../share/symbols/symbols.h:169
+msgctxt "Symbol"
+msgid "Currency Exchange - Euro"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:170 ../share/symbols/symbols.h:171
+msgctxt "Symbol"
+msgid "Cashier"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:174 ../share/symbols/symbols.h:175
+msgctxt "Symbol"
+msgid "Lost and Found"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:176 ../share/symbols/symbols.h:177
+msgctxt "Symbol"
+msgid "Coat Check"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:178 ../share/symbols/symbols.h:179
+msgctxt "Symbol"
+msgid "Baggage Lockers"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:180 ../share/symbols/symbols.h:181
+msgctxt "Symbol"
+msgid "Escalator"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:182 ../share/symbols/symbols.h:183
+msgctxt "Symbol"
+msgid "Escalator Down"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:184 ../share/symbols/symbols.h:185
+msgctxt "Symbol"
+msgid "Escalator Up"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:186 ../share/symbols/symbols.h:187
+msgctxt "Symbol"
+msgid "Stairs"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:188 ../share/symbols/symbols.h:189
+msgctxt "Symbol"
+msgid "Stairs Down"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:190 ../share/symbols/symbols.h:191
+msgctxt "Symbol"
+msgid "Stairs Up"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:192 ../share/symbols/symbols.h:193
+#, fuzzy
+msgctxt "Symbol"
+msgid "Elevator"
+msgstr "ആരോഹണം"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:194 ../share/symbols/symbols.h:195
+msgctxt "Symbol"
+msgid "Toilets - Men"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:196 ../share/symbols/symbols.h:197
+msgctxt "Symbol"
+msgid "Toilets - Women"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:198 ../share/symbols/symbols.h:199
+msgctxt "Symbol"
+msgid "Toilets"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:200 ../share/symbols/symbols.h:201
+msgctxt "Symbol"
+msgid "Nursery"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:202 ../share/symbols/symbols.h:203
+msgctxt "Symbol"
+msgid "Drinking Fountain"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:204 ../share/symbols/symbols.h:205
+#, fuzzy
+msgctxt "Symbol"
+msgid "Waiting Room"
+msgstr "പെയിന്‍റിങ്"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:208 ../share/symbols/symbols.h:209
+#, fuzzy
+msgctxt "Symbol"
+msgid "Hotel Information"
+msgstr "താളിന്‍റെ വിവരം"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:210 ../share/symbols/symbols.h:211
+#, fuzzy
+msgctxt "Symbol"
+msgid "Air Transportation"
+msgstr "പരിവര്‍ത്തനം"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:212 ../share/symbols/symbols.h:213
+msgctxt "Symbol"
+msgid "Heliport"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:214 ../share/symbols/symbols.h:215
+msgctxt "Symbol"
+msgid "Taxi"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:216 ../share/symbols/symbols.h:217
+#, fuzzy
+msgctxt "Symbol"
+msgid "Bus"
+msgstr "മൂടല്‍"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:218 ../share/symbols/symbols.h:219
+#, fuzzy
+msgctxt "Symbol"
+msgid "Ground Transportation"
+msgstr "പരിവര്‍ത്തനം"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:220 ../share/symbols/symbols.h:221
+#, fuzzy
+msgctxt "Symbol"
+msgid "Rail Transportation"
+msgstr "പരിവര്‍ത്തനം"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:222 ../share/symbols/symbols.h:223
+#, fuzzy
+msgctxt "Symbol"
+msgid "Water Transportation"
+msgstr "പരിവര്‍ത്തനം"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:224 ../share/symbols/symbols.h:225
+msgctxt "Symbol"
+msgid "Car Rental"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:226 ../share/symbols/symbols.h:227
+msgctxt "Symbol"
+msgid "Restaurant"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:228 ../share/symbols/symbols.h:229
+msgctxt "Symbol"
+msgid "Coffeeshop"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:230 ../share/symbols/symbols.h:231
+#, fuzzy
+msgctxt "Symbol"
+msgid "Bar"
+msgstr "മരത്തൊലി"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:232 ../share/symbols/symbols.h:233
+msgctxt "Symbol"
+msgid "Shops"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:234 ../share/symbols/symbols.h:235
+msgctxt "Symbol"
+msgid "Barber Shop - Beauty Salon"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:236 ../share/symbols/symbols.h:237
+msgctxt "Symbol"
+msgid "Barber Shop"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:238 ../share/symbols/symbols.h:239
+msgctxt "Symbol"
+msgid "Beauty Salon"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:240 ../share/symbols/symbols.h:241
+msgctxt "Symbol"
+msgid "Ticket Purchase"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:242 ../share/symbols/symbols.h:243
+msgctxt "Symbol"
+msgid "Baggage Check In"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:244 ../share/symbols/symbols.h:245
+msgctxt "Symbol"
+msgid "Baggage Claim"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:246 ../share/symbols/symbols.h:247
+#, fuzzy
+msgctxt "Symbol"
+msgid "Customs"
+msgstr "പതിവ്"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:248 ../share/symbols/symbols.h:249
+#, fuzzy
+msgctxt "Symbol"
+msgid "Immigration"
+msgstr "രൂപങ്ങള്‍"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:250 ../share/symbols/symbols.h:251
+#, fuzzy
+msgctxt "Symbol"
+msgid "Departing Flights"
+msgstr "ഉദ്ധിഷ്ടസ്ഥാനത്തെ ഉയരം"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:252 ../share/symbols/symbols.h:253
+msgctxt "Symbol"
+msgid "Arriving Flights"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:254 ../share/symbols/symbols.h:255
+msgctxt "Symbol"
+msgid "Smoking"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:256 ../share/symbols/symbols.h:257
+msgctxt "Symbol"
+msgid "No Smoking"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:260 ../share/symbols/symbols.h:261
+msgctxt "Symbol"
+msgid "No Parking"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:262 ../share/symbols/symbols.h:263
+msgctxt "Symbol"
+msgid "No Dogs"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:264 ../share/symbols/symbols.h:265
+msgctxt "Symbol"
+msgid "No Entry"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:266 ../share/symbols/symbols.h:267
+msgctxt "Symbol"
+msgid "Exit"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:268 ../share/symbols/symbols.h:269
+msgctxt "Symbol"
+msgid "Fire Extinguisher"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:270 ../share/symbols/symbols.h:271
+#, fuzzy
+msgctxt "Symbol"
+msgid "Right Arrow"
+msgstr "വലത്"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:272 ../share/symbols/symbols.h:273
+msgctxt "Symbol"
+msgid "Forward and Right Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:274 ../share/symbols/symbols.h:275
+#, fuzzy
+msgctxt "Symbol"
+msgid "Up Arrow"
+msgstr "ആരോകള്‍"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:276 ../share/symbols/symbols.h:277
+msgctxt "Symbol"
+msgid "Forward and Left Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:278 ../share/symbols/symbols.h:279
+#, fuzzy
+msgctxt "Symbol"
+msgid "Left Arrow"
+msgstr "ആരോകള്‍"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:280 ../share/symbols/symbols.h:281
+msgctxt "Symbol"
+msgid "Left and Down Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:282 ../share/symbols/symbols.h:283
+#, fuzzy
+msgctxt "Symbol"
+msgid "Down Arrow"
+msgstr "ആരോകള്‍"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:284 ../share/symbols/symbols.h:285
+msgctxt "Symbol"
+msgid "Right and Down Arrow"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:286 ../share/symbols/symbols.h:287
+msgctxt "Symbol"
+msgid "NPS Wheelchair Accessible - 1996"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:288 ../share/symbols/symbols.h:289
+msgctxt "Symbol"
+msgid "NPS Wheelchair Accessible"
+msgstr ""
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:290 ../share/symbols/symbols.h:291
+msgctxt "Symbol"
+msgid "New Wheelchair Accessible"
 msgstr ""
 
 #: ../share/templates/templates.h:1
@@ -4787,6 +4787,19 @@ msgstr ""
 
 #: ../share/templates/templates.h:1
 msgid "CD label 120x120 disc disk"
+msgstr ""
+
+#: ../share/templates/templates.h:1
+#, fuzzy
+msgid "No Layers"
+msgstr "പാളി"
+
+#: ../share/templates/templates.h:1
+msgid "Empty sheet with no layers"
+msgstr ""
+
+#: ../share/templates/templates.h:1
+msgid "no layers empty"
 msgstr ""
 
 #: ../share/templates/templates.h:1
@@ -4812,19 +4825,6 @@ msgstr ""
 
 #: ../share/templates/templates.h:1
 msgid "guidelines typography canvas"
-msgstr ""
-
-#: ../share/templates/templates.h:1
-#, fuzzy
-msgid "No Layers"
-msgstr "പാളി"
-
-#: ../share/templates/templates.h:1
-msgid "Empty sheet with no layers"
-msgstr ""
-
-#: ../share/templates/templates.h:1
-msgid "no layers empty"
 msgstr ""
 
 #. 3D box
@@ -5256,22 +5256,22 @@ msgstr "ഗ്രിഡ് സ്പെയ്സിങ്ങിന്റെ ഇ�
 msgid " to "
 msgstr " to "
 
-#: ../src/document.cpp:526
+#: ../src/document.cpp:529
 #, fuzzy, c-format
 msgid "New document %d"
 msgstr "പുതിയ പ്രമാണം"
 
-#: ../src/document.cpp:531
+#: ../src/document.cpp:534
 #, c-format
 msgid "Memory document %d"
 msgstr "പ്രജ്ഞ പ്രമാണം %d"
 
-#: ../src/document.cpp:560
+#: ../src/document.cpp:563
 #, fuzzy
 msgid "Memory document %1"
 msgstr "പ്രജ്ഞ പ്രമാണം %d"
 
-#: ../src/document.cpp:859
+#: ../src/document.cpp:862
 #, fuzzy, c-format
 msgid "Unnamed document %d"
 msgstr "പേരിടാത്ത പ്രമാണം"
@@ -6257,54 +6257,54 @@ msgstr "പേജ് തിരഞ്ഞെടുക്കുക:"
 msgid "out of %i"
 msgstr "%i ല്‍"
 
-#: ../src/extension/internal/cdr-input.cpp:293
+#: ../src/extension/internal/cdr-input.cpp:300
 msgid "Corel DRAW Input"
 msgstr "കോറല്‍ ഡ്രോ ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/cdr-input.cpp:298
+#: ../src/extension/internal/cdr-input.cpp:305
 msgid "Corel DRAW 7-X4 files (*.cdr)"
 msgstr "കോറല്‍  ഡ്രോ 7 എക്സ്4 ഫയല്‍സ്(*.സിഡിആര്‍ )"
 
-#: ../src/extension/internal/cdr-input.cpp:299
+#: ../src/extension/internal/cdr-input.cpp:306
 msgid "Open files saved in Corel DRAW 7-X4"
 msgstr "കോറല്‍ ഡ്രോ 7-X4 ലെ സംരക്ഷിച്ച ഫയലുകള്‍ തുറക്കുക"
 
-#: ../src/extension/internal/cdr-input.cpp:306
+#: ../src/extension/internal/cdr-input.cpp:313
 msgid "Corel DRAW templates input"
 msgstr "കോറല്‍ ഡ്രോ ടെമ്പ്ലേറ്റ്സ് ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/cdr-input.cpp:311
+#: ../src/extension/internal/cdr-input.cpp:318
 #, fuzzy
 msgid "Corel DRAW 7-13 template files (*.cdt)"
 msgstr "കോറല്‍ ഡ്രോ 7-13 ടെമ്പ്ലേറ്റ് ഫയല്‍സ് (.സിഡിറ്റി)"
 
-#: ../src/extension/internal/cdr-input.cpp:312
+#: ../src/extension/internal/cdr-input.cpp:319
 msgid "Open files saved in Corel DRAW 7-13"
 msgstr "കോറല്‍ ഡ്രോ 7-13 ലെ സംരക്ഷിച്ച ഫയലുകള്‍ തുറക്കുക"
 
-#: ../src/extension/internal/cdr-input.cpp:319
+#: ../src/extension/internal/cdr-input.cpp:326
 msgid "Corel DRAW Compressed Exchange files input"
 msgstr "കോറല്‍  ഡ്രോ സംക്ഷിപ്തമാക്കി കൈമാറ്റിയ ഫയല്‍സ് ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/cdr-input.cpp:324
+#: ../src/extension/internal/cdr-input.cpp:331
 #, fuzzy
 msgid "Corel DRAW Compressed Exchange files (*.ccx)"
 msgstr "കോറല്‍  ഡ്രോ സംക്ഷിപ്തമാക്കി കൈമാറ്റിയ ഫയല്‍സ്(.സിസിഎക്സ്)"
 
-#: ../src/extension/internal/cdr-input.cpp:325
+#: ../src/extension/internal/cdr-input.cpp:332
 msgid "Open compressed exchange files saved in Corel DRAW"
 msgstr "കോറല്‍  ഡ്രോയില്‍ സംരക്ഷിച്ചിരിക്കുന്ന സംക്ഷിപ്തമാക്കി കൈമാറ്റിയ ഫയല്‍സ് തുറക്കുക"
 
-#: ../src/extension/internal/cdr-input.cpp:332
+#: ../src/extension/internal/cdr-input.cpp:339
 msgid "Corel DRAW Presentation Exchange files input"
 msgstr "കോറല്‍  ഡ്രോ അവതരണം കൈമാറ്റിയ ഫയല്‍സ് ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/cdr-input.cpp:337
+#: ../src/extension/internal/cdr-input.cpp:344
 #, fuzzy
 msgid "Corel DRAW Presentation Exchange files (*.cmx)"
 msgstr "കോറല്‍  ഡ്രോ അവതരണം കൈമാറ്റിയ ഫയല്‍സ്(.സിഎംഎക്സ്)"
 
-#: ../src/extension/internal/cdr-input.cpp:338
+#: ../src/extension/internal/cdr-input.cpp:345
 msgid "Open presentation exchange files saved in Corel DRAW"
 msgstr "കോറല്‍  ഡ്രോയില്‍ സംരക്ഷിച്ചിരിക്കുന്ന അവതരണം കൈമാറ്റിയ ഫയല്‍സ് തുറക്കുക"
 
@@ -8532,7 +8532,7 @@ msgstr "കടക്കാരന്‍"
 #: ../src/extension/internal/grid.cpp:210
 #: ../src/ui/dialog/document-properties.cpp:163
 #: ../src/ui/dialog/inkscape-preferences.cpp:827
-#: ../src/widgets/toolbox.cpp:1901
+#: ../src/widgets/toolbox.cpp:1900
 msgid "Grids"
 msgstr "ഗ്രിഡുക്കള്‍"
 
@@ -8797,54 +8797,54 @@ msgstr "ചുരുക്കിയ Plain SVG (*.svgz)"
 msgid "Scalable Vector Graphics format compressed with GZip"
 msgstr "GZip നോടൊപ്പം ചുരുക്കിയ അളക്കുവാന്‍ പറ്റുന്ന വെക്ടര്‍ ഗ്രാഫിക്സ് ഘടന"
 
-#: ../src/extension/internal/vsd-input.cpp:296
+#: ../src/extension/internal/vsd-input.cpp:303
 #, fuzzy
 msgid "VSD Input"
 msgstr "PDF ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/vsd-input.cpp:301
+#: ../src/extension/internal/vsd-input.cpp:308
 #, fuzzy
 msgid "Microsoft Visio Diagram (*.vsd)"
 msgstr "ഡിയ രേഖാചിത്രം (*.ഡിഐഎ)"
 
-#: ../src/extension/internal/vsd-input.cpp:302
+#: ../src/extension/internal/vsd-input.cpp:309
 msgid "File format used by Microsoft Visio 6 and later"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:309
+#: ../src/extension/internal/vsd-input.cpp:316
 #, fuzzy
 msgid "VDX Input"
 msgstr "ഡിഎക്സ്എഫ് ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/vsd-input.cpp:314
+#: ../src/extension/internal/vsd-input.cpp:321
 #, fuzzy
 msgid "Microsoft Visio XML Diagram (*.vdx)"
 msgstr "മൈക്രോസോഫ്റ്റ് എക്സ്എഎംഎല്‍ (*.എക്സ്എഎംഎല്‍ )"
 
-#: ../src/extension/internal/vsd-input.cpp:315
+#: ../src/extension/internal/vsd-input.cpp:322
 msgid "File format used by Microsoft Visio 2010 and later"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:322
+#: ../src/extension/internal/vsd-input.cpp:329
 #, fuzzy
 msgid "VSDM Input"
 msgstr "EMF ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/vsd-input.cpp:327
+#: ../src/extension/internal/vsd-input.cpp:334
 msgid "Microsoft Visio 2013 drawing (*.vsdm)"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:328
-#: ../src/extension/internal/vsd-input.cpp:341
+#: ../src/extension/internal/vsd-input.cpp:335
+#: ../src/extension/internal/vsd-input.cpp:348
 msgid "File format used by Microsoft Visio 2013 and later"
 msgstr ""
 
-#: ../src/extension/internal/vsd-input.cpp:335
+#: ../src/extension/internal/vsd-input.cpp:342
 #, fuzzy
 msgid "VSDX Input"
 msgstr "ഡിഎക്സ്എഫ് ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/vsd-input.cpp:340
+#: ../src/extension/internal/vsd-input.cpp:347
 msgid "Microsoft Visio 2013 drawing (*.vsdx)"
 msgstr ""
 
@@ -8879,15 +8879,15 @@ msgstr "വിന്‍ഡോസ് മെറ്റാഫയല്‍ (*.ഡബ�
 msgid "Windows Metafile"
 msgstr "ജാലക മെറ്റാഫയലുകള്‍"
 
-#: ../src/extension/internal/wpg-input.cpp:144
+#: ../src/extension/internal/wpg-input.cpp:151
 msgid "WPG Input"
 msgstr "WPG ഇന്‍പുട്ട്"
 
-#: ../src/extension/internal/wpg-input.cpp:149
+#: ../src/extension/internal/wpg-input.cpp:156
 msgid "WordPerfect Graphics (*.wpg)"
 msgstr "വേഡ്പെര്‍ഫെക്ട് ഗ്രാഫിക്സുകള്‍ (*.wpg)"
 
-#: ../src/extension/internal/wpg-input.cpp:150
+#: ../src/extension/internal/wpg-input.cpp:157
 msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "കോറല്‍ വേള്‍ഡ്പെര്‍ഫെക്ട് ഉപയോഗിക്കുന്ന വെക്ടര്‍ ഗ്രാഫിക്സ് ഘടന"
 
@@ -8958,7 +8958,7 @@ msgstr "ഡോക്യുമെന്‍റ് സംരക്ഷിക്ക�
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 
-#: ../src/file.cpp:749 ../src/file.cpp:1694
+#: ../src/file.cpp:749 ../src/file.cpp:1698
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "അപേക്ഷിച്ച ഫയല്‍ %s ലോഡ് ചെയ്യുന്നതില്‍ പരാജയപ്പെട്ടു"
@@ -9032,7 +9032,7 @@ msgid "Document saved."
 msgstr "ഡോക്യുമെന്‍‌റ് സൂക്ഷിച്ചു."
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:1284 ../src/file.cpp:1853
+#: ../src/file.cpp:1284 ../src/file.cpp:1857
 #, fuzzy
 msgid "drawing"
 msgstr "വര"
@@ -9058,20 +9058,20 @@ msgstr "മാറ്റങ്ങളൊന്നും സൂക്ഷിക�
 msgid "Saving document..."
 msgstr "രേഖ സൂക്ഷിക്കുന്നു..."
 
-#: ../src/file.cpp:1691 ../src/ui/dialog/inkscape-preferences.cpp:1500
+#: ../src/file.cpp:1695 ../src/ui/dialog/inkscape-preferences.cpp:1500
 #: ../src/ui/dialog/ocaldialogs.cpp:1244
 msgid "Import"
 msgstr "ഇംപോര്‍ട്ട്"
 
-#: ../src/file.cpp:1741
+#: ../src/file.cpp:1745
 msgid "Select file to import"
 msgstr "ഇംപോര്‍ട്ട് ചെയ്യാനായി ഒരു ഫയല്‍ തിരഞ്ഞെടുക്കുക"
 
-#: ../src/file.cpp:1874
+#: ../src/file.cpp:1878
 msgid "Select file to export to"
 msgstr "അയക്കുന്നതിനുള്ള ഫയല്‍ തിരഞ്ഞെടുക്കുക"
 
-#: ../src/file.cpp:2127
+#: ../src/file.cpp:2131
 #, fuzzy
 msgid "Import Clip Art"
 msgstr "കയറ്റുമതി ഇറക്കുമതി"
@@ -9488,7 +9488,7 @@ msgstr ""
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "ചുവടെ നല്‍കിയിട്ടുള്ള രേഖകളുടെ സ്വാഭാവികമായുള്ള ബാക്കപ്സ് പരാജയപ്പെട്ടു:\n"
 
-#: ../src/knot.cpp:350
+#: ../src/knot.cpp:348
 msgid "Node or handle drag canceled."
 msgstr "നോഡോ ഹാന്‍ഡിലോ വലിച്ചത് റദ്ദാക്കുക"
 
@@ -10238,7 +10238,7 @@ msgid "Path along which to bend the original path"
 msgstr "മൂലവഴിയിലേക്കു തിരിഞ്ഞ വഴി"
 
 #: ../src/live_effects/lpe-bendpath.cpp:71
-#: ../src/live_effects/lpe-patternalongpath.cpp:64
+#: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../src/ui/dialog/export.cpp:285 ../src/ui/dialog/transformation.cpp:73
 #: ../src/ui/widget/page-sizer.cpp:237
 msgid "_Width:"
@@ -10266,7 +10266,7 @@ msgstr ""
 "കൂടിക്കലര്‍ന്ന പാതയിലൂടെ ഇത് കൂടിക്കലരുന്നതിന് മുമ്പായി യഥാര്‍ത്ഥത്തിലുള്ളതിനെ 90 ഡിഗ്രി കറക്കുക"
 
 #: ../src/live_effects/lpe-bendpath.cpp:178
-#: ../src/live_effects/lpe-patternalongpath.cpp:279
+#: ../src/live_effects/lpe-patternalongpath.cpp:281
 #, fuzzy
 msgid "Change the width"
 msgstr "വരകളുടെ വീതി മാറ്റുക"
@@ -11370,61 +11370,61 @@ msgstr "ഡിഎക്സ്എഫ് ബിന്ദുക്കള്‍"
 msgid "Adjust center of mirroring"
 msgstr "നിറം നേരെയാക്കുക"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:53
+#: ../src/live_effects/lpe-patternalongpath.cpp:54
 #: ../share/extensions/pathalongpath.inx.h:10
 msgid "Single"
 msgstr "ഒന്ന്"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:54
+#: ../src/live_effects/lpe-patternalongpath.cpp:55
 #: ../share/extensions/pathalongpath.inx.h:11
 msgid "Single, stretched"
 msgstr "ഏകം,നിവര്‍ന്നത്"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:55
+#: ../src/live_effects/lpe-patternalongpath.cpp:56
 #: ../share/extensions/pathalongpath.inx.h:12
 msgid "Repeated"
 msgstr "ആവര്‍ത്തിക്കുന്നു"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:56
+#: ../src/live_effects/lpe-patternalongpath.cpp:57
 #: ../share/extensions/pathalongpath.inx.h:13
 msgid "Repeated, stretched"
 msgstr "ആവര്‍ത്തിക്കുന്നു,വ്യാപ്പ്പിക്കുന്നു"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:62
+#: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Pattern source:"
 msgstr "മാതൃകയുടെ ഉറവിടം"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:62
+#: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Path to put along the skeleton path"
 msgstr "സ്കെല്‍ട്ടണ്‍ മാര്‍ഗ്ഗത്തിനൊപ്പം  ചേര്‍ക്കുക"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:64
+#: ../src/live_effects/lpe-patternalongpath.cpp:65
 msgid "Width of the pattern"
 msgstr "മാതൃകയുടെ വിതി"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:65
+#: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "Pattern copies:"
 msgstr "മാതൃകാ പതിപ്പുകള്‍"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:65
+#: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "How many pattern copies to place along the skeleton path"
 msgstr "സ്കെല്‍ട്ടണ്‍ മാര്‍ഗ്ഗത്തിനൊപ്പം എത്ര  ക്രമമായ പതിപ്പുകള്‍ ചേര്‍ത്തു"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:67
+#: ../src/live_effects/lpe-patternalongpath.cpp:68
 #, fuzzy
 msgid "Wid_th in units of length"
 msgstr "വീതി അകലത്തിന്‍റെ അളവില്‍"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:68
+#: ../src/live_effects/lpe-patternalongpath.cpp:69
 msgid "Scale the width of the pattern in units of its length"
 msgstr "ക്രമമായ വസ്തുവിന്‍റെ അളവ്"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:70
+#: ../src/live_effects/lpe-patternalongpath.cpp:71
 #, fuzzy
 msgid "Spa_cing:"
 msgstr "അകലം_Y:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:72
+#: ../src/live_effects/lpe-patternalongpath.cpp:73
 #, no-c-format
 msgid ""
 "Space between copies of the pattern. Negative values allowed, but are "
@@ -11433,22 +11433,22 @@ msgstr ""
 "മാതൃകയുടെ പകര്‍പ്പുകള്‍ക്കിടയിലെ അകലം.നെഗറ്റീവ് വിലകള്‍ അനുവദനീയമാണ് എന്നാല്‍ മാതൃകാ വീതിയുടെ "
 "-90% ആയി പരിമിതപ്പെടുത്തിയിരിക്കുന്നു."
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:74
+#: ../src/live_effects/lpe-patternalongpath.cpp:75
 #, fuzzy
 msgid "No_rmal offset:"
 msgstr "സാധാരണ ഓഫ്സെറ്റ്"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:75
+#: ../src/live_effects/lpe-patternalongpath.cpp:76
 #, fuzzy
 msgid "Tan_gential offset:"
 msgstr "നിവര്‍ന്ന ഓഫ്സെറ്റ്"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:76
+#: ../src/live_effects/lpe-patternalongpath.cpp:77
 #, fuzzy
 msgid "Offsets in _unit of pattern size"
 msgstr "ക്രമീകരണവലിപ്പമനുസരിച്ചുള്ള ഓഫ്സെറ്റ്"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:77
+#: ../src/live_effects/lpe-patternalongpath.cpp:78
 msgid ""
 "Spacing, tangential and normal offset are expressed as a ratio of width/"
 "height"
@@ -11456,21 +11456,21 @@ msgstr ""
 "അകലവും, റ്റാന്‍ജന്‍ഷ്യലും ലംബകവുമായ ഓഫ്സെറ്റുകള്‍ വീതി/ഉയരം എന്ന ഭാജ്യ രൂപത്തിലാണ് "
 "പ്രദര്‍ശിപ്പിക്കുന്നത്"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:79
+#: ../src/live_effects/lpe-patternalongpath.cpp:80
 #, fuzzy
 msgid "Pattern is _vertical"
 msgstr "ലംബരൂപത്തിലുള്ള ക്രമീകരണം"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:79
+#: ../src/live_effects/lpe-patternalongpath.cpp:80
 msgid "Rotate pattern 90 deg before applying"
 msgstr "നടപ്പാക്കുന്നതിനു മുന്‍പ് ക്രമീകരണം 90 ഡിഗ്രി തിരിക്കുക"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:81
+#: ../src/live_effects/lpe-patternalongpath.cpp:82
 #, fuzzy
 msgid "_Fuse nearby ends:"
 msgstr "അവസാനഭാഗത്തിനടുത്ത് യോജിപ്പിക്കുക"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:81
+#: ../src/live_effects/lpe-patternalongpath.cpp:82
 msgid "Fuse ends closer than this number. 0 means don't fuse."
 msgstr "ഈ നമ്പറിനടുത്തുള്ള ഭാഗങ്ങള്‍ യോജിപ്പിക്കുക,0 ആണെങ്കില്‍ യോജിപ്പിക്കരുത്"
 
@@ -12586,276 +12586,280 @@ msgstr "നിര്‍ദേശരേഖയിലെ കര്‍മ്മ വ�
 msgid "Unable to find node ID: '%s'\n"
 msgstr "നോഡ് വ്യക്തിത്വം കണ്ടെത്താന്‍ കഴിഞ്ഞില്ല"
 
-#: ../src/main.cpp:300
+#: ../src/main.cpp:301
 msgid "Print the Inkscape version number"
 msgstr "ഇങ്ക്സ് കേപ്പ് അക്കങ്ങള്‍ അച്ചടിക്കുക"
 
-#: ../src/main.cpp:305
+#: ../src/main.cpp:306
 msgid "Do not use X server (only process files from console)"
 msgstr "എക്സ്-സെര്‍വര്‍ ഉപയോഗിക്കരുത്"
 
-#: ../src/main.cpp:310
+#: ../src/main.cpp:311
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "എക്സ്-സെര്‍വര്‍ ഉപയോഗിക്കുക"
 
-#: ../src/main.cpp:315
+#: ../src/main.cpp:316
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "എക്സ്-സെര്‍വര്‍ ഉപയോഗിക്കരുത്"
 
-#: ../src/main.cpp:316 ../src/main.cpp:321 ../src/main.cpp:326
-#: ../src/main.cpp:398 ../src/main.cpp:403 ../src/main.cpp:408
-#: ../src/main.cpp:419 ../src/main.cpp:435 ../src/main.cpp:440
+#: ../src/main.cpp:317 ../src/main.cpp:322 ../src/main.cpp:327
+#: ../src/main.cpp:399 ../src/main.cpp:404 ../src/main.cpp:409
+#: ../src/main.cpp:420 ../src/main.cpp:436 ../src/main.cpp:441
 msgid "FILENAME"
 msgstr "ഫയലിന്‍റെ പേര്"
 
-#: ../src/main.cpp:320
+#: ../src/main.cpp:321
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr "പ്രത്യേക രൂപത്തില്‍ പ്രമാണങ്ങള്‍ അച്ചടിക്കുക"
 
-#: ../src/main.cpp:325
+#: ../src/main.cpp:326
 msgid "Export document to a PNG file"
 msgstr "പ്രമാണങ്ങള്‍ പിഎന്‍ജി രൂപത്തിലേക്കു മാറ്റുക"
 
-#: ../src/main.cpp:330
+#: ../src/main.cpp:331
 #, fuzzy
 msgid ""
 "Resolution for exporting to bitmap and for rasterization of filters in PS/"
 "EPS/PDF (default 96)"
 msgstr "എക്സപോര്‍ട്ട് ചെയ്ത ബിറ്റ് മാപ്പിലെ റാസ്റ്ററൈസേഷന്‍ ഫില്‍ട്ടറിന്‍റെ റെസല്യൂഷന്‍"
 
-#: ../src/main.cpp:331 ../src/ui/widget/rendering-options.cpp:37
+#: ../src/main.cpp:332 ../src/ui/widget/rendering-options.cpp:37
 msgid "DPI"
 msgstr "ഡിപിഐ"
 
-#: ../src/main.cpp:335
+#: ../src/main.cpp:336
 msgid ""
 "Exported area in SVG user units (default is the page; 0,0 is lower-left "
 "corner)"
 msgstr "എസ്വിജി ഉപഭോക്താവിന്‍റെ സ്ഥലം എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/main.cpp:336
+#: ../src/main.cpp:337
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:340
+#: ../src/main.cpp:341
 msgid "Exported area is the entire drawing (not page)"
 msgstr "വരച്ച ഭാഗങ്ങള്‍ എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/main.cpp:345
+#: ../src/main.cpp:346
 msgid "Exported area is the entire page"
 msgstr "എല്ലാഭാഗങ്ങളും എക്സപോര്‍ട്ടി ചെയ്യുക"
 
-#: ../src/main.cpp:350
+#: ../src/main.cpp:351
 msgid "Only for PS/EPS/PDF, sets margin in mm around exported area (default 0)"
 msgstr ""
 
-#: ../src/main.cpp:351 ../src/main.cpp:393
+#: ../src/main.cpp:352 ../src/main.cpp:394
 msgid "VALUE"
 msgstr "VALUE"
 
-#: ../src/main.cpp:355
+#: ../src/main.cpp:356
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
 msgstr "എക്സ്പോര്‍ട്ട് ചെയ്ത ബിറ്റ്മാപ്പിനെ അടുത്തുള്ള ഇന്‍റിജര്‍ അളവിനോട് സ്നാപ്പു ചെയ്യുക"
 
-#: ../src/main.cpp:360
+#: ../src/main.cpp:361
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "എക്സപോര്‍ട്ട് ചെയ്ത ചിത്രത്തിന്‍റെ വീതി പിക്സലില്‍"
 
-#: ../src/main.cpp:361
+#: ../src/main.cpp:362
 msgid "WIDTH"
 msgstr "_വീതി"
 
-#: ../src/main.cpp:365
+#: ../src/main.cpp:366
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "എക്സപോര്‍ട്ട് ചെയ്ത ചിത്രത്തിന്‍റെ ഉയരം പിക്സലില്‍"
 
-#: ../src/main.cpp:366
+#: ../src/main.cpp:367
 msgid "HEIGHT"
 msgstr "_ഉയരം"
 
-#: ../src/main.cpp:370
+#: ../src/main.cpp:371
 msgid "The ID of the object to export"
 msgstr "എക്സപോര്‍ട്ട് ചെയ്ത വസ്തുവിന്‍റെ ഐഡി"
 
-#: ../src/main.cpp:371 ../src/main.cpp:484
+#: ../src/main.cpp:372 ../src/main.cpp:485
 #: ../src/ui/dialog/inkscape-preferences.cpp:1564
 msgid "ID"
 msgstr "_ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:377
+#: ../src/main.cpp:378
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr "എക്സ്പോര്‍ട്ട് ഐഡി ഉള്ളതു മാത്രം എക്സ്പോര്‍ട്ട് ചെയ്യുക അല്ലാത്തവ മറച്ചു പിടിക്കുക"
 
-#: ../src/main.cpp:382
+#: ../src/main.cpp:383
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr "എക്സ്പോര്‍ട്ട് ചെയ്യുമ്പോള്‍ ഡിപിഐ ഹിന്‍റുകളും ഫയലിന്‍റേയും പേര് ഉപയോഗിക്കുക"
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:388
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr "എക്സ്പോര്‍ട്ട് ചെയ്ത ബിറ്റ്മാപ്പിലെ പശ്ചാത്തല നിറം"
 
-#: ../src/main.cpp:388
+#: ../src/main.cpp:389
 msgid "COLOR"
 msgstr "നിറം"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:393
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr "എക്സപോര്‍ട്ട് ചെയ്ത ബിറ്റ്മാപ്പ് ചിത്രത്തിലെ പശ്ചാത്തലത്തിലെ ഒപാസിറ്റി"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:398
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr "എസ് വിജി രൂപത്തില്‍ പ്രമാണങ്ങല്‍എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:403
 msgid "Export document to a PS file"
 msgstr "പിഎസ് രൂപത്തില്‍ പ്രമാണങ്ങള്‍ എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:408
 msgid "Export document to an EPS file"
 msgstr "ഇപിഎസ് രൂപത്തില്‍ പ്രമാണങ്ങള്‍ എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:413
 msgid ""
 "Choose the PostScript Level used to export. Possible choices are 2 and 3 "
 "(the default)"
 msgstr ""
 
-#: ../src/main.cpp:414
+#: ../src/main.cpp:415
 #, fuzzy
 msgid "PS Level"
 msgstr "ലെവല്‍"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:419
 msgid "Export document to a PDF file"
 msgstr "പിഡിഎഫ് രൂപത്തില്‍ പ്രമാണങ്ങള്‍ എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
 #. TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:424
+#: ../src/main.cpp:425
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
 "found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
 
-#: ../src/main.cpp:425
+#: ../src/main.cpp:426
 msgid "PDF_VERSION"
 msgstr ""
 
-#: ../src/main.cpp:429
+#: ../src/main.cpp:430
 msgid ""
 "Export PDF/PS/EPS without text. Besides the PDF/PS/EPS, a LaTeX file is "
 "exported, putting the text on top of the PDF/PS/EPS file. Include the result "
 "in LaTeX like: \\input{latexfile.tex}"
 msgstr "പിഡിഎഫ്,പിഎസ്,ഇപിഎസ് എന്നിവ എക്സ്പോര്‍ട്ട് ചെയ്യുന്നത് ടെക്സ്റ്റ് ഇല്ലാതെയായിരിക്കണം"
 
-#: ../src/main.cpp:434
+#: ../src/main.cpp:435
 msgid "Export document to an Enhanced Metafile (EMF) File"
 msgstr "എന്‍ഹാന്‍സ്ഡ് മെറ്റാ ഫയല്‍ രൂപത്തില്‍ പ്രമാണങ്ങള്‍ എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/main.cpp:439
+#: ../src/main.cpp:440
 #, fuzzy
 msgid "Export document to a Windows Metafile (WMF) File"
 msgstr "എന്‍ഹാന്‍സ്ഡ് മെറ്റാ ഫയല്‍ രൂപത്തില്‍ പ്രമാണങ്ങള്‍ എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/main.cpp:444
+#: ../src/main.cpp:445
 #, fuzzy
 msgid "Convert text object to paths on export (PS, EPS, PDF, SVG)"
 msgstr "എക്സ്പോര്‍ട്ട് ചെയ്യുമ്പോള്‍ മാര്‍ഗ്ഗത്തിനനുസരിച്ച് ടെക്സ്റ്റ് മാറ്റുക"
 
-#: ../src/main.cpp:449
+#: ../src/main.cpp:450
 msgid ""
 "Render filtered objects without filters, instead of rasterizing (PS, EPS, "
 "PDF)"
 msgstr "റാസ്റ്ററൈസേഷനു പകരം ഫില്‍ട്ടറില്ലാത്ത ഫില്‍ട്ടേഡ് വസ്തുക്കളെ റെണ്‍ഡര്‍ ചെയ്യുക"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:455
+#: ../src/main.cpp:456
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr "ക്വറി ഐഡി പറഞ്ഞിട്ടുള്ള വരച്ചതിന്‍റെ എക്സ്- കോര്‍ണിനേറ്റ് ക്വറി"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:461
+#: ../src/main.cpp:462
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr "ക്വറി ഐഡി പറഞ്ഞിട്ടുള്ള വരച്ചതിന്‍റെ വൈ്- കോര്‍ണിനേറ്റ് ക്വറി"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:467
+#: ../src/main.cpp:468
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr "ക്വറി ഐഡി പറഞ്ഞിട്ടുള്ള വരച്ചതിന്‍റെ വീതി  ക്വറി"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:473
+#: ../src/main.cpp:474
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr "ക്വറി ഐഡി പറഞ്ഞിട്ടുള്ള വരച്ചതിന്‍റെ നീളംി  ക്വറി"
 
-#: ../src/main.cpp:478
+#: ../src/main.cpp:479
 msgid "List id,x,y,w,h for all objects"
 msgstr "വസ്തുക്കളെ എക്സ്, വൈ,ഡബ്ലിയൂ,എച്ച് എന്നിവയായി തരം തരം തിരിക്കുക"
 
-#: ../src/main.cpp:483
+#: ../src/main.cpp:484
 msgid "The ID of the object whose dimensions are queried"
 msgstr "അളവുകള്‍ ആവശ്യമുള്ള വസ്തുക്കളുടെ ഐഡി"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:489
+#: ../src/main.cpp:490
 msgid "Print out the extension directory and exit"
 msgstr "എക്സ്റ്റെന്‍ഷന്‍ പാതയുടെ പതിപ്പെടുത്തിട്ട് പുറത്തു കടക്കുക"
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:495
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "പ്മാണത്തിലം വിശദീകരണങ്ങളില്‍ ആവശ്യമില്ലാത്ത് ഒഴിവാക്കുക"
 
-#: ../src/main.cpp:500
+#: ../src/main.cpp:501
 msgid "Enter a listening loop for D-Bus messages in console mode"
 msgstr ""
 
-#: ../src/main.cpp:505
+#: ../src/main.cpp:506
 msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
 msgstr ""
 
-#: ../src/main.cpp:506
+#: ../src/main.cpp:507
 msgid "BUS-NAME"
 msgstr ""
 
-#: ../src/main.cpp:511
+#: ../src/main.cpp:512
 msgid "List the IDs of all the verbs in Inkscape"
 msgstr "ഇങ്ക്സ്കേപ്പിലെ ക്രിയകളുടെ നിര"
 
-#: ../src/main.cpp:516
+#: ../src/main.cpp:517
 msgid "Verb to call when Inkscape opens."
 msgstr "ഇങ്ക്സ്കേപ്പ് തുറക്കുമ്പോള്‍ വരുന്ന ക്രിയ"
 
-#: ../src/main.cpp:517
+#: ../src/main.cpp:518
 msgid "VERB-ID"
 msgstr "ക്രിയ-ഐഡി"
 
-#: ../src/main.cpp:521
+#: ../src/main.cpp:522
 msgid "Object ID to select when Inkscape opens."
 msgstr "ഇങ്ക്സ്കേപ്പ് തുറക്കുമ്പോള്‍ വരുന്ന വസ്തുവിന്‍റെ ഐഡി"
 
-#: ../src/main.cpp:522
+#: ../src/main.cpp:523
 msgid "OBJECT-ID"
 msgstr "വസ്തുവിന്‍റെ ഐഡി"
 
-#: ../src/main.cpp:526
+#: ../src/main.cpp:527
 msgid "Start Inkscape in interactive shell mode."
 msgstr "ഇന്‍ററാക്ടീവ് മോഡില്‍ ഇങ്ക്സ്കേപ്പ് തു?ക്കുക"
 
-#: ../src/main.cpp:876 ../src/main.cpp:1349
+#: ../src/main.cpp:532
+msgid "Prevents automatic fix of pre-92 files on opening them."
+msgstr ""
+
+#: ../src/main.cpp:882 ../src/main.cpp:1355
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -14080,26 +14084,26 @@ msgstr "<b>വസ്തുവിന്‍റെ</b> കൂട്ടം <b>%d</b>
 msgid "of <b>%d</b> objects"
 msgstr "<b>വസ്തുവിന്‍റെ</b> കൂട്ടം <b>%d</b>"
 
-#: ../src/sp-item.cpp:1035 ../src/verbs.cpp:213
+#: ../src/sp-item.cpp:1036 ../src/verbs.cpp:213
 msgid "Object"
 msgstr "വസ്തു"
 
-#: ../src/sp-item.cpp:1047
+#: ../src/sp-item.cpp:1048
 #, c-format
 msgid "%s; <i>clipped</i>"
 msgstr "%s;<i>ക്ലിപ്പ് ചെയ്തത് </i>"
 
-#: ../src/sp-item.cpp:1053
+#: ../src/sp-item.cpp:1054
 #, c-format
 msgid "%s; <i>masked</i>"
 msgstr "%s;<i>മാസ്ക് ചെയ്തത്</i>"
 
-#: ../src/sp-item.cpp:1063
+#: ../src/sp-item.cpp:1064
 #, c-format
 msgid "%s; <i>filtered (%s)</i>"
 msgstr "%s;<i>ഫില്‍റ്റര്‍ചെയ്തത്(%s)</i>"
 
-#: ../src/sp-item.cpp:1065
+#: ../src/sp-item.cpp:1066
 #, c-format
 msgid "%s; <i>filtered</i>"
 msgstr "%s;<i>ഫില്‍റ്റര്‍ചെയ്തത് </i>"
@@ -14671,7 +14675,7 @@ msgid "Rearrange"
 msgstr "പുനക്രമീക്കരിക്കുക"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:941
-#: ../src/widgets/toolbox.cpp:1803
+#: ../src/widgets/toolbox.cpp:1802
 msgid "Nodes"
 msgstr "നോഡുകള്‍"
 
@@ -15930,7 +15934,7 @@ msgstr "നീക്കം ചെയ്യുക(_R)"
 msgid "Remove selected grid."
 msgstr "തിരഞ്ഞെടുത്ത ഗ്രിഡി നീക്കുക"
 
-#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1910
+#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1909
 msgid "Guides"
 msgstr "പഠനസഹായികള്‍"
 
@@ -17500,7 +17504,7 @@ msgstr "സര്‍പ്പാളങ്ങള്‍"
 msgid "Search spirals"
 msgstr "സര്‍പ്പാളം തിരയൂ"
 
-#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1811
+#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1810
 msgid "Paths"
 msgstr "വഴുകള്‍"
 
@@ -22597,13 +22601,13 @@ msgstr ""
 #: ../src/ui/dialog/polar-arrange-tab.cpp:52
 #, fuzzy
 msgctxt "Polar arrange tab"
-msgid "Object's bounding box:"
+msgid "Objects' bounding boxes:"
 msgstr "വിഷ്വല്‍ ബൌണ്ടിംഗ് പെട്ടി"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
 #, fuzzy
 msgctxt "Polar arrange tab"
-msgid "Object's rotational center"
+msgid "Objects' rotational centers"
 msgstr "ഒബ്ജക്ടിന്റെ ഭ്രമണ കേന്ദ്രം"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:64
@@ -30733,8 +30737,8 @@ msgstr ""
 
 #: ../src/widgets/measure-toolbar.cpp:329
 #, fuzzy
-msgid "The offset size"
-msgstr "ഒന്നിനനുസരിച്ചുള്ള അലങ്കാരം"
+msgid "Mark dimension offset"
+msgstr "അളവുകള്‍"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
@@ -32710,140 +32714,140 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "പെയിന്‍റ് ബക്കറ്റില്‍ നിറയ്ക്കുന്ന വസ്തുക്കളുടെ ശൈലി"
 
-#: ../src/widgets/toolbox.cpp:1757
+#: ../src/widgets/toolbox.cpp:1756
 msgid "Bounding box"
 msgstr "ബൌണ്ടിംഗ് ബോക്സ്"
 
-#: ../src/widgets/toolbox.cpp:1757
+#: ../src/widgets/toolbox.cpp:1756
 #, fuzzy
 msgid "Snap bounding boxes"
 msgstr "ബൌണ്ടിംഗ് ബോക്സ് മൂലകളുടെ ചിത്രമെടുക്കുക"
 
-#: ../src/widgets/toolbox.cpp:1766
+#: ../src/widgets/toolbox.cpp:1765
 msgid "Bounding box edges"
 msgstr "ബൌണ്ടിംഗ് ബോക്സിന്‍റെ അറ്റങ്ങള്‍"
 
-#: ../src/widgets/toolbox.cpp:1766
+#: ../src/widgets/toolbox.cpp:1765
 msgid "Snap to edges of a bounding box"
 msgstr "ബൌണ്ടിംഗ് ബോക്സ് അറ്റങ്ങളുടെ ചിത്രമെടുക്കുക"
 
-#: ../src/widgets/toolbox.cpp:1775
+#: ../src/widgets/toolbox.cpp:1774
 msgid "Bounding box corners"
 msgstr "ബൌണ്ടിംഗ് ബോക്സ് മൂലകള്‍"
 
-#: ../src/widgets/toolbox.cpp:1775
+#: ../src/widgets/toolbox.cpp:1774
 msgid "Snap bounding box corners"
 msgstr "ബൌണ്ടിംഗ് ബോക്സ് മൂലകളുടെ ചിത്രമെടുക്കുക"
 
-#: ../src/widgets/toolbox.cpp:1784
+#: ../src/widgets/toolbox.cpp:1783
 msgid "BBox Edge Midpoints"
 msgstr "ബിബോക്സിന്‍റെ അറ്റത്തെ മദ്ധ്യബിന്ദു"
 
-#: ../src/widgets/toolbox.cpp:1784
+#: ../src/widgets/toolbox.cpp:1783
 #, fuzzy
 msgid "Snap midpoints of bounding box edges"
 msgstr "ബൌണ്ടിംഗ് ബോക്സ് അറ്റങ്ങളുടെ കേന്ദ്രബിന്ദുക്കളില്‍ നിന്നും അതിലേക്കും സ്നാപ് ചെയ്യുക"
 
-#: ../src/widgets/toolbox.cpp:1794
+#: ../src/widgets/toolbox.cpp:1793
 msgid "BBox Centers"
 msgstr "ബിബോക്സ് മദ്ധ്യം"
 
-#: ../src/widgets/toolbox.cpp:1794
+#: ../src/widgets/toolbox.cpp:1793
 #, fuzzy
 msgid "Snapping centers of bounding boxes"
 msgstr "ബൌണ്ടിംഗ് ബോക്സിന്‍റെ കേന്ദ്രങ്ങളില്‍ നിന്നും അതിലേക്കും സ്നാപ്പിംഗ്"
 
-#: ../src/widgets/toolbox.cpp:1803
+#: ../src/widgets/toolbox.cpp:1802
 #, fuzzy
 msgid "Snap nodes, paths, and handles"
 msgstr "നോഡ്സോ പിടിയോ സ്നാപ്പ് ചെയ്യുക"
 
-#: ../src/widgets/toolbox.cpp:1811
+#: ../src/widgets/toolbox.cpp:1810
 msgid "Snap to paths"
 msgstr "വഴിയിലേക്ക് സ്നാപ്പ് ചെയ്യുക"
 
-#: ../src/widgets/toolbox.cpp:1820
+#: ../src/widgets/toolbox.cpp:1819
 msgid "Path intersections"
 msgstr "വഴിയിലെ കൂട്ടിമുട്ടലുകള്‍"
 
-#: ../src/widgets/toolbox.cpp:1820
+#: ../src/widgets/toolbox.cpp:1819
 msgid "Snap to path intersections"
 msgstr "വഴിയിലെ കൂട്ടിമുട്ടലുകളുടെ ചിത്രമെടുക്കുക"
 
-#: ../src/widgets/toolbox.cpp:1829
+#: ../src/widgets/toolbox.cpp:1828
 msgid "To nodes"
 msgstr "നോഡ്സിലേക്ക്"
 
-#: ../src/widgets/toolbox.cpp:1829
+#: ../src/widgets/toolbox.cpp:1828
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1838
+#: ../src/widgets/toolbox.cpp:1837
 msgid "Smooth nodes"
 msgstr "മിനുസമുള്ള നോഡ്സ്"
 
-#: ../src/widgets/toolbox.cpp:1838
+#: ../src/widgets/toolbox.cpp:1837
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1847
+#: ../src/widgets/toolbox.cpp:1846
 msgid "Line Midpoints"
 msgstr "വരിയുടെ മദ്ധ്യബിന്ദു"
 
-#: ../src/widgets/toolbox.cpp:1847
+#: ../src/widgets/toolbox.cpp:1846
 #, fuzzy
 msgid "Snap midpoints of line segments"
 msgstr "വസ്തുവിന്‍റെ കേന്ദ്രങ്ങള്‍"
 
-#: ../src/widgets/toolbox.cpp:1856
+#: ../src/widgets/toolbox.cpp:1855
 #, fuzzy
 msgid "Others"
 msgstr "അദര്‍"
 
-#: ../src/widgets/toolbox.cpp:1856
+#: ../src/widgets/toolbox.cpp:1855
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1864
+#: ../src/widgets/toolbox.cpp:1863
 msgid "Object Centers"
 msgstr "വസ്തുക്കളുടെ മദ്ധ്യം"
 
-#: ../src/widgets/toolbox.cpp:1864
+#: ../src/widgets/toolbox.cpp:1863
 #, fuzzy
 msgid "Snap centers of objects"
 msgstr "വസ്തുക്കളുടെ മദ്ധ്യത്തില്‍ നിന്നും അതിലേക്കും ചിത്രമെടുക്കുക"
 
-#: ../src/widgets/toolbox.cpp:1873
+#: ../src/widgets/toolbox.cpp:1872
 msgid "Rotation Centers"
 msgstr "ഭ്രമണ കേന്ദ്രങ്ങള്‍"
 
-#: ../src/widgets/toolbox.cpp:1873
+#: ../src/widgets/toolbox.cpp:1872
 #, fuzzy
 msgid "Snap an item's rotation center"
 msgstr "ഭ്രമണകേന്ദ്രങ്ങളുടെ മദ്ധ്യത്തില്‍ നിന്നും അതിലേക്കും ചിത്രമെടുക്കുക"
 
-#: ../src/widgets/toolbox.cpp:1882
+#: ../src/widgets/toolbox.cpp:1881
 msgid "Text baseline"
 msgstr "വചനത്തിന്റെ അടിസ്ഥാനരേഖ"
 
-#: ../src/widgets/toolbox.cpp:1882
+#: ../src/widgets/toolbox.cpp:1881
 #, fuzzy
 msgid "Snap text anchors and baselines"
 msgstr "ടെക്സ്റ്റ് ബേസ് രേഖകള്‍ അണിനിരത്തുക"
 
-#: ../src/widgets/toolbox.cpp:1892
+#: ../src/widgets/toolbox.cpp:1891
 msgid "Page border"
 msgstr "താളിന്റെ അരിക്"
 
-#: ../src/widgets/toolbox.cpp:1892
+#: ../src/widgets/toolbox.cpp:1891
 msgid "Snap to the page border"
 msgstr "പേജിന്‍റെ അതിര്‍ത്തി"
 
-#: ../src/widgets/toolbox.cpp:1901
+#: ../src/widgets/toolbox.cpp:1900
 msgid "Snap to grids"
 msgstr "ഗ്രിഡിലേക്കു സ്നാപ്പു ചെയ്യുക"
 
-#: ../src/widgets/toolbox.cpp:1910
+#: ../src/widgets/toolbox.cpp:1909
 #, fuzzy
 msgid "Snap guides"
 msgstr "വഴികാട്ടികളിലേക്കു സ്നാപ്പു ചെയ്യുക"
@@ -33077,41 +33081,45 @@ msgstr ""
 "ഈ ഒബ്ജക്ട് പ്രൊസസ്സ് ചെയ്യാന്‍ സാധിക്കുന്നില്ല.ആദ്യമായി അതിനെ ഒരു പാത്തിലേക്ക്  മാറ്റിയ ശേഷം "
 "ശ്രമിക്കൂ"
 
-#: ../share/extensions/draw_from_triangle.py:179
-#, fuzzy
-msgid "Side Length 'a' ("
+#: ../share/extensions/draw_from_triangle.py:180
+#, fuzzy, python-brace-format
+msgid "Side Length 'a' ({0}): {1}"
 msgstr "പാര്‍ശ നീളം 'a' (px):"
 
-#: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy
-msgid "Side Length 'b' ("
+#: ../share/extensions/draw_from_triangle.py:181
+#, fuzzy, python-brace-format
+msgid "Side Length 'b' ({0}): {1}"
 msgstr "പാര്‍ശ നീളം 'b' (px):"
 
-#: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy
-msgid "Side Length 'c' ("
+#: ../share/extensions/draw_from_triangle.py:182
+#, fuzzy, python-brace-format
+msgid "Side Length 'c' ({0}): {1}"
 msgstr "പാര്‍ശ നീളം 'c' (px):"
 
-#: ../share/extensions/draw_from_triangle.py:182
-msgid "Angle 'A' (radians): "
+#: ../share/extensions/draw_from_triangle.py:183
+#, fuzzy
+msgid "Angle 'A' (radians): {}"
 msgstr "കോണ്‍ 'A'(റേഡിയന്‍സ്):"
 
-#: ../share/extensions/draw_from_triangle.py:183
-msgid "Angle 'B' (radians): "
+#: ../share/extensions/draw_from_triangle.py:184
+#, fuzzy
+msgid "Angle 'B' (radians): {}"
 msgstr "കോണ്‍ 'B' (റേഡിയന്‍സ്):"
 
-#: ../share/extensions/draw_from_triangle.py:184
-msgid "Angle 'C' (radians): "
-msgstr "കോണ്‍ 'C' (റേഡിയന്‍സ്):"
-
 #: ../share/extensions/draw_from_triangle.py:185
-msgid "Semiperimeter (px): "
-msgstr "ഉപചുറ്റളവ്(px):"
+#, fuzzy
+msgid "Angle 'C' (radians): {}"
+msgstr "കോണ്‍ 'C' (റേഡിയന്‍സ്):"
 
 #: ../share/extensions/draw_from_triangle.py:186
 #, fuzzy
-msgid "Area ("
-msgstr "പ്രദേശം"
+msgid "Semiperimeter (px): {}"
+msgstr "ഉപചുറ്റളവ്(px):"
+
+#: ../share/extensions/draw_from_triangle.py:187
+#, fuzzy, python-brace-format
+msgid "Area ({0}^2): {1}"
+msgstr "വിസ്തീര്‍ണ്ണം(Px^2):"
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -33120,7 +33128,7 @@ msgid ""
 "to Release 13 format using QCad."
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:47
+#: ../share/extensions/dxf_outlines.py:49
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again."
@@ -33128,13 +33136,13 @@ msgstr ""
 "നംപൈയോ നംപൈയോ ഇംപോര്‍ട്ട് ചെയ്യുന്നതില്‍ പരാജയപ്പെട്ടു.ഈ എക്സറ്റന്‍ഷന് ഈ മോ‍ഡ്യൂളുകള്‍ ആവശ്യമാണ്."
 "ദയവായി അവയെ ഇന്‍സ്റ്റാള്‍ ചെയ്ത ശേഷം വീണ്ടും ശ്രമിക്കുക."
 
-#: ../share/extensions/dxf_outlines.py:313
+#: ../share/extensions/dxf_outlines.py:315
 msgid ""
 "Error: Field 'Layer match name' must be filled when using 'By name match' "
 "option"
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:354
+#: ../share/extensions/dxf_outlines.py:356
 #, python-format
 msgid "Warning: Layer '%s' not found!"
 msgstr ""
@@ -33502,18 +33510,18 @@ msgid "Pen "
 msgstr "പേനയുടെ ഘനം"
 
 #. issue error if no hpgl data found
-#: ../share/extensions/hpgl_input.py:56
+#: ../share/extensions/hpgl_input.py:58
 msgid "No HPGL data found."
 msgstr ""
 
-#: ../share/extensions/hpgl_input.py:64
+#: ../share/extensions/hpgl_input.py:66
 msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
 msgstr ""
 
 #. issue error if no paths found
-#: ../share/extensions/hpgl_output.py:57
+#: ../share/extensions/hpgl_output.py:56
 msgid ""
 "No paths where found. Please convert all objects you want to save into paths."
 msgstr ""
@@ -33752,7 +33760,7 @@ msgstr "%s' id ക്ക് ശൈലീഗുണങ്ങള്‍ കണ്ട
 msgid "unable to locate marker: %s"
 msgstr "%s' മാര്‍ക്കര്‍ കണ്ടെത്താന്‍ കഴിഞ്ഞില്ല."
 
-#: ../share/extensions/measure.py:58
+#: ../share/extensions/measure.py:61
 #, fuzzy
 msgid ""
 "Failed to import the numpy modules. These modules are required by this "
@@ -33763,12 +33771,12 @@ msgstr ""
 "മൊഡ്യൂളുകള്‍ ആവശ്യമാണ്.ദയവായി അവ ഇന്‍സ്റ്റാള്‍ ചെയ്യുകയും വീണ്ടും ശ്രമിക്കുകയും ചെയ്യുക.ഒരു ഡീബിയന്‍ "
 "സിസ്റ്റത്തിനെ പോലെ സിഡോ ആപ്റ്റ്-ഗെറ്റ് ഇന്‍സ്റ്റാള്‍ പൈത്തണ്‍-നമ്പി കമാന്‍ഡിനാല്‍ ഇത് ചെയ്യാന്‍ കഴിയും."
 
-#: ../share/extensions/measure.py:120
+#: ../share/extensions/measure.py:123
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr ""
 
 #: ../share/extensions/pathalongpath.py:207
-#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:50
+#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:52
 msgid "This extension requires two selected paths."
 msgstr "രണ്ടു തിരഞ്ഞെടുക്കപ്പെട്ട വഴികള്‍ ഈ എക്സ്റ്റന്‍ഷന് ആവശ്യമാണ്"
 
@@ -33792,7 +33800,7 @@ msgstr ""
 msgid "Please first convert objects to paths!  (Got [%s].)"
 msgstr "ദയവായി ഒബ്ജക്ടുകളെ വഴികളായ് ആദ്യം രൂപാന്തരപ്പെടുത്തുക! (Got [%s])"
 
-#: ../share/extensions/perspective.py:42
+#: ../share/extensions/perspective.py:44
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again.  On a Debian-"
@@ -33803,7 +33811,7 @@ msgstr ""
 "മൊഡ്യൂളുകള്‍ ആവശ്യമാണ്.ദയവായി അവ ഇന്‍സ്റ്റാള്‍ ചെയ്യുകയും വീണ്ടും ശ്രമിക്കുകയും ചെയ്യുക.ഒരു ഡീബിയന്‍ "
 "സിസ്റ്റത്തിനെ പോലെ സിഡോ ആപ്റ്റ്-ഗെറ്റ് ഇന്‍സ്റ്റാള്‍ പൈത്തണ്‍-നമ്പി കമാന്‍ഡിനാല്‍ ഇത് ചെയ്യാന്‍ കഴിയും."
 
-#: ../share/extensions/perspective.py:58 ../share/extensions/summersnight.py:49
+#: ../share/extensions/perspective.py:60 ../share/extensions/summersnight.py:49
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
@@ -33812,12 +33820,12 @@ msgstr ""
 "ആദ്യമായി തിരഞ്ഞെടുത്ത വസ്തുവിന്‍റെ തരം '%s' ആണ്.\n"
 "പാത്തിലേക്ക് പാത്ത്->ഒബ്ജക്റ്റ് രീതി ഉപയോഗിക്കാന്‍ ശ്രമിക്കുക."
 
-#: ../share/extensions/perspective.py:65 ../share/extensions/summersnight.py:57
+#: ../share/extensions/perspective.py:67 ../share/extensions/summersnight.py:57
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr "നാല് പര്‍വ്വം നീളമുള്ള രണ്ടാമതായി തിരഞ്ഞെടുക്കപ്പെട്ട വഴി ഈ എക്സ്റ്റന്‍ഷന് ആവശ്യമാണ്."
 
-#: ../share/extensions/perspective.py:91 ../share/extensions/summersnight.py:90
+#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:90
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
@@ -33825,7 +33833,7 @@ msgstr ""
 "രണ്ടാമതായി തിരഞ്ഞെടുത്ത വസ്തുവിന്‍റെ തരം ഒരു പാത്ത് അല്ല ഗ്രൂപ്പ് ആണ്.\n"
 "ഒബ്ജക്റ്റ്->അണ്‍ഗ്രൂപ്പ് രീതി ഉപയോഗിക്കാന്‍ ശ്രമിക്കുക."
 
-#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:92
+#: ../share/extensions/perspective.py:95 ../share/extensions/summersnight.py:92
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -33833,7 +33841,7 @@ msgstr ""
 "രണ്ടാമതായി തിരഞ്ഞെടുത്ത വസ്തുവിന്‍റെ തരം ഒരു പാത്ത് അല്ല.\n"
 "പാത്തിലേക്ക് പാത്ത്->ഒബ്ജക്റ്റ് രീതി ഉപയോഗിക്കാന്‍ ശ്രമിക്കുക."
 
-#: ../share/extensions/perspective.py:96 ../share/extensions/summersnight.py:95
+#: ../share/extensions/perspective.py:98 ../share/extensions/summersnight.py:95
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -33876,7 +33884,7 @@ msgid ""
 "and the settings are correct."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:64
+#: ../share/extensions/polyhedron_3d.py:67
 msgid ""
 "Failed to import the numpy module. This module is required by this "
 "extension. Please install it and try again.  On a Debian-like system this "
@@ -33886,24 +33894,24 @@ msgstr ""
 "ദയവായി അവ ഇന്‍സ്റ്റാള്‍ ചെയ്യുകയും വീണ്ടും ശ്രമിക്കുകയും ചെയ്യുക.ഒരു ഡീബിയന്‍ സിസ്റ്റത്തിനെ പോലെ "
 "സിഡോ ആപ്റ്റ്-ഗെറ്റ് ഇന്‍സ്റ്റാള്‍ പൈത്തണ്‍-നമ്പി കമാന്‍ഡിനാല്‍ ഇത് ചെയ്യാന്‍ കഴിയും."
 
-#: ../share/extensions/polyhedron_3d.py:335
+#: ../share/extensions/polyhedron_3d.py:338
 msgid "No face data found in specified file."
 msgstr "നിര്‍ദിഷ്ട ഫയലില്‍ മുഖത്തിന്റെ വസ്തുതകള്‍ കണ്ടെത്താന്‍ കഴിഞ്ഞില്ല."
 
-#: ../share/extensions/polyhedron_3d.py:336
+#: ../share/extensions/polyhedron_3d.py:339
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr "മാതൃകാ ഫയല്‍ ടാബിലെ \"നിര്‍ദിഷ്ട അരിക്\" തിരഞ്ഞെടുത്ത ശേഷം ശ്രമിക്കുക.\n"
 
-#: ../share/extensions/polyhedron_3d.py:342
+#: ../share/extensions/polyhedron_3d.py:345
 msgid "No edge data found in specified file."
 msgstr "നിര്‍ദിഷ്ട ഫയലില്‍ അരികിന്റെ വസ്തുതകള്‍ കണ്ടെത്താന്‍ കഴിഞ്ഞില്ല."
 
-#: ../share/extensions/polyhedron_3d.py:343
+#: ../share/extensions/polyhedron_3d.py:346
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr "മാതൃകാ ഫയല്‍ ടാബിലെ \"നിര്‍ദിഷ്ട മുഖം\" തിരഞ്ഞെടുത്ത ശേഷം ശ്രമിക്കുക.\n"
 
 #. we cannot generate a list of faces from the edges without a lot of computation
-#: ../share/extensions/polyhedron_3d.py:522
+#: ../share/extensions/polyhedron_3d.py:525
 msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
@@ -33912,7 +33920,7 @@ msgstr ""
 "ഫയല്‍ ഇംപോര്‍ട്ട് ചെയ്തിരിക്കുന്നത് മാതൃകാ ഫയല്‍ ടാബിനടിയിലുള്ള ഫെയ്സ് - സ്പെസിഫൈഡായിട്ടാണോ എന്ന് "
 "പരിശോധിക്കുക.\n"
 
-#: ../share/extensions/polyhedron_3d.py:524
+#: ../share/extensions/polyhedron_3d.py:527
 msgid "Internal Error. No view type selected\n"
 msgstr "ആന്തരിക പിശക്.വീക്ഷണ ശൈലികളൊന്നും തന്നെ തിരഞ്ഞെടുത്തിട്ടില്ല.\n"
 
@@ -34011,13 +34019,14 @@ msgstr "%s' ഫയല്‍ കണ്ടെത്താന്‍ കഴിഞ്
 msgid "You must select a correct system encoding."
 msgstr "ചുരുങ്ങിയത് രണ്ടു ഘടകങ്ങളെങ്കിലും താങ്കള്‍ തെരെഞ്ഞെടുക്കേണ്ടിയിരിക്കുന്നു."
 
-#: ../share/extensions/uniconv-ext.py:54
-#: ../share/extensions/uniconv_output.py:121
+#: ../share/extensions/uniconv-ext.py:55
+#: ../share/extensions/uniconv_output.py:122
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
 "For Windows: download it from\n"
-"http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
+"https://sk1project.net/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
 "and install into your Inkscape's Python location\n"
 msgstr ""
 
@@ -40758,6 +40767,14 @@ msgid "XAML Input"
 msgstr "XAML ഇന്‍പുട്ട്"
 
 #, fuzzy
+#~ msgid "The offset size"
+#~ msgstr "ഒന്നിനനുസരിച്ചുള്ള അലങ്കാരം"
+
+#, fuzzy
+#~ msgid "Area ("
+#~ msgstr "പ്രദേശം"
+
+#, fuzzy
 #~ msgid "Adjust the rotation angle"
 #~ msgstr "നിറയ്ക്കുന്നത് നേരെയാക്കുക"
 
@@ -40794,9 +40811,6 @@ msgstr "XAML ഇന്‍പുട്ട്"
 #, fuzzy
 #~ msgid "<b>Mesh gradient</b>"
 #~ msgstr "<b>ഭാഗം</b>"
-
-#~ msgid "Area (px^2): "
-#~ msgstr "വിസ്തീര്‍ണ്ണം(Px^2):"
 
 #~ msgid ""
 #~ "Select <b>exactly 2 paths</b> to perform difference, division, or path "

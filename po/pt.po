@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-12-21 01:15+0100\n"
+"POT-Creation-Date: 2017-01-24 21:21+0100\n"
 "PO-Revision-Date: 2016-07-26 15:30+0100\n"
 "Last-Translator: Rui Cruz <xande6ruz@yandex.com>\n"
 "Language-Team: \n"
@@ -2073,1177 +2073,1177 @@ msgstr "Contorno discreto"
 msgid "Sharp multiple contour for objects"
 msgstr "Aumentar nitidez em vários contornos para os objetos"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:2
 msgctxt "Palette"
 msgid "Black"
 msgstr "Preto"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:3
 #, no-c-format
 msgctxt "Palette"
 msgid "90% Gray"
 msgstr "90% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:4
 #, no-c-format
 msgctxt "Palette"
 msgid "80% Gray"
 msgstr "80% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:5
 #, no-c-format
 msgctxt "Palette"
 msgid "70% Gray"
 msgstr "70% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:6
 #, no-c-format
 msgctxt "Palette"
 msgid "60% Gray"
 msgstr "60% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:7
 #, no-c-format
 msgctxt "Palette"
 msgid "50% Gray"
 msgstr "50% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:8
 #, no-c-format
 msgctxt "Palette"
 msgid "40% Gray"
 msgstr "40% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:9
 #, no-c-format
 msgctxt "Palette"
 msgid "30% Gray"
 msgstr "30% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:10
 #, no-c-format
 msgctxt "Palette"
 msgid "20% Gray"
 msgstr "20% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:11
 #, no-c-format
 msgctxt "Palette"
 msgid "10% Gray"
 msgstr "10% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:12
 #, no-c-format
 msgctxt "Palette"
 msgid "7.5% Gray"
 msgstr "7.5% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:13
 #, no-c-format
 msgctxt "Palette"
 msgid "5% Gray"
 msgstr "5% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:14
 #, no-c-format
 msgctxt "Palette"
 msgid "2.5% Gray"
 msgstr "2.5% Cinza"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:15
 msgctxt "Palette"
 msgid "White"
 msgstr "Branco"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:16
 msgctxt "Palette"
 msgid "Maroon (#800000)"
 msgstr "Bordô (#800000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:17
 msgctxt "Palette"
 msgid "Red (#FF0000)"
 msgstr "Vermelho (#FF0000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:18
 msgctxt "Palette"
 msgid "Olive (#808000)"
 msgstr "Azeitona (#808000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:19
 msgctxt "Palette"
 msgid "Yellow (#FFFF00)"
 msgstr "Amarelo (#FFFF00)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:20
 msgctxt "Palette"
 msgid "Green (#008000)"
 msgstr "Verde (#008000)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:21
 msgctxt "Palette"
 msgid "Lime (#00FF00)"
 msgstr "Lima (#00FF00)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:22
 msgctxt "Palette"
 msgid "Teal (#008080)"
 msgstr "Verde-azulado (#008080)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:23
 msgctxt "Palette"
 msgid "Aqua (#00FFFF)"
 msgstr "Água (#00FFFF)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:24
 msgctxt "Palette"
 msgid "Navy (#000080)"
 msgstr "Azul-marinho (#000080)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:25
 msgctxt "Palette"
 msgid "Blue (#0000FF)"
 msgstr "Azul (#0000FF)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:26
 msgctxt "Palette"
 msgid "Purple (#800080)"
 msgstr "Púrpura (#800080)"
 
-#. Palette: inkscape.gpl
+#. Palette: ./inkscape.gpl
 #: ../share/palettes/palettes.h:27
 msgctxt "Palette"
 msgid "Fuchsia (#FF00FF)"
 msgstr "Rosa vívido (#FF00FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:28
 msgctxt "Palette"
 msgid "black (#000000)"
 msgstr "preto (#000000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:29
 msgctxt "Palette"
 msgid "dimgray (#696969)"
 msgstr "cinza-escuro (#696969)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:30
 msgctxt "Palette"
 msgid "gray (#808080)"
 msgstr "cinzento (#808080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:31
 msgctxt "Palette"
 msgid "darkgray (#A9A9A9)"
 msgstr "cinza-escuro (#A9A9A9)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:32
 msgctxt "Palette"
 msgid "silver (#C0C0C0)"
 msgstr "prateado (#C0C0C0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:33
 msgctxt "Palette"
 msgid "lightgray (#D3D3D3)"
 msgstr "cinza-claro (#D3D3D3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:34
 msgctxt "Palette"
 msgid "gainsboro (#DCDCDC)"
 msgstr "cinza-claro-azulado (#DCDCDC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:35
 msgctxt "Palette"
 msgid "whitesmoke (#F5F5F5)"
 msgstr "branco-fumo (#F5F5F5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:36
 msgctxt "Palette"
 msgid "white (#FFFFFF)"
 msgstr "branco (#FFFFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:37
 msgctxt "Palette"
 msgid "rosybrown (#BC8F8F)"
 msgstr "castanho-rosado (#BC8F8F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:38
 msgctxt "Palette"
 msgid "indianred (#CD5C5C)"
 msgstr "vermelho-indiano (#CD5C5C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:39
 msgctxt "Palette"
 msgid "brown (#A52A2A)"
 msgstr "castanho (#A52A2A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:40
 msgctxt "Palette"
 msgid "firebrick (#B22222)"
 msgstr "cor-de-tijolo (#B22222)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:41
 msgctxt "Palette"
 msgid "lightcoral (#F08080)"
 msgstr "coral-claro (#F08080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:42
 msgctxt "Palette"
 msgid "maroon (#800000)"
 msgstr "bordô (#800000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:43
 msgctxt "Palette"
 msgid "darkred (#8B0000)"
 msgstr "vermelho-escuro (#8B0000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:44
 msgctxt "Palette"
 msgid "red (#FF0000)"
 msgstr "vermelho (#FF0000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:45
 msgctxt "Palette"
 msgid "snow (#FFFAFA)"
 msgstr "neve (#FFFAFA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:46
 msgctxt "Palette"
 msgid "mistyrose (#FFE4E1)"
 msgstr "rosa-místico (#FFE4E1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:47
 msgctxt "Palette"
 msgid "salmon (#FA8072)"
 msgstr "salmão (#FA8072)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:48
 msgctxt "Palette"
 msgid "tomato (#FF6347)"
 msgstr "tomate (#FF6347)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:49
 msgctxt "Palette"
 msgid "darksalmon (#E9967A)"
 msgstr "salmão-escuro (#E9967A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:50
 msgctxt "Palette"
 msgid "coral (#FF7F50)"
 msgstr "coral (#FF7F50)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:51
 msgctxt "Palette"
 msgid "orangered (#FF4500)"
 msgstr "laranja-vermelho (#FF4500)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:52
 msgctxt "Palette"
 msgid "lightsalmon (#FFA07A)"
 msgstr "salmão-claro (#FFA07A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:53
 msgctxt "Palette"
 msgid "sienna (#A0522D)"
 msgstr "sienna (#A0522D)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:54
 msgctxt "Palette"
 msgid "seashell (#FFF5EE)"
 msgstr "concha-do-mar (#FFF5EE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:55
 msgctxt "Palette"
 msgid "chocolate (#D2691E)"
 msgstr "chocolate (#D2691E)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:56
 msgctxt "Palette"
 msgid "saddlebrown (#8B4513)"
 msgstr "castanho-sela (#8B4513)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:57
 msgctxt "Palette"
 msgid "sandybrown (#F4A460)"
 msgstr "castanho-areia (#F4A460)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:58
 msgctxt "Palette"
 msgid "peachpuff (#FFDAB9)"
 msgstr "pêssego-rosa (#FFDAB9)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:59
 msgctxt "Palette"
 msgid "peru (#CD853F)"
 msgstr "perú (#CD853F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:60
 msgctxt "Palette"
 msgid "linen (#FAF0E6)"
 msgstr "linho (#FAF0E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:61
 msgctxt "Palette"
 msgid "bisque (#FFE4C4)"
 msgstr "rosa-bisque (#FFE4C4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:62
 msgctxt "Palette"
 msgid "darkorange (#FF8C00)"
 msgstr "laranja-escuro (#FF8C00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:63
 msgctxt "Palette"
 msgid "burlywood (#DEB887)"
 msgstr "castanho-areia (#DEB887)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:64
 msgctxt "Palette"
 msgid "tan (#D2B48C)"
 msgstr "pardo (#D2B48C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:65
 msgctxt "Palette"
 msgid "antiquewhite (#FAEBD7)"
 msgstr "branco-envelhecido (#FAEBD7)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:66
 msgctxt "Palette"
 msgid "navajowhite (#FFDEAD)"
 msgstr "branco-navajo (#FFDEAD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:67
 msgctxt "Palette"
 msgid "blanchedalmond (#FFEBCD)"
 msgstr "amêndoa-branqueada (#FFEBCD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:68
 msgctxt "Palette"
 msgid "papayawhip (#FFEFD5)"
 msgstr "papaia-batida (#FFEFD5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:69
 msgctxt "Palette"
 msgid "moccasin (#FFE4B5)"
 msgstr "mocassim (#FFE4B5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:70
 msgctxt "Palette"
 msgid "orange (#FFA500)"
 msgstr "laranja (#FFA500)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:71
 msgctxt "Palette"
 msgid "wheat (#F5DEB3)"
 msgstr "trigo (#F5DEB3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:72
 msgctxt "Palette"
 msgid "oldlace (#FDF5E6)"
 msgstr "atacador-antigo (#FDF5E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:73
 msgctxt "Palette"
 msgid "floralwhite (#FFFAF0)"
 msgstr "branco-floral (#FFFAF0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:74
 msgctxt "Palette"
 msgid "darkgoldenrod (#B8860B)"
 msgstr "solidago-escuro (#B8860B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:75
 msgctxt "Palette"
 msgid "goldenrod (#DAA520)"
 msgstr "solidago (#DAA520)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:76
 msgctxt "Palette"
 msgid "cornsilk (#FFF8DC)"
 msgstr "folha-de-milho-seca (#FFF8DC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:77
 msgctxt "Palette"
 msgid "gold (#FFD700)"
 msgstr "ouro (#FFD700)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:78
 msgctxt "Palette"
 msgid "khaki (#F0E68C)"
 msgstr "caqui (#F0E68C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:79
 msgctxt "Palette"
 msgid "lemonchiffon (#FFFACD)"
 msgstr "bolo-limão (#FFFACD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:80
 msgctxt "Palette"
 msgid "palegoldenrod (#EEE8AA)"
 msgstr "ouro-pálido (#EEE8AA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:81
 msgctxt "Palette"
 msgid "darkkhaki (#BDB76B)"
 msgstr "caqui-escuro (#BDB76B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:82
 msgctxt "Palette"
 msgid "beige (#F5F5DC)"
 msgstr "bege (#F5F5DC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:83
 msgctxt "Palette"
 msgid "lightgoldenrodyellow (#FAFAD2)"
 msgstr "ouro-pálido-claro (#FAFAD2)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:84
 msgctxt "Palette"
 msgid "olive (#808000)"
 msgstr "oliva (#808000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:85
 msgctxt "Palette"
 msgid "yellow (#FFFF00)"
 msgstr "amarelo (#FFFF00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:86
 msgctxt "Palette"
 msgid "lightyellow (#FFFFE0)"
 msgstr "amarelo-claro (#FFFFE0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:87
 msgctxt "Palette"
 msgid "ivory (#FFFFF0)"
 msgstr "marfim (#FFFFF0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:88
 msgctxt "Palette"
 msgid "olivedrab (#6B8E23)"
 msgstr "verde-oliva (#6B8E23)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:89
 msgctxt "Palette"
 msgid "yellowgreen (#9ACD32)"
 msgstr "amarelo-verde (#9ACD32)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:90
 msgctxt "Palette"
 msgid "darkolivegreen (#556B2F)"
 msgstr "verde-azeitona-escuro"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:91
 msgctxt "Palette"
 msgid "greenyellow (#ADFF2F)"
 msgstr "verde-amarelo (#ADFF2F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:92
 msgctxt "Palette"
 msgid "chartreuse (#7FFF00)"
 msgstr "verde-limão (#7FFF00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:93
 msgctxt "Palette"
 msgid "lawngreen (#7CFC00)"
 msgstr "verde-erva (#7CFC00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:94
 msgctxt "Palette"
 msgid "darkseagreen (#8FBC8F)"
 msgstr "verde-mar-escuro (#8FBC8F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:95
 msgctxt "Palette"
 msgid "forestgreen (#228B22)"
 msgstr "verde-floresta (#228B22)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:96
 msgctxt "Palette"
 msgid "limegreen (#32CD32)"
 msgstr "verde-lima (#32CD32)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:97
 msgctxt "Palette"
 msgid "lightgreen (#90EE90)"
 msgstr "verde-claro (#90EE90)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:98
 msgctxt "Palette"
 msgid "palegreen (#98FB98)"
 msgstr "verde-pálido (#98FB98)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:99
 msgctxt "Palette"
 msgid "darkgreen (#006400)"
 msgstr "verde-escuro (#006400)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:100
 msgctxt "Palette"
 msgid "green (#008000)"
 msgstr "verde (#008000)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:101
 msgctxt "Palette"
 msgid "lime (#00FF00)"
 msgstr "lima (#00FF00)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:102
 msgctxt "Palette"
 msgid "honeydew (#F0FFF0)"
 msgstr "verde-melão (#F0FFF0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:103
 msgctxt "Palette"
 msgid "seagreen (#2E8B57)"
 msgstr "verde-mar (#2E8B57)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:104
 msgctxt "Palette"
 msgid "mediumseagreen (#3CB371)"
 msgstr "verde-mar-médio (#3CB371)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:105
 msgctxt "Palette"
 msgid "springgreen (#00FF7F)"
 msgstr "verde-primavera (#00FF7F)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:106
 msgctxt "Palette"
 msgid "mintcream (#F5FFFA)"
 msgstr "creme-menta (#F5FFFA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:107
 msgctxt "Palette"
 msgid "mediumspringgreen (#00FA9A)"
 msgstr "verde-primavera-médio (#00FA9A)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:108
 msgctxt "Palette"
 msgid "mediumaquamarine (#66CDAA)"
 msgstr "azul-marinho-médio (#66CDAA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:109
 msgctxt "Palette"
 msgid "aquamarine (#7FFFD4)"
 msgstr "azul-marinho (#7FFFD4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:110
 msgctxt "Palette"
 msgid "turquoise (#40E0D0)"
 msgstr "turquesa (#40E0D0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:111
 msgctxt "Palette"
 msgid "lightseagreen (#20B2AA)"
 msgstr "verde-mar-claro (#20B2AA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:112
 msgctxt "Palette"
 msgid "mediumturquoise (#48D1CC)"
 msgstr "turquesa-médio (#48D1CC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:113
 msgctxt "Palette"
 msgid "darkslategray (#2F4F4F)"
 msgstr "ardósia-cinza-escuro"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:114
 msgctxt "Palette"
 msgid "paleturquoise (#AFEEEE)"
 msgstr "turquesa-pálido (#AFEEEE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:115
 msgctxt "Palette"
 msgid "teal (#008080)"
 msgstr "verde-azulado (#008080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:116
 msgctxt "Palette"
 msgid "darkcyan (#008B8B)"
 msgstr "ciano-escuro (#008B8B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:117
 msgctxt "Palette"
 msgid "cyan (#00FFFF)"
 msgstr "ciano (#00FFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:118
 msgctxt "Palette"
 msgid "lightcyan (#E0FFFF)"
 msgstr "ciano-claro (#E0FFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:119
 msgctxt "Palette"
 msgid "azure (#F0FFFF)"
 msgstr "azul-ciano-céu (#F0FFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:120
 msgctxt "Palette"
 msgid "darkturquoise (#00CED1)"
 msgstr "turquesa-escuro (#00CED1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:121
 msgctxt "Palette"
 msgid "cadetblue (#5F9EA0)"
 msgstr "azul-cadete (#5F9EA0)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:122
 msgctxt "Palette"
 msgid "powderblue (#B0E0E6)"
 msgstr "azul-pó (#B0E0E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:123
 msgctxt "Palette"
 msgid "lightblue (#ADD8E6)"
 msgstr "azul-claro (#ADD8E6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:124
 msgctxt "Palette"
 msgid "deepskyblue (#00BFFF)"
 msgstr "azul-céu-escuro (#00BFFF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:125
 msgctxt "Palette"
 msgid "skyblue (#87CEEB)"
 msgstr "azul-céu (#87CEEB)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:126
 msgctxt "Palette"
 msgid "lightskyblue (#87CEFA)"
 msgstr "azul-céu-claro (#87CEFA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:127
 msgctxt "Palette"
 msgid "steelblue (#4682B4)"
 msgstr "azul-aço (#4682B4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:128
 msgctxt "Palette"
 msgid "aliceblue (#F0F8FF)"
 msgstr "azul-alice (#F0F8FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:129
 msgctxt "Palette"
 msgid "dodgerblue (#1E90FF)"
 msgstr "azul-dodger (#1E90FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:130
 msgctxt "Palette"
 msgid "slategray (#708090)"
 msgstr "cinza-ardósia (#708090)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:131
 msgctxt "Palette"
 msgid "lightslategray (#778899)"
 msgstr "cinza-ardósia-claro (#778899)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:132
 msgctxt "Palette"
 msgid "lightsteelblue (#B0C4DE)"
 msgstr "azul-aço-claro (#B0C4DE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:133
 msgctxt "Palette"
 msgid "cornflowerblue (#6495ED)"
 msgstr "azul-centáurea (#6495ED)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:134
 msgctxt "Palette"
 msgid "royalblue (#4169E1)"
 msgstr "azul-real (#4169E1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:135
 msgctxt "Palette"
 msgid "midnightblue (#191970)"
 msgstr "azul-meia-noite (#191970)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:136
 msgctxt "Palette"
 msgid "lavender (#E6E6FA)"
 msgstr "lavanda (#E6E6FA)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:137
 msgctxt "Palette"
 msgid "navy (#000080)"
 msgstr "azul-marinho (#000080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:138
 msgctxt "Palette"
 msgid "darkblue (#00008B)"
 msgstr "azul-escuro (#00008B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:139
 msgctxt "Palette"
 msgid "mediumblue (#0000CD)"
 msgstr "azul-médio (#0000CD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:140
 msgctxt "Palette"
 msgid "blue (#0000FF)"
 msgstr "azul (#0000FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:141
 msgctxt "Palette"
 msgid "ghostwhite (#F8F8FF)"
 msgstr "branco-fantasma (#F8F8FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:142
 msgctxt "Palette"
 msgid "slateblue (#6A5ACD)"
 msgstr "azul-ardósia (#6A5ACD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:143
 msgctxt "Palette"
 msgid "darkslateblue (#483D8B)"
 msgstr "azul-ardósia-escuro (#483D8B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:144
 msgctxt "Palette"
 msgid "mediumslateblue (#7B68EE)"
 msgstr "azul-ardósia-médio (#7B68EE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:145
 msgctxt "Palette"
 msgid "mediumpurple (#9370DB)"
 msgstr "púrpura-médio (#9370DB)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:146
 msgctxt "Palette"
 msgid "blueviolet (#8A2BE2)"
 msgstr "violeta-azul (#8A2BE2)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:147
 msgctxt "Palette"
 msgid "indigo (#4B0082)"
 msgstr "indigo (#4B0082)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:148
 msgctxt "Palette"
 msgid "darkorchid (#9932CC)"
 msgstr "orquídea-escuro (#9932CC)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:149
 msgctxt "Palette"
 msgid "darkviolet (#9400D3)"
 msgstr "violeta-escuro (#9400D3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:150
 msgctxt "Palette"
 msgid "mediumorchid (#BA55D3)"
 msgstr "orquídea-médio (#BA55D3)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:151
 msgctxt "Palette"
 msgid "thistle (#D8BFD8)"
 msgstr "cardo (#D8BFD8)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:152
 msgctxt "Palette"
 msgid "plum (#DDA0DD)"
 msgstr "ameixa (#DDA0DD)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:153
 msgctxt "Palette"
 msgid "violet (#EE82EE)"
 msgstr "violeta (#EE82EE)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:154
 msgctxt "Palette"
 msgid "purple (#800080)"
 msgstr "púrpura (#800080)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:155
 msgctxt "Palette"
 msgid "darkmagenta (#8B008B)"
 msgstr "magenta-escuro (#8B008B)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:156
 msgctxt "Palette"
 msgid "magenta (#FF00FF)"
 msgstr "magenta (#FF00FF)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:157
 msgctxt "Palette"
 msgid "orchid (#DA70D6)"
 msgstr "orquídea (#DA70D6)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:158
 msgctxt "Palette"
 msgid "mediumvioletred (#C71585)"
 msgstr "vermelho-violeta-médio (#C71585)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:159
 msgctxt "Palette"
 msgid "deeppink (#FF1493)"
 msgstr "rosa-escuro (#FF1493)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:160
 msgctxt "Palette"
 msgid "hotpink (#FF69B4)"
 msgstr "rosa-choque (#FF69B4)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:161
 msgctxt "Palette"
 msgid "lavenderblush (#FFF0F5)"
 msgstr "lavanda-corado (#FFF0F5)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:162
 msgctxt "Palette"
 msgid "palevioletred (#DB7093)"
 msgstr "vermelho-violeta-pálido (#DB7093)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:163
 msgctxt "Palette"
 msgid "crimson (#DC143C)"
 msgstr "carmesim (#DC143C)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:164
 msgctxt "Palette"
 msgid "pink (#FFC0CB)"
 msgstr "rosa (#FFC0CB)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:165
 msgctxt "Palette"
 msgid "lightpink (#FFB6C1)"
 msgstr "rosa-claro (#FFB6C1)"
 
-#. Palette: svg.gpl
+#. Palette: ./svg.gpl
 #: ../share/palettes/palettes.h:166
 msgctxt "Palette"
 msgid "rebeccapurple (#663399)"
 msgstr "púrpura-rebbeca (#663399)"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:167
 msgctxt "Palette"
 msgid "Butter 1"
 msgstr "Manteiga 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:168
 msgctxt "Palette"
 msgid "Butter 2"
 msgstr "Manteiga 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:169
 msgctxt "Palette"
 msgid "Butter 3"
 msgstr "Manteiga 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:170
 msgctxt "Palette"
 msgid "Chameleon 1"
 msgstr "Camaleão 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:171
 msgctxt "Palette"
 msgid "Chameleon 2"
 msgstr "Camaleão 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:172
 msgctxt "Palette"
 msgid "Chameleon 3"
 msgstr "Camaleão 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:173
 msgctxt "Palette"
 msgid "Orange 1"
 msgstr "Laranja 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:174
 msgctxt "Palette"
 msgid "Orange 2"
 msgstr "Laranja 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:175
 msgctxt "Palette"
 msgid "Orange 3"
 msgstr "Laranja 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:176
 msgctxt "Palette"
 msgid "Sky Blue 1"
 msgstr "Azul Céu 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:177
 msgctxt "Palette"
 msgid "Sky Blue 2"
 msgstr "Azul Céu 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:178
 msgctxt "Palette"
 msgid "Sky Blue 3"
 msgstr "Azul Céu 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:179
 msgctxt "Palette"
 msgid "Plum 1"
 msgstr "Ameixa 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:180
 msgctxt "Palette"
 msgid "Plum 2"
 msgstr "Ameixa 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:181
 msgctxt "Palette"
 msgid "Plum 3"
 msgstr "Ameixa 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:182
 msgctxt "Palette"
 msgid "Chocolate 1"
 msgstr "Chocolate 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:183
 msgctxt "Palette"
 msgid "Chocolate 2"
 msgstr "Chocolate 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:184
 msgctxt "Palette"
 msgid "Chocolate 3"
 msgstr "Chocolate 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:185
 msgctxt "Palette"
 msgid "Scarlet Red 1"
 msgstr "Vermelho Escarlate 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:186
 msgctxt "Palette"
 msgid "Scarlet Red 2"
 msgstr "Vermelho Escarlate 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:187
 msgctxt "Palette"
 msgid "Scarlet Red 3"
 msgstr "Vermelho Escarlate 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:188
 msgctxt "Palette"
 msgid "Snowy White"
 msgstr "Branco Neve"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:189
 msgctxt "Palette"
 msgid "Aluminium 1"
 msgstr "Alumínio 1"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:190
 msgctxt "Palette"
 msgid "Aluminium 2"
 msgstr "Alumínio 2"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:191
 msgctxt "Palette"
 msgid "Aluminium 3"
 msgstr "Alumínio 3"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:192
 msgctxt "Palette"
 msgid "Aluminium 4"
 msgstr "Alumínio 4"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:193
 msgctxt "Palette"
 msgid "Aluminium 5"
 msgstr "Alumínio 5"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:194
 msgctxt "Palette"
 msgid "Aluminium 6"
 msgstr "Alumínio 6"
 
-#. Palette: Tango-Palette.gpl
+#. Palette: ./Tango-Palette.gpl
 #: ../share/palettes/palettes.h:195
 msgctxt "Palette"
 msgid "Jet Black"
@@ -3413,1034 +3413,1034 @@ msgstr "Tecido (bitmap)"
 msgid "Old paint (bitmap)"
 msgstr "Pintura antiga (bitmap)"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:2
 msgctxt "Symbol"
-msgid "AIGA Symbol Signs"
-msgstr "Pictogramas AIGA"
+msgid "United States National Park Service Map Symbols"
+msgstr "Pictogramas do Serv.Parq.Nac.EUA"
 
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:3 ../share/symbols/symbols.h:4
-#: ../share/symbols/symbols.h:281 ../share/symbols/symbols.h:282
 msgctxt "Symbol"
-msgid "Telephone"
-msgstr "Telefone"
+msgid "Airport"
+msgstr "Aeroporto"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:5 ../share/symbols/symbols.h:6
 msgctxt "Symbol"
-msgid "Mail"
-msgstr "Correio"
+msgid "Amphitheatre"
+msgstr "Anfiteatro"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:7 ../share/symbols/symbols.h:8
 msgctxt "Symbol"
-msgid "Currency Exchange"
-msgstr "Câmbio"
+msgid "Bicycle Trail"
+msgstr "Trilho de Bicicleta"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:9 ../share/symbols/symbols.h:10
 msgctxt "Symbol"
-msgid "Currency Exchange - Euro"
-msgstr "Câmbio - Euro"
+msgid "Boat Launch"
+msgstr "Rampa de Barcos"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:11 ../share/symbols/symbols.h:12
 msgctxt "Symbol"
-msgid "Cashier"
-msgstr "Caixa de Pagamento"
+msgid "Boat Tour"
+msgstr "Guia Turístico por Barco"
 
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:13 ../share/symbols/symbols.h:14
-#: ../share/symbols/symbols.h:213 ../share/symbols/symbols.h:214
+msgctxt "Symbol"
+msgid "Bus Stop"
+msgstr "Paragem de Autocarro"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
+msgctxt "Symbol"
+msgid "Campfire"
+msgstr "Fogueira"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
+msgctxt "Symbol"
+msgid "Campground"
+msgstr "Parque de Campismo"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
+msgctxt "Symbol"
+msgid "CanoeAccess"
+msgstr "Acesso a Canoas"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
+msgctxt "Symbol"
+msgid "Crosscountry Ski Trail"
+msgstr "Trilho de Esqui Crosscountry"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
+msgctxt "Symbol"
+msgid "Downhill Skiing"
+msgstr "Esqui Downhill"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
+msgctxt "Symbol"
+msgid "Drinking Water"
+msgstr "Água Potável"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
+#: ../share/symbols/symbols.h:172 ../share/symbols/symbols.h:173
 msgctxt "Symbol"
 msgid "First Aid"
 msgstr "Primeiros Socorros"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
-msgctxt "Symbol"
-msgid "Lost and Found"
-msgstr "Perdidos e Achados"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
-msgctxt "Symbol"
-msgid "Coat Check"
-msgstr "Guarda-Roupas"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
-msgctxt "Symbol"
-msgid "Baggage Lockers"
-msgstr "Cacifos de Bagagem"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
-msgctxt "Symbol"
-msgid "Escalator"
-msgstr "Escadas Rolantes"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
-msgctxt "Symbol"
-msgid "Escalator Down"
-msgstr "Escadas Rolantes para Baixo"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
-msgctxt "Symbol"
-msgid "Escalator Up"
-msgstr "Escadas Rolantes para Cima"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
-msgctxt "Symbol"
-msgid "Stairs"
-msgstr "Escadas"
-
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:29 ../share/symbols/symbols.h:30
 msgctxt "Symbol"
-msgid "Stairs Down"
-msgstr "Escadas para Baixo"
+msgid "Fishing"
+msgstr "Pesca"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:31 ../share/symbols/symbols.h:32
 msgctxt "Symbol"
-msgid "Stairs Up"
-msgstr "Escadas para Cima"
+msgid "Food Service"
+msgstr "Serviço de Comida"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:33 ../share/symbols/symbols.h:34
 msgctxt "Symbol"
-msgid "Elevator"
-msgstr "Elevador"
+msgid "Four Wheel Drive Road"
+msgstr "Estrada para Quatro Rodas"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:35 ../share/symbols/symbols.h:36
 msgctxt "Symbol"
-msgid "Toilets - Men"
-msgstr "Casas de Banho - Homens"
+msgid "Gas Station"
+msgstr "Posto de combustível"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:37 ../share/symbols/symbols.h:38
 msgctxt "Symbol"
-msgid "Toilets - Women"
-msgstr "Casas de Banho - Mulheres"
+msgid "Golfing"
+msgstr "Golfe"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:39 ../share/symbols/symbols.h:40
 msgctxt "Symbol"
-msgid "Toilets"
-msgstr "Casas de Banho"
+msgid "Horseback Riding"
+msgstr "Hipismo"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:41 ../share/symbols/symbols.h:42
 msgctxt "Symbol"
-msgid "Nursery"
-msgstr "Bersário"
+msgid "Hospital"
+msgstr "Hospital"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
 msgctxt "Symbol"
-msgid "Drinking Fountain"
-msgstr "Fonte de Água Potável"
+msgid "Ice Skating"
+msgstr "Patinagem no Gelo"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
 #: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
-msgctxt "Symbol"
-msgid "Waiting Room"
-msgstr "Sala de Espera"
-
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
-#: ../share/symbols/symbols.h:231 ../share/symbols/symbols.h:232
+#: ../share/symbols/symbols.h:206 ../share/symbols/symbols.h:207
 msgctxt "Symbol"
 msgid "Information"
 msgstr "Informação"
 
-#. Symbols: AigaSymbols.svg
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
+msgctxt "Symbol"
+msgid "Litter Receptacle"
+msgstr "Caixote do Lixo"
+
+#. Symbols: ./MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:49 ../share/symbols/symbols.h:50
+msgctxt "Symbol"
+msgid "Lodging"
+msgstr "Alojamento"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
+msgctxt "Symbol"
+msgid "Marina"
+msgstr "Marina"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
+msgctxt "Symbol"
+msgid "Motorbike Trail"
+msgstr "Trilho de Motocliclos"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
+msgctxt "Symbol"
+msgid "Radiator Water"
+msgstr "Água de Refrigeração"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
+msgctxt "Symbol"
+msgid "Recycling"
+msgstr "Reciclagem"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
+#: ../share/symbols/symbols.h:258 ../share/symbols/symbols.h:259
+msgctxt "Symbol"
+msgid "Parking"
+msgstr "Estacionamento"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
+msgctxt "Symbol"
+msgid "Pets On Leash"
+msgstr "Animais com Trela"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
+msgctxt "Symbol"
+msgid "Picnic Area"
+msgstr "Área de Pique-Niques"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
+msgctxt "Symbol"
+msgid "Post Office"
+msgstr "Posto de Correios"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
+msgctxt "Symbol"
+msgid "Ranger Station"
+msgstr "Posto de Guarda Florestal"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
+msgctxt "Symbol"
+msgid "RV Campground"
+msgstr "Parque de Caravanas"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
+msgctxt "Symbol"
+msgid "Restrooms"
+msgstr "Casas de Banho"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
+msgctxt "Symbol"
+msgid "Sailing"
+msgstr "Vela"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
+msgctxt "Symbol"
+msgid "Sanitary Disposal Station"
+msgstr "Estação de Deposição Sanitária (caravanas)"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
+msgctxt "Symbol"
+msgid "Scuba Diving"
+msgstr "Mergulho"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
+msgctxt "Symbol"
+msgid "Self Guided Trail"
+msgstr "Trilho de Orientação"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
+msgctxt "Symbol"
+msgid "Shelter"
+msgstr "Abrigo"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
+msgctxt "Symbol"
+msgid "Showers"
+msgstr "Chuveiros"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
+msgctxt "Symbol"
+msgid "Sledding"
+msgstr "Trenós de Escorregar"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
+msgctxt "Symbol"
+msgid "SnowmobileTrail"
+msgstr "Trilho de Mota de Neve"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
+msgctxt "Symbol"
+msgid "Stable"
+msgstr "Estábulo"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
+msgctxt "Symbol"
+msgid "Store"
+msgstr "Loja"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
+msgctxt "Symbol"
+msgid "Swimming"
+msgstr "Natação"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
+#: ../share/symbols/symbols.h:162 ../share/symbols/symbols.h:163
+msgctxt "Symbol"
+msgid "Telephone"
+msgstr "Telefone"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
+msgctxt "Symbol"
+msgid "Emergency Telephone"
+msgstr "Telefone de Emergência"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
+msgctxt "Symbol"
+msgid "Trailhead"
+msgstr "Início do Trilho"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
+msgctxt "Symbol"
+msgid "Wheelchair Accessible"
+msgstr "Acessível a Cadeiras de Rodas"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
+msgctxt "Symbol"
+msgid "Wind Surfing"
+msgstr "Prancha à Vela (windsurf)"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:105
+msgctxt "Symbol"
+msgid "Blank"
+msgstr "Vazio"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:106
+msgctxt "Symbol"
+msgid "Flow Chart Shapes"
+msgstr "Formas de Fluxogramas"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:107
+msgctxt "Symbol"
+msgid "Process"
+msgstr "Processo"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:108
+msgctxt "Symbol"
+msgid "Input/Output"
+msgstr "Entrada/Saída"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:109
+msgctxt "Symbol"
+msgid "Document"
+msgstr "Documento"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:110
+msgctxt "Symbol"
+msgid "Manual Operation"
+msgstr "Operação Manual"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:111
+msgctxt "Symbol"
+msgid "Preparation"
+msgstr "Preparação"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:112
+msgctxt "Symbol"
+msgid "Merge"
+msgstr "União"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:113
+msgctxt "Symbol"
+msgid "Decision"
+msgstr "Decisão"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:114
+msgctxt "Symbol"
+msgid "Magnetic Tape"
+msgstr "Fita magnética"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:115
+msgctxt "Symbol"
+msgid "Display"
+msgstr "Painel"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:116
+msgctxt "Symbol"
+msgid "Auxiliary Operation"
+msgstr "Operação Auxiliar"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:117
+msgctxt "Symbol"
+msgid "Manual Input"
+msgstr "Entrada Manual"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:118
+msgctxt "Symbol"
+msgid "Extract"
+msgstr "Extrair"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:119
+msgctxt "Symbol"
+msgid "Terminal/Interrupt"
+msgstr "Terminal/Interrupção"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:120
+msgctxt "Symbol"
+msgid "Punched Card"
+msgstr "Cartão Perfurado"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:121
+msgctxt "Symbol"
+msgid "Punch Tape"
+msgstr "Fita Perfurada"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:122
+msgctxt "Symbol"
+msgid "Online Storage"
+msgstr "Armazenamento Online"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:123
+msgctxt "Symbol"
+msgid "Keying"
+msgstr "Entrada"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:124
+msgctxt "Symbol"
+msgid "Sort"
+msgstr "Ordenação"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:125
+msgctxt "Symbol"
+msgid "Connector"
+msgstr "Conetor"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:126
+msgctxt "Symbol"
+msgid "Off-Page Connector"
+msgstr "Conetor Para Trás"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:127
+msgctxt "Symbol"
+msgid "Transmittal Tape"
+msgstr "Banda de Transmissão"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:128
+msgctxt "Symbol"
+msgid "Communication Link"
+msgstr "Ligação de Comunicação"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:129
+msgctxt "Symbol"
+msgid "Collate"
+msgstr "Comparar"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:130
+msgctxt "Symbol"
+msgid "Comment/Annotation"
+msgstr "Comentário/Anotação"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:131
+msgctxt "Symbol"
+msgid "Core"
+msgstr "Núcleo"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:132
+msgctxt "Symbol"
+msgid "Predefined Process"
+msgstr "Processo Pré-definido"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:133
+msgctxt "Symbol"
+msgid "Magnetic Disk (Database)"
+msgstr "Disco Magnético (Base de Dados)"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:134
+msgctxt "Symbol"
+msgid "Magnetic Drum (Direct Access)"
+msgstr "Tambor Magnético (Acesso Direto)"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:135
+msgctxt "Symbol"
+msgid "Offline Storage"
+msgstr "Armazenamento Offline"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:136
+msgctxt "Symbol"
+msgid "Logical Or"
+msgstr "OR Lógico"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:137
+msgctxt "Symbol"
+msgid "Logical And"
+msgstr "AND Lógico"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:138
+msgctxt "Symbol"
+msgid "Delay"
+msgstr "Atraso"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:139
+msgctxt "Symbol"
+msgid "Loop Limit Begin"
+msgstr "Início de Limite de Ciclo"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:140
+msgctxt "Symbol"
+msgid "Loop Limit End"
+msgstr "Fim de Limite de Ciclo"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:141
+msgctxt "Symbol"
+msgid "Word Balloons"
+msgstr "Balão de Banda Desenhada"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:142
+msgctxt "Symbol"
+msgid "Thought Balloon"
+msgstr "Balão de Pensamento"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:143
+msgctxt "Symbol"
+msgid "Dream Speaking"
+msgstr "Sonho Falado"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:144
+msgctxt "Symbol"
+msgid "Rounded Balloon"
+msgstr "Balão Redondo"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:145
+msgctxt "Symbol"
+msgid "Squared Balloon"
+msgstr "Balão Quadrado"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:146
+msgctxt "Symbol"
+msgid "Over the Phone"
+msgstr "Ao Telefone"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:147
+msgctxt "Symbol"
+msgid "Hip Balloon"
+msgstr "Balão Oco"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:148
+msgctxt "Symbol"
+msgid "Circle Balloon"
+msgstr "Balão Circular"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:149
+msgctxt "Symbol"
+msgid "Exclaim Balloon"
+msgstr "Balão de Exclamação"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:150
+msgctxt "Symbol"
+msgid "Logic Symbols"
+msgstr "Símbolos Lógicos"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:151
+msgctxt "Symbol"
+msgid "Xnor Gate"
+msgstr "Porta XNOR"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:152
+msgctxt "Symbol"
+msgid "Xor Gate"
+msgstr "Porta XOR"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:153
+msgctxt "Symbol"
+msgid "Nor Gate"
+msgstr "Porta NOR"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:154
+msgctxt "Symbol"
+msgid "Or Gate"
+msgstr "Porta OR"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:155
+msgctxt "Symbol"
+msgid "Nand Gate"
+msgstr "Porta NAND"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:156
+msgctxt "Symbol"
+msgid "And Gate"
+msgstr "Porta AND"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:157
+msgctxt "Symbol"
+msgid "Buffer"
+msgstr "Buffer"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:158
+msgctxt "Symbol"
+msgid "Not Gate"
+msgstr "Não Porta"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:159
+msgctxt "Symbol"
+msgid "Buffer Small"
+msgstr "Buffer Pequeno"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:160
+msgctxt "Symbol"
+msgid "Not Gate Small"
+msgstr "Não Porta Pequeno"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:161
+msgctxt "Symbol"
+msgid "AIGA Symbol Signs"
+msgstr "Pictogramas AIGA"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:164 ../share/symbols/symbols.h:165
+msgctxt "Symbol"
+msgid "Mail"
+msgstr "Correio"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:166 ../share/symbols/symbols.h:167
+msgctxt "Symbol"
+msgid "Currency Exchange"
+msgstr "Câmbio"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:168 ../share/symbols/symbols.h:169
+msgctxt "Symbol"
+msgid "Currency Exchange - Euro"
+msgstr "Câmbio - Euro"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:170 ../share/symbols/symbols.h:171
+msgctxt "Symbol"
+msgid "Cashier"
+msgstr "Caixa de Pagamento"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:174 ../share/symbols/symbols.h:175
+msgctxt "Symbol"
+msgid "Lost and Found"
+msgstr "Perdidos e Achados"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:176 ../share/symbols/symbols.h:177
+msgctxt "Symbol"
+msgid "Coat Check"
+msgstr "Guarda-Roupas"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:178 ../share/symbols/symbols.h:179
+msgctxt "Symbol"
+msgid "Baggage Lockers"
+msgstr "Cacifos de Bagagem"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:180 ../share/symbols/symbols.h:181
+msgctxt "Symbol"
+msgid "Escalator"
+msgstr "Escadas Rolantes"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:182 ../share/symbols/symbols.h:183
+msgctxt "Symbol"
+msgid "Escalator Down"
+msgstr "Escadas Rolantes para Baixo"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:184 ../share/symbols/symbols.h:185
+msgctxt "Symbol"
+msgid "Escalator Up"
+msgstr "Escadas Rolantes para Cima"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:186 ../share/symbols/symbols.h:187
+msgctxt "Symbol"
+msgid "Stairs"
+msgstr "Escadas"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:188 ../share/symbols/symbols.h:189
+msgctxt "Symbol"
+msgid "Stairs Down"
+msgstr "Escadas para Baixo"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:190 ../share/symbols/symbols.h:191
+msgctxt "Symbol"
+msgid "Stairs Up"
+msgstr "Escadas para Cima"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:192 ../share/symbols/symbols.h:193
+msgctxt "Symbol"
+msgid "Elevator"
+msgstr "Elevador"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:194 ../share/symbols/symbols.h:195
+msgctxt "Symbol"
+msgid "Toilets - Men"
+msgstr "Casas de Banho - Homens"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:196 ../share/symbols/symbols.h:197
+msgctxt "Symbol"
+msgid "Toilets - Women"
+msgstr "Casas de Banho - Mulheres"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:198 ../share/symbols/symbols.h:199
+msgctxt "Symbol"
+msgid "Toilets"
+msgstr "Casas de Banho"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:200 ../share/symbols/symbols.h:201
+msgctxt "Symbol"
+msgid "Nursery"
+msgstr "Bersário"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:202 ../share/symbols/symbols.h:203
+msgctxt "Symbol"
+msgid "Drinking Fountain"
+msgstr "Fonte de Água Potável"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:204 ../share/symbols/symbols.h:205
+msgctxt "Symbol"
+msgid "Waiting Room"
+msgstr "Sala de Espera"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:208 ../share/symbols/symbols.h:209
 msgctxt "Symbol"
 msgid "Hotel Information"
 msgstr "Informação de Hotéis"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:210 ../share/symbols/symbols.h:211
 msgctxt "Symbol"
 msgid "Air Transportation"
 msgstr "Transportes Aéreos"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:212 ../share/symbols/symbols.h:213
 msgctxt "Symbol"
 msgid "Heliport"
 msgstr "Heliporto"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:214 ../share/symbols/symbols.h:215
 msgctxt "Symbol"
 msgid "Taxi"
 msgstr "Táxi"
 
 # Enevoar, desfocar ou borrar? -- krishna
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:216 ../share/symbols/symbols.h:217
 msgctxt "Symbol"
 msgid "Bus"
 msgstr "Autocarro"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:218 ../share/symbols/symbols.h:219
 msgctxt "Symbol"
 msgid "Ground Transportation"
 msgstr "Transporte Terrestre"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:220 ../share/symbols/symbols.h:221
 msgctxt "Symbol"
 msgid "Rail Transportation"
 msgstr "Transporte Ferroviário"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:222 ../share/symbols/symbols.h:223
 msgctxt "Symbol"
 msgid "Water Transportation"
 msgstr "Transporte Aquático"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:224 ../share/symbols/symbols.h:225
 msgctxt "Symbol"
 msgid "Car Rental"
 msgstr "Aluguer de Carros"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:226 ../share/symbols/symbols.h:227
 msgctxt "Symbol"
 msgid "Restaurant"
 msgstr "Restaurante"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:228 ../share/symbols/symbols.h:229
 msgctxt "Symbol"
 msgid "Coffeeshop"
 msgstr "Café"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:230 ../share/symbols/symbols.h:231
 msgctxt "Symbol"
 msgid "Bar"
 msgstr "Bar"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:232 ../share/symbols/symbols.h:233
 msgctxt "Symbol"
 msgid "Shops"
 msgstr "Lojas"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:234 ../share/symbols/symbols.h:235
 msgctxt "Symbol"
 msgid "Barber Shop - Beauty Salon"
 msgstr "Salão de Beleza"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:236 ../share/symbols/symbols.h:237
 msgctxt "Symbol"
 msgid "Barber Shop"
 msgstr "Barbearia"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:238 ../share/symbols/symbols.h:239
 msgctxt "Symbol"
 msgid "Beauty Salon"
 msgstr "Salão de Beleza"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:240 ../share/symbols/symbols.h:241
 msgctxt "Symbol"
 msgid "Ticket Purchase"
 msgstr "Compra de Bilhetes"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:242 ../share/symbols/symbols.h:243
 msgctxt "Symbol"
 msgid "Baggage Check In"
 msgstr "Apresentação de Bagagem"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:244 ../share/symbols/symbols.h:245
 msgctxt "Symbol"
 msgid "Baggage Claim"
 msgstr "Recepção de Bagagem"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:246 ../share/symbols/symbols.h:247
 msgctxt "Symbol"
 msgid "Customs"
 msgstr "Alfândega"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:248 ../share/symbols/symbols.h:249
 msgctxt "Symbol"
 msgid "Immigration"
 msgstr "Imigração"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:250 ../share/symbols/symbols.h:251
 msgctxt "Symbol"
 msgid "Departing Flights"
 msgstr "Partidas de Vôos"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:252 ../share/symbols/symbols.h:253
 msgctxt "Symbol"
 msgid "Arriving Flights"
 msgstr "Chegadas de Vôos"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:254 ../share/symbols/symbols.h:255
 msgctxt "Symbol"
 msgid "Smoking"
 msgstr "Fumadores"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:256 ../share/symbols/symbols.h:257
 msgctxt "Symbol"
 msgid "No Smoking"
 msgstr "Não Fumadores"
 
-#. Symbols: AigaSymbols.svg
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
-#: ../share/symbols/symbols.h:245 ../share/symbols/symbols.h:246
-msgctxt "Symbol"
-msgid "Parking"
-msgstr "Estacionamento"
-
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:260 ../share/symbols/symbols.h:261
 msgctxt "Symbol"
 msgid "No Parking"
 msgstr "Proibido Estacionar"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:262 ../share/symbols/symbols.h:263
 msgctxt "Symbol"
 msgid "No Dogs"
 msgstr "Proibido Cães"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:105 ../share/symbols/symbols.h:106
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:264 ../share/symbols/symbols.h:265
 msgctxt "Symbol"
 msgid "No Entry"
 msgstr "Entrada Proibida"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:107 ../share/symbols/symbols.h:108
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:266 ../share/symbols/symbols.h:267
 msgctxt "Symbol"
 msgid "Exit"
 msgstr "Saída"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:109 ../share/symbols/symbols.h:110
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:268 ../share/symbols/symbols.h:269
 msgctxt "Symbol"
 msgid "Fire Extinguisher"
 msgstr "Extintor"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:111 ../share/symbols/symbols.h:112
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:270 ../share/symbols/symbols.h:271
 msgctxt "Symbol"
 msgid "Right Arrow"
 msgstr "Seta para a Direita"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:113 ../share/symbols/symbols.h:114
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:272 ../share/symbols/symbols.h:273
 msgctxt "Symbol"
 msgid "Forward and Right Arrow"
 msgstr "Seta para a Frente e Direita"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:115 ../share/symbols/symbols.h:116
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:274 ../share/symbols/symbols.h:275
 msgctxt "Symbol"
 msgid "Up Arrow"
 msgstr "Seta para Cima"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:117 ../share/symbols/symbols.h:118
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:276 ../share/symbols/symbols.h:277
 msgctxt "Symbol"
 msgid "Forward and Left Arrow"
 msgstr "Seta para a Frente e Esquerda"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:119 ../share/symbols/symbols.h:120
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:278 ../share/symbols/symbols.h:279
 msgctxt "Symbol"
 msgid "Left Arrow"
 msgstr "Seta para a Esquerda"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:121 ../share/symbols/symbols.h:122
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:280 ../share/symbols/symbols.h:281
 msgctxt "Symbol"
 msgid "Left and Down Arrow"
 msgstr "Seta para a Esquerda e para Baixo"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:123 ../share/symbols/symbols.h:124
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:282 ../share/symbols/symbols.h:283
 msgctxt "Symbol"
 msgid "Down Arrow"
 msgstr "Seta para Baixo"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:125 ../share/symbols/symbols.h:126
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:284 ../share/symbols/symbols.h:285
 msgctxt "Symbol"
 msgid "Right and Down Arrow"
 msgstr "Seta para a Direita e para Baixo"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:127 ../share/symbols/symbols.h:128
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:286 ../share/symbols/symbols.h:287
 msgctxt "Symbol"
 msgid "NPS Wheelchair Accessible - 1996"
 msgstr "Acessível a Cadeiras de Rodas - NPS 1996"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:129 ../share/symbols/symbols.h:130
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:288 ../share/symbols/symbols.h:289
 msgctxt "Symbol"
 msgid "NPS Wheelchair Accessible"
 msgstr "Acessível a Cadeiras de Rodas - NPS"
 
-#. Symbols: AigaSymbols.svg
-#: ../share/symbols/symbols.h:131 ../share/symbols/symbols.h:132
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:290 ../share/symbols/symbols.h:291
 msgctxt "Symbol"
 msgid "New Wheelchair Accessible"
 msgstr "Acessível a Cadeiras de Rodas - Novo"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:133
-msgctxt "Symbol"
-msgid "Word Balloons"
-msgstr "Balão de Banda Desenhada"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:134
-msgctxt "Symbol"
-msgid "Thought Balloon"
-msgstr "Balão de Pensamento"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:135
-msgctxt "Symbol"
-msgid "Dream Speaking"
-msgstr "Sonho Falado"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:136
-msgctxt "Symbol"
-msgid "Rounded Balloon"
-msgstr "Balão Redondo"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:137
-msgctxt "Symbol"
-msgid "Squared Balloon"
-msgstr "Balão Quadrado"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:138
-msgctxt "Symbol"
-msgid "Over the Phone"
-msgstr "Ao Telefone"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:139
-msgctxt "Symbol"
-msgid "Hip Balloon"
-msgstr "Balão Oco"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:140
-msgctxt "Symbol"
-msgid "Circle Balloon"
-msgstr "Balão Circular"
-
-#. Symbols: BalloonSymbols.svg
-#: ../share/symbols/symbols.h:141
-msgctxt "Symbol"
-msgid "Exclaim Balloon"
-msgstr "Balão de Exclamação"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:142
-msgctxt "Symbol"
-msgid "Flow Chart Shapes"
-msgstr "Formas de Fluxogramas"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:143
-msgctxt "Symbol"
-msgid "Process"
-msgstr "Processo"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:144
-msgctxt "Symbol"
-msgid "Input/Output"
-msgstr "Entrada/Saída"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:145
-msgctxt "Symbol"
-msgid "Document"
-msgstr "Documento"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:146
-msgctxt "Symbol"
-msgid "Manual Operation"
-msgstr "Operação Manual"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:147
-msgctxt "Symbol"
-msgid "Preparation"
-msgstr "Preparação"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:148
-msgctxt "Symbol"
-msgid "Merge"
-msgstr "União"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:149
-msgctxt "Symbol"
-msgid "Decision"
-msgstr "Decisão"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:150
-msgctxt "Symbol"
-msgid "Magnetic Tape"
-msgstr "Fita magnética"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:151
-msgctxt "Symbol"
-msgid "Display"
-msgstr "Painel"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:152
-msgctxt "Symbol"
-msgid "Auxiliary Operation"
-msgstr "Operação Auxiliar"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:153
-msgctxt "Symbol"
-msgid "Manual Input"
-msgstr "Entrada Manual"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:154
-msgctxt "Symbol"
-msgid "Extract"
-msgstr "Extrair"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:155
-msgctxt "Symbol"
-msgid "Terminal/Interrupt"
-msgstr "Terminal/Interrupção"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:156
-msgctxt "Symbol"
-msgid "Punched Card"
-msgstr "Cartão Perfurado"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:157
-msgctxt "Symbol"
-msgid "Punch Tape"
-msgstr "Fita Perfurada"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:158
-msgctxt "Symbol"
-msgid "Online Storage"
-msgstr "Armazenamento Online"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:159
-msgctxt "Symbol"
-msgid "Keying"
-msgstr "Entrada"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:160
-msgctxt "Symbol"
-msgid "Sort"
-msgstr "Ordenação"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:161
-msgctxt "Symbol"
-msgid "Connector"
-msgstr "Conetor"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:162
-msgctxt "Symbol"
-msgid "Off-Page Connector"
-msgstr "Conetor Para Trás"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:163
-msgctxt "Symbol"
-msgid "Transmittal Tape"
-msgstr "Banda de Transmissão"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:164
-msgctxt "Symbol"
-msgid "Communication Link"
-msgstr "Ligação de Comunicação"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:165
-msgctxt "Symbol"
-msgid "Collate"
-msgstr "Comparar"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:166
-msgctxt "Symbol"
-msgid "Comment/Annotation"
-msgstr "Comentário/Anotação"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:167
-msgctxt "Symbol"
-msgid "Core"
-msgstr "Núcleo"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:168
-msgctxt "Symbol"
-msgid "Predefined Process"
-msgstr "Processo Pré-definido"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:169
-msgctxt "Symbol"
-msgid "Magnetic Disk (Database)"
-msgstr "Disco Magnético (Base de Dados)"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:170
-msgctxt "Symbol"
-msgid "Magnetic Drum (Direct Access)"
-msgstr "Tambor Magnético (Acesso Direto)"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:171
-msgctxt "Symbol"
-msgid "Offline Storage"
-msgstr "Armazenamento Offline"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:172
-msgctxt "Symbol"
-msgid "Logical Or"
-msgstr "OR Lógico"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:173
-msgctxt "Symbol"
-msgid "Logical And"
-msgstr "AND Lógico"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:174
-msgctxt "Symbol"
-msgid "Delay"
-msgstr "Atraso"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:175
-msgctxt "Symbol"
-msgid "Loop Limit Begin"
-msgstr "Início de Limite de Ciclo"
-
-#. Symbols: FlowSymbols.svg
-#: ../share/symbols/symbols.h:176
-msgctxt "Symbol"
-msgid "Loop Limit End"
-msgstr "Fim de Limite de Ciclo"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:177
-msgctxt "Symbol"
-msgid "Logic Symbols"
-msgstr "Símbolos Lógicos"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:178
-msgctxt "Symbol"
-msgid "Xnor Gate"
-msgstr "Porta XNOR"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:179
-msgctxt "Symbol"
-msgid "Xor Gate"
-msgstr "Porta XOR"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:180
-msgctxt "Symbol"
-msgid "Nor Gate"
-msgstr "Porta NOR"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:181
-msgctxt "Symbol"
-msgid "Or Gate"
-msgstr "Porta OR"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:182
-msgctxt "Symbol"
-msgid "Nand Gate"
-msgstr "Porta NAND"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:183
-msgctxt "Symbol"
-msgid "And Gate"
-msgstr "Porta AND"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:184
-msgctxt "Symbol"
-msgid "Buffer"
-msgstr "Buffer"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:185
-msgctxt "Symbol"
-msgid "Not Gate"
-msgstr "Não Porta"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:186
-msgctxt "Symbol"
-msgid "Buffer Small"
-msgstr "Buffer Pequeno"
-
-#. Symbols: LogicSymbols.svg
-#: ../share/symbols/symbols.h:187
-msgctxt "Symbol"
-msgid "Not Gate Small"
-msgstr "Não Porta Pequeno"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:188
-msgctxt "Symbol"
-msgid "United States National Park Service Map Symbols"
-msgstr "Pictogramas do Serv.Parq.Nac.EUA"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:189 ../share/symbols/symbols.h:190
-msgctxt "Symbol"
-msgid "Airport"
-msgstr "Aeroporto"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:191 ../share/symbols/symbols.h:192
-msgctxt "Symbol"
-msgid "Amphitheatre"
-msgstr "Anfiteatro"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:193 ../share/symbols/symbols.h:194
-msgctxt "Symbol"
-msgid "Bicycle Trail"
-msgstr "Trilho de Bicicleta"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:195 ../share/symbols/symbols.h:196
-msgctxt "Symbol"
-msgid "Boat Launch"
-msgstr "Rampa de Barcos"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:197 ../share/symbols/symbols.h:198
-msgctxt "Symbol"
-msgid "Boat Tour"
-msgstr "Guia Turístico por Barco"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:199 ../share/symbols/symbols.h:200
-msgctxt "Symbol"
-msgid "Bus Stop"
-msgstr "Paragem de Autocarro"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:201 ../share/symbols/symbols.h:202
-msgctxt "Symbol"
-msgid "Campfire"
-msgstr "Fogueira"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:203 ../share/symbols/symbols.h:204
-msgctxt "Symbol"
-msgid "Campground"
-msgstr "Parque de Campismo"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:205 ../share/symbols/symbols.h:206
-msgctxt "Symbol"
-msgid "CanoeAccess"
-msgstr "Acesso a Canoas"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:207 ../share/symbols/symbols.h:208
-msgctxt "Symbol"
-msgid "Crosscountry Ski Trail"
-msgstr "Trilho de Esqui Crosscountry"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:209 ../share/symbols/symbols.h:210
-msgctxt "Symbol"
-msgid "Downhill Skiing"
-msgstr "Esqui Downhill"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:211 ../share/symbols/symbols.h:212
-msgctxt "Symbol"
-msgid "Drinking Water"
-msgstr "Água Potável"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:215 ../share/symbols/symbols.h:216
-msgctxt "Symbol"
-msgid "Fishing"
-msgstr "Pesca"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:217 ../share/symbols/symbols.h:218
-msgctxt "Symbol"
-msgid "Food Service"
-msgstr "Serviço de Comida"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:219 ../share/symbols/symbols.h:220
-msgctxt "Symbol"
-msgid "Four Wheel Drive Road"
-msgstr "Estrada para Quatro Rodas"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:221 ../share/symbols/symbols.h:222
-msgctxt "Symbol"
-msgid "Gas Station"
-msgstr "Posto de combustível"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:223 ../share/symbols/symbols.h:224
-msgctxt "Symbol"
-msgid "Golfing"
-msgstr "Golfe"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:225 ../share/symbols/symbols.h:226
-msgctxt "Symbol"
-msgid "Horseback Riding"
-msgstr "Hipismo"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:227 ../share/symbols/symbols.h:228
-msgctxt "Symbol"
-msgid "Hospital"
-msgstr "Hospital"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:229 ../share/symbols/symbols.h:230
-msgctxt "Symbol"
-msgid "Ice Skating"
-msgstr "Patinagem no Gelo"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:233 ../share/symbols/symbols.h:234
-msgctxt "Symbol"
-msgid "Litter Receptacle"
-msgstr "Caixote do Lixo"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:235 ../share/symbols/symbols.h:236
-msgctxt "Symbol"
-msgid "Lodging"
-msgstr "Alojamento"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:237 ../share/symbols/symbols.h:238
-msgctxt "Symbol"
-msgid "Marina"
-msgstr "Marina"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:239 ../share/symbols/symbols.h:240
-msgctxt "Symbol"
-msgid "Motorbike Trail"
-msgstr "Trilho de Motocliclos"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:241 ../share/symbols/symbols.h:242
-msgctxt "Symbol"
-msgid "Radiator Water"
-msgstr "Água de Refrigeração"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:243 ../share/symbols/symbols.h:244
-msgctxt "Symbol"
-msgid "Recycling"
-msgstr "Reciclagem"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:247 ../share/symbols/symbols.h:248
-msgctxt "Symbol"
-msgid "Pets On Leash"
-msgstr "Animais com Trela"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:249 ../share/symbols/symbols.h:250
-msgctxt "Symbol"
-msgid "Picnic Area"
-msgstr "Área de Pique-Niques"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:251 ../share/symbols/symbols.h:252
-msgctxt "Symbol"
-msgid "Post Office"
-msgstr "Posto de Correios"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:253 ../share/symbols/symbols.h:254
-msgctxt "Symbol"
-msgid "Ranger Station"
-msgstr "Posto de Guarda Florestal"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:255 ../share/symbols/symbols.h:256
-msgctxt "Symbol"
-msgid "RV Campground"
-msgstr "Parque de Caravanas"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:257 ../share/symbols/symbols.h:258
-msgctxt "Symbol"
-msgid "Restrooms"
-msgstr "Casas de Banho"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:259 ../share/symbols/symbols.h:260
-msgctxt "Symbol"
-msgid "Sailing"
-msgstr "Vela"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:261 ../share/symbols/symbols.h:262
-msgctxt "Symbol"
-msgid "Sanitary Disposal Station"
-msgstr "Estação de Deposição Sanitária (caravanas)"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:263 ../share/symbols/symbols.h:264
-msgctxt "Symbol"
-msgid "Scuba Diving"
-msgstr "Mergulho"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:265 ../share/symbols/symbols.h:266
-msgctxt "Symbol"
-msgid "Self Guided Trail"
-msgstr "Trilho de Orientação"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:267 ../share/symbols/symbols.h:268
-msgctxt "Symbol"
-msgid "Shelter"
-msgstr "Abrigo"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:269 ../share/symbols/symbols.h:270
-msgctxt "Symbol"
-msgid "Showers"
-msgstr "Chuveiros"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:271 ../share/symbols/symbols.h:272
-msgctxt "Symbol"
-msgid "Sledding"
-msgstr "Trenós de Escorregar"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:273 ../share/symbols/symbols.h:274
-msgctxt "Symbol"
-msgid "SnowmobileTrail"
-msgstr "Trilho de Mota de Neve"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:275 ../share/symbols/symbols.h:276
-msgctxt "Symbol"
-msgid "Stable"
-msgstr "Estábulo"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:277 ../share/symbols/symbols.h:278
-msgctxt "Symbol"
-msgid "Store"
-msgstr "Loja"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:279 ../share/symbols/symbols.h:280
-msgctxt "Symbol"
-msgid "Swimming"
-msgstr "Natação"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:283 ../share/symbols/symbols.h:284
-msgctxt "Symbol"
-msgid "Emergency Telephone"
-msgstr "Telefone de Emergência"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:285 ../share/symbols/symbols.h:286
-msgctxt "Symbol"
-msgid "Trailhead"
-msgstr "Início do Trilho"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:287 ../share/symbols/symbols.h:288
-msgctxt "Symbol"
-msgid "Wheelchair Accessible"
-msgstr "Acessível a Cadeiras de Rodas"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:289 ../share/symbols/symbols.h:290
-msgctxt "Symbol"
-msgid "Wind Surfing"
-msgstr "Prancha à Vela (windsurf)"
-
-#. Symbols: MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:291
-msgctxt "Symbol"
-msgid "Blank"
-msgstr "Vazio"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -4453,6 +4453,18 @@ msgstr "Modelo simples de etiqueta do CD com a figura do CD"
 #: ../share/templates/templates.h:1
 msgid "CD label 120x120 disc disk"
 msgstr "Etiqueta de Disco de CD 120x120"
+
+#: ../share/templates/templates.h:1
+msgid "No Layers"
+msgstr "Sem Camadas"
+
+#: ../share/templates/templates.h:1
+msgid "Empty sheet with no layers"
+msgstr "Folha vazia sem camadas"
+
+#: ../share/templates/templates.h:1
+msgid "no layers empty"
+msgstr "sem camadas vazias"
 
 #: ../share/templates/templates.h:1
 msgid "LaTeX Beamer"
@@ -4477,18 +4489,6 @@ msgstr "Área de desenho tipográfico vazio com guias de ajuda."
 #: ../share/templates/templates.h:1
 msgid "guidelines typography canvas"
 msgstr "guias de área de desenho tipográfico"
-
-#: ../share/templates/templates.h:1
-msgid "No Layers"
-msgstr "Sem Camadas"
-
-#: ../share/templates/templates.h:1
-msgid "Empty sheet with no layers"
-msgstr "Folha vazia sem camadas"
-
-#: ../share/templates/templates.h:1
-msgid "no layers empty"
-msgstr "sem camadas vazias"
 
 #. 3D box
 #: ../src/box3d.cpp:255 ../src/box3d.cpp:1309
@@ -4913,21 +4913,21 @@ msgstr "Múltiplo do espaçamento da grelha"
 msgid " to "
 msgstr " para "
 
-#: ../src/document.cpp:526
+#: ../src/document.cpp:529
 #, c-format
 msgid "New document %d"
 msgstr "Novo documento %d"
 
-#: ../src/document.cpp:531
+#: ../src/document.cpp:534
 #, c-format
 msgid "Memory document %d"
 msgstr "Memória do documento %d"
 
-#: ../src/document.cpp:560
+#: ../src/document.cpp:563
 msgid "Memory document %1"
 msgstr "Memória do documento %1"
 
-#: ../src/document.cpp:859
+#: ../src/document.cpp:862
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Documento sem nome %d"
@@ -5924,51 +5924,51 @@ msgstr "Selecionar página:"
 msgid "out of %i"
 msgstr "de um total de %i"
 
-#: ../src/extension/internal/cdr-input.cpp:293
+#: ../src/extension/internal/cdr-input.cpp:300
 msgid "Corel DRAW Input"
 msgstr "Importar Corel DRAW"
 
-#: ../src/extension/internal/cdr-input.cpp:298
+#: ../src/extension/internal/cdr-input.cpp:305
 msgid "Corel DRAW 7-X4 files (*.cdr)"
 msgstr "Corel DRAW 7-X4 (*.cdr)"
 
-#: ../src/extension/internal/cdr-input.cpp:299
+#: ../src/extension/internal/cdr-input.cpp:306
 msgid "Open files saved in Corel DRAW 7-X4"
 msgstr "Abrir ficheiros gravados no Corel DRAW 7-X4"
 
-#: ../src/extension/internal/cdr-input.cpp:306
+#: ../src/extension/internal/cdr-input.cpp:313
 msgid "Corel DRAW templates input"
 msgstr "Importar Corel DRAW template"
 
-#: ../src/extension/internal/cdr-input.cpp:311
+#: ../src/extension/internal/cdr-input.cpp:318
 msgid "Corel DRAW 7-13 template files (*.cdt)"
 msgstr "Corel DRAW 7-13 template (*.cdt)"
 
-#: ../src/extension/internal/cdr-input.cpp:312
+#: ../src/extension/internal/cdr-input.cpp:319
 msgid "Open files saved in Corel DRAW 7-13"
 msgstr "Abrir ficheiros gravados no Corel DRAW 7-13"
 
-#: ../src/extension/internal/cdr-input.cpp:319
+#: ../src/extension/internal/cdr-input.cpp:326
 msgid "Corel DRAW Compressed Exchange files input"
 msgstr "Importar Corel DRAW Compressed Exchange"
 
-#: ../src/extension/internal/cdr-input.cpp:324
+#: ../src/extension/internal/cdr-input.cpp:331
 msgid "Corel DRAW Compressed Exchange files (*.ccx)"
 msgstr "Corel DRAW Compressed Exchange - ficheiros (*.ccx)"
 
-#: ../src/extension/internal/cdr-input.cpp:325
+#: ../src/extension/internal/cdr-input.cpp:332
 msgid "Open compressed exchange files saved in Corel DRAW"
 msgstr "Abrir ficheiros compressed exchange gravados no Corel DRAW"
 
-#: ../src/extension/internal/cdr-input.cpp:332
+#: ../src/extension/internal/cdr-input.cpp:339
 msgid "Corel DRAW Presentation Exchange files input"
 msgstr "Importar Corel DRAW Presentation Exchange"
 
-#: ../src/extension/internal/cdr-input.cpp:337
+#: ../src/extension/internal/cdr-input.cpp:344
 msgid "Corel DRAW Presentation Exchange files (*.cmx)"
 msgstr "Corel DRAW Presentation Exchange - ficheiros (*.cmx)"
 
-#: ../src/extension/internal/cdr-input.cpp:338
+#: ../src/extension/internal/cdr-input.cpp:345
 msgid "Open presentation exchange files saved in Corel DRAW"
 msgstr "Abrir ficheiros presentation exchange gravados no Corel DRAW"
 
@@ -8029,7 +8029,7 @@ msgstr "Render"
 #: ../src/extension/internal/grid.cpp:210
 #: ../src/ui/dialog/document-properties.cpp:163
 #: ../src/ui/dialog/inkscape-preferences.cpp:827
-#: ../src/widgets/toolbox.cpp:1901
+#: ../src/widgets/toolbox.cpp:1900
 msgid "Grids"
 msgstr "Grelhas"
 
@@ -8299,48 +8299,48 @@ msgstr "SVG plain (limpo) compactado (*.svgz)"
 msgid "Scalable Vector Graphics format compressed with GZip"
 msgstr "Formato SVG compactado com GZip"
 
-#: ../src/extension/internal/vsd-input.cpp:296
+#: ../src/extension/internal/vsd-input.cpp:303
 msgid "VSD Input"
 msgstr "Importar VSD"
 
-#: ../src/extension/internal/vsd-input.cpp:301
+#: ../src/extension/internal/vsd-input.cpp:308
 msgid "Microsoft Visio Diagram (*.vsd)"
 msgstr "Microsoft Visio Diagram (*.vsd)"
 
-#: ../src/extension/internal/vsd-input.cpp:302
+#: ../src/extension/internal/vsd-input.cpp:309
 msgid "File format used by Microsoft Visio 6 and later"
 msgstr "Formato de ficheiro usado pelo Microsoft Visio 6 e posterior"
 
-#: ../src/extension/internal/vsd-input.cpp:309
+#: ../src/extension/internal/vsd-input.cpp:316
 msgid "VDX Input"
 msgstr "Importar VDX"
 
-#: ../src/extension/internal/vsd-input.cpp:314
+#: ../src/extension/internal/vsd-input.cpp:321
 msgid "Microsoft Visio XML Diagram (*.vdx)"
 msgstr "Microsoft Visio XML Diagram (*.vdx)"
 
-#: ../src/extension/internal/vsd-input.cpp:315
+#: ../src/extension/internal/vsd-input.cpp:322
 msgid "File format used by Microsoft Visio 2010 and later"
 msgstr "Formato de ficheiro usado pelo Microsoft Visio 2010 e posterior"
 
-#: ../src/extension/internal/vsd-input.cpp:322
+#: ../src/extension/internal/vsd-input.cpp:329
 msgid "VSDM Input"
 msgstr "Importar VSDM"
 
-#: ../src/extension/internal/vsd-input.cpp:327
+#: ../src/extension/internal/vsd-input.cpp:334
 msgid "Microsoft Visio 2013 drawing (*.vsdm)"
 msgstr "Microsoft Visio 2013 - desenho (*.vsdm)"
 
-#: ../src/extension/internal/vsd-input.cpp:328
-#: ../src/extension/internal/vsd-input.cpp:341
+#: ../src/extension/internal/vsd-input.cpp:335
+#: ../src/extension/internal/vsd-input.cpp:348
 msgid "File format used by Microsoft Visio 2013 and later"
 msgstr "Formato de ficheiro usado pelo Microsoft Visio 2013 e posterior"
 
-#: ../src/extension/internal/vsd-input.cpp:335
+#: ../src/extension/internal/vsd-input.cpp:342
 msgid "VSDX Input"
 msgstr "Importar VSDX"
 
-#: ../src/extension/internal/vsd-input.cpp:340
+#: ../src/extension/internal/vsd-input.cpp:347
 msgid "Microsoft Visio 2013 drawing (*.vsdx)"
 msgstr "Microsoft Visio 2013 - desenho (*.vsdx)"
 
@@ -8373,15 +8373,15 @@ msgstr "Metaficheiro do Windows (*.wmf)"
 msgid "Windows Metafile"
 msgstr "Metaficheiros do Windows"
 
-#: ../src/extension/internal/wpg-input.cpp:144
+#: ../src/extension/internal/wpg-input.cpp:151
 msgid "WPG Input"
 msgstr "Importar WPG"
 
-#: ../src/extension/internal/wpg-input.cpp:149
+#: ../src/extension/internal/wpg-input.cpp:156
 msgid "WordPerfect Graphics (*.wpg)"
 msgstr "Gráficos WordPerfect (*.wpg)"
 
-#: ../src/extension/internal/wpg-input.cpp:150
+#: ../src/extension/internal/wpg-input.cpp:157
 msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "Formato de gráficos vetoriais usado pelo Corel WordPerfect"
 
@@ -8454,7 +8454,7 @@ msgstr ""
 "As ligações quebradas foram alteradas por forma a apontar a ficheiros "
 "existentes."
 
-#: ../src/file.cpp:749 ../src/file.cpp:1694
+#: ../src/file.cpp:749 ../src/file.cpp:1698
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Falha ao carregar o ficheiro %s"
@@ -8528,7 +8528,7 @@ msgid "Document saved."
 msgstr "Documento gravado."
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:1284 ../src/file.cpp:1853
+#: ../src/file.cpp:1284 ../src/file.cpp:1857
 msgid "drawing"
 msgstr "desenho"
 
@@ -8552,20 +8552,20 @@ msgstr "Não há alterações a gravar."
 msgid "Saving document..."
 msgstr "A gravar o documento..."
 
-#: ../src/file.cpp:1691 ../src/ui/dialog/inkscape-preferences.cpp:1500
+#: ../src/file.cpp:1695 ../src/ui/dialog/inkscape-preferences.cpp:1500
 #: ../src/ui/dialog/ocaldialogs.cpp:1244
 msgid "Import"
 msgstr "Importar"
 
-#: ../src/file.cpp:1741
+#: ../src/file.cpp:1745
 msgid "Select file to import"
 msgstr "Selecionar o ficheiro a importar"
 
-#: ../src/file.cpp:1874
+#: ../src/file.cpp:1878
 msgid "Select file to export to"
 msgstr "Selecionar o ficheiro a exportar"
 
-#: ../src/file.cpp:2127
+#: ../src/file.cpp:2131
 msgid "Import Clip Art"
 msgstr "Importar Clip Ar_t"
 
@@ -8962,7 +8962,7 @@ msgstr ""
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "Falhou a cópia de segurança automática dos seguintes documentos:\n"
 
-#: ../src/knot.cpp:350
+#: ../src/knot.cpp:348
 msgid "Node or handle drag canceled."
 msgstr "Arrasto de nó ou alça cancelado."
 
@@ -9696,7 +9696,7 @@ msgid "Path along which to bend the original path"
 msgstr "Caminho ao longo do qual deformar o caminho original"
 
 #: ../src/live_effects/lpe-bendpath.cpp:71
-#: ../src/live_effects/lpe-patternalongpath.cpp:64
+#: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../src/ui/dialog/export.cpp:285 ../src/ui/dialog/transformation.cpp:73
 #: ../src/ui/widget/page-sizer.cpp:237
 msgid "_Width:"
@@ -9724,7 +9724,7 @@ msgstr ""
 "Roda o original em 90 graus, antes de o dobrar ao longo do caminho de dobra"
 
 #: ../src/live_effects/lpe-bendpath.cpp:178
-#: ../src/live_effects/lpe-patternalongpath.cpp:279
+#: ../src/live_effects/lpe-patternalongpath.cpp:281
 msgid "Change the width"
 msgstr "Alterar largura"
 
@@ -10814,59 +10814,59 @@ msgstr "Ponto de início"
 msgid "Adjust center of mirroring"
 msgstr "Ajustar matiz"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:53
+#: ../src/live_effects/lpe-patternalongpath.cpp:54
 #: ../share/extensions/pathalongpath.inx.h:10
 msgid "Single"
 msgstr "Único"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:54
+#: ../src/live_effects/lpe-patternalongpath.cpp:55
 #: ../share/extensions/pathalongpath.inx.h:11
 msgid "Single, stretched"
 msgstr "Único, esticado"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:55
+#: ../src/live_effects/lpe-patternalongpath.cpp:56
 #: ../share/extensions/pathalongpath.inx.h:12
 msgid "Repeated"
 msgstr "Repetido"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:56
+#: ../src/live_effects/lpe-patternalongpath.cpp:57
 #: ../share/extensions/pathalongpath.inx.h:13
 msgid "Repeated, stretched"
 msgstr "Repetido, esticado"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:62
+#: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Pattern source:"
 msgstr "Fonte do padrão:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:62
+#: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Path to put along the skeleton path"
 msgstr "Caminho a ser colocado ao longo do caminho esqueleto"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:64
+#: ../src/live_effects/lpe-patternalongpath.cpp:65
 msgid "Width of the pattern"
 msgstr "Largura do padrão"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:65
+#: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "Pattern copies:"
 msgstr "Cópias do padrão:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:65
+#: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "How many pattern copies to place along the skeleton path"
 msgstr "Quantas cópias de padrão serão colocadas ao longo do caminho esqueleto"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:67
+#: ../src/live_effects/lpe-patternalongpath.cpp:68
 msgid "Wid_th in units of length"
 msgstr "Largura em unidades de comprimen_to"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:68
+#: ../src/live_effects/lpe-patternalongpath.cpp:69
 msgid "Scale the width of the pattern in units of its length"
 msgstr "Dimensão da largura do padrão em unidades do seu comprimento"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:70
+#: ../src/live_effects/lpe-patternalongpath.cpp:71
 msgid "Spa_cing:"
 msgstr "Espa_çamento:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:72
+#: ../src/live_effects/lpe-patternalongpath.cpp:73
 #, no-c-format
 msgid ""
 "Space between copies of the pattern. Negative values allowed, but are "
@@ -10875,19 +10875,19 @@ msgstr ""
 "Espaço entre cópias do padrão. Podem-se usar valores negativos, mas estão "
 "limitados a -90% do padrão"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:74
+#: ../src/live_effects/lpe-patternalongpath.cpp:75
 msgid "No_rmal offset:"
 msgstr "Desvio no_rmal:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:75
+#: ../src/live_effects/lpe-patternalongpath.cpp:76
 msgid "Tan_gential offset:"
 msgstr "Desvio tan_gencial:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:76
+#: ../src/live_effects/lpe-patternalongpath.cpp:77
 msgid "Offsets in _unit of pattern size"
 msgstr "Deslocamentos em _unidade do tamanho do padrão"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:77
+#: ../src/live_effects/lpe-patternalongpath.cpp:78
 msgid ""
 "Spacing, tangential and normal offset are expressed as a ratio of width/"
 "height"
@@ -10895,19 +10895,19 @@ msgstr ""
 "O espaçamento, tangencial e deslocamento normal são exprimidos como um rácio "
 "do comprimento/altura"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:79
+#: ../src/live_effects/lpe-patternalongpath.cpp:80
 msgid "Pattern is _vertical"
 msgstr "Padrão é _vertical"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:79
+#: ../src/live_effects/lpe-patternalongpath.cpp:80
 msgid "Rotate pattern 90 deg before applying"
 msgstr "Rodar padrão 90 graus antes de aplicar"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:81
+#: ../src/live_effects/lpe-patternalongpath.cpp:82
 msgid "_Fuse nearby ends:"
 msgstr "_Fundir terminais próximos:"
 
-#: ../src/live_effects/lpe-patternalongpath.cpp:81
+#: ../src/live_effects/lpe-patternalongpath.cpp:82
 msgid "Fuse ends closer than this number. 0 means don't fuse."
 msgstr ""
 "Funde os nós finais de caminhos que estejam mais próximos que este número. "
@@ -11981,40 +11981,40 @@ msgstr ""
 msgid "Unable to find node ID: '%s'\n"
 msgstr "Impossível encontrar o ID do nó: '%s'\n"
 
-#: ../src/main.cpp:300
+#: ../src/main.cpp:301
 msgid "Print the Inkscape version number"
 msgstr "Imprimir o número de versão do Inkscape"
 
-#: ../src/main.cpp:305
+#: ../src/main.cpp:306
 msgid "Do not use X server (only process files from console)"
 msgstr "Não usar o servidor X (processar apenas ficheiros da consola)"
 
-#: ../src/main.cpp:310
+#: ../src/main.cpp:311
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Tente usar o servidor X (mesmo se $DISPLAY não foi definido)"
 
-#: ../src/main.cpp:315
+#: ../src/main.cpp:316
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 "Abrir os documentos especificados (expressão de opção pode ser excluída)"
 
-#: ../src/main.cpp:316 ../src/main.cpp:321 ../src/main.cpp:326
-#: ../src/main.cpp:398 ../src/main.cpp:403 ../src/main.cpp:408
-#: ../src/main.cpp:419 ../src/main.cpp:435 ../src/main.cpp:440
+#: ../src/main.cpp:317 ../src/main.cpp:322 ../src/main.cpp:327
+#: ../src/main.cpp:399 ../src/main.cpp:404 ../src/main.cpp:409
+#: ../src/main.cpp:420 ../src/main.cpp:436 ../src/main.cpp:441
 msgid "FILENAME"
 msgstr "NOME DO FICHEIRO"
 
-#: ../src/main.cpp:320
+#: ../src/main.cpp:321
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Imprimir documentos para um ficheiro especificado (usar '| programa' para "
 "pipe)"
 
-#: ../src/main.cpp:325
+#: ../src/main.cpp:326
 msgid "Export document to a PNG file"
 msgstr "Exportar documento para um ficheiro PNG"
 
-#: ../src/main.cpp:330
+#: ../src/main.cpp:331
 msgid ""
 "Resolution for exporting to bitmap and for rasterization of filters in PS/"
 "EPS/PDF (default 96)"
@@ -12022,11 +12022,11 @@ msgstr ""
 "Resolução para exportar para imagem bitmap e para rasterização de filtros em "
 "PS/EPS/PDF (padrão 96)"
 
-#: ../src/main.cpp:331 ../src/ui/widget/rendering-options.cpp:37
+#: ../src/main.cpp:332 ../src/ui/widget/rendering-options.cpp:37
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:335
+#: ../src/main.cpp:336
 msgid ""
 "Exported area in SVG user units (default is the page; 0,0 is lower-left "
 "corner)"
@@ -12034,29 +12034,29 @@ msgstr ""
 "Área exportada em unidades de utilizador SVG (padrão é a página; 0,0 é o "
 "canto esquerdo inferior)"
 
-#: ../src/main.cpp:336
+#: ../src/main.cpp:337
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:340
+#: ../src/main.cpp:341
 msgid "Exported area is the entire drawing (not page)"
 msgstr "A área exportada é o desenho inteiro (não a página)"
 
-#: ../src/main.cpp:345
+#: ../src/main.cpp:346
 msgid "Exported area is the entire page"
 msgstr "A área exportada é a página inteira"
 
-#: ../src/main.cpp:350
+#: ../src/main.cpp:351
 msgid "Only for PS/EPS/PDF, sets margin in mm around exported area (default 0)"
 msgstr ""
 "Apenas para PS/EPS/PDF, define a margem em mm à volta da área exportada "
 "(padrão 0)"
 
-#: ../src/main.cpp:351 ../src/main.cpp:393
+#: ../src/main.cpp:352 ../src/main.cpp:394
 msgid "VALUE"
 msgstr "VALOR"
 
-#: ../src/main.cpp:355
+#: ../src/main.cpp:356
 msgid ""
 "Snap the bitmap export area outwards to the nearest integer values (in SVG "
 "user units)"
@@ -12064,76 +12064,76 @@ msgstr ""
 "Atrair a área de exportar a imagem bitmap para fora para os valores inteiros "
 "mais próximos (em unidades de utilizador SVG)"
 
-#: ../src/main.cpp:360
+#: ../src/main.cpp:361
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "A largura da imagem exportada em píxeis (prioridade a export-dpi)"
 
-#: ../src/main.cpp:361
+#: ../src/main.cpp:362
 msgid "WIDTH"
 msgstr "LARGURA"
 
-#: ../src/main.cpp:365
+#: ../src/main.cpp:366
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "A altura da imagem exportada em píxeis (prioridade a export-dpi)"
 
-#: ../src/main.cpp:366
+#: ../src/main.cpp:367
 msgid "HEIGHT"
 msgstr "ALTURA"
 
-#: ../src/main.cpp:370
+#: ../src/main.cpp:371
 msgid "The ID of the object to export"
 msgstr "O ID do objeto para exportar"
 
-#: ../src/main.cpp:371 ../src/main.cpp:484
+#: ../src/main.cpp:372 ../src/main.cpp:485
 #: ../src/ui/dialog/inkscape-preferences.cpp:1564
 msgid "ID"
 msgstr "ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:377
+#: ../src/main.cpp:378
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Exportar apenas o objeto com export-id, ocultar todos os outros (apenas com "
 "export-id)"
 
-#: ../src/main.cpp:382
+#: ../src/main.cpp:383
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Usar nome de ficheiro armazenado e dicas de DPI ao exportar (apenas com "
 "export-id)"
 
-#: ../src/main.cpp:387
+#: ../src/main.cpp:388
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Cor de fundo da imagem bitmap exportada (qualquer expressão de cor suportada "
 "pelo SVG)"
 
-#: ../src/main.cpp:388
+#: ../src/main.cpp:389
 msgid "COLOR"
 msgstr "COR"
 
-#: ../src/main.cpp:392
+#: ../src/main.cpp:393
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Opacidade do fundo da imagem bitmap exportada (quer 0.0 a 1.0, ou 1 a 255)"
 
-#: ../src/main.cpp:397
+#: ../src/main.cpp:398
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Exportar o documento para um ficheiro SVG simples (plain SVG, sem nomes de "
 "espaço sodipodi ou inkscape)"
 
-#: ../src/main.cpp:402
+#: ../src/main.cpp:403
 msgid "Export document to a PS file"
 msgstr "Exportar documento para um ficheiro PostScript"
 
-#: ../src/main.cpp:407
+#: ../src/main.cpp:408
 msgid "Export document to an EPS file"
 msgstr "Exportar documento para um ficheiro EPS"
 
-#: ../src/main.cpp:412
+#: ../src/main.cpp:413
 msgid ""
 "Choose the PostScript Level used to export. Possible choices are 2 and 3 "
 "(the default)"
@@ -12141,16 +12141,16 @@ msgstr ""
 "Escolher o Nível PostScript usado para exportar. Pode ser o nível 2 ou 3 "
 "(padrão)"
 
-#: ../src/main.cpp:414
+#: ../src/main.cpp:415
 msgid "PS Level"
 msgstr "Nível PS"
 
-#: ../src/main.cpp:418
+#: ../src/main.cpp:419
 msgid "Export document to a PDF file"
 msgstr "Exportar documento para um ficheiro PDF"
 
 #. TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:424
+#: ../src/main.cpp:425
 msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
 "found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
@@ -12159,11 +12159,11 @@ msgstr ""
 "expressão exata encontrada na janela de exportar PDF, por exemplo \"PDF "
 "1.4\" que está de acordo com a especificação PDF-a."
 
-#: ../src/main.cpp:425
+#: ../src/main.cpp:426
 msgid "PDF_VERSION"
 msgstr "VERSAO_PDF"
 
-#: ../src/main.cpp:429
+#: ../src/main.cpp:430
 msgid ""
 "Export PDF/PS/EPS without text. Besides the PDF/PS/EPS, a LaTeX file is "
 "exported, putting the text on top of the PDF/PS/EPS file. Include the result "
@@ -12173,19 +12173,19 @@ msgstr ""
 "um ficheiro LaTeX, colocando o texto no topo do ficheiro PDF/PS/EPS. Incluir "
 "o resultado no LaTeX como: \\input{latexfile.tex}"
 
-#: ../src/main.cpp:434
+#: ../src/main.cpp:435
 msgid "Export document to an Enhanced Metafile (EMF) File"
 msgstr "Exportar documento para um ficheiro Enhanced Metafile (EMF)"
 
-#: ../src/main.cpp:439
+#: ../src/main.cpp:440
 msgid "Export document to a Windows Metafile (WMF) File"
 msgstr "Exportar documento para um ficheiro Windows Metafile (WMF)"
 
-#: ../src/main.cpp:444
+#: ../src/main.cpp:445
 msgid "Convert text object to paths on export (PS, EPS, PDF, SVG)"
 msgstr "Converter texto em caminhos ao exportar (PS, EPS, PDF, SVG)"
 
-#: ../src/main.cpp:449
+#: ../src/main.cpp:450
 msgid ""
 "Render filtered objects without filters, instead of rasterizing (PS, EPS, "
 "PDF)"
@@ -12194,7 +12194,7 @@ msgstr ""
 "PDF)"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:455
+#: ../src/main.cpp:456
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -12203,7 +12203,7 @@ msgstr ""
 "query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:461
+#: ../src/main.cpp:462
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -12212,7 +12212,7 @@ msgstr ""
 "query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:467
+#: ../src/main.cpp:468
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
@@ -12220,35 +12220,35 @@ msgstr ""
 "Perguntar a largura do desenho ou, se especificado, do objeto com --query-id"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:473
+#: ../src/main.cpp:474
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 "Perguntar a altura do desenho ou, se especificado, do objeto com --query-id"
 
-#: ../src/main.cpp:478
+#: ../src/main.cpp:479
 msgid "List id,x,y,w,h for all objects"
 msgstr "Listar id,x,y,w,h para todos os objetos"
 
-#: ../src/main.cpp:483
+#: ../src/main.cpp:484
 msgid "The ID of the object whose dimensions are queried"
 msgstr "O ID do objeto cujas dimensões são consultadas"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:489
+#: ../src/main.cpp:490
 msgid "Print out the extension directory and exit"
 msgstr "Imprimir a pasta das extensões e sair"
 
-#: ../src/main.cpp:494
+#: ../src/main.cpp:495
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Eliminar definições não usadas das secções <defs> do documento"
 
-#: ../src/main.cpp:500
+#: ../src/main.cpp:501
 msgid "Enter a listening loop for D-Bus messages in console mode"
 msgstr "Introduzir um ciclo de escuta para as mensagens D-Bus no modo terminal"
 
-#: ../src/main.cpp:505
+#: ../src/main.cpp:506
 msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
@@ -12256,35 +12256,39 @@ msgstr ""
 "Especificar o nome do bus D-Bus no qual obter mensagens (o padrão é org."
 "inkscape)"
 
-#: ../src/main.cpp:506
+#: ../src/main.cpp:507
 msgid "BUS-NAME"
 msgstr "NOME-DO-BUS"
 
-#: ../src/main.cpp:511
+#: ../src/main.cpp:512
 msgid "List the IDs of all the verbs in Inkscape"
 msgstr "Listar os IDs de todos os verbos do Inkscape"
 
-#: ../src/main.cpp:516
+#: ../src/main.cpp:517
 msgid "Verb to call when Inkscape opens."
 msgstr "Verbo para chamar quando o Inkscape abrir."
 
-#: ../src/main.cpp:517
+#: ../src/main.cpp:518
 msgid "VERB-ID"
 msgstr "VERBO-ID"
 
-#: ../src/main.cpp:521
+#: ../src/main.cpp:522
 msgid "Object ID to select when Inkscape opens."
 msgstr "ID do objeto para selecionar quando o Inkscape abrir."
 
-#: ../src/main.cpp:522
+#: ../src/main.cpp:523
 msgid "OBJECT-ID"
 msgstr "OBJETO-ID"
 
-#: ../src/main.cpp:526
+#: ../src/main.cpp:527
 msgid "Start Inkscape in interactive shell mode."
 msgstr "Iniciar o Inkscape com a consola interativa"
 
-#: ../src/main.cpp:876 ../src/main.cpp:1349
+#: ../src/main.cpp:532
+msgid "Prevents automatic fix of pre-92 files on opening them."
+msgstr ""
+
+#: ../src/main.cpp:882 ../src/main.cpp:1355
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -13492,26 +13496,26 @@ msgstr "de <b>%d</b> objeto"
 msgid "of <b>%d</b> objects"
 msgstr "de <b>%d</b> objetos"
 
-#: ../src/sp-item.cpp:1035 ../src/verbs.cpp:213
+#: ../src/sp-item.cpp:1036 ../src/verbs.cpp:213
 msgid "Object"
 msgstr "Objeto"
 
-#: ../src/sp-item.cpp:1047
+#: ../src/sp-item.cpp:1048
 #, c-format
 msgid "%s; <i>clipped</i>"
 msgstr "%s; <i>com recorte</i>"
 
-#: ../src/sp-item.cpp:1053
+#: ../src/sp-item.cpp:1054
 #, c-format
 msgid "%s; <i>masked</i>"
 msgstr "%s; <i>com máscara</i>"
 
-#: ../src/sp-item.cpp:1063
+#: ../src/sp-item.cpp:1064
 #, c-format
 msgid "%s; <i>filtered (%s)</i>"
 msgstr "%s; <i>com efeito de filtro (%s)</i>"
 
-#: ../src/sp-item.cpp:1065
+#: ../src/sp-item.cpp:1066
 #, c-format
 msgid "%s; <i>filtered</i>"
 msgstr "%s; <i>filtrado</i>"
@@ -14108,7 +14112,7 @@ msgid "Rearrange"
 msgstr "Reorganizar"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:941
-#: ../src/widgets/toolbox.cpp:1803
+#: ../src/widgets/toolbox.cpp:1802
 msgid "Nodes"
 msgstr "Nós"
 
@@ -15370,7 +15374,7 @@ msgstr "_Remover"
 msgid "Remove selected grid."
 msgstr "Remover grelha selecionada."
 
-#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1910
+#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1909
 msgid "Guides"
 msgstr "Guias"
 
@@ -16907,7 +16911,7 @@ msgstr "Espirais"
 msgid "Search spirals"
 msgstr "Procurar espirais"
 
-#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1811
+#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1810
 msgid "Paths"
 msgstr "Caminhos"
 
@@ -21946,13 +21950,15 @@ msgid "Anchor point:"
 msgstr "Ponto âncora:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:52
+#, fuzzy
 msgctxt "Polar arrange tab"
-msgid "Object's bounding box:"
+msgid "Objects' bounding boxes:"
 msgstr "Caixa limitadora do objeto:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
+#, fuzzy
 msgctxt "Polar arrange tab"
-msgid "Object's rotational center"
+msgid "Objects' rotational centers"
 msgstr "Centro de rotação do objeto"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:64
@@ -29894,8 +29900,9 @@ msgid "Scale the results"
 msgstr "Permite alterar a escala das medidas"
 
 #: ../src/widgets/measure-toolbar.cpp:329
-msgid "The offset size"
-msgstr "Tamanho do deslocamento"
+#, fuzzy
+msgid "Mark dimension offset"
+msgstr "Criar Cota"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
@@ -31795,133 +31802,133 @@ msgstr "A definir"
 msgid "Style of Paint Bucket fill objects"
 msgstr "Estilo do preenchimento do Balde de Tinta nos objetos"
 
-#: ../src/widgets/toolbox.cpp:1757
+#: ../src/widgets/toolbox.cpp:1756
 msgid "Bounding box"
 msgstr "Caixa limitadora"
 
-#: ../src/widgets/toolbox.cpp:1757
+#: ../src/widgets/toolbox.cpp:1756
 msgid "Snap bounding boxes"
 msgstr "Atrair às caixas limitadoras"
 
-#: ../src/widgets/toolbox.cpp:1766
+#: ../src/widgets/toolbox.cpp:1765
 msgid "Bounding box edges"
 msgstr "Laterais da caixa limitadora"
 
-#: ../src/widgets/toolbox.cpp:1766
+#: ../src/widgets/toolbox.cpp:1765
 msgid "Snap to edges of a bounding box"
 msgstr "Atrair às laterais da caixa limitadora"
 
-#: ../src/widgets/toolbox.cpp:1775
+#: ../src/widgets/toolbox.cpp:1774
 msgid "Bounding box corners"
 msgstr "Cantos da caixa limitadora"
 
-#: ../src/widgets/toolbox.cpp:1775
+#: ../src/widgets/toolbox.cpp:1774
 msgid "Snap bounding box corners"
 msgstr "Atrair aos cantos da caixa limitadora"
 
-#: ../src/widgets/toolbox.cpp:1784
+#: ../src/widgets/toolbox.cpp:1783
 msgid "BBox Edge Midpoints"
 msgstr "Pontos Centrais das Laterais da Caixa Limitadora"
 
-#: ../src/widgets/toolbox.cpp:1784
+#: ../src/widgets/toolbox.cpp:1783
 msgid "Snap midpoints of bounding box edges"
 msgstr "Atrair aos pontos centrais dos lados da caixa limitadora"
 
-#: ../src/widgets/toolbox.cpp:1794
+#: ../src/widgets/toolbox.cpp:1793
 msgid "BBox Centers"
 msgstr "Centros da Caixa Limitadora"
 
-#: ../src/widgets/toolbox.cpp:1794
+#: ../src/widgets/toolbox.cpp:1793
 msgid "Snapping centers of bounding boxes"
 msgstr "Atrair aos centros das caixas limitadoras"
 
-#: ../src/widgets/toolbox.cpp:1803
+#: ../src/widgets/toolbox.cpp:1802
 msgid "Snap nodes, paths, and handles"
 msgstr "Atrair aos nós, caminhos e alças"
 
-#: ../src/widgets/toolbox.cpp:1811
+#: ../src/widgets/toolbox.cpp:1810
 msgid "Snap to paths"
 msgstr "Atrair aos caminhos"
 
-#: ../src/widgets/toolbox.cpp:1820
+#: ../src/widgets/toolbox.cpp:1819
 msgid "Path intersections"
 msgstr "Interseções de caminhos"
 
-#: ../src/widgets/toolbox.cpp:1820
+#: ../src/widgets/toolbox.cpp:1819
 msgid "Snap to path intersections"
 msgstr "Atrair às interseções de caminhos"
 
-#: ../src/widgets/toolbox.cpp:1829
+#: ../src/widgets/toolbox.cpp:1828
 msgid "To nodes"
 msgstr "Aos nós"
 
-#: ../src/widgets/toolbox.cpp:1829
+#: ../src/widgets/toolbox.cpp:1828
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr "Atrair aos nós afiados, incluindo cantos de retângulos"
 
-#: ../src/widgets/toolbox.cpp:1838
+#: ../src/widgets/toolbox.cpp:1837
 msgid "Smooth nodes"
 msgstr "Nós suaves"
 
-#: ../src/widgets/toolbox.cpp:1838
+#: ../src/widgets/toolbox.cpp:1837
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr "Atrair aos nós suaves, incluindo pontos quadrantes e elipses"
 
-#: ../src/widgets/toolbox.cpp:1847
+#: ../src/widgets/toolbox.cpp:1846
 msgid "Line Midpoints"
 msgstr "Pontos do Meio das Linhas"
 
-#: ../src/widgets/toolbox.cpp:1847
+#: ../src/widgets/toolbox.cpp:1846
 msgid "Snap midpoints of line segments"
 msgstr "Atrair aos pontos centrais de segmentos de linha"
 
-#: ../src/widgets/toolbox.cpp:1856
+#: ../src/widgets/toolbox.cpp:1855
 msgid "Others"
 msgstr "Outros"
 
-#: ../src/widgets/toolbox.cpp:1856
+#: ../src/widgets/toolbox.cpp:1855
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 "Atrair aos outros pontos (centros, origens de guias, alças de gradientes, "
 "etc.)"
 
-#: ../src/widgets/toolbox.cpp:1864
+#: ../src/widgets/toolbox.cpp:1863
 msgid "Object Centers"
 msgstr "Centros dos objetos"
 
-#: ../src/widgets/toolbox.cpp:1864
+#: ../src/widgets/toolbox.cpp:1863
 msgid "Snap centers of objects"
 msgstr "Atrair aos centros dos objetos"
 
-#: ../src/widgets/toolbox.cpp:1873
+#: ../src/widgets/toolbox.cpp:1872
 msgid "Rotation Centers"
 msgstr "Centros de Rotação"
 
-#: ../src/widgets/toolbox.cpp:1873
+#: ../src/widgets/toolbox.cpp:1872
 msgid "Snap an item's rotation center"
 msgstr "Atrair ao centro de rotação de um item"
 
-#: ../src/widgets/toolbox.cpp:1882
+#: ../src/widgets/toolbox.cpp:1881
 msgid "Text baseline"
 msgstr "Linhas base do texto"
 
-#: ../src/widgets/toolbox.cpp:1882
+#: ../src/widgets/toolbox.cpp:1881
 msgid "Snap text anchors and baselines"
 msgstr "Atrair às âncoras de texto e linhas base de texto"
 
-#: ../src/widgets/toolbox.cpp:1892
+#: ../src/widgets/toolbox.cpp:1891
 msgid "Page border"
 msgstr "Borda da página"
 
-#: ../src/widgets/toolbox.cpp:1892
+#: ../src/widgets/toolbox.cpp:1891
 msgid "Snap to the page border"
 msgstr "Atrair às bordas da página"
 
-#: ../src/widgets/toolbox.cpp:1901
+#: ../src/widgets/toolbox.cpp:1900
 msgid "Snap to grids"
 msgstr "Atrair às grelhas"
 
-#: ../src/widgets/toolbox.cpp:1910
+#: ../src/widgets/toolbox.cpp:1909
 msgid "Snap guides"
 msgstr "Atrair às guias"
 
@@ -32161,41 +32168,45 @@ msgstr ""
 "Não foi possível processar este objeto. Tente alterá-lo para um caminho "
 "primeiro."
 
-#: ../share/extensions/draw_from_triangle.py:179
-#, fuzzy
-msgid "Side Length 'a' ("
+#: ../share/extensions/draw_from_triangle.py:180
+#, fuzzy, python-brace-format
+msgid "Side Length 'a' ({0}): {1}"
 msgstr "Comprimento do Lado 'a' (px): "
 
-#: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy
-msgid "Side Length 'b' ("
+#: ../share/extensions/draw_from_triangle.py:181
+#, fuzzy, python-brace-format
+msgid "Side Length 'b' ({0}): {1}"
 msgstr "Comprimento do Lado 'b' (px): "
 
-#: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy
-msgid "Side Length 'c' ("
+#: ../share/extensions/draw_from_triangle.py:182
+#, fuzzy, python-brace-format
+msgid "Side Length 'c' ({0}): {1}"
 msgstr "Comprimento do Lado 'c' (px): "
 
-#: ../share/extensions/draw_from_triangle.py:182
-msgid "Angle 'A' (radians): "
+#: ../share/extensions/draw_from_triangle.py:183
+#, fuzzy
+msgid "Angle 'A' (radians): {}"
 msgstr "Ângulo 'A' (radianos): "
 
-#: ../share/extensions/draw_from_triangle.py:183
-msgid "Angle 'B' (radians): "
+#: ../share/extensions/draw_from_triangle.py:184
+#, fuzzy
+msgid "Angle 'B' (radians): {}"
 msgstr "Ângulo 'B' (radianos): "
 
-#: ../share/extensions/draw_from_triangle.py:184
-msgid "Angle 'C' (radians): "
-msgstr "Ângulo 'C' (radianos): "
-
 #: ../share/extensions/draw_from_triangle.py:185
-msgid "Semiperimeter (px): "
-msgstr "Semi-perímetro (px): "
+#, fuzzy
+msgid "Angle 'C' (radians): {}"
+msgstr "Ângulo 'C' (radianos): "
 
 #: ../share/extensions/draw_from_triangle.py:186
 #, fuzzy
-msgid "Area ("
-msgstr "Área"
+msgid "Semiperimeter (px): {}"
+msgstr "Semi-perímetro (px): "
+
+#: ../share/extensions/draw_from_triangle.py:187
+#, fuzzy, python-brace-format
+msgid "Area ({0}^2): {1}"
+msgstr "Área (px^2): "
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -32206,7 +32217,7 @@ msgstr ""
 "%d ENTIDADES do tipo POLILINHA encontradas e ignoradas. Por favor tentar "
 "converter para o formato Release 13 utilizando o QCad."
 
-#: ../share/extensions/dxf_outlines.py:47
+#: ../share/extensions/dxf_outlines.py:49
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again."
@@ -32214,7 +32225,7 @@ msgstr ""
 "Falhou a importação dos módulos numpy ou numpy.linalg. Estes módulos são "
 "necessários para esta extensão. Instale-os e tente de novo."
 
-#: ../share/extensions/dxf_outlines.py:313
+#: ../share/extensions/dxf_outlines.py:315
 msgid ""
 "Error: Field 'Layer match name' must be filled when using 'By name match' "
 "option"
@@ -32222,7 +32233,7 @@ msgstr ""
 "Erro: o campo 'Nome que corresponde à camada' tem de ser preenchido ao "
 "utilizar a opção 'Por correspondência do nome'"
 
-#: ../share/extensions/dxf_outlines.py:354
+#: ../share/extensions/dxf_outlines.py:356
 #, python-format
 msgid "Warning: Layer '%s' not found!"
 msgstr "Aviso: a camada '%s' não foi encontrada!"
@@ -32600,11 +32611,11 @@ msgid "Pen "
 msgstr "Caneta "
 
 #. issue error if no hpgl data found
-#: ../share/extensions/hpgl_input.py:56
+#: ../share/extensions/hpgl_input.py:58
 msgid "No HPGL data found."
 msgstr "Nenhuns dados HPGL encontrados."
 
-#: ../share/extensions/hpgl_input.py:64
+#: ../share/extensions/hpgl_input.py:66
 msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
@@ -32613,7 +32624,7 @@ msgstr ""
 "possibilidade de faltar algum conteúdo no desenho."
 
 #. issue error if no paths found
-#: ../share/extensions/hpgl_output.py:57
+#: ../share/extensions/hpgl_output.py:56
 msgid ""
 "No paths where found. Please convert all objects you want to save into paths."
 msgstr ""
@@ -32877,7 +32888,7 @@ msgstr "Não foi encontrado nenhum atributo de estilo para o ID: %s"
 msgid "unable to locate marker: %s"
 msgstr "não foi possível encontrar o marcador: %s"
 
-#: ../share/extensions/measure.py:58
+#: ../share/extensions/measure.py:61
 msgid ""
 "Failed to import the numpy modules. These modules are required by this "
 "extension. Please install them and try again.  On a Debian-like system this "
@@ -32888,12 +32899,12 @@ msgstr ""
 "similar isto pode ser feito com o comando 'sudo apt-get install python-"
 "numpy'."
 
-#: ../share/extensions/measure.py:120
+#: ../share/extensions/measure.py:123
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr "A área é zero, não é possível calcular o Centro da Massa"
 
 #: ../share/extensions/pathalongpath.py:207
-#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:50
+#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:52
 msgid "This extension requires two selected paths."
 msgstr "Esta extensão requer 2 caminhos selecionados."
 
@@ -32918,7 +32929,7 @@ msgstr ""
 msgid "Please first convert objects to paths!  (Got [%s].)"
 msgstr "Converta primeiro os objetos em caminhos! (Obtido [%s].)"
 
-#: ../share/extensions/perspective.py:42
+#: ../share/extensions/perspective.py:44
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again.  On a Debian-"
@@ -32930,7 +32941,7 @@ msgstr ""
 "Debian ou similar isto pode ser feito com o comando 'sudo apt-get install "
 "python-numpy'."
 
-#: ../share/extensions/perspective.py:58 ../share/extensions/summersnight.py:49
+#: ../share/extensions/perspective.py:60 ../share/extensions/summersnight.py:49
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
@@ -32939,13 +32950,13 @@ msgstr ""
 "O primeiro objeto selecionado é do tipo '%s'.\n"
 "Tente usar o menu Caminho->Converter Objeto num Caminho."
 
-#: ../share/extensions/perspective.py:65 ../share/extensions/summersnight.py:57
+#: ../share/extensions/perspective.py:67 ../share/extensions/summersnight.py:57
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr ""
 "Esta extensão necessita que o segundo caminho contenha pelo menos 4 nós."
 
-#: ../share/extensions/perspective.py:91 ../share/extensions/summersnight.py:90
+#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:90
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
@@ -32953,7 +32964,7 @@ msgstr ""
 "O segundo objeto selecionado está num grupo, não num caminho.\n"
 "Tente usar o menu Objeto->Desagrupar."
 
-#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:92
+#: ../share/extensions/perspective.py:95 ../share/extensions/summersnight.py:92
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -32961,7 +32972,7 @@ msgstr ""
 "O segundo objeto selecionado não é um caminho.\n"
 "Tente usar o menu Caminho->Converter Objeto num Caminho."
 
-#: ../share/extensions/perspective.py:96 ../share/extensions/summersnight.py:95
+#: ../share/extensions/perspective.py:98 ../share/extensions/summersnight.py:95
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -33012,7 +33023,7 @@ msgstr ""
 "Não foi possível abrir a porta. Verifique que a plotter está ligada, com os "
 "cabos ligados e se as configurações estão corretas."
 
-#: ../share/extensions/polyhedron_3d.py:64
+#: ../share/extensions/polyhedron_3d.py:67
 msgid ""
 "Failed to import the numpy module. This module is required by this "
 "extension. Please install it and try again.  On a Debian-like system this "
@@ -33022,26 +33033,26 @@ msgstr ""
 "extensão. Instale-o e tente de novo. Num sistema Debian ou similar isto pode "
 "ser feito com o comando 'sudo apt-get install python-numpy'."
 
-#: ../share/extensions/polyhedron_3d.py:335
+#: ../share/extensions/polyhedron_3d.py:338
 msgid "No face data found in specified file."
 msgstr "Não foram encontrados dados de faces no ficheiro especificado."
 
-#: ../share/extensions/polyhedron_3d.py:336
+#: ../share/extensions/polyhedron_3d.py:339
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr ""
 "Tente selecionar \"Especificado pelas Bordas\" na aba Ficheiro de Modelo.\n"
 
-#: ../share/extensions/polyhedron_3d.py:342
+#: ../share/extensions/polyhedron_3d.py:345
 msgid "No edge data found in specified file."
 msgstr "Não foram encontrados dados de bordas no ficheiro especificado."
 
-#: ../share/extensions/polyhedron_3d.py:343
+#: ../share/extensions/polyhedron_3d.py:346
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr ""
 "Tente selecionar \"Especificado pelas Faces\" na aba Ficheiro de Modelo.\n"
 
 #. we cannot generate a list of faces from the edges without a lot of computation
-#: ../share/extensions/polyhedron_3d.py:522
+#: ../share/extensions/polyhedron_3d.py:525
 msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
@@ -33050,7 +33061,7 @@ msgstr ""
 "faces, e verifique se o ficheiro é importado como \"Especificado pelas Faces"
 "\" na aba \"Ficheiro de Modelo\".\n"
 
-#: ../share/extensions/polyhedron_3d.py:524
+#: ../share/extensions/polyhedron_3d.py:527
 msgid "Internal Error. No view type selected\n"
 msgstr "Erro Interno. Nenhum tipo de vista selecionada\n"
 
@@ -33148,13 +33159,15 @@ msgstr "Não foi possível localizar o ficheiro: %s"
 msgid "You must select a correct system encoding."
 msgstr "Tem de selecionar uma codificação de sistema correta."
 
-#: ../share/extensions/uniconv-ext.py:54
-#: ../share/extensions/uniconv_output.py:121
+#: ../share/extensions/uniconv-ext.py:55
+#: ../share/extensions/uniconv_output.py:122
+#, fuzzy
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
 "For Windows: download it from\n"
-"http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
+"https://sk1project.net/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
 "and install into your Inkscape's Python location\n"
 msgstr ""
 "É necessário instalar o programa UniConvertor.\n"
@@ -39822,6 +39835,13 @@ msgstr "Um formato de ficheiro gráfico popular para clipart"
 msgid "XAML Input"
 msgstr "Importar XAML"
 
+#~ msgid "The offset size"
+#~ msgstr "Tamanho do deslocamento"
+
+#, fuzzy
+#~ msgid "Area ("
+#~ msgstr "Área"
+
 #, fuzzy
 #~ msgid "Adjust the rotation angle"
 #~ msgstr "Ajustar saturação"
@@ -39853,9 +39873,6 @@ msgstr "Importar XAML"
 
 #~ msgid "<b>Mesh gradient</b>"
 #~ msgstr "<b>Gradiente de malha</b>"
-
-#~ msgid "Area (px^2): "
-#~ msgstr "Área (px^2): "
 
 #~ msgid "Add Stored to measure tool"
 #~ msgstr "Adicionar Armazenado à ferramenta de medição"
