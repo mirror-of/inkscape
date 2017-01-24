@@ -41,12 +41,13 @@ void fix_blank_line(SPObject *o)
     SPIFontSize fontsize = o->style->font_size;
     SPILengthOrNormal lineheight = o->style->line_height;
     vector<SPObject *> cl = o->childList(false);
-    Inkscape::Text::Layout::iterator pos = te_get_layout((SPItem *)(o))->begin();
     bool beginning = true;
     for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i)) {
             if (sp_text_get_length((SPItem *)i) <= 1) { // empty line
+                Inkscape::Text::Layout::iterator pos = te_get_layout((SPItem*)(o))->charIndexToIterator(
+                        (SP_IS_FLOWPARA(i)?0:((ci==cl.begin())?0:1)) + sp_text_get_length_upto(o,i) );
                 sp_te_insert((SPItem *)o, pos, "\u00a0"); //"\u00a0"
                 gchar *l = g_strdup_printf("%f", lineheight.value);
                 gchar *f = g_strdup_printf("%f", fontsize.value);
@@ -62,7 +63,6 @@ void fix_blank_line(SPObject *o)
                 fontsize = i->style->font_size;
                 lineheight = o->style->line_height;
             }
-            pos.nextLineCursor();
         }
     }
 }
@@ -86,7 +86,7 @@ void fix_line_spacing(SPObject *o)
         if (SP_IS_TEXT(o)) {
             o->style->line_height.read("0.00%");
         } else {
-            o->style->line_height.readIfUnset("0.01%");
+            o->style->line_height.read("0.01%");
         }
     }
 }
