@@ -241,7 +241,6 @@ static gchar *sp_dbus_name = NULL;
 static gchar *sp_export_png_utf8 = NULL;
 static gchar *sp_export_svg_utf8 = NULL;
 static gchar *sp_global_printer_utf8 = NULL;
-bool sp_do_not_fix_pre_92 = false;
 
 /**
  *  Reset variables to default values.

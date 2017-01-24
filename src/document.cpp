@@ -79,7 +79,7 @@ using Inkscape::Util::unit_table;
 // since we want it to happen when there are no more updates.
 #define SP_DOCUMENT_REROUTING_PRIORITY (G_PRIORITY_HIGH_IDLE - 1)
 
-
+bool sp_do_not_fix_pre_92 = false;
 static gint sp_document_idle_handler(gpointer data);
 static gint sp_document_rerouting_handler(gpointer data);
 
