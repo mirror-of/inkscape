@@ -14,6 +14,7 @@ tutorial_DATA = \
     pixelart-dialog.nl.png \
     pixelart-dialog.png \
     pixelart-dialog.pt.png \
+    pixelart-dialog.ru.png \
     pixelart-dialog.sk.png \
     pixelart-dialog.zh_TW.png \
     potrace.be.png \
@@ -226,6 +227,7 @@ tutorial_DATA = \
     tutorial-tracing-pixelart.fr.svg \
     tutorial-tracing-pixelart.nl.svg \
     tutorial-tracing-pixelart.pt.svg \
+    tutorial-tracing-pixelart.ru.svg \
     tutorial-tracing-pixelart.sk.svg \
     tutorial-tracing-pixelart.zh_TW.svg \
     tux.png
