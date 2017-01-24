@@ -50,6 +50,7 @@
 #include "display/drawing-item.h"
 #include "document-private.h"
 #include "document-undo.h"
+#include "file.h"
 #include "id-clash.h"
 #include "inkscape.h"
 #include "inkscape-version.h"
@@ -78,7 +79,7 @@ using Inkscape::Util::unit_table;
 // since we want it to happen when there are no more updates.
 #define SP_DOCUMENT_REROUTING_PRIORITY (G_PRIORITY_HIGH_IDLE - 1)
 
-
+bool sp_do_not_fix_pre_92 = false;
 static gint sp_document_idle_handler(gpointer data);
 static gint sp_document_rerouting_handler(gpointer data);
 
@@ -452,7 +453,9 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));
     document->oldSignalsConnected = true;
-
+    if ( (!sp_do_not_fix_pre_92) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+        sp_file_fix_text(document);
+   }
     return document;
 }
 
