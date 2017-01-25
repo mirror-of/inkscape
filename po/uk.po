@@ -6,13 +6,13 @@
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2007.
 # Alex <pilipchukap@rambler.ru>, 2005.
-# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-01-24 21:21+0100\n"
-"PO-Revision-Date: 2016-12-21 08:50+0200\n"
+"PO-Revision-Date: 2017-01-25 18:46+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -12261,6 +12261,7 @@ msgstr "Запустити Inkscape у режимі інтерактивної �
 #: ../src/main.cpp:532
 msgid "Prevents automatic fix of pre-92 files on opening them."
 msgstr ""
+"Запобігає автоматичному виправленню файлів до 0.92 під час їхнього відкриття."
 
 #: ../src/main.cpp:882 ../src/main.cpp:1355
 msgid ""
@@ -21861,16 +21862,14 @@ msgid "Anchor point:"
 msgstr "Точка прив’язки:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:52
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' bounding boxes:"
-msgstr "Видима рамка об’єкта:"
+msgstr "Рамки-обгортки об’єктів:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' rotational centers"
-msgstr "Центр обертання об'єкта"
+msgstr "Центри обертання об’єктів"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:64
 msgctxt "Polar arrange tab"
@@ -29802,9 +29801,8 @@ msgid "Scale the results"
 msgstr "Масштабувати результати"
 
 #: ../src/widgets/measure-toolbar.cpp:329
-#, fuzzy
 msgid "Mark dimension offset"
-msgstr "Позначити розмірність"
+msgstr "Відступ позначки розмірності"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
@@ -32070,44 +32068,40 @@ msgstr ""
 "Неможливо обробити цей об'єкт. Спробуйте спочатку перетворити його на контур."
 
 #: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'a' ({0}): {1}"
-msgstr "Довжина сторони «a» ("
+msgstr "Довжина сторони «a» ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'b' ({0}): {1}"
-msgstr "Довжина сторони «b» ("
+msgstr "Довжина сторони «b» ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:182
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'c' ({0}): {1}"
-msgstr "Довжина сторони «c» ("
+msgstr "Довжина сторони «c» ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:183
-#, fuzzy
 msgid "Angle 'A' (radians): {}"
-msgstr "Кут «A» (у радіанах): "
+msgstr "Кут «A» (у радіанах): {}"
 
 #: ../share/extensions/draw_from_triangle.py:184
-#, fuzzy
 msgid "Angle 'B' (radians): {}"
-msgstr "Кут «B» (у радіанах): "
+msgstr "Кут «B» (у радіанах): {}"
 
 #: ../share/extensions/draw_from_triangle.py:185
-#, fuzzy
 msgid "Angle 'C' (radians): {}"
-msgstr "Кут «C» (у радіанах): "
+msgstr "Кут «C» (у радіанах): {}"
 
 #: ../share/extensions/draw_from_triangle.py:186
-#, fuzzy
 msgid "Semiperimeter (px): {}"
-msgstr "Напівпериметр (у пк): "
+msgstr "Напівпериметр (у пк): {}"
 
 #: ../share/extensions/draw_from_triangle.py:187
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Area ({0}^2): {1}"
-msgstr "Площа (у пк²): "
+msgstr "Площа (у {0}²): {1}"
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -33064,7 +33058,6 @@ msgstr "Вам слід вибрати відповідне кодування �
 
 #: ../share/extensions/uniconv-ext.py:55
 #: ../share/extensions/uniconv_output.py:122
-#, fuzzy
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
@@ -33076,7 +33069,8 @@ msgstr ""
 "Вам слід встановити програму UniConvertor.\n"
 "У GNU/Linux: встановіть пакунок python-uniconvertor.\n"
 "У Windows: отримайте пакунок зі сторінки\n"
-"http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
+"https://sk1project.net/modules.php?name=Products&product=uniconvertor&op=downl"
+"oad\n"
 "і встановіть його до теки Python Inkscape.\n"
 
 #: ../share/extensions/voronoi2svg.py:205
