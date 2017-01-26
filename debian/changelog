@@ -1,3 +1,10 @@
+inkscape (0.92.0+devel-0ubuntu1) trusty; urgency=medium
+
+  * Fork the -stable package to -stable-daily
+  * Bump version to 0.92
+
+ -- Bryce Harrington <bryce@ubuntu.com>  Thu, 26 Jan 2017 10:59:33 -0800
+
 inkscape (0.91.0+48) wily; urgency=low
 
   * Rebuild for new wily package naming
