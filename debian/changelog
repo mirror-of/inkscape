@@ -1,3 +1,9 @@
+inkscape (0.92.1~devel-0ubuntu1) trusty; urgency=medium
+
+  * Bump version to indicate pre-releases of 0.92.1
+
+ -- Bryce Harrington <bryce@ubuntu.com>  Sun, 29 Jan 2017 10:39:02 -0800
+
 inkscape (0.92.0+devel-0ubuntu1) trusty; urgency=medium
 
   * Fork the -stable package to -stable-daily
