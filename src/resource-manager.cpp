@@ -158,9 +158,13 @@ bool ResourceManagerImpl::extractFilepath( Glib::ustring const &href, std::strin
             // TODO debug g_message("--- is a file URI                 [%s]", href.c_str());
 
             // throws Glib::ConvertError:
-            uri = Glib::filename_from_uri(href); // TODO see if we can get this to throw
-            // TODO debug g_message("                                  [%s]", uri.c_str());
-            isFile = true;
+            try {
+                uri = Glib::filename_from_uri(href);
+                // TODO debug g_message("                                  [%s]", uri.c_str());
+                isFile = true;
+            } catch(Glib::ConvertError e) {
+                g_warning("%s", e.what().c_str());
+            }
         }
     } else {
         // No scheme. Assuming it is a file path (absolute or relative).
@@ -230,7 +234,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
                     priorLocations.push_back(path);
                 }
             } catch (Glib::ConvertError e) {
-                g_warning("Bad URL ignored [%s]", uri.c_str());
+                g_warning("%s", e.what().c_str());
             }
         }
     }
