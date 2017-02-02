@@ -147,7 +147,7 @@ void fix_update(SPObject *o) {
     o->updateRepr();
 }
 
-void sp_file_fix_text(SPDocument *doc)
+void sp_file_convert_text_baseline_spacing(SPDocument *doc)
 {
     sp_file_text_run_recursive(fix_blank_line, doc->getRoot());
     sp_file_text_run_recursive(fix_line_spacing, doc->getRoot());

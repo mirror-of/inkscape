@@ -177,7 +177,7 @@ enum {
     SP_ARG_SHELL,
     SP_ARG_VERSION,
     SP_ARG_VACUUM_DEFS,
-    SP_ARG_DO_NOT_FIX_PRE_92,
+    SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
 #ifdef WITH_DBUS
     SP_ARG_DBUS_LISTEN,
     SP_ARG_DBUS_NAME,
@@ -280,7 +280,7 @@ static void resetCommandlineGlobals() {
         sp_query_all = FALSE;
         sp_query_id = NULL;
         sp_vacuum_defs = FALSE;
-        sp_do_not_fix_pre_92 = FALSE;
+        sp_no_convert_text_baseline_spacing = FALSE;
 #ifdef WITH_DBUS
         sp_dbus_listen = FALSE;
         sp_dbus_name = NULL;
@@ -527,9 +527,9 @@ struct poptOption options[] = {
      N_("Start Inkscape in interactive shell mode."),
      NULL},
 
-    {"do-not-fix-pre-92", 0,
-    POPT_ARG_NONE, &sp_do_not_fix_pre_92, SP_ARG_DO_NOT_FIX_PRE_92,
-    N_("Prevents automatic fix of pre-92 files on opening them."),
+    {"no-convert-text-baseline-spacing", 0,
+    POPT_ARG_NONE, &sp_no_convert_text_baseline_spacing, SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
+    N_("Do not fix legacy (pre-0.92) files' text baseline spacing on opening."),
     NULL},
 
     POPT_AUTOHELP POPT_TABLEEND
