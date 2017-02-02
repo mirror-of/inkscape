@@ -460,6 +460,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         sp_file_convert_text_baseline_spacing(document);
     }
 
+    /** Fix font names in legacy documents (pre-92 files) **/
+    if ( sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+        sp_file_convert_font_name(document);
+    }
+
     return document;
 }
 

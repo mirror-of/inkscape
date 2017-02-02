@@ -151,12 +151,15 @@ void sp_file_convert_text_baseline_spacing(SPDocument *doc)
 {
     sp_file_text_run_recursive(fix_blank_line, doc->getRoot());
     sp_file_text_run_recursive(fix_line_spacing, doc->getRoot());
-    sp_file_text_run_recursive(fix_font_name, doc->getRoot());
     sp_file_text_run_recursive(fix_font_size, doc->getRoot());
     sp_file_text_run_recursive(fix_update, doc->getRoot());
 }
 
-
+void sp_file_convert_font_name(SPDocument *doc)
+{
+    sp_file_text_run_recursive(fix_font_name, doc->getRoot());
+    sp_file_text_run_recursive(fix_update, doc->getRoot());
+}
 
 /*
   Local Variables:
