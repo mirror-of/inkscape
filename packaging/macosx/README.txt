@@ -20,12 +20,16 @@ $ (cd ports && portindex)
 
 $ sudo sed -e '$a\'$'\n''+x11 -quartz -no_x11 +rsvg +Pillow -tkinter +gnome_vfs' -i "" "$MP_PREFIX/etc/macports/variants.conf"
 
-6) install required dependencies: 
+6) set build architecture to i386
+
+$ sudo sed -e '/^#build_arch/i\'$'\nbuild_arch i386' -i "" "$MP_PREFIX/etc/macports/macports.conf"
+
+7) install required dependencies: 
 
 $ sudo port install inkscape-packaging
 
-7) compile inkscape, create app bundle and DMG: 
+8) compile inkscape, create app bundle and DMG: 
 
 $ LIBPREFIX="$MP_PREFIX" ./osx-build.sh a c b -j 5 i p -s d
 
-8) upload the DMG.
+9) upload the DMG.
