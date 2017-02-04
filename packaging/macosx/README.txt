@@ -30,6 +30,6 @@ $ sudo port install inkscape-packaging
 
 8) compile inkscape, create app bundle and DMG: 
 
-$ LIBPREFIX="$MP_PREFIX" ./osx-build.sh a c b -j 5 i p -s d
+$ LIBPREFIX="$MP_PREFIX" ARCH="i386" ./osx-build.sh a c b -j 5 i p -s d
 
 9) upload the DMG.
