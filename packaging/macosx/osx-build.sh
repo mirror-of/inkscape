@@ -221,7 +221,7 @@ elif [ "$OSXMINORNO" -eq "5" ]; then
 	TARGETVERSION="10.5"
 	export CC="/usr/bin/gcc-4.2"
 	export CXX="/usr/bin/g++-4.2"
-	#export CLAGS="$CFLAGS -arch $_build_arch"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS"
 	CONFFLAGS="--disable-openmp $CONFFLAGS"
 elif [ "$OSXMINORNO" -eq "6" ]; then
@@ -230,7 +230,7 @@ elif [ "$OSXMINORNO" -eq "6" ]; then
 	TARGETVERSION="10.6"
 	export CC="/usr/bin/llvm-gcc-4.2"
 	export CXX="/usr/bin/llvm-g++-4.2"
-	#export CLAGS="$CFLAGS -arch $_build_arch"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS"
 	CONFFLAGS="--disable-openmp $CONFFLAGS"
 elif [ "$OSXMINORNO" -eq "7" ]; then
@@ -239,7 +239,7 @@ elif [ "$OSXMINORNO" -eq "7" ]; then
 	TARGETVERSION="10.7"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	#export CLAGS="$CFLAGS -arch $_build_arch"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
 elif [ "$OSXMINORNO" -eq "8" ]; then
 	## Apple's clang on Mountain Lion
@@ -247,7 +247,7 @@ elif [ "$OSXMINORNO" -eq "8" ]; then
 	TARGETVERSION="10.8"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	#export CLAGS="$CFLAGS -arch $_build_arch"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libstdc++"
 elif [ "$OSXMINORNO" -eq "9" ]; then
 	## Apple's clang on Mavericks
@@ -255,16 +255,16 @@ elif [ "$OSXMINORNO" -eq "9" ]; then
 	TARGETVERSION="10.9"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	#export CLAGS="$CFLAGS -arch $_build_arch"
-	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
+	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 elif [ "$OSXMINORNO" -eq "10" ]; then
 	## Apple's clang on Yosemite
 	TARGETNAME="YOSEMITE"
 	TARGETVERSION="10.10"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	#export CLAGS="$CFLAGS -arch $_build_arch"
-	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
+	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
 	echo "      Inkscape packaging has not been tested on ${TARGETNAME}."
 else # if [ "$OSXMINORNO" -ge "11" ]; then
@@ -273,8 +273,8 @@ else # if [ "$OSXMINORNO" -ge "11" ]; then
 	TARGETVERSION="10.XX"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	#export CLAGS="$CFLAGS -arch $_build_arch"
-	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
+	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
 	echo "      Inkscape packaging has not been tested on this unknown version of OS X (${OSXVERSION})."
 fi
