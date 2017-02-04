@@ -6,12 +6,12 @@ PortGroup python 1.0
 
 name            py-uniconvertor
 version         1.1.5
-revision        100
+revision        101
 license         LGPL-2 GPL-2
 maintainers     nomaintainer
 categories      python graphics 
 platforms       darwin
-homepage        http://sk1project.org/modules.php?name=Products&product=uniconvertor
+homepage        http://sk1project.net/modules.php?name=Products&product=uniconvertor
 
 description     universal vector graphics translator.
 
@@ -42,5 +42,5 @@ if {$subport != $name} {
 } 
 
 livecheck.type          regex
-livecheck.url           http://sk1project.org/modules.php?name=Products&product=uniconvertor&op=download
+livecheck.url           http://sk1project.net/modules.php?name=Products&product=uniconvertor&op=download
 livecheck.regex         "uniconvertor-(\\d+(?:\\.\\d+)*)${extract.suffix}"
