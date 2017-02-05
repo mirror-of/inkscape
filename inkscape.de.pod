@@ -77,6 +77,7 @@ Optionen:
     -z, --without-gui                 
 
         --vacuum-defs
+        --no-convert-text-baseline-spacing
 
         --g-fatal-warnings
 
@@ -421,6 +422,15 @@ SVG-Datei. Wenn diese Option zusammen mit --export-plain-svg verwendet wird,
 wird nur die exportierte Datei dadurch verändert. Allein verwendet, wird die
 angegebene Datei selbst verändert.
 
+=item B<--no-convert-text-baseline-spacing>
+
+Do not automatically fix text baselines in legacy (pre-0.92) files on
+opening.  Inkscape 0.92 adopts the CSS standard definition for the
+'line-height' property, which differs from past versions.  By default, the
+line height values in files created prior to Inkscape 0.92 will be adjusted
+on loading to preserve the intended text layout.  This command line option
+will skip that adjustment.
+
 =item B<-z>, B<--without-gui>
 
 Öffnet nicht die Benutzeroberfläche (auf Unix: verwendet nicht den
@@ -688,10 +698,10 @@ Publikum grafisch reizvoller zu machen.
 
 =head1 URHEBERRECHT UND LIZENZ
 
-B<Copyright (C)> 1999-2015 liegt bei den Autoren.
+B<Copyright (C)> 1999-2016 by Authors.
 
-B<Inkscape> ist freie Software. Sie dürfen es zu den Bedingungen der GPL
-weiterverbreiten und / oder verändern.
+B<Inkscape> is free software; you can redistribute it and/or modify it under
+the terms of the GPL version 2 or later.
 
 
 
