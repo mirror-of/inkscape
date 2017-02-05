@@ -55,9 +55,7 @@ depends_build-append        port:popt \
                             port:potrace
 
 # ports for Inkscape.app
-depends_build-append        port:gnome-icon-theme \
-                            port:gnome-icon-theme-symbolic \
-                            port:icon-naming-utils \
+depends_build-append        port:icon-naming-utils \
                             port:gnome-themes-standard \
                             port:gtk-engines2 \
                             port:gtk2-murrine
