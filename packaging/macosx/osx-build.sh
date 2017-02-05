@@ -247,6 +247,8 @@ elif [ "$OSXMINORNO" -eq "7" ]; then
 	export CXX="/usr/bin/clang++"
 	#export CFLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
+	# Workaround for https://bugs.launchpad.net/inkscape/+bug/1606018
+	CONFFLAGS="--disable-strict-build"
 elif [ "$OSXMINORNO" -eq "8" ]; then
 	## Apple's clang on Mountain Lion
 	TARGETNAME="MOUNTAIN LION"
