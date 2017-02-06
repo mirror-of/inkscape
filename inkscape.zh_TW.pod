@@ -501,7 +501,7 @@ Ted Gould 成立 Inkscape 計劃，想要以專注於 SVG 相容、介面外觀�
 
 =head1 著作權和許可證
 
-B<Copyright (C)> 1999-2016 by Authors.
+B<Copyright (C)> 1999-2017 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it under
 the terms of the GPL version 2 or later.

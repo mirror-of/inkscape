@@ -424,12 +424,14 @@ angegebene Datei selbst verändert.
 
 =item B<--no-convert-text-baseline-spacing>
 
-Do not automatically fix text baselines in legacy (pre-0.92) files on
-opening.  Inkscape 0.92 adopts the CSS standard definition for the
-'line-height' property, which differs from past versions.  By default, the
-line height values in files created prior to Inkscape 0.92 will be adjusted
-on loading to preserve the intended text layout.  This command line option
-will skip that adjustment.
+Text-Grundlinien werden beim Öffnen von älteren (vor Version 0.92) Dateien
+nicht repariert. Inkscape 0.92 hat die Definition der Eigenschaft
+'line-height' aus dem CSS-Standard übernommen. Diese weicht nun von der in
+älteren Versionen genutzten Definition ab. Standardmäßig werden die Werte
+für Zeilenhöhe in Dateien, die vor dem Erscheinen von Inkscape 0.92 erstellt
+worden sind, beim Laden angepasst, um das Erscheinungsbild des Textes zu
+erhalten. Der Kommandozeilenbefehl bewirkt, dass die Anpassung nicht
+vorgenommen wird.
 
 =item B<-z>, B<--without-gui>
 
@@ -698,10 +700,10 @@ Publikum grafisch reizvoller zu machen.
 
 =head1 URHEBERRECHT UND LIZENZ
 
-B<Copyright (C)> 1999-2016 by Authors.
+B<Copyright (C)> 1999-2017 liegt bei den Autoren.
 
-B<Inkscape> is free software; you can redistribute it and/or modify it under
-the terms of the GPL version 2 or later.
+B<Inkscape> ist freie Software. Sie dürfen es zu den Bedingungen der GPL in
+Version 2 oder höher weiterverbreiten und / oder verändern.
 
 
 

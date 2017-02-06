@@ -560,7 +560,7 @@ Inkscape
 
 =head1 著作権およびライセンス
 
-B<Copyright (C)> 1999-2016 by Authors.
+B<Copyright (C)> 1999-2017 by Authors.
 
 B<Inkscape> is free software; you can redistribute it and/or modify it under
 the terms of the GPL version 2 or later.
