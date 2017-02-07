@@ -727,7 +727,10 @@ static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
     std::vector<SPItem*> itemlist=selection->itemList();
 
     // Convert between units
-    if        ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_EX) {
+    if        ((unit->abbr == "" || unit->abbr == "em") &&
+               (old_unit == SP_CSS_UNIT_NONE || old_unit == SP_CSS_UNIT_EM)) {
+        // Do nothing
+    } else if ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_EX) {
         line_height *= 0.5;
     } else if ((unit->abbr) == "ex" && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE) ) {
         line_height *= 2.0;
