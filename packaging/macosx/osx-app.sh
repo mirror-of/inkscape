@@ -286,20 +286,25 @@ OSXVERSION="$(/usr/bin/sw_vers | grep ProductVersion | cut -f2)"
 OSXMINORVER="$(cut -d. -f 1,2 <<< $OSXVERSION)"
 OSXMINORNO="$(cut -d. -f2 <<< $OSXVERSION)"
 OSXPOINTNO="$(cut -d. -f3 <<< $OSXVERSION)"
-ARCH="$(uname -a | awk '{print $NF;}')"
+HOSTARCH="$(uname -a | awk '{print $NF;}')"
 
-# guess default build_arch (MacPorts)
-if [ "$OSXMINORNO" -ge "6" ]; then
-	if [ "$(sysctl -n hw.cpu64bit_capable 2>/dev/null)" = "1" ]; then
-		_build_arch="x86_64"
-	else
-		_build_arch="i386"
-	fi
+if [ "$ARCH" != "" ]; then
+	# explicit build_arch
+	_build_arch="$ARCH"
 else
-	if [ $ARCH = "powerpc" ]; then
-		_build_arch="ppc"
+	# guess default build_arch (MacPorts)
+	if [ "$OSXMINORNO" -ge "6" ]; then
+		if [ "$(sysctl -n hw.cpu64bit_capable 2>/dev/null)" = "1" ]; then
+			_build_arch="x86_64"
+		else
+			_build_arch="i386"
+		fi
 	else
-		_build_arch="i386"
+		if [ $HOSTARCH = "powerpc" ]; then
+			_build_arch="ppc"
+		else
+			_build_arch="i386"
+		fi
 	fi
 fi
 
