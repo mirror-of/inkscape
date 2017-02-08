@@ -15,7 +15,7 @@
 #	Kees Cook
 #	Michael Wybrow
 #
-# Copyright (C) 2006-2014
+# Copyright (C) 2006-2017
 # Released under GNU GPL, read the file 'COPYING' for more information
 #
 
