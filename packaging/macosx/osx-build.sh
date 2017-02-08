@@ -399,10 +399,11 @@ Included dependency versions (build or runtime):
 	Libexif               $(checkversion libexif libexif)
 	JPEG                  $(checkversion jpeg jpeg)
 	Icu                   $(checkversion icu-uc icu)
-	LibWPD                $(checkversion libwpd-0.9 libwpd)
-	LibWPG                $(checkversion libwpg-0.2 libwpg)
-	Libcdr                $(checkversion libcdr-0.0 libcdr)
-	Libvisio              $(checkversion libvisio-0.0 libvisio)
+	LibRevenge            $(checkversion librevenge-0.0 librevenge)
+	LibWPD                $(checkversion libwpd-0.10 libwpd-0.10)
+	LibWPG                $(checkversion libwpg-0.3 libwpg-0.3)
+	Libcdr                $(checkversion libcdr-0.1 libcdr-0.1)
+	Libvisio              $(checkversion libvisio-0.1 libvisio-0.1)
 	Potrace               $(checkversion potrace potrace)
 Included python modules:
 	lxml                  $(checkversion py27-lxml py27-lxml)
@@ -411,13 +412,6 @@ Included python modules:
 	UniConvertor          $(checkversion py27-uniconvertor py27-uniconvertor)
 	Pillow                $(checkversion py27-Pillow py27-Pillow)
 " > $INFOFILE
-
-	## TODO: Pending merge adds support for:
-	#LibRevenge            $(checkversion librevenge-0.0 librevenge-devel)
-	#LibWPD                $(checkversion libwpd-0.10 libwpd-10.0)
-	#LibWPG                $(checkversion libwpg-0.3 libwpg-0.3)
-	#Libcdr                $(checkversion libcdr-0.1 libcdr-0.1)
-	#Libvisio              $(checkversion libvisio-0.1 libvisio-0.1)
 
 	## TODO: add support for gtk-mac-integration (see osxmenu branch)
 	#Gtk-mac-integration   $(checkversion gtk-mac-integration gtk-osx-application)
