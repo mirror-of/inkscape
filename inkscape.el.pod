@@ -77,6 +77,7 @@ C<inkscape [επιλογές [όνομα_αρχείου ...]>
     -z, --without-gui                 
 
         --vacuum-defs
+        --no-convert-text-baseline-spacing
 
         --g-fatal-warnings
 
@@ -411,6 +412,15 @@ Inkscape, αλλά χωρίς το όνομα προγράμματος Inkscape,
 --export-plain-svg, μόνο το εξαγόμενο αρχείο θα επηρεαστεί. Εάν
 χρησιμοποιηθεί μόνη, το καθορισμένο αρχείο θα τροποποιηθεί επιτόπου.
 
+=item B<--no-convert-text-baseline-spacing>
+
+Do not automatically fix text baselines in legacy (pre-0.92) files on
+opening.  Inkscape 0.92 adopts the CSS standard definition for the
+'line-height' property, which differs from past versions.  By default, the
+line height values in files created prior to Inkscape 0.92 will be adjusted
+on loading to preserve the intended text layout.  This command line option
+will skip that adjustment.
+
 =item B<-z>, B<--without-gui>
 
 Μην ανοίγετε το GUI (σε Unix, μην χρησιμοποιείτε εξυπηρετητή X). Μόνο
@@ -677,10 +687,10 @@ Sodipodi διανθίστηκε με έναν αριθμό μαθηματικώ�
 
 =head1 ΠΝΕΥΜΑΤΙΚΑ ΔΙΚΑΙΩΜΑΤΑ ΚΑΙ ΑΔΕΙΑ
 
-B<Copyright (C)> 1999-2015 από τους συγγραφείς.
+B<Copyright (C)> 1999-2017 by Authors.
 
-B<Inkscape> είναι ελεύθερο λογισμικό. Μπορείτε να το αναδιανείμετε και/ή να
-το τροποποιήσετε με τους όρους του GPL.
+B<Inkscape> is free software; you can redistribute it and/or modify it under
+the terms of the GPL version 2 or later.
 
 
 

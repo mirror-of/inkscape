@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-01-24 21:21+0100\n"
-"PO-Revision-Date: 2016-12-21 20:54+0100\n"
+"PO-Revision-Date: 2017-02-05 15:08+0100\n"
 "Last-Translator: Sylvain Chiron <chironsylvain@orange.fr>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
@@ -8465,7 +8465,6 @@ msgid "Ignore"
 msgstr "Ignorer"
 
 #: ../src/file.cpp:517
-#, fuzzy
 msgid ""
 "Old Inkscape files use 1in == 90px. CSS requires 1in == 96px.\n"
 "Drawings meant to match a physical size (e.g. Letter or A4)\n"
@@ -8474,11 +8473,14 @@ msgid ""
 "attribute to compensate or by scaling all objects in the drawing."
 msgstr ""
 "Auparavant, Inkscape utilisait l'équivalence 1 in = 90 px.\n"
-"Le standard CSS exige que 1 in = 96 px. Les éléments du dessin\n"
-"seront peut-être plus petits que souhaité.\n"
-"Cela peut-être corrigé soit en définissant la « zone de vue »\n"
-"(viewBox SVG) pour compenser ou en redimensionnant\n"
-"l'ensemble des éléments du dessin."
+"Le standard CSS exige que 1 in = 96 px. Si le document\n"
+"est prévu pour être imprimé (sur papier ou en 3D),\n"
+"sa taille réelle sera plus petite qu'auparavant.\n"
+"Le document peut être redimensionné pour conserver\n"
+"les mêmes dimensions physiques. Le redimensionnement\n"
+"du contenu peut être effectué de deux manières :\n"
+"— soit en définissant la « zone de vue » (viewBox SVG) ;\n"
+"— soit en redimensionnant chacun des éléments."
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
@@ -12330,6 +12332,8 @@ msgstr "Démarrer Inkscape en mode ligne de commande interactif."
 #: ../src/main.cpp:532
 msgid "Prevents automatic fix of pre-92 files on opening them."
 msgstr ""
+"Annule la conversion automatique des documents enregistrés avec une version "
+"d'Inkscape antérieure à 0.92."
 
 #: ../src/main.cpp:882 ../src/main.cpp:1355
 msgid ""
@@ -22072,16 +22076,14 @@ msgid "Anchor point:"
 msgstr "Point d'encrage :"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:52
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' bounding boxes:"
-msgstr "Boîte englobante de l'objet :"
+msgstr "Boîtes englobantes des objets :"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' rotational centers"
-msgstr "Centre de rotation de l'objet"
+msgstr "Centres de rotation des objets"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:64
 msgctxt "Polar arrange tab"
@@ -30074,9 +30076,8 @@ msgid "Scale the results"
 msgstr "Redimensionner le résultat"
 
 #: ../src/widgets/measure-toolbar.cpp:329
-#, fuzzy
 msgid "Mark dimension offset"
-msgstr "Marquer la taille"
+msgstr "Marquer le changement de taille"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
@@ -32348,44 +32349,40 @@ msgstr ""
 "chemin."
 
 #: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'a' ({0}): {1}"
-msgstr "Longueur du côté « a » ("
+msgstr "Longueur du côté « a » ({0}) : {1}"
 
 #: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'b' ({0}): {1}"
-msgstr "Longueur du côté « b » ("
+msgstr "Longueur du côté « b » ({0}) : {1}"
 
 #: ../share/extensions/draw_from_triangle.py:182
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'c' ({0}): {1}"
-msgstr "Longueur du côté « c » ("
+msgstr "Longueur du côté « c » ({0}) : {1}"
 
 #: ../share/extensions/draw_from_triangle.py:183
-#, fuzzy
 msgid "Angle 'A' (radians): {}"
-msgstr "Angle A (radians) :"
+msgstr "Angle A (radians) : {}"
 
 #: ../share/extensions/draw_from_triangle.py:184
-#, fuzzy
 msgid "Angle 'B' (radians): {}"
-msgstr "Angle B (radians) :"
+msgstr "Angle B (radians) : {}"
 
 #: ../share/extensions/draw_from_triangle.py:185
-#, fuzzy
 msgid "Angle 'C' (radians): {}"
-msgstr "Angle C (radians) :"
+msgstr "Angle C (radians) : {}"
 
 #: ../share/extensions/draw_from_triangle.py:186
-#, fuzzy
 msgid "Semiperimeter (px): {}"
-msgstr "Demi-périmètre (px) :"
+msgstr "Demi-périmètre (px) : {}"
 
 #: ../share/extensions/draw_from_triangle.py:187
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Area ({0}^2): {1}"
-msgstr "Aire (px²) :"
+msgstr "Aire ({0}^2) : {1}"
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -33348,7 +33345,6 @@ msgstr "Vous devez sélectionner un système d'encodage valide."
 
 #: ../share/extensions/uniconv-ext.py:55
 #: ../share/extensions/uniconv_output.py:122
-#, fuzzy
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
@@ -33360,8 +33356,9 @@ msgstr ""
 "Vous devez installer le logiciel UniConvertor.\n"
 "Sous GNU/Linux : installez le paquet python-uniconvertor.\n"
 "Sous Windows : téléchargez-le depuis\n"
-"http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
-"et placez-le dans votre installation de Python jointe à Inkscape\n"
+"http://sk1project.org/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
+"et placez-le avec votre installation de Python jointe à Inkscape\n"
 
 #: ../share/extensions/voronoi2svg.py:205
 msgid "Please select objects!"

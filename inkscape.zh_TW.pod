@@ -76,6 +76,7 @@ C<inkscape [選項] [檔名 ...]>
     -z, --without-gui                 
 
         --vacuum-defs
+        --no-convert-text-baseline-spacing
 
         --g-fatal-warnings
 
@@ -298,6 +299,15 @@ PDF/PS/EPS 檔案裡，但會出現在 LaTeX 檔案。這個 LaTeX 檔案包含 
 從 SVG 檔案的 <lt>defs<gt> 段落中移除所有未使用的項目。如果這個選項與 --export-plain-svg 一起調用，
 只有匯出的檔案會有作用。如果單獨使用會適當地修飾所指定的檔案。
 
+=item B<--no-convert-text-baseline-spacing>
+
+Do not automatically fix text baselines in legacy (pre-0.92) files on
+opening.  Inkscape 0.92 adopts the CSS standard definition for the
+'line-height' property, which differs from past versions.  By default, the
+line height values in files created prior to Inkscape 0.92 will be adjusted
+on loading to preserve the intended text layout.  This command line option
+will skip that adjustment.
+
 =item B<-z>, B<--without-gui>
 
 不要開啟圖形介面 (在 Unix 系統，不使用 X server)；只從終端機處理檔案。 這被假定為 -p、-e、-l 和 --vacuum-defs
@@ -491,9 +501,10 @@ Ted Gould 成立 Inkscape 計劃，想要以專注於 SVG 相容、介面外觀�
 
 =head1 著作權和許可證
 
-B<著作權 (C)> 1999-2015 作者所有。
+B<Copyright (C)> 1999-2017 by Authors.
 
-B<Inkscape> 是自由軟體；你可以在遵守 GPL 許可證情形下重新發佈或修改它。
+B<Inkscape> is free software; you can redistribute it and/or modify it under
+the terms of the GPL version 2 or later.
 
 
 

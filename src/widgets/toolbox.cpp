@@ -210,6 +210,7 @@ static struct {
       SP_VERB_CONTEXT_ERASER_PREFS, "/tools/eraser", _("TBD")},
     { "/tools/lpetool", "lpetool_toolbox", 0, sp_lpetool_toolbox_prep, "LPEToolToolbar",
       SP_VERB_CONTEXT_LPETOOL_PREFS, "/tools/lpetool", _("TBD")},
+    // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/dropper", "dropper_toolbox", 0, sp_dropper_toolbox_prep,         "DropperToolbar",
@@ -1449,10 +1450,11 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
 #if GTK_CHECK_VERSION(3,0,0)
             GtkWidget* holder = gtk_grid_new();
-            gtk_widget_set_name( holder, "ToolbarHolder" );
+            gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
             gtk_grid_attach( GTK_GRID(holder), kludge, 2, 0, 1, 1);
 #else
             GtkWidget* holder = gtk_table_new( 1, 3, FALSE );
+            gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
             gtk_table_attach( GTK_TABLE(holder), kludge, 2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0 );
 #endif
 

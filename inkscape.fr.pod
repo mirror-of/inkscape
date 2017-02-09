@@ -76,6 +76,7 @@ S<options :>
     -z, --without-gui
 
         --vacuum-defs
+        --no-convert-text-baseline-spacing
 
         --g-fatal-warnings
 
@@ -421,6 +422,16 @@ SVG. Si cette option est utilisée avec --export-plain-svg, seul le fichier
 exporté sera affecté. Si cette option est utilisée seule, le fichier
 spécifié sera modifié.
 
+=item B<--no-convert-text-baseline-spacing>
+
+Ne pas corriger automatiquement les lignes de base dans les documents
+produits avec une version d'Inkscape antérieure à 0.92. Depuis Inkscape
+0.92, la propriété S<« line-height »> est gérée conformément au standard CSS,
+ce qui la rend incompatible avec les précédentes versions. Par défaut, les
+valeurs de hauteur de ligne dans les fichiers créés avant Inkscape 0.92 vont
+être ajustées au chargement afin de préserver la disposition
+souhaitée. Cette option permet d’éviter cet ajustement.
+
 =item B<-z>, B<--without-gui>
 
 Ne pas ouvrir l'interface graphique (sous Unix, ne pas utiliser le serveur
@@ -689,10 +700,10 @@ public.
 
 =head1 COPYRIGHT ET LICENCE
 
-B<Copyright (C)> 1999-2015 par les auteurs.
+B<Copyright (C)> 1999-2017 par les auteurs.
 
 B<Inkscape> est un logiciel S<libre ;> vous pouvez le redistribuer et/ou le
-modifier selon les conditions de la licence GPL.
+modifier selon les termes de la licence GPL version 2 ou ultérieure.
 
 
 
