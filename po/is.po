@@ -2,13 +2,13 @@
 # Copyright (C) 2015 Icelandic Inksape Translators
 # This file is distributed under the same license as the Inkscape package.
 #
-# Sveinn í Felli <sv1@fellsnet.is>, 2015, 2016.
+# Sveinn í Felli <sv1@fellsnet.is>, 2015, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-01-24 21:21+0100\n"
-"PO-Revision-Date: 2016-12-30 09:09+0000\n"
+"PO-Revision-Date: 2017-02-09 10:28+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
@@ -45,6 +45,13 @@ msgid ""
 "trace bitmaps and much more. We also aim to maintain a thriving user and "
 "developer community by using open, community-oriented development."
 msgstr ""
+"Inkscape styður marga af framsæknustu eiginleikum SVG (línumerki, klóna, "
+"gegnsæisblöndun, o.s.frv.), einnig er mikil áhersla lögð á að straumlínulaga "
+"viðmótið. Mjög auðvelt er að breyta hnútum, framkvæma flóknar aðgerðir á "
+"ferlum, "
+"línuteikna bitamyndir auk margs annars. Markmið okkar er líka að viðhalda "
+"blómlegu samfélagi notenda og hönnuða og er það gert með opinni, "
+"félagsmiðaðri framþróun."
 
 #: ../inkscape.appdata.xml.in.h:5
 msgid "Main application window"
@@ -115,7 +122,7 @@ msgstr "Afskerpingar"
 
 #: ../share/filters/filters.svg.h:12
 msgid "Edges are partly feathered out"
-msgstr ""
+msgstr "Brúnir eru að hluta til fjaðraðar út"
 
 #: ../share/filters/filters.svg.h:14
 msgid "Jigsaw Piece"
@@ -173,7 +180,7 @@ msgstr "Eldur"
 
 #: ../share/filters/filters.svg.h:28
 msgid "Edges of object are on fire"
-msgstr ""
+msgstr "Kviknað er í brúnum hluta"
 
 #: ../share/filters/filters.svg.h:30
 msgid "Bloom"
@@ -807,7 +814,7 @@ msgstr "Köflóttur vefnaður"
 
 #: ../share/filters/filters.svg.h:288
 msgid "Checkered tartan pattern"
-msgstr ""
+msgstr "Köflótt vefnaðarmynstur"
 
 #: ../share/filters/filters.svg.h:290
 msgid "Shaken Liquid"
@@ -906,7 +913,7 @@ msgstr "Skotland"
 
 #: ../share/filters/filters.svg.h:336
 msgid "Colorized mountain tops out of the fog"
-msgstr ""
+msgstr "Litaðir fjallstindar upp úr þoku"
 
 #: ../share/filters/filters.svg.h:338
 msgid "Garden of Delights"
@@ -947,7 +954,7 @@ msgstr "Bleyttur pappír"
 
 #: ../share/filters/filters.svg.h:356
 msgid "Inkblot on blotting paper"
-msgstr ""
+msgstr "Blekklessa á bleyttum pappír"
 
 #: ../share/filters/filters.svg.h:358
 msgid "Wax Print"
@@ -1012,7 +1019,7 @@ msgstr "Bylgjaður köflóttur vefnaður"
 
 #: ../share/filters/filters.svg.h:392
 msgid "Tartan pattern with a wavy displacement and bevel around the edges"
-msgstr "Hlaupabrautarmynstur með bylguðum tilfærslum og fláa í kringum jaðra"
+msgstr "Vefnaðarmynstur með bylgjuðum tilfærslum og fláa í kringum jaðra"
 
 #: ../share/filters/filters.svg.h:394
 msgid "3D Marble"
@@ -1575,7 +1582,7 @@ msgstr "Búðingsáferð"
 
 #: ../share/filters/filters.svg.h:624
 msgid "Convert pictures to thick jelly"
-msgstr ""
+msgstr "Umbreyta myndum í þykkt hlaup"
 
 #: ../share/filters/filters.svg.h:626
 msgid "Blend Opposites"
@@ -1741,7 +1748,7 @@ msgstr "Stillanlegur köflóttur vefnaður"
 
 #: ../share/filters/filters.svg.h:716
 msgid "Highly configurable checkered tartan pattern"
-msgstr ""
+msgstr "Köflótt vefnaðarmynstur sem stilla má á marga vegu"
 
 #: ../share/filters/filters.svg.h:718
 msgid "Light Contour"
@@ -4830,7 +4837,7 @@ msgstr "Margfeldi af millibilum hnitanets"
 
 #: ../src/display/snap-indicator.cpp:286
 msgid " to "
-msgstr " til "
+msgstr " í "
 
 #: ../src/document.cpp:529
 #, c-format
@@ -5645,7 +5652,7 @@ msgstr "Fjöldi þrepa:"
 
 #: ../src/extension/internal/bluredge.cpp:135
 msgid "Number of inset/outset copies of the object to make"
-msgstr ""
+msgstr "Fjöldi innfelldra/útfelldra afrita hlutarins sem á að gera"
 
 #: ../src/extension/internal/bluredge.cpp:139
 #: ../share/extensions/extrude.inx.h:5
@@ -9261,7 +9268,7 @@ msgstr "Fjarvíddarferill"
 
 #: ../src/live_effects/effect.cpp:113
 msgid "Recursive skeleton"
-msgstr "Endurkvæm grind"
+msgstr "Endurkvæmur stoðferill"
 
 #: ../src/live_effects/effect.cpp:114
 msgid "Tangent to curve"
@@ -10532,11 +10539,11 @@ msgstr "Henda upprunalegum ferli?"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:42
 msgid "Check this to only keep the mirrored part of the path"
-msgstr ""
+msgstr "Hakaðu við þetta til að halda einungis speglaða hluta ferilsins"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
 msgid "Fuse original and the reflection into a single path"
-msgstr ""
+msgstr "Bræða upprunalegan feril og speglunina saman í einn feril"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
 msgid "Opposite fuse"
@@ -10596,7 +10603,7 @@ msgstr "Uppruni mynsturs:"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:63
 msgid "Path to put along the skeleton path"
-msgstr ""
+msgstr "Ferill sem á að setja eftir stoðferlinum"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 msgid "Width of the pattern"
@@ -10608,7 +10615,7 @@ msgstr "Afrit af mynstri:"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:66
 msgid "How many pattern copies to place along the skeleton path"
-msgstr ""
+msgstr "Hve mörg afrit mynsturs á að setja eftir stoðferlinum"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:68
 msgid "Wid_th in units of length"
@@ -10616,7 +10623,7 @@ msgstr "_Breidd í lengdareiningum"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:69
 msgid "Scale the width of the pattern in units of its length"
-msgstr ""
+msgstr "Kvarða breidd mynstursins í lengdareiningum þess"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:71
 msgid "Spa_cing:"
@@ -10628,6 +10635,8 @@ msgid ""
 "Space between copies of the pattern. Negative values allowed, but are "
 "limited to -90% of pattern width."
 msgstr ""
+"Bil á milli afrita mynstursins. Neikvæð gildi eru leyfileg, en eru takmörkuð "
+"við -90% af breidd mynsturs."
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:75
 msgid "No_rmal offset:"
@@ -10646,6 +10655,8 @@ msgid ""
 "Spacing, tangential and normal offset are expressed as a ratio of width/"
 "height"
 msgstr ""
+"Millibil, snertilhliðrun og venjuleg hliðrun eru birt sem hlutfall af "
+"breidd/hæð"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:80
 msgid "Pattern is _vertical"
@@ -10916,7 +10927,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Thickness: at 1st side:"
-msgstr ""
+msgstr "Þykkt: á hlið 1:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:241
 msgid "Width at 'bottom' half-turns"
@@ -10924,7 +10935,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:242
 msgid "At 2nd side:"
-msgstr ""
+msgstr "Á hlið 2:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:242
 msgid "Width at 'top' half-turns"
@@ -10933,19 +10944,19 @@ msgstr ""
 #.
 #: ../src/live_effects/lpe-rough-hatches.cpp:244
 msgid "From 2nd to 1st side:"
-msgstr ""
+msgstr "Frá hlið 2 til hliðar 1:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:244
 msgid "Width from 'top' to 'bottom'"
-msgstr ""
+msgstr "Breidd að 'ofan' og 'niður'"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:245
 msgid "From 1st to 2nd side:"
-msgstr ""
+msgstr "Frá hlið 1 til hliðar 2:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:245
 msgid "Width from 'bottom' to 'top'"
-msgstr ""
+msgstr "Breidd að 'neðan' og 'upp'"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:247
 msgid "Hatches width and dir"
@@ -11116,7 +11127,7 @@ msgstr "Eining"
 
 #: ../src/live_effects/lpe-ruler.cpp:43
 msgid "Ma_jor length:"
-msgstr ""
+msgstr "Aða_llengd:"
 
 #: ../src/live_effects/lpe-ruler.cpp:43
 msgid "Length of major ruler marks"
@@ -11124,7 +11135,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-ruler.cpp:44
 msgid "Mino_r length:"
-msgstr ""
+msgstr "Milliþ_rep:"
 
 #: ../src/live_effects/lpe-ruler.cpp:44
 msgid "Length of minor ruler marks"
@@ -11132,7 +11143,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-ruler.cpp:45
 msgid "Major steps_:"
-msgstr ""
+msgstr "Aðalþrep_:"
 
 #: ../src/live_effects/lpe-ruler.cpp:45
 msgid "Draw a major mark every ... steps"
@@ -11210,11 +11221,11 @@ msgstr ""
 
 #: ../src/live_effects/lpe-simplify.cpp:34
 msgid "Paths separately"
-msgstr ""
+msgstr "Ferlar sérstaklega"
 
 #: ../src/live_effects/lpe-simplify.cpp:34
 msgid "Simplifying paths (separately)"
-msgstr ""
+msgstr "Einföldun ferla (aðskilinna)"
 
 #: ../src/live_effects/lpe-simplify.cpp:36
 msgid "Just coalesce"
@@ -11749,11 +11760,11 @@ msgstr "x0:y0:x1:y1"
 
 #: ../src/main.cpp:341
 msgid "Exported area is the entire drawing (not page)"
-msgstr ""
+msgstr "Útflutt svæði er öll teikningin (ekki síðan)"
 
 #: ../src/main.cpp:346
 msgid "Exported area is the entire page"
-msgstr ""
+msgstr "Útflutt svæði er öll síðan"
 
 #: ../src/main.cpp:351
 msgid "Only for PS/EPS/PDF, sets margin in mm around exported area (default 0)"
@@ -11816,6 +11827,8 @@ msgstr "LITUR"
 #: ../src/main.cpp:393
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
+"Ógegnsæi bakgrunns útfluttrar bitamyndar (annað hvort 0.0 til 1.0, eða 1 til "
+"255)"
 
 #: ../src/main.cpp:398
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
@@ -11865,15 +11878,15 @@ msgstr ""
 
 #: ../src/main.cpp:435
 msgid "Export document to an Enhanced Metafile (EMF) File"
-msgstr "Flytja skjal út sem Enhanced Metafile (EMF)"
+msgstr "Flytja skjal út sem Enhanced Metafile (EMF) skrá"
 
 #: ../src/main.cpp:440
 msgid "Export document to a Windows Metafile (WMF) File"
-msgstr ""
+msgstr "Flytja skjal út sem Windows Metafile (WMF) skrá"
 
 #: ../src/main.cpp:445
 msgid "Convert text object to paths on export (PS, EPS, PDF, SVG)"
-msgstr ""
+msgstr "Umbreyta textahlutum í ferla við útflutning (PS, EPS, PDF, SVG)"
 
 #: ../src/main.cpp:450
 msgid ""
@@ -11974,6 +11987,9 @@ msgid ""
 "\n"
 "Available options:"
 msgstr ""
+"[VALKOSTIR...] [SKRÁ...]\n"
+"\n"
+"Tiltækir valkostir:"
 
 #. ## Add a menu for clear()
 #: ../src/menus-skeleton.h:18 ../src/ui/dialog/debug.cpp:79
@@ -12327,11 +12343,11 @@ msgstr ""
 
 #: ../src/rdf.cpp:264
 msgid "Relation:"
-msgstr "Tengt:"
+msgstr "Vensl:"
 
 #: ../src/rdf.cpp:265
 msgid "A related resource"
-msgstr ""
+msgstr "Tengt tilfang"
 
 #: ../src/rdf.cpp:267 ../src/ui/dialog/inkscape-preferences.cpp:1920
 msgid "Language:"
@@ -12407,7 +12423,7 @@ msgstr "Eyða texta"
 
 #: ../src/selection-chemistry.cpp:409
 msgid "<b>Nothing</b> was deleted."
-msgstr ""
+msgstr "<b>Engu</b>var eytt."
 
 #: ../src/selection-chemistry.cpp:426
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:75
@@ -12434,7 +12450,7 @@ msgstr "Eyða öllu"
 
 #: ../src/selection-chemistry.cpp:762
 msgid "Select <b>some objects</b> to group."
-msgstr ""
+msgstr "Veldu <b>einhverja hluti</b> til að hópa."
 
 #: ../src/selection-chemistry.cpp:775
 msgctxt "Verb"
@@ -12475,6 +12491,7 @@ msgstr "Veldu <b>hluti</b> sem á að hækka."
 msgid ""
 "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
+"Ekki er hægt að hækka/lækka hluti úr <b>mismunandi hópum</b> eða <b>lögum</b>."
 
 #. TRANSLATORS: "Raise" means "to raise an object" in the undo history
 #: ../src/selection-chemistry.cpp:1031
@@ -13285,7 +13302,7 @@ msgstr "%s (%s, %s)"
 
 #: ../src/sp-tref.cpp:218
 msgid "Cloned Character Data"
-msgstr ""
+msgstr "Klónuð stafgögn"
 
 #: ../src/sp-tref.cpp:234
 msgid " from "
@@ -13377,7 +13394,7 @@ msgstr ""
 
 #: ../src/splivarot.cpp:1585
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
-msgstr ""
+msgstr "Valinn hlutur er <b>ekki ferill</b>, er ekki hægt að innfella/útfella."
 
 #: ../src/splivarot.cpp:1676 ../src/splivarot.cpp:1743
 msgid "Create linked offset"
@@ -13389,7 +13406,7 @@ msgstr "Búa til breytilega hliðrun"
 
 #: ../src/splivarot.cpp:1769
 msgid "Select <b>path(s)</b> to inset/outset."
-msgstr ""
+msgstr "Veldu <b>feril/ferla</b> til að innfella/útfella."
 
 #: ../src/splivarot.cpp:1965
 msgid "Outset path"
@@ -13401,11 +13418,11 @@ msgstr "Innfella feril"
 
 #: ../src/splivarot.cpp:1967
 msgid "<b>No paths</b> to inset/outset in the selection."
-msgstr ""
+msgstr "<b>Engir ferlar</b> í valinu til að innfella/útfella."
 
 #: ../src/splivarot.cpp:2129
 msgid "Simplifying paths (separately):"
-msgstr ""
+msgstr "Einföldun ferla (aðskilinna):"
 
 #: ../src/splivarot.cpp:2131
 msgid "Simplifying paths:"
@@ -13414,20 +13431,20 @@ msgstr "Einföldun ferla:"
 #: ../src/splivarot.cpp:2168
 #, c-format
 msgid "%s <b>%d</b> of <b>%d</b> paths simplified..."
-msgstr ""
+msgstr "%s <b>%d</b> af <b>%d</b> ferlum einfaldaðir..."
 
 #: ../src/splivarot.cpp:2181
 #, c-format
 msgid "<b>%d</b> paths simplified."
-msgstr ""
+msgstr "<b>%d</b> ferlar einfaldaðir."
 
 #: ../src/splivarot.cpp:2195
 msgid "Select <b>path(s)</b> to simplify."
-msgstr ""
+msgstr "Veldu <b>feril/ferla</b> til að einfalda."
 
 #: ../src/splivarot.cpp:2211
 msgid "<b>No paths</b> to simplify in the selection."
-msgstr ""
+msgstr "<b>Engir ferlar</b> í valinu til að einfalda."
 
 #: ../src/text-chemistry.cpp:91
 msgid "Select <b>a text and a path</b> to put text on path."
@@ -13458,11 +13475,11 @@ msgstr "Setja texta á feril"
 
 #: ../src/text-chemistry.cpp:194
 msgid "Select <b>a text on path</b> to remove it from path."
-msgstr ""
+msgstr "Veldu <b>texta á ferli</b> til að fjarlægja hann af ferlinum."
 
 #: ../src/text-chemistry.cpp:213
 msgid "<b>No texts-on-paths</b> in the selection."
-msgstr ""
+msgstr "<b>Engir textar-á-ferli</b> í valinu."
 
 #: ../src/text-chemistry.cpp:216 ../src/verbs.cpp:2571
 msgid "Remove text from path"
@@ -13646,7 +13663,7 @@ msgstr "about.svg"
 #. one per line in the form of: name surname (email). Use \n for newline.
 #: ../src/ui/dialog/aboutbox.cpp:442
 msgid "translator-credits"
-msgstr "Sveinn í Felli (sv1@fellsnet.is), 2014-2015"
+msgstr "Sveinn í Felli (sv1@fellsnet.is), 2014-2017"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:206
 #: ../src/ui/dialog/align-and-distribute.cpp:937
@@ -19600,7 +19617,7 @@ msgstr "_Innfella/Útfella um:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1315
 msgid "Inset and Outset commands displace the path by this distance"
-msgstr ""
+msgstr "Innfella/Útfella skipanirnar hliðra ferlinum um þessa vegalengd"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1316
 msgid "Compass-like display of angles"
@@ -21176,16 +21193,14 @@ msgid "Anchor point:"
 msgstr "Festipunktur:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:52
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' bounding boxes:"
-msgstr "Umgjörð hlutar:"
+msgstr "Umgjarðir hlutar:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' rotational centers"
-msgstr "Snúningsmiðja hlutar"
+msgstr "Snúningsmiðjur hlutar"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:64
 msgctxt "Polar arrange tab"
@@ -23373,7 +23388,7 @@ msgstr "Stórt"
 
 #: ../src/ui/tools/flood-tool.cpp:415
 msgid "<b>Too much inset</b>, the result is empty."
-msgstr ""
+msgstr "<b>Of mikil innfelling</b>, útkoman verður tóm."
 
 #: ../src/ui/tools/flood-tool.cpp:456
 #, c-format
@@ -28960,9 +28975,8 @@ msgid "Scale the results"
 msgstr "Kvarða útkomuna"
 
 #: ../src/widgets/measure-toolbar.cpp:329
-#, fuzzy
 msgid "Mark dimension offset"
-msgstr "Merkja stærð"
+msgstr "Merkja hliðrun stærða"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
@@ -30101,7 +30115,7 @@ msgstr ""
 
 #: ../src/widgets/spray-toolbar.cpp:502 ../src/widgets/spray-toolbar.cpp:503
 msgid "Pick from center instead average area."
-msgstr ""
+msgstr "Plokka af miðju í stað meðaltals svæðis."
 
 #: ../src/widgets/spray-toolbar.cpp:515 ../src/widgets/spray-toolbar.cpp:516
 msgid "Inverted pick value, retaining color in advanced trace mode"
@@ -30149,7 +30163,7 @@ msgstr "Hliðrun %:"
 
 #: ../src/widgets/spray-toolbar.cpp:609
 msgid "Increase to segregate objects more (value in percent)"
-msgstr ""
+msgstr "Auka til að aðskilja hluti meira (gildi í prósentum)"
 
 #: ../src/widgets/star-toolbar.cpp:103
 msgid "Star: Change number of corners"
@@ -30755,9 +30769,8 @@ msgstr ""
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2172
-#, fuzzy
 msgid "Show outer style"
-msgstr "Setja textastíl"
+msgstr "Sýna ytri stíl"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2173
@@ -31154,7 +31167,7 @@ msgstr "Notaðu þrýsting frá inntakstæki til að breyta krafti aðgerðar"
 
 #: ../share/extensions/convert2dashes.py:56
 msgid "Total number of objects not converted: {}\n"
-msgstr ""
+msgstr "Fjöldi hluta sem ekki var umbreytt: {}\n"
 
 #: ../share/extensions/dimension.py:108
 msgid "Please select an object."
@@ -31163,45 +31176,43 @@ msgstr "Veldu einhvern hlut."
 #: ../share/extensions/dimension.py:133
 msgid "Unable to process this object.  Try changing it into a path first."
 msgstr ""
+"Tókst ekki að vinna með þennan hlut. Prófaðu að umbreyta honum fyrst í feril."
 
 #: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'a' ({0}): {1}"
-msgstr "Lengd hliðar 'a' ("
+msgstr "Lengd hliðar 'a' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'b' ({0}): {1}"
-msgstr "Lengd hliðar 'b' ("
+msgstr "Lengd hliðar 'b' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:182
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'c' ({0}): {1}"
-msgstr "Lengd hliðar 'c' ("
+msgstr "Lengd hliðar 'c' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:183
-#, fuzzy
 msgid "Angle 'A' (radians): {}"
-msgstr "Horn 'A' (radíanar): "
+msgstr "Horn 'A' (radíanar): {}"
 
 #: ../share/extensions/draw_from_triangle.py:184
-#, fuzzy
 msgid "Angle 'B' (radians): {}"
-msgstr "Horn 'B' (radíanar): "
+msgstr "Horn 'B' (radíanar): {}"
 
 #: ../share/extensions/draw_from_triangle.py:185
-#, fuzzy
 msgid "Angle 'C' (radians): {}"
-msgstr "Horn 'C' (radíanar): "
+msgstr "Horn 'C' (radíanar): {}"
 
 #: ../share/extensions/draw_from_triangle.py:186
 msgid "Semiperimeter (px): {}"
-msgstr ""
+msgstr "Hálft ummál (px): {}"
 
 #: ../share/extensions/draw_from_triangle.py:187
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Area ({0}^2): {1}"
-msgstr "Flötur (px^2): "
+msgstr "Flötur ({0}^2): {1}"
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -31452,7 +31463,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools.py:6006
 msgid "Selection is empty! Will compute whole drawing."
-msgstr ""
+msgstr "Myndvalið er tómt. Mun reikna alla teikninguna."
 
 #: ../share/extensions/gcodetools.py:6060
 msgid ""
@@ -31509,7 +31520,7 @@ msgstr ""
 
 #: ../share/extensions/generate_voronoi.py:34
 msgid "Python version is: "
-msgstr ""
+msgstr "Python útgáfa: "
 
 #: ../share/extensions/generate_voronoi.py:92
 msgid "Please select an object"
@@ -31525,11 +31536,11 @@ msgstr ""
 
 #: ../share/extensions/gimp_xcf.py:45
 msgid "An error occurred while processing the XCF file."
-msgstr ""
+msgstr "Villa kom upp við að vinna með XFC-skrána."
 
 #: ../share/extensions/gimp_xcf.py:183
 msgid "This extension requires at least one non empty layer."
-msgstr ""
+msgstr "Viðbótin krefst að minnsta kosti eins lags sem ekki sé tómt."
 
 #: ../share/extensions/guillotine.py:248
 msgid "The sliced bitmaps have been saved as:"
@@ -31575,7 +31586,7 @@ msgstr ""
 #: ../share/extensions/inkex.py:184
 #, python-format
 msgid "Unable to open specified file: %s"
-msgstr ""
+msgstr "Tókst ekki að opna tilgreinda skrá: %s"
 
 #: ../share/extensions/inkex.py:193
 #, python-format
@@ -31682,21 +31693,21 @@ msgstr "{0}Heiti lags: {1}"
 
 #: ../share/extensions/jessyInk_summary.py:101
 msgid "{0}Transition in: {1} ({2!s} s)"
-msgstr ""
+msgstr "{0}Millifærsla inn: {1} ({2!s} s)"
 
 #: ../share/extensions/jessyInk_summary.py:103
 #, python-brace-format
 msgid "{0}Transition in: {1}"
-msgstr ""
+msgstr "{0}Millifærsla inn: {1}"
 
 #: ../share/extensions/jessyInk_summary.py:110
 msgid "{0}Transition out: {1} ({2!s} s)"
-msgstr ""
+msgstr "{0}Millifærsla út: {1} ({2!s} s)"
 
 #: ../share/extensions/jessyInk_summary.py:112
 #, python-brace-format
 msgid "{0}Transition out: {1}"
-msgstr ""
+msgstr "{0}Millifærsla út: {1}"
 
 #: ../share/extensions/jessyInk_summary.py:119
 #, python-brace-format
@@ -31704,11 +31715,14 @@ msgid ""
 "\n"
 "{0}Auto-texts:"
 msgstr ""
+"\n"
+"{0}Sjálfvirkir textar:"
 
 #: ../share/extensions/jessyInk_summary.py:122
 #, python-brace-format
 msgid "{0}\t\"{1}\" (object id \"{2}\") will be replaced by \"{3}\"."
 msgstr ""
+"{0}\t\"{1}\" (hlut með auðkennið \"{2}\") verður skipt út fyrir \"{3}\"."
 
 #: ../share/extensions/jessyInk_summary.py:167
 #, python-brace-format
@@ -31760,7 +31774,7 @@ msgstr "Lagið fannst ekki.\n"
 
 #: ../share/extensions/jessyInk_transitions.py:56
 msgid "More than one layer with this name found.\n"
-msgstr ""
+msgstr "Fleiri en eitt lag með þessu heiti fundust.\n"
 
 #: ../share/extensions/jessyInk_transitions.py:69
 msgid "Please enter a layer name.\n"
@@ -31816,12 +31830,17 @@ msgid ""
 "The total length of the pattern is too small :\n"
 "Please choose a larger object or set 'Space between copies' > 0"
 msgstr ""
+"Heildarlengd mynstursins er of lítil :\n"
+"Veldu stærri hlut eða stilltu 'Bil á milli eintaka' > 0"
 
 #: ../share/extensions/pathalongpath.py:276
 msgid ""
 "The 'stretch' option requires that the pattern must have non-zero width :\n"
 "Please edit the pattern width."
 msgstr ""
+"Valkosturinn 'teygja' krefst þess að mynstrið sé með breidd sem ekki er "
+"núll:\n"
+"Breyttu breidd mynstursins."
 
 #: ../share/extensions/pathmodifier.py:235
 #, python-format
@@ -31874,26 +31893,30 @@ msgstr ""
 
 #: ../share/extensions/plotter.py:146
 msgid "pySerial is not installed. Please follow these steps:"
-msgstr ""
+msgstr "pySerial er ekki uppsett. Farðu í gegnum þessi skref:"
 
 #: ../share/extensions/plotter.py:147
 msgid "1. Download and extract (unzip) this file to your local harddisk:"
-msgstr ""
+msgstr "1. Sæktu og afþjappaðu (unzip) þessari skrá á harða diskinn þinn:"
 
 #: ../share/extensions/plotter.py:149
 msgid ""
 "2. Copy the \"serial\" folder (Can be found inside the just extracted folder)"
 msgstr ""
+"2. Afritaðu \"serial\" möppuna (má finna inni ú skránni sem var verið að "
+"afþjappa)"
 
 #: ../share/extensions/plotter.py:150
 msgid ""
 "   into the following Inkscape folder: C:\\[Program files]\\inkscape\\python"
 "\\Lib\\"
 msgstr ""
+"   inn í eftirfarandi Inkscape möppu: C:\\[Program files]\\inkscape\\python"
+"\\Lib\\"
 
 #: ../share/extensions/plotter.py:151
 msgid "3. Close and restart Inkscape."
-msgstr ""
+msgstr "3. Lokaðu og endurræstu Inkscape."
 
 #: ../share/extensions/plotter.py:200
 msgid ""
@@ -31910,7 +31933,7 @@ msgstr ""
 
 #: ../share/extensions/polyhedron_3d.py:338
 msgid "No face data found in specified file."
-msgstr ""
+msgstr "Engin gögn fundust í umbeðinni skrá."
 
 #: ../share/extensions/polyhedron_3d.py:339
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
@@ -31937,11 +31960,11 @@ msgstr ""
 
 #: ../share/extensions/print_win32_vector.py:39
 msgid "sorry, this will run only on Windows, exiting..."
-msgstr ""
+msgstr "Því miður, þetta keyrir einungis á Windows, hætti..."
 
 #: ../share/extensions/print_win32_vector.py:177
 msgid "Failed to open default printer"
-msgstr ""
+msgstr "Mistókst að opna sjálfgefinn prentara"
 
 #: ../share/extensions/render_barcode_datamatrix.py:201
 msgid "Unrecognised DataMatrix size"
@@ -31955,7 +31978,7 @@ msgstr ""
 #. abort if converting blank text
 #: ../share/extensions/render_barcode_datamatrix.py:677
 msgid "Please enter an input string"
-msgstr ""
+msgstr "Settu inn inntaksstreng"
 
 #. abort if converting blank text
 #: ../share/extensions/render_barcode_qrcode.py:1053
@@ -31995,7 +32018,7 @@ msgstr "Ekkert var valið"
 
 #: ../share/extensions/replace_font.py:242
 msgid "Please enter a search string in the find box."
-msgstr ""
+msgstr "Þú verður að gefa upp leitarstreng í leitarreitinn."
 
 #: ../share/extensions/replace_font.py:246
 msgid "Please enter a replacement font in the replace with box."
@@ -32023,11 +32046,10 @@ msgstr "Gat ekki staðsett skrá: %s"
 #: ../share/extensions/svgcalendar.py:265
 #: ../share/extensions/svgcalendar.py:287
 msgid "You must select a correct system encoding."
-msgstr ""
+msgstr "Þú verður að velja rétta stafatöflu kerfis."
 
 #: ../share/extensions/uniconv-ext.py:55
 #: ../share/extensions/uniconv_output.py:122
-#, fuzzy
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
@@ -32039,7 +32061,8 @@ msgstr ""
 "Þú þarft að setja upp UniConvertor hugbúnaðinn.\n"
 "Fyrir GNU/Linux: settu inn pakkann python-uniconvertor.\n"
 "Fyrir Windows: náðu í hann frá\n"
-"http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
+"https://sk1project.net/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
 "og settu það upp þar sem Inkscape geymir Python-uppsetninguna\n"
 
 #: ../share/extensions/voronoi2svg.py:205
@@ -32096,17 +32119,17 @@ msgstr "Ekkert sneiðingalag fannst."
 #: ../share/extensions/webslicer_export.py:106
 #, python-format
 msgid "You have more than one element with \"%s\" html-id."
-msgstr ""
+msgstr "Þú ert með fleiri en eitt stak með \"%s\" html-auðkenni."
 
 #: ../share/extensions/webslicer_export.py:336
 msgid "You must install the ImageMagick to get JPG and GIF."
-msgstr ""
+msgstr "Þú verður að setja upp ImageMagick til að vinna með JPG og GIF."
 
 #. PARAMETER PROCESSING
 #. lines of longitude are odd : abort
 #: ../share/extensions/wireframe_sphere.py:116
 msgid "Please enter an even number of lines of longitude."
-msgstr ""
+msgstr "Settu inn jafna tölu lengdargráðulína."
 
 #. vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
 #: ../share/extensions/addnodes.inx.h:1
@@ -32302,7 +32325,7 @@ msgstr "Blátt svið:"
 
 #: ../share/extensions/color_custom.inx.h:6
 msgid "Input (r,g,b) Color Range:"
-msgstr "Intakslitasvið (r,g,b):"
+msgstr "Inntakslitasvið (r,g,b):"
 
 #: ../share/extensions/color_custom.inx.h:8
 msgid ""
@@ -32504,12 +32527,11 @@ msgid "Show page info"
 msgstr "Birta upplýsingar um síðu"
 
 #: ../share/extensions/docinfo.inx.h:3
-#, fuzzy
 msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
-"Lokaðu þessum flipa ef þú vilt sjá lista yfir allt letur sem fannst/er notað."
+"Veldu þennan flipa ef þú vilt sjá síðuupplýsingar áður en upplausn er breytt."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -32608,7 +32630,7 @@ msgstr ""
 
 #: ../share/extensions/draw_from_triangle.inx.h:16
 msgid "Centroid"
-msgstr ""
+msgstr "Þyngdarpunktur"
 
 #: ../share/extensions/draw_from_triangle.inx.h:17
 msgid "Nine-Point Centre"
@@ -33764,7 +33786,7 @@ msgstr "Z-dýpt:"
 #: ../share/extensions/gcodetools_graffiti.inx.h:14
 #: ../share/extensions/gcodetools_orientation_points.inx.h:7
 msgid "2-points mode (move and rotate, maintained aspect ratio X/Y)"
-msgstr ""
+msgstr "2-punkta hamur (flytja og snúa, halda X/Y stærðarhlutföllum)"
 
 #: ../share/extensions/gcodetools_graffiti.inx.h:15
 #: ../share/extensions/gcodetools_orientation_points.inx.h:8
@@ -36150,7 +36172,7 @@ msgstr "Mynstur er lóðrétt"
 #: ../share/extensions/pathalongpath.inx.h:9
 #: ../share/extensions/pathscatter.inx.h:10
 msgid "Duplicate the pattern before deformation"
-msgstr ""
+msgstr "Tvítaka mynstrið fyrir aflögun"
 
 #: ../share/extensions/pathalongpath.inx.h:14
 msgid "Snake"
@@ -36166,6 +36188,9 @@ msgid ""
 "The pattern is the topmost object in the selection. Groups of paths, shapes "
 "or clones are allowed."
 msgstr ""
+"Þetta dreifir eða beygir mynstur eftir 'stoðferlum' (skeleton path). Mynstrið "
+"verður að vera efsti hluturinn í valstaflanum. Það má nota hópa af ferlum, "
+"laganir eða klón."
 
 #: ../share/extensions/pathscatter.inx.h:3
 msgid "Follow path orientation"
@@ -36173,7 +36198,7 @@ msgstr "Fylgja stefnu ferils"
 
 #: ../share/extensions/pathscatter.inx.h:4
 msgid "Stretch spaces to fit skeleton length"
-msgstr ""
+msgstr "Teygja bil til að passa við lengd stoðferils"
 
 #: ../share/extensions/pathscatter.inx.h:9
 msgid "Original pattern will be:"
@@ -36213,6 +36238,9 @@ msgid ""
 "pattern must be the topmost object in the selection. Groups of paths, "
 "shapes, clones are allowed."
 msgstr ""
+"Þetta dreifir mynstri eftir 'stoðferlum' (skeleton path). Mynstrið verður að "
+"vera efsti hluturinn í valstaflanum. Það má nota hópa af ferlum, "
+"laganir eða klón."
 
 #: ../share/extensions/perfectboundcover.inx.h:1
 msgid "Perfect-Bound Cover Template"
@@ -36881,7 +36909,7 @@ msgstr "Telja upp allt letur"
 msgid ""
 "Choose this tab if you would like to see a list of the fonts used/found."
 msgstr ""
-"Lokaðu þessum flipa ef þú vilt sjá lista yfir allt letur sem fannst/er notað."
+"Veldu þennan flipa ef þú vilt sjá lista yfir allt letur sem fannst/er notað."
 
 #: ../share/extensions/replace_font.inx.h:8
 msgid "Work on:"
