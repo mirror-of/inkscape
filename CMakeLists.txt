@@ -128,9 +128,12 @@ set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 add_custom_target(dist
     COMMAND sed -i "s/unknown/r${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
     && sed -i "s/custom//" CMakeScripts/inkscape-version.cmake
+    && sed -i "/VER_BZRREV=/d" src/Makefile.am
+    && sed -i "s/..VER_BZRREV/ r${INKSCAPE_REVISION}/" src/Makefile.am
     && bzr export --uncommitted --root=${INKSCAPE_DIST_PREFIX}
     "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2" 
     && bzr revert ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
+    && bzr revert ${CMAKE_SOURCE_DIR}/src/Makefile.am
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 # -----------------------------------------------------------------------------
