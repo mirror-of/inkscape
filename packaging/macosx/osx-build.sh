@@ -408,6 +408,7 @@ Included dependency versions (build or runtime):
 Included python modules:
 	lxml                  $(checkversion py27-lxml py27-lxml)
 	numpy                 $(checkversion py27-numpy py27-numpy)
+	scour                 $(checkversion py27-scour py27-scour)
 	sk1libs               $(checkversion py27-sk1libs py27-sk1libs)
 	UniConvertor          $(checkversion py27-uniconvertor py27-uniconvertor)
 	Pillow                $(checkversion py27-Pillow py27-Pillow)
