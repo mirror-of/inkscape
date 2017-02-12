@@ -861,6 +861,20 @@ else
 
 fi    
 
+# Patch files in app bundle
+#----------------------------------------------------------
+
+PATCH_FILE_DIR="app_patches"
+
+if [ -d "$PATCH_FILE_DIR" ]; then
+	echo "Applying patches in '$PATCH_FILE_DIR'"
+	for PATCH in ${PATCH_FILE_DIR}/*.patch; do
+		patch -d ${package} -p0 < $PATCH || {
+			echo "Patch failed!"
+			exit 1
+		}
+	done
+fi
 
 # All done.
 #----------------------------------------------------------
