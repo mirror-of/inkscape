@@ -1,3 +1,126 @@
+                            Inkscape 0.92.1
+
+                     -~=  Released 2017-02-13  =~-
+
+
+
++----------------------------------------------------------------------+
+|                          Release Highlights                          |
++----------------------------------------------------------------------+
+
+Inkscape 0.92.1 is a stability and bugfix release. For a complete list
+of bugs fixed in 0.92.1, see the Launchpad milestone page:
+
+    https://launchpad.net/inkscape/+milestone/0.92.1
+
+
++----------------------------------------------------------------------+
+|                           Regression fixes                           |
++----------------------------------------------------------------------+
+
+* Text: baseline-spacing related issues with regular and flowed text in
+  legacy Inkscape SVG files
+  (Bug #1655483 and others)
+* Text: Default baseline spacing stored in relative units is always
+  converted to document units
+  (Bug #1645016)
+* Path effects: Crash on ungroup if group contains elements with path
+  effects
+  (Bug #1657591)
+* Clipboard: Pasting a path effect from clipboard fails
+  (Bug #1656093)
+* Clipboard: Fix copy&pasting of groups which contain elements with path
+  effects
+  (Bug #1656527)
+* Selection: Node tool can selected objects on locked layers
+  (Bug #1656141)
+* Clones: Critical warnings with clones and symbols
+  (Bug #1653184)
+* About screen missing for several UI languages
+  (Bug #1659426)
+* Selection: Missing transformation handles after reset of rotation
+  center
+  (Bug #1657874)
+
+
++----------------------------------------------------------------------+
+|                          Important bugfixes                          |
++----------------------------------------------------------------------+
+
+* Bitmap images: Crash when opening files with invalid image links
+  (Bug #1660142)
+* Bitmap images: Fix path separators in relative image links (Windows)
+  (Bug #1659347)
+* File import: Failure to open CDR/Visio/WPG files from paths with
+  special characters (Windows)
+  (Bug #1656763)
+
+
++----------------------------------------------------------------------+
+|                             Translations                             |
++----------------------------------------------------------------------+
+
+* Catalan: Tutorial translation ("Basic") added
+* Czech: UI translation updated
+* French: UI translation updated
+* French: Man page, Readme and Keys & mouse reference updated
+* German: Man page and Keys & mouse reference updated
+* Icelandic: UI translation updated
+* Italian: UI translation updated
+* Latvian: UI translation updated
+* Russian: Tutorial translation ("Tracing Pixel Art") added
+* Russian: UI translation updated
+* Spanish: UI translation updated
+* Slovak: Tutorial translation ("Tracing Pixel Art") added
+* Slovak: UI translation updated
+* Ukrainian: UI translation updated
+
+
++----------------------------------------------------------------------+
+|                            Documentation                             |
++----------------------------------------------------------------------+
+
+* Shortcuts: Add shortcut '7' for cycling through path effect parameters
+  in node tool
+  (Bug #1656713)
+* Shortcuts: Add new Shift+I shortcut to keys and mouse reference
+  (Bug #1644609)
+* Man page: Add new --no-convert-text-baseline-spacing command line
+  option
+  (Bug #1661811)
+
+
++----------------------------------------------------------------------+
+|                             Known issues                             |
++----------------------------------------------------------------------+
+
+* DPI Change: Dialog needs better explanation of available options
+  (Bug #1659229)
+* DPI Change: Provide command line options for batch-processing legacy
+  files
+  (Bug #1659489)
+* DPI Change: known issues with 'Scale elements' option
+  (Bugs #1653230,1653236,1654342,1654796,1654880,1654903,1655005,
+  1655053,1660228)
+* DPI Change: Default grids in documents created with Inkscape 0.91
+  don't scale correctly
+  (Bug #1653893)
+* Renderer: Artifacts in Gaussian blur effects with default quality
+  settings
+  (Bug #1656383)
+* Node editor: Deselecting selected nodes of complex paths takes a long
+  time
+  (Bug #1652100)
+* Fill and Stroke: HSL color selector may show corrupted colors, defunct
+  5th slider
+  (Bug #1635982)
+
+
+
+
+
+------------------------------------------------------------------------
+
                              Inkscape 0.92
 
                      -~=  Released 2017-01-01  =~-
