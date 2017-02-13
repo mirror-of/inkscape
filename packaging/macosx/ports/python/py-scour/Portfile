@@ -8,7 +8,8 @@ PortGroup           select 1.0
 set realname        scour
 
 name                py-scour
-version             0.32
+version             0.35
+revision            100
 categories-append   graphics
 license             Apache-2
 platforms           darwin
@@ -21,12 +22,12 @@ long_description    Scour is a SVG optimizer/sanitizer that can be used to \
                     produce SVGs for Web deployment.
 
 homepage            http://pypi.python.org/pypi/${realname}/
-master_sites        http://pypi.python.org/packages/source/s/${realname}/
+master_sites        pypi:s/${realname}/
 
 distname            scour-${version}
 
-checksums           rmd160  50e7f6288d0704575a19ab4fda294b5237fbbca2 \
-                    sha256  8a957b5362c7de9e3dd51bd0cbd7a2c1351a61cdb2b1e5255955679bb56283d7
+checksums           rmd160  fcb8c54d89cf0b015f7f081e7d4640a85226c85a \
+                    sha256  7b33a0fc7ed578e7d1fcf4f68eb4c38cd080c243ea57537840062d37cd0d3c8e
 
 python.versions     27 34 35
 
