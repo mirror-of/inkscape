@@ -1,7 +1,7 @@
 # British English translation for Inkscape.
 # Copyright (C) 2000-2003, 2006 Free Software Foundation, Inc.
 # This file is distributed under the same license as the Inkscape package.
-# Tim Sheridan <tghs@tghs.net>, 2007-2016.
+# Tim Sheridan <tghs@tghs.net>, 2007-2017.
 # Bruce Cowan <bruce@bcowan.me.uk>, 2010.
 # Kingsley Turner <kingsley@maddogsbreakfast.com.au>, 2006.
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-01-24 21:21+0100\n"
-"PO-Revision-Date: 2016-06-21 10:54-0000\n"
+"PO-Revision-Date: 2017-02-13 12:13+0000\n"
 "Last-Translator: Tim Sheridan <tghs@tghs.net>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -8312,24 +8312,26 @@ msgid ""
 "either setting the SVG 'viewBox' to compensate or by scaling\n"
 "all the elements in the drawing."
 msgstr ""
+"Old Inkscape files use 1in == 90px. CSS requires 1in == 96px.\n"
+"Drawing elements may be too small. This can be corrected by\n"
+"either setting the SVG 'viewBox' to compensate or by scaling\n"
+"all the elements in the drawing."
 
 #: ../src/file.cpp:425 ../src/file.cpp:523
 msgid "Old Inkscape file detected (90 DPI)"
-msgstr ""
+msgstr "Old Inkscape file detected (90 DPI)"
 
 #: ../src/file.cpp:437 ../src/file.cpp:535
-#, fuzzy
 msgid "Create backup file (in same directory)."
-msgstr "Cannot create profile directory %s."
+msgstr "Create backup file (in same directory)."
 
 #: ../src/file.cpp:448 ../src/file.cpp:546 ../src/ui/widget/page-sizer.cpp:958
 msgid "Set 'viewBox'"
 msgstr "Set 'viewBox'"
 
 #: ../src/file.cpp:449 ../src/file.cpp:547
-#, fuzzy
 msgid "Scale elements"
-msgstr "Scale mode"
+msgstr "Scale elements"
 
 #: ../src/file.cpp:450 ../src/file.cpp:548
 #: ../src/widgets/connector-toolbar.cpp:317
@@ -8344,13 +8346,17 @@ msgid ""
 "Internal scaling can be handled either by setting the SVG 'viewBox'\n"
 "attribute to compensate or by scaling all objects in the drawing."
 msgstr ""
+"Old Inkscape files use 1in == 90px. CSS requires 1in == 96px.\n"
+"Drawings meant to match a physical size (e.g. Letter or A4)\n"
+"will be too small. Scaling the drawing can correct for this.\n"
+"Internal scaling can be handled either by setting the SVG 'viewBox'\n"
+"attribute to compensate or by scaling all objects in the drawing."
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
 #: ../src/file.cpp:722
-#, fuzzy
 msgid "Update Document"
-msgstr "Save document"
+msgstr "Update Document"
 
 #: ../src/file.cpp:738
 msgid "Broken links have been changed to point to existing files."
@@ -8766,7 +8772,7 @@ msgstr " (stroke)"
 #: ../src/gradient-drag.cpp:1482
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s for: %s%s"
 
 #: ../src/gradient-drag.cpp:1489
 #, c-format
@@ -9711,14 +9717,12 @@ msgid "Origin"
 msgstr "Origin"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:42
-#, fuzzy
 msgid "Origin of the rotation"
-msgstr "Ignore image rotations"
+msgstr "Origin of the rotation"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:42
-#, fuzzy
 msgid "Adjust origin of rotation"
-msgstr "Ignore image rotations"
+msgstr "Adjust origin of rotation"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
 #: ../src/live_effects/lpe-transform_2pts.cpp:37
@@ -9726,38 +9730,32 @@ msgid "Start point"
 msgstr "Start point"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Starting point to define start angle"
-msgstr "Start point of the taper"
+msgstr "Starting point to define start angle"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:43
-#, fuzzy
 msgid "Adjust starting point to define start angle"
-msgstr "Adjust the starting angle"
+msgstr "Adjust starting point to define start angle"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:44
-#, fuzzy
 msgid "Starting:"
-msgstr "Start:"
+msgstr "Starting:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:44
-#, fuzzy
 msgid "Angle of the first copy"
-msgstr "A language of the resource"
+msgstr "Angle of the first copy"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:45
-#, fuzzy
 msgid "Rotation angle:"
-msgstr "Starting angle"
+msgstr "Rotation angle:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:45
 msgid "Angle between two successive copies"
 msgstr "Angle between two successive copies"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:46
-#, fuzzy
 msgid "Number of copies:"
-msgstr "Number of copies"
+msgstr "Number of copies:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:46
 msgid "Number of copies of the original path"
@@ -9765,21 +9763,20 @@ msgstr "Number of copies of the original path"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:47
 msgid "360º Copies"
-msgstr ""
+msgstr "360º Copies"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:47
 msgid "No rotation angle, fixed to 360º"
-msgstr ""
+msgstr "No rotation angle, fixed to 360º"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:48
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
-#, fuzzy
 msgid "Fuse paths"
-msgstr "Outset path"
+msgstr "Fuse paths"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:48
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
-msgstr ""
+msgstr "Fuse paths by helper line, use fill-rule: evenodd for best result"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:41
 msgid "Stitch path:"
@@ -10077,13 +10074,12 @@ msgstr ""
 "contact."
 
 #: ../src/live_effects/lpe-gears.cpp:216
-#, fuzzy
 msgid "Min Radius:"
-msgstr "Radius:"
+msgstr "Min Radius:"
 
 #: ../src/live_effects/lpe-gears.cpp:216
 msgid "Minimum radius, low values can be slow"
-msgstr ""
+msgstr "Minimum radius, low values can be slow"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Trajectory:"
@@ -10566,27 +10562,24 @@ msgid "Hide Points"
 msgstr "Hide Points"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:30
-#, fuzzy
 msgid "Vertical Page Center"
-msgstr "Vertical edge detect"
+msgstr "Vertical Page Center"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:31
-#, fuzzy
 msgid "Horizontal Page Center"
-msgstr "Horizontal edge detect"
+msgstr "Horizontal Page Center"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:32
-#, fuzzy
 msgid "Free from reflection line"
-msgstr "Remove from selection set"
+msgstr "Free from reflection line"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:33
 msgid "X from middle knot"
-msgstr ""
+msgstr "X from middle knot"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:34
 msgid "Y from middle knot"
-msgstr ""
+msgstr "Y from middle knot"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:41
 #: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
@@ -10594,14 +10587,12 @@ msgid "Mode"
 msgstr "Move"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:41
-#, fuzzy
 msgid "Symmetry move mode"
-msgstr "Symmetric node"
+msgstr "Symmetry move mode"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:42
-#, fuzzy
 msgid "Discard original path?"
-msgstr "Replace original path"
+msgstr "Discard original path?"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:42
 msgid "Check this to only keep the mirrored part of the path"
@@ -10609,45 +10600,39 @@ msgstr "Check this to only keep the mirrored part of the path"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
 msgid "Fuse original and the reflection into a single path"
-msgstr ""
+msgstr "Fuse original and the reflection into a single path"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
-#, fuzzy
 msgid "Opposite fuse"
-msgstr "Blend Opposites"
+msgstr "Opposite fuse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
-#, fuzzy
 msgid "Picks the other side of the mirror as the original"
-msgstr "Clones are translated by the same vector as their original"
+msgstr "Picks the other side of the mirror as the original"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Start mirror line"
-msgstr "Start point"
+msgstr "Start mirror line"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Adjust start of mirroring"
-msgstr "Adjust saturation"
+msgstr "Adjust start of mirroring"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
 msgid "End mirror line"
-msgstr ""
+msgstr "End mirror line"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
 msgid "Adjust end of mirroring"
-msgstr ""
+msgstr "Adjust end of mirroring"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Center mirror line"
-msgstr "Start point"
+msgstr "Centre mirror line"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Adjust center of mirroring"
-msgstr "Adjust the origin"
+msgstr "Adjust center of mirroring"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:54
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -12091,7 +12076,7 @@ msgstr "Start Inkscape in interactive shell mode."
 
 #: ../src/main.cpp:532
 msgid "Prevents automatic fix of pre-92 files on opening them."
-msgstr ""
+msgstr "Prevents automatic fix of pre-92 files on opening them."
 
 #: ../src/main.cpp:882 ../src/main.cpp:1355
 msgid ""
@@ -18414,9 +18399,8 @@ msgid "Kannada (kn)"
 msgstr "Kannada (kn)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
-#, fuzzy
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
-msgstr "Kashmiri in Peso-Arabic script (ks@aran)"
+msgstr "Kashmiri in Perso-Arabic script (ks@aran)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:549
 msgid "Kashmiri in Devanagari script (ks@deva)"
@@ -21573,16 +21557,14 @@ msgid "Anchor point:"
 msgstr "Anchor point:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:52
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' bounding boxes:"
-msgstr "Object's bounding box:"
+msgstr "Objects' bounding boxes:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:59
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Objects' rotational centers"
-msgstr "Object's rotational center"
+msgstr "Objects' rotational centres"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:64
 msgctxt "Polar arrange tab"
@@ -22893,26 +22875,24 @@ msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 
 #: ../src/ui/object-edit.cpp:1004
-#, fuzzy
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
-"snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
-"segment"
+"Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to "
+"move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
+"b> the ellipse for arc, <b>outside</b> for segment"
 
 #: ../src/ui/object-edit.cpp:1010
-#, fuzzy
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to "
 "move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
-"snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
-"segment"
+"Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to "
+"move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
+"<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 
 #: ../src/ui/object-edit.cpp:1157
 msgid ""
@@ -24011,14 +23991,12 @@ msgid "Picked mesh corner color."
 msgstr "Picked mesh corner colour."
 
 #: ../src/ui/tools/mesh-tool.cpp:478
-#, fuzzy
 msgid "Inserted new row or column."
-msgstr "Added patch row or column"
+msgstr "Inserted new row or column."
 
 #: ../src/ui/tools/mesh-tool.cpp:548
-#, fuzzy
 msgid "Fit mesh inside bounding box."
-msgstr "Uses the visual bounding box"
+msgstr "Fit mesh inside bounding box."
 
 #: ../src/ui/tools/mesh-tool.cpp:1189
 msgid "Create mesh"
@@ -28942,14 +28920,12 @@ msgid "Set gradient on stroke"
 msgstr "Set gradient on stroke"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on fill"
-msgstr "Set pattern on fill"
+msgstr "Set mesh on fill"
 
 #: ../src/widgets/fill-style.cpp:727
-#, fuzzy
 msgid "Set mesh on stroke"
-msgstr "Set pattern on stroke"
+msgstr "Set mesh on stroke"
 
 #: ../src/widgets/fill-style.cpp:788
 msgid "Set pattern on fill"
@@ -29376,9 +29352,8 @@ msgid "Scale the results"
 msgstr "Scale the results"
 
 #: ../src/widgets/measure-toolbar.cpp:329
-#, fuzzy
 msgid "Mark dimension offset"
-msgstr "Mark Dimension"
+msgstr "Mark dimension offset"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
@@ -29438,6 +29413,12 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Mesh gradients are part of SVG 2:\n"
+"* Syntax may change.\n"
+"* Web browser implementation is not guaranteed.\n"
+"\n"
+"For web: convert to bitmap (Edit->Make bitmap copy).\n"
+"For print: export to PDF."
 
 #: ../src/widgets/mesh-toolbar.cpp:398
 msgid "normal"
@@ -29568,19 +29549,16 @@ msgid "Pick Color"
 msgstr "Pick Colour"
 
 #: ../src/widgets/mesh-toolbar.cpp:597
-#, fuzzy
 msgid "Scale mesh to bounding box:"
-msgstr "Show the bounding box"
+msgstr "Scale mesh to bounding box:"
 
 #: ../src/widgets/mesh-toolbar.cpp:598
-#, fuzzy
 msgid "Scale mesh to fit inside bounding box."
-msgstr "Show limiting bounding box"
+msgstr "Scale mesh to fit inside bounding box."
 
 #: ../src/widgets/mesh-toolbar.cpp:601
-#, fuzzy
 msgid "Fit mesh"
-msgstr "Edit fill mesh"
+msgstr "Fit mesh"
 
 #: ../src/widgets/node-toolbar.cpp:341
 msgid "Insert node"
@@ -29845,12 +29823,11 @@ msgstr "<b>Radial gradient</b>"
 
 #: ../src/widgets/paint-selector.cpp:1080
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
-msgstr ""
+msgstr "Use the <b>Mesh tool</b> to modify the mesh."
 
 #: ../src/widgets/paint-selector.cpp:1093
-#, fuzzy
 msgid "<b>Mesh fill</b>"
-msgstr "<b>Swatch fill</b>"
+msgstr "<b>Mesh fill</b>"
 
 #: ../src/widgets/paint-selector.cpp:1444
 msgid ""
@@ -30902,9 +30879,8 @@ msgid "Text: Change font style"
 msgstr "Text: Change font style"
 
 #: ../src/widgets/text-toolbar.cpp:345
-#, fuzzy
 msgid "Text: Unset line height."
-msgstr "Text: Change line-height"
+msgstr "Text: Unset line height."
 
 #: ../src/widgets/text-toolbar.cpp:422
 msgid "Text: Change superscript or subscript"
@@ -31186,20 +31162,18 @@ msgstr "Character rotation (degrees)"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2159
-#, fuzzy
 msgid "Unset line height"
-msgstr "Align lines right"
+msgstr "Unset line height"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2160
 msgid "If enabled, line height is set on part of selection. Click to unset."
-msgstr ""
+msgstr "If enabled, line height is set on part of selection. Click to unset."
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2172
-#, fuzzy
 msgid "Show outer style"
-msgstr "Shadowy outer bevel"
+msgstr "Show outer style"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2173
@@ -31208,6 +31182,9 @@ msgid ""
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
+"Show style of outermost text element. The 'font-size' and 'line-height' "
+"values of the outermost text element determine the minimum line spacing in "
+"the block."
 
 #: ../src/widgets/toolbox.cpp:186
 msgid "Color/opacity used for color tweaking"
@@ -31606,44 +31583,40 @@ msgid "Unable to process this object.  Try changing it into a path first."
 msgstr "Unable to process this object.  Try changing it into a path first."
 
 #: ../share/extensions/draw_from_triangle.py:180
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'a' ({0}): {1}"
-msgstr "Side Length 'a' (px): "
+msgstr "Side Length 'a' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:181
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'b' ({0}): {1}"
-msgstr "Side Length 'b' (px): "
+msgstr "Side Length 'b' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:182
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'c' ({0}): {1}"
-msgstr "Side Length 'c' (px): "
+msgstr "Side Length 'c' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:183
-#, fuzzy
 msgid "Angle 'A' (radians): {}"
-msgstr "Angle 'A' (radians): "
+msgstr "Angle 'A' (radians): {}"
 
 #: ../share/extensions/draw_from_triangle.py:184
-#, fuzzy
 msgid "Angle 'B' (radians): {}"
-msgstr "Angle 'B' (radians): "
+msgstr "Angle 'B' (radians): {}"
 
 #: ../share/extensions/draw_from_triangle.py:185
-#, fuzzy
 msgid "Angle 'C' (radians): {}"
-msgstr "Angle 'C' (radians): "
+msgstr "Angle 'C' (radians): {}"
 
 #: ../share/extensions/draw_from_triangle.py:186
-#, fuzzy
 msgid "Semiperimeter (px): {}"
-msgstr "Semiperimeter (px): "
+msgstr "Semiperimeter (px): {}"
 
 #: ../share/extensions/draw_from_triangle.py:187
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Area ({0}^2): {1}"
-msgstr "Area (px^2): "
+msgstr "Area ({0}^2): {1}"
 
 #: ../share/extensions/dxf_input.py:530
 #, python-format
@@ -32574,7 +32547,6 @@ msgstr "You must select a correct system encoding."
 
 #: ../share/extensions/uniconv-ext.py:55
 #: ../share/extensions/uniconv_output.py:122
-#, fuzzy
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
@@ -32586,7 +32558,8 @@ msgstr ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
 "For Windows: download it from\n"
-"http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
+"https://sk1project.net/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
 "and install into your Inkscape's Python location\n"
 
 #: ../share/extensions/voronoi2svg.py:205
@@ -33066,20 +33039,19 @@ msgstr "Visualise Path"
 
 #: ../share/extensions/docinfo.inx.h:1
 msgid "DOC Info"
-msgstr ""
+msgstr "DOC Info"
 
 #: ../share/extensions/docinfo.inx.h:2
-#, fuzzy
 msgid "Show page info"
-msgstr "Show page _border"
+msgstr "Show page info"
 
 #: ../share/extensions/docinfo.inx.h:3
-#, fuzzy
 msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
-"Choose this tab if you would like to see a list of the fonts used/found."
+"Choose this tab if you would like to see page info previously to apply DPI "
+"Switcher."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -33117,11 +33089,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr ""
+msgstr "DPI 90 to 96"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr ""
+msgstr "DPI 96 to 90"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 msgid "Draw From Triangle"
@@ -35554,9 +35526,8 @@ msgid "Ask Us a Question"
 msgstr "Ask Us a Question"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx.h:2
-#, fuzzy
 msgid "https://inkscape.org/en/ask/"
-msgstr "http://inkscape.org/doc/keys092.html"
+msgstr "https://inkscape.org/en/ask/"
 
 #: ../share/extensions/inkscape_help_commandline.inx.h:1
 msgid "Command Line Options"
@@ -35586,9 +35557,8 @@ msgstr "Inkscape Manual"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_manual.inx.h:3
-#, fuzzy
 msgid "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
-msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
+msgstr "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
 
 #: ../share/extensions/inkscape_help_relnotes.inx.h:1
 msgid "New in This Version"
