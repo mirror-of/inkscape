@@ -34,6 +34,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/clipboard.h>
+#include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/markup.h>
 #include <glibmm/i18n.h>
@@ -154,7 +155,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   sigc::connection connSet = symbolSet->signal_changed().connect(
           sigc::mem_fun(*this, &SymbolsDialog::rebuild));
   instanceConns.push_back(connSet);
-  
+
   ++row;
 
   /********************* Icon View **************************/
@@ -378,7 +379,7 @@ void SymbolsDialog::rebuild() {
     addSymbol->set_sensitive( true );
     removeSymbol->set_sensitive( true );
   } else {
-    addSymbol->set_sensitive( false );                                              
+    addSymbol->set_sensitive( false );
     removeSymbol->set_sensitive( false );
   }
   add_symbols( symbolDocument );
@@ -500,7 +501,14 @@ void SymbolsDialog::iconChanged() {
 
 #ifdef WITH_LIBVISIO
 // Read Visio stencil files
-SPDocument* read_vss( gchar* fullname, gchar* filename ) {
+SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
+
+  #ifdef WIN32
+    // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
+    // therefore attempt to convert uri to the system codepage
+    // even if this is not possible the alternate short (8.3) file name will be used if available
+    fullname = g_win32_locale_filename_from_utf8(fullname);
+  #endif
 
   RVNGFileStream input(fullname);
 
@@ -523,6 +531,12 @@ SPDocument* read_vss( gchar* fullname, gchar* filename ) {
     return NULL;
   }
 
+  // prepare a valid title for the symbol file
+  Glib::ustring title = Glib::Markup::escape_text(name);
+  // prepare a valid id prefix for the symbols (unfortunately libvisio doesn't give us a name)
+  Glib::RefPtr<Glib::Regex> regex1 = Glib::Regex::create("[^a-zA-Z0-9_-]");
+  Glib::ustring id = regex1->replace(name, 0, "_", Glib::REGEX_MATCH_PARTIAL);
+
   Glib::ustring tmpSVGOutput;
   tmpSVGOutput += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
   tmpSVGOutput += "<svg\n";
@@ -532,16 +546,9 @@ SPDocument* read_vss( gchar* fullname, gchar* filename ) {
   tmpSVGOutput += "  version=\"1.1\"\n";
   tmpSVGOutput += "  style=\"fill:none;stroke:#000000;stroke-width:2\">\n";
   tmpSVGOutput += "  <title>";
-  tmpSVGOutput += filename;
+  tmpSVGOutput += title;
   tmpSVGOutput += "</title>\n";
   tmpSVGOutput += "  <defs>\n";
-
-  // Create a string we can use for the symbol id (libvisio doesn't give us a name)
-  std::string sanitized( filename );
-  sanitized.erase( sanitized.find_last_of(".vss")-3 );
-  sanitized.erase( std::remove_if( sanitized.begin(), sanitized.end(), ispunct ), sanitized.end() );
-  std::replace( sanitized.begin(), sanitized.end(), ' ', '_' );
-  // std::cout << filename << "   |" << sanitized << "|" << std::endl;
 
   // Each "symbol" is in it's own SVG file, we wrap with <symbol> and merge into one file.
   for (unsigned i=0; i<output.size(); ++i) {
@@ -550,7 +557,7 @@ SPDocument* read_vss( gchar* fullname, gchar* filename ) {
     ss << i;
 
     tmpSVGOutput += "    <symbol id=\"";
-    tmpSVGOutput += sanitized;
+    tmpSVGOutput += id;
     tmpSVGOutput += "_";
     tmpSVGOutput += ss.str();
     tmpSVGOutput += "\">\n";
@@ -570,12 +577,12 @@ SPDocument* read_vss( gchar* fullname, gchar* filename ) {
 
   tmpSVGOutput += "  </defs>\n";
   tmpSVGOutput += "</svg>\n";
-        
+
   return SPDocument::createNewDocFromMem( tmpSVGOutput.c_str(), strlen( tmpSVGOutput.c_str()), 0 );
 
 }
 #endif
-                        
+
 /* Hunts preference directories for symbol files */
 void SymbolsDialog::get_symbols() {
 
@@ -614,11 +621,14 @@ void SymbolsDialog::get_symbols() {
 
 #ifdef WITH_LIBVISIO
           if( tag.compare( "vss" ) == 0 ) {
+            // strip extension from filename and use it as name for the symbol set
+            Glib::ustring name = Glib::ustring(filename);
+            name = name.erase(name.rfind('.'));
 
-            symbol_doc = read_vss( fullname, filename );
+            symbol_doc = read_vss( fullname, name );
             if( symbol_doc ) {
-              symbolSets[Glib::ustring(filename)]= symbol_doc;
-              symbolSet->append(filename);
+              symbolSets[name]= symbol_doc;
+              symbolSet->append(name);
             }
           }
 #endif
@@ -679,7 +689,7 @@ GSList* SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument ) {
 }
 
 GSList* SymbolsDialog::use_in_doc_recursive (SPObject *r, GSList *l)
-{ 
+{
 
   if ( dynamic_cast<SPUse *>(r) ) {
     l = g_slist_prepend (l, r);
@@ -865,7 +875,7 @@ SPDocument* SymbolsDialog::symbols_preview_doc()
 "     xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
 "     xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\""
 "     xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
-"  <defs id=\"defs\">"  
+"  <defs id=\"defs\">"
 "    <symbol id=\"the_symbol\"/>"
 "  </defs>"
 "  <use id=\"the_use\" xlink:href=\"#the_symbol\"/>"
