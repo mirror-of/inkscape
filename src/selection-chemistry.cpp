@@ -1623,10 +1623,10 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
             // the same (even though the output itself gets transformed)
             for ( SPObject *region = item->firstChild() ; region ; region = region->getNext() ) {
                 if (dynamic_cast<SPFlowregion *>(region) || dynamic_cast<SPFlowregionExclude *>(region)) {
-                    for ( SPObject *item = region->firstChild() ; item ; item = item->getNext() ) {
-                        SPUse *use = dynamic_cast<SPUse *>(item);
+                    for ( SPObject *obj = region->firstChild() ; obj ; obj = obj->getNext() ) {
+                        SPUse *use = dynamic_cast<SPUse *>(obj);
                         if ( use ) {
-                            use->doWriteTransform(use->getRepr(), use->transform.inverse(), NULL, compensate);
+                            use->doWriteTransform(use->getRepr(), item->transform.inverse(), NULL, compensate);
                         }
                     }
                 }
