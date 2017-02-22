@@ -493,9 +493,6 @@ if [ ${add_python} = "true" ]; then
 		$cp_cmd -RL "$packages_path/uniconvertor" "$pkgpython"
 		# pySerial for HPGL plotting
 		$cp_cmd -RL "$packages_path/serial" "$pkgpython"
-		# scour and its dependency six
-		$cp_cmd -RL "$packages_path/scour" "$pkgpython"
-		$cp_cmd -RL "$packages_path/six.py" "$pkgpython"
 		# PyGTK (optional)
 		$cp_cmd -RL "$packages_path/cairo" "$pkgpython"
 		$cp_cmd -RL "$packages_path/glib" "$pkgpython"
