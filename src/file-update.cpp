@@ -45,10 +45,10 @@ void fix_blank_line(SPObject *o)
     bool beginning = true;
     for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
-        if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i)) {
+        if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             if (sp_text_get_length((SPItem *)i) <= 1) { // empty line
                 Inkscape::Text::Layout::iterator pos = te_get_layout((SPItem*)(o))->charIndexToIterator(
-                        (SP_IS_FLOWPARA(i)?0:((ci==cl.begin())?0:1)) + sp_text_get_length_upto(o,i) );
+                        ((SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i))?0:((ci==cl.begin())?0:1)) + sp_text_get_length_upto(o,i) );
                 sp_te_insert((SPItem *)o, pos, "\u00a0"); //"\u00a0"
                 gchar *l = g_strdup_printf("%f", lineheight.value);
                 gchar *f = g_strdup_printf("%f", fontsize.value);
@@ -75,7 +75,7 @@ void fix_line_spacing(SPObject *o)
     vector<SPObject *> cl = o->childList(false);
     for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
-        if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i)) {
+        if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             // if no line-height attribute, set it
             gchar *l = g_strdup_printf("%f", lineheight.value);
             i->style->line_height.readIfUnset(l);
@@ -117,7 +117,7 @@ void fix_font_size(SPObject *o)
     for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
         fix_font_size(i);
-        if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i)) {
+        if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             inner = true;
             gchar *s = g_strdup_printf("%f", fontsize.value);
             if (fontsize.set)
