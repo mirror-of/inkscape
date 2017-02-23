@@ -275,8 +275,28 @@ elif [ "$OSXMINORNO" -eq "10" ]; then
 	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
 	echo "      Inkscape packaging has not been tested on ${TARGETNAME}."
-else # if [ "$OSXMINORNO" -ge "11" ]; then
-	## Apple's clang after Yosemite?
+elif [ "$OSXMINORNO" -eq "11" ]; then
+	## Apple's clang on El Capitan
+	TARGETNAME="EL_CAPITAN"
+	TARGETVERSION="10.11"
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
+	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
+	echo "      Inkscape packaging has not been tested on ${TARGETNAME}."
+elif [ "$OSXMINORNO" -eq "12" ]; then
+	## Apple's clang on Sierra
+	TARGETNAME="SIERRA"
+	TARGETVERSION="10.12"
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	#export CFLAGS="$CFLAGS -arch $_build_arch"
+	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
+	echo "      Inkscape packaging has not been tested on ${TARGETNAME}."
+else # if [ "$OSXMINORNO" -ge "13" ]; then
+	## Apple's clang after Sierra?
 	TARGETNAME="UNKNOWN"
 	TARGETVERSION="10.XX"
 	export CC="/usr/bin/clang"
