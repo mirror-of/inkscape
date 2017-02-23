@@ -429,6 +429,7 @@ $cp_cmd "$plist" "$package/Contents/Info.plist"
 if [ $_backend = "quartz" ]; then
 	/usr/libexec/PlistBuddy -x -c "Set :CGDisableCoalescedUpdates 1" "${package}/Contents/Info.plist"
 fi
+/usr/libexec/PlistBuddy -x -c "Set :LSMinimumSystemVersion $OSXMINORVER" "${package}/Contents/Info.plist"
 
 # Share files
 $rsync_cmd "$binary_dir/../share/$binary_name"/* "$pkgshare/$binary_name"
