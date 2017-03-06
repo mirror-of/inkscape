@@ -486,6 +486,8 @@ void Inkscape::SelTrans::ungrab()
                 DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
                                    _("Skew"));
             }
+        } else {
+            _updateHandles();
         }
 
     } else {
