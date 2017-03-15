@@ -18,6 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 
+from __future__ import print_function
 import math, cmath
 
 def rootWrapper(a,b,c,d):
@@ -55,8 +56,9 @@ def rootWrapper(a,b,c,d):
         return 1.0*(-d/c),
     return ()
 
-def bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
+def bezierparameterize(input):
     #parametric bezier
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=input
     x0=bx0
     y0=by0
     cx=3*(bx1-x0)
@@ -69,8 +71,9 @@ def bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
     return ax,ay,bx,by,cx,cy,x0,y0
     #ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
 
-def linebezierintersect(((lx1,ly1),(lx2,ly2)),((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))):
+def linebezierintersect(input):
     #parametric line
+    ((lx1,ly1),(lx2,ly2)),((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=input
     dd=lx1
     cc=lx2-lx1
     bb=ly1
@@ -99,19 +102,23 @@ def linebezierintersect(((lx1,ly1),(lx2,ly2)),((bx0,by0),(bx1,by1),(bx2,by2),(bx
             retval.append(bezierpointatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),i))
     return retval
 
-def bezierpointatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
+def bezierpointatt(param1,t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=param1
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     x=ax*(t**3)+bx*(t**2)+cx*t+x0
     y=ay*(t**3)+by*(t**2)+cy*t+y0
     return x,y
 
-def bezierslopeatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
+def bezierslopeatt(param1,t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=param1
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     dx=3*ax*(t**2)+2*bx*t+cx
     dy=3*ay*(t**2)+2*by*t+cy
     return dx,dy
 
-def beziertatslope(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),(dy,dx)):
+def beziertatslope(param1,param2):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=param1
+    (dy,dx)=param2
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     #quadratic coefficents of slope formula
     if dx:
@@ -136,9 +143,12 @@ def beziertatslope(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),(dy,dx)):
             retval.append(i)
     return retval
 
-def tpoint((x1,y1),(x2,y2),t):
+def tpoint(param1,param2,t):
+    (x1,y1)=param1
+    (x2,y2)=param2
     return x1+t*(x2-x1),y1+t*(y2-y1)
-def beziersplitatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
+def beziersplitatt(param1,t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=param1
     m1=tpoint((bx0,by0),(bx1,by1),t)
     m2=tpoint((bx1,by1),(bx2,by2),t)
     m3=tpoint((bx2,by2),(bx3,by3),t)
@@ -167,7 +177,9 @@ Jens Gravesen <gravesen@mat.dth.dk>
 mat-report no. 1992-10, Mathematical Institute, The Technical
 University of Denmark. 
 '''
-def pointdistance((x1,y1),(x2,y2)):
+def pointdistance(point1,point2):
+    (x1,y1)=point1
+    (x2,y2)=point2
     return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
 def Gravesen_addifclose(b, len, error = 0.001):
     box = 0
@@ -214,13 +226,15 @@ def Simpson(f, a, b, n_limit, tolerance):
     #print multiplier, endsum, interval, asum, bsum, est1, est0
     return est1
 
-def bezierlengthSimpson(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)), tolerance = 0.001):
+def bezierlengthSimpson(param1, tolerance = 0.001):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=param1
     global balfax,balfbx,balfcx,balfay,balfby,balfcy
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy
     return Simpson(balf, 0.0, 1.0, 4096, tolerance)
 
-def beziertatlength(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)), l = 0.5, tolerance = 0.001):
+def beziertatlength(param1, l = 0.5, tolerance = 0.001):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3))=param1
     global balfax,balfbx,balfcx,balfay,balfby,balfcy
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy
@@ -268,7 +282,7 @@ if __name__ == '__main__':
         print s, st
     '''
     for curve in curves:
-        print beziertatlength(curve,0.5)
+        print(beziertatlength(curve,0.5))
 
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

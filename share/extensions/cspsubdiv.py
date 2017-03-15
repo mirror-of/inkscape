@@ -2,7 +2,8 @@
 from bezmisc import *
 from ffgeom import *
 
-def maxdist(((p0x,p0y),(p1x,p1y),(p2x,p2y),(p3x,p3y))):
+def maxdist(input):
+    ((p0x,p0y),(p1x,p1y),(p2x,p2y),(p3x,p3y))=input
     p0 = Point(p0x,p0y)
     p1 = Point(p1x,p1y)
     p2 = Point(p2x,p2y)

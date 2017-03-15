@@ -98,11 +98,13 @@ def errormsg(msg):
          ...
          inkex.errormsg(_("This extension requires two selected paths."))
     """
-    if isinstance(msg, unicode):
-        sys.stderr.write(msg.encode("utf-8") + "\n")
+    if sys.version_info.major == 2:
+        if isinstance(msg, unicode):
+            sys.stderr.write(msg.encode("utf-8") + "\n")
+        else:
+            sys.stderr.write((unicode(msg, "utf-8", errors='replace') + "\n").encode("utf-8"))
     else:
-        sys.stderr.write((unicode(msg, "utf-8", errors='replace') + "\n").encode("utf-8"))
-
+        sys.stderr.write(msg + "\n")
 
 def are_near_relative(a, b, eps):
     return (a-b <= a*eps) and (a-b >= -a*eps)
