@@ -8,6 +8,9 @@
  * Marc Jeanmougin
  * su_v
  */
+
+#include <gtkmm.h>
+
 #include "extension/effect.h"
 #include "extension/db.h"
 #include "extension/input.h"
@@ -46,7 +49,6 @@
 #include "message-stack.h"
 #include "verbs.h"
 #include "sp-namedview.h"
-#include <gtkmm.h>
 
 using Inkscape::DocumentUndo;
 using namespace std;

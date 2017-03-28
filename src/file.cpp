@@ -31,6 +31,8 @@
 # include "config.h"
 #endif
 
+#include <gtkmm.h>
+
 #include "ui/dialog/ocaldialogs.h"
 #include "desktop.h"
 
@@ -68,8 +70,6 @@
 #include "verbs.h"
 #include "event-log.h"
 #include "ui/dialog/font-substitution.h"
-
-#include <gtkmm.h>
 
 using Inkscape::DocumentUndo;
 
