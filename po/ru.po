@@ -39337,6 +39337,7 @@ msgstr ""
 "элементов или групп (напр. #arrowStart, #arrowEnd or #textLabels) которые будут "
 "сохранены при удалении/сокращении нумерованных ID (генерируемых большинством SVG редакторов "
 "включая Inkscape) ."
+
 #: ../share/extensions/scour.inx.h:53
 msgid "Preserve the following IDs:"
 msgstr "Сохранять следующие ID:"
@@ -39356,6 +39357,7 @@ msgid ""
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr "Сохранять все ID, начинающиеся с указанного префикса (напр. укажите \"flag\""
 "для сохранения \"flag-mx\", \"flag-pt\", и т.п.)."
+
 #: ../share/extensions/scour.inx.h:57
 msgid "Optimized SVG (*.svg)"
 msgstr "Оптимизированный SVG (*.svg)"
