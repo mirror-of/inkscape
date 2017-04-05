@@ -45,6 +45,7 @@ private:
     AppearanceMode _mode;
     int _indent;
     const gchar* _context;
+    bool _preserve_whitespace;
 };
 
 }  /* namespace Extension */
