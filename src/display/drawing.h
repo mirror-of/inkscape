@@ -12,6 +12,7 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_H
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_H
 
+#include <omp.h>
 #include <2geom/rect.h>
 #include <boost/operators.hpp>
 #include <boost/utility.hpp>
@@ -102,7 +103,7 @@ private:
     Filters::FilterColorMatrix::ColorMatrixMatrix _grayscale_colormatrix;
     SPCanvasArena *_canvasarena; // may be NULL if this arena is not the screen
                                  // but used for export etc.
-
+    omp_lock_t lock;
     friend class DrawingItem;
 };
 

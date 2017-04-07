@@ -44,7 +44,7 @@ Drawing::Drawing(SPCanvasArena *arena)
     , _grayscale_colormatrix(std::vector<gdouble> (grayscale_value_matrix, grayscale_value_matrix + 20 ))
     , _canvasarena(arena)
 {
-
+  omp_init_lock(&lock);
 }
 
 Drawing::~Drawing()
@@ -204,6 +204,7 @@ Drawing::pick(Geom::Point const &p, double delta, unsigned flags)
 void
 Drawing::_pickItemsForCaching()
 {
+    omp_set_lock(&lock);
     // we cache the objects with the highest score until the budget is exhausted
     _candidate_items.sort(std::greater<CacheRecord>());
     size_t used = 0;
@@ -228,6 +229,7 @@ Drawing::_pickItemsForCaching()
     for (std::set<DrawingItem*>::iterator j = to_uncache.begin(); j != to_uncache.end(); ++j) {
         (*j)->setCached(false);
     }
+    omp_unset_lock(&lock);
 }
 
 } // end namespace Inkscape

@@ -19,6 +19,7 @@
 #include <boost/intrusive/list.hpp>
 #include <exception>
 #include <list>
+#include <boost/thread/shared_mutex.hpp>
 
 namespace Glib {
 class ustring;
@@ -226,7 +227,8 @@ protected:
 
     unsigned _isolation : 1;
     unsigned _mix_blend_mode : 4;
-
+    boost::shared_mutex lock;
+    
     friend class Drawing;
 };
 

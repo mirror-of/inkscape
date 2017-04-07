@@ -20,7 +20,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-
+#include <boost/thread/shared_mutex.hpp>
 #include <gdkmm/devicemanager.h>
 #include <gdkmm/display.h>
 #include <gdkmm/rectangle.h>
@@ -133,7 +133,7 @@ struct SPCanvasGroup {
     SPCanvasItem item;
 
     std::list<SPCanvasItem *> items;
-
+    boost::shared_mutex lock;
 };
 
 /**
@@ -768,6 +768,7 @@ static void sp_canvas_group_class_init(SPCanvasGroupClass *klass)
 static void sp_canvas_group_init(SPCanvasGroup * group)
 {
     new (&group->items) std::list<SPCanvasItem *>;
+    new (&group->lock) boost::shared_mutex;
 }
 
 void SPCanvasGroup::destroy(SPCanvasItem *object)
@@ -792,6 +793,9 @@ void SPCanvasGroup::destroy(SPCanvasItem *object)
 void SPCanvasGroup::update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags)
 {
     SPCanvasGroup const *group = SP_CANVAS_GROUP(item);
+    // must not render when in update
+    group->lock.lock();
+
     Geom::OptRect bounds;
 
     for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
@@ -814,6 +818,7 @@ void SPCanvasGroup::update(SPCanvasItem *item, Geom::Affine const &affine, unsig
         // FIXME ?
         item->x1 = item->x2 = item->y1 = item->y2 = 0;
     }
+    group->lock.unlock();
 }
 
 double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item)
@@ -863,7 +868,9 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
 void SPCanvasGroup::render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
     SPCanvasGroup const *group = SP_CANVAS_GROUP(item);
-
+    // protect it from SPCanvasGroup::update(), called by idle_handler -> doUpdate
+    group->lock.lock_shared();
+    
     for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
         SPCanvasItem *child = *it;
         if (child->visible) {
@@ -877,6 +884,7 @@ void SPCanvasGroup::render(SPCanvasItem *item, SPCanvasBuf *buf)
             }
         }
     }
+    group->lock.unlock_shared();
 }
 
 void SPCanvasGroup::viewboxChanged(SPCanvasItem *item, Geom::IntRect const &new_area)
@@ -977,6 +985,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_enable_cms_display_adj = false;
     new (&canvas->_cms_key) Glib::ustring("");
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    omp_init_lock(&canvas->lock);
 }
 
 void SPCanvas::shutdownTransients()
@@ -1553,21 +1562,26 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     //cairo_t *xct = gdk_cairo_create(gtk_widget_get_window (widget));
+    omp_set_lock(&lock);    // cairo_create mutates _backing_store
     cairo_t *xct = cairo_create(_backing_store);
+    omp_unset_lock(&lock);
     cairo_translate(xct, paint_rect.left() - _x0, paint_rect.top() - _y0);
     cairo_rectangle(xct, 0, 0, paint_rect.width(), paint_rect.height());
     cairo_clip(xct);
     cairo_set_source_surface(xct, imgs, 0, 0);
     cairo_set_operator(xct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(xct);
+    omp_set_lock(&lock);    // cairo_destroy mutates _backing_store
     cairo_destroy(xct);
+    omp_unset_lock(&lock);
     cairo_surface_destroy(imgs);
 
     // Mark the painted rectangle clean
+    omp_set_lock(&lock);
     markRect(paint_rect, 0);
-
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
         paint_rect.width(), paint_rect.height());
+    omp_unset_lock(&lock);
 }
 
 struct PaintRectSetup {
@@ -1617,6 +1631,37 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
     if ((bw < 1) || (bh < 1))
         return 0;
 
+  #if 1
+    // YZ - multithread
+    using namespace std::chrono;
+    {
+        int idealBlocks = omp_get_num_procs(); // could use more to improve load balancing, but the extra cost of iterating through the scene and additional per polygon setup will probably offset this
+        int blockSize = (this_rect.height() + idealBlocks - 1) / idealBlocks;  //64  use small size to test for race conditions
+        // Always paint towards the mouse first
+        auto t0 = system_clock::now();
+        bool timeOut = false;
+        #pragma omp parallel
+        {
+          #pragma omp for lastprivate(timeOut)
+            for (int y = this_rect.top(); y < this_rect.bottom(); y += blockSize)
+          {
+            unsigned timeElapsed = duration_cast<milliseconds>(system_clock::now() - t0).count();
+            if (0)//timeElapsed > 400)   // don't time out if we want to measure rendering time
+            {
+                timeOut = true;
+                continue;    // can't break out of parallel loop
+            }
+            Geom::IntRect r(this_rect.left(), y, this_rect.right(), std::min(y + blockSize, this_rect.bottom()));
+            paintSingleBuffer(r, setup->canvas_rect, bw);
+          }
+        #if 0
+          #pragma omp critical
+          printf("t_thread%d=%llu\n", omp_get_thread_num(), duration_cast<milliseconds>(system_clock::now() - t0).count());
+        #endif
+        }
+        return !timeOut;
+    }
+  #endif
     if (bw * bh < setup->max_pixels) {
         // We are small enough
         /*
@@ -1834,8 +1879,12 @@ gint SPCanvas::handle_focus_out(GtkWidget *widget, GdkEventFocus *event)
     }
 }
 
+bool renderLoop;
 int SPCanvas::paint()
 {
+    using namespace std::chrono;
+start:
+    auto t0 = system_clock::now();
     if (_need_update) {
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);
         _need_update = FALSE;
@@ -1853,6 +1902,7 @@ int SPCanvas::paint()
         cairo_region_get_rectangle(to_draw, i, &crect);
         if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
+            printf("t_paint2=%llu\n", duration_cast<milliseconds>(system_clock::now() - t0).count());
             return FALSE;
         };
     }
@@ -1861,7 +1911,13 @@ int SPCanvas::paint()
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;
     }
+    printf("t_paint=%llu\n", duration_cast<milliseconds>(system_clock::now() - t0).count());
 
+    if (renderLoop)
+    {
+        dirtyRect(Geom::IntRect(_x0, _y0, _x0 + allocation.width, _y0 + allocation.height));
+        goto start;
+    }
     return TRUE;
 }
 

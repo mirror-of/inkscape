@@ -95,6 +95,7 @@ SPItem::SPItem() : SPObject() {
     style->signal_stroke_ps_changed.connect(sigc::bind(sigc::ptr_fun(stroke_ps_ref_changed), this));
 
     avoidRef = new SPAvoidRef(this);
+    omp_init_lock(&lock);
 }
 
 SPItem::~SPItem() {
@@ -1174,6 +1175,7 @@ void SPItem::hide(unsigned int /*key*/) {
 
 void SPItem::invoke_hide(unsigned key)
 {
+    omp_set_lock(&lock);
 	this->hide(key);
 
     SPItemView *ref = NULL;
@@ -1209,6 +1211,7 @@ void SPItem::invoke_hide(unsigned key)
         }
         v = next;
     }
+    omp_unset_lock(&lock);
 }
 
 // Adjusters

@@ -7,6 +7,7 @@
  *
  */
 
+#include <omp.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "sp-canvas-item.h"
 #include "enums.h"
@@ -40,11 +41,11 @@ struct SPCtrl : public SPCanvasItem {
     SPAnchorType anchor;
     gint width;
     gint height;
-    guint defined : 1;
-    guint shown   : 1;
-    guint build   : 1;
-    guint filled  : 1;
-    guint stroked : 1;
+    bool defined;
+    bool shown;
+    bool build;
+    bool filled;
+    bool stroked;
     guint32 fill_color;
     guint32 stroke_color;
     gdouble angle;
@@ -55,6 +56,7 @@ struct SPCtrl : public SPCanvasItem {
 
     void moveto(Geom::Point const p);
     Geom::Point _point;
+    omp_lock_t lock;
 };
 
 struct SPCtrlClass : public SPCanvasItemClass{
