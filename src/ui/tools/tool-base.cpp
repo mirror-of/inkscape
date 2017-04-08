@@ -371,7 +371,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
-                                | GDK_POINTER_MOTION_MASK
+                                | GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->button.time - 1);
 
@@ -391,7 +391,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 sp_canvas_item_grab (desktop->canvas_rotate,
                                      GDK_KEY_PRESS_MASK    | GDK_KEY_RELEASE_MASK    |
                                      GDK_BUTTON_RELEASE_MASK |
-                                     GDK_POINTER_MOTION_MASK,
+                                     GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK,
                                      NULL, event->button.time );
                 // sp_canvas_item_hide (desktop->drawing);
 
@@ -405,7 +405,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 panning = 2;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK |
+                                    GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK |
                                     GDK_POINTER_MOTION_HINT_MASK,
                                     NULL, event->button.time - 1);
 
@@ -423,7 +423,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 panning = 3;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                        GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
+                        GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->button.time);
 
@@ -448,7 +448,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
-                                | GDK_POINTER_MOTION_MASK
+                                | GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->motion.time - 1);
             }

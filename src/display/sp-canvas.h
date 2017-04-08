@@ -140,7 +140,7 @@ private:
     /// Convenience function to add an idle handler to a canvas.
     void addIdle();
     void removeIdle();
-
+    
 public:
     // GTK virtual functions.
     static void dispose(GObject *object);
@@ -157,6 +157,7 @@ public:
      * @todo FIXME: generate motion events to re-select items.
      */
     static gint handle_scroll(GtkWidget *widget, GdkEventScroll *event);
+    static gint handle_touch(GtkWidget *widget, GdkEventTouch *event);
     static gint handle_motion(GtkWidget *widget, GdkEventMotion *event);
     static gboolean handle_draw(GtkWidget *widget, cairo_t *cr);
     static gint handle_key_event(GtkWidget *widget, GdkEventKey *event);

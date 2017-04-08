@@ -16,6 +16,8 @@
 # include <config.h>
 #endif
 #include <map>
+#include <unordered_map>
+#include <chrono>
 #include <string>
 
 #include "ui/dialog/guides.h"
@@ -594,7 +596,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
 //static std::map<GdkInputSource, std::string> switchMap;
 static std::map<std::string, int> toolToUse;
 static std::string lastName;
-static GdkInputSource lastType = GDK_SOURCE_MOUSE;
+static GdkInputSource lastType = -1;
 
 static void init_extended()
 {
@@ -616,7 +618,7 @@ static void init_extended()
             
             if ( !devName.empty()
                  && (avoidName != devName)
-                 && (devSrc != Gdk::SOURCE_MOUSE) ) {
+                ) {
 //                 g_message("Adding '%s' as [%d]", devName, devSrc);
 
                 // Set the initial tool for the device
@@ -628,6 +630,8 @@ static void init_extended()
                         toolToUse[devName] = TOOLS_ERASER;
                         break;
                     case Gdk::SOURCE_CURSOR:
+                    case Gdk::SOURCE_MOUSE:
+                    case Gdk::SOURCE_TOUCHSCREEN:
                         toolToUse[devName] = TOOLS_SELECT;
                         break;
                     default:
@@ -640,20 +644,36 @@ static void init_extended()
     }
 }
 
+struct TouchEvent
+{
+    int x0, y0,
+         x, y;
+};
+
+float Square(float x)
+{
+  return x * x;
+}
+bool handlingGesture;
 
 void snoop_extended(GdkEvent* event, SPDesktop *desktop)
 {
-    GdkInputSource source = GDK_SOURCE_MOUSE;
-    std::string name;
-
+    using namespace std::chrono;
+    using namespace std;
+    static unordered_map<int, TouchEvent> touchEvents;
+    static Geom::Rect viewBox0;
+ 
+    GdkDevice *device = gdk_event_get_source_device(event);
+    GdkInputSource source = gdk_device_get_source(device);
+    int x, y;
+    int state = 0;
     switch ( event->type ) {
         case GDK_MOTION_NOTIFY:
         {
             GdkEventMotion* event2 = reinterpret_cast<GdkEventMotion*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
+            state = event2->state;
+            x = event2->x;
+            y = event2->y;
         }
         break;
 
@@ -663,20 +683,15 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         case GDK_BUTTON_RELEASE:
         {
             GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
+            state = event2->state;
+            x = event2->x;
+            y = event2->y;
         }
         break;
 
         case GDK_SCROLL:
         {
             GdkEventScroll* event2 = reinterpret_cast<GdkEventScroll*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
         }
         break;
 
@@ -684,16 +699,118 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         case GDK_PROXIMITY_OUT:
         {
             GdkEventProximity* event2 = reinterpret_cast<GdkEventProximity*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
         }
         break;
-
+        case GDK_TOUCH_BEGIN:
+        case GDK_TOUCH_UPDATE:
+        case GDK_TOUCH_END:
+        {
+            GdkEventTouch &touch = *(GdkEventTouch*)event;
+            printf("touch type=%d (%f %f) id=%lld time=%u tot=%lld\n", touch.type, touch.x, touch.y, touch.sequence, touch.time, touchEvents.size());
+ 
+            if (event->type == GDK_TOUCH_BEGIN)
+            {
+                TouchEvent &e = touchEvents[(int)touch.sequence];
+                e.x0 = touch.x;
+                e.y0 = touch.y;
+                handlingGesture = touchEvents.size() == 2;
+                if (handlingGesture)
+                {
+                  viewBox0 = desktop->get_display_area();
+                }
+            }
+            else if (event->type == GDK_TOUCH_END)
+            {
+                touchEvents.erase((int)touch.sequence);
+                handlingGesture = touchEvents.size() == 2;
+            }
+            else
+            {
+                auto i = touchEvents.find((int)touch.sequence);
+                if (i == touchEvents.end())
+                {
+                    // why are we getting these?
+                    printf("ignoring out-of-order touch event\n");
+                    break;
+                }
+                TouchEvent &e = i->second;
+                e.x = touch.x;
+                e.y = touch.y;
+                static uint32_t lastT;
+                if (touch.time - lastT < 80)
+                    break;
+                lastT = touch.time;
+ 
+                if (touchEvents.size() == 2)
+                {
+                    auto i = touchEvents.begin();
+                    TouchEvent &e0 = i->second;
+                    ++i;
+                    TouchEvent &e1 = i->second;
+ 
+                    // inverse because zooming in means scale < 1
+                    float scale = sqrtf((Square(e1.x0 - e0.x0) + Square(e1.y0 - e0.y0)) / (Square(e1.x - e0.x) + Square(e1.y - e0.y)));
+                    if (isnan(scale) || isinf(scale) || scale == 0)
+                        break;
+                    
+                    Geom::Affine w2d = desktop->w2d();
+                    
+                    Geom::Point const translation((e0.x0 + e1.x0 - e0.x - e1.x) * 0.5f * std::abs(w2d[0]), (e0.y + e1.y - e0.y0 - e1.y0) * 0.5f * std::abs(w2d[3]));
+                    if (std::abs(translation[Geom::X]) > 500 || std::abs(translation[Geom::Y]) > 500)
+                    {
+                        printf("bad translation p0=(%f %f) p1=(%f %f) p00=(%f %f) p10=(%f %f)\n", e0.x, e0.y, e1.x, e1.y, e0.x0, e0.y0, e1.x0, e1.y0);
+                    }
+                    Geom::Point viewCenter0 = Geom::Point(0.5f * (viewBox0.min()[Geom::X] + viewBox0.max()[Geom::X]), 0.5f * (viewBox0.min()[Geom::Y] + viewBox0.max()[Geom::Y]));
+ 
+                    Geom::Point center = viewCenter0;
+                    center += translation;
+                    Geom::Point halfSize(viewBox0.dimensions()[Geom::X] * 0.5f, viewBox0.dimensions()[Geom::Y] * 0.5f);
+                    Geom::Rect newViewBox(center[Geom::X] - halfSize[Geom::X] * scale, center[Geom::Y] - halfSize[Geom::Y] * scale,
+                                          center[Geom::X] + halfSize[Geom::X] * scale, center[Geom::Y] + halfSize[Geom::Y] * scale);
+                    /*
+                    printf("zoom=%f translate=(%f %f) w2d=(%f %f) (%f %f %f %f)\n", 1.0f / scale, translation[Geom::X], translation[Geom::Y],
+                           w2d[0], w2d[3],
+                           newViewBox.min()[Geom::X], newViewBox.min()[Geom::Y], newViewBox.max()[Geom::X], newViewBox.max()[Geom::Y]);
+                    */
+                    desktop->set_display_area(newViewBox, 0);
+                    
+                    desktop->updateNow();
+                }
+            }
+            break;
+        }
+        case GDK_LEAVE_NOTIFY:
+          // if you move the mouse outside the window while dragging with fingers,
+          // GDK_TOUCH_END won't be delivered to this widget
+          touchEvents.clear();
+          break;
         default:
             ;
     }
+    if (event->type == GDK_ENTER_NOTIFY || event->type == GDK_LEAVE_NOTIFY ||
+        source == GDK_SOURCE_TOUCHSCREEN && (event->type < GDK_TOUCH_BEGIN || event->type > GDK_TOUCH_END) ||
+        source == GDK_SOURCE_KEYBOARD)
+    {
+        // ENTER & LEAVE events have an improper device name, Virtual Core Pointer,
+        // which isn't a real slave device (should be System Aggregated Pointer)
+ 
+        // this will confuse the later auto tool selection
+ 
+        // Also, emulated pointer events need to be ignored or else they'll switch the tool
+        // back to the mouse immediately after each touch event
+ 
+        // also, why are there keyboard events when tapping to change tools?
+        return;
+    }
+ 
+    std::string name;
+    // for now, make mouse & touch screen share same tool
+    // making touch screen remember its own tool didn't work because of some spurious MOTION_NOTIFY
+    // right after switching tools - where are these coming from?
+    if (source == GDK_SOURCE_TOUCHSCREEN)
+      name = "System Aggregated Pointer";
+    else
+      name = gdk_device_get_name(device);
 
     if (!name.empty()) {
         if ( lastType != source || lastName != name ) {
