@@ -123,6 +123,7 @@ public:
 
     void setDesktop(SPDesktop *desktop);
     SPDesktop *getDesktop() {return _desktop;}
+    Inkscape::Util::Unit const *getUnit() {return _sw_unit;}
     void update();
 
     guint32 _lastselected[2];
@@ -131,7 +132,6 @@ public:
     guint _mode[2];
 
     double current_stroke_width;
-    Inkscape::Util::Unit const *_sw_unit; // points to object in UnitTable, do not delete
 
 protected:
     SPDesktop *_desktop;
@@ -272,6 +272,8 @@ protected:
     void on_popup_preset(int i);
     Gtk::MenuItem _popup_sw_remove;
 
+    Inkscape::Util::Unit const *_sw_unit; // points to object in UnitTable, do not delete
+    
     void *_drop[2];
     bool _dropEnabled[2];
 };

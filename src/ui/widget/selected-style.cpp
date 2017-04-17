@@ -1381,7 +1381,7 @@ RotateableStrokeWidth::value_adjust(double current, double by, guint /*modifier*
     double newval;
     // by is -1..1
     double max_f = 50;  // maximum width is (current * max_f), minimum - zero
-    newval = current * (std::exp(std::log(max_f-1) * (by+1)) - 1) / (max_f-2);
+    newval = current * (std::pow(max_f-1, by+1) - 1) / (max_f-2);
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
     if (final && newval < 1e-6) {
@@ -1389,13 +1389,16 @@ RotateableStrokeWidth::value_adjust(double current, double by, guint /*modifier*
         // if it's not final, leave it a chance to increase again (which is not possible with "none")
         sp_repr_css_set_property (css, "stroke", "none");
     } else {
-        newval = Inkscape::Util::Quantity::convert(newval, parent->_sw_unit, "px");
         Inkscape::CSSOStringStream os;
-        os << newval;
+        if (parent->getUnit()) {
+            os << Inkscape::Util::Quantity::convert(newval, parent->getUnit(), "px");
+        } else {
+            os << newval;
+        }
         sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
     }
 
-    sp_desktop_set_style (parent->getDesktop(), css);
+    sp_desktop_set_style (parent->getDesktop(), css, true);
     sp_repr_css_attr_unref (css);
     return newval - current;
 }
@@ -1416,9 +1419,13 @@ RotateableStrokeWidth::do_motion(double by, guint modifier) {
     if (modifier == 3) { // Alt, do nothing
     } else {
         double diff = value_adjust(startvalue, by, modifier, false);
+        gchar const *units = parent->getUnit() ? parent->getUnit()->abbr.c_str() : "px";
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, 
+                    _("Adjusting <b>stroke width</b> (%s): was %.3g, now <b>%.3g</b> (diff %.3g)"), 
+                    units, startvalue, startvalue + diff, diff);
+        
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust stroke width")));
-        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"), startvalue, startvalue + diff, diff);
     }
 }
 
@@ -1444,7 +1451,7 @@ RotateableStrokeWidth::do_release(double by, guint modifier) {
 
 void
 RotateableStrokeWidth::do_scroll(double by, guint modifier) {
-    do_motion(by/10.0, modifier);
+    do_motion(by/20.0, modifier);
     startvalue_set = false;
 }
 
