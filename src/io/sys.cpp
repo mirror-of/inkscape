@@ -116,7 +116,10 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
     }
 #else
     Glib::ustring how( mode );
-    how.append("b");
+    if ( how.find("b") == Glib::ustring::npos )
+    {
+        how.append("b");
+    }
     DEBUG_MESSAGE( dumpOne, "   calling is_os_wide()       ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
 
     fp = g_fopen(utf8name, how.c_str());
