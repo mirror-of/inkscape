@@ -38,33 +38,55 @@ ParamDescription::ParamDescription (const gchar * name,
                                     Inkscape::XML::Node * xml,
                                     AppearanceMode mode) :
     Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext),
-              _value(NULL), _mode(mode), _indent(0), _preserve_whitespace(false)
+              _value(NULL), _mode(mode), _indent(0)
 {
-    Glib::ustring defaultval;
+    // construct the text content by concatenating all (non-empty) text nodes,
+    // removing all other nodes (e.g. comment nodes) and replacing <extension:br> elements with "<br/>"
+    Glib::ustring value;
     Inkscape::XML::Node * cur_child = xml->firstChild();
     while (cur_child != NULL) {
         if (cur_child->type() == XML::TEXT_NODE && cur_child->content() != NULL) {
-            defaultval += cur_child->content();
+            value += cur_child->content();
         } else if (cur_child->type() == XML::ELEMENT_NODE && !g_strcmp0(cur_child->name(), "extension:br")) {
-            defaultval += "<br/>";
+            value += "<br/>";
         }
         cur_child = cur_child->next();
     }
 
-    if (defaultval != Glib::ustring("")) {
-        _value = g_strdup(defaultval.c_str());
+    // if there is no text content we can return immediately (the description will be invisible)
+    if (value == Glib::ustring("")) {
+        return;
     }
-
-    _context = xml->attribute("msgctxt");
 
     const char * indent = xml->attribute("indent");
     if (indent != NULL) {
         _indent = atoi(indent) * 12;
     }
 
+    // do replacements in the source string to account for the attribute xml:space="preserve"
+    // (those should match replacements potentially performed by xgettext to allow for proper translation)
     if (g_strcmp0(xml->attribute("xml:space"), "preserve") == 0) {
-        _preserve_whitespace = true;
+        // xgettext copies the source string verbatim in this case, so no changes needed
+    } else {
+        // remove all whitespace from start/end of string and replace intermediate whitespace with a single space
+        value = Glib::Regex::create("^\\s+|\\s+$")->replace_literal(value, 0, "", (Glib::RegexMatchFlags)0);
+        value = Glib::Regex::create("\\s+")->replace_literal(value, 0, " ", (Glib::RegexMatchFlags)0);
     }
+
+    // translate if underscored version (_param) was used
+    if (g_str_has_prefix(xml->name(), "extension:_")) {
+        const gchar * context = xml->attribute("msgctxt");
+        if (context != NULL) {
+            value = g_dpgettext2(NULL, context, value.c_str());
+        } else {
+            value = _(value.c_str());
+        }
+    }
+
+    // finally replace all remaining <br/> with a real newline character
+    value = Glib::Regex::create("<br/>")->replace_literal(value, 0, "\n", (Glib::RegexMatchFlags)0);
+
+    _value = g_strdup(value.c_str());
 
     return;
 }
@@ -81,25 +103,6 @@ ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node
     }
 
     Glib::ustring newguitext = _value;
-
-    // do replacements in the source string matching those performed by xgettext to allow for proper translation
-    if (_preserve_whitespace) {
-        // xgettext copies the source string verbatim in this case, so no changes needed
-    } else {
-        // remove all whitespace from start/end of string and replace intermediate whitespace with a single space
-        newguitext = Glib::Regex::create("^\\s+|\\s+$")->replace_literal(newguitext, 0, "", (Glib::RegexMatchFlags)0);
-        newguitext = Glib::Regex::create("\\s+")->replace_literal(newguitext, 0, " ", (Glib::RegexMatchFlags)0);
-    }
-
-    // translate
-    if (_context != NULL) {
-        newguitext = g_dpgettext2(NULL, _context, newguitext.c_str());
-    } else {
-        newguitext = _(newguitext.c_str());
-    }
-
-    // finally replace all remaining <br/> with a real newline character
-    newguitext = Glib::Regex::create("<br/>")->replace_literal(newguitext, 0, "\n", (Glib::RegexMatchFlags)0);
 
     Gtk::Label * label = Gtk::manage(new Gtk::Label());
     int padding = 12 + _indent;
