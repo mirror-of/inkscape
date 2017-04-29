@@ -35,6 +35,7 @@ if(WIN32)
 	endif()
 endif()
 
+find_package(PkgConfig REQUIRED)
 pkg_check_modules(INKSCAPE_DEP REQUIRED pangocairo pangoft2 fontconfig gthread-2.0 gsl gmodule-2.0)
 
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
