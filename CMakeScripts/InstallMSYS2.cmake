@@ -31,6 +31,9 @@ if(WIN32)
     LGPL2.1.txt
     DESTINATION ${CMAKE_INSTALL_PREFIX})
 
+  install(DIRECTORY doc
+    DESTINATION ${CMAKE_INSTALL_PREFIX})
+
   # mingw dlls
   install(FILES
     ${MINGW_BIN}/LIBEAY32.dll
@@ -151,17 +154,6 @@ if(WIN32)
     doc
     modules
     plugins)
-
-  install(DIRECTORY
-    data
-    doc
-    modules
-    plugins
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-    PATTERN Adwaita EXCLUDE               # NOTE: The theme is not used on Windows.
-    PATTERN hicolor/index.theme EXCLUDE   # NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.
-    PATTERN CMakeLists.txt EXCLUDE
-    PATTERN *.am EXCLUDE)
 
   # Install hicolor/index.theme to avoid bug 1635207
   install(FILES
