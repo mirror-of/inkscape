@@ -124,13 +124,13 @@ void OriginalPathArrayParam::on_reverse_toggled(const Glib::ustring& path)
     w->reversed = row[_model->_colReverse];
     
     gchar * full = param_getSVGValue();
-    param_write_to_repr(full);
+    param_writeToRepr(full);
     g_free(full);
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Link path parameter to path"));
 }
 
-void OriginalPathArrayParam::param_set_default()
+void OriginalPathArrayParam::param_valueFromDefault(bool /*write*/)
 {
     
 }
@@ -224,7 +224,7 @@ void OriginalPathArrayParam::on_up_button_click()
         }
         
         gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
+        param_writeToRepr(full);
         g_free(full);
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
@@ -254,7 +254,7 @@ void OriginalPathArrayParam::on_down_button_click()
         }
         
         gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
+        param_writeToRepr(full);
         g_free(full);
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
@@ -272,7 +272,7 @@ void OriginalPathArrayParam::on_remove_button_click()
         remove_link(row[_model->_colObject]);
         
         gchar * full = param_getSVGValue();
-        param_write_to_repr(full);
+        param_writeToRepr(full);
         g_free(full);
         
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
@@ -310,7 +310,7 @@ OriginalPathArrayParam::on_link_button_click()
     
     os << pathid.c_str() << ",0";
     
-    param_write_to_repr(os.str().c_str());
+    param_writeToRepr(os.str().c_str());
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                        _("Link path parameter to path"));
 }
@@ -345,7 +345,7 @@ void OriginalPathArrayParam::linked_delete(SPObject */*deleted*/, PathAndDirecti
     //remove_link(to);
     
     gchar * full = param_getSVGValue();
-    param_write_to_repr(full);
+    param_writeToRepr(full);
     g_free(full);
 }
 

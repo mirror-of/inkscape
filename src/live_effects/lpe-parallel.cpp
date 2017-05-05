@@ -70,7 +70,7 @@ LPEParallel::doOnApply (SPLPEItem const* lpeitem)
     B = *(curve->last_point());
     dir = unit_vector(B - A);
     Geom::Point offset = (A + B)/2 + dir.ccw() * 100;
-    offset_pt.param_update_default(offset);
+    offset_pt.param_updateDefault(offset);
     offset_pt.param_setValue(offset, true);
 }
 
@@ -120,7 +120,7 @@ KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*ori
     Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = L2(s - lpe->offset_pt) * sgn(dot(s - lpe->offset_pt, lpe->dir));
-    lpe->length_left.param_set_value(-lambda);
+    lpe->length_left.param_setValue(-lambda);
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }
@@ -135,7 +135,7 @@ KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*or
     Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = L2(s - lpe->offset_pt) * sgn(dot(s - lpe->offset_pt, lpe->dir));
-    lpe->length_right.param_set_value(lambda);
+    lpe->length_right.param_setValue(lambda);
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }

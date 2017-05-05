@@ -49,11 +49,11 @@ LPECurveStitch::LPECurveStitch(LivePathEffectObject *lpeobject) :
     registerParameter(&prop_scale);
     registerParameter(&scale_y_rel);
 
-    nrofpaths.param_make_integer();
-    nrofpaths.param_set_range(2, Geom::infinity());
+    nrofpaths.param_makeInteger();
+    nrofpaths.param_setRange(2, Geom::infinity());
 
-    prop_scale.param_set_digits(3);
-    prop_scale.param_set_increments(0.01, 0.10);
+    prop_scale.param_setDigits(3);
+    prop_scale.param_setIncrements(0.01, 0.10);
     transformed = false;
 }
 
@@ -174,11 +174,11 @@ LPECurveStitch::resetDefaults(SPItem const* item)
             strokepath.set_new_value( path.toPwSb(), true );
         } else {
             // bounding box is too small to make decent path. set to default default. :-)
-            strokepath.param_set_and_write_default();
+            strokepath.param_valueFromDefault( true );
         }
     } else {
         // bounding box is non-existent. set to default default. :-)
-        strokepath.param_set_and_write_default();
+        strokepath.param_valueFromDefault( true );
     }
 }
 
@@ -193,10 +193,10 @@ LPECurveStitch::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     // only take translations into account
     if (postmul.isTranslation()) {
-        strokepath.param_transform_multiply(postmul, set);
+        strokepath.param_transformMultiply(postmul, set);
     } else if (!scale_y_rel.get_value()) {
         transformed = true;
-        strokepath.param_transform_multiply(postmul, set);
+        strokepath.param_transformMultiply(postmul, set);
     }
 }
 

@@ -25,21 +25,18 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               bool default_value = false,
+               bool defaultvalue = false,
                bool no_widget = false);
     virtual ~BoolParam();
-
     virtual Gtk::Widget * param_newWidget();
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-
-    void param_setValue(bool newvalue);
-    virtual void param_set_default();
-    void param_update_default(bool const default_value);
-    bool get_value() const { return value; };
-
-    inline operator bool() const { return value; };
+    virtual bool       param_readSVGValue(const gchar * strvalue);
+    virtual gchar *    param_getSVGValue() const;
+    virtual void       param_valueFromDefault();
+    virtual void       param_updateDefault(bool const defaultvalue);
+    virtual void       param_updateDefault(const gchar * default_value);
+    void               param_setValue(bool newvalue);
+    bool               param_getValue() const { return value; };
 
 private:
     BoolParam(const BoolParam&);
@@ -47,7 +44,6 @@ private:
 
     bool value;
     bool defvalue;
-    bool hide_widget;
 };
 
 

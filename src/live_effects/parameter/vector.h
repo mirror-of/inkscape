@@ -42,11 +42,11 @@ public:
     void setValues(Geom::Point const &new_origin, Geom::Point const &new_vector) { setVector(new_vector); setOrigin(new_origin); };
     void setVector(Geom::Point const &new_vector) { vector = new_vector; };
     void setOrigin(Geom::Point const &new_origin) { origin = new_origin; };
-    virtual void param_set_default();
+    virtual void param_valueFromDefault();
 
     void set_and_write_new_values(Geom::Point const &new_origin, Geom::Point const &new_vector);
 
-    virtual void param_transform_multiply(Geom::Affine const &postmul, bool set);
+    virtual void param_transformMultiply(Geom::Affine const &postmul, bool set);
 
     void set_vector_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
     void set_origin_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);

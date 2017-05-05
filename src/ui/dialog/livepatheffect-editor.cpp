@@ -191,6 +191,10 @@ LivePathEffectEditor::~LivePathEffectEditor()
 void
 LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 {
+    if ( ! effect.upd_params ) {
+        return;
+    }
+    std::cout << "sdgsdgdsgsdgsdgsdgdgdggsdgsd\n";
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
@@ -208,6 +212,7 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
     status_label.hide();
     effectcontrol_frame.show();
     effectcontrol_vbox.show_all_children();
+    effect.upd_params = false;
     // fixme: add resizing of dialog
 }
 

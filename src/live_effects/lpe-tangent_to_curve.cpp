@@ -125,14 +125,14 @@ KnotHolderEntityAttachPt::knot_set(Geom::Point const &p, Geom::Point const &/*or
     Geom::Point const s = snap_knot_position(p, state);
 
     if ( !SP_IS_SHAPE(lpe->sp_lpe_item) ) {
-        //lpe->t_attach.param_set_value(0);
+        //lpe->t_attach.param_setValue(0);
         g_warning("LPEItem is not a path! %s:%d\n", __FILE__, __LINE__);
         return;
     }
     Piecewise<D2<SBasis> > pwd2 = paths_to_pw( lpe->pathvector_before_effect );
     
     double t0 = nearest_time(s, pwd2);
-    lpe->t_attach.param_set_value(t0);
+    lpe->t_attach.param_setValue(t0);
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
@@ -146,7 +146,7 @@ KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*ori
     Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = Geom::nearest_time(s, lpe->ptA, lpe->derivA);
-    lpe->length_left.param_set_value(-lambda);
+    lpe->length_left.param_setValue(-lambda);
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }
@@ -159,7 +159,7 @@ KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*or
     Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = Geom::nearest_time(s, lpe->ptA, lpe->derivA);
-    lpe->length_right.param_set_value(lambda);
+    lpe->length_right.param_setValue(lambda);
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }

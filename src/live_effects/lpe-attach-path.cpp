@@ -79,13 +79,13 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                     Geom::Coord length = derivs[deriv_n].length();
                     if ( ! Geom::are_near(length, 0) ) {
                         if (set_start_end) {
-                            start_path_position.param_set_value(transformedpath.nearestTime(start_path_curve_end.getOrigin()).asFlatTime());
+                            start_path_position.param_setValue(transformedpath.nearestTime(start_path_curve_end.getOrigin()).asFlatTime());
                         }
                         
                         if (start_path_position > transformedpath.size()) {
-                            start_path_position.param_set_value(transformedpath.size());
+                            start_path_position.param_setValue(transformedpath.size());
                         } else if (start_path_position < 0) {
-                            start_path_position.param_set_value(0);
+                            start_path_position.param_setValue(0);
                         }
                         Geom::Curve const *c = start_path_position >= transformedpath.size() ?
 							&transformedpath.back() : &transformedpath.at((int)start_path_position);
@@ -134,13 +134,13 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                     Geom::Coord length = derivs[deriv_n].length();
                     if ( ! Geom::are_near(length, 0) ) {
                         if (set_end_end) {
-                            end_path_position.param_set_value(transformedpath.nearestTime(end_path_curve_end.getOrigin()).asFlatTime());
+                            end_path_position.param_setValue(transformedpath.nearestTime(end_path_curve_end.getOrigin()).asFlatTime());
                         }
                         
                         if (end_path_position > transformedpath.size()) {
-                            end_path_position.param_set_value(transformedpath.size());
+                            end_path_position.param_setValue(transformedpath.size());
                         } else if (end_path_position < 0) {
-                            end_path_position.param_set_value(0);
+                            end_path_position.param_setValue(0);
                         }
                         const Geom::Curve *c = end_path_position >= transformedpath.size() ?
 							&transformedpath.back() : &transformedpath.at((int)end_path_position);

@@ -29,7 +29,7 @@ public:
 
     virtual Gtk::Widget * param_newWidget();
     /** Disable the canvas indicators of parent class by overriding this method */
-    virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
+    virtual void param_editOnCanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
     /** Disable the canvas indicators of parent class by overriding this method */
     virtual void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) {};
 

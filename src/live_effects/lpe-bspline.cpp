@@ -41,19 +41,19 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
     registerParameter(&apply_with_weight);
     registerParameter(&only_selected);
 
-    weight.param_set_range(NO_POWER, 100.0);
-    weight.param_set_increments(0.1, 0.1);
-    weight.param_set_digits(4);
-    weight.param_overwrite_widget(true);
+    weight.param_setRange(NO_POWER, 100.0);
+    weight.param_setIncrements(0.1, 0.1);
+    weight.param_setDigits(4);
+    weight.param_overwriteWidget(true);
 
-    steps.param_set_range(1, 10);
-    steps.param_set_increments(1, 1);
-    steps.param_set_digits(0);
-    steps.param_overwrite_widget(true);
+    steps.param_setRange(1, 10);
+    steps.param_setIncrements(1, 1);
+    steps.param_setDigits(0);
+    steps.param_overwriteWidget(true);
 
-    helper_size.param_set_range(0.0, 999.0);
-    helper_size.param_set_increments(1, 1);
-    helper_size.param_set_digits(2);
+    helper_size.param_setRange(0.0, 999.0);
+    helper_size.param_setIncrements(1, 1);
+    helper_size.param_setDigits(2);
 }
 
 LPEBSpline::~LPEBSpline() {}

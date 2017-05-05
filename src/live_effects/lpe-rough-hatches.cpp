@@ -262,13 +262,13 @@ LPERoughHatches::LPERoughHatches(LivePathEffectObject *lpeobject) :
     registerParameter(&front_thickness);
     registerParameter(&back_thickness);
 
-    //hatch_dist.param_set_range(0.1, Geom::infinity());
-    growth.param_set_range(0, Geom::infinity());
-    dist_rdm.param_set_range(0, 99.);
-    stroke_width_top.param_set_range(0,  Geom::infinity());
-    stroke_width_bot.param_set_range(0,  Geom::infinity());
-    front_thickness.param_set_range(0, Geom::infinity());
-    back_thickness.param_set_range(0, Geom::infinity());
+    //hatch_dist.param_setRange(0.1, Geom::infinity());
+    growth.param_setRange(0, Geom::infinity());
+    dist_rdm.param_setRange(0, 99.);
+    stroke_width_top.param_setRange(0,  Geom::infinity());
+    stroke_width_bot.param_setRange(0,  Geom::infinity());
+    front_thickness.param_setRange(0, Geom::infinity());
+    back_thickness.param_setRange(0, Geom::infinity());
 
     // hide the widgets for direction and bender vectorparams
     direction.widget_is_visible = false;
@@ -558,13 +558,13 @@ LPERoughHatches::resetDefaults(SPItem const* item)
     if (bbox) {
         origin = bbox->midpoint();
         vector = Geom::Point((*bbox)[X].extent()/4, 0.);
-        top_edge_variation.param_set_value( (*bbox)[Y].extent()/10, 0 );
-        bot_edge_variation.param_set_value( (*bbox)[Y].extent()/10, 0 );
-        top_edge_variation.write_to_SVG();
-        bot_edge_variation.write_to_SVG();
+        top_edge_variation.param_setValue( (*bbox)[Y].extent()/10, 0 );
+        bot_edge_variation.param_setValue( (*bbox)[Y].extent()/10, 0 );
+        top_edge_variation.writeToSVG();
+        bot_edge_variation.writeToSVG();
     }
     //direction.set_and_write_new_values(origin, vector);
-    //bender.param_set_and_write_new_value( origin + Geom::Point(5,0) );
+    //bender.param_setAndWriteNewValue( origin + Geom::Point(5,0) );
     direction.set_and_write_new_values(origin + Geom::Point(0,-5), vector);
     bender.set_and_write_new_values( origin, Geom::Point(5,0) );
     hatch_dist = Geom::L2(vector)/2;

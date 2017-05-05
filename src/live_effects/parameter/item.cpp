@@ -38,13 +38,13 @@ namespace LivePathEffect {
 
 ItemParam::ItemParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const gchar * default_value)
+                      Effect* effect, const gchar * defaultvalue)
     : Parameter(label, tip, key, wr, effect),
       changed(true),
       href(NULL),
       ref( (SPObject*)effect->getLPEObj() )
 {
-    defvalue = g_strdup(default_value);
+    defvalue = g_strdup(defaultvalue);
     ref_changed_connection = ref.changedSignal().connect(sigc::mem_fun(*this, &ItemParam::ref_changed));
 }
 
@@ -55,16 +55,19 @@ ItemParam::~ItemParam()
 }
 
 void
-ItemParam::param_set_default()
+ItemParam::param_valueFromDefault()
 {
     param_readSVGValue(defvalue);
 }
 
 
 void
-ItemParam::param_set_and_write_default()
+ItemParam::param_valueFromDefault(bool write)
 {
-    param_write_to_repr(defvalue);
+    param_setValue(defvalue);
+    if (write) {
+        param_writeToRepr(defvalue);
+    }
 }
 
 bool
@@ -227,7 +230,7 @@ ItemParam::on_link_button_click()
         // check if id really exists in document, or only in clipboard document: if only in clipboard then invalid
         // check if linking to object to which LPE is applied (maybe delegated to PathReference
 
-        param_write_to_repr(itemid.c_str());
+        param_writeToRepr(itemid.c_str());
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                            _("Link item parameter to path"));
     }

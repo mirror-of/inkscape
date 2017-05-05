@@ -31,7 +31,7 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               const Glib::ustring default_value = "");
+               const Glib::ustring defaultvalue = "");
     virtual ~TextParam() {}
 
     virtual Gtk::Widget * param_newWidget();
@@ -41,8 +41,8 @@ public:
 
     void param_setValue(const Glib::ustring newvalue);
     void param_hide_canvas_text();
-    virtual void param_set_default();
-    void param_update_default(Glib::ustring default_value);
+    virtual void param_valueFromDefault();
+    void param_updateDefault(Glib::ustring defaultvalue);
     void setPos(Geom::Point pos);
     void setPosAndAnchor(const Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
 			 const double t, const double length, bool use_curvature = false);

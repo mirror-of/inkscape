@@ -28,7 +28,7 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                const gchar * default_value = "M0,0 L1,1");
+                const gchar * defaultvalue = "M0,0 L1,1");
     virtual ~PathParam();
 
     Geom::PathVector const & get_pathvector() const;
@@ -39,16 +39,16 @@ public:
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
 
-    virtual void param_set_default();
-    void param_set_and_write_default();
+    virtual void param_valueFromDefault();
+    void param_valueFromDefault( true );
     void set_new_value (Geom::PathVector const &newpath, bool write_to_svg);
     void set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const &newpath, bool write_to_svg);
 
-    virtual void param_editOncanvas(SPItem * item, SPDesktop * dt);
-    virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);
+    virtual void param_editOnCanvas(SPItem * item, SPDesktop * dt);
+    virtual void param_setupNodepath(Inkscape::NodePath::Path *np);
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
-    virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
+    virtual void param_transformMultiply(Geom::Affine const& /*postmul*/, bool /*set*/);
 
     sigc::signal <void> signal_path_pasted;
     sigc::signal <void> signal_path_changed;

@@ -27,12 +27,12 @@ public:
                 const Util::EnumDataConverter<E>& c,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                E default_value,
+                E defaultvalue,
                 bool sort = true)
         : Parameter(label, tip, key, wr, effect)
     {
         enumdataconv = &c;
-        defvalue = default_value;
+        defvalue = defaultvalue;
         value = defvalue;
         sorted = sort;
     };
@@ -41,8 +41,14 @@ public:
 
     virtual Gtk::Widget * param_newWidget() {
         Inkscape::UI::Widget::RegisteredEnum<E> *regenum = Gtk::manage ( 
-            new Inkscape::UI::Widget::RegisteredEnum<E>( param_label, param_tooltip,
-                       param_key, *enumdataconv, *param_wr, param_effect->getRepr(), param_effect->getSPDoc(), sorted ) );
+            new Inkscape::UI::Widget::RegisteredEnum<E>(param_label,
+                                                        param_tooltip,
+                                                        param_key,
+                                                        *enumdataconv,
+                                                        *param_wr,
+                                                        param_effect->getRepr(),
+                                                        param_effect->getSPDoc(),
+                                                        sorted) );
 
         regenum->set_active_by_id(value);
         regenum->combobox()->setProgrammatically = false;
@@ -52,33 +58,36 @@ public:
 
     bool param_readSVGValue(const gchar * strvalue) {
         if (!strvalue) {
-            param_set_default();
+            param_valueFromDefault();
             return true;
         }
-
-        param_set_value( enumdataconv->get_id_from_key(Glib::ustring(strvalue)) );
-
+        param_setValue( enumdataconv->get_id_from_key(Glib::ustring(strvalue)) );
         return true;
     };
+
     gchar * param_getSVGValue() const {
         gchar * str = g_strdup( enumdataconv->get_key(value).c_str() );
         return str;
     };
 
-    E get_value() const {
+    E param_getValue() const {
         return value;
     }
 
-    inline operator E() const {
-        return value;
-    };
-
-    void param_set_default() {
-        param_set_value(defvalue);
-    }
-
-    void param_set_value(E val) {
+    void param_setValue(E val) {
         value = val;
+    }
+
+    void param_valueFromDefault(bool /*write*/) {
+        param_setValue(defvalue);
+    }
+
+    virtual void param_updateDefault(E defaultvalue) {
+        defvalue = defaultvalue;
+    }
+
+    virtual void param_update_default(const gchar * defaultvalue) {
+        param_update_default(enumdataconv->get_id_from_key(Glib::ustring(defaultvalue)));
     }
 
 private:

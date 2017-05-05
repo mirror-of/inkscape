@@ -18,7 +18,7 @@ namespace LivePathEffect {
 
 template <>
 double
-ArrayParam<double>::readsvg(const gchar * str)
+ArrayParam<double>::readSVG(const gchar * str)
 {
     double newx = Geom::infinity();
     sp_svg_number_read_d(str, &newx);
@@ -27,7 +27,7 @@ ArrayParam<double>::readsvg(const gchar * str)
 
 template <>
 float
-ArrayParam<float>::readsvg(const gchar * str)
+ArrayParam<float>::readSVG(const gchar * str)
 {
     float newx = Geom::infinity();
     sp_svg_number_read_f(str, &newx);
@@ -36,7 +36,7 @@ ArrayParam<float>::readsvg(const gchar * str)
 
 template <>
 Geom::Point
-ArrayParam<Geom::Point>::readsvg(const gchar * str)
+ArrayParam<Geom::Point>::readSVG(const gchar * str)
 {
     gchar ** strarray = g_strsplit(str, ",", 2);
     double newx, newy;

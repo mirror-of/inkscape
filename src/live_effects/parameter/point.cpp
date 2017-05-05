@@ -21,10 +21,10 @@ namespace LivePathEffect {
 
 PointParam::PointParam( const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                        Effect* effect, const gchar *htip, Geom::Point default_value,
+                        Effect* effect, const gchar *htip, Geom::Point defaultvalue,
                         bool live_update )
     :   Parameter(label, tip, key, wr, effect), 
-        defvalue(default_value),
+        defvalue(defaultvalue),
         liveupdate(live_update),
         knoth(NULL)
 {
@@ -41,24 +41,24 @@ PointParam::~PointParam()
 }
 
 void
-PointParam::param_set_default()
+PointParam::param_valueFromDefault()
 {
     param_setValue(defvalue,true);
 }
 
 void
-PointParam::param_set_liveupdate( bool live_update)
+PointParam::param_setLiveupdate( bool live_update)
 {
     liveupdate = live_update;
 }
 
 Geom::Point 
-PointParam::param_get_default() const{
+PointParam::param_getDefault() const{
     return defvalue;
 }
 
 void
-PointParam::param_update_default(Geom::Point default_point)
+PointParam::param_updateDefault(Geom::Point default_point)
 {
     defvalue = default_point;
 }
@@ -71,7 +71,7 @@ PointParam::param_setValue(Geom::Point newpoint, bool write)
         Inkscape::SVGOStringStream os;
         os << newpoint;
         gchar * str = g_strdup(os.str().c_str());
-        param_write_to_repr(str);
+        param_writeToRepr(str);
         g_free(str);
     }
     if(knoth && liveupdate){
@@ -104,7 +104,7 @@ PointParam::param_getSVGValue() const
 }
 
 void
-PointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+PointParam::param_transformMultiply(Geom::Affine const& postmul, bool /*set*/)
 {
     param_setValue( (*this) * postmul, true);
 }
@@ -112,7 +112,7 @@ PointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 Gtk::Widget *
 PointParam::param_newWidget()
 {
-    Inkscape::UI::Widget::RegisteredTransformedPoint * pointwdg = Gtk::manage(
+    pointwdg = Gtk::manage(
         new Inkscape::UI::Widget::RegisteredTransformedPoint( param_label,
                                                               param_tooltip,
                                                               param_key,
@@ -133,7 +133,7 @@ PointParam::param_newWidget()
 }
 
 void
-PointParam::set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
+PointParam::set_onCanvasLooks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
 {
     knot_shape = shape;
     knot_mode  = mode;
@@ -169,10 +169,6 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
         }
     }
     pparam->param_setValue(s, this->pparam->liveupdate);
-    SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
-    if(splpeitem && this->pparam->liveupdate){
-        sp_lpe_item_update_patheffect(splpeitem, false, false);
-    }
 }
 
 Geom::Point
@@ -186,7 +182,7 @@ PointParamKnotHolderEntity::knot_click(guint state)
 {
     if (state & GDK_CONTROL_MASK) {
         if (state & GDK_MOD1_MASK) {
-            this->pparam->param_set_default();
+            this->pparam->param_valueFromDefault();
             SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
             if(splpeitem){
                 sp_lpe_item_update_patheffect(splpeitem, false, false);

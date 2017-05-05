@@ -42,7 +42,7 @@ PowerStrokePointArrayParam::param_newWidget()
     return NULL;
 }
 
-void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &postmul, bool /*set*/)
+void PowerStrokePointArrayParam::param_transformMultiply(Geom::Affine const &postmul, bool /*set*/)
 {
     // Check if proportional stroke-width scaling is on
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -57,7 +57,7 @@ void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &po
             Geom::Coord const A = (*point_it)[Geom::Y] * ((postmul.expansionX() + postmul.expansionY()) / 2);
             result.push_back(Geom::Point((*point_it)[Geom::X], A));
         }
-        param_set_and_write_new_value(result);
+        param_setAndWriteNewValue(result);
     }
 }
 
@@ -85,7 +85,7 @@ PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewi
             }
         }
 
-        write_to_SVG();
+        writeToSVG();
     }
 }
 
@@ -115,7 +115,7 @@ PowerStrokePointArrayParam::set_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > co
 
 
 void
-PowerStrokePointArrayParam::set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
+PowerStrokePointArrayParam::set_onCanvasLooks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
 {
     knot_shape = shape;
     knot_mode  = mode;
@@ -202,7 +202,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
             // delete the clicked knot
             std::vector<Geom::Point> & vec = _pparam->_vector;
             vec.erase(vec.begin() + _index);
-            _pparam->param_set_and_write_new_value(vec);
+            _pparam->param_setAndWriteNewValue(vec);
 
             // remove knot from knotholder
             parent_holder->entity.remove(this);
@@ -222,7 +222,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
             // add a knot to XML
             std::vector<Geom::Point> & vec = _pparam->_vector;
             vec.insert(vec.begin() + _index, 1, vec.at(_index)); // this clicked knot is duplicated
-            _pparam->param_set_and_write_new_value(vec);
+            _pparam->param_setAndWriteNewValue(vec);
 
             // shift knots up one index
             for(std::list<KnotHolderEntity *>::iterator ent = parent_holder->entity.begin(); ent != parent_holder->entity.end(); ++ent) {

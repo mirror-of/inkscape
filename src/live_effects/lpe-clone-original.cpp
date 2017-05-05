@@ -57,9 +57,9 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     registerParameter(&paintorder);
     registerParameter(&opacity);
     registerParameter(&filter);
-    scale.param_set_range(0.01, 999999.0);
-    scale.param_set_increments(1, 1);
-    scale.param_set_digits(2);
+    scale.param_setRange(0.01, 999999.0);
+    scale.param_setIncrements(1, 1);
+    scale.param_setDigits(2);
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
     preserve_position_changed = preserve_position;

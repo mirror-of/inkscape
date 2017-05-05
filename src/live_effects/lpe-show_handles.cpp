@@ -34,9 +34,9 @@ LPEShowHandles::LPEShowHandles(LivePathEffectObject *lpeobject)
     registerParameter(&original_path);
     registerParameter(&show_center_node);
     registerParameter(&scale_nodes_and_handles);
-    scale_nodes_and_handles.param_set_range(0, 500.);
-    scale_nodes_and_handles.param_set_increments(1, 1);
-    scale_nodes_and_handles.param_set_digits(2);
+    scale_nodes_and_handles.param_setRange(0, 500.);
+    scale_nodes_and_handles.param_setIncrements(1, 1);
+    scale_nodes_and_handles.param_setDigits(2);
     stroke_width = 1.0;
 }
 

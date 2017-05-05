@@ -86,7 +86,6 @@ set(ui_SRC
 	dialog/layers.cpp
 	dialog/livepatheffect-add.cpp
 	dialog/livepatheffect-editor.cpp
-	dialog/lpe-fillet-chamfer-properties.cpp
 	dialog/lpe-powerstroke-properties.cpp
 	dialog/memory.cpp
 	dialog/messages.cpp
@@ -229,7 +228,6 @@ set(ui_SRC
 	dialog/layers.h
 	dialog/livepatheffect-add.h
 	dialog/livepatheffect-editor.h
-	dialog/lpe-fillet-chamfer-properties.h
 	dialog/lpe-powerstroke-properties.h
 	dialog/memory.h
 	dialog/messages.h

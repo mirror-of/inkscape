@@ -57,7 +57,7 @@ namespace LivePathEffect {
 
 PathParam::PathParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const gchar * default_value)
+                      Effect* effect, const gchar * defaultvalue)
     : Parameter(label, tip, key, wr, effect),
       changed(true),
       _pathvector(),
@@ -66,7 +66,7 @@ PathParam::PathParam( const Glib::ustring& label, const Glib::ustring& tip,
       href(NULL),
       ref( (SPObject*)effect->getLPEObj() )
 {
-    defvalue = g_strdup(default_value);
+    defvalue = g_strdup(defaultvalue);
     param_readSVGValue(defvalue);
     oncanvas_editable = true;
 
@@ -108,15 +108,15 @@ PathParam::get_pwd2()
 }
 
 void
-PathParam::param_set_default()
+PathParam::param_valueFromDefault()
 {
     param_readSVGValue(defvalue);
 }
 
 void
-PathParam::param_set_and_write_default()
+PathParam::param_valueFromDefault( true )
 {
-    param_write_to_repr(defvalue);
+    param_writeToRepr(defvalue);
 }
 
 bool
@@ -222,7 +222,7 @@ PathParam::param_newWidget()
 }
 
 void
-PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
+PathParam::param_editOnCanvas(SPItem *item, SPDesktop * dt)
 {
     SPDocument *document = dt->getDocument();
     bool saved = DocumentUndo::getUndoSensitive(document);
@@ -244,9 +244,9 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
         r.item = reinterpret_cast<SPItem*>(param_effect->getLPEObj());
         r.lpe_key = param_key;
         Geom::PathVector stored_pv =  _pathvector;
-        param_write_to_repr("M0,0 L1,0");
+        param_writeToRepr("M0,0 L1,0");
         const char *svgd = sp_svg_write_path(stored_pv);
-        param_write_to_repr(svgd);
+        param_writeToRepr(svgd);
     } else {
         r.item = ref.getObject();
     }
@@ -256,7 +256,7 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
 }
 
 void
-PathParam::param_setup_nodepath(Inkscape::NodePath::Path *)
+PathParam::param_setupNodepath(Inkscape::NodePath::Path *)
 {
     // TODO this method should not exist at all!
 }
@@ -271,7 +271,7 @@ PathParam::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::Pa
  * Only applies transform when not referring to other path!
  */
 void
-PathParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+PathParam::param_transformMultiply(Geom::Affine const& postmul, bool /*set*/)
 {
     // only apply transform when not referring to other path
     if (!href) {
@@ -290,7 +290,7 @@ PathParam::set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & newpa
 
     if (write_to_svg) {
         gchar * svgd = sp_svg_write_path( _pathvector );
-        param_write_to_repr(svgd);
+        param_writeToRepr(svgd);
         g_free(svgd);
 
         // After the whole "writing to svg avalanche of function calling": force value upon pwd2 and don't recalculate.
@@ -320,7 +320,7 @@ PathParam::set_new_value (Geom::PathVector const &newpath, bool write_to_svg)
 {
     remove_link();
     if (newpath.empty()) {
-        param_set_and_write_default();
+        param_valueFromDefault( true );
         return;
     } else {
         _pathvector = newpath;
@@ -329,7 +329,7 @@ PathParam::set_new_value (Geom::PathVector const &newpath, bool write_to_svg)
 
     if (write_to_svg) {
         gchar * svgd = sp_svg_write_path( _pathvector );
-        param_write_to_repr(svgd);
+        param_writeToRepr(svgd);
         g_free(svgd);
     } else {
         emit_changed();
@@ -446,7 +446,7 @@ PathParam::on_edit_button_click()
 {
     SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
     if (item != NULL) {
-        param_editOncanvas(item, SP_ACTIVE_DESKTOP);
+        param_editOnCanvas(item, SP_ACTIVE_DESKTOP);
     }
 }
 
@@ -464,7 +464,7 @@ PathParam::paste_param_path(const char *svgd)
             svgd = sp_svg_write_path( path_clipboard );
         }
         
-        param_write_to_repr(svgd);
+        param_writeToRepr(svgd);
         signal_path_pasted.emit();
     }
 }
@@ -506,7 +506,7 @@ PathParam::on_link_button_click()
         // check if id really exists in document, or only in clipboard document: if only in clipboard then invalid
         // check if linking to object to which LPE is applied (maybe delegated to PathReference
 
-        param_write_to_repr(pathid.c_str());
+        param_writeToRepr(pathid.c_str());
         DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                            _("Link path parameter to path"));
     }

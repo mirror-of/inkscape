@@ -27,10 +27,10 @@ LPEConstructGrid::LPEConstructGrid(LivePathEffectObject *lpeobject) :
     registerParameter(&nr_x);
     registerParameter(&nr_y);
 
-    nr_x.param_make_integer();
-    nr_y.param_make_integer();
-    nr_x.param_set_range(1, 1e10);
-    nr_y.param_set_range(1, 1e10);
+    nr_x.param_makeInteger();
+    nr_y.param_makeInteger();
+    nr_x.param_setRange(1, 1e10);
+    nr_y.param_setRange(1, 1e10);
 }
 
 LPEConstructGrid::~LPEConstructGrid()

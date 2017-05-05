@@ -300,7 +300,7 @@ idx_of_nearest(CrossingPoints const &cpts, Geom::Point const &p)
 //TODO: Find a way to warn the user when the topology changes.
 //TODO: be smarter at guessing the signs when the topology changed?
 void
-CrossingPoints::inherit_signs(CrossingPoints const &other, int default_value)
+CrossingPoints::inherit_signs(CrossingPoints const &other, int defaultvalue)
 {
     bool topo_changed = false;
     for (unsigned n=0; n < size(); n++){
@@ -325,7 +325,7 @@ CrossingPoints::inherit_signs(CrossingPoints const &other, int default_value)
             if (idx < other.size()) {
                 (*this)[n].sign = other[idx].sign;
             } else {
-                (*this)[n].sign = default_value;
+                (*this)[n].sign = defaultvalue;
             }
         }
     }
@@ -655,7 +655,7 @@ KnotHolderEntityCrossingSwitcher::knot_click(guint state)
             lpe->crossing_points[s].sign = ((sign+2)%3)-1;
             //std::cout<<"crossing set to"<<lpe->crossing_points[s].sign<<".\n";
         }
-        lpe->crossing_points_vector.param_set_and_write_new_value(lpe->crossing_points.to_vector());
+        lpe->crossing_points_vector.param_setAndWriteNewValue(lpe->crossing_points.to_vector());
         DocumentUndo::done(lpe->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, /// @todo Is this the right verb?
                            _("Change knot crossing"));
 

@@ -358,6 +358,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       concatenate_before_pwd2(false),
       sp_lpe_item(NULL),
       current_zoom(1),
+      upd_params(true),
       sp_shape(NULL),
       sp_curve(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
@@ -575,9 +576,10 @@ Effect::doAcceptPathPreparations(SPLPEItem *lpeitem)
 
 void
 Effect::writeParamsToSVG() {
+    upd_params = true;
     std::vector<Inkscape::LivePathEffect::Parameter *>::iterator p;
     for (p = param_vector.begin(); p != param_vector.end(); ++p) {
-        (*p)->write_to_SVG();
+        (*p)->writeToSVG();
     }
 }
 
@@ -655,7 +657,7 @@ Effect::readallParameters(Inkscape::XML::Node const* repr)
             }
         } else {
             // set default value
-            param->param_set_default();
+            param->param_valueFromDefault();
         }
 
         ++it;
@@ -675,7 +677,7 @@ Effect::setParameter(const gchar * key, const gchar * new_value)
             }
         } else {
             // set default value
-            param->param_set_default();
+            param->param_valueFromDefault();
         }
     }
 }
@@ -842,7 +844,7 @@ Effect::editNextParamOncanvas(SPItem * item, SPDesktop * desktop)
 
     Parameter * param = getNextOncanvasEditableParam();
     if (param) {
-        param->param_editOncanvas(item, desktop);
+        param->param_editOnCanvas(item, desktop);
         gchar *message = g_strdup_printf(_("Editing parameter <b>%s</b>."), param->param_label.c_str());
         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
         g_free(message);
@@ -860,8 +862,8 @@ Effect::resetDefaults(SPItem const* /*item*/)
 {
     std::vector<Inkscape::LivePathEffect::Parameter *>::iterator p;
     for (p = param_vector.begin(); p != param_vector.end(); ++p) {
-        (*p)->param_set_default();
-        (*p)->write_to_SVG();
+        (*p)->param_valueFromDefault();
+        (*p)->writeToSVG();
     }
 }
 
@@ -871,7 +873,7 @@ Effect::transform_multiply(Geom::Affine const& postmul, bool set)
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
     for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
         Parameter * param = *it;
-        param->param_transform_multiply(postmul, set);
+        param->param_transformMultiply(postmul, set);
     }
 }
 

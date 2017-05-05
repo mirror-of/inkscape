@@ -28,15 +28,15 @@ namespace LivePathEffect {
 
 TextParam::TextParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const Glib::ustring default_value )
+                      Effect* effect, const Glib::ustring defaultvalue )
     : Parameter(label, tip, key, wr, effect),
-      value(default_value),
-      defvalue(default_value),
+      value(defaultvalue),
+      defvalue(defaultvalue),
       _hide_canvas_text(false)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) { // FIXME: we shouldn't use this!
         canvas_text = (SPCanvasText *) sp_canvastext_new(desktop->getTempGroup(), desktop, Geom::Point(0,0), "");
-        sp_canvastext_set_text (canvas_text, default_value.c_str());
+        sp_canvastext_set_text (canvas_text, defaultvalue.c_str());
         sp_canvastext_set_coords (canvas_text, 0, 0);
     } else {
         _hide_canvas_text = true;
@@ -44,15 +44,15 @@ TextParam::TextParam( const Glib::ustring& label, const Glib::ustring& tip,
 }
 
 void
-TextParam::param_set_default()
+TextParam::param_valueFromDefault()
 {
     param_setValue(defvalue);
 }
 
 void
-TextParam::param_update_default(Glib::ustring default_value)
+TextParam::param_updateDefault(Glib::ustring defaultvalue)
 {
-    defvalue = default_value;
+    defvalue = defaultvalue;
 }
 
 void

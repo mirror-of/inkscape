@@ -34,8 +34,8 @@ LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject) :
     registerParameter(&equidistant_spacing);
     registerParameter(&number_of_steps);
 
-    number_of_steps.param_make_integer();
-    number_of_steps.param_set_range(2, Geom::infinity());
+    number_of_steps.param_makeInteger();
+    number_of_steps.param_setRange(2, Geom::infinity());
 }
 
 LPEInterpolate::~LPEInterpolate()
@@ -117,7 +117,7 @@ LPEInterpolate::resetDefaults(SPItem const* item)
         traj_pathv[0].appendNew<Geom::LineSegment>( bounds_B->midpoint() );
         trajectory_path.set_new_value( traj_pathv, true );
     } else {
-        trajectory_path.param_set_and_write_default();
+        trajectory_path.param_valueFromDefault( true );
     }
 }
 

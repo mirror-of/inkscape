@@ -105,62 +105,62 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     if(fontbutton_value.empty()){
         fontbutton_value = "Sans 10";
     }
-    fontbutton.param_update_default(fontbutton_value);
-    scale.param_update_default(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
-    precision.param_update_default(prefs->getInt("/live_effects/measure-line/precision", 2));
-    position.param_update_default(prefs->getDouble("/live_effects/measure-line/position", 10.0));
-    text_top_bottom.param_update_default(prefs->getDouble("/live_effects/measure-line/text_top_bottom", 5.0));
-    helpline_distance.param_update_default(prefs->getDouble("/live_effects/measure-line/helpline_distance", 0.0));
-    helpline_overlap.param_update_default(prefs->getDouble("/live_effects/measure-line/helpline_overlap", 0.0));
+    fontbutton.param_updateDefault(fontbutton_value);
+    scale.param_updateDefault(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
+    precision.param_updateDefault(prefs->getInt("/live_effects/measure-line/precision", 2));
+    position.param_updateDefault(prefs->getDouble("/live_effects/measure-line/position", 10.0));
+    text_top_bottom.param_updateDefault(prefs->getDouble("/live_effects/measure-line/text_top_bottom", 5.0));
+    helpline_distance.param_updateDefault(prefs->getDouble("/live_effects/measure-line/helpline_distance", 0.0));
+    helpline_overlap.param_updateDefault(prefs->getDouble("/live_effects/measure-line/helpline_overlap", 0.0));
     Glib::ustring unit_value = prefs->getString("/live_effects/measure-line/unit");
     if(unit_value.empty()){
         unit_value = "px";
     }
-    unit.param_update_default(unit_value);
+    unit.param_updateDefault(unit_value);
     Glib::ustring format_value = prefs->getString("/live_effects/measure-line/format");
     if(format_value.empty()){
         format_value = "{measure}{unit}";
     }
-    format.param_update_default(format_value);
-    dimline_format.param_update_default(prefs->getString("/live_effects/measure-line/dimline_format"));
-    helperlines_format.param_update_default(prefs->getString("/live_effects/measure-line/helperlines_format"));
-    anotation_format.param_update_default(prefs->getString("/live_effects/measure-line/anotation_format"));
-    arrows_format.param_update_default(prefs->getString("/live_effects/measure-line/arrows_format"));
-    flip_side.param_update_default(prefs->getBool("/live_effects/measure-line/flip_side"));
-    scale_sensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_sensitive"));
-    local_locale.param_update_default(prefs->getBool("/live_effects/measure-line/local_locale"));
-    line_group_05.param_update_default(prefs->getBool("/live_effects/measure-line/line_group_05"));
-    rotate_anotation.param_update_default(prefs->getBool("/live_effects/measure-line/rotate_anotation"));
-    hide_back.param_update_default(prefs->getBool("/live_effects/measure-line/hide_back"));
+    format.param_updateDefault(format_value);
+    dimline_format.param_updateDefault(prefs->getString("/live_effects/measure-line/dimline_format"));
+    helperlines_format.param_updateDefault(prefs->getString("/live_effects/measure-line/helperlines_format"));
+    anotation_format.param_updateDefault(prefs->getString("/live_effects/measure-line/anotation_format"));
+    arrows_format.param_updateDefault(prefs->getString("/live_effects/measure-line/arrows_format"));
+    flip_side.param_updateDefault(prefs->getBool("/live_effects/measure-line/flip_side"));
+    scale_sensitive.param_updateDefault(prefs->getBool("/live_effects/measure-line/scale_sensitive"));
+    local_locale.param_updateDefault(prefs->getBool("/live_effects/measure-line/local_locale"));
+    line_group_05.param_updateDefault(prefs->getBool("/live_effects/measure-line/line_group_05"));
+    rotate_anotation.param_updateDefault(prefs->getBool("/live_effects/measure-line/rotate_anotation"));
+    hide_back.param_updateDefault(prefs->getBool("/live_effects/measure-line/hide_back"));
     format.param_hide_canvas_text();
     dimline_format.param_hide_canvas_text();
     helperlines_format.param_hide_canvas_text();
     anotation_format.param_hide_canvas_text();
     arrows_format.param_hide_canvas_text();
-    precision.param_set_range(0, 100);
-    precision.param_set_increments(1, 1);
-    precision.param_set_digits(0);
-    precision.param_make_integer(true);
-    curve_linked.param_set_range(0, 999);
-    curve_linked.param_set_increments(1, 1);
-    curve_linked.param_set_digits(0);
-    curve_linked.param_make_integer(true);
-    precision.param_make_integer(true);
-    position.param_set_range(-999999.0, 999999.0);
-    position.param_set_increments(1, 1);
-    position.param_set_digits(2);
-    text_top_bottom.param_set_range(-999999.0, 999999.0);
-    text_top_bottom.param_set_increments(1, 1);
-    text_top_bottom.param_set_digits(2);
-    text_right_left.param_set_range(-999999.0, 999999.0);
-    text_right_left.param_set_increments(1, 1);
-    text_right_left.param_set_digits(2);
-    helpline_distance.param_set_range(-999999.0, 999999.0);
-    helpline_distance.param_set_increments(1, 1);
-    helpline_distance.param_set_digits(2);
-    helpline_overlap.param_set_range(-999999.0, 999999.0);
-    helpline_overlap.param_set_increments(1, 1);
-    helpline_overlap.param_set_digits(2);
+    precision.param_setRange(0, 100);
+    precision.param_setIncrements(1, 1);
+    precision.param_setDigits(0);
+    precision.param_makeInteger(true);
+    curve_linked.param_setRange(0, 999);
+    curve_linked.param_setIncrements(1, 1);
+    curve_linked.param_setDigits(0);
+    curve_linked.param_makeInteger(true);
+    precision.param_makeInteger(true);
+    position.param_setRange(-999999.0, 999999.0);
+    position.param_setIncrements(1, 1);
+    position.param_setDigits(2);
+    text_top_bottom.param_setRange(-999999.0, 999999.0);
+    text_top_bottom.param_setIncrements(1, 1);
+    text_top_bottom.param_setDigits(2);
+    text_right_left.param_setRange(-999999.0, 999999.0);
+    text_right_left.param_setIncrements(1, 1);
+    text_right_left.param_setDigits(2);
+    helpline_distance.param_setRange(-999999.0, 999999.0);
+    helpline_distance.param_setIncrements(1, 1);
+    helpline_distance.param_setDigits(2);
+    helpline_overlap.param_setRange(-999999.0, 999999.0);
+    helpline_overlap.param_setIncrements(1, 1);
+    helpline_overlap.param_setDigits(2);
     start_stored = Geom::Point(0,0);
     end_stored = Geom::Point(0,0);
 }
@@ -501,7 +501,7 @@ LPEMeasureLine::doOnApply(SPLPEItem const* lpeitem)
         item->removeCurrentPathEffect(false);
     }
     id_origin.param_setValue(Glib::ustring(lpeitem->getId()));
-    id_origin.write_to_SVG();
+    id_origin.writeToSVG();
 }
 
 void
@@ -529,8 +529,8 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             format.param_setValue(Glib::ustring("{measure}{unit}"));
         }
         size_t ncurves = pathvector.curveCount();
-        if (ncurves != (size_t)curve_linked.param_get_max()) {
-            curve_linked.param_set_range(0, ncurves);
+        if (ncurves != (size_t)curve_linked.param_getMax()) {
+            curve_linked.param_setRange(0, ncurves);
         }
         Geom::Point start = pathvector.initialPoint();
         Geom::Point end =  pathvector.finalPoint();

@@ -42,7 +42,7 @@ VectorParam::~VectorParam()
 }
 
 void
-VectorParam::param_set_default()
+VectorParam::param_valueFromDefault()
 {
     setOrigin(Geom::Point(0.,0.));
     setVector(defvalue);
@@ -109,12 +109,12 @@ VectorParam::set_and_write_new_values(Geom::Point const &new_origin, Geom::Point
 {
     setValues(new_origin, new_vector);
     gchar * str = param_getSVGValue();
-    param_write_to_repr(str);
+    param_writeToRepr(str);
     g_free(str);
 }
 
 void
-VectorParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+VectorParam::param_transformMultiply(Geom::Affine const& postmul, bool /*set*/)
 {
     set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );
 }

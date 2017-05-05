@@ -21,25 +21,27 @@ namespace LivePathEffect {
 
 BoolParam::BoolParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, bool default_value , bool no_widget)
-    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value), hide_widget(no_widget)
+                      Effect* effect, bool defaultvalue)
+    : Parameter(label, tip, key, wr, effect), value(defaultvalue), defvalue(defaultvalue)
 {
 }
 
-BoolParam::~BoolParam()
+Gtk::Widget *
+BoolParam::param_newWidget()
 {
-}
+    Inkscape::UI::Widget::RegisteredCheckButton * checkwdg = Gtk::manage(
+        new Inkscape::UI::Widget::RegisteredCheckButton( param_label,
+                                                         param_tooltip,
+                                                         param_key,
+                                                         *param_wr,
+                                                         false,
+                                                         param_effect->getRepr(),
+                                                         param_effect->getSPDoc()) );
 
-void
-BoolParam::param_set_default()
-{
-    param_setValue(defvalue);
-}
-
-void 
-BoolParam::param_update_default(bool const default_value)
-{
-    defvalue = default_value;
+    checkwdg->setActive(value);
+    checkwdg->setProgrammatically = false;
+    checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change bool parameter"));
+    return dynamic_cast<Gtk::Widget *> (checkwdg);
 }
 
 bool
@@ -56,26 +58,22 @@ BoolParam::param_getSVGValue() const
     return str;
 }
 
-Gtk::Widget *
-BoolParam::param_newWidget()
+void
+BoolParam::param_valueFromDefault()
 {
-    if(!hide_widget){
-        Inkscape::UI::Widget::RegisteredCheckButton * checkwdg = Gtk::manage(
-            new Inkscape::UI::Widget::RegisteredCheckButton( param_label,
-                                                             param_tooltip,
-                                                             param_key,
-                                                             *param_wr,
-                                                             false,
-                                                             param_effect->getRepr(),
-                                                             param_effect->getSPDoc()) );
+    param_setValue(defvalue);
+}
 
-        checkwdg->setActive(value);
-        checkwdg->setProgrammatically = false;
-        checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change bool parameter"));
-        return dynamic_cast<Gtk::Widget *> (checkwdg);
-    } else {
-        return NULL;
-    }
+void 
+BoolParam::param_updateDefault(bool const defaultvalue)
+{
+    defvalue = defaultvalue;
+}
+
+void
+BoolParam::param_update_default(const gchar * default_value)
+{
+    param_update_default(helperfns_read_bool(default_value, defvalue));
 }
 
 void

@@ -18,7 +18,6 @@ set(live_effects_SRC
 	lpe-extrude.cpp
 	lpe-fill-between-many.cpp
 	lpe-fill-between-strokes.cpp
-	lpe-fillet-chamfer.cpp
 	lpe-gears.cpp
 	lpe-interpolate.cpp
 	lpe-interpolate_points.cpp
@@ -59,7 +58,6 @@ set(live_effects_SRC
 
 	parameter/array.cpp
 	parameter/bool.cpp
-	parameter/filletchamferpointarray.cpp
 	parameter/item-reference.cpp
 	parameter/item.cpp
 	parameter/originalitem.cpp
@@ -71,6 +69,7 @@ set(live_effects_SRC
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
 	parameter/random.cpp
+	parameter/scalar.cpp
 	parameter/text.cpp
 	parameter/fontbutton.cpp
 	parameter/togglebutton.cpp
@@ -101,7 +100,6 @@ set(live_effects_SRC
 	lpe-extrude.h
 	lpe-fill-between-many.h
 	lpe-fill-between-strokes.h
-	lpe-fillet-chamfer.h
 	lpe-gears.h
 	lpe-interpolate.h
 	lpe-interpolate_points.h
@@ -144,7 +142,6 @@ set(live_effects_SRC
 	parameter/array.h
 	parameter/bool.h
 	parameter/enum.h
-	parameter/filletchamferpointarray.h
 	parameter/item.h
 	parameter/item-reference.h
 	parameter/originalitem.h
@@ -156,6 +153,7 @@ set(live_effects_SRC
 	parameter/point.h
 	parameter/powerstrokepointarray.h
 	parameter/random.h
+	parameter/scalar.h
 	parameter/text.h
 	parameter/fontbutton.h
 	parameter/togglebutton.h

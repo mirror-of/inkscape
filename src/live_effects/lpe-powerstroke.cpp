@@ -177,7 +177,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     /// @todo offset_points are initialized with empty path, is that bug-save?
 
     interpolator_beta.addSlider(true);
-    interpolator_beta.param_set_range(0.,1.);
+    interpolator_beta.param_setRange(0.,1.);
 
     registerParameter(&offset_points);
     registerParameter(&sort_points);
@@ -247,7 +247,7 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
                 points.push_back( Geom::Point(size - 0.2,width) );
             }
         }
-        offset_points.param_set_and_write_new_value(points);
+        offset_points.param_setAndWriteNewValue(points);
     } else {
         g_warning("LPE Powerstroke can only be applied to shapes (not groups).");
     }

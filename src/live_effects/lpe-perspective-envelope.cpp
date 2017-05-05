@@ -484,19 +484,19 @@ LPEPerspectiveEnvelope::setDefaults()
     Geom::Point down_left(boundingbox_X.min(), boundingbox_Y.max());
     Geom::Point down_right(boundingbox_X.max(), boundingbox_Y.max());
 
-    up_left_point.param_update_default(up_left);
-    up_right_point.param_update_default(up_right);
-    down_right_point.param_update_default(down_right);
-    down_left_point.param_update_default(down_left);
+    up_left_point.param_updateDefault(up_left);
+    up_right_point.param_updateDefault(up_right);
+    down_right_point.param_updateDefault(down_right);
+    down_left_point.param_updateDefault(down_left);
 }
 
 void
 LPEPerspectiveEnvelope::resetGrid()
 {
-    up_left_point.param_set_default();
-    up_right_point.param_set_default();
-    down_right_point.param_set_default();
-    down_left_point.param_set_default();
+    up_left_point.param_valueFromDefault();
+    up_right_point.param_valueFromDefault();
+    down_right_point.param_valueFromDefault();
+    down_left_point.param_valueFromDefault();
 }
 
 void

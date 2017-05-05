@@ -30,7 +30,7 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               bool default_value = false,
+               bool defaultvalue = false,
                const Glib::ustring& inactive_label = "",
                char const * icon_active = NULL,
                char const * icon_inactive = NULL,
@@ -43,7 +43,7 @@ public:
     virtual gchar * param_getSVGValue() const;
 
     void param_setValue(bool newvalue);
-    virtual void param_set_default();
+    virtual void param_valueFromDefault();
 
     bool get_value() const { return value; };
 

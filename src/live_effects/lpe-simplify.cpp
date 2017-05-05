@@ -35,21 +35,21 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
     registerParameter(&simplify_individual_paths);
     registerParameter(&simplify_just_coalesce);
 
-    threshold.param_set_range(0.0001, Geom::infinity());
-    threshold.param_set_increments(0.0001, 0.0001);
-    threshold.param_set_digits(6);
+    threshold.param_setRange(0.0001, Geom::infinity());
+    threshold.param_setIncrements(0.0001, 0.0001);
+    threshold.param_setDigits(6);
 
-    steps.param_set_range(0, 100);
-    steps.param_set_increments(1, 1);
-    steps.param_set_digits(0);
+    steps.param_setRange(0, 100);
+    steps.param_setIncrements(1, 1);
+    steps.param_setDigits(0);
 
-    smooth_angles.param_set_range(0.0, 360.0);
-    smooth_angles.param_set_increments(10, 10);
-    smooth_angles.param_set_digits(2);
+    smooth_angles.param_setRange(0.0, 360.0);
+    smooth_angles.param_setIncrements(10, 10);
+    smooth_angles.param_setDigits(2);
 
-    helper_size.param_set_range(0.0, 999.0);
-    helper_size.param_set_increments(5, 5);
-    helper_size.param_set_digits(2);
+    helper_size.param_setRange(0.0, 999.0);
+    helper_size.param_setIncrements(5, 5);
+    helper_size.param_setDigits(2);
 
     radius_helper_nodes = 6.0;
     apply_to_clippath_and_mask = true;

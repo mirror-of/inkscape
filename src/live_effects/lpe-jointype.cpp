@@ -65,12 +65,12 @@ LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
     //registerParameter(&end_lean);
     registerParameter(&miter_limit);
     registerParameter(&attempt_force_join);
-    //start_lean.param_set_range(-1,1);
-    //start_lean.param_set_increments(0.1, 0.1);
-    //start_lean.param_set_digits(4);
-    //end_lean.param_set_range(-1,1);
-    //end_lean.param_set_increments(0.1, 0.1);
-    //end_lean.param_set_digits(4);
+    //start_lean.param_setRange(-1,1);
+    //start_lean.param_setIncrements(0.1, 0.1);
+    //start_lean.param_setDigits(4);
+    //end_lean.param_setRange(-1,1);
+    //end_lean.param_setIncrements(0.1, 0.1);
+    //end_lean.param_setDigits(4);
 }
 
 LPEJoinType::~LPEJoinType()
@@ -110,8 +110,8 @@ void LPEJoinType::doOnApply(SPLPEItem const* lpeitem)
         sp_desktop_apply_css_recursive(item, css, true);
         sp_repr_css_attr_unref (css);
 
-        line_width.param_set_value(width);
-        line_width.write_to_SVG();
+        line_width.param_setValue(width);
+        line_width.writeToSVG();
     }
 }
 

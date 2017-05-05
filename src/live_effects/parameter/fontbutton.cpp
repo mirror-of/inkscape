@@ -21,21 +21,27 @@ namespace LivePathEffect {
 
 FontButtonParam::FontButtonParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const Glib::ustring default_value )
+                      Effect* effect, const Glib::ustring defaultvalue )
     : Parameter(label, tip, key, wr, effect),
-      value(default_value),
-      defvalue(default_value)
+      value(defaultvalue),
+      defvalue(defaultvalue)
 {
 }
 
-void
-FontButtonParam::param_set_default()
+Gtk::Widget *
+FontButtonParam::param_newWidget()
 {
-    param_setValue(defvalue);
-}
-void 
-FontButtonParam::param_update_default(const Glib::ustring default_value){
-    defvalue = default_value;
+    Inkscape::UI::Widget::RegisteredFontButton * fontbuttonwdg = Gtk::manage(
+        new Inkscape::UI::Widget::RegisteredFontButton( param_label,
+                                                        param_tooltip,
+                                                        param_key,
+                                                        *param_wr,
+                                                        param_effect->getRepr(),
+                                                        param_effect->getSPDoc() ) );
+    Glib::ustring fontspec = param_getSVGValue();
+    fontbuttonwdg->setValue( fontspec);
+    fontbuttonwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font button parameter"));
+    return dynamic_cast<Gtk::Widget *> (fontbuttonwdg);
 }
 
 bool
@@ -53,20 +59,18 @@ FontButtonParam::param_getSVGValue() const
     return g_strdup(value.c_str());
 }
 
-Gtk::Widget *
-FontButtonParam::param_newWidget()
+void
+FontButtonParam::param_valueFromDefault( bool write )
 {
-    Inkscape::UI::Widget::RegisteredFontButton * fontbuttonwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredFontButton( param_label,
-                                                        param_tooltip,
-                                                        param_key,
-                                                        *param_wr,
-                                                        param_effect->getRepr(),
-                                                        param_effect->getSPDoc() ) );
-    Glib::ustring fontspec = param_getSVGValue();
-    fontbuttonwdg->setValue( fontspec);
-    fontbuttonwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font button parameter"));
-    return dynamic_cast<Gtk::Widget *> (fontbuttonwdg);
+    param_setValue(defvalue);
+    if (write) {
+        param_writeToRepr(defvalue);
+    }
+}
+
+void 
+FontButtonParam::param_updateDefault(const Glib::ustring defaultvalue){
+    defvalue = defaultvalue;
 }
 
 void

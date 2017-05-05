@@ -53,7 +53,7 @@ public:
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
         gchar ** iter = strarray;
         while (*iter != NULL) {
-            _vector.push_back( readsvg(*iter) );
+            _vector.push_back( readSVG(*iter) );
             iter++;
         }
         g_strfreev (strarray);
@@ -62,7 +62,7 @@ public:
 
     virtual gchar * param_getSVGValue() const {
         Inkscape::SVGOStringStream os;
-        writesvg(os, _vector);
+        writeSVG(os, _vector);
         gchar * str = g_strdup(os.str().c_str());
         return str;
     }
@@ -71,15 +71,15 @@ public:
         _vector = new_vector;
     }
 
-    void param_set_default() {
+    void param_valueFromDefault() {
         param_setValue( std::vector<StorageType>(_default_size) );
     }
 
-    void param_set_and_write_new_value(std::vector<StorageType> const &new_vector) {
+    void param_setAndWriteNewValue(std::vector<StorageType> const &new_vector) {
         Inkscape::SVGOStringStream os;
-        writesvg(os, new_vector);
+        writeSVG(os, new_vector);
         gchar * str = g_strdup(os.str().c_str());
-        param_write_to_repr(str);
+        param_writeToRepr(str);
         g_free(str);
     }
 
@@ -87,7 +87,7 @@ protected:
     std::vector<StorageType> _vector;
     size_t _default_size;
 
-    void writesvg(SVGOStringStream &str, std::vector<StorageType> const &vector) const {
+    void writeSVG(SVGOStringStream &str, std::vector<StorageType> const &vector) const {
         for (unsigned int i = 0; i < vector.size(); ++i) {
             if (i != 0) {
                 // separate items with pipe symbol
@@ -97,7 +97,7 @@ protected:
         }
     }
 
-    StorageType readsvg(const gchar * str);
+    StorageType readSVG(const gchar * str);
 
 private:
     ArrayParam(const ArrayParam&);

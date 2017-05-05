@@ -25,19 +25,19 @@ public:
                 const Glib::ustring& key, 
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                gdouble default_value = 1.0,
+                gdouble defaultvalue = 1.0,
                 long default_seed = 0);
     virtual ~RandomParam();
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
-    virtual void param_set_default();
+    virtual void param_valueFromDefault();
 
     virtual Gtk::Widget * param_newWidget();
 
-    void param_set_value(gdouble val, long newseed);
-    void param_make_integer(bool yes = true);
-    void param_set_range(gdouble min, gdouble max);
+    void param_setValue(gdouble val, long newseed);
+    void param_makeInteger(bool yes = true);
+    void param_setRange(gdouble min, gdouble max);
 
     void resetRandomizer();
 

@@ -28,15 +28,13 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                const gchar * default_value = "");
+                const gchar * defaultvalue = "");
     virtual ~ItemParam();
     virtual Gtk::Widget * param_newWidget();
-
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-
-    virtual void param_set_default();
-    void param_set_and_write_default();
+    virtual bool      param_readSVGValue(const gchar * strvalue);
+    virtual gchar *   param_getSVGValue() const;
+    virtual void      param_valueFromDefault( bool write );
+    
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
     sigc::signal <void> signal_item_pasted;

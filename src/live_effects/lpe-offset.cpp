@@ -38,7 +38,7 @@ void
 LPEOffset::doOnApply(SPLPEItem const* lpeitem)
 {
     Geom::Point offset = *(SP_SHAPE(lpeitem)->_curve->first_point());
-    offset_pt.param_update_default(offset);
+    offset_pt.param_updateDefault(offset);
     offset_pt.param_setValue(offset,true);
 }
 

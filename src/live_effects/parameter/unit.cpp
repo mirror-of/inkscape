@@ -36,7 +36,7 @@ bool
 UnitParam::param_readSVGValue(const gchar * strvalue)
 {
     if (strvalue) {
-        param_set_value(*unit_table.getUnit(strvalue));
+        param_setValue(*unit_table.getUnit(strvalue));
         return true;
     }
     return false;
@@ -49,19 +49,19 @@ UnitParam::param_getSVGValue() const
 }
 
 void
-UnitParam::param_set_default()
+UnitParam::param_valueFromDefault()
 {
-    param_set_value(*defunit);
+    param_setValue(*defunit);
 }
 
 void 
-UnitParam::param_update_default(const Glib::ustring default_unit)
+UnitParam::param_updateDefault(const Glib::ustring default_unit)
 {
     defunit = unit_table.getUnit(default_unit);
 }
 
 void
-UnitParam::param_set_value(Inkscape::Util::Unit const &val)
+UnitParam::param_setValue(Inkscape::Util::Unit const &val)
 {
     unit = new Inkscape::Util::Unit(val);
 }

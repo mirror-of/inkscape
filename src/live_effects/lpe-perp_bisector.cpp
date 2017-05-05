@@ -67,10 +67,10 @@ KnotHolderEntityEnd::bisector_end_set(Geom::Point const &p, guint state, bool le
     double lambda = Geom::nearest_time(s, lpe->M, lpe->perp_dir);
     if (left) {
         lpe->C = lpe->M + lpe->perp_dir * lambda;
-        lpe->length_left.param_set_value(lambda);
+        lpe->length_left.param_setValue(lambda);
     } else {
         lpe->D = lpe->M + lpe->perp_dir * lambda;
-        lpe->length_right.param_set_value(-lambda);
+        lpe->length_right.param_setValue(-lambda);
     }
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.

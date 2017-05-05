@@ -73,9 +73,9 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter(&center_point);
     registerParameter(&id_origin);
     id_origin.param_hide_canvas_text();
-    split_gap.param_set_range(-999999.0, 999999.0);
-    split_gap.param_set_increments(0.1, 0.1);
-    split_gap.param_set_digits(5);
+    split_gap.param_setRange(-999999.0, 999999.0);
+    split_gap.param_setIncrements(0.1, 0.1);
+    split_gap.param_setDigits(5);
     apply_to_clippath_and_mask = true;
     previous_center = Geom::Point(0,0);
 }
@@ -114,7 +114,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 
     using namespace Geom;
     original_bbox(lpeitem);
-    //center_point->param_set_liveupdate(false);
+    //center_point->param_setLiveupdate(false);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     if (mode == MT_Y) {
@@ -362,7 +362,7 @@ LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
     for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
         Parameter * param = *it;
-        param->param_transform_multiply(postmul, set);
+        param->param_transformMultiply(postmul, set);
     }
     previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
 }
@@ -378,15 +378,15 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
     start_point.param_setValue(point_a);
-    start_point.param_update_default(point_a);
+    start_point.param_updateDefault(point_a);
     end_point.param_setValue(point_b);
-    end_point.param_update_default(point_b);
+    end_point.param_updateDefault(point_b);
     center_point.param_setValue(point_c, true);
     previous_center = center_point;
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     if (!lpeitem->hasPathEffectOfType(this->effectType(), false) ){ //first applied not ready yet
         id_origin.param_setValue(lpeitem->getRepr()->attribute("id"));
-        id_origin.write_to_SVG();
+        id_origin.writeToSVG();
     }
 }
 

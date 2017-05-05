@@ -62,8 +62,8 @@ LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     registerParameter( &scale_y_rel);
     registerParameter( &vertical_pattern);
 
-    prop_scale.param_set_digits(3);
-    prop_scale.param_set_increments(0.01, 0.10);
+    prop_scale.param_setDigits(3);
+    prop_scale.param_setIncrements(0.01, 0.10);
 
     _provides_knotholder_entities = true;
     apply_to_clippath_and_mask = true;
@@ -185,9 +185,9 @@ KnotHolderEntityWidthBendPath::knot_set(Geom::Point const &p, Geom::Point const&
     Geom::Point knot_pos = this->knot->pos * item->i2dt_affine().inverse();
     Geom::Coord nearest_to_ray = ray.nearestTime(knot_pos);
     if(nearest_to_ray == 0){
-        lpe->prop_scale.param_set_value(-Geom::distance(s , ptA)/(lpe->original_height/2.0));
+        lpe->prop_scale.param_setValue(-Geom::distance(s , ptA)/(lpe->original_height/2.0));
     } else {
-        lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
+        lpe->prop_scale.param_setValue(Geom::distance(s , ptA)/(lpe->original_height/2.0));
     }
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);

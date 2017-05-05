@@ -42,7 +42,7 @@ TransformedPointParam::~TransformedPointParam()
 }
 
 void
-TransformedPointParam::param_set_default()
+TransformedPointParam::param_valueFromDefault()
 {
     setOrigin(Geom::Point(0.,0.));
     setVector(defvalue);
@@ -109,12 +109,12 @@ TransformedPointParam::set_and_write_new_values(Geom::Point const &new_origin, G
 {
     setValues(new_origin, new_vector);
     gchar * str = param_getSVGValue();
-    param_write_to_repr(str);
+    param_writeToRepr(str);
     g_free(str);
 }
 
 void
-TransformedPointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+TransformedPointParam::param_transformMultiply(Geom::Affine const& postmul, bool /*set*/)
 {
     if (!noTransform) {
         set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );

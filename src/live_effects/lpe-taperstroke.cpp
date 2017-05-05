@@ -74,8 +74,8 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     show_orig_path = true;
     _provides_knotholder_entities = true;
 
-    attach_start.param_set_digits(3);
-    attach_end.param_set_digits(3);
+    attach_start.param_setDigits(3);
+    attach_end.param_setDigits(3);
 
     registerParameter(&line_width);
     registerParameter(&attach_start);
@@ -118,8 +118,8 @@ void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
         sp_desktop_apply_css_recursive(item, css, true);
         sp_repr_css_attr_unref (css);
 
-        line_width.param_set_value(width);
-        line_width.write_to_SVG();
+        line_width.param_setValue(width);
+        line_width.writeToSVG();
     } else {
         printf("WARNING: It only makes sense to apply Taper stroke to paths (not groups).\n");
     }
@@ -201,7 +201,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         // check to see if the knots were dragged over each other
         // if so, reset the end offset, but still allow the start offset.
         if ( attach_start >= (size - attach_end) ) {
-            attach_end.param_set_value( size - attach_start );
+            attach_end.param_setValue( size - attach_start );
             metInMiddle = true;
         }
     }
@@ -216,10 +216,10 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     // don't let it be integer (TODO this is stupid!)
     {
         if (double(unsigned(attach_start)) == attach_start) {
-            attach_start.param_set_value(attach_start - 0.00001);
+            attach_start.param_setValue(attach_start - 0.00001);
         }
         if (double(unsigned(attach_end)) == attach_end) {
-            attach_end.param_set_value(attach_end -     0.00001);
+            attach_end.param_setValue(attach_end -     0.00001);
         }
     }
 
@@ -229,20 +229,20 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     // don't let the knots be farther than they are allowed to be
     {
         if ((unsigned)attach_start >= allowed_start) {
-            attach_start.param_set_value((double)allowed_start - 0.00001);
+            attach_start.param_setValue((double)allowed_start - 0.00001);
         }
         if ((unsigned)attach_end >= allowed_end) {
-            attach_end.param_set_value((double)allowed_end - 0.00001);
+            attach_end.param_setValue((double)allowed_end - 0.00001);
         }
     }
     
     // don't let it be zero (this is stupid too!)
     if (attach_start < 0.0000001 || withinRange(double(attach_start), 0.00000001, 0.000001)) {
-        attach_start.param_set_value( 0.0000001 );
+        attach_start.param_setValue( 0.0000001 );
         zeroStart = true;
     }
     if (attach_end < 0.0000001 || withinRange(double(attach_end), 0.00000001, 0.000001)) {
-        attach_end.param_set_value( 0.0000001 );
+        attach_end.param_setValue( 0.0000001 );
         zeroEnd = true;
     }
 
@@ -476,7 +476,7 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
     pwd2.concat(p_in.toPwSb());
 
     double t0 = nearest_time(s, pwd2);
-    lpe->attach_start.param_set_value(t0);
+    lpe->attach_start.param_setValue(t0);
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, true);
@@ -504,7 +504,7 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
     Piecewise<D2<SBasis> > pwd2 = p_in.toPwSb();
     
     double t0 = nearest_time(s, pwd2);
-    lpe->attach_end.param_set_value(t0);
+    lpe->attach_end.param_setValue(t0);
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }

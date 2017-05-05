@@ -24,10 +24,10 @@ namespace LivePathEffect {
 
 ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, bool default_value, const Glib::ustring& inactive_label,
+                      Effect* effect, bool defaultvalue, const Glib::ustring& inactive_label,
                       char const * _icon_active, char const * _icon_inactive, 
                       Inkscape::IconSize _icon_size)
-    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value),
+    : Parameter(label, tip, key, wr, effect), value(defaultvalue), defvalue(defaultvalue),
       inactive_label(inactive_label), _icon_active(_icon_active), _icon_inactive(_icon_inactive), _icon_size(_icon_size)
 {
     checkwdg = NULL;
@@ -41,7 +41,7 @@ ToggleButtonParam::~ToggleButtonParam()
 }
 
 void
-ToggleButtonParam::param_set_default()
+ToggleButtonParam::param_valueFromDefault()
 {
     param_setValue(defvalue);
 }

@@ -47,7 +47,7 @@ public:
   CrossingPoints(std::vector<double> const &input);
   std::vector<double> to_vector();
   CrossingPoint get(unsigned const i, unsigned const ni);
-  void inherit_signs(CrossingPoints const &from_other, int default_value = 1);
+  void inherit_signs(CrossingPoints const &from_other, int defaultvalue = 1);
 };
 } 
 

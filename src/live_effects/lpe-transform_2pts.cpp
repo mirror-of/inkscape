@@ -63,19 +63,19 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     registerParameter(&lock_lenght);
     registerParameter(&lock_angle);
 
-    first_knot.param_make_integer(true);
-    first_knot.param_overwrite_widget(true);
-    last_knot.param_make_integer(true);
-    last_knot.param_overwrite_widget(true);
-    helper_size.param_set_range(0, 999);
-    helper_size.param_set_increments(1, 1);
-    helper_size.param_set_digits(0);
-    offset.param_set_range(-999999.0, 999999.0);
-    offset.param_set_increments(1, 1);
-    offset.param_set_digits(2);
-    stretch.param_set_range(0, 999.0);
-    stretch.param_set_increments(0.01, 0.01);
-    stretch.param_set_digits(4);
+    first_knot.param_makeInteger(true);
+    first_knot.param_overwriteWidget(true);
+    last_knot.param_makeInteger(true);
+    last_knot.param_overwriteWidget(true);
+    helper_size.param_setRange(0, 999);
+    helper_size.param_setIncrements(1, 1);
+    helper_size.param_setDigits(0);
+    offset.param_setRange(-999999.0, 999999.0);
+    offset.param_setIncrements(1, 1);
+    offset.param_setDigits(2);
+    stretch.param_setRange(0, 999.0);
+    stretch.param_setIncrements(0.01, 0.01);
+    stretch.param_setDigits(4);
     apply_to_clippath_and_mask = true;
 }
 
@@ -102,16 +102,16 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
             point_b = pathvector.back().finalCurve().initialPoint();
         }
         size_t nnodes = nodeCount(pathvector);
-        last_knot.param_set_value(nnodes);
+        last_knot.param_setValue(nnodes);
     }
 
     previous_lenght = Geom::distance(point_a,point_b);
     Geom::Ray transformed(point_a,point_b);
     previous_angle = transformed.angle();
-    start.param_update_default(point_a);
-    start.param_set_default();
-    end.param_update_default(point_b);
-    end.param_set_default();
+    start.param_updateDefault(point_a);
+    start.param_valueFromDefault();
+    end.param_updateDefault(point_b);
+    end.param_valueFromDefault();
 }
 
 void
@@ -136,14 +136,14 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
         point_a = pointAtNodeIndex(pathvector,(size_t)first_knot-1);
         point_b = pointAtNodeIndex(pathvector,(size_t)last_knot-1);
         size_t nnodes = nodeCount(pathvector);
-        first_knot.param_set_range(1, last_knot-1);
-        last_knot.param_set_range(first_knot+1, nnodes);
+        first_knot.param_setRange(1, last_knot-1);
+        last_knot.param_setRange(first_knot+1, nnodes);
         from_original_width.param_setValue(false);
     } else {
-        first_knot.param_set_value(1);
-        last_knot.param_set_value(2);
-        first_knot.param_set_range(1,1);
-        last_knot.param_set_range(2,2);
+        first_knot.param_setValue(1);
+        last_knot.param_setValue(2);
+        first_knot.param_setRange(1,1);
+        last_knot.param_setRange(2,2);
         from_original_width.param_setValue(true);
         append_path = false;
     }
@@ -181,14 +181,14 @@ LPETransform2Pts::updateIndex()
     if(!from_original_width) {
         point_a = pointAtNodeIndex(pathvector,(size_t)first_knot-1);
         point_b = pointAtNodeIndex(pathvector,(size_t)last_knot-1);
-        start.param_update_default(point_a);
-        start.param_set_default();
-        end.param_update_default(point_b);
-        end.param_set_default();
-        start.param_update_default(point_a);
-        end.param_update_default(point_b);
-        start.param_set_default();
-        end.param_set_default();
+        start.param_updateDefault(point_a);
+        start.param_valueFromDefault();
+        end.param_updateDefault(point_b);
+        end.param_valueFromDefault();
+        start.param_updateDefault(point_a);
+        end.param_updateDefault(point_b);
+        start.param_valueFromDefault();
+        end.param_valueFromDefault();
     }
     DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change index of knot"));
 }
@@ -241,23 +241,23 @@ LPETransform2Pts::reset()
     point_b = Geom::Point(boundingbox_X.max(), boundingbox_Y.middle());
     if(!pathvector.empty() && !from_original_width) {
         size_t nnodes = nodeCount(pathvector);
-        first_knot.param_set_range(1, last_knot-1);
-        last_knot.param_set_range(first_knot+1, nnodes);
-        first_knot.param_set_value(1);
-        last_knot.param_set_value(nnodes);
+        first_knot.param_setRange(1, last_knot-1);
+        last_knot.param_setRange(first_knot+1, nnodes);
+        first_knot.param_setValue(1);
+        last_knot.param_setValue(nnodes);
         point_a = pathvector.initialPoint();
         point_b = pathvector.finalPoint();
     } else {
-        first_knot.param_set_value(1);
-        last_knot.param_set_value(2);
+        first_knot.param_setValue(1);
+        last_knot.param_setValue(2);
     }
     Geom::Ray transformed(point_a, point_b);
     previous_angle = transformed.angle();
     previous_lenght = Geom::distance(point_a, point_b);
-    start.param_update_default(point_a);
-    end.param_update_default(point_b);
-    start.param_set_default();
-    end.param_set_default();
+    start.param_updateDefault(point_a);
+    end.param_updateDefault(point_b);
+    start.param_valueFromDefault();
+    end.param_valueFromDefault();
 }
 
 Gtk::Widget *LPETransform2Pts::newWidget()

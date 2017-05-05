@@ -21,19 +21,16 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               const Glib::ustring default_value = "");
+               const Glib::ustring defaultvalue = "Sans 10");
     virtual ~FontButtonParam() {}
 
-    virtual Gtk::Widget * param_newWidget();
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    void param_update_default(const Glib::ustring defvalue);
-    virtual gchar * param_getSVGValue() const;
-
-    void param_setValue(const Glib::ustring newvalue);
-    
-    virtual void param_set_default();
-
-    const Glib::ustring get_value() const { return defvalue; };
+    virtual Gtk::Widget *    param_newWidget();
+    virtual bool             param_readSVGValue(const gchar * strvalue);
+    virtual gchar *          param_getSVGValue() const;
+    virtual void             param_valueFromDefault();
+    virtual void             param_updateDefault(const gchar * default_value);
+    void                     param_setValue(Glib::ustring newvalue);
+    const Glib::ustring      param_getValue() const { return value; };
 
 private:
     FontButtonParam(const FontButtonParam&);

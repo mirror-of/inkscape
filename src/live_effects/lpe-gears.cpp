@@ -216,9 +216,9 @@ LPEGears::LPEGears(LivePathEffectObject *lpeobject) :
      * allows the teeth to have higher capacity and also allows fewer teeth without undercutting.
      */
 
-    teeth.param_make_integer();
-    teeth.param_set_range(3, 1e10);
-    min_radius.param_set_range(0.01, 9999.0);
+    teeth.param_makeInteger();
+    teeth.param_setRange(3, 1e10);
+    min_radius.param_setRange(0.01, 9999.0);
     registerParameter(&teeth);
     registerParameter(&phi);
     registerParameter(&min_radius);

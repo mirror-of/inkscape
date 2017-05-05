@@ -24,10 +24,10 @@ namespace LivePathEffect {
 
 RandomParam::RandomParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, gdouble default_value, long default_seed)
+                      Effect* effect, gdouble defaultvalue, long default_seed)
     : Parameter(label, tip, key, wr, effect)
 {
-    defvalue = default_value;
+    defvalue = defaultvalue;
     value = defvalue;
     min = -Geom::infinity();
     max = Geom::infinity();
@@ -51,9 +51,9 @@ RandomParam::param_readSVGValue(const gchar * strvalue)
     if (success == 1) {
         success += sp_svg_number_read_d(stringarray[1], &newstartseed);
         if (success == 2) {
-            param_set_value(newval, static_cast<long>(newstartseed));
+            param_setValue(newval, static_cast<long>(newstartseed));
         } else {
-            param_set_value(newval, defseed);
+            param_setValue(newval, defseed);
         }
         g_strfreev(stringarray);
         return true;
@@ -72,13 +72,13 @@ RandomParam::param_getSVGValue() const
 }
 
 void
-RandomParam::param_set_default()
+RandomParam::param_valueFromDefault()
 {
-    param_set_value(defvalue, defseed);
+    param_setValue(defvalue, defseed);
 }
 
 void
-RandomParam::param_set_value(gdouble val, long newseed)
+RandomParam::param_setValue(gdouble val, long newseed)
 {
     value = val;
     if (integer)
@@ -93,14 +93,14 @@ RandomParam::param_set_value(gdouble val, long newseed)
 }
 
 void
-RandomParam::param_set_range(gdouble min, gdouble max)
+RandomParam::param_setRange(gdouble min, gdouble max)
 {
     this->min = min;
     this->max = max;
 }
 
 void
-RandomParam::param_make_integer(bool yes)
+RandomParam::param_makeInteger(bool yes)
 {
     integer = yes;
 }

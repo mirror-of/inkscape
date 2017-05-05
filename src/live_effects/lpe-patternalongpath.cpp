@@ -95,8 +95,8 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     registerParameter(&prop_units);
     registerParameter(&vertical_pattern);
     registerParameter(&fuse_tolerance);
-    prop_scale.param_set_digits(3);
-    prop_scale.param_set_increments(0.01, 0.10);
+    prop_scale.param_setDigits(3);
+    prop_scale.param_setIncrements(0.01, 0.10);
 
     _provides_knotholder_entities = true;
 
@@ -157,9 +157,9 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
         }
         //TODO: dynamical update of parameter ranges?
         //if (prop_units.get_value()){
-        //        spacing.param_set_range(-.9, Geom::infinity());
+        //        spacing.param_setRange(-.9, Geom::infinity());
         //    }else{
-        //        spacing.param_set_range(-pattBndsX.extent()*.9, Geom::infinity());
+        //        spacing.param_setRange(-pattBndsX.extent()*.9, Geom::infinity());
         //    }
 
         y0 += noffset;
@@ -260,12 +260,12 @@ LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
     if (transform_stroke && !scale_y_rel) {
-        prop_scale.param_set_value(prop_scale * ((postmul.expansionX() + postmul.expansionY()) / 2));
-        prop_scale.write_to_SVG();
+        prop_scale.param_setValue(prop_scale * ((postmul.expansionX() + postmul.expansionY()) / 2));
+        prop_scale.writeToSVG();
     }
     if (postmul.isTranslation()) {
-        pattern.param_transform_multiply(postmul, set);
-        pattern.write_to_SVG();
+        pattern.param_transformMultiply(postmul, set);
+        pattern.writeToSVG();
     }
 }
 
@@ -307,9 +307,9 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
         Geom::Point knot_pos = this->knot->pos * item->i2dt_affine().inverse();
         Geom::Coord nearest_to_ray = ray.nearestTime(knot_pos);
         if(nearest_to_ray == 0){
-            lpe->prop_scale.param_set_value(-Geom::distance(s , ptA)/(lpe->original_height/2.0));
+            lpe->prop_scale.param_setValue(-Geom::distance(s , ptA)/(lpe->original_height/2.0));
         } else {
-            lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
+            lpe->prop_scale.param_setValue(Geom::distance(s , ptA)/(lpe->original_height/2.0));
         }
         
     }

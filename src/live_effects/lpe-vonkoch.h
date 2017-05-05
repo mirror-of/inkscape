@@ -25,9 +25,9 @@ public:
 		       const Glib::ustring& key,
 		       Inkscape::UI::Widget::Registry* wr,
 		       Effect* effect,
-		       const gchar * default_value = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,default_value){}
+		       const gchar * defaultvalue = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,defaultvalue){}
     virtual ~VonKochPathParam(){}
-    virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);  
+    virtual void param_setupNodepath(Inkscape::NodePath::Path *np);  
   };
 
   //FIXME: a path is used here instead of 2 points to work around path/point param incompatibility bug.
@@ -38,9 +38,9 @@ public:
 		       const Glib::ustring& key,
 		       Inkscape::UI::Widget::Registry* wr,
 		       Effect* effect,
-		       const gchar * default_value = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,default_value){}
+		       const gchar * defaultvalue = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,defaultvalue){}
     virtual ~VonKochRefPathParam(){}
-    virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);  
+    virtual void param_setupNodepath(Inkscape::NodePath::Path *np);  
     virtual bool param_readSVGValue(const gchar * strvalue);  
   };
  

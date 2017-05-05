@@ -84,28 +84,28 @@ LPESketch::LPESketch(LivePathEffectObject *lpeobject) :
 #endif
 #endif
 
-    nbiter_approxstrokes.param_make_integer();
-    nbiter_approxstrokes.param_set_range(0, Geom::infinity());
-    strokelength.param_set_range(1, Geom::infinity());
-    strokelength.param_set_increments(1., 5.);
-    strokelength_rdm.param_set_range(0, 1.);
-    strokeoverlap.param_set_range(0, 1.);
-    strokeoverlap.param_set_increments(0.1, 0.30);
-    ends_tolerance.param_set_range(0., 1.);
-    parallel_offset.param_set_range(0, Geom::infinity());
-    tremble_frequency.param_set_range(0.01, 100.);
-    tremble_frequency.param_set_increments(.5, 1.5);
-    strokeoverlap_rdm.param_set_range(0, 1.);
+    nbiter_approxstrokes.param_makeInteger();
+    nbiter_approxstrokes.param_setRange(0, Geom::infinity());
+    strokelength.param_setRange(1, Geom::infinity());
+    strokelength.param_setIncrements(1., 5.);
+    strokelength_rdm.param_setRange(0, 1.);
+    strokeoverlap.param_setRange(0, 1.);
+    strokeoverlap.param_setIncrements(0.1, 0.30);
+    ends_tolerance.param_setRange(0., 1.);
+    parallel_offset.param_setRange(0, Geom::infinity());
+    tremble_frequency.param_setRange(0.01, 100.);
+    tremble_frequency.param_setIncrements(.5, 1.5);
+    strokeoverlap_rdm.param_setRange(0, 1.);
 
 #ifdef LPE_SKETCH_USE_CONSTRUCTION_LINES
-    nbtangents.param_make_integer();
-    nbtangents.param_set_range(0, Geom::infinity());
-    tgtscale.param_set_range(0, Geom::infinity());
-    tgtscale.param_set_increments(.1, .5);
-    tgtlength.param_set_range(0, Geom::infinity());
-    tgtlength.param_set_increments(1., 5.);
-    tgtlength_rdm.param_set_range(0, 1.);
-    tgt_places_rdmness.param_set_range(0, 1.);
+    nbtangents.param_makeInteger();
+    nbtangents.param_setRange(0, Geom::infinity());
+    tgtscale.param_setRange(0, Geom::infinity());
+    tgtscale.param_setIncrements(.1, .5);
+    tgtlength.param_setRange(0, Geom::infinity());
+    tgtlength.param_setIncrements(1., 5.);
+    tgtlength_rdm.param_setRange(0, 1.);
+    tgt_places_rdmness.param_setRange(0, 1.);
     //this is not very smart, but required to avoid having lot of tangents stacked on short components.
     //Nota: we could specify a density instead of an absolute number, but this would be scale dependant.
     concatenate_before_pwd2 = true;

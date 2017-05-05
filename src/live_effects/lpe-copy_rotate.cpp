@@ -87,11 +87,11 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&mirror_copies);
     registerParameter(&split_items);
 
-    gap.param_set_range(-99999.0, 99999.0);
-    gap.param_set_increments(0.1, 0.1);
-    gap.param_set_digits(5);
-    num_copies.param_set_range(1, 999999);
-    num_copies.param_make_integer(true);
+    gap.param_setRange(-99999.0, 99999.0);
+    gap.param_setIncrements(0.1, 0.1);
+    gap.param_setDigits(5);
+    num_copies.param_setRange(1, 999999);
+    num_copies.param_makeInteger(true);
     apply_to_clippath_and_mask = true;
     previous_num_copies = num_copies;
     reset = false;
@@ -340,7 +340,7 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
     origin.param_setValue(A, true);
-    origin.param_update_default(A);
+    origin.param_updateDefault(A);
     dist_angle_handle = L2(B - A);
     dir = unit_vector(B - A);
 }
@@ -351,7 +351,7 @@ LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
     for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
         Parameter * param = *it;
-        param->param_transform_multiply(postmul, set);
+        param->param_transformMultiply(postmul, set);
     }
     sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
 }
@@ -362,20 +362,20 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     using namespace Geom;
     original_bbox(lpeitem);
     if (copies_to_360 && num_copies > 2) {
-        rotation_angle.param_set_value(360.0/(double)num_copies);
+        rotation_angle.param_setValue(360.0/(double)num_copies);
     }
 
     if ((method == RM_KALEIDOSCOPE || method == RM_FUSE) && rotation_angle * num_copies > 360.1 && rotation_angle > 0) {
-        num_copies.param_set_value(floor(360/rotation_angle));
+        num_copies.param_setValue(floor(360/rotation_angle));
     }
     if ((method == RM_KALEIDOSCOPE || method == RM_FUSE)  && mirror_copies && copies_to_360) {
-        num_copies.param_set_increments(2.0,10.0);
+        num_copies.param_setIncrements(2.0,10.0);
         if ((int)num_copies%2 !=0) {
-            num_copies.param_set_value(num_copies+1);
-            rotation_angle.param_set_value(360.0/(double)num_copies);
+            num_copies.param_setValue(num_copies+1);
+            rotation_angle.param_setValue(360.0/(double)num_copies);
         }
     } else {
-        num_copies.param_set_increments(1.0, 10.0);
+        num_copies.param_setIncrements(1.0, 10.0);
     }
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
@@ -388,7 +388,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     // likely due to SVG's choice of coordinate system orientation (max)
     bool near = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.01);
     if (!near) {
-        starting_angle.param_set_value(deg_from_rad(-angle_between(dir, starting_point - origin)));
+        starting_angle.param_setValue(deg_from_rad(-angle_between(dir, starting_point - origin)));
         if (GDK_SHIFT_MASK) {
             dist_angle_handle = L2(B - A);
         } else {

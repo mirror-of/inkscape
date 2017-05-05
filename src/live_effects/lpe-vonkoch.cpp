@@ -13,17 +13,17 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 void
-VonKochPathParam::param_setup_nodepath(Inkscape::NodePath::Path *np)
+VonKochPathParam::param_setupNodepath(Inkscape::NodePath::Path *np)
 {  
-    PathParam::param_setup_nodepath(np);
+    PathParam::param_setupNodepath(np);
     //sp_nodepath_make_straight_path(np);
 }
 
 //FIXME: a path is used here instead of 2 points to work around path/point param incompatibility bug.
 void
-VonKochRefPathParam::param_setup_nodepath(Inkscape::NodePath::Path *np)
+VonKochRefPathParam::param_setupNodepath(Inkscape::NodePath::Path *np)
 {  
-    PathParam::param_setup_nodepath(np);
+    PathParam::param_setupNodepath(np);
     //sp_nodepath_make_straight_path(np);
 }
 bool
@@ -63,10 +63,10 @@ LPEVonKoch::LPEVonKoch(LivePathEffectObject *lpeobject) :
     registerParameter(&maxComplexity);
     //registerParameter(&draw_boxes) );
     apply_to_clippath_and_mask = true;
-    nbgenerations.param_make_integer();
-    nbgenerations.param_set_range(0, Geom::infinity());
-    maxComplexity.param_make_integer();
-    maxComplexity.param_set_range(0, Geom::infinity());
+    nbgenerations.param_makeInteger();
+    nbgenerations.param_setRange(0, Geom::infinity());
+    maxComplexity.param_makeInteger();
+    maxComplexity.param_setRange(0, Geom::infinity());
 }
 
 LPEVonKoch::~LPEVonKoch()

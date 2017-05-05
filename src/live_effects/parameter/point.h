@@ -30,7 +30,7 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 const gchar *handle_tip = NULL,// tip for automatically associated on-canvas handle
-                Geom::Point default_value = Geom::Point(0,0), 
+                Geom::Point defaultvalue = Geom::Point(0,0), 
                 bool live_update = true );
     virtual ~PointParam();
 
@@ -40,13 +40,13 @@ public:
     gchar * param_getSVGValue() const;
     inline const gchar *handleTip() const { return handle_tip ? handle_tip : param_tooltip.c_str(); }
     void param_setValue(Geom::Point newpoint, bool write = false);
-    void param_set_default();
-    Geom::Point param_get_default() const;
-    void param_set_liveupdate(bool live_update);
-    void param_update_default(Geom::Point default_point);
-    virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
+    void param_valueFromDefault();
+    Geom::Point param_getDefault() const;
+    void param_setLiveupdate(bool live_update);
+    void param_updateDefault(Geom::Point default_point);
+    virtual void param_transformMultiply(Geom::Affine const& /*postmul*/, bool /*set*/);
 
-    void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
+    void set_onCanvasLooks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
     virtual bool providesKnotHolderEntities() const { return true; }
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);

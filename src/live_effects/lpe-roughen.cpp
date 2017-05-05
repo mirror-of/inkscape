@@ -75,15 +75,15 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     registerParameter(&shift_nodes);
     registerParameter(&fixed_displacement);
     registerParameter(&spray_tool_friendly);
-    displace_x.param_set_range(0., Geom::infinity());
-    displace_y.param_set_range(0., Geom::infinity());
-    global_randomize.param_set_range(0., Geom::infinity());
-    max_segment_size.param_set_range(0., Geom::infinity());
-    max_segment_size.param_set_increments(1, 1);
-    max_segment_size.param_set_digits(1);
-    segments.param_set_range(1, Geom::infinity());
-    segments.param_set_increments(1, 1);
-    segments.param_set_digits(0);
+    displace_x.param_setRange(0., Geom::infinity());
+    displace_y.param_setRange(0., Geom::infinity());
+    global_randomize.param_setRange(0., Geom::infinity());
+    max_segment_size.param_setRange(0., Geom::infinity());
+    max_segment_size.param_setIncrements(1, 1);
+    max_segment_size.param_setDigits(1);
+    segments.param_setRange(1, Geom::infinity());
+    segments.param_setIncrements(1, 1);
+    segments.param_setDigits(0);
     seed = 0;
     apply_to_clippath_and_mask = true;
 }
@@ -95,7 +95,7 @@ void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
     if(spray_tool_friendly && seed == 0 && SP_OBJECT(lpeitem)->getId()){
         std::string id_item(SP_OBJECT(lpeitem)->getId());
         long seed = static_cast<long>(boost::hash_value(id_item));
-        global_randomize.param_set_value(global_randomize.get_value(), seed);
+        global_randomize.param_setValue(global_randomize.get_value(), seed);
     }
     displace_x.resetRandomizer();
     displace_y.resetRandomizer();
