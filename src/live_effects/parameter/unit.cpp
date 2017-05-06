@@ -55,14 +55,15 @@ UnitParam::param_valueFromDefault()
 }
 
 void 
-UnitParam::param_updateDefault(const Glib::ustring default_unit)
+UnitParam::param_update_default(const gchar * default_unit)
 {
-    defunit = unit_table.getUnit(default_unit);
+    defunit = unit_table.getUnit((Glib::ustring)default_unit);
 }
 
 void
 UnitParam::param_setValue(Inkscape::Util::Unit const &val)
 {
+    param_effect->upd_params = true;
     unit = new Inkscape::Util::Unit(val);
 }
 

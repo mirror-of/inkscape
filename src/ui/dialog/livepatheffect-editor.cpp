@@ -19,7 +19,7 @@
 #include "livepatheffect-editor.h"
 
 #include "desktop.h"
-
+#include <gtkmm/expander.h>
 #include "document.h"
 #include "document-undo.h"
 #include "helper/action.h"
@@ -53,12 +53,16 @@ void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data
 {
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
     lpeeditor->lpe_list_locked = false;
+    lpeeditor->lpe_changed = true;
     lpeeditor->onSelectionChanged(selection);
 }
 
 void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
 {
-    lpeeditor_selection_changed (selection, data);
+    
+    LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
+    lpeeditor->lpe_list_locked = false;
+    lpeeditor->onSelectionChanged(selection);
 }
 
 static void lpe_style_button(Gtk::Button& btn, char const* iconName)
@@ -81,6 +85,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     : UI::Widget::Panel("", "/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
       deskTrack(),
       lpe_list_locked(false),
+      lpe_changed(true),
       effectwidget(NULL),
       status_label("", Gtk::ALIGN_CENTER),
       effectcontrol_frame(""),
@@ -191,11 +196,22 @@ LivePathEffectEditor::~LivePathEffectEditor()
 void
 LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 {
-    if ( ! effect.upd_params ) {
+
+    if (!effect.upd_params && !lpe_changed) {
+        lpe_changed = false;
         return;
     }
-    std::cout << "sdgsdgdsgsdgsdgsdgdgdggsdgsd\n";
+    bool expanderopen = false;
+    Gtk::Widget * defaultswidget = effect.defaultParamSet();
     if (effectwidget) {
+         if (defaultswidget) {
+            Gtk::Expander * expander = NULL;
+            std::vector<Gtk::Widget *> childs = dynamic_cast<Gtk::Box *> (effectwidget)->get_children();
+            std::vector<Gtk::Widget *> childs_default = dynamic_cast<Gtk::Box *> (childs[childs.size()-1])->get_children();
+            if ((expander = dynamic_cast<Gtk::Expander *>(childs_default[childs_default.size()-1]))){
+                expanderopen = expander->get_expanded();
+            }
+        }
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
         effectwidget = NULL;
@@ -205,6 +221,15 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 
     effectwidget = effect.newWidget();
     if (effectwidget) {
+        
+        if (defaultswidget) {
+            Gtk::Expander * expander = NULL;
+            std::vector<Gtk::Widget *> childs_default = dynamic_cast<Gtk::Box *> (defaultswidget)->get_children();
+            if ((expander = dynamic_cast<Gtk::Expander *>(childs_default[childs_default.size()-1]))){
+                expander->set_expanded(expanderopen);
+            }
+            dynamic_cast<Gtk::Box *> (effectwidget)->pack_start(*defaultswidget, true, true);
+        }
         effectcontrol_vbox.pack_start(*effectwidget, true, true);
     }
     button_remove.show();
@@ -214,6 +239,8 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
     effectcontrol_vbox.show_all_children();
     effect.upd_params = false;
     // fixme: add resizing of dialog
+    effect.upd_params = false;
+    lpe_changed = false;
 }
 
 void
@@ -545,6 +572,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
             current_lperef = lperef;
             LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
             if (effect) {
+                lpe_changed = true;
                 showParams(*effect);
             }
         }

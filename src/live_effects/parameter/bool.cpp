@@ -44,6 +44,12 @@ BoolParam::param_newWidget()
     return dynamic_cast<Gtk::Widget *> (checkwdg);
 }
 
+void 
+BoolParam::param_update_default(const gchar * default_value)
+{
+    param_update_default(helperfns_read_bool(default_value, defvalue));
+}
+
 bool
 BoolParam::param_readSVGValue(const gchar * strvalue)
 {
@@ -79,6 +85,9 @@ BoolParam::param_update_default(const gchar * default_value)
 void
 BoolParam::param_setValue(bool newvalue)
 {
+    if (value != newvalue) {
+        param_effect->upd_params = true;
+    }
     value = newvalue;
 }
 

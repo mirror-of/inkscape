@@ -64,6 +64,19 @@ PointParam::param_updateDefault(Geom::Point default_point)
 }
 
 void
+PointParam::param_update_default(const gchar * default_point)
+{
+    gchar ** strarray = g_strsplit(default_point, ",", 2);
+    double newx, newy;
+    unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+    success += sp_svg_number_read_d(strarray[1], &newy);
+    g_strfreev (strarray);
+    if (success == 2) {
+        param_update_default( Geom::Point(newx, newy) );
+    }
+}
+
+void
 PointParam::param_setValue(Geom::Point newpoint, bool write)
 {
     *dynamic_cast<Geom::Point *>( this ) = newpoint;
@@ -168,7 +181,11 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
             s = A;
         }
     }
-    pparam->param_setValue(s, this->pparam->liveupdate);
+    pparam->param_setValue(s);
+    SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
+    if(splpeitem && this->pparam->liveupdate){
+        sp_lpe_item_update_patheffect(splpeitem, false, false);
+    }
 }
 
 Geom::Point

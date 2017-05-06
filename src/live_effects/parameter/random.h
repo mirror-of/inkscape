@@ -39,8 +39,9 @@ public:
     void param_makeInteger(bool yes = true);
     void param_setRange(gdouble min, gdouble max);
 
-    void resetRandomizer();
+    virtual void param_update_default(const gchar * default_value);
 
+    void resetRandomizer();
     operator gdouble();
     inline gdouble get_value() { return value; } ;
 

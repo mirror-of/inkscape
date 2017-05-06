@@ -40,10 +40,12 @@ public:
     gchar * param_getSVGValue() const;
     inline const gchar *handleTip() const { return handle_tip ? handle_tip : param_tooltip.c_str(); }
     void param_setValue(Geom::Point newpoint, bool write = false);
-    void param_valueFromDefault();
+    void param_setDefault();
     Geom::Point param_getDefault() const;
     void param_setLiveupdate(bool live_update);
     void param_updateDefault(Geom::Point default_point);
+
+    virtual void param_updateDefault(const gchar * default_point);
     virtual void param_transformMultiply(Geom::Affine const& /*postmul*/, bool /*set*/);
 
     void set_onCanvasLooks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);

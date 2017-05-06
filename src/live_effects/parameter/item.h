@@ -31,10 +31,16 @@ public:
                 const gchar * defaultvalue = "");
     virtual ~ItemParam();
     virtual Gtk::Widget * param_newWidget();
+
     virtual bool      param_readSVGValue(const gchar * strvalue);
     virtual gchar *   param_getSVGValue() const;
     virtual void      param_valueFromDefault( bool write );
-    
+
+
+
+    virtual void param_setDefault();
+    virtual void param_updateDefault(const gchar * default_value);
+    void param_set_and_write_default();
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
     sigc::signal <void> signal_item_pasted;

@@ -31,13 +31,13 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
+
     virtual void param_valueFromDefault();
     void param_setValue(Inkscape::Util::Unit const &val);
-    void param_updateDefault(const Glib::ustring default_unit);
+    void param_updateDefault(const gchar * default_unit);
     const gchar *get_abbreviation() const;
-
     virtual Gtk::Widget * param_newWidget();
-
+    
     operator Inkscape::Util::Unit const *() const { return unit; }
 
 private:

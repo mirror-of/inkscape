@@ -74,7 +74,11 @@ public:
         return value;
     }
 
+
     void param_setValue(E val) {
+        if (value != val) {
+            param_effect->upd_params = true;
+        }
         value = val;
     }
 
@@ -86,8 +90,8 @@ public:
         defvalue = defaultvalue;
     }
 
-    virtual void param_update_default(const gchar * defaultvalue) {
-        param_update_default(enumdataconv->get_id_from_key(Glib::ustring(defaultvalue)));
+    virtual void param_updateDefault(const gchar * defaultvalue) {
+        param_updateDefault(enumdataconv->get_id_from_key(Glib::ustring(defaultvalue)));
     }
 
 private:

@@ -21,6 +21,7 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
+
                const Glib::ustring defaultvalue = "Sans 10");
     virtual ~FontButtonParam() {}
 

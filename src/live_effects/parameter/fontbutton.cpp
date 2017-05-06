@@ -25,7 +25,12 @@ FontButtonParam::FontButtonParam( const Glib::ustring& label, const Glib::ustrin
     : Parameter(label, tip, key, wr, effect),
       value(defaultvalue),
       defvalue(defaultvalue)
+}
+
+void
+FontButtonParam::param_set_default()
 {
+    param_setValue(defvalue);
 }
 
 Gtk::Widget *
@@ -76,8 +81,12 @@ FontButtonParam::param_updateDefault(const Glib::ustring defaultvalue){
 void
 FontButtonParam::param_setValue(const Glib::ustring newvalue)
 {
+    if (value != newvalue) {
+        param_effect->upd_params = true;
+    }
     value = newvalue;
 }
+
 
 } /* namespace LivePathEffect */
 

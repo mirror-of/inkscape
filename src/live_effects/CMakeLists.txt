@@ -68,6 +68,7 @@ set(live_effects_SRC
 	parameter/path.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
+	parameter/satellitesarray.cpp
 	parameter/random.cpp
 	parameter/scalar.cpp
 	parameter/text.cpp
@@ -152,6 +153,7 @@ set(live_effects_SRC
 	parameter/path.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
+	parameter/satellitesarray.h
 	parameter/random.h
 	parameter/scalar.h
 	parameter/text.h

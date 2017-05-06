@@ -48,7 +48,6 @@ public:
                 Effect* effect);
     virtual ~Parameter() {};
 
-
     void writeToSVG();
     virtual Gtk::Widget *      param_newWidget() = 0;
     // Returns true if new value is valid / accepted.
@@ -57,6 +56,7 @@ public:
     virtual void               param_valueFromDefault(bool write = false) = 0;
     virtual void               param_updateDefault(bool const defaultvalue) = 0;
     virtual void               param_updateDefault(const gchar * default_value) = 0;
+
     // This creates a new widget (newed with Gtk::manage(new ...);)
     virtual Glib::ustring *    param_getTooltip() { return &param_tooltip; };
     virtual void               param_transformMultiply(Geom::Affine const& /*postmul*/, bool /*set*/) {};
@@ -69,6 +69,7 @@ public:
     virtual void param_setupNodepath(Inkscape::NodePath::Path */*np*/) {};
 
     Glib::ustring param_key;
+    Glib::ustring param_tooltip;
     Inkscape::UI::Widget::Registry * param_wr;
     Glib::ustring param_label;
     bool oncanvas_editable;
@@ -76,6 +77,7 @@ public:
 
 protected:
     Glib::ustring param_tooltip;
+
     Effect* param_effect;
     void param_writeToRepr(const char * svgd);
 
