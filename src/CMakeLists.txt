@@ -514,10 +514,16 @@ if(WIN32)
   # Build console applications as wrappers around inkscape/inkview.exe as GUI applications can't print to the console.
   add_executable(inkscape_com winconsole.cpp)
   set_target_properties(inkscape_com
-                        PROPERTIES LINK_FLAGS "-mconsole")
+                        PROPERTIES
+                          LINK_FLAGS "-mconsole"
+                          OUTPUT_NAME "inkscape"
+                          SUFFIX ".com")
   add_executable(inkview_com winconsole.cpp)
   set_target_properties(inkview_com
-                        PROPERTIES LINK_FLAGS "-mconsole")
+                        PROPERTIES
+                          LINK_FLAGS "-mconsole"
+                          OUTPUT_NAME "inkview"
+                          SUFFIX ".com")
 else()
   set(main_SRC main.cpp)
 endif()
@@ -567,8 +573,10 @@ target_link_libraries(inkscape_base ${INKSCAPE_TARGET_LIBS})
 target_link_libraries(inkscape inkscape_base)
 target_link_libraries(inkview inkscape_base)
 
+
+
+#Define the installation
 if(NOT WIN32)
-  #Define the installation
   install(TARGETS
     inkscape_base
     inkscape
@@ -576,4 +584,12 @@ if(NOT WIN32)
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib/inkscape
     ARCHIVE DESTINATION lib/inkscape)
+else()
+  install(TARGETS
+    inkscape_base
+    inkscape
+    inkscape_com
+    inkview
+    inkview_com
+    DESTINATION .)
 endif()

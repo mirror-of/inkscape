@@ -6,24 +6,6 @@ if(UNIX)
 endif()
 
 if(WIN32)
-  install(PROGRAMS
-    ${EXECUTABLE_OUTPUT_PATH}/inkscape.exe
-    ${EXECUTABLE_OUTPUT_PATH}/inkview.exe
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-  )
-
-  install(PROGRAMS
-	${EXECUTABLE_OUTPUT_PATH}/inkscape_com.exe
-	DESTINATION ${CMAKE_INSTALL_PREFIX}
-	RENAME inkscape.com
-  )
-
-  install(FILES
-    ${LIBRARY_OUTPUT_PATH}/libinkscape_base.dll
-    ${LIBRARY_OUTPUT_PATH}/libgrid2.dll
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-  )
-
   install(FILES
     AUTHORS
     COPYING
