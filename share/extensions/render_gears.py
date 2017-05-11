@@ -161,8 +161,9 @@ class Gears(inkex.Effect):
         #  Translate group, Rotate path.
         view_center = computePointInNode(list(self.view_center), self.current_layer)
         t = 'translate(' + str( view_center[0] ) + ',' + str( view_center[1] ) + ')'
+        #Add class 'select' to retain selected once applied
         g_attribs = {inkex.addNS('label','inkscape'):'Gear' + str( teeth ),
-                     'transform':t }
+                     'transform':t , 'class': 'select'}
         g = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)
 
         # Create SVG Path for gear

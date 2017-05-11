@@ -384,6 +384,12 @@ public:
      */
     virtual void changeOrder(Node *child, Node *after)=0;
 
+     /**
+     * @brief Remove all elements that not in src node
+     * @param src The node to check for elemments into this node
+     * @param key The attribute to use as the identity attribute
+     */
+    virtual void cleanOriginal(Node *src, gchar const *key)=0;
     /**
      * @brief Merge all children of another node with the current
      *
@@ -397,8 +403,11 @@ public:
      *
      * @param src The node to merge into this node
      * @param key The attribute to use as the identity attribute
+     * @param noid If true process noid items
+     * @param key If clean callback to cleanOriginal
      */
-    virtual void mergeFrom(Node const *src, char const *key)=0;
+
+    virtual void mergeFrom(Node const *src, char const *key, bool noid = true, bool clean = false)=0;
     
     /*@}*/
 
