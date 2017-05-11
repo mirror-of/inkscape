@@ -645,12 +645,37 @@ Node *SimpleNode::root() {
     }
 }
 
-void SimpleNode::mergeFrom(Node const *src, gchar const *key) {
+void SimpleNode::cleanOriginal(Node *src, gchar const *key){
+    std::vector<Node *> to_delete;
+    for ( Node *child = this->firstChild() ; child != NULL ; child = child->next() )
+    {
+        gchar const *id = child->attribute(key);
+        if (id) {
+            Node *rch = sp_repr_lookup_child(src, key, id);
+            Node *rch2 = sp_repr_lookup_child(this, key, id);
+            if (rch && rch2) {
+                rch2->cleanOriginal(child, key);
+                
+            } else {
+                to_delete.push_back(child);
+            }
+        }
+    }
+    for(Node *i : to_delete) {
+        removeChild(i);
+    }
+}
+
+void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool noid, bool clean) {
     g_return_if_fail(src != NULL);
     g_return_if_fail(key != NULL);
     g_assert(src != this);
 
     setContent(src->content());
+    if (clean) {
+        Node * srcp = const_cast<Node *>(src);
+        cleanOriginal(srcp, key);
+    }
 
     for ( Node const *child = src->firstChild() ; child != NULL ; child = child->next() )
     {
@@ -658,13 +683,13 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key) {
         if (id) {
             Node *rch=sp_repr_lookup_child(this, key, id);
             if (rch) {
-                rch->mergeFrom(child, key);
+                rch->mergeFrom(child, key, noid);
             } else {
                 rch = child->duplicate(_document);
                 appendChild(rch);
                 rch->release();
             }
-        } else {
+        } else if (noid) {
             Node *rch=child->duplicate(_document);
             appendChild(rch);
             rch->release();
