@@ -27,9 +27,9 @@ namespace Widget {
 ClipMaskIcon::ClipMaskIcon() :
     Glib::ObjectBase(typeid(ClipMaskIcon)),
     Gtk::CellRendererPixbuf(),
-    _pixClipName(INKSCAPE_ICON("path-cut")),
-    _pixMaskName(INKSCAPE_ICON("path-difference")),
-    _pixBothName(INKSCAPE_ICON("bitmap-trace")),
+    _pixClipName(INKSCAPE_ICON("object-clipped")),
+    _pixMaskName(INKSCAPE_ICON("object-masked")),
+    _pixBothName(INKSCAPE_ICON("object-clip-mask")),
     _property_active(*this, "active", 0),
     _property_pixbuf_clip(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
     _property_pixbuf_mask(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0)),
