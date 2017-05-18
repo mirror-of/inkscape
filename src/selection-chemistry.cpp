@@ -1115,6 +1115,63 @@ void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
                        C_("Undo action", "Lower"));
 }
 
+void sp_selection_stack_down(Inkscape::Selection *selection, SPDesktop *desktop)
+{
+    SPDocument *document = selection->layers()->getDocument();
+    std::vector<SPItem*> selected = selection->itemList();
+
+    if (selected.empty()) {
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to stack down."));
+        return;
+    }
+
+    /* Construct direct-ordered list of selected children. */
+    std::vector<SPItem*> items(selected);
+    sort(items.begin(),items.end(),sp_item_repr_compare_position_bool);
+
+    for (std::vector<SPItem*>::const_iterator item=items.begin();item!=items.end();++item) {
+        SPItem *item_obj = *item;
+        if(!item_obj->lowerOne()) {
+            DocumentUndo::cancel(document);
+            selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("We hit bottom."));
+            return;
+        }
+    }
+
+    DocumentUndo::done(document, SP_VERB_SELECTION_STACK_DOWN,
+           //TRANSLATORS: "Lower" means "to lower an object" in the undo history
+           C_("Undo action", "stack down"));
+}
+
+void sp_selection_stack_up(Inkscape::Selection *selection, SPDesktop *desktop)
+{
+    SPDocument *document = selection->layers()->getDocument();
+    std::vector<SPItem*> selected = selection->itemList();
+
+    if (selected.empty()) {
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to stack up."));
+        return;
+    }
+
+    /* Construct direct-ordered list of selected children. */
+    std::vector<SPItem*> items(selected);
+    sort(items.begin(),items.end(),sp_item_repr_compare_position_bool);
+    bool cancel = false;
+
+    for (std::vector<SPItem*>::const_reverse_iterator item=items.rbegin();item!=items.rend();++item) {
+        SPItem *item_obj = *item;
+        if (!item_obj->raiseOne()) {
+            DocumentUndo::cancel(document);
+            selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("We hit top."));
+            return;
+        }
+    }
+
+    DocumentUndo::done(document, SP_VERB_SELECTION_STACK_UP,
+       //TRANSLATORS: "Lower" means "to lower an object" in the undo history
+       C_("Undo action", "stack up"));
+}
+
 void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop)
 {
     SPDocument *document = selection->layers()->getDocument();
@@ -3175,8 +3232,11 @@ void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
     the_parent_repr->appendChild(clone);
 
     if( single_group && transform.isTranslation() ) {
-        if( !transform.isIdentity() )
-            clone->setAttribute("transform", sp_svg_transform_write( transform ));
+        if( !transform.isIdentity() ) {
+            gchar *c = sp_svg_transform_write( transform );
+            clone->setAttribute("transform", c);
+            g_free(c);
+        }
     }
 
     // Change selection to new <use> element.
