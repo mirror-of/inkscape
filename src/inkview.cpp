@@ -31,7 +31,6 @@
 #endif
 
 #include <cstring>
-#include <sys/stat.h>
 #include <locale.h>
 
 #include <gtkmm/main.h>
@@ -50,6 +49,8 @@
 #include "document.h"
 #include "svg-view.h"
 #include "svg-view-widget.h"
+
+#include "io/sys.h"
 #include "util/units.h"
 
 #ifdef WITH_INKJAR
@@ -233,16 +234,14 @@ int main (int argc, const char **argv)
     // starting at where the commandline options stopped parsing because
     // we want all the files to be in the list
     for (i = num_parsed_options + 1 ; i < argc; i++) {
-        struct stat st;
-        if (stat (argv[i], &st)
-              || !S_ISREG (st.st_mode)
-              || (st.st_size < 64)) {
-            fprintf(stderr, "could not open file %s\n", argv[i]);
+        gchar * argv_utf8 = g_locale_to_utf8(argv[i], -1, NULL, NULL, NULL);
+        if (!Inkscape::IO::file_test( argv_utf8, G_FILE_TEST_EXISTS )) {
+            fprintf(stderr, "could not open file %s\n", argv_utf8);
         } else {
 
     #ifdef WITH_INKJAR
-            if (is_jar(argv[i])) {
-                Inkjar::JarFileReader jar_file_reader(argv[i]);
+            if (is_jar(argv_utf8)) {
+                Inkjar::JarFileReader jar_file_reader(argv_utf8);
                 for (;;) {
                     GByteArray *gba = jar_file_reader.get_next_file();
                     if (gba == NULL) {
@@ -288,7 +287,7 @@ int main (int argc, const char **argv)
                 ss.slides = g_renew (char *, ss.slides, ss.size);
             }
 
-            ss.slides[ss.length++] = strdup (argv[i]);
+            ss.slides[ss.length++] = strdup (argv_utf8);
 
             if (!ss.doc) {
                 ss.doc = SPDocument::createNewDoc (ss.slides[ss.current], TRUE, false);
@@ -300,6 +299,7 @@ int main (int argc, const char **argv)
             }
     #endif
         }
+        g_free(argv_utf8);
     }
 
     if(!ss.doc) {
