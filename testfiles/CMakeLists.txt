@@ -28,5 +28,5 @@ target_link_libraries(unittest
 add_dependencies(unittest inkscape_version)
 
 
-add_test(BaseTest ${EXECUTABLE_OUTPUT_PATH}/unittest)
+add_test(BaseTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/unittest)
 add_dependencies(check unittest)
