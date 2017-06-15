@@ -83,14 +83,18 @@ option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
-set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
-    CACHE PATH "The path to the GoogleMock test framework.")
-
-if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
+find_package(GTest) # gtest 1.8.0 and later already include gmock
+if(GTEST_FOUND AND EXISTS "${GTEST_INCLUDE_DIR}/gmock" AND IS_DIRECTORY "${GTEST_INCLUDE_DIR}/gmock")
     set(GMOCK_PRESENT ON)
 else()
-    set(GMOCK_PRESENT OFF)
-    message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
+    set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+    CACHE PATH "The path to the GoogleMock test framework.")
+    if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
+        set(GMOCK_PRESENT ON)
+    else()
+        set(GMOCK_PRESENT OFF)
+        message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
+    endif()
 endif()
 
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
