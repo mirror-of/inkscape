@@ -1839,7 +1839,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (shortcut_id != GDK_KEY_VoidSymbol) {
             gchar* str = sp_shortcut_get_label(shortcut_id);
             if (str) {
-                shortcut_label = str;
+                shortcut_label = Glib::Markup::escape_text(str);
                 g_free(str);
                 str = 0;
             }
