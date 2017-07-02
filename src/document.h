@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 #include <stddef.h>
 #include <sigc++/sigc++.h>
-#include <sigc++/class_slot.h>
+//#include <sigc++/class_slot.h>
 
 #include "libcroco/cr-cascade.h"
 #include <2geom/forward.h>

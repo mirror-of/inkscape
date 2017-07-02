@@ -231,28 +231,28 @@ AC_CHECK_HEADERS([gc.h gc/gc.h],
 				  break], [gc_ok=no], [$gc_libs])
 		    break],
                  [gc_ok=no])
-if test "x$gc_ok" = "xyes" && test "x$cross_compiling" = "xno" ; then 
-	AC_MSG_CHECKING([libgc version 6.4+])
-	AC_RUN_IFELSE(
-		[AC_LANG_SOURCE([[
-			#ifdef HAVE_GC_GC_H
-			# include <gc/gc.h>
-			#else
-			# include <gc.h>
-			#endif
-			#include <stdio.h>
-			extern unsigned GC_version;
-			int main(void){
-				unsigned min = ((6 << 16) | (4 << 8) | 0);
-				printf("%d.%d.%d ",GC_version >> 16, (GC_version >> 8) & 0xFF, GC_version & 0xFF);
-				if (GC_version>=min) return 0;
-				return 1;
-			}]])],
-		[gc_ok=yes],
-		[gc_ok=no]
-	)
-	AC_MSG_RESULT([$gc_ok])
-fi
+dnl if test "x$gc_ok" = "xyes" && test "x$cross_compiling" = "xno" ; then
+dnl 	AC_MSG_CHECKING([libgc version 6.4+])
+dnl 	AC_RUN_IFELSE(
+dnl 		[AC_LANG_SOURCE([[
+dnl 			#ifdef HAVE_GC_GC_H
+dnl 			# include <gc/gc.h>
+dnl 			#else
+dnl 			# include <gc.h>
+dnl 			#endif
+dnl 			#include <stdio.h>
+dnl 			extern unsigned GC_version;
+dnl 			int main(void){
+dnl 				unsigned min = ((6 << 16) | (4 << 8) | 0);
+dnl 				printf("%d.%d.%d ",GC_version >> 16, (GC_version >> 8) & 0xFF, GC_version & 0xFF);
+dnl 				if (GC_version>=min) return 0;
+dnl 				return 1;
+dnl 			}]])],
+dnl 		[gc_ok=yes],
+dnl 		[gc_ok=no]
+dnl 	)
+dnl 	AC_MSG_RESULT([$gc_ok])
+dnl fi
 if test "x$gc_ok" != "xyes"; then
 	AC_MSG_ERROR([libgc (the Boehm Conservative Collector) 6.4+, is needed to compile inkscape -- http://www.hpl.hp.com/personal/Hans_Boehm/gc])
 fi
@@ -591,6 +591,11 @@ fi
 PKG_CHECK_MODULES(POPPLER_EVEN_NEWER_COLOR_SPACE_API, poppler >= 0.26.0, popplernewercolorspaceapi=yes, popplernewercolorspaceapi=no)
 if test "x$popplernewercolorspaceapi" = "xyes"; then
 	AC_DEFINE(POPPLER_EVEN_NEWER_COLOR_SPACE_API, 1, [Use even newer color space API from Poppler >= 0.26.0])
+fi
+
+PKG_CHECK_MODULES(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API, poppler >= 0.29.0, popplernewernewcolorspaceapi=yes, popplernewernewcolorspaceapi=no)
+if test "x$popplernewernewcolorspaceapi" = "xyes"; then
+	AC_DEFINE(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API, 1, [Use even newer new color space API from Poppler >= 0.29.0])
 fi
 
 # Poppler's b604a008 commit changes this
