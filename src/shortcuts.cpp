@@ -56,7 +56,7 @@ using Inkscape::IO::Resource::SYSTEM;
 using Inkscape::IO::Resource::USER;
 using Inkscape::IO::Resource::KEYS;
 
-static bool try_shortcuts_file(char const *filename);
+static bool try_shortcuts_file(char const *filename, bool const is_user_set=false);
 static void read_shortcuts_file(char const *filename, bool const is_user_set=false);
 
 unsigned int sp_shortcut_get_key(unsigned int const shortcut);
@@ -113,15 +113,15 @@ void sp_shortcut_init()
     }
 
     // load shortcuts adjusted by user
-    try_shortcuts_file(get_path(USER, KEYS, "default.xml"));
+    try_shortcuts_file(get_path(USER, KEYS, "default.xml"), true);
 }
 
-static bool try_shortcuts_file(char const *filename) {
+static bool try_shortcuts_file(char const *filename, bool const is_user_set) {
     using Inkscape::IO::file_test;
 
     /* ah, if only we had an exception to catch... (permission, forgiveness) */
     if (file_test(filename, G_FILE_TEST_EXISTS)) {
-        read_shortcuts_file(filename, true);
+        read_shortcuts_file(filename, is_user_set);
         return true;
     }
 
