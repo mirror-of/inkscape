@@ -24,6 +24,7 @@
 #endif
 
 #include "ui/dialog/dialog-manager.h"
+#include <gtkmm/applicationwindow.h>
 #include <gtkmm/icontheme.h>
 #include "file.h"
 #include <glibmm/miscutils.h>
@@ -144,7 +145,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
     g_return_if_fail(vw != NULL);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
 
-    Gtk::Window *win = Inkscape::UI::window_new("", TRUE);
+    auto win = Inkscape::UI::window_new("", TRUE);
 
     gtk_container_add(GTK_CONTAINER(win->gobj()), GTK_WIDGET(vw));
     gtk_widget_show(GTK_WIDGET(vw));
