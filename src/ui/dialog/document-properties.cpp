@@ -22,8 +22,11 @@
 # include <config.h>
 #endif
 
-#include "ui/widget/notebook-page.h"
 #include "document-properties.h"
+
+#include <gtkmm/applicationwindow.h>
+
+#include "ui/widget/notebook-page.h"
 #include "display/canvas-grid.h"
 
 #include "io/sys.h"
@@ -1061,7 +1064,7 @@ void  DocumentProperties::browseExternalScript() {
     if (!selectPrefsFileInstance) {
         selectPrefsFileInstance =
               Inkscape::UI::Dialog::FileOpenDialog::create(
-                 *desktop->getToplevel(),
+                 desktop->getToplevel(),
                  open_path,
                  Inkscape::UI::Dialog::CUSTOM_TYPE,
                  _("Select a script to load"));

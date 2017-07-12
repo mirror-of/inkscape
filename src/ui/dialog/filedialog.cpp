@@ -84,7 +84,7 @@ bool isValidImageFile(const Glib::ustring &fileName)
 /**
  * Public factory.  Called by file.cpp, among others.
  */
-FileOpenDialog *FileOpenDialog::create(Gtk::Window &parentWindow,
+FileOpenDialog *FileOpenDialog::create(Gtk::Window *parentWindow,
 		                               const Glib::ustring &path,
                                        FileDialogType fileTypes,
                                        const char *title)
@@ -116,7 +116,7 @@ Glib::ustring FileOpenDialog::getFilename()
 /**
  * Public factory method.  Used in file.cpp
  */
-FileSaveDialog *FileSaveDialog::create(Gtk::Window& parentWindow,
+FileSaveDialog *FileSaveDialog::create(Gtk::Window *parentWindow,
                                        const Glib::ustring &path,
                                        FileDialogType fileTypes,
                                        const char *title,
@@ -192,7 +192,7 @@ void FileSaveDialog::appendExtension(Glib::ustring& path, Inkscape::Extension::O
 /**
  * Public factory method.  Used in file.cpp
  */
-FileExportDialog *FileExportDialog::create(Gtk::Window& parentWindow,
+FileExportDialog *FileExportDialog::create(Gtk::Window *parentWindow,
                                            const Glib::ustring &path,
                                            FileDialogType fileTypes,
                                            const char *title,

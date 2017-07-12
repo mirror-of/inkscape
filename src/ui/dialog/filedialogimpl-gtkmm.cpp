@@ -684,7 +684,7 @@ void FileDialogBaseGtk::_updatePreviewCallback()
 /**
  * Constructor.  Not called directly.  Use the factory.
  */
-FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const Glib::ustring &dir,
+FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window *parentWindow, const Glib::ustring &dir,
                                              FileDialogType fileTypes, const Glib::ustring &title)
     : FileDialogBaseGtk(parentWindow, title, Gtk::FILE_CHOOSER_ACTION_OPEN, fileTypes, "/dialogs/open")
 {
@@ -949,7 +949,7 @@ Glib::ustring FileOpenDialogImplGtk::getCurrentDirectory()
 /**
  * Constructor
  */
-FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Glib::ustring &dir,
+FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window *parentWindow, const Glib::ustring &dir,
                                              FileDialogType fileTypes, const Glib::ustring &title,
                                              const Glib::ustring & /*default_key*/, const gchar *docTitle,
                                              const Inkscape::Extension::FileSaveMethod save_method)

@@ -16,7 +16,7 @@
 #include <2geom/point.h>
 
 namespace Gtk {
-class Window;
+class ApplicationWindow;
 }
 
 namespace Glib {
@@ -38,7 +38,7 @@ struct EditWidgetInterface
     virtual ~EditWidgetInterface() {}
 
     /// Returns pointer to window UI object as void*
-    virtual Gtk::Window *getWindow() = 0;
+    virtual Gtk::ApplicationWindow *getWindow() = 0;
 
     /// Set the widget's title
     virtual void setTitle (gchar const*) = 0;

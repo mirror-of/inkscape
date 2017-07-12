@@ -26,6 +26,8 @@
 #include <map>
 
 #include "shortcuts.h"
+
+#include <gtkmm/applicationwindow.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
@@ -391,7 +393,7 @@ void sp_shortcut_file_export()
 
     Inkscape::UI::Dialog::FileSaveDialog *saveDialog =
        Inkscape::UI::Dialog::FileSaveDialog::create(
-            *(desktop->getToplevel()),
+            desktop->getToplevel(),
             open_path,
             Inkscape::UI::Dialog::CUSTOM_TYPE,
             _("Select a filename for exporting"),
@@ -425,7 +427,7 @@ bool sp_shortcut_file_import() {
 
     Inkscape::UI::Dialog::FileOpenDialog *importFileDialog =
               Inkscape::UI::Dialog::FileOpenDialog::create(
-                 *desktop->getToplevel(),
+                 desktop->getToplevel(),
                  open_path,
                  Inkscape::UI::Dialog::CUSTOM_TYPE,
                  _("Select a file to import"));

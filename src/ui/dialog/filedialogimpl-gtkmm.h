@@ -145,9 +145,9 @@ public:
     /**
      *
      */
-    FileDialogBaseGtk(Gtk::Window& parentWindow, const Glib::ustring &title,
+    FileDialogBaseGtk(Gtk::Window *parentWindow, const Glib::ustring &title,
     		Gtk::FileChooserAction dialogType, FileDialogType type, gchar const* preferenceBase) :
-        Gtk::FileChooserDialog(parentWindow, title, dialogType),
+        Gtk::FileChooserDialog(*parentWindow, title, dialogType),
         preferenceBase(preferenceBase ? preferenceBase : "unknown"),
         _dialogType(type)
     {
@@ -157,9 +157,9 @@ public:
     /**
      *
      */
-    FileDialogBaseGtk(Gtk::Window& parentWindow, const char *title,
+    FileDialogBaseGtk(Gtk::Window *parentWindow, const char *title,
                    Gtk::FileChooserAction dialogType, FileDialogType type, gchar const* preferenceBase) :
-        Gtk::FileChooserDialog(parentWindow, title, dialogType),
+        Gtk::FileChooserDialog(*parentWindow, title, dialogType),
         preferenceBase(preferenceBase ? preferenceBase : "unknown"),
         _dialogType(type)
     {
@@ -219,7 +219,7 @@ class FileOpenDialogImplGtk : public FileOpenDialog, public FileDialogBaseGtk
 {
 public:
 
-    FileOpenDialogImplGtk(Gtk::Window& parentWindow,
+    FileOpenDialogImplGtk(Gtk::Window *parentWindow,
     		       const Glib::ustring &dir,
                        FileDialogType fileTypes,
                        const Glib::ustring &title);
@@ -275,7 +275,7 @@ class FileSaveDialogImplGtk : public FileSaveDialog, public FileDialogBaseGtk
 {
 
 public:
-    FileSaveDialogImplGtk(Gtk::Window &parentWindow,
+    FileSaveDialogImplGtk(Gtk::Window *parentWindow,
                           const Glib::ustring &dir,
                           FileDialogType fileTypes,
                           const Glib::ustring &title,

@@ -25,6 +25,10 @@
 
 class SPDocument;
 
+namespace Gtk {
+class Window;
+}
+
 namespace Inkscape {
 namespace Extension {
 class Extension;
@@ -96,7 +100,7 @@ public:
      * @param fileTypes one of FileDialogTypes
      * @param title the title of the dialog
      */
-    static FileOpenDialog *create(Gtk::Window& parentWindow,
+    static FileOpenDialog *create(Gtk::Window *parentWindow,
                                   const Glib::ustring &path,
                                   FileDialogType fileTypes,
                                   const char *title);
@@ -167,7 +171,7 @@ public:
      * @param title the title of the dialog
      * @param key a list of file types from which the user can select
      */
-    static FileSaveDialog *create(Gtk::Window& parentWindow,
+    static FileSaveDialog *create(Gtk::Window *parentWindow,
                                   const Glib::ustring &path,
                                   FileDialogType fileTypes,
                                   const char *title,
@@ -273,7 +277,7 @@ public:
      * @param title the title of the dialog
      * @param key a list of file types from which the user can select
      */
-    static FileExportDialog *create(Gtk::Window& parentWindow,
+    static FileExportDialog *create(Gtk::Window *parentWindow,
                                     const Glib::ustring &path,
                                     FileDialogType fileTypes,
                                     const char *title,

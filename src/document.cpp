@@ -42,6 +42,7 @@
 #include <string>
 #include <cstring>
 #include <2geom/transforms.h>
+#include <gtkmm/applicationwindow.h>
 
 #include "widgets/desktop-widget.h"
 #include "desktop.h"

@@ -26,6 +26,7 @@
 #include <config.h>
 #endif
 
+#include <gtkmm/applicationwindow.h>
 #include "ui/dialog/dialog-manager.h"
 #include <glibmm/i18n.h>
 
@@ -643,7 +644,7 @@ SPDesktop::change_document (SPDocument *theDocument)
 
     /* update the rulers, connect the desktop widget's signal to the new namedview etc.
        (this can probably be done in a better way) */
-    Gtk::Window *parent = this->getToplevel();
+    auto parent = this->getToplevel();
     g_assert(parent != NULL);
     SPDesktopWidget *dtw = (SPDesktopWidget *) parent->get_data("desktopwidget");
     if (dtw) {
@@ -1338,7 +1339,7 @@ SPDesktop::setWindowTransient (void *p, int transient_policy)
     _widget->setTransient (p, transient_policy);
 }
 
-Gtk::Window*
+Gtk::ApplicationWindow*
 SPDesktop::getToplevel( )
 {
     return _widget->getWindow();
