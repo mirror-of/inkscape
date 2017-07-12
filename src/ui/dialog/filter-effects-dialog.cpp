@@ -20,6 +20,7 @@
 #endif
 
 #include "dialog-manager.h"
+#include <gtkmm/applicationwindow.h>
 #include <gtkmm/imagemenuitem.h>
 
 #include <gdkmm/display.h>
@@ -690,7 +691,7 @@ private:
         if (!selectFeImageFileInstance) {
             selectFeImageFileInstance =
                   Inkscape::UI::Dialog::FileOpenDialog::create(
-                     *_desktop->getToplevel(),
+                     _desktop->getToplevel(),
                      open_path,
                      Inkscape::UI::Dialog::SVG_TYPES,/*TODO: any image, not just svg*/
                      (char const *)_("Select an image to be used as feImage input"));

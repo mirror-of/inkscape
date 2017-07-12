@@ -63,7 +63,7 @@ typedef struct _DocumentInterface DocumentInterface;//struct DocumentInterface;
 
 namespace Gtk
 {
-  class Window;
+  class ApplicationWindow;
 }
 
 typedef int sp_verb_t;
@@ -374,7 +374,7 @@ public:
     void setWindowPosition (Geom::Point p);
     void setWindowSize (gint w, gint h);
     void setWindowTransient (void* p, int transient_policy=1);
-    Gtk::Window* getToplevel();
+    Gtk::ApplicationWindow* getToplevel();
     void presentWindow();
     bool showInfoDialog( Glib::ustring const &message );
     bool warnDialog (Glib::ustring const &text);

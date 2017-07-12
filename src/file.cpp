@@ -497,7 +497,7 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     //# Create a dialog
     Inkscape::UI::Dialog::FileOpenDialog *openDialogInstance =
               Inkscape::UI::Dialog::FileOpenDialog::create(
-                 parentWindow, open_path,
+                 &parentWindow, open_path,
                  Inkscape::UI::Dialog::SVG_TYPES,
                  _("Select file to open"));
 
@@ -853,7 +853,7 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
     gchar* doc_title = doc->getRoot()->title();
     Inkscape::UI::Dialog::FileSaveDialog *saveDialog =
         Inkscape::UI::Dialog::FileSaveDialog::create(
-            parentWindow,
+            &parentWindow,
             save_loc,
             Inkscape::UI::Dialog::SVG_TYPES,
             dialog_title,
@@ -1388,7 +1388,7 @@ sp_file_import(Gtk::Window &parentWindow)
     // Create new dialog (don't use an old one, because parentWindow has probably changed)
     Inkscape::UI::Dialog::FileOpenDialog *importDialogInstance =
              Inkscape::UI::Dialog::FileOpenDialog::create(
-                 parentWindow,
+                 &parentWindow,
                  import_path,
                  Inkscape::UI::Dialog::IMPORT_TYPES,
                  (char const *)_("Select file to import"));

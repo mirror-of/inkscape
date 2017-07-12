@@ -35,7 +35,7 @@
 #include "desktop.h"
 #include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "sp-root.h"
-#include <gtkmm/window.h>
+#include <gtkmm/applicationwindow.h>
 
 #if WITH_GTKMM_3_22
 # include <gdkmm/monitor.h>
@@ -792,7 +792,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         // do nothing, as we already have code for that in interface.cpp
         // TODO: Probably should not do similar things in two places
     } else if ((geometry_from_file && nv->window_maximized) || (new_document && (default_geometry == 2))) {
-        Gtk::Window *win = desktop->getToplevel();
+        auto win = desktop->getToplevel();
         if (win) {
             win->maximize();
         }

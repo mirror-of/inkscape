@@ -12,7 +12,7 @@
  *      ? -2004
  */
 
-#include <gtkmm/window.h>
+#include <gtkmm/applicationwindow.h>
 #include "message.h"
 #include "ui/view/view-widget.h"
 #include "ui/view/edit-widget-interface.h"
@@ -72,7 +72,7 @@ struct SPDesktopWidget {
 
     SPDesktop *desktop;
 
-    Gtk::Window *window;
+    Gtk::ApplicationWindow *window;
 
     // The root vbox of the window layout.
     GtkWidget *vbox;
@@ -130,7 +130,7 @@ struct SPDesktopWidget {
 
         virtual void setTitle (gchar const *uri)
             { _dtw->updateTitle (uri); }
-        virtual Gtk::Window* getWindow()
+        virtual Gtk::ApplicationWindow* getWindow() override
             { return _dtw->window; }
 
         virtual void layout() {

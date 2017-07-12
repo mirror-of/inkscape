@@ -14,6 +14,7 @@
 #include <config.h>
 #endif
 
+#include <gtkmm/applicationwindow.h>
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/scale.h>
@@ -789,7 +790,7 @@ void PrefEntryFileButtonHBox::onRelatedButtonClickedCallback()
         if (!selectPrefsFileInstance) {
         selectPrefsFileInstance =
               Inkscape::UI::Dialog::FileOpenDialog::create(
-                 *desktop->getToplevel(),
+                 desktop->getToplevel(),
                  open_path,
                  Inkscape::UI::Dialog::EXE_TYPES,
                  _("Select a bitmap editor"));
