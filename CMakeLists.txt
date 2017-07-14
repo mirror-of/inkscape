@@ -222,10 +222,10 @@ add_custom_target(clean-all
 
 #-----------------------------------------------------------------------------
 if(GMOCK_PRESENT)
-    set(CMAKE_CTEST_COMMAND ctest -V)
     enable_testing()
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
     add_subdirectory(testfiles EXCLUDE_FROM_ALL)
+    set(CMAKE_CTEST_COMMAND ctest -V)
+    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
 endif()
 
 # Canonicalize the flags to speed up recompilation using ccache/etc.

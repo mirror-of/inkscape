@@ -9,7 +9,7 @@ if(NOT GTEST_FOUND) # not required for gtest 1.8.0 and later
                                ${CMAKE_SOURCE_DIR}/gtest/gtest/include)
 endif()
 
-add_executable(unittest
+add_executable(tests
 	unittest.cpp
 	doc-per-case-test.cpp
 	src/attributes-test.cpp
@@ -17,9 +17,8 @@ add_executable(unittest
 	src/dir-util-test.cpp
 )
 
-target_link_libraries(unittest
+target_link_libraries(tests
 	gmock_main
 	inkscape_base)
 
-add_test(BaseTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/unittest)
-add_dependencies(check unittest)
+add_test(BaseTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tests)
