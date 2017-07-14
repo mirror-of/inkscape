@@ -21,8 +21,5 @@ target_link_libraries(unittest
 	gmock_main
 	inkscape_base)
 
-add_dependencies(unittest inkscape_version)
-
-
 add_test(BaseTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/unittest)
 add_dependencies(check unittest)
