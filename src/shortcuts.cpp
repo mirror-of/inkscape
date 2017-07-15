@@ -124,12 +124,18 @@ unsigned int sp_gdkmodifier_to_shortcut(guint accel_key, Gdk::ModifierType gdkmo
     guint keyval = Inkscape::UI::Tools::get_group0_keyval (&event);
 
     shortcut = accel_key |
-               ( (gdkmodifier & GDK_SHIFT_MASK) || ( accel_key != keyval) ?
+               ( (gdkmodifier & GDK_SHIFT_MASK) ?
                  SP_SHORTCUT_SHIFT_MASK : 0 ) |
                ( gdkmodifier & GDK_CONTROL_MASK ?
                  SP_SHORTCUT_CONTROL_MASK : 0 ) |
                ( gdkmodifier & GDK_MOD1_MASK ?
                  SP_SHORTCUT_ALT_MASK : 0 );
+
+    // enforce the Shift modifier for uppercase letters (otherwise plain A and Shift+A are equivalent)
+    // for characters that are not letters both (is_upper and is_lower) return TRUE, so the condition is false
+    if (gdk_keyval_is_upper(keyval) && !gdk_keyval_is_lower(keyval)) {
+        shortcut |= SP_SHORTCUT_SHIFT_MASK;
+    }
 
     return shortcut;
 }
@@ -333,13 +339,14 @@ void sp_shortcut_file_export()
        Inkscape::UI::Dialog::FileSaveDialog::create(
             *(desktop->getToplevel()),
             open_path,
-        Inkscape::UI::Dialog::CUSTOM_TYPE,
-        _("Select a filename for exporting"),
-        "",
-        "",
-        Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS
+            Inkscape::UI::Dialog::CUSTOM_TYPE,
+            _("Select a filename for exporting"),
+            "",
+            "",
+            Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS
         );
-    saveDialog->addFileType("All Files", "*");
+    saveDialog->addFileType(_("Inkscape shortcuts (*.xml)"), ".xml");
+    
 
     bool success = saveDialog->show();
     if (!success) {

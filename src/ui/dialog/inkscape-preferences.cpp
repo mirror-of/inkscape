@@ -1550,7 +1550,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     _page_keyshortcuts.add_line( false, _("Search:"), _kb_search, "", "", true);
 
     _kb_store = Gtk::TreeStore::create( _kb_columns );
-    _kb_store->set_sort_column (_kb_columns.id, Gtk::SORT_ASCENDING );
+    _kb_store->set_sort_column ( GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, Gtk::SORT_ASCENDING ); // only sort in onKBListKeyboardShortcuts()
 
     _kb_filter = Gtk::TreeModelFilter::create(_kb_store);
     _kb_filter->set_visible_func (sigc::mem_fun(*this, &InkscapePreferences::onKBSearchFilter));
@@ -1839,7 +1839,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (shortcut_id != GDK_KEY_VoidSymbol) {
             gchar* str = sp_shortcut_get_label(shortcut_id);
             if (str) {
-                shortcut_label = str;
+                shortcut_label = Glib::Markup::escape_text(str);
                 g_free(str);
                 str = 0;
             }
@@ -1859,6 +1859,10 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             _kb_tree.get_selection()->select(sel_path);
         }
     }
+
+    // re-order once after updating (then disable ordering again to increase performance)
+    _kb_store->set_sort_column (_kb_columns.id, Gtk::SORT_ASCENDING );
+    _kb_store->set_sort_column ( GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, Gtk::SORT_ASCENDING );
 
     if (selected_id.empty()) {
         _kb_tree.expand_to_path(_kb_store->get_path(_kb_store->get_iter("0:1")));
