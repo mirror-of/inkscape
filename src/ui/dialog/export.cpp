@@ -20,6 +20,7 @@
 // This has to be included prior to anything that includes setjmp.h, it croaks otherwise
 #include <png.h>
 
+#include <gtkmm/applicationwindow.h>
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/dialog.h>
@@ -1345,7 +1346,7 @@ void Export::onBrowse ()
     g_free(utf16_path_string);
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Glib::RefPtr<const Gdk::Window> parentWindow = desktop->getToplevel()->get_window();
+    auto parentWindow = desktop->getToplevel()->get_window();
     g_assert(parentWindow->gobj() != NULL);
 
     opf.hwndOwner = (HWND)gdk_win32_window_get_handle((GdkWindow*)parentWindow->gobj());
