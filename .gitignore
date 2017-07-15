@@ -1,0 +1,8 @@
+build
+share/inkscape
+share/*/*.h
+
+*.pyc
+*.old
+*.swp
+*~
