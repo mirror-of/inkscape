@@ -45,7 +45,7 @@ endif()
 # console output is slow as hell on Windows and as a result status messages of the "install" target slow down
 # the whole build process considerably (especially since we also copy a lot of files from the devlibs)
 # TODO: Is this worth to be configurable / also applicable to other platforms?
-if(WIN32)
+if(WIN32 AND NOT CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
@@ -53,8 +53,8 @@ endif()
 # -----------------------------------------------------------------------------
 # Redirect output files
 # -----------------------------------------------------------------------------
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" )
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" )
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory for runtime binaries")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for libraries")
 
 # -----------------------------------------------------------------------------
 # Options
@@ -83,14 +83,18 @@ option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
-set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
-    CACHE PATH "The path to the GoogleMock test framework.")
-
-if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
+find_package(GTest) # gtest 1.8.0 and later already include gmock
+if(GTEST_FOUND AND EXISTS "${GTEST_INCLUDE_DIR}/gmock" AND IS_DIRECTORY "${GTEST_INCLUDE_DIR}/gmock")
     set(GMOCK_PRESENT ON)
 else()
-    set(GMOCK_PRESENT OFF)
-    message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
+    set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+    CACHE PATH "The path to the GoogleMock test framework.")
+    if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
+        set(GMOCK_PRESENT ON)
+    else()
+        set(GMOCK_PRESENT OFF)
+        message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
+    endif()
 endif()
 
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
@@ -218,10 +222,10 @@ add_custom_target(clean-all
 
 #-----------------------------------------------------------------------------
 if(GMOCK_PRESENT)
-    set(CMAKE_CTEST_COMMAND ctest -V)
     enable_testing()
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-    add_subdirectory(testfiles)
+    add_subdirectory(testfiles EXCLUDE_FROM_ALL)
+    set(CMAKE_CTEST_COMMAND ctest -V)
+    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
 endif()
 
 # Canonicalize the flags to speed up recompilation using ccache/etc.
