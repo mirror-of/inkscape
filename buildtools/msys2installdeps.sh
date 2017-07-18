@@ -28,7 +28,7 @@ pacman -Sy
 
 # install basic development system, compiler toolchain and build tools
 eval pacman -S --needed --noconfirm \
-bzr \
+git \
 intltool \
 base-devel \
 $ARCH-toolchain \
@@ -43,11 +43,7 @@ $ARCH-popt \
 $ARCH-libxslt \
 $ARCH-boost \
 $ARCH-gtk2 \
-$ARCH-gtkmm \
-$ARCH-gtk3 \
-$ARCH-gtkmm3 \
-$ARCH-gdl \
-$ARCH-libsoup
+$ARCH-gtkmm
 
 # install Inkscape dependecies (optional)
 eval pacman -S --needed --noconfirm \
@@ -58,9 +54,7 @@ $ARCH-libvisio \
 $ARCH-libwpg \
 $ARCH-aspell \
 $ARCH-aspell-en \
-$ARCH-gtkspell \
-$ARCH-gtkspell3 \
-$ARCH-libyaml
+$ARCH-gtkspell
 
 # install ImageMagick (as Inkscape requires old version ImageMagick 6 we have to specify it explicitly)
 # to prevent future updates:
