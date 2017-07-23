@@ -19,7 +19,7 @@
 ; Unicode, compression and admin requirement {{{2
 Unicode true
 SetCompressor /SOLID lzma
-SetCompressorDictSize 32
+SetCompressorDictSize 64
 RequestExecutionLevel admin
 
 ; Include required files {{{2
