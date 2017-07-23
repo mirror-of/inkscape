@@ -6,10 +6,6 @@ set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 set(INKSCAPE_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 include(CMakeScripts/inkscape-version.cmake)
 
-if(INKSCAPE_VERSION_SUFFIX AND INKSCAPE_REVISION_DATE AND INKSCAPE_REVISION_HASH)
-    set(INKSCAPE_DIST_PREFIX ${INKSCAPE_DIST_PREFIX}_${INKSCAPE_REVISION_DATE}_${INKSCAPE_REVISION_HASH})
-endif()
-
 
 # -----------------------------------------------------------------------------
 # 'dist' - generate source release tarball
