@@ -13,12 +13,14 @@ include(CMakeScripts/inkscape-version.cmake)
 
 add_custom_target(dist
     COMMAND sed -i "s/unknown/${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
-         && tar cfz ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.gz ${CMAKE_SOURCE_DIR}/doc --exclude=".*" --exclude-vcs-ignores
+         && tar cfj ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2
+	 ${CMAKE_SOURCE_DIR}/doc --exclude=".*" --exclude-vcs-ignores
          || git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
-    COMMAND git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake # duplicate to make sure we actually revert in case of error
+
+    # duplicate to make sure we actually revert in case of error
+    COMMAND git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     VERBATIM)
-
 
 
 # -----------------------------------------------------------------------------
