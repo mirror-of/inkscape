@@ -37,6 +37,11 @@ ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
 wget -nv https://gitlab.com/Ede123/bintray/raw/master/$MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz \
     && pacman -U $MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz --noconfirm
 
+# patched icu to for compatibility with Windows XP
+#   - https://github.com/Alexpux/MINGW-packages/pull/2709
+wget -nv https://gitlab.com/Ede123/bintray/raw/master/$MINGW_PACKAGE_PREFIX-icu-58.2-2-any.pkg.tar.xz \
+    && pacman -U $MINGW_PACKAGE_PREFIX-icu-58.2-2-any.pkg.tar.xz --noconfirm
+
 
 ### build / test
 
