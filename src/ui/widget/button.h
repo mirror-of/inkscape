@@ -57,6 +57,10 @@ private:
 protected:
     virtual void on_clicked() override;
     virtual bool on_event(GdkEvent *event) override;
+    virtual void get_preferred_width_vfunc( int &minimum_width,
+                                            int &natural_width) const override;
+    virtual void get_preferred_height_vfunc(int &minimum_width,
+                                            int &natural_width) const override;
 
 public:
     Button(Gtk::IconSize  size,

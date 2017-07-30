@@ -22,8 +22,6 @@
 #include "shortcuts.h"
 #include "helper/action.h"
 
-static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width);
-static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height);
 
 namespace Inkscape {
 namespace UI {
@@ -79,48 +77,46 @@ Button::Button(Gtk::IconSize             size,
     set_can_default(false);
 }
 
-static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width)
+void Button::get_preferred_width_vfunc(int &minimal_width,
+                                       int &natural_width) const
 {
-    GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+    auto child = get_child();
 
     if (child) {
-        gtk_widget_get_preferred_width(GTK_WIDGET(child), minimal_width, natural_width);
+        child->get_preferred_width(minimal_width, natural_width);
     } else {
-        *minimal_width = 0;
-        *natural_width = 0;
+        minimal_width = 0;
+        natural_width = 0;
     }
 
-    GtkStyleContext *context = gtk_widget_get_style_context (widget);
-    GtkBorder padding;
-    GtkBorder border;
+    auto context = get_style_context();
 
-    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_border( context, GTK_STATE_FLAG_NORMAL, &border );
+    auto padding = context->get_padding(Gtk::STATE_FLAG_NORMAL);
+    auto border  = context->get_border( Gtk::STATE_FLAG_NORMAL);
 
-    *minimal_width += MAX(2, padding.left + padding.right + border.left + border.right);
-    *natural_width += MAX(2, padding.left + padding.right + border.left + border.right);
+    minimal_width += MAX(2, padding.get_left() + padding.get_right() + border.get_left() + border.get_right());
+    natural_width += MAX(2, padding.get_left() + padding.get_right() + border.get_left() + border.get_right());
 }
 
-static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height)
+void Button::get_preferred_height_vfunc(int &minimal_height,
+                                        int &natural_height) const
 {
-    GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+    auto child = get_child();
 
     if (child) {
-        gtk_widget_get_preferred_height(GTK_WIDGET(child), minimal_height, natural_height);
+        child->get_preferred_height(minimal_height, natural_height);
     } else {
-        *minimal_height = 0;
-        *natural_height = 0;
+        minimal_height = 0;
+        natural_height = 0;
     }
 
-    GtkStyleContext *context = gtk_widget_get_style_context (widget);
-    GtkBorder padding;
-    GtkBorder border;
+    auto context = get_style_context();
 
-    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_border( context, GTK_STATE_FLAG_NORMAL, &border );
+    auto padding = context->get_padding(Gtk::STATE_FLAG_NORMAL);
+    auto border  = context->get_border (Gtk::STATE_FLAG_NORMAL);
 
-    *minimal_height += MAX(2, padding.top + padding.bottom + border.top + border.bottom);
-    *natural_height += MAX(2, padding.top + padding.bottom + border.top + border.bottom);
+    minimal_height += MAX(2, padding.get_top() + padding.get_bottom() + border.get_top() + border.get_bottom());
+    natural_height += MAX(2, padding.get_top() + padding.get_bottom() + border.get_top() + border.get_bottom());
 }
 
 void Button::clicked()
