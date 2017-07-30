@@ -245,7 +245,6 @@ static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, 
 
 static Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick( GtkWidget *t,
                                                                               Gtk::IconSize size,
-                                                                              Inkscape::UI::Widget::ButtonType type,
                                                                               Inkscape::Verb *verb,
                                                                               Inkscape::Verb *doubleclick_verb,
                                                                               Inkscape::UI::View::View *view);
@@ -314,7 +313,6 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
     GtkWidget* toolbox = nullptr;
     auto button_toolitem = sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox,
                                                                                   static_cast<Gtk::IconSize>(toolboxSize),
-                                                                                  Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
                                                                                   verb,
                                                                                   verb2,
                                                                                   view );
@@ -456,7 +454,6 @@ void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
 
 Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t,
                                                                       Gtk::IconSize size,
-                                                                      Inkscape::UI::Widget::ButtonType type,
                                                                       Inkscape::Verb *verb,
                                                                       Inkscape::Verb *doubleclick_verb,
                                                                       Inkscape::UI::View::View *view)
@@ -475,7 +472,7 @@ Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget 
 
     /* fixme: Handle sensitive/unsensitive */
     /* fixme: Implement construction of Button from an action */
-    auto b = Gtk::manage(new Inkscape::UI::Widget::Button(size, type, action, doubleclick_action));
+    auto b = Gtk::manage(new Inkscape::UI::Widget::Button(size, action, doubleclick_action));
     b->show();
     auto b_toolitem = Gtk::manage(new Gtk::ToolItem());
     b_toolitem->add(*b);

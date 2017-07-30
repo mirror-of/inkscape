@@ -26,20 +26,9 @@ class View;
 
 namespace Widget {
 
-typedef enum {
-    BUTTON_TYPE_NORMAL,
-    BUTTON_TYPE_TOGGLE
-} ButtonType;
-
-struct BChoiceData {
-    guchar *px;
-};
-
 class Button : public Gtk::ToggleButton {
 private:
-    ButtonType     _type;
     Gtk::IconSize  _lsize;
-    unsigned int   _psize;
     SPAction      *_action;
     SPAction      *_doubleclick_action;
 
@@ -49,6 +38,7 @@ private:
     // True if handling of "clicked" signal should be blocked
     bool _block_on_clicked;
 
+    void init();
     void set_action(SPAction *action);
     void set_doubleclick_action(SPAction *action);
     void action_set_active(bool active);
@@ -64,19 +54,15 @@ protected:
 
 public:
     Button(Gtk::IconSize  size,
-           ButtonType     type,
            SPAction      *action,
            SPAction      *doubleclick_action);
 
     Button(Gtk::IconSize             size,
-           ButtonType                type,
            Inkscape::UI::View::View *view,
            const gchar              *name,
            const gchar              *tip);
 
     void toggle_set_down(bool down);
-
-    void clicked();
 };
 
 } // namespace Widget

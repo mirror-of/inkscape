@@ -357,7 +357,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->tool_toolbox, FALSE, TRUE, 0 );
     // Lock guides button
     dtw->guides_lock = Gtk::manage(new Inkscape::UI::Widget::Button(Gtk::ICON_SIZE_MENU,
-                                                                    Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
                                                                     NULL,
                                                                     INKSCAPE_ICON("object-locked"),
                                                                     _("Toggle lock of all guides in the document")));
@@ -415,7 +414,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     // Sticky zoom button
     dtw->sticky_zoom = Gtk::manage(new Inkscape::UI::Widget::Button(Gtk::ICON_SIZE_MENU,
-                                                                    Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
                                                                     NULL,
                                                                     INKSCAPE_ICON("zoom-original"),
                                                                     _("Zoom drawing if window size changes")));
@@ -440,7 +438,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         }
     }
     dtw->cms_adjust = Gtk::manage(new Inkscape::UI::Widget::Button(Gtk::ICON_SIZE_MENU,
-                                                                   Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
                                                                    NULL,
                                                                    INKSCAPE_ICON("color-management"),
                                                                    tip ));

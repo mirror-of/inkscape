@@ -27,13 +27,11 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 Button::Button(Gtk::IconSize  size,
-               ButtonType   type,
                SPAction      *action,
                SPAction      *doubleclick_action) :
+    _lsize(CLAMP(size, Gtk::ICON_SIZE_MENU, Gtk::ICON_SIZE_DIALOG)),
     _action(nullptr),
     _doubleclick_action(nullptr),
-    _type(type),
-    _lsize(CLAMP(size, Gtk::ICON_SIZE_MENU, Gtk::ICON_SIZE_DIALOG)),
     _block_on_clicked(false)
 {
     new (&_c_set_active) sigc::connection();
@@ -53,11 +51,9 @@ Button::Button(Gtk::IconSize  size,
 }
 
 Button::Button(Gtk::IconSize             size,
-               ButtonType              type,
                Inkscape::UI::View::View *view,
                const gchar              *name,
                const gchar              *tip) :
-    _type(type),
     _lsize(CLAMP(size, Gtk::ICON_SIZE_MENU, Gtk::ICON_SIZE_DIALOG)),
     _action(nullptr),
     _doubleclick_action(nullptr),
@@ -119,13 +115,6 @@ void Button::get_preferred_height_vfunc(int &minimal_height,
     natural_height += MAX(2, padding.get_top() + padding.get_bottom() + border.get_top() + border.get_bottom());
 }
 
-void Button::clicked()
-{
-    if (_type == BUTTON_TYPE_TOGGLE) {
-        Gtk::ToggleButton::clicked();
-    }
-}
-
 bool Button::on_event(GdkEvent *event)
 {
     // Run parent-class handler first
@@ -158,7 +147,6 @@ void Button::on_clicked()
 
 void Button::toggle_set_down(bool down)
 {
-    g_return_if_fail(_type == BUTTON_TYPE_TOGGLE);
     _block_on_clicked = true;
     Gtk::ToggleButton::set_active(down);
     _block_on_clicked = false;
@@ -210,9 +198,6 @@ void Button::set_action(SPAction *action)
 
 void Button::action_set_active(bool active)
 {
-    if (_type != BUTTON_TYPE_TOGGLE) {
-        return;
-    }
 }
 
 void Button::set_composed_tooltip(SPAction *action)
