@@ -245,7 +245,7 @@ static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, 
 
 static Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick( GtkWidget *t,
                                                                               Gtk::IconSize size,
-                                                                              SPButtonType type,
+                                                                              Inkscape::UI::Widget::ButtonType type,
                                                                               Inkscape::Verb *verb,
                                                                               Inkscape::Verb *doubleclick_verb,
                                                                               Inkscape::UI::View::View *view);
@@ -314,13 +314,13 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
     GtkWidget* toolbox = nullptr;
     auto button_toolitem = sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox,
                                                                                   static_cast<Gtk::IconSize>(toolboxSize),
-                                                                                  SP_BUTTON_TYPE_TOGGLE,
+                                                                                  Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
                                                                                   verb,
                                                                                   verb2,
                                                                                   view );
 
     auto child = button_toolitem->get_child();
-    auto button_widget = dynamic_cast<SPButton *>(child);
+    auto button_widget = dynamic_cast<Inkscape::UI::Widget::Button *>(child);
 
     if (button_widget) {
        if ( active ) {
@@ -354,9 +354,9 @@ void VerbAction::set_active(bool active)
         auto ti = dynamic_cast<Gtk::ToolItem*>(proxy);
 
         if (ti) {
-            // *should* have one child that is the SPButton
+            // *should* have one child that is the Button
             auto child  = ti->get_child();
-            auto button = dynamic_cast<SPButton *>(child);
+            auto button = dynamic_cast<Inkscape::UI::Widget::Button *>(child);
 
             if (button) {
                 button->toggle_set_down(active);
@@ -456,7 +456,7 @@ void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
 
 Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t,
                                                                       Gtk::IconSize size,
-                                                                      SPButtonType type,
+                                                                      Inkscape::UI::Widget::ButtonType type,
                                                                       Inkscape::Verb *verb,
                                                                       Inkscape::Verb *doubleclick_verb,
                                                                       Inkscape::UI::View::View *view)
@@ -474,8 +474,8 @@ Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget 
     }
 
     /* fixme: Handle sensitive/unsensitive */
-    /* fixme: Implement sp_button_new_from_action */
-    auto b = Gtk::manage(new SPButton(size, type, action, doubleclick_action));
+    /* fixme: Implement construction of Button from an action */
+    auto b = Gtk::manage(new Inkscape::UI::Widget::Button(size, type, action, doubleclick_action));
     b->show();
     auto b_toolitem = Gtk::manage(new Gtk::ToolItem());
     b_toolitem->add(*b);

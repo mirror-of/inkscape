@@ -27,7 +27,6 @@ struct SPCanvas;
 class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
-class SPButton;
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
 #define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
@@ -56,11 +55,22 @@ bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw );
 void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
 void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
 
-namespace Inkscape { namespace Widgets { class LayerSelector; } }
+namespace Inkscape {
+namespace UI {
+namespace Dialogs {
+class SwatchesPanel;
+}
 
-namespace Inkscape { namespace UI { namespace Widget { class SelectedStyle; } } }
+namespace Widget {
+class Button;
+class SelectedStyle;
+} // namespace Widget
+} // namespace UI
 
-namespace Inkscape { namespace UI { namespace Dialogs { class SwatchesPanel; } } }
+namespace Widgets {
+class LayerSelector;
+} // namespace Widgets
+} // namespace Inkscape
 
 /// A GtkEventBox on an SPDesktop.
 struct SPDesktopWidget {
@@ -89,9 +99,9 @@ struct SPDesktopWidget {
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    SPButton  *guides_lock;
-    SPButton  *sticky_zoom;
-    SPButton  *cms_adjust;
+    Inkscape::UI::Widget::Button  *guides_lock;
+    Inkscape::UI::Widget::Button  *sticky_zoom;
+    Inkscape::UI::Widget::Button  *cms_adjust;
     GtkWidget *coord_status;
     GtkWidget *coord_status_x;
     GtkWidget *coord_status_y;

@@ -25,10 +25,13 @@
 static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width);
 static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height);
 
-SPButton::SPButton(Gtk::IconSize  size,
-                   SPButtonType   type,
-                   SPAction      *action,
-                   SPAction      *doubleclick_action) :
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+Button::Button(Gtk::IconSize  size,
+               ButtonType   type,
+               SPAction      *action,
+               SPAction      *doubleclick_action) :
     _action(nullptr),
     _doubleclick_action(nullptr),
     _type(type),
@@ -51,11 +54,11 @@ SPButton::SPButton(Gtk::IconSize  size,
     set_can_default(false);
 }
 
-SPButton::SPButton(Gtk::IconSize             size,
-                   SPButtonType              type,
-                   Inkscape::UI::View::View *view,
-                   const gchar              *name,
-                   const gchar              *tip) :
+Button::Button(Gtk::IconSize             size,
+               ButtonType              type,
+               Inkscape::UI::View::View *view,
+               const gchar              *name,
+               const gchar              *tip) :
     _type(type),
     _lsize(CLAMP(size, Gtk::ICON_SIZE_MENU, Gtk::ICON_SIZE_DIALOG)),
     _action(nullptr),
@@ -120,14 +123,14 @@ static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_heig
     *natural_height += MAX(2, padding.top + padding.bottom + border.top + border.bottom);
 }
 
-void SPButton::clicked()
+void Button::clicked()
 {
-    if (_type == SP_BUTTON_TYPE_TOGGLE) {
+    if (_type == BUTTON_TYPE_TOGGLE) {
         Gtk::ToggleButton::clicked();
     }
 }
 
-bool SPButton::on_event(GdkEvent *event)
+bool Button::on_event(GdkEvent *event)
 {
     // Run parent-class handler first
     Gtk::ToggleButton::on_event(event);
@@ -146,7 +149,7 @@ bool SPButton::on_event(GdkEvent *event)
     return false;
 }
 
-void SPButton::on_clicked()
+void Button::on_clicked()
 {
     if (!_block_on_clicked) {
         Gtk::ToggleButton::on_clicked();
@@ -157,15 +160,15 @@ void SPButton::on_clicked()
     }
 }
 
-void SPButton::toggle_set_down(bool down)
+void Button::toggle_set_down(bool down)
 {
-    g_return_if_fail(_type == SP_BUTTON_TYPE_TOGGLE);
+    g_return_if_fail(_type == BUTTON_TYPE_TOGGLE);
     _block_on_clicked = true;
     Gtk::ToggleButton::set_active(down);
     _block_on_clicked = false;
 }
 
-void SPButton::set_doubleclick_action(SPAction *action)
+void Button::set_doubleclick_action(SPAction *action)
 {
     if (_doubleclick_action) {
         g_object_unref(_doubleclick_action);
@@ -177,7 +180,7 @@ void SPButton::set_doubleclick_action(SPAction *action)
     }
 }
 
-void SPButton::set_action(SPAction *action)
+void Button::set_action(SPAction *action)
 {
     // First remove the old action if there is one
     if (_action) {
@@ -195,7 +198,7 @@ void SPButton::set_action(SPAction *action)
     if (action) {
         g_object_ref(action);
         _c_set_active = action->signal_set_active.connect(
-                sigc::mem_fun(this, &SPButton::action_set_active));
+                sigc::mem_fun(this, &Button::action_set_active));
         _c_set_sensitive = action->signal_set_sensitive.connect(
                 sigc::mem_fun(this, &Gtk::Widget::set_sensitive));
         if (action->image) {
@@ -209,14 +212,14 @@ void SPButton::set_action(SPAction *action)
     set_composed_tooltip(action);
 }
 
-void SPButton::action_set_active(bool active)
+void Button::action_set_active(bool active)
 {
-    if (_type != SP_BUTTON_TYPE_TOGGLE) {
+    if (_type != BUTTON_TYPE_TOGGLE) {
         return;
     }
 }
 
-void SPButton::set_composed_tooltip(SPAction *action)
+void Button::set_composed_tooltip(SPAction *action)
 {
     if (action) {
         unsigned int shortcut = sp_shortcut_get_primary(action->verb);
@@ -239,6 +242,9 @@ void SPButton::set_composed_tooltip(SPAction *action)
     }
 }
 
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:
