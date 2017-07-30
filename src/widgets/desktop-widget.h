@@ -27,7 +27,7 @@ struct SPCanvas;
 class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
-
+class SPButton;
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
 #define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
@@ -89,9 +89,9 @@ struct SPDesktopWidget {
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    GtkWidget *guides_lock;
-    GtkWidget *sticky_zoom;
-    GtkWidget *cms_adjust;
+    SPButton  *guides_lock;
+    SPButton  *sticky_zoom;
+    SPButton  *cms_adjust;
     GtkWidget *coord_status;
     GtkWidget *coord_status_x;
     GtkWidget *coord_status_y;

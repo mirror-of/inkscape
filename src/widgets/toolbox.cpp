@@ -243,9 +243,12 @@ static void update_aux_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWi
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
 
-static GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick( GtkWidget *t, GtkIconSize size, SPButtonType type,
-                                                                     Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
-                                                                     Inkscape::UI::View::View *view);
+static Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick( GtkWidget *t,
+                                                                              Gtk::IconSize size,
+                                                                              SPButtonType type,
+                                                                              Inkscape::Verb *verb,
+                                                                              Inkscape::Verb *doubleclick_verb,
+                                                                              Inkscape::UI::View::View *view);
 
 class VerbAction : public Gtk::Action {
 public:
@@ -307,25 +310,28 @@ Gtk::Widget* VerbAction::create_menu_item_vfunc()
 
 Gtk::Widget* VerbAction::create_tool_item_vfunc()
 {
-//     Gtk::Widget* widg = Gtk::Action::create_tool_item_vfunc();
-    GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small");
-    GtkWidget* toolbox = 0;
-    GtkToolItem *button_toolitem = sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox, toolboxSize,
-                                                                                      SP_BUTTON_TYPE_TOGGLE,
-                                                                                      verb,
-                                                                                      verb2,
-                                                                                      view );
+    auto toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small");
+    GtkWidget* toolbox = nullptr;
+    auto button_toolitem = sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox,
+                                                                                  static_cast<Gtk::IconSize>(toolboxSize),
+                                                                                  SP_BUTTON_TYPE_TOGGLE,
+                                                                                  verb,
+                                                                                  verb2,
+                                                                                  view );
 
-    GtkWidget* button_widget = gtk_bin_get_child(GTK_BIN(button_toolitem));
+    auto child = button_toolitem->get_child();
+    auto button_widget = dynamic_cast<SPButton *>(child);
 
-    if ( active ) {
-        sp_button_toggle_set_down( SP_BUTTON(button_widget), active);
+    if (button_widget) {
+       if ( active ) {
+        button_widget->toggle_set_down(active);
+       }
+
+       button_widget->show_all();
     }
-    gtk_widget_show_all( button_widget );
-    Gtk::ToolItem* holder = Glib::wrap(button_toolitem);
 
 //     g_message("create_tool_item_vfunc() = %p  for '%s'", holder, verb->get_id());
-    return holder;
+    return button_toolitem;
 }
 
 void VerbAction::connect_proxy_vfunc(Gtk::Widget* proxy)
@@ -343,15 +349,17 @@ void VerbAction::disconnect_proxy_vfunc(Gtk::Widget* proxy)
 void VerbAction::set_active(bool active)
 {
     this->active = active;
-    Glib::SListHandle<Gtk::Widget*> proxies = get_proxies();
-    for ( Glib::SListHandle<Gtk::Widget*>::iterator it = proxies.begin(); it != proxies.end(); ++it ) {
-        Gtk::ToolItem* ti = dynamic_cast<Gtk::ToolItem*>(*it);
+
+    for ( auto proxy : get_proxies() ) {
+        auto ti = dynamic_cast<Gtk::ToolItem*>(proxy);
+
         if (ti) {
             // *should* have one child that is the SPButton
-            Gtk::Widget* child = ti->get_child();
-            if ( child && SP_IS_BUTTON(child->gobj()) ) {
-                SPButton* button = SP_BUTTON(child->gobj());
-                sp_button_toggle_set_down( button, active );
+            auto child  = ti->get_child();
+            auto button = dynamic_cast<SPButton *>(child);
+
+            if (button) {
+                button->toggle_set_down(active);
             }
         }
     }
@@ -446,9 +454,12 @@ void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
 // ------------------------------------------------------
 
 
-GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t, GtkIconSize size, SPButtonType type,
-                                                             Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
-                                                             Inkscape::UI::View::View *view)
+Gtk::ToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t,
+                                                                      Gtk::IconSize size,
+                                                                      SPButtonType type,
+                                                                      Inkscape::Verb *verb,
+                                                                      Inkscape::Verb *doubleclick_verb,
+                                                                      Inkscape::UI::View::View *view)
 {
     SPAction *action = verb->get_action(Inkscape::ActionContext(view));
     if (!action) {
@@ -464,25 +475,25 @@ GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t
 
     /* fixme: Handle sensitive/unsensitive */
     /* fixme: Implement sp_button_new_from_action */
-    GtkWidget *b = sp_button_new(size, type, action, doubleclick_action);
-    gtk_widget_show(b);
-    GtkToolItem *b_toolitem = gtk_tool_item_new();
-    gtk_container_add(GTK_CONTAINER(b_toolitem), b);
+    auto b = Gtk::manage(new SPButton(size, type, action, doubleclick_action));
+    b->show();
+    auto b_toolitem = Gtk::manage(new Gtk::ToolItem());
+    b_toolitem->add(*b);
 
     unsigned int shortcut = sp_shortcut_get_primary(verb);
     if (shortcut != GDK_KEY_VoidSymbol) {
         gchar *key = sp_shortcut_get_label(shortcut);
         gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
         if ( t ) {
-           gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem, -1);
-           gtk_widget_set_tooltip_text(b, tip);
+           gtk_toolbar_insert(GTK_TOOLBAR(t), GTK_TOOL_ITEM(b_toolitem->gobj()), -1);
+           b->set_tooltip_text(tip);
         }
         g_free(tip);
         g_free(key);
     } else {
         if ( t ) {
-            gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem, -1);
-            gtk_widget_set_tooltip_text(b, action->tip);
+            gtk_toolbar_insert(GTK_TOOLBAR(t), GTK_TOOL_ITEM(b_toolitem->gobj()), -1);
+            b->set_tooltip_text(action->tip);
         }
     }
 

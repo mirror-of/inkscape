@@ -202,7 +202,7 @@ void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     for ( std::list<SPDesktopWidget*>::iterator it = _widget_list.begin(); it != _widget_list.end(); ++it ) {
         SPDesktopWidget *dtw = *it;
-        if ( gtk_widget_get_sensitive( dtw->cms_adjust ) != enabled ) {
+        if ( dtw->cms_adjust->get_sensitive() != enabled ) {
             cms_adjust_set_sensitive( dtw, enabled );
         }
     }
@@ -356,16 +356,15 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
     gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->tool_toolbox, FALSE, TRUE, 0 );
     // Lock guides button
-    dtw->guides_lock = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
-                                               SP_BUTTON_TYPE_TOGGLE,
-                                               NULL,
-                                               INKSCAPE_ICON("object-locked"),
-                                               _("Toggle lock of all guides in the document"));
+    dtw->guides_lock = Gtk::manage(new SPButton( Gtk::ICON_SIZE_MENU,
+                                                 SP_BUTTON_TYPE_TOGGLE,
+                                                 NULL,
+                                                 INKSCAPE_ICON("object-locked"),
+                                                 _("Toggle lock of all guides in the document")));
     auto guides_lock_style_provider = Gtk::CssProvider::create();
     guides_lock_style_provider->load_from_data("GtkWidget { padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; }");
-    auto wnd = Glib::wrap(dtw->guides_lock);
-    wnd->set_name("LockGuides");
-    auto context = wnd->get_style_context();
+    dtw->guides_lock->set_name("LockGuides");
+    auto context = dtw->guides_lock->get_style_context();
     context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
     /* Horizontal ruler */
@@ -386,9 +385,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->canvas_tbl = gtk_grid_new();
     gtk_widget_set_name(dtw->canvas_tbl, "CanvasTable");
     
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->guides_lock->gobj()), 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 1, 0, 1, 1);
-    g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
+    g_signal_connect (G_OBJECT (dtw->guides_lock->gobj()), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
     gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl_wrapper, TRUE, TRUE, 1 );
 
     /* Vertical ruler */
@@ -415,15 +414,15 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->vscrollbar_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
     // Sticky zoom button
-    dtw->sticky_zoom = sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
+    dtw->sticky_zoom = Gtk::manage(new SPButton( Gtk::ICON_SIZE_MENU,
                                                  SP_BUTTON_TYPE_TOGGLE,
                                                  NULL,
                                                  INKSCAPE_ICON("zoom-original"),
-                                                 _("Zoom drawing if window size changes"));
-    gtk_widget_set_name(dtw->sticky_zoom, "StickyZoom");
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dtw->sticky_zoom), prefs->getBool("/options/stickyzoom/value"));
-    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
-    g_signal_connect (G_OBJECT (dtw->sticky_zoom), "toggled", G_CALLBACK (sp_dtw_sticky_zoom_toggled), dtw);
+                                                 _("Zoom drawing if window size changes")));
+    dtw->sticky_zoom->set_name("StickyZoom");
+    dtw->sticky_zoom->set_active(prefs->getBool("/options/stickyzoom/value"));
+    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), GTK_WIDGET(dtw->sticky_zoom->gobj()), FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (dtw->sticky_zoom->gobj()), "toggled", G_CALLBACK (sp_dtw_sticky_zoom_toggled), dtw);
 
     // Vertical scrollbar
     dtw->vadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
@@ -440,12 +439,12 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
             tip = act->tip;
         }
     }
-    dtw->cms_adjust = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
+    dtw->cms_adjust = Gtk::manage(new SPButton(Gtk::ICON_SIZE_MENU,
                                                SP_BUTTON_TYPE_TOGGLE,
                                                NULL,
                                                INKSCAPE_ICON("color-management"),
-                                               tip );
-    gtk_widget_set_name(dtw->cms_adjust, "CMS_Adjust");
+                                               tip ));
+    dtw->cms_adjust->set_name("CMS_Adjust");
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     {
@@ -455,16 +454,16 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         if ( enabled ) {
             bool active = prefs->getBool("/options/displayprofile/enable");
             if ( active ) {
-                sp_button_toggle_set_down( SP_BUTTON(dtw->cms_adjust), TRUE );
+                dtw->cms_adjust->toggle_set_down(true);
             }
         }
     }
-    g_signal_connect_after( G_OBJECT(dtw->cms_adjust), "clicked", G_CALLBACK(cms_adjust_toggled), dtw );
+    g_signal_connect_after( G_OBJECT(dtw->cms_adjust->gobj()), "clicked", G_CALLBACK(cms_adjust_toggled), dtw );
 #else
     cms_adjust_set_sensitive(dtw, FALSE);
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    gtk_grid_attach( GTK_GRID(dtw->canvas_tbl), dtw->cms_adjust, 2, 2, 1, 1);
+    gtk_grid_attach( GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->cms_adjust->gobj()), 2, 2, 1, 1);
     {
         if (!watcher) {
             watcher = new CMSPrefWatcher();
@@ -848,7 +847,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate (widget, allocation);
         }
 
-        if (SP_BUTTON_IS_DOWN(dtw->sticky_zoom)) {
+        if (dtw->sticky_zoom->get_active()) {
             /* Find new visible area */
             Geom::Rect newarea = dtw->desktop->get_display_area();
             /* Calculate adjusted zoom */
@@ -986,7 +985,7 @@ void sp_update_guides_lock( GtkWidget */*button*/, gpointer data )
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
 
-    bool down = SP_BUTTON_IS_DOWN(dtw->guides_lock);
+    bool down = dtw->guides_lock->get_active();
 
     SPDocument *doc = dtw->desktop->getDocument();
     SPNamedView *nv = dtw->desktop->getNamedView();
@@ -1008,7 +1007,7 @@ void cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
 
-    bool down = SP_BUTTON_IS_DOWN(dtw->cms_adjust);
+    bool down = dtw->cms_adjust->get_active();
     if ( down != dtw->canvas->_enable_cms_display_adj ) {
         dtw->canvas->_enable_cms_display_adj = down;
         dtw->requestCanvasUpdate();
@@ -1032,7 +1031,7 @@ void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled )
             sp_action_set_sensitive( act, enabled );
         }
     }
-    gtk_widget_set_sensitive( dtw->cms_adjust, enabled );
+    dtw->cms_adjust->set_sensitive(enabled);
 }
 
 void
@@ -1507,19 +1506,19 @@ void SPDesktopWidget::layoutWidgets()
     if (!prefs->getBool(pref_root + "scrollbars/state", true)) {
         gtk_widget_hide (dtw->hscrollbar);
         gtk_widget_hide (dtw->vscrollbar_box);
-        gtk_widget_hide ( dtw->cms_adjust );
+        dtw->cms_adjust->hide();
     } else {
         gtk_widget_show_all (dtw->hscrollbar);
         gtk_widget_show_all (dtw->vscrollbar_box);
-        gtk_widget_show_all( dtw->cms_adjust );
+        dtw->cms_adjust->show_all();
     }
 
     if (!prefs->getBool(pref_root + "rulers/state", true)) {
-        gtk_widget_hide (dtw->guides_lock);
+        dtw->guides_lock->hide();
         gtk_widget_hide (dtw->hruler);
         gtk_widget_hide (dtw->vruler);
     } else {
-        gtk_widget_show_all (dtw->guides_lock);
+        dtw->guides_lock->show_all();
         gtk_widget_show_all (dtw->hruler);
         gtk_widget_show_all (dtw->vruler);
     }
@@ -1659,7 +1658,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
     /* Once desktop is set, we can update rulers */
     sp_desktop_widget_update_rulers (dtw);
-    sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), namedview->lockguides );
+    dtw->guides_lock->toggle_set_down( namedview->lockguides );
 
     sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), dtw->desktop);
 
@@ -2002,7 +2001,7 @@ sp_dtw_sticky_zoom_toggled (GtkMenuItem *, gpointer data)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/stickyzoom/value", SP_BUTTON_IS_DOWN(dtw->sticky_zoom));
+    prefs->setBool("/options/stickyzoom/value", dtw->sticky_zoom->get_active());
 }
 
 
@@ -2190,13 +2189,13 @@ void
 sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (gtk_widget_get_visible (dtw->guides_lock)) {
-        gtk_widget_hide (dtw->guides_lock);
+    if (dtw->guides_lock->get_visible()) {
+        dtw->guides_lock->hide();
         gtk_widget_hide (dtw->hruler);
         gtk_widget_hide (dtw->vruler);
         prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", false);
     } else {
-        gtk_widget_show_all (dtw->guides_lock);
+        dtw->guides_lock->show_all();
         gtk_widget_show_all (dtw->hruler);
         gtk_widget_show_all (dtw->vruler);
         prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", true);
@@ -2210,55 +2209,41 @@ sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw)
     if (gtk_widget_get_visible (dtw->hscrollbar)) {
         gtk_widget_hide (dtw->hscrollbar);
         gtk_widget_hide (dtw->vscrollbar_box);
-        gtk_widget_hide ( dtw->cms_adjust );
+        dtw->cms_adjust->hide();
         prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", false);
     } else {
         gtk_widget_show_all (dtw->hscrollbar);
         gtk_widget_show_all (dtw->vscrollbar_box);
-        gtk_widget_show_all( dtw->cms_adjust );
+        dtw->cms_adjust->show_all();
         prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", true);
     }
 }
 
 bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw )
 {
-    return gtk_widget_get_sensitive( dtw->cms_adjust ) &&
-              SP_BUTTON_IS_DOWN(dtw->cms_adjust) ;
+    return dtw->cms_adjust->get_sensitive() &&
+        dtw->cms_adjust->get_active();
 }
 
 void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw )
 {
-    if ( gtk_widget_get_sensitive( dtw->cms_adjust ) ) {
-        if ( SP_BUTTON_IS_DOWN(dtw->cms_adjust) ) {
-            sp_button_toggle_set_down( SP_BUTTON(dtw->cms_adjust), FALSE );
+    if (dtw->cms_adjust->get_sensitive() ) {
+        if (dtw->cms_adjust->get_active()) {
+            dtw->cms_adjust->toggle_set_down(false);
         } else {
-            sp_button_toggle_set_down( SP_BUTTON(dtw->cms_adjust), TRUE );
+            dtw->cms_adjust->toggle_set_down(true);
         }
     }
 }
 
 void sp_desktop_widget_toggle_guides_lock( SPDesktopWidget *dtw )
 {
-    if ( SP_BUTTON_IS_DOWN(dtw->guides_lock) ) {
-        sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), FALSE );
+    if (dtw->guides_lock->get_active()) {
+        dtw->guides_lock->toggle_set_down(false);
     } else {
-        sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), TRUE );
+        dtw->guides_lock->toggle_set_down(true);
     }
 }
-/* Unused
-void
-sp_spw_toggle_menubar (SPDesktopWidget *dtw, bool is_fullscreen)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (gtk_widget_get_visible (dtw->menubar)) {
-        gtk_widget_hide (dtw->menubar);
-        prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", false);
-    } else {
-        gtk_widget_show_all (dtw->menubar);
-        prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", true);
-    }
-}
-*/
 
 static void
 set_adjustment (GtkAdjustment *adj, double l, double u, double ps, double si, double pi)

@@ -12,11 +12,7 @@
  * This code is in public domain
  */
 
-#define SP_TYPE_BUTTON (sp_button_get_type ())
-#define SP_BUTTON(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_BUTTON, SPButton))
-#define SP_IS_BUTTON(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_BUTTON))
-
-#include <gtk/gtk.h>
+#include <gtkmm/togglebutton.h>
 #include <sigc++/connection.h>
 #include "icon-size.h"
 
@@ -31,43 +27,53 @@ class View;
 }
 
 typedef enum {
-	SP_BUTTON_TYPE_NORMAL,
-	SP_BUTTON_TYPE_TOGGLE
+    SP_BUTTON_TYPE_NORMAL,
+    SP_BUTTON_TYPE_TOGGLE
 } SPButtonType;
 
 struct SPBChoiceData {
-	guchar *px;
+    guchar *px;
 };
 
-struct SPButton {
-	GtkToggleButton widget;
-	SPButtonType type;
-	GtkIconSize lsize;
-	unsigned int psize;
-	SPAction *action;
-	SPAction *doubleclick_action;
+class SPButton : public Gtk::ToggleButton {
+private:
+    SPButtonType   _type;
+    Gtk::IconSize  _lsize;
+    unsigned int   _psize;
+    SPAction      *_action;
+    SPAction      *_doubleclick_action;
 
-	sigc::connection c_set_active;
-	sigc::connection c_set_sensitive;
+    sigc::connection _c_set_active;
+    sigc::connection _c_set_sensitive;
+
+    // True if handling of "clicked" signal should be blocked
+    bool _block_on_clicked;
+
+    void set_action(SPAction *action);
+    void set_doubleclick_action(SPAction *action);
+    void action_set_active(bool active);
+    void set_composed_tooltip(SPAction *action);
+
+protected:
+    virtual void on_clicked() override;
+    virtual bool on_event(GdkEvent *event) override;
+
+public:
+    SPButton(Gtk::IconSize  size,
+             SPButtonType   type,
+             SPAction      *action,
+             SPAction      *doubleclick_action);
+
+    SPButton(Gtk::IconSize             size,
+             SPButtonType              type,
+             Inkscape::UI::View::View *view,
+             const gchar              *name,
+             const gchar              *tip);
+
+    void toggle_set_down(bool down);
+
+    void clicked();
 };
-
-struct SPButtonClass {
-	GtkToggleButtonClass parent_class;
-};
-
-#define SP_BUTTON_IS_DOWN(b) gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))
-
-GType sp_button_get_type (void);
-
-GtkWidget *sp_button_new (GtkIconSize size, SPButtonType type, SPAction *action, SPAction *doubleclick_action);
-
-void sp_button_toggle_set_down (SPButton *button, gboolean down);
-
-GtkWidget *sp_button_new_from_data (GtkIconSize  size,
-				    SPButtonType type,
-				    Inkscape::UI::View::View *view,
-				    const gchar *name,
-				    const gchar *tip);
 
 #endif // !SEEN_SP_BUTTON_H
 
