@@ -257,11 +257,11 @@ public:
     virtual void set_active(bool active = true);
 
 protected:
-    virtual Gtk::Widget* create_menu_item_vfunc();
-    virtual Gtk::Widget* create_tool_item_vfunc();
+    virtual Gtk::Widget* create_menu_item_vfunc() override;
+    virtual Gtk::Widget* create_tool_item_vfunc() override;
 
-    virtual void connect_proxy_vfunc(Gtk::Widget* proxy);
-    virtual void disconnect_proxy_vfunc(Gtk::Widget* proxy);
+    virtual void connect_proxy_vfunc(Gtk::Widget* proxy) override;
+    virtual void disconnect_proxy_vfunc(Gtk::Widget* proxy) override;
 
     virtual void on_activate();
 
@@ -322,7 +322,7 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
 
     if (button_widget) {
        if ( active ) {
-        button_widget->toggle_set_down(active);
+           button_widget->toggle_set_down(active);
        }
 
        button_widget->show_all();
