@@ -28,7 +28,6 @@
 
 #include "helper/action.h"
 #include "sp-root.h"
-#include "ui/widget/button.h"
 #include "verbs.h"
 
 using std::pair;

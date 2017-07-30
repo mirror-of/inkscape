@@ -65,43 +65,43 @@ Find::Find()
       entry_find(_("F_ind:"), _("Find objects by their content or properties (exact or partial match)")),
       entry_replace(_("R_eplace:"), _("Replace match with this value")),
 
-      check_scope_all(_("_All"), _("Search in all layers")),
-      check_scope_layer(_("Current _layer"), _("Limit search to the current layer")),
-      check_scope_selection(_("Sele_ction"), _("Limit search to the current selection")),
-      check_searchin_text(_("_Text"), _("Search in text objects")),
-      check_searchin_property(_("_Properties"), _("Search in object properties, styles, attributes and IDs")),
+      check_scope_all(        _("_All"),           true),
+      check_scope_layer(      _("Current _layer"), true),
+      check_scope_selection(  _("Sele_ction"),     true),
+      check_searchin_text(    _("_Text"),          true),
+      check_searchin_property(_("_Properties"),    true),
       vbox_searchin(0, false),
       frame_searchin(_("Search in")),
       frame_scope(_("Scope")),
 
-      check_case_sensitive(_("Case sensiti_ve"), _("Match upper/lower case"), false),
-      check_exact_match(_("E_xact match"), _("Match whole objects only"), false),
-      check_include_hidden(_("Include _hidden"), _("Include hidden objects in search"), false),
-      check_include_locked(_("Include loc_ked"), _("Include locked objects in search"), false),
+      check_case_sensitive(_("Case sensiti_ve"), true),
+      check_exact_match(   _("E_xact match"),    true),
+      check_include_hidden(_("Include _hidden"), true),
+      check_include_locked(_("Include loc_ked"), true),
       expander_options(_("Options")),
       frame_options(_("General")),
 
-      check_ids(_("_ID"), _("Search id name"), true),
-      check_attributename(_("Attribute _name"), _("Search attribute name"), false),
-      check_attributevalue(_("Attri_bute value"), _("Search attribute value"), true),
-      check_style(_("_Style"), _("Search style"), true),
-      check_font(_("F_ont"), _("Search fonts"), false),
+      check_ids(           _("_ID"),              true),
+      check_attributename( _("Attribute _name"),  true),
+      check_attributevalue(_("Attri_bute value"), true),
+      check_style(         _("_Style"),           true),
+      check_font(          _("F_ont"),            true),
       frame_properties(_("Properties")),
 
-      check_alltypes(_("All types"), _("Search all object types"), true),
-      check_rects(_("Rectangles"), _("Search rectangles"), false),
-      check_ellipses(_("Ellipses"), _("Search ellipses, arcs, circles"), false),
-      check_stars(_("Stars"), _("Search stars and polygons"), false),
-      check_spirals(_("Spirals"), _("Search spirals"), false),
-      check_paths(_("Paths"), _("Search paths, lines, polylines"), false),
-      check_texts(_("Texts"), _("Search text objects"), false),
-      check_groups(_("Groups"), _("Search groups"), false),
+      check_alltypes(_("All types"),  true),
+      check_rects(   _("Rectangles"), true),
+      check_ellipses(_("Ellipses"),   true),
+      check_stars(   _("Stars"),      true),
+      check_spirals( _("Spirals"),    true),
+      check_paths(   _("Paths"),      true),
+      check_texts(   _("Texts"),      true),
+      check_groups(  _("Groups"),     true),
       check_clones(
                     //TRANSLATORS: "Clones" is a noun indicating type of object to find
-                    C_("Find dialog", "Clones"), _("Search clones"), false),
+                    C_("Find dialog", "Clones"), true),
 
-      check_images(_("Images"), _("Search images"), false),
-      check_offsets(_("Offsets"), _("Search offset objects"), false),
+      check_images(  _("Images"),     true),
+      check_offsets( _("Offsets"),    true),
       frame_types(_("Object types")),
 
       status(""),
@@ -116,14 +116,19 @@ Find::Find()
     entry_find.getEntry()->set_width_chars(25);
     entry_replace.getEntry()->set_width_chars(25);
 
+    check_searchin_text.set_tooltip_text(_("Search in text objects"));
     Gtk::RadioButtonGroup grp_searchin = check_searchin_text.get_group();
+    check_searchin_property.set_tooltip_text(_("Search in object properties, styles, attributes and IDs"));
     check_searchin_property.set_group(grp_searchin);
     vbox_searchin.pack_start(check_searchin_text, false, false);
     vbox_searchin.pack_start(check_searchin_property, false, false);
     frame_searchin.add(vbox_searchin);
 
+    check_scope_all.set_tooltip_text(_("Search in all layers"));
     Gtk::RadioButtonGroup grp_scope = check_scope_all.get_group();
+    check_scope_layer.set_tooltip_text(_("Limit search to the current layer"));
     check_scope_layer.set_group(grp_scope);
+    check_scope_selection.set_tooltip_text(_("Limit search to the current selection"));
     check_scope_selection.set_group(grp_scope);
     vbox_scope.pack_start(check_scope_all, true, true);
     vbox_scope.pack_start(check_scope_layer, true, true);
@@ -134,35 +139,75 @@ Find::Find()
     hbox_searchin.pack_start(frame_searchin, true, true);
     hbox_searchin.pack_start(frame_scope, true, true);
 
+    check_case_sensitive.set_tooltip_text(_("Match upper/lower case"));
+    check_case_sensitive.set_active(false);
     vbox_options1.pack_start(check_case_sensitive, true, true);
+    check_include_hidden.set_tooltip_text(_("Include hidden objects in search"));
+    check_include_hidden.set_active(false);
     vbox_options1.pack_start(check_include_hidden, true, true);
+    check_exact_match.set_tooltip_text(_("Match whole objects only"));
+    check_exact_match.set_active( false);
     vbox_options2.pack_start(check_exact_match, true, true);
+    check_include_locked.set_tooltip_text(_("Include locked objects in search"));
+    check_include_locked.set_active(false);
     vbox_options2.pack_start(check_include_locked, true, true);
     hbox_options.pack_start(vbox_options1, true, true, 4);
     hbox_options.pack_start(vbox_options2, true, true, 4);
     frame_options.add(hbox_options);
 
     hbox_properties1.set_homogeneous(false);
+    check_ids.set_tooltip_text(_("Search id name"));
+    check_ids.set_active(true);
     hbox_properties1.pack_start(check_ids, false, false, 4 );
+    check_style.set_tooltip_text(_("Search style"));
+    check_style.set_active(true);
     hbox_properties1.pack_start(check_style, false, false, 8);
+    check_font.set_tooltip_text(_("Search fonts"));
+    check_font.set_active(false);
     hbox_properties1.pack_start(check_font, false, false, 8);
     hbox_properties2.set_homogeneous(false);
+    check_attributevalue.set_tooltip_text(_("Search attribute value"));
+    check_attributevalue.set_active(true);
     hbox_properties2.pack_start(check_attributevalue, false, false, 4);
+    check_attributename.set_tooltip_text(_("Search attribute name"));
+    check_attributename.set_active(false);
     hbox_properties2.pack_start(check_attributename, false, false, 4);
     vbox_properties.pack_start(hbox_properties1, true, true, 0);
     vbox_properties.pack_start(hbox_properties2, true, true, 2);
     frame_properties.add(vbox_properties);
 
     vbox_types1.pack_start(check_alltypes, true, true);
+    check_paths.set_tooltip_text(_("Search paths, lines, polylines"));
+    check_paths.set_active(false);
     vbox_types1.pack_start(check_paths, true, true);
+    check_texts.set_tooltip_text(_("Search text objects"));
+    check_texts.set_active(false);
     vbox_types1.pack_start(check_texts, true, true);
+    check_groups.set_tooltip_text(_("Search groups"));
+    check_groups.set_active(false);
     vbox_types1.pack_start(check_groups, true, true);
+
+    //TRANSLATORS: "Clones" is a noun indicating type of object to find
+    check_clones.set_tooltip_text(_("Search clones"));
+    check_clones.set_active(false);
     vbox_types1.pack_start(check_clones, true, true);
+    check_images.set_tooltip_text(_("Search images"));
+    check_images.set_active(false);
     vbox_types1.pack_start(check_images, true, true);
+    check_offsets.set_tooltip_text(_("Search offset objects"));
+    check_offsets.set_active(false);
     vbox_types2.pack_start(check_offsets, true, true);
+    check_rects.set_tooltip_text(_("Search rectangles"));
+    check_rects.set_active(false);
     vbox_types2.pack_start(check_rects, true, true);
+    check_ellipses.set_tooltip_text(_("Search ellipses, arcs, circles"));
+    check_ellipses.set_active(false);
     vbox_types2.pack_start(check_ellipses, true, true);
+    check_stars.set_tooltip_text(_("Search stars and polygons"));
+    check_stars.set_active(false);
     vbox_types2.pack_start(check_stars, true, true);
+    check_spirals.set_tooltip_text(_("Search spirals"));
+    check_spirals.set_active(false);
     vbox_types2.pack_start(check_spirals, true, true);
     hbox_types.pack_start(vbox_types1, true, true, 4);
     hbox_types.pack_start(vbox_types2, true, true, 4);
@@ -214,6 +259,8 @@ Find::Find()
     button_replace.signal_clicked().connect(sigc::mem_fun(*this, &Find::onReplace));
     check_searchin_text.signal_clicked().connect(sigc::mem_fun(*this, &Find::onSearchinText));
     check_searchin_property.signal_clicked().connect(sigc::mem_fun(*this, &Find::onSearchinProperty));
+    check_alltypes.set_tooltip_text(_("Search all object types"));
+    check_alltypes.set_active(true);
     check_alltypes.signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleAlltypes));
 
     for(size_t i = 0; i < checkProperties.size(); i++) {

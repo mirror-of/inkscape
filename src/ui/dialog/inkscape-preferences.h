@@ -22,7 +22,6 @@
 #include <iostream>
 #include <vector>
 #include "ui/widget/preferences-widget.h"
-#include "ui/widget/button.h"
 #include <stddef.h>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/comboboxtext.h>

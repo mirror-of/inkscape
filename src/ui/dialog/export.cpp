@@ -25,6 +25,7 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/radiobutton.h>
 #include <gtkmm/spinbutton.h>
 
 #ifdef WITH_GNOME_VFS
@@ -144,8 +145,8 @@ Export::Export (void) :
     browse_label(_("_Export As..."), 1),
     browse_image(),
     batch_box(false, 5),
-    batch_export(_("B_atch export all selected objects"), _("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)")),
-    interlacing(_("Use interlacing"),_("Enables ADAM7 interlacing for PNG output. This results in slightly heavier images, but big images will look better sooner when loading the file")),
+    batch_export(_("B_atch export all selected objects"), true),
+    interlacing(_("Use interlacing")),
     bitdepth_label(_("Bit depth")),
     bitdepth_cb(),
     zlib_label(_("Compression")),
@@ -155,8 +156,8 @@ Export::Export (void) :
     antialiasing_label(_("Antialiasing")),
     antialiasing_cb(),
     hide_box(false, 5),
-    hide_export(_("Hide all except selected"), _("In the exported image, hide all objects except those that are selected")),
-    closeWhenDone(_("Close when complete"), _("Once the export completes, close this dialog")),
+    hide_export(_("Hide all except selected")),
+    closeWhenDone(_("Close when complete")),
     button_box(false, 3),
     _prog(),
     prog_dlg(NULL),
@@ -309,9 +310,11 @@ Export::Export (void) :
         singleexport_box.pack_start(file_box);
     }
 
+    batch_export.set_tooltip_text(_("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)"));
     batch_export.set_sensitive(true);
     batch_box.pack_start(batch_export, false, false);
 
+    hide_export.set_tooltip_text(_("In the exported image, hide all objects except those that are selected"));
     hide_export.set_sensitive(true);
     hide_export.set_active (prefs->getBool("/dialogs/export/hideexceptselected/value", false));
     hide_box.pack_start(hide_export, false, false);
@@ -323,6 +326,7 @@ Export::Export (void) :
     export_button.set_use_underline();
     export_button.set_tooltip_text (_("Export the bitmap file with these settings"));
 
+    closeWhenDone.set_tooltip_text(_("Once the export completes, close this dialog"));
     button_box.pack_start(closeWhenDone, true, true, 0 );
     button_box.pack_end(export_button, false, false, 0);
 
@@ -349,6 +353,7 @@ Export::Export (void) :
     antialiasing_cb.set_active_text(antialising_list[2]);
     auto table = new Gtk::Grid();
     gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));
+    interlacing.set_tooltip_text(_("Enables ADAM7 interlacing for PNG output. This results in slightly heavier images, but big images will look better sooner when loading the file"));
     table->attach(interlacing,0,0,1,1);
     table->attach(bitdepth_label,0,1,1,1);
     table->attach(bitdepth_cb,1,1,1,1);

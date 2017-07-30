@@ -85,12 +85,17 @@ Transformation::Transformation()
       _counterclockwise_rotate (),
       _clockwise_rotate (),
 
-      _check_move_relative    (_("Rela_tive move"), _("Add the specified relative displacement to the current position; otherwise, edit the current absolute position directly")),
-      _check_scale_proportional (_("_Scale proportionally"), _("Preserve the width/height ratio of the scaled objects")),
-      _check_apply_separately    (_("Apply to each _object separately"), _("Apply the scale/rotate/skew to each selected object separately; otherwise, transform the selection as a whole")),
-      _check_replace_matrix    (_("Edit c_urrent matrix"), _("Edit the current transform= matrix; otherwise, post-multiply transform= by this matrix"))
+      _check_move_relative    (_("Rela_tive move"), true),
+      _check_scale_proportional (_("_Scale proportionally"), true),
+      _check_apply_separately    (_("Apply to each _object separately"), true),
+      _check_replace_matrix    (_("Edit c_urrent matrix"), true)
 
 {
+    _check_move_relative.set_tooltip_text(_("Add the specified relative displacement to the current position; otherwise, edit the current absolute position directly"));
+    _check_scale_proportional.set_tooltip_text(_("Preserve the width/height ratio of the scaled objects"));
+    _check_apply_separately.set_tooltip_text(_("Apply the scale/rotate/skew to each selected object separately; otherwise, transform the selection as a whole"));
+    _check_replace_matrix.set_tooltip_text(_("Edit the current transform= matrix; otherwise, post-multiply transform= by this matrix"));
+        
     Gtk::Box *contents = _getContents();
 
     contents->set_spacing(0);

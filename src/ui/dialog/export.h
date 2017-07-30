@@ -12,17 +12,18 @@
 #ifndef SP_EXPORT_H
 #define SP_EXPORT_H
 
-#include <gtkmm/progressbar.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/comboboxtext.h>
+#include <gtkmm/progressbar.h>
 
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
-#include "ui/widget/button.h"
 
 namespace Gtk {
 class Dialog;
+class RadioButton;
 }
 
 namespace Inkscape {
@@ -310,16 +311,16 @@ private:
     Gtk::Image browse_image;
 
     Gtk::HBox batch_box;
-    Inkscape::UI::Widget::CheckButton    batch_export;
+    Gtk::CheckButton    batch_export;
 
     Gtk::HBox hide_box;
-    Inkscape::UI::Widget::CheckButton    hide_export;
+    Gtk::CheckButton    hide_export;
 
-    Inkscape::UI::Widget::CheckButton closeWhenDone;
+    Gtk::CheckButton closeWhenDone;
 
     /* Advanced */
     Gtk::Expander expander;
-    Inkscape::UI::Widget::CheckButton interlacing;
+    Gtk::CheckButton interlacing;
     Gtk::Label                        bitdepth_label;
     Gtk::ComboBoxText                 bitdepth_cb;
     Gtk::Label                        zlib_label;
