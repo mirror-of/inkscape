@@ -52,7 +52,7 @@
 #include "../ui/widget/style-swatch.h"
 #include "../ui/widget/unit-tracker.h"
 #include "../verbs.h"
-#include "../widgets/button.h"
+#include "ui/widget/button.h"
 #include "../widgets/spinbutton-events.h"
 #include "ui/widget/spinbutton.h"
 #include "../widgets/spw-utilities.h"

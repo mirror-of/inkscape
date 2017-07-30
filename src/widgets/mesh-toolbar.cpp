@@ -20,13 +20,13 @@
 
 #include <gtkmm.h>
 
+#include "ui/widget/button.h"
 #include "ui/widget/color-preview.h"
 #include "toolbox.h"
 #include "mesh-toolbar.h"
 
 #include "verbs.h"
 
-#include "widgets/button.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/gradient-vector.h"
 #include "widgets/gradient-image.h"

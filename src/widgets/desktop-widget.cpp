@@ -42,6 +42,7 @@
 #include "file.h"
 #include "helper/action.h"
 #include "util/units.h"
+#include "ui/widget/button.h"
 #include "ui/widget/unit-tracker.h"
 #include "ui/interface.h"
 #include "sp-image.h"
@@ -56,7 +57,6 @@
 #include "sp-root.h"
 #include "attributes.h"
 // We're in the "widgets" directory, so no need to explicitly prefix these:
-#include "button.h"
 #include "gimp/ruler.h"
 #include "spinbutton-events.h"
 #include "spw-utilities.h"

@@ -3,7 +3,6 @@ add_subdirectory(gimp)
 set(widgets_SRC
 	arc-toolbar.cpp
 	box3d-toolbar.cpp
-	button.cpp
 	calligraphy-toolbar.cpp
 	connector-toolbar.cpp
 	dash-selector.cpp
@@ -58,7 +57,6 @@ set(widgets_SRC
 	# Headers
 	arc-toolbar.h
 	box3d-toolbar.h
-	button.h
 	calligraphy-toolbar.h
 	connector-toolbar.h
 	dash-selector.h
