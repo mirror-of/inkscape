@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-07-24 23:11+0200\n"
-"PO-Revision-Date: 2017-08-03 23:09+0100\n"
-"Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
+"PO-Revision-Date: 2017-08-05 00:39+0100\n"
+"Last-Translator: Eduard Braun <eduard.braun2@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -8379,32 +8379,32 @@ msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
-"wurde mit einer älteren Inkscape-Version (mit einer Auflösung von 90 dpi)"
-" erstellt, und wir müssen die Datei mit neueren Versionen (96 dpi) kompatibel"
-" machen. Bitte wähle eine Option:\n"
+"wurde mit einer älteren Inkscape-Version (mit einer Auflösung von 90 dpi) "
+"erstellt, und wir müssen die Datei mit neueren Versionen (96 dpi) kompatibel "
+"machen. Bitte wähle eine Option:\n"
 
 #: ../src/file-update.cpp:327
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
-"Diese Datei enthält digitales Bildmaterial, das nur auf einem Bildschirm"
-" dargestellt"
-" werden soll. <b>(Wählen Sie dies aus, wenn Sie sich nicht sicher sind.)</b>"
+"Diese Datei enthält digitales Bildmaterial, das nur auf einem Bildschirm "
+"dargestellt werden soll. <b>(Wählen Sie dies aus, wenn Sie sich nicht sicher "
+"sind.)</b>"
 
 #: ../src/file-update.cpp:330
 msgid "This file is intended for physical output, such as paper or 3D prints."
 msgstr ""
-"Diese Datei ist für die physikalische Ausgabe vorgesehen, z.B. als Ausdruck"
-" auf Papier oder in einem 3D-Drucker."
+"Diese Datei ist für die physikalische Ausgabe vorgesehen, z.B. als Ausdruck "
+"auf Papier oder in einem 3D-Drucker."
 
 #: ../src/file-update.cpp:332
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
-"Das Erscheinungsbild von Elementen, wie z.B. ausgeschnittenen oder maskierten"
-" Objekten, Filtern, Klonen,\n"
+"Das Erscheinungsbild von Elementen, wie z.B. ausgeschnittenen oder "
+"maskierten Objekten, Filtern, Klonen,\n"
 "ist am wichtigsten. <b>(Auswählen, wenn unsicher.)</b>"
 
 #: ../src/file-update.cpp:336
@@ -8412,8 +8412,8 @@ msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
-"Die präzise Wiedergabe physikalischer Einheitsgrößen und der Positionen von"
-" Objekten\n"
+"Die präzise Wiedergabe physikalischer Einheitsgrößen und der Positionen von "
+"Objekten\n"
 "in der Datei sind besonders wichtig (experimentell)."
 
 #: ../src/file-update.cpp:338
@@ -8450,17 +8450,16 @@ msgstr ""
 "Auflösung für bessere Kompatibilität mit Webbrowsern zu erfüllen. Früher "
 "haben wir 90 dpi verwendet. Digitales Bildmaterial, das auf einem Bildschirm "
 "dargestellt werden sollen, werden ohne Größenänderung zu 96 dpi konvertiert "
-"und sollten nicht betroffen sein. Kunstwerke, die mit 90 dpi für eine"
-" bestimmte physische Größe erstellt worden sind, werden zu klein sein, "
-"wenn sie ohne Größenänderung zu 96 dpi konvertiert werden. Es gibt zwei "
-"Methoden zur Anpassung der Größe:\n"
+"und sollten nicht betroffen sein. Kunstwerke, die mit 90 dpi für eine "
+"bestimmte physische Größe erstellt worden sind, werden zu klein sein, wenn "
+"sie ohne Größenänderung zu 96 dpi konvertiert werden. Es gibt zwei Methoden "
+"zur Anpassung der Größe:\n"
 "\n"
 "<b>Die Größe des ganzen Dokuments ändern:</b> Dies ist die am wenigsten "
-"fehleranfällige Methode. Sie erhält das Erscheinungsbild der Zeichnung, und"
-" lässt "
-"Filter und die Position von Masken usw. unverändert. Die Größe der "
-"Zeichnung im Verhältnis zur Dokumentgröße ist jedoch möglicherweise "
-"nicht korrekt.\n"
+"fehleranfällige Methode. Sie erhält das Erscheinungsbild der Zeichnung, und "
+"lässt Filter und die Position von Masken usw. unverändert. Die Größe der "
+"Zeichnung im Verhältnis zur Dokumentgröße ist jedoch möglicherweise nicht "
+"korrekt.\n"
 "\n"
 "<b>Die Größe der einzelnen Elemente der Zeichnung ändern:</b> Diese Methode "
 "ist weniger zuverlässig und kann ein verändertes Erscheinungsbild bewirken. "
@@ -12049,7 +12048,7 @@ msgid ""
 "EPS/PDF (default 96)"
 msgstr ""
 "Auflösung beim Exportieren von Bitmaps und für Rasterisierung von Filtern in "
-"PS/EPS/PDF (Vorgabe ist 96)"
+"PS/EPS/PDF (Standard ist 96)"
 
 #: ../src/main.cpp:335 ../src/ui/widget/rendering-options.cpp:37
 msgid "DPI"
@@ -12060,8 +12059,8 @@ msgid ""
 "Exported area in SVG user units (default is the page; 0,0 is lower-left "
 "corner)"
 msgstr ""
-"Exportierter Bereich in SVG-Benutzereinheiten (Vorgabe: gesamte Seite, „0,0“ "
-"ist die untere linke Ecke)"
+"Exportierter Bereich in SVG-Benutzereinheiten (Standard: gesamte Seite, "
+"„0,0“ ist die untere linke Ecke)"
 
 #: ../src/main.cpp:340
 msgid "x0:y0:x1:y1"
@@ -12273,7 +12272,7 @@ msgstr "Erweiterungsverzeichnis ausgeben und beenden"
 
 #: ../src/main.cpp:498
 msgid "Remove unused definitions from the defs section(s) of the document"
-msgstr "Unbenutzte Elemente aus den &lt;defs&gt; des Dokuments entfernen"
+msgstr "Unbenutzte Elemente aus den <defs> des Dokuments entfernen"
 
 #: ../src/main.cpp:504
 msgid "Enter a listening loop for D-Bus messages in console mode"
@@ -12284,8 +12283,8 @@ msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
 msgstr ""
-"D-Bus-Namen angeben, dessen Nachrichten angezeigt werden sollen (Vorgabe ist "
-"org.inkscape)"
+"D-Bus-Namen angeben, dessen Nachrichten angezeigt werden sollen (Standard "
+"ist org.inkscape)"
 
 #: ../src/main.cpp:510
 msgid "BUS-NAME"
@@ -12534,7 +12533,7 @@ msgstr "Nachzeichnen"
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
-"Inkscape läuft mit den Vorgabeeinstellungen.\n"
+"Inkscape läuft mit den Standardeinstellungen.\n"
 "Neue Einstellungen werden nicht gespeichert."
 
 #. the creation failed
@@ -15614,15 +15613,15 @@ msgstr "<b>Inhalt:</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:1075
 msgid "_Save as default"
-msgstr "Zur Vorgabe machen"
+msgstr "Als Standardeinstellung _speichern"
 
 #: ../src/ui/dialog/document-properties.cpp:1076
 msgid "Save this metadata as the default metadata"
-msgstr "Metadaten als Standard abspeichern"
+msgstr "Aktuelle Metadaten als Standard abspeichern"
 
 #: ../src/ui/dialog/document-properties.cpp:1077
 msgid "Use _default"
-msgstr "Standardeinstellungen benutzen"
+msgstr "Standardeinstellungen _benutzen"
 
 #: ../src/ui/dialog/document-properties.cpp:1078
 msgid "Use the previously saved default metadata here"
@@ -18154,7 +18153,7 @@ msgstr "Stilvorgaben für dieses Werkzeug für neue Objekte"
 #: ../src/ui/dialog/inkscape-preferences.cpp:307
 msgid "Remember the style of the (first) selected object as this tool's style"
 msgstr ""
-"Stil des (ersten) ausgewählten Objektes zur Vorgabe für dieses Werkzeug "
+"Stil des (ersten) ausgewählten Objektes zur Stilvorgabe für dieses Werkzeug "
 "machen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:312
@@ -19344,8 +19343,9 @@ msgid ""
 "above the right scrollbar)"
 msgstr ""
 "Darstellungsgröße des Dokuments anpassen, wenn sich die Fenstergröße ändert, "
-"damit der selbe Bereich sichtbar bleibt (Vorgabe, die in jedem Fenster mit "
-"der Schaltfläche über dem rechten Rollbalken geändert werden kann)"
+"damit der selbe Bereich sichtbar bleibt (Standardeinstellung, die in jedem "
+"Fenster mit der Schaltfläche über dem rechten Rollbalken geändert werden "
+"kann)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:762
 msgid ""
@@ -19379,7 +19379,7 @@ msgstr "Die Gitterlinien werden in der Hauptgitterlinienfarbe angezeigt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:775
 msgid "Default grid settings"
-msgstr "Vorgabe Gittereinstellungen"
+msgstr "Standard-Gittereinstellungen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:781
 #: ../src/ui/dialog/inkscape-preferences.cpp:806
@@ -20017,7 +20017,7 @@ msgid ""
 "this command several times in quick succession, it will act more and more "
 "aggressively; invoking it again after a pause restores the default threshold."
 msgstr ""
-"Vorgabeschwelle der Vereinfachung im Knotenwerkzeug. Wird diese Operation "
+"Standardschwelle der Vereinfachung im Knotenwerkzeug. Wird diese Operation "
 "mehrmals schnell hintereinander ausgeführt, erhöht sich die Stärke; kurze "
 "Pause dazwischen setzt den Schwellwert zurück."
 
@@ -21550,7 +21550,7 @@ msgstr "_Titel:"
 
 #: ../src/ui/dialog/object-properties.cpp:61
 msgid "_Image Rendering:"
-msgstr "B_ildrendering:"
+msgstr "B_ilddarstellung:"
 
 #: ../src/ui/dialog/object-properties.cpp:62
 msgid "_Hide"
@@ -21587,11 +21587,11 @@ msgid ""
 "Note that this behaviour is not defined in the SVG 1.1 specification and not "
 "all browsers follow this interpretation."
 msgstr ""
-"Die 'Bild-Darstellung' Eigenschaft kann die Vergrößerung von Bitmaps "
+"Die 'image-rendering' Eigenschaft kann die Skalierung von Rastergrafiken "
 "beeinflussen: \n"
-"\t'auto' keine Vorgabe;\n"
-"\t'Qualität optimieren' glatter;\n"
-"\t'Geschwindigkeit optimieren' pixeliger.\n"
+"\t'auto' keine Präferenz;\n"
+"\t'optimizeQuality' geglättet;\n"
+"\t'optimizeSpeed' pixelig.\n"
 "Beachte, dass dieses Verhalten nicht in der SVG 1.1 Spezifikation definiert "
 "ist und nicht von allen Browsern unterstützt wird."
 
@@ -22955,7 +22955,7 @@ msgstr "Matri_x"
 
 #: ../src/ui/dialog/transformation.cpp:143
 msgid "Reset the values on the current tab to defaults"
-msgstr "Die Werte des aktuellen Reiters auf die Vorgabewerte setzen"
+msgstr "Die Werte des aktuellen Reiters auf Standardwerte zurücksetzen"
 
 #: ../src/ui/dialog/transformation.cpp:150
 msgid "Apply transformation to selection"
@@ -29074,7 +29074,7 @@ msgstr "(konstante Breite)"
 
 #: ../src/widgets/calligraphy-toolbar.cpp:444
 msgid "(slight thinning, default)"
-msgstr "(schwache Ausdünnung, Vorgabe)"
+msgstr "(schwache Ausdünnung, Standard)"
 
 #: ../src/widgets/calligraphy-toolbar.cpp:444
 msgid "(speed deflates stroke)"
@@ -29133,7 +29133,7 @@ msgstr "(senkrecht zum Strich, \"Pinsel\")"
 
 #: ../src/widgets/calligraphy-toolbar.cpp:478
 msgid "(almost fixed, default)"
-msgstr "(fast fixiert, Vorgabe)"
+msgstr "(fast fixiert, Standard)"
 
 #: ../src/widgets/calligraphy-toolbar.cpp:478
 msgid "(fixed by Angle, \"pen\")"
@@ -29158,7 +29158,7 @@ msgstr ""
 #. Cap Rounding
 #: ../src/widgets/calligraphy-toolbar.cpp:494
 msgid "(blunt caps, default)"
-msgstr "(stumpfe Enden, Vorgabe)"
+msgstr "(stumpfe Enden, Standard)"
 
 #: ../src/widgets/calligraphy-toolbar.cpp:494
 msgid "(slightly bulging)"
@@ -29252,7 +29252,7 @@ msgstr "(keine Trägheit)"
 #: ../src/widgets/calligraphy-toolbar.cpp:546
 #: ../src/widgets/eraser-toolbar.cpp:168
 msgid "(slight smoothing, default)"
-msgstr "(leichte Glättung, Vorgabe)"
+msgstr "(leichte Glättung, Standard)"
 
 #: ../src/widgets/calligraphy-toolbar.cpp:546
 #: ../src/widgets/eraser-toolbar.cpp:168
@@ -30570,8 +30570,8 @@ msgid ""
 "create a new pattern from selection."
 msgstr ""
 "Benutzen Sie das <b>Knotenwerkzeug</b>, um Position Winkel und Größe des "
-"Musters auf der Arbeitsfläche anzupassen. Mit <b>Objekt „ Füllmuster "
-"„ Objekte in Füllmuster umwandeln</b> lassen sich neue Füllmuster von "
+"Musters auf der Arbeitsfläche anzupassen. Mit <b>Objekt > Füllmuster > "
+"Objekte in Füllmuster umwandeln</b> lassen sich neue Füllmuster von "
 "ausgewählten Objekten erzeugen."
 
 #: ../src/widgets/paint-selector.cpp:1457
@@ -30636,8 +30636,8 @@ msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
 "to change defaults)"
 msgstr ""
-"Die Parameter des Farbeimers auf Vorgabewerte zurücksetzen (Menü Datei "
-"„ Inkscape-Einstellungen „ Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
+"Die Parameter des Farbeimers auf Standardwerte zurücksetzen (Menü Datei > "
+"Inkscape-Einstellungen > Werkzeuge, um die Standardeinstellungen zu ändern)"
 
 #: ../src/widgets/pencil-toolbar.cpp:104
 msgid "Bezier"
@@ -30730,8 +30730,8 @@ msgid ""
 "Reset pencil parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
-"Die Parameter des Stiftes auf Vorgabewerte zurücksetzen (Menü Datei "
-"„ Inkscape-Einstellungen „ Werkzeuge, um die Grundeinstellungen zu ändern)"
+"Die Parameter des Stiftes auf Standardwerte zurücksetzen (Menü Datei > "
+"Inkscape-Einstellungen > Werkzeuge, um die Grundeinstellungen zu ändern)"
 
 #: ../src/widgets/pencil-toolbar.cpp:413 ../src/widgets/pencil-toolbar.cpp:414
 msgid "LPE based interactive simplify"
@@ -31094,8 +31094,8 @@ msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
-"Die Parameter der Formen auf Vorgabewerte zurücksetzen (Menü Datei "
-"„ Inkscape-Einstellungen „ Werkzeuge, um die Vorgabeeinstellungen zu ändern)"
+"Die Parameter der Formen auf Standardwerte zurücksetzen (Menü Datei > "
+"Inkscape-Einstellungen > Werkzeuge, um die Standardeinstellungen zu ändern)"
 
 # (swatches)
 #. Width
@@ -34718,8 +34718,7 @@ msgstr ""
 "Maschinen verwendet wird. So erlauben die Gcodewerkzeuge Inkscape als CAM-"
 "Programm zu verwenden.\n"
 "\n"
-"Es kann mit einer Menge von Maschinentypen verwendet "
-"werden:   \n"
+"Es kann mit einer Menge von Maschinentypen verwendet werden:   \n"
 "\tFräsen \n"
 "\tDrehmaschinen\n"
 "\tLaser- und Plasma-Schneider und Graviergeräte \n"
@@ -34727,8 +34726,8 @@ msgstr ""
 "\tPlotter\n"
 "\tusw.\n"
 "\t\n"
-"Weitere Informationen erhalten Sie auf der Entwickler-"
-"Seite unter http://www.cnc-club.ru/gcodetools"
+"Weitere Informationen erhalten Sie auf der Entwickler-Seite unter http://www."
+"cnc-club.ru/gcodetools"
 
 #: ../share/extensions/gcodetools_about.inx.h:14
 #: ../share/extensions/gcodetools_area.inx.h:70
@@ -34762,7 +34761,8 @@ msgid ""
 msgstr ""
 "\n"
 "Gcode-Werkzeug Plug-in: Wandelt Pfade zu Gcode (mit Kreisinterpolation), "
-"erstellt versetzte Pfade und graviert scharfe Ecken mittels Kegelschneider. \n"
+"erstellt versetzte Pfade und graviert scharfe Ecken mittels "
+"Kegelschneider. \n"
 "Dieses Plug-In berechnet Gcode für Pfade mittels Kreisinterpolation oder "
 "linearer Bewegung, wenn nötig.\n"
 "\n"
@@ -34770,13 +34770,11 @@ msgstr ""
 "im Englischen Support-Forum:\n"
 "\thttp://www.cnc-club.ru/gcodetools\n"
 "\t\n"
-"und "
-"im russischen Support-Forum:\n"
+"und im russischen Support-Forum:\n"
 "\thttp://www.cnc-club.ru/gcodetoolsru\n"
 "\n"
-"Danksagung: "
-"Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, Chris Lusby "
-"Taylor.\n"
+"Danksagung: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
 "\n"
 "Gcode-Werkzeug Ver. 1.7\n"
 
@@ -34828,12 +34826,11 @@ msgstr ""
 "um die originale Pfadfläche bis zur maximalen \"Breite der Fläche\" zu "
 "füllen. \n"
 "\n"
-"Die dabei erstellten Umrisse reichen von \"1/2 D\" bis zur gesamten "
-"\"Breite der Fläche\" in \"D\" breiten Schritten, wobei D von der nächsten "
+"Die dabei erstellten Umrisse reichen von \"1/2 D\" bis zur gesamten \"Breite "
+"der Fläche\" in \"D\" breiten Schritten, wobei D von der nächsten "
 "Werkzeugdefinition genommen wird (Wert für \"Werkzeugdurchmesser\").\n"
-"Es wird "
-"nur ein einziger Versatz erstellt, wenn die \"Bereichsbreite\" gleich \"1/2 D"
-"\" ist.\n"
+"Es wird nur ein einziger Versatz erstellt, wenn die \"Bereichsbreite\" "
+"gleich \"1/2 D\" ist.\n"
 "\t\t\t"
 
 #: ../share/extensions/gcodetools_area.inx.h:11
@@ -34971,13 +34968,12 @@ msgstr ""
 "\n"
 "Biarc-Interpolationstoleranz ist der maximale Abstand zwischen dem Pfad und "
 "seiner Annäherung.\n"
-"Ein Segment wird in zwei Segmente aufgeteilt, wenn der "
-"Abstand zwischen Pfad-Segment und dessen Angleichung die Biarc-"
-"Interpolationstoleranz überschreitet.\n"
-"In der Tiefenfunktion ist c=Farbintensität von 0.0 (weiß) bis 1.0 (schwarz),"
-" d ist die Tiefe, "
-"definiert durch Orientierungspunkte, s ist die Oberfläche definiert durch "
-"Orientierungspunkte.\n"
+"Ein Segment wird in zwei Segmente aufgeteilt, wenn der Abstand zwischen Pfad-"
+"Segment und dessen Angleichung die Biarc-Interpolationstoleranz "
+"überschreitet.\n"
+"In der Tiefenfunktion ist c=Farbintensität von 0.0 (weiß) bis 1.0 (schwarz), "
+"d ist die Tiefe, definiert durch Orientierungspunkte, s ist die Oberfläche "
+"definiert durch Orientierungspunkte.\n"
 
 #: ../share/extensions/gcodetools_area.inx.h:46
 #: ../share/extensions/gcodetools_engraving.inx.h:16
@@ -35205,9 +35201,9 @@ msgstr ""
 "können auch die ursprüngliche Form speichern. Nur der Startpunkt jeder Kurve "
 "wird verwendet.\n"
 "\n"
-"Sie können auch manuell ein Objekt auswählen, öffnen den XML-"
-"Editor (Umschalt+Strg+X) und den XML-Tag 'dxfpoint' mit einem beliebigen "
-"Wert hinzufügen oder entfernen.\n"
+"Sie können auch manuell ein Objekt auswählen, öffnen den XML-Editor (Umschalt"
+"+Strg+X) und den XML-Tag 'dxfpoint' mit einem beliebigen Wert hinzufügen "
+"oder entfernen.\n"
 "\t\t  "
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:10
@@ -35258,13 +35254,14 @@ msgstr ""
 "\n"
 "Diese Funktion erzeugt einen Pfad, um Buchstaben zu gravieren oder eine "
 "beliebige Form mit scharfen Winkeln.\n"
-"Die Schnitt-Tiefe als eine Funktion des  Radius wird durch das Werkzeug"
-" definiert.\n"
+"Die Schnitt-Tiefe als eine Funktion des  Radius wird durch das Werkzeug "
+"definiert.\n"
 "Die Tiefe kann jeder Python-Ausdruck sein. Zum Beispiel:\n"
 "\n"
-"Kegel....(45 Grad) ......................: w\n "
-"Kegel....(Höhe / Durchmesser=10/3) ..: 10*w/3\n"
-"Kugel....(Radius r) ...........................: math.sqrt(max(0,r**2-w**2))\n"
+"Kegel....(45 Grad) ......................: w\n"
+" Kegel....(Höhe / Durchmesser=10/3) ..: 10*w/3\n"
+"Kugel....(Radius r) ...........................: math.sqrt(max(0,r**2-"
+"w**2))\n"
 "Ellipse..(Nebenachse r, Hauptachse 4r).....: math.sqrt(max (0,r-w**2**2))*4"
 
 #: ../share/extensions/gcodetools_graffiti.inx.h:1
@@ -35360,21 +35357,19 @@ msgstr ""
 "\n"
 "Orientierungspunkte werden zum Berechnen von Transformationen (Versatz, "
 "Skalierung, Spiegel, eine Drehung in XY-Ebene) des Pfades benutzt.\n"
-"Nur 3-Punkt-Modus: Nicht alle drei auf einer Linie anlegen (stattdessen"
-" 2-Punkt-"
-"Modus verwenden).\n"
+"Nur 3-Punkt-Modus: Nicht alle drei auf einer Linie anlegen (stattdessen 2-"
+"Punkt-Modus verwenden).\n"
 "\n"
-"Sie können die Z-Oberflächen und Z-Tiefen-Werte später mit "
-"dem Text-Werkzeug verändern (3. Koordinaten).\n"
+"Sie können die Z-Oberflächen und Z-Tiefen-Werte später mit dem Text-Werkzeug "
+"verändern (3. Koordinaten).\n"
 "\n"
-"Wenn es keine Orientierungspunkte in der aktuellen Ebene gibt, werden die von"
-" der Ebene "
-"darüber verwendet.\n"
+"Wenn es keine Orientierungspunkte in der aktuellen Ebene gibt, werden die "
+"von der Ebene darüber verwendet.\n"
 "\n"
-"Die Gruppierung von Orientierungspunkten nicht aufheben! "
-"Sie können die Gruppe mit Doppelklick oder Strg+Eingabetaste betreten.\n"
-"\n "
-"Klicken Sie auf Anwenden, um die Kontrollpunkte (unabhängiger Satz für jede "
+"Die Gruppierung von Orientierungspunkten nicht aufheben! Sie können die "
+"Gruppe mit Doppelklick oder Strg+Eingabetaste betreten.\n"
+"\n"
+" Klicken Sie auf Anwenden, um die Kontrollpunkte (unabhängiger Satz für jede "
 "Ebene) zu erstellen.\n"
 "\t\t\t"
 
@@ -35552,11 +35547,11 @@ msgstr ""
 "Der ausgewählte Werkzeugtyp gibt passende Standardwerte vor. Sie können "
 "diese Werte später mit dem Textwerkzeug ändern.\n"
 "\n"
-"Es wird das oberste Werkzeug "
-"(Z-Ordnung) in der aktiven Ebene verwendet. Wenn kein Werkzeug innerhalb der "
-"aktuellen Ebene vorhanden ist, wird eines von der Ebene darüber verwendet.\n"
-"\n "
-"Anwenden erstellt ein neues Werkzeug.\n"
+"Es wird das oberste Werkzeug (Z-Ordnung) in der aktiven Ebene verwendet. "
+"Wenn kein Werkzeug innerhalb der aktuellen Ebene vorhanden ist, wird eines "
+"von der Ebene darüber verwendet.\n"
+"\n"
+" Anwenden erstellt ein neues Werkzeug.\n"
 "\t\t\t"
 
 #: ../share/extensions/generate_voronoi.inx.h:1
@@ -36894,7 +36889,7 @@ msgstr "In den Folienmodus wechseln:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:18
 msgid "Set path width to default:"
-msgstr "Setze Pfadbreite auf Vorgabewert:"
+msgstr "Setze Pfadbreite auf Standard:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:19
 msgid "Set path width to 1:"
@@ -38697,7 +38692,7 @@ msgstr "Positionsabhängig"
 
 #: ../share/extensions/restack.inx.h:3
 msgid "Presets"
-msgstr "Vorgabewerte"
+msgstr "Standard"
 
 #: ../share/extensions/restack.inx.h:6
 msgid "Horizontal:"
@@ -42664,10 +42659,6 @@ msgstr "XAML einlesen"
 #~ msgstr "Vorgegebener Titel"
 
 #~ msgctxt "Palette"
-#~ msgid "default block"
-#~ msgstr "(Vorgabe)"
-
-#~ msgctxt "Palette"
 #~ msgid "default covered text"
 #~ msgstr "Fließtext erstellen"
 
@@ -43918,13 +43909,6 @@ msgstr "XAML einlesen"
 #~ "%s ist keine gültige Menübeschreibungsdatei.\n"
 #~ "%s"
 
-#~ msgid ""
-#~ "Inkscape will run with default menus.\n"
-#~ "New menus will not be saved."
-#~ msgstr ""
-#~ "Inkscape läuft mit den Vorgabemenüs.\n"
-#~ "Neue Menüs werden nicht gespeichert."
-
 #~ msgid "Deactivate knotholder?"
 #~ msgstr "Deaktiviert"
 
@@ -43945,7 +43929,7 @@ msgstr "XAML einlesen"
 
 #~ msgid "The resolution used for exporting SVG into bitmap (default 90)"
 #~ msgstr ""
-#~ "Verwendete Auflösung beim Umwandeln von SVG nach Bitmap (Vorgabe: 90)"
+#~ "Verwendete Auflösung beim Umwandeln von SVG nach Bitmap (Standard: 90)"
 
 #~ msgid "Embed fonts on export (Type 1 only) (EPS)"
 #~ msgstr "Fonts beim Exportieren einbetten (nur Type 1) (EPS)"
