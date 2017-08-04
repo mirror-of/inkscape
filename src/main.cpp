@@ -531,14 +531,14 @@ struct poptOption options[] = {
      NULL},
 
     {"no-convert-text-baseline-spacing", 0,
-    POPT_ARG_NONE, &sp_no_convert_text_baseline_spacing, SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
-    N_("Do not fix legacy (pre-0.92) files' text baseline spacing on opening."),
-    NULL},
+     POPT_ARG_NONE, &sp_no_convert_text_baseline_spacing, SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
+     N_("Do not fix legacy (pre-0.92) files' text baseline spacing on opening."),
+     NULL},
 
     {"convert-dpi-method", 0,
      POPT_ARG_STRING, NULL, SP_ARG_CONVERT_DPI_METHOD,
-     N_("Method used to convert pre-.92 document dpi, if needed."),
-     "[none|scale-viewbox|scale-document]"},
+     N_("Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|scale-document])"),
+     "[...]"},
 
     POPT_AUTOHELP POPT_TABLEEND
 };
