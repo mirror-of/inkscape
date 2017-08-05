@@ -8505,7 +8505,7 @@ msgid ""
 "printing.)\n"
 "\n"
 "More information about this change are available in the <a href='https://"
-"inkscape.org/en/learn/faq#todo-todo-todo'>Inkscape FAQ</a></small>"
+"inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
 "<small>Nous avons mis à jour Inkscape afin qu'il suive le standard CSS de "
 "96 ppp pour une meilleure compatibilité avec les navigateurs — nous "
@@ -8527,7 +8527,7 @@ msgstr ""
 "l'impression 3D).\n"
 "\n"
 "Plus d'informations sur ce changement sont disponibles dans la <a href="
-"\"https://inkscape.org/fr/apprendre/faq#a-faire\">FAQ d'Inkscape</a>.</small>"
+"\"https://inkscape.org/fr/apprendre/faq#dpi_change\">FAQ d'Inkscape</a>.</small>"
 
 # Opacity
 #: ../src/file-update.cpp:386
