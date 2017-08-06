@@ -8452,7 +8452,7 @@ msgstr ""
 "\n"
 "\n"
 "Ulteriori informazioni sono disponibili nelle <a href='https://"
-"inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small"
+"inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 
 #: ../src/file-update.cpp:386
 msgid "OK"
