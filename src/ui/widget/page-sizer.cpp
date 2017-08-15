@@ -294,7 +294,7 @@ PageSizer::PageSizer(Registry & _wr)
     _paperSizeListScroller.add(_paperSizeList);
     _paperSizeListScroller.set_shadow_type(Gtk::SHADOW_IN);
     _paperSizeListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-    _paperSizeListScroller.set_size_request(-1, 90);
+    _paperSizeListScroller.set_size_request(-1, 130);
 
     fill_landscape_papers();
 
@@ -316,7 +316,7 @@ PageSizer::PageSizer(Registry & _wr)
     //    _paperSizeListSelection->select(iter);
 
 
-    pack_start (_paperSizeListScroller, true, true, 0);
+    pack_start (_paperSizeListScroller, false, false, 0);
 
     //## Set up orientation radio buttons
     pack_start (_orientationBox, false, false, 0);
