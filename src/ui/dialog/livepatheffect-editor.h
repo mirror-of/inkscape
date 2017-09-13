@@ -86,12 +86,14 @@ private:
         {
             add(col_name);
             add(lperef);
+            add(col_flatten);
             add(col_visible);
         }
         virtual ~ModelColumns() {}
 
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<LivePathEffect::LPEObjectReference *> lperef;
+        Gtk::TreeModelColumn<bool> col_flatten;
         Gtk::TreeModelColumn<bool> col_visible;
     };
 
@@ -112,6 +114,7 @@ private:
     Glib::RefPtr<Gtk::TreeSelection> effectlist_selection;
 
     void on_visibility_toggled( Glib::ustring const& str );
+    void on_flatten( Glib::ustring const& str );
 
     Gtk::ButtonBox toolbar_hbox;
     Gtk::Button button_add;

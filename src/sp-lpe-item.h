@@ -17,6 +17,7 @@
 #include <list>
 #include <string>
 #include "sp-item.h"
+#include "live_effects/lpeobject-reference.h"
 
 #define SP_LPE_ITEM(obj) (dynamic_cast<SPLPEItem*>((SPObject*)obj))
 #define SP_IS_LPE_ITEM(obj) (dynamic_cast<const SPLPEItem*>((SPObject*)obj) != NULL)
@@ -103,6 +104,8 @@ public:
 };
 
 void sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write); // careful, class already has method with *very* similar name!
+std::vector<Inkscape::LivePathEffect::LPEObjectReference *> sp_lpe_item_hide_all_LPE (SPLPEItem *lpeitem, bool recursive);
+void sp_lpe_item_flatten(SPLPEItem *lpeitem, bool recursive);
 
 #endif /* !SP_LPE_ITEM_H_SEEN */
 

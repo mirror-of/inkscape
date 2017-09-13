@@ -393,6 +393,109 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
     }
 }
 
+std::vector<Inkscape::LivePathEffect::LPEObjectReference *>
+sp_lpe_item_hide_all_LPE(SPLPEItem *lpeitem, bool recursive) 
+{
+    std::vector<Inkscape::LivePathEffect::LPEObjectReference *> result;
+    if (SP_IS_GROUP(lpeitem)) {
+        PathEffectList effectlist = lpeitem->getEffectList();
+        PathEffectList::iterator it;
+        for( it = effectlist.begin() ; it!=effectlist.end(); ++it) {
+            Inkscape::LivePathEffect::LPEObjectReference * lpeobjref = (*it);
+            if ( !lpeobjref ) {
+                continue;
+            }
+            Inkscape::LivePathEffect::Effect *lpe = lpeobjref->lpeobject->get_lpe();
+            if (lpe) {
+                bool is_visible = strcmp(lpeobjref->lpeobject->getRepr()->attribute("is_visible"), "true") == 0 ? true : false;
+                if (is_visible) {
+                    result.push_back(lpeobjref);
+                    lpe->doOnVisibilityToggled(lpeitem);
+                }
+            }
+        }
+        if (recursive) {
+            std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
+            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+                SPObject *subitem = *iter;
+                if (SP_IS_LPE_ITEM(subitem)) {
+                    std::vector<Inkscape::LivePathEffect::LPEObjectReference *> result_child = sp_lpe_item_hide_all_LPE(SP_LPE_ITEM(subitem), recursive);
+                    result.insert(result.begin(), result_child.begin(), result_child.end());
+                }
+            }
+        }
+    } else {
+        PathEffectList effectlist = lpeitem->getEffectList();
+        PathEffectList::iterator it;
+        for( it = effectlist.begin() ; it!=effectlist.end(); ++it) {
+            Inkscape::LivePathEffect::LPEObjectReference * lpeobjref = (*it);
+            if ( !lpeobjref ) {
+                continue;
+            }
+            Inkscape::LivePathEffect::Effect *lpe = lpeobjref->lpeobject->get_lpe();
+            if (lpe) {
+                bool is_visible = strcmp(lpeobjref->lpeobject->getRepr()->attribute("is_visible"), "true") == 0 ? true : false;
+                if (is_visible) {
+                    result.push_back(lpeobjref);
+                    lpe->doOnVisibilityToggled(lpeitem);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+void
+sp_lpe_item_flatten(SPLPEItem *lpeitem, bool recursive)
+{
+    g_return_if_fail(lpeitem != NULL);
+    if (SP_IS_GROUP(lpeitem)) {
+        if (!lpeitem->hasPathEffectOnClipOrMaskRecursive()) {
+            SPMask * mask = lpeitem->mask_ref->getObject();
+            if(mask)
+            {
+                sp_lpe_item_flatten(SP_LPE_ITEM(mask->firstChild()), recursive);
+            }
+            SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+            if(clip_path)
+            {
+                sp_lpe_item_flatten(SP_LPE_ITEM(clip_path->firstChild()->firstChild()), recursive);
+            }
+        }
+        std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
+        if (recursive) {
+            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+                SPObject *subitem = *iter;
+                if (SP_IS_LPE_ITEM(subitem)) {
+                    sp_lpe_item_flatten(SP_LPE_ITEM(subitem), recursive);
+                }
+            }
+        }
+    } else if (SP_IS_PATH(lpeitem)) {
+        Inkscape::XML::Node *repr = lpeitem->getRepr();
+        SPMask * mask = lpeitem->mask_ref->getObject();
+        if(mask) {
+            sp_lpe_item_flatten(SP_LPE_ITEM(mask->firstChild()), recursive);
+        }
+        SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+        if(clip_path) {
+            sp_lpe_item_flatten(SP_LPE_ITEM(clip_path->firstChild()->firstChild()), recursive);
+        }
+        repr->setAttribute("inkscape:original-d", NULL);
+    } else if (SP_IS_SHAPE(lpeitem)) {
+        Inkscape::XML::Node *repr = lpeitem->getRepr();
+        SPMask * mask = lpeitem->mask_ref->getObject();
+        if(mask) {
+            sp_lpe_item_flatten(SP_LPE_ITEM(mask->firstChild()), recursive);
+        }
+        SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+        if(clip_path) {
+            sp_lpe_item_flatten(SP_LPE_ITEM(clip_path->firstChild()->firstChild()), recursive);
+        }
+        repr->setAttribute("d", NULL);
+    }
+}
+
 static void
 sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths)
 {
@@ -429,8 +532,11 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths)
         }
         mask = dynamic_cast<SPMask *>(lpeitem->parent);
         clip_path = dynamic_cast<SPClipPath *>(lpeitem->parent);
-        if ((!lpeitem->hasPathEffectRecursive() && repr->attribute("inkscape:original-d")) ||
-            ((mask || clip_path) && !lpeitem->hasPathEffectOnClipOrMaskRecursive() && repr->attribute("inkscape:original-d"))) 
+        if ((!lpeitem->hasPathEffectRecursive() && 
+            repr->attribute("inkscape:original-d")) ||
+            ((mask || clip_path) && 
+            !lpeitem->hasPathEffectOnClipOrMaskRecursive() &&
+            repr->attribute("inkscape:original-d"))) 
         {
             if (!keep_paths) {
                 repr->setAttribute("d", repr->attribute("inkscape:original-d"));

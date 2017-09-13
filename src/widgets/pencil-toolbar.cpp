@@ -48,8 +48,6 @@
 #include "display/curve.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-powerstroke.h"
-#include "live_effects/lpe-bspline.h"
-#include "live_effects/lpe-spiro.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 
@@ -60,7 +58,7 @@ using Inkscape::UI::PrefPusher;
 //########################
 //##     Pen/Pencil     ##
 //########################
-static void sp_flatten_spiro_bspline(GtkWidget * /*widget*/, GObject *obj);
+
 /* This is used in generic functions below to share large portions of code between pen and pencil tool */
 static Glib::ustring const freehand_tool_name(GObject *dataKludge)
 {
@@ -84,16 +82,10 @@ static void freehand_mode_changed(EgeSelectOneAction* act, GObject* tbl)
         Inkscape::UI::Tools::PenTool *pc = SP_PEN_CONTEXT(desktop->event_context);
         pc->setPolylineMode();
     }
-    if (mode == 1 || mode == 2) {
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_spiro_bspline") ), true );
-    } else {
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_spiro_bspline") ), false );
-    }
+
     if (mode == 2) {
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_simplify") ), false );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "simplify") ), false );
     } else {
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_simplify") ), true );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "simplify") ), true );
     }
 }
@@ -161,21 +153,6 @@ static void sp_add_freehand_mode_toggle(GtkActionGroup* mainActions, GObject* ho
             ege_select_one_action_set_active( act, freehandMode);
             g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(freehand_mode_changed), holder);
         }
-        /* LPE bspline spiro flatten */
-        InkAction* inky = ink_action_new( tool_is_pencil ? "FlattenSpiroBsplinePencil" :
-                                            "FlattenSpiroBsplinePen",
-                                          _("LPE spiro or bspline flatten"),
-                                          _("LPE spiro or bspline flatten"),
-                                          INKSCAPE_ICON("flatten"),
-                                          GTK_ICON_SIZE_SMALL_TOOLBAR );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_flatten_spiro_bspline), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        g_object_set_data( holder, "flatten_spiro_bspline", inky );
-        if (freehandMode == 1 || freehandMode == 2) {
-            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_spiro_bspline") ), true );
-        } else {
-            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_spiro_bspline") ), false );
-        }
     }
 }
 
@@ -189,12 +166,6 @@ static void freehand_simplify_lpe(InkToggleAction* itact, GObject *dataKludge) {
     gint simplify = gtk_toggle_action_get_active( GTK_TOGGLE_ACTION(itact) );
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt(freehand_tool_name(dataKludge) + "/simplify", simplify);
-    gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "flatten_simplify") ), simplify );
-    if (simplify) {
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "flatten_simplify") ), true );
-    } else {
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "flatten_simplify") ), false );
-    }
 }
 
 /**
@@ -265,90 +236,6 @@ static void sp_pencil_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
     gtk_adjustment_value_changed(adj);
 
     spinbutton_defocus(tbl);
-}
-
-static void sp_flatten_spiro_bspline(GtkWidget * /*widget*/, GObject *obj)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(obj, "desktop"));
-    auto selected = desktop->getSelection()->items();
-    SPLPEItem* lpeitem = NULL;
-    for (auto it(selected.begin()); it != selected.end(); ++it){
-        lpeitem = dynamic_cast<SPLPEItem*>(*it);
-        if (lpeitem && lpeitem->hasPathEffect()){
-            PathEffectList lpelist = lpeitem->getEffectList();
-            PathEffectList::iterator i;
-            for (i = lpelist.begin(); i != lpelist.end(); ++i) {
-                LivePathEffectObject *lpeobj = (*i)->lpeobject;
-                if (lpeobj) {
-                    Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-                    if (dynamic_cast<Inkscape::LivePathEffect::LPEBSpline *>(lpe) || 
-                        dynamic_cast<Inkscape::LivePathEffect::LPESpiro *>(lpe)) 
-                    {
-                        SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
-                        if(shape){
-                            SPCurve * c = shape->getCurveBeforeLPE();
-                            lpe->doEffect(c);
-                            lpeitem->setCurrentPathEffect(*i);
-                            if (lpelist.size() > 1){
-                                lpeitem->removeCurrentPathEffect(true);
-                                shape->setCurveBeforeLPE(c);
-                            } else {
-                                lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c,0);
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    if (lpeitem) {
-        desktop->getSelection()->remove(lpeitem->getRepr());
-        desktop->getSelection()->add(lpeitem->getRepr());
-        sp_lpe_item_update_patheffect(lpeitem, false, false);
-    }
-}
-
-static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(obj, "desktop"));
-    auto selected = desktop->getSelection()->items();
-    SPLPEItem* lpeitem = NULL;
-    for (auto it(selected.begin()); it != selected.end(); ++it){
-        lpeitem = dynamic_cast<SPLPEItem*>(*it);
-        if (lpeitem && lpeitem->hasPathEffect()){
-            PathEffectList lpelist = lpeitem->getEffectList();
-            PathEffectList::iterator i;
-            for (i = lpelist.begin(); i != lpelist.end(); ++i) {
-                LivePathEffectObject *lpeobj = (*i)->lpeobject;
-                if (lpeobj) {
-                    Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-                    if (dynamic_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe)) {
-                        SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
-                        if(shape){
-                            SPCurve * c = shape->getCurveBeforeLPE();
-                            lpe->doEffect(c);
-                            lpeitem->setCurrentPathEffect(*i);
-                            if (lpelist.size() > 1){
-                                lpeitem->removeCurrentPathEffect(true);
-                                shape->setCurveBeforeLPE(c);
-                            } else {
-                                lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c,0);
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    if (lpeitem) {
-        desktop->getSelection()->remove(lpeitem->getRepr());
-        desktop->getSelection()->add(lpeitem->getRepr());
-        sp_lpe_item_update_patheffect(lpeitem, false, false);
-    }
 }
 
 static void sp_pencil_tb_tolerance_value_changed(GtkAdjustment *adj, GObject *tbl)
@@ -495,23 +382,6 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "simplify") ), false );
         } else {
             gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "simplify") ), true );
-        }
-    }
-    /* LPE simplify flatten */
-    {
-        InkAction* inky = ink_action_new( "PencilLpeSimplifyFlatten",
-                                          _("LPE simplify flatten"),
-                                          _("LPE simplify flatten"),
-                                          INKSCAPE_ICON("flatten"),
-                                          GTK_ICON_SIZE_SMALL_TOOLBAR );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_simplify_flatten), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        g_object_set_data( holder, "flatten_simplify", inky );
-        guint freehandMode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-        if (freehandMode == 2 || !prefs->getInt("/tools/freehand/pencil/simplify", 0)) {
-            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_simplify") ), false );
-        } else {
-            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_simplify") ), true );
         }
     }
 
