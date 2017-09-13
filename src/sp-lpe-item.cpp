@@ -409,8 +409,9 @@ sp_lpe_item_hide_all_LPE(SPLPEItem *lpeitem, bool recursive)
             if (lpe) {
                 bool is_visible = strcmp(lpeobjref->lpeobject->getRepr()->attribute("is_visible"), "true") == 0 ? true : false;
                 if (is_visible) {
-                    result.push_back(lpeobjref);
+                    lpe->getRepr()->setAttribute("is_visible", "false");
                     lpe->doOnVisibilityToggled(lpeitem);
+                    result.push_back(lpeobjref);
                 }
             }
         }
@@ -436,8 +437,9 @@ sp_lpe_item_hide_all_LPE(SPLPEItem *lpeitem, bool recursive)
             if (lpe) {
                 bool is_visible = strcmp(lpeobjref->lpeobject->getRepr()->attribute("is_visible"), "true") == 0 ? true : false;
                 if (is_visible) {
-                    result.push_back(lpeobjref);
+                    lpe->getRepr()->setAttribute("is_visible", "false");
                     lpe->doOnVisibilityToggled(lpeitem);
+                    result.push_back(lpeobjref);
                 }
             }
         }
@@ -481,7 +483,10 @@ sp_lpe_item_flatten(SPLPEItem *lpeitem, bool recursive)
         if(clip_path) {
             sp_lpe_item_flatten(SP_LPE_ITEM(clip_path->firstChild()->firstChild()), recursive);
         }
-        repr->setAttribute("inkscape:original-d", NULL);
+        if (repr->attribute("inkscape:original-d")) {
+            repr->setAttribute("inkscape:original-d", repr->attribute("d"));
+        }
+        
     } else if (SP_IS_SHAPE(lpeitem)) {
         Inkscape::XML::Node *repr = lpeitem->getRepr();
         SPMask * mask = lpeitem->mask_ref->getObject();
@@ -492,7 +497,9 @@ sp_lpe_item_flatten(SPLPEItem *lpeitem, bool recursive)
         if(clip_path) {
             sp_lpe_item_flatten(SP_LPE_ITEM(clip_path->firstChild()->firstChild()), recursive);
         }
-        repr->setAttribute("d", NULL);
+        if (repr->attribute("d")) {
+            repr->setAttribute("d", NULL);
+        }
     }
 }
 

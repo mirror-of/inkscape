@@ -76,6 +76,7 @@ private:
     // callback methods for buttons on grids page.
     void onAdd();
     void onRemove();
+    void onFlatten();
     void onUp();
     void onDown();
 
@@ -86,14 +87,12 @@ private:
         {
             add(col_name);
             add(lperef);
-            add(col_flatten);
             add(col_visible);
         }
         virtual ~ModelColumns() {}
 
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<LivePathEffect::LPEObjectReference *> lperef;
-        Gtk::TreeModelColumn<bool> col_flatten;
         Gtk::TreeModelColumn<bool> col_visible;
     };
 
@@ -114,11 +113,11 @@ private:
     Glib::RefPtr<Gtk::TreeSelection> effectlist_selection;
 
     void on_visibility_toggled( Glib::ustring const& str );
-    void on_flatten( Glib::ustring const& str );
 
     Gtk::ButtonBox toolbar_hbox;
     Gtk::Button button_add;
     Gtk::Button button_remove;
+    Gtk::Button button_flatten;
     Gtk::Button button_up;
     Gtk::Button button_down;
 

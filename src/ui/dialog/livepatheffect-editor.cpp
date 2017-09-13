@@ -90,6 +90,7 @@ LivePathEffectEditor::LivePathEffectEditor()
       effectcontrol_frame(""),
       button_add(),
       button_remove(),
+      button_flatten(),
       button_up(),
       button_down(),
       current_desktop(NULL),
@@ -119,6 +120,10 @@ LivePathEffectEditor::LivePathEffectEditor()
     button_remove.set_tooltip_text(_("Delete current path effect"));
     lpe_style_button(button_remove, INKSCAPE_ICON("list-remove"));
     button_remove.set_relief(Gtk::RELIEF_NONE);
+    
+    button_flatten.set_tooltip_text(_("Flatten to current path effect"));
+    lpe_style_button(button_flatten, INKSCAPE_ICON("flatten"));
+    button_flatten.set_relief(Gtk::RELIEF_NONE);
 
     button_up.set_tooltip_text(_("Raise the current path effect"));
     lpe_style_button(button_up, INKSCAPE_ICON("go-up"));
@@ -134,6 +139,8 @@ LivePathEffectEditor::LivePathEffectEditor()
     toolbar_hbox.set_child_secondary( button_add , true);
     toolbar_hbox.add( button_remove );
     toolbar_hbox.set_child_secondary( button_remove , true);
+    toolbar_hbox.add( button_flatten );
+    toolbar_hbox.set_child_secondary( button_flatten , true);
     toolbar_hbox.add( button_up );
     toolbar_hbox.add( button_down );
 
@@ -156,17 +163,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     if ( col ) {
         col->add_attribute( eyeRenderer->property_active(), columns.col_visible );
     }
-        //Add the flatten column
-    //TODO: Use a button instead a toggle here,
-    Inkscape::UI::Widget::ImageToggler *flattenRenderer = Gtk::manage( new Inkscape::UI::Widget::ImageToggler(
-        INKSCAPE_ICON("flatten"), INKSCAPE_ICON("flatten")) );
-    int flattenColNum = effectlist_view.append_column("flatten", *flattenRenderer) - 1;
-    flattenRenderer->signal_toggled().connect( sigc::mem_fun(*this, &LivePathEffectEditor::on_flatten) );
-    flattenRenderer->property_activatable() = true;
-    Gtk::TreeViewColumn* col2 = effectlist_view.get_column(flattenColNum);
-    if ( col2 ) {
-        col2->add_attribute( flattenRenderer->property_active(), columns.col_flatten );
-    }
+
     //Add the effect name column:
     effectlist_view.append_column("Effect", columns.col_name);
 
@@ -179,6 +176,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     // connect callback functions to buttons
     button_add.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onAdd));
     button_remove.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onRemove));
+    button_flatten.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onFlatten));
     button_up.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onUp));
     button_down.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onDown));
 
@@ -216,9 +214,11 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
          if (defaultswidget) {
             Gtk::Expander * expander = NULL;
             std::vector<Gtk::Widget *> childs = dynamic_cast<Gtk::Box *> (effectwidget)->get_children();
-            std::vector<Gtk::Widget *> childs_default = dynamic_cast<Gtk::Box *> (childs[childs.size()-1])->get_children();
-            if ((expander = dynamic_cast<Gtk::Expander *>(childs_default[childs_default.size()-1]))){
-                expanderopen = expander->get_expanded();
+            if (!childs.empty()) {
+                std::vector<Gtk::Widget *> childs_default = dynamic_cast<Gtk::Box *> (childs[childs.size()-1])->get_children();
+                if ((expander = dynamic_cast<Gtk::Expander *>(childs_default[childs_default.size()-1]))){
+                    expanderopen = expander->get_expanded();
+                }
             }
         }
         effectcontrol_vbox.remove(*effectwidget);
@@ -379,13 +379,11 @@ LivePathEffectEditor::effect_list_reload(SPLPEItem *lpeitem)
             Gtk::TreeModel::Row row = *(effectlist_store->append());
             row[columns.col_name] = (*it)->lpeobject->get_lpe()->getName();
             row[columns.lperef] = *it;
-            row[columns.col_flatten] = true;
             row[columns.col_visible] = (*it)->lpeobject->get_lpe()->isVisible();
         } else {
             Gtk::TreeModel::Row row = *(effectlist_store->append());
             row[columns.col_name] = _("Unknown effect");
             row[columns.lperef] = *it;
-            row[columns.col_flatten] = true;
             row[columns.col_visible] = false;
         }
     }
@@ -530,6 +528,67 @@ LivePathEffectEditor::onRemove()
 
 }
 
+void LivePathEffectEditor::onFlatten()
+{
+    Glib::RefPtr<Gtk::TreeSelection> seleffect = effectlist_view.get_selection();
+    Gtk::TreeModel::iterator it = seleffect->get_selected();
+    LivePathEffect::LPEObjectReference * lpeobjref = (*it)[columns.lperef];
+    Inkscape::Selection *sel = _getSelection();
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
+        SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem) {
+            PathEffectList effectlist = lpeitem->getEffectList();
+            PathEffectList::iterator it;
+            for( it = effectlist.begin() ; it!=effectlist.end(); ++it)
+            {
+                LivePathEffect::LPEObjectReference *lpeobjref_sel = (*it);
+                if (lpeobjref_sel) {
+                    std::vector<bool> effects_visibled;
+                    Inkscape::LivePathEffect::Effect *lpe_sel = lpeobjref_sel->lpeobject->get_lpe();
+                    bool is_visible = false;
+                    if (lpe_sel) {
+                        is_visible = strcmp(lpe_sel->getRepr()->attribute("is_visible"), "true") == 0 ? true : false;
+                    }
+                    std::vector<LivePathEffect::LPEObjectReference *> hidded = sp_lpe_item_hide_all_LPE(lpeitem, true);
+                    if (lpe_sel) {
+                        if (is_visible) {
+                            lpe_sel->getRepr()->setAttribute("is_visible", "true");
+                            lpe_sel->doOnVisibilityToggled(lpeitem);
+                        }
+                    }
+                    sp_lpe_item_update_patheffect(lpeitem, true, true);
+                    sp_lpe_item_flatten(lpeitem, true);
+                    for(auto it2 = hidded.begin() ; it2!=hidded.end(); ++it2)
+                    {
+                        LivePathEffect::LPEObjectReference * lpeobjref_show = (*it2);
+                        if ( !lpeobjref_show ) {
+                            continue;
+                        }
+
+                        LivePathEffectObject * lpeobj_show = (*it2)->lpeobject;
+                        if ( !lpeobj_show ) {
+                            continue;
+                        }
+                        Inkscape::LivePathEffect::Effect *lpe_show = lpeobj_show->get_lpe();
+                        if (lpe_show) {
+                            bool is_visible = strcmp(lpe_show->getRepr()->attribute("is_visible"), "true") == 0 ? true : false;
+                            if (!is_visible) {
+                                lpe_show->getRepr()->setAttribute("is_visible", "true");
+                                lpe_show->doOnVisibilityToggled(lpeitem);
+                            }
+                        }
+                    }
+                    onRemove();
+                    if ((*it) == lpeobjref ) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void LivePathEffectEditor::onUp()
 {
     Inkscape::Selection *sel = _getSelection();
@@ -613,46 +672,6 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
         }
         DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                             newValue ? _("Activate path effect") : _("Deactivate path effect"));
-    }
-}
-
-void LivePathEffectEditor::on_flatten( Glib::ustring const& str )
-{
-    Gtk::TreeModel::Children::iterator iter = effectlist_view.get_model()->get_iter(str);
-    Gtk::TreeModel::Row row = *iter;
-
-    LivePathEffect::LPEObjectReference * lpeobjref = row[columns.lperef];
-    std::vector<bool> effects_visibled;
-    Inkscape::Selection *sel = _getSelection();
-    SPLPEItem *lpeitem  = NULL;
-    if ( sel && !sel->isEmpty() ) {
-        SPItem *item = sel->singleItem();
-        lpeitem  = dynamic_cast<SPLPEItem *>(item);
-    }
-    if (!lpeitem) {
-        return;
-    }
-    std::vector<LivePathEffect::LPEObjectReference *> hidded = sp_lpe_item_hide_all_LPE(lpeitem, true);
-    Inkscape::LivePathEffect::Effect *lpe = lpeobjref->lpeobject->get_lpe();
-    if (lpe) {
-        lpe->doOnVisibilityToggled(lpeitem);
-    }
-    sp_lpe_item_flatten(lpeitem, true);
-    onRemove();
-    for(auto it = hidded.begin() ; it!=hidded.end(); ++it)
-    {
-        LivePathEffect::LPEObjectReference * lpeobjref_one = (*it);
-        if ( !lpeobjref_one ) {
-            continue;
-        }
-        LivePathEffectObject * lpeobj = (*it)->lpeobject;
-        if ( !lpeobj ) {
-            continue;
-        }
-        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-        if (lpe) {
-            lpe->doOnVisibilityToggled(lpeitem);
-        }
     }
 }
 
