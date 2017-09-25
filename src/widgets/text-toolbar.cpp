@@ -588,6 +588,7 @@ static bool is_relative( Unit const *unit ) {
     return (unit->abbr == "" || unit->abbr == "em" || unit->abbr == "ex" || unit->abbr == "%");
 }
 
+
 // Set property for object, but unset all descendents
 // Should probably be moved to desktop_style.cpp
 static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
@@ -599,6 +600,31 @@ static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
         recursively_set_properties (i, css_unset);
     }
     sp_repr_css_attr_unref (css_unset);
+}
+
+// Set properties on selected <text> and <flowText> elements, unsetting children.
+static void set_outer_text_properties( SPCSSAttr *css ) {
+
+    Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
+    auto itemlist= selection->items();
+    for (auto i: itemlist) {
+
+        if (dynamic_cast<SPText *>(i) || dynamic_cast<SPFlowtext *>(i)) {
+            SPItem *item = i;
+
+            // Scale by inverse of accumulated parent transform
+            SPCSSAttr *css_set = sp_repr_css_attr_new();
+            sp_repr_css_merge(css_set, css);
+            Geom::Affine const local(item->i2doc_affine());
+            double const ex(local.descrim());
+            if ( (ex != 0.0) && (ex != 1.0) ) {
+                sp_css_attr_scale(css_set, 1/ex);
+            }
+
+            recursively_set_properties( i, css_set );
+            sp_repr_css_attr_unref (css_set);
+        }
+    }
 }
 
 // Apply line height changes (line-height value changed or line-height unit changed)
@@ -641,6 +667,7 @@ static void set_lineheight (SPCSSAttr *css) {
                         child->changeCSS(css_set,"style");
                     }
                 }
+                sp_repr_css_attr_unref (css_set);
             }
         }
     }
@@ -1242,6 +1269,8 @@ static void sp_text_rotation_value_changed( GtkAdjustment *adj, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
+// This method changes 'writing-mode' and as well as 'direction' (for horizontal modes).
+// 'writing-mode' is only applicable to <text> and is ignored for sub-elements (e.g. <tspan>).
 static void sp_writing_mode_changed( GObject* tbl, int mode )
 {
     // quit if run by the _changed callbacks
@@ -1256,21 +1285,29 @@ static void sp_writing_mode_changed( GObject* tbl, int mode )
         case 0:
         {
             sp_repr_css_set_property (css, "writing-mode", "lr-tb");
+            sp_repr_css_set_property (css, "direction",    "ltr"  );
             break;
         }
 
         case 1:
         {
-            sp_repr_css_set_property (css, "writing-mode", "tb-rl");
+            sp_repr_css_set_property (css, "writing-mode", "rl-tb");
+            sp_repr_css_set_property (css, "direction",    "rtl"  );
             break;
         }
 
         case 2:
         {
+            sp_repr_css_set_property (css, "writing-mode", "tb-rl");
+            break;
+        }
+
+        case 3:
+        {
             sp_repr_css_set_property (css, "writing-mode", "vertical-lr");
             break;
         }
-}
+    }
 
     SPStyle query(SP_ACTIVE_DOCUMENT);
     int result_numbers =
@@ -1283,7 +1320,9 @@ static void sp_writing_mode_changed( GObject* tbl, int mode )
         prefs->mergeStyle("/tools/text/style", css);
     }
 
-    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css, true, true);
+    // Sets outer properties on selected text, clearing inner values.
+    set_outer_text_properties (css);
+
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
         DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
@@ -1350,6 +1389,7 @@ static void sp_text_orientation_changed( GObject* tbl, int mode )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
+// Only enabled for vertical writing modes (otherwise sp_writing_mode_changed handles direction).
 static void sp_text_direction_changed( GObject *tbl, int mode )
 {
     // quit if run by the _changed callbacks
@@ -1385,7 +1425,10 @@ static void sp_text_direction_changed( GObject *tbl, int mode )
         prefs->mergeStyle("/tools/text/style", css);
     }
 
-    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css, true, true);
+    // Set outer text 'direction', clearing inner text. In principle, <tspan>'s can
+    // have their own direction but until we support 'unicode-bidi' it is pointless.
+    set_outer_text_properties (css);
+
     if(result_numbers != QUERY_STYLE_NOTHING)
     {
         DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
@@ -1802,11 +1845,16 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         gtk_adjustment_set_value( letterSpacingAdjustment, letterSpacing );
 
 
-        // Writing mode
+        // Writing mode (and horizontal direction)
         int activeButton2 = 0;
-        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) activeButton2 = 0;
-        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) activeButton2 = 1;
-        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR) activeButton2 = 2;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB &&
+            query.direction.computed    == SP_CSS_DIRECTION_LTR     ) activeButton2 = 0;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB &&
+            query.direction.computed    == SP_CSS_DIRECTION_RTL     ) activeButton2 = 1;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB &&
+            query.direction.computed    == SP_CSS_DIRECTION_RTL     ) activeButton2 = 1;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) activeButton2 = 2;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR) activeButton2 = 3;
 
         InkSelectOneAction* writingModeAction =
             static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextWritingModeAction" ) );
@@ -1823,7 +1871,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         textOrientationAction->set_active( activeButton3 );
 
         // Disable text orientation for horizontal text...
-        textOrientationAction->set_sensitive( activeButton2 != 0 );
+        textOrientationAction->set_sensitive( activeButton2 != 0 && activeButton2 != 1 );
 
         // Direction
         int activeButton4 = 0;
@@ -1832,6 +1880,9 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         InkSelectOneAction* textDirectionAction =
             static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextDirectionAction" ) );
         textDirectionAction->set_active( activeButton4 );
+
+        // Disable direction for horizontal text...
+        textDirectionAction->set_sensitive( activeButton2 != 0 && activeButton2 != 1 );
     }
 
 #ifdef DEBUG_TEXT
@@ -2161,9 +2212,15 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         Gtk::TreeModel::Row row;
 
         row = *(store->append());
-        row[columns.col_label    ] = _("Horizontal");
-        row[columns.col_tooltip  ] = _("Horizontal text");
+        row[columns.col_label    ] = _("Horizontal — L2R");
+        row[columns.col_tooltip  ] = _("Left to right text");
         row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-horizontal");
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Horizontal — R2L");
+        row[columns.col_tooltip  ] = _("Right to left text");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-r2l");
         row[columns.col_sensitive] = true;
 
         row = *(store->append());
@@ -2239,7 +2296,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     }
 
 
-    // Text direction (predominant direction of horizontal text).
+    // Text direction (predominant direction of normally horizontal text in a vertical context).
     {
         InkSelectOneActionColumns columns;
 
