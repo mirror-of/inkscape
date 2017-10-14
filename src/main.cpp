@@ -69,6 +69,7 @@
 #include "document.h"
 #include "layer-model.h"
 #include "selection.h"
+#include "selection-chemistry.h"
 #include "sp-object.h"
 #include "ui/interface.h"
 #include "print.h"
@@ -1257,6 +1258,9 @@ static int sp_process_file_list(GSList *fl)
 
                     sp_item_list_to_curves(items, selected, to_select);
 
+                }
+                if(sp_export_area_drawing) {
+                    fit_canvas_to_drawing(doc, false);
                 }
                 if(sp_export_id) {
                     doc->ensureUpToDate();
