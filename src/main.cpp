@@ -1279,7 +1279,7 @@ static int sp_process_file_list(GSList *fl)
 
                     // "crop" the document to the specified object, cleaning as we go.
                     SPObject *obj = doc->getObjectById(sp_export_id);
-                    Geom::OptRect const bbox(SP_ITEM(obj)->visualBounds());
+                    Geom::OptRect const bbox(SP_ITEM(obj)->desktopVisualBounds());
 
                     if (!sp_export_area_page && bbox) {
                         doc->fitToRect(*bbox, sp_export_margin ? true : false);
