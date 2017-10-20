@@ -1698,7 +1698,9 @@ void SPDocument::setModifiedSinceSave(bool modified) {
         Gtk::Window *parent = SP_ACTIVE_DESKTOP->getToplevel();
         if (parent) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
             SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-            dtw->updateTitle( this->getName() );
+            if (dtw) {
+                dtw->updateTitle( this->getName() );
+            }
         }
     }
 }
