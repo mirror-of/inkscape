@@ -383,8 +383,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       sp_lpe_item(NULL),
       current_zoom(1),
       upd_params(true),
-      sp_shape(NULL),
-      sp_curve(NULL),
+      current_shape(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
 {
@@ -516,17 +515,6 @@ Effect::processObjects(LpeAction lpe_action)
     }
 }
 
-void Effect::setCurrentShape(SPShape * shape){ 
-    if(shape){
-        sp_shape = shape;
-        if (!(sp_curve = sp_shape->getCurveBeforeLPE())) {
-           // oops
-            return;
-        }
-        pathvector_before_effect = sp_curve->get_pathvector();
-    }
-}
-
 /**
  * Is performed each time before the effect is updated.
  */
@@ -551,21 +539,18 @@ void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
-    setCurrentShape(shape);
     doOnApply(lpeitem);
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
-    setCurrentShape(shape);
-    doBeforeEffect(lpeitem);
-    if (apply_to_clippath_and_mask && SP_IS_GROUP(sp_lpe_item)) {
-        sp_lpe_item->applyToClipPath(sp_lpe_item);
-        sp_lpe_item->applyToMask(sp_lpe_item);
+    if (current_shape) {
+        SPCurve* original_curve = current_shape->getCurveBeforeLPE();
+        pathvector_before_all_effects = original_curve->get_pathvector();
+        original_curve->unref();
     }
+    doBeforeEffect(lpeitem);
     update_helperpath();
 }
 

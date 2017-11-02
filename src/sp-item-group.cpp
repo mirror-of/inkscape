@@ -936,16 +936,40 @@ void SPGroup::update_patheffect(bool write) {
 static void
 sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
 {
-    std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-
-    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+    std::vector<SPItem*> item_list = sp_item_group_item_list(group);
+//    bool apply_to_clip_mask = SP_LPE_ITEM(top_group)->hasApplyToClipOrMask();
+    for ( std::vector<SPItem*>::iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
+//        if (apply_to_clip_mask) {
+//            SPClipPath *clip_path = SP_ITEM(sub_item)->clip_ref->getObject();
+//            if(clip_path) {
+//                std::vector<SPObject*> clip_path_list = clip_path->childList(true);
+//                for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+//                    SPItem * clip_data = SP_ITEM(*iter);
+//                    if (clip_data) {
+//                        item_list.push_back(clip_data);
+//                    }
+//                }
+//            }
 
+//            SPMask *mask_path = SP_ITEM(sub_item)->mask_ref->getObject();
+//            if(mask_path) {
+//                std::vector<SPObject*> mask_path_list = mask_path->childList(true);
+//                for ( std::vector<SPObject*>::const_iterator iter = mask_path_list.begin(); iter != mask_path_list.end();++iter) {
+//                    SPItem * mask_data = SP_ITEM(*iter);
+//                    if (mask_data) {
+//                        item_list.push_back(mask_data);
+//                    }
+//                }
+//            }
+//        }
         SPGroup *sub_group = dynamic_cast<SPGroup *>(sub_item);
         if (sub_group) {
             sp_group_perform_patheffect(sub_group, top_group, write);
         } else {
-            SPShape *sub_shape = dynamic_cast<SPShape *>(sub_item);
+            SPShape*   sub_shape         = dynamic_cast<SPShape *>(sub_item);
+            SPLPEItem* sub_shape_lpeitem = dynamic_cast<SPLPEItem *>(sub_item);
+            SPLPEItem* top_group_lpeitem = dynamic_cast<SPLPEItem *>(top_group);
             if (sub_shape) {
                 SPCurve * c = NULL;
                 // If item is a SPRect, convert it to path first:
@@ -967,7 +991,12 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                         }
                     }
                 }
-                c = sub_shape->getCurve();
+                
+                if (sub_shape_lpeitem->getNearestLPEItem() == top_group_lpeitem) {
+                    c = sub_shape->getCurveBeforeLPE();
+                } else {
+                    c = sub_shape->getCurve();
+                }
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {
@@ -976,12 +1005,9 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                     c->transform(i2anc_affine(sub_item, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
-                        SPPath *sub_path = dynamic_cast<SPPath *>(sub_item);
-                        if (!sub_path) {
-                            sub_shape->setCurveInsync( sub_shape->getCurveBeforeLPE(), TRUE);
-                            sub_shape->setCurve(c, TRUE);
-                            sub_shape->setCurveInsync( c, TRUE);
-                        }
+                        sub_shape->setCurveInsync( sub_shape->getCurveBeforeLPE(), TRUE);
+                        sub_shape->setCurve(c, TRUE);
+                        sub_shape->setCurveInsync( c, TRUE);
                         if (write) {
                             gchar *str = sp_svg_write_path(c->get_pathvector());
                             repr->setAttribute("d", str);

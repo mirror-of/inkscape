@@ -316,13 +316,13 @@ void LPEFilletChamfer::setSelected(PathVectorSatellites *_pathvector_satellites)
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
-    if (sp_curve) {
+    if (!pathvector_before_effect.empty()) {
         //fillet chamfer specific calls
         satellites_param.setUseDistance(use_knot_distance);
         satellites_param.setCurrentZoom(current_zoom);
         //mandatory call
         satellites_param.setEffectType(effectType());
-        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(sp_curve->get_pathvector());
+        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
         //if are diferent sizes call to recalculate
         //TODO: Update the satellite data in paths modified,
         Satellites satellites = satellites_param.data();
@@ -334,7 +334,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             size_t number_nodes = pathv.nodes().size();
             size_t previous_number_nodes = _pathvector_satellites->getTotalSatellites();
             if (number_nodes != previous_number_nodes) {
-                Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(sp_curve->get_pathvector());
                 Satellites satellites;
                 double power = radius;
                 if (!flexible) {

@@ -22,7 +22,8 @@ protected:
     Geom::Interval boundingbox_Y;
 
 	//This sets boundingbox_X and boundingbox_Y
-    void original_bbox(SPLPEItem const* lpeitem, bool absolute = false);
+	Geom::OptRect getItemClipMaskBounds(SPLPEItem* item, Geom::Affine transform);
+    void original_bbox(SPLPEItem const* lpeitem, bool absolute = false, bool clipmask = false);
 };
 
 }; //namespace LivePathEffect

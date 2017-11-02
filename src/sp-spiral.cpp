@@ -376,10 +376,15 @@ void SPSpiral::set_shape(bool force) {
 
     if (hasPathEffect() && pathEffectsEnabled()) {
         SPCurve *c_lpe = c->copy();
-        bool success = this->performPathEffect(c_lpe);
+        bool success = this->performPathEffect(c_lpe, SP_SHAPE(this));
 
         if (success) {
             this->setCurveInsync( c_lpe, TRUE);
+            bool apply_to_clip_mask = this->hasApplyToClipOrMask();
+            if (apply_to_clip_mask) {
+                this->applyToClipPath();
+                this->applyToMask();
+            }
         }
 
         c_lpe->unref();
