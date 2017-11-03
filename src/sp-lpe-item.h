@@ -76,7 +76,7 @@ public:
     bool hasPathEffect() const;
     bool hasPathEffectOfType(int const type, bool is_ready = true) const;
     bool hasPathEffectRecursive() const;
-    SPLPEItem * getNearestLPEItem() const;
+    SPLPEItem const* getNearestLPEItem() const;
     bool hasApplyToClipOrMask(bool check_clip_mask = true) const;
     Inkscape::LivePathEffect::Effect* getPathEffectOfType(int type);
     Inkscape::LivePathEffect::Effect const* getPathEffectOfType(int type) const;

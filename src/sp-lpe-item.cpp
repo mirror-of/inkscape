@@ -703,7 +703,7 @@ bool SPLPEItem::hasPathEffectRecursive() const
     }
 }
 
-SPLPEItem * 
+SPLPEItem const* 
 SPLPEItem::getNearestLPEItem() const
 {
     if (parent && SP_IS_LPE_ITEM(parent)) {
