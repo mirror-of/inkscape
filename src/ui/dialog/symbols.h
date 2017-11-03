@@ -105,8 +105,6 @@ private:
     std::map<Glib::ustring, SPDocument*> symbol_sets;
     std::vector<std::pair<Glib::ustring, SPSymbol*> > l;
     // Index into sizes which is selected
-    Glib::RefPtr<Gdk::Pixbuf> noresults_icon;
-    Glib::RefPtr<Gdk::Pixbuf> search_icon;
     int pack_size;
     // Scale factor
     int scale_factor;
@@ -130,12 +128,13 @@ private:
     Gtk::Button* more;
     Gtk::Button* fewer;
     Gtk::HBox* tools;
+#if GTK_CHECK_VERSION(3,2,4)
     Gtk::Overlay* overlay;
+#endif
     Gtk::Image* overlay_icon;
     Gtk::Image* overlay_opacity;
     Gtk::Label* overlay_title;
     Gtk::Label* overlay_desc;
-    Gtk::Grid* table;
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
     Gtk::IconSize iconsize;
