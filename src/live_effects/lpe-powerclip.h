@@ -34,6 +34,8 @@ private:
     Geom::Affine base;
 };
 
+void sp_inverse_powerclip(Inkscape::Selection *sel);
+
 } //namespace LivePathEffect
 } //namespace Inkscape
 #endif
