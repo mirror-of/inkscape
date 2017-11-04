@@ -70,14 +70,12 @@ public:
 
     virtual void update_patheffect(bool write);
 
-    bool performPathEffect(SPCurve *curve, SPShape *current);
+    bool performPathEffect(SPCurve *curve, SPShape *current, bool clipmask = false);
 
     bool pathEffectsEnabled() const;
     bool hasPathEffect() const;
     bool hasPathEffectOfType(int const type, bool is_ready = true) const;
     bool hasPathEffectRecursive() const;
-    SPLPEItem const* getNearestLPEItem() const;
-    bool hasApplyToClipOrMask(bool check_clip_mask = true) const;
     Inkscape::LivePathEffect::Effect* getPathEffectOfType(int type);
     Inkscape::LivePathEffect::Effect const* getPathEffectOfType(int type) const;
     bool hasBrokenPathEffect() const;

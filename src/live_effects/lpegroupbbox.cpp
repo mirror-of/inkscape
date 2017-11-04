@@ -64,12 +64,12 @@ void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, boo
     }
     
     Geom::OptRect bbox;
-    if (clipmask) {
-        SPLPEItem * item = const_cast<SPLPEItem *>(lpeitem);
-        bbox = getItemClipMaskBounds(item, transform);
-    } else {
+//    if (clipmask) {
+//        SPLPEItem * item = const_cast<SPLPEItem *>(lpeitem);
+//        bbox = getItemClipMaskBounds(item, transform);
+//    } else {
         bbox = lpeitem->geometricBounds(transform);
-    }
+//    }
     if (bbox) {
         boundingbox_X = (*bbox)[Geom::X];
         boundingbox_Y = (*bbox)[Geom::Y];

@@ -334,7 +334,7 @@ void SPPath::update_patheffect(bool write) {
 g_message("sp_path_update_patheffect");
 #endif
 
-    if (_curve_before_lpe && pathEffectsEnabled() && hasPathEffect()) {
+    if (_curve_before_lpe && hasPathEffect()) {
         SPCurve *curve = _curve_before_lpe->copy();
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
@@ -370,13 +370,28 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         curve->unref();
-//        if (success) {
-//            bool apply_to_clip_mask = this->hasApplyToClipOrMask();
-//            if (apply_to_clip_mask) {
-//                this->applyToClipPath();
-//                this->applyToMask();
-//            }
-//        }
+        if (success) {
+            this->applyToClipPath();
+            this->applyToMask();
+        }
+    } if (_curve_before_lpe && hasPathEffectRecursive()) {
+        SPCurve *curve = _curve_before_lpe->copy();
+        this->setCurveInsync(curve, TRUE);
+        if (write) {
+            // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
+#ifdef PATH_VERBOSE
+g_message("sp_path_update_patheffect writes 'd' attribute");
+#endif
+            if (_curve) {
+                gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
+                repr->setAttribute("d", str);
+                g_free(str);
+            } else {
+                repr->setAttribute("d", NULL);
+            }
+        }
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        curve->unref();
     }
 }
 

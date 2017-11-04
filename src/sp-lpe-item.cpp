@@ -204,7 +204,7 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
 /**
  * returns true when LPE was successful.
  */
-bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current) {
+bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool clipmask) {
 
     if (!curve) {
         return false;
@@ -236,6 +236,9 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current) {
                     // yet, we don't alter the path
                     return false;
                 }
+                if (clipmask && !lpe->apply_to_clippath_and_mask) {
+                    continue;
+                }
                 // Groups have their doBeforeEffect called elsewhere
                 lpe->setCurrentShape(current);
                 lpe->pathvector_before_effect = curve->get_pathvector();
@@ -257,8 +260,8 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current) {
                     return false;
                 }
 
-                if (!SP_IS_GROUP(this)) {
                     lpe->pathvector_after_effect = curve->get_pathvector();
+                if (!SP_IS_GROUP(this)) {
                     lpe->doAfterEffect(this);
                 }
 
@@ -267,40 +270,6 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current) {
         }
     }
     return true;
-}
-
-//Sometimes wa need to check if clip ot mask is setted so make it optional to no doble check
-bool SPLPEItem::hasApplyToClipOrMask(bool check_clip_mask) const {
-    if (check_clip_mask) {
-        SPClipPath *clip_path = this->clip_ref->getObject();
-        SPMask     *mask_path = this->mask_ref->getObject();
-        if(!clip_path && !mask_path) {
-            return false;
-        }
-    }
-
-    if (!this->hasPathEffect() || 
-        !this->pathEffectsEnabled() ||
-         this->path_effect_list->empty() )
-    {
-        return false;
-    }
-
-    for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
-    {
-        LivePathEffectObject *lpeobj = (*it)->lpeobject;
-        if (!lpeobj) {
-            continue;
-        }
-        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-        if (!lpe) {
-            continue;
-        }
-        if (lpe->apply_to_clippath_and_mask) {
-            return true;
-        }
-    }
-    return false;
 }
 
 // CPPIFY: make pure virtual
@@ -691,30 +660,12 @@ bool SPLPEItem::hasPathEffect() const
 
 bool SPLPEItem::hasPathEffectRecursive() const
 {
-    if (parent && SP_IS_LPE_ITEM(parent)) {
-        SPLPEItem * parent_lpe_item = dynamic_cast<SPLPEItem *>(parent);
-        if (!parent_lpe_item) {
-            return hasPathEffect();
-        }
+    SPLPEItem * parent_lpe_item = dynamic_cast<SPLPEItem *>(parent);
+    if (parent_lpe_item) {
         return hasPathEffect() || parent_lpe_item->hasPathEffectRecursive();
     }
     else {
         return hasPathEffect();
-    }
-}
-
-SPLPEItem const* 
-SPLPEItem::getNearestLPEItem() const
-{
-    if (parent && SP_IS_LPE_ITEM(parent)) {
-        SPLPEItem * parent_lpe_item = dynamic_cast<SPLPEItem *>(parent);
-        if (!parent_lpe_item) {
-            return hasPathEffect()?this:NULL;
-        }
-        return hasPathEffect()?this:parent_lpe_item->getNearestLPEItem();
-    }
-    else {
-        return hasPathEffect()?this:NULL;
     }
 }
 
@@ -766,7 +717,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask)
         if (c) {
             bool success = false;
             try {
-                success = this->performPathEffect(c, shape);
+                success = this->performPathEffect(c, shape, true);
                 if (!path) {
                     shape->setCurveInsync( shape->getCurveBeforeLPE(), TRUE);
                     shape->setCurve(c, TRUE);
