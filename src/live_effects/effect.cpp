@@ -545,11 +545,6 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    if (current_shape) {
-        SPCurve* original_curve = current_shape->getCurveBeforeLPE();
-        pathvector_before_all_effects = original_curve->get_pathvector();
-        original_curve->unref();
-    }
     doBeforeEffect(lpeitem);
     update_helperpath();
 }

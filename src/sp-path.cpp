@@ -374,7 +374,7 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
             this->applyToClipPath(this);
             this->applyToMask(this);
         }
-    } if (_curve_before_lpe && hasPathEffectRecursive()) {
+    } else if (_curve_before_lpe && hasPathEffectRecursive()) {
         SPCurve *curve = _curve_before_lpe->copy();
         this->setCurveInsync(curve, TRUE);
         if (write) {

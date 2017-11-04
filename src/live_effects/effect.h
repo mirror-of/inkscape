@@ -136,7 +136,6 @@ public:
     bool is_load;
     bool upd_params;
     BoolParam is_visible;
-    Geom::PathVector pathvector_before_all_effects;
     Geom::PathVector pathvector_before_effect;
     Geom::PathVector pathvector_after_effect;
 protected:

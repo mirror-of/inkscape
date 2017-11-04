@@ -941,8 +941,8 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
         top_group->applyToClipPath(clipmaskto);
         top_group->applyToMask(clipmaskto);
     }
-    std::vector<SPItem*> item_list = sp_item_group_item_list(group);
-    for ( std::vector<SPItem*>::iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+    std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
+    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
         SPGroup *sub_group = dynamic_cast<SPGroup *>(sub_item);
         if (sub_group) {
