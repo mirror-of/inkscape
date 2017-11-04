@@ -670,33 +670,33 @@ bool SPLPEItem::hasPathEffectRecursive() const
 }
 
 void
-SPLPEItem::applyToClipPath()
+SPLPEItem::applyToClipPath(SPLPEItem* to)
 {
-    SPClipPath *clip_path = this->clip_ref->getObject();
+    SPClipPath *clip_path = to->clip_ref->getObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;
-            applyToClipPathOrMask(SP_ITEM(clip_data));
+            applyToClipPathOrMask(SP_ITEM(clip_data), to);
         }
     }
 }
 
 void
-SPLPEItem::applyToMask()
+SPLPEItem::applyToMask(SPLPEItem* to)
 {
-    SPMask *mask = this->mask_ref->getObject();
+    SPMask *mask = to->mask_ref->getObject();
     if(mask) {
         std::vector<SPObject*> mask_list = mask->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
             SPObject * mask_data = *iter;
-            applyToClipPathOrMask(SP_ITEM(mask_data));
+            applyToClipPathOrMask(SP_ITEM(mask_data), to);
         }
     }
 }
 
 void
-SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask)
+SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPLPEItem* to)
 {
     SPGroup *group = dynamic_cast<SPGroup *>(clip_mask);
     SPPath  *path  = dynamic_cast<SPPath  *>(clip_mask);
@@ -705,12 +705,12 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask)
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *subitem = *iter;
-            applyToClipPathOrMask(subitem);
+            applyToClipPathOrMask(subitem, to);
         }
     } else if (shape) {
         SPCurve * c = NULL;
-        if (path) {
-            c = path->get_original_curve();
+        if (to == this) {
+            c = shape->getCurveBeforeLPE();
         } else {
             c = shape->getCurve();
         }

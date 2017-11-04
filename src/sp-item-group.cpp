@@ -936,8 +936,11 @@ void SPGroup::update_patheffect(bool write) {
 static void
 sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
 {
-    group->applyToClipPath();
-    group->applyToMask();
+    SPLPEItem* clipmaskto = dynamic_cast<SPLPEItem *>(group);
+    if (clipmaskto) {
+        top_group->applyToClipPath(clipmaskto);
+        top_group->applyToMask(clipmaskto);
+    }
     std::vector<SPItem*> item_list = sp_item_group_item_list(group);
     for ( std::vector<SPItem*>::iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
@@ -945,8 +948,13 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
         if (sub_group) {
             sp_group_perform_patheffect(sub_group, top_group, write);
         } else {
-            SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);
-            SPPath*  sub_path  = dynamic_cast<SPPath *>(sub_item);
+            SPShape* sub_shape = dynamic_cast<SPShape   *>(sub_item);
+            SPPath*  sub_path  = dynamic_cast<SPPath    *>(sub_item);
+            clipmaskto         = dynamic_cast<SPLPEItem *>(sub_item);
+            if (clipmaskto) {
+                top_group->applyToClipPath(clipmaskto);
+                top_group->applyToMask(clipmaskto);
+            }
             if (sub_shape) {
                 SPCurve * c = NULL;
                 // If item is a SPRect, convert it to path first:
@@ -968,8 +976,6 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                         }
                     }
                 }
-                sub_shape->applyToClipPath();
-                sub_shape->applyToMask();
                 c = sub_shape->getCurve();
                 bool success = false;
                 // only run LPEs when the shape has a curve defined

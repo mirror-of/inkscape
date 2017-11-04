@@ -202,11 +202,6 @@ void Box3DSide::set_shape() {
 
         if (success) {
             this->setCurveInsync(c_lpe, TRUE);
-            bool apply_to_clip_mask = this->hasApplyToClipOrMask();
-            if (apply_to_clip_mask) {
-                this->applyToClipPath();
-                this->applyToMask();
-            }
         }
 
         c_lpe->unref();

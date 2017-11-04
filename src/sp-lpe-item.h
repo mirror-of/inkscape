@@ -92,9 +92,9 @@ public:
     void removeAllPathEffects(bool keep_paths);
     void addPathEffect(std::string value, bool reset);
     void addPathEffect(LivePathEffectObject * new_lpeobj);
-    void applyToMask();
-    void applyToClipPath();
-    void applyToClipPathOrMask(SPItem * clip_mask);
+    void applyToMask(SPLPEItem* to);
+    void applyToClipPath(SPLPEItem* to);
+    void applyToClipPathOrMask(SPItem * clip_mask, SPLPEItem* to);
     bool forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users = 1);
 
     void editNextParamOncanvas(SPDesktop *dt);

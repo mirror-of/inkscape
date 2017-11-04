@@ -276,7 +276,7 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
                 lpe->getRepr()->setAttribute("inverse", "true");
                 lpe->getRepr()->setAttribute("flatten", "false");
                 lpe->getRepr()->setAttribute("hide_clip", "false");
-                dynamic_cast<LPEPowerClip *>(lpe)->convertShapes();
+                //dynamic_cast<LPEPowerClip *>(lpe)->convertShapes();
             }
         }
     }
