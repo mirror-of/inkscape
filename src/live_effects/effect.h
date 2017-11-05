@@ -63,12 +63,12 @@ public:
     //basically, to get this method called before the derived classes, a bit
     //of indirection is needed. We first call these methods, then the below.
     void doOnApply_impl(SPLPEItem const* lpeitem);
-    void doBeforeEffect_impl(SPLPEItem const* lpeitem);
+    void doBeforeEffect_impl(SPLPEItem const* lpeitem, bool clip_or_mask);
     void setCurrentZoom(double cZ);
     void setSelectedNodePoints(std::vector<Geom::Point> sNP);
     bool isNodePointSelected(Geom::Point const &nodePoint) const;
     virtual void doOnApply (SPLPEItem const* lpeitem);
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     
     virtual void doAfterEffect (SPLPEItem const* lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);

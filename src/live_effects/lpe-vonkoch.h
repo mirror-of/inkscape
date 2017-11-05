@@ -53,7 +53,7 @@ public:
 
     virtual void resetDefaults(SPItem const* item);
 
-    virtual void doBeforeEffect(SPLPEItem const* item, bool is_clip_or_mask);
+    virtual void doBeforeEffect(SPLPEItem const* item);
 
     //Usefull??
     //    protected: 

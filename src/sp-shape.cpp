@@ -1025,13 +1025,17 @@ SPCurve * SPShape::getCurve() const
 /**
  * Return duplicate of curve *before* LPE (if any exists) or NULL if there is no curve
  */
-SPCurve * SPShape::getCurveBeforeLPE() const
+SPCurve * SPShape::getCurveBeforeLPE(bool force) const
 {
     if (hasPathEffectRecursive()) {
         if (_curve_before_lpe) {
             return this->_curve_before_lpe->copy();
         }
     } else {
+        //We can force for mask and clippath that dont have real path effect
+        if (force && _curve_before_lpe) {
+            return this->_curve_before_lpe->copy();
+        }
         if (_curve) {
             return _curve->copy();
         }

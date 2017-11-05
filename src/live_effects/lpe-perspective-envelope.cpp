@@ -460,7 +460,7 @@ LPEPerspectiveEnvelope::horizontal(PointParam &param_one, PointParam &param_two,
 }
 
 void
-LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask)
+LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem);
     Geom::Line vert(Geom::Point(boundingbox_X.middle(),boundingbox_Y.max()), Geom::Point(boundingbox_X.middle(), boundingbox_Y.min()));

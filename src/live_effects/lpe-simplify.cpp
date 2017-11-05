@@ -58,7 +58,7 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
 LPESimplify::~LPESimplify() {}
 
 void
-LPESimplify::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask)
+LPESimplify::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     if(!hp.empty()) {
         hp.clear();

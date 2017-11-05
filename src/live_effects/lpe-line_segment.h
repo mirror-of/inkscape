@@ -32,7 +32,7 @@ public:
     LPELineSegment(LivePathEffectObject *lpeobject);
     virtual ~LPELineSegment();
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
 

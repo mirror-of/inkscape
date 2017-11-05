@@ -354,7 +354,8 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
             } else {
                 repr->setAttribute("d", NULL);
             }
-            
+            this->applyToClipPath(this);
+            this->applyToMask(this);
         } else if (!success) {
             // LPE was unsuccesfull. Read the old 'd'-attribute.
             if (gchar const * value = repr->attribute("d")) {
@@ -370,27 +371,27 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
 
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         curve->unref();
-    } else if(_curve_before_lpe) {
-        SPCurve *curve = _curve_before_lpe->copy();
-        this->setCurveInsync(curve, TRUE);
-        if (write) {
-            // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
-#ifdef PATH_VERBOSE
-g_message("sp_path_update_patheffect writes 'd' attribute");
-#endif
-            if (_curve) {
-                gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
-                repr->setAttribute("d", str);
-                g_free(str);
-            } else {
-                repr->setAttribute("d", NULL);
-            }
         }
-        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        curve->unref();
-    }
-    this->applyToClipPath(this);
-    this->applyToMask(this);
+//    } else if(_curve_before_lpe) {
+//        SPCurve *curve = _curve_before_lpe->copy();
+//        this->setCurveInsync(curve, TRUE);
+//        if (write) {
+//            // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
+//#ifdef PATH_VERBOSE
+//g_message("sp_path_update_patheffect writes 'd' attribute");
+//#endif
+//            if (_curve) {
+//                gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
+//                repr->setAttribute("d", str);
+//                g_free(str);
+//            } else {
+//                repr->setAttribute("d", NULL);
+//            }
+//        }
+//        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+//        curve->unref();
+//    }
+    
 }
 
 

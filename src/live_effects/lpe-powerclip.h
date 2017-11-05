@@ -17,7 +17,7 @@ class LPEPowerClip : public Effect {
 public:
     LPEPowerClip(LivePathEffectObject *lpeobject);
     virtual ~LPEPowerClip();
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();

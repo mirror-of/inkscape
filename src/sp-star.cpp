@@ -462,6 +462,8 @@ void SPStar::set_shape(bool force) {
 
         if (success) {
             this->setCurveInsync( c_lpe, TRUE);
+            this->applyToClipPath(this);
+            this->applyToMask(this);
         } 
 
         c_lpe->unref();

@@ -40,7 +40,7 @@ public:
 	virtual ~SPShape();
 
     SPCurve * getCurve () const;
-    SPCurve * getCurveBeforeLPE () const;
+    SPCurve * getCurveBeforeLPE (bool force = false) const;
     void setCurve (SPCurve *curve, unsigned int owner);
     void setCurveInsync (SPCurve *curve, unsigned int owner);
     void setCurveBeforeLPE (SPCurve *curve);

@@ -930,10 +930,6 @@ void SPGroup::update_patheffect(bool write) {
                 lpeobj->get_lpe()->doAfterEffect(this);
             }
         }
-    } else if (pathEffectsEnabled()) {
-        //here force reset lpe
-        this->applyToClipPath(this);
-        this->applyToMask(this);
     }
 }
 
@@ -952,9 +948,9 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
         if (sub_group) {
             sp_group_perform_patheffect(sub_group, top_group, write);
         } else {
-            SPShape* sub_shape = dynamic_cast<SPShape   *>(sub_item);
-            SPPath*  sub_path  = dynamic_cast<SPPath    *>(sub_item);
-            clipmaskto         = dynamic_cast<SPItem *>(sub_item);
+            SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);
+            SPPath*  sub_path  = dynamic_cast<SPPath  *>(sub_item);
+            clipmaskto         = dynamic_cast<SPItem  *>(sub_item);
             if (clipmaskto) {
                 top_group->applyToClipPath(clipmaskto);
                 top_group->applyToMask(clipmaskto);
@@ -980,7 +976,11 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                         }
                     }
                 }
-                c = sub_shape->getCurve();
+                if (sub_shape->isFirstLPE(top_group)) {
+                    c = sub_shape->getCurveBeforeLPE();
+                } else {
+                    c = sub_shape->getCurve();
+                }
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {

@@ -529,7 +529,7 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
 
 
 void
-LPEKnot::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask)
+LPEKnot::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);

@@ -56,7 +56,7 @@ public:
   LPEKnot(LivePathEffectObject *lpeobject);
   virtual ~LPEKnot();
   
-  virtual void doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask);
+  virtual void doBeforeEffect (SPLPEItem const* lpeitem);
   virtual Geom::PathVector doEffect_path (Geom::PathVector const & input_path);
   
   /* the knotholder entity classes must be declared friends */

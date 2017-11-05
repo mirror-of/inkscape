@@ -368,7 +368,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;
-            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_data), keep_paths, !lpeitem->hasPathEffectRecursive());
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_data), keep_paths, SP_IS_PATH(lpeitem) && !lpeitem->hasPathEffectRecursive());
         }
     }
 
@@ -377,7 +377,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         std::vector<SPObject*> mask_path_list = mask_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter = mask_path_list.begin(); iter != mask_path_list.end();++iter) {
             SPObject * mask_data = *iter;
-            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask_path), keep_paths, !lpeitem->hasPathEffectRecursive());
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask_path), keep_paths, SP_IS_PATH(lpeitem) && !lpeitem->hasPathEffectRecursive());
         }
     }
 
@@ -386,7 +386,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPObject *subitem = *iter;
             if (SP_IS_LPE_ITEM(subitem)) {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(subitem), keep_paths);
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(subitem), keep_paths, false);
             }
         }
     } else if (SP_IS_PATH(lpeitem)) {
@@ -667,6 +667,18 @@ bool SPLPEItem::hasPathEffectRecursive() const
     }
 }
 
+bool SPLPEItem::isFirstLPE(SPLPEItem const* compare) const
+{
+    if (hasPathEffectRecursive()) {
+        SPLPEItem const* nearest =  this;
+        while (!nearest->hasPathEffect()) {
+            nearest = SP_LPE_ITEM(nearest->parent);
+        }
+        return nearest == compare;
+    }
+    return false;
+}
+
 void
 SPLPEItem::applyToClipPath(SPItem* to)
 {
@@ -696,8 +708,9 @@ SPLPEItem::applyToMask(SPItem* to)
 void
 SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to)
 {
-    SPGroup   *group = dynamic_cast<SPGroup   *>(clip_mask);
-    SPShape   *shape = dynamic_cast<SPShape   *>(clip_mask);
+    SPGroup*   group = dynamic_cast<SPGroup  *>(clip_mask);
+    SPShape*   shape = dynamic_cast<SPShape  *>(clip_mask);
+    SPLPEItem* tolpe = dynamic_cast<SPLPEItem*>(to);
     if (group) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
@@ -707,8 +720,11 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to)
     } else if (shape) {
         SPCurve* c = NULL;
         SPPath* path  = dynamic_cast<SPPath*>(clip_mask);
-        shape->update_patheffect(true);
-        c = shape->getCurve();
+        if (tolpe->isFirstLPE(this)) {
+            c = shape->getCurveBeforeLPE(true);
+        } else {
+            c = shape->getCurve();
+        }
         if (c) {
             bool success = false;
             try {
