@@ -46,7 +46,7 @@ LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
 LPEPowerMask::~LPEPowerMask() {}
 
 void
-LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
+LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask){
         //To avoid close of color dialog and better performance on change color
     SPObject * mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     if(hide_mask && mask) {
@@ -274,7 +274,7 @@ LPEPowerMask::setMask(){
 void 
 LPEPowerMask::doOnVisibilityToggled(SPLPEItem const* lpeitem)
 {
-    doBeforeEffect(lpeitem);
+    doBeforeEffect(lpeitem, false);
 }
 
 void

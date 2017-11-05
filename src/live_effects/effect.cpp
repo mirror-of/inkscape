@@ -524,6 +524,7 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
     //Do nothing for simple effects
 }
 
+
 void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
 {
     is_load = false;
@@ -542,10 +543,10 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
     doOnApply(lpeitem);
 }
 
-void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
+void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem, bool is_clip_or_mask)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    doBeforeEffect(lpeitem);
+    doBeforeEffect(lpeitem, is_clip_or_mask);
     update_helperpath();
 }
 

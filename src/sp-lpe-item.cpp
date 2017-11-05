@@ -244,7 +244,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 lpe->pathvector_before_effect = curve->get_pathvector();
                 // Groups have their doBeforeEffect called elsewhere
                 if (!SP_IS_GROUP(this)) {
-                    lpe->doBeforeEffect_impl(this);
+                    lpe->doBeforeEffect_impl(this, is_clip_or_mask);
                 }
 
                 try {
@@ -705,14 +705,10 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to)
             applyToClipPathOrMask(subitem, to);
         }
     } else if (shape) {
-        SPCurve * c = NULL;
-        SPLPEItem *tolpe = dynamic_cast<SPLPEItem *>(to);
-        SPPath    *path  = dynamic_cast<SPPath    *>(clip_mask);
-        if (tolpe && tolpe == this) {
-            c = shape->getCurveBeforeLPE();
-        } else {
-            c = shape->getCurve();
-        }
+        SPCurve* c = NULL;
+        SPPath* path  = dynamic_cast<SPPath*>(clip_mask);
+        shape->update_patheffect(true);
+        c = shape->getCurve();
         if (c) {
             bool success = false;
             try {

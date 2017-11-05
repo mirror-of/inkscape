@@ -76,11 +76,13 @@ LPEBendPath::~LPEBendPath()
 }
 
 void
-LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
+LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask)
 {
     // get the item bounding box
-    original_bbox(lpeitem);
-    original_height = boundingbox_Y.max() - boundingbox_Y.min();
+    if (!is_clip_or_mask) {
+        original_bbox(lpeitem);
+        original_height = boundingbox_Y.max() - boundingbox_Y.min();
+    }
 }
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >

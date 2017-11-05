@@ -80,7 +80,7 @@ LPEPerspectivePath::doOnApply(SPLPEItem const* lpeitem)
     }
 }
 void
-LPEPerspectivePath::doBeforeEffect (SPLPEItem const* lpeitem)
+LPEPerspectivePath::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask)
 {
     original_bbox(lpeitem, true);
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);

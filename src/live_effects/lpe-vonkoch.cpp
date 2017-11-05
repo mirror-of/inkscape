@@ -236,7 +236,7 @@ LPEVonKoch::doEffect_path (Geom::PathVector const & path_in)
 */
 
 void
-LPEVonKoch::doBeforeEffect (SPLPEItem const* lpeitem)
+LPEVonKoch::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask)
 {
     using namespace Geom;
     original_bbox(lpeitem);

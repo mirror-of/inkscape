@@ -46,7 +46,7 @@ public:
 
     virtual void horizontal(PointParam &paramA,PointParam &paramB,Geom::Line horiz);
 
-    virtual void doBeforeEffect(SPLPEItem const* lpeitem);
+    virtual void doBeforeEffect(SPLPEItem const* lpeitem, bool is_clip_or_mask);
 
     virtual Gtk::Widget * newWidget();
 

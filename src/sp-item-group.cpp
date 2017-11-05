@@ -916,7 +916,7 @@ void SPGroup::update_patheffect(bool write) {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
 
             if (lpeobj && lpeobj->get_lpe()) {
-                lpeobj->get_lpe()->doBeforeEffect_impl(this);
+                lpeobj->get_lpe()->doBeforeEffect_impl(this, false);
             }
         }
 
@@ -930,13 +930,17 @@ void SPGroup::update_patheffect(bool write) {
                 lpeobj->get_lpe()->doAfterEffect(this);
             }
         }
+    } else if (pathEffectsEnabled()) {
+        //here force reset lpe
+        this->applyToClipPath(this);
+        this->applyToMask(this);
     }
 }
 
 static void
 sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
 {
-    SPLPEItem* clipmaskto = dynamic_cast<SPLPEItem *>(group);
+    SPItem* clipmaskto = dynamic_cast<SPItem *>(group);
     if (clipmaskto) {
         top_group->applyToClipPath(clipmaskto);
         top_group->applyToMask(clipmaskto);
@@ -950,7 +954,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
         } else {
             SPShape* sub_shape = dynamic_cast<SPShape   *>(sub_item);
             SPPath*  sub_path  = dynamic_cast<SPPath    *>(sub_item);
-            clipmaskto         = dynamic_cast<SPLPEItem *>(sub_item);
+            clipmaskto         = dynamic_cast<SPItem *>(sub_item);
             if (clipmaskto) {
                 top_group->applyToClipPath(clipmaskto);
                 top_group->applyToMask(clipmaskto);

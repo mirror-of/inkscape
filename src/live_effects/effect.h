@@ -68,7 +68,7 @@ public:
     void setSelectedNodePoints(std::vector<Geom::Point> sNP);
     bool isNodePointSelected(Geom::Point const &nodePoint) const;
     virtual void doOnApply (SPLPEItem const* lpeitem);
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask);
     
     virtual void doAfterEffect (SPLPEItem const* lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);
@@ -132,6 +132,7 @@ public:
 
     void editNextParamOncanvas(SPItem * item, SPDesktop * desktop);
     bool apply_to_clippath_and_mask;
+    bool is_clip_or_mask;//Not a group and the effect is applied to clip or mask
     bool keep_paths; // set this to false allow retain extra generated objects, see measure line LPE
     bool is_load;
     bool upd_params;

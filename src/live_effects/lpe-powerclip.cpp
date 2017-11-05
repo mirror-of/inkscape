@@ -41,7 +41,7 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
 LPEPowerClip::~LPEPowerClip() {}
 
 void
-LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
+LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask){
     SPObject * clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     if(hide_clip && clip_path) {
         SP_ITEM(sp_lpe_item)->clip_ref->detach();
@@ -324,7 +324,7 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
 void 
 LPEPowerClip::doOnVisibilityToggled(SPLPEItem const* lpeitem)
 {
-    doBeforeEffect(lpeitem);
+    doBeforeEffect(lpeitem, false);
 }
 
 

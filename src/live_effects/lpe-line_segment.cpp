@@ -41,7 +41,7 @@ LPELineSegment::~LPELineSegment()
 }
 
 void
-LPELineSegment::doBeforeEffect (SPLPEItem const* lpeitem)
+LPELineSegment::doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask)
 {
     Inkscape::UI::Tools::lpetool_get_limiting_bbox_corners(lpeitem->document, bboxA, bboxB);
 }

@@ -19,7 +19,7 @@ class LPEPowerMask : public Effect {
 public:
     LPEPowerMask(LivePathEffectObject *lpeobject);
     virtual ~LPEPowerMask();
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem, bool is_clip_or_mask);
     virtual void doEffect (SPCurve * curve);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
