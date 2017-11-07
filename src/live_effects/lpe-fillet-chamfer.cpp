@@ -131,7 +131,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             }
             //we add the last satellite on open path because _pathvector_satellites is related to nodes, not curves
             //so maybe in the future we can need this last satellite in other effects
-            //dont remove for this effect because _pathvector_satellites class has methods when the path is modiffied
+            //don't remove for this effect because _pathvector_satellites class has methods when the path is modiffied
             //and we want one method for all uses
             if (!path_it->closed()) {
                 Satellite satellite(satellite_type);
@@ -467,7 +467,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             Satellite satellite = satellites[path][next_index];
             if (Geom::are_near((*curve_it1).initialPoint(), (*curve_it1).finalPoint())) {
                 _degenerate_hide = true;
-                g_warning("Knots hidded if consecutive nodes has the same position.");
+                g_warning("Knots hidden if consecutive nodes has the same position.");
                 return path_in;
             }
             if (!curve) { //curve == 0 
