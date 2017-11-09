@@ -81,7 +81,7 @@
 #include "display/curve.h"
 #include <stdio.h>
 #include <string.h>
-
+#include <gtkmm/expander.h>
 
 namespace Inkscape {
 
@@ -386,7 +386,6 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       upd_params(true),
       current_shape(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
-      defaultsopen(false),
       is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
 {
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
@@ -786,9 +785,6 @@ Effect::newWidget()
 
         ++it;
     }
-    if(Gtk::Widget* widg = defaultParamSet()) {
-        vbox->pack_start(*widg, true, true, 2);
-    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -800,6 +796,7 @@ Effect::defaultParamSet()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
     Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
     Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(effectType());
     Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(effectType());
@@ -810,22 +807,21 @@ Effect::defaultParamSet()
         if ((*it)->widget_is_visible) {
             has_params = true;
             Parameter * param = *it;
-            char * param_value_char = param->param_getSVGValue();
             Glib::ustring * tip = param->param_getTooltip();
             const gchar * key = param->param_key.c_str();
             const gchar * value = param->param_label.c_str();
-            gchar* defvalue = param->param_getDefaultSVGValue();
+
             Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
                                        effectkey +
                                       (Glib::ustring)"/" + 
                                       (Glib::ustring)key;
             bool valid = prefs->getEntry(pref_path).isValid();
             const gchar * set_or_upd;
-            Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + Glib::ustring(defvalue) + Glib::ustring("\n");
+            Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + Glib::ustring(param->param_getDefaultSVGValue()) + Glib::ustring("\n");
             Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> ")) + Glib::ustring(prefs->getString(pref_path)) + Glib::ustring("\n");
             if (valid) {
                 set_or_upd = _("Update");
-                def = Glib::ustring(_("<b>Default value:</b> <s>")) + Glib::ustring(defvalue) + Glib::ustring("</s>\n");
+                def = Glib::ustring(_("<b>Default value:</b> <s>")) + Glib::ustring(param->param_getDefaultSVGValue()) + Glib::ustring("</s>\n");
             } else {
                 set_or_upd = _("Set");
                 ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
@@ -841,9 +837,9 @@ Effect::defaultParamSet()
             vbox_param->pack_start(*parameter_label, true, true, 2);
             Gtk::Button *set = Gtk::manage(new Gtk::Button((Glib::ustring)set_or_upd));
             Gtk::Button *unset = Gtk::manage(new Gtk::Button(Glib::ustring(_("Unset"))));
-            unset->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, gchar *, gchar *, Gtk::Label *,Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::unsetDefaultParam), pref_path, tooltip, param_value_char, defvalue, parameter_label, set, unset));
+            unset->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, gchar *, gchar *, Gtk::Label *,Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::unsetDefaultParam), pref_path, tooltip, param->param_getSVGValue(), param->param_getDefaultSVGValue(), parameter_label, set, unset));
             
-            set->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, gchar *, gchar *, Gtk::Label *,Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::setDefaultParam), pref_path, tooltip, param_value_char, defvalue, parameter_label, set, unset));
+            set->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, gchar *, gchar *, Gtk::Label *,Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::setDefaultParam), pref_path, tooltip, param->param_getSVGValue(), param->param_getDefaultSVGValue(), parameter_label, set, unset));
             if (!valid) {
                 unset->set_sensitive(false);
             }
@@ -851,8 +847,6 @@ Effect::defaultParamSet()
             vbox_param->pack_start(*unset, true, true, 2);
 
             vbox_expander->pack_start(*vbox_param, true, true, 2);
-            g_free(defvalue);
-            g_free(param_value_char);
         }
         ++it;
     }
@@ -860,22 +854,16 @@ Effect::defaultParamSet()
     Gtk::Expander * expander = Gtk::manage(new Gtk::Expander(tip));
     expander->set_use_markup(true);
     expander->add(*vbox_expander);
-    expander->set_expanded(defaultsopen);
-    expander->property_expanded().signal_changed().connect(sigc::bind<0>(sigc::mem_fun(*this, &Effect::onDefaultsExpanderChanged), expander ));
+    expander->set_expanded(false);
+    vbox->pack_start(*dynamic_cast<Gtk::Widget *> (expander), true, true, 2);
     if (has_params) {
-        Gtk::Widget *vboxwidg = dynamic_cast<Gtk::Widget *>(expander);
+        Gtk::Widget *vboxwidg = dynamic_cast<Gtk::Widget *>(vbox);
         vboxwidg->set_margin_bottom(10);
         vboxwidg->set_margin_top(5);
         return vboxwidg;
     } else {
         return NULL;
     }
-}
-
-void
-Effect::onDefaultsExpanderChanged(Gtk::Expander * expander)
-{
-    defaultsopen = expander->get_expanded();
 }
 
 void

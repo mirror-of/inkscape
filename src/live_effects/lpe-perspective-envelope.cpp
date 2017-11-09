@@ -414,6 +414,9 @@ LPEPerspectiveEnvelope::newWidget()
     reset_button->set_size_request(140,30);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*reset_button, false, false,2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

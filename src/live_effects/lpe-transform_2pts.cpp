@@ -360,6 +360,9 @@ Gtk::Widget *LPETransform2Pts::newWidget()
     vbox->pack_start(*button2, true, true, 2);
     vbox->pack_start(*button3, true, true, 2);
     vbox->pack_start(*button4, true, true, 2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

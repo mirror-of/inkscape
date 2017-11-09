@@ -262,6 +262,9 @@ LPELattice2::newWidget()
     expander->set_expanded(expanded);
     vbox->pack_start(*expander, true, true, 2);
     expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPELattice2::onExpanderChanged) );
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

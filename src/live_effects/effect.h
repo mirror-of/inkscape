@@ -10,6 +10,7 @@
 #include <glibmm/ustring.h>
 #include <2geom/forward.h>
 #include "ui/widget/registry.h"
+#include <gtkmm/expander.h>
 #include "parameter/bool.h"
 #include "effect-enum.h"
 

@@ -196,15 +196,17 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         if (method != CLM_NONE) {
             attr += Glib::ustring("d,");
         }
-        attr += Glib::ustring(attributes.param_getSVGValue()) + Glib::ustring(",");
-        if (attr.size()  && !Glib::ustring(attributes.param_getSVGValue()).size()) {
+        gchar * attributes_str = attributes.param_getSVGValue();
+        attr += Glib::ustring(attributes_str) + Glib::ustring(",");
+        if (attr.size()  && !Glib::ustring(attributes_str).size()) {
             attr.erase (attr.size()-1, 1);
         }
+        gchar * style_attributes_str = style_attributes.param_getSVGValue();
         Glib::ustring style_attr = "";
-        if (style_attr.size() && !Glib::ustring(style_attributes.param_getSVGValue()).size()) {
+        if (style_attr.size() && !Glib::ustring( style_attributes_str).size()) {
             style_attr.erase (style_attr.size()-1, 1);
         }
-        style_attr += Glib::ustring(style_attributes.param_getSVGValue()) + Glib::ustring(",");
+        style_attr += Glib::ustring( style_attributes_str) + Glib::ustring(",");
 
         SPItem * orig =  SP_ITEM(linkeditem.getObject()); 
         SPItem * dest =  SP_ITEM(sp_lpe_item); 
@@ -253,6 +255,8 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         }
 
         linked = g_strdup(id);
+        g_free(style_attributes_str);
+        g_free(attributes_str);
         g_free(id);
     } else {
         linked = g_strdup("");

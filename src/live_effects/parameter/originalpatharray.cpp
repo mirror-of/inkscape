@@ -528,7 +528,7 @@ gchar * OriginalPathArrayParam::param_getSVGValue() const
 
 gchar * OriginalPathArrayParam::param_getDefaultSVGValue() const
 {
-    return "";
+    return g_strdup("");
 }
 
 void OriginalPathArrayParam::update()

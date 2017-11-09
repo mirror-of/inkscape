@@ -241,8 +241,9 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (document) {
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
-        const char * id_origin_char = id_origin.param_getSVGValue();
-        const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
+        char * id_origin_char = id_origin.param_getSVGValue();
+        const char * elemref_id = (Glib::ustring("mirror-") + Glib::ustring(id_origin_char)).c_str();
+        g_free(id_origin_char);
         items.clear();
         items.push_back(elemref_id);
         SPObject *elemref= NULL;

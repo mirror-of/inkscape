@@ -101,7 +101,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&rotate_anotation);
     registerParameter(&hide_back);
     registerParameter(&message);
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     Glib::ustring format_value = prefs->getString("/live_effects/measure-line/format");
@@ -228,12 +227,13 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     } else {
         doc_scale = 1.0;
     }
-    const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+    char * id = g_strdup((Glib::ustring("text-on-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str());
     SPObject *elemref = NULL;
     Inkscape::XML::Node *rtspan = NULL;
     if ((elemref = document->getObjectById(id))) {
         if (remove) {
             elemref->deleteObject();
+            g_free(id);
             return;
         }
         rtext = elemref->getRepr();
@@ -243,6 +243,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rtext->setAttribute("transform", NULL);
     } else {
         if (remove) {
+            g_free(id);
             return;
         }
         rtext = xml_doc->createElement("svg:text");
@@ -274,7 +275,9 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     g_free(transform);
     SPCSSAttr *css = sp_repr_css_attr_new();
     Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
-    fontlister->fill_css(css, Glib::ustring(fontbutton.param_getSVGValue()));
+    gchar * fontbutton_str = fontbutton.param_getSVGValue();
+    fontlister->fill_css(css, Glib::ustring(fontbutton_str));
+    g_free(fontbutton_str);
     std::stringstream font_size;
     font_size.imbue(std::locale::classic());
     font_size <<  fontsize << "pt";
@@ -301,7 +304,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         Inkscape::GC::release(rtspan);
     }
     length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
-    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+    gchar const* oldlocale = strdup(setlocale(LC_NUMERIC, NULL));
     if (local_locale) {
         setlocale (LC_NUMERIC, "");
     } else {
@@ -310,8 +313,9 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     gchar length_str[64];
     g_snprintf(length_str, 64, "%.*f", (int)precision, length);
     setlocale (LC_NUMERIC, oldlocale);
-    g_free (oldlocale);
-    Glib::ustring label_value(format.param_getSVGValue());
+    gchar * format_str = format.param_getSVGValue();
+    Glib::ustring label_value(format_str);
+    g_free(format_str);
     size_t s = label_value.find(Glib::ustring("{measure}"),0);
     if(s < label_value.length()) {
         label_value.replace(s,s+9,length_str);
@@ -349,6 +353,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     if (bounds) {
         anotation_width = bounds->width() * 1.15;
     }
+    g_free(id);
 }
 
 void
@@ -533,7 +538,9 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
 bool
 LPEMeasureSegments::hasMeassure (size_t i)
 {
-    std::string listsegments(std::string(blacklist.param_getSVGValue()) + std::string(","));
+    gchar * blacklist_str = blacklist.param_getSVGValue();
+    std::string listsegments(std::string(blacklist_str) + std::string(","));
+    g_free(blacklist_str);
     listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
     size_t s = listsegments.find(std::to_string(i) + std::string(","),0);
     if(s < listsegments.length()) {
@@ -570,7 +577,6 @@ void
 LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
         return;
@@ -604,9 +610,11 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         } else {
             pathvector *= writed_transform;
         }
-        if ((Glib::ustring(format.param_getSVGValue()).empty())) {
+        gchar * format_str = format.param_getSVGValue();
+        if (Glib::ustring(format_str).empty()) {
             format.param_setValue(Glib::ustring("{measure}{unit}"));
         }
+        g_free(format_str);
         size_t ncurves = pathvector.curveCount();
         items.clear();
         double start_angle_cross = 0;
@@ -631,15 +639,29 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     } else if (pathvector[i].size() > j + 1) {
                         next = pathvector[i].pointAt(j+2);
                     }
-                    const char * idstart = Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str();
+                    const char * idstart = (Glib::ustring("infoline-on-start-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str();
                     SPObject *elemref = NULL;
-                    if ((elemref = document->getObjectById(idstart))) {
-                        start_stored = *SP_PATH(elemref)->get_curve()->first_point();
+                    if (elemref = document->getObjectById(idstart)) {
+                        SPPath* path = dynamic_cast<SPPath *>(elemref);
+                        if (path) {
+                            SPCurve* startcurve = path->get_curve();
+                            if (startcurve) {
+                                start_stored = *startcurve->first_point();
+                            }
+                            startcurve->unref();
+                        }
                     }
-                    const char * idend = Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str();
+                    const char * idend = (Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")) + Glib::ustring(this->getRepr()->attribute("id"))).c_str();
                     elemref = NULL;
-                    if ((elemref = document->getObjectById(idend))) {
-                        end_stored = *SP_PATH(elemref)->get_curve()->first_point();
+                    if (elemref = document->getObjectById(idend)) {
+                        SPPath* path = dynamic_cast<SPPath *>(elemref);
+                        if (path) {
+                            SPCurve* endcurve = path->get_curve();
+                            if (endcurve) {
+                                end_stored = *endcurve->first_point();
+                            }
+                            endcurve->unref();
+                        }
                     }
                     if (Geom::are_near(start, start_stored, 0.01) && 
                         Geom::are_near(end, end_stored, 0.01))
@@ -713,7 +735,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     } else {
                         hstart = hstart - Point::polar(angle_cross, position);
                     }
-                    createLine(start, hstart, g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, remove);
+                    createLine(start, hstart, (Glib::ustring("infoline-on-start-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), false, remove);
 
                     if (fix_overlaps != 180 && end_angle_cross != 0) {
                         double position_turned = position / sin(end_angle_cross/2.0);
@@ -731,8 +753,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         createArrowMarker("ArrowDIN-end");
                     }
                     //We get the font size to offset the text to the middle
-                    Pango::FontDescription fontdesc(Glib::ustring(fontbutton.param_getSVGValue()));
+                    gchar * fontbutton_str = fontbutton.param_getSVGValue();
+                    Glib::ustring fontdesc_ustring = Glib::ustring(fontbutton_str);
+                    Pango::FontDescription fontdesc(fontdesc_ustring);
                     fontsize = fontdesc.get_size()/(double)Pango::SCALE;
+                    fontsize *= document->getRoot()->c2p.inverse().expansionX();
+                    g_free(fontbutton_str);
                     fontsize *= document->getRoot()->c2p.inverse().expansionX();
                     
                     if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
@@ -752,38 +778,37 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     } else {
                         createTextLabel(pos, counter, length, angle, remove, true);
                     }
-                    const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+                    const char * downline = (Glib::ustring("downline-") + Glib::ustring::format(counter) + Glib::ustring("-")+ Glib::ustring(this->getRepr()->attribute("id"))).c_str();
                     arrow_gap = 8 * Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
                     SPCSSAttr *css = sp_repr_css_attr_new();
 
-                    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+                    gchar const* oldlocale = setlocale(LC_NUMERIC, NULL);
                     setlocale (LC_NUMERIC, "C");
                     double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
                     setlocale (LC_NUMERIC, oldlocale);
-                    g_free (oldlocale);
                     if (width_line > -0.0001) {
                          arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
                     }
                     if(flip_side) {
                        arrow_gap *= -1;
                     }
-                    createLine(end, hend, g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, remove);
+                    createLine(end, hend,(Glib::ustring("infoline-on-end-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), false, remove);
                     if (!arrows_outside) {
                         hstart = hstart + Point::polar(angle, arrow_gap);
                         hend = hend - Point::polar(angle, arrow_gap );
                     }
                     if ((anotation_width/2) < Geom::distance(hstart,hend)/2.0) {
-                        createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, remove, true);
+                        createLine(hstart, hend, (Glib::ustring("infoline-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, remove, true);
                     } else {
-                        createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
+                        createLine(hstart, hend, (Glib::ustring("infoline-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, true, true);
                     }
                 } else {
-                    const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+                    const char * downline = (Glib::ustring("downline-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str();
                     createLine(Geom::Point(),Geom::Point(), downline, true, true, true);
-                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
-                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
-                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
-                    const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+                    createLine(Geom::Point(), Geom::Point(), (Glib::ustring("infoline-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, true, true);
+                    createLine(Geom::Point(), Geom::Point(), (Glib::ustring("infoline-on-start-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, true, true);
+                    createLine(Geom::Point(), Geom::Point(), (Glib::ustring("infoline-on-end-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, true, true);
+                    const char * id = (Glib::ustring("text-on-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str();
                     SPObject *elemref = NULL;
                     if ((elemref = document->getObjectById(id))) {
                         elemref->deleteObject();
@@ -792,12 +817,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             }
         }
         for (size_t k = ncurves; k <= previous_size; k++) {
-            const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+            const char * downline = (Glib::ustring("downline-") + Glib::ustring::format(counter) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str();
             createLine(Geom::Point(),Geom::Point(), downline, true, true, true);
-            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
-            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
-            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
-            const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+            createLine(Geom::Point(), Geom::Point(), (Glib::ustring("infoline-") + Glib::ustring::format(k) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, true, true);
+            createLine(Geom::Point(), Geom::Point(), (Glib::ustring("infoline-on-start-") + Glib::ustring::format(k) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, true, true);
+            createLine(Geom::Point(), Geom::Point(), (Glib::ustring("infoline-on-end-") + Glib::ustring::format(k) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str(), true, true, true);
+            const char * id = (Glib::ustring("text-on-") + Glib::ustring::format(k) + Glib::ustring("-") + Glib::ustring(this->getRepr()->attribute("id"))).c_str();
             SPObject *elemref = NULL;
             if ((elemref = document->getObjectById(id))) {
                 elemref->deleteObject();
