@@ -204,7 +204,7 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
         delete effectwidget;
         effectwidget = NULL;
     }
-    effectwidget = effect.newWidget_impl();
+    effectwidget = effect.newWidget();
     effectcontrol_frame.set_label(effect.getName());
     effectcontrol_vbox.pack_start(*effectwidget, true, true);
 
