@@ -32,6 +32,7 @@
 #include "macros.h"
 #include "message-stack.h"
 #include "ui/tools/pen-tool.h"
+#include "ui/tools/pencil-tool.h"
 #include "ui/tools/lpe-tool.h"
 #include "selection-chemistry.h"
 #include "sp-item-group.h"
@@ -40,6 +41,10 @@
 #include "ui/control-manager.h"
 // clipboard support
 #include "ui/clipboard.h"
+
+#define MIN_PRESSURE      0.0
+#define MAX_PRESSURE      1.0
+#define DEFAULT_PRESSURE  1.0
 
 using Inkscape::DocumentUndo;
 
@@ -86,6 +91,8 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
     , waiting_LPE_type(Inkscape::LivePathEffect::INVALID_LPE)
     , red_curve_is_valid(false)
     , anchor_statusbar(false)
+    , input_has_pressure(false)
+    , pressure(DEFAULT_PRESSURE)
 {
 }
 
@@ -219,12 +226,57 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
 }
 
-static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points, FreehandBase *dc, SPItem *item)
+static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, FreehandBase *dc, SPItem *item)
 {
     using namespace Inkscape::LivePathEffect;
 
+    if (SP_IS_PENCIL_CONTEXT(dc)) {
+        PencilTool *pt = SP_PENCIL_CONTEXT(dc);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if (dc->input_has_pressure) {
+            SPShape *sp_shape = dynamic_cast<SPShape *>(item);
+            if (sp_shape) {
+                SPCurve * c = sp_shape->getCurve();
+                if (!c) {
+                    return;
+                }
+                pt->addPowerStrokePencil(c);
+            }
+            if(pt->points.empty()){
+                //if use mouse give a line
+                double zoom = SP_EVENT_CONTEXT(dc)->desktop->current_zoom() * 5.0;
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
+                double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
+                if (min > max){
+                    min = max;
+                }
+                Geom::Affine transformCoordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
+                Geom::Coord scale = transformCoordinate.expansionX();
+                double pressure_shirnked = (1.0 * (max - min)) + min;
+                double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
+                pt->points.push_back(Geom::Point(0,pressure_computed));
+            }
+            Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
+            Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+            if(prefs->getBool("/tools/freehand/pencil/optimus-powerstroke",true)) {
+                lpe->getRepr()->setAttribute("start_linecap_type", "round");
+                lpe->getRepr()->setAttribute("end_linecap_type", "round");
+                lpe->getRepr()->setAttribute("sort_points", "true");
+                lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+                lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
+                lpe->getRepr()->setAttribute("miter_limit", "4");
+                lpe->getRepr()->setAttribute("linejoin_type", "round");
+            }
+            static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(pt->points);
+            pt->points.clear();
+            return;
+        }
+    }
+
     Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+
     static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
 
     // write powerstroke parameters:
@@ -349,6 +401,15 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         swidth = prefs->getDouble("/live_effect/power_stroke/width", swidth/2);
         if (!swidth) {
             swidth = swidth/2;
+        }
+        if (SP_IS_PENCIL_CONTEXT(dc)) {
+            if (dc->input_has_pressure) {
+                std::vector<Geom::Point> points;
+                spdc_apply_powerstroke_shape(points, dc, item);
+                shape = NONE;
+                //To allow retain color
+                shape_applied = true;
+            }
         }
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10

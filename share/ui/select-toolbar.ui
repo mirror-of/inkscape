@@ -210,6 +210,10 @@
     <separator />
     <toolitem action='FlattenSpiroBsplinePencil' />
     <separator />
+    <toolitem action='PencilPressureAction' />
+    <toolitem action='MinPressureAction' />
+    <toolitem action='MaxPressureAction' />
+    <separator />
     <toolitem action='PencilToleranceAction' />
     <toolitem action='PencilLpeSimplify' />
     <toolitem action='PencilLpeSimplifyFlatten' />

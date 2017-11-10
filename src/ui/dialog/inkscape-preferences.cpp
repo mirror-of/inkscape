@@ -204,6 +204,40 @@ void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring
                        false );
 }
 
+void InkscapePreferences::AddPressureSensibility(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
+{
+    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
+    sb->init ( prefs_path + "/pressure-sensibility", 1, 100.0, 1.0, 10.0, def_value, true, false);
+    p.add_line( false, _("Pressure sensibility:"), *sb, _("on tablet usage"),
+                       _("Pressure sensibility, 12 is the default value"),
+                       false );
+}
+
+void InkscapePreferences::AddPowerStrokeKnotDistanceFactor(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
+{
+    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
+    sb->init ( prefs_path + "/knots-distance", 0.1, 9999.0, 1.0, 10.0, def_value, false, false);
+    p.add_line( false, _("Pressure min knot distance factor:"), *sb, _("on tablet usage"),
+                       _("Min distance between knots, this is a factor value computed with other parameters, 135 is the default one"),
+                       false );
+}
+
+void InkscapePreferences::AddPowerStrokeGapPressureFactor(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
+{
+    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
+    sb->init ( prefs_path + "/gap-pressure", 0.01, 9999.0, 1.0, 10.0, def_value, false, false);
+    p.add_line( false, _("Pressure inputs difference for made knots:"), *sb, _("on tablet usage"),
+                       _("Diference between input pressure to make a powerstroke knot, this is a factor value computed with other parameters, 1 is the default value"),
+                       false );
+}
+
+void InkscapePreferences::AddPowerStrokeUseOptimusValues(DialogPage &p, Glib::ustring const &prefs_path, bool def_value)
+{
+    PrefCheckButton* cb = Gtk::manage( new PrefCheckButton);
+    cb->init ( _("Use optimiced powerstroke values instead the default ones:"), prefs_path + "/optimus-powerstroke", def_value);
+    p.add_line( false, "", *cb, "", _("Use optimized powerstroke parameters values in pencil tool por pressure inputs instead the default ones"));
+}
+
 
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
@@ -423,6 +457,12 @@ void InkscapePreferences::initPageTools()
     this->AddNewObjectsStyle(_page_pencil, "/tools/freehand/pencil");
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
+    _page_pencil.add_group_header( _("Pencil pressure"));
+    this->AddPowerStrokeUseOptimusValues(_page_pencil, "/tools/freehand/pencil", true);
+    this->AddPressureSensibility(_page_pencil, "/tools/freehand/pencil", 12.0);
+    this->AddPowerStrokeKnotDistanceFactor(_page_pencil, "/tools/freehand/pencil", 135.0);
+    this->AddPowerStrokeGapPressureFactor(_page_pencil, "/tools/freehand/pencil", 1.0);
+
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",
                             _("If on, the sketch result will be the normal average of all sketches made, instead of averaging the old result with the new sketch"));
