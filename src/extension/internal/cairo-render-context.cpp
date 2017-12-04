@@ -1437,9 +1437,40 @@ CairoRenderContext::_prepareRenderGraphic()
 {
     // Only PDFLaTeX supports importing a single page of a graphics file,
     // so only PDF backend gets interleaved text/graphics
-    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF) {
-        if (_omittext_state == NEW_PAGE_ON_GRAPHIC)
+    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF && _render_mode != RENDER_MODE_CLIP) {
+        if (_omittext_state == NEW_PAGE_ON_GRAPHIC) {
+            // better set this immediately (not sure if masks applied during "popLayer" could call
+            // this function, too, triggering the same code again in error
+            _omittext_state = GRAPHIC_ON_TOP;
+
+            // As we can not emit the page in the middle of a layer (aka group) - it will not be fully painted yet! -
+            // the following basically mirrors the calls in CairoRenderer::renderItem (but in reversed order)
+            // - first traverse all saved states in reversed order (i.e. from deepest nesting to the top)
+            //   and apply clipping / masking to layers on the way (this is done in popLayer)
+            // - then emit the page using cairo_show_page()
+            // - finally restore the previous state with proper transforms and appropriate layers again
+            // 
+            // TODO: While this appears to be an ugly hack it seems to work
+            //       Somebody with a more intimate understanding of cairo and the renderer implementation might
+            //       be able to implement this in a cleaner way, though.
+            int stack_size = g_slist_length(_state_stack);
+            for (int i = 0; i < stack_size-1; i++) {
+                if (static_cast<CairoRenderState *>(g_slist_nth_data(_state_stack, i))->need_layer)
+                    popLayer();
+                cairo_restore(_cr);
+                _state = static_cast<CairoRenderState *>(g_slist_nth_data(_state_stack, i+1));
+            }
+
             cairo_show_page(_cr);
+
+            for (int i = stack_size-2; i >= 0; i--) {
+                cairo_save(_cr);
+                _state = static_cast<CairoRenderState *>(g_slist_nth_data(_state_stack, i));
+                if (_state->need_layer)
+                    pushLayer();
+                setTransform(_state->transform);
+            }
+        }
         _omittext_state = GRAPHIC_ON_TOP;
     }
 }
