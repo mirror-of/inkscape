@@ -14,6 +14,7 @@ description: |
  We also aim to maintain a thriving user and developer community by using
  open, community-oriented development.
 confinement: strict
+grade: stable
 
 parts:
   inkscape:
