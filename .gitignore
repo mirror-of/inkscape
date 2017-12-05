@@ -6,3 +6,6 @@ share/*/*.h
 *.old
 *.swp
 *~
+
+inkscape_*.snap
+inkscape_*_source.tar.bz2
