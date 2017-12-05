@@ -98,6 +98,7 @@ apps:
   inkscape:
     command: desktop-launch ${SNAP}/snapcraft.sh inkscape
     plugs: [home, unity7, gsettings, desktop, desktop-legacy]
+    desktop: share/applications/inkscape.desktop
   viewer:
     command: desktop-launch ${SNAP}/snapcraft.sh inkview
     plugs: [home, unity7, gsettings, desktop, desktop-legacy]
