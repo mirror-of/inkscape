@@ -86,7 +86,7 @@ parts:
       - ruby
     stage:
       - -usr/sbin/update-icon-caches
-    snap:
+    prime:
       - -lib/inkscape/*.a
     after: [desktop-gtk2]
   snapcraft-wrapper:
