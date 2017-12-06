@@ -23,7 +23,6 @@ parts:
     source: .
     configflags:
       - '-DENABLE_BINRELOC=ON'
-      - '-DINKSCAPE_ICONPATH="share/branding/inkscape.svg"'
     build-packages:
       - cmake
       - intltool

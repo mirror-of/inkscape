@@ -137,11 +137,6 @@ if (ENABLE_BINRELOC)
 	add_definitions(-DENABLE_BINRELOC)
 endif()
 
-if ("${INKSCAPE_ICONPATH}" STREQUAL "")
-  set(INKSCAPE_ICONPATH "inkscape")
-endif()
-
-
 # -----------------------------------------------------------------------------
 # Dist Targets
 # -----------------------------------------------------------------------------
@@ -261,7 +256,6 @@ message("CMAKE_C_COMPILER:        ${CMAKE_C_COMPILER}")
 message("CMAKE_CXX_COMPILER:      ${CMAKE_CXX_COMPILER}")
 message("CMAKE_BUILD_TYPE:        ${CMAKE_BUILD_TYPE}")
 message("ENABLE_BINRELOC:         ${ENABLE_BINRELOC}")
-message("INKSCAPE_ICONPATH:       ${INKSCAPE_ICONPATH}")
 message("")
 
 if(WIN32)
