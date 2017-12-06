@@ -137,6 +137,11 @@ if (ENABLE_BINRELOC)
 	add_definitions(-DENABLE_BINRELOC)
 endif()
 
+if ("${INKSCAPE_ICONPATH}" STREQUAL "")
+  set(INKSCAPE_ICONPATH "inkscape")
+endif()
+
+
 # -----------------------------------------------------------------------------
 # Dist Targets
 # -----------------------------------------------------------------------------
@@ -198,7 +203,7 @@ endif()
 # Installation
 # -----------------------------------------------------------------------------
 add_subdirectory(share)
-	
+
 if(HAVE_MSYS2)
   include(CMakeScripts/InstallMSYS2.cmake)
 else()

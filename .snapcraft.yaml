@@ -21,7 +21,9 @@ parts:
   inkscape:
     plugin: cmake
     source: .
-    configflags: ['-DENABLE_BINRELOC=ON']
+    configflags:
+      - '-DENABLE_BINRELOC=ON'
+      - '-DINKSCAPE_ICONPATH=share/branding/inkscape.svg'
     build-packages:
       - cmake
       - intltool
