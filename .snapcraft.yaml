@@ -1,6 +1,6 @@
 name: inkscape
-version: unknown
 version-script: packaging/snappy/version.sh
+version: devel # Replaced at build time ^^^
 summary: Vector Graphics Editor
 description: |
  An Open Source vector graphics editor, with capabilities similar to
@@ -23,7 +23,7 @@ parts:
     source: .
     configflags:
       - '-DENABLE_BINRELOC=ON'
-      - '-DINKSCAPE_ICONPATH=share/branding/inkscape.svg'
+      - '-DINKSCAPE_ICONPATH="share/branding/inkscape.svg"'
     build-packages:
       - cmake
       - intltool
@@ -55,8 +55,6 @@ parts:
       - libxml2-dev
       - libxslt1-dev
       - pkg-config
-      - python-dev
-      - python-lxml
       - zlib1g-dev
     stage-packages:
       - libaspell15
@@ -80,13 +78,9 @@ parts:
       - imagemagick
       - libimage-magick-perl
       - libwmf-bin
-      - python-lxml
-      - python-numpy
       - transfig
-      - pstoedit
       - libsvg-perl
       - libxml-xql-perl
-      - python-uniconvertor
       - ruby
     stage:
       - -usr/sbin/update-icon-caches
@@ -96,6 +90,15 @@ parts:
   snapcraft-wrapper:
     plugin: dump
     source: packaging/snappy/
+  python-deps:
+    plugin: python
+    python-version: python2
+    python-packages:
+      - lxml
+      - numpy
+    stage-packages:
+      - pstoedit
+      - python-uniconvertor
 
 apps:
   inkscape:
