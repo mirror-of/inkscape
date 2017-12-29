@@ -151,7 +151,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
     }
 
     Gtk::Label *menu_label = Gtk::manage(new Gtk::Label(label, true));
-#if WITH_GTKMM_3_16
+#if GTKMM_CHECK_VERSION(3,16,0)
     menu_label->set_xalign(0.0);
 #else
     menu_label->set_alignment(0.0, 0.5);
@@ -572,7 +572,12 @@ bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
         int y = static_cast<int>(event->y);
         if ( _tree.get_path_at_pos( x, y, path ) ) {
             _checkTreeSelection();
+
+#if GTKMM_CHECK_VERSION(3,22,0)
+            _popupMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
             _popupMenu.popup(event->button, event->time);
+#endif
         }
     }
 
@@ -799,7 +804,10 @@ LayersPanel::LayersPanel() :
     _model(0),
     _pending(0),
     _toggleEvent(0),
-    _compositeSettings(SP_VERB_DIALOG_LAYERS, "layers", UI::Widget::SimpleFilterModifier::BLEND),
+    _compositeSettings(SP_VERB_DIALOG_LAYERS, "layers",
+                       UI::Widget::SimpleFilterModifier::BLEND |
+                       UI::Widget::SimpleFilterModifier::OPACITY |
+                       UI::Widget::SimpleFilterModifier::BLUR),
     desktopChangeConn()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();

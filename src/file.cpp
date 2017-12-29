@@ -272,6 +272,11 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         if ( INKSCAPE.use_gui() ) {
+            
+            SPNamedView *nv = desktop->namedview;
+            if (nv->lockguides) {
+                desktop->toggleGuidesLock();
+            }
             // Perform a fixup pass for hrefs.
             if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(doc) ) {
                 Glib::ustring msg = _("Broken links have been changed to point to existing files.");
@@ -651,6 +656,13 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         return false;
     } catch (Inkscape::Extension::Output::save_cancelled &e) {
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        return false;
+    } catch (Inkscape::Extension::Output::export_id_not_found &e) {
+        gchar *text = g_strdup_printf(_("File could not be saved:\nNo object with ID '%s' found."), e.id);
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        sp_ui_error_dialog(text);
+        g_free(text);
         doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {

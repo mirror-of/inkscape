@@ -388,6 +388,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 1, 0, 1, 1);
+
     g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
     gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl_wrapper, TRUE, TRUE, 1 );
 
@@ -736,10 +737,9 @@ static void sp_desktop_widget_dispose(GObject *object)
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas), (gpointer) G_CALLBACK (sp_desktop_widget_event), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas_tbl), (gpointer) G_CALLBACK (canvas_tbl_size_allocate), dtw);
 
-
         dtw->layer_selector->setDesktop(NULL);
         dtw->layer_selector->unreference();
-        INKSCAPE.remove_desktop (dtw->desktop); // clears selection too
+        INKSCAPE.remove_desktop(dtw->desktop); // clears selection and event_context
         dtw->modified_connection.disconnect();
         dtw->desktop->destroy();
         Inkscape::GC::release (dtw->desktop);
@@ -994,7 +994,7 @@ void sp_update_guides_lock( GtkWidget */*button*/, gpointer data )
     
     if ( down != nv->lockguides ) {
         nv->lockguides = down;
-        sp_namedview_guides_toggle_lock(doc, repr);
+        sp_namedview_guides_toggle_lock(doc, nv);
         if (down) {
             dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Locked all guides"));
         } else {
@@ -1659,7 +1659,6 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
     /* Once desktop is set, we can update rulers */
     sp_desktop_widget_update_rulers (dtw);
-    sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), namedview->lockguides );
 
     sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), dtw->desktop);
 
@@ -1671,7 +1670,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->menubar = sp_ui_main_menubar (dtw->desktop);
     gtk_widget_set_name(dtw->menubar, "MenuBar");
     gtk_widget_show_all (dtw->menubar);
-    SPNamedView *nv = dtw->desktop->namedview;
+
     gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
     dtw->layoutWidgets();
 

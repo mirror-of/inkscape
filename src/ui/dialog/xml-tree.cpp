@@ -231,6 +231,7 @@ XmlTree::XmlTree (void) :
     Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
     scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     scroller->set_shadow_type(Gtk::SHADOW_IN);
+    scroller->set_size_request(0, 60);
 
     attr_vbox.pack_start(*scroller, TRUE, TRUE, 0);
 
@@ -447,7 +448,7 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
             gtk_tree_selection_select_iter(selection, &node);
 
         } else {
-            g_message("XmlTree::set_tree_select : Couldnt find repr node");
+            g_message("XmlTree::set_tree_select : Couldn't find repr node");
         }
     } else {
         GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));

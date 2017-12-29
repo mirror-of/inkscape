@@ -1125,21 +1125,27 @@ void SelectionVerb::perform(SPAction *action, void *data)
     bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_UNION:
+            selection->toCurves(true);
             selection->pathUnion();
             break;
         case SP_VERB_SELECTION_INTERSECT:
+            selection->toCurves(true);
             selection->pathIntersect();
             break;
         case SP_VERB_SELECTION_DIFF:
+            selection->toCurves(true);
             selection->pathDiff();
             break;
         case SP_VERB_SELECTION_SYMDIFF:
+            selection->toCurves(true);
             selection->pathSymDiff();
             break;
         case SP_VERB_SELECTION_CUT:
+            selection->toCurves(true);
             selection->pathCut();
             break;
         case SP_VERB_SELECTION_SLICE:
+            selection->toCurves(true);
             selection->pathSlice();
             break;
         case SP_VERB_SELECTION_GROW:
@@ -1253,6 +1259,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             tools_switch(dt, TOOLS_NODES);
             break;
         case SP_VERB_SELECTION_OUTLINE:
+            selection->toCurves(true);
             sp_selected_path_outline(dt);
             break;
         case SP_VERB_SELECTION_OUTLINE_LEGACY:
@@ -1281,9 +1288,11 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
 
         case SP_VERB_SELECTION_COMBINE:
+            selection->toCurves(true);
             selection->combine();
             break;
         case SP_VERB_SELECTION_BREAK_APART:
+            selection->toCurves(true);
             selection->breakApart();
             break;
         case SP_VERB_SELECTION_ARRANGE:
@@ -3028,11 +3037,11 @@ Verb *Verb::_base_verbs[] = {
 
     new ZoomVerb(SP_VERB_ROTATE_CW,   "RotateClockwise",        N_("Rotate Clockwise"),         N_("Rotate canvas clockwise"),         NULL),
     new ZoomVerb(SP_VERB_ROTATE_CCW,  "RotateCounterClockwise", N_("Rotate Counter-Clockwise"), N_("Rotate canvas counter-clockwise"), NULL),
-    new ZoomVerb(SP_VERB_ROTATE_ZERO, "RotateZero",             N_("Rotate Zero"),              N_("Reset canvas rotation to zero"),   NULL),
+    new ZoomVerb(SP_VERB_ROTATE_ZERO, "RotateZero",             N_("Reset Rotation"),           N_("Reset canvas rotation to zero"),   NULL),
 
-    new ZoomVerb(SP_VERB_FLIP_HORIZONTAL, "FlipHorizontal",     N_("Flip Horizontal"), N_("Flip canvas horizontally"), INKSCAPE_ICON("object-flip-horizontal")),
-    new ZoomVerb(SP_VERB_FLIP_VERTICAL,   "FlipVertical",       N_("Flip Vertical"),   N_("Flip canvas vertically"),   INKSCAPE_ICON("object-flip-vertical")),
-    new ZoomVerb(SP_VERB_FLIP_NONE,       "FlipNone",           N_("Flip None"),       N_("Undo any flip"),            NULL),
+    new ZoomVerb(SP_VERB_FLIP_HORIZONTAL, "FlipHorizontal",     N_("Flip Horizontally"), N_("Flip canvas horizontally"), INKSCAPE_ICON("object-flip-horizontal")),
+    new ZoomVerb(SP_VERB_FLIP_VERTICAL,   "FlipVertical",       N_("Flip Vertically"),   N_("Flip canvas vertically"),   INKSCAPE_ICON("object-flip-vertical")),
+    new ZoomVerb(SP_VERB_FLIP_NONE,       "FlipNone",           N_("Reset Flip"),        N_("Undo any flip"),            NULL),
 
 
 // WHY ARE THE FOLLOWING ZoomVerbs???

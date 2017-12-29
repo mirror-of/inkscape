@@ -272,6 +272,7 @@ protected:
     UI::Widget::PrefRadioButton _clone_option_unlink;
     UI::Widget::PrefRadioButton _clone_option_delete;
     UI::Widget::PrefCheckButton _clone_relink_on_duplicate;
+    UI::Widget::PrefCheckButton _clone_to_curves;
 
     UI::Widget::PrefCheckButton _mask_mask_on_top;
     UI::Widget::PrefCheckButton _mask_mask_remove;
@@ -500,10 +501,7 @@ protected:
     static void AddFirstAndLastCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddDotSizeSpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddBaseSimplifySpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
-    static void AddPressureSensibility(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
-    static void AddPowerStrokeKnotDistanceFactor(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
-    static void AddPowerStrokeGapPressureFactor(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
-    static void AddPowerStrokeUseOptimusValues(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
+    static void AddPencilPowerStrokePressureStep(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, gint def_value);
     static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = NULL);
 
     void on_pagelist_selection_changed();

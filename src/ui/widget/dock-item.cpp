@@ -29,8 +29,7 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     _x(0),
     _y(0),
     _grab_focus_on_realize(false),
-    _gdl_dock_item(0),
-    _dock_item_action_area(0)
+    _gdl_dock_item(0)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GdlDockItemBehavior gdl_dock_behavior =
@@ -45,7 +44,12 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
         int width = 0;
         int height = 0;
         Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
-        _icon_pixbuf = iconTheme->load_icon(icon_name, width);
+        try {
+            _icon_pixbuf = iconTheme->load_icon(icon_name, width);
+        }
+        catch (const Gtk::IconThemeError& e) {
+            std::cerr << "DocItem::DocItem(): " << e.what() << std::endl;
+        }
     }
 
     if ( _icon_pixbuf ) {

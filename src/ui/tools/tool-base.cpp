@@ -1126,10 +1126,15 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
+#if GTKMM_CHECK_VERSION(3,22,0)
+    case GDK_KEY_PRESS:
+        CM->popup_at_pointer(event);
+#else
         CM->popup(event->button.button, event->button.time);
         break;
     case GDK_KEY_PRESS:
         CM->popup(0, event->key.time);
+#endif
         break;
     default:
         break;
@@ -1289,8 +1294,9 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
     // The snap delay will repeat the last motion event, which will lead to
     // erroneous points in the calligraphy context. And because we don't snap
     // in this context, we might just as well disable the snap delay all together
+    bool const c4 = ec->space_panning; // Don't snap while panning with the spacebar
 
-    if (c1 || c2 || c3) {
+    if (c1 || c2 || c3 || c4) {
         // Make sure that we don't send any pending snap events to a context if we know in advance
         // that we're not going to snap any way (e.g. while scrolling with middle mouse button)
         // Any motion event might affect the state of the context, leading to unexpected behavior

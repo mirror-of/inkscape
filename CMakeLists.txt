@@ -229,7 +229,9 @@ add_custom_target(clean-all
 if(GMOCK_PRESENT)
     enable_testing()
     set(CMAKE_CTEST_COMMAND ctest -V)
-    set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
+    if(WIN32)
+        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
+    endif()
     add_subdirectory(testfiles EXCLUDE_FROM_ALL)
     add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
     add_dependencies(check inkscape)
@@ -242,6 +244,10 @@ canonicalize_flags_var("${CMAKE_CXX_FLAGS}" _new_cxx)
 set(CMAKE_CXX_FLAGS "${_new_cxx}" CACHE STRING "" FORCE)
 # message(FATAL_ERROR "CMAKE_CXX_FLAGS = <${CMAKE_CXX_FLAGS}>")
 
+install(FILES
+	AUTHORS
+	TRANSLATORS
+	DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
 
 # ----------------------------------------------------------------------
 # Information Summary

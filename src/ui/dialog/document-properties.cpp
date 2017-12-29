@@ -228,7 +228,7 @@ inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned cons
                     // this sets the padding for subordinate widgets on the "Page" page
                     if( indent && (i==(n-6) || i==(n-4) || i==(n-2)) ) {
                         arr[i+1]->set_hexpand();
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
                         arr[i+1]->set_margin_start(20);
                         arr[i+1]->set_margin_end(20);
 #else
@@ -564,21 +564,33 @@ void DocumentProperties::populate_linked_profiles_box()
 void DocumentProperties::external_scripts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _ExternalScriptsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _ExternalScriptsContextMenu.popup(event->button, event->time);
+#endif
     }
 }
 
 void DocumentProperties::embedded_scripts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _EmbeddedScriptsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _EmbeddedScriptsContextMenu.popup(event->button, event->time);
+#endif
     }
 }
 
 void DocumentProperties::linked_profiles_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _EmbProfContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _EmbProfContextMenu.popup(event->button, event->time);
+#endif
     }
 }
 
@@ -703,7 +715,7 @@ void DocumentProperties::build_cms()
 
     _link_btn.set_halign(Gtk::ALIGN_CENTER);
     _link_btn.set_valign(Gtk::ALIGN_CENTER);
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
     _link_btn.set_margin_start(2);
     _link_btn.set_margin_end(2);
 #else
@@ -809,7 +821,7 @@ void DocumentProperties::build_scripting()
     _external_add_btn.set_halign(Gtk::ALIGN_CENTER);
     _external_add_btn.set_valign(Gtk::ALIGN_CENTER);
 
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
     _external_add_btn.set_margin_start(2);
     _external_add_btn.set_margin_end(2);
 #else

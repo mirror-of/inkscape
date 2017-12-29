@@ -204,40 +204,14 @@ void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring
                        false );
 }
 
-void InkscapePreferences::AddPressureSensibility(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
+void InkscapePreferences::AddPencilPowerStrokePressureStep(DialogPage &p, Glib::ustring const &prefs_path, gint def_value)
 {
     PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
-    sb->init ( prefs_path + "/pressure-sensibility", 1, 100.0, 1.0, 10.0, def_value, true, false);
-    p.add_line( false, _("Pressure sensibility:"), *sb, _("on tablet usage"),
-                       _("Pressure sensibility, 12 is the default value"),
+    sb->init ( prefs_path + "/ps-step-pressure", 1, 100, 1, 10, def_value, true, false);
+    p.add_line( false, _("Pressure change for new knot:"), *sb, _("%"),
+                       _("Percentage increase / decrease of stylus pressure that is required to create a new PowerStroke knot."),
                        false );
 }
-
-void InkscapePreferences::AddPowerStrokeKnotDistanceFactor(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
-{
-    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
-    sb->init ( prefs_path + "/knots-distance", 0.1, 9999.0, 1.0, 10.0, def_value, false, false);
-    p.add_line( false, _("Pressure min knot distance factor:"), *sb, _("on tablet usage"),
-                       _("Min distance between knots, this is a factor value computed with other parameters, 135 is the default one"),
-                       false );
-}
-
-void InkscapePreferences::AddPowerStrokeGapPressureFactor(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
-{
-    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
-    sb->init ( prefs_path + "/gap-pressure", 0.01, 9999.0, 1.0, 10.0, def_value, false, false);
-    p.add_line( false, _("Pressure inputs difference for made knots:"), *sb, _("on tablet usage"),
-                       _("Diference between input pressure to make a powerstroke knot, this is a factor value computed with other parameters, 1 is the default value"),
-                       false );
-}
-
-void InkscapePreferences::AddPowerStrokeUseOptimusValues(DialogPage &p, Glib::ustring const &prefs_path, bool def_value)
-{
-    PrefCheckButton* cb = Gtk::manage( new PrefCheckButton);
-    cb->init ( _("Use optimiced powerstroke values instead the default ones:"), prefs_path + "/optimus-powerstroke", def_value);
-    p.add_line( false, "", *cb, "", _("Use optimized powerstroke parameters values in pencil tool por pressure inputs instead the default ones"));
-}
-
 
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
@@ -457,11 +431,8 @@ void InkscapePreferences::initPageTools()
     this->AddNewObjectsStyle(_page_pencil, "/tools/freehand/pencil");
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
-    _page_pencil.add_group_header( _("Pencil pressure"));
-    this->AddPowerStrokeUseOptimusValues(_page_pencil, "/tools/freehand/pencil", true);
-    this->AddPressureSensibility(_page_pencil, "/tools/freehand/pencil", 12.0);
-    this->AddPowerStrokeKnotDistanceFactor(_page_pencil, "/tools/freehand/pencil", 135.0);
-    this->AddPowerStrokeGapPressureFactor(_page_pencil, "/tools/freehand/pencil", 1.0);
+    _page_pencil.add_group_header( _("Pressure sensitivity settings"));
+    this->AddPencilPowerStrokePressureStep(_page_pencil, "/tools/freehand/pencil", 5);
 
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",
@@ -1394,6 +1365,11 @@ void InkscapePreferences::initPageBehavior()
     _page_clones.add_line(true, "", _clone_relink_on_duplicate, "",
                         _("When duplicating a selection containing both a clone and its original (possibly in groups), relink the duplicated clone to the duplicated original instead of the old original"));
 
+    _page_clones.add_group_header( _("Unlinking clones"));
+    _clone_to_curves.init ( _("Path operations unlink clones"), "/options/pathoperationsunlink/value", true);
+    _page_clones.add_line(true, "", _clone_to_curves, "",
+                        _("The following path operations will unlink clones: Stroke to path, Object to path, Boolean operations, Combine, Break apart"));
+
     //TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
     this->AddPage(_page_clones, _("Clones"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLONES);
 
@@ -1461,7 +1437,7 @@ void InkscapePreferences::initPageRendering()
 
     // rendering tile multiplier
     _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 512.0, 1.0, 16.0, 16.0, true, false);
-    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, _(""),
+    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, "",
                               _("Set the relative size of tiles used to render the canvas. The larger the value, the bigger the tile size."), false);
 
     /* blur quality */

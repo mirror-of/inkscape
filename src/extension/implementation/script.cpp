@@ -28,6 +28,7 @@
 #include "desktop.h"
 #include "ui/dialog-events.h"
 #include "extension/effect.h"
+#include "extension/execution-env.h"
 #include "extension/output.h"
 #include "extension/input.h"
 #include "extension/db.h"
@@ -145,9 +146,10 @@ std::string Script::resolveInterpreterExecutable(const Glib::ustring &interpName
    officially in the load function.  This allows for less allocation
    of memory in the unloaded state.
 */
-Script::Script() :
-    Implementation(),
-    _canceled(false)
+Script::Script()
+    : Implementation()
+    , _canceled(false)
+    , parent_window(NULL)
 {
 }
 
@@ -652,6 +654,8 @@ void Script::effect(Inkscape::Extension::Effect *module,
     std::list<std::string> params;
     module->paramListString(params);
 
+    parent_window = module->get_execution_env()->get_working_dialog();
+
     if (module->no_doc) {
         // this is a no-doc extension, e.g. a Help menu command;
         // just run the command without any files, ignoring errors
@@ -732,9 +736,18 @@ void Script::effect(Inkscape::Extension::Effect *module,
 
     SPDocument * mydoc = NULL;
     if (data_read > 10) {
-        mydoc = Inkscape::Extension::open(
-              Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG),
-              tempfilename_out.c_str());
+        try {
+            mydoc = Inkscape::Extension::open(
+                  Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG),
+                  tempfilename_out.c_str());
+        } catch (const Inkscape::Extension::Input::open_failed &e) {
+            g_warning("Extension returned output that could not be parsed: %s", e.what());
+            Gtk::MessageDialog warning(
+                    _("The output from the extension could not be parsed."),
+                    false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+            warning.set_transient_for( parent_window ? *parent_window : *(INKSCAPE.active_desktop()->getToplevel()) );
+            warning.run();
+        }
     } // data_read
 
     pump_events();
@@ -923,7 +936,11 @@ void Script::checkStderr (const Glib::ustring &data,
     Gtk::MessageDialog warning(message, false, type, Gtk::BUTTONS_OK, true);
     warning.set_resizable(true);
     GtkWidget *dlg = GTK_WIDGET(warning.gobj());
-    sp_transientize(dlg);
+    if (parent_window) {
+        warning.set_transient_for(*parent_window);
+    } else {
+        sp_transientize(dlg);
+    }
 
     auto vbox = warning.get_content_area();
 

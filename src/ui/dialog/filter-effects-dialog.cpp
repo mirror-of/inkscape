@@ -842,7 +842,10 @@ public:
     SpinScale* add_spinscale(double def, const SPAttributeEnum attr, const Glib::ustring& label,
                          const double lo, const double hi, const double step_inc, const double climb, const int digits, char* tip_text = NULL)
     {
-        SpinScale* spinslider = new SpinScale("", def, lo, hi, step_inc, climb, digits, attr, tip_text);
+        Glib::ustring tip_text2;
+        if (tip_text)
+            tip_text2 = tip_text;
+        SpinScale* spinslider = new SpinScale("", def, lo, hi, step_inc, climb, digits, attr, tip_text2);
         add_widget(spinslider, label);
         add_attr_widget(spinslider);
         return spinslider;
@@ -850,8 +853,10 @@ public:
 
     // DualSpinScale
     DualSpinScale* add_dualspinscale(const SPAttributeEnum attr, const Glib::ustring& label,
-                                       const double lo, const double hi, const double step_inc,
-                                       const double climb, const int digits, char* tip_text1 = NULL, char* tip_text2 = NULL)
+                                     const double lo, const double hi, const double step_inc,
+                                     const double climb, const int digits,
+                                     const Glib::ustring tip_text1 = "",
+                                     const Glib::ustring tip_text2 = "")
     {
         DualSpinScale* dss = new DualSpinScale("", "", lo, lo, hi, step_inc, climb, digits, attr, tip_text1, tip_text2);
         add_widget(dss, label);
@@ -1619,7 +1624,12 @@ void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventBut
 	auto items = _menu->get_children();
 	items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
+
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _menu->popup(event->button, event->time);
+#endif
     }
 }
 
@@ -2479,7 +2489,12 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
 	auto items = _primitive_menu->get_children();
         items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
+
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _primitive_menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(e));
+#else
         _primitive_menu->popup(e->button, e->time);
+#endif
 
         return true;
     }

@@ -37,7 +37,7 @@
 #include "sp-root.h"
 #include <gtkmm/window.h>
 
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
 # include <gdkmm/monitor.h>
 #else
 # include <gdkmm/screen.h>
@@ -593,10 +593,9 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             break;
     }
     case SP_ATTR_INKSCAPE_LOCKGUIDES:
-        this->lockguides = value ? sp_str_to_bool(value) : FALSE;
-        sp_namedview_lock_guides(this);
-        this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-        break;
+            this->lockguides = value ? sp_str_to_bool(value) : FALSE;
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
     default:
             SPObjectGroup::set(key, value);
             break;
@@ -671,7 +670,6 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
                     }
 
                     sp_namedview_show_single_guide(SP_GUIDE(g), this->showguides);
-                    sp_namedview_lock_single_guide(SP_GUIDE(g), this->lockguides);
                 }
             }
         }
@@ -721,7 +719,6 @@ void SPNamedView::show(SPDesktop *desktop)
             (*it)->sensitize(desktop->getCanvas(), TRUE);
         }
         sp_namedview_show_single_guide((*it), showguides);
-        sp_namedview_lock_single_guide((*it), lockguides);
     }
 
     views.push_back(desktop);
@@ -748,7 +745,7 @@ gdouble const NEWDOC_Y_SCALE = NEWDOC_X_SCALE;
 Geom::Point calcAnchorPoint(gint const x, gint const y,
                             gint const w, gint const h, gint const minOnscreen)
 {
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
     Gdk::Rectangle screen_geometry;
 
     auto const display = Gdk::Display::get_default();
@@ -801,7 +798,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         // TODO: account for multi-monitor setups (i.e. on which monitor do we want to display Inkscape?)
         Gdk::Rectangle monitor_geometry;
 
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
         auto const display = Gdk::Display::get_default();
         auto const monitor = display->get_primary_monitor();
 
@@ -1013,9 +1010,10 @@ void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr)
     doc->setModifiedSinceSave();
 }
 
-void sp_namedview_guides_toggle_lock(SPDocument *doc, Inkscape::XML::Node *repr)
+void sp_namedview_guides_toggle_lock(SPDocument *doc, SPNamedView * namedview)
 {
     unsigned int v;
+    Inkscape::XML::Node *repr = namedview->getRepr();
     unsigned int set = sp_repr_get_boolean(repr, "inkscape:lockguides", &v);
     if (!set) { // hide guides if not specified, for backwards compatibility
         v = true;
@@ -1026,6 +1024,7 @@ void sp_namedview_guides_toggle_lock(SPDocument *doc, Inkscape::XML::Node *repr)
     bool saved = DocumentUndo::getUndoSensitive(doc);
     DocumentUndo::setUndoSensitive(doc, false);
     sp_repr_set_boolean(repr, "inkscape:lockguides", v);
+    sp_namedview_lock_guides(namedview);
     DocumentUndo::setUndoSensitive(doc, saved);
     doc->setModifiedSinceSave();
 }
