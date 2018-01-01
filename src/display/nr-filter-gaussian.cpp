@@ -12,13 +12,13 @@
  */
 
 #include "config.h" // Needed for HAVE_OPENMP
-
 #include <algorithm>
 #include <cmath>
 #include <complex>
 #include <cstdlib>
 #include <glib.h>
 #include <limits>
+#include <typeinfo>
 #if HAVE_OPENMP
 #include <omp.h>
 #endif //HAVE_OPENMP
@@ -32,10 +32,17 @@
 #include <2geom/affine.h>
 #include "util/fixed_point.h"
 #include "preferences.h"
+#include <fstream>
+#include <iomanip>
+#include <cpuid.h>
+#include <chrono>
+#include "SimpleImage.h"
 
 #ifndef INK_UNUSED
 #define INK_UNUSED(x) ((void)(x))
 #endif
+
+using namespace std;
 
 // IIR filtering method based on:
 // L.J. van Vliet, I.T. Young, and P.W. Verbeek, Recursive Gaussian Derivative Filters,
@@ -54,10 +61,12 @@
 // filters are used).
 static size_t const N = 3;
 
+#if __cplusplus < 201103
 template<typename InIt, typename OutIt, typename Size>
 inline void copy_n(InIt beg_in, Size N, OutIt beg_out) {
     std::copy(beg_in, beg_in+N, beg_out);
 }
+#endif
 
 // Type used for IIR filter coefficients (can be 10.21 signed fixed point, see Anisotropic Gaussian Filtering Using Fixed Point Arithmetic, Christoph H. Lampert & Oliver Wirjadi, 2006)
 typedef double IIRValue;
@@ -123,6 +132,11 @@ namespace Filters {
 
 FilterGaussian::FilterGaussian()
 {
+    extern void (*GaussianBlurIIR_Y8)(SimpleImage<uint8_t>, SimpleImage<uint8_t>, ssize_t, ssize_t, float, float);
+    void InitializeSIMDFunctions();
+    if (GaussianBlurIIR_Y8 == NULL)
+        InitializeSIMDFunctions();
+
     _deviation_x = _deviation_y = 0.0;
 }
 
@@ -142,8 +156,8 @@ _effect_area_scr(double const deviation)
     return (int)std::ceil(std::fabs(deviation) * 3.0);
 }
 
-static void
-_make_kernel(FIRValue *const kernel, double const deviation)
+template <typename FIRValue>
+static void _make_kernel(FIRValue *const kernel, double const deviation)
 {
     int const scr_len = _effect_area_scr(deviation);
     g_assert(scr_len >= 0);
@@ -546,6 +560,559 @@ gaussian_pass_FIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_su
     };
 }
 
+#ifdef _MSC_VER
+  #define FORCE_INLINE __forceinline
+  #define ALIGN(x) __declspec(aligned(x))
+#else
+  #define FORCE_INLINE inline __attribute__((always_inline))
+  #define ALIGN(x) __attribute__((alignment(x)))
+#endif
+
+void (*GaussianBlurIIR_Y8)(SimpleImage<uint8_t> out, SimpleImage<uint8_t> in, ssize_t width, ssize_t height, float sigmaX, float sigmaY);
+void (*GaussianBlurIIR_R8G8B8A8)(SimpleImage<uint8_t> out, SimpleImage<uint8_t> in, ssize_t width, ssize_t height, float sigmaX, float sigmaY);
+
+void (*GaussianBlurFIR_Y8)(SimpleImage<uint8_t> out, SimpleImage<uint8_t> in, ssize_t width, ssize_t height, float sigmaX, float sigmaY);
+void (*GaussianBlurFIR_R8G8B8A8)(SimpleImage<uint8_t> out, SimpleImage<uint8_t> in, ssize_t width, ssize_t height, float sigmaX, float sigmaY);
+
+void(*GaussianBlurHorizontalIIR_Y8)(SimpleImage<uint8_t> out, SimpleImage<uint8_t> in, ssize_t width, ssize_t height, float sigmaX, bool canOverwriteInput);
+void(*GaussianBlurHorizontalIIR_R8G8B8A8)(SimpleImage<uint8_t> out, SimpleImage<uint8_t> in, ssize_t width, ssize_t height, float sigmaX, bool canOverwriteInput);
+void(*GaussianBlurVerticalIIR)(SimpleImage<uint8_t> out, SimpleImage<uint8_t> in, ssize_t width, ssize_t height, float sigmaY);   // works for grayscale & RGBA
+
+template <typename AnyType>
+void SaveImage(const char *path, SimpleImage<AnyType> in, int width, int height, int channels, float scale = 1.0f)
+{
+  cairo_surface_t *scaled = cairo_image_surface_create(channels == 1 ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32, width, height);
+
+  uint8_t *_scaled = cairo_image_surface_get_data(scaled);
+  ssize_t scaledPitch = cairo_image_surface_get_stride(scaled);
+  for (int y = 0; y < height; ++y)
+  {
+    for (int x = 0; x < width * channels; ++x)
+    {
+      _scaled[y * scaledPitch + x] = min(in[y][x] * scale, 255.0f);
+    }
+  }
+  cairo_surface_mark_dirty(scaled);
+  if (cairo_surface_write_to_png(scaled, path) != CAIRO_STATUS_SUCCESS)
+    throw 0;
+}
+
+#if defined(__x86_64__) || defined(__i386__) || defined (_M_X64) || defined(_M_IX86)     // if x86 processor
+
+#include <immintrin.h>
+
+#ifndef __GNUC__
+  #define __SSE__
+  #define __SSE2__
+#endif
+
+const float MAX_SIZE_FOR_SINGLE_PRECISION = 30.0f;   // switch to double if sigma > threshold or else round off error becomes so big that the output barely changes and you see annoying mach bands
+
+const size_t GUARANTEED_ALIGNMENT = 16;
+
+#define ALIGNED_ALLOCA(size, alignment) RoundUp((size_t)alloca(size + (((alignment) / GUARANTEED_ALIGNMENT) - 1) * GUARANTEED_ALIGNMENT), alignment)
+
+const ALIGN(32) uint8_t PARTIAL_VECTOR_MASK[64] =
+{
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+#ifdef _MSC_VER
+#define __FMA__
+#define __AVX2__
+#define __AVX__
+#define __SSE4_1__
+#define __SSSE3__
+#include "gaussian_blur_templates.h"
+
+#else
+
+#pragma GCC push_options
+
+namespace AVX2
+{
+#pragma GCC target("fma,avx2")
+#define __FMA__
+#define __AVX2__
+#define __AVX__
+#define __SSE4_1__
+#define __SSSE3__
+#include "gaussian_blur_templates.h"
+}
+
+namespace AVX
+{
+#pragma GCC target("avx")
+#undef __AVX2__
+#undef __FMA__
+
+#include "gaussian_blur_templates.h"
+}
+
+namespace SSE2
+{
+//#ifdef __x86_64__
+//  #pragma GCC target("default")     // base x86_64 ISA already has SSE2
+//#else
+  #pragma GCC target("sse2")
+//#endif
+#undef __AVX__
+#undef __SSE4_1__
+#undef __SSSE3__
+#include "gaussian_blur_templates.h"
+}
+
+#pragma GCC pop_options
+
+#endif
+
+void InitializeSIMDFunctions()
+{
+#ifdef __GNUC__
+    enum SIMDarch { SSE2, AVX, AVX2 };
+    const char *SIMDarchNames[] = { "SSE2", "AVX", "AVX2" };
+    SIMDarch arch;
+    if (getenv("FORCE_SIMD") != NULL)
+    {
+        arch = (SIMDarch)atoi(getenv("FORCE_SIMD"));
+    }
+    else
+    {
+        unsigned cpuInfo[4];
+    // version in cpuid.h is buggy - forgets to clear ecx
+    #define __cpuid(level, a, b, c, d) \
+              __asm__("xor %%ecx, %%ecx\n" \
+                      "cpuid\n" \
+                      : "=a"(a), "=b"(b), "=c"(c), "=d"(d) \
+                      : "0"(level))
+        int maxLevel = __get_cpuid_max(0, 0);
+
+        cpuInfo[1] = 0;
+        if (maxLevel >= 7)
+          __cpuid(7, cpuInfo[0], cpuInfo[1], cpuInfo[2], cpuInfo[3]);
+
+        if (cpuInfo[1] & bit_AVX2)
+        {
+          arch = AVX2;
+        }
+        else
+        {
+          __cpuid(1, cpuInfo[0], cpuInfo[1], cpuInfo[2], cpuInfo[3]);
+          if (cpuInfo[2] & bit_AVX)
+            arch = AVX;
+          else if (cpuInfo[3] & bit_SSE2)
+            arch = SSE2;
+        }
+    }
+    cout << "using " << SIMDarchNames[arch] << " functions" << endl;
+    switch (arch)
+    {
+    case SSE2:
+        GaussianBlurIIR_Y8 = SSE2::Convolve<1>;
+        GaussianBlurIIR_R8G8B8A8 = SSE2::Convolve<4>;
+        GaussianBlurFIR_Y8 = SSE2::ConvolveFIR<1>;
+        GaussianBlurFIR_R8G8B8A8 = SSE2::ConvolveFIR<4>;
+        GaussianBlurHorizontalIIR_Y8 = SSE2::ConvolveHorizontal<false, 1>;
+        GaussianBlurHorizontalIIR_R8G8B8A8 = SSE2::ConvolveHorizontal<false, 4>;
+        GaussianBlurVerticalIIR = SSE2::ConvolveVertical;
+        break;
+    case AVX:
+        GaussianBlurIIR_Y8 = AVX::Convolve<1>;
+        GaussianBlurIIR_R8G8B8A8 = AVX::Convolve<4>;
+        GaussianBlurFIR_Y8 = AVX::ConvolveFIR<1>;
+        GaussianBlurFIR_R8G8B8A8 = AVX::ConvolveFIR<4>;
+        GaussianBlurHorizontalIIR_Y8 = AVX::ConvolveHorizontal<false, 1>;
+        GaussianBlurHorizontalIIR_R8G8B8A8 = AVX::ConvolveHorizontal<false, 4>;
+        GaussianBlurVerticalIIR = AVX::ConvolveVertical;
+        break;
+    case AVX2:
+        GaussianBlurIIR_Y8 = AVX2::Convolve<1>;
+        GaussianBlurIIR_R8G8B8A8 = AVX2::Convolve<4>;
+        GaussianBlurFIR_Y8 = AVX2::ConvolveFIR<1>;
+        GaussianBlurFIR_R8G8B8A8 = AVX2::ConvolveFIR<4>;
+        GaussianBlurHorizontalIIR_Y8 = AVX2::ConvolveHorizontal<false, 1>;
+        GaussianBlurHorizontalIIR_R8G8B8A8 = AVX2::ConvolveHorizontal<false, 4>;
+        GaussianBlurVerticalIIR = AVX2::ConvolveVertical;
+        break;
+    }
+#else
+    GaussianBlurIIR_Y8 = Convolve<1>;
+    GaussianBlurIIR_R8G8B8A8 = Convolve<4>;
+    GaussianBlurFIR_Y8 = ConvolveFIR<1>;
+    GaussianBlurFIR_R8G8B8A8 = ConvolveFIR<4>;
+    GaussianBlurHorizontalIIR_Y8 = ConvolveHorizontal<false, 1>;
+    GaussianBlurHorizontalIIR_R8G8B8A8 = ConvolveHorizontal<false, 4>;
+    GaussianBlurVerticalIIR = ConvolveVertical;
+#endif
+}
+#else
+void InitializeSIMDFunctions()
+{
+}
+#endif
+
+
+#ifdef UNIT_TEST
+
+template <typename AnyType>
+void CompareImages(SimpleImage<AnyType> ref, SimpleImage<AnyType> actual, int w, int h)
+{
+    double avgDiff = 0,
+        maxDiff = 0,
+        maxErrorFrac = 0;
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            double diff = abs((double)actual[y][x] - (double)ref[y][x]);
+            maxDiff = max(diff, maxDiff);
+            avgDiff += diff;
+            if (ref[y][x] != 0)
+            {
+                double errorFrac = abs(diff / ref[y][x]);
+                maxErrorFrac = max(errorFrac, maxErrorFrac);
+            }
+        }
+    }
+    avgDiff /= (w * h);
+    cout << "avgDiff=" << setprecision(4) << setw(9) << avgDiff << " maxDiff=" << setw(4) << maxDiff << " maxErrorFrac=" << setprecision(4) << setw(8) << maxErrorFrac << endl;
+}
+
+void RefFilterIIR(cairo_surface_t *out, cairo_surface_t *in,
+                  float deviation_x, float deviation_y)
+{
+    int threads = omp_get_max_threads();
+    const int MAX_THREADS = 16;
+
+    int h = cairo_image_surface_get_height(in),
+        w = cairo_image_surface_get_width(in);
+
+    IIRValue * tmpdata[MAX_THREADS];
+    for (int i = 0; i < threads; ++i)
+      tmpdata[i] = new IIRValue[std::max(w, h)*4];
+    
+    gaussian_pass_IIR(Geom::X, deviation_x, in, out, tmpdata, threads);
+    gaussian_pass_IIR(Geom::Y, deviation_y, out, out, tmpdata, threads);
+
+    for (int i = 0; i < threads; ++i)
+      delete[] tmpdata[i];
+}
+
+void RefFilterFIR(cairo_surface_t *out, cairo_surface_t *in,
+                  float deviation_x, float deviation_y)
+{
+    int threads = omp_get_max_threads();
+    gaussian_pass_FIR(Geom::X, deviation_x, in, out, threads);
+    gaussian_pass_FIR(Geom::Y, deviation_y, out, out, threads);
+}
+
+
+cairo_surface_t *ConvertToGrayscale(cairo_surface_t *s)
+{
+    int w = cairo_image_surface_get_width(s),
+        h = cairo_image_surface_get_height(s);
+    cairo_surface_t *temp = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h),
+               *grayScale = cairo_image_surface_create(CAIRO_FORMAT_A8, w, h);
+
+    cairo_t *r = cairo_create(temp);
+    // set to 0
+    cairo_set_source_rgb(r, 0, 0, 0);
+    cairo_paint(r);
+
+    // convert to gray scale
+    cairo_set_operator(r, CAIRO_OPERATOR_HSL_LUMINOSITY);
+    cairo_set_source_surface(r, s, 0, 0);
+    cairo_paint(r);
+    cairo_destroy(r);
+
+    ssize_t inPitch = cairo_image_surface_get_stride(temp),
+           outPitch = cairo_image_surface_get_stride(grayScale);
+    uint8_t *in = cairo_image_surface_get_data(temp),
+           *out = cairo_image_surface_get_data(grayScale);
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            out[y * outPitch + x] = in[y * inPitch + x * 4];
+        }
+    }
+    cairo_surface_destroy(temp);
+    cairo_surface_mark_dirty(grayScale);
+    return grayScale;
+}
+
+void CopySurface(cairo_surface_t *out, cairo_surface_t *in)
+{
+    int pitch = cairo_image_surface_get_stride(in),
+            h = cairo_image_surface_get_height(in);
+
+    memcpy(cairo_image_surface_get_data(out), cairo_image_surface_get_data(in), pitch * h);
+    cairo_surface_mark_dirty(out);
+}
+
+extern "C" int main(int argc, char **argv)
+{
+  using namespace boost::chrono;
+  bool compareOrBenchmark = false;
+  const char *imagePath = "../drmixx/rasterized/99_showdown_carcass.png";
+  _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);   // why does Intel need microcode to handle denormals? NVIDIA handles it in hardware fine
+    
+  cairo_surface_t *in;
+  bool result;
+  for (int i = 1; i < argc; ++i)
+  {
+    if (strcmp(argv[i], "-b") == 0)
+      compareOrBenchmark = true;
+    else
+      imagePath = argv[i];
+  }
+  in = cairo_image_surface_create_from_png(imagePath);
+  
+  // OMG, not aligning to 16 bytes can almost slow things down 2x!
+  //iluScale(RoundUp(ilGetInteger(IL_IMAGE_WIDTH), 4), RoundUp(ilGetInteger(IL_IMAGE_HEIGHT), 4), 0);
+
+  if (cairo_surface_status(in) != CAIRO_STATUS_SUCCESS)
+  {
+    cerr << "error loading" << endl;
+    return -1;
+  }
+    
+  //if (!iluScale(38, 44, 1))
+  //  cerr << "error scaling" << endl;
+  int originalHeight = cairo_image_surface_get_height(in),
+      originalWidth = cairo_image_surface_get_width(in);
+  
+  cairo_surface_t *grayScaleIn = ConvertToGrayscale(in);
+  if (GaussianBlurIIR_Y8 == NULL)
+    InitializeSIMDFunctions();
+  
+  auto IterateCombinations = [&](int adjustedWidth0, int adjustedWidth1, int adjustedHeight0, int adjustedHeight1, auto callback)
+  {
+      for (int adjustedHeight = adjustedHeight0; adjustedHeight <= adjustedHeight1; ++adjustedHeight)
+      {
+          for (int adjustedWidth = adjustedWidth0; adjustedWidth <= adjustedWidth1; ++adjustedWidth)
+          {
+              for (int channels = 1; channels <= 4; channels += 3)
+              {
+                  cairo_surface_t *modifiedIn = cairo_surface_create_similar_image(in, channels == 1 ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32, adjustedWidth, adjustedHeight);
+                  if (cairo_surface_status(modifiedIn) != CAIRO_STATUS_SUCCESS)
+                  {
+                      cerr << "error creating surface" << endl;
+                      continue;
+                  }
+                  cairo_t *ct = cairo_create(modifiedIn);
+                  cairo_scale(ct, double(adjustedWidth) / originalWidth, double(adjustedHeight) / originalHeight);
+                  // scale/convert to given size/format
+                  if (channels == 1)
+                  {
+                      cairo_set_source_rgb(ct, 1, 1, 1);
+                      cairo_mask_surface(ct, grayScaleIn, 0, 0);
+                  }
+                  else
+                  {
+                      cairo_set_source_surface(ct, in, 0, 0);
+                      cairo_paint(ct);
+                  }
+                  cairo_destroy(ct);
+
+                  cairo_surface_t *out = cairo_surface_create_similar_image(modifiedIn, cairo_image_surface_get_format(modifiedIn), adjustedWidth, adjustedHeight);
+
+                  for (int FIRorIIR = 0; FIRorIIR < 2; ++FIRorIIR)
+                  {
+                      for (int inPlace = 0; inPlace < 2; ++inPlace)
+                      {
+                          if (inPlace)
+                            CopySurface(out, modifiedIn);   // restore overwritten input image
+
+                          callback(out, inPlace ? out : modifiedIn, modifiedIn, inPlace, FIRorIIR);
+                      }
+                  }
+                  cairo_surface_destroy(modifiedIn);
+                  cairo_surface_destroy(out);
+              }
+          }
+      }
+  };
+  if (!compareOrBenchmark)
+  {
+  auto CompareFunction = [&](cairo_surface_t *out, cairo_surface_t *in, cairo_surface_t *backupIn, bool inPlace, bool FIRorIIR)
+  {
+      // here, we assume input & output have the same format
+      int channels = cairo_image_surface_get_format(in) == CAIRO_FORMAT_ARGB32 ? 4 : 1;
+
+      SimpleImage <uint8_t> _in(cairo_image_surface_get_data(in), cairo_image_surface_get_stride(in)),
+          _out(cairo_image_surface_get_data(out), cairo_image_surface_get_stride(out));
+      int width = cairo_image_surface_get_width(in),
+          height = cairo_image_surface_get_height(in);
+
+      cairo_surface_t *refOut = cairo_surface_create_similar_image(in, channels == 1 ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32, width, height);
+
+      SimpleImage <uint8_t> _refOut(cairo_image_surface_get_data(refOut), cairo_image_surface_get_stride(refOut));
+      bool originalSize = width == originalWidth && height == originalHeight;
+
+      // test the correctness of different sigmas only for the original image size
+      // testing multiple sigmas for scaled image sizes is a waste
+      float DEFAULT_SIGMA = 5.0f;
+      
+      float sigmaX0 = originalSize ? 0.5f : DEFAULT_SIGMA,
+            sigmaX1 = originalSize ? (FIRorIIR ? 64 : 4) : DEFAULT_SIGMA;
+      for (float sigmaX = sigmaX0; sigmaX <= sigmaX1; sigmaX *= 2)
+      {
+          float sigmaY = 1.2f * sigmaX;
+
+          cout << width << "x" << height
+              << setw(10) << (channels == 4 ? " RGBA" : " grayscale")
+              << (FIRorIIR ? " IIR" : " FIR")
+              << setw(15) << (inPlace ? " in-place" : " out-of-place")
+              << " sigmaX=" << setw(3) << sigmaX << " ";
+          double dt = 0;
+
+          if (inPlace)
+          {
+              CopySurface(out, backupIn);
+          }
+
+
+          if (FIRorIIR)
+          {
+              if (channels == 1)
+                  GaussianBlurIIR_Y8(_out, _in, width, height, sigmaX, sigmaY);
+              else
+                  GaussianBlurIIR_R8G8B8A8(_out, _in, width, height, sigmaX, sigmaY);
+          }
+          else
+          {
+              if (channels == 1)
+                  GaussianBlurFIR_Y8(_out, _in, width, height, sigmaX, sigmaY);
+              else
+                  GaussianBlurFIR_R8G8B8A8(_out, _in, width, height, sigmaX, sigmaY);
+          }
+          
+          // ---------------------reference
+          cairo_surface_t *refIn;
+          if (inPlace)
+          {
+            refIn = refOut;
+            CopySurface(refIn, backupIn);
+          }
+          else
+          {
+              refIn = in;
+          }
+
+          if (FIRorIIR)
+            RefFilterIIR(refOut, refIn, sigmaX, sigmaY);
+          else
+            RefFilterFIR(refOut, refIn, sigmaX, sigmaY);
+          
+          if (0)//FIRorIIR && width == 1466 && sigmaX == 0.5f)
+          {
+              cout << " dumping ";
+              cairo_surface_write_to_png(refOut, "filtered_ref.png");
+              cairo_surface_write_to_png(out, "filtered_opt.png");
+              exit(1);
+          }
+          
+          CompareImages(_refOut, _out, width, height);
+        }
+      cairo_surface_destroy(refOut);
+  };
+     
+      const int SIMD_Y_BLOCK_SIZE = 2,      // for checking SIMD remainder handling issues
+                SIMD_X_BLOCK_SIZE = 4;
+      int h0 = RoundDown(originalHeight, SIMD_Y_BLOCK_SIZE),
+          w0 = RoundDown(originalWidth, SIMD_X_BLOCK_SIZE);
+      IterateCombinations(w0, w0 + SIMD_X_BLOCK_SIZE, h0, h0 + SIMD_Y_BLOCK_SIZE, CompareFunction);
+      //IterateCombinations(4, 8, 4, 8, CompareFunction);
+  
+  }
+  else
+  {
+      // benchmark
+#if defined(_WIN32) && defined(_DEBUG)
+  const int REPEATS = 1;
+#else
+  const int REPEATS = 50 * max(1.0f, sqrtf(omp_get_max_threads()));     // assume speedup is sqrt(#cores)
+#endif
+  auto BenchmarkFunction = [&](cairo_surface_t *out, cairo_surface_t *in, cairo_surface_t *backupIn, bool inPlace, bool FIRorIIR)
+  {
+     // here, we assume input & output have the same format
+     int channels = cairo_image_surface_get_format(in) == CAIRO_FORMAT_ARGB32 ? 4 : 1;
+
+     SimpleImage <uint8_t> _in(cairo_image_surface_get_data(in), cairo_image_surface_get_stride(in)),
+                          _out(cairo_image_surface_get_data(out), cairo_image_surface_get_stride(out));
+     int width = cairo_image_surface_get_width(in),
+         height = cairo_image_surface_get_height(in);
+     const bool useRefCode = false;
+
+     float sigma0, sigma1;
+     if (FIRorIIR)
+     {
+       // test single precision & double precision throughput
+       sigma0 = MAX_SIZE_FOR_SINGLE_PRECISION * 0.75f;
+       sigma1 = sigma0 * 2.0f;
+     }
+     else
+     {
+       sigma0 = 0.5f;
+       sigma1 = 4;
+     }
+
+     for (float sigma = sigma0; sigma <= sigma1; sigma *= 2)
+     {
+         cout << width << "x" << height
+              << setw(10) << (channels == 4 ? " RGBA" : " grayscale")
+              << (FIRorIIR ? " IIR" : " FIR")
+              << setw(15) << (inPlace ? " in-place" : " out-of-place")
+              << " sigma=" << setw(3) << sigma;
+         high_resolution_clock::duration dt(0);
+         for (int i = 0; i < REPEATS; ++i)
+         {
+             if (inPlace)
+               CopySurface(out, backupIn);  // copy backup to input/output
+
+             auto t0 = high_resolution_clock::now();
+             if (useRefCode)
+             {
+                 if (FIRorIIR)
+                     RefFilterIIR(out, in, sigma, sigma);
+                 else
+                     RefFilterFIR(out, in, sigma, sigma);
+             }
+             else
+             {
+                 if (FIRorIIR)
+                 {
+                     if (channels == 1)
+                         GaussianBlurIIR_Y8(_out, _in, width, height, sigma, sigma);
+                     else
+                         GaussianBlurIIR_R8G8B8A8(_out, _in, width, height, sigma, sigma);
+                 }
+                 else
+                 {
+                     if (channels == 1)
+                         GaussianBlurFIR_Y8(_out, _in, width, height, sigma, sigma);
+                     else
+                         GaussianBlurFIR_R8G8B8A8(_out, _in, width, height, sigma, sigma);
+                 }
+             }
+             dt += high_resolution_clock::now() - t0;
+         }
+         cout << setw(9) << setprecision(3) << double(width * height * REPEATS) / duration_cast<microseconds>(dt).count() << " Mpix/s" << endl;
+     }
+  };
+  int roundedWidth = RoundUp(originalWidth, 4),
+     roundedHeight = RoundUp(originalHeight, 4);
+  IterateCombinations(roundedWidth, roundedWidth, roundedHeight, roundedHeight, BenchmarkFunction);  
+  }
+  cairo_surface_destroy(in);
+  cairo_surface_destroy(grayScaleIn);
+  return 0;
+}
+
+#endif
+
 void FilterGaussian::render_cairo(FilterSlot &slot)
 {
     cairo_surface_t *in = slot.getcairo(_input);
@@ -653,22 +1220,97 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     }
     cairo_surface_flush(downsampled);
 
+    SimpleImage<uint8_t> im((uint8_t *)cairo_image_surface_get_data(downsampled), cairo_image_surface_get_stride(downsampled));
+    
+    // 2D filter benefits
+    // 1. intermediate image may have higher precision than uint8
+    // 2. reduced cache pollution from useless flushing of intermediate image to memory
+    if (scr_len_x > 0 && scr_len_y > 0 && use_IIR_x == use_IIR_y && GaussianBlurIIR_Y8 != NULL)
+    {
+        if (fmt == CAIRO_FORMAT_ARGB32) {
+            if (use_IIR_x) {
+                GaussianBlurIIR_R8G8B8A8(im,  // out
+                                         im,     // in
+    			                         cairo_image_surface_get_width(downsampled),
+    			                         cairo_image_surface_get_height(downsampled),
+    			                         deviation_x, deviation_y);
+            }
+            else {
+                GaussianBlurFIR_R8G8B8A8(im, // out
+                                         im,  // in
+                                         cairo_image_surface_get_width(downsampled),
+                                         cairo_image_surface_get_height(downsampled),
+                                         deviation_x, deviation_y);
+            }
+        }
+        else {
+            if (use_IIR_x) {
+                GaussianBlurIIR_Y8(im,
+                                   im,
+                                   cairo_image_surface_get_width(downsampled),
+                                   cairo_image_surface_get_height(downsampled),
+                                   deviation_x, deviation_y);
+            }
+            else {
+                GaussianBlurFIR_Y8(im,
+                                   im,
+                                   cairo_image_surface_get_width(downsampled),
+                                   cairo_image_surface_get_height(downsampled),
+                                   deviation_x, deviation_y);
+            }
+        }
+    }
+    else
+    {
     if (scr_len_x > 0) {
-        if (use_IIR_x) {
-            gaussian_pass_IIR(Geom::X, deviation_x, downsampled, downsampled, tmpdata, threads);
+        if (use_IIR_x && GaussianBlurIIR_Y8 != NULL) {
+            if (fmt == CAIRO_FORMAT_ARGB32)
+            {
+                GaussianBlurHorizontalIIR_R8G8B8A8(im, // out
+                                                   im, // in
+                                                   cairo_image_surface_get_width(downsampled),
+                                                   cairo_image_surface_get_height(downsampled),
+                                                   deviation_x, false);
+            }
+            else {
+                GaussianBlurHorizontalIIR_Y8(im, // out
+                                             im, // in
+                                             cairo_image_surface_get_width(downsampled),
+                                             cairo_image_surface_get_height(downsampled),
+                                             deviation_x, false);
+                //gaussian_pass_IIR(Geom::X, deviation_x, downsampled, downsampled, tmpdata, threads);
+            }
         } else {
+            // optimized 1D FIR filter can't work in-place
             gaussian_pass_FIR(Geom::X, deviation_x, downsampled, downsampled, threads);
         }
     }
 
     if (scr_len_y > 0) {
-        if (use_IIR_y) {
-            gaussian_pass_IIR(Geom::Y, deviation_y, downsampled, downsampled, tmpdata, threads);
+        if (use_IIR_y && GaussianBlurIIR_Y8 != NULL) {
+            if (fmt == CAIRO_FORMAT_ARGB32)
+            {
+                GaussianBlurVerticalIIR(im,  // out
+                    im,  // in
+                    cairo_image_surface_get_width(downsampled) * 4,
+                    cairo_image_surface_get_height(downsampled),
+                    deviation_y);
+            }
+            else
+            {
+                GaussianBlurVerticalIIR(im,  // out
+                                 im,  // in
+                                 cairo_image_surface_get_width(downsampled),
+                                 cairo_image_surface_get_height(downsampled),
+                                 deviation_y);
+                //gaussian_pass_IIR(Geom::Y, deviation_y, downsampled, downsampled, tmpdata, threads);
+            }
         } else {
+            // optimized 1D FIR filter can't work in-place
             gaussian_pass_FIR(Geom::Y, deviation_y, downsampled, downsampled, threads);
         }
     }
-
+    }
     // free the temporary data
     if ( use_IIR_x || use_IIR_y ) {
         for(int i = 0; i < threads; ++i) {
