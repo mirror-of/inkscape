@@ -822,6 +822,54 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         default:
             ;
     }
+    if (source == GDK_SOURCE_PEN)
+    {
+      static int lastState = -1;
+      static int lastX, lastY;
+      static int dragX0, dragY0;    // pen cursor when drag started
+      static system_clock::time_point lastPressTime;
+      static uint8_t toolIndex;
+      static uint8_t TOOLS[] = {TOOLS_TWEAK, TOOLS_FREEHAND_PENCIL};
+      static Geom::Rect viewBox0;
+      #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+      if (event->type == GDK_MOTION_NOTIFY && (state & 4096))
+      {
+          // pan
+           Geom::Affine w2d = desktop->w2d();
+           // why does pen movement have such noise?
+           int averageX = (x + lastX + 1) / 2,
+               averageY = (y + lastY + 1) / 2;
+           Geom::Point const translation((dragX0 - averageX) * std::abs(w2d[0]), (averageY - dragY0) * std::abs(w2d[3]));
+           Geom::Rect newViewBox(viewBox0.min()[Geom::X] + translation[Geom::X], viewBox0.min()[Geom::Y] + translation[Geom::Y],
+                                 viewBox0.max()[Geom::X] + translation[Geom::X], viewBox0.max()[Geom::Y] + translation[Geom::Y]);
+           desktop->set_display_area(newViewBox, 0);
+      }
+      else if (event->type == GDK_BUTTON_PRESS && (state & 4096))
+      {
+          auto t = system_clock::now();
+          dragX0 = x;
+          dragY0 = y;
+          viewBox0 = desktop->get_display_area();
+          int dt = duration_cast<milliseconds>(t - lastPressTime).count();
+          if (dt < 250)
+          {
+            tools_switch(desktop, TOOLS_ERASER);
+            toolIndex = (toolIndex + ARRAY_SIZE(TOOLS) - 1) % ARRAY_SIZE(TOOLS);   // so that we can switch back to previous tool without cycling through all tools
+          }
+          lastPressTime = t;
+      }
+      if (lastState != state)   // seems holding down button generates idle states?
+      {
+          if (state & 1024)
+          {
+              toolIndex = (toolIndex + 1) % ARRAY_SIZE(TOOLS);
+              tools_switch(desktop, TOOLS[toolIndex]);
+          }
+          lastState = state;
+      }
+      lastX = x;
+      lastY = y;
+    }
     if (event->type == GDK_ENTER_NOTIFY || event->type == GDK_LEAVE_NOTIFY ||
         source == GDK_SOURCE_TOUCHSCREEN && (event->type < GDK_TOUCH_BEGIN || event->type > GDK_TOUCH_END) ||
         source == GDK_SOURCE_KEYBOARD)
