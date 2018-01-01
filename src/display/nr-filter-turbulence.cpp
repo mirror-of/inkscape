@@ -24,9 +24,116 @@
 #include "display/nr-filter-units.h"
 #include "display/nr-filter-utils.h"
 #include <math.h>
+#include "SIMD_functions.h"
 
 namespace Inkscape {
 namespace Filters{
+
+typedef __v4si VINT;
+
+#ifndef __SSE4_1__
+// only works for non-negative numbers, seems to be OK for turbulence function
+__m128 _mm_floor_ps(__m128 x)
+{
+  return _mm_cvtepi32_ps(_mm_cvttps_epi32(x));
+}
+
+#else
+__m128i Select(__m128i a, __m128i b, __m128i selectors)
+{
+  return  _mm_blendv_epi8(a, b, selectors);
+}
+#endif
+
+__m128 Abs(__m128 x)
+{
+  return _mm_castsi128_ps(_mm_castps_si128(x) & _mm_set1_epi32(0x7fffffff));
+}
+
+inline VINT
+premul_alpha_SIMD(const VINT color, const VINT alpha)
+{
+  VINT temp = alpha * color + (VINT)_mm_set1_epi32(128);
+  return (temp + (temp >> 8)) >> 8;
+}
+
+
+VINT Clamp(__m128i x)
+{
+  return (VINT)_mm_min_epi32(_mm_max_epi32(x, _mm_set1_epi32(0)), _mm_set1_epi32(255));
+}
+
+#ifndef __SSE4_1__
+int _mm_extract_epi32(__m128i v, int lane)
+{
+    union
+    {
+        int elements[4];
+        __m128i vec;
+    };
+    vec = v;
+    return elements[lane];
+}
+#endif
+
+template <typename IntType>
+VINT Gather(IntType *base, VINT _offsets)
+{
+  __m128i offsets = (__m128i)offsets;
+  return _mm_set_epi32(base[_mm_extract_epi32(offsets, 3)], base[_mm_extract_epi32(offsets, 2)], base[_mm_extract_epi32(offsets, 1)], base[_mm_extract_epi32(offsets, 0)]);
+}
+
+// todo: use traits so that only 1 gather function needed
+__m128 GatherFloat(const float *base, VINT _offsets)
+{
+  __m128i offsets = (__m128i)offsets;
+  return _mm_set_ps(base[_mm_extract_epi32(offsets, 3)], base[_mm_extract_epi32(offsets, 2)], base[_mm_extract_epi32(offsets, 1)], base[_mm_extract_epi32(offsets, 0)]);
+}
+
+// specialized
+__m128 GatherFloat(const float *base, int offsets[4])
+{
+  return _mm_set_ps(base[offsets[3]], base[offsets[2]], base[offsets[1]], base[offsets[0]]);
+}
+
+#ifdef __AVX2__
+#include <immintrin.h>
+
+typedef __v8si VINT8;
+
+__m256i Select256(__m256i a, __m256i b, __m256i selectors)
+{
+  return _mm256_blendv_epi8(a, b, selectors);
+}
+
+__m256 Abs256(__m256 x)
+{
+	return _mm256_castsi256_ps(_mm256_castps_si256(x) & _mm256_set1_epi32(0x7fffffff));
+}
+
+inline VINT8
+premul_alpha_SIMD256(const VINT8 color, const VINT8 alpha)
+{
+    VINT8 temp = alpha * color + (VINT8)_mm256_set1_epi32(128);
+    return (temp + (temp >> 8)) >> 8;
+}
+VINT8 Clamp256(__m256i x)
+{
+  return (VINT8)_mm256_min_epi32(_mm256_max_epi32(x, _mm256_set1_epi32(0)), _mm256_set1_epi32(255));
+}
+
+template <typename IntType>
+__m256i Gather256(IntType *base, VINT8 offsets)
+{
+  return  _mm256_i32gather_epi32(base, offsets, 4);
+}
+
+__m256 GatherFloat256(const float *base, VINT8 offsets)
+{
+  return _mm256_i32gather_ps(base, (__m256i)offsets, 4);
+}
+
+#endif
 
 class TurbulenceGenerator {
 public:
@@ -65,14 +172,13 @@ public:
                 _latticeSelector[i] = i;
 
                 do {
-                  _gradient[i][k][0] = static_cast<double>(_random() % (BSize*2) - BSize) / BSize;
-                  _gradient[i][k][1] = static_cast<double>(_random() % (BSize*2) - BSize) / BSize;
-                } while(_gradient[i][k][0] == 0 && _gradient[i][k][1] == 0);
-
+                  _gradient[k][0][i] = static_cast<double>(_random() % (BSize*2) - BSize) / BSize;
+                _gradient[k][1][i] = static_cast<double>(_random() % (BSize*2) - BSize) / BSize;
+                } while(_gradient[k][0][i] == 0 && _gradient[k][1][i] == 0);
                 // normalize gradient
-                double s = hypot(_gradient[i][k][0], _gradient[i][k][1]);
-                _gradient[i][k][0] /= s;
-                _gradient[i][k][1] /= s;
+                double s = hypot(_gradient[k][0][i], _gradient[k][1][i]);
+                _gradient[k][0][i] /= s;
+                _gradient[k][1][i] /= s;
             }
         }
         while (--i) {
@@ -87,8 +193,8 @@ public:
             _latticeSelector[BSize + i] = _latticeSelector[i];
 
             for(int k = 0; k < 4; ++k) {
-                _gradient[BSize + i][k][0] = _gradient[i][k][0];
-                _gradient[BSize + i][k][1] = _gradient[i][k][1];
+                _gradient[k][0][BSize + i] = _gradient[k][0][i];
+                _gradient[k][1][BSize + i] = _gradient[k][1][i];
             }
         }
 
@@ -166,14 +272,11 @@ public:
             double result[4];
             // channel numbering: R=0, G=1, B=2, A=3
             for (int k = 0; k < 4; ++k) {
-                double const *qxa = _gradient[b00][k];
-                double const *qxb = _gradient[b10][k];
-                double a = _lerp(sx, rx0 * qxa[0] + ry0 * qxa[1],
-                                     rx1 * qxb[0] + ry0 * qxb[1]);
-                double const *qya = _gradient[b01][k];
-                double const *qyb = _gradient[b11][k];
-                double b = _lerp(sx, rx0 * qya[0] + ry1 * qya[1],
-                                     rx1 * qyb[0] + ry1 * qyb[1]);
+                double a = _lerp(sx, rx0 * _gradient[k][0][b00] + ry0 * _gradient[k][1][b00],
+                                     rx1 * _gradient[k][0][b10] + ry0 * _gradient[k][1][b10]);
+
+                double b = _lerp(sx, rx0 * _gradient[k][0][b01] + ry1 * _gradient[k][1][b01],
+                                     rx1 * _gradient[k][0][b11] + ry1 * _gradient[k][1][b01]);
                 result[k] = _lerp(sy, a, b);
             }
 
@@ -222,7 +325,235 @@ public:
             return pxout;
         }
     }
+    union VINT_Union
+    {
+      VINT vec;
+      int v[4];
+    };
 
+    G_GNUC_PURE
+    __m128i turbulencePixelSIMD4(__m128 x, __m128 y) const {
+
+        int wrapx = _wrapx, wrapy = _wrapy, wrapw = _wrapw, wraph = _wraph;
+
+        __m128 pixel[4];
+
+        x *= _mm_set1_ps(_baseFreq[Geom::X]);
+        y *= _mm_set1_ps(_baseFreq[Geom::Y]);
+
+        __m128 ratio = _mm_set1_ps(1.0f);
+
+        for (int k = 0; k < 4; ++k)
+            pixel[k] = _mm_set1_ps(0);
+
+        VINT bmask = (VINT)_mm_set1_epi32(BMask);
+        VINT v4n_1 = (VINT)_mm_set1_epi32(1);
+        __m128 v4f_1 = _mm_set1_ps(1.0f);
+        __m128 v4f_PerlinOffset = _mm_set1_ps(PerlinOffset);
+
+
+        for(int octave = 0; octave < _octaves; ++octave)
+        {
+            __m128 tx = x + v4f_PerlinOffset;
+            __m128 bx = _mm_floor_ps(tx);
+            __m128 rx0 = tx - bx, rx1 = rx0 - v4f_1;
+            VINT bx0 = (VINT)_mm_cvtps_epi32(bx), bx1 = bx0 + v4n_1;
+
+            __m128 ty = y + v4f_PerlinOffset;
+            __m128 by = _mm_floor_ps(ty);
+            __m128 ry0 = ty - by, ry1 = ry0 - v4f_1;
+            VINT by0 = (VINT)_mm_cvtps_epi32(by), by1 = by0 + v4n_1;
+
+            if (_stitchTiles) {
+            	VINT wrapx_minus_one = (VINT)_mm_set1_epi32(wrapx - 1),
+                     wrapy_minus_one = (VINT)_mm_set1_epi32(wrapy - 1);
+            	bx0 = Select(bx0, bx0 - (VINT)_mm_set1_epi32(wrapw), _mm_cmpgt_epi32((__m128i)bx0, (__m128i)wrapx_minus_one));
+            	bx1 = Select(bx1, bx1 - (VINT)_mm_set1_epi32(wrapw), _mm_cmpgt_epi32((__m128i)bx1, (__m128i)wrapx_minus_one));
+            	by0 = Select(by0, by0 - (VINT)_mm_set1_epi32(wraph), _mm_cmpgt_epi32((__m128i)by0, (__m128i)wrapy_minus_one));
+            	by1 = Select(by1, by1 - (VINT)_mm_set1_epi32(wraph), _mm_cmpgt_epi32((__m128i)by1, (__m128i)wrapy_minus_one));
+            }
+
+            bx0 &= bmask;
+            bx1 &= bmask;
+            by0 &= bmask;
+            by1 &= bmask;
+
+            VINT i = Gather(_latticeSelector, bx0);
+            VINT j = Gather(_latticeSelector, bx1);
+
+            VINT_Union b00, b01, b10, b11;
+            b00.vec = Gather(_latticeSelector, i + by0);
+            b01.vec =  Gather(_latticeSelector, i + by1);
+            b10.vec =  Gather(_latticeSelector, j + by0);
+            b11.vec =  Gather(_latticeSelector, j + by1);
+
+            __m128 sx = _scurve(rx0),
+                   sy = _scurve(ry0);
+
+            // channel numbering: R=0, G=1, B=2, A=3
+            for (int k = 0; k < 4; ++k)
+            {
+                __m128 a = _lerp(sx, rx0 * GatherFloat(_gradient[k][0], b00.v) + ry0 * GatherFloat(_gradient[k][1], b00.v),
+                                     rx1 * GatherFloat(_gradient[k][0], b10.v) + ry0 * GatherFloat(_gradient[k][1], b10.v));
+
+                __m128 b = _lerp(sx, rx0 * GatherFloat(_gradient[k][0], b01.v) + ry1 * GatherFloat(_gradient[k][1], b01.v),
+                                     rx1 * GatherFloat(_gradient[k][0], b11.v) + ry1 * GatherFloat(_gradient[k][1], b11.v));
+                __m128 result = _lerp(sy, a, b);
+                if (_fractalnoise)
+                  pixel[k] += result * ratio;
+                else
+                  pixel[k] += Abs(result) * ratio;
+            }
+
+            x = x + x;   //saves from having to load a constant for multiply
+            y = y + y;
+            ratio *= _mm_set1_ps(0.5f);
+
+            if(_stitchTiles)
+            {
+                // Update stitch values. Subtracting PerlinOffset before the multiplication and
+                // adding it afterward simplifies to subtracting it once.
+                wrapw *= 2;
+                wraph *= 2;
+                wrapx = wrapx*2 - PerlinOffset;
+                wrapy = wrapy*2 - PerlinOffset;
+            }
+        }
+
+        if (_fractalnoise) {
+            VINT r = Clamp(_mm_cvtps_epi32(pixel[0] * _mm_set1_ps(127.5f) + _mm_set1_ps(127.5f)));
+            VINT g = Clamp(_mm_cvtps_epi32(pixel[1] * _mm_set1_ps(127.5f) + _mm_set1_ps(127.5f)));
+            VINT b = Clamp(_mm_cvtps_epi32(pixel[2] * _mm_set1_ps(127.5f) + _mm_set1_ps(127.5f)));
+            VINT a = Clamp(_mm_cvtps_epi32(pixel[3] * _mm_set1_ps(127.5f) + _mm_set1_ps(127.5f)));
+            r = premul_alpha_SIMD(r, a);
+            g = premul_alpha_SIMD(g, a);
+            b = premul_alpha_SIMD(b, a);
+            return b | (VINT)_mm_slli_si128((__m128i)g, 1) | (VINT)_mm_slli_si128((__m128i)r, 2) | (VINT)_mm_slli_si128((__m128i)a, 3);
+
+
+        } else {
+            VINT r = Clamp(_mm_cvtps_epi32(pixel[0]*_mm_set1_ps(255.0f)));
+            VINT g = Clamp(_mm_cvtps_epi32(pixel[1]*_mm_set1_ps(255.0f)));
+            VINT b = Clamp(_mm_cvtps_epi32(pixel[2]*_mm_set1_ps(255.0f)));
+            VINT a = Clamp(_mm_cvtps_epi32(pixel[3]*_mm_set1_ps(255.0f)));
+            r = premul_alpha_SIMD(r, a);
+            g = premul_alpha_SIMD(g, a);
+            b = premul_alpha_SIMD(b, a);
+            return b | (VINT)_mm_slli_si128((__m128i)g, 1) | (VINT)_mm_slli_si128((__m128i)r, 2) | (VINT)_mm_slli_si128((__m128i)a, 3);
+        }
+    }
+#ifdef __AVX2__
+    G_GNUC_PURE
+       __m256i turbulencePixelSIMD8(__m256 x, __m256 y) const {
+
+            int wrapx = _wrapx, wrapy = _wrapy, wrapw = _wrapw, wraph = _wraph;
+
+            __m256 pixel[4];
+
+            x *= _mm256_set1_ps(_baseFreq[Geom::X]);
+            y *= _mm256_set1_ps(_baseFreq[Geom::Y]);
+
+            __m256 ratio = _mm256_set1_ps(1.0f);
+
+            for (int k = 0; k < 4; ++k)
+                pixel[k] = _mm256_set1_ps(0);
+
+            VINT8 bmask = _mm256_set1_epi32(BMask);
+            VINT8 v4n_1 = _mm256_set1_epi32(1);
+            __m256 v4f_1 = _mm256_set1_ps(1.0f);
+            __m256 v4f_PerlinOffset = _mm256_set1_ps(PerlinOffset);
+
+
+            for(int octave = 0; octave < _octaves; ++octave)
+            {
+                __m256 tx = x + v4f_PerlinOffset;
+                __m256 bx = _mm256_floor_ps(tx);
+                __m256 rx0 = tx - bx, rx1 = rx0 - v4f_1;
+                VINT8 bx0 = _mm256_cvtps_epi32(bx), bx1 = bx0 + v4n_1;
+
+                __m256 ty = y + v4f_PerlinOffset;
+                __m256 by = _mm256_floor_ps(ty);
+                __m256 ry0 = ty - by, ry1 = ry0 - v4f_1;
+                VINT8 by0 = _mm256_cvtps_epi32(by), by1 = by0 + v4n_1;
+
+                if (_stitchTiles) {
+                	VINT8 wrapx_minus_one = _mm256_set1_epi32(wrapx - 1),
+                	     wrapy_minus_one = _mm256_set1_epi32(wrapy - 1);
+                	bx0 = Select256(bx0, bx0 - (VINT8)_mm256_set1_epi32(wrapw), _mm256_cmpgt_epi32(bx0, wrapx_minus_one));
+                	bx1 = Select256(bx1, bx1 - (VINT8)_mm256_set1_epi32(wrapw), _mm256_cmpgt_epi32(bx1, wrapx_minus_one));
+                	by0 = Select256(by0, by0 - (VINT8)_mm256_set1_epi32(wraph), _mm256_cmpgt_epi32(by0, wrapy_minus_one));
+                	by1 = Select256(by1, by1 - (VINT8)_mm256_set1_epi32(wraph), _mm256_cmpgt_epi32(by1, wrapy_minus_one));
+                }
+
+                bx0 &= bmask;
+                bx1 &= bmask;
+                by0 &= bmask;
+                by1 &= bmask;
+
+                VINT8 i = Gather256(_latticeSelector, bx0);
+                VINT8 j = Gather256(_latticeSelector, bx1);
+
+                VINT8 b00, b01, b10, b11;
+                b00 = Gather256(_latticeSelector, i + by0);
+                b01 =  Gather256(_latticeSelector, i + by1);
+                b10 =  Gather256(_latticeSelector, j + by0);
+                b11 =  Gather256(_latticeSelector, j + by1);
+
+                __m256 sx = _scurve256(rx0),
+                       sy = _scurve256(ry0);
+
+                // channel numbering: R=0, G=1, B=2, A=3
+                for (int k = 0; k < 4; ++k)
+                {
+                    __m256 a = _lerp256(sx, rx0 * GatherFloat256(_gradient[k][0], b00) + ry0 * GatherFloat256(_gradient[k][1], b00),
+                                         rx1 * GatherFloat256(_gradient[k][0], b10) + ry0 * GatherFloat256(_gradient[k][1], b10)),
+                           b = _lerp256(sx, rx0 * GatherFloat256(_gradient[k][0], b01) + ry1 * GatherFloat256(_gradient[k][1], b01),
+                                         rx1 * GatherFloat256(_gradient[k][0], b11) + ry1 * GatherFloat256(_gradient[k][1], b11)),
+                           result = _lerp256(sy, a, b);
+                    if (_fractalnoise)
+                      pixel[k] += result * ratio;
+                    else
+                      pixel[k] += Abs256(result) * ratio;
+                }
+
+                x = x + x;   //saves from having to load a constant for multiply
+                y = y + y;
+                ratio *= _mm256_set1_ps(0.5f);
+
+                if(_stitchTiles)
+                {
+                    // Update stitch values. Subtracting PerlinOffset before the multiplication and
+                    // adding it afterward simplifies to subtracting it once.
+                    wrapw *= 2;
+                    wraph *= 2;
+                    wrapx = wrapx*2 - PerlinOffset;
+                    wrapy = wrapy*2 - PerlinOffset;
+                }
+            }
+
+            if (_fractalnoise) {
+                VINT8 r = Clamp256(_mm256_cvtps_epi32(pixel[0] * _mm256_set1_ps(127.5f) + _mm256_set1_ps(127.5f)));
+                VINT8 g = Clamp256(_mm256_cvtps_epi32(pixel[1] * _mm256_set1_ps(127.5f) + _mm256_set1_ps(127.5f)));
+                VINT8 b = Clamp256(_mm256_cvtps_epi32(pixel[2] * _mm256_set1_ps(127.5f) + _mm256_set1_ps(127.5f)));
+                VINT8 a = Clamp256(_mm256_cvtps_epi32(pixel[3] * _mm256_set1_ps(127.5f) + _mm256_set1_ps(127.5f)));
+                r = premul_alpha_SIMD256(r, a);
+                g = premul_alpha_SIMD256(g, a);
+                b = premul_alpha_SIMD256(b, a);
+                return b | (VINT8)_mm256_slli_epi32(g, 8) | (VINT8)_mm256_slli_epi32(r, 16) | (VINT8)_mm256_slli_epi32(a, 24);
+
+
+            } else {
+                VINT8 r = Clamp256(_mm256_cvtps_epi32(pixel[0]*_mm256_set1_ps(255.0f)));
+                VINT8 g = Clamp256(_mm256_cvtps_epi32(pixel[1]*_mm256_set1_ps(255.0f)));
+                VINT8 b = Clamp256(_mm256_cvtps_epi32(pixel[2]*_mm256_set1_ps(255.0f)));
+                VINT8 a = Clamp256(_mm256_cvtps_epi32(pixel[3]*_mm256_set1_ps(255.0f)));
+                r = premul_alpha_SIMD256(r, a);
+                g = premul_alpha_SIMD256(g, a);
+                b = premul_alpha_SIMD256(b, a);
+                return b | (VINT8)_mm256_slli_epi32(g, 8) | (VINT8)_mm256_slli_epi32(r, 16) | (VINT8)_mm256_slli_epi32(a, 24);
+            }
+        }
+#endif
     //G_GNUC_PURE
     /*guint32 turbulencePixel(Geom::Point const &p) const {
         if (!_fractalnoise) {
@@ -274,7 +605,24 @@ private:
     static inline double _lerp(double t, double a, double b) {
         return a + t * (b-a);
     }
-
+    static inline __m128 _scurve(__m128 t)
+    {
+    	return t * t * (_mm_set1_ps(3.0f) - _mm_set1_ps(2.0f) * t);
+    }
+    static inline __m128 _lerp(__m128 t, __m128 a, __m128 b)
+    {
+    	return a + t * (b - a);
+    }
+#ifdef __AVX2__
+    static inline __m256 _scurve256(__m256 t)
+    {
+     	return t * t * (_mm256_set1_ps(3.0f) - _mm256_set1_ps(2.0f) * t);
+    }
+    static inline __m256 _lerp256(__m256 t, __m256 a, __m256 b)
+    {
+     	return a + t * (b - a);
+    }
+#endif
     // random number generator constants
     static long const
         RAND_m = 2147483647, // 2**31 - 1
@@ -291,7 +639,7 @@ private:
     Geom::Rect _tile;
     Geom::Point _baseFreq;
     int _latticeSelector[2*BSize + 2];
-    double _gradient[2*BSize + 2][4][2];
+    float _gradient[4][2][2*BSize + 2];
     long _seed;
     int _octaves;
     bool _stitchTiles;
@@ -367,6 +715,74 @@ struct Turbulence {
         point *= _trans;
         return _gen.turbulencePixel(point);
     }
+    __m128i CalculateSIMD4(int x, int y)
+    {
+      Geom::Point transformed = Geom::Point(x + _x0, y + _y0) * _trans;
+      __m128 transformedX = _mm_set1_ps(transformed[Geom::X]),
+             transformedY = _mm_set1_ps(transformed[Geom::Y]);
+      // calculate the 3 other transformed points (x + 1, x + 2, x + 3) by taking advantage of linearity of transform
+      __m128 temp = _mm_set_ps(3, 2, 1, 0);
+
+      transformedX = transformedX + temp * _mm_set1_ps(_trans[0]);
+      transformedY = transformedY + temp * _mm_set1_ps(_trans[1]);
+
+      __m128i opt = _gen.turbulencePixelSIMD4(transformedX, transformedY);
+      return opt;
+      for (int i = 0; i < 4; ++i)
+      {
+    	  union
+    	  {
+    	    int my;
+    	    unsigned char bgra[4];
+    	  } actual;
+    	  actual.my = ((int *)&opt)[i];
+          union
+          {
+    		  int my;
+    		  unsigned char bgra[4];
+          } ref;
+          ref.my = _gen.turbulencePixel(Geom::Point(x + i + _x0, y + _y0) * _trans);
+    	  if (actual.my != ref.my)
+    	  {
+    		  printf("z");
+    	  }
+      }
+    }
+#ifdef __AVX2__
+    __m256i CalculateSIMD8(int x, int y)
+        {
+          Geom::Point transformed = Geom::Point(x + _x0, y + _y0) * _trans;
+          __m256 transformedX = _mm256_set1_ps(transformed[Geom::X]),
+                 transformedY = _mm256_set1_ps(transformed[Geom::Y]);
+          // calculate the 7 other transformed points (x + 1, x + 2, x + 3) by taking advantage of linearity of transform
+          __m256 temp = _mm256_set_ps(7, 6, 5, 4, 3, 2, 1, 0);
+
+          transformedX = transformedX + temp * _mm256_set1_ps(_trans[0]);
+          transformedY = transformedY + temp * _mm256_set1_ps(_trans[1]);
+
+          __m256i opt = _gen.turbulencePixelSIMD8(transformedX, transformedY);
+          return opt;
+          for (int i = 0; i < 4; ++i)
+          {
+        	  union
+        	  {
+        	    int my;
+        	    unsigned char bgra[4];
+        	  } actual;
+        	  actual.my = ((int *)&opt)[i];
+              union
+              {
+        		  int my;
+        		  unsigned char bgra[4];
+              } ref;
+              ref.my = _gen.turbulencePixel(Geom::Point(x + i + _x0, y + _y0) * _trans);
+        	  if (actual.my != ref.my)
+        	  {
+        		  printf("z");
+        	  }
+          }
+        }
+#endif
 private:
     TurbulenceGenerator const &_gen;
     Geom::Affine _trans;
@@ -408,7 +824,7 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
     Geom::Rect slot_area = slot.get_slot_area();
     double x0 = slot_area.min()[Geom::X];
     double y0 = slot_area.min()[Geom::Y];
-    ink_cairo_surface_synthesize(temp, Turbulence(*gen, unit_trans, x0, y0));
+    ink_cairo_surface_synthesize_SIMD(temp, Turbulence(*gen, unit_trans, x0, y0));
 
     // cairo_surface_write_to_png( temp, "turbulence0.png" );
 

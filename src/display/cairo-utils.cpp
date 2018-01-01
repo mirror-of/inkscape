@@ -13,7 +13,7 @@
 #endif
 
 #include "display/cairo-utils.h"
-
+//#include <arpa/inet.h>
 #include <stdexcept>
 #include <glib/gstdio.h>
 #include <glibmm/fileutils.h>
@@ -31,8 +31,9 @@
 #include "helper/geom-curves.h"
 #include "display/cairo-templates.h"
 
-/**
- * Key for cairo_surface_t to keep track of current color interpolation value
+#include "SIMD_functions.h"
+
+/* Key for cairo_surface_t to keep track of current color interpolation value
  * Only the address of the structure is used, it is never initialized. See:
  * http://www.cairographics.org/manual/cairo-Types.html#cairo-user-data-key-t
  */
@@ -41,6 +42,7 @@ cairo_user_data_key_t ink_pixbuf_key;
 
 namespace Inkscape {
 
+/**
 CairoGroup::CairoGroup(cairo_t *_ct) : ct(_ct), pushed(false) {}
 CairoGroup::~CairoGroup() {
     if (pushed) {
@@ -941,6 +943,10 @@ ink_cairo_surface_get_height(cairo_surface_t *surface)
     return cairo_image_surface_get_height(surface);
 }
 
+typedef __v8hi VINT16;
+typedef __v8hu VUINT16;
+typedef __v4si VINT32;
+
 static int ink_cairo_surface_average_color_internal(cairo_surface_t *surface, double &rf, double &gf, double &bf, double &af)
 {
     rf = gf = bf = af = 0.0;
@@ -949,10 +955,11 @@ static int ink_cairo_surface_average_color_internal(cairo_surface_t *surface, do
     int height = cairo_image_surface_get_height(surface);
     int stride = cairo_image_surface_get_stride(surface);
     unsigned char *data = cairo_image_surface_get_data(surface);
-
+#if 0
     /* TODO convert this to OpenMP somehow */
-    for (int y = 0; y < height; ++y, data += stride) {
-        for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < height; ++y, data += stride)
+    {
+       for (int x = 0; x < width; ++x) {
             guint32 px = *reinterpret_cast<guint32*>(data + 4*x);
             EXTRACT_ARGB32(px, a,r,g,b)
             rf += r / 255.0;
@@ -962,6 +969,56 @@ static int ink_cairo_surface_average_color_internal(cairo_surface_t *surface, do
         }
     }
     return width * height;
+#else
+    VINT32 pixSum[4];
+    for (int i = 0; i < 4; ++i)
+        pixSum[i] = (VINT32){0};
+
+    data = cairo_image_surface_get_data(surface);
+
+    __m128i zero = _mm_set1_epi8(0);
+    for (int y = 0; y < height; ++y)
+    {
+        VUINT16 localSum0 = (VUINT16){0},
+                localSum1 = (VUINT16){0};
+        for (int x0 = 0; x0 < width; )
+        {
+          int blockWidth = std::min(width - x0, 1024),   // each color can be accumulated 256 times before overflowing, then times 4 since each it's spread over 4 accumulators
+                    xEnd = x0 + blockWidth;
+          int x;
+          for (x = x0; x <= xEnd - 4; x += 4)
+          {
+              __m128i pixels = _mm_loadu_si128((__m128i *)&data[y * stride + 4*x]);
+              localSum0 += (VUINT16)_mm_unpacklo_epi8(pixels, zero);
+              localSum1 += (VUINT16)_mm_unpackhi_epi8(pixels, zero);
+          }
+          pixSum[0] += (VINT32)_mm_unpacklo_epi16((__m128i)localSum0, zero);
+          pixSum[1] += (VINT32)_mm_unpackhi_epi16((__m128i)localSum0, zero);
+          pixSum[2] += (VINT32)_mm_unpacklo_epi16((__m128i)localSum1, zero);
+          pixSum[3] += (VINT32)_mm_unpackhi_epi16((__m128i)localSum1, zero);
+          while (x < xEnd)
+          {
+            guint32 px = *reinterpret_cast<guint32*>(&data[y * stride + 4*x]);
+            EXTRACT_ARGB32(px, a,r,g,b)
+            pixSum[0] += (VINT32){b, g, r, a};
+            ++x;
+          }
+          x0 = xEnd;
+        }
+    }
+    for (int i = 0; i < 4; ++i)
+    {
+        rf += pixSum[i][2];
+        gf += pixSum[i][1];
+        bf += pixSum[i][0];
+        af += pixSum[i][3];
+    }
+    rf /= 255;
+    gf /= 255;
+    bf /= 255;
+    af /= 255;
+    return width * height;
+#endif
 }
 
 guint32 ink_cairo_surface_average_color(cairo_surface_t *surface)
@@ -1058,15 +1115,186 @@ private:
     /* None */
 };
 
+__m128i ClipToByte(__m128i v4n_data)
+{
+  return _mm_max_epi32(_mm_set1_epi32(0), _mm_min_epi32(_mm_set1_epi32(255), v4n_data));
+}
+
+#ifdef __AVX2__
+__m256i ClipToByte2(__m256i v8n_data)
+{
+  return _mm256_max_epi32(_mm256_set1_epi32(0), _mm256_min_epi32(_mm256_set1_epi32(255), v8n_data));
+}
+#endif
+
 int ink_cairo_surface_srgb_to_linear(cairo_surface_t *surface)
 {
     cairo_surface_flush(surface);
     int width = cairo_image_surface_get_width(surface);
     int height = cairo_image_surface_get_height(surface);
-    // int stride = cairo_image_surface_get_stride(surface);
-    // unsigned char *data = cairo_image_surface_get_data(surface);
+    int stride = cairo_image_surface_get_stride(surface);
+    unsigned char *data = cairo_image_surface_get_data(surface);
+#if 0
+    ink_cairo_surface_filter( surface, surface, SurfaceSrgbToLinear());
+#elif defined(__AVX2__)
+    if (cairo_image_surface_get_format(surface) == CAIRO_FORMAT_A8)
+    {
+       ink_cairo_surface_filter( surface, surface, SurfaceSrgbToLinear());
+    }
+   else
+   {
+    __m256 a0 = _mm256_set1_ps(0.00020342516531723587527236692766971382505828800876123f),
+    	   a1 = _mm256_set1_ps(-0.011965156355972116911844776651594694083907547106830),
+    	   a2 = _mm256_set1_ps(+0.41489746926612589981295392086997469678644801058346),
+    	   a3 = _mm256_set1_ps(0.87568103570293072359432661972630787939589549737044),
+    	   a4 = _mm256_set1_ps(-0.28438158597063315340451547602445472465606300048998),
+    	   linearScale = _mm256_set1_ps(1.0f / 12.92f),
+    	   c0 = _mm256_set1_ps(0.055f),
+    	   c1 = _mm256_set1_ps(1.0f / 1.055f),
+    	   vThreshold = _mm256_set1_ps(0.04045f);
 
-    ink_cairo_surface_filter( surface, surface, SurfaceSrgbToLinear() );
+    #pragma omp parallel for
+    for (int y = 0; y < height; ++y)
+    {
+        int x;
+        __m256i byteMask = _mm256_set1_epi32(0xff);
+        for (x = 0; x + 8 <= width; x += 8)
+        {
+            __m256i bgra = _mm256_loadu_si256((__m256i *)&data[y * stride + 4 * x]);
+            __m256 v8f_blue = _mm256_cvtepi32_ps(bgra & byteMask),
+            		v8f_green = _mm256_cvtepi32_ps(_mm256_srli_epi32(bgra, 8) & byteMask),
+            		v8f_red = _mm256_cvtepi32_ps(_mm256_srli_epi32(bgra, 16) & byteMask),
+            		v8f_alpha = _mm256_cvtepi32_ps(_mm256_srli_epi32(bgra, 24) & byteMask);
+
+            __m256 scale = _mm256_rcp_ps(v8f_alpha);
+            v8f_blue = v8f_blue * scale;
+            v8f_green = v8f_green * scale;
+            v8f_red = v8f_red * scale;
+
+            __m256 linearScaledBlue = v8f_blue * linearScale,
+            		linearScaledGreen = v8f_green * linearScale,
+            		linearScaledRed = v8f_red * linearScale;
+
+            __m256 v8f_powerBlue = (v8f_blue + c0) * c1,
+            v8f_powerGreen = (v8f_green + c0) * c1,
+            v8f_powerRed = (v8f_red + c0) * c1;
+
+            v8f_powerBlue = (((((a4 * v8f_powerBlue) + a3) * v8f_powerBlue + a2) * v8f_powerBlue + a1) * v8f_powerBlue) + a0;
+            v8f_powerGreen = (((((a4 * v8f_powerGreen) + a3) * v8f_powerGreen + a2) * v8f_powerGreen + a1) * v8f_powerGreen) + a0;
+            v8f_powerRed = (((((a4 * v8f_powerRed) + a3) * v8f_powerRed + a2) * v8f_powerRed + a1) * v8f_powerRed) + a0;
+
+            v8f_blue = _mm256_blendv_ps(v8f_powerBlue, linearScaledBlue, _mm256_cmp_ps(v8f_blue, vThreshold, _CMP_LT_OQ));
+            v8f_green = _mm256_blendv_ps(v8f_powerGreen, linearScaledGreen, _mm256_cmp_ps(v8f_green, vThreshold, _CMP_LT_OQ));
+            v8f_red = _mm256_blendv_ps(v8f_powerRed, linearScaledRed, _mm256_cmp_ps(v8f_red, vThreshold, _CMP_LT_OQ));
+
+            v8f_blue *= v8f_alpha;
+            v8f_green *= v8f_alpha;
+            v8f_red *= v8f_alpha;
+
+            // repack
+            __m256i packed = ClipToByte2(_mm256_cvtps_epi32(v8f_blue)) |
+            _mm256_slli_epi32(ClipToByte2(_mm256_cvtps_epi32(v8f_green)), 8) |
+            _mm256_slli_epi32(ClipToByte2(_mm256_cvtps_epi32(v8f_red)), 16) |
+            _mm256_slli_epi32(ClipToByte2(_mm256_cvtps_epi32(v8f_alpha)), 24);   // todo: there's more efficient way to repack alpha
+
+            _mm256_storeu_si256((__m256i *)&data[y * stride + 4 * x], packed);
+        }
+        while (x < width)
+        {
+        	 guint32 px = *reinterpret_cast<guint32*>(data + y * stride + 4*x);
+        	 EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
+        	 if( a != 0 ) {
+        	    r = srgb_to_linear( r, a );
+        	    g = srgb_to_linear( g, a );
+        	    b = srgb_to_linear( b, a );
+        	 }
+        	 ASSEMBLE_ARGB32(px2, a,r,g,b);
+        	 *reinterpret_cast<guint32*>(data + y * stride + 4*x) = px2;
+        	 ++x;
+        }
+      }
+      cairo_surface_mark_dirty(surface);
+    }
+#else
+    if (cairo_image_surface_get_format(surface) == CAIRO_FORMAT_A8)
+    {
+       ink_cairo_surface_filter( surface, surface, SurfaceSrgbToLinear());
+    }
+   else
+   {
+    __m128 a0 = _mm_set1_ps(0.00020342516531723587527236692766971382505828800876123f),
+    	   a1 = _mm_set1_ps(-0.011965156355972116911844776651594694083907547106830),
+    	   a2 = _mm_set1_ps(+0.41489746926612589981295392086997469678644801058346),
+    	   a3 = _mm_set1_ps(0.87568103570293072359432661972630787939589549737044),
+    	   a4 = _mm_set1_ps(-0.28438158597063315340451547602445472465606300048998),
+    	   linearScale = _mm_set1_ps(1.0f / 12.92f),
+    	   c0 = _mm_set1_ps(0.055f),
+    	   c1 = _mm_set1_ps(1.0f / 1.055f),
+    	   vThreshold = _mm_set1_ps(0.04045f);
+
+    #pragma omp parallel for
+    for (int y = 0; y < height; ++y)
+    {
+        int x;
+        __m128i byteMask = _mm_set1_epi32(0xff);
+        for (x = 0; x + 4 <= width; x += 4)
+        {
+            __m128i bgra = _mm_loadu_si128((__m128i *)&data[y * stride + 4 * x]);
+            __m128 v8f_blue = _mm_cvtepi32_ps(bgra & byteMask),
+            	   v8f_green = _mm_cvtepi32_ps(_mm_srli_epi32(bgra, 8) & byteMask),
+                   v8f_red = _mm_cvtepi32_ps(_mm_srli_epi32(bgra, 16) & byteMask),
+                   v8f_alpha = _mm_cvtepi32_ps(_mm_srli_epi32(bgra, 24) & byteMask);
+
+            __m128 scale = _mm_rcp_ps(v8f_alpha);
+            v8f_blue = v8f_blue * scale;
+            v8f_green = v8f_green * scale;
+            v8f_red = v8f_red * scale;
+
+            __m128 linearScaledBlue = v8f_blue * linearScale,
+            	   linearScaledGreen = v8f_green * linearScale,
+            	   linearScaledRed = v8f_red * linearScale;
+
+            __m128 v8f_powerBlue = (v8f_blue + c0) * c1,
+            v8f_powerGreen = (v8f_green + c0) * c1,
+            v8f_powerRed = (v8f_red + c0) * c1;
+
+            v8f_powerBlue = (((((a4 * v8f_powerBlue) + a3) * v8f_powerBlue + a2) * v8f_powerBlue + a1) * v8f_powerBlue) + a0;
+            v8f_powerGreen = (((((a4 * v8f_powerGreen) + a3) * v8f_powerGreen + a2) * v8f_powerGreen + a1) * v8f_powerGreen) + a0;
+            v8f_powerRed = (((((a4 * v8f_powerRed) + a3) * v8f_powerRed + a2) * v8f_powerRed + a1) * v8f_powerRed) + a0;
+
+            v8f_blue = _mm_blendv_ps(v8f_powerBlue, linearScaledBlue, _mm_cmplt_ps(v8f_blue, vThreshold));
+            v8f_green = _mm_blendv_ps(v8f_powerGreen, linearScaledGreen, _mm_cmplt_ps(v8f_green, vThreshold));
+            v8f_red = _mm_blendv_ps(v8f_powerRed, linearScaledRed, _mm_cmplt_ps(v8f_red, vThreshold));
+
+            v8f_blue *= v8f_alpha;
+            v8f_green *= v8f_alpha;
+            v8f_red *= v8f_alpha;
+
+            // repack
+            __m128i packed = ClipToByte(_mm_cvtps_epi32(v8f_blue)) |
+            _mm_slli_epi32(ClipToByte(_mm_cvtps_epi32(v8f_green)), 8) |
+            _mm_slli_epi32(ClipToByte(_mm_cvtps_epi32(v8f_red)), 16) |
+            _mm_slli_epi32(ClipToByte(_mm_cvtps_epi32(v8f_alpha)), 24);   // todo: there's more efficient way to repack alpha
+
+            _mm_storeu_si128((__m128i *)&data[y * stride + 4 * x], packed);
+        }
+        while (x < width)
+        {
+        	 guint32 px = *reinterpret_cast<guint32*>(data + y * stride + 4*x);
+        	 EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
+        	 if( a != 0 ) {
+        	    r = srgb_to_linear( r, a );
+        	    g = srgb_to_linear( g, a );
+        	    b = srgb_to_linear( b, a );
+        	 }
+        	 ASSEMBLE_ARGB32(px2, a,r,g,b);
+        	 *reinterpret_cast<guint32*>(data + y * stride + 4*x) = px2;
+        	 ++x;
+        }
+      }
+      cairo_surface_mark_dirty(surface);
+    }
+#endif
 
     /* TODO convert this to OpenMP somehow */
     // for (int y = 0; y < height; ++y, data += stride) {
@@ -1106,11 +1334,166 @@ int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
     cairo_surface_flush(surface);
     int width = cairo_image_surface_get_width(surface);
     int height = cairo_image_surface_get_height(surface);
-    // int stride = cairo_image_surface_get_stride(surface);
-    // unsigned char *data = cairo_image_surface_get_data(surface);
+    int stride = cairo_image_surface_get_stride(surface);
+    unsigned char *data = cairo_image_surface_get_data(surface);
 
+#if 0
     ink_cairo_surface_filter( surface, surface, SurfaceLinearToSrgb() );
+#elif defined(__AVX2__)
+    if (cairo_image_surface_get_format(surface) == CAIRO_FORMAT_A8)
+    {
+      ink_cairo_surface_filter( surface, surface, SurfaceLinearToSrgb() );
+    }
+    else
+    {
+    __m256 a3 = _mm256_set1_ps(63.83121810383552232797091829895520314293771398586f),
+    	a2 = _mm256_set1_ps(187.69666072223210321983201157027764451781648194282f),
+        a1 = _mm256_set1_ps(17.60773211516974336848413503050583976216152489963f),
+    	a0 = _mm256_set1_ps(0.0542658823722819162574281287228066466386026961459),
+        b2 = _mm256_set1_ps(199.53130256725512074002609234688206803271449435026f),
+        b1 = _mm256_set1_ps(68.398517138846475409393096846284973296189174492889f),
+        b0  = _mm256_set1_ps(1.0000000000000000000000000000000000000000000000000f),
+    vThreshold = _mm256_set1_ps(0.0031308f),
+            		linearScale = _mm256_set1_ps(12.92f),
+            		c0 = _mm256_set1_ps(1.055f),
+            		c1 = _mm256_set1_ps(0.055f);
 
+#pragma omp parallel for
+for (int y = 0; y < height; ++y)
+{
+    int x;
+    __m256i byteMask = _mm256_set1_epi32(0xff);
+    for (x = 0; x + 8 <= width; x += 8)
+    {
+        __m256i bgra = _mm256_loadu_si256((__m256i *)&data[y * stride + 4 * x]);
+        __m256 v8f_blue = _mm256_cvtepi32_ps(bgra & byteMask),
+        		v8f_green = _mm256_cvtepi32_ps(_mm256_srli_epi32(bgra, 8) & byteMask),
+        		v8f_red = _mm256_cvtepi32_ps(_mm256_srli_epi32(bgra, 16) & byteMask),
+        		v8f_alpha = _mm256_cvtepi32_ps(_mm256_srli_epi32(bgra, 24) & byteMask);
+
+        __m256 scale = _mm256_rcp_ps(v8f_alpha);
+        v8f_blue = v8f_blue * scale;
+        v8f_green = v8f_green * scale;
+        v8f_red = v8f_red * scale;
+
+
+        v8f_blue = _mm256_blendv_ps(
+        		     (((((a3 * v8f_blue) + a2) * v8f_blue + a1) * v8f_blue + a0) / ((b2 * v8f_blue + b1) * v8f_blue + b0)) * c0 - c1,
+        		     v8f_blue * linearScale, _mm256_cmp_ps(v8f_blue, vThreshold, _CMP_LT_OQ));
+        v8f_green = _mm256_blendv_ps(
+        		      (((((a3 * v8f_green) + a2) * v8f_green + a1) * v8f_green + a0) / ((b2 * v8f_green + b1) * v8f_green + b0)) * c0 - c1,
+        		      v8f_green * linearScale, _mm256_cmp_ps(v8f_green, vThreshold, _CMP_LT_OQ));
+        v8f_red = _mm256_blendv_ps(
+        		      (((((a3 * v8f_red) + a2) * v8f_red + a1) * v8f_red + a0) / ((b2 * v8f_red + b1) * v8f_red + b0)) * c0 - c1,
+        		      v8f_red * linearScale, _mm256_cmp_ps(v8f_red, vThreshold, _CMP_LT_OQ));
+
+        v8f_blue *= v8f_alpha;
+        v8f_green *= v8f_alpha;
+        v8f_red *= v8f_alpha;
+
+        // repack
+        __m256i packed = ClipToByte2(_mm256_cvtps_epi32(v8f_blue)) |
+        _mm256_slli_epi32(ClipToByte2(_mm256_cvtps_epi32(v8f_green)), 8) |
+        _mm256_slli_epi32(ClipToByte2(_mm256_cvtps_epi32(v8f_red)), 16) |
+        _mm256_slli_epi32(ClipToByte2(_mm256_cvtps_epi32(v8f_alpha)), 24);   // todo: there's more efficient way to repack alpha
+
+        _mm256_storeu_si256((__m256i *)&data[y * stride + 4 * x], packed);
+    }
+    while (x < width)
+    {
+    	 guint32 px = *reinterpret_cast<guint32*>(data + y * stride + 4*x);
+    	 EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
+    	 if( a != 0 ) {
+    		 r = linear_to_srgb( r, a );
+    		 g = linear_to_srgb( g, a );
+    		 b = linear_to_srgb( b, a );
+    	 }
+    	 ASSEMBLE_ARGB32(px2, a,r,g,b);
+    	 *reinterpret_cast<guint32*>(data + y * stride + 4*x) = px2;
+    	 ++x;
+    }
+
+    }
+     cairo_surface_mark_dirty(surface);
+  }
+#else
+    if (cairo_image_surface_get_format(surface) == CAIRO_FORMAT_A8)
+    {
+      ink_cairo_surface_filter( surface, surface, SurfaceLinearToSrgb() );
+    }
+    else
+    {
+    __m128 a3 = _mm_set1_ps(63.83121810383552232797091829895520314293771398586f),
+    	a2 = _mm_set1_ps(187.69666072223210321983201157027764451781648194282f),
+        a1 = _mm_set1_ps(17.60773211516974336848413503050583976216152489963f),
+    	a0 = _mm_set1_ps(0.0542658823722819162574281287228066466386026961459),
+        b2 = _mm_set1_ps(199.53130256725512074002609234688206803271449435026f),
+        b1 = _mm_set1_ps(68.398517138846475409393096846284973296189174492889f),
+        b0  = _mm_set1_ps(1.0000000000000000000000000000000000000000000000000f),
+    vThreshold = _mm_set1_ps(0.0031308f),
+            		linearScale = _mm_set1_ps(12.92f),
+            		c0 = _mm_set1_ps(1.055f),
+            		c1 = _mm_set1_ps(0.055f);
+
+#pragma omp parallel for
+for (int y = 0; y < height; ++y)
+{
+    int x;
+    __m128i byteMask = _mm_set1_epi32(0xff);
+    for (x = 0; x + 4 <= width; x += 4)
+    {
+        __m128i bgra = _mm_loadu_si128((__m128i *)&data[y * stride + 4 * x]);
+        __m128 v8f_blue = _mm_cvtepi32_ps(bgra & byteMask),
+        		v8f_green = _mm_cvtepi32_ps(_mm_srli_epi32(bgra, 8) & byteMask),
+        		v8f_red = _mm_cvtepi32_ps(_mm_srli_epi32(bgra, 16) & byteMask),
+        		v8f_alpha = _mm_cvtepi32_ps(_mm_srli_epi32(bgra, 24) & byteMask);
+
+        __m128 scale = _mm_rcp_ps(v8f_alpha);
+        v8f_blue = v8f_blue * scale;
+        v8f_green = v8f_green * scale;
+        v8f_red = v8f_red * scale;
+
+
+        v8f_blue = _mm_blendv_ps(
+        		     (((((a3 * v8f_blue) + a2) * v8f_blue + a1) * v8f_blue + a0) / ((b2 * v8f_blue + b1) * v8f_blue + b0)) * c0 - c1,
+        		     v8f_blue * linearScale, _mm_cmplt_ps(v8f_blue, vThreshold));
+        v8f_green = _mm_blendv_ps(
+        		      (((((a3 * v8f_green) + a2) * v8f_green + a1) * v8f_green + a0) / ((b2 * v8f_green + b1) * v8f_green + b0)) * c0 - c1,
+        		      v8f_green * linearScale, _mm_cmplt_ps(v8f_green, vThreshold));
+        v8f_red = _mm_blendv_ps(
+        		      (((((a3 * v8f_red) + a2) * v8f_red + a1) * v8f_red + a0) / ((b2 * v8f_red + b1) * v8f_red + b0)) * c0 - c1,
+        		      v8f_red * linearScale, _mm_cmplt_ps(v8f_red, vThreshold));
+
+        v8f_blue *= v8f_alpha;
+        v8f_green *= v8f_alpha;
+        v8f_red *= v8f_alpha;
+
+        // repack
+        __m128i packed = ClipToByte(_mm_cvtps_epi32(v8f_blue)) |
+        _mm_slli_epi32(ClipToByte(_mm_cvtps_epi32(v8f_green)), 8) |
+        _mm_slli_epi32(ClipToByte(_mm_cvtps_epi32(v8f_red)), 16) |
+        _mm_slli_epi32(ClipToByte(_mm_cvtps_epi32(v8f_alpha)), 24);   // todo: there's more efficient way to repack alpha
+
+        _mm_storeu_si128((__m128i *)&data[y * stride + 4 * x], packed);
+    }
+    while (x < width)
+    {
+    	 guint32 px = *reinterpret_cast<guint32*>(data + y * stride + 4*x);
+    	 EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
+    	 if( a != 0 ) {
+    		 r = linear_to_srgb( r, a );
+    		 g = linear_to_srgb( g, a );
+    		 b = linear_to_srgb( b, a );
+    	 }
+    	 ASSEMBLE_ARGB32(px2, a,r,g,b);
+    	 *reinterpret_cast<guint32*>(data + y * stride + 4*x) = px2;
+    	 ++x;
+    }
+
+    }
+     cairo_surface_mark_dirty(surface);
+  }
+#endif
     // /* TODO convert this to OpenMP somehow */
     // for (int y = 0; y < height; ++y, data += stride) {
     //     for (int x = 0; x < width; ++x) {

@@ -30,6 +30,10 @@ static const int OPENMP_THRESHOLD = 2048;
 #include <math.h>
 #include "display/nr-3dutils.h"
 #include "display/cairo-utils.h"
+#include <emmintrin.h>
+#ifdef __AVX2__
+  #include <immintrin.h>
+#endif
 
 /**
  * Blend two surfaces using the supplied functor.
@@ -365,6 +369,68 @@ void ink_cairo_surface_synthesize(cairo_surface_t *out, cairo_rectangle_t const 
 }
 
 template <typename Synth>
+void ink_cairo_surface_synthesize_SIMD(cairo_surface_t *out, cairo_rectangle_t const &out_area, Synth synth)
+{
+    // ASSUMPTIONS
+    // 1. Cairo ARGB32 surface strides are always divisible by 4
+    // 2. We can only receive CAIRO_FORMAT_ARGB32 or CAIRO_FORMAT_A8 surfaces
+
+    int w = out_area.width;
+    int h = out_area.height;
+    int strideout = cairo_image_surface_get_stride(out);
+    int bppout = cairo_image_surface_get_format(out) == CAIRO_FORMAT_A8 ? 1 : 4;
+    // NOTE: fast path is not used, because we would need 2 divisions to get pixel indices
+
+    unsigned char *out_data = cairo_image_surface_get_data(out);
+
+    #if HAVE_OPENMP
+    int limit = w * h;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int numOfThreads = prefs->getIntLimited("/options/threading/numthreads", omp_get_num_procs(), 1, 256);
+    if (numOfThreads){} // inform compiler we are using it.
+    #endif
+
+    if (bppout == 4) {
+        #if HAVE_OPENMP
+        #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(numOfThreads)
+        #endif
+        for (int i = out_area.y; i < h; ++i) {
+        	  int j;
+#ifdef __AVX2__
+        	  for (j = out_area.x; j + 8 <= w; j += 8)
+        	  {
+        		  _mm256_storeu_si256((__m256i *)&out_data[i * strideout + j * sizeof(guint32)], synth.CalculateSIMD8(j, i));
+        	  }
+#else
+        	  for (j = out_area.x; j + 4 <= w; j += 4)
+        	  {
+        		  _mm_storeu_si128((__m128i *)&out_data[i * strideout + j * sizeof(guint32)], synth.CalculateSIMD4(j, i));
+        	  }
+#endif
+        	  while (j < w)
+        	  {
+        		  *(guint32 *)&out_data[i * strideout + j * sizeof(guint32)] = synth(j, i);
+        		  ++j;
+        	  }
+        }
+    } else {
+        // bppout == 1
+        #if HAVE_OPENMP
+        #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(numOfThreads)
+        #endif
+        for (int i = out_area.y; i < h; ++i) {
+            guint8 *out_p = out_data + i * strideout;
+            for (int j = out_area.x; j < w; ++j) {
+                guint32 out_px = synth(j, i);
+                *out_p = out_px >> 24;
+                ++out_p;
+            }
+        }
+    }
+    cairo_surface_mark_dirty(out);
+}
+
+template <typename Synth>
 void ink_cairo_surface_synthesize(cairo_surface_t *out, Synth synth)
 {
     int w = cairo_image_surface_get_width(out);
@@ -378,6 +444,22 @@ void ink_cairo_surface_synthesize(cairo_surface_t *out, Synth synth)
 
     ink_cairo_surface_synthesize(out, area, synth);
 }
+
+template <typename Synth>
+void ink_cairo_surface_synthesize_SIMD(cairo_surface_t *out, Synth synth)
+{
+    int w = cairo_image_surface_get_width(out);
+    int h = cairo_image_surface_get_height(out);
+
+    cairo_rectangle_t area;
+    area.x = 0;
+    area.y = 0;
+    area.width = w;
+    area.height = h;
+
+    ink_cairo_surface_synthesize_SIMD(out, area, synth);
+}
+
 
 struct SurfaceSynth {
     SurfaceSynth(cairo_surface_t *surface)
