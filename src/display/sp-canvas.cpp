@@ -940,6 +940,7 @@ void sp_canvas_class_init(SPCanvasClass *klass)
     widget_class->leave_notify_event   = SPCanvas::handle_crossing;
     widget_class->focus_in_event       = SPCanvas::handle_focus_in;
     widget_class->focus_out_event      = SPCanvas::handle_focus_out;
+    widget_class->touch_event          = SPCanvas::handle_touch;
 }
 
 static void sp_canvas_init(SPCanvas *canvas)
@@ -1067,6 +1068,7 @@ void SPCanvas::handle_realize(GtkWidget *widget)
                              GDK_BUTTON_PRESS_MASK |
                              GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_MASK |
+                             GDK_TOUCH_MASK |
                              ( HAS_BROKEN_MOTION_HINTS ?
                                0 : GDK_POINTER_MOTION_HINT_MASK ) |
                              GDK_PROXIMITY_IN_MASK |
@@ -1190,6 +1192,8 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
     canvas->addIdle();
 }
 
+//#pragma GCC push_options
+//#pragma GCC optimize("-O0")
 int SPCanvas::emitEvent(GdkEvent *event)
 {
     guint mask;
@@ -1223,12 +1227,22 @@ int SPCanvas::emitEvent(GdkEvent *event)
             mask = GDK_SCROLL_MASK;
             mask |= GDK_SMOOTH_SCROLL_MASK;
             break;
+        case GDK_TOUCH_BEGIN:
+        case GDK_TOUCH_UPDATE:
+        case GDK_TOUCH_END:
+            mask = GDK_TOUCH_MASK;
+            break;
         default:
             mask = 0;
             break;
         }
 
-        if (!(mask & _grabbed_event_mask)) return FALSE;
+        if (!(mask & _grabbed_event_mask))
+        {
+            if (event->type >= GDK_TOUCH_BEGIN && event->type <= GDK_TOUCH_END)
+                printf("crap dropped event %d %d\n", event->type, _grabbed_event_mask);
+            return FALSE;
+        }
     }
 
     // Convert to world coordinates -- we have two cases because of different
@@ -1284,20 +1298,43 @@ int SPCanvas::emitEvent(GdkEvent *event)
     // handler returns TRUE, just like for GtkWidget events.
 
     gint finished = FALSE;
-
+#if DEBUG_EVENTS
+    int depth = 0;
+    char *names[20];
+    bool seen = false;
+    static SPCanvasItem *acetate;
+        
+#endif
     while (item && !finished) {
+        #if DEBUG_EVENTS
+        names[depth] = G_OBJECT_TYPE_NAME(item);
+        if (!seen)
+        {
+          seen = strcmp(names[depth], "SPCanvasAcetate") == 0;
+          acetate = item;
+        }
+        ++depth;
+        #endif
         g_object_ref (item);
         g_signal_emit (G_OBJECT (item), item_signals[ITEM_EVENT], 0, ev, &finished);
         SPCanvasItem *parent = item->parent;
         g_object_unref (item);
         item = parent;
     }
-
+    #ifdef DEBUG_EVENTS
+    if (!seen && (event->type >= GDK_TOUCH_BEGIN && event->type <= GDK_TOUCH_END))
+    {
+        printf("crap - touch event not delivered to acetate\n");
+        g_object_ref (acetate);
+        g_signal_emit (G_OBJECT (acetate), item_signals[ITEM_EVENT], 0, ev, &finished);
+        g_object_unref (acetate);
+    }
+    #endif
     gdk_event_free(ev);
 
     return finished;
 }
-
+//#pragma GCC pop_options
 int SPCanvas::pickCurrentItem(GdkEvent *event)
 {
     int button_down = 0;
@@ -1324,7 +1361,8 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
     // synthesize an enter event.
 
     if (event != &_pick_event) {
-        if ((event->type == GDK_MOTION_NOTIFY) || (event->type == GDK_BUTTON_RELEASE)) {
+        if ((event->type == GDK_MOTION_NOTIFY) || (event->type == GDK_BUTTON_RELEASE) ||
+            event->type >= GDK_TOUCH_BEGIN && event->type <= GDK_TOUCH_END) {
             // these fields have the same offsets in both types of events
 
             _pick_event.crossing.type       = GDK_ENTER_NOTIFY;
@@ -1427,7 +1465,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
         new_event.crossing.subwindow = NULL;
         retval = emitEvent(&new_event);
     }
-
+    //printf("new_current_item = %s\n", typeid(*_current_item).name()); 
     return retval;
 }
 
@@ -1500,6 +1538,92 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
 gint SPCanvas::handle_scroll(GtkWidget *widget, GdkEventScroll *event)
 {
     return SP_CANVAS(widget)->emitEvent(reinterpret_cast<GdkEvent *>(event));
+}
+
+gint SPCanvas::handle_touch(GtkWidget *widget, GdkEventTouch *event)
+{
+    int status;
+    SPCanvas *canvas = SP_CANVAS (widget);
+
+    trackLatency((GdkEvent *)event);
+
+    GdkEventTouch &touch = *event;
+    //printf("touch2 type=%d (%f %f) id=%lld\n", touch.type, touch.x, touch.y, touch.sequence);
+    if (event->window != getWindow(canvas)) {
+        return FALSE;
+    }
+
+    if (canvas->_root == NULL) // canvas being deleted
+        return FALSE;
+
+    extern bool handlingGesture;
+    if (!handlingGesture)
+    {
+        // I found during a pan/zoom gesture, if my finger touches a canvas element, the zoom blows up or glitches - not sure why but proabably due to events getting diverted to the new element instead of the canvas acetate
+      canvas->_state = 0;   // almost all touch events have BUTTON 1 set, but that causes pickCurrentItem to not set _current_item - why?
+      canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
+    }
+
+    SP_CANVAS(widget)->emitEvent(reinterpret_cast<GdkEvent *>(event));
+
+    if (!event->emulating_pointer || handlingGesture)
+    {
+        // don't generate emulation events in middle of gesture - saw strange case where touch events get processed out of order (TOUCH_UPDATE event occurs after TOUCH_END), completely breaking everything
+      return TRUE;
+      //return FALSE;    // so that default handler gtk_widget_real_touch_event() can translate touch events in to emulated mouse events
+    }
+    GdkEvent *bevent;
+    // emulate pointer (copied from gtk_real_touch_event)
+    if (event->type == GDK_TOUCH_BEGIN ||
+        event->type == GDK_TOUCH_END)
+    {
+      GdkEventType type;
+      if (event->type == GDK_TOUCH_BEGIN)
+        {
+          type = GDK_BUTTON_PRESS;
+        }
+      else
+        {
+          type = GDK_BUTTON_RELEASE;
+        }
+      bevent = gdk_event_new (type);
+      bevent->any.window = g_object_ref (event->window);
+      bevent->any.send_event = FALSE;
+      bevent->button.time = event->time;
+      bevent->button.state = event->state;
+      bevent->button.button = 1;
+      bevent->button.x_root = event->x_root;
+      bevent->button.y_root = event->y_root;
+      bevent->button.x = event->x;
+      bevent->button.y = event->y;
+      bevent->button.device = event->device;
+      bevent->button.axes = g_memdup (event->axes,
+                                      sizeof (gdouble) * gdk_device_get_n_axes (event->device));
+      gdk_event_set_source_device (bevent, gdk_event_get_source_device ((GdkEvent*)event));
+
+      if (event->type == GDK_TOUCH_END)
+        bevent->button.state |= GDK_BUTTON1_MASK;
+    }
+    else if (event->type == GDK_TOUCH_UPDATE)
+    {
+      bevent = gdk_event_new (GDK_MOTION_NOTIFY);
+      bevent->any.window = g_object_ref (event->window);
+      bevent->any.send_event = FALSE;
+      bevent->motion.time = event->time;
+      bevent->motion.state = event->state | GDK_BUTTON1_MASK;
+      bevent->motion.x_root = event->x_root;
+      bevent->motion.y_root = event->y_root;
+      bevent->motion.x = event->x;
+      bevent->motion.y = event->y;
+      bevent->motion.device = event->device;
+      bevent->motion.is_hint = FALSE;
+      bevent->motion.axes = g_memdup (event->axes,
+                                      sizeof (gdouble) * gdk_device_get_n_axes (event->device));
+      gdk_event_set_source_device (bevent, gdk_event_get_source_device ((GdkEvent*)event));
+    }
+    SP_CANVAS(widget)->emitEvent(reinterpret_cast<GdkEvent *>(bevent));
+    gdk_event_free (bevent);
+    return TRUE;
 }
 
 static inline void request_motions(GdkWindow *w, GdkEventMotion *event) {

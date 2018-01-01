@@ -530,8 +530,9 @@ private:
         Geom::Scale   _flip;     // Flip part of _w2d
         Geom::Point   _offset;   // Point on canvas to align to (0,0) of window
     };
-
+public:
     DesktopAffine _current_affine;
+private:
     std::list<DesktopAffine> transforms_past;
     std::list<DesktopAffine> transforms_future;
     bool _quick_zoom_enabled; ///< Signifies that currently we're in quick zoom mode

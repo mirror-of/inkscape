@@ -228,7 +228,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                 ( GDK_KEY_PRESS_MASK |
                                   GDK_BUTTON_RELEASE_MASK       |
-                                  GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK       |
+                                  GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK | GDK_POINTER_MOTION_HINT_MASK       |
                                   GDK_BUTTON_PRESS_MASK ),
                                 NULL, event->button.time);
             ret = TRUE;

@@ -16,6 +16,8 @@
 # include <config.h>
 #endif
 #include <map>
+#include <unordered_map>
+#include <chrono>
 #include <string>
 
 #include "ui/dialog/guides.h"
@@ -613,7 +615,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
 //static std::map<GdkInputSource, std::string> switchMap;
 static std::map<std::string, int> toolToUse;
 static std::string lastName;
-static GdkInputSource lastType = GDK_SOURCE_MOUSE;
+static GdkInputSource lastType = -1;
 
 static void init_extended()
 {
@@ -635,7 +637,7 @@ static void init_extended()
             
             if ( !devName.empty()
                  && (avoidName != devName)
-                 && (devSrc != Gdk::SOURCE_MOUSE) ) {
+                ) {
 //                 g_message("Adding '%s' as [%d]", devName, devSrc);
 
                 // Set the initial tool for the device
@@ -647,6 +649,8 @@ static void init_extended()
                         toolToUse[devName] = TOOLS_ERASER;
                         break;
                     case Gdk::SOURCE_CURSOR:
+                    case Gdk::SOURCE_MOUSE:
+                    case Gdk::SOURCE_TOUCHSCREEN:
                         toolToUse[devName] = TOOLS_SELECT;
                         break;
                     default:
@@ -659,20 +663,39 @@ static void init_extended()
     }
 }
 
+struct TouchEvent
+{
+    int x0, y0,
+         x, y;
+};
+
+float Square(float x)
+{
+  return x * x;
+}
+bool handlingGesture;
 
 void snoop_extended(GdkEvent* event, SPDesktop *desktop)
 {
-    GdkInputSource source = GDK_SOURCE_MOUSE;
-    std::string name;
-
+    using namespace std::chrono;
+    using namespace std;
+    static unordered_map<int, TouchEvent> touchEvents;
+    // scale, rotation, offset when touchscreen zooming/panning/rotation started
+    static Geom::Point offset0, rotationCenter;
+    static float rotation0;
+    static float scale0;
+ 
+    GdkDevice *device = gdk_event_get_source_device(event);
+    GdkInputSource source = gdk_device_get_source(device);
+    int x, y;
+    int state = 0;
     switch ( event->type ) {
         case GDK_MOTION_NOTIFY:
         {
             GdkEventMotion* event2 = reinterpret_cast<GdkEventMotion*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
+            state = event2->state;
+            x = event2->x;
+            y = event2->y;
         }
         break;
 
@@ -682,20 +705,15 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         case GDK_BUTTON_RELEASE:
         {
             GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
+            state = event2->state;
+            x = event2->x;
+            y = event2->y;
         }
         break;
 
         case GDK_SCROLL:
         {
             GdkEventScroll* event2 = reinterpret_cast<GdkEventScroll*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
         }
         break;
 
@@ -703,16 +721,131 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         case GDK_PROXIMITY_OUT:
         {
             GdkEventProximity* event2 = reinterpret_cast<GdkEventProximity*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
         }
         break;
+        case GDK_TOUCH_BEGIN:
+        case GDK_TOUCH_UPDATE:
+        case GDK_TOUCH_END:
+        {
+            GdkEventTouch &touch = *(GdkEventTouch*)event;
+            //printf("touch type=%d (%f %f) id=%lld time=%u tot=%lld\n", touch.type, touch.x, touch.y, touch.sequence, touch.time, touchEvents.size());
+ 
+            if (event->type == GDK_TOUCH_BEGIN)
+            {
+                TouchEvent &e = touchEvents[(int)touch.sequence];
+                e.x0 = touch.x;
+                e.y0 = touch.y;
+                handlingGesture = touchEvents.size() == 2;
+                if (handlingGesture)
+                {
+                  rotation0 = desktop->_current_affine.getRotation();
+                  offset0 = -desktop->_current_affine.getOffset();
+                  scale0 = desktop->_current_affine.getZoom();
 
+                  auto i = touchEvents.begin();
+                  TouchEvent &e0 = i->second;
+                  ++i;
+                  TouchEvent &e1 = i->second;
+
+                  rotationCenter[Geom::X] = (e0.x0 + e1.x0) * 0.5f;
+                  rotationCenter[Geom::Y] = (e0.y0 + e1.y0) * 0.5f;
+                }
+            }
+            else if (event->type == GDK_TOUCH_END)
+            {
+                touchEvents.erase((int)touch.sequence);
+                handlingGesture = touchEvents.size() == 2;
+            }
+            else
+            {
+                auto i = touchEvents.find((int)touch.sequence);
+                if (i == touchEvents.end())
+                {
+                    // why are we getting these?
+                    printf("ignoring out-of-order touch event\n");
+                    break;
+                }
+                TouchEvent &e = i->second;
+                e.x = touch.x;
+                e.y = touch.y;
+                static uint32_t lastT;
+                if (touch.time - lastT < 80)
+                    break;
+                lastT = touch.time;
+ 
+                if (touchEvents.size() == 2)
+                {
+                    auto i = touchEvents.begin();
+                    TouchEvent &e0 = i->second;
+                    ++i;
+                    TouchEvent &e1 = i->second;
+ 
+                    float scale = sqrtf((Square(e1.x - e0.x) + Square(e1.y - e0.y)) / (Square(e1.x0 - e0.x0) + Square(e1.y0 - e0.y0)));
+                    if (isnan(scale) || isinf(scale) || scale == 0)
+                        break;
+
+                    Geom::Point const translation((e0.x + e1.x - e0.x0 - e1.x0) * 0.5f, (e0.y + e1.y - e0.y0 - e1.y0) * 0.5f);
+                    float rotation = atan2(e1.y0 - e0.y0, e1.x0 - e0.x0) - atan2(e1.y - e0.y, e1.x - e0.x);
+
+                    float finalRotation = rotation + rotation0;
+                     // snap rotation to 0 like Autodesk Sketchbook
+                    const float MIN_TOUCH_SCREEN_ROTATION = 0.17f;
+                    if (-MIN_TOUCH_SCREEN_ROTATION <= finalRotation && finalRotation <= MIN_TOUCH_SCREEN_ROTATION)
+                    {
+                        finalRotation = 0;
+                        rotation = -rotation0;
+                    }
+
+                    desktop->_current_affine.setRotate(finalRotation);
+                    desktop->_current_affine.setScale(scale0 * scale);
+                    
+                    Geom::Point offset(scale * (cosf(-rotation) * (offset0[Geom::X] - rotationCenter[Geom::X]) + sinf(-rotation) * (rotationCenter[Geom::Y] - offset0[Geom::Y])) + rotationCenter[Geom::X],
+                                       scale * (sinf(-rotation) * (offset0[Geom::X] - rotationCenter[Geom::X]) + cosf(-rotation) * (offset0[Geom::Y] - rotationCenter[Geom::Y])) + rotationCenter[Geom::Y]);
+                    offset += translation;
+                    /*
+                    printf("offset0=(%f %f) rotationCenter=(%f %f) r1=%f rotation0=%f translate=(%f %f) offset=(%f %f)\n",offset0[Geom::X], offset0[Geom::Y],
+                           rotationCenter[Geom::X], rotationCenter[Geom::Y], rotation, rotation0, translation[Geom::X], translation[Geom::Y],
+                           offset[Geom::X], offset[Geom::Y]);
+                    */
+                    desktop->_current_affine.setOffset(-offset);
+                    desktop->set_display_area();
+                    desktop->updateNow();
+                }
+            }
+            break;
+        }
+        case GDK_LEAVE_NOTIFY:
+          // if you move the mouse outside the window while dragging with fingers,
+          // GDK_TOUCH_END won't be delivered to this widget
+          touchEvents.clear();
+          break;
         default:
             ;
     }
+    if (event->type == GDK_ENTER_NOTIFY || event->type == GDK_LEAVE_NOTIFY ||
+        source == GDK_SOURCE_TOUCHSCREEN && (event->type < GDK_TOUCH_BEGIN || event->type > GDK_TOUCH_END) ||
+        source == GDK_SOURCE_KEYBOARD)
+    {
+        // ENTER & LEAVE events have an improper device name, Virtual Core Pointer,
+        // which isn't a real slave device (should be System Aggregated Pointer)
+ 
+        // this will confuse the later auto tool selection
+ 
+        // Also, emulated pointer events need to be ignored or else they'll switch the tool
+        // back to the mouse immediately after each touch event
+ 
+        // also, why are there keyboard events when tapping to change tools?
+        return;
+    }
+ 
+    std::string name;
+    // for now, make mouse & touch screen share same tool
+    // making touch screen remember its own tool didn't work because of some spurious MOTION_NOTIFY
+    // right after switching tools - where are these coming from?
+    if (source == GDK_SOURCE_TOUCHSCREEN)
+      name = "System Aggregated Pointer";
+    else
+      name = gdk_device_get_name(device);
 
     if (!name.empty()) {
         if ( lastType != source || lastName != name ) {

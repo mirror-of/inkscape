@@ -393,7 +393,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
             this->grab = SP_CANVAS_ITEM(desktop->acetate);
             sp_canvas_item_grab(this->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
                                             GDK_BUTTON_RELEASE_MASK |
-                                            GDK_POINTER_MOTION_MASK  ),
+                                            GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK  ),
                                 NULL, bevent.time);
         }
 
