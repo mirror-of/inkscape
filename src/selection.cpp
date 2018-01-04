@@ -30,7 +30,7 @@
 #include "desktop.h"
 #include "document.h"
 
-#define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
+#define SP_SELECTION_UPDATE_PRIORITY (GDK_PRIORITY_REDRAW + 20)   // must be lower priority than UPDATE_PRIORITY in sp-canvas.cpp or else there will be no redraw when dragging
 
 namespace Inkscape {
 
