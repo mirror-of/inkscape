@@ -680,6 +680,15 @@ static void set_extensions_env()
 int
 main(int argc, char **argv)
 {
+#ifdef _WIN32
+    BOOL success = AllocConsole();
+    AttachConsole(GetCurrentProcessId());
+    freopen ("CONOUT$", "w", stdout);
+    dup2 (fileno (stdout), 1);
+    freopen ("CONOUT$", "w", stderr);
+    dup2 (fileno (stderr), 2);
+#endif
+
 #ifdef HAVE_FPSETMASK
     /* This is inherited from Sodipodi code, where it was in #ifdef __FreeBSD__.  It's probably
        safe to remove: the default mask is already 0 in C99, and in current FreeBSD according to

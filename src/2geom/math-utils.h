@@ -103,7 +103,7 @@ inline void sincos(double angle, double &sin_, double &cos_) {
  * the C++ standard (which predates C99).
  */
 
-#if defined(__isnan)
+#if 1 //defined(__isnan)
 # define IS_NAN(_a) (__isnan(_a))
 #elif defined(__APPLE__) && __GNUC__ == 3
 # define IS_NAN(_a) (__isnan(_a))	/* MacOSX/Darwin definition < 10.4 */
