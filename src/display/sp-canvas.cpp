@@ -145,7 +145,8 @@ struct SPCanvasClass {
 
 namespace {
 
-gint const UPDATE_PRIORITY = G_PRIORITY_DEFAULT_IDLE;
+gint const UPDATE_PRIORITY = GDK_PRIORITY_REDRAW + 10;   // must be lower priority than GDK_PRIORITY_REDRAW or else redraw (handle_draw()) might be very jerky or not happen at all
+
 
 GdkWindow *getWindow(SPCanvas *canvas)
 {
