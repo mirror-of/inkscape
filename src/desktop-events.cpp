@@ -807,7 +807,18 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
                            rotationCenter[Geom::X], rotationCenter[Geom::Y], rotation, rotation0, translation[Geom::X], translation[Geom::Y],
                            offset[Geom::X], offset[Geom::Y]);
                     */
+                #if 1
+                    desktop->_current_affine.setRotate(finalRotation);
+                    desktop->_current_affine.setScale(scale0 * scale);
+
                     desktop->_current_affine.setOffset(-offset);
+                #else
+                    Geom::Point const rotationCenter_dt(desktop->w2d(rotationCenter - desktop->_current_affine.getOffset()));
+
+                    desktop->zoom_absolute_keep_point(rotationCenter_dt, scale0 * scale);
+                    desktop->rotate_absolute_keep_point(rotationCenter_dt, finalRotation);
+                    desktop->scroll_absolute(-offset);
+                #endif
                     desktop->set_display_area();
                     desktop->updateNow();
                 }
