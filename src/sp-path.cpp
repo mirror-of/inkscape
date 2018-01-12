@@ -357,7 +357,7 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
             this->applyToClipPath(this);
             this->applyToMask(this);
         } else if (!success) {
-            // LPE was unsuccesfull. Read the old 'd'-attribute.
+            // LPE was unsuccessful. Read the old 'd'-attribute.
             if (gchar const * value = repr->attribute("d")) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
                 SPCurve *oldcurve = new SPCurve(pv);
