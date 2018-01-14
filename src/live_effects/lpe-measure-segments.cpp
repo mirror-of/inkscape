@@ -380,9 +380,9 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
     {
         double k = 0;
         if (flip_side) {
-            k = (Geom::distance(start,end)/2.0) + arrow_gap - (anotation_width/2.0);
+            k = (Geom::distance(start,end)/2.0) + (anotation_width/10.0) - (anotation_width/2.0);
         } else {
-            k = (Geom::distance(start,end)/2.0) - arrow_gap - (anotation_width/2.0);
+            k = (Geom::distance(start,end)/2.0) - (anotation_width/10.0) - (anotation_width/2.0);
         }
         if (Geom::distance(start,end) < anotation_width){
             if ((elemref = document->getObjectById(id))) {
