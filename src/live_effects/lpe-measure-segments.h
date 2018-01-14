@@ -79,6 +79,7 @@ private:
     double anotation_width;
     double previous_size;
     double arrow_gap;
+    gchar const* locale_base;
     Geom::Affine star_ellipse_fix;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);

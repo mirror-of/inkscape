@@ -244,6 +244,8 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 lpe->pathvector_before_effect = curve->get_pathvector();
                 // Groups have their doBeforeEffect called elsewhere
                 if (!SP_IS_GROUP(this)) {
+                    //to calculate BBox on shapes and nested LPE
+                    current->setCurve(curve, TRUE);
                     lpe->doBeforeEffect_impl(this, is_clip_or_mask);
                 }
 

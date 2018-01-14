@@ -1,0 +1,21 @@
+--- src/live_effects/lpe-bendpath.cpp
++++ src/live_effects/lpe-bendpath.cpp
+@@ -90,14 +90,14 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
+     if (!is_clip_or_mask) {
+         original_bbox(lpeitem);
+         original_height = boundingbox_Y.max() - boundingbox_Y.min();
+-        if (knot_entity && knot_entity->knot) {
++        if (_knot_entity) {
+             if (hide_knot) {
+                 helper_path.clear();
+-                knot_entity->knot->hide();
++                _knot_entity->knot->hide();
+             } else {
+-                knot_entity->knot->show();
++                _knot_entity->knot->show();
+             }
+-            knot_entity->update_knot();
++            _knot_entity->update_knot();
+         }
+     }
+ }

@@ -138,6 +138,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
     star_ellipse_fix = Geom::identity();
+    locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     //message.param_set_min_height(95);
 }
 
@@ -279,9 +280,9 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     fontlister->fill_css(css, Glib::ustring(fontbutton_str));
     g_free(fontbutton_str);
     std::stringstream font_size;
-    font_size.imbue(std::locale::classic());
+    setlocale (LC_NUMERIC, "C");
     font_size <<  fontsize << "pt";
-
+    setlocale (LC_NUMERIC, locale_base);
     gchar c[32];
     unsigned const rgb24 = coloropacity.get_value() >> 8;
     sprintf(c, "#%06x", rgb24);
@@ -304,7 +305,6 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         Inkscape::GC::release(rtspan);
     }
     length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
-    gchar const* oldlocale = strdup(setlocale(LC_NUMERIC, NULL));
     if (local_locale) {
         setlocale (LC_NUMERIC, "");
     } else {
@@ -312,7 +312,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     }
     gchar length_str[64];
     g_snprintf(length_str, 64, "%.*f", (int)precision, length);
-    setlocale (LC_NUMERIC, oldlocale);
+    setlocale (LC_NUMERIC, locale_base);
     gchar * format_str = format.param_getSVGValue();
     Glib::ustring label_value(format_str);
     g_free(format_str);
@@ -448,9 +448,10 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
         line->setAttribute("inkscape:label", "dinhelpline");
     }
     std::stringstream stroke_w;
-    stroke_w.imbue(std::locale::classic());
+    setlocale (LC_NUMERIC, "C");
     double stroke_width = Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
     stroke_w <<  stroke_width;
+    setlocale (LC_NUMERIC, locale_base);
     style = style + Glib::ustring("stroke-width:" + stroke_w.str());
     gchar c[32];
     unsigned const rgb24 = coloropacity.get_value() >> 8;
@@ -782,10 +783,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     arrow_gap = 8 * Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
                     SPCSSAttr *css = sp_repr_css_attr_new();
 
-                    gchar const* oldlocale = setlocale(LC_NUMERIC, NULL);
                     setlocale (LC_NUMERIC, "C");
                     double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
-                    setlocale (LC_NUMERIC, oldlocale);
+                    setlocale (LC_NUMERIC, locale_base);
                     if (width_line > -0.0001) {
                          arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
                     }
