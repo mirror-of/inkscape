@@ -217,56 +217,68 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
             if (!lpeobj) {
                 /** \todo Investigate the cause of this.
                  * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
-                 */
+                */
                 g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
                 return false;
             }
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if (!lpe) {
-                /** \todo Investigate the cause of this.
-                 * Not sure, but I think this can happen when an unknown effect type is specified...
-                 */
-                g_warning("SPLPEItem::performPathEffect - lpeobj with invalid lpe in the stack!");
-                return false;
+            performOnePathEffect(curve, current, lpe, is_clip_or_mask);
+        }
+    }
+    return true;
+}
+
+/**
+ * returns true when LPE was successful.
+ */
+bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape::LivePathEffect::Effect *lpe, bool is_clip_or_mask) {
+
+    if (!curve) {
+        return false;
+    }
+    if (!lpe) {
+        /** \todo Investigate the cause of this.
+         * Not sure, but I think this can happen when an unknown effect type is specified...
+         */
+        g_warning("SPLPEItem::performPathEffect - lpeobj with invalid lpe in the stack!");
+        return false;
+    }
+    if (lpe->isVisible()) {
+
+        if (lpe->acceptsNumClicks() > 0 && !lpe->isReady()) {
+            // if the effect expects mouse input before being applied and the input is not finished
+            // yet, we don't alter the path
+            return false;
+        }
+        if (is_clip_or_mask && !lpe->apply_to_clippath_and_mask) {
+            continue;
+        }
+
+        lpe->setCurrentShape(current);
+        lpe->pathvector_before_effect = curve->get_pathvector();
+        // Groups have their doBeforeEffect called elsewhere
+        if (!SP_IS_GROUP(this)) {
+            //to calculate BBox on shapes and nested LPE
+            current->setCurveInsync(curve, TRUE);
+            lpe->doBeforeEffect_impl(this, is_clip_or_mask);
+        }
+
+        try {
+            lpe->doEffect(curve);
+        }
+
+        catch (std::exception & e) {
+            g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());
+            if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->messageStack()) {
+                SP_ACTIVE_DESKTOP->messageStack()->flash( Inkscape::WARNING_MESSAGE,
+                                _("An exception occurred during execution of the Path Effect.") );
             }
-            if (lpe->isVisible()) {
+            return false;
+        }
 
-                if (lpe->acceptsNumClicks() > 0 && !lpe->isReady()) {
-                    // if the effect expects mouse input before being applied and the input is not finished
-                    // yet, we don't alter the path
-                    return false;
-                }
-                if (is_clip_or_mask && !lpe->apply_to_clippath_and_mask) {
-                    continue;
-                }
-
-                lpe->setCurrentShape(current);
-                lpe->pathvector_before_effect = curve->get_pathvector();
-                // Groups have their doBeforeEffect called elsewhere
-                if (!SP_IS_GROUP(this)) {
-                    //to calculate BBox on shapes and nested LPE
-                    current->setCurve(curve, TRUE);
-                    lpe->doBeforeEffect_impl(this, is_clip_or_mask);
-                }
-
-                try {
-                    lpe->doEffect(curve);
-                }
-
-                catch (std::exception & e) {
-                    g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());
-                    if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->messageStack()) {
-                        SP_ACTIVE_DESKTOP->messageStack()->flash( Inkscape::WARNING_MESSAGE,
-                                        _("An exception occurred during execution of the Path Effect.") );
-                    }
-                    return false;
-                }
-
-                lpe->pathvector_after_effect = curve->get_pathvector();
-                if (!SP_IS_GROUP(this)) {
-                    lpe->doAfterEffect(this);
-                }
-             }
+        lpe->pathvector_after_effect = curve->get_pathvector();
+        if (!SP_IS_GROUP(this)) {
+            lpe->doAfterEffect(this);
         }
     }
     return true;
@@ -687,33 +699,33 @@ bool SPLPEItem::isFirstLPE(SPLPEItem const* compare) const
 }
 
 void
-SPLPEItem::applyToClipPath(SPItem* to)
+SPLPEItem::applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
 {
     SPClipPath *clip_path = to->clip_ref->getObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;
-            applyToClipPathOrMask(SP_ITEM(clip_data), to);
+            applyToClipPathOrMask(SP_ITEM(clip_data), to, lpe);
         }
     }
 }
 
 void
-SPLPEItem::applyToMask(SPItem* to)
+SPLPEItem::applyToMask(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
 {
     SPMask *mask = to->mask_ref->getObject();
     if(mask) {
         std::vector<SPObject*> mask_list = mask->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
             SPObject * mask_data = *iter;
-            applyToClipPathOrMask(SP_ITEM(mask_data), to);
+            applyToClipPathOrMask(SP_ITEM(mask_data), to, lpe);
         }
     }
 }
 
 void
-SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to)
+SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
 {
     SPGroup*   group = dynamic_cast<SPGroup  *>(clip_mask);
     SPShape*   shape = dynamic_cast<SPShape  *>(clip_mask);
@@ -722,22 +734,26 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to)
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *subitem = *iter;
-            applyToClipPathOrMask(subitem, to);
+            applyToClipPathOrMask(subitem, to, lpe);
         }
     } else if (shape) {
         SPCurve* c = NULL;
         SPPath* path  = dynamic_cast<SPPath*>(clip_mask);
-        if (tolpe->isFirstLPE(this)) {
-            c = shape->getCurveBeforeLPE(true);
-        } else {
+//        if (tolpe->isFirstLPE(this)) {
+//            c = shape->getCurveBeforeLPE(true);
+//        } else {
             c = shape->getCurve();
-        }
+       // }
         if (c) {
             bool success = false;
             try {
                 if(SP_IS_GROUP(this)){
                     c->transform(i2anc_affine(SP_GROUP(to), SP_GROUP(this)));
-                    success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
+                    if (lpe) {
+                        success = this->performOnePathEffect(c, SP_SHAPE(clip_mask), lpe, true);
+                    } else {
+                        success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
+                    }
                     c->transform(i2anc_affine(SP_GROUP(to), SP_GROUP(this)).inverse());
                 } else {
                     success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);

@@ -71,7 +71,7 @@ public:
     virtual void update_patheffect(bool write);
 
     bool performPathEffect(SPCurve *curve, SPShape *current, bool is_clip_or_mask = false);
-
+    bool performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape::LivePathEffect::Effect *lpe, bool is_clip_or_mask);
     bool pathEffectsEnabled() const;
     bool hasPathEffect() const;
     bool hasPathEffectOfType(int const type, bool is_ready = true) const;
@@ -93,9 +93,9 @@ public:
     void removeAllPathEffects(bool keep_paths);
     void addPathEffect(std::string value, bool reset);
     void addPathEffect(LivePathEffectObject * new_lpeobj);
-    void applyToMask(SPItem* to);
-    void applyToClipPath(SPItem* to);
-    void applyToClipPathOrMask(SPItem * clip_mask, SPItem* to);
+    void applyToMask(SPItem* to, Inkscape::LivePathEffect::Effect *lpe = NULL);
+    void applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe = NULL);
+    void applyToClipPathOrMask(SPItem * clip_mask, SPItem* to, Inkscape::LivePathEffect::Effect *lpe = NULL);
     bool forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users = 1);
 
     void editNextParamOncanvas(SPDesktop *dt);

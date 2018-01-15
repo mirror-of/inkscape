@@ -56,7 +56,7 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write);
+static void sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePathEffect::Effect *lpe, bool write);
 
 SPGroup::SPGroup() : SPLPEItem(),
     _expanded(false),
@@ -917,16 +917,7 @@ void SPGroup::update_patheffect(bool write) {
 
             if (lpeobj && lpeobj->get_lpe()) {
                 lpeobj->get_lpe()->doBeforeEffect_impl(this, false);
-            }
-        }
-
-        sp_group_perform_patheffect(this, this, write);
-        
-        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
-        {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
-
-            if (lpeobj && lpeobj->get_lpe()) {
+                sp_group_perform_patheffect(this, this,lpeobj->get_lpe(), write);
                 lpeobj->get_lpe()->doAfterEffect(this);
             }
         }
@@ -934,26 +925,26 @@ void SPGroup::update_patheffect(bool write) {
 }
 
 static void
-sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
+sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePathEffect::Effect *lpe, bool write)
 {
     SPItem* clipmaskto = dynamic_cast<SPItem *>(group);
     if (clipmaskto) {
-        top_group->applyToClipPath(clipmaskto);
-        top_group->applyToMask(clipmaskto);
+        top_group->applyToClipPath(clipmaskto, lpe);
+        top_group->applyToMask(clipmaskto, lpe);
     }
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
         SPGroup *sub_group = dynamic_cast<SPGroup *>(sub_item);
         if (sub_group) {
-            sp_group_perform_patheffect(sub_group, top_group, write);
+            sp_group_perform_patheffect(sub_group, top_group, lpe, write);
         } else {
             SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);
             SPPath*  sub_path  = dynamic_cast<SPPath  *>(sub_item);
             clipmaskto         = dynamic_cast<SPItem  *>(sub_item);
             if (clipmaskto) {
-                top_group->applyToClipPath(clipmaskto);
-                top_group->applyToMask(clipmaskto);
+                top_group->applyToClipPath(clipmaskto, lpe);
+                top_group->applyToMask(clipmaskto, lpe);
             }
             if (sub_shape) {
                 SPCurve * c = NULL;
@@ -976,11 +967,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                         }
                     }
                 }
-                if (sub_shape->isFirstLPE(top_group)) {
-                    c = sub_shape->getCurveBeforeLPE();
-                } else {
-                    c = sub_shape->getCurve();
-                }
+                c = sub_shape->getCurve();
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {
@@ -989,11 +976,6 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                     c->transform(i2anc_affine(sub_item, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
-                        if (!sub_path) {
-                            sub_shape->setCurveInsync( sub_shape->getCurveBeforeLPE(), TRUE);
-                            sub_shape->setCurve(c, TRUE);
-                            sub_shape->setCurveInsync( c, TRUE);
-                        }
                         if (write) {
                             gchar *str = sp_svg_write_path(c->get_pathvector());
                             repr->setAttribute("d", str);
@@ -1001,6 +983,8 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                             g_message("sp_group_perform_patheffect writes 'd' attribute");
 #endif
                             g_free(str);
+                        } else {
+                            sub_shape->setCurveInsync( c, TRUE);
                         }
                         c->unref();
                     } else {
