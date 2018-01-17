@@ -87,18 +87,16 @@ void
 LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     // get the item bounding box
-    if (!is_clip_or_mask) {
-        original_bbox(lpeitem);
-        original_height = boundingbox_Y.max() - boundingbox_Y.min();
-        if (_knot_entity) {
-            if (hide_knot) {
-                helper_path.clear();
-                _knot_entity->knot->hide();
-            } else {
-                _knot_entity->knot->show();
-            }
-            _knot_entity->update_knot();
+    original_bbox(lpeitem, false, true);
+    original_height = boundingbox_Y.max() - boundingbox_Y.min();
+    if (_knot_entity) {
+        if (hide_knot) {
+            helper_path.clear();
+            _knot_entity->knot->hide();
+        } else {
+            _knot_entity->knot->show();
         }
+        _knot_entity->update_knot();
     }
 }
 
@@ -155,7 +153,7 @@ LPEBendPath::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 
-    original_bbox(SP_LPE_ITEM(item));
+    original_bbox(SP_LPE_ITEM(item), false, true);
 
     Geom::Point start(boundingbox_X.min(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
     Geom::Point end(boundingbox_X.max(), (boundingbox_Y.max()+boundingbox_Y.min())/2);

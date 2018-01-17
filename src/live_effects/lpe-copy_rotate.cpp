@@ -348,7 +348,7 @@ void
 LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
@@ -375,7 +375,7 @@ void
 LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     if (copies_to_360 && num_copies > 2) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
@@ -711,7 +711,7 @@ void
 LPECopyRotate::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
-    original_bbox(SP_LPE_ITEM(item));
+    original_bbox(SP_LPE_ITEM(item), false, true);
 }
 
 void

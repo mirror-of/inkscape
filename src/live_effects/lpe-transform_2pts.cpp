@@ -87,7 +87,7 @@ void
 LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     point_a = Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
@@ -118,7 +118,7 @@ void
 LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     point_a = Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
 

@@ -929,11 +929,6 @@ void SPGroup::update_patheffect(bool write) {
 static void
 sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePathEffect::Effect *lpe, bool write)
 {
-    SPItem* clipmaskto = dynamic_cast<SPItem *>(group);
-    if (clipmaskto) {
-        top_group->applyToClipPath(clipmaskto, lpe);
-        top_group->applyToMask(clipmaskto, lpe);
-    }
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
@@ -1002,6 +997,11 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                 }
             }
         }
+    }
+    SPItem* clipmaskto = dynamic_cast<SPItem *>(group);
+    if (clipmaskto) {
+        top_group->applyToClipPath(clipmaskto, lpe);
+        top_group->applyToMask(clipmaskto, lpe);
     }
 }
 

@@ -372,7 +372,6 @@ Effect::createAndApply(EffectType type, SPDocument *doc, SPItem *item)
 
 Effect::Effect(LivePathEffectObject *lpeobject)
     : apply_to_clippath_and_mask(false),
-      is_clip_or_mask(false),
       _provides_knotholder_entities(false),
       oncanvasedit_it(0),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
@@ -545,10 +544,9 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
     doOnApply(lpeitem);
 }
 
-void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem, bool clip_or_mask)
+void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    is_clip_or_mask = clip_or_mask;
     doBeforeEffect(lpeitem);
     update_helperpath();
 }

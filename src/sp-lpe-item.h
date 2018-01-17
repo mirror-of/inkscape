@@ -76,7 +76,6 @@ public:
     bool hasPathEffect() const;
     bool hasPathEffectOfType(int const type, bool is_ready = true) const;
     bool hasPathEffectRecursive() const;
-    bool isFirstLPE(SPLPEItem const* compare) const;
     Inkscape::LivePathEffect::Effect* getPathEffectOfType(int type);
     Inkscape::LivePathEffect::Effect const* getPathEffectOfType(int type) const;
     bool hasBrokenPathEffect() const;

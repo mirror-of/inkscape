@@ -465,7 +465,7 @@ LPEPerspectiveEnvelope::horizontal(PointParam &param_one, PointParam &param_two,
 void
 LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     Geom::Line vert(Geom::Point(boundingbox_X.middle(),boundingbox_Y.max()), Geom::Point(boundingbox_X.middle(), boundingbox_Y.min()));
     Geom::Line horiz(Geom::Point(boundingbox_X.min(),boundingbox_Y.middle()), Geom::Point(boundingbox_X.max(), boundingbox_Y.middle()));
     if(vertical_mirror) {
@@ -506,7 +506,7 @@ void
 LPEPerspectiveEnvelope::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
-    original_bbox(SP_LPE_ITEM(item));
+    original_bbox(SP_LPE_ITEM(item), false, true);
     setDefaults();
     resetGrid();
 }

@@ -116,7 +116,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
 
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     //center_point->param_set_liveupdate(false);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
@@ -343,7 +343,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
 
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
 
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
