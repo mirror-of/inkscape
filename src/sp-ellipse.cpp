@@ -484,6 +484,7 @@ void SPGenericEllipse::set_shape(bool force)
         }
     }
     this->setCurveInsync(curve, TRUE);
+    this->resetClipPathAndMaskLPE();
     this->setCurveBeforeLPE(curve);
     if (hasPathEffect() && pathEffectsEnabled()) {
         SPCurve *c_lpe = curve->copy();

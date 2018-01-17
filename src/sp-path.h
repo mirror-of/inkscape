@@ -37,7 +37,7 @@ public:
     // still in lowercase because the names should be clearer on whether curve, curve->copy or curve-ref is returned.
     void     set_original_curve (SPCurve *curve, unsigned int owner, bool write);
     SPCurve* get_original_curve () const;
-    SPCurve* get_curve_for_edit () const;
+    SPCurve* get_curve_for_edit (bool force = false) const;
     const SPCurve* get_curve_reference() const;
 
 public: // should be made protected

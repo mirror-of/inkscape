@@ -92,6 +92,7 @@ public:
     void removeAllPathEffects(bool keep_paths);
     void addPathEffect(std::string value, bool reset);
     void addPathEffect(LivePathEffectObject * new_lpeobj);
+    void resetClipPathAndMaskLPE();
     void applyToMask(SPItem* to, Inkscape::LivePathEffect::Effect *lpe = NULL);
     void applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe = NULL);
     void applyToClipPathOrMask(SPItem * clip_mask, SPItem* to, Inkscape::LivePathEffect::Effect *lpe = NULL);

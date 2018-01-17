@@ -684,6 +684,49 @@ bool SPLPEItem::hasPathEffectRecursive() const
 }
 
 void
+SPLPEItem::resetClipPathAndMaskLPE()
+{
+    SPClipPath *clip_path = this->clip_ref->getObject();
+    if(clip_path) {
+        std::vector<SPObject*> clip_path_list = clip_path->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+            SPGroup*   group = dynamic_cast<SPGroup  *>(*iter);
+            SPShape*   shape = dynamic_cast<SPShape  *>(*iter);
+            if (group) {
+                std::vector<SPItem*> item_list = sp_item_group_item_list(group);
+                for ( std::vector<SPItem*>::const_iterator iter2=item_list.begin();iter2!=item_list.end();++iter2) {
+                    SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter2);
+                    if (subitem) {
+                        subitem->resetClipPathAndMaskLPE();
+                    }
+                }
+            } else if (shape) {
+                shape->setCurveInsync( shape->getCurveBeforeLPE(true), TRUE);
+            }
+        }
+    }
+    SPMask *mask = this->mask_ref->getObject();
+    if(mask) {
+        std::vector<SPObject*> mask_list = mask->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+            SPGroup*   group = dynamic_cast<SPGroup  *>(*iter);
+            SPShape*   shape = dynamic_cast<SPShape  *>(*iter);
+            if (group) {
+                std::vector<SPItem*> item_list = sp_item_group_item_list(group);
+                for ( std::vector<SPItem*>::const_iterator iter2=item_list.begin();iter2!=item_list.end();++iter2) {
+                    SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter2);
+                    if (subitem) {
+                        subitem->resetClipPathAndMaskLPE();
+                    }
+                }
+            } else if (shape) {
+                shape->setCurveInsync( shape->getCurveBeforeLPE(true), TRUE);
+            }
+        }
+    }
+}
+
+void
 SPLPEItem::applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
 {
     SPClipPath *clip_path = to->clip_ref->getObject();

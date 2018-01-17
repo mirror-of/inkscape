@@ -334,15 +334,16 @@ void SPPath::update_patheffect(bool write) {
 g_message("sp_path_update_patheffect");
 #endif
 
-    if (_curve_before_lpe) {
-        SPCurve *curve = _curve_before_lpe->copy();
-        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
-         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    SPCurve *curve = get_curve_for_edit(true);
+    /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    this->setCurveInsync(curve, TRUE);
+    this->resetClipPathAndMaskLPE();
+    if (hasPathEffect()) {
+        bool success = this->performPathEffect(curve, SP_SHAPE(this));
         this->setCurveInsync(curve, TRUE);
 
-        bool success = this->performPathEffect(curve, SP_SHAPE(this));
-
-        if (success && write && hasPathEffect()) {
+        if (success && write) {
             // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
 #ifdef PATH_VERBOSE
 g_message("sp_path_update_patheffect writes 'd' attribute");
@@ -368,10 +369,9 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
                 }
             }
         }
-
-        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        curve->unref();
-        }
+    }
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    curve->unref();
 //    } else if(_curve_before_lpe) {
 //        SPCurve *curve = _curve_before_lpe->copy();
 //        this->setCurveInsync(curve, TRUE);
@@ -437,9 +437,9 @@ SPCurve * SPPath::get_original_curve () const
  * Return duplicate of edittable curve which is _curve_before_lpe if it exists or
  * shape->curve if not.
  */
-SPCurve* SPPath::get_curve_for_edit () const
+SPCurve* SPPath::get_curve_for_edit(bool force) const
 {
-    if (_curve_before_lpe && hasPathEffectRecursive()) {
+    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
         return get_original_curve();
     } else {
         return getCurve();
