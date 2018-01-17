@@ -222,7 +222,9 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 return false;
             }
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            performOnePathEffect(curve, current, lpe, is_clip_or_mask);
+            if(!performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
+                return false;
+            }
         }
     }
     return true;
@@ -232,10 +234,6 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
  * returns true when LPE was successful.
  */
 bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape::LivePathEffect::Effect *lpe, bool is_clip_or_mask) {
-
-    if (!curve) {
-        return false;
-    }
     if (!lpe) {
         /** \todo Investigate the cause of this.
          * Not sure, but I think this can happen when an unknown effect type is specified...
@@ -244,41 +242,38 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
         return false;
     }
     if (lpe->isVisible()) {
-
         if (lpe->acceptsNumClicks() > 0 && !lpe->isReady()) {
             // if the effect expects mouse input before being applied and the input is not finished
             // yet, we don't alter the path
             return false;
         }
-        if (is_clip_or_mask && !lpe->apply_to_clippath_and_mask) {
-            continue;
-        }
-
-        lpe->setCurrentShape(current);
-        lpe->pathvector_before_effect = curve->get_pathvector();
-        // Groups have their doBeforeEffect called elsewhere
-        if (!SP_IS_GROUP(this)) {
-            //to calculate BBox on shapes and nested LPE
-            current->setCurveInsync(curve, TRUE);
-            lpe->doBeforeEffect_impl(this, is_clip_or_mask);
-        }
-
-        try {
-            lpe->doEffect(curve);
-        }
-
-        catch (std::exception & e) {
-            g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());
-            if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->messageStack()) {
-                SP_ACTIVE_DESKTOP->messageStack()->flash( Inkscape::WARNING_MESSAGE,
-                                _("An exception occurred during execution of the Path Effect.") );
+        if (!(is_clip_or_mask && !lpe->apply_to_clippath_and_mask)) {
+            lpe->setCurrentShape(current);
+            lpe->pathvector_before_effect = curve->get_pathvector();
+            // Groups have their doBeforeEffect called elsewhere
+            if (!SP_IS_GROUP(this)) {
+                //to calculate BBox on shapes and nested LPE
+                current->setCurveInsync(curve, TRUE);
+                lpe->doBeforeEffect_impl(this, is_clip_or_mask);
             }
-            return false;
-        }
 
-        lpe->pathvector_after_effect = curve->get_pathvector();
-        if (!SP_IS_GROUP(this)) {
-            lpe->doAfterEffect(this);
+            try {
+                lpe->doEffect(curve);
+            }
+
+            catch (std::exception & e) {
+                g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());
+                if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->messageStack()) {
+                    SP_ACTIVE_DESKTOP->messageStack()->flash( Inkscape::WARNING_MESSAGE,
+                                    _("An exception occurred during execution of the Path Effect.") );
+                }
+                return false;
+            }
+
+            lpe->pathvector_after_effect = curve->get_pathvector();
+            if (!SP_IS_GROUP(this)) {
+                lpe->doAfterEffect(this);
+            }
         }
     }
     return true;

@@ -71,7 +71,7 @@ public:
     virtual void update_patheffect(bool write);
 
     bool performPathEffect(SPCurve *curve, SPShape *current, bool is_clip_or_mask = false);
-    bool performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape::LivePathEffect::Effect *lpe, bool is_clip_or_mask);
+    bool performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape::LivePathEffect::Effect *lpe, bool is_clip_or_mask = false);
     bool pathEffectsEnabled() const;
     bool hasPathEffect() const;
     bool hasPathEffectOfType(int const type, bool is_ready = true) const;

@@ -914,11 +914,13 @@ void SPGroup::update_patheffect(bool write) {
         for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
-
-            if (lpeobj && lpeobj->get_lpe()) {
-                lpeobj->get_lpe()->doBeforeEffect_impl(this, false);
-                sp_group_perform_patheffect(this, this,lpeobj->get_lpe(), write);
-                lpeobj->get_lpe()->doAfterEffect(this);
+            if (lpeobj) {
+                Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+                if (lpe) {
+                    lpeobj->get_lpe()->doBeforeEffect_impl(this, false);
+                    sp_group_perform_patheffect(this, this, lpe, write);
+                    lpeobj->get_lpe()->doAfterEffect(this);
+                }
             }
         }
     }
@@ -972,10 +974,11 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                 // only run LPEs when the shape has a curve defined
                 if (c) {
                     c->transform(i2anc_affine(sub_item, top_group));
-                    success = top_group->performPathEffect(c, sub_shape);
+                    success = top_group->performOnePathEffect(c, sub_shape, lpe);
                     c->transform(i2anc_affine(sub_item, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
+                        sub_shape->setCurveInsync( c, TRUE);
                         if (write) {
                             gchar *str = sp_svg_write_path(c->get_pathvector());
                             repr->setAttribute("d", str);
@@ -983,8 +986,6 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                             g_message("sp_group_perform_patheffect writes 'd' attribute");
 #endif
                             g_free(str);
-                        } else {
-                            sub_shape->setCurveInsync( c, TRUE);
                         }
                         c->unref();
                     } else {
