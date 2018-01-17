@@ -254,8 +254,8 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             // Groups have their doBeforeEffect called elsewhere
             if (!SP_IS_GROUP(this)) {
                 //to calculate BBox on shapes and nested LPE
-                current->setCurveInsync(curve);
-                lpe->doBeforeEffect_impl(this, is_clip_or_mask);
+                current->setCurveInsync(curve, true);
+                lpe->doBeforeEffect_impl(this);
             }
 
             try {

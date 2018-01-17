@@ -917,7 +917,7 @@ void SPGroup::update_patheffect(bool write) {
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                 if (lpe) {
-                    lpeobj->get_lpe()->doBeforeEffect_impl(this, false);
+                    lpeobj->get_lpe()->doBeforeEffect_impl(this);
                     sp_group_perform_patheffect(this, this, lpe, write);
                     lpeobj->get_lpe()->doAfterEffect(this);
                 }
@@ -938,7 +938,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
         } else {
             SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);
             SPPath*  sub_path  = dynamic_cast<SPPath  *>(sub_item);
-            clipmaskto         = dynamic_cast<SPItem  *>(sub_item);
+            SPItem* clipmaskto = dynamic_cast<SPItem  *>(sub_item);
             if (clipmaskto) {
                 top_group->applyToClipPath(clipmaskto, lpe);
                 top_group->applyToMask(clipmaskto, lpe);
