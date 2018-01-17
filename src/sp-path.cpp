@@ -334,7 +334,7 @@ void SPPath::update_patheffect(bool write) {
 g_message("sp_path_update_patheffect");
 #endif
 
-    if (_curve_before_lpe && hasPathEffectRecursive()) {
+    if (_curve_before_lpe) {
         SPCurve *curve = _curve_before_lpe->copy();
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
