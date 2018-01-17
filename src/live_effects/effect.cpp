@@ -859,11 +859,11 @@ Effect::defaultParamSet()
     expander->set_use_markup(true);
     expander->add(*vbox_expander);
     expander->set_expanded(defaultsopen);
-    expander->set_size_request(-1, 90);
+    //expander->set_size_request(-1, 90);
     expander->property_expanded().signal_changed().connect(sigc::bind<0>(sigc::mem_fun(*this, &Effect::onDefaultsExpanderChanged), expander ));
     if (has_params) {
         Gtk::Widget *vboxwidg = dynamic_cast<Gtk::Widget *>(expander);
-        vboxwidg->set_margin_bottom(10);
+        vboxwidg->set_margin_bottom(5);
         vboxwidg->set_margin_top(5);
         return vboxwidg;
     } else {
