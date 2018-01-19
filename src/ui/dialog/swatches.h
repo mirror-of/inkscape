@@ -10,11 +10,7 @@
 #ifndef SEEN_DIALOGS_SWATCHES_H
 #define SEEN_DIALOGS_SWATCHES_H
 
-#include <gtkmm/eventbox.h>
-#include <gtkmm/image.h>
-
 #include "ui/widget/panel.h"
-#include "enums.h"
 
 namespace Gtk {
     class Menu;
@@ -25,7 +21,6 @@ namespace Gtk {
 namespace Inkscape {
 namespace UI {
 
-class PreviewFillable;
 class PreviewHolder;
 
 namespace Dialogs {
@@ -36,6 +31,11 @@ class DocTrack;
 
 /**
  * A panel that displays paint swatches.
+ *
+ * It comes in two flavors, depending on the prefsPath argument passed to
+ * the construtor: the default "/dialog/swatches" is just a regular panel;
+ * the "/embedded/swatches/" is the horizontal color swatches at the bottom
+ * of window.
  */
 class SwatchesPanel : public Inkscape::UI::Widget::Panel
 {
@@ -44,8 +44,6 @@ public:
     virtual ~SwatchesPanel();
 
     static SwatchesPanel& getInstance();
-
-    virtual void setOrientation(SPAnchorType how);
 
     virtual void setDesktop( SPDesktop* desktop );
     virtual SPDesktop* getDesktop() {return _currentDesktop;}
@@ -65,8 +63,7 @@ private:
     SwatchesPanel(SwatchesPanel const &); // no copy
     SwatchesPanel &operator=(SwatchesPanel const &); // no assign
 
-    void init();
-    void restorePanelPrefs();
+    void _build_menu();
 
     static void _trackDocument( SwatchesPanel *panel, SPDocument *document );
     static void handleDefsModified(SPDocument *document);
@@ -78,27 +75,13 @@ private:
     SPDesktop*  _currentDesktop;
     SPDocument* _currentDocument;
 
+    void _regItem(Gtk::MenuItem* item, int id);
 
-    void _setTargetFillable(PreviewFillable *target);
-    void _regItem(Gtk::MenuItem* item, int group, int id);
+    void _updateSettings(int settings, int value);
 
-    void _handleAction(int set_id, int item_id);
-    void _bounceCall(int i, int j);
-
-    void _popper(GdkEventButton *btn);
-
-    SPAnchorType _anchor;
     void _wrapToggled(Gtk::CheckMenuItem *toggler);
 
-    Gtk::HBox        _boxy;
-    Gtk::Image       _temp_arrow;
-    Gtk::HBox        _top_bar;
-    Gtk::VBox        _right_bar;
-    Gtk::EventBox    _menu_popper;
     Gtk::Menu       *_menu;
-    std::vector<Gtk::Widget *> _non_horizontal;
-    std::vector<Gtk::Widget *> _non_vertical;
-    PreviewFillable *_fillable;
 
     sigc::connection _documentConnection;
     sigc::connection _selChanged;
