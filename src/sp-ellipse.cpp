@@ -410,7 +410,7 @@ const char *SPGenericEllipse::displayName() const
 }
 
 // Create path for rendering shape on screen
-void SPGenericEllipse::set_shape(bool force)
+void SPGenericEllipse::set_shape()
 {
     // std::cout << "SPGenericEllipse::set_shape: Entrance" << std::endl;
     if (hasBrokenPathEffect()) {
@@ -474,33 +474,20 @@ void SPGenericEllipse::set_shape(bool force)
     // Stretching / moving the calculated shape to fit the actual dimensions.
     Geom::Affine aff = Geom::Scale(rx.computed, ry.computed) * Geom::Translate(cx.computed, cy.computed);
     curve->transform(aff);
-
-    /* Reset the shape's curve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    if(this->getCurveBeforeLPE()) {
-        if(!force && this->getCurveBeforeLPE()->get_pathvector() == curve->get_pathvector()) {
+    
+    //If original shape dont change on a LPE item return here to allow LPE
+    if (this->getCurveBeforeLPE()) {
+        if(this->getCurveBeforeLPE()->get_pathvector() == curve->get_pathvector()) {
             curve->unref();
             return;
         }
     }
-    this->setCurveInsync(curve, TRUE);
-    this->resetClipPathAndMaskLPE();
+    /* Reset the shape's curve to the "original_curve"
+     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     this->setCurveBeforeLPE(curve);
-    if (hasPathEffect() && pathEffectsEnabled()) {
-        SPCurve *c_lpe = curve->copy();
-        bool success = this->performPathEffect(c_lpe, SP_SHAPE(this));
-
-        if (success) {
-            this->setCurveInsync(c_lpe, TRUE);
-            this->applyToClipPath(this);
-            this->applyToMask(this);
-        }
-
-        c_lpe->unref();
-    }
-
+    this->setCurveInsync(curve, TRUE);
     curve->unref();
-    // std::cout << "SPGenericEllipse::set_shape: Exit" << std::endl;
+    return;
 }
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
@@ -637,21 +624,39 @@ void SPGenericEllipse::modified(guint flags)
 
 void SPGenericEllipse::update_patheffect(bool write)
 {
-    this->set_shape(true);
-
-    if (write) {
-        Inkscape::XML::Node *repr = this->getRepr();
-
-        if (this->_curve != NULL && type == SP_GENERIC_ELLIPSE_ARC) {
-            gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
-            repr->setAttribute("d", str);
-            g_free(str);
-        } else {
-            repr->setAttribute("d", NULL);
+    Inkscape::XML::Node *repr = this->getRepr();
+    if (SPCurve *c_lpe = this->getCurveForEdit(true)) {
+        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        this->setCurveInsync(c_lpe, TRUE);
+        this->resetClipPathAndMaskLPE();
+        bool success = false;
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
+            if (success) {
+                this->setCurveInsync(c_lpe, TRUE);
+                this->applyToClipPath(this);
+                this->applyToMask(this);
+            } else {
+                // LPE was unsuccessful. Read the old 'd'-attribute.
+                if (gchar const * value = repr->attribute("d")) {
+                    this->setCurve(this->getCurveBeforeLPE(), TRUE);
+                }
+            }
         }
-    }
 
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        if (write && success) {
+            if (c_lpe != NULL) {
+                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
+                repr->setAttribute("d", str);
+                g_free(str);
+            } else {
+                repr->setAttribute("d", NULL);
+            }
+        }
+        c_lpe->unref();
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 void SPGenericEllipse::normalize()
@@ -700,7 +705,7 @@ void SPGenericEllipse::position_set(gdouble x, gdouble y, gdouble rx, gdouble ry
     this->rx = rx;
     this->ry = ry;
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Inkscape::Preferences * prefs = Inkscape::Preferences::get();
 
     // those pref values are in degrees, while we want radians
     if (prefs->getDouble("/tools/shapes/arc/start", 0.0) != 0) {

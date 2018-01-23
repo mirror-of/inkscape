@@ -1146,6 +1146,9 @@ void PathManipulator::_createControlPointsFromGeometry()
             ++i;
         }
     }
+    if (pathv.empty()) {
+        return;
+    }
     _spcurve->set_pathvector(pathv);
 
     pathv *= (_edit_transform * _i2d_transform);
@@ -1352,6 +1355,19 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
     builder.flush();
     Geom::PathVector pathv = builder.peek() * (_edit_transform * _i2d_transform).inverse();
+    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
+        // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
+        // When we erase an element, the next one slides into position,
+        // so we do not increment the iterator even though it is theoretically invalidated.
+        if (i->empty()) {
+            i = pathv.erase(i);
+        } else {
+            ++i;
+        }
+    }
+    if (pathv.empty()) {
+        return;
+    }
     _spcurve->set_pathvector(pathv);
     if (alert_LPE) {
         /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
@@ -1651,8 +1667,14 @@ Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
     Geom::Coord dist = HUGE_VAL;
 
     Geom::Affine to_desktop = _edit_transform * _i2d_transform;
+//    //To avoid crash releasing clips and mask on LPE with node tool and path parameter
+//    Geom::PathVector pv;
+//    try {
+//        pv = _spcurve->get_pathvector();
+//    } catch ( const std::bad_alloc& e ) {
+//        return dist;
+//    }
     Geom::PathVector pv = _spcurve->get_pathvector();
-
     boost::optional<Geom::PathVectorTime> pvp =
         pv.nearestTime(_desktop->w2d(evp) * to_desktop.inverse());
     if (!pvp) return dist;

@@ -328,50 +328,43 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
 
 void SPPath::update_patheffect(bool write) {
-    Inkscape::XML::Node *repr = this->getRepr();
-
 #ifdef PATH_VERBOSE
 g_message("sp_path_update_patheffect");
 #endif
+    Inkscape::XML::Node *repr = this->getRepr();
+    if (SPCurve *c_lpe = this->getCurveForEdit(true)) {
+        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        this->setCurveInsync(c_lpe, TRUE);
+        this->resetClipPathAndMaskLPE();
+        bool success = false;
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
+            if (success) {
+                this->setCurveInsync(c_lpe, TRUE);
+                this->applyToClipPath(this);
+                this->applyToMask(this);
+            } else {
+                // LPE was unsuccessful. Read the old 'd'-attribute.
+                if (gchar const * value = repr->attribute("d")) {
+                    this->setCurve(this->getCurveBeforeLPE(), TRUE);
+                }
+            }
+        }
 
-    SPCurve *curve = get_curve_for_edit(true);
-    /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    this->setCurveInsync(curve, TRUE);
-    this->resetClipPathAndMaskLPE();
-    if (hasPathEffect()) {
-        bool success = this->performPathEffect(curve, SP_SHAPE(this));
-        this->setCurveInsync(curve, TRUE);
-
-        if (success && write) {
-            // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
-#ifdef PATH_VERBOSE
-g_message("sp_path_update_patheffect writes 'd' attribute");
-#endif
-            if (curve) {
-                gchar *str = sp_svg_write_path(curve->get_pathvector());
+        if (write && success) {
+            if (c_lpe != NULL) {
+                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
                 repr->setAttribute("d", str);
                 g_free(str);
             } else {
                 repr->setAttribute("d", NULL);
             }
-            this->applyToClipPath(this);
-            this->applyToMask(this);
-        } else if (!success) {
-            // LPE was unsuccessful. Read the old 'd'-attribute.
-            if (gchar const * value = repr->attribute("d")) {
-                Geom::PathVector pv = sp_svg_read_pathv(value);
-                SPCurve *oldcurve = new SPCurve(pv);
-
-                if (oldcurve) {
-                    this->setCurve(oldcurve, TRUE);
-                    oldcurve->unref();
-                }
-            }
         }
+        c_lpe->unref();
+
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    curve->unref();
 //    } else if(_curve_before_lpe) {
 //        SPCurve *curve = _curve_before_lpe->copy();
 //        this->setCurveInsync(curve, TRUE);
@@ -426,7 +419,7 @@ void SPPath::set_original_curve (SPCurve *new_curve, unsigned int owner, bool wr
  */
 SPCurve * SPPath::get_original_curve () const
 {
-    if (_curve_before_lpe) {
+    if (hasPathEffectRecursive() && _curve_before_lpe) {
         return _curve_before_lpe->copy();
     }
 
@@ -440,10 +433,9 @@ SPCurve * SPPath::get_original_curve () const
 SPCurve* SPPath::get_curve_for_edit(bool force) const
 {
     if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
-        return get_original_curve();
-    } else {
-        return getCurve();
+        return _curve_before_lpe->copy();
     }
+    return _curve;
 }
 
 /**
@@ -454,9 +446,8 @@ const SPCurve* SPPath::get_curve_reference () const
 {
     if (_curve_before_lpe && hasPathEffectRecursive()) {
         return _curve_before_lpe;
-    } else {
-        return _curve;
     }
+    return _curve;
 }
 
 /**
@@ -467,9 +458,8 @@ SPCurve* SPPath::get_curve ()
 {
     if (_curve_before_lpe && hasPathEffectRecursive()) {
         return _curve_before_lpe;
-    } else {
-        return _curve;
     }
+    return _curve;
 }
 
 /*

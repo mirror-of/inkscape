@@ -910,6 +910,7 @@ void SPGroup::update_patheffect(bool write) {
         }
     }
 
+    this->resetClipPathAndMaskLPE();
     if (hasPathEffect() && pathEffectsEnabled()) {
         for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {

@@ -416,7 +416,7 @@ void SPShape::modified(unsigned int flags) {
 Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const {
     Geom::OptRect bbox;
 
-    if (!this->_curve) {
+    if (!this->_curve || this->_curve->get_pathvector().empty()) {
     	return bbox;
     }
 
@@ -1025,24 +1025,25 @@ SPCurve * SPShape::getCurve() const
 /**
  * Return duplicate of curve *before* LPE (if any exists) or NULL if there is no curve
  */
-SPCurve * SPShape::getCurveBeforeLPE(bool force) const
+SPCurve * SPShape::getCurveBeforeLPE() const
 {
-    if (hasPathEffectRecursive()) {
-        if (_curve_before_lpe) {
-            return this->_curve_before_lpe->copy();
-        }
-    } else {
-        //We can force for mask and clippath that dont have real path effect
-        if (force && _curve_before_lpe) {
-            return this->_curve_before_lpe->copy();
-        }
-        if (_curve) {
-            return _curve->copy();
-        }
-    }
-
+    if (hasPathEffectRecursive() && _curve_before_lpe) {
+        return _curve_before_lpe->copy();
+    } 
     return NULL;
 }
+
+/**
+ * Return curve for edit
+ */
+SPCurve * SPShape::getCurveForEdit(bool force) const
+{
+    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+        return _curve_before_lpe->copy();
+    }
+    return getCurve();
+}
+
 
 /**
  * Same as sp_shape_set_curve but without updating the display

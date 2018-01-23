@@ -180,10 +180,12 @@ void SPLPEItem::update(SPCtx* ctx, unsigned int flags) {
 }
 
 void SPLPEItem::modified(unsigned int flags) {
-    if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
+    //TODO: finale remove tghe commented code if no regressions
+    /* The SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a
+       transformation.  It's apparently safe comment this. */
+    if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) /*&& (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)*/) {
         sp_lpe_item_update_patheffect(this, true, true);
     }
-
 //    SPItem::onModified(flags);
 }
 
@@ -252,10 +254,10 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
         if (!(is_clip_or_mask && !lpe->apply_to_clippath_and_mask)) { 
             lpe->setCurrentShape(current);
             lpe->pathvector_before_effect = curve->get_pathvector();
+            // To Calculate BBox on shapes and nested LPE
+            current->setCurveInsync(curve, true);
             // Groups have their doBeforeEffect called elsewhere
             if (!SP_IS_GROUP(this)) {
-                //to calculate BBox on shapes and nested LPE
-                current->setCurveInsync(curve, true);
                 lpe->doBeforeEffect_impl(this);
             }
 
@@ -296,6 +298,7 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
     g_message("sp_lpe_item_update_patheffect: %p\n", lpeitem);
 #endif
     g_return_if_fail (lpeitem != NULL);
+    g_return_if_fail (SP_IS_OBJECT (lpeitem));
     g_return_if_fail (SP_IS_LPE_ITEM (lpeitem));
 
     if (!lpeitem->pathEffectsEnabled())
@@ -701,7 +704,7 @@ SPLPEItem::resetClipPathAndMaskLPE()
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveBeforeLPE(true), TRUE);
+                shape->setCurveInsync( shape->getCurveForEdit(true), TRUE);
             }
         }
     }
@@ -720,7 +723,7 @@ SPLPEItem::resetClipPathAndMaskLPE()
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveBeforeLPE(true), TRUE);
+                shape->setCurveInsync( shape->getCurveForEdit(true), TRUE);
             }
         }
     }
@@ -729,6 +732,9 @@ SPLPEItem::resetClipPathAndMaskLPE()
 void
 SPLPEItem::applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
 {
+    if (lpe && !lpe->apply_to_clippath_and_mask) {
+        return;
+    }
     SPClipPath *clip_path = to->clip_ref->getObject();
     if(clip_path) {
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
@@ -742,6 +748,9 @@ SPLPEItem::applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
 void
 SPLPEItem::applyToMask(SPItem* to, Inkscape::LivePathEffect::Effect *lpe)
 {
+    if (lpe && !lpe->apply_to_clippath_and_mask) {
+        return;
+    }
     SPMask *mask = to->mask_ref->getObject();
     if(mask) {
         std::vector<SPObject*> mask_list = mask->childList(true);

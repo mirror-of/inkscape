@@ -171,7 +171,7 @@ LPEBendPath::resetDefaults(SPItem const* item)
 void
 LPEBendPath::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    if (sp_lpe_item) {
+    if (sp_lpe_item) { //Check is object
         sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
     }
 }

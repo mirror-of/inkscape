@@ -44,10 +44,10 @@ GroupBBoxEffect::getItemClipMaskBounds(SPLPEItem* item, Geom::Affine transform) 
     	std::vector<SPItem*> item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPLPEItem *subitem = dynamic_cast<SPLPEItem *>(*iter);
-            bbox.unionWith(getItemClipMaskBounds(subitem, transform));
+            bbox.unionWith(getItemClipMaskBounds(subitem, group->transform * transform));
         }
     } else if (shape) {
-        bbox.unionWith(item->geometricBounds(transform));
+        bbox.unionWith(item->geometricBounds(shape->transform * transform));
     }
     return bbox;
 }
@@ -64,7 +64,7 @@ void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, boo
     }
     
     Geom::OptRect bbox;
-    if (clipmask) {
+    if (clipmask && 1>2) {
         SPLPEItem * item = const_cast<SPLPEItem *>(lpeitem);
         bbox = getItemClipMaskBounds(item, transform);
     } else {
