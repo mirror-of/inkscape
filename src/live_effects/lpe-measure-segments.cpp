@@ -594,7 +594,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 
         SPPath *path = dynamic_cast<SPPath *>(shape);
         if (path) {
-            c = path->get_original_curve();
+            c = path->get_curve_for_edit();
         } else {
             c = shape->getCurve();
         }

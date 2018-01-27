@@ -1500,7 +1500,7 @@ void PathManipulator::_setGeometry()
         }
     } else {
         if (empty()) return;
-        if (SPCurve * original = _path->get_original_curve()){
+        if (SPCurve * original = _path->get_curve_for_edit()){
             if(!_spcurve->is_equal(original)) {
                 _path->set_original_curve(_spcurve, false, false);
                 delete original;

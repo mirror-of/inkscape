@@ -447,8 +447,8 @@ void SPStar::set_shape(bool force) {
 
     /* Reset the shape'scurve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    if(this->getCurveBeforeLPE()) {
-        if(!force && this->getCurveBeforeLPE()->get_pathvector() == c->get_pathvector()) {
+    if(this->getCurveForEdit()) {
+        if(!force && this->getCurveForEdit()->get_pathvector() == c->get_pathvector()) {
             c->unref();
             return;
         }

@@ -120,7 +120,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
             if ( shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
                 SPCurve *c = NULL;
                 if (method == CLM_BSPLINESPIRO) {
-                    c = shape_origin->getCurveBeforeLPE();
+                    c = shape_origin->getCurveForEdit();
                     SPLPEItem * lpe_item = SP_LPE_ITEM(origin);
                     if (lpe_item) {
                         PathEffectList lpelist = lpe_item->getEffectList();
@@ -138,7 +138,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
                         }
                     }
                 } else if(method == CLM_ORIGINALD) {
-                    c = shape_origin->getCurveBeforeLPE();
+                    c = shape_origin->getCurveForEdit();
                 } else {
                     c = shape_origin->getCurve();
                 }
@@ -336,7 +336,7 @@ LPECloneOriginal::doEffect (SPCurve * curve)
 //    if (linkeditem.linksToItem()) {
 //        SPShape * shape = getCurrentShape();
 //        if(shape){
-//            curve->set_pathvector(shape->getCurveBeforeLPE()->get_pathvector());
+//            curve->set_pathvector(shape->getCurveForEdit()->get_pathvector());
 //        }
 //    }
 }

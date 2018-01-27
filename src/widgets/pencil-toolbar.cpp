@@ -292,7 +292,7 @@ static void sp_flatten_spiro_bspline(GtkWidget * /*widget*/, GObject *obj)
                     {
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
-                            SPCurve * c = shape->getCurveBeforeLPE();
+                            SPCurve * c = shape->getCurveForEdit();
                             lpe->doEffect(c);
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){
@@ -333,7 +333,7 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
                     if (dynamic_cast<Inkscape::LivePathEffect::LPESimplify *>(lpe)) {
                         SPShape * shape = dynamic_cast<SPShape *>(lpeitem);
                         if(shape){
-                            SPCurve * c = shape->getCurveBeforeLPE();
+                            SPCurve * c = shape->getCurveForEdit();
                             lpe->doEffect(c);
                             lpeitem->setCurrentPathEffect(*i);
                             if (lpelist.size() > 1){

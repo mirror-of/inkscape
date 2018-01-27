@@ -2560,7 +2560,7 @@ SPCurve* curve_for_item_before_LPE(SPItem *item)
     
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(item)) {
-        curve = SP_SHAPE(item)->getCurveBeforeLPE();
+        curve = SP_SHAPE(item)->getCurveForEdit();
     }
     else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))
     {

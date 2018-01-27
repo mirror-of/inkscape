@@ -347,7 +347,7 @@ g_message("sp_path_update_patheffect");
             } else {
                 // LPE was unsuccessful. Read the old 'd'-attribute.
                 if (gchar const * value = repr->attribute("d")) {
-                    this->setCurve(this->getCurveBeforeLPE(), TRUE);
+                    this->setCurve(this->getCurveForEdit(), TRUE);
                 }
             }
         }

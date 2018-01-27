@@ -476,8 +476,8 @@ void SPGenericEllipse::set_shape()
     curve->transform(aff);
     
     //If original shape dont change on a LPE item return here to allow LPE
-    if (this->getCurveBeforeLPE()) {
-        if(this->getCurveBeforeLPE()->get_pathvector() == curve->get_pathvector()) {
+    if (this->getCurveForEdit()) {
+        if(this->getCurveForEdit()->get_pathvector() == curve->get_pathvector()) {
             curve->unref();
             return;
         }
@@ -640,7 +640,7 @@ void SPGenericEllipse::update_patheffect(bool write)
             } else {
                 // LPE was unsuccessful. Read the old 'd'-attribute.
                 if (gchar const * value = repr->attribute("d")) {
-                    this->setCurve(this->getCurveBeforeLPE(), TRUE);
+                    this->setCurve(this->getCurveForEdit(), TRUE);
                 }
             }
         }
