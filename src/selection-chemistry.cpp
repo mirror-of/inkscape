@@ -4145,9 +4145,14 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
         for (auto& child: obj->children) {
             // Collect all clipped paths and masks within a single group
             Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
-            if(copy->attribute("inkscape:original-d") && copy->attribute("inkscape:path-effect"))
-            {
+            if (copy->attribute("inkscape:original-d") && copy->attribute("inkscape:path-effect")) {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
+            } else if (copy->attribute("inkscape:original-d")) {
+                copy->setAttribute("d", copy->attribute("inkscape:original-d"));
+                copy->setAttribute("inkscape:original-d", NULL);
+            } else if (!copy->attribute("inkscape:path-effect") && !SP_IS_PATH(&child)) {
+                copy->setAttribute("d", NULL);
+                copy->setAttribute("inkscape:original-d", NULL);
             }
             items_to_move.push_back(copy);
         }
@@ -4194,7 +4199,15 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
 
     // rebuild selection
     addList(items_to_select);
-
+    NodeTool *nt = NULL;
+    std::cout << "aaaaaaaaaaaaaaaaaaa" << std::endl;
+//    SPDesktop * desktop = desktop();
+//    if (desktop && tools_isactive(desktop, TOOLS_NODES)) {
+//        nt = static_cast<NodeTool*>(desktop->event_context);
+//        if (nt) {
+//            nt->selection_changed(this);
+//        }
+//    }
     if (!skip_undo) {
         if (apply_clip_path) {
             DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));

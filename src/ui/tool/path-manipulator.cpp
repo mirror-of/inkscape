@@ -1667,13 +1667,6 @@ Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
     Geom::Coord dist = HUGE_VAL;
 
     Geom::Affine to_desktop = _edit_transform * _i2d_transform;
-//    //To avoid crash releasing clips and mask on LPE with node tool and path parameter
-//    Geom::PathVector pv;
-//    try {
-//        pv = _spcurve->get_pathvector();
-//    } catch ( const std::bad_alloc& e ) {
-//        return dist;
-//    }
     Geom::PathVector pv = _spcurve->get_pathvector();
     boost::optional<Geom::PathVectorTime> pvp =
         pv.nearestTime(_desktop->w2d(evp) * to_desktop.inverse());

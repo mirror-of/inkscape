@@ -594,26 +594,7 @@ TEST_F(ObjectSetTest, ZOrder) {
     EXPECT_TRUE(sp_object_compare_position_bool(r1.get(),r2.get()));
 }
 
-TEST_F(ObjectSetTest, Combine) {
-    set->add(r1.get());
-    set->add(r2.get());
-    set->combine();
-    r1.release();
-    r2.release();
-    EXPECT_EQ(1, set->size());
-    EXPECT_EQ(5, _doc->getRoot()->children.size());
-    set->breakApart();
-    EXPECT_EQ(2, set->size());
-    EXPECT_EQ(6, _doc->getRoot()->children.size());
-    set->deleteItems();
-    set->set(r3.get());
-    set->toCurves();
-    r3.release();
-    auto x = set->singleItem();
-    EXPECT_NE(nullptr,dynamic_cast<SPPath*>(x));
-    EXPECT_EQ(nullptr,dynamic_cast<SPRect*>(x));
-    set->deleteItems();
-}
+
 
 TEST_F(ObjectSetTest, Moves) {
     set->add(r1.get());
