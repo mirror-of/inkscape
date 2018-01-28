@@ -4199,15 +4199,6 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
 
     // rebuild selection
     addList(items_to_select);
-    NodeTool *nt = NULL;
-    std::cout << "aaaaaaaaaaaaaaaaaaa" << std::endl;
-//    SPDesktop * desktop = desktop();
-//    if (desktop && tools_isactive(desktop, TOOLS_NODES)) {
-//        nt = static_cast<NodeTool*>(desktop->event_context);
-//        if (nt) {
-//            nt->selection_changed(this);
-//        }
-//    }
     if (!skip_undo) {
         if (apply_clip_path) {
             DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
