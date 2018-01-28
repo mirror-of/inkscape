@@ -612,7 +612,7 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
         Geom::Affine i2d ( (this->clickeditem)->i2dt_affine() );
         Geom::Affine d2i = i2d.inverse();
         SPPath *path = SP_PATH(this->clickeditem);
-        SPCurve *curve = path->get_curve();
+        SPCurve *curve = path->get_curve(true);
         if (this->clickedhandle == this->endpt_handle[0]) {
             Geom::Point o = this->endpt_handle[1]->pos;
             curve->stretch_endpoints(p * d2i, o * d2i);

@@ -1028,7 +1028,7 @@ SPCurve * SPShape::getCurve(bool reference) const
 /**
  * Return duplicate of curve *before* LPE (if any exists) or NULL if there is no curve
  */
-SPCurve * SPShape::getCurveBeforeLPE(bool reference.bool force) const
+SPCurve * SPShape::getCurveBeforeLPE(bool reference, bool force) const
 {
     if (hasPathEffectRecursive() && _curve_before_lpe) {
         if (reference) {

@@ -1505,7 +1505,7 @@ void PathManipulator::_setGeometry()
                 _path->set_curve_before_LPE(_spcurve, false, false);
                 delete original;
             }
-        } else if(!_spcurve->is_equal(_path->get_curve())) {
+        } else if(!_spcurve->is_equal(_path->get_curve(true))) {
             _path->setCurve(_spcurve, false);
         }
     }

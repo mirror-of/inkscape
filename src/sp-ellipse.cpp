@@ -476,11 +476,14 @@ void SPGenericEllipse::set_shape()
     curve->transform(aff);
     
     //If original shape dont change on a LPE item return here to allow LPE
-    if (this->getCurveForEdit()) {
-        if(this->getCurveForEdit()->get_pathvector() == curve->get_pathvector()) {
+    SPCurve * check = this->getCurveForEdit(false, true);
+    if (check) {
+        if(check->get_pathvector() == curve->get_pathvector()) {
+            check->unref();
             curve->unref();
             return;
         }
+        check->unref();
     }
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/

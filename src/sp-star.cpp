@@ -224,21 +224,34 @@ void SPStar::update(SPCtx *ctx, guint flags) {
 }
 
 void SPStar::update_patheffect(bool write) {
-    this->set_shape(true);
-
-    if (write) {
-        Inkscape::XML::Node *repr = this->getRepr();
-
-        if ( this->_curve != NULL ) {
-            gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
-            repr->setAttribute("d", str);
-            g_free(str);
-        } else {
-            repr->setAttribute("d", NULL);
+    Inkscape::XML::Node *repr = this->getRepr();
+    if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
+        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        this->setCurveInsync(c_lpe, TRUE);
+        this->resetClipPathAndMaskLPE();
+        bool success = false;
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
+            if (success) {
+                this->setCurveInsync(c_lpe, TRUE);
+                this->applyToClipPath(this);
+                this->applyToMask(this);
+            }
         }
-    }
 
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        if (write && success) {
+            if (c_lpe != NULL) {
+                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
+                repr->setAttribute("d", str);
+                g_free(str);
+            } else {
+                repr->setAttribute("d", NULL);
+            }
+        }
+        c_lpe->unref();
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 const char* SPStar::displayName() const {
@@ -364,7 +377,7 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 #define NEXT false
 #define PREV true
 
-void SPStar::set_shape(bool force) {
+void SPStar::set_shape() {
     // perhaps we should convert all our shapes into LPEs without source path
     // and with knotholders for parameters, then this situation will be handled automatically
     // by disabling the entire stack (including the shape LPE)
@@ -445,32 +458,22 @@ void SPStar::set_shape(bool force) {
 
     c->closepath();
 
-    /* Reset the shape'scurve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    if(this->getCurveForEdit()) {
-        if(!force && this->getCurveForEdit()->get_pathvector() == c->get_pathvector()) {
+    //If original shape dont change on a LPE item return here to allow LPE
+    SPCurve * check = this->getCurveForEdit(false, true);
+    if (check) {
+        if(check->get_pathvector() == c->get_pathvector()) {
+            check->unref();
             c->unref();
             return;
         }
+        check->unref();
     }
-    this->setCurveInsync( c, TRUE);
-    this->setCurveBeforeLPE( c );
-
-    if (hasPathEffect() && pathEffectsEnabled()) {
-        SPCurve *c_lpe = c->copy();
-        bool success = this->performPathEffect(c_lpe, SP_SHAPE(this));
-
-        if (success) {
-            this->setCurveInsync( c_lpe, TRUE);
-            this->applyToClipPath(this);
-            this->applyToMask(this);
-        } 
-
-        c_lpe->unref();
-        
-    }
-
+    /* Reset the shape's curve to the "original_curve"
+     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    this->setCurveBeforeLPE(c);
+    this->setCurveInsync(c, TRUE);
     c->unref();
+    return;
 }
 
 void

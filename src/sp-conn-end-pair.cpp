@@ -322,7 +322,7 @@ bool SPConnEndPair::reroutePathFromLibavoid()
         return false;
     }
 
-    SPCurve *curve = _path->get_curve();
+    SPCurve *curve = _path->get_curve(true);
 
     recreateCurve(curve, _connRef, _connCurvature);
 

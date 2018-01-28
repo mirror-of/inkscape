@@ -197,21 +197,34 @@ void SPSpiral::update(SPCtx *ctx, guint flags) {
 }
 
 void SPSpiral::update_patheffect(bool write) {
-    this->set_shape(true);
-
-    if (write) {
-        Inkscape::XML::Node *repr = this->getRepr();
-
-        if ( this->_curve != NULL ) {
-            gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
-            repr->setAttribute("d", str);
-            g_free(str);
-        } else {
-            repr->setAttribute("d", NULL);
+    Inkscape::XML::Node *repr = this->getRepr();
+    if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
+        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        this->setCurveInsync(c_lpe, TRUE);
+        this->resetClipPathAndMaskLPE();
+        bool success = false;
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
+            if (success) {
+                this->setCurveInsync(c_lpe, TRUE);
+                this->applyToClipPath(this);
+                this->applyToMask(this);
+            }
         }
-    }
 
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        if (write && success) {
+            if (c_lpe != NULL) {
+                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
+                repr->setAttribute("d", str);
+                g_free(str);
+            } else {
+                repr->setAttribute("d", NULL);
+            }
+        }
+        c_lpe->unref();
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 const char* SPSpiral::displayName() const {
@@ -310,7 +323,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
     g_assert (is_unit_vector (hat2));
 }
 
-void SPSpiral::set_shape(bool force) {
+void SPSpiral::set_shape() {
     if (hasBrokenPathEffect()) {
         g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
 
@@ -363,31 +376,22 @@ void SPSpiral::set_shape(bool force) {
         this->fitAndDraw(c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
     }
 
-    /* Reset the shape'scurve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    if(this->getCurveForEdit()) {
-        if(!force && this->getCurveForEdit()->get_pathvector() == c->get_pathvector()) {
+    //If original shape dont change on a LPE item return here to allow LPE
+    SPCurve * check = this->getCurveForEdit(false, true);
+    if (check) {
+        if(check->get_pathvector() == c->get_pathvector()) {
+            check->unref();
             c->unref();
             return;
         }
+        check->unref();
     }
-    setCurveInsync( c, TRUE);
-    setCurveBeforeLPE( c );
-
-    if (hasPathEffect() && pathEffectsEnabled()) {
-        SPCurve *c_lpe = c->copy();
-        bool success = this->performPathEffect(c_lpe, SP_SHAPE(this));
-
-        if (success) {
-            this->setCurveInsync( c_lpe, TRUE);
-            this->applyToClipPath(this);
-            this->applyToMask(this);
-        }
-
-        c_lpe->unref();
-    }
-
+    /* Reset the shape's curve to the "original_curve"
+     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    this->setCurveBeforeLPE(c);
+    this->setCurveInsync(c, TRUE);
     c->unref();
+    return;
 }
 
 /**
