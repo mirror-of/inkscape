@@ -704,7 +704,7 @@ SPLPEItem::resetClipPathAndMaskLPE()
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveForEdit(true), TRUE);
+                shape->setCurveInsync( shape->getCurveForEdit(false, true), TRUE);
             }
         }
     }
@@ -723,7 +723,7 @@ SPLPEItem::resetClipPathAndMaskLPE()
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveForEdit(true), TRUE);
+                shape->setCurveInsync( shape->getCurveForEdit(false, true), TRUE);
             }
         }
     }

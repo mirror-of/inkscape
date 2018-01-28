@@ -39,9 +39,9 @@ public:
 	SPShape();
 	virtual ~SPShape();
 
-    SPCurve * getCurve () const;
-    SPCurve * getCurveBeforeLPE () const;
-    SPCurve * getCurveForEdit (bool force = false) const;
+    SPCurve * getCurve (bool reference = false) const;
+    SPCurve * getCurveBeforeLPE (bool reference = false, bool force = false) const;
+    SPCurve * getCurveForEdit (bool reference = false, bool force = false) const;
     void setCurve (SPCurve *curve, unsigned int owner);
     void setCurveInsync (SPCurve *curve, unsigned int owner);
     void setCurveBeforeLPE (SPCurve *curve);

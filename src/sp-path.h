@@ -35,13 +35,12 @@ public:
     int nodesInPath() const;
 
     // still in lowercase because the names should be clearer on whether curve, curve->copy or curve-ref is returned.
-    void     set_original_curve (SPCurve *curve, unsigned int owner, bool write);
-    SPCurve* get_original_curve () const;
-    SPCurve* get_curve_for_edit (bool force = false) const;
-    const SPCurve* get_curve_reference() const;
+    void     set_curve_before_LPE (SPCurve *curve, unsigned int owner, bool write);
+    SPCurve* get_curve_before_LPE (bool reference = false, bool force = false) const;
+    SPCurve* get_curve_for_edit (bool reference = false, bool force = false) const;
 
 public: // should be made protected
-    SPCurve* get_curve();
+    SPCurve* get_curve(bool reference = false);
     friend class SPConnEndPair;
 
 public:

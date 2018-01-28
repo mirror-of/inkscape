@@ -192,11 +192,11 @@ void SPPath::set(unsigned int key, const gchar* value) {
                 SPCurve *curve = new SPCurve(pv);
 
                 if (curve) {
-                    this->set_original_curve(curve, TRUE, true);
+                    this->set_curve_before_LPE(curve, TRUE, true);
                     curve->unref();
                 }
             } else {
-                this->set_original_curve(NULL, TRUE, true);
+                this->set_curve_before_LPE(NULL, TRUE, true);
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -332,7 +332,7 @@ void SPPath::update_patheffect(bool write) {
 g_message("sp_path_update_patheffect");
 #endif
     Inkscape::XML::Node *repr = this->getRepr();
-    if (SPCurve *c_lpe = this->getCurveForEdit(true)) {
+    if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
         this->setCurveInsync(c_lpe, TRUE);
@@ -344,11 +344,6 @@ g_message("sp_path_update_patheffect");
                 this->setCurveInsync(c_lpe, TRUE);
                 this->applyToClipPath(this);
                 this->applyToMask(this);
-            } else {
-                // LPE was unsuccessful. Read the old 'd'-attribute.
-                if (gchar const * value = repr->attribute("d")) {
-                    this->setCurve(this->getCurveForEdit(), TRUE);
-                }
             }
         }
 
@@ -396,7 +391,7 @@ g_message("sp_path_update_patheffect");
  * and also triggers a request to update the display. Does not write
  * result to XML when write=false.
  */
-void SPPath::set_original_curve (SPCurve *new_curve, unsigned int owner, bool write)
+void SPPath::set_curve_before_LPE (SPCurve *new_curve, unsigned int owner, bool write)
 {
     if (_curve_before_lpe) {
         _curve_before_lpe = _curve_before_lpe->unref();
@@ -415,11 +410,29 @@ void SPPath::set_original_curve (SPCurve *new_curve, unsigned int owner, bool wr
 }
 
 /**
+ * Return duplicate of _curve (if any exists) or NULL if there is no curve
+ */
+SPCurve* SPPath::get_curve (bool reference)
+{
+    if (_curve) {
+        if (reference) {
+            return _curve;
+        }
+        return _curve->copy();
+    }
+    return NULL;
+}
+
+
+/**
  * Return duplicate of _curve_before_lpe (if any exists) or NULL if there is no curve
  */
-SPCurve * SPPath::get_original_curve () const
+SPCurve * SPPath::get_curve_before_LPE (bool reference, bool force) const
 {
-    if (hasPathEffectRecursive() && _curve_before_lpe) {
+    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+        if (reference) {
+            return _curve_before_lpe;
+        }
         return _curve_before_lpe->copy();
     }
 
@@ -430,36 +443,21 @@ SPCurve * SPPath::get_original_curve () const
  * Return duplicate of edittable curve which is _curve_before_lpe if it exists or
  * shape->curve if not.
  */
-SPCurve* SPPath::get_curve_for_edit(bool force) const
+SPCurve* SPPath::get_curve_for_edit(bool reference, bool force) const
 {
     if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+        if (reference) {
+            return _curve_before_lpe;
+        }
         return _curve_before_lpe->copy();
     }
-    return _curve;
-}
-
-/**
- * Returns \c _curve_before_lpe if it is not NULL and a valid LPE is applied or
- * \c curve if not.
- */
-const SPCurve* SPPath::get_curve_reference () const
-{
-    if (_curve_before_lpe && hasPathEffectRecursive()) {
-        return _curve_before_lpe;
+    if (_curve) {
+        if (reference) {
+            return _curve;
+        }
+        return _curve->copy();
     }
-    return _curve;
-}
-
-/**
- * Returns \c _curve_before_lpe if it is not NULL and a valid LPE is applied or \c curve if not.
- * \todo should only be available to class friends!
- */
-SPCurve* SPPath::get_curve ()
-{
-    if (_curve_before_lpe && hasPathEffectRecursive()) {
-        return _curve_before_lpe;
-    }
-    return _curve;
+    return NULL;
 }
 
 /*

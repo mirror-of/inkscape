@@ -643,7 +643,7 @@ ObjectSet::pathReverse()
 
         did = true;
 
-        SPCurve *rcurve = path->get_curve_reference()->create_reverse();
+        SPCurve *rcurve = path->get_curve_for_edit(true)->create_reverse();
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
         if ( path->hasPathEffectRecursive() ) {

@@ -1013,9 +1013,12 @@ SPShape::setCurveBeforeLPE (SPCurve *new_curve)
 /**
  * Return duplicate of curve (if any exists) or NULL if there is no curve
  */
-SPCurve * SPShape::getCurve() const
+SPCurve * SPShape::getCurve(bool reference) const
 {
     if (_curve) {
+        if(reference) {
+            return _curve;
+        }
         return _curve->copy();
     }
 
@@ -1025,9 +1028,12 @@ SPCurve * SPShape::getCurve() const
 /**
  * Return duplicate of curve *before* LPE (if any exists) or NULL if there is no curve
  */
-SPCurve * SPShape::getCurveBeforeLPE() const
+SPCurve * SPShape::getCurveBeforeLPE(bool reference.bool force) const
 {
     if (hasPathEffectRecursive() && _curve_before_lpe) {
+        if (reference) {
+            return _curve_before_lpe;
+        }
         return _curve_before_lpe->copy();
     } 
     return NULL;
@@ -1036,12 +1042,15 @@ SPCurve * SPShape::getCurveBeforeLPE() const
 /**
  * Return curve for edit
  */
-SPCurve * SPShape::getCurveForEdit(bool force) const
+SPCurve * SPShape::getCurveForEdit(bool reference, bool force) const
 {
     if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+        if (reference) {
+            return _curve_before_lpe;
+        }
         return _curve_before_lpe->copy();
     }
-    return getCurve();
+    return getCurve(reference);
 }
 
 

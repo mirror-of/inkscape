@@ -120,7 +120,7 @@ LPEPerpBisector::doOnApply (SPLPEItem const*/*lpeitem*/)
     SPCurve *c = new SPCurve();
     c->moveto(A);
     c->lineto(B);
-    // TODO: Why doesn't sp_path_set_original_curve(SP_PATH(lpeitem), c, TRUE, true) work?
+    // TODO: Why doesn't sp_path_set_curve_before_LPE(SP_PATH(lpeitem), c, TRUE, true) work?
     SP_PATH(lpeitem)->original_curve = c->ref();
     c->unref();
     **/

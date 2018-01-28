@@ -625,7 +625,7 @@ void SPGenericEllipse::modified(guint flags)
 void SPGenericEllipse::update_patheffect(bool write)
 {
     Inkscape::XML::Node *repr = this->getRepr();
-    if (SPCurve *c_lpe = this->getCurveForEdit(true)) {
+    if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
         this->setCurveInsync(c_lpe, TRUE);
@@ -637,11 +637,6 @@ void SPGenericEllipse::update_patheffect(bool write)
                 this->setCurveInsync(c_lpe, TRUE);
                 this->applyToClipPath(this);
                 this->applyToMask(this);
-            } else {
-                // LPE was unsuccessful. Read the old 'd'-attribute.
-                if (gchar const * value = repr->attribute("d")) {
-                    this->setCurve(this->getCurveForEdit(), TRUE);
-                }
             }
         }
 
