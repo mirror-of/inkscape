@@ -18,41 +18,40 @@
 #include <config.h>
 #endif
 
+#include <glibmm/i18n.h>
 #include <gtkmm.h>
 
-#include "ui/widget/color-preview.h"
-#include "toolbox.h"
 #include "mesh-toolbar.h"
 
-#include "verbs.h"
-
-#include "widgets/spinbutton-events.h"
-#include "widgets/gradient-image.h"
-#include "style.h"
-
-#include "inkscape.h"
+#include "desktop-style.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "desktop.h"
-
-#include <glibmm/i18n.h>
-
-#include "ui/tools/gradient-tool.h"
-#include "ui/tools/mesh-tool.h"
-#include "ui/widget/ink-select-one-action.h"
-#include "gradient-drag.h"
-#include "sp-mesh-gradient.h"
 #include "gradient-chemistry.h"
-#include "ui/icon-names.h"
-
-#include "widgets/ege-adjustment-action.h"
+#include "gradient-drag.h"
 #include "ink-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
+#include "inkscape.h"
+#include "toolbox.h"
+#include "verbs.h"
 
-#include "sp-stop.h"
+#include "object/sp-defs.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-stop.h"
+#include "style.h"
+
 #include "svg/css-ostringstream.h"
-#include "desktop-style.h"
+
+#include "ui/icon-names.h"
+#include "ui/tools/gradient-tool.h"
+#include "ui/tools/mesh-tool.h"
+#include "ui/widget/color-preview.h"
+#include "ui/widget/ink-select-one-action.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/gradient-image.h"
+#include "widgets/spinbutton-events.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -396,7 +395,7 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         InkSelectOneAction* act =
             InkSelectOneAction::create( "MeshNewTypeAction", // Name
                                         _("New:"),           // Label
-                                        _(""),               // Tooltip
+                                        "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
@@ -433,8 +432,8 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
         InkSelectOneAction* act =
             InkSelectOneAction::create( "MeshNewFillStrokeAction", // Name
-                                        _(""),               // Label
-                                        _(""),               // Tooltip
+                                        "",                  // Label
+                                        "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
@@ -546,13 +545,13 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
         row = *(store->append());
         row[columns.col_label    ] = C_("Type", "Coons");
-        row[columns.col_tooltip  ] = _("");
+        row[columns.col_tooltip  ] = "";
         row[columns.col_icon     ] = "NotUsed";
         row[columns.col_sensitive] = true;
 
         row = *(store->append());
         row[columns.col_label    ] = _("Bicubic");
-        row[columns.col_tooltip  ] = _("");
+        row[columns.col_tooltip  ] = "";
         row[columns.col_icon     ] = "NotUsed";
         row[columns.col_sensitive] = true;
 

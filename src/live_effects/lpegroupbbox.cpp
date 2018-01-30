@@ -11,6 +11,8 @@
 #include "sp-shape.h"
 #include "sp-item-group.h"
 
+#include "object/sp-lpe-item.h"
+
 namespace Inkscape {
 namespace LivePathEffect {
 
