@@ -140,7 +140,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_digits(2);
     star_ellipse_fix = Geom::identity();
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
-    //message.param_set_min_height(95);
+    message.param_set_min_height(85);
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {}
@@ -349,7 +349,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         copy->setAttribute("id", id);
         elemref = elemref_copy;
     }
-    items.push_back(id);
+    items.push_back(g_strdup(id));
     Geom::OptRect bounds = SP_ITEM(elemref)->bounds(SPItem::GEOMETRIC_BBOX);
     if (bounds) {
         anotation_width = bounds->width() * 1.15;
@@ -477,7 +477,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
         elemref->deleteObject();
         copy->setAttribute("id", id);
     }
-    items.push_back(id);
+    items.push_back(g_strdup(id));
 }
 
 void

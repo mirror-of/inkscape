@@ -17,6 +17,7 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/intersection-graph.h>
 #include "live_effects/lpe-copy_rotate.h"
+#include "live_effects/lpeobject.h"
 #include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
@@ -129,8 +130,8 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             if (numcopies_gap > 0 && num_copies != 0) {
                 guint counter = num_copies - 1;
                 while (numcopies_gap > 0) {
-                    const char * id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
-                     if (!id || strlen(id) == 0) {
+                    char * id = g_strdup((Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(this->lpeobj->getId())).c_str());
+                    if (!id || strlen(id) == 0) {
                         return;
                     }
                     SPObject *elemref = NULL;
@@ -139,20 +140,22 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
                     }
                     counter++;
                     numcopies_gap--;
+                    g_free(id);
                 }
             }
             previous_num_copies = num_copies;
         }
         SPObject *elemref = NULL;
-        const char * id = g_strdup(Glib::ustring("rotated-").append("0").append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
         guint counter = 0;
+        char * id = g_strdup((Glib::ustring("rotated-0-").append(this->lpeobj->getId())).c_str());
         while((elemref = document->getObjectById(id))) {
-            id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
+            id = g_strdup((Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(this->lpeobj->getId())).c_str());
             if (SP_ITEM(elemref)->isHidden()) {
-                items.push_back(id);
+                items.push_back(g_strdup(id));
             }
             counter++;
         }
+        g_free(id);
         Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
         for (size_t i = 1; i < num_copies; ++i) {
             Geom::Affine r = Geom::identity();
@@ -200,15 +203,18 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
             cloneD(*obj_it, dest_child, transform, false, reset); 
             index++;
         }
+        return;
     }
     SPShape * shape =  SP_SHAPE(orig);
-    if (shape && !SP_IS_PATH(dest)) {
+    SPPath * path =  SP_PATH(dest);
+    if (shape && !path) {   
         const char * id = dest->getId();
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         dest->getRepr()->setAttribute("d", id);
+        path =  SP_PATH(dest);
     }
-    if (SP_IS_PATH(dest) && shape) {
+    if (path && shape) {
         SPCurve *c = NULL;
         if (root) {
             c = new SPCurve();
@@ -217,10 +223,10 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
             c = shape->getCurve();
         }
         if (c) {
-            SP_PATH(dest)->setCurve(c, TRUE);
+            path->setCurve(c, TRUE);
             c->unref();
         } else {
-            dest->getRepr()->setAttribute("d", NULL);
+            path->getRepr()->setAttribute("d", NULL);
         }
         if (reset) {
             dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
@@ -236,8 +242,8 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
-    items.push_back(elemref_id);
+    char * elemref_id = g_strdup((Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(this->lpeobj->getId())).c_str());
+    items.push_back(g_strdup(elemref_id));
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
     if ((elemref = document->getObjectById(elemref_id))) {

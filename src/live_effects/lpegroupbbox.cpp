@@ -6,10 +6,10 @@
  */
 
 #include "live_effects/lpegroupbbox.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
-#include "sp-shape.h"
-#include "sp-item-group.h"
+#include "object/sp-clippath.h"
+#include "object/sp-mask.h"
+#include "object/sp-shape.h"
+#include "object/sp-item-group.h"
 
 #include "object/sp-lpe-item.h"
 

@@ -42,6 +42,7 @@
 #include "object/sp-text.h"
 
 #include "ui/icon-names.h"
+#include "ui/tools/node-tool.h"
 #include "ui/widget/imagetoggler.h"
 
 namespace Inkscape {
@@ -554,6 +555,16 @@ void LivePathEffectEditor::on_effect_selection_changed()
             if (effect) {
                 lpe_changed = true;
                 showParams(*effect);
+                //To reload knots and helper paths
+                Inkscape::Selection *sel = _getSelection();
+                if ( sel && !sel->isEmpty() ) {
+                    SPItem *item = sel->singleItem();
+                    if (item) {
+                        sel->clear();
+                        sel->add(item);
+                         Inkscape::UI::Tools::sp_update_helperpath();
+                    }
+                }
             }
         }
     }
