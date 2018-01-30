@@ -233,7 +233,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    const char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
+    char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
     items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
@@ -295,6 +295,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         Inkscape::GC::release(copy);
         elemref->deleteObject();
     }
+    g_free(elemref_id);
 }
 
 void

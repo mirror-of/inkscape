@@ -242,7 +242,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
     if (document) {
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
         char * id_origin_char = id_origin.param_getSVGValue();
-        const char * elemref_id = (Glib::ustring("mirror-") + Glib::ustring(id_origin_char)).c_str();
+        char * elemref_id = g_strdup((Glib::ustring("mirror-") + Glib::ustring(id_origin_char)).c_str());
         g_free(id_origin_char);
         items.clear();
         items.push_back(elemref_id);
@@ -305,6 +305,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
             Inkscape::GC::release(copy);
             elemref->deleteObject();
         }
+        g_free(elemref_id);
     }
 }
 
