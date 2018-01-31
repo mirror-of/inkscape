@@ -18,6 +18,8 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
 
 #include <2geom/angle.h>
 #include <2geom/circle.h>
@@ -631,6 +633,21 @@ void SPGenericEllipse::update_patheffect(bool write)
     if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+            {
+                LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                if (lpeobj) {
+                    Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+                    if (lpe) {
+                        if (lpe->skip_reprocess) {
+                            lpe->skip_reprocess--;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
         SPCurve * last = this->getCurve();
         this->setCurveInsync(c_lpe, TRUE);
         this->resetClipPathAndMaskLPE();

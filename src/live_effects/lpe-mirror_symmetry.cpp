@@ -100,8 +100,9 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
     if (root_origin != root) {
         return;
     }
+    std::cout << "kkkkkkkkkk" << std::endl;
+    
     if (split_items && !discard_orig_path) {
-        std::cout << "kkkkkkkkkk" << std::endl;
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
         m = m * sp_lpe_item->transform;
@@ -157,7 +158,7 @@ LPEMirrorSymmetry::newWidget()
 void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-
+    std::cout << "starting" << std::endl;
     using namespace Geom;
     original_bbox(lpeitem, false, true);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
@@ -201,11 +202,14 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         }
     } else if ( mode == MT_FREE) {
         if (are_near(previous_center, (Geom::Point)center_point, 0.01)) {
-            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
+            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
+            this->skip_reprocess++;
         } else {
             Geom::Point trans = center_point - Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
-            start_point.param_setValue(start_point * trans);
-            end_point.param_setValue(end_point * trans);
+            start_point.param_setValue(start_point * trans, true);
+            end_point.param_setValue(end_point * trans, true);
+            this->skip_reprocess++;
+            this->skip_reprocess++;
         }
         std::cout << "lolololo" << std::endl;
     } else if ( mode == MT_V){
@@ -229,8 +233,8 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
         }
     }
-
     previous_center = center_point;
+    std::cout << "ending" << std::endl;
 }
 
 void

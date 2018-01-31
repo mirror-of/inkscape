@@ -900,7 +900,22 @@ void SPGroup::update_patheffect(bool write) {
 #ifdef GROUP_VERBOSE
     g_message("sp_group_update_patheffect: %p\n", lpeitem);
 #endif
-
+    if (hasPathEffect() && pathEffectsEnabled()) {
+        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+        {
+            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            if (lpeobj) {
+                Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+                if (lpe) {
+                    if (lpe->skip_reprocess) {
+                        std::cout << lpe->skip_reprocess << "lpe->skip_reprocess" << std::endl;
+                        lpe->skip_reprocess--;
+                        return;
+                    }
+                }
+            }
+        }
+    }
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
 
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {

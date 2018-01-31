@@ -390,6 +390,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       sp_lpe_item(NULL),
       current_zoom(1),
       upd_params(true),
+      skip_reprocess(0),
       current_shape(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),

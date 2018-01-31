@@ -279,14 +279,14 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             
             if (!SP_IS_GROUP(this)) {
                 // To have processed the shape to doAfterEffect
-                current->setCurveInsync(curve, true);
+                current->setCurveInsync(curve, false);
                 lpe->pathvector_after_effect = curve->get_pathvector();
                 lpe->doAfterEffect(this);
             } else {
                 SPCurve * c = curve->copy();
                 c->transform(i2anc_affine(current, this).inverse());
                 // To have processed the shape to doAfterEffect
-                current->setCurveInsync(c, true);
+                current->setCurveInsync(c, false);
                 c->unref();
             }
         }
