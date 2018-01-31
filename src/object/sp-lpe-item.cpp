@@ -253,7 +253,9 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
         //if is not clip or mask or LPE apply to clip and mask
         if (!(is_clip_or_mask && !lpe->apply_to_clippath_and_mask)) { 
             lpe->setCurrentShape(current);
-            lpe->pathvector_before_effect = curve->get_pathvector();
+            if (!SP_IS_GROUP(this)) {
+                lpe->pathvector_before_effect = curve->get_pathvector();
+            }
             // To Calculate BBox on shapes and nested LPE
             current->setCurveInsync(curve, true);
             // Groups have their doBeforeEffect called elsewhere
@@ -273,10 +275,19 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                 }
                 return false;
             }
-
-            lpe->pathvector_after_effect = curve->get_pathvector();
+            
+            
             if (!SP_IS_GROUP(this)) {
+                // To have processed the shape to doAfterEffect
+                current->setCurveInsync(curve, true);
+                lpe->pathvector_after_effect = curve->get_pathvector();
                 lpe->doAfterEffect(this);
+            } else {
+                SPCurve * c = curve->copy();
+                c->transform(i2anc_affine(current, this).inverse());
+                // To have processed the shape to doAfterEffect
+                current->setCurveInsync(c, true);
+                c->unref();
             }
         }
     }

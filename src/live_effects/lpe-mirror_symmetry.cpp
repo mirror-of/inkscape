@@ -101,6 +101,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
         return;
     }
     if (split_items && !discard_orig_path) {
+        std::cout << "kkkkkkkkkk" << std::endl;
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
         m = m * sp_lpe_item->transform;
@@ -178,7 +179,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     }
     if ( mode == MT_X || mode == MT_Y ) {
         if (!are_near(previous_center, (Geom::Point)center_point, 0.01)) {
-            center_point.param_setValue(Geom::middle_point(point_a, point_b), true);
+            center_point.param_setValue(Geom::middle_point(point_a, point_b));
             end_point.param_setValue(point_b);
             start_point.param_setValue(point_a);
         } else {
@@ -206,6 +207,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             start_point.param_setValue(start_point * trans);
             end_point.param_setValue(end_point * trans);
         }
+        std::cout << "lolololo" << std::endl;
     } else if ( mode == MT_V){
         SPDocument * document = SP_ACTIVE_DOCUMENT;
         if (document) {
@@ -227,6 +229,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
         }
     }
+
     previous_center = center_point;
 }
 
