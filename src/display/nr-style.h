@@ -15,6 +15,7 @@
 
 #include <cairo.h>
 #include <2geom/rect.h>
+#include <omp.h>
 #include "color.h"
 
 class SPPaintServer;
@@ -122,6 +123,7 @@ struct NRStyle {
     float font_size;
 
     int   text_direction;
+    omp_lock_t lock;
 };
 
 #endif

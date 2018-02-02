@@ -31,6 +31,7 @@
 
 //class SPGuideConstraint;
 #include "sp-guide-constraint.h"
+#include <omp.h>
 
 class SPClipPathReference;
 class SPMaskReference;
@@ -401,6 +402,7 @@ public:
     virtual void convert_to_guides() const;
 
     virtual int event(SPEvent *event);
+    omp_lock_t lock;
 };
 
 

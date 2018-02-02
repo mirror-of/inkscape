@@ -215,6 +215,7 @@ DrawingItem::isAncestorOf(DrawingItem *item) const
 void
 DrawingItem::appendChild(DrawingItem *item)
 {
+    lock.lock();
     item->_parent = this;
     assert(item->_child_type == CHILD_ORPHAN);
     item->_child_type = CHILD_NORMAL;
@@ -227,11 +228,13 @@ DrawingItem::appendChild(DrawingItem *item)
     // rely on the appended child being in the default non-updated state.
     // We set propagate to true, because the child might have descendants of its own.
     item->_markForUpdate(STATE_ALL, true);
+    lock.unlock();
 }
 
 void
 DrawingItem::prependChild(DrawingItem *item)
 {
+    lock.lock();
     item->_parent = this;
     assert(item->_child_type == CHILD_ORPHAN);
     item->_child_type = CHILD_NORMAL;
@@ -239,12 +242,16 @@ DrawingItem::prependChild(DrawingItem *item)
     // See appendChild for explanation
     item->_state = STATE_ALL;
     item->_markForUpdate(STATE_ALL, true);
+    lock.unlock();
 }
+
+#include "SharedMutexGuard.h"
 
 /// Delete all regular children of this item (not mask or clip).
 void
 DrawingItem::clearChildren()
 {
+    SharedMutexGuard<> _lock(this->lock);
     if (_children.empty()) return;
 
     _markForRendering();
@@ -340,7 +347,8 @@ DrawingItem::setCached(bool cached, bool persistent)
 {
     static const char *cache_env = getenv("_INKSCAPE_DISABLE_CACHE");
     if (cache_env) return;
-
+    
+    SharedMutexGuard<> myLock(this->lock);
     if (_cached_persistent && !persistent)
         return;
 
@@ -482,6 +490,7 @@ DrawingItem::setStrokePattern(DrawingPattern *pattern)
 void
 DrawingItem::setZOrder(unsigned z)
 {
+    SharedMutexGuard<> _lock(this->lock);
     if (!_parent) return;
 
     ChildrenList::iterator it = _parent->_children.iterator_to(*this);
@@ -524,6 +533,7 @@ DrawingItem::setItemBounds(Geom::OptRect const &bounds)
 void
 DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigned flags, unsigned reset)
 {
+    SharedMutexGuard<> myLock(this->lock);
     bool render_filters = _drawing.renderFilters();
     bool outline = _drawing.outline();
 
@@ -678,6 +688,7 @@ struct MaskLuminanceToAlpha {
 unsigned
 DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
 {
+    SharedMutexGuard<true> myLock(this->lock);  // WARNING: can deadlock when calling recursive, child functions since
     bool outline = _drawing.outline();
     bool render_filters = _drawing.renderFilters();
 
@@ -691,6 +702,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // TODO convert outline rendering to a separate virtual function
     if (outline) {
+        myLock.Unlock();
         _renderOutline(dc, area, flags);
         return RENDER_OK;
     }
@@ -722,7 +734,12 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // render from cache if possible
     if (_cached) {
         if (_cache) {
+            lock.unlock_shared();   // can't call upgrade or else deadlock
+            lock.lock();
             _cache->prepare();
+            lock.unlock();
+            lock.lock_shared();
+
             set_cairo_blend_operator( dc, _mix_blend_mode );
 
             _cache->paintFromCache(dc, carea);
@@ -734,7 +751,13 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             Geom::OptIntRect cl = _drawing.cacheLimit();
             cl.intersectWith(_drawbox);
             if (cl) {
+                // locking not really necessary since it's atomic, just to please ThreadSanitizer
+                // without it, there will be a whole bunch of false positives
+                lock.unlock_shared();   // can't call upgrade or else deadlock
+                lock.lock();
                 _cache = new DrawingCache(*cl, device_scale);
+                lock.unlock();
+                lock.lock_shared();
             }
         }
     } else {
@@ -773,6 +796,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // filters and opacity do not apply when rendering the ancestors of the filtered
     // element
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
+        myLock.Unlock();
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
@@ -824,7 +848,10 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // 3. Render object itself
     ict.pushGroup();
+
+    lock.unlock_shared();
     render_result = _renderItem(ict, *iarea, flags, stop_at);
+    lock.lock_shared();
 
     // 4. Apply filter.
     if (_filter && render_filters) {
@@ -849,7 +876,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         // the internals of the filter need to use cairo_get_group_target()
         // instead of cairo_get_target().
     }
-
+    
     // 5. Render object inside the composited mask + clip
     ict.popGroupToSource();
     ict.setOperator(CAIRO_OPERATOR_IN);
@@ -857,12 +884,20 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // 6. Paint the completed rendering onto the base context (or into cache)
     if (_cached && _cache) {
+        // upgrade lock here because to because creating DrawingContext will mutate _cache (calls createRawContext)
+        lock.unlock_shared();   // can't call upgrade or else deadlock
+        lock.lock();
+        {
         DrawingContext cachect(*_cache);
         cachect.rectangle(*carea);
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);
         cachect.setSource(&intermediate);
         cachect.fill();
         _cache->markClean(*carea);
+        // destructor needs to be called before unlocking
+        }
+        lock.unlock();
+        lock.lock_shared();
     }
     dc.rectangle(*carea);
     dc.setSource(&intermediate);

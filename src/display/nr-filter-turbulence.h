@@ -22,7 +22,7 @@
  */
 
 #include <2geom/point.h>
-
+#include <omp.h>
 #include "display/nr-filter-primitive.h"
 #include "display/nr-filter-slot.h"
 #include "display/nr-filter-units.h"
@@ -76,7 +76,7 @@ private:
 
     double fTileX;
     double fTileY;
-
+    omp_lock_t lock;
 };
 
 } /* namespace Filters */

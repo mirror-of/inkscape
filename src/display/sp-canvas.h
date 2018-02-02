@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <omp.h>
 #include <stdint.h>
 #include <glibmm/ustring.h>
 #include <2geom/affine.h>
@@ -248,6 +249,7 @@ public:
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     bool _is_scrolling;
+    omp_lock_t lock;
 };
 
 bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, Geom::Point const &world);
