@@ -641,8 +641,8 @@ void SPGenericEllipse::update_patheffect(bool write)
                     Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                     if (lpe) {
                         if (lpe->skip_reprocess) {
-                            lpe->skip_reprocess--;
-                            return;
+                            //lpe->skip_reprocess--;
+                            //return;
                         }
                     }
                 }

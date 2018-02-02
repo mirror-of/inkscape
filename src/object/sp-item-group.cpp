@@ -907,9 +907,9 @@ void SPGroup::update_patheffect(bool write) {
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                 if (lpe) {
+                    std::cout << lpe->skip_reprocess << "lpe->skip_reprocessxxxxx" << std::endl;
                     if (lpe->skip_reprocess) {
-                        std::cout << lpe->skip_reprocess << "lpe->skip_reprocess" << std::endl;
-                        lpe->skip_reprocess--;
+                        lpe->skip_reprocess = false;
                         return;
                     }
                 }

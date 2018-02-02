@@ -524,8 +524,7 @@ gchar * OriginalPathArrayParam::param_getSVGValue() const
         }
         os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0") << "," << ((*iter)->visibled ? "1" : "0");
     }
-    gchar * str = g_strdup(os.str().c_str());
-    return str;
+    return g_strdup(os.str().c_str());
 }
 
 gchar * OriginalPathArrayParam::param_getDefaultSVGValue() const

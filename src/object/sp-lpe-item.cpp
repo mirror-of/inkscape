@@ -494,7 +494,7 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
             }
 
             // perform this once when the effect is applied
-            lpe->doOnApply(this);
+            lpe->doOnApply_impl(this);
 
             // indicate that all necessary preparations are done and the effect can be performed
             lpe->setReady();

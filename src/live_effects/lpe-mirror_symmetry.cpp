@@ -202,14 +202,13 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         }
     } else if ( mode == MT_FREE) {
         if (are_near(previous_center, (Geom::Point)center_point, 0.01)) {
-            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
-            this->skip_reprocess++;
+            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
+
         } else {
             Geom::Point trans = center_point - Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
-            start_point.param_setValue(start_point * trans, true);
-            end_point.param_setValue(end_point * trans, true);
-            this->skip_reprocess++;
-            this->skip_reprocess++;
+            start_point.param_setValue(start_point * trans);
+            end_point.param_setValue(end_point * trans);
+           
         }
         std::cout << "lolololo" << std::endl;
     } else if ( mode == MT_V){

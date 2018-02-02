@@ -343,8 +343,8 @@ g_message("sp_path_update_patheffect");
                     Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                     if (lpe) {
                         if (lpe->skip_reprocess) {
-                            lpe->skip_reprocess--;
-                            return;
+                            //lpe->skip_reprocess--;
+                            //return;
                         }
                     }
                 }
