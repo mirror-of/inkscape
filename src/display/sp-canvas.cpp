@@ -1965,8 +1965,38 @@ void SPCanvas::endForcedFullRedraws()
     _forced_redraw_limit = -1;
 }
 
+#ifdef _WIN32
+  #include <windows.h>
+#else
+  #include <chrono>
+  using namespace std::chrono;
+#endif
+
+uint64_t MyClock()
+{
+#ifdef _WIN32
+    // don't use system_clock() because it's hard to use system_clock in GTK which is C not C++
+    FILETIME t;
+    GetSystemTimePreciseAsFileTime(&t);
+    return *(uint64_t *)&t;
+#else
+    return system_clock::now().time_since_epoch().count();
+#endif
+}
+
+uint64_t T_exposeBeginBurst;
+
 gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
 
+#ifndef DIRECT_DRAW
+    uint64_t t = MyClock();
+    bool newBurst = false;
+    if (t - T_exposeBeginBurst > 5000000)
+    {
+        T_exposeBeginBurst = t;
+        newBurst = true;
+    }
+#endif
     SPCanvas *canvas = SP_CANVAS(widget);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
@@ -2031,7 +2061,21 @@ gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
         canvas->addIdle();
     }
     cairo_region_destroy(dirty_region);
+#ifndef DIRECT_DRAW
+    if (newBurst)
+    {
+        extern uint64_t T_lastDragBurst, T_addIdleBurst,
+            T_drawBeginBurst, T_drawEndBurst;
+        uint64_t t = MyClock();
 
+        printf("idle=%llu drawBegin=%llu drawEnd=%llu exposeBegin=%llu exposeEnd=%llu\n",
+               T_addIdleBurst - T_lastDragBurst,
+               T_drawBeginBurst - T_lastDragBurst,
+               T_drawEndBurst - T_lastDragBurst,
+               T_exposeBeginBurst - T_lastDragBurst,
+               t - T_lastDragBurst);
+    }
+#endif
     return TRUE;
 }
 
@@ -2076,8 +2120,17 @@ gint SPCanvas::handle_focus_out(GtkWidget *widget, GdkEventFocus *event)
     }
 }
 
+uint64_t T_drawBeginBurst, T_drawEndBurst;
+
 int SPCanvas::paint()
 {
+    uint64_t t = MyClock();
+    bool newBurst = false;
+    if (t - T_drawBeginBurst > 5000000)
+    {
+        T_drawBeginBurst = t;
+        newBurst = true;
+    }
     if (_need_update) {
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);
         _need_update = FALSE;
@@ -2123,7 +2176,10 @@ int SPCanvas::paint()
     
     cairo_region_t *_drawBoundsTopWin = cairo_region_create_rectangle(&drawBoundsTopWin);
 
+    uint64_t t0 = MyClock();
     GdkDrawingContext *context = gdk_window_begin_draw_frame(window, _drawBoundsTopWin);
+    uint64_t t1 = MyClock();
+    uint64_t T_beginFrame = t1 - t0;
     cairo_t *xct = gdk_drawing_context_get_cairo_context(context);
     int canvasOffsetX = drawBoundsTopWin.x - drawBoundsWin.x,
         canvasOffsetY = drawBoundsTopWin.y - drawBoundsWin.y;
@@ -2137,7 +2193,10 @@ int SPCanvas::paint()
     cairo_set_operator(xct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(xct);
 
+    t0 = MyClock();
+    uint64_t T_copy = t0 - t1;
     gdk_window_end_draw_frame(window, context);
+    uint64_t T_endFrame = MyClock() - t0;
     cairo_region_destroy(_drawBoundsTopWin);
 #endif
 
@@ -2148,6 +2207,21 @@ int SPCanvas::paint()
 
     cairo_region_destroy(to_draw);
 
+    if (newBurst)
+    {
+        T_drawEndBurst = MyClock();
+    #ifdef DIRECT_DRAW
+        extern uint64_t T_lastDragBurst, T_addIdleBurst;
+        printf("idle=%llu drawBegin=%llu drawEnd=%llu T_beginFrame=%llu T_endFrame=%llu T_copy=%llu\n",
+               T_addIdleBurst - T_lastDragBurst,
+               T_drawBeginBurst - T_lastDragBurst,
+               T_drawEndBurst - T_lastDragBurst,
+               T_beginFrame,
+               T_endFrame,
+               T_copy
+               );
+    #endif
+    }
     return !aborted;
 }
 
@@ -2191,8 +2265,14 @@ gint SPCanvas::idle_handler(gpointer data)
     return !ret;
 }
 
+uint64_t T_addIdleBurst;
+
 void SPCanvas::addIdle()
 {
+    uint64_t t = MyClock();
+    if (t - T_addIdleBurst > 5000000)
+        T_addIdleBurst = t;
+
     if (_idle_id == 0) {
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, NULL);
     }
