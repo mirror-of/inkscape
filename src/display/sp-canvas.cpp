@@ -145,8 +145,12 @@ struct SPCanvasClass {
 
 namespace {
 
+#define DIRECT_DRAW
+#ifdef DIRECT_DRAW
+gint const UPDATE_PRIORITY = GDK_PRIORITY_EVENTS;   // why?
+#else
 gint const UPDATE_PRIORITY = GDK_PRIORITY_REDRAW + 10;   // must be lower priority than GDK_PRIORITY_REDRAW or else redraw (handle_draw()) might be very jerky or not happen at all
-
+#endif
 
 GdkWindow *getWindow(SPCanvas *canvas)
 {
@@ -1686,6 +1690,8 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     // Create a temporary surface that draws directly to _backing_store
     cairo_surface_flush(_backing_store);
     // cairo_surface_write_to_png( _backing_store, "debug0.png" );
+//#define METHOD2
+#ifndef METHOD2
     unsigned char *data = cairo_image_surface_get_data(_backing_store);
     int stride = cairo_image_surface_get_stride(_backing_store);
 
@@ -1709,8 +1715,17 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     buf.ct = cairo_create(imgs);
 
+#else
+    cairo_surface_set_device_offset(_backing_store, paint_rect.left() - _x0, paint_rect.top() - _y0);
+    buf.ct = cairo_create(_backing_store);
+    cairo_rectangle(buf.ct, 0, 0, paint_rect.width(), paint_rect.height());
+    cairo_clip(buf.ct);
+#endif
     cairo_save(buf.ct);
+
+#ifndef METHOD2
     cairo_translate(buf.ct, -paint_rect.left(), -paint_rect.top());
+#endif
     cairo_set_source(buf.ct, _background);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
@@ -1736,6 +1751,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
             transf = Inkscape::CMSSystem::getDisplayTransform();
         }
 
+    #if 0
         if (transf) {
             cairo_surface_flush(imgs);
             unsigned char *px = cairo_image_surface_get_data(imgs);
@@ -1746,6 +1762,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
             }
             cairo_surface_mark_dirty(imgs);
         }
+    #endif
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
@@ -1754,9 +1771,11 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
-
+    
+#ifndef DIRECT_DRAW
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
         paint_rect.width(), paint_rect.height());
+#endif
 }
 
 struct PaintRectSetup {
@@ -2070,16 +2089,57 @@ int SPCanvas::paint()
     cairo_region_t *to_draw = cairo_region_create_rectangle(&crect);
     cairo_region_subtract(to_draw, _clean_region);
 
+    bool aborted = false;
     int n_rects = cairo_region_num_rectangles(to_draw);
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(to_draw, i, &crect);
         if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
-            cairo_region_destroy(to_draw);
-            return FALSE;
+            aborted = true;
         };
     }
+#ifdef DIRECT_DRAW
+    // copy backing store to window
+    GtkWidget *widget = GTK_WIDGET(this);
+    GdkWindow *window = gtk_widget_get_window(gtk_widget_get_toplevel(widget));
+    cairo_rectangle_int_t drawBounds,   // world coordinates
+                          drawBoundsWin, drawBoundsTopWin;
+//#define WHOLE_SCREEN
+#ifdef WHOLE_SCREEN
+    drawBounds.x = _x0;
+    drawBounds.y = _y0;
+    drawBounds.width = allocation.width;
+    drawBounds.height = allocation.height;
+#else
+    cairo_region_get_extents(to_draw, &drawBounds);
+#endif
+    drawBoundsWin = drawBounds;
+    drawBoundsWin.x -= _x0;
+    drawBoundsWin.y -= _y0;
+
+    drawBoundsTopWin = drawBoundsWin;
+    gtk_widget_translate_coordinates(widget, gtk_widget_get_toplevel(widget), drawBoundsWin.x, drawBoundsWin.y, &drawBoundsTopWin.x, &drawBoundsTopWin.y);
+    
+    cairo_region_t *_drawBoundsTopWin = cairo_region_create_rectangle(&drawBoundsTopWin);
+
+    GdkDrawingContext *context = gdk_window_begin_draw_frame(window, _drawBoundsTopWin);
+    cairo_t *xct = gdk_drawing_context_get_cairo_context(context);
+    int canvasOffsetX = drawBoundsTopWin.x - drawBoundsWin.x,
+        canvasOffsetY = drawBoundsTopWin.y - drawBoundsWin.y;
+
+    //printf("dboundswin=[%d %d %d %d] dboundsTopWin=[%d %d %d %d]\n", drawBoundsWin.x, drawBoundsWin.y, drawBoundsWin.width, drawBoundsWin.height,
+    //       drawBoundsTopWin.x, drawBoundsTopWin.y, drawBoundsTopWin.width, drawBoundsTopWin.height);
+    cairo_rectangle(xct, drawBoundsTopWin.x, drawBoundsTopWin.y, drawBounds.width, drawBounds.height);    // WTH? why aren't the coordinates relative to the update region passed to gdk_window_begin_draw_frame()?
+    cairo_clip(xct);
+    cairo_surface_set_device_offset(_backing_store, 0, 0);
+    cairo_set_source_surface(xct, _backing_store, canvasOffsetX, canvasOffsetY);
+    cairo_set_operator(xct, CAIRO_OPERATOR_SOURCE);
+    cairo_paint(xct);
+
+    gdk_window_end_draw_frame(window, context);
+    cairo_region_destroy(_drawBoundsTopWin);
+#endif
 
     // we've had a full unaborted redraw, reset the full redraw counter
     if (_forced_redraw_limit != -1) {
@@ -2088,7 +2148,7 @@ int SPCanvas::paint()
 
     cairo_region_destroy(to_draw);
 
-    return TRUE;
+    return !aborted;
 }
 
 int SPCanvas::doUpdate()
