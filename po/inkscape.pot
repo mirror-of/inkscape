@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2018-01-29 20:50+0100\n"
+"POT-Creation-Date: 2018-02-03 23:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13506,37 +13506,37 @@ msgstr ""
 msgid "Nothing was copied."
 msgstr ""
 
-#: ../src/ui/clipboard.cpp:393 ../src/ui/clipboard.cpp:607
-#: ../src/ui/clipboard.cpp:636
+#: ../src/ui/clipboard.cpp:393 ../src/ui/clipboard.cpp:608
+#: ../src/ui/clipboard.cpp:637
 msgid "Nothing on the clipboard."
 msgstr ""
 
-#: ../src/ui/clipboard.cpp:451
+#: ../src/ui/clipboard.cpp:452
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr ""
 
-#: ../src/ui/clipboard.cpp:462 ../src/ui/clipboard.cpp:479
+#: ../src/ui/clipboard.cpp:463 ../src/ui/clipboard.cpp:480
 msgid "No style on the clipboard."
 msgstr ""
 
-#: ../src/ui/clipboard.cpp:504
+#: ../src/ui/clipboard.cpp:505
 msgid "Select <b>object(s)</b> to paste size to."
 msgstr ""
 
-#: ../src/ui/clipboard.cpp:511
+#: ../src/ui/clipboard.cpp:512
 msgid "No size on the clipboard."
 msgstr ""
 
-#: ../src/ui/clipboard.cpp:568
+#: ../src/ui/clipboard.cpp:569
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr ""
 
 #. no_effect:
-#: ../src/ui/clipboard.cpp:594
+#: ../src/ui/clipboard.cpp:595
 msgid "No effect on the clipboard."
 msgstr ""
 
-#: ../src/ui/clipboard.cpp:613 ../src/ui/clipboard.cpp:650
+#: ../src/ui/clipboard.cpp:614 ../src/ui/clipboard.cpp:651
 msgid "Clipboard does not contain a path."
 msgstr ""
 
