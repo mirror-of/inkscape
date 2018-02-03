@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-02-03 23:41+0100\n"
-"PO-Revision-Date: 2017-07-28 16:34+0200\n"
+"PO-Revision-Date: 2018-02-03 23:53+0100\n"
 "Last-Translator: Sylvain Chiron <chironsylvain@orange.fr>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Bookmarks: 46,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -10153,9 +10153,8 @@ msgid "Paths from which to take the original path data"
 msgstr "Chemins à partir desquels prendre les données de chemin originales"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:26
-#, fuzzy
 msgid "Allow transforms"
-msgstr "Transformations"
+msgstr "Autoriser les transformations"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:24
 msgid "Second path:"
@@ -12150,6 +12149,8 @@ msgid ""
 "Sets margin around exported area (default 0) in units of page size for SVG "
 "and mm for PS/EPS/PDF"
 msgstr ""
+"Définit la marge autour de la zone exportée (0 par défaut) en unités de la "
+"taille de la page pour le SVG ou en mm pour PS/EPS/PDF."
 
 #: ../src/main.cpp:356 ../src/main.cpp:398
 msgid "VALUE"
@@ -12394,13 +12395,12 @@ msgstr ""
 "hérités (pré-0.92)."
 
 #: ../src/main.cpp:541
-#, fuzzy
 msgid ""
 "Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|"
 "scale-document])"
 msgstr ""
 "Méthode utilisée pour convertir la résolution des documents pré-0.92, si "
-"nécessaire."
+"nécessaire. ([none|scale-viewbox|scale-document])"
 
 #: ../src/main.cpp:891 ../src/main.cpp:1379
 msgid ""
@@ -20805,20 +20805,20 @@ msgstr ""
 "positionnez cette valeur à zéro pour désactiver le cache"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
-#, fuzzy
 msgid "Rendering tile multiplier:"
-msgstr "Taille du _cache de rendu :"
+msgstr "Multiplicateur du pavé de rendu :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
-#, fuzzy
 msgid "requires restart"
-msgstr "(nécessite un redémarrage)"
+msgstr "nécessite un redémarrage"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
 msgid ""
 "Set the relative size of tiles used to render the canvas. The larger the "
 "value, the bigger the tile size."
 msgstr ""
+"Définit la taille relative des pavés utilisés pour rendre le canevas. Plus "
+"la valeur est élevée, plus le pavé est grand."
 
 #. blur quality
 #. filter quality
@@ -29028,9 +29028,8 @@ msgid "Center on horizontal and vertical axis"
 msgstr "Centrer horizontalement et verticalement"
 
 #: ../src/widgets/arc-toolbar.cpp:143
-#, fuzzy
 msgid "Change arc"
-msgstr "Modifier le flou"
+msgstr "Modifier l'arc"
 
 #: ../src/widgets/arc-toolbar.cpp:209
 msgid "Arc: Change start/end"
@@ -29065,9 +29064,8 @@ msgid "Rx:"
 msgstr "Rx :"
 
 #: ../src/widgets/arc-toolbar.cpp:435
-#, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
-msgstr "Rayon horizontal des coins arrondis"
+msgstr "Rayon horizontal du cercle, de l'ellipse ou de l'arc"
 
 #: ../src/widgets/arc-toolbar.cpp:452 ../src/widgets/rect-toolbar.cpp:366
 msgid "Vertical radius"
@@ -29078,9 +29076,8 @@ msgid "Ry:"
 msgstr "Ry :"
 
 #: ../src/widgets/arc-toolbar.cpp:452
-#, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
-msgstr "Créer des cercles, des ellipses et des arcs"
+msgstr "Rayon vertical du cercle, de l'ellipse ou de l'arc"
 
 #. Add the units menu.
 #: ../src/widgets/arc-toolbar.cpp:466 ../src/widgets/lpe-toolbar.cpp:387
@@ -31834,9 +31831,8 @@ msgid "Text: Change orientation"
 msgstr "Texte : modifier l'orientation"
 
 #: ../src/widgets/text-toolbar.cpp:1188
-#, fuzzy
 msgid "Text: Change direction"
-msgstr "Texte : modifier l'orientation"
+msgstr "Texte : Modifier l'orientation"
 
 #: ../src/widgets/text-toolbar.cpp:1725
 msgid "Font Family"
@@ -31960,32 +31956,29 @@ msgstr "Orientation du texte (glyphe) dans du texte vertical."
 
 #: ../src/widgets/text-toolbar.cpp:2028
 msgid "LTR"
-msgstr ""
+msgstr "GàD"
 
 #: ../src/widgets/text-toolbar.cpp:2029
-#, fuzzy
 msgid "Left to right text"
-msgstr "De gauche à droite"
+msgstr "Texte de gauche à droite"
 
 #: ../src/widgets/text-toolbar.cpp:2036
 msgid "RTL"
-msgstr ""
+msgstr "DàG"
 
 #: ../src/widgets/text-toolbar.cpp:2037
-#, fuzzy
 msgid "Right to left text"
-msgstr "De droite à gauche"
+msgstr "Texte de droite à gauche"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2043
-#, fuzzy
 msgid "Text direction"
 msgstr "Direction du texte :"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2044
 msgid "Text direction for normally horizontal text."
-msgstr ""
+msgstr "Direction du texte pour du texte horizontal normal."
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:2077
