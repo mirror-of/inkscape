@@ -18,39 +18,43 @@
 #include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
 #include <cstring>
 #include <string>
 
+#include <glibmm/i18n.h>
 
-#include "selection.h"
-#include "desktop.h"
 #include "desktop-style.h"
-
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "display/sp-ctrlline.h"
-#include "display/sp-ctrlcurve.h"
-#include "display/sp-canvas-util.h"
-#include "xml/sp-css-attr.h"
-#include "svg/css-ostringstream.h"
-#include "svg/svg.h"
-#include "inkscape.h"
-#include "style.h"
-#include "knot.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-mesh-gradient.h"
+#include "document.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
-#include "sp-stop.h"
-#include "snap.h"
-#include "sp-namedview.h"
+#include "inkscape.h"
+#include "knot.h"
 #include "selection-chemistry.h"
+#include "selection.h"
+#include "snap.h"
 #include "verbs.h"
+
+#include "display/sp-canvas-util.h"
 #include "display/sp-canvas.h"
+#include "display/sp-ctrlcurve.h"
+#include "display/sp-ctrlline.h"
+
+#include "object/sp-linear-gradient.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-namedview.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-stop.h"
+#include "style.h"
+
+#include "svg/css-ostringstream.h"
+#include "svg/svg.h"
+
 #include "ui/control-manager.h"
 #include "ui/tools/tool-base.h"
+
+#include "xml/sp-css-attr.h"
 
 using Inkscape::ControlManager;
 using Inkscape::CtrlLineType;
@@ -1703,7 +1707,7 @@ GrDragger::~GrDragger()
 {
     // unselect if it was selected
     // Hmm, this causes a race condition as it triggers a call to gradient_selection_changed which
-    // can be executed while a list of draggers is being deleted. It doesn't acutally seem to be
+    // can be executed while a list of draggers is being deleted. It doesn't actually seem to be
     // necessary.
     //this->parent->setDeselected(this);
 

@@ -22,13 +22,14 @@
 #endif
 
 #include "inkscape.h"
-#include "xml/repr.h"
 #include "preferences.h"
-
-#include "sp-shape.h"
-#include "sp-path.h"
 #include "desktop.h"
 #include "document.h"
+
+#include "object/sp-shape.h"
+#include "object/sp-path.h"
+
+#include "xml/repr.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (GDK_PRIORITY_REDRAW + 20)   // must be lower priority than UPDATE_PRIORITY in sp-canvas.cpp or else there will be no redraw when dragging
 

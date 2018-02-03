@@ -15,8 +15,11 @@
 #include "display/cairo-utils.h"
 //#include <arpa/inet.h>
 #include <stdexcept>
+
 #include <glib/gstdio.h>
 #include <glibmm/fileutils.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include <2geom/pathvector.h>
 #include <2geom/curves.h>
 #include <2geom/affine.h>
@@ -24,12 +27,12 @@
 #include <2geom/path.h>
 #include <2geom/transforms.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
+
+#include <boost/operators.hpp>
+#include <boost/optional/optional.hpp>
 
 #include "color.h"
-#include "style.h"
-#include "helper/geom-curves.h"
-#include "display/cairo-templates.h"
+#include "cairo-templates.h"
 
 #include "SIMD_functions.h"
 
@@ -302,13 +305,34 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
     // since we'll store it as MIME data
     gchar *data = NULL;
     gsize len = 0;
-    GError *error;
+    GError *error = NULL;
 
     if (g_file_get_contents(fn.c_str(), &data, &len, &error)) {
 
+        if (error != NULL) {
+            std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
+            std::cerr << "   (" << fn << ")" << std::endl;
+            return NULL;
+        }
+
         GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
-        gdk_pixbuf_loader_write(loader, (guchar *) data, len, NULL);
-        gdk_pixbuf_loader_close(loader, NULL);
+        gdk_pixbuf_loader_write(loader, (guchar *) data, len, &error);
+        if (error != NULL) {
+            std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
+            std::cerr << "   (" << fn << ")" << std::endl;
+            g_free(data);
+            g_object_unref(loader);
+            return NULL;
+        }
+
+        gdk_pixbuf_loader_close(loader, &error);
+        if (error != NULL) {
+            std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
+            std::cerr << "   (" << fn << ")" << std::endl;
+            g_free(data);
+            g_object_unref(loader);
+            return NULL;
+        }
 
         GdkPixbuf *buf = gdk_pixbuf_loader_get_pixbuf(loader);
         if (buf) {
@@ -322,6 +346,7 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
             pb->_setMimeData((guchar *) data, len, fmt_name);
             g_free(fmt_name);
         } else {
+            std::cerr << "Pixbuf::create_from_file: failed to load contents: " << fn << std::endl;
             g_free(data);
         }
         g_object_unref(loader);
@@ -329,6 +354,7 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
         // TODO: we could also read DPI, ICC profile, gamma correction, and other information
         // from the file. This can be done by using format-specific libraries e.g. libpng.
     } else {
+        std::cerr << "Pixbuf::create_from_file: failed to get contents: " << fn << std::endl;
         return NULL;
     }
 

@@ -9,7 +9,7 @@
 
 #include "live_effects/effect.h"
 #include "knotholder.h"
-#include "sp-lpe-item.h"
+
 
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-geometric.h>
@@ -230,7 +230,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
         if (state & GDK_MOD1_MASK) {
             // delete the clicked knot
             std::vector<Geom::Point> & vec = _pparam->_vector;
-            if (vec.size() > 1) { //Force dont remove last knot
+            if (vec.size() > 1) { //Force don't remove last knot
                 vec.erase(vec.begin() + _index);
                 _pparam->param_set_and_write_new_value(vec);
                 // shift knots down one index
@@ -242,7 +242,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
                         }
                     }
                 };
-                // temporary hide, when knotholder were recreated it finaly drop
+                // temporary hide, when knotholder were recreated it finally drop
                 this->knot->hide();
             }
             return;

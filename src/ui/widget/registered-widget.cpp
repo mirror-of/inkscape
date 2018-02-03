@@ -19,15 +19,17 @@
 
 #include "registered-widget.h"
 
-#include "widgets/spinbutton-events.h"
+#include <gtkmm/radiobutton.h>
+
+#include "verbs.h"
+
+#include "object/sp-root.h"
 
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 
-#include "verbs.h"
-#include "sp-root.h"
+#include "widgets/spinbutton-events.h"
 
-#include <gtkmm/radiobutton.h>
 
 namespace Inkscape {
 namespace UI {
@@ -52,7 +54,8 @@ RegisteredCheckButton::RegisteredCheckButton (const Glib::ustring& label, const 
     setProgrammatically = false;
 
     set_tooltip_text (tip);
-    Gtk::Label *l = new Gtk::Label (label);
+    Gtk::Label *l = new Gtk::Label();
+    l->set_markup(label);
     l->set_use_underline (true);
     add (*manage (l));
 
@@ -302,7 +305,7 @@ RegisteredScalar::on_value_changed()
     double val = getValue() < 1e-6 && getValue() > -1e-6?0.0:getValue();
     os << val;
     //TODO: Test is ok remove this sensitives
-    //also removed in registed text and in registered random
+    //also removed in registered text and in registered random
     //set_sensitive(false);
     write_to_xml(os.str().c_str());
     //set_sensitive(true);

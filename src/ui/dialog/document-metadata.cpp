@@ -20,11 +20,12 @@
 
 #include "document-metadata.h"
 #include "desktop.h"
-
 #include "rdf.h"
-#include "sp-namedview.h"
-#include "ui/widget/entity-entry.h"
 #include "verbs.h"
+
+#include "object/sp-namedview.h"
+
+#include "ui/widget/entity-entry.h"
 #include "xml/node-event-vector.h"
 
 
@@ -60,7 +61,7 @@ DocumentMetadata::getInstance()
 
 
 DocumentMetadata::DocumentMetadata()
-    : UI::Widget::Panel ("", "/dialogs/documentmetadata", SP_VERB_DIALOG_METADATA)
+    : UI::Widget::Panel("/dialogs/documentmetadata", SP_VERB_DIALOG_METADATA)
 {
     hide();
     _getContents()->set_spacing (4);

@@ -19,15 +19,18 @@
 #include <gtkmm/scrolledwindow.h>
 
 #include "desktop.h"
-#include "document.h" // for SPDocumentUndo::done()
 #include "document-undo.h"
-#include "libnrtype/font-instance.h"
-#include "sp-flowtext.h"
-#include "sp-text.h"
-#include "verbs.h"
-#include "widgets/font-selector.h"
-#include "text-editing.h"
+#include "document.h" // for SPDocumentUndo::done()
 #include "selection.h"
+#include "text-editing.h"
+#include "verbs.h"
+
+#include "libnrtype/font-instance.h"
+
+#include "object/sp-flowtext.h"
+#include "object/sp-text.h"
+
+#include "widgets/font-selector.h"
 
 namespace Inkscape {
 namespace UI {
@@ -317,8 +320,8 @@ GlyphColumns *GlyphsPanel::getColumns()
 /**
  * Constructor
  */
-GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
-    Inkscape::UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_GLYPHS, "", false),
+GlyphsPanel::GlyphsPanel() :
+    Inkscape::UI::Widget::Panel("/dialogs/glyphs", SP_VERB_DIALOG_GLYPHS),
     store(Gtk::ListStore::create(*getColumns())),
     iconView(0),
     entry(0),
@@ -455,8 +458,6 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
 
 
     show_all_children();
-
-    restorePanelPrefs();
 
     // Connect this up last
     conn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &GlyphsPanel::setTargetDesktop) );

@@ -20,16 +20,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "ui/dialog/dialog-manager.h"
-#include "desktop.h"
-
-#include "sp-anchor.h"
-#include "sp-image.h"
-#include "verbs.h"
-#include "ui/dialog/object-attributes.h"
-#include "widgets/sp-attribute-widget.h"
-#include "inkscape.h"
 #include <glibmm/i18n.h>
+
+#include "desktop.h"
+#include "inkscape.h"
+#include "verbs.h"
+
+#include "object/sp-anchor.h"
+#include "object/sp-image.h"
+
+#include "ui/dialog/object-attributes.h"
+#include "ui/dialog/dialog-manager.h"
+
+#include "widgets/sp-attribute-widget.h"
 
 namespace Inkscape {
 namespace UI {
@@ -77,7 +80,7 @@ static const SPAttrDesc image_nohref_desc[] = {
 };
 
 ObjectAttributes::ObjectAttributes (void) :
-    UI::Widget::Panel ("", "/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
+    UI::Widget::Panel("/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
     blocked (false),
     CurrentItem(NULL),
     attrTable(Gtk::manage(new SPAttributeTable())),

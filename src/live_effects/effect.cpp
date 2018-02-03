@@ -67,7 +67,11 @@
 #include "live_effects/lpe-embrodery-stitch.h"
 #include "live_effects/lpe-bool.h"
 
+#include "live_effects/lpeobject.h"
+
 #include "xml/node-event-vector.h"
+#include "xml/sp-css-attr.h"
+
 #include "message-stack.h"
 #include "document-private.h"
 #include "ui/tools/pen-tool.h"
@@ -75,12 +79,14 @@
 #include "ui/tools-switch.h"
 #include "knotholder.h"
 #include "path-chemistry.h"
-#include "xml/sp-css-attr.h"
-#include "live_effects/lpeobject.h"
-#include <pangomm/layout.h>
 #include "display/curve.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-shape.h"
+
 #include <stdio.h>
 #include <string.h>
+#include <pangomm/layout.h>
 #include <gtkmm/expander.h>
 
 namespace Inkscape {
@@ -130,7 +136,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {MEASURE_SEGMENTS,      N_("Measure Segments"),                "measure_segments"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
-    {EMBRODERY_STITCH,      N_("Embrodery stitch"),                "embrodery_stitch"},
+    {EMBRODERY_STITCH,      N_("Embroidery stitch"),                "embrodery_stitch"},
     {POWERCLIP,             N_("Power clip"),                      "powerclip"},
     {POWERMASK,             N_("Power mask"),                      "powermask"},
 #ifdef LPE_ENABLE_TEST_EFFECTS

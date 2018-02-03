@@ -52,7 +52,6 @@
 //# Inkscape includes
 #include "clear-n_.h"
 #include "inkscape.h"
-#include <style.h>
 #include "display/curve.h"
 #include <2geom/pathvector.h>
 #include <2geom/curves.h>
@@ -63,20 +62,21 @@
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
-#include "sp-image.h"
-#include "sp-gradient.h"
-#include "sp-stop.h"
-#include "gradient-chemistry.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-path.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
+#include "object/sp-image.h"
+#include "object/sp-gradient.h"
+#include "object/sp-stop.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
+#include "object/sp-flowtext.h"
+#include "object/uri.h"
+#include "style.h"
+
 #include "svg/svg.h"
 #include "text-editing.h"
 #include "util/units.h"
 
-#include "uri.h"
 
 #include "inkscape-version.h"
 #include "document.h"
@@ -1079,8 +1079,7 @@ void OdfOutput::preprocess(ZipFile &zf, Inkscape::XML::Node *node)
                 Glib::ustring comment = "old name was: ";
                 comment.append(oldName);
                 Inkscape::URI oldUri(oldName.c_str());
-                //# if relative to the documentURI, get proper path
-                std::string pathName = documentUri.getFullPath(oldUri.getFullPath(""));
+                std::string pathName = oldUri.toNativeFilename();
                 ZipEntry *ze = zf.addFile(pathName, comment);
                 if (ze)
                     {
@@ -2095,8 +2094,6 @@ void OdfOutput::reset()
 void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gchar const *filename)
 {
     reset();
-
-    documentUri = Inkscape::URI(filename);
 
     ZipFile zf;
     preprocess(zf, doc->rroot);

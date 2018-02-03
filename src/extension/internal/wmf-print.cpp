@@ -38,11 +38,8 @@
 #include <2geom/curves.h>
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
-#include "sp-item.h"
 
-#include "style.h"
 #include "inkscape-version.h"
-#include "sp-root.h"
 
 #include "util/units.h"
 
@@ -50,17 +47,19 @@
 #include "extension/print.h"
 #include "document.h"
 #include "path-prefix.h"
-#include "sp-pattern.h"
-#include "sp-image.h"
-#include "sp-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-linear-gradient.h"
-#include "display/cairo-utils.h"
+
+#include "object/sp-pattern.h"
+#include "object/sp-image.h"
+#include "object/sp-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-root.h"
+#include "object/sp-item.h"
 
 #include "splivarot.h"             // pieces for union on shapes
 #include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
 #include "display/canvas-bpath.h"  // for SPWindRule
-#include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
+#include "display/cairo-utils.h"   // for Inkscape::Pixbuf::PF_CAIRO
 
 #include "wmf-print.h"
 
@@ -1123,7 +1122,7 @@ unsigned int PrintWmf::image(
     unsigned int w,      /** width of bitmap */
     unsigned int h,      /** height of bitmap */
     unsigned int rs,     /** row stride (normally w*4) */
-    Geom::Affine const &tf_rect,  /** affine transform only used for defining location and size of rect, for all other tranforms, use the one from m_tr_stack */
+    Geom::Affine const &tf_rect,  /** affine transform only used for defining location and size of rect, for all other transforms, use the one from m_tr_stack */
     SPStyle const * /*style*/)  /** provides indirect link to image object */
 {
     double x1, y1, dw, dh;
@@ -1245,7 +1244,7 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
 
                 /**  For each segment in the subpath */
 
-                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
+                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the iterator
 
                 p1[X] = (p1[X] * PX2WORLD);
                 p1[Y] = (p1[Y] * PX2WORLD);
@@ -1289,7 +1288,7 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
 
                 /**  For each segment in the subpath */
 
-                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
+                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the iterator
 
                 p1[X] = (p1[X] * PX2WORLD);
                 p1[Y] = (p1[Y] * PX2WORLD);

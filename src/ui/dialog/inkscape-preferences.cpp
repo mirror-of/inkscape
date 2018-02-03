@@ -18,6 +18,7 @@
 #endif
 
 #include "inkscape-preferences.h"
+
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/markup.h>
@@ -25,27 +26,31 @@
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/recentinfo.h>
 
+#include "cms-system.h"
+#include "document.h"
+#include "enums.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "path-prefix.h"
 #include "preferences.h"
-#include "verbs.h"
 #include "selcue.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "shortcuts.h"
+#include "verbs.h"
+
+#include "display/canvas-grid.h"
+#include "display/nr-filter-gaussian.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
-#include "message-stack.h"
-#include "style.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "ui/widget/style-swatch.h"
-#include "display/nr-filter-gaussian.h"
-#include "cms-system.h"
-#include "color-profile.h"
-#include "display/canvas-grid.h"
-#include "path-prefix.h"
+
 #include "io/resource.h"
 #include "io/sys.h"
-#include "inkscape.h"
-#include "shortcuts.h"
-#include "document.h"
 
+#include "object/color-profile.h"
+#include "style.h"
+
+#include "ui/widget/style-swatch.h"
 
 #ifdef HAVE_ASPELL
 # include <aspell.h>
@@ -67,9 +72,11 @@ using Inkscape::CMSSystem;
 
 
 InkscapePreferences::InkscapePreferences()
-    : UI::Widget::Panel ("", "/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
-      _max_dialog_width(0),
-      _max_dialog_height(0),
+    : UI::Widget::Panel ("/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
+      _minimum_width(0),
+      _minimum_height(0),
+      _natural_width(0),
+      _natural_height(0),
       _current_page(0),
       _init(true)
 {
@@ -97,6 +104,10 @@ InkscapePreferences::InkscapePreferences()
     hbox_list_page->pack_start(*list_frame, false, true, 0);
     _page_list.set_headers_visible(false);
     scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+#if GTKMM_CHECK_VERSION(3,22,0)
+    scrolled_window->set_propagate_natural_width();
+    scrolled_window->set_propagate_natural_height();
+#endif
     scrolled_window->add(_page_list);
     list_frame->set_shadow_type(Gtk::SHADOW_IN);
     list_frame->add(*scrolled_window);
@@ -113,6 +124,10 @@ InkscapePreferences::InkscapePreferences()
 
     Gtk::ScrolledWindow* pageScroller = Gtk::manage(new Gtk::ScrolledWindow());
     pageScroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+#if GTKMM_CHECK_VERSION(3,22,0)
+    pageScroller->set_propagate_natural_width();
+    pageScroller->set_propagate_natural_height();
+#endif
     pageScroller->add(*vbox_page);
     hbox_list_page->pack_start(*pageScroller, true, true, 0);
 
@@ -136,10 +151,30 @@ InkscapePreferences::InkscapePreferences()
     signalPresent().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
 
     //calculate the size request for this dialog
-    this->show_all_children();
     _page_list.expand_all();
-    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::SetMaxDialogSize));
-    _getContents()->set_size_request(_max_dialog_width, _max_dialog_height);
+#if GTKMM_CHECK_VERSION(3,22,0)
+    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
+#else
+    // we don't have Gtk::ScrolledWindow::set_propagate_natural_width/height so work around it:
+    // -> store current policy
+    Gtk::PolicyType scrolled_window_h, scrolled_window_v,
+                    pageScroller_h, pageScroller_v;
+    scrolled_window->get_policy(scrolled_window_h, scrolled_window_v);
+    pageScroller->get_policy(pageScroller_h, pageScroller_v);
+    // -> calculate minimum size with current policy
+    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
+    int minimum_width  = _minimum_width;
+    int minimum_height = _minimum_height;
+    // -> calculate natural size with Gtk::POLICY_NEVER (i.e. no scrollbars)
+    scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+    pageScroller->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
+    // -> reset policy to previously stored values and reset minimum size to reasonable values as stored above
+    scrolled_window->set_policy(scrolled_window_h, scrolled_window_v);
+    pageScroller->set_policy(pageScroller_h, pageScroller_v);
+    _minimum_width  = minimum_width;
+    _minimum_height = minimum_height;
+#endif
     _page_list.collapse_all();
 }
 
@@ -684,9 +719,9 @@ void InkscapePreferences::initPageUI()
     }
 
     // Windows
-    _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", 1, true, 0);
-    _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", 2, false, &_win_save_geom);
-    _win_save_geom_off.init ( _("Don't save window geometry"), "/options/savewindowgeometry/value", 0, false, &_win_save_geom);
+    _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, 0);
+    _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST, false, &_win_save_geom);
+    _win_save_geom_off.init ( _("Don't save window geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE, false, &_win_save_geom);
 
     _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", 1, true, 0);
     _win_save_dialog_pos_off.init ( _("Don't save dialogs status"), "/options/savedialogposition/value", 0, false, &_win_save_dialog_pos_on);
@@ -701,16 +736,21 @@ void InkscapePreferences::initPageUI()
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
-    _win_show_close.init ( _("Show close button on dialogs"), "/dialogs/showclose", false);
     _win_ontop_none.init ( C_("Dialog on top", "None"), "/options/transientpolicy/value", 0, false, 0);
     _win_ontop_normal.init ( _("Normal"), "/options/transientpolicy/value", 1, true, &_win_ontop_none);
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
 
     {
-        Glib::ustring defaultSizeLabels[] = {C_("Window size", "Small"), C_("Window size", "Large"), C_("Window size", "Maximized")};
-        int defaultSizeValues[] = {0, 1, 2};
+        Glib::ustring defaultSizeLabels[] = {C_("Window size", "Default"),
+                                             C_("Window size", "Small"),
+                                             C_("Window size", "Large"),
+                                             C_("Window size", "Maximized")};
+        int defaultSizeValues[] = {PREFS_WINDOW_SIZE_NATURAL,
+                                   PREFS_WINDOW_SIZE_SMALL,
+                                   PREFS_WINDOW_SIZE_LARGE,
+                                   PREFS_WINDOW_SIZE_MAXIMIZED};
 
-        _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), 1 );
+        _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), PREFS_WINDOW_SIZE_NATURAL);
         _page_windows.add_line( false, _("Default window size:"),  _win_default_size, "",
                            _("Set the default window size"), false);
     }
@@ -773,8 +813,6 @@ void InkscapePreferences::initPageUI()
                             _("Zoom drawing when document window is resized, to keep the same area visible (this is the default which can be changed in any window using the button above the right scrollbar)"));
     _page_windows.add_line( true, "", _win_save_viewport, "",
                             _("Save documents viewport (zoom and panning position). Useful to turn off when sharing version controlled files."));
-    _page_windows.add_line( true, "", _win_show_close, "",
-                            _("Whether dialog windows have a close button (requires restart)"));
     this->AddPage(_page_windows, _("Windows"), iter_ui, PREFS_PAGE_UI_WINDOWS);
 
     // Grids
@@ -1316,9 +1354,9 @@ void InkscapePreferences::initPageBehavior()
     _steps_compass.init ( _("Compass-like display of angles"), "/options/compassangledisplay/value", true);
     _page_steps.add_line( false, "", _steps_compass, "",
                             _("When on, angles are displayed with 0 at north, 0 to 360 range, positive clockwise; otherwise with 0 at east, -180 to 180 range, positive counterclockwise"));
-    int const num_items = 17;
-    Glib::ustring labels[num_items] = {"90", "60", "45", "36", "30", "22.5", "18", "15", "12", "10", "7.5", "6", "3", "2", "1", "0.5", C_("Rotation angle", "None")};
-    int values[num_items] = {2, 3, 4, 5, 6, 8, 10, 12, 15, 18, 24, 30, 60, 90, 180, 360, 0};
+    int const num_items = 18;
+    Glib::ustring labels[num_items] = {"90", "60", "45", "36", "30", "22.5", "18", "15", "12", "10", "7.5", "6", "5", "3", "2", "1", "0.5", C_("Rotation angle", "None")};
+    int values[num_items] = {2, 3, 4, 5, 6, 8, 10, 12, 15, 18, 24, 30, 36, 60, 90, 180, 360, 0};
     _steps_rot_snap.set_size_request(_sb_width);
     _steps_rot_snap.init("/options/rotationsnapsperpi/value", labels, values, num_items, 12);
     _page_steps.add_line( false, _("_Rotation snaps every:"), _steps_rot_snap, _("degrees"),
@@ -2026,17 +2064,19 @@ void InkscapePreferences::initPageSystem()
     this->AddPage(_page_system, _("System"), PREFS_PAGE_SYSTEM);
 }
 
-bool InkscapePreferences::SetMaxDialogSize(const Gtk::TreeModel::iterator& iter)
+bool InkscapePreferences::GetSizeRequest(const Gtk::TreeModel::iterator& iter)
 {
     Gtk::TreeModel::Row row = *iter;
     DialogPage* page = row[_page_list_columns._col_page];
     _page_frame.add(*page);
     this->show_all_children();
-    Gtk::Requisition sreq;
+    Gtk::Requisition sreq_minimum;
     Gtk::Requisition sreq_natural;
-    this->get_preferred_size(sreq_natural, sreq);
-    _max_dialog_width=std::max(_max_dialog_width, sreq.width);
-    _max_dialog_height=std::max(_max_dialog_height, sreq.height);
+    _getContents()->get_preferred_size(sreq_minimum, sreq_natural);
+    _minimum_width  = std::max(_minimum_width,  sreq_minimum.width);
+    _minimum_height = std::max(_minimum_height, sreq_minimum.height);
+    _natural_width  = std::max(_natural_width,  sreq_natural.width);
+    _natural_height = std::max(_natural_height, sreq_natural.height);
     _page_frame.remove();
     return false;
 }

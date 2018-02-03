@@ -16,22 +16,24 @@
 #include <2geom/transforms.h>
 #include <cairo.h>
 #include <vector>
-#include "sp-object.h"
+
 #include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/nr-svgfonts.h"
 #include "display/nr-svgfonts.h"
-#include "sp-path.h"
-#include "sp-object-group.h"
-#include "sp-use.h"
-#include "sp-use-reference.h"
 #include "display/curve.h"
+
 #include "xml/repr.h"
-#include "sp-font-face.h"
-#include "sp-glyph.h"
-#include "sp-missing-glyph.h"
-#include "sp-font.h"
-#include "sp-glyph-kerning.h"
+
+#include "object/sp-path.h"
+#include "object/sp-object-group.h"
+#include "object/sp-use.h"
+#include "object/sp-use-reference.h"
+#include "object/sp-font-face.h"
+#include "object/sp-glyph.h"
+#include "object/sp-missing-glyph.h"
+#include "object/sp-font.h"
+#include "object/sp-glyph-kerning.h"
 
 // ************************//
 // UserFont Implementation //
@@ -166,7 +168,7 @@ SvgFont::scaled_font_text_to_glyphs (cairo_scaled_font_t  */*scaled_font*/,
     unsigned int len;
 
     bool missing;
-    //First we findout whats the number of glyphs needed.
+    //First we find out what's the number of glyphs needed.
     while(g_utf8_get_char(_utf8)){
         missing = true;
         for (i=0; i < (unsigned long) this->glyphs.size(); i++){

@@ -18,25 +18,31 @@
 
 #include "livepatheffect-editor.h"
 
-#include "desktop.h"
 #include <gtkmm/expander.h>
-#include "document.h"
+
+#include "desktop.h"
 #include "document-undo.h"
-#include "helper/action.h"
+#include "document.h"
 #include "inkscape.h"
-#include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
+#include "livepatheffect-add.h"
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
-#include "sp-item-group.h"
-#include "sp-path.h"
-#include "sp-rect.h"
-#include "sp-text.h"
+#include "verbs.h"
+
+#include "helper/action.h"
+
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+
+#include "object/sp-item-group.h"
+#include "object/sp-path.h"
+#include "object/sp-rect.h"
+#include "object/sp-use.h"
+#include "object/sp-text.h"
+
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
-#include "verbs.h"
-#include "livepatheffect-add.h"
 
 namespace Inkscape {
 namespace UI {
@@ -81,7 +87,7 @@ static void lpe_style_button(Gtk::Button& btn, char const* iconName)
  */
 
 LivePathEffectEditor::LivePathEffectEditor()
-    : UI::Widget::Panel("", "/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
+    : UI::Widget::Panel("/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
       deskTrack(),
       lpe_list_locked(false),
       lpe_changed(true),

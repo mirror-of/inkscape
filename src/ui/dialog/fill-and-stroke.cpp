@@ -15,7 +15,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/notebook-page.h"
 
 #include "desktop-style.h"
 #include "document.h"
@@ -23,22 +22,25 @@
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "style.h"
-#include "svg/css-ostringstream.h"
-#include "ui/icon-names.h"
 #include "verbs.h"
+
+#include "svg/css-ostringstream.h"
+
+#include "ui/icon-names.h"
+#include "ui/view/view-widget.h"
+#include "ui/widget/notebook-page.h"
+
 #include "widgets/fill-style.h"
 #include "widgets/paint-selector.h"
 #include "widgets/stroke-style.h"
 
-#include "ui/view/view-widget.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 FillAndStroke::FillAndStroke()
-    : UI::Widget::Panel ("", "/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE),
+    : UI::Widget::Panel("/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE),
       _page_fill(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
       _page_stroke_paint(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
       _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),

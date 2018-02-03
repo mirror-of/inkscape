@@ -21,7 +21,9 @@
 #endif
 
 #include "text-edit.h"
-#include <libnrtype/font-instance.h>
+
+#include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 
 #ifdef WITH_GTKSPELL
 extern "C" {
@@ -29,34 +31,39 @@ extern "C" {
 }
 #endif
 
-#include <libnrtype/font-lister.h>
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "text-editing.h"
+#include "verbs.h"
 
 #include "helper/window.h"
-#include "inkscape.h"
-#include "document.h"
-#include "desktop.h"
-#include "desktop-style.h"
 
-#include "document-undo.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "text-editing.h"
-#include "ui/icon-names.h"
-#include "verbs.h"
-#include "ui/interface.h"
+#include <libnrtype/font-instance.h>
+#include <libnrtype/font-lister.h>
+
+#include "object/sp-flowtext.h"
+#include "object/sp-text.h"
+#include "object/sp-textpath.h"
+
 #include "svg/css-ostringstream.h"
-#include "widgets/font-selector.h"
-#include <glibmm/i18n.h>
-#include <glibmm/markup.h>
+
+#include "ui/icon-names.h"
+#include "ui/interface.h"
+
 #include "util/units.h"
-#include "sp-textpath.h"
+
+#include "widgets/font-selector.h"
+
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 TextEdit::TextEdit()
-    : UI::Widget::Panel("", "/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
+    : UI::Widget::Panel("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
       font_label(_("_Font"), true),
       text_label(_("_Text"), true),
       vari_label(_("_Variants"), true),
@@ -367,6 +374,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
         return;
     }
 
+    Glib::ustring font_spec_escaped = Glib::Markup::escape_text( font_spec );
     Glib::ustring phrase_escaped = Glib::Markup::escape_text( phrase );
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -379,7 +387,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
     std::ostringstream size_st;
     size_st << int(pt_size * PANGO_SCALE); // Markup code expects integers
 
-    Glib::ustring markup = "<span font=\'" + font_spec +
+    Glib::ustring markup = "<span font=\'" + font_spec_escaped +
         "\' size=\'" + size_st.str() + "\'>" + phrase_escaped + "</span>";
 
     preview_label.set_markup(markup.c_str());

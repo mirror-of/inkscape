@@ -17,25 +17,28 @@
  */
 
 #include "xml-tree.h"
+
 #include <glibmm/i18n.h>
 
-#include "desktop.h"
 
-#include "ui/dialog-events.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "ui/tools/tool-base.h"
-#include "helper/window.h"
+#include "document.h"
 #include "inkscape.h"
-#include "ui/interface.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "shortcuts.h"
-#include "sp-root.h"
-#include "sp-string.h"
-#include "sp-tspan.h"
-#include "ui/icon-names.h"
 #include "verbs.h"
+
+#include "helper/window.h"
+
+#include "object/sp-root.h"
+#include "object/sp-string.h"
+
+#include "ui/dialog-events.h"
+#include "ui/icon-names.h"
+#include "ui/interface.h"
+#include "ui/tools/tool-base.h"
 
 #include "widgets/sp-xmlview-attr-list.h"
 #include "widgets/sp-xmlview-content.h"
@@ -45,8 +48,8 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-XmlTree::XmlTree (void) :
-    UI::Widget::Panel ("", "/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR),
+XmlTree::XmlTree() :
+    UI::Widget::Panel("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR),
     blocked (0),
     _message_stack (NULL),
     _message_context (NULL),
@@ -214,7 +217,7 @@ XmlTree::XmlTree (void) :
     Gtk::ScrolledWindow *attr_scroller = new Gtk::ScrolledWindow();
     attr_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     attr_scroller->set_shadow_type(Gtk::SHADOW_IN);
-    attr_scroller->set_size_request(0, 60);
+    attr_scroller->set_size_request(-1, 80);
 
     attr_subpaned_container.pack1( *attr_scroller );
     attr_scroller->add(*Gtk::manage(Glib::wrap(GTK_WIDGET(attributes))));
@@ -231,17 +234,16 @@ XmlTree::XmlTree (void) :
     Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
     scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     scroller->set_shadow_type(Gtk::SHADOW_IN);
-    scroller->set_size_request(0, 60);
+    scroller->set_size_request(-1, 40);
 
     attr_vbox.pack_start(*scroller, TRUE, TRUE, 0);
 
-    attr_value.set_size_request(0, 60);
     attr_value.set_wrap_mode(Gtk::WRAP_CHAR);
     attr_value.set_tooltip_text( _("Attribute value") );// TRANSLATORS: "Attribute" is a noun here
     attr_value.set_editable(TRUE);
     scroller->add(attr_value);
 
-    attr_subpaned_container.pack2( attr_vbox, FALSE, TRUE );
+    attr_subpaned_container.pack2( attr_vbox, FALSE, FALSE );
 
     /* text */
     text_container.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );

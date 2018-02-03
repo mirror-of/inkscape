@@ -53,6 +53,7 @@ InkSelectOneAction::InkSelectOneAction (const Glib::ustring &name,
     _use_radio (true),
     _use_label (true),
     _use_icon  (true),
+    _use_pixbuf (false),
     _icon_size ( Gtk::ICON_SIZE_LARGE_TOOLBAR ),
     _combobox (nullptr),
     _radioaction (nullptr),
@@ -78,6 +79,13 @@ void InkSelectOneAction::set_active (gint active) {
             _radiomenuitems[ active ]->set_active();
         }
     }
+}
+
+Glib::ustring InkSelectOneAction::get_active_text () {
+    Gtk::TreeModel::Row row = _store->children()[_active];
+    InkSelectOneActionColumns columns;
+    Glib::ustring label = row[columns.col_label];
+    return label;
 }
 
 Gtk::Widget* InkSelectOneAction::create_menu_item_vfunc() {
@@ -130,16 +138,16 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
 
     Gtk::ToolItem *tool_item = new Gtk::ToolItem;
 
+    Gtk::Box* box = Gtk::manage(new Gtk::Box());
+    tool_item->add (*box);
+
+    if (_use_group_label) {
+        Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
+        box->add( *group_label );
+    }
+
     if (_use_radio) {
         // Create radio actions (note: these are not radio buttons).
-
-        Gtk::Box* box = Gtk::manage(new Gtk::Box());
-        tool_item->add (*box);  
-
-        if (_use_group_label) {
-            Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
-            box->add( *group_label );
-        }
 
         Gtk::RadioAction::Group group;
         int index = 0;
@@ -185,11 +193,16 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
         _combobox->set_model(_store);
 
         InkSelectOneActionColumns columns;
-        if (_use_icon ) {
+        if (_use_icon) {
             Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
             renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
             _combobox->pack_start (*renderer, false);
             _combobox->add_attribute (*renderer, "icon_name", columns.col_icon   );
+        } else if (_use_pixbuf) {
+            Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
+            //renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+            _combobox->pack_start (*renderer, false);
+            _combobox->add_attribute (*renderer, "pixbuf", columns.col_pixbuf   );
         }
   
         if (_use_label) {
@@ -206,7 +219,7 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
         _combobox->signal_changed().connect(
             sigc::mem_fun(*this, &InkSelectOneAction::on_changed_combobox));
 
-        tool_item->add (*_combobox);
+        box->add (*_combobox);
     }
 
     tool_item->show_all();

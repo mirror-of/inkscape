@@ -32,8 +32,8 @@
 #include <string>
 #include <map>
 
-#include "uri.h"
-#include "sp-item.h"
+#include "object/uri.h"
+class SPItem;
 
 #include <glibmm/ustring.h>
 
@@ -275,8 +275,6 @@ public:
     static void   init  (void);
 
 private:
-
-    Inkscape::URI documentUri;
 
     void reset();
 

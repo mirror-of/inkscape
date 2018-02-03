@@ -9,14 +9,15 @@
  * Released under the GNU GPL, read the file 'COPYING' for more information.
  */
 
-#include "ui/dialog/prototype.h"
-#include "verbs.h"
+#include "prototype.h"
+
 #include "desktop.h"
 #include "document.h"
 #include "selection.h"
+#include "verbs.h"
 
 // Only for use in demonstration widget.
-#include "sp-root.h"
+#include "object/sp-root.h"
 
 namespace Inkscape {
 namespace UI {
@@ -25,9 +26,7 @@ namespace Dialog {
 // Note that in order for a dialog to be restored, it must be listed in SPDesktop::show_dialogs().
 
 Prototype::Prototype() :
-    // UI::Widget::Panel("Prototype Label", "/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE,
-    //                "Prototype Apply Label", true),
-    UI::Widget::Panel("Prototype Label", "/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE),
+    UI::Widget::Panel("/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE),
 
     desktopTracker() //,
     // desktopChangedConnection()

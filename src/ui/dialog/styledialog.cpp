@@ -12,15 +12,17 @@
  */
 
 #include "styledialog.h"
-#include "ui/widget/addtoicon.h"
 #include "verbs.h"
-#include "sp-object.h"
 #include "selection.h"
-#include "xml/attribute-record.h"
-#include "xml/node-observer.h"
 #include "attribute-rel-svg.h"
 #include "inkscape.h"
 #include "document-undo.h"
+
+
+#include "ui/widget/addtoicon.h"
+
+#include "xml/attribute-record.h"
+#include "xml/node-observer.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
@@ -236,7 +238,7 @@ Glib::RefPtr<StyleDialog::TreeStore> StyleDialog::TreeStore::create(StyleDialog 
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
 StyleDialog::StyleDialog() :
-    UI::Widget::Panel("", "/dialogs/style", SP_VERB_DIALOG_STYLE),
+    UI::Widget::Panel("/dialogs/style", SP_VERB_DIALOG_STYLE),
     _updating(false),
     _textNode(NULL),
     _desktopTracker()
