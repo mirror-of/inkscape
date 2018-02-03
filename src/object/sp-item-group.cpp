@@ -920,10 +920,11 @@ void SPGroup::update_patheffect(bool write) {
 
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
-
-        SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
-        if (lpe_item) {
-            lpe_item->update_patheffect(write);
+        if (sub_item) {
+            SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
+            if (lpe_item) {
+                lpe_item->update_patheffect(write);
+            }
         }
     }
 

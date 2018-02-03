@@ -46,10 +46,11 @@ using namespace Geom;
 namespace Inkscape {
 namespace LivePathEffect {
 
-static const Util::EnumData<OrientationMethod> OrientationMethodData[] = {
-    { OM_HORIZONTAL, N_("Horizontal"), "horizontal" }, 
-    { OM_VERTICAL, N_("Vertical"), "vertical" },
-    { OM_PARALLEL, N_("Parallel"), "parallel" }
+
+static const Util::EnumData<OrientationMethod> OrientationMethodData[OM_END] = {
+    { OM_HORIZONTAL , N_("Horizontal"), "horizontal" }, 
+    { OM_VERTICAL   , N_("Vertical")  , "vertical"   },
+    { OM_PARALLEL   , N_("Parallel")  , "parallel"   }
 };
 static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationMethodData, OM_END);
 
@@ -203,7 +204,7 @@ LPEMeasureSegments::createArrowMarker(const char * mode)
         elemref = SP_OBJECT(document->getDefs()->appendChildRepr(arrow));
         Inkscape::GC::release(arrow);
     }
-    items.push_back(mode);
+    items.push_back(g_strdup(mode));
 }
 
 void

@@ -335,21 +335,6 @@ g_message("sp_path_update_patheffect");
     if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-        if (hasPathEffect() && pathEffectsEnabled()) {
-            for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
-            {
-                LivePathEffectObject *lpeobj = (*it)->lpeobject;
-                if (lpeobj) {
-                    Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-                    if (lpe) {
-                        if (lpe->skip_reprocess) {
-                            //lpe->skip_reprocess--;
-                            //return;
-                        }
-                    }
-                }
-            }
-        }
         this->setCurveInsync(c_lpe, TRUE);
         this->resetClipPathAndMaskLPE();
         bool success = false;

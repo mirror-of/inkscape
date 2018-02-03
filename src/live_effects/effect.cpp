@@ -556,6 +556,7 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    std::cout << "dobefore" << std::endl;
     doBeforeEffect(lpeitem);
     update_helperpath();
 }
