@@ -1,7 +1,3 @@
-/**
- * @file
- * Color swatches dialog.
- */
 /* Authors:
  *   Jon A. Cruz
  *   John Bintz
@@ -13,13 +9,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <errno.h>
 #include <map>
 #include <algorithm>
+#include <iomanip>
 #include <set>
 
 #include "swatches.h"
 #include <gtkmm/radiomenuitem.h>
+
+#include <gtkmm/menu.h>
+#include <gtkmm/checkmenuitem.h>
+#include <gtkmm/radiomenuitem.h>
+#include <gtkmm/separatormenuitem.h>
+#include <gtkmm/menubutton.h>
 
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
@@ -40,12 +42,15 @@
 #include "io/resource.h"
 #include "message-context.h"
 #include "path-prefix.h"
-#include "style.h"
+
 #include "ui/previewholder.h"
 #include "widgets/desktop-widget.h"
 #include "widgets/gradient-vector.h"
 #include "display/cairo-utils.h"
-#include "sp-gradient-reference.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-gradient-reference.h"
+
 #include "dialog-manager.h"
 #include "verbs.h"
 #include "gradient-chemistry.h"
@@ -54,6 +59,16 @@
 namespace Inkscape {
 namespace UI {
 namespace Dialogs {
+
+
+enum {
+    SWATCHES_SETTINGS_SIZE = 0,
+    SWATCHES_SETTINGS_MODE = 1,
+    SWATCHES_SETTINGS_SHAPE = 2,
+    SWATCHES_SETTINGS_WRAP = 3,
+    SWATCHES_SETTINGS_BORDER = 4,
+    SWATCHES_SETTINGS_PALETTE = 5
+};
 
 #define VBLOCK 16
 #define PREVIEW_PIXBUF_WIDTH 128
@@ -367,7 +382,7 @@ static char* trim( char* str ) {
         str++;
     }
     str--;
-    while ( str > ret && (( *str == ' ' || *str == '\t' ) || *str == '\r' || *str == '\n') ) {
+    while ( str >= ret && (( *str == ' ' || *str == '\t' ) || *str == '\r' || *str == '\n') ) {
         *str-- = 0;
     }
     return ret;
@@ -440,9 +455,16 @@ void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
                                     }
                                     if ( !hasErr && *ptr ) {
                                         char* n = trim(ptr);
-                                        if (n != NULL) {
+                                        if (n != NULL && *n) {
                                             name = g_dpgettext2(NULL, "Palette", n);
                                         }
+                                        if (name == "") {
+                                            name = Glib::ustring::compose("#%1%2%3",
+                                                       Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), r),
+                                                       Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), g),
+                                                       Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), b)
+                                                   ).uppercase();
+                                        } 
                                     }
                                     if ( !hasErr ) {
                                         // Add the entry now
@@ -517,25 +539,24 @@ compare_swatch_names(SwatchPage const *a, SwatchPage const *b) {
     return g_utf8_collate(a->_name.c_str(), b->_name.c_str()) < 0;
 }
 
-static void loadEmUp()
+static void load_palettes()
 {
-    using namespace Inkscape::IO::Resource;
-    static bool beenHere = false;
-    gboolean userPalette = true;
-    if ( !beenHere ) {
-        beenHere = true;
+    static bool init_done = false;
 
-        for(auto &filename: get_filenames(PALETTES, {".gpl"})) {
-            bool userPalette = Inkscape::IO::file_is_writable(filename.c_str());
-            _loadPaletteFile(filename, userPalette);
-        }
+    if (init_done) {
+        return;
+    }
+    init_done = true;
+
+    for (auto &filename: Inkscape::IO::Resource::get_filenames(Inkscape::IO::Resource::PALETTES, {".gpl"})) {
+        bool userPalette = Inkscape::IO::file_is_writable(filename.c_str());
+        _loadPaletteFile(filename, userPalette);
     }
 
     // Sort the list of swatches by name, grouped by user/system
     userSwatchPages.sort(compare_swatch_names);
     systemSwatchPages.sort(compare_swatch_names);
 }
-
 
 SwatchesPanel& SwatchesPanel::getInstance()
 {
@@ -547,7 +568,8 @@ SwatchesPanel& SwatchesPanel::getInstance()
  * Constructor
  */
 SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
-    Inkscape::UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SWATCHES, "", true),
+    Inkscape::UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_SWATCHES),
+    _menu(0),
     _holder(0),
     _clear(0),
     _remove(0),
@@ -555,11 +577,37 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
     _currentDesktop(0),
     _currentDocument(0)
 {
-    set_name( "SwatchesPanel" );
-    Gtk::RadioMenuItem* hotItem = 0;
     _holder = new PreviewHolder();
+
+    _build_menu();
+
+    auto menu_button = Gtk::manage(new Gtk::MenuButton());
+    menu_button->set_halign(Gtk::ALIGN_END);
+    menu_button->set_relief(Gtk::RELIEF_NONE);
+    menu_button->set_image_from_icon_name("pan-start-symbolic", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    menu_button->set_popup(*_menu);
+
+    auto box = Gtk::manage(new Gtk::Box());
+
+    if (_prefs_path == "/dialogs/swatches") {
+        box->set_orientation(Gtk::ORIENTATION_VERTICAL);
+        box->pack_start(*menu_button, Gtk::PACK_SHRINK);
+    } else {
+        box->set_orientation(Gtk::ORIENTATION_HORIZONTAL);
+        box->pack_end(*menu_button, Gtk::PACK_SHRINK);
+        _updateSettings(SWATCHES_SETTINGS_MODE, 1);
+        _holder->setOrientation(SP_ANCHOR_SOUTH);
+    }
+
+    box->pack_start(*_holder, Gtk::PACK_EXPAND_WIDGET);
+    _getContents()->pack_start(*box);
+
+    load_palettes();
+
+    Gtk::RadioMenuItem* hotItem = 0;
     _clear = new ColorItem( ege::PaintDef::CLEAR );
     _remove = new ColorItem( ege::PaintDef::NONE );
+
     if (docPalettes.empty()) {
         SwatchPage *docPalette = new SwatchPage();
 
@@ -567,7 +615,6 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
         docPalettes[0] = docPalette;
     }
 
-    loadEmUp();
     if ( !systemSwatchPages.empty() || !userSwatchPages.empty()) {
         SwatchPage* first = 0;
         int index = 0;
@@ -579,7 +626,6 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
                 if (targetName == "Auto") {
                     first = docPalettes[0];
                 } else {
-                    //index++;
                     std::vector<SwatchPage*> pages = _getSwatchSets();
                     for ( std::vector<SwatchPage*>::iterator iter = pages.begin(); iter != pages.end(); ++iter ) {
                         if ( (*iter)->_name == targetName ) {
@@ -611,31 +657,17 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
             if ( curr == first ) {
                 hotItem = single;
             }
-            _regItem( single, 3, i );
+            _regItem(single, i);
 
             i++;
         }
     }
 
-    if (Glib::ustring(prefsPath) == "/dialogs/swatches") {
-        Gtk::Requisition sreq;
-        Gtk::Requisition sreq_natural;
-        get_preferred_size(sreq_natural, sreq);
-        int minHeight = 60;
-        if (sreq.height < minHeight) {
-            set_size_request(70, minHeight);
-        }
-    }
-
-    _getContents()->pack_start(*_holder, Gtk::PACK_EXPAND_WIDGET);
-    _setTargetFillable(_holder);
-
-    show_all_children();
-
-    restorePanelPrefs();
     if ( hotItem ) {
         hotItem->set_active();
     }
+
+    show_all_children();
 }
 
 SwatchesPanel::~SwatchesPanel()
@@ -654,17 +686,169 @@ SwatchesPanel::~SwatchesPanel()
     if ( _holder ) {
         delete _holder;
     }
+
+    delete _menu;
 }
 
-void SwatchesPanel::setOrientation(SPAnchorType how)
+void SwatchesPanel::_build_menu()
 {
-    // Must call the parent class or bad things might happen
-    Inkscape::UI::Widget::Panel::setOrientation( how );
-
-    if ( _holder )
-    {
-        _holder->setOrientation(SP_ANCHOR_SOUTH);
+    guint panel_size = 0, panel_mode = 0, panel_ratio = 100, panel_border = 0;
+    bool panel_wrap = 0;
+    if (!_prefs_path.empty()) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        panel_wrap = prefs->getBool(_prefs_path + "/panel_wrap");
+        panel_size = prefs->getIntLimited(_prefs_path + "/panel_size", 1, 0, PREVIEW_SIZE_HUGE);
+        panel_mode = prefs->getIntLimited(_prefs_path + "/panel_mode", 1, 0, 10);
+        panel_ratio = prefs->getIntLimited(_prefs_path + "/panel_ratio", 100, 0, 500 );
+        panel_border = prefs->getIntLimited(_prefs_path + "/panel_border", BORDER_NONE, 0, 2 );
     }
+
+    _menu = new Gtk::Menu();
+
+    if (_prefs_path == "/dialogs/swatches") {
+        Gtk::RadioMenuItem::Group group;
+        Glib::ustring list_label(_("List"));
+        Glib::ustring grid_label(_("Grid"));
+        Gtk::RadioMenuItem *list_item = Gtk::manage(new Gtk::RadioMenuItem(group, list_label));
+        Gtk::RadioMenuItem *grid_item = Gtk::manage(new Gtk::RadioMenuItem(group, grid_label));
+
+        if (panel_mode == 0) {
+            list_item->set_active(true);
+        } else if (panel_mode == 1) {
+            grid_item->set_active(true);
+        }
+
+        _menu->append(*list_item);
+        _menu->append(*grid_item);
+        _menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+
+        list_item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_MODE, 0));
+        grid_item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_MODE, 1));
+    }
+
+    {
+        Glib::ustring heightItemLabel(C_("Swatches", "Size"));
+
+        //TRANSLATORS: Indicates size of colour swatches
+        const gchar *heightLabels[] = {
+            NC_("Swatches height", "Tiny"),
+            NC_("Swatches height", "Small"),
+            NC_("Swatches height", "Medium"),
+            NC_("Swatches height", "Large"),
+            NC_("Swatches height", "Huge")
+        };
+
+        Gtk::MenuItem *sizeItem = Gtk::manage(new Gtk::MenuItem(heightItemLabel));
+        Gtk::Menu *sizeMenu = Gtk::manage(new Gtk::Menu());
+        sizeItem->set_submenu(*sizeMenu);
+
+        Gtk::RadioMenuItem::Group heightGroup;
+        for (unsigned int i = 0; i < G_N_ELEMENTS(heightLabels); i++) {
+            Glib::ustring _label(g_dpgettext2(NULL, "Swatches height", heightLabels[i]));
+            Gtk::RadioMenuItem* _item = Gtk::manage(new Gtk::RadioMenuItem(heightGroup, _label));
+            sizeMenu->append(*_item);
+            if (i == panel_size) {
+                _item->set_active(true);
+            }
+            _item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_SIZE, i));
+       }
+
+       _menu->append(*sizeItem);
+    }
+
+    {
+        Glib::ustring widthItemLabel(C_("Swatches", "Width"));
+
+        //TRANSLATORS: Indicates width of colour swatches
+        const gchar *widthLabels[] = {
+            NC_("Swatches width", "Narrower"),
+            NC_("Swatches width", "Narrow"),
+            NC_("Swatches width", "Medium"),
+            NC_("Swatches width", "Wide"),
+            NC_("Swatches width", "Wider")
+        };
+
+        Gtk::MenuItem *item = Gtk::manage( new Gtk::MenuItem(widthItemLabel));
+        Gtk::Menu *type_menu = Gtk::manage(new Gtk::Menu());
+        item->set_submenu(*type_menu);
+        _menu->append(*item);
+
+        Gtk::RadioMenuItem::Group widthGroup;
+
+        guint values[] = {0, 25, 50, 100, 200, 400};
+        guint hot_index = 3;
+        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+            // Assume all values are in increasing order
+            if ( values[i] <= panel_ratio ) {
+                hot_index = i;
+            }
+        }
+        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+            Glib::ustring _label(g_dpgettext2(NULL, "Swatches width", widthLabels[i]));
+            Gtk::RadioMenuItem *_item = Gtk::manage(new Gtk::RadioMenuItem(widthGroup, _label));
+            type_menu->append(*_item);
+            if ( i <= hot_index ) {
+                _item->set_active(true);
+            }
+            _item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_SHAPE, values[i]));
+        }
+    }
+
+    {
+        Glib::ustring widthItemLabel(C_("Swatches", "Border"));
+
+        //TRANSLATORS: Indicates border of colour swatches
+        const gchar *widthLabels[] = {
+            NC_("Swatches border", "None"),
+            NC_("Swatches border", "Solid"),
+            NC_("Swatches border", "Wide"),
+        };
+
+        Gtk::MenuItem *item = Gtk::manage( new Gtk::MenuItem(widthItemLabel));
+        Gtk::Menu *type_menu = Gtk::manage(new Gtk::Menu());
+        item->set_submenu(*type_menu);
+        _menu->append(*item);
+
+        Gtk::RadioMenuItem::Group widthGroup;
+
+        guint values[] = {0, 1, 2};
+        guint hot_index = 0;
+        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+            // Assume all values are in increasing order
+            if ( values[i] <= panel_border ) {
+                hot_index = i;
+            }
+        }
+        for ( guint i = 0; i < G_N_ELEMENTS(widthLabels); ++i ) {
+            Glib::ustring _label(g_dpgettext2(NULL, "Swatches border", widthLabels[i]));
+            Gtk::RadioMenuItem *_item = Gtk::manage(new Gtk::RadioMenuItem(widthGroup, _label));
+            type_menu->append(*_item);
+            if ( i <= hot_index ) {
+                _item->set_active(true);
+            }
+            _item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_BORDER, values[i]));
+        }
+    }
+
+    if (_prefs_path == "/embedded/swatches") {
+        //TRANSLATORS: "Wrap" indicates how colour swatches are displayed
+        Glib::ustring wrap_label(C_("Swatches","Wrap"));
+        Gtk::CheckMenuItem *check = Gtk::manage(new Gtk::CheckMenuItem(wrap_label));
+        check->set_active(panel_wrap);
+        _menu->append(*check);
+
+        check->signal_toggled().connect(sigc::bind<Gtk::CheckMenuItem*>(sigc::mem_fun(*this, &SwatchesPanel::_wrapToggled), check));
+    }
+
+    _menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+
+    _menu->show_all();
+
+    _updateSettings(SWATCHES_SETTINGS_SIZE, panel_size);
+    _updateSettings(SWATCHES_SETTINGS_MODE, panel_mode);
+    _updateSettings(SWATCHES_SETTINGS_SHAPE, panel_ratio);
+    _updateSettings(SWATCHES_SETTINGS_WRAP, panel_wrap);
+    _updateSettings(SWATCHES_SETTINGS_BORDER, panel_border);
 }
 
 void SwatchesPanel::setDesktop( SPDesktop* desktop )
@@ -697,6 +881,125 @@ void SwatchesPanel::setDesktop( SPDesktop* desktop )
             _setDocument(0);
         }
     }
+}
+
+
+void SwatchesPanel::_updateSettings(int settings, int value)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    switch (settings) {
+    case SWATCHES_SETTINGS_SIZE: {
+        prefs->setInt(_prefs_path + "/panel_size", value);
+
+        ViewType curr_type = _holder->getPreviewType();
+        guint curr_ratio = _holder->getPreviewRatio();
+        ::BorderStyle curr_border = _holder->getPreviewBorder();
+
+        switch (value) {
+        case 0:
+            _holder->setStyle(::PREVIEW_SIZE_TINY, curr_type, curr_ratio, curr_border);
+            break;
+        case 1:
+            _holder->setStyle(::PREVIEW_SIZE_SMALL, curr_type, curr_ratio, curr_border);
+            break;
+        case 2:
+            _holder->setStyle(::PREVIEW_SIZE_MEDIUM, curr_type, curr_ratio, curr_border);
+            break;
+        case 3:
+            _holder->setStyle(::PREVIEW_SIZE_BIG, curr_type, curr_ratio, curr_border);
+            break;
+        case 4:
+            _holder->setStyle(::PREVIEW_SIZE_HUGE, curr_type, curr_ratio, curr_border);
+            break;
+        default:
+            break;
+        }
+
+        break;
+    }
+    case SWATCHES_SETTINGS_MODE: {
+        prefs->setInt(_prefs_path + "/panel_mode", value);
+
+        ::PreviewSize curr_size = _holder->getPreviewSize();
+        guint curr_ratio = _holder->getPreviewRatio();
+        ::BorderStyle curr_border = _holder->getPreviewBorder();
+        switch (value) {
+        case 0:
+            _holder->setStyle(curr_size, VIEW_TYPE_LIST, curr_ratio, curr_border);
+            break;
+        case 1:
+            _holder->setStyle(curr_size, VIEW_TYPE_GRID, curr_ratio, curr_border);
+            break;
+        default:
+            break;
+        }
+        break;
+    }
+    case SWATCHES_SETTINGS_SHAPE: {
+        prefs->setInt(_prefs_path + "/panel_ratio", value);
+
+        ViewType curr_type = _holder->getPreviewType();
+        ::PreviewSize curr_size = _holder->getPreviewSize();
+        ::BorderStyle curr_border = _holder->getPreviewBorder();
+
+        _holder->setStyle(curr_size, curr_type, value, curr_border);
+        break;
+    }
+    case SWATCHES_SETTINGS_BORDER: {
+        prefs->setInt(_prefs_path + "/panel_border", value);
+
+        ::PreviewSize curr_size = _holder->getPreviewSize();
+        ViewType curr_type = _holder->getPreviewType();
+        guint curr_ratio = _holder->getPreviewRatio();
+
+        switch (value) {
+        case 0:
+            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_NONE);
+            break;
+        case 1:
+            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_SOLID);
+            break;
+        case 2:
+            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_WIDE);
+            break;
+        default:
+            break;
+        }
+        break;
+    }
+    case SWATCHES_SETTINGS_WRAP: {
+        prefs->setBool(_prefs_path + "/panel_wrap", value);
+        _holder->setWrap(value);
+        break;
+    }
+    case SWATCHES_SETTINGS_PALETTE: {
+        std::vector<SwatchPage*> pages = _getSwatchSets();
+        if (value >= 0 && value < static_cast<int>(pages.size()) ) {
+            _currentIndex = value;
+
+            prefs->setString(_prefs_path + "/palette", pages[_currentIndex]->_name);
+
+            _rebuild();
+        }
+    }
+    default:
+        break;
+    }
+}
+
+void SwatchesPanel::_wrapToggled(Gtk::CheckMenuItem* toggler)
+{
+    if (toggler) {
+        _updateSettings(SWATCHES_SETTINGS_WRAP, toggler->get_active() ? 1 : 0);
+    }
+}
+
+void SwatchesPanel::_regItem(Gtk::MenuItem* item, int id)
+{
+    _menu->append(*item);
+    item->signal_activate().connect(sigc::bind<int, int>(sigc::mem_fun(*this, &SwatchesPanel::_updateSettings), SWATCHES_SETTINGS_PALETTE, id));
+    item->show();
 }
 
 
@@ -1090,27 +1393,6 @@ void SwatchesPanel::_updateFromSelection()
             bool isStroke = (strokeId == item->def.descr);
             item->setState( isFill, isStroke );
         }
-    }
-}
-
-void SwatchesPanel::_handleAction( int setId, int itemId )
-{
-    switch( setId ) {
-        case 3:
-        {
-            std::vector<SwatchPage*> pages = _getSwatchSets();
-            if ( itemId >= 0 && itemId < static_cast<int>(pages.size()) ) {
-                _currentIndex = itemId;
-
-                if ( !_prefs_path.empty() ) {
-                    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                    prefs->setString(_prefs_path + "/palette", pages[_currentIndex]->_name);
-                }
-
-                _rebuild();
-            }
-        }
-        break;
     }
 }
 

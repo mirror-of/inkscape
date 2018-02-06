@@ -12,10 +12,12 @@
  */
 
 #include "cssdialog.h"
-#include "ui/widget/addtoicon.h"
+
 #include "verbs.h"
-#include "sp-object.h"
 #include "selection.h"
+
+#include "ui/widget/addtoicon.h"
+
 #include "xml/attribute-record.h"
 
 namespace Inkscape {
@@ -32,7 +34,7 @@ namespace Dialog {
  * drawing.
  */
 CssDialog::CssDialog():
-    UI::Widget::Panel("", "/dialogs/css", SP_VERB_DIALOG_CSS),
+    UI::Widget::Panel("/dialogs/css", SP_VERB_DIALOG_CSS),
     _desktop(0)
 {
     set_size_request(20, 15);

@@ -17,28 +17,29 @@
 #include "config.h"
 #endif
 
-#include <gtkmm/buttonbox.h>
-
 #include <glibmm/i18n.h>
 #include <glibmm/timer.h>
 #include <glibmm/main.h>
 
+#include <gtkmm/buttonbox.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/frame.h>
-#include "ui/widget/frame.h"
 
 #include "desktop.h"
+#include "document.h"
+#include "inkscape.h"
+#include "verbs.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing.h"
 #include "display/drawing-context.h"
-#include "document.h"
-#include "inkscape.h"
-#include "sp-namedview.h"
-#include "sp-root.h"
-#include "verbs.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
 
 #include "icon-preview.h"
+
+#include "ui/widget/frame.h"
 
 extern "C" {
 // takes doc, drawing, icon, and icon name to produce pixels
@@ -88,7 +89,7 @@ void IconPreviewPanel::on_button_clicked(int which)
  * Constructor
  */
 IconPreviewPanel::IconPreviewPanel() :
-    UI::Widget::Panel("", "/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
+    UI::Widget::Panel("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
     deskTrack(),
     desktop(0),
     document(0),

@@ -9,23 +9,26 @@
 #include <iostream>
 #include <stdexcept>
 #include <boost/utility.hpp>
-#include "multi-path-manipulator.h"
+
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
+
 #include <2geom/bezier-utils.h>
+
+#include "desktop.h"
+#include "multi-path-manipulator.h"
+#include "snap.h"
+
 #include "display/sp-ctrlline.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
-#include "desktop.h"
 
-#include "snap.h"
-#include "sp-namedview.h"
 #include "ui/control-manager.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
-#include <gdk/gdkkeysyms.h>
 
 namespace {
 
@@ -750,7 +753,7 @@ void Node::_updateAutoHandles()
         return;
     }
 
-    // Auto nodes automaticaly adjust their handles to give an appearance of smoothness,
+    // Auto nodes automatically adjust their handles to give an appearance of smoothness,
     // no matter what their surroundings are.
     Geom::Point vec_next = _next()->position() - position();
     Geom::Point vec_prev = _prev()->position() - position();
@@ -880,7 +883,7 @@ void Node::setType(NodeType type, bool update_handles)
             break;
         default: break;
         }
-        /* in node type changes, about bspline traces, we can mantain them with NO_POWER power in border mode,
+        /* in node type changes, about bspline traces, we can maintain them with NO_POWER power in border mode,
            or we give them the default power in curve mode */
         if(_pm()._isBSpline()){
             double weight = NO_POWER;

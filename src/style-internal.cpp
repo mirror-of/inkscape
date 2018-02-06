@@ -26,22 +26,21 @@
 #include <config.h>
 #endif
 
-#include "style-internal.h"
-
 #include <glibmm/regex.h>
 
-#include "bad-uri-exception.h"
+#include "style-internal.h"
 #include "style.h"
 
-#include "svg/svg.h"
-#include "svg/svg-color.h"
-
+#include "bad-uri-exception.h"
+#include "extract-uri.h"
+#include "preferences.h"
 #include "streq.h"
 #include "strneq.h"
 
-#include "extract-uri.h"
-#include "preferences.h"
+#include "svg/svg.h"
+#include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
+
 #include "util/units.h"
 
 // TODO REMOVE OR MAKE MEMBER FUNCTIONS
@@ -206,6 +205,7 @@ SPIScale24::merge( const SPIBase* const parent ) {
                 std::cerr << "SPIScale24::merge: unhandled property: " << name << std::endl;
             if( !set || (!inherit && value == SP_SCALE24_MAX) ) {
                 value = p->value;
+                set = (value != 1.0);
             } else {
                 if( inherit ) value = p->value; // Insures child is up-to-date
                 value = SP_SCALE24_MUL( value, p->value );
@@ -2172,7 +2172,7 @@ SPIFontSize::merge( const SPIBase* const parent ) {
                      ( p->type == SP_FONT_SIZE_LENGTH &&
                        p->unit != SP_CSS_UNIT_EM &&
                        p->unit != SP_CSS_UNIT_EX ) ) {
-                    // Parent absolut size
+                    // Parent absolute size
                     type = SP_FONT_SIZE_LENGTH;
 
                 } else {

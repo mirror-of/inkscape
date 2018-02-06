@@ -24,6 +24,7 @@
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/button.h>
 
 #include "ui/dialog/desktop-tracker.h"
 #include "message.h"
@@ -181,7 +182,7 @@ private:
     void setDesktop(SPDesktop *desktop);
 
     /**
-     * Flag to ensure only one operation is perfomed at once
+     * Flag to ensure only one operation is performed at once
      */
     gint blocked;
 

@@ -27,24 +27,27 @@
  */
 
 #include "object-properties.h"
-#include "widgets/sp-attribute-widget.h"
 
-#include "document.h"
-#include "document-undo.h"
-#include "verbs.h"
-#include "inkscape.h"
-#include "desktop.h"
-#include "sp-image.h"
 #include <glibmm/i18n.h>
 
 #include <gtkmm/grid.h>
+
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "verbs.h"
+
+#include "object/sp-image.h"
+
+#include "widgets/sp-attribute-widget.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 ObjectProperties::ObjectProperties()
-    : UI::Widget::Panel ("", "/dialogs/object/", SP_VERB_DIALOG_ITEM)
+    : UI::Widget::Panel("/dialogs/object/", SP_VERB_DIALOG_ITEM)
     , _blocked (false)
     , _current_item(NULL)
     , _label_id(_("_ID:"), 1)

@@ -19,24 +19,25 @@
 #include "stroke-marker-selector.h"
 
 #include <glibmm/i18n.h>
-
-
-#include "style.h"
-#include "ui/dialog-events.h"
+#include <gtkmm/icontheme.h>
 
 #include "desktop-style.h"
 #include "path-prefix.h"
-#include "io/sys.h"
-#include "sp-marker.h"
-#include "sp-defs.h"
-#include "sp-root.h"
-#include "ui/cache/svg_preview_cache.h"
-#include "helper/stock-items.h"
-#include "gradient-vector.h"
-
-#include <gtkmm/icontheme.h>
-#include "ui/widget/spinbutton.h"
 #include "stroke-style.h"
+
+#include "helper/stock-items.h"
+
+#include "io/sys.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-marker.h"
+#include "object/sp-root.h"
+#include "style.h"
+
+#include "ui/cache/svg_preview_cache.h"
+#include "ui/dialog-events.h"
+#include "ui/util.h"
+#include "ui/widget/spinbutton.h"
 
 static Inkscape::UI::Cache::SvgPreview svg_preview_cache;
 
@@ -389,7 +390,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
         else
             row = *(marker_store->append());
 
-        row[marker_columns.label] = gr_ellipsize_text(markid, 20);
+        row[marker_columns.label] = ink_ellipsize_text(markid, 20);
         // Non "stock" markers can also have "inkscape:stockid" (when using extension ColorMarkers),
         // So use !is_history instead to determine is it is "stock" (ie in the markers.svg file)
         row[marker_columns.stock] = !history;

@@ -12,8 +12,12 @@
 #include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
+
+#include "object/sp-clippath.h"
+#include "object/sp-mask.h"
+#include "object/sp-path.h"
+#include "object/sp-shape.h"
+
 #include "xml/sp-css-attr.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
@@ -34,9 +38,9 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     linkeditem(_("Linked Item:"), _("Item from which to take the original data"), "linkeditem", &wr, this),
     method(_("Shape linked"), _("Shape linked"), "method", CLMConverter, &wr, this, CLM_D),
-    attributes("Attributes linked", "Attributes linked, comma separated atributes", "attributes", &wr, this,""),
+    attributes("Attributes linked", "Attributes linked, comma separated attributes", "attributes", &wr, this,""),
     style_attributes("Style attributes linked", "Style attributes linked, comma separated attributes like fill, filter, opacity", "style_attributes", &wr, this,""),
-    allow_transforms(_("Alow transforms"), _("Alow transforms"), "allow_transforms", &wr, this, true)
+    allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, true)
 {
     //0.92 compatibility
     const gchar * linkedpath = this->getRepr()->attribute("linkedpath");

@@ -33,38 +33,45 @@
 
 #include <gtkmm.h>
 
-#include "ui/dialog/ocaldialogs.h"
-#include "desktop.h"
+#include "file.h"
 
-#include "extension/effect.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "ui/tools/tool-base.h"
-#include "extension/db.h"
-#include "extension/input.h"
-#include "extension/output.h"
-#include "file.h"
-#include "helper/png-write.h"
+#include "event-log.h"
 #include "id-clash.h"
-#include "inkscape.h"
 #include "inkscape-version.h"
-#include "ui/interface.h"
-#include "io/sys.h"
-#include "io/resource.h"
+#include "inkscape.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "print.h"
-#include "resource-manager.h"
 #include "rdf.h"
+#include "resource-manager.h"
 #include "selection-chemistry.h"
-#include "sp-namedview.h"
+#include "verbs.h"
+
+#include "extension/db.h"
+#include "extension/effect.h"
+#include "extension/input.h"
+#include "extension/output.h"
+
+#include "helper/png-write.h"
+
+#include "io/resource.h"
+#include "io/sys.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
 #include "style.h"
+
+#include "ui/dialog/font-substitution.h"
+#include "ui/dialog/ocaldialogs.h"
+#include "ui/interface.h"
+#include "ui/tools/tool-base.h"
 #include "ui/view/view-widget.h"
+
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
-#include "verbs.h"
-#include "event-log.h"
-#include "ui/dialog/font-substitution.h"
 
 
 using Inkscape::DocumentUndo;
@@ -667,8 +674,25 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         return false;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {
         return sp_file_save_dialog(parentWindow, doc, save_method);
-    } catch (...) {
+    } catch (std::exception &e) {
+        gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
+        gchar *text = g_strdup_printf(_("File %s could not be saved.\n\n"
+                                        "The following additional information was returned by the output extension:\n"
+                                        "'%s'"), safeUri, e.what());
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        sp_ui_error_dialog(text);
+        g_free(text);
+        g_free(safeUri);
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        return false;
+    } catch (...) {
+        g_critical("Extension '%s' threw an unspecified exception.", key->get_id());
+        gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
+        gchar *text = g_strdup_printf(_("File %s could not be saved."), safeUri);
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        sp_ui_error_dialog(text);
+        g_free(text);
+        g_free(safeUri);
         doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     }

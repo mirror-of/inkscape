@@ -22,28 +22,29 @@
 # include <config.h>
 #endif
 
-#include "ui/widget/notebook-page.h"
-#include "document-properties.h"
 #include "display/canvas-grid.h"
+#include "document-properties.h"
+#include "rdf.h"
+#include "verbs.h"
 
 #include "io/sys.h"
-#include "ui/shape-editor.h"
-#include "sp-root.h"
-#include "sp-script.h"
+
+#include "object/sp-root.h"
+#include "object/sp-script.h"
 #include "style.h"
-#include "ui/tools-switch.h"
+
 #include "ui/dialog/filedialog.h"
-#include "verbs.h"
+#include "ui/icon-names.h"
+#include "ui/shape-editor.h"
+#include "ui/tools-switch.h"
+#include "ui/widget/entity-entry.h"
+#include "ui/widget/notebook-page.h"
+
 #include "xml/node-event-vector.h"
 
-#include "rdf.h"
-#include "ui/widget/entity-entry.h"
-
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-#include "color-profile.h"
+#include "object/color-profile.h"
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-
-#include "ui/icon-names.h"
 
 using std::pair;
 
@@ -88,7 +89,7 @@ DocumentProperties& DocumentProperties::getInstance()
 }
 
 DocumentProperties::DocumentProperties()
-    : UI::Widget::Panel ("", "/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
+    : UI::Widget::Panel("/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
       _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
       _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),

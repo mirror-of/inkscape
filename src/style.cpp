@@ -31,22 +31,26 @@
 
 #include <glibmm/regex.h>
 
+#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "libcroco/cr-sel-eng.h"
-#include "xml/croco-node-iface.h"
-
-#include "svg/svg.h"
+#include "document.h"
+#include "preferences.h"
 
 #include "display/canvas-bpath.h"
-#include "attributes.h"
-#include "document.h"
-#include "uri-references.h"
-#include "uri.h"
-#include "sp-paint-server.h"
+
+#include "libcroco/cr-sel-eng.h"
+
+#include "object/sp-paint-server.h"
+#include "object/uri-references.h"
+#include "object/uri.h"
+
 #include "svg/css-ostringstream.h"
-#include "xml/simple-document.h"
+#include "svg/svg.h"
+
 #include "util/units.h"
-#include "preferences.h"
+
+#include "xml/croco-node-iface.h"
+#include "xml/simple-document.h"
 
 using Inkscape::CSSOStringStream;
 using std::vector;
@@ -491,7 +495,7 @@ SPStyle::~SPStyle() {
     fill_ps_changed_connection.disconnect();
     stroke_ps_changed_connection.disconnect();
 
-    // The following shoud be moved into SPIPaint and SPIFilter
+    // The following should be moved into SPIPaint and SPIFilter
     if (fill.value.href) {
         fill_ps_modified_connection.disconnect();
     }

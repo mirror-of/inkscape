@@ -16,6 +16,8 @@
 #include <algorithm>
 #include <locale>
 #include <sstream>
+#include <fstream>
+#include <regex>
 
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
@@ -37,10 +39,11 @@
 
 #include "document.h"
 #include "inkscape.h"
-#include "sp-root.h"
-#include "sp-use.h"
-#include "sp-defs.h"
-#include "sp-symbol.h"
+
+#include "object/sp-root.h"
+#include "object/sp-use.h"
+#include "object/sp-defs.h"
+#include "object/sp-symbol.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
@@ -101,7 +104,7 @@ SymbolColumns* SymbolsDialog::getColumns()
  * Constructor
  */
 SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
-  UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SYMBOLS),
+  UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_SYMBOLS),
   store(Gtk::ListStore::create(*getColumns())),
   all_docs_processed(0),
   icon_view(0),
@@ -371,7 +374,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // This might need to be a global variable so setTargetDesktop can modify it
   SPDefs *defs = current_document->getDefs();
-
   sigc::connection defsModifiedConn = defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified));
   instanceConns.push_back(defsModifiedConn);
 
@@ -382,7 +384,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   sigc::connection documentReplacedConn = current_desktop->connectDocumentReplaced(
           sigc::mem_fun(*this, &SymbolsDialog::documentReplaced));
   instanceConns.push_back(documentReplacedConn);
-  getSymbolsFilename();
+  getSymbolsTitle();
   icons_found = false;
   
   addSymbolsInDoc(current_document); /* Defaults to current document */
@@ -719,7 +721,7 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
     // even if this is not possible the alternate short (8.3) file name will be used if available
     fullname = g_win32_locale_filename_from_utf8(filename.c_str());
   #else
-    filename.copy(fullname, filename.length());
+    fullname = strdup(filename.c_str());
   #endif
 
   RVNGFileStream input(fullname);
@@ -728,7 +730,6 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
   if (!libvisio::VisioDocument::isSupported(&input)) {
     return NULL;
   }
-
   RVNGStringVector output;
   RVNGStringVector titles;
 #if WITH_LIBVISIO01
@@ -740,7 +741,6 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 #endif
     return NULL;
   }
-
   if (output.empty()) {
     return NULL;
   }
@@ -796,42 +796,52 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 
   tmpSVGOutput += "  </defs>\n";
   tmpSVGOutput += "</svg>\n";
-
   return SPDocument::createNewDocFromMem( tmpSVGOutput.c_str(), strlen( tmpSVGOutput.c_str()), 0 );
 
 }
 #endif
 
 /* Hunts preference directories for symbol files */
-void SymbolsDialog::getSymbolsFilename() {
+void SymbolsDialog::getSymbolsTitle() {
 
     using namespace Inkscape::IO::Resource;
     Glib::ustring title;
     number_docs = 0;
+    std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)"); 
     for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
-        if(Glib::str_has_suffix(filename, ".svg")) {
-            //TODO: find a way to get real title without loading all SPDocument
-            std::size_t found = filename.find_last_of("/\\");
-            filename = filename.substr(found+1);
-            title = filename.erase(filename.rfind('.'));
-            if(title.empty()) {
-              title = _("Unnamed Symbols");
-            }
-            symbol_sets[title]= NULL;
-            ++number_docs;
-        }
-#ifdef WITH_LIBVISIO
         if(Glib::str_has_suffix(filename, ".vss")) {
-            std::size_t found = filename.find_last_of("/\\");
-            filename = filename.substr(found+1);
-            title = filename.erase(filename.rfind('.'));
-            if(title.empty()) {
-              title = _("Unnamed Symbols");
-            }
-            symbol_sets[title]= NULL;
-            ++number_docs;
+          std::size_t found = filename.find_last_of("/\\");
+          filename = filename.substr(found+1);
+          title = filename.erase(filename.rfind('.'));
+          if(title.empty()) {
+            title = _("Unnamed Symbols");
+          }
+          symbol_sets[title]= NULL;
+          ++number_docs;
+        } else {
+          std::ifstream infile(filename);
+          std::string line;
+          while (std::getline(infile, line)) {
+              std::string title_res = std::regex_replace (line, matchtitle,"$1",std::regex_constants::format_no_copy);
+              if (!title_res.empty()) {
+                  symbol_sets[ellipsize(Glib::ustring(title_res), 33)]= NULL;
+                  ++number_docs;
+                  break;
+              }
+              std::string::size_type position_exit = line.find ("<defs");
+              if (position_exit != std::string::npos) {
+                  std::size_t found = filename.find_last_of("/\\");
+                  filename = filename.substr(found+1);
+                  title = filename.erase(filename.rfind('.'));
+                  if(title.empty()) {
+                    title = _("Unnamed Symbols");
+                  }
+                  symbol_sets[title]= NULL;
+                  ++number_docs;
+                  break;
+              }
+          } 
         }
-#endif
     }
     for(auto const &symbol_document_map : symbol_sets) {
       symbol_set->append(symbol_document_map.first);
@@ -842,6 +852,11 @@ void SymbolsDialog::getSymbolsFilename() {
 std::pair<Glib::ustring, SPDocument*>
 SymbolsDialog::getSymbolsSet(Glib::ustring title) 
 {
+    SPDocument* symbol_doc = NULL;
+    Glib::ustring current = symbol_set->get_active_text();
+    if (current == CURRENTDOC) {
+      return std::make_pair(CURRENTDOC, symbol_doc);
+    }
     if (symbol_sets[title]) {
       sensitive = false;
       symbol_set->remove_all();
@@ -857,29 +872,53 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
       return std::make_pair(title, symbol_sets[title]);
     }
     using namespace Inkscape::IO::Resource;
-    SPDocument* symbol_doc = NULL;
     Glib::ustring new_title;
+
+    std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)"); 
     for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
-        std::size_t pos = filename.find_last_of("/\\");
-        if (pos != std::string::npos) {
-          Glib::ustring filename_short = filename.substr(pos+1);
-          if(filename_short == title + ".svg") {
-              symbol_doc = SPDocument::createNewDoc(filename.c_str(), FALSE);
-              if(symbol_doc) {
-                  new_title = documentTitle(symbol_doc);
-                  break;
-              }
-          }
+        if(Glib::str_has_suffix(filename, ".vss")) {
 #ifdef WITH_LIBVISIO
-          if(filename_short == title + ".vss") {
-              symbol_doc = read_vss(filename, title);
-              if(symbol_doc) {
-                  new_title = documentTitle(symbol_doc);
-                  break;
-              }
+          std::size_t pos = filename.find_last_of("/\\");
+          Glib::ustring filename_short = "";
+          if (pos != std::string::npos) {
+            filename_short = filename.substr(pos+1);
+          }
+          if (filename_short == title + ".vss") {
+              new_title = title;
+              symbol_doc = read_vss(Glib::ustring(filename), title);
           }
 #endif
-      }
+        } else {
+            std::ifstream infile(filename);
+            std::string line;
+            while (std::getline(infile, line)) {
+                std::string title_res = std::regex_replace (line, matchtitle,"$1",std::regex_constants::format_no_copy);
+                if (!title_res.empty()) {
+                  new_title = ellipsize(Glib::ustring(title_res), 33);
+                }
+                std::size_t pos = filename.find_last_of("/\\");
+                Glib::ustring filename_short = "";
+                if (pos != std::string::npos) {
+                  filename_short = filename.substr(pos+1);
+                }
+                if (title == new_title || filename_short == title + ".svg") {
+                    new_title = title;
+                    if(Glib::str_has_suffix(filename, ".svg")) {
+                        symbol_doc = SPDocument::createNewDoc(filename.c_str(), FALSE);
+                    }
+                }
+                if (symbol_doc) {
+                    break;
+                }
+                std::string::size_type position_exit = line.find ("<defs");
+                if (position_exit != std::string::npos) {
+                    break;
+                }
+            }
+        }
+        if (symbol_doc) {
+            break;
+        }
     }
     if(symbol_doc) {
       symbol_sets.erase(title);

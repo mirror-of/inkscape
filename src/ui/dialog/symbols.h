@@ -18,11 +18,11 @@
 #include "display/drawing.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
-#include "sp-symbol.h"
-#include "sp-use.h"
 #include <vector>
 
 class SPObject;
+class SPSymbol;
+class SPUse;
 
 namespace Inkscape {
 namespace UI {
@@ -81,7 +81,7 @@ private:
     Glib::ustring selectedSymbolDocTitle();
     void iconChanged();
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
-    void getSymbolsFilename();
+    void getSymbolsTitle();
     Glib::ustring documentTitle(SPDocument* doc);
     std::pair<Glib::ustring, SPDocument*> getSymbolsSet(Glib::ustring title);
     void addSymbol( SPObject* symbol, Glib::ustring doc_title);

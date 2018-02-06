@@ -16,30 +16,37 @@
 #include <config.h>
 #endif
 
+#include <glibmm/i18n.h>
+
 #include <2geom/rect.h>
 
-#include "ui/widget/spinbutton.h"
-#include <glibmm/i18n.h>
 #include "select-toolbar.h"
 
 #include "desktop.h"
-#include "display/sp-canvas.h"
 #include "document-undo.h"
 #include "document.h"
-#include "widgets/ege-adjustment-action.h"
-#include "helper/action-context.h"
-#include "helper/action.h"
 #include "ink-action.h"
 #include "ink-toggle-action.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
-#include "sp-item-transform.h"
-#include "sp-namedview.h"
 #include "toolbox.h"
-#include "ui/icon-names.h"
-#include "ui/widget/unit-tracker.h"
 #include "verbs.h"
+
+#include "display/sp-canvas.h"
+
+#include "helper/action-context.h"
+#include "helper/action.h"
+
+#include "object/sp-item-transform.h"
+#include "object/sp-namedview.h"
+
+#include "ui/icon-names.h"
+#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/spinbutton.h"
+#include "ui/widget/unit-tracker.h"
+
+#include "widgets/ege-adjustment-action.h"
 #include "widgets/sp-widget.h"
 #include "widgets/widget-sizes.h"
 
@@ -517,8 +524,10 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     contextActions->push_back( GTK_ACTION(eact) );
 
     // Add the units menu.
-    act = tracker->createAction( "UnitsAction", _("Units"), ("") );
-    gtk_action_group_add_action( selectionActions, act );
+    {
+        InkSelectOneAction* act = tracker->createAction( "UnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( selectionActions, act->gobj() );
+    }
 
     g_object_set_data( G_OBJECT(spw), "selectionActions", selectionActions );
     g_object_set_data( G_OBJECT(spw), "contextActions", contextActions );

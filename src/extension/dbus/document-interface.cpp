@@ -15,54 +15,49 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "file.h" //IO
-#include "document-interface.h"
-#include "application-interface.h"
+#include <glib.h>
 #include <string.h>
+
 #include <dbus/dbus-glib.h>
-#include "desktop.h"
- //sp_desktop_document()
-#include "desktop-style.h" //sp_desktop_get_style
-#include "display/canvas-text.h" //text
-#include "display/sp-canvas.h" //text
-#include "document.h" // getReprDoc()
-#include "document-undo.h"
-#include "extension/output.h" //IO
-#include "extension/system.h" //IO
-#include "file.h" //IO
-#include "helper/action.h" //sp_action_perform
-#include "helper/action-context.h"
-#include "inkscape.h" //inkscape_find_desktop_by_dkey, activate desktops
-#include "layer-fns.h" //LPOS_BELOW
-#include "layer-model.h"
-#include "live_effects/parameter/text.h" //text
-#include "print.h" //IO
-#include "selection-chemistry.h"// lots of selection functions
-#include "selection.h" //selection struct
-#include "sp-ellipse.h"
-#include "sp-object.h"
-#include "sp-root.h"
-#include "style.h" //style_write
-#include "util/units.h"
-
-#include "extension/system.h" //IO
-
-#include "extension/output.h" //IO
-
-#include "print.h" //IO
-
-#include "live_effects/parameter/text.h" //text
-#include "display/canvas-text.h" //text
-
-#include "display/sp-canvas.h" //text
-#include "text-editing.h"
-#include "verbs.h"
-#include "xml/repr.h" //sp_repr_document_new
+#include <dbus/dbus-glib.h>
 
 //#include "2geom/svg-path-parser.h" //get_node_coordinates
 
-#include <glib.h>
-#include <dbus/dbus-glib.h>
+#include "application-interface.h"
+#include "desktop-style.h" //sp_desktop_get_style
+#include "desktop.h"
+#include "document-interface.h"
+#include "document-undo.h"
+#include "document.h" // getReprDoc()
+#include "file.h" //IO
+#include "inkscape.h" //inkscape_find_desktop_by_dkey, activate desktops
+#include "layer-fns.h" //LPOS_BELOW
+#include "layer-model.h"
+#include "print.h" //IO
+#include "selection-chemistry.h"// lots of selection functions
+#include "selection.h" //selection struct
+#include "style.h" //style_write
+#include "text-editing.h"
+#include "verbs.h"
+
+#include "helper/action-context.h"
+#include "helper/action.h" //sp_action_perform
+
+#include "display/canvas-text.h" //text
+#include "display/sp-canvas.h" //text
+
+#include "extension/output.h" //IO
+#include "extension/system.h" //IO
+
+#include "live_effects/parameter/text.h" //text
+
+#include "object/sp-ellipse.h"
+#include "object/sp-object.h"
+#include "object/sp-root.h"
+
+#include "util/units.h"
+
+#include "xml/repr.h" //sp_repr_document_new
 
 #if 0
 #include <libxml/tree.h>
@@ -127,7 +122,7 @@ get_object_by_name (SPDocument *doc, gchar *name, GError **error)
 /*
  * Tests for NULL strings and throws an appropriate error.
  * Every method that takes a string parameter (other than the 
- * name of an object, that's tested seperatly) should call this.
+ * name of an object, that's tested separately) should call this.
  */
 gboolean
 dbus_check_string (gchar *string, GError ** error, const gchar * errorstr)
@@ -183,7 +178,7 @@ selection_get_center_y (Inkscape::Selection *sel){
  * original selection.
  *
  * This should be mostly transparent to the user who need never
- * know we never bothered to implement it seperatly.  Although
+ * know we never bothered to implement it separately.  Although
  * they might see the selection box flicker if used in a loop.
  */
 std::vector<SPObject*>

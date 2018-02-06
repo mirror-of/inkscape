@@ -31,13 +31,15 @@
 #include "live_effects/lpe-line_segment.h"
 #include "lpe-toolbar.h"
 
-#include "widgets/ege-select-one-action.h"
 #include "helper/action-context.h"
 #include "helper/action.h"
+
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
+
 #include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -55,7 +57,7 @@ using Inkscape::UI::Tools::LpeTool;
 // the subtools from which the toolbar is built automatically are listed in lpe-tool-context.h
 
 // this is called when the mode is changed via the toolbar (i.e., one of the subtool buttons is pressed)
-static void sp_lpetool_mode_changed(EgeSelectOneAction *act, GObject *tbl)
+static void sp_lpetool_mode_changed(GObject *tbl, int mode)
 {
     using namespace Inkscape::LivePathEffect;
 
@@ -70,14 +72,15 @@ static void sp_lpetool_mode_changed(EgeSelectOneAction *act, GObject *tbl)
         // in turn, prevent listener from responding
         g_object_set_data(tbl, "freeze", GINT_TO_POINTER(TRUE));
 
-        gint mode = ege_select_one_action_get_active(act);
         EffectType type = lpesubtools[mode].type;
 
         LpeTool *lc = SP_LPETOOL_CONTEXT(desktop->event_context);
         bool success = lpetool_try_construction(lc, type);
         if (success) {
             // since the construction was already performed, we set the state back to inactive
-            ege_select_one_action_set_active(act, 0);
+            InkSelectOneAction* act =
+                static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "lpetool_mode_action" ) );
+            act->set_active(0);
             mode = 0;
         } else {
             // switch to the chosen subtool
@@ -114,26 +117,30 @@ static void sp_lpetool_toolbox_sel_changed(Inkscape::Selection *selection, GObje
     lpetool_create_measuring_items(lc, selection);
 
     // activate line segment combo box if a single item with LPELineSegment is selected
-    GtkAction* w = GTK_ACTION(g_object_get_data(tbl, "lpetool_line_segment_action"));
+    InkSelectOneAction* act =
+        static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "lpetool_line_segment_action" ) );
+
     SPItem *item = selection->singleItem();
     if (item && SP_IS_LPE_ITEM(item) && lpetool_item_has_construction(lc, item)) {
+
         SPLPEItem *lpeitem = SP_LPE_ITEM(item);
         Effect* lpe = lpeitem->getCurrentLPE();
         if (lpe && lpe->effectType() == LINE_SEGMENT) {
             LPELineSegment *lpels = static_cast<LPELineSegment*>(lpe);
             g_object_set_data(tbl, "currentlpe", lpe);
             g_object_set_data(tbl, "currentlpeitem", lpeitem);
-            gtk_action_set_sensitive(w, TRUE);
-            ege_select_one_action_set_active(EGE_SELECT_ONE_ACTION(w), lpels->end_type.get_value());
+            act->set_sensitive(true);
+            act->set_active( lpels->end_type.get_value() );
         } else {
             g_object_set_data(tbl, "currentlpe", NULL);
             g_object_set_data(tbl, "currentlpeitem", NULL);
-            gtk_action_set_sensitive(w, FALSE);
+            act->set_sensitive(false);
         }
+
     } else {
         g_object_set_data(tbl, "currentlpe", NULL);
         g_object_set_data(tbl, "currentlpeitem", NULL);
-        gtk_action_set_sensitive(w, FALSE);
+        act->set_sensitive(false);
     }
 }
 
@@ -157,18 +164,20 @@ static void lpetool_toggle_show_measuring_info(GtkToggleAction *act, GObject *tb
         return;
     }
 
-    GtkAction *unitact = static_cast<GtkAction*>(g_object_get_data(tbl, "lpetool_units_action"));
+    bool show = gtk_toggle_action_get_active( act );
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/lpetool/show_measuring_info",  show);
+
     LpeTool *lc = SP_LPETOOL_CONTEXT(desktop->event_context);
-    if (tools_isactive(desktop, TOOLS_LPETOOL)) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool show = gtk_toggle_action_get_active( act );
-        prefs->setBool("/tools/lpetool/show_measuring_info",  show);
-        lpetool_show_measuring_info(lc, show);
-        gtk_action_set_sensitive(GTK_ACTION(unitact), show);
-    }
+    lpetool_show_measuring_info(lc, show);
+
+    InkSelectOneAction* unitact =
+        static_cast<InkSelectOneAction*>(g_object_get_data(tbl, "lpetool_units_action"));
+    unitact->set_sensitive( show );
 }
 
-static void lpetool_unit_changed(GtkAction* /*act*/, GObject* tbl)
+static void lpetool_unit_changed(GObject* tbl, int /* NotUsed */)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Unit const *unit = tracker->getActiveUnit();
@@ -211,31 +220,7 @@ static void lpetool_toggle_set_bbox(GtkToggleAction *act, gpointer data)
     gtk_toggle_action_set_active(act, false);
 }
 
-static void sp_line_segment_build_list(GObject *tbl)
-{
-    g_object_set_data(tbl, "line_segment_list_blocked", GINT_TO_POINTER(TRUE));
-
-    EgeSelectOneAction* selector = static_cast<EgeSelectOneAction *>(g_object_get_data(tbl, "lpetool_line_segment_action"));
-    GtkListStore* model = GTK_LIST_STORE(ege_select_one_action_get_model(selector));
-    gtk_list_store_clear (model);
-
-    // TODO: we add the entries of rht combo box manually; later this should be done automatically
-    {
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Closed"), 1, 0, -1 );
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Open start"), 1, 1, -1 );
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Open end"), 1, 2, -1 );
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Open both"), 1, 3, -1 );
-    }
-
-    g_object_set_data(tbl, "line_segment_list_blocked", GINT_TO_POINTER(FALSE));
-}
-
-static void sp_lpetool_change_line_segment_type(EgeSelectOneAction* act, GObject* tbl)
+static void sp_lpetool_change_line_segment_type(GObject* tbl, int mode)
 {
     using namespace Inkscape::LivePathEffect;
 
@@ -251,7 +236,7 @@ static void sp_lpetool_change_line_segment_type(EgeSelectOneAction* act, GObject
     SPLPEItem *lpeitem = static_cast<SPLPEItem *>(g_object_get_data(tbl, "currentlpeitem"));
     if (lpeitem) {
         SPLPEItem *lpeitem = static_cast<SPLPEItem *>(g_object_get_data(tbl, "currentlpeitem"));
-        lpe->end_type.param_set_value(static_cast<Inkscape::LivePathEffect::EndType>(ege_select_one_action_get_active(act)));
+        lpe->end_type.param_set_value(static_cast<Inkscape::LivePathEffect::EndType>(mode));
         sp_lpe_item_update_patheffect(lpeitem, true, true);
     }
 
@@ -283,43 +268,48 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
 
     /** Automatically create a list of LPEs that get added to the toolbar **/
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        // the first toggle button represents the state that no subtool is active (remove this when
-        // this can be modeled by EgeSelectOneAction or some other action)
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("All inactive"),
-                            1, _("No geometric tool is active"),
-                            2, "draw-geometry-inactive",
-                            -1 );
+        Gtk::TreeModel::Row row;
+
+        // The first toggle button represents the state that no subtool is active.
+        row = *(store->append());
+        row[columns.col_label    ] = _("All inactive");
+        row[columns.col_tooltip  ] = _("No geometric tool is active");
+        row[columns.col_icon     ] = "draw-geometry-inactive";
+        row[columns.col_sensitive] = true;
 
         Inkscape::LivePathEffect::EffectType type;
-        for (int i = 1; i < num_subtools; ++i) { // we start with i = 1 because INVALID_LPE was already added
+        for (int i = 1; i < num_subtools; ++i) { // i == 0 ia INVALIDE_LPE.
+
             type =  lpesubtools[i].type;
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter,
-                                0, Inkscape::LivePathEffect::LPETypeConverter.get_label(type).c_str(),
-                                1, _(Inkscape::LivePathEffect::LPETypeConverter.get_label(type).c_str()),
-                                2, lpesubtools[i].icon_name,
-                                -1 );
+
+            row = *(store->append());
+            row[columns.col_label    ] = Inkscape::LivePathEffect::LPETypeConverter.get_label(type);
+            row[columns.col_tooltip  ] = _(Inkscape::LivePathEffect::LPETypeConverter.get_label(type).c_str());
+            row[columns.col_icon     ] = lpesubtools[i].icon_name;
+            row[columns.col_sensitive] = true;
         }
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "LPEToolModeAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "LPEToolModeAction",    // Name
+                                        (""),                // Label
+                                        (""),                // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+
+        act->use_radio( true );
+        act->use_icon( true );
+        act->use_label( false );
+        int mode = prefs->getInt("/tools/lpetool/mode", 0);
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, act->gobj() );
         g_object_set_data( holder, "lpetool_mode_action", act );
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_tooltip_column( act, 1  );
-
-        gint lpeToolMode = prefs->getInt("/tools/lpetool/mode", 0);
-        ege_select_one_action_set_active( act, lpeToolMode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_lpetool_mode_changed), holder );
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_lpetool_mode_changed), holder));
     }
 
     /* Show limiting bounding box */
@@ -349,18 +339,52 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
 
     /* Combo box to choose line segment type */
     {
-        GtkListStore* model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
-        EgeSelectOneAction* act = ege_select_one_action_new ("LPELineSegmentAction", "" , (_("Choose a line segment type")), NULL, GTK_TREE_MODEL(model));
-        ege_select_one_action_set_appearance (act, "compact");
+        InkSelectOneActionColumns columns;
+
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+        Gtk::TreeModel::Row row;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Closed");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Open start");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Open end");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Open both");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "LPELineSegmentAction", // Name
+                                        (""),                   // Label
+                                        _("Choose a line segement type"), // Tooltip
+                                        "Not Used",             // Icon
+                                        store );                // Tree store
+
+        act->use_radio( false );
+        act->use_icon( false );
+        act->use_label( true );
+        act->set_sensitive( false );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data (holder, "lpetool_line_segment_action", act );
 
-        g_object_set_data(holder, "line_segment_list_blocked", GINT_TO_POINTER(FALSE));
-
-        sp_line_segment_build_list (holder);
-
-        g_signal_connect(G_OBJECT(act), "changed", G_CALLBACK(sp_lpetool_change_line_segment_type), holder);
-        gtk_action_set_sensitive( GTK_ACTION(act), FALSE );
-        gtk_action_group_add_action(mainActions, GTK_ACTION(act));
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(sp_lpetool_change_line_segment_type), holder));
     }
 
     /* Display measuring info for selected items */
@@ -375,13 +399,13 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool( "/tools/lpetool/show_measuring_info", true ) );
     }
 
-    // add the units menu
+    // Add the units menu
     {
-        GtkAction* act = tracker->createAction( "LPEToolUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(lpetool_unit_changed), holder );
+        InkSelectOneAction* act = tracker->createAction( "LPEToolUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act->gobj() );
+        act->signal_changed_after().connect(sigc::bind<0>(sigc::ptr_fun(&lpetool_unit_changed), holder));
         g_object_set_data(holder, "lpetool_units_action", act);
-        gtk_action_set_sensitive(act, prefs->getBool("/tools/lpetool/show_measuring_info", true));
+        act->set_sensitive( prefs->getBool("/tools/lpetool/show_measuring_info", true));
     }
 
     /* Open LPE dialog (to adapt parameters numerically) */

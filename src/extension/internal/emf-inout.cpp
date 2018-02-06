@@ -33,8 +33,8 @@
 #include <libuemf/symbol_convert.h>
 
 #include "document.h"
-#include "sp-root.h" // even though it is included indirectly by wmf-inout.h
-#include "sp-path.h"
+#include "object/sp-root.h"
+#include "object/sp-path.h"
 #include "print.h"
 #include "extension/system.h"
 #include "extension/print.h"
@@ -3101,7 +3101,7 @@ std::cout << "BEFORE DRAW"
                 /*  These should be JUST ASCII, but they might not be...
                     If it holds Utf-8 or plain ASCII the first call will succeed.
                     If not, assume that it holds Latin1.
-                    If that fails then someting is really screwed up!
+                    If that fails then something is really screwed up!
                 */
                 dup_wt = U_Utf8ToUtf32le((char *) pEmr + pEmr->emrtext.offString, pEmr->emrtext.nChars, NULL);
                 if(!dup_wt)dup_wt = U_Latin1ToUtf32le((char *) pEmr + pEmr->emrtext.offString, pEmr->emrtext.nChars, NULL);

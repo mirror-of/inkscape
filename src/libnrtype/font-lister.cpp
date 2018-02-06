@@ -15,8 +15,8 @@
 #include "document.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "sp-object.h"
-#include "sp-root.h"
+#include "object/sp-object.h"
+#include "object/sp-root.h"
 #include "xml/repr.h"
 
 #include <glibmm/regex.h>
@@ -183,8 +183,8 @@ void FontLister::insert_font_family(Glib::ustring new_family)
 
 void FontLister::update_font_list(SPDocument *document)
 {
-    SPObject *r = document->getRoot();
-    if (!r) {
+    SPObject *root = document->getRoot();
+    if (!root) {
         return;
     }
 
@@ -217,7 +217,7 @@ void FontLister::update_font_list(SPDocument *document)
 
     /* Get "font-family"s used in document. */
     std::list<Glib::ustring> fontfamilies;
-    update_font_list_recursive(r, &fontfamilies);
+    update_font_list_recursive(root, &fontfamilies);
 
     fontfamilies.sort();
     fontfamilies.unique();
@@ -1085,7 +1085,7 @@ void font_lister_cell_data_func(GtkCellLayout * /*cell_layout*/,
         markup = "<span foreground='darkblue'>";
 
         /* See if font-family on system */
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family_escaped);
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family);
         for (size_t i = 0; i < tokens.size(); ++i) {
 
             Glib::ustring token = tokens[i];

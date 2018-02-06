@@ -18,35 +18,41 @@
 #include <cstring>
 #include <string>
 #include <vector>
+
 #include <glib.h>
-#include "xml/repr.h"
-#include "svg/svg.h"
-#include "sp-path.h"
-#include "sp-image.h"
-#include "sp-marker.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "text-editing.h"
-#include "style.h"
-#include "document.h"
+#include <glibmm/i18n.h>
+
+#include <2geom/svg-path-parser.h> // to get from SVG on boolean to Geom::Path
+#include <2geom/svg-path-writer.h>
+
+#include "splivarot.h"
+
 #include "document-undo.h"
+#include "document.h"
 #include "layer-model.h"
 #include "message-stack.h"
 #include "selection.h"
+#include "text-editing.h"
+#include "verbs.h"
 
-#include <glibmm/i18n.h>
-
-#include "xml/repr-sorting.h"
-#include <2geom/svg-path-writer.h>
 #include "helper/geom.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
-#include "splivarot.h"
-#include "verbs.h"
-#include "2geom/svg-path-parser.h" // to get from SVG on boolean to Geom::Path
+#include "object/sp-flowtext.h"
+#include "object/sp-image.h"
+#include "object/sp-marker.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
+#include "style.h"
+
+#include "svg/svg.h"
+
 #include "util/units.h"            // to get abbr for document units
+
+#include "xml/repr-sorting.h"
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 
@@ -56,42 +62,42 @@ void sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffs
 void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool updating);
 
 bool Inkscape::ObjectSet::pathUnion(const bool skip_undo) {
-    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, SP_VERB_SELECTION_UNION, _("Union"));
+    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, false, SP_VERB_SELECTION_UNION, _("Union"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathIntersect(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
+    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, false, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathDiff(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, SP_VERB_SELECTION_DIFF, _("Difference"));
+    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, false, SP_VERB_SELECTION_DIFF, _("Difference"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathSymDiff(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
+    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, false, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathCut(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, SP_VERB_SELECTION_CUT, _("Division"));
+    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, false, SP_VERB_SELECTION_CUT, _("Division"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathSlice(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, SP_VERB_SELECTION_SLICE, _("Cut path"));
+    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, false, SP_VERB_SELECTION_SLICE, _("Cut path"));
     return DONE == result;
 }
 
@@ -308,11 +314,11 @@ Geom::PathVector pathliv_to_pathvector(Path *pathliv){
 
 // boolean operations on the desktop
 // take the source paths from the file, do the operation, delete the originals and add the results
-BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const unsigned int verb, const Glib::ustring description)
+BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const bool checked, const unsigned int verb, const Glib::ustring description)
 {
-    if (nullptr != desktop() && !skip_undo) {
+    if (nullptr != desktop() && !checked) {
         SPDocument *doc = desktop()->getDocument();
-        BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true);
+        BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true, true);
         switch(returnCode) {
         case ERR_TOO_LESS_PATHS_1:
             boolop_display_error_message(desktop(), _("Select <b>at least 1 path</b> to perform a boolean union."));
@@ -327,10 +333,14 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             boolop_display_error_message(desktop(), _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
             break;
         case DONE_NO_PATH:
-            DocumentUndo::done(doc, SP_VERB_NONE, description);
+            if (!skip_undo) { 
+                DocumentUndo::done(doc, SP_VERB_NONE, description);
+            }
             break;
         case DONE:
-            DocumentUndo::done(doc, verb, description);
+            if (!skip_undo) { 
+                DocumentUndo::done(doc, verb, description);
+            }
             break;
         }
         return returnCode;

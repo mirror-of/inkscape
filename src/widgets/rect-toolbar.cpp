@@ -28,25 +28,31 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 
 #include "rect-toolbar.h"
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
-#include "widgets/ink-action.h"
 #include "inkscape.h"
-#include "sp-namedview.h"
-#include "sp-rect.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-rect.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/rect-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
-#include "verbs.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-output-action.h"
+#include "widgets/ink-action.h"
 #include "widgets/widget-sizes.h"
+
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -322,7 +328,6 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_width_value_changed, tracker);
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "width_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -339,7 +344,6 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_height_value_changed, tracker);
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "height_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -356,7 +360,6 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_rx_value_changed, tracker);
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
@@ -371,14 +374,13 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_ry_value_changed, tracker);
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
     // add the units menu
     {
-        GtkAction* act = tracker->createAction( "RectUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act );
+        InkSelectOneAction* act = tracker->createAction( "RectUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
     /* Reset */

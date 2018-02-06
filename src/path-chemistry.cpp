@@ -17,28 +17,35 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
 #include <cstring>
 #include <string>
-#include "xml/repr.h"
-#include "svg/svg.h"
-#include "display/curve.h"
-#include <glibmm/i18n.h>
-#include "sp-path.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "text-editing.h"
-#include "style.h"
-#include "desktop.h"
-#include "document.h"
-#include "document-undo.h"
-#include "message-stack.h"
-#include "selection.h"
 
-#include "box3d.h"
-#include "selection-chemistry.h"
+#include <glibmm/i18n.h>
+
+
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "message-stack.h"
 #include "path-chemistry.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "text-editing.h"
 #include "verbs.h"
-#include "object-set.h"
+
+#include "display/curve.h"
+
+#include "object/box3d.h"
+#include "object/object-set.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
+#include "style.h"
+
+#include "svg/svg.h"
+
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::ObjectSet;
@@ -511,7 +518,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
         /* Whole text's style */
         Glib::ustring style_str =
-            item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : NULL); // TODO investigate posibility
+            item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : NULL); // TODO investigate possibility
         g_repr->setAttribute("style", style_str.c_str());
 
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -532,7 +539,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
                pos_obj = pos_obj->parent;   // SPStrings don't have style
             }
             Glib::ustring style_str =
-                pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : NULL); // TODO investigate posibility
+                pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : NULL); // TODO investigate possibility
 
             // get path from iter to iter_next:
             SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
@@ -590,7 +597,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
     /* Style */
     Glib::ustring style_str =
-        item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : NULL); // TODO investigate posibility
+        item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : NULL); // TODO investigate possibility
     repr->setAttribute("style", style_str.c_str());
 
     /* Mask */

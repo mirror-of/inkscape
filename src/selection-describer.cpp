@@ -18,18 +18,22 @@
 #include <set>
 
 #include <glibmm/i18n.h>
-#include "xml/quote.h"
+
+#include "selection-describer.h"
+
 #include "layer-model.h"
 #include "selection.h"
-#include "selection-describer.h"
 #include "desktop.h"
-#include "sp-textpath.h"
-#include "sp-offset.h"
-#include "sp-flowtext.h"
-#include "sp-use.h"
-#include "sp-symbol.h"
-#include "sp-image.h"
-#include "sp-path.h"
+
+#include "object/sp-flowtext.h"
+#include "object/sp-image.h"
+#include "object/sp-offset.h"
+#include "object/sp-path.h"
+#include "object/sp-symbol.h"
+#include "object/sp-textpath.h"
+#include "object/sp-use.h"
+
+#include "xml/quote.h"
 
 // Returns a list of terms for the items to be used in the statusbar
 char* collect_terms (const std::vector<SPItem*> &items)
@@ -92,23 +96,13 @@ SelectionDescriber::SelectionDescriber(Inkscape::Selection *selection, MessageSt
     _selection_changed_connection = new sigc::connection (
              selection->connectChanged(
                  sigc::mem_fun(*this, &SelectionDescriber::_updateMessageFromSelection)));
-    _selection_modified_connection = new sigc::connection (
-             selection->connectModified(
-                 sigc::mem_fun(*this, &SelectionDescriber::_selectionModified)));
     _updateMessageFromSelection(selection);
 }
 
 SelectionDescriber::~SelectionDescriber()
 {
     _selection_changed_connection->disconnect();
-    _selection_modified_connection->disconnect();
     delete _selection_changed_connection;
-    delete _selection_modified_connection;
-}
-
-void SelectionDescriber::_selectionModified(Inkscape::Selection *selection, guint /*flags*/)
-{
-    _updateMessageFromSelection(selection);
 }
 
 void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *selection) {

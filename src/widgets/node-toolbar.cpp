@@ -28,24 +28,29 @@
 #include <config.h>
 #endif
 
-#include "ui/tool/multi-path-manipulator.h"
 #include <glibmm/i18n.h>
-#include "node-toolbar.h"
+
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
 #include "ink-toggle-action.h"
 #include "ink-tool-menu-action.h"
 #include "inkscape.h"
+#include "node-toolbar.h"
 #include "selection-chemistry.h"
-#include "sp-namedview.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "object/sp-namedview.h"
+
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
+#include "ui/tool/multi-path-manipulator.h"
 #include "ui/tools/node-tool.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
-#include "verbs.h"
+
+#include "widgets/ege-adjustment-action.h"
 #include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -582,7 +587,6 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_node_path_x_value_changed, tracker );
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "nodes_x_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -600,7 +604,6 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_node_path_y_value_changed, tracker );
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "nodes_y_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -608,8 +611,8 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     // add the units menu
     {
-        GtkAction* act = tracker->createAction( "NodeUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act );
+        InkSelectOneAction* act = tracker->createAction( "NodeUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
     sp_node_toolbox_sel_changed(desktop->getSelection(), holder);
