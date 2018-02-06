@@ -43,7 +43,7 @@
 #include <cmath>
 #include <cfloat>
 
-#if defined(__isnan)
+#if 1//defined(__isnan)
 # define isNaN(_a) (__isnan(_a))	/* MacOSX/Darwin definition < 10.4 */
 #elif defined(WIN32) || defined(_isnan)
 # define isNaN(_a) (_isnan(_a)) 	/* Win32 definition */
