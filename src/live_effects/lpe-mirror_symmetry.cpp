@@ -15,8 +15,6 @@
  */
 
 #include <gtkmm.h>
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpe-mirror_symmetry.h"
 #include "display/curve.h"
 #include "svg/path-string.h"
@@ -41,7 +39,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-static const Util::EnumData<ModeType> ModeTypeData[MT_END] = {
+static const Util::EnumData<ModeType> ModeTypeData[] = {
     { MT_V, N_("Vertical Page Center"), "vertical" },
     { MT_H, N_("Horizontal Page Center"), "horizontal" },
     { MT_FREE, N_("Free from reflection line"), "free" },
@@ -292,12 +290,13 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    char * elemref_id = g_strdup((Glib::ustring("mirror-") + this->lpeobj->getId()).c_str());
+    Glib::ustring elemref_id = Glib::ustring("mirror-");
+    elemref_id += this->lpeobj->getId();
     items.clear();
-    items.push_back(g_strdup(elemref_id));
+    items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
-    if ((elemref = document->getObjectById(elemref_id))) {
+    if ((elemref = document->getObjectById(elemref_id.c_str()))) {
         phantom = elemref->getRepr();
     } else {
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
@@ -334,7 +333,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
         attrs.push_back("ry");
         attrs.push_back("width");
         attrs.push_back("height");
-        phantom->setAttribute("id", elemref_id);
+        phantom->setAttribute("id", elemref_id.c_str());
         for(const char * attr : attrs) { 
             phantom->setAttribute(attr, NULL);
         }
@@ -354,7 +353,6 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
         Inkscape::GC::release(copy);
         elemref->deleteObject();
     }
-    g_free(elemref_id);
 }
 
 void

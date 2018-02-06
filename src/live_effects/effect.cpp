@@ -86,7 +86,6 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include <pangomm/layout.h>
 #include <gtkmm/expander.h>
 
@@ -466,14 +465,14 @@ Effect::processObjects(LpeAction lpe_action)
     if (!document) {
         return;
     }
-    for (std::vector<const char *>::iterator el_it = items.begin(); 
+    for (std::vector<Glib::ustring>::iterator el_it = items.begin(); 
          el_it != items.end(); ++el_it) {
-        const char * id = *el_it;
-        if (!id) {
+        Glib::ustring id = *el_it;
+        if (id.empty()) {
             return;
         }
         SPObject *elemref = NULL;
-        if ((elemref = document->getObjectById(id))) {
+        if ((elemref = document->getObjectById(id.c_str()))) {
             Inkscape::XML::Node * elemnode = elemref->getRepr();
             std::vector<SPItem*> item_list;
             item_list.push_back(SP_ITEM(elemref));
@@ -532,7 +531,6 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     //Do nothing for simple effects
 }
-
 
 void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
 {

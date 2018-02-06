@@ -130,32 +130,37 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             if (numcopies_gap > 0 && num_copies != 0) {
                 guint counter = num_copies - 1;
                 while (numcopies_gap > 0) {
-                    char * id = g_strdup((Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(this->lpeobj->getId())).c_str());
-                    if (!id || strlen(id) == 0) {
+                    Glib::ustring id = Glib::ustring("rotated-");
+                    id += std::to_string(counter);
+                    id += "-";
+                    id += this->lpeobj->getId();
+                    if (id.empty()) {
                         return;
                     }
                     SPObject *elemref = NULL;
-                    if ((elemref = document->getObjectById(id))) {
+                    if (elemref = document->getObjectById(id.c_str())) {
                         SP_ITEM(elemref)->setHidden(true);
                     }
                     counter++;
                     numcopies_gap--;
-                    g_free(id);
                 }
             }
             previous_num_copies = num_copies;
         }
         SPObject *elemref = NULL;
         guint counter = 0;
-        char * id = g_strdup((Glib::ustring("rotated-0-").append(this->lpeobj->getId())).c_str());
-        while((elemref = document->getObjectById(id))) {
-            id = g_strdup((Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(this->lpeobj->getId())).c_str());
+        Glib::ustring id = "rotated-0-";
+        id += this->lpeobj->getId();
+        while((elemref = document->getObjectById(id.c_str()))) {
+            id = Glib::ustring("rotated-");
+            id += std::to_string(counter);
+            id += "-";
+            id += this->lpeobj->getId();
             if (SP_ITEM(elemref)->isHidden()) {
-                items.push_back(g_strdup(id));
+                items.push_back(id);
             }
             counter++;
         }
-        g_free(id);
         Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
         for (size_t i = 1; i < num_copies; ++i) {
             Geom::Affine r = Geom::identity();
@@ -242,11 +247,14 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    char * elemref_id = g_strdup((Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(this->lpeobj->getId())).c_str());
-    items.push_back(g_strdup(elemref_id));
+    Glib::ustring elemref_id = Glib::ustring("rotated-");
+    elemref_id += std::to_string(i);
+    elemref_id += "-";
+    elemref_id += this->lpeobj->getId();
+    items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
-    if ((elemref = document->getObjectById(elemref_id))) {
+    if (elemref = document->getObjectById(elemref_id.c_str())) {
         phantom = elemref->getRepr();
     } else {
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
@@ -283,7 +291,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         attrs.push_back("ry");
         attrs.push_back("width");
         attrs.push_back("height");
-        phantom->setAttribute("id", elemref_id);
+        phantom->setAttribute("id", elemref_id.c_str());
         for(const char * attr : attrs) { 
             phantom->setAttribute(attr, NULL);
         }
@@ -299,12 +307,11 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
     SP_ITEM(elemref)->setHidden(false);
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
-        copy->setAttribute("id", elemref_id);
+        copy->setAttribute("id", elemref_id.c_str());
         container->appendChildRepr(copy);
         Inkscape::GC::release(copy);
         elemref->deleteObject();
     }
-    g_free(elemref_id);
 }
 
 void

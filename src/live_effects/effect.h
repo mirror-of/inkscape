@@ -177,7 +177,7 @@ protected:
     bool concatenate_before_pwd2;
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     SPShape * current_shape; // these get stored in performPathEffects.
-    std::vector<const char *> items;
+    std::vector<Glib::ustring> items;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
 

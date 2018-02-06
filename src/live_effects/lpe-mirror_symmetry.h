@@ -17,6 +17,8 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
