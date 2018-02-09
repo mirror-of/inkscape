@@ -397,7 +397,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     {
         double k = (Geom::distance(start,end)/2.0) - (anotation_width/10.0) - (anotation_width/2.0);
         if (Geom::distance(start,end) < anotation_width){
-            if ((elemref = document->getObjectById(id.c_str()))) {
+            if (elemref = document->getObjectById(id.c_str())) {
                 if (remove) {
                     elemref->deleteObject();
                 }
@@ -665,22 +665,22 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         for (size_t i = 0; i < pathvector.size(); i++) {
             for (size_t j = 0; j < pathvector[i].size(); j++) {
                 counter++;
-                if(hasMeassure(counter + 1)) {
-                    Geom::Point prev = Geom::Point(0,0);
-                    if (j == 0 && pathvector[i].closed()) {
-                        prev = pathvector.pointAt(pathvector[i].size() - 1);
-                    } else if (j != 0) {
-                        prev = pathvector[i].pointAt(j - 1);
-                    }
-                    Geom::Point start = pathvector[i].pointAt(j);
-                    Geom::Point end = pathvector[i].pointAt(j + 1);
-                    Geom::Point next = Geom::Point(0,0);
-                    if(pathvector[i].closed() && pathvector[i].size() == j+1){
-                        end = pathvector[i].pointAt(0);
-                        next = pathvector[i].pointAt(1);
-                    } else if (pathvector[i].size() > j + 1) {
-                        next = pathvector[i].pointAt(j+2);
-                    }
+                Geom::Point prev = Geom::Point(0,0);
+                if (j == 0 && pathvector[i].closed()) {
+                    prev = pathvector.pointAt(pathvector[i].size() - 1);
+                } else if (j != 0) {
+                    prev = pathvector[i].pointAt(j - 1);
+                }
+                Geom::Point start = pathvector[i].pointAt(j);
+                Geom::Point end = pathvector[i].pointAt(j + 1);
+                Geom::Point next = Geom::Point(0,0);
+                if(pathvector[i].closed() && pathvector[i].size() == j+1){
+                    end = pathvector[i].pointAt(0);
+                    next = pathvector[i].pointAt(1);
+                } else if (pathvector[i].size() > j + 1) {
+                    next = pathvector[i].pointAt(j+2);
+                }
+                if(hasMeassure(counter)) {
                     Glib::ustring idstart = Glib::ustring("infoline-on-start-");
                     idstart += Glib::ustring::format(counter);
                     idstart += "-";
@@ -743,7 +743,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         items.push_back(Glib::ustring("ArrowDIN-start"));
                         items.push_back(Glib::ustring("ArrowDIN-end"));
                     }
-                    std::cout << this->upd_params << "this->upd_params" << std::endl;
                     if (Geom::are_near(start, start_stored, 0.01) && 
                         Geom::are_near(end, end_stored, 0.01) && 
                         !this->upd_params &&
