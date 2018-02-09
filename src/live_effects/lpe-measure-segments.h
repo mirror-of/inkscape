@@ -74,6 +74,7 @@ private:
     double fontsize;
     double anotation_width;
     double previous_size;
+    unsigned rgb24;
     double arrow_gap;
     gchar const* locale_base;
     Geom::Affine star_ellipse_fix;

@@ -162,7 +162,6 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
     Glib::ustring itemid  = sp_lpe_item->getId();
     Glib::ustring style;
     gchar c[32];
-    unsigned const rgb24 = coloropacity.get_value() >> 8;
     sprintf(c, "#%06x", rgb24);
     style = Glib::ustring("fill:") + Glib::ustring(c);
     Inkscape::SVGOStringStream os;
@@ -280,7 +279,6 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     font_size <<  fontsize << "pt";
     setlocale (LC_NUMERIC, locale_base);
     gchar c[32];
-    unsigned const rgb24 = coloropacity.get_value() >> 8;
     sprintf(c, "#%06x", rgb24);
     sp_repr_css_set_property (css, "fill",c);
     Inkscape::SVGOStringStream os;
@@ -476,7 +474,6 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     setlocale (LC_NUMERIC, locale_base);
     style = style + Glib::ustring("stroke-width:" + stroke_w.str());
     gchar c[32];
-    unsigned const rgb24 = coloropacity.get_value() >> 8;
     sprintf(c, "#%06x", rgb24);
     style = style + Glib::ustring(";stroke:") + Glib::ustring(c);
     Inkscape::SVGOStringStream os;
@@ -624,6 +621,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         } else {
             doc_scale = 1.0;
         }
+        unsigned const color = coloropacity.get_value() >> 8;
+        bool colorchanged = false;
+        if (color != rgb24) {
+            colorchanged = true;
+        }
+        rgb24 = color;
         gint fix_overlaps_degree = fix_overlaps;
         SPCurve * c = NULL;
         gchar * fontbutton_str = fontbutton.param_getSVGValue();
@@ -740,10 +743,11 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         items.push_back(Glib::ustring("ArrowDIN-start"));
                         items.push_back(Glib::ustring("ArrowDIN-end"));
                     }
-                    
+                    std::cout << this->upd_params << "this->upd_params" << std::endl;
                     if (Geom::are_near(start, start_stored, 0.01) && 
                         Geom::are_near(end, end_stored, 0.01) && 
-                        !this->upd_params)
+                        !this->upd_params &&
+                        !colorchanged)
                     {
                         continue;
                     }
