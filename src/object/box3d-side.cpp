@@ -194,14 +194,14 @@ void Box3DSide::set_shape() {
 
     /* Reset the this'scurve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    this->setCurveInsync( c, TRUE);
+    this->setCurveInsync(c);
 
     if (hasPathEffect() && pathEffectsEnabled()) {
         SPCurve *c_lpe = c->copy();
         bool success = this->performPathEffect(c_lpe, SP_SHAPE(this));
 
         if (success) {
-            this->setCurveInsync(c_lpe, TRUE);
+            this->setCurveInsync(c_lpe);
             this->applyToClipPath(this);
             this->applyToMask(this);
         }

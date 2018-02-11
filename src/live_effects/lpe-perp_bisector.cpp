@@ -113,7 +113,7 @@ LPEPerpBisector::doOnApply (SPLPEItem const*/*lpeitem*/)
 {
     /* make the path a straight line */
     /**
-    SPCurve* curve = sp_path_get_curve_for_edit (SP_PATH(lpeitem)); // TODO: Should we use sp_shape_get_curve()?
+    SPCurve* curve = sp_path_getCurveForEdit (SP_PATH(lpeitem)); // TODO: Should we use sp_shape_get_curve()?
 
     Geom::Point A(curve->first_point());
     Geom::Point B(curve->last_point());

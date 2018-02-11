@@ -56,7 +56,6 @@ pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &
     return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
 }
 
-
 LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     method(_("Method:"), _("Rotate methods"), "method", RMConverter, &wr, this, RM_NORMAL),
@@ -67,7 +66,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
     gap(_("Gap"), _("Gap"), "gap", &wr, this, -0.0001),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
-    mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
+    mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, true),
     split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
     dist_angle_handle(100.0)
 {
@@ -192,7 +191,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 }
 
 void
-LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool root, bool reset) 
+LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -205,7 +204,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, transform, false, reset); 
+            cloneD(*obj_it, dest_child, transform, reset); 
             index++;
         }
         return;
@@ -220,15 +219,11 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         path =  SP_PATH(dest);
     }
     if (path && shape) {
-        SPCurve *c = NULL;
-        if (root) {
-            c = new SPCurve();
-            c->set_pathvector(pathvector_after_effect);
-        } else {
-            c = shape->getCurve();
-        }
+        SPCurve *c = shape->getCurve();
         if (c) {
-            path->setCurve(c, TRUE);
+            gchar *str = sp_svg_write_path(c->get_pathvector());
+            path->getRepr()->setAttribute("d", str);
+            g_free(str);
             c->unref();
         } else {
             path->getRepr()->setAttribute("d", NULL);
@@ -237,6 +232,33 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
             dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
         }
     }
+}
+
+Inkscape::XML::Node *
+LPECopyRotate::createPathBase(SPObject *elemref) {
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return NULL;
+    }
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Node *prev = elemref->getRepr();
+    SPGroup *group = dynamic_cast<SPGroup *>(elemref);
+    if (group) {
+        Inkscape::XML::Node *container = xml_doc->createElement("svg:g");
+        container->setAttribute("transform", prev->attribute("transform"));
+        std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
+        Inkscape::XML::Node *previous = NULL;
+        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+            SPObject *sub_item = *iter;
+            Inkscape::XML::Node *resultnode = createPathBase(sub_item);
+            container->addChild(resultnode, previous);
+            previous = resultnode;
+        }
+        return container;
+    }
+    Inkscape::XML::Node *resultnode = xml_doc->createElement("svg:path");
+    resultnode->setAttribute("transform", prev->attribute("transform"));
+    return resultnode;
 }
 
 void
@@ -257,50 +279,15 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
     if (elemref = document->getObjectById(elemref_id.c_str())) {
         phantom = elemref->getRepr();
     } else {
-        phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
-        std::vector<const char *> attrs;
-        attrs.push_back("inkscape:path-effect");
-        attrs.push_back("inkscape:original-d");
-        attrs.push_back("sodipodi:type");
-        attrs.push_back("sodipodi:rx");
-        attrs.push_back("sodipodi:ry");
-        attrs.push_back("sodipodi:cx");
-        attrs.push_back("sodipodi:cy");
-        attrs.push_back("sodipodi:end");
-        attrs.push_back("sodipodi:start");
-        attrs.push_back("inkscape:flatsided");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:rounded");
-        attrs.push_back("sodipodi:arg1");
-        attrs.push_back("sodipodi:arg2");
-        attrs.push_back("sodipodi:r1");
-        attrs.push_back("sodipodi:r2");
-        attrs.push_back("sodipodi:sides");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("sodipodi:argument");
-        attrs.push_back("sodipodi:expansion");
-        attrs.push_back("sodipodi:radius");
-        attrs.push_back("sodipodi:revolution");
-        attrs.push_back("sodipodi:t0");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("x");
-        attrs.push_back("y");
-        attrs.push_back("rx");
-        attrs.push_back("ry");
-        attrs.push_back("width");
-        attrs.push_back("height");
+        phantom = createPathBase(sp_lpe_item);
         phantom->setAttribute("id", elemref_id.c_str());
-        for(const char * attr : attrs) { 
-            phantom->setAttribute(attr, NULL);
-        }
+        reset = true;
     }
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, true, reset);
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, reset);
     gchar *str = sp_svg_transform_write(transform);
     elemref->getRepr()->setAttribute("transform" , str);
     g_free(str);

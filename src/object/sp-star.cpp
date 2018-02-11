@@ -228,13 +228,13 @@ void SPStar::update_patheffect(bool write) {
     if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-        this->setCurveInsync(c_lpe, TRUE);
+        this->setCurveInsync(c_lpe);
         this->resetClipPathAndMaskLPE();
         bool success = false;
         if (hasPathEffect() && pathEffectsEnabled()) {
             success = this->performPathEffect(c_lpe, SP_SHAPE(this));
             if (success) {
-                this->setCurveInsync(c_lpe, TRUE);
+                this->setCurveInsync(c_lpe);
                 this->applyToClipPath(this);
                 this->applyToMask(this);
             }
@@ -388,7 +388,7 @@ void SPStar::set_shape() {
             // unconditionally read the curve from d, if any, to preserve appearance
             Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
             SPCurve *cold = new SPCurve(pv);
-            this->setCurveInsync( cold, TRUE);
+            this->setCurveInsync(cold);
             this->setCurveBeforeLPE(cold);
             cold->unref();
         }
@@ -471,7 +471,7 @@ void SPStar::set_shape() {
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     this->setCurveBeforeLPE(c);
-    this->setCurveInsync(c, TRUE);
+    this->setCurveInsync(c);
     c->unref();
     return;
 }

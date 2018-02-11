@@ -49,6 +49,7 @@ static const Util::EnumData<ModeType> ModeTypeData[] = {
 static const Util::EnumDataConverter<ModeType>
 MTConverter(ModeTypeData, MT_END);
 
+
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     mode(_("Mode"), _("Symmetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
@@ -98,7 +99,6 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
     if (root_origin != root) {
         return;
     }
-    std::cout << "kkkkkkkkkk" << std::endl;
     
     if (split_items && !discard_orig_path) {
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
@@ -156,7 +156,6 @@ LPEMirrorSymmetry::newWidget()
 void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    std::cout << "starting" << std::endl;
     using namespace Geom;
     original_bbox(lpeitem, false, true);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
@@ -208,7 +207,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             end_point.param_setValue(end_point * trans);
            
         }
-        std::cout << "lolololo" << std::endl;
     } else if ( mode == MT_V){
         SPDocument * document = SP_ACTIVE_DOCUMENT;
         if (document) {
@@ -231,11 +229,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         }
     }
     previous_center = center_point;
-    std::cout << "ending" << std::endl;
 }
 
 void
-LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool root, bool reset) 
+LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -248,38 +245,54 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool root, bool reset)
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, false, reset); 
+            cloneD(*obj_it, dest_child, reset); 
             index++;
         }
         return;
     }
     SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
-    if (shape && !path) {   
-        const char * id = dest->getId();
-        Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
-        dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
-        dest->getRepr()->setAttribute("d", id);
-        path =  SP_PATH(dest);
-    }
     if (path && shape) {
-        SPCurve *c = NULL;
-        if (root) {
-            c = new SPCurve();
-            c->set_pathvector(pathvector_after_effect);
-        } else {
-            c = shape->getCurve();
-        }
+        SPCurve *c = shape->getCurve();
         if (c) {
-            path->setCurve(c, TRUE);
+            gchar *str = sp_svg_write_path(c->get_pathvector());
+            dest->getRepr()->setAttribute("d", str);
+            g_free(str);
             c->unref();
         } else {
-            path->getRepr()->setAttribute("d", NULL);
+            dest->getRepr()->setAttribute("d", NULL);
         }
         if (reset) {
             dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
         }
     }
+}
+
+Inkscape::XML::Node *
+LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return NULL;
+    }
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Node *prev = elemref->getRepr();
+    SPGroup *group = dynamic_cast<SPGroup *>(elemref);
+    if (group) {
+        Inkscape::XML::Node *container = xml_doc->createElement("svg:g");
+        container->setAttribute("transform", prev->attribute("transform"));
+        std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
+        Inkscape::XML::Node *previous = NULL;
+        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+            SPObject *sub_item = *iter;
+            Inkscape::XML::Node *resultnode = createPathBase(sub_item);
+            container->addChild(resultnode, previous);
+            previous = resultnode;
+        }
+        return container;
+    }
+    Inkscape::XML::Node *resultnode = xml_doc->createElement("svg:path");
+    resultnode->setAttribute("transform", prev->attribute("transform"));
+    return resultnode;
 }
 
 void
@@ -294,55 +307,20 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
     elemref_id += this->lpeobj->getId();
     items.clear();
     items.push_back(elemref_id);
-    SPObject *elemref= NULL;
+    SPObject *elemref = NULL;
     Inkscape::XML::Node *phantom = NULL;
-    if ((elemref = document->getObjectById(elemref_id.c_str()))) {
+    if (elemref = document->getObjectById(elemref_id.c_str())) {
         phantom = elemref->getRepr();
     } else {
-        phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
-        std::vector<const char *> attrs;
-        attrs.push_back("inkscape:path-effect");
-        attrs.push_back("inkscape:original-d");
-        attrs.push_back("sodipodi:type");
-        attrs.push_back("sodipodi:rx");
-        attrs.push_back("sodipodi:ry");
-        attrs.push_back("sodipodi:cx");
-        attrs.push_back("sodipodi:cy");
-        attrs.push_back("sodipodi:end");
-        attrs.push_back("sodipodi:start");
-        attrs.push_back("inkscape:flatsided");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:rounded");
-        attrs.push_back("sodipodi:arg1");
-        attrs.push_back("sodipodi:arg2");
-        attrs.push_back("sodipodi:r1");
-        attrs.push_back("sodipodi:r2");
-        attrs.push_back("sodipodi:sides");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("sodipodi:argument");
-        attrs.push_back("sodipodi:expansion");
-        attrs.push_back("sodipodi:radius");
-        attrs.push_back("sodipodi:revolution");
-        attrs.push_back("sodipodi:t0");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("x");
-        attrs.push_back("y");
-        attrs.push_back("rx");
-        attrs.push_back("ry");
-        attrs.push_back("width");
-        attrs.push_back("height");
+        phantom = createPathBase(sp_lpe_item);
         phantom->setAttribute("id", elemref_id.c_str());
-        for(const char * attr : attrs) { 
-            phantom->setAttribute(attr, NULL);
-        }
+        reset = true;
     }
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, true, reset);
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, reset);
     gchar *str = sp_svg_transform_write(transform);
     elemref->getRepr()->setAttribute("transform" , str);
     g_free(str);
@@ -354,6 +332,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
         elemref->deleteObject();
     }
 }
+
 
 void
 LPEMirrorSymmetry::resetStyles(){

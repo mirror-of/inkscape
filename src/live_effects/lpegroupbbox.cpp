@@ -66,7 +66,7 @@ void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, boo
     }
     
     Geom::OptRect bbox;
-    if (clipmask && 1>2) {
+    if (clipmask) {
         SPLPEItem * item = const_cast<SPLPEItem *>(lpeitem);
         bbox = getItemClipMaskBounds(item, transform);
     } else {

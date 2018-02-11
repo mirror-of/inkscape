@@ -104,6 +104,7 @@ void
 MessageParam::param_setValue(const gchar * strvalue)
 {
     if (strcmp(strvalue, message) != 0) {
+        param_effect->skip_reprocess = true;
         param_effect->upd_params = true;
     }
     message = strvalue;

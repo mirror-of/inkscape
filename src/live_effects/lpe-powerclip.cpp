@@ -169,6 +169,13 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
 }
 
 void
+LPEPowerClip::doAfterEffect (SPLPEItem const* lpeitem){
+    if (!hide_clip && flatten && isVisible()) {
+        SP_ITEM(sp_lpe_item)->clip_ref->detach();
+    }
+}
+
+void
 LPEPowerClip::addInverse (SPItem * clip_data){
     gchar * is_inverse_str = is_inverse.param_getSVGValue();
     if(!strcmp(is_inverse_str,"false")) {
@@ -193,7 +200,10 @@ LPEPowerClip::addInverse (SPItem * clip_data){
                 c->set_pathvector(c_pv);
                 SP_SHAPE(clip_data)->setCurve(c, TRUE);
                 c->unref();
-                is_inverse.param_setValue((Glib::ustring)"true", true);
+                gchar * is_inverse_str = is_inverse.param_getSVGValue();
+                if (strcmp(is_inverse_str, "true") != 0) {
+                    is_inverse.param_setValue((Glib::ustring)"true", true);
+                }
                 SPDesktop *desktop = SP_ACTIVE_DESKTOP;
                 if (desktop) {
                     if (tools_isactive(desktop, TOOLS_NODES)) {
@@ -232,7 +242,10 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                 c->set_pathvector(c_pv);
                 SP_SHAPE(clip_data)->setCurve(c, TRUE);
                 c->unref();
-                is_inverse.param_setValue((Glib::ustring)"false", true);
+                gchar * is_inverse_str = is_inverse.param_getSVGValue();
+                if (strcmp(is_inverse_str, "false") != 0) {
+                    is_inverse.param_setValue((Glib::ustring)"false", true);
+                }
                 SPDesktop *desktop = SP_ACTIVE_DESKTOP;
                 if (desktop) {
                     if (tools_isactive(desktop, TOOLS_NODES)) {
@@ -331,7 +344,6 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
                 flattenClip(SP_ITEM(clip_data), path_out);
             }
         }
-        SP_ITEM(sp_lpe_item)->clip_ref->detach();
     }
     return path_out;
 }

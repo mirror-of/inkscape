@@ -76,6 +76,7 @@ void
 HiddenParam::param_setValue(const Glib::ustring newvalue, bool write)
 {
     value = newvalue;
+    param_effect->skip_reprocess = true;
     if (write) {
         param_write_to_repr(value.c_str());
     }

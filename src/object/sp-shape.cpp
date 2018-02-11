@@ -995,64 +995,25 @@ void SPShape::setCurve(SPCurve *new_curve, unsigned int owner)
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+
 /**
  * Sets _curve_before_lpe to refer to the curve.
  */
 void
-SPShape::setCurveBeforeLPE (SPCurve *new_curve)
+SPShape::setCurveBeforeLPE(SPCurve *new_curve, unsigned int owner)
 {
     if (_curve_before_lpe) {
         _curve_before_lpe = _curve_before_lpe->unref();
     }
 
     if (new_curve) {
-        _curve_before_lpe = new_curve->ref();
+        if (owner) {
+            _curve_before_lpe = new_curve->ref();
+        } else {
+            _curve_before_lpe = new_curve->copy();
+        }
     }
 }
-
-/**
- * Return duplicate of curve (if any exists) or NULL if there is no curve
- */
-SPCurve * SPShape::getCurve(bool reference) const
-{
-    if (_curve) {
-        if(reference) {
-            return _curve;
-        }
-        return _curve->copy();
-    }
-
-    return NULL;
-}
-
-/**
- * Return duplicate of curve *before* LPE (if any exists) or NULL if there is no curve
- */
-SPCurve * SPShape::getCurveBeforeLPE(bool reference, bool force) const
-{
-    if (hasPathEffectRecursive() && _curve_before_lpe) {
-        if (reference) {
-            return _curve_before_lpe;
-        }
-        return _curve_before_lpe->copy();
-    } 
-    return NULL;
-}
-
-/**
- * Return curve for edit
- */
-SPCurve * SPShape::getCurveForEdit(bool reference, bool force) const
-{
-    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
-        if (reference) {
-            return _curve_before_lpe;
-        }
-        return _curve_before_lpe->copy();
-    }
-    return getCurve(reference);
-}
-
 
 /**
  * Same as sp_shape_set_curve but without updating the display
@@ -1070,6 +1031,57 @@ void SPShape::setCurveInsync(SPCurve *new_curve, unsigned int owner)
             _curve = new_curve->copy();
         }
     }
+}
+
+
+/**
+ * Return curve (if any exists) or NULL if there is no curve
+* if owner == 0 return a copy
+ */
+SPCurve * SPShape::getCurve(unsigned int owner) const
+{
+    if (_curve) {
+        if(owner) {
+            return _curve;
+        }
+        return _curve->copy();
+    }
+
+    return NULL;
+}
+
+/**
+ * Return  curve *before* LPE (if any exists) or NULL if there is no curve
+ * If force is set allow return curve_before_lpe even if not
+ * has path effect like in clips and mask
+ * if owner == 0 return a copy
+ */
+SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner, bool force) const
+{
+    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+        if (owner) {
+            return _curve_before_lpe;
+        }
+        return _curve_before_lpe->copy();
+    } 
+    return NULL;
+}
+
+/**
+ * Return curve for edit
+ * If force is set allow return curve_before_lpe even if not
+ * has path effect like in clips and mask
+ * if owner == 0 return a copy
+ */
+SPCurve * SPShape::getCurveForEdit(unsigned int owner, bool force) const
+{
+    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+        if (owner) {
+            return _curve_before_lpe;
+        }
+        return _curve_before_lpe->copy();
+    }
+    return getCurve(owner);
 }
 
 void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const {

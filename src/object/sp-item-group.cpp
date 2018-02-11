@@ -993,10 +993,10 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                     c->transform(i2anc_affine(sub_item, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
-                        sub_shape->setCurveInsync( c, TRUE);
+                        sub_shape->setCurveInsync(c);
                         lpe->pathvector_after_effect = c->get_pathvector();
                         if (write) {
-                            gchar *str = sp_svg_write_path(c->get_pathvector());
+                            gchar *str = sp_svg_write_path(lpe->pathvector_after_effect);
                             repr->setAttribute("d", str);
 #ifdef GROUP_VERBOSE
                             g_message("sp_group_perform_patheffect writes 'd' attribute");

@@ -212,9 +212,7 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
         }
     }
     if(this->pparam->liveupdate){
-        std::cout << "knot_set" << std::endl;
         pparam->param_setValue(s, true);
-        pparam->param_effect->skip_reprocess = true;
     } else {
         pparam->param_setValue(s);
     }

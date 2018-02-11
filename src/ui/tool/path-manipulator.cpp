@@ -190,7 +190,7 @@ void PathManipulator::writeXML()
 {
     if (!_live_outline)
         _updateOutline();
-    if (!_live_objects)
+    if (_live_objects)
         _setGeometry();
 
     if (!_path) return;
@@ -1374,6 +1374,10 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     if (pathv.empty()) {
         return;
     }
+
+    if (_spcurve->get_pathvector() == pathv) {
+        return;
+    }
     _spcurve->set_pathvector(pathv);
     if (alert_LPE) {
         /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
@@ -1387,7 +1391,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             }
         }
     }
-
     if (_live_outline)
         _updateOutline();
     if (_live_objects)
@@ -1481,7 +1484,7 @@ void PathManipulator::_getGeometry()
         }
     } else {
         _spcurve->unref();
-        _spcurve = _path->get_curve_for_edit();
+        _spcurve = _path->getCurveForEdit();
         // never allow NULL to sneak in here!
         if (_spcurve == NULL) {
             _spcurve = new SPCurve();
@@ -1493,7 +1496,6 @@ void PathManipulator::_getGeometry()
 void PathManipulator::_setGeometry()
 {
     using namespace Inkscape::LivePathEffect;
-
     if (!_lpe_key.empty()) {
         // copied from nodepath.cpp
         // NOTE: if we are editing an LPE param, _path is not actually an SPPath, it is
@@ -1501,17 +1503,22 @@ void PathManipulator::_setGeometry()
         Effect *lpe = LIVEPATHEFFECT(_path)->get_lpe();
         if (lpe) {
             PathParam *pathparam = dynamic_cast<PathParam *>(lpe->getParameter(_lpe_key.data()));
+            if (pathparam->get_pathvector() == _spcurve->get_pathvector()) {
+                return; //False we dont update LPE
+            }
             pathparam->set_new_value(_spcurve->get_pathvector(), false);
             LIVEPATHEFFECT(_path)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
     } else {
+        // return true to leave the decission on empty to the caller. 
+        // Maybe the path become empty and we want to update to empty
         if (empty()) return;
-        if (SPCurve * original = _path->get_curve_for_edit()){
+        if (SPCurve * original = _path->getCurveBeforeLPE()){
             if(!_spcurve->is_equal(original)) {
-                _path->set_curve_before_LPE(_spcurve, false, false);
+                _path->setCurveBeforeLPE(_spcurve);
                 delete original;
             }
-        } else if(!_spcurve->is_equal(_path->get_curve(true))) {
+        } else if(!_spcurve->is_equal(_path->getCurve(true))) {
             _path->setCurve(_spcurve, false);
         }
     }

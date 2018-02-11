@@ -39,12 +39,12 @@ public:
 	SPShape();
 	virtual ~SPShape();
 
-    SPCurve * getCurve (bool reference = false) const;
-    SPCurve * getCurveBeforeLPE (bool reference = false, bool force = false) const;
-    SPCurve * getCurveForEdit (bool reference = false, bool force = false) const;
+    SPCurve * getCurve (unsigned int owner = FALSE) const;
+    SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE, bool force = FALSE) const;
+    SPCurve * getCurveForEdit (unsigned int owner = FALSE, bool force = FALSE) const;
     void setCurve (SPCurve *curve, unsigned int owner);
-    void setCurveInsync (SPCurve *curve, unsigned int owner);
-    void setCurveBeforeLPE (SPCurve *curve);
+    void setCurveBeforeLPE (SPCurve *new_curve, unsigned int owner = TRUE);
+    void setCurveInsync (SPCurve *curve, unsigned int owner = TRUE);
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
 

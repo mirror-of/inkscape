@@ -154,6 +154,7 @@ void
 TextParam::param_setValue(const Glib::ustring newvalue)
 {
     if (value != newvalue) {
+        param_effect->skip_reprocess = true;
         param_effect->upd_params = true;
     }
     value = newvalue;

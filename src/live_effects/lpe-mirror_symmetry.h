@@ -50,7 +50,8 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void toMirror(Geom::Affine transform, bool reset);
-    void cloneD(SPObject *orig, SPObject *dest, bool root, bool reset);
+    void cloneD(SPObject *orig, SPObject *dest, bool reset);
+    Inkscape::XML::Node * createPathBase(SPObject *elemref);
     void resetStyles();
 
 protected:

@@ -257,7 +257,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                 lpe->pathvector_before_effect = curve->get_pathvector();
             }
             // To Calculate BBox on shapes and nested LPE
-            current->setCurveInsync(curve, true);
+            current->setCurveInsync(curve);
             // Groups have their doBeforeEffect called elsewhere
             if (!SP_IS_GROUP(this)) {
                 lpe->doBeforeEffect_impl(this);
@@ -279,15 +279,8 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             
             if (!SP_IS_GROUP(this)) {
                 // To have processed the shape to doAfterEffect
-                current->setCurveInsync(curve, false);
                 lpe->pathvector_after_effect = curve->get_pathvector();
                 lpe->doAfterEffect(this);
-            } else {
-                SPCurve * c = curve->copy();
-                c->transform(i2anc_affine(current, this).inverse());
-                // To have processed the shape to doAfterEffect
-                current->setCurveInsync(c, false);
-                c->unref();
             }
         }
     }
@@ -646,6 +639,8 @@ bool SPLPEItem::hasBrokenPathEffect() const
     return false;
 }
 
+
+
 bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
 {
     if (path_effect_list->empty()) {
@@ -666,6 +661,46 @@ bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
     }
 
     return false;
+}
+
+/**
+ * returns true when any LPE apply to clip or mask.
+ */
+bool SPLPEItem::hasPathEffectOnClipOrMask(SPLPEItem * shape) const
+{
+    if (shape->hasPathEffectRecursive()) {
+        return true;
+    }
+    if (!path_effect_list || path_effect_list->empty()) {
+        return false;
+    }
+    
+    for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+    {
+        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+        if (!lpeobj) {
+            continue;
+        }
+        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+        if (lpe->apply_to_clippath_and_mask) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * returns true when any LPE apply to clip or mask.
+ */
+bool SPLPEItem::hasPathEffectOnClipOrMaskRecursive(SPLPEItem * shape) const
+{
+    SPLPEItem * parent_lpe_item = dynamic_cast<SPLPEItem *>(parent);
+    if (parent_lpe_item) {
+        return hasPathEffectOnClipOrMask(shape) || parent_lpe_item->hasPathEffectOnClipOrMaskRecursive(shape);
+    }
+    else {
+        return hasPathEffectOnClipOrMask(shape);
+    }
 }
 
 bool SPLPEItem::hasPathEffect() const
@@ -715,7 +750,10 @@ SPLPEItem::resetClipPathAndMaskLPE()
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveForEdit(false, true), TRUE);
+                shape->setCurveInsync( shape->getCurveForEdit(false, true));
+                if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
+                    shape->getRepr()->setAttribute("inkscape:original-d", NULL);
+                }
             }
         }
     }
@@ -734,7 +772,10 @@ SPLPEItem::resetClipPathAndMaskLPE()
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveForEdit(false, true), TRUE);
+                shape->setCurveInsync( shape->getCurveForEdit(false, true));
+                if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
+                    shape->getRepr()->setAttribute("inkscape:original-d", NULL);
+                }
             }
         }
     }
@@ -805,21 +846,27 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
                 }
             }
         }
-        c = shape->getCurve();
+        if (lpe) { //group
+            c = shape->getCurve();
+        } else {
+            c = shape->getCurveForEdit(false, true);
+            //we ressurrect if the clip or mask has a allowed LPE
+            shape->getRepr()->setAttribute("inkscape:original-d", NULL); 
+        }
         if (c) {
             bool success = false;
             try {
                 if(SP_IS_GROUP(this)){
                     c->transform(i2anc_affine(SP_GROUP(to), SP_GROUP(this)));
                     if (lpe) {
-                        success = this->performOnePathEffect(c, SP_SHAPE(clip_mask), lpe, true);
+                        success = this->performOnePathEffect(c, shape, lpe, true);
                     } else {
-                        success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
+                        success = this->performPathEffect(c, shape, true);
                     }
                     c->transform(i2anc_affine(SP_GROUP(to), SP_GROUP(this)).inverse());
                 } else {
                     if (lpe) {
-                        success = this->performOnePathEffect(c, SP_SHAPE(clip_mask), lpe, true);
+                        success = this->performOnePathEffect(c, shape, lpe, true);
                     } else {
                         success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
                     }
@@ -834,7 +881,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
             }
             Inkscape::XML::Node *repr = clip_mask->getRepr();
             if (success && c) {
-                shape->setCurveInsync( c, TRUE);
+                shape->setCurveInsync(c);
                 gchar *str = sp_svg_write_path(c->get_pathvector());
                 repr->setAttribute("d", str);
                 g_free(str);
