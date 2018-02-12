@@ -335,6 +335,7 @@ g_message("sp_path_update_patheffect");
     if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        SPCurve * last = this->getCurve();
         this->setCurveInsync(c_lpe);
         this->resetClipPathAndMaskLPE();
         bool success = false;
@@ -344,6 +345,8 @@ g_message("sp_path_update_patheffect");
                 this->setCurveInsync(c_lpe);
                 this->applyToClipPath(this);
                 this->applyToMask(this);
+            } else {
+                this->setCurveInsync(last);
             }
         }
 
@@ -357,6 +360,7 @@ g_message("sp_path_update_patheffect");
             }
         }
         c_lpe->unref();
+        last->unref();
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
