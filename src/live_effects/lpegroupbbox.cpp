@@ -28,33 +28,29 @@ namespace LivePathEffect {
  */
 
 Geom::OptRect
-GroupBBoxEffect::getItemClipMaskBounds(SPLPEItem* item, Geom::Affine transform) {
+GroupBBoxEffect::clip_mask_bbox(SPLPEItem *item, Geom::Affine transform)
+{
     Geom::OptRect bbox;
-    SPClipPath *clip_path = item->clip_ref->getObject();
+    SPClipPath * clip_path = item->clip_ref->getObject();
     if(clip_path) {
-        //clip path  dont need visualbouds use geometrical
         bbox.unionWith(clip_path->geometricBounds(transform));
     }
-
-    SPMask *mask_path = item->mask_ref->getObject();
+    SPMask * mask_path = item->mask_ref->getObject();
     if(mask_path) {
         bbox.unionWith(mask_path->geometricBounds(transform));
     }
     SPGroup * group = dynamic_cast<SPGroup *>(item);
-    SPShape * shape = dynamic_cast<SPShape *>(item);
     if (group) {
-    	std::vector<SPItem*> item_list = sp_item_group_item_list(group);
+        std::vector<SPItem*> item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPLPEItem *subitem = dynamic_cast<SPLPEItem *>(*iter);
-            bbox.unionWith(getItemClipMaskBounds(subitem, group->transform * transform));
+            SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter);
+            bbox.unionWith(clip_mask_bbox(subitem, transform));
         }
-    } else if (shape) {
-        bbox.unionWith(item->geometricBounds(shape->transform * transform));
     }
     return bbox;
 }
 
-void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, bool clipmask)
+void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, bool clip_mask)
 {
     // Get item bounding box
     Geom::Affine transform;
@@ -65,12 +61,10 @@ void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, boo
         transform = Geom::identity();
     }
     
-    Geom::OptRect bbox;
-    if (clipmask) {
+    Geom::OptRect bbox = lpeitem->geometricBounds(transform);
+    if (clip_mask) {
         SPLPEItem * item = const_cast<SPLPEItem *>(lpeitem);
-        bbox = getItemClipMaskBounds(item, transform);
-    } else {
-        bbox = lpeitem->geometricBounds(transform);
+        bbox.unionWith(clip_mask_bbox(item, transform));
     }
     if (bbox) {
         boundingbox_X = (*bbox)[Geom::X];

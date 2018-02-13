@@ -474,6 +474,8 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
         if( SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
         }
+        // make sure there is an original-d for paths!!!
+        sp_lpe_item_create_original_path_recursive(this);
 
         LivePathEffectObject *lpeobj = this->path_effect_list->back()->lpeobject;
         if (lpeobj && lpeobj->get_lpe()) {
