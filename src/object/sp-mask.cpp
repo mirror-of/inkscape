@@ -132,10 +132,9 @@ SPMask::geometricBounds(Geom::Affine const &transform) {
 Geom::OptRect 
 SPMask::visualBounds(Geom::Affine const &transform) {
     Geom::OptRect bbox;
-
     for (auto& i: children) {
         if (SP_IS_ITEM(&i)) {
-            Geom::OptRect tmp = SP_ITEM(&i)->visualBounds(Geom::Affine(SP_ITEM(&i)->transform) * transform);
+            Geom::OptRect tmp = SP_ITEM(&i)->visualBounds(transform);
             bbox.unionWith(tmp);
         }
     }

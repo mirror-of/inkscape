@@ -5,12 +5,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "document.h"
 #include "live_effects/lpegroupbbox.h"
 #include "object/sp-clippath.h"
 #include "object/sp-mask.h"
+#include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-item-group.h"
-
 #include "object/sp-lpe-item.h"
 
 namespace Inkscape {
@@ -31,20 +32,21 @@ Geom::OptRect
 GroupBBoxEffect::clip_mask_bbox(SPLPEItem *item, Geom::Affine transform)
 {
     Geom::OptRect bbox;
+    Geom::Affine affine = transform * item->transform;
     SPClipPath * clip_path = item->clip_ref->getObject();
     if(clip_path) {
-        bbox.unionWith(clip_path->geometricBounds(transform));
+        bbox.unionWith(clip_path->geometricBounds(affine));
     }
     SPMask * mask_path = item->mask_ref->getObject();
     if(mask_path) {
-        bbox.unionWith(mask_path->geometricBounds(transform));
+        bbox.unionWith(mask_path->visualBounds(affine));
     }
     SPGroup * group = dynamic_cast<SPGroup *>(item);
     if (group) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPLPEItem * subitem = dynamic_cast<SPLPEItem *>(*iter);
-            bbox.unionWith(clip_mask_bbox(subitem, transform));
+            bbox.unionWith(clip_mask_bbox(subitem, affine));
         }
     }
     return bbox;
