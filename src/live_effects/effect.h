@@ -136,7 +136,6 @@ public:
     bool keep_paths; // set this to false allow retain extra generated objects, see measure line LPE
     bool is_load;
     bool upd_params;
-    bool skip_reprocess;
     BoolParam is_visible;
     Geom::PathVector pathvector_before_effect;
     Geom::PathVector pathvector_after_effect;

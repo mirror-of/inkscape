@@ -131,7 +131,6 @@ ColorPickerParam::param_newWidget()
 void
 ColorPickerParam::param_setValue(const guint32 newvalue)
 {
-    param_effect->skip_reprocess = true;
     value = newvalue;
 }
 

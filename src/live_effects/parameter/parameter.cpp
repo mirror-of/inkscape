@@ -129,7 +129,6 @@ ScalarParam::param_set_value(gdouble val)
 {
     if (value != val) {
         param_effect->upd_params = true;
-        param_effect->skip_reprocess = true;
     }
     value = val;
     if (integer)

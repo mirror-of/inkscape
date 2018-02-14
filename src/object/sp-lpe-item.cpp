@@ -180,13 +180,11 @@ void SPLPEItem::update(SPCtx* ctx, unsigned int flags) {
 }
 
 void SPLPEItem::modified(unsigned int flags) {
-    //TODO: finale remove tghe commented code if no regressions
-    /* The SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a
-       transformation.  It's apparently safe comment this. */
-    if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) /*&& (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)*/) {
-        sp_lpe_item_update_patheffect(this, true, true);
-    }
-//    SPItem::onModified(flags);
+    //TODO: remove if no regressions
+    //stop update when modified and make the effect update on the LPE transform method if the effect require it
+    //if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
+    //    sp_lpe_item_update_patheffect(this, true, true);
+    //}
 }
 
 Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -925,7 +923,6 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
             if (c) {
                c->unref();
             }
-            shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     }
 }

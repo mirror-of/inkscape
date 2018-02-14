@@ -389,7 +389,6 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       sp_lpe_item(NULL),
       current_zoom(1),
       upd_params(true),
-      skip_reprocess(false),
       current_shape(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),
@@ -548,7 +547,6 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
     doOnApply(lpeitem);
-    this->skip_reprocess = 0;
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)

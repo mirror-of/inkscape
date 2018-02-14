@@ -172,7 +172,6 @@ void
 ToggleButtonParam::param_setValue(bool newvalue)
 {
     if (value != newvalue) {
-        param_effect->skip_reprocess = true;
         param_effect->upd_params = true;
     }
     value = newvalue;

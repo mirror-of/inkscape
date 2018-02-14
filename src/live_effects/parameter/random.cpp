@@ -102,7 +102,6 @@ void
 RandomParam::param_set_value(gdouble val, long newseed)
 {
     value = val;
-    param_effect->skip_reprocess = true;
     if (integer)
         value = round(value);
     if (value > max)

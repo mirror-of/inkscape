@@ -133,7 +133,6 @@ TransformedPointParam::param_newWidget()
 void
 TransformedPointParam::set_and_write_new_values(Geom::Point const &new_origin, Geom::Point const &new_vector)
 {
-    param_effect->skip_reprocess = true;
     setValues(new_origin, new_vector);
     gchar * str = param_getSVGValue();
     param_write_to_repr(str);

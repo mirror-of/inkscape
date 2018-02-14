@@ -95,7 +95,6 @@ PointParam::param_hide_knot(bool hide) {
 void
 PointParam::param_setValue(Geom::Point newpoint, bool write)
 {
-    param_effect->skip_reprocess = true;
     *dynamic_cast<Geom::Point *>( this ) = newpoint;
     if(write){
         Inkscape::SVGOStringStream os;

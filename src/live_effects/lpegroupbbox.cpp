@@ -66,7 +66,7 @@ void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute, boo
     Geom::OptRect bbox = lpeitem->geometricBounds(transform);
     if (clip_mask) {
         SPLPEItem * item = const_cast<SPLPEItem *>(lpeitem);
-        bbox.unionWith(clip_mask_bbox(item, transform));
+        bbox.unionWith(clip_mask_bbox(item, transform * item->transform.inverse()));
     }
     if (bbox) {
         boundingbox_X = (*bbox)[Geom::X];
