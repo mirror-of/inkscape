@@ -18,6 +18,7 @@
 
 #include "sp-shape.h"
 #include "sp-conn-end-pair.h"
+#include "style-internal.h" // For SPStyleSrc
 
 class SPCurve;
 
@@ -49,6 +50,9 @@ public:
     virtual void convert_to_guides() const;
 
     virtual void update_patheffect(bool write);
+
+private:
+    SPStyleSrc d_source;  // Source of 'd' value, saved for output.
 };
 
 #endif // SEEN_SP_PATH_H
