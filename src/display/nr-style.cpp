@@ -75,6 +75,7 @@ NRStyle::NRStyle()
     , font_size(0)
 {
     paint_order_layer[0] = PAINT_ORDER_NORMAL;
+    omp_init_lock(&lock);
 }
 
 NRStyle::~NRStyle()
@@ -341,8 +342,23 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     update();
 }
 
+class LockGuard
+{
+public:
+    LockGuard(omp_lock_t &l) : lock(l)
+    {
+        omp_set_lock(&lock);
+    }
+    ~LockGuard()
+    {
+        omp_unset_lock(&lock);
+    }
+    omp_lock_t &lock;
+};
+
 bool NRStyle::prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern)
 {
+    LockGuard _lock(this->lock);
     // update fill pattern
     if (!fill_pattern) {
         switch (fill.type) {
@@ -407,6 +423,7 @@ void NRStyle::applyTextDecorationFill(Inkscape::DrawingContext &dc)
 
 bool NRStyle::prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern)
 {
+    LockGuard _lock(this->lock);
     if (!stroke_pattern) {
         switch (stroke.type) {
         case PAINT_SERVER:

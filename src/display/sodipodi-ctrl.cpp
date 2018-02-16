@@ -210,6 +210,7 @@ sp_ctrl_init (SPCtrl *ctrl)
     ctrl->pixbuf = NULL;
 
     ctrl->_point = Geom::Point(0,0);
+    omp_init_lock(&ctrl->lock);
 }
 
 static void sp_ctrl_destroy(SPCanvasItem *object)
@@ -584,10 +585,11 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
     if ((!ctrl->filled) && (!ctrl->stroked)) return;
 
     // the control-image is rendered into ctrl->cache
+    omp_set_lock(&ctrl->lock);
     if (!ctrl->build) {
         sp_ctrl_build_cache (ctrl, buf->device_scale);
     }
-
+    omp_unset_lock(&ctrl->lock);
     // Must match width/height sp_ctrl_build_cache.
     int w = (ctrl->width  * 2 + 1) * buf->device_scale;
     int h = (ctrl->height * 2 + 1) * buf->device_scale;

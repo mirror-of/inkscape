@@ -315,6 +315,7 @@ FilterTurbulence::FilterTurbulence()
     , fTileX(1) //guessed
     , fTileY(1) //guessed
 {
+    omp_init_lock(&lock);
 }
 
 FilterPrimitive * FilterTurbulence::create() {
@@ -396,6 +397,7 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
         set_cairo_surface_ci(out, (SPColorInterpolation)_style->color_interpolation_filters.computed );
     }
 
+    omp_set_lock(&lock);
     if (!gen->ready()) {
         Geom::Point ta(fTileX, fTileY);
         Geom::Point tb(fTileX + fTileWidth, fTileY + fTileHeight);
@@ -403,6 +405,7 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
             Geom::Point(XbaseFrequency, YbaseFrequency), stitchTiles,
             type == TURBULENCE_FRACTALNOISE, numOctaves);
     }
+    omp_unset_lock(&lock);
 
     Geom::Affine unit_trans = slot.get_units().get_matrix_primitiveunits2pb().inverse();
     Geom::Rect slot_area = slot.get_slot_area();

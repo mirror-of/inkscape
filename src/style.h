@@ -59,8 +59,8 @@ public:
     void mergeString( char const *const p );
     bool operator==(const SPStyle& rhs);
 
-    int style_ref()   { ++_refcount; return _refcount; }
-    int style_unref() { --_refcount; return _refcount; }
+    int style_ref()   { __sync_fetch_and_add(&_refcount, 1); return _refcount; }   // Y.Z. is this needed any more after fixing other more fundamental race conditions?
+    int style_unref() { __sync_fetch_and_add(&_refcount, -1); return _refcount; }
     int refCount() { return _refcount; }
 
 private:

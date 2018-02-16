@@ -108,6 +108,7 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
         return 1;
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    //YZ: setFilter/BlurQuality are race conditions that can be ignored
     item->drawing().setFilterQuality(prefs->getInt("/options/filterquality/value", 0));
     item->drawing().setBlurQuality(prefs->getInt("/options/blurquality/value", 0));
     FilterQuality const filterquality = (FilterQuality)item->drawing().filterQuality();
@@ -232,6 +233,7 @@ Geom::OptRect Filter::filter_effect_area(Geom::OptRect const &bbox)
         /* TODO: fetch somehow the object ex and em lengths */
 
         // Update for em, ex, and % values
+        // YZ: unresolved race condition - need to make this private to each thread
         _region_x.update(12, 6, len_x);
         _region_y.update(12, 6, len_y);
         _region_width.update(12, 6, len_x);

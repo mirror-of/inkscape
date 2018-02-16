@@ -284,9 +284,15 @@ set(TRY_GTKSPELL ON)
         ${GTKSPELL3_LIBRARIES}
     )
 
-find_package(Boost 1.19.0 REQUIRED)
+if(WIN32)
+  find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem system)
+  list(APPEND INKSCAPE_LIBS ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+else()
+  find_package(Boost 1.19.0 REQUIRED COMPONENTS filesystem thread system)
+  list(APPEND INKSCAPE_LIBS ${Boost_FILESYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+endif()
+
 list(APPEND INKSCAPE_INCS_SYS ${Boost_INCLUDE_DIRS})
-# list(APPEND INKSCAPE_LIBS ${Boost_LIBRARIES})
 
 find_package(ASPELL)
 if(ASPELL_FOUND)

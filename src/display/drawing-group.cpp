@@ -86,9 +86,12 @@ DrawingGroup::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
     return beststate;
 }
 
+#include "SharedMutexGuard.h"
+
 unsigned
 DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
 {
+    //SharedMutexGuard<true> _lock(this->lock);  // not needed because DrawingItem::render() already locks - but is that always the case?
     if (stop_at == NULL) {
         // normal rendering
         for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
