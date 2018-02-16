@@ -55,6 +55,9 @@
 #endif
 
 
+uint64_t T_lastDragBurst;
+uint64_t MyClock();
+
 using Inkscape::DocumentUndo;
 
 GdkPixbuf *handles[13];
@@ -543,6 +546,10 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
         case GDK_MOTION_NOTIFY:
         {
+            uint64_t t = MyClock();
+            if (t - T_lastDragBurst > 5000000)
+              T_lastDragBurst = t;
+
             tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
