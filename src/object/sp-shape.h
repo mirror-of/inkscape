@@ -40,9 +40,9 @@ public:
 	virtual ~SPShape();
 
     SPCurve * getCurve (unsigned int owner = FALSE) const;
-    SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE, bool force = FALSE) const;
-    SPCurve * getCurveForEdit (unsigned int owner = FALSE, bool force = FALSE) const;
-    void setCurve (SPCurve *curve, unsigned int owner);
+    SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE) const;
+    SPCurve * getCurveForEdit (unsigned int owner = FALSE) const;
+    void setCurve (SPCurve *curve, unsigned int owner = TRUE);
     void setCurveBeforeLPE (SPCurve *new_curve, unsigned int owner = TRUE);
     void setCurveInsync (SPCurve *curve, unsigned int owner = TRUE);
     int hasMarkers () const;

@@ -418,6 +418,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                 repr->setAttribute("d", repr->attribute("inkscape:original-d"));
             }
             repr->setAttribute("inkscape:original-d", NULL);
+            path->setCurveBeforeLPE(NULL);
         } else {
             if (!keep_paths) {
                 sp_lpe_item_update_patheffect(lpeitem, true, true);
@@ -429,7 +430,6 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         {
             if (!keep_paths) {
                 repr->setAttribute("d", NULL);
-                sp_lpe_item_update_patheffect(lpeitem, true, true);
             } else {
                 SPDesktop * desktop = SP_ACTIVE_DESKTOP;
                 if (desktop) {
@@ -440,6 +440,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                     sp_item_list_to_curves(items, selected, to_select, true);
                 }
             }
+            shape->setCurveBeforeLPE(NULL);
         } else {
             if (!keep_paths) {
                 sp_lpe_item_update_patheffect(lpeitem, true, true);

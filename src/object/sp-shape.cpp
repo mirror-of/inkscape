@@ -741,11 +741,19 @@ void SPShape::print(SPPrintContext* ctx) {
 
 void SPShape::update_patheffect(bool write)
 {
-    std::cout << "AAAAAAAAAAAAAA" << std::endl;
+    
     Inkscape::XML::Node *repr = this->getRepr();
-    if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
+    if (SPCurve *c_lpe = this->getCurveForEdit()) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        SPCurve * before = this->getCurveBeforeLPE();
+        std::cout << c_lpe->get_pathvector() << "AAAAAAAAAAAAAA" << std::endl;
+        if (!before) {
+            this->setCurveBeforeLPE(c_lpe);
+        } else {
+            before->unref();
+        }
+        std::cout << this->getCurveBeforeLPE()->get_pathvector() << "AAAAAAAAAAAAAA" << std::endl;
         this->setCurveInsync(c_lpe);
         this->resetClipPathAndMaskLPE();
         bool success = false;
@@ -1090,9 +1098,9 @@ SPCurve * SPShape::getCurve(unsigned int owner) const
  * has path effect like in clips and mask
  * if owner == 0 return a copy
  */
-SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner, bool force) const
+SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
 {
-    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+    if (_curve_before_lpe) {
         if (owner) {
             return _curve_before_lpe;
         }
@@ -1107,9 +1115,9 @@ SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner, bool force) const
  * has path effect like in clips and mask
  * if owner == 0 return a copy
  */
-SPCurve * SPShape::getCurveForEdit(unsigned int owner, bool force) const
+SPCurve * SPShape::getCurveForEdit(unsigned int owner) const
 {
-    if (_curve_before_lpe && (hasPathEffectRecursive() || force)) {
+    if (_curve_before_lpe) {
         if (owner) {
             return _curve_before_lpe;
         }
