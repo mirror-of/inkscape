@@ -71,8 +71,6 @@ public:
 
     virtual void modified(unsigned int flags);
 
-    virtual void update_patheffect(bool write);
-
     /**
      * @brief Makes sure that start and end lie between 0 and 2 * PI.
      */

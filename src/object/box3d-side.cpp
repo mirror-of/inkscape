@@ -192,24 +192,20 @@ void Box3DSide::set_shape() {
     c->lineto(box3d_get_corner_screen(box, corners[3]));
     c->closepath();
 
-    /* Reset the this'scurve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    this->setCurveInsync(c);
-
-    if (hasPathEffect() && pathEffectsEnabled()) {
-        SPCurve *c_lpe = c->copy();
-        bool success = this->performPathEffect(c_lpe, SP_SHAPE(this));
-
-        if (success) {
-            this->setCurveInsync(c_lpe);
-            this->applyToClipPath(this);
-            this->applyToMask(this);
+    //If original shape dont change on a LPE item return here to allow LPE
+    SPCurve * check = this->getCurveForEdit(false, true);
+    if (check) {
+        if(check->get_pathvector() == c->get_pathvector()) {
+            check->unref();
+            c->unref();
+            return;
         }
-
-        c_lpe->unref();
-
+        check->unref();
     }
-
+    /* Reset the shape's curve to the "original_curve"
+     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    this->setCurveBeforeLPE(c);
+    this->setCurveInsync(c);
     c->unref();
 }
 

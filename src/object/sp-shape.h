@@ -48,6 +48,7 @@ public:
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
 
+
 public: // temporarily public, until SPPath is properly classed, etc.
     SPCurve *_curve_before_lpe;
     SPCurve *_curve;
@@ -74,6 +75,7 @@ public:
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
 
 	virtual void set_shape();
+	virtual void update_patheffect(bool write);
 };
 
 

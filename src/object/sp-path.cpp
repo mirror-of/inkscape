@@ -372,41 +372,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     return Geom::identity();
 }
 
-
-void SPPath::update_patheffect(bool write) {
-#ifdef PATH_VERBOSE
-g_message("sp_path_update_patheffect");
-#endif
-    Inkscape::XML::Node *repr = this->getRepr();
-    if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
-        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
-         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-        this->setCurveInsync(c_lpe);
-        this->resetClipPathAndMaskLPE();
-        bool success = false;
-        if (hasPathEffect() && pathEffectsEnabled()) {
-            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
-            if (success) {
-                this->setCurveInsync(c_lpe);
-                this->applyToClipPath(this);
-                this->applyToMask(this);
-            }
-        }
-
-        if (write && success) {
-            if (c_lpe != NULL) {
-                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
-                repr->setAttribute("d", str);
-                g_free(str);
-            } else {
-                repr->setAttribute("d", NULL);
-            }
-        }
-        c_lpe->unref();
-        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    }
-}
-
 /*
   Local Variables:
   mode:c++

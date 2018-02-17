@@ -37,7 +37,8 @@
 #include "sp-path.h"
 #include "preferences.h"
 #include "attributes.h"
-
+#include "svg/svg.h"
+#include "svg/path-string.h"
 #include "live_effects/lpeobject.h"
 
 #include "helper/mathfns.h" // for triangle_area()
@@ -736,6 +737,39 @@ void SPShape::print(SPPrintContext* ctx) {
 		sp_print_comment(ctx, comment);
 		g_free(comment);
 	}
+}
+
+void SPShape::update_patheffect(bool write)
+{
+    std::cout << "AAAAAAAAAAAAAA" << std::endl;
+    Inkscape::XML::Node *repr = this->getRepr();
+    if (SPCurve *c_lpe = this->getCurveForEdit(false, true)) {
+        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        this->setCurveInsync(c_lpe);
+        this->resetClipPathAndMaskLPE();
+        bool success = false;
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
+            if (success) {
+                this->setCurveInsync(c_lpe);
+                this->applyToClipPath(this);
+                this->applyToMask(this);
+            }
+        }
+
+        if (write && success) {
+            if (c_lpe != NULL) {
+                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
+                repr->setAttribute("d", str);
+                g_free(str);
+            } else {
+                repr->setAttribute("d", NULL);
+            }
+        }
+        c_lpe->unref();
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 Inkscape::DrawingItem* SPShape::show(Inkscape::Drawing &drawing, unsigned int /*key*/, unsigned int /*flags*/) {
