@@ -5,14 +5,14 @@
 # Alessio Frusciante <algol@firenze.linux.it>, 2002-2003.
 # Luca Ferretti <elle.uca@infinito.it>, 2005.
 # Luca Bruno <lucab@debian.org>, 2005-2009.
-# Firas Hanife <FirasHanife@gmail.com>, 2014-2017.
+# Firas Hanife <FirasHanife@gmail.com>, 2014-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-02-03 23:41+0100\n"
-"PO-Revision-Date: 2017-08-05 02:00+0100\n"
+"PO-Revision-Date: 2018-02-17 00:00+0100\n"
 "Last-Translator: Firas Hanife <FirasHanife@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -28818,9 +28818,8 @@ msgid "Center on horizontal and vertical axis"
 msgstr "Centra sull'asse orizzontale e verticale"
 
 #: ../src/widgets/arc-toolbar.cpp:143
-#, fuzzy
 msgid "Change arc"
-msgstr "Modifica sfocatura"
+msgstr "Modifica arco"
 
 #: ../src/widgets/arc-toolbar.cpp:209
 msgid "Arc: Change start/end"
@@ -28855,9 +28854,8 @@ msgid "Rx:"
 msgstr "Rx:"
 
 #: ../src/widgets/arc-toolbar.cpp:435
-#, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
-msgstr "Raggio orizzontale dell'angolo arrotondato"
+msgstr "Raggio orizzontale del cerchio, ellisse o arco"
 
 #: ../src/widgets/arc-toolbar.cpp:452 ../src/widgets/rect-toolbar.cpp:366
 msgid "Vertical radius"
@@ -28868,9 +28866,8 @@ msgid "Ry:"
 msgstr "Ry:"
 
 #: ../src/widgets/arc-toolbar.cpp:452
-#, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
-msgstr "Crea cerchi, ellissi e archi"
+msgstr "Raggio verticale del cerchio, ellisse o arco"
 
 #. Add the units menu.
 #: ../src/widgets/arc-toolbar.cpp:466 ../src/widgets/lpe-toolbar.cpp:387
@@ -31622,9 +31619,8 @@ msgid "Text: Change orientation"
 msgstr "Testo: Cambia orientamento"
 
 #: ../src/widgets/text-toolbar.cpp:1188
-#, fuzzy
 msgid "Text: Change direction"
-msgstr "Testo: Cambia orientamento"
+msgstr "Testo: Cambia direzione"
 
 #: ../src/widgets/text-toolbar.cpp:1725
 msgid "Font Family"
@@ -31748,32 +31744,29 @@ msgstr "Orientazione testo (glifi) nel testo verticale."
 
 #: ../src/widgets/text-toolbar.cpp:2028
 msgid "LTR"
-msgstr ""
+msgstr "LTR"
 
 #: ../src/widgets/text-toolbar.cpp:2029
-#, fuzzy
 msgid "Left to right text"
-msgstr "Da sinistra a destra"
+msgstr "Testo da sinistra a destra"
 
 #: ../src/widgets/text-toolbar.cpp:2036
 msgid "RTL"
-msgstr ""
+msgstr "RTL"
 
 #: ../src/widgets/text-toolbar.cpp:2037
-#, fuzzy
 msgid "Right to left text"
-msgstr "Da destra a sinistra"
+msgstr "Testo da destra a sinistra"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2043
-#, fuzzy
 msgid "Text direction"
-msgstr "Direzione testo:"
+msgstr "Direzione testo"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2044
 msgid "Text direction for normally horizontal text."
-msgstr ""
+msgstr "Direzione del testo orientato orizzontalmente."
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:2077
