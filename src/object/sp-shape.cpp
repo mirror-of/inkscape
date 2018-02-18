@@ -741,8 +741,7 @@ void SPShape::print(SPPrintContext* ctx) {
 
 void SPShape::update_patheffect(bool write)
 {
-    
-    Inkscape::XML::Node *repr = this->getRepr();
+    sp_lpe_item_create_original_path_recursive(this);
     if (SPCurve *c_lpe = this->getCurveForEdit()) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
@@ -759,6 +758,7 @@ void SPShape::update_patheffect(bool write)
         }
 
         if (write && success) {
+            Inkscape::XML::Node *repr = this->getRepr();
             if (c_lpe != NULL) {
                 gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
                 repr->setAttribute("d", str);
@@ -1115,6 +1115,7 @@ SPCurve * SPShape::getCurveForEdit(unsigned int owner) const
         }
         return _curve_before_lpe->copy();
     }
+    std::cout << "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" << std::endl;
     return getCurve(owner);
 }
 

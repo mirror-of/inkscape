@@ -151,7 +151,6 @@ void
 LPEBendPath::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
-
     original_bbox(SP_LPE_ITEM(item), false, true);
 
     Geom::Point start(boundingbox_X.min(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
@@ -170,9 +169,7 @@ LPEBendPath::resetDefaults(SPItem const* item)
 void
 LPEBendPath::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    if (sp_lpe_item && !postmul.isTranslation()) { //Check is object
-        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
-    }
+    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
 }
 
 void

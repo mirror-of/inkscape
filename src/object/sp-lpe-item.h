@@ -102,6 +102,7 @@ public:
 
     void editNextParamOncanvas(SPDesktop *dt);
 };
+void sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem);
 void sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write); // careful, class already has method with *very* similar name!
 
 #endif /* !SP_LPE_ITEM_H_SEEN */

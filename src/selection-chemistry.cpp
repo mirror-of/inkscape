@@ -771,10 +771,6 @@ Inkscape::XML::Node* ObjectSet::group() {
     group->setPosition(topmost + 1);
 
     set(doc->getObjectByRepr(group));
-    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(*(items().begin()));
-    if (lpeitem) {
-        sp_lpe_item_update_patheffect(lpeitem, true, true);
-    }
     DocumentUndo::done(doc, SP_VERB_SELECTION_GROUP,
                        C_("Verb", "Group"));
 
