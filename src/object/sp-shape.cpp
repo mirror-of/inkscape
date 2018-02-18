@@ -741,7 +741,6 @@ void SPShape::print(SPPrintContext* ctx) {
 
 void SPShape::update_patheffect(bool write)
 {
-    sp_lpe_item_create_original_path_recursive(this);
     if (SPCurve *c_lpe = this->getCurveForEdit()) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/

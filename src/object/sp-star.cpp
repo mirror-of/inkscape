@@ -432,7 +432,7 @@ void SPStar::set_shape() {
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
     SPCurve * edit   = this->getCurveForEdit();
-    if (edit && before) {
+    if (edit && (before || this->hasPathEffectRecursive()) {
         if (before->get_pathvector() != c->get_pathvector()){
             this->setCurveBeforeLPE(c);
             this->update_patheffect(false);

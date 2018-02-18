@@ -121,6 +121,7 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
             }
         }
     }
+    item->requestModified(SP_OBJECT_MODIFIED_FLAG);
     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -641,13 +642,13 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         if (item) {
             item->doWriteTransform(item->transform, NULL, false);
             children.insert(children.begin(),item);
+            item->requestModified(SP_OBJECT_MODIFIED_FLAG);
         } else {
             g_assert_not_reached();
         }
 
         Inkscape::GC::release(repr);
     }
-
     if (do_done) {
         DocumentUndo::done(doc, SP_VERB_NONE, _("Ungroup"));
     }

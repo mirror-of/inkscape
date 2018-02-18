@@ -49,7 +49,7 @@
 static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
 
 static void lpeobject_ref_modified(SPObject *href, guint flags, SPLPEItem *lpeitem);
-
+static void sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem);
 static void sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths, bool force = false);
 
 typedef std::list<std::string> HRefList;
