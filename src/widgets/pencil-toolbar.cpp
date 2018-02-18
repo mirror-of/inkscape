@@ -328,7 +328,7 @@ static void sp_flatten_spiro_bspline(GtkWidget * /*widget*/, GObject *obj)
                                 shape->setCurveBeforeLPE(c);
                             } else {
                                 lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c,0);
+                                shape->setCurve(c, false);
                             }
                             break;
                         }
@@ -369,7 +369,7 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
                                 shape->setCurveBeforeLPE(c);
                             } else {
                                 lpeitem->removeCurrentPathEffect(false);
-                                shape->setCurve(c,0);
+                                shape->setCurve(c, false);
                             }
                             break;
                         }

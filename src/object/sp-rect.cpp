@@ -199,7 +199,7 @@ const char* SPRect::displayName() const {
 void SPRect::set_shape() {
     if ((this->height.computed < 1e-18) || (this->width.computed < 1e-18)) {
     	this->setCurveInsync(NULL);
-    	this->setCurveBeforeLPE( NULL );
+    	this->setCurveBeforeLPE(NULL);
         return;
     }
 

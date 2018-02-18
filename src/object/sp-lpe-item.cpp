@@ -359,18 +359,24 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
         }
     }
     if (SP_IS_GROUP(lpeitem)) {
-    	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
+        std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPObject *subitem = *iter;
             if (SP_IS_LPE_ITEM(subitem)) {
                 sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(subitem));
             }
         }
-    }
-    else if (SP_IS_PATH(lpeitem)) {
-        Inkscape::XML::Node *pathrepr = lpeitem->getRepr();
+    } else if (SPPath * path = dynamic_cast<SPPath *>(lpeitem)) {
+        Inkscape::XML::Node *pathrepr = path->getRepr();
         if ( !pathrepr->attribute("inkscape:original-d") ) {
             pathrepr->setAttribute("inkscape:original-d", pathrepr->attribute("d"));
+            path->setCurveBeforeLPE(path->getCurve());
+        }
+    } else if (SPShape * shape = dynamic_cast<SPShape *>(lpeitem)) {
+        if (SPCurve * c_lpe = shape->getCurveBeforeLPE()) {
+            c_lpe->unref();
+        } else {
+            shape->setCurveBeforeLPE(shape->getCurve());
         }
     }
 }
@@ -747,7 +753,7 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
                 }
             }
         } else if (shape) {
-            shape->setCurveInsync( shape->getCurveForEdit(false, true));
+            shape->setCurveInsync( shape->getCurveForEdit());
             if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
                 shape->getRepr()->setAttribute("inkscape:original-d", NULL);
             } else {
@@ -772,9 +778,10 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveForEdit(false, true));
+                shape->setCurveInsync( shape->getCurveForEdit());
                 if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
                     shape->getRepr()->setAttribute("inkscape:original-d", NULL);
+                    shape->setCurveBeforeLPE(NULL);
                 } else {
                     // make sure there is an original-d for paths!!!
                     sp_lpe_item_create_original_path_recursive(shape);
@@ -797,9 +804,10 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
                     }
                 }
             } else if (shape) {
-                shape->setCurveInsync( shape->getCurveForEdit(false, true));
+                shape->setCurveInsync( shape->getCurveForEdit());
                 if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
                     shape->getRepr()->setAttribute("inkscape:original-d", NULL);
+                    shape->setCurveBeforeLPE(NULL);
                 } else {
                     // make sure there is an original-d for paths!!!
                     sp_lpe_item_create_original_path_recursive(shape);
@@ -877,7 +885,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
         if (lpe) { //group
             c = shape->getCurve();
         } else {
-            c = shape->getCurveForEdit(false, true);
+            c = shape->getCurveForEdit();
         }
         if (c) {
             bool success = false;
@@ -917,7 +925,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
                     Geom::PathVector pv = sp_svg_read_pathv(value);
                     SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                     if (oldcurve) {
-                        SP_SHAPE(clip_mask)->setCurve(oldcurve, TRUE);
+                        SP_SHAPE(clip_mask)->setCurve(oldcurve);
                         oldcurve->unref();
                     }
                 }

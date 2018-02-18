@@ -746,14 +746,6 @@ void SPShape::update_patheffect(bool write)
     if (SPCurve *c_lpe = this->getCurveForEdit()) {
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-        SPCurve * before = this->getCurveBeforeLPE();
-        std::cout << c_lpe->get_pathvector() << "AAAAAAAAAAAAAA" << std::endl;
-        if (!before) {
-            this->setCurveBeforeLPE(c_lpe);
-        } else {
-            before->unref();
-        }
-        std::cout << this->getCurveBeforeLPE()->get_pathvector() << "AAAAAAAAAAAAAA" << std::endl;
         this->setCurveInsync(c_lpe);
         this->resetClipPathAndMaskLPE();
         bool success = false;

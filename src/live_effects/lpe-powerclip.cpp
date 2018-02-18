@@ -128,7 +128,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                     Geom::PathVector c_pv = c->get_pathvector();
                     c_pv *= affine;
                     c->set_pathvector(c_pv);
-                    SP_SHAPE(clip_to_path)->setCurve(c, TRUE);
+                    SP_SHAPE(clip_to_path)->setCurve(c);
                     c->unref();
                 }
                 
@@ -198,7 +198,7 @@ LPEPowerClip::addInverse (SPItem * clip_data){
                 }
                 c_pv.push_back(clip_box);
                 c->set_pathvector(c_pv);
-                SP_SHAPE(clip_data)->setCurve(c, TRUE);
+                SP_SHAPE(clip_data)->setCurve(c);
                 c->unref();
                 gchar * is_inverse_str = is_inverse.param_getSVGValue();
                 if (strcmp(is_inverse_str, "true") != 0) {
@@ -240,7 +240,7 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                     c_pv.pop_back();
                 }
                 c->set_pathvector(c_pv);
-                SP_SHAPE(clip_data)->setCurve(c, TRUE);
+                SP_SHAPE(clip_data)->setCurve(c);
                 c->unref();
                 gchar * is_inverse_str = is_inverse.param_getSVGValue();
                 if (strcmp(is_inverse_str, "false") != 0) {

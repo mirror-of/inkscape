@@ -218,11 +218,11 @@ void SPPath::set(unsigned int key, const gchar* value) {
                 SPCurve *curve = new SPCurve(pv);
 
                 if (curve) {
-                    this->setCurve(curve, TRUE);
+                    this->setCurve(curve);
                     curve->unref();
                 }
             } else {
-                this->setCurve(NULL, TRUE);
+                this->setCurve(NULL);
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -309,7 +309,7 @@ void SPPath::update(SPCtx *ctx, guint flags) {
             if (curve) {
 
                 // Update curve
-                this->setCurveInsync(curve, TRUE);
+                this->setCurveInsync(curve);
                 curve->unref();
 
                 // Convert from property to attribute (convert back on write)

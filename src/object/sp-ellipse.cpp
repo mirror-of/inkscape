@@ -434,7 +434,7 @@ void SPGenericEllipse::set_shape()
 
     this->normalize();
 
-    SPCurve *curve = NULL;
+    SPCurve *c = NULL;
 
     // For simplicity, we use a circle with center (0, 0) and radius 1 for our calculations.
     Geom::Circle circle(0, 0, 1);
@@ -467,7 +467,7 @@ void SPGenericEllipse::set_shape()
     } else {
         pb.flush();
     }
-    curve = new SPCurve(pb.peek());
+    c = new SPCurve(pb.peek());
 
     // gchar *str = sp_svg_write_path(curve->get_pathvector());
     // std::cout << "  path: " << str << std::endl;
@@ -475,23 +475,29 @@ void SPGenericEllipse::set_shape()
 
     // Stretching / moving the calculated shape to fit the actual dimensions.
     Geom::Affine aff = Geom::Scale(rx.computed, ry.computed) * Geom::Translate(cx.computed, cy.computed);
-    curve->transform(aff);
+    c->transform(aff);
     
-    //If original shape dont change on a LPE item return here to allow LPE
-    SPCurve * check = this->getCurveForEdit(false, true);
-    if (check) {
-        if(check->get_pathvector() == curve->get_pathvector()) {
-            check->unref();
-            curve->unref();
-            return;
-        }
-        check->unref();
-    }
     /* Reset the shape's curve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    this->setCurveBeforeLPE(curve);
-    this->setCurveInsync(curve);
-    curve->unref();
+    * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    SPCurve * before = this->getCurveBeforeLPE();
+    SPCurve * edit   = this->getCurveForEdit();
+    if (edit && before) {
+        if (before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            this->update_patheffect(false);
+        } else {
+            this->setCurveBeforeLPE(c);
+        }
+    } else {
+        this->setCurveInsync(c);
+    }
+    if (before) {
+        before->unref();
+    }
+    if (edit) {
+        edit->unref();
+    }
+    c->unref();
 }
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)

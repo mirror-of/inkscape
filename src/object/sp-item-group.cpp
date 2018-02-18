@@ -994,7 +994,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                             Geom::PathVector pv = sp_svg_read_pathv(value);
                             SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                             if (oldcurve) {
-                                sub_shape->setCurve(oldcurve, TRUE);
+                                sub_shape->setCurve(oldcurve);
                                 oldcurve->unref();
                             }
                         }

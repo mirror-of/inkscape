@@ -345,20 +345,26 @@ void SPSpiral::set_shape() {
         this->fitAndDraw(c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
     }
 
-    //If original shape dont change on a LPE item return here to allow LPE
-    SPCurve * check = this->getCurveForEdit(false, true);
-    if (check) {
-        if(check->get_pathvector() == c->get_pathvector()) {
-            check->unref();
-            c->unref();
-            return;
-        }
-        check->unref();
-    }
     /* Reset the shape's curve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    this->setCurveBeforeLPE(c);
-    this->setCurveInsync(c);
+    * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    SPCurve * before = this->getCurveBeforeLPE();
+    SPCurve * edit   = this->getCurveForEdit();
+    if (edit && before) {
+        if (before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            this->update_patheffect(false);
+        } else {
+            this->setCurveBeforeLPE(c);
+        }
+    } else {
+        this->setCurveInsync(c);
+    }
+    if (before) {
+        before->unref();
+    }
+    if (edit) {
+        edit->unref();
+    }
     c->unref();
 }
 

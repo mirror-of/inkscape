@@ -431,12 +431,15 @@ void SPStar::set_shape() {
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
-    SPCurve * edit   = this->getCurveForEdit(false, true);
+    SPCurve * edit   = this->getCurveForEdit();
     if (edit && before) {
-        this->setCurveBeforeLPE(c);
-        std::cout << c->get_pathvector() << "beforebeforebeforebeforebeforebefore" << std::endl;
+        if (before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            this->update_patheffect(false);
+        } else {
+            this->setCurveBeforeLPE(c);
+        }
     } else {
-        std::cout << c->get_pathvector() << "editediteditediteditediteditediteditedit" << std::endl;
         this->setCurveInsync(c);
     }
     if (before) {
