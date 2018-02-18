@@ -1648,7 +1648,7 @@ void PathManipulator::_selectionChanged(SelectableControlPoint *p, bool selected
     }
 }
 
-/** Removes all nodes belonging to this manipulator from the control pont selection */
+/** Removes all nodes belonging to this manipulator from the control point selection */
 void PathManipulator::_removeNodesFromSelection()
 {
     // remove this manipulator's nodes from selection
