@@ -478,11 +478,10 @@ void SPGenericEllipse::set_shape()
     c->transform(aff);
     
     /* Reset the shape's curve to the "original_curve"
-    * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
-    SPCurve * edit   = this->getCurveForEdit();
-    if (edit && before) {
-        if (before->get_pathvector() != c->get_pathvector()){
+    if (before || this->hasPathEffectRecursive()) {
+        if (!before || before->get_pathvector() != c->get_pathvector()){
             this->setCurveBeforeLPE(c);
             this->update_patheffect(false);
         } else {
@@ -493,9 +492,6 @@ void SPGenericEllipse::set_shape()
     }
     if (before) {
         before->unref();
-    }
-    if (edit) {
-        edit->unref();
     }
     c->unref();
 }

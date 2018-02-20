@@ -169,7 +169,7 @@ LPEBendPath::resetDefaults(SPItem const* item)
 void
 LPEBendPath::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+    //block parameters be transformed because shapes with bend store transform in the element
 }
 
 void

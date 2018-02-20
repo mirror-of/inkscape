@@ -1114,7 +1114,6 @@ SPCurve * SPShape::getCurveForEdit(unsigned int owner) const
         }
         return _curve_before_lpe->copy();
     }
-    std::cout << "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" << std::endl;
     return getCurve(owner);
 }
 

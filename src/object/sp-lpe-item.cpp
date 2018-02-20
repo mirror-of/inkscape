@@ -932,6 +932,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
             if (c) {
                c->unref();
             }
+            shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     }
 }
