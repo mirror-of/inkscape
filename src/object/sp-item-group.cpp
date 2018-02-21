@@ -88,10 +88,9 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
     SPLPEItem::child_added(child, ref);
 
     SPObject *last_child = this->lastChild();
-    SPItem *item = NULL;
     if (last_child && last_child->getRepr() == child) {
         // optimization for the common special case where the child is being added at the end
-        item = dynamic_cast<SPItem *>(last_child);
+        SPItem *item = dynamic_cast<SPItem *>(last_child);
         if ( item ) {
             /* TODO: this should be moved into SPItem somehow */
             SPItemView *v;
@@ -105,7 +104,7 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
             }
         }
     } else {    // general case
-        item = dynamic_cast<SPItem *>(get_child_by_repr(child));
+        SPItem *item = dynamic_cast<SPItem *>(get_child_by_repr(child));
         if ( item ) {
             /* TODO: this should be moved into SPItem somehow */
             SPItemView *v;
@@ -121,7 +120,6 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
             }
         }
     }
-    item->requestModified(SP_OBJECT_MODIFIED_FLAG);
     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
