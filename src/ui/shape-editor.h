@@ -47,7 +47,7 @@ private:
 
     SPDesktop *desktop;
     Inkscape::XML::Node *knotholder_listener_attached_for;
-    Inkscape::XML::Node *lpegit knotholder_listener_attached_for;
+    Inkscape::XML::Node *lpeknotholder_listener_attached_for;
     Geom::Affine _edit_transform;
 };
 
