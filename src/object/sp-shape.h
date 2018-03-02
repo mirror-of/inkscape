@@ -39,15 +39,13 @@ public:
 	SPShape();
 	virtual ~SPShape();
 
-    SPCurve * getCurve (unsigned int owner = FALSE) const;
-    SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE) const;
-    SPCurve * getCurveForEdit (unsigned int owner = FALSE) const;
-    void setCurve (SPCurve *curve, unsigned int owner = TRUE);
-    void setCurveBeforeLPE (SPCurve *new_curve, unsigned int owner = TRUE);
-    void setCurveInsync (SPCurve *curve, unsigned int owner = TRUE);
+    SPCurve * getCurve () const;
+    SPCurve * getCurveBeforeLPE () const;
+    void setCurve (SPCurve *curve, unsigned int owner);
+    void setCurveInsync (SPCurve *curve, unsigned int owner);
+    void setCurveBeforeLPE (SPCurve *curve);
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
-
 
 public: // temporarily public, until SPPath is properly classed, etc.
     SPCurve *_curve_before_lpe;
@@ -75,7 +73,6 @@ public:
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
 
 	virtual void set_shape();
-	virtual void update_patheffect(bool write);
 };
 
 

@@ -460,7 +460,7 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(linked_obj)) {
         if (_from_original_d) {
-            curve = SP_SHAPE(linked_obj)->getCurveForEdit();
+            curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
         } else {
             curve = SP_SHAPE(linked_obj)->getCurve();
         }

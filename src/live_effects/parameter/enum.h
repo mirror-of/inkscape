@@ -61,11 +61,13 @@ public:
         return true;
     };
     gchar * param_getSVGValue() const {
-        return g_strdup( enumdataconv->get_key(value).c_str() );
+        gchar * str = g_strdup( enumdataconv->get_key(value).c_str() );
+        return str;
     };
     
     gchar * param_getDefaultSVGValue() const {
-        return g_strdup( enumdataconv->get_key(defvalue).c_str() );
+        gchar * str = g_strdup( enumdataconv->get_key(defvalue).c_str() );
+        return str;
     };
     
     E get_value() const {

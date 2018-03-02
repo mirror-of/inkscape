@@ -533,7 +533,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
             }
 
             this->flashed_item = over_item;
-            SPCurve *c = SP_SHAPE(over_item)->getCurveForEdit();
+            SPCurve *c = SP_SHAPE(over_item)->getCurveBeforeLPE();
 
             if (!c) {
                 break; // break out when curve doesn't exist

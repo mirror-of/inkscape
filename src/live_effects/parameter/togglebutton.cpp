@@ -55,13 +55,15 @@ ToggleButtonParam::param_readSVGValue(const gchar * strvalue)
 gchar *
 ToggleButtonParam::param_getSVGValue() const
 {
-    return g_strdup(value ? "true" : "false");
+    gchar * str = g_strdup(value ? "true" : "false");
+    return str;
 }
 
 gchar *
 ToggleButtonParam::param_getDefaultSVGValue() const
 {
-    return g_strdup(defvalue ? "true" : "false");
+    gchar * str = g_strdup(defvalue ? "true" : "false");
+    return str;
 }
 
 void 

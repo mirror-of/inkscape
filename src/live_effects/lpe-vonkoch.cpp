@@ -239,7 +239,7 @@ void
 LPEVonKoch::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem, false, true);
+    original_bbox(lpeitem);
     
     Geom::PathVector paths = ref_path.get_pathvector();
     Geom::Point A,B;
@@ -269,7 +269,7 @@ LPEVonKoch::resetDefaults(SPItem const* item)
     Effect::resetDefaults(item);
 
     using namespace Geom;
-    original_bbox(SP_LPE_ITEM(item), false, true);
+    original_bbox(SP_LPE_ITEM(item));
 
     Point A,B;
     A[Geom::X] = boundingbox_X.min();

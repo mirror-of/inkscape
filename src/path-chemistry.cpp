@@ -123,7 +123,7 @@ ObjectSet::combine(bool skip_undo)
             did = true;
         }
 
-        SPCurve *c = path->getCurveForEdit();
+        SPCurve *c = path->get_curve_for_edit();
         if (first == NULL) {  // this is the topmost path
             first = item;
             parent = first->getRepr()->parent();
@@ -225,7 +225,7 @@ ObjectSet::breakApart(bool skip_undo)
             continue;
         }
 
-        SPCurve *curve = path->getCurveForEdit();
+        SPCurve *curve = path->get_curve_for_edit();
         if (curve == NULL) {
             continue;
         }
@@ -650,7 +650,7 @@ ObjectSet::pathReverse()
 
         did = true;
 
-        SPCurve *rcurve = path->getCurveForEdit(true)->create_reverse();
+        SPCurve *rcurve = path->get_curve_reference()->create_reverse();
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
         if ( path->hasPathEffectRecursive() ) {

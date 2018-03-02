@@ -97,7 +97,8 @@ VectorParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << origin << " , " << vector;
-    return g_strdup(os.str().c_str());
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
 }
 
 gchar *
@@ -105,7 +106,8 @@ VectorParam::param_getDefaultSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << defvalue;
-    return g_strdup(os.str().c_str());
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
 }
 
 Gtk::Widget *

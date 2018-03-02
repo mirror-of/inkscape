@@ -86,8 +86,9 @@ void
 LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     // get the item bounding box
-    original_bbox(lpeitem, false, true);
+    original_bbox(lpeitem);
     original_height = boundingbox_Y.max() - boundingbox_Y.min();
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (_knot_entity) {
         if (hide_knot) {
             helper_path.clear();
@@ -151,7 +152,8 @@ void
 LPEBendPath::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
-    original_bbox(SP_LPE_ITEM(item), false, true);
+
+    original_bbox(SP_LPE_ITEM(item));
 
     Geom::Point start(boundingbox_X.min(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
     Geom::Point end(boundingbox_X.max(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
@@ -169,7 +171,9 @@ LPEBendPath::resetDefaults(SPItem const* item)
 void
 LPEBendPath::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    //block parameters be transformed because shapes with bend store transform in the element
+    if (sp_lpe_item) {
+        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+    }
 }
 
 void

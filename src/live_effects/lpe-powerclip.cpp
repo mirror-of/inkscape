@@ -44,12 +44,11 @@ LPEPowerClip::~LPEPowerClip() {}
 void
 LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
     SPObject * clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
-    gchar * uri_str = uri.param_getSVGValue();
     if(hide_clip && clip_path) {
         SP_ITEM(sp_lpe_item)->clip_ref->detach();
-    } else if (!hide_clip && !clip_path && uri_str) {
+    } else if (!hide_clip && !clip_path && uri.param_getSVGValue()) {
         try {
-            SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri_str));
+            SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
         } catch (Inkscape::BadURIException &e) {
             g_warning("%s", e.what());
             SP_ITEM(sp_lpe_item)->clip_ref->detach();
@@ -63,10 +62,9 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
         if(!bbox) {
             return;
         }
-        uri_str = uri.param_getSVGValue();
-        if (uri_str) {
+        if (uri.param_getSVGValue()) {
             try {
-                SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri_str));
+                SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
             } catch (Inkscape::BadURIException &e) {
                 g_warning("%s", e.what());
                 SP_ITEM(sp_lpe_item)->clip_ref->detach();
@@ -74,7 +72,6 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
         } else {
             SP_ITEM(sp_lpe_item)->clip_ref->detach();
         }
-        g_free(uri_str);
         Geom::Rect bboxrect = (*bbox);
         bboxrect.expandBy(1);
         Geom::Point topleft      = bboxrect.corner(0);
@@ -128,7 +125,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                     Geom::PathVector c_pv = c->get_pathvector();
                     c_pv *= affine;
                     c->set_pathvector(c_pv);
-                    SP_SHAPE(clip_to_path)->setCurve(c);
+                    SP_SHAPE(clip_to_path)->setCurve(c, TRUE);
                     c->unref();
                 }
                 
@@ -147,38 +144,28 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                 Inkscape::GC::release(clip_path_node);
                 clip_to_path->emitModified(SP_OBJECT_MODIFIED_CASCADE);
             }
-            gchar * is_inverse_str = is_inverse.param_getSVGValue();
-            if(!strcmp(is_inverse_str,"false") && inverse && isVisible()) {
+            if( is_inverse.param_getSVGValue() == (Glib::ustring)"false" && inverse && isVisible()) {
                 if (clip_to_path) {
                     addInverse(SP_ITEM(clip_to_path));
                 } else {
                     addInverse(SP_ITEM(clip_data));
                 }
-            } else if(!strcmp(is_inverse_str,"true") && !inverse && isVisible()) {
+            } else if(is_inverse.param_getSVGValue() == (Glib::ustring)"true" && !inverse && isVisible()) {
                 if (clip_to_path) {
                     removeInverse(SP_ITEM(clip_to_path));
                 } else {
                     removeInverse(SP_ITEM(clip_data));
                 }
-            } else if (inverse && !is_visible && is_inverse_str == (Glib::ustring)"true"){
+            } else if (inverse && !is_visible && is_inverse.param_getSVGValue() == (Glib::ustring)"true"){
                 removeInverse(SP_ITEM(clip_data));
             }
-            g_free(is_inverse_str);
         }
     }
 }
 
 void
-LPEPowerClip::doAfterEffect (SPLPEItem const* lpeitem){
-    if (!hide_clip && flatten && isVisible()) {
-        SP_ITEM(sp_lpe_item)->clip_ref->detach();
-    }
-}
-
-void
 LPEPowerClip::addInverse (SPItem * clip_data){
-    gchar * is_inverse_str = is_inverse.param_getSVGValue();
-    if(!strcmp(is_inverse_str,"false")) {
+    if(is_inverse.param_getSVGValue() == (Glib::ustring)"false") {
         if (SP_IS_GROUP(clip_data)) {
             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
             for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
@@ -198,12 +185,9 @@ LPEPowerClip::addInverse (SPItem * clip_data){
                 }
                 c_pv.push_back(clip_box);
                 c->set_pathvector(c_pv);
-                SP_SHAPE(clip_data)->setCurve(c);
+                SP_SHAPE(clip_data)->setCurve(c, TRUE);
                 c->unref();
-                gchar * is_inverse_str = is_inverse.param_getSVGValue();
-                if (strcmp(is_inverse_str, "true") != 0) {
-                    is_inverse.param_setValue((Glib::ustring)"true", true);
-                }
+                is_inverse.param_setValue((Glib::ustring)"true", true);
                 SPDesktop *desktop = SP_ACTIVE_DESKTOP;
                 if (desktop) {
                     if (tools_isactive(desktop, TOOLS_NODES)) {
@@ -218,13 +202,11 @@ LPEPowerClip::addInverse (SPItem * clip_data){
             }
         }
     }
-    g_free(is_inverse_str);
 }
 
 void
 LPEPowerClip::removeInverse (SPItem * clip_data){
-    gchar * is_inverse_str = is_inverse.param_getSVGValue();
-    if(!strcmp(is_inverse_str,"true")) {
+    if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
         if (SP_IS_GROUP(clip_data)) {
              std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
              for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
@@ -240,12 +222,9 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                     c_pv.pop_back();
                 }
                 c->set_pathvector(c_pv);
-                SP_SHAPE(clip_data)->setCurve(c);
+                SP_SHAPE(clip_data)->setCurve(c, TRUE);
                 c->unref();
-                gchar * is_inverse_str = is_inverse.param_getSVGValue();
-                if (strcmp(is_inverse_str, "false") != 0) {
-                    is_inverse.param_setValue((Glib::ustring)"false", true);
-                }
+                is_inverse.param_setValue((Glib::ustring)"false", true);
                 SPDesktop *desktop = SP_ACTIVE_DESKTOP;
                 if (desktop) {
                     if (tools_isactive(desktop, TOOLS_NODES)) {
@@ -260,7 +239,6 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
             }
         }
     }
-    g_free(is_inverse_str);
 }
 
 void
@@ -303,9 +281,6 @@ LPEPowerClip::newWidget()
     topaths_button->set_size_request(220,30);
     hbox->pack_start(*topaths_button, false, false,2);
     vbox->pack_start(*hbox, true,true,2);
-    if(Gtk::Widget* widg = defaultParamSet()) {
-        vbox->pack_start(*widg, true, true, 2);
-    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -315,15 +290,13 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
     SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     if(!keep_paths) {
         if(clip_path) {
-            gchar * is_inverse_str = is_inverse.param_getSVGValue();
             std::vector<SPObject*> clip_path_list = clip_path->childList(true);
             for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
                 SPObject * clip_data = *iter;
-                if(!strcmp(is_inverse_str,"true")) {
+                if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
                     removeInverse(SP_ITEM(clip_data));
                 }
             }
-            g_free(is_inverse_str);
         }
     } else {
         if (flatten && clip_path) {
@@ -344,6 +317,7 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
                 flattenClip(SP_ITEM(clip_data), path_out);
             }
         }
+        SP_ITEM(sp_lpe_item)->clip_ref->detach();
     }
     return path_out;
 }

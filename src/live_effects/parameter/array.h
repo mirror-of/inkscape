@@ -64,7 +64,8 @@ public:
     virtual gchar * param_getSVGValue() const {
         Inkscape::SVGOStringStream os;
         writesvg(os, _vector);
-        return g_strdup(os.str().c_str());
+        gchar * str = g_strdup(os.str().c_str());
+        return str;
     }
     
     virtual gchar * param_getDefaultSVGValue() const {

@@ -18,8 +18,6 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
 
 #include <2geom/angle.h>
 #include <2geom/circle.h>
@@ -412,7 +410,7 @@ const char *SPGenericEllipse::displayName() const
 }
 
 // Create path for rendering shape on screen
-void SPGenericEllipse::set_shape()
+void SPGenericEllipse::set_shape(bool force)
 {
     // std::cout << "SPGenericEllipse::set_shape: Entrance" << std::endl;
     if (hasBrokenPathEffect()) {
@@ -422,7 +420,7 @@ void SPGenericEllipse::set_shape()
             // unconditionally read the curve from d, if any, to preserve appearance
             Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
             SPCurve *cold = new SPCurve(pv);
-            this->setCurveInsync(cold);
+            this->setCurveInsync(cold, TRUE);
             cold->unref();
         }
 
@@ -434,7 +432,7 @@ void SPGenericEllipse::set_shape()
 
     this->normalize();
 
-    SPCurve *c = NULL;
+    SPCurve *curve = NULL;
 
     // For simplicity, we use a circle with center (0, 0) and radius 1 for our calculations.
     Geom::Circle circle(0, 0, 1);
@@ -467,7 +465,7 @@ void SPGenericEllipse::set_shape()
     } else {
         pb.flush();
     }
-    c = new SPCurve(pb.peek());
+    curve = new SPCurve(pb.peek());
 
     // gchar *str = sp_svg_write_path(curve->get_pathvector());
     // std::cout << "  path: " << str << std::endl;
@@ -475,25 +473,32 @@ void SPGenericEllipse::set_shape()
 
     // Stretching / moving the calculated shape to fit the actual dimensions.
     Geom::Affine aff = Geom::Scale(rx.computed, ry.computed) * Geom::Translate(cx.computed, cy.computed);
-    c->transform(aff);
-    
+    curve->transform(aff);
+
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    SPCurve * before = this->getCurveBeforeLPE();
-    if (before || this->hasPathEffectRecursive()) {
-        if (!before || before->get_pathvector() != c->get_pathvector()){
-            this->setCurveBeforeLPE(c);
-            this->update_patheffect(false);
-        } else {
-            this->setCurveBeforeLPE(c);
+    if(this->getCurveBeforeLPE()) {
+        if(!force && this->getCurveBeforeLPE()->get_pathvector() == curve->get_pathvector()) {
+            curve->unref();
+            return;
         }
-    } else {
-        this->setCurveInsync(c);
     }
-    if (before) {
-        before->unref();
+    this->setCurveInsync(curve, TRUE);
+    this->setCurveBeforeLPE(curve);
+
+    if (hasPathEffect() && pathEffectsEnabled()) {
+        SPCurve *c_lpe = curve->copy();
+        bool success = this->performPathEffect(c_lpe);
+
+        if (success) {
+            this->setCurveInsync(c_lpe, TRUE);
+        }
+
+        c_lpe->unref();
     }
-    c->unref();
+
+    curve->unref();
+    // std::cout << "SPGenericEllipse::set_shape: Exit" << std::endl;
 }
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
@@ -628,6 +633,25 @@ void SPGenericEllipse::modified(guint flags)
     SPShape::modified(flags);
 }
 
+void SPGenericEllipse::update_patheffect(bool write)
+{
+    this->set_shape(true);
+
+    if (write) {
+        Inkscape::XML::Node *repr = this->getRepr();
+
+        if (this->_curve != NULL && type == SP_GENERIC_ELLIPSE_ARC) {
+            gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
+            repr->setAttribute("d", str);
+            g_free(str);
+        } else {
+            repr->setAttribute("d", NULL);
+        }
+    }
+
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
 void SPGenericEllipse::normalize()
 {
     Geom::AngleInterval a(this->start, this->end, true);
@@ -674,7 +698,7 @@ void SPGenericEllipse::position_set(gdouble x, gdouble y, gdouble rx, gdouble ry
     this->rx = rx;
     this->ry = ry;
 
-    Inkscape::Preferences * prefs = Inkscape::Preferences::get();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // those pref values are in degrees, while we want radians
     if (prefs->getDouble("/tools/shapes/arc/start", 0.0) != 0) {

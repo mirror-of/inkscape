@@ -872,7 +872,7 @@ public:
     }
 
     bool isNone() const {
-        return !colorSet && !isPaintserver() && (paintOrigin == SP_CSS_PAINT_ORIGIN_NORMAL);
+        return (paintOrigin == SP_CSS_PAINT_ORIGIN_NORMAL) && !colorSet && !isPaintserver();
     } // TODO refine
 
     bool isColor() const {

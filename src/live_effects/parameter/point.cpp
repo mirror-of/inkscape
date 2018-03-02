@@ -128,7 +128,8 @@ PointParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << *dynamic_cast<Geom::Point const *>( this );
-    return g_strdup(os.str().c_str());
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
 }
 
 gchar *
@@ -136,7 +137,8 @@ PointParam::param_getDefaultSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << defvalue;
-    return g_strdup(os.str().c_str());
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
 }
 
 void
@@ -210,10 +212,10 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
             s = A;
         }
     }
-    if(this->pparam->liveupdate){
-        pparam->param_setValue(s, true);
-    } else {
-        pparam->param_setValue(s);
+    pparam->param_setValue(s);
+    SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
+    if(splpeitem && this->pparam->liveupdate){
+        sp_lpe_item_update_patheffect(splpeitem, true, true);
     }
 }
 
@@ -229,7 +231,10 @@ PointParamKnotHolderEntity::knot_click(guint state)
     if (state & GDK_CONTROL_MASK) {
         if (state & GDK_MOD1_MASK) {
             this->pparam->param_set_default();
-            pparam->param_setValue(*pparam,true);
+            SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
+            if(splpeitem){
+                sp_lpe_item_update_patheffect(splpeitem, true, true);
+            }
         }
     }
 }

@@ -11,16 +11,19 @@
  */
 
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "live_effects/parameter/bool.h"
-#include "live_effects/parameter/colorpicker.h"
+#include "ui/dialog/styledialog.h"
+
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/fontbutton.h"
-#include "live_effects/parameter/message.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/unit.h"
-
+#include "live_effects/parameter/bool.h"
+#include "live_effects/parameter/colorpicker.h"
+#include "live_effects/parameter/message.h"
+#include <libnrtype/font-lister.h>
+#include <2geom/angle.h>
+#include <2geom/ray.h>
+#include <2geom/point.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -36,15 +39,16 @@ class LPEMeasureSegments : public Effect {
 public:
     LPEMeasureSegments(LivePathEffectObject *lpeobject);
     virtual ~LPEMeasureSegments();
-    virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doOnRemove(SPLPEItem const* /*lpeitem*/);
-    virtual void doEffect(SPCurve * curve){}; //stop the chain
+    virtual void doOnApply(SPLPEItem const* lpeitem);
+    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
+    virtual void doEffect (SPCurve * curve){}; //stop the chain
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-    void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
+    virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
+    void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
-    void createArrowMarker(Glib::ustring mode);
+    void createArrowMarker(const char * mode);
     bool hasMeassure (size_t i);
 private:
     UnitParam unit;
@@ -74,9 +78,7 @@ private:
     double fontsize;
     double anotation_width;
     double previous_size;
-    unsigned rgb24;
     double arrow_gap;
-    gchar const* locale_base;
     Geom::Affine star_ellipse_fix;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);

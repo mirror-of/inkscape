@@ -41,8 +41,8 @@ private:
     int _min_height;
     MessageParam(const MessageParam&);
     MessageParam& operator=(const MessageParam&);
-    const gchar *  message;
-    const gchar *  defmessage;
+    gchar *  message;
+    gchar *  defmessage;
 };
 
 } //namespace LivePathEffect

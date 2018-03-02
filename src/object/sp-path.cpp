@@ -191,14 +191,13 @@ void SPPath::set(unsigned int key, const gchar* value) {
                 SPCurve *curve = new SPCurve(pv);
 
                 if (curve) {
-                    this->setCurveBeforeLPE(curve);
+                    this->set_original_curve(curve, TRUE, true);
                     curve->unref();
                 }
             } else {
-                this->setCurveBeforeLPE(NULL);
-                
+                this->set_original_curve(NULL, TRUE, true);
             }
-            sp_lpe_item_update_patheffect(this, true, true);
+
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
@@ -208,11 +207,11 @@ void SPPath::set(unsigned int key, const gchar* value) {
                 SPCurve *curve = new SPCurve(pv);
 
                 if (curve) {
-                    this->setCurve(curve);
+                    this->setCurve(curve, TRUE);
                     curve->unref();
                 }
             } else {
-                this->setCurve(NULL);
+                this->setCurve(NULL, TRUE);
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -324,6 +323,130 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // nothing remains - we've written all of the transform, so return identity
     return Geom::identity();
+}
+
+
+void SPPath::update_patheffect(bool write) {
+    Inkscape::XML::Node *repr = this->getRepr();
+
+#ifdef PATH_VERBOSE
+g_message("sp_path_update_patheffect");
+#endif
+
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
+        SPCurve *curve = _curve_before_lpe->copy();
+        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        this->setCurveInsync(curve, TRUE);
+
+        bool success = this->performPathEffect(curve);
+
+        if (success && write) {
+            // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
+#ifdef PATH_VERBOSE
+g_message("sp_path_update_patheffect writes 'd' attribute");
+#endif
+            if (_curve) {
+                gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
+                repr->setAttribute("d", str);
+                g_free(str);
+            } else {
+                repr->setAttribute("d", NULL);
+            }
+        } else if (!success) {
+            // LPE was unsuccessful. Read the old 'd'-attribute.
+            if (gchar const * value = repr->attribute("d")) {
+                Geom::PathVector pv = sp_svg_read_pathv(value);
+                SPCurve *oldcurve = new SPCurve(pv);
+
+                if (oldcurve) {
+                    this->setCurve(oldcurve, TRUE);
+                    oldcurve->unref();
+                }
+            }
+        }
+
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        curve->unref();
+    }
+}
+
+
+/**
+ * Adds a original_curve to the path.  If owner is specified, a reference
+ * will be made, otherwise the curve will be copied into the path.
+ * Any existing curve in the path will be unreferenced first.
+ * This routine triggers reapplication of an effect if present
+ * and also triggers a request to update the display. Does not write
+ * result to XML when write=false.
+ */
+void SPPath::set_original_curve (SPCurve *new_curve, unsigned int owner, bool write)
+{
+    if (_curve_before_lpe) {
+        _curve_before_lpe = _curve_before_lpe->unref();
+    }
+
+    if (new_curve) {
+        if (owner) {
+            _curve_before_lpe = new_curve->ref();
+        } else {
+            _curve_before_lpe = new_curve->copy();
+        }
+    }
+
+    sp_lpe_item_update_patheffect(this, true, write);
+    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+/**
+ * Return duplicate of _curve_before_lpe (if any exists) or NULL if there is no curve
+ */
+SPCurve * SPPath::get_original_curve () const
+{
+    if (_curve_before_lpe) {
+        return _curve_before_lpe->copy();
+    }
+
+    return NULL;
+}
+
+/**
+ * Return duplicate of edittable curve which is _curve_before_lpe if it exists or
+ * shape->curve if not.
+ */
+SPCurve* SPPath::get_curve_for_edit () const
+{
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
+        return get_original_curve();
+    } else {
+        return getCurve();
+    }
+}
+
+/**
+ * Returns \c _curve_before_lpe if it is not NULL and a valid LPE is applied or
+ * \c curve if not.
+ */
+const SPCurve* SPPath::get_curve_reference () const
+{
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
+        return _curve_before_lpe;
+    } else {
+        return _curve;
+    }
+}
+
+/**
+ * Returns \c _curve_before_lpe if it is not NULL and a valid LPE is applied or \c curve if not.
+ * \todo should only be available to class friends!
+ */
+SPCurve* SPPath::get_curve ()
+{
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
+        return _curve_before_lpe;
+    } else {
+        return _curve;
+    }
 }
 
 /*

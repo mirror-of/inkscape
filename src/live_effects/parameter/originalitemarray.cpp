@@ -438,7 +438,8 @@ gchar * OriginalItemArrayParam::param_getSVGValue() const
         }
         os << (*iter)->href << "," << ((*iter)->actived ? "1" : "0");
     }
-    return g_strdup(os.str().c_str());
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
 }
 
 gchar * OriginalItemArrayParam::param_getDefaultSVGValue() const
