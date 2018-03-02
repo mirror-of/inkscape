@@ -29,37 +29,24 @@ class SPCurve;
  */
 class SPPath : public SPShape {
 public:
-	SPPath();
-	virtual ~SPPath();
+    SPPath();
+    virtual ~SPPath();
 
     int nodesInPath() const;
-
-    // still in lowercase because the names should be clearer on whether curve, curve->copy or curve-ref is returned.
-    void     set_original_curve (SPCurve *curve, unsigned int owner, bool write);
-    SPCurve* get_original_curve () const;
-    SPCurve* get_curve_for_edit () const;
-    const SPCurve* get_curve_reference() const;
-
-public: // should be made protected
-    SPCurve* get_curve();
     friend class SPConnEndPair;
-
-public:
     SPConnEndPair connEndPair;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void update(SPCtx* ctx, unsigned int flags);
+    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+    virtual void release();
+    virtual void update(SPCtx* ctx, unsigned int flags);
 
-	virtual void set(unsigned int key, char const* value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+    virtual void set(unsigned int key, char const* value);
+    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
 
-        virtual const char* displayName() const;
-	virtual char* description() const;
-	virtual Geom::Affine set_transform(Geom::Affine const &transform);
+    virtual const char* displayName() const;
+    virtual char* description() const;
+    virtual Geom::Affine set_transform(Geom::Affine const &transform);
     virtual void convert_to_guides() const;
-
-    virtual void update_patheffect(bool write);
 };
 
 #endif // SEEN_SP_PATH_H
