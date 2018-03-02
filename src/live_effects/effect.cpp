@@ -66,6 +66,7 @@
 #include "live_effects/lpe-vonkoch.h"
 #include "live_effects/lpe-embrodery-stitch.h"
 #include "live_effects/lpe-bool.h"
+#include "live_effects/lpe-pts2ellipse.h"
 
 #include "live_effects/lpeobject.h"
 
@@ -136,9 +137,11 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {MEASURE_SEGMENTS,      N_("Measure Segments"),                "measure_segments"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
-    {EMBRODERY_STITCH,      N_("Embroidery stitch"),                "embrodery_stitch"},
+    {EMBRODERY_STITCH,      N_("Embroidery stitch"),               "embrodery_stitch"},
     {POWERCLIP,             N_("Power clip"),                      "powerclip"},
     {POWERMASK,             N_("Power mask"),                      "powermask"},
+    {PTS2ELLIPSE,           N_("Ellipse from points"),             "pts2ellipse"},
+    {OFFSET,                N_("Offset"),                          "offset"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -148,7 +151,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {EXTRUDE,               N_("Extrude"),                         "extrude"},
     {LATTICE,               N_("Lattice Deformation"),             "lattice"},
     {LINE_SEGMENT,          N_("Line Segment"),                    "line_segment"},
-    {OFFSET,                N_("Offset"),                          "offset"},
     {PARALLEL,              N_("Parallel"),                        "parallel"},
     {PATH_LENGTH,           N_("Path length"),                     "path_length"},
     {PERP_BISECTOR,         N_("Perpendicular bisector"),          "perp_bisector"},
@@ -340,6 +342,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case MEASURE_SEGMENTS:
             neweffect = static_cast<Effect*> ( new LPEMeasureSegments(lpeobj) );
+            break;
+        case PTS2ELLIPSE:
+            neweffect = static_cast<Effect*> ( new LPEPts2Ellipse(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
