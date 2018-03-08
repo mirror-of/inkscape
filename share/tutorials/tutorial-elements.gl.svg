@@ -29,8 +29,8 @@
    <path d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-2e-3 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349 12.839 12.839 55.967-3.2094 48.155 30.28 17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546 12.839-12.839 45.247-12.908 72.555-43.621-10.992-17.095-46.981-24.375-34.142-37.214 12.839-12.839 37.8-6.3179 91.659-30.777 26.292-11.941 24.12-21.01 24.019-32.006-2e-3 -0.23138 0-0.43973 0-0.67288h-0.0585c-0.16888-11.088-4.4637-22.134-12.96-30.631l-154.06-154.06c-8.6691-8.6691-19.991-12.99-31.304-12.99zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" width="320.00000" height="1052.3622" color="#000000" fill="#ffffff" fill-opacity=".11077" font-family="sans-serif" xlink:href="#w"/>
-  <path transform="matrix(.61496 .045496 .061919 -.45186 112.46 270.87)" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" color="#000000" fill-rule="evenodd" opacity=".5"/>
-  <text transform="rotate(90)" x="3.6203015" y="-326.81229" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="3.6203015" y="-326.81229" letter-spacing=".29056" sodipodi:role="line">Используйте для прокрутки <tspan font-weight="bold">Ctrl+стрелка вниз</tspan></tspan></text>
+  <text transform="rotate(90)" x="3.6203015" y="-326.81229" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="3.6203015" y="-326.81229" letter-spacing=".29056" sodipodi:role="line">Use <tspan font-weight="bold">Ctrl+frecha abaixo</tspan> para desprazar </tspan></text>
+  <path d="m332.89 162.52-8.1397-0.0221 4.0438 5.1906z" color="#000000" fill-rule="evenodd" opacity=".5" inkscape:connector-curvature="0"/>
  </g>
  <text transform="scale(1.1307)" x="35" y="30" fill="#ffffff" font-family="Liberation Sans,Arial,sans-serif" font-size="7">
   <tspan dx="0 -0.57057059 0 0 0 0 0" fill="#ffffff" letter-spacing="2.1813">::ELEMENTS OF DESIGN</tspan>
@@ -40,49 +40,57 @@
   <flowRegion>
    <use xlink:href="#ah"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Этот раздел учебника описывает основы и правила дизайна, которым обучают начинающих дизайнеров. Это не полный список правил, и его можно смело дополнять.</flowDiv>
+  <flowDiv xml:space="preserve">This tutorial will demonstrate the elements and principles of design which 
+are normally taught to early art students in order to understand various 
+properties used in art making. This is not an exhaustive list, so please add, 
+subtract, and combine to make this tutorial more comprehensive.
+</flowDiv>
  </flowRoot>
- <rect transform="translate(10 82.993)" x="7.5753" y=".32084" width="305.16" height="167.44" fill="#e1e1e1" fill-rule="evenodd" stroke="#000" stroke-width=".64164"/>
- <path transform="translate(10 82.993) matrix(1.3533 -4.2587e-17 4.2587e-17 1.3533 309.86 -242.92)" d="m-40.289 236.82c0 25.429-20.615 46.044-46.044 46.044-25.429 0-46.044-20.615-46.044-46.044s20.615-46.044 46.044-46.044c25.429 0 46.044 20.615 46.044 46.044z" fill="#00f" fill-opacity=".3046" fill-rule="evenodd" stroke="#000" stroke-opacity=".33" stroke-width="1.25"/>
- <path transform="translate(10 82.993) matrix(1.3533 4.2587e-17 4.2587e-17 -1.3533 248.67 398.05)" d="m-40.289 236.82c0 25.429-20.615 46.044-46.044 46.044-25.429 0-46.044-20.615-46.044-46.044s20.615-46.044 46.044-46.044c25.429 0 46.044 20.615 46.044 46.044z" fill="#ff00f5" fill-opacity=".28161" fill-rule="evenodd" stroke="#000" stroke-opacity=".32759" stroke-width="1.25"/>
- <text transform="translate(10 82.993)" x="102.01891" y="154.377" fill="#ff00f7" fill-opacity=".5977" font-family="sans-serif" font-size="10" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="102.01891" y="154.37700" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#ff00f7" fill-opacity=".5977" sodipodi:role="line">Элементы</tspan></text>
- <text transform="translate(10 82.993)" x="168.60974" y="154.377" fill="#0000ff" fill-opacity=".6" font-family="sans-serif" font-size="10" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="168.60974" y="154.37700" dx="0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0" fill="#0000ff" fill-opacity=".6" sodipodi:role="line">Правила</tspan></text>
- <text transform="translate(10 82.993)" x="90.54583" y="100.13462" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="90.545830" y="100.13462" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Цвет</tspan></text>
- <text transform="translate(10 82.993)" x="116.87344" y="32.645866" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="116.87344" y="32.645866" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Линия</tspan></text>
- <text transform="translate(10 82.993)" x="95.306877" y="47.565285" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="95.306877" y="47.565285" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Фигура</tspan></text>
- <text transform="translate(10 82.993)" x="83.459221" y="83.103767" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="83.459221" y="83.103767" dx="0 0 0 0 0" dy="0 0 0 0 0" sodipodi:role="line">Пространство</tspan></text>
- <text transform="translate(10 82.993)" x="101.17574" y="114.99348" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="101.17574" y="114.99348" dx="0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0" sodipodi:role="line">Имитирующая текстура</tspan></text>
- <text transform="translate(10 82.993)" x="118.89227" y="129.16661" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="118.89227" y="129.16661" dx="0 0 0 0 0" dy="0 0 0 0 0" sodipodi:role="line">Интенсивность</tspan></text>
- <text transform="translate(10 82.993)" x="83.459221" y="65.387245" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="83.459221" y="65.387245" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Размер</tspan></text>
- <text transform="translate(10 82.993)" x="184.08173" y="34.637756" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="184.08173" y="34.637756" dx="0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0" sodipodi:role="line">Баланс</tspan></text>
- <text transform="translate(10 82.993)" x="194.48068" y="51.614323" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="194.48068" y="51.614323" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" sodipodi:role="line">Контраст</tspan></text>
- <text transform="translate(10 82.993)" x="199.68022" y="71.448875" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="199.68022" y="71.448875" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" sodipodi:role="line">Акцент</tspan></text>
- <text transform="translate(10 82.993)" x="199.44937" y="91.283318" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="199.44937" y="91.283318" dx="0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0" sodipodi:role="line">Пропорция</tspan></text>
- <text transform="translate(10 82.993)" x="193.78815" y="111.11781" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="193.78815" y="111.11781" dx="0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0" sodipodi:role="line">Текстура</tspan></text>
- <text transform="translate(10 82.993) scale(1 .99998)" x="178.64687" y="129.04839" fill="#000000" font-family="sans-serif" font-size="7.9998" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="178.64687" y="129.04839" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" sodipodi:role="line">Градация</tspan></text>
- <text transform="translate(10 82.993)" x="133.85378" y="80.613045" fill="#ffffff" font-family="sans-serif" font-size="8" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="133.85378" y="80.613045" dx="0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0" fill="#ffffff" sodipodi:role="line">Композиция</tspan></text>
- <text transform="translate(10 82.993)" x="12.456144" y="12.44677" fill="#000000" fill-opacity=".21476" font-family="sans-serif" font-size="10" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="12.456144" y="12.446770" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" fill-opacity=".21476" sodipodi:role="line">Общее представление</tspan></text>
- <text x="10" y="275.876467" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="275.876467">Основы дизайна</tspan>
+ <rect transform="translate(10 95.111)" x="7.5753" y=".32084" width="305.16" height="167.44" fill="#e1e1e1" fill-rule="evenodd" stroke="#000" stroke-width=".64164"/>
+ <path transform="translate(10 95.111) matrix(1.3533 -4.2587e-17 4.2587e-17 1.3533 309.86 -242.92)" d="m-40.289 236.82c0 25.429-20.615 46.044-46.044 46.044-25.429 0-46.044-20.615-46.044-46.044s20.615-46.044 46.044-46.044c25.429 0 46.044 20.615 46.044 46.044z" fill="#00f" fill-opacity=".3046" fill-rule="evenodd" stroke="#000" stroke-opacity=".33" stroke-width="1.25"/>
+ <path transform="translate(10 95.111) matrix(1.3533 4.2587e-17 4.2587e-17 -1.3533 248.67 398.05)" d="m-40.289 236.82c0 25.429-20.615 46.044-46.044 46.044-25.429 0-46.044-20.615-46.044-46.044s20.615-46.044 46.044-46.044c25.429 0 46.044 20.615 46.044 46.044z" fill="#ff00f5" fill-opacity=".28161" fill-rule="evenodd" stroke="#000" stroke-opacity=".32759" stroke-width="1.25"/>
+ <text transform="translate(10 95.111)" x="102.01891" y="154.377" fill="#ff00f7" fill-opacity=".5977" font-family="sans-serif" font-size="10" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="102.01891" y="154.37700" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#ff00f7" fill-opacity=".5977" sodipodi:role="line">Elementos</tspan></text>
+ <text transform="translate(10 95.111)" x="168.60974" y="154.377" fill="#0000ff" fill-opacity=".6" font-family="sans-serif" font-size="10" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="168.60974" y="154.37700" dx="0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0" fill="#0000ff" fill-opacity=".6" sodipodi:role="line">Principios</tspan></text>
+ <text transform="translate(10 95.111)" x="90.54583" y="100.13462" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="90.545830" y="100.13462" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Cor</tspan></text>
+ <text transform="translate(10 95.111)" x="116.87344" y="32.645866" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="116.87344" y="32.645866" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Liña</tspan></text>
+ <text transform="translate(10 95.111)" x="95.306877" y="47.565285" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="95.306877" y="47.565285" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Figura</tspan></text>
+ <text transform="translate(10 95.111)" x="83.459221" y="83.103767" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="83.459221" y="83.103767" dx="0 0 0 0 0" dy="0 0 0 0 0" sodipodi:role="line">Espazo</tspan></text>
+ <text transform="translate(10 95.111)" x="101.17574" y="114.99348" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="101.17574" y="114.99348" dx="0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0" sodipodi:role="line">Textura</tspan></text>
+ <text transform="translate(10 95.111)" x="118.89227" y="129.16661" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="118.89227" y="129.16661" dx="0 0 0 0 0" dy="0 0 0 0 0" sodipodi:role="line">Valor</tspan></text>
+ <text transform="translate(10 95.111)" x="83.459221" y="65.387245" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="83.459221" y="65.387245" dx="0 0 0 0" dy="0 0 0 0" sodipodi:role="line">Tamaño</tspan></text>
+ <text transform="translate(10 95.111)" x="184.08173" y="34.637756" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="184.08173" y="34.637756" dx="0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0" sodipodi:role="line">Balance</tspan></text>
+ <text transform="translate(10 95.111)" x="194.48068" y="51.614323" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="194.48068" y="51.614323" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" sodipodi:role="line">Contraste</tspan></text>
+ <text transform="translate(10 95.111)" x="199.68022" y="71.448875" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="199.68022" y="71.448875" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" sodipodi:role="line">Énfase</tspan></text>
+ <text transform="translate(10 95.111)" x="199.44937" y="91.283318" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="199.44937" y="91.283318" dx="0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0" sodipodi:role="line">Proporción</tspan></text>
+ <text transform="translate(10 95.111)" x="193.78815" y="111.11781" fill="#000000" font-family="sans-serif" font-size="8" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="193.78815" y="111.11781" dx="0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0" sodipodi:role="line">Patrón</tspan></text>
+ <text transform="translate(10 95.111) scale(1 .99998)" x="178.64687" y="129.04839" fill="#000000" font-family="sans-serif" font-size="7.9998" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="178.64687" y="129.04839" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" sodipodi:role="line">Gradation</tspan></text>
+ <text transform="translate(10 95.111)" x="133.85378" y="80.613045" fill="#ffffff" font-family="sans-serif" font-size="8" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="133.85378" y="80.613045" dx="0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0" fill="#ffffff" sodipodi:role="line">Composición</tspan></text>
+ <text transform="translate(10 95.111)" x="12.456144" y="12.44677" fill="#000000" fill-opacity=".21476" font-family="sans-serif" font-size="10" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="12.456144" y="12.446770" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" fill-opacity=".21476" sodipodi:role="line">Resumo</tspan></text>
+ <text x="10" y="287.994826" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="287.994826">Elementos de deseño</tspan>
  </text>
- <rect id="as" x="10" y="281.08" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="293.19" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Приведённые ниже основы являются в дизайне основополагающими.</flowDiv>
+  <flowDiv xml:space="preserve">Os seguintes elementos son os bloques de construción do deseño.</flowDiv>
  </flowRoot>
- <text x="10" y="310.2561545" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="310.2561545">Линия</tspan>
+ <text x="10" y="322.4838885" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="322.4838885">Liña</tspan>
  </text>
- <rect id="am" x="10" y="315.76" width="288" height="1e3px" display="none"/>
+ <rect id="am" x="10" y="327.98" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#am"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Линия определена как отрезок прямой, имеющий длину и направление. Линия может меняться по длине, ширине, направлению, кривизне и цвету. Линия может быть двухмерной (линия, оставленная карандашом на бумаге) или заключённой в три измерения.</flowDiv>
+  <flowDiv xml:space="preserve">A line is defined as a mark with length and direction, created by a point 
+that moves across a surface. A line can vary in length, width, direction, 
+curvature, and color. Line can be two-dimensional (a pencil line on 
+paper), or implied three-dimensional.
+</flowDiv>
  </flowRoot>
- <g transform="translate(10 -51.312)">
+ <g transform="translate(10 -49.568)">
   <rect x="7.5753" y="424.42" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
   <path d="m18.77 434.05h76.604" fill="none" stroke="#000" stroke-width=".94529pt"/>
   <path d="m18.77 446.55h172.36" fill="none" stroke="#000" stroke-width=".94529pt" sodipodi:nodetypes="cc"/>
@@ -94,58 +102,74 @@
   <path d="m307.64 433.78-60.474 66.219-0.10437-15.79 60.574-55.538 0.00492 5.1087z" fill-rule="evenodd" sodipodi:nodetypes="ccccc"/>
   <path d="m307.64 440.1-60.474 79.034-0.10437-15.79 60.574-68.353 0.00492 5.1087z" fill-rule="evenodd" sodipodi:nodetypes="ccccc"/>
  </g>
- <text x="10" y="498.3479235" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="498.3479235">Фигура</tspan>
+ <text x="10" y="500.0919065" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="500.0919065">Figura</tspan>
  </text>
- <rect id="al" x="10" y="503.85" width="288" height="1e3px" display="none"/>
+ <rect id="al" x="10" y="505.59" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#al"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Плоская фигура получается путём окружения пространства линиями. Меняющийся цвет или оттенок могут быть характеристикой фигуры. Фигуры могут быть разделены на несколько типов: геометрические (квадрат, треугольник, круг) и органические (неправильные очертания).</flowDiv>
+  <flowDiv xml:space="preserve">A flat figure, shape is created when actual or implied lines meet to 
+surround a space. A change in color or shading can define a shape. 
+Shapes can be divided into several types: geometric (square, triangle, 
+circle) and organic (irregular in outline).
+</flowDiv>
  </flowRoot>
- <g transform="translate(10 -50.942)" stroke="#000">
+ <g transform="translate(10 -59.732)" stroke="#000">
   <rect x="7.5753" y="612.21" width="305.16" height="100.99" fill="none" stroke-width=".49832"/>
   <path transform="matrix(.70711 -.70711 .70711 .70711 -391.84 213.7)" d="m97.81 689.54-18.404 68.686-50.281-50.281z" fill-rule="evenodd" stroke-width="1pt"/>
   <rect x="28.147" y="628.75" width="65.282" height="65.282" fill-rule="evenodd" stroke-width="1pt"/>
   <path transform="matrix(1.1957 0 0 1.1957 83.878 -215.2)" d="m175.45 733.14c0 14.808-12.004 26.812-26.812 26.812s-26.812-12.004-26.812-26.812 12.004-26.812 26.812-26.812 26.812 12.004 26.812 26.812z" fill-rule="evenodd" stroke-width="1pt"/>
  </g>
- <text x="10" y="686.5139115" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="686.5139115">Размер</tspan>
+ <text x="10" y="677.7233625" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="677.7233625">Tamaño</tspan>
  </text>
- <rect id="ak" x="10" y="692.01" width="288" height="1e3px" display="none"/>
+ <rect id="ak" x="10" y="683.22" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ak"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Размер имеет отношение к изменению пропорций объектов, линий или фигур. Изменения размеров объектов могут быть как реальными, так и воображаемыми.</flowDiv>
+  <flowDiv xml:space="preserve">This refers to variations in the proportions of objects, lines or shapes. 
+There is a variation of sizes in objects either real or imagined.
+</flowDiv>
  </flowRoot>
- <rect transform="translate(10 728.11)" x="7.5753" y=".24915" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <text transform="translate(10 728.11) scale(.99998 1)" x="76.186218" y="95.748199" fill="#000000" font-family="sans-serif" font-size="122.3" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="76.186218" y="95.748199" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" sodipodi:role="line">БОЛЬШОЙ</tspan></text>
- <text transform="translate(10 728.11) scale(.99998 1)" x="50.097645" y="95.652267" fill="#000000" font-family="sans-serif" font-size="10.077" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="50.097645" y="95.652267" dx="0 0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0 0" fill="#000000" sodipodi:role="line">малый</tspan></text>
- <text x="10" y="871.2272165" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="871.2272165">Пространство</tspan>
+ <rect transform="translate(10 719.22)" x="7.5753" y=".24915" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <text transform="translate(10 719.22) scale(.99998 1)" x="76.186218" y="95.748199" fill="#000000" font-family="sans-serif" font-size="122.3" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="76.186218" y="95.748199" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" sodipodi:role="line">BIG</tspan></text>
+ <text transform="translate(10 719.22) scale(.99998 1)" x="50.097645" y="95.652267" fill="#000000" font-family="sans-serif" font-size="10.077" font-weight="bold" stroke-width="3pt" style="line-height:100.00000%" sodipodi:linespacing="100.00000%" xml:space="preserve"><tspan x="50.097645" y="95.652267" dx="0 0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0 0" fill="#000000" sodipodi:role="line">small</tspan></text>
+ <text x="10" y="844.7148175" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="844.7148175">Espazo</tspan>
  </text>
- <rect id="aj" x="10" y="876.73" width="288" height="1e3px" display="none"/>
+ <rect id="aj" x="10" y="850.21" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aj"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Пространство — это пустая открытая область между, вокруг, над, под или вне объекта. Фигуры и формы — это части пространства. Часто пространство называют трёхмерным или двухмерным. Положительное пространство заполнено фигурой или формой. Отрицательное пространство окружает фигуру или форму.</flowDiv>
+  <flowDiv xml:space="preserve">Space is the empty or open area between, around, above, below, or 
+within objects. Shapes and forms are made by the space around and 
+within them. Space is often called three-dimensional or two-
+dimensional. Positive space is filled by a shape or form. Negative 
+space surrounds a shape or form.
+</flowDiv>
  </flowRoot>
- <rect transform="translate(10 934.1)" x="7.5753" y=".24914" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 934.1)" x="36.104" y="3.9333" width="100.6" height="90.929" fill-rule="evenodd"/>
- <path transform="translate(10 934.1) matrix(1.5435 0 0 1.5435 6.8499 -1082.8)" d="m175.45 733.14c0 14.808-12.004 26.812-26.812 26.812s-26.812-12.004-26.812-26.812 12.004-26.812 26.812-26.812 26.812 12.004 26.812 26.812z" fill-rule="evenodd"/>
- <path transform="translate(10 934.1) matrix(1.5435 0 0 1.5435 -142.84 -1082.8)" d="m175.45 733.14c0 14.808-12.004 26.812-26.812 26.812s-26.812-12.004-26.812-26.812 12.004-26.812 26.812-26.812 26.812 12.004 26.812 26.812z" fill="#fff" fill-rule="evenodd"/>
- <text x="10" y="1059.5924235" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="1059.5924235">Цвет</tspan>
+ <rect transform="translate(10 907.41)" x="7.5753" y=".24914" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 907.41)" x="36.104" y="3.9333" width="100.6" height="90.929" fill-rule="evenodd"/>
+ <path transform="translate(10 907.41) matrix(1.5435 0 0 1.5435 6.8499 -1082.8)" d="m175.45 733.14c0 14.808-12.004 26.812-26.812 26.812s-26.812-12.004-26.812-26.812 12.004-26.812 26.812-26.812 26.812 12.004 26.812 26.812z" fill-rule="evenodd"/>
+ <path transform="translate(10 907.41) matrix(1.5435 0 0 1.5435 -142.84 -1082.8)" d="m175.45 733.14c0 14.808-12.004 26.812-26.812 26.812s-26.812-12.004-26.812-26.812 12.004-26.812 26.812-26.812 26.812 12.004 26.812 26.812z" fill="#fff" fill-rule="evenodd"/>
+ <text x="10" y="1032.9042435" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="1032.9042435">Cor</tspan>
  </text>
- <rect id="ai" x="10" y="1065.1" width="288" height="1e3px" display="none"/>
+ <rect id="ai" x="10" y="1038.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ai"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Цвет — это восприятие характера поверхности в зависимости от длины волны, отражённой ею. Цвет имеет три измерения: тон (другой термин для цвета, являющийся определением цвета, таким как красный или жёлтый), интенсивность (темнее/светлее), глубина (яркость/тусклость).</flowDiv>
+  <flowDiv xml:space="preserve">Color is the perceived character of a surface according to the 
+wavelength of light reflected from it. Color has three dimensions: HUE 
+(another word for color, indicated by its name such as red or yellow), 
+VALUE (its lightness or darkness), INTENSITY (its brightness or 
+dullness).
+</flowDiv>
  </flowRoot>
  <defs>
   <linearGradient id="du" x1="4.2216" x2="180.35" y1="2135.3" y2="2135.3" gradientTransform="matrix(1.7354 0 0 .57624 0 -1179.7)" gradientUnits="userSpaceOnUse" inkscape:collect="always">
@@ -158,16 +182,19 @@
    <stop stop-color="#f00" offset="1"/>
   </linearGradient>
  </defs>
- <rect transform="translate(10 1122)" x="7.5753" y=".24916" width="305.16" height="100.99" fill="url(#du)" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
- <text x="10" y="1247.4693495" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="1247.4693495">Имитирующая текстура</tspan>
+ <rect transform="translate(10 1095.7)" x="7.5753" y=".24916" width="305.16" height="100.99" fill="url(#du)" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
+ <text x="10" y="1221.1757005" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="1221.1757005">Textura</tspan>
  </text>
- <rect id="ag" x="10" y="1253" width="288" height="1e3px" display="none"/>
+ <rect id="ag" x="10" y="1226.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ag"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Имитирующая текстура — это то, как выглядит поверхность (настоящая текстура) или как она может выглядеть (подразумеваемая текстура). Текстуры определяются такими словами как: шероховатость, шелковистость, зернистость.</flowDiv>
+  <flowDiv xml:space="preserve">Texture is the way a surface feels (actual texture) or how it may look 
+(implied texture). Textures are described by word such as rough, silky, 
+or pebbly.
+</flowDiv>
  </flowRoot>
  <defs>
   <pattern id="dr" xlink:href="#t" inkscape:collect="always" patternTransform="scale(.25)"/>
@@ -180,19 +207,23 @@
   <pattern id="s" xlink:href="#t" inkscape:collect="always" patternTransform="matrix(.19371 .13459 -.13459 .19371 0 0)"/>
   <pattern id="dp" xlink:href="#s" inkscape:collect="always" patternTransform="matrix(.036022 -.062902 .062902 .036022 0 0)"/>
  </defs>
- <rect transform="translate(10 1299.5)" x="7.5753" y=".24922" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 1299.5)" x="7.4039" y=".83906" width="304.83" height="54.241" fill="url(#dr)"/>
- <rect transform="translate(10 1299.5)" x="7.4039" y="23.339" width="304.83" height="54.241" fill="url(#ds)"/>
- <rect transform="translate(10 1299.5)" x="7.4039" y="46.636" width="304.83" height="54.241" fill="url(#dt)"/>
- <text x="10" y="1424.9953365" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="1424.9953365">Интенсивность</tspan>
+ <rect transform="translate(10 1262.7)" x="7.5753" y=".24922" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 1262.7)" x="7.4039" y=".83906" width="304.83" height="54.241" fill="url(#dr)"/>
+ <rect transform="translate(10 1262.7)" x="7.4039" y="23.339" width="304.83" height="54.241" fill="url(#ds)"/>
+ <rect transform="translate(10 1262.7)" x="7.4039" y="46.636" width="304.83" height="54.241" fill="url(#dt)"/>
+ <text x="10" y="1388.1671555" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="1388.1671555">Valor</tspan>
  </text>
- <rect id="af" x="10" y="1430.5" width="288" height="1e3px" display="none"/>
+ <rect id="af" x="10" y="1393.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#af"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">То, насколько тёмным или светлым что-либо выглядит, называется интенсивностью. Мы добиваемся изменения интенсивности цвета, добавляя чёрного или белого к цвету. В чиароскуро (распределение светотени) интенсивность используется при рисовании путём установления резкого контраста между светлым и тёмным.</flowDiv>
+  <flowDiv xml:space="preserve">Value is how dark or how light something looks. We achieve value 
+changes in color by adding black or white to the color. Chiaroscuro 
+uses value in drawing by dramatically contrasting lights and darks 
+in a composition.
+</flowDiv>
  </flowRoot>
  <defs>
   <linearGradient id="do" x1="4.2527" x2="81.905" y1="5730.5" y2="5730.5" gradientTransform="matrix(3.7006 0 0 .27023 0 -1539.9)" gradientUnits="userSpaceOnUse" inkscape:collect="always">
@@ -214,75 +245,85 @@
    <stop stop-color="#0082ab" stop-opacity="0" offset="1"/>
   </linearGradient>
  </defs>
- <rect transform="translate(10 1498.5)" x="7.5753" y=".24881" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 1498.5)" x="15.738" y="71.546" width="287.36" height="20.984" fill="url(#dl)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1498.5)" x="15.738" y="50.563" width="287.36" height="20.984" fill="url(#dm)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1498.5)" x="15.738" y="29.579" width="287.36" height="20.984" fill="url(#dn)" fill-opacity=".75" fill-rule="evenodd"/>
- <rect transform="translate(10 1498.5)" x="15.738" y="8.5956" width="287.36" height="20.984" fill="url(#do)" fill-opacity=".75" fill-rule="evenodd"/>
- <text x="10" y="1624.8005425" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1624.8005425">Правила дизайна</tspan>
+ <rect transform="translate(10 1440.2)" x="7.5753" y=".24881" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 1440.2)" x="15.738" y="71.546" width="287.36" height="20.984" fill="url(#dl)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1440.2)" x="15.738" y="50.563" width="287.36" height="20.984" fill="url(#dm)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1440.2)" x="15.738" y="29.579" width="287.36" height="20.984" fill="url(#dn)" fill-opacity=".75" fill-rule="evenodd"/>
+ <rect transform="translate(10 1440.2)" x="15.738" y="8.5956" width="287.36" height="20.984" fill="url(#do)" fill-opacity=".75" fill-rule="evenodd"/>
+ <text x="10" y="1566.5165795" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1566.5165795">Principios de deseño</tspan>
  </text>
- <rect id="ae" x="10" y="1630" width="288" height="1e3px" display="none"/>
+ <rect id="ae" x="10" y="1571.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ae"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Правила использования элементов дизайна для создания композиции.</flowDiv>
+  <flowDiv xml:space="preserve">Os principios usan os elementos de deseño para crear unha composición.</flowDiv>
  </flowRoot>
- <text x="10" y="1659.18023" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="1659.18023">Баланс</tspan>
+ <text x="10" y="1600.9822045" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="1600.9822045">Balance</tspan>
  </text>
- <rect id="ad" x="10" y="1664.7" width="288" height="1e3px" display="none"/>
+ <rect id="ad" x="10" y="1606.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ad"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Баланс — это ощущение визуального равенства в фигуре, форме, цвете и т.д. Баланс может быть симметричным, т.е. полностью уравновешенным, либо асимметричным, т.е. неуравновешенным. Объекты, цвета, текстуры, фигуры, формы и т.д. могут быть использованы для создания баланса в композиции.</flowDiv>
+  <flowDiv xml:space="preserve">Balance is a feeling of visual equality in shape, form, value, color, etc. 
+Balance can be symmetrical or evenly balanced or asymmetrical and 
+un-evenly balanced. Objects, values, colors, textures, shapes, forms, 
+etc., can be used in creating a balance in a composition.
+</flowDiv>
  </flowRoot>
- <rect transform="translate(10 1721.9)" x="7.5753" y=".24922" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <path transform="translate(10 1721.9)" d="m160.08 0.2492v100.99-100.99z" fill="none" stroke="#000" stroke-width=".49832" sodipodi:nodetypes="ccc"/>
- <path transform="translate(10 1721.9) matrix(.82353 0 0 .82353 65.313 -1470.5)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
- <path transform="translate(10 1721.9) matrix(1.6818 0 0 1.6818 -14.992 -3007.5)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
- <path transform="translate(10 1721.9) matrix(.82353 0 0 .82353 240.23 -1414.1)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
- <path transform="translate(10 1721.9) matrix(1.6818 0 0 1.6818 163.04 -3001.2)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
- <text x="10" y="1847.369656" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="1847.369656">Контраст</tspan>
+ <rect transform="translate(10 1663.7)" x="7.5753" y=".24922" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <path transform="translate(10 1663.7)" d="m160.08 0.2492v100.99-100.99z" fill="none" stroke="#000" stroke-width=".49832" sodipodi:nodetypes="ccc"/>
+ <path transform="translate(10 1663.7) matrix(.82353 0 0 .82353 65.313 -1470.5)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
+ <path transform="translate(10 1663.7) matrix(1.6818 0 0 1.6818 -14.992 -3007.5)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
+ <path transform="translate(10 1663.7) matrix(.82353 0 0 .82353 240.23 -1414.1)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
+ <path transform="translate(10 1663.7) matrix(1.6818 0 0 1.6818 163.04 -3001.2)" d="m55.207 1809.3c0 11.466-9.2954 20.762-20.762 20.762s-20.762-9.2954-20.762-20.762 9.2954-20.762 20.762-20.762 20.762 9.2954 20.762 20.762z" fill-rule="evenodd"/>
+ <text x="10" y="1789.2302235" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="1789.2302235">Contraste</tspan>
  </text>
- <rect id="ac" x="10" y="1852.9" width="288" height="1e3px" display="none"/>
+ <rect id="ac" x="10" y="1794.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ac"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Контраст — это сопоставление противоположностей.</flowDiv>
+  <flowDiv xml:space="preserve">Contrast is the juxtaposition of opposing elements
+</flowDiv>
  </flowRoot>
- <rect transform="translate(10 1878)" x="159.95" y=".24905" width="152.52" height="100.99" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 1878)" x="191.93" y="21.426" width="88.56" height="58.64" fill="#fff" fill-rule="evenodd"/>
- <rect transform="translate(10 1878)" x="7.4506" y=".24905" width="152.52" height="100.99" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 1878)" x="39.433" y="21.426" width="88.56" height="58.64" fill="#d4d4d4" fill-rule="evenodd"/>
- <text x="10" y="2003.5414235" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="2003.5414235">Акцент</tspan>
+ <rect transform="translate(10 1820.1)" x="159.95" y=".24905" width="152.52" height="100.99" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 1820.1)" x="191.93" y="21.426" width="88.56" height="58.64" fill="#fff" fill-rule="evenodd"/>
+ <rect transform="translate(10 1820.1)" x="7.4506" y=".24905" width="152.52" height="100.99" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 1820.1)" x="39.433" y="21.426" width="88.56" height="58.64" fill="#d4d4d4" fill-rule="evenodd"/>
+ <text x="10" y="1945.5816785" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="1945.5816785">Énfase</tspan>
  </text>
- <rect id="ab" x="10" y="2009" width="288" height="1e3px" display="none"/>
+ <rect id="ab" x="10" y="1951.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ab"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Акцент используется для привлечения внимания к части иллюстрации. Это центр работы или та её часть, на которой фокусируется ваше внимание.</flowDiv>
+  <flowDiv xml:space="preserve">Emphasis is used to make certain parts of their artwork stand out 
+and grab your attention. The center of interest or focal point is the 
+place a work draws your eye to first.
+</flowDiv>
  </flowRoot>
- <rect transform="translate(10 2044.7)" x="159.95" y=".24905" width="152.52" height="100.99" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 2044.7)" x="191.93" y="21.426" width="88.56" height="58.64" fill="#d4d4d4" fill-rule="evenodd"/>
- <rect transform="translate(10 2044.7)" x="7.4506" y=".24905" width="152.52" height="100.99" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 2044.7)" x="39.433" y="21.426" width="88.56" height="58.64" fill="#d4d4d4" fill-rule="evenodd"/>
- <path transform="translate(220.23 -70.427)" d="m68.891 2183c0 6.2545-5.0702 11.325-11.325 11.325s-11.325-5.0702-11.325-11.325c0-6.2544 5.0702-11.325 11.325-11.325s11.325 5.0702 11.325 11.325z" fill="#f00" fill-rule="evenodd"/>
- <text x="10" y="2170.1969415" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="2170.1969415">Пропорция</tspan>
+ <rect transform="translate(10 1987.1)" x="159.95" y=".24905" width="152.52" height="100.99" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 1987.1)" x="191.93" y="21.426" width="88.56" height="58.64" fill="#d4d4d4" fill-rule="evenodd"/>
+ <rect transform="translate(10 1987.1)" x="7.4506" y=".24905" width="152.52" height="100.99" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 1987.1)" x="39.433" y="21.426" width="88.56" height="58.64" fill="#d4d4d4" fill-rule="evenodd"/>
+ <path transform="translate(220.23 -128.05)" d="m68.891 2183c0 6.2545-5.0702 11.325-11.325 11.325s-11.325-5.0702-11.325-11.325c0-6.2544 5.0702-11.325 11.325-11.325s11.325 5.0702 11.325 11.325z" fill="#f00" fill-rule="evenodd"/>
+ <text x="10" y="2112.5731335" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="2112.5731335">Proporción</tspan>
  </text>
- <rect id="aa" x="10" y="2175.7" width="288" height="1e3px" display="none"/>
+ <rect id="aa" x="10" y="2118.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aa"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Пропорция характеризуется размером, местом или отношением одного предмета к другому.</flowDiv>
+  <flowDiv xml:space="preserve">Proportion describes the size, location or amount of one thing compared 
+to another.
+</flowDiv>
  </flowRoot>
  <defs>
   <linearGradient id="c">
@@ -334,9 +375,9 @@
   </radialGradient>
   <linearGradient id="cy" x1="52.397" x2="54.702" y1="74.473" y2="42.421" gradientTransform="scale(.9461 1.057)" gradientUnits="userSpaceOnUse" xlink:href="#c" inkscape:collect="always"/>
  </defs>
- <rect transform="translate(10 2211.3)" x="159.95" y="1.658" width="152.52" height="100.99" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 2211.3)" x="7.4506" y="1.658" width="152.52" height="100.99" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
- <g id="dj" transform="translate(10 2211.3) matrix(.51988 0 0 .51988 27.077 -1681.3)" fill-rule="evenodd">
+ <rect transform="translate(10 2143.4)" x="159.95" y="1.658" width="152.52" height="100.99" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 2143.4)" x="7.4506" y="1.658" width="152.52" height="100.99" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-width=".49832"/>
+ <g id="dj" transform="translate(10 2143.4) matrix(.51988 0 0 .51988 27.077 -1681.3)" fill-rule="evenodd">
   <path transform="matrix(.96674 0 0 .23354 113.96 3337.1)" d="m82.055 175.84c0 31.007-25.136 56.143-56.143 56.143-31.007 0-56.143-25.136-56.143-56.143 0-31.007 25.136-56.143 56.143-56.143 31.007 0 56.143 25.136 56.143 56.143z" fill="url(#cx)" fill-opacity=".75" stroke-width="1pt"/>
   <path transform="matrix(1.0809 0 0 .28699 162.89 3326.4)" d="m82.055 175.84c0 31.007-25.136 56.143-56.143 56.143-31.007 0-56.143-25.136-56.143-56.143 0-31.007 25.136-56.143 56.143-56.143 31.007 0 56.143 25.136 56.143 56.143z" fill="url(#cw)" fill-opacity=".75" stroke-width="1pt"/>
   <g transform="matrix(1.202 0 0 1.202 73.323 3220.8)">
@@ -373,9 +414,9 @@
   </g>
   <path transform="matrix(1.0809 0 0 .28699 146.76 3332.9)" d="m82.055 175.84c0 31.007-25.136 56.143-56.143 56.143-31.007 0-56.143-25.136-56.143-56.143 0-31.007 25.136-56.143 56.143-56.143 31.007 0 56.143 25.136 56.143 56.143z" fill="url(#ct)" fill-opacity=".75" stroke-width="1pt"/>
  </g>
- <text transform="translate(10 2211.3)" x="7.0871472" y="109.55157" font-family="sans-serif" font-size="5.1805" stroke-width="1pt" xml:space="preserve"><tspan>Неопределённый Ant &amp; 4WD</tspan></text>
- <text transform="translate(10 2211.3)" x="7.7085347" y="111.84713" font-family="sans-serif" font-size="1.2782" stroke-width="1pt" xml:space="preserve"><tspan>SVG изображение, автор — Эндрю Фитцсаймон</tspan><tspan x="7.7085347" y="113.44485" sodipodi:role="line">Предоставлен Clip Art Library</tspan><tspan x="7.7085347" y="115.04258" sodipodi:role="line">http://www.openclipart.org/</tspan><tspan x="7.7085347" y="116.64030" sodipodi:role="line"/></text>
- <g id="dk" transform="translate(10 2211.3) matrix(1.1201 0 0 1.1201 -199.55 -2562.7)">
+ <text transform="translate(10 2143.4)" x="7.0871472" y="109.55157" font-family="sans-serif" font-size="5.1805" stroke-width="1pt" xml:space="preserve"><tspan>Random Ant &amp; 4WD</tspan></text>
+ <text transform="translate(10 2143.4)" x="7.7085347" y="111.84713" font-family="sans-serif" font-size="1.2782" stroke-width="1pt" xml:space="preserve"><tspan>Imaxe SVG creada por Andrew Fitzsimon</tspan><tspan x="7.7085347" y="113.44485" sodipodi:role="line">Courtesy of Open Clip Art Library</tspan><tspan x="7.7085347" y="115.04258" sodipodi:role="line">http://www.openclipart.org/</tspan><tspan x="7.7085347" y="116.64030" sodipodi:role="line"/></text>
+ <g id="dk" transform="translate(10 2143.4) matrix(1.1201 0 0 1.1201 -199.55 -2562.7)">
   <path transform="matrix(.31191 0 0 .31191 184.83 2289.2)" d="m147.45 91.908-16.756-7.6988 28.531-4.0759 2.2644 3.1701" fill="none" stroke="#000" stroke-width="4.5308"/>
   <path transform="matrix(.31191 0 0 .31191 184.83 2289.2)" d="m155.46 108.55 4.9816 18.115 14.492-24.455" fill="none" stroke="#000" stroke-width="4.5308"/>
   <path transform="matrix(.31191 0 0 .31191 184.83 2289.2)" d="m97.069 145.26s-17.933-7.6855-25.939 4.8034c-8.0057 12.489-10.247 28.821-4.163 35.225 6.0844 6.4046 25.939 1.9214 30.102-6.4046 4.163-8.326 8.326-25.298 6.4046-29.461-1.9214-4.163-6.4046-4.163-6.4046-4.163z" fill="#7c5a08" fill-rule="evenodd" stroke-width="1pt"/>
@@ -395,17 +436,19 @@
   <path transform="matrix(.37256 0 0 .37256 189.99 2308.3)" d="m43.043 81.71s-5.562 15.032 0.058521 19.907c5.4456 4.7226 19.41 6.1634 27.361-10.858 7.9512-17.021-18.303-32.734-27.419-9.049z" fill="url(#cs)" fill-opacity=".75" fill-rule="evenodd" stroke-width="1pt" sodipodi:nodetypes="czzc"/>
   <path transform="matrix(.37256 0 0 .37256 189.99 2308.3)" d="m58.62 74.099c-6.0202 0.57656-10.181 9.2307-12.36 16.012-1.2094 0.51832-1.0476-6.8264-0.52924-8.0358 0.51832-1.2094 2.3222-7.9799 5.2051-9.9618 2.7644-1.9005 6.6543-2.0002 9.6768-0.91637 2.9935 1.0734 3.7658 2.3509-1.9922 2.9023z" fill="url(#cy)" fill-opacity=".75" fill-rule="evenodd" stroke-width="1pt" sodipodi:nodetypes="ccczzz"/>
  </g>
- <use transform="translate(10 2211.3) matrix(1.7586 0 0 1.7586 137.33 -45.691) translate(-10 -2211.3)" width="320.00000" height="3146.2500" xlink:href="#dk"/>
- <use transform="translate(10 2211.3) matrix(.25 0 0 .25 251.88 41.637) translate(-10 -2211.3)" width="320.00000" height="3146.2500" xlink:href="#dj"/>
- <text x="10" y="2354.5323355" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="2354.5323355">Текстура</tspan>
+ <use transform="translate(10 2143.4) matrix(1.7586 0 0 1.7586 137.33 -45.691) translate(-10 -2143.4)" width="320.00000" height="3146.2500" xlink:href="#dk"/>
+ <use transform="translate(10 2143.4) matrix(.25 0 0 .25 251.88 41.637) translate(-10 -2143.4)" width="320.00000" height="3146.2500" xlink:href="#dj"/>
+ <text x="10" y="2286.6630585" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="2286.6630585">Patrón</tspan>
  </text>
- <rect id="z" x="10" y="2360" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="2292.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Текстура получается путём повторения элемента (линии, фигуры или цвета) снова и снова.</flowDiv>
+  <flowDiv xml:space="preserve">Pattern is created by repeating an element (line, shape or color) over 
+and over again.
+</flowDiv>
  </flowRoot>
  <defs>
   <pattern id="cr" xlink:href="#cq" inkscape:collect="always" patternTransform="matrix(1.1809 .33224 -.33224 1.1809 43.379 31.643)"/>
@@ -417,18 +460,22 @@
    <path transform="matrix(.16492 -.50572 .50572 .16492 -1249.9 -402.18)" d="m12.4 2503.1-9.0646-2.2648-6.6401 5.5796-3.354-10.891-12.632-2.2872 14.957-6.084-2.5394-12.031 11.15 5.8506 8.3942 0.4146-2.764 7.827 2.4928 13.886z" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#bdbb00" stroke-width="1.8799pt" inkscape:flatsided="false" inkscape:randomized="0.19700000" inkscape:rounded="0.0000000"/>
   </pattern>
  </defs>
- <rect transform="translate(10 2394.3)" x="7.4959" y=".35476" width="305.3" height="100.75" fill="url(#cr)"/>
- <rect transform="translate(10 2394.3)" x="7.6676" y=".32448" width="304.98" height="100.61" fill="none"/>
- <rect transform="translate(10 2394.3)" x="7.5753" y=".24929" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <text x="10" y="2519.8284785" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
-  <tspan x="10" y="2519.8284785">Градация</tspan>
+ <rect transform="translate(10 2317.4)" x="7.4959" y=".35476" width="305.3" height="100.75" fill="url(#cr)"/>
+ <rect transform="translate(10 2317.4)" x="7.6676" y=".32448" width="304.98" height="100.61" fill="none"/>
+ <rect transform="translate(10 2317.4)" x="7.5753" y=".24929" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <text x="10" y="2442.9324823" font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+  <tspan x="10" y="2442.9324823">Gradation</tspan>
  </text>
- <rect id="aw" x="10" y="2525.3" width="288" height="1e3px" display="none"/>
+ <rect id="aw" x="10" y="2448.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aw"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Градация размера и направления создают линейную перспективу. Градация цвета от тёплого к холодному и тона от тёмного к светлому создают воздушную перспективу. Градация может прибавить интересности и оживления фигуре. Градация от тёмного к светлому заставит глаз пройтись по фигуре.</flowDiv>
+  <flowDiv xml:space="preserve">Gradation of size and direction produce linear perspective. Gradation 
+of color from warm to cool and tone from dark to light produce aerial 
+perspective. Gradation can add interest and movement to a shape. A 
+gradation from dark to light will cause the eye to move along a shape.
+</flowDiv>
  </flowRoot>
  <defs>
   <linearGradient id="b">
@@ -440,21 +487,21 @@
   <linearGradient id="cn" x1="182.07" x2="316.21" y1="2898.4" y2="2897.7" gradientTransform="matrix(1.0731 0 0 .93188 0 -2631.7)" gradientUnits="userSpaceOnUse" xlink:href="#b" inkscape:collect="always"/>
   <linearGradient id="cm" x1="114.03" x2="-14.463" y1="2874.8" y2="2874.8" gradientTransform="matrix(1.0731 0 0 .93188 0 -2631.7)" gradientUnits="userSpaceOnUse" xlink:href="#b" inkscape:collect="always"/>
  </defs>
- <rect transform="translate(10 2582.5)" x="7.5753" y=".24891" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <rect transform="translate(10 2582.5)" x="123.93" y="38.759" width="72.439" height="23.974" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <path transform="translate(10 2582.5)" d="m7.7108 0.4123 116.17 38.317v24.183l-116.17 38.317" fill="url(#cm)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="cccc"/>
- <path transform="translate(10 2582.5)" d="m196.38 62.912v-24.183l116.17-38.317v100.82l-116.17-38.317z" fill="url(#cn)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="ccccc"/>
- <path transform="translate(10 2582.5)" d="m312.55 0.4123h-304.84l116.17 38.317h72.502l116.17-38.317z" fill="url(#co)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="ccccc"/>
- <path transform="translate(10 2582.5)" d="m312.55 101.23h-304.84l116.17-38.317h72.502l116.17 38.317z" fill="url(#cp)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="ccccc"/>
- <text x="10" y="2708.8271655" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2708.8271655">Композиция</tspan>
+ <rect transform="translate(10 2505.7)" x="7.5753" y=".24891" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <rect transform="translate(10 2505.7)" x="123.93" y="38.759" width="72.439" height="23.974" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <path transform="translate(10 2505.7)" d="m7.7108 0.4123 116.17 38.317v24.183l-116.17 38.317" fill="url(#cm)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="cccc"/>
+ <path transform="translate(10 2505.7)" d="m196.38 62.912v-24.183l116.17-38.317v100.82l-116.17-38.317z" fill="url(#cn)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="ccccc"/>
+ <path transform="translate(10 2505.7)" d="m312.55 0.4123h-304.84l116.17 38.317h72.502l116.17-38.317z" fill="url(#co)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="ccccc"/>
+ <path transform="translate(10 2505.7)" d="m312.55 101.23h-304.84l116.17-38.317h72.502l116.17 38.317z" fill="url(#cp)" fill-rule="evenodd" stroke="#000" stroke-width=".5" sodipodi:nodetypes="ccccc"/>
+ <text x="10" y="2632.0874193" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2632.0874193">Composición</tspan>
  </text>
- <rect id="av" x="10" y="2714" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="2637.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Сопоставление разных элементов в единую форму.</flowDiv>
+  <flowDiv xml:space="preserve">A combinación de distintos elementos para formar un todo.</flowDiv>
  </flowRoot>
  <defs>
   <pattern id="bp" xlink:href="#bo" inkscape:collect="always" patternTransform="matrix(.017913 .012179 -.012179 .017913 7.8698 48.268)"/>
@@ -536,48 +583,48 @@
    <stop stop-color="#00ff1a" offset="1"/>
   </linearGradient>
  </defs>
- <rect transform="translate(10 2739.3)" x="7.5522" y="45.539" width="305.45" height="55.704" fill="url(#ch)" fill-rule="evenodd"/>
- <path transform="translate(10 2739.3)" d="m175.12 48.594-3.3978 52.838h-157.19l160.59-52.838z" fill="url(#ci)" fill-rule="evenodd" sodipodi:nodetypes="cccc"/>
- <rect transform="translate(10 2739.3)" x="7.5753" y=".11732" width="305.16" height="48.419" fill="url(#cj)" fill-rule="evenodd"/>
- <rect transform="translate(10 2739.3)" x="7.8698" y="48.268" width="304.85" height="52.932" fill="url(#bp)"/>
- <path transform="translate(10 2739.3)" d="m103.54 100.43 70.717-50.836" fill="none" stroke="#b0af00" stroke-dasharray="5.0000000 2.5000000" stroke-width="1.25" sodipodi:nodetypes="cc"/>
- <path transform="translate(10 2739.3)" d="m175.12 48.594-3.3978 52.838h-157.19l160.59-52.838z" fill="none" stroke="url(#ck)" stroke-width=".375" sodipodi:nodetypes="cccc"/>
- <path transform="translate(10 2739.3)" d="m66.375 5.766-29.375 21.344-10.656-10.688-18.781 15.031-0.03125 17h126.44 4.4688 173.59l-0.03125-38.594-15.5 14-22.062-2.5-18.594-12-15.75 18.906-25.188-13.219-23.281 18.875-21.406-5.6562-33.656 18.75-32.844-25.25-10.656 10.688-26.688-26.688z" fill="url(#cl)" fill-rule="evenodd"/>
- <path transform="translate(10 2739.3)" d="m12.724 100.91 156.85-0.8509 3.1457-51.439-160 52.29z" fill="url(#bq)" sodipodi:nodetypes="cccc"/>
- <path transform="translate(10 2739.3)" d="m75.087 78.225 66.736-19.44-4.9758-3.2224-9.9495 2.6047-12.863 6.3715-4.1225-6.9893-8.4927 5.5181-7.036-7.5926-8.4927 5.518-9.9495-3.2224-11.406 6.9748-8.4927-4.6791-4.1225-7.5926-11.406 5.5181-4.1225-6.1359-11.406 2.6046-9.9495 2.6046-7.036-3.2224-0.82084 16.813 12.237-3.2732 6.4101 5.4672 2.0399 12.751 19.521-17.841 0.58313 14.208 9.3236-1.8165 9.3236-6.1867 8.4703 4.2604z" fill="url(#br)" sodipodi:nodetypes="ccccccccccccccccccccccccccc"/>
- <path transform="translate(10 2739.3)" d="m7.5099 67.447v34.991l16.378-3.6777 21.135-10.236 16.366-3.0822 6.8267-7.8515 6.8267-0.6973 13.981-3.0821 6.8267-0.6973 16.366-5.4669 16.366-3.082-28.548 7.2165-3.7128-11.453-36.691-0.3469 6.5248 13.962-15.926-6.6831-10.867-6.683-17.302-1.3517-14.55 8.2212z" fill="url(#bs)" sodipodi:nodetypes="ccccccccccccccccccc"/>
- <path transform="translate(10 2739.3)" d="m151.66 54.474-11.563-1.5027-9.3416 2.0873-29.236 9.2247-14.919 1.5875-5.4713-11.023-17.832 2.6908-9.945-0.4728-21.599-3.3861-24.062-1.4735 0.44608-4.1219 16.927-1.0318 5.5965 1.0285 4.5664-0.0016 6.6265 1.0284 4.5664-1.0317 6.6265-2.0618 5.5965 1.0285 5.5965 2.0584 6.6265-1.0316 4.5664-1.0317 5.5965 1.0285 6.6265 1.0283 10.163-2.0633 5.5964-0.0017 5.6288 1.017 6.6589-0.013 5.1137-0.5281 6.1438 1.5321 5.1138-1.5581 4.0837 0.5019 8.1674-0.0261 7.6523 1.0041 11.773-1.0562 8.6824 1.004-20.771 5.567z" fill="url(#bt)" sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccc"/>
- <path transform="translate(10 2739.3)" d="m7.686 55.504 17.229-0.4726 11.402 8.2677 23.056 0.9841 12.859-0.4726 15.772-4.8429 15.772 6.8111 9.945-0.4728 13.358-3.3861 28.183-8.684-3.017-4.1464-31.859 6.1543-16.408-1.0561-22.588-0.0261-15.672-4.9059-16.702 1.2745-11.773 3.5793-16.408-6.2066-12.288 1.004-0.86018 6.5971z" fill="url(#bu)" sodipodi:nodetypes="cccccccccccccccccccc"/>
- <rect transform="translate(10 2739.3)" x="7.5753" y=".24891" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
- <path transform="translate(10 2739.3)" d="m173.68 67.447-2.4801 32.511 36.219 1.2825 105.46-0.3158-2.2507-33.278-15.876-3.082-32.261-4.2361-36.691-0.3469-13.316 13.962 1.4348-19.084-28.228-1.7228-9.862 3.6086-2.1492 10.701z" fill="url(#bv)" sodipodi:nodetypes="ccccccccccccc"/>
- <path transform="translate(10 2739.3)" d="m173.85 55.504 17.229-0.4726 11.402 8.2677 13.135 0.9841 12.859-0.4726 25.692-4.8429 5.8515 6.8111 19.866-0.4728 13.358-3.3861 18.262-8.684-3.017-4.1464-21.939 6.1543-16.408-1.0561-22.588-0.0261-15.672-4.9059-16.702 1.2745-11.773 3.5793-16.408-6.2066-12.288 1.004-0.86019 6.5971z" fill="url(#bw)" sodipodi:nodetypes="cccccccccccccccccccc"/>
- <path transform="translate(10 2739.3)" d="m230.21 62.78 6.2022 6.3838 44.518 10.788 31.491 11.254-1.5403-23.111 1.2655-12.171-62.026 5.8276-19.91 1.028z" fill="url(#bx)" sodipodi:nodetypes="cccccccc"/>
- <path transform="translate(10 2739.3)" d="m306.26 52.972-9.3416 2.0873-29.236 9.2247-14.919 1.5875-5.4712-13.503-17.832 5.1709-9.945-0.4728-21.599-3.3861-24.062-1.4735 0.44608-4.1219 16.927-1.0318 5.5964 1.0285 4.5664-0.0016 6.6265 1.0284 4.5664-1.0317 6.6265-2.0618 5.5964 1.0285 5.5964 2.0584 6.6265-1.0316 4.5664-1.0317 5.5964 1.0285 6.6265 1.0283 10.163-2.0633 5.5964-0.0017 5.6288 1.017 6.6589-0.013 5.1137-0.5281 6.1438 1.5321 5.1138-1.5581 4.0837 0.5019 8.1674-0.0261-4.2274 5.0162z" fill="url(#by)" sodipodi:nodetypes="ccccccccccccccccccccccccccccccccc"/>
- <path transform="translate(10 2739.3)" d="m173.87 62.414-0.46027 21.414 20.912-1.3486 23.195-1.0047 7.4645-3.4865-0.89768-23.709-39.606-0.5708-10.607 8.7056z" fill="url(#bz)" sodipodi:nodetypes="cccccccc"/>
- <path transform="translate(10 2739.3)" d="m198.16 59.687 0.00415 10.019 47.912 27.683 1.0848-20.323-49.001-17.378z" fill="#845206" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="ccccc"/>
- <path transform="translate(10 2739.3)" d="m246.07 97.389 1.0889-20.689 43.34-11.978v19.6l-44.429 13.067z" fill="#734805" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="ccccc"/>
- <path transform="translate(10 2739.3)" d="m195.95 58.853 17.523-12.247 56.195 5.4113-24.679 25.772-49.039-18.936z" fill="#950f06" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="ccccc"/>
- <path transform="translate(10 2739.3)" d="m256.02 94.521 0.6431-14.679 25.597-7.074v14.035l-26.24 7.7172z" fill="#8a5606" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width=".62353pt" sodipodi:nodetypes="ccccc"/>
- <path transform="translate(10 2739.3)" d="m270.03 52.017 22.863 12.705-47.542 13.067 24.679-25.772z" fill="#7f3e06" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="cccc"/>
- <g transform="translate(10 -124.33)">
+ <rect transform="translate(10 2662.6)" x="7.5522" y="45.539" width="305.45" height="55.704" fill="url(#ch)" fill-rule="evenodd"/>
+ <path transform="translate(10 2662.6)" d="m175.12 48.594-3.3978 52.838h-157.19l160.59-52.838z" fill="url(#ci)" fill-rule="evenodd" sodipodi:nodetypes="cccc"/>
+ <rect transform="translate(10 2662.6)" x="7.5753" y=".11732" width="305.16" height="48.419" fill="url(#cj)" fill-rule="evenodd"/>
+ <rect transform="translate(10 2662.6)" x="7.8698" y="48.268" width="304.85" height="52.932" fill="url(#bp)"/>
+ <path transform="translate(10 2662.6)" d="m103.54 100.43 70.717-50.836" fill="none" stroke="#b0af00" stroke-dasharray="5.0000000 2.5000000" stroke-width="1.25" sodipodi:nodetypes="cc"/>
+ <path transform="translate(10 2662.6)" d="m175.12 48.594-3.3978 52.838h-157.19l160.59-52.838z" fill="none" stroke="url(#ck)" stroke-width=".375" sodipodi:nodetypes="cccc"/>
+ <path transform="translate(10 2662.6)" d="m66.375 5.766-29.375 21.344-10.656-10.688-18.781 15.031-0.03125 17h126.44 4.4688 173.59l-0.03125-38.594-15.5 14-22.062-2.5-18.594-12-15.75 18.906-25.188-13.219-23.281 18.875-21.406-5.6562-33.656 18.75-32.844-25.25-10.656 10.688-26.688-26.688z" fill="url(#cl)" fill-rule="evenodd"/>
+ <path transform="translate(10 2662.6)" d="m12.724 100.91 156.85-0.8509 3.1457-51.439-160 52.29z" fill="url(#bq)" sodipodi:nodetypes="cccc"/>
+ <path transform="translate(10 2662.6)" d="m75.087 78.225 66.736-19.44-4.9758-3.2224-9.9495 2.6047-12.863 6.3715-4.1225-6.9893-8.4927 5.5181-7.036-7.5926-8.4927 5.518-9.9495-3.2224-11.406 6.9748-8.4927-4.6791-4.1225-7.5926-11.406 5.5181-4.1225-6.1359-11.406 2.6046-9.9495 2.6046-7.036-3.2224-0.82084 16.813 12.237-3.2732 6.4101 5.4672 2.0399 12.751 19.521-17.841 0.58313 14.208 9.3236-1.8165 9.3236-6.1867 8.4703 4.2604z" fill="url(#br)" sodipodi:nodetypes="ccccccccccccccccccccccccccc"/>
+ <path transform="translate(10 2662.6)" d="m7.5099 67.447v34.991l16.378-3.6777 21.135-10.236 16.366-3.0822 6.8267-7.8515 6.8267-0.6973 13.981-3.0821 6.8267-0.6973 16.366-5.4669 16.366-3.082-28.548 7.2165-3.7128-11.453-36.691-0.3469 6.5248 13.962-15.926-6.6831-10.867-6.683-17.302-1.3517-14.55 8.2212z" fill="url(#bs)" sodipodi:nodetypes="ccccccccccccccccccc"/>
+ <path transform="translate(10 2662.6)" d="m151.66 54.474-11.563-1.5027-9.3416 2.0873-29.236 9.2247-14.919 1.5875-5.4713-11.023-17.832 2.6908-9.945-0.4728-21.599-3.3861-24.062-1.4735 0.44608-4.1219 16.927-1.0318 5.5965 1.0285 4.5664-0.0016 6.6265 1.0284 4.5664-1.0317 6.6265-2.0618 5.5965 1.0285 5.5965 2.0584 6.6265-1.0316 4.5664-1.0317 5.5965 1.0285 6.6265 1.0283 10.163-2.0633 5.5964-0.0017 5.6288 1.017 6.6589-0.013 5.1137-0.5281 6.1438 1.5321 5.1138-1.5581 4.0837 0.5019 8.1674-0.0261 7.6523 1.0041 11.773-1.0562 8.6824 1.004-20.771 5.567z" fill="url(#bt)" sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccc"/>
+ <path transform="translate(10 2662.6)" d="m7.686 55.504 17.229-0.4726 11.402 8.2677 23.056 0.9841 12.859-0.4726 15.772-4.8429 15.772 6.8111 9.945-0.4728 13.358-3.3861 28.183-8.684-3.017-4.1464-31.859 6.1543-16.408-1.0561-22.588-0.0261-15.672-4.9059-16.702 1.2745-11.773 3.5793-16.408-6.2066-12.288 1.004-0.86018 6.5971z" fill="url(#bu)" sodipodi:nodetypes="cccccccccccccccccccc"/>
+ <rect transform="translate(10 2662.6)" x="7.5753" y=".24891" width="305.16" height="100.99" fill="none" stroke="#000" stroke-width=".49832"/>
+ <path transform="translate(10 2662.6)" d="m173.68 67.447-2.4801 32.511 36.219 1.2825 105.46-0.3158-2.2507-33.278-15.876-3.082-32.261-4.2361-36.691-0.3469-13.316 13.962 1.4348-19.084-28.228-1.7228-9.862 3.6086-2.1492 10.701z" fill="url(#bv)" sodipodi:nodetypes="ccccccccccccc"/>
+ <path transform="translate(10 2662.6)" d="m173.85 55.504 17.229-0.4726 11.402 8.2677 13.135 0.9841 12.859-0.4726 25.692-4.8429 5.8515 6.8111 19.866-0.4728 13.358-3.3861 18.262-8.684-3.017-4.1464-21.939 6.1543-16.408-1.0561-22.588-0.0261-15.672-4.9059-16.702 1.2745-11.773 3.5793-16.408-6.2066-12.288 1.004-0.86019 6.5971z" fill="url(#bw)" sodipodi:nodetypes="cccccccccccccccccccc"/>
+ <path transform="translate(10 2662.6)" d="m230.21 62.78 6.2022 6.3838 44.518 10.788 31.491 11.254-1.5403-23.111 1.2655-12.171-62.026 5.8276-19.91 1.028z" fill="url(#bx)" sodipodi:nodetypes="cccccccc"/>
+ <path transform="translate(10 2662.6)" d="m306.26 52.972-9.3416 2.0873-29.236 9.2247-14.919 1.5875-5.4712-13.503-17.832 5.1709-9.945-0.4728-21.599-3.3861-24.062-1.4735 0.44608-4.1219 16.927-1.0318 5.5964 1.0285 4.5664-0.0016 6.6265 1.0284 4.5664-1.0317 6.6265-2.0618 5.5964 1.0285 5.5964 2.0584 6.6265-1.0316 4.5664-1.0317 5.5964 1.0285 6.6265 1.0283 10.163-2.0633 5.5964-0.0017 5.6288 1.017 6.6589-0.013 5.1137-0.5281 6.1438 1.5321 5.1138-1.5581 4.0837 0.5019 8.1674-0.0261-4.2274 5.0162z" fill="url(#by)" sodipodi:nodetypes="ccccccccccccccccccccccccccccccccc"/>
+ <path transform="translate(10 2662.6)" d="m173.87 62.414-0.46027 21.414 20.912-1.3486 23.195-1.0047 7.4645-3.4865-0.89768-23.709-39.606-0.5708-10.607 8.7056z" fill="url(#bz)" sodipodi:nodetypes="cccccccc"/>
+ <path transform="translate(10 2662.6)" d="m198.16 59.687 0.00415 10.019 47.912 27.683 1.0848-20.323-49.001-17.378z" fill="#845206" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="ccccc"/>
+ <path transform="translate(10 2662.6)" d="m246.07 97.389 1.0889-20.689 43.34-11.978v19.6l-44.429 13.067z" fill="#734805" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="ccccc"/>
+ <path transform="translate(10 2662.6)" d="m195.95 58.853 17.523-12.247 56.195 5.4113-24.679 25.772-49.039-18.936z" fill="#950f06" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="ccccc"/>
+ <path transform="translate(10 2662.6)" d="m256.02 94.521 0.6431-14.679 25.597-7.074v14.035l-26.24 7.7172z" fill="#8a5606" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width=".62353pt" sodipodi:nodetypes="ccccc"/>
+ <path transform="translate(10 2662.6)" d="m270.03 52.017 22.863 12.705-47.542 13.067 24.679-25.772z" fill="#7f3e06" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0557pt" sodipodi:nodetypes="cccc"/>
+ <g transform="translate(10 -201.01)">
   <path d="m196.36 2926.7v11.004l47.767 27.603 2.6777-20.612-50.445-17.995z" fill="url(#bm)" sodipodi:nodetypes="ccccc"/>
   <path d="m246.72 2963.6-1.2298-17.858 44.246-12.476v17.306l-43.016 13.028z" fill="url(#bn)" sodipodi:nodetypes="ccccc"/>
   <path d="m196.31 2925.2 17.822-11.549 53.303 6.3982-20.999 22.872-50.126-17.722z" fill="url(#bk)" sodipodi:nodetypes="ccccc"/>
   <path d="m247.23 2943.6 22.679-24.915 21.719 12.574-44.397 12.341z" fill="url(#bl)" sodipodi:nodetypes="cccc"/>
  </g>
- <path transform="translate(10 2739.3)" d="m194.7 68.832-6.7201 24.773 15.42 4.4086 11.913-0.8526 11.036 3.5317 16.297 0.0243 28.121-2.057 21.894-9.4809-5.4397-4.001-2.7198-1.5621-3.5967 0.1916-4.4735 3.2606-1.843 1.5069-4.5628 2.137-8.0702 2.1369-7.1934-1.3705-8.9471 5.6444-1.9322-4.8779-3.57 0.0074-4.4469-1.7464-0.06259-4.3769-2.6932-4.3769-7.2652 3.5369-4.6347-2.6011-1.1272-7.8622-3.5594-1.9545-3.5594 0.6761-2.7345 3.1057-3.7153-4.3107-6.3458-1.3168-5.469-2.1938z" fill="url(#ca)" sodipodi:nodetypes="ccccccccccccccccccccccccccccccc"/>
- <text x="10" y="2866.5432593" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2866.5432593">Библиография</tspan>
+ <path transform="translate(10 2662.6)" d="m194.7 68.832-6.7201 24.773 15.42 4.4086 11.913-0.8526 11.036 3.5317 16.297 0.0243 28.121-2.057 21.894-9.4809-5.4397-4.001-2.7198-1.5621-3.5967 0.1916-4.4735 3.2606-1.843 1.5069-4.5628 2.137-8.0702 2.1369-7.1934-1.3705-8.9471 5.6444-1.9322-4.8779-3.57 0.0074-4.4469-1.7464-0.06259-4.3769-2.6932-4.3769-7.2652 3.5369-4.6347-2.6011-1.1272-7.8622-3.5594-1.9545-3.5594 0.6761-2.7345 3.1057-3.7153-4.3107-6.3458-1.3168-5.469-2.1938z" fill="url(#ca)" sodipodi:nodetypes="ccccccccccccccccccccccccccccccc"/>
+ <text x="10" y="2789.8621068" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2789.8621068">Bibliografía</tspan>
  </text>
- <rect id="au" x="10" y="2871.7" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2795.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Вот список части документов, использованных для написания этого учебника.</flowDiv>
+  <flowDiv xml:space="preserve">Isto é parte da bibliografía que se usou para este documento.</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2895.2)" r="2"/>
- <rect id="at" x="20" y="2889.2" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2818.4)" r="2"/>
+ <rect id="at" x="20" y="2812.4" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#at"/>
@@ -585,8 +632,8 @@
   <flowDiv xml:space="preserve"><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.makart.com/resources/artclass/EPlist.html</flowSpan>
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 2912.7)" r="2"/>
- <rect id="ar" x="20" y="2906.7" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2835.9)" r="2"/>
+ <rect id="ar" x="20" y="2829.9" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
@@ -594,8 +641,8 @@
   <flowDiv xml:space="preserve"><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.princetonol.com/groups/iad/Files/elements2.htm</flowSpan>
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 2930.1)" r="2"/>
- <rect id="aq" x="20" y="2924.1" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2853.4)" r="2"/>
+ <rect id="aq" x="20" y="2847.4" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
@@ -603,8 +650,8 @@
   <flowDiv xml:space="preserve"><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.johnlovett.com/test.htm</flowSpan>
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 2947.6)" r="2"/>
- <rect id="ap" x="20" y="2941.6" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2870.8)" r="2"/>
+ <rect id="ap" x="20" y="2864.8" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
@@ -612,8 +659,8 @@
   <flowDiv xml:space="preserve"><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/elements_of_design/</flowSpan>
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 2965.1)" r="2"/>
- <rect id="ao" x="20" y="2959.1" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2888.3)" r="2"/>
+ <rect id="ao" x="20" y="2882.3" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
@@ -621,7 +668,7 @@
   <flowDiv xml:space="preserve"><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/principles_of_design/</flowSpan>
 </flowDiv>
  </flowRoot>
- <rect id="an" x="10" y="2976.6" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="2899.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
@@ -632,7 +679,7 @@ Open Clip Art Library (<flowSpan font-family="Liberation Sans,Arial,sans-serif" 
 people have submitted to that project.
 </flowDiv>
  </flowRoot>
- <g transform="translate(0 3015.6)">
+ <g transform="translate(0 2938.8)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="x" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#g" inkscape:collect="always"/>
    <filter id="ax" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">
@@ -655,8 +702,8 @@ people have submitted to that project.
     <path d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-2e-3 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349 12.839 12.839 55.967-3.2094 48.155 30.28 17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546 12.839-12.839 45.247-12.908 72.555-43.621-10.992-17.095-46.981-24.375-34.142-37.214 12.839-12.839 37.8-6.3179 91.659-30.777 26.292-11.941 24.12-21.01 24.019-32.006-2e-3 -0.23138 0-0.43973 0-0.67288h-0.0585c-0.16888-11.088-4.4637-22.134-12.96-30.631l-154.06-154.06c-8.6691-8.6691-19.991-12.99-31.304-12.99zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" width="744.09448" height="1052.3622" color="#000000" fill="#ffffff" fill-opacity=".064615" font-family="sans-serif" xlink:href="#v"/>
-   <path transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -203.9)" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" color="#000000" fill-rule="evenodd" opacity=".5"/>
-   <text transform="rotate(-90)" x="-70.95546" y="-6.5672836" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="-70.95546" y="-6.5672836" letter-spacing=".29056" sodipodi:role="line">Используйте для прокрутки <tspan font-weight="bold">Ctrl+стрелка вверх</tspan></tspan></text>
+   <text transform="rotate(-90)" x="-70.787514" y="-6.6619034" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="-70.787514" y="-6.6619034" letter-spacing=".29056" sodipodi:role="line">Use <tspan font-weight="bold">Ctrl+frecha arriba <tspan font-weight="normal">para desprazar </tspan></tspan></tspan></text>
+   <path transform="matrix(-.61496 -.045496 -.061919 .45186 207.69 -163.2)" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" color="#000000" fill-rule="evenodd" opacity=".5"/>
   </g>
  </g>
 </svg>

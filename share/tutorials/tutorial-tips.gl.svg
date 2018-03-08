@@ -29,11 +29,11 @@
    <path d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-2e-3 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349 12.839 12.839 55.967-3.2094 48.155 30.28 17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546 12.839-12.839 45.247-12.908 72.555-43.621-10.992-17.095-46.981-24.375-34.142-37.214 12.839-12.839 37.8-6.3179 91.659-30.777 26.292-11.941 24.12-21.01 24.019-32.006-2e-3 -0.23138 0-0.43973 0-0.67288h-0.0585c-0.16888-11.088-4.4637-22.134-12.96-30.631l-154.06-154.06c-8.6691-8.6691-19.991-12.99-31.304-12.99zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" width="320.00000" height="1052.3622" color="#000000" fill="#ffffff" fill-opacity=".11077" font-family="sans-serif" xlink:href="#r"/>
-  <text transform="rotate(90)" x="3.6203015" y="-326.81229" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="3.6203015" y="-326.81229" letter-spacing=".29056" sodipodi:role="line">Use <tspan font-weight="bold">Ctrl+down arrow</tspan> to scroll </tspan></text>
-  <path transform="matrix(.61496 .045496 .061919 -.45186 112.46 201.6)" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" color="#000000" fill-rule="evenodd" opacity=".5"/>
+  <text transform="rotate(90)" x="3.6203015" y="-326.81229" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="3.6203015" y="-326.81229" letter-spacing=".29056" sodipodi:role="line">Use <tspan font-weight="bold">Ctrl+frecha abaixo</tspan> para desprazar </tspan></text>
+  <path d="m332.89 162.52-8.1397-0.0221 4.0438 5.1906z" color="#000000" fill-rule="evenodd" opacity=".5" inkscape:connector-curvature="0"/>
  </g>
  <text transform="scale(1.1307)" x="35" y="30" fill="#ffffff" font-family="Liberation Sans,Arial,sans-serif" font-size="7">
-  <tspan dx="0 -0.57057059 0 0 0 0 0" fill="#ffffff" letter-spacing="2.1813">::TIPS AND TRICKS</tspan>
+  <tspan dx="0 -0.57057059 0 0 0 0 0" fill="#ffffff" letter-spacing="2.1813">::CONSELLOS E TRUCOS</tspan>
  </text>
  <rect id="ae" x="35" y="42" width="264" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
@@ -583,8 +583,7 @@ repeat it as many times as you wish.
   <flowRegion>
    <use xlink:href="#u"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Press <flowSpan font-weight="bold">Enter</flowSpan>
-</flowDiv>
+  <flowDiv xml:space="preserve">Prema <flowSpan font-weight="bold">Intro</flowSpan></flowDiv>
  </flowRoot>
  <circle transform="translate(15 1939.1)" r="2"/>
  <rect id="be" x="20" y="1933.1" width="258" height="1e3px" display="none"/>
@@ -610,10 +609,9 @@ repeat it as many times as you wish.
   <flowRegion>
    <use xlink:href="#bc"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Select another tool 
-</flowDiv>
+  <flowDiv xml:space="preserve">Seleccionar outra ferramenta</flowDiv>
  </flowRoot>
- <rect id="bb" x="10" y="1981.7" width="288" height="1e3px" display="none"/>
+ <rect id="bb" x="10" y="1981.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bb"/>
@@ -624,7 +622,7 @@ either <flowSpan font-weight="bold">Esc</flowSpan> (cancel the whole path) or <f
 (remove the last segment of the unfinished path) instead of <flowSpan font-family="Liberation Sans,Arial,sans-serif">Undo</flowSpan>.
 </flowDiv>
  </flowRoot>
- <rect id="az" x="10" y="2029.5" width="288" height="1e3px" display="none"/>
+ <rect id="az" x="10" y="2029.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#az"/>
@@ -635,10 +633,10 @@ either <flowSpan font-weight="bold">Esc</flowSpan> (cancel the whole path) or <f
 drawing from one of the end anchors of the selected path.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2091.6051227" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2091.6051227">Entering Unicode values</tspan>
+ <text x="10" y="2091.687154" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2091.687154">Entering Unicode values</tspan>
  </text>
- <rect id="ay" x="10" y="2096.8" width="288" height="1e3px" display="none"/>
+ <rect id="ay" x="10" y="2096.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ay"/>
@@ -661,10 +659,10 @@ an em-dash (—). To quit the Unicode mode without inserting anything press
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2206.7011507" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2206.7011507">Using the grid for drawing icons</tspan>
+ <text x="10" y="2206.783182" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2206.783182">Using the grid for drawing icons</tspan>
  </text>
- <rect id="av" x="10" y="2211.9" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="2212" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
@@ -677,10 +675,10 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2284.6456007" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2284.6456007">Object rotation</tspan>
+ <text x="10" y="2284.727632" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2284.727632">Rotación de obxectos</tspan>
  </text>
- <rect id="au" x="10" y="2289.8" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2289.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
@@ -704,10 +702,10 @@ degrees). The same <flowSpan font-weight="bold">[]</flowSpan> keys with <flowSpa
 pixel-size rotation.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2390.5851117" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2390.5851117">Drop shadows</tspan>
+ <text x="10" y="2390.667143" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2390.667143">Drop shadows</tspan>
  </text>
- <rect id="as" x="10" y="2395.8" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="2395.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
@@ -716,7 +714,7 @@ pixel-size rotation.
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Filters &gt; Shadows and Glows &gt; Drop Shadow...</flowSpan> feature.
 </flowDiv>
  </flowRoot>
- <rect id="ar" x="10" y="2424" width="288" height="1e3px" display="none"/>
+ <rect id="ar" x="10" y="2424.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
@@ -728,10 +726,10 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2486.1008527" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2486.1008527">Placing text on a path</tspan>
+ <text x="10" y="2486.182884" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2486.182884">Situar un texto nun camiño</tspan>
  </text>
- <rect id="aq" x="10" y="2491.3" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="2491.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
@@ -743,10 +741,10 @@ be fitted to, rather than fitting it to some other drawing element — this will
 more control without screwing over your drawing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2564.0432657" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2564.0432657">Selecting the original</tspan>
+ <text x="10" y="2564.125297" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2564.125297">Seleccionar o orixinal</tspan>
  </text>
- <rect id="ap" x="10" y="2569.2" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2569.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
@@ -758,8 +756,8 @@ offset, or clone, and press <flowSpan font-weight="bold">Shift+D</flowSpan> to m
 corresponding path, offset source, or clone original.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2631.3569067" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2631.3569067">Window off-screen recovery</tspan>
+ <text x="10" y="2631.438938" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2631.438938">Window off-screen recovery</tspan>
  </text>
  <rect id="ao" x="10" y="2636.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -774,10 +772,10 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2719.9979127" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2719.9979127">Transparency, gradients, and PostScript export</tspan>
+ <text x="10" y="2720.079944" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2720.079944">Transparency, gradients, and PostScript export</tspan>
  </text>
- <rect id="an" x="10" y="2725.2" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="2725.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
@@ -796,7 +794,7 @@ value of the object, but only the alpha value of its fill or stroke color, so ma
 every object's opacity value is set to 100% before you start out.
 </flowDiv>
  </flowRoot>
- <g transform="translate(0 2838.5)">
+ <g transform="translate(0 2838.6)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="s" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#d" inkscape:collect="always"/>
    <filter id="bf" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">
@@ -819,8 +817,8 @@ every object's opacity value is set to 100% before you start out.
     <path d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-2e-3 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349 12.839 12.839 55.967-3.2094 48.155 30.28 17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546 12.839-12.839 45.247-12.908 72.555-43.621-10.992-17.095-46.981-24.375-34.142-37.214 12.839-12.839 37.8-6.3179 91.659-30.777 26.292-11.941 24.12-21.01 24.019-32.006-2e-3 -0.23138 0-0.43973 0-0.67288h-0.0585c-0.16888-11.088-4.4637-22.134-12.96-30.631l-154.06-154.06c-8.6691-8.6691-19.991-12.99-31.304-12.99zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" width="744.09448" height="1052.3622" color="#000000" fill="#ffffff" fill-opacity=".064615" font-family="sans-serif" xlink:href="#q"/>
-   <text transform="rotate(-90)" x="-70.83046" y="-6.5672836" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="-70.83046" y="-6.5672836" letter-spacing=".29056" sodipodi:role="line">Use <tspan font-weight="bold">Ctrl+up arrow</tspan> to scroll </tspan></text>
-   <path transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -117.15)" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" color="#000000" fill-rule="evenodd" opacity=".5"/>
+   <text transform="rotate(-90)" x="-70.787514" y="-6.6619034" fill="#000000" font-family="sans-serif" font-size="6.9693px" opacity=".5" style="line-height:125%" sodipodi:linespacing="125%" xml:space="preserve"><tspan x="-70.787514" y="-6.6619034" letter-spacing=".29056" sodipodi:role="line">Use <tspan font-weight="bold">Ctrl+frecha arriba <tspan font-weight="normal">para desprazar </tspan></tspan></tspan></text>
+   <path transform="matrix(-.61496 -.045496 -.061919 .45186 207.69 -163.2)" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" color="#000000" fill-rule="evenodd" opacity=".5"/>
   </g>
  </g>
 </svg>
