@@ -37,7 +37,6 @@
 #include "document-undo.h"
 #include "enums.h"
 #include "graphlayout.h"
-#include "ink-action.h"
 #include "ink-toggle-action.h"
 #include "inkscape.h"
 #include "toolbox.h"
@@ -310,21 +309,21 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     {
-        InkAction* inky = ink_action_new( "ConnectorAvoidAction",
+        GtkAction* inky = gtk_action_new( "ConnectorAvoidAction",
                                           _("Avoid"),
                                           _("Make connectors avoid selected objects"),
-                                          INKSCAPE_ICON("connector-avoid"),
-                                          secondarySize );
+                                          NULL);
+        gtk_action_set_icon_name(inky, INKSCAPE_ICON("connector-avoid"));
         g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_connector_path_set_avoid), holder );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
     }
 
     {
-        InkAction* inky = ink_action_new( "ConnectorIgnoreAction",
+        GtkAction* inky = gtk_action_new( "ConnectorIgnoreAction",
                                           _("Ignore"),
                                           _("Make connectors ignore selected objects"),
-                                          INKSCAPE_ICON("connector-ignore"),
-                                          secondarySize );
+                                          NULL);
+        gtk_action_set_icon_name(inky, INKSCAPE_ICON("connector-ignore"));
         g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_connector_path_set_ignore), holder );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
     }
@@ -369,11 +368,11 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
 
     // Graph (connector network) layout
     {
-        InkAction* inky = ink_action_new( "ConnectorGraphAction",
+        GtkAction* inky = gtk_action_new( "ConnectorGraphAction",
                                           _("Graph"),
                                           _("Nicely arrange selected connector network"),
-                                          INKSCAPE_ICON("distribute-graph"),
-                                          secondarySize );
+                                          NULL);
+        gtk_action_set_icon_name(inky, INKSCAPE_ICON("distribute-graph"));
         g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_connector_graph_layout), holder );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
     }
