@@ -976,6 +976,13 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
+
+    // This section uses the UI manager template in select-toolbar.ui to
+    // generate the full set of toolbars.
+    //
+    // This is DEPRECATED in Gtk+ 3 and FAILS in Gtk+ 4.
+    //
+    // TODO: Replace this with code based on GAction instead of GtkAction
     GtkUIManager* mgr = gtk_ui_manager_new();
     GError *err = 0;
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
@@ -994,6 +1001,11 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         if ( aux_toolboxes[i].prep_func ) {
             // converted to GtkActions and UIManager
 
+            // The following code:
+            // * Creates a dummy toolbar "kludge" and stores it in the
+            //   "dataHolders" array
+            // * Calls the relevant toolbar prep function, which creates the
+            //   actions and hooks up their signals
             GtkWidget* kludge = gtk_toolbar_new();
             gtk_widget_set_name( kludge, "Kludge" );
             g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
@@ -1017,20 +1029,42 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         }
     }
 
+    // Here, we add on the GAction-based widgets that were left out of the UI
+    // manager code.  This is part of the migration process and eventually ALL
+    // of the tool widgets should be created this way
+    auto connector_toolbar = gtk_ui_manager_get_widget(mgr, "/ui/ConnectorToolbar");
+    sp_connector_toolbox_add_tools(connector_toolbar);
+
+    // At this point, we've now got some toolbars (using default widget styles)
+    // and some actions (which were declared using a dummy toolbar that has been
+    // .
+
     // Second pass to create toolbars *after* all GtkActions are created
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         if ( aux_toolboxes[i].prep_func ) {
             // converted to GtkActions and UIManager
 
+            // Get the previously created "dummy" toolbar that contains
+            // all the actions
             auto kludge = dataHolders[aux_toolboxes[i].type_name];
+
+            // Now create a grid and give it a name, the same as the
+            // toolbar entry in the UI file (e.g., "ConnectorToolbar")
             auto holder = gtk_grid_new();
             gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
+
+            // Add the dummy toolbar to the grid (the one with the actions),
+            // in the 3rd slot from the left
             gtk_grid_attach( GTK_GRID(holder), kludge, 2, 0, 1, 1);
+
+            // Get the real toolbar (the one with the tools!) that was created
+            // by the UI manager. This is found using its name (e.g., "/ui/ConnectorToolbar")
             gchar* tmp = g_strdup_printf( "/ui/%s", aux_toolboxes[i].ui_name );
             GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, tmp );
             g_free( tmp );
             tmp = 0;
 
+            // Now set the style properties of the toolbar
             if ( prefs->getBool( "/toolbox/icononly", true) ) {
                 gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
             }
@@ -1038,8 +1072,12 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
             gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
             gtk_widget_set_hexpand(toolBar, TRUE);
+
+            // Add the real toolbar to the grid, in the leftmost slot
             gtk_grid_attach( GTK_GRID(holder), toolBar, 0, 0, 1, 1);
 
+            // If the toolbar is supposed to contain a swatch, then add that
+            // to the grid in the second-from-left slot
             if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
                 Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( NULL, _(aux_toolboxes[i].swatch_tip) );
                 swatch->setDesktop( desktop );

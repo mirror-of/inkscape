@@ -28,6 +28,8 @@
 #include <config.h>
 #endif
 
+#include <gtkmm.h>
+#include <glibmm.h>
 #include <glibmm/i18n.h>
 
 #include "connector-toolbar.h"
@@ -303,20 +305,58 @@ static void sp_connector_toolbox_selection_changed(Inkscape::Selection *selectio
 
 }
 
+/**
+ * @brief Add the tools to the toolbox
+ *
+ * @details Note that this is different from the _prep function
+ *          as it:
+ *          1. Uses GAction (not GtkAction) to define the action that each tool
+ *             performs
+ *          2. Actually creates tools (not just their actions)
+ *
+ *          This is being created as part of the GtkAction -> GAction migration
+ *          and hopefully will ultimately completely replace the _prep function
+ */
+void sp_connector_toolbox_add_tools(GtkWidget* toolbar)
+{
+    // Create a new action group to describe all the actions that relate to tools
+    // in this toolbar.  All actions will have the "connector-actions" prefix
+    auto action_group = g_simple_action_group_new();
+    gtk_widget_insert_action_group(toolbar,
+                                   "connector-actions",
+                                   G_ACTION_GROUP(action_group));
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+
+    // Define the "avoid" action and hook up its "activate" signal to the correct handler
+    auto connector_avoid_action = g_simple_action_new("avoid", NULL);
+    g_signal_connect_after(G_OBJECT(connector_avoid_action),
+                           "activate",
+                           G_CALLBACK(sp_connector_path_set_avoid),
+                           NULL);
+
+    // Add the "avoid" action to the action group for the toolbar
+    // TODO: Replace all this with a bulk assignment rather than declaring each action
+    //       individually
+    g_action_map_add_action(G_ACTION_MAP(action_group), G_ACTION(connector_avoid_action));
+
+    // Create toolbutton for the "avoid" action
+    auto connector_avoid_icon = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
+    auto connector_avoid_button = gtk_tool_button_new(connector_avoid_icon, _("Avoid"));
+    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_avoid_button), _("Make connectors avoid selected objects"));
+    gtk_toolbar_insert(GTK_TOOLBAR(toolbar), connector_avoid_button, 1);
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_avoid_button), "connector-actions.avoid");
+
+    gtk_widget_show_all(toolbar);
+}
+
 void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+    auto toolbar = GTK_TOOLBAR(holder);
 
-    {
-        GtkAction* inky = gtk_action_new( "ConnectorAvoidAction",
-                                          _("Avoid"),
-                                          _("Make connectors avoid selected objects"),
-                                          NULL);
-        gtk_action_set_icon_name(inky, INKSCAPE_ICON("connector-avoid"));
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_connector_path_set_avoid), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
 
     {
         GtkAction* inky = gtk_action_new( "ConnectorIgnoreAction",
