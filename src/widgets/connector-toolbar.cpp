@@ -65,13 +65,17 @@ using Inkscape::UI::PrefPusher;
 //##      Connector      ##
 //#########################
 
-static void sp_connector_path_set_avoid(void)
+static void sp_connector_path_set_avoid(GSimpleAction *action,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
 {
     Inkscape::UI::Tools::cc_selection_set_avoid(true);
 }
 
 
-static void sp_connector_path_set_ignore(void)
+static void sp_connector_path_set_ignore(GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
 {
     Inkscape::UI::Tools::cc_selection_set_avoid(false);
 }
@@ -329,24 +333,43 @@ void sp_connector_toolbox_add_tools(GtkWidget* toolbar)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
-    // Define the "avoid" action and hook up its "activate" signal to the correct handler
-    auto connector_avoid_action = g_simple_action_new("avoid", NULL);
-    g_signal_connect_after(G_OBJECT(connector_avoid_action),
-                           "activate",
-                           G_CALLBACK(sp_connector_path_set_avoid),
-                           NULL);
+    // Define all the actions.  Each entry contains the:
+    // - name of the action
+    // - "activate" signal handler
+    GActionEntry entries[] = {
+        {"avoid",  sp_connector_path_set_avoid},
+        {"ignore", sp_connector_path_set_ignore}
+    };
 
-    // Add the "avoid" action to the action group for the toolbar
-    // TODO: Replace all this with a bulk assignment rather than declaring each action
-    //       individually
-    g_action_map_add_action(G_ACTION_MAP(action_group), G_ACTION(connector_avoid_action));
+    // Add the actions to the action group
+    g_action_map_add_action_entries(G_ACTION_MAP(action_group),
+                                    entries,
+                                    G_N_ELEMENTS(entries),
+                                    NULL);
 
     // Create toolbutton for the "avoid" action
-    auto connector_avoid_icon = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
+    auto connector_avoid_icon   = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
     auto connector_avoid_button = gtk_tool_button_new(connector_avoid_icon, _("Avoid"));
-    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_avoid_button), _("Make connectors avoid selected objects"));
-    gtk_toolbar_insert(GTK_TOOLBAR(toolbar), connector_avoid_button, 1);
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_avoid_button), "connector-actions.avoid");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_avoid_button),
+                                _("Make connectors avoid selected objects"));
+
+    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
+                       connector_avoid_button, 1);
+
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_avoid_button),
+                                   "connector-actions.avoid");
+
+    // Create toolbutton for the "ignore" action
+    auto connector_ignore_icon   = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-ignore"), secondarySize);
+    auto connector_ignore_button = gtk_tool_button_new(connector_ignore_icon, _("Ignore"));
+    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_ignore_button),
+                                _("Make connectors ignore selected objects"));
+
+    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
+                       connector_ignore_button, 2);
+
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_ignore_button),
+                                   "connector-actions.ignore");
 
     gtk_widget_show_all(toolbar);
 }
@@ -356,17 +379,6 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     auto toolbar = GTK_TOOLBAR(holder);
-
-
-    {
-        GtkAction* inky = gtk_action_new( "ConnectorIgnoreAction",
-                                          _("Ignore"),
-                                          _("Make connectors ignore selected objects"),
-                                          NULL);
-        gtk_action_set_icon_name(inky, INKSCAPE_ICON("connector-ignore"));
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_connector_path_set_ignore), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
 
     // Orthogonal connectors toggle button
     {
