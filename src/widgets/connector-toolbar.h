@@ -32,6 +32,7 @@ class SPDesktop;
 typedef struct _GtkActionGroup GtkActionGroup;
 typedef struct _GObject GObject;
 
-void       sp_connector_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+void sp_connector_toolbox_add_tools(GtkWidget* toolbar);
+void sp_connector_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
 
 #endif /* !SEEN_CONNECTOR_TOOLBAR_H */
