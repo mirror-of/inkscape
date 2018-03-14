@@ -65,6 +65,19 @@ using Inkscape::UI::PrefPusher;
 //##      Connector      ##
 //#########################
 
+/**
+ * @brief List of all the tool items
+ * @todo  This is mainly provided for quick access to children of the
+ *        toolbar.  It probably won't be needed if we make the toolitems
+ *        members of a ConnectorToolbar class in C++ as we'd be able
+ *        to access them directly rather than by index
+ */
+enum ConnectorToolItemIndex {
+    INDEX_AVOID      = 1,
+    INDEX_IGNORE     = 2,
+    INDEX_ORTHOGONAL = 3
+};
+
 static void sp_connector_path_set_avoid(GSimpleAction *action,
                                         GVariant      *parameter,
                                         gpointer       user_data)
@@ -80,15 +93,18 @@ static void sp_connector_path_set_ignore(GSimpleAction *action,
     Inkscape::UI::Tools::cc_selection_set_avoid(false);
 }
 
-static void sp_connector_orthogonal_toggled( GtkToggleAction* act, GObject *tbl )
+static void sp_connector_orthogonal_toggled(GSimpleAction *action,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
 {
+    auto tbl = reinterpret_cast<GObject *>(user_data);
+
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
     SPDocument *doc = desktop->getDocument();
 
     if (!DocumentUndo::getUndoSensitive(doc)) {
         return;
     }
-
 
     // quit if run by the _changed callbacks
     if (g_object_get_data( tbl, "freeze" )) {
@@ -98,7 +114,9 @@ static void sp_connector_orthogonal_toggled( GtkToggleAction* act, GObject *tbl 
     // in turn, prevent callbacks from responding
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
-    bool is_orthog = gtk_toggle_action_get_active( act );
+    // Get the toolbutton
+    auto connector_orthogonal_button = gtk_toolbar_get_nth_item(GTK_TOOLBAR(tbl),INDEX_ORTHOGONAL);
+    bool is_orthog = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(connector_orthogonal_button));
     gchar orthog_str[] = "orthogonal";
     gchar polyline_str[] = "polyline";
     gchar *value = is_orthog ? orthog_str : polyline_str ;
@@ -337,15 +355,16 @@ void sp_connector_toolbox_add_tools(GtkWidget* toolbar)
     // - name of the action
     // - "activate" signal handler
     GActionEntry entries[] = {
-        {"avoid",  sp_connector_path_set_avoid},
-        {"ignore", sp_connector_path_set_ignore}
+        {"avoid",      sp_connector_path_set_avoid},
+        {"ignore",     sp_connector_path_set_ignore},
+        {"orthogonal", sp_connector_orthogonal_toggled}
     };
 
     // Add the actions to the action group
     g_action_map_add_action_entries(G_ACTION_MAP(action_group),
                                     entries,
                                     G_N_ELEMENTS(entries),
-                                    NULL);
+                                    toolbar);
 
     // Create toolbutton for the "avoid" action
     auto connector_avoid_icon   = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
@@ -354,7 +373,8 @@ void sp_connector_toolbox_add_tools(GtkWidget* toolbar)
                                 _("Make connectors avoid selected objects"));
 
     gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
-                       connector_avoid_button, 1);
+                       connector_avoid_button,
+                       INDEX_AVOID);
 
     gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_avoid_button),
                                    "connector-actions.avoid");
@@ -366,10 +386,28 @@ void sp_connector_toolbox_add_tools(GtkWidget* toolbar)
                                 _("Make connectors ignore selected objects"));
 
     gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
-                       connector_ignore_button, 2);
+                       connector_ignore_button,
+                       INDEX_IGNORE);
 
     gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_ignore_button),
                                    "connector-actions.ignore");
+
+    // Create toggle toolbutton for the "orthogonal" action
+    auto connector_orthogonal_icon   = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-orthogonal"), GTK_ICON_SIZE_MENU);
+    auto connector_orthogonal_button = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(connector_orthogonal_button),
+                              _("Orthogonal"));
+    gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(connector_orthogonal_button),
+                                    connector_orthogonal_icon);
+    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_orthogonal_button), _("Make connector orthogonal or polyline"));
+    bool tbuttonstate = prefs->getBool("/tools/connector/orthogonal");
+    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(connector_orthogonal_button), tbuttonstate);
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_orthogonal_button),
+                                   "connector-actions.orthogonal");
+
+    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
+                       connector_orthogonal_button,
+                       INDEX_ORTHOGONAL);
 
     gtk_widget_show_all(toolbar);
 }
@@ -379,21 +417,6 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     auto toolbar = GTK_TOOLBAR(holder);
-
-    // Orthogonal connectors toggle button
-    {
-        InkToggleAction* act = ink_toggle_action_new( "ConnectorOrthogonalAction",
-                                                      _("Orthogonal"),
-                                                      _("Make connector orthogonal or polyline"),
-                                                      INKSCAPE_ICON("connector-orthogonal"),
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-
-        bool tbuttonstate = prefs->getBool("/tools/connector/orthogonal");
-        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(act), ( tbuttonstate ? TRUE : FALSE ));
-        g_object_set_data( holder, "orthogonal", act );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_connector_orthogonal_toggled), holder );
-    }
 
     EgeAdjustmentAction* eact = 0;
     // Curvature spinbox

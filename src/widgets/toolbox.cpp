@@ -1033,6 +1033,9 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     // manager code.  This is part of the migration process and eventually ALL
     // of the tool widgets should be created this way
     auto connector_toolbar = gtk_ui_manager_get_widget(mgr, "/ui/ConnectorToolbar");
+
+    // Should really use a custom subclass here rather than stuffing GObject data
+    g_object_set_data( G_OBJECT(connector_toolbar), "desktop", desktop);
     sp_connector_toolbox_add_tools(connector_toolbar);
 
     // At this point, we've now got some toolbars (using default widget styles)
