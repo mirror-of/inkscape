@@ -75,7 +75,8 @@ using Inkscape::UI::PrefPusher;
 enum ConnectorToolItemIndex {
     INDEX_AVOID      = 1,
     INDEX_IGNORE     = 2,
-    INDEX_ORTHOGONAL = 3
+    INDEX_ORTHOGONAL = 3,
+    INDEX_SEPARATOR  = 4
 };
 
 static void sp_connector_path_set_avoid(GSimpleAction *action,
@@ -408,6 +409,12 @@ void sp_connector_toolbox_add_tools(GtkWidget* toolbar)
     gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
                        connector_orthogonal_button,
                        INDEX_ORTHOGONAL);
+
+    // Separator
+    auto separator = gtk_separator_tool_item_new();
+    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
+                       separator,
+                       INDEX_SEPARATOR);
 
     gtk_widget_show_all(toolbar);
 }
