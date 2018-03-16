@@ -971,14 +971,32 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
     }
 }
 
+/**
+ * @brief Set up all the toolboxes that can appear in the auxilliary toolbox
+ *
+ * @param toolbox The auxilliary toolbox to set up
+ *
+ * @detail The auxilliary toolbox is the one that appears under the menu-bar,
+ *         with items that change, depending on the Inkscape tool that has been
+ *         selected.  This function creates ALL the possible toolboxes that can
+ *         be shown in this location, and stores pointers to all of them within the
+ *         "toolbox" widget.  These pointers are stored as GObject data, with
+ *         names taken from the "data_name" field in the aux_toolboxes struct.
+ *         For example, the Connector toolbar is stored as a pointer called
+ *         "connector_tool", and can be accessed after running this function, by
+ *         using:
+ *
+ *           g_object_get_data(G_OBJECT(toolbox), "connector_tool");
+ */
 void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
 
-    // This section uses the UI manager template in select-toolbar.ui to
-    // generate the full set of toolbars.
+    // This section uses the UI manager to generate any toolbars and their
+    // tool widgets that have been defined in the "select-toolbar.ui" file.
+    // These can subsequently be looked up by name.
     //
     // This is DEPRECATED in Gtk+ 3 and FAILS in Gtk+ 4.
     //
@@ -995,8 +1013,19 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
       return;
     }
 
+    // This map contains a set of "dummy" toolboxes, which don't actually
+    // contain visible widgets.  They just contain a set of GtkAction widgets
     std::map<std::string, GtkWidget*> dataHolders;
 
+    // This loops through all the toolboxes that have been declared in the aux_toolboxes
+    // list and for each toolbox, EITHER:
+    // * runs the prep function to create the actions for the widgets.  This is done
+    //   for toolboxes that were created using the UI Manager file (this is DEPRECATED).
+    // OR:
+    // * creates a new toolbox.  This is probably what we should be using for the
+    //   new GAction-based toolboxes for Gtk+ 3.  At the end of this option, pointers to any
+    //   toolboxes created in this way, are stored as GObject data with names taken from the
+    //   "data_name" field in the aux_toolboxes struct (e.g., "connector_tool").
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         if ( aux_toolboxes[i].prep_func ) {
             // converted to GtkActions and UIManager
@@ -1013,7 +1042,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             dataHolders[aux_toolboxes[i].type_name] = kludge;
             aux_toolboxes[i].prep_func( desktop, mainActions->gobj(), G_OBJECT(kludge) );
         } else {
-
             GtkWidget *sub_toolbox = 0;
             if (aux_toolboxes[i].create_func == NULL) {
                 sub_toolbox = sp_empty_toolbox_new(desktop);
@@ -1025,7 +1053,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
             gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
             g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
-
         }
     }
 
@@ -1040,9 +1067,15 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
     // At this point, we've now got some toolbars (using default widget styles)
     // and some actions (which were declared using a dummy toolbar that has been
-    // .
+    // stored in the dataHolders array).
 
     // Second pass to create toolbars *after* all GtkActions are created
+    //
+    // *** This is ONLY done if a "prep" function is defined in the aux_toolboxes
+    // structure above. ***
+    //
+    // At the end of this loop, a pointer to the toolbox is stored as GObject data
+    // (with the name "connector_tool" etc) in the auxilliary toolbox
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         if ( aux_toolboxes[i].prep_func ) {
             // converted to GtkActions and UIManager
@@ -1110,21 +1143,44 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
             gtk_size_group_add_widget( grouper, holder );
 
+            // Finally, the grid (i.e., the holder) is added to the toolbox container
             gtk_container_add( GTK_CONTAINER(toolbox), holder );
             g_object_set_data( G_OBJECT(toolbox), aux_toolboxes[i].data_name, holder );
-        }
-    }
+        } // if a prep function exists for the toolbox
+    } // for-loop over all aux toolboxes
 
     g_object_unref( G_OBJECT(grouper) );
 }
 
+/**
+ * @brief Select which of the auxilliary toolboxes to display
+ *
+ * @param toolbox The Auxilliary toolbox (containing all possible toolbars that can be shown here)
+ *
+ * @details Pointers to all of the possible toolbars that can be shown in the auxilliary toolbox
+ *          should previously have been stored as GObject data in the toolbox, by the
+ *          setup_aux_toolbox function.
+ *          This function now takes an event context, checks the name of the toolbar we want to
+ *          show, and then loops through all the toolbar pointers and shows or hides the widgets
+ *          as required.
+ */
 void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidget *toolbox)
 {
+    // Get the name of the toolbox we want to display by checking the eventcontext object
     gchar const *tname = ( eventcontext
                            ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                            : NULL );
+
+    // Loop through all of the toolboxes that can be shown.  Show it if the name matches,
+    // and hide it if not
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+
+        // Get the pointer to the toolbox with this name.  This is stored as GObject data
+        // inside the main Auxilliary toolbox object
         GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name));
+
+        // Now, either show or hide the object depending on whether its name matches the
+        // one we want
         if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
             gtk_widget_show_now(sub_toolbox);
             g_object_set_data(G_OBJECT(toolbox), "shows", sub_toolbox);

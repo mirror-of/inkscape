@@ -223,9 +223,7 @@ void UXManagerImpl::connectToDesktop( vector<GtkWidget *> const & toolboxes, SPD
     vector<GtkWidget*>& tracked = tracker.boxes;
     tracker.destroyConn = desktop->connectDestroy(&desktopDestructHandler);
 
-    for (vector<GtkWidget*>::const_iterator it = toolboxes.begin(); it != toolboxes.end(); ++it ) {
-        GtkWidget* toolbox = *it;
-
+    for (auto const toolbox : toolboxes) {
         ToolboxFactory::setToolboxDesktop( toolbox, desktop );
         if (find(tracked.begin(), tracked.end(), toolbox) == tracked.end()) {
             tracked.push_back(toolbox);
