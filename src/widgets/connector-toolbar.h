@@ -27,12 +27,55 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#if HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#include <gtkmm/toolbar.h>
+
 class SPDesktop;
 
 typedef struct _GtkActionGroup GtkActionGroup;
 typedef struct _GObject GObject;
 
-void sp_connector_toolbox_add_tools(GtkWidget* toolbar);
 void sp_connector_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
 
+namespace Gtk {
+class ToggleToolButton;
+}
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+class ConnectorToolbar : public Gtk::Toolbar {
+private:
+    void on_avoid_activated();
+    void on_ignore_activated();
+    void on_orthogonal_activated();
+
+    SPDesktop *_desktop;
+    Gtk::ToggleToolButton *_connector_orthogonal_button;
+
+    bool _freeze_flag;
+
+public:
+    ConnectorToolbar(SPDesktop *desktop);
+
+    static GtkWidget * create(SPDesktop *desktop);
+};
+}
+}
+}
+
 #endif /* !SEEN_CONNECTOR_TOOLBAR_H */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

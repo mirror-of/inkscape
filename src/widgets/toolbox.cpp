@@ -221,7 +221,7 @@ static struct {
       SP_VERB_INVALID, 0, 0},
     { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Widget::DropperToolbar::create, 0,         "DropperToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/connector", "connector_toolbox", 0, sp_connector_toolbox_prep,   "ConnectorToolbar",
+    { "/tools/connector", "connector_toolbox", Inkscape::UI::Widget::ConnectorToolbar::create, 0,   "ConnectorToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/gradient", "gradient_toolbox", 0, sp_gradient_toolbox_prep, "GradientToolbar",
       SP_VERB_INVALID, 0, 0},
@@ -1055,15 +1055,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
         }
     }
-
-    // Here, we add on the GAction-based widgets that were left out of the UI
-    // manager code.  This is part of the migration process and eventually ALL
-    // of the tool widgets should be created this way
-    auto connector_toolbar = gtk_ui_manager_get_widget(mgr, "/ui/ConnectorToolbar");
-
-    // Should really use a custom subclass here rather than stuffing GObject data
-    g_object_set_data( G_OBJECT(connector_toolbar), "desktop", desktop);
-    sp_connector_toolbox_add_tools(connector_toolbar);
 
     // At this point, we've now got some toolbars (using default widget styles)
     // and some actions (which were declared using a dummy toolbar that has been

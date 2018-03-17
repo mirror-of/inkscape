@@ -65,87 +65,6 @@ using Inkscape::UI::PrefPusher;
 //##      Connector      ##
 //#########################
 
-/**
- * @brief List of all the tool items
- * @todo  This is mainly provided for quick access to children of the
- *        toolbar.  It probably won't be needed if we make the toolitems
- *        members of a ConnectorToolbar class in C++ as we'd be able
- *        to access them directly rather than by index
- */
-enum ConnectorToolItemIndex {
-    INDEX_AVOID      = 1,
-    INDEX_IGNORE     = 2,
-    INDEX_ORTHOGONAL = 3,
-    INDEX_SEPARATOR  = 4
-};
-
-static void sp_connector_path_set_avoid(GSimpleAction *action,
-                                        GVariant      *parameter,
-                                        gpointer       user_data)
-{
-    Inkscape::UI::Tools::cc_selection_set_avoid(true);
-}
-
-
-static void sp_connector_path_set_ignore(GSimpleAction *action,
-                                         GVariant      *parameter,
-                                         gpointer       user_data)
-{
-    Inkscape::UI::Tools::cc_selection_set_avoid(false);
-}
-
-static void sp_connector_orthogonal_toggled(GSimpleAction *action,
-                                            GVariant      *parameter,
-                                            gpointer       user_data)
-{
-    auto tbl = reinterpret_cast<GObject *>(user_data);
-
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-    SPDocument *doc = desktop->getDocument();
-
-    if (!DocumentUndo::getUndoSensitive(doc)) {
-        return;
-    }
-
-    // quit if run by the _changed callbacks
-    if (g_object_get_data( tbl, "freeze" )) {
-        return;
-    }
-
-    // in turn, prevent callbacks from responding
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
-
-    // Get the toolbutton
-    auto connector_orthogonal_button = gtk_toolbar_get_nth_item(GTK_TOOLBAR(tbl),INDEX_ORTHOGONAL);
-    bool is_orthog = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(connector_orthogonal_button));
-    gchar orthog_str[] = "orthogonal";
-    gchar polyline_str[] = "polyline";
-    gchar *value = is_orthog ? orthog_str : polyline_str ;
-
-    bool modmade = false;
-    auto itemlist= desktop->getSelection()->items();
-    for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        SPItem *item = *i;
-
-        if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
-            item->setAttribute( "inkscape:connector-type",
-                    value, NULL);
-            item->avoidRef->handleSettingChange();
-            modmade = true;
-        }
-    }
-
-    if (!modmade) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setBool("/tools/connector/orthogonal", is_orthog);
-    } else {
-
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
-                       is_orthog ? _("Set connector type: orthogonal"): _("Set connector type: polyline"));
-    }
-
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-}
 
 static void connector_curvature_changed(GtkAdjustment *adj, GObject* tbl)
 {
@@ -328,97 +247,6 @@ static void sp_connector_toolbox_selection_changed(Inkscape::Selection *selectio
 
 }
 
-/**
- * @brief Add the tools to the toolbox
- *
- * @details Note that this is different from the _prep function
- *          as it:
- *          1. Uses GAction (not GtkAction) to define the action that each tool
- *             performs
- *          2. Actually creates tools (not just their actions)
- *
- *          This is being created as part of the GtkAction -> GAction migration
- *          and hopefully will ultimately completely replace the _prep function
- */
-void sp_connector_toolbox_add_tools(GtkWidget* toolbar)
-{
-    // Create a new action group to describe all the actions that relate to tools
-    // in this toolbar.  All actions will have the "connector-actions" prefix
-    auto action_group = g_simple_action_group_new();
-    gtk_widget_insert_action_group(toolbar,
-                                   "connector-actions",
-                                   G_ACTION_GROUP(action_group));
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    // Define all the actions.  Each entry contains the:
-    // - name of the action
-    // - "activate" signal handler
-    GActionEntry entries[] = {
-        {"avoid",      sp_connector_path_set_avoid},
-        {"ignore",     sp_connector_path_set_ignore},
-        {"orthogonal", sp_connector_orthogonal_toggled}
-    };
-
-    // Add the actions to the action group
-    g_action_map_add_action_entries(G_ACTION_MAP(action_group),
-                                    entries,
-                                    G_N_ELEMENTS(entries),
-                                    toolbar);
-
-    // Create toolbutton for the "avoid" action
-    auto connector_avoid_icon   = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
-    auto connector_avoid_button = gtk_tool_button_new(connector_avoid_icon, _("Avoid"));
-    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_avoid_button),
-                                _("Make connectors avoid selected objects"));
-
-    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
-                       connector_avoid_button,
-                       INDEX_AVOID);
-
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_avoid_button),
-                                   "connector-actions.avoid");
-
-    // Create toolbutton for the "ignore" action
-    auto connector_ignore_icon   = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-ignore"), secondarySize);
-    auto connector_ignore_button = gtk_tool_button_new(connector_ignore_icon, _("Ignore"));
-    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_ignore_button),
-                                _("Make connectors ignore selected objects"));
-
-    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
-                       connector_ignore_button,
-                       INDEX_IGNORE);
-
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_ignore_button),
-                                   "connector-actions.ignore");
-
-    // Create toggle toolbutton for the "orthogonal" action
-    auto connector_orthogonal_icon   = gtk_image_new_from_icon_name(INKSCAPE_ICON("connector-orthogonal"), GTK_ICON_SIZE_MENU);
-    auto connector_orthogonal_button = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(connector_orthogonal_button),
-                              _("Orthogonal"));
-    gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(connector_orthogonal_button),
-                                    connector_orthogonal_icon);
-    gtk_widget_set_tooltip_text(GTK_WIDGET(connector_orthogonal_button), _("Make connector orthogonal or polyline"));
-    bool tbuttonstate = prefs->getBool("/tools/connector/orthogonal");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(connector_orthogonal_button), tbuttonstate);
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_orthogonal_button),
-                                   "connector-actions.orthogonal");
-
-    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
-                       connector_orthogonal_button,
-                       INDEX_ORTHOGONAL);
-
-    // Separator
-    auto separator = gtk_separator_tool_item_new();
-    gtk_toolbar_insert(GTK_TOOLBAR(toolbar),
-                       separator,
-                       INDEX_SEPARATOR);
-
-    gtk_widget_show_all(toolbar);
-}
-
 void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -518,6 +346,138 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
     }
 } // end of sp_connector_toolbox_prep()
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
+ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
+    : _desktop(desktop),
+      _connector_orthogonal_button(Gtk::manage(new Gtk::ToggleToolButton())),
+      _freeze_flag(false)
+{
+    // Create a new action group to describe all the actions that relate to tools
+    // in this toolbar.  All actions will have the "connector-actions" prefix
+    auto action_group = Gio::SimpleActionGroup::create();
+    insert_action_group("connector-actions", action_group);
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto secondarySize = static_cast<Gtk::IconSize>(ToolboxFactory::prefToSize("/toolbox/secondary", 1));
+
+    action_group->add_action("avoid",      sigc::mem_fun(*this, &ConnectorToolbar::on_avoid_activated));
+    action_group->add_action("ignore",     sigc::mem_fun(*this, &ConnectorToolbar::on_ignore_activated));
+    action_group->add_action("orthogonal", sigc::mem_fun(*this, &ConnectorToolbar::on_orthogonal_activated));
+
+    // Create toolbutton for the "avoid" action
+    auto connector_avoid_icon   = Gtk::manage(new Gtk::Image());
+    connector_avoid_icon->set_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
+    auto connector_avoid_button = Gtk::manage(new Gtk::ToolButton(*connector_avoid_icon, _("Avoid")));
+    connector_avoid_button->set_tooltip_text(_("Make connectors avoid selected objects"));
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_avoid_button->gobj()), "connector-actions.avoid");
+
+
+    // Create toolbutton for the "ignore" action
+    auto connector_ignore_icon   = Gtk::manage(new Gtk::Image());
+    connector_ignore_icon->set_from_icon_name(INKSCAPE_ICON("connector-ignore"), secondarySize);
+    auto connector_ignore_button = Gtk::manage(new Gtk::ToolButton(*connector_ignore_icon, _("Ignore")));
+    connector_ignore_button->set_tooltip_text(_("Make connectors ignore selected objects"));
+
+
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_ignore_button->gobj()),
+                                   "connector-actions.ignore");
+
+    // Create toggle toolbutton for the "orthogonal" action
+    auto connector_orthogonal_icon   = Gtk::manage(new Gtk::Image());
+    connector_orthogonal_icon->set_from_icon_name(INKSCAPE_ICON("connector-orthogonal"), Gtk::ICON_SIZE_MENU);
+    _connector_orthogonal_button->set_label(_("Orthogonal"));
+    _connector_orthogonal_button->set_icon_widget(*connector_orthogonal_icon);
+    _connector_orthogonal_button->set_tooltip_text(_("Make connector orthogonal or polyline"));
+    bool tbuttonstate = prefs->getBool("/tools/connector/orthogonal");
+    _connector_orthogonal_button->set_active(tbuttonstate);
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(_connector_orthogonal_button->gobj()),
+                                   "connector-actions.orthogonal");
+
+    // Separator
+    auto separator = Gtk::manage(new Gtk::SeparatorToolItem());
+
+    // Append all widgets to toolbar
+    append(*connector_avoid_button);
+    append(*connector_ignore_button);
+    append(*_connector_orthogonal_button);
+    append(*separator);
+    show_all();
+}
+
+GtkWidget *
+ConnectorToolbar::create(SPDesktop *desktop)
+{
+    auto connector_toolbar = Gtk::manage(new ConnectorToolbar(desktop));
+    return GTK_WIDGET(connector_toolbar->gobj());
+}
+
+void
+ConnectorToolbar::on_avoid_activated()
+{
+    Inkscape::UI::Tools::cc_selection_set_avoid(true);
+}
+
+void
+ConnectorToolbar::on_ignore_activated()
+{
+    Inkscape::UI::Tools::cc_selection_set_avoid(false);
+}
+
+void
+ConnectorToolbar::on_orthogonal_activated()
+{
+    SPDocument *doc = _desktop->getDocument();
+
+    if (!DocumentUndo::getUndoSensitive(doc)) {
+        return;
+    }
+
+    // quit if run by the _changed callbacks
+    if (_freeze_flag) {
+        return;
+    }
+
+    // in turn, prevent callbacks from responding
+    _freeze_flag = true;
+
+    // Get the toolbutton state
+    bool is_orthog = _connector_orthogonal_button->get_active();
+    gchar orthog_str[] = "orthogonal";
+    gchar polyline_str[] = "polyline";
+    gchar *value = is_orthog ? orthog_str : polyline_str ;
+
+    bool modmade = false;
+    auto itemlist= _desktop->getSelection()->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
+        SPItem *item = *i;
+
+        if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
+            item->setAttribute( "inkscape:connector-type",
+                    value, NULL);
+            item->avoidRef->handleSettingChange();
+            modmade = true;
+        }
+    }
+
+    if (!modmade) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setBool("/tools/connector/orthogonal", is_orthog);
+    } else {
+
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
+                       is_orthog ? _("Set connector type: orthogonal"): _("Set connector type: polyline"));
+    }
+
+    _freeze_flag = false;
+}
+
+
+}
+}
+}
 
 /*
   Local Variables:
