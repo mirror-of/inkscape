@@ -73,7 +73,7 @@
 #include "box3d-toolbar.h"
 #include "calligraphy-toolbar.h"
 #include "connector-toolbar.h"
-#include "dropper-toolbar.h"
+#include "ui/widget/dropper-toolbar.h"
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
@@ -219,7 +219,7 @@ static struct {
     // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/dropper", "dropper_toolbox", 0, sp_dropper_toolbox_prep,         "DropperToolbar",
+    { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Widget::DropperToolbar::create, 0,         "DropperToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/connector", "connector_toolbox", 0, sp_connector_toolbox_prep,   "ConnectorToolbar",
       SP_VERB_INVALID, 0, 0},
