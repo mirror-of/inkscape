@@ -8,7 +8,6 @@ set(widgets_SRC
 	connector-toolbar.cpp
 	dash-selector.cpp
 	desktop-widget.cpp
-	dropper-toolbar.cpp
 	eek-preview.cpp
 	ege-adjustment-action.cpp
 	ege-output-action.cpp
@@ -62,7 +61,6 @@ set(widgets_SRC
 	connector-toolbar.h
 	dash-selector.h
 	desktop-widget.h
-	dropper-toolbar.h
 	eek-preview.h
 	ege-adjustment-action.h
 	ege-output-action.h

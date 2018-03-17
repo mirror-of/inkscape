@@ -133,6 +133,7 @@ set(ui_SRC
 	widget/color-wheel-selector.cpp
 	widget/dock-item.cpp
 	widget/dock.cpp
+	widget/dropper-toolbar.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/filter-effect-chooser.cpp
@@ -327,6 +328,7 @@ set(ui_SRC
 	widget/combo-enums.h
 	widget/dock-item.h
 	widget/dock.h
+	widget/dropper-toolbar.h
 	widget/entity-entry.h
 	widget/entry.h
 	widget/filter-effect-chooser.h
