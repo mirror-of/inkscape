@@ -49,12 +49,15 @@ namespace UI {
 namespace Widget {
 class ConnectorToolbar : public Gtk::Toolbar {
 private:
+    // Event handlers
     void on_avoid_activated();
     void on_ignore_activated();
     void on_orthogonal_activated();
+    void on_curvature_adj_value_changed();
 
     SPDesktop *_desktop;
-    Gtk::ToggleToolButton *_connector_orthogonal_button;
+    Gtk::ToggleToolButton *_orthogonal_button;
+    Glib::RefPtr<Gtk::Adjustment> _curvature_adj;
 
     bool _freeze_flag;
 
