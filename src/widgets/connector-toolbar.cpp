@@ -50,6 +50,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/spinbutton.h"
 
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/spinbutton-events.h"
@@ -64,55 +65,6 @@ using Inkscape::UI::PrefPusher;
 //#########################
 //##      Connector      ##
 //#########################
-
-
-static void connector_curvature_changed(GtkAdjustment *adj, GObject* tbl)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-    SPDocument *doc = desktop->getDocument();
-
-    if (!DocumentUndo::getUndoSensitive(doc)) {
-        return;
-    }
-
-
-    // quit if run by the _changed callbacks
-    if (g_object_get_data( tbl, "freeze" )) {
-        return;
-    }
-
-    // in turn, prevent callbacks from responding
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
-
-    gdouble newValue = gtk_adjustment_get_value(adj);
-    gchar value[G_ASCII_DTOSTR_BUF_SIZE];
-    g_ascii_dtostr(value, G_ASCII_DTOSTR_BUF_SIZE, newValue);
-
-    bool modmade = false;
-    auto itemlist= desktop->getSelection()->items();
-    for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        SPItem *item = *i;
-
-        if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
-            item->setAttribute( "inkscape:connector-curvature",
-                    value, NULL);
-            item->avoidRef->handleSettingChange();
-            modmade = true;
-        }
-    }
-
-    if (!modmade) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble(Glib::ustring("/tools/connector/curvature"), newValue);
-    }
-    else {
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
-                       _("Change connector curvature"));
-    }
-
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-}
-
 
 static void connector_spacing_changed(GtkAdjustment *adj, GObject* tbl)
 {
@@ -255,6 +207,7 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
 
     EgeAdjustmentAction* eact = 0;
     // Curvature spinbox
+#if 0
     eact = create_adjustment_action( "ConnectorCurvatureAction",
                                     _("Connector Curvature"), _("Curvature:"),
                                     _("The amount of connectors curvature"),
@@ -264,6 +217,7 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                     0, 0, 0,
                                     connector_curvature_changed, NULL /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+#endif
 
     // Spacing spinbox
     eact = create_adjustment_action( "ConnectorSpacingAction",
@@ -352,7 +306,7 @@ namespace Widget {
 
 ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     : _desktop(desktop),
-      _connector_orthogonal_button(Gtk::manage(new Gtk::ToggleToolButton())),
+      _orthogonal_button(Gtk::manage(new Gtk::ToggleToolButton())),
       _freeze_flag(false)
 {
     // Create a new action group to describe all the actions that relate to tools
@@ -367,43 +321,66 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     action_group->add_action("ignore",     sigc::mem_fun(*this, &ConnectorToolbar::on_ignore_activated));
     action_group->add_action("orthogonal", sigc::mem_fun(*this, &ConnectorToolbar::on_orthogonal_activated));
 
-    // Create toolbutton for the "avoid" action
-    auto connector_avoid_icon   = Gtk::manage(new Gtk::Image());
-    connector_avoid_icon->set_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
-    auto connector_avoid_button = Gtk::manage(new Gtk::ToolButton(*connector_avoid_icon, _("Avoid")));
-    connector_avoid_button->set_tooltip_text(_("Make connectors avoid selected objects"));
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_avoid_button->gobj()), "connector-actions.avoid");
+    /*******************************************/
+    /**** Toolbutton for the "avoid" action ****/
+    /*******************************************/
+    auto avoid_icon   = Gtk::manage(new Gtk::Image());
+    avoid_icon->set_from_icon_name(INKSCAPE_ICON("connector-avoid"), secondarySize);
+    auto avoid_button = Gtk::manage(new Gtk::ToolButton(*avoid_icon, _("Avoid")));
+    avoid_button->set_tooltip_text(_("Make connectors avoid selected objects"));
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(avoid_button->gobj()), "connector-actions.avoid");
 
-
-    // Create toolbutton for the "ignore" action
-    auto connector_ignore_icon   = Gtk::manage(new Gtk::Image());
-    connector_ignore_icon->set_from_icon_name(INKSCAPE_ICON("connector-ignore"), secondarySize);
-    auto connector_ignore_button = Gtk::manage(new Gtk::ToolButton(*connector_ignore_icon, _("Ignore")));
-    connector_ignore_button->set_tooltip_text(_("Make connectors ignore selected objects"));
-
-
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(connector_ignore_button->gobj()),
+    /********************************************/
+    /**** Toolbutton for the "ignore" action ****/
+    /********************************************/
+    auto ignore_icon   = Gtk::manage(new Gtk::Image());
+    ignore_icon->set_from_icon_name(INKSCAPE_ICON("connector-ignore"), secondarySize);
+    auto ignore_button = Gtk::manage(new Gtk::ToolButton(*ignore_icon, _("Ignore")));
+    ignore_button->set_tooltip_text(_("Make connectors ignore selected objects"));
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(ignore_button->gobj()),
                                    "connector-actions.ignore");
 
-    // Create toggle toolbutton for the "orthogonal" action
-    auto connector_orthogonal_icon   = Gtk::manage(new Gtk::Image());
-    connector_orthogonal_icon->set_from_icon_name(INKSCAPE_ICON("connector-orthogonal"), Gtk::ICON_SIZE_MENU);
-    _connector_orthogonal_button->set_label(_("Orthogonal"));
-    _connector_orthogonal_button->set_icon_widget(*connector_orthogonal_icon);
-    _connector_orthogonal_button->set_tooltip_text(_("Make connector orthogonal or polyline"));
+    /*******************************************************/
+    /**** Toggle toolbutton for the "orthogonal" action ****/
+    /*******************************************************/
+    auto orthogonal_icon   = Gtk::manage(new Gtk::Image());
+    orthogonal_icon->set_from_icon_name(INKSCAPE_ICON("connector-orthogonal"), Gtk::ICON_SIZE_MENU);
+    _orthogonal_button->set_label(_("Orthogonal"));
+    _orthogonal_button->set_icon_widget(*orthogonal_icon);
+    _orthogonal_button->set_tooltip_text(_("Make connector orthogonal or polyline"));
     bool tbuttonstate = prefs->getBool("/tools/connector/orthogonal");
-    _connector_orthogonal_button->set_active(tbuttonstate);
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(_connector_orthogonal_button->gobj()),
+    _orthogonal_button->set_active(tbuttonstate);
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(_orthogonal_button->gobj()),
                                    "connector-actions.orthogonal");
 
-    // Separator
+    /*******************/
+    /**** Separator ****/
+    /*******************/
     auto separator = Gtk::manage(new Gtk::SeparatorToolItem());
 
+    /*******************************/
+    /**** Curvature spin-button ****/
+    /*******************************/
+    auto curvature_value = prefs->getDouble("/tools/connector/curvature", defaultConnCurvature);
+    _curvature_adj = Gtk::Adjustment::create(curvature_value, 0, 100);
+    auto curvature_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_curvature_adj_value_changed);
+    _curvature_adj->signal_value_changed().connect(curvature_adj_value_changed_cb);
+    auto curvature_spin_button = Gtk::manage(new Inkscape::UI::Widget::SpinButton(_curvature_adj, 1, 0));
+    auto curvature_box = Gtk::manage(new Gtk::Box());
+    auto curvature_label = Gtk::manage(new Gtk::Label(_("Curvature:")));
+    auto curvature_ti = Gtk::manage(new Gtk::ToolItem());
+    curvature_spin_button->set_tooltip_text(_("The amount of connectors curvature"));
+    curvature_box->set_spacing(3);
+    curvature_box->pack_start(*curvature_label);
+    curvature_box->pack_start(*curvature_spin_button);
+    curvature_ti->add(*curvature_box);
+
     // Append all widgets to toolbar
-    append(*connector_avoid_button);
-    append(*connector_ignore_button);
-    append(*_connector_orthogonal_button);
+    append(*avoid_button);
+    append(*ignore_button);
+    append(*_orthogonal_button);
     append(*separator);
+    append(*curvature_ti);
     show_all();
 }
 
@@ -444,7 +421,7 @@ ConnectorToolbar::on_orthogonal_activated()
     _freeze_flag = true;
 
     // Get the toolbutton state
-    bool is_orthog = _connector_orthogonal_button->get_active();
+    bool is_orthog = _orthogonal_button->get_active();
     gchar orthog_str[] = "orthogonal";
     gchar polyline_str[] = "polyline";
     gchar *value = is_orthog ? orthog_str : polyline_str ;
@@ -469,6 +446,51 @@ ConnectorToolbar::on_orthogonal_activated()
 
         DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
                        is_orthog ? _("Set connector type: orthogonal"): _("Set connector type: polyline"));
+    }
+
+    _freeze_flag = false;
+}
+
+void
+ConnectorToolbar::on_curvature_adj_value_changed()
+{
+    SPDocument *doc = _desktop->getDocument();
+
+    if (!DocumentUndo::getUndoSensitive(doc)) {
+        return;
+    }
+
+
+    // quit if run by the _changed callbacks
+    if (_freeze_flag) {
+        return;
+    }
+
+    // in turn, prevent callbacks from responding
+    _freeze_flag = true;
+
+    gdouble newValue = _curvature_adj->get_value();
+    gchar value[G_ASCII_DTOSTR_BUF_SIZE];
+    g_ascii_dtostr(value, G_ASCII_DTOSTR_BUF_SIZE, newValue);
+
+    bool modmade = false;
+    auto itemlist= _desktop->getSelection()->items();
+    for(auto item : itemlist){
+        if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
+            item->setAttribute( "inkscape:connector-curvature",
+                    value, NULL);
+            item->avoidRef->handleSettingChange();
+            modmade = true;
+        }
+    }
+
+    if (!modmade) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble(Glib::ustring("/tools/connector/curvature"), newValue);
+    }
+    else {
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
+                       _("Change connector curvature"));
     }
 
     _freeze_flag = false;

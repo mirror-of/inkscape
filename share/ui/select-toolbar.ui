@@ -363,10 +363,8 @@
     <toolitem action='MeshSmoothAction' />
   </toolbar>
 
+  <!--
   <toolbar name='ConnectorToolbar'>
-    <!-- toolitem action='connector-actions.avoid' /-->
-    <!-- toolitem action='ConnectorIgnoreAction' /-->
-    <!-- toolitem action='ConnectorOrthogonalAction' /-->
     <separator />
     <toolitem action='ConnectorCurvatureAction' />
     <toolitem action='ConnectorSpacingAction' />
@@ -375,6 +373,6 @@
     <toolitem action='ConnectorDirectedAction' />
     <toolitem action='ConnectorOverlapAction' />
   </toolbar>
-
+  -->
 </ui>
 
