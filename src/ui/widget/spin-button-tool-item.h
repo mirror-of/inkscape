@@ -24,8 +24,9 @@ private:
     bool        _transfer_focus; ///< Whether or not to transfer focus
 
     // Event handlers
-    bool on_btn_focus_in_event(GdkEventFocus *focus_event);
+    bool on_btn_focus_in_event(GdkEventFocus  *focus_event);
     bool on_btn_focus_out_event(GdkEventFocus *focus_event);
+    bool on_btn_key_press_event(GdkEventKey   *key_event);
 
 public:
     SpinButtonToolItem(const Glib::ustring&                 label_text,
