@@ -9,6 +9,38 @@ namespace UI {
 namespace Widget {
 
 /**
+ * \brief Handler for the button's "focus-in-event" signal
+ *
+ * \param focus_event The event that triggered the signal
+ *
+ * \detail This just logs the current value of the spin-button
+ *         and sets the _transfer_focus flag
+ */
+bool
+SpinButtonToolItem::on_btn_focus_in_event(GdkEventFocus * /* focus_event */)
+{
+    _last_val = _btn->get_value();
+    _transfer_focus = true;
+
+    return false; // Event not consumed
+}
+
+/**
+ * \brief Handler for the button's "focus-out-event" signal
+ *
+ * \param focus_event The event that triggered the signal
+ *
+ * \detail This just unsets the _transfer_focus flag
+ */
+bool
+SpinButtonToolItem::on_btn_focus_out_event(GdkEventFocus * /* focus_event */)
+{
+    _transfer_focus = false;
+
+    return false; // Event not consumed
+}
+
+/**
  * \brief Create a new SpinButtonToolItem
  *
  * \param[in] label_text The text to display in the toolbar
@@ -20,13 +52,23 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring&                 labe
                                        const Glib::RefPtr<Gtk::Adjustment>& adjustment,
                                        double                               climb_rate,
                                        double                               digits)
-    : _btn(Gtk::manage(new SpinButton(adjustment, climb_rate, digits)))
+    : _btn(Gtk::manage(new SpinButton(adjustment, climb_rate, digits))),
+      _last_val(0.0),
+      _transfer_focus(false)
 {
+    // Handle button events
+    auto btn_focus_in_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_in_event);
+    _btn->signal_focus_in_event().connect(btn_focus_in_event_cb);
+
+    auto btn_focus_out_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_out_event);
+    _btn->signal_focus_out_event().connect(btn_focus_out_event_cb);
+
+    // Create a label
+    auto label = Gtk::manage(new Gtk::Label(label_text));
+
     // Arrange the widgets in a horizontal box
     auto hbox = Gtk::manage(new Gtk::Box());
     hbox->set_spacing(3);
-
-    auto label = Gtk::manage(new Gtk::Label(label_text));
     hbox->pack_start(*label);
     hbox->pack_start(*_btn);
     add(*hbox);

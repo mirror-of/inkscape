@@ -19,7 +19,14 @@ class SpinButton;
 class SpinButtonToolItem : public Gtk::ToolItem
 {
 private:
-    SpinButton *_btn; ///< The spin-button within the widget
+    SpinButton *_btn;            ///< The spin-button within the widget
+    double      _last_val;       ///< The last value of the adjustment
+    bool        _transfer_focus; ///< Whether or not to transfer focus
+
+    // Event handlers
+    bool on_btn_focus_in_event(GdkEventFocus *focus_event);
+    bool on_btn_focus_out_event(GdkEventFocus *focus_event);
+
 public:
     SpinButtonToolItem(const Glib::ustring&                 label_text,
                        const Glib::RefPtr<Gtk::Adjustment>& adjustment,
