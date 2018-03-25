@@ -890,7 +890,7 @@ void SPCanvasGroup::remove(SPCanvasItem *item)
 {
     g_return_if_fail(item != NULL);
 
-    auto position = std::find(items.begin(), items.end(), item);
+    std::list<SPCanvasItem *>::iterator position = std::find(items.begin(), items.end(), item);
     if (position != items.end()) {
         items.erase(position);
     }
