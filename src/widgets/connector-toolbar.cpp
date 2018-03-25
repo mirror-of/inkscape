@@ -50,7 +50,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
 #include "ui/uxmanager.h"
-#include "ui/widget/spinbutton.h"
+#include "ui/widget/spin-button-tool-item.h"
 
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/spinbutton-events.h"
@@ -365,22 +365,17 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     _curvature_adj = Gtk::Adjustment::create(curvature_value, 0, 100);
     auto curvature_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_curvature_adj_value_changed);
     _curvature_adj->signal_value_changed().connect(curvature_adj_value_changed_cb);
-    auto curvature_spin_button = Gtk::manage(new Inkscape::UI::Widget::SpinButton(_curvature_adj, 1, 0));
-    auto curvature_box = Gtk::manage(new Gtk::Box());
-    auto curvature_label = Gtk::manage(new Gtk::Label(_("Curvature:")));
-    auto curvature_ti = Gtk::manage(new Gtk::ToolItem());
-    curvature_spin_button->set_tooltip_text(_("The amount of connectors curvature"));
-    curvature_box->set_spacing(3);
-    curvature_box->pack_start(*curvature_label);
-    curvature_box->pack_start(*curvature_spin_button);
-    curvature_ti->add(*curvature_box);
+
+    auto curvature_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Curvature"),
+                                                                                 _curvature_adj));
+    curvature_sb->set_all_tooltip_text(_("The amount of connectors curvature"));
 
     // Append all widgets to toolbar
     append(*avoid_button);
     append(*ignore_button);
     append(*_orthogonal_button);
     append(*separator);
-    append(*curvature_ti);
+    append(*curvature_sb);
     show_all();
 }
 

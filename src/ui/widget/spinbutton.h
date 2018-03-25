@@ -36,7 +36,7 @@ public:
   {
       connect_signals();
   };
-  explicit SpinButton(Glib::RefPtr<Gtk::Adjustment>& adjustment, double climb_rate = 0.0, guint digits = 0)
+  explicit SpinButton(const Glib::RefPtr<Gtk::Adjustment>& adjustment, double climb_rate = 0.0, guint digits = 0)
     : Gtk::SpinButton(adjustment, climb_rate, digits),
       _unit_menu(NULL),
       _unit_tracker(NULL),
