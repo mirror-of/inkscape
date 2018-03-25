@@ -7,13 +7,11 @@
 
 #include <gtkmm/toolitem.h>
 
-namespace Gtk {
-class SpinButton;
-}
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
+
+class SpinButton;
 
 /**
  * \brief A spin-button with a label that can be added to a toolbar
@@ -21,11 +19,14 @@ namespace Widget {
 class SpinButtonToolItem : public Gtk::ToolItem
 {
 private:
-    Gtk::SpinButton *_btn; ///< The spin-button within the widget
+    SpinButton *_btn; ///< The spin-button within the widget
 public:
-    SpinButtonToolItem(const Glib::RefPtr<Gtk::Adjustment>& adjustment,
+    SpinButtonToolItem(const Glib::ustring&                 label_text,
+                       const Glib::RefPtr<Gtk::Adjustment>& adjustment,
                        double                               climb_rate = 0.0,
                        double                               digits     = 0);
+
+    void set_all_tooltip_text(const Glib::ustring& text);
 };
 } // namespace Widget
 } // namespace UI
