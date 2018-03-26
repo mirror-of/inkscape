@@ -67,25 +67,6 @@ using Inkscape::UI::PrefPusher;
 //#########################
 
 
-static void sp_connector_graph_layout(void)
-{
-    if (!SP_ACTIVE_DESKTOP) {
-        return;
-    }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    // hack for clones, see comment in align-and-distribute.cpp
-    int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-    prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-
-    auto tmp = SP_ACTIVE_DESKTOP->getSelection()->items();
-    std::vector<SPItem *> vec(tmp.begin(), tmp.end());
-    graphlayout(vec);
-
-    prefs->setInt("/options/clonecompensation/value", saved_compensation);
-
-    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE, _("Arrange connector network"));
-}
 
 static void sp_directed_graph_layout_toggled( GtkToggleAction* act, GObject * /*tbl*/ )
 {
@@ -102,11 +83,6 @@ static void sp_nooverlaps_graph_layout_toggled( GtkToggleAction* act, GObject * 
 }
 
 
-static void connector_length_changed(GtkAdjustment *adj, GObject* /*tbl*/)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble("/tools/connector/length", gtk_adjustment_get_value(adj));
-}
 
 static void connector_tb_event_attr_changed(Inkscape::XML::Node *repr,
                                             gchar const *name, gchar const * /*old_value*/, gchar const * /*new_value*/,
@@ -186,7 +162,6 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                     0, 0, 0,
                                     connector_spacing_changed, NULL /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-#endif
 
     // Graph (connector network) layout
     {
@@ -209,6 +184,7 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                      0, 0, 0,
                                      connector_length_changed, NULL /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+#endif
 
 
     // Directed edges toggle button
@@ -278,6 +254,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     action_group->add_action("avoid",      sigc::mem_fun(*this, &ConnectorToolbar::on_avoid_activated));
     action_group->add_action("ignore",     sigc::mem_fun(*this, &ConnectorToolbar::on_ignore_activated));
     action_group->add_action("orthogonal", sigc::mem_fun(*this, &ConnectorToolbar::on_orthogonal_activated));
+    action_group->add_action("graph",      sigc::mem_fun(*this, &ConnectorToolbar::on_graph_activated));
 
     /*******************************************/
     /**** Toolbutton for the "avoid" action ****/
@@ -342,6 +319,29 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     spacing_sb->set_all_tooltip_text(_("The amount of space left around objects by auto-routing connectors"));
     spacing_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
 
+    /******************************************************/
+    /**** Toolbutton for the "graph" action ****/
+    /******************************************************/
+    auto graph_icon   = Gtk::manage(new Gtk::Image());
+    graph_icon->set_from_icon_name(INKSCAPE_ICON("distribute-graph"), secondarySize);
+    auto graph_button = Gtk::manage(new Gtk::ToolButton(*graph_icon, _("Graph")));
+    graph_button->set_tooltip_text(_("Nicely arrange selected connector network"));
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(graph_button->gobj()),
+                                   "connector-actions.graph");
+
+    /**************************************/
+    /**** Connector-length spin button ****/
+    /**************************************/
+    auto length_value = prefs->getDouble("/tools/connector/length", 100);
+    _length_adj = Gtk::Adjustment::create(length_value, 0, 100);
+    auto length_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_length_adj_value_changed);
+    _length_adj->signal_value_changed().connect(length_adj_value_changed_cb);
+
+    auto length_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Length:"),
+                                                                               _length_adj));
+    length_sb->set_all_tooltip_text(_("Ideal length for connectors when layout is applied"));
+    length_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+
     // Append all widgets to toolbar
     append(*avoid_button);
     append(*ignore_button);
@@ -349,6 +349,8 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     append(*separator);
     append(*curvature_sb);
     append(*spacing_sb);
+    append(*graph_button);
+    append(*length_sb);
     show_all();
 }
 
@@ -510,6 +512,33 @@ ConnectorToolbar::on_spacing_adj_value_changed()
     _freeze_flag = false;
 }
 
+void
+ConnectorToolbar::on_graph_activated()
+{
+    if (!SP_ACTIVE_DESKTOP) {
+        return;
+    }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    // hack for clones, see comment in align-and-distribute.cpp
+    int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+    prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+
+    auto tmp = SP_ACTIVE_DESKTOP->getSelection()->items();
+    std::vector<SPItem *> vec(tmp.begin(), tmp.end());
+    graphlayout(vec);
+
+    prefs->setInt("/options/clonecompensation/value", saved_compensation);
+
+    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_DIALOG_ALIGN_DISTRIBUTE, _("Arrange connector network"));
+}
+
+void
+ConnectorToolbar::on_length_adj_value_changed()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble("/tools/connector/length", _length_adj->get_value());
+}
 
 }
 }
