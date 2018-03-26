@@ -1,6 +1,7 @@
 #include "spin-button-tool-item.h"
 
 #include <gtkmm/box.h>
+#include <gtkmm/toolbar.h>
 
 #include "spinbutton.h"
 
@@ -59,12 +60,14 @@ SpinButtonToolItem::on_btn_key_press_event(GdkEventKey *key_event)
                                         static_cast<GdkModifierType>(key_event->state),
                                         0, &key, 0, 0, 0);
 
+    auto val = _btn->get_value();
+
     switch(key) {
         case GDK_KEY_Escape:
         {
             _transfer_focus = true;
             _btn->set_value(_last_val);
-            // defocus
+            defocus();
             was_consumed = true;
         }
         break;
@@ -73,7 +76,7 @@ SpinButtonToolItem::on_btn_key_press_event(GdkEventKey *key_event)
         case GDK_KEY_KP_Enter:
         {
             _transfer_focus = true;
-            // defocus
+            defocus();
             was_consumed = true;
         }
         break;
@@ -81,26 +84,52 @@ SpinButtonToolItem::on_btn_key_press_event(GdkEventKey *key_event)
         case GDK_KEY_Tab:
         {
             _transfer_focus = false;
-            //was_consumed = process_tab(1)
+            was_consumed = process_tab(1);
         }
         break;
 
         case GDK_KEY_ISO_Left_Tab:
         {
             _transfer_focus = false;
-            //was_consumed = process_tab(1)
+            was_consumed = process_tab(1);
         }
         break;
 
         // TODO: Enable variable step-size if this is ever used
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
+        {
+            _transfer_focus = false;
+            _btn->set_value(val+1);
+            was_consumed=true;
+        }
+        break;
+
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
+        {
+            _transfer_focus = false;
+            _btn->set_value(val-1);
+            was_consumed=true;
+        }
+        break;
+
         case GDK_KEY_Page_Up:
         case GDK_KEY_KP_Page_Up:
+        {
+            _transfer_focus = false;
+            _btn->set_value(val+10);
+            was_consumed=true;
+        }
+        break;
+
         case GDK_KEY_Page_Down:
         case GDK_KEY_KP_Page_Down:
+        {
+            _transfer_focus = false;
+            _btn->set_value(val-10);
+            was_consumed=true;
+        }
         break;
 
         case GDK_KEY_z:
@@ -114,6 +143,96 @@ SpinButtonToolItem::on_btn_key_press_event(GdkEventKey *key_event)
     }
 
     return was_consumed;
+}
+
+void
+SpinButtonToolItem::on_btn_value_changed()
+{
+    if(_btn->has_focus()) {
+        int start_pos = 0;
+        int end_pos = 0;
+        _btn->get_selection_bounds(start_pos, end_pos);
+
+        // #167846, #363000 If the spin button has a selection, it's probably
+        // because we got here from a Tab key from another spin; if so don't defocus
+        if(start_pos != end_pos) {
+            return;
+        }
+
+        defocus();
+    }
+}
+
+/**
+ * \brief Shift focus to a different widget
+ *
+ * \details This only has an effect if the _transfer_focus flag and the _focus_widget are set
+ */
+void
+SpinButtonToolItem::defocus()
+{
+    if(_transfer_focus && _focus_widget) {
+        _focus_widget->grab_focus();
+    }
+}
+
+/**
+ * \brief Move focus to another spinbutton in the toolbar
+ *
+ * \param increment[in] The number of places to shift within the toolbar
+ */
+bool
+SpinButtonToolItem::process_tab(int increment)
+{
+    // If the increment is zero, do nothing
+    if(increment == 0) return true;
+
+    // Here, we're working through the widget heirarchy:
+    // Toolbar
+    // |- ToolItem (*this)
+    //    |-> Box
+    //       |-> SpinButton (*_btn)
+    //
+    // Our aim is to find the next/previous spin-button within a toolitem in our toolbar
+
+    bool handled = false;
+
+    // We only bother doing this if the current item is actually in a toolbar!
+    auto toolbar = dynamic_cast<Gtk::Toolbar *>(get_parent());
+
+    if (toolbar) {
+        // Get the index of the current item within the toolbar and the total number of items
+        auto my_index = toolbar->get_item_index(*this);
+        auto n_items  = toolbar->get_n_items();
+
+        auto test_index = my_index + increment; // The index of the item we want to check
+
+        // Loop through tool items as long as we're within the bounds of the toolbar and
+        // we haven't yet found our new item to focus on
+        while(test_index > 0 && test_index <= n_items && !handled) {
+
+            auto tool_item = toolbar->get_nth_item(test_index);
+
+            if(tool_item) {
+                // There are now two options that we support:
+                if(dynamic_cast<SpinButtonToolItem *>(tool_item)) {
+                    // (1) The tool item is a SpinButtonToolItem, in which case, we just pass
+                    //     focus to its spin-button
+                    dynamic_cast<SpinButtonToolItem *>(tool_item)->grab_button_focus();
+                    handled = true;
+                }
+                else if(dynamic_cast<Gtk::SpinButton *>(tool_item->get_child())) {
+                    // (2) The tool item contains a plain Gtk::SpinButton, in which case we
+                    //     pass focus directly to it
+                    tool_item->get_child()->grab_focus();
+                }
+            }
+
+            test_index += increment;
+        }
+    }
+
+    return handled;
 }
 
 /**
@@ -130,7 +249,8 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring&                 labe
                                        double                               digits)
     : _btn(Gtk::manage(new SpinButton(adjustment, climb_rate, digits))),
       _last_val(0.0),
-      _transfer_focus(false)
+      _transfer_focus(false),
+      _focus_widget(nullptr)
 {
     // Handle button events
     auto btn_focus_in_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_in_event);
@@ -141,6 +261,9 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring&                 labe
 
     auto btn_key_press_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_key_press_event);
     _btn->signal_key_press_event().connect(btn_key_press_event_cb);
+
+    auto btn_value_changed_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_value_changed);
+    _btn->signal_value_changed().connect(btn_value_changed_cb);
 
     // Create a label
     auto label = Gtk::manage(new Gtk::Label(label_text));
@@ -164,6 +287,26 @@ SpinButtonToolItem::set_all_tooltip_text(const Glib::ustring& text)
 {
     set_tooltip_text(text);
     _btn->set_tooltip_text(text);
+}
+
+/**
+ * \brief Set the widget that focus moves to when this one loses focus
+ *
+ * \param widget The widget that will gain focus
+ */
+void
+SpinButtonToolItem::set_focus_widget(Gtk::Widget *widget)
+{
+    _focus_widget = widget;
+}
+
+/**
+ * \brief Grab focus on the spin-button widget
+ */
+void
+SpinButtonToolItem::grab_button_focus()
+{
+    _btn->grab_focus();
 }
 } // namespace Widget
 } // namespace UI
