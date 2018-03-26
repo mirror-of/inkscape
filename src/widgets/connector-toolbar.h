@@ -55,11 +55,14 @@ private:
     void on_orthogonal_activated();
     void on_curvature_adj_value_changed();
     void on_spacing_adj_value_changed();
+    void on_graph_activated();
+    void on_length_adj_value_changed();
 
     SPDesktop *_desktop;
     Gtk::ToggleToolButton *_orthogonal_button;
     Glib::RefPtr<Gtk::Adjustment> _curvature_adj;
     Glib::RefPtr<Gtk::Adjustment> _spacing_adj;
+    Glib::RefPtr<Gtk::Adjustment> _length_adj;
 
     bool _freeze_flag;
 
