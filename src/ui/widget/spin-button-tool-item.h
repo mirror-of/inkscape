@@ -23,10 +23,17 @@ private:
     double      _last_val;       ///< The last value of the adjustment
     bool        _transfer_focus; ///< Whether or not to transfer focus
 
+    /** A widget that grabs focus when this one loses it */
+    Gtk::Widget * _focus_widget;
+
     // Event handlers
     bool on_btn_focus_in_event(GdkEventFocus  *focus_event);
     bool on_btn_focus_out_event(GdkEventFocus *focus_event);
     bool on_btn_key_press_event(GdkEventKey   *key_event);
+    void on_btn_value_changed();
+
+    void defocus();
+    bool process_tab(int direction);
 
 public:
     SpinButtonToolItem(const Glib::ustring&                 label_text,
@@ -35,6 +42,8 @@ public:
                        double                               digits     = 0);
 
     void set_all_tooltip_text(const Glib::ustring& text);
+    void set_focus_widget(Gtk::Widget *widget);
+    void grab_button_focus();
 };
 } // namespace Widget
 } // namespace UI

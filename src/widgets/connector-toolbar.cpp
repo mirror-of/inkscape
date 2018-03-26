@@ -369,6 +369,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     auto curvature_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Curvature"),
                                                                                  _curvature_adj));
     curvature_sb->set_all_tooltip_text(_("The amount of connectors curvature"));
+    curvature_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
 
     // Append all widgets to toolbar
     append(*avoid_button);
