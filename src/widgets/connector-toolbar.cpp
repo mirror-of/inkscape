@@ -66,52 +66,6 @@ using Inkscape::UI::PrefPusher;
 //##      Connector      ##
 //#########################
 
-static void connector_spacing_changed(GtkAdjustment *adj, GObject* tbl)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-    SPDocument *doc = desktop->getDocument();
-
-    if (!DocumentUndo::getUndoSensitive(doc)) {
-        return;
-    }
-
-    Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-
-    if ( !repr->attribute("inkscape:connector-spacing") &&
-            ( gtk_adjustment_get_value(adj) == defaultConnSpacing )) {
-        // Don't need to update the repr if the attribute doesn't
-        // exist and it is being set to the default value -- as will
-        // happen at startup.
-        return;
-    }
-
-    // quit if run by the attr_changed listener
-    if (g_object_get_data( tbl, "freeze" )) {
-        return;
-    }
-
-    // in turn, prevent listener from responding
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE));
-
-    sp_repr_set_css_double(repr, "inkscape:connector-spacing", gtk_adjustment_get_value(adj));
-    desktop->namedview->updateRepr();
-    bool modmade = false;
-
-    std::vector<SPItem *> items;
-    items = get_avoided_items(items, desktop->currentRoot(), desktop);
-    for (std::vector<SPItem *>::const_iterator iter = items.begin(); iter != items.end(); ++iter ) {
-        SPItem *item = *iter;
-        Geom::Affine m = Geom::identity();
-        avoid_item_move(&m, item);
-        modmade = true;
-    }
-
-    if(modmade) {
-        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
-                       _("Change connector spacing"));
-    }
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-}
 
 static void sp_connector_graph_layout(void)
 {
@@ -212,12 +166,15 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                     _("Connector Curvature"), _("Curvature:"),
                                     _("The amount of connectors curvature"),
                                     "/tools/connector/curvature", defaultConnCurvature,
-                                    GTK_WIDGET(desktop->canvas), holder, TRUE, "inkscape:connector-curvature",
-                                    0, 100, 1.0, 10.0,
-                                    0, 0, 0,
-                                    connector_curvature_changed, NULL /*unit tracker*/, 1, 0 );
+                                    GTK_WIDGET(desktop->canvas), holder,
+                                    TRUE, // altx
+                                    "inkscape:connector-curvature", // altx_mark
+                                    0, 100, 1.0, 10.0,  // Lower, upper, step, page
+                                    0, 0, 0, // descrLabels, descrValues, descrCount
+                                    connector_curvature_changed, // callback for "value-changed"
+                                    NULL /*unit tracker*/,
+                                    1, 0 ); // climb, digits, factor
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-#endif
 
     // Spacing spinbox
     eact = create_adjustment_action( "ConnectorSpacingAction",
@@ -229,6 +186,7 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                     0, 0, 0,
                                     connector_spacing_changed, NULL /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+#endif
 
     // Graph (connector network) layout
     {
@@ -366,10 +324,23 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     auto curvature_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_curvature_adj_value_changed);
     _curvature_adj->signal_value_changed().connect(curvature_adj_value_changed_cb);
 
-    auto curvature_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Curvature"),
+    auto curvature_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Curvature:"),
                                                                                  _curvature_adj));
     curvature_sb->set_all_tooltip_text(_("The amount of connectors curvature"));
     curvature_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+
+    /*****************************/
+    /**** Spacing spin-button ****/
+    /*****************************/
+    auto spacing_value = prefs->getDouble("/tools/connector/spacing", defaultConnSpacing);
+    _spacing_adj = Gtk::Adjustment::create(spacing_value, 0, 100);
+    auto spacing_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_spacing_adj_value_changed);
+    _spacing_adj->signal_value_changed().connect(spacing_adj_value_changed_cb);
+
+    auto spacing_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Spacing:"),
+                                                                               _spacing_adj));
+    spacing_sb->set_all_tooltip_text(_("The amount of space left around objects by auto-routing connectors"));
+    spacing_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
 
     // Append all widgets to toolbar
     append(*avoid_button);
@@ -377,6 +348,7 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     append(*_orthogonal_button);
     append(*separator);
     append(*curvature_sb);
+    append(*spacing_sb);
     show_all();
 }
 
@@ -456,7 +428,6 @@ ConnectorToolbar::on_curvature_adj_value_changed()
         return;
     }
 
-
     // quit if run by the _changed callbacks
     if (_freeze_flag) {
         return;
@@ -489,6 +460,53 @@ ConnectorToolbar::on_curvature_adj_value_changed()
                        _("Change connector curvature"));
     }
 
+    _freeze_flag = false;
+}
+
+void
+ConnectorToolbar::on_spacing_adj_value_changed()
+{
+    auto doc = _desktop->getDocument();
+
+    if (!DocumentUndo::getUndoSensitive(doc)) {
+        return;
+    }
+
+    Inkscape::XML::Node *repr = _desktop->namedview->getRepr();
+
+    if ( !repr->attribute("inkscape:connector-spacing") &&
+            ( _spacing_adj->get_value() == defaultConnSpacing )) {
+        // Don't need to update the repr if the attribute doesn't
+        // exist and it is being set to the default value -- as will
+        // happen at startup.
+        return;
+    }
+
+    // quit if run by the attr_changed listener
+    if (_freeze_flag) {
+        return;
+    }
+
+    // in turn, prevent listener from responding
+    _freeze_flag = true;
+
+    sp_repr_set_css_double(repr, "inkscape:connector-spacing", _spacing_adj->get_value());
+    _desktop->namedview->updateRepr();
+    bool modmade = false;
+
+    std::vector<SPItem *> items;
+    items = get_avoided_items(items, _desktop->currentRoot(), _desktop);
+    for (std::vector<SPItem *>::const_iterator iter = items.begin(); iter != items.end(); ++iter ) {
+        SPItem *item = *iter;
+        Geom::Affine m = Geom::identity();
+        avoid_item_move(&m, item);
+        modmade = true;
+    }
+
+    if(modmade) {
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_CONNECTOR,
+                       _("Change connector spacing"));
+    }
     _freeze_flag = false;
 }
 
