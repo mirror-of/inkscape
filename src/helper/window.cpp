@@ -8,7 +8,7 @@
  */
 
 #include <glibmm.h>
-#include <gtkmm/window.h>
+#include <gtkmm/applicationwindow.h>
 
 #include "desktop.h"
 #include "inkscape.h"
@@ -22,9 +22,9 @@ static bool on_window_key_press(GdkEventKey* event)
     return sp_shortcut_invoke (shortcut, SP_ACTIVE_DESKTOP);
 }
 
-Gtk::Window * Inkscape::UI::window_new (const gchar *title, unsigned int resizeable)
+Gtk::ApplicationWindow * Inkscape::UI::window_new (const gchar *title, unsigned int resizeable)
 {
-    Gtk::Window *window = new Gtk::Window(Gtk::WINDOW_TOPLEVEL);
+    auto window = new Gtk::ApplicationWindow();
     window->set_title (title);
     window->set_resizable (resizeable);
     window->signal_key_press_event().connect(sigc::ptr_fun(&on_window_key_press));
