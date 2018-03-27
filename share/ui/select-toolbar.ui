@@ -363,16 +363,5 @@
     <toolitem action='MeshSmoothAction' />
   </toolbar>
 
-  <!--
-  <toolbar name='ConnectorToolbar'>
-    <separator />
-    <toolitem action='ConnectorCurvatureAction' />
-    <toolitem action='ConnectorSpacingAction' />
-    <toolitem action='ConnectorGraphAction' />
-    <toolitem action='ConnectorLengthAction' />
-    <toolitem action='ConnectorDirectedAction' />
-    <toolitem action='ConnectorOverlapAction' />
-  </toolbar>
-  -->
 </ui>
 
