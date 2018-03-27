@@ -131,6 +131,7 @@ set(ui_SRC
 	widget/color-scales.cpp
 	widget/color-slider.cpp
 	widget/color-wheel-selector.cpp
+	widget/connector-toolbar.cpp
 	widget/dock-item.cpp
 	widget/dock.cpp
 	widget/dropper-toolbar.cpp
@@ -327,6 +328,7 @@ set(ui_SRC
 	widget/color-slider.h
 	widget/color-wheel-selector.h
 	widget/combo-enums.h
+	widget/connector-toolbar.h
 	widget/dock-item.h
 	widget/dock.h
 	widget/dropper-toolbar.h

@@ -39,9 +39,9 @@
 #include "document-undo.h"
 #include "enums.h"
 #include "graphlayout.h"
-#include "ink-toggle-action.h"
+#include "widgets/ink-toggle-action.h"
 #include "inkscape.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-namedview.h"
