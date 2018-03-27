@@ -30,7 +30,6 @@ private:
     bool on_btn_focus_in_event(GdkEventFocus  *focus_event);
     bool on_btn_focus_out_event(GdkEventFocus *focus_event);
     bool on_btn_key_press_event(GdkEventKey   *key_event);
-    void on_btn_value_changed();
 
     void defocus();
     bool process_tab(int direction);

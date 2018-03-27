@@ -145,24 +145,6 @@ SpinButtonToolItem::on_btn_key_press_event(GdkEventKey *key_event)
     return was_consumed;
 }
 
-void
-SpinButtonToolItem::on_btn_value_changed()
-{
-    if(_btn->has_focus()) {
-        int start_pos = 0;
-        int end_pos = 0;
-        _btn->get_selection_bounds(start_pos, end_pos);
-
-        // #167846, #363000 If the spin button has a selection, it's probably
-        // because we got here from a Tab key from another spin; if so don't defocus
-        if(start_pos != end_pos) {
-            return;
-        }
-
-        defocus();
-    }
-}
-
 /**
  * \brief Shift focus to a different widget
  *
@@ -264,9 +246,6 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring&                 labe
 
     auto btn_key_press_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_key_press_event);
     _btn->signal_key_press_event().connect(btn_key_press_event_cb);
-
-    auto btn_value_changed_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_value_changed);
-    _btn->signal_value_changed().connect(btn_value_changed_cb);
 
     _btn->add_events(Gdk::KEY_PRESS_MASK);
 
