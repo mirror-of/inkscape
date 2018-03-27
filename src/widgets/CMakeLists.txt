@@ -5,7 +5,6 @@ set(widgets_SRC
 	box3d-toolbar.cpp
 	button.cpp
 	calligraphy-toolbar.cpp
-	connector-toolbar.cpp
 	dash-selector.cpp
 	desktop-widget.cpp
 	eek-preview.cpp
@@ -58,7 +57,6 @@ set(widgets_SRC
 	box3d-toolbar.h
 	button.h
 	calligraphy-toolbar.h
-	connector-toolbar.h
 	dash-selector.h
 	desktop-widget.h
 	eek-preview.h

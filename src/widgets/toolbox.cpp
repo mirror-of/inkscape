@@ -72,7 +72,7 @@
 #include "arc-toolbar.h"
 #include "box3d-toolbar.h"
 #include "calligraphy-toolbar.h"
-#include "connector-toolbar.h"
+#include "ui/widget/connector-toolbar.h"
 #include "ui/widget/dropper-toolbar.h"
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
