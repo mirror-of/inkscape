@@ -62,28 +62,6 @@ using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
 
-//#########################
-//##      Connector      ##
-//#########################
-
-
-
-static void sp_directed_graph_layout_toggled( GtkToggleAction* act, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/connector/directedlayout",
-                gtk_toggle_action_get_active( act ));
-}
-
-static void sp_nooverlaps_graph_layout_toggled( GtkToggleAction* act, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/connector/avoidoverlaplayout",
-                gtk_toggle_action_get_active( act ));
-}
-
-
-
 static void connector_tb_event_attr_changed(Inkscape::XML::Node *repr,
                                             gchar const *name, gchar const * /*old_value*/, gchar const * /*new_value*/,
                                             bool /*is_interactive*/, gpointer data)
@@ -114,21 +92,8 @@ static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
     NULL  /* order_changed */
 };
 
-static void sp_connector_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
-{
-    GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "curvature" ) );
-    GtkToggleAction *act = GTK_TOGGLE_ACTION( g_object_get_data( tbl, "orthogonal" ) );
-    SPItem *item = selection->singleItem();
-    if (SP_IS_PATH(item))
-    {
-        gdouble curvature = SP_PATH(item)->connEndPair.getCurvature();
-        bool is_orthog = SP_PATH(item)->connEndPair.isOrthogonal();
-        gtk_toggle_action_set_active(act, is_orthog);
-        gtk_adjustment_set_value(adj, curvature);
-    }
 
-}
-
+#if 0
 void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -137,7 +102,6 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
 
     EgeAdjustmentAction* eact = 0;
     // Curvature spinbox
-#if 0
     eact = create_adjustment_action( "ConnectorCurvatureAction",
                                     _("Connector Curvature"), _("Curvature:"),
                                     _("The amount of connectors curvature"),
@@ -184,7 +148,6 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                      0, 0, 0,
                                      connector_length_changed, NULL /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-#endif
 
 
     // Directed edges toggle button
@@ -217,22 +180,8 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
 
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_nooverlaps_graph_layout_toggled), holder );
     }
-
-
-    // Code to watch for changes to the connector-spacing attribute in
-    // the XML.
-    Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-    g_assert(repr != NULL);
-
-    purge_repr_listener( holder, holder );
-
-    if (repr) {
-        g_object_set_data( holder, "repr", repr );
-        Inkscape::GC::anchor(repr);
-        sp_repr_add_listener( repr, &connector_tb_repr_events, holder );
-        sp_repr_synthesize_events( repr, &connector_tb_repr_events, holder );
-    }
 } // end of sp_connector_toolbox_prep()
+#endif
 
 namespace Inkscape {
 namespace UI {
@@ -241,7 +190,9 @@ namespace Widget {
 ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     : _desktop(desktop),
       _orthogonal_button(Gtk::manage(new Gtk::ToggleToolButton())),
-      _freeze_flag(false)
+      _freeze_flag(false),
+      _direction_button(Gtk::manage(new Gtk::ToggleToolButton())),
+      _overlap_button(Gtk::manage(new Gtk::ToggleToolButton()))
 {
     // Create a new action group to describe all the actions that relate to tools
     // in this toolbar.  All actions will have the "connector-actions" prefix
@@ -255,6 +206,8 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     action_group->add_action("ignore",     sigc::mem_fun(*this, &ConnectorToolbar::on_ignore_activated));
     action_group->add_action("orthogonal", sigc::mem_fun(*this, &ConnectorToolbar::on_orthogonal_activated));
     action_group->add_action("graph",      sigc::mem_fun(*this, &ConnectorToolbar::on_graph_activated));
+    action_group->add_action("direction",  sigc::mem_fun(*this, &ConnectorToolbar::on_direction_activated));
+    action_group->add_action("overlap",    sigc::mem_fun(*this, &ConnectorToolbar::on_overlap_activated));
 
     /*******************************************/
     /**** Toolbutton for the "avoid" action ****/
@@ -342,6 +295,33 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     length_sb->set_all_tooltip_text(_("Ideal length for connectors when layout is applied"));
     length_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
 
+    /*******************************************************/
+    /**** Toggle toolbutton for the "direction" action ****/
+    /*******************************************************/
+    auto direction_icon = Gtk::manage(new Gtk::Image());
+    direction_icon->set_from_icon_name(INKSCAPE_ICON("distribute-graph-directed"), Gtk::ICON_SIZE_MENU);
+    _direction_button->set_label(_("Downwards"));
+    _direction_button->set_icon_widget(*direction_icon);
+    _direction_button->set_tooltip_text(_("Make connectors with end-markers (arrows) point downwards"));
+    bool direction_button_state = prefs->getBool("/tools/connector/directedLayout");
+    _direction_button->set_active(direction_button_state);
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(_direction_button->gobj()),
+                                   "connector-actions.direction");
+    _desktop->getSelection()->connectChanged(sigc::bind(sigc::mem_fun(*this, &ConnectorToolbar::selection_changed), G_OBJECT(gobj())));
+
+    /****************************************************/
+    /**** Toggle toolbutton for the "overlap" action ****/
+    /****************************************************/
+    auto overlap_icon = Gtk::manage(new Gtk::Image());
+    overlap_icon->set_from_icon_name(INKSCAPE_ICON("distribute-remove-overlaps"), Gtk::ICON_SIZE_MENU);
+    _overlap_button->set_label(_("Remove overlaps"));
+    _overlap_button->set_icon_widget(*overlap_icon);
+    _overlap_button->set_tooltip_text(_("Do not allow overlapping states"));
+    bool overlap_button_state = prefs->getBool("/tools/connector/avoidoverlapayout");
+    _overlap_button->set_active(overlap_button_state);
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(_overlap_button->gobj()),
+                                   "connector-actions.overlap");
+
     // Append all widgets to toolbar
     append(*avoid_button);
     append(*ignore_button);
@@ -351,7 +331,23 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     append(*spacing_sb);
     append(*graph_button);
     append(*length_sb);
+    append(*_direction_button);
+    append(*_overlap_button);
     show_all();
+
+    // Code to watch for changes to the connector-spacing attribute in
+    // the XML.
+    auto repr = desktop->namedview->getRepr();
+    g_assert(repr != NULL);
+
+    purge_repr_listener( G_OBJECT(gobj()), G_OBJECT(gobj()));
+
+    if (repr) {
+        _repr = repr;
+        Inkscape::GC::anchor(repr);
+        sp_repr_add_listener( repr, &connector_tb_repr_events, G_OBJECT(gobj()) );
+        sp_repr_synthesize_events( repr, &connector_tb_repr_events, G_OBJECT(gobj()) );
+    }
 }
 
 GtkWidget *
@@ -538,6 +534,36 @@ ConnectorToolbar::on_length_adj_value_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble("/tools/connector/length", _length_adj->get_value());
+}
+
+void
+ConnectorToolbar::on_direction_activated()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/connector/directedlayout",
+                _direction_button->get_active());
+}
+
+void
+ConnectorToolbar::selection_changed(Inkscape::Selection *selection, GObject * /* data */)
+{
+    SPItem *item = selection->singleItem();
+    if (SP_IS_PATH(item))
+    {
+        gdouble curvature = SP_PATH(item)->connEndPair.getCurvature();
+        bool is_orthog = SP_PATH(item)->connEndPair.isOrthogonal();
+        _orthogonal_button->set_active(is_orthog);
+        _curvature_adj->set_value(curvature);
+    }
+
+}
+
+void
+ConnectorToolbar::on_overlap_activated()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/connector/avoidoverlaplayout",
+                _overlap_button->get_active());
 }
 
 }

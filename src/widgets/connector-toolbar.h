@@ -45,6 +45,13 @@ class ToggleToolButton;
 }
 
 namespace Inkscape {
+
+class Selection;
+
+namespace XML {
+class Node;
+}
+
 namespace UI {
 namespace Widget {
 class ConnectorToolbar : public Gtk::Toolbar {
@@ -57,12 +64,21 @@ private:
     void on_spacing_adj_value_changed();
     void on_graph_activated();
     void on_length_adj_value_changed();
+    void on_direction_activated();
+    void on_overlap_activated();
+    void selection_changed(Inkscape::Selection *selection,
+                           GObject             *data);
 
     SPDesktop *_desktop;
-    Gtk::ToggleToolButton *_orthogonal_button;
-    Glib::RefPtr<Gtk::Adjustment> _curvature_adj;
-    Glib::RefPtr<Gtk::Adjustment> _spacing_adj;
-    Glib::RefPtr<Gtk::Adjustment> _length_adj;
+    Inkscape::XML::Node *_repr;
+
+    // Widgets contained in toolbar
+    Gtk::ToggleToolButton         *_orthogonal_button;
+    Glib::RefPtr<Gtk::Adjustment>  _curvature_adj;
+    Glib::RefPtr<Gtk::Adjustment>  _spacing_adj;
+    Glib::RefPtr<Gtk::Adjustment>  _length_adj;
+    Gtk::ToggleToolButton         *_direction_button;
+    Gtk::ToggleToolButton         *_overlap_button;
 
     bool _freeze_flag;
 
