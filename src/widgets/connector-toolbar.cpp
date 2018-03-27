@@ -233,8 +233,8 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     if (repr) {
         _repr = repr;
         Inkscape::GC::anchor(repr);
-        sp_repr_add_listener( repr, &connector_tb_repr_events, G_OBJECT(gobj()) );
-        sp_repr_synthesize_events( repr, &connector_tb_repr_events, G_OBJECT(gobj()) );
+        sp_repr_add_listener( repr, &connector_tb_repr_events, this );
+        sp_repr_synthesize_events( repr, &connector_tb_repr_events, this );
     }
 }
 
