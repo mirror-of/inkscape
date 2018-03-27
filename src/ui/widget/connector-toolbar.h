@@ -35,7 +35,6 @@
 
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
 typedef struct _GObject GObject;
 
 void sp_connector_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
