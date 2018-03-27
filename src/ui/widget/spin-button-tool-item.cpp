@@ -91,7 +91,7 @@ SpinButtonToolItem::on_btn_key_press_event(GdkEventKey *key_event)
         case GDK_KEY_ISO_Left_Tab:
         {
             _transfer_focus = false;
-            was_consumed = process_tab(1);
+            was_consumed = process_tab(-1);
         }
         break;
 
