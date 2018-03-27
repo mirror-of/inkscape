@@ -62,32 +62,11 @@ using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
 
-static void connector_tb_event_attr_changed(Inkscape::XML::Node *repr,
-                                            gchar const *name, gchar const * /*old_value*/, gchar const * /*new_value*/,
-                                            bool /*is_interactive*/, gpointer data)
-{
-    GtkWidget *tbl = GTK_WIDGET(data);
-
-    if ( !g_object_get_data(G_OBJECT(tbl), "freeze")
-         && (strcmp(name, "inkscape:connector-spacing") == 0) ) {
-        GtkAdjustment *adj = static_cast<GtkAdjustment*>(g_object_get_data(G_OBJECT(tbl), "spacing"));
-        gdouble spacing = defaultConnSpacing;
-        sp_repr_get_double(repr, "inkscape:connector-spacing", &spacing);
-
-        gtk_adjustment_set_value(adj, spacing);
-
-#if !GTK_CHECK_VERSION(3,18,0)
-        gtk_adjustment_value_changed(adj);
-#endif
-
-        spinbutton_defocus(tbl);
-    }
-}
 
 static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
-    connector_tb_event_attr_changed,
+    Inkscape::UI::Widget::ConnectorToolbar::event_attr_changed,
     NULL, /* content_changed */
     NULL  /* order_changed */
 };
@@ -473,6 +452,28 @@ ConnectorToolbar::on_overlap_activated()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/connector/avoidoverlaplayout",
                 _overlap_button->get_active());
+}
+
+void
+ConnectorToolbar::event_attr_changed(Inkscape::XML::Node *repr,
+                                     gchar const *name, gchar const * /*old_value*/, gchar const * /*new_value*/,
+                                     bool /*is_interactive*/, gpointer data)
+{
+    auto toolbar = reinterpret_cast<ConnectorToolbar *>(data);
+
+    if ( !toolbar->_freeze_flag
+         && (strcmp(name, "inkscape:connector-spacing") == 0) ) {
+        gdouble spacing = defaultConnSpacing;
+        sp_repr_get_double(repr, "inkscape:connector-spacing", &spacing);
+
+        toolbar->_spacing_adj->set_value(spacing);
+
+#if !GTK_CHECK_VERSION(3,18,0)
+        _spacing_adj->value_changed();
+#endif
+
+        gtk_widget_grab_focus(GTK_WIDGET(toolbar->_desktop->canvas));
+    }
 }
 
 }

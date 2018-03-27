@@ -86,6 +86,13 @@ public:
     ConnectorToolbar(SPDesktop *desktop);
 
     static GtkWidget * create(SPDesktop *desktop);
+
+    static void event_attr_changed(Inkscape::XML::Node *repr,
+                                   gchar const         *name,
+                                   gchar const         *old_value,
+                                   gchar const         *new_value,
+                                   bool                 is_interactive,
+                                   gpointer             data);
 };
 }
 }
