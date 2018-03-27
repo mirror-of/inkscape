@@ -268,6 +268,8 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring&                 labe
     auto btn_value_changed_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_value_changed);
     _btn->signal_value_changed().connect(btn_value_changed_cb);
 
+    _btn->add_events(Gdk::KEY_PRESS_MASK);
+
     // Create a label
     auto label = Gtk::manage(new Gtk::Label(label_text));
 
