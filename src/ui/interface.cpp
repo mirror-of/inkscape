@@ -23,6 +23,7 @@
 #include <config.h>
 #endif
 
+#include <gtkmm/applicationwindow.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/separatormenuitem.h>
@@ -141,13 +142,20 @@ static void sp_ui_menu_item_set_name(GtkWidget *data,
                                      Glib::ustring const &name);
 static void sp_recent_open(GtkRecentChooser *, gpointer);
 
+/**
+ * This top-level window is added to the SPViewWidget as a GObject data
+ * item called "window".
+ *
+ * The SPViewWidget is also cast to a SPDesktopWidget object and a pointer to the
+ * top-level window is stored as its "window" member.
+ */
 void
 sp_create_window(SPViewWidget *vw, bool editable)
 {
     g_return_if_fail(vw != NULL);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
 
-    Gtk::Window *win = Inkscape::UI::window_new("", TRUE);
+    auto win = Inkscape::UI::window_new("", TRUE);
 
     gtk_container_add(GTK_CONTAINER(win->gobj()), GTK_WIDGET(vw));
     gtk_widget_show(GTK_WIDGET(vw));
@@ -237,6 +245,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
                      "drag_leave",
                      G_CALLBACK(sp_ui_drag_leave),
                      NULL);
+
     win->show();
 
     // needed because the first ACTIVATE_DESKTOP was sent when there was no window yet

@@ -14,7 +14,7 @@ struct _GtkWidget;
 typedef _GtkWidget GtkWidget;
 
 namespace Gtk {
-class Window;
+class ApplicationWindow;
 }
 
 // Can we just get rid of this altogether?
@@ -26,7 +26,7 @@ GtkWidget * sp_window_new (const gchar *title, unsigned int resizeable);
 namespace Inkscape {
 namespace UI {
 
-Gtk::Window *window_new (const gchar *title, unsigned int resizeable);
+Gtk::ApplicationWindow *window_new (const gchar *title, unsigned int resizeable);
 
 }
 }
