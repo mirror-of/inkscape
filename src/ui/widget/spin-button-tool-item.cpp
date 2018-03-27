@@ -252,6 +252,9 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring&                 labe
       _transfer_focus(false),
       _focus_widget(nullptr)
 {
+    set_margin_start(3);
+    set_margin_end(3);
+
     // Handle button events
     auto btn_focus_in_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_in_event);
     _btn->signal_focus_in_event().connect(btn_focus_in_event_cb);
