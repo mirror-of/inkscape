@@ -16,11 +16,34 @@
 
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+namespace Gtk {
+class Toolbar;
+}
 
-void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+//typedef struct _GtkActionGroup GtkActionGroup;
+//typedef struct _GObject GObject;
 
+// void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+
+namespace Inkscape {
+class Verb;
+
+namespace UI {
+namespace Widget {
+class SelectToolbar : public Gtk::Toolbar {
+private:
+    SPDesktop *_desktop;
+    Gtk::ToolButton * create_toolbutton_for_verb(unsigned int  verb_code,
+                                                 Gtk::IconSize size);
+
+public:
+    SelectToolbar(SPDesktop *desktop);
+
+    static GtkWidget *create(SPDesktop *desktop);
+};
+}
+}
+}
 
 #endif /* !SEEN_SELECT_TOOLBAR_H */
 
