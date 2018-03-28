@@ -16,7 +16,9 @@
 #include <config.h>
 #endif
 
+#include <giomm/simpleactiongroup.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/toolbar.h>
 
 #include <2geom/rect.h>
 
@@ -343,27 +345,7 @@ static void destroy_tracker( GObject* obj, gpointer /*user_data*/ )
     }
 }
 
-static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
-{
-    SPAction* targetAction = SP_ACTION(user_data);
-    if ( targetAction ) {
-        sp_action_perform( targetAction, NULL );
-    }
-}
-
-static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::View::View* view, GtkIconSize size )
-{
-    GtkAction* act = 0;
-
-    SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
-    InkAction* inky = ink_action_new( verb->get_id(), verb->get_name(), verb->get_tip(), verb->get_image(), size  );
-    act = GTK_ACTION(inky);
-
-    g_signal_connect( G_OBJECT(inky), "activate", G_CALLBACK(trigger_sp_action), targetAction );
-
-    return act;
-}
-
+#if 0
 void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     Inkscape::UI::View::View *view = desktop;
@@ -374,14 +356,6 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 
     GtkActionGroup* selectionActions = mainActions; // temporary
     std::vector<GtkAction*>* contextActions = new std::vector<GtkAction*>();
-
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL), view, secondarySize );
-    gtk_action_group_add_action( selectionActions, act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS), view, secondarySize );
-    gtk_action_group_add_action( selectionActions, act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_EDIT_DESELECT), view, secondarySize );
-    gtk_action_group_add_action( selectionActions, act );
-    contextActions->push_back( act );
 
     act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CCW), view, secondarySize );
     gtk_action_group_add_action( selectionActions, act );
@@ -602,7 +576,69 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
     }
 }
+#endif
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+SelectToolbar::SelectToolbar(SPDesktop *desktop)
+    : _desktop(desktop)
+{
+    auto action_group = Gio::SimpleActionGroup::create();
+    insert_action_group("select", action_group);
+
+    auto prefs = Inkscape::Preferences::get();
+    auto secondarySize = static_cast<Gtk::IconSize>(Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/secondary", 1));
+
+    auto contextActions = new std::vector<Gtk::ToolButton*>();
+
+    auto select_all_button               = create_toolbutton_for_verb( SP_VERB_EDIT_SELECT_ALL,               secondarySize );
+    auto select_all_in_all_layers_button = create_toolbutton_for_verb( SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, secondarySize );
+    auto deselect_button                 = create_toolbutton_for_verb( SP_VERB_EDIT_DESELECT,                 secondarySize );
+    contextActions->push_back(deselect_button);
+
+    add(*select_all_button);
+    add(*select_all_in_all_layers_button);
+    add(*deselect_button);
+}
+
+GtkWidget *
+SelectToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = Gtk::manage(new SelectToolbar(desktop));
+    return GTK_WIDGET(toolbar->gobj());
+}
+
+/**
+ * \brief     Create a toolbutton whose "clicked" signal performs an Inkscape verb
+ *
+ * \param[in] verb_code The code (e.g., SP_VERB_EDIT_SELECT_ALL) for the verb we want
+ * \param[in] size      The size of the toolbutton to create
+ *
+ * \todo This should really attach the toolbutton to a application action instead of
+ *       hooking up the "clicked" signal.  This should probably wait until we've
+ *       migrated to Gtk::Application
+ */
+Gtk::ToolButton*
+SelectToolbar::create_toolbutton_for_verb( unsigned int  verb_code,
+                                           Gtk::IconSize size )
+{
+    auto verb = Inkscape::Verb::get(verb_code);
+    SPAction* targetAction = verb->get_action(Inkscape::ActionContext(_desktop));
+    auto icon_name = verb->get_image();
+    auto icon = Gtk::manage(new Gtk::Image());
+    icon->set_from_icon_name(icon_name, size);
+
+    auto button = Gtk::manage(new Gtk::ToolButton(*icon, verb->get_name()));
+    button->set_tooltip_text(verb->get_tip());
+    button->signal_clicked().connect(sigc::bind(sigc::ptr_fun(&sp_action_perform), targetAction, nullptr));
+
+    return button;
+}
+
+}
+}
+}
 
 /*
   Local Variables:

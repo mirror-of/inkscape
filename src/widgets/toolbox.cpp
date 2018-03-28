@@ -184,7 +184,7 @@ static struct {
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "/tools/select", "select_toolbox", 0, sp_select_toolbox_prep,            "SelectToolbar",
+    { "/tools/select", "select_toolbox", Inkscape::UI::Widget::SelectToolbar::create, nullptr, "SelectToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/nodes",   "node_toolbox",   0, sp_node_toolbox_prep,              "NodeToolbar",
       SP_VERB_INVALID, 0, 0},
