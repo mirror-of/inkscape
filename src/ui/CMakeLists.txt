@@ -164,6 +164,7 @@ set(ui_SRC
 	widget/rotateable.cpp
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
+	widget/select-toolbar.cpp
 	widget/selected-style.cpp
         widget/spin-button-tool-item.cpp
 	widget/spin-scale.cpp
@@ -362,6 +363,7 @@ set(ui_SRC
 	widget/rotateable.h
 	widget/scalar-unit.h
 	widget/scalar.h
+	widget/select-toolbar.h
 	widget/selected-style.h
         widget/spin-button-tool-item.h
 	widget/spin-scale.h

@@ -30,7 +30,6 @@ set(widgets_SRC
 	paint-selector.cpp
 	pencil-toolbar.cpp
 	rect-toolbar.cpp
-	select-toolbar.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
 	sp-xmlview-attr-list.cpp
@@ -82,7 +81,6 @@ set(widgets_SRC
 	paint-selector.h
 	pencil-toolbar.h
 	rect-toolbar.h
-	select-toolbar.h
 	sp-attribute-widget.h
 	sp-color-selector.h
 	sp-xmlview-attr-list.h

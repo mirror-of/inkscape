@@ -74,6 +74,7 @@
 #include "calligraphy-toolbar.h"
 #include "ui/widget/connector-toolbar.h"
 #include "ui/widget/dropper-toolbar.h"
+#include "ui/widget/select-toolbar.h"
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
@@ -87,7 +88,6 @@
 #endif
 
 #include "pencil-toolbar.h"
-#include "select-toolbar.h"
 #include "spray-toolbar.h"
 #include "spiral-toolbar.h"
 #include "star-toolbar.h"
