@@ -18,6 +18,7 @@
 
 #include <giomm/simpleactiongroup.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/separatortoolitem.h>
 #include <gtkmm/toolbar.h>
 
 #include <2geom/rect.h>
@@ -357,19 +358,6 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     GtkActionGroup* selectionActions = mainActions; // temporary
     std::vector<GtkAction*>* contextActions = new std::vector<GtkAction*>();
 
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CCW), view, secondarySize );
-    gtk_action_group_add_action( selectionActions, act );
-    contextActions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CW), view, secondarySize );
-    gtk_action_group_add_action( selectionActions, act );
-    contextActions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_HORIZONTAL), view, secondarySize );
-    gtk_action_group_add_action( selectionActions, act );
-    contextActions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_VERTICAL), view, secondarySize );
-    gtk_action_group_add_action( selectionActions, act );
-    contextActions->push_back( act );
-
     act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_SELECTION_TO_BACK), view, secondarySize );
     gtk_action_group_add_action( selectionActions, act );
     contextActions->push_back( act );
@@ -592,14 +580,46 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
 
     auto contextActions = new std::vector<Gtk::ToolButton*>();
 
-    auto select_all_button               = create_toolbutton_for_verb( SP_VERB_EDIT_SELECT_ALL,               secondarySize );
-    auto select_all_in_all_layers_button = create_toolbutton_for_verb( SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, secondarySize );
-    auto deselect_button                 = create_toolbutton_for_verb( SP_VERB_EDIT_DESELECT,                 secondarySize );
-    contextActions->push_back(deselect_button);
+    // Create tool items
+    auto select_all_button               = create_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL);
+    auto select_all_in_all_layers_button = create_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS);
+    auto deselect_button                 = create_toolbutton_for_verb(SP_VERB_EDIT_DESELECT);
+    auto object_rotate_90_ccw_button     = create_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CCW);
+    auto object_rotate_90_cw_button      = create_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CW);
+    auto object_flip_horizontal_button   = create_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_HORIZONTAL);
+    auto object_flip_vertical_button     = create_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_VERTICAL);
+    auto selection_to_back_button        = create_toolbutton_for_verb(SP_VERB_SELECTION_TO_BACK);
+    auto selection_lower_button          = create_toolbutton_for_verb(SP_VERB_SELECTION_LOWER);
+    auto selection_raise_button          = create_toolbutton_for_verb(SP_VERB_SELECTION_RAISE);
+    auto selection_to_front_button       = create_toolbutton_for_verb(SP_VERB_SELECTION_TO_FRONT);
 
+    // Add some items to the contextActions list
+    contextActions->push_back(deselect_button);
+    contextActions->push_back(object_rotate_90_ccw_button);
+    contextActions->push_back(object_rotate_90_cw_button);
+    contextActions->push_back(object_flip_horizontal_button);
+    contextActions->push_back(object_flip_vertical_button);
+    contextActions->push_back(selection_to_back_button);
+    contextActions->push_back(selection_lower_button);
+    contextActions->push_back(selection_raise_button);
+    contextActions->push_back(selection_to_front_button);
+
+
+    // Add tool items to the toolbar in the correct order
     add(*select_all_button);
     add(*select_all_in_all_layers_button);
     add(*deselect_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*object_rotate_90_ccw_button);
+    add(*object_rotate_90_cw_button);
+    add(*object_flip_horizontal_button);
+    add(*object_flip_vertical_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*selection_to_back_button);
+    add(*selection_lower_button);
+    add(*selection_raise_button);
+    add(*selection_to_front_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 }
 
 GtkWidget *
@@ -613,23 +633,20 @@ SelectToolbar::create(SPDesktop *desktop)
  * \brief     Create a toolbutton whose "clicked" signal performs an Inkscape verb
  *
  * \param[in] verb_code The code (e.g., SP_VERB_EDIT_SELECT_ALL) for the verb we want
- * \param[in] size      The size of the toolbutton to create
  *
  * \todo This should really attach the toolbutton to a application action instead of
  *       hooking up the "clicked" signal.  This should probably wait until we've
  *       migrated to Gtk::Application
  */
 Gtk::ToolButton*
-SelectToolbar::create_toolbutton_for_verb( unsigned int  verb_code,
-                                           Gtk::IconSize size )
+SelectToolbar::create_toolbutton_for_verb(unsigned int  verb_code)
 {
     auto verb = Inkscape::Verb::get(verb_code);
     SPAction* targetAction = verb->get_action(Inkscape::ActionContext(_desktop));
     auto icon_name = verb->get_image();
-    auto icon = Gtk::manage(new Gtk::Image());
-    icon->set_from_icon_name(icon_name, size);
 
-    auto button = Gtk::manage(new Gtk::ToolButton(*icon, verb->get_name()));
+    auto button = Gtk::manage(new Gtk::ToolButton(verb->get_name()));
+    button->set_icon_name(icon_name);
     button->set_tooltip_text(verb->get_tip());
     button->signal_clicked().connect(sigc::bind(sigc::ptr_fun(&sp_action_perform), targetAction, nullptr));
 
