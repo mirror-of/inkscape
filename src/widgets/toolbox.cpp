@@ -186,7 +186,7 @@ static struct {
 } const aux_toolboxes[] = {
     { "/tools/select", "select_toolbox", Inkscape::UI::Widget::SelectToolbar::create, nullptr, "SelectToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/nodes",   "node_toolbox",   0, sp_node_toolbox_prep,              "NodeToolbar",
+    { "/tools/nodes",   "node_toolbox",   Inkscape::UI::Widget::NodeToolbar::create, nullptr,  "NodeToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/tweak",   "tweak_toolbox",   0, sp_tweak_toolbox_prep,              "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},

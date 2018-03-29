@@ -28,8 +28,9 @@
 #include <config.h>
 #endif
 
+#include <giomm/simpleactiongroup.h>
 #include <glibmm/i18n.h>
-
+#include <gtkmm/menutoolbutton.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -330,14 +331,9 @@ static void node_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 //##    Node Editing Toolbox    ##
 //################################
 
+#if 0
 void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
-    Unit doc_units = *desktop->getNamedView()->display_units;
-    tracker->setActiveUnit(&doc_units);
-    g_object_set_data( holder, "tracker", tracker );
-
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     {
         InkToolMenuAction* inky = ink_tool_menu_action_new( "NodeInsertAction",
@@ -619,6 +615,7 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(node_toolbox_watch_ec), holder));
 
 } // end of sp_node_toolbox_prep()
+#endif
 
 static void node_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec, GObject* holder)
 {
@@ -643,6 +640,43 @@ static void node_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
     }
 }
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
+NodeToolbar::NodeToolbar(SPDesktop *desktop)
+    : _desktop(desktop),
+      _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+{
+    auto action_group = Gio::SimpleActionGroup::create();
+    insert_action_group("node-toolbar", action_group);
+
+    Unit doc_units = *_desktop->getNamedView()->display_units;
+    _tracker->setActiveUnit(&doc_units);
+
+    auto secondarySize = static_cast<Gtk::IconSize>(ToolboxFactory::prefToSize("/toolbox/secondary", 1));
+
+    auto insert_node_button = Gtk::manage(new Gtk::MenuToolButton());
+    insert_node_button->set_icon_name(INKSCAPE_ICON("node-add"));
+    insert_node_button->set_label(_("Insert node"));
+    insert_node_button->set_tooltip_text(_("Insert new nodes into selected segments"));
+
+    add(*insert_node_button);
+}
+
+NodeToolbar::~NodeToolbar() {
+    if(_tracker) delete _tracker;
+}
+
+GtkWidget *
+NodeToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = Gtk::manage(new NodeToolbar(desktop));
+    return GTK_WIDGET(toolbar->gobj());
+}
+}
+}
+}
 
 /*
   Local Variables:
