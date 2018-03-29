@@ -33,8 +33,7 @@ namespace Widget {
 class SelectToolbar : public Gtk::Toolbar {
 private:
     SPDesktop *_desktop;
-    Gtk::ToolButton * create_toolbutton_for_verb(unsigned int  verb_code,
-                                                 Gtk::IconSize size);
+    Gtk::ToolButton * create_toolbutton_for_verb(unsigned int  verb_code);
 
 public:
     SelectToolbar(SPDesktop *desktop);
