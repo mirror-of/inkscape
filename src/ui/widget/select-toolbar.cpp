@@ -28,12 +28,9 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "ink-action.h"
-#include "ink-toggle-action.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
-#include "toolbox.h"
 #include "verbs.h"
 
 #include "display/sp-canvas.h"
@@ -50,7 +47,7 @@
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ege-adjustment-action.h"
+#include "widgets/toolbox.h"
 #include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
