@@ -27,11 +27,37 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm/toolbar.h>
+
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+class UnitTracker;
 
-void       sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+class NodeToolbar : public Gtk::Toolbar {
+private:
+    SPDesktop *_desktop;
+    Inkscape::UI::Widget::UnitTracker *_tracker;
 
-#endif /* !SEEN_SELECT_TOOLBAR_H */
+public:
+    NodeToolbar(SPDesktop *desktop);
+    ~NodeToolbar();
+    static GtkWidget * create(SPDesktop *desktop);
+};
+}
+}
+}
+
+#endif /* !SEEN_NODE_TOOLBAR_H */
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
