@@ -56,7 +56,6 @@
 
 #include "widgets/dash-selector.h"
 #include "widgets/paint-selector.h"
-#include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/stroke-marker-selector.h"
 

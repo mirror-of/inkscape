@@ -33,7 +33,6 @@ set(widgets_SRC
 	select-toolbar.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
-	sp-widget.cpp
 	sp-xmlview-attr-list.cpp
 	sp-xmlview-content.cpp
 	sp-xmlview-tree.cpp
@@ -86,7 +85,6 @@ set(widgets_SRC
 	select-toolbar.h
 	sp-attribute-widget.h
 	sp-color-selector.h
-	sp-widget.h
 	sp-xmlview-attr-list.h
 	sp-xmlview-content.h
 	sp-xmlview-tree.h

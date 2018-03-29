@@ -51,7 +51,6 @@
 #include "ui/widget/unit-tracker.h"
 
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/sp-widget.h"
 #include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
