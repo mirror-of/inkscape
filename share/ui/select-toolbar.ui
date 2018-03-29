@@ -1,20 +1,4 @@
 <ui>
-	<!--
-  <toolbar name='SelectToolbar'>
-    <toolitem action='XAction' />
-    <toolitem action='YAction' />
-    <toolitem action='WidthAction' />
-    <toolitem action='LockAction' />
-    <toolitem action='HeightAction' />
-    <toolitem action='UnitsAction' />
-    <separator />
-    <toolitem action='transform_stroke' />
-    <toolitem action='transform_corners' />
-    <toolitem action='transform_gradient' />
-    <toolitem action='transform_pattern' />
-  </toolbar>
--->
-
   <toolbar name='NodeToolbar'>
     <separator />
     <toolitem action='NodeInsertAction'>

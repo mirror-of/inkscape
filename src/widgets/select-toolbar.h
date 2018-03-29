@@ -40,6 +40,10 @@ private:
     Glib::RefPtr<Gtk::Adjustment>  _width_adj;
     Glib::RefPtr<Gtk::Adjustment>  _height_adj;
     Gtk::ToggleToolButton         *_lock_button;
+    Gtk::ToggleToolButton         *_transform_stroke_button;
+    Gtk::ToggleToolButton         *_transform_corners_button;
+    Gtk::ToggleToolButton         *_transform_gradient_button;
+    Gtk::ToggleToolButton         *_transform_pattern_button;
 
     std::vector<Gtk::ToolItem *> _context_items;
 
@@ -57,6 +61,10 @@ private:
     void on_h_adj_value_changed();
     void on_any_layout_adj_value_changed();
     void on_lock_button_toggled();
+    void on_transform_stroke_button_toggled();
+    void on_transform_corners_button_toggled();
+    void on_transform_gradient_button_toggled();
+    void on_transform_pattern_button_toggled();
 
 public:
     SelectToolbar(SPDesktop *desktop);
