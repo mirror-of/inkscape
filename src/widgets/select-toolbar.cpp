@@ -60,160 +60,6 @@ using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
 
 
-
-// toggle button callbacks and updaters
-
-static void toggle_stroke( GtkToggleAction* act, gpointer data )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/options/transform/stroke", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."));
-    }
-}
-
-static void toggle_corners( GtkToggleAction* act, gpointer data)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/options/transform/rectcorners", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are scaled."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles are scaled."));
-    }
-}
-
-static void toggle_gradient( GtkToggleAction *act, gpointer data )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/options/transform/gradient", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
-    }
-}
-
-static void toggle_pattern( GtkToggleAction* act, gpointer data )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setInt("/options/transform/pattern", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
-    }
-}
-
-#if 0
-void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
-{
-    Inkscape::UI::View::View *view = desktop;
-    GtkIconSize secondarySize = Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    GtkAction* act = 0;
-
-    GtkActionGroup* selectionActions = mainActions; // temporary
-    std::vector<GtkAction*>* contextActions = new std::vector<GtkAction*>();
-
-    // Remember the desktop's canvas widget, to be used for defocusing.
-    g_object_set_data(G_OBJECT(spw), "dtw", desktop->getCanvas());
-
-    // The vb frame holds all other widgets and is used to set sensitivity depending on selection state.
-    auto vb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
-    gtk_widget_show(vb);
-    gtk_container_add(GTK_CONTAINER(spw), vb);
-
-    g_signal_connect( G_OBJECT(spw), "destroy", G_CALLBACK(destroy_tracker), spw );
-
-    EgeAdjustmentAction* eact = 0;
-
-    // four spinbuttons
-
-    eact = create_adjustment_action(
-            "XAction",                            /* name */ 
-            C_("Select toolbar", "X position"),   /* label */ 
-            TRUE, "altx",                         /* altx, altx_mark */ 
-            tracker,                              /* unit_tracker */ 
-
-    eact = create_adjustment_action(
-            "YAction",                            /* name */
-            C_("Select toolbar", "Y position"),   /* label */
-            TRUE, "altx",                         /* altx, altx_mark */
-            tracker,                              /* unit_tracker */
-
-    eact = create_adjustment_action(
-            "WidthAction",                        /* name */
-            C_("Select toolbar", "Width"),        /* label */
-            TRUE, "altx",                         /* altx, altx_mark */
-            tracker,                              /* unit_tracker */
-
-    eact = create_adjustment_action(
-            "HeightAction",                       /* name */
-            C_("Select toolbar", "Height"),       /* label */
-            TRUE, "altx",                         /* altx, altx_mark */
-            tracker,                              /* unit_tracker */
-
-    // "Transform with object" buttons
-    {
-
-    InkToggleAction* itact = ink_toggle_action_new( "transform_stroke",
-                                                    _("Scale stroke width"),
-                                                    _("When scaling objects, scale the stroke width by the same proportion"),
-                                                    "transform-affect-stroke",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/stroke", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_stroke), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-
-    {
-    InkToggleAction* itact = ink_toggle_action_new( "transform_corners",
-                                                    _("Scale rounded corners"),
-                                                    _("When scaling rectangles, scale the radii of rounded corners"),
-                                                    "transform-affect-rounded-corners",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/rectcorners", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_corners), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-
-    {
-    InkToggleAction* itact = ink_toggle_action_new( "transform_gradient",
-                                                    _("Move gradients"),
-                                                    _("Move gradients (in fill or stroke) along with the objects"),
-                                                    "transform-affect-gradient",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/gradient", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_gradient), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-
-    {
-    InkToggleAction* itact = ink_toggle_action_new( "transform_pattern",
-                                                    _("Move patterns"),
-                                                    _("Move patterns (in fill or stroke) along with the objects"),
-                                                    "transform-affect-pattern",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/pattern", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_pattern), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-}
-#endif
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -227,6 +73,10 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
       _update_flag(false),
       _last_changed(CHANGED_NONE),
       _lock_button(Gtk::manage(new Gtk::ToggleToolButton())),
+      _transform_stroke_button(Gtk::manage(new Gtk::ToggleToolButton())),
+      _transform_corners_button(Gtk::manage(new Gtk::ToggleToolButton())),
+      _transform_gradient_button(Gtk::manage(new Gtk::ToggleToolButton())),
+      _transform_pattern_button(Gtk::manage(new Gtk::ToggleToolButton())),
       _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
 {
     auto action_group = Gio::SimpleActionGroup::create();
@@ -257,6 +107,7 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
     auto _y_val = prefs->getDouble("/tools/select/Y", 0.0);
     auto _w_val = prefs->getDouble("/tools/select/width", 0.0);
     auto _h_val = prefs->getDouble("/tools/select/height", 0.0);
+
     _x_pos_adj  = Gtk::Adjustment::create(_x_val, -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
     _y_pos_adj  = Gtk::Adjustment::create(_y_val, -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
     _width_adj  = Gtk::Adjustment::create(_w_val,  0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
@@ -303,6 +154,30 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
     // TODO: Migrate away from GtkAction
     auto unit_menu = _tracker->createAction( "UnitsAction", _("Units"), ("") );
     auto unit_menu_ti = unit_menu->create_tool_item();
+
+    _transform_stroke_button->set_label(_("Scale stroke width"));
+    _transform_stroke_button->set_icon_name(INKSCAPE_ICON("transform-affect-stroke"));
+    _transform_stroke_button->set_tooltip_text(_("When scaling objects, scale the stroke width by the same proportion"));
+    _transform_stroke_button->set_active(prefs->getBool("/options/transform/stroke", true));
+    _transform_stroke_button->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::on_transform_stroke_button_toggled));
+
+    _transform_corners_button->set_label(_("Scale rounded corners"));
+    _transform_corners_button->set_icon_name(INKSCAPE_ICON("transform-affect-rounded-corners"));
+    _transform_corners_button->set_tooltip_text(_("When scaling objects, scale the radii of rounded corners"));
+    _transform_corners_button->set_active(prefs->getBool("/options/transform/rectcorners", true));
+    _transform_corners_button->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::on_transform_corners_button_toggled));
+
+    _transform_gradient_button->set_label(_("Move gradients"));
+    _transform_gradient_button->set_icon_name(INKSCAPE_ICON("transform-affect-gradient"));
+    _transform_gradient_button->set_tooltip_text(_("Move gradients (in fill and stroke) along with the objects"));
+    _transform_gradient_button->set_active(prefs->getBool("/options/transform/gradient", true));
+    _transform_gradient_button->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::on_transform_gradient_button_toggled));
+
+    _transform_pattern_button->set_label(_("Move patterns"));
+    _transform_pattern_button->set_icon_name(INKSCAPE_ICON("transform-affect-pattern"));
+    _transform_pattern_button->set_tooltip_text(_("Move patterns (in fill or stroke) along with the objects"));
+    _transform_pattern_button->set_active(prefs->getBool("/options/transform/pattern", true));
+    _transform_pattern_button->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::on_transform_pattern_button_toggled));
 
     // Add some items to the context_items list
     _context_items.push_back(deselect_button);
@@ -353,6 +228,11 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
     add(*_lock_button);
     add(*h_btn);
     add(*unit_menu_ti);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*_transform_stroke_button);
+    add(*_transform_corners_button);
+    add(*_transform_gradient_button);
+    add(*_transform_pattern_button);
 }
 
 GtkWidget *
@@ -620,6 +500,58 @@ SelectToolbar::on_lock_button_toggled() {
         _lock_button->set_icon_name(INKSCAPE_ICON("object-locked"));
     } else {
         _lock_button->set_icon_name(INKSCAPE_ICON("object-unlocked"));
+    }
+}
+
+void
+SelectToolbar::on_transform_stroke_button_toggled()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_stroke_button->get_active();
+    prefs->setBool("/options/transform/stroke", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."));
+    }
+}
+
+void
+SelectToolbar::on_transform_corners_button_toggled()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_corners_button->get_active();
+    prefs->setBool("/options/transform/rectcorners", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are scaled."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles are scaled."));
+    }
+}
+
+void
+SelectToolbar::on_transform_gradient_button_toggled()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_gradient_button->get_active();
+    prefs->setBool("/options/transform/gradient", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
+    }
+}
+
+void
+SelectToolbar::on_transform_pattern_button_toggled()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_pattern_button->get_active();
+    prefs->setInt("/options/transform/pattern", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
     }
 }
 
