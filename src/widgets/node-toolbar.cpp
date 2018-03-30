@@ -29,9 +29,12 @@
 #endif
 
 #include <giomm/simpleactiongroup.h>
+
 #include <glibmm/i18n.h>
+
 #include <gtkmm/image.h>
 #include <gtkmm/menutoolbutton.h>
+#include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -81,94 +84,6 @@ static NodeTool *get_node_tool()
     return tool;
 }
 
-static void sp_node_path_edit_delete(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        nt->_multipath->deleteNodes(prefs->getBool("/tools/nodes/delete_preserves_shape", true));
-    }
-}
-
-static void sp_node_path_edit_delete_segment(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->deleteSegments();
-    }
-}
-
-static void sp_node_path_edit_break(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->breakNodes();
-    }
-}
-
-static void sp_node_path_edit_join(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->joinNodes();
-    }
-}
-
-static void sp_node_path_edit_join_segment(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->joinSegments();
-    }
-}
-
-static void sp_node_path_edit_toline(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_STRAIGHT);
-    }
-}
-
-static void sp_node_path_edit_tocurve(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_CUBIC_BEZIER);
-    }
-}
-
-static void sp_node_path_edit_cusp(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->setNodeType(Inkscape::UI::NODE_CUSP);
-    }
-}
-
-static void sp_node_path_edit_smooth(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->setNodeType(Inkscape::UI::NODE_SMOOTH);
-    }
-}
-
-static void sp_node_path_edit_symmetrical(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->setNodeType(Inkscape::UI::NODE_SYMMETRIC);
-    }
-}
-
-static void sp_node_path_edit_auto(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->setNodeType(Inkscape::UI::NODE_AUTO);
-    }
-}
 
 static void sp_node_path_edit_nextLPEparam(GtkAction * /*act*/, gpointer data) {
     sp_selection_next_patheffect_param( reinterpret_cast<SPDesktop*>(data) );
@@ -297,49 +212,6 @@ static void node_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 #if 0
 void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    {
-        InkAction* inky = ink_action_new( "NodeDeleteAction",
-                                          _("Delete node"),
-                                          _("Delete selected nodes"),
-                                          INKSCAPE_ICON("node-delete"),
-                                          secondarySize );
-        g_object_set( inky, "short_label", _("Delete"), NULL );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_delete), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-
-    {
-        InkAction* inky = ink_action_new( "NodeJoinAction",
-                                          _("Join nodes"),
-                                          _("Join selected nodes"),
-                                          INKSCAPE_ICON("node-join"),
-                                          secondarySize );
-        g_object_set( inky, "short_label", _("Join"), NULL );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_join), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-
-    {
-        InkAction* inky = ink_action_new( "NodeBreakAction",
-                                          _("Break nodes"),
-                                          _("Break path at selected nodes"),
-                                          INKSCAPE_ICON("node-break"),
-                                          secondarySize );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_break), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-
-
-    {
-        InkAction* inky = ink_action_new( "NodeJoinSegmentAction",
-                                          _("Join with segment"),
-                                          _("Join selected endnodes with a new segment"),
-                                          INKSCAPE_ICON("node-join-segment"),
-                                          secondarySize );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_join_segment), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-
     {
         InkAction* inky = ink_action_new( "NodeDeleteSegmentAction",
                                           _("Delete segment"),
@@ -566,9 +438,84 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     action_group->add_action("insert-node-max-x", sigc::mem_fun(*this, &NodeToolbar::on_insert_node_max_x_activated));
     action_group->add_action("insert-node-min-y", sigc::mem_fun(*this, &NodeToolbar::on_insert_node_min_y_activated));
     action_group->add_action("insert-node-max-y", sigc::mem_fun(*this, &NodeToolbar::on_insert_node_max_y_activated));
+    action_group->add_action("delete",            sigc::mem_fun(*this, &NodeToolbar::on_delete_activated));
+    action_group->add_action("join",              sigc::mem_fun(*this, &NodeToolbar::on_join_activated));
+    action_group->add_action("break",             sigc::mem_fun(*this, &NodeToolbar::on_break_activated));
+    action_group->add_action("join-segment",      sigc::mem_fun(*this, &NodeToolbar::on_join_segment_activated));
+    action_group->add_action("delete-segment",    sigc::mem_fun(*this, &NodeToolbar::on_delete_segment_activated));
+    action_group->add_action("cusp",              sigc::mem_fun(*this, &NodeToolbar::on_cusp_activated));
+    action_group->add_action("smooth",            sigc::mem_fun(*this, &NodeToolbar::on_smooth_activated));
+    action_group->add_action("symmetrical",       sigc::mem_fun(*this, &NodeToolbar::on_symmetrical_activated));
+    action_group->add_action("auto",              sigc::mem_fun(*this, &NodeToolbar::on_auto_activated));
+    action_group->add_action("toline",            sigc::mem_fun(*this, &NodeToolbar::on_toline_activated));
+    action_group->add_action("tocurve",           sigc::mem_fun(*this, &NodeToolbar::on_tocurve_activated));
 
+    auto delete_button     = Gtk::manage(new Gtk::ToolButton(_("Delete node")));
+    auto join_button       = Gtk::manage(new Gtk::ToolButton(_("Join node")));
+    auto break_button      = Gtk::manage(new Gtk::ToolButton(_("Break nodes")));
+    auto join_seg_button   = Gtk::manage(new Gtk::ToolButton(_("Join with segment")));
+    auto delete_seg_button = Gtk::manage(new Gtk::ToolButton(_("Delete segment")));
+    auto cusp_button       = Gtk::manage(new Gtk::ToolButton(_("Node Cusp")));
+    auto smooth_button     = Gtk::manage(new Gtk::ToolButton(_("Node Smooth")));
+    auto symmetric_button  = Gtk::manage(new Gtk::ToolButton(_("Node Symmetric")));
+    auto auto_button       = Gtk::manage(new Gtk::ToolButton(_("Node Auto")));
+    auto toline_button     = Gtk::manage(new Gtk::ToolButton(_("Node Line")));
+    auto tocurve_button    = Gtk::manage(new Gtk::ToolButton(_("Node Curve")));
+
+    delete_button->set_tooltip_text(_("Delete selected nodes"));
+    join_button->set_tooltip_text(_("Join selected nodes"));
+    break_button->set_tooltip_text(_("Break path at selected nodes"));
+    join_seg_button->set_tooltip_text(_("Join selected endnodes with a new segment"));
+    delete_seg_button->set_tooltip_text(_("Delete segment between two non-endpoint nodes"));
+    cusp_button->set_tooltip_text(_("Make selected nodes corner"));
+    smooth_button->set_tooltip_text(_("Make selected nodes smooth"));
+    symmetric_button->set_tooltip_text(_("Make selected nodes symmetric"));
+    auto_button->set_tooltip_text(_("Make selected nodes auto-smooth"));
+    toline_button->set_tooltip_text(_("Make selected segments lines"));
+    tocurve_button->set_tooltip_text(_("Make selected segments curves"));
+
+    delete_button->set_icon_name(INKSCAPE_ICON("node-delete"));
+    join_button->set_icon_name(INKSCAPE_ICON("node-join"));
+    break_button->set_icon_name(INKSCAPE_ICON("node-break"));
+    join_seg_button->set_icon_name(INKSCAPE_ICON("node-join-segment"));
+    delete_seg_button->set_icon_name(INKSCAPE_ICON("node-delete-segment"));
+    cusp_button->set_icon_name(INKSCAPE_ICON("node-type-cusp"));
+    smooth_button->set_icon_name(INKSCAPE_ICON("node-type-smooth"));
+    symmetric_button->set_icon_name(INKSCAPE_ICON("node-type-symmetric"));
+    auto_button->set_icon_name(INKSCAPE_ICON("node-type-auto-smooth"));
+    toline_button->set_icon_name(INKSCAPE_ICON("node-segment-line"));
+    tocurve_button->set_icon_name(INKSCAPE_ICON("node-segment-curve"));
+
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(delete_button->gobj()),     "node-toolbar.delete");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(join_button->gobj()),       "node-toolbar.join");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(break_button->gobj()),      "node-toolbar.break");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(join_seg_button->gobj()),   "node-toolbar.join-segment");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(delete_seg_button->gobj()), "node-toolbar.delete-segment");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(cusp_button->gobj()),       "node-toolbar.cusp");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(smooth_button->gobj()),     "node-toolbar.smooth");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(symmetric_button->gobj()),  "node-toolbar.symmetrical");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(auto_button->gobj()),       "node-toolbar.auto");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(toline_button->gobj()),     "node-toolbar.toline");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(tocurve_button->gobj()),    "node-toolbar.tocurve");
+
+    // Pack tool items into toolbar
     create_insert_node_button();
-
+    add(*delete_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*join_button);
+    add(*break_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*join_seg_button);
+    add(*delete_seg_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*cusp_button);
+    add(*smooth_button);
+    add(*symmetric_button);
+    add(*auto_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*toline_button);
+    add(*tocurve_button);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
     show_all();
 }
 
@@ -674,6 +621,106 @@ NodeToolbar::create_insert_node_button()
 
     insert_node_button->set_menu(*insert_node_menu);
     add(*insert_node_button);
+}
+
+void
+NodeToolbar::on_delete_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        nt->_multipath->deleteNodes(prefs->getBool("/tools/nodes/delete_preserves_shape", true));
+    }
+}
+
+void
+NodeToolbar::on_join_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->joinNodes();
+    }
+}
+
+void
+NodeToolbar::on_break_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->breakNodes();
+    }
+}
+
+void
+NodeToolbar::on_join_segment_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->joinSegments();
+    }
+}
+
+void
+NodeToolbar::on_delete_segment_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->deleteSegments();
+    }
+}
+
+void
+NodeToolbar::on_toline_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_STRAIGHT);
+    }
+}
+
+void
+NodeToolbar::on_tocurve_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setSegmentType(Inkscape::UI::SEGMENT_CUBIC_BEZIER);
+    }
+}
+
+void
+NodeToolbar::on_cusp_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setNodeType(Inkscape::UI::NODE_CUSP);
+    }
+}
+
+void
+NodeToolbar::on_smooth_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setNodeType(Inkscape::UI::NODE_SMOOTH);
+    }
+}
+
+void
+NodeToolbar::on_symmetrical_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setNodeType(Inkscape::UI::NODE_SYMMETRIC);
+    }
+}
+
+void
+NodeToolbar::on_auto_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->setNodeType(Inkscape::UI::NODE_AUTO);
+    }
 }
 
 }
