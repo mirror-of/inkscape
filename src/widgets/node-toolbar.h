@@ -50,6 +50,17 @@ private:
     void on_insert_node_max_x_activated();
     void on_insert_node_min_y_activated();
     void on_insert_node_max_y_activated();
+    void on_delete_activated();
+    void on_join_activated();
+    void on_break_activated();
+    void on_join_segment_activated();
+    void on_delete_segment_activated();
+    void on_cusp_activated();
+    void on_smooth_activated();
+    void on_symmetrical_activated();
+    void on_auto_activated();
+    void on_toline_activated();
+    void on_tocurve_activated();
 
     void create_insert_node_button();
 
