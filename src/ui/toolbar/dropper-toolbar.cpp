@@ -42,7 +42,7 @@ using Inkscape::DocumentUndo;
 
 namespace Inkscape {
 namespace UI {
-namespace Widget {
+namespace Toolbar {
 
 /**
  * @brief Default constructor

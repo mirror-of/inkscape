@@ -548,7 +548,7 @@ static void node_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
 
 namespace Inkscape {
 namespace UI {
-namespace Widget {
+namespace Toolbar {
 
 NodeToolbar::NodeToolbar(SPDesktop *desktop)
     : _desktop(desktop),

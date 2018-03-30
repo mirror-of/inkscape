@@ -35,6 +35,9 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 class UnitTracker;
+}
+
+namespace Toolbar {
 
 class NodeToolbar : public Gtk::Toolbar {
 private:

@@ -117,7 +117,11 @@ set(ui_SRC
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
 	dialog/xml-tree.cpp
-    dialog/save-template-dialog.cpp
+	dialog/save-template-dialog.cpp
+
+	toolbar/connector-toolbar.cpp
+	toolbar/dropper-toolbar.cpp
+	toolbar/select-toolbar.cpp
 
 	widget/addtoicon.cpp
 	widget/anchor-selector.cpp
@@ -131,10 +135,8 @@ set(ui_SRC
 	widget/color-scales.cpp
 	widget/color-slider.cpp
 	widget/color-wheel-selector.cpp
-	widget/connector-toolbar.cpp
 	widget/dock-item.cpp
 	widget/dock.cpp
-	widget/dropper-toolbar.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/filter-effect-chooser.cpp
@@ -164,7 +166,6 @@ set(ui_SRC
 	widget/rotateable.cpp
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
-	widget/select-toolbar.cpp
 	widget/selected-style.cpp
         widget/spin-button-tool-item.cpp
 	widget/spin-scale.cpp
@@ -271,7 +272,7 @@ set(ui_SRC
 	dialog/transformation.h
 	dialog/undo-history.h
 	dialog/xml-tree.h
-    dialog/save-template-dialog.h
+	dialog/save-template-dialog.h
 
 	tool/commit-events.h
 	tool/control-point-selection.h
@@ -288,6 +289,10 @@ set(ui_SRC
 	tool/selector.h
 	tool/shape-record.h
 	tool/transform-handle-set.h
+
+	toolbar/connector-toolbar.h
+	toolbar/dropper-toolbar.h
+	toolbar/select-toolbar.h
 
 	tools/arc-tool.h
 	tools/box3d-tool.h
@@ -329,10 +334,8 @@ set(ui_SRC
 	widget/color-slider.h
 	widget/color-wheel-selector.h
 	widget/combo-enums.h
-	widget/connector-toolbar.h
 	widget/dock-item.h
 	widget/dock.h
-	widget/dropper-toolbar.h
 	widget/entity-entry.h
 	widget/entry.h
 	widget/filter-effect-chooser.h
@@ -363,7 +366,6 @@ set(ui_SRC
 	widget/rotateable.h
 	widget/scalar-unit.h
 	widget/scalar.h
-	widget/select-toolbar.h
 	widget/selected-style.h
         widget/spin-button-tool-item.h
 	widget/spin-scale.h

@@ -41,7 +41,7 @@ class ToggleToolButton;
 
 namespace Inkscape {
 namespace UI {
-namespace Widget {
+namespace Toolbar {
 
 /// A toolbar for the "Dropper" tool
 class DropperToolbar : public Gtk::Toolbar

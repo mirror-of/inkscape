@@ -72,9 +72,9 @@
 #include "arc-toolbar.h"
 #include "box3d-toolbar.h"
 #include "calligraphy-toolbar.h"
-#include "ui/widget/connector-toolbar.h"
-#include "ui/widget/dropper-toolbar.h"
-#include "ui/widget/select-toolbar.h"
+#include "ui/toolbar/connector-toolbar.h"
+#include "ui/toolbar/dropper-toolbar.h"
+#include "ui/toolbar/select-toolbar.h"
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
@@ -184,9 +184,9 @@ static struct {
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "/tools/select", "select_toolbox", Inkscape::UI::Widget::SelectToolbar::create, nullptr, "SelectToolbar",
+    { "/tools/select", "select_toolbox", Inkscape::UI::Toolbar::SelectToolbar::create, nullptr, "SelectToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/nodes",   "node_toolbox",   Inkscape::UI::Widget::NodeToolbar::create, nullptr,  "NodeToolbar",
+    { "/tools/nodes",   "node_toolbox",   Inkscape::UI::Toolbar::NodeToolbar::create, nullptr,  "NodeToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/tweak",   "tweak_toolbox",   0, sp_tweak_toolbox_prep,              "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
@@ -219,9 +219,9 @@ static struct {
     // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Widget::DropperToolbar::create, 0,         "DropperToolbar",
+    { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create, 0,         "DropperToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/connector", "connector_toolbox", Inkscape::UI::Widget::ConnectorToolbar::create, 0,   "ConnectorToolbar",
+    { "/tools/connector", "connector_toolbox", Inkscape::UI::Toolbar::ConnectorToolbar::create, 0,   "ConnectorToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/gradient", "gradient_toolbox", 0, sp_gradient_toolbox_prep, "GradientToolbar",
       SP_VERB_INVALID, 0, 0},

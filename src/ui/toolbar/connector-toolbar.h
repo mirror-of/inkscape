@@ -52,7 +52,7 @@ class Node;
 }
 
 namespace UI {
-namespace Widget {
+namespace Toolbar {
 class ConnectorToolbar : public Gtk::Toolbar {
 private:
     // Event handlers
