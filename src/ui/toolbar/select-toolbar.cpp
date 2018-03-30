@@ -59,7 +59,7 @@ using Inkscape::Util::unit_table;
 
 namespace Inkscape {
 namespace UI {
-namespace Widget {
+namespace Toolbar {
 SelectToolbar::~SelectToolbar()
 {
     delete _tracker;

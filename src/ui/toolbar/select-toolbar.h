@@ -25,8 +25,12 @@ class Selection;
 class Verb;
 
 namespace UI {
+
 namespace Widget {
 class UnitTracker;
+}
+
+namespace Toolbar {
 
 class SelectToolbar : public Gtk::Toolbar {
 private:
@@ -47,7 +51,7 @@ private:
 
     std::vector<Gtk::ToolItem *> _context_items;
 
-    UnitTracker *_tracker;
+    UI::Widget::UnitTracker *_tracker;
 
     enum LastChanged { CHANGED_NONE, CHANGED_X_Y, CHANGED_W, CHANGED_H };
 

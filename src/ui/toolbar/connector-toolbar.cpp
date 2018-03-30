@@ -65,14 +65,14 @@ using Inkscape::UI::PrefPusher;
 static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
-    Inkscape::UI::Widget::ConnectorToolbar::event_attr_changed,
+    Inkscape::UI::Toolbar::ConnectorToolbar::event_attr_changed,
     NULL, /* content_changed */
     NULL  /* order_changed */
 };
 
 namespace Inkscape {
 namespace UI {
-namespace Widget {
+namespace Toolbar {
 
 ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     : _desktop(desktop),
