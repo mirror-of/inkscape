@@ -36,7 +36,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "ink-toggle-action.h"
-#include "ink-tool-menu-action.h"
 #include "inkscape.h"
 #include "node-toolbar.h"
 #include "selection-chemistry.h"
@@ -298,63 +297,6 @@ static void node_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 #if 0
 void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-
-    {
-        InkToolMenuAction* inky = ink_tool_menu_action_new( "NodeInsertAction",
-                                                            _("Insert node"),
-                                                            _("Insert new nodes into selected segments"),
-                                                            INKSCAPE_ICON("node-add"),
-                                                            secondarySize );
-        g_object_set( INK_ACTION(inky), "short_label", _("Insert"), NULL );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        GtkToolItem *menu_tool_button = gtk_menu_tool_button_new (NULL, NULL);
-        gtk_activatable_set_related_action (GTK_ACTIVATABLE (menu_tool_button), GTK_ACTION(inky));
-        // also create dummy menu action:
-        gtk_action_group_add_action( mainActions, gtk_action_new("NodeInsertActionMenu", NULL, NULL, NULL) );
-    }
-
-    {
-        InkAction* inky = ink_action_new( "NodeInsertActionMinX",
-                                          _("Insert node at min X"),
-                                          _("Insert new nodes at min X into selected segments"),
-                                          INKSCAPE_ICON("node_insert_min_x"),
-                                          secondarySize );
-        g_object_set( inky, "short_label", _("Insert min X"), NULL );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add_min_x), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-    {
-        InkAction* inky = ink_action_new( "NodeInsertActionMaxX",
-                                          _("Insert node at max X"),
-                                          _("Insert new nodes at max X into selected segments"),
-                                          INKSCAPE_ICON("node_insert_max_x"),
-                                          secondarySize );
-        g_object_set( inky, "short_label", _("Insert max X"), NULL );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add_max_x), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-    {
-        InkAction* inky = ink_action_new( "NodeInsertActionMinY",
-                                          _("Insert node at min Y"),
-                                          _("Insert new nodes at min Y into selected segments"),
-                                          INKSCAPE_ICON("node_insert_min_y"),
-                                          secondarySize );
-        g_object_set( inky, "short_label", _("Insert min Y"), NULL );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add_min_y), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-    {
-        InkAction* inky = ink_action_new( "NodeInsertActionMaxY",
-                                          _("Insert node at max Y"),
-                                          _("Insert new nodes at max Y into selected segments"),
-                                          INKSCAPE_ICON("node_insert_max_y"),
-                                          secondarySize );
-        g_object_set( inky, "short_label", _("Insert max Y"), NULL );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add_max_y), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-
     {
         InkAction* inky = ink_action_new( "NodeDeleteAction",
                                           _("Delete node"),
