@@ -22,7 +22,6 @@ set(widgets_SRC
 	ink-comboboxentry-action.cpp
 	ink-radio-action.cpp
 	ink-toggle-action.cpp
-	ink-tool-menu-action.cpp
 	lpe-toolbar.cpp
 	measure-toolbar.cpp
 	mesh-toolbar.cpp
@@ -73,7 +72,6 @@ set(widgets_SRC
 	ink-comboboxentry-action.h
 	ink-radio-action.h
 	ink-toggle-action.h
-	ink-tool-menu-action.h
 	lpe-toolbar.h
 	measure-toolbar.h
 	mesh-toolbar.h
