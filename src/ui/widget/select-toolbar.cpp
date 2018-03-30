@@ -230,6 +230,8 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
     add(*_transform_corners_button);
     add(*_transform_gradient_button);
     add(*_transform_pattern_button);
+
+    show_all();
 }
 
 GtkWidget *
