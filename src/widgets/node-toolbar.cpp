@@ -30,6 +30,7 @@
 
 #include <giomm/simpleactiongroup.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/image.h>
 #include <gtkmm/menutoolbutton.h>
 
 #include "desktop.h"
@@ -79,43 +80,6 @@ static NodeTool *get_node_tool()
         }
     }
     return tool;
-}
-
-static void sp_node_path_edit_add(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->insertNodes();
-    }
-}
-
-static void sp_node_path_edit_add_min_x(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MIN_X);
-    }
-}
-static void sp_node_path_edit_add_max_x(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MAX_X);
-    }
-}
-static void sp_node_path_edit_add_min_y(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MIN_Y);
-    }
-}
-static void sp_node_path_edit_add_max_y(void)
-{
-    NodeTool *nt = get_node_tool();
-    if (nt) {
-        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MAX_Y);
-    }
 }
 
 static void sp_node_path_edit_delete(void)
@@ -656,12 +620,14 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
 
     auto secondarySize = static_cast<Gtk::IconSize>(ToolboxFactory::prefToSize("/toolbox/secondary", 1));
 
-    auto insert_node_button = Gtk::manage(new Gtk::MenuToolButton());
-    insert_node_button->set_icon_name(INKSCAPE_ICON("node-add"));
-    insert_node_button->set_label(_("Insert node"));
-    insert_node_button->set_tooltip_text(_("Insert new nodes into selected segments"));
+    action_group->add_action("insert-node-min-x", sigc::mem_fun(*this, &NodeToolbar::on_insert_node_min_x_activated));
+    action_group->add_action("insert-node-max-x", sigc::mem_fun(*this, &NodeToolbar::on_insert_node_max_x_activated));
+    action_group->add_action("insert-node-min-y", sigc::mem_fun(*this, &NodeToolbar::on_insert_node_min_y_activated));
+    action_group->add_action("insert-node-max-y", sigc::mem_fun(*this, &NodeToolbar::on_insert_node_max_y_activated));
 
-    add(*insert_node_button);
+    create_insert_node_button();
+
+    show_all();
 }
 
 NodeToolbar::~NodeToolbar() {
@@ -674,6 +640,100 @@ NodeToolbar::create(SPDesktop *desktop)
     auto toolbar = Gtk::manage(new NodeToolbar(desktop));
     return GTK_WIDGET(toolbar->gobj());
 }
+
+void
+NodeToolbar::on_insert_node_button_clicked()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->insertNodes();
+    }
+}
+
+void
+NodeToolbar::on_insert_node_min_x_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MIN_X);
+    }
+}
+
+void
+NodeToolbar::on_insert_node_max_x_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MAX_X);
+    }
+}
+
+void
+NodeToolbar::on_insert_node_min_y_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MIN_Y);
+    }
+}
+
+void
+NodeToolbar::on_insert_node_max_y_activated()
+{
+    NodeTool *nt = get_node_tool();
+    if (nt) {
+        nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MAX_Y);
+    }
+}
+
+void
+NodeToolbar::create_insert_node_button()
+{
+    auto insert_node_button_clicked_cb = sigc::mem_fun(*this, &NodeToolbar::on_insert_node_button_clicked);
+
+    auto insert_node_button = Gtk::manage(new Gtk::MenuToolButton());
+    insert_node_button->set_icon_name(INKSCAPE_ICON("node-add"));
+    insert_node_button->set_label(_("Insert node"));
+    insert_node_button->set_tooltip_text(_("Insert new nodes into selected segments"));
+    insert_node_button->signal_clicked().connect(insert_node_button_clicked_cb);
+
+    auto insert_node_min_x_icon = Gtk::manage(new Gtk::Image());
+    auto insert_node_max_x_icon = Gtk::manage(new Gtk::Image());
+    auto insert_node_min_y_icon = Gtk::manage(new Gtk::Image());
+    auto insert_node_max_y_icon = Gtk::manage(new Gtk::Image());
+
+    insert_node_min_x_icon->set_from_icon_name(INKSCAPE_ICON("node_insert_min_x"), Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    insert_node_max_x_icon->set_from_icon_name(INKSCAPE_ICON("node_insert_max_x"), Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    insert_node_min_y_icon->set_from_icon_name(INKSCAPE_ICON("node_insert_min_y"), Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    insert_node_max_y_icon->set_from_icon_name(INKSCAPE_ICON("node_insert_max_y"), Gtk::ICON_SIZE_LARGE_TOOLBAR);
+
+    auto insert_node_min_x_item = Gtk::manage(new Gtk::MenuItem(*insert_node_min_x_icon));
+    auto insert_node_max_x_item = Gtk::manage(new Gtk::MenuItem(*insert_node_max_x_icon));
+    auto insert_node_min_y_item = Gtk::manage(new Gtk::MenuItem(*insert_node_min_y_icon));
+    auto insert_node_max_y_item = Gtk::manage(new Gtk::MenuItem(*insert_node_max_y_icon));
+
+    insert_node_min_x_item->set_tooltip_text(_("Insert new nodes at min X into selected segments"));
+    insert_node_max_x_item->set_tooltip_text(_("Insert new nodes at max X into selected segments"));
+    insert_node_min_y_item->set_tooltip_text(_("Insert new nodes at min Y into selected segments"));
+    insert_node_max_y_item->set_tooltip_text(_("Insert new nodes at max Y into selected segments"));
+
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(insert_node_min_x_item->gobj()),"node-toolbar.insert-node-min-x");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(insert_node_max_x_item->gobj()),"node-toolbar.insert-node-max-x");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(insert_node_min_y_item->gobj()),"node-toolbar.insert-node-min-y");
+    gtk_actionable_set_action_name(GTK_ACTIONABLE(insert_node_max_y_item->gobj()),"node-toolbar.insert-node-max-y");
+
+    // Pack items into node-insert menu
+    auto insert_node_menu = Gtk::manage(new Gtk::Menu());
+    insert_node_menu->append(*insert_node_min_x_item);
+    insert_node_menu->append(*insert_node_max_x_item);
+    insert_node_menu->append(*insert_node_min_y_item);
+    insert_node_menu->append(*insert_node_max_y_item);
+    insert_node_menu->show_all();
+
+    insert_node_button->set_menu(*insert_node_menu);
+    add(*insert_node_button);
+}
+
 }
 }
 }

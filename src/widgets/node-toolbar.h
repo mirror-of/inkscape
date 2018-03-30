@@ -41,6 +41,15 @@ private:
     SPDesktop *_desktop;
     Inkscape::UI::Widget::UnitTracker *_tracker;
 
+    // Signal handlers
+    void on_insert_node_button_clicked();
+    void on_insert_node_min_x_activated();
+    void on_insert_node_max_x_activated();
+    void on_insert_node_min_y_activated();
+    void on_insert_node_max_y_activated();
+
+    void create_insert_node_button();
+
 public:
     NodeToolbar(SPDesktop *desktop);
     ~NodeToolbar();
