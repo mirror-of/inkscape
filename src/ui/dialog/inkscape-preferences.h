@@ -459,7 +459,7 @@ protected:
     class ModelColumns: public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
-            add(name);
+            add(label);
             add(id);
             add(shortcut);
             add(description);
@@ -469,7 +469,7 @@ protected:
         virtual ~ModelColumns() {
         }
 
-        Gtk::TreeModelColumn<Glib::ustring> name;
+        Gtk::TreeModelColumn<Glib::ustring> label;
         Gtk::TreeModelColumn<Glib::ustring> id;
         Gtk::TreeModelColumn<Glib::ustring> shortcut;
         Gtk::TreeModelColumn<Glib::ustring> description;

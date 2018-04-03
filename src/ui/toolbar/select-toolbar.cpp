@@ -257,7 +257,7 @@ SelectToolbar::create_toolbutton_for_verb(unsigned int  verb_code)
     SPAction* targetAction = verb->get_action(Inkscape::ActionContext(_desktop));
     auto icon_name = verb->get_image();
 
-    auto button = Gtk::manage(new Gtk::ToolButton(verb->get_name()));
+    auto button = Gtk::manage(new Gtk::ToolButton(verb->get_label()));
     button->set_icon_name(icon_name);
     button->set_tooltip_text(verb->get_tip());
     button->signal_clicked().connect(sigc::bind(sigc::ptr_fun(&sp_action_perform), targetAction, nullptr));

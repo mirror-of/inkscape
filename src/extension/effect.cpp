@@ -74,7 +74,7 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
                     if (!strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "menu-name") ||
                             !strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "_menu-name")) {
                         // printf("Found local effects menu in %s\n", this->get_name());
-                        _verb.set_name(effect_child->firstChild()->content());
+                        _verb.set_label(effect_child->firstChild()->content());
                     }
                     if (!strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "menu-tip") ||
                             !strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "_menu-tip")) {
@@ -161,7 +161,7 @@ Effect::merge_menu (Inkscape::XML::Node * base,
 					g_warning("Unable to find verb '%s' which is referred to in the menus.", verbid);
                     continue;
                 }
-                compare_char = verb->get_name();
+                compare_char = verb->get_label();
             } else if (!strcmp(menupass->name(), "submenu")) {
                 compare_char = menupass->attribute("name");
                 if (compare_char == NULL)
