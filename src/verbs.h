@@ -456,8 +456,8 @@ private:
     /** A unique textual ID for the verb. */
     char const * _id;
 
-    /** The full name of the verb.  (shown on menu entries) */
-    char const * _name;
+    /** The full label for the verb.  (shown on menu entries) */
+    char const * _label;
 
     /** Tooltip for the verb. */
     char const * _tip;
@@ -510,7 +510,7 @@ public:
     char const * get_id (void) { return _id; }
 
     /** Accessor to get the internal variable. */
-    char const * get_name (void) { return _name; }
+    char const * get_label (void) { return _label; }
 
     /** Accessor to get the internal variable. */
     char const * get_short_tip (void) { return _tip; };
@@ -524,8 +524,8 @@ public:
     /** Get the verbs group */
     char const * get_group (void) { return _group; }
 
-    /** Set the name after initialization. */
-    char const * set_name (char const * name) { _name = name; return _name; }
+    /** Set the label after initialization. */
+    char const * set_label (char const * label) { _label = label; return _label; }
 
     /** Set the tooltip after initialization. */
     char const * set_tip (char const * tip) { _tip = tip; return _tip; }
@@ -554,19 +554,19 @@ public:
      *
      * @param code  Goes to \c _code.
      * @param id    Goes to \c _id.
-     * @param name  Goes to \c _name.
+     * @param label Goes to \c _label.
      * @param tip   Goes to \c _tip.
      * @param image Goes to \c _image.
      */
     Verb(const unsigned int code,
          char const * id,
-         char const * name,
+         char const * label,
          char const * tip,
          char const * image,
          char const * group) :
         _actions(0),
         _id(id),
-        _name(name),
+        _label(label),
         _tip(tip),
         _full_tip(0),
         _shortcut(0),

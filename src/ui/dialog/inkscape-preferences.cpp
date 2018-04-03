@@ -1609,7 +1609,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     _kb_shortcut_renderer.property_editable() = true;
 
     _kb_tree.set_model(_kb_filter);
-    _kb_tree.append_column(_("Name"), _kb_columns.name);
+    _kb_tree.append_column(_("Label"), _kb_columns.label);
     _kb_tree.append_column(_("Shortcut"), _kb_shortcut_renderer);
     _kb_tree.append_column(_("Description"), _kb_columns.description);
     _kb_tree.append_column(_("ID"), _kb_columns.id);
@@ -1675,7 +1675,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     _kb_shortcuts_loaded = false;
     Gtk::TreeStore::iterator iter_group = _kb_store->append();
-    (*iter_group)[_kb_columns.name] = "Loading ...";
+    (*iter_group)[_kb_columns.label] = "Loading ...";
     (*iter_group)[_kb_columns.shortcut] = "";
     (*iter_group)[_kb_columns.id] = "";
     (*iter_group)[_kb_columns.description] = "";
@@ -1764,7 +1764,7 @@ bool InkscapePreferences::onKBSearchFilter(const Gtk::TreeModel::const_iterator&
         return TRUE;
     }
 
-    Glib::ustring name = (*iter)[_kb_columns.name];
+    Glib::ustring label = (*iter)[_kb_columns.label];
     Glib::ustring desc = (*iter)[_kb_columns.description];
     Glib::ustring shortcut = (*iter)[_kb_columns.shortcut];
     Glib::ustring id = (*iter)[_kb_columns.id];
@@ -1773,10 +1773,10 @@ bool InkscapePreferences::onKBSearchFilter(const Gtk::TreeModel::const_iterator&
         return TRUE;    // Keep all group nodes visible
     }
 
-    return (name.lowercase().find(search) != name.npos
-            || shortcut.lowercase().find(search) != name.npos
-            || desc.lowercase().find(search) != name.npos
-            || id.lowercase().find(search) != name.npos);
+    return (label.lowercase().find(search) != label.npos
+            || shortcut.lowercase().find(search) != label.npos
+            || desc.lowercase().find(search) != label.npos
+            || id.lowercase().find(search) != label.npos);
 }
 
 void InkscapePreferences::onKBRealize()
@@ -1824,7 +1824,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (!verb) {
             continue;
         }
-        if (!verb->get_name()){
+        if (!verb->get_label()){
             continue;
         }
 
@@ -1846,8 +1846,8 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             if (!_kb_store->iter_is_valid(iter_group)) {
                 break;
             }
-            Glib::ustring name = (*iter_group)[_kb_columns.name];
-            if ((*iter_group)[_kb_columns.name] == group) {
+            Glib::ustring label = (*iter_group)[_kb_columns.label];
+            if ((*iter_group)[_kb_columns.label] == group) {
                 found = true;
                 break;
             }
@@ -1857,7 +1857,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         if (!found) {
             // Add the group if not there
             iter_group = _kb_store->append();
-            (*iter_group)[_kb_columns.name] = group;
+            (*iter_group)[_kb_columns.label] = group;
             (*iter_group)[_kb_columns.shortcut] = "";
             (*iter_group)[_kb_columns.id] = "";
             (*iter_group)[_kb_columns.description] = "";
@@ -1865,11 +1865,11 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             (*iter_group)[_kb_columns.user_set] = 0;
         }
 
-        // Remove the key accelerators from the verb name
-        Glib::ustring name = _(verb->get_name());
+        // Remove the key accelerators from the verb label
+        Glib::ustring label = _(verb->get_label());
         std::string::size_type k = 0;
-        while((k=name.find('_',k))!=name.npos) {
-            name.erase(k, 1);
+        while((k=label.find('_',k))!=label.npos) {
+            label.erase(k, 1);
         }
 
         // Get the shortcut label
@@ -1885,7 +1885,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
         // Add the verb to the group
         Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
-        (*row)[_kb_columns.name] =  name;
+        (*row)[_kb_columns.label] =  label;
         (*row)[_kb_columns.shortcut] = shortcut_label;
         (*row)[_kb_columns.description] = verb->get_short_tip() ? _(verb->get_short_tip()) : "";
         (*row)[_kb_columns.shortcutid] = shortcut_id;

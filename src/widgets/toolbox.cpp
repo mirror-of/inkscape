@@ -293,7 +293,7 @@ Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb
 }
 
 VerbAction::VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view) :
-    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_name())), Glib::ustring(_(verb->get_tip()))),
+    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_label())), Glib::ustring(_(verb->get_tip()))),
     verb(verb),
     verb2(verb2),
     view(view),
@@ -510,7 +510,7 @@ static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::Vi
     GtkAction* act = 0;
 
     SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
-    InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_name()), verb->get_tip(), verb->get_image(), size  );
+    InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_label()), verb->get_tip(), verb->get_image(), size  );
     act = GTK_ACTION(inky);
     gtk_action_set_sensitive( act, targetAction->sensitive );
 
@@ -1331,7 +1331,7 @@ void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         //       For example, this action could be based on the verb(+action) + PrefsPusher.
         Inkscape::Verb* verb = Inkscape::Verb::get(SP_VERB_TOGGLE_SNAPPING);
         InkToggleAction* act = ink_toggle_action_new(verb->get_id(),
-                                                     verb->get_name(), verb->get_tip(), INKSCAPE_ICON("snap"), secondarySize,
+                                                     verb->get_label(), verb->get_tip(), INKSCAPE_ICON("snap"), secondarySize,
                                                      SP_ATTR_INKSCAPE_SNAP_GLOBAL);
 
         gtk_action_group_add_action( mainActions->gobj(), GTK_ACTION( act ) );

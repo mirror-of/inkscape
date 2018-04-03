@@ -366,10 +366,10 @@ Verb::VerbIDTable Verb::_verb_ids;
  * each call it is incremented.  The list of allocated verbs is kept
  * in the \c _verbs hashtable which is indexed by the \c code.
  */
-Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *image, gchar const *group) :
+Verb::Verb(gchar const *id, gchar const *label, gchar const *tip, gchar const *image, gchar const *group) :
     _actions(0),
     _id(id),
-    _name(name),
+    _label(label),
     _tip(tip),
     _full_tip(0),
     _shortcut(0),
@@ -594,7 +594,7 @@ SPAction *Verb::make_action_helper(Inkscape::ActionContext const & context, void
     SPAction *action;
 
     //std::cout << "Adding action: " << _code << std::endl;
-    action = sp_action_new(context, _id, _(_name),
+    action = sp_action_new(context, _id, _(_label),
                            _(_tip), _image, this);
 
     if (action == NULL) return NULL;
@@ -643,8 +643,7 @@ SPAction *Verb::get_action(Inkscape::ActionContext const & context)
     } else {
         action = this->make_action(context);
 
-        // if (action == NULL) printf("Hmm, NULL in %s\n", _name);
-        if (action == NULL) printf("Hmm, NULL in %s\n", _name);
+        if (action == NULL) printf("Hmm, NULL in %s\n", _label);
         if (!_default_sensitive) {
             sp_action_set_sensitive(action, 0);
         } else {
@@ -3314,7 +3313,7 @@ Verb::list (void) {
             continue;
         }
 
-        printf("%s: %s\n", verb->get_id(), verb->get_tip()? verb->get_tip() : verb->get_name());
+        printf("%s: %s\n", verb->get_id(), verb->get_tip()? verb->get_tip() : verb->get_label());
     }
 
     return;
