@@ -454,7 +454,7 @@ private:
     ActionTable * _actions;
 
     /** A unique textual ID for the verb. */
-    char const * _id;
+    char const * _name;
 
     /** The full label for the verb.  (shown on menu entries) */
     char const * _label;
@@ -509,7 +509,7 @@ public:
     unsigned int get_code (void) { return _code; }
 
     /** Accessor to get the internal variable. */
-    char const * get_id (void) { return _id; }
+    char const * get_name (void) { return _name; }
 
     /** Accessor to get the internal variable. */
     char const * get_label (void) { return _label; }
@@ -566,19 +566,19 @@ public:
      * would be a waste of memory.
      *
      * @param code  Goes to \c _code.
-     * @param id    Goes to \c _id.
+     * @param name  Goes to \c _name.
      * @param label Goes to \c _label.
      * @param tip   Goes to \c _tip.
      * @param image Goes to \c _image.
      */
     Verb(const unsigned int code,
-         char const * id,
+         char const * name,
          char const * label,
          char const * tip,
          char const * image,
          char const * group) :
         _actions(0),
-        _id(id),
+        _name(name),
         _label(label),
         _tip(tip),
         _full_tip(0),
@@ -589,9 +589,9 @@ public:
         _default_sensitive(true)
     {
         _verbs.insert(VerbTable::value_type(_code, this));
-        _verb_ids.insert(VerbIDTable::value_type(_id, this));
+        _verb_ids.insert(VerbIDTable::value_type(_name, this));
     }
-    Verb (char const * id, char const * name, char const * tip, char const * image, char const * group);
+    Verb (char const * name, char const * label, char const * tip, char const * image, char const * group);
     virtual ~Verb (void);
 
     SPAction * get_action(Inkscape::ActionContext const & context);

@@ -125,7 +125,7 @@ public:
         g_free(serial);
         Verb *verb = Verb::get(type);
         if (verb) {
-            _addProperty(share_static_string("context"), verb->get_id());
+            _addProperty(share_static_string("context"), verb->get_name());
         }
         if (key) {
             _addProperty(share_static_string("merge-key"), key);

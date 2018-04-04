@@ -299,7 +299,7 @@ void
 Effect::set_last_effect (Effect * in_effect)
 {
     if (in_effect) {
-        gchar const * verb_id = in_effect->get_verb()->get_id();
+        gchar const * verb_id = in_effect->get_verb()->get_name();
         gchar const * help_id_prefix = "org.inkscape.help.";
 
         // We don't want these "effects" to register as the last effect,
