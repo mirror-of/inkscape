@@ -293,7 +293,7 @@ Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb
 }
 
 VerbAction::VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view) :
-    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_label())), Glib::ustring(_(verb->get_tip()))),
+    Gtk::Action(Glib::ustring(verb->get_name()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_label())), Glib::ustring(_(verb->get_tip()))),
     verb(verb),
     verb2(verb2),
     view(view),
@@ -308,7 +308,6 @@ VerbAction::~VerbAction()
 Gtk::Widget* VerbAction::create_menu_item_vfunc()
 {
     Gtk::Widget* widg = Gtk::Action::create_menu_item_vfunc();
-//     g_message("create_menu_item_vfunc() = %p  for '%s'", widg, verb->get_id());
     return widg;
 }
 
@@ -331,19 +330,16 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
     gtk_widget_show_all( button_widget );
     Gtk::ToolItem* holder = Glib::wrap(button_toolitem);
 
-//     g_message("create_tool_item_vfunc() = %p  for '%s'", holder, verb->get_id());
     return holder;
 }
 
 void VerbAction::connect_proxy_vfunc(Gtk::Widget* proxy)
 {
-//     g_message("connect_proxy_vfunc(%p)  for '%s'", proxy, verb->get_id());
     Gtk::Action::connect_proxy_vfunc(proxy);
 }
 
 void VerbAction::disconnect_proxy_vfunc(Gtk::Widget* proxy)
 {
-//     g_message("disconnect_proxy_vfunc(%p)  for '%s'", proxy, verb->get_id());
     Gtk::Action::disconnect_proxy_vfunc(proxy);
 }
 
@@ -510,7 +506,7 @@ static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::Vi
     GtkAction* act = 0;
 
     SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
-    InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_label()), verb->get_tip(), verb->get_image(), size  );
+    InkAction* inky = ink_action_new( verb->get_name(), _(verb->get_label()), verb->get_tip(), verb->get_image(), size  );
     act = GTK_ACTION(inky);
     gtk_action_set_sensitive( act, targetAction->sensitive );
 
@@ -605,7 +601,7 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
     for ( guint i = 0; i < G_N_ELEMENTS(verbsToUse); i++ ) {
         Inkscape::Verb* verb = Inkscape::Verb::get(verbsToUse[i]);
         if ( verb ) {
-            if (!mainActions->get_action(verb->get_id())) {
+            if (!mainActions->get_action(verb->get_name())) {
                 GtkAction* act = create_action_for_verb( verb, view, toolboxSize );
                 mainActions->add(Glib::wrap(act));
             }
@@ -960,7 +956,7 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
 
     for (int i = 0 ; tools[i].type_name ; i++ ) {
-        Glib::RefPtr<Gtk::Action> act = mainActions->get_action( Inkscape::Verb::get(tools[i].verb)->get_id() );
+        Glib::RefPtr<Gtk::Action> act = mainActions->get_action( Inkscape::Verb::get(tools[i].verb)->get_name() );
         if ( act ) {
             bool setActive = tname && !strcmp(tname, tools[i].type_name);
             Glib::RefPtr<VerbAction> verbAct = Glib::RefPtr<VerbAction>::cast_dynamic(act);
@@ -1330,7 +1326,7 @@ void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         //       We should really unify these (should save some lines of code as well).
         //       For example, this action could be based on the verb(+action) + PrefsPusher.
         Inkscape::Verb* verb = Inkscape::Verb::get(SP_VERB_TOGGLE_SNAPPING);
-        InkToggleAction* act = ink_toggle_action_new(verb->get_id(),
+        InkToggleAction* act = ink_toggle_action_new(verb->get_name(),
                                                      verb->get_label(), verb->get_tip(), INKSCAPE_ICON("snap"), secondarySize,
                                                      SP_ATTR_INKSCAPE_SNAP_GLOBAL);
 

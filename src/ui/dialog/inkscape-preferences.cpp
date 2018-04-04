@@ -1835,7 +1835,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
         // Find this group in the tree
         Glib::ustring group = verb->get_group() ? _(verb->get_group()) : _("Misc");
-        Glib::ustring verb_id = verb->get_id();
+        Glib::ustring verb_id = verb->get_name();
         if (verb_id .compare(0,26,"org.inkscape.effect.filter") == 0) {
             group = _("Filters");
         }
@@ -1889,10 +1889,10 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         (*row)[_kb_columns.shortcut] = shortcut_label;
         (*row)[_kb_columns.description] = verb->get_short_tip() ? _(verb->get_short_tip()) : "";
         (*row)[_kb_columns.shortcutid] = shortcut_id;
-        (*row)[_kb_columns.id] = verb->get_id();
+        (*row)[_kb_columns.id] = verb->get_name();
         (*row)[_kb_columns.user_set] = sp_shortcut_is_user_set(verb);
 
-        if (selected_id == verb->get_id()) {
+        if (selected_id == verb->get_name()) {
             Gtk::TreeStore::Path sel_path = _kb_filter->convert_child_path_to_path(_kb_store->get_path(row));
             _kb_tree.expand_to_path(sel_path);
             _kb_tree.get_selection()->select(sel_path);
