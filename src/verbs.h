@@ -485,6 +485,8 @@ private:
      */
     bool _default_sensitive;
 
+    static Verb * get_search (unsigned int code);
+
 protected:
 
     /**
@@ -535,6 +537,17 @@ protected:
     SPAction *make_action_helper (Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
     virtual SPAction *make_action (Inkscape::ActionContext const & context);
 
+    /**
+     * Returns the size of the internal base verb array.
+     *
+     * This is an inline function intended for testing. This should normally not be used.
+     * For testing, a subclass that returns this value can be created to verify that the
+     * length matches the enum values, etc.
+     *
+     * @return The size in elements of the internal base array.
+     */
+    static int _getBaseListSize(void) {return G_N_ELEMENTS(_base_verbs);}
+
 public:
 
     /**
@@ -583,10 +596,6 @@ public:
 
     SPAction * get_action(Inkscape::ActionContext const & context);
 
-private:
-    static Verb * get_search (unsigned int code);
-public:
-
     /**
      * A function to turn a code into a verb.
      *
@@ -619,21 +628,6 @@ public:
     void sensitive (SPDocument * in_doc = NULL, bool in_sensitive = true);
     void name (SPDocument * in_doc = NULL, Glib::ustring in_name = "");
 
-// Yes, multiple public, protected and private sections are bad. We'll clean that up later
-protected:
-
-    /**
-     * Returns the size of the internal base verb array.
-     *
-     * This is an inline function intended for testing. This should normally not be used.
-     * For testing, a subclass that returns this value can be created to verify that the
-     * length matches the enum values, etc.
-     *
-     * @return The size in elements of the internal base array.
-     */
-    static int _getBaseListSize(void) {return G_N_ELEMENTS(_base_verbs);}
-
-public:
     static void list (void);
     static std::vector<Inkscape::Verb *>getList (void);
 
