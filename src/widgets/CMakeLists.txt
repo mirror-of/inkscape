@@ -25,7 +25,6 @@ set(widgets_SRC
 	lpe-toolbar.cpp
 	measure-toolbar.cpp
 	mesh-toolbar.cpp
-	node-toolbar.cpp
 	paint-selector.cpp
 	pencil-toolbar.cpp
 	rect-toolbar.cpp
@@ -75,7 +74,6 @@ set(widgets_SRC
 	lpe-toolbar.h
 	measure-toolbar.h
 	mesh-toolbar.h
-	node-toolbar.h
 	paint-selector.h
 	pencil-toolbar.h
 	rect-toolbar.h

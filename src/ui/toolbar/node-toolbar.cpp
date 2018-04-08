@@ -38,11 +38,10 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "ink-toggle-action.h"
 #include "inkscape.h"
 #include "node-toolbar.h"
 #include "selection-chemistry.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "helper/action.h"

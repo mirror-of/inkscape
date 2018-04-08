@@ -72,15 +72,17 @@
 #include "arc-toolbar.h"
 #include "box3d-toolbar.h"
 #include "calligraphy-toolbar.h"
+
 #include "ui/toolbar/connector-toolbar.h"
 #include "ui/toolbar/dropper-toolbar.h"
+#include "ui/toolbar/node-toolbar.h"
 #include "ui/toolbar/select-toolbar.h"
+
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
 #include "mesh-toolbar.h"
 #include "measure-toolbar.h"
-#include "node-toolbar.h"
 #include "rect-toolbar.h"
 
 #if HAVE_POTRACE
