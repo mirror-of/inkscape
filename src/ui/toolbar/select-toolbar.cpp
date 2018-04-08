@@ -83,17 +83,18 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
     auto secondarySize = static_cast<Gtk::IconSize>(Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/secondary", 1));
 
     // Create tool items
-    auto select_all_button               = create_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL);
-    auto select_all_in_all_layers_button = create_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS);
-    auto deselect_button                 = create_toolbutton_for_verb(SP_VERB_EDIT_DESELECT);
-    auto object_rotate_90_ccw_button     = create_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CCW);
-    auto object_rotate_90_cw_button      = create_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CW);
-    auto object_flip_horizontal_button   = create_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_HORIZONTAL);
-    auto object_flip_vertical_button     = create_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_VERTICAL);
-    auto selection_to_back_button        = create_toolbutton_for_verb(SP_VERB_SELECTION_TO_BACK);
-    auto selection_lower_button          = create_toolbutton_for_verb(SP_VERB_SELECTION_LOWER);
-    auto selection_raise_button          = create_toolbutton_for_verb(SP_VERB_SELECTION_RAISE);
-    auto selection_to_front_button       = create_toolbutton_for_verb(SP_VERB_SELECTION_TO_FRONT);
+    auto context = Inkscape::ActionContext(_desktop);
+    auto select_all_button               = SPAction::create_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL, context);
+    auto select_all_in_all_layers_button = SPAction::create_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, context);
+    auto deselect_button                 = SPAction::create_toolbutton_for_verb(SP_VERB_EDIT_DESELECT, context);
+    auto object_rotate_90_ccw_button     = SPAction::create_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CCW, context);
+    auto object_rotate_90_cw_button      = SPAction::create_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CW, context);
+    auto object_flip_horizontal_button   = SPAction::create_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_HORIZONTAL, context);
+    auto object_flip_vertical_button     = SPAction::create_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_VERTICAL, context);
+    auto selection_to_back_button        = SPAction::create_toolbutton_for_verb(SP_VERB_SELECTION_TO_BACK, context);
+    auto selection_lower_button          = SPAction::create_toolbutton_for_verb(SP_VERB_SELECTION_LOWER, context);
+    auto selection_raise_button          = SPAction::create_toolbutton_for_verb(SP_VERB_SELECTION_RAISE, context);
+    auto selection_to_front_button       = SPAction::create_toolbutton_for_verb(SP_VERB_SELECTION_TO_FRONT, context);
 
     // Create the units menu.
     _tracker->addUnit(unit_table.getUnit("%"));
@@ -239,30 +240,6 @@ SelectToolbar::create(SPDesktop *desktop)
 {
     auto toolbar = Gtk::manage(new SelectToolbar(desktop));
     return GTK_WIDGET(toolbar->gobj());
-}
-
-/**
- * \brief     Create a toolbutton whose "clicked" signal performs an Inkscape verb
- *
- * \param[in] verb_code The code (e.g., SP_VERB_EDIT_SELECT_ALL) for the verb we want
- *
- * \todo This should really attach the toolbutton to a application action instead of
- *       hooking up the "clicked" signal.  This should probably wait until we've
- *       migrated to Gtk::Application
- */
-Gtk::ToolButton*
-SelectToolbar::create_toolbutton_for_verb(unsigned int  verb_code)
-{
-    auto verb = Inkscape::Verb::get(verb_code);
-    SPAction* targetAction = verb->get_action(Inkscape::ActionContext(_desktop));
-    auto icon_name = verb->get_image();
-
-    auto button = Gtk::manage(new Gtk::ToolButton(verb->get_name()));
-    button->set_icon_name(icon_name);
-    button->set_tooltip_text(verb->get_tip());
-    button->signal_clicked().connect(sigc::bind(sigc::ptr_fun(&sp_action_perform), targetAction, nullptr));
-
-    return button;
 }
 
 void
