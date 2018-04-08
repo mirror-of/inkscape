@@ -396,16 +396,16 @@ void purge_repr_listener( GObject* /*obj*/, GObject* tbl )
     }
 }
 
-PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(GObject*), GObject *cbData ) :
+PrefPusher::PrefPusher( Gtk::ToggleToolButton *btn, Glib::ustring const &path, void (*callback)(GObject*), GObject *cbData ) :
     Observer(path),
-    act(act),
+    _btn(btn),
     callback(callback),
     cbData(cbData),
     freeze(false)
 {
-    g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggleCB), this);
+    btn->signal_toggled().connect(sigc::mem_fun(*this, &PrefPusher::handleToggled));
     freeze = true;
-    gtk_toggle_action_set_active( act, Inkscape::Preferences::get()->getBool(observed_path) );
+    _btn->set_active( Inkscape::Preferences::get()->getBool(observed_path) );
     freeze = false;
 
     Inkscape::Preferences::get()->addObserver(*this);
@@ -416,18 +416,11 @@ PrefPusher::~PrefPusher()
     Inkscape::Preferences::get()->removeObserver(*this);
 }
 
-void PrefPusher::toggleCB( GtkToggleAction * /*act*/, PrefPusher *self )
-{
-    if (self) {
-        self->handleToggled();
-    }
-}
-
 void PrefPusher::handleToggled()
 {
     if (!freeze) {
         freeze = true;
-        Inkscape::Preferences::get()->setBool(observed_path, gtk_toggle_action_get_active( act ));
+        Inkscape::Preferences::get()->setBool(observed_path, _btn->get_active());
         if (callback) {
             (*callback)(cbData);
         }
@@ -438,16 +431,11 @@ void PrefPusher::handleToggled()
 void PrefPusher::notify(Inkscape::Preferences::Entry const &newVal)
 {
     bool newBool = newVal.getBool();
-    bool oldBool = gtk_toggle_action_get_active(act);
+    bool oldBool = _btn->get_active();
 
     if (!freeze && (newBool != oldBool)) {
-        gtk_toggle_action_set_active( act, newBool );
+        _btn->set_active( newBool );
     }
-}
-
-void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
-{
-    delete watcher;
 }
 
 // ------------------------------------------------------

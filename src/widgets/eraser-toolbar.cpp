@@ -210,8 +210,8 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                                       INKSCAPE_ICON("draw-use-pressure"),
                                                       GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/eraser/usepressure", eraser_update_presets_list, holder);
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        //PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/eraser/usepressure", eraser_update_presets_list, holder);
+        //g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
         g_object_set_data( holder, "usepressure", act );
     }
 
