@@ -119,10 +119,10 @@ static void tweak_toggle_doo(GtkToggleAction *act, gpointer /*data*/) {
     prefs->setBool("/tools/tweak/doo", gtk_toggle_action_get_active(act));
 }
 
+#if 0
 void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     {
         /* Width */
@@ -130,9 +130,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         gdouble values[] = {1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakWidthAction",
                                                               _("Width"), _("Width:"), _("The width of the tweak area (relative to the visible canvas area)"),
-                                                              "/tools/tweak/width", 15,
                                                               GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-tweak",
-                                                              1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               sp_tweak_width_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
@@ -373,7 +371,31 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     }
 
 }
+#endif
 
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+
+TweakToolbar::TweakToolbar(SPDesktop *desktop)
+    : _desktop(desktop)
+{
+    auto prefs = Inkscape::Preferences::get();
+
+    auto width_val = prefs->getDouble("/tools/tweak/width", 15);
+
+    _width_adj = Gtk::Adjustment::create(width_val, 1, 100, 1.0, 10.0);
+}
+
+GtkWidget *
+TweakToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = Gtk::manage(new TweakToolbar(desktop));
+    return GTK_WIDGET(toolbar->gobj());
+}
+} // namespace Toolbar
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:
