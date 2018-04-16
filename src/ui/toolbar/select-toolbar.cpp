@@ -116,10 +116,10 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop)
     _tracker->addAdjustment(_width_adj->gobj());
     _tracker->addAdjustment(_height_adj->gobj());
 
-    auto x_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(C_("Select toolbar", "X:"), _x_pos_adj,  SPIN_STEP, 3));
-    auto y_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(C_("Select toolbar", "Y:"), _y_pos_adj,  SPIN_STEP, 3));
-    auto w_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(C_("Select toolbar", "W:"), _width_adj,  SPIN_STEP, 3));
-    auto h_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(C_("Select toolbar", "H:"), _height_adj, SPIN_STEP, 3));
+    auto x_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("select-x", C_("Select toolbar", "X:"), _x_pos_adj,  SPIN_STEP, 3));
+    auto y_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("select-y", C_("Select toolbar", "Y:"), _y_pos_adj,  SPIN_STEP, 3));
+    auto w_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("select-width",  C_("Select toolbar", "W:"), _width_adj,  SPIN_STEP, 3));
+    auto h_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("select-height", C_("Select toolbar", "H:"), _height_adj, SPIN_STEP, 3));
 
     x_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
     y_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
