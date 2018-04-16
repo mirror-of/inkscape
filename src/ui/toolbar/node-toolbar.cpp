@@ -151,8 +151,8 @@ NodeToolbar::NodeToolbar(SPDesktop *desktop)
     _tracker->addAdjustment(_x_coord_adj->gobj());
     _tracker->addAdjustment(_y_coord_adj->gobj());
 
-    _x_coord_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("X:"), _x_coord_adj, 0.1, 3));
-    _y_coord_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Y:"), _y_coord_adj, 0.1, 3));
+    _x_coord_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("nodes-xcoord", _("X:"), _x_coord_adj, 0.1, 3));
+    _y_coord_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("nodes-ycoord", _("Y:"), _y_coord_adj, 0.1, 3));
     _x_coord_btn->set_sensitive(false);
     _y_coord_btn->set_sensitive(false);
     _x_coord_btn->set_all_tooltip_text(_("X coordinate of selected node(s)"));

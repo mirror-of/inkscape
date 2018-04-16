@@ -19,9 +19,11 @@ class SpinButton;
 class SpinButtonToolItem : public Gtk::ToolItem
 {
 private:
-    SpinButton *_btn;            ///< The spin-button within the widget
-    double      _last_val;       ///< The last value of the adjustment
-    bool        _transfer_focus; ///< Whether or not to transfer focus
+    Glib::ustring  _name;           ///< A unique ID for the widget (NOT translatable)
+    SpinButton    *_btn;            ///< The spin-button within the widget
+    Glib::ustring  _label_text;     ///< A string to use in labels for the widget (translatable)
+    double         _last_val;       ///< The last value of the adjustment
+    bool           _transfer_focus; ///< Whether or not to transfer focus
 
     /** A widget that grabs focus when this one loses it */
     Gtk::Widget * _focus_widget;
@@ -34,8 +36,12 @@ private:
     void defocus();
     bool process_tab(int direction);
 
+protected:
+    virtual bool on_create_menu_proxy() override;
+
 public:
-    SpinButtonToolItem(const Glib::ustring&                 label_text,
+    SpinButtonToolItem(const Glib::ustring&                 name,
+                       const Glib::ustring&                 label_text,
                        const Glib::RefPtr<Gtk::Adjustment>& adjustment,
                        double                               climb_rate = 0.0,
                        double                               digits     = 0);
