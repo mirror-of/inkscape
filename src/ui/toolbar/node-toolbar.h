@@ -27,13 +27,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm/adjustment.h>
 #include <gtkmm/toolbar.h>
 
 class SPDesktop;
 
 namespace Inkscape {
+class Selection;
+
 namespace UI {
+class PrefPusher;
+
 namespace Widget {
+class SpinButtonToolItem;
 class UnitTracker;
 }
 
@@ -43,6 +49,25 @@ class NodeToolbar : public Gtk::Toolbar {
 private:
     SPDesktop *_desktop;
     Inkscape::UI::Widget::UnitTracker *_tracker;
+
+    Glib::RefPtr<Gtk::Adjustment>  _x_coord_adj;
+    Glib::RefPtr<Gtk::Adjustment>  _y_coord_adj;
+    Inkscape::UI::Widget::SpinButtonToolItem *_x_coord_btn;
+    Inkscape::UI::Widget::SpinButtonToolItem *_y_coord_btn;
+    Gtk::ToggleToolButton         *_edit_clip_path_button;
+    Gtk::ToggleToolButton         *_edit_mask_path_button;
+    Gtk::ToggleToolButton         *_show_transform_handles_button;
+    Gtk::ToggleToolButton         *_show_handles_button;
+    Gtk::ToggleToolButton         *_show_helper_path_button;
+    Gtk::ToolButton               *_next_pe_param_button;
+
+    PrefPusher *_edit_clip_pusher;
+    PrefPusher *_edit_mask_pusher;
+    PrefPusher *_show_transform_handles_pusher;
+    PrefPusher *_show_handles_pusher;
+    PrefPusher *_show_helper_path_pusher;
+
+    bool _freeze_flag; ///< Prevent signal handling if true
 
     // Signal handlers
     void on_insert_node_button_clicked();
@@ -61,8 +86,17 @@ private:
     void on_auto_activated();
     void on_toline_activated();
     void on_tocurve_activated();
+    void on_x_coord_adj_value_changed();
+    void on_y_coord_adj_value_changed();
+
+    void path_value_changed(Geom::Dim2 d);
 
     void create_insert_node_button();
+
+    void selection_changed(Inkscape::Selection *selection);
+    void selection_modified(Inkscape::Selection *selection, guint flags);
+    void coord_changed(gpointer shape_editor);
+    void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
 
 public:
     NodeToolbar(SPDesktop *desktop);

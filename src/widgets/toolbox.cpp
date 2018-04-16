@@ -72,15 +72,17 @@
 #include "arc-toolbar.h"
 #include "box3d-toolbar.h"
 #include "calligraphy-toolbar.h"
+
 #include "ui/toolbar/connector-toolbar.h"
 #include "ui/toolbar/dropper-toolbar.h"
+#include "ui/toolbar/node-toolbar.h"
 #include "ui/toolbar/select-toolbar.h"
+
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
 #include "mesh-toolbar.h"
 #include "measure-toolbar.h"
-#include "node-toolbar.h"
 #include "rect-toolbar.h"
 
 #if HAVE_POTRACE
@@ -186,9 +188,9 @@ static struct {
 } const aux_toolboxes[] = {
     { "/tools/select", "select_toolbox", Inkscape::UI::Toolbar::SelectToolbar::create, nullptr, "SelectToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/nodes",   "node_toolbox",   Inkscape::UI::Toolbar::NodeToolbar::create, nullptr,  "NodeToolbar",
+    { "/tools/nodes",   "node_toolbox",  Inkscape::UI::Toolbar::NodeToolbar::create,   nullptr,  "NodeToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/tweak",   "tweak_toolbox",   0, sp_tweak_toolbox_prep,              "TweakToolbar",
+    { "/tools/tweak",   "tweak_toolbox", Inkscape::UI::Toolbar::TweakToolbar::create,  nullptr, "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
     { "/tools/spray",   "spray_toolbox",   0, sp_spray_toolbox_prep,              "SprayToolbar",
       SP_VERB_INVALID, 0, 0},
@@ -392,16 +394,16 @@ void purge_repr_listener( GObject* /*obj*/, GObject* tbl )
     }
 }
 
-PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(GObject*), GObject *cbData ) :
+PrefPusher::PrefPusher( Gtk::ToggleToolButton *btn, Glib::ustring const &path, void (*callback)(GObject*), GObject *cbData ) :
     Observer(path),
-    act(act),
+    _btn(btn),
     callback(callback),
     cbData(cbData),
     freeze(false)
 {
-    g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggleCB), this);
+    btn->signal_toggled().connect(sigc::mem_fun(*this, &PrefPusher::handleToggled));
     freeze = true;
-    gtk_toggle_action_set_active( act, Inkscape::Preferences::get()->getBool(observed_path) );
+    _btn->set_active( Inkscape::Preferences::get()->getBool(observed_path) );
     freeze = false;
 
     Inkscape::Preferences::get()->addObserver(*this);
@@ -412,18 +414,11 @@ PrefPusher::~PrefPusher()
     Inkscape::Preferences::get()->removeObserver(*this);
 }
 
-void PrefPusher::toggleCB( GtkToggleAction * /*act*/, PrefPusher *self )
-{
-    if (self) {
-        self->handleToggled();
-    }
-}
-
 void PrefPusher::handleToggled()
 {
     if (!freeze) {
         freeze = true;
-        Inkscape::Preferences::get()->setBool(observed_path, gtk_toggle_action_get_active( act ));
+        Inkscape::Preferences::get()->setBool(observed_path, _btn->get_active());
         if (callback) {
             (*callback)(cbData);
         }
@@ -434,16 +429,11 @@ void PrefPusher::handleToggled()
 void PrefPusher::notify(Inkscape::Preferences::Entry const &newVal)
 {
     bool newBool = newVal.getBool();
-    bool oldBool = gtk_toggle_action_get_active(act);
+    bool oldBool = _btn->get_active();
 
     if (!freeze && (newBool != oldBool)) {
-        gtk_toggle_action_set_active( act, newBool );
+        _btn->set_active( newBool );
     }
-}
-
-void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
-{
-    delete watcher;
 }
 
 // ------------------------------------------------------

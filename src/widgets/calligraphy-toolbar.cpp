@@ -538,8 +538,8 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
                                                           INKSCAPE_ICON("draw-trace-background"),
                                                           GTK_ICON_SIZE_MENU );
             gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-            PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/calligraphic/tracebackground", update_presets_list, holder);
-            g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+            //PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/calligraphic/tracebackground", update_presets_list, holder);
+            //g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
             g_object_set_data( holder, "tracebackground", act );
         }
 
@@ -551,8 +551,8 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
                                                           INKSCAPE_ICON("draw-use-pressure"),
                                                           GTK_ICON_SIZE_MENU );
             gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-            PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/calligraphic/usepressure", update_presets_list, holder);
-            g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+            //PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/calligraphic/usepressure", update_presets_list, holder);
+            //g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
             g_object_set_data( holder, "usepressure", act );
         }
 
@@ -564,8 +564,8 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
                                                           INKSCAPE_ICON("draw-use-tilt"),
                                                           GTK_ICON_SIZE_MENU );
             gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-            PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/calligraphic/usetilt", update_presets_list, holder);
-            g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+            //PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/calligraphic/usetilt", update_presets_list, holder);
+            //g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
             g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_ddc_tilt_state_changed), holder );
             gtk_action_set_sensitive( GTK_ACTION(calligraphy_angle), !prefs->getBool("/tools/calligraphic/usetilt", true) );
             gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/calligraphic/usetilt", true) );

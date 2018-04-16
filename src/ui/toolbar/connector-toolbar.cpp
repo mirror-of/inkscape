@@ -141,7 +141,8 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     auto curvature_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_curvature_adj_value_changed);
     _curvature_adj->signal_value_changed().connect(curvature_adj_value_changed_cb);
 
-    auto curvature_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Curvature:"),
+    auto curvature_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("connector-curvature",
+                                                                                 _("Curvature:"),
                                                                                  _curvature_adj));
     curvature_sb->set_all_tooltip_text(_("The amount of connectors curvature"));
     curvature_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
@@ -154,7 +155,8 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     auto spacing_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_spacing_adj_value_changed);
     _spacing_adj->signal_value_changed().connect(spacing_adj_value_changed_cb);
 
-    auto spacing_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Spacing:"),
+    auto spacing_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("connector-spacing",
+                                                                               _("Spacing:"),
                                                                                _spacing_adj));
     spacing_sb->set_all_tooltip_text(_("The amount of space left around objects by auto-routing connectors"));
     spacing_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
@@ -177,7 +179,8 @@ ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
     auto length_adj_value_changed_cb = sigc::mem_fun(*this, &ConnectorToolbar::on_length_adj_value_changed);
     _length_adj->signal_value_changed().connect(length_adj_value_changed_cb);
 
-    auto length_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem(_("Length:"),
+    auto length_sb = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("connector-length",
+                                                                               _("Length:"),
                                                                                _length_adj));
     length_sb->set_all_tooltip_text(_("Ideal length for connectors when layout is applied"));
     length_sb->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));

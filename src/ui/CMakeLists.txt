@@ -121,6 +121,7 @@ set(ui_SRC
 
 	toolbar/connector-toolbar.cpp
 	toolbar/dropper-toolbar.cpp
+	toolbar/node-toolbar.cpp
 	toolbar/select-toolbar.cpp
 
 	widget/addtoicon.cpp
@@ -292,6 +293,7 @@ set(ui_SRC
 
 	toolbar/connector-toolbar.h
 	toolbar/dropper-toolbar.h
+	toolbar/node-toolbar.h
 	toolbar/select-toolbar.h
 
 	tools/arc-tool.h
