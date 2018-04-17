@@ -271,25 +271,53 @@ SpinButtonToolItem::on_create_menu_proxy()
 
     // Get values for the adjustment
     auto adj = _btn->get_adjustment();
-    auto current_val = adj->get_value();
+    auto adj_value = adj->get_value();
     auto lower = adj->get_lower();
     auto upper = adj->get_upper();
     auto range = upper - lower;
     auto step = range/4.0;
+
+    auto digits = _btn->get_digits();
+
+    // A number a little smaller than the smallest increment that can be
+    // displayed in the spinbutton entry.
+    //
+    // For example, if digits = 0, we are displaying integers only and
+    // epsilon = 0.9 * 10^-0 = 0.9
+    //
+    // For digits = 1, we get epsilon = 0.9 * 10^-1 = 0.09
+    // For digits = 2, we get epsilon = 0.9 * 10^-2 = 0.009 etc...
+    auto epsilon = 0.9 * pow(10.0, -float(digits));
 
     // For now, let's just set some fixed values at 25% intervals
     // along the adjustment's range.
     //
     // TODO: Allow values for the list to be specified
     // TODO: Allow descriptions to be added
-    // TODO: Make this an adaptive list that depends on current value
+    // TODO: Make the range of values depend on current value?
 
     for (unsigned int i = 0; i < 5; ++i)
     {
         // Get the value for this item and represent it as a string
         auto value = lower + i * step;
+
         auto numeric_menu_item = create_numeric_menu_item(&group, value);
         sub_menu->append(*numeric_menu_item);
+
+        if (fabs(adj_value - value) < epsilon) {
+            // If the adjustment value is very close to the value of this menu item,
+            // make this menu item active
+            numeric_menu_item->set_active();
+        }
+        else if (adj_value > value + epsilon &&
+                 adj_value < value + step - epsilon)
+        {
+            // Alternatively, if the adjustment value is between this and the
+            // next item, then insert another menu item here
+            auto active_menu_item = create_numeric_menu_item(&group, adj_value);
+            sub_menu->append(*active_menu_item);
+            active_menu_item->set_active();
+        }
     }
 
     menu_item->set_submenu(*sub_menu);
