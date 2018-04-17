@@ -7,6 +7,11 @@
 
 #include <gtkmm/toolitem.h>
 
+namespace Gtk {
+class RadioButtonGroup;
+class RadioMenuItem;
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -35,6 +40,11 @@ private:
 
     void defocus();
     bool process_tab(int direction);
+
+    void on_numeric_menu_item_toggled(double value);
+
+    Gtk::RadioMenuItem * create_numeric_menu_item(Gtk::RadioButtonGroup *group,
+                                                  double                 value);
 
 protected:
     virtual bool on_create_menu_proxy() override;

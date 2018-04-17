@@ -1,6 +1,7 @@
 #include "spin-button-tool-item.h"
 
 #include <gtkmm/box.h>
+#include <gtkmm/radiomenuitem.h>
 #include <gtkmm/toolbar.h>
 
 #include "spinbutton.h"
@@ -218,6 +219,35 @@ SpinButtonToolItem::process_tab(int increment)
 }
 
 /**
+ * \brief Handler for toggle events on numeric menu items
+ *
+ * \details Sets the adjustment to the desired value
+ */
+void
+SpinButtonToolItem::on_numeric_menu_item_toggled(double value)
+{
+    auto adj = _btn->get_adjustment();
+    adj->set_value(value);
+}
+
+Gtk::RadioMenuItem *
+SpinButtonToolItem::create_numeric_menu_item(Gtk::RadioButtonGroup *group,
+                                             double                 value)
+{
+    // Represent the value as a string
+    std::ostringstream ss;
+    ss << value;
+
+    auto numeric_option = Gtk::manage(new Gtk::RadioMenuItem(*group, ss.str()));
+
+    // Set the adjustment value in response to changes in the selected item
+    auto toggled_handler = sigc::bind(sigc::mem_fun(*this, &SpinButtonToolItem::on_numeric_menu_item_toggled), value);
+    numeric_option->signal_toggled().connect(toggled_handler);
+
+    return numeric_option;
+}
+
+/**
  * \brief Create a menu-item in response to the "create-menu-proxy" signal
  *
  * \detail This is an override for the default Gtk::ToolItem handler so
@@ -228,7 +258,41 @@ SpinButtonToolItem::process_tab(int increment)
 bool
 SpinButtonToolItem::on_create_menu_proxy()
 {
+    // The main menu-item.  It just contains the label that normally appears
+    // next to the spin-button, and an indicator for a sub-menu.
     auto menu_item = Gtk::manage(new Gtk::MenuItem(_label_text));
+
+    // A sub-menu containing fixed numeric options for the
+    // adjustment. Each of these represent "snap-points" for the
+    // adjustment's value.
+    auto sub_menu = Gtk::manage(new Gtk::Menu());
+
+    Gtk::RadioMenuItem::Group group;
+
+    // Get values for the adjustment
+    auto adj = _btn->get_adjustment();
+    auto current_val = adj->get_value();
+    auto lower = adj->get_lower();
+    auto upper = adj->get_upper();
+    auto range = upper - lower;
+    auto step = range/4.0;
+
+    // For now, let's just set some fixed values at 25% intervals
+    // along the adjustment's range.
+    //
+    // TODO: Allow values for the list to be specified
+    // TODO: Allow descriptions to be added
+    // TODO: Make this an adaptive list that depends on current value
+
+    for (unsigned int i = 0; i < 5; ++i)
+    {
+        // Get the value for this item and represent it as a string
+        auto value = lower + i * step;
+        auto numeric_menu_item = create_numeric_menu_item(&group, value);
+        sub_menu->append(*numeric_menu_item);
+    }
+
+    menu_item->set_submenu(*sub_menu);
 
     set_proxy_menu_item(_name, *menu_item);
 
