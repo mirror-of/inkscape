@@ -54,6 +54,12 @@ private:
     Glib::RefPtr<Gtk::Adjustment>  _fidelity_adj;
 
     Gtk::ToggleToolButton         *_pressure_btn;
+    Gtk::ToggleToolButton         *_do_H_btn;
+    Gtk::ToggleToolButton         *_do_S_btn;
+    Gtk::ToggleToolButton         *_do_L_btn;
+    Gtk::ToggleToolButton         *_do_O_btn;
+
+    Gtk::ToolItem                 *_channels_label;
 
     Inkscape::UI::Widget::SpinButtonToolItem *_fidelity_btn;
 
@@ -62,6 +68,10 @@ private:
     void on_force_adj_value_changed();
     void on_fidelity_adj_value_changed();
     void on_pressure_btn_toggled();
+    void on_do_H_btn_toggled();
+    void on_do_S_btn_toggled();
+    void on_do_L_btn_toggled();
+    void on_do_O_btn_toggled();
     void on_mode_button_clicked(int mode);
 
     // Widget-creation helpers

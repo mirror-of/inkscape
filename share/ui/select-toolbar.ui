@@ -1,12 +1,4 @@
 <ui>
-  <toolbar name='TweakToolbar'>
-    <toolitem action='TweakChannelsLabel' />
-    <toolitem action='TweakDoH' />
-    <toolitem action='TweakDoS' />
-    <toolitem action='TweakDoL' />
-    <toolitem action='TweakDoO' />
-  </toolbar>
-
   <toolbar name='SprayToolbar'>
     <toolitem action='SprayModeAction' />
     <separator />
