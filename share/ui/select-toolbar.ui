@@ -1,9 +1,5 @@
 <ui>
   <toolbar name='TweakToolbar'>
-    <toolitem action='TweakModeAction' />
-    <separator />
-    <toolitem action='TweakFidelityAction' />
-    <separator />
     <toolitem action='TweakChannelsLabel' />
     <toolitem action='TweakDoH' />
     <toolitem action='TweakDoS' />

@@ -58,16 +58,6 @@ using Inkscape::UI::PrefPusher;
 //##       Tweak        ##
 //########################
 
-
-
-
-static void sp_tweak_fidelity_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/tweak/fidelity",
-            gtk_adjustment_get_value(adj) * 0.01 );
-}
-
 static void tweak_toggle_doh(GtkToggleAction *act, gpointer /*data*/) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/tweak/doh", gtk_toggle_action_get_active(act));
@@ -164,25 +154,6 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         }
         g_object_set_data( holder, "tweak_doo", act );
     }
-
-    {   /* Fidelity */
-        gchar const* labels[] = {_("(rough, simplified)"), 0, 0, _("(default)"), 0, 0, _("(fine, but many nodes)")};
-        gdouble values[] = {10, 25, 35, 50, 60, 80, 100};
-        EgeAdjustmentAction *eact = create_adjustment_action( "TweakFidelityAction",
-                                                              _("Fidelity"), _("Fidelity:"),
-                                                              _("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"),
-                                                              "/tools/tweak/fidelity", 50,
-                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-fidelity",
-                                                              1, 100, 1.0, 10.0,
-                                                              labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_fidelity_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_visible( GTK_ACTION(eact), TRUE );
-        if (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT || mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(eact), FALSE);
-        }
-        g_object_set_data( holder, "tweak_fidelity", eact );
-    }
 }
 #endif
 
@@ -207,6 +178,15 @@ TweakToolbar::on_force_adj_value_changed()
 }
 
 void
+TweakToolbar::on_fidelity_adj_value_changed()
+{
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/tweak/fidelity",
+                      _fidelity_adj->get_value() * 0.01 );
+}
+
+
+void
 TweakToolbar::on_pressure_btn_toggled()
 {
     auto prefs = Inkscape::Preferences::get();
@@ -228,10 +208,8 @@ TweakToolbar::on_mode_button_clicked(int mode)
             gtk_action_set_visible(act, flag);
         }
     }
-    GtkAction *fid = GTK_ACTION(get_data("tweak_fidelity"));
-    if (fid) {
-        gtk_action_set_visible(fid, !flag);
-    }
+
+    _fidelity_btn->set_visible(!flag);
 }
 
 Gtk::RadioToolButton *
@@ -253,26 +231,33 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
 {
     auto prefs = Inkscape::Preferences::get();
 
-    auto width_val = prefs->getDouble("/tools/tweak/width", 15) * 100.0;
-    auto force_val = prefs->getDouble("/tools/tweak/force", 20) * 100.0;
+    auto width_val    = prefs->getDouble("/tools/tweak/width", 15) * 100.0;
+    auto force_val    = prefs->getDouble("/tools/tweak/force", 20) * 100.0;
+    auto fidelity_val = prefs->getDouble("/tools/tweak/fidelity", 50) * 100.0;
 
-    _width_adj = Gtk::Adjustment::create(width_val, 1, 100, 1.0, 10.0);
-    _force_adj = Gtk::Adjustment::create(force_val, 1, 100, 1.0, 10.0);
+    _width_adj    = Gtk::Adjustment::create(width_val, 1, 100, 1.0, 10.0);
+    _force_adj    = Gtk::Adjustment::create(force_val, 1, 100, 1.0, 10.0);
+    _fidelity_adj = Gtk::Adjustment::create(force_val, 1, 100, 1.0, 10.0);
 
-    auto width_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("tweak-width", _("Width:"), _width_adj, 0.01, 0));
-    auto force_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("tweak-force", _("Force:"), _force_adj, 0.01, 0));
+    auto width_btn    = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("tweak-width", _("Width:"), _width_adj, 0.01, 0));
+    auto force_btn    = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("tweak-force", _("Force:"), _force_adj, 0.01, 0));
+    _fidelity_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("tweak-fidelity", _("Fidelity:"), _fidelity_adj, 0.01, 0));
 
     width_btn->set_all_tooltip_text(_("The width of the tweak area (relative to the visible canvas area)"));
     force_btn->set_all_tooltip_text(_("The force of the tweak action"));
+    _fidelity_btn->set_all_tooltip_text(_("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"));
 
     width_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
     force_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    _fidelity_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
 
-    auto width_adj_value_changed_cb = sigc::mem_fun(*this, &TweakToolbar::on_width_adj_value_changed);
-    auto force_adj_value_changed_cb = sigc::mem_fun(*this, &TweakToolbar::on_force_adj_value_changed);
+    auto width_adj_value_changed_cb    = sigc::mem_fun(*this, &TweakToolbar::on_width_adj_value_changed);
+    auto force_adj_value_changed_cb    = sigc::mem_fun(*this, &TweakToolbar::on_force_adj_value_changed);
+    auto fidelity_adj_value_changed_cb = sigc::mem_fun(*this, &TweakToolbar::on_fidelity_adj_value_changed);
 
     _width_adj->signal_value_changed().connect(width_adj_value_changed_cb);
     _force_adj->signal_value_changed().connect(force_adj_value_changed_cb);
+    _fidelity_adj->signal_value_changed().connect(fidelity_adj_value_changed_cb);
 
     // TODO: Consider adding explicit items for width button's proxy menu item.
     //       However, there may be no point, as this tool probably won't fall off the toolbar
@@ -282,6 +267,10 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
     // TODO: Explicit labels for force button's proxy menu item.
     // gchar const* labels[] = {_("(minimum force)"), 0, 0, _("(default)"), 0, 0, 0, _("(maximum force)")};
     // gdouble values[] = {1, 5, 10, 20, 30, 50, 70, 100};
+
+    // TODO: Explicity labels for fidelity button
+    // gchar const* labels[] = {_("(rough, simplified)"), 0, 0, _("(default)"), 0, 0, _("(fine, but many nodes)")};
+    //  gdouble values[] = {10, 25, 35, 50, 60, 80, 100};
 
     _pressure_btn->set_label(_("Pressure"));
     _pressure_btn->set_icon_name(INKSCAPE_ICON("draw-use-pressure"));
@@ -383,7 +372,15 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         ++btn_index;
     }
 
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*_fidelity_btn);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
     show_all();
+
+    if (current_mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT || current_mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
+        _fidelity_btn->set_visible (false);
+    }
 }
 
 GtkWidget *
