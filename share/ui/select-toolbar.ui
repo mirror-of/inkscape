@@ -1,9 +1,5 @@
 <ui>
   <toolbar name='TweakToolbar'>
-    <toolitem action='TweakWidthAction' />
-    <toolitem action='TweakForceAction' />
-    <toolitem action='TweakPressureAction' />
-    <separator />
     <toolitem action='TweakModeAction' />
     <separator />
     <toolitem action='TweakFidelityAction' />
