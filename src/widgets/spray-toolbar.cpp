@@ -285,6 +285,7 @@ static void sp_toggle_pick_inverse_value( GtkToggleAction* act, gpointer data )
     prefs->setBool("/tools/spray/pick_inverse_value", active);
 }
 
+#if 0
 void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
@@ -615,8 +616,25 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     }
     sp_spray_init(holder);
 }
+#endif
 
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+SprayToolbar::SprayToolbar(SPDesktop *desktop)
+    : _desktop(desktop)
+{
+}
 
+GtkWidget *
+SprayToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = Gtk::manage(new SprayToolbar(desktop));
+    return GTK_WIDGET(toolbar->gobj());
+}
+}
+}
+}
 
 /*
   Local Variables:

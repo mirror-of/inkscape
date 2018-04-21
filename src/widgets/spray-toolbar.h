@@ -29,9 +29,20 @@
 
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+class SprayToolbar : public Gtk::Toolbar {
+private:
+    SPDesktop *_desktop;
 
-void       sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+public:
+    SprayToolbar(SPDesktop *desktop);
+
+    static GtkWidget *create(SPDesktop *desktop);
+};
+}
+}
+}
 
 #endif /* !SEEN_SELECT_TOOLBAR_H */

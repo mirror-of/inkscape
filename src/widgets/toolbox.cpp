@@ -191,9 +191,9 @@ static struct {
       SP_VERB_INVALID, 0, 0},
     { "/tools/tweak",   "tweak_toolbox", Inkscape::UI::Toolbar::TweakToolbar::create,  "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
-#if 0
-    { "/tools/spray",   "spray_toolbox",   0, sp_spray_toolbox_prep,              "SprayToolbar",
+    { "/tools/spray",   "spray_toolbox", Inkscape::UI::Toolbar::SprayToolbar::create,  "SprayToolbar",
       SP_VERB_INVALID, 0, 0},
+#if 0
     { "/tools/zoom",   "zoom_toolbox",   0, sp_zoom_toolbox_prep,              "ZoomToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/measure",   "measure_toolbox",   0, sp_measure_toolbox_prep,              "MeasureToolbar",
