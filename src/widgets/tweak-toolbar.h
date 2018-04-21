@@ -39,6 +39,10 @@ class ToggleToolButton;
 
 namespace Inkscape {
 namespace UI {
+namespace Widget {
+class SpinButtonToolItem;
+}
+
 namespace Toolbar {
 class TweakToolbar : public Gtk::Toolbar {
 private:
@@ -47,11 +51,16 @@ private:
     // Widgets
     Glib::RefPtr<Gtk::Adjustment>  _width_adj;
     Glib::RefPtr<Gtk::Adjustment>  _force_adj;
+    Glib::RefPtr<Gtk::Adjustment>  _fidelity_adj;
+
     Gtk::ToggleToolButton         *_pressure_btn;
+
+    Inkscape::UI::Widget::SpinButtonToolItem *_fidelity_btn;
 
     // Signal handlers
     void on_width_adj_value_changed();
     void on_force_adj_value_changed();
+    void on_fidelity_adj_value_changed();
     void on_pressure_btn_toggled();
     void on_mode_button_clicked(int mode);
 
