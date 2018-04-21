@@ -39,127 +39,42 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/tweak-tool.h"
-#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-button-tool-item.h"
 
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
-#include "widgets/ink-radio-action.h"
-#include "widgets/ink-toggle-action.h"
 #include "widgets/toolbox.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
 
-
-//########################
-//##       Tweak        ##
-//########################
-
-static void tweak_toggle_doh(GtkToggleAction *act, gpointer /*data*/) {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/tweak/doh", gtk_toggle_action_get_active(act));
-}
-static void tweak_toggle_dos(GtkToggleAction *act, gpointer /*data*/) {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/tweak/dos", gtk_toggle_action_get_active(act));
-}
-static void tweak_toggle_dol(GtkToggleAction *act, gpointer /*data*/) {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/tweak/dol", gtk_toggle_action_get_active(act));
-}
-static void tweak_toggle_doo(GtkToggleAction *act, gpointer /*data*/) {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/tweak/doo", gtk_toggle_action_get_active(act));
-}
-
-#if 0
-void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
-{
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    {
-        EgeOutputAction* act = ege_output_action_new( "TweakChannelsLabel", _("Channels:"), "", 0 );
-        ege_output_action_set_use_markup( act, TRUE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
-        }
-        g_object_set_data( holder, "tweak_channels_label", act);
-    }
-
-    {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoH",
-                                                      _("Hue"),
-                                                      _("In color mode, act on objects' hue"),
-                                                      NULL,
-                                                      GTK_ICON_SIZE_MENU );
-        //TRANSLATORS:  "H" here stands for hue
-        g_object_set( act, "short_label", C_("Hue", "H"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_doh), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/doh", true) );
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
-        }
-        g_object_set_data( holder, "tweak_doh", act);
-    }
-    {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoS",
-                                                      _("Saturation"),
-                                                      _("In color mode, act on objects' saturation"),
-                                                      NULL,
-                                                      GTK_ICON_SIZE_MENU );
-        //TRANSLATORS: "S" here stands for Saturation
-        g_object_set( act, "short_label", C_("Saturation", "S"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_dos), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/dos", true) );
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
-        }
-        g_object_set_data( holder, "tweak_dos", act );
-    }
-    {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoL",
-                                                      _("Lightness"),
-                                                      _("In color mode, act on objects' lightness"),
-                                                      NULL,
-                                                      GTK_ICON_SIZE_MENU );
-        //TRANSLATORS: "L" here stands for Lightness
-        g_object_set( act, "short_label", C_("Lightness", "L"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_dol), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/dol", true) );
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
-        }
-        g_object_set_data( holder, "tweak_dol", act );
-    }
-    {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoO",
-                                                      _("Opacity"),
-                                                      _("In color mode, act on objects' opacity"),
-                                                      NULL,
-                                                      GTK_ICON_SIZE_MENU );
-        //TRANSLATORS: "O" here stands for Opacity
-        g_object_set( act, "short_label", C_("Opacity", "O"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_doo), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/doo", true) );
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
-        }
-        g_object_set_data( holder, "tweak_doo", act );
-    }
-}
-#endif
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
+
+void
+TweakToolbar::on_do_H_btn_toggled() {
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/tweak/doh", _do_H_btn->get_active());
+}
+
+void
+TweakToolbar::on_do_S_btn_toggled() {
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/tweak/dos", _do_S_btn->get_active());
+}
+
+void
+TweakToolbar::on_do_L_btn_toggled() {
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/tweak/dol", _do_L_btn->get_active());
+}
+
+void
+TweakToolbar::on_do_O_btn_toggled() {
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/tweak/doo", _do_O_btn->get_active());
+}
 
 void
 TweakToolbar::on_width_adj_value_changed()
@@ -199,15 +114,14 @@ TweakToolbar::on_mode_button_clicked(int mode)
     auto prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/tweak/mode", mode);
 
-    static gchar const* names[] = {"tweak_doh", "tweak_dos", "tweak_dol", "tweak_doo", "tweak_channels_label"};
     bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) ||
                  (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
-    for (size_t i = 0; i < G_N_ELEMENTS(names); ++i) {
-        GtkAction *act = GTK_ACTION(get_data(names[i]));
-        if (act) {
-            gtk_action_set_visible(act, flag);
-        }
-    }
+
+    _channels_label->set_visible(flag);
+    _do_H_btn->set_visible(flag);
+    _do_S_btn->set_visible(flag);
+    _do_L_btn->set_visible(flag);
+    _do_O_btn->set_visible(flag);
 
     _fidelity_btn->set_visible(!flag);
 }
@@ -227,7 +141,11 @@ TweakToolbar::create_radio_tool_button(Gtk::RadioButtonGroup &group,
 
 TweakToolbar::TweakToolbar(SPDesktop *desktop)
     : _desktop(desktop),
-      _pressure_btn(Gtk::manage(new Gtk::ToggleToolButton()))
+      _pressure_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+      _do_H_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+      _do_S_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+      _do_L_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+      _do_O_btn(Gtk::manage(new Gtk::ToggleToolButton()))
 {
     auto prefs = Inkscape::Preferences::get();
 
@@ -273,11 +191,44 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
     //  gdouble values[] = {10, 25, 35, 50, 60, 80, 100};
 
     _pressure_btn->set_label(_("Pressure"));
+
+    //TRANSLATORS: Here, "H" stands for "hue"
+    _do_H_btn->set_label(C_("Hue",        "H"));
+
+    //TRANSLATORS: "S" here stands for Saturation
+    _do_S_btn->set_label(C_("Saturation", "S"));
+
+    //TRANSLATORS: "L" here stands for Lightness
+    _do_L_btn->set_label(C_("Lightness",  "L"));
+
+    //TRANSLATORS: "O" here stands for Opacity
+    _do_O_btn->set_label(C_("Opacity",    "O"));
+
     _pressure_btn->set_icon_name(INKSCAPE_ICON("draw-use-pressure"));
+
     _pressure_btn->set_tooltip_text(_("Use the pressure of the input device to alter the force of tweak action"));
+    _do_H_btn->set_tooltip_text(_("In color mode, act on object's hue"));
+    _do_S_btn->set_tooltip_text(_("In color mode, act on object's saturation"));
+    _do_L_btn->set_tooltip_text(_("In color mode, act on object's lightness"));
+    _do_O_btn->set_tooltip_text(_("In color mode, act on object's opacity"));
+
     _pressure_btn->set_active(prefs->getBool("/tools/tweak/usepressure", true));
+    _do_H_btn->set_active(prefs->getBool("/tools/tweak/doh", true));
+    _do_S_btn->set_active(prefs->getBool("/tools/tweak/dos", true));
+    _do_L_btn->set_active(prefs->getBool("/tools/tweak/dol", true));
+    _do_O_btn->set_active(prefs->getBool("/tools/tweak/doo", true));
 
     auto pressure_btn_toggled_cb = sigc::mem_fun(*this, &TweakToolbar::on_pressure_btn_toggled);
+    auto do_H_btn_toggled_cb = sigc::mem_fun(*this, &TweakToolbar::on_do_H_btn_toggled);
+    auto do_S_btn_toggled_cb = sigc::mem_fun(*this, &TweakToolbar::on_do_S_btn_toggled);
+    auto do_L_btn_toggled_cb = sigc::mem_fun(*this, &TweakToolbar::on_do_L_btn_toggled);
+    auto do_O_btn_toggled_cb = sigc::mem_fun(*this, &TweakToolbar::on_do_O_btn_toggled);
+
+    _pressure_btn->signal_toggled().connect(pressure_btn_toggled_cb);
+    _do_H_btn->signal_toggled().connect(do_H_btn_toggled_cb);
+    _do_S_btn->signal_toggled().connect(do_S_btn_toggled_cb);
+    _do_L_btn->signal_toggled().connect(do_L_btn_toggled_cb);
+    _do_O_btn->signal_toggled().connect(do_O_btn_toggled_cb);
 
     // Add items to toolbar in correct order
     add(*width_btn);
@@ -374,12 +325,27 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
     add(*_fidelity_btn);
-    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    auto channels_label_widget = Gtk::manage(new Gtk::Label(_("Channels:")));
+    _channels_label = Gtk::manage(new Gtk::ToolItem());
+    _channels_label->add(*channels_label_widget);
+    add(*_channels_label);
+    add(*_do_H_btn);
+    add(*_do_S_btn);
+    add(*_do_L_btn);
+    add(*_do_O_btn);
 
     show_all();
 
+    // Hide selected widgets depending on whether we're in colorpaint/colorjitter mode
     if (current_mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT || current_mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
         _fidelity_btn->set_visible (false);
+    } else {
+        _channels_label->set_visible(false);
+        _do_H_btn->set_visible(false);
+        _do_S_btn->set_visible(false);
+        _do_L_btn->set_visible(false);
+        _do_O_btn->set_visible(false);
     }
 }
 
