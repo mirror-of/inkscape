@@ -180,18 +180,18 @@ static struct {
     gchar const *type_name;
     gchar const *data_name;
     GtkWidget *(*create_func)(SPDesktop *desktop);
-    void (*prep_func)(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
     gchar const *ui_name;
     gint swatch_verb_id;
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "/tools/select", "select_toolbox", Inkscape::UI::Toolbar::SelectToolbar::create, nullptr, "SelectToolbar",
+    { "/tools/select", "select_toolbox", Inkscape::UI::Toolbar::SelectToolbar::create, "SelectToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/nodes",   "node_toolbox",  Inkscape::UI::Toolbar::NodeToolbar::create,   nullptr,  "NodeToolbar",
+    { "/tools/nodes",   "node_toolbox",  Inkscape::UI::Toolbar::NodeToolbar::create,   "NodeToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/tweak",   "tweak_toolbox", Inkscape::UI::Toolbar::TweakToolbar::create,  nullptr, "TweakToolbar",
+    { "/tools/tweak",   "tweak_toolbox", Inkscape::UI::Toolbar::TweakToolbar::create,  "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
+#if 0
     { "/tools/spray",   "spray_toolbox",   0, sp_spray_toolbox_prep,              "SprayToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/zoom",   "zoom_toolbox",   0, sp_zoom_toolbox_prep,              "ZoomToolbar",
@@ -221,10 +221,12 @@ static struct {
     // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create, 0,         "DropperToolbar",
+#endif
+    { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create,       "DropperToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/connector", "connector_toolbox", Inkscape::UI::Toolbar::ConnectorToolbar::create, 0,   "ConnectorToolbar",
+    { "/tools/connector", "connector_toolbox", Inkscape::UI::Toolbar::ConnectorToolbar::create, "ConnectorToolbar",
       SP_VERB_INVALID, 0, 0},
+#if 0
     { "/tools/gradient", "gradient_toolbox", 0, sp_gradient_toolbox_prep, "GradientToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/mesh", "mesh_toolbox", 0, sp_mesh_toolbox_prep, "MeshToolbar",
@@ -235,7 +237,8 @@ static struct {
 #else
     { "/tools/paintbucket",  "paintbucket_toolbox",  0, NULL, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},
 #endif
-    { NULL, NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
+#endif // Block comment
+    { NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
 };
 
 
@@ -976,155 +979,27 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
  */
 void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
-    Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
-
-    // This section uses the UI manager to generate any toolbars and their
-    // tool widgets that have been defined in the "select-toolbar.ui" file.
-    // These can subsequently be looked up by name.
-    //
-    // This is DEPRECATED in Gtk+ 3 and FAILS in Gtk+ 4.
-    //
-    // TODO: Replace this with code based on GAction instead of GtkAction
-    GtkUIManager* mgr = gtk_ui_manager_new();
-    GError *err = 0;
-    gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
-
-    Glib::ustring filename = get_filename(UIS, "select-toolbar.ui");
-    guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename.c_str(), &err);
-    if(err) {
-      g_warning("Failed to load aux toolbar %s: %s", filename.c_str(), err->message);
-      g_error_free(err);
-      return;
-    }
-
-    // This map contains a set of "dummy" toolboxes, which don't actually
-    // contain visible widgets.  They just contain a set of GtkAction widgets
-    std::map<std::string, GtkWidget*> dataHolders;
 
     // This loops through all the toolboxes that have been declared in the aux_toolboxes
-    // list and for each toolbox, EITHER:
-    // * runs the prep function to create the actions for the widgets.  This is done
-    //   for toolboxes that were created using the UI Manager file (this is DEPRECATED).
-    // OR:
-    // * creates a new toolbox.  This is probably what we should be using for the
-    //   new GAction-based toolboxes for Gtk+ 3.  At the end of this option, pointers to any
-    //   toolboxes created in this way, are stored as GObject data with names taken from the
-    //   "data_name" field in the aux_toolboxes struct (e.g., "connector_tool").
+    // list and for each toolbox, creates a new toolbox.
+    //
+    // At the end of this option, pointers to all toolboxes are stored as GObject data
+    // with names taken from the "data_name" field in the aux_toolboxes struct
+    // (e.g., "connector_tool").
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        if ( aux_toolboxes[i].prep_func ) {
-            // converted to GtkActions and UIManager
-
-            // The following code:
-            // * Creates a dummy toolbar "kludge" and stores it in the
-            //   "dataHolders" array
-            // * Calls the relevant toolbar prep function, which creates the
-            //   actions and hooks up their signals
-            GtkWidget* kludge = gtk_toolbar_new();
-            gtk_widget_set_name( kludge, "Kludge" );
-            g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
-            g_object_set_data( G_OBJECT(kludge), "desktop", desktop);
-            dataHolders[aux_toolboxes[i].type_name] = kludge;
-            aux_toolboxes[i].prep_func( desktop, mainActions->gobj(), G_OBJECT(kludge) );
+        GtkWidget *sub_toolbox = 0;
+        if (aux_toolboxes[i].create_func == NULL) {
+            sub_toolbox = sp_empty_toolbox_new(desktop);
         } else {
-            GtkWidget *sub_toolbox = 0;
-            if (aux_toolboxes[i].create_func == NULL) {
-                sub_toolbox = sp_empty_toolbox_new(desktop);
-            } else {
-                sub_toolbox = aux_toolboxes[i].create_func(desktop);
-            }
-            gtk_widget_set_name( sub_toolbox, "SubToolBox" );
-            gtk_size_group_add_widget( grouper, sub_toolbox );
-
-            gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
-            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
+            sub_toolbox = aux_toolboxes[i].create_func(desktop);
         }
+        gtk_widget_set_name( sub_toolbox, "SubToolBox" );
+        gtk_size_group_add_widget( grouper, sub_toolbox );
+
+        gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
+        g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
     }
-
-    // At this point, we've now got some toolbars (using default widget styles)
-    // and some actions (which were declared using a dummy toolbar that has been
-    // stored in the dataHolders array).
-
-    // Second pass to create toolbars *after* all GtkActions are created
-    //
-    // *** This is ONLY done if a "prep" function is defined in the aux_toolboxes
-    // structure above. ***
-    //
-    // At the end of this loop, a pointer to the toolbox is stored as GObject data
-    // (with the name "connector_tool" etc) in the auxilliary toolbox
-    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        if ( aux_toolboxes[i].prep_func ) {
-            // converted to GtkActions and UIManager
-
-            // Get the previously created "dummy" toolbar that contains
-            // all the actions
-            auto kludge = dataHolders[aux_toolboxes[i].type_name];
-
-            // Now create a grid and give it a name, the same as the
-            // toolbar entry in the UI file (e.g., "ConnectorToolbar")
-            auto holder = gtk_grid_new();
-            gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
-
-            // Add the dummy toolbar to the grid (the one with the actions),
-            // in the 3rd slot from the left
-            gtk_grid_attach( GTK_GRID(holder), kludge, 2, 0, 1, 1);
-
-            // Get the real toolbar (the one with the tools!) that was created
-            // by the UI manager. This is found using its name (e.g., "/ui/ConnectorToolbar")
-            gchar* tmp = g_strdup_printf( "/ui/%s", aux_toolboxes[i].ui_name );
-            GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, tmp );
-            g_free( tmp );
-            tmp = 0;
-
-            // Now set the style properties of the toolbar
-            if ( prefs->getBool( "/toolbox/icononly", true) ) {
-                gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
-            }
-
-            GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
-            gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
-            gtk_widget_set_hexpand(toolBar, TRUE);
-
-            // Add the real toolbar to the grid, in the leftmost slot
-            gtk_grid_attach( GTK_GRID(holder), toolBar, 0, 0, 1, 1);
-
-            // If the toolbar is supposed to contain a swatch, then add that
-            // to the grid in the second-from-left slot
-            if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
-                Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( NULL, _(aux_toolboxes[i].swatch_tip) );
-                swatch->setDesktop( desktop );
-                swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
-                swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
-
-#if GTKMM_CHECK_VERSION(3,12,0)
-                swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
-#else
-                swatch->set_margin_left(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_right(AUX_BETWEEN_BUTTON_GROUPS);
-#endif
-
-                swatch->set_margin_top(AUX_SPACING);
-                swatch->set_margin_bottom(AUX_SPACING);
-
-                auto swatch_ = GTK_WIDGET( swatch->gobj() );
-                gtk_grid_attach( GTK_GRID(holder), swatch_, 1, 0, 1, 1);
-            }
-            if(i==0){
-                gtk_widget_show_all( holder );
-            } else {
-                gtk_widget_show_now( holder );
-            }
-            sp_set_font_size_smaller( holder );
-
-            gtk_size_group_add_widget( grouper, holder );
-
-            // Finally, the grid (i.e., the holder) is added to the toolbox container
-            gtk_container_add( GTK_CONTAINER(toolbox), holder );
-            g_object_set_data( G_OBJECT(toolbox), aux_toolboxes[i].data_name, holder );
-        } // if a prep function exists for the toolbox
-    } // for-loop over all aux toolboxes
 
     g_object_unref( G_OBJECT(grouper) );
 }
@@ -1160,6 +1035,7 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
         // one we want
         if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
             gtk_widget_show_now(sub_toolbox);
+            gtk_widget_show_all(sub_toolbox);
             g_object_set_data(G_OBJECT(toolbox), "shows", sub_toolbox);
         } else {
             gtk_widget_hide(sub_toolbox);
