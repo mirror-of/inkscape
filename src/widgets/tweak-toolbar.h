@@ -32,6 +32,8 @@
 class SPDesktop;
 
 namespace Gtk {
+class RadioButtonGroup;
+class RadioToolButton;
 class ToggleToolButton;
 }
 
@@ -51,6 +53,13 @@ private:
     void on_width_adj_value_changed();
     void on_force_adj_value_changed();
     void on_pressure_btn_toggled();
+    void on_mode_button_clicked(int mode);
+
+    // Widget-creation helpers
+    Gtk::RadioToolButton * create_radio_tool_button(Gtk::RadioButtonGroup &group,
+                                                    const Glib::ustring   &label,
+                                                    const Glib::ustring   &tooltip_text,
+                                                    const Glib::ustring   &icon_name);
 
 public:
     TweakToolbar(SPDesktop *desktop);

@@ -31,6 +31,7 @@
 #include "tweak-toolbar.h"
 
 #include <glibmm/i18n.h>
+#include <gtkmm/radiotoolbutton.h>
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
@@ -59,25 +60,6 @@ using Inkscape::UI::PrefPusher;
 
 
 
-static void sp_tweak_mode_changed( GObject *tbl, int mode )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/tweak/mode", mode);
-
-    static gchar const* names[] = {"tweak_doh", "tweak_dos", "tweak_dol", "tweak_doo", "tweak_channels_label"};
-    bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) ||
-                 (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
-    for (size_t i = 0; i < G_N_ELEMENTS(names); ++i) {
-        GtkAction *act = GTK_ACTION(g_object_get_data( tbl, names[i] ));
-        if (act) {
-            gtk_action_set_visible(act, flag);
-        }
-    }
-    GtkAction *fid = GTK_ACTION(g_object_get_data( tbl, "tweak_fidelity"));
-    if (fid) {
-        gtk_action_set_visible(fid, !flag);
-    }
-}
 
 static void sp_tweak_fidelity_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
 {
@@ -107,114 +89,6 @@ static void tweak_toggle_doo(GtkToggleAction *act, gpointer /*data*/) {
 void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    /* Mode */
-    {
-        InkSelectOneActionColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Move mode");
-        row[columns.col_tooltip  ] = _("Move objects in any direction");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-push");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Move in/out mode");
-        row[columns.col_tooltip  ] = _("Move objects towards cursor; with Shift from cursor");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-attract");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Move jitter mode");
-        row[columns.col_tooltip  ] = _("Move objects in random directions");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-randomize");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Scale mode");
-        row[columns.col_tooltip  ] = _("Shrink objects, with Shift enlarge");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-shrink");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Rotate mode");
-        row[columns.col_tooltip  ] = _("Rotate objects, with Shift counterclockwise");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-rotate");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Duplicate/delete mode");
-        row[columns.col_tooltip  ] = _("Duplicate objects, with Shift delete");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-duplicate");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Push mode");
-        row[columns.col_tooltip  ] = _("Push parts of paths in any direction");
-        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-push");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Shrink/grow mode");
-        row[columns.col_tooltip  ] = _("Shrink (inset) parts of paths; with Shift grow (outset)");
-        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-shrink");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Attract/repel mode");
-        row[columns.col_tooltip  ] = _("Attract parts of paths towards cursor; with Shift from cursor");
-        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-attract");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Roughen mode");
-        row[columns.col_tooltip  ] = _("Roughen parts of paths");
-        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-roughen");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Color paint mode");
-        row[columns.col_tooltip  ] = _("Paint the tool's color upon selected objects");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-paint");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Color jitter mode");
-        row[columns.col_tooltip  ] = _("Jitter the colors of selected objects");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-jitter-color");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Blur mode");
-        row[columns.col_tooltip  ] = _("Blur selected objects more; with Shift, blur less");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-blur");
-        row[columns.col_sensitive] = true;
-
-        InkSelectOneAction* act =
-            InkSelectOneAction::create( "TweakModeAction",   // Name
-                                        _("Mode"),           // Label
-                                        (""),                // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
-
-        act->use_radio( true );
-        act->use_icon( true );
-        act->use_label( false );
-        act->use_group_label( true );
-        int mode = prefs->getInt("/tools/tweak/mode", 0);
-        act->set_active( mode );
-
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
-        g_object_set_data( holder, "tweak_tool_mode", act );
-
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_tweak_mode_changed), holder));
-    }
-
-    guint mode = prefs->getInt("/tools/tweak/mode", 0);
 
     {
         EgeOutputAction* act = ege_output_action_new( "TweakChannelsLabel", _("Channels:"), "", 0 );
@@ -339,6 +213,39 @@ TweakToolbar::on_pressure_btn_toggled()
     prefs->setBool("/tools/tweak/usepressure", _pressure_btn->get_active());
 }
 
+void
+TweakToolbar::on_mode_button_clicked(int mode)
+{
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/tweak/mode", mode);
+
+    static gchar const* names[] = {"tweak_doh", "tweak_dos", "tweak_dol", "tweak_doo", "tweak_channels_label"};
+    bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) ||
+                 (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
+    for (size_t i = 0; i < G_N_ELEMENTS(names); ++i) {
+        GtkAction *act = GTK_ACTION(get_data(names[i]));
+        if (act) {
+            gtk_action_set_visible(act, flag);
+        }
+    }
+    GtkAction *fid = GTK_ACTION(get_data("tweak_fidelity"));
+    if (fid) {
+        gtk_action_set_visible(fid, !flag);
+    }
+}
+
+Gtk::RadioToolButton *
+TweakToolbar::create_radio_tool_button(Gtk::RadioButtonGroup &group,
+                                       const Glib::ustring   &label,
+                                       const Glib::ustring   &tooltip_text,
+                                       const Glib::ustring   &icon_name)
+{
+    auto btn = Gtk::manage(new Gtk::RadioToolButton(group, label));
+    btn->set_tooltip_text(tooltip_text);
+    btn->set_icon_name(icon_name);
+
+    return btn;
+}
 
 TweakToolbar::TweakToolbar(SPDesktop *desktop)
     : _desktop(desktop),
@@ -388,6 +295,93 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
     add(*force_btn);
     add(*_pressure_btn);
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    // Add Move-mode radio buttons
+    auto mode_label = Gtk::manage(new Gtk::Label(_("Move:")));
+    auto mode_label_ti = Gtk::manage(new Gtk::ToolItem());
+    mode_label_ti->add(*mode_label);
+    add(*mode_label_ti);
+
+    Gtk::RadioToolButton::Group mode_button_group;
+
+    std::vector<Gtk::RadioToolButton *> mode_buttons;
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Move mode"),
+                                                    _("Move objects in any direction"),
+                                                    INKSCAPE_ICON("object-tweak-push")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Move in/out mode"),
+                                                    _("Move objects towards cursor; with Shift from cursor"),
+                                                    INKSCAPE_ICON("object-tweak-attract")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Move jitter mode"),
+                                                    _("Move objects in random directions"),
+                                                    INKSCAPE_ICON("object-tweak-randomize")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Scale mode"),
+                                                    _("Shrink objects, with Shift enlarge"),
+                                                    INKSCAPE_ICON("object-tweak-shrink")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Rotate mode"),
+                                                    _("Rotate objects, with Shift counterclockwise"),
+                                                    INKSCAPE_ICON("object-tweak-rotate")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Duplicate/delete mode"),
+                                                    _("Duplicate objects, with Shift delete"),
+                                                    INKSCAPE_ICON("object-tweak-duplicate")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Push mode"),
+                                                    _("Push parts of paths in any direction"),
+                                                    INKSCAPE_ICON("path-tweak-push")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Shrink/grow mode"),
+                                                    _("Shrink (inset) parts of paths; with Shift grow (outset)"),
+                                                    INKSCAPE_ICON("path-tweak-shrink")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Attract/repel mode"),
+                                                    _("Attract parts of paths towards cursor; with Shift from cursor"),
+                                                    INKSCAPE_ICON("path-tweak-attract")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Roughen mode"),
+                                                    _("Roughen parts of paths"),
+                                                    INKSCAPE_ICON("path-tweak-roughen")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Color paint mode"),
+                                                    _("Paint the tool's color upon selected objects"),
+                                                    INKSCAPE_ICON("object-tweak-paint")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Color jitter mode"),
+                                                    _("Jitter the colors of selected objects"),
+                                                    INKSCAPE_ICON("object-tweak-jitter-color")));
+
+    mode_buttons.push_back(create_radio_tool_button(mode_button_group,
+                                                    _("Blur mode"),
+                                                    _("Blur selected objects more; with Shift, blur less"),
+                                                    INKSCAPE_ICON("object-tweak-blur")));
+
+    // Activate the appropriate mode button according to preference
+    int current_mode = prefs->getInt("/tools/tweak/mode", 0);
+    mode_buttons[current_mode]->set_active();
+
+    auto btn_index = 0;
+
+    for (auto btn : mode_buttons) {
+        add(*btn);
+        btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &TweakToolbar::on_mode_button_clicked), btn_index));
+        ++btn_index;
+    }
 
     show_all();
 }
