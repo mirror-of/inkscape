@@ -43,7 +43,6 @@ set(widgets_SRC
 	swatch-selector.cpp
 	text-toolbar.cpp
 	toolbox.cpp
-	tweak-toolbar.cpp
 	zoom-toolbar.cpp
 
 
@@ -92,7 +91,6 @@ set(widgets_SRC
 	swatch-selector.h
 	text-toolbar.h
 	toolbox.h
-	tweak-toolbar.h
 	widget-sizes.h
 	zoom-toolbar.h
 )
