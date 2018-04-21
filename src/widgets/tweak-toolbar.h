@@ -31,6 +31,10 @@
 
 class SPDesktop;
 
+namespace Gtk {
+class ToggleToolButton;
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
@@ -39,7 +43,14 @@ private:
     SPDesktop *_desktop;
 
     // Widgets
-    Glib::RefPtr<Gtk::Adjustment> _width_adj;
+    Glib::RefPtr<Gtk::Adjustment>  _width_adj;
+    Glib::RefPtr<Gtk::Adjustment>  _force_adj;
+    Gtk::ToggleToolButton         *_pressure_btn;
+
+    // Signal handlers
+    void on_width_adj_value_changed();
+    void on_force_adj_value_changed();
+    void on_pressure_btn_toggled();
 
 public:
     TweakToolbar(SPDesktop *desktop);

@@ -28,9 +28,10 @@
 #include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
-
 #include "tweak-toolbar.h"
+
+#include <glibmm/i18n.h>
+#include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -39,6 +40,7 @@
 #include "ui/tools/tweak-tool.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/spin-button-tool-item.h"
 
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-output-action.h"
@@ -55,25 +57,7 @@ using Inkscape::UI::PrefPusher;
 //##       Tweak        ##
 //########################
 
-static void sp_tweak_width_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/tweak/width",
-            gtk_adjustment_get_value(adj) * 0.01 );
-}
 
-static void sp_tweak_force_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/tweak/force",
-            gtk_adjustment_get_value(adj) * 0.01 );
-}
-
-static void sp_tweak_pressure_state_changed( GtkToggleAction *act, gpointer /*data*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/tweak/usepressure", gtk_toggle_action_get_active(act));
-}
 
 static void sp_tweak_mode_changed( GObject *tbl, int mode )
 {
@@ -123,37 +107,6 @@ static void tweak_toggle_doo(GtkToggleAction *act, gpointer /*data*/) {
 void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    {
-        /* Width */
-        gchar const* labels[] = {_("(pinch tweak)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad tweak)")};
-        gdouble values[] = {1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
-        EgeAdjustmentAction *eact = create_adjustment_action( "TweakWidthAction",
-                                                              _("Width"), _("Width:"), _("The width of the tweak area (relative to the visible canvas area)"),
-                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-tweak",
-                                                              labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_width_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
-        ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-    }
-
-
-    {
-        /* Force */
-        gchar const* labels[] = {_("(minimum force)"), 0, 0, _("(default)"), 0, 0, 0, _("(maximum force)")};
-        gdouble values[] = {1, 5, 10, 20, 30, 50, 70, 100};
-        EgeAdjustmentAction *eact = create_adjustment_action( "TweakForceAction",
-                                                              _("Force"), _("Force:"), _("The force of the tweak action"),
-                                                              "/tools/tweak/force", 20,
-                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-force",
-                                                              1, 100, 1.0, 10.0,
-                                                              labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_force_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
-        ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-    }
 
     /* Mode */
     {
@@ -356,20 +309,6 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         }
         g_object_set_data( holder, "tweak_fidelity", eact );
     }
-
-
-    /* Use Pressure button */
-    {
-        InkToggleAction* act = ink_toggle_action_new( "TweakPressureAction",
-                                                      _("Pressure"),
-                                                      _("Use the pressure of the input device to alter the force of tweak action"),
-                                                      INKSCAPE_ICON("draw-use-pressure"),
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_tweak_pressure_state_changed), NULL);
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/usepressure", true) );
-    }
-
 }
 #endif
 
@@ -377,14 +316,80 @@ namespace Inkscape {
 namespace UI {
 namespace Toolbar {
 
+void
+TweakToolbar::on_width_adj_value_changed()
+{
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/tweak/width",
+            _width_adj->get_value() * 0.01 );
+}
+
+void
+TweakToolbar::on_force_adj_value_changed()
+{
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/tweak/force",
+            _force_adj->get_value() * 0.01 );
+}
+
+void
+TweakToolbar::on_pressure_btn_toggled()
+{
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/tweak/usepressure", _pressure_btn->get_active());
+}
+
+
 TweakToolbar::TweakToolbar(SPDesktop *desktop)
-    : _desktop(desktop)
+    : _desktop(desktop),
+      _pressure_btn(Gtk::manage(new Gtk::ToggleToolButton()))
 {
     auto prefs = Inkscape::Preferences::get();
 
-    auto width_val = prefs->getDouble("/tools/tweak/width", 15);
+    auto width_val = prefs->getDouble("/tools/tweak/width", 15) * 100.0;
+    auto force_val = prefs->getDouble("/tools/tweak/force", 20) * 100.0;
 
     _width_adj = Gtk::Adjustment::create(width_val, 1, 100, 1.0, 10.0);
+    _force_adj = Gtk::Adjustment::create(force_val, 1, 100, 1.0, 10.0);
+
+    auto width_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("tweak-width", _("Width:"), _width_adj, 0.01, 0));
+    auto force_btn = Gtk::manage(new Inkscape::UI::Widget::SpinButtonToolItem("tweak-force", _("Force:"), _force_adj, 0.01, 0));
+
+    width_btn->set_all_tooltip_text(_("The width of the tweak area (relative to the visible canvas area)"));
+    force_btn->set_all_tooltip_text(_("The force of the tweak action"));
+
+    width_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    force_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+
+    auto width_adj_value_changed_cb = sigc::mem_fun(*this, &TweakToolbar::on_width_adj_value_changed);
+    auto force_adj_value_changed_cb = sigc::mem_fun(*this, &TweakToolbar::on_force_adj_value_changed);
+
+    _width_adj->signal_value_changed().connect(width_adj_value_changed_cb);
+    _force_adj->signal_value_changed().connect(force_adj_value_changed_cb);
+
+    // TODO: Consider adding explicit items for width button's proxy menu item.
+    //       However, there may be no point, as this tool probably won't fall off the toolbar
+    // gchar const* labels[] = {_("(pinch tweak)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad tweak)")};
+    // gdouble values[] = {1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
+
+    // TODO: Explicit labels for force button's proxy menu item.
+    // gchar const* labels[] = {_("(minimum force)"), 0, 0, _("(default)"), 0, 0, 0, _("(maximum force)")};
+    // gdouble values[] = {1, 5, 10, 20, 30, 50, 70, 100};
+
+    _pressure_btn->set_label(_("Pressure"));
+    _pressure_btn->set_icon_name(INKSCAPE_ICON("draw-use-pressure"));
+    _pressure_btn->set_tooltip_text(_("Use the pressure of the input device to alter the force of tweak action"));
+    _pressure_btn->set_active(prefs->getBool("/tools/tweak/usepressure", true));
+
+    auto pressure_btn_toggled_cb = sigc::mem_fun(*this, &TweakToolbar::on_pressure_btn_toggled);
+
+    // Add items to toolbar in correct order
+    add(*width_btn);
+    add(*force_btn);
+    add(*_pressure_btn);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    show_all();
 }
 
 GtkWidget *
