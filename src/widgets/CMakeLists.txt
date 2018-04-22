@@ -42,8 +42,6 @@ set(widgets_SRC
 	swatch-selector.cpp
 	text-toolbar.cpp
 	toolbox.cpp
-	zoom-toolbar.cpp
-
 
 	# -------
 	# Headers
@@ -90,7 +88,6 @@ set(widgets_SRC
 	text-toolbar.h
 	toolbox.h
 	widget-sizes.h
-	zoom-toolbar.h
 )
 
 # add_inkscape_lib(widgets_LIB "${widgets_SRC}")
