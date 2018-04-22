@@ -30,15 +30,62 @@
 
 #include "zoom-toolbar.h"
 
+#include <gtkmm/separatortoolitem.h>
+
+#include "desktop.h"
+#include "helper/action.h"
+#include "verbs.h"
+
 //########################
 //##    Zoom Toolbox    ##
 //########################
 
-void sp_zoom_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* /*mainActions*/, GObject* /*holder*/)
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+ZoomToolbar::ZoomToolbar(SPDesktop *desktop)
+    : _desktop(desktop)
 {
-    // no custom GtkAction setup needed
-} // end of sp_zoom_toolbox_prep()
+    auto context = Inkscape::ActionContext(_desktop);
+    auto zoom_in_btn  = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_IN,  context);
+    auto zoom_out_btn = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_OUT, context);
+    auto zoom_1_1_btn = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_1_1, context);
+    auto zoom_1_2_btn = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_1_2, context);
+    auto zoom_2_1_btn = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_2_1, context);
 
+    auto zoom_selection_btn  = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_SELECTION,  context);
+    auto zoom_drawing_btn    = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_DRAWING,    context);
+    auto zoom_page_btn       = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_PAGE,       context);
+    auto zoom_page_width_btn = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_PAGE_WIDTH, context);
+
+    auto zoom_prev_btn = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_PREV, context);
+    auto zoom_next_btn = SPAction::create_toolbutton_for_verb(SP_VERB_ZOOM_NEXT, context);
+
+    add(*zoom_in_btn);
+    add(*zoom_out_btn);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*zoom_1_1_btn);
+    add(*zoom_1_2_btn);
+    add(*zoom_2_1_btn);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*zoom_selection_btn);
+    add(*zoom_drawing_btn);
+    add(*zoom_page_btn);
+    add(*zoom_page_width_btn);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*zoom_prev_btn);
+    add(*zoom_next_btn);
+}
+
+GtkWidget *
+ZoomToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = Gtk::manage(new ZoomToolbar(desktop));
+    return GTK_WIDGET(toolbar->gobj());
+}
+}
+}
+}
 /*
   Local Variables:
   mode:c++
