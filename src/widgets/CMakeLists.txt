@@ -35,7 +35,6 @@ set(widgets_SRC
 	sp-xmlview-tree.cpp
 	spinbutton-events.cpp
 	spiral-toolbar.cpp
-	spray-toolbar.cpp
 	spw-utilities.cpp
 	star-toolbar.cpp
 	stroke-marker-selector.cpp
@@ -83,7 +82,6 @@ set(widgets_SRC
 	sp-xmlview-tree.h
 	spinbutton-events.h
 	spiral-toolbar.h
-	spray-toolbar.h
 	spw-utilities.h
 	star-toolbar.h
 	stroke-marker-selector.h
