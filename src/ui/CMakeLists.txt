@@ -125,6 +125,7 @@ set(ui_SRC
 	toolbar/select-toolbar.cpp
         toolbar/spray-toolbar.cpp
         toolbar/tweak-toolbar.cpp
+        toolbar/zoom-toolbar.cpp
 
 	widget/addtoicon.cpp
 	widget/anchor-selector.cpp
@@ -299,6 +300,7 @@ set(ui_SRC
 	toolbar/select-toolbar.h
         toolbar/spray-toolbar.h
         toolbar/tweak-toolbar.h
+        toolbar/zoom-toolbar.h
 
 	tools/arc-tool.h
 	tools/box3d-tool.h

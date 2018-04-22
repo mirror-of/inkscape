@@ -79,6 +79,7 @@
 #include "ui/toolbar/select-toolbar.h"
 #include "ui/toolbar/spray-toolbar.h"
 #include "ui/toolbar/tweak-toolbar.h"
+#include "ui/toolbar/zoom-toolbar.h"
 
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
@@ -95,7 +96,6 @@
 #include "spiral-toolbar.h"
 #include "star-toolbar.h"
 #include "text-toolbar.h"
-#include "zoom-toolbar.h"
 
 #include "toolbox.h"
 
