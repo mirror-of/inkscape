@@ -27,11 +27,24 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm/toolbar.h>
+
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+class ZoomToolbar : public Gtk::Toolbar {
+private:
+    SPDesktop *_desktop;
 
-void       sp_zoom_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+public:
+    ZoomToolbar(SPDesktop *desktop);
+
+    static GtkWidget * create(SPDesktop *desktop);
+};
+}
+}
+}
 
 #endif /* !SEEN_ZOOM_TOOLBAR_H */
