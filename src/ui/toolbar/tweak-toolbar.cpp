@@ -31,22 +31,17 @@
 #include "tweak-toolbar.h"
 
 #include <glibmm/i18n.h>
+
+#include <gtkmm/adjustment.h>
+#include <gtkmm/label.h>
 #include <gtkmm/radiotoolbutton.h>
 #include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
-#include "document-undo.h"
 
 #include "ui/icon-names.h"
 #include "ui/tools/tweak-tool.h"
-#include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-button-tool-item.h"
-
-#include "widgets/toolbox.h"
-
-using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 
 namespace Inkscape {
 namespace UI {
@@ -236,8 +231,8 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
     add(*_pressure_btn);
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    // Add Move-mode radio buttons
-    auto mode_label = Gtk::manage(new Gtk::Label(_("Move:")));
+    // Add Mode radio buttons
+    auto mode_label = Gtk::manage(new Gtk::Label(_("Mode:")));
     auto mode_label_ti = Gtk::manage(new Gtk::ToolItem());
     mode_label_ti->add(*mode_label);
     add(*mode_label_ti);
@@ -315,7 +310,7 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
     int current_mode = prefs->getInt("/tools/tweak/mode", 0);
     mode_buttons[current_mode]->set_active();
 
-    auto btn_index = 0;
+    int btn_index = 0;
 
     for (auto btn : mode_buttons) {
         add(*btn);
