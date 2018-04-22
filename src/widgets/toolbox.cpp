@@ -77,6 +77,7 @@
 #include "ui/toolbar/dropper-toolbar.h"
 #include "ui/toolbar/node-toolbar.h"
 #include "ui/toolbar/select-toolbar.h"
+#include "ui/toolbar/spray-toolbar.h"
 #include "ui/toolbar/tweak-toolbar.h"
 
 #include "eraser-toolbar.h"
@@ -91,7 +92,6 @@
 #endif
 
 #include "pencil-toolbar.h"
-#include "spray-toolbar.h"
 #include "spiral-toolbar.h"
 #include "star-toolbar.h"
 #include "text-toolbar.h"

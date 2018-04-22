@@ -38,7 +38,7 @@
 
 #include "desktop.h"
 #include "inkscape.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/panel-dialog.h"

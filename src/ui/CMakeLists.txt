@@ -123,6 +123,7 @@ set(ui_SRC
 	toolbar/dropper-toolbar.cpp
 	toolbar/node-toolbar.cpp
 	toolbar/select-toolbar.cpp
+        toolbar/spray-toolbar.cpp
         toolbar/tweak-toolbar.cpp
 
 	widget/addtoicon.cpp
@@ -296,6 +297,7 @@ set(ui_SRC
 	toolbar/dropper-toolbar.h
 	toolbar/node-toolbar.h
 	toolbar/select-toolbar.h
+        toolbar/spray-toolbar.h
         toolbar/tweak-toolbar.h
 
 	tools/arc-tool.h
