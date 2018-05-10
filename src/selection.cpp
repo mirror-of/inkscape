@@ -22,6 +22,7 @@
 #include "macros.h"
 #include "inkscape.h"
 #include "document.h"
+#include "desktop.h"
 #include "layer-model.h"
 #include "selection.h"
 #include <2geom/rect.h>
@@ -34,6 +35,12 @@
 #include "box3d.h"
 #include "box3d.h"
 #include "persp3d.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tool/multi-path-manipulator.h"
+#include "ui/tool/path-manipulator.h"
+#include "ui/tool/control-point-selection.h"
+#include "sp-path.h"
+#include "sp-defs.h"
 
 #include <sigc++/functors/mem_fun.h>
 
@@ -540,6 +547,125 @@ size_t Selection::numberOfParents() {
     }
     return parents.size();
 }
+
+void
+Selection::emptyBackup(){
+    _selected_ids.clear();
+    _seldata.clear();
+    params.clear();
+}
+
+void
+Selection::setBackup () 
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        std::vector<SPItem*> selected_items = itemList();
+        _selected_ids.clear();
+        _seldata.clear();
+        params.clear();
+        for(std::vector<SPItem*>::const_iterator x = selected_items.begin(); x != selected_items.end(); ++x){
+            std::string selected_id;
+            selected_id += "--id=";
+            selected_id += (*x)->getId();
+            params.push_front(selected_id);
+            _selected_ids.push_back((*x)->getId());
+        }
+        Inkscape::UI::Tools::NodeTool *tool = 0;
+        
+        Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
+        if (INK_IS_NODE_TOOL(ec)) {
+            tool = static_cast<Inkscape::UI::Tools::NodeTool*>(ec);
+        }
+        if(tool){
+            Inkscape::UI::ControlPointSelection *cps = tool->_selected_nodes;
+            std::list<Inkscape::UI::SelectableControlPoint *> points_list = cps->_points_list;
+            for (std::list<Inkscape::UI::SelectableControlPoint *>::iterator i = points_list.begin(); i != points_list.end(); ++i) {
+                Inkscape::UI::Node *node = dynamic_cast<Inkscape::UI::Node*>(*i);
+                if (node) { 
+                    std::string id = node->nodeList().subpathList().pm().item()->getId(); 
+
+                    int sp = 0;
+                    bool found_sp = false;
+                    for(Inkscape::UI::SubpathList::iterator i = node->nodeList().subpathList().begin(); i != node->nodeList().subpathList().end(); ++i,++sp){
+                        if(&**i == &(node->nodeList())){
+                            found_sp = true;
+                            break;
+                        }
+                    }
+                    int nl=0;
+                    bool found_nl = false;
+                    for (Inkscape::UI::NodeList::iterator j = node->nodeList().begin(); j != node->nodeList().end(); ++j, ++nl){
+                        if(&*j==node){
+                            found_nl = true;
+                            break;
+                        }
+                    }
+                    std::ostringstream ss;
+                    ss<< "--selected-nodes=" << id << ":" << sp << ":" << nl;
+                    Glib::ustring selected_nodes = ss.str();
+
+                    if(found_nl && found_sp) {
+                        _seldata.push_back(std::make_pair(id,std::make_pair(sp,nl)));
+                        params.push_back(selected_nodes);
+                    } else {
+                        g_warning("Something went wrong while trying to pass selected nodes to extension. Please report a bug.");
+                    }
+                }
+            }
+        }
+    }//end add selected nodes
+}
+
+void
+Selection::restoreBackup() 
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Inkscape::UI::Tools::NodeTool *tool = 0;
+        Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
+        if (INK_IS_NODE_TOOL(ec)) {
+            tool = static_cast<Inkscape::UI::Tools::NodeTool*>(ec);
+        }
+        clear();
+        std::vector<std::string>::reverse_iterator rit = _selected_ids.rbegin();
+        for (; rit!= _selected_ids.rend(); ++rit){
+            SPObject * obj = desktop->doc()->getObjectById(rit->c_str());
+            SPDefs * defs = desktop->getDocument()->getDefs();
+            if (obj && !defs->isAncestorOf(obj)) {
+                add(obj);
+            }
+        }
+        if (tool) {
+            Inkscape::UI::ControlPointSelection *cps = tool->_selected_nodes;
+            cps->selectAll();
+            std::list<Inkscape::UI::SelectableControlPoint *> points_list = cps->_points_list;
+            cps->clear();
+            Inkscape::UI::Node * node = dynamic_cast<Inkscape::UI::Node*>(*points_list.begin());
+            if (node) {
+                Inkscape::UI::SubpathList sp = node->nodeList().subpathList();
+                for (std::vector<std::pair<std::string, std::pair<int, int> > >::iterator l = _seldata.begin(); l != _seldata.end();  ++l) {
+                    SPPath * path = dynamic_cast<SPPath *>(desktop->doc()->getObjectById(l->first));
+                    gint sp_count = 0;
+                    for (Inkscape::UI::SubpathList::iterator j = sp.begin(); j != sp.end(); ++j, ++sp_count) {
+                        if(sp_count == l->second.first) {
+                            gint nt_count = 0;
+                            for (Inkscape::UI::NodeList::iterator k = (*j)->begin(); k != (*j)->end(); ++k, ++nt_count) {
+                                if(nt_count == l->second.second) {
+                                    k->select(true);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            points_list.clear();
+        }
+    }
+}
+
 
 }
 

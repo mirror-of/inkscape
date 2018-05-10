@@ -23,6 +23,8 @@
 #include "selection.h"
 #include "effect.h"
 #include "document.h"
+#include "desktop.h"
+#include "inkscape.h"
 #include "document-undo.h"
 #include "desktop.h"
 #include "ui/view/view.h"
@@ -54,19 +56,6 @@ ExecutionEnv::ExecutionEnv (Effect * effect, Inkscape::UI::View::View * doc, Imp
     _show_working(show_working),
     _show_errors(show_errors)
 {
-    SPDesktop *desktop = (SPDesktop *)_doc;
-    sp_namedview_document_from_window(desktop);
-
-    if (desktop != NULL) {
-    	std::vector<SPItem*> selected = desktop->getSelection()->itemList();
-        for(std::vector<SPItem*>::const_iterator x = selected.begin(); x != selected.end(); ++x){
-            Glib::ustring selected_id;
-            selected_id = (*x)->getId();
-            _selected.insert(_selected.end(), selected_id);
-            //std::cout << "Selected: " << selected_id << std::endl;
-        }
-    }
-
     genDocCache();
 
     return;
@@ -183,24 +172,14 @@ ExecutionEnv::commit (void) {
 
 void
 ExecutionEnv::reselect (void) {
-    if (_doc == NULL) { return; }
-    SPDocument * doc = _doc->doc();
-    if (doc == NULL) { return; }
-
-    SPDesktop *desktop = (SPDesktop *)_doc;
-    sp_namedview_document_from_window(desktop);
-
-    if (desktop == NULL) { return; }
-
-    Inkscape::Selection * selection = desktop->getSelection();
-
-    for (std::list<Glib::ustring>::iterator i = _selected.begin(); i != _selected.end(); ++i) {
-        SPObject * obj = doc->getObjectById(i->c_str());
-        if (obj != NULL) {
-            selection->add(obj);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::Selection * selection = NULL;
+    if(desktop) {
+        selection = desktop->getSelection();
+        if (!desktop->on_live_extension) {
+            selection->restoreBackup();
         }
     }
-
     return;
 }
 
