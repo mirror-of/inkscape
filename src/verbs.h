@@ -454,10 +454,10 @@ private:
     ActionTable * _actions;
 
     /** A unique textual ID for the verb. */
-    char const * _id;
-
-    /** The full name of the verb.  (shown on menu entries) */
     char const * _name;
+
+    /** The full label for the verb.  (shown on menu entries) */
+    char const * _label;
 
     /** Tooltip for the verb. */
     char const * _tip;
@@ -485,6 +485,8 @@ private:
      */
     bool _default_sensitive;
 
+    static Verb * get_search (unsigned int code);
+
 protected:
 
     /**
@@ -507,10 +509,10 @@ public:
     unsigned int get_code (void) { return _code; }
 
     /** Accessor to get the internal variable. */
-    char const * get_id (void) { return _id; }
+    char const * get_name (void) { return _name; }
 
     /** Accessor to get the internal variable. */
-    char const * get_name (void) { return _name; }
+    char const * get_label (void) { return _label; }
 
     /** Accessor to get the internal variable. */
     char const * get_short_tip (void) { return _tip; };
@@ -524,8 +526,8 @@ public:
     /** Get the verbs group */
     char const * get_group (void) { return _group; }
 
-    /** Set the name after initialization. */
-    char const * set_name (char const * name) { _name = name; return _name; }
+    /** Set the label after initialization. */
+    char const * set_label (char const * label) { _label = label; return _label; }
 
     /** Set the tooltip after initialization. */
     char const * set_tip (char const * tip) { _tip = tip; return _tip; }
@@ -534,6 +536,17 @@ public:
 protected:
     SPAction *make_action_helper (Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
     virtual SPAction *make_action (Inkscape::ActionContext const & context);
+
+    /**
+     * Returns the size of the internal base verb array.
+     *
+     * This is an inline function intended for testing. This should normally not be used.
+     * For testing, a subclass that returns this value can be created to verify that the
+     * length matches the enum values, etc.
+     *
+     * @return The size in elements of the internal base array.
+     */
+    static int _getBaseListSize(void) {return G_N_ELEMENTS(_base_verbs);}
 
 public:
 
@@ -553,20 +566,20 @@ public:
      * would be a waste of memory.
      *
      * @param code  Goes to \c _code.
-     * @param id    Goes to \c _id.
      * @param name  Goes to \c _name.
+     * @param label Goes to \c _label.
      * @param tip   Goes to \c _tip.
      * @param image Goes to \c _image.
      */
     Verb(const unsigned int code,
-         char const * id,
          char const * name,
+         char const * label,
          char const * tip,
          char const * image,
          char const * group) :
         _actions(0),
-        _id(id),
         _name(name),
+        _label(label),
         _tip(tip),
         _full_tip(0),
         _shortcut(0),
@@ -576,16 +589,12 @@ public:
         _default_sensitive(true)
     {
         _verbs.insert(VerbTable::value_type(_code, this));
-        _verb_ids.insert(VerbIDTable::value_type(_id, this));
+        _verb_ids.insert(VerbIDTable::value_type(_name, this));
     }
-    Verb (char const * id, char const * name, char const * tip, char const * image, char const * group);
+    Verb (char const * name, char const * label, char const * tip, char const * image, char const * group);
     virtual ~Verb (void);
 
     SPAction * get_action(Inkscape::ActionContext const & context);
-
-private:
-    static Verb * get_search (unsigned int code);
-public:
 
     /**
      * A function to turn a code into a verb.
@@ -619,21 +628,6 @@ public:
     void sensitive (SPDocument * in_doc = NULL, bool in_sensitive = true);
     void name (SPDocument * in_doc = NULL, Glib::ustring in_name = "");
 
-// Yes, multiple public, protected and private sections are bad. We'll clean that up later
-protected:
-
-    /**
-     * Returns the size of the internal base verb array.
-     *
-     * This is an inline function intended for testing. This should normally not be used.
-     * For testing, a subclass that returns this value can be created to verify that the
-     * length matches the enum values, etc.
-     *
-     * @return The size in elements of the internal base array.
-     */
-    static int _getBaseListSize(void) {return G_N_ELEMENTS(_base_verbs);}
-
-public:
     static void list (void);
     static std::vector<Inkscape::Verb *>getList (void);
 

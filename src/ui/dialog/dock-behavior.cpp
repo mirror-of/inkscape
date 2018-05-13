@@ -33,7 +33,7 @@ namespace Behavior {
 DockBehavior::DockBehavior(Dialog &dialog) :
     Behavior(dialog),
     _dock_item(*SP_ACTIVE_DESKTOP->getDock(),
-               Inkscape::Verb::get(dialog._verb_num)->get_id(), dialog._title.c_str(),
+               Inkscape::Verb::get(dialog._verb_num)->get_name(), dialog._title.c_str(),
                (Inkscape::Verb::get(dialog._verb_num)->get_image() ?
                 Inkscape::Verb::get(dialog._verb_num)->get_image() : ""),
                static_cast<Widget::DockItem::State>(
@@ -51,7 +51,7 @@ DockBehavior::DockBehavior(Dialog &dialog) :
     if (_dock_item.getState() == Widget::DockItem::FLOATING_STATE) {
         if (Gtk::Window *floating_win = _dock_item.getWindow()) {
             sp_transientize(GTK_WIDGET(floating_win->gobj()));
-            if(!strcmp(Inkscape::Verb::get(_dialog._verb_num)->get_id() ,"DialogDocumentProperties")) {
+            if(!strcmp(Inkscape::Verb::get(_dialog._verb_num)->get_name() ,"DialogDocumentProperties")) {
                 floating_win->set_resizable(false);
             }
         }

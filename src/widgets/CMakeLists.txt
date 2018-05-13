@@ -5,10 +5,8 @@ set(widgets_SRC
 	box3d-toolbar.cpp
 	button.cpp
 	calligraphy-toolbar.cpp
-	connector-toolbar.cpp
 	dash-selector.cpp
 	desktop-widget.cpp
-	dropper-toolbar.cpp
 	eek-preview.cpp
 	ege-adjustment-action.cpp
 	ege-output-action.cpp
@@ -27,11 +25,9 @@ set(widgets_SRC
 	lpe-toolbar.cpp
 	measure-toolbar.cpp
 	mesh-toolbar.cpp
-	node-toolbar.cpp
 	paint-selector.cpp
 	pencil-toolbar.cpp
 	rect-toolbar.cpp
-	select-toolbar.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
 	sp-widget.cpp
@@ -40,7 +36,6 @@ set(widgets_SRC
 	sp-xmlview-tree.cpp
 	spinbutton-events.cpp
 	spiral-toolbar.cpp
-	spray-toolbar.cpp
 	spw-utilities.cpp
 	star-toolbar.cpp
 	stroke-marker-selector.cpp
@@ -48,9 +43,6 @@ set(widgets_SRC
 	swatch-selector.cpp
 	text-toolbar.cpp
 	toolbox.cpp
-	tweak-toolbar.cpp
-	zoom-toolbar.cpp
-
 
 	# -------
 	# Headers
@@ -58,10 +50,8 @@ set(widgets_SRC
 	box3d-toolbar.h
 	button.h
 	calligraphy-toolbar.h
-	connector-toolbar.h
 	dash-selector.h
 	desktop-widget.h
-	dropper-toolbar.h
 	eek-preview.h
 	ege-adjustment-action.h
 	ege-output-action.h
@@ -81,11 +71,9 @@ set(widgets_SRC
 	lpe-toolbar.h
 	measure-toolbar.h
 	mesh-toolbar.h
-	node-toolbar.h
 	paint-selector.h
 	pencil-toolbar.h
 	rect-toolbar.h
-	select-toolbar.h
 	sp-attribute-widget.h
 	sp-color-selector.h
 	sp-widget.h
@@ -94,7 +82,6 @@ set(widgets_SRC
 	sp-xmlview-tree.h
 	spinbutton-events.h
 	spiral-toolbar.h
-	spray-toolbar.h
 	spw-utilities.h
 	star-toolbar.h
 	stroke-marker-selector.h
@@ -102,9 +89,7 @@ set(widgets_SRC
 	swatch-selector.h
 	text-toolbar.h
 	toolbox.h
-	tweak-toolbar.h
 	widget-sizes.h
-	zoom-toolbar.h
 )
 
 # add_inkscape_lib(widgets_LIB "${widgets_SRC}")
