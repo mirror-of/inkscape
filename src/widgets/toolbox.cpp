@@ -69,9 +69,9 @@
 #include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
 
-#include "arc-toolbar.h"
-#include "box3d-toolbar.h"
-#include "calligraphy-toolbar.h"
+#include "ui/toolbar/arc-toolbar.h"
+#include "ui/toolbar/box3d-toolbar.h"
+#include "ui/toolbar/calligraphy-toolbar.h"
 
 #include "ui/toolbar/connector-toolbar.h"
 #include "ui/toolbar/dropper-toolbar.h"
@@ -81,21 +81,21 @@
 #include "ui/toolbar/tweak-toolbar.h"
 #include "ui/toolbar/zoom-toolbar.h"
 
-#include "eraser-toolbar.h"
-#include "gradient-toolbar.h"
-#include "lpe-toolbar.h"
-#include "mesh-toolbar.h"
-#include "measure-toolbar.h"
-#include "rect-toolbar.h"
+#include "ui/toolbar/eraser-toolbar.h"
+#include "ui/toolbar/gradient-toolbar.h"
+#include "ui/toolbar/lpe-toolbar.h"
+#include "ui/toolbar/mesh-toolbar.h"
+#include "ui/toolbar/measure-toolbar.h"
+#include "ui/toolbar/rect-toolbar.h"
 
 #if HAVE_POTRACE
-# include "paintbucket-toolbar.h"
+# include "ui/toolbar/paintbucket-toolbar.h"
 #endif
 
-#include "pencil-toolbar.h"
-#include "spiral-toolbar.h"
-#include "star-toolbar.h"
-#include "text-toolbar.h"
+#include "ui/toolbar/pencil-toolbar.h"
+#include "ui/toolbar/spiral-toolbar.h"
+#include "ui/toolbar/star-toolbar.h"
+#include "ui/toolbar/text-toolbar.h"
 
 #include "toolbox.h"
 

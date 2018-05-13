@@ -34,10 +34,10 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "ink-action.h"
-#include "ink-radio-action.h"
+#include "widgets/ink-action.h"
+#include "widgets/ink-radio-action.h"
 #include "selection.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-star.h"

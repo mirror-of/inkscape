@@ -119,11 +119,24 @@ set(ui_SRC
 	dialog/xml-tree.cpp
         dialog/save-template-dialog.cpp
 
+        toolbar/arc-toolbar.cpp
+        toolbar/box3d-toolbar.cpp
+        toolbar/calligraphy-toolbar.cpp
         toolbar/connector-toolbar.cpp
         toolbar/dropper-toolbar.cpp
+        toolbar/eraser-toolbar.cpp
+        toolbar/gradient-toolbar.cpp
+        toolbar/lpe-toolbar.cpp
+        toolbar/measure-toolbar.cpp
+        toolbar/mesh-toolbar.cpp
         toolbar/node-toolbar.cpp
+        toolbar/pencil-toolbar.cpp
+        toolbar/rect-toolbar.cpp
         toolbar/select-toolbar.cpp
+        toolbar/spiral-toolbar.cpp
         toolbar/spray-toolbar.cpp
+        toolbar/star-toolbar.cpp
+        toolbar/text-toolbar.cpp
         toolbar/tweak-toolbar.cpp
         toolbar/zoom-toolbar.cpp
 
@@ -324,11 +337,24 @@ set(ui_SRC
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
+        toolbar/arc-toolbar.h
+        toolbar/box3d-toolbar.h
+        toolbar/calligraphy-toolbar.h
         toolbar/connector-toolbar.h
         toolbar/dropper-toolbar.h
+        toolbar/eraser-toolbar.h
+        toolbar/gradient-toolbar.h
+        toolbar/lpe-toolbar.h
+        toolbar/measure-toolbar.h
+        toolbar/mesh-toolbar.h
         toolbar/node-toolbar.h
+        toolbar/pencil-toolbar.h
+        toolbar/rect-toolbar.h
         toolbar/select-toolbar.h
+        toolbar/spiral-toolbar.h
         toolbar/spray-toolbar.h
+        toolbar/star-toolbar.h
+        toolbar/text-toolbar.h
         toolbar/tweak-toolbar.h
         toolbar/zoom-toolbar.h
 
@@ -415,6 +441,12 @@ set ( ui_flood_and_trace_SRC
 	dialog/tracedialog.h
 )
 
+set(widgets_paintbucket_SRC
+	toolbar/paintbucket-toolbar.cpp
+	toolbar/paintbucket-toolbar.h
+)
+
 if ("${HAVE_POTRACE}")
 	add_inkscape_source("${ui_flood_and_trace_SRC}")
+	add_inkscape_source("${widgets_paintbucket_SRC}")
 endif()
