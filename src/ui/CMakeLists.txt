@@ -117,7 +117,15 @@ set(ui_SRC
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
 	dialog/xml-tree.cpp
-    dialog/save-template-dialog.cpp
+        dialog/save-template-dialog.cpp
+
+        toolbar/connector-toolbar.cpp
+        toolbar/dropper-toolbar.cpp
+        toolbar/node-toolbar.cpp
+        toolbar/select-toolbar.cpp
+        toolbar/spray-toolbar.cpp
+        toolbar/tweak-toolbar.cpp
+        toolbar/zoom-toolbar.cpp
 
 	widget/addtoicon.cpp
 	widget/alignment-selector.cpp
@@ -167,6 +175,7 @@ set(ui_SRC
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
 	widget/selected-style.cpp
+        widget/spin-button-tool-item.cpp
 	widget/spin-scale.cpp
 	widget/spin-slider.cpp
 	widget/spinbutton.cpp
@@ -315,6 +324,14 @@ set(ui_SRC
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
+        toolbar/connector-toolbar.h
+        toolbar/dropper-toolbar.h
+        toolbar/node-toolbar.h
+        toolbar/select-toolbar.h
+        toolbar/spray-toolbar.h
+        toolbar/tweak-toolbar.h
+        toolbar/zoom-toolbar.h
+
 	widget/addtoicon.h
 	widget/alignment-selector.h
 	widget/anchor-selector.h
@@ -366,6 +383,7 @@ set(ui_SRC
 	widget/scalar-unit.h
 	widget/scalar.h
 	widget/selected-style.h
+        widget/spin-button-tool-item.h
 	widget/spin-scale.h
 	widget/spin-slider.h
 	widget/spinbutton.h

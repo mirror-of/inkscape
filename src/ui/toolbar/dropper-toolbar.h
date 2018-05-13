@@ -1,6 +1,9 @@
+#ifndef SEEN_DROPPER_TOOLBAR_H
+#define SEEN_DROPPER_TOOLBAR_H
+
 /**
  * @file
- * Zoom aux toolbar
+ * Dropper aux toolbar
  */
 /* Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -24,20 +27,45 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#if HAVE_CONFIG_H
+# include <config.h>
 #endif
 
-#include "zoom-toolbar.h"
+#include <gtkmm/toolbar.h>
 
-//########################
-//##    Zoom Toolbox    ##
-//########################
+class SPDesktop;
 
-void sp_zoom_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* /*mainActions*/, GObject* /*holder*/)
+namespace Gtk {
+class ToggleToolButton;
+}
+
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+
+/// A toolbar for the "Dropper" tool
+class DropperToolbar : public Gtk::Toolbar
 {
-    // no custom GtkAction setup needed
-} // end of sp_zoom_toolbox_prep()
+private:
+    // Tool widgets
+    Gtk::ToggleToolButton *_pick_alpha_button; ///< Control for whether to pick opacity
+    Gtk::ToggleToolButton *_set_alpha_button;  ///< Control for whether to set opacity
+
+    // Event handlers
+    void on_pick_alpha_button_toggle();
+    void on_set_alpha_button_toggle();
+
+public:
+    DropperToolbar();
+
+    static GtkWidget * create(SPDesktop *desktop);
+};
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
+
+#endif /* !SEEN_DROPPER_TOOLBAR_H */
 
 /*
   Local Variables:

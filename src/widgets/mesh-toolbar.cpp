@@ -488,8 +488,8 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
                                                       INKSCAPE_ICON("object-fill"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        //PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill");
+        //g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_toggle_fill_stroke), holder);
     }
 
@@ -501,8 +501,8 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
                                                       INKSCAPE_ICON("object-stroke"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        //PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke");
+        //g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_toggle_fill_stroke), holder);
     }
 
@@ -514,8 +514,8 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
                                                       INKSCAPE_ICON("show-node-handles"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        //PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles");
+        //g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_toggle_handles), 0);
     }
 

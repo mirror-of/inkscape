@@ -366,10 +366,10 @@ Verb::VerbIDTable Verb::_verb_ids;
  * each call it is incremented.  The list of allocated verbs is kept
  * in the \c _verbs hashtable which is indexed by the \c code.
  */
-Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *image, gchar const *group) :
+Verb::Verb(gchar const *name, gchar const *label, gchar const *tip, gchar const *image, gchar const *group) :
     _actions(0),
-    _id(id),
     _name(name),
+    _label(label),
     _tip(tip),
     _full_tip(0),
     _shortcut(0),
@@ -383,7 +383,7 @@ Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *im
     count++;
     _code = count;
     _verbs.insert(VerbTable::value_type(count, this));
-    _verb_ids.insert(VerbIDTable::value_type(_id, this));
+    _verb_ids.insert(VerbIDTable::value_type(_name, this));
 }
 
 /**
@@ -594,7 +594,7 @@ SPAction *Verb::make_action_helper(Inkscape::ActionContext const & context, void
     SPAction *action;
 
     //std::cout << "Adding action: " << _code << std::endl;
-    action = sp_action_new(context, _id, _(_name),
+    action = sp_action_new(context, _name, _(_label),
                            _(_tip), _image, this);
 
     if (action == NULL) return NULL;
@@ -643,8 +643,7 @@ SPAction *Verb::get_action(Inkscape::ActionContext const & context)
     } else {
         action = this->make_action(context);
 
-        // if (action == NULL) printf("Hmm, NULL in %s\n", _name);
-        if (action == NULL) printf("Hmm, NULL in %s\n", _name);
+        if (action == NULL) printf("Hmm, NULL in %s\n", _label);
         if (!_default_sensitive) {
             sp_action_set_sensitive(action, 0);
         } else {
@@ -1471,6 +1470,7 @@ void LayerVerb::perform(SPAction *action, void *data)
                 dt->getSelection()->clear();
                 SPObject *old_layer=dt->currentLayer();
 
+                sp_object_ref(old_layer, NULL);
                 SPObject *survivor=Inkscape::next_layer(dt->currentRoot(), old_layer);
                 if (!survivor) {
                     survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
@@ -1486,6 +1486,7 @@ void LayerVerb::perform(SPAction *action, void *data)
                 // http://sourceforge.net/tracker/index.php?func=detail&aid=1339397&group_id=93438&atid=604306
                 //
                 old_layer->deleteObject();
+                sp_object_unref(old_layer, NULL);
                 if (survivor) {
                     dt->setCurrentLayer(survivor);
                 }
@@ -1948,7 +1949,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
     if (dt->namedview->display_units && (dt->namedview->display_units->abbr == abbr))
         zcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
 
-    //Geom::Rect const d = dt->get_display_area();
+    Geom::Rect const d = dt->get_display_area();
 
     Geom::Rect const d_canvas = dt->getCanvas()->getViewbox(); // Not SVG 'viewBox'
     Geom::Point midpoint = dt->w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
@@ -2068,7 +2069,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         }
         case SP_VERB_FLIP_VERTICAL:
         {
-            /* gint mul = 1 + */ Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
             // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -3130,9 +3131,8 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."), INKSCAPE_ICON("dialog-fill-and-stroke")),
     // FIXME: Probably better to either use something from the icon naming spec or ship our own "select-font" icon
-    // Technically what we show are unicode code points and not glyphs. The actual glyphs shown are determined by the shaping engines.
-    new DialogVerb(SP_VERB_DIALOG_GLYPHS, "DialogGlyphs", N_("_Unicode Characters..."),
-                   N_("Select Unicode characters from a palette"), INKSCAPE_ICON("gtk-select-font")),
+    new DialogVerb(SP_VERB_DIALOG_GLYPHS, "DialogGlyphs", N_("Gl_yphs..."),
+                   N_("Select characters from a glyphs palette"), INKSCAPE_ICON("gtk-select-font")),
     // FIXME: Probably better to either use something from the icon naming spec or ship our own "select-color" icon
     // TRANSLATORS: "Swatches" means: color samples
     new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("S_watches..."),
@@ -3323,7 +3323,7 @@ Verb::list (void) {
             continue;
         }
 
-        printf("%s: %s\n", verb->get_id(), verb->get_tip()? verb->get_tip() : verb->get_name());
+        printf("%s: %s\n", verb->get_name(), verb->get_tip()? verb->get_tip() : verb->get_label());
     }
 
     return;

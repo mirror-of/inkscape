@@ -1,9 +1,9 @@
-#ifndef SEEN_CONNECTOR_TOOLBAR_H
-#define SEEN_CONNECTOR_TOOLBAR_H
+#ifndef SEEN_ZOOM_TOOLBAR_H
+#define SEEN_ZOOM_TOOLBAR_H
 
 /**
  * @file
- * Connector aux toolbar
+ * Zoom aux toolbar
  */
 /* Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -27,11 +27,24 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm/toolbar.h>
+
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+class ZoomToolbar : public Gtk::Toolbar {
+private:
+    SPDesktop *_desktop;
 
-void       sp_connector_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+public:
+    ZoomToolbar(SPDesktop *desktop);
 
-#endif /* !SEEN_CONNECTOR_TOOLBAR_H */
+    static GtkWidget * create(SPDesktop *desktop);
+};
+}
+}
+}
+
+#endif /* !SEEN_ZOOM_TOOLBAR_H */

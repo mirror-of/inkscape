@@ -72,14 +72,20 @@
 #include "arc-toolbar.h"
 #include "box3d-toolbar.h"
 #include "calligraphy-toolbar.h"
-#include "connector-toolbar.h"
-#include "dropper-toolbar.h"
+
+#include "ui/toolbar/connector-toolbar.h"
+#include "ui/toolbar/dropper-toolbar.h"
+#include "ui/toolbar/node-toolbar.h"
+#include "ui/toolbar/select-toolbar.h"
+#include "ui/toolbar/spray-toolbar.h"
+#include "ui/toolbar/tweak-toolbar.h"
+#include "ui/toolbar/zoom-toolbar.h"
+
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
 #include "mesh-toolbar.h"
 #include "measure-toolbar.h"
-#include "node-toolbar.h"
 #include "rect-toolbar.h"
 
 #if HAVE_POTRACE
@@ -87,13 +93,9 @@
 #endif
 
 #include "pencil-toolbar.h"
-#include "select-toolbar.h"
-#include "spray-toolbar.h"
 #include "spiral-toolbar.h"
 #include "star-toolbar.h"
-#include "tweak-toolbar.h"
 #include "text-toolbar.h"
-#include "zoom-toolbar.h"
 
 #include "toolbox.h"
 
@@ -178,22 +180,22 @@ static struct {
     gchar const *type_name;
     gchar const *data_name;
     GtkWidget *(*create_func)(SPDesktop *desktop);
-    void (*prep_func)(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
     gchar const *ui_name;
     gint swatch_verb_id;
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "/tools/select", "select_toolbox", 0, sp_select_toolbox_prep,            "SelectToolbar",
+    { "/tools/select", "select_toolbox", Inkscape::UI::Toolbar::SelectToolbar::create, "SelectToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/nodes",   "node_toolbox",   0, sp_node_toolbox_prep,              "NodeToolbar",
+    { "/tools/nodes",   "node_toolbox",  Inkscape::UI::Toolbar::NodeToolbar::create,   "NodeToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/tweak",   "tweak_toolbox",   0, sp_tweak_toolbox_prep,              "TweakToolbar",
+    { "/tools/tweak",   "tweak_toolbox", Inkscape::UI::Toolbar::TweakToolbar::create,  "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
-    { "/tools/spray",   "spray_toolbox",   0, sp_spray_toolbox_prep,              "SprayToolbar",
+    { "/tools/spray",   "spray_toolbox", Inkscape::UI::Toolbar::SprayToolbar::create,  "SprayToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/zoom",   "zoom_toolbox",   0, sp_zoom_toolbox_prep,              "ZoomToolbar",
+    { "/tools/zoom",   "zoom_toolbox",   Inkscape::UI::Toolbar::ZoomToolbar::create,   "ZoomToolbar",
       SP_VERB_INVALID, 0, 0},
+#if 0
     { "/tools/measure",   "measure_toolbox",   0, sp_measure_toolbox_prep,              "MeasureToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/shapes/star",   "star_toolbox",   0, sp_star_toolbox_prep,              "StarToolbar",
@@ -219,10 +221,12 @@ static struct {
     // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/dropper", "dropper_toolbox", 0, sp_dropper_toolbox_prep,         "DropperToolbar",
+#endif
+    { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create,       "DropperToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "/tools/connector", "connector_toolbox", 0, sp_connector_toolbox_prep,   "ConnectorToolbar",
+    { "/tools/connector", "connector_toolbox", Inkscape::UI::Toolbar::ConnectorToolbar::create, "ConnectorToolbar",
       SP_VERB_INVALID, 0, 0},
+#if 0
     { "/tools/gradient", "gradient_toolbox", 0, sp_gradient_toolbox_prep, "GradientToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/mesh", "mesh_toolbox", 0, sp_mesh_toolbox_prep, "MeshToolbar",
@@ -233,7 +237,8 @@ static struct {
 #else
     { "/tools/paintbucket",  "paintbucket_toolbox",  0, NULL, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},
 #endif
-    { NULL, NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
+#endif // Block comment
+    { NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
 };
 
 
@@ -293,7 +298,7 @@ Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb
 }
 
 VerbAction::VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view) :
-    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_name())), Glib::ustring(_(verb->get_tip()))),
+    Gtk::Action(Glib::ustring(verb->get_name()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_label())), Glib::ustring(_(verb->get_tip()))),
     verb(verb),
     verb2(verb2),
     view(view),
@@ -308,7 +313,6 @@ VerbAction::~VerbAction()
 Gtk::Widget* VerbAction::create_menu_item_vfunc()
 {
     Gtk::Widget* widg = Gtk::Action::create_menu_item_vfunc();
-//     g_message("create_menu_item_vfunc() = %p  for '%s'", widg, verb->get_id());
     return widg;
 }
 
@@ -331,19 +335,16 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
     gtk_widget_show_all( button_widget );
     Gtk::ToolItem* holder = Glib::wrap(button_toolitem);
 
-//     g_message("create_tool_item_vfunc() = %p  for '%s'", holder, verb->get_id());
     return holder;
 }
 
 void VerbAction::connect_proxy_vfunc(Gtk::Widget* proxy)
 {
-//     g_message("connect_proxy_vfunc(%p)  for '%s'", proxy, verb->get_id());
     Gtk::Action::connect_proxy_vfunc(proxy);
 }
 
 void VerbAction::disconnect_proxy_vfunc(Gtk::Widget* proxy)
 {
-//     g_message("disconnect_proxy_vfunc(%p)  for '%s'", proxy, verb->get_id());
     Gtk::Action::disconnect_proxy_vfunc(proxy);
 }
 
@@ -396,16 +397,16 @@ void purge_repr_listener( GObject* /*obj*/, GObject* tbl )
     }
 }
 
-PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(GObject*), GObject *cbData ) :
+PrefPusher::PrefPusher( Gtk::ToggleToolButton *btn, Glib::ustring const &path, void (*callback)(GObject*), GObject *cbData ) :
     Observer(path),
-    act(act),
+    _btn(btn),
     callback(callback),
     cbData(cbData),
     freeze(false)
 {
-    g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggleCB), this);
+    btn->signal_toggled().connect(sigc::mem_fun(*this, &PrefPusher::handleToggled));
     freeze = true;
-    gtk_toggle_action_set_active( act, Inkscape::Preferences::get()->getBool(observed_path) );
+    _btn->set_active( Inkscape::Preferences::get()->getBool(observed_path) );
     freeze = false;
 
     Inkscape::Preferences::get()->addObserver(*this);
@@ -416,18 +417,11 @@ PrefPusher::~PrefPusher()
     Inkscape::Preferences::get()->removeObserver(*this);
 }
 
-void PrefPusher::toggleCB( GtkToggleAction * /*act*/, PrefPusher *self )
-{
-    if (self) {
-        self->handleToggled();
-    }
-}
-
 void PrefPusher::handleToggled()
 {
     if (!freeze) {
         freeze = true;
-        Inkscape::Preferences::get()->setBool(observed_path, gtk_toggle_action_get_active( act ));
+        Inkscape::Preferences::get()->setBool(observed_path, _btn->get_active());
         if (callback) {
             (*callback)(cbData);
         }
@@ -438,16 +432,11 @@ void PrefPusher::handleToggled()
 void PrefPusher::notify(Inkscape::Preferences::Entry const &newVal)
 {
     bool newBool = newVal.getBool();
-    bool oldBool = gtk_toggle_action_get_active(act);
+    bool oldBool = _btn->get_active();
 
     if (!freeze && (newBool != oldBool)) {
-        gtk_toggle_action_set_active( act, newBool );
+        _btn->set_active( newBool );
     }
-}
-
-void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
-{
-    delete watcher;
 }
 
 // ------------------------------------------------------
@@ -510,7 +499,7 @@ static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::Vi
     GtkAction* act = 0;
 
     SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
-    InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_name()), verb->get_tip(), verb->get_image(), size  );
+    InkAction* inky = ink_action_new( verb->get_name(), _(verb->get_label()), verb->get_tip(), verb->get_image(), size  );
     act = GTK_ACTION(inky);
     gtk_action_set_sensitive( act, targetAction->sensitive );
 
@@ -605,7 +594,7 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
     for ( guint i = 0; i < G_N_ELEMENTS(verbsToUse); i++ ) {
         Inkscape::Verb* verb = Inkscape::Verb::get(verbsToUse[i]);
         if ( verb ) {
-            if (!mainActions->get_action(verb->get_id())) {
+            if (!mainActions->get_action(verb->get_name())) {
                 GtkAction* act = create_action_for_verb( verb, view, toolboxSize );
                 mainActions->add(Glib::wrap(act));
             }
@@ -960,7 +949,7 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
 
     for (int i = 0 ; tools[i].type_name ; i++ ) {
-        Glib::RefPtr<Gtk::Action> act = mainActions->get_action( Inkscape::Verb::get(tools[i].verb)->get_id() );
+        Glib::RefPtr<Gtk::Action> act = mainActions->get_action( Inkscape::Verb::get(tools[i].verb)->get_name() );
         if ( act ) {
             bool setActive = tname && !strcmp(tname, tools[i].type_name);
             Glib::RefPtr<VerbAction> verbAct = Glib::RefPtr<VerbAction>::cast_dynamic(act);
@@ -971,121 +960,82 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
     }
 }
 
+/**
+ * @brief Set up all the toolboxes that can appear in the auxilliary toolbox
+ *
+ * @param toolbox The auxilliary toolbox to set up
+ *
+ * @detail The auxilliary toolbox is the one that appears under the menu-bar,
+ *         with items that change, depending on the Inkscape tool that has been
+ *         selected.  This function creates ALL the possible toolboxes that can
+ *         be shown in this location, and stores pointers to all of them within the
+ *         "toolbox" widget.  These pointers are stored as GObject data, with
+ *         names taken from the "data_name" field in the aux_toolboxes struct.
+ *         For example, the Connector toolbar is stored as a pointer called
+ *         "connector_tool", and can be accessed after running this function, by
+ *         using:
+ *
+ *           g_object_get_data(G_OBJECT(toolbox), "connector_tool");
+ */
 void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
-    Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
-    GtkUIManager* mgr = gtk_ui_manager_new();
-    GError *err = 0;
-    gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
 
-    Glib::ustring filename = get_filename(UIS, "select-toolbar.ui");
-    guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename.c_str(), &err);
-    if(err) {
-      g_warning("Failed to load aux toolbar %s: %s", filename.c_str(), err->message);
-      g_error_free(err);
-      return;
-    }
-
-    std::map<std::string, GtkWidget*> dataHolders;
-
+    // This loops through all the toolboxes that have been declared in the aux_toolboxes
+    // list and for each toolbox, creates a new toolbox.
+    //
+    // At the end of this option, pointers to all toolboxes are stored as GObject data
+    // with names taken from the "data_name" field in the aux_toolboxes struct
+    // (e.g., "connector_tool").
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        if ( aux_toolboxes[i].prep_func ) {
-            // converted to GtkActions and UIManager
-
-            GtkWidget* kludge = gtk_toolbar_new();
-            gtk_widget_set_name( kludge, "Kludge" );
-            g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
-            g_object_set_data( G_OBJECT(kludge), "desktop", desktop);
-            dataHolders[aux_toolboxes[i].type_name] = kludge;
-            aux_toolboxes[i].prep_func( desktop, mainActions->gobj(), G_OBJECT(kludge) );
+        GtkWidget *sub_toolbox = 0;
+        if (aux_toolboxes[i].create_func == NULL) {
+            sub_toolbox = sp_empty_toolbox_new(desktop);
         } else {
-
-            GtkWidget *sub_toolbox = 0;
-            if (aux_toolboxes[i].create_func == NULL) {
-                sub_toolbox = sp_empty_toolbox_new(desktop);
-            } else {
-                sub_toolbox = aux_toolboxes[i].create_func(desktop);
-            }
-            gtk_widget_set_name( sub_toolbox, "SubToolBox" );
-            gtk_size_group_add_widget( grouper, sub_toolbox );
-
-            gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
-            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
-
+            sub_toolbox = aux_toolboxes[i].create_func(desktop);
         }
-    }
+        gtk_widget_set_name( sub_toolbox, "SubToolBox" );
+        gtk_size_group_add_widget( grouper, sub_toolbox );
 
-    // Second pass to create toolbars *after* all GtkActions are created
-    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        if ( aux_toolboxes[i].prep_func ) {
-            // converted to GtkActions and UIManager
-
-            auto kludge = dataHolders[aux_toolboxes[i].type_name];
-            auto holder = gtk_grid_new();
-            gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
-            gtk_grid_attach( GTK_GRID(holder), kludge, 2, 0, 1, 1);
-            gchar* tmp = g_strdup_printf( "/ui/%s", aux_toolboxes[i].ui_name );
-            GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, tmp );
-            g_free( tmp );
-            tmp = 0;
-
-            if ( prefs->getBool( "/toolbox/icononly", true) ) {
-                gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
-            }
-
-            GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
-            gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
-            gtk_widget_set_hexpand(toolBar, TRUE);
-            gtk_grid_attach( GTK_GRID(holder), toolBar, 0, 0, 1, 1);
-
-            if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
-                Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( NULL, _(aux_toolboxes[i].swatch_tip) );
-                swatch->setDesktop( desktop );
-                swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
-                swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
-
-#if GTKMM_CHECK_VERSION(3,12,0)
-                swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
-#else
-                swatch->set_margin_left(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_right(AUX_BETWEEN_BUTTON_GROUPS);
-#endif
-
-                swatch->set_margin_top(AUX_SPACING);
-                swatch->set_margin_bottom(AUX_SPACING);
-
-                auto swatch_ = GTK_WIDGET( swatch->gobj() );
-                gtk_grid_attach( GTK_GRID(holder), swatch_, 1, 0, 1, 1);
-            }
-            if(i==0){
-                gtk_widget_show_all( holder );
-            } else {
-                gtk_widget_show_now( holder );
-            }
-            sp_set_font_size_smaller( holder );
-
-            gtk_size_group_add_widget( grouper, holder );
-
-            gtk_container_add( GTK_CONTAINER(toolbox), holder );
-            g_object_set_data( G_OBJECT(toolbox), aux_toolboxes[i].data_name, holder );
-        }
+        gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
+        g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
     }
 
     g_object_unref( G_OBJECT(grouper) );
 }
 
+/**
+ * @brief Select which of the auxilliary toolboxes to display
+ *
+ * @param toolbox The Auxilliary toolbox (containing all possible toolbars that can be shown here)
+ *
+ * @details Pointers to all of the possible toolbars that can be shown in the auxilliary toolbox
+ *          should previously have been stored as GObject data in the toolbox, by the
+ *          setup_aux_toolbox function.
+ *          This function now takes an event context, checks the name of the toolbar we want to
+ *          show, and then loops through all the toolbar pointers and shows or hides the widgets
+ *          as required.
+ */
 void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidget *toolbox)
 {
+    // Get the name of the toolbox we want to display by checking the eventcontext object
     gchar const *tname = ( eventcontext
                            ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                            : NULL );
+
+    // Loop through all of the toolboxes that can be shown.  Show it if the name matches,
+    // and hide it if not
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+
+        // Get the pointer to the toolbox with this name.  This is stored as GObject data
+        // inside the main Auxilliary toolbox object
         GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name));
+
+        // Now, either show or hide the object depending on whether its name matches the
+        // one we want
         if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
             gtk_widget_show_now(sub_toolbox);
+            gtk_widget_show_all(sub_toolbox);
             g_object_set_data(G_OBJECT(toolbox), "shows", sub_toolbox);
         } else {
             gtk_widget_hide(sub_toolbox);
@@ -1242,8 +1192,8 @@ void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         //       We should really unify these (should save some lines of code as well).
         //       For example, this action could be based on the verb(+action) + PrefsPusher.
         Inkscape::Verb* verb = Inkscape::Verb::get(SP_VERB_TOGGLE_SNAPPING);
-        InkToggleAction* act = ink_toggle_action_new(verb->get_id(),
-                                                     verb->get_name(), verb->get_tip(), INKSCAPE_ICON("snap"), secondarySize,
+        InkToggleAction* act = ink_toggle_action_new(verb->get_name(),
+                                                     verb->get_label(), verb->get_tip(), INKSCAPE_ICON("snap"), secondarySize,
                                                      SP_ATTR_INKSCAPE_SNAP_GLOBAL);
 
         gtk_action_group_add_action( mainActions->gobj(), GTK_ACTION( act ) );

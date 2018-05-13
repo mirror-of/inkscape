@@ -55,34 +55,34 @@ class Effect : public Extension {
             Effect * _effect;
             /** \brief  Whether or not to show preferences on display */
             bool _showPrefs;
-            /** \brief  Name with elipses if that makes sense */
-            gchar * _elip_name;
+            /** \brief  Label with elipses if that makes sense */
+            gchar * _elip_label;
         protected:
             virtual SPAction * make_action (Inkscape::ActionContext const & context);
         public:
             /** \brief Use the Verb initializer with the same parameters. */
             EffectVerb(gchar const * id,
-                       gchar const * name,
+                       gchar const * label,
                        gchar const * tip,
                        gchar const * image,
                        Effect *      effect,
                        bool          showPrefs) :
-                    Verb(id, _(name), _(tip), image, _("Extensions")),
+                    Verb(id, _(label), _(tip), image, _("Extensions")),
                     _effect(effect), 
                     _showPrefs(showPrefs),
-                    _elip_name(NULL) {
+                    _elip_label(NULL) {
                 /* No clue why, but this is required */
                 this->set_default_sensitive(true);
                 if (_showPrefs && effect != NULL && effect->param_visible_count() != 0) {
-                    _elip_name = g_strdup_printf("%s...", _(name));
-                    set_name(_elip_name);
+                    _elip_label = g_strdup_printf("%s...", _(label));
+                    set_label(_elip_label);
                 }
             }
             
             /** \brief  Destructor */
             ~EffectVerb() {
-                if (_elip_name != NULL) {
-                    g_free(_elip_name);
+                if (_elip_label != NULL) {
+                    g_free(_elip_label);
                 }
             }
     };
