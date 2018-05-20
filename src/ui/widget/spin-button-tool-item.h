@@ -53,8 +53,8 @@ public:
     SpinButtonToolItem(const Glib::ustring&           name,
                        const Glib::ustring&           label_text,
                        Glib::RefPtr<Gtk::Adjustment>& adjustment,
-                       double                         climb_rate = 0.0,
-                       double                         digits     = 0);
+                       double                         climb_rate = 0.1,
+                       double                         digits     = 3);
 
     void set_all_tooltip_text(const Glib::ustring& text);
     void set_focus_widget(Gtk::Widget *widget);
