@@ -103,6 +103,8 @@ private:
     void selection_changed(Inkscape::Selection *selection);
     void check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
 
+    void purge_repr_listener();
+
 public:
     ArcToolbar(SPDesktop *desktop);
     ~ArcToolbar();

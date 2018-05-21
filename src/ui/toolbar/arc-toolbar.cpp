@@ -40,14 +40,12 @@
 #include "document-undo.h"
 #include "mod360.h"
 #include "selection.h"
-#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-ellipse.h"
 
 #include "ui/icon-names.h"
 #include "ui/tools/arc-tool.h"
-#include "ui/uxmanager.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
@@ -58,10 +56,7 @@
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::Widget::UnitTracker;
-using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 using Inkscape::Util::Quantity;
 using Inkscape::Util::unit_table;
 
@@ -91,11 +86,23 @@ ArcToolbar::check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec)
     } else {
         if (changed) {
             changed.disconnect();
-            purge_repr_listener(NULL, G_OBJECT(gobj()));
+            purge_repr_listener();
         }
     }
 }
 
+void
+ArcToolbar::purge_repr_listener()
+{
+    auto oldrepr = _repr;
+
+    if (oldrepr) { // remove old listener
+        sp_repr_remove_listener_by_data(oldrepr, this);
+        Inkscape::GC::release(oldrepr);
+        oldrepr = 0;
+        _repr = nullptr;
+    }
+}
 
 void
 ArcToolbar::sensitivize( double v1, double v2 )
@@ -251,7 +258,7 @@ ArcToolbar::selection_changed(Inkscape::Selection *selection)
         _item = nullptr;
     }
 
-    purge_repr_listener( G_OBJECT(gobj()), G_OBJECT(gobj()) );
+    purge_repr_listener();
 
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
@@ -547,7 +554,9 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop)
         ++btn_index;
     }
 
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
     add(*_make_whole_btn);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
     show_all();
 
     _desktop->connectEventContextChanged(sigc::mem_fun(*this, &ArcToolbar::check_ec));
@@ -557,7 +566,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop)
 
 ArcToolbar::~ArcToolbar()
 {
-    purge_repr_listener(G_OBJECT(gobj()), G_OBJECT(gobj()));
+    purge_repr_listener();
 }
 
 GtkWidget *

@@ -107,21 +107,6 @@
     <separator />
   </toolbar>
 
-  <toolbar name='ArcToolbar'>
-    <toolitem action='ArcStateAction' />
-    <toolitem action='ArcRadiusXAction' />
-    <toolitem action='ArcRadiusYAction' />
-    <toolitem action='ArcUnitsAction' />
-    <separator />
-    <toolitem action='ArcStartAction' />
-    <toolitem action='ArcEndAction' />
-    <separator />
-    <toolitem action='ArcTypeAction' />
-    <separator />
-    <toolitem action='ArcResetAction' />
-    <separator />
-  </toolbar>
-
   <toolbar name='PaintbucketToolbar'>
     <toolitem action='ChannelsAction' />
     <toolitem action='ThresholdAction' />
@@ -231,25 +216,5 @@
     <separator />
     <toolitem action='MeshSmoothAction' />
   </toolbar>
-
-  <toolbar name='DropperToolbar'>
-    <toolitem action='DropperOpacityAction' />
-    <toolitem action='DropperPickAlphaAction' />
-    <toolitem action='DropperSetAlphaAction' />
-  </toolbar>
-
-  <toolbar name='ConnectorToolbar'>
-    <toolitem action='ConnectorAvoidAction' />
-    <toolitem action='ConnectorIgnoreAction' />
-    <toolitem action='ConnectorOrthogonalAction' />
-    <separator />
-    <toolitem action='ConnectorCurvatureAction' />
-    <toolitem action='ConnectorSpacingAction' />
-    <toolitem action='ConnectorGraphAction' />
-    <toolitem action='ConnectorLengthAction' />
-    <toolitem action='ConnectorDirectedAction' />
-    <toolitem action='ConnectorOverlapAction' />
-  </toolbar>
-
 </ui>
 
