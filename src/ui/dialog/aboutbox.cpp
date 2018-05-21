@@ -366,6 +366,7 @@ void AboutBox::initStrings() {
 "Dmitry G. Mastrukov\n"
 "David Mathog\n"
 "Matiphas\n"
+"Patrick McDermott\n"
 "Michael Meeks\n"
 "Federico Mena\n"
 "MenTaLguY\n"
