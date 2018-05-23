@@ -81,17 +81,17 @@ Print::Print(SPDocument *doc, SPItem *base) :
     // attempt to match document size against known paper sizes
     Gtk::PaperSize paper_size("custom", "custom", doc_width, doc_height, Gtk::UNIT_POINTS);
     std::vector<Gtk::PaperSize> known_sizes = Gtk::PaperSize::get_paper_sizes(false);
-    for (auto& size : known_sizes) {
-        if (fabs(size.get_width(Gtk::UNIT_POINTS) - doc_width) >= 1.0) {
+    for (std::vector<Gtk::PaperSize>::const_iterator size = known_sizes.begin(); size != known_sizes.end(); ++size) {
+        if (fabs(size->get_width(Gtk::UNIT_POINTS) - doc_width) >= 1.0) {
             // width (short edge) doesn't match
             continue;
         }
-        if (fabs(size.get_height(Gtk::UNIT_POINTS) - doc_height) >= 1.0) {
+        if (fabs(size->get_height(Gtk::UNIT_POINTS) - doc_height) >= 1.0) {
             // height (short edge) doesn't match
             continue;
         }
         // size matches
-        paper_size = size;
+        paper_size = *size;
         break;
     }
 
