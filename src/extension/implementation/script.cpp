@@ -691,11 +691,17 @@ void Script::effect(Inkscape::Extension::Effect *module,
     }
     if (desktop) {
         Inkscape::Selection * selection = desktop->getSelection();
-        if (!selection->isEmpty()) {
-            selection->setBackup();
+        if (selection) {
+                    //No working dialog run once
+            if (!selection->isEmpty()) {
+                selection->setBackup();
+            } else {
+                selection->restoreBackup();
+            }
+            params = selection->params;
+            module->paramListString(params);
+            selection->clear();
         }
-        params = selection->params;
-        module->paramListString(params);
     }
     file_listener fileout;
     int data_read = execute(command, params, dc->_filename, fileout);
@@ -754,12 +760,10 @@ void Script::effect(Inkscape::Extension::Effect *module,
                 //set the current layer
                 desktop->setCurrentLayer(layer);
             }
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             if (desktop) {
                 Inkscape::Selection * selection = desktop->getSelection();
-                if (selection && selection->isEmpty() && !desktop->on_live_extension) {
+                if (selection && selection->isEmpty()) {
                     selection->restoreBackup();
-                    selection->emptyBackup();
                 }
             }
         }

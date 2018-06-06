@@ -94,7 +94,7 @@ public:
     void undo (void);
     /** \brief Wait for the effect to complete if it hasn't. */
     bool wait (void);
-
+    void reselect (void);
 private:
     void runComplete (void);
     void createPrefsDialog (Gtk::Widget * controls);
@@ -104,7 +104,6 @@ private:
     void processingComplete(void);
     void documentCancel (void);
     void documentCommit (void);
-    void reselect (void);
     void genDocCache (void);
     void killDocCache (void);
 };

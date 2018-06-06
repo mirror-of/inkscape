@@ -272,8 +272,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
     if (!loaded())
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return;
-
-
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     ExecutionEnv executionEnv(this, doc);
     timer->lock();
     executionEnv.run();
