@@ -245,6 +245,7 @@ PrefDialog::param_timer_expire (void) {
         bool modified = document->isModifiedSinceSave();
         _exEnv->cancel();
         _exEnv->undo();
+        _exEnv->reselect();
         _exEnv->run();
         document->setModifiedSinceSave(modified);
     }

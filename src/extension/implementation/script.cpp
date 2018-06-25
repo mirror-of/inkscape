@@ -692,12 +692,6 @@ void Script::effect(Inkscape::Extension::Effect *module,
     if (desktop) {
         Inkscape::Selection * selection = desktop->getSelection();
         if (selection) {
-                    //No working dialog run once
-            if (!selection->isEmpty()) {
-                selection->setBackup();
-            } else {
-                selection->restoreBackup();
-            }
             params = selection->params;
             module->paramListString(params);
             selection->clear();
@@ -759,12 +753,6 @@ void Script::effect(Inkscape::Extension::Effect *module,
             if (layer) {
                 //set the current layer
                 desktop->setCurrentLayer(layer);
-            }
-            if (desktop) {
-                Inkscape::Selection * selection = desktop->getSelection();
-                if (selection && selection->isEmpty()) {
-                    selection->restoreBackup();
-                }
             }
         }
         mydoc->release();
