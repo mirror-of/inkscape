@@ -32656,7 +32656,6 @@ msgid "Please select an object"
 msgstr "Seleziona un oggetto"
 
 #: ../share/extensions/gimp_xcf.py:37
-#, fuzzy
 msgid "Inkscape must be installed and set in your path variable."
 msgstr "Inkscape deve essere installato e impostato nei percorsi."
 
