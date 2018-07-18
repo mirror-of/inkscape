@@ -21,7 +21,7 @@ void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& b
     buttonIcon->show();
 
     button.set_relief(Gtk::RELIEF_NONE);
-	button.show();
+    button.show();
 	button.add(*buttonIcon);
 	button.set_can_focus(false);
 }
