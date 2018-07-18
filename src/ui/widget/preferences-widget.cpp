@@ -34,6 +34,7 @@
 
 #include "io/sys.h"
 
+#include "helper/icon-loader.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/widget/preferences-widget.h"
 
@@ -705,9 +706,7 @@ void PrefEntryFileButtonHBox::init(Glib::ustring const &prefs_path,
     
     relatedButton = new Gtk::Button();
     Gtk::HBox* pixlabel = new Gtk::HBox(false, 3);
-    Gtk::Image *im = new Gtk::Image();
-    im->set_from_icon_name("applications-graphics",
-                           Gtk::ICON_SIZE_BUTTON);
+    Gtk::Image *im = sp_get_icon_image("applications-graphics", Gtk::ICON_SIZE_BUTTON);
     pixlabel->pack_start(*im);
     Gtk::Label *l = new Gtk::Label();
     l->set_markup_with_mnemonic(_("_Browse..."));

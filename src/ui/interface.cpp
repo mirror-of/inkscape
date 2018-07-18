@@ -51,6 +51,7 @@
 #include "extension/input.h"
 
 #include "helper/action.h"
+#include "helper/icon-loader.h"
 #include "helper/window.h"
 
 #include "io/sys.h"
