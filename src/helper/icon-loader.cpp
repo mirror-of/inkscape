@@ -29,6 +29,9 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     if (prefs->getString("/theme/themeName") == "") {
         prefs->setString("/theme/themeName", "hicolor");
     }
+    //TODO: remove this fixed value by a theme setting in prefs or wereeber might to be
+    prefs->setBool("/theme/symbolicIcons", true);
+    prefs->setString("/theme/symbolicIcons", "hicolor");
     auto iconTheme = Gtk::IconTheme::create();
     iconTheme->set_custom_theme(prefs->getString("/theme/themeName"));
     iconTheme->append_search_path(get_path_ustring(SYSTEM, ICONS));
