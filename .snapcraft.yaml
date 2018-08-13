@@ -95,6 +95,7 @@ parts:
     python-packages:
       - lxml
       - numpy
+      - scour
     stage-packages:
       - pstoedit
       - python-uniconvertor
