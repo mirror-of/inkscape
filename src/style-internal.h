@@ -402,7 +402,6 @@ public:
     bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
-    void setDouble(double v);
     virtual const Glib::ustring toString(bool wname = false) const;
 
     // To do: make private

@@ -984,16 +984,21 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOT:
         case U_PS_DASHDOTDOT:
         {
+            SPDocument *document = SP_ACTIVE_DOCUMENT;
+            double scale_doc = document->getDocumentScale()[0];
+            SPILength spilength("temp");
+            spilength.unit = SP_CSS_UNIT_NONE;
             int penstyle = (up.Style & U_PS_STYLE_MASK);
-            SPILength spilength("temp", 1);
             if (!d->dc[d->level].style.stroke_dasharray.values.empty() &&
                 (d->level == 0 || (d->level > 0 && d->dc[d->level].style.stroke_dasharray !=
                                                        d->dc[d->level - 1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
-                spilength.setDouble(3);
+                spilength.value = 3;
+                spilength.computed =   3 * scale_doc;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
-                spilength.setDouble(1);
+                spilength.value = 1;
+                spilength.computed = scale_doc;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
             if (penstyle==U_PS_DOT || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {

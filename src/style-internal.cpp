@@ -247,9 +247,13 @@ SPILength::read( gchar const *str ) {
         gchar *e;
         /** \todo fixme: Move this to standard place (Lauris) */
         value_tmp = g_ascii_strtod(str, &e);
+
         if ( !IS_FINITE(value_tmp) ) { // fix for bug lp:935157
             return;
         }
+        SPDocument *document = SP_ACTIVE_DOCUMENT;
+        double scale_doc = document->getDocumentScale()[0];
+
         if ((gchar const *) e != str) {
 
             value = value_tmp;
@@ -259,40 +263,48 @@ SPILength::read( gchar const *str ) {
                 computed = value;
             } else if (!strcmp(e, "px")) {
                 /* Userspace */
-                unit = SP_CSS_UNIT_PX;
+                unit = SP_CSS_UNIT_NONE;
                 computed = value;
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "pt")) {
                 /* Userspace / DEVICESCALE */
-                unit = SP_CSS_UNIT_PT;
+                unit = SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pt", "px");
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "pc")) {
-                unit = SP_CSS_UNIT_PC;
+                unit = SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pc", "px");
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "mm")) {
-                unit = SP_CSS_UNIT_MM;
+                unit = SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "mm", "px");
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "cm")) {
-                unit = SP_CSS_UNIT_CM;
+                unit = SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "cm", "px");
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "in")) {
-                unit = SP_CSS_UNIT_IN;
+                unit = SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "in", "px");
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "em")) {
                 /* EM square */
-                unit = SP_CSS_UNIT_EM;
+                unit = SP_CSS_UNIT_NONE;
                 if( style ) {
                     computed = value * style->font_size.computed;
                 } else {
                     computed = value * SPIFontSize::font_size_default;
                 }
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "ex")) {
                 /* ex square */
-                unit = SP_CSS_UNIT_EX;
+                unit = SP_CSS_UNIT_NONE;
                 if( style ) {
                     computed = value * style->font_size.computed * 0.5; // FIXME
                 } else {
                     computed = value * SPIFontSize::font_size_default * 0.5;
                 }
+                value = computed  / scale_doc;
             } else if (!strcmp(e, "%")) {
                 /* Percentage */
                 unit = SP_CSS_UNIT_PERCENT;
@@ -393,14 +405,6 @@ SPILength::merge( const SPIBase* const parent ) {
     }
 }
 
-void SPILength::setDouble(double v)
-{
-    unit = SP_CSS_UNIT_NONE;
-    value = v;
-    computed = v;
-    value_default = v;
-}
-
 // Generate a string and allow emove name for parsing dasharray, etc.
 const Glib::ustring SPILength::toString(bool wname) const
 {
@@ -411,7 +415,7 @@ Inkscape:
     }
     switch (this->unit) {
         case SP_CSS_UNIT_NONE:
-            os << this->computed;
+            os << this->value;
             break;
         case SP_CSS_UNIT_PX:
             os << this->computed << "px";

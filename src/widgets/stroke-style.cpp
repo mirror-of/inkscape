@@ -996,7 +996,8 @@ StrokeStyle::setScaledDash(SPCSSAttr *css,
 static inline double calcScaleLineWidth(const double width_typed, SPItem *const item, Inkscape::Util::Unit const *const unit)
 {
     if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-        return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
+        SPDocument *document = SP_ACTIVE_DOCUMENT;
+        return Inkscape::Util::Quantity::convert(width_typed, unit, "px") * document->getDocumentScale()[0];
     } else { // percentage
         const gdouble old_w = item->style->stroke_width.computed;
         return old_w * width_typed / 100;
@@ -1055,7 +1056,7 @@ StrokeStyle::scaleLine()
                 setScaledDash(css, ndash, dash, offset, width);
             }
             else {
-                setScaledDash(css, ndash, dash, offset, document->getDocumentScale()[0]);
+                setScaledDash(css, ndash, dash, offset, 1);
             }
             sp_desktop_apply_css_recursive ((*i), css, true);
         }
