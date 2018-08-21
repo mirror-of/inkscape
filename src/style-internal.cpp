@@ -251,8 +251,10 @@ SPILength::read( gchar const *str ) {
         if ( !IS_FINITE(value_tmp) ) { // fix for bug lp:935157
             return;
         }
-        SPDocument *document = SP_ACTIVE_DOCUMENT;
-        double scale_doc = document->getDocumentScale()[0];
+        double scale_doc = 1;
+//        if (SP_ACTIVE_DOCUMENT) {
+//            scale_doc = SP_ACTIVE_DOCUMENT->getDocumentScale()[0];
+//        }
 
         if ((gchar const *) e != str) {
 
@@ -260,7 +262,7 @@ SPILength::read( gchar const *str ) {
             if (!*e) {
                 /* Userspace */
                 unit = SP_CSS_UNIT_NONE;
-                computed = value;
+                computed = value  * scale_doc;
             } else if (!strcmp(e, "px")) {
                 /* Userspace */
                 unit = SP_CSS_UNIT_NONE;
@@ -337,7 +339,7 @@ SPILength::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
         if (this->inherit) {
             return (name + ":inherit;");
         } else {
-            return toString(true);
+            return (name + ":" value);
         }
     }
     return Glib::ustring("");
@@ -403,56 +405,6 @@ SPILength::merge( const SPIBase* const parent ) {
     } else {
         std::cerr << "SPIFloat::merge(): Incorrect parent type" << std::endl;
     }
-}
-
-// Generate a string and allow emove name for parsing dasharray, etc.
-const Glib::ustring SPILength::toString(bool wname) const
-{
-Inkscape:
-    CSSOStringStream os;
-    if (wname) {
-        os << name << ":";
-    }
-    switch (this->unit) {
-        case SP_CSS_UNIT_NONE:
-            os << this->value;
-            break;
-        case SP_CSS_UNIT_PX:
-            os << this->computed << "px";
-            break;
-        case SP_CSS_UNIT_PT:
-            os << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
-            break;
-        case SP_CSS_UNIT_PC:
-            os << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
-            break;
-        case SP_CSS_UNIT_MM:
-            os << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
-            break;
-        case SP_CSS_UNIT_CM:
-            os << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
-            break;
-        case SP_CSS_UNIT_IN:
-            os << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
-            break;
-        case SP_CSS_UNIT_EM:
-            os << this->value << "em";
-            break;
-        case SP_CSS_UNIT_EX:
-            os << this->value << "ex";
-            break;
-        case SP_CSS_UNIT_PERCENT:
-            os << (this->value * 100.0) << "%";
-            break;
-        default:
-            /* Invalid */
-            break;
-    }
-    if (wname) {
-        os << important_str();
-        os << ";";
-    }
-    return os.str();
 }
 
 bool
@@ -2093,7 +2045,7 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
                 if (i) {
                     os << ", ";
                 }
-                os << this->values[i].toString().c_str();
+                os << this->values[i].value;
             }
             os << important_str();
             os << ";";

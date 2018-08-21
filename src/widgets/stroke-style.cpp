@@ -997,7 +997,7 @@ static inline double calcScaleLineWidth(const double width_typed, SPItem *const 
 {
     if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
         SPDocument *document = SP_ACTIVE_DOCUMENT;
-        return Inkscape::Util::Quantity::convert(width_typed, unit, "px") * document->getDocumentScale()[0];
+        return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
     } else { // percentage
         const gdouble old_w = item->style->stroke_width.computed;
         return old_w * width_typed / 100;
