@@ -1095,8 +1095,6 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOT:
         case U_PS_DASHDOTDOT:
         {
-            SPDocument *document = SP_ACTIVE_DOCUMENT;
-            double scale_doc = Geom::Affine(document->getDocumentScale()).descrim();
             SPILength spilength("temp");
             spilength.unit = SP_CSS_UNIT_NONE;
             int penstyle = (pEmr->lopn.lopnStyle & U_PS_STYLE_MASK);
@@ -1106,10 +1104,10 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
                 spilength.value = 3;
-                spilength.computed = 3 * scale_doc;
+                spilength.computed = 3;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
                 spilength.value = 1;
-                spilength.computed = scale_doc;
+                spilength.computed = 1;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
             if (penstyle==U_PS_DOT || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
@@ -1215,13 +1213,11 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                 (d->level == 0 || (d->level > 0 && d->dc[d->level].style.stroke_dasharray !=
                                                        d->dc[d->level - 1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
-            SPDocument *document = SP_ACTIVE_DOCUMENT;
-            double scale_doc = Geom::Affine(document->getDocumentScale()).descrim();
             SPILength spilength("temp");
             spilength.unit = SP_CSS_UNIT_NONE;
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
                 spilength.value = 3;
-                spilength.computed = 3 * scale_doc;
+                spilength.computed = 3;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
                 spilength.value = 2;
                 spilength.computed = 2 * scale_doc;
@@ -1229,18 +1225,18 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
             }
             if (penstyle==U_PS_DOT || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
                 spilength.value = 1;
-                spilength.computed = 1 * scale_doc;
+                spilength.computed = 1;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
                 spilength.value = 2;
-                spilength.computed = 2 * scale_doc;
+                spilength.computed = 2;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
             if (penstyle==U_PS_DASHDOTDOT) {
                 spilength.value = 1;
-                spilength.computed = 1 * scale_doc;
+                spilength.computed = 1;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
                 spilength.value = 2;
-                spilength.computed = 2 * scale_doc;
+                spilength.computed = 2;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
 

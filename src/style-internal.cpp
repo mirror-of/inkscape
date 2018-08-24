@@ -273,6 +273,8 @@ SPILength::read( gchar const *str ) {
             if (!*e) {
                 /* Userspace */
                 unit = SP_CSS_UNIT_NONE;
+                //TODO: this not need to be 'computed = wnormal ? value : value * scale_doc;'
+                // Seems consistent but break a lot...
                 computed = value;
             } else if (!strcmp(e, "px")) {
                 /* Userspace */

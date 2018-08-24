@@ -984,8 +984,6 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOT:
         case U_PS_DASHDOTDOT:
         {
-            SPDocument *document = SP_ACTIVE_DOCUMENT;
-            double scale_doc = Geom::Affine(document->getDocumentScale()).descrim();
             SPILength spilength("temp");
             spilength.unit = SP_CSS_UNIT_NONE;
             int penstyle = (up.Style & U_PS_STYLE_MASK);
@@ -995,10 +993,10 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
                 spilength.value = 3;
-                spilength.computed = 3 * scale_doc;
+                spilength.computed = 3;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
                 spilength.value = 1;
-                spilength.computed = scale_doc;
+                spilength.computed = 1;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
             if (penstyle==U_PS_DOT || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
