@@ -985,7 +985,7 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOTDOT:
         {
             SPDocument *document = SP_ACTIVE_DOCUMENT;
-            double scale_doc = document->getDocumentScale()[0];
+            double scale_doc = Geom::Affine(document->getDocumentScale()).descrim();
             SPILength spilength("temp");
             spilength.unit = SP_CSS_UNIT_NONE;
             int penstyle = (up.Style & U_PS_STYLE_MASK);

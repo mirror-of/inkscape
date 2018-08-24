@@ -35,6 +35,7 @@
 #include "extract-uri.h"
 #include "inkscape.h"
 #include "preferences.h"
+#include "document.h"
 #include "streq.h"
 #include "strneq.h"
 
@@ -247,66 +248,83 @@ SPILength::read( gchar const *str ) {
         gchar *e;
         /** \todo fixme: Move this to standard place (Lauris) */
         value_tmp = g_ascii_strtod(str, &e);
-
+        if ( !IS_FINITE(value_tmp) ) { // fix for bug lp:935157
+            return;
+        }
+        bool wnormal       = false;
+        if (name.compare( "line-height"    ) == 0 ||
+            name.compare( "word-spacing"   ) == 0 ||
+            name.compare( "letter-spacing" ) == 0) 
+        {
+            wnormal       = true;
+        }
+        
         if ( !IS_FINITE(value_tmp) ) { // fix for bug lp:935157
             return;
         }
         double scale_doc = 1;
-//        if (SP_ACTIVE_DOCUMENT) {
-//            scale_doc = SP_ACTIVE_DOCUMENT->getDocumentScale()[0];
-//        }
-
+        if (!wnormal && Inkscape::Application::exists() && SP_ACTIVE_DOCUMENT) {
+            scale_doc = Geom::Affine(SP_ACTIVE_DOCUMENT->getDocumentScale()).descrim();
+        } else {
+            //If no application dont transform SPILenghts
+            wnormal = true;
+        }
         if ((gchar const *) e != str) {
-
             value = value_tmp;
             if (!*e) {
                 /* Userspace */
                 unit = SP_CSS_UNIT_NONE;
-                computed = value  * scale_doc;
+                computed = value;
             } else if (!strcmp(e, "px")) {
                 /* Userspace */
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_PX : SP_CSS_UNIT_NONE;
                 computed = value;
-                value = computed  / scale_doc;
             } else if (!strcmp(e, "pt")) {
                 /* Userspace / DEVICESCALE */
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_PT : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pt", "px");
-                value = computed  / scale_doc;
+                value = wnormal? value : computed  / scale_doc;
+                computed = value;
             } else if (!strcmp(e, "pc")) {
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_PC : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pc", "px");
-                value = computed  / scale_doc;
+                value = wnormal? value : computed  / scale_doc;
+                computed = value;
             } else if (!strcmp(e, "mm")) {
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_MM : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "mm", "px");
-                value = computed  / scale_doc;
+                value = wnormal? value : computed  / scale_doc;
+                computed = value;
             } else if (!strcmp(e, "cm")) {
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_CM : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "cm", "px");
-                value = computed  / scale_doc;
+                value = wnormal? value : computed  / scale_doc;
+                computed = value;
             } else if (!strcmp(e, "in")) {
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_IN : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "in", "px");
-                value = computed  / scale_doc;
+                value = wnormal? value : computed  / scale_doc;
+                computed = value;
             } else if (!strcmp(e, "em")) {
                 /* EM square */
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_EM : SP_CSS_UNIT_NONE;
                 if( style ) {
                     computed = value * style->font_size.computed;
                 } else {
                     computed = value * SPIFontSize::font_size_default;
                 }
-                value = computed  / scale_doc;
+                value = wnormal? value : computed  / scale_doc;
+                computed = value;
             } else if (!strcmp(e, "ex")) {
                 /* ex square */
-                unit = SP_CSS_UNIT_NONE;
+                unit = wnormal? SP_CSS_UNIT_EX : SP_CSS_UNIT_NONE;
                 if( style ) {
                     computed = value * style->font_size.computed * 0.5; // FIXME
                 } else {
                     computed = value * SPIFontSize::font_size_default * 0.5;
                 }
-                value = computed  / scale_doc;
+                value = wnormal? value : computed  / scale_doc;
+                computed = value;
             } else if (!strcmp(e, "%")) {
                 /* Percentage */
                 unit = SP_CSS_UNIT_PERCENT;
@@ -339,7 +357,45 @@ SPILength::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
         if (this->inherit) {
             return (name + ":inherit;");
         } else {
-            return (name + ":" value);
+            Inkscape::CSSOStringStream os;
+            switch (this->unit) {
+                case SP_CSS_UNIT_NONE:
+                    os << name << ":" << this->computed;
+                    break;
+                case SP_CSS_UNIT_PX:
+                    os << name << ":" << this->computed << "px";
+                    break;
+                case SP_CSS_UNIT_PT:
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
+                    break;
+                case SP_CSS_UNIT_PC:
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
+                    break;
+                case SP_CSS_UNIT_MM:
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
+                    break;
+                case SP_CSS_UNIT_CM:
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
+                    break;
+                case SP_CSS_UNIT_IN:
+                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
+                    break;
+                case SP_CSS_UNIT_EM:
+                    os << name << ":" << this->value << "em";
+                    break;
+                case SP_CSS_UNIT_EX:
+                    os << name << ":" << this->value << "ex";
+                    break;
+                case SP_CSS_UNIT_PERCENT:
+                    os << name << ":" << (this->value * 100.0) << "%";
+                    break;
+                default:
+                    /* Invalid */
+                    break;
+            }
+            os << important_str();
+            os << ";";
+            return os.str();
         }
     }
     return Glib::ustring("");
@@ -410,8 +466,8 @@ SPILength::merge( const SPIBase* const parent ) {
 bool
 SPILength::operator==(const SPIBase& rhs) {
     if( const SPILength* r = dynamic_cast<const SPILength*>(&rhs) ) {
-
-        if( unit != r->unit ) return false;
+        
+        if (unit != r->unit ) return false;
 
         // If length depends on external parameter, lengths cannot be equal.
         if (unit    == SP_CSS_UNIT_EM)      return false;
@@ -421,7 +477,7 @@ SPILength::operator==(const SPIBase& rhs) {
         if (r->unit == SP_CSS_UNIT_EX)      return false;
         if (r->unit == SP_CSS_UNIT_PERCENT) return false;
 
-        return (computed == r->computed );
+        return (computed == r->computed);
     } else {
         return false;
     }
@@ -2045,7 +2101,44 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
                 if (i) {
                     os << ", ";
                 }
-                os << this->values[i].value;
+                Glib::ustring unit_str="";
+                switch (this->values[i].unit) {
+                    case SP_CSS_UNIT_PX:
+                        unit_str="px";
+                        break;
+                    case SP_CSS_UNIT_PT:
+                        unit_str="pt";
+                        break;
+                    case SP_CSS_UNIT_PC:
+                        unit_str="pc";
+                        break;
+                    case SP_CSS_UNIT_MM:
+                        unit_str="mm";
+                        break;
+                    case SP_CSS_UNIT_CM:
+                        unit_str="cm";
+                        break;
+                    case SP_CSS_UNIT_IN:
+                        unit_str="in";
+                        break;
+                    case SP_CSS_UNIT_EM:
+                        unit_str="em";
+                        break;
+                    case SP_CSS_UNIT_EX:
+                        unit_str="ex";
+                        break;
+                    case SP_CSS_UNIT_PERCENT:
+                        unit_str="%";
+                        break;
+                    default:
+                        /* Invalid */
+                        break;
+                }
+                if (this->values[i].unit == SP_CSS_UNIT_PERCENT) {
+                    os << (this->values[i].value  * 100.0) << unit_str ;
+                } else {
+                    os << this->values[i].value << unit_str ;
+                }
             }
             os << important_str();
             os << ";";

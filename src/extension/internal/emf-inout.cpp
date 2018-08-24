@@ -1096,7 +1096,7 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOTDOT:
         {
             SPDocument *document = SP_ACTIVE_DOCUMENT;
-            double scale_doc = document->getDocumentScale()[0];
+            double scale_doc = Geom::Affine(document->getDocumentScale()).descrim();
             SPILength spilength("temp");
             spilength.unit = SP_CSS_UNIT_NONE;
             int penstyle = (pEmr->lopn.lopnStyle & U_PS_STYLE_MASK);
@@ -1216,7 +1216,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                                                        d->dc[d->level - 1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             SPDocument *document = SP_ACTIVE_DOCUMENT;
-            double scale_doc = document->getDocumentScale()[0];
+            double scale_doc = Geom::Affine(document->getDocumentScale()).descrim();
             SPILength spilength("temp");
             spilength.unit = SP_CSS_UNIT_NONE;
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {

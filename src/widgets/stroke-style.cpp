@@ -749,14 +749,11 @@ StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
             scaledash = style->stroke_width.computed;
         }
         for (unsigned i = 0; i < len; i++) {
-            if (style->stroke_width.computed != 0)
-                d[i] = style->stroke_dasharray.values[i].value / scaledash;
-            else
-                d[i] = style->stroke_dasharray.values[i].value; // is there a better thing to do for stroke_width==0?
+            d[i] = style->stroke_dasharray.values[i].computed / scaledash;
         }
         dsel->set_dash(len, d,
-                       style->stroke_width.computed != 0 ? style->stroke_dashoffset.value / scaledash
-                                                         : style->stroke_dashoffset.value);
+                       style->stroke_width.computed != 0 ? style->stroke_dashoffset.computed / scaledash
+                                                         : style->stroke_dashoffset.computed);
     } else {
         dsel->set_dash(0, nullptr, 0.0);
     }
@@ -996,7 +993,6 @@ StrokeStyle::setScaledDash(SPCSSAttr *css,
 static inline double calcScaleLineWidth(const double width_typed, SPItem *const item, Inkscape::Util::Unit const *const unit)
 {
     if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-        SPDocument *document = SP_ACTIVE_DOCUMENT;
         return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
     } else { // percentage
         const gdouble old_w = item->style->stroke_width.computed;
@@ -1022,7 +1018,6 @@ StrokeStyle::scaleLine()
 
     /* TODO: Create some standardized method */
     SPCSSAttr *css = sp_repr_css_attr_new();
-
     if (!items.empty()) {
         double width_typed = (*widthAdj)->get_value();
         double const miterlimit = (*miterLimitAdj)->get_value();
@@ -1051,13 +1046,9 @@ StrokeStyle::scaleLine()
 
             /* Set dash */
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            gboolean scale = prefs->getBool("/options/dash/scale", true);
-            if (scale) {
-                setScaledDash(css, ndash, dash, offset, width);
-            }
-            else {
-                setScaledDash(css, ndash, dash, offset, 1);
-            }
+            double desktop_scale = Geom::Affine(SP_ACTIVE_DOCUMENT->getDocumentScale()).descrim();
+            double scale = prefs->getBool("/options/dash/scale", true) ? width : desktop_scale;
+            setScaledDash(css, ndash, dash, offset, scale);
             sp_desktop_apply_css_recursive ((*i), css, true);
         }
 
