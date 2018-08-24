@@ -268,7 +268,7 @@ SPILength::read( gchar const *str ) {
             // If no application dont transform SPILenghts
             wnormal = true;
         }
-        if ((gchar const *) e != str) {
+        if ((gchar const *)e != str) {
             value = value_tmp;
             if (!*e) {
                 /* Userspace */
