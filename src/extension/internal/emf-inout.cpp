@@ -1220,7 +1220,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                 spilength.computed = 3;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
                 spilength.value = 2;
-                spilength.computed = 2 * scale_doc;
+                spilength.computed = 2;
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
             if (penstyle==U_PS_DOT || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
