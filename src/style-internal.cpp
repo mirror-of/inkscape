@@ -285,27 +285,27 @@ SPILength::read( gchar const *str ) {
                 unit = wnormal ? SP_CSS_UNIT_PT : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pt", "px");
                 value = wnormal ? value : computed / scale_doc;
-                computed = value;
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "pc")) {
                 unit = wnormal ? SP_CSS_UNIT_PC : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pc", "px");
                 value = wnormal ? value : computed / scale_doc;
-                computed = value;
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "mm")) {
                 unit = wnormal ? SP_CSS_UNIT_MM : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "mm", "px");
                 value = wnormal ? value : computed / scale_doc;
-                computed = value;
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "cm")) {
                 unit = wnormal ? SP_CSS_UNIT_CM : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "cm", "px");
                 value = wnormal ? value : computed / scale_doc;
-                computed = value;
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "in")) {
                 unit = wnormal ? SP_CSS_UNIT_IN : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "in", "px");
                 value = wnormal ? value : computed / scale_doc;
-                computed = value;
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "em")) {
                 /* EM square */
                 unit = wnormal ? SP_CSS_UNIT_EM : SP_CSS_UNIT_NONE;
@@ -315,7 +315,7 @@ SPILength::read( gchar const *str ) {
                     computed = value * SPIFontSize::font_size_default;
                 }
                 value = wnormal ? value : computed / scale_doc;
-                computed = value;
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "ex")) {
                 /* ex square */
                 unit = wnormal ? SP_CSS_UNIT_EX : SP_CSS_UNIT_NONE;
@@ -325,7 +325,7 @@ SPILength::read( gchar const *str ) {
                     computed = value * SPIFontSize::font_size_default * 0.5;
                 }
                 value = wnormal ? value : computed / scale_doc;
-                computed = value;
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "%")) {
                 /* Percentage */
                 unit = SP_CSS_UNIT_PERCENT;
