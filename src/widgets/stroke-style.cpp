@@ -751,9 +751,8 @@ StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
         for (unsigned i = 0; i < len; i++) {
             d[i] = style->stroke_dasharray.values[i].computed / scaledash;
         }
-        dsel->set_dash(len, d,
-                       style->stroke_width.computed != 0 ? style->stroke_dashoffset.computed / scaledash
-                                                         : style->stroke_dashoffset.computed);
+        dsel->set_dash(len, d, style->stroke_width.computed != 0 ? style->stroke_dashoffset.computed / scaledash
+                                                                 : style->stroke_dashoffset.computed);
     } else {
         dsel->set_dash(0, nullptr, 0.0);
     }

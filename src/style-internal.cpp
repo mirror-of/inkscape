@@ -254,11 +254,11 @@ SPILength::read( gchar const *str ) {
         bool wnormal = false;
         Glib::ustring unitnv = "";
         if (name.compare("line-height") == 0 || name.compare("word-spacing") == 0 ||
-            name.compare("letter-spacing") == 0 || !Inkscape::Application::exists() ||
-            !SP_ACTIVE_DOCUMENT || !SP_ACTIVE_DESKTOP) 
-        {
+            name.compare("letter-spacing") == 0 || !Inkscape::Application::exists() || !SP_ACTIVE_DOCUMENT ||
+            !SP_ACTIVE_DESKTOP) {
             wnormal = true;
-        } else if (SPNamedView *namedview = SP_ACTIVE_DESKTOP->getNamedView()) {
+        }
+        else if (SPNamedView *namedview = SP_ACTIVE_DESKTOP->getNamedView()) {
             unitnv = namedview->display_units->abbr;
         }
 
