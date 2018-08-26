@@ -1046,8 +1046,12 @@ StrokeStyle::scaleLine()
 
             /* Set dash */
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            double desktop_scale = Geom::Affine(SP_ACTIVE_DOCUMENT->getDocumentScale()).descrim();
-            double scale = prefs->getBool("/options/dash/scale", true) ? width : desktop_scale;
+            Glib::ustring unitnv = "px";
+            if (SPNamedView *namedview = SP_ACTIVE_DESKTOP->getNamedView()) {
+                unitnv = namedview->display_units->abbr;
+            }
+            double unit_scale = Inkscape::Util::Quantity::convert(1, unitnv, "px");
+            double scale = prefs->getBool("/options/dash/scale", true) ? width : unit_scale;
             setScaledDash(css, ndash, dash, offset, scale);
             sp_desktop_apply_css_recursive ((*i), css, true);
         }

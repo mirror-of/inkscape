@@ -35,6 +35,7 @@
 #include "document.h"
 #include "extract-uri.h"
 #include "inkscape.h"
+#include "object/sp-namedview.h"
 #include "preferences.h"
 #include "streq.h"
 #include "strneq.h"
@@ -235,7 +236,6 @@ SPIScale24::operator==(const SPIBase& rhs) {
 
 void
 SPILength::read( gchar const *str ) {
-
     if( !str ) return;
 
     if (!strcmp(str, "inherit")) {
@@ -252,59 +252,56 @@ SPILength::read( gchar const *str ) {
             return;
         }
         bool wnormal = false;
+        Glib::ustring unitnv = "";
         if (name.compare("line-height") == 0 || name.compare("word-spacing") == 0 ||
-            name.compare("letter-spacing") == 0) {
+            name.compare("letter-spacing") == 0 || !Inkscape::Application::exists() ||
+            !SP_ACTIVE_DOCUMENT || !SP_ACTIVE_DESKTOP) 
+        {
             wnormal = true;
+        } else if (SPNamedView *namedview = SP_ACTIVE_DESKTOP->getNamedView()) {
+            unitnv = namedview->display_units->abbr;
         }
 
         if (!IS_FINITE(value_tmp)) { // fix for bug lp:935157
             return;
-        }
-        double scale_doc = 1;
-        if (!wnormal && Inkscape::Application::exists() && SP_ACTIVE_DOCUMENT) {
-            scale_doc = Geom::Affine(SP_ACTIVE_DOCUMENT->getDocumentScale()).descrim();
-        }
-        else {
-            // If no application dont transform SPILenghts
-            wnormal = true;
         }
         if ((gchar const *)e != str) {
             value = value_tmp;
             if (!*e) {
                 /* Userspace */
                 unit = SP_CSS_UNIT_NONE;
-                // TODO: this not need to be 'computed = wnormal ? value : value * scale_doc;'
-                // Seems consistent but break a lot...
                 computed = value;
             } else if (!strcmp(e, "px")) {
                 /* Userspace */
                 unit = wnormal ? SP_CSS_UNIT_PX : SP_CSS_UNIT_NONE;
                 computed = value;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
+                computed = wnormal ? computed : value;
             } else if (!strcmp(e, "pt")) {
                 /* Userspace / DEVICESCALE */
                 unit = wnormal ? SP_CSS_UNIT_PT : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pt", "px");
-                value = wnormal ? value : computed / scale_doc;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
                 computed = wnormal ? computed : value;
             } else if (!strcmp(e, "pc")) {
                 unit = wnormal ? SP_CSS_UNIT_PC : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "pc", "px");
-                value = wnormal ? value : computed / scale_doc;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
                 computed = wnormal ? computed : value;
             } else if (!strcmp(e, "mm")) {
                 unit = wnormal ? SP_CSS_UNIT_MM : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "mm", "px");
-                value = wnormal ? value : computed / scale_doc;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
                 computed = wnormal ? computed : value;
             } else if (!strcmp(e, "cm")) {
                 unit = wnormal ? SP_CSS_UNIT_CM : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "cm", "px");
-                value = wnormal ? value : computed / scale_doc;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
                 computed = wnormal ? computed : value;
             } else if (!strcmp(e, "in")) {
                 unit = wnormal ? SP_CSS_UNIT_IN : SP_CSS_UNIT_NONE;
                 computed = Inkscape::Util::Quantity::convert(value, "in", "px");
-                value = wnormal ? value : computed / scale_doc;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
                 computed = wnormal ? computed : value;
             } else if (!strcmp(e, "em")) {
                 /* EM square */
@@ -314,7 +311,7 @@ SPILength::read( gchar const *str ) {
                 } else {
                     computed = value * SPIFontSize::font_size_default;
                 }
-                value = wnormal ? value : computed / scale_doc;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
                 computed = wnormal ? computed : value;
             } else if (!strcmp(e, "ex")) {
                 /* ex square */
@@ -324,7 +321,7 @@ SPILength::read( gchar const *str ) {
                 } else {
                     computed = value * SPIFontSize::font_size_default * 0.5;
                 }
-                value = wnormal ? value : computed / scale_doc;
+                value = wnormal ? value : Inkscape::Util::Quantity::convert(computed, "px", unitnv);
                 computed = wnormal ? computed : value;
             } else if (!strcmp(e, "%")) {
                 /* Percentage */
