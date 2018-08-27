@@ -23,6 +23,8 @@
 
 
 #include <glib.h>
+#include <glibmm.h>
+
 #include <2geom/point.h>
 #include "svg/stringstream.h"
 #include "svg/css-ostringstream.h"
@@ -386,6 +388,34 @@ std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many( Inkscape::XML
 
         for (Inkscape::XML::Node const *child = repr->firstChild() ; child; child = child->next() ) {
             found = sp_repr_lookup_name_many( child, name, maxdepth - 1);
+            nodes.insert(nodes.end(), found.begin(), found.end());
+        }
+    }
+
+    return nodes;
+}
+
+std::vector<Inkscape::XML::Node *>
+sp_repr_lookup_property_many( Inkscape::XML::Node *repr, Glib::ustring const& property,
+                              Glib::ustring const &value, int maxdepth )
+{
+    std::vector<Inkscape::XML::Node *> nodes;
+    std::vector<Inkscape::XML::Node *> found;
+    g_return_val_if_fail(repr     != nullptr, nodes);
+
+    SPCSSAttr* css = sp_repr_css_attr (repr, "style");
+    if (value == sp_repr_css_property (css, property, "")) {
+        nodes.push_back(repr);
+    }
+
+    if ( maxdepth != 0 ) {
+        // maxdepth == -1 means unlimited
+        if ( maxdepth == -1 ) {
+            maxdepth = 0;
+        }
+
+        for (Inkscape::XML::Node *child = repr->firstChild() ; child; child = child->next() ) {
+            found = sp_repr_lookup_property_many( child, property, value, maxdepth - 1);
             nodes.insert(nodes.end(), found.begin(), found.end());
         }
     }

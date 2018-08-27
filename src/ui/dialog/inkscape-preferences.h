@@ -88,6 +88,7 @@ enum {
     PREFS_PAGE_IO,
     PREFS_PAGE_IO_MOUSE,
     PREFS_PAGE_IO_SVGOUTPUT,
+    PREFS_PAGE_IO_SVGEXPORT,
     PREFS_PAGE_IO_CMS,
     PREFS_PAGE_IO_AUTOSAVE,
     PREFS_PAGE_IO_OPENCLIPART,
@@ -181,6 +182,7 @@ protected:
     UI::Widget::DialogPage _page_io;
     UI::Widget::DialogPage _page_mouse;
     UI::Widget::DialogPage _page_svgoutput;
+    UI::Widget::DialogPage _page_svgexport;
     UI::Widget::DialogPage _page_cms;
     UI::Widget::DialogPage _page_autosave;
     UI::Widget::DialogPage _page_openclipart;
@@ -472,9 +474,14 @@ protected:
     UI::Widget::PrefCheckButton   _svgoutput_check_editing;
     UI::Widget::PrefCheckButton   _svgoutput_check_writing;
 
+    // SVG Output export:
+    UI::Widget::PrefCheckButton   _svgexport_remove_marker_auto_start_reverse;
+    UI::Widget::PrefCheckButton   _svgexport_remove_marker_context_paint;
+
+
     UI::Widget::PrefEntryButtonHBox _importexport_ocal_url;
-    UI::Widget::PrefEntry       _importexport_ocal_username;
-    UI::Widget::PrefEntry       _importexport_ocal_password;
+    UI::Widget::PrefEntry           _importexport_ocal_username;
+    UI::Widget::PrefEntry           _importexport_ocal_password;
 
     /*
      * Keyboard shortcut members

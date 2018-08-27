@@ -1199,6 +1199,20 @@ void InkscapePreferences::initPageIO()
 
     this->AddPage(_page_svgoutput, _("SVG output"), iter_io, PREFS_PAGE_IO_SVGOUTPUT);
 
+
+    // SVG Export Options (SVG 2 -> SVG 1)
+
+    _page_svgexport.add_group_header( _("SVG 2 to SVG 1.1"));
+
+    _svgexport_remove_marker_auto_start_reverse.init( _("Replace markers with 'auto_start_reverse'."),               "/options/svgexport/marker_autostartreverse", false);
+    _svgexport_remove_marker_context_paint.init(      _("Replace markers using 'context_paint' or 'context_fill'."), "/options/svgexport/marker_contextpaint",     false);
+
+    _page_svgexport.add_line( false, "", _svgexport_remove_marker_auto_start_reverse, "", _("SVG 2 allows markers to automatically be reversed at start of path."), false);
+    _page_svgexport.add_line( false, "", _svgexport_remove_marker_context_paint,      "", _("SVG 2 allows markers to automatically match stroke color."),           false);
+
+    this->AddPage(_page_svgexport, _("SVG export"), iter_io, PREFS_PAGE_IO_SVGEXPORT);
+
+
     // CMS options
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int const numIntents = 4;
