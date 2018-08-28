@@ -528,7 +528,9 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     if (pb) {
         //TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
 
+        ctx->pushState();
         ctx->renderImage(pb.get(), t, item->style);
+        ctx->popState();
     }
     g_slist_free (items);
 }

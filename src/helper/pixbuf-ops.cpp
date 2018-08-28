@@ -132,6 +132,11 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
     // because that would not work if the shown item references something in defs
     if (items_only) {
         hide_other_items_recursively(doc->getRoot(), items_only, dkey);
+        // TODO: The following loop forces 100% opacity as required by sp_asbitmap_render() in cairo-renderer.cpp
+        //       Make it contitional if 'item_only' is ever used by other callers which need to retain opacity
+        for (GSList *item = items_only; item; item = item->next) {
+            ((SPItem *)item->data)->get_arenaitem(dkey)->setOpacity(1.0);
+        }
     }
 
     Geom::IntRect final_bbox = Geom::IntRect::from_xywh(0, 0, width, height);
