@@ -1631,7 +1631,7 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
         }
     }
 
-    cairo_paint_with_alpha(_cr, opacity);
+    cairo_paint(_cr);
 
     cairo_restore(_cr);
     return true;
