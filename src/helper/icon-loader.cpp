@@ -35,6 +35,10 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
     }
+    Glib::RefPtr< Gdk::Screen > screen = Gdk::Screen::get_default();
+    Glib::RefPtr< Gdk::Window > window = Gdk::Window::get_default_root_window();
+    double scale = screen->get_monitor_scale_factor(screen->get_monitor_at_window(window));
+    size *= scale;
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             gchar colornamed[64];
