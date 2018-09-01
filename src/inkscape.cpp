@@ -435,12 +435,12 @@ static void set_scale_env()
     const gchar *gdk_scale = std::to_string(scale_value).c_str();
     g_setenv("GDK_SCALE", gdk_scale, TRUE);
     double original_scale_dpi = atof(g_getenv("GDK_DPI_SCALE") ? g_getenv("GDK_DPI_SCALE") : "1");
-    double scale_dpi_value = prefs->getDouble("/theme/gdkDPIScale",original_scale_dpi);
+    double scale_dpi_value = prefs->getDouble("/theme/gdkDPIScale", original_scale_dpi);
     const gchar *gdk_scale_dpi = std::to_string(scale_dpi_value).c_str();
     g_setenv("GDK_DPI_SCALE", gdk_scale_dpi, TRUE);
 
-    //printf("GDK_SCALE = %s\n", g_getenv("GDK_SCALE"));
-    //printf("GDK_DPI_SCALE = %s\n", g_getenv("GDK_DPI_SCALE"));
+    // printf("GDK_SCALE = %s\n", g_getenv("GDK_SCALE"));
+    // printf("GDK_DPI_SCALE = %s\n", g_getenv("GDK_DPI_SCALE"));
 }
 
 /* \brief Constructor for the application.
@@ -507,7 +507,7 @@ Application::Application(const char* argv, bool use_gui) :
             }
             double scaleText = prefs->getDouble("/theme/scaleText", -1);
             if (scaleText != -1) {
-                g_object_set (gtk_settings_get_default (), "gtk-xft-dpi", (gint)(scaleText * 96 * 1024),NULL);
+                g_object_set(gtk_settings_get_default(), "gtk-xft-dpi", (gint)(scaleText * 96 * 1024), NULL);
             }
             if (prefs->getString("/theme/iconTheme") != "") {
                 g_object_set(settings, "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);

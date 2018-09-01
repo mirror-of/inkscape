@@ -250,8 +250,8 @@ protected:
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
-    UI::Widget::PrefSpinButton _gdk_scale; 
-    UI::Widget::PrefSpinButton _gdk_dpi_scale; 
+    UI::Widget::PrefSpinButton _gdk_scale;
+    UI::Widget::PrefSpinButton _gdk_dpi_scale;
     Gtk::Button _apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;

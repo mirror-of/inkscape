@@ -55,15 +55,15 @@
 #undef AND
 #endif
 
-#include "file.h"
+#include "color.h"
 #include "document.h"
+#include "file.h"
 #include "layer-model.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "ui/interface.h"
 #include "preferences.h"
 #include "print.h"
-#include "color.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "ui/interface.h"
 
 #include "svg/svg.h"
 #include "svg/svg-color.h"
@@ -656,7 +656,7 @@ main(int argc, char **argv)
     LIBXML_TEST_VERSION
 
     Inkscape::GC::init();
-    
+
     Inkscape::Debug::Logger::init();
 
     gboolean use_gui;
