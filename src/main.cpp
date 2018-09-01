@@ -61,6 +61,7 @@
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "ui/interface.h"
+#include "preferences.h"
 #include "print.h"
 #include "color.h"
 
@@ -618,7 +619,6 @@ static void set_extensions_env()
     // printf("PYTHONPATH = %s\n", g_getenv("PYTHONPATH"));
 }
 
-
 /**
  * This is the classic main() entry point of the program, though on some
  * architectures it might be called by something else.
@@ -649,7 +649,6 @@ main(int argc, char **argv)
         rt.setPathInfo();
     }
 #endif
-    set_extensions_env();
 
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
     Gtk::Main::init_gtkmm_internals();
@@ -657,7 +656,7 @@ main(int argc, char **argv)
     LIBXML_TEST_VERSION
 
     Inkscape::GC::init();
-
+    
     Inkscape::Debug::Logger::init();
 
     gboolean use_gui;

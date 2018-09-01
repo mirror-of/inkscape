@@ -35,6 +35,9 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
     }
+    double original_scale = atof(g_getenv("GDK_SCALE") ? g_getenv("GDK_SCALE") : "1");
+    double scale = prefs->getDouble("/theme/gdkScale", original_scale);
+    size *= scale;
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             gchar colornamed[64];
