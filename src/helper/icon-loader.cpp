@@ -35,34 +35,31 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
     }
-    Glib::RefPtr< Gdk::Screen > screen = Gdk::Screen::get_default();
     Glib::RefPtr< Gdk::Window > window = Gdk::Window::get_default_root_window();
-    double scale = screen->get_monitor_scale_factor(screen->get_monitor_at_window(window));
-    size *= scale;
+    double scale = window->get_scale_factor();
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             gchar colornamed[64];
             sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
             Gdk::RGBA color;
             color.set(colornamed);
+            // TODO: migrate to "lookup_by_gicon_for_scale" as documentations says about HiDPI. 
+            // Currenlty docs couldent be followed
+            // broken, missing or incomplete
             Gtk::IconInfo iconinfo =
-                icon_theme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+                icon_theme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, scale, Gtk::ICON_LOOKUP_FORCE_SIZE);
             if (bool(iconinfo)) {
                 // TODO: view if we need parametrice other colors
                 bool was_symbolic = false;
                 _icon_pixbuf = iconinfo.load_symbolic(color, color, color, color, was_symbolic);
             }
             else {
-                _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+                _icon_pixbuf = icon_theme->load_icon(icon_name, size, scale, Gtk::ICON_LOOKUP_FORCE_SIZE);
             }
         }
         else {
-            _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+            _icon_pixbuf = icon_theme->load_icon(icon_name, size, scale, Gtk::ICON_LOOKUP_FORCE_SIZE);
         }
-        double xdpi = atof(_icon_pixbuf->get_option("x-dpi").c_str()) * scale;
-        double ydpi = atof(_icon_pixbuf->get_option("y-dpi").c_str()) * scale;
-        _icon_pixbuf->set_option("x-dpi", Glib::ustring::format(xdpi));
-        _icon_pixbuf->set_option("y-dpi", Glib::ustring::format(ydpi));
     }
     catch (const Gtk::IconThemeError &e) {
         std::cout << "Icon Loader: " << e.what() << std::endl;
