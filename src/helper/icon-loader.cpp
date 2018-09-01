@@ -59,6 +59,10 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         else {
             _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
         }
+        double xdpi = atof(Gdk::Pixbuf::get_option("x-dpi")) * scale;
+        double ydpi = atof(Gdk::Pixbuf::get_option("y-dpi")) * scale;
+        Gdk::Pixbuf::set_option("x-dpi", Glib::ustring.format(xdpi).c_str());
+        Gdk::Pixbuf::set_option("y-dpi", Glib::ustring.format(ydpi).c_str());
     }
     catch (const Gtk::IconThemeError &e) {
         std::cout << "Icon Loader: " << e.what() << std::endl;
