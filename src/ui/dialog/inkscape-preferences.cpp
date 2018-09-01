@@ -883,8 +883,8 @@ void InkscapePreferences::initPageUI()
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
     _gdk_scale.init("/theme/gdkScale", 0.01, 10.0, 0.01, 0.1, 1.0, false, false);
-    _page_theme.add_line(true, _("Scale app"), _gdk_scale,
-                         "<span size=\"small\">Common value for HiDPI is 2</span>", "", false);
+    _page_theme.add_line(true, _("Scale app"), _gdk_scale, "<span size=\"small\">Common value for HiDPI is 2</span>",
+                         "", false);
     _gdk_dpi_scale.init("/theme/gdkDPIScale", 0.01, 10.0, 0.01, 0.1, 1.0, false, false);
     _page_theme.add_line(true, _("Scale text dpi"), _gdk_dpi_scale,
                          "<span size=\"small\">Common value for HiDPI is 0.5</span>", "", false);
