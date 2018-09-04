@@ -36,6 +36,7 @@ extern "C" {
 #include "pdf-parser.h"
 #include "util/units.h"
 
+#include "glib/poppler-features.h"
 #include "goo/gmem.h"
 #include "goo/GooString.h"
 #include "GlobalParams.h"
@@ -2581,7 +2582,11 @@ void PdfParser::opShowSpaceText(Object args[], int /*numArgs*/)
   }
 }
 
+#if POPPLER_CHECK_VERSION(0,64,0)
 void PdfParser::doShowText(const GooString *s) {
+#else
+void PdfParser::doShowText(GooString *s) {
+#endif
   GfxFont *font;
   int wMode;
   double riseX, riseY;
@@ -2594,7 +2599,11 @@ void PdfParser::doShowText(const GooString *s) {
   Object charProc;
   Dict *resDict;
   Parser *oldParser;
+#if POPPLER_CHECK_VERSION(0,64,0)
+  const char *p;
+#else
   char *p;
+#endif
   int len, n, uLen;
 
   font = state->getFont();
@@ -2630,7 +2639,7 @@ void PdfParser::doShowText(const GooString *s) {
     double lineX = state->getLineX();
     double lineY = state->getLineY();
     oldParser = parser;
-    p = g_strdup(s->getCString());
+    p = s->getCString();
     len = s->getLength();
     while (len > 0) {
       n = font->getNextChar(p, len, &code,
@@ -2685,7 +2694,7 @@ void PdfParser::doShowText(const GooString *s) {
 
   } else {
     state->textTransformDelta(0, state->getRise(), &riseX, &riseY);
-    p = g_strdup(s->getCString());
+    p = s->getCString();
     len = s->getLength();
     while (len > 0) {
       n = font->getNextChar(p, len, &code,
@@ -2731,7 +2740,11 @@ void PdfParser::opXObject(Object args[], int /*numArgs*/)
 {
   Object obj1, obj2, obj3, refObj;
 
-  char *name = g_strdup(args[0].getName());
+#if POPPLER_CHECK_VERSION(0,64,0)
+  const char *name = args[0].getName();
+#else
+  char *name = args[0].getName();
+#endif
 #if defined(POPPLER_NEW_OBJECT_API)
   if ((obj1 = res->lookupXObject(name)).isNull()) {
 #else
