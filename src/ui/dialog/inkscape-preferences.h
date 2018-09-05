@@ -475,6 +475,8 @@ protected:
     UI::Widget::PrefCheckButton   _svgoutput_check_writing;
 
     // SVG Output export:
+    UI::Widget::PrefCheckButton   _svgexport_insert_text_fallback;
+    UI::Widget::PrefCheckButton   _svgexport_insert_mesh_polyfill;
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_auto_start_reverse;
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_context_paint;
 

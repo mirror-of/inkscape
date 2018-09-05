@@ -40,9 +40,11 @@
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
 
+#include "object/sp-root.h"
 #include "object/sp-namedview.h"
 #include "object/sp-image.h"
-#include "object/sp-root.h"
+#include "object/sp-text.h"
+
 #include "util/units.h"
 #include "selection-chemistry.h"
 
@@ -348,6 +350,165 @@ static void remove_marker_context_paint (Inkscape::XML::Node *repr,
 }
 
 /*
+ * Recursively insert SVG 1.1 fallback for SVG 2 text (ignored by SVG 2 renderers).
+ * Notes:
+ *   Text must have been layed out. Access via old document.
+ */
+static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, Inkscape::XML::Node *defs = nullptr )
+{
+    if (repr) {
+
+        if (strncmp("svg:text", repr->name(), 8) == 0) {
+
+            auto id = repr->attribute("id");
+            // std::cout << "insert_text_fallback: found text!  id: " << (id?id:"null") << std::endl;
+
+            // See if we need to do anything (i.e. do we have SVG 2 text?).
+            SPCSSAttr* css = sp_repr_css_attr_inherited (repr, "style");
+            Glib::ustring inline_size  = sp_repr_css_property (css, "inline-size",  "");
+            Glib::ustring shape_inside = sp_repr_css_property (css, "shape-inside", "");
+
+            // No SVG 2 text, nothing to do.
+            if (inline_size.length() == 0 &&
+                shape_inside.length() == 0) {
+                return;
+            }
+
+            // We need to get SPText object to access layout.
+            SPText* text = static_cast<SPText *>(doc->getObjectById( id ));
+            if (text == nullptr) {
+                std::cerr << "insert_text_fallback: bad cast" << std::endl;
+                return;
+            }
+
+            // We will keep this text node but replace all children.
+
+            // Make a list of children to delete at end:
+            std::vector<Inkscape::XML::Node *> old_children;
+            for (auto child = repr->firstChild(); child; child = child->next()) {
+                old_children.push_back(child);
+            }
+
+            // For round-tripping, xml:space (or 'white-space:pre') must be set.
+            repr->setAttribute("xml:space", "preserve");
+
+            // Set 'x' and 'y' on <text>
+            Geom::Point anchor_point = text->layout.characterAnchorPoint(text->layout.begin());
+            sp_repr_set_svg_double(repr, "x", anchor_point[Geom::X]);
+            sp_repr_set_svg_double(repr, "y", anchor_point[Geom::Y]);
+
+            // Loop over all lines in layout.
+            for (auto it = text->layout.begin() ; it != text->layout.end() ; ) {
+
+                // Create a <tspan> with 'x' and 'y' for each line.
+                Inkscape::XML::Node *line_tspan = repr->document()->createElement("svg:tspan");
+
+                // This could be useful if one wants to edit in an old version of Inkscape but we need to check if it breaks anything:
+                // line_tspan->setAttribute("sodipodi:role", "line");
+
+                // Inside line <tspan>, create <tspan>s for each change of style or shift.
+                // For simple lines, this creates an unneeded <tspan> but so be it.
+                Inkscape::Text::Layout::iterator it_line_end = it;
+                it_line_end.nextStartOfLine();
+
+                while (it != it_line_end) {
+
+                    Inkscape::XML::Node *span_tspan = repr->document()->createElement("svg:tspan");
+                    Geom::Point anchor_point = text->layout.characterAnchorPoint(it);
+                    // use kerning to simulate justification and whatnot
+                    Inkscape::Text::Layout::iterator it_span_end = it;
+                    it_span_end.nextStartOfSpan();
+                    Inkscape::Text::Layout::OptionalTextTagAttrs attrs;
+                    text->layout.simulateLayoutUsingKerning(it, it_span_end, &attrs);
+                    // set x,y attributes only when we need to
+                    bool set_x = false;
+                    bool set_y = false;
+                    if (!text->transform.isIdentity()) {
+                        set_x = set_y = true;
+                    } else {
+                        Inkscape::Text::Layout::iterator it_chunk_start = it;
+                        it_chunk_start.thisStartOfChunk();
+                        if (it == it_chunk_start) {
+                            set_x = true;
+                            // don't set y so linespacing adjustments and things will still work
+                        }
+                        Inkscape::Text::Layout::iterator it_shape_start = it;
+                        it_shape_start.thisStartOfShape();
+                        if (it == it_shape_start)
+                            set_y = true;
+                    }
+                    if (set_x && !attrs.dx.empty())
+                        attrs.dx[0] = 0.0;
+                    TextTagAttributes(attrs).writeTo(span_tspan);
+                    if (set_x)
+                        sp_repr_set_svg_double(span_tspan, "x", anchor_point[Geom::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                    if (set_y)
+                        sp_repr_set_svg_double(span_tspan, "y", anchor_point[Geom::Y]);
+                    if (line_tspan->childCount() == 0) {
+                        sp_repr_set_svg_double(line_tspan, "x", anchor_point[Geom::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                        sp_repr_set_svg_double(line_tspan, "y", anchor_point[Geom::Y]);
+                    }
+
+                    void *rawptr = nullptr;
+                    Glib::ustring::iterator span_text_start_iter;
+                    text->layout.getSourceOfCharacter(it, &rawptr, &span_text_start_iter);
+                    SPObject *source_obj = reinterpret_cast<SPObject *>(rawptr);
+
+                    Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, text->style);
+                    if (!style_text.empty()) {
+                        span_tspan->setAttribute("style", style_text.c_str());
+                    }
+
+                    SPString *str = dynamic_cast<SPString *>(source_obj);
+                    if (str) {
+                        Glib::ustring *string = &(str->string); // TODO fixme: dangerous, unsafe premature-optimization
+                        void *rawptr = nullptr;
+                        Glib::ustring::iterator span_text_end_iter;
+                        text->layout.getSourceOfCharacter(it_span_end, &rawptr, &span_text_end_iter);
+                        SPObject *span_end_obj = reinterpret_cast<SPObject *>(rawptr);
+                        if (span_end_obj != source_obj) {
+                            if (it_span_end == text->layout.end()) {
+                                span_text_end_iter = span_text_start_iter;
+                                for (int i = text->layout.iteratorToCharIndex(it_span_end) - text->layout.iteratorToCharIndex(it) ; i ; --i)
+                                    ++span_text_end_iter;
+                            } else
+                                span_text_end_iter = string->end();    // spans will never straddle a source boundary
+                        }
+
+                        if (span_text_start_iter != span_text_end_iter) {
+                            Glib::ustring new_string;
+                            while (span_text_start_iter != span_text_end_iter)
+                                new_string += *span_text_start_iter++;    // grr. no substr() with iterators
+                            Inkscape::XML::Node *new_text = repr->document()->createTextNode(new_string.c_str());
+                            span_tspan->appendChild(new_text);
+                            Inkscape::GC::release(new_text);
+                            // std::cout << "  new_string: |" << new_string << "|" << std::endl;
+                        }
+                    }
+                    it = it_span_end;
+
+                    line_tspan->appendChild(span_tspan);
+                    Inkscape::GC::release(span_tspan);
+                }
+
+                repr->appendChild(line_tspan);
+                Inkscape::GC::release(line_tspan);
+            }
+
+            for (auto i: old_children) {
+                repr->removeChild (i);
+            }
+
+            return; // No need to look at children of <text>
+        }
+
+        for ( Node *child = repr->firstChild(); child; child = child->next() ) {
+            insert_text_fallback (child, doc, defs);
+        }
+    }
+}
+
+/*
  * Recursively transform SVG 2 to SVG 1.1, if possible.
  */
 static void transform_2_to_1( Inkscape::XML::Node *repr, Inkscape::XML::Node *defs = nullptr )
@@ -384,18 +545,6 @@ static void transform_2_to_1( Inkscape::XML::Node *repr, Inkscape::XML::Node *de
         // SVG 2 paint values 'context-fill', 'context-stroke':
         if ( prefs->getBool("/options/svgexport/marker_contextpaint", false) ) {
             remove_marker_context_paint(repr, defs);
-        }
-
-        // SVG 2 wrapped text to SVG 1.1 text:  NEED TO FINISH
-        if (strncmp("svg:text", repr->name(), 8) == 0) {
-            for ( List<AttributeRecord const> it = repr->attributeList(); it; ++it ) {
-                const gchar* attrName = g_quark_to_string(it->key);
-                // std::cout << "  " << (attrName?attrName:"unknown attribute") << std::endl;
-                if (strncmp("style", attrName, 5) == 0) {
-                    // std::cout << " found style!" << std::endl;
-                    break;
-                }
-            }
         }
 
         // *** To Do ***
@@ -625,8 +774,6 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 void
 Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filename)
 {
-    // std::cout << "Svg::save: " << (filename?filename:"null") << std::endl;
-
     g_return_if_fail(doc != nullptr);
     g_return_if_fail(filename != nullptr);
     Inkscape::XML::Document *rdoc = doc->rdoc;
@@ -636,10 +783,19 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
       || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVGZ_INKSCAPE));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool const transform2to1 =
+    bool const transform_2_to_1_flag =
         prefs->getBool("/dialogs/save_as/enable_svgexport", false);
 
-    bool createNewDoc = !exportExtensions || transform2to1;
+    bool const insert_text_fallback_flag =
+        prefs->getBool("/options/svgexport/text_insertfallback", true);
+    bool const insert_mesh_polyfill_flag =
+        prefs->getBool("/options/svgexport/mesh_insertpolyfill", true);
+
+    bool createNewDoc =
+        !exportExtensions         ||
+        transform_2_to_1_flag     ||
+        insert_text_fallback_flag ||
+        insert_mesh_polyfill_flag;
 
     // We prune the in-use document and deliberately loose data, because there
     // is no known use for this data at the present time.
@@ -667,9 +823,17 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
             pruneExtendedNamespaces(root);
         }
 
-        if (transform2to1) {
+        if (transform_2_to_1_flag) {
             transform_2_to_1 (root);
             new_rdoc->setAttribute("version", "1.1");
+        }
+
+        if (insert_text_fallback_flag) {
+            insert_text_fallback (root, doc);
+        }
+
+        if (insert_mesh_polyfill_flag) {
+            // To do
         }
 
         rdoc = new_rdoc;
