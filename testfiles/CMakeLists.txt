@@ -10,15 +10,17 @@ if(NOT GTEST_FOUND) # not required for gtest 1.8.0 and later
 endif()
 
 add_executable(tests
-	unittest.cpp
-	doc-per-case-test.cpp
-	src/attributes-test.cpp
-	src/color-profile-test.cpp
-	src/dir-util-test.cpp
+    unittest.cpp
+    doc-per-case-test.cpp
+    src/attributes-test.cpp
+    src/color-profile-test.cpp
+    src/dir-util-test.cpp
 )
 
 target_link_libraries(tests
-	gmock_main
-	inkscape_base)
+    ${GTEST_LIBRARIES}
+    ${GMOCK_LIBRARIES}
+    gmock_main
+    inkscape_base)
 
 add_test(BaseTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/tests)
