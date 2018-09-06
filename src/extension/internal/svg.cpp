@@ -508,6 +508,46 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, In
     }
 }
 
+
+static void insert_mesh_polyfill( Inkscape::XML::Node *repr )
+{
+    if (repr) {
+
+        Inkscape::XML::Node *defs = sp_repr_lookup_name (repr, "svg:defs");
+
+        if (defs == nullptr) {
+            // We always put meshes in <defs>, no defs -> no mesh.
+            return;
+        }
+
+        bool has_mesh = false;
+        for ( Node *child = defs->firstChild(); child; child = child->next() ) {
+            if (strncmp("svg:meshgradient", child->name(), 16) == 0) {
+                has_mesh = true;
+                break;
+            }
+        }
+
+        Inkscape::XML::Node *script = sp_repr_lookup_child (repr, "id", "mesh_polyfill");
+
+        if (has_mesh && script == nullptr) {
+
+            script = repr->document()->createElement("svg:script");
+            script->setAttribute ("id",   "mesh_polyfill");
+            script->setAttribute ("type", "text/javascript");
+            repr->root()->appendChild(script); // Must be last
+
+            // Insert JavaScript via raw string literal.
+            Glib::ustring js =
+#include "polyfill/mesh_compressed.include"
+;
+
+            Inkscape::XML::Node *script_text = repr->document()->createTextNode(js.c_str());
+            script->appendChild(script_text);
+        }
+    }
+}
+
 /*
  * Recursively transform SVG 2 to SVG 1.1, if possible.
  */
@@ -833,7 +873,7 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
         }
 
         if (insert_mesh_polyfill_flag) {
-            // To do
+            insert_mesh_polyfill (root);
         }
 
         rdoc = new_rdoc;
