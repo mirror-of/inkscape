@@ -72,7 +72,7 @@
 
 static void sp_image_set_curve(SPImage *image);
 
-static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base );
+static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base , char const *svgdpi);
 static void sp_image_update_arenaitem (SPImage *img, Inkscape::DrawingImage *ai);
 static void sp_image_update_canvas_image (SPImage *image);
 
@@ -117,7 +117,7 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->clipbox = Geom::Rect();
     this->sx = this->sy = 1.0;
     this->ox = this->oy = 0.0;
-
+    this->dpi = 96.00;
     this->curve = nullptr;
 
     this->href = nullptr;
@@ -137,6 +137,7 @@ void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "y" );
     this->readAttr( "width" );
     this->readAttr( "height" );
+    this->readAttr( "inkscape:svg-dpi" );
     this->readAttr( "preserveAspectRatio" );
     this->readAttr( "color-profile" );
 
@@ -214,6 +215,10 @@ void SPImage::set(unsigned int key, const gchar* value) {
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            break;
+        
+        case SP_ATTR_SVG_DPI:
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             break;
 
         case SP_ATTR_PRESERVEASPECTRATIO:
@@ -330,10 +335,16 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->pixbuf = nullptr;
         if (this->href) {
             Inkscape::Pixbuf *pixbuf = nullptr;
+            const gchar * svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
+            if (!svgdpi) {
+                svgdpi = "96";
+            }
+            this->dpi = atof(svgdpi);
             pixbuf = sp_image_repr_read_image (
                 this->getRepr()->attribute("xlink:href"),
                 this->getRepr()->attribute("sodipodi:absref"),
-                doc->getBase());
+                doc->getBase(),
+                svgdpi);
             
             if (pixbuf) {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -437,7 +448,7 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
     if (this->height._set) {
         sp_repr_set_svg_double(repr, "height", this->height.computed);
     }
-
+    repr->setAttribute("inkscape:svg-dpi", this->getRepr()->attribute("inkscape:svg-dpi"));
     //XML Tree being used directly here while it shouldn't be...
     repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -511,10 +522,15 @@ gchar* SPImage::description() const {
         this->document) 
     {
         Inkscape::Pixbuf * pb = nullptr;
+        const gchar * svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
+        if (!svgdpi) {
+            svgdpi = "96";
+        }
         pb = sp_image_repr_read_image (
                 this->getRepr()->attribute("xlink:href"),
                 this->getRepr()->attribute("sodipodi:absref"),
-                this->document->getBase());
+                this->document->getBase(),
+                svgdpi);
 
         if (pb) {
             ret = g_strdup_printf(_("%d &#215; %d: %s"),
@@ -537,7 +553,7 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int /*
     return ai;
 }
 
-Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base)
+Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base, char const *svgdpi)
 {
     Inkscape::Pixbuf *inkpb = nullptr;
 
@@ -547,7 +563,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
         if (strncmp (filename,"file:",5) == 0) {
             gchar *fullname = g_filename_from_uri(filename, nullptr, nullptr);
             if (fullname) {
-                inkpb = Inkscape::Pixbuf::create_from_file(fullname);
+                inkpb = Inkscape::Pixbuf::create_from_file(fullname, svgdpi);
                 g_free(fullname);
                 if (inkpb != nullptr) {
                     return inkpb;
@@ -556,7 +572,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
         } else if (strncmp (filename,"data:",5) == 0) {
             /* data URI - embedded image */
             filename += 5;
-            inkpb = Inkscape::Pixbuf::create_from_data_uri(filename);
+            inkpb = Inkscape::Pixbuf::create_from_data_uri(filename, svgdpi);
             if (inkpb != nullptr) {
                 return inkpb;
             }
@@ -585,7 +601,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
 
             /* try filename as absolute */
             if (g_file_test (filename, G_FILE_TEST_EXISTS) && !g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-                inkpb = Inkscape::Pixbuf::create_from_file(filename);
+                inkpb = Inkscape::Pixbuf::create_from_file(filename, svgdpi);
                 if (inkpb != nullptr) {
                     return inkpb;
                 }
@@ -603,7 +619,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
             g_warning ("xlink:href did not resolve to a valid image file, now trying sodipodi:absref=\"%s\"", absref);
         }
 
-        inkpb = Inkscape::Pixbuf::create_from_file(filename);
+        inkpb = Inkscape::Pixbuf::create_from_file(filename, svgdpi);
         if (inkpb != nullptr) {
             return inkpb;
         }

@@ -68,6 +68,8 @@ static const SPAttrDesc image_desc[] = {
     { N_("Width:"), "width"},
     { N_("Height:"), "height"},
     { N_("Image Rendering:"), "image-rendering"},
+    { N_("SVG DPI:"), "inkscape:svg-dpi"},
+    { N_("Preserve Aspect Ratio:"), "preserveAspectRatio"},
     { nullptr, nullptr}
 };
 
@@ -76,6 +78,8 @@ static const SPAttrDesc image_nohref_desc[] = {
     { N_("Y:"), "y"},
     { N_("Width:"), "width"},
     { N_("Height:"), "height"},
+    { N_("SVG DPI:"), "inkscape:svg-dpi"},
+    { N_("Preserve Aspect Ratio:"), "preserveAspectRatio"},
     { nullptr, nullptr}
 };
 

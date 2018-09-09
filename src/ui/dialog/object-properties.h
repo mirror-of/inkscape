@@ -40,6 +40,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/spinbutton.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/comboboxtext.h>
 
@@ -85,6 +86,7 @@ private:
     Gtk::Entry _entry_label; //the entry for the object label
     Gtk::Label _label_title; //the label for the object title
     Gtk::Entry _entry_title; //the entry for the object title
+
     Gtk::Label _label_image_rendering; // the label for 'image-rendering'
     Gtk::ComboBoxText _combo_image_rendering; // the combo box text for 'image-rendering'
     
@@ -94,6 +96,8 @@ private:
     Gtk::CheckButton _cb_hide; //the check button hide
     Gtk::CheckButton _cb_lock; //the check button lock
 
+    Gtk::Label _label_dpi; //the entry for the dpi value
+    Gtk::SpinButton _dpi_value; //the expander for interactivity
     Gtk::Expander _exp_interactivity; //the expander for interactivity
     SPAttributeTable *_attr_table; //the widget for showing the on... names at the bottom
     

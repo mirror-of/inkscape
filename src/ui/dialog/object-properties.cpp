@@ -54,6 +54,7 @@ ObjectProperties::ObjectProperties()
     , _label_label(_("_Label:"), true)
     , _label_title(_("_Title:"), true)
     , _label_image_rendering(_("_Image Rendering:"), true)
+    , _dpi_value( 96.00)
     , _cb_hide(_("_Hide"), true)
     , _cb_lock(_("L_ock"), true)
     , _attr_table(Gtk::manage(new SPAttributeTable()))
@@ -206,6 +207,7 @@ void ObjectProperties::_init()
     _combo_image_rendering.signal_changed().connect(
         sigc::mem_fun(this, &ObjectProperties::_imageRenderingChanged)
     );
+
 
     /* Check boxes */
     Gtk::HBox *hb_checkboxes = Gtk::manage(new Gtk::HBox());

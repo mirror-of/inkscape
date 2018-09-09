@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.ipp": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp",
+        "istream": "cpp",
+        "optional": "cpp",
+        "ostream": "cpp",
+        "type_traits": "cpp",
+        "atomic": "cpp",
+        "chrono": "cpp"
+    }
+}
