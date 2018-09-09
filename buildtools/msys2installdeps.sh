@@ -77,7 +77,8 @@ $ARCH-python2 \
 $ARCH-python2-pip \
 $ARCH-python2-lxml \
 $ARCH-python2-numpy \
-$ARCH-python2-pillow
+$ARCH-python2-pillow \
+$ARCH-python2-six
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)
