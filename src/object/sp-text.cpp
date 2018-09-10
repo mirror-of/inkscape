@@ -318,7 +318,13 @@ void SPText::hide(unsigned int key) {
 }
 
 const char* SPText::displayName() const {
-    return _("Text");
+    if (has_inline_size()) {
+        return _("Auto-wrapped text");
+    } else if (has_shape_inside()) {
+        return _("Text in-a-shape");
+    } else {
+        return _("Text");
+    }
 }
 
 gchar* SPText::description() const {
@@ -870,6 +876,60 @@ void SPText::_clearFlow(Inkscape::DrawingGroup *in_arena)
     in_arena->clearChildren();
 }
 
+bool SPText::has_inline_size() const
+{
+    return (style->inline_size.set);
+}
+
+bool SPText::has_shape_inside() const
+{
+    return (style->shape_inside.set);
+}
+
+SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
+{
+    SPDocument *doc = desktop->getDocument();
+
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
+    text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+    SPText *text_object = dynamic_cast<SPText *>(desktop->currentLayer()->appendChildRepr(text_repr));
+    g_assert(text_object != nullptr);
+
+    // Invert coordinate system?
+    p0 *= desktop->dt2doc();
+    p1 *= desktop->dt2doc();
+
+    // Pixels to user units
+    p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+
+    sp_repr_set_svg_double( text_repr, "x", p0[Geom::X]);
+    sp_repr_set_svg_double( text_repr, "y", p0[Geom::Y]);
+
+    double inline_size = p1[Geom::X] - p0[Geom::X];
+
+    text_object->style->inline_size.setDouble( inline_size );
+    text_object->style->inline_size.set = true;
+
+    Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
+    text_repr->appendChild(text_node);
+
+    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
+    g_assert(item != nullptr);
+
+    // text_object->transform = item->i2doc_affine().inverse();
+
+    text_object->updateRepr();
+
+    SPCSSAttr* css = sp_repr_css_attr (text_repr, "style");
+
+    Inkscape::GC::release(text_repr);
+    Inkscape::GC::release(text_node);
+
+    return text_object;
+}
 
 /*
  * TextTagAttributes implementation

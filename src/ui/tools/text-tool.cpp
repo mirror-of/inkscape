@@ -642,12 +642,41 @@ bool TextTool::root_handler(GdkEvent* event) {
                     double cursor_height = sp_desktop_get_font_size_tool(desktop);
                     if (fabs(p1[Geom::Y] - this->p0[Geom::Y]) > cursor_height) {
                         // otherwise even one line won't fit; most probably a slip of hand (even if bigger than tolerance)
-                        SPItem *ft = create_flowtext_with_internal_frame (desktop, this->p0, p1);
-                        /* Set style */
-                        sp_desktop_apply_style_tool(desktop, ft->getRepr(), "/tools/text", true);
-                        desktop->getSelection()->set(ft);
+
+                        if (true) {
+                            // SVG 2 text
+
+                            SPItem *text = create_text_with_inline_size (desktop, this->p0, p1);
+
+                            /* Save "inline-size" */
+                            double inline_size = text->style->inline_size.computed;
+
+                            /* Set style */
+                            sp_desktop_apply_style_tool(desktop, text->getRepr(), "/tools/text", true);
+
+                            /* Restore "inline-size" */
+                            text->style->inline_size.setDouble( inline_size );
+                            text->style->inline_size.set = true;
+                            text->updateRepr();
+
+                            desktop->getSelection()->set(text);
+
+                        } else {
+                            // SVG 1.2 text
+
+                            SPItem *ft = create_flowtext_with_internal_frame (desktop, this->p0, p1);
+
+                            /* Set style */
+                            sp_desktop_apply_style_tool(desktop, ft->getRepr(), "/tools/text", true);
+
+                            ft->updateRepr();
+
+                            desktop->getSelection()->set(ft);
+                        }
+
                         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Flowed text is created."));
                         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, _("Create flowed text"));
+
                     } else {
                         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is <b>too small</b> for the current font size. Flowed text not created."));
                     }

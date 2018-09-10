@@ -21,6 +21,8 @@
 #include "sp-string.h" // Provides many other headers with SP_IS_STRING
 #include "text-tag-attributes.h"
 
+#include "desktop.h"
+
 #define SP_TEXT(obj) (dynamic_cast<SPText*>((SPObject*)obj))
 #define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj) != NULL)
 
@@ -96,7 +98,12 @@ public:
     void hide(unsigned int key) override;
     void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
     Geom::Affine set_transform(Geom::Affine const &transform) override;
+
+    bool has_inline_size() const;
+    bool has_shape_inside() const;
 };
+
+SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);
 
 #endif
 

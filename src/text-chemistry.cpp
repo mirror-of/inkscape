@@ -304,7 +304,10 @@ text_flow_into_shape()
 
     if (true) {
         // SVG 2 Text
+
         if (SP_IS_TEXT(text)) {
+
+            // Make list of all shapes.
             Glib::ustring shape_inside;
             auto items = selection->items();
             for (auto item : items) {
@@ -314,10 +317,13 @@ text_flow_into_shape()
                     shape_inside += ") ";
                 }
             }
+
+            // Remove extra space at end.
             if (shape_inside.length() > 1) {
                 shape_inside.erase (shape_inside.length() - 1);
             }
 
+            // Set 'shape-inside' property.
             SPCSSAttr* css = sp_repr_css_attr (text->getRepr(), "style");
             sp_repr_css_set_property (css, "shape-inside", shape_inside.c_str());
             sp_repr_css_set (text->getRepr(), css, "style");
@@ -328,8 +334,8 @@ text_flow_into_shape()
 
 
     } else {
+        // SVG 1.2 Flowed Text
 
-    // OLD SVG 1.2 Flowed Text, to be removed!
     if (SP_IS_TEXT(text)) {
       // remove transform from text, but recursively scale text's fontsize by the expansion
       SP_TEXT(text)->_adjustFontsizeRecursive(text, text->transform.descrim());
@@ -402,7 +408,7 @@ text_flow_into_shape()
     Inkscape::GC::release(root_repr);
     Inkscape::GC::release(region_repr);
 
-    } // End of to delete ==========
+    }
 }
 
 void
