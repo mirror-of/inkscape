@@ -209,7 +209,9 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     Glib::ustring link_svg  = prefs->getString("/dialogs/import/link_svg");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
     bool is_import = false;
-    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
+    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "done") == 0 || 
+        strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) 
+    {
         is_import = true;
     }
     if(INKSCAPE.use_gui() && is_import && ask) {

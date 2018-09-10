@@ -53,10 +53,11 @@ ObjectProperties::ObjectProperties()
     , _label_id(_("_ID:"), true)
     , _label_label(_("_Label:"), true)
     , _label_title(_("_Title:"), true)
+    , _label_dpi(_("_DPI SVG:"), true)
     , _label_image_rendering(_("_Image Rendering:"), true)
-    , _dpi_value( 96.00)
     , _cb_hide(_("_Hide"), true)
     , _cb_lock(_("L_ock"), true)
+    , _cb_aspect_ratio(_("Pereserve Ratio"), true)
     , _attr_table(Gtk::manage(new SPAttributeTable()))
     , _desktop(nullptr)
 {
@@ -186,12 +187,39 @@ void ObjectProperties::_init()
     _ft_description.add(_tv_description);
     _tv_description.add_mnemonic_label(*label_desc);
 
+    /* Create the text view box for the DPI svg */
+    _ft_description.set_border_width(4);
+    _ft_description.set_sensitive(FALSE);
+    frame_desc->add(_ft_description);
+    _ft_description.set_shadow_type(Gtk::SHADOW_IN);
+
+    _tv_description.set_wrap_mode(Gtk::WRAP_WORD);
+    _tv_description.get_buffer()->set_text("");
+    _ft_description.add(_tv_description);
+    _tv_description.add_mnemonic_label(*label_desc);
+
+    /* Create the label for the object title */
+    _label_dpi.set_label(_label_dpi.get_label() + " ");
+    _label_dpi.set_halign(Gtk::ALIGN_END);
+    _label_dpi.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_label_dpi, 0, 3, 1, 1);
+
+    /* Create the entry box for the SVG DPI */
+    _spin_dpi.set_digits(2);
+    _spin_dpi.set_range (1,1200);
+    grid_top->attach(_spin_dpi, 1, 3, 1, 1);
+
+    _label_dpi.set_mnemonic_widget(_spin_dpi);
+    // pressing enter in the label field is the same as clicking Set:
+    _spin_dpi.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
+
+
     /* Image rendering */
     /* Create the label for the object ImageRendering */
     _label_image_rendering.set_label(_label_image_rendering.get_label() + " ");
     _label_image_rendering.set_halign(Gtk::ALIGN_END);
     _label_image_rendering.set_valign(Gtk::ALIGN_CENTER);
-    grid_top->attach(_label_image_rendering, 0, 3, 1, 1);
+    grid_top->attach(_label_image_rendering, 0, 4, 1, 1);
 
     /* Create the combo box text for the 'image-rendering' property  */
     _combo_image_rendering.append( "auto" );
@@ -200,13 +228,15 @@ void ObjectProperties::_init()
     _combo_image_rendering.set_tooltip_text(_("The 'image-rendering' property can influence how a bitmap is up-scaled:\n\t'auto' no preference;\n\t'optimizeQuality' smooth;\n\t'optimizeSpeed' blocky.\nNote that this behaviour is not defined in the SVG 1.1 specification and not all browsers follow this interpretation."));
 
     _combo_image_rendering.set_valign(Gtk::ALIGN_CENTER);
-    grid_top->attach(_combo_image_rendering, 1, 3, 1, 1);
+    grid_top->attach(_combo_image_rendering, 1, 4, 1, 1);
 
     _label_image_rendering.set_mnemonic_widget(_combo_image_rendering);
 
     _combo_image_rendering.signal_changed().connect(
         sigc::mem_fun(this, &ObjectProperties::_imageRenderingChanged)
     );
+
+
 
 
     /* Check boxes */
@@ -237,12 +267,20 @@ void ObjectProperties::_init()
 
     _cb_lock.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::_sensitivityToggled));
 
+    /* Preserve aspect ratio */
+    _cb_aspect_ratio.set_tooltip_text (_("Check to preserve aspect ratio on images"));
+    _cb_aspect_ratio.set_hexpand();
+    _cb_aspect_ratio.set_valign(Gtk::ALIGN_CENTER);
+    grid_cb->attach(_cb_aspect_ratio, 0, 1, 1, 1);
+
+    _cb_aspect_ratio.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::_aspectRatioToggled));
+
 
     /* Button for setting the object's id, label, title and description. */
     Gtk::Button *btn_set = Gtk::manage(new Gtk::Button(_("_Set"), true));
     btn_set->set_hexpand();
     btn_set->set_valign(Gtk::ALIGN_CENTER);
-    grid_cb->attach(*btn_set, 2, 0, 1, 1);
+    grid_cb->attach(*btn_set, 1, 1, 1, 1);
 
     btn_set->signal_clicked().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
 
@@ -286,7 +324,7 @@ void ObjectProperties::update()
         return;
     }
     _blocked = true;
-    
+    _cb_aspect_ratio.set_active(item->getAttribute("preserveAspectRatio") == "true");  
     _cb_lock.set_active(item->isLocked());           /* Sensitive */
     _cb_hide.set_active(item->isExplicitlyHidden()); /* Hidden */
     
@@ -411,6 +449,14 @@ void ObjectProperties::_labelChanged()
                 _("Set object title"));
     }
 
+    /* Retrieve the DPI */
+    if (SP_IS_IMAGE(obj)) {
+        Glib::ustring dpi_value = Glib::ustring::format(_spin_dpi.get_value());
+        obj->setAttribute("inkscape:svg-dpi", dpi_value);
+        DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
+                    _("Set image DPI"));
+    }
+
     /* Retrieve the description */
     Gtk::TextBuffer::iterator start, end;
     _tv_description.get_buffer()->get_bounds(start, end);
@@ -463,6 +509,34 @@ void ObjectProperties::_sensitivityToggled()
     item->setLocked(_cb_lock.get_active());
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
                        _cb_lock.get_active() ? _("Lock object") : _("Unlock object"));
+    _blocked = false;
+}
+
+void ObjectProperties::_aspectRatioToggled()
+{
+    if (_blocked) {
+        return;
+    }
+
+    SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
+    g_return_if_fail(item != nullptr);
+
+    _blocked = true;
+
+    item->setLocked(_cb_aspect_ratio.get_active());
+    const char *active;
+    if(_cb_aspect_ratio.get_active()) {
+        active = "true";
+    } else {
+        active = "none";
+    }
+        /* Retrieve the DPI */
+    if (SP_IS_IMAGE(item)) {
+        Glib::ustring dpi_value = Glib::ustring::format(_spin_dpi.get_value());
+        item->setAttribute("preserveAspectRatio", active);
+        DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
+                    _("Set preserve ratio"));
+    }
     _blocked = false;
 }
 

@@ -95,9 +95,10 @@ private:
 
     Gtk::CheckButton _cb_hide; //the check button hide
     Gtk::CheckButton _cb_lock; //the check button lock
+    Gtk::CheckButton _cb_aspect_ratio; //the preserve aspect ratio of images
 
     Gtk::Label _label_dpi; //the entry for the dpi value
-    Gtk::SpinButton _dpi_value; //the expander for interactivity
+    Gtk::SpinButton _spin_dpi; //the expander for interactivity
     Gtk::Expander _exp_interactivity; //the expander for interactivity
     SPAttributeTable *_attr_table; //the widget for showing the on... names at the bottom
     
@@ -121,6 +122,9 @@ private:
 
     /// Callback for checkbox Hide.
     void _hiddenToggled();
+
+    /// Callback for checkbox Preserve Aspect Ratio.
+    void _aspectRatioToggled();
 
     /// Can be invoked for setting the desktop. Currently not used.
     void _setDesktop(SPDesktop *desktop);

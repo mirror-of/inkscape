@@ -36,6 +36,7 @@ public:
     double sx, sy;
     double ox, oy;
     double dpi;
+    double prev_width, prev_height;
 
     SPCurve *curve; // This curve is at the image's boundary for snapping
 

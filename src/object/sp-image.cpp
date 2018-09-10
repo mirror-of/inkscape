@@ -118,6 +118,8 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->sx = this->sy = 1.0;
     this->ox = this->oy = 0.0;
     this->dpi = 96.00;
+    this->prev_width = 0.0;
+    this->prev_height = 0.0;
     this->curve = nullptr;
 
     this->href = nullptr;
@@ -359,7 +361,6 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
 
     // Why continue without a pixbuf? So we can display "Missing Image" png.
     // Eventually, we should properly support SVG image type (i.e. render it ourselves).
-
     if (this->pixbuf) {
         if (!this->x._set) {
             this->x.unit = SVGLength::PX;
@@ -407,10 +408,34 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->oy = c2p[5];
         this->sx = c2p[0];
         this->sy = c2p[3];
+        
     }
 
+    
+
     // TODO: eliminate ox, oy, sx, sy
+
     sp_image_update_canvas_image ((SPImage *) this);
+    double proportion_pixbuf = this->pixbuf->height()/(double)this->pixbuf->width();
+    double proportion_image  = this->height.computed/(double)this->width.computed; 
+    if (this->prev_width && (this->prev_width != this->pixbuf->width() || this->prev_height != this->pixbuf->height())) {
+        if (std::abs(this->prev_width - this->pixbuf->width()) > std::abs(this->prev_height - this->pixbuf->height())) {
+            proportion_pixbuf = this->pixbuf->width()/(double)this->pixbuf->height();
+            proportion_image  = this->width.computed/(double)this->height.computed;
+            if(proportion_pixbuf != proportion_image) {
+                double new_height = this->height.computed * proportion_pixbuf;
+                sp_repr_set_svg_double(this->getRepr(), "width",  new_height);
+            
+            }
+        } else {
+            if(proportion_pixbuf != proportion_image) {
+                double new_width = this->width.computed * proportion_pixbuf;
+                sp_repr_set_svg_double(this->getRepr(), "height", new_width);
+            }
+        }
+    }
+    this->prev_width = this->pixbuf->width();
+    this->prev_height = this->pixbuf->height();
 }
 
 void SPImage::modified(unsigned int flags) {
@@ -649,7 +674,6 @@ sp_image_update_arenaitem (SPImage *image, Inkscape::DrawingImage *ai)
 static void sp_image_update_canvas_image(SPImage *image)
 {
     SPItem *item = SP_ITEM(image);
-
     for (SPItemView *v = item->display; v != nullptr; v = v->next) {
         sp_image_update_arenaitem(image, dynamic_cast<Inkscape::DrawingImage *>(v->arenaitem));
     }
