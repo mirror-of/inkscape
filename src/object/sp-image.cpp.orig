@@ -72,8 +72,7 @@
 
 static void sp_image_set_curve(SPImage *image);
 
-static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base,
-                                                  char const *svgdpi);
+static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base , char const *svgdpi);
 static void sp_image_update_arenaitem (SPImage *img, Inkscape::DrawingImage *ai);
 static void sp_image_update_canvas_image (SPImage *image);
 
@@ -140,7 +139,7 @@ void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "y" );
     this->readAttr( "width" );
     this->readAttr( "height" );
-    this->readAttr("inkscape:svg-dpi");
+    this->readAttr( "inkscape:svg-dpi" );
     this->readAttr( "preserveAspectRatio" );
     this->readAttr( "color-profile" );
 
@@ -219,7 +218,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
-
+        
         case SP_ATTR_SVG_DPI:
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             break;
@@ -338,14 +337,17 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->pixbuf = nullptr;
         if (this->href) {
             Inkscape::Pixbuf *pixbuf = nullptr;
-            const gchar *svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
+            const gchar * svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
             if (!svgdpi) {
                 svgdpi = "96";
             }
             this->dpi = atof(svgdpi);
-            pixbuf = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                              this->getRepr()->attribute("sodipodi:absref"), doc->getBase(), svgdpi);
-
+            pixbuf = sp_image_repr_read_image (
+                this->getRepr()->attribute("xlink:href"),
+                this->getRepr()->attribute("sodipodi:absref"),
+                doc->getBase(),
+                svgdpi);
+            
             if (pixbuf) {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
                 if ( this->color_profile ) apply_profile( pixbuf );
@@ -406,27 +408,27 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->oy = c2p[5];
         this->sx = c2p[0];
         this->sy = c2p[3];
+        
     }
 
-
+    
 
     // TODO: eliminate ox, oy, sx, sy
 
     sp_image_update_canvas_image ((SPImage *) this);
-    double proportion_pixbuf = this->pixbuf->height() / (double)this->pixbuf->width();
-    double proportion_image = this->height.computed / (double)this->width.computed;
-    if (this->prev_width &&
-        (this->prev_width != this->pixbuf->width() || this->prev_height != this->pixbuf->height())) {
+    double proportion_pixbuf = this->pixbuf->height()/(double)this->pixbuf->width();
+    double proportion_image  = this->height.computed/(double)this->width.computed; 
+    if (this->prev_width && (this->prev_width != this->pixbuf->width() || this->prev_height != this->pixbuf->height())) {
         if (std::abs(this->prev_width - this->pixbuf->width()) > std::abs(this->prev_height - this->pixbuf->height())) {
-            proportion_pixbuf = this->pixbuf->width() / (double)this->pixbuf->height();
-            proportion_image = this->width.computed / (double)this->height.computed;
-            if (proportion_pixbuf != proportion_image) {
+            proportion_pixbuf = this->pixbuf->width()/(double)this->pixbuf->height();
+            proportion_image  = this->width.computed/(double)this->height.computed;
+            if(proportion_pixbuf != proportion_image) {
                 double new_height = this->height.computed * proportion_pixbuf;
-                sp_repr_set_svg_double(this->getRepr(), "width", new_height);
+                sp_repr_set_svg_double(this->getRepr(), "width",  new_height);
+            
             }
-        }
-        else {
-            if (proportion_pixbuf != proportion_image) {
+        } else {
+            if(proportion_pixbuf != proportion_image) {
                 double new_width = this->width.computed * proportion_pixbuf;
                 sp_repr_set_svg_double(this->getRepr(), "height", new_width);
             }
@@ -545,12 +547,15 @@ gchar* SPImage::description() const {
         this->document) 
     {
         Inkscape::Pixbuf * pb = nullptr;
-        const gchar *svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
+        const gchar * svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
         if (!svgdpi) {
             svgdpi = "96";
         }
-        pb = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                      this->getRepr()->attribute("sodipodi:absref"), this->document->getBase(), svgdpi);
+        pb = sp_image_repr_read_image (
+                this->getRepr()->attribute("xlink:href"),
+                this->getRepr()->attribute("sodipodi:absref"),
+                this->document->getBase(),
+                svgdpi);
 
         if (pb) {
             ret = g_strdup_printf(_("%d &#215; %d: %s"),

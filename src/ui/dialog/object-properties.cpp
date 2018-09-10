@@ -48,7 +48,7 @@ namespace Dialog {
 
 ObjectProperties::ObjectProperties()
     : UI::Widget::Panel("/dialogs/object/", SP_VERB_DIALOG_ITEM)
-    , _blocked (false)
+    , _blocked(false)
     , _current_item(nullptr)
     , _label_id(_("_ID:"), true)
     , _label_label(_("_Label:"), true)
@@ -206,7 +206,7 @@ void ObjectProperties::_init()
 
     /* Create the entry box for the SVG DPI */
     _spin_dpi.set_digits(2);
-    _spin_dpi.set_range (1,1200);
+    _spin_dpi.set_range(1, 1200);
     grid_top->attach(_spin_dpi, 1, 3, 1, 1);
 
     _label_dpi.set_mnemonic_widget(_spin_dpi);
@@ -235,7 +235,6 @@ void ObjectProperties::_init()
     _combo_image_rendering.signal_changed().connect(
         sigc::mem_fun(this, &ObjectProperties::_imageRenderingChanged)
     );
-
 
 
 
@@ -268,7 +267,7 @@ void ObjectProperties::_init()
     _cb_lock.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::_sensitivityToggled));
 
     /* Preserve aspect ratio */
-    _cb_aspect_ratio.set_tooltip_text (_("Check to preserve aspect ratio on images"));
+    _cb_aspect_ratio.set_tooltip_text(_("Check to preserve aspect ratio on images"));
     _cb_aspect_ratio.set_hexpand();
     _cb_aspect_ratio.set_valign(Gtk::ALIGN_CENTER);
     grid_cb->attach(_cb_aspect_ratio, 0, 1, 1, 1);
@@ -324,7 +323,7 @@ void ObjectProperties::update()
         return;
     }
     _blocked = true;
-    _cb_aspect_ratio.set_active(item->getAttribute("preserveAspectRatio") == "true");  
+    _cb_aspect_ratio.set_active(item->getAttribute("preserveAspectRatio") == "true");
     _cb_lock.set_active(item->isLocked());           /* Sensitive */
     _cb_hide.set_active(item->isExplicitlyHidden()); /* Hidden */
     
@@ -453,8 +452,7 @@ void ObjectProperties::_labelChanged()
     if (SP_IS_IMAGE(obj)) {
         Glib::ustring dpi_value = Glib::ustring::format(_spin_dpi.get_value());
         obj->setAttribute("inkscape:svg-dpi", dpi_value);
-        DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
-                    _("Set image DPI"));
+        DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM, _("Set image DPI"));
     }
 
     /* Retrieve the description */
@@ -525,17 +523,17 @@ void ObjectProperties::_aspectRatioToggled()
 
     item->setLocked(_cb_aspect_ratio.get_active());
     const char *active;
-    if(_cb_aspect_ratio.get_active()) {
+    if (_cb_aspect_ratio.get_active()) {
         active = "true";
-    } else {
+    }
+    else {
         active = "none";
     }
-        /* Retrieve the DPI */
+    /* Retrieve the DPI */
     if (SP_IS_IMAGE(item)) {
         Glib::ustring dpi_value = Glib::ustring::format(_spin_dpi.get_value());
         item->setAttribute("preserveAspectRatio", active);
-        DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
-                    _("Set preserve ratio"));
+        DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM, _("Set preserve ratio"));
     }
     _blocked = false;
 }

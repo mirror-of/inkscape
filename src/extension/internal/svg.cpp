@@ -209,9 +209,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     Glib::ustring link_svg  = prefs->getString("/dialogs/import/link_svg");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
     bool is_import = false;
-    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "done") == 0 || 
-        strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) 
-    {
+    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "done") == 0 ||
+        strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
         is_import = true;
     }
     if(INKSCAPE.use_gui() && is_import && ask) {
@@ -263,7 +262,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
             if(pb) {
                 sp_embed_svg(image_node, uri);
             }
-        } else { 
+        }
+        else {
             gchar* _uri = g_filename_to_uri(uri, nullptr, nullptr);
             if(_uri) {
                 image_node->setAttribute("xlink:href", _uri);

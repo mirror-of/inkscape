@@ -120,7 +120,7 @@ public:
     static Pixbuf *create_from_data_uri(gchar const *uri, char const *svgdpi = NULL);
     static Pixbuf *create_from_file(std::string const &fn, char const *svgddpi = NULL);
 
-private:
+  private:
     void _ensurePixelsARGB32();
     void _ensurePixelsPixbuf();
     void _forceAlpha();
