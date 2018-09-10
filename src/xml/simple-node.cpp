@@ -163,7 +163,7 @@ using Util::rest;
 using Util::set_rest;
 
 SimpleNode::SimpleNode(int code, Document *document)
-: Node(), _name(code), _attributes(), _child_count(0),
+: Node(), _name(code), _child_count(0),
   _cached_positions_valid(false)
 {
     g_assert(document != nullptr);
@@ -178,7 +178,7 @@ SimpleNode::SimpleNode(int code, Document *document)
 SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
 : Node(),
   _cached_position(node._cached_position),
-  _name(node._name), _attributes(), _content(node._content),
+  _name(node._name), _attributes() , _content(node._content),
   _child_count(node._child_count),
   _cached_positions_valid(node._cached_positions_valid)
 {
@@ -204,11 +204,7 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
         child_copy->release(); // release to avoid a leak
     }
 
-    for ( List<AttributeRecord const> iter = node._attributes ;
-          iter ; ++iter )
-    {
-        _attributes = cons(*iter, _attributes);
-    }
+    _attributes = node._attributes;
 
     _observers.add(_subtree_observers);
 }
@@ -225,16 +221,11 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
     g_return_val_if_fail(name != nullptr, NULL);
 
     GQuark const key = g_quark_from_string(name);
+    std::map<GQuark, Inkscape::Util::ptr_shared>::const_iterator it = _attributes.find(key);
 
-    for ( List<AttributeRecord const> iter = _attributes ;
-          iter ; ++iter )
-    {
-        if ( iter->key == key ) {
-            return iter->value;
-        }
-    }
-
-    return nullptr;
+    if (it == _attributes.end())
+        return nullptr;
+    return it->second;
 }
 
 unsigned SimpleNode::position() const {
@@ -267,10 +258,9 @@ Node *SimpleNode::nthChild(unsigned index) {
 bool SimpleNode::matchAttributeName(gchar const *partial_name) const {
     g_return_val_if_fail(partial_name != nullptr, false);
 
-    for ( List<AttributeRecord const> iter = _attributes ;
-          iter ; ++iter )
+    for ( auto iter : _attributes)
     {
-        gchar const *name = g_quark_to_string(iter->key);
+        gchar const *name = g_quark_to_string(iter.first);
         if (std::strstr(name, partial_name)) {
             return true;
         }
@@ -352,11 +342,27 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
             }
         }
     }
-
+    //Debug::EventTracker<> tracker;
+    
     GQuark const key = g_quark_from_string(name);
+    ptr_shared old_value=( _attributes.find(key)!=_attributes.end() ? _attributes[key] : ptr_shared() );
+    ptr_shared new_value = ptr_shared();
+    
+    if(cleaned_value) {
+        new_value = share_string(cleaned_value);
+    //    tracker.set<DebugSetAttribute>(*this, key, new_value);
+        _attributes[key] = new_value;
+    } else {
+    //    tracker.set<DebugClearAttribute>(*this, key);
+        auto it = _attributes.find(key);
+        if (it != _attributes.end())
+            _attributes.erase(it);
+    }
 
+
+/*
     MutableList<AttributeRecord> ref;
-    MutableList<AttributeRecord> existing;
+    ref = _attributes[key];
     for ( existing = _attributes ; existing ; ++existing ) {
         if ( existing->key == key ) {
             break;
@@ -391,7 +397,7 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
             set_rest(existing, MutableList<AttributeRecord>());
         }
     }
-
+*/
     if ( new_value != old_value && (!old_value || !new_value || strcmp(old_value, new_value))) {
         _document->logger()->notifyAttributeChanged(*this, key, old_value, new_value);
         _observers.notifyAttributeChanged(*this, key, old_value, new_value);
@@ -579,10 +585,9 @@ const NodeEventVector OBSERVER_EVENT_VECTOR = {
 
 void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
     if (vector->attr_changed) {
-        for ( List<AttributeRecord const> iter = _attributes ;
-              iter ; ++iter )
+        for ( auto iter : _attributes)
         {
-            vector->attr_changed(this, g_quark_to_string(iter->key), nullptr, iter->value, false, data);
+            vector->attr_changed(this, g_quark_to_string(iter.first), nullptr, iter.second, false, data);
         }
     }
     if (vector->child_added) {
@@ -679,22 +684,10 @@ bool SimpleNode::equal(Node const *other, bool recursive) {
     if(content() && other->content() && strcmp(content(), other->content()) != 0){
         return false;
     }
-    for (List<AttributeRecord const> orig_attr = attributeList(); orig_attr; ++orig_attr) {
-        for (List<AttributeRecord const> other_attr = other->attributeList(); other_attr; ++other_attr) {
-            const gchar * key_orig = g_quark_to_string(orig_attr->key);
-            const gchar * key_other = g_quark_to_string(other_attr->key);
-            if (!strcmp(key_orig, key_other) && 
-                !strcmp(orig_attr->value, other_attr->value)) 
-            {
-                other_length++;
-                break;
-            }
-        }
-        orig_length++;
-    }
-    if (orig_length != other_length) {
+
+    if ( attributeList().size() != other->attributeList().size() || !std::equal(attributeList().begin(),attributeList().end(),other->attributeList().begin()) )
         return false;
-    }
+
     if (recursive) {
         //NOTE: for faster the childs need to be in the same order
         Node const *other_child = other->firstChild();
@@ -755,10 +748,9 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bo
         }
     }
 
-    for ( List<AttributeRecord const> iter = src->attributeList() ;
-          iter ; ++iter )
+    for ( auto iter : src->attributeList())
     {
-        setAttribute(g_quark_to_string(iter->key), iter->value);
+        setAttribute(g_quark_to_string(iter.first), iter.second);
     }
 }
 

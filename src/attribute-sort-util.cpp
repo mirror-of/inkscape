@@ -24,8 +24,6 @@
 #include "attributes.h"
 
 using Inkscape::XML::Node;
-using Inkscape::XML::AttributeRecord;
-using Inkscape::Util::List;
 
 /**
  * Sort attributes by name.
@@ -87,13 +85,13 @@ void sp_attribute_sort_element(Node *repr) {
 
   // It doesn't seem possible to sort a List directly so we dump the list into
   // a std::list and sort that. Not very efficient. Sad.
-  List<AttributeRecord const> attributes = repr->attributeList();
+  auto attributes = repr->attributeList();
 
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
-  for ( List<AttributeRecord const> iter = attributes ; iter ; ++iter ) {
+  for ( auto iter : attributes ) {
 
-      Glib::ustring attribute = g_quark_to_string(iter->key);
-      Glib::ustring value = (const char*)iter->value;
+      Glib::ustring attribute = g_quark_to_string(iter.first);
+      Glib::ustring value = (const char*)iter.second;
 
       // C++11 my_list.emlace_back(attribute, value);
       my_list.emplace_back(attribute,value);
@@ -177,10 +175,10 @@ void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
 
   // Loop over all properties in "style" node.
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
-  for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
+  for ( auto iter : css->attributeList()) {
 
-    Glib::ustring property = g_quark_to_string(iter->key);
-    Glib::ustring value = (const char*)iter->value;
+    Glib::ustring property = g_quark_to_string(iter.first);
+    Glib::ustring value = (const char*)iter.second;
 
     // C++11 my_list.emlace_back(property, value);
     my_list.emplace_back(property,value);

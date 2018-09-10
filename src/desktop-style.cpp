@@ -268,7 +268,7 @@ sp_desktop_get_style(SPDesktop *desktop, bool with_text)
 {
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_merge(css, desktop->current);
-    if (!css->attributeList()) {
+    if (css->attributeList().empty()) {
         sp_repr_css_attr_unref(css);
         return nullptr;
     } else {

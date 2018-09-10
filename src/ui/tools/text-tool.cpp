@@ -1357,19 +1357,9 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
 
 static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
-            return false;
-    }
-    attrs = second->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
-            return false;
-    }
-    return true;
+    auto l1 = first->attributeList();
+    auto l2 = second->attributeList();
+    return l1.size() == l2.size() && std::equal(l1.begin(), l1.end(), l2.begin());
 }
 
 std::vector<SPCSSAttr*> sp_text_get_selected_style(ToolBase const *ec, unsigned *k, int *b, std::vector<unsigned> *positions)

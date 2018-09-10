@@ -55,8 +55,6 @@ namespace Internal {
 #include "clear-n_.h"
 
 
-using Inkscape::Util::List;
-using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::Node;
 
 /*
@@ -68,8 +66,8 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
     if (repr) {
         if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
             std::vector<gchar const*> attrsRemoved;
-            for ( List<AttributeRecord const> it = repr->attributeList(); it; ++it ) {
-                const gchar* attrName = g_quark_to_string(it->key);
+            for ( auto it : repr->attributeList() ) {
+                const gchar* attrName = g_quark_to_string(it.first);
                 if ((strncmp("inkscape:", attrName, 9) == 0) || (strncmp("sodipodi:", attrName, 9) == 0)) {
                     attrsRemoved.push_back(attrName);
                 }

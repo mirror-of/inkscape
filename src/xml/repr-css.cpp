@@ -275,20 +275,16 @@ double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double def
 void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
 {
     str.clear();
-    for ( List<AttributeRecord const> iter = css->attributeList() ;
-          iter ; ++iter )
+    for ( auto iter : css->attributeList())
     {
-        if (iter->value && !strcmp(iter->value, "inkscape:unset")) {
+        if ( !strcmp(iter.second, "inkscape:unset")) {
             continue;
         }
 
-        str.append(g_quark_to_string(iter->key));
+        str.append(g_quark_to_string(iter.first));
         str.push_back(':');
-        str.append(iter->value); // Any necessary quoting to be done by calling routine.
-
-        if (rest(iter)) {
-            str.push_back(';');
-        }
+        str.append(iter.second); // Any necessary quoting to be done by calling routine.
+        str.push_back(';');
     }
 }
 
@@ -318,11 +314,10 @@ void sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
  */
 void sp_repr_css_print(SPCSSAttr *css)
 {
-    for ( List<AttributeRecord const> iter = css->attributeList() ;
-          iter ; ++iter )
+    for ( auto iter : css->attributeList())
     {
-        gchar const * key = g_quark_to_string(iter->key);
-        gchar const * val = iter->value;
+        gchar const * key = g_quark_to_string(iter.first);
+        gchar const * val = iter.second;
         g_print("%s:\t%s\n",key,val);
     }
 }
@@ -475,8 +470,8 @@ void sp_repr_css_change_recursive(Node *repr, SPCSSAttr *css, gchar const *attr)
 SPCSSAttr* sp_repr_css_attr_unset_all(SPCSSAttr *css)
 {
     SPCSSAttr* css_unset = sp_repr_css_attr_new();
-    for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
-        sp_repr_css_set_property (css_unset, g_quark_to_string(iter->key), "inkscape:unset");
+    for ( auto iter : css->attributeList() ) {
+        sp_repr_css_set_property (css_unset, g_quark_to_string(iter.first), "inkscape:unset");
     }
     return css_unset;
 }
