@@ -20,6 +20,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtkmm/clipboard.h>
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
@@ -30,6 +31,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
+#include "inkscape.h"
 #include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
@@ -42,6 +44,10 @@
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
 #include "object/sp-text.h"
+#include "object/sp-rect.h"
+#include "object/sp-shape.h"
+#include "object/sp-ellipse.h"
+
 #include "style.h"
 
 #include "ui/pixmaps/cursor-text-insert.xpm"
@@ -169,7 +175,10 @@ void TextTool::setup() {
     this->shape_editor = new ShapeEditor(this->desktop);
 
     SPItem *item = this->desktop->getSelection()->singleItem();
-    if (item && SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) {
+    if (item && (
+            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
+            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside())           )
+        ) {
         this->shape_editor->set_item(item);
     }
 
@@ -1480,7 +1489,10 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
 
     ec->shape_editor->unset_item();
     SPItem *item = selection->singleItem();
-    if (item && SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) {
+    if (item && (
+            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
+            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside())           )
+        ) {
         ec->shape_editor->set_item(item);
     }
 
@@ -1630,23 +1642,68 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             truncated = true;
             trunc = _(" [truncated]");
         }
+
+        if (truncated) {
+            SP_CTRLRECT(tc->frame)->setColor(0xff0000ff, false, 0);
+        } else {
+            SP_CTRLRECT(tc->frame)->setColor(0x0000ff7f, false, 0);
+        }
+
         if (SP_IS_FLOWTEXT(tc->text)) {
             SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (nullptr); // first frame only
             if (frame) {
-                if (truncated) {
-                    SP_CTRLRECT(tc->frame)->setColor(0xff0000ff, false, 0);
-                } else {
-                    SP_CTRLRECT(tc->frame)->setColor(0x0000ff7f, false, 0);
-                }
                 sp_canvas_item_show(tc->frame);
                 Geom::OptRect frame_bbox = frame->desktopVisualBounds();
                 if (frame_bbox) {
                     SP_CTRLRECT(tc->frame)->setRectangle(*frame_bbox);
+                    sp_canvas_item_show(tc->frame);
                 }
             }
 
             SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
+
+        } else if (SP_IS_TEXT(tc->text) && (SP_TEXT(tc->text)->style->inline_size.set)) {
+
+            Geom::Rect frame = SP_TEXT(tc->text)->get_frame();
+
+            // User units to screen pixels
+            frame *= SP_TEXT(tc->text)->i2doc_affine();
+            frame *= SP_ACTIVE_DESKTOP->dt2doc().inverse();
+
+            SP_CTRLRECT(tc->frame)->setRectangle(frame);
+            sp_canvas_item_show(tc->frame);
+
+        } else if (SP_IS_TEXT(tc->text) && (SP_TEXT(tc->text)->style->shape_inside.set)) {
+
+            Glib::ustring shapes = SP_TEXT(tc->text)->style->shape_inside.value;
+
+            std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapes);
+
+            SPShape *shape = nullptr;
+
+            for (unsigned int i=0; i<shapes_url.size(); ++i) {
+                Glib::ustring shape_url = shapes_url.at(i);
+                if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+                    std::cerr << "sp_text_context_update_cursor: Invalid shape-inside value: " << shape_url << std::endl;
+                } else {
+                    shape_url.erase(0,5);
+                    shape_url.erase(shape_url.size()-1,1);
+                    shape = dynamic_cast<SPShape *>(SP_ACTIVE_DOCUMENT->getObjectById( shape_url ));
+                    if (shape) break; // Take first...
+                }
+            }
+
+            if (shape) {
+
+                Geom::OptRect frame_bbox = shape->desktopVisualBounds();
+                if (frame_bbox) {
+                    SP_CTRLRECT(tc->frame)->setRectangle(*frame_bbox);
+                    sp_canvas_item_show(tc->frame);
+                }
+            }
+
         } else {
+
             SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit text (%d character%s); <b>Enter</b> to start new line.", "Type or edit text (%d characters%s); <b>Enter</b> to start new line.", nChars), nChars, trunc);
         }
 

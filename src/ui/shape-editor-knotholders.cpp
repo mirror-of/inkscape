@@ -34,6 +34,7 @@
 #include "object/sp-rect.h"
 #include "object/sp-spiral.h"
 #include "object/sp-star.h"
+#include "object/sp-text.h"
 #include "style.h"
 
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil((v) / (m) - 0.5)) * (m)) : ((floor((v) / (m) + 0.5)) * (m)))
@@ -72,6 +73,12 @@ class OffsetKnotHolder : public KnotHolder {
 public:
     OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
     ~OffsetKnotHolder() override = default;;
+};
+
+class TextKnotHolder : public KnotHolder {
+public:
+    TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
+    ~TextKnotHolder() override = default;;
 };
 
 class FlowtextKnotHolder : public KnotHolder {
@@ -119,6 +126,8 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
         knotholder = new SpiralKnotHolder(desktop, item, nullptr);
     } else if (dynamic_cast<SPOffset *>(item)) {
         knotholder = new OffsetKnotHolder(desktop, item, nullptr);
+    } else if (dynamic_cast<SPText *>(item) && !dynamic_cast<SPText *>(item)->has_shape_inside()) {
+        knotholder = new TextKnotHolder(desktop, item, nullptr);
     } else {
         SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
         if (flowtext && flowtext->has_internal_frame()) {
@@ -1630,6 +1639,72 @@ OffsetKnotHolder::OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
 
     add_pattern_knotholder();
 }
+
+
+/* SPText */
+class TextKnotHolderEntityInlineSize : public KnotHolderEntity {
+public:
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+};
+
+Geom::Point
+TextKnotHolderEntityInlineSize::knot_get() const
+{
+    SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+
+    Geom::Point p = text->attributes.firstXY();
+
+    if (text->style->inline_size.set) {
+        p += Geom::Point(text->style->inline_size.computed, 0);
+    } else {
+        Geom::OptRect bbox = text->geometricBounds(); // Check if this is best.
+        if (bbox) {
+            p += Geom::Point((*bbox).width(), 0);
+        }
+    }
+
+    return p;
+}
+
+void
+TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
+{
+    SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+
+    Geom::Point const s = snap_knot_position(p, state);
+    double size = s[Geom::X] - text->attributes.firstXY()[Geom::X];
+
+    double visual_size = 0;
+    Geom::OptRect bbox = text->geometricBounds();
+    if (bbox) {
+        visual_size = (*bbox).width();
+    }
+
+    if (visual_size > size) {
+        text->style->inline_size.setDouble(size);
+        text->style->inline_size.set = true;
+    } else {
+        text->style->inline_size.clear();
+    }
+
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler) :
+    KnotHolder(desktop, item, relhandler)
+{
+    TextKnotHolderEntityInlineSize *entity_inlinesize = new TextKnotHolderEntityInlineSize();
+
+    entity_inlinesize->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
+                              _("Adjust the <b>inline size</b> (line length) of the text."),
+                              SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+
+    entity.push_back(entity_inlinesize);
+}
+
 
 // TODO: this is derived from RectKnotHolderEntityWH because it used the same static function
 // set_internal as the latter before KnotHolderEntity was C++ified. Check whether this also makes

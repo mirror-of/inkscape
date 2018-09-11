@@ -551,32 +551,7 @@ void SPText::_buildLayoutInit()
             // and the other dimension set to infinity. Text is laid out starting at the 'x' and 'y'
             // attribute values. This is handled elsewhere.
 
-            double inline_size = style->inline_size.computed;
-            unsigned mode      = style->writing_mode.computed;
-            unsigned anchor    = style->text_anchor.computed;
-            unsigned direction = style->direction.computed;
-
-            Geom::Rect frame;
-            if (mode == SP_CSS_WRITING_MODE_LR_TB ||
-                mode == SP_CSS_WRITING_MODE_RL_TB) {
-                // horizontal
-                frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
-                if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                    frame *= Geom::Translate (-inline_size/2.0, 0 );
-                } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
-                            (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
-                    frame *= Geom::Translate (-inline_size, 0);
-                }
-            } else {
-                // vertical
-                frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
-                if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                    frame *= Geom::Translate (0, -inline_size/2.0);
-                } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
-                    frame *= Geom::Translate (0, -inline_size);
-                }
-            }
-            // std::cout << " inline_size frame: " << frame << std::endl;
+            Geom::Rect frame = get_frame();
 
             Shape *shape = new Shape;
             shape->Reset();
@@ -657,12 +632,9 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
 
     else if (SP_IS_TSPAN(object)) {
         SPTSpan *tspan = SP_TSPAN(object);
-        // x, y attributes are stripped from some tspans marked with role="line" as we do our own line layout.
-        // This should be checked carefully, as it can undo line layout in imported SVG files.
-        bool use_xy = !in_textpath && (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || !tspan->attributes.singleXYCoordinates());
-        tspan->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, true);
 
-        // SVG 2 Text wrapping: see comment above.
+        // SVG 2 Text wrapping: see comment above. This must be done first so that we merge 'x' and
+        // 'y' from text into tspan.
         if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_SHAPE_INSIDE ||
             layout.wrap_mode == Inkscape::Text::Layout::WRAP_INLINE_SIZE) {
 
@@ -670,6 +642,12 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
             optional_attrs.x.clear();
             optional_attrs.y.clear();
         }
+
+        // x, y attributes are stripped from some tspans marked with role="line" as we do our own line layout.
+        // This should be checked carefully, as it can undo line layout in imported SVG files.
+        bool use_xy = !in_textpath && (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || !tspan->attributes.singleXYCoordinates());
+        tspan->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, true);
+
     }
 
     else if (SP_IS_TREF(object)) {
@@ -885,6 +863,39 @@ bool SPText::has_shape_inside() const
 {
     return (style->shape_inside.set);
 }
+
+Geom::Rect SPText::get_frame() const
+{
+    double inline_size = style->inline_size.computed;
+    unsigned mode      = style->writing_mode.computed;
+    unsigned anchor    = style->text_anchor.computed;
+    unsigned direction = style->direction.computed;
+
+    Geom::Rect frame;
+    if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+        mode == SP_CSS_WRITING_MODE_RL_TB) {
+        // horizontal
+        frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100, inline_size, 200);
+        if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+            frame *= Geom::Translate (-inline_size/2.0, 0 );
+        } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                    (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+            frame *= Geom::Translate (-inline_size, 0);
+        }
+    } else {
+        // vertical
+        frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
+        if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+            frame *= Geom::Translate (0, -inline_size/2.0);
+        } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+            frame *= Geom::Translate (0, -inline_size);
+        }
+    }
+
+    // std::cout << " inline_size frame: " << frame << std::endl;
+    return frame;
+}
+
 
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
