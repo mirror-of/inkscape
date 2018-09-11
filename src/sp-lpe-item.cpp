@@ -26,6 +26,7 @@
 #include "live_effects/lpeobject-reference.h"
 
 #include "sp-path.h"
+#include "sp-root.h"
 #include "sp-item-group.h"
 #include "streq.h"
 #include "macros.h"
@@ -35,6 +36,7 @@
 #include "uri.h"
 #include "message-stack.h"
 #include "inkscape.h"
+#include "document.h"
 #include "desktop.h"
 #include "ui/shape-editor.h"
 #include "sp-ellipse.h"
@@ -662,48 +664,53 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
             apply_to_clip_or_mask(subitem, item);
         }
     } else if (SP_IS_SHAPE(clip_mask)) {
-        SPCurve * c = NULL;
-
-        if (SP_IS_PATH(clip_mask)) {
-            c = SP_PATH(clip_mask)->get_original_curve();
+        SPRoot *root = this->document->getRoot();
+        if (sp_version_inside_range(root->version.inkscape, 0, 1, 0, 92)) {
+            clip_mask->getRepr()->setAttribute("inkscape:original-d" , NULL);
         } else {
-            c = SP_SHAPE(clip_mask)->getCurve();
-        }
-        if (c) {
-            bool success = false;
-            try {
-                if(SP_IS_GROUP(this)){
-                    c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)));
-                    success = this->performPathEffect(c, true);
-                    c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)).inverse());
-                } else {
-                    success = this->performPathEffect(c, true);
-                }
-            } catch (std::exception & e) {
-                g_warning("Exception during LPE execution. \n %s", e.what());
-                if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->messageStack()) {
-                    SP_ACTIVE_DESKTOP->messageStack()->flash( Inkscape::WARNING_MESSAGE,
-                                    _("An exception occurred during execution of the Path Effect.") );
-                }
-                success = false;
-            }
-            Inkscape::XML::Node *repr = clip_mask->getRepr();
-            if (success) {
-                gchar *str = sp_svg_write_path(c->get_pathvector());
-                repr->setAttribute("d", str);
-                g_free(str);
+            SPCurve * c = NULL;
+
+            if (SP_IS_PATH(clip_mask)) {
+                c = SP_PATH(clip_mask)->get_original_curve();
             } else {
-                // LPE was unsuccesfull. Read the old 'd'-attribute.
-                if (gchar const * value = repr->attribute("d")) {
-                    Geom::PathVector pv = sp_svg_read_pathv(value);
-                    SPCurve *oldcurve = new SPCurve(pv);
-                    if (oldcurve) {
-                        SP_SHAPE(clip_mask)->setCurve(oldcurve, TRUE);
-                        oldcurve->unref();
+                c = SP_SHAPE(clip_mask)->getCurve();
+            }
+            if (c) {
+                bool success = false;
+                try {
+                    if(SP_IS_GROUP(this)){
+                        c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)));
+                        success = this->performPathEffect(c, true);
+                        c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)).inverse());
+                    } else {
+                        success = this->performPathEffect(c, true);
+                    }
+                } catch (std::exception & e) {
+                    g_warning("Exception during LPE execution. \n %s", e.what());
+                    if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->messageStack()) {
+                        SP_ACTIVE_DESKTOP->messageStack()->flash( Inkscape::WARNING_MESSAGE,
+                                        _("An exception occurred during execution of the Path Effect.") );
+                    }
+                    success = false;
+                }
+                Inkscape::XML::Node *repr = clip_mask->getRepr();
+                if (success) {
+                    gchar *str = sp_svg_write_path(c->get_pathvector());
+                    repr->setAttribute("d", str);
+                    g_free(str);
+                } else {
+                    // LPE was unsuccesfull. Read the old 'd'-attribute.
+                    if (gchar const * value = repr->attribute("d")) {
+                        Geom::PathVector pv = sp_svg_read_pathv(value);
+                        SPCurve *oldcurve = new SPCurve(pv);
+                        if (oldcurve) {
+                            SP_SHAPE(clip_mask)->setCurve(oldcurve, TRUE);
+                            oldcurve->unref();
+                        }
                     }
                 }
+                c->unref();
             }
-            c->unref();
         }
     }
 }
