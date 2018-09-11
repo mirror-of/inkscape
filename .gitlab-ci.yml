@@ -32,3 +32,33 @@ inkscape:linux:
     expire_in: 1 year
     paths:
       - build/
+
+
+translations:
+  stage: build
+  script:
+    # make sure dependecies for inkscape.pot are up-to-date
+    - mkdir build && cd build && cmake .. && make inkscape_pot && cd ..
+    - cd po/
+
+    # update POTFILES.in
+    - grep -v "^#" POTFILES.in > POTFILES.in.1
+    - ./generate_POTFILES.sh
+    - grep -v "^#" POTFILES.in > POTFILES.in.2
+
+    # update inkscape.pot and sync all .po files
+    - intltool-update --pot
+    - ./update_po_files.sh
+
+    # check if POTFILES.in should be updated in the repo (shall we automate this?)
+    - 'if [ -n "$(diff POTFILES.in.1 POTFILES.in.2)" ]; then
+        echo "New translatable source files were added.";
+        echo "Please update POTFILES.in so they can be translated (or add them to POTFILES.skip)";
+        exit 1;
+      fi'
+    - rm POTFILES.in.1 POTFILES.in.2
+  artifacts:
+    name: "translations"
+    paths:
+      - po/
+    when: always
