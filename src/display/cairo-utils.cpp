@@ -354,7 +354,6 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn, char const *svgdpi)
     if (val == 0 && stdir.st_mode & S_IFDIR){
         return nullptr;
     }
-
     // we need to load the entire file into memory,
     // since we'll store it as MIME data
     gchar *data = nullptr;

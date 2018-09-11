@@ -610,7 +610,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
                 // different dir) or unset (when doc is not saved yet), so we check for base+href existence first,
                 // and if it fails, we also try to use bare href regardless of its g_path_is_absolute
                 if (g_file_test (fullname, G_FILE_TEST_EXISTS) && !g_file_test (fullname, G_FILE_TEST_IS_DIR)) {
-                    inkpb = Inkscape::Pixbuf::create_from_file(fullname);
+                    inkpb = Inkscape::Pixbuf::create_from_file(fullname, svgdpi);
                     if (inkpb != nullptr) {
                         g_free (fullname);
                         return inkpb;
