@@ -258,7 +258,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         }
         // convert filename to uri
         if (embed) {
-            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
+            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri, svgdpi.c_str()));
             if(pb) {
                 sp_embed_svg(image_node, uri);
             }
