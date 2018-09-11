@@ -1,0 +1,34 @@
+# Dependencies are managed in the Dockerfile in the inkscape-ci-docker
+# Git repository. Change them there, wait a bit, and then we'll use
+# the new ones here in these builds.
+image: registry.gitlab.com/inkscape/inkscape-ci-docker/0-92-x
+
+variables:
+  GIT_DEPTH: "10"
+  GIT_SUBMODULE_STRATEGY: recursive
+
+cache:
+  paths:
+    - ccache/
+
+
+# Building inkscape
+inkscape:linux:
+  stage: build
+  before_script:
+    # CCache Config
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+  script:
+    - mkdir -p build/conf
+    - ln -s . share/inkscape
+    - cd build
+    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
+    - make -j3 install
+    - make check
+    - cd ..
+  artifacts:
+    expire_in: 1 year
+    paths:
+      - build/
