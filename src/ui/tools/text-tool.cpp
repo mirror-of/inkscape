@@ -134,12 +134,14 @@ void TextTool::setup() {
     this->cursor->setRgba32(0x000000ff);
     sp_canvas_item_hide(this->cursor);
 
+    // The rectangle box tightly wrapping text object when selected or under cursor.
     this->indicator = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
     SP_CTRLRECT(this->indicator)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
     SP_CTRLRECT(this->indicator)->setColor(0x0000ff7f, false, 0);
     SP_CTRLRECT(this->indicator)->setShadow(1, 0xffffff7f);
     sp_canvas_item_hide(this->indicator);
 
+    // The rectangle box outlining wrapping the shape for text in a shape.
     this->frame = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
     SP_CTRLRECT(this->frame)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
     SP_CTRLRECT(this->frame)->setColor(0x0000ff7f, false, 0);
@@ -1743,6 +1745,12 @@ static void sp_text_context_update_text_selection(TextTool *tc)
         sp_ctrlquadr_set_coords(SP_CTRLQUADR(quad_canvasitem), quads[i], quads[i+1], quads[i+2], quads[i+3]);
         sp_canvas_item_show(quad_canvasitem);
         tc->text_selection_quads.push_back(quad_canvasitem);
+    }
+
+    if (tc->shape_editor != nullptr) {
+        if (tc->shape_editor->knotholder) {
+            tc->shape_editor->knotholder->update_knots();
+        }
     }
 }
 

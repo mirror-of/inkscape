@@ -864,6 +864,7 @@ bool SPText::has_shape_inside() const
     return (style->shape_inside.set);
 }
 
+// Gets rectangle defined by <text> x, y and inline-size ("infinite" in one direction).
 Geom::Rect SPText::get_frame() const
 {
     double inline_size = style->inline_size.computed;

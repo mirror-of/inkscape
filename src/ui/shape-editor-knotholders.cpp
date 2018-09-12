@@ -1646,6 +1646,7 @@ class TextKnotHolderEntityInlineSize : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 Geom::Point
@@ -1677,20 +1678,36 @@ TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const
     Geom::Point const s = snap_knot_position(p, state);
     double size = s[Geom::X] - text->attributes.firstXY()[Geom::X];
 
-    double visual_size = 0;
+    double visual_width = 0;
+    double visual_height = 0;
     Geom::OptRect bbox = text->geometricBounds();
     if (bbox) {
-        visual_size = (*bbox).width();
+        visual_width = (*bbox).width();
+        visual_height = (*bbox).width();
     }
 
-    if (visual_size > size) {
-        text->style->inline_size.setDouble(size);
-        text->style->inline_size.set = true;
-    } else {
+    // Fix for vertical and right to left text.
+    double line_box_height = text->style->font_size.computed * text->style->line_height.computed;
+
+    text->style->inline_size.setDouble(size);
+    text->style->inline_size.set = true;
+
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    text->updateRepr();
+}
+
+void
+TextKnotHolderEntityInlineSize::knot_click(unsigned int state)
+{
+    SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+
+    if (state & GDK_CONTROL_MASK) {
         text->style->inline_size.clear();
     }
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    text->updateRepr();
 }
 
 TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler) :
