@@ -338,6 +338,36 @@ Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
     return nullptr;
 }
 
+/**
+ * Recursive version of sp_repr_lookup_child().
+ */
+Inkscape::XML::Node const *sp_repr_lookup_decendant(Inkscape::XML::Node const *repr,
+                                                    gchar const *key,
+                                                    gchar const *value)
+{
+    Inkscape::XML::Node const *found = nullptr;
+    g_return_val_if_fail(repr != nullptr, NULL);
+    gchar const *repr_value = repr->attribute(key);
+    if ( (repr_value == value) ||
+         (repr_value && value && strcmp(repr_value, value) == 0) ) {
+        found = repr;
+    } else {
+        for (Inkscape::XML::Node const *child = repr->firstChild() ; child && !found; child = child->next() ) {
+            found = sp_repr_lookup_decendant( child, key, value );
+        }
+    }
+    return found;
+}
+
+
+Inkscape::XML::Node *sp_repr_lookup_decendant(Inkscape::XML::Node *repr,
+                                              gchar const *key,
+                                              gchar const *value)
+{
+    Inkscape::XML::Node const *found = sp_repr_lookup_decendant( const_cast<Inkscape::XML::Node const *>(repr), key, value );
+    return const_cast<Inkscape::XML::Node *>(found);
+}
+
 Inkscape::XML::Node const *sp_repr_lookup_name( Inkscape::XML::Node const *repr, gchar const *name, gint maxdepth )
 {
     Inkscape::XML::Node const *found = nullptr;

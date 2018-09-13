@@ -156,6 +156,15 @@ Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
                                           char const *key,
                                           char const *value);
 
+// Find an element node using an unique attribute recursively.
+Inkscape::XML::Node *sp_repr_lookup_decendant(Inkscape::XML::Node *repr,
+                                              char const *key,
+                                              char const *value);
+
+Inkscape::XML::Node const *sp_repr_lookup_decendant(Inkscape::XML::Node const *repr,
+                                                    char const *key,
+                                                    char const *value);
+
 // Find element nodes using a property value.
 std::vector<Inkscape::XML::Node *> sp_repr_lookup_property_many(Inkscape::XML::Node *repr,
                                                                 Glib::ustring const &property,
