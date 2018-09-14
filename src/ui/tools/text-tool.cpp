@@ -657,17 +657,17 @@ bool TextTool::root_handler(GdkEvent* event) {
                         if (true) {
                             // SVG 2 text
 
-                            SPItem *text = create_text_with_inline_size (desktop, this->p0, p1);
+                            SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);
 
-                            /* Save "inline-size" */
-                            double inline_size = text->style->inline_size.computed;
+                            /* Get "shape-inside" */
+                            gchar* shape_inside = g_strdup(text->style->shape_inside.value);
 
                             /* Set style */
                             sp_desktop_apply_style_tool(desktop, text->getRepr(), "/tools/text", true);
 
-                            /* Restore "inline-size" */
-                            text->style->inline_size.setDouble( inline_size );
-                            text->style->inline_size.set = true;
+                            /* Restore "shape-inside" */
+                            text->style->shape_inside.read( shape_inside );
+                            g_free( shape_inside );
                             text->updateRepr();
 
                             desktop->getSelection()->set(text);
@@ -1493,8 +1493,9 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
     SPItem *item = selection->singleItem();
     if (item && (
             (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
-            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside())           )
-        ) {
+            (SP_IS_TEXT(item) &&
+             !(SP_TEXT(item)->has_shape_inside() && !SP_TEXT(item)->get_first_rectangle()))
+            )) {
         ec->shape_editor->set_item(item);
     }
 
@@ -1664,44 +1665,20 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
 
             SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
 
-        } else if (SP_IS_TEXT(tc->text) && (SP_TEXT(tc->text)->style->inline_size.set)) {
+        } else if (SP_IS_TEXT(tc->text)) {
 
-            Geom::Rect frame = SP_TEXT(tc->text)->get_frame();
+            Geom::OptRect opt_frame = SP_TEXT(tc->text)->get_frame();
 
-            // User units to screen pixels
-            frame *= SP_TEXT(tc->text)->i2doc_affine();
-            frame *= SP_ACTIVE_DESKTOP->dt2doc().inverse();
+            if (opt_frame) {
+                // User units to screen pixels
+                Geom::Rect frame = *opt_frame;
+                frame *= SP_TEXT(tc->text)->i2doc_affine();
+                frame *= SP_ACTIVE_DESKTOP->dt2doc().inverse();
 
-            SP_CTRLRECT(tc->frame)->setRectangle(frame);
-            sp_canvas_item_show(tc->frame);
-
-        } else if (SP_IS_TEXT(tc->text) && (SP_TEXT(tc->text)->style->shape_inside.set)) {
-
-            Glib::ustring shapes = SP_TEXT(tc->text)->style->shape_inside.value;
-
-            std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapes);
-
-            SPShape *shape = nullptr;
-
-            for (unsigned int i=0; i<shapes_url.size(); ++i) {
-                Glib::ustring shape_url = shapes_url.at(i);
-                if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
-                    std::cerr << "sp_text_context_update_cursor: Invalid shape-inside value: " << shape_url << std::endl;
-                } else {
-                    shape_url.erase(0,5);
-                    shape_url.erase(shape_url.size()-1,1);
-                    shape = dynamic_cast<SPShape *>(SP_ACTIVE_DOCUMENT->getObjectById( shape_url ));
-                    if (shape) break; // Take first...
-                }
-            }
-
-            if (shape) {
-
-                Geom::OptRect frame_bbox = shape->desktopVisualBounds();
-                if (frame_bbox) {
-                    SP_CTRLRECT(tc->frame)->setRectangle(*frame_bbox);
-                    sp_canvas_item_show(tc->frame);
-                }
+                SP_CTRLRECT(tc->frame)->setRectangle(frame);
+                sp_canvas_item_show(tc->frame);
+            } else {
+                sp_canvas_item_hide(tc->frame);
             }
 
         } else {

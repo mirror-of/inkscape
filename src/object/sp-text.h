@@ -101,10 +101,13 @@ public:
 
     bool has_inline_size() const;
     bool has_shape_inside() const;
-    Geom::Rect get_frame() const; // Gets inline-size frame
+    Geom::OptRect get_frame();                        // Gets inline-size or shape-inside frame.
+    Inkscape::XML::Node* get_first_rectangle();       // Gets first shape-inside rectangle (if it exists).
+    std::vector<Glib::ustring> get_shapes() const;    // Gets list of shapes in shape-inside.
 };
 
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);
+SPItem *create_text_with_rectangle   (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);
 
 #endif
 

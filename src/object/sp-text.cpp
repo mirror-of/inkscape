@@ -29,6 +29,7 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
+
 #include "svg/svg.h"
 #include "display/drawing-text.h"
 #include "attributes.h"
@@ -551,7 +552,8 @@ void SPText::_buildLayoutInit()
             // and the other dimension set to infinity. Text is laid out starting at the 'x' and 'y'
             // attribute values. This is handled elsewhere.
 
-            Geom::Rect frame = get_frame();
+            Geom::OptRect opt_frame = get_frame();
+            Geom::Rect frame = *opt_frame;
 
             Shape *shape = new Shape;
             shape->Reset();
@@ -865,36 +867,104 @@ bool SPText::has_shape_inside() const
 }
 
 // Gets rectangle defined by <text> x, y and inline-size ("infinite" in one direction).
-Geom::Rect SPText::get_frame() const
+Geom::OptRect SPText::get_frame()
 {
-    double inline_size = style->inline_size.computed;
-    unsigned mode      = style->writing_mode.computed;
-    unsigned anchor    = style->text_anchor.computed;
-    unsigned direction = style->direction.computed;
-
+    Geom::OptRect opt_frame;
     Geom::Rect frame;
-    if (mode == SP_CSS_WRITING_MODE_LR_TB ||
-        mode == SP_CSS_WRITING_MODE_RL_TB) {
-        // horizontal
-        frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100, inline_size, 200);
-        if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-            frame *= Geom::Translate (-inline_size/2.0, 0 );
-        } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
-                    (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
-            frame *= Geom::Translate (-inline_size, 0);
+
+    if (style->inline_size.set) {
+        double inline_size = style->inline_size.computed;
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+            mode == SP_CSS_WRITING_MODE_RL_TB) {
+            // horizontal
+            frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100, inline_size, 200);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (-inline_size/2.0, 0 );
+            } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                frame *= Geom::Translate (-inline_size, 0);
+            }
+        } else {
+            // vertical
+            frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (0, -inline_size/2.0);
+            } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                frame *= Geom::Translate (0, -inline_size);
+            }
         }
+
+        opt_frame = frame;
+
     } else {
-        // vertical
-        frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
-        if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-            frame *= Geom::Translate (0, -inline_size/2.0);
-        } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
-            frame *= Geom::Translate (0, -inline_size);
+        // See if 'shape-inside' has rectangle
+        Inkscape::XML::Node* rectangle = get_first_rectangle();
+
+        if (rectangle) {
+            double x = 0.0;
+            double y = 0.0;
+            double width = 0.0;
+            double height = 0.0;
+            sp_repr_get_double (rectangle, "x",      &x);
+            sp_repr_get_double (rectangle, "y",      &y);
+            sp_repr_get_double (rectangle, "width",  &width);
+            sp_repr_get_double (rectangle, "height", &height);
+            frame = Geom::Rect::from_xywh( x, y, width, height);
+            opt_frame = frame;
         }
     }
 
-    // std::cout << " inline_size frame: " << frame << std::endl;
-    return frame;
+    // std::cout << " text frame: " << frame << std::endl;
+    return opt_frame;
+}
+
+// Find the node of the first rectangle (if it exists) in 'shape-inside'.
+Inkscape::XML::Node* SPText::get_first_rectangle()
+{
+    Inkscape::XML::Node* first_rectangle = nullptr;
+
+    Inkscape::XML::Node *our_ref = getRepr();
+
+    if (style->shape_inside.set && style->shape_inside.value) {
+
+        std::vector<Glib::ustring> shapes = get_shapes();
+
+        for (auto shape: shapes) {
+
+            Inkscape::XML::Node *item =
+                sp_repr_lookup_decendant (our_ref->root(), "id", shape.c_str());
+
+            if (item && strncmp("svg:rect", item->name(), 8) == 0) {
+                return item;
+                break;
+            }
+        }
+    }
+
+    return first_rectangle;
+}
+
+// Get a list of shape in 'shape-inside' as a vector of strings.
+std::vector<Glib::ustring> SPText::get_shapes() const
+{
+    std::vector<Glib::ustring> shapes;
+    if (style->shape_inside.set && style->shape_inside.value) {
+
+        static Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("url\\(#([A-z0-9#]*)\\)");
+        Glib::MatchInfo matchInfo;
+        regex->match(style->shape_inside.value, matchInfo);
+
+        while (matchInfo.matches()) {
+            shapes.push_back(matchInfo.fetch(1));
+            matchInfo.next();
+        }
+    }
+
+    return shapes;
 }
 
 
@@ -939,6 +1009,65 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
 
     Inkscape::GC::release(text_repr);
     Inkscape::GC::release(text_node);
+
+    return text_object;
+}
+
+SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
+{
+    SPDocument *doc = desktop->getDocument();
+
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
+    text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+    SPText *text_object = dynamic_cast<SPText *>(desktop->currentLayer()->appendChildRepr(text_repr));
+    g_assert(text_object != nullptr);
+
+    // Invert coordinate system?
+    p0 *= desktop->dt2doc();
+    p1 *= desktop->dt2doc();
+
+    // Pixels to user units
+    p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+
+    // Create rectangle
+    Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
+    sp_repr_set_svg_double( rect_repr, "x", p0[Geom::X]);
+    sp_repr_set_svg_double( rect_repr, "y", p0[Geom::Y]);
+    sp_repr_set_svg_double( rect_repr, "width",  abs(p1[Geom::X]-p0[Geom::X]));
+    sp_repr_set_svg_double( rect_repr, "height", abs(p1[Geom::Y]-p0[Geom::Y]));
+
+    // Find defs, if does not exist, create.
+    Inkscape::XML::Node *defs_repr = sp_repr_lookup_name (xml_doc->root(), "svg:defs");
+    if (defs_repr == nullptr) {
+        defs_repr = xml_doc->createElement("svg:defs");
+        xml_doc->root()->addChild(defs_repr, nullptr);
+    }
+
+    // Add rectangle to defs.
+    defs_repr->addChild(rect_repr, nullptr);
+
+    // Link rectangle to text
+    std::string value("url(#");
+    value += rect_repr->attribute("id");
+    value += ")";
+    SPCSSAttr* css = sp_repr_css_attr (text_repr, "style");
+    sp_repr_css_set_property (css, "shape-inside", value.c_str());
+    sp_repr_css_set(text_repr, css, "style");
+    sp_repr_css_attr_unref(css);
+
+    Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
+    text_repr->appendChild(text_node);
+
+    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
+    g_assert(item != nullptr);
+
+    Inkscape::GC::release(text_repr);
+    Inkscape::GC::release(text_node);
+    Inkscape::GC::release(defs_repr);
+    Inkscape::GC::release(rect_repr);
 
     return text_object;
 }

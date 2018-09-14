@@ -126,7 +126,7 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
         knotholder = new SpiralKnotHolder(desktop, item, nullptr);
     } else if (dynamic_cast<SPOffset *>(item)) {
         knotholder = new OffsetKnotHolder(desktop, item, nullptr);
-    } else if (dynamic_cast<SPText *>(item) && !dynamic_cast<SPText *>(item)->has_shape_inside()) {
+    } else if (dynamic_cast<SPText *>(item)) {
         knotholder = new TextKnotHolder(desktop, item, nullptr);
     } else {
         SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
@@ -1658,14 +1658,25 @@ TextKnotHolderEntityInlineSize::knot_get() const
     Geom::Point p = text->attributes.firstXY();
 
     if (text->style->inline_size.set) {
+        // SVG 2 'inline-size'
         p += Geom::Point(text->style->inline_size.computed, 0);
+    } else if (text->style->shape_inside.set) {
+        // SVG 2 'shape-inside'. We only get here if there is a rectangle shape.
+        Geom::OptRect frame = text->get_frame();
+        if (frame) {
+            p = (*frame).corner(2);
+        } else {
+            std::cerr << "TextKnotHolderEntityInlineSize::knot_get(): no frame!" << std::endl;
+        }
     } else {
+        // Normal single line text.
         Geom::OptRect bbox = text->geometricBounds(); // Check if this is best.
         if (bbox) {
             p += Geom::Point((*bbox).width(), 0);
         }
     }
 
+    // std::cout << "knot_get(): " << p << std::endl;
     return p;
 }
 
@@ -1676,21 +1687,39 @@ TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const
     g_assert(text != nullptr);
 
     Geom::Point const s = snap_knot_position(p, state);
-    double size = s[Geom::X] - text->attributes.firstXY()[Geom::X];
 
-    double visual_width = 0;
-    double visual_height = 0;
-    Geom::OptRect bbox = text->geometricBounds();
-    if (bbox) {
-        visual_width = (*bbox).width();
-        visual_height = (*bbox).width();
+    if (text->style->shape_inside.set) {
+        // Text in a shape: rectangle
+
+        Inkscape::XML::Node* rectangle = text->get_first_rectangle();
+        double x = 0.0;
+        double y = 0.0;
+        sp_repr_get_double (rectangle, "x",      &x);
+        sp_repr_get_double (rectangle, "y",      &y);
+        double width  = s[Geom::X] - x;
+        double height = s[Geom::Y] - y;
+        sp_repr_set_svg_double (rectangle, "width",  width);
+        sp_repr_set_svg_double (rectangle, "height", height);
+
+    } else {
+        // Normal or 'inline-size' text.
+
+        double size = s[Geom::X] - text->attributes.firstXY()[Geom::X];
+
+        double visual_width = 0;
+        double visual_height = 0;
+        Geom::OptRect bbox = text->geometricBounds();
+        if (bbox) {
+            visual_width = (*bbox).width();
+            visual_height = (*bbox).width();
+        }
+
+        // Fix for vertical and right to left text.
+        double line_box_height = text->style->font_size.computed * text->style->line_height.computed;
+
+        text->style->inline_size.setDouble(size);
+        text->style->inline_size.set = true;
     }
-
-    // Fix for vertical and right to left text.
-    double line_box_height = text->style->font_size.computed * text->style->line_height.computed;
-
-    text->style->inline_size.setDouble(size);
-    text->style->inline_size.set = true;
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     text->updateRepr();
