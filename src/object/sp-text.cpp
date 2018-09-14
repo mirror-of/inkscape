@@ -881,7 +881,7 @@ Geom::OptRect SPText::get_frame()
         if (mode == SP_CSS_WRITING_MODE_LR_TB ||
             mode == SP_CSS_WRITING_MODE_RL_TB) {
             // horizontal
-            frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100, inline_size, 200);
+            frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
             if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
                 frame *= Geom::Translate (-inline_size/2.0, 0 );
             } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||

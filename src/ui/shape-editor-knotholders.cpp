@@ -1655,24 +1655,88 @@ TextKnotHolderEntityInlineSize::knot_get() const
     SPText *text = dynamic_cast<SPText *>(item);
     g_assert(text != nullptr);
 
-    Geom::Point p = text->attributes.firstXY();
+    Geom::Point p;
 
-    if (text->style->inline_size.set) {
-        // SVG 2 'inline-size'
-        p += Geom::Point(text->style->inline_size.computed, 0);
-    } else if (text->style->shape_inside.set) {
+    if (text->style->shape_inside.set) {
         // SVG 2 'shape-inside'. We only get here if there is a rectangle shape.
+
         Geom::OptRect frame = text->get_frame();
         if (frame) {
             p = (*frame).corner(2);
         } else {
             std::cerr << "TextKnotHolderEntityInlineSize::knot_get(): no frame!" << std::endl;
         }
+
     } else {
-        // Normal single line text.
-        Geom::OptRect bbox = text->geometricBounds(); // Check if this is best.
-        if (bbox) {
-            p += Geom::Point((*bbox).width(), 0);
+        // 'shape-inside' or normal text.
+
+        SPStyle* style = text->style;
+
+        double inline_size = style->inline_size.computed;
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        p = text->attributes.firstXY();
+
+        if (text->style->inline_size.set) {
+            // SVG 2 'inline-size'
+
+            // Keep handle at end of text line.
+            if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+                mode == SP_CSS_WRITING_MODE_RL_TB) {
+                // horizontal
+                if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START  ) ||
+                     (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END) ) {
+                    p *= Geom::Translate (inline_size, 0);
+                } else if ( direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    p *= Geom::Translate (inline_size/2.0, 0 );
+                } else if ( direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    p *= Geom::Translate (-inline_size/2.0, 0 );
+                } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                            (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                    p *= Geom::Translate (-inline_size, 0);
+                }
+            } else {
+                // vertical
+                if (anchor == SP_CSS_TEXT_ANCHOR_START) {
+                    p *= Geom::Translate (0, inline_size);
+                } else if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    p *= Geom::Translate (0, inline_size/2.0);
+                } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                    p *= Geom::Translate (0, -inline_size);
+                }
+            }
+        } else {
+            // Normal single line text.
+            Geom::OptRect bbox = text->geometricBounds(); // Check if this is best.
+            if (bbox) {
+                if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+                    mode == SP_CSS_WRITING_MODE_RL_TB) {
+                    // horizontal
+                    if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START  ) ||
+                         (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END) ) {
+                        p *= Geom::Translate ((*bbox).width(), 0);
+                    } else if ( direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                        p *= Geom::Translate ((*bbox).width()/2, 0);
+                    } else if ( direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                        p *= Geom::Translate (-(*bbox).width()/2, 0);
+                    } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                                (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                        p *= Geom::Translate (-(*bbox).width(), 0);
+                    }
+                } else {
+                    // vertical
+                    if (anchor == SP_CSS_TEXT_ANCHOR_START) {
+                        p *= Geom::Translate (0, (*bbox).height());
+                    } else if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                        p *= Geom::Translate (0, (*bbox).height()/2);
+                    } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                        p *= Geom::Translate (0, -(*bbox).height());
+                    }
+                }
+                p += Geom::Point((*bbox).width(), 0);
+            }
         }
     }
 
@@ -1704,20 +1768,22 @@ TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const
     } else {
         // Normal or 'inline-size' text.
 
-        double size = s[Geom::X] - text->attributes.firstXY()[Geom::X];
+        SPStyle* style = text->style;
 
-        double visual_width = 0;
-        double visual_height = 0;
-        Geom::OptRect bbox = text->geometricBounds();
-        if (bbox) {
-            visual_width = (*bbox).width();
-            visual_height = (*bbox).width();
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        Geom::Point delta = s - text->attributes.firstXY();
+        double size = 0.0;
+        if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+            mode == SP_CSS_WRITING_MODE_RL_TB) {
+            size = delta[Geom::X];
+        } else {
+            size = delta[Geom::Y];
         }
 
-        // Fix for vertical and right to left text.
-        double line_box_height = text->style->font_size.computed * text->style->line_height.computed;
-
-        text->style->inline_size.setDouble(size);
+        text->style->inline_size.setDouble(abs(size));
         text->style->inline_size.set = true;
     }
 
