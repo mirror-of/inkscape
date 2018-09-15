@@ -202,7 +202,7 @@ static void do_query_dimension (SPDocument *doc, bool extent, Geom::Dim2 const a
 static void do_query_all (SPDocument *doc);
 static void do_query_all_recurse (SPObject *o);
 static void do_print_message(const char *message, ...);
-static bool detect_pipe_in_filename(const char *filename);
+static void detect_pipe_in_filename(const char *filename);
 
 static gchar *sp_global_printer = NULL;
 static gchar *sp_export_png = NULL;
@@ -2380,16 +2380,13 @@ static void do_print_message(const char *message, ...)
  *  In case it is a pipe the variable sp_writingToPipe is set.
  *
  *  \param filename Filename to check for a pipe.
- *  \return true if the filename is a pipe.
  */
 
-static bool detect_pipe_in_filename(const char *filename)
+static void detect_pipe_in_filename(const char *filename)
 {
     if (g_strcmp0(filename, "-") == 0) {
         sp_writingToPipe = TRUE;
-        return true;
     }
-    return false;
 }
 
 /*
