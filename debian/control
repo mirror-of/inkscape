@@ -69,7 +69,8 @@ Recommends:
  python-numpy,
  python-lxml,
  python-scour,
- python-uniconvertor
+ python-uniconvertor,
+ adwaita-icon-theme-full
 Suggests:
  dia | dia-gnome, 
  libgnomevfs2-extra, 
