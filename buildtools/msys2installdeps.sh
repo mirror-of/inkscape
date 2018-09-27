@@ -23,11 +23,16 @@ case "$MSYSTEM" in
     ;;
 esac
 
+# set default options for invoking pacman (in CI this variable is already set globally)
+if [ -z $CI ]; then
+    PACMAN_OPTIONS="--needed --noconfirm"
+fi
+
 # sync package databases
 pacman -Sy
 
 # install basic development system, compiler toolchain and build tools
-eval pacman -S --needed --noconfirm \
+eval pacman -S $PACMAN_OPTIONS \
 git \
 intltool \
 base-devel \
@@ -35,8 +40,8 @@ $ARCH-toolchain \
 $ARCH-cmake \
 $ARCH-ninja
 
-# install Inkscape dependecies (required)
-eval pacman -S --needed --noconfirm \
+# install Inkscape dependencies (required)
+eval pacman -S $PACMAN_OPTIONS \
 $ARCH-gc \
 $ARCH-gsl \
 $ARCH-popt \
@@ -45,8 +50,8 @@ $ARCH-boost \
 $ARCH-gtk2 \
 $ARCH-gtkmm
 
-# install Inkscape dependecies (optional)
-eval pacman -S --needed --noconfirm \
+# install Inkscape dependencies (optional)
+eval pacman -S $PACMAN_OPTIONS \
 $ARCH-poppler \
 $ARCH-potrace \
 $ARCH-libcdr \
@@ -66,13 +71,13 @@ $ARCH-gtkspell
 #        --ignore=mingw-w64-*-imagemagick
 for arch in $(eval echo $ARCH); do
   wget -nv https://gitlab.com/Ede123/bintray/raw/master/${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz \
-    && pacman -U --needed --noconfirm ${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz \
+    && pacman -U $PACMAN_OPTIONS ${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz \
     && rm  ${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz
 done
 
 
 # install Python and modules used by Inkscape
-eval pacman -S --needed --noconfirm \
+eval pacman -S $PACMAN_OPTIONS \
 $ARCH-python2 \
 $ARCH-python2-pip \
 $ARCH-python2-lxml \
