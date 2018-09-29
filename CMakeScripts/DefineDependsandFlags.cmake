@@ -397,6 +397,13 @@ if(WITH_NLS)
     else(GETTEXT_FOUND)
 	message(STATUS "Cannot find gettext + msgfmt to convert language file. Translation won't be enabled")
     endif(GETTEXT_FOUND)
+
+    find_program(INTLTOOL-UPDATE intltool-update)
+    if(INTLTOOL-UPDATE)
+        message(STATUS "Found íntltool. inkscape.pot will be re-created if missing.")
+    else()
+        message(STATUS "Did not find íntltool. inkscape.pot can't be re-created.")
+    endif()
 endif(WITH_NLS)
 
 # find sigc++ and set -std=c++11 if required
