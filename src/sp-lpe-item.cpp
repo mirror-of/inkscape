@@ -407,8 +407,9 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
     if (!value.empty()) {
         // Apply the path effects here because in the casse of a group, lpe->resetDefaults
         // needs that all the subitems have their effects applied
-        sp_lpe_item_update_patheffect(this, false, true);
-
+        if (SP_IS_GROUP(this)) {
+          //  sp_lpe_item_update_patheffect(this, false, true);
+        }
         // Disable the path effects while preparing the new lpe
         sp_lpe_item_enable_path_effects(this, false);
 
@@ -426,9 +427,7 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
         if( SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
         }
-        // make sure there is an original-d for paths!!!
-        sp_lpe_item_create_original_path_recursive(this);
-
+        
         LivePathEffectObject *lpeobj = this->path_effect_list->back()->lpeobject;
         if (lpeobj && lpeobj->get_lpe()) {
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
@@ -437,7 +436,10 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
                 // has to be called when all the subitems have their lpes applied
                 lpe->resetDefaults(this);
             }
-
+            // Moved here to fix #1299461, we can call previious function twice after
+            // if anyone find necesary
+            // make sure there is an original-d for paths!!!
+            sp_lpe_item_create_original_path_recursive(this);
             // perform this once when the effect is applied
             lpe->doOnApply(this);
 
