@@ -9,3 +9,4 @@ share/*/*.h
 
 inkscape_*.snap
 inkscape_*_source.tar.bz2
+.vscode
