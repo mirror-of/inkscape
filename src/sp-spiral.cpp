@@ -192,7 +192,7 @@ void SPSpiral::set(unsigned int key, gchar const* value) {
 
 void SPSpiral::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        this->set_shape();
+        this->set_shape(false);
     }
 
     SPShape::update(ctx, flags);
@@ -312,7 +312,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
     g_assert (is_unit_vector (hat2));
 }
 
-void SPSpiral::set_shape() {
+void SPSpiral::set_shape(bool lpeupd) {
     if (hasBrokenPathEffect()) {
         g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
 
@@ -364,7 +364,10 @@ void SPSpiral::set_shape() {
     if ((1.0 - t) > SP_EPSILON) {
         this->fitAndDraw(c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
     }
-
+    if (!lpeupd && hasPathEffect() && pathEffectsEnabled()) {
+        this->setCurveBeforeLPE(c);
+        return;
+    }
     /* Reset the shape'scurve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     setCurveInsync( c, TRUE);

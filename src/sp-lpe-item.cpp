@@ -187,9 +187,9 @@ void SPLPEItem::update(SPCtx* ctx, unsigned int flags) {
 }
 
 void SPLPEItem::modified(unsigned int flags) {
-    if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
-        sp_lpe_item_update_patheffect(this, true, true);
-    }
+    //if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
+        //sp_lpe_item_update_patheffect(this, true, true);
+    //}
 
 //    SPItem::onModified(flags);
 }
@@ -249,6 +249,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
 
                     try {
                             lpe->doEffect(curve);
+                            std::cout << "aaasssss" << std::endl;
                     }
                     catch (std::exception & e) {
                         g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());

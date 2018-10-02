@@ -217,7 +217,7 @@ void SPStar::update(SPCtx *ctx, guint flags) {
              SP_OBJECT_STYLE_MODIFIED_FLAG |
              SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
-        this->set_shape();
+        this->set_shape(false);
     }
 
     // CPPIFY: see header file
@@ -365,7 +365,7 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 #define NEXT false
 #define PREV true
 
-void SPStar::set_shape() {
+void SPStar::set_shape(bool lpeupd) {
     // perhaps we should convert all our shapes into LPEs without source path
     // and with knotholders for parameters, then this situation will be handled automatically
     // by disabling the entire stack (including the shape LPE)
@@ -446,8 +446,12 @@ void SPStar::set_shape() {
 
     c->closepath();
 
+    if (!lpeupd && hasPathEffect() && pathEffectsEnabled()) {
+        this->setCurveBeforeLPE(c);
+        return;
+    }
     /* Reset the shape'scurve to the "original_curve"
-     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/  
     this->setCurveInsync( c, TRUE);
     this->setCurveBeforeLPE( c );
 

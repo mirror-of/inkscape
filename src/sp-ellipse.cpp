@@ -196,7 +196,7 @@ void SPGenericEllipse::update(SPCtx *ctx, guint flags)
         this->rx.update(em, ex, dr);
         this->ry.update(em, ex, dr);
 
-        this->set_shape();
+        this->set_shape(false);
     }
 
     SPShape::update(ctx, flags);
@@ -375,7 +375,7 @@ const char *SPGenericEllipse::displayName() const
 }
 
 // Create path for rendering shape on screen
-void SPGenericEllipse::set_shape()
+void SPGenericEllipse::set_shape(bool lpeupd)
 {
     // std::cout << "SPGenericEllipse::set_shape: Entrance" << std::endl;
     if (hasBrokenPathEffect()) {
@@ -442,6 +442,10 @@ void SPGenericEllipse::set_shape()
 
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    if (!lpeupd && hasPathEffect() && pathEffectsEnabled()) {
+        this->setCurveBeforeLPE(curve);
+        return;
+    }
     this->setCurveInsync(curve, TRUE);
     this->setCurveBeforeLPE(curve);
 
@@ -575,7 +579,7 @@ void SPGenericEllipse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, 
 void SPGenericEllipse::modified(guint flags)
 {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        this->set_shape();
+        this->set_shape(false);
     }
 
     SPShape::modified(flags);
@@ -624,7 +628,7 @@ Geom::Point SPGenericEllipse::getPointAtAngle(double arg) const
 bool SPGenericEllipse::set_elliptical_path_attribute(Inkscape::XML::Node *repr)
 {
     // Make sure our pathvector is up to date.
-    this->set_shape();
+    this->set_shape(false);
 
     if (_curve != NULL) {
         gchar* d = sp_svg_write_path(_curve->get_pathvector());
