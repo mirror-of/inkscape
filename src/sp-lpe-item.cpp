@@ -249,7 +249,6 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
 
                     try {
                             lpe->doEffect(curve);
-                            std::cout << "aaasssss" << std::endl;
                     }
                     catch (std::exception & e) {
                         g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());
