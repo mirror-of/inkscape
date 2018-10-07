@@ -11,6 +11,7 @@
  */
 
 #include <cmath>
+#include <math.h> // isfinite C99
 #include <cstring>
 #include <string>
 #include <glib.h>
@@ -184,14 +185,14 @@ bool SVGLength::read(gchar const *str)
         return false;
     }
 
-    if (!strcmp(str, "nan") || !strcmp(str, "-nan") || !strcmp(str, "NaN") || !strcmp(str, "-NaN")) {
-        return false;
-    }
-
     SVGLength::Unit u;
     float v;
     float c;
     if (!sp_svg_length_read_lff(str, &u, &v, &c, NULL)) {
+        return false;
+    }
+
+    if (!isfinite(v)) {
         return false;
     }
 
