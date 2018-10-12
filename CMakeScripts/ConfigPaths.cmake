@@ -9,7 +9,7 @@ if(WIN32)
   set(INKSCAPE_LIBDIR "\\\\lib")
   set(INKSCAPE_DATADIR "")
   
-  set(PACKAGE_LOCALE_DIR "\\\\share\\\\locale")
+  set(PACKAGE_LOCALE_DIR "share/locale")
   
   set(SHARE_INSTALL "share" CACHE STRING "Data file install path. Must be a relative path (from CMAKE_INSTALL_PREFIX), with no trailing slash.")
   set(INKSCAPE_SHARE_INSTALL "${SHARE_INSTALL}") # share/inkscape goes directly into /share on Windows
