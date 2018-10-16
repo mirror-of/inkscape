@@ -813,8 +813,8 @@ void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)
     gint state = 0;
     gint save = 0;
     gsize written = 0;
-    written += g_base64_encode_step(data, len, TRUE, buf_work, &state, &save);
-    written += g_base64_encode_close(TRUE, buf_work + written, &state, &save);
+    written += g_base64_encode_step(data, len, false, buf_work, &state, &save);
+    written += g_base64_encode_close(false, buf_work + written, &state, &save);
     buf_work[written] = 0; // null terminate
 
     // TODO: this is very wasteful memory-wise.
@@ -866,8 +866,8 @@ void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn)
         gint state = 0;
         gint save = 0;
         gsize written = 0;
-        written += g_base64_encode_step(reinterpret_cast<guchar *>(data), len, TRUE, buf_work, &state, &save);
-        written += g_base64_encode_close(TRUE, buf_work + written, &state, &save);
+        written += g_base64_encode_step(reinterpret_cast<guchar *>(data), len, false, buf_work, &state, &save);
+        written += g_base64_encode_close(false, buf_work + written, &state, &save);
         buf_work[written] = 0; // null terminate
 
         // TODO: this is very wasteful memory-wise.
