@@ -147,7 +147,7 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     GtkWidget *dlg = GTK_WIDGET(gobj());
     sp_transientize(dlg);
     prefs->setInt( "/options/transientpolicy/value", transient_policy);
-    set_position(Gtk::WindowPosition::WIN_POS_CENTER_ON_PARENT);
+    set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
     set_modal(false);
     return;
 }

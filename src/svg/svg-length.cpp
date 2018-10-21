@@ -11,11 +11,12 @@
  */
 
 #include <cmath>
-#include <math.h> // isfinite C99
 #include <cstring>
 #include <string>
 #include <glib.h>
 #include <iostream>
+
+#include <2geom/math-utils.h>
 
 #include "svg.h"
 #include "stringstream.h"
@@ -192,7 +193,7 @@ bool SVGLength::read(gchar const *str)
         return false;
     }
 
-    if (!isfinite(v)) {
+    if (!IS_FINITE(v)) {
         return false;
     }
 
