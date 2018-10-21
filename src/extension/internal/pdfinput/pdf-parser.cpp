@@ -466,7 +466,11 @@ void PdfParser::go(GBool /*topLevel*/)
 
     // got an argument - save it
     } else if (numArgs < maxArgs) {
+#if defined(POPPLER_NEW_OBJECT_API)
       args[numArgs++] = std::move(obj);
+#else
+      args[numArgs++] = obj;
+#endif
 
     // too many arguments - something is wrong
     } else {
@@ -2725,7 +2729,11 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
             _POPPLER_CALL_ARGS(obj2, res->lookupColorSpace, obj1.getName());
             if (!obj2.isNull()) {
 	            _POPPLER_FREE(obj1);
+#if defined(POPPLER_NEW_OBJECT_API)
                     obj1 = std::move(obj2);
+#else
+                    obj1 = obj2;
+#endif
             } else {
 	            _POPPLER_FREE(obj2);
             }
@@ -2830,7 +2838,11 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
 	            _POPPLER_CALL_ARGS(obj2, res->lookupColorSpace, obj1.getName());
 	            if (!obj2.isNull()) {
 	                _POPPLER_FREE(obj1);
+#if defined(POPPLER_NEW_OBJECT_API)
                         obj1 = std::move(obj2);
+#else
+                        obj1 = obj2;
+#endif
 	            } else {
 	                _POPPLER_FREE(obj2);
 	            }

@@ -877,7 +877,7 @@ bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *sh
             _addStopToGradient(gradient, 1.0, &stop2, 1.0);
         }
     } else if ( type == 3 ) { // Stitching
-        auto stitchingFunc = static_cast<_POPPLER_CONST StitchingFunction*>(func);
+        _POPPLER_CONST StitchingFunction* stitchingFunc = static_cast<_POPPLER_CONST StitchingFunction*>(func);
         const double *bounds = stitchingFunc->getBounds();
         const double *encode = stitchingFunc->getEncode();
         int num_funcs = stitchingFunc->getNumFuncs();
