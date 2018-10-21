@@ -50,10 +50,8 @@ inkscape:linux-14.04:
     - mkdir -p build/conf
     - ln -s . share/inkscape
     - cd build
-    - cmake ..
-        -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-        -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=98
-        -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
+    - CC="ccache gcc" CXX="ccache g++" CXXFLAGS="$CXXFLAGS -std=c++98"
+        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ ..
     - make -j3 install
     - make check
     - cd ..
