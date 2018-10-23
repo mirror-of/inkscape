@@ -36,7 +36,7 @@ inkscape:linux:
 # Building inkscape (with Ubuntu 14.04 and enforcing C++98)
 inkscape:linux-14.04:
   stage: build
-  image: registry.gitlab.com/ede123/inkscape-ci-docker/0-92-x-14-04
+  image: registry.gitlab.com/inkscape/inkscape-ci-docker/0-92-x-14-04
   cache:
     key: "cache-linux-0.92-14.04"
     paths:
