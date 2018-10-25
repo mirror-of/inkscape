@@ -13,7 +13,6 @@
  */
 
 class KnotHolder;
-class LivePathEffectObject;
 class SPDesktop;
 class SPItem;
 
@@ -26,7 +25,7 @@ public:
     ShapeEditor(SPDesktop *desktop);
     ~ShapeEditor();
 
-    void set_item(SPItem *item, bool keep_knotholder = false);
+    void set_item(SPItem *item);
     void unset_item(bool keep_knotholder = false);
 
     void update_knotholder(); //((deprecated))
@@ -42,7 +41,7 @@ public:
                                    char const * /*new_value*/, bool /*is_interactive*/, void *data);
 private:
     bool has_knotholder();
-    void reset_item (bool keep_knotholder = true);
+    void reset_item ();
     const SPItem *get_item();
 
     static bool _blockSetItem;
