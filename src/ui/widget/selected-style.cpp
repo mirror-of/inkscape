@@ -159,6 +159,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _opacity_label.set_valign(Gtk::ALIGN_CENTER);
     _opacity_label.set_margin_top(0);
     _opacity_label.set_margin_bottom(0);
+    _stroke_width.set_name("monoStrokeWidth");
+    
 
 #if GTK_CHECK_VERSION(3,12,0)
     _fill_label.set_margin_start(0);
@@ -1325,25 +1327,25 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust alpha")));
         double ch = hsla[3];
-        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> to adjust lightness, with <b>Shift</b> to adjust saturation, without modifiers to adjust hue"), ch - diff, ch, diff);
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>alpha</b>: was <tt>%.3g</tt>, now <b><tt>%.3g</tt></b> (diff <tt>%.3g</tt>); with <b>Ctrl</b> to adjust lightness, with <b>Shift</b> to adjust saturation, without modifiers to adjust hue"), ch - diff, ch, diff);
 
     } else if (modifier == 2) { // saturation
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust saturation")));
         double ch = hsla[1];
-        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"), ch - diff, ch, diff);
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>saturation</b>: was <tt>%.3gv, now <b><tt>%.3g</tt></b> (diff <tt>%.3g</tt>); with <b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"), ch - diff, ch, diff);
 
     } else if (modifier == 1) { // lightness
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust lightness")));
         double ch = hsla[2];
-        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"), ch - diff, ch, diff);
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>lightness</b>: was <tt>%.3g</tt>, now <b><tt>%.3g</tt></b> (diff <tt>%.3g</tt>); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"), ch - diff, ch, diff);
 
     } else { // hue
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust hue")));
         double ch = hsla[0];
-        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> to adjust lightness"), ch - diff, ch, diff);
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>hue</b>: was <tt>%.3g</tt>, now <b><tt>%.3g</tt></b> (diff <tt>%.3g</tt>); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> to adjust lightness"), ch - diff, ch, diff);
     }
 }
 
@@ -1453,7 +1455,7 @@ RotateableStrokeWidth::do_motion(double by, guint modifier) {
         double diff = value_adjust(startvalue, by, modifier, false);
         DocumentUndo::maybeDone(parent->getDesktop()->getDocument(), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust stroke width")));
-        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"), startvalue, startvalue + diff, diff);
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>stroke width</b>: was <tt>%.3g</tt>, now <b><tt>%.3g</tt></b> (diff <tt>%.3g</tt>)"), startvalue, startvalue + diff, diff);
     }
 }
 

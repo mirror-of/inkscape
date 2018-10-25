@@ -180,3 +180,6 @@ spinbutton undershoot {
     color:rgb(0,0,0);
 }
 
+#monoStrokeWidth{
+    font-family:monospace;
+}

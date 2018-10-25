@@ -969,7 +969,7 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
 
     /* Status text */
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
-                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
+                          _("<b>Scale</b>: <tt>%0.2f%%</tt> x <tt>%0.2f%%</tt>; with <b>Ctrl</b> to lock ratio"),
                           100 * _absolute_affine[0], 100 * _absolute_affine[3]);
 
     return TRUE;
@@ -1073,7 +1073,7 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, Geom
 
     // status text
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
-                          _("<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"),
+                          _("<b>Scale</b>: <tt>%0.2f%%</tt> x <tt>%0.2f%%</tt>; with <b>Ctrl</b> to lock ratio"),
                           100 * _absolute_affine[0], 100 * _absolute_affine[3]);
 
     return TRUE;
@@ -1210,7 +1210,7 @@ gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, Geom::P
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
                           // TRANSLATORS: don't modify the first ";"
                           // (it will NOT be displayed as ";" - only the second one will be)
-                          _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"),
+                          _("<b>Skew</b>: <tt>%0.2f&#176;</tt>; with <b>Ctrl</b> to snap angle"),
                           degrees);
 
     return TRUE;
@@ -1286,7 +1286,7 @@ gboolean Inkscape::SelTrans::rotateRequest(Geom::Point &pt, guint state)
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
                           // TRANSLATORS: don't modify the first ";"
                           // (it will NOT be displayed as ";" - only the second one will be)
-                          _("<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), degrees);
+                          _("<b>Rotate</b>: <tt>%0.2f&#176;</tt>; with <b>Ctrl</b> to snap angle"), degrees);
 
     return TRUE;
 }
@@ -1323,7 +1323,7 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(pt[Geom::Y], "px");
     Glib::ustring xs(x_q.string(_desktop->namedview->display_units));
     Glib::ustring ys(y_q.string(_desktop->namedview->display_units));
-    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"),
+    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to <tt>%s</tt>, %s"),
             xs.c_str(), ys.c_str());
     return TRUE;
 }
@@ -1470,7 +1470,7 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
     Glib::ustring xs(x_q.string(_desktop->namedview->display_units));
     Glib::ustring ys(y_q.string(_desktop->namedview->display_units));
     _message_context.setF(Inkscape::NORMAL_MESSAGE,
-            _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"),
+            _("<b>Move</b> by <tt>%s</tt>, <tt>%s</tt>; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"),
             xs.c_str(), ys.c_str());
 }
 
