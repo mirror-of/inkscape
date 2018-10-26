@@ -681,12 +681,12 @@ void NodeTool::update_tip(GdkEvent *event) {
             }
             g_assert(positions.size() == 2);
             const double angle = Geom::deg_from_rad(Geom::Line(positions[0], positions[1]).angle());
-            nodestring = g_strdup_printf("<b><tt>%u</tt> of <tt>%u</tt></b> nodes selected, angle: <tt>%.2f°</tt>.", sz,
+            nodestring = g_strdup_printf("<b><span face=\"LSMD\">%u</span> of <span face=\"LSMD\">%u</span></b> nodes selected, angle: <span face=\"LSMD\">%.2f°</span>.", sz,
                                          total, angle);
         }
         else {
-            nodestring = g_strdup_printf(ngettext("<b><tt>%u</tt> of <tt>%u</tt></b> node selected.",
-                                                  "<b><tt>%u</tt> of <tt>%u</tt></b> nodes selected.", total),
+            nodestring = g_strdup_printf(ngettext("<b><span face=\"LSMD\">%u</span> of <span face=\"LSMD\">%u</span></b> node selected.",
+                                                  "<b><span face=\"LSMD\">%u</span> of <span face=\"LSMD\">%u</span></b> nodes selected.", total),
                                          sz, total);
         }
 

@@ -195,7 +195,7 @@ void SprayTool::update_cursor(bool /*with_shift*/) {
     if (!desktop->selection->isEmpty()) {
         num = (guint) boost::distance(desktop->selection->items());
         sel_message = g_strdup_printf(
-            ngettext("<b><tt>%i</tt></b> object selected", "<b><tt>%i</tt></b> objects selected", num), num);
+            ngettext("<b><span face=\"LSMD\">%i</span></b> object selected", "<b><span face=\"LSMD\">%i</span></b> objects selected", num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
     }

@@ -182,6 +182,6 @@ spinbutton undershoot {
 
 #monoStrokeWidth,
 #fillEmptySpace{
-    font-family:monospace;
-    min-width:55px;
+    font-family:"LSMD"; /*Liberation Sans MonoDigits renamed TODO: based in Liberation sans and monospaced view licenses...*/
+    min-width:47px; /*min width to avoid movement on message label*/
 }

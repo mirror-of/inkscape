@@ -392,8 +392,8 @@ void StarTool::drag(Geom::Point p, guint state)
     this->message_context->setF(
         Inkscape::IMMEDIATE_MESSAGE,
         (this->isflatsided
-             ? _("<b>Polygon</b>: radius <tt>%s, angle <tt>%5g&#176;</tt>; with <b>Ctrl</b> to snap angle")
-             : _("<b>Star</b>: radius <tt>%s, angle <tt>%5g&#176;</tt>; with <b>Ctrl</b> to snap angle")),
+             ? _("<b>Polygon</b>: radius <span face=\"LSMD\">%s, angle <span face=\"LSMD\">%5g&#176;</span>; with <b>Ctrl</b> to snap angle")
+             : _("<b>Star</b>: radius <span face=\"LSMD\">%s, angle <span face=\"LSMD\">%5g&#176;</span>; with <b>Ctrl</b> to snap angle")),
         rads.c_str(), sp_round((arg1)*180 / M_PI, 0.0001));
 }
 
