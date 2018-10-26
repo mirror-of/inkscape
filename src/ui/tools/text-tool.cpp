@@ -577,7 +577,9 @@ bool TextTool::root_handler(GdkEvent* event) {
                 Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(fabs((p - this->p0)[Geom::Y]), "px");
                 Glib::ustring xs = x_q.string(desktop->namedview->display_units);
                 Glib::ustring ys = y_q.string(desktop->namedview->display_units);
-                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Flowed text frame</b>: <tt>%s</tt> &#215; <tt>%s</tt>"), xs.c_str(), ys.c_str());
+                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
+                                            _("<b>Flowed text frame</b>: <tt>%s</tt> &#215; <tt>%s</tt>"), xs.c_str(),
+                                            ys.c_str());
             } else if (!this->sp_event_context_knot_mouseover()) {
                 SnapManager &m = desktop->namedview->snap_manager;
                 m.setup(desktop);
@@ -1613,9 +1615,18 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
                 }
             }
 
-            SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (<tt>%d</tt> character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (<tt>%d</tt> characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
+            SP_EVENT_CONTEXT(tc)->message_context->setF(
+                Inkscape::NORMAL_MESSAGE,
+                ngettext("Type or edit flowed text (<tt>%d</tt> character%s); <b>Enter</b> to start new paragraph.",
+                         "Type or edit flowed text (<tt>%d</tt> characters%s); <b>Enter</b> to start new paragraph.",
+                         nChars),
+                nChars, trunc);
         } else {
-            SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit text (<tt>%d</tt> character%s); <b>Enter</b> to start new line.", "Type or edit text (<tt>%d</tt> characters%s); <b>Enter</b> to start new line.", nChars), nChars, trunc);
+            SP_EVENT_CONTEXT(tc)->message_context->setF(
+                Inkscape::NORMAL_MESSAGE,
+                ngettext("Type or edit text (<tt>%d</tt> character%s); <b>Enter</b> to start new line.",
+                         "Type or edit text (<tt>%d</tt> characters%s); <b>Enter</b> to start new line.", nChars),
+                nChars, trunc);
         }
 
     } else {

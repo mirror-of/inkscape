@@ -1800,14 +1800,16 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
     if (statusbar) {
         gchar *message;
         if(this->spiro || this->bspline){
-            message = is_curve ?
-            _("<b>Curve segment</b>: angle <tt>%3.2f&#176;</tt>; with <b>Shift+Click</b> cusp node,<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish" ):
-            _("<b>Line segment</b>: angle <tt>%3.2f&#176;</tt>; with <b>Shift+Click</b> cusp node,<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish");
+            message = is_curve ? _("<b>Curve segment</b>: angle <tt>%3.2f&#176;</tt>; with <b>Shift+Click</b> cusp "
+                                   "node,<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish")
+                               : _("<b>Line segment</b>: angle <tt>%3.2f&#176;</tt>; with <b>Shift+Click</b> cusp "
+                                   "node,<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish");
             this->_setAngleDistanceStatusMessage(p, 0, message);
         } else {
-            message = is_curve ?
-            _("<b>Curve segment</b>: angle <tt>%3.2f&#176;</tt>, distance <tt>%s</tt>; with <b>Ctrl</b> to snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path" ):
-            _("<b>Line segment</b>: angle <tt>%3.2f&#176;</tt>, distance <tt>%s</tt>; with <b>Ctrl</b> to snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path");
+            message = is_curve ? _("<b>Curve segment</b>: angle <tt>%3.2f&#176;</tt>, distance <tt>%s</tt>; with "
+                                   "<b>Ctrl</b> to snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path")
+                               : _("<b>Line segment</b>: angle <tt>%3.2f&#176;</tt>, distance <tt>%s</tt>; with "
+                                   "<b>Ctrl</b> to snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path");
             this->_setAngleDistanceStatusMessage(p, 0, message);
         }
         
@@ -1825,7 +1827,9 @@ void PenTool::_setCtrl(Geom::Point const p, guint const state) {
         sp_canvas_item_hide(this->cl0);
         SP_CTRL(this->c1)->moveto(this->p[1]);
         this->cl1->setCoords(this->p[0], this->p[1]);
-        this->_setAngleDistanceStatusMessage(p, 0, _("<b>Curve handle</b>: angle <tt>%3.2f&#176;</tt>, length <tt>%s</tt>; with <b>Ctrl</b> to snap angle"));
+        this->_setAngleDistanceStatusMessage(
+            p, 0,
+            _("<b>Curve handle</b>: angle <tt>%3.2f&#176;</tt>, length <tt>%s</tt>; with <b>Ctrl</b> to snap angle"));
     } else if ( this->npoints == 5 ) {
         this->p[4] = p;
         sp_canvas_item_show(this->c0);
@@ -1848,9 +1852,10 @@ void PenTool::_setCtrl(Geom::Point const p, guint const state) {
 
 
 
-        gchar *message = is_symm ?
-            _("<b>Curve handle, symmetric</b>: angle <tt>%3.2f&#176;</tt>, length <tt>%s</tt>; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only") :
-            _("<b>Curve handle</b>: angle <tt>%3.2f&#176;</tt>, length <tt>%s</tt>; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only");
+        gchar *message = is_symm ? _("<b>Curve handle, symmetric</b>: angle <tt>%3.2f&#176;</tt>, length <tt>%s</tt>; "
+                                     "with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only")
+                                 : _("<b>Curve handle</b>: angle <tt>%3.2f&#176;</tt>, length <tt>%s</tt>; with "
+                                     "<b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only");
         this->_setAngleDistanceStatusMessage(p, 3, message);
     } else {
         g_warning("Something bad happened - npoints is %d", this->npoints);

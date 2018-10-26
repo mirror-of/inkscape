@@ -144,7 +144,8 @@ void TweakTool::update_cursor (bool with_shift) {
 
     if (!desktop->selection->isEmpty()) {
         num = (guint) boost::distance(desktop->selection->items());
-        sel_message = g_strdup_printf(ngettext("<b><tt>%i</tt></b> object selected","<b><tt>%i</tt></b> objects selected",num), num);
+        sel_message = g_strdup_printf(
+            ngettext("<b><tt>%i</tt></b> object selected", "<b><tt>%i</tt></b> objects selected", num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
     }

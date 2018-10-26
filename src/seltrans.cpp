@@ -1210,8 +1210,7 @@ gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, Geom::P
     _message_context.setF(Inkscape::IMMEDIATE_MESSAGE,
                           // TRANSLATORS: don't modify the first ";"
                           // (it will NOT be displayed as ";" - only the second one will be)
-                          _("<b>Skew</b>: <tt>%0.2f&#176;</tt>; with <b>Ctrl</b> to snap angle"),
-                          degrees);
+                          _("<b>Skew</b>: <tt>%0.2f&#176;</tt>; with <b>Ctrl</b> to snap angle"), degrees);
 
     return TRUE;
 }
@@ -1323,8 +1322,7 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(pt[Geom::Y], "px");
     Glib::ustring xs(x_q.string(_desktop->namedview->display_units));
     Glib::ustring ys(y_q.string(_desktop->namedview->display_units));
-    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to <tt>%s</tt>, %s"),
-            xs.c_str(), ys.c_str());
+    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to <tt>%s</tt>, %s"), xs.c_str(), ys.c_str());
     return TRUE;
 }
 
@@ -1470,8 +1468,9 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
     Glib::ustring xs(x_q.string(_desktop->namedview->display_units));
     Glib::ustring ys(y_q.string(_desktop->namedview->display_units));
     _message_context.setF(Inkscape::NORMAL_MESSAGE,
-            _("<b>Move</b> by <tt>%s</tt>, <tt>%s</tt>; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"),
-            xs.c_str(), ys.c_str());
+                          _("<b>Move</b> by <tt>%s</tt>, <tt>%s</tt>; with <b>Ctrl</b> to restrict to "
+                            "horizontal/vertical; with <b>Shift</b> to disable snapping"),
+                          xs.c_str(), ys.c_str());
 }
 
 // Given a location of a handle at the visual bounding box, find the corresponding location at the
