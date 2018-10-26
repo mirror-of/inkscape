@@ -63,10 +63,6 @@ spinbutton.entry {
     padding-left: 2px;
 }
 
-#DesktopMainTable spinbutton {
-    font-family:"LSMD"; /*Liberation Sans MonoDigits renamed TODO: based in Liberation sans and monospaced view licenses...*/
-}
-
 SPRuler {
     background-color: @theme_bg_color;
     color:            @theme_fg_color;
@@ -139,7 +135,9 @@ combobox window.popup scrolledwindow treeview separator {
 }
 
 /* Hide slider */
-#InkSpinScale slider {
+#InkSpinScale s#DesktopMainTable spinbutton {
+    font-family:"Liberation Sans MonoDigits",monospace; /*TODO: based in Liberation sans and monospaced view licenses...*/
+}lider {
     background: none;
     border:     none;
     outline:    none;
@@ -185,7 +183,15 @@ spinbutton undershoot {
 }
 
 #monoStrokeWidth,
-#fillEmptySpace{
-    font-family:"LSMD"; /*Liberation Sans MonoDigits renamed TODO: based in Liberation sans and monospaced view licenses...*/
+#fillEmptySpace,
+#SelectStatus,
+#CoordinateStatusX,
+#CoordinateStatusY,
+#DesktopMainTable spinbutton{
+    font-family:"Liberation Sans MonoDigits",monospace; /*TODO: based in Liberation sans and monospaced view licenses...*/
+}
+
+#fillEmptySpace,
+#monoStrokeWidth{
     min-width:47px; /*min width to avoid movement on message label*/
 }

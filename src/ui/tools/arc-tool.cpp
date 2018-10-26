@@ -400,18 +400,9 @@ void ArcTool::drag(Geom::Point pt, guint state) {
             ratio_y = (int) rint (rdimy / rdimx);
         }
 
-        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
-                                    _("<b>Ellipse</b>: <span face=\"LSMD\">%s</span> &#215; <span "
-                                      "face=\"LSMD\">%s</span> (constrained to ratio "
-                                      "<span face=\"LSMD\">%d</span>:<span face=\"LSMD\">%d</span>); with <b>Shift</b> "
-                                      "to draw around the starting point"),
-                                    xs.c_str(), ys.c_str(), ratio_x, ratio_y);
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str(), ratio_x, ratio_y);
     } else {
-        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
-                                    _("<b>Ellipse</b>: <span face=\"LSMD\">%s</span> &#215; <span "
-                                      "face=\"LSMD\">%s</span>; with <b>Ctrl</b> to make square "
-                                      "or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"),
-                                    xs.c_str(), ys.c_str());
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str());
     }
 }
 

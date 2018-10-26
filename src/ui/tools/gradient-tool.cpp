@@ -114,55 +114,34 @@ void GradientTool::selection_changed(Inkscape::Selection*) {
     //The use of ngettext in the following code is intentional even if the English singular form would never be used
     if (n_sel == 1) {
         if (drag->singleSelectedDraggerNumDraggables() == 1) {
-            gchar *message = g_strconcat(
-                // TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a
-                // compound message
-                _("<span face=\"LSMD\">%s</span> selected"),
-                // TRANSLATORS: Mind the space in front. This is part of a compound message
-                ngettext(" out of <span face=\"LSMD\">%d</span> gradient handle",
-                         " out of <span face=\"LSMD\">%d</span> gradient handles", n_tot),
-                ngettext(" on <span face=\"LSMD\">%d</span> selected object",
-                         " on <span face=\"LSMD\">%d</span> selected objects", n_obj),
-                NULL);
+            gchar * message = g_strconcat(
+                //TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a compound message
+                _("%s selected"),
+                //TRANSLATORS: Mind the space in front. This is part of a compound message
+                ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
+                ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
             rc->message_context->setF(Inkscape::NORMAL_MESSAGE,
                                        message,_(gr_handle_descr[drag->singleSelectedDraggerSingleDraggableType()]), n_tot, n_obj);
         } else {
-            gchar *message = g_strconcat(
-                // TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count
-                // & object count)
-                ngettext("One handle merging <span face=\"LSMD\">%d</span> stop (drag with <b>Shift</b> to separate) "
-                         "selected",
-                         "One handle merging <span face=\"LSMD\">%d</span> stops (drag with <b>Shift</b> to separate) "
-                         "selected",
-                         drag->singleSelectedDraggerNumDraggables()),
-                ngettext(" out of <span face=\"LSMD\">%d</span> gradient handle",
-                         " out of <span face=\"LSMD\">%d</span> gradient handles", n_tot),
-                ngettext(" on <span face=\"LSMD\">%d</span> selected object",
-                         " on <span face=\"LSMD\">%d</span> selected objects", n_obj),
-                NULL);
+            gchar * message = g_strconcat(
+                //TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
+                ngettext("One handle merging %d stop (drag with <b>Shift</b> to separate) selected",
+                         "One handle merging %d stops (drag with <b>Shift</b> to separate) selected",drag->singleSelectedDraggerNumDraggables()),
+                ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
+                ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
             rc->message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
         }
     } else if (n_sel > 1) {
         //TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
-        gchar *message = g_strconcat(
-            ngettext(
-                "<b><span face=\"LSMD\">%d</span></b> gradient handle selected out of <span face=\"LSMD\">%d</span>",
-                "<b>%d</b> gradient handles selected out of %d", n_sel),
-            // TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of
-            // a compound message
-            ngettext(" on <span face=\"LSMD\">%d</span> selected object",
-                     " on <span face=\"LSMD\">%d</span> selected objects", n_obj),
-            NULL);
+        gchar * message = g_strconcat(ngettext("<b>%d</b> gradient handle selected out of %d","<b>%d</b> gradient handles selected out of %d",n_sel),
+                                      //TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
+                                      ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
         rc->message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
     } else if (n_sel == 0) {
         rc->message_context->setF(Inkscape::NORMAL_MESSAGE,
-                                  // TRANSLATORS: The plural refers to number of selected objects
-                                  ngettext("<b>No</b> gradient handles selected out of <span face=\"LSMD\">%d</span> "
-                                           "on <span face=\"LSMD\">%d</span> selected object",
-                                           "<b>No</b> gradient handles selected out of <span face=\"LSMD\">%d</span> "
-                                           "on <span face=\"LSMD\">%d</span> selected objects",
-                                           n_obj),
-                                  n_tot, n_obj);
+                                   //TRANSLATORS: The plural refers to number of selected objects
+                                   ngettext("<b>No</b> gradient handles selected out of %d on %d selected object",
+                                            "<b>No</b> gradient handles selected out of %d on %d selected objects",n_obj), n_tot, n_obj);
     }
 }
 
@@ -960,12 +939,10 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
         int n_objects = (int) boost::distance(selection->items());
-        rc.message_context->setF(
-            Inkscape::NORMAL_MESSAGE,
-            ngettext("<b>Gradient</b> for <span face=\"LSMD\">%d</span> object; with <b>Ctrl</b> to snap angle",
-                     "<b>Gradient</b> for <span face=\"LSMD\">%d</span> objects; with <b>Ctrl</b> to snap angle",
-                     n_objects),
-            n_objects);
+        rc.message_context->setF(Inkscape::NORMAL_MESSAGE,
+                                  ngettext("<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle",
+                                           "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle", n_objects),
+                                  n_objects);
     } else {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> on which to create gradient."));
     }
