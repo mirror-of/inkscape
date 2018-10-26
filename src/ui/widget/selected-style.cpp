@@ -1340,7 +1340,8 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         double ch = hsla[3];
         parent->getDesktop()->event_context->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
-            _("Adjusting <b>alpha</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span face=\"LSMD\">%.3g</span></b> (diff <span face=\"LSMD\">%.3g</span>); with "
+            _("Adjusting <b>alpha</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span face=\"LSMD\">%.3g</span></b> "
+              "(diff <span face=\"LSMD\">%.3g</span>); with "
               "<b>Ctrl</b> to adjust lightness, with <b>Shift</b> to adjust saturation, without modifiers to adjust "
               "hue"),
             ch - diff, ch, diff);
@@ -1350,7 +1351,8 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         double ch = hsla[1];
         parent->getDesktop()->event_context->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
-            _("Adjusting <b>saturation</b>: was <span face=\"LSMD\">%.3gv, now <b><span face=\"LSMD\">%.3g</span></b> (diff <span face=\"LSMD\">%.3g</span>); with "
+            _("Adjusting <b>saturation</b>: was <span face=\"LSMD\">%.3gv, now <b><span face=\"LSMD\">%.3g</span></b> "
+              "(diff <span face=\"LSMD\">%.3g</span>); with "
               "<b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"),
             ch - diff, ch, diff);
     } else if (modifier == 1) { // lightness
@@ -1359,7 +1361,8 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         double ch = hsla[2];
         parent->getDesktop()->event_context->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
-            _("Adjusting <b>lightness</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span face=\"LSMD\">%.3g</span></b> (diff <span face=\"LSMD\">%.3g</span>); with "
+            _("Adjusting <b>lightness</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span "
+              "face=\"LSMD\">%.3g</span></b> (diff <span face=\"LSMD\">%.3g</span>); with "
               "<b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"),
             ch - diff, ch, diff);
     } else { // hue
@@ -1368,7 +1371,8 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         double ch = hsla[0];
         parent->getDesktop()->event_context->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
-            _("Adjusting <b>hue</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span face=\"LSMD\">%.3g</span></b> (diff <span face=\"LSMD\">%.3g</span>); with "
+            _("Adjusting <b>hue</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span face=\"LSMD\">%.3g</span></b> "
+              "(diff <span face=\"LSMD\">%.3g</span>); with "
               "<b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> to adjust "
               "lightness"),
             ch - diff, ch, diff);
@@ -1483,7 +1487,8 @@ RotateableStrokeWidth::do_motion(double by, guint modifier) {
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust stroke width")));
         parent->getDesktop()->event_context->message_context->setF(
             Inkscape::IMMEDIATE_MESSAGE,
-            _("Adjusting <b>stroke width</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span face=\"LSMD\">%.3g</span></b> (diff <span face=\"LSMD\">%.3g</span>)"),
+            _("Adjusting <b>stroke width</b>: was <span face=\"LSMD\">%.3g</span>, now <b><span "
+              "face=\"LSMD\">%.3g</span></b> (diff <span face=\"LSMD\">%.3g</span>)"),
             startvalue, startvalue + diff, diff);
     }
 }
