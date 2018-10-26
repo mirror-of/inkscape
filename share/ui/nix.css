@@ -1,0 +1,10 @@
+/* GTK3 WIDGET STYLING */
+/* *nix css specific  */
+#monoStrokeWidth,
+#fillEmptySpace,
+#SelectStatus,
+#CoordinateStatusX,
+#CoordinateStatusY,
+#DesktopMainTable spinbutton{
+    font-family:open-sans,monospace; /*TODO: based in Liberation sans and monospaced view licenses...*/
+}

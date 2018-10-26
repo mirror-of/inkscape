@@ -182,15 +182,6 @@ spinbutton undershoot {
     color:rgb(0,0,0);
 }
 
-#monoStrokeWidth,
-#fillEmptySpace,
-#SelectStatus,
-#CoordinateStatusX,
-#CoordinateStatusY,
-#DesktopMainTable spinbutton{
-    font-family:"Liberation Sans MonoDigits",monospace; /*TODO: based in Liberation sans and monospaced view licenses...*/
-}
-
 #fillEmptySpace,
 #monoStrokeWidth{
     min-width:47px; /*min width to avoid movement on message label*/
