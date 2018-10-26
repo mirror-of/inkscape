@@ -402,62 +402,31 @@ Application::add_style_sheet()
     catch (...) {
     }
 #endif
-    {
-        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        // we want a tiny file with 3 or 4 lines, so we can load without removing context
-        // is more understandable than record previously applied
-        Glib::ustring style = get_filename(UIS, "style.css");
-        if (!style.empty()) {
-        auto provider = Gtk::CssProvider::create();
+    // we want a tiny file with 3 or 4 lines, so we can load without removing context
+    // is more understandable than record previously applied
+    Glib::ustring style = get_filename(UIS, "style.css");
+    if (!style.empty()) {
+    auto provider = Gtk::CssProvider::create();
 
-        // From 3.16, throws an error which we must catch.
-        try {
-            provider->load_from_path (style);
-        }
+    // From 3.16, throws an error which we must catch.
+    try {
+        provider->load_from_path (style);
+    }
 #if GTK_CHECK_VERSION(3,16,0)
-        // Gtk::CssProviderError not defined until 3.16.
-        catch (const Gtk::CssProviderError& ex)
-        {
-            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
-                    style.c_str(), ex.what().c_str());
-        }
+    // Gtk::CssProviderError not defined until 3.16.
+    catch (const Gtk::CssProviderError& ex)
+    {
+        g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
+                style.c_str(), ex.what().c_str());
+    }
 #else
-        catch (...)
-        {}
+    catch (...)
+    {}
 #endif
         Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        }
     }
-#ifndef _WIN32
-    {
-        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-        // we want a tiny file with 3 or 4 lines, so we can load without removing context
-        // is more understandable than record previously applied
-        Glib::ustring style = get_filename(UIS, "nix.css");
-        if (!style.empty()) {
-        auto provider = Gtk::CssProvider::create();
-
-        // From 3.16, throws an error which we must catch.
-        try {
-            provider->load_from_path (style);
-        }
-#if GTK_CHECK_VERSION(3,16,0)
-        // Gtk::CssProviderError not defined until 3.16.
-        catch (const Gtk::CssProviderError& ex)
-        {
-            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
-                    style.c_str(), ex.what().c_str());
-        }
-#else
-        catch (...)
-        {}
-#endif
-        Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        }
-    }
-#endif
 }
 
 /* \brief Constructor for the application.
