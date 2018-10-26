@@ -137,9 +137,11 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
       _opacity_adjustment(Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0)),
       _opacity_sb (0.02, 0),
 
+      _fill (),
       _stroke (),
       _stroke_width_place(this),
       _stroke_width (""),
+      _fill_emty_space (""),
 
       _opacity_blocked (false)
 {
@@ -160,6 +162,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _opacity_label.set_margin_top(0);
     _opacity_label.set_margin_bottom(0);
     _stroke_width.set_name("monoStrokeWidth");
+    _fill_emty_space.set_name("fillEmptySpace");  
     
 
 #if GTK_CHECK_VERSION(3,12,0)
@@ -373,6 +376,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
     _fill_place.add(_na[SS_FILL]);
     _fill_place.set_tooltip_text(__na[SS_FILL]);
+    _fill_place.add(_fill_emty_space);
+    _fill.pack_start(_fill_place, Gtk::PACK_SHRINK);
 
     _stroke_place.add(_na[SS_STROKE]);
     _stroke_place.set_tooltip_text(__na[SS_STROKE]);
@@ -392,7 +397,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _table.attach(_fill_flag_place, 1, 0, 1, 1);
     _table.attach(_stroke_flag_place, 1, 1, 1, 1);
 
-    _table.attach(_fill_place, 2, 0, 1, 1);
+    _table.attach(_fill, 2, 0, 1, 1);
     _table.attach(_stroke, 2, 1, 1, 1);
 
     _opacity_place.add(_opacity_label);
