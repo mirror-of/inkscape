@@ -1273,11 +1273,11 @@ void
 SPDesktopWidget::setCoordinateStatus(Geom::Point p)
 {
     gchar *cstr;
-    cstr = g_strdup_printf("<tt>%7.2f </tt>", dt2r * p[Geom::X]);
+    cstr = g_strdup_printf("<span face=\"LSMD\">%7.2f </span>", dt2r * p[Geom::X]);
     gtk_label_set_markup( GTK_LABEL(this->coord_status_x), cstr );
     g_free(cstr);
 
-    cstr = g_strdup_printf("<tt>%7.2f </tt>", dt2r * p[Geom::Y]);
+    cstr = g_strdup_printf("<span face=\"LSMD\">%7.2f </span>", dt2r * p[Geom::Y]);
     gtk_label_set_markup( GTK_LABEL(this->coord_status_y), cstr );
     g_free(cstr);
 }

@@ -63,6 +63,10 @@ spinbutton.entry {
     padding-left: 2px;
 }
 
+#DesktopMainTable spinbutton {
+    font-family:"LSMD"; /*Liberation Sans MonoDigits renamed TODO: based in Liberation sans and monospaced view licenses...*/
+}
+
 SPRuler {
     background-color: @theme_bg_color;
     color:            @theme_fg_color;
