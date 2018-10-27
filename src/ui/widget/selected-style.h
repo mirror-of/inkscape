@@ -195,7 +195,7 @@ protected:
     Gtk::HBox _stroke;
     RotateableStrokeWidth _stroke_width_place;
     Gtk::Label _stroke_width;
-    Gtk::Label _fill_emty_space;
+    Gtk::Label _fill_empty_space;
 
     Glib::ustring _paintserver_id[2];
 
