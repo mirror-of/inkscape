@@ -32,6 +32,7 @@
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
 #include "display/rendermode.h"
+#include "display/drawing-item.h"
 #include "display/cairo-utils.h"
 #include "preferences.h"
 #include "inkscape.h"
@@ -1592,6 +1593,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_set_source(buf.ct, _background);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
+
     cairo_restore(buf.ct);
     // cairo_surface_write_to_png( imgs, "debug1.png" );
 
@@ -1600,6 +1602,17 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     }
     // cairo_surface_write_to_png( imgs, "debug2.png" );
 
+     // Start of visible tile rendering
+    cairo_set_operator(buf.ct, CAIRO_OPERATOR_OVER);
+    cairo_set_source_rgb (buf.ct, 0, 0, 0);
+    cairo_move_to (buf.ct, 0, 0);
+    cairo_line_to (buf.ct, paint_rect.width()  * _device_scale, paint_rect.height() * _device_scale);
+    cairo_move_to (buf.ct, paint_rect.width()  * _device_scale, 0);
+    cairo_line_to (buf.ct, 0, paint_rect.height() * _device_scale);
+    cairo_set_line_width (buf.ct, 1);
+    cairo_stroke (buf.ct);
+    // End
+    
     // output to X
     cairo_destroy(buf.ct);
 
@@ -1946,8 +1959,26 @@ int SPCanvas::paint()
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
     cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
     cairo_region_t *to_draw = cairo_region_create_rectangle(&crect);
+    cairo_region_t *filtered_region = cairo_region_create();
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Geom::Rect box = Geom::Rect(_x0 , _y0, _x0 + allocation.width, _y0 + allocation.height) * desktop->dt2doc();
+        box *= Geom::Scale(desktop->current_zoom()).inverse();
+        std::vector<SPItem*> items = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, box, true, true);
+        for (auto item:items) {
+            if (item->isFiltered()) {
+                Geom::OptRect optarea = item->get_arenaitem(desktop->dkey)->visualBounds();
+                if (optarea) {
+                    Geom::Rect area = (*optarea)  * desktop->doc2dt() ;
+                    Geom::IntRect render_rect = area.roundOutwards();
+                    cairo_rectangle_int_t crect = { render_rect.left(), render_rect.top(), render_rect.width(), render_rect.height() };
+                    cairo_region_union_rectangle(filtered_region, &crect);
+                }
+            }
+        }
+    }
     cairo_region_subtract(to_draw, _clean_region);
-
+    cairo_region_subtract(to_draw, filtered_region);
     int n_rects = cairo_region_num_rectangles(to_draw);
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
@@ -1958,7 +1989,20 @@ int SPCanvas::paint()
             return FALSE;
         };
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    unsigned tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
+    prefs->setInt("/options/rendering/tile-multiplier",512);
+    n_rects = cairo_region_num_rectangles(filtered_region);
+    for (int i = 0; i < n_rects; ++i) {
+        cairo_rectangle_int_t crect;
+        cairo_region_get_rectangle(filtered_region, i, &crect);
+        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
+            // Aborted
+            cairo_region_destroy(filtered_region);
+            return FALSE;
+        };
+    }
+    prefs->setInt("/options/rendering/tile-multiplier", tile_multiplier);
     // we've had a full unaborted redraw, reset the full redraw counter
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;
