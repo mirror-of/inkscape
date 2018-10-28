@@ -2032,26 +2032,15 @@ int SPCanvas::paint()
                     // std::cout << itemInsideTile(to_draw_rect, render_rect) << std::endl;
                     // std::cout << to_draw_rect << std::endl;
                     // std::cout << render_rect << std::endl;
-                    if (!itemInsideTile(to_draw_rect, render_rect)) {    
+                    if (!itemInsideTile(to_draw_rect, render_rect)) {
                         cairo_region_union_rectangle(filtered_region, &item_crect);
                     };
                 } 
             }
         }
     }
-    cairo_region_subtract(to_draw, _clean_region);
-    cairo_region_subtract(to_draw, filtered_region);
-    int n_rects = cairo_region_num_rectangles(to_draw);
-    for (int i = 0; i < n_rects; ++i) {
-        cairo_rectangle_int_t crect;
-        cairo_region_get_rectangle(to_draw, i, &crect);
-        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
-            // Aborted
-            cairo_region_destroy(to_draw);
-            return FALSE;
-        };
-    }
-    n_rects = cairo_region_num_rectangles(filtered_region);
+    cairo_region_subtract(filtered_region, _clean_region);
+    int n_rects = cairo_region_num_rectangles(filtered_region);
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(filtered_region, i, &crect);
@@ -2061,6 +2050,18 @@ int SPCanvas::paint()
             return FALSE;
         };
     }
+    cairo_region_subtract(to_draw, _clean_region);
+    n_rects = cairo_region_num_rectangles(to_draw);
+    for (int i = 0; i < n_rects; ++i) {
+        cairo_rectangle_int_t crect;
+        cairo_region_get_rectangle(to_draw, i, &crect);
+        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
+            // Aborted
+            cairo_region_destroy(to_draw);
+            return FALSE;
+        };
+    }
+    
     // we've had a full unaborted redraw, reset the full redraw counter
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;
