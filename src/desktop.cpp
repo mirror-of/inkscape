@@ -731,7 +731,7 @@ SPItem *SPDesktop::getGroupAtPoint(Geom::Point const &p) const
  */
 std::vector<SPItem *> SPDesktop::getVisibleItems(bool isFiltered) {
     std::vector<SPItem *> result;
-    for(auto item:getDocument()->getItemsPartiallyInBox(dkey, get_display_area(), true, true)) {
+    for(auto item:getDocument()->getItemsPartiallyInBox(dkey, get_display_area(), true, true, true)) {
         if(isFiltered && !item->isFiltered()) {
             continue;
         }
