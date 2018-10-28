@@ -128,7 +128,7 @@ private:
 
     /// Draws a specific rectangular part of the canvas.
     /// @return true if the rectangle painting succeeds.
-    bool paintRect(int xx0, int yy0, int xx1, int yy1);
+    bool paintRect(int xx0, int yy0, int xx1, int yy1, bool paint_as_one = false);
 
     /// Repaints the areas in the canvas that need it.
     /// @return true if all the dirty parts have been redrawn

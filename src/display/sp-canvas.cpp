@@ -25,6 +25,7 @@
 #include <gdkmm/display.h>
 #include <gdkmm/rectangle.h>
 #include <cairomm/region.h>
+#include <limits>
 
 #include "helper/sp-marshal.h"
 #include <2geom/rect.h>
@@ -1768,7 +1769,7 @@ The default for now is the strips mode.
 }
 
 
-bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
+bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1, bool paint_as_one)
 {
     GtkAllocation allocation;
     g_return_val_if_fail (!_need_update, false);
@@ -1808,8 +1809,9 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
-
-    if (_rendermode != Inkscape::RENDERMODE_OUTLINE) {
+    if (paint_as_one) {
+        setup.max_pixels = std::numeric_limits<int>::max(); // Geom::Infinity() dont work
+    } else if (_rendermode != Inkscape::RENDERMODE_OUTLINE) {
         // use 256K as a compromise to not slow down gradients
         // 256K is the cached buffer and we need 4 channels
         setup.max_pixels = 65536 * tile_multiplier; // 256K/4
@@ -1970,10 +1972,10 @@ int SPCanvas::paint()
                 Geom::IntRect render_rect = area.roundOutwards();
                 render_rect.setLeft(std::max(render_rect.left(),_x0));
                 render_rect.setTop(std::max(render_rect.top(),_y0));
-                render_rect.setRight(std::max(render_rect.right(), (allocation.width +_x0)));
-                render_rect.setBottom(std::max(render_rect.bottom(),(allocation.height +_y0)));
-                cairo_rectangle_int_t crect = {_x0, _y0, render_rect.width(), render_rect.height() };
-                cairo_region_union_rectangle(filtered_region, &crect);
+                render_rect.setRight(std::min(render_rect.right(), (allocation.width +_x0)));
+                render_rect.setBottom(std::min(render_rect.bottom(),(allocation.height +_y0)));
+                cairo_rectangle_int_t item_crect = {render_rect.left(), render_rect.top(), render_rect.width(), render_rect.height() };
+                cairo_region_union_rectangle(filtered_region, &item_crect);
             }
         }
     }
@@ -1989,25 +1991,22 @@ int SPCanvas::paint()
             return FALSE;
         };
     }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    unsigned tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
-    prefs->setInt("/options/rendering/tile-multiplier",512);
     n_rects = cairo_region_num_rectangles(filtered_region);
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(filtered_region, i, &crect);
-        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
+        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height, true)) {
             // Aborted
             cairo_region_destroy(filtered_region);
             return FALSE;
         };
     }
-    prefs->setInt("/options/rendering/tile-multiplier", tile_multiplier);
     // we've had a full unaborted redraw, reset the full redraw counter
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;
     }
 
+    cairo_region_destroy(filtered_region);
     cairo_region_destroy(to_draw);
 
     return TRUE;
