@@ -1658,6 +1658,49 @@ struct PaintRectSetup {
     Geom::Point mouse_loc;
 };
 
+bool SPCanvas::itemInsideTile(Geom::IntRect const &this_rect, Geom::IntRect const &item_bbox)
+{
+    int bw = this_rect.width();
+    int bh = this_rect.height();
+    if ((bw < 1) || (bh < 1))
+        return false;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    unsigned tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
+    gint max_pixels = 0;
+    if (_rendermode != Inkscape::RENDERMODE_OUTLINE) {
+        // use 256K as a compromise to not slow down gradients
+        // 256K is the cached buffer and we need 4 channels
+        max_pixels = 65536 * tile_multiplier; // 256K/4
+    } else {
+        // paths only, so 1M works faster
+        // 1M is the cached buffer and we need 4 channels
+        max_pixels = 262144;
+    }
+
+    if (bw * bh < max_pixels) {
+        return this_rect.contains(item_bbox);
+    }
+    Geom::IntRect lo, hi;
+    if (bw < bh || bh < 2 * TILE_SIZE) {
+        int mid = this_rect[Geom::X].middle();
+        // Make sure that mid lies on a tile boundary
+        mid = (mid / TILE_SIZE) * TILE_SIZE;
+
+        lo = Geom::IntRect(this_rect.left(), this_rect.top(), mid, this_rect.bottom());
+        hi = Geom::IntRect(mid, this_rect.top(), this_rect.right(), this_rect.bottom());
+        return itemInsideTile(hi, item_bbox) || itemInsideTile(lo, item_bbox);
+    } else {
+        int mid = this_rect[Geom::Y].middle();
+        // Make sure that mid lies on a tile boundary
+        mid = (mid / TILE_SIZE) * TILE_SIZE;
+
+        lo = Geom::IntRect(this_rect.left(), this_rect.top(), this_rect.right(), mid);
+        hi = Geom::IntRect(this_rect.left(), mid, this_rect.right(), this_rect.bottom());
+
+        return itemInsideTile(lo, item_bbox) || itemInsideTile(hi, item_bbox);
+    }
+}
+
 int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect)
 {
     GTimeVal now;
@@ -1968,14 +2011,31 @@ int SPCanvas::paint()
         for (auto item:items) {
             Geom::OptRect optarea = item->get_arenaitem(desktop->dkey)->visualBounds();
             if (optarea) {
-                Geom::Rect area = (*optarea)  * desktop->doc2dt();
+                Geom::Rect area = (*optarea) * desktop->doc2dt();
                 Geom::IntRect render_rect = area.roundOutwards();
                 render_rect.setLeft(std::max(render_rect.left(),_x0));
                 render_rect.setTop(std::max(render_rect.top(),_y0));
                 render_rect.setRight(std::min(render_rect.right(), (allocation.width +_x0)));
                 render_rect.setBottom(std::min(render_rect.bottom(),(allocation.height +_y0)));
                 cairo_rectangle_int_t item_crect = {render_rect.left(), render_rect.top(), render_rect.width(), render_rect.height() };
-                cairo_region_union_rectangle(filtered_region, &item_crect);
+                int n_rects = cairo_region_num_rectangles(to_draw);
+                for (int i = 0; i < n_rects; ++i) {
+                    cairo_rectangle_int_t crect;
+                    cairo_region_get_rectangle(to_draw, i, &crect);
+                    Geom::IntRect to_draw_rect = render_rect;
+                    to_draw_rect.setLeft(crect.x);
+                    to_draw_rect.setTop(crect.y);
+                    to_draw_rect.setRight(crect.x + crect.width);
+                    to_draw_rect.setBottom(crect.y + crect.height);
+                    // This optimice the rendering, rendering only appart
+                    // If a tile dont contain the whole
+                    // std::cout << itemInsideTile(to_draw_rect, render_rect) << std::endl;
+                    // std::cout << to_draw_rect << std::endl;
+                    // std::cout << render_rect << std::endl;
+                    if (!itemInsideTile(to_draw_rect, render_rect)) {    
+                        cairo_region_union_rectangle(filtered_region, &item_crect);
+                    };
+                } 
             }
         }
     }

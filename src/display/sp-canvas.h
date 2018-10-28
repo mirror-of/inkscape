@@ -118,6 +118,7 @@ private:
 
     void paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw);
 
+    bool itemInsideTile(Geom::IntRect const &this_rect, Geom::IntRect const &item_bbox);
     /**
      * Paint the given rect, recursively subdividing the region until it is the size of a single
      * buffer.
