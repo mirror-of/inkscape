@@ -1602,7 +1602,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     }
     // cairo_surface_write_to_png( imgs, "debug2.png" );
 
-     // Start of visible tile rendering
+     // Start of visible tile rendering comment for hide X tiles
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_OVER);
     cairo_set_source_rgb (buf.ct, 0, 0, 0);
     cairo_move_to (buf.ct, 0, 0);
@@ -1962,18 +1962,18 @@ int SPCanvas::paint()
     cairo_region_t *filtered_region = cairo_region_create();
     SPDesktop * desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
-        Geom::Rect box = Geom::Rect(_x0 , _y0, _x0 + allocation.width, _y0 + allocation.height) * desktop->dt2doc();
-        box *= Geom::Scale(desktop->current_zoom()).inverse();
-        std::vector<SPItem*> items = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, box, true, true);
+        std::vector<SPItem *> items = desktop->getVisibleItems(true);
         for (auto item:items) {
-            if (item->isFiltered()) {
-                Geom::OptRect optarea = item->get_arenaitem(desktop->dkey)->visualBounds();
-                if (optarea) {
-                    Geom::Rect area = (*optarea)  * desktop->doc2dt() ;
-                    Geom::IntRect render_rect = area.roundOutwards();
-                    cairo_rectangle_int_t crect = { render_rect.left(), render_rect.top(), render_rect.width(), render_rect.height() };
-                    cairo_region_union_rectangle(filtered_region, &crect);
-                }
+            Geom::OptRect optarea = item->get_arenaitem(desktop->dkey)->visualBounds();
+            if (optarea) {
+                Geom::Rect area = (*optarea)  * desktop->doc2dt();
+                Geom::IntRect render_rect = area.roundOutwards();
+                render_rect.setLeft(std::max(render_rect.left(),_x0));
+                render_rect.setTop(std::max(render_rect.top(),_y0));
+                render_rect.setRight(std::max(render_rect.right(), (allocation.width +_x0)));
+                render_rect.setBottom(std::max(render_rect.bottom(),(allocation.height +_y0)));
+                cairo_rectangle_int_t crect = {_x0, _y0, render_rect.width(), render_rect.height() };
+                cairo_region_union_rectangle(filtered_region, &crect);
             }
         }
     }
