@@ -287,7 +287,7 @@ public:
     int ensureUpToDate();
     bool addResource(char const *key, SPObject *object);
     bool removeResource(char const *key, SPObject *object);
-    std::vector<SPObject *> const getResourceList(char const *key) const;
+    std::vector<SPObject *> const getResourceList(char const *key);
     std::vector<SPItem*> getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive = false, bool into_groups = false, bool with_groups = false) const;
     std::vector<SPItem*> getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive = false, bool into_groups = false, bool with_groups = false) const;
     SPItem *getItemAtPoint(unsigned int key, Geom::Point const &p, bool into_groups, SPItem *upto = nullptr) const;
