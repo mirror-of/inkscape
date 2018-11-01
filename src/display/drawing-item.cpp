@@ -127,6 +127,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _visible(true)
     , _sensitive(true)
     , _cached(0)
+    , _cache_insensitive(0)
     , _cached_persistent(0)
     , _has_cache_iterator(0)
     , _propagate(0)
@@ -261,7 +262,7 @@ DrawingItem::clearChildren()
 
 /// Set the incremental transform for this item
 void
-DrawingItem::setTransform(Geom::Affine const &new_trans)
+DrawingItem::setTransform(Geom::Affine const &new_trans, bool markForUpdate)
 {
     Geom::Affine current;
     if (_transform) {
@@ -277,7 +278,9 @@ DrawingItem::setTransform(Geom::Affine const &new_trans)
         } else {
             _transform = new Geom::Affine(new_trans);
         }
-        _markForUpdate(STATE_ALL, true);
+        if (markForUpdate) {
+            _markForUpdate(STATE_ALL, true);
+        }
     }
 }
 
@@ -340,7 +343,7 @@ DrawingItem::setCached(bool cached, bool persistent)
 {
     static const char *cache_env = getenv("_INKSCAPE_DISABLE_CACHE");
     if (cache_env) return;
-
+    if (_cache_insensitive) return;
     if (_cached_persistent && !persistent)
         return;
 
@@ -680,7 +683,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 {
     bool outline = _drawing.outline();
     bool render_filters = _drawing.renderFilters();
-
+    std::cout << "111111111111111111" << std::endl;
     // stop_at is handled in DrawingGroup, but this check is required to handle the case
     // where a filtered item with background-accessing filter has enable-background: new
     if (this == stop_at) return RENDER_STOP;
@@ -688,7 +691,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // If we are invisible, return immediately
     if (!_visible) return RENDER_OK;
     if (_ctm.isSingular(1e-18)) return RENDER_OK;
-
+std::cout << "222222222222222222222222" << std::endl;
     // TODO convert outline rendering to a separate virtual function
     if (outline) {
         _renderOutline(dc, area, flags);
@@ -698,7 +701,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
     if (!carea) return RENDER_OK;
-
+std::cout << "13333333333333333333333" << std::endl;
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
@@ -718,9 +721,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         default: // should not happen
             g_assert_not_reached();
     }
-
+std::cout << render_filters << "ññññññññññññññññññññññññññ" << std::endl;
     // render from cache if possible
-    if (_cached) {
+    if (_cached && !_cache_insensitive) {
         if (_cache) {
             _cache->prepare();
             set_cairo_blend_operator( dc, _mix_blend_mode );
@@ -741,6 +744,8 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         // if our caching was turned off after the last update, it was already
         // deleted in setCached()
     }
+    _cache_insensitive = false;
+    std::cout << render_filters << "wwwwwwwwwwwwwwwwwwwwwwwww" << std::endl;
 
     // determine whether this shape needs intermediate rendering.
     bool needs_intermediate_rendering = false;

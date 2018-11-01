@@ -111,6 +111,7 @@ public:
     void setSensitive(bool v);
     bool cached() const { return _cached; }
     void setCached(bool c, bool persistent = false);
+    void setCacheInsensitive() { _cache_insensitive = true; }
 
     virtual void setStyle(SPStyle *style, SPStyle *context_style = nullptr);
     virtual void setChildrenStyle(SPStyle *context_style);
@@ -118,7 +119,7 @@ public:
     void setAntialiasing(unsigned a);
     void setIsolation(unsigned isolation); // CSS Compositing and Blending
     void setBlendMode(unsigned blend_mode);
-    void setTransform(Geom::Affine const &trans);
+    void setTransform(Geom::Affine const &trans, bool markForUpdate = true);
     void setClip(DrawingItem *item);
     void setMask(DrawingItem *item);
     void setFillPattern(DrawingPattern *pattern);
@@ -216,6 +217,7 @@ protected:
     unsigned _visible : 1;
     unsigned _sensitive : 1; ///< Whether this item responds to events
     unsigned _cached : 1; ///< Whether the rendering is stored for reuse
+    unsigned _cache_insensitive: 1; // If set cache is not changed for a temporary item change
     unsigned _cached_persistent : 1; ///< If set, will always be cached regardless of score
     unsigned _has_cache_iterator : 1; ///< If set, _cache_iterator is valid
     unsigned _propagate : 1; ///< Whether to call update for all children on next update

@@ -118,7 +118,6 @@ private:
 
     void paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw);
 
-    bool itemInsideTile(Geom::IntRect const &this_rect, Geom::IntRect const &item_bbox);
     /**
      * Paint the given rect, recursively subdividing the region until it is the size of a single
      * buffer.
@@ -189,12 +188,15 @@ public:
 #endif
     /// Area of the widget that has up-to-date content
     cairo_region_t *_clean_region;
+    /// Area of the widget that has filtered to render
+    cairo_region_t *_filtered_region;
     /// Widget background, defaults to white
     cairo_pattern_t *_background;
     bool _background_is_checkerboard;
 
     /// Last known modifier state, for deferred repick when a button is down.
     int _state;
+    bool _filtering;
 
     /** The item containing the mouse pointer, or NULL if none. */
     SPCanvasItem *_current_item;
