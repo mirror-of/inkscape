@@ -699,6 +699,10 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
     if (!carea) return RENDER_OK;
 
+    //if (!(_filter && render_filters)) {
+        //cachearea.intersectWith(carea);
+    //}
+    carea = _cacheRect();
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
@@ -719,25 +723,21 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             g_assert_not_reached();
     }
 
-    // render from cache if possible
-    Geom::IntRect _canvas_bbox = dc.targetLogicalBounds().roundOutwards();
-    std::cout << _canvas_bbox << std::endl;
     if (_cached) {
         if (_cache) {
-            _cache->prepare();
+            _cache->prepare(carea);
             set_cairo_blend_operator( dc, _mix_blend_mode );
             _cache->paintFromCache(dc, carea);
+            std::cout << "bbbbbbbbbbbbb" << std::endl;
             if (!carea) return RENDER_OK;
-        } else {
-            // There is no cache. This could be because caching of this item
-            // was just turned on after the last update phase, or because
-            // we were previously outside of the canvas.
-            Geom::OptIntRect cl = _drawing.cacheLimit();
-            cl.intersectWith(_drawbox);
-            if (cl) {
-                _cache = new DrawingCache(*cl, device_scale);
-            }
+            std::cout << "aaaaaaaaaaaaaaaaa" << std::endl;
+            delete _cache;
+            _cache = nullptr;
         }
+        // There is no cache. This could be because caching of this item
+        // was just turned on after the last update phase, or because
+        // we were previously outside of the canvas.
+        _cache = new DrawingCache(*carea, device_scale);
     } else {
         // if our caching was turned off after the last update, it was already
         // deleted in setCached()
@@ -858,20 +858,12 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // 6. Paint the completed rendering onto the base context (or into cache)
     if (_cached && _cache) {
-        Geom::OptIntRect cl = _drawing.cacheLimit();
-        if (_filter && render_filters) {
-            cl.intersectWith(_drawbox);
-        } else {
-            cl.intersects(*carea);
-        }
-        if (cl) {
-            DrawingContext cachect(*_cache);
-            cachect.rectangle(*cl);
-            cachect.setOperator(CAIRO_OPERATOR_SOURCE);
-            cachect.setSource(&intermediate);
-            cachect.fill();
-            _cache->markClean(*cl);
-        }
+        DrawingContext cachect(*_cache);
+        cachect.rectangle(*carea);
+        cachect.setOperator(CAIRO_OPERATOR_SOURCE);
+        cachect.setSource(&intermediate);
+        cachect.fill();
+        _cache->markClean(*carea);
     }
     dc.rectangle(*carea);
     dc.setSource(&intermediate);

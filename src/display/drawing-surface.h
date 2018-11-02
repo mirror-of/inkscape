@@ -70,7 +70,7 @@ public:
     void markDirty(Geom::IntRect const &area = Geom::IntRect::infinite());
     void markClean(Geom::IntRect const &area = Geom::IntRect::infinite());
     void scheduleTransform(Geom::IntRect const &new_area, Geom::Affine const &trans);
-    void prepare();
+    void prepare(Geom::OptIntRect cachearea = Geom::OptIntRect());
     void paintFromCache(DrawingContext &dc, Geom::OptIntRect &area);
 
 protected:

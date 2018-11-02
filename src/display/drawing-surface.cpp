@@ -235,7 +235,7 @@ DrawingCache::scheduleTransform(Geom::IntRect const &new_area, Geom::Affine cons
 /// Transforms the cache according to the transform specified during the update phase.
 /// Call this during render phase, before painting.
 void
-DrawingCache::prepare()
+DrawingCache::prepare(Geom::OptIntRect cachearea)
 {
     Geom::IntRect old_area = pixelArea();
     bool is_identity = _pending_transform.isIdentity();
@@ -265,21 +265,28 @@ DrawingCache::prepare()
     _surface = nullptr;
     _pixels = _pending_area.dimensions();
     _origin = _pending_area.min();
-
+    Geom::IntRect expanded = _pending_area;
+    Geom::IntPoint expansion(_pending_area.width()/2, _pending_area.height()/2);
+    expanded.expandBy(expansion);
     if (is_integer_translation) {
-        // transform the cache only for integer translations and identities
-        cairo_t *ct = createRawContext();
-        if (!is_identity) {
-            ink_cairo_transform(ct, _pending_transform);
-        }
-        cairo_set_source_surface(ct, old_surface, old_origin[X], old_origin[Y]);
-        cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
-        cairo_pattern_set_filter(cairo_get_source(ct), CAIRO_FILTER_NEAREST);
-        cairo_paint(ct);
-        cairo_destroy(ct);
+        if (expanded.contains(cachearea) && 1 > 2) {
+            cairo_rectangle_int_t cache_t = _convertRect(*cachearea);
+            cairo_region_subtract_rectangle(_clean_region, &cache_t);
+        } else {
+            // transform the cache only for integer translations and identities
+            cairo_t *ct = createRawContext();
+            if (!is_identity) {
+                ink_cairo_transform(ct, _pending_transform);
+            }
+            cairo_set_source_surface(ct, old_surface, old_origin[X], old_origin[Y]);
+            cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
+            cairo_pattern_set_filter(cairo_get_source(ct), CAIRO_FILTER_NEAREST);
+            cairo_paint(ct);
+            cairo_destroy(ct);
 
-        cairo_rectangle_int_t limit = _convertRect(_pending_area);
-        cairo_region_intersect_rectangle(_clean_region, &limit);
+            cairo_rectangle_int_t limit = _convertRect(_pending_area);
+            cairo_region_intersect_rectangle(_clean_region, &limit);
+        }
     } else {
         // dirty everything
         cairo_region_destroy(_clean_region);
@@ -308,6 +315,9 @@ DrawingCache::paintFromCache(DrawingContext &dc, Geom::OptIntRect &area)
     cairo_rectangle_int_t area_c = _convertRect(*area);
     cairo_region_t *dirty_region = cairo_region_create_rectangle(&area_c);
     cairo_region_t *cache_region = cairo_region_copy(dirty_region);
+    cairo_region_subtract(dirty_region, _clean_region);
+
+
     cairo_region_subtract(dirty_region, _clean_region);
 
     if (cairo_region_is_empty(dirty_region)) {
