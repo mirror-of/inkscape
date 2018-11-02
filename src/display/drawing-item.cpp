@@ -135,7 +135,6 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _antialias(2)
     , _isolation(SP_CSS_ISOLATION_AUTO)
     , _mix_blend_mode(SP_CSS_BLEND_NORMAL)
-    , _canvas_bbox(Geom::IntRect::infinite())
 {}
 
 DrawingItem::~DrawingItem()
@@ -721,7 +720,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     }
 
     // render from cache if possible
-    _canvas_bbox = dc.targetLogicalBounds().roundOutwards();
+    Geom::IntRect _canvas_bbox = dc.targetLogicalBounds().roundOutwards();
     if (_cached) {
         if (_cache) {
             _cache->prepare();
@@ -858,6 +857,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // 6. Paint the completed rendering onto the base context (or into cache)
     if (_cached && _cache) {
         Geom::OptIntRect cl = _cacheRect();
+        if (_filter && render_filters) {
+            cl.intersects(_canvas_bbox);
+        } else {
+            cl.intersects(*carea);
+        }
         if (cl) {
             DrawingContext cachect(*_cache);
             cachect.rectangle(*cl);
@@ -1158,7 +1162,7 @@ DrawingItem::_cacheScore()
 Geom::OptIntRect
 DrawingItem::_cacheRect()
 {
-    Geom::OptIntRect r = _drawbox & _canvas_bbox & _drawing.cacheLimit();
+    Geom::OptIntRect r = _drawbox & _drawing.cacheLimit();
     return r;
 }
 

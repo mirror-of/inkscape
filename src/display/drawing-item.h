@@ -193,7 +193,6 @@ protected:
     Geom::Affine _ctm; ///< Total transform from item coords to display coords
     Geom::OptIntRect _bbox; ///< Bounding box in display (pixel) coords including stroke
     Geom::OptIntRect _drawbox; ///< Full visual bounding box - enlarged by filters, shrunk by clips and masks
-    Geom::IntRect _canvas_bbox; ///< Canvas bounding box
     Geom::OptRect _item_bbox; ///< Geometric bounding box in item's user space.
                               ///  This is used to compute the filter effect region and render in
                               ///  objectBoundingBox units.
