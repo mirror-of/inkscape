@@ -240,6 +240,7 @@ DrawingCache::prepare()
     Geom::IntRect old_area = pixelArea();
     bool is_identity = _pending_transform.isIdentity();
     if (is_identity && _pending_area == old_area) return; // no change
+
     bool is_integer_translation = is_identity;
     if (!is_identity && _pending_transform.isTranslation()) {
         Geom::IntPoint t = _pending_transform.translation().round();
@@ -265,7 +266,9 @@ DrawingCache::prepare()
     _surface = nullptr;
     _pixels = _pending_area.dimensions();
     _origin = _pending_area.min();
+
     if (is_integer_translation) {
+        // transform the cache only for integer translations and identities
         cairo_t *ct = createRawContext();
         if (!is_identity) {
             ink_cairo_transform(ct, _pending_transform);

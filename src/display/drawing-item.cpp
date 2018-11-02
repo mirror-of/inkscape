@@ -627,7 +627,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
             Geom::OptIntRect cl = _cacheRect();
             if (_visible && cl) { // never create cache for invisible items
                 // this takes care of invalidation on transform
-                _cache->scheduleTransform(*_drawbox, ctm_change);
+                _cache->scheduleTransform(*cl, ctm_change);
             } else {
                 // Destroy cache for this item - outside of canvas or invisible.
                 // The opposite transition (invisible -> visible or object
@@ -699,10 +699,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
     if (!carea) return RENDER_OK;
 
-    //if (!(_filter && render_filters)) {
-        //cachearea.intersectWith(carea);
-    //}
-    carea = _cacheRect();
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
@@ -723,21 +719,24 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             g_assert_not_reached();
     }
 
+    // render from cache if possible
     if (_cached) {
         if (_cache) {
-            _cache->prepare(carea);
+            _cache->prepare();
             set_cairo_blend_operator( dc, _mix_blend_mode );
+
             _cache->paintFromCache(dc, carea);
-            std::cout << "bbbbbbbbbbbbb" << std::endl;
             if (!carea) return RENDER_OK;
-            std::cout << "aaaaaaaaaaaaaaaaa" << std::endl;
-            delete _cache;
-            _cache = nullptr;
+        } else {
+            // There is no cache. This could be because caching of this item
+            // was just turned on after the last update phase, or because
+            // we were previously outside of the canvas.
+            Geom::OptIntRect cl = _drawing.cacheLimit();
+            cl.intersectWith(_drawbox);
+            if (cl) {
+                _cache = new DrawingCache(*cl, device_scale);
+            }
         }
-        // There is no cache. This could be because caching of this item
-        // was just turned on after the last update phase, or because
-        // we were previously outside of the canvas.
-        _cache = new DrawingCache(*carea, device_scale);
     } else {
         // if our caching was turned off after the last update, it was already
         // deleted in setCached()
