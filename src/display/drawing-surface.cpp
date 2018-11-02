@@ -305,7 +305,7 @@ DrawingCache::paintFromCache(DrawingContext &dc, Geom::OptIntRect &area)
     // by the item.
     // Then we subtract the area that needs to be repainted from the
     // original area and paint the resulting region from cache.
-    cairo_rectangle_int_t area_c = _convertRect(pixelArea());
+    cairo_rectangle_int_t area_c = _convertRect(*area);
     cairo_region_t *dirty_region = cairo_region_create_rectangle(&area_c);
     cairo_region_t *cache_region = cairo_region_copy(dirty_region);
     cairo_region_subtract(dirty_region, _clean_region);

@@ -731,7 +731,8 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
             // we were previously outside of the canvas.
-            Geom::OptIntRect cl = _cacheRect();
+            Geom::OptIntRect cl = _drawing.cacheLimit();
+            cl.intersectWith(_drawbox);
             if (cl) {
                 _cache = new DrawingCache(*cl, device_scale);
             }
@@ -856,9 +857,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // 6. Paint the completed rendering onto the base context (or into cache)
     if (_cached && _cache) {
-        Geom::OptIntRect cl = _cacheRect();
+        Geom::OptIntRect cl = _drawing.cacheLimit();
         if (_filter && render_filters) {
-            cl.intersects(_canvas_bbox);
+            cl.intersectWith(_drawbox);
         } else {
             cl.intersects(*carea);
         }
