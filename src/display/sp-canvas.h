@@ -128,7 +128,7 @@ private:
 
     /// Draws a specific rectangular part of the canvas.
     /// @return true if the rectangle painting succeeds.
-    bool paintRect(int xx0, int yy0, int xx1, int yy1, bool paint_as_one = false);
+    bool paintRect(int xx0, int yy0, int xx1, int yy1);
 
     /// Repaints the areas in the canvas that need it.
     /// @return true if all the dirty parts have been redrawn
@@ -188,15 +188,12 @@ public:
 #endif
     /// Area of the widget that has up-to-date content
     cairo_region_t *_clean_region;
-    /// Area of the widget that has filtered to render
-    cairo_region_t *_filtered_region;
     /// Widget background, defaults to white
     cairo_pattern_t *_background;
     bool _background_is_checkerboard;
 
     /// Last known modifier state, for deferred repick when a button is down.
     int _state;
-    bool _filtering;
 
     /** The item containing the mouse pointer, or NULL if none. */
     SPCanvasItem *_current_item;

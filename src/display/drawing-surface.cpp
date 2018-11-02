@@ -240,7 +240,6 @@ DrawingCache::prepare()
     Geom::IntRect old_area = pixelArea();
     bool is_identity = _pending_transform.isIdentity();
     if (is_identity && _pending_area == old_area) return; // no change
-
     bool is_integer_translation = is_identity;
     if (!is_identity && _pending_transform.isTranslation()) {
         Geom::IntPoint t = _pending_transform.translation().round();
@@ -306,7 +305,7 @@ DrawingCache::paintFromCache(DrawingContext &dc, Geom::OptIntRect &area)
     // by the item.
     // Then we subtract the area that needs to be repainted from the
     // original area and paint the resulting region from cache.
-    cairo_rectangle_int_t area_c = _convertRect(*area);
+    cairo_rectangle_int_t area_c = _convertRect(pixelArea());
     cairo_region_t *dirty_region = cairo_region_create_rectangle(&area_c);
     cairo_region_t *cache_region = cairo_region_copy(dirty_region);
     cairo_region_subtract(dirty_region, _clean_region);

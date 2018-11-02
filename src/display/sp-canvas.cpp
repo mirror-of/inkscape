@@ -25,19 +25,14 @@
 #include <gdkmm/display.h>
 #include <gdkmm/rectangle.h>
 #include <cairomm/region.h>
-#include <limits>
 
 #include "helper/sp-marshal.h"
 #include <2geom/rect.h>
 #include <2geom/affine.h>
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
-#include "display/drawing-item.h"
-#include "display/canvas-arena.h"
 #include "display/rendermode.h"
-#include "display/drawing-item.h"
 #include "display/cairo-utils.h"
-#include "object/sp-root.h"
 #include "preferences.h"
 #include "inkscape.h"
 #include "sodipodi-ctrlrect.h"
@@ -54,7 +49,7 @@ using Inkscape::Debug::GdkEventLatencyTracker;
 
 // gtk_check_version returns non-NULL on failure
 static bool const HAS_BROKEN_MOTION_HINTS =
-  TRUE || gtk_check_version(2, 12, 0) != nullptr;
+  true || gtk_check_version(2, 12, 0) != nullptr;
 
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
@@ -195,7 +190,7 @@ static guint       object_signals[LAST_SIGNAL] = { 0 };
 void sp_canvas_item_construct(SPCanvasItem *item, SPCanvasGroup *parent, gchar const *first_arg_name, va_list args);
 
 /**
- * Helper that returns TRUE iff item is descendant of parent.
+ * Helper that returns true iff item is descendant of parent.
  */
 bool is_descendant(SPCanvasItem const *item, SPCanvasItem const *parent);
 
@@ -245,8 +240,8 @@ sp_canvas_item_init(SPCanvasItem *item)
     // that should be initially invisible; examples of such items: node handles, the CtrlRect
     // used for rubberbanding, path outline, etc.
     item->visible = TRUE;
-    item->in_destruction = FALSE;
-    item->pickable = TRUE;
+    item->in_destruction = false;
+    item->pickable = true;
 }
 
 SPCanvasItem *sp_canvas_item_new(SPCanvasGroup *parent, GType type, gchar const *first_arg_name, ...)
@@ -320,7 +315,7 @@ void sp_canvas_item_dispose(GObject *object)
      */
     if (!item->in_destruction)
     {
-      item->in_destruction=TRUE;
+      item->in_destruction=true;
 
       // Hack: if this is a ctrlrect, move it to 0,0;
       // this redraws only the stroke of the rect to be deleted,
@@ -357,7 +352,7 @@ void sp_canvas_item_dispose(GObject *object)
       }
 
       g_signal_emit (object, object_signals[DESTROY], 0);
-      item->in_destruction = FALSE;
+      item->in_destruction = false;
     }
 
     G_OBJECT_CLASS(sp_canvas_item_parent_class)->dispose(object);
@@ -708,12 +703,12 @@ bool is_descendant(SPCanvasItem const *item, SPCanvasItem const *parent)
 {
     while (item) {
         if (item == parent) {
-            return TRUE;
+            return true;
         }
         item = item->parent;
     }
 
-    return FALSE;
+    return false;
 }
 
 } // namespace
@@ -969,25 +964,23 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_need_repick = TRUE;
 
     // See comment at in sp-canvas.h.
-    canvas->_gen_all_enter_events = FALSE;
+    canvas->_gen_all_enter_events = false;
 
-    canvas->_drawing_disabled = FALSE;
+    canvas->_drawing_disabled = false;
 
     canvas->_backing_store = nullptr;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     canvas->_surface_for_similar = nullptr;
 #endif
     canvas->_clean_region = cairo_region_create();
-    canvas->_filtered_region = cairo_region_create();
     canvas->_background = cairo_pattern_create_rgb(1, 1, 1);
-    canvas->_background_is_checkerboard = FALSE;
-    canvas->_filtering = FALSE;
+    canvas->_background_is_checkerboard = false;
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    canvas->_enable_cms_display_adj = FALSE;
+    canvas->_enable_cms_display_adj = false;
     new (&canvas->_cms_key) Glib::ustring("");
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 }
@@ -1025,10 +1018,6 @@ void SPCanvas::dispose(GObject *object)
     if (canvas->_clean_region) {
         cairo_region_destroy(canvas->_clean_region);
         canvas->_clean_region = nullptr;
-    }
-    if (canvas->_filtered_region) {
-        cairo_region_destroy(canvas->_filtered_region);
-        canvas->_filtered_region = nullptr;
     }
     if (canvas->_background) {
         cairo_pattern_destroy(canvas->_background);
@@ -1100,7 +1089,7 @@ void SPCanvas::handle_realize(GtkWidget *widget)
     gdk_window_set_user_data (window, widget);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/options/useextinput/value", TRUE)) {
+    if (prefs->getBool("/options/useextinput/value", true)) {
         gtk_widget_set_events(widget, attributes.event_mask);
     }
 
@@ -1270,9 +1259,9 @@ int SPCanvas::emitEvent(GdkEvent *event)
     }
     // Block Undo and Redo while we drag /anything/
     if(event->type == GDK_BUTTON_PRESS && event->button.button == 1)
-        _is_dragging = TRUE;
+        _is_dragging = true;
     else if(event->type == GDK_BUTTON_RELEASE)
-        _is_dragging = FALSE;
+        _is_dragging = false;
 
     // Choose where we send the event
 
@@ -1322,7 +1311,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
 
     int retval = FALSE;
 
-    if (_gen_all_enter_events == FALSE) {
+    if (_gen_all_enter_events == false) {
         // If a button is down, we'll perform enter and leave events on the
         // current item, but not enter on any other item.  This is more or
         // less like X pointer grabbing for canvas items.
@@ -1420,7 +1409,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
         _in_repick = FALSE;
     }
 
-    if (_gen_all_enter_events == FALSE) {
+    if (_gen_all_enter_events == false) {
         // new_current_item may have been set to NULL during the call to
         // emitEvent() above
         if ((_new_current_item != _current_item) && button_down) {
@@ -1555,13 +1544,14 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     // initialized.
     if (_backing_store == nullptr)
         return;
+
     SPCanvasBuf buf;
     buf.buf = nullptr;
     buf.buf_rowstride = 0;
     buf.rect = paint_rect;
     buf.canvas_rect = canvas_rect;
     buf.device_scale = _device_scale;
-    buf.is_empty = TRUE;
+    buf.is_empty = true;
 
     // Make sure the following code does not go outside of _backing_store's data
     // FIXME for device_scale.
@@ -1570,6 +1560,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     assert(paint_rect.top() - _y0 >= 0);
     assert(paint_rect.right() - _x0 <= cairo_image_surface_get_width(_backing_store));
     assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
+
     // Create a temporary surface that draws directly to _backing_store
     cairo_surface_flush(_backing_store);
     // cairo_surface_write_to_png( _backing_store, "debug0.png" );
@@ -1582,6 +1573,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_surface_get_device_scale(_backing_store, &x_scale, &y_scale);
     assert (_device_scale == (int)x_scale);
     assert (_device_scale == (int)y_scale);
+
     // Move to the right row
     data += stride * (paint_rect.top() - _y0) * (int)y_scale;
     // Move to the right pixel inside of that row
@@ -1600,15 +1592,15 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_set_source(buf.ct, _background);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
-
     cairo_restore(buf.ct);
     // cairo_surface_write_to_png( imgs, "debug1.png" );
 
-    if (_root->visible) { 
+    if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
     // cairo_surface_write_to_png( imgs, "debug2.png" );
-     // Start of visible tile rendering comment for hide X tiles
+
+    // Start of visible tile rendering comment for hide X tiles
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_OVER);
     cairo_set_source_rgb (buf.ct, 0, 0, 0);
     cairo_move_to (buf.ct, 0, 0);
@@ -1618,7 +1610,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_set_line_width (buf.ct, 1);
     cairo_stroke (buf.ct);
     // End
-    
+
     // output to X
     cairo_destroy(buf.ct);
 
@@ -1651,6 +1643,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
+
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
         paint_rect.width(), paint_rect.height());
 }
@@ -1692,7 +1685,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
                 _forced_redraw_count++;
             }
 
-            return FALSE;
+            return false;
         }
     }
 
@@ -1714,7 +1707,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
         GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(setup->canvas));
         gdk_window_begin_paint_rect(window, &r);
         */
-        std::cout << "<zzzzzzzzzzzzzzzzzzz" << std::endl;
+
         paintSingleBuffer(this_rect, setup->canvas_rect, bw);
         //gdk_window_end_paint(window);
         return 1;
@@ -1773,10 +1766,10 @@ The default for now is the strips mode.
 }
 
 
-bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1, bool paint_as_one)
+bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 {
     GtkAllocation allocation;
-    g_return_val_if_fail (!_need_update, FALSE);
+    g_return_val_if_fail (!_need_update, false);
 
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
 
@@ -1786,7 +1779,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1, bool paint_as_one)
     Geom::IntRect paint_rect(xx0, yy0, xx1, yy1);
 
     Geom::OptIntRect area = paint_rect & canvas_rect;
-    if (!area || area->hasZeroArea()) return FALSE;
+    if (!area || area->hasZeroArea()) return false;
     paint_rect = *area;
 
     PaintRectSetup setup;
@@ -1813,9 +1806,8 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1, bool paint_as_one)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
-    if (paint_as_one) {
-        setup.max_pixels = std::numeric_limits<int>::max(); // Geom::Infinity() dont work
-    } else if (_rendermode != Inkscape::RENDERMODE_OUTLINE) {
+
+    if (_rendermode != Inkscape::RENDERMODE_OUTLINE) {
         // use 256K as a compromise to not slow down gradients
         // 256K is the cached buffer and we need 4 channels
         setup.max_pixels = 65536 * tile_multiplier; // 256K/4
@@ -1956,91 +1948,33 @@ gint SPCanvas::handle_focus_out(GtkWidget *widget, GdkEventFocus *event)
 
 int SPCanvas::paint()
 {
-    bool need_update = _need_update;
     if (_need_update) {
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);
         _need_update = FALSE;
     }
+
     GtkAllocation allocation;
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
     cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
     cairo_region_t *to_draw = cairo_region_create_rectangle(&crect);
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::DrawingItem *rootarena;
-    size_t nitems = 0;
-    if (desktop) {
-        rootarena =  desktop->getDocument()->getRoot()->get_arenaitem(desktop->dkey);
-        if (!_filtering && _rendermode == Inkscape::RENDERMODE_NORMAL) {
-            std::vector<SPItem *> items = desktop->getVisibleItems(TRUE);
-            nitems = items.size();
-            for (auto item:items) {
-                Inkscape::DrawingItem *ditem = item->get_arenaitem(desktop->dkey);
-                //ditem->setCacheInsensitive(); //toggle back on render
-                Geom::OptRect optarea = ditem->visualBounds();
-                if (optarea) {
-                    Geom::Rect area = (*optarea) * desktop->doc2dt();
-                    Geom::IntRect render_rect = area.roundOutwards();
-                    render_rect.setLeft(std::max(render_rect.left(),_x0));
-                    render_rect.setTop(std::max(render_rect.top(),_y0));
-                    render_rect.setRight(std::min(render_rect.right(), (allocation.width +_x0)));
-                    render_rect.setBottom(std::min(render_rect.bottom(),(allocation.height +_y0)));
-                    cairo_rectangle_int_t crect = {render_rect.left(), render_rect.top(), render_rect.width(), render_rect.height() };
-                    std::cout << _filtering << "---" << 1 << "---" << crect.x << "---" << crect.y << "---" << crect.width <<  "---" << crect.height << std::endl;
-                    cairo_region_union_rectangle(_filtered_region, &crect);
-                }
-            }
-            if (nitems) {
-                cairo_region_subtract(_filtered_region, _clean_region);
-                desktop->_display_mode = Inkscape::RENDERMODE_NO_FILTERS;
-                rootarena->drawing().setRenderMode(desktop->_display_mode);
-                _rendermode = desktop->_display_mode;
-            }
-        }
-    }
     cairo_region_subtract(to_draw, _clean_region);
+
     int n_rects = cairo_region_num_rectangles(to_draw);
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(to_draw, i, &crect);
-        std::cout << _filtering << "---" << 2 << "---" <<  crect.x << "---" << crect.y << "---" << crect.width <<  "---" << crect.height << std::endl;
-        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height, _filtering)) {
+        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
             cairo_region_destroy(to_draw);
-            if (nitems) {
-                desktop->_display_mode = Inkscape::RENDERMODE_NORMAL;
-                rootarena->drawing().setRenderMode(desktop->_display_mode);
-                _rendermode = desktop->_display_mode;
-                nitems = 0;
-            }
-            _filtering = FALSE;
             return FALSE;
         };
     }
 
-    if (nitems) {
-        std::cout << _filtering << "wwwwwwwwwwwwwwwww" << std::endl;
-        _filtering = TRUE;
-        /* for (auto item:items) {
-            sp_canvas_item_request_update(SP_CANVAS_ITEM(this));
-        } */
-        //_need_update = need_update?TRUE:FALSE;
-        desktop->_display_mode = Inkscape::RENDERMODE_NORMAL;
-        rootarena->drawing().setRenderMode(desktop->_display_mode);
-        _rendermode = desktop->_display_mode;
-        
-        cairo_region_subtract(_clean_region, _filtered_region);
-        if(!paint()) {
-            return FALSE;
-        }
-        cairo_region_subtract(_filtered_region, _filtered_region);
-        //_need_update = FALSE;
-        _filtering = FALSE;
-    } else {
-        // we've had a full unaborted redraw, reset the full redraw counter
+    // we've had a full unaborted redraw, reset the full redraw counter
+    if (_forced_redraw_limit != -1) {
+        _forced_redraw_count = 0;
     }
-        if (_forced_redraw_limit != -1) {
-            _forced_redraw_count = 0;
-        }
+
     cairo_region_destroy(to_draw);
 
     return TRUE;
@@ -2092,7 +2026,6 @@ void SPCanvas::addIdle()
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
     }
 }
-
 void SPCanvas::removeIdle()
 {
     if (_idle_id) {
@@ -2244,7 +2177,7 @@ void SPCanvas::setBackgroundColor(guint32 rgba) {
         cairo_pattern_destroy(_background);
     }
     _background = cairo_pattern_create_rgb(new_r, new_g, new_b);
-    _background_is_checkerboard = FALSE;
+    _background_is_checkerboard = false;
     dirtyAll();
     addIdle();
 }
@@ -2255,7 +2188,7 @@ void SPCanvas::setBackgroundCheckerboard() {
         cairo_pattern_destroy(_background);
     }
     _background = ink_cairo_pattern_create_checkerboard();
-    _background_is_checkerboard = TRUE;
+    _background_is_checkerboard = true;
     dirtyAll();
     addIdle();
 }
@@ -2307,7 +2240,7 @@ Geom::Point sp_canvas_world_to_window(SPCanvas const *canvas, Geom::Point const 
 }
 
 /**
- * Returns TRUE if point given in world coordinates is inside window.
+ * Returns true if point given in world coordinates is inside window.
  */
 bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, Geom::Point const &world)
 {
@@ -2369,10 +2302,6 @@ void SPCanvas::dirtyAll() {
     if (_clean_region && !cairo_region_is_empty(_clean_region)) {
         cairo_region_destroy(_clean_region);
         _clean_region = cairo_region_create();
-    }
-    if (_filtered_region && !cairo_region_is_empty(_filtered_region)) {
-        cairo_region_destroy(_filtered_region);
-        _filtered_region = cairo_region_create();
     }
 }
 
