@@ -135,6 +135,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _antialias(2)
     , _isolation(SP_CSS_ISOLATION_AUTO)
     , _mix_blend_mode(SP_CSS_BLEND_NORMAL)
+    , _canvas_bbox(Geom::IntRect::infinite())
 {}
 
 DrawingItem::~DrawingItem()
@@ -720,26 +721,21 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     }
 
     // render from cache if possible
-    Geom::IntRect canvas_bbox = dc.targetLogicalBounds().roundOutwards();
+    _canvas_bbox = dc.targetLogicalBounds().roundOutwards();
     if (_cached) {
         if (_cache) {
             _cache->prepare();
             set_cairo_blend_operator( dc, _mix_blend_mode );
             _cache->paintFromCache(dc, carea);
-            if (!carea) {
-                return RENDER_OK;
+            if (!carea) return RENDER_OK;
+        } else {
+            // There is no cache. This could be because caching of this item
+            // was just turned on after the last update phase, or because
+            // we were previously outside of the canvas.
+            Geom::OptIntRect cl = _cacheRect();
+            if (cl) {
+                _cache = new DrawingCache(*cl, device_scale);
             }
-            delete _cache;
-            _cache = nullptr;
-        }
-        // There is no cache. This could be because caching of this item
-        // was just turned on after the last update phase, or because
-        // we were previously outside of the canvas.
-        Geom::OptIntRect cl = _drawing.cacheLimit();
-        cl.intersectWith(_drawbox);
-        cl.intersectWith(canvas_bbox);
-        if (cl) {
-            _cache = new DrawingCache(*cl, device_scale);
         }
     } else {
         // if our caching was turned off after the last update, it was already
@@ -861,9 +857,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // 6. Paint the completed rendering onto the base context (or into cache)
     if (_cached && _cache) {
-        Geom::OptIntRect cl = _drawing.cacheLimit();
-        cl.intersectWith(_drawbox);
-        cl.intersectWith(canvas_bbox);
+        Geom::OptIntRect cl = _cacheRect();
         if (cl) {
             DrawingContext cachect(*_cache);
             cachect.rectangle(*cl);
@@ -1164,7 +1158,7 @@ DrawingItem::_cacheScore()
 Geom::OptIntRect
 DrawingItem::_cacheRect()
 {
-    Geom::OptIntRect r = _drawbox & _drawing.cacheLimit();
+    Geom::OptIntRect r = _drawbox & _canvas_bbox & _drawing.cacheLimit();
     return r;
 }
 
