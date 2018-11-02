@@ -737,11 +737,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         // we were previously outside of the canvas.
         Geom::OptIntRect cl = _drawing.cacheLimit();
         cl.intersectWith(_drawbox);
-        if (_filter && render_filters) {
-            cl.intersectWith(canvas_bbox);
-        } else {
-            cl.intersectWith(carea);
-        }
+        cl.intersectWith(canvas_bbox);
         if (cl) {
             _cache = new DrawingCache(*cl, device_scale);
         }
@@ -867,11 +863,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     if (_cached && _cache) {
         Geom::OptIntRect cl = _drawing.cacheLimit();
         cl.intersectWith(_drawbox);
-        if (_filter && render_filters) {
-            cl.intersectWith(canvas_bbox);
-        } else {
-            cl.intersectWith(carea);
-        }
+        cl.intersectWith(canvas_bbox);
         if (cl) {
             DrawingContext cachect(*_cache);
             cachect.rectangle(*cl);
