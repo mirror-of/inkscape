@@ -627,7 +627,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
             Geom::OptIntRect cl = _cacheRect();
             if (_visible && cl) { // never create cache for invisible items
                 // this takes care of invalidation on transform
-                _cache->scheduleTransform(*cl, ctm_change);
+                _cache->scheduleTransform(*_drawbox, ctm_change);
             } else {
                 // Destroy cache for this item - outside of canvas or invisible.
                 // The opposite transition (invisible -> visible or object
