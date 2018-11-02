@@ -721,6 +721,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // render from cache if possible
     Geom::IntRect _canvas_bbox = dc.targetLogicalBounds().roundOutwards();
+    std::cout << _canvas_bbox << std::endl;
     if (_cached) {
         if (_cache) {
             _cache->prepare();
