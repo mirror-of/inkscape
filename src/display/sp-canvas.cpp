@@ -1610,7 +1610,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_set_line_width (buf.ct, 1);
     cairo_stroke (buf.ct);
     // End
-
+    
     // output to X
     cairo_destroy(buf.ct);
 

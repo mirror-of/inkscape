@@ -847,11 +847,7 @@ void MeasureTool::toMarkDimension()
     totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
     double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
     gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
-    double textangle = Geom::rad_from_deg(180) - ray.angle();
-    if (desktop->is_yaxisdown()) {
-        textangle = ray.angle() - Geom::rad_from_deg(180);
-    }
-    setLabelText(totallength_str, middle, fontsize, textangle, color);
+    setLabelText(totallength_str, middle, fontsize, Geom::rad_from_deg(180) - ray.angle(), color);
     g_free(totallength_str);
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global measure line"));
@@ -1300,7 +1296,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     std::vector<SPItem*> items;
     SPDocument *doc = desktop->getDocument();
     Geom::Rect rect(start_p, end_p);
-    items = doc->getItemsPartiallyInBox(desktop->dkey, rect, false, false, true, true);
+    items = doc->getItemsPartiallyInBox(desktop->dkey, rect, false, true);
     Inkscape::LayerModel *layer_model = nullptr;
     SPObject *current_layer = nullptr;
     if(desktop){
