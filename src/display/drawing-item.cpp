@@ -704,6 +704,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     if (_filter && render_filters) {
         carea = cl;
     }
+
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
@@ -729,6 +730,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         if (_cache) {
             _cache->prepare();
             set_cairo_blend_operator( dc, _mix_blend_mode );
+
             _cache->paintFromCache(dc, carea);
             if (!carea) return RENDER_OK;
         } else {
