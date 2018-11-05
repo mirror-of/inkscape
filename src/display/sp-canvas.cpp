@@ -1600,17 +1600,6 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     }
     // cairo_surface_write_to_png( imgs, "debug2.png" );
 
-    // Start of visible tile rendering comment for hide X tiles
-    cairo_set_operator(buf.ct, CAIRO_OPERATOR_OVER);
-    cairo_set_source_rgb (buf.ct, 0, 0, 0);
-    cairo_move_to (buf.ct, 0, 0);
-    cairo_line_to (buf.ct, paint_rect.width()  * _device_scale, paint_rect.height() * _device_scale);
-    cairo_move_to (buf.ct, paint_rect.width()  * _device_scale, 0);
-    cairo_line_to (buf.ct, 0, paint_rect.height() * _device_scale);
-    cairo_set_line_width (buf.ct, 1);
-    cairo_stroke (buf.ct);
-    // End
-    
     // output to X
     cairo_destroy(buf.ct);
 
