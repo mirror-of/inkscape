@@ -20,4 +20,4 @@ if [ -d "/home/${USER}" ]; then
 	export HOME="/home/${USER}"
 fi
 
-exec $@
+exec "$@"
