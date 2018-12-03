@@ -34,6 +34,7 @@ static const gdouble grayscale_value_matrix[20] = {
 Drawing::Drawing(SPCanvasArena *arena)
     : _root(nullptr)
     , outlinecolor(0x000000ff)
+    , bypass_cache(false)
     , delta(0)
     , _exact(false)
     , _outline_sensitive(true)

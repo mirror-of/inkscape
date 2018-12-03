@@ -104,6 +104,9 @@ static void sp_canvas_bpath_update(SPCanvasItem *item, Geom::Affine const &affin
 static void
 sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
+    if (buf->only_draw) {
+        return;
+    }
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (item);
 
     Geom::Rect area = buf->rect;

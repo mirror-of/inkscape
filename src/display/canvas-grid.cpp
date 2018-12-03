@@ -864,6 +864,9 @@ void
 CanvasXYGrid::Render (SPCanvasBuf *buf)
 {
 
+    if (buf->only_draw) {
+        return;
+    }
     // no_emphasize_when_zoomedout determines color (minor or major) when only major grid lines/dots shown.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     guint32 _empcolor;

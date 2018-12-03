@@ -1760,7 +1760,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
     return status;
 }
 
-void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int /*sw*/)
+void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw, bool only_draw)
 {
 
     // Prevent crash if paintSingleBuffer is called before _backing_store is
@@ -1775,6 +1775,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     buf.canvas_rect = canvas_rect;
     buf.device_scale = _device_scale;
     buf.is_empty = true;
+    buf.only_draw = only_draw;
 
     // Make sure the following code does not go outside of _backing_store's data
     // FIXME for device_scale.
@@ -2268,16 +2269,30 @@ int SPCanvas::paint()
     if (_need_update) {
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);
         _need_update = FALSE;
-    }
+    }    
     SPCanvas *canvas = SP_CANVAS(this);
     GtkAllocation allocation;
     gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
+    Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0,
+        allocation.width, allocation.height);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int navigation_size = prefs->getIntLimited("/options/rendering/navigation-size", 8, 5, 50);
+    Geom::Coord proportion = (navigation_size * std::max(allocation.height, allocation.width)) / 100.0;
+    Geom::Coord left = _x0 + (allocation.width - (allocation.width / proportion));
+    Geom::Coord top  = _y0 + (allocation.height - (allocation.height / proportion));
+    Geom::Coord right = _x0 + allocation.width;
+    Geom::Coord bottom = _y0 + (allocation.height / proportion);
+    _nav_rect = Geom::IntRect::from_xywh(left,
+                                        top,
+                                        (allocation.width / proportion),
+                                        (allocation.height / proportion));
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPCanvasArena *arena = nullptr;
     bool split = false;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double split_x = 1;
     double split_y = 1;
+
+
     if (desktop && desktop->splitMode()) {
         split = desktop->splitMode();
         arena = SP_CANVAS_ARENA(desktop->drawing);
@@ -2377,6 +2392,14 @@ int SPCanvas::paint()
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
         canvas->paintSpliter();
+    }
+    if (desktop && desktop->navMode()) {
+        arena = SP_CANVAS_ARENA(desktop->drawing);
+        arena->drawing.bypass_cache = true;
+        desktop->zoom_quick_navigation();
+        paintSingleBuffer(_nav_rect, canvas_rect, 0, true);
+        desktop->prev_transform();
+        arena->drawing.bypass_cache = false;
     }
 
     // we've had a full unaborted redraw, reset the full redraw counter
@@ -2528,6 +2551,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     if (clear || _spliter) {
         dirtyAll();
     } else {
+        dirtyRect(_nav_rect);
         cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
         cairo_region_intersect_rectangle(_clean_region, &crect);
     }

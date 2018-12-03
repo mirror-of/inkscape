@@ -66,6 +66,9 @@ sp_ctrlcurve_destroy(SPCanvasItem *object)
 static void
 sp_ctrlcurve_render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
+    if (buf->only_draw) {
+        return;
+    }
     SPCtrlCurve *cl = SP_CTRLCURVE (item);
 
     if (!buf->ct)

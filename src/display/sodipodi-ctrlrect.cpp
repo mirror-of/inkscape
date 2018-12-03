@@ -95,6 +95,9 @@ void CtrlRect::init()
 
 void CtrlRect::render(SPCanvasBuf *buf)
 {
+    if (buf->only_draw) {
+        return;
+    }
     using Geom::X;
     using Geom::Y;
 

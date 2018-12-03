@@ -435,6 +435,9 @@ void
 CanvasAxonomGrid::Render (SPCanvasBuf *buf)
 {
     //set correct coloring, depending preference (when zoomed out, always major coloring or minor coloring)
+    if (buf->only_draw) {
+        return;
+    }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     guint32 _empcolor;
     bool preference = prefs->getBool("/options/grids/no_emphasize_when_zoomedout", false);

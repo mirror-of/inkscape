@@ -69,6 +69,9 @@ void sp_ctrlline_destroy(SPCanvasItem *object)
 
 void sp_ctrlline_render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
+    if (buf->only_draw) {
+        return;
+    }
     SPCtrlLine *cl = SP_CTRLLINE(item);
 
     if (!buf->ct) {

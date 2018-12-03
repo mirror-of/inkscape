@@ -123,6 +123,7 @@ SPDesktop::SPDesktop()
     _display_mode(Inkscape::RENDERMODE_NORMAL)
     , _display_color_mode(Inkscape::COLORMODE_NORMAL)
     , _split_canvas(false)
+    , _nav_canvas(false)
     , _widget(nullptr)
     , _guides_message_context(nullptr)
     , _active(false)
@@ -1139,6 +1140,36 @@ void SPDesktop::zoom_quick(bool enable)
     return;
 }
 
+/**
+ * Zoom to whole drawing preview, return the area.
+ */
+void
+SPDesktop::zoom_quick_navigation()
+{
+    g_return_if_fail (doc() != nullptr);
+    SPItem *docitem = doc()->getRoot();
+    g_return_if_fail (docitem != nullptr);
+
+    docitem->bbox_valid = FALSE;
+    Geom::OptRect d = docitem->desktopVisualBounds();
+
+
+    /* Note that the second condition here indicates that
+    ** there are no items in the drawing.
+    */
+    if ( !d || d->minExtent() < 0.1 ) {
+        return;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int navigation_size = prefs->getIntLimited("/options/rendering/navigation-size", 8, 5, 50);
+    Geom::Coord height = (*d).height();
+    Geom::Coord width = (*d).width();
+    Geom::Coord proportion = (navigation_size * std::max(height,width)) / 100.0;
+    Geom::Point expand = Geom::Point((*d).left() * proportion, (*d).top() * proportion);
+    (*d).expandTo(expand);
+    set_display_area(*d, 10);
+}
 
 /**
  * Tell widget to let zoom widget grab keyboard focus.
@@ -1609,6 +1640,20 @@ void SPDesktop::toggleSplitMode()
     Gtk::Window *parent = getToplevel();
     if (parent) {
         _split_canvas = !_split_canvas;
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
+        SPCanvas *canvas = getCanvas();
+        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width,
+                              canvas->_y0 + allocation.height);
+    }
+}
+
+void SPDesktop::toggleNavMode()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        _nav_canvas = !_nav_canvas;
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);

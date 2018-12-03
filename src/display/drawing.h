@@ -91,6 +91,7 @@ private:
 public:
     // TODO: remove these temporarily public members
     guint32 outlinecolor;
+    bool bypass_cache; //
     double delta;
 private:
     bool _exact;  // if true then rendering must be exact

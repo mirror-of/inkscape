@@ -587,6 +587,9 @@ static inline guint32 compose_xor(guint32 bg, guint32 fg, guint32 a)
 static void
 sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
+    if (buf->only_draw) {
+        return;
+    }
     SPCtrl *ctrl = SP_CTRL (item);
 
     if (!ctrl->defined) return;

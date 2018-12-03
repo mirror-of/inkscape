@@ -78,6 +78,9 @@ static void sp_guideline_destroy(SPCanvasItem *object)
 
 static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
+    if (buf->only_draw) {
+        return;
+    }
     SPGuideLine const *gl = SP_GUIDELINE (item);
 
     cairo_save(buf->ct);

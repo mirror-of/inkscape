@@ -65,6 +65,10 @@ static void sp_canvas_debug_render( SPCanvasItem *item, SPCanvasBuf *buf)
         return;
     }
 
+    if (buf->only_draw) {
+        return;
+    }
+
     cairo_set_line_width (buf->ct, 2);
 
     // Draw box around buffer (for debugging)

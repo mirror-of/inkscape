@@ -58,6 +58,7 @@ struct SPCanvasBuf {
     int buf_rowstride;
     int device_scale; // For high DPI monitors.
     bool is_empty;
+    bool only_draw;
 };
 
 G_END_DECLS
@@ -117,7 +118,7 @@ private:
     /// Invokes update, paint, and repick on canvas.
     int doUpdate();
 
-    void paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw);
+    void paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw, bool only_draw = false);
 
     /**
      * Paint the given rect, recursively subdividing the region until it is the size of a single
@@ -194,6 +195,7 @@ public:
     bool _split_pressed;
     bool _split_control_pressed;
     bool _split_dragging;
+    Geom::IntRect _nav_rect;
 
     bool _is_dragging;
     guint _changecursor;

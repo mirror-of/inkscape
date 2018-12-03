@@ -338,6 +338,7 @@ public:
     void zoom_page_width();
     void zoom_drawing();
     void zoom_selection();
+    void zoom_quick_navigation();
 
     double current_zoom() const { return _current_affine.getZoom(); }
 
@@ -402,9 +403,11 @@ public:
     bool colorProfAdjustEnabled();
 
     void toggleGrids();
-    void toggleSplitMode();
-    bool splitMode() const { return _split_canvas; };
     void toggleSnapGlobal();
+    void toggleSplitMode();
+    void toggleNavMode();
+    bool splitMode() const { return _split_canvas; };
+    bool navMode() const { return _nav_canvas; };
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
     void toggleToolbar(gchar const *toolbar_name);
@@ -537,6 +540,7 @@ private:
     std::list<DesktopAffine> transforms_past;
     std::list<DesktopAffine> transforms_future;
     bool _split_canvas;
+    bool _nav_canvas;
     bool _quick_zoom_enabled; ///< Signifies that currently we're in quick zoom mode
     DesktopAffine _quick_zoom_affine;  ///< The transform of the screen before quick zoom
 

@@ -627,7 +627,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
         }
     }
 
-    if (to_update & STATE_CACHE) {
+    if (!_drawing.bypass_cache && (to_update & STATE_CACHE )) {
         // Update cache score for this item
         if (_has_cache_iterator) {
             // remove old score information
@@ -757,7 +757,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     }
 
     // render from cache if possible
-    if (_cached) {
+    if (_cached && !_drawing.bypass_cache) {
         if (_cache) {
             _cache->prepare();
             set_cairo_blend_operator( dc, _mix_blend_mode );
@@ -891,7 +891,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     ict.paint();
 
     // 6. Paint the completed rendering onto the base context (or into cache)
-    if (_cached && _cache) {
+    if (_cached && _cache && !_drawing.bypass_cache) {
         DrawingContext cachect(*_cache);
         cachect.rectangle(*carea);
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);

@@ -65,6 +65,9 @@ static void sp_ctrlquadr_destroy(SPCanvasItem *object)
 static void
 sp_ctrlquadr_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
+    if (buf->only_draw) {
+        return;
+    }
     SPCtrlQuadr *cq = SP_CTRLQUADR (item);
 
     if (!buf->ct)
