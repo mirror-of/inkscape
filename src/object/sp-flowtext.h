@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_SP_ITEM_FLOWTEXT_H
 #define SEEN_SP_ITEM_FLOWTEXT_H
 
@@ -73,7 +82,7 @@ public:
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 	void remove_child(Inkscape::XML::Node* child) override;
 
-	void set(unsigned int key, const char* value) override;
+	void set(SPAttributeEnum key, const char* value) override;
 	Geom::Affine set_transform(Geom::Affine const& xform) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;

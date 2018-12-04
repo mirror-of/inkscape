@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -7,14 +8,11 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <2geom/point.h>
+#include <memory>
 #include "document.h"
 #include "view.h"
 #include "message-stack.h"
@@ -60,8 +58,8 @@ _onDocumentResized (double x, double y, View* v)
 View::View()
 :  _doc(nullptr)
 {
-    _message_stack = GC::release(new Inkscape::MessageStack());
-    _tips_message_context = new Inkscape::MessageContext(_message_stack);
+    _message_stack = std::make_shared<Inkscape::MessageStack>();
+    _tips_message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
 
     _resized_connection = _resized_signal.connect (sigc::bind (sigc::ptr_fun (&_onResized), this));
     _redraw_requested_connection = _redraw_requested_signal.connect (sigc::bind (sigc::ptr_fun (&_onRedrawRequested), this));
@@ -77,7 +75,6 @@ View::~View()
 void View::_close() {
     _message_changed_connection.disconnect();
 
-    delete _tips_message_context;
     _tips_message_context = nullptr;
 
     _message_stack = nullptr;

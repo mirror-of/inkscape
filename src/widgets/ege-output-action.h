@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later
 #ifndef SEEN_EGE_OUTPUT_ACTION
 #define SEEN_EGE_OUTPUT_ACTION
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
@@ -59,7 +60,6 @@ G_BEGIN_DECLS
 
 typedef struct _EgeOutputAction      EgeOutputAction;
 typedef struct _EgeOutputActionClass EgeOutputActionClass;
-typedef struct _EgeOutputActionPrivate EgeOutputActionPrivate;
 
 /**
  * Instance structure of EgeOutputAction.
@@ -68,9 +68,6 @@ struct _EgeOutputAction
 {
     /** Parent instance structure. */
     GtkAction action;
-
-    /** Pointer to private instance data. */
-    EgeOutputActionPrivate *private_data;
 };
 
 /**

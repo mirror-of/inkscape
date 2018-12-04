@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -9,12 +10,8 @@
  * Copyright (C) 2001-2006 authors
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "sp-item.h"
 
@@ -53,7 +50,6 @@
 
 
 #include "util/find-last-if.h"
-#include "util/reverse-list.h"
 
 #include "extract-uri.h"
 
@@ -262,7 +258,7 @@ bool SPItem::isCenterSet() const {
     return (transform_center_x != 0 || transform_center_y != 0);
 }
 
-// Get the item's transformation center in document coordinates (i.e. in pixels)
+// Get the item's transformation center in desktop coordinates (i.e. in pixels)
 Geom::Point SPItem::getCenter() const {
     document->ensureUpToDate();
 
@@ -430,7 +426,7 @@ void SPItem::release() {
     //item->_transformed_signal.~signal();
 }
 
-void SPItem::set(unsigned int key, gchar const* value) {
+void SPItem::set(SPAttributeEnum key, gchar const* value) {
     SPItem *item = this;
     SPItem* object = item;
 
@@ -522,7 +518,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
             }
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
-                style->readFromObject( this );
+                style->clear(key);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 SPObject::set(key, value);
@@ -754,20 +750,14 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     if (item->clip_ref){
         if (item->clip_ref->getObject()) {
-            gchar *uri = item->clip_ref->getURI()->toString();
-            const gchar *value = g_strdup_printf ("url(%s)", uri);
-            repr->setAttribute ("clip-path", value);
-            g_free ((void *) value);
-            g_free ((void *) uri);
+            auto value = item->clip_ref->getURI()->cssStr();
+            repr->setAttribute("clip-path", value.c_str());
         }
     }
     if (item->mask_ref){
         if (item->mask_ref->getObject()) {
-            gchar *uri = item->mask_ref->getURI()->toString();
-            const gchar *value = g_strdup_printf ("url(%s)", uri);
-            repr->setAttribute ("mask", value);
-            g_free ((void *) value);
-            g_free ((void *) uri);
+            auto value = item->clip_ref->getURI()->cssStr();
+            repr->setAttribute("mask", value.c_str());
         }
     }
     if (item->_highlightColor){
@@ -865,6 +855,10 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
         ownerItem->bbox_valid = FALSE;  // LP Bug 1349018
         bbox.intersectWith(clip_ref->getObject()->geometricBounds(transform));
     }
+    if (mask_ref->getObject()) {
+        bbox_valid = false;  // LP Bug 1349018
+        bbox.intersectWith(mask_ref->getObject()->visualBounds(transform));
+    }
 
     return bbox;
 }
@@ -918,10 +912,10 @@ Geom::OptRect SPItem::desktopGeometricBounds() const
 
 Geom::OptRect SPItem::desktopVisualBounds() const
 {
-    /// @fixme hardcoded desktop transform
-    Geom::Affine m = Geom::Scale(1, -1) * Geom::Translate(0, document->getHeight().value("px"));
     Geom::OptRect ret = documentVisualBounds();
-    if (ret) *ret *= m;
+    if (ret && SP_ACTIVE_DESKTOP) {
+        *ret *= SP_ACTIVE_DESKTOP->doc2dt();
+    }
     return ret;
 }
 
@@ -1185,7 +1179,7 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
                 stroke_ps->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             }
         }
-        ai->setData(this);
+        ai->setItem(this);
         ai->setItemBounds(geometricBounds());
     }
 
@@ -1199,7 +1193,7 @@ void SPItem::hide(unsigned int /*key*/) {
 
 void SPItem::invoke_hide(unsigned key)
 {
-	this->hide(key);
+    this->hide(key);
 
     SPItemView *ref = nullptr;
     SPItemView *v = display;
@@ -1321,7 +1315,7 @@ void SPItem::adjust_stroke( gdouble ex )
 /**
  * Find out the inverse of previous transform of an item (from its repr)
  */
-static Geom::Affine sp_item_transform_repr (SPItem *item)
+Geom::Affine sp_item_transform_repr (SPItem *item)
 {
     Geom::Affine t_old(Geom::identity());
     gchar const *t_attr = item->getRepr()->attribute("transform");
@@ -1514,14 +1508,10 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
         )
     {
         transform_attr = this->set_transform(transform);
-
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
         }
     } else {
-        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
-            lpeitem->adjust_livepatheffect(transform_attr);
-        }
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
             if (compensate) {
@@ -1614,25 +1604,21 @@ Geom::Affine SPItem::i2doc_affine() const
 
 Geom::Affine SPItem::i2dt_affine() const
 {
-    Geom::Affine ret;
+    Geom::Affine ret(i2doc_affine());
     SPDesktop const *desktop = SP_ACTIVE_DESKTOP;
     if ( desktop ) {
-        ret = i2doc_affine() * desktop->doc2dt();
-    } else {
-        // TODO temp code to prevent crashing on command-line launch:
-        ret = i2doc_affine()
-            * Geom::Scale(1, -1)
-            * Geom::Translate(0, document->getHeight().value("px"));
+        ret *= desktop->doc2dt();
     }
     return ret;
 }
 
+// TODO should be named "set_i2dt_affine"
 void SPItem::set_i2d_affine(Geom::Affine const &i2dt)
 {
     Geom::Affine dt2p; /* desktop to item parent transform */
     if (parent) {
         dt2p = static_cast<SPItem *>(parent)->i2dt_affine().inverse();
-    } else {
+    } else if (SP_ACTIVE_DESKTOP) {
         SPDesktop *dt = SP_ACTIVE_DESKTOP;
         dt2p = dt->dt2doc();
     }

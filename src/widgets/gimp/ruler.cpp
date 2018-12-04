@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /*
  * Customized ruler class for inkscape.  Note that this is a fork of
  * the GimpRuler widget from GIMP: libgimpwidgets/gimpruler.c.
- * The GIMP code is released under the GPL 3.  The GIMP code itself
- * is a fork of the now-obsolete GtkRuler widget from GTK+ 2.
+ * The GIMP code was released under the LGPL3+ (which is GPL3 plus extra permissions that may be ignored).
+ * The GIMP code itself is a fork of the now-obsolete GtkRuler widget from GTK+ 2.
  *
  * Major differences between implementations in Inkscape and GIMP are
  * as follows:
@@ -26,7 +27,7 @@
  *
  * Copyright (C) 1999-2011 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v3+. Read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -84,7 +85,7 @@ public:
 };
 
 #define SP_RULER_GET_PRIVATE(ruler) \
-  G_TYPE_INSTANCE_GET_PRIVATE (ruler, SP_TYPE_RULER, SPRulerPrivate)
+  reinterpret_cast<SPRulerPrivate *>(sp_ruler_get_instance_private (ruler))
 
 
 struct SPRulerMetric
@@ -148,7 +149,7 @@ static PangoLayout * sp_ruler_get_layout           (GtkWidget      *widget,
                                                     const gchar    *text);
 
 
-G_DEFINE_TYPE (SPRuler, sp_ruler, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE (SPRuler, sp_ruler, GTK_TYPE_WIDGET)
 
 #define parent_class sp_ruler_parent_class
 
@@ -177,9 +178,6 @@ sp_ruler_class_init (SPRulerClass *klass)
   widget_class->style_updated        = sp_ruler_style_updated;
   widget_class->draw                 = sp_ruler_draw;
   widget_class->motion_notify_event = sp_ruler_motion_notify;
-
-  g_type_class_add_private (object_class, sizeof (SPRulerPrivate));
-
 
   g_object_class_install_property (object_class,
                                    PROP_ORIENTATION,
@@ -521,7 +519,8 @@ sp_ruler_unrealize(GtkWidget *widget)
 static void
 sp_ruler_map (GtkWidget *widget)
 {
-  SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (widget);
+  SPRuler        *ruler = SP_RULER (widget);
+  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
 
   GTK_WIDGET_CLASS (sp_ruler_parent_class)->map (widget);
 
@@ -532,7 +531,8 @@ sp_ruler_map (GtkWidget *widget)
 static void
 sp_ruler_unmap (GtkWidget *widget)
 {
-  SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (widget);
+  SPRuler        *ruler = SP_RULER (widget);
+  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
 
   if (priv->input_window)
     gdk_window_hide (priv->input_window);
@@ -571,10 +571,11 @@ static void
 sp_ruler_size_request (GtkWidget      *widget, 
                        GtkRequisition *requisition)
 {
-  SPRulerPrivate  *priv    = SP_RULER_GET_PRIVATE (widget);
-  PangoLayout     *layout;
-  PangoRectangle   ink_rect;
-  gint             size;
+  SPRuler        *ruler = SP_RULER (widget);
+  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
+  PangoLayout    *layout;
+  PangoRectangle  ink_rect;
+  gint            size;
 
   layout = sp_ruler_get_layout (widget, "0123456789");
   pango_layout_get_pixel_extents (layout, &ink_rect, nullptr);
@@ -606,7 +607,8 @@ sp_ruler_size_request (GtkWidget      *widget,
 static void
 sp_ruler_style_updated (GtkWidget *widget)
 {
-  SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (widget);
+  SPRuler        *ruler = SP_RULER (widget);
+  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
 
   GTK_WIDGET_CLASS (sp_ruler_parent_class)->style_updated (widget);
 
@@ -1406,7 +1408,8 @@ static PangoLayout*
 sp_ruler_create_layout (GtkWidget   *widget,
                         const gchar *text)
 {
-  SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (widget);
+  SPRuler        *ruler = SP_RULER (widget);
+  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
   PangoLayout    *layout;
   PangoAttrList  *attrs;
   PangoAttribute *attr;
@@ -1430,7 +1433,8 @@ static PangoLayout *
 sp_ruler_get_layout (GtkWidget   *widget,
                      const gchar *text)
 {
-  SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (widget);
+  SPRuler        *ruler = SP_RULER (widget);
+  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
 
   if (priv->layout)
     {

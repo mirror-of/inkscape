@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feTurbulence> implementation.
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2007 Felipe Sanches
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "attributes.h"
@@ -101,7 +102,7 @@ static Inkscape::Filters::FilterTurbulenceType sp_feTurbulence_read_type(gchar c
 /**
  * Sets a specific value in the SPFeTurbulence.
  */
-void SPFeTurbulence::set(unsigned int key, gchar const *value) {
+void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
     int read_int;
     double read_num;
     bool read_bool;
@@ -206,7 +207,7 @@ void SPFeTurbulence::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterTurbulence *nr_turbulence = dynamic_cast<Inkscape::Filters::FilterTurbulence*>(nr_primitive);
     g_assert(nr_turbulence != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_turbulence->set_baseFrequency(0, this->baseFrequency.getNumber());
     nr_turbulence->set_baseFrequency(1, this->baseFrequency.getOptNumber());

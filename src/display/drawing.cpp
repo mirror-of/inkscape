@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * SVG drawing for display.
@@ -7,7 +8,7 @@
  *   Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
  *
  * Copyright (C) 2011-2012 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <algorithm>
@@ -35,13 +36,14 @@ Drawing::Drawing(SPCanvasArena *arena)
     , outlinecolor(0x000000ff)
     , delta(0)
     , _exact(false)
+    , _outline_sensitive(true)
     , _rendermode(RENDERMODE_NORMAL)
     , _colormode(COLORMODE_NORMAL)
     , _blur_quality(BLUR_QUALITY_BEST)
     , _filter_quality(Filters::FILTER_QUALITY_BEST)
     , _cache_score_threshold(50000.0)
     , _cache_budget(0)
-    , _grayscale_colormatrix(std::vector<gdouble> (grayscale_value_matrix, grayscale_value_matrix + 20 ))
+    , _grayscale_colormatrix(std::vector<gdouble>(grayscale_value_matrix, grayscale_value_matrix + 20))
     , _canvasarena(arena)
 {
 
@@ -79,9 +81,14 @@ Drawing::outline() const
     return renderMode() == RENDERMODE_OUTLINE;
 }
 bool
+Drawing::visibleHairlines() const
+{
+    return renderMode() == RENDERMODE_VISIBLE_HAIRLINES;
+}
+bool
 Drawing::renderFilters() const
 {
-    return renderMode() == RENDERMODE_NORMAL;
+    return renderMode() == RENDERMODE_NORMAL || renderMode() == RENDERMODE_VISIBLE_HAIRLINES;
 }
 int
 Drawing::blurQuality() const
@@ -127,6 +134,8 @@ Drawing::setExact(bool e)
 {
     _exact = e;
 }
+
+void Drawing::setOutlineSensitive(bool e) { _outline_sensitive = e; };
 
 Geom::OptIntRect const &
 Drawing::cacheLimit() const

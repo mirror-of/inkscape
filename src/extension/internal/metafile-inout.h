@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Metafile input - common functions
  *//*
@@ -5,15 +6,11 @@
  *   David Mathog
  *
  * Copyright (C) 2013 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_METAFILE_INOUT_H
 #define SEEN_INKSCAPE_EXTENSION_INTERNAL_METAFILE_INOUT_H
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #define PNG_SKIP_SETJMP_CHECK // else any further png.h include blows up in the compiler
 #include <png.h>

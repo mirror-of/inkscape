@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_PREFERENCES_SKELETON_H
 #define SEEN_PREFERENCES_SKELETON_H
 
@@ -73,7 +82,7 @@ static char const preferences_skeleton[] =
 "       inkscape:window-height=\"480\" />\n"
 "  </group>\n"
 "  <group id=\"theme\" \n" 
-"       gtkTheme=\"Adwaita\" iconTheme=\"hicolor\"  symbolicIcons=\"0\" darkTheme=\"0\" symbolicColor=\"0x000000ff\" >\n"
+"       gtkTheme=\"\" iconTheme=\"\"  symbolicIcons=\"0\" darkTheme=\"0\" symbolicColor=\"0x000000ff\" >\n"
 "  </group>\n"
 "\n"
 "  <group id=\"tools\"\n"
@@ -201,7 +210,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"save_as\" default=\"\" append_extension=\"1\" enable_preview=\"1\" path=\"\" use_current_dir=\"1\"/>\n"
 "    <group id=\"save_copy\" default=\"\" append_extension=\"1\" enable_preview=\"1\" path=\"\"/>\n"
 "    <group id=\"open\" enable_preview=\"1\" path=\"\"/>\n"
-"    <group id=\"import\" enable_preview=\"1\" path=\"\" ask=\"1\" link=\"link\" scale=\"optimizeSpeed\"/>\n"
+"    <group id=\"import\" enable_preview=\"1\" path=\"\" ask=\"1\" ask_svg=\"1\" link=\"link\" scale=\"optimizeSpeed\"/>\n"
 "    <group id=\"debug\" redirect=\"0\"/>\n"
 "    <group id=\"clonetiler\" />\n"
 "    <group id=\"gridtiler\" />\n"
@@ -222,7 +231,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"transparency\"\n"
 "       on-focus=\"1.0\"\n"
 "       on-blur=\"0.50\"\n"
-#ifdef WIN32
+#ifdef _WIN32
 "       animate-time=\"0\"\n" // apparently windows sucks (flickers)
 #else
 "       animate-time=\"100\"\n" // time to change in ms
@@ -286,7 +295,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"svgeditor\" value=\"inkscape\"/>\n"
 "    <group id=\"bitmapautoreload\" value=\"1\"/>\n"
 "    <group id=\"dialogtype\" value=\"1\"/>\n"
-#ifdef WIN32
+#ifdef _WIN32
 "    <group id=\"desktopintegration\" value=\"1\"/>\n"
 #endif
 "    <group id=\"dock\" "
@@ -294,7 +303,7 @@ static char const preferences_skeleton[] =
 "           dockbarstyle=\"2\""      // GDL_DOCK_BAR_BOTH
 "           switcherstyle=\"2\"/>\n" // GDL_SWITCHER_STYLE_BOTH
 "    <group id=\"dialogsskiptaskbar\" value=\"1\"/>\n"
-#ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+#ifdef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
 "    <group id=\"dialogsontopwin32\" value=\"0\"/>\n"
 #endif
 #if !defined(GDK_WINDOWING_QUARTZ) // No maximise for Quartz, see lp:1302627

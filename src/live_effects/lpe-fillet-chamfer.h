@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_FILLET_CHAMFER_H
 #define INKSCAPE_LPE_FILLET_CHAMFER_H
 
@@ -9,7 +10,7 @@
  *
  * Jabiertxof:Thanks to all people help me
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/enum.h"
@@ -56,17 +57,15 @@ private:
     ScalarParam chamfer_steps;
     BoolParam flexible;
     HiddenParam mode;
-    BoolParam mirror_knots;
     BoolParam only_selected;
     BoolParam use_knot_distance;
     BoolParam hide_knots;
     BoolParam apply_no_radius;
     BoolParam apply_with_radius;
-    ScalarParam helper_size;
     bool _degenerate_hide;
     PathVectorSatellites *_pathvector_satellites;
     Geom::PathVector _hp;
-
+    Glib::ustring previous_unit;
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);
 

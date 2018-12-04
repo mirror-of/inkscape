@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Windows Metafile printing - implementation
  */
@@ -6,14 +7,10 @@
  *
  * Copyright (C) 2006-2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_WMF_PRINT_H
 #define SEEN_INKSCAPE_EXTENSION_INTERNAL_WMF_PRINT_H
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <3rdparty/libuemf/uwmf.h>
 #include "extension/internal/metafile-print.h"

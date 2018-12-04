@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Symbols dialog.
@@ -5,11 +6,11 @@
 /* Authors:
  * Copyright (C) 2012 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #include <iostream>
@@ -19,32 +20,32 @@
 #include <fstream>
 #include <regex>
 
+#include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
-#include <glibmm/markup.h>
 
-#include "path-prefix.h"
-#include "io/sys.h"
-#include "io/resource.h"
-
-#include "display/cairo-utils.h"
-#include "helper/icon-loader.h"
-#include "ui/cache/svg_preview_cache.h"
-#include "ui/clipboard.h"
-#include "ui/icon-names.h"
-
-#include "symbols.h"
-
-#include "selection.h"
 #include "desktop.h"
-
 #include "document.h"
 #include "inkscape.h"
+#include "path-prefix.h"
+#include "selection.h"
+#include "symbols.h"
+#include "verbs.h"
 
-#include "object/sp-root.h"
-#include "object/sp-use.h"
+#include "display/cairo-utils.h"
+#include "helper/action.h"
+#include "include/gtkmm_version.h"
+#include "io/resource.h"
+#include "io/sys.h"
 #include "object/sp-defs.h"
+#include "object/sp-root.h"
 #include "object/sp-symbol.h"
+#include "object/sp-use.h"
+#include "ui/cache/svg_preview_cache.h"
+#include "ui/clipboard.h"
+#include "ui/icon-loader.h"
+#include "ui/icon-names.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
@@ -66,9 +67,6 @@
   #endif
 #endif
 
-#include "verbs.h"
-#include "helper/action.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {
@@ -188,6 +186,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   icon_view = new Gtk::IconView(static_cast<Glib::RefPtr<Gtk::TreeModel> >(store));
   //icon_view->set_text_column(  columns->symbol_id  );
   icon_view->set_tooltip_column( 1 );
+  icon_view->set_name( "symbolsView" );
   icon_view->set_pixbuf_column( columns->symbol_image );
   // Giving the iconview a small minimum size will help users understand
   // What the dialog does.
@@ -227,7 +226,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   if (!iconsize) {
       iconsize = Gtk::IconSize().register_new(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"), 110, 110);
   }
-  overlay_icon = new Gtk::Image();
+  overlay_icon = sp_get_icon_image("searching", iconsize);
+  overlay_icon->set_name("iconinverse");
   overlay_icon->set_halign(Gtk::ALIGN_CENTER );
   overlay_icon->set_valign(Gtk::ALIGN_START );
   overlay_icon->set_margin_top(45);
@@ -468,11 +468,11 @@ void SymbolsDialog::rebuild() {
 void SymbolsDialog::showOverlay() {
 #if GTKMM_CHECK_VERSION(3,14,0)
   Glib::ustring current = Glib::Markup::escape_text(symbol_set->get_active_text());
-  overlay_icon = sp_get_icon_image("none", iconsize);
   if (current == ALLDOCS && !l.size()) 
   {
+    overlay_icon->hide();
     if (!all_docs_processed ) {
-        overlay_icon = sp_get_icon_image("searching", iconsize);
+        overlay_icon->show();
         overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") +
                                   Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
         overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") +
@@ -481,7 +481,7 @@ void SymbolsDialog::showOverlay() {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("Try a different search term.")) + Glib::ustring("</span>"));
     } else {
-        overlay_icon = sp_get_icon_image("searching", iconsize);
+        overlay_icon->show();
         overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") +
                                   Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
         overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") +
@@ -716,7 +716,7 @@ class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGener
 // Read Visio stencil files
 SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
   gchar *fullname;
-  #ifdef WIN32
+  #ifdef _WIN32
     // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
     // therefore attempt to convert uri to the system codepage
     // even if this is not possible the alternate short (8.3) file name will be used if available

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <polyline> implementation
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "attributes.h"
@@ -29,7 +30,7 @@ void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     this->readAttr("points");
 }
 
-void SPPolyLine::set(unsigned int key, const gchar* value) {
+void SPPolyLine::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
 	case SP_ATTR_POINTS: {
             SPCurve * curve;

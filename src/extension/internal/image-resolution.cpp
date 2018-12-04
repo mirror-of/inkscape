@@ -1,14 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Daniel Wagenaar <daw@caltech.edu>
  *
  * Copyright (C) 2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #include "util/units.h"
@@ -30,7 +31,7 @@
 #include <csetjmp>
 #endif
 
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
 #include <Magick++.h>
 #endif
 
@@ -396,7 +397,7 @@ void ImageResolution::readjfif(char const *) {
 
 #endif
 
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
 void ImageResolution::readmagick(char const *fn) {
     Magick::Image image;
     debug("Trying image.read");
@@ -439,7 +440,7 @@ void ImageResolution::readmagick(char const *fn) {
 void ImageResolution::readmagick(char const *) {
 }
 
-#endif /* WITH_IMAGE_MAGICK */
+#endif /* WITH_MAGICK */
 
 }
 }

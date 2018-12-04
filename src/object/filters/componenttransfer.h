@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief SVG component transferfilter effect
  *//*
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SP_FECOMPONENTTRANSFER_H_SEEN
 #define SP_FECOMPONENTTRANSFER_H_SEEN
@@ -35,7 +36,7 @@ protected:
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 	void remove_child(Inkscape::XML::Node* child) override;
 
-	void set(unsigned int key, const gchar* value) override;
+	void set(SPAttributeEnum key, const gchar* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 

@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *   Abhishek Sharma
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/path.h"
@@ -25,10 +26,10 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "helper/icon-loader.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
+#include "ui/icon-loader.h"
 #include "verbs.h"
 #include "xml/repr.h"
 // needed for on-canvas editing:
@@ -99,6 +100,14 @@ PathParam::~PathParam()
 //            }
 //        }
 //    }
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        // TODO remove the tools_switch atrocity.
+        if (tools_isactive(desktop, TOOLS_NODES)) {
+            tools_switch(desktop, TOOLS_SELECT);
+            tools_switch(desktop, TOOLS_NODES);
+        }
+    }
     g_free(defvalue);
 }
 

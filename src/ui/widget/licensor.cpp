@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   bulia byak <buliabyak@users.sf.net>
@@ -9,12 +10,8 @@
  *
  * Copyright (C) 2000 - 2005 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "licensor.h"
 
@@ -26,7 +23,6 @@
 #include "rdf.h"
 #include "inkscape.h"
 #include "document-undo.h"
-#include "document-private.h"
 #include "verbs.h"
 
 
@@ -68,7 +64,7 @@ void LicenseItem::on_toggled()
     _wr.setUpdating (true);
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     rdf_set_license (doc, _lic->details ? _lic : nullptr);
-    if (doc->priv->sensitive) {
+    if (doc->sensitive) {
         DocumentUndo::done(doc, SP_VERB_NONE, _("Document license updated"));
     }
     _wr.setUpdating (false);

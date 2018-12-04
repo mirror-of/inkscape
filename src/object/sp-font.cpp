@@ -1,7 +1,4 @@
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <font> element implementation
  *
@@ -11,7 +8,7 @@
  *
  * Copyright (C) 2008, Felipe C. da S. Sanches
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "xml/repr.h"
@@ -78,7 +75,7 @@ void SPFont::release() {
     SPObject::release();
 }
 
-void SPFont::set(unsigned int key, const gchar *value) {
+void SPFont::set(SPAttributeEnum key, const gchar *value) {
     // TODO these are floating point, so some epsilon comparison would be good
     switch (key) {
         case SP_ATTR_HORIZ_ORIGIN_X:

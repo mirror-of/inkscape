@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Tool for picking colors from drawing
  *
@@ -8,12 +9,8 @@
  *
  * Copyright (C) 1999-2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 #include <gdk/gdk.h>
@@ -26,7 +23,6 @@
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "macros.h"
 #include "message-context.h"
 #include "preferences.h"
 #include "selection.h"
@@ -37,6 +33,8 @@
 #include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "display/cairo-utils.h"
+
+#include "include/macros.h"
 
 #include "object/sp-namedview.h"
 

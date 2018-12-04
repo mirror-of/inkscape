@@ -2,12 +2,12 @@ if(WIN32)
   install(FILES
     AUTHORS
     COPYING
-    NEWS
+    NEWS.md
     README.md
     TRANSLATORS
-	GPL2.txt
-	GPL3.txt
-	LGPL2.1.txt
+	LICENSES/GPL-2.0.txt
+	LICENSES/GPL-3.0.txt
+	LICENSES/LGPL-2.1.txt
     DESTINATION .)
 
   install(DIRECTORY doc
@@ -30,7 +30,9 @@ if(WIN32)
     ${MINGW_BIN}/libcairomm-1.0-[0-9]*.dll
     ${MINGW_BIN}/libcdr-0.[0-9]*.dll
     ${MINGW_BIN}/libcroco-0.6-[0-9]*.dll
+    ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
+    ${MINGW_BIN}/libdatrie-[0-9]*.dll
     ${MINGW_BIN}/libenchant-[0-9]*.dll
     ${MINGW_BIN}/libepoxy-[0-9]*.dll
     ${MINGW_BIN}/libexpat-[0-9]*.dll
@@ -87,7 +89,6 @@ if(WIN32)
     ${MINGW_BIN}/libpng16-[0-9]*.dll
     ${MINGW_BIN}/libpoppler-[0-9]*.dll
     ${MINGW_BIN}/libpoppler-glib-[0-9]*.dll
-    ${MINGW_BIN}/libpopt-[0-9]*.dll
     ${MINGW_BIN}/libpotrace-[0-9]*.dll
     ${MINGW_BIN}/libpsl-[0-9]*.dll
     ${MINGW_BIN}/libquadmath-[0-9]*.dll
@@ -99,8 +100,10 @@ if(WIN32)
     ${MINGW_BIN}/libsigc-2.0-[0-9]*.dll
     ${MINGW_BIN}/libsoup-2.4-[0-9]*.dll
     ${MINGW_BIN}/libsqlite3-[0-9]*.dll
+    ${MINGW_BIN}/libssl-1_[0-9]*.dll
     ${MINGW_BIN}/libstdc++-[0-9]*.dll
     ${MINGW_BIN}/libtermcap-[0-9]*.dll
+    ${MINGW_BIN}/libthai-[0-9]*.dll
     ${MINGW_BIN}/libtiff-[0-9]*.dll
     ${MINGW_BIN}/libunistring-[0-9]*.dll
     ${MINGW_BIN}/libvisio-0.[0-9]*.dll
@@ -118,7 +121,8 @@ if(WIN32)
     ${MINGW_BIN}/smime[0-9]*.dll
     ${MINGW_BIN}/tcl[0-9]*.dll
     ${MINGW_BIN}/tk[0-9]*.dll
-    ${MINGW_BIN}/zlib1.dll)
+    ${MINGW_BIN}/zlib1.dll
+    ${MINGW_BIN}/libzstd.dll)
   INSTALL(FILES ${MINGW_LIBS} DESTINATION .)
   # There are differences for 64-Bit and 32-Bit build environments.
   if(HAVE_MINGW64)
@@ -241,7 +245,7 @@ if(WIN32)
 
   set(site_packages "lib/python2.7/site-packages")
   # Python packages installed via pacman
-  set(packages "python2-lxml" "python2-numpy" "python2-pillow")
+  set(packages "python2-lxml" "python2-numpy" "python2-pillow" "python2-six")
   foreach(package ${packages})
     list_files_pacman(${package} paths)
     install_list(FILES ${paths}
@@ -250,7 +254,7 @@ if(WIN32)
     )
   endforeach()
   # Python packages installed via pip
-  set(packages "coverage" "pyserial" "scour" "six")
+  set(packages "coverage" "pyserial" "scour")
   foreach(package ${packages})
     list_files_pip(${package} paths)
     install_list(FILES ${paths}

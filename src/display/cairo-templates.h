@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Cairo software blending templates.
@@ -6,14 +7,14 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2010 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_DISPLAY_CAIRO_TEMPLATES_H
 #define SEEN_INKSCAPE_DISPLAY_CAIRO_TEMPLATES_H
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #include <glib.h>

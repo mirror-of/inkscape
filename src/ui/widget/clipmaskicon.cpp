@@ -1,20 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Theodore Janeczko
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "ui/widget/clipmaskicon.h"
 
-#include "helper/icon-loader.h"
 #include "layertypeicon.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "widgets/toolbox.h"
 

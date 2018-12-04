@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A class for handling connector endpoint movement and libavoid interaction.
  *
@@ -8,7 +9,7 @@
  *
  *    * Copyright (C) 2004-2005 Monash University
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -143,9 +144,8 @@ void SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
     for (unsigned handle_ix = 0; handle_ix < 2; ++handle_ix) {
         const Inkscape::URI* U = this->_connEnd[handle_ix]->ref.getURI();
         if (U) {
-            gchar *str = U->toString();
-            repr->setAttribute(attr_strs[handle_ix], str);
-            g_free(str);
+            auto str = U->str();
+            repr->setAttribute(attr_strs[handle_ix], str.c_str());
         }
     }
     repr->setAttribute("inkscape:connector-curvature", Glib::Ascii::dtostr(_connCurvature).c_str());

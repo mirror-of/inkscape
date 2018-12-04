@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * LPE perspective path effect implementation.
@@ -8,17 +9,18 @@
  *
  * Copyright (C) 2007-2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <gtkmm.h>
 
 //#include "transf_mat_3x4.h"
-#include "document-private.h"
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpeobject.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 #include <util/units.h>
+
+#include "include/gtkmm_version.h"
 
 #include "object/persp3d.h"
 #include "object/sp-defs.h"

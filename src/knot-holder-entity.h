@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_KNOT_HOLDER_ENTITY_H
 #define SEEN_KNOT_HOLDER_ENTITY_H
 /*
@@ -11,7 +12,7 @@
  * Copyright (C) 2004 Monash University
  * Copyright (C) 2008 Maximilian Albert
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/forward.h>
@@ -87,6 +88,7 @@ public:
     unsigned int   _ungrab_handler_id;
 
 private:
+    sigc::connection _mousedown_connection;
     sigc::connection _moved_connection;
     sigc::connection _click_connection;
     sigc::connection _ungrabbed_connection;

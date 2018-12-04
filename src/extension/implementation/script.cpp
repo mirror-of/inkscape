@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Code for handling extensions (i.e. scripts).
  *
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2002-2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm.h>
@@ -51,10 +52,10 @@
 
 #include "path-prefix.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <sys/stat.h>
-#include "registrytool.h"
+#include "io/registrytool.h"
 #endif
 
 /** This is the command buffer that gets allocated from the stack */
@@ -86,7 +87,7 @@ void Script::pump_events () {
 */
 Script::interpreter_t const Script::interpreterTab[] = {
         {"perl",   "perl-interpreter",   "perl"   },
-#ifdef WIN32
+#ifdef _WIN32
         {"python", "python-interpreter", "pythonw" },
 #else
         {"python", "python-interpreter", "python" },

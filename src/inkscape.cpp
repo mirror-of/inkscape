@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Interface to main application.
@@ -8,15 +9,11 @@
  *   Liam P. White <inkscapebrony@gmail.com>
  *
  * Copyright (C) 1999-2014 authors
- * c++ port Copyright (C) 2003 Nathan Hurst 
+ * c++ port Copyright (C) 2003 Nathan Hurst
  * c++ification Copyright (C) 2014 Liam P. White
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <cerrno>
 #include <unistd.h>
@@ -29,8 +26,6 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/messagedialog.h>
-#include "debug/simple-event.h"
-#include "debug/event-tracker.h"
 
 #include <glib/gstdio.h>
 #include <glibmm/i18n.h>
@@ -38,22 +33,30 @@
 #include <glibmm/convert.h>
 
 #include "desktop.h"
-
 #include "device-manager.h"
 #include "document.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "path-prefix.h"
+
+#include "debug/simple-event.h"
+#include "debug/event-tracker.h"
+
 #include "extension/db.h"
 #include "extension/init.h"
 #include "extension/output.h"
 #include "extension/system.h"
+
 #include "helper/action-context.h"
-#include "inkscape.h"
+
 #include "io/resource.h"
+#include "io/resource-manager.h"
 #include "io/sys.h"
+
 #include "libnrtype/FontFactory.h"
-#include "message-stack.h"
-#include "path-prefix.h"
-#include "resource-manager.h"
+
 #include "svg/svg-color.h"
+
 #include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
 
@@ -64,13 +67,13 @@
 Inkscape::Application * Inkscape::Application::_S_inst = nullptr;
 bool Inkscape::Application::_crashIsHappening = false;
 
-#define DESKTOP_IS_ACTIVE(d) (!INKSCAPE._desktops->empty() && ((d) == INKSCAPE._desktops->front()))
+#define DESKTOP_IS_ACTIVE(d) (INKSCAPE._desktops != nullptr && !INKSCAPE._desktops->empty() && ((d) == INKSCAPE._desktops->front()))
 
 static void (* segv_handler) (int) = SIG_DFL;
 static void (* abrt_handler) (int) = SIG_DFL;
 static void (* fpe_handler)  (int) = SIG_DFL;
 static void (* ill_handler)  (int) = SIG_DFL;
-#ifndef WIN32
+#ifndef _WIN32
 static void (* bus_handler)  (int) = SIG_DFL;
 #endif
 
@@ -78,21 +81,19 @@ static void (* bus_handler)  (int) = SIG_DFL;
 
 #define SP_INDENT 8
 
-#ifdef WIN32
+#ifdef _WIN32
 typedef int uid_t;
 #define getuid() 0
 #endif
 
 /**  C++ification TODO list
- * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break. 
+ * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break.
  * - Application::_deskops has to be a pointer because of a signal bug somewhere else. Basically, it will attempt to access a deleted object in sp_ui_close_all(),
  *   but if it's a pointer we can stop and return NULL in Application::active_desktop()
  * - These functions are calling Application::create for no good reason I can determine:
  *
  *   Inkscape::UI::Dialog::SVGPreview::SVGPreview()
  *       src/ui/dialog/filedialogimpl-gtkmm.cpp:542:9
- *   void Inkscape::UI::Widget::ImageIcon::init()
- *       src/ui/widget/imageicon.cpp:93:9
  */
 
 
@@ -133,7 +134,7 @@ void inkscape_unref(Inkscape::Application & in)
             delete Inkscape::Application::_S_inst;
         }
     } else {
-        g_error("Attempt to unref an Application (=%p) not the current instance (=%p) (maybe it's already been destroyed?)", 
+        g_error("Attempt to unref an Application (=%p) not the current instance (=%p) (maybe it's already been destroyed?)",
                 &in, Inkscape::Application::_S_inst);
     }
 }
@@ -267,7 +268,7 @@ int Application::autosave()
             while( (filename = g_dir_read_name(autosave_dir_ptr)) != nullptr ){
                 if ( strncmp(filename, baseName, strlen(baseName)) == 0 ){
                     gchar* full_path = g_build_filename( autosave_dir.c_str(), filename, NULL );
-                    if (g_file_test (full_path, G_FILE_TEST_EXISTS)){ 
+                    if (g_file_test (full_path, G_FILE_TEST_EXISTS)){
                         if ( g_stat(full_path, &sb) != -1 ) {
                             if ( difftime(sb.st_ctime, min_time) < 0 || min_time == 0 ){
                                 min_time = sb.st_ctime;
@@ -371,21 +372,47 @@ void Application::argv0(char const* argv)
  * \brief Add our CSS style sheets
  */
 void
-Application::add_style_sheet()
+Application::add_gtk_css()
 {
     using namespace Inkscape::IO::Resource;
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    // symbolic
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
+        int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
         gchar colornamed[64];
-        sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
-        css_str += "*{-gtk-icon-style: symbolic;}toolbutton image{ color: ";
+        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+        // Use in case the special widgets have inverse theme background and symbolic
+        int colorset_inverse = colorset ^ 0xffffff00;
+        gchar colornamed_inverse[64];
+        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+        css_str += "*{ -gtk-icon-style: symbolic;}";
+        css_str += "image{ color:";
         css_str += colornamed;
         css_str += ";}";
+        css_str += "#iconinverse{ color:";
+        css_str += colornamed_inverse;
+        css_str += ";}";
+        css_str += "#iconregular{ -gtk-icon-style: regular;}";
+    } else {
+        css_str += "*{-gtk-icon-style: regular;}";
+    }
+    GtkSettings *settings = gtk_settings_get_default();
+    const gchar *gtk_font_name = "";
+    if (settings) {
+        g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
+    }
+    if (!strncmp(gtk_font_name, "Cantarell", 9)) {
+        css_str += "#monoStrokeWidth,";
+        css_str += "#fillEmptySpace,";
+        css_str += "#SelectStatus,";
+        css_str += "#CoordinateStatusX,";
+        css_str += "#CoordinateStatusY,";
+        css_str += "#DesktopMainTable spinbutton{";
+        css_str += "    font-family: sans-serif";
+        css_str += "}"; // we also can add to * but seems to me Cantarell looks better for oter places
     }
     // From 3.16, throws an error which we must catch.
     try {
@@ -402,8 +429,8 @@ Application::add_style_sheet()
 #endif
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    // we want a tiny file with 3 or 4 lines, so we can loada witout removing context
-    // is more undertable than record previously applyed
+    // we want a tiny file with 3 or 4 lines, so we can load without removing context
+    // is more understandable than record previously applied
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
       auto provider = Gtk::CssProvider::create();
@@ -449,7 +476,7 @@ Application::Application(const char* argv, bool use_gui) :
     abrt_handler = signal (SIGABRT, Application::crash_handler);
     fpe_handler  = signal (SIGFPE,  Application::crash_handler);
     ill_handler  = signal (SIGILL,  Application::crash_handler);
-#ifndef WIN32
+#ifndef _WIN32
     bus_handler  = signal (SIGBUS,  Application::crash_handler);
 #endif
 
@@ -471,17 +498,23 @@ Application::Application(const char* argv, bool use_gui) :
     }
 
     if (use_gui) {
-        add_style_sheet();
+        using namespace Inkscape::IO::Resource;
+        auto icon_theme = Gtk::IconTheme::get_default();
+        icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
+        icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
+        add_gtk_css();
         /* Load the preferences and menus */
         GtkSettings *settings = gtk_settings_get_default();
         if (settings) {
             const gchar *gtkThemeName;
-            g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
             const gchar *gtkIconThemeName;
-            g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
-            prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
             gboolean gtkApplicationPreferDarkTheme;
+            g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+            g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
             g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+            g_object_set(settings, "gtk-application-prefer-dark-theme",
+                         prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
+            prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
             if (prefs->getString("/theme/gtkTheme") != "") {
                 g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
             }
@@ -489,19 +522,15 @@ Application::Application(const char* argv, bool use_gui) :
                 prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
             }
 
-            if (prefs->getString("/theme/iconTheme") != "") {
-                g_object_set(settings, "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);
-            }
+            Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+            if (themeiconname != "") {
+                g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+            } 
             else {
-                Glib::ustring defaulticontheme = prefs->getString("/theme/defaultIconTheme");
-                if (defaulticontheme == "Adwaita") {
-                    defaulticontheme = "hicolor";
-                }
-                prefs->setString("/theme/iconTheme", defaulticontheme);
+                prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
             }
-            g_object_set(settings, "gtk-application-prefer-dark-theme",
-                         prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
         }
+
         load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
     }
@@ -518,7 +547,7 @@ Application::Application(const char* argv, bool use_gui) :
     /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON.
      * Use only if use_gui is enabled
      */
-#ifdef WIN32
+#ifdef _WIN32
 #define DEFAULT_LOG_REDIRECT true
 #else
 #define DEFAULT_LOG_REDIRECT false
@@ -541,7 +570,7 @@ Application::Application(const char* argv, bool use_gui) :
     Inkscape::Extension::init();
 
     autosave_init();
-    
+
     /* Initialize font factory */
     font_factory *factory = font_factory::Default();
     if (prefs->getBool("/options/font/use_fontsdir_system", true)) {
@@ -580,7 +609,7 @@ Application::~Application()
     _S_inst = nullptr; // this will probably break things
 
     refCount = 0;
-    gtk_main_quit ();
+    // gtk_main_quit ();
 }
 
 /** Sets the keyboard modifer to map to Alt.
@@ -613,7 +642,7 @@ Application::crash_handler (int /*signum*/)
     signal (SIGABRT, abrt_handler );
     signal (SIGFPE,  fpe_handler  );
     signal (SIGILL,  ill_handler  );
-#ifndef WIN32
+#ifndef _WIN32
     signal (SIGBUS,  bus_handler  );
 #endif
 
@@ -829,7 +858,7 @@ void
 Application::selection_changed (Inkscape::Selection * selection)
 {
     g_return_if_fail (selection != nullptr);
-    
+
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
         signal_selection_changed.emit(selection);
     }
@@ -909,7 +938,7 @@ Application::remove_desktop (SPDesktop * desktop)
             SPDesktop * new_desktop = *(++_desktops->begin());
             _desktops->erase(std::find(_desktops->begin(), _desktops->end(), new_desktop));
             _desktops->insert(_desktops->begin(), new_desktop);
-            
+
             signal_activate_desktop.emit(new_desktop);
             signal_eventcontext_set.emit(new_desktop->getEventContext());
             signal_selection_set.emit(new_desktop->getSelection());
@@ -943,7 +972,7 @@ Application::activate_desktop (SPDesktop * desktop)
     }
 
     std::vector<SPDesktop*>::iterator i;
-    
+
     if ((i = std::find (_desktops->begin(), _desktops->end(), desktop)) == _desktops->end()) {
         g_error("Tried to activate desktop not added to list.");
     }
@@ -1250,6 +1279,7 @@ Application::action_context_for_document(SPDocument *doc)
     // Document is not associated with any desktops - maybe we're in command-line mode
     std::map<SPDocument *, AppSelectionModel *>::iterator sel_iter = _selection_models.find(doc);
     if (sel_iter == _selection_models.end()) {
+        std::cout << "Application::action_context_for_document: no selection model" << std::endl;
         return Inkscape::ActionContext();
     }
     return Inkscape::ActionContext(sel_iter->second->getSelection());
@@ -1280,7 +1310,7 @@ Application::exit ()
     signal_shut_down.emit();
 
     Inkscape::Preferences::unload();
-    gtk_main_quit ();
+    //gtk_main_quit ();
 }
 
 

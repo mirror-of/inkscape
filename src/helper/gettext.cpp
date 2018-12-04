@@ -1,33 +1,20 @@
-/**
- * \file
- * \brief helper functions for gettext
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * helper functions for gettext
  *//*
  * Authors:
+ * see git history
  *   Eduard Braun <eduard.braun2@gmx.de>
  *
- * Copyright 2017 Authors
- *
- * This file is part of Inkscape.
- *
- * Inkscape is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * Inkscape is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Inkscape.  If not, see <http://www.gnu.org/licenses/>.
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -43,7 +30,7 @@ namespace Inkscape {
 
 /** does all required gettext initialization and takes care of the respective locale directory paths */
 void initialize_gettext() {
-#ifdef WIN32
+#ifdef _WIN32
     gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
 
     // obtain short path to executable dir and pass it
@@ -90,7 +77,7 @@ void bind_textdomain_codeset_utf8() {
  *       for now do something even easier - switch console encoding to UTF8 and be done with it!
  *     this also works nicely on MSYS consoles where UTF8 encoding is used by default, too  */
 void bind_textdomain_codeset_console() {
-#ifdef WIN32
+#ifdef _WIN32
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 #else
     std::string charset;

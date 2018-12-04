@@ -1,9 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /*
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <glibmm/i18n.h>
 
 #include <xml/repr.h>
@@ -329,7 +335,7 @@ static void         UnionShape(Shape **base_shape, Shape const *add_shape)
 
 static void         GetDest(SPObject* child,Shape **computed)
 {
-	if ( child == nullptr ) return;
+	if ( child == nullptr || dynamic_cast<SPItem *>(child) == nullptr ) return;
 
 	SPCurve *curve=nullptr;
 	Geom::Affine tr_mat;

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Transform dialog - implementation.
@@ -8,12 +9,8 @@
  *   Abhishek Sharma
  *
  * Copyright (C) 2004, 2005 Authors
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <gtkmm/dialog.h>
 
@@ -29,9 +26,9 @@
 #include "transformation.h"
 #include "verbs.h"
 
-#include "helper/icon-loader.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
+#include "ui/icon-loader.h"
 
 #include "ui/icon-names.h"
 
@@ -124,6 +121,13 @@ Transformation::Transformation()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _check_apply_separately.set_active(prefs->getBool("/dialogs/transformation/applyseparately"));
     _check_apply_separately.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onApplySeparatelyToggled));
+
+    // make icons match desktop rotation direction
+    if (!getDesktop()->is_yaxisdown()) {
+        _scalar_move_vertical.flipIconVertically();
+        _scalar_rotate.flipIconVertically();
+        _scalar_skew_vertical.flipIconVertically();
+    }
 
     // make sure all spinbuttons activate Apply on pressing Enter
       ((Gtk::Entry *) (_scalar_move_horizontal.getWidget()))->set_activates_default(true);
@@ -304,7 +308,7 @@ void Transformation::layoutPageRotate()
     _page_rotate.table().attach(_clockwise_rotate,        4, 0, 1, 1);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/dialogs/transformation/rotateCounterClockwise", TRUE)) {
+    if (prefs->getBool("/dialogs/transformation/rotateCounterClockwise", TRUE) != getDesktop()->is_yaxisdown()) {
         _counterclockwise_rotate.set_active();
         onRotateCounterclockwiseClicked();
     } else {
@@ -1003,14 +1007,14 @@ void Transformation::onRotateCounterclockwiseClicked()
 {
     _scalar_rotate.setTooltipText(_("Rotation angle (positive = counterclockwise)"));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", TRUE);
+    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", !getDesktop()->is_yaxisdown());
 }
 
 void Transformation::onRotateClockwiseClicked()
 {
     _scalar_rotate.setTooltipText(_("Rotation angle (positive = clockwise)"));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", FALSE);
+    prefs->setBool("/dialogs/transformation/rotateCounterClockwise", getDesktop()->is_yaxisdown());
 }
 
 void Transformation::onSkewValueChanged()

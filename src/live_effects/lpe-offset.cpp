@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE <offset> implementation
  */
@@ -10,7 +11,7 @@
  * Copyright (C) Maximilian Albert 2008 <maximilian.albert@gmail.com>
  * Copyright (C) Jabierto Arraiza 2015 <jabier.arraiza@marker.es>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/enum.h"
@@ -31,7 +32,7 @@
 #include "knotholder.h"
 #include "knot.h"
 #include <algorithm>
-//this is only to flatten nonzero fillrule
+// this is only to flatten nonzero fillrule
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
@@ -87,7 +88,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     registerParameter(&update_on_knot_move);
     offset.param_set_increments(0.1, 0.1);
     offset.param_set_digits(4);
-    offset_pt = Geom::Point();
+    offset_pt = Geom::Point(Geom::infinity(), Geom::infinity());
     origin = Geom::Point();
     evenodd = true;
     _knot_entity = nullptr;
@@ -178,6 +179,7 @@ sp_set_origin(Geom::PathVector original_pathv, Geom::Point &origin)
         Geom::PathTime pathtime = pathvectortime->asPathTime();
         origin = bigger[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
     }
+
 }
 
 void
@@ -311,7 +313,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
     }
     Geom::PathIntersectionGraph *pig_b = new Geom::PathIntersectionGraph(ret, re_painter);
-    if (pig && !ret.empty() && !re_painter.empty()) {
+    if (pig_b && !ret.empty() && !re_painter.empty()) {
         ret = pig_b->getUnion();
     }
     return ret;
@@ -417,6 +419,11 @@ void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point con
 Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
 {
     LPEOffset const * lpe = dynamic_cast<LPEOffset const*> (_effect);
+    if (lpe->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
+        if(boost::optional< Geom::Point > offset_point = SP_SHAPE(item)->getCurve()->first_point()) {
+            return *offset_point;
+        }
+    }
     return lpe->offset_pt;
 }
 

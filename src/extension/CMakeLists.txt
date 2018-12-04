@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 set(extension_SRC
 	db.cpp
@@ -168,7 +169,7 @@ if(WITH_LIBWPG)
 	)
 endif()
 
-if(WITH_IMAGE_MAGICK)
+if(WITH_MAGICK)
 	list(APPEND extension_SRC
 		internal/bitmap/adaptiveThreshold.cpp
 		internal/bitmap/adaptiveThreshold.h

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <box3d> implementation
  *
@@ -12,7 +13,7 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "box3d.h"
@@ -34,7 +35,7 @@
 
 #include "desktop.h"
 
-#include "macros.h"
+#include "include/macros.h"
 
 static void box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box);
 
@@ -114,7 +115,7 @@ void SPBox3D::release() {
     SPGroup::release();
 }
 
-void SPBox3D::set(unsigned int key, const gchar* value) {
+void SPBox3D::set(SPAttributeEnum key, const gchar* value) {
     SPBox3D* object = this;
     SPBox3D *box = object;
 
@@ -217,9 +218,8 @@ Inkscape::XML::Node* SPBox3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
             /* box is not yet linked to a perspective; use the document's current perspective */
             SPDocument *doc = object->document;
             if (box->persp_ref->getURI()) {
-                gchar *uri_string = box->persp_ref->getURI()->toString();
-                repr->setAttribute("inkscape:perspectiveID", uri_string);
-                g_free(uri_string);
+                auto uri_string = box->persp_ref->getURI()->str();
+                repr->setAttribute("inkscape:perspectiveID", uri_string.c_str());
             } else {
                 Glib::ustring href = "#";
                 href += doc->getCurrentPersp3D()->getId();
@@ -652,6 +652,12 @@ box3d_XY_axes_are_swapped (SPBox3D *box) {
 
 static inline void
 box3d_aux_set_z_orders (int z_orders[6], int a, int b, int c, int d, int e, int f) {
+    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        std::swap(a, f);
+        std::swap(b, e);
+        std::swap(c, d);
+    }
+
     z_orders[0] = a;
     z_orders[1] = b;
     z_orders[2] = c;

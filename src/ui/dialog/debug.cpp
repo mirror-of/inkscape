@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * A dialog that displays log messages.
@@ -7,11 +8,8 @@
  *   Other dudes from The Inkscape Organization
  *
  * Copyright (C) 2004 The Inkscape Organization
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>

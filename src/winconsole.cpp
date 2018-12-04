@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * \file
  * Command-line wrapper for Windows.
@@ -35,10 +36,10 @@
  *
  * Copyright (C) 2008-2010 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef WIN32
+#ifdef _WIN32
 #undef DATADIR
 #include <windows.h>
 

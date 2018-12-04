@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Widgets::LayerSelector - layer selector widget
  *
@@ -7,18 +8,14 @@
  *
  * Copyright (C) 2004 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <cstring>
 #include <string>
 
-#include "helper/icon-loader.h"
 #include "ui/dialog/layer-properties.h"
+#include "ui/icon-loader.h"
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <glibmm/i18n.h>
@@ -30,7 +27,6 @@
 #include "layer-manager.h"
 #include "ui/icon-names.h"
 #include "ui/util.h"
-#include "util/filter-list.h"
 #include "util/reverse-list.h"
 #include "verbs.h"
 #include "xml/node-event-vector.h"

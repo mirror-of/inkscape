@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * <sodipodi:namedview> implementation
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 1999-2013 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -272,7 +273,9 @@ void SPNamedView::release() {
     SPObjectGroup::release();
 }
 
-void SPNamedView::set(unsigned int key, const gchar* value) {
+void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool global_snapping = prefs->getBool("/options/snapdefault/value", false);
     switch (key) {
     case SP_ATTR_VIEWONLY:
             this->editable = (!value);
@@ -431,7 +434,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_SNAP_GLOBAL:
-            this->snap_manager.snapprefs.setSnapEnabledGlobally(value ? sp_str_to_bool(value) : TRUE);
+            this->snap_manager.snapprefs.setSnapEnabledGlobally(value ? sp_str_to_bool(value) : global_snapping);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_SNAP_BBOX:
@@ -783,7 +786,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
             }
         }
         if ((w > 0) && (h > 0)) {
-#ifndef WIN32
+#ifndef _WIN32
             gint dx= 0;
             gint dy = 0;
             gint dw = 0;

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Open Clip Art Library integration dialogs - implementation.
@@ -9,21 +10,16 @@
  *
  * Copyright (C) 2007 Bruno Dilly <bruno.dilly@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include "ocaldialogs.h"
 
 #include "filedialogimpl-gtkmm.h"
-#include "helper/icon-loader.h"
-#include "inkgc/gc-core.h"
 #include "io/sys.h"
 #include "path-prefix.h"
 #include "preferences.h"
+#include "ui/icon-loader.h"
 #include "ui/interface.h"
 
 #include <gtkmm/notebook.h>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <pattern> implementation
  *
@@ -9,34 +10,33 @@
  *
  * Copyright (C) 2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "sp-pattern.h"
 
 #include <cstring>
 #include <string>
+
 #include <glibmm.h>
+
 #include <2geom/transforms.h>
 
+#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "svg/svg.h"
+#include "document.h"
+
+#include "sp-defs.h"
+#include "sp-factory.h"
+#include "sp-item.h"
+
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing-surface.h"
 #include "display/drawing.h"
 #include "display/drawing-group.h"
-#include "attributes.h"
-#include "document-private.h"
 
-#include "sp-factory.h"
-
-#include "sp-defs.h"
-#include "sp-item.h"
+#include "svg/svg.h"
 
 SPPattern::SPPattern()
     : SPPaintServer()
@@ -98,7 +98,7 @@ void SPPattern::release()
     SPPaintServer::release();
 }
 
-void SPPattern::set(unsigned int key, const gchar *value)
+void SPPattern::set(SPAttributeEnum key, const gchar *value)
 {
     switch (key) {
         case SP_ATTR_PATTERNUNITS:

@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /*
  */
 
@@ -79,7 +88,7 @@ void SPFlowdiv::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
-void SPFlowdiv::set(unsigned int key, const gchar* value) {
+void SPFlowdiv::set(SPAttributeEnum key, const gchar* value) {
 	SPItem::set(key, value);
 }
 
@@ -202,7 +211,7 @@ void SPFlowtspan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
-void SPFlowtspan::set(unsigned int key, const gchar* value) {
+void SPFlowtspan::set(SPAttributeEnum key, const gchar* value) {
 	SPItem::set(key, value);
 }
 
@@ -324,7 +333,7 @@ void SPFlowpara::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
-void SPFlowpara::set(unsigned int key, const gchar* value) {
+void SPFlowpara::set(SPAttributeEnum key, const gchar* value) {
 	SPItem::set(key, value);
 }
 

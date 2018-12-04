@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVGPreview: Preview cache
  */
@@ -11,13 +12,9 @@
  * Copyright (C) 2001 Ximian, Inc.
  * Copyright (C) 2004 John Cliff
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <gtk/gtk.h>
 
@@ -25,7 +22,6 @@
 
 #include "selection.h"
 #include "inkscape.h"
-#include "document-private.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"

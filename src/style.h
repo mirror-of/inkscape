@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_STYLE_H
 #define SEEN_SP_STYLE_H
 
@@ -14,7 +15,7 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "style-enums.h"
@@ -26,11 +27,10 @@
 #include "3rdparty/libcroco/cr-declaration.h"
 #include "3rdparty/libcroco/cr-prop-list.h"
 
+enum SPAttributeEnum : unsigned;
+
 // Define SPIBasePtr, a Pointer to a data member of SPStyle of type SPIBase;
 typedef SPIBase SPStyle::*SPIBasePtr;
-
-// Define SPPropMap, a map linking property name to property data
-// typedef std::map<std::string, SPIBasePtr> SPPropMap;
 
 namespace Inkscape {
 namespace XML {
@@ -47,16 +47,18 @@ public:
     SPStyle(SPDocument *document = nullptr, SPObject *object = nullptr);// document is ignored if valid object given
     ~SPStyle();
     void clear();
+    void clear(SPAttributeEnum id);
     void read(SPObject *object, Inkscape::XML::Node *repr);
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
-    void readIfUnset( int id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
+    void readIfUnset(SPAttributeEnum id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
     Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,
                          SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                          SPStyle const *const base = nullptr ) const;
     void cascade( SPStyle const *const parent );
     void merge(   SPStyle const *const parent );
     void mergeString( char const *const p );
+    void mergeStatement( CRStatement *statement );
     bool operator==(const SPStyle& rhs);
 
     int style_ref()   { ++_refcount; return _refcount; }
@@ -84,7 +86,6 @@ public:
 private:
     /// Pointers to all the properties (for looping through them)
     std::vector<SPIBase *> _properties;
-    // static SPPropMap _propmap;
 
 public:
 
@@ -226,7 +227,7 @@ public:
     SPIScale24 solid_opacity;
 
     /** vector effect */
-    SPIEnum vector_effect;
+    SPIVectorEffect vector_effect;
 
     /** fill */
     SPIPaint fill;
@@ -271,6 +272,10 @@ public:
     /** enable-background, used for defining where filter effects get their background image */
     SPIEnum enable_background;
 
+    /** gradient-stop */
+    SPIColor stop_color;
+    SPIScale24 stop_opacity;
+
     /* Rendering hints ----------------------- */
 
     /** hints on how to render: e.g. speed vs. accuracy.
@@ -309,15 +314,15 @@ public:
 
     SPObject       *getFilter()          { return (filter.href) ? filter.href->getObject() : nullptr; }
     SPObject const *getFilter()    const { return (filter.href) ? filter.href->getObject() : nullptr; }
-    char    const *getFilterURI() const { return (filter.href) ? filter.href->getURI()->toString() : nullptr; }
+    Inkscape::URI const *getFilterURI() const { return (filter.href) ? filter.href->getURI() : nullptr; }
 
     SPPaintServer       *getFillPaintServer()         { return (fill.value.href) ? fill.value.href->getObject() : nullptr; }
     SPPaintServer const *getFillPaintServer()   const { return (fill.value.href) ? fill.value.href->getObject() : nullptr; }
-    char         const *getFillURI()           const { return (fill.value.href) ? fill.value.href->getURI()->toString() : nullptr; }
+    Inkscape::URI const *getFillURI()           const { return (fill.value.href) ? fill.value.href->getURI() : nullptr; }
 
     SPPaintServer       *getStrokePaintServer()       { return (stroke.value.href) ? stroke.value.href->getObject() : nullptr; }
     SPPaintServer const *getStrokePaintServer() const { return (stroke.value.href) ? stroke.value.href->getObject() : nullptr; }
-    char        const  *getStrokeURI()         const { return (stroke.value.href) ? stroke.value.href->getURI()->toString() : nullptr; }
+    Inkscape::URI const *getStrokeURI()         const { return (stroke.value.href) ? stroke.value.href->getURI() : nullptr; }
 
     /**
      * Return a font feature string useful for Pango.
@@ -330,7 +335,7 @@ SPStyle *sp_style_ref(SPStyle *style); // SPStyle::ref();
 
 SPStyle *sp_style_unref(SPStyle *style); // SPStyle::unref();
 
-void sp_style_set_to_uri_string (SPStyle *style, bool isfill, const char *uri); // ?
+void sp_style_set_to_uri(SPStyle *style, bool isfill, Inkscape::URI const *uri); // ?
 
 char const *sp_style_get_css_unit_string(int unit);  // No change?
 

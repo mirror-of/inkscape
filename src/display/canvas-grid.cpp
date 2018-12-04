@@ -1,11 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * Cartesian grid implementation.
- */
-/* Copyright (C) Johan Engelen 2006-2007 <johan@shouraizou.nl>
+ * Cartesian grid item for the Inkscape canvas.
+ *//*
+ * Authors:
+ * see git history
+ * Copyright (C) Johan Engelen 2006-2007 <johan@shouraizou.nl>
  * Copyright (C) Lauris Kaplinski 2000
  *   Abhishek Sharma
  *   Jon A. Cruz <jon@joncruz.org>
  * Copyright (C) Tavmong Bah 2017 <tavmjong@free.fr>
+ * 
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /* As a general comment, I am not exactly proud of how things are done.
@@ -13,10 +18,6 @@
  * It does seem to work however. I intend to clean up and sort things out later, but that can take forever...
  * Don't be shy to correct things.
  */
-
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
@@ -389,7 +390,10 @@ void CanvasGrid::align_clicked(int align)
 {
     Geom::Point dimensions = doc->getDimensions();
     dimensions[Geom::X] *= align % 3 * 0.5;
-    dimensions[Geom::Y] *= 1 - (align / 3 * 0.5);
+    dimensions[Geom::Y] *= align / 3 * 0.5;
+    if (SP_ACTIVE_DESKTOP) {
+        dimensions = SP_ACTIVE_DESKTOP->doc2dt(dimensions);
+    }
     setOrigin(dimensions);
 }
 
@@ -731,6 +735,9 @@ void
 CanvasXYGrid::updateWidgets()
 {
     if (_wr.isUpdating()) return;
+
+    //no widgets (grid created with the document, not with the dialog)
+    if (!_rcb_visible) return;
 
     _wr.setUpdating (true);
 

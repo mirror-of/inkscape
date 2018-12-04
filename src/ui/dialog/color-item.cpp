@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Inkscape color swatch UI item.
@@ -8,12 +9,8 @@
  *
  * Copyright (C) 2010 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <cerrno>
 
@@ -322,7 +319,7 @@ void ColorItem::setState( bool fill, bool stroke )
 
         for ( std::vector<Gtk::Widget*>::iterator it = _previews.begin(); it != _previews.end(); ++it ) {
             Gtk::Widget* widget = *it;
-            if ( IS_EEK_PREVIEW(widget->gobj()) ) {
+            if ( EEK_IS_PREVIEW(widget->gobj()) ) {
                 EekPreview * preview = EEK_PREVIEW(widget->gobj());
 
                 int val = eek_preview_get_linked( preview );
@@ -355,7 +352,7 @@ void ColorItem::setName(const Glib::ustring name)
 
     for ( std::vector<Gtk::Widget*>::iterator it = _previews.begin(); it != _previews.end(); ++it ) {
         Gtk::Widget* widget = *it;
-        if ( IS_EEK_PREVIEW(widget->gobj()) ) {
+        if ( EEK_IS_PREVIEW(widget->gobj()) ) {
             gtk_widget_set_tooltip_text(GTK_WIDGET(widget->gobj()), name.c_str());
         }
         else if ( GTK_IS_LABEL(widget->gobj()) ) {
@@ -427,7 +424,7 @@ void ColorItem::_updatePreviews()
 {
     for ( std::vector<Gtk::Widget*>::iterator it =  _previews.begin(); it != _previews.end(); ++it ) {
         Gtk::Widget* widget = *it;
-        if ( IS_EEK_PREVIEW(widget->gobj()) ) {
+        if ( EEK_IS_PREVIEW(widget->gobj()) ) {
             EekPreview * preview = EEK_PREVIEW(widget->gobj());
 
             _regenPreview(preview);

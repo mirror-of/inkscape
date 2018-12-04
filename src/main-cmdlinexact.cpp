@@ -1,13 +1,20 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * Extended actions ("xverbs") that can be queued in a yaml file
+ *//*
  * Authors:
  *   Dmitry Zhulanov <dmitry.zhulanov@gmail.com>
  *
  * Copyright (C) 2016 Authors
  *
- * Released under GNU GPL v2, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * more details: http://wiki.inkscape.org/wiki/index.php/Using_xverbs
  */
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #ifdef WITH_YAML
 
@@ -27,7 +34,6 @@
 #include "file.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "resource-manager.h"
 #include "selection.h"
 #include "verbs.h"
 #include "yaml.h"
@@ -39,6 +45,7 @@
 #include "helper/action.h"
 #include "helper/png-write.h"
 
+#include "io/resource-manager.h"
 #include "io/sys.h"
 
 #include "object/sp-namedview.h"
@@ -399,7 +406,7 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
             handling_value = true;
             break;
 
-            /* Block delimeters */
+            /* Block delimiters */
         case YAML_BLOCK_SEQUENCE_START_TOKEN:
             if( state == HANDLING_ROOT ) {
                 if( key == "run" )

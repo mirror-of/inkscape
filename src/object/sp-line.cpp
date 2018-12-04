@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <line> implementation
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "attributes.h"
@@ -38,7 +39,7 @@ void SPLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     this->readAttr( "y2" );
 }
 
-void SPLine::set(unsigned int key, const gchar* value) {
+void SPLine::set(SPAttributeEnum key, const gchar* value) {
     /* fixme: we should really collect updates */
 
     switch (key) {

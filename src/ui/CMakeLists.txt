@@ -1,9 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 set(ui_SRC
 	clipboard.cpp
 	contextmenu.cpp
 	control-manager.cpp
 	dialog-events.cpp
 	draw-anchor.cpp
+	icon-loader.cpp
 	interface.cpp
         monitor.cpp
 	previewholder.cpp
@@ -82,6 +84,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
+        dialog/attrdialog.cpp
         dialog/cssdialog.cpp
 	dialog/debug.cpp
 	dialog/desktop-tracker.cpp
@@ -141,7 +144,7 @@ set(ui_SRC
 	dialog/xml-tree.cpp
         dialog/save-template-dialog.cpp
 
-	widget/addtoicon.cpp
+	widget/iconrenderer.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
 	widget/button.cpp
@@ -150,7 +153,7 @@ set(ui_SRC
 	widget/color-icc-selector.cpp
 	widget/color-notebook.cpp
 	widget/color-picker.cpp
-	widget/color-preview.cpp
+	widget/color-preview.cpp	icon-loader.cpp
 	widget/color-scales.cpp
 	widget/color-slider.cpp
 	widget/color-wheel-selector.cpp
@@ -166,8 +169,8 @@ set(ui_SRC
 	widget/font-variations.cpp
 	widget/frame.cpp
 	widget/highlight-picker.cpp
-	widget/imageicon.cpp
 	widget/imagetoggler.cpp
+        widget/ink-color-wheel.cpp
 	widget/ink-select-one-action.cpp
 	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
@@ -199,6 +202,7 @@ set(ui_SRC
 	widget/unit-menu.cpp
 	widget/unit-tracker.cpp
 
+	view/svg-view-widget.cpp
 	view/view.cpp
 	view/view-widget.cpp
 
@@ -213,6 +217,7 @@ set(ui_SRC
 	draw-anchor.h
 	event-debug.h
 	icon-names.h
+	icon-loader.h
 	interface.h
         monitor.h
 	previewable.h
@@ -233,6 +238,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.h
 	dialog/clonetiler.h
 	dialog/color-item.h
+        dialog/attrdialog.h
         dialog/cssdialog.h
 	dialog/debug.h
 	dialog/desktop-tracker.h
@@ -359,7 +365,7 @@ set(ui_SRC
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
-	widget/addtoicon.h
+	widget/iconrenderer.h
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h
@@ -387,8 +393,8 @@ set(ui_SRC
 	widget/frame.h
 	widget/highlight-picker.h
 	widget/insertordericon.h
-	widget/imageicon.h
 	widget/imagetoggler.h
+        widget/ink-color-wheel.h
 	widget/ink-select-one-action.h
 	widget/ink-spinscale.h
 	widget/labelled.h
@@ -398,6 +404,7 @@ set(ui_SRC
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/page-sizer.h
+	widget/pages-skeleton.h 
 	widget/panel.h
 	widget/point.h
 	widget/preferences-widget.h
@@ -421,8 +428,9 @@ set(ui_SRC
 	widget/unit-tracker.h
 
 	view/edit-widget-interface.h
-	view/view-widget.h
+	view/svg-view-widget.h
 	view/view.h
+	view/view-widget.h
 )
 
 if(WIN32)

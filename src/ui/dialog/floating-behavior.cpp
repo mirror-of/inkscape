@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Floating dialog implementation.
@@ -7,12 +8,8 @@
  *
  * Copyright (C) 2007 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <gtkmm/dialog.h>
 #include <glibmm/main.h>
@@ -184,7 +181,7 @@ FloatingBehavior::onDesktopActivated (SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", 1, 0, 2);
 
-#ifdef WIN32 // Win32 special code to enable transient dialogs
+#ifdef _WIN32 // Win32 special code to enable transient dialogs
     transient_policy = 2;
 #endif
 

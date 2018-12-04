@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Star drawing context
  *
@@ -11,12 +12,8 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2001-2002 Mitsuru Oka
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <cstring>
 #include <string>
@@ -29,7 +26,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "selection.h"
 #include "verbs.h"
@@ -345,7 +342,7 @@ void StarTool::drag(Geom::Point p, guint state)
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
     if (!this->star) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

@@ -1,6 +1,16 @@
-/*
- * OpenDocument <drawing> input and output
+// SPDX-License-Identifier: LGPL-2.1-or-later
+/** @file
+ * OpenDocument (drawing) input and output
+ *//*
+ * Authors:
+ *   Bob Jamison
+ *   Abhishek Sharma
+ *   Kris De Gussem
  *
+ * Copyright (C) 2018 Authors
+ * Released under GNU LGPL v2.1+, read the file 'COPYING' for more information.
+ */
+/*
  * This is an an entry in the extensions mechanism to begin to enable
  * the inputting and outputting of OpenDocument Format (ODF) files from
  * within Inkscape.  Although the initial implementations will be very lossy
@@ -12,34 +22,7 @@
  *
  * http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/idl-definitions.html
  *
- * Authors:
- *   Bob Jamison
- *   Abhishek Sharma
- *   Kris De Gussem
- *
- * Copyright (C) 2006, 2007 Bob Jamison
- * Copyright (C) 2013 Kris De Gussem
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include "odf.h"
 
@@ -67,6 +50,7 @@
 #include "object/sp-stop.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-radial-gradient.h"
+#include "object/sp-root.h"
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 #include "object/sp-flowtext.h"
@@ -82,8 +66,9 @@
 #include "document.h"
 #include "extension/extension.h"
 
-#include "io/inkscapestream.h"
-#include "io/bufferstream.h"
+#include "io/stream/bufferstream.h"
+#include "io/stream/stringstream.h"
+#include "io/sys.h"
 #include <util/ziptool.h>
 #include <iomanip>
 namespace Inkscape
@@ -273,7 +258,7 @@ private:
  * The singular values, sigma[k] = S[k][k], are ordered so that
  * sigma[0] >= sigma[1] >= ... >= sigma[n-1].
  * <P>
- * The singular value decompostion always exists, so the constructor will
+ * The singular value decomposition always exists, so the constructor will
  * never fail.  The matrix condition number and the effective numerical
  * rank can be computed from this decomposition.
  */
@@ -894,25 +879,6 @@ static Glib::ustring getAttribute( Inkscape::XML::Node *node, char const *attrNa
 }
 
 
-/**
- * Get the extension suffix from the end of a file name
- */
-static Glib::ustring getExtension(const Glib::ustring &fname)
-{
-    Glib::ustring ext;
-
-    std::string::size_type pos = fname.rfind('.');
-    if (pos == fname.npos)
-        {
-        ext = "";
-        }
-    else
-        {
-        ext = fname.substr(pos);
-        }
-    return ext;
-}
-
 static Glib::ustring formatTransform(Geom::Affine &tf)
 {
     Glib::ustring str;
@@ -935,12 +901,7 @@ static Glib::ustring formatTransform(Geom::Affine &tf)
 static Geom::Affine getODFTransform(const SPItem *item)
 {
     //### Get SVG-to-ODF transform
-    Geom::Affine tf (item->i2dt_affine());
-    //Flip Y into document coordinates
-    double doc_height    = SP_ACTIVE_DOCUMENT->getHeight().value("px");
-    Geom::Affine doc2dt_tf = Geom::Affine(Geom::Scale(1.0, -1.0));                    /// @fixme hardcoded desktop transform
-    doc2dt_tf            = doc2dt_tf * Geom::Affine(Geom::Translate(0, doc_height));
-    tf                   = tf * doc2dt_tf;
+    Geom::Affine tf (item->i2doc_affine());
     tf                   = tf * Geom::Affine(Geom::Scale(pxToCm));
     return tf;
 }
@@ -962,14 +923,13 @@ static Geom::OptRect getODFBoundingBox(const SPItem *item)
 
 
 /**
- * Get the transform for an item, correcting for
- * handedness reversal
+ * Get the transform for an item, including parents, but without
+ * root viewBox transformation.
  */
 static Geom::Affine getODFItemTransform(const SPItem *item)
 {
-    Geom::Affine itemTransform (Geom::Scale(1, -1));  /// @fixme hardcoded doc2dt transform?
-    itemTransform = itemTransform * (Geom::Affine)item->transform;
-    itemTransform = itemTransform * Geom::Scale(1, -1);
+    Geom::Affine itemTransform (item->i2doc_affine() *
+            SP_ACTIVE_DOCUMENT->getRoot()->c2p.inverse());
     return itemTransform;
 }
 
@@ -1060,38 +1020,30 @@ void OdfOutput::preprocess(ZipFile &zf, Inkscape::XML::Node *node)
         return;
     }
 
-    if (nodeName == "image" || nodeName == "svg:image")
-        {
+    if (nodeName == "image" || nodeName == "svg:image") {
         Glib::ustring href = getAttribute(node, "xlink:href");
-        if (href.size() > 0)
-            {
-            Glib::ustring oldName = href;
-            Glib::ustring ext = getExtension(oldName);
-            if (ext == ".jpeg")
-                ext = ".jpg";
-            if (imageTable.find(oldName) == imageTable.end())
-                {
-                char buf[64];
-                snprintf(buf, sizeof(buf), "Pictures/image%u%s",
-                         static_cast<unsigned int>(imageTable.size()), ext.c_str());
-                Glib::ustring newName = buf;
-                imageTable[oldName] = newName;
-                Glib::ustring comment = "old name was: ";
-                comment.append(oldName);
-                Inkscape::URI oldUri(oldName.c_str());
-                std::string pathName = oldUri.toNativeFilename();
-                ZipEntry *ze = zf.addFile(pathName, comment);
-                if (ze)
-                    {
-                    ze->setFileName(newName);
-                    }
-                else
-                    {
-                    g_warning("Could not load image file '%s'", pathName.c_str());
-                    }
+        if (href.size() > 0 && imageTable.count(href) == 0) {
+            try {
+                auto uri = Inkscape::URI(href.c_str(), docBaseUri.c_str());
+                auto mimetype = uri.getMimeType();
+
+                if (mimetype.substr(0, 6) != "image/") {
+                    return;
                 }
+
+                auto ext = mimetype.substr(6);
+                auto newName = Glib::ustring("Pictures/image") + std::to_string(imageTable.size()) + "." + ext;
+
+                imageTable[href] = newName;
+
+                auto ze = zf.newEntry(newName, "");
+                ze->setUncompressedData(uri.getContents());
+                ze->finish();
+            } catch (...) {
+                g_warning("Could not handle URI '%.100s'", href.c_str());
             }
         }
+    }
 
     for (Inkscape::XML::Node *child = node->firstChild() ;
             child ; child = child->next())
@@ -1133,19 +1085,14 @@ bool OdfOutput::writeManifest(ZipFile &zf)
     std::map<Glib::ustring, Glib::ustring>::iterator iter;
     for (iter = imageTable.begin() ; iter!=imageTable.end() ; ++iter)
         {
-        Glib::ustring oldName = iter->first;
         Glib::ustring newName = iter->second;
 
-        Glib::ustring ext = getExtension(oldName);
-        if (ext == ".jpeg")
-            ext = ".jpg";
+        // note: mime subtype was added as file extenion in OdfOutput::preprocess
+        Glib::ustring mimesubtype = Inkscape::IO::get_file_extension(newName);
+
         outs.printf("    <manifest:file-entry manifest:media-type=\"");
-        if (ext == ".gif")
-            outs.printf("image/gif");
-        else if (ext == ".png")
-            outs.printf("image/png");
-        else if (ext == ".jpg")
-            outs.printf("image/jpeg");
+        outs.printf("image/");
+        outs.printf("%s", mimesubtype.c_str());
         outs.printf("\" manifest:full-path=\"");
         outs.writeString(newName.c_str());
         outs.printf("\"/>\n");
@@ -1720,10 +1667,9 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
         double iwidth  = img->width.value;
         double iheight = img->height.value;
 
-        Geom::Rect ibbox(Geom::Point(ix, iy), Geom::Point(ix+iwidth, iy+iheight));
-        ibbox = ibbox * tf;
-        ix      = ibbox.min()[Geom::X];
-        iy      = ibbox.min()[Geom::Y];
+        Geom::Point ibbox_min = Geom::Point(ix, iy) * tf;
+        ix      = ibbox_min.x();
+        iy      = ibbox_min.y();
         iwidth  = xscale * iwidth;
         iheight = yscale * iheight;
 
@@ -2094,6 +2040,8 @@ void OdfOutput::reset()
 void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gchar const *filename)
 {
     reset();
+
+    docBaseUri = Inkscape::URI::from_dirname(doc->getBase()).str();
 
     ZipFile zf;
     preprocess(zf, doc->rroot);

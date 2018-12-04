@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Dialog for renaming layers.
@@ -10,12 +11,8 @@
  * Copyright (C) 2004 Bryce Harrington
  * Copyright (C) 2006 Andrius R.
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include "ui/dialog/knot-properties.h"
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 add_subdirectory(gimp)
 
 set(widgets_SRC
@@ -21,8 +22,6 @@ set(widgets_SRC
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
 	sp-widget.cpp
-	sp-xmlview-attr-list.cpp
-	sp-xmlview-content.cpp
 	sp-xmlview-tree.cpp
 	spinbutton-events.cpp
 	spw-utilities.cpp
@@ -54,8 +53,6 @@ set(widgets_SRC
 	sp-attribute-widget.h
 	sp-color-selector.h
 	sp-widget.h
-	sp-xmlview-attr-list.h
-	sp-xmlview-content.h
 	sp-xmlview-tree.h
 	spinbutton-events.h
 	spw-utilities.h

@@ -1,4 +1,5 @@
-/* 
+// SPDX-License-Identifier: GPL-2.0-or-later
+/*
  *  This file came from libwpg as a source, their utility wpg2svg
  *  specifically.  It has been modified to work as an Inkscape extension.
  *  The Inkscape extension code is covered by this copyright, but the
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2006 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 
@@ -39,8 +40,11 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <cstdio>
-#include "config.h"
 
 #ifdef WITH_LIBWPG
 
@@ -81,7 +85,7 @@ namespace Internal {
 
 SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
-    #ifdef WIN32
+    #ifdef _WIN32
         // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
         // therefore attempt to convert uri to the system codepage
         // even if this is not possible the alternate short (8.3) file name will be used if available

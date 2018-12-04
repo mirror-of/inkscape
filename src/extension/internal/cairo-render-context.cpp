@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Rendering with Cairo.
  */
@@ -9,11 +10,11 @@
  *
  * Copyright (C) 2006 Miklos Erdelyi
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifndef PANGO_ENABLE_BACKEND
@@ -50,7 +51,7 @@
 #include "object/sp-clippath.h"
 
 #include "util/units.h"
-#ifdef WIN32
+#ifdef _WIN32
 #include "libnrtype/FontFactory.h" // USE_PANGO_WIN32
 #endif
 
@@ -270,7 +271,7 @@ bool CairoRenderContext::setPdfTarget(gchar const *utf8_fn)
         if (*fn == '|') {
             fn += 1;
             while (isspace(*fn)) fn += 1;
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(fn, "w");
 #else
             osp = _popen(fn, "w");
@@ -297,7 +298,7 @@ bool CairoRenderContext::setPdfTarget(gchar const *utf8_fn)
             gchar *qn = ( *fn
                     ? g_strdup_printf("lpr -P %s", fn)  /* FIXME: quote fn */
                 : g_strdup("lpr") );
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(qn, "w");
 #else
             osp = _popen(qn, "w");
@@ -352,7 +353,7 @@ bool CairoRenderContext::setPsTarget(gchar const *utf8_fn)
         if (*fn == '|') {
             fn += 1;
             while (isspace(*fn)) fn += 1;
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(fn, "w");
 #else
             osp = _popen(fn, "w");
@@ -379,7 +380,7 @@ bool CairoRenderContext::setPsTarget(gchar const *utf8_fn)
             gchar *qn = ( *fn
                     ? g_strdup_printf("lpr -P %s", fn)  /* FIXME: quote fn */
                 : g_strdup("lpr") );
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(qn, "w");
 #else
             osp = _popen(qn, "w");
@@ -1673,7 +1674,7 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
         }
     }
 
-    cairo_paint_with_alpha(_cr, opacity);
+    cairo_paint(_cr);
 
     cairo_restore(_cr);
     return true;
@@ -1933,8 +1934,6 @@ _write_callback(void *closure, const unsigned char *data, unsigned int length)
 
 #undef TRACE
 #undef TEST
-
-/* End of GNU GPL code */
 
 
 /*

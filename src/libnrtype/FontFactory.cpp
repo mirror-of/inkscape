@@ -1,20 +1,24 @@
-/*
- *  FontFactory.cpp
- *  testICU
- *
- *   Authors:
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
  *     fred
  *     bulia byak <buliabyak@users.sf.net>
  *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifndef PANGO_ENABLE_ENGINE
 #define PANGO_ENABLE_ENGINE
 #endif
+
+#include <unordered_map>
 
 #include <glibmm/i18n.h>
 
@@ -25,13 +29,12 @@
 #include <pango/pango-ot.h>
 
 #include "io/sys.h"
-#include "util/unordered-containers.h"
 
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 #include "libnrtype/OpenTypeUtil.h"
 
-typedef INK_UNORDERED_MAP<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
+typedef std::unordered_map<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
 
 // need to avoid using the size field
 size_t font_descr_hash::operator()( PangoFontDescription *const &x) const {
@@ -791,7 +794,7 @@ void font_factory::AddFontsDir(char const *utf8dir)
     }
 
     gchar *dir;
-# ifdef WIN32
+# ifdef _WIN32
     dir = g_win32_locale_filename_from_utf8(utf8dir);
 # else
     dir = g_filename_from_utf8(utf8dir, -1, nullptr, nullptr, nullptr);
@@ -823,7 +826,7 @@ void font_factory::AddFontFile(char const *utf8file)
     }
 
     gchar *file;
-# ifdef WIN32
+# ifdef _WIN32
     file = g_win32_locale_filename_from_utf8(utf8file);
 # else
     file = g_filename_from_utf8(utf8file, -1, nullptr, nullptr, nullptr);

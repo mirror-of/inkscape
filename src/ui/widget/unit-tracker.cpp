@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::UI::Widget::UnitTracker
  * Simple mediator to synchronize changes to unit menus
@@ -10,7 +11,7 @@
  * Copyright (C) 2013 Matthew Petroff
  * Copyright (C) 2018 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <algorithm>
@@ -114,7 +115,7 @@ void UnitTracker::addAdjustment(GtkAdjustment *adj)
         g_object_weak_ref(G_OBJECT(adj), _adjustmentFinalizedCB, this);
         _adjList.push_back(adj);
     } else {
-        std::cerr << "UnitTracker::addAjustment: Ajustment already added!" << std::endl;
+        std::cerr << "UnitTracker::addAjustment: Adjustment already added!" << std::endl;
     }
 }
 

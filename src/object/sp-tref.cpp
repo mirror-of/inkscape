@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <tref> implementation - All character data within the referenced
  * element, including character data enclosed within additional markup,
@@ -13,7 +14,7 @@
  *
  * Copyright (C) 2007 Gail Banaszkiewicz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-tref.h"
@@ -85,7 +86,7 @@ void SPTRef::release() {
     SPItem::release();
 }
 
-void SPTRef::set(unsigned int key, const gchar* value) {
+void SPTRef::set(SPAttributeEnum key, const gchar* value) {
     debug("0x%p %s(%u): '%s'",this,
             sp_attribute_name(key),key,value ? value : "<no value>");
 
@@ -173,10 +174,10 @@ Inkscape::XML::Node* SPTRef::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     this->attributes.writeTo(repr);
 
     if (this->uriOriginalRef->getURI()) {
-        gchar *uri_string = this->uriOriginalRef->getURI()->toString();
+        auto uri = this->uriOriginalRef->getURI()->str();
+        auto uri_string = uri.c_str();
         debug("uri_string=%s", uri_string);
         repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
     }
 
     SPItem::write(xml_doc, repr, flags);

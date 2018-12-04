@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/dialog/lpe-powerstroke-properties.h"
@@ -179,7 +180,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     if (!valid_index(_index)) {
         return;
     }
-
+    _pparam->param_effect->upd_params = true;
     /// @todo how about item transforms???
     Piecewise<D2<SBasis> > const & pwd2 = _pparam->get_pwd2();
     Piecewise<D2<SBasis> > const & n = _pparam->get_pwd2_normal();
@@ -218,7 +219,8 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_get() const
 
 void PowerStrokePointArrayParamKnotHolderEntity::knot_set_offset(Geom::Point offset)
 {
-	_pparam->_vector.at(_index) = Geom::Point(offset.x(), offset.y() / 2);
+	_pparam->param_effect->upd_params = true;
+    _pparam->_vector.at(_index) = Geom::Point(offset.x(), offset.y() / 2);
 	this->parent_holder->knot_ungrabbed_handler(this->knot, 0);
 }
 

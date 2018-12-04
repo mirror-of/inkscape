@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Eraser drawing mode
  *
@@ -19,7 +20,7 @@
  * Copyright (C) 2006 MenTaLguY
  * Copyright (C) 2008 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noERASER_VERBOSE
@@ -43,7 +44,6 @@
 #include "document.h"
 #include "layer-manager.h"
 #include "layer-model.h"
-#include "macros.h"
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "rubberband.h"
@@ -56,6 +56,8 @@
 #include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
+
+#include "include/macros.h"
 
 #include "object/sp-clippath.h"
 #include "object/sp-item-group.h"
@@ -382,7 +384,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
-                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
 
@@ -673,7 +675,7 @@ void EraserTool::set_to_accumulated() {
             std::vector<SPItem*> toWorkOn;
             if (selection->isEmpty()) {
                 if (eraser_mode  == ERASER_MODE_CUT || eraser_mode  == ERASER_MODE_CLIP) {
-                    toWorkOn = document->getItemsPartiallyInBox(this->desktop->dkey, *eraserBbox);
+                    toWorkOn = document->getItemsPartiallyInBox(this->desktop->dkey, *eraserBbox, false, false, false, true);
                 } else {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(this->desktop);
                     toWorkOn = document->getItemsAtPoints(this->desktop->dkey, r->getPoints());

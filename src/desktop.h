@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_DESKTOP_H
 #define SEEN_SP_DESKTOP_H
 
@@ -17,13 +18,9 @@
  * Copyright (C) 1999-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <cstddef>
 #include <sigc++/sigc++.h>
@@ -38,6 +35,7 @@
 
 #include "preferences.h"
 #include "object/sp-gradient.h" // TODO refactor enums out to their own .h file
+#include "ui/dialog/print.h"
 
 class SPCSSAttr;
 struct SPCanvas;
@@ -151,6 +149,8 @@ public:
     DocumentInterface *dbus_document_interface;
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;
+    /// Stored settings for print dialogue
+    Inkscape::UI::Dialog::PrinterSettings printer_settings;
 
     Inkscape::UI::Tools::ToolBase* getEventContext() const;
     Inkscape::Selection* getSelection() const;
@@ -252,7 +252,7 @@ public:
     void destroy();
 
     Inkscape::MessageContext *guidesMessageContext() const {
-        return _guides_message_context;
+        return _guides_message_context.get();
     }
 
     Inkscape::Display::TemporaryItem * add_temporary_canvasitem (SPCanvasItem *item, guint lifetime, bool move_to_bottom = true);
@@ -269,6 +269,9 @@ public:
     }
     void setDisplayModeOutline() {
         _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
+    }
+    void setDisplayModeVisibleHairlines() {
+        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
     }
     void displayModeToggle();
     Inkscape::RenderMode _display_mode;
@@ -399,6 +402,8 @@ public:
     bool colorProfAdjustEnabled();
 
     void toggleGrids();
+    void toggleSplitMode();
+    bool splitMode() const { return _split_canvas; };
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
@@ -426,11 +431,16 @@ public:
     Geom::Point doc2dt(Geom::Point const &p) const;
     Geom::Point dt2doc(Geom::Point const &p) const;
 
+    bool is_yaxisdown() const { return _doc2dt[3] > 0; }
+    double yaxisdir() const { return _doc2dt[3]; }
+
     void setDocument (SPDocument* doc) override;
     bool shutdown() override;
-    void mouseover() override {}
-    void mouseout() override {}
 
+    guint get_hruler_thickness();
+    guint get_vruler_thickness();
+    guint get_vscroll_thickness();
+    guint get_hscroll_thickness();
 
     virtual bool onDeleteUI (GdkEventAny*);
     virtual bool onWindowStateEvent (GdkEventWindowState* event);
@@ -439,7 +449,7 @@ public:
 
 private:
     Inkscape::UI::View::EditWidgetInterface       *_widget;
-    Inkscape::MessageContext  *_guides_message_context;
+    std::unique_ptr<Inkscape::MessageContext> _guides_message_context;
     bool _active;
 
     // This simple class ensures that _w2d is always in sync with _rotation and _scale
@@ -455,16 +465,8 @@ private:
             _scale = scale;
             _update();
         }
-        void setScale( double scale ) {
-            _scale = Geom::Scale(scale, -scale); // Y flip
-            _update();
-        }
         void addScale( Geom::Scale scale) {
             _scale *= scale;
-            _update();
-        }
-        void addScale( double scale ) {
-            _scale *= Geom::Scale(scale, -scale); // Y flip?? Check
             _update();
         }
 
@@ -534,6 +536,7 @@ private:
     DesktopAffine _current_affine;
     std::list<DesktopAffine> transforms_past;
     std::list<DesktopAffine> transforms_future;
+    bool _split_canvas;
     bool _quick_zoom_enabled; ///< Signifies that currently we're in quick zoom mode
     DesktopAffine _quick_zoom_affine;  ///< The transform of the screen before quick zoom
 
@@ -578,11 +581,11 @@ private:
     sigc::connection _commit_connection;
     sigc::connection _modified_connection;
 
-    void onResized (double, double) override;
-    void onRedrawRequested() override;
-    void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
-    void onDocumentURISet (gchar const* uri) override;
-    void onDocumentResized (double, double) override;
+    void onResized (double, double);
+    void onRedrawRequested();
+    void onStatusMessage (Inkscape::MessageType type, gchar const *message);
+    void onDocumentURISet (gchar const* uri);
+    void onDocumentResized (double, double);
 
     static void _onActivate (SPDesktop* dt);
     static void _onDeactivate (SPDesktop* dt);

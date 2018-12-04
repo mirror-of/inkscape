@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * <sodipodi:spiral> implementation
  */
@@ -11,7 +12,7 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/effect.h"
@@ -89,7 +90,7 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
     return repr;
 }
 
-void SPSpiral::set(unsigned int key, gchar const* value) {
+void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
     /// \todo fixme: we should really collect updates
     switch (key) {
     case SP_ATTR_SODIPODI_CX:
@@ -347,12 +348,16 @@ void SPSpiral::set_shape() {
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
-    if (before || this->hasPathEffectRecursive()) {
+    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
+    if (before || haslpe) {
         if (c && before && before->get_pathvector() != c->get_pathvector()){
             this->setCurveBeforeLPE(c);
             sp_lpe_item_update_patheffect(this, true, false);
-        } else {
+        } else if(haslpe) {
             this->setCurveBeforeLPE(c);
+        } else {
+            //This happends on undo, fix bug:#1791784
+            this->setCurveInsync(c);
         }
     } else {
         this->setCurveInsync(c);
@@ -404,23 +409,11 @@ void SPSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
  */
 Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 {
-    if (hasPathEffect() && pathEffectsEnabled() && 
-        (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
-    {
-        // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
-        // also if the effect is type BEND PATH to fix bug #179842
-        this->adjust_livepatheffect(xform);
+    if (hasPathEffect() && pathEffectsEnabled()) {
         return xform;
     }
     // Only set transform with proportional scaling
     if (!xform.withoutTranslation().isUniformScale()) {
-        // Adjust livepatheffect
-        if (hasPathEffect() && pathEffectsEnabled()) {
-            this->adjust_livepatheffect(xform);
-        }
         return xform;
     }
 
@@ -460,9 +453,6 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
-
-    // Adjust livepatheffect
-    this->adjust_livepatheffect(xform);
 
     return ret;
 }

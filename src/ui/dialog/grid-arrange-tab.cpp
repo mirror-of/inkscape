@@ -1,19 +1,20 @@
-    /*
-     * A simple dialog for creating grid type arrangements of selected objects
-     *
-     * Authors:
-     *   Bob Jamison ( based off trace dialog)
-     *   John Cliff
-     *   Other dudes from The Inkscape Organization
-     *   Abhishek Sharma
-     *   Declara Denis
-     *
-     * Copyright (C) 2004 Bob Jamison
-     * Copyright (C) 2004 John Cliff
-     *
-     * Released under GNU GPL, read the file 'COPYING' for more information
-     */
-    //#define DEBUG_GRID_ARRANGE 1
+// SPDX-License-Identifier: GPL-2.0-or-later
+/*
+ * A simple dialog for creating grid type arrangements of selected objects
+ *
+ * Authors:
+ *   Bob Jamison ( based off trace dialog)
+ *   John Cliff
+ *   Other dudes from The Inkscape Organization
+ *   Abhishek Sharma
+ *   Declara Denis
+ *
+ * Copyright (C) 2004 Bob Jamison
+ * Copyright (C) 2004 John Cliff
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+//#define DEBUG_GRID_ARRANGE 1
 
 #include "ui/dialog/grid-arrange-tab.h"
 #include <glibmm/i18n.h>
@@ -29,7 +30,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "desktop.h"
-    //#include "sp-item-transform.h" FIXME
+//#include "sp-item-transform.h" FIXME
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 
     /*
@@ -324,10 +325,9 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
                  new_x = grid_left + (((col_widths[col] - width)/2)*HorizAlign) + col_xs[col];
                  new_y = grid_top + (((row_heights[row] - height)/2)*VertAlign) + row_ys[row];
 
-                 // signs are inverted between x and y due to y inversion
-                 Geom::Point move = Geom::Point(new_x - min[Geom::X], min[Geom::Y] - new_y);
+                 Geom::Point move = Geom::Point(new_x, new_y) - min;
                  Geom::Affine const affine = Geom::Affine(Geom::Translate(move));
-                 item->set_i2d_affine(item->i2dt_affine() * affine);
+                 item->set_i2d_affine(item->i2doc_affine() * affine * SP_ACTIVE_DESKTOP->doc2dt());
                  item->doWriteTransform(item->transform);
                  item->updateRepr();
                  cnt +=1;

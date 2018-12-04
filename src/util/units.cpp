@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape Units
  *
@@ -6,18 +7,15 @@
  *
  * Copyright (C) 2013 Matthew Petroff
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include <cmath>
 #include <cerrno>
 #include <iomanip>
 #include <iostream>
 #include <utility>
+#include <unordered_map>
 #include <glib.h>
 #include <glibmm/regex.h>
 #include <glibmm/fileutils.h>
@@ -85,7 +83,7 @@ unsigned const svg_length_lookup[] = {
 
 
 // maps unit codes obtained from their abbreviations to their SVGLength unit indexes
-typedef INK_UNORDERED_MAP<unsigned, SVGLength::Unit> UnitCodeLookup;
+typedef std::unordered_map<unsigned, SVGLength::Unit> UnitCodeLookup;
 
 UnitCodeLookup make_unit_code_lookup()
 {
@@ -100,7 +98,7 @@ UnitCodeLookup const unit_code_lookup = make_unit_code_lookup();
 
 
 
-typedef INK_UNORDERED_MAP<Glib::ustring, Inkscape::Util::UnitType> TypeMap;
+typedef std::unordered_map<Glib::ustring, Inkscape::Util::UnitType> TypeMap;
 
 /** A std::map that gives the data type value for the string version.
  * @todo consider hiding map behind hasFoo() and getFoo() type functions. */

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 /*
  * System abstraction utility routines
@@ -7,15 +8,16 @@
  *
  * Copyright (C) 2004-2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <fstream>
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
 #endif
 
-#include <fstream>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glibmm/ustring.h>
@@ -67,6 +69,21 @@ void Inkscape::IO::dump_fopen_call( char const *utf8name, char const *id )
 FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
 {
     FILE* fp = nullptr;
+
+    if (Glib::ustring( utf8name ) == Glib::ustring("-")) {
+        // user requests to use pipes
+
+        Glib::ustring how( mode );
+        if ( how.find("w") != Glib::ustring::npos ) {
+#ifdef _WIN32
+            setmode(fileno(stdout), O_BINARY);
+#endif
+            return stdout;
+        } else {
+            return stdin;
+        }
+    }
+
     gchar *filename = g_filename_from_utf8( utf8name, -1, nullptr, nullptr, nullptr );
     if ( filename )
     {
@@ -109,6 +126,10 @@ int Inkscape::IO::mkdir_utf8name( char const *utf8name )
 bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
 {
     bool exists = false;
+
+    // in case the file to check is a pipe it doesn't need to exist
+    if (g_strcmp0(utf8name, "-") == 0 && G_FILE_TEST_IS_REGULAR)
+        return true;
 
     if ( utf8name ) {
         gchar *filename = nullptr;

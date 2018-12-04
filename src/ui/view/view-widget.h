@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_UI_VIEW_VIEWWIDGET_H
 #define INKSCAPE_UI_VIEW_VIEWWIDGET_H
 
@@ -9,10 +10,11 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtk/gtk.h>
+
 
 namespace Inkscape {
 namespace UI {
@@ -51,17 +53,12 @@ void sp_view_widget_set_view(SPViewWidget *vw, Inkscape::UI::View::View *view);
 bool sp_view_widget_shutdown(SPViewWidget *vw);
 
 /**
- * Create a new SPViewWidget (which happens to be a SPDesktopWidget).
- */
-SPViewWidget *sp_desktop_widget_new(SPNamedView *namedview);
-
-/**
  * SPViewWidget is a GUI widget that contain a single View. It is also
  * an abstract base class with little functionality of its own.
  */
 class SPViewWidget {
  public:
-	GtkEventBox eventbox;
+    GtkEventBox eventbox;  // NOT USED!
 
         Inkscape::UI::View::View *view;
 

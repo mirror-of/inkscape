@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * feSpecularLighting renderer
  *
@@ -7,8 +8,12 @@
  *
  * Copyright (C) 2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #include <glib.h>
 #include <cmath>

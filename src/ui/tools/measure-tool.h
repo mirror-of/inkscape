@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_MEASURING_CONTEXT_H
 #define SEEN_SP_MEASURING_CONTEXT_H
 
@@ -9,12 +10,8 @@
  *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
  * Copyright (C) 2011 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include <cstddef>
 #include <sigc++/sigc++.h>
@@ -77,6 +74,7 @@ private:
     gint dimension_offset;
     Geom::Point start_p;
     Geom::Point end_p;
+    Geom::Point last_pos;
     std::vector<SPCanvasItem *> measure_tmp_items;
     std::vector<SPCanvasItem *> measure_phantom_items;
     std::vector<SPCanvasItem *> measure_item;

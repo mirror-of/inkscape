@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feOffset> implementation.
  *
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2006,2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "offset.h"
@@ -54,7 +55,7 @@ void SPFeOffset::release() {
 /**
  * Sets a specific value in the SPFeOffset.
  */
-void SPFeOffset::set(unsigned int key, gchar const *value) {
+void SPFeOffset::set(SPAttributeEnum key, gchar const *value) {
     double read_num;
 
     switch(key) {
@@ -118,7 +119,7 @@ void SPFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterOffset *nr_offset = dynamic_cast<Inkscape::Filters::FilterOffset*>(nr_primitive);
     g_assert(nr_offset != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_offset->set_dx(this->dx);
     nr_offset->set_dy(this->dy);

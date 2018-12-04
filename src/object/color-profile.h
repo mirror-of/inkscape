@@ -1,5 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_COLOR_PROFILE_H
 #define SEEN_COLOR_PROFILE_H
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #include <set>
 #include <vector>
@@ -85,7 +98,7 @@ protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void release() override;
 
-    void set(unsigned int key, char const* value) override;
+    void set(SPAttributeEnum key, char const* value) override;
 
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };

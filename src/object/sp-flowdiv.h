@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_SP_ITEM_FLOWDIV_H
 #define SEEN_SP_ITEM_FLOWDIV_H
 
@@ -34,7 +43,7 @@ protected:
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
@@ -49,7 +58,7 @@ protected:
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
@@ -64,7 +73,7 @@ protected:
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 

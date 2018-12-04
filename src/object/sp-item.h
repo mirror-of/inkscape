@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_ITEM_H
 #define SEEN_SP_ITEM_H
 
@@ -17,7 +18,7 @@
  * Copyright (C) 2001-2002 Ximian, Inc.
  * Copyright (C) 2004 Monash University
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/forward.h>
@@ -45,15 +46,12 @@ class Drawing;
 class DrawingItem;
 class URIReference;
 
+namespace UI {
+namespace View {
+class SVGViewWidget;
 }
-
-enum {
-    SP_EVENT_INVALID,
-    SP_EVENT_NONE,
-    SP_EVENT_ACTIVATE,
-    SP_EVENT_MOUSEOVER,
-    SP_EVENT_MOUSEOUT
-};
+}
+}
 
 // TODO make a completely new function that transforms either the fill or
 // stroke of any SPItem  without adding an extra parameter to adjust_pattern.
@@ -72,11 +70,21 @@ enum PatternTransform {
  * to process correct ones in meaningful way.
  * Also, this probably goes to SPObject base class.
  *
+ * GUI Code should not be here!
  */
 class SPEvent {
+
 public:
-    unsigned int type;
-    void* data;
+    enum Type {
+        INVALID,
+        NONE,
+        ACTIVATE,
+        MOUSEOVER,
+        MOUSEOUT
+    };
+
+    Type type;
+    Inkscape::UI::View::SVGViewWidget* view;
 };
 
 class SPItemView {
@@ -306,7 +314,10 @@ public:
     static unsigned int display_key_new(unsigned int numkeys);
 
     Inkscape::DrawingItem *invoke_show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+
+    // Removed item from display tree.
     void invoke_hide(unsigned int key);
+
     void getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs=nullptr) const;
     void adjust_pattern(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false, PatternTransform = TRANSFORM_BOTH);
     void adjust_gradient(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false);
@@ -388,7 +399,7 @@ private:
 public:
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
 	void release() override;
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 	void update(SPCtx *ctx, unsigned int flags) override;
         void modified(unsigned int flags) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
@@ -417,6 +428,8 @@ public:
 Geom::Affine i2anc_affine(SPObject const *item, SPObject const *ancestor);
 
 Geom::Affine i2i_affine(SPObject const *src, SPObject const *dest);
+
+Geom::Affine sp_item_transform_repr (SPItem *item);
 
 /* fixme: - these are evil, but OK */
 

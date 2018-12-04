@@ -1,5 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2012 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_COLOR_PROFILE_CMS_FNS_H
 #define SEEN_COLOR_PROFILE_CMS_FNS_H
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #if HAVE_LIBLCMS2
 #  include <lcms2.h>

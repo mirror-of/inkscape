@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief SVG diffuse lighting filter effect
  *//*
@@ -6,7 +7,7 @@
  *   Jean-Rene Reinhard <jr@komite.net>
  *
  * Copyright (C) 2006-2007 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SP_FEDIFFUSELIGHTING_H_SEEN
@@ -49,7 +50,7 @@ protected:
 
 	void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old_repr, Inkscape::XML::Node* new_repr) override;
 
-	void set(unsigned int key, const gchar* value) override;
+	void set(SPAttributeEnum key, const gchar* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 

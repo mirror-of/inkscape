@@ -1,23 +1,22 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * Generic button widget
+ *//*
+ * Authors:
+ *  see git history
+ *  Lauris Kaplinski <lauris@kaplinski.com>
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_SP_BUTTON_H
 #define SEEN_SP_BUTTON_H
 
-/**
- * Generic button widget
- *
- * Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *
- * Copyright (C) 2002 Lauris Kaplinski
- *
- * This code is in public domain
- */
-
-#define SP_TYPE_BUTTON (sp_button_get_type ())
-#define SP_BUTTON(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_BUTTON, SPButton))
-#define SP_IS_BUTTON(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_BUTTON))
-
 #include <gtk/gtk.h>
 #include <sigc++/connection.h>
+
+#define SP_TYPE_BUTTON (sp_button_get_type ())
+G_DECLARE_FINAL_TYPE(SPButton, sp_button, SP, BUTTON, GtkToggleButton);
 
 struct SPAction;
 
@@ -38,25 +37,20 @@ struct SPBChoiceData {
 	guchar *px;
 };
 
-struct SPButton {
-	GtkToggleButton widget;
-	SPButtonType type;
-	GtkIconSize lsize;
-	unsigned int psize;
-	SPAction *action;
-	SPAction *doubleclick_action;
+struct _SPButton {
+    GtkToggleButton parent_instance;
 
-	sigc::connection c_set_active;
-	sigc::connection c_set_sensitive;
-};
+    SPButtonType type;
+    GtkIconSize lsize;
+    unsigned int psize;
+    SPAction *action;
+    SPAction *doubleclick_action;
 
-struct SPButtonClass {
-	GtkToggleButtonClass parent_class;
+    sigc::connection c_set_active;
+    sigc::connection c_set_sensitive;
 };
 
 #define SP_BUTTON_IS_DOWN(b) gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))
-
-GType sp_button_get_type ();
 
 GtkWidget *sp_button_new (GtkIconSize size, SPButtonType type, SPAction *action, SPAction *doubleclick_action);
 

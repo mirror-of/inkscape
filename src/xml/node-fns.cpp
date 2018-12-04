@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifdef HAVE_CONFIG_H
 #endif
 
@@ -59,6 +68,7 @@ struct node_matches {
 
 // documentation moved to header
 Node *previous_node(Node *node) {
+    return node->prev();
     using Inkscape::Algorithms::find_if_before;
 
     if ( !node || !node->parent() ) {

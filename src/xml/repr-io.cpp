@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Dirty DOM-like  tree
  *
@@ -7,12 +8,8 @@
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <cstring>
 #include <string>
@@ -27,9 +24,9 @@
 #include "xml/text-node.h"
 
 #include "io/sys.h"
-#include "io/uristream.h"
-#include "io/stringstream.h"
-#include "io/gzipstream.h"
+#include "io/stream/stringstream.h"
+#include "io/stream/gzipstream.h"
+#include "io/stream/uristream.h"
 
 #include "extension/extension.h"
 
@@ -47,7 +44,6 @@ using Inkscape::XML::Document;
 using Inkscape::XML::SimpleDocument;
 using Inkscape::XML::Node;
 using Inkscape::XML::AttributeRecord;
-using Inkscape::XML::calc_abs_doc_base;
 using Inkscape::XML::rebase_href_attrs;
 
 Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
@@ -79,7 +75,6 @@ public:
           LoadEntities(false),
           cachedData(),
           cachedPos(0),
-          dummy("x"),
           instr(nullptr),
           gzin(nullptr)
     {
@@ -116,8 +111,7 @@ private:
     bool LoadEntities; // Checks for SYSTEM Entities (requires cached data)
     std::string cachedData;
     unsigned int cachedPos;
-    Inkscape::URI dummy;
-    Inkscape::IO::UriInputStream* instr;
+    Inkscape::IO::FileInputStream* instr;
     Inkscape::IO::GzipInputStream* gzin;
 };
 
@@ -140,7 +134,7 @@ int XmlSource::setFile(char const *filename, bool load_entities=false)
                 fclose(fp);
                 fp = nullptr;
                 fp = Inkscape::IO::fopen_utf8name(filename, "r");
-                instr = new Inkscape::IO::UriInputStream(fp, dummy);
+                instr = new Inkscape::IO::FileInputStream(fp);
                 gzin = new Inkscape::IO::GzipInputStream(*instr);
 
                 memset( firstFew, 0, sizeof(firstFew) );
@@ -673,8 +667,7 @@ void sp_repr_save_stream(Document *doc, FILE *fp, gchar const *default_ns, bool 
                     gchar const *const old_href_abs_base,
                     gchar const *const new_href_abs_base)
 {
-    Inkscape::URI dummy("x");
-    Inkscape::IO::UriOutputStream bout(fp, dummy);
+    Inkscape::IO::FileOutputStream bout(fp);
     Inkscape::IO::GzipOutputStream *gout = compress ? new Inkscape::IO::GzipOutputStream(bout) : nullptr;
     Inkscape::IO::OutputStreamWriter *out  = compress ? new Inkscape::IO::OutputStreamWriter( *gout ) : new Inkscape::IO::OutputStreamWriter( bout );
 
@@ -716,8 +709,15 @@ bool sp_repr_save_rebased_file(Document *doc, gchar const *const filename, gchar
 
     Glib::ustring old_href_abs_base;
     Glib::ustring new_href_abs_base;
+
+    if (old_base) {
+        old_href_abs_base = old_base;
+        if (!Glib::path_is_absolute(old_href_abs_base)) {
+            old_href_abs_base = Glib::build_filename(Glib::get_current_dir(), old_href_abs_base);
+        }
+    }
+
     if (for_filename) {
-        old_href_abs_base = calc_abs_doc_base(old_base);
         if (Glib::path_is_absolute(for_filename)) {
             new_href_abs_base = Glib::path_get_dirname(for_filename);
         } else {
@@ -772,24 +772,15 @@ static void repr_write_comment( Writer &out, const gchar * val, bool addWhitespa
     if (addWhitespace && indent) {
         for (gint i = 0; i < indentLevel; i++) {
             for (gint j = 0; j < indent; j++) {
-                out.writeString(" ");
+                out.writeChar(' ');
             }
         }
     }
 
-    out.writeString("<!--");
-    // WARNING out.printf() and out.writeString() are *NOT* non-ASCII friendly.
-    if (val) {
-        for (const gchar* cur = val; *cur; cur++ ) {
-            out.writeChar(*cur);
-        }
-    } else {
-        out.writeString(" ");
-    }
-    out.writeString("-->");
+    out.printf("<!--%s-->", val);
 
     if (addWhitespace) {
-        out.writeString("\n");
+        out.writeChar('\n');
     }
 }
 
@@ -976,7 +967,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     if (add_whitespace && indent) {
         for (gint i = 0; i < indent_level; i++) {
             for (gint j = 0; j < indent; j++) {
-                out.writeString(" ");
+                out.writeChar(' ');
             }
         }
     }
@@ -1001,11 +992,11 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
           iter ; ++iter )
     {
         if (!inlineattrs) {
-            out.writeString("\n");
+            out.writeChar('\n');
             if (indent) {
                 for ( gint i = 0 ; i < indent_level + 1 ; i++ ) {
                     for ( gint j = 0 ; j < indent ; j++ ) {
-                        out.writeString(" ");
+                        out.writeChar(' ');
                     }
                 }
             }
@@ -1024,9 +1015,9 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     }
 
     if (repr->firstChild()) {
-        out.writeString( ">" );
+        out.writeChar('>');
         if (loose && add_whitespace) {
-            out.writeString( "\n" );
+            out.writeChar('\n');
         }
         for (child = repr->firstChild(); child != nullptr; child = child->next()) {
             sp_repr_write_stream(child, out, ( loose ? indent_level + 1 : 0 ),
@@ -1037,7 +1028,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         if (loose && add_whitespace && indent) {
             for (gint i = 0; i < indent_level; i++) {
                 for ( gint j = 0 ; j < indent ; j++ ) {
-                    out.writeString(" ");
+                    out.writeChar(' ');
                 }
             }
         }
@@ -1050,7 +1041,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     // after closing text
 
     if (add_whitespace || !strcmp (repr->name(), "svg:text")) {
-        out.writeString( "\n" );
+        out.writeChar('\n');
     }
 }
 

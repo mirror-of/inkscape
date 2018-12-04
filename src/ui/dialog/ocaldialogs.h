@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Open Clip Art Library integration dialogs
  */
@@ -7,15 +8,11 @@
  *   Andrew Higginson
  *
  * Copyright (C) 2007 Bruno Dilly <bruno.dilly@gmail.com>
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
- 
+
 #ifndef __OCAL_DIALOG_H__
 #define __OCAL_DIALOG_H__
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 // Gtkmm includes
 #include <gtkmm/box.h>

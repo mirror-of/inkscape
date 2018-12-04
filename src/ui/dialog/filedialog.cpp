@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Implementation of the file dialog interfaces defined in filedialog.h.
@@ -12,10 +13,10 @@
  * Copyright (C) 2007-2008 Joel Holdsworth
  * Copyright (C) 2004-2008 The Inkscape Organization
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef WIN32
+#ifdef _WIN32
 # include "filedialogimpl-win32.h"
 # include "preferences.h"
 #endif
@@ -89,7 +90,7 @@ FileOpenDialog *FileOpenDialog::create(Gtk::Window &parentWindow,
                                        FileDialogType fileTypes,
                                        const char *title)
 {
-#ifdef WIN32
+#ifdef _WIN32
     FileOpenDialog *dialog = NULL;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool( "/options/desktopintegration/value")) {
@@ -124,7 +125,7 @@ FileSaveDialog *FileSaveDialog::create(Gtk::Window& parentWindow,
                                        const gchar *docTitle,
                                        const Inkscape::Extension::FileSaveMethod save_method)
 {
-#ifdef WIN32
+#ifdef _WIN32
     FileSaveDialog *dialog = NULL;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool( "/options/desktopintegration/value")) {

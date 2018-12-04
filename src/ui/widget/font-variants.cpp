@@ -1,15 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
  *   Tavmjong Bah <tavmjong@free.fr>
  *
  * Copyright (C) 2015, 2018 Tavmong Bah
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <gtkmm.h>
 #include <glibmm/i18n.h>
@@ -896,7 +893,7 @@ namespace Widget {
           for (auto table: res->openTypeTables) {
 
               if (table.first == "liga" ||
-                  table.first == "dlig" ||
+                  table.first == "clig" ||
                   table.first == "dlig" ||
                   table.first == "hgli" ||
                   table.first == "calt") {

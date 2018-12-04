@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * The reference corresponding to the inkscape:live-effect attribute
  *
  * Copyright (C) 2007 Johan Engelen
  *
- * Released under GNU GPL, read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpeobject-reference.h"
@@ -114,8 +115,9 @@ lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObj
     if ( refobj ) {
         lpeobjref->start_listening(refobj);
     }
-
-    lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    if (lpeobjref->owner) {
+        lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 static void

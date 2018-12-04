@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_UI_VIEW_VIEW_H
 #define INKSCAPE_UI_VIEW_VIEW_H
 /*
@@ -8,11 +9,12 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gdk/gdk.h>
 #include <cstddef>
+#include <memory>
 #include <sigc++/connection.h>
 #include "message.h"
 #include "inkgc/gc-managed.h"
@@ -84,31 +86,26 @@ public:
     SPDocument *doc() const
       { return _doc; }
     /// Returns a pointer to the view's message stack.
-    Inkscape::MessageStack *messageStack() const
+    std::shared_ptr<Inkscape::MessageStack> messageStack() const
       { return _message_stack; }
     /// Returns a pointer to the view's tipsMessageContext.
     Inkscape::MessageContext *tipsMessageContext() const
-      { return _tips_message_context; }
+      { return _tips_message_context.get(); }
 
     void emitResized(gdouble width, gdouble height);
     void requestRedraw();
 
-    // view subclasses must give implementations of these methods
-
-    virtual bool shutdown() = 0;
-    virtual void mouseover() = 0;
-    virtual void mouseout() = 0;
-
-    virtual void onResized (double, double) = 0;
-    virtual void onRedrawRequested() = 0;
-    virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) = 0;
-    virtual void onDocumentURISet (gchar const* uri) = 0;
-    virtual void onDocumentResized (double, double) = 0;
+    virtual void onResized (double, double) {};
+    virtual void onRedrawRequested() {};
+    virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) {};
+    virtual void onDocumentURISet (gchar const* uri) {};
+    virtual void onDocumentResized (double, double) {};
+    virtual bool shutdown() { return false; };
 
 protected:
     SPDocument *_doc;
-    Inkscape::MessageStack *_message_stack;
-    Inkscape::MessageContext *_tips_message_context;
+    std::shared_ptr<Inkscape::MessageStack> _message_stack;
+    std::unique_ptr<Inkscape::MessageContext> _tips_message_context;
 
     virtual void _close();
 
@@ -116,7 +113,7 @@ protected:
      * Disconnects the view from the document signals, connects the view 
      * to a new one, and emits the _document_set_signal on the view.
      *
-     * This is code comon to all subclasses and called from their
+     * This is code common to all subclasses and called from their
      * setDocument() methods after they are done.
      * 
      * @param doc The new document to connect the view to.

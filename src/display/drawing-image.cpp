@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Bitmap image belonging to an SVG drawing.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/bezier-curve.h>
@@ -111,6 +112,7 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
         dc.translate(_origin);
         dc.scale(_scale);
         dc.setSource(_pixbuf->getSurfaceRaw(), 0, 0);
+        dc.patternSetExtend(CAIRO_EXTEND_PAD);
 
         if (_style) {
             // See: http://www.w3.org/TR/SVG/painting.html#ImageRenderingProperty
@@ -186,7 +188,7 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
 {
     if (!_pixbuf) return nullptr;
 
-    bool outline = _drawing.outline();
+    bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
 
     if (outline) {
         Geom::Rect r = bounds();

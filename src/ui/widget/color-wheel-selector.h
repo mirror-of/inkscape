@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Color selector widget containing GIMP color wheel and slider
@@ -5,29 +6,22 @@
 /* Authors:
  *   Tomasz Boczkowski <penginsbacon@gmail.com> (c++-sification)
  *
- * Copyright (C) 2014 Authors
- *
- * This code is in public domain
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SEEN_SP_COLOR_WHEEL_SELECTOR_H
 #define SEEN_SP_COLOR_WHEEL_SELECTOR_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <gtkmm/grid.h>
 
 #include "ui/selected-color.h"
-
-typedef struct _GimpColorWheel GimpColorWheel;
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
 class ColorSlider;
-
+class ColorWheel;
 class ColorWheelSelector
     : public Gtk::Grid
 {
@@ -47,14 +41,14 @@ protected:
     void _sliderGrabbed();
     void _sliderReleased();
     void _sliderChanged();
-    static void _wheelChanged(GimpColorWheel *wheel, ColorWheelSelector *cs);
+    void _wheelChanged();
 
     void _updateDisplay();
 
     SelectedColor &_color;
     bool _updating;
     Glib::RefPtr<Gtk::Adjustment> _alpha_adjustment;
-    GtkWidget *_wheel;
+    Inkscape::UI::Widget::ColorWheel *_wheel;
     Inkscape::UI::Widget::ColorSlider *_slider;
 
 private:

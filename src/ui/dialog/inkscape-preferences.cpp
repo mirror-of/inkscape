@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Inkscape Preferences dialog - implementation.
@@ -10,11 +11,11 @@
  *
  * Copyright (C) 2004-2013 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #include "inkscape-preferences.h"
@@ -25,6 +26,7 @@
 #include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
 #include <gtk/gtksettings.h>
+#include <gtkmm/cssprovider.h>
 #include <gtkmm/main.h>
 #include <gtkmm/recentinfo.h>
 #include <gtkmm/recentmanager.h>
@@ -47,18 +49,20 @@
 
 #include "extension/internal/gdkpixbuf-input.h"
 
+#include "include/gtkmm_version.h"
+
 #include "io/resource.h"
 #include "io/sys.h"
 
 #include "object/color-profile.h"
 #include "style.h"
-
+#include "svg/svg-color.h"
 #include "ui/interface.h"
 #include "ui/widget/style-swatch.h"
 
 #ifdef HAVE_ASPELL
 # include <aspell.h>
-# ifdef WIN32
+# ifdef _WIN32
 #  include <windows.h>
 # endif
 #endif
@@ -601,6 +605,7 @@ void InkscapePreferences::symbolicThemeCheck()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     auto folders = get_foldernames(ICONS, { "application" });
     bool symbolic = false;
+    bool default_icon_theme = true;
     for (auto &folder : folders) {
         auto path = folder;
         const size_t last_slash_idx = folder.find_last_of("\\/");
@@ -608,17 +613,21 @@ void InkscapePreferences::symbolicThemeCheck()
             folder.erase(0, last_slash_idx + 1);
         }
         if (folder == prefs->getString("/theme/iconTheme")) {
-#ifdef WIN32
+#ifdef _WIN32
             path += g_win32_locale_filename_from_utf8("/symbolic/actions");
 #else
             path += "/symbolic/actions";
 #endif
+            default_icon_theme = false;
             std::vector<Glib::ustring> symbolic_icons = get_filenames(path, { ".svg" }, {});
             if (symbolic_icons.size() > 0) {
                 symbolic = true;
                 symbolic_icons.clear();
             }
         }
+    }
+    if (default_icon_theme) {
+        symbolic = true;
     }
     if (_symbolic_icons.get_parent()) {
         if (!symbolic) {
@@ -627,12 +636,53 @@ void InkscapePreferences::symbolicThemeCheck()
             _symbolic_color.get_parent()->hide();
         }
         else {
+
             _symbolic_icons.get_parent()->show();
             _symbolic_color.get_parent()->show();
         }
     }
 }
 
+void InkscapePreferences::symbolicAddClass()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto const screen = Gdk::Screen::get_default();
+    auto provider = Gtk::CssProvider::create();
+    Glib::ustring css_str = "";
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+        gchar colornamed[64];
+        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+        // Use in case the special widgets have inverse theme background and symbolic
+        int colorset_inverse = colorset ^ 0xffffff00;
+        gchar colornamed_inverse[64];
+        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+        css_str += "*{ -gtk-icon-style: symbolic;}";
+        css_str += "image{ color:";
+        css_str += colornamed;
+        css_str += ";}";
+        css_str += "iconinverse{ color:";
+        css_str += colornamed_inverse;
+        css_str += ";}";
+        css_str += "iconregular{ -gtk-icon-style: regular;}";
+    } else {
+        css_str += "*{-gtk-icon-style: regular;}";
+    }
+    // From 3.16, throws an error which we must catch.
+    try {
+        provider->load_from_data(css_str);
+    }
+#if GTK_CHECK_VERSION(3, 16, 0)
+    // Gtk::CssProviderError not defined until 3.16.
+    catch (const Gtk::CssProviderError &ex) {
+        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
+    }
+#else
+    catch (...) {
+    }
+#endif
+    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
 void InkscapePreferences::themeChange()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -652,7 +702,7 @@ void InkscapePreferences::initPageUI()
         _("Catalan (ca)"), _("Valencian Catalan (ca@valencia)"), _("Chinese/China (zh_CN)"),  _("Chinese/Taiwan (zh_TW)"), _("Croatian (hr)"), _("Czech (cs)"),
         _("Danish (da)"), _("Dogri (doi)"), _("Dutch (nl)"), _("Dzongkha (dz)"),
         _("German (de)"), _("Greek (el)"),
-        _("English (en)"), _("English/Australia (en_AU)"), _("English/Canada (en_CA)"), _("English/Great Britain (en_GB)"), _("Pig Latin (en_US@piglatin)"), _("Esperanto (eo)"), _("Estonian (et)"),
+        _("English (en)"), _("English/Australia (en_AU)"), _("English/Canada (en_CA)"), _("English/Great Britain (en_GB)"), _("Esperanto (eo)"), _("Estonian (et)"),
         _("Farsi (fa)"), _("Finnish (fi)"), _("French (fr)"),
         _("Galician (gl)"), _("Gujarati (gu)"),
         _("Hebrew (he)"), _("Hindi (hi)"), _("Hungarian (hu)"),
@@ -676,7 +726,7 @@ void InkscapePreferences::initPageUI()
         "ca", "ca@valencia", "zh_CN", "zh_TW", "hr", "cs",
         "da", "doi", "nl", "dz",
         "de", "el",
-        "en", "en_AU", "en_CA", "en_GB", "en_US@piglatin", "eo", "et",
+        "en", "en_AU", "en_CA", "en_GB", "eo", "et",
         "fa", "fi", "fr",
         "gl", "gu",
         "he", "hi", "hu",
@@ -771,6 +821,11 @@ void InkscapePreferences::initPageUI()
                         _("Selects whether the dockbar switcher will show text labels, icons, or both"), false);
     }
 
+    _ui_yaxisdown.init( _("Origin at upper left with y-axis pointing down (requires restart)"), "/options/yaxisdown", true);
+    _page_ui.add_line( false, "", _ui_yaxisdown, "",
+                       _("When off, origin is at lower left corner and y-axis points up"), true);
+
+
     // Theme
     _page_theme.add_group_header(_("Theme changes"));
     {
@@ -861,9 +916,13 @@ void InkscapePreferences::initPageUI()
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
     }
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
+    _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false);
+    Gtk::Button *_apply_color = new Gtk::Button(_("Apply color"));
+    _apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
+    _apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
+    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false, _apply_color);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };
@@ -881,6 +940,13 @@ void InkscapePreferences::initPageUI()
         _misc_small_secondary.init("/toolbox/secondary", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 1);
         _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
+    }
+    {
+        Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Theme decides")};
+        int menu_icons_values[] = {1, -1, 0};
+        _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
+        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
+                             _("You can either enable or disable all icons in menus. By default the theme determines which icons to display by using the 'show-icons' attribute in its 'menus.xml' file."), false);
     }
     _apply_theme.set_label(_("Reload icons"));
     _apply_theme.set_tooltip_text(_("Apply icon changes (may take a few seconds)"));
@@ -946,7 +1012,7 @@ void InkscapePreferences::initPageUI()
                             _("Dockable"));
     _page_windows.add_line( true, "", _win_floating, "",
                             _("Floating"));
-#ifdef WIN32
+#ifdef _WIN32
     _page_windows.add_group_header( _("Desktop integration"));
     _page_windows.add_line( true, "", _win_native, "",
                             _("Use Windows like open and save dialogs"));
@@ -954,7 +1020,7 @@ void InkscapePreferences::initPageUI()
                             _("Use GTK open and save dialogs "));
 #endif
 
-#ifndef WIN32 // non-Win32 special code to enable transient dialogs
+#ifndef _WIN32 // non-Win32 special code to enable transient dialogs
     _page_windows.add_group_header( _("Dialogs on top:"));
 
     _page_windows.add_line( true, "", _win_ontop_none, "",
@@ -975,7 +1041,7 @@ void InkscapePreferences::initPageUI()
 
 
     _page_windows.add_group_header( _("Miscellaneous"));
-#ifndef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+#ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
     _page_windows.add_line( true, "", _win_hide_task, "",
                             _("Whether dialog windows are to be hidden in the window manager taskbar"));
 #endif
@@ -1502,6 +1568,12 @@ void InkscapePreferences::initPageBehavior()
     this->AddPage(_page_scrolling, _("Scrolling"), iter_behavior, PREFS_PAGE_BEHAVIOR_SCROLLING);
 
     // Snapping options
+    _page_snapping.add_group_header( _("Snap defaults"));
+
+    _snap_default.init( _("Enabled in new document"), "/options/snapdefault/value", false);
+    _page_snapping.add_line( true, "", _snap_default, "",
+                             _("When creating a new document, or opening a non-inkscape svg, what should global snapping be set to."));
+
     _page_snapping.add_group_header( _("Snap indicator"));
 
     _snap_indicator.init( _("Enable snap indicator"), "/options/snapindicator/value", true);
@@ -1748,9 +1820,12 @@ void InkscapePreferences::initPageBitmaps()
                             _("Resolution used by the Create Bitmap Copy command"), false);
 
     _page_bitmaps.add_group_header( _("Import"));
-    _bitmap_ask.init(_("Ask about linking and scaling when importing"), "/dialogs/import/ask", true);
+    _bitmap_ask.init(_("Ask about linking and scaling when importing bitmap images"), "/dialogs/import/ask", true);
     _page_bitmaps.add_line( true, "", _bitmap_ask, "",
                            _("Pop-up linking and scaling dialog when importing bitmap image."));
+    _svg_ask.init(_("Ask about linking and scaling when importing SVG images"), "/dialogs/import/ask_svg", true);
+    _page_bitmaps.add_line( true, "", _svg_ask, "",
+                           _("Pop-up linking and scaling dialog when importing SVG image."));
 
     {
         Glib::ustring labels[] = {_("Embed"), _("Link")};
@@ -1762,7 +1837,7 @@ void InkscapePreferences::initPageBitmaps()
     {
         Glib::ustring labels[] = {_("Include"), _("Embed"), _("Link")};
         Glib::ustring values[] = {"include", "embed", "link"};
-        _svg_link.init("/dialogs/import/link_svg", labels, values, G_N_ELEMENTS(values), "include");
+        _svg_link.init("/dialogs/import/import_mode_svg", labels, values, G_N_ELEMENTS(values), "include");
         _page_bitmaps.add_line( false, _("SVG import mode:"), _svg_link, "", "", false);
     }
 
@@ -2124,7 +2199,7 @@ void InkscapePreferences::initPageSpellcheck()
 
   AspellConfig *config = new_aspell_config();
 
-#ifdef WIN32
+#ifdef _WIN32
     // on windows, dictionaries are in a lib/aspell-0.60 subdir off inkscape's executable dir;
     // this is some black magick to find out the executable path to give it to aspell
     char exeName[MAX_PATH+1];
@@ -2381,6 +2456,9 @@ void InkscapePreferences::on_pagelist_selection_changed()
             Gtk::Main::iteration();
         }
         this->show_all_children();
+        if (prefs->getInt("/dialogs/preferences/page", 0) == PREFS_PAGE_UI_THEME) {
+            symbolicThemeCheck();
+        }
     }
 }
 

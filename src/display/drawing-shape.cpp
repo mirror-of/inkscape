@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Shape (styled path) belonging to an SVG drawing.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm.h>
@@ -180,11 +181,22 @@ DrawingShape::_renderStroke(DrawingContext &dc)
     if( has_stroke ) {
         // TODO: remove segments outside of bbox when no dashes present
         dc.path(_curve->get_pathvector());
-        if (_style && _style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE) {
+        if (_style && _style->vector_effect.stroke) {
             dc.restore();
             dc.save();
         }
         _nrstyle.applyStroke(dc);
+
+        // If the draw mode is set to visible hairlines, don't let them get smaller than half a
+        // pixel.
+        if (_drawing.visibleHairlines()) {
+            double half_pixel_size = 0.5, trash = 0.5;
+            dc.device_to_user_distance(half_pixel_size, trash);
+            if (_nrstyle.stroke_width < half_pixel_size) {
+                dc.setLineWidth(half_pixel_size);
+            }
+        }
+
         dc.strokePreserve();
         dc.newPath(); // clear path
     }
@@ -249,12 +261,23 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
                     _nrstyle.applyFill(dc);
                     dc.fillPreserve();
                 }
-                if (_style && _style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE) {
+                if (_style && _style->vector_effect.stroke) {
                     dc.restore();
                     dc.save();
                 }
                 if (has_stroke) {
                     _nrstyle.applyStroke(dc);
+
+                    // If the draw mode is set to visible hairlines, don't let anything get smaller
+                    // than half a pixel.
+                    if (_drawing.visibleHairlines()) {
+                        double half_pixel_size = 0.5, trash = 0.5;
+                        dc.device_to_user_distance(half_pixel_size, trash);
+                        if (_nrstyle.stroke_width < half_pixel_size) {
+                            dc.setLineWidth(half_pixel_size);
+                        }
+                    }
+
                     dc.strokePreserve();
                 }
                 dc.newPath(); // clear path
@@ -315,7 +338,7 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
     if (!_curve) return nullptr;
     if (!_style) return nullptr;
 
-    bool outline = _drawing.outline();
+    bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
     bool pick_as_clip = flags & PICK_AS_CLIP;
 
     if (SP_SCALE24_TO_FLOAT(_style->opacity.value) == 0 && !outline && !pick_as_clip) 

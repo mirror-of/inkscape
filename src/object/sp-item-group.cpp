@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <g> implementation
  *
@@ -11,12 +12,8 @@
  * Copyright (C) 1999-2006 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 #include <cstring>
@@ -314,7 +311,7 @@ gchar *SPGroup::description() const {
         ngettext(_("of <b>%d</b> object"), _("of <b>%d</b> objects"), len), len);
 }
 
-void SPGroup::set(unsigned int key, gchar const* value) {
+void SPGroup::set(SPAttributeEnum key, gchar const* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_GROUPMODE:
             if ( value && !strcmp(value, "layer") ) {

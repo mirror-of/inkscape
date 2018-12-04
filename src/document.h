@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_DOCUMENT_H
 #define SEEN_SP_DOCUMENT_H
 
@@ -14,21 +15,28 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstddef>
-#include <sigc++/sigc++.h>
-#include "3rdparty/libcroco/cr-cascade.h"
-#include <2geom/forward.h>
-#include "inkgc/gc-managed.h"
-#include "gc-finalized.h"
-#include "gc-anchored.h"
-#include <glibmm/ustring.h>
-#include <boost/ptr_container/ptr_list.hpp>
-#include <vector>
-#include <set>
 #include <deque>
+#include <set>
+#include <vector>
+
+#include <boost/ptr_container/ptr_list.hpp>
+#include <sigc++/sigc++.h>
+#include <glibmm/ustring.h>
+#include <2geom/forward.h>
+
+#include "3rdparty/libcroco/cr-cascade.h"
+#include "event.h"
+#include "gc-anchored.h"
+#include "gc-finalized.h"
+#include "inkgc/gc-managed.h"
+
+#include "composite-undo-stack-observer.h"
+// XXX only for testing!
+#include "console-output-undo-observer.h"
 
 // This variable is introduced with 0.92.1
 // with the introduction of automatic fix 
@@ -82,8 +90,6 @@ namespace Proj {
     class TransfMat3x4;
 }
 
-struct SPDocumentPrivate;
-
 /// Typed SVG document implementation.
 class SPDocument : public Inkscape::GC::Managed<>,
                     public Inkscape::GC::Finalized,
@@ -127,8 +133,6 @@ protected:
     char *name;  ///< basename(uri) or other human-readable label for the document.
 
 public:
-
-    SPDocumentPrivate *priv;
 
     /// Last action key
     Glib::ustring actionkey;
@@ -284,9 +288,9 @@ public:
     int ensureUpToDate();
     bool addResource(char const *key, SPObject *object);
     bool removeResource(char const *key, SPObject *object);
-    const std::vector<SPObject *> getResourceList(char const *key) const;
-    std::vector<SPItem*> getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive = false, bool into_groups = false) const;
-    std::vector<SPItem*> getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive = false, bool into_groups = false) const;
+    std::vector<SPObject *> const getResourceList(char const *key);
+    std::vector<SPItem*> getItemsInBox         (unsigned int dkey, Geom::Rect const &box, bool take_hidden = false, bool take_insensitive = false, bool take_groups = true, bool enter_groups = false) const;
+    std::vector<SPItem*> getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden = false, bool take_insensitive = false, bool take_groups = true, bool enter_groups = false) const;
     SPItem *getItemAtPoint(unsigned int key, Geom::Point const &p, bool into_groups, SPItem *upto = nullptr) const;
     std::vector<SPItem*> getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers = true, size_t limit = 0) const ;
     SPItem *getGroupAtPoint(unsigned int key,  Geom::Point const &p) const;
@@ -305,6 +309,48 @@ private:
     void build_flat_item_list(unsigned int dkey, SPGroup *group, gboolean into_groups) const;
     mutable std::deque<SPItem*> _node_cache;
     mutable bool _node_cache_valid;
+
+    // The following were in document-private.h and despite being called "private", they weren't.
+public:
+    typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
+    typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
+
+    std::map<std::string, SPObject *> iddef;
+    std::map<Inkscape::XML::Node *, SPObject *> reprdef;
+
+    unsigned long _serial;
+
+    /** Dictionary of signals for id changes */
+    IDChangedSignalMap id_changed_signals;
+
+    /* Resources */
+    std::map<std::string, std::vector<SPObject *> > resources;
+    ResourcesChangedSignalMap resources_changed_signals;
+
+    sigc::signal<void> destroySignal;
+    SPDocument::ModifiedSignal modified_signal;
+    SPDocument::URISetSignal uri_set_signal;
+    SPDocument::ResizedSignal resized_signal;
+    SPDocument::ReconstructionStart _reconstruction_start_signal;
+    SPDocument::ReconstructionFinish  _reconstruction_finish_signal;
+    SPDocument::CommitSignal commit_signal;
+
+    /* Undo/Redo state */
+    bool sensitive; /* If we save actions to undo stack */
+    Inkscape::XML::Event * partial; /* partial undo log when interrupted */
+    int history_size;
+    std::vector<Inkscape::Event *> undo; /* Undo stack of reprs */
+    std::vector<Inkscape::Event *> redo; /* Redo stack of reprs */
+
+    /* Undo listener */
+    Inkscape::CompositeUndoStackObserver undoStackObservers;
+
+    // XXX only for testing!
+    Inkscape::ConsoleOutputUndoObserver console_output_undo_observer;
+
+    bool seeking;
+    sigc::connection selChangeConnection;
+    sigc::connection desktopActivatedConnection;
 };
 
 /*

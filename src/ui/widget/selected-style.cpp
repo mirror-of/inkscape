@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
  *   buliabyak@gmail.com
@@ -6,12 +7,8 @@
  *
  * Copyright (C) 2005 author
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "selected-style.h"
 
@@ -26,6 +23,8 @@
 #include "sp-cursor.h"
 
 #include "display/sp-canvas.h"
+
+#include "include/gtkmm_version.h"
 
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
@@ -118,32 +117,26 @@ static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 static Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop);
 
 SelectedStyle::SelectedStyle(bool /*layout*/)
-    :
-      current_stroke_width(0),
-
-      _sw_unit(nullptr),
-
-      _desktop (nullptr),
-      _table(),
-      _fill_label (_("Fill:")),
-      _stroke_label (_("Stroke:")),
-      _opacity_label (_("O:")),
-
-      _fill_place(this, SS_FILL),
-      _stroke_place(this, SS_STROKE),
-
-      _fill_flag_place (),
-      _stroke_flag_place (),
-
-      _opacity_place (),
-      _opacity_adjustment(Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0)),
-      _opacity_sb (0.02, 0),
-
-      _stroke (),
-      _stroke_width_place(this),
-      _stroke_width (""),
-
-      _opacity_blocked (false)
+    : current_stroke_width(0)
+    , _sw_unit(nullptr)
+    , _desktop(nullptr)
+    , _table()
+    , _fill_label(_("Fill:"))
+    , _stroke_label(_("Stroke:"))
+    , _opacity_label(_("O:"))
+    , _fill_place(this, SS_FILL)
+    , _stroke_place(this, SS_STROKE)
+    , _fill_flag_place()
+    , _stroke_flag_place()
+    , _opacity_place()
+    , _opacity_adjustment(Gtk::Adjustment::create(100, 0.0, 100, 1.0, 10.0))
+    , _opacity_sb(0.02, 0)
+    , _fill()
+    , _stroke()
+    , _stroke_width_place(this)
+    , _stroke_width("")
+    , _fill_empty_space("")
+    , _opacity_blocked(false)
 {
     set_name("SelectedStyle");
     _drop[0] = _drop[1] = nullptr;
@@ -161,6 +154,9 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _opacity_label.set_valign(Gtk::ALIGN_CENTER);
     _opacity_label.set_margin_top(0);
     _opacity_label.set_margin_bottom(0);
+    _stroke_width.set_name("monoStrokeWidth");
+    _fill_empty_space.set_name("fillEmptySpace");
+
 
 #if GTK_CHECK_VERSION(3,12,0)
     _fill_label.set_margin_start(0);
@@ -195,7 +191,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         }
         sp_set_font_size_smaller (GTK_WIDGET(_none[i].gobj()));
         _none[i].show_all();
-        __none[i] = (i == SS_FILL)? (C_("Fill and stroke", "No fill")) : (C_("Fill and stroke", "No stroke"));
+        __none[i] = (i == SS_FILL)? (C_("Fill and stroke", "No fill, middle-click for black fill")) : (C_("Fill and stroke", "No stroke, middle-click for black stroke"));
 
         _pattern[i].set_markup (_("Pattern"));
         sp_set_font_size_smaller (GTK_WIDGET(_pattern[i].gobj()));
@@ -373,6 +369,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
     _fill_place.add(_na[SS_FILL]);
     _fill_place.set_tooltip_text(__na[SS_FILL]);
+    _fill.pack_start(_fill_place, Gtk::PACK_SHRINK);
+    _fill.pack_start(_fill_empty_space, Gtk::PACK_SHRINK);
 
     _stroke_place.add(_na[SS_STROKE]);
     _stroke_place.set_tooltip_text(__na[SS_STROKE]);
@@ -392,7 +390,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _table.attach(_fill_flag_place, 1, 0, 1, 1);
     _table.attach(_stroke_flag_place, 1, 1, 1, 1);
 
-    _table.attach(_fill_place, 2, 0, 1, 1);
+    _table.attach(_fill, 2, 0, 1, 1);
     _table.attach(_stroke, 2, 1, 1, 1);
 
     _opacity_place.add(_opacity_label);
@@ -1022,7 +1020,7 @@ SelectedStyle::update()
                 place->add(*_color_preview[i]);
                 gchar c_string[64];
                 g_snprintf (c_string, 64, "%06x/%.3g", color >> 8, SP_RGBA32_A_F(color));
-                place->set_tooltip_text(__color[i] + ": " + c_string + _(", drag to adjust"));
+                place->set_tooltip_text(__color[i] + ": " + c_string + _(", drag to adjust, middle-click to remove"));
                 _mode[i] = SS_COLOR;
                 _popup_copy[i].set_sensitive(true);
 
@@ -1098,7 +1096,10 @@ SelectedStyle::update()
         current_stroke_width = w;
 
         {
-            gchar *str = g_strdup_printf(" %.3g", w);
+            gchar *str = g_strdup_printf(" %#.3g", w);
+            if (str[strlen(str) - 1] == ',' || str[strlen(str) - 1] == '.') {
+                str[strlen(str)-1] = '\0';
+            }
             _stroke_width.set_markup(str);
             g_free (str);
         }

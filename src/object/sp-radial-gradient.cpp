@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #include <cairo.h>
 
 #include "sp-radial-gradient.h"
@@ -38,7 +47,7 @@ void SPRadialGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Set radial gradient attribute.
  */
-void SPRadialGradient::set(unsigned key, gchar const *value) {
+void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
         case SP_ATTR_CX:
             if (!this->cx.read(value)) {

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE knot effect implementation, see lpe-knot.cpp.
  */
@@ -7,7 +8,7 @@
  *
  * Copyright (C) Authors 2007-2012
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_LPE_KNOT_H
@@ -16,8 +17,9 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/lpegroupbbox.h"
-#include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/array.h"
+#include "live_effects/parameter/hidden.h"
+#include "live_effects/parameter/parameter.h"
 //#include "live_effects/parameter/path.h"
 #include "live_effects/parameter/bool.h"
 #include "2geom/crossing.h"
@@ -73,9 +75,13 @@ private:
   void updateSwitcher();
  
   ScalarParam interruption_width;
-  BoolParam  prop_to_stroke_width;
-  BoolParam  add_stroke_width;
-  BoolParam  add_other_stroke_width;
+  BoolParam prop_to_stroke_width;
+  BoolParam both;
+  BoolParam inverse_width;
+  // "add_stroke_width" and "add_other_stroke_width" parameters are not used since Inkscape 1.0,
+  // but changed from bool to hidden parameter to retain backward compatibility and dont show in the UI
+  HiddenParam add_stroke_width;
+  HiddenParam add_other_stroke_width;
   ScalarParam switcher_size;
   ArrayParam<double> crossing_points_vector;//svg storage of crossing_points
   

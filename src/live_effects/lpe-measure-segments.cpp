@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author(s):
  *   Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
@@ -6,7 +7,7 @@
  * https://github.com/Rutzmoser/inkscape_dimensioning
  * Copyright (C) 2014 Author(s)
 
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpeobject.h"
@@ -97,10 +98,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     bboxonly(_("Only bounding box"), _("Measure only bbox and hide nodes"), "bboxonly", &wr, this, false),
     centers(_("Project center"), _("Use centers as measurement"), "centers", &wr, this, false),
     maxmin(_("Only max and min"), _("Compute only max/min projection values"), "maxmin", &wr, this, false),
-    general(_("General"), _("General"), "general", &wr, this, ""),
-    projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
-    options(_("Options"), _("Options"), "options", &wr, this, ""),
-    tips(_("Tips"), _("Tips"), "tips", &wr, this, "")
+    helpdata(_("Help"), _("Measure segments help"), "helpdata", &wr, this, "", "")
 {
     //set to true the parameters you want to be changed his default values
     registerParameter(&unit);
@@ -136,10 +134,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&bboxonly);
     registerParameter(&centers);
     registerParameter(&maxmin);
-    registerParameter(&general);
-    registerParameter(&projection);
-    registerParameter(&options);
-    registerParameter(&tips);
+    registerParameter(&helpdata);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     Glib::ustring format_value = prefs->getString("/live_effects/measure-line/format");
@@ -167,8 +162,8 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     text_top_bottom.param_set_range(-999999.0, 999999.0);
     text_top_bottom.param_set_increments(1, 1);
     text_top_bottom.param_set_digits(2);
-    line_width.param_set_range(-999999.0, 999999.0);
-    line_width.param_set_increments(1, 1);
+    line_width.param_set_range(0, 999999.0);
+    line_width.param_set_increments(0.1, 0.1);
     line_width.param_set_digits(2);
     helpline_distance.param_set_range(-999999.0, 999999.0);
     helpline_distance.param_set_increments(1, 1);
@@ -185,13 +180,18 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, nullptr));
     previous_size = 0;
     pagenumber = 0;
-    general.param_update_default(_("Base of the LPE, focus on measure display and positioning"));
-    projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
-    " to set the elements on clipboard, the element is converted to a line with measurements based on the selected items"));
-    options.param_update_default(_("Here we show measurement settings that usually don't change much"));
-    tips.param_update_default(_("<b>Style Dialog</b> styling using XML editor to find appropriate classes or ID's\n"
-    "<b>Default Parameters</b> In all LPE, at the bottom, it's possible to change these for future uses\n"
-    "<b>Blacklists...</b> This allow to hide some segments or projection steps to measure"));
+    helpdata.param_update_default(_("<b><big>General</big></b>\n"
+                        "Measure display and positioning\n\n"
+                        "<b><big>Projection</big></b>\n"
+                        "Show a line with measurements based on the selected items\n\n"
+                        "<b><big>Options</big></b>\n"
+                        "That usually don't change much\n\n"
+                        "<b><big>Tips</big></b>\n"
+                        "<b><i>Style Dialog</i></b> Styling using XML editor to find appropriate classes or ID's\n"
+                        "<b><i>Blacklists</i></b> This allow to hide some segments or projection steps to measure\n"
+                        "<b><i>Multiple Measures</i></b> In the same object, in conjunction of blacklists, "
+                        "allow measures with different orientations or a extra projection \n"
+                        "<b><i>Set Defaults</i></b> Remember all LPE has it in the bottom"));
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
@@ -242,7 +242,6 @@ LPEMeasureSegments::newWidget()
                 {
                     vbox1->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "precision"     ||
-                           param->param_key == "fix_overlaps"  ||
                            param->param_key == "coloropacity"  ||
                            param->param_key == "font"          ||
                            param->param_key == "format"        ||
@@ -254,10 +253,7 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "hide_arrows"     )
                 {
                     vbox2->pack_start(*widg, false, true, 2);
-                } else if (param->param_key == "general"    ||
-                           param->param_key == "projection" ||
-                           param->param_key == "options"    ||
-                           param->param_key == "tips"         )
+                } else if (param->param_key == "helpdata")
                 {
                     vbox3->pack_start(*widg, false, true, 2);
                 } else {
@@ -428,7 +424,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     font_size <<  fontsize << "pt";
     setlocale (LC_NUMERIC, locale_base);
     gchar c[32];
-    sprintf(c, "#%06x", rgb24);
+    sprintf(c, "#%06x", rgb32 >> 8);
     sp_repr_css_set_property (css, "fill",c);
     Inkscape::SVGOStringStream os;
     os << SP_RGBA32_A_F(coloropacity.get_value());
@@ -626,7 +622,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     style  += "stroke-width:";
     style  += stroke_w.str();
     gchar c[32];
-    sprintf(c, "#%06x", rgb24);
+    sprintf(c, "#%06x", rgb32 >> 8);
     style += ";stroke:";
     style += Glib::ustring(c);
     Inkscape::SVGOStringStream os;
@@ -919,24 +915,18 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (shape) {
         //only check constrain viewbox on X
         Geom::Scale scaledoc = document->getDocumentScale();
-        SPNamedView *nv = sp_document_namedview(document, nullptr);
-        display_unit = nv->display_units->abbr;
-        if (display_unit.empty()) {
-            display_unit = "px";
-        }
+        display_unit = document->getDisplayUnit()->abbr.c_str();
         doc_scale = Inkscape::Util::Quantity::convert( scaledoc[Geom::X], "px", display_unit.c_str() );
         if (doc_scale > 0) {
             doc_scale= 1.0/doc_scale;
         } else {
             doc_scale = 1.0;
         }
-        unsigned long const color = coloropacity.get_value() >> 8;
         guint32 color32 = coloropacity.get_value();
         bool colorchanged = false;
         if (color32 != rgb32) {
             colorchanged = true;
         }
-        rgb24 = color;
         rgb32 = color32;
         SPCurve * c = nullptr;
         gchar * fontbutton_str = fontbutton.param_getSVGValue();

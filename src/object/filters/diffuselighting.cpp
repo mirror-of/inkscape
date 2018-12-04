@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feDiffuseLighting> implementation.
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2006 Hugo Rodrigues
  *               2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 // Same directory
@@ -76,7 +77,7 @@ void SPFeDiffuseLighting::release() {
 /**
  * Sets a specific value in the SPFeDiffuseLighting.
  */
-void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
+void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
     
@@ -285,7 +286,7 @@ void SPFeDiffuseLighting::build_renderer(Inkscape::Filters::Filter* filter) {
     g_assert(nr_diffuselighting != nullptr);
 
     this->renderer = nr_diffuselighting;
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_diffuselighting->diffuseConstant = this->diffuseConstant;
     nr_diffuselighting->surfaceScale = this->surfaceScale;

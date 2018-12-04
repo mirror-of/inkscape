@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Here are handlers for modifying selections, specific to paths
  *
@@ -11,12 +12,8 @@
  * Copyright (C) 1999-2008 Authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <cstring>
 #include <string>

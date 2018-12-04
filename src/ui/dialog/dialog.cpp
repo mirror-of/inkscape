@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Base class for dialogs in Inkscape - implementation.
@@ -10,12 +11,8 @@
  *
  * Copyright (C) 2004--2007 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "dialog-manager.h"
 #include <gtkmm/dialog.h>

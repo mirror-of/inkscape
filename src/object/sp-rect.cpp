@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <rect> implementation
  *
@@ -8,12 +9,8 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "display/curve.h"
 
@@ -54,7 +51,7 @@ void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 #endif
 }
 
-void SPRect::set(unsigned key, gchar const *value) {
+void SPRect::set(SPAttributeEnum key, gchar const *value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;

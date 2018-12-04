@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_FILE_H
 #define SEEN_SP_FILE_H
 
@@ -12,7 +13,7 @@
  * Copyright (C) 2001-2002 Ximian, Inc.
  * Copyright (C) 1999-2002 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/ustring.h>
@@ -106,7 +107,7 @@ bool sp_file_save_a_copy (Gtk::Window &parentWindow, void* object, void* data);
 /**
  *  Save a copy of a document as template.
  */
-void
+bool
 sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     Glib::ustring author, Glib::ustring description, Glib::ustring keywords,
     bool isDefault);
@@ -221,4 +222,4 @@ extern int sp_file_convert_dpi_method_commandline;
   fill-column:99
   End:
 */
-// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 encoding=utf-8 textwidth=99 :
+// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 fileencoding=utf-8 textwidth=99 :

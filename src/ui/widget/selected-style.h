@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   buliabyak@gmail.com
@@ -5,15 +6,11 @@
  *
  * Copyright (C) 2005 authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_CURRENT_STYLE_H
 #define INKSCAPE_UI_CURRENT_STYLE_H
-
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/grid.h>
@@ -195,9 +192,11 @@ protected:
     Gtk::Label _multiple[2];
     Glib::ustring __multiple[2];
 
+    Gtk::HBox _fill;
     Gtk::HBox _stroke;
     RotateableStrokeWidth _stroke_width_place;
     Gtk::Label _stroke_width;
+    Gtk::Label _fill_empty_space;
 
     Glib::ustring _paintserver_id[2];
 

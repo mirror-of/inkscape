@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feFlood> implementation.
  *
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "flood.h"
@@ -57,7 +58,7 @@ void SPFeFlood::release() {
 /**
  * Sets a specific value in the SPFeFlood.
  */
-void SPFeFlood::set(unsigned int key, gchar const *value) {
+void SPFeFlood::set(SPAttributeEnum key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
     guint32 read_color;
@@ -161,7 +162,7 @@ void SPFeFlood::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterFlood *nr_flood = dynamic_cast<Inkscape::Filters::FilterFlood*>(nr_primitive);
     g_assert(nr_flood != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
     
     nr_flood->set_opacity(this->opacity);
     nr_flood->set_color(this->color);

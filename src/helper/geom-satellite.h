@@ -1,12 +1,14 @@
-/**
- * \file
- * \brief Satellite a per node holder of data.
- */ /*
-    * Authors:
-    * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
-    *
-    * This code is in public domain
-    */
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * Satellite -- a per node holder of data.
+ *//*
+ * Authors:
+ * see git history
+ * Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+ *
+ * Copyright (C) 2017 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
 #ifndef SEEN_SATELLITE_H
 #define SEEN_SATELLITE_H
@@ -105,6 +107,4 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in);
   fill-column:99
   End:
 */
-// vim:
-// filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99
-// :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

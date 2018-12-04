@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -5,17 +6,41 @@
  *
  * Copyright (C) 2003 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "uri.h"
 
+#include <cstring>
+
+#include <giomm/contenttype.h>
+#include <giomm/file.h>
+#include <glibmm/base64.h>
+#include <glibmm/convert.h>
 #include <glibmm/ustring.h>
 #include <glibmm/miscutils.h>
 
 #include "bad-uri-exception.h"
 
 namespace Inkscape {
+
+auto const URI_ALLOWED_NON_ALNUM = "!#$%&'()*+,-./:;=?@_~";
+
+/**
+ * Return true if the given URI string contains characters that need escaping.
+ *
+ * Note: It does not check if valid characters appear in invalid context (e.g.
+ * '%' not followed by two hex digits).
+ */
+static bool uri_needs_escaping(char const *uri)
+{
+    for (auto *p = uri; *p; ++p) {
+        if (!g_ascii_isalnum(*p) && !strchr(URI_ALLOWED_NON_ALNUM, *p)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 URI::URI() {
     const gchar *in = "";
@@ -27,16 +52,57 @@ URI::URI(const URI &uri) {
     _impl = uri._impl;
 }
 
-URI::URI(gchar const *preformed) {
+URI::URI(gchar const *preformed, char const *baseuri)
+{
     xmlURIPtr uri;
     if (!preformed) {
         throw MalformedURIException();
     }
+
+    // check for invalid characters, escape if needed
+    xmlChar *escaped = nullptr;
+    if (uri_needs_escaping(preformed)) {
+        escaped = xmlURIEscapeStr(      //
+            (xmlChar const *)preformed, //
+            (xmlChar const *)URI_ALLOWED_NON_ALNUM);
+        preformed = (decltype(preformed))escaped;
+    }
+
+    // make absolute
+    xmlChar *full = nullptr;
+    if (baseuri) {
+        full = xmlBuildURI(             //
+            (xmlChar const *)preformed, //
+            (xmlChar const *)baseuri);
+#if LIBXML_VERSION < 20905
+        // libxml2 bug: "file:/some/file" instead of "file:///some/file"
+        auto f = (gchar const *)full;
+        if (f && g_str_has_prefix(f, "file:/") && f[6] != '/') {
+            auto fixed = std::string(f, 6) + "//" + std::string(f + 6);
+            xmlFree(full);
+            full = (xmlChar *)xmlMemStrdup(fixed.c_str());
+        }
+#endif
+        preformed = (decltype(preformed))full;
+    }
+
     uri = xmlParseURI(preformed);
+
+    if (full) {
+        xmlFree(full);
+    }
+    if (escaped) {
+        xmlFree(escaped);
+    }
     if (!uri) {
         throw MalformedURIException();
     }
     _impl = Impl::create(uri);
+}
+
+URI::URI(char const *preformed, URI const &baseuri)
+    : URI::URI(preformed, baseuri.str().c_str())
+{
 }
 
 URI::~URI() {
@@ -134,13 +200,6 @@ const gchar *URI::Impl::getOpaque() const {
     return (gchar *)_uri->opaque;
 }
 
-gchar *URI::to_native_filename(gchar const* uri)
-{
-    gchar *filename = nullptr;
-    URI tmp(uri);
-    filename = tmp.toNativeFilename();
-    return filename;
-}
 /*
  * Returns the absolute path to an existing file referenced in this URI,
  * if the uri is data, the path is empty or the file doesn't exist, then
@@ -148,16 +207,28 @@ gchar *URI::to_native_filename(gchar const* uri)
  *
  * Does not check if the returned path is the local document's path (local)
  * and thus redundent. Caller is expected to check against the document's path.
+ *
+ * @param base directory name to use as base if this is not an absolute URL
  */
 const std::string URI::getFullPath(std::string const &base) const {
     if (!_impl->getPath()) {
         return "";
     }
-    std::string path = std::string(_impl->getPath());
-    // Calculate the absolute path from an available base
-    if(!base.empty() && !path.empty() && path[0] != '/') {
-        path = Glib::build_filename(base, path);
+
+    URI url;
+
+    if (!base.empty() && !getScheme()) {
+        url = Inkscape::URI::from_href_and_basedir(str().c_str(), base.c_str());
+    } else {
+        url = *this;
     }
+
+    if (!url.hasScheme("file")) {
+        return "";
+    }
+
+    auto path = Glib::filename_from_uri(url.str());
+
     // Check the existence of the file
     if(! g_file_test(path.c_str(), G_FILE_TEST_EXISTS)
       || g_file_test(path.c_str(), G_FILE_TEST_IS_DIR) ) {
@@ -168,19 +239,9 @@ const std::string URI::getFullPath(std::string const &base) const {
 
 
 /* TODO !!! proper error handling */
-gchar *URI::toNativeFilename() const {
-    gchar *uriString = toString();
-    if (isRelativePath()) {
-        return uriString;
-    } else {
-        gchar *filename = g_filename_from_uri(uriString, nullptr, nullptr);
-        g_free(uriString);
-        if (filename) {
-            return filename;
-        } else {
-            throw MalformedURIException();
-        }
-    }
+std::string URI::toNativeFilename() const
+{ //
+    return Glib::filename_from_uri(str());
 }
 
 URI URI::fromUtf8( gchar const* path ) {
@@ -222,6 +283,32 @@ URI URI::from_native_filename(gchar const *path) {
     return result;
 }
 
+URI URI::from_dirname(gchar const *path)
+{
+    std::string pathstr = path ? path : ".";
+
+    if (!Glib::path_is_absolute(pathstr)) {
+        pathstr = Glib::build_filename(Glib::get_current_dir(), pathstr);
+    }
+
+    auto uristr = Glib::filename_to_uri(pathstr);
+
+    if (uristr[uristr.size() - 1] != '/') {
+        uristr.push_back('/');
+    }
+
+    return URI(uristr.c_str());
+}
+
+URI URI::from_href_and_basedir(char const *href, char const *basedir)
+{
+    try {
+        return URI(href, URI::from_dirname(basedir));
+    } catch (...) {
+        return URI();
+    }
+}
+
 gchar *URI::Impl::toString() const {
     xmlChar *string = xmlSaveUri(_uri);
     if (string) {
@@ -234,7 +321,151 @@ gchar *URI::Impl::toString() const {
     }
 }
 
+/**
+ * Replacement for buggy xmlBuildRelativeURI
+ * https://gitlab.gnome.org/GNOME/libxml2/merge_requests/12
+ *
+ * Special case: Don't cross filesystem root, e.g. drive letter on Windows.
+ * This is an optimization to keep things practical, it's not required for correctness.
+ *
+ * @param uri an absolute URI
+ * @param base an absolute URI without any ".." path segments
+ * @return relative URI if possible, otherwise @a uri unchanged
+ */
+static std::string build_relative_uri(char const *uri, char const *base)
+{
+    size_t n_slash = 0;
+    size_t i = 0;
+
+    // find longest common prefix
+    for (; uri[i]; ++i) {
+        if (uri[i] != base[i]) {
+            break;
+        }
+
+        if (uri[i] == '/') {
+            ++n_slash;
+        }
+    }
+
+    // URIs must share protocol://server/
+    if (n_slash < 3) {
+        return uri;
+    }
+
+    // Don't cross filesystem root
+    if (n_slash == 3 && g_str_has_prefix(base, "file:///") && base[8]) {
+        return uri;
+    }
+
+    std::string relative;
+
+    for (size_t j = i; base[j]; ++j) {
+        if (base[j] == '/') {
+            relative += "../";
+        }
+    }
+
+    while (uri[i - 1] != '/') {
+        --i;
+    }
+
+    relative += (uri + i);
+
+    if (relative.empty() && base[i]) {
+        relative = "./";
+    }
+
+    return relative;
 }
+
+std::string URI::str(char const *baseuri) const
+{
+    std::string s;
+    gchar *save = _impl->toString();
+    if (save) {
+        if (baseuri && baseuri[0]) {
+            s = build_relative_uri(save, baseuri);
+        } else {
+            s = save;
+        }
+        g_free(save);
+    }
+    return s;
+}
+
+std::string URI::getMimeType() const
+{
+    const char *path = getPath();
+
+    if (path) {
+        if (hasScheme("data")) {
+            for (const char *p = path; *p; ++p) {
+                if (*p == ';' || *p == ',') {
+                    return std::string(path, p);
+                }
+            }
+        } else {
+            bool uncertain;
+            auto type = Gio::content_type_guess(path, nullptr, 0, uncertain);
+            return Gio::content_type_get_mime_type(type).raw();
+        }
+    }
+
+    return "unknown/unknown";
+}
+
+std::string URI::getContents() const
+{
+    if (hasScheme("data")) {
+        // handle data URIs
+
+        const char *p = getPath();
+        const char *tok = nullptr;
+
+        // scan "[<media type>][;base64]," header
+        for (; *p && *p != ','; ++p) {
+            if (*p == ';') {
+                tok = p + 1;
+            }
+        }
+
+        // body follows after comma
+        if (*p != ',') {
+            g_critical("data URI misses comma");
+        } else if (tok && strncmp("base64", tok, p - tok) == 0) {
+            // base64 encoded body
+            return Glib::Base64::decode(p + 1);
+        } else {
+            // raw body
+            return p + 1;
+        }
+    } else {
+        // handle non-data URIs with GVfs
+        auto file = Gio::File::create_for_uri(str());
+
+        gsize length = 0;
+        char *buffer = nullptr;
+
+        if (file->load_contents(buffer, length)) {
+            auto contents = std::string(buffer, buffer + length);
+            g_free(buffer);
+            return contents;
+        } else {
+            g_critical("failed to load contents from %.100s", str().c_str());
+        }
+    }
+
+    return "";
+}
+
+bool URI::hasScheme(const char *scheme) const
+{
+    const char *s = getScheme();
+    return s && g_ascii_strcasecmp(s, scheme) == 0;
+}
+
+} // namespace Inkscape
 
 
 /*

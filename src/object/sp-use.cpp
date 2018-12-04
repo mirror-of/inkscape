@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <use> implementation
  *
@@ -10,7 +11,7 @@
  * Copyright (C) 1999-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -106,7 +107,7 @@ void SPUse::release() {
     SPItem::release();
 }
 
-void SPUse::set(unsigned int key, const gchar* value) {
+void SPUse::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_X:
             this->x.readOrUnset(value);
@@ -172,9 +173,8 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
     repr->setAttribute("height", sp_svg_length_write_with_units(this->height).c_str());
 
     if (this->ref->getURI()) {
-        gchar *uri_string = this->ref->getURI()->toString();
-        repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
+        auto uri_string = this->ref->getURI()->str();
+        repr->setAttribute("xlink:href", uri_string.c_str());
     }
 
     SPShape *shape = dynamic_cast<SPShape *>(child);

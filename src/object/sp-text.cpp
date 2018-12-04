@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <text> and <tspan> implementation
  *
@@ -10,7 +11,7 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /*
@@ -84,7 +85,7 @@ void SPText::release() {
     SPItem::release();
 }
 
-void SPText::set(unsigned int key, const gchar* value) {
+void SPText::set(SPAttributeEnum key, const gchar* value) {
     //std::cout << "SPText::set: " << sp_attribute_name( key ) << ": " << (value?value:"Null") << std::endl;
 
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) {
@@ -581,6 +582,11 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
     unsigned length = 0;
     int child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
+
+    // Per SVG spec, an object with 'display:none' doesn't contribute to text layout.
+    if (object->style->display.computed == SP_CSS_DISPLAY_NONE) {
+        return 0;
+    }
 
     if (SP_IS_TEXT(object)) {
         SP_TEXT(object)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);

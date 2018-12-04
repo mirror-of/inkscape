@@ -1,20 +1,15 @@
-/*
- * This is intended to be a standalone, reduced capability
- * implementation of Gzip and Zip functionality.  Its
- * targeted use case is for archiving and retrieving single files
- * which use these encoding types.  Being memory based and
- * non-optimized, it is not useful in cases where very large
- * archives are needed or where high performance is desired.
- * However, it should hopefully work very well for smaller,
- * one-at-a-time tasks.  What you get in return is the ability
- * to drop these files into your project and remove the dependencies
- * on ZLib and Info-Zip.  Enjoy.
- *
+// SPDX-License-Identifier: LGPL-2.1-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
  * Authors:
- *   Bob Jamison
+ * see git history
+ * Bob Jamison
  *
- * Copyright (C) 2006-2007 Bob Jamison
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU LGPL v2.1+, read the file 'COPYING' for more information.
+ */
+/*
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License as published by the Free Software Foundation; either
@@ -28,6 +23,18 @@
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+/*
+ * This is intended to be a standalone, reduced capability
+ * implementation of Gzip and Zip functionality.  Its
+ * targeted use case is for archiving and retrieving single files
+ * which use these encoding types.  Being memory based and
+ * non-optimized, it is not useful in cases where very large
+ * archives are needed or where high performance is desired.
+ * However, it should hopefully work very well for smaller,
+ * one-at-a-time tasks.  What you get in return is the ability
+ * to drop these files into your project and remove the dependencies
+ * on ZLib and Info-Zip.  Enjoy.
  */
 
 
@@ -1230,7 +1237,7 @@ void Deflater::encodeDistStatic(unsigned int len, unsigned int dist)
         }
 
     bool found = false;
-    for (int i=0 ; i<30 ; i++)
+    for (int i=0 ; i<29 ; i++)
         {
         unsigned int base  = lenBases[i].base;
         unsigned int range = lenBases[i].range;
@@ -2017,6 +2024,13 @@ std::vector<unsigned char> &ZipEntry::getUncompressedData()
 void ZipEntry::setUncompressedData(const std::vector<unsigned char> &val)
 {
     uncompressedData = val;
+}
+
+void ZipEntry::setUncompressedData(const std::string &s)
+{
+    uncompressedData.clear();
+    uncompressedData.reserve(s.size());
+    uncompressedData.insert(uncompressedData.begin(), s.begin(), s.end());
 }
 
 /**

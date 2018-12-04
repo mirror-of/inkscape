@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Gradient vector widget
  *
@@ -10,17 +11,12 @@
  * Copyright (C) 2001 Ximian, Inc.
  * Copyright (C) 2010 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 #include <gtkmm/treeview.h>
 
-#include "document-private.h"
 #include "document-undo.h"
 #include "document.h"
 #include "gradient-chemistry.h"
@@ -35,7 +31,7 @@
 #include "style.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 #include "ui/icon-names.h"
 
@@ -99,7 +95,7 @@ static void sp_gradient_selector_class_init(SPGradientSelectorClass *klass)
 static void gradsel_style_button(GtkWidget *gtkbtn, char const *iconName)
 {
     Gtk::Button *btn = Glib::wrap(GTK_BUTTON(gtkbtn));
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn->add(*manage(Glib::wrap(child)));
     btn->set_relief(Gtk::RELIEF_NONE);

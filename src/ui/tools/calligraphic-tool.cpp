@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Handwriting-like drawing mode
  *
@@ -18,7 +19,7 @@
  * Copyright (C) 2005-2007 bulia byak
  * Copyright (C) 2006 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noDYNA_DRAW_VERBOSE
@@ -41,7 +42,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "macros.h"
 #include "message-context.h"
 #include "selection.h"
 #include "splivarot.h"
@@ -52,6 +52,8 @@
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/sp-canvas.h"
+
+#include "include/macros.h"
 
 #include "livarot/Shape.h"
 
@@ -288,6 +290,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
         // 1b. fixed dc->angle (absolutely flat nib):
         double const radians = ( (this->angle - 90) / 180.0 ) * M_PI;
         Geom::Point ang1 = Geom::Point(-sin(radians),  cos(radians));
+        ang1.y() *= -this->desktop->yaxisdir();
         a1 = atan2(ang1);
     }
 
@@ -444,7 +447,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
-                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
 

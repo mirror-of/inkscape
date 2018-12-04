@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * MessageContext - context for posting status messages
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2004 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glib.h>
@@ -15,15 +16,12 @@
 
 namespace Inkscape {
 
-MessageContext::MessageContext(MessageStack *stack)
-: _stack(stack), _message_id(0), _flash_message_id(0)
-{
-    GC::anchor(_stack);
-}
+MessageContext::MessageContext(std::shared_ptr<MessageStack> stack)
+: _stack(std::move(stack)), _message_id(0), _flash_message_id(0)
+{}
 
 MessageContext::~MessageContext() {
     clear();
-    GC::release(_stack);
     _stack = nullptr;
 }
 

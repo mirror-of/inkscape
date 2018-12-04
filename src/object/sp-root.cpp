@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG \<svg\> implementation.
  */
@@ -10,7 +11,7 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <string>
@@ -96,7 +97,7 @@ void SPRoot::release()
 }
 
 
-void SPRoot::set(unsigned int key, const gchar *value)
+void SPRoot::set(SPAttributeEnum key, const gchar *value)
 {
     switch (key) {
     case SP_ATTR_VERSION:

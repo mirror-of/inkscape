@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <fespotlight> implementation.
  */
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2006,2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 // Same directory
@@ -22,8 +23,6 @@
 #include "document.h"
 
 #include "xml/repr.h"
-
-#define SP_MACROS_SILENT
 
 SPFeSpotLight::SPFeSpotLight()
     : SPObject(), x(0), x_set(FALSE), y(0), y_set(FALSE), z(0), z_set(FALSE), pointsAtX(0), pointsAtX_set(FALSE),
@@ -73,7 +72,7 @@ void SPFeSpotLight::release() {
 /**
  * Sets a specific value in the SPFeSpotLight.
  */
-void SPFeSpotLight::set(unsigned int key, gchar const *value) {
+void SPFeSpotLight::set(SPAttributeEnum key, gchar const *value) {
     gchar *end_ptr;
 
     switch (key) {

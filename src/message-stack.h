@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Raw stack of active status messages
  */
@@ -10,7 +11,7 @@
  * Copyright (C) 2004 MenTaLguY
  * Copyright (C) 2011 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_MESSAGE_STACK_H
@@ -22,9 +23,6 @@
 #include <glibmm/ustring.h>
 #include <sigc++/sigc++.h>
 
-#include "inkgc/gc-managed.h"
-#include "gc-finalized.h"
-#include "gc-anchored.h"
 #include "message.h"
 
 namespace Inkscape {
@@ -47,13 +45,11 @@ namespace Inkscape {
  * assuming that the message you pushed is still on top is an
  * invalid and unsafe assumption.
  */
-class MessageStack : public GC::Managed<>,
-                     public GC::Finalized,
-                     public GC::Anchored
+class MessageStack final
 {
 public:
     MessageStack();
-    ~MessageStack() override;
+    ~MessageStack();
 
     /** @brief returns the type of message currently at the top of the stack */
     MessageType currentMessageType() {

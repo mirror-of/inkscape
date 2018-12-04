@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /*
  * BinReloc - a library for creating relocatable executables
  * Written by: Mike Hearn <mike@theoretic.com>
@@ -16,6 +25,10 @@
 
 #ifndef _PREFIX_H_
 #define _PREFIX_H_
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #ifdef __cplusplus
 extern "C" {

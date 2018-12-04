@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feTile> implementation.
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "tile.h"
@@ -46,7 +47,7 @@ void SPFeTile::release() {
 /**
  * Sets a specific value in the SPFeTile.
  */
-void SPFeTile::set(unsigned int key, gchar const *value) {
+void SPFeTile::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
@@ -93,7 +94,7 @@ void SPFeTile::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterTile *nr_tile = dynamic_cast<Inkscape::Filters::FilterTile*>(nr_primitive);
     g_assert(nr_tile != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 }
 
 /*

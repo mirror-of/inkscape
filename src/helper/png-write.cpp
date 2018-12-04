@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * PNG file format utilities
  *
@@ -10,12 +11,8 @@
  *
  * Copyright (C) 1999-2002 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <png.h>
 #include "ui/interface.h"
@@ -30,6 +27,8 @@
 #include "preferences.h"
 #include "rdf.h"
 #include "util/units.h"
+
+#include "inkscape.h"
 
 #include "object/sp-item.h"
 #include "object/sp-root.h"
@@ -115,7 +114,7 @@ void PngTextList::add(gchar const* key, gchar const* text)
         item->lang_key = nullptr;
 #endif // PNG_iTXt_SUPPORTED
     } else {
-        g_warning("Unable to allocate arrary for %d PNG text data.", count);
+        g_warning("Unable to allocate array for %d PNG text data.", count);
         textItems = nullptr;
         count = 0;
     }
@@ -425,8 +424,13 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
 
     doc->ensureUpToDate();
 
+    Geom::Affine dt2doc;
+    if (SP_ACTIVE_DESKTOP) {
+        dt2doc = SP_ACTIVE_DESKTOP->dt2doc();
+    }
+
     /* Calculate translation by transforming to document coordinates (flipping Y)*/
-    Geom::Point translation = Geom::Point(-area[Geom::X][0], area[Geom::Y][1] - doc->getHeight().value("px"));
+    Geom::Point translation = -(area * dt2doc).min();
 
     /*  This calculation is only valid when assumed that (x0,y0)= area.corner(0) and (x1,y1) = area.corner(2)
      * 1) a[0] * x0 + a[2] * y1 + a[4] = 0.0
@@ -447,8 +451,6 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
     Geom::Affine const affine(Geom::Translate(translation)
                             * Geom::Scale(width / area.width(),
                                         height / area.height()));
-
-    //SP_PRINT_MATRIX("SVG2PNG", &affine);
 
     struct SPEBP ebp;
     ebp.width  = width;

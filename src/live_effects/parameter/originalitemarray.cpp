@@ -1,12 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include "live_effects/parameter/originalitemarray.h"
 
@@ -18,12 +15,12 @@
 
 #include <glibmm/i18n.h>
 
-#include "helper/icon-loader.h"
 #include "inkscape.h"
 #include "originalitem.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "ui/clipboard.h"
+#include "ui/icon-loader.h"
 
 #include "object/uri.h"
 

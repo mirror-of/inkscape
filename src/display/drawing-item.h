@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Canvas item belonging to an SVG drawing element.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_ITEM_H
@@ -25,6 +26,7 @@ class ustring;
 }
 
 class SPStyle;
+class SPItem;
 
 namespace Inkscape {
 
@@ -129,8 +131,9 @@ public:
 
     void setKey(unsigned key) { _key = key; }
     unsigned key() const { return _key; }
-    void setData(void *data) { _user_data = data; }
-    void *data() const { return _user_data; }
+    void setItem(SPItem *item) { _item = item; }
+    SPItem* getItem() const { return _item; } // SPItem
+
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = STATE_ALL, unsigned reset = 0);
     unsigned render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = nullptr);
@@ -202,7 +205,7 @@ protected:
     DrawingPattern *_fill_pattern;
     DrawingPattern *_stroke_pattern;
     Inkscape::Filters::Filter *_filter;
-    void *_user_data; ///< Used to associate DrawingItems with SPItems that created them
+    SPItem *_item; ///< Used to associate DrawingItems with SPItems that created them
     DrawingCache *_cache;
 
     CacheList::iterator _cache_iterator;

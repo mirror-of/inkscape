@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Align and Distribute dialog - implementation.
@@ -13,13 +14,8 @@
  *
  * Copyright (C) 1999-2004, 2005 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <glibmm/i18n.h>
 
@@ -45,7 +41,7 @@
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
@@ -130,7 +126,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
     if (selected.empty()) return;
 
-    const Coeffs &a = _allCoeffs[index];
+    Coeffs a = _allCoeffs[index]; // copy
     SPItem *focus = nullptr;
     Geom::OptRect b = Geom::OptRect();
     Selection::CompareSize horiz = (a.mx0 != 0.0) || (a.mx1 != 0.0)
@@ -167,6 +163,13 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     if(focus)
         b = focus->desktopPreferredBounds();
     g_return_if_fail(b);
+
+    if (horiz == Selection::HORIZONTAL && desktop->is_yaxisdown()) {
+        a.my0 = 1. - a.my0;
+        a.my1 = 1. - a.my1;
+        a.sy0 = 1. - a.sy0;
+        a.sy1 = 1. - a.sy1;
+    }
 
     // Generate the move point from the selected bounding box
     Geom::Point mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
@@ -303,6 +306,13 @@ private :
         ++second;
         if (second == selected.end()) return;
 
+        double kBegin = _kBegin;
+        double kEnd = _kEnd;
+        if (_orientation == Geom::Y && desktop->is_yaxisdown()) {
+            kBegin = 1. - kBegin;
+            kEnd = 1. - kEnd;
+        }
+
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int prefs_bbox = prefs->getBool("/tools/bounding_box");
         std::vector< BBoxSort  > sorted;
@@ -312,7 +322,7 @@ private :
             SPItem *item = *it;
             Geom::OptRect bbox = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (bbox) {
-                sorted.emplace_back(item, *bbox, _orientation, _kBegin, _kEnd);
+                sorted.emplace_back(item, *bbox, _orientation, kBegin, kEnd);
             }
         }
         //sort bbox by anchors
@@ -566,6 +576,9 @@ private :
             // First criteria: Sort according to the angle to the center point
             double angle_a = atan2(double(point_a[Geom::Y]), double(point_a[Geom::X]));
             double angle_b = atan2(double(point_b[Geom::Y]), double(point_b[Geom::X]));
+            double dt_yaxisdir = SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->yaxisdir() : 1;
+            angle_a *= -dt_yaxisdir;
+            angle_b *= -dt_yaxisdir;
             if (angle_a != angle_b) return (angle_a < angle_b);
             // Second criteria: Sort according to the distance the center point
             Geom::Coord length_a = point_a.length();
@@ -585,7 +598,6 @@ private :
         if (!selection) return;
 
         std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
-        if (selected.empty()) return;
 
         //Check 2 or more selected objects
         if (selected.size() < 2) return;
@@ -604,20 +616,15 @@ private :
 		}
 		sort(selected.begin(),selected.end(),sort_compare);
 	}
-	std::vector<SPItem*>::iterator it(selected.begin());
-	SPItem* item = *it;
-	Geom::Point p1 =  item->getCenter();
-	for (++it ;it != selected.end(); ++it)
+
+	Geom::Point p1 = selected.back()->getCenter();
+	for (SPItem *item : selected)
 	{
-		item = *it;
 		Geom::Point p2 = item->getCenter();
 		Geom::Point delta = p1 - p2;
 		sp_item_move_rel(item,Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 		p1 = p2;
 	}
-	Geom::Point p2 = selected.front()->getCenter();
-	Geom::Point delta = p1 - p2;
-	sp_item_move_rel(selected.front(),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);

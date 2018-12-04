@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A quick hack to use the Cairo renderer to write out a file.  This
  * then makes 'save as...' PDF.
@@ -8,11 +9,15 @@
  *
  * Copyright (C) 2004-2006 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef EXTENSION_INTERNAL_CAIRO_RENDERER_PDF_OUT_H
 #define EXTENSION_INTERNAL_CAIRO_RENDERER_PDF_OUT_H
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #include "extension/implementation/implementation.h"
 

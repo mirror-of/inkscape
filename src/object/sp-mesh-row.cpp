@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @gradient meshrow class.
  */
@@ -12,7 +13,7 @@
  * Copyright (C) 2010 Jon A. Cruz
  * Copyright (C) 2012 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "sp-mesh-row.h"
 #include "style.h"
@@ -68,7 +69,7 @@ void SPMeshrow::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 /**
  * Virtual build: set meshrow attributes from its associated XML node.
  */
-void SPMeshrow::set(unsigned int /*key*/, const gchar* /*value*/) {
+void SPMeshrow::set(SPAttributeEnum /*key*/, const gchar* /*value*/) {
 }
 
 /**

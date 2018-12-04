@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Per-desktop selection container
  *
@@ -15,7 +16,7 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -192,7 +193,7 @@ Selection::emptyBackup(){
 void
 Selection::setBackup () 
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = this->desktop();
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     Inkscape::UI::Tools::NodeTool *tool = nullptr;
     if (desktop) {
@@ -255,7 +256,7 @@ Selection::setBackup ()
 void
 Selection::restoreBackup() 
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = this->desktop();
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     Inkscape::UI::Tools::NodeTool *tool = nullptr;
     if (desktop) {

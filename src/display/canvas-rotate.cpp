@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Temporary surface for previewing rotated canvas.
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2017 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "inkscape.h"
@@ -199,6 +200,7 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
 
             // Rotate the actual canvas
             desktop->rotate_relative_center_point (desktop->w2d(cr->center),
+                                                   (desktop->w2d().det() > 0 ? -1 : 1) *
                                                    Geom::rad_from_deg(cr->angle) );
 
             // We're done

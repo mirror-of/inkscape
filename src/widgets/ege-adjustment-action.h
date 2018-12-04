@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later
 #ifndef SEEN_EGE_ADJUSTMENT_ACTION
 #define SEEN_EGE_ADJUSTMENT_ACTION
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
@@ -59,7 +60,6 @@ G_BEGIN_DECLS
 
 typedef struct _EgeAdjustmentAction      EgeAdjustmentAction;
 typedef struct _EgeAdjustmentActionClass EgeAdjustmentActionClass;
-typedef struct _EgeAdjustmentActionPrivate EgeAdjustmentActionPrivate;
 
 namespace Inkscape {
     namespace UI {
@@ -76,9 +76,6 @@ struct _EgeAdjustmentAction
 {
     /** Parent instance structure. */
     GtkAction action;
-
-    /** Pointer to private instance data. */
-    EgeAdjustmentActionPrivate *private_data;
 };
 
 /**

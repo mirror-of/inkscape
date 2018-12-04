@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * extension parameter for radiobuttons.
  *
@@ -11,12 +12,8 @@
  * Copyright (C) 2006-2007 Johan Engelen
  * Copyright (C) 2008 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
@@ -26,7 +23,6 @@
 #include "xml/node.h"
 #include "extension/extension.h"
 #include "preferences.h"
-#include "document-private.h"
 
 #include "radiobutton.h"
 

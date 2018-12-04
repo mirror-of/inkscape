@@ -1,7 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 add_subdirectory(attributes)
 add_subdirectory(branding)
 add_subdirectory(examples)
-add_subdirectory(extensions)
 add_subdirectory(filters)
 add_subdirectory(fonts)
 add_subdirectory(gradients)
@@ -16,3 +16,5 @@ add_subdirectory(templates)
 add_subdirectory(pixmaps)
 add_subdirectory(tutorials)
 add_subdirectory(ui)
+
+install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL})

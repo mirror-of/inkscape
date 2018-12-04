@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape guideline implementation
  *
@@ -12,12 +13,8 @@
  * Copyright (C) 2004 Monash University
  * Copyright (C) 2007 Johan Engelen
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <algorithm>
 #include <cstring>
@@ -93,7 +90,7 @@ void SPGuide::release()
     SPObject::release();
 }
 
-void SPGuide::set(unsigned int key, const gchar *value) {
+void SPGuide::set(SPAttributeEnum key, const gchar *value) {
     switch (key) {
     case SP_ATTR_INKSCAPE_COLOR:
         if (value) {
@@ -131,6 +128,12 @@ void SPGuide::set(unsigned int key, const gchar *value) {
             g_strfreev (strarray);
             if (success == 2 && (fabs(newx) > 1e-6 || fabs(newy) > 1e-6)) {
                 Geom::Point direction(newx, newy);
+
+                // <sodipodi:guide> stores inverted y-axis coordinates
+                if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+                    direction[Geom::Y] *= -1.0;
+                }
+
                 direction.normalize();
                 this->normal_to_line = direction;
             } else {
@@ -176,6 +179,11 @@ void SPGuide::set(unsigned int key, const gchar *value) {
                     this->point_on_line = Geom::Point(newx, 0);
                 }
             }
+
+            // <sodipodi:guide> stores inverted y-axis coordinates
+            if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+                this->point_on_line[Geom::Y] = document->getHeight().value("px") - this->point_on_line[Geom::Y];
+            }
         } else {
             // default to (0,0) for bad arguments
             this->point_on_line = Geom::Point(0,0);
@@ -215,6 +223,12 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
             newx = newx * root->viewBox.width()  / root->width.computed;
             newy = newy * root->viewBox.height() / root->height.computed;
         }
+    }
+
+    // <sodipodi:guide> stores inverted y-axis coordinates
+    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        newy = doc->getHeight().value("px") - newy;
+        n[Geom::Y] *= -1.0;
     }
 
     sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
@@ -368,6 +382,11 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
         double newx = point_on_line.x();
         double newy = point_on_line.y();
 
+        // <sodipodi:guide> stores inverted y-axis coordinates
+        if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+            newy = document->getHeight().value("px") - newy;
+        }
+
         SPRoot *root = document->getRoot();
         if( root->viewBox_set ) {
             // check to see if scaling is uniform
@@ -414,7 +433,14 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
        case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
     if (commit) {
         //XML Tree being used directly while it shouldn't be
-        sp_repr_set_point(getRepr(), "orientation", normal_to_line);
+        auto normal = normal_to_line;
+
+        // <sodipodi:guide> stores inverted y-axis coordinates
+        if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+            normal[Geom::Y] *= -1.0;
+        }
+
+        sp_repr_set_point(getRepr(), "orientation", normal);
     }
 
 /*  DISABLED CODE BECAUSE  SPGuideAttachment  IS NOT USE AT THE MOMENT (johan)

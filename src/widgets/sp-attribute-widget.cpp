@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Base widget for user input of object properties.
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2001 Ximian, Inc.
  * Copyright (C) 2012, authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/i18n.h>
@@ -18,10 +19,12 @@
 
 #include "sp-attribute-widget.h"
 
-#include "macros.h"
+#include "include/macros.h"
 #include "document.h"
 #include "document-undo.h"
 #include "verbs.h"
+
+#include "include/gtkmm_version.h"
 
 #include "object/sp-object.h"
 

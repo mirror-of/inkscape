@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 include(${CMAKE_SOURCE_DIR}/CMakeScripts/UseGlibMarshal.cmake)
 
@@ -17,7 +18,6 @@ set(helper_SRC
 	geom-pathvectorsatellites.cpp
 	geom-satellite.cpp
 	gettext.cpp
-	icon-loader.cpp
 	pixbuf-ops.cpp
 	png-write.cpp
 	stock-items.cpp
@@ -39,7 +39,6 @@ set(helper_SRC
 	geom-satellite.h
 	geom.h
 	gettext.h
-	icon-loader.h
 	mathfns.h
 	pixbuf-ops.h
 	png-write.h

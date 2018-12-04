@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SPGradient, SPStop, SPLinearGradient, SPRadialGradient,
  * SPMeshGradient, SPMeshRow, SPMeshPatch
@@ -17,7 +18,7 @@
  * Copyright (C) 2009 Jasper van de Gronde
  * Copyright (C) 2011 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 
@@ -36,13 +37,11 @@
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
 
-#include "bad-uri-exception.h"
-#include "display/cairo-utils.h"
-#include "svg/svg.h"
-#include "svg/css-ostringstream.h"
 #include "attributes.h"
-#include "document-private.h"
+#include "bad-uri-exception.h"
+#include "document.h"
 #include "gradient-chemistry.h"
+
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
@@ -51,8 +50,10 @@
 #include "sp-mesh-patch.h"
 #include "sp-stop.h"
 
-/// Has to be power of 2   Seems to be unused.
-//#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
+#include "display/cairo-utils.h"
+
+#include "svg/svg.h"
+#include "svg/css-ostringstream.h"
 
 bool SPGradient::hasStops() const
 {
@@ -128,8 +129,8 @@ bool SPGradient::isEquivalent(SPGradient *that)
 
         bool effective = true;
         while (effective && (as && bs)) {
-            if (!as->getEffectiveColor().isClose(bs->getEffectiveColor(), 0.001) ||
-                    as->offset != bs->offset || as->opacity != bs->opacity ) {
+            if (!as->getColor().isClose(bs->getColor(), 0.001) ||
+                    as->offset != bs->offset || as->getOpacity() != bs->getOpacity() ) {
                 effective = false;
                 break;
             } 
@@ -329,7 +330,7 @@ void SPGradient::release()
 /**
  * Set gradient attribute to value.
  */
-void SPGradient::set(unsigned key, gchar const *value)
+void SPGradient::set(SPAttributeEnum key, gchar const *value)
 {
 #ifdef OBJECT_TRACE
     std::stringstream temp;
@@ -539,7 +540,6 @@ void SPGradient::modified(guint flags)
 #ifdef OBJECT_TRACE
     objectTrace( "SPGradient::modified" );
 #endif
-
     if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
         if (SP_IS_MESHGRADIENT(this)) {
             this->invalidateArray();
@@ -630,9 +630,8 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
     }
 
     if (this->ref->getURI()) {
-        gchar *uri_string = this->ref->getURI()->toString();
-        repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
+        auto uri_string = this->ref->getURI()->str();
+        repr->setAttribute("xlink:href", uri_string.c_str());
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->units_set) {
@@ -1003,8 +1002,8 @@ void SPGradient::rebuildVector()
             // down to 100%."
             gstop.offset = CLAMP(gstop.offset, 0, 1);
 
-            gstop.color = stop->getEffectiveColor();
-            gstop.opacity = stop->opacity;
+            gstop.color = stop->getColor();
+            gstop.opacity = stop->getOpacity();
 
             vector.stops.push_back(gstop);
         }

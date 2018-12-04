@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 name: inkscape
 version-script: packaging/snappy/version.sh
 version: devel # Replaced at build time ^^^
@@ -16,6 +17,17 @@ description: >
  open, community-oriented development.
 confinement: strict
 grade: stable
+base: core18
+
+plugs:
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes
 
 parts:
   inkscape:
@@ -62,19 +74,25 @@ parts:
       - libatkmm-1.6-1v5
       - libcairomm-1.0-1v5
       - libcdr-0.1-1
+      - libgc1c2
       - libgdk-pixbuf2.0-0
+      - libgdl-3-5
       - libglibmm-2.4-1v5
+      - libglib2.0-bin
       - libgnomevfs2-0
-      - libgtkmm-2.4-1v5
+      - libgsl23
+      - libgslcblas0
+      - libgtkmm-3.0-1v5
       - libgtkspell0
       - liblcms2-2
-      - libmagick++-6.q16-5v5
+      - libmagick++-6.q16-7
       - libpangomm-1.4-1v5
       - libpoppler-glib8
+      - libpotrace0
       - librevenge-0.0-0
       - libvisio-0.1-1
       - libwpg-0.3-3
-      - libglib2.0-bin
+      - libxslt1.1
       - aspell
       - imagemagick
       - libimage-magick-perl
@@ -87,7 +105,6 @@ parts:
       - -lib/inkscape/*.a
     after:
       - desktop-gtk3
-      - gnome-3-26
   snapcraft-wrapper:
     plugin: dump
     source: packaging/snappy/
@@ -100,18 +117,6 @@ parts:
       - scour
     stage-packages:
       - pstoedit
-      - python-uniconvertor
-    after:
-      - gnome-3-26
-  gnome-3-26:
-    plugin: nil
-    build-packages:
-      - software-properties-common
-    prepare: |
-       add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
-       apt-get -y update
-       apt-get -y dist-upgrade
-       apt-get -y install gtk-update-icon-cache
   desktop-gtk3:
     source: https://github.com/Ubuntu/snapcraft-desktop-helpers.git
     source-type: git
@@ -136,8 +141,6 @@ parts:
       - libappindicator3-1
       - locales-all
       - xdg-user-dirs
-    after:
-      - gnome-3-26
 
 apps:
   inkscape:

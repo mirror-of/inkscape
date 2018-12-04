@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Base class for shapes, including <path> element
  *
@@ -11,12 +12,8 @@
  * Copyright (C) 2007-2008 Johan Engelen
  * Copyright (C) 2010      Jon A. Cruz <jon@joncruz.org>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
@@ -34,6 +31,7 @@
 #include "document.h"
 #include "style.h"
 #include "sp-marker.h"
+#include "sp-root.h"
 #include "sp-path.h"
 #include "preferences.h"
 #include "attributes.h"
@@ -109,7 +107,7 @@ void SPShape::release() {
     SPLPEItem::release();
 }
 
-void SPShape::set(unsigned int key, const gchar* value) {
+void SPShape::set(SPAttributeEnum key, const gchar* value) {
 	SPLPEItem::set(key, value);
 }
 
@@ -788,7 +786,11 @@ void SPShape::update_patheffect(bool write)
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
         this->setCurveInsync(c_lpe);
-        this->resetClipPathAndMaskLPE();
+        SPRoot *root = this->document->getRoot();
+        if (!sp_version_inside_range(root->version.inkscape, 0, 1, 0, 92)) {
+            this->resetClipPathAndMaskLPE();
+        }
+
         bool success = false;
         if (hasPathEffect() && pathEffectsEnabled()) {
             success = this->performPathEffect(c_lpe, SP_SHAPE(this));

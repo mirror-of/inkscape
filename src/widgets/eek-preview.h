@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
@@ -46,12 +47,8 @@
 
 G_BEGIN_DECLS
 
-#define EEK_PREVIEW_TYPE            (eek_preview_get_type())
-#define EEK_PREVIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST( (obj), EEK_PREVIEW_TYPE, EekPreview))
-#define EEK_PREVIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST( (klass), EEK_PREVIEW_TYPE, EekPreviewClass))
-#define IS_EEK_PREVIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE( (obj), EEK_PREVIEW_TYPE))
-#define IS_EEK_PREVIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE( (klass), EEK_PREVIEW_TYPE))
-#define EEK_PREVIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS( (obj), EEK_PREVIEW_TYPE, EekPreviewClass))
+#define EEK_TYPE_PREVIEW eek_preview_get_type()
+G_DECLARE_DERIVABLE_TYPE (EekPreview, eek_preview, EEK, PREVIEW, GtkDrawingArea)
 
 enum PreviewStyle {
     PREVIEW_STYLE_ICON = 0,
@@ -96,12 +93,6 @@ enum BorderStyle {
 };
 
 typedef struct _EekPreview       EekPreview;
-typedef struct _EekPreviewClass  EekPreviewClass;
-
-struct _EekPreview
-{
-    GtkDrawingArea drawing;
-};
 
 struct _EekPreviewClass
 {
@@ -110,7 +101,6 @@ struct _EekPreviewClass
     void (*clicked) (EekPreview* splat);
 };
 
-GType      eek_preview_get_type(void) G_GNUC_CONST;
 GtkWidget* eek_preview_new(void);
 
 void eek_preview_set_details(EekPreview   *preview,

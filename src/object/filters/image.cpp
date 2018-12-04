@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feImage> implementation.
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2007 Felipe Sanches
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "image.h"
@@ -96,7 +97,7 @@ static void sp_feImage_href_modified(SPObject* /*old_elem*/, SPObject* new_elem,
 /**
  * Sets a specific value in the SPFeImage.
  */
-void SPFeImage::set(unsigned int key, gchar const *value) {
+void SPFeImage::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
     /*DEAL WITH SETTING ATTRIBUTES HERE*/
         case SP_ATTR_XLINK_HREF:
@@ -239,7 +240,7 @@ void SPFeImage::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterImage *nr_image = dynamic_cast<Inkscape::Filters::FilterImage*>(nr_primitive);
     g_assert(nr_image != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_image->from_element = this->from_element;
     nr_image->SVGElem = this->SVGElem;

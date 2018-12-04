@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SELECTION_CHEMISTRY_H
 #define SEEN_SELECTION_CHEMISTRY_H
 
@@ -14,7 +15,7 @@
  * Copyright (C) 1999-2012 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/forward.h>
@@ -121,7 +122,7 @@ enum SPCycleType
 
 
 
-// TOOD fixme: This should be moved into preference repr
+// TODO FIXME: This should be moved into preference repr
 extern SPCycleType SP_CYCLING;
 
 #endif // SEEN_SELECTION_CHEMISTRY_H

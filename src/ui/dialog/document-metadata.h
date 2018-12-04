@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * \brief  Document Metadata dialog
  */
@@ -7,15 +8,11 @@
  *
  * Copyright (C) 2004, 2005, 2006 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_DOCUMENT_METADATA_H
 #define INKSCAPE_UI_DIALOG_DOCUMENT_METADATA_H
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include <list>
 #include <cstddef>

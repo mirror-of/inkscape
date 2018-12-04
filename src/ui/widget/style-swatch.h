@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Static style swatch (fill, stroke, opacity)
  */
@@ -7,15 +8,11 @@
  *
  * Copyright (C) 2005-2008 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_CURRENT_STYLE_H
 #define INKSCAPE_UI_CURRENT_STYLE_H
-
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>

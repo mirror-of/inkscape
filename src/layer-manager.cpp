@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::LayerManager - a view of a document's layers, relative
  *                          to a particular desktop
@@ -5,7 +6,7 @@
  * Copyright 2006  MenTaLguY  <mental@rydia.net>
  *   Abhishek Sharma
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <set>
@@ -23,8 +24,6 @@
 #include "inkgc/gc-managed.h"
 
 #include "object/sp-item-group.h"
-
-#include "util/format.h"
 
 #include "xml/node-observer.h"
 
@@ -270,7 +269,6 @@ void LayerManager::_rebuild() {
 
         for ( std::vector<SPObject *>::const_iterator iter = layers.begin(); iter != layers.end(); ++iter ) {
             SPObject *layer = *iter;
-//             Debug::EventTracker<DebugLayerNote> tracker(Util::format("Examining %s", layer->label()));
             bool needsAdd = false;
             std::set<SPGroup*> additional;
 

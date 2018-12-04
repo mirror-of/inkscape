@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2017 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef INK_RADIO_ACTION_H
 #define INK_RADIO_ACTION_H
 
@@ -14,12 +23,10 @@ G_BEGIN_DECLS
 
 typedef struct _InkRadioAction      InkRadioAction;
 typedef struct _InkRadioActionClass InkRadioActionClass;
-typedef struct _InkRadioActionPrivate InkRadioActionPrivate;
 
 struct _InkRadioAction
 {
     GtkRadioAction action;
-    InkRadioActionPrivate *private_data;
 };
 
 struct _InkRadioActionClass

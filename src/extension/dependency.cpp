@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
  *   Ted Gould <ted@gould.cx>
@@ -5,12 +6,8 @@
  * Copyright (C) 2006 Johan Engelen, johan@shouraizou.nl
  * Copyright (C) 2004 Author
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 #include <glibmm/fileutils.h>
@@ -118,7 +115,7 @@ Dependency::~Dependency ()
 
     If the \c _location is \c LOCATION_EXTENSIONS then the \c INKSCAPE_EXTENSIONDIR
     is put on the front of the string with \c build_filename.  Then the
-    appopriate filetest is run.
+    appropriate filetest is run.
 
     If the \c _location is \c LOCATION_ABSOLUTE then the file test is
     run directly on the string.

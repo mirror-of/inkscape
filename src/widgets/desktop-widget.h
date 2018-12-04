@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_DESKTOP_WIDGET_H
 #define SEEN_SP_DESKTOP_WIDGET_H
 
@@ -7,9 +8,11 @@
  * Authors:
  *      Jon A. Cruz <jon@joncruz.org> (c) 2010
  *      John Bintz <jcoswell@coswellproductions.org> (c) 2006
- *      Ralf Stephan <ralf@ark.in-berlin.de> (c) 2005, distrib. under GPL2
+ *      Ralf Stephan <ralf@ark.in-berlin.de> (c) 2005
  *      Abhishek Sharma
  *      ? -2004
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm/window.h>
@@ -28,6 +31,14 @@ class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
 
+namespace Gtk {
+class Box;
+class Grid;
+class MenuBar;
+class Scrollbar;
+class SpinButton;
+class ToggleButton;
+}
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
 #define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
@@ -35,22 +46,22 @@ class SPObject;
 #define SP_IS_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
 #define SP_IS_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
 
+/**
+ * Create a new SPViewWidget (which happens to be a SPDesktopWidget).
+ */
+SPViewWidget *sp_desktop_widget_new(SPNamedView *namedview);
+
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
 void sp_desktop_widget_maximize(SPDesktopWidget *dtw);
 void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
-void sp_desktop_widget_update_zoom(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rotation(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
 
 /* Show/hide rulers & scrollbars */
-void sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw);
-void sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
-void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw );
-bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw );
 
 void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
 void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
@@ -73,33 +84,52 @@ struct SPDesktopWidget {
 
     Gtk::Window *window;
 
+    static void dispose(GObject *object);
+
+private:
     // The root vbox of the window layout.
-    GtkWidget *vbox;
+    Gtk::Box *_vbox;
 
-    GtkWidget *hbox;
+    Gtk::Box *_hbox;
 
-    GtkWidget *menubar, *statusbar;
+    Gtk::MenuBar *_menubar;
+    Gtk::Box     *_statusbar;
 
-    Inkscape::UI::Dialogs::SwatchesPanel *panels;
+    Inkscape::UI::Dialogs::SwatchesPanel *_panels;
 
-    GtkWidget *hscrollbar, *vscrollbar, *vscrollbar_box;
+    Glib::RefPtr<Gtk::Adjustment> _hadj;
+    Glib::RefPtr<Gtk::Adjustment> _vadj;
+
+    Gtk::ToggleButton *_guides_lock;
+
+    Gtk::ToggleButton *_cms_adjust;
+    Gtk::ToggleButton *_sticky_zoom;
+    Gtk::Grid *_coord_status;
+
+    Gtk::Label *_coord_status_x;
+    Gtk::Label *_coord_status_y;
+    Gtk::SpinButton *_zoom_status;
+    sigc::connection _zoom_status_input_connection;
+    sigc::connection _zoom_status_output_connection;
+    sigc::connection _zoom_status_value_changed_connection;
+    sigc::connection _zoom_status_populate_popup_connection;
+
+public:
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    GtkWidget *guides_lock;
-    GtkWidget *sticky_zoom;
-    GtkWidget *cms_adjust;
-    GtkWidget *coord_status;
-    GtkWidget *coord_status_x;
-    GtkWidget *coord_status_y;
     GtkWidget *select_status;
     GtkWidget *select_status_eventbox;
-    GtkWidget *zoom_status;
     GtkWidget *rotation_status;
-    gulong zoom_update;
     gulong rotation_update;
+
+
+    Gtk::Scrollbar *hscrollbar;
+    Gtk::Scrollbar *vscrollbar;
+
+    Gtk::Box *vscrollbar_box;
 
     Inkscape::UI::Widget::Dock *dock;
 
@@ -116,8 +146,6 @@ struct SPDesktopWidget {
 
     Geom::Point ruler_origin;
     double dt2r;
-
-    GtkAdjustment *hadj, *vadj;
 
     Inkscape::Widgets::LayerSelector *layer_selector;
 
@@ -171,12 +199,12 @@ struct SPDesktopWidget {
             void activateDesktop() override { sp_dtw_desktop_activate(_dtw); }
             void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
             void updateRulers() override { sp_desktop_widget_update_rulers(_dtw); }
-            void updateScrollbars(double scale) override { sp_desktop_widget_update_scrollbars(_dtw, scale); }
-            void toggleRulers() override { sp_desktop_widget_toggle_rulers(_dtw); }
-            void toggleScrollbars() override { sp_desktop_widget_toggle_scrollbars(_dtw); }
-            void toggleColorProfAdjust() override { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
-            bool colorProfAdjustEnabled() override { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
-            void updateZoom() override { sp_desktop_widget_update_zoom(_dtw); }
+            void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
+            void toggleRulers() override { _dtw->toggle_rulers(); }
+            void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
+            void toggleColorProfAdjust() override { _dtw->toggle_color_prof_adj(); }
+            bool colorProfAdjustEnabled() override { return _dtw->get_color_prof_adj_enabled(); }
+            void updateZoom() override { _dtw->update_zoom(); }
             void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
             void updateRotation() override { sp_desktop_widget_update_rotation(_dtw); }
             void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
@@ -236,6 +264,16 @@ struct SPDesktopWidget {
     static SPDesktopWidget* createInstance(SPNamedView *namedview);
 
     void updateNamedview();
+    void update_guides_lock();
+
+    /// Get the CMS adjustment button widget
+    decltype(_cms_adjust) get_cms_adjust() const {return _cms_adjust;}
+
+    void cms_adjust_set_sensitive(bool enabled);
+    bool get_color_prof_adj_enabled() const;
+    void toggle_color_prof_adj();
+    bool get_sticky_zoom_active() const;
+    void update_zoom();
 
 private:
     GtkWidget *tool_toolbox;
@@ -247,7 +285,20 @@ private:
     void layoutWidgets();
 
     void namedviewModified(SPObject *obj, guint flags);
+    void on_adjustment_value_changed();
+    void toggle_scrollbars();
+    void update_scrollbars(double scale);
+    void toggle_rulers();
+    void sticky_zoom_toggled();
+    int zoom_input(double *new_val);
+    bool zoom_output();
+    void zoom_value_changed();
+    void zoom_menu_handler(double factor);
+    void zoom_populate_popup(Gtk::Menu *menu);
 
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    static void cms_adjust_toggled( GtkWidget *button, gpointer data );
+#endif
 };
 
 /// The SPDesktopWidget vtable

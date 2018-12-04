@@ -1,18 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
  *
  * Copyright (C) 2012 Author
  *               2017 Tavmjong Bah
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_WIDGET_SPIN_SCALE_H
 #define INKSCAPE_UI_WIDGET_SPIN_SCALE_H
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>

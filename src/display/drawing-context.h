@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Cairo drawing context with Inkscape extensions.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_CONTEXT_H
@@ -52,6 +53,8 @@ public:
     void translate(double dx, double dy) { cairo_translate(_ct, dx, dy); }
     void scale(Geom::Scale const &s) { cairo_scale(_ct, s[Geom::X], s[Geom::Y]); }
     void scale(double sx, double sy) { cairo_scale(_ct, sx, sy); }
+    void device_to_user_distance(double &dx, double &dy) { cairo_device_to_user_distance(_ct, &dx, &dy); }
+    void user_to_device_distance(double &dx, double &dy) { cairo_user_to_device_distance(_ct, &dx, &dy); }
 
     void moveTo(Geom::Point const &p) { cairo_move_to(_ct, p[Geom::X], p[Geom::Y]); }
     void lineTo(Geom::Point const &p) { cairo_line_to(_ct, p[Geom::X], p[Geom::Y]); }
@@ -113,6 +116,7 @@ public:
     void patternSetFilter(cairo_filter_t filter) {
         cairo_pattern_set_filter(cairo_get_source(_ct), filter);
     }
+    void patternSetExtend(cairo_extend_t extend) { cairo_pattern_set_extend(cairo_get_source(_ct), extend); }
 
     Geom::Rect targetLogicalBounds() const;
 

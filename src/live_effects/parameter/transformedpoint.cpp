@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/widget/registered-widget.h"
@@ -120,7 +121,7 @@ TransformedPointParam::param_newWidget()
     pointwdg->setValue( vector, origin );
     pointwdg->clearProgrammatically();
     pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change vector parameter"));
-
+    
     Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
     static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
@@ -166,9 +167,11 @@ public:
     ~TransformedPointParamKnotHolderEntity_Vector() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) override {
+        param->param_effect->upd_params = true;
         Geom::Point const s = p - param->origin;
         /// @todo implement angle snapping when holding CTRL
         param->setVector(s);
+        param->set_and_write_new_values(param->origin, param->vector);
         sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
     };
     Geom::Point knot_get() const override{

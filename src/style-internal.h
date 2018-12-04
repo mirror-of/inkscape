@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_STYLE_INTERNAL_H
 #define SEEN_SP_STYLE_INTERNAL_H
 
@@ -14,7 +15,7 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <utility>
@@ -181,9 +182,10 @@ public:
         readIfUnset( repr->attribute( name.c_str() ), SP_STYLE_SRC_ATTRIBUTE );
     }
 
+    virtual const Glib::ustring get_value() const = 0;
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const = 0;
+                                       SPIBase const *const base = nullptr ) const;
     virtual void clear() {
         set = false, inherit = false, important = false;
     }
@@ -239,9 +241,7 @@ public:
 
     ~SPIFloat() override = default;
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value = value_default;
@@ -316,9 +316,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value = value_default;
@@ -384,9 +382,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         unit = SP_CSS_UNIT_NONE, value = value_default;
@@ -436,9 +432,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPILength::clear();
         normal = true;
@@ -480,9 +474,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         axes.clear();
@@ -550,9 +542,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value = value_default, computed = computed_default;
@@ -605,10 +595,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
-
+    const Glib::ustring get_value() const override;
 };
 
 
@@ -632,9 +619,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
 };
 
 
@@ -656,9 +641,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
 };
 
 
@@ -680,9 +663,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
 };
 
 
@@ -710,9 +691,7 @@ public:
     }
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override; // TODO check about value and value_default
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
@@ -748,8 +727,8 @@ public:
         value.color.set(0);
     }
 
-    SPIColor( Glib::ustring const &name )
-        : SPIBase( name ),
+    SPIColor( Glib::ustring const &name, bool inherits = true )
+        : SPIBase( name, inherits ),
           currentcolor(false) {
         value.color.set(0);
     }
@@ -758,9 +737,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         value.color.set(0);
@@ -840,9 +817,7 @@ public:
     ~SPIPaint() override;  // Clear and delete href.
     void read( gchar const *str ) override;
     virtual void read( gchar const *str, SPStyle &style, SPDocument *document = nullptr);
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override;
     virtual void reset( bool init ); // Used internally when reading or cascading
     void cascade( const SPIBase* const parent ) override;
@@ -880,7 +855,7 @@ public:
     }
 
     bool isPaintserver() const {
-        return (value.href) ? value.href->getObject() : nullptr;
+        return value.href && value.href->getObject() != nullptr;
     }
 
     void setColor( float r, float g, float b ) {
@@ -940,9 +915,7 @@ public:
     }
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
@@ -993,9 +966,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         values.clear();
@@ -1028,9 +999,7 @@ public:
 
     ~SPIFilter() override;
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override;
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
@@ -1069,9 +1038,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         type = SP_FONT_SIZE_LITERAL, unit = SP_CSS_UNIT_NONE,
@@ -1118,9 +1085,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
     }
@@ -1160,9 +1125,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         type=SP_BASELINE_SHIFT_LITERAL, unit=SP_CSS_UNIT_NONE,
@@ -1209,9 +1172,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         underline = false, overline = false, line_through = false, blink = false;
@@ -1250,9 +1211,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
-    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = nullptr ) const override;
+    const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
         solid = true, isdouble = false, dotted = false, dashed = false, wavy = false;
@@ -1299,6 +1258,7 @@ public:
     = default;
 
     void read( gchar const *str ) override;
+    const Glib::ustring get_value() const override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = nullptr ) const override;
@@ -1338,6 +1298,49 @@ struct SPITextDecorationData {
     float   underline_position; 
     float   line_through_thickness;
     float   line_through_position;
+};
+
+/// Vector Effects.  THIS SHOULD BE A GENERIC CLASS
+class SPIVectorEffect : public SPIBase
+{
+
+public:
+    SPIVectorEffect()
+        : SPIBase( "vector-effect" ) {
+        this->clear();
+        inherits = false;
+    }
+
+    ~SPIVectorEffect() override
+    = default;
+
+    void read( gchar const *str ) override;
+    const Glib::ustring get_value() const override;
+    void clear() override {
+        SPIBase::clear();
+        stroke = false;
+        size   = false;
+        rotate = false;
+        fixed  = false;
+    }
+
+    // Does not inherit
+    void cascade( const SPIBase* const parent ) override {};
+    void merge(   const SPIBase* const parent ) override {};
+
+    SPIVectorEffect& operator=(const SPIVectorEffect& rhs) = default;
+
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
+        return !(*this == rhs);
+    }
+
+  // To do: make private
+public:
+    bool stroke : 1;
+    bool size   : 1;
+    bool rotate : 1;
+    bool fixed  : 1;
 };
 
 #endif // SEEN_SP_STYLE_INTERNAL_H

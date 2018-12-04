@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef INKSCAPE_SP_TEXTPATH_H
 #define INKSCAPE_SP_TEXTPATH_H
 
@@ -31,7 +40,7 @@ public:
 
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void release() override;
-    void set(unsigned int key, const char* value) override;
+    void set(SPAttributeEnum key, const char* value) override;
     void update(SPCtx* ctx, unsigned int flags) override;
     void modified(unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;

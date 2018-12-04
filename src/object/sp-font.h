@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SP_FONT_H_SEEN
 #define SP_FONT_H_SEEN
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2008 Felipe C. da S. Sanches
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-object.h"
@@ -36,7 +37,7 @@ protected:
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 	void remove_child(Inkscape::XML::Node* child) override;
 
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 

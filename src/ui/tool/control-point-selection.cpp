@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Node selection - implementation.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <boost/none.hpp>
@@ -662,11 +663,11 @@ bool ControlPointSelection::event(Inkscape::UI::Tools::ToolBase * /*event_contex
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
-            return _keyboardMove(event->key, Geom::Point(0, 1));
+            return _keyboardMove(event->key, Geom::Point(0, -_desktop->yaxisdir()));
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
-            return _keyboardMove(event->key, Geom::Point(0, -1));
+            return _keyboardMove(event->key, Geom::Point(0, _desktop->yaxisdir()));
         case GDK_KEY_Right:
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
@@ -678,9 +679,9 @@ bool ControlPointSelection::event(Inkscape::UI::Tools::ToolBase * /*event_contex
 
         // rotates
         case GDK_KEY_bracketleft:
-            return _keyboardRotate(event->key, 1);
+            return _keyboardRotate(event->key, -_desktop->yaxisdir());
         case GDK_KEY_bracketright:
-            return _keyboardRotate(event->key, -1);
+            return _keyboardRotate(event->key, _desktop->yaxisdir());
 
         // scaling
         case GDK_KEY_less:

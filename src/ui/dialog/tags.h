@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A simple dialog for tags UI.
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_TAGS_PANEL_H
@@ -19,8 +20,10 @@
 #include <gtkmm/dialog.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/panel.h"
+#include "object/sp-tag.h"
+#include "object/sp-tag-use.h"
+#include "object/sp-tag-use-reference.h"
 #include "desktop-tracker.h"
-#include "ui/widget/style-subject.h"
 #include "selection.h"
 #include "ui/widget/filter-effect-chooser.h"
 

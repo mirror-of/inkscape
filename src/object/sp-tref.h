@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SP_TREF_H
 #define SP_TREF_H
 
@@ -12,7 +13,7 @@
  *
  * Copyright (C) 2007 Gail Banaszkiewicz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-item.h"
@@ -53,7 +54,7 @@ public:
 
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 	void release() override;
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;

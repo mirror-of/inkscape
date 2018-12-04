@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #include <glibmm.h>
 
 #include "attributes.h"
@@ -51,7 +60,7 @@ void SPMeshGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 
-void SPMeshGradient::set(unsigned key, gchar const *value) {
+void SPMeshGradient::set(SPAttributeEnum key, gchar const *value) {
 #ifdef OBJECT_TRACE
   objectTrace( "SPMeshGradient::set" );
 #endif

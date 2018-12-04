@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Rectangle drawing context
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2000-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -25,7 +26,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "selection-chemistry.h"
 #include "selection.h"
@@ -361,7 +362,7 @@ void RectTool::drag(Geom::Point const pt, guint state) {
     SPDesktop *desktop = this->desktop;
 
     if (!this->rect) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feMerge> implementation.
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "attributes.h"
@@ -44,7 +45,7 @@ void SPFeMerge::release() {
 /**
  * Sets a specific value in the SPFeMerge.
  */
-void SPFeMerge::set(unsigned int key, gchar const *value) {
+void SPFeMerge::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
@@ -89,7 +90,7 @@ void SPFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterMerge *nr_merge = dynamic_cast<Inkscape::Filters::FilterMerge*>(nr_primitive);
     g_assert(nr_merge != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     int in_nr = 0;
 

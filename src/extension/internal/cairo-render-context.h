@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef EXTENSION_INTERNAL_CAIRO_RENDER_CONTEXT_H_SEEN
 #define EXTENSION_INTERNAL_CAIRO_RENDER_CONTEXT_H_SEEN
 
@@ -10,12 +11,8 @@
  *
  * Copyright (C) 2006 Miklos Erdelyi
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include "extension/extension.h"
 #include <set>

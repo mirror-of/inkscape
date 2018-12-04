@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape Preferences dialog.
  *
@@ -7,12 +8,8 @@
  *
  * Copyright (C) 2004, 2006, 2007 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 #include <glibmm/convert.h>
@@ -32,14 +29,16 @@
 #include "selection-chemistry.h"
 #include "verbs.h"
 
+#include "include/gtkmm_version.h"
+
 #include "io/sys.h"
 
-#include "helper/icon-loader.h"
 #include "ui/dialog/filedialog.h"
+#include "ui/icon-loader.h"
 #include "ui/widget/preferences-widget.h"
 
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -643,7 +642,7 @@ void PrefCombo::init(Glib::ustring const &prefs_path, std::vector<Glib::ustring>
     size_t values_size = values.size();
     if (values_size != labels_size) {
         std::cout << "PrefCombo::"
-                  << "Diferent number of values/labels in " << prefs_path << std::endl;
+                  << "Different number of values/labels in " << prefs_path << std::endl;
         return;
     }
     _prefs_path = prefs_path;
@@ -667,7 +666,7 @@ void PrefCombo::init(Glib::ustring const &prefs_path, std::vector<Glib::ustring>
     size_t values_size = values.size();
     if (values_size != labels_size) {
         std::cout << "PrefCombo::"
-                  << "Diferent number of values/labels in " << prefs_path << std::endl;
+                  << "Different number of values/labels in " << prefs_path << std::endl;
         return;
     }
     _prefs_path = prefs_path;
@@ -803,7 +802,7 @@ void PrefEntryFileButtonHBox::onRelatedButtonClickedCallback()
                   (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
             open_path = "";
 
-#ifdef WIN32
+#ifdef _WIN32
         //# If no open path, default to our win32 documents folder
         if (open_path.empty())
         {
@@ -905,7 +904,7 @@ void PrefOpenFolder::onRelatedButtonClickedCallback()
 {
     g_mkdir_with_parents(relatedEntry->get_text().c_str(), 0700);
     // https://stackoverflow.com/questions/42442189/how-to-open-spawn-a-file-with-glib-gtkmm-in-windows
-#ifdef WIN32
+#ifdef _WIN32
     ShellExecute(NULL, "open", relatedEntry->get_text().c_str(), NULL, NULL, SW_SHOWDEFAULT);
 #elif defined(__APPLE__)
     system(("open " + relatedEntry->get_text()).c_str());

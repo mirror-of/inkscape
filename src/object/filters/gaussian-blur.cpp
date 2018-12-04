@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <gaussianBlur> implementation.
  *
@@ -10,12 +11,8 @@
  *
  * Copyright (C) 2006,2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "gaussian-blur.h"
 
@@ -54,7 +51,7 @@ void SPGaussianBlur::release() {
 /**
  * Sets a specific value in the SPGaussianBlur.
  */
-void SPGaussianBlur::set(unsigned int key, gchar const *value) {
+void SPGaussianBlur::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
         case SP_ATTR_STDDEVIATION:
             this->stdDeviation.set(value);
@@ -108,7 +105,7 @@ void SPGaussianBlur::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(handle);
     Inkscape::Filters::FilterGaussian *nr_blur = dynamic_cast<Inkscape::Filters::FilterGaussian*>(nr_primitive);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     gfloat num = this->stdDeviation.getNumber();
 

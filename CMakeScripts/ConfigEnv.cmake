@@ -12,9 +12,7 @@ if(WIN32)
   endif()
   
   set(CMAKE_C_COMPILER "${MINGW_BIN}/gcc.exe")
-  set(CMAKE_C_LINK_EXECUTABLE "${MINGW_BIN}/gcc.exe")
   set(CMAKE_CXX_COMPILER "${MINGW_BIN}/g++.exe")
-  set(CMAKE_CXX_LINK_EXECUTABLE "${MINGW_BIN}/g++.exe")
   set(CMAKE_CXX_STANDARD 11)
   
   # Setup Windows resource files compiler.
@@ -25,11 +23,10 @@ if(WIN32)
   
   # These options are required for having i18n support on Windows.
   option(ENABLE_NLS "Compile with Native Language Support (using gettext)" ON)
-  option(HAVE_BIND_TEXTDOMAIN_CODESET "Compile with 'bind_textdomain_codeset' function" ON)
   
   # Does not compile on Windows with these options.
-  option(BR_PTHREADS "Use binreloc thread support" OFF)
   option(ENABLE_BINRELOC "Use AutoPackage" OFF)
+  option(WITH_JEMALLOC "Compile with JEMALLOC support" OFF)
 endif()
 
 if(APPLE)

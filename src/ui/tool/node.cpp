@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Authors:
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *   Jon A. Cruz <jon@joncruz.org>
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <iostream>
@@ -980,7 +981,11 @@ bool Node::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent 
             dir = 1;
         } else if (event->scroll.direction == GDK_SCROLL_DOWN) {
             dir = -1;
-        } else break;
+        } else if (event->scroll.direction == GDK_SCROLL_SMOOTH) {
+            dir = event->scroll.delta_y > 0 ? -1 : 1;
+        } else {
+            break;
+        }
         if (held_control(event->scroll)) {
             _linearGrow(dir);
         } else {

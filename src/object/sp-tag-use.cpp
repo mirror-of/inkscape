@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <inkscape:tagref> implementation
  *
@@ -7,7 +8,7 @@
  *
  * Copyright (C) Theodore Janeczko 2012-2014 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-tag-use.h"
@@ -84,7 +85,7 @@ SPTagUse::release()
 }
 
 void
-SPTagUse::set(unsigned key, gchar const *value)
+SPTagUse::set(SPAttributeEnum key, gchar const *value)
 {
 
     switch (key) {
@@ -128,9 +129,8 @@ SPTagUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, gui
     SPObject::write(xml_doc, repr, flags);
     
     if (ref->getURI()) {
-        gchar *uri_string = ref->getURI()->toString();
-        repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
+        auto uri_string = ref->getURI()->str();
+        repr->setAttribute("xlink:href", uri_string.c_str());
     }
 
     return repr;

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 /**
  * @file
@@ -11,12 +12,8 @@
  *   Romain de Bossoreille
  *
  * Copyright (C) 2004-2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "clonetiler.h"
 
@@ -43,8 +40,8 @@
 #include "display/drawing-context.h"
 #include "display/drawing.h"
 
-#include "helper/icon-loader.h"
 #include "helper/window.h"
+#include "ui/icon-loader.h"
 
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
@@ -2684,7 +2681,7 @@ GtkWidget * CloneTiler::table_x_y_rand(int values)
 	auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
 
-    GtkWidget *i = GTK_WIDGET(sp_get_icon_image(INKSCAPE_ICON("object-rows"), GTK_ICON_SIZE_MENU)->gobj());
+    GtkWidget *i = sp_get_icon_image(INKSCAPE_ICON("object-rows"), GTK_ICON_SIZE_MENU);
     gtk_box_pack_start(GTK_BOX(hb), i, FALSE, FALSE, 2);
 
     GtkWidget *l = gtk_label_new("");
@@ -2698,7 +2695,7 @@ GtkWidget * CloneTiler::table_x_y_rand(int values)
 	auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
 
-    GtkWidget *i = GTK_WIDGET(sp_get_icon_image(INKSCAPE_ICON("object-columns"), GTK_ICON_SIZE_MENU)->gobj());
+    GtkWidget *i = sp_get_icon_image(INKSCAPE_ICON("object-columns"), GTK_ICON_SIZE_MENU);
     gtk_box_pack_start(GTK_BOX(hb), i, FALSE, FALSE, 2);
 
     GtkWidget *l = gtk_label_new("");

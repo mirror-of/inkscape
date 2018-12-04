@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Text::Layout - text layout engine output functions
  *
@@ -6,8 +7,13 @@
  *
  * Copyright (C) 2005 Richard Hughes
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <glib.h>
 #include "Layout-TNG.h"
 #include "display/drawing-text.h"
@@ -201,7 +207,7 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
                 }
                 // Save the starting coordinates for the line - these are needed for figuring out
                 // dot/dash/wave phase.
-                // Use maximum ascent and descent to ensure glpyhs that extend outside the embox
+                // Use maximum ascent and descent to ensure glyphs that extend outside the embox
                 // are fully drawn.
                 (void) nr_text->addComponent(_spans[span_index].font, _glyphs[glyph_index].glyph, glyph_matrix,
                     _glyphs[glyph_index].width,
@@ -368,7 +374,7 @@ std:: cout << "DEBUG Layout::print in while "
                 ++text_iter;
                 if(doUTN)newtarget=SingleUnicodeToNon(*text_iter); // this should only ever be with a 1:1 glyph:character situation
                 if(newtarget != oldtarget)break;     // change in unicode to nonunicode translation status
-                // MUST exit on any major span change, but not on some little events, like a font substitution event irrelvant for the file save
+                // MUST exit on any major span change, but not on some little events, like a font substitution event irrelevant for the file save
                 unsigned next_span_index = _characters[lc_index].in_span;
                 if(span_index != next_span_index){
                     /* on major changes break out of loop.

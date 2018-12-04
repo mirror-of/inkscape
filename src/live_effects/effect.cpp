@@ -1,15 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *   Abhishek Sharma
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-//#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
+
+//#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
 
 // include effects:
 #include "live_effects/lpe-patternalongpath.h"
@@ -75,7 +76,6 @@
 #include "xml/sp-css-attr.h"
 
 #include "message-stack.h"
-#include "document-private.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
@@ -398,7 +398,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       concatenate_before_pwd2(false),
       sp_lpe_item(nullptr),
       current_zoom(1),
-      upd_params(true),
+      upd_params(false),
       current_shape(nullptr),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),
@@ -409,8 +409,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
     current_zoom = 0.0;
 }
 
-Effect::~Effect()
-= default;
+Effect::~Effect() = default;
 
 Glib::ustring
 Effect::getName() const
@@ -558,6 +557,7 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    setReady();
     doBeforeEffect(lpeitem);
     update_helperpath();
 }

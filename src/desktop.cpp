@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Editable view implementation
  *
@@ -18,18 +19,13 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 #include <2geom/transforms.h>
-
 #include <2geom/rect.h>
+#include <memory>
 
 #include "desktop.h"
 
@@ -43,7 +39,6 @@
 #include "layer-manager.h"
 #include "message-context.h"
 #include "message-stack.h"
-#include "resource-manager.h"
 
 #include "display/canvas-arena.h"
 #include "display/canvas-debug.h"
@@ -59,6 +54,8 @@
 
 #include "helper/action-context.h"
 #include "helper/action.h" //sp_action_perform
+
+#include "io/resource-manager.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
@@ -87,49 +84,51 @@ static void _reconstruction_start(SPDesktop * desktop);
 static void _reconstruction_finish(SPDesktop * desktop);
 static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop);
 
-SPDesktop::SPDesktop() :
-    _dlg_mgr( nullptr ),
-    namedview( nullptr ),
-    canvas( nullptr ),
-    layers( nullptr ),
-    selection( nullptr ),
-    event_context( nullptr ),
-    layer_manager( nullptr ),
-    event_log( nullptr ),
-    temporary_item_list( nullptr ),
-    snapindicator( nullptr ),
-    acetate( nullptr ),
-    main( nullptr ),
-    gridgroup( nullptr ),
-    guides( nullptr ),
-    drawing( nullptr ),
-    sketch( nullptr ),
-    controls( nullptr ),
-    tempgroup ( nullptr ),
-    page( nullptr ),
-    page_border( nullptr ),
-    current( nullptr ),
-    _focusMode(false),
-    dkey( 0 ),
-    number( 0 ),
-    window_state(0),
-    interaction_disabled_counter( 0 ),
-    waiting_cursor( false ),
-    showing_dialogs ( false ),
-    guides_active( false ),
-    gr_item( nullptr ),
-    gr_point_type( POINT_LG_BEGIN ),
-    gr_point_i( 0 ),
-    gr_fill_or_stroke( Inkscape::FOR_FILL ),
-    _reconstruction_old_layer_id(), // an id attribute is not allowed to be the empty string
-    _display_mode(Inkscape::RENDERMODE_NORMAL),
-    _display_color_mode(Inkscape::COLORMODE_NORMAL),
-    _widget( nullptr ),
-    _guides_message_context( nullptr ),
-    _active( false ),
-    _doc2dt( Geom::Scale(1, -1) ),
-    _image_render_observer(this, "/options/rendering/imageinoutlinemode"),
-    grids_visible( false )
+SPDesktop::SPDesktop()
+    : _dlg_mgr(nullptr)
+    , namedview(nullptr)
+    , canvas(nullptr)
+    , layers(nullptr)
+    , selection(nullptr)
+    , event_context(nullptr)
+    , layer_manager(nullptr)
+    , event_log(nullptr)
+    , temporary_item_list(nullptr)
+    , snapindicator(nullptr)
+    , acetate(nullptr)
+    , main(nullptr)
+    , gridgroup(nullptr)
+    , guides(nullptr)
+    , drawing(nullptr)
+    , sketch(nullptr)
+    , controls(nullptr)
+    , tempgroup(nullptr)
+    , page(nullptr)
+    , page_border(nullptr)
+    , current(nullptr)
+    , _focusMode(false)
+    , dkey(0)
+    , number(0)
+    , window_state(0)
+    , interaction_disabled_counter(0)
+    , waiting_cursor(false)
+    , showing_dialogs(false)
+    , guides_active(false)
+    , gr_item(nullptr)
+    , gr_point_type(POINT_LG_BEGIN)
+    , gr_point_i(0)
+    , gr_fill_or_stroke(Inkscape::FOR_FILL)
+    , _reconstruction_old_layer_id()
+    , // an id attribute is not allowed to be the empty string
+    _display_mode(Inkscape::RENDERMODE_NORMAL)
+    , _display_color_mode(Inkscape::COLORMODE_NORMAL)
+    , _split_canvas(false)
+    , _widget(nullptr)
+    , _guides_message_context(nullptr)
+    , _active(false)
+    , _doc2dt(Geom::identity())
+    , _image_render_observer(this, "/options/rendering/imageinoutlinemode")
+    , grids_visible(false)
 {
     layers = new Inkscape::LayerModel();
     layers->_layer_activated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_activated), this));
@@ -148,7 +147,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     Inkscape::ResourceManager::getManager();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    _guides_message_context = new Inkscape::MessageContext(const_cast<Inkscape::MessageStack*>(messageStack()));
+    _guides_message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(messageStack()));
 
     current = prefs->getStyle("/desktop/style");
 
@@ -255,7 +254,10 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
 
     /* Connect event for page resize */
-    _doc2dt[5] = document->getHeight().value("px");
+    if (!prefs->getBool("/options/yaxisdown", true)) {
+        _doc2dt[3] = -1;
+        _doc2dt[5] = document->getHeight().value("px");
+    }
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
 
     _modified_connection =
@@ -374,7 +376,6 @@ void SPDesktop::destroy()
         drawing = nullptr;
     }
 
-    delete _guides_message_context;
     _guides_message_context = nullptr;
 }
 
@@ -431,7 +432,7 @@ SPCanvasGroup* SPDesktop::getTempGroup() const {
 }
 
 Inkscape::MessageStack* SPDesktop::getMessageStack() const {
-	return messageStack();
+	return messageStack().get();
 }
 
 SPNamedView* SPDesktop::getNamedView() const {
@@ -486,6 +487,9 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
     SP_CANVAS_ARENA (drawing)->drawing.setRenderMode(mode);
     canvas->_rendermode = mode;
     _display_mode = mode;
+    if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
+        _split_canvas = false;
+    }
     redrawDesktop();
     _widget->setTitle( this->getDocument()->getName() );
 }
@@ -520,10 +524,16 @@ void SPDesktop::displayModeToggle() {
         _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
         break;
     case Inkscape::RENDERMODE_OUTLINE:
+        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
+        break;
+    case Inkscape::RENDERMODE_VISIBLE_HAIRLINES:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
         break;
     default:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+    }
+    if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
+        _split_canvas = false;
     }
 }
 void SPDesktop::displayColorModeToggle() {
@@ -674,7 +684,7 @@ void SPDesktop::setEventContext(const std::string& toolName)
     } else {
         event_context = ToolFactory::createObject(toolName);
         event_context->desktop = this;
-        event_context->message_context = new Inkscape::MessageContext(this->messageStack());
+        event_context->message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(this->messageStack()));
         event_context->setup();
 
         // Make sure no delayed snapping events are carried over after switching tools
@@ -886,7 +896,7 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
     } else {
         zoom = w.height() / r.height();
     }
-    _current_affine.setScale( zoom );
+    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
 
     // Zero offset, actual offset calculated later.
     _current_affine.setOffset( Geom::Point( 0, 0 ) );
@@ -903,11 +913,61 @@ Geom::Rect SPDesktop::get_display_area() const
     Geom::Rect const viewbox = canvas->getViewbox();
     double const scale = _current_affine.getZoom();
 
-    /// @fixme hardcoded desktop transform
-    return Geom::Rect(Geom::Point(viewbox.min()[Geom::X] / scale, viewbox.max()[Geom::Y] / -scale),
-                      Geom::Point(viewbox.max()[Geom::X] / scale, viewbox.min()[Geom::Y] / -scale));
+    return viewbox * Geom::Scale(1. / scale, _doc2dt[3] / scale);
 }
 
+guint SPDesktop::get_hruler_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(dtw->hruler, &allocation);
+        return allocation.height;
+    }
+    return 0;
+}
+
+guint SPDesktop::get_vruler_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(dtw->vruler, &allocation);
+        return allocation.width;
+    }
+    return 0;
+}
+
+guint SPDesktop::get_hscroll_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->hscrollbar), &allocation);
+        return allocation.height;
+    }
+    return 0;
+}
+
+guint SPDesktop::get_vscroll_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->vscrollbar_box), &allocation);
+        return allocation.width;
+    }
+    return 0;
+}
+
+int get_hruler_thickness();
+int get_vruler_thickness();
+int get_vscroll_thickness();
+int get_hscroll_thickness();
 
 /**
  * Zoom keeping the point 'c' fixed in the desktop window.
@@ -917,7 +977,7 @@ SPDesktop::zoom_absolute_keep_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);    
     Geom::Point w = d2w( c ); // Must be before zoom changed.
-    _current_affine.setScale( zoom );
+    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
     set_display_area( c, w );
 }
 
@@ -937,7 +997,7 @@ void
 SPDesktop::zoom_absolute_center_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
-    _current_affine.setScale( zoom );
+    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
     Geom::Rect viewbox = canvas->getViewbox();
     set_display_area( c, viewbox.midpoint() );
 }
@@ -1544,6 +1604,20 @@ void SPDesktop::toggleGrids()
     }
 }
 
+void SPDesktop::toggleSplitMode()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        _split_canvas = !_split_canvas;
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
+        SPCanvas *canvas = getCanvas();
+        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width,
+                              canvas->_y0 + allocation.height);
+    }
+}
+
 void SPDesktop::showGrids(bool show, bool dirty_document)
 {
     grids_visible = show;
@@ -1682,7 +1756,9 @@ SPDesktop::onDocumentURISet (gchar const* uri)
 void
 SPDesktop::onDocumentResized (gdouble width, gdouble height)
 {
-    _doc2dt[5] = height;
+    if (!Inkscape::Preferences::get()->getBool("/options/yaxisdown", true)) {
+        _doc2dt[5] = height;
+    }
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
     Geom::Rect const a(Geom::Point(0, 0), Geom::Point(width, height));
     SP_CTRLRECT(page)->setRectangle(a);
@@ -1739,7 +1815,7 @@ static gint
 _arena_handler (SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *event, SPDesktop *desktop)
 {
     if (ai) {
-        SPItem *spi = (SPItem*) ai->data();
+        SPItem *spi = ai->getItem();
         return sp_event_context_item_handler (desktop->event_context, spi, event);
     } else {
         return sp_event_context_root_handler (desktop->event_context, event);

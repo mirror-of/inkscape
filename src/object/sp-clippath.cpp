@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <clipPath> implementation
  *
@@ -9,20 +10,17 @@
  * Copyright (C) 2001-2002 authors
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
 #include <string>
 
-#include "display/drawing.h"
-#include "display/drawing-group.h"
 #include "xml/repr.h"
 
 #include "enums.h"
 #include "attributes.h"
 #include "document.h"
-#include "document-private.h"
 #include "style.h"
 
 #include <2geom/transforms.h>
@@ -30,13 +28,6 @@
 #include "sp-clippath.h"
 #include "sp-item.h"
 #include "sp-defs.h"
-
-struct SPClipPathView {
-    SPClipPathView *next;
-    unsigned int key;
-    Inkscape::DrawingItem *arenaitem;
-    Geom::OptRect bbox;
-};
 
 static SPClipPathView*      sp_clippath_view_new_prepend(SPClipPathView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 static SPClipPathView*      sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view);
@@ -74,7 +65,7 @@ void SPClipPath::release() {
     SPObjectGroup::release();
 }
 
-void SPClipPath::set(unsigned int key, const gchar* value) {
+void SPClipPath::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_CLIPPATHUNITS:
             this->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
@@ -93,7 +84,7 @@ void SPClipPath::set(unsigned int key, const gchar* value) {
             break;
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
-                this->style->readFromObject( this );
+                this->style->clear(key);
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 SPObjectGroup::set(key, value);
@@ -239,7 +230,7 @@ Geom::OptRect SPClipPath::geometricBounds(Geom::Affine const &transform) {
     Geom::OptRect bbox;
     for (auto& i: children) {
         if (SP_IS_ITEM(&i)) {
-            Geom::OptRect tmp = SP_ITEM(&i)->geometricBounds(transform);
+            Geom::OptRect tmp = SP_ITEM(&i)->geometricBounds(SP_ITEM(&i)->transform * transform);
             bbox.unionWith(tmp);
         }
     }

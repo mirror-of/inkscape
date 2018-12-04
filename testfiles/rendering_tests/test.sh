@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 if [ "$#" -lt 2 ]; then
     echo "pass the path of the inkscape executable as parameter then the name of the test" $#
@@ -14,7 +15,7 @@ EXPECTED=$(dirname $test)"/expected_rendering/"$(basename $test)
 testname=$(basename $test)
 
 
-    ${INKSCAPE_EXE} -z ${test}.svg -d 96  -e ${testname}.png #2>/dev/null >/dev/null
+    ${INKSCAPE_EXE} --export-file=${testname}.png -d 96 ${test}.svg #2>/dev/null >/dev/null
     compare -metric AE ${testname}.png ${EXPECTED}.png ${testname}-compare.png 2> .tmp
     test1=`cat .tmp`
     echo $test1
@@ -25,7 +26,7 @@ testname=$(basename $test)
         echo ${testname} "FAILED"
         exit_status=1
     fi
-    ${INKSCAPE_EXE} -z ${test}.svg -d 384 -e ${testname}-large.png #2>/dev/null >/dev/null
+    ${INKSCAPE_EXE} --export-file=${testname}-large.png -d 384 ${test}.svg #2>/dev/null >/dev/null
     compare -metric AE ${testname}-large.png ${EXPECTED}-large.png ${testname}-compare-large.png 2>.tmp
     test2=`cat .tmp`
     if [ $test2 == 0 ]; then

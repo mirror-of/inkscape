@@ -1,9 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /*
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <glibmm/i18n.h>
 #include <cstring>
 #include <string>
@@ -148,7 +154,7 @@ void SPFlowtext::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     this->readAttr( "inkscape:layoutOptions" );     // must happen after css has been read
 }
 
-void SPFlowtext::set(unsigned int key, const gchar* value) {
+void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_LAYOUT_OPTIONS: {
             // deprecated attribute, read for backward compatibility only

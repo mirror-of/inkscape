@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * File/Print operations.
@@ -18,7 +19,7 @@
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /** @file
@@ -28,7 +29,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #include <gtkmm.h>
@@ -36,7 +37,6 @@
 #include "file.h"
 
 #include "desktop.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "event-log.h"
 #include "id-clash.h"
@@ -46,7 +46,6 @@
 #include "path-prefix.h"
 #include "print.h"
 #include "rdf.h"
-#include "resource-manager.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
 
@@ -58,8 +57,10 @@
 #include "helper/png-write.h"
 
 #include "io/resource.h"
+#include "io/resource-manager.h"
 #include "io/sys.h"
 
+#include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 #include "style.h"
@@ -68,11 +69,10 @@
 #include "ui/dialog/ocaldialogs.h"
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"
-#include "ui/view/view-widget.h"
+#include "widgets/desktop-widget.h"
 
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
-
 
 using Inkscape::DocumentUndo;
 using Inkscape::IO::Resource::TEMPLATES;
@@ -82,7 +82,7 @@ using Inkscape::IO::Resource::USER;
 #include "extension/dbus/dbus-init.h"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -218,7 +218,6 @@ bool sp_file_open(const Glib::ustring &uri,
     if (desktop) {
         desktop->setWaitingCursor();
     }
-
     SPDocument *doc = nullptr;
     bool cancelled = false;
     try {
@@ -231,7 +230,6 @@ bool sp_file_open(const Glib::ustring &uri,
         doc = nullptr;
         cancelled = true;
     }
-
     if (desktop) {
         desktop->clearWaitingCursor();
     }
@@ -279,7 +277,7 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         if ( INKSCAPE.use_gui() ) {
-            
+
             SPNamedView *nv = desktop->namedview;
             if (nv->lockguides) {
                 nv->lockGuides();
@@ -293,7 +291,11 @@ bool sp_file_open(const Glib::ustring &uri,
             // Check for font substitutions
             Inkscape::UI::Dialog::FontSubstitution::getInstance().checkFontSubstitutions(doc);
         }
-
+        // Related bug:#1769679 #18
+        SPDefs * defs = dynamic_cast<SPDefs *>(doc->getDefs());
+        if (defs && !existing) {
+            defs->emitModified(SP_OBJECT_MODIFIED_CASCADE);
+        }
         return TRUE;
     } else if (!cancelled) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
@@ -465,7 +467,7 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
               (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
         open_path = "";
 
-#ifdef WIN32
+#ifdef _WIN32
     //# If no open path, default to our win32 documents folder
     if (open_path.empty())
     {
@@ -957,14 +959,13 @@ sp_file_save_a_copy(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
 /**
  *  Save a copy of a document as template.
  */
-void
+bool
 sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     Glib::ustring author, Glib::ustring description, Glib::ustring keywords,
     bool isDefault)
 {
-
     if (!SP_ACTIVE_DOCUMENT || name.length() == 0)
-        return;
+        return true;
 
     auto document = SP_ACTIVE_DOCUMENT;
 
@@ -1020,22 +1021,30 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
 
     root->appendChild(templateinfo_node);
 
-    if (isDefault) {
-
-        auto filename =  Inkscape::IO::Resource::get_path_ustring(USER,
-            TEMPLATES, "default.svg");
-        file_save(parentWindow, document, filename,
-        Inkscape::Extension::db.get(".svg"), false, false,
-        Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
-    }
-
-    name.append(".svg");
+    auto encodedName = Glib::uri_escape_string(name);
+    encodedName.append(".svg");
 
     auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
-        name.c_str());
-    file_save(parentWindow, document, filename,
-        Inkscape::Extension::db.get(".svg"), false, false,
-        Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+        encodedName.c_str());
+
+    auto operation_confirmed = sp_ui_overwrite_file(filename.c_str());
+
+    if (operation_confirmed) {
+
+        file_save(parentWindow, document, filename,
+            Inkscape::Extension::db.get(".svg"), false, false,
+            Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+
+        if (isDefault) {
+
+            filename =  Inkscape::IO::Resource::get_path_ustring(USER,
+                TEMPLATES, "default.svg");
+
+            file_save(parentWindow, document, filename,
+                Inkscape::Extension::db.get(".svg"), false, false,
+                Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+        }
+    }
 
     auto nodeToRemove = sp_repr_lookup_name(root, "inkscape:_templateinfo");
 
@@ -1046,6 +1055,8 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     }
 
     DocumentUndo::setUndoSensitive(document, true);
+
+    return operation_confirmed;
 }
 
 
@@ -1094,14 +1105,16 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         Inkscape::GC::release(obj_copy);
 
         pasted_objects.push_back(obj_copy);
+
+        // if we are pasting a clone to an already existing object, its
+        // transform is wrong (see ui/clipboard.cpp)
+        if(obj_copy->attribute("transform-with-parent") && target_document->getObjectById(obj->attribute("xlink:href")+1) ){
+            obj_copy->setAttribute("transform",obj_copy->attribute("transform-with-parent"));
+        }
+        if(obj_copy->attribute("transform-with-parent"))
+            obj_copy->setAttribute("transform-with-parent", nullptr);
     }
 
-    /*  take that stuff into account:
-     *   if( use && selection->includes(use->get_original()) ){//we are copying something whose parent is also copied (!)
-     *       transform = ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform;
-     *   }
-     *
-     */
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
     if(clipboard)
     for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {

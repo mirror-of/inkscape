@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Native PDF import using libpoppler.
  *
@@ -7,12 +8,12 @@
  *
  * Copyright (C) 2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #include "pdf-input.h"
@@ -52,7 +53,6 @@
 #include "svg-builder.h"
 #include "pdf-parser.h"
 
-#include "document-private.h"
 #include "document-undo.h"
 #include "inkscape.h"
 #include "util/units.h"
@@ -710,7 +710,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 
     // PDFDoc is from poppler. PDFDoc is used for preview and for native import.
 
-#ifndef WIN32
+#ifndef _WIN32
     // poppler does not use glib g_open. So on win32 we must use unicode call. code was copied from
     // glib gstdio.c
     GooString *filename_goo = new GooString(uri);
@@ -804,7 +804,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
             dlg->getImportSettings(prefs);
 
         // Apply crop settings
-        PDFRectangle *clipToBox = nullptr;
+        _POPPLER_CONST PDFRectangle *clipToBox = nullptr;
         double crop_setting;
         sp_repr_get_double(prefs, "cropTo", &crop_setting);
 

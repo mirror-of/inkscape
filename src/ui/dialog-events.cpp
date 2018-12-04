@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Event handler for dialog windows.
@@ -8,21 +9,17 @@
  *
  * Copyright (C) 2003-2014 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <gtkmm/entry.h>
 #include <gtkmm/window.h>
-#include "macros.h"
+
 #include "desktop.h"
 #include "inkscape.h"
-#include "ui/tools/tool-base.h"
-
+#include "include/macros.h"
 #include "ui/dialog-events.h"
+#include "ui/tools/tool-base.h"
 
 
 /**
@@ -148,7 +145,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 void sp_transientize(GtkWidget *dialog)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-#ifndef WIN32  // FIXME: Temporary Win32 special code to enable transient dialogs
+#ifndef _WIN32  // FIXME: Temporary Win32 special code to enable transient dialogs
     // _set_skip_taskbar_hint makes transient dialogs NON-transient! When dialogs
     // are made transient (_set_transient_for), they are already removed from
     // the taskbar in Win32.
@@ -159,7 +156,7 @@ void sp_transientize(GtkWidget *dialog)
 
     gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", 1, 0, 2);
 
-#ifdef WIN32 // Win32 special code to enable transient dialogs
+#ifdef _WIN32 // Win32 special code to enable transient dialogs
     transient_policy = 2;
 #endif
 
@@ -185,7 +182,7 @@ sp_transientize_callback ( SPDesktop *desktop, win_data *wd )
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint transient_policy = prefs->getIntLimited( "/options/transientpolicy/value", 1, 0, 2);
 
-#ifdef WIN32 // Win32 special code to enable transient dialogs
+#ifdef _WIN32 // Win32 special code to enable transient dialogs
     transient_policy = 1;
 #endif
 

@@ -1,32 +1,20 @@
-/*
- * path-prefix.cpp - Inkscape specific prefix handling
- *
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * path-prefix.cpp - Inkscape specific prefix handling *//*
  * Authors:
  *   Eduard Braun <eduard.braun2@gmx.de>
- *
- * Copyright (C) 2017 Authors
- *
- * This file is part of Inkscape.
- *
- * Inkscape is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * See the file COPYING for details.
- *
+ * 
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
-
 
 #include "io/resource.h"
 #include "path-prefix.h"
 #include <glib.h>
-
 
 /**
  * Determine the location of the Inkscape data directory (typically the share/ folder
@@ -43,7 +31,11 @@ char *append_inkscape_datadir(const char *relative_path)
     if (!inkscape_datadir) {
         gchar const *datadir_env = g_getenv("INKSCAPE_DATADIR");
         if (datadir_env) {
+#if GLIB_CHECK_VERSION(2,58,0)
+            inkscape_datadir = g_canonicalize_filename(datadir_env, NULL);
+#else
             inkscape_datadir = g_strdup(datadir_env);
+#endif
         } else {
 #ifdef _WIN32
             gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
@@ -69,7 +61,7 @@ gchar *get_extensions_path()
     gchar *extdir;
     gchar *new_pythonpath;
 
-#ifdef WIN32
+#ifdef _WIN32
     extdir = g_win32_locale_filename_from_utf8(INKSCAPE_EXTENSIONDIR);
 #else
     extdir = g_strdup(INKSCAPE_EXTENSIONDIR);
@@ -103,7 +95,7 @@ gchar *get_datadir_path()
     using namespace Inkscape::IO::Resource;
     gchar *datadir;
 
-#ifdef WIN32
+#ifdef _WIN32
     datadir = g_win32_locale_filename_from_utf8(profile_path(""));
 #else
     datadir = profile_path("");

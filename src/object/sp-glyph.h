@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Authors:
  *    Felipe C. da S. Sanches <juca@members.fsf.org>
  *
  * Copyright (C) 2008 Felipe C. da S. Sanches
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_SP_GLYPH_H
@@ -52,7 +53,7 @@ public:
 protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void release() override;
-    void set(unsigned int key, const char* value) override;
+    void set(SPAttributeEnum key, const char* value) override;
     void update(SPCtx* ctx, unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 

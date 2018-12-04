@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Main UI stuff.
@@ -16,14 +17,9 @@
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <gtkmm/icontheme.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 #include <glibmm/miscutils.h>
@@ -41,7 +37,6 @@
 #include "preferences.h"
 #include "selection-chemistry.h"
 #include "shortcuts.h"
-#include "svg-view-widget.h"
 
 #include "display/sp-canvas.h"
 
@@ -51,8 +46,8 @@
 #include "extension/input.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
 #include "helper/window.h"
+#include "ui/icon-loader.h"
 
 #include "io/sys.h"
 
@@ -71,6 +66,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/clipboard.h"
+#include "ui/contextmenu.h"
 #include "ui/dialog-events.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/inkscape-preferences.h"
@@ -79,6 +75,7 @@
 #include "ui/monitor.h"
 #include "ui/tools/tool-base.h"
 #include "ui/uxmanager.h"
+#include "ui/view/svg-view-widget.h"
 
 #include "widgets/desktop-widget.h"
 #include "widgets/ege-paint-def.h"
@@ -181,7 +178,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
             if (pw>0 && ph>0) {
                 Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
                 pw = std::min(pw, monitor_geometry.get_width());
-                ph = std::min(ph, monitor_geometry.get_height());      
+                ph = std::min(ph, monitor_geometry.get_height());
                 desktop->setWindowSize(pw, ph);
                 desktop->setWindowPosition(Geom::Point(px, py));
             }
@@ -274,7 +271,12 @@ void sp_ui_reload()
         prefs_dialog->hide();
     }
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    g_object_set(gtk_settings_get_default(), "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);
+    if (GtkSettings *settings = gtk_settings_get_default()) {
+        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+        if (themeiconname != "") {
+            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+        }
+    }
     prefs->setInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST);
     prefs->save();
     std::list<SPDesktop *> desktops;
@@ -311,20 +313,8 @@ void sp_ui_reload()
         i++;
     }
     SP_ACTIVE_DESKTOP->_dlg_mgr->showDialog("InkscapePreferences");
-    INKSCAPE.add_style_sheet();
+    INKSCAPE.add_gtk_css();
     prefs->setInt("/options/savewindowgeometry/value", window_geometry);
-}
-
-void sp_ui_new_view_preview()
-{
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    if ( document ) {
-        SPViewWidget *dtw = reinterpret_cast<SPViewWidget *>(sp_svg_view_widget_new(document));
-        g_return_if_fail(dtw != nullptr);
-        SP_SVG_VIEW_WIDGET(dtw)->setResize(true, 400.0, 400.0);
-
-        sp_create_window(dtw, FALSE);
-    }
 }
 
 void
@@ -345,7 +335,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
     INKSCAPE.get_all_desktops(desktops);
     if (desktops.size() == 1) {
         Glib::ustring templateUri = sp_file_default_template_uri();
-        SPDocument *doc = SPDocument::createNewDoc( templateUri.c_str() , TRUE, true );
+        SPDocument *doc = SPDocument::createNewDoc( templateUri.empty() ? nullptr : templateUri.c_str(), TRUE, true );
         // Set viewBox if it doesn't exist
         if (!doc->getRoot()->viewBox_set) {
             doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
@@ -451,9 +441,20 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
     }
 }
 
+/* install CSS to shift icons into the space reserved for toggles (i.e. check and radio items)
+ *
+ * TODO: This code already exists as a C++ version in the class ContextMenu so we can simply wrap it here.
+ *       In future ContextMenu and the (to be created) class for the menu bar should then be derived from one common base class.
+ */
+void shift_icons(GtkWidget *menu, gpointer /* user_data */)
+{
+    ContextMenu *contextmenu = static_cast<ContextMenu *>(Glib::wrap(menu));
+    contextmenu->ShiftIcons();
+}
+
 /**
  * Appends a custom menu UI from a verb.
- * 
+ *
  * @see ContextMenu::AppendItemFromVerb for a c++ified alternative. Consider dropping sp_ui_menu_append_item_from_verb when c++ifying interface.cpp.
  *
  * @param menu      The menu to which the item will be appended
@@ -477,8 +478,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
 {
     Gtk::Widget *item;
 
-    // Just create a menu separator if this isn't a real action.
-    // Otherwise, create a real menu item
+    // Just create a menu separator if this isn't a real action. Otherwise, create a real menu item
     if (verb->get_code() == SP_VERB_NONE) {
         item = new Gtk::SeparatorMenuItem();
     } else {
@@ -494,44 +494,32 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
             item = new Gtk::MenuItem();
         }
 
-        // Create a box to contain all the widgets (icon, label, accelerator)
-        // that will go inside the menu item
-        GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-
         // Now create the label and add it to the menu item
         GtkWidget *label = gtk_accel_label_new(action->name);
         gtk_label_set_markup_with_mnemonic( GTK_LABEL(label), action->name);
-        gtk_label_set_use_underline(GTK_LABEL(label), true);
 
 #if GTK_CHECK_VERSION(3,16,0)
         gtk_label_set_xalign(GTK_LABEL(label), 0.0);
 #else
         gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 #endif
-
-        GtkAccelGroup *accel_group = sp_shortcut_get_accel_group();
-        gtk_menu_set_accel_group(menu, accel_group);
-
         sp_shortcut_add_accelerator(item->gobj(), sp_shortcut_get_primary(verb));
         gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(label), item->gobj());
 
-        GtkWidget *icon;
+        // If there is an image associated with the action, then we can add it as an icon for the menu item.
+        if (show_icon && action->image) {
+            item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
+            GtkWidget *icon = sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU);
 
-        // If there is an image associated with the action, then we can add it as an
-        // icon for the menu item.  If not, give the label a bit more space
-        if(show_icon && action->image) {
-            icon = GTK_WIDGET(sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU)->gobj());
+            // create a box to hold icon and label as GtkMenuItem derives from GtkBin and can only hold one child
+            GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
+            gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
+
+            gtk_container_add(GTK_CONTAINER(item->gobj()), box);
+        } else {
+            gtk_container_add(GTK_CONTAINER(item->gobj()), label);
         }
-        else {
-            icon = gtk_label_new(nullptr); // A fake icon just to act as a placeholder
-        }
-
-        gtk_box_pack_start(GTK_BOX(box), icon, FALSE, TRUE, 0);
-        gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
-
-        // Finally, pack all the widgets into the menu item
-        gtk_container_add(GTK_CONTAINER(item->gobj()), box);
-
 
         action->signal_set_sensitive.connect(
             sigc::bind<0>(
@@ -635,8 +623,9 @@ static gboolean checkitem_update(GtkWidget *widget, cairo_t * /*cr*/, gpointer u
         }
         else if (!strcmp(action->id, "ViewCmsToggle")) {
             ison = dt->colorProfAdjustEnabled();
-        }
-        else  {
+        } else if (!strcmp(action->id, "ViewSplitModeToggle")) {
+            ison = dt->splitMode();
+        } else {
             ison = getViewStateFromPref(view, pref);
         }
     } else if (pref) {
@@ -686,6 +675,8 @@ static gboolean update_view_menu(GtkWidget *widget, cairo_t * /*cr*/, gpointer u
         new_state = mode == Inkscape::RENDERMODE_NO_FILTERS;
     } else if (!strcmp(action->id, "ViewModeOutline")) {
         new_state = mode == Inkscape::RENDERMODE_OUTLINE;
+    } else if (!strcmp(action->id, "ViewModeVisibleHairlines")) {
+        new_state = mode == Inkscape::RENDERMODE_VISIBLE_HAIRLINES;
     } else if (!strcmp(action->id, "ViewColorModeNormal")) {
         new_state = colormode == Inkscape::COLORMODE_NORMAL;
     } else if (!strcmp(action->id, "ViewColorModeGrayscale")) {
@@ -711,39 +702,26 @@ static gboolean update_view_menu(GtkWidget *widget, cairo_t * /*cr*/, gpointer u
 }
 
 static void
-sp_ui_menu_append_check_item_from_verb(GtkMenu *menu, Inkscape::UI::View::View *view, gchar const *label, gchar const *tip, gchar const *pref,
-                                       void (*callback_toggle)(GtkCheckMenuItem *, gpointer user_data),
-                                       gboolean (*callback_update)(GtkWidget *widget, cairo_t *cr, gpointer user_data),
-                                       Inkscape::Verb *verb)
+sp_ui_menu_append_check_item_from_verb(GtkMenu *menu, Inkscape::UI::View::View *view, gchar const *pref, Inkscape::Verb *verb)
 {
-    unsigned int shortcut = (verb) ? sp_shortcut_get_primary(verb) : 0;
-    SPAction *action = (verb) ? verb->get_action(Inkscape::ActionContext(view)) : nullptr;
-    GtkWidget *item = gtk_check_menu_item_new_with_mnemonic(action ? action->name : label);
-
-#if 0
-    if (!action->sensitive) {
-        gtk_widget_set_sensitive(item, FALSE);
-    }
-#endif
+    unsigned int shortcut = sp_shortcut_get_primary(verb);
+    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
+    GtkWidget *item = gtk_check_menu_item_new_with_mnemonic(action->name);
 
     sp_shortcut_add_accelerator(item, shortcut);
-
-    gtk_widget_show(item);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
     g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
     g_object_set_data(G_OBJECT(item), "action", (gpointer) action);
 
-    g_signal_connect( G_OBJECT(item), "toggled", (GCallback) callback_toggle, (void *) pref);
+    g_signal_connect( G_OBJECT(item), "toggled", (GCallback) checkitem_toggled, (void *) pref);
+    g_signal_connect( G_OBJECT(item), "draw", (GCallback) checkitem_update, (void *) pref);
 
-    g_signal_connect( G_OBJECT(item), "draw", (GCallback) callback_update, (void *) pref);
+    checkitem_update(item, nullptr, (void *)pref);
 
-    (*callback_update)(item, nullptr, (void *)pref);
-
-    g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) (action ? action->tip : tip));
-    g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
-
+    g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select_action), action );
+    g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect_action), action );
 }
 
 static void
@@ -762,24 +740,23 @@ sp_recent_open(GtkRecentChooser *recent_menu, gpointer /*user_data*/)
 static void
 sp_ui_checkboxes_menus(GtkMenu *m, Inkscape::UI::View::View *view)
 {
-    //sp_ui_menu_append_check_item_from_verb(m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
-    //                                       checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "commands",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_COMMANDS_TOOLBAR));
-    sp_ui_menu_append_check_item_from_verb(m, view,nullptr, nullptr, "snaptoolbox",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SNAP_TOOLBAR));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "toppanel",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_TOOL_TOOLBAR));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "toolbox",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_TOOLBOX));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "rulers",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "scrollbars",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "panels",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_PALETTE));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "statusbar",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_STATUSBAR));
+    //sp_ui_menu_append_check_item_from_verb(m, view, "menu", 0);
+    sp_ui_menu_append_check_item_from_verb(m, view, "commands",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_COMMANDS_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view,"snaptoolbox",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_SNAP_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view, "toppanel",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_TOOL_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view, "toolbox",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_TOOLBOX));
+    sp_ui_menu_append_check_item_from_verb(m, view, "rulers",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS));
+    sp_ui_menu_append_check_item_from_verb(m, view, "scrollbars",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS));
+    sp_ui_menu_append_check_item_from_verb(m, view, "panels",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_PALETTE));
+    sp_ui_menu_append_check_item_from_verb(m, view, "statusbar",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_STATUSBAR));
 }
 
 
@@ -845,19 +822,45 @@ private:
  *  the verb that is missing, and display that.  The menu item is also made
  *  insensitive.
  *
- * @param  menus  This is the XML that defines the menu
- * @param  menu   Menu to be added to
- * @param  view   The View that this menu is being built for
+ * @param  menus        This is the XML that defines the menu
+ * @param  menu         Menu to be added to
+ * @param  view         The View that this menu is being built for
+ * @param  show_icons   Whether to show icons (can be overridden by the current XML::Node and preferences)
  */
-static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI::View::View *view)
+static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI::View::View *view,
+                                  bool show_icons = true)
 {
     if (menus == nullptr) return;
     if (menu == nullptr)  return;
     Gtk::RadioMenuItem::Group group;
 
-    for (Inkscape::XML::Node *menu_pntr = menus;
-         menu_pntr != nullptr;
-         menu_pntr = menu_pntr->next()) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int show_icons_pref = prefs->getInt("/theme/menuIcons", 0);
+
+    for (Inkscape::XML::Node *menu_pntr = menus; menu_pntr != nullptr; menu_pntr = menu_pntr->next()) {
+
+        // Check if the "show-icons" attribute is set, and set the flag here accordingly
+        bool show_icons_curr = show_icons;
+        if (show_icons_pref == 1) {          // enable all icons
+            show_icons_curr = true;
+        } else if (show_icons_pref == -1) {  // disable all icons
+            show_icons_curr = false;
+        } else {                             // read from XML file or inherit (=keep) previous value if unset
+            const char *str = menu_pntr->attribute("show-icons");
+            if (str) {
+                if (!g_ascii_strcasecmp(str, "yes") || !g_ascii_strcasecmp(str, "true") || !g_ascii_strcasecmp(str, "1")) {
+                    show_icons_curr = true;
+                } else if (!g_ascii_strcasecmp(str, "no") || !g_ascii_strcasecmp(str, "false") || !g_ascii_strcasecmp(str, "0")) {
+                    show_icons_curr = false;
+                } else {
+                    g_warning("Invalid value for attribute 'show-icons': '%s'", str);
+                }
+            }
+        }
+
+        if (!strcmp(menu_pntr->name(), "inkscape")) {
+            sp_ui_build_dyn_menus(menu_pntr->firstChild(), menu, view, show_icons_curr);
+        }
         if (!strcmp(menu_pntr->name(), "submenu")) {
             GtkWidget *mitem;
             if (menu_pntr->attribute("_name") != nullptr) {
@@ -866,26 +869,19 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                 mitem = gtk_menu_item_new_with_mnemonic(menu_pntr->attribute("name"));
             }
             GtkWidget *submenu = gtk_menu_new();
-            sp_ui_build_dyn_menus(menu_pntr->firstChild(), submenu, view);
+            sp_ui_build_dyn_menus(menu_pntr->firstChild(), submenu, view, show_icons_curr);
             gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), GTK_WIDGET(submenu));
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), mitem);
+            g_signal_connect(submenu, "map", G_CALLBACK(shift_icons), NULL);
             continue;
         }
         if (!strcmp(menu_pntr->name(), "verb")) {
             gchar const *verb_name = menu_pntr->attribute("verb-id");
-
-            // Check if the "show-icon" attribute is set, and set the flag here accordingly
-            bool show_icon = false;
-
-            if(menu_pntr->attribute("show-icon") != nullptr) {
-                show_icon = true;
-            }
-
             Inkscape::Verb *verb = Inkscape::Verb::getbyid(verb_name);
 
             if (verb != nullptr) {
                 if (menu_pntr->attribute("radio") != nullptr) {
-                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, show_icon, true, &group);
+                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, false, true, &group);
                     if (menu_pntr->attribute("default") != nullptr) {
                         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
                     }
@@ -896,11 +892,10 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                 } else if (menu_pntr->attribute("check") != nullptr) {
                     if (verb->get_code() != SP_VERB_NONE) {
                         SPAction *action = verb->get_action(Inkscape::ActionContext(view));
-                        sp_ui_menu_append_check_item_from_verb(GTK_MENU(menu), view, action->name, action->tip, nullptr,
-                            checkitem_toggled, checkitem_update, verb);
+                        sp_ui_menu_append_check_item_from_verb(GTK_MENU(menu), view, nullptr, verb);
                     }
                 } else {
-                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view, show_icon);
+                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view, show_icons_curr);
                     Gtk::RadioMenuItem::Group group2;
                     group = group2;
                 }
@@ -921,7 +916,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
             continue;
         }
-        
+
         if (!strcmp(menu_pntr->name(), "recent-file-list")) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -964,7 +959,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
 GtkWidget *sp_ui_main_menubar(Inkscape::UI::View::View *view)
 {
     GtkWidget *mbar = gtk_menu_bar_new();
-    sp_ui_build_dyn_menus(INKSCAPE.get_menus(), mbar, view);
+    sp_ui_build_dyn_menus(INKSCAPE.get_menus()->parent(), mbar, view);
     return mbar;
 }
 
@@ -1030,7 +1025,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
                             g_free(str);
                             str = 0;
 
-                            item->setAttribute( 
+                            item->setAttribute(
                                 fillnotstroke ? "inkscape:x-fill-tag":"inkscape:x-stroke-tag",
                                 palName.c_str(),
                                 false );
@@ -1246,6 +1241,8 @@ sp_ui_drag_data_received(GtkWidget *widget,
 
         case SVG_DATA:
         case SVG_XML_DATA: {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            prefs->setBool("/options/onimport", true);
             gchar *svgdata = (gchar *)gtk_selection_data_get_data (data);
 
             Inkscape::XML::Document *rnewdoc = sp_repr_read_mem(svgdata, gtk_selection_data_get_length (data), SP_SVG_NS_URI);
@@ -1290,13 +1287,17 @@ sp_ui_drag_data_received(GtkWidget *widget,
 
             Inkscape::GC::release(newgroup);
             DocumentUndo::done( doc, SP_VERB_NONE,
-                             _("Drop SVG") );
+                                _("Drop SVG") );
+            prefs->setBool("/options/onimport", false);
             break;
         }
 
         case URI_LIST: {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            prefs->setBool("/options/onimport", true);
             gchar *uri = (gchar *)gtk_selection_data_get_data (data);
             sp_ui_import_files(uri);
+            prefs->setBool("/options/onimport", false);
             break;
         }
 
@@ -1316,9 +1317,9 @@ sp_ui_drag_data_received(GtkWidget *widget,
             ext->set_gui(false);
 
             gchar *filename = g_build_filename( g_get_tmp_dir(), "inkscape-dnd-import", NULL );
-            g_file_set_contents(filename, 
-                reinterpret_cast<gchar const *>(gtk_selection_data_get_data (data)), 
-                gtk_selection_data_get_length (data), 
+            g_file_set_contents(filename,
+                reinterpret_cast<gchar const *>(gtk_selection_data_get_data (data)),
+                gtk_selection_data_get_length (data),
                 nullptr);
             file_import(doc, filename, ext);
             g_free(filename);
@@ -1450,22 +1451,27 @@ sp_ui_menu_item_set_name(GtkWidget *data, Glib::ustring const &name)
 {
     if (data || GTK_IS_BIN (data)) {
         void *child = gtk_bin_get_child (GTK_BIN (data));
-        //child is either
-        //- a GtkBox, whose first child is a label displaying name if the menu
-        //item has an accel key
-        //- a GtkLabel if the menu has no accel key
-        if (child != nullptr){
+        // child is either
+        // - a GtkLabel (if the menu has no accel key or icon)
+        // - a GtkBox (if item has an accel key or image)
+        //   in which case we need to find the GtkLabel in the box
+        // - something else we do not expect (yet)
+        if (child != nullptr) {
             if (GTK_IS_LABEL(child)) {
                 gtk_label_set_markup_with_mnemonic(GTK_LABEL (child), name.c_str());
             } else if (GTK_IS_BOX(child)) {
                 std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(child))->get_children();
-
-                // Label is second child in list
-                Gtk::Label *label = dynamic_cast<Gtk::Label*>(children[1]);
-                if(!label) return;
-                label->set_markup_with_mnemonic(name);
-            }//else sp_ui_menu_append_item_from_verb has been modified and can set
-            //a menu item in yet another way...
+                for (auto child: children) {
+                    Gtk::Label *label = dynamic_cast<Gtk::Label *>(child);
+                    if (label) {
+                        label->set_markup_with_mnemonic(name);
+                        break;
+                    }
+                }
+            } else {
+                // sp_ui_menu_append_item_from_verb might have learned to set a menu item in yet another way...
+                g_assert_not_reached();
+            }
         }
     }
 }

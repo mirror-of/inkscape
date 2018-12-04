@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This code abstracts the libwpg interfaces into the Inkscape
  * input extension interface.
@@ -7,14 +8,14 @@
  *
  * Copyright (C) 2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef __EXTENSION_INTERNAL_CDROUTPUT_H__
 #define __EXTENSION_INTERNAL_CDROUTPUT_H__
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifdef WITH_LIBCDR

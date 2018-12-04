@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feSpecularLighting> implementation.
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2006 Hugo Rodrigues
  *               2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 // Same directory
@@ -81,7 +82,7 @@ void SPFeSpecularLighting::release() {
 /**
  * Sets a specific value in the SPFeSpecularLighting.
  */
-void SPFeSpecularLighting::set(unsigned int key, gchar const *value) {
+void SPFeSpecularLighting::set(SPAttributeEnum key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
 
@@ -297,7 +298,7 @@ void SPFeSpecularLighting::build_renderer(Inkscape::Filters::Filter* filter) {
     g_assert(nr_specularlighting != nullptr);
 
     this->renderer = nr_specularlighting;
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_specularlighting->specularConstant = this->specularConstant;
     nr_specularlighting->specularExponent = this->specularExponent;

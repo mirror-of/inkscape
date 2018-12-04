@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_MESHPATCH_H
 #define SEEN_SP_MESHPATCH_H
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2012 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/ustring.h>
@@ -32,7 +33,7 @@ public:
 
 protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
-    void set(unsigned int key, const char* value) override;
+    void set(SPAttributeEnum key, const char* value) override;
     void modified(unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };

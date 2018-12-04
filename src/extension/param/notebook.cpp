@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Notebook and NotebookPage parameters for extensions.
  */
@@ -9,12 +10,8 @@
  *
  * Copyright (C) 2006 Author
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -27,7 +24,6 @@
 
 #include <extension/extension.h>
 #include "preferences.h"
-#include "document-private.h"
 
 #include "notebook.h"
 

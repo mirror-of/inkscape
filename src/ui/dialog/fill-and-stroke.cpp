@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Fill and Stroke dialog - implementation.
@@ -12,7 +13,7 @@
  * Copyright (C) 2004--2007 Authors
  * Copyright (C) 2010 Jon A. Cruz
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 
@@ -26,9 +27,8 @@
 
 #include "svg/css-ostringstream.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/view/view-widget.h"
 #include "ui/widget/notebook-page.h"
 
 #include "widgets/fill-style.h"

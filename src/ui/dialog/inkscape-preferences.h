@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Inkscape Preferences dialog
  */
@@ -9,15 +10,11 @@
  *
  * Copyright (C) 2004-2013 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
-
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <iostream>
 #include <vector>
@@ -210,6 +207,7 @@ protected:
 
     Gtk::Scale      *_slider_snapping_delay;
 
+    UI::Widget::PrefCheckButton _snap_default;
     UI::Widget::PrefCheckButton _snap_indicator;
     UI::Widget::PrefCheckButton _snap_closest_only;
     UI::Widget::PrefCheckButton _snap_mouse_pointer;
@@ -252,6 +250,7 @@ protected:
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
+    UI::Widget::PrefCombo _menu_icons;
     Gtk::Button _apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;
@@ -387,6 +386,7 @@ protected:
     UI::Widget::PrefSpinButton  _misc_recent;
     UI::Widget::PrefCheckButton _ui_partialdynamic;
     UI::Widget::ZoomCorrRulerSlider _ui_zoom_correction;
+    UI::Widget::PrefCheckButton _ui_yaxisdown;
 
     //Spellcheck
     UI::Widget::PrefCombo       _spell_language;
@@ -402,6 +402,7 @@ protected:
     UI::Widget::PrefCheckButton _misc_bitmap_autoreload;
     UI::Widget::PrefSpinButton  _bitmap_copy_res;
     UI::Widget::PrefCheckButton _bitmap_ask;
+    UI::Widget::PrefCheckButton _svg_ask;
     UI::Widget::PrefCombo       _bitmap_link;
     UI::Widget::PrefCombo       _svg_link;
     UI::Widget::PrefCombo       _bitmap_scale;
@@ -587,6 +588,7 @@ protected:
 private:
   void themeChange();
   void symbolicThemeCheck();
+  void symbolicAddClass();
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);
   InkscapePreferences operator=(InkscapePreferences const &d);

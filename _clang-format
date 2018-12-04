@@ -1,4 +1,5 @@
 ---
+# SPDX-License-Identifier: GPL-2.0-or-later
 # BasedOnStyle:  LLVM
 AccessModifierOffset: -2
 ConstructorInitializerIndentWidth: 4
@@ -38,7 +39,7 @@ Standard:        Cpp03
 IndentWidth:     4
 TabWidth:        4
 UseTab:          Never
-BreakBeforeBraces: Stroustrup
+BreakBeforeBraces: WebKit
 IndentFunctionDeclarationAfterType: false
 SpacesInParentheses: false
 SpacesInAngles:  false

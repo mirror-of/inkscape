@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_EVENT_CONTEXT_H
 #define SEEN_SP_EVENT_CONTEXT_H
 
@@ -9,11 +10,12 @@
  * Copyright (C) 1999-2002 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstddef>
 #include <string>
+#include <memory>
 #include "knot.h"
 #include "knotholder.h"
 #include <2geom/point.h>
@@ -161,11 +163,11 @@ public:
     SPItem *item_to_select; ///< the item where mouse_press occurred, to
                             ///< be selected if this is a click not drag
 
-    Inkscape::MessageContext *defaultMessageContext() {
-        return message_context;
+    Inkscape::MessageContext *defaultMessageContext() const {
+        return message_context.get();
     }
 
-    Inkscape::MessageContext *message_context;
+    std::unique_ptr<Inkscape::MessageContext> message_context;
 
     Inkscape::SelCue *_selcue;
 

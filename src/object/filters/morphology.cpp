@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feMorphology> implementation.
  *
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -74,7 +75,7 @@ static Inkscape::Filters::FilterMorphologyOperator sp_feMorphology_read_operator
 /**
  * Sets a specific value in the SPFeMorphology.
  */
-void SPFeMorphology::set(unsigned int key, gchar const *value) {
+void SPFeMorphology::set(SPAttributeEnum key, gchar const *value) {
     Inkscape::Filters::FilterMorphologyOperator read_operator;
     
     switch(key) {
@@ -142,7 +143,7 @@ void SPFeMorphology::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterMorphology *nr_morphology = dynamic_cast<Inkscape::Filters::FilterMorphology*>(nr_primitive);
     g_assert(nr_morphology != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
     
     nr_morphology->set_operator(this->Operator);
     nr_morphology->set_xradius( this->radius.getNumber() );

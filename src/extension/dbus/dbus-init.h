@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Soren Berg <glimmer07@gmail.com>
  *
  * Copyright (C) 2009 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_EXTENSION_DBUS_INIT_H__
@@ -31,7 +32,7 @@ gchar * dbus_init_desktop_interface (SPDesktop * dt);
 /** Set the bus name to use. Default is "org.inkscape".
   This function should only be called once, before init(), if a non-default
   bus name is required. */
-void dbus_set_bus_name(gchar * bus_name);
+void dbus_set_bus_name(gchar const * bus_name);
 
 /** Get the bus name for this instance. Default is "org.inkscape".
   This function should only be called after init().

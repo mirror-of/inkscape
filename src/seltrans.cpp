@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Helper object for transforming selected items.
  */
@@ -11,12 +12,9 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 1999-2014 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <cstring>
 #include <string>
 
@@ -276,6 +274,10 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         _items_const.push_back(it);
         _items_affines.push_back(it->i2dt_affine());
         _items_centers.push_back(it->getCenter()); // for content-dragging, we need to remember original centers
+    }
+
+    if (y != -1 && _desktop->is_yaxisdown()) {
+        y = 1 - y;
     }
 
     _handle_x = x;
@@ -568,8 +570,12 @@ void Inkscape::SelTrans::stamp()
             if ( copy_item->isCenterSet() && _center ) {
                 copy_item->setCenter(*_center * _current_relative_affine);
             }
-
             Inkscape::GC::release(copy_repr);
+            SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(copy_item);
+            if(lpeitem && lpeitem->hasPathEffectRecursive()) {
+                lpeitem->forkPathEffectsIfNecessary(1);
+                sp_lpe_item_update_patheffect(lpeitem, true, true);
+            }
         }
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
                            _("Stamp"));
@@ -631,12 +637,14 @@ void Inkscape::SelTrans::_showHandles(SPSelTransType type)
     // shouldn't have nullary bbox, but knots
     g_assert(_bbox);
 
+    auto const y_dir = _desktop->yaxisdir();
+
     for (int i = 0; i < NUMHANDS; i++) {
         if (hands[i].type != type)
             continue;
 
         // Position knots to scale the selection bbox
-        Geom::Point const bpos(hands[i].x, hands[i].y);
+        Geom::Point const bpos(hands[i].x, (hands[i].y - 0.5) * (-y_dir) + 0.5);
         Geom::Point p(_bbox->min() + (_bbox->dimensions() * Geom::Scale(bpos)));
         knots[i]->moveto(p);
         knots[i]->show();
@@ -1449,6 +1457,8 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
                 }
             }
         }
+        delete bb;
+        delete sn;
     }
 
     Geom::Affine const move((Geom::Translate(dxy)));

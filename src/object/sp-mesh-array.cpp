@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
    A group of classes and functions for manipulating mesh gradients.
 
@@ -5,7 +6,7 @@
    be shared between two patches and the corners between up to four.
 
    The order of the points for each side always goes from left to right or top to bottom.
-   For sides 2 and 3 the points must be reversed when used (as in calls to cairo functions). 
+   For sides 2 and 3 the points must be reversed when used (as in calls to cairo functions).
 
    Two patches: (C=corner, S=side, H=handle, T=tensor)
 
@@ -34,7 +35,7 @@
  *
  * Copyright  (C) 2012, 2015 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm.h>
@@ -853,8 +854,8 @@ bool SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
                             if( (istop == 0 && irow == 0 && icolumn > 0) || (istop == 1 && irow > 0 ) ) {
                                 // skip 
                             } else {
-                                SPColor color   = stop->getEffectiveColor();
-                                double opacity  = stop->opacity;
+                                SPColor color   = stop->getColor();
+                                double opacity  = stop->getOpacity();
                                 new_patch.setColor( istop, color );
                                 new_patch.setOpacity( istop, opacity );
                                 new_patch.setStopPtr( istop, stop );
@@ -1087,7 +1088,7 @@ static SPColor default_color( SPItem *item ) {
             if ( SP_IS_GRADIENT(server) && SP_GRADIENT(server)->getVector() ) {
                 SPStop *firstStop = SP_GRADIENT(server)->getVector()->getFirstStop();
                 if ( firstStop ) {
-                    color = firstStop->getEffectiveColor();
+                    color = firstStop->getColor();
                 }
             }
         }
@@ -2126,7 +2127,7 @@ guint SPMeshNodeArray::tensor_toggle( std::vector<guint> corners ) {
 }
 
 /**
-   Atempts to smooth color transitions across corners.
+   Attempts to smooth color transitions across corners.
    Input is a list of selected corner draggable indices.
 */
 guint SPMeshNodeArray::color_smooth( std::vector<guint> corners ) {

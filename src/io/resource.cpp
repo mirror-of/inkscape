@@ -1,26 +1,20 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Inkscape::IO::Resource - simple resource API
- *
+ *//*
  * Authors:
  *   MenTaLguY <mental@rydia.net>
  *   Martin Owens <doctormo@gmail.com>
  *
- * Copyright (C) 2006-2017 Authors
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * See the file COPYING for details.
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <shlobj.h> // for SHGetSpecialFolderLocation
 #endif
 
@@ -68,7 +62,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case UIS: temp = INKSCAPE_UIDIR; break;
                 case PIXMAPS: temp = INKSCAPE_PIXMAPSDIR; break;
 #ifdef INKSCAPE_DATADIR
-                case DATADIR: temp = INKSCAPE_DATADIR; break;
+                case DATA_DIR: temp = INKSCAPE_DATADIR; break;
 #endif
                 default: temp = "";
             }
@@ -105,7 +99,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case THEMES: name = "themes"; break;
                 case UIS: name = "ui"; break;
                 case PIXMAPS: name = "pixmaps"; break;
-                case DATADIR: name = ""; break;
+                case DATA_DIR: name = ""; break;
                 default: return _get_path(SYSTEM, type, filename);
             }
             path = profile_path(name);
@@ -378,7 +372,7 @@ char *profile_path(const char *filename)
             prefdir = g_strdup(userenv);
         }
 
-#ifdef WIN32
+#ifdef _WIN32
         // prefer c:\Documents and Settings\UserName\Application Data\ to c:\Documents and Settings\userName\;
         // TODO: CSIDL_APPDATA is C:\Users\UserName\AppData\Roaming these days
         //       should we migrate to AppData\Local? Then we can simply use the portable g_get_user_config_dir()

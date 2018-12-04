@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Windows-only Enhanced Metafile input and output.
  */
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006-2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * References:
  *  - How to Create & Play Enhanced Metafiles in Win32
@@ -21,11 +22,6 @@
  *  - Metafile Structures
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
-
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 //#include <png.h>   //This must precede text_reassemble.h or it blows up in pngconf.h when compiling
 #include <cstdio>
@@ -1266,7 +1262,7 @@ Wmf::delete_object(PWMF_CALLBACK_DATA d, int index)
         d->wmf_obj[index].type = 0;
 // We are keeping a copy of the WMR rather than just a structure.  Currently that is not necessary as the entire
 // WMF is read in at once and is stored in a big malloc.  However, in past versions it was handled
-// reord by record, and we might need to do that again at some point in the future if we start running into WMF
+// record by record, and we might need to do that again at some point in the future if we start running into WMF
 // files too big to fit into memory.
         if (d->wmf_obj[index].record)
             free(d->wmf_obj[index].record);

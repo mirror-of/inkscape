@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is file is kind of the junk file.  Basically everything that
  * didn't fit in one of the other well defined areas, well, it's now
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2002-2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_EXTENSION_SYSTEM_H__
@@ -75,7 +76,7 @@ Glib::ustring get_file_save_path (SPDocument *doc, FileSaveMethod method);
  * Write the given file extension back to prefs so that it can be used later on.
  *
  * @param extension the file extension which should be written to prefs
- * @param method the file save mathod of the dialog
+ * @param method the file save method of the dialog
  */
 void store_file_extension_in_prefs (Glib::ustring extension, FileSaveMethod method);
 
@@ -83,7 +84,7 @@ void store_file_extension_in_prefs (Glib::ustring extension, FileSaveMethod meth
  * Write the given path back to prefs so that it can be used later on.
  *
  * @param path the path which should be written to prefs
- * @param method the file save mathod of the dialog
+ * @param method the file save method of the dialog
  */
 void store_save_path_in_prefs (Glib::ustring path, FileSaveMethod method);
 

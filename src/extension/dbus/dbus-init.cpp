@@ -1,5 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * This is where Inkscape connects to the DBus when it starts and 
+ * This is where Inkscape connects to the DBus when it starts and
  * registers the main interface.
  *
  * Also where new interfaces are registered when a new document is created.
@@ -10,9 +11,9 @@
  *
  * Copyright (C) 2009 Soren Berg
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
- 
+
 #include <dbus/dbus-glib.h>
 // this is reguired so that giomm headers won't barf
 #undef DBUS_MESSAGE_TYPE_INVALID
@@ -211,7 +212,7 @@ init_desktop (void) {
 }
 
 void
-dbus_set_bus_name(gchar * bus_name)
+dbus_set_bus_name(gchar const * bus_name)
 {
     g_assert(bus_name != NULL);
     g_assert(instance_bus_name == NULL);

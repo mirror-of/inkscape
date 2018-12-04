@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <symbol> implementation
  *
@@ -8,12 +9,8 @@
  *
  * Copyright (C) 1999-2003 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <string>
 
@@ -41,7 +38,7 @@ void SPSymbol::release() {
 	SPGroup::release();
 }
 
-void SPSymbol::set(unsigned int key, const gchar* value) {
+void SPSymbol::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
     case SP_ATTR_VIEWBOX:
         set_viewBox( value );

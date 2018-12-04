@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Spiral drawing context
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 1999-2001 Lauris Kaplinski
  * Copyright (C) 2001-2002 Mitsuru Oka
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -25,7 +26,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "ui/pixmaps/cursor-spiral.xpm"
 #include "selection.h"
@@ -330,7 +331,7 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
     if (!this->spiral) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

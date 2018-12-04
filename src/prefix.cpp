@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /*
  * BinReloc - a library for creating relocatable executables
  * Written by: Mike Hearn <mike@theoretic.com>
@@ -23,13 +32,12 @@
  * --> expands br_locate to foobar_br_locate
  */
 
-#ifndef _PREFIX_C_
-#define _PREFIX_C_
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
+#ifndef _PREFIX_C_
+#define _PREFIX_C_
 
 #include <glib.h>
 #include <cstdlib>

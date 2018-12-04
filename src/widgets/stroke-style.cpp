@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Bryce Harrington <brycehar@bryceharrington.org>
@@ -12,7 +13,7 @@
  * Copyright (C) 2004 John Cliff
  * Copyright (C) 2008 Maximilian Albert (gtkmm-ification)
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noSP_SS_VERBOSE
@@ -28,7 +29,7 @@
 
 #include "svg/svg-color.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/widget/unit-menu.h"
 
 #include "widgets/style-utils.h"
@@ -494,8 +495,6 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
         Inkscape::XML::Node *selrepr = item->getRepr();
         if (selrepr) {
             sp_repr_css_change_recursive(selrepr, css, "style");
-            SPObject *markerObj = getMarkerObj(marker, document);
-            spw->setMarkerColor(markerObj, marker_combo->get_loc(), item);
         }
 
         item->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -1210,6 +1209,22 @@ StrokeStyle::setPaintOrderButtons(Gtk::ToggleButton *active)
 
 
 /**
+ * Recursively builds a simple list from an arbitrarily complex selection
+ * of items and grouped items
+ */
+static void buildGroupedItemList(SPObject *element, std::vector<SPObject*> &simple_list)
+{
+    if (SP_IS_GROUP(element)) {
+        for (SPObject *i = element->firstChild(); i; i = i->getNext()) {
+            buildGroupedItemList(i, simple_list);
+        }
+    } else {
+        simple_list.push_back(element);
+    }
+}
+
+
+/**
  * Updates the marker combobox to highlight the appropriate marker and scroll to
  * that marker.
  */
@@ -1223,61 +1238,73 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
     };
 
     bool all_texts = true;
-    for(std::vector<SPItem*>::const_iterator i=objects.begin();i!=objects.end();++i){
-        if (!SP_IS_TEXT (*i)) {
+
+    auto simplified_list = std::vector<SPObject *>();
+    for (SPItem *item : objects) {
+        buildGroupedItemList(item, simplified_list);
+    }
+
+    for (SPObject *object : simplified_list) {
+        if (!SP_IS_TEXT(object)) {
             all_texts = false;
             break;
         }
     }
 
-    for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
-        MarkerComboBox *combo = static_cast<MarkerComboBox *>(keyloc[i].key);
-        // Per SVG spec, text objects cannot have markers; disable combobox if only texts are selected
-        combo->set_sensitive(!all_texts);
-    }
-
-    // We show markers of the first object in the list only
+    // We show markers of the last object in the list only
     // FIXME: use the first in the list that has the marker of each type, if any
-    SPObject *object = objects[0];
 
-    for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
+    // -1 means prefs haven't been queried yet
+    int update = -1;
+
+    for (auto const &markertype : keyloc) {
         // For all three marker types,
 
         // find the corresponding combobox item
-        MarkerComboBox *combo = static_cast<MarkerComboBox *>(keyloc[i].key);
+        MarkerComboBox *combo = markertype.key;
 
         // Quit if we're in update state
         if (combo->update()) {
             return;
         }
 
+        // Per SVG spec, text objects cannot have markers; disable combobox if only texts are selected
+        combo->set_sensitive(!all_texts);
+
         combo->setDesktop(desktop);
 
-        if (object->style->marker_ptrs[keyloc[i].loc]->value != nullptr && !all_texts) {
-            // If the object has this type of markers,
+        SPObject *marker = nullptr;
 
-            // Extract the name of the marker that the object uses
-            SPObject *marker = getMarkerObj(object->style->marker_ptrs[keyloc[i].loc]->value, object->document);
-            // Scroll the combobox to that marker
-            combo->set_current(marker);
+        if (!all_texts) {
+            for (SPObject *object : simplified_list) {
+                // If the object has this type of markers,
+                if (object->style->marker_ptrs[markertype.loc]->value == nullptr)
+                    continue;
 
-            // Set the marker color
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            gboolean update = prefs->getBool("/options/markers/colorUpdateMarkers", true);
+                // Extract the name of the marker that the object uses
+                marker = getMarkerObj(object->style->marker_ptrs[markertype.loc]->value, object->document);
 
-            if (update) {
-                setMarkerColor(marker, combo->get_loc(), SP_ITEM(object));
+                // Set the marker color
+                if (update < 0) {
+                    // query prefs (only once)
+                    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                    update = prefs->getBool("/options/markers/colorUpdateMarkers", true) ? 1 : 0;
+                }
 
-                if (!skip_undo) {
-                    SPDocument *document = desktop->getDocument();
-                    DocumentUndo::maybeDone(document, "UaM", SP_VERB_DIALOG_FILL_STROKE,
-                                   _("Set marker color"));
+                if (update > 0) {
+                    setMarkerColor(marker, markertype.loc, SP_ITEM(object));
+
+                    if (!skip_undo) {
+                        SPDocument *document = desktop->getDocument();
+                        DocumentUndo::maybeDone(document, "UaM", SP_VERB_DIALOG_FILL_STROKE,
+                                       _("Set marker color"));
+                    }
                 }
             }
-
-        } else {
-            combo->set_current(nullptr);
         }
+
+        // Scroll the combobox to that marker
+        combo->set_current(marker);
     }
 
 }

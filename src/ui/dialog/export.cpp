@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
@@ -10,12 +11,8 @@
  * Copyright (C) 1999-2007, 2012 Authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 // This has to be included prior to anything that includes setjmp.h, it croaks otherwise
 #include <png.h>
@@ -61,7 +58,7 @@
 #include "extension/output.h"
 
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <commdlg.h>
 #include <gdk/gdkwin32.h>
@@ -1313,7 +1310,7 @@ void Export::onBrowse ()
 
     gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fs), filename.c_str());
 
-#ifdef WIN32
+#ifdef _WIN32
     // code in this section is borrowed from ui/dialogs/filedialogimpl-win32.cpp
     OPENFILENAMEW opf;
     WCHAR filter_string[20];

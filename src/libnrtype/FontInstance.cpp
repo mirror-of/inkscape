@@ -1,15 +1,17 @@
-/*
- *  FontInstance.cpp
- *  testICU
- *
- *   Authors:
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
  *     fred
  *     bulia byak <buliabyak@users.sf.net>
  *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifndef PANGO_ENABLE_ENGINE
@@ -32,7 +34,6 @@
 #include <2geom/path-sink.h>
 #include "libnrtype/font-glyph.h"
 #include "libnrtype/font-instance.h"
-#include "util/unordered-containers.h"
 
 
 #ifndef USE_PANGO_WIN32
@@ -700,7 +701,7 @@ void font_instance::FindFontMetrics() {
     // On Windows, the typographic ascender and descender are taken from the otmMacAscent and
     // otmMacDescent values:
     //   http://microsoft.public.win32.programmer.gdi.narkive.com/LV6k4BDh/msdn-documentation-outlinetextmetrics-clarification
-    // The otmAscent and otmDescent values are the maxiumum ascent and maxiumum descent of all the
+    // The otmAscent and otmDescent values are the maximum ascent and maximum descent of all the
     // glyphs in a font.
     if ( theFace ) {
 

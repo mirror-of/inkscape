@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Utility functions for switching tools (= contexts)
  *
@@ -6,15 +7,11 @@
  *
  * Copyright (C) 2003 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_TOOLS_SWITCH_H
 #define SEEN_TOOLS_SWITCH_H
-
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 class SPDesktop;
 class SPItem;

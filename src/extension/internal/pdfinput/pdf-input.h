@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_EXTENSION_INTERNAL_PDFINPUT_H
 #define SEEN_EXTENSION_INTERNAL_PDFINPUT_H
 
@@ -7,14 +8,15 @@
  *
  * Copyright (C) 2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifdef HAVE_POPPLER
+#include "poppler-transition-api.h"
 
 #include <gtkmm/dialog.h>
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * 3x4 transformation matrix to map points from projective 3-space into the projective plane
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2007  Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_PROJ_PT_H
@@ -48,7 +49,7 @@ public:
     }
 
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
-         the result for finite points is the same as if the affine points were addes ***/
+         the result for finite points is the same as if the affine points were added ***/
     inline Pt2 &operator+(Pt2 &rhs) const {
         Pt2 *result = new Pt2 (*this);
         result->normalize();
@@ -105,7 +106,7 @@ public:
     }
 
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
-         the result for finite points is the same as if the affine points were addes ***/
+         the result for finite points is the same as if the affine points were added ***/
     inline Pt3 &operator+(Pt3 &rhs) const {
         Pt3 *result = new Pt3 (*this);
         result->normalize();
@@ -134,7 +135,7 @@ public:
         }
         return *result;
     }
-    
+
     inline double operator[] (unsigned int index) const {
         if (index > 3) { return Geom::infinity(); }
         return pt[index];

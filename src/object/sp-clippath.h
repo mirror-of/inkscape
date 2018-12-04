@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_CLIPPATH_H
 #define SEEN_SP_CLIPPATH_H
 
@@ -12,18 +13,18 @@
  * Copyright (C) 2001-2002 authors
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#define SP_CLIPPATH(obj) (dynamic_cast<SPClipPath*>((SPObject*)obj))
-#define SP_IS_CLIPPATH(obj) (dynamic_cast<const SPClipPath*>((SPObject*)obj) != NULL)
-
-struct SPClipPathView;
 
 #include <cstdio>
 #include "sp-object-group.h"
+#include "display/drawing.h"
+#include "display/drawing-group.h"
 #include "uri-references.h"
 #include "xml/node.h"
+
+#define SP_CLIPPATH(obj) (dynamic_cast<SPClipPath*>((SPObject*)obj))
+#define SP_IS_CLIPPATH(obj) (dynamic_cast<const SPClipPath*>((SPObject*)obj) != NULL)
 
 namespace Inkscape {
 
@@ -31,6 +32,14 @@ class Drawing;
 class DrawingItem;
 
 } // namespace Inkscape
+
+
+struct SPClipPathView {
+    SPClipPathView *next;
+    unsigned int key;
+    Inkscape::DrawingItem *arenaitem;
+    Geom::OptRect bbox;
+};
 
 class SPClipPath : public SPObjectGroup {
 public:
@@ -58,7 +67,7 @@ protected:
 
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;

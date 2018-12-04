@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /*
  *  FontFactory.h
  *  testICU
@@ -7,15 +16,10 @@
 #ifndef my_font_factory
 #define my_font_factory
 
-//#include <glibmm/ustring.h>
-
 #include <functional>
 #include <algorithm>
 #include <utility>
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 #ifdef _WIN32
 //#define USE_PANGO_WIN32 // disable for Bug 165665
 #endif
@@ -135,7 +139,7 @@ public:
                                int weight=PANGO_WEIGHT_NORMAL, int stretch=PANGO_STRETCH_NORMAL,
                                int size=10, int spacing=0);
 
-    /// Semi-private: tells the font_factory taht the font_instance 'who' has died and should be removed from loadedFaces
+    /// Semi-private: tells the font_factory that the font_instance 'who' has died and should be removed from loadedFaces
     void                  UnrefFace(font_instance* who);
 
     // internal

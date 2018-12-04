@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_BOX3D_SIDE_H
 #define SEEN_BOX3D_SIDE_H
 
@@ -11,7 +12,7 @@
  *
  * Copyright (C) 2007  Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-polygon.h"
@@ -34,7 +35,7 @@ public:
     static Box3DSide * createBox3DSide(SPBox3D *box);
 
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 	void update(SPCtx *ctx, unsigned int flags) override;
 

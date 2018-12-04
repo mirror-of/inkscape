@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * RGBA display list system for inkscape
  *
@@ -8,7 +9,7 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm.h>
@@ -228,6 +229,9 @@ sp_canvas_arena_viewbox_changed (SPCanvasItem *item, Geom::IntRect const &new_ar
     arena->drawing.setCacheLimit(expanded);
 }
 
+// What is this used for? It appears to allow one to get signals on entering/leaving elements which
+// is intend to be used by Inkview to change the cursor when over an anchor. However arena->active
+// appears to only be set to root.
 static gint
 sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 {
@@ -235,7 +239,6 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
     /* fixme: This sucks, we have to handle enter/leave notifiers */
 
     SPCanvasArena *arena = SP_CANVAS_ARENA (item);
-
     gint ret = FALSE;
 
     switch (event->type) {

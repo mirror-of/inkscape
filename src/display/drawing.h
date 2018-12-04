@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * SVG drawing for display.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_H
@@ -50,6 +51,7 @@ public:
     RenderMode renderMode() const;
     ColorMode colorMode() const;
     bool outline() const;
+    bool visibleHairlines() const;
     bool renderFilters() const;
     int blurQuality() const;
     int filterQuality() const;
@@ -58,6 +60,9 @@ public:
     void setBlurQuality(int q);
     void setFilterQuality(int q);
     void setExact(bool e);
+    bool getExact() const { return _exact; };
+    void setOutlineSensitive(bool e);
+    bool getOutlineSensitive() const { return _outline_sensitive; };
 
     Geom::OptIntRect const &cacheLimit() const;
     void setCacheLimit(Geom::OptIntRect const &r);
@@ -79,7 +84,7 @@ private:
     void _pickItemsForCaching();
 
     typedef std::list<CacheRecord> CandidateList;
-
+    bool _outline_sensitive;
     DrawingItem *_root;
     std::set<DrawingItem *> _cached_items; // modified by DrawingItem::setCached()
     CacheList _candidate_items;

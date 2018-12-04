@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * feMergeNode implementation. A feMergeNode contains the name of one
  * input image for feMerge.
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2004,2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "mergenode.h"
@@ -47,11 +48,11 @@ void SPFeMergeNode::release() {
 /**
  * Sets a specific value in the SPFeMergeNode.
  */
-void SPFeMergeNode::set(unsigned int key, gchar const *value) {
+void SPFeMergeNode::set(SPAttributeEnum key, gchar const *value) {
     SPFeMerge *parent = SP_FEMERGE(this->parent);
 
     if (key == SP_ATTR_IN) {
-        int input = sp_filter_primitive_read_in(parent, value);
+        int input = parent->read_in(value);
         if (input != this->input) {
             this->input = input;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);

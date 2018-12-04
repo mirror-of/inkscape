@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <funcR>, <funcG>, <funcB> and <funcA> implementations.
  */
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2006, 2007, 2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glib.h>
@@ -21,9 +22,6 @@
 #include "componenttransfer-funcnode.h"
 #include "xml/repr.h"
 #include "helper-fns.h"
-
-#define SP_MACROS_SILENT
-
 
 /* FeFuncNode class */
 SPFeFuncNode::SPFeFuncNode(SPFeFuncNode::Channel channel)
@@ -106,7 +104,7 @@ static Inkscape::Filters::FilterComponentTransferType sp_feComponenttransfer_rea
 /**
  * Sets a specific value in the SPFeFuncNode.
  */
-void SPFeFuncNode::set(unsigned int key, gchar const *value) {
+void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
     Inkscape::Filters::FilterComponentTransferType type;
     double read_num;
 

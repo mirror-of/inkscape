@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::SelectionDescriber - shows messages describing selection
  *
@@ -6,13 +7,14 @@
  *
  * Copyright (C) 2004 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_SELECTION_DESCRIPTION_HANDLER_H
 #define SEEN_INKSCAPE_SELECTION_DESCRIPTION_HANDLER_H
 
 #include <cstddef>
+#include <memory>
 #include <sigc++/sigc++.h>
 #include "message-context.h"
 
@@ -23,7 +25,7 @@ class Selection;
 
 class SelectionDescriber : public sigc::trackable {
 public:
-    SelectionDescriber(Inkscape::Selection *selection, MessageStack *stack, char *when_selected, char *when_nothing);
+    SelectionDescriber(Inkscape::Selection *selection, std::shared_ptr<MessageStack> stack, char *when_selected, char *when_nothing);
     ~SelectionDescriber();
 
 private:

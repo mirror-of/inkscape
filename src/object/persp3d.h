@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_PERSP3D_H
 #define SEEN_PERSP3D_H
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2007  Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define SP_PERSP3D(obj) (dynamic_cast<Persp3D*>((SPObject*)obj))
@@ -66,7 +67,7 @@ protected:
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 	void release() override;
 
-	void set(unsigned int key, char const* value) override;
+	void set(SPAttributeEnum key, char const* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 

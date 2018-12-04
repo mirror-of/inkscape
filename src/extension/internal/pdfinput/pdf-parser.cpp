@@ -1,18 +1,17 @@
- /*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * PDF parsing using libpoppler.
- *
- * Derived from poppler's Gfx.cc
- *
+ *//*
  * Authors:
- *   Jon A. Cruz <jon@joncruz.org>
+ * Derived from poppler's Gfx.cc, which was derived from Xpdf by 1996-2003 Glyph & Cog, LLC
+ * Jon A. Cruz <jon@joncruz.org>
  *
- * Copyright 2012 authors
- * Copyright 1996-2003 Glyph & Cog, LLC
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifdef HAVE_POPPLER
@@ -32,6 +31,7 @@
 #include "pdf-parser.h"
 #include "util/units.h"
 
+#include "glib/poppler-features.h"
 #include "goo/gmem.h"
 #include "goo/GooString.h"
 #include "GlobalParams.h"
@@ -290,8 +290,8 @@ PdfParser::PdfParser(XRef *xrefA,
                      int /*pageNum*/,
 		     int rotate,
 		     Dict *resDict,
-                     PDFRectangle *box,
-		     PDFRectangle *cropBox) :
+                     _POPPLER_CONST PDFRectangle *box,
+                     _POPPLER_CONST PDFRectangle *cropBox) :
     xref(xrefA),
     builder(builderA),
     subPage(gFalse),
@@ -313,7 +313,7 @@ PdfParser::PdfParser(XRef *xrefA,
   builder->setDocumentSize(Inkscape::Util::Quantity::convert(state->getPageWidth(), "pt", "px"),
                            Inkscape::Util::Quantity::convert(state->getPageHeight(), "pt", "px"));
 
-  double *ctm = state->getCTM();
+  const double *ctm = state->getCTM();
   double scaledCTM[6];
   for (int i = 0; i < 6; ++i) {
     baseMatrix[i] = ctm[i];
@@ -348,7 +348,7 @@ PdfParser::PdfParser(XRef *xrefA,
 PdfParser::PdfParser(XRef *xrefA,
 		     Inkscape::Extension::Internal::SvgBuilder *builderA,
                      Dict *resDict,
-		     PDFRectangle *box) :
+		     _POPPLER_CONST PDFRectangle *box) :
     xref(xrefA),
     builder(builderA),
     subPage(gTrue),
@@ -409,21 +409,13 @@ void PdfParser::parse(Object *obj, GBool topLevel) {
 
   if (obj->isArray()) {
     for (int i = 0; i < obj->arrayGetLength(); ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-      obj2 = obj->arrayGet(i);
-#else
-      obj->arrayGet(i, &obj2);
-#endif
+      _POPPLER_CALL_ARGS(obj2, obj->arrayGet, i);
       if (!obj2.isStream()) {
 	error(errInternal, -1, "Weird page contents");
-#if !defined(POPPLER_NEW_OBJECT_API)
-	obj2.free();
-#endif
+	_POPPLER_FREE(obj2);
 	return;
       }
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj2.free();
-#endif
+      _POPPLER_FREE(obj2);
     }
   } else if (!obj->isStream()) {
 	error(errInternal, -1, "Weird page contents");
@@ -442,11 +434,7 @@ void PdfParser::go(GBool /*topLevel*/)
 
   // scan a sequence of objects
   int numArgs = 0;
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj = parser->getObj();
-#else
-  parser->getObj(&obj);
-#endif
+  _POPPLER_CALL(obj, parser->getObj);
   while (!obj.isEOF()) {
 
     // got a command - execute it
@@ -465,19 +453,15 @@ void PdfParser::go(GBool /*topLevel*/)
       execOp(&obj, args, numArgs);
 
 #if !defined(POPPLER_NEW_OBJECT_API)
-      obj.free();
+      _POPPLER_FREE(obj);
       for (int i = 0; i < numArgs; ++i)
-	args[i].free();
+	_POPPLER_FREE(args[i]);
 #endif
       numArgs = 0;
 
     // got an argument - save it
     } else if (numArgs < maxArgs) {
-#if defined(POPPLER_NEW_OBJECT_API)
       args[numArgs++] = std::move(obj);
-#else
-      args[numArgs++] = obj;
-#endif
 
     // too many arguments - something is wrong
     } else {
@@ -488,21 +472,13 @@ void PdfParser::go(GBool /*topLevel*/)
 	printf("\n");
 	fflush(stdout);
       }
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj.free();
-#endif
+      _POPPLER_FREE(obj);
     }
 
     // grab the next object
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj = parser->getObj();
-#else
-    parser->getObj(&obj);
-#endif
+    _POPPLER_CALL(obj, parser->getObj);
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj.free();
-#endif
+  _POPPLER_FREE(obj);
 
   // args at end with no command
   if (numArgs > 0) {
@@ -518,7 +494,7 @@ void PdfParser::go(GBool /*topLevel*/)
     }
 #if !defined(POPPLER_NEW_OBJECT_API)
     for (int i = 0; i < numArgs; ++i)
-      args[i].free();
+      _POPPLER_FREE(args[i]);
 #endif
   }
 }
@@ -567,7 +543,7 @@ const char *PdfParser::getPreviousOperator(unsigned int look_back) {
 
 void PdfParser::execOp(Object *cmd, Object args[], int numArgs) {
   PdfOperator *op;
-  char *name;
+  const char *name;
   Object *argPtr;
   int i;
 
@@ -615,7 +591,7 @@ void PdfParser::execOp(Object *cmd, Object args[], int numArgs) {
   (this->*op->func)(argPtr, numArgs);
 }
 
-PdfOperator* PdfParser::findOp(char *name) {
+PdfOperator* PdfParser::findOp(const char *name) {
   int a = -1;
   int b = numOps;
   int cmp = -1;
@@ -715,13 +691,9 @@ void PdfParser::opSetDash(Object args[], int /*numArgs*/)
   if (length != 0) {
     dash = (double *)gmallocn(length, sizeof(double));
     for (int i = 0; i < length; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-      dash[i] = a->get(i).getNum();
-#else
       Object obj;
-      dash[i] = a->get(i, &obj)->getNum();
-      obj.free();
-#endif
+      dash[i] = _POPPLER_CALL_ARGS_DEREF(obj, a->get, i).getNum();
+      _POPPLER_FREE(obj);
     }
   }
   state->setLineDash(dash, length, args[1].getNum());
@@ -771,18 +743,13 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
   GBool haveBackdropColor = gFalse;
   GBool alpha = gFalse;
 
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj1 = res->lookupGState(args[0].getName())).isNull()) {
-#else
-  if (!res->lookupGState(args[0].getName(), &obj1)) {
-#endif
+  _POPPLER_CALL_ARGS(obj1, res->lookupGState, args[0].getName());
+  if (obj1.isNull()) {
     return;
   }
   if (!obj1.isDict()) {
     error(errSyntaxError, getPos(), "ExtGState '{0:s}' is wrong type"), args[0].getName();
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj1.free();
-#endif
+    _POPPLER_FREE(obj1);
     return;
   }
   if (printCommands) {
@@ -792,11 +759,7 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
   }
 
   // transparency support: blend mode, fill/stroke opacity
-#if defined(POPPLER_NEW_OBJECT_API)
-  if (!((obj2 = obj1.dictLookup(const_cast<char*>("BM"))).isNull())) {
-#else
-  if (!obj1.dictLookup(const_cast<char*>("BM"), &obj2)->isNull()) {
-#endif
+  if (!_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "BM").isNull()) {
     GfxBlendMode mode = gfxBlendNormal;
     if (state->parseBlendMode(&obj2, &mode)) {
       state->setBlendMode(mode);
@@ -804,71 +767,40 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
       error(errSyntaxError, getPos(), "Invalid blend mode in ExtGState");
     }
   }
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj2 = obj1.dictLookup(const_cast<char*>("ca"))).isNum()) {
-#else
-  obj2.free();
-  if (obj1.dictLookup(const_cast<char*>("ca"), &obj2)->isNum()) {
-#endif
+  _POPPLER_FREE(obj2);
+  if (_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "ca").isNum()) {
     state->setFillOpacity(obj2.getNum());
   }
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj2 = obj1.dictLookup(const_cast<char*>("CA"))).isNum()) {
-#else
-  obj2.free();
-  if (obj1.dictLookup(const_cast<char*>("CA"), &obj2)->isNum()) {
-#endif
+  _POPPLER_FREE(obj2);
+  if (_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "CA").isNum()) {
     state->setStrokeOpacity(obj2.getNum());
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj2.free();
-#endif
+  _POPPLER_FREE(obj2);
 
   // fill/stroke overprint
   GBool haveFillOP = gFalse;
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((haveFillOP = (obj2 = obj1.dictLookup(const_cast<char*>("op"))).isBool())) {
-#else
-  if ((haveFillOP = (obj1.dictLookup(const_cast<char*>("op"), &obj2)->isBool()))) {
-#endif
+  if ((haveFillOP = _POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "op").isBool())) {
     state->setFillOverprint(obj2.getBool());
   }
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj2 = obj1.dictLookup(const_cast<char*>("OP"))).isBool()) {
-#else
-  obj2.free();
-  if (obj1.dictLookup(const_cast<char*>("OP"), &obj2)->isBool()) {
-#endif
+  _POPPLER_FREE(obj2);
+  if (_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "OP").isBool()) {
     state->setStrokeOverprint(obj2.getBool());
     if (!haveFillOP) {
       state->setFillOverprint(obj2.getBool());
     }
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj2.free();
-#endif
+  _POPPLER_FREE(obj2);
 
   // stroke adjust
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj2 = obj1.dictLookup(const_cast<char*>("SA"))).isBool()) {
-#else
-  if (obj1.dictLookup(const_cast<char*>("SA"), &obj2)->isBool()) {
-#endif
+  if (_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "SA").isBool()) {
     state->setStrokeAdjust(obj2.getBool());
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj2.free();
-#endif
+  _POPPLER_FREE(obj2);
 
   // transfer function
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj2 = obj1.dictLookup(const_cast<char*>("TR2"))).isNull()) {
-    obj2 = obj1.dictLookup(const_cast<char*>("TR"));
-#else
-  if (obj1.dictLookup(const_cast<char*>("TR2"), &obj2)->isNull()) {
-    obj2.free();
-    obj1.dictLookup(const_cast<char*>("TR"), &obj2);
-#endif
+  if (_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "TR2").isNull()) {
+    _POPPLER_FREE(obj2);
+    _POPPLER_CALL_ARGS(obj2, obj1.dictLookup, "TR");
   }
   if (obj2.isName(const_cast<char*>("Default")) ||
       obj2.isName(const_cast<char*>("Identity"))) {
@@ -877,15 +809,9 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
   } else if (obj2.isArray() && obj2.arrayGetLength() == 4) {
     int pos = 4;
     for (int i = 0; i < 4; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-      obj3 = obj2.arrayGet(i);
-#else
-      obj2.arrayGet(i, &obj3);
-#endif
+      _POPPLER_CALL_ARGS(obj3, obj2.arrayGet, i);
       funcs[i] = Function::parse(&obj3);
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj3.free();
-#endif
+      _POPPLER_FREE(obj3);
       if (!funcs[i]) {
 	pos = i;
 	break;
@@ -902,37 +828,21 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
   } else if (!obj2.isNull()) {
     error(errSyntaxError, getPos(), "Invalid transfer function in ExtGState");
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj2.free();
-#endif
+  _POPPLER_FREE(obj2);
 
   // soft mask
-#if defined(POPPLER_NEW_OBJECT_API)
-  if (!((obj2 = obj1.dictLookup(const_cast<char*>("SMask"))).isNull())) {
-#else
-  if (!obj1.dictLookup(const_cast<char*>("SMask"), &obj2)->isNull()) {
-#endif
+  if (!_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "SMask").isNull()) {
     if (obj2.isName(const_cast<char*>("None"))) {
       builder->clearSoftMask(state);
     } else if (obj2.isDict()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-      if ((obj3 = obj2.dictLookup(const_cast<char*>("S"))).isName(const_cast<char*>("Alpha"))) {
-#else
-      if (obj2.dictLookup(const_cast<char*>("S"), &obj3)->isName(const_cast<char*>("Alpha"))) {
-#endif
+      if (_POPPLER_CALL_ARGS_DEREF(obj3, obj2.dictLookup, "S").isName("Alpha")) {
 	alpha = gTrue;
       } else { // "Luminosity"
 	alpha = gFalse;
       }
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj3.free();
-#endif
+      _POPPLER_FREE(obj3);
       funcs[0] = nullptr;
-#if defined(POPPLER_NEW_OBJECT_API)
-      if (!((obj3 = obj2.dictLookup(const_cast<char*>("TR"))).isNull())) {
-#else
-      if (!obj2.dictLookup(const_cast<char*>("TR"), &obj3)->isNull()) {
-#endif
+      if (!_POPPLER_CALL_ARGS_DEREF(obj3, obj2.dictLookup, "TR").isNull()) {
 	funcs[0] = Function::parse(&obj3);
 	if (funcs[0]->getInputSize() != 1 ||
 	    funcs[0]->getOutputSize() != 1) {
@@ -941,45 +851,26 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
 	  funcs[0] = nullptr;
 	}
       }
-#if defined(POPPLER_NEW_OBJECT_API)
-      if ((haveBackdropColor = (obj3 = obj2.dictLookup(const_cast<char*>("BC"))).isArray())) {
-#else
-      obj3.free();
-      if ((haveBackdropColor = obj2.dictLookup(const_cast<char*>("BC"), &obj3)->isArray())) {
-#endif
+      _POPPLER_FREE(obj3);
+      if ((haveBackdropColor = _POPPLER_CALL_ARGS_DEREF(obj3, obj2.dictLookup, "BC").isArray())) {
 	for (int i = 0; i < gfxColorMaxComps; ++i) {
 	  backdropColor.c[i] = 0;
 	}
 	for (int i = 0; i < obj3.arrayGetLength() && i < gfxColorMaxComps; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-	  obj4 = obj3.arrayGet(i);
-#else
-	  obj3.arrayGet(i, &obj4);
-#endif
+          _POPPLER_CALL_ARGS(obj4, obj3.arrayGet, i);
 	  if (obj4.isNum()) {
 	    backdropColor.c[i] = dblToCol(obj4.getNum());
 	  }
-#if !defined(POPPLER_NEW_OBJECT_API)
-	  obj4.free();
-#endif
+	  _POPPLER_FREE(obj4);
 	}
       }
-#if defined(POPPLER_NEW_OBJECT_API)
-      if ((obj3 = obj2.dictLookup(const_cast<char*>("G"))).isStream()) {
-	if ((obj4 = obj3.streamGetDict()->lookup(const_cast<char*>("Group"))).isDict()) {
-#else
-      obj3.free();
-      if (obj2.dictLookup(const_cast<char*>("G"), &obj3)->isStream()) {
-	if (obj3.streamGetDict()->lookup(const_cast<char*>("Group"), &obj4)->isDict()) {
-#endif
+      _POPPLER_FREE(obj3);
+      if (_POPPLER_CALL_ARGS_DEREF(obj3, obj2.dictLookup, "G").isStream()) {
+	if (_POPPLER_CALL_ARGS_DEREF(obj4, obj3.streamGetDict()->lookup, "Group").isDict()) {
 	  GfxColorSpace *blendingColorSpace = nullptr;
 	  GBool isolated = gFalse;
 	  GBool knockout = gFalse;
-#if defined(POPPLER_NEW_OBJECT_API)
-	  if (!((obj5 = obj4.dictLookup(const_cast<char*>("CS"))).isNull())) {
-#else
-	  if (!obj4.dictLookup(const_cast<char*>("CS"), &obj5)->isNull()) {
-#endif
+	  if (!_POPPLER_CALL_ARGS_DEREF(obj5, obj4.dictLookup, "CS").isNull()) {
 #if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
 	    blendingColorSpace = GfxColorSpace::parse(nullptr, &obj5, nullptr, nullptr);
 #elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
@@ -988,25 +879,15 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
 	    blendingColorSpace = GfxColorSpace::parse(&obj5, NULL);
 #endif
 	  }
-#if defined(POPPLER_NEW_OBJECT_API)
-	  if ((obj5 = obj4.dictLookup(const_cast<char*>("I"))).isBool()) {
-#else
-	  obj5.free();
-	  if (obj4.dictLookup(const_cast<char*>("I"), &obj5)->isBool()) {
-#endif
+          _POPPLER_FREE(obj5);
+	  if (_POPPLER_CALL_ARGS_DEREF(obj5, obj4.dictLookup, "I").isBool()) {
 	    isolated = obj5.getBool();
 	  }
-#if defined(POPPLER_NEW_OBJECT_API)
-	  if ((obj5 = obj4.dictLookup(const_cast<char*>("K"))).isBool()) {
-#else
-	  obj5.free();
-	  if (obj4.dictLookup(const_cast<char*>("K"), &obj5)->isBool()) {
-#endif
+          _POPPLER_FREE(obj5);
+	  if (_POPPLER_CALL_ARGS_DEREF(obj5, obj4.dictLookup, "K").isBool()) {
 	    knockout = obj5.getBool();
 	  }
-#if !defined(POPPLER_NEW_OBJECT_API)
-	  obj5.free();
-#endif
+	  _POPPLER_FREE(obj5);
 	  if (!haveBackdropColor) {
 	    if (blendingColorSpace) {
 	      blendingColorSpace->getDefaultColor(&backdropColor);
@@ -1025,24 +906,18 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
 	} else {
 	  error(errSyntaxError, getPos(), "Invalid soft mask in ExtGState - missing group");
 	}
-#if !defined(POPPLER_NEW_OBJECT_API)
-	obj4.free();
-#endif
+	_POPPLER_FREE(obj4);
       } else {
 	error(errSyntaxError, getPos(), "Invalid soft mask in ExtGState - missing group");
       }
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj3.free();
-#endif
+      _POPPLER_FREE(obj3);
     } else if (!obj2.isNull()) {
       error(errSyntaxError, getPos(), "Invalid soft mask in ExtGState");
     }
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj2.free();
+  _POPPLER_FREE(obj2);
 
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj1);
 }
 
 void PdfParser::doSoftMask(Object *str, GBool alpha,
@@ -1063,79 +938,43 @@ void PdfParser::doSoftMask(Object *str, GBool alpha,
   dict = str->streamGetDict();
 
   // check form type
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj1 = dict->lookup(const_cast<char*>("FormType"));
-#else
-  dict->lookup(const_cast<char*>("FormType"), &obj1);
-#endif
+  _POPPLER_CALL_ARGS(obj1, dict->lookup, "FormType");
   if (!(obj1.isNull() || (obj1.isInt() && obj1.getInt() == 1))) {
     error(errSyntaxError, getPos(), "Unknown form type");
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj1);
 
   // get bounding box
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj1 = dict->lookup(const_cast<char*>("BBox"));
-#else
-  dict->lookup(const_cast<char*>("BBox"), &obj1);
-#endif
+  _POPPLER_CALL_ARGS(obj1, dict->lookup, "BBox");
   if (!obj1.isArray()) {
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj1.free();
-#endif
+    _POPPLER_FREE(obj1);
     error(errSyntaxError, getPos(), "Bad form bounding box");
     return;
   }
   for (i = 0; i < 4; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj2 = obj1.arrayGet(i);
-#else
-    obj1.arrayGet(i, &obj2);
-#endif
+    _POPPLER_CALL_ARGS(obj2, obj1.arrayGet, i);
     bbox[i] = obj2.getNum();
-#if defined(POPPLER_NEW_OBJECT_API)
+    _POPPLER_FREE(obj2);
   }
-#else
-    obj2.free();
-  }
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj1);
 
   // get matrix
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj1 = dict->lookup(const_cast<char*>("Matrix"));
-#else
-  dict->lookup(const_cast<char*>("Matrix"), &obj1);
-#endif
+  _POPPLER_CALL_ARGS(obj1, dict->lookup, "Matrix");
   if (obj1.isArray()) {
     for (i = 0; i < 6; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-      obj2 = obj1.arrayGet(i);
-#else
-      obj1.arrayGet(i, &obj2);
-#endif
+      _POPPLER_CALL_ARGS(obj2, obj1.arrayGet, i);
       m[i] = obj2.getNum();
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj2.free();
-#endif
+      _POPPLER_FREE(obj2);
     }
   } else {
     m[0] = 1; m[1] = 0;
     m[2] = 0; m[3] = 1;
     m[4] = 0; m[5] = 0;
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj1);
 
   // get resources
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj1 = dict->lookup(const_cast<char*>("Resources"));
-#else
-  dict->lookup(const_cast<char*>("Resources"), &obj1);
-#endif
+  _POPPLER_CALL_ARGS(obj1, dict->lookup, "Resources");
   resDict = obj1.isDict() ? obj1.getDict() : (Dict *)nullptr;
 
   // draw it
@@ -1148,9 +987,7 @@ void PdfParser::doSoftMask(Object *str, GBool alpha,
   if (blendingColorSpace) {
     delete blendingColorSpace;
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj1);
 }
 
 void PdfParser::opSetRenderingIntent(Object /*args*/[], int /*numArgs*/)
@@ -1247,11 +1084,7 @@ void PdfParser::opSetFillColorSpace(Object args[], int /*numArgs*/)
   Object obj;
 
   state->setFillPattern(nullptr);
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj = res->lookupColorSpace(args[0].getName());
-#else
-  res->lookupColorSpace(args[0].getName(), &obj);
-#endif
+  _POPPLER_CALL_ARGS(obj, res->lookupColorSpace, args[0].getName());
 
   GfxColorSpace *colorSpace = nullptr;
 #if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
@@ -1273,9 +1106,7 @@ void PdfParser::opSetFillColorSpace(Object args[], int /*numArgs*/)
     colorSpace = GfxColorSpace::parse(&obj, NULL);
   }
 #endif
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj.free();
-#endif
+  _POPPLER_FREE(obj);
   if (colorSpace) {
   GfxColor color;
     state->setFillColorSpace(colorSpace);
@@ -1294,11 +1125,7 @@ void PdfParser::opSetStrokeColorSpace(Object args[], int /*numArgs*/)
   GfxColorSpace *colorSpace = nullptr;
 
   state->setStrokePattern(nullptr);
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj = res->lookupColorSpace(args[0].getName());
-#else
-  res->lookupColorSpace(args[0].getName(), &obj);
-#endif
+  _POPPLER_CALL_ARGS(obj, res->lookupColorSpace, args[0].getName());
 #if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
   if (obj.isNull()) {
     colorSpace = GfxColorSpace::parse(nullptr, &args[0], nullptr, nullptr);
@@ -1318,9 +1145,7 @@ void PdfParser::opSetStrokeColorSpace(Object args[], int /*numArgs*/)
     colorSpace = GfxColorSpace::parse(&obj, NULL);
   }
 #endif
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj.free();
-#endif
+  _POPPLER_FREE(obj);
   if (colorSpace) {
     GfxColor color;
     state->setStrokeColorSpace(colorSpace);
@@ -1747,7 +1572,7 @@ void PdfParser::doShadingPatternFillFallback(GfxShadingPattern *sPat,
                                              GBool stroke, GBool eoFill) {
   GfxShading *shading;
   GfxPath *savedPath;
-  double *ctm, *btm, *ptm;
+  const double *ctm, *btm, *ptm;
   double m[6], ictm[6], m1[6];
   double xMin, yMin, xMax, yMax;
   double det;
@@ -1989,7 +1814,7 @@ void PdfParser::doFunctionShFill1(GfxFunctionShading *shading,
   GfxColor color0M, color1M, colorM0, colorM1, colorMM;
   GfxColor colors2[4];
   double functionColorDelta = colorDeltas[pdfFunctionShading-1];
-  double *matrix;
+  const double *matrix;
   double xM, yM;
   int nComps, i, j;
 
@@ -2169,7 +1994,7 @@ void PdfParser::doPatchMeshShFill(GfxPatchMeshShading *shading) {
   }
 }
 
-void PdfParser::fillPatch(GfxPatch *patch, int nComps, int depth) {
+void PdfParser::fillPatch(_POPPLER_CONST GfxPatch *patch, int nComps, int depth) {
   GfxPatch patch00 = blankPatch();
   GfxPatch patch01 = blankPatch();
   GfxPatch patch10 = blankPatch();
@@ -2550,11 +2375,7 @@ void PdfParser::opShowSpaceText(Object args[], int /*numArgs*/)
   wMode = state->getFont()->getWMode();
   a = args[0].getArray();
   for (int i = 0; i < a->getLength(); ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj = a->get(i);
-#else
-    a->get(i, &obj);
-#endif
+    _POPPLER_CALL_ARGS(obj, a->get, i);
     if (obj.isNum()) {
       // this uses the absolute value of the font size to match
       // Acrobat's behavior
@@ -2571,13 +2392,15 @@ void PdfParser::opShowSpaceText(Object args[], int /*numArgs*/)
     } else {
       error(errSyntaxError, getPos(), "Element of show/space array must be number or string");
     }
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj.free();
-#endif
+    _POPPLER_FREE(obj);
   }
 }
 
+#if POPPLER_CHECK_VERSION(0,64,0)
 void PdfParser::doShowText(const GooString *s) {
+#else
+void PdfParser::doShowText(GooString *s) {
+#endif
   GfxFont *font;
   int wMode;
   double riseX, riseY;
@@ -2586,11 +2409,15 @@ void PdfParser::doShowText(const GooString *s) {
   double x, y, dx, dy, tdx, tdy;
   double originX, originY, tOriginX, tOriginY;
   double oldCTM[6], newCTM[6];
-  double *mat;
+  const double *mat;
   Object charProc;
   Dict *resDict;
   Parser *oldParser;
+#if POPPLER_CHECK_VERSION(0,64,0)
+  const char *p;
+#else
   char *p;
+#endif
   int len, n, uLen;
 
   font = state->getFont();
@@ -2626,7 +2453,7 @@ void PdfParser::doShowText(const GooString *s) {
     double lineX = state->getLineX();
     double lineY = state->getLineY();
     oldParser = parser;
-    p = g_strdup(s->getCString());
+    p = s->getCString();
     len = s->getLength();
     while (len > 0) {
       n = font->getNextChar(p, len, &code,
@@ -2646,11 +2473,7 @@ void PdfParser::doShowText(const GooString *s) {
       //out->updateCTM(state, 1, 0, 0, 1, 0, 0);
       if (false){ /*!out->beginType3Char(state, curX + riseX, curY + riseY, tdx, tdy,
 			       code, u, uLen)) {*/
-#if defined(POPPLER_NEW_OBJECT_API)
-	charProc = ((Gfx8BitFont *)font)->getCharProc(code);
-#else
-	((Gfx8BitFont *)font)->getCharProc(code, &charProc);
-#endif
+        _POPPLER_CALL_ARGS(charProc, ((Gfx8BitFont *)font)->getCharProc, code);
 	if ((resDict = ((Gfx8BitFont *)font)->getResources())) {
 	  pushResources(resDict);
 	}
@@ -2663,9 +2486,7 @@ void PdfParser::doShowText(const GooString *s) {
 	if (resDict) {
 	  popResources();
 	}
-#if !defined(POPPLER_NEW_OBJECT_API)
-	charProc.free();
-#endif
+	_POPPLER_FREE(charProc);
       }
       restoreState();
       // GfxState::restore() does *not* restore the current position,
@@ -2681,7 +2502,7 @@ void PdfParser::doShowText(const GooString *s) {
 
   } else {
     state->textTransformDelta(0, state->getRise(), &riseX, &riseY);
-    p = g_strdup(s->getCString());
+    p = s->getCString();
     len = s->getLength();
     while (len > 0) {
       n = font->getNextChar(p, len, &code,
@@ -2727,44 +2548,29 @@ void PdfParser::opXObject(Object args[], int /*numArgs*/)
 {
   Object obj1, obj2, obj3, refObj;
 
-  char *name = g_strdup(args[0].getName());
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj1 = res->lookupXObject(name)).isNull()) {
+#if POPPLER_CHECK_VERSION(0,64,0)
+  const char *name = args[0].getName();
 #else
-  if (!res->lookupXObject(name, &obj1)) {
+  char *name = args[0].getName();
 #endif
+  _POPPLER_CALL_ARGS(obj1, res->lookupXObject, name);
+  if (obj1.isNull()) {
     return;
   }
   if (!obj1.isStream()) {
     error(errSyntaxError, getPos(), "XObject '{0:s}' is wrong type", name);
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj1.free();
-#endif
+    _POPPLER_FREE(obj1);
     return;
   }
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj2 = obj1.streamGetDict()->lookup(const_cast<char*>("Subtype"));
-#else
-  obj1.streamGetDict()->lookup(const_cast<char*>("Subtype"), &obj2);
-#endif
+  _POPPLER_CALL_ARGS(obj2, obj1.streamGetDict()->lookup, "Subtype");
   if (obj2.isName(const_cast<char*>("Image"))) {
-#if defined(POPPLER_NEW_OBJECT_API)
-    refObj = res->lookupXObjectNF(name);
-#else
-    res->lookupXObjectNF(name, &refObj);
-#endif
+    _POPPLER_CALL_ARGS(refObj, res->lookupXObjectNF, name);
     doImage(&refObj, obj1.getStream(), gFalse);
-#if !defined(POPPLER_NEW_OBJECT_API)
-    refObj.free();
-#endif
+    _POPPLER_FREE(refObj);
   } else if (obj2.isName(const_cast<char*>("Form"))) {
     doForm(&obj1);
   } else if (obj2.isName(const_cast<char*>("PS"))) {
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj3 = obj1.streamGetDict()->lookup(const_cast<char*>("Level1"));
-#else
-    obj1.streamGetDict()->lookup(const_cast<char*>("Level1"), &obj3);
-#endif
+    _POPPLER_CALL_ARGS(obj3, obj1.streamGetDict()->lookup, "Level1");
 /*    out->psXObject(obj1.getStream(),
     		   obj3.isStream() ? obj3.getStream() : (Stream *)NULL);*/
   } else if (obj2.isName()) {
@@ -2772,10 +2578,8 @@ void PdfParser::opXObject(Object args[], int /*numArgs*/)
   } else {
     error(errSyntaxError, getPos(), "XObject subtype is missing or wrong type");
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj2.free();
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj2);
+  _POPPLER_FREE(obj1);
 }
 
 void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
@@ -2802,18 +2606,10 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
     dict = str->getDict();
     
     // get size
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj1 = dict->lookup(const_cast<char*>("Width"));
-#else
-    dict->lookup(const_cast<char*>("Width"), &obj1);
-#endif
+    _POPPLER_CALL_ARGS(obj1, dict->lookup, "Width");
     if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-        obj1 = dict->lookup(const_cast<char*>("W"));
-#else
-        obj1.free();
-        dict->lookup(const_cast<char*>("W"), &obj1);
-#endif
+        _POPPLER_FREE(obj1);
+        _POPPLER_CALL_ARGS(obj1, dict->lookup, "W");
     }
     if (obj1.isInt()){
         width = obj1.getInt();
@@ -2824,19 +2620,11 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
     else {
         goto err2;
     }
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj1 = dict->lookup(const_cast<char*>("Height"));
-#else
-    obj1.free();
-    dict->lookup(const_cast<char*>("Height"), &obj1);
-#endif
+    _POPPLER_FREE(obj1);
+    _POPPLER_CALL_ARGS(obj1, dict->lookup, "Height");
     if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-        obj1 = dict->lookup(const_cast<char*>("H"));
-#else
-        obj1.free();
-        dict->lookup(const_cast<char*>("H"), &obj1);
-#endif
+        _POPPLER_FREE(obj1);
+        _POPPLER_CALL_ARGS(obj1, dict->lookup, "H");
     }
     if (obj1.isInt()) {
         height = obj1.getInt();
@@ -2847,46 +2635,26 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
     else {
         goto err2;
     }
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj1.free();
-#endif
+    _POPPLER_FREE(obj1);
     
     // image interpolation
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj1 = dict->lookup("Interpolate");
-#else
-    dict->lookup("Interpolate", &obj1);
-#endif
+    _POPPLER_CALL_ARGS(obj1, dict->lookup, "Interpolate");
     if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-      obj1 = dict->lookup("I");
-#else
-      obj1.free();
-      dict->lookup("I", &obj1);
-#endif
+      _POPPLER_FREE(obj1);
+      _POPPLER_CALL_ARGS(obj1, dict->lookup, "I");
     }
     if (obj1.isBool())
       interpolate = obj1.getBool();
     else
       interpolate = gFalse;
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj1.free();
-#endif
+    _POPPLER_FREE(obj1);
     maskInterpolate = gFalse;
 
     // image or mask?
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj1 = dict->lookup(const_cast<char*>("ImageMask"));
-#else
-    dict->lookup(const_cast<char*>("ImageMask"), &obj1);
-#endif
+    _POPPLER_CALL_ARGS(obj1, dict->lookup, "ImageMask");
     if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-        obj1 = dict->lookup(const_cast<char*>("IM"));
-#else
-        obj1.free();
-        dict->lookup(const_cast<char*>("IM"), &obj1);
-#endif
+        _POPPLER_FREE(obj1);
+        _POPPLER_CALL_ARGS(obj1, dict->lookup, "IM");
     }
     mask = gFalse;
     if (obj1.isBool()) {
@@ -2895,24 +2663,14 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
     else if (!obj1.isNull()) {
         goto err2;
     }
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj1.free();
-#endif
+    _POPPLER_FREE(obj1);
     
     // bit depth
     if (bits == 0) {
-#if defined(POPPLER_NEW_OBJECT_API)
-        obj1 = dict->lookup(const_cast<char*>("BitsPerComponent"));
-#else
-        dict->lookup(const_cast<char*>("BitsPerComponent"), &obj1);
-#endif
+        _POPPLER_CALL_ARGS(obj1, dict->lookup, "BitsPerComponent");
         if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = dict->lookup(const_cast<char*>("BPC"));
-#else
-            obj1.free();
-            dict->lookup(const_cast<char*>("BPC"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, dict->lookup, "BPC");
         }
         if (obj1.isInt()) {
             bits = obj1.getInt();
@@ -2921,9 +2679,7 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
         } else {
             goto err2;
         }
-#if !defined(POPPLER_NEW_OBJECT_API)
-        obj1.free();
-#endif
+        _POPPLER_FREE(obj1);
     }
     
     // display a mask
@@ -2933,37 +2689,21 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
             goto err1;
         }
         invert = gFalse;
-#if defined(POPPLER_NEW_OBJECT_API)
-        obj1 = dict->lookup(const_cast<char*>("Decode"));
-#else
-        dict->lookup(const_cast<char*>("Decode"), &obj1);
-#endif
+        _POPPLER_CALL_ARGS(obj1, dict->lookup, "Decode");
         if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = dict->lookup(const_cast<char*>("D"));
-#else
-            obj1.free();
-            dict->lookup(const_cast<char*>("D"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, dict->lookup, "D");
         }
         if (obj1.isArray()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj2 = obj1.arrayGet(0);
-#else
-            obj1.arrayGet(0, &obj2);
-#endif
+            _POPPLER_CALL_ARGS(obj2, obj1.arrayGet, 0);
             if (obj2.isInt() && obj2.getInt() == 1) {
                 invert = gTrue;
             }
-#if !defined(POPPLER_NEW_OBJECT_API)
-            obj2.free();
-#endif
+            _POPPLER_FREE(obj2);
         } else if (!obj1.isNull()) {
             goto err2;
         }
-#if !defined(POPPLER_NEW_OBJECT_API)
-        obj1.free();
-#endif
+        _POPPLER_FREE(obj1);
         
         // draw it
         builder->addImageMask(state, str, width, height, invert, interpolate);
@@ -2971,36 +2711,18 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
     } else {
         // get color space and color map
         GfxColorSpace *colorSpace;
-#if defined(POPPLER_NEW_OBJECT_API)
-        obj1 = dict->lookup(const_cast<char*>("ColorSpace"));
-#else
-        dict->lookup(const_cast<char*>("ColorSpace"), &obj1);
-#endif
+        _POPPLER_CALL_ARGS(obj1, dict->lookup, "ColorSpace");
         if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = dict->lookup(const_cast<char*>("CS"));
-#else
-            obj1.free();
-            dict->lookup(const_cast<char*>("CS"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, dict->lookup, "CS");
         }
         if (obj1.isName()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj2 = res->lookupColorSpace(obj1.getName());
-#else
-            res->lookupColorSpace(obj1.getName(), &obj2);
-#endif
+            _POPPLER_CALL_ARGS(obj2, res->lookupColorSpace, obj1.getName());
             if (!obj2.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
+	            _POPPLER_FREE(obj1);
                     obj1 = std::move(obj2);
-#else
-	            obj1.free();
-	            obj1 = obj2;
-#endif
             } else {
-#if !defined(POPPLER_NEW_OBJECT_API)
-	            obj2.free();
-#endif
+	            _POPPLER_FREE(obj2);
             }
         }
         if (!obj1.isNull()) {
@@ -3020,29 +2742,17 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
         } else {
             colorSpace = nullptr;
         }
-#if !defined(POPPLER_NEW_OBJECT_API)
-        obj1.free();
-#endif
+        _POPPLER_FREE(obj1);
         if (!colorSpace) {
             goto err1;
         }
-#if defined(POPPLER_NEW_OBJECT_API)
-        obj1 = dict->lookup(const_cast<char*>("Decode"));
-#else
-        dict->lookup(const_cast<char*>("Decode"), &obj1);
-#endif
+        _POPPLER_CALL_ARGS(obj1, dict->lookup, "Decode");
         if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = dict->lookup(const_cast<char*>("D"));
-#else
-            obj1.free();
-            dict->lookup(const_cast<char*>("D"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, dict->lookup, "D");
         }
         GfxImageColorMap *colorMap = new GfxImageColorMap(bits, &obj1, colorSpace);
-#if !defined(POPPLER_NEW_OBJECT_API)
-        obj1.free();
-#endif
+        _POPPLER_FREE(obj1);
         if (!colorMap->isOk()) {
             delete colorMap;
             goto err1;
@@ -3056,13 +2766,8 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
         int maskHeight = 0;
         maskInvert = gFalse;
         GfxImageColorMap *maskColorMap = nullptr;
-#if defined(POPPLER_NEW_OBJECT_API)
-        maskObj = dict->lookup(const_cast<char*>("Mask"));
-        smaskObj = dict->lookup(const_cast<char*>("SMask"));
-#else
-        dict->lookup(const_cast<char*>("Mask"), &maskObj);
-        dict->lookup(const_cast<char*>("SMask"), &smaskObj);
-#endif
+        _POPPLER_CALL_ARGS(maskObj, dict->lookup, "Mask");
+        _POPPLER_CALL_ARGS(smaskObj, dict->lookup, "SMask");
         Dict* maskDict;
         if (smaskObj.isStream()) {
             // soft mask
@@ -3071,108 +2776,58 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
             }
             maskStr = smaskObj.getStream();
             maskDict = smaskObj.streamGetDict();
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("Width"));
-#else
-            maskDict->lookup(const_cast<char*>("Width"), &obj1);
-#endif
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Width");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-	            obj1 = maskDict->lookup(const_cast<char*>("W"));
-#else
-        	    obj1.free();
-	            maskDict->lookup(const_cast<char*>("W"), &obj1);
-#endif
+                    _POPPLER_FREE(obj1);
+	            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "W");
             }
             if (!obj1.isInt()) {
 	            goto err2;
             }
             maskWidth = obj1.getInt();
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("Height"));
-#else
-            obj1.free();
-            maskDict->lookup(const_cast<char*>("Height"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Height");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                    obj1 = maskDict->lookup(const_cast<char*>("H"));
-#else
-	            obj1.free();
-	            maskDict->lookup(const_cast<char*>("H"), &obj1);
-#endif
+	            _POPPLER_FREE(obj1);
+                    _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "H");
             }
             if (!obj1.isInt()) {
 	            goto err2;
             }
             maskHeight = obj1.getInt();
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("BitsPerComponent"));
-#else
-            obj1.free();
-            maskDict->lookup(const_cast<char*>("BitsPerComponent"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "BitsPerComponent");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                    obj1 = maskDict->lookup(const_cast<char*>("BPC"));
-#else
-        	    obj1.free();
-	            maskDict->lookup(const_cast<char*>("BPC"), &obj1);
-#endif
+                    _POPPLER_FREE(obj1);
+                    _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "BPC");
             }
             if (!obj1.isInt()) {
 	            goto err2;
             }
             int maskBits = obj1.getInt();
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("Interpolate"));
-#else
-            obj1.free();
-	    maskDict->lookup("Interpolate", &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Interpolate");
 	    if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-              obj1 = maskDict->lookup(const_cast<char*>("I"));
-#else
-	      obj1.free();
-	      maskDict->lookup("I", &obj1);
-#endif
+	      _POPPLER_FREE(obj1);
+              _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "I");
 	    }
 	    if (obj1.isBool())
 	      maskInterpolate = obj1.getBool();
 	    else
 	      maskInterpolate = gFalse;
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("ColorSpace"));
-#else
-	    obj1.free();
-            maskDict->lookup(const_cast<char*>("ColorSpace"), &obj1);
-#endif
+	    _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "ColorSpace");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                    obj1 = maskDict->lookup(const_cast<char*>("CS"));
-#else
-	            obj1.free();
-	            maskDict->lookup(const_cast<char*>("CS"), &obj1);
-#endif
+	            _POPPLER_FREE(obj1);
+                    _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "CS");
             }
             if (obj1.isName()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-	            obj2 = res->lookupColorSpace(obj1.getName());
-#else
-	            res->lookupColorSpace(obj1.getName(), &obj2);
-#endif
+	            _POPPLER_CALL_ARGS(obj2, res->lookupColorSpace, obj1.getName());
 	            if (!obj2.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
+	                _POPPLER_FREE(obj1);
                         obj1 = std::move(obj2);
-#else
-	                obj1.free();
-    	            obj1 = obj2;
-#endif
 	            } else {
-#if !defined(POPPLER_NEW_OBJECT_API)
-	                obj2.free();
-#endif
+	                _POPPLER_FREE(obj2);
 	            }
             }
 #if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
@@ -3182,29 +2837,17 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
 #else
             GfxColorSpace *maskColorSpace = GfxColorSpace::parse(&obj1, NULL);
 #endif
-#if !defined(POPPLER_NEW_OBJECT_API)
-            obj1.free();
-#endif
+            _POPPLER_FREE(obj1);
             if (!maskColorSpace || maskColorSpace->getMode() != csDeviceGray) {
                 goto err1;
             }
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("Decode"));
-#else
-            maskDict->lookup(const_cast<char*>("Decode"), &obj1);
-#endif
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Decode");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                obj1 = maskDict->lookup(const_cast<char*>("D"));
-#else
-	            obj1.free();
-    	        maskDict->lookup(const_cast<char*>("D"), &obj1);
-#endif
+                _POPPLER_FREE(obj1);
+                _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "D");
             }
             maskColorMap = new GfxImageColorMap(maskBits, &obj1, maskColorSpace);
-#if !defined(POPPLER_NEW_OBJECT_API)
-            obj1.free();
-#endif
+            _POPPLER_FREE(obj1);
             if (!maskColorMap->isOk()) {
                 delete maskColorMap;
                 goto err1;
@@ -3215,15 +2858,9 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
             // color key mask
             int i;
             for (i = 0; i < maskObj.arrayGetLength() && i < 2*gfxColorMaxComps; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                obj1 = maskObj.arrayGet(i);
-#else
-                maskObj.arrayGet(i, &obj1);
-#endif
+                _POPPLER_CALL_ARGS(obj1, maskObj.arrayGet, i);
                 maskColors[i] = obj1.getInt();
-#if !defined(POPPLER_NEW_OBJECT_API)
-                obj1.free();
-#endif
+                _POPPLER_FREE(obj1);
             }
               haveColorKeyMask = gTrue;
         } else if (maskObj.isStream()) {
@@ -3233,111 +2870,61 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
             }
             maskStr = maskObj.getStream();
             maskDict = maskObj.streamGetDict();
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("Width"));
-#else
-            maskDict->lookup(const_cast<char*>("Width"), &obj1);
-#endif
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Width");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                obj1 = maskDict->lookup(const_cast<char*>("W"));
-#else
-                obj1.free();
-                maskDict->lookup(const_cast<char*>("W"), &obj1);
-#endif
+                _POPPLER_FREE(obj1);
+                _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "W");
             }
             if (!obj1.isInt()) {
                 goto err2;
             }
             maskWidth = obj1.getInt();
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("Height"));
-#else
-            obj1.free();
-            maskDict->lookup(const_cast<char*>("Height"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Height");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                obj1 = maskDict->lookup(const_cast<char*>("H"));
-#else
-                obj1.free();
-                maskDict->lookup(const_cast<char*>("H"), &obj1);
-#endif
+                _POPPLER_FREE(obj1);
+                _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "H");
             }
             if (!obj1.isInt()) {
                 goto err2;
             }
             maskHeight = obj1.getInt();
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("ImageMask"));
-#else
-            obj1.free();
-            maskDict->lookup(const_cast<char*>("ImageMask"), &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "ImageMask");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                obj1 = maskDict->lookup(const_cast<char*>("IM"));
-#else
-                obj1.free();
-                maskDict->lookup(const_cast<char*>("IM"), &obj1);
-#endif
+                _POPPLER_FREE(obj1);
+                _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "IM");
             }
             if (!obj1.isBool() || !obj1.getBool()) {
                 goto err2;
             }
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup("Interpolate");
-#else
-            obj1.free();
-	    maskDict->lookup("Interpolate", &obj1);
-#endif
+            _POPPLER_FREE(obj1);
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Interpolate");
 	    if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-	      obj1 = maskDict->lookup("I");
-#else
-	      obj1.free();
-	      maskDict->lookup("I", &obj1);
-#endif
+	      _POPPLER_FREE(obj1);
+	      _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "I");
 	    }
 	    if (obj1.isBool())
 	      maskInterpolate = obj1.getBool();
 	    else
 	      maskInterpolate = gFalse;
-#if !defined(POPPLER_NEW_OBJECT_API)
-	    obj1.free();
-#endif
+	    _POPPLER_FREE(obj1);
             maskInvert = gFalse;
-#if defined(POPPLER_NEW_OBJECT_API)
-            obj1 = maskDict->lookup(const_cast<char*>("Decode"));
-#else
-            maskDict->lookup(const_cast<char*>("Decode"), &obj1);
-#endif
+            _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "Decode");
             if (obj1.isNull()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                obj1 = maskDict->lookup(const_cast<char*>("D"));
-#else
-                obj1.free();
-                maskDict->lookup(const_cast<char*>("D"), &obj1);
-#endif
+                _POPPLER_FREE(obj1);
+                _POPPLER_CALL_ARGS(obj1, maskDict->lookup, "D");
             }
             if (obj1.isArray()) {
-#if defined(POPPLER_NEW_OBJECT_API)
-                obj2 = obj1.arrayGet(0);
-#else
-                obj1.arrayGet(0, &obj2);
-#endif
+                _POPPLER_CALL_ARGS(obj2, obj1.arrayGet, 0);
                 if (obj2.isInt() && obj2.getInt() == 1) {
                     maskInvert = gTrue;
                 }
-#if !defined(POPPLER_NEW_OBJECT_API)
-                obj2.free();
-#endif
+                _POPPLER_FREE(obj2);
             } else if (!obj1.isNull()) {
                 goto err2;
             }
-#if !defined(POPPLER_NEW_OBJECT_API)
-            obj1.free();
-#endif
+            _POPPLER_FREE(obj1);
             haveExplicitMask = gTrue;
         }
         
@@ -3355,18 +2942,14 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
         }
         delete colorMap;
         
-#if !defined(POPPLER_NEW_OBJECT_API)
-        maskObj.free();
-        smaskObj.free();
-#endif
+        _POPPLER_FREE(maskObj);
+        _POPPLER_FREE(smaskObj);
     }
 
     return;
 
  err2:
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj1.free();
-#endif
+    _POPPLER_FREE(obj1);
  err1:
     error(errSyntaxError, getPos(), "Bad image parameters");
 }
@@ -3391,97 +2974,52 @@ void PdfParser::doForm(Object *str) {
   dict = str->streamGetDict();
 
   // check form type
-#if defined(POPPLER_NEW_OBJECT_API)
-  obj1 = dict->lookup(const_cast<char*>("FormType"));
-#else
-  dict->lookup(const_cast<char*>("FormType"), &obj1);
-#endif
+  _POPPLER_CALL_ARGS(obj1, dict->lookup, "FormType");
   if (!(obj1.isNull() || (obj1.isInt() && obj1.getInt() == 1))) {
     error(errSyntaxError, getPos(), "Unknown form type");
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj1);
 
   // get bounding box
-#if defined(POPPLER_NEW_OBJECT_API)
-  bboxObj = dict->lookup(const_cast<char*>("BBox"));
-#else
-  dict->lookup(const_cast<char*>("BBox"), &bboxObj);
-#endif
+  _POPPLER_CALL_ARGS(bboxObj, dict->lookup, "BBox");
   if (!bboxObj.isArray()) {
-#if !defined(POPPLER_NEW_OBJECT_API)
-    bboxObj.free();
-#endif
+    _POPPLER_FREE(bboxObj);
     error(errSyntaxError, getPos(), "Bad form bounding box");
     return;
   }
   for (i = 0; i < 4; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-    obj1 = bboxObj.arrayGet(i);
-#else
-    bboxObj.arrayGet(i, &obj1);
-#endif
+    _POPPLER_CALL_ARGS(obj1, bboxObj.arrayGet, i);
     bbox[i] = obj1.getNum();
-#if defined(POPPLER_NEW_OBJECT_API)
+    _POPPLER_FREE(obj1);
   }
-#else
-    obj1.free();
-  }
-  bboxObj.free();
-#endif
+  _POPPLER_FREE(bboxObj);
 
   // get matrix
-#if defined(POPPLER_NEW_OBJECT_API)
-  matrixObj = dict->lookup(const_cast<char*>("Matrix"));
-#else
-  dict->lookup(const_cast<char*>("Matrix"), &matrixObj);
-#endif
+  _POPPLER_CALL_ARGS(matrixObj, dict->lookup, "Matrix");
   if (matrixObj.isArray()) {
     for (i = 0; i < 6; ++i) {
-#if defined(POPPLER_NEW_OBJECT_API)
-      obj1 = matrixObj.arrayGet(i);
-#else
-      matrixObj.arrayGet(i, &obj1);
-#endif
+      _POPPLER_CALL_ARGS(obj1, matrixObj.arrayGet, i);
       m[i] = obj1.getNum();
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj1.free();
-#endif
+      _POPPLER_FREE(obj1);
     }
   } else {
     m[0] = 1; m[1] = 0;
     m[2] = 0; m[3] = 1;
     m[4] = 0; m[5] = 0;
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  matrixObj.free();
-#endif
+  _POPPLER_FREE(matrixObj);
 
   // get resources
-#if defined(POPPLER_NEW_OBJECT_API)
-  resObj = dict->lookup(const_cast<char*>("Resources"));
-#else
-  dict->lookup(const_cast<char*>("Resources"), &resObj);
-#endif
+  _POPPLER_CALL_ARGS(resObj, dict->lookup, "Resources");
   resDict = resObj.isDict() ? resObj.getDict() : (Dict *)nullptr;
 
   // check for a transparency group
   transpGroup = isolated = knockout = gFalse;
   blendingColorSpace = nullptr;
-#if defined(POPPLER_NEW_OBJECT_API)
-  if ((obj1 = dict->lookup(const_cast<char*>("Group"))).isDict()) {
-    if ((obj2 = obj1.dictLookup(const_cast<char*>("S"))).isName(const_cast<char*>("Transparency"))) {
-#else
-  if (dict->lookup(const_cast<char*>("Group"), &obj1)->isDict()) {
-    if (obj1.dictLookup(const_cast<char*>("S"), &obj2)->isName(const_cast<char*>("Transparency"))) {
-#endif
+  if (_POPPLER_CALL_ARGS_DEREF(obj1, dict->lookup, "Group").isDict()) {
+    if (_POPPLER_CALL_ARGS_DEREF(obj2, obj1.dictLookup, "S").isName("Transparency")) {
       transpGroup = gTrue;
-#if defined(POPPLER_NEW_OBJECT_API)
-      if (!((obj3 = obj1.dictLookup(const_cast<char*>("CS"))).isNull())) {
-#else
-      if (!obj1.dictLookup(const_cast<char*>("CS"), &obj3)->isNull()) {
-#endif
+      if (!_POPPLER_CALL_ARGS_DEREF(obj3, obj1.dictLookup, "CS").isNull()) {
 #if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
 	blendingColorSpace = GfxColorSpace::parse(nullptr, &obj3, nullptr, nullptr);
 #elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
@@ -3490,32 +3028,19 @@ void PdfParser::doForm(Object *str) {
 	blendingColorSpace = GfxColorSpace::parse(&obj3, NULL);
 #endif
       }
-#if defined(POPPLER_NEW_OBJECT_API)
-      if ((obj3 = obj1.dictLookup(const_cast<char*>("I"))).isBool()) {
-#else
-      obj3.free();
-      if (obj1.dictLookup(const_cast<char*>("I"), &obj3)->isBool()) {
-#endif
+      _POPPLER_FREE(obj3);
+      if (_POPPLER_CALL_ARGS_DEREF(obj3, obj1.dictLookup, "I").isBool()) {
 	isolated = obj3.getBool();
       }
-#if defined(POPPLER_NEW_OBJECT_API)
-      if ((obj3 = obj1.dictLookup(const_cast<char*>("K"))).isBool()) {
-#else
-      obj3.free();
-      if (obj1.dictLookup(const_cast<char*>("K"), &obj3)->isBool()) {
-#endif
+      _POPPLER_FREE(obj3);
+      if (_POPPLER_CALL_ARGS_DEREF(obj3, obj1.dictLookup, "K").isBool()) {
 	knockout = obj3.getBool();
       }
-#if defined(POPPLER_NEW_OBJECT_API)
+      _POPPLER_FREE(obj3);
     }
+    _POPPLER_FREE(obj2);
   }
-#else
-      obj3.free();
-    }
-    obj2.free();
-  }
-  obj1.free();
-#endif
+  _POPPLER_FREE(obj1);
 
   // draw it
   ++formDepth;
@@ -3526,9 +3051,7 @@ void PdfParser::doForm(Object *str) {
   if (blendingColorSpace) {
     delete blendingColorSpace;
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  resObj.free();
-#endif
+  _POPPLER_FREE(resObj);
 }
 
 void PdfParser::doForm1(Object *str, Dict *resDict, double *matrix, double *bbox,
@@ -3652,56 +3175,39 @@ void PdfParser::opBeginImage(Object /*args*/[], int /*numArgs*/)
 Stream *PdfParser::buildImageStream() {
   Object dict;
   Object obj;
-  char *key;
   Stream *str;
 
   // build dictionary
 #if defined(POPPLER_NEW_OBJECT_API)
   dict = Object(new Dict(xref));
-  obj = parser->getObj();
 #else
   dict.initDict(xref);
-  parser->getObj(&obj);
 #endif
+  _POPPLER_CALL(obj, parser->getObj);
   while (!obj.isCmd(const_cast<char*>("ID")) && !obj.isEOF()) {
     if (!obj.isName()) {
       error(errSyntaxError, getPos(), "Inline image dictionary key must be a name object");
-#if !defined(POPPLER_NEW_OBJECT_API)
-      obj.free();
-#endif
+      _POPPLER_FREE(obj);
     } else {
-      key = copyString(obj.getName());
-#if defined(POPPLER_NEW_OBJECT_API)
-      obj = parser->getObj();
-#else
-      obj.free();
-      parser->getObj(&obj);
-#endif
-      if (obj.isEOF() || obj.isError()) {
-	gfree(key);
+      Object obj2;
+      _POPPLER_CALL(obj2, parser->getObj);
+      if (obj2.isEOF() || obj2.isError()) {
+        _POPPLER_FREE(obj);
 	break;
       }
-#if defined(POPPLER_NEW_OBJECT_API)
-      dict.dictAdd(key, std::move(obj));
+      _POPPLER_DICTADD(dict, obj.getName(), obj2);
+      _POPPLER_FREE(obj);
+      _POPPLER_FREE(obj2);
     }
-    obj = parser->getObj();
-#else
-      dict.dictAdd(key, &obj);
-    }
-    parser->getObj(&obj);
-#endif
+    _POPPLER_CALL(obj, parser->getObj);
   }
   if (obj.isEOF()) {
     error(errSyntaxError, getPos(), "End of file in inline image");
-#if !defined(POPPLER_NEW_OBJECT_API)
-    obj.free();
-    dict.free();
-#endif
+    _POPPLER_FREE(obj);
+    _POPPLER_FREE(dict);
     return nullptr;
   }
-#if !defined(POPPLER_NEW_OBJECT_API)
-  obj.free();
-#endif
+  _POPPLER_FREE(obj);
 
   // make stream
 #if defined(POPPLER_NEW_OBJECT_API)

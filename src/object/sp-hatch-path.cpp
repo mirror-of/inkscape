@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * SVG <hatchPath> implementation
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2014 Tomasz Boczkowski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <string>
@@ -24,7 +25,6 @@
 #include "display/drawing-shape.h"
 #include "helper/geom.h"
 #include "attributes.h"
-#include "document-private.h"
 #include "sp-item.h"
 #include "sp-hatch-path.h"
 #include "svg/css-ostringstream.h"
@@ -79,7 +79,7 @@ void SPHatchPath::release()
     SPObject::release();
 }
 
-void SPHatchPath::set(unsigned int key, const gchar* value)
+void SPHatchPath::set(SPAttributeEnum key, const gchar* value)
 {
     switch (key) {
     case SP_ATTR_D:
@@ -106,7 +106,7 @@ void SPHatchPath::set(unsigned int key, const gchar* value)
 
     default:
         if (SP_ATTRIBUTE_IS_CSS(key)) {
-            style->readFromObject( this );
+            style->clear(key);
             requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         } else {
             SPObject::set(key, value);

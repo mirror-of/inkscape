@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SPObject implementation.
  *
@@ -12,7 +13,7 @@
  * Copyright (C) 1999-2016 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -604,7 +605,7 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 
     SPObject* ochild = SPFactory::createObject(type_string);
     if (ochild == nullptr) {
-        // Currenty, there are many node types that do not have
+        // Currently, there are many node types that do not have
         // corresponding classes in the SPObject tree.
         // (rdf:RDF, inkscape:clipboard, ...)
         // Thus, simply ignore this case for now.
@@ -673,7 +674,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
         SPObject* child = SPFactory::createObject(typeString);
         if (child == nullptr) {
-            // Currenty, there are many node types that do not have
+            // Currently, there are many node types that do not have
             // corresponding classes in the SPObject tree.
             // (rdf:RDF, inkscape:clipboard, ...)
             // Thus, simply ignore this case for now.
@@ -879,7 +880,7 @@ void SPObject::repr_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML:
     object->order_changed(child, old, newer);
 }
 
-void SPObject::set(unsigned int key, gchar const* value) {
+void SPObject::set(SPAttributeEnum key, gchar const* value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;
@@ -975,7 +976,7 @@ void SPObject::set(unsigned int key, gchar const* value) {
 #endif
 }
 
-void SPObject::setKeyValue(unsigned int key, gchar const *value)
+void SPObject::setKeyValue(SPAttributeEnum key, gchar const *value)
 {
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
@@ -992,7 +993,7 @@ void SPObject::readAttr(gchar const *key)
     //XML Tree being used here.
     g_assert(this->getRepr() != nullptr);
 
-    unsigned int keyid = sp_attribute_lookup(key);
+    auto keyid = sp_attribute_lookup(key);
     if (keyid != SP_ATTR_INVALID) {
         /* Retrieve the 'key' attribute from the object's XML representation */
         gchar const *value = getRepr()->attribute(key);
@@ -1097,21 +1098,6 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             }
             g_warning("Item's style is NULL; repr style attribute is %s", style_str);
         }
-
-        /** \note We treat this->style as authoritative.  Its effects have
-         * been written to the style attribute above; any properties that are
-         * unset we take to be deliberately unset (e.g. so that clones can
-         * override the property).
-         *
-         * Note that the below has an undesirable consequence of changing the
-         * appearance on renderers that lack CSS support (e.g. SVG tiny);
-         * possibly we should write property attributes instead of a style
-         * attribute.
-         */
-        // With the changes to preserves style source this is no longer needed
-        // and the above comment no longer applies. I leave it here until these
-        // change are well tested.
-        // sp_style_unset_property_attrs (this);
     }
 
 #ifdef OBJECT_TRACE
@@ -1185,7 +1171,10 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
 {
     g_return_if_fail( this->document != nullptr );
 
-    if (update_in_progress) {
+    // update_in_progress is a global variable. It can be come greater than one when reading in a second
+    // document (as in creating the broken image bitmap). It is still an important warning so we don't
+    // remove it entirely. We probably shouldn't be calling requestDisplayUpdate in the set() methods.
+    if (update_in_progress > 2) {
         g_print("WARNING: Requested update while update in progress, counter = %d\n", update_in_progress);
     }
 
@@ -1200,17 +1189,20 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
 #endif
 
     bool already_propagated = (!(this->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
-
-    this->uflags |= flags;
-    
+    //https://stackoverflow.com/a/7841333
+    if ((this->uflags & flags) !=  flags ) {
+        this->uflags |= flags;
+    }
     /* If requestModified has already been called on this object or one of its children, then we
      * don't need to set CHILD_MODIFIED on our ancestors because it's already been done.
      */
     if (already_propagated) {
-        if (parent) {
-            parent->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
-        } else {
-            document->requestModified();
+        if(this->document) {
+            if (parent) {
+                parent->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
+            } else {
+                this->document->requestModified();
+            }
         }
     }
 
@@ -1440,55 +1432,6 @@ sp_object_get_unique_id(SPObject    *object,
         g_snprintf(count_buf, count_buflen, "%lu", count);
     } while ( object->document->getObjectById(buf) != nullptr );
     return buf;
-}
-
-// Style
-
-gchar const * SPObject::getStyleProperty(gchar const *key, gchar const *def) const
-{
-    //g_return_val_if_fail(object != NULL, NULL);
-    //g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
-    g_return_val_if_fail(key != nullptr, NULL);
-
-    //XML Tree being used here.
-    gchar const *style = getRepr()->attribute("style");
-    if (style) {
-        size_t const len = strlen(key);
-        char const *p;
-        while ( (p = strstr(style, key))
-                != nullptr )
-        {
-            p += len;
-            while ((*p <= ' ') && *p) {
-                p++;
-            }
-            if (*p++ != ':') {
-                break;
-            }
-            while ((*p <= ' ') && *p) {
-                p++;
-            }
-            size_t const inherit_len = sizeof("inherit") - 1;
-            if (*p
-                && !(strneq(p, "inherit", inherit_len)
-                     && (p[inherit_len] == '\0'
-                         || p[inherit_len] == ';'
-                         || g_ascii_isspace(p[inherit_len])))) {
-                return p;
-            }
-        }
-    }
-
-    //XML Tree being used here.
-    gchar const *val = getRepr()->attribute(key);
-    if (val && !streq(val, "inherit")) {
-        return val;
-    }
-    if (this->parent) {
-        return (this->parent)->getStyleProperty(key, def);
-    }
-
-    return def;
 }
 
 void SPObject::_requireSVGVersion(Inkscape::Version version) {

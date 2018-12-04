@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_MARKER_H
 #define SEEN_SP_MARKER_H
 
@@ -10,7 +11,7 @@
  * Copyright (C) 1999-2003 Lauris Kaplinski
  * Copyright (C) 2008      Johan Engelen
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 /*
  * This is quite similar in logic to <svg>
@@ -73,7 +74,7 @@ public:
 
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
 	void release() override;
-	void set(unsigned int key, gchar const* value) override;
+	void set(SPAttributeEnum key, gchar const* value) override;
 	void update(SPCtx *ctx, guint flags) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) override;
 

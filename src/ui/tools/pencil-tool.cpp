@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Pencil event context implementation.
  */
@@ -13,7 +14,7 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2004 Monash University
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gdk/gdkkeysyms.h>
@@ -177,7 +178,7 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
     if ( bevent.button == 1  && !this->space_panning) {
         Inkscape::Selection *selection = desktop->getSelection();
 
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return true;
         }
 

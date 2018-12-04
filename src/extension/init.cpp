@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is what gets executed to initialize all of the modules.  For
  * the internal modules this involves executing their initialization
@@ -9,11 +10,11 @@
  *
  * Copyright (C) 2002-2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifdef HAVE_POPPLER
@@ -65,7 +66,7 @@
 #include "dbus/dbus-init.h"
 #endif
 
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
 #include <Magick++.h>
 #include "internal/bitmap/adaptiveThreshold.h"
 #include "internal/bitmap/addNoise.h"
@@ -102,7 +103,7 @@
 //#include "internal/bitmap/threshold.h"
 #include "internal/bitmap/unsharpmask.h"
 #include "internal/bitmap/wave.h"
-#endif /* WITH_IMAGE_MAGICK */
+#endif /* WITH_MAGICK */
 
 #include "internal/filter/filter.h"
 
@@ -191,7 +192,7 @@ init()
 #endif
 
     /* Raster Effects */
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
     Magick::InitializeMagick(NULL);
 
     Internal::Bitmap::AdaptiveThreshold::init();
@@ -229,7 +230,7 @@ init()
     //Internal::Bitmap::Threshold::init();
     Internal::Bitmap::Unsharpmask::init();
     Internal::Bitmap::Wave::init();
-#endif /* WITH_IMAGE_MAGICK */
+#endif /* WITH_MAGICK */
 
     Internal::Filter::Filter::filters_all();
 

@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  * Copyright (C) Jabiertxo Arraiza Cenoz 2014 <j.b.c.engelen@utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/widget/registered-widget.h"
@@ -11,13 +12,13 @@
 #include <utility>
 
 #include "helper-fns.h"
-#include "helper/icon-loader.h"
 #include "inkscape.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/togglebutton.h"
 #include "selection.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
+#include "ui/icon-loader.h"
 #include "verbs.h"
 
 namespace Inkscape {
@@ -112,9 +113,9 @@ ToggleButtonParam::param_newWidget()
         gtk_widget_show(box_button);
         GtkWidget *icon_button = nullptr;
         if (!value) {
-            icon_button = GTK_WIDGET(sp_get_icon_image(_icon_inactive, _icon_size));
+            icon_button = sp_get_icon_image(_icon_inactive, _icon_size);
         } else {
-            icon_button = GTK_WIDGET(sp_get_icon_image(_icon_active, _icon_size));
+            icon_button = sp_get_icon_image(_icon_active, _icon_size);
         }
         gtk_widget_show(icon_button);
         gtk_box_pack_start (GTK_BOX(box_button), icon_button, false, false, 1);
@@ -160,13 +161,12 @@ ToggleButtonParam::refresh_button()
     }
     if ( _icon_active ) {
         GdkPixbuf * icon_pixbuf = nullptr;
-        Gtk::Image *im = dynamic_cast<Gtk::Image*>(children[0]);
-        Gtk::IconSize is(_icon_size);
+        Gtk::Widget *im = dynamic_cast<Gtk::Image *>(children[0]);
         if (!im) return;
         if (!value) {
-            im = sp_get_icon_image(_icon_inactive, is);
+            im = Glib::wrap(sp_get_icon_image(_icon_inactive, _icon_size));
         } else {
-            im = sp_get_icon_image(_icon_active, is);
+            im = Glib::wrap(sp_get_icon_image(_icon_active, _icon_size));
         }
     }
 }

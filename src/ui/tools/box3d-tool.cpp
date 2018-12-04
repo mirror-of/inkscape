@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * 3D box drawing context
  *
@@ -12,7 +13,7 @@
  * Copyright (C) 2000-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gdk/gdkkeysyms.h>
@@ -22,10 +23,8 @@
 #include "context-fns.h"
 #include "desktop-style.h"
 #include "desktop.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
 #include "message-context.h"
 #include "perspective-line.h"
 #include "selection-chemistry.h"
@@ -34,6 +33,8 @@
 
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas.h"
+
+#include "include/macros.h"
 
 #include "ui/pixmaps/cursor-3dbox.xpm"
 
@@ -495,7 +496,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
 
 void Box3dTool::drag(guint /*state*/) {
     if (!this->box3d) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

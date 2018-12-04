@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is file is kind of the junk file.  Basically everything that
  * didn't fit in one of the other well defined areas, well, it's now
@@ -13,12 +14,8 @@
  * Copyright (C) 2006-2007 Johan Engelen
  * Copyright (C) 2002-2004 Ted Gould
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "ui/interface.h"
 
@@ -98,12 +95,16 @@ SPDocument *open(Extension *key, gchar const *filename)
     if (strlen(imod->get_id()) > 21) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool ask = prefs->getBool("/dialogs/import/ask");
+        bool ask_svg = prefs->getBool("/dialogs/import/ask_svg");
         Glib::ustring id = Glib::ustring(imod->get_id(), 22);
-        if (id.compare( "org.inkscape.input.svg") == 0 &&
-           (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") != 0 || !ask)) 
-        {
-            show = false;
-            imod->set_gui(false);
+        if (id.compare("org.inkscape.input.svg") == 0) {
+            if (ask_svg && prefs->getBool("/options/onimport", false)) {
+                show = true;
+                imod->set_gui(true);
+            } else {
+                show = false;
+                imod->set_gui(false);
+            }
         } else if(strlen(imod->get_id()) > 27) {
             id = Glib::ustring(imod->get_id(), 28);
             if (!ask && id.compare( "org.inkscape.input.gdkpixbuf") == 0) {

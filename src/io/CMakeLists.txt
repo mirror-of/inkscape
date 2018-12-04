@@ -1,29 +1,44 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 set(io_SRC
-	base64stream.cpp
-	bufferstream.cpp
-	gzipstream.cpp
-	inkscapestream.cpp
-	resource.cpp
-	stringstream.cpp
-	sys.cpp
-	http.cpp
-	uristream.cpp
-	xsltstream.cpp
+  dir-util.cpp
+  file.cpp
+  file-export-cmd.cpp
+  resource.cpp
+  resource-manager.cpp
+  stream/bufferstream.cpp
+  stream/gzipstream.cpp
+  stream/inkscapestream.cpp
+  stream/stringstream.cpp
+  stream/uristream.cpp
+  stream/xsltstream.cpp
+  sys.cpp
+  http.cpp
 
-	# -------
-	# Headers
-	base64stream.h
-	bufferstream.h
-	gzipstream.h
-	inkscapestream.h
-	resource.h
-	stringstream.h
-	sys.h
-	http.h
-	uristream.h
-	xsltstream.h
+  # -------
+  # Headers
+  dir-util.h
+  file.h
+  file-export-cmd.h
+  resource.h
+  resource-manager.h
+  stream/bufferstream.h
+  stream/gzipstream.h
+  stream/inkscapestream.h
+  stream/stringstream.h
+  stream/uristream.h
+  stream/xsltstream.h
+  sys.h
+  http.h
 )
+
+if(WIN32)
+  # Sources for the inkscape executable on Windows.
+  list(APPEND io_SRC
+    registrytool.h
+    registrytool.cpp
+  )
+endif()
 
 # add_inkscape_lib(io_LIB "${io_SRC}")
 add_inkscape_source("${io_SRC}")

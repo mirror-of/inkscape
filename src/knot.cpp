@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SPKnot implementation
  *
@@ -9,7 +10,7 @@
  * Copyright (C) 1999-2005 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -81,8 +82,8 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
 
     this->fill[SP_KNOT_STATE_NORMAL] = 0xffffff00;
     this->fill[SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
-    this->fill[SP_KNOT_STATE_DRAGGING] = 0x0000ffff;
-    this->fill[SP_KNOT_STATE_SELECTED] = 0xff0000ff;
+    this->fill[SP_KNOT_STATE_DRAGGING] = 0xff0000ff;
+    this->fill[SP_KNOT_STATE_SELECTED] = 0x0000ffff;
 
     this->stroke[SP_KNOT_STATE_NORMAL] = 0x01000000;
     this->stroke[SP_KNOT_STATE_MOUSEOVER] = 0x01000000;

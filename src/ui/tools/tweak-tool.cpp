@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * tweaking paths without node editing
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <numeric>
@@ -28,7 +29,7 @@
 #include "filter-chemistry.h"
 #include "gradient-chemistry.h"
 #include "inkscape.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "selection.h"
@@ -397,7 +398,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (a->contains(p)) x = 0;
                 if (x < 1) {
                     Geom::Point move = force * 0.5 * (cos(M_PI * x) + 1) * vector;
-                    sp_item_move_rel(item, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                    sp_item_move_rel(item, Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
                     did = true;
                 }
             }
@@ -411,7 +412,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (x < 1) {
                     Geom::Point move = force * 0.5 * (cos(M_PI * x) + 1) * 
                         (reverse? (a->midpoint() - p) : (p - a->midpoint()));
-                    sp_item_move_rel(item, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                    sp_item_move_rel(item, Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
                     did = true;
                 }
             }
@@ -426,7 +427,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (a->contains(p)) x = 0;
                 if (x < 1) {
                     Geom::Point move = force * 0.5 * (cos(M_PI * x) + 1) * Geom::Point(cos(dp)*dr, sin(dp)*dr);
-                    sp_item_move_rel(item, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                    sp_item_move_rel(item, Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
                     did = true;
                 }
             }
@@ -452,6 +453,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (a->contains(p)) x = 0;
                 if (x < 1) {
                     double angle = (reverse? force : -force) * 0.05 * (cos(M_PI * x) + 1) * M_PI;
+                    angle *= -selection->desktop()->yaxisdir();
                     sp_item_rotate_rel(item, Geom::Rotate(angle));
                     did = true;
                 }
@@ -836,10 +838,10 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                     // so it only affects the ends of this interstop;
                     // distribute the force between the two endstops so that they
                     // get all the painting even if they are not touched by the brush
-                    tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                    tweak_color (mode, stop->getColor().v.c, rgb_goal,
                                  force * (pos_e - offset_l) / (offset_h - offset_l),
                                  do_h, do_s, do_l);
-                    tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
+                    tweak_color(mode, prevStop->getColor().v.c, rgb_goal,
                                 force * (offset_h - pos_e) / (offset_h - offset_l),
                                 do_h, do_s, do_l);
                     stop->updateRepr();
@@ -849,14 +851,14 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                     // wide brush, may affect more than 2 stops,
                     // paint each stop by the force from the profile curve
                     if (offset_l <= pos_e && offset_l > pos_e - r) {
-                        tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
+                        tweak_color(mode, prevStop->getColor().v.c, rgb_goal,
                                     force * tweak_profile (fabs (pos_e - offset_l), r),
                                     do_h, do_s, do_l);
                         child_prev->updateRepr();
                     }
 
                     if (offset_h >= pos_e && offset_h < pos_e + r) {
-                        tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                        tweak_color (mode, stop->getColor().v.c, rgb_goal,
                                      force * tweak_profile (fabs (pos_e - offset_h), r),
                                      do_h, do_s, do_l);
                         stop->updateRepr();
@@ -878,7 +880,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                 for( unsigned j=0; j < array->nodes[i].size(); j+=3 ) {
                     SPStop *stop = array->nodes[i][j]->stop;
                     double distance = Geom::L2(Geom::Point(p - array->nodes[i][j]->p)); 
-                    tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                    tweak_color (mode, stop->getColor().v.c, rgb_goal,
                                  force * tweak_profile (distance, radius), do_h, do_s, do_l);
                     stop->updateRepr();
                 }
@@ -1154,7 +1156,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
 
-                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
 

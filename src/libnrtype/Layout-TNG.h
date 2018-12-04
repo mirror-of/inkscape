@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Text::Layout - text layout engine
  *
@@ -6,16 +7,17 @@
  *
  * Copyright (C) 2005 Richard Hughes
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef __LAYOUT_TNG_H__
 #define __LAYOUT_TNG_H__
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 //#define DEBUG_TEXTLAYOUT_DUMPASTEXT
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 #include <2geom/d2.h>
 #include <2geom/affine.h>
 #include <glibmm/ustring.h>
@@ -971,7 +973,7 @@ public:
 
     /* mustn't compare _glyph_index in these operators because for characters
     that don't have glyphs (line breaks, elided soft hyphens, etc), the glyph
-    index is -1 which makes them not well-ordered. To be honest, interating by
+    index is -1 which makes them not well-ordered. To be honest, iterating by
     glyphs is not very useful and should be avoided. */
     bool operator< (iterator const &other) const
         {return _char_index < other._char_index;}

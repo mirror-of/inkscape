@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Cairo integration helpers.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2010 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_DISPLAY_CAIRO_UTILS_H
@@ -117,10 +118,13 @@ public:
     PixelFormat pixelFormat() const { return _pixel_format; }
     void ensurePixelFormat(PixelFormat fmt);
 
-    static Pixbuf *create_from_data_uri(gchar const *uri);
-    static Pixbuf *create_from_file(std::string const &fn);
+    static Pixbuf *create_from_data_uri(gchar const *uri, double svgdpi = 0);
+    static Pixbuf *create_from_file(std::string const &fn, double svgddpi = 0);
+    static Pixbuf *create_from_buffer(std::string const &, double svgddpi = 0, std::string const &fn = "");
 
-private:
+  private:
+    static Pixbuf *create_from_buffer(gchar *&&, gsize, double svgddpi = 0, std::string const &fn = "");
+
     void _ensurePixelsARGB32();
     void _ensurePixelsPixbuf();
     void _forceAlpha();

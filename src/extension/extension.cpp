@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  *
  * Inkscape::Extension::Extension:
@@ -12,12 +13,8 @@
  *
  * Copyright (C) 2002-2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
@@ -261,7 +258,7 @@ Extension::check ()
 
     // No need to include Windows only extensions
     // See LP bug #1307554 for details - https://bugs.launchpad.net/inkscape/+bug/1307554
-#ifndef WIN32
+#ifndef _WIN32
     const char* win_ext[] = {"com.vaxxine.print.win32"};
     std::vector<std::string> v (win_ext, win_ext + sizeof(win_ext)/sizeof(win_ext[0]));
     std::string ext_id(id);

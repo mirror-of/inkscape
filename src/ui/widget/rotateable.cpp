@@ -1,15 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   buliabyak@gmail.com
  *
  * Copyright (C) 2007 authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/eventbox.h>
@@ -34,7 +31,7 @@ Rotateable::Rotateable():
     signal_button_press_event().connect(sigc::mem_fun(*this, &Rotateable::on_click));
     signal_motion_notify_event().connect(sigc::mem_fun(*this, &Rotateable::on_motion));
     signal_button_release_event().connect(sigc::mem_fun(*this, &Rotateable::on_release));
-    gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK);
+    gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
     signal_scroll_event().connect(sigc::mem_fun(*this, &Rotateable::on_scroll));
 
 }
@@ -139,6 +136,9 @@ bool Rotateable::on_scroll(GdkEventScroll* event)
         change = 1.0;
     } else if (event->direction == GDK_SCROLL_DOWN) {
         change = -1.0;
+    } else if (event->direction == GDK_SCROLL_SMOOTH) {
+        double delta_y_clamped = CLAMP(event->delta_y, -1.0, 1.0); // values > 1 result in excessive changes
+        change = 1.0 * -delta_y_clamped;
     } else {
         return FALSE;
     }

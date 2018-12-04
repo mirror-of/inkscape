@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Stock-items
  *
@@ -11,22 +12,16 @@
  * Copyright 2004 John Cliff
  *
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noSP_SS_VERBOSE
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <cstring>
 
 #include "path-prefix.h"
 
 #include <xml/repr.h>
-#include "document-private.h"
-#include "desktop.h"
 #include "inkscape.h"
 
 #include "io/sys.h"
@@ -195,8 +190,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
         
         gchar * base = g_strndup(e, a);
 
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SPDocument *doc = desktop->getDocument();
+        SPDocument *doc = SP_ACTIVE_DOCUMENT;
         SPDefs *defs = doc->getDefs();
         if (!defs) {
             g_free(base);
@@ -265,8 +259,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
     
     else {
         
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SPDocument *doc = desktop->getDocument();
+        SPDocument *doc = SP_ACTIVE_DOCUMENT;
         SPObject *object = doc->getObjectById(urn);
 
         return object;

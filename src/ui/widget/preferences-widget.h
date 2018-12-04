@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Widgets for Inkscape Preferences dialog.
@@ -9,15 +10,11 @@
  *
  * Copyright (C) 2004, 2006, 2007  Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_WIDGET_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_WIDGET_INKSCAPE_PREFERENCES_H
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include <iostream>
 #include <vector>

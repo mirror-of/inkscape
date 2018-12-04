@@ -5,14 +5,18 @@ image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
 variables:
   GIT_DEPTH: "10"
+  GIT_SUBMODULE_STRATEGY: recursive
 
-cache:
-  paths:
-    - ccache/
 
 # Building inkscape
 inkscape:linux:
   stage: build
+  except:
+    - schedules
+  cache:
+    key: "cache-linux"
+    paths:
+      - ccache/
   before_script:
     # CCache Config
     - mkdir -p ccache
@@ -32,20 +36,18 @@ inkscape:linux:
     paths:
       - build/
 
-inkscape:codequality:
-    stage: build
-    script:
-        - git fetch https://gitlab.com/inkscape/inkscape.git
-        - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
-        - if [[ -s clang_format_diff ]]; then false; fi
-    allow_failure: true
-
 inkscape:mac:
   stage: build
   tags:
     - mac
   only:
     - branches@inkscape/inkscape
+  except:
+    - schedules
+  cache:
+    key: "cache-mac"
+    paths:
+      - ccache/
   before_script:
     - brew update
     - brew upgrade
@@ -73,10 +75,33 @@ inkscape:mac:
       - build/
   allow_failure: true
 
-inkscape:doc:
+
+codequality:
+  stage: build
+  except:
+    - schedules
+  script:
+    - git fetch https://gitlab.com/inkscape/inkscape.git
+    - echo "Your commit does not comply exactly with the clang-format style checker.\nPlease review the following diff or apply it with\n \$ git apply <<EOF"
+    - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
+    - echo "EOF"
+    - if [[ -s clang_format_diff ]]; then false; fi
+  allow_failure: true
+
+codeprotect:
+  stage: build
+  except:
+    - schedules
+  script:
+    - git fetch https://gitlab.com/inkscape/inkscape.git
+    - git diff FETCH_HEAD -U0 --no-color src/2geom/ src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
+    - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
+
+source-doc:
   stage: build
   only:
-    - schedules
+    variables:
+      - $SCHEDULED_JOB_NAME == "source-doc"
   script:
     - cd buildtools
     - doxygen Doxyfile
@@ -93,7 +118,8 @@ inkscape:doc:
 clang:
   stage: build
   only:
-    - schedules
+    variables:
+      - $SCHEDULED_JOB_NAME == "clang"
   script:
     - apt-get update -yqq && apt-get install -y clang
     - mkdir -p clang-build
@@ -106,18 +132,61 @@ clang:
 
 test:linux:
   stage: test
+  except:
+    - schedules
   dependencies:
     - inkscape:linux
   script:
     - cd build
-    - make test
     - ctest -V
+
+check-license-headers:
+  stage: build
+  except:
+    - schedules
+  script:
+    - python buildtools/check_license_headers.py
+
+translations:
+  stage: build
+  except:
+    - schedules
+  script:
+    # make sure dependencies for inkscape.pot are up-to-date
+    - mkdir build && cd build && cmake .. && make inkscape_pot && cd ..
+    - cd po/
+
+    # update POTFILES.in
+    - grep -v "^#" POTFILES.in > POTFILES.in.1
+    - ./generate_POTFILES.sh
+    - grep -v "^#" POTFILES.in > POTFILES.in.2
+
+    # update inkscape.pot and sync all .po files
+    - intltool-update --pot && mv untitled.pot inkscape.pot
+    - ./update_po_files.sh
+
+    # check if POTFILES.in should be updated in the repo (shall we automate this?)
+    - 'if [ -n "$(diff POTFILES.in.1 POTFILES.in.2)" ]; then
+        git diff POTFILES.in;
+        echo "New translatable strings in source files found.";
+        echo "Please add the paths to POTFILES.in so they can be translated";
+        echo "(or add them to POTFILES.skip to exlude them from translations).";
+        exit 1;
+      fi'
+    - rm POTFILES.in.1 POTFILES.in.2
+  artifacts:
+    name: "translations"
+    paths:
+      - po/
+    when: always
 
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
+  only:
+    - schedules
   dependencies:
-    - inkscape:doc
+    - source-doc
     - clang
   script:
     - mkdir -p public/
@@ -128,5 +197,3 @@ pages:
   artifacts:
     paths:
       - public
-  only:
-    - schedules

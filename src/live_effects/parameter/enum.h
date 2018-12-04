@@ -1,12 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_ENUM_H
 #define INKSCAPE_LIVEPATHEFFECT_PARAMETER_ENUM_H
 
 /*
  * Inkscape::LivePathEffectParameters
  *
-* Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
+ * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/widget/registered-enums.h"
@@ -46,10 +47,14 @@ public:
 
         regenum->set_active_by_id(value);
         regenum->combobox()->setProgrammatically = false;
+        regenum->combobox()->signal_changed().connect(sigc::mem_fun (*this, &EnumParam::_on_change_combo));
         regenum->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change enumeration parameter"));
+        
         return dynamic_cast<Gtk::Widget *> (regenum);
     };
-
+    void _on_change_combo() {
+        param_effect->upd_params = true;
+    }
     bool param_readSVGValue(const gchar * strvalue) override {
         if (!strvalue) {
             param_set_default();
@@ -89,9 +94,6 @@ public:
     }
     
     void param_set_value(E val) {
-        if (value != val) {
-            param_effect->upd_params = true;
-        }
         value = val;
     }
 

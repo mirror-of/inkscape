@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Context menu
@@ -16,7 +17,7 @@
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "contextmenu.h"
@@ -25,20 +26,25 @@
 #include <glibmm/miscutils.h>
 
 #include <gtkmm/box.h>
+#include <gtkmm/cssprovider.h>
 #include <gtkmm/image.h>
 #include <gtkmm/separatormenuitem.h>
 
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "helper/action.h"
-#include "helper/action-context.h"
 #include "inkscape.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "shortcuts.h"
+
+#include "helper/action-context.h"
+#include "helper/action.h"
+#include "ui/icon-loader.h"
+
+#include "include/gtkmm_version.h"
 
 #include "object/sp-anchor.h"
 #include "object/sp-clippath.h"
@@ -58,20 +64,23 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     MIGroup(),
     MIParent(_("Go to parent"))
 {
-// g_message("ContextMenu");
     _object = static_cast<SPObject *>(item);
     _desktop = desktop;
 
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_UNDO));
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_REDO));
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int show_icons_pref = prefs->getInt("/theme/menuIcons", 0);
+    bool show_icon = show_icons_pref >= 0 ? true : false;
+
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_UNDO), show_icon);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_REDO), show_icon);
     AddSeparator();
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_CUT));
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_COPY));
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_PASTE));
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_CUT), show_icon);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_COPY), show_icon);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_PASTE), show_icon);
     AddSeparator();
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE));
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DELETE));
-    
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), show_icon);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DELETE), show_icon);
+
     positionOfLastDialog = 10; // 9 in front + 1 for the separator in the next if; used to position the dialog menu entries below each other
     /* Item menu */
     if (item!=nullptr) {
@@ -81,7 +90,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     AddSeparator();
     /* Lock/Unock Hide/Unhide*/
     Geom::Rect b(_desktop->point(),_desktop->point() + Geom::Point(1,1));
-    std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true);
+    std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true, true, true);
     bool has_down_hidden = false;
     bool has_down_locked = false;
     for(std::vector< SPItem * >::iterator down = down_items.begin(); down != down_items.end(); ++down){
@@ -162,6 +171,8 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
             append(*miu);
         }
     }
+
+    signal_map().connect(sigc::mem_fun(*this, &ContextMenu::ShiftIcons));
 }
 
 ContextMenu::~ContextMenu(void)
@@ -186,7 +197,7 @@ void ContextMenu::LeaveGroup()
     _desktop->setCurrentLayer(_desktop->currentLayer()->parent);
 }
 
-void ContextMenu::LockSelected() 
+void ContextMenu::LockSelected()
 {
     auto itemlist = _desktop->selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end(); ++i) {
@@ -253,11 +264,11 @@ context_menu_item_on_my_deselect(void */*object*/, SPAction *action)
 
 
 // TODO: Update this to allow radio items to be used
-void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)
+void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon)
 {
     SPAction *action;
     SPDesktop *view = _desktop;
-    
+
     if (verb->get_code() == SP_VERB_NONE) {
         Gtk::MenuItem *item = AddSeparator();
         item->show();
@@ -267,10 +278,33 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)
         if (!action) {
             return;
         }
-        
-        auto const item = Gtk::manage(new Gtk::MenuItem(action->name, true));
+        // Create the menu item itself
+        auto const item = Gtk::manage(new Gtk::MenuItem());
 
+        // Now create the label and add it to the menu item (with mnemonic)
+        auto const label = Gtk::manage(new Gtk::AccelLabel(action->name, true));
+#if GTKMM_CHECK_VERSION(3,16,0)
+        label->set_xalign(0.0);
+#else
+        label->set_alignment(0.0, 0.5);
+#endif
         sp_shortcut_add_accelerator(GTK_WIDGET(item->gobj()), sp_shortcut_get_primary(verb));
+        label->set_accel_widget(*item);
+
+        // If there is an image associated with the action, then we can add it as an icon for the menu item
+        if (show_icon && action->image) {
+            item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
+            auto const icon = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
+
+            // create a box to hold icon and label as GtkMenuItem derives from GtkBin and can only hold one child
+            auto const box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+            box->pack_start(*icon, false, false, 0);
+            box->pack_start(*label, true, true, 0);
+
+            item->add(*box);
+        } else {
+            item->add(*label);
+        }
 
         action->signal_set_sensitive.connect(sigc::mem_fun(*this, &ContextMenu::set_sensitive));
         action->signal_set_name.connect(sigc::mem_fun(*item, &ContextMenu::set_name));
@@ -284,6 +318,7 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)
         item->signal_select().connect(sigc::bind(sigc::ptr_fun(context_menu_item_on_my_select),item,action));
         item->signal_deselect().connect(sigc::bind(sigc::ptr_fun(context_menu_item_on_my_deselect),item,action));
         item->show_all();
+
         append(*item);
     }
 }
@@ -326,7 +361,7 @@ void ContextMenu::MakeItemMenu ()
     append(*mi);//insert(*mi,positionOfLastDialog++);
 
     AddSeparator();
-    
+
     /* Select item */
     if (Inkscape::Verb::getbyid( "org.inkscape.followlink" )) {
         mi = Gtk::manage(new Gtk::MenuItem(_("_Select This"), true));
@@ -400,7 +435,7 @@ void ContextMenu::MakeItemMenu ()
     mi->set_sensitive(!SP_IS_ANCHOR(_item));
     mi->show();
     append(*mi);
-    
+
     bool ClipRefOK=false;
     bool MaskRefOK=false;
     if (_item){
@@ -409,14 +444,14 @@ void ContextMenu::MakeItemMenu ()
                 ClipRefOK=true;
             }
         }
-    }    
+    }
     if (_item){
         if (_item->mask_ref){
             if (_item->mask_ref->getObject()){
                 MaskRefOK=true;
             }
         }
-    }    
+    }
     /* Set mask */
     mi = Gtk::manage(new Gtk::MenuItem(_("Set Mask"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetMask));
@@ -427,7 +462,7 @@ void ContextMenu::MakeItemMenu ()
     }
     mi->show();
     append(*mi);
-    
+
     /* Release mask */
     mi = Gtk::manage(new Gtk::MenuItem(_("Release Mask"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseMask));
@@ -445,7 +480,7 @@ void ContextMenu::MakeItemMenu ()
     mi->set_sensitive(TRUE);
     mi->show();
     append(*mi);
-    
+
     /* Set Clip */
     mi = Gtk::manage(new Gtk::MenuItem(_("Set Cl_ip"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetClip));
@@ -456,7 +491,7 @@ void ContextMenu::MakeItemMenu ()
     }
     mi->show();
     append(*mi);
-    
+
     /* Release Clip */
     mi = Gtk::manage(new Gtk::MenuItem(_("Release C_lip"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseClip));
@@ -593,7 +628,7 @@ void ContextMenu::ActivateUngroup()
     sp_item_group_ungroup(static_cast<SPGroup*>(_item), children);
     _desktop->selection->setList(children);
 }
- 
+
 void ContextMenu::ActivateUngroupPopSelection()
 {
     _desktop->selection->popFromGroup();
@@ -603,19 +638,19 @@ void ContextMenu::ActivateUngroupPopSelection()
 void ContextMenu::MakeAnchorMenu()
 {
     Gtk::MenuItem* mi;
-    
+
     /* Link dialog */
     mi = Gtk::manage(new Gtk::MenuItem(_("Link _Properties..."), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkProperties));
     mi->show();
     insert(*mi,positionOfLastDialog++);
-    
+
     /* Select item */
     mi = Gtk::manage(new Gtk::MenuItem(_("_Follow Link"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkFollow));
     mi->show();
     append(*mi);
-    
+
     /* Reset transformations */
     mi = Gtk::manage(new Gtk::MenuItem(_("_Remove Link"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkRemove));
@@ -753,7 +788,7 @@ void ContextMenu::ImageEdit()
     Glib::ustring name;
     Glib::ustring fullname;
 
-#ifdef WIN32
+#ifdef _WIN32
     // g_spawn_command_line_sync parsing is done according to Unix shell rules,
     // not Windows command interpreter rules. Thus we need to enclose the
     // executable path with single quotes.
@@ -778,7 +813,7 @@ void ContextMenu::ImageEdit()
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
         Inkscape::XML::Node *ir = (*i)->getRepr();
         const gchar *href = ir->attribute("xlink:href");
-        
+
         if (strncmp (href,"file:",5) == 0) {
         // URI to filename conversion
           name = g_filename_from_uri(href, nullptr, nullptr);
@@ -794,7 +829,7 @@ void ContextMenu::ImageEdit()
             fullname = Glib::build_filename(Glib::get_current_dir(), name);
         }
         if (name.substr(name.find_last_of(".") + 1) == "SVG" ||
-            name.substr(name.find_last_of(".") + 1) == "svg"   ) 
+            name.substr(name.find_last_of(".") + 1) == "svg"   )
         {
             cmdline.erase(0, bmpeditor.length());
             Glib::ustring svgeditor = getImageEditorName(true);
@@ -807,7 +842,7 @@ void ContextMenu::ImageEdit()
 
     //g_warning("##Command line: %s\n", cmdline.c_str());
 
-    g_spawn_command_line_async(cmdline.c_str(), &errThing); 
+    g_spawn_command_line_async(cmdline.c_str(), &errThing);
 
     if ( errThing ) {
         g_warning("Problem launching editor (%d). %s", errThing->code, errThing->message);
@@ -862,7 +897,7 @@ void ContextMenu::ImageExtract()
 void ContextMenu::MakeShapeMenu ()
 {
     Gtk::MenuItem* mi;
-    
+
     /* Item dialog */
     mi = Gtk::manage(new Gtk::MenuItem(_("_Fill and Stroke..."), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
@@ -888,7 +923,7 @@ void ContextMenu::MakeTextMenu ()
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
-    
+
     /* Edit Text dialog */
     mi = Gtk::manage(new Gtk::MenuItem(_("_Text and Font..."), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::TextSettings));
@@ -919,6 +954,64 @@ void ContextMenu::SpellcheckSettings ()
 
     _desktop->_dlg_mgr->showDialog("SpellCheck");
 }
+
+void ContextMenu::ShiftIcons()
+{
+    static auto provider = Gtk::CssProvider::create();
+    static bool provider_added = false;
+
+    Gtk::MenuItem *menuitem = nullptr;
+    Gtk::Box *content = nullptr;
+    Gtk::Image *icon = nullptr;
+
+    static int current_shift = 0;
+    int calculated_shift = 0;
+
+    // install CssProvider for our custom styles
+    if (!provider_added) {
+        auto const screen = Gdk::Screen::get_default();
+        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        provider_added = true;
+    }
+
+    // get the first MenuItem with an image (i.e. "ImageMenuItem" as named below)
+    std::vector<Gtk::Widget *> children = get_children();
+    for (auto child: children) {
+        if (child->get_name() == "ImageMenuItem") {
+            menuitem = static_cast<Gtk::MenuItem *>(child);
+            content = static_cast<Gtk::Box *>(menuitem->get_child());
+            icon = static_cast<Gtk::Image *>(content->get_children()[0]);
+            break;
+        }
+    }
+
+    // calculate how far we have to shift the icon to fit it into the empty space between menuitem and its content
+    if (icon) {
+        auto allocation_menuitem = menuitem->get_allocation();
+        auto allocation_icon = icon->get_allocation();
+
+        if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
+            calculated_shift = allocation_menuitem.get_width() - allocation_icon.get_x() - allocation_icon.get_width();
+        } else {
+            calculated_shift = -allocation_icon.get_x();
+        }
+    }
+
+    // install CSS to shift icon, use a threshold to avoid overly frequent updates
+    // (gtk's own calculations for the reserved space are off by a few pixels if there is no check/radio item in a menu)
+    if (calculated_shift && std::abs(current_shift - calculated_shift) > 2) {
+        current_shift = calculated_shift;
+
+        std::string css_str;
+        if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
+            css_str = "#ImageMenuItem image {margin-right:" + std::to_string(-calculated_shift) + "px;}";
+        } else {
+            css_str = "#ImageMenuItem image {margin-left:" + std::to_string(calculated_shift) + "px;}";
+        }
+        provider->load_from_data(css_str);
+    }
+}
+
 /*
   Local Variables:
   mode:c++

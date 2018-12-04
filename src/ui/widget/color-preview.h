@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_COLOR_PREVIEW_H
 #define SEEN_COLOR_PREVIEW_H
 /*
@@ -8,12 +9,8 @@
  * Copyright (C) 2001-2005 Authors
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include <gtkmm/widget.h>
 

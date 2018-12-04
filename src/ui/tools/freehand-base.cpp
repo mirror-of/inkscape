@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Generic drawing context
  *
@@ -11,22 +12,19 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2012 Johan Engelen
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define DRAW_VERBOSE
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "desktop-style.h"
-#include "macros.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
 
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
+
+#include "include/macros.h"
 
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
@@ -1041,7 +1039,7 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
     Geom::Point pp = pt * i2d.inverse();
     double rad = 0.5 * prefs->getDouble(tool_path + "/dot-size", 3.0);
     if (!strcmp(tool, "/tools/calligraphic"))
-        rad = 0.1 * prefs->getDouble(tool_path + "/width", 3.0) / desktop->current_zoom();
+        rad = 0.0333 * prefs->getDouble(tool_path + "/width", 3.0) / desktop->current_zoom() / desktop->getDocument()->getDocumentScale()[Geom::X];
     if (event_state & GDK_MOD1_MASK) {
         // TODO: We vary the dot size between 0.5*rad and 1.5*rad, where rad is the dot size
         // as specified in prefs. Very simple, but it might be sufficient in practice. If not,

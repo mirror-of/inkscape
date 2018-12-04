@@ -1,21 +1,20 @@
-/**
- * @file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * A notebook with RGB, CMYK, CMS, HSL, and Wheel pages
- */
-/* Authors:
+ *//*
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
  *   Tomasz Boczkowski <penginsbacon@gmail.com> (c++-sification)
  *
  * Copyright (C) 2001-2014 Authors
- *
- * This code is in public domain
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SEEN_SP_COLOR_NOTEBOOK_H
 #define SEEN_SP_COLOR_NOTEBOOK_H
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #include <boost/ptr_container/ptr_vector.hpp>

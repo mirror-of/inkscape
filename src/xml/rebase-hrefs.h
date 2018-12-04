@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2014 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef REBASE_HREFS_H_SEEN
 #define REBASE_HREFS_H_SEEN
 
@@ -7,8 +16,6 @@ class SPDocument;
 
 namespace Inkscape {
 namespace XML {
-
-std::string calc_abs_doc_base(char const *doc_base);
 
 /**
  * Change relative hrefs in doc to be relative to \a new_base instead of doc.base.
@@ -51,4 +58,4 @@ Inkscape::Util::List<AttributeRecord const> rebase_href_attrs(
   fill-column:99
   End:
 */
-// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 encoding=utf-8 textwidth=99 :
+// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 fileencoding=utf-8 textwidth=99 :

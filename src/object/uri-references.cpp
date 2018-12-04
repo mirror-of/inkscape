@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Helper methods for resolving URI References
  *
@@ -8,7 +9,7 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "uri-references.h"
@@ -120,7 +121,7 @@ void URIReference::attach(const URI &uri)
 
     // createChildDoc() assumes that the referenced file is an SVG.
     // PNG and JPG files are allowed (in the case of feImage).
-    gchar *filename = uri.toString();
+    gchar const *filename = uri.getPath() ? uri.getPath() : "";
     bool skip = false;
     if (g_str_has_suffix(filename, ".jpg") || g_str_has_suffix(filename, ".JPG") ||
         g_str_has_suffix(filename, ".png") || g_str_has_suffix(filename, ".PNG")) {
@@ -139,10 +140,8 @@ void URIReference::attach(const URI &uri)
     }
     if (!document) {
         g_warning("Can't get document for referenced URI: %s", filename);
-        g_free(filename);
         return;
     }
-    g_free(filename);
 
     gchar const *fragment = uri.getFragment();
     if (!uri.isRelative() || uri.getQuery() || !fragment) {

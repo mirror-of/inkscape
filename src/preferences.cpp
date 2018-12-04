@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Singleton class to access the preferences file - implementation.
  */
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2008,2009 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -38,6 +39,10 @@ static Inkscape::XML::Document *loadImpl( std::string const& prefsFilename, Glib
 static void migrateDetails( Inkscape::XML::Document *from, Inkscape::XML::Document *to );
 
 static Inkscape::XML::Document *migrateFromDoc = nullptr;
+
+// cachedRawValue prefixes for encoding nullptr
+static Glib::ustring const RAWCACHE_CODE_NULL {"N"};
+static Glib::ustring const RAWCACHE_CODE_VALUE {"V"};
 
 // TODO clean up. Function copied from file.cpp:
 // what gets passed here is not actually an URI... it is an UTF-8 encoded filename (!)
@@ -429,6 +434,17 @@ void Preferences::setBool(Glib::ustring const &pref_path, bool value)
 }
 
 /**
+ * Set an point attribute of a preference.
+ *
+ * @param pref_path Path of the preference to modify.
+ * @param value The new value of the pref attribute.
+ */
+void Preferences::setPoint(Glib::ustring const &pref_path, Geom::Point value)
+{
+    _setRawValue(pref_path, Glib::ustring::compose("%1",value[Geom::X]) + "," + Glib::ustring::compose("%1",value[Geom::Y]));
+}
+
+/**
  * Set an integer attribute of a preference.
  *
  * @param pref_path Path of the preference to modify.
@@ -505,6 +521,9 @@ void Preferences::mergeStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
  */
 void Preferences::remove(Glib::ustring const &pref_path)
 {
+    auto it = cachedRawValue.find(pref_path.c_str());
+    if (it != cachedRawValue.end()) cachedRawValue.erase(it);
+
     Inkscape::XML::Node *node = _getNode(pref_path, false);
     if (node && node->parent()) {
         node->parent()->removeChild(node);
@@ -746,6 +765,18 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
 
 void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
 {
+    // will return empty string if `path` was not in the cache yet
+    auto& cacheref = cachedRawValue[path.c_str()];
+
+    if (!cacheref.empty()) {
+        if (cacheref == RAWCACHE_CODE_NULL) {
+            result = nullptr;
+        } else {
+            result = cacheref.c_str() + RAWCACHE_CODE_VALUE.length();
+        }
+        return;
+    }
+
     // create node and attribute keys
     Glib::ustring node_key, attr_key;
     _keySplit(path, node_key, attr_key);
@@ -762,6 +793,13 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
             result = attr;
         }
     }
+
+    if (!result) {
+        cacheref = RAWCACHE_CODE_NULL;
+    } else {
+        cacheref = RAWCACHE_CODE_VALUE;
+        cacheref += result;
+    }
 }
 
 void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &value)
@@ -773,6 +811,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
     node->setAttribute(attr_key.c_str(), value.c_str());
+    cachedRawValue[path.c_str()] = RAWCACHE_CODE_VALUE + value;
 }
 
 // The _extract* methods are where the actual work is done - they define how preferences are stored
@@ -780,30 +819,53 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
 
 bool Preferences::_extractBool(Entry const &v)
 {
+    if (v.cached_bool) return v.value_bool;
+    v.cached_bool = true;
     gchar const *s = static_cast<gchar const *>(v._value);
     if ( !s[0] || !strcmp(s, "0") || !strcmp(s, "false") ) {
         return false;
     } else {
+        v.value_bool = true;
         return true;
     }
 }
 
+Geom::Point Preferences::_extractPoint(Entry const &v)
+{
+    if (v.cached_point) return v.value_point;
+    v.cached_point = true;
+    gchar const *s = static_cast<gchar const *>(v._value);
+    gchar ** strarray = g_strsplit(s, ",", 2);
+    double newx = atoi(strarray[0]);
+    double newy = atoi(strarray[1]);
+    g_strfreev (strarray);
+    return Geom::Point(newx, newy);
+}
+
 int Preferences::_extractInt(Entry const &v)
 {
+    if (v.cached_int) return v.value_int;
+    v.cached_int = true;
     gchar const *s = static_cast<gchar const *>(v._value);
     if ( !strcmp(s, "true") ) {
+        v.value_int = 1;
         return true;
     } else if ( !strcmp(s, "false") ) {
+        v.value_int = 0;
         return false;
     } else {
-        return atoi(s);
+        v.value_int = atoi(s);
+        return v.value_int;
     }
 }
 
 double Preferences::_extractDouble(Entry const &v)
 {
+    if (v.cached_double) return v.value_double;
+    v.cached_double = true;
     gchar const *s = static_cast<gchar const *>(v._value);
-    return g_ascii_strtod(s, nullptr);
+    v.value_double = g_ascii_strtod(s, nullptr);
+    return v.value_double;
 }
 
 double Preferences::_extractDouble(Entry const &v, Glib::ustring const &requested_unit)
@@ -825,6 +887,9 @@ Glib::ustring Preferences::_extractString(Entry const &v)
 
 Glib::ustring Preferences::_extractUnit(Entry const &v)
 {
+    if (v.cached_unit) return v.value_unit;
+    v.cached_unit = true;
+    v.value_unit = "";
     gchar const *str = static_cast<gchar const *>(v._value);
     gchar const *e;
     g_ascii_strtod(str, (char **) &e);
@@ -836,12 +901,15 @@ Glib::ustring Preferences::_extractUnit(Entry const &v)
         /* Unitless */
         return "";
     } else {
-        return Glib::ustring(e);
+        v.value_unit = Glib::ustring(e);
+        return v.value_unit;
     }
 }
 
 guint32 Preferences::_extractColor(Entry const &v)
 {
+    if (v.cached_color) return v.value_color;
+    v.cached_color = true;
     gchar const *s = static_cast<gchar const *>(v._value);
     std::istringstream hr(s);
     guint32 color;
@@ -851,13 +919,17 @@ guint32 Preferences::_extractColor(Entry const &v)
     } else {
         hr >> color;
     }
+    v.value_color = color;
     return color;
 }
 
 SPCSSAttr *Preferences::_extractStyle(Entry const &v)
 {
+    if (v.cached_style) return v.value_style;
+    v.cached_style = true;
     SPCSSAttr *style = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(style, static_cast<gchar const*>(v._value));
+    v.value_style = style;
     return style;
 }
 

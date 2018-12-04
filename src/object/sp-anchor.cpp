@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <a> element implementation
  *
@@ -9,7 +10,7 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noSP_ANCHOR_VERBOSE
@@ -19,7 +20,7 @@
 #include "xml/repr.h"
 #include "attributes.h"
 #include "sp-anchor.h"
-#include "ui/view/view.h"
+#include "ui/view/svg-view-widget.h"
 #include "document.h"
 
 SPAnchor::SPAnchor() : SPGroup() {
@@ -65,7 +66,7 @@ void SPAnchor::release() {
     SPGroup::release();
 }
 
-void SPAnchor::set(unsigned int key, const gchar* value) {
+void SPAnchor::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
 	case SP_ATTR_XLINK_HREF:
             g_free(this->href);
@@ -152,22 +153,34 @@ gchar* SPAnchor::description() const {
 }
 
 /* fixme: We should forward event to appropriate container/view */
-gint SPAnchor::event(SPEvent* event) {
+/* The only use of SPEvent appears to be here, to change the cursor in Inkview when over a link (and
+ * which hasn't worked since at least 0.48). GUI code should not be here. */
+int SPAnchor::event(SPEvent* event) {
+
     switch (event->type) {
-	case SP_EVENT_ACTIVATE:
+	case SPEvent::ACTIVATE:
             if (this->href) {
+                // If this actually worked, it could be useful to open a webpage with the link.
                 g_print("Activated xlink:href=\"%s\"\n", this->href);
                 return TRUE;
             }
             break;
 
-	case SP_EVENT_MOUSEOVER:
-            (static_cast<Inkscape::UI::View::View*>(event->data))->mouseover();
+	case SPEvent::MOUSEOVER:
+        {
+            if (event->view) {
+                event->view->mouseover();
+            }
             break;
+        }
 
-	case SP_EVENT_MOUSEOUT:
-            (static_cast<Inkscape::UI::View::View*>(event->data))->mouseout();
+	case SPEvent::MOUSEOUT:
+        {
+            if (event->view) {
+                event->view->mouseout();
+            }
             break;
+        }
 
 	default:
             break;

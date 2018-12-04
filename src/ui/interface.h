@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_INTERFACE_H
 #define SEEN_SP_INTERFACE_H
 
@@ -14,7 +15,7 @@
  * Copyright (C) 1999-2002 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/ustring.h>
@@ -46,11 +47,6 @@ void sp_ui_close_view (GtkWidget *widget);
 void sp_ui_new_view ();
 
 void sp_ui_reload();
-
-/**
- * @todo TODO: not yet working. To be re-enabled (by adding to menu) once it works.
- */
-void sp_ui_new_view_preview ();
 
 /**
  *  This function is called to exit the program, and iterates through all

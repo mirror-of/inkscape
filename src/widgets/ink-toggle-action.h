@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2017 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef INK_TOGGLE_ACTION_H
 #define INK_TOGGLE_ACTION_H
 
@@ -15,12 +24,10 @@ G_BEGIN_DECLS
 
 typedef struct _InkToggleAction      InkToggleAction;
 typedef struct _InkToggleActionClass InkToggleActionClass;
-typedef struct _InkToggleActionPrivate InkToggleActionPrivate;
 
 struct _InkToggleAction
 {
     GtkToggleAction action;
-    InkToggleActionPrivate *private_data;
 };
 
 struct _InkToggleActionClass

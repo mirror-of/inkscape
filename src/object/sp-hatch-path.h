@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * SVG <hatchPath> implementation
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2014 Tomasz Boczkowski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_SP_HATCH_PATH_H
@@ -51,7 +52,7 @@ public:
 protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void release() override;
-    void set(unsigned int key, const gchar* value) override;
+    void set(SPAttributeEnum key, const gchar* value) override;
     void update(SPCtx* ctx, unsigned int flags) override;
 
 private:

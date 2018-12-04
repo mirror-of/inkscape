@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Main event handling, and related helper functions.
  *
@@ -11,12 +12,8 @@
  * Copyright (C) 1999-2012 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/display.h>
@@ -32,7 +29,7 @@
 #include "desktop.h"
 #include "gradient-drag.h"
 #include "knot-ptr.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "rubberband.h"
 #include "selcue.h"
@@ -42,6 +39,8 @@
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
 #include "display/canvas-rotate.h"
+
+#include "include/gtkmm_version.h"
 
 #include "object/sp-guide.h"
 
@@ -120,9 +119,7 @@ ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
 }
 
 ToolBase::~ToolBase() {
-    if (this->message_context) {
-        delete this->message_context;
-    }
+    this->message_context = nullptr;
 
     if (this->desktop) {
         this->desktop = nullptr;
@@ -311,7 +308,7 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
 {
     if (held_control(event)) return false;
     unsigned num = 1 + combine_key_events(shortcut_key(event), 0);
-    Geom::Point delta = dir * num; 
+    Geom::Point delta = dir * num;
     if (held_shift(event)) delta *= 10;
     if (held_alt(event)) {
         delta /= desktop->current_zoom();
@@ -653,10 +650,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
                         acceleration, desktop->getCanvas()));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
-                this->desktop->scroll_relative(Geom::Point(0, i));
+                this->desktop->scroll_relative(Geom::Point(0, -i * desktop->yaxisdir()));
                 ret = TRUE;
             } else {
-                ret = _keyboardMove(event->key, Geom::Point(0, 1));
+                ret = _keyboardMove(event->key, Geom::Point(0, -desktop->yaxisdir()));
             }
             break;
 
@@ -683,10 +680,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
                         acceleration, desktop->getCanvas()));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
-                this->desktop->scroll_relative(Geom::Point(0, -i));
+                this->desktop->scroll_relative(Geom::Point(0, i * desktop->yaxisdir()));
                 ret = TRUE;
             } else {
-                ret = _keyboardMove(event->key, Geom::Point(0, -1));
+                ret = _keyboardMove(event->key, Geom::Point(0, desktop->yaxisdir()));
             }
             break;
 
@@ -782,8 +779,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
         bool shift = (event->scroll.state & GDK_SHIFT_MASK);
         bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
 
+        int constexpr WHEEL_SCROLL_DEFAULT = 40;
         int const wheel_scroll = prefs->getIntLimited(
-                "/options/wheelscroll/value", 40, 0, 1000);
+                "/options/wheelscroll/value", WHEEL_SCROLL_DEFAULT, 0, 1000);
 
         // Size of smooth-scrolls (only used in GTK+ 3)
         gdouble delta_x = 0;
@@ -795,7 +793,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             double rotate_inc = prefs->getDoubleLimited(
                     "/options/rotateincrement/value", 15, 1, 90, "°" );
             rotate_inc *= M_PI/180.0;
-            
+
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
                 // Do nothing
@@ -804,6 +802,17 @@ bool ToolBase::root_handler(GdkEvent* event) {
             case GDK_SCROLL_DOWN:
                 rotate_inc = -rotate_inc;
                 break;
+
+            case GDK_SCROLL_SMOOTH: {
+                gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
+                double delta_y_clamped = CLAMP(delta_y, -1.0, 1.0); // values > 1 result in excessive rotating
+                rotate_inc = rotate_inc * -delta_y_clamped;
+                break;
+            }
 
             default:
                 rotate_inc = 0.0;
@@ -820,12 +829,24 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
+            case GDK_SCROLL_LEFT:
                 desktop->scroll_relative(Geom::Point(wheel_scroll, 0));
                 break;
 
             case GDK_SCROLL_DOWN:
+            case GDK_SCROLL_RIGHT:
                 desktop->scroll_relative(Geom::Point(-wheel_scroll, 0));
                 break;
+
+            case GDK_SCROLL_SMOOTH: {
+                gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
+                desktop->scroll_relative(Geom::Point(wheel_scroll * -delta_y, 0));
+                break;
+            }
 
             default:
                 break;
@@ -845,6 +866,22 @@ bool ToolBase::root_handler(GdkEvent* event) {
             case GDK_SCROLL_DOWN:
                 rel_zoom = 1 / zoom_inc;
                 break;
+
+            case GDK_SCROLL_SMOOTH: {
+                gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
+                double delta_y_clamped = CLAMP(std::abs(delta_y), 0.0, 1.0); // values > 1 result in excessive zooming
+                double zoom_inc_scaled = (zoom_inc-1) * delta_y_clamped + 1;
+                if (delta_y < 0) {
+                    rel_zoom = zoom_inc_scaled;
+                } else {
+                    rel_zoom = 1 / zoom_inc_scaled;
+                }
+                break;
+            }
 
             default:
                 rel_zoom = 0.0;
@@ -877,12 +914,18 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH:
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-                desktop->scroll_relative(Geom::Point(delta_x, delta_y));
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_x /= WHEEL_SCROLL_DEFAULT;
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
+                desktop->scroll_relative(Geom::Point(-wheel_scroll*delta_x, -wheel_scroll*delta_y));
                 break;
             }
         }
         break;
     }
+
     default:
         break;
     }
@@ -1367,7 +1410,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         delete dse;
         return false;
     }
-    
+
     ec->_dse_callback_in_process = true;
 
     SPDesktop *dt = ec->desktop;
@@ -1405,7 +1448,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         }
         ControlPoint *point = reinterpret_cast<ControlPoint*> (pitem2);
         if (point) {
-            if (point->position().isFinite() && (dt == point->_desktop)) {            
+            if (point->position().isFinite() && (dt == point->_desktop)) {
                 point->_eventHandler(ec, dse->getEvent());
             }
             else {

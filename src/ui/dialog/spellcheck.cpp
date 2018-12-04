@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Spellcheck dialog.
@@ -9,8 +10,12 @@
  *
  * Copyright (C) 2009 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #include "spellcheck.h"
 #include "message-stack.h"
@@ -39,14 +44,9 @@
 
 #include <glibmm/i18n.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 
 namespace Inkscape {
 namespace UI {
@@ -312,7 +312,7 @@ SpellCheck::init(SPDesktop *d)
     gtk_widget_set_sensitive(dictionary_combo, false);
     start_button.set_sensitive(false);
 
-#ifdef WIN32
+#ifdef _WIN32
     // on windows, dictionaries are in a lib/aspell-0.60 subdir off inkscape's executable dir;
     // this is some black magick to find out the executable path to give it to aspell
     char exeName[MAX_PATH+1];
@@ -330,7 +330,7 @@ SpellCheck::init(SPDesktop *d)
 #ifdef HAVE_ASPELL
     {
         AspellConfig *config = new_aspell_config();
-#ifdef WIN32
+#ifdef _WIN32
         aspell_config_replace(config, "prefix", exeName);
 #endif
         aspell_config_replace(config, "lang", _lang.c_str());
@@ -347,7 +347,7 @@ SpellCheck::init(SPDesktop *d)
 
     if (_lang2 != "") {
         AspellConfig *config = new_aspell_config();
-#ifdef WIN32
+#ifdef _WIN32
         aspell_config_replace(config, "prefix", exeName);
 #endif
         aspell_config_replace(config, "lang", _lang2.c_str());
@@ -364,7 +364,7 @@ SpellCheck::init(SPDesktop *d)
 
     if (_lang3 != "") {
         AspellConfig *config = new_aspell_config();
-#ifdef WIN32
+#ifdef _WIN32
         aspell_config_replace(config, "prefix", exeName);
 #endif
         aspell_config_replace(config, "lang", _lang3.c_str());

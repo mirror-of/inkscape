@@ -1,16 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Helper functions to use cairo with inkscape
  *
  * Copyright (C) 2007 bulia byak
  * Copyright (C) 2008 Johan Engelen
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include "display/cairo-utils.h"
 
@@ -207,7 +204,7 @@ Pixbuf::~Pixbuf()
     }
 }
 
-Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
+Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
 {
     Pixbuf *pixbuf = nullptr;
 
@@ -310,7 +307,11 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
             return nullptr;
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+        double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+        if (svgdpi && svgdpi > 0) {
+            dpi = svgdpi;
+        }
+        std::cout << dpi << "dpi" << std::endl;
         // Get the size of the document
         Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
         Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
@@ -338,7 +339,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
     return pixbuf;
 }
 
-Pixbuf *Pixbuf::create_from_file(std::string const &fn)
+Pixbuf *Pixbuf::create_from_file(std::string const &fn, double svgdpi)
 {
     Pixbuf *pb = nullptr;
     // test correctness of filename
@@ -350,7 +351,6 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
     if (val == 0 && stdir.st_mode & S_IFDIR){
         return nullptr;
     }
-
     // we need to load the entire file into memory,
     // since we'll store it as MIME data
     gchar *data = nullptr;
@@ -364,6 +364,31 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
             std::cerr << "   (" << fn << ")" << std::endl;
             return nullptr;
         }
+
+        pb = Pixbuf::create_from_buffer(std::move(data), len, svgdpi, fn);
+
+        if (pb) {
+            pb->_mod_time = stdir.st_mtime;
+        }
+    } else {
+        std::cerr << "Pixbuf::create_from_file: failed to get contents: " << fn << std::endl;
+        return nullptr;
+    }
+
+    return pb;
+}
+
+Pixbuf *Pixbuf::create_from_buffer(std::string const &buffer, double svgdpi, std::string const &fn)
+{
+    auto datacopy = (gchar *)g_memdup(buffer.data(), buffer.size());
+    return Pixbuf::create_from_buffer(std::move(datacopy), buffer.size(), svgdpi, fn);
+}
+
+Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std::string const &fn)
+{
+    Pixbuf *pb = nullptr;
+    GError *error = nullptr;
+    {
         GdkPixbuf *buf = nullptr;
         GdkPixbufLoader *loader = nullptr;
         std::string::size_type idx;
@@ -372,8 +397,10 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
         if(idx != std::string::npos)
         {
             if (boost::iequals(fn.substr(idx+1).c_str(), "svg")) {
-                SPDocument *svgDoc = SPDocument::createNewDoc(fn.c_str(), TRUE);
-               // Check the document loaded properly
+
+                SPDocument *svgDoc = SPDocument::createNewDocFromMem (data, len, true);
+
+                // Check the document loaded properly
                 if (svgDoc == nullptr) {
                     return nullptr;
                 }
@@ -382,8 +409,13 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
                     svgDoc->doUnref();
                     return nullptr;
                 }
+
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+                double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+                if (svgdpi && svgdpi > 0) {
+                    dpi = svgdpi;
+                }
+
                 // Get the size of the document
                 Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
                 Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
@@ -426,16 +458,17 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
             
             buf = gdk_pixbuf_loader_get_pixbuf(loader);
         }
+
         if (buf) {
             g_object_ref(buf);
             pb = new Pixbuf(buf);
-            pb->_mod_time = stdir.st_mtime;
             pb->_path = fn;
             if (!is_svg) {
                 GdkPixbufFormat *fmt = gdk_pixbuf_loader_get_format(loader);
                 gchar *fmt_name = gdk_pixbuf_format_get_name(fmt);
                 pb->_setMimeData((guchar *) data, len, fmt_name);
                 g_free(fmt_name);
+                g_object_unref(loader);
             } else {
                 pb->_setMimeData((guchar *) data, len, "svg");
             }
@@ -443,13 +476,9 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
             std::cerr << "Pixbuf::create_from_file: failed to load contents: " << fn << std::endl;
             g_free(data);
         }
-        g_object_unref(loader);
 
         // TODO: we could also read DPI, ICC profile, gamma correction, and other information
         // from the file. This can be done by using format-specific libraries e.g. libpng.
-    } else {
-        std::cerr << "Pixbuf::create_from_file: failed to get contents: " << fn << std::endl;
-        return nullptr;
     }
 
     return pb;

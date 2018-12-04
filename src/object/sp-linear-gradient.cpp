@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #include <cairo.h>
 
 #include "sp-linear-gradient.h"
@@ -29,7 +38,7 @@ void SPLinearGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Callback: set attribute.
  */
-void SPLinearGradient::set(unsigned int key, const gchar* value) {
+void SPLinearGradient::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_X1:
             this->x1.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);

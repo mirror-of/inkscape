@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <filter> implementation.
  */
@@ -10,17 +11,14 @@
  *
  * Copyright (C) 2006,2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "sp-filter.h"
 
 #include <map>
 #include <cstring>
+#include <utility>
 
 #include <glibmm.h>
 
@@ -35,8 +33,6 @@
 
 using std::map;
 using std::pair;
-
-#define SP_MACROS_SILENT
 
 static void filter_ref_changed(SPObject *old_ref, SPObject *ref, SPFilter *filter);
 static void filter_ref_modified(SPObject *href, guint flags, SPFilter *filter);
@@ -117,7 +113,7 @@ void SPFilter::release() {
 /**
  * Sets a specific value in the SPFilter.
  */
-void SPFilter::set(unsigned int key, gchar const *value) {
+void SPFilter::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
         case SP_ATTR_FILTERUNITS:
             if (value) {
@@ -227,8 +223,7 @@ void SPFilter::update(SPCtx *ctx, guint flags) {
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
     std::vector<SPObject*> l(this->childList(true, SPObject::ActionUpdate));
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *child = *i;
+    for(SPObject* child: l){
         if( SP_IS_FILTER_PRIMITIVE( child ) ) {
             child->updateDisplay(ctx, childflags);
         }
@@ -322,9 +317,8 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
     }
 
     if (this->href->getURI()) {
-        gchar *uri_string = this->href->getURI()->toString();
-        repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
+        auto uri_string = this->href->getURI()->str();
+        repr->setAttribute("xlink:href", uri_string.c_str());
     }
 
     SPObject::write(doc, repr, flags);
@@ -376,31 +370,30 @@ void SPFilter::remove_child(Inkscape::XML::Node *child) {
 	this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr_filter)
+void SPFilter::build_renderer(Inkscape::Filters::Filter *nr_filter)
 {
-    g_assert(sp_filter != nullptr);
     g_assert(nr_filter != nullptr);
 
-    sp_filter->_renderer = nr_filter;
+    this->_renderer = nr_filter;
 
-    nr_filter->set_filter_units(sp_filter->filterUnits);
-    nr_filter->set_primitive_units(sp_filter->primitiveUnits);
-    nr_filter->set_x(sp_filter->x);
-    nr_filter->set_y(sp_filter->y);
-    nr_filter->set_width(sp_filter->width);
-    nr_filter->set_height(sp_filter->height);
+    nr_filter->set_filter_units(this->filterUnits);
+    nr_filter->set_primitive_units(this->primitiveUnits);
+    nr_filter->set_x(this->x);
+    nr_filter->set_y(this->y);
+    nr_filter->set_width(this->width);
+    nr_filter->set_height(this->height);
 
-    if (sp_filter->filterRes.getNumber() >= 0) {
-        if (sp_filter->filterRes.getOptNumber() >= 0) {
-            nr_filter->set_resolution(sp_filter->filterRes.getNumber(),
-                                      sp_filter->filterRes.getOptNumber());
+    if (this->filterRes.getNumber() >= 0) {
+        if (this->filterRes.getOptNumber() >= 0) {
+            nr_filter->set_resolution(this->filterRes.getNumber(),
+                                      this->filterRes.getOptNumber());
         } else {
-            nr_filter->set_resolution(sp_filter->filterRes.getNumber());
+            nr_filter->set_resolution(this->filterRes.getNumber());
         }
     }
 
     nr_filter->clear_primitives();
-    for(auto& primitive_obj: sp_filter->children) {
+    for(auto& primitive_obj: this->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
             SPFilterPrimitive *primitive = SP_FILTER_PRIMITIVE(&primitive_obj);
             g_assert(primitive != nullptr);
@@ -415,11 +408,10 @@ void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr
     }
 }
 
-int sp_filter_primitive_count(SPFilter *filter) {
-    g_assert(filter != nullptr);
+int SPFilter::primitive_count() const {
     int count = 0;
 
-    for(auto& primitive_obj: filter->children) {
+    for(const auto& primitive_obj: this->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
             count++;
         }
@@ -428,20 +420,18 @@ int sp_filter_primitive_count(SPFilter *filter) {
     return count;
 }
 
-int sp_filter_get_image_name(SPFilter *filter, gchar const *name) {
-    gchar *name_copy = strdup(name);
-    map<gchar *, int, ltstr>::iterator result = filter->_image_name->find(name_copy);
-    free(name_copy);
-    if (result == filter->_image_name->end()) return -1;
+int SPFilter::get_image_name(gchar const *name) const {
+    map<gchar *, int, ltstr>::iterator result = this->_image_name->find(const_cast<gchar*>(name));
+    if (result == this->_image_name->end()) return -1;
     else return (*result).second;
 }
 
-int sp_filter_set_image_name(SPFilter *filter, gchar const *name) {
-    int value = filter->_image_number_next;
-    filter->_image_number_next++;
+int SPFilter::set_image_name(gchar const *name) {
+    int value = this->_image_number_next;
+    this->_image_number_next++;
     gchar *name_copy = strdup(name);
     pair<gchar*,int> new_pair(name_copy, value);
-    pair<map<gchar*,int,ltstr>::iterator,bool> ret = filter->_image_name->insert(new_pair);
+    const pair<map<gchar*,int,ltstr>::iterator,bool> ret = this->_image_name->insert(new_pair);
     if (ret.second == false) {
         // The element is not inserted (because an element with the same key was already in the map) 
         // Therefore, free the memory allocated for the new entry:
@@ -452,7 +442,7 @@ int sp_filter_set_image_name(SPFilter *filter, gchar const *name) {
     return value;
 }
 
-gchar const *sp_filter_name_for_image(SPFilter const *filter, int const image) {
+gchar const *SPFilter::name_for_image(int const image) const {
     switch (image) {
         case Inkscape::Filters::NR_FILTER_SOURCEGRAPHIC:
             return "SourceGraphic";
@@ -478,8 +468,8 @@ gchar const *sp_filter_name_for_image(SPFilter const *filter, int const image) {
             break;
         default:
             for (map<gchar *, int, ltstr>::const_iterator i
-                     = filter->_image_name->begin() ;
-                 i != filter->_image_name->end() ; ++i) {
+                     = this->_image_name->begin() ;
+                 i != this->_image_name->end() ; ++i) {
                 if (i->second == image) {
                     return i->first;
                 }
@@ -488,13 +478,12 @@ gchar const *sp_filter_name_for_image(SPFilter const *filter, int const image) {
     return nullptr;
 }
 
-Glib::ustring sp_filter_get_new_result_name(SPFilter *filter) {
-    g_assert(filter != nullptr);
+Glib::ustring SPFilter::get_new_result_name() const {
     int largest = 0;
 
-    for(auto& primitive_obj: filter->children) {
+    for(const auto& primitive_obj: this->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
-            Inkscape::XML::Node *repr = primitive_obj.getRepr();
+            const Inkscape::XML::Node *repr = primitive_obj.getRepr();
             char const *result = repr->attribute("result");
             int index;
             if (result)

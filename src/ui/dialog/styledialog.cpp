@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief A dialog for CSS selectors
  */
@@ -8,7 +9,7 @@
  * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
  * Copyright (C) Tavmjong Bah 2017 <tavmjong@free.fr>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "styledialog.h"
@@ -18,8 +19,8 @@
 #include "inkscape.h"
 #include "document-undo.h"
 
-#include "helper/icon-loader.h"
-#include "ui/widget/addtoicon.h"
+#include "ui/icon-loader.h"
+#include "ui/widget/iconrenderer.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
@@ -248,8 +249,10 @@ StyleDialog::StyleDialog() :
 #endif
 
     // Tree
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(
-                new Inkscape::UI::Widget::AddToIcon() );
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage(
+                new Inkscape::UI::Widget::IconRenderer() );
+    addRenderer->add_icon("edit-delete");
+    addRenderer->add_icon("list-add");
 
     _store = TreeStore::create(this);
     _treeView.set_model(_store);
@@ -260,7 +263,7 @@ StyleDialog::StyleDialog() :
     int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
     if ( col ) {
-        col->add_attribute( addRenderer->property_active(), _mColumns._colIsSelector );
+        col->add_attribute( addRenderer->property_icon(), _mColumns._colIsSelector );
     }
     _treeView.append_column("CSS Selector", _mColumns._colSelector);
     _treeView.set_expander_column(*(_treeView.get_column(1)));
@@ -923,6 +926,7 @@ void StyleDialog::_addSelector()
         result = textDialogPtr->run();
         if (result != Gtk::RESPONSE_OK) { // Cancel, close dialog, etc.
             textDialogPtr->hide();
+            delete textDialogPtr;
             return;
         }
         /**
@@ -1518,7 +1522,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
 void StyleDialog::_styleButton(Gtk::Button& btn, char const* iconName,
                                char const* tooltip)
 {
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);

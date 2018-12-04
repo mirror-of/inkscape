@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2017 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef INKSCAPE_SEEN_UI_DIALOG_SAVE_TEMPLATE_H
 #define INKSCAPE_SEEN_UI_DIALOG_SAVE_TEMPLATE_H
 
@@ -42,7 +51,7 @@ private:
     Gtk::CheckButton is_default_template;
 
     SaveTemplate();
-    void save_template(Gtk::Window &parentWindow);
+    bool save_template(Gtk::Window &parentWindow);
 
 };
 }

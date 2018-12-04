@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Authors:
  *   Liam P. White
  *   Tavmjong Bah
@@ -5,7 +6,7 @@
  *
  * Copyright (C) 2014-2015 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <iomanip>
@@ -1201,4 +1202,4 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

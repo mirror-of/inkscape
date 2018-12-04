@@ -1,18 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @brief Arranges Objects into a Circle/Ellipse
  */
 /* Authors:
  *   Declara Denis
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_POLAR_ARRANGE_TAB_H
 #define INKSCAPE_UI_DIALOG_POLAR_ARRANGE_TAB_H
-
-#if HAVE_CONFIG_H
- #include "config.h"
-#endif
 
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/anchor-selector.h"

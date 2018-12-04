@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <metadata> implementation
  *
@@ -6,12 +7,8 @@
  *
  * Copyright (C) 2004 Kees Cook
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "sp-metadata.h"
 #include "xml/node-iterators.h"
@@ -79,7 +76,7 @@ void SPMetadata::release() {
     SPObject::release();
 }
 
-void SPMetadata::set(unsigned int key, const gchar* value) {
+void SPMetadata::set(SPAttributeEnum key, const gchar* value) {
     debug("0x%08x %s(%u): '%s'",(unsigned int)this,
           sp_attribute_name(key),key,value);
 

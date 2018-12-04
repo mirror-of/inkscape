@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
     Author:  Ted Gould <ted@gould.cx>
     Copyright (c) 2003-2005,2007
 
-    This code is licensed under the GNU GPL.  See COPYING for details.
- 
+    Released under GNU GPL v2+, read the file 'COPYING' for more information.
+
     This file is the backend to the extensions system.  These are
     the parts of the system that most users will never see, but are
     important for implementing the extensions themselves.  This file
@@ -178,6 +179,11 @@ public:
                           Geom::Point const & /*p*/,
                           SPStyle const * /*style*/) { return 0; }
     virtual void     processPath(Inkscape::XML::Node * /*node*/) {}
+
+    /**
+     * If detach = true, when saving to a file, don't store URIs realtive to the filename
+     */
+    virtual void setDetachBase(bool detach) {}
 };
 
 

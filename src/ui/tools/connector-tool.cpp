@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Connector creation tool
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2009  Monash University
  * Copyright (C) 2012  Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * TODO:
  *  o  Show a visual indicator for objects with the 'avoid' property set.
@@ -469,7 +470,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
     bool ret = false;
 
         if ( bevent.button == 1 && !this->space_panning ) {
-            if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+            if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                 return true;
             }
 

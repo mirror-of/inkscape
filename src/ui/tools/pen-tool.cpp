@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Pen event context implementation.
  */
@@ -13,7 +14,7 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2004 Monash University
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -26,7 +27,7 @@
 
 #include "context-fns.h"
 #include "desktop.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
@@ -389,7 +390,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
         // make sure this is not the last click for a waiting LPE (otherwise we want to finish the path)
         && this->expecting_clicks_for_LPE != 1) {
 
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return true;
         }
 

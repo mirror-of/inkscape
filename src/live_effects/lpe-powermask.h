@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_POWERMASK_H
 #define INKSCAPE_LPE_POWERMASK_H
 
 /*
  * Inkscape::LPEPowerMask
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "live_effects/effect.h"
 #include "live_effects/parameter/bool.h"
@@ -19,6 +20,7 @@ class LPEPowerMask : public Effect {
 public:
     LPEPowerMask(LivePathEffectObject *lpeobject);
     ~LPEPowerMask() override;
+    void doOnApply (SPLPEItem const * lpeitem);
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doEffect (SPCurve * curve) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
@@ -36,6 +38,7 @@ private:
     guint32 previous_color;
 };
 
+void sp_remove_powermask(Inkscape::Selection *sel);
 void sp_inverse_powermask(Inkscape::Selection *sel);
 
 } //namespace LivePathEffect

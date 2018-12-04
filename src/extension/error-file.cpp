@@ -1,16 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
  * Copyright (C) 2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "ui/dialog/extensions.h"
 

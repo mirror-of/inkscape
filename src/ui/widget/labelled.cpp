@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Carl Hetherington <inkscape@carlh.net>
@@ -5,15 +6,11 @@
  *
  * Copyright (C) 2004 Carl Hetherington
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
-#include "helper/icon-loader.h"
 #include "labelled.h"
+#include "ui/icon-loader.h"
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 
@@ -75,6 +72,11 @@ Labelled::setTooltipText(const Glib::ustring &tooltip)
 {
     _label->set_tooltip_text(tooltip);
     _widget->set_tooltip_text(tooltip);
+}
+
+void Labelled::flipIconVertically()
+{
+    _icon->set(_icon->get_pixbuf()->flip(false));
 }
 
 bool Labelled::on_mnemonic_activate ( bool group_cycling )

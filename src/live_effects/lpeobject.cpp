@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Johan Engelen 2007-2008 <j.b.c.engelen@utwente.nl>
  *   Abhishek Sharma
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpeobject.h"
@@ -13,7 +14,6 @@
 #include "xml/node-event-vector.h"
 #include "attributes.h"
 #include "document.h"
-#include "document-private.h"
 
 #include "object/sp-defs.h"
 
@@ -95,7 +95,7 @@ void LivePathEffectObject::release() {
 /**
  * Virtual set: set attribute to value.
  */
-void LivePathEffectObject::set(unsigned key, gchar const *value) {
+void LivePathEffectObject::set(SPAttributeEnum key, gchar const *value) {
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_print("Set livepatheffect");
 #endif

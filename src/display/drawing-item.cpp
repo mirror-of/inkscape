@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Canvas item belonging to an SVG drawing element.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <climits>
@@ -23,6 +24,8 @@
 
 #include "display/cairo-utils.h"
 #include "display/cairo-templates.h"
+
+#include "object/sp-item.h"
 
 namespace Inkscape {
 
@@ -118,7 +121,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _fill_pattern(nullptr)
     , _stroke_pattern(nullptr)
     , _filter(nullptr)
-    , _user_data(nullptr)
+    , _item(nullptr)
     , _cache(nullptr)
     , _state(0)
     , _child_type(CHILD_ORPHAN)
@@ -374,10 +377,10 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
     
     if (style && style->filter.set && style->getFilter()) {
         if (!_filter) {
-            int primitives = sp_filter_primitive_count(SP_FILTER(style->getFilter()));
+            int primitives = SP_FILTER(style->getFilter())->primitive_count();
             _filter = new Inkscape::Filters::Filter(primitives);
         }
-        sp_filter_build_renderer(SP_FILTER(style->getFilter()), _filter);
+        SP_FILTER(style->getFilter())->build_renderer(_filter);
     } else {
         // no filter set for this group
         delete _filter;
@@ -555,6 +558,33 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
     if (_transform) {
         child_ctx.ctm = *_transform * ctx.ctm;
     }
+
+    // Vector effects
+    if (_style) {
+
+        if (_style->vector_effect.fixed) {
+            child_ctx.ctm.setTranslation(Geom::Point(0,0));
+        }
+
+        if (_style->vector_effect.size) {
+            double value = sqrt(child_ctx.ctm.det());
+            if (value > 0 ) {
+                child_ctx.ctm[0] = child_ctx.ctm[0]/value;
+                child_ctx.ctm[1] = child_ctx.ctm[1]/value;
+                child_ctx.ctm[2] = child_ctx.ctm[2]/value;
+                child_ctx.ctm[3] = child_ctx.ctm[3]/value;
+            }
+        }
+
+        if (_style->vector_effect.rotate) {
+            double value = sqrt(child_ctx.ctm.det());
+            child_ctx.ctm[0] = value;
+            child_ctx.ctm[1] = 0;
+            child_ctx.ctm[2] = 0;
+            child_ctx.ctm[3] = value;
+        }
+    }
+
     /* Remember the transformation matrix */
     Geom::Affine ctm_change = _ctm.inverse() * child_ctx.ctm;
     _ctm = child_ctx.ctm;
@@ -680,7 +710,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 {
     bool outline = _drawing.outline();
     bool render_filters = _drawing.renderFilters();
-
     // stop_at is handled in DrawingGroup, but this check is required to handle the case
     // where a filtered item with background-accessing filter has enable-background: new
     if (this == stop_at) return RENDER_STOP;
@@ -697,6 +726,14 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
+    
+    // expand render on filtered items
+    Geom::OptIntRect cl = _cacheRect();
+    if (_filter != nullptr && render_filters && cl) {
+        setCached(true, true);
+        carea = cl;
+    }
+    
     if (!carea) return RENDER_OK;
 
     // Device scale for HiDPI screens (typically 1 or 2)
@@ -731,8 +768,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
             // we were previously outside of the canvas.
-            Geom::OptIntRect cl = _drawing.cacheLimit();
-            cl.intersectWith(_drawbox);
             if (cl) {
                 _cache = new DrawingCache(*cl, device_scale);
             }
@@ -963,9 +998,9 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
     if (!(flags & PICK_STICKY) && !(_visible && _sensitive))
         return nullptr;
 
-    bool outline = _drawing.outline();
+    bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
 
-    if (!_drawing.outline()) {
+    if (!_drawing.outline() && !_drawing.getOutlineSensitive()) {
         // pick inside clipping path; if NULL, it means the object is clipped away there
         if (_clip) {
             DrawingItem *cpick = _clip->pick(p, delta, flags | PICK_AS_CLIP);
@@ -996,10 +1031,9 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
 Glib::ustring
 DrawingItem::name()
 {
-    SPObject *object = static_cast<SPObject *>(_user_data);
-    if (object) {
-        if(object->getId())
-            return object->getId();
+    if (_item) {
+        if (_item->getId())
+            return _item->getId();
         else
             return "No object id";
     } else {
@@ -1117,7 +1151,7 @@ DrawingItem::_markForUpdate(unsigned flags, bool propagate)
 /**
  * Compute the caching score.
  *
- * Higher scores mean the item is more aggresively prioritized for automatic
+ * Higher scores mean the item is more aggressively prioritized for automatic
  * caching by Inkscape::Drawing.
  */
 double

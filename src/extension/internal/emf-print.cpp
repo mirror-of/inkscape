@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Enhanced Metafile printing
  *//*
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006-2009 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * References:
  *  - How to Create & Play Enhanced Metafiles in Win32
@@ -21,10 +22,6 @@
  *  - Metafile Structures
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <cstring>
 #include <glibmm/miscutils.h>

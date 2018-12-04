@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Filter Effects dialog.
@@ -12,12 +13,8 @@
  *
  * Copyright (C) 2007 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <gtkmm/imagemenuitem.h>
 
@@ -50,6 +47,8 @@
 #include "inkscape.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
+
+#include "include/gtkmm_version.h"
 
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
@@ -2428,7 +2427,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
                         // Make sure the target has a result
                         const gchar *gres = repr->attribute("result");
                         if(!gres) {
-                            result = sp_filter_get_new_result_name(SP_FILTER(prim->parent));
+                            result = SP_FILTER(prim->parent)->get_new_result_name();
                             repr->setAttribute("result", result.c_str());
                             in_val = result.c_str();
                         }
@@ -3088,7 +3087,7 @@ void FilterEffectsDialog::update_settings_view()
 
     SPFilterPrimitive* prim = _primitive_list.get_selected();
 
-    if(prim) {
+    if(prim && prim->getRepr()) {
 
         //XML Tree being used directly here while it shouldn't be.
         _settings->show_and_update(FPConverter.get_id_from_key(prim->getRepr()->name()), prim);

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <ellipse> and related implementations
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2000-2001 Ximian, Inc.
  * Copyright (C) 2013 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm.h>
@@ -91,7 +92,7 @@ void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
     SPShape::build(document, repr);
 }
 
-void SPGenericEllipse::set(unsigned int key, gchar const *value)
+void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
 {
     // There are multiple ways to set internal cx, cy, rx, and ry (via SVG attributes or Sodipodi
     // attributes) thus we don't want to unset them if a read fails (e.g., when we explicitly clear
@@ -461,6 +462,7 @@ void SPGenericEllipse::set_shape()
     if (this->_isSlice() && this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE) {
         pb.lineTo(Geom::Point(0, 0));
     }
+
     if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
         pb.closePath();
     } else {
@@ -479,12 +481,16 @@ void SPGenericEllipse::set_shape()
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
-    if (before || this->hasPathEffectRecursive()) {
+    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
+    if (before || haslpe) {
         if (c && before && before->get_pathvector() != c->get_pathvector()){
             this->setCurveBeforeLPE(c);
             sp_lpe_item_update_patheffect(this, true, false);
-        } else {
+        } else if(haslpe) {
             this->setCurveBeforeLPE(c);
+        } else {
+            //This happends on undo, fix bug:#1791784
+            this->setCurveInsync(c);
         }
     } else {
         this->setCurveInsync(c);
@@ -498,17 +504,10 @@ void SPGenericEllipse::set_shape()
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 {
-    if (hasPathEffect() && pathEffectsEnabled() && 
-        (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
-    {
-        // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
-        // also if the effect is type BEND PATH to fix bug #179842
-        this->adjust_livepatheffect(xform);
+    if (hasPathEffect() && pathEffectsEnabled()) {
         return xform;
     }
+
     /* Calculate ellipse start in parent coords. */
     Geom::Point pos(Geom::Point(this->cx.computed, this->cy.computed) * xform);
 
@@ -557,9 +556,6 @@ Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
-
-    // Adjust livepatheffect
-    this->adjust_livepatheffect(xform);
     
     return ret;
 }

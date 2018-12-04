@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SP_TAG_H_SEEN
 #define SP_TAG_H_SEEN
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-object.h"
@@ -28,7 +29,7 @@ public:
 
     void build(SPDocument * doc, Inkscape::XML::Node *repr) override;
     //virtual void release();
-    void set(unsigned key, const gchar* value) override;
+    void set(SPAttributeEnum key, const gchar* value) override;
     void update(SPCtx * ctx, unsigned flags) override;
 
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;

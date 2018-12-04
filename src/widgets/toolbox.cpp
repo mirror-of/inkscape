@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Inkscape toolbar definitions and general utility functions.
@@ -23,12 +24,8 @@
  * Copyright (C) 1999-2015 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/action.h>
@@ -47,6 +44,8 @@
 #include "ink-toggle-action.h"
 
 #include "helper/action.h"
+
+#include "include/gtkmm_version.h"
 
 #include "io/resource.h"
 
@@ -135,6 +134,15 @@ GtkIconSize ToolboxFactory::prefToSize( Glib::ustring const &path, int base ) {
     };
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int index = prefs->getIntLimited( path, base, 0, G_N_ELEMENTS(sizeChoices) );
+    return sizeChoices[index];
+}
+
+Gtk::IconSize ToolboxFactory::prefToSize_mm(Glib::ustring const &path, int base)
+{
+    static Gtk::IconSize sizeChoices[] = { Gtk::ICON_SIZE_LARGE_TOOLBAR, Gtk::ICON_SIZE_SMALL_TOOLBAR,
+                                           Gtk::ICON_SIZE_MENU, Gtk::ICON_SIZE_DIALOG };
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int index = prefs->getIntLimited(path, base, 0, G_N_ELEMENTS(sizeChoices));
     return sizeChoices[index];
 }
 

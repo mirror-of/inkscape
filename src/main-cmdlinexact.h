@@ -1,6 +1,10 @@
-
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __INK_MAIN_CMD_LINE_XACTIONS_H__
 #define __INK_MAIN_CMD_LINE_XACTIONS_H__
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #ifdef WITH_YAML
 
@@ -14,7 +18,9 @@
  *
  * Copyright (C) 2016 Authors
  *
- * Released under GNU GPL v2.x, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ *
+ * more details: http://wiki.inkscape.org/wiki/index.php/Using_xverbs
  */
 
 #include "main-cmdlineact.h"

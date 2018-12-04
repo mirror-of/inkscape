@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feConvolveMatrix> implementation.
  *
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -102,7 +103,7 @@ static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_
 /**
  * Sets a specific value in the SPFeConvolveMatrix.
  */
-void SPFeConvolveMatrix::set(unsigned int key, gchar const *value) {
+void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
     double read_num;
     int read_int;
     bool read_bool;
@@ -295,7 +296,7 @@ void SPFeConvolveMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterConvolveMatrix *nr_convolve = dynamic_cast<Inkscape::Filters::FilterConvolveMatrix*>(nr_primitive);
     g_assert(nr_convolve != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_convolve->set_targetX(this->targetX);
     nr_convolve->set_targetY(this->targetY);

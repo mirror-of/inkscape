@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A simple panel for tags
  *
@@ -6,12 +7,8 @@
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "tags.h"
 #include <gtkmm/icontheme.h>
@@ -22,26 +19,24 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "filter-chemistry.h"
 #include "inkscape.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
-
-#include "helper/icon-loader.h"
-#include "svg/css-ostringstream.h"
-#include "ui/tools/tool-base.h" //"event-context.h"
-#include "ui/widget/addtoicon.h"
-#include "ui/widget/layertypeicon.h"
 #include "verbs.h"
-#include "xml/node-observer.h"
-//#include "dialogs/dialog-events.h"
-#include "ui/widget/color-notebook.h"
-#include "filter-chemistry.h"
 
-#include "object/sp-item.h"
+#include "helper/action.h"
+#include "include/gtkmm_version.h"
 #include "object/sp-defs.h"
+#include "object/sp-item.h"
 #include "object/sp-object-group.h"
+#include "svg/css-ostringstream.h"
+#include "ui/icon-loader.h"
+#include "ui/tools/tool-base.h"
+#include "ui/widget/color-notebook.h"
+#include "ui/widget/iconrenderer.h"
+#include "ui/widget/layertypeicon.h"
+#include "xml/node-observer.h"
 
 //#define DUMP_LAYERS 1
 
@@ -127,7 +122,7 @@ public:
 
 void TagsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -141,7 +136,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
     const char* label = nullptr;
 
     if ( iconName ) {
-        iconWidget = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_MENU)->gobj());
+        iconWidget = sp_get_icon_image(iconName, GTK_ICON_SIZE_MENU);
     }
 
     if ( desktop ) {
@@ -149,7 +144,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
         if ( verb ) {
             SPAction *action = verb->get_action(desktop);
             if ( !iconWidget && action && action->image ) {
-                iconWidget = GTK_WIDGET(sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU)->gobj());
+                iconWidget = sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU);
             }
 
             if ( action ) {
@@ -286,7 +281,7 @@ public:
     Gtk::TreeModelColumn<SPObject*> _colParentObject;
     Gtk::TreeModelColumn<SPObject*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;
-    Gtk::TreeModelColumn<bool> _colAddRemove;
+    Gtk::TreeModelColumn<int> _colAddRemove;
     Gtk::TreeModelColumn<bool> _colAllowAddRemove;
 };
 
@@ -391,7 +386,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
                 row[_model->_colObject] = &child;
                 row[_model->_colParentObject] = NULL;
                 row[_model->_colLabel] = child.label() ? child.label() : child.getId();
-                row[_model->_colAddRemove] = true;
+                row[_model->_colAddRemove] = 1;
                 row[_model->_colAllowAddRemove] = true;
                 
                 _tree.expand_to_path( _store->get_path(iter) );
@@ -409,7 +404,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
             rowitems[_model->_colObject] = NULL;
             rowitems[_model->_colParentObject] = obj;
             rowitems[_model->_colLabel] = _("Items");
-            rowitems[_model->_colAddRemove] = false;
+            rowitems[_model->_colAddRemove] = 0;
             rowitems[_model->_colAllowAddRemove] = false;
             
             _tree.expand_to_path( _store->get_path(iteritems) );
@@ -423,7 +418,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
                     row[_model->_colObject] = &child;
                     row[_model->_colParentObject] = NULL;
                     row[_model->_colLabel] = item ? (item->label() ? item->label() : item->getId()) : SP_TAG_USE(&child)->href;
-                    row[_model->_colAddRemove] = false;
+                    row[_model->_colAddRemove] = 0;
                     row[_model->_colAllowAddRemove] = true;
 
                     if (SP_TAG(obj)->expanded()) {
@@ -933,11 +928,14 @@ TagsPanel::TagsPanel() :
     tooltip_string += (_("Remove from selection set"));
     _tree.set_tooltip_text( tooltip_string );
 
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage( new Inkscape::UI::Widget::AddToIcon());
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage( new Inkscape::UI::Widget::IconRenderer());
+    addRenderer->add_icon("edit-delete");
+    addRenderer->add_icon("list-add");
+
     int addColNum = _tree.append_column("type", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _tree.get_column(addColNum);
     if ( col ) {
-        col->add_attribute( addRenderer->property_active(), _model->_colAddRemove );
+        col->add_attribute( addRenderer->property_icon(), _model->_colAddRemove );
         col->add_attribute( addRenderer->property_visible(), _model->_colAllowAddRemove );
     }
 

@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SP_RADIAL_GRADIENT_H
 #define SP_RADIAL_GRADIENT_H
 
@@ -31,7 +40,7 @@ public:
 
 protected:
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
-	void set(unsigned key, char const *value) override;
+	void set(SPAttributeEnum key, char const *value) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 

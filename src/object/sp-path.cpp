@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <path> implementation
  *
@@ -12,14 +13,11 @@
  * Copyright (C) 2000-2001 Ximian, Inc.
  * Copyright (C) 1999-2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -136,28 +134,47 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
         (d_source == SP_STYLE_SRC_STYLE_PROP || d_source == SP_STYLE_SRC_STYLE_SHEET) ) {
 
         if (style->d.value) {
-            Geom::PathVector pv = sp_svg_read_pathv(style->d.value);
-            SPCurve *curve = new SPCurve(pv);
-            if (curve) {
+            // Chrome shipped with a different syntax for property vs attribute.
+            // The SVG Working group decided to follow the Chrome syntax (which may
+            // allow future extensions of the 'd' property). The property syntax
+            // wraps the path data with "path(...)". We must strip that!
 
-                // Update curve
-                this->setCurveInsync(curve, TRUE);
-                curve->unref();
+            // Must be Glib::ustring or we get conversion errors!
+            Glib::ustring input = style->d.value;
+            Glib::ustring expression = R"A(path\("(.*)"\))A";
+            Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create(expression);
+            Glib::MatchInfo matchInfo;
+            regex->match(input, matchInfo);
 
-                // Convert from property to attribute (convert back on write)
-                getRepr()->setAttribute("d", style->d.value);
+            if (matchInfo.matches()) {
+                Glib::ustring  value = matchInfo.fetch(1);
+                Geom::PathVector pv = sp_svg_read_pathv(value.c_str());
 
-                SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
-                sp_repr_css_unset_property ( css, "d");
-                sp_repr_css_set ( getRepr(), css, "style" );
-                sp_repr_css_attr_unref ( css );
+                SPCurve *curve = new SPCurve(pv);
+                if (curve) {
 
-                style->d.style_src = SP_STYLE_SRC_ATTRIBUTE;
-            } else {
-                // Do nothing... don't overwrite 'd' from attribute
+                    // Update curve
+                    this->setCurveInsync(curve, TRUE);
+                    curve->unref();
+
+                    // Convert from property to attribute (convert back on write)
+                    getRepr()->setAttribute("d", value);
+
+                    SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
+                    sp_repr_css_unset_property ( css, "d");
+                    sp_repr_css_set ( getRepr(), css, "style" );
+                    sp_repr_css_attr_unref ( css );
+
+                    style->d.style_src = SP_STYLE_SRC_ATTRIBUTE;
+                } else {
+                    std::cerr << "SPPath::build: Failed to create curve: " << input << std::endl;
+                }
             }
         }
+        // If any if statement is false, do nothing... don't overwrite 'd' from attribute
     }
+
+
     // this->readAttr( "inkscape:original-d" ); // bug #1299948
     // Why we take the long way of doing this probably needs some explaining:
     //
@@ -215,7 +232,7 @@ void SPPath::release() {
     SPShape::release();
 }
 
-void SPPath::set(unsigned int key, const gchar* value) {
+void SPPath::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_ORIGINAL_D:
             if (value) {
@@ -227,8 +244,13 @@ void SPPath::set(unsigned int key, const gchar* value) {
                     curve->unref();
                 }
             } else {
-                this->setCurveBeforeLPE(nullptr);
-                
+                bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
+                if (!haslpe) {
+                    this->setCurveBeforeLPE(nullptr);
+                } else {
+                    //This happends on undo, fix bug:#1791784
+                    this->removeAllPathEffects(false);
+                }
             }
             sp_lpe_item_update_patheffect(this, true, true);
             break;
@@ -321,16 +343,17 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
+    if (hasPathEffect() && pathEffectsEnabled()) {
+        return transform;
+    }
+
+    // TODO: try to remove CLONE_ORIGINAL from here
     // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
     if (_curve_before_lpe && hasPathEffectRecursive()) {
-        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
-            this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
-            this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
-            this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) 
+        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) 
         {
             // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
             // also if the effect is type BEND PATH to fix bug #179842
-            this->adjust_livepatheffect(transform);
             return transform;
         } else {
             _curve_before_lpe->transform(transform);
@@ -347,9 +370,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // Adjust gradient fill
     this->adjust_gradient(transform);
-
-    // Adjust LPE
-    this->adjust_livepatheffect(transform);
 
     // nothing remains - we've written all of the transform, so return identity
     return Geom::identity();

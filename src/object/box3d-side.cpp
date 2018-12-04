@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * 3D box face implementation
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2007  Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "box3d-side.h"
@@ -71,7 +72,7 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
     return repr;
 }
 
-void Box3DSide::set(unsigned int key, const gchar* value) {
+void Box3DSide::set(SPAttributeEnum key, const gchar* value) {
     // TODO: In case the box was recreated (by undo, e.g.) we need to recreate the path
     //       (along with other info?) from the parent box.
 
@@ -194,16 +195,21 @@ void Box3DSide::set_shape() {
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
-    if (before || this->hasPathEffectRecursive()) {
+    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
+    if (before || haslpe) {
         if (c && before && before->get_pathvector() != c->get_pathvector()){
             this->setCurveBeforeLPE(c);
             sp_lpe_item_update_patheffect(this, true, false);
-        } else {
+        } else if(haslpe) {
             this->setCurveBeforeLPE(c);
+        } else {
+            //This happends on undo, fix bug:#1791784
+            this->setCurveInsync(c);
         }
     } else {
         this->setCurveInsync(c);
     }
+
     if (before) {
         before->unref();
     }

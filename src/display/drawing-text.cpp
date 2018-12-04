@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Group belonging to an SVG drawing element.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2011 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 //#include "display/cairo-utils.h"
@@ -186,7 +187,7 @@ DrawingItem *DrawingGlyphs::_pickItem(Geom::Point const &p, double /*delta*/, un
     bool invisible = (ggroup->_nrstyle.fill.type == NRStyle::PAINT_NONE) &&
         (ggroup->_nrstyle.stroke.type == NRStyle::PAINT_NONE);
 
-    if (_font && _bbox && (_drawing.outline() || !invisible) ) {
+    if (_font && _bbox && (_drawing.outline() || _drawing.getOutlineSensitive() || !invisible)) {
         // With text we take a simple approach: pick if the point is in a character bbox
         Geom::Rect expanded(_pick_bbox);
         // FIXME, why expand by delta?  When is the next line needed?
@@ -598,11 +599,22 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         }
         {
             Inkscape::DrawingContext::Save save(dc);
-            if (!_style || !(_style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE)) {
+            if (!_style || !(_style->vector_effect.stroke)) {
                 dc.transform(_ctm);
             }
             if (has_stroke) {
                 _nrstyle.applyStroke(dc);
+
+                // If the draw mode is set to visible hairlines, don't let anything get smaller
+                // than half a pixel.
+                if (_drawing.visibleHairlines()) {
+                    double half_pixel_size = 0.5, trash = 0.5;
+                    dc.device_to_user_distance(half_pixel_size, trash);
+                    if (_nrstyle.stroke_width < half_pixel_size) {
+                        dc.setLineWidth(half_pixel_size);
+                    }
+                }
+
                 dc.strokePreserve();
             }
         }

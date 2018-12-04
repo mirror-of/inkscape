@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Gradient drawing and editing tool
  *
@@ -9,12 +10,8 @@
  * Copyright (C) 2007 Johan Engelen
  * Copyright (C) 2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 #include <gdk/gdkkeysyms.h>
@@ -24,7 +21,7 @@
 #include "document.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"

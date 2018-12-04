@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_POWERCLIP_H
 #define INKSCAPE_LPE_POWERCLIP_H
 
 /*
  * Inkscape::LPEPowerClip
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/effect.h"
@@ -18,17 +19,16 @@ class LPEPowerClip : public Effect {
 public:
     LPEPowerClip(LivePathEffectObject *lpeobject);
     ~LPEPowerClip() override;
+    void doOnApply (SPLPEItem const * lpeitem);
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
-    Gtk::Widget * newWidget() override;
-    //virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
     void doAfterEffect (SPLPEItem const* lpeitem) override;
-    void addInverse (SPItem * clip_data);
+    void addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine affine, bool root);
+    void updateInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);
     void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);
-    void convertShapes();
 private:
     HiddenParam is_inverse;
     HiddenParam uri;
@@ -38,9 +38,10 @@ private:
     MessageParam message;
     Geom::Path clip_box;
     Geom::Affine base;
-    bool convert_shapes;
+    Geom::Affine lastapplied;
 };
 
+void sp_remove_powerclip(Inkscape::Selection *sel);
 void sp_inverse_powerclip(Inkscape::Selection *sel);
 
 } //namespace LivePathEffect

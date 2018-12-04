@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Windows-only Enhanced Metafile input and output.
  */
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006-2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * References:
  *  - How to Create & Play Enhanced Metafiles in Win32
@@ -21,11 +22,6 @@
  *  - Metafile Structures
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
-
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <cstdio>
 #include <cstdlib>
@@ -587,7 +583,7 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
         So the rotated name is EMFrotimage###_XXXXXX, where ### is the number of the referred to image, and
         XXXX is the rotation in radians x 1000000 and truncated.  That is then stored in BASE64 as the "image".
         The corresponding SVG generated though is not for an image, but a reference to an image.
-        The name of the pattern MUST stil be EMFimage###_ref or output_style() will not be able to use it.
+        The name of the pattern MUST still be EMFimage###_ref or output_style() will not be able to use it.
     */
     if(current_rotation(d) >= 0.00001 || current_rotation(d) <= -0.00001){ /* some rotation, allow a little rounding error around 0 degrees */
         int tangle = round(current_rotation(d)*1000000.0);
@@ -1461,7 +1457,7 @@ Emf::delete_object(PEMF_CALLBACK_DATA d, int index)
         d->emf_obj[index].type = 0;
 // We are keeping a copy of the EMR rather than just a structure.  Currently that is not necessary as the entire
 // EMF is read in at once and is stored in a big malloc.  However, in past versions it was handled
-// reord by record, and we might need to do that again at some point in the future if we start running into EMF
+// record by record, and we might need to do that again at some point in the future if we start running into EMF
 // files too big to fit into memory.
         if (d->emf_obj[index].lpEMFR)
             free(d->emf_obj[index].lpEMFR);

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  *  This file came from libwpg as a source, their utility wpg2svg
  *  specifically.  It has been modified to work as an Inkscape extension.
@@ -9,12 +10,15 @@
  *
  * Copyright (C) 2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <cstdio>
-#include "config.h"
 
 #include "vsd-input.h"
 
@@ -46,13 +50,12 @@
 #include "extension/input.h"
 
 #include "document.h"
-#include "document-private.h"
 #include "inkscape.h"
 
 #include "ui/dialog-events.h"
 #include <glibmm/i18n.h>
 
-#include "svg-view-widget.h"
+#include "ui/view/svg-view-widget.h"
 
 #include "object/sp-root.h"
 
@@ -81,7 +84,7 @@ private:
      void _onSpinButtonRelease(GdkEventButton* button_event);
 
      class Gtk::VBox * vbox1;
-     class Gtk::Widget * _previewArea;
+     class Inkscape::UI::View::SVGViewWidget * _previewArea;
      class Gtk::Button * cancelbutton;
      class Gtk::Button * okbutton;
 
@@ -96,7 +99,10 @@ private:
 };
 
 VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
-     : _vec(vec), _current_page(1), _spinning(false)
+    : _previewArea(nullptr)
+    , _vec(vec)
+    , _current_page(1)
+    , _spinning(false)
 {
      int num_pages = _vec.size();
      if ( num_pages <= 1 )
@@ -112,9 +118,7 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      this->property_destroy_with_parent().set_value(false);
 
      // Preview area
-     _previewArea = Gtk::manage(new class Gtk::VBox());
      vbox1 = Gtk::manage(new class Gtk::VBox());
-     vbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 0);
      this->get_content_area()->pack_start(*vbox1);
 
      // CONTROLS
@@ -206,34 +210,44 @@ void VsdImportDialog::_onSpinButtonRelease(GdkEventButton* /*button_event*/)
  */
 void VsdImportDialog::_setPreviewPage()
 {
-     if (_spinning) {
-         return;
-     }
+    if (_spinning) {
+        return;
+    }
 
-     SPDocument *doc = SPDocument::createNewDocFromMem(_vec[_current_page-1].cstr(), strlen(_vec[_current_page-1].cstr()), 0);
-     if(!doc) {
-           g_warning("VSD import: Could not create preview for page %d", _current_page);
-           gchar const *no_preview_template =
-                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>"
-                "  <path style='fill:none;stroke:#ff0000;stroke-width:2px;' d='M 82,10 18,74 m 0,-64 64,64' />"
-                "  <rect style='fill:none;stroke:#000000;stroke-width:1.5px;' width='64' height='64' x='18' y='10' />"
-                "  <text x='50' y='92' style='font-size:10px;text-anchor:middle;font-family:sans-serif;'>%s</text>"
-                "</svg>";
-           gchar * no_preview = g_strdup_printf(no_preview_template, _("No preview"));
-           doc = SPDocument::createNewDocFromMem(no_preview, strlen(no_preview), 0);
-           g_free(no_preview);
-     }
+    SPDocument *doc = SPDocument::createNewDocFromMem(_vec[_current_page-1].cstr(), strlen(_vec[_current_page-1].cstr()), 0);
+    if(!doc) {
+        g_warning("VSD import: Could not create preview for page %d", _current_page);
+        gchar const *no_preview_template = R"A(
+          <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+            <path d='M 82,10 18,74 m 0,-64 64,64' style='fill:none;stroke:#ff0000;stroke-width:2px;'/>
+            <rect x='18' y='10' width='64' height='64' style='fill:none;stroke:#000000;stroke-width:1.5px;'/>
+            <text x='50' y='92' style='font-size:10px;text-anchor:middle;font-family:sans-serif;'>%s</text>
+          </svg>
+        )A";
+        gchar * no_preview = g_strdup_printf(no_preview_template, _("No preview"));
+        doc = SPDocument::createNewDocFromMem(no_preview, strlen(no_preview), 0);
+        g_free(no_preview);
+    }
 
-     Gtk::Widget * tmpPreviewArea = Glib::wrap(sp_svg_view_widget_new(doc));
-     std::swap(_previewArea, tmpPreviewArea);
-     delete tmpPreviewArea;
-     vbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 0);
-     _previewArea->show_now();
+    if (!doc) {
+        std::cerr << "VsdImportDialog::_setPreviewPage: No document!" << std::endl;
+        return;
+    }
+
+    if (_previewArea) {
+        _previewArea->setDocument(doc);
+    } else {
+        _previewArea = Gtk::manage(new Inkscape::UI::View::SVGViewWidget(doc));
+        vbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 0);
+    }
+
+    _previewArea->setResize(400, 400);
+    _previewArea->show_all();
 }
 
 SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
-     #ifdef WIN32
+     #ifdef _WIN32
           // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
           // therefore attempt to convert uri to the system codepage
           // even if this is not possible the alternate short (8.3) file name will be used if available

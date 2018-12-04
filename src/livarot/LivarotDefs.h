@@ -1,17 +1,17 @@
-/*
- *  LivarotDefs.h
- *  nlivarot
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
+ * Fred
  *
- *  Created by fred on Tue Jun 17 2003.
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef my_defs
 #define my_defs
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <cstdint>
 

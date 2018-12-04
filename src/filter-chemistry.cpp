@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Various utility methods for filters
  *
@@ -10,22 +11,22 @@
  *
  * Copyright (C) 2006-2008 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "filter-chemistry.h"
 
 #include <cstring>
 #include <glibmm.h>
 
-#include "document-private.h"
 #include "desktop-style.h"
-
-#include "filter-chemistry.h"
+#include "document.h"
 #include "filter-enums.h"
+#include "style.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-item.h"
-#include "style.h"
+
 #include "object/filters/blend.h"
 #include "object/filters/gaussian-blur.h"
 

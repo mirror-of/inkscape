@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Parameters for extensions.
  */
@@ -8,39 +9,39 @@
  *
  * Copyright (C) 2005-2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #ifdef linux  // does the dollar sign need escaping when passed as string parameter?
 # define ESCAPE_DOLLAR_COMMANDLINE
 #endif
 
 #include <cstring>
+#include <list>
 
-#include "ui/widget/color-notebook.h"
-#include <xml/node.h>
+#include <glibmm/i18n.h>
+#include <sigc++/sigc++.h>
 
-#include <extension/extension.h>
-#include "document-private.h"
-#include "object/sp-defs.h"
-#include <color.h>
-
-#include "parameter.h"
 #include "bool.h"
+#include "color.h"
 #include "color.h"
 #include "description.h"
 #include "enum.h"
 #include "float.h"
 #include "int.h"
 #include "notebook.h"
+#include "parameter.h"
 #include "radiobutton.h"
 #include "string.h"
 
-#include <glibmm/i18n.h>
+#include "extension/extension.h"
+
+#include "object/sp-defs.h"
+
+#include "ui/widget/color-notebook.h"
+
+#include "xml/node.h"
+
 
 namespace Inkscape {
 namespace Extension {

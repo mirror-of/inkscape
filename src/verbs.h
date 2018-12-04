@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_VERBS_H
 #define SEEN_SP_VERBS_H
 /*
@@ -9,13 +10,8 @@
  *  Copyright (C) 2006 Johan Engelen <johan@shouraizou.nl>
  *  Copyright (C) (date unspecified) Authors
 
- * This code is in public domain if done by Lauris
- * This code is GPL if done by Ted or David
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <cstring>
 #include <string>
@@ -42,22 +38,22 @@ class View;
  */
 enum {
     /* Header */
-    SP_VERB_INVALID,               /**< A dummy verb to represent doing something wrong. */
-    SP_VERB_NONE,                  /**< A dummy verb to represent not having a verb. */
+    SP_VERB_INVALID, /**< A dummy verb to represent doing something wrong. */
+    SP_VERB_NONE,    /**< A dummy verb to represent not having a verb. */
     /* File */
-    SP_VERB_FILE_NEW,              /**< A new file in a new window. */
-    SP_VERB_FILE_OPEN,             /**< Open a file. */
-    SP_VERB_FILE_REVERT,           /**< Revert this file to its original state. */
-    SP_VERB_FILE_SAVE,             /**< Save the current file with its saved filename */
-    SP_VERB_FILE_SAVE_AS,          /**< Save the current file with a new filename */
-    SP_VERB_FILE_SAVE_A_COPY,      /**< Save a copy of the current file */
-    SP_VERB_FILE_SAVE_TEMPLATE,    /**< Save the ciurrent document as template */
+    SP_VERB_FILE_NEW,           /**< A new file in a new window. */
+    SP_VERB_FILE_OPEN,          /**< Open a file. */
+    SP_VERB_FILE_REVERT,        /**< Revert this file to its original state. */
+    SP_VERB_FILE_SAVE,          /**< Save the current file with its saved filename */
+    SP_VERB_FILE_SAVE_AS,       /**< Save the current file with a new filename */
+    SP_VERB_FILE_SAVE_A_COPY,   /**< Save a copy of the current file */
+    SP_VERB_FILE_SAVE_TEMPLATE, /**< Save the ciurrent document as template */
     SP_VERB_FILE_PRINT,
     SP_VERB_FILE_VACUUM,
     SP_VERB_FILE_IMPORT,
-//    SP_VERB_FILE_EXPORT,
+    //    SP_VERB_FILE_EXPORT,
     SP_VERB_FILE_IMPORT_FROM_OCAL, /**< Import the file from Open Clip Art Library */
-//    SP_VERB_FILE_EXPORT_TO_OCAL, /**< Export the file to Open Clip Art  Library */
+                                   //    SP_VERB_FILE_EXPORT_TO_OCAL, /**< Export the file to Open Clip Art  Library */
     SP_VERB_FILE_NEXT_DESKTOP,
     SP_VERB_FILE_PREV_DESKTOP,
     SP_VERB_FILE_CLOSE_VIEW,
@@ -297,16 +293,17 @@ enum {
     SP_VERB_FULLSCREENFOCUS,
     SP_VERB_FOCUSTOGGLE,
     SP_VERB_VIEW_NEW,
-    SP_VERB_VIEW_NEW_PREVIEW,
     SP_VERB_VIEW_MODE_NORMAL,
     SP_VERB_VIEW_MODE_NO_FILTERS,
     SP_VERB_VIEW_MODE_OUTLINE,
+    SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES,
     SP_VERB_VIEW_MODE_TOGGLE,
     SP_VERB_VIEW_COLOR_MODE_NORMAL,
     SP_VERB_VIEW_COLOR_MODE_GRAYSCALE,
 
-//    SP_VERB_VIEW_COLOR_MODE_PRINT_COLORS_PREVIEW,
+    //    SP_VERB_VIEW_COLOR_MODE_PRINT_COLORS_PREVIEW,
     SP_VERB_VIEW_COLOR_MODE_TOGGLE,
+    SP_VERB_VIEW_TOGGLE_SPLIT,
     SP_VERB_VIEW_CMS_TOGGLE,
     SP_VERB_VIEW_ICON_PREVIEW,
 
@@ -349,7 +346,7 @@ enum {
     SP_VERB_HELP_ABOUT_EXTENSIONS,
     SP_VERB_HELP_MEMORY,
     SP_VERB_HELP_ABOUT,
-    //SP_VERB_SHOW_LICENSE,
+    // SP_VERB_SHOW_LICENSE,
     /* Tutorials */
     SP_VERB_TUTORIAL_BASIC,
     SP_VERB_TUTORIAL_SHAPES,

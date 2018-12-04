@@ -1,24 +1,17 @@
-/**
- * @file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * System-wide clipboard management - implementation.
- */
-/* Authors:
+ *//*
+ * Authors:
+ * see git history
  *   Krzysztof Kosiński <tweenk@o2.pl>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Incorporates some code from selection-chemistry.cpp, see that file for more credits.
  *   Abhishek Sharma
  *   Tavmjong Bah
  *
- * Copyright (C) 2008 authors
- * Copyright (C) 2010 Jon A. Cruz
- * Copyright (C) 2012 Tavmjong Bah (Symbol additions)
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * See the file COPYING for details.
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm/clipboard.h>
@@ -32,12 +25,10 @@
 #include "inkgc/gc-core.h"
 #include "xml/repr.h"
 #include "inkscape.h"
-#include "io/stringstream.h"
 #include "desktop.h"
 
 #include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
 #include "document.h"
-#include "document-private.h"
 #include "message-stack.h"
 #include "context-fns.h"
 #include "ui/tools/dropper-tool.h" // used in copy()
@@ -85,7 +76,7 @@
 
 #define CLIPBOARD_TEXT_TARGET "text/plain"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -367,7 +358,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
     if ( desktop == nullptr ) {
         return false;
     }
-    if ( Inkscape::have_viable_layer(desktop, desktop->messageStack()) == false ) {
+    if ( Inkscape::have_viable_layer(desktop, desktop->getMessageStack()) == false ) {
         return false;
     }
 
@@ -760,15 +751,17 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             // write the complete accumulated transform passed to us
             // (we're dealing with unattached representations, so we write to their attributes
             // instead of using sp_item_set_transform)
+            
             SPUse *use=dynamic_cast<SPUse *>(item);
-            if( use && use->get_original() && use->get_original()->parent ){//we are copying something whose parent is also copied (!)
-                transform = ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform;
-            }
-            gchar *transform_str = sp_svg_transform_write(transform );
-
-
-            obj_copy->setAttribute("transform", transform_str);
-            g_free(transform_str);
+            if( use && use->get_original() && use->get_original()->parent) {
+                if (selection->includes(use->get_original())){ //we are copying something whose parent is also copied (!)
+                    obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
+                } else { // original is not copied
+                    obj_copy->setAttribute("transform-with-parent", sp_svg_transform_write(transform));
+                    obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
+                }
+            } else
+                obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
         }
     }
 
@@ -1106,9 +1099,6 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
     if (lpeitem)
     {
-        // for each effect in the stack, check if we need to fork it before adding it to the item
-        lpeitem->forkPathEffectsIfNecessary(1);
-
         std::istringstream iss(effectstack);
         std::string href;
         while (std::getline(iss, href, ';'))
@@ -1120,6 +1110,8 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
             LivePathEffectObject *lpeobj = LIVEPATHEFFECT(obj);
             lpeitem->addPathEffect(lpeobj);
         }
+        // for each effect in the stack, check if we need to fork it before adding it to the item
+        lpeitem->forkPathEffectsIfNecessary(1);
     }
 }
 
@@ -1148,7 +1140,7 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
     bool file_saved = false;
     Glib::ustring target = best_target;
 
-#ifdef WIN32
+#ifdef _WIN32
     if (best_target == "CF_ENHMETAFILE" || best_target == "WCF_ENHMETAFILE")
     {   // Try to save clipboard data as en emf file (using win32 api)
         if (OpenClipboard(NULL)) {
@@ -1245,7 +1237,8 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     // FIXME: Temporary hack until we add support for memory output.
     // Save to a temporary file, read it back and then set the clipboard contents
     gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export", NULL );
-    gsize len; gchar *data;
+    gchar *data = nullptr;
+    gsize len;
 
     try {
         if (out == outlist.end() && target == "image/png")
@@ -1278,7 +1271,12 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
                 // Need to load the extension.
                 (*out)->set_state(Inkscape::Extension::Extension::STATE_LOADED);
             }
-            (*out)->save(_clipboardSPDoc, filename);
+
+            if (SP_ACTIVE_DOCUMENT) {
+                _clipboardSPDoc->setBase(SP_ACTIVE_DOCUMENT->getBase());
+            }
+
+            (*out)->save(_clipboardSPDoc, filename, true);
         }
         g_file_get_contents(filename, &data, &len, nullptr);
 
@@ -1288,6 +1286,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
 
     g_unlink(filename); // delete the temporary file
     g_free(filename);
+    g_free(data);
 }
 
 
@@ -1396,7 +1395,7 @@ Glib::ustring ClipboardManagerImpl::_getBestTarget()
             return *i;
         }
     }
-#ifdef WIN32
+#ifdef _WIN32
     if (OpenClipboard(NULL))
     {   // If both bitmap and metafile are present, pick the one that was exported first.
         UINT format = EnumClipboardFormats(0);
@@ -1462,7 +1461,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
         sigc::mem_fun(*this, &ClipboardManagerImpl::_onGet),
         sigc::mem_fun(*this, &ClipboardManagerImpl::_onClear));
 
-#ifdef WIN32
+#ifdef _WIN32
     // If the "image/x-emf" target handled by the emf extension would be
     // presented as a CF_ENHMETAFILE automatically (just like an "image/bmp"
     // is presented as a CF_BITMAP) this code would not be needed.. ???

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_MASK_H
 #define SEEN_SP_MASK_H
 
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2003 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/rect.h>
@@ -21,15 +22,20 @@
 #define SP_MASK(obj) (dynamic_cast<SPMask*>((SPObject*)obj))
 #define SP_IS_MASK(obj) (dynamic_cast<const SPMask*>((SPObject*)obj) != NULL)
 
-struct SPMaskView;
-
 namespace Inkscape {
 
 class Drawing;
 class DrawingItem;
 
+
 } // namespace Inkscape
 
+struct SPMaskView {
+	SPMaskView *next;
+	unsigned int key;
+	Inkscape::DrawingItem *arenaitem;
+	Geom::OptRect bbox;
+};
 
 class SPMask : public SPObjectGroup {
 public:
@@ -59,7 +65,7 @@ protected:
 
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 
-	void set(unsigned int key, const char* value) override;
+	void set(SPAttributeEnum key, const char* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Ellipse drawing context.
@@ -13,12 +14,8 @@
  * Copyright (C) 2000-2006 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <glibmm/i18n.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -27,7 +24,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
 #include "message-context.h"
 #include "preferences.h"
 #include "selection.h"
@@ -36,6 +32,8 @@
 
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
+
+#include "include/macros.h"
 
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
@@ -322,7 +320,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
 
 void ArcTool::drag(Geom::Point pt, guint state) {
     if (!this->arc) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

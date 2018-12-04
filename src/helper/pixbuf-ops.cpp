@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Helpers for SPItem -> gdk_pixbuf related stuff
  *
@@ -8,12 +9,8 @@
  *
  * Copyright (C) 2008 John Cliff
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <2geom/transforms.h>
 
@@ -27,6 +24,7 @@
 #include "object/sp-defs.h"
 #include "object/sp-use.h"
 #include "util/units.h"
+#include "inkscape.h"
 
 #include "helper/pixbuf-ops.h"
 
@@ -82,12 +80,12 @@ bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
 /**
     generates a bitmap from given items
     the bitmap is stored in RAM and not written to file
-    @param x0
-    @param y0
-    @param x1
-    @param y1
-    @param width
-    @param height
+    @param x0       area left in document coordinates
+    @param y0       area top in document coordinates
+    @param x1       area right in document coordinates
+    @param y1       area bottom in document coordinates
+    @param width    bitmap width in pixels
+    @param height   bitmap height in pixels
     @param xdpi
     @param ydpi
     @return the created GdkPixbuf structure or NULL if no memory is allocable
@@ -111,13 +109,7 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
 
     Geom::Rect screen=Geom::Rect(Geom::Point(x0,y0), Geom::Point(x1, y1));
 
-    double padding = 1.0;
-
-    Geom::Point origin(screen.min()[Geom::X],
-                  doc->getHeight().value("px") - screen[Geom::Y].extent() - screen.min()[Geom::Y]);
-
-    origin[Geom::X] = origin[Geom::X] + (screen[Geom::X].extent() * ((1 - padding) / 2));
-    origin[Geom::Y] = origin[Geom::Y] + (screen[Geom::Y].extent() * ((1 - padding) / 2));
+    Geom::Point origin = screen.min();
 
     Geom::Scale scale(Inkscape::Util::Quantity::convert(xdpi, "px", "in"), Inkscape::Util::Quantity::convert(ydpi, "px", "in"));
     Geom::Affine affine = scale * Geom::Translate(-origin * scale);
@@ -131,6 +123,9 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
     // because that would not work if the shown item references something in defs
     if (item_only) {
         hide_other_items_recursively(doc->getRoot(), item_only, dkey);
+        // TODO: The following line forces 100% opacity as required by sp_asbitmap_render() in cairo-renderer.cpp
+        //       Make it contitional if 'item_only' is ever used by other callers which need to retain opacity 
+        item_only->get_arenaitem(dkey)->setOpacity(1.0);
     }
 
     Geom::IntRect final_bbox = Geom::IntRect::from_xywh(0, 0, width, height);

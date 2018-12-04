@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Widgets used in the stroke style dialog.
@@ -9,7 +10,7 @@
  * Copyright (C) 2010 Jon A. Cruz
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 // WHOA! talk about header bloat!
@@ -17,17 +18,12 @@
 #ifndef SEEN_DIALOGS_STROKE_STYLE_H
 #define SEEN_DIALOGS_STROKE_STYLE_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glibmm/i18n.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/radiobutton.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "fill-n-stroke-factory.h"
 #include "fill-style.h" // to get sp_fill_style_widget_set_desktop

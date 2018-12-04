@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 # -----------------------------------------------------------------------------
 # Define the main source
 # -----------------------------------------------------------------------------
@@ -19,7 +20,6 @@ set(inkscape_SRC
   desktop-style.cpp
   desktop.cpp
   device-manager.cpp
-  dir-util.cpp
   document-subset.cpp
   document-undo.cpp
   document.cpp
@@ -67,7 +67,6 @@ set(inkscape_SRC
   pure-transform.cpp
   rdf.cpp
   removeoverlap.cpp
-  resource-manager.cpp
   rubberband.cpp
   satisfied-guide-cns.cpp
   selcue.cpp
@@ -88,9 +87,6 @@ set(inkscape_SRC
   sp-item-notify-moveto.cpp 
   style-internal.cpp
   style.cpp
-  svg-view-slideshow.cpp
-  svg-view-widget.cpp
-  svg-view.cpp
   text-chemistry.cpp
   text-editing.cpp
   transf_mat_3x4.cpp
@@ -124,8 +120,6 @@ set(inkscape_SRC
   desktop-style.h
   desktop.h
   device-manager.h
-  dir-util.h
-  document-private.h
   document-subset.h
   document-undo.h
   document.h
@@ -159,7 +153,6 @@ set(inkscape_SRC
   layer-model.h
   line-geometry.h
   line-snapper.h
-  macros.h
   main-cmdlineact.h
   main-cmdlinexact.h
   media.h
@@ -184,7 +177,6 @@ set(inkscape_SRC
   rdf.h
   remove-last.h
   removeoverlap.h
-  resource-manager.h
   rubberband.h
   satisfied-guide-cns.h
   selcue.h
@@ -213,9 +205,6 @@ set(inkscape_SRC
   style-internal.h
   style.h
   svg-profile.h
-  svg-view-slideshow.h
-  svg-view-widget.h
-  svg-view.h
   syseq.h
   text-chemistry.h
   text-editing.h
@@ -256,10 +245,12 @@ list(APPEND inkscape_SRC
 
 # All folders for internal inkscape
 # these call add_inkscape_source
+add_subdirectory(actions)
 add_subdirectory(debug)
 add_subdirectory(display)
 add_subdirectory(extension)
 add_subdirectory(helper)
+add_subdirectory(include)
 add_subdirectory(io)
 add_subdirectory(live_effects)
 add_subdirectory(object)
@@ -288,20 +279,30 @@ set(inkscape_SRC
 # -----------------------------------------------------------------------------
 # Setup the executable
 # -----------------------------------------------------------------------------
-set(main_SRC main.cpp)
+set(main_SRC
+  inkscape-main.cpp
+  inkscape-application.h
+  inkscape-application.cpp
+  actions/actions-base.h
+  actions/actions-base.cpp
+  actions/actions-helper.h
+  actions/actions-helper.cpp
+  actions/actions-output.h
+  actions/actions-output.cpp
+  actions/actions-selection.h
+  actions/actions-selection.cpp
+  actions/actions-transform.h
+  actions/actions-transform.cpp
+)
 set(view_SRC
-  inkview.cpp
-  inkview-options-group.cpp
-  inkview-options-group.h
+  inkview-main.cpp
+  inkview-application.h
+  inkview-application.cpp
+  inkview-window.h
+  inkview-window.cpp
 )
 
 if(WIN32)
-  # Sources for the inkscape executable on Windows.
-  list(APPEND main_SRC
-    registrytool.h
-    registrytool.cpp
-  )
-
   # Configure and add the platform specific resource files (enabling the app icon).
   string(TIMESTAMP COPYRIGHT_YEAR %Y)
   
@@ -355,6 +356,7 @@ set(INKSCAPE_TARGET_LIBS
         uemf_LIB
         2geom_LIB
         depixelize_LIB
+        autotrace_LIB
         util_LIB
         gc_LIB
 )

@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_CMS_COLOR_TYPES_H
 #define SEEN_CMS_COLOR_TYPES_H
 
@@ -7,8 +16,8 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif // HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #if HAVE_LIBLCMS1
 # include <icc34.h>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Bryce Harrington <bryce@bryceharrington.org>
@@ -8,12 +9,8 @@
  * Copyright (C) 2005 Jon A. Cruz
  * Copyright (C) 2007 Gustav Broberg
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <gtkmm/dialog.h> // for Gtk::RESPONSE_*
 

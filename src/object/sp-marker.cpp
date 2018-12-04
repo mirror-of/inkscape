@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <marker> implementation
  *
@@ -11,7 +12,7 @@
  *               2004-2006 Bryce Harrington
  *               2008      Johan Engelen
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -24,7 +25,6 @@
 #include "xml/repr.h"
 #include "attributes.h"
 #include "document.h"
-#include "document-private.h"
 #include "preferences.h"
 
 #include "sp-marker.h"
@@ -113,7 +113,7 @@ void SPMarker::release() {
 }
 
 
-void SPMarker::set(unsigned int key, const gchar* value) {
+void SPMarker::set(SPAttributeEnum key, const gchar* value) {
 	switch (key) {
 	case SP_ATTR_MARKERUNITS:
 		this->markerUnits_set = FALSE;

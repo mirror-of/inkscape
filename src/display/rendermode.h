@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2011 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /*
  * RenderMode enumeration.
  *
@@ -12,7 +21,8 @@ namespace Inkscape {
 enum RenderMode {
     RENDERMODE_NORMAL,
     RENDERMODE_NO_FILTERS,
-    RENDERMODE_OUTLINE
+    RENDERMODE_OUTLINE,
+    RENDERMODE_VISIBLE_HAIRLINES
 };
 
 enum ColorMode {

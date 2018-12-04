@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
     \file grid.cpp
 
@@ -8,12 +9,8 @@
  * Copyright (C) 2007  MenTaLguY <mental@rydia.net>
  *   Abhishek Sharma
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/adjustment.h>
@@ -100,9 +97,7 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
             bounding_area = *bounds;
         }
 
-        gdouble doc_height  =  (document->doc())->getHeight().value("px");
-        Geom::Rect temprec = Geom::Rect(Geom::Point(bounding_area.min()[Geom::X], doc_height - bounding_area.min()[Geom::Y]),
-                                    Geom::Point(bounding_area.max()[Geom::X], doc_height - bounding_area.max()[Geom::Y]));
+        Geom::Rect temprec = bounding_area * static_cast<SPDesktop *>(document)->doc2dt();
 
         bounding_area = temprec;
     }

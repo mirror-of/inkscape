@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
  * Copyright (C) 2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_EXTENSION_DEPENDENCY_H__
@@ -47,10 +48,10 @@ class Dependency {
     /** \brief  The location to look for this particular dependency. */
     location_t _location;
 
-    /** \brief  Strings to reperesent the different enum values in
+    /** \brief  Strings to represent the different enum values in
                 \c type_t in the XML */
     static gchar const * _type_str[TYPE_CNT]; 
-    /** \brief  Strings to reperesent the different enum values in
+    /** \brief  Strings to represent the different enum values in
                 \c location_t in the XML */
     static gchar const * _location_str[LOCATION_CNT]; 
 

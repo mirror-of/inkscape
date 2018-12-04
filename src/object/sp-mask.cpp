@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <mask> implementation
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2003 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>
@@ -22,20 +23,12 @@
 #include "enums.h"
 #include "attributes.h"
 #include "document.h"
-#include "document-private.h"
 #include "style.h"
 #include "attributes.h"
 
 #include "sp-defs.h"
 #include "sp-item.h"
 #include "sp-mask.h"
-
-struct SPMaskView {
-	SPMaskView *next;
-	unsigned int key;
-	Inkscape::DrawingItem *arenaitem;
-	Geom::OptRect bbox;
-};
 
 SPMaskView *sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 SPMaskView *sp_mask_view_list_remove (SPMaskView *list, SPMaskView *view);
@@ -76,7 +69,7 @@ void SPMask::release() {
     SPObjectGroup::release();
 }
 
-void SPMask::set(unsigned int key, const gchar* value) {
+void SPMask::set(SPAttributeEnum key, const gchar* value) {
 	switch (key) {
 	case SP_ATTR_MASKUNITS:
 		this->maskUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
@@ -133,7 +126,7 @@ SPMask::visualBounds(Geom::Affine const &transform) {
     Geom::OptRect bbox;
     for (auto& i: children) {
         if (SP_IS_ITEM(&i)) {
-            Geom::OptRect tmp = SP_ITEM(&i)->visualBounds(transform);
+            Geom::OptRect tmp = SP_ITEM(&i)->visualBounds(SP_ITEM(&i)->transform * transform);
             bbox.unionWith(tmp);
         }
     }

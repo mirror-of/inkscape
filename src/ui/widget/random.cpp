@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Carl Hetherington <inkscape@carlh.net>
@@ -6,16 +7,11 @@
  *
  * Copyright (C) 2004 Carl Hetherington
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
-#include "helper/icon-loader.h"
 #include "random.h"
+#include "ui/icon-loader.h"
 #include <glibmm/i18n.h>
 
 #include <gtkmm/button.h>

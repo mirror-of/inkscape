@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A simple interface for previewing representations.
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2005 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 
@@ -76,7 +77,18 @@ bool PreviewHolder::on_scroll_event(GdkEventScroll *event)
         return FALSE;
     }
 
-    int move = (event->direction == GDK_SCROLL_DOWN) ? adj->get_page_size() : -adj->get_page_size();
+    int move;
+    switch (event->direction) {
+        case GDK_SCROLL_UP:
+            move = -adj->get_page_size();
+            break;
+        case GDK_SCROLL_DOWN:
+            move =  adj->get_page_size();
+            break;
+        case GDK_SCROLL_SMOOTH:
+            move = event->delta_y > 0 ? adj->get_page_size() : -adj->get_page_size();
+            break;
+    }
 
     double value = std::min(adj->get_upper() - move, adj->get_value() + move );
 

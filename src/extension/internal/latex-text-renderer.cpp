@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Rendering LaTeX file (pdf/eps/ps+latex output)
  *
@@ -12,12 +13,8 @@
  *
  * Copyright (C) 2006-2011 Authors
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include "latex-text-renderer.h"
 
@@ -45,6 +42,7 @@
 #include "extension/output.h"
 #include "extension/system.h"
 
+#include "inkscape.h"
 #include "inkscape-version.h"
 #include "io/sys.h"
 #include "document.h"
@@ -680,7 +678,9 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bl
     }
 
     // flip y-axis
-    push_transform( Geom::Scale(1,-1) * Geom::Translate(0, doc->getHeight().value("px")) ); /// @fixme hardcoded desktop transform!
+    if (SP_ACTIVE_DESKTOP) {
+        push_transform( SP_ACTIVE_DESKTOP->doc2dt() );
+    }
 
     // write the info to LaTeX
     Inkscape::SVGOStringStream os;

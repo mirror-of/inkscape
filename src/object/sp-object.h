@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SP_OBJECT_H_SEEN
 #define SP_OBJECT_H_SEEN
 
@@ -12,7 +13,7 @@
  * Copyright (C) 1999-2016 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/ustring.h>
@@ -60,6 +61,8 @@ class SPObject;
 #include <boost/intrusive/list.hpp>
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
+
+enum SPAttributeEnum : unsigned;
 
 class SPCSSAttr;
 class SPStyle;
@@ -705,7 +708,7 @@ public:
     /**
      * Call virtual set() function of object.
      */
-    void setKeyValue(unsigned int key, char const *value);
+    void setKeyValue(SPAttributeEnum key, char const *value);
 
     void setAttribute(         char const *key,          char const *value, SPException *ex=nullptr);
     void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=nullptr);
@@ -719,36 +722,6 @@ public:
     char const *getTagName(SPException *ex) const;
 
     void removeAttribute(char const *key, SPException *ex=nullptr);
-
-    /**
-     * Returns an object style property.
-     *
-     * \todo
-     * fixme: Use proper CSS parsing.  The current version is buggy
-     * in a number of situations where key is a substring of the
-     * style string other than as a property name (including
-     * where key is a substring of a property name), and is also
-     * buggy in its handling of inheritance for properties that
-     * aren't inherited by default.  It also doesn't allow for
-     * the case where the property is specified but with an invalid
-     * value (in which case I believe the CSS2 error-handling
-     * behaviour applies, viz. behave as if the property hadn't
-     * been specified).  Also, the current code doesn't use CRSelEng
-     * stuff to take a value from stylesheets.  Also, we aren't
-     * setting any hooks to force an update for changes in any of
-     * the inputs (i.e., in any of the elements that this function
-     * queries).
-     *
-     * \par
-     * Given that the default value for a property depends on what
-     * property it is (e.g., whether to inherit or not), and given
-     * the above comment about ignoring invalid values, and that the
-     * repr parent isn't necessarily the right element to inherit
-     * from (e.g., maybe we need to inherit from the referencing
-     * <use> element instead), we should probably make the caller
-     * responsible for ascending the repr tree as necessary.
-     */
-    char const *getStyleProperty(char const *key, char const *def) const;
 
     void setCSS(SPCSSAttr *css, char const *attr);
 
@@ -846,7 +819,7 @@ protected:
 
 	virtual void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old_repr, Inkscape::XML::Node* new_repr);
 
-	virtual void set(unsigned int key, const char* value);
+	virtual void set(SPAttributeEnum key, const char* value);
 
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);

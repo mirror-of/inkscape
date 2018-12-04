@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * On-canvas gradient dragging
  *
@@ -11,12 +12,8 @@
  * Copyright (C) 2007 Johan Engelen
  * Copyright (C) 2005,2010 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <cstring>
 #include <string>
@@ -217,12 +214,7 @@ Glib::ustring GrDrag::makeStopSafeColor( gchar const *str, bool &isNull )
                     SPGradient *vect = grad->getVector();
                     SPStop *firstStop = (vect) ? vect->getFirstStop() : grad->getFirstStop();
                     if (firstStop) {
-                        Glib::ustring stopColorStr;
-                        if (firstStop->currentColor) {
-                            stopColorStr = firstStop->getStyleProperty("color", nullptr);
-                        } else {
-                            stopColorStr = firstStop->specified_color.toString();
-                        }
+                        Glib::ustring stopColorStr = firstStop->getColor().toString();
                         if ( !stopColorStr.empty() ) {
                             colorStr = stopColorStr;
                         }

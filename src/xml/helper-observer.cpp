@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
 #include "helper-observer.h"
 
@@ -19,7 +28,7 @@ SignalObserver::~SignalObserver()
 // Add this observer to the SPObject and remove it from any previous object
 void SignalObserver::set(SPObject* o)
 {
-  // XML Tree being used direcly in this function in the following code
+  // XML Tree being used directly in this function in the following code
   //   while it shouldn't be
   // Pointer to object is stored, so refcounting should be increased/decreased
     if(_oldsel) {

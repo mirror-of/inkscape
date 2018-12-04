@@ -1,15 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) 2008 Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "filter.h"
 
 #include "io/sys.h"
 #include "io/resource.h"
-#include "io/inkscapestream.h"
+#include "io/stream/inkscapestream.h"
 
 /* Directory includes */
 #include "path-prefix.h"
@@ -80,13 +81,13 @@ class mywriter : public Inkscape::IO::BasicWriter {
 public:
 	void close() override;
 	void flush() override;
-	void put (gunichar ch) override;
+	void put (char ch) override;
 	gchar const * c_str () { return _str.c_str(); }
 };
 
 void mywriter::close () { return; }
 void mywriter::flush () { return; }
-void mywriter::put (gunichar ch) { _str += ch; }
+void mywriter::put (char ch) { _str += ch; }
 
 
 void

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Michael Forbes <miforbes@mbhs.edu>
@@ -6,12 +7,9 @@
  *
  * Copyright (C) 2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 #include "latex-pstricks-out.h"
 #include <print.h>
 #include "extension/system.h"

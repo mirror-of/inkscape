@@ -1,13 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <inkscape:tag> implementation
- * 
+ *
  * Authors:
  *   Theodore Janeczko
  *   Liam P. White
  *
  * Copyright (C) Theodore Janeczko 2012-2014 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "attributes.h"
@@ -70,7 +71,7 @@ SPTag::build(SPDocument *document, Inkscape::XML::Node *repr)
  * Sets a specific value in the SPTag.
  */
 void
-SPTag::set(unsigned int key, gchar const *value)
+SPTag::set(SPAttributeEnum key, gchar const *value)
 {
     
     switch (key)

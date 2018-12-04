@@ -1,8 +1,13 @@
-cmake_minimum_required(VERSION 2.8.2)
+# SPDX-License-Identifier: GPL-2.0-or-later
+cmake_minimum_required(VERSION 2.8.8)
 
 cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
 cmake_policy(SET CMP0005 NEW) # proper define quoting
 cmake_policy(SET CMP0009 NEW) # don't follow symbolic links when using GLOB
+
+if(POLICY CMP0075)
+    cmake_policy(SET CMP0075 NEW) # link check-executable to CMAKE_REQUIRED_LIBRARIES (CMake 3.12.1)
+endif(POLICY CMP0075)
 
 message("------------------------------")
 message("Building Makefile for Inkscape")
@@ -13,6 +18,10 @@ message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
+# Used in cmake 3.1+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 
 # avoid having empty buildtype
@@ -20,9 +29,11 @@ set(CMAKE_BUILD_TYPE_INIT "Release")
 
 include(CMakeScripts/HelperFunctions.cmake)
 include(CMakeScripts/ConfigEnv.cmake)
-include(CMakeScripts/ConfigPaths.cmake)
 
 project(inkscape)
+
+include(CMakeScripts/ConfigPaths.cmake)
+
 set(PROJECT_NAME inkscape)
 
 set(INKSCAPE_VERSION_MAJOR  0)
@@ -49,13 +60,6 @@ endif()
 
 # this can be removed if/when cmake 3.1 is made the minimum required version
 set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
-
-# workaround for omission in cmake 2.8.4's GNU.cmake, fixed in 2.8.5
-if(CMAKE_COMPILER_IS_GNUCC)
-    if(NOT DARWIN)
-    set(CMAKE_INCLUDE_SYSTEM_FLAG_C "-isystem ")
-    endif()
-endif()
 
 # console output is slow as hell on Windows and as a result status messages of the "install" target slow down
 # the whole build process considerably (especially since we also copy a lot of files from the devlibs)
@@ -103,7 +107,8 @@ option(BUILD_SHARED_LIBS "Compile libraries as shared and not static" ON)
 
 option(ENABLE_POPPLER "Compile with support of libpoppler" ON)
 option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on ENABLE_POPPLER)" ON)
-option(WITH_IMAGE_MAGICK "Compile with support of ImageMagick for raster extensions and image import resolution" ON)
+option(WITH_IMAGE_MAGICK "Compile with support of ImageMagick for raster extensions and image import resolution (requires ImageMagick 6; set to OFF if you prefer GraphicsMagick)" ON)
+option(WITH_GRAPHICS_MAGICK "Compile with support of GraphicsMagick for raster extensions and image import resolution" ON)
 option(WITH_LIBCDR "Compile with support of libcdr for CorelDRAW Diagrams" ON)
 option(WITH_LIBVISIO "Compile with support of libvisio for Microsoft Visio Diagrams" ON)
 option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
@@ -125,8 +130,6 @@ include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
   add_definitions(-D_FORTIFY_SOURCE=2)
 endif()
-add_definitions(-DHAVE_CONFIG_H)
-add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
 if(BUILD_SHARED_LIBS AND NOT WIN32)
     add_definitions(-fPIC)
 endif()
@@ -150,6 +153,14 @@ if(NOT WIN32)
     add_subdirectory(man)
 endif()
 
+
+
+# -----------------------------------------------------------------------------
+# Check License Headers
+# -----------------------------------------------------------------------------
+add_custom_target(check-license-headers WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} COMMAND ./buildtools/check_license_headers.py)
+
+
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
@@ -164,7 +175,7 @@ else()
               PATHS "$ENV{GMOCK_DIR}"
                 "/usr/src/googletest/googlemock"
                     "/usr/src/gmock"
-                "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+                "${CMAKE_SOURCE_DIR}/gtest/gtest/googlemock"
              )
     endif(NOT GMOCK_DIR)
     if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
@@ -292,6 +303,7 @@ message("GMOCK_PRESENT:           ${GMOCK_PRESENT}")
 message("WITH_DBUS:               ${WITH_DBUS}")
 message("WITH_GTKSPELL:           ${WITH_GTKSPELL}")
 message("WITH_IMAGE_MAGICK:       ${WITH_IMAGE_MAGICK}")
+message("WITH_GRAPHICS_MAGICK:    ${WITH_GRAPHICS_MAGICK}")
 message("WITH_LIBCDR:             ${WITH_LIBCDR}")
 message("WITH_LIBVISIO:           ${WITH_LIBVISIO}")
 message("WITH_LIBWPG:             ${WITH_LIBWPG}")

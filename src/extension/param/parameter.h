@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Parameters for extensions.
  */
@@ -7,11 +8,15 @@
  *
  * Copyright (C) 2005-2006 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INK_EXTENSION_PARAM_H__
 #define SEEN_INK_EXTENSION_PARAM_H__
+
+#include <string>
+
+#include <glibmm/ustring.h>
 
 class SPDocument;
 

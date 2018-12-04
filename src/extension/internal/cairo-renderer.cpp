@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Rendering with Cairo.
  */
@@ -9,11 +10,11 @@
  *
  * Copyright (C) 2006 Miklos Erdelyi
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifndef PANGO_ENABLE_BACKEND
@@ -80,21 +81,6 @@
 #define TRACE(_args)
 //#define TEST(_args) _args
 #define TEST(_args)
-
-// FIXME: expose these from sp-clippath/mask.cpp
-struct SPClipPathView {
-    SPClipPathView *next;
-    unsigned int key;
-    Inkscape::DrawingItem *arenaitem;
-    Geom::OptRect bbox;
-};
-
-struct SPMaskView {
-    SPMaskView *next;
-    unsigned int key;
-    Inkscape::DrawingItem *arenaitem;
-    Geom::OptRect bbox;
-};
 
 namespace Inkscape {
 namespace Extension {
@@ -389,7 +375,7 @@ static void sp_image_render(SPImage *image, CairoRenderContext *ctx)
     Geom::Scale s(width / (double)w, height / (double)h);
     Geom::Affine t(s * tp);
 
-    ctx->renderImage(image->pixbuf, t, image->style);
+    ctx->renderImage(image->pixbuf, t, image->style); 
 }
 
 static void sp_symbol_render(SPSymbol *symbol, CairoRenderContext *ctx)
@@ -466,7 +452,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     TRACE(("sp_asbitmap_render: resolution: %f\n", res ));
 
     // Get the bounding box of the selection in desktop coordinates.
-    Geom::OptRect bbox = item->desktopVisualBounds();
+    Geom::OptRect bbox = item->documentVisualBounds();
 
     // no bbox, e.g. empty group
     if (!bbox) {
@@ -493,23 +479,22 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
 
     // Location of bounding box in document coordinates.
     double shift_x = bbox->min()[Geom::X];
-    double shift_y = bbox->max()[Geom::Y];
+    double shift_y = bbox->top();
 
     // For default 96 dpi, snap bitmap to pixel grid
     if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { 
         shift_x = round (shift_x);
-        shift_y = -round (-shift_y); // Correct rounding despite coordinate inversion.
-                                     // Remove the negations when the inversion is gone.
+        shift_y = round (shift_y);
     }
 
     // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
 
-    // Matix to put bitmap in correct place on document
-    Geom::Affine t_on_document = (Geom::Affine)(Geom::Scale (scale_x, -scale_y)) *
+    // Matrix to put bitmap in correct place on document
+    Geom::Affine t_on_document = (Geom::Affine)(Geom::Scale (scale_x, scale_y)) *
                                  (Geom::Affine)(Geom::Translate (shift_x, shift_y));
 
     // ctx matrix already includes item transformation. We must substract.
-    Geom::Affine t_item =  item->i2dt_affine ();
+    Geom::Affine t_item =  item->i2doc_affine();
     Geom::Affine t = t_on_document * t_item.inverse();
 
     // Do the export
@@ -663,7 +648,7 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
     if (pageBoundingBox) {
         d = Geom::Rect::from_xywh(Geom::Point(0,0), doc->getDimensions());
     } else {
-        Geom::OptRect bbox = base->desktopVisualBounds();
+        Geom::OptRect bbox = base->documentVisualBounds();
         if (!bbox) {
             g_message("CairoRenderer: empty bounding box.");
             return false;
@@ -672,13 +657,14 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
     }
     d.expandBy(bleedmargin_px);
 
+    double px_to_ctx_units = 1.0;
     if (ctx->_vector_based_target) {
         // convert from px to pt
-        d *= Geom::Scale(Inkscape::Util::Quantity::convert(1, "px", "pt"));
+        px_to_ctx_units = Inkscape::Util::Quantity::convert(1, "px", "pt");
     }
 
-    ctx->_width = d.width();
-    ctx->_height = d.height();
+    ctx->_width = d.width() * px_to_ctx_units;
+    ctx->_height = d.height() * px_to_ctx_units;
 
     TRACE(("setupDocument: %f x %f\n", ctx->_width, ctx->_height));
 
@@ -690,21 +676,14 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
             Geom::Affine tp( Geom::Translate( bleedmargin_px, bleedmargin_px ) );
             ctx->transform(tp);
         } else {
-            double high = doc->getHeight().value("px");
-            if (ctx->_vector_based_target)
-                high = Inkscape::Util::Quantity::convert(high, "px", "pt");
-
             // this transform translates the export drawing to a virtual page (0,0)-(width,height)
-            Geom::Affine tp(Geom::Translate(-d.left() * (ctx->_vector_based_target ? Inkscape::Util::Quantity::convert(1, "pt", "px") : 1.0),
-                                            (d.bottom() - high) * (ctx->_vector_based_target ? Inkscape::Util::Quantity::convert(1, "pt", "px") : 1.0)));
+            Geom::Affine tp(Geom::Translate(-d.min()));
             ctx->transform(tp);
         }
     }
 
     return ret;
 }
-
-#include "macros.h" // SP_PRINT_*
 
 // Apply an SVG clip path
 void
@@ -721,7 +700,6 @@ CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
     // FIXME: the access to the first clippath view to obtain the bbox is completely bogus
     Geom::Affine saved_ctm;
     if (cp->clipPathUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && cp->display->bbox) {
-        //SP_PRINT_DRECT("clipd", cp->display->bbox);
         Geom::Rect clip_bbox = *cp->display->bbox;
         Geom::Affine t(Geom::Scale(clip_bbox.dimensions()));
         t[4] = clip_bbox.left();
@@ -774,7 +752,6 @@ CairoRenderer::applyMask(CairoRenderContext *ctx, SPMask const *mask)
     // FIXME: the access to the first mask view to obtain the bbox is completely bogus
     // TODO: should the bbox be transformed if maskUnits != userSpaceOnUse ?
     if (mask->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && mask->display->bbox) {
-        //SP_PRINT_DRECT("maskd", &mask->display->bbox);
         Geom::Rect mask_bbox = *mask->display->bbox;
         Geom::Affine t(Geom::Scale(mask_bbox.dimensions()));
         t[4] = mask_bbox.left();
@@ -865,7 +842,6 @@ calculatePreserveAspectRatio(unsigned int aspect_align, unsigned int aspect_clip
 
 #undef TRACE
 
-/* End of GNU GPL code */
 
 /*
   Local Variables:

@@ -1,5 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #define noDEBUG_LCMS
@@ -20,7 +29,7 @@
 #include <io/sys.h>
 #include <io/resource.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #ifndef _WIN32_WINDOWS         // Allow use of features specific to Windows 98 or later. Required for correctly including icm.h
 #define _WIN32_WINDOWS 0x0410
 #endif
@@ -46,9 +55,9 @@
 #include <glibmm/convert.h>
 #include "uri.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <icm.h>
-#endif // WIN32
+#endif // _WIN32
 
 using Inkscape::ColorProfile;
 using Inkscape::ColorProfileImpl;
@@ -315,7 +324,7 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Callback: set attribute.
  */
-void ColorProfile::set(unsigned key, gchar const *value) {
+void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
         case SP_ATTR_XLINK_HREF:
             if ( this->href ) {
@@ -788,7 +797,7 @@ std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
         g_free(path);
     }
 
-#ifdef WIN32
+#ifdef _WIN32
     wchar_t pathBuf[MAX_PATH + 1];
     pathBuf[0] = 0;
     DWORD pathSize = sizeof(pathBuf);
@@ -802,7 +811,7 @@ std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
         }
         g_free( utf8Path );
     }
-#endif // WIN32
+#endif // _WIN32
 
     return sources;
 }

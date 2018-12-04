@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief A dialog for CSS selectors
  */
@@ -8,7 +9,7 @@
  * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
  * Copyright (C) Tavmjong Bah 2017 <tavmjong@free.fr>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "cssdialog.h"
@@ -16,8 +17,8 @@
 #include "verbs.h"
 #include "selection.h"
 
-#include "helper/icon-loader.h"
-#include "ui/widget/addtoicon.h"
+#include "ui/icon-loader.h"
+#include "ui/widget/iconrenderer.h"
 
 #include "xml/attribute-record.h"
 
@@ -47,14 +48,11 @@ CssDialog::CssDialog():
     _store = Gtk::ListStore::create(_cssColumns);
     _treeView.set_model(_store);
 
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(new Inkscape::UI::Widget::AddToIcon());
-    addRenderer->property_active() = false;
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
+    addRenderer->add_icon("edit-delete");
 
     int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
-    if (col) {
-        col->add_attribute(addRenderer->property_active(), _cssColumns._colUnsetProp);
-    }
 
     _propRenderer = Gtk::manage(new Gtk::CellRendererText());
     _propRenderer->property_editable() = true;
@@ -80,7 +78,11 @@ CssDialog::CssDialog():
       _attrCol->add_attribute(_attrRenderer->property_text(), _cssColumns._styleAttrVal);
     }
 
-    _styleButton(_buttonAddProperty, "list-add", "Add a new property");
+    GtkWidget *child = sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    gtk_widget_show(child);
+    _buttonAddProperty.add(*manage(Glib::wrap(child)));
+    _buttonAddProperty.set_relief(Gtk::RELIEF_NONE);
+    _buttonAddProperty.set_tooltip_text("Add a new property");
 
     _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
     _buttonBox.pack_start(_buttonAddProperty, Gtk::PACK_SHRINK);
@@ -112,25 +114,6 @@ void CssDialog::setDesktop(SPDesktop* desktop)
 {
     _desktop = desktop;
 }
-
-
-/**
- * @brief CssDialog::_styleButton
- * @param btn
- * @param iconName
- * @param tooltip
- * This function sets the style of '+'button at the bottom of dialog.
- */
-void CssDialog::_styleButton(Gtk::Button& btn, char const* iconName,
-                               char const* tooltip)
-{
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
-    gtk_widget_show(child);
-    btn.add(*manage(Glib::wrap(child)));
-    btn.set_relief(Gtk::RELIEF_NONE);
-    btn.set_tooltip_text(tooltip);
-}
-
 
 /**
  * @brief CssDialog::_addProperty

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * SVG <hatch> implementation
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2014 Tomasz Boczkowski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-hatch.h"
@@ -20,16 +21,19 @@
 #include <2geom/transforms.h>
 #include <sigc++/functors/mem_fun.h>
 
+#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "svg/svg.h"
+#include "document.h"
+
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing-surface.h"
 #include "display/drawing.h"
 #include "display/drawing-pattern.h"
-#include "attributes.h"
-#include "document-private.h"
+
 #include "sp-hatch-path.h"
+
+#include "svg/svg.h"
 
 SPHatch::SPHatch()
     : SPPaintServer(),
@@ -125,7 +129,7 @@ void SPHatch::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref)
     //FIXME: notify all hatches that refer to this child set
 }
 
-void SPHatch::set(unsigned int key, const gchar* value)
+void SPHatch::set(SPAttributeEnum key, const gchar* value)
 {
     switch (key) {
     case SP_ATTR_HATCHUNITS:
@@ -221,7 +225,7 @@ void SPHatch::set(unsigned int key, const gchar* value)
 
     default:
         if (SP_ATTRIBUTE_IS_CSS(key)) {
-            style->readFromObject( this );
+            style->clear(key);
             requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         } else {
             SPPaintServer::set(key, value);

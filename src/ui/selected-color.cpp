@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Color selected in color selector widget.
  * This file was created during the refactoring of SPColorSelector
@@ -8,11 +9,8 @@
  *   Tomasz Boczkowski <penginsbacon@gmail.com>
  *
  * Copyright (C) 2014 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/ustring.h>
 #include <cmath>

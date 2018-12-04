@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is the code that moves all of the SVG loading and saving into
  * the module format.  Really Inkscape is built to handle these formats
@@ -11,14 +12,8 @@
  *
  * Copyright (C) 2002-2003 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
-#include <vector>
 
 #include <gtkmm.h>
 
@@ -40,9 +35,8 @@
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
 
-#include "object/sp-root.h"
-#include "object/sp-namedview.h"
 #include "object/sp-image.h"
+#include "object/sp-root.h"
 #include "object/sp-text.h"
 
 #include "util/units.h"
@@ -77,7 +71,7 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
                     attrsRemoved.push_back(attrName);
                 }
             }
-            // Can't change the set we're interating over while we are iterating.
+            // Can't change the set we're iterating over while we are iterating.
             for ( std::vector<gchar const*>::iterator it = attrsRemoved.begin(); it != attrsRemoved.end(); ++it ) {
                 repr->setAttribute(*it, nullptr);
             }
@@ -622,18 +616,19 @@ Svg::init()
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("SVG Input") "</name>\n"
             "<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
-            "<param name='link_svg' type='optiongroup' appearance='full' _gui-text='" N_("SVG Image Import Type:") "' >\n"
+            "<param name='import_mode_svg' type='optiongroup' appearance='full' _gui-text='" N_("SVG Image Import Type:") "' >\n"
                     "<_option value='include' >" N_("Include SVG image as editable object(s) in the current file") "</_option>\n"
                     "<_option value='embed' >" N_("Embed the SVG file in a image tag (not editable in this document)") "</_option>\n"
                     "<_option value='link' >" N_("Link the SVG file in a image tag (not editable in this document).") "</_option>\n"
                   "</param>\n"
+            "<param name='svgdpi' type='float' precision='2' min='1' max='999999' gui-text='DPI for rendered SVG'>96.00</param>\n"
             "<param name='scale' appearance='minimal' type='optiongroup' _gui-text='" N_("Image Rendering Mode:") "' _gui-description='" N_("When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will not work in all browsers.)") "' >\n"
                     "<_option value='auto' >" N_("None (auto)") "</_option>\n"
                     "<_option value='optimizeQuality' >" N_("Smooth (optimizeQuality)") "</_option>\n"
                     "<_option value='optimizeSpeed' >" N_("Blocky (optimizeSpeed)") "</_option>\n"
                   "</param>\n"
 
-            "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' _gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >false</param>\n"
+            "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' _gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >%s</param>\n"
             "<input>\n"
                 "<extension>.svg</extension>\n"
                 "<mimetype>image/svg+xml</mimetype>\n"
@@ -642,7 +637,7 @@ Svg::init()
                 "<output_extension>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</output_extension>\n"
             "</input>\n"
         "</inkscape-extension>", new Svg());
-
+    
     /* SVG out Inkscape */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -682,77 +677,108 @@ Svg::init()
     \param     uri   The path or URI to the file (UTF-8)
 
     This function is really simple, it just calls sp_document_new...
+    That's BS, it does all kinds of things for importing documents
+    that probably should be in a separate function.
+
+    Most of the import code was copied from gdkpixpuf-input.cpp.
 */
 SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
+    // This is only used at the end... but it should go here once uri stuff is fixed.
     auto file = Gio::File::create_for_uri(uri);
     const auto path = file->get_path();
+
+    // Fixing this means fixing a whole string of things.
+    // if (path.empty()) {
+    //     // We lied, the uri wasn't a uri, try as path.
+    //     file = Gio::File::create_for_path(uri);
+    // }
+
+    // std::cout << "Svg::open: uri in: " << uri << std::endl;
+    // std::cout << "         : uri:    " << file->get_uri() << std::endl;
+    // std::cout << "         : scheme: " << file->get_uri_scheme() << std::endl;
+    // std::cout << "         : path:   " << file->get_path() << std::endl;
+    // std::cout << "         : parse:  " << file->get_parse_name() << std::endl;
+    // std::cout << "         : base:   " << file->get_basename() << std::endl;
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool ask = prefs->getBool("/dialogs/import/ask");
-    Glib::ustring link_svg  = prefs->getString("/dialogs/import/link_svg");
-    Glib::ustring scale = prefs->getString("/dialogs/import/scale");
-    bool is_import = false;
-    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
-        is_import = true;
+
+    // Get import preferences.
+    bool ask_svg                   = prefs->getBool(  "/dialogs/import/ask_svg");
+    Glib::ustring import_mode_svg  = prefs->getString("/dialogs/import/import_mode_svg");
+    Glib::ustring scale            = prefs->getString("/dialogs/import/scale");
+
+    // If we popped up a window asking about import preferences, get values from
+    // there and update preferences.
+    if(mod->get_gui() && ask_svg) {
+        ask_svg         = !mod->get_param_bool("do_not_ask");
+        import_mode_svg =  mod->get_param_optiongroup("import_mode_svg");
+        scale           =  mod->get_param_optiongroup("scale");
+
+        prefs->setBool(  "/dialogs/import/ask_svg",         ask_svg);
+        prefs->setString("/dialogs/import/import_mode_svg", import_mode_svg );
+        prefs->setString("/dialogs/import/scale",           scale );
     }
-    if(INKSCAPE.use_gui() && is_import && ask) {
-        Glib::ustring mod_link_svg = mod->get_param_optiongroup("link_svg");
-        Glib::ustring mod_scale = mod->get_param_optiongroup("scale");
-        if( link_svg.compare( mod_link_svg) != 0 ) {
-            link_svg = mod_link_svg;
-        }
-        prefs->setString("/dialogs/import/link_svg", link_svg );
-        if( scale.compare( mod_scale ) != 0 ) {
-            scale = mod_scale;
-        }
-        prefs->setString("/dialogs/import/scale", scale );
-        prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
-    }
-    
-    SPDocument * doc = SPDocument::createNewDoc (nullptr, TRUE, TRUE);
-    if (link_svg.compare("include") != 0 && is_import) {
-        bool embed = ( link_svg.compare( "embed" ) == 0 );
-        SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
-        SPNamedView *nv = sp_document_namedview(doc, nullptr);
-        Glib::ustring display_unit = nv->display_units->abbr;
-        if (display_unit.empty()) {
-            display_unit = "px";
-        }
-        double width  = ret->getWidth().value(display_unit);
-        double height = ret->getHeight().value(display_unit);
+
+    // Do we "import" as <image>?
+    if (prefs->getBool("/options/onimport", false) && import_mode_svg != "include") {
+        // We import!
+
+        // New wrapper document.
+        SPDocument * doc = SPDocument::createNewDoc (nullptr, true, true);
+
+        // Imported document
+        // SPDocument * ret = SPDocument::createNewDoc(file->get_uri().c_str(), true);
+        SPDocument * ret = SPDocument::createNewDoc(uri, true);
+
         // Create image node
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *image_node = xml_doc->createElement("svg:image");
 
-        // Added 11 Feb 2014 as we now honor "preserveAspectRatio" and this is
-        // what Inkscaper's expect.
+        // Set default value as we honor "preserveAspectRatio".
         image_node->setAttribute("preserveAspectRatio", "none");
+
+        double svgdpi = mod->get_param_float("svgdpi");
+        image_node->setAttribute("inkscape:svg-dpi", Glib::ustring::format(svgdpi));
+
+        // What is display unit doing here?
+        Glib::ustring display_unit = doc->getDisplayUnit()->abbr;
+        double width  = ret->getWidth().value(display_unit);
+        double height = ret->getHeight().value(display_unit);
         image_node->setAttribute("width", Glib::ustring::format(width));
         image_node->setAttribute("height", Glib::ustring::format(height));
+
+        // This is actually "image-rendering"
         Glib::ustring scale = prefs->getString("/dialogs/import/scale");
-        if( scale.compare( "auto" ) != 0 ) {
+        if( scale != "auto") {
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_set_property(css, "image-rendering", scale.c_str());
             sp_repr_css_set(image_node, css, "style");
             sp_repr_css_attr_unref( css );
         }
-        // convert filename to uri
-        if (embed) {
-            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
+
+        // Do we embed or link?
+        if (import_mode_svg == "embed") {
+            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri, svgdpi));
             if(pb) {
                 sp_embed_svg(image_node, uri);
             }
         } else {
+            // Convert filename to uri (why do we need to do this, we claimed it was already a uri).
             gchar* _uri = g_filename_to_uri(uri, nullptr, nullptr);
             if(_uri) {
+                // if (strcmp(_uri, uri) != 0) {
+                //     std::cout << "Svg::open: _uri != uri! " << _uri << ":" << uri << std::endl;
+                // }
                 image_node->setAttribute("xlink:href", _uri);
                 g_free(_uri);
             } else {
                 image_node->setAttribute("xlink:href", uri);
             }
         }
-        // Add it to the current layer
+
+        // Add the image to a layer.
         Inkscape::XML::Node *layer_node = xml_doc->createElement("svg:g");
         layer_node->setAttribute("inkscape:groupmode", "layer");
         layer_node->setAttribute("inkscape:label", "Image");
@@ -761,13 +787,17 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         Inkscape::GC::release(image_node);
         Inkscape::GC::release(layer_node);
         fit_canvas_to_drawing(doc);
-        
-        // Set viewBox if it doesn't exist
+
+        // Set viewBox if it doesn't exist. What is display unit doing here?
         if (!doc->getRoot()->viewBox_set) {
             doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
         }
         return doc;
     }
+
+    // We are not importing as <image>. Open as new document.
+
+    // Try to open non-local file (when does this occur?).
     if (!file->get_uri_scheme().empty()) {
         if (path.empty()) {
             try {
@@ -780,11 +810,14 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
                 return nullptr;
             }
         } else {
+            // Do we ever get here and does this actually work?
             uri = path.c_str();
         }
     }
 
-    return SPDocument::createNewDoc(uri, TRUE);
+    SPDocument *doc = SPDocument::createNewDoc(uri, true);
+    // SPDocument *doc = SPDocument::createNewDoc(file->get_uri().c_str(), true);
+    return doc;
 }
 
 /**
@@ -880,7 +913,8 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     }
 
     if (!sp_repr_save_rebased_file(rdoc, filename, SP_SVG_NS_URI,
-                                   doc->getBase(), filename)) {
+                                   doc->getBase(), //
+                                   m_detachbase ? nullptr : filename)) {
         throw Inkscape::Extension::Output::save_failed();
     }
 

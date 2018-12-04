@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Windows Metafile printing
  */
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006-2009 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 /*
  * References:
@@ -22,12 +23,6 @@
  *  - Metafile Structures
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
-
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/elliptical-arc.h>

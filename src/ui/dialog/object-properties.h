@@ -1,19 +1,20 @@
-/** 
+// SPDX-License-Identifier: GPL-2.0-or-later
+/**
  * @file Object properties dialog.
  */
-/* 
+/*
  * Inkscape, an Open Source vector graphics editor
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -29,10 +30,6 @@
 #ifndef SEEN_DIALOGS_ITEM_PROPERTIES_H
 #define SEEN_DIALOGS_ITEM_PROPERTIES_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
 
@@ -40,6 +37,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/spinbutton.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/comboboxtext.h>
 
@@ -85,6 +83,7 @@ private:
     Gtk::Entry _entry_label; //the entry for the object label
     Gtk::Label _label_title; //the label for the object title
     Gtk::Entry _entry_title; //the entry for the object title
+
     Gtk::Label _label_image_rendering; // the label for 'image-rendering'
     Gtk::ComboBoxText _combo_image_rendering; // the combo box text for 'image-rendering'
     
@@ -93,7 +92,10 @@ private:
 
     Gtk::CheckButton _cb_hide; //the check button hide
     Gtk::CheckButton _cb_lock; //the check button lock
+    Gtk::CheckButton _cb_aspect_ratio; //the preserve aspect ratio of images
 
+    Gtk::Label _label_dpi; //the entry for the dpi value
+    Gtk::SpinButton _spin_dpi; //the expander for interactivity
     Gtk::Expander _exp_interactivity; //the expander for interactivity
     SPAttributeTable *_attr_table; //the widget for showing the on... names at the bottom
     
@@ -117,6 +119,9 @@ private:
 
     /// Callback for checkbox Hide.
     void _hiddenToggled();
+
+    /// Callback for checkbox Preserve Aspect Ratio.
+    void _aspectRatioToggled();
 
     /// Can be invoked for setting the desktop. Currently not used.
     void _setDesktop(SPDesktop *desktop);

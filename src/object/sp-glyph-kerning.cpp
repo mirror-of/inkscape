@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * SVG <hkern> and <vkern> elements implementation
  * W3C SVG 1.1 spec, page 476, section 20.7
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "xml/repr.h"
@@ -79,7 +80,7 @@ bool GlyphNames::contains(const char* name)
     return false;
 }
 
-void SPGlyphKerning::set(unsigned int key, const gchar *value)
+void SPGlyphKerning::set(SPAttributeEnum key, const gchar *value)
 {
     switch (key) {
         case SP_ATTR_U1:

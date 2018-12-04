@@ -6,17 +6,15 @@ if(WIN32)
         CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
   endif()
   
-  set(INKSCAPE_LIBDIR "\\\\lib")
-  set(INKSCAPE_DATADIR "") # can be set via the evironment variable INKSCAPE_DATADIR at runtime
+  set(INKSCAPE_DATADIR "") # can be set via the environment variable INKSCAPE_DATADIR at runtime
   
-  set(PACKAGE_LOCALE_DIR "\\\\share\\\\locale")
+  set(PACKAGE_LOCALE_DIR "share/locale")
   
   set(SHARE_INSTALL "share" CACHE STRING "Data file install path. Must be a relative path (from CMAKE_INSTALL_PREFIX), with no trailing slash.")
   set(INKSCAPE_SHARE_INSTALL "${SHARE_INSTALL}") # share/inkscape goes directly into /share on Windows
   
   mark_as_advanced(SHARE_INSTALL)
 else()
-  set(INKSCAPE_LIBDIR "${CMAKE_INSTALL_PREFIX}/lib")
   set(INKSCAPE_DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
   # TODO: check and change this to correct value:

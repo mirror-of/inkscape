@@ -1,18 +1,19 @@
- /*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/*
  * Native PDF import using libpoppler.
- * 
+ *
  * Authors:
  *   miklos erdelyi
  *   Jon A. Cruz <jon@joncruz.org>
  *
  * Copyright (C) 2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #include <string> 
@@ -22,9 +23,9 @@
 #include "svg-builder.h"
 #include "pdf-parser.h"
 
-#include <png.h>
+#include "document.h"
+#include "png.h"
 
-#include "document-private.h"
 #include "xml/document.h"
 #include "xml/node.h"
 #include "xml/repr.h"
@@ -34,8 +35,6 @@
 #include "svg/svg-color.h"
 #include "color.h"
 #include "util/units.h"
-#include "io/stringstream.h"
-#include "io/base64stream.h"
 #include "display/nr-filter-utils.h"
 #include "libnrtype/font-instance.h"
 #include "object/sp-defs.h"
@@ -625,7 +624,7 @@ gchar *SvgBuilder::_createPattern(GfxPattern *pattern, GfxState *state, bool is_
     if ( pattern != nullptr ) {
         if ( pattern->getType() == 2 ) {  // Shading pattern
             GfxShadingPattern *shading_pattern = static_cast<GfxShadingPattern *>(pattern);
-            double *ptm;
+            const double *ptm;
             double m[6] = {1, 0, 0, 1, 0, 0};
             double det;
 
@@ -672,7 +671,7 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
 
     Inkscape::XML::Node *pattern_node = _xml_doc->createElement("svg:pattern");
     // Set pattern transform matrix
-    double *p2u = tiling_pattern->getMatrix();
+    const double *p2u = tiling_pattern->getMatrix();
     double m[6] = {1, 0, 0, 1, 0, 0};
     double det;
     det = _ttm[0] * _ttm[3] - _ttm[1] * _ttm[2];    // see LP Bug 1168908
@@ -698,7 +697,7 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
     pattern_node->setAttribute("patternUnits", "userSpaceOnUse");
     // Set pattern tiling
     // FIXME: don't ignore XStep and YStep
-    double *bbox = tiling_pattern->getBBox();
+    const double *bbox = tiling_pattern->getBBox();
     sp_repr_set_svg_double(pattern_node, "x", 0.0);
     sp_repr_set_svg_double(pattern_node, "y", 0.0);
     sp_repr_set_svg_double(pattern_node, "width", bbox[2] - bbox[0]);
@@ -751,7 +750,7 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
  */
 gchar *SvgBuilder::_createGradient(GfxShading *shading, double *matrix, bool for_shading) {
     Inkscape::XML::Node *gradient;
-    Function *func;
+    _POPPLER_CONST Function *func;
     int num_funcs;
     bool extend0, extend1;
 
@@ -865,7 +864,7 @@ static bool svgGetShadingColorRGB(GfxShading *shading, double offset, GfxRGB *re
 
 #define INT_EPSILON 8
 bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *shading,
-                                   Function *func) {
+                                   _POPPLER_CONST Function *func) {
     int type = func->getType();
     if ( type == 0 || type == 2 ) {  // Sampled or exponential function
         GfxRGB stop1, stop2;
@@ -877,9 +876,9 @@ bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *sh
             _addStopToGradient(gradient, 1.0, &stop2, 1.0);
         }
     } else if ( type == 3 ) { // Stitching
-        StitchingFunction *stitchingFunc = static_cast<StitchingFunction*>(func);
-        double *bounds = stitchingFunc->getBounds();
-        double *encode = stitchingFunc->getEncode();
+        auto stitchingFunc = static_cast<_POPPLER_CONST StitchingFunction*>(func);
+        const double *bounds = stitchingFunc->getBounds();
+        const double *encode = stitchingFunc->getEncode();
         int num_funcs = stitchingFunc->getNumFuncs();
 
         // Add stops from all the stitched functions
@@ -890,7 +889,7 @@ bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *sh
             svgGetShadingColorRGB(shading, bounds[i + 1], &color);
             // Add stops
             if (stitchingFunc->getFunc(i)->getType() == 2) {    // process exponential fxn
-                double expE = (static_cast<ExponentialFunction*>(stitchingFunc->getFunc(i)))->getE();
+                double expE = (static_cast<_POPPLER_CONST ExponentialFunction*>(stitchingFunc->getFunc(i)))->getE();
                 if (expE > 1.0) {
                     expE = (bounds[i + 1] - bounds[i])/expE;    // approximate exponential as a single straight line at x=1
                     if (encode[2*i] == 0) {    // normal sequence
@@ -1020,9 +1019,9 @@ void SvgBuilder::updateFont(GfxState *state) {
     GfxFont *font = state->getFont();
     // Store original name
     if (font->getName()) {
-        _font_specification = g_strdup(font->getName()->getCString());
+        _font_specification = font->getName()->getCString();
     } else {
-        _font_specification = (char*) "Arial";
+        _font_specification = "Arial";
     }
 
     // Prune the font name to get the correct font family name
@@ -1030,7 +1029,7 @@ void SvgBuilder::updateFont(GfxState *state) {
     char *font_family = nullptr;
     char *font_style = nullptr;
     char *font_style_lowercase = nullptr;
-    char *plus_sign = strstr(_font_specification, "+");
+    const char *plus_sign = strstr(_font_specification, "+");
     if (plus_sign) {
         font_family = g_strdup(plus_sign + 1);
         _font_specification = plus_sign + 1;
@@ -1148,7 +1147,7 @@ void SvgBuilder::updateFont(GfxState *state) {
     Inkscape::CSSOStringStream os_font_size;
     double css_font_size = _font_scaling * state->getFontSize();
     if ( font->getType() == fontType3 ) {
-        double *font_matrix = font->getFontMatrix();
+        const double *font_matrix = font->getFontMatrix();
         if ( font_matrix[0] != 0.0 ) {
             css_font_size *= font_matrix[3] / font_matrix[0];
         }
@@ -1193,7 +1192,7 @@ void SvgBuilder::updateTextPosition(double tx, double ty) {
 void SvgBuilder::updateTextMatrix(GfxState *state) {
     _flushText();
     // Update text matrix
-    double *text_matrix = state->getTextMat();
+    const double *text_matrix = state->getTextMat();
     double w_scale = sqrt( text_matrix[0] * text_matrix[0] + text_matrix[2] * text_matrix[2] );
     double h_scale = sqrt( text_matrix[1] * text_matrix[1] + text_matrix[3] * text_matrix[3] );
     double max_scale;
@@ -1465,20 +1464,12 @@ void SvgBuilder::endTextObject(GfxState * /*state*/) {
 /**
  * Helper functions for supporting direct PNG output into a base64 encoded stream
  */
-void png_write_base64stream(png_structp png_ptr, png_bytep data, png_size_t length)
+void png_write_vector(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    Inkscape::IO::Base64OutputStream *stream =
-            (Inkscape::IO::Base64OutputStream*)png_get_io_ptr(png_ptr); // Get pointer to stream
+    auto *v_ptr = reinterpret_cast<std::vector<guchar> *>(png_get_io_ptr(png_ptr)); // Get pointer to stream
     for ( unsigned i = 0 ; i < length ; i++ ) {
-        stream->put((int)data[i]);
+        v_ptr->push_back(data[i]);
     }
-}
-
-void png_flush_base64stream(png_structp png_ptr)
-{
-    Inkscape::IO::Base64OutputStream *stream =
-            (Inkscape::IO::Base64OutputStream*)png_get_io_ptr(png_ptr); // Get pointer to stream
-    stream->flush();
 }
 
 /**
@@ -1511,13 +1502,11 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     sp_repr_get_int(_preferences, "embedImages", &attr_value);
     bool embed_image = ( attr_value != 0 );
     // Set read/write functions
-    Inkscape::IO::StringOutputStream base64_string;
-    Inkscape::IO::Base64OutputStream base64_stream(base64_string);
+    std::vector<guchar> png_buffer;
     FILE *fp = nullptr;
     gchar *file_name = nullptr;
     if (embed_image) {
-        base64_stream.setColumnWidth(0);   // Disable line breaks
-        png_set_write_fn(png_ptr, &base64_stream, png_write_base64stream, png_flush_base64stream);
+        png_set_write_fn(png_ptr, &png_buffer, png_write_vector, nullptr);
     } else {
         static int counter = 0;
         file_name = g_strdup_printf("%s_img%d.png", _docname, counter++);
@@ -1652,7 +1641,6 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     // Close PNG
     png_write_end(png_ptr, info_ptr);
     png_destroy_write_struct(&png_ptr, &info_ptr);
-    base64_stream.close();
 
     // Create repr
     Inkscape::XML::Node *image_node = _xml_doc->createElement("svg:image");
@@ -1676,8 +1664,9 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     // Create href
     if (embed_image) {
         // Append format specification to the URI
-        Glib::ustring& png_data = base64_string.getString();
-        png_data.insert(0, "data:image/png;base64,");
+        auto *base64String = g_base64_encode(png_buffer.data(), png_buffer.size());
+        auto png_data = std::string("data:image/png;base64,") + base64String;
+        g_free(base64String);
         image_node->setAttribute("xlink:href", png_data.c_str());
     } else {
         fclose(fp);

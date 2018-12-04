@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Class modelling a 3D perspective as an SPObject
  *
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "persp3d.h"
@@ -17,7 +18,6 @@
 #include "sp-defs.h"
 
 #include "attributes.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "vanishing-point.h"
 #include "ui/tools/box3d-tool.h"
@@ -84,28 +84,62 @@ void Persp3D::release() {
     this->getRepr()->removeListenerByData(this);
 }
 
+/**
+ * Apply viewBox and legacy desktop transformation to point loaded from SVG
+ */
+static Proj::Pt2 legacy_transform_forward(Proj::Pt2 pt, SPDocument const *doc) {
+    // Read values are in 'user units'.
+    auto root = doc->getRoot();
+    if (root->viewBox_set) {
+        pt[0] *= root->width.computed / root->viewBox.width();
+        pt[1] *= root->height.computed / root->viewBox.height();
+    }
+
+    // <inkscape:perspective> stores inverted y-axis coordinates
+    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        pt[1] *= -1;
+        if (pt[2]) {
+            pt[1] += doc->getHeight().value("px");
+        }
+    }
+
+    return pt;
+}
+
+/**
+ * Apply viewBox and legacy desktop transformation to point to be written to SVG
+ */
+static Proj::Pt2 legacy_transform_backward(Proj::Pt2 pt, SPDocument const *doc) {
+    // <inkscape:perspective> stores inverted y-axis coordinates
+    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        pt[1] *= -1;
+        if (pt[2]) {
+            pt[1] += doc->getHeight().value("px");
+        }
+    }
+
+    // Written values are in 'user units'.
+    auto root = doc->getRoot();
+    if (root->viewBox_set) {
+        pt[0] *= root->viewBox.width() / root->width.computed;
+        pt[1] *= root->viewBox.height() / root->height.computed;
+    }
+
+    return pt;
+}
 
 /**
  * Virtual set: set attribute to value.
  */
 // FIXME: Currently we only read the finite positions of vanishing points;
 //        should we move VPs into their own repr (as it's done for SPStop, e.g.)?
-void Persp3D::set(unsigned key, gchar const *value) {
-
-    // Read values are in 'user units'.
-    double scale_x = 1.0;
-    double scale_y = 1.0;
-    SPRoot *root = document->getRoot();
-    if( root->viewBox_set ) {
-        scale_x = root->width.computed / root->viewBox.width();
-        scale_y = root->height.computed / root->viewBox.height();
-    }
+void Persp3D::set(SPAttributeEnum key, gchar const *value) {
 
     switch (key) {
         case SP_ATTR_INKSCAPE_PERSP3D_VP_X: {
             if (value) {
                 Proj::Pt2 pt (value);
-                Proj::Pt2 ptn ( pt[0]*scale_x, pt[1]*scale_y, pt[2] );
+                Proj::Pt2 ptn = legacy_transform_forward(pt, document);
                 perspective_impl->tmat.set_image_pt( Proj::X, ptn );
             }
             break;
@@ -113,7 +147,7 @@ void Persp3D::set(unsigned key, gchar const *value) {
         case SP_ATTR_INKSCAPE_PERSP3D_VP_Y: {
             if (value) {
                 Proj::Pt2 pt (value);
-                Proj::Pt2 ptn ( pt[0]*scale_x, pt[1]*scale_y, pt[2] );
+                Proj::Pt2 ptn = legacy_transform_forward(pt, document);
                 perspective_impl->tmat.set_image_pt( Proj::Y, ptn );
             }
             break;
@@ -121,7 +155,7 @@ void Persp3D::set(unsigned key, gchar const *value) {
         case SP_ATTR_INKSCAPE_PERSP3D_VP_Z: {
             if (value) {
                 Proj::Pt2 pt (value);
-                Proj::Pt2 ptn ( pt[0]*scale_x, pt[1]*scale_y, pt[2] );
+                Proj::Pt2 ptn = legacy_transform_forward(pt, document);
                 perspective_impl->tmat.set_image_pt( Proj::Z, ptn );
             }
             break;
@@ -129,7 +163,7 @@ void Persp3D::set(unsigned key, gchar const *value) {
         case SP_ATTR_INKSCAPE_PERSP3D_ORIGIN: {
             if (value) {
                 Proj::Pt2 pt (value);
-                Proj::Pt2 ptn ( pt[0]*scale_x, pt[1]*scale_y, pt[2] );
+                Proj::Pt2 ptn = legacy_transform_forward(pt, document);
                 perspective_impl->tmat.set_image_pt( Proj::W, ptn );
             }
             break;
@@ -236,37 +270,32 @@ Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-
-        // Written values are in 'user units'.
-        double scale_x = 1.0;
-        double scale_y = 1.0;
-        SPRoot *root = document->getRoot();
-        if( root->viewBox_set ) {
-            scale_x = root->viewBox.width() / root->width.computed;
-            scale_y = root->viewBox.height() / root->height.computed;
-        }
         {
             Proj::Pt2 pt = perspective_impl->tmat.column( Proj::X );
             Inkscape::SVGOStringStream os;
-            os << pt[0] * scale_x  << " : " << pt[1] * scale_y << " : " << pt[2];
+            pt = legacy_transform_backward(pt, document);
+            os << pt[0] << " : " << pt[1] << " : " << pt[2];
             repr->setAttribute("inkscape:vp_x", os.str().c_str());
         }
         {
             Proj::Pt2 pt = perspective_impl->tmat.column( Proj::Y );
             Inkscape::SVGOStringStream os;
-            os << pt[0] * scale_x  << " : " << pt[1] * scale_y << " : " << pt[2];
+            pt = legacy_transform_backward(pt, document);
+            os << pt[0] << " : " << pt[1] << " : " << pt[2];
             repr->setAttribute("inkscape:vp_y", os.str().c_str());
         }
         {
             Proj::Pt2 pt = perspective_impl->tmat.column( Proj::Z );
             Inkscape::SVGOStringStream os;
-            os << pt[0] * scale_x  << " : " << pt[1] * scale_y << " : " << pt[2];
+            pt = legacy_transform_backward(pt, document);
+            os << pt[0] << " : " << pt[1] << " : " << pt[2];
             repr->setAttribute("inkscape:vp_z", os.str().c_str());
         }
         {
             Proj::Pt2 pt = perspective_impl->tmat.column( Proj::W );
             Inkscape::SVGOStringStream os;
-            os << pt[0] * scale_x  << " : " << pt[1] * scale_y << " : " << pt[2];
+            pt = legacy_transform_backward(pt, document);
+            os << pt[0] << " : " << pt[1] << " : " << pt[2];
             repr->setAttribute("inkscape:persp3d-origin", os.str().c_str());
         }
     }

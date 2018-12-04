@@ -1,17 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
  *
  * Copyright (C) 2004-2006 Bob Jamison
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SEEN_TRACE_H
 #define SEEN_TRACE_H
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 # include <cstring>
 
@@ -129,15 +126,12 @@ class TracingEngine
      *  of an SVG <path> element.
      */
     virtual  std::vector<TracingEngineResult> trace(
-                           Glib::RefPtr<Gdk::Pixbuf> /*pixbuf*/)
-        { std::vector<TracingEngineResult> dummy;  return dummy; }
-
+                           Glib::RefPtr<Gdk::Pixbuf> /*pixbuf*/) = 0;
 
     /**
      *  Abort the thread that is executing getPathDataFromPixbuf()
      */
-    virtual void abort()
-        {}
+    virtual void abort() = 0;
 
 
 

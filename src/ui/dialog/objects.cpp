@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A simple panel for objects
  *
@@ -9,11 +10,8 @@
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *               Tavmjong Bah 2017
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include "objects.h"
 
@@ -33,7 +31,9 @@
 #include "verbs.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
+
+#include "include/gtkmm_version.h"
 
 #include "object/filters/blend.h"
 #include "object/filters/gaussian-blur.h"
@@ -231,7 +231,7 @@ public:
  */
 void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show( child );
     btn.add( *Gtk::manage(Glib::wrap(child)) );
     btn.set_relief(Gtk::RELIEF_NONE);

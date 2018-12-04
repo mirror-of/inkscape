@@ -9,12 +9,12 @@ if(WIN32)
   install(FILES
     AUTHORS
     COPYING
-    NEWS
+    NEWS.md
     README.md
     TRANSLATORS
-	GPL2.txt
-	GPL3.txt
-	LGPL2.1.txt
+	LICENSES/GPL-2.0.txt
+	LICENSES/GPL-3.0.txt
+	LICENSES/LGPL-2.1.txt
     DESTINATION .)
 
   install(DIRECTORY doc
@@ -78,7 +78,6 @@ if(WIN32)
       ${DEVLIBS_BIN}/libpng16-16.dll
       ${DEVLIBS_BIN}/libpoppler-58.dll
       ${DEVLIBS_BIN}/libpoppler-glib-8.dll
-      ${DEVLIBS_BIN}/libpopt-0.dll
       ${DEVLIBS_BIN}/libpotrace-0.dll
       ${DEVLIBS_BIN}/librevenge-0.0.dll
       ${DEVLIBS_BIN}/librevenge-stream-0.0.dll
@@ -144,7 +143,6 @@ if(WIN32)
       ${DEVLIBS_BIN}/libpng14-14.dll
       ${DEVLIBS_BIN}/libpoppler-58.dll
       ${DEVLIBS_BIN}/libpoppler-glib-8.dll
-      ${DEVLIBS_BIN}/libpopt-0.dll
       ${DEVLIBS_BIN}/librevenge-0.0.dll
       ${DEVLIBS_BIN}/librevenge-stream-0.0.dll
       ${DEVLIBS_BIN}/libsigc-2.0-0.dll

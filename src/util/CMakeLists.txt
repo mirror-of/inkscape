@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 set(util_SRC
 	ege-appear-time-tracker.cpp
@@ -15,27 +16,22 @@ set(util_SRC
 	ege-tags.h
 	enums.h
 	expression-evaluator.h
-	filter-list.h
 	find-if-before.h
 	find-last-if.h
 	fixed_point.h
 	format.h
 	forward-pointer-iterator.h
-	function.h
 	list-container-test.h
 	list-container.h
 	list-copy.h
 	list.h
 	longest-common-suffix.h
-	map-list.h
 	reference.h
 	reverse-list.h
 	share.h
 	signal-blocker.h
-	tuple.h
 	ucompose.hpp
 	units.h
-	unordered-containers.h
 	ziptool.h
 )
 

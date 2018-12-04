@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Handy zooming tool
  *
@@ -8,13 +9,13 @@
  *
  * Copyright (C) 1999-2002 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 
 #include <gdk/gdkkeysyms.h>
 
-#include "macros.h"
+#include "include/macros.h"
 #include "rubberband.h"
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas-util.h"

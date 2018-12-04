@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Gradient aux toolbar
  *
@@ -9,12 +10,8 @@
  * Copyright (C) 2007 Johan Engelen
  * Copyright (C) 2005 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <glibmm/i18n.h>
 
@@ -28,7 +25,6 @@
 #include "widgets/ink-action.h"
 #include "widgets/ink-toggle-action.h"
 #include "widgets/toolbox.h"
-#include "macros.h"
 #include "selection.h"
 #include "verbs.h"
 

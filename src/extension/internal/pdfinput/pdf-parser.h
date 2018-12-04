@@ -1,14 +1,25 @@
- /*
- * Derived from Gfx.h
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * PDF parsing using libpoppler.
+ *//*
+ * Authors:
+ * see git history
+ * 
+ * Derived from Gfx.h from poppler (?) which derives from Xpdf, Copyright 1996-2003 Glyph & Cog, LLC, which is under GPL2+.
  *
- * Copyright 1996-2003 Glyph & Cog, LLC
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef PDF_PARSER_H
 #define PDF_PARSER_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #ifdef HAVE_POPPLER
+#include "poppler-transition-api.h"
 
 #ifdef USE_GCC_PRAGMAS
 #pragma interface
@@ -25,6 +36,7 @@ namespace Inkscape {
 // TODO clean up and remove using:
 using Inkscape::Extension::Internal::SvgBuilder;
 
+#include "glib/poppler-features.h"
 #include "goo/gtypes.h"
 #include "Object.h"
 
@@ -127,11 +139,14 @@ public:
 
   // Constructor for regular output.
   PdfParser(XRef *xrefA, SvgBuilder *builderA, int pageNum, int rotate,
-            Dict *resDict, PDFRectangle *box, PDFRectangle *cropBox);
+            Dict *resDict,
+            _POPPLER_CONST PDFRectangle *box,
+            _POPPLER_CONST PDFRectangle *cropBox);
 
   // Constructor for a sub-page object.
   PdfParser(XRef *xrefA, Inkscape::Extension::Internal::SvgBuilder *builderA,
-            Dict *resDict, PDFRectangle *box);
+            Dict *resDict,
+            _POPPLER_CONST PDFRectangle *box);
 
   virtual ~PdfParser();
 
@@ -185,7 +200,7 @@ private:
 
   void go(GBool topLevel);
   void execOp(Object *cmd, Object args[], int numArgs);
-  PdfOperator *findOp(char *name);
+  PdfOperator *findOp(const char *name);
   GBool checkArg(Object *arg, TchkType type);
   int getPos();
 
@@ -256,7 +271,7 @@ private:
 			   double x2, double y2, GfxColor *color2,
 			   int nComps, int depth);
   void doPatchMeshShFill(GfxPatchMeshShading *shading);
-  void fillPatch(GfxPatch *patch, int nComps, int depth);
+  void fillPatch(_POPPLER_CONST GfxPatch *patch, int nComps, int depth);
   void doEndPath();
 
   // path clipping operators
@@ -287,7 +302,12 @@ private:
   void opMoveShowText(Object args[], int numArgs);
   void opMoveSetShowText(Object args[], int numArgs);
   void opShowSpaceText(Object args[], int numArgs);
+#if POPPLER_CHECK_VERSION(0,64,0)
   void doShowText(const GooString *s);
+#else
+  void doShowText(GooString *s);
+#endif
+  
 
   // XObject operators
   void opXObject(Object args[], int numArgs);

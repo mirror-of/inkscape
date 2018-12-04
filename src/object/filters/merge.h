@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG merge filter effect
  *//*
@@ -5,7 +6,7 @@
  *   Hugo Rodrigues <haa.rodrigues@gmail.com>
  *
  * Copyright (C) 2006 Hugo Rodrigues
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SP_FEMERGE_H_SEEN
 #define SP_FEMERGE_H_SEEN
@@ -24,7 +25,7 @@ protected:
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 	void release() override;
 
-	void set(unsigned int key, const gchar* value) override;
+	void set(SPAttributeEnum key, const gchar* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 

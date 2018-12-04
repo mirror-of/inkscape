@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INK_EXTENSION_H
 #define INK_EXTENSION_H
 
@@ -11,7 +12,7 @@
  *
  * Copyright (C) 2002-2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <ostream>
@@ -290,6 +291,7 @@ public:
     Gtk::Widget *    autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal = nullptr);
     void paramListString (std::list <std::string> & retlist);
     void set_gui(bool s) { _gui = s; }
+    bool get_gui() { return _gui; }
 
     /* Extension editor dialog stuff */
 public:

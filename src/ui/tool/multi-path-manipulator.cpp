@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Multi path manipulator - implementation.
@@ -7,8 +8,10 @@
  *   Abhishek Sharma
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
+#include <unordered_set>
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -39,13 +42,13 @@ struct hash_nodelist_iterator
     : public std::unary_function<NodeList::iterator, std::size_t>
 {
     std::size_t operator()(NodeList::iterator i) const {
-        return INK_HASH<NodeList::iterator::pointer>()(&*i);
+        return std::hash<NodeList::iterator::pointer>()(&*i);
     }
 };
 
 typedef std::pair<NodeList::iterator, NodeList::iterator> IterPair;
 typedef std::vector<IterPair> IterPairList;
-typedef INK_UNORDERED_SET<NodeList::iterator, hash_nodelist_iterator> IterSet;
+typedef std::unordered_set<NodeList::iterator, hash_nodelist_iterator> IterSet;
 typedef std::multimap<double, IterPair> DistanceMap;
 typedef std::pair<double, IterPair> DistanceMapItem;
 
@@ -595,11 +598,11 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
             // rotation
             case GDK_KEY_bracketleft:
             case GDK_KEY_braceleft:
-                pm.rotateHandle(n, which, 1, one_pixel);
+                pm.rotateHandle(n, which, -_desktop->yaxisdir(), one_pixel);
                 break;
             case GDK_KEY_bracketright:
             case GDK_KEY_braceright:
-                pm.rotateHandle(n, which, -1, one_pixel);
+                pm.rotateHandle(n, which, _desktop->yaxisdir(), one_pixel);
                 break;
             // adjust length
             case GDK_KEY_period:

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @solid color class.
  */
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2014 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <cairo.h>
 
@@ -36,10 +37,10 @@ void SPSolidColor::build(SPDocument* doc, Inkscape::XML::Node* repr) {
  * Virtual build: set solidcolor attributes from its associated XML node.
  */
 
-void SPSolidColor::set(unsigned int key, const gchar* value) {
+void SPSolidColor::set(SPAttributeEnum key, const gchar* value) {
 
     if (SP_ATTRIBUTE_IS_CSS(key)) {
-        style->readFromObject( this );
+        style->clear(key);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     } else {
         SPPaintServer::set(key, value);

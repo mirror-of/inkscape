@@ -1,33 +1,27 @@
-/**
- * \file verbs.cpp
- *
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Actions for inkscape.
+ *
  *
  * This file implements routines necessary to deal with verbs.  A verb
  * is a numeric identifier used to retrieve standard SPActions for particular
  * views.
- */
-
-/*
+ *//*
  * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *   Ted Gould <ted@gould.cx>
- *   MenTaLguY <mental@rydia.net>
- *   David Turner <novalis@gnu.org>
- *   bulia byak <buliabyak@users.sf.net>
- *   Jon A. Cruz <jon@joncruz.org>
- *   Abhishek Sharma
+ * see git history
+ * Lauris Kaplinski <lauris@kaplinski.com>
+ * Ted Gould <ted@gould.cx>
+ * MenTaLguY <mental@rydia.net>
+ * David Turner <novalis@gnu.org>
+ * bulia byak <buliabyak@users.sf.net>
+ * Jon A. Cruz <jon@joncruz.org>
+ * Abhishek Sharma
+ * 2006 Johan Engelen <johan@shouraizou.nl>
+ * 2012 Kris De Gussem <Kris.DeGussem@gmail.com>
  *
- * Copyright (C) 2006 Johan Engelen <johan@shouraizou.nl>
- * Copyright (C) 2012 Kris De Gussem <Kris.DeGussem@gmail.com>
- * Copyright (C) (date unspecified) Authors
- * This code is in public domain.
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <cstring>
 #include <string>
@@ -582,7 +576,7 @@ SPAction *TextVerb::make_action(Inkscape::ActionContext const & context)
  * it allocates and creates the action.  When it does this it
  * translates the \c _name and \c _tip variables.  This allows them
  * to be statically allocated easily, and get translated in the end.  Then,
- * if the action gets crated, a listener is added to the action with
+ * if the action gets created, a listener is added to the action with
  * the vector that is passed in.
  *
  * @param  context Which context the action should be created for.
@@ -889,14 +883,10 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_new_default();
             break;
         case SP_VERB_FILE_OPEN:
-            prefs->setString("/options/openmethod/value", "open");
             sp_file_open_dialog(*parent, nullptr, nullptr);
-            prefs->setString("/options/openmethod/value", "done");
             break;
         case SP_VERB_FILE_REVERT:
-            prefs->setString("/options/openmethod/value", "revert");
             sp_file_revert_dialog();
-            prefs->setString("/options/openmethod/value", "done");
             break;
         case SP_VERB_FILE_SAVE:
             sp_file_save(*parent, nullptr, nullptr);
@@ -914,17 +904,15 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_print(*parent);
             break;
         case SP_VERB_FILE_IMPORT:
-            prefs->setString("/options/openmethod/value","import");
+            prefs->setBool("/options/onimport",true);
             sp_file_import(*parent);
-            prefs->setString("/options/openmethod/value", "done");
+            prefs->setBool("/options/onimport",false);
             break;
 //        case SP_VERB_FILE_EXPORT:
 //            sp_file_export_dialog(*parent);
 //            break;
         case SP_VERB_FILE_IMPORT_FROM_OCAL:
-            prefs->setString("/options/openmethod/value", "ocal");
             sp_file_import_from_ocal(*parent);
-            prefs->setString("/options/openmethod/value", "done");
             break;
 //        case SP_VERB_FILE_EXPORT_TO_OCAL:
 //            sp_file_export_to_ocal(*parent);
@@ -939,9 +927,7 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_ui_close_view(nullptr);
             break;
         case SP_VERB_FILE_TEMPLATES:
-            prefs->setString("/options/openmethod/value", "template");
             Inkscape::UI::NewFromTemplate::load_new_from_template();
-            prefs->setString("/options/openmethod/value", "done");
             break;
         default:
             break;
@@ -1637,6 +1623,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->editMask(false);
             break;
         case SP_VERB_OBJECT_UNSET_MASK:
+            Inkscape::LivePathEffect::sp_remove_powermask(sp_action_get_selection(action));
             sel->unsetMask(false);
             break;
         case SP_VERB_OBJECT_SET_CLIPPATH:
@@ -1653,6 +1640,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->editMask(true);
             break;
         case SP_VERB_OBJECT_UNSET_CLIPPATH:
+            Inkscape::LivePathEffect::sp_remove_powerclip(sp_action_get_selection(action));
             sel->unsetMask(true);
             break;
         default:
@@ -2131,9 +2119,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_VIEW_NEW:
             sp_ui_new_view();
             break;
-        case SP_VERB_VIEW_NEW_PREVIEW:
-            sp_ui_new_view_preview();
-            break;
         case SP_VERB_VIEW_MODE_NORMAL:
             dt->setDisplayModeNormal();
             break;
@@ -2142,6 +2127,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_VIEW_MODE_OUTLINE:
             dt->setDisplayModeOutline();
+            break;
+        case SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES:
+            dt->setDisplayModeVisibleHairlines();
             break;
         case SP_VERB_VIEW_MODE_TOGGLE:
             dt->displayModeToggle();
@@ -2157,6 +2145,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
 //            break;
         case SP_VERB_VIEW_COLOR_MODE_TOGGLE:
             dt->displayColorModeToggle();
+            break;
+        case SP_VERB_VIEW_TOGGLE_SPLIT:
+            dt->toggleSplitMode();
             break;
         case SP_VERB_VIEW_CMS_TOGGLE:
             dt->toggleColorProfAdjust();
@@ -3110,8 +3101,6 @@ Verb *Verb::_base_verbs[] = {
                  N_("Remove excess toolbars to focus on drawing"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_NEW, "ViewNew", N_("Duplic_ate Window"), N_("Open a new window with the same document"),
                  INKSCAPE_ICON("window-new")),
-    new ZoomVerb(SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"), N_("New View Preview"),
-                 nullptr /*"view_new_preview"*/),
 
     new ZoomVerb(SP_VERB_VIEW_MODE_NORMAL, "ViewModeNormal", N_("_Normal"), N_("Switch to normal display mode"),
                  nullptr),
@@ -3119,6 +3108,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Switch to normal display without filters"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_MODE_OUTLINE, "ViewModeOutline", N_("_Outline"),
                  N_("Switch to outline (wireframe) display mode"), nullptr),
+    new ZoomVerb(SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES, "ViewModeVisibleHairlines", N_("Visible _Hairlines"),
+                 N_("Make sure hairlines are always drawn thick enough to see"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_MODE_TOGGLE, "ViewModeToggle", N_("_Toggle"),
                  N_("Toggle between normal and outline display modes"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_NORMAL, "ViewColorModeNormal", N_("_Normal"),
@@ -3130,6 +3121,9 @@ Verb *Verb::_base_verbs[] = {
     //                 N_("Switch to print colors preview mode"), NULL),
     new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_TOGGLE, "ViewColorModeToggle", N_("_Toggle"),
                  N_("Toggle between normal and grayscale color display modes"), nullptr),
+
+    new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("Toggle _Split View Mode"),
+                 N_("Split canvas in 2 to show outline"), nullptr),
 
     new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-managed view"),
                  N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_MEASURE_SEGMENTS_H
 #define INKSCAPE_LPE_MEASURE_SEGMENTS_H
 
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2014 Author(s)
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <gtkmm.h>
 #include "live_effects/effect.h"
@@ -80,17 +81,13 @@ private:
     ScalarParam distance_projection;
     ScalarParam angle_projection;
     BoolParam avoid_overlapping;
-    MessageParam general;
-    MessageParam projection;
-    MessageParam options;
-    MessageParam tips;
+    MessageParam helpdata;
     Glib::ustring display_unit;
     bool locked_pagenumber;
     double doc_scale;
     double fontsize;
     double anotation_width;
     double previous_size;
-    unsigned long rgb24;
     guint32 rgb32;
     double arrow_gap;
     guint pagenumber;

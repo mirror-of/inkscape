@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_CANVAS_H
 #define SEEN_SP_CANVAS_H
 
@@ -17,11 +18,11 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2016 Google Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+# include "config.h"  // only include where actually required!
 #endif
 
 #include <gtk/gtk.h>
@@ -126,6 +127,8 @@ private:
      */
     int paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect);
 
+    void paintSpliter();
+    void set_cursor(GtkWidget *widget);
     /// Draws a specific rectangular part of the canvas.
     /// @return true if the rectangle painting succeeds.
     bool paintRect(int xx0, int yy0, int xx1, int yy1);
@@ -150,6 +153,7 @@ public:
     static void handle_get_preferred_height(GtkWidget *widget, gint *min_h, gint *nat_h);
     static void handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation);
     static gint handle_button(GtkWidget *widget, GdkEventButton *event);
+    static gint handle_doubleclick(GtkWidget *widget, GdkEventButton *event);
 
     /**
      * Scroll event handler for the canvas.
@@ -172,7 +176,27 @@ public:
 
     SPCanvasItem *_root;
 
+    Geom::OptIntRect _spliter;
+    Geom::OptIntRect _spliter_area;
+    Geom::OptIntRect _spliter_control;
+    Geom::OptIntRect _spliter_top;
+    Geom::OptIntRect _spliter_bottom;
+    Geom::OptIntRect _spliter_left;
+    Geom::OptIntRect _spliter_right;
+    Geom::Point _spliter_control_pos;
+    Geom::Point _spliter_in_control_pos;
+    double _split_value;
+    bool _split_vertical;
+    bool _split_inverse;
+    bool _split_hover_vertical;
+    bool _split_hover_horizontal;
+    bool _split_hover;
+    bool _split_pressed;
+    bool _split_control_pressed;
+    bool _split_dragging;
+
     bool _is_dragging;
+    guint _changecursor;
     double _dx0;
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window

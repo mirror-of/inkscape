@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE <parallel> implementation
  */
@@ -8,7 +9,7 @@
  * Copyright (C) Johan Engelen 2007-2012 <j.b.c.engelen@alumnus.utwente.nl>
  * Copyright (C) Maximilian Albert 2008 <maximilian.albert@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-parallel.h"
@@ -62,6 +63,12 @@ LPEParallel::~LPEParallel()
 void
 LPEParallel::doOnApply (SPLPEItem const* lpeitem)
 {
+    if (!SP_IS_SHAPE(lpeitem)) {
+        g_warning("LPE parallel can only be applied to shapes (not groups).");
+        SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+        item->removeCurrentPathEffect(false);
+        return;
+    }
     SPCurve const *curve = SP_SHAPE(lpeitem)->_curve;
 
     A = *(curve->first_point());

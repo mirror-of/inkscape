@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Spray Tool
  *
@@ -17,7 +18,7 @@
  *
  * Copyright (C) 2009 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <numeric>
@@ -36,7 +37,7 @@
 #include "document.h"
 #include "filter-chemistry.h"
 #include "inkscape.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "selection.h"
@@ -969,7 +970,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale));
                 sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle));
                 // Move the cursor p
-                sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                sp_item_move_rel(item_copied, Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
                 Inkscape::GC::release(copy);
                 if(picker){
                     sp_desktop_apply_css_recursive(item_copied, css, true);
@@ -1013,7 +1014,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
                     sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
                     sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
-                    sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                    sp_item_move_rel(item_copied, Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
 
                     // Union and duplication
                     set->clear();
@@ -1101,7 +1102,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
                 sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
                 sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
-                sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                sp_item_move_rel(item_copied, Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
                 if(picker){
                     sp_desktop_apply_css_recursive(item_copied, css, true);
                 }
@@ -1231,7 +1232,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
-                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
                 this->setCloneTilerPrefs();
@@ -1304,8 +1305,9 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 
                 switch (event->scroll.direction) {
                     case GDK_SCROLL_DOWN:
-                    case GDK_SCROLL_UP: {
-                        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                    case GDK_SCROLL_UP:
+                    case GDK_SCROLL_SMOOTH: {
+                        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                             return TRUE;
                         }
                         this->last_push = desktop->dt2doc(scroll_dt);

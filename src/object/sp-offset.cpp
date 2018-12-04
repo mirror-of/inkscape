@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Implementation of <path sodipodi:type="inkscape:offset">.
  */
@@ -11,12 +12,8 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "sp-offset.h"
 
@@ -220,7 +217,7 @@ void SPOffset::release() {
     SPShape::release();
 }
 
-void SPOffset::set(unsigned int key, const gchar* value) {
+void SPOffset::set(SPAttributeEnum key, const gchar* value) {
     if ( this->sourceDirty ) {
     	refresh_offset_source(this);
     }
@@ -350,8 +347,8 @@ void SPOffset::set_shape() {
 
     if ( fabs(this->rad) < 0.01 ) {
         // grosso modo: 0
-        // just put the source this as the offseted one, no one will notice
-        // it's also useless to compute the offset with a 0 radius
+        // just put the source of this (almost-non-offsetted) object as being the actual offset, 
+        // no one will notice. it's also useless to compute the offset with a 0 radius
 
         //XML Tree being used directly here while it shouldn't be.
         const char *res_d = this->getRepr()->attribute("inkscape:original");
@@ -370,7 +367,7 @@ void SPOffset::set_shape() {
         return;
     }
 
-    // extra paraniac careful check. the preceding if () should take care of this case
+    // extra paranoiac careful check. the preceding if () should take care of this case
     if (fabs (this->rad) < 0.01) {
     	this->rad = (this->rad < 0) ? -0.01 : 0.01;
     }

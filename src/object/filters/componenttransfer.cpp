@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <feComponentTransfer> implementation.
  *
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "attributes.h"
@@ -120,7 +121,7 @@ void SPFeComponentTransfer::release() {
 /**
  * Sets a specific value in the SPFeComponentTransfer.
  */
-void SPFeComponentTransfer::set(unsigned int key, gchar const *value) {
+void SPFeComponentTransfer::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
         /*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
@@ -168,7 +169,7 @@ void SPFeComponentTransfer::build_renderer(Inkscape::Filters::Filter* filter) {
     g_assert(nr_componenttransfer != nullptr);
 
     this->renderer = nr_componenttransfer;
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
 
     sp_feComponentTransfer_children_modified(this);    //do we need it?!

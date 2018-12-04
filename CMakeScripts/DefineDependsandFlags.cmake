@@ -14,8 +14,13 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 # Add C++11 standard compliance
 # TODO: Add a proper check for compiler compliance here
 # ----------------------------------------------------------------------------
+# this can be removed when cmake minimum is 3.1 
+# as replaced with CMAKE_CXX_STANDARD in main CMakeLists.txt
 list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
 
+# Errors for common mistakes
+list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
+list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
 
 # Define the flags for profiling if desired:
 if(WITH_PROFILING)
@@ -29,44 +34,39 @@ endif()
 # Files we include
 # ----------------------------------------------------------------------------
 if(WIN32)
-	# Set the link and include directories
-	get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+    # Set the link and include directories
+    get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
 
-	list(APPEND INKSCAPE_LIBS "-lmscms")
+    list(APPEND INKSCAPE_LIBS "-lmscms")
 
-	list(APPEND INKSCAPE_CXX_FLAGS "-mwindows")
-	list(APPEND INKSCAPE_CXX_FLAGS "-mthreads")
+    list(APPEND INKSCAPE_CXX_FLAGS "-mms-bitfields")
+    list(APPEND INKSCAPE_CXX_FLAGS "-mwindows")
+    list(APPEND INKSCAPE_CXX_FLAGS "-mthreads")
 
-	list(APPEND INKSCAPE_LIBS "-lgomp")
-	list(APPEND INKSCAPE_LIBS "-lwinpthread")
+    list(APPEND INKSCAPE_LIBS "-lgomp")
+    list(APPEND INKSCAPE_LIBS "-lwinpthread")
 
-	if(HAVE_MINGW64)
-		list(APPEND INKSCAPE_CXX_FLAGS "-m64")
-	else()
-		list(APPEND INKSCAPE_CXX_FLAGS "-m32")
-	endif()
+    if(HAVE_MINGW64)
+        list(APPEND INKSCAPE_CXX_FLAGS "-m64")
+    else()
+        list(APPEND INKSCAPE_CXX_FLAGS "-m32")
+    endif()
 endif()
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(INKSCAPE_DEP REQUIRED
-	          harfbuzz
-	          pangocairo
-		  pangoft2
-		  fontconfig
-		  gsl
-		  gmodule-2.0
-		  libsoup-2.4>=2.42)
+                  harfbuzz
+                  pangocairo
+                  pangoft2
+                  fontconfig
+                  gsl
+                  gmodule-2.0
+                  libsoup-2.4>=2.42)
 
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LIBRARIES})
 
 add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
-
-if(APPLE AND DEFINED ENV{CMAKE_PREFIX_PATH})
-    list(APPEND INKSCAPE_LIBS "-L$ENV{CMAKE_PREFIX_PATH}/lib")
-endif()
-
 
 if(WITH_JEMALLOC)
     find_package(JeMalloc)
@@ -82,9 +82,9 @@ if(ENABLE_LCMS)
     unset(HAVE_LIBLCMS2)
     find_package(LCMS2)
     if(LCMS2_FOUND)
-	list(APPEND INKSCAPE_INCS_SYS ${LCMS2_INCLUDE_DIRS})
-	list(APPEND INKSCAPE_LIBS ${LCMS2_LIBRARIES})
-	add_definitions(${LCMS2_DEFINITIONS})
+        list(APPEND INKSCAPE_INCS_SYS ${LCMS2_INCLUDE_DIRS})
+        list(APPEND INKSCAPE_LIBS ${LCMS2_LIBRARIES})
+        add_definitions(${LCMS2_DEFINITIONS})
         set (HAVE_LIBLCMS2 ON)
     else()
         find_package(LCMS)
@@ -117,29 +117,14 @@ add_definitions(${BOEHMGC_DEFINITIONS})
 if(ENABLE_POPPLER)
     find_package(PopplerCairo)
     if(POPPLER_FOUND)
-	set(HAVE_POPPLER ON)
-	if(ENABLE_POPPLER_CAIRO)
-	    if(POPPLER_CAIRO_FOUND AND POPPLER_GLIB_FOUND)
-		set(HAVE_POPPLER_CAIRO ON)
-	    endif()
-	    if(POPPLER_GLIB_FOUND AND CAIRO_SVG_FOUND)
-		set(HAVE_POPPLER_GLIB ON)
-	    endif()
-	endif()
-	if(POPPLER_VERSION VERSION_GREATER "0.26.0" OR
-		POPPLER_VERSION VERSION_EQUAL   "0.26.0")
-	    set(POPPLER_EVEN_NEWER_COLOR_SPACE_API ON)
-	endif()
-	if(POPPLER_VERSION VERSION_GREATER "0.29.0" OR
-		POPPLER_VERSION VERSION_EQUAL   "0.29.0")
-	    set(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API ON)
-	endif()
-	if(POPPLER_VERSION VERSION_GREATER "0.58.0" OR
-		POPPLER_VERSION VERSION_EQUAL   "0.58.0")
-            set(POPPLER_NEW_OBJECT_API ON)
-	endif()
+        set(HAVE_POPPLER ON)
+        if(ENABLE_POPPLER_CAIRO)
+            if(POPPLER_CAIRO_FOUND AND POPPLER_GLIB_FOUND)
+                set(HAVE_POPPLER_CAIRO ON)
+            endif()
+        endif()
     else()
-	set(ENABLE_POPPLER_CAIRO OFF)
+        set(ENABLE_POPPLER_CAIRO OFF)
     endif()
 else()
     set(HAVE_POPPLER OFF)
@@ -153,40 +138,37 @@ add_definitions(${POPPLER_DEFINITIONS})
 if(WITH_LIBWPG)
     find_package(LibWPG)
     if(LIBWPG_FOUND)
-	set(WITH_LIBWPG01 ${LIBWPG-0.1_FOUND})
-	set(WITH_LIBWPG02 ${LIBWPG-0.2_FOUND})
-	set(WITH_LIBWPG03 ${LIBWPG-0.3_FOUND})
-	list(APPEND INKSCAPE_INCS_SYS ${LIBWPG_INCLUDE_DIRS})
-	list(APPEND INKSCAPE_LIBS     ${LIBWPG_LIBRARIES})
-	add_definitions(${LIBWPG_DEFINITIONS})
+        set(WITH_LIBWPG02 ${LIBWPG-0.2_FOUND})
+        set(WITH_LIBWPG03 ${LIBWPG-0.3_FOUND})
+        list(APPEND INKSCAPE_INCS_SYS ${LIBWPG_INCLUDE_DIRS})
+        list(APPEND INKSCAPE_LIBS     ${LIBWPG_LIBRARIES})
+        add_definitions(${LIBWPG_DEFINITIONS})
     else()
-	set(WITH_LIBWPG OFF)
+        set(WITH_LIBWPG OFF)
     endif()
 endif()
 
 if(WITH_LIBVISIO)
     find_package(LibVisio)
     if(LIBVISIO_FOUND)
-	set(WITH_LIBVISIO00 ${LIBVISIO-0.0_FOUND})
-	set(WITH_LIBVISIO01 ${LIBVISIO-0.1_FOUND})
-	list(APPEND INKSCAPE_INCS_SYS ${LIBVISIO_INCLUDE_DIRS})
-	list(APPEND INKSCAPE_LIBS     ${LIBVISIO_LIBRARIES})
-	add_definitions(${LIBVISIO_DEFINITIONS})
+        set(WITH_LIBVISIO01 ${LIBVISIO-0.1_FOUND})
+        list(APPEND INKSCAPE_INCS_SYS ${LIBVISIO_INCLUDE_DIRS})
+        list(APPEND INKSCAPE_LIBS     ${LIBVISIO_LIBRARIES})
+        add_definitions(${LIBVISIO_DEFINITIONS})
     else()
-	set(WITH_LIBVISIO OFF)
+        set(WITH_LIBVISIO OFF)
     endif()
 endif()
 
 if(WITH_LIBCDR)
     find_package(LibCDR)
     if(LIBCDR_FOUND)
-	set(WITH_LIBCDR00 ${LIBCDR-0.0_FOUND})
-	set(WITH_LIBCDR01 ${LIBCDR-0.1_FOUND})
-	list(APPEND INKSCAPE_INCS_SYS ${LIBCDR_INCLUDE_DIRS})
-	list(APPEND INKSCAPE_LIBS     ${LIBCDR_LIBRARIES})
-	add_definitions(${LIBCDR_DEFINITIONS})
+        set(WITH_LIBCDR01 ${LIBCDR-0.1_FOUND})
+        list(APPEND INKSCAPE_INCS_SYS ${LIBCDR_INCLUDE_DIRS})
+        list(APPEND INKSCAPE_LIBS     ${LIBCDR_LIBRARIES})
+        add_definitions(${LIBCDR_DEFINITIONS})
     else()
-	set(WITH_LIBCDR OFF)
+        set(WITH_LIBCDR OFF)
     endif()
 endif()
 
@@ -200,11 +182,6 @@ ENDIF()
 find_package(PNG REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${PNG_PNG_INCLUDE_DIR})
 list(APPEND INKSCAPE_LIBS ${PNG_LIBRARY})
-
-find_package(Popt REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${POPT_INCLUDE_DIR})
-list(APPEND INKSCAPE_LIBS ${POPT_LIBRARIES})
-add_definitions(${POPT_DEFINITIONS})
 
 find_package(Potrace)
 if(POTRACE_FOUND)
@@ -220,26 +197,24 @@ endif()
 if(WITH_DBUS)
     pkg_check_modules(DBUS dbus-1 dbus-glib-1)
     if(DBUS_FOUND)
-    list(APPEND INKSCAPE_LIBS ${DBUS_LDFLAGS})
-    list(APPEND INKSCAPE_INCS_SYS ${DBUS_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/src/extension/dbus/)
-    list(APPEND INKSCAPE_LIBS ${DBUS_LIBRARIES})
-    add_definitions(${DBUS_CFLAGS_OTHER})
-
+        list(APPEND INKSCAPE_LIBS ${DBUS_LDFLAGS})
+        list(APPEND INKSCAPE_INCS_SYS ${DBUS_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/src/extension/dbus/)
+        add_definitions(${DBUS_CFLAGS_OTHER})
     else()
-	set(WITH_DBUS OFF)
+        set(WITH_DBUS OFF)
     endif()
 endif()
 
 if(WITH_SVG2)
-	add_definitions(-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE -DWITH_SVG2)
+    add_definitions(-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE -DWITH_SVG2)
 else()
-	add_definitions(-UWITH_MESH -UWITH_CSSBLEND -UWITH_CSSCOMPOSITE -UWITH_SVG2)
+    add_definitions(-UWITH_MESH -UWITH_CSSBLEND -UWITH_CSSCOMPOSITE -UWITH_SVG2)
 endif()
 
 if(WITH_LPETOOL)
-	add_definitions(-DWITH_LPETOOL -DLPE_ENABLE_TEST_EFFECTS)
+    set(LPE_ENABLE_TEST_EFFECTS ON)
 else()
-	add_definitions(-UWITH_LPETOOL -ULPE_ENABLE_TEST_EFFECTS)
+    set(LPE_ENABLE_TEST_EFFECTS OFF)
 endif()
 
 # ----------------------------------------------------------------------------
@@ -259,29 +234,19 @@ pkg_check_modules(
     )
 list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
 list(APPEND INKSCAPE_INCS_SYS ${GTK3_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${GTK3_LIBRARIES})
-
-# Use some obtuse string parsing to get the version
-# number components for GTKMM.
-# These variables are also substituted in config.h, and used within the
-# GTKMM_CHECK_VERSION macro
-string(REPLACE "." ";" GTKMM_VERSION_COMPONENTS ${GTK3_gtkmm-3.0_VERSION})
-list(GET GTKMM_VERSION_COMPONENTS 0 INKSCAPE_GTKMM_MAJOR_VERSION)
-list(GET GTKMM_VERSION_COMPONENTS 1 INKSCAPE_GTKMM_MINOR_VERSION)
-list(GET GTKMM_VERSION_COMPONENTS 2 INKSCAPE_GTKMM_MICRO_VERSION)
+list(APPEND INKSCAPE_LIBS ${GTK3_LDFLAGS})
 
 pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 if("${GDL_3_6_FOUND}")
-    message("Using GDL 3.6 or higher")
-    add_definitions(-DWITH_GDL_3_6)
+    message(STATUS "Using GDL 3.6 or higher")
     set (WITH_GDL_3_6 ON)
 endif()
 
 pkg_check_modules(GTKSPELL3 gtkspell3-3.0)
 if("${GTKSPELL3_FOUND}")
-    message("Using GtkSpell 3")
+    message(STATUS "Using GtkSpell 3")
     list(APPEND INKSCAPE_INCS_SYS ${GTKSPELL3_INCLUDE_DIRS})
-    list(APPEND INKSCAPE_LIBS ${GTKSPELL3_LIBRARIES})
+    list(APPEND INKSCAPE_LIBS ${GTKSPELL3_LDFLAGS})
     set(WITH_GTKSPELL ON)
 else()
     set(WITH_GTKSPELL OFF)
@@ -316,20 +281,20 @@ add_definitions(${LIBXML2_DEFINITIONS})
 if(WITH_OPENMP)
     find_package(OpenMP)
     if(OPENMP_FOUND)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-	list(APPEND INKSCAPE_CXX_FLAGS  ${OpenMP_CXX_FLAGS})
-	if(APPLE AND ${CMAKE_GENERATOR} MATCHES "Xcode")
-	    set(CMAKE_XCODE_ATTRIBUTE_ENABLE_OPENMP_SUPPORT "YES")
-	endif()
-	mark_as_advanced(OpenMP_C_FLAGS)
-	mark_as_advanced(OpenMP_CXX_FLAGS)
-	# '-fopenmp' is in OpenMP_C_FLAGS, OpenMP_CXX_FLAGS and implies '-lgomp'
-	# uncomment explicit linking below if still needed:
-	set(HAVE_OPENMP ON)
-	#list(APPEND INKSCAPE_LIBS "-lgomp")  # FIXME
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        list(APPEND INKSCAPE_CXX_FLAGS  ${OpenMP_CXX_FLAGS})
+        if(APPLE AND ${CMAKE_GENERATOR} MATCHES "Xcode")
+            set(CMAKE_XCODE_ATTRIBUTE_ENABLE_OPENMP_SUPPORT "YES")
+        endif()
+        mark_as_advanced(OpenMP_C_FLAGS)
+        mark_as_advanced(OpenMP_CXX_FLAGS)
+        # '-fopenmp' is in OpenMP_C_FLAGS, OpenMP_CXX_FLAGS and implies '-lgomp'
+        # uncomment explicit linking below if still needed:
+        set(HAVE_OPENMP ON)
+        #list(APPEND INKSCAPE_LIBS "-lgomp")  # FIXME
     else()
-	set(HAVE_OPENMP OFF)
-	set(WITH_OPENMP OFF)
+        set(HAVE_OPENMP OFF)
+        set(WITH_OPENMP OFF)
     endif()
 endif()
 
@@ -338,33 +303,48 @@ list(APPEND INKSCAPE_INCS_SYS ${ZLIB_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${ZLIB_LIBRARIES})
 
 if(WITH_IMAGE_MAGICK)
-    pkg_check_modules(ImageMagick ImageMagick++ )
-    if(ImageMagick_FOUND)
-
-        list(APPEND INKSCAPE_LIBS ${ImageMagick_LDFLAGS})
-        add_definitions(${ImageMagick_CFLAGS_OTHER})
-
-        list(APPEND INKSCAPE_INCS_SYS ${ImageMagick_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS ${ImageMagick_LIBRARIES})
-        else()
-	set(WITH_IMAGE_MAGICK OFF)  # enable 'Extensions > Raster'
+    # we want "<" but pkg_check_modules only offers "<=" for some reason; let's hope nobody actually has 7.0.0
+    pkg_check_modules(MAGICK ImageMagick++<=7)
+    if(MAGICK_FOUND)
+        set(WITH_GRAPHICS_MAGICK OFF)  # prefer ImageMagick for now and disable GraphicsMagick if found
+    else()
+        set(WITH_IMAGE_MAGICK OFF)
     endif()
+endif()
+if(WITH_GRAPHICS_MAGICK)
+    pkg_check_modules(MAGICK GraphicsMagick++)
+    if(NOT MAGICK_FOUND)
+        set(WITH_GRAPHICS_MAGICK OFF)
+    endif()
+endif()
+if(MAGICK_FOUND)
+    list(APPEND INKSCAPE_LIBS ${MAGICK_LDFLAGS})
+    add_definitions(${MAGICK_CFLAGS_OTHER})
+    list(APPEND INKSCAPE_INCS_SYS ${MAGICK_INCLUDE_DIRS})
+
+    set(WITH_MAGICK ON) # enable 'Extensions > Raster'
 endif()
 
 set(ENABLE_NLS OFF)
 if(WITH_NLS)
     find_package(Gettext)
     if(GETTEXT_FOUND)
-	message(STATUS "Found gettext + msgfmt to convert language files. Translation enabled")
-	set(ENABLE_NLS ON)
+        message(STATUS "Found gettext + msgfmt to convert language files. Translation enabled")
+        set(ENABLE_NLS ON)
     else(GETTEXT_FOUND)
-	message(STATUS "Cannot find gettext + msgfmt to convert language file. Translation won't be enabled")
+        message(STATUS "Cannot find gettext + msgfmt to convert language file. Translation won't be enabled")
     endif(GETTEXT_FOUND)
+
+    find_program(INTLTOOL-UPDATE intltool-update)
+    if(INTLTOOL-UPDATE)
+        message(STATUS "Found íntltool. inkscape.pot will be re-created if missing.")
+    else()
+        message(STATUS "Did not find intltool. inkscape.pot can't be re-created.")
+    endif()
 endif(WITH_NLS)
 
 pkg_check_modules(SIGC++ REQUIRED sigc++-2.0 )
 list(APPEND INKSCAPE_LIBS ${SIGC++_LDFLAGS})
-
 list(APPEND INKSCAPE_CXX_FLAGS ${SIGC++_CFLAGS_OTHER})
 
 if(WITH_YAML)
@@ -373,7 +353,6 @@ if(WITH_YAML)
         set (WITH_YAML ON)
         list(APPEND INKSCAPE_INCS_SYS ${YAML_INCLUDE_DIRS})
         list(APPEND INKSCAPE_LIBS ${YAML_LIBRARIES})
-        add_definitions(-DWITH_YAML)
     else(YAML_FOUND)
         set(WITH_YAML OFF)
         message(STATUS "Could not locate the yaml library headers: xverb feature will be disabled")

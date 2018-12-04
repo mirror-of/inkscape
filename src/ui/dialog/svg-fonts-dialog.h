@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief SVG Fonts dialog
  */
@@ -5,7 +6,7 @@
  *   Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
  *
  * Copyright (C) 2008 Authors
- * Released under GNU GPLv2 (or later).  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_SVG_FONTS_H
@@ -88,7 +89,7 @@ public:
     class AttrEntry : public Gtk::HBox
     {
     public:
-        AttrEntry(SvgFontsDialog* d, gchar* lbl, const SPAttributeEnum attr);
+        AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttributeEnum attr);
         void set_text(char*);
     private:
         SvgFontsDialog* dialog;
@@ -100,7 +101,7 @@ public:
     class AttrSpin : public Gtk::HBox
     {
     public:
-        AttrSpin(SvgFontsDialog* d, gchar* lbl, const SPAttributeEnum attr);
+        AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttributeEnum attr);
         void set_value(double v);
         void set_range(double low, double high);
         Inkscape::UI::Widget::SpinButton* getSpin() { return &spin; }

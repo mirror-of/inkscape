@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * TextTool
  *
@@ -10,12 +11,8 @@
  * Copyright (C) 1999-2005 authors
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <gdk/gdkkeysyms.h>
 #include <gtkmm/clipboard.h>
@@ -31,8 +28,8 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
+#include "include/macros.h"
 #include "inkscape.h"
-#include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"
@@ -527,7 +524,7 @@ bool TextTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
 
-                if (Inkscape::have_viable_layer(desktop, desktop->messageStack()) == false) {
+                if (Inkscape::have_viable_layer(desktop, desktop->getMessageStack()) == false) {
                     return TRUE;
                 }
 
@@ -634,7 +631,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                     // Cursor height is defined by the new text object's font size; it needs to be set
                     // artificially here, for the text object does not exist yet:
                     double cursor_height = sp_desktop_get_font_size_tool(desktop);
-                    this->cursor->setCoords(p1, p1 + Geom::Point(0, cursor_height));
+                    auto const y_dir = desktop->yaxisdir();
+                    this->cursor->setCoords(p1, p1 - Geom::Point(0, y_dir * cursor_height));
                     if (this->imc) {
                         GdkRectangle im_cursor;
                         Geom::Point const top_left = SP_EVENT_CONTEXT(this)->desktop->get_display_area().corner(3);

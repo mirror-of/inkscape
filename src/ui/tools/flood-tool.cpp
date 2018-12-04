@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Bucket fill drawing context, works by bitmap filling an area on a rendered version
@@ -14,12 +15,8 @@
  * Copyright (C) 2000-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "flood-tool.h"
 
@@ -37,7 +34,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"
@@ -50,6 +46,8 @@
 #include "display/drawing-image.h"
 #include "display/drawing.h"
 #include "display/sp-canvas.h"
+
+#include "include/macros.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -765,8 +763,8 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     unsigned int width = (int)ceil(screen.width() * zoom_scale * padding);
     unsigned int height = (int)ceil(screen.height() * zoom_scale * padding);
 
-    Geom::Point origin(screen.min()[Geom::X],
-                       document->getHeight().value("px") - screen.height() - screen.min()[Geom::Y]);
+    Geom::Point origin = screen.corner(desktop->is_yaxisdown() ? 0 : 3)
+        * desktop->doc2dt();
                     
     origin[Geom::X] += (screen.width() * ((1 - padding) / 2));
     origin[Geom::Y] += (screen.height() * ((1 - padding) / 2));
@@ -876,7 +874,11 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     }
 
     for (unsigned int i = 0; i < fill_points.size(); i++) {
-        Geom::Point pw = Geom::Point(fill_points[i][Geom::X] / zoom_scale, document->getHeight().value("px") + (fill_points[i][Geom::Y] / zoom_scale)) * affine;
+        Geom::Point pw = fill_points[i]
+            * Geom::Scale(1. / zoom_scale)
+            * desktop->doc2dt().withoutTranslation()
+            * desktop->doc2dt()
+            * affine;
 
         pw[Geom::X] = (int)MIN(width - 1, MAX(0, pw[Geom::X]));
         pw[Geom::Y] = (int)MIN(height - 1, MAX(0, pw[Geom::Y]));
