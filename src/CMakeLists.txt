@@ -294,6 +294,21 @@ set(main_SRC
   actions/actions-transform.h
   actions/actions-transform.cpp
 )
+set(headless_SRC
+  inkscape-main.cpp
+  inkscape-application-headless.h
+  inkscape-application-headless.cpp
+  actions/actions-base.h
+  actions/actions-base.cpp
+  actions/actions-helper.h
+  actions/actions-helper.cpp
+  actions/actions-output.h
+  actions/actions-output.cpp
+  actions/actions-selection.h
+  actions/actions-selection.cpp
+  actions/actions-transform.h
+  actions/actions-transform.cpp
+)
 set(view_SRC
   inkview-main.cpp
   inkview-application.h
@@ -337,9 +352,10 @@ endif()
 
 # make executables for inkscape and inkview
 add_executable(inkscape ${main_SRC})
+add_executable(inkscape-headless ${headless_SRC})
 add_executable(inkview ${view_SRC})
 
-
+set_source_files_properties( inkscape-application-headless.cpp PROPERTIES COMPILE_FLAGS "-DHEADLESS")
 
 set(INKSCAPE_TARGET_LIBS
         # order from automake
@@ -373,6 +389,7 @@ target_link_libraries(inkscape_base PRIVATE ${INKSCAPE_TARGET_LIBS} PUBLIC ${INK
 
 # Link inkscape and inkview against inkscape_base
 target_link_libraries(inkscape inkscape_base)
+target_link_libraries(inkscape-headless inkscape_base)
 target_link_libraries(inkview inkscape_base)
 
 
@@ -381,7 +398,8 @@ target_link_libraries(inkview inkscape_base)
 if(NOT WIN32)
   install(TARGETS
     inkscape
-    inkview 
+    inkscape-headless
+    inkview
     RUNTIME DESTINATION bin)
   if(BUILD_SHARED_LIBS)
     install(TARGETS inkscape_base LIBRARY DESTINATION lib/inkscape)

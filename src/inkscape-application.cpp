@@ -44,7 +44,11 @@ using Inkscape::IO::Resource::UIS;
 // after calling on_handle_local_options() are assumed to be filenames.
 
 InkscapeApplication::InkscapeApplication()
+#ifdef HEADLESS
+    : Gio::Application("org.inkscape.application.with_gui",
+#else
     : Gtk::Application("org.inkscape.application.with_gui",
+#endif
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
                        Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkscape to run at same time.
     , _with_gui(true)
@@ -177,7 +181,11 @@ InkscapeApplication::get_active_selection()
 void
 InkscapeApplication::on_startup()
 {
+#ifdef HEADLESS
+    Gio::Application::on_startup();
+#else
     Gtk::Application::on_startup();
+#endif
 }
 
 // Here are things that should be in on_startup() but cannot be as we don't set _with_gui until
@@ -187,6 +195,10 @@ InkscapeApplication::on_startup2()
 {
     // This should be completely rewritten.
     Inkscape::Application::create(nullptr, _with_gui); // argv appears to not be used.
+
+#ifdef HEADLESS
+    _with_gui = false;
+#endif
 
     if (!_with_gui) {
         return;
@@ -219,7 +231,9 @@ InkscapeApplication::on_startup2()
     if (!menu) {
         std::cerr << "InkscapeApplication: failed to load application menu!" << std::endl;
     } else {
+#ifndef HEADLESS
         set_app_menu(menu);
+#endif
     }
 }
 
@@ -315,8 +329,9 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
     _documents.push_back(desktop->getDocument());
 
     // Add to Gtk::Window to app window list.
+#ifndef HEADLESS
     add_window(*desktop->getToplevel());
-
+#endif
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
 
@@ -697,12 +712,13 @@ InkscapeApplication::on_new()
 void
 InkscapeApplication::on_quit()
 {
+#ifndef HEADLESS
     // Delete all windows (quit() doesn't do this).
     std::vector<Gtk::Window*> windows = get_windows();
     for (auto window: windows) {
         // Do something
     }
-
+#endif
     quit();
 }
 

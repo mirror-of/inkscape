@@ -30,7 +30,11 @@
 
 typedef std::vector<std::pair<std::string, Glib::VariantBase> > action_vector_t;
 
+#ifdef HEADLESS
+class InkscapeApplication : public Gio::Application
+#else
 class InkscapeApplication : public Gtk::Application
+#endif
 {
 protected:
     InkscapeApplication();
