@@ -697,6 +697,15 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
+
+    // expand render on filtered items
+    Geom::OptIntRect cl = _cacheRect();
+    if (_filter != nullptr && render_filters && cl) {
+        setCached(true, true);
+        carea = cl;
+    }
+    
+
     if (!carea) return RENDER_OK;
 
     if (_antialias) {
@@ -717,8 +726,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
             // we were previously outside of the canvas.
-            Geom::OptIntRect cl = _drawing.cacheLimit();
-            cl.intersectWith(_drawbox);
             if (cl) {
                 _cache = new DrawingCache(*cl);
             }
