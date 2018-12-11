@@ -700,7 +700,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // expand render on filtered items
     Geom::OptIntRect cl = _cacheRect();
-    if (_filter != nullptr && render_filters && cl) {
+    if (_filter && render_filters && cl) {
         setCached(true, true);
         carea = cl;
     }
