@@ -691,7 +691,9 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
             }
 
             for (child = node->firstChild(); child; child = child->next()) {
-                if (!strcmp(splits[part_i], child->attribute("id"))) {
+                // To do: figure out why a comment in the XML file causes a crash if we don't
+                // check for child->attribute("id").
+                if (child->attribute("id") && !strcmp(splits[part_i], child->attribute("id"))) {
                     break;
                 }
             }
