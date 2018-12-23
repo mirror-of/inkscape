@@ -36,9 +36,9 @@ namespace Resource {
 
 #define INKSCAPE_PROFILE_DIR "inkscape"
 
-gchar *_get_path(Domain domain, Type type, char const *filename)
+std::string _get_path(Domain domain, Type type, char const *filename)
 {
-    gchar *path=nullptr;
+    std::string path;
     switch (domain) {
         case SYSTEM: {
             gchar const* temp = nullptr;
@@ -66,7 +66,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
 #endif
                 default: temp = "";
             }
-            path = g_strdup(temp);
+            path = temp;
         } break;
         case CREATE: {
             gchar const* temp = nullptr;
@@ -76,10 +76,10 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case PATTERNS: temp = CREATE_PATTERNSDIR; break;
                 default: temp = "";
             }
-            path = g_strdup(temp);
+            path = temp;
         } break;
         case CACHE: {
-            path = g_build_filename(g_get_user_cache_dir(), "inkscape", NULL);
+            path = Glib::build_filename(g_get_user_cache_dir(), "inkscape");
         } break;
         case USER: {
             char const *name=nullptr;
@@ -106,11 +106,8 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
         } break;
     }
 
-
-    if (filename && path) {
-        gchar *temp=g_build_filename(path, filename, NULL);
-        g_free(path);
-        path = temp;
+    if (filename && !path.empty()) {
+        return Glib::build_filename(path, filename);
     }
 
     return path;
@@ -120,20 +117,12 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
 
 Util::ptr_shared get_path(Domain domain, Type type, char const *filename)
 {
-    char *path = _get_path(domain, type, filename);
-    Util::ptr_shared result=Util::share_string(path);
-    g_free(path);
-    return result;
+    auto path = _get_path(domain, type, filename);
+    return Util::share_string(path.c_str());
 }
 Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
 {
-    Glib::ustring result;
-    char *path = _get_path(domain, type, filename);
-    if(path) {
-      result = Glib::ustring(path);
-      g_free(path);
-    }
-    return result;
+    return _get_path(domain, type, filename);
 }
 
 /*
@@ -146,44 +135,36 @@ Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
  */
 Glib::ustring get_filename(Type type, char const *filename, char const *locale)
 {
-    Glib::ustring result;
+    struct {
+        Domain domain;
+        char const *filename;
+    } candidates[] = {
+        { USER, locale },
+        { SYSTEM, locale },
+        { USER, filename },
+        { SYSTEM, filename },
+    };
 
-    if(locale != nullptr) {
-      char *user_locale = _get_path(USER, type, locale);
-      char *sys_locale = _get_path(SYSTEM, type, locale);
+    // for warning message
+    std::string nonexisting;
 
-      if (file_test(user_locale, G_FILE_TEST_EXISTS)) {
-          result = Glib::ustring(user_locale);
-      } else if(file_test(sys_locale, G_FILE_TEST_EXISTS)) {
-          result = Glib::ustring(sys_locale);
-      }
-      g_free(user_locale);
-      g_free(sys_locale);
+    for (auto const &candidate : candidates) {
+        if (candidate.filename) {
+            auto path = _get_path(candidate.domain, type, candidate.filename);
 
-      if(!result.empty()) {
-          g_info("Using translated resource file: %s", result.c_str());
-          return result;
-      }
+            if (file_test(path.c_str(), G_FILE_TEST_EXISTS)) {
+                g_info("Using resource file: %s", path.c_str());
+                return path;
+            }
+
+            nonexisting.append("\n");
+            nonexisting.append(path);
+        }
     }
 
-    char *user_filename = _get_path(USER, type, filename);
-    char *sys_filename = _get_path(SYSTEM, type, filename);
+    g_warning("Failed to load resource '%s' from any of:%s", filename, nonexisting.c_str());
 
-    if (file_test(user_filename, G_FILE_TEST_EXISTS)) {
-        result = Glib::ustring(user_filename);
-    } else if(file_test(sys_filename, G_FILE_TEST_EXISTS)) {
-        result = Glib::ustring(sys_filename);
-    } else {
-        g_warning("Failed to load resource: %s from %s or %s", filename, user_filename, sys_filename);
-    }
-
-    if(!result.empty()) {
-        g_info("Using resource file: %s", result.c_str());
-    }
-
-    g_free(user_filename);
-    g_free(sys_filename);
-    return result;
+    return "";
 }
 
 /*
@@ -196,7 +177,7 @@ Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
 {
     // Test if it's a filename and get the parent directory instead
     if (Glib::file_test(path, Glib::FILE_TEST_IS_REGULAR)) {
-        return get_filename(g_path_get_dirname(path.c_str()), filename);
+        return get_filename(Glib::path_get_dirname(path.raw()), filename);
     }
     if (g_path_is_absolute(filename.c_str())) {
         if (Glib::file_test(filename, Glib::FILE_TEST_EXISTS)) {
@@ -355,7 +336,7 @@ void get_foldernames_from_path(std::vector<Glib::ustring> &folders, Glib::ustrin
  * file should be located. This also indicates where all other inkscape
  * shared files may optionally exist.
  */
-char *profile_path(const char *filename)
+std::string profile_path(const char *filename)
 {
     static const gchar *prefdir = nullptr;
 
@@ -435,28 +416,27 @@ char *profile_path(const char *filename)
             }
         }
     }
-    return g_build_filename(prefdir, filename, NULL);
+    return Glib::build_filename(prefdir, filename);
 }
 
 /*
  * We return the profile_path because that is where most documentation
  * days log files will be generated in inkscape 0.92
  */
-char *log_path(const char *filename)
+std::string log_path(const char *filename)
 {
     return profile_path(filename);
 }
 
-char *homedir_path(const char *filename)
+std::string homedir_path(const char *filename)
 {
-    static const gchar *homedir = nullptr;
-    homedir = g_get_home_dir();
+    static const gchar *homedir = g_get_home_dir();
 
     // I suspect this is for handling inkscape app packages
     /*if (!homedir && Application::exists()) {
         homedir = g_path_get_dirname(Application::instance()._argv0);
     }*/
-    return g_build_filename(homedir, filename, NULL);
+    return Glib::build_filename(homedir, filename);
 }
 
 }

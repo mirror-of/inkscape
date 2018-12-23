@@ -110,15 +110,15 @@ PageSizer::PageSizer(Registry & _wr)
     _paperSizeListScroller.set_size_request(-1, 130);
 
 
-    char *path = Inkscape::IO::Resource::profile_path("pages.csv");
-    if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
-        if (!g_file_set_contents(path, pages_skeleton, sizeof(pages_skeleton) , nullptr)) {
+    auto path = Inkscape::IO::Resource::profile_path("pages.csv");
+    if (!g_file_test(path.c_str(), G_FILE_TEST_EXISTS)) {
+        if (!g_file_set_contents(path.c_str(), pages_skeleton, sizeof(pages_skeleton), nullptr)) {
             g_warning("%s", _("Failed to create the page file."));
         }
     }
  
     gchar *content = nullptr;
-    if (g_file_get_contents(path, &content, nullptr, nullptr)) {
+    if (g_file_get_contents(path.c_str(), &content, nullptr, nullptr)) {
     
         gchar **lines = g_strsplit_set(content, "\n", 0);
 
@@ -144,7 +144,6 @@ PageSizer::PageSizer(Registry & _wr)
         g_strfreev(lines);
         g_free(content);
     }
-    g_free(path);
 
     pack_start (_paperSizeListScroller, true, true, 0);
 

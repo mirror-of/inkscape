@@ -21,6 +21,7 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/grid.h>
 
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include "inkscape.h"
 #include "extension/implementation/implementation.h"
@@ -649,15 +650,13 @@ Extension::set_param_color (const gchar * name, guint32 color, SPDocument * doc,
 void
 Extension::error_file_open ()
 {
-    gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
-    gchar * filename = g_filename_from_utf8( ext_error_file, -1, nullptr, nullptr, nullptr );
+    auto ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
+    auto filename = Glib::filename_from_utf8(ext_error_file);
     error_file.open(filename);
     if (!error_file.is_open()) {
         g_warning(_("Could not create extension error log file '%s'"),
-                  filename);
+                  filename.c_str());
     }
-    g_free(filename);
-    g_free(ext_error_file);
 };
 
 /** \brief A function to close the error log file. */

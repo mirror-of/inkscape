@@ -25,6 +25,7 @@
 #include <boost/range/adaptor/reversed.hpp>
 #include <cstring>
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 #include <map>
 #include <string>
 
@@ -3645,15 +3646,13 @@ void ObjectSet::createBitmapCopy()
     g_strcanon(basename, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.=+~$#@^&!?", '_');
 
     // Build the complete path by adding document base dir, if set, otherwise home dir
-    gchar *directory = nullptr;
+    std::string directory;
     if ( doc->getURI() ) {
-        directory = g_path_get_dirname( doc->getURI() );
-    }
-    if (directory == nullptr) {
+        directory = Glib::path_get_dirname(doc->getURI());
+    } else {
         directory = Inkscape::IO::Resource::homedir_path(nullptr);
     }
-    gchar *filepath = g_build_filename(directory, basename, NULL);
-    g_free(directory);
+    gchar *filepath = g_build_filename(directory.c_str(), basename, NULL);
 
     //g_print("%s\n", filepath);
 

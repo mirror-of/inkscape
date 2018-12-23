@@ -56,6 +56,10 @@ char *append_inkscape_datadir(const char *relative_path)
 
 gchar *get_extensions_path()
 {
+#if 1
+    throw "unused - remove or update std::string usage";
+    return nullptr;
+#else
     using namespace Inkscape::IO::Resource;
     gchar const *pythonpath = g_getenv("PYTHONPATH");
     gchar *extdir;
@@ -88,10 +92,15 @@ gchar *get_extensions_path()
     }
 
     return new_pythonpath;
+#endif
 }
 
 gchar *get_datadir_path()
 {
+#if 1
+    throw "unused - remove or update std::string usage";
+    return nullptr;
+#else
     using namespace Inkscape::IO::Resource;
     gchar *datadir;
 
@@ -114,6 +123,7 @@ gchar *get_datadir_path()
     }
 
     return datadir;
+#endif
 }
 /*
   Local Variables:

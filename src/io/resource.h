@@ -92,9 +92,9 @@ void get_foldernames_from_path(std::vector<Glib::ustring> &files, Glib::ustring 
                                std::vector<const char *> exclusions = {});
 
 
-char *profile_path(const char *filename);
-char *homedir_path(const char *filename);
-char *log_path(const char *filename);
+std::string profile_path(const char *filename);
+std::string homedir_path(const char *filename);
+std::string log_path(const char *filename);
 
 }
 

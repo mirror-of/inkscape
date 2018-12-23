@@ -2298,7 +2298,7 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "",
                           _("Location of the user’s preferences file"), true);
 
-    _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
+    _sys_user_config.init(Inkscape::IO::Resource::profile_path("").c_str(), _("Open preferences folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
     _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),
