@@ -5,15 +5,15 @@
 # Agradecimientos: zert, softcatala, 2002-2003.
 # Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003.
 # Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.
-# Lucas Vieites <lucas@codexion.com>, 2003-2017.
+# Lucas Vieites <lucas@codexion.com>, 2003-2019.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Inkscape 0.92.1\n"
+"Project-Id-Version: Inkscape 0.92.4\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-02-03 23:41+0100\n"
-"PO-Revision-Date: 2017-09-17 12:51+0200\n"
-"Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
+"PO-Revision-Date: 2019-01-09 10:05+0100\n"
+"Last-Translator: Lucas Vieites Fariña <lucas@codexion.com>\n"
 "Language-Team: Español; Castellano <inkscape-translator@lists.sourceforge."
 "net>\n"
 "Language: es_ES\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Geany / PoHelper 1.34\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
@@ -8429,7 +8429,6 @@ msgid "More details..."
 msgstr "Más detalles…"
 
 #: ../src/file-update.cpp:343
-#, fuzzy
 msgid ""
 "<small>We've updated Inkscape to follow the CSS standard of 96 DPI for "
 "better browser compatibility; we used to use 90 DPI. Digital artwork for "
@@ -8459,9 +8458,9 @@ msgstr ""
 "Hay dos métodos de escalado:\n"
 "\n"
 "<b>Escalar el documento completo:</b> Es el método con menor posibilidad de "
-"fallo, preserva el aspecto del dibujo, inclusive filtros y posicionamiento "
+"fallo, preserva el aspecto del dibujo inclusive filtros y posicionamiento "
 "de máscaras, etc. La escala del dibujo con respecto al tamaño del documento "
-"podría no ser correcto.\n"
+"podrá resultar impreciso.\n"
 "\n"
 "<b>Escalar elementos individuales en el dibujo:</b> Este método es menos "
 "fiable y puede resultar en un cambio de aspecto, pero es mejor para un medio "
@@ -8469,7 +8468,7 @@ msgstr ""
 "(por ejemplo, para impresión 3D.)\n"
 "\n"
 "Hay más información disponible acerca de este cambio en <a href='https://"
-"inkscape.org/es/learn/faq/'>Inkscape - Preguntas frecuentes</a></small>"
+"inkscape.org/es/aprende/fac/#dpi_change'>Inkscape - Preguntas frecuentes</a></small>"
 
 #: ../src/file-update.cpp:387
 msgid "OK"
@@ -10085,9 +10084,8 @@ msgid "Paths from which to take the original path data"
 msgstr "Trayectos de los cuales se obtendrán los datos del trayecto original"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:26
-#, fuzzy
 msgid "Allow transforms"
-msgstr "Transformaciones"
+msgstr "Permitir transformaciones"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:24
 msgid "Second path:"
@@ -12066,7 +12064,8 @@ msgstr "El área exportada es el lienzo completo"
 msgid ""
 "Sets margin around exported area (default 0) in units of page size for SVG "
 "and mm for PS/EPS/PDF"
-msgstr ""
+msgstr "Fija el margen alrededor del área exportada (predet. 0) en unidades"
+"de tamaño de página para SVG y mm para PS/EPS/PDF"
 
 #: ../src/main.cpp:356 ../src/main.cpp:398
 msgid "VALUE"
@@ -12310,13 +12309,12 @@ msgid "Do not fix legacy (pre-0.92) files' text baseline spacing on opening."
 msgstr "No arreglar el espaciado de base de línea (pre-0.92) al abrir."
 
 #: ../src/main.cpp:541
-#, fuzzy
 msgid ""
 "Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|"
 "scale-document])"
 msgstr ""
 "Método utilizado para convertir los ppp de documentos pre-0.92, si fuera "
-"necesario."
+"necesario. ([ninguno|scale-viewbox|scale-document])"
 
 #: ../src/main.cpp:891 ../src/main.cpp:1379
 msgid ""
@@ -14090,7 +14088,7 @@ msgstr "about.es.svg"
 #: ../src/ui/dialog/aboutbox.cpp:442
 msgid "translator-credits"
 msgstr ""
-"Lucas Vieites Fariña, 2003-2017\n"
+"Lucas Vieites Fariña, 2003-2019\n"
 "Francisco Javier F. Serrador, 2003\n"
 "José Antonio Salgueiro Aquino, 2003"
 
@@ -20667,20 +20665,19 @@ msgstr ""
 "desactivar caché"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
-#, fuzzy
 msgid "Rendering tile multiplier:"
-msgstr "Tamaño de _cache de renderizado:"
+msgstr "Multiplicador de renderizado de teselas:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
-#, fuzzy
 msgid "requires restart"
-msgstr "(necesita reiniciar)"
+msgstr "necesita reiniciar"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
 msgid ""
 "Set the relative size of tiles used to render the canvas. The larger the "
 "value, the bigger the tile size."
-msgstr ""
+msgstr "Fija el tamaño relativo de las teselas utilizadas para generar el lienzo."
+"Cuanto más alto el valor, mayor tamaño de tesela."
 
 #. blur quality
 #. filter quality
@@ -28835,9 +28832,8 @@ msgid "Center on horizontal and vertical axis"
 msgstr "Centrar en los ejes horizontal y vertical"
 
 #: ../src/widgets/arc-toolbar.cpp:143
-#, fuzzy
 msgid "Change arc"
-msgstr "Cambiar desenfoque"
+msgstr "Cambiar arco"
 
 #: ../src/widgets/arc-toolbar.cpp:209
 msgid "Arc: Change start/end"
@@ -28876,9 +28872,8 @@ msgid "Rx:"
 msgstr "Rx:"
 
 #: ../src/widgets/arc-toolbar.cpp:435
-#, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
-msgstr "Radio horizontal de las esquinas redondeadas"
+msgstr "Radio horizontal del círculo, elipse o arco"
 
 #: ../src/widgets/arc-toolbar.cpp:452 ../src/widgets/rect-toolbar.cpp:366
 msgid "Vertical radius"
@@ -28889,9 +28884,8 @@ msgid "Ry:"
 msgstr "Ry:"
 
 #: ../src/widgets/arc-toolbar.cpp:452
-#, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
-msgstr "Crear círculos, elipses y arcos"
+msgstr "Radio vertical del círculo, elipse o arco"
 
 #. Add the units menu.
 #: ../src/widgets/arc-toolbar.cpp:466 ../src/widgets/lpe-toolbar.cpp:387
@@ -31637,9 +31631,8 @@ msgid "Text: Change orientation"
 msgstr "Texto: Cambiar orientación"
 
 #: ../src/widgets/text-toolbar.cpp:1188
-#, fuzzy
 msgid "Text: Change direction"
-msgstr "Texto: Cambiar orientación"
+msgstr "Texto: Cambiar dirección"
 
 #: ../src/widgets/text-toolbar.cpp:1725
 msgid "Font Family"
@@ -31763,32 +31756,29 @@ msgstr "Orientación de texto (glifo) en texto vertical."
 
 #: ../src/widgets/text-toolbar.cpp:2028
 msgid "LTR"
-msgstr ""
+msgstr "IAD"
 
 #: ../src/widgets/text-toolbar.cpp:2029
-#, fuzzy
 msgid "Left to right text"
-msgstr "De izquierda a derecha"
+msgstr "Texto de izquierda a derecha"
 
 #: ../src/widgets/text-toolbar.cpp:2036
 msgid "RTL"
-msgstr ""
+msgstr "DAI"
 
 #: ../src/widgets/text-toolbar.cpp:2037
-#, fuzzy
 msgid "Right to left text"
-msgstr "De derecha a izquierda"
+msgstr "Texto de derecha a izquierda"
 
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2043
-#, fuzzy
 msgid "Text direction"
-msgstr "Dirección de texto:"
+msgstr "Dirección del texto"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2044
 msgid "Text direction for normally horizontal text."
-msgstr ""
+msgstr "Dirección del texto para texto horizontal normal."
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:2077
