@@ -1,14 +1,14 @@
 # Þýðing inkscape.po á íslensku
-# Copyright (C) 2015 Icelandic Inksape Translators
+# Copyright (C) 2015-2019 Icelandic Inksape Translators
 # This file is distributed under the same license as the Inkscape package.
 #
-# Sveinn í Felli (sv1@fellsnet.is), 2015, 2016, 2017, 2018.
+# Sveinn í Felli (sv1@fellsnet.is), 2015, 2016, 2017, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-02-03 23:41+0100\n"
-"PO-Revision-Date: 2018-10-12 13:19+0000\n"
+"PO-Revision-Date: 2019-01-09 10:39+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
@@ -1444,7 +1444,7 @@ msgstr "Djúplitað plast"
 
 #: ../share/filters/filters.svg.h:556
 msgid "Transparent plastic with deep colors"
-msgstr ""
+msgstr "Gegnsætt plast með djúpum litum"
 
 #: ../share/filters/filters.svg.h:558
 msgid "Melted Jelly Matte"
@@ -1553,7 +1553,7 @@ msgstr "Línstrigi"
 
 #: ../share/filters/filters.svg.h:608 ../share/filters/filters.svg.h:616
 msgid "Painting canvas emboss effect"
-msgstr ""
+msgstr "Upphleypingaráhrif á málunarfleti"
 
 #: ../share/filters/filters.svg.h:610
 msgid "Plasticine"
@@ -1843,7 +1843,7 @@ msgstr "Hvass málmur"
 
 #: ../share/filters/filters.svg.h:764
 msgid "Chrome effect with darkened edges"
-msgstr ""
+msgstr "Krómáferð með dekktum jöðrum"
 
 #: ../share/filters/filters.svg.h:766
 msgid "Brush Draw"
@@ -2103,7 +2103,7 @@ msgstr "Hvítt"
 #: ../share/palettes/palettes.h:16
 msgctxt "Palette"
 msgid "Maroon (#800000)"
-msgstr "Ljósbrúnt (#800000)"
+msgstr "Kastaníubrúnt (#800000)"
 
 #. Palette: inkscape.gpl
 #: ../share/palettes/palettes.h:17
@@ -2169,7 +2169,7 @@ msgstr "Purpurablátt (#800080)"
 #: ../share/palettes/palettes.h:27
 msgctxt "Palette"
 msgid "Fuchsia (#FF00FF)"
-msgstr "Dökkbleikt (#FF00FF)"
+msgstr "Bleikt (#FF00FF)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:28
@@ -2259,7 +2259,7 @@ msgstr "ljóskórall (#F08080)"
 #: ../share/palettes/palettes.h:42
 msgctxt "Palette"
 msgid "maroon (#800000)"
-msgstr "ljósbrúnt (#800000)"
+msgstr "kastaníubrúnt (#800000)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:43
@@ -4953,7 +4953,7 @@ msgstr "XML-lýsingin fyrir hana tapaðist."
 
 #: ../src/extension/extension.cpp:294
 msgid "no implementation was defined for the extension."
-msgstr ""
+msgstr "engin útfærsla var tilgreind fyrir viðbótina."
 
 #. std::cout << "Failed: " << *(_deps[i]) << std::endl;
 #: ../src/extension/extension.cpp:301
@@ -5004,6 +5004,9 @@ msgid ""
 "Inkscape website or ask on the mailing lists if you have questions regarding "
 "this extension."
 msgstr ""
+"Í augnablikinu er engin hjálp til taks fyrir þessa viðbót. Skoðaðu"
+" Inkscape-vefsvæðið hvort þar sé nokkuð að finna eða spurðu á póstlistunum ef"
+" þú ert með spurningar varðandi þessa viðbót."
 
 #: ../src/extension/implementation/script.cpp:1119
 msgid ""
@@ -6363,7 +6366,7 @@ msgstr "Fjarlægt"
 #: ../src/extension/internal/filter/bumps.h:106
 #: ../src/ui/dialog/inkscape-preferences.cpp:488
 msgid "Point"
-msgstr "Punktljós"
+msgstr "Punktur"
 
 #: ../src/extension/internal/filter/bumps.h:107
 msgid "Spot"
@@ -8922,7 +8925,7 @@ msgstr "Aðal"
 
 #: ../src/libgdl/gdl-dock-bar.c:106
 msgid "GdlDockMaster object which the dockbar widget is attached to"
-msgstr ""
+msgstr "GdlDockMaster-hlutinn sem tengispjalds-viðmótshlutinn er tendur við"
 
 #: ../src/libgdl/gdl-dock-bar.c:113
 msgid "Dockbar style"
@@ -8946,7 +8949,7 @@ msgstr "Stýring atriðis á tengispjaldi"
 
 #: ../src/libgdl/gdl-dock-item-grip.c:724
 msgid "Dockitem which 'owns' this grip"
-msgstr ""
+msgstr "Tengjanlegt atriði (dockitem) sem er 'eigandi' þessa haldfangs"
 
 #: ../src/libgdl/gdl-dock-item.c:298 ../src/widgets/ruler.cpp:201
 #: ../share/extensions/gcodetools_graffiti.inx.h:9
@@ -8965,6 +8968,8 @@ msgstr "Breytanleg stærð"
 #: ../src/libgdl/gdl-dock-item.c:315
 msgid "If set, the dock item can be resized when docked in a GtkPanel widget"
 msgstr ""
+"Ef þetta er sett, er hægt að breyta stærð tengjanlegs atriðis þegar það er"
+" tengt í GtkPanel viðmótshluta"
 
 #: ../src/libgdl/gdl-dock-item.c:322
 msgid "Item behavior"
@@ -8975,6 +8980,8 @@ msgid ""
 "General behavior for the dock item (i.e. whether it can float, if it's "
 "locked, etc.)"
 msgstr ""
+"Almenn hegðun tengiatriðis (t.d. hvort hægt er að fleyta því, hvort það er"
+" læst, o.s.frv.)"
 
 #: ../src/libgdl/gdl-dock-item.c:331 ../src/libgdl/gdl-dock-master.c:148
 msgid "Locked"
@@ -9046,7 +9053,7 @@ msgstr "Sjálfgefinn titill"
 
 #: ../src/libgdl/gdl-dock-master.c:142
 msgid "Default title for newly created floating docks"
-msgstr ""
+msgstr "Sjálfgefinn titill fyrir nýgerða fljótandi tengihluta"
 
 #: ../src/libgdl/gdl-dock-master.c:149
 msgid ""
@@ -9116,7 +9123,7 @@ msgstr "Innbyggð táknmynd"
 
 #: ../src/libgdl/gdl-dock-object.c:141
 msgid "Stock icon for the dock object"
-msgstr ""
+msgstr "Meðfylgjandi táknmynd atriðis á tengispjaldi"
 
 #: ../src/libgdl/gdl-dock-object.c:147
 msgid "Pixbuf Icon"
@@ -9124,15 +9131,15 @@ msgstr "Pixbuf táknmynd"
 
 #: ../src/libgdl/gdl-dock-object.c:148
 msgid "Pixbuf icon for the dock object"
-msgstr ""
+msgstr "Pixbuf-táknmynd atriðis á tengispjaldi"
 
 #: ../src/libgdl/gdl-dock-object.c:153
 msgid "Dock master"
-msgstr ""
+msgstr "Aðaltenging"
 
 #: ../src/libgdl/gdl-dock-object.c:154
 msgid "Dock master this dock object is bound to"
-msgstr ""
+msgstr "Aðaltenging sem þetta tengiatriði er bundið við"
 
 #: ../src/libgdl/gdl-dock-object.c:463
 #, c-format
@@ -9205,7 +9212,7 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-placeholder.c:182
 msgid "Floating Toplevel"
-msgstr ""
+msgstr "Fljótandi efstastig"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:183
 msgid "Whether the placeholder is standing in for a floating toplevel dock"
@@ -9217,7 +9224,7 @@ msgstr "X hnit"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:190
 msgid "X coordinate for dock when floating"
-msgstr ""
+msgstr "X-hnit fljótandi tengispjalds"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:196
 msgid "Y Coordinate"
@@ -9225,7 +9232,7 @@ msgstr "Y hnit"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:197
 msgid "Y coordinate for dock when floating"
-msgstr ""
+msgstr "Y-hnit fljótandi tengispjalds"
 
 #: ../src/libgdl/gdl-dock-placeholder.c:499
 msgid "Attempt to dock a dock object to an unbound placeholder"
@@ -9245,7 +9252,7 @@ msgstr ""
 
 #: ../src/libgdl/gdl-dock-tablabel.c:126
 msgid "Dockitem which 'owns' this tablabel"
-msgstr ""
+msgstr "Tengjanlegt atriði (dockitem) sem er 'eigandi' þessa flipamerkis"
 
 #: ../src/libgdl/gdl-dock.c:176 ../src/ui/dialog/inkscape-preferences.cpp:700
 #: ../src/ui/dialog/inkscape-preferences.cpp:743
@@ -9254,19 +9261,19 @@ msgstr "Fljótandi"
 
 #: ../src/libgdl/gdl-dock.c:177
 msgid "Whether the dock is floating in its own window"
-msgstr ""
+msgstr "Hvort tengispjaldið flýtur í eigin glugga"
 
 #: ../src/libgdl/gdl-dock.c:185
 msgid "Default title for the newly created floating docks"
-msgstr ""
+msgstr "Sjálfgefinn titill fyrir nýgerðu fljótandi tengihlutana"
 
 #: ../src/libgdl/gdl-dock.c:192
 msgid "Width for the dock when it's of floating type"
-msgstr ""
+msgstr "Breidd tengispjalds þegar það er fljótandi"
 
 #: ../src/libgdl/gdl-dock.c:200
 msgid "Height for the dock when it's of floating type"
-msgstr ""
+msgstr "Hæð tengispjalds þegar það er fljótandi"
 
 #: ../src/libgdl/gdl-dock.c:207
 msgid "Float X"
@@ -11802,7 +11809,7 @@ msgstr ""
 
 #: ../src/main.cpp:320
 msgid "Open specified document(s) (option string may be excluded)"
-msgstr ""
+msgstr "Opna tilgreint skjal/skjöl (hægt er að sleppa valrofum)"
 
 #: ../src/main.cpp:321 ../src/main.cpp:326 ../src/main.cpp:331
 #: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
@@ -11911,6 +11918,7 @@ msgstr ""
 #: ../src/main.cpp:392
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
+"Bakgrunnslitur útfluttrar bitamyndar (einhver SVG-studdur litastrengur)"
 
 #: ../src/main.cpp:393
 msgid "COLOR"
@@ -11958,6 +11966,9 @@ msgid ""
 "Export PDF to given version. (hint: make sure to input the exact string "
 "found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"
 msgstr ""
+"Flytja út PDF í tiltekinni útgáfu. (Ábending: gakktu úr skugga um að setja"
+" inn nákvæmlega sama strenginn og er í PDF-útflutningsglugganum, t.d. \"1.4\""
+" sem er samhæft við PDF-A)"
 
 #: ../src/main.cpp:430
 msgid "PDF_VERSION"
@@ -12027,7 +12038,7 @@ msgstr ""
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
 #: ../src/main.cpp:494
 msgid "Print out the extension directory and exit"
-msgstr ""
+msgstr "Prenta út möppu viðbótarinnar og hætta"
 
 #: ../src/main.cpp:499
 msgid "Remove unused definitions from the defs section(s) of the document"
@@ -12900,7 +12911,7 @@ msgstr "Hlutir sem mynstur"
 
 #: ../src/selection-chemistry.cpp:3472
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
-msgstr ""
+msgstr "Veldu <b>hlut með mynsturfyllingu</b> til að einangra hluti úr."
 
 #: ../src/selection-chemistry.cpp:3531
 msgid "<b>No pattern fills</b> in the selection."
@@ -13996,7 +14007,7 @@ msgstr "Dreifa grunnlínum texta lóðrétt"
 #: ../src/ui/dialog/align-and-distribute.cpp:1041
 #: ../src/widgets/connector-toolbar.cpp:367
 msgid "Nicely arrange selected connector network"
-msgstr "Laga fallega til valið tengilínunet"
+msgstr "Laga valið tengilínunet"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1044
 msgid "Exchange positions of selected objects - selection order"
@@ -17601,7 +17612,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:222
 msgid "Ctrl+click _dot size:"
-msgstr "Ctrl+smella _punktstærð:"
+msgstr "Ctrl+smella fyrir _punktstærð:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:222
 msgid "times current stroke width"
@@ -17617,7 +17628,7 @@ msgstr "Einfalda grunn:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:231
 msgid "on dynamic LPE simplify"
-msgstr ""
+msgstr "við breytilega LPE-einföldun"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:232
 msgid "Base simplify of dynamic LPE based simplify"
@@ -17641,7 +17652,7 @@ msgstr "Stíll nýrra hluta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:294
 msgid "Last used style"
-msgstr "Síðast notaða stíl"
+msgstr "Síðast notaði stíll"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:296
 msgid "Apply the style you last set on an object"
@@ -17649,7 +17660,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:301
 msgid "This tool's own style:"
-msgstr "Eigin stíl þessa verkfæris:"
+msgstr "Eigin stíll þessa verkfæris:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:305
 msgid ""
@@ -17728,7 +17739,7 @@ msgstr "Breidd er í algildum einingum"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:351
 msgid "Select new path"
-msgstr "Veldu nýjan feril"
+msgstr "Velja nýjan feril"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:352
 msgid "Don't attach connectors to text objects"
@@ -18101,7 +18112,7 @@ msgstr ""
 #. disabled, because the LPETool is not finished yet.
 #: ../src/ui/dialog/inkscape-preferences.cpp:545
 msgid "LPE Tool"
-msgstr "LPE verkfæri (LivePathEffects)"
+msgstr "LPE-verkfæri (LivePathEffects)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:552
 msgid "Interface"
@@ -18608,6 +18619,7 @@ msgstr "Stíll flettis (krefst endurræsingar):"
 msgid ""
 "Selects whether the dockbar switcher will show text labels, icons, or both"
 msgstr ""
+"Velur hvort tengispjaldaskiptirinn sýni textamerki, táknmyndir, eða bæði"
 
 #. Windows
 #: ../src/ui/dialog/inkscape-preferences.cpp:692
@@ -18766,11 +18778,11 @@ msgstr "Gegnsæi samskiptaglugga"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:765
 msgid "_Opacity when focused:"
-msgstr "Ó_gegnsæi þegar er virkt:"
+msgstr "Ó_gegnsæi þegar eru virkir:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:767
 msgid "Opacity when _unfocused:"
-msgstr "Óg_egnsæi þegar er óvirkt:"
+msgstr "Óg_egnsæi þegar eru óvirkir:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:769
 msgid "_Time of opacity change animation:"
@@ -19042,7 +19054,7 @@ msgstr "Bestað"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:956
 msgid "Path string format:"
-msgstr ""
+msgstr "Snið á textastreng ferils:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:956
 msgid ""
@@ -19050,6 +19062,9 @@ msgid ""
 "relative coordinates, or optimized for string length (mixed absolute and "
 "relative coordinates)"
 msgstr ""
+"Ferilgögn ætti að skrifa: einungis með algildum hnitum, einungis með afstæðum"
+" hnitum, eða bestað gagnvart lengd textastrengs (blanda af algildum og"
+" afstæðum hnitum)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:958
 msgid "Force repeat commands"
@@ -19835,7 +19850,7 @@ msgstr "Þrepun"
 #. Clones options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1353
 msgid "Move in parallel"
-msgstr "Flytja samsíða"
+msgstr "Flytjast samsíða"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1355
 msgid "Stay unmoved"
@@ -20028,6 +20043,9 @@ msgid ""
 "Set the amount of memory per document which can be used to store rendered "
 "parts of the drawing for later reuse; set to zero to disable caching"
 msgstr ""
+"Stillir hve mikið minni hvert skjal getur notað til að geyma myndgerða hluta"
+" teikningar fyrir notkun síðar; stilltu þetta á núll til að gera þetta"
+" skynniminni óvirkt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
 msgid "Rendering tile multiplier:"
@@ -20035,13 +20053,15 @@ msgstr "Margföldun myndgerðarflísa:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
 msgid "requires restart"
-msgstr "krefst endurræsingar"
+msgstr "(krefst endurræsingar)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1450
 msgid ""
 "Set the relative size of tiles used to render the canvas. The larger the "
 "value, the bigger the tile size."
 msgstr ""
+"Stilla afstæða stærð flísa sem notaðar eru til að myndgera myndflötinn. Því"
+" stærra sem gildið er, því stærri verða flísarnar."
 
 #. blur quality
 #. filter quality
@@ -20168,6 +20188,7 @@ msgstr "Spyrja um tengingar og kvörðun við innflutning"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1525
 msgid "Pop-up linking and scaling dialog when importing bitmap image."
 msgstr ""
+"Láta glugga fyrir tengingar og kvörðun spretta upp við innflutning bitamynda."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1531
 msgid "Bitmap link:"
@@ -21086,6 +21107,8 @@ msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
 msgstr ""
+"Litur á áherslulitun línu í hnútaverkfærinu. Smelltu til að setja. Ef"
+" alfa-gegnsæi er núll, verður erfður litur notaður."
 
 #: ../src/ui/dialog/objects.cpp:1766
 msgid ""
@@ -25269,7 +25292,7 @@ msgstr "Mynstur"
 #: ../src/ui/widget/selected-style.cpp:196
 #: ../src/ui/widget/style-swatch.cpp:304
 msgid "Pattern fill"
-msgstr "Mynsturfylla"
+msgstr "Mynsturfylling"
 
 #: ../src/ui/widget/selected-style.cpp:196
 #: ../src/ui/widget/style-swatch.cpp:304
@@ -26198,7 +26221,7 @@ msgstr "Hluti sem st_oðlínur"
 msgid ""
 "Convert selected objects to a collection of guidelines aligned with their "
 "edges"
-msgstr ""
+msgstr "Umbreyta völdum hlutum í safn stoðlína sem jafnað er að jöðrum þeirra"
 
 #: ../src/verbs.cpp:2516
 msgid "Objects to Patter_n"
@@ -26206,7 +26229,7 @@ msgstr "Hlutir sem m_ynstur"
 
 #: ../src/verbs.cpp:2517
 msgid "Convert selection to a rectangle with tiled pattern fill"
-msgstr ""
+msgstr "Umbreyta vali í ferhyrning með flísalagðri mynsturfyllingu"
 
 #: ../src/verbs.cpp:2518
 msgid "Pattern to _Objects"
@@ -26214,7 +26237,7 @@ msgstr "_Mynstur í hluti"
 
 #: ../src/verbs.cpp:2519
 msgid "Extract objects from a tiled pattern fill"
-msgstr ""
+msgstr "Einangra hluti úr flísalagðri mynsturfyllingu"
 
 #: ../src/verbs.cpp:2520
 msgid "Group to Symbol"
@@ -27107,7 +27130,7 @@ msgstr "Fylla afmörkuð svæði"
 #: ../src/verbs.cpp:2789
 msgctxt "ContextVerb"
 msgid "LPE Edit"
-msgstr "LPE breyting"
+msgstr "LPE-breyting"
 
 #: ../src/verbs.cpp:2790
 msgid "Edit Path Effect parameters"
@@ -27125,7 +27148,7 @@ msgstr "Stroka út ferla"
 #: ../src/verbs.cpp:2793
 msgctxt "ContextVerb"
 msgid "LPE Tool"
-msgstr "LPE verkfæri"
+msgstr "LPE-verkfæri"
 
 #: ../src/verbs.cpp:2794
 msgid "Do geometric constructions"
@@ -27306,7 +27329,7 @@ msgstr "Kjörstillingar LPE-verkfæris"
 
 #: ../src/verbs.cpp:2843
 msgid "Open Preferences for the LPETool tool"
-msgstr "Opna stillingar fyrir LPETool verkfærið"
+msgstr "Opna stillingar fyrir LPETool-verkfærið"
 
 #. Zoom/View
 #: ../src/verbs.cpp:2845
@@ -29140,11 +29163,11 @@ msgstr "Birta mælingaupplýsingar fyrir valda hluti"
 
 #: ../src/widgets/lpe-toolbar.cpp:397
 msgid "Open LPE dialog"
-msgstr "Opna LPE glugga"
+msgstr "Opna LPE-glugga"
 
 #: ../src/widgets/lpe-toolbar.cpp:398
 msgid "Open LPE dialog (to adapt parameters numerically)"
-msgstr "Opna LPE glugga (til að setja inn tölulegar stærðir)"
+msgstr "Opna LPE-glugga (til að setja inn tölulegar stærðir)"
 
 #: ../src/widgets/measure-toolbar.cpp:157
 msgid "Start and end measures inactive."
@@ -29691,6 +29714,9 @@ msgid ""
 "pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to "
 "create a new pattern from selection."
 msgstr ""
+"Notaðu <b>hnútaverkfærið</b> til að laga til staðsetningu, kvarða og snúning"
+" mynsturfyllingar á myndfletinum. Notaðu <b>Hlutur &gt; Mynstur &gt; Hlutir"
+" sem mynstur</b> til að útbúa nýtt mynstur úr myndvalinu."
 
 #: ../src/widgets/paint-selector.cpp:1457
 msgid "<b>Pattern fill</b>"
@@ -29856,7 +29882,7 @@ msgstr ""
 
 #: ../src/widgets/pencil-toolbar.cpp:424 ../src/widgets/pencil-toolbar.cpp:425
 msgid "LPE simplify flatten"
-msgstr ""
+msgstr "LPE-einföldun fletja"
 
 #: ../src/widgets/rect-toolbar.cpp:125
 msgid "Change rectangle"
@@ -31672,7 +31698,7 @@ msgstr ""
 #: ../share/extensions/gcodetools.py:4748
 #: ../share/extensions/gcodetools.py:4994
 msgid "This extension requires at least one selected path."
-msgstr ""
+msgstr "Viðbótin krefst að minnsta kosti eins valins ferils."
 
 #: ../share/extensions/gcodetools.py:4754
 #: ../share/extensions/gcodetools.py:5000
@@ -32080,7 +32106,7 @@ msgstr ""
 #: ../share/extensions/pathalongpath.py:207
 #: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:52
 msgid "This extension requires two selected paths."
-msgstr ""
+msgstr "Viðbótin krefst að minnsta kosti tveggja valinna ferla."
 
 #: ../share/extensions/pathalongpath.py:233
 msgid ""
@@ -32123,6 +32149,8 @@ msgstr ""
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr ""
+"Viðbótin krefst að seinni valdi ferillinn sé að minnsta kosti fjögurra hnúta"
+" langur."
 
 #: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:90
 msgid ""
@@ -32294,6 +32322,8 @@ msgid ""
 "This extension requires two selected paths. \n"
 "The second path must be exactly four nodes long."
 msgstr ""
+"Viðbótin krefst að minnsta kosti tveggja valinna ferla. \n"
+"Seinni ferillinn verður að vera nákvæmlega fjögurra hnúta langur."
 
 #: ../share/extensions/svg_and_media_zip_output.py:128
 #, python-format
