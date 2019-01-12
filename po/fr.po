@@ -23047,14 +23047,14 @@ msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:97
 msgid "Edit c_urrent matrix"
-msgstr "Modifier la matrice co_urante"
+msgstr "Modifier la matrice act_uelle"
 
 #: ../src/ui/dialog/transformation.cpp:97
 msgid ""
 "Edit the current transform= matrix; otherwise, post-multiply transform= by "
 "this matrix"
 msgstr ""
-"Si coché, édite la matrice de la transformation actuelle ; sinon, post-"
+"Si coché, modifie la matrice de transformation actuelle ; sinon, post-"
 "multiplie la transformation actuelle par cette matrice"
 
 #: ../src/ui/dialog/transformation.cpp:110
@@ -33823,13 +33823,13 @@ msgid ""
 "  Blue Function: g"
 msgstr ""
 "Permet l'évaluation de différentes fonctions pour chaque canal.\n"
-"r, v et b sont les valeurs normalisées pour les canaux rouge, vert et bleu. "
+"r, g et b sont les valeurs normalisées pour les canaux rouge, vert et bleu. "
 "Les valeurs RVB résultantes sont recalculées automatiquement.\n"
 "\n"
 "Exemple (division du rouge par deux, échange du vert et du bleu) :\n"
 "  Fonction pour le rouge : r*0.5\n"
 "  Fonction pour le vert : b\n"
-"  Fonction pour le bleu : v"
+"  Fonction pour le bleu : g"
 
 #: ../share/extensions/color_darker.inx.h:1
 msgid "Darker"
