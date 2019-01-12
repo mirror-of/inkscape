@@ -5375,7 +5375,7 @@ msgstr "Ajuster :"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:48
 msgid "Increase or decrease contrast in bitmap(s)"
-msgstr "Augmente ou diminue le contraste des images"
+msgstr "Augmente ou diminue le contraste des images matricielles"
 
 #: ../src/extension/internal/bitmap/crop.cpp:66
 #: ../src/extension/internal/filter/bumps.h:86
@@ -23047,7 +23047,7 @@ msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:97
 msgid "Edit c_urrent matrix"
-msgstr "Éditer la matrice co_urante"
+msgstr "Modifier la matrice co_urante"
 
 #: ../src/ui/dialog/transformation.cpp:97
 msgid ""
@@ -33829,7 +33829,7 @@ msgstr ""
 "Exemple (division du rouge par deux, échange du vert et du bleu) :\n"
 "  Fonction pour le rouge : r*0.5\n"
 "  Fonction pour le vert : b\n"
-"  Fonction pour le bleu: v"
+"  Fonction pour le bleu : v"
 
 #: ../share/extensions/color_darker.inx.h:1
 msgid "Darker"
