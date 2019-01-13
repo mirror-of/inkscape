@@ -14,7 +14,7 @@ my $count = 0;
 
 my @data = (
 	["be",	"Пласт 1",	"layer1"],
-	["ca",	"Capa 1",	"capa1"],
+	["ca",	"Capa 1",	"layer1"],
 	["cs",	"Vrstva 1",	"layer1"],
 	["de",	"Ebene 1",	"layer1"],
 	["eo",	"Tavolo 1",	"layer1"],
