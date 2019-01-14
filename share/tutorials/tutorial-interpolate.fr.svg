@@ -84,10 +84,8 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Prenons par exemple les deux chemins suivants :</flowDiv>
  </flowRoot>
- <g transform="translate(10 291.99)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482">
-  <path d="m20.29 2.0163c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
-  <path d="m245.44 2.0163c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
- </g>
+ <path transform="translate(10 291.98)" d="m20.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+ <path transform="translate(10 291.98)" d="m245.44 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
  <rect id="z" x="10" y="344.56" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
@@ -132,10 +130,8 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Prenons par exemple les deux chemins suivants :</flowDiv>
  </flowRoot>
- <g transform="translate(-7.8827 535.48)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482">
-  <path d="m38.172 69.145c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.265-18.266 18.265c-10.119 0-18.266-8.1464-18.266-18.265s8.1464-18.266 18.266-18.266z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
-  <path d="m281.59 76.452-18.266 29.225-18.266-29.225h36.531z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997" sodipodi:nodetypes="cccc"/>
- </g>
+ <path transform="translate(10 602.6)" d="m20.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.265-18.266 18.265c-10.119 0-18.266-8.1464-18.266-18.265s8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+ <path transform="translate(10 602.6)" d="m263.71 9.3303-18.266 29.225-18.266-29.225z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc"/>
  <rect id="v" x="10" y="655.18" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>

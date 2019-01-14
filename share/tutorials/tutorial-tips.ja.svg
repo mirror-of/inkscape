@@ -483,8 +483,8 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1641.285557" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1641.285557">ドキュメントのクリーンアップ</tspan>
+ <text x="10" y="1641.319821" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1641.319821">ドキュメントのクリーンアップ</tspan>
  </text>
  <rect id="aa" x="10" y="1646.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -497,8 +497,8 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1719.310002" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1719.310002">XML エディターの隠し機能</tspan>
+ <text x="10" y="1719.344266" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1719.344266">XML エディターの隠し機能</tspan>
  </text>
  <rect id="z" x="10" y="1724.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -507,8 +507,8 @@ which are not used by anything in the document, making the file smaller.
   </flowRegion>
   <flowDiv xml:space="preserve">XML エディター (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>) では、外部のテキストエディターを使用せずに、ドキュメントをほとんどすべての面から変更できます。Inkscape は GUI から編集できるよりも多くの SVG 機能をサポートしていますが、XML エディターはこれらの機能を利用する一つの手段です (もしあなたが SVG についてご存知ならば)。</flowDiv>
  </flowRoot>
- <text x="10" y="1798.483193" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1798.483193">ルーラーの単位の変更</tspan>
+ <text x="10" y="1798.517457" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1798.517457">ルーラーの単位の変更</tspan>
  </text>
  <rect id="x" x="10" y="1803.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -523,8 +523,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1876.580564" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1876.580564">スタンプ</tspan>
+ <text x="10" y="1876.614828" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1876.614828">スタンプ</tspan>
  </text>
  <rect id="w" x="10" y="1881.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -533,8 +533,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">オブジェクトの複製を素早く作成するには、<flowSpan font-style="italic">スタンプ</flowSpan> 機能を使います。オブジェクトをドラッグ (または拡大縮小や回転) し、マウスボタンを押している間に <flowSpan font-weight="bold">スペース</flowSpan> キーを押します。その時点でのオブジェクトが「スタンプ」として残ります。好きなだけこれを繰り返せます。</flowDiv>
  </flowRoot>
- <text x="10" y="1944.251165" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1944.251165">ペンツールの裏技</tspan>
+ <text x="10" y="1944.285429" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1944.285429">ペンツールの裏技</tspan>
  </text>
  <rect id="v" x="10" y="1949.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -559,8 +559,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">マウスの左ボタンでダブルクリックする</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2018.3)" r="2"/>
- <rect id="bd" x="20" y="2012.3" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2018.4)" r="2"/>
+ <rect id="bd" x="20" y="2012.4" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
@@ -568,15 +568,15 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   <flowDiv xml:space="preserve">Click with the right mouse button
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 2035.6)" r="2"/>
- <rect id="bc" x="20" y="2029.6" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2035.7)" r="2"/>
+ <rect id="bc" x="20" y="2029.7" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bc"/>
   </flowRegion>
   <flowDiv xml:space="preserve">他のツールを選択する</flowDiv>
  </flowRoot>
- <rect id="bb" x="10" y="2046.8" width="288" height="1e3px" display="none"/>
+ <rect id="bb" x="10" y="2046.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bb"/>
@@ -590,8 +590,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">既存のパスに新規にサブパスを追加するには、パスを選択し <flowSpan font-weight="bold">Shift</flowSpan> キーを押しながら任意のポイントを描画してください。しかし、既存のパスを伸ばしたいだけならば、Shift を押す必要はありません。単に選択したパスの終点から描画を開始してください。</flowDiv>
  </flowRoot>
- <text x="10" y="2170.3931318" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2170.3931318">Unicode 値の入力</tspan>
+ <text x="10" y="2170.4273958" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2170.4273958">Unicode 値の入力</tspan>
  </text>
  <rect id="ay" x="10" y="2175.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -609,8 +609,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2296.2622838" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2296.2622838">アイコン描画のためのグリッドの使用</tspan>
+ <text x="10" y="2296.2965478" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2296.2965478">アイコン描画のためのグリッドの使用</tspan>
  </text>
  <rect id="av" x="10" y="2301.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -625,8 +625,8 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2374.2067338" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2374.2067338">オブジェクトの回転</tspan>
+ <text x="10" y="2374.2409978" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2374.2409978">オブジェクトの回転</tspan>
  </text>
  <rect id="au" x="10" y="2379.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -648,8 +648,8 @@ rotation center to any place.
   </flowRegion>
   <flowDiv xml:space="preserve">また、キーボードから <flowSpan font-weight="bold">[</flowSpan> および <flowSpan font-weight="bold">]</flowSpan> キーを押すと 15°ずつ回転し、<flowSpan font-weight="bold">Ctrl+[</flowSpan> および <flowSpan font-weight="bold">Ctrl+]</flowSpan> キーを押すと90°ずつ回転します。<flowSpan font-weight="bold">Alt</flowSpan> キーを押しながらだと、ピクセルサイズ単位のゆっくりとした回転になります。</flowDiv>
  </flowRoot>
- <text x="10" y="2491.2115338" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2491.2115338">影を落とす</tspan>
+ <text x="10" y="2491.2457978" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2491.2457978">影を落とす</tspan>
  </text>
  <rect id="as" x="10" y="2496.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -672,18 +672,18 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2586.7272748" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2586.7272748">パス上にテキストを置く</tspan>
+ <text x="10" y="2586.7615388" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2586.7615388">パス上にテキストを置く</tspan>
  </text>
- <rect id="aq" x="10" y="2591.9" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="2592" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
   </flowRegion>
   <flowDiv xml:space="preserve">曲線に沿ってテキストを配置するには、テキストと曲線を一緒に選択し、「テキスト」メニューから <flowSpan font-family="Liberation Sans,Arial,sans-serif">テキストをパス上に配置</flowSpan> を選びます。テキストはパスの先頭からパスに沿って表示されます。一般に、テキストを沿わせるにはそれ用にパスを作成するのが最適です。</flowDiv>
  </flowRoot>
- <text x="10" y="2654.0537248" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2654.0537248">オリジナルを選択する</tspan>
+ <text x="10" y="2654.0879888" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2654.0879888">オリジナルを選択する</tspan>
  </text>
  <rect id="ap" x="10" y="2659.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -692,8 +692,8 @@ say, 5.0. That's it!
   </flowRegion>
   <flowDiv xml:space="preserve">パス上に配置したテキスト、リンクオフセット、あるいはクローンがある場合、場合によってはそれらのもととなるオブジェクト/パスを探すのが難しくなるかもしれません。なぜなら、それは直下にあるとか、見えなくしている、あるいはロックされているかもしれないからです。マジックキー <flowSpan font-weight="bold">Shift+D</flowSpan> がそれを助けてくれます。テキスト、リンクオフセット、あるいはクローンを選択し、<flowSpan font-weight="bold">Shift+D</flowSpan> を押すと対応するパス、オフセットソース、あるいはクローンオリジナルが選択されます。</flowDiv>
  </flowRoot>
- <text x="10" y="2753.5566048" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2753.5566048">画面の外に出てしまったウィンドウの回復</tspan>
+ <text x="10" y="2753.5908688" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2753.5908688">画面の外に出てしまったウィンドウの回復</tspan>
  </text>
  <rect id="ao" x="10" y="2758.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -708,8 +708,8 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2842.1976108" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2842.1976108">透明、グラデーション、そして PostScript エクスポート</tspan>
+ <text x="10" y="2842.2318748" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2842.2318748">透明、グラデーション、そして PostScript エクスポート</tspan>
  </text>
  <rect id="an" x="10" y="2847.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">

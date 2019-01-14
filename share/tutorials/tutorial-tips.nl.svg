@@ -483,8 +483,8 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1646.8051748" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1646.8051748">Document opruimen</tspan>
+ <text x="10" y="1646.8394388" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1646.8394388">Document opruimen</tspan>
  </text>
  <rect id="z" x="10" y="1652" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -497,18 +497,18 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1724.8296198" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1724.8296198">Verborgen features en de XML-editor</tspan>
+ <text x="10" y="1724.8638838" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1724.8638838">Verborgen features en de XML-editor</tspan>
  </text>
- <rect id="y" x="10" y="1730" width="288" height="1e3px" display="none"/>
+ <rect id="y" x="10" y="1730.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#y"/>
   </flowRegion>
   <flowDiv xml:space="preserve">De XML-editor laat je toe om bijna alle aspecten van het document te bewerken zonder een externe tekstbewerker. Bovendien ondersteunt Inkscape dikwijls meer features dan dat er toegankelijk zijn via de GUI. De XML-editor is een manier om toegang te krijgen tot deze features, indien je SVG kent.</flowDiv>
  </flowRoot>
- <text x="10" y="1792.0035278" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1792.0035278">Aanpassen van de eenheid van de liniaal</tspan>
+ <text x="10" y="1792.0377918" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1792.0377918">Aanpassen van de eenheid van de liniaal</tspan>
  </text>
  <rect id="w" x="10" y="1797.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -523,8 +523,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1870.1008988" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1870.1008988">Stempelen</tspan>
+ <text x="10" y="1870.1351628" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1870.1351628">Stempelen</tspan>
  </text>
  <rect id="v" x="10" y="1875.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -533,8 +533,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Om snel meerdere kopieën van een object te maken, kan je <flowSpan font-style="italic">stempelen</flowSpan>. Sleep een object (of schaal of roteer het) en tijdens het ingedrukt houden van de linkermuisknop, druk je op de <flowSpan font-weight="bold">Spatiebalk</flowSpan>. Dit maakt een stempel van de huidige objectvorm. Je kan het zo vaak herhalen als je wil.</flowDiv>
  </flowRoot>
- <text x="10" y="1937.3090698" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1937.3090698">Trucken met de pen</tspan>
+ <text x="10" y="1937.3433338" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1937.3433338">Trucken met de pen</tspan>
  </text>
  <rect id="u" x="10" y="1942.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -543,8 +543,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">In het pengereedschap (Bezier), heb je de volgende mogelijkheden om een lijn te beëindigen:</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1976.4)" r="2"/>
- <rect id="t" x="20" y="1970.4" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1976.5)" r="2"/>
+ <rect id="t" x="20" y="1970.5" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#t"/>
@@ -559,8 +559,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Dubbelklikken met de linkermuisknop</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2010.9)" r="2"/>
- <rect id="bc" x="20" y="2004.9" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2011)" r="2"/>
+ <rect id="bc" x="20" y="2005" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bc"/>
@@ -590,10 +590,10 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Om een nieuw subpad aan een bestaand pad toe te voegen, selecteer je dat pad en begin je te tekenen met <flowSpan font-weight="bold">Shift</flowSpan> van een willekeurig punt. Indien je echter eenvoudigweg wil <flowSpan font-style="italic">voortgaan</flowSpan> met een bestaand pad, is Shift niet nodig; begin dan te tekenen vanaf een van de uiteinden.</flowDiv>
  </flowRoot>
- <text x="10" y="2149.2225198" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2149.2225198">Ingeven van Unicode tekens</tspan>
+ <text x="10" y="2149.2588228" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2149.2588228">Ingeven van Unicode tekens</tspan>
  </text>
- <rect id="ax" x="10" y="2154.4" width="288" height="1e3px" display="none"/>
+ <rect id="ax" x="10" y="2154.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ax"/>
@@ -609,10 +609,10 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2264.3185478" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2264.3185478">Het raster gebruiken voor het tekenen van iconen</tspan>
+ <text x="10" y="2264.3548508" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2264.3548508">Het raster gebruiken voor het tekenen van iconen</tspan>
  </text>
- <rect id="au" x="10" y="2269.5" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2269.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
@@ -625,8 +625,8 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2342.2629978" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2342.2629978">Objectrotatie</tspan>
+ <text x="10" y="2342.2993008" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2342.2993008">Objectrotatie</tspan>
  </text>
  <rect id="at" x="10" y="2347.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -648,8 +648,8 @@ rotation center to any place.
   </flowRegion>
   <flowDiv xml:space="preserve">Je kan ook roteren met het toetsenbord met <flowSpan font-weight="bold">[</flowSpan> en <flowSpan font-weight="bold">]</flowSpan> (per 15 graden) of <flowSpan font-weight="bold">Ctrl+[</flowSpan> en <flowSpan font-weight="bold">Ctrl+]</flowSpan> (per 90 graden). Dezelfde <flowSpan font-weight="bold">[]</flowSpan> toetsen met <flowSpan font-weight="bold">Alt</flowSpan> zorgen voor pixelgrootte rotatie.</flowDiv>
  </flowRoot>
- <text x="10" y="2448.2025088" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2448.2025088">Slagschaduwen</tspan>
+ <text x="10" y="2448.2388118" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2448.2388118">Slagschaduwen</tspan>
  </text>
  <rect id="ar" x="10" y="2453.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -672,18 +672,18 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2543.7182498" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2543.7182498">Tekst op een pad plaatsen</tspan>
+ <text x="10" y="2543.7545528" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2543.7545528">Tekst op een pad plaatsen</tspan>
  </text>
- <rect id="ap" x="10" y="2548.9" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2549" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Om tekst op een pad te plaatsen, selecteer je de tekst en de curve en kies je <flowSpan font-family="Liberation Sans,Arial,sans-serif">Op pad plaatsen</flowSpan> in het menu Tekst. De tekst zal starten bij het begin van het pad. Algemeen is het best om een expliciet pad te maken waaraan je de tekst wil fitten in plaats van het te fitten op een andere object — dit geeft je meer controle zonder je afbeelding om zeep te helpen.</flowDiv>
  </flowRoot>
- <text x="10" y="2621.8833188" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2621.8833188">Het origineel selecteren</tspan>
+ <text x="10" y="2621.9196218" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2621.9196218">Het origineel selecteren</tspan>
  </text>
  <rect id="ao" x="10" y="2627.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -692,8 +692,8 @@ say, 5.0. That's it!
   </flowRegion>
   <flowDiv xml:space="preserve">Wanneer je tekst op een pad hebt, een gekoppelde rand of een kloon, kan het moeilijk zijn om het bronobject/-pad te selecteren, omdat het er direct onder kan liggen, onzichtbaar kan zijn of vergrendeld. De magische toets <flowSpan font-weight="bold">Shift+D</flowSpan> helpt hierbij; selecteer de test, gekoppelde rand of kloon en druk <flowSpan font-weight="bold">Shift+D</flowSpan> om het corresponderende originele pad, rand of kloon te selecteren.</flowDiv>
  </flowRoot>
- <text x="10" y="2698.2579408" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2698.2579408">Indien het venster niet op het scherm staat</tspan>
+ <text x="10" y="2698.2942438" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2698.2942438">Indien het venster niet op het scherm staat</tspan>
  </text>
  <rect id="an" x="10" y="2703.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -708,8 +708,8 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2786.8989468" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2786.8989468">Transparantie, kleurverlopen en PostScript export</tspan>
+ <text x="10" y="2786.9352498" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2786.9352498">Transparantie, kleurverlopen en PostScript export</tspan>
  </text>
  <rect id="am" x="10" y="2792.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">

@@ -483,10 +483,10 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1639.421034" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1639.421034">Ачыстка дакумэнта</tspan>
+ <text x="10" y="1639.455298" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1639.455298">Ачыстка дакумэнта</tspan>
  </text>
- <rect id="aa" x="10" y="1644.6" width="288" height="1e3px" display="none"/>
+ <rect id="aa" x="10" y="1644.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aa"/>
@@ -497,18 +497,18 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1717.445479" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1717.445479">Схаваныя магчымасьці й рэдактар XML</tspan>
+ <text x="10" y="1717.479743" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1717.479743">Схаваныя магчымасьці й рэдактар XML</tspan>
  </text>
- <rect id="z" x="10" y="1722.6" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="1722.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Рэдактар XML (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>) дазваляе зьмяняць амаль усе аспэкты дакумэнта, не выкарыстоўваючы  вонкавага тэкставага рэдактару. Таксама Inkscape звычайна падтрымлівае больш магчымасьцяў SVG, чым дасяжна з ҐІК. Рэдактар XML — адзін са спосабаў дабрацца да гэтых магчымасьцяў (калі ведаеце SVG).</flowDiv>
  </flowRoot>
- <text x="10" y="1784.75912" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1784.75912">Зьмяненьне адзінак вымярэньня лінейкі</tspan>
+ <text x="10" y="1784.793384" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1784.793384">Зьмяненьне адзінак вымярэньня лінейкі</tspan>
  </text>
  <rect id="x" x="10" y="1790" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -523,8 +523,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1862.856491" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1862.856491">Штампаваньне</tspan>
+ <text x="10" y="1862.890755" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1862.890755">Штампаваньне</tspan>
  </text>
  <rect id="w" x="10" y="1868.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -533,8 +533,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Каб хутка стварыць шмат копій аб'екта карыстайцеся <flowSpan font-style="italic">штампаваньнем</flowSpan>. Проста пацягніце аб'ект (ці зьмяніце памер ці паварот) і, трымаючы націснутай кнопку мышы, націсьніце <flowSpan font-weight="bold">Прабел</flowSpan>. Гэтым пакінеце «штамп» фіґурай бягучага аб'екта. Можаце паўтарыць колькі трэба.</flowDiv>
  </flowRoot>
- <text x="10" y="1930.263881" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1930.263881">Парады да выкарыстаньня «Асадкі»</tspan>
+ <text x="10" y="1930.298145" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1930.298145">Парады да выкарыстаньня «Асадкі»</tspan>
  </text>
  <rect id="v" x="10" y="1935.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -543,24 +543,24 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Інструмэнт «Асадка» («Бэзье») мае наступныя спосабы скончыць бягучую лінію:</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1958.9)" r="2"/>
- <rect id="u" x="20" y="1952.9" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1959)" r="2"/>
+ <rect id="u" x="20" y="1953" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Націснуць <flowSpan font-weight="bold">Enter</flowSpan></flowDiv>
  </flowRoot>
- <circle transform="translate(15 1975.9)" r="2"/>
- <rect id="be" x="20" y="1969.9" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1976)" r="2"/>
+ <rect id="be" x="20" y="1970" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#be"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Двойчы пстрыкнуць левай кнопкай мышы</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1993.1)" r="2"/>
- <rect id="bd" x="20" y="1987.1" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1993.2)" r="2"/>
+ <rect id="bd" x="20" y="1987.2" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
@@ -568,8 +568,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   <flowDiv xml:space="preserve">Click with the right mouse button
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 2010.4)" r="2"/>
- <rect id="bc" x="20" y="2004.4" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2010.5)" r="2"/>
+ <rect id="bc" x="20" y="2004.5" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bc"/>
@@ -590,8 +590,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Каб дадаць падшлях да наяўнага шляху вылучыце гэты шлях і пачніце рысаваць з <flowSpan font-weight="bold">Shift</flowSpan> ад адвольнага пункту. Калі, усё ж такі, вы проста жадаеце <flowSpan font-style="italic">працягнуць</flowSpan> наяўны шлях, то Shift непатрэбны, проста пачніце рысаваць ад аднаго з канцавых якараў вылучанага шляху.</flowDiv>
  </flowRoot>
- <text x="10" y="2133.5724873" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2133.5724873">Уводжаньне значэньняў Unicode</tspan>
+ <text x="10" y="2133.6410143" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2133.6410143">Уводжаньне значэньняў Unicode</tspan>
  </text>
  <rect id="ay" x="10" y="2138.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -609,10 +609,10 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2259.1288273" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2259.1288273">Выкарыстаньне сеткі для рысаваньня значак</tspan>
+ <text x="10" y="2259.1973543" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2259.1973543">Выкарыстаньне сеткі для рысаваньня значак</tspan>
  </text>
- <rect id="av" x="10" y="2264.3" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="2264.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
@@ -625,8 +625,8 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2337.0732773" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2337.0732773">Паварочваньне аб'ектаў</tspan>
+ <text x="10" y="2337.1418043" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2337.1418043">Паварочваньне аб'ектаў</tspan>
  </text>
  <rect id="au" x="10" y="2342.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -648,8 +648,8 @@ rotation center to any place.
   </flowRegion>
   <flowDiv xml:space="preserve">Альбо можаце паварочваць з клявіятуры, націскаючы <flowSpan font-weight="bold">[</flowSpan> і <flowSpan font-weight="bold">]</flowSpan> (на 15 ґрадусаў) ці <flowSpan font-weight="bold">Ctrl+[</flowSpan> і <flowSpan font-weight="bold">Ctrl+]</flowSpan> (на 90 ґрадусаў). Тыя ж клявішы <flowSpan font-weight="bold">[]</flowSpan> з <flowSpan font-weight="bold">Alt</flowSpan> зьдзяйсьняюць павольнае папіксэльнае паварочваньне.</flowDiv>
  </flowRoot>
- <text x="10" y="2453.7573643" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2453.7573643">Падаючыя цені</tspan>
+ <text x="10" y="2453.8258913" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2453.8258913">Падаючыя цені</tspan>
  </text>
  <rect id="as" x="10" y="2459" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -672,8 +672,8 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2549.2731053" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2549.2731053">Разьмяшчэньне тэксту на шляху</tspan>
+ <text x="10" y="2549.3416323" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2549.3416323">Разьмяшчэньне тэксту на шляху</tspan>
  </text>
  <rect id="aq" x="10" y="2554.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -682,8 +682,8 @@ say, 5.0. That's it!
   </flowRegion>
   <flowDiv xml:space="preserve">Каб разьмесьціць тэкст уздоўж крывой вылучыце разам тэкст і крывую й выберыце <flowSpan font-family="Liberation Sans,Arial,sans-serif">Разьмесьціць на шляху</flowSpan>  з мэню «Тэкст». Тэкст пачнецца ад пачатку шляху. Звычайна налепей бывае, калі яўна ствараюць тэкст, па якім будзе разьмешчаны тэкст, чым дастасоўваць яго да нейкага іншага элемэнту рысунку — гэта дазволіць лепш кантраляваць працэс бязь лішніх праблем.</flowDiv>
  </flowRoot>
- <text x="10" y="2627.3678623" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2627.3678623">Вылучэньне арыґіналу</tspan>
+ <text x="10" y="2627.4363893" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2627.4363893">Вылучэньне арыґіналу</tspan>
  </text>
  <rect id="ap" x="10" y="2632.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -692,8 +692,8 @@ say, 5.0. That's it!
   </flowRegion>
   <flowDiv xml:space="preserve">Калі маеце тэкст на шляху, злучаны зрух ці клон, іхны выточны аб'ект/шлях часам цяжка вылучыць, бо ён можа быць проста пад нізам, ці зроблены нябачным і/ці замкнутым. Дапаможа чароўная клявіша <flowSpan font-weight="bold">Shift+D</flowSpan>, вылучыце тэкст, зрух ці клон і націсніце <flowSpan font-weight="bold">Shift+D</flowSpan> каб вылучыць адпаведны шлях, крыніцу зруха ці арыґінал клона.</flowDiv>
  </flowRoot>
- <text x="10" y="2694.7752533" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2694.7752533">Аднаўленьне вакна, якое апынулася па-за экранам</tspan>
+ <text x="10" y="2694.8437803" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2694.8437803">Аднаўленьне вакна, якое апынулася па-за экранам</tspan>
  </text>
  <rect id="ao" x="10" y="2700" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -708,10 +708,10 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2783.4162593" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2783.4162593">Празрыстасьць, ґрадыенты й экспартаваньне ў PostScript</tspan>
+ <text x="10" y="2783.4847863" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2783.4847863">Празрыстасьць, ґрадыенты й экспартаваньне ў PostScript</tspan>
  </text>
- <rect id="an" x="10" y="2788.6" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="2788.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
@@ -730,7 +730,7 @@ value of the object, but only the alpha value of its fill or stroke color, so ma
 every object's opacity value is set to 100% before you start out.
 </flowDiv>
  </flowRoot>
- <g transform="translate(0 2901.9)">
+ <g transform="translate(0 2902)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="s" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#d" inkscape:collect="always"/>
    <filter id="bg" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

@@ -112,8 +112,8 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Una de las grandes ventajas que tenemos sobre los escribas del pasado, es el comando <flowSpan font-family="Liberation Sans,Arial,sans-serif">Deshacer</flowSpan>: Si usted comete un error, no se daña toda la página . La herramienta Caligrafía de Inkscape permite algunas otras técnicas que no serían posibles con una pluma y tinta tradicional.</flowDiv>
  </flowRoot>
- <text x="10" y="414.9986632" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="414.9986632">Hardware</tspan>
+ <text x="10" y="414.9986622" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="414.9986622">Hardware</tspan>
  </text>
  <rect id="ab" x="10" y="420.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -144,7 +144,7 @@ to the Calligraphy tool and toggle the toolbar buttons for pressure and tilt. Fr
 now on, Inkscape will remember those settings on startup.
 </flowDiv>
  </flowRoot>
- <rect id="y" x="10" y="610.41" width="288" height="1e3px" display="none"/>
+ <rect id="y" x="10" y="610.42" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#y"/>
@@ -154,8 +154,8 @@ the stroke (see “Thinning” below), so if you are using a mouse, you'll proba
 zero this parameter.
 </flowDiv>
  </flowRoot>
- <text x="10" y="661.8293122" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="661.8293122">Opciones de la Herramienta de Caligrafía</tspan>
+ <text x="10" y="661.8313482" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="661.8313482">Opciones de la Herramienta de Caligrafía</tspan>
  </text>
  <rect id="x" x="10" y="667.03" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -169,8 +169,8 @@ There are also two buttons to toggle tablet Pressure and Tilt sensitivity on and
 drawing tablets).
 </flowDiv>
  </flowRoot>
- <text x="10" y="729.0609212" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="729.0609212">Ancho &amp; Adelgazar</tspan>
+ <text x="10" y="729.0629572" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="729.0629572">Ancho &amp; Adelgazar</tspan>
  </text>
  <rect id="w" x="10" y="734.26" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -245,8 +245,8 @@ jerky movements to get strangely naturalistic, neuron-like shapes:
  <path transform="translate(10 1295.2)" d="m29.654 2.3471c1.311 3.4234 2.2854 10.077 5.9341 12.149 0.99265 0.5635 2.229-0.5899 3.341-0.8932 7.0038-1.9098 13.934-4.0589 20.95-5.9271 3.5955-0.9573 8.107-1.1798 11.57-2.3687 6.3405-2.1768 1.3707-8.2767 9.1006-3.5631-0.32494 1.7841 1.4428 11.47-3.6887 9.8467-0.7277-0.2302-1.2944-1.5881-1.9325-1.1846-0.72836 0.4607-0.29896 1.6731-0.12628 2.4866 1.6646 7.842 17.874 24.172 24.051 30.016 2.8144 1.0509 8.8574 10.763 12.34 9.9192 5.3295-1.2909 4.1068-5.9076 9.0333-2.706 1.3409 0.7075 3.5797 1.5746 4.0399 3.1463 0.77903 2.6602-2.4882 10.129-2.9758 10.732-0.63727 0.7878-2.2548-0.6904-3.1379-0.1566-0.62343 0.3768-3.5672 25.868-3.7886 28.21 1.244 4.4734-2.805 10.838-1.2858 15.175 1.6941 4.8351 2.5157 1.7509 3.1835 6.5519 0.38835 2.7919-3.1789 4.7994-2.1778 7.359 0.38847 0.9933 3.2412 3.5642 4.2493 0.2656 1.7314-5.6653 1.6236-11.695 2.4354-17.543-11.33-9.598-8.2239 1.7438-5.4897 8.4455l-0.032 0.5794c-4.4814 7.6469-7.3044 15.735-16.771 6.7825 0.80061-5.9567 0.65367-12.098 2.4018-17.87 2.0329-6.7121 8.2676 6.4496 11.716 5.0742 0.04247-0.0169 1.2024-13.906 1.2782-15.165 0.82623-8.6676 1.8845-17.335 3.3827-25.924 0.18175-1.042 1.8364-6.8699-2.0936-6.0919-4.641 0.9188-2.3888 8.0654-1.7116 5.745-5.85-4.3036-1.1416-5.0725-2.7792-11.482-1.0962-4.2907-10.495-6.2728-12.108-10.536-8.6717-8.19-17.2-17.43-23.006-27.723-1.6561-2.9365-3.1607-5.4148-4.751-8.4821-0.48255-0.9308-1.0203-3.6294-1.5698-2.7325-1.3827 2.257-0.98374 5.1357-1.4756 7.7035 8.3477 1.8502 6.589-5.5962 3.7366-6.2991-1.7896-0.441-35.686 9.0068-35.809 9.1829-2.7754 3.9456-0.55112 9.7775-1.632 14.096l-4.4026-26.818z" display="block"/>
  <path transform="translate(10 1295.2)" d="m164.9 34.629c7.5556-1.214 6.6288 7.1447 11.54 10.087 3.9417 2.3611 15.543-9.0233 17.669-11.691 2.8671-1.9798 1.198-5.2109 2.678-7.6616 1.7428-2.8858 5.9239-0.6155 8.0722-3.3296 1.8733-2.3667 1.4743-7.8515 5.634-6.3251 2.2217 1.324 3.2298 3.8454 5.3562 5.2585 1.6772 1.1146 4.1762 1.1451 6.0686 1.7798 1.7445 0.5852 5.8481 3.4148 7.6072 3.1947 2.5065-0.3137 4.1806-3.7336 5.3748-5.4534 2.8985 0.582 3.6966 4.1267 4.9246 6.327 1.4844 2.6594 3.8626 4.4806 5.3552 7.0489 3.6458 6.2729 3.9529 14.768 5.427 21.675 0.04858 6.7874 5.1785 12.425 4.4522 18.856-0.38399 3.3998-2.8705 5.9268-2.9589 9.5733 0.32586-0.7791 0.75885 5.1325 1.8008 4.0502 1.1508-1.1954 0.77403-3.1705 1.4545-4.6545 0.73212-1.5967 1.3587 2.5514-1.3937 7.0129-3.1335 5.0794-1.1704 8.8265 4.8214 10.326 7.8778 0.3924 14.49-4.3477 21.089-7.7933l0.19105 0.5514c-6.6907 3.4944-13.385 8.2613-21.38 7.8146-7.6169-1.9059-4.2819-4.7087-7.5647-7.1365-1.5644-1.1569-3.7561 0.2801-5.3401-0.1971-1.5558-0.4688-0.63981-12.677 3.9143-12.188 3.9407-4.6295 2.3362-19.349 0.44781-25.839-0.96671-4.5187-1.9729-25.198-9.7937-25.03-3.1334 0.0674-4.1306 3.1618-6.6096 3.7323-2.5267-2.3019-2.2112-5.7634-4.3734-8.1166-0.86712-0.9438-2.398-1.0486-3.5956-1.5759-5.7513-2.532-11.268-4.3777-14.139 2.6446-1.3921 2.0972-3.6894-2.4644-5.8867-2.7697-3.6322-0.5046-3.4306 4.2082-5.7423 5.4568-4.3316 2.3395 2.5237-1.8666-3.2161 0.3458-0.42657 0.1643-2.1982 2.7125-2.3398 2.9067-2.5638 3.1943-5.3562 6.1148-8.8897 8.38-2.0507 1.3145-7.5462 2.5234-8.812 4.4833-2.2843 3.5369-4.6614 12.91 2.051 12.659l-13.895-24.403z" display="block"/>
  <path transform="translate(10 1295.2)" d="m178.84 99.8c-0.09532 2.8848-3.4688 1.0403-1.8492 4.6874 0.84509 1.903 3.9333 6.4477 6.4514 6.5669 2.7606 0.1307 16.626-18.131 18.613-20.897 5.5268-3.2256-0.42592-9.5467 3.2015-13.304 0.38912-0.4031 7.8564-2.3343 5.8816-3.6933-1.8295-1.2589-3.7318 0.6821-1.8786 2.2332 3.865 2.7708 5.3025-1.6158 8.5612-2.7133 2.9564-0.9957 5.1902 1.6049 7.1461-1.7247 4.3482-2.4062 10.069 3.5988 13.457-2.5424 0.90896-1.6476 0.69779-3.8578 2.0808-5.2083 2.7206-1.2064 6.3134 1.0779 8.8063-0.9493 1.1275-0.9168 1.474-4.062 3.152-4.2324 2.3159-0.2353 3.2701 3.4698 4.3609 4.0426 1.4905 0.7826 8.4984-2.9953 9.6162-3.4908 8.1688-3.8767 13.984-10.406 19.708-16.922l0.32122 0.494c-5.7605 6.5553-11.64 13.098-19.863 16.987-1.1973 0.5285-8.9601 2.5289-9.6861 3.5108-1.1963 1.6179-0.20711 4.4988-1.9051 5.6449-1.8731 1.2642-5.3066-4.5853-9.11 6.5893-7.168 4.3654-5.9566-9.0513-14.25 6.6879-0.66931 1.2702-1.5602 1.8647-3.0155 2.1205-5.2171-0.2432-11.925 1.8589-12.243 7.0508-0.42557 2.7928-4.2286 7.0085-7.1426 3.5413-2.1837-2.5983 3.0512-3.8745-1.9797-7.0946-2.9786-1.9064-3.4452 1.9014-4.8674 3.4484-2.9788 4.1391-6.0213 8.2226-9.411 12.073-2.0674 2.3485-8.1645 6.199-9.3133 8.8819-1.6396 3.8292 1.2114 10.592-1.5425 14.012-3.8504 4.783-2.8692 0.2337-3.3009 2.7593v-28.559z" display="block"/>
- <text x="10" y="1448.3786172" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1448.3786172">ángulo &amp; Fijación</tspan>
+ <text x="10" y="1448.3806532" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1448.3806532">ángulo &amp; Fijación</tspan>
  </text>
  <rect id="r" x="10" y="1453.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -270,7 +270,7 @@ jerky movements to get strangely naturalistic, neuron-like shapes:
  <text transform="translate(10 1500.2)" x="202.46759" y="52.500549" display="block" fill="#000000" font-family="sans-serif" font-size="6" stroke-width="1pt" sodipodi:insensitive="true" xml:space="preserve"><tspan x="202.46759" y="52.500549" sodipodi:role="line">angle = 30 (default)</tspan></text>
  <text transform="translate(10 1500.2)" x="207.52388" y="104.26855" display="block" fill="#000000" font-family="sans-serif" font-size="6" stroke-width="1pt" sodipodi:insensitive="true" xml:space="preserve"><tspan x="207.52388" y="104.26855" sodipodi:role="line">angle = 0</tspan></text>
  <text transform="translate(10 1500.2)" x="87.677307" y="139.26855" display="block" fill="#000000" font-family="sans-serif" font-size="6" stroke-width="1pt" sodipodi:insensitive="true" xml:space="preserve"><tspan x="87.677307" y="139.26855" sodipodi:role="line">angle = -90 deg</tspan></text>
- <path transform="translate(10 22.865)" d="m144.5 1564.1c2.0412 4.3309 3.2095 9.0215 3.4381 13.804" color="#000000" display="block" fill="none" marker-end="url(#ay)" marker-start="url(#az)" stroke="#000" stroke-width="1.6875"/>
+ <path transform="translate(10 22.867)" d="m144.5 1564.1c2.0412 4.3309 3.2095 9.0215 3.4381 13.804" color="#000000" display="block" fill="none" marker-end="url(#ay)" marker-start="url(#az)" stroke="#000" stroke-width="1.6875"/>
  <g transform="translate(10 1500.2) matrix(.36245 -.20926 .20926 .36245 -207.78 -450.15)" display="block">
   <use transform="matrix(-1 1.5541e-6 1.5541e-6 1 279.99 -.00021757)" width="320.00000" height="2515.0000" xlink:href="#aw"/>
   <path id="aw" d="m140.95 1527.7h-14.519s0.01902 51.9-15.338 51.9c8.741 47.256 10.022 36.942 10.841 46.776 8.7733 5.3489 16.354 6.3692 19.732 5.9823" fill="#fff" fill-rule="evenodd" sodipodi:nodetypes="ccccc"/>
@@ -503,8 +503,8 @@ perpendicular to the stroke, and Angle has no effect anymore:
   </flowRegion>
   <flowDiv xml:space="preserve">Hablando tipográficamente, la fijación máxima y por consiguiente el contraste del ancho máximo del trazo son las características (más adelante) de las fuentes antique serif, como las Times o Bodoni (por que estas fuentes son históricamente una imitación de la caligrafí de la pluma-arreglada). La fijación Cero y el ancho de contraste Cero (Arriba a la derecha), sobre la otra mano, sugiere la fuente actual Sans Serif, así como la Helvetica.</flowDiv>
  </flowRoot>
- <text x="10" y="2207.3236302" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2207.3236302">Tremor</tspan>
+ <text x="10" y="2207.3256662" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2207.3256662">Tremor</tspan>
  </text>
  <rect id="l" x="10" y="2212.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -573,8 +573,8 @@ splotches. This significantly expands the creative range of the tool.
  <path transform="translate(10 2269.7)" d="m189.88 233.47c6.8217-4.7172-7.1134 6.8864 6.2038-1.2637-1.0028 1.3518-4.3801 3.2825-3.0085 4.0555 2.8863 1.6266 5.645-4.4462 8.8407-4.3979 5.5675 0.08408-17.284 13.39 4.9921 0.97377 1.7048-0.75104 3.3023-2.0681 5.1143-2.2531 1.3992-0.14287 2.4565 2.0841 3.8592 2.003 3.5218-0.20356 6.8925-3.1539 10.371-2.4691 0.8085 0.15917 0.26536 1.917 0.39804 2.8756 8.121 2.8333 16.132-1.2383 24.42-2.6442-4.8285 10.254 5.4844 2.5543 9.5247 1.1025 2.5087-0.17069 3.6236 0.78321 6.5051 0.29123 2.3849 4.4136 5.3576-3.5834 8.7198-0.18173 17.165-8.0693-4.8573 6.3815 4.8902 1.4695 1.4636-0.20138 6.4405-3.0303 6.1176-2.3864-0.62589 1.2482-3.708 3.4392-2.5007 3.1921 3.2949-0.67427 9.0214-7.8953 2.828-0.65305 25.524-15.749-15.46 7.8657 7.452-2.9554 0.8945-0.60409 1.789-1.2082 2.6835-1.8123l-8.2294 7.086c-0.55239 0.3095-1.1048 0.619-1.6572 0.92851 4.6793-5.4794-1.5718 2.1218-3.1853 1.6814-9.8866-2.6985 10.077-5.4193 1.8349-3.9798-7.2554 3.2729-0.31535-1.8965-7.7886 2.8254-1.4606 0.92285-3.7282 4.6343-4.3582 2.8203-0.66748-1.9219 2.5809-2.8146 3.8714-4.222-13.984 7.7898 9.0199-10.964-8.6857 1.8345 5.1008-8.6558 2.7179-0.7812-3.8631-0.18661-1.6326 0.1475 3.4341-2.299 3.3676-4.2379-0.11645-3.3936-8.6091 8.6326-7.7871 4.3181 1.9257-6.3587 0.63566 0.59016-4.181 0.30236-2.0682-0.12357 19.054-18.103-6.3124 2.9427 1.7655-1.8483 5.2537-2.7536 5.2964-5.545 0.03657-2.3923-3.2494 3.43-5.2659 3.5463-1.2415 0.07159 2.4349-4.6077 1.2497-4.1638-7.3905 2.7676-6.4241 6.9282-6.9064 1.4767-3.4186-0.39892-6.3913-1.2326-9.8491-0.20515-4.8983 1.4555-9.4974 7.6424-14.319 5.8634-1.5292-0.56417 1.4363-3.3931 2.1544-5.0896-2.7999 0.42201-9.5486-0.50205-10.992-0.22282-2.4795 0.47982-5.6913 5.7057-7.0392 3.1929-2.3572-4.3943 14.58-11.452-0.66614-4.0404-2.0405-5.7264-20.983 12.869-10.616-0.79335-13.493 8.859-3.5522 0.61418-6.3406 1.3815l2.8568-2.4599z" color="black"/>
  <path transform="translate(10 2269.7)" d="m187.36 243.29c0.8957-0.66748 3.4336-3.6214 4.5534 0.94191 13.371-3.685 27.033-0.72629 40.714-2.3865 7.8482 11.793-5.1261-5.0467 14.67 0.3132 8.6555 2.3435-9.8459 10.523 2.8219 9.2996 12.35-4.4958 6.6706-3.4399 16.886-4.2397 1.9908 12.646 15.433-7.7228 28.084 1.5368l-1.5389 1.3799c-2.5658 0.34875-4.7373 1.3359-7.0775-0.63937-0.79179-0.66832-0.79671-2.9354-1.7507-2.8238-7.5446 0.88296-13.744 8.0532-21.703 4.0903-2.751-0.91644-5.2114-3.0379-8.0122-3.683-10.723-2.47-20.917 10.347-31.262 2.6845-2.668 0.06252-5.3517-0.17638-8.0039 0.18757-3.4794 0.47745-7.7785 5.2938-10.332 2.3286-2.1468-2.4925 5.9106-7.1853 3.8787-9.8214-2.4594-3.1908-17.504 7.5652-21.866 5.7043-2.4099-2.3499 2.7117-6.4977-3.449-1.824l3.3882-3.0488z" color="black"/>
  <path transform="translate(10 2269.7)" d="m111.59 9.6633c0.82497 0.031346 1.6506 0.049745 2.4759 0.072731 5.5517 0.20344 11.108 0.24303 16.662 0.28492 7.7392 0.038128 15.478-0.023297 23.217-0.057022 5.3954-0.13602 10.787 0.054554 16.18 0.21233 3.475 0.1115 6.9518 0.099336 10.428 0.081858 1.5514-0.02159 3.1028-0.030368 4.6542-0.042773 1.3449 0.001963 2.6899 0.005795 4.0348 0.006077 1.3374 0.006642 2.6748-0.004422 4.0122-0.011507 0.93748 0.11723 1.863-0.089409 2.7518-0.18829l-5.8366 4.4418c-0.94504 0.029603-1.8918 0.088424-2.8397 0.050912-1.327-0.007074-2.654-0.018192-3.981-0.01091-1.3525 0.001328-2.705 0.005615-4.0574 0.010903-1.5075-0.011328-3.0153-0.014519-4.5223-0.06141-3.3841-0.087615-6.7675-0.19787-10.151-0.30252-5.2981-0.18566-10.594-0.44169-15.898-0.39003-7.6868-0.033904-15.374-0.095457-23.061-0.057022-5.8162 0.042965-11.633 0.0881-17.447 0.28492-0.89204 0.023352-1.7844 0.041735-2.6761 0.072731l6.0529-4.3977z" color="black"/>
- <text x="10" y="2546.9515752" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2546.9515752">Wiggle &amp; Mass</tspan>
+ <text x="10" y="2546.9536112" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2546.9536112">Wiggle &amp; Mass</tspan>
  </text>
  <rect id="k" x="10" y="2552.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -606,8 +606,8 @@ quite small (2) so that the tool is fast and responsive, but you can increase ma
 get slower and smoother pen.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2712.7662662" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2712.7662662">Ejemplos de caligrafía</tspan>
+ <text x="10" y="2712.7683022" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2712.7683022">Ejemplos de caligrafía</tspan>
  </text>
  <rect id="as" x="10" y="2718" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -815,8 +815,8 @@ stems. Here are some letter elements for the Uncial hand:
  <path transform="translate(10 3191)" d="m85.023 384.91c2.1782-1.8201 4.3491-3.6587 6.5348-5.4602 0.34863-0.28736-0.48941 0.85077-0.66382 1.3033-0.89515 2.323-1.3799 4.7454-1.7935 7.0938-0.67125 3.8117-1.2176 7.5868-1.988 11.407-2.8019 14.518-5.211 29.076-8.831 43.615-0.98598 3.9021-2.527 8.4802-2.8829 12.282 0.80174 3.0295 1.5226 2.2417 4.6774 0.32132l-5.8439 5.1825c-3.3958 2.1044-4.3852 3.1764-5.365-0.03585 0.51409-4.0608 2.4483-8.8011 3.5902-12.948 3.9137-14.633 7.0896-29.474 9.385-44.06 1.913-14.211-1.0025-15.322 9.6984-24.362l-6.5178 5.6605z" display="block"/>
  <path transform="translate(10 3191)" d="m111.38 368.18c-11.979 11.332-22.617 15.884-37.234 15.844-19.492-0.94697-41.198-3.8031-51.153 17.86l-6.1218 4.1026c13.359-27.605 41.508-27.321 63.739-26.56 17.548-0.27522 16.162 0.58294 22.609-5.829l8.1614-5.4176z" display="block"/>
  <path transform="translate(10 3191)" d="m207.51 437.58c4.005-4.1973 12.756-12.671 13.567-4.8029-0.05237 12.282-5.9845 26.333-9.0914 38.768-4.421 18.098-8.3108 36.199-17.335 53.757-10.754 18.434-32.812 32.088-51.55 27.321-5.876-3.1068-9.9928-7.1568-12.021-13.712-6.9021-22.305 18.75-37.198 39.332-40.678 1.6285-0.11434 3.2571-0.22869 4.8856-0.34302l-4.9175 3.5061c-1.5583 0.06969-3.1166 0.13938-4.6749 0.20907-5.0354 0.77158-13.313 1.7699-17.906 4.5035-21.577 12.841-14.649 35.859 0.30259 42.995 18.876 4.4079 31.511-3.7211 41.533-20.444 9.281-17.509 13.062-35.707 17.452-53.813 2.9911-12.046 8.4667-26.056 7.7879-37.848-0.21452-1.13-0.40288-2.3856-1.4906-2.9209-0.49608-0.24414-2.3816 0.55912-1.8391 0.15865 10.819-7.9862 4.8205-3.6809 2.7528-1.1609l-6.7879 4.5058z" display="block"/>
- <text x="10" y="3769.1675715" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3769.1675715">Conclusión</tspan>
+ <text x="10" y="3769.1696075" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3769.1696075">Conclusión</tspan>
  </text>
  <rect id="ah" x="10" y="3774.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">

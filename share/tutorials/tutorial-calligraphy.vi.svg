@@ -800,8 +800,8 @@ stems. Here are some letter elements for the Uncial hand:
  <path transform="translate(10 3230.5)" d="m85.023 384.91c2.1782-1.8201 4.3491-3.6587 6.5348-5.4602 0.34863-0.28736-0.48941 0.85077-0.66382 1.3033-0.89515 2.323-1.3799 4.7454-1.7935 7.0938-0.67125 3.8117-1.2176 7.5868-1.988 11.407-2.8019 14.518-5.211 29.076-8.831 43.615-0.98598 3.9021-2.527 8.4802-2.8829 12.282 0.80174 3.0295 1.5226 2.2417 4.6774 0.32132l-5.8439 5.1825c-3.3958 2.1044-4.3852 3.1764-5.365-0.03585 0.51409-4.0608 2.4483-8.8011 3.5902-12.948 3.9137-14.633 7.0896-29.474 9.385-44.06 1.913-14.211-1.0025-15.322 9.6984-24.362l-6.5178 5.6605z" display="block"/>
  <path transform="translate(10 3230.5)" d="m111.38 368.18c-11.979 11.332-22.617 15.884-37.234 15.844-19.492-0.94697-41.198-3.8031-51.153 17.86l-6.1218 4.1026c13.359-27.605 41.508-27.321 63.739-26.56 17.548-0.27522 16.162 0.58294 22.609-5.829l8.1614-5.4176z" display="block"/>
  <path transform="translate(10 3230.5)" d="m207.51 437.58c4.005-4.1973 12.756-12.671 13.567-4.8029-0.05237 12.282-5.9845 26.333-9.0914 38.768-4.421 18.098-8.3108 36.199-17.335 53.757-10.754 18.434-32.812 32.088-51.55 27.321-5.876-3.1068-9.9928-7.1568-12.021-13.712-6.9021-22.305 18.75-37.198 39.332-40.678 1.6285-0.11434 3.2571-0.22869 4.8856-0.34302l-4.9175 3.5061c-1.5583 0.06969-3.1166 0.13938-4.6749 0.20907-5.0354 0.77158-13.313 1.7699-17.906 4.5035-21.577 12.841-14.649 35.859 0.30259 42.995 18.876 4.4079 31.511-3.7211 41.533-20.444 9.281-17.509 13.062-35.707 17.452-53.813 2.9911-12.046 8.4667-26.056 7.7879-37.848-0.21452-1.13-0.40288-2.3856-1.4906-2.9209-0.49608-0.24414-2.3816 0.55912-1.8391 0.15865 10.819-7.9862 4.8205-3.6809 2.7528-1.1609l-6.7879 4.5058z" display="block"/>
- <text x="10" y="3808.6918356" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3808.6918356">Kết luận</tspan>
+ <text x="10" y="3808.7260996" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3808.7260996">Kết luận</tspan>
  </text>
  <rect id="ah" x="10" y="3813.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -810,7 +810,7 @@ stems. Here are some letter elements for the Uncial hand:
   </flowRegion>
   <flowDiv xml:space="preserve">Thư pháp là một công cụ rất lý thú; nó dùng để diễn tả cả một nghệ thuật, có thể được áp dụng cho tất cả các sáng tạo của bạn. Hãy học cách dùng Thư pháp và ứng dụng nó một cách hiệu quả trong các ảnh mà bạn thiết kế. Enjoy!</flowDiv>
  </flowRoot>
- <g transform="translate(0 3854.4)">
+ <g transform="translate(0 3854.5)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="g" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#c" inkscape:collect="always"/>
    <filter id="au" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

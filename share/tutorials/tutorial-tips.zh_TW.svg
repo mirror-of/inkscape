@@ -282,31 +282,31 @@
   </flowRegion>
   <flowDiv xml:space="preserve">建立一個新圖層，在這圖層裡建立幾個隱形矩形，讓這些矩形分成幾個部份覆蓋你的影像。確認你的文件是使用 px 單位 (預設)，開啟格線顯示並把矩形都貼齊格線，使每個矩形長度都是整數 px 單位。每個矩形都給予一個有意義的識別名稱 (ID)，並且將每個矩形匯出成自己個別的檔案 (<flowSpan font-family="Liberation Sans,Arial,sans-serif">檔案 &gt; 匯出 PNG 圖片</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+E</flowSpan>))。而這些矩形會記住匯出的檔名。在那之後，就可以很容易的再次匯出一些檔案：切換到匯出圖層，使用 Tab 鍵來選擇你要匯出的區域 (或依照 ID 來尋找)，然後點擊對話窗裡的匯出按鈕。或者，你可以寫一個 shell 腳本或批次命令檔來匯出所有區域，例如下面的指令：</flowDiv>
  </flowRoot>
- <rect id="ah" x="10" y="912.55" width="288" height="1e3px" display="none"/>
+ <rect id="ah" x="10" y="912.58" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ah"/>
   </flowRegion>
   <flowDiv xml:space="preserve">inkscape -i 區域-id -t 檔名.svg</flowDiv>
  </flowRoot>
- <rect id="ag" x="10" y="930.75" width="288" height="1e3px" display="none"/>
+ <rect id="ag" x="10" y="930.78" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ag"/>
   </flowRegion>
   <flowDiv xml:space="preserve">針對每個要匯出的區域。參數 -t 會告訴程式使用已記住的檔名提示，不然你可以用參數 -e 提供匯出的檔名。或者，你可以使用 <flowSpan font-family="Liberation Sans,Arial,sans-serif">擴充功能 &gt; 網頁 &gt; 切片器</flowSpan> 或 <flowSpan font-family="Liberation Sans,Arial,sans-serif">擴充功能 &gt; 匯出 &gt; 切片工具</flowSpan> 達成類似的效果。</flowDiv>
  </flowRoot>
- <text x="10" y="982.5352265" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="982.5352265">非線性漸層</tspan>
+ <text x="10" y="982.5694825" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="982.5694825">非線性漸層</tspan>
  </text>
- <rect id="af" x="10" y="987.74" width="288" height="1e3px" display="none"/>
+ <rect id="af" x="10" y="987.77" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#af"/>
   </flowRegion>
   <flowDiv xml:space="preserve">SVG 版本 1.1 不支援非線性漸層 (即顏色之間有非線性轉變)。不過，你可以用<flowSpan font-style="italic">多停止點</flowSpan>漸層模擬類似的效果。</flowDiv>
  </flowRoot>
- <rect id="ae" x="10" y="1015.8" width="288" height="1e3px" display="none"/>
+ <rect id="ae" x="10" y="1015.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ae"/>
@@ -416,8 +416,8 @@
  <rect transform="translate(10 1148.8) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-31.223" y="-305.42" width="16.125" height="286.4" fill="url(#l)" fill-opacity=".75" fill-rule="evenodd"/>
  <rect transform="translate(10 1148.8) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-15.167" y="-305.42" width="16.125" height="286.4" fill="url(#m)" fill-opacity=".75" fill-rule="evenodd"/>
  <rect transform="translate(10 1148.8) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" x="-127.56" y="-305.42" width="16.125" height="286.4" fill="url(#n)" fill-opacity=".75" fill-rule="evenodd"/>
- <text x="10" y="1302.0993045" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1302.0993045">離心放射狀漸層</tspan>
+ <text x="10" y="1302.1335605" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1302.1335605">離心放射狀漸層</tspan>
  </text>
  <rect id="ab" x="10" y="1307.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -438,76 +438,76 @@
  </defs>
  <rect transform="translate(10 1354.1)" x="70.82" y=".55902" width="74.385" height="68.187" fill="url(#e)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
  <rect transform="translate(10 1354.1)" x="153.67" y=".55902" width="74.385" height="68.187" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
- <text x="10" y="1448.2304505" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1448.2304505">對齊頁面中心</tspan>
+ <text x="10" y="1448.2647065" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1448.2647065">對齊頁面中心</tspan>
  </text>
- <rect id="aa" x="10" y="1453.4" width="288" height="1e3px" display="none"/>
+ <rect id="aa" x="10" y="1453.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aa"/>
   </flowRegion>
   <flowDiv xml:space="preserve">想要對齊頁面中心或邊緣，可選取物件或群組然後在對齊和分佈對話窗 (<flowSpan font-weight="bold">Ctrl+Shift+A</flowSpan>) 裡從 <flowSpan font-family="Liberation Sans,Arial,sans-serif">相對於:</flowSpan> 清單中選擇 <flowSpan font-family="Liberation Sans,Arial,sans-serif">頁面</flowSpan>。</flowDiv>
  </flowRoot>
- <text x="10" y="1495.2411445" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1495.2411445">清理文件</tspan>
+ <text x="10" y="1495.3096635" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1495.3096635">清理文件</tspan>
  </text>
- <rect id="z" x="10" y="1500.4" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="1500.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
   </flowRegion>
   <flowDiv xml:space="preserve">許多沒用到的漸層、圖樣和標記 (更準確地說是你手動編輯的那些) 保存在對應的參數面板中並可重複使用於新物件上。但是如果你想要將你的文件最佳化，請使用檔案選單裡的<flowSpan font-family="Liberation Sans,Arial,sans-serif">清理文件</flowSpan> 指令。它會移除文件中沒有用到的漸層、圖樣或標記，使檔案體積更小。</flowDiv>
  </flowRoot>
- <text x="10" y="1562.5990475" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1562.5990475">隱藏特性和 XML 編輯器</tspan>
+ <text x="10" y="1562.6675665" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1562.6675665">隱藏特性和 XML 編輯器</tspan>
  </text>
- <rect id="y" x="10" y="1567.8" width="288" height="1e3px" display="none"/>
+ <rect id="y" x="10" y="1567.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#y"/>
   </flowRegion>
   <flowDiv xml:space="preserve">XML 編輯器 (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>) 讓你能夠在不使用內部的編輯器情形下改變文件絕大部分的外觀。而且 Inkscape 支援的 SVG 特性通常比圖形介面上可使用的還多。舉例來說，我們現在支援顯示遮罩和裁剪路徑，雖然沒有圖形介面可建立或修改。XML 編輯器是使用這些功能的唯一方法 (如果你了解 SVG 的話)。</flowDiv>
  </flowRoot>
- <text x="10" y="1630.8193385" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1630.8193385">改變尺標的測量單位</tspan>
+ <text x="10" y="1630.8880565" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1630.8880565">改變尺標的測量單位</tspan>
  </text>
- <rect id="w" x="10" y="1636" width="288" height="1e3px" display="none"/>
+ <rect id="w" x="10" y="1636.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#w"/>
   </flowRegion>
   <flowDiv xml:space="preserve">在預設的範本裡，尺標使用的測量單位為 mm。這也是左下角的顯示坐標上使用的單位和所有選單裡預先選擇的單位。(你可以把滑鼠游標停留在尺標上方會看見單位使用的相關工具提示。) 若要改變單位，開啟 <flowSpan font-family="Liberation Sans,Arial,sans-serif">文件屬性</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+D</flowSpan>) 並改變在 <flowSpan font-family="Liberation Sans,Arial,sans-serif">頁面</flowSpan> 分頁上的<flowSpan font-family="Liberation Sans,Arial,sans-serif">預設單位</flowSpan>。</flowDiv>
  </flowRoot>
- <text x="10" y="1698.3054535" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1698.3054535">圖章</tspan>
+ <text x="10" y="1698.3741715" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1698.3741715">圖章</tspan>
  </text>
- <rect id="v" x="10" y="1703.5" width="288" height="1e3px" display="none"/>
+ <rect id="v" x="10" y="1703.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#v"/>
   </flowRegion>
   <flowDiv xml:space="preserve">想要快速建立許多物件的複本，就使用<flowSpan font-style="italic">圖章</flowSpan>功能。先拖動物件(或者縮放、旋轉物件)，然後當按住滑鼠按鈕時按<flowSpan font-weight="bold">空白鍵</flowSpan>。這會留下目前物件形狀的「圖案」。你可根據需求重複這個動作好幾次。</flowDiv>
  </flowRoot>
- <text x="10" y="1755.0233545" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1755.0233545">筆工具的技巧</tspan>
+ <text x="10" y="1755.0920725" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1755.0920725">筆工具的技巧</tspan>
  </text>
- <rect id="u" x="10" y="1760.2" width="288" height="1e3px" display="none"/>
+ <rect id="u" x="10" y="1760.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>
   </flowRegion>
   <flowDiv xml:space="preserve">使用筆 (貝茲曲線) 工具，你有下列幾種方式來結束目前的線條：</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1784.5)" r="2"/>
- <rect id="t" x="20" y="1778.5" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1784.6)" r="2"/>
+ <rect id="t" x="20" y="1778.6" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#t"/>
   </flowRegion>
   <flowDiv xml:space="preserve">按 <flowSpan font-weight="bold">Enter</flowSpan> 鍵</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1801.7)" r="2"/>
- <rect id="bd" x="20" y="1795.7" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1801.8)" r="2"/>
+ <rect id="bd" x="20" y="1795.8" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
@@ -522,8 +522,8 @@
   </flowRegion>
   <flowDiv xml:space="preserve">點擊滑鼠右鍵</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1836.2)" r="2"/>
- <rect id="bb" x="20" y="1830.2" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1836.3)" r="2"/>
+ <rect id="bb" x="20" y="1830.3" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bb"/>
@@ -544,8 +544,8 @@
   </flowRegion>
   <flowDiv xml:space="preserve">要加入新的子路徑到現有的路徑，選取路徑並按著 <flowSpan font-weight="bold">Shift</flowSpan> 從任意一個點開始繪製。但是如果你只不過想<flowSpan font-style="italic">接續</flowSpan>現有的路徑，那麼不需要按著 Shift 鍵；僅需從選取路徑的結束錨點開始繪製。</flowDiv>
  </flowRoot>
- <text x="10" y="1938.6526845" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1938.6526845">輸入 Unicode 字元</tspan>
+ <text x="10" y="1938.7214025" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1938.7214025">輸入 Unicode 字元</tspan>
  </text>
  <rect id="ax" x="10" y="1943.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -554,89 +554,89 @@
   </flowRegion>
   <flowDiv xml:space="preserve">當使用文字工具時，按 <flowSpan font-weight="bold">Ctrl+U</flowSpan> 可在一般模式與 Unicode 模式之間作切換。在 Unicode 模式中，你輸入的字會以 4 個十六進位數字為一組變成一個單一的 Unicode 字元，因而允許你輸入各種符號 (只要你曉得它們的 Unicode 區分碼且字型能支援)。按 <flowSpan font-weight="bold">Enter</flowSpan> 可完成 Unicode 輸入。例如，<flowSpan font-weight="bold">Ctrl+U 2 0 1 4 Enter</flowSpan> 可插入一個 em-dash (—)。按 <flowSpan font-weight="bold">Esc</flowSpan> 可不插入任何字元便離開 Unicode 模式。</flowDiv>
  </flowRoot>
- <rect id="av" x="10" y="2004.7" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="2004.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
   </flowRegion>
   <flowDiv xml:space="preserve">你也可以使用 <flowSpan font-family="Liberation Sans,Arial,sans-serif">文字 &gt; 字形</flowSpan> 對話窗來搜尋和插入字形到你的檔案中。</flowDiv>
  </flowRoot>
- <text x="10" y="2034.9851395" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2034.9851395">使用格線繪製圖示</tspan>
+ <text x="10" y="2035.0538575" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2035.0538575">使用格線繪製圖示</tspan>
  </text>
- <rect id="au" x="10" y="2040.2" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2040.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
   </flowRegion>
   <flowDiv xml:space="preserve">假設你想製作一個 24x24 像素的圖示。建立一幅寬高為 24x24 px 的畫布 (使用<flowSpan font-family="Liberation Sans,Arial,sans-serif">文件偏好設定</flowSpan>) 並設定格線為 0.5 px (48x48 的格線數)。這時，如果你將填充物件對齊<flowSpan font-style="italic">偶數</flowSpan>格線，而邊框物件對齊到<flowSpan font-style="italic">奇數</flowSpan>格線加上 px 單位的邊框寬度就變成偶數，並於預設 90dpi (也就是 1 px 變成 1 點陣圖像素) 匯出，你會得到一個清晰的點陣圖像，而沒有不必要的平滑效果。</flowDiv>
  </flowRoot>
- <text x="10" y="2112.9834415" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2112.9834415">物件旋轉</tspan>
+ <text x="10" y="2113.0521595" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2113.0521595">物件旋轉</tspan>
  </text>
- <rect id="at" x="10" y="2118.2" width="288" height="1e3px" display="none"/>
+ <rect id="at" x="10" y="2118.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#at"/>
   </flowRegion>
   <flowDiv xml:space="preserve">當使用選取工具，在物件上<flowSpan font-weight="bold">點擊</flowSpan>會看到縮放箭頭，然後在物件上<flowSpan font-weight="bold">再點擊一次</flowSpan>會見到旋轉、位移的箭頭。如果點擊和拖曳四個角上的箭頭，物件會繞著中心點旋轉 (顯示為十字標誌)。如果你在做這個動作時按住 <flowSpan font-weight="bold">Shift</flowSpan> 鍵，那麼會繞著對角作旋轉。你也能將旋轉中心拖到任何地方。</flowDiv>
  </flowRoot>
- <rect id="as" x="10" y="2167.6" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="2167.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
   </flowRegion>
   <flowDiv xml:space="preserve">或者，你可以按鍵盤上的 <flowSpan font-weight="bold">[</flowSpan> 和 <flowSpan font-weight="bold">]</flowSpan> (15 度) 或 <flowSpan font-weight="bold">Ctrl+[</flowSpan> 和 <flowSpan font-weight="bold">Ctrl+]</flowSpan> (90 度)作旋轉。按著 <flowSpan font-weight="bold">Alt</flowSpan> 並按 <flowSpan font-weight="bold">[]</flowSpan> 鍵可作緩慢的像素大小旋轉。</flowDiv>
  </flowRoot>
- <text x="10" y="2208.6828845" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2208.6828845">下落式陰影</tspan>
+ <text x="10" y="2208.7516025" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2208.7516025">下落式陰影</tspan>
  </text>
- <rect id="ar" x="10" y="2213.9" width="288" height="1e3px" display="none"/>
+ <rect id="ar" x="10" y="2214" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
   </flowRegion>
   <flowDiv xml:space="preserve">使用 <flowSpan font-family="Liberation Sans,Arial,sans-serif">濾鏡 &gt; 陰影和光暈 &gt; 下落式陰影...</flowSpan> 功能能夠快速建立物件的下落式陰影。</flowDiv>
  </flowRoot>
- <rect id="aq" x="10" y="2231.3" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="2231.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
   </flowRegion>
   <flowDiv xml:space="preserve">你也可以藉由填充和邊框對話窗中的模糊很簡單地手動為物件加上模糊的下落式陰影。先選取物件，用 <flowSpan font-weight="bold">Ctrl+D</flowSpan> 再製，按 <flowSpan font-weight="bold">PgDown</flowSpan> 把再製物件放到原始物件的下方，將再製物件放置到比原始物件下面一點及右邊一點的位置。現在開啟「填充和邊框」對話窗並將模糊值改為 5.0。就是這樣！</flowDiv>
  </flowRoot>
- <text x="10" y="2293.5435985" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2293.5435985">將文字放置在路徑上</tspan>
+ <text x="10" y="2293.6123165" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2293.6123165">將文字放置在路徑上</tspan>
  </text>
- <rect id="ap" x="10" y="2298.7" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2298.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">要將文字沿著曲線放置，同時選取文字和路徑並從文字選單中選擇<flowSpan font-family="Liberation Sans,Arial,sans-serif">置於路徑</flowSpan>。這串文字會從路徑起點開始。一般來說最好的方式是建立一個你想要填入的明確路徑，而不是把文字填入到其他繪圖元件 — 這會讓你更好控制且不會影響到你的繪畫。</flowDiv>
  </flowRoot>
- <text x="10" y="2350.3235995" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2350.3235995">選取原始物件</tspan>
+ <text x="10" y="2350.3923175" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2350.3923175">選取原始物件</tspan>
  </text>
- <rect id="ao" x="10" y="2355.5" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="2355.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
   </flowRegion>
   <flowDiv xml:space="preserve">當你有置於路徑上的文字、連結偏移物件或仿製物件，這些物件的來源物件/路徑可能很難選取，因為可能正好在底下或設定為隱形和/或鎖定。神奇的 <flowSpan font-weight="bold">Shift+D</flowSpan> 會幫助你；先選取文字、連結偏移物件或仿製物件，然後按 <flowSpan font-weight="bold">Shift+D</flowSpan> 可將選取移動到對應的路徑、偏移來源或仿製原始物件。</flowDiv>
  </flowRoot>
- <text x="10" y="2417.8439775" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2417.8439775">恢復超出螢幕的視窗</tspan>
+ <text x="10" y="2417.9126955" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2417.9126955">恢復超出螢幕的視窗</tspan>
  </text>
- <rect id="an" x="10" y="2423" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="2423.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
   </flowRegion>
   <flowDiv xml:space="preserve">當在不同的解析度或一些顯示模式的系統之間移動文件時，你會發現 Inkscape 已經儲存了視窗位置，程式會把視窗放置到超出螢幕的地方。直接將視窗最大化 (使用任務欄會把視窗帶回檢視區)，儲存並重新載入。你可以藉由取消勾選整體選項變成儲存視窗空間 (<flowSpan font-family="Liberation Sans,Arial,sans-serif">Inkscape 偏好設定</flowSpan>，<flowSpan font-family="Liberation Sans,Arial,sans-serif">介面 &gt; 視窗</flowSpan>部分) 來避免這種問題。</flowDiv>
  </flowRoot>
- <text x="10" y="2486.1663215" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2486.1663215">透明、漸層和 PostScript 匯出</tspan>
+ <text x="10" y="2486.2350395" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2486.2350395">透明、漸層和 PostScript 匯出</tspan>
  </text>
  <rect id="am" x="10" y="2491.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -645,7 +645,7 @@
   </flowRegion>
   <flowDiv xml:space="preserve">PostScript 或 EPS 格式不支援<flowSpan font-style="italic">透明</flowSpan>，因此如果你想要匯出成 PS/EPS 就不要使用透明。至於平面透明會覆蓋平面色彩的問題，很簡單就能解決：選取透明物件的其中一個；切換到滴管工具 (<flowSpan font-weight="bold">F7</flowSpan>)；確認滴管工具列上<flowSpan font-family="Liberation Sans,Arial,sans-serif">不透明度：拾取</flowSpan>按鈕為停用狀態；然後在同物件上點擊。這會拾取可見顏色並指派回到物件。對全部其他透明物件重複上述的步驟。如果你的透明物件蓋住一些平面顏色範圍，你需要相對地將它打散成數個元件並對每個元件套用上述的步驟。注意滴管工具不只會改變物件的不透明度，也會變更物件的填色或邊框透明值，因此動作前先確認每個物件不透明值設定為 100%。</flowDiv>
  </flowRoot>
- <g transform="translate(0 2583.3)">
+ <g transform="translate(0 2583.4)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="r" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#d" inkscape:collect="always"/>
    <filter id="be" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

@@ -489,10 +489,10 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Na rýchle vytvorenie mnohých kópií objektu použite <flowSpan font-style="italic">pečiatkovanie</flowSpan>. Iba ťahajte objekt (alebo meňte jeho mierku či otáčajte), a počas držania stlačeného tlačidla myši stlačte <flowSpan font-weight="bold">medzerník</flowSpan>. Tým zanecháte „pečiatku“ objektu. Môžete to opakovať ľubovoľný počet krát.</flowDiv>
  </flowRoot>
- <text x="10" y="1951.0376138" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1951.0376138">Triky pomocou pera</tspan>
+ <text x="10" y="1951.0718778" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1951.0718778">Triky pomocou pera</tspan>
  </text>
- <rect id="v" x="10" y="1956.2" width="288" height="1e3px" display="none"/>
+ <rect id="v" x="10" y="1956.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#v"/>
@@ -507,24 +507,24 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Stlačte <flowSpan font-weight="bold">Enter</flowSpan></flowDiv>
  </flowRoot>
- <circle transform="translate(15 1995.2)" r="2"/>
- <rect id="be" x="20" y="1989.2" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1995.3)" r="2"/>
+ <rect id="be" x="20" y="1989.3" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#be"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Dvakrát kliknite ľavým tlačidlom myši</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2012.5)" r="2"/>
- <rect id="bd" x="20" y="2006.5" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2012.6)" r="2"/>
+ <rect id="bd" x="20" y="2006.6" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Kliknite pravým tlačidlom myši</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2029.8)" r="2"/>
- <rect id="bc" x="20" y="2023.8" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2029.9)" r="2"/>
+ <rect id="bc" x="20" y="2023.9" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bc"/>
@@ -545,8 +545,8 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Ak chcete pridať nový úsek do existujúcej cesty, vyberte cestu a začnite kresliť s klávesom <flowSpan font-weight="bold">Shift</flowSpan> z niektorého bodu. Ak však chcete <flowSpan font-style="italic">pokračovať</flowSpan> v predlžovaní cesty, Shift nie je potrebný; iba začnite kresliť z jednej z koncových kotiev cesty.</flowDiv>
  </flowRoot>
- <text x="10" y="2141.9601269" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2141.9601269">Zadávanie hodnôt v Unicode</tspan>
+ <text x="10" y="2141.9943909" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2141.9943909">Zadávanie hodnôt v Unicode</tspan>
  </text>
  <rect id="ay" x="10" y="2147.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -555,15 +555,15 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Stlačením <flowSpan font-weight="bold">Ctrl+U</flowSpan> v nástroji text môžete prepnúť medzi Unicode a normálnym režimom. V režime Unicode sa každá skupina 4 napísaných šestnástkových číslic stane jedným znakom Unicode, teda môžete zadávať ľubovoľné symboly (pokiaľ viete ich Unicode kódy a vybrané písmo ich podporuje). Zadávanie znakov Unicode ukončíte stlačením <flowSpan font-weight="bold">Enter</flowSpan>. Napríklad <flowSpan font-weight="bold">Ctrl+U 2 0 1 4 Enter</flowSpan> vkladá dlhú pomlčku (—). Režim Unicode môžete ukončiť klávesom <flowSpan font-weight="bold">Esc</flowSpan> bez toho, aby sa čokoľvek vložilo.</flowDiv>
  </flowRoot>
- <rect id="ax" x="10" y="2217.8" width="288" height="1e3px" display="none"/>
+ <rect id="ax" x="10" y="2217.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ax"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Môžete použiť aj dialógové okno <flowSpan font-family="Liberation Sans,Arial,sans-serif">Text &gt; Grafémy</flowSpan> na vyhľadanie a vloženie znakov do dokumentu.</flowDiv>
  </flowRoot>
- <text x="10" y="2257.2514669" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2257.2514669">Použitie mriežky na kreslenie ikon</tspan>
+ <text x="10" y="2257.3199949" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2257.3199949">Použitie mriežky na kreslenie ikon</tspan>
  </text>
  <rect id="av" x="10" y="2262.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -572,42 +572,42 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Povedzme, že chcete vytvoriť ikonu s rozmerom 24x24 pixelov. Vytvorte 24x24 px plátno (použite <flowSpan font-family="Liberation Sans,Arial,sans-serif">Vlastnosti dokumentu</flowSpan>) a nastavte mriežku na 0,5 px (čiary mriežky 48x48). Teraz ak zarovnáte vyplnené objekty na <flowSpan font-style="italic">párne</flowSpan> čiary mriežky a obtiahnuté objekty na <flowSpan font-style="italic">nepárne</flowSpan> čiary mriežky so šírkou ťahu párnym číslom a exportujete dokument pri predvolených 96 DPI (teda 1 px bude zodpovedať 1 pixlu bitmapy), dostanete ostrý bitmapový obrázok bez nepotrebného antialiasingu.</flowDiv>
  </flowRoot>
- <text x="10" y="2345.9395159" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2345.9395159">Otáčanie objektu</tspan>
+ <text x="10" y="2346.0080439" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2346.0080439">Otáčanie objektu</tspan>
  </text>
- <rect id="au" x="10" y="2351.1" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2351.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Keď používate nástroj Výber, <flowSpan font-weight="bold">kliknutím</flowSpan> na objekt zobrazíte šípky na zmenu veľkosti, <flowSpan font-weight="bold">ďalším kliknutím</flowSpan> zobrazíte šípky na otáčacie a skosenie. Ťahaním šípok na rohoch otáčate objekt okolo stredu. Ak počas otáčania podržíte kláves <flowSpan font-weight="bold">Shift</flowSpan>, bude sa otáčať okolo protiľahlého rohu. Môžete tiež presunúť stred otáčania na ľubovoľné miesto.</flowDiv>
  </flowRoot>
- <rect id="at" x="10" y="2400.4" width="288" height="1e3px" display="none"/>
+ <rect id="at" x="10" y="2400.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#at"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Alebo môžete otáčať pomocou klávesnice stlačením <flowSpan font-weight="bold">[</flowSpan> a <flowSpan font-weight="bold">]</flowSpan> (o 15 stupňov) alebo <flowSpan font-weight="bold">Ctrl+[</flowSpan> a <flowSpan font-weight="bold">Ctrl+]</flowSpan> (o 90 stupňov).  Tie isté klávesy <flowSpan font-weight="bold">[]</flowSpan> s klávesom <flowSpan font-weight="bold">Alt</flowSpan> vykonávajú pomalé otáčanie po pixloch.</flowDiv>
  </flowRoot>
- <text x="10" y="2451.9358369" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2451.9358369">Tiene</tspan>
+ <text x="10" y="2452.0043649" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2452.0043649">Tiene</tspan>
  </text>
- <rect id="as" x="10" y="2457.1" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="2457.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Ak chcete rýchlo vytvoriť tiene objektov, použite funkciu <flowSpan font-family="Liberation Sans,Arial,sans-serif">Filtre &gt; Tiene a žiary &gt; Tieň...</flowSpan>.</flowDiv>
  </flowRoot>
- <rect id="ar" x="10" y="2483.8" width="288" height="1e3px" display="none"/>
+ <rect id="ar" x="10" y="2483.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Môžete jednoducho ručne vytvárať rozostrené tiene objektov pomocou dialógu Výplňa a ťah. Vyberte objekt, duplikujte ho pomocou <flowSpan font-weight="bold">Ctrl+D</flowSpan>, stlačením <flowSpan font-weight="bold">PgDown</flowSpan> ho umiestnite pod pôvodný objekt, posuňte ho trochu doľava a dolu oproti pôvodnému objektu. Teraz otvorte dialóg Výplň a ťah a zmeňte hodnotu Rozostrenia na povedzme 5,0. To je všetko!</flowDiv>
  </flowRoot>
- <text x="10" y="2545.9515779" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2545.9515779">Umiestnenie textu na cestu</tspan>
+ <text x="10" y="2546.0201059" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2546.0201059">Umiestnenie textu na cestu</tspan>
  </text>
  <rect id="aq" x="10" y="2551.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -616,18 +616,18 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Text pozdĺž krivky umiestnite tak, že vyberiete text aj krivku a vyberiete možnosť <flowSpan font-family="Liberation Sans,Arial,sans-serif">Umiestniť na cestu</flowSpan> z ponuky Text. Text začne na začiatku cesty. Často sa oplatí vytvoriť samostatnú cestu na ktorú sa umiestni text namiesto umiestnenia ho na iný už nakreslený prvok — dá vám to väčšiu kontrolu bez nutnosti zložitých zmien v kresbe.</flowDiv>
  </flowRoot>
- <text x="10" y="2614.7266479" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2614.7266479">Výber originálu</tspan>
+ <text x="10" y="2614.7951759" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2614.7951759">Výber originálu</tspan>
  </text>
- <rect id="ap" x="10" y="2619.9" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2620" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Ak máte text na ceste, prepojený posun alebo klon, ich zdrojový objekt alebo cestu môže byť ťažké vybrať, pretože môže byť priamo pod ním, neviditeľný alebo uzamknutý. Zázračný kláves <flowSpan font-weight="bold">Shift+D</flowSpan> vám pomôže; vyberte text, prepojený posun alebo klon a stlačením <flowSpan font-weight="bold">Shift+D</flowSpan> vyberiete príslušnú cestu, zdroj posunu alebo originál klonu.</flowDiv>
  </flowRoot>
- <text x="10" y="2681.9738819" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2681.9738819">Vrátenie okna späť na viditeľnú obrazovku</tspan>
+ <text x="10" y="2682.0424099" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2682.0424099">Vrátenie okna späť na viditeľnú obrazovku</tspan>
  </text>
  <rect id="ao" x="10" y="2687.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -636,8 +636,8 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Pri prenose dokumentov medzi systémami s odlišnými rozlíšeniami alebo iným počtom obrazoviek sa môže stať že Inkscape v súbore uloží polohu okna programu, ktorá sa nachádza mimo dosahu vašej obrazovky. Jednoducho maximalizujte okno (vráti sa späť na obrazovku, použite na to panel úloh), uložte dokument a znovu ho načítajte. Môžete sa tomu celkom vyhnúť ak vypnete voľbu ukladania rozmerov okna (<flowSpan font-family="Liberation Sans,Arial,sans-serif">Nastavenia Inkscape</flowSpan>, časť <flowSpan font-family="Liberation Sans,Arial,sans-serif">Rozhranie &gt; Okná</flowSpan>).</flowDiv>
  </flowRoot>
- <text x="10" y="2770.6535509" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2770.6535509">Priesvitnosť, farebné prechody a export do PostScriptu</tspan>
+ <text x="10" y="2770.7220789" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2770.7220789">Priesvitnosť, farebné prechody a export do PostScriptu</tspan>
  </text>
  <rect id="an" x="10" y="2775.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -646,7 +646,7 @@ Stačí dvakrát kliknúť na objekt nástrojom výberu, aby ste sa dostali do r
   </flowRegion>
   <flowDiv xml:space="preserve">Formáty PostScript a EPS nepodporujú <flowSpan font-style="italic">priesvitnosť</flowSpan>, preto by ste ju nikdy nemali používať, ak budete exportovať do PS/EPS. V prípade rovnomernej priesvitnosti, ktorá prekrýva jednoduchú farbu je to jednoduché napraviť: Vyberte jeden z priesvitných objektov, vyberte nástroj Pipeta (<flowSpan font-weight="bold">F7</flowSpan> alebo <flowSpan font-weight="bold">d</flowSpan>); uistite sa, že tlačidlo <flowSpan font-family="Liberation Sans,Arial,sans-serif">Krytie: Vybrať</flowSpan> v ovládacom paneli nástroja Pipeta je deaktivované a kliknite na rovnaký objekt. Tým sa vyberie viditeľná farba a priradí sa späť objektu, ale tentoraz bez priesvitnosti. Opakujte to na všetkých priesvitných objektoch. Ak váš priesvitný objekt prekrýva viacero oblastí s rôznymi jednoduchými farbami, budete ho musieť podľa toho rozdeliť na časti a použiť uvedený postup na každú časť zvlášť. Všimnite i, že nástroj Pipeta nemení hodnotu krytia objektu, iba hodnotu alfa jeho farby výplne alebo ťahu, preto sa uistite, že hodnota krytia každého objektu je nastavená na 100 % predtým, než začnete.</flowDiv>
  </flowRoot>
- <g transform="translate(0 2899.7)">
+ <g transform="translate(0 2899.8)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="s" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#d" inkscape:collect="always"/>
    <filter id="bf" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

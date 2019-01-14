@@ -704,38 +704,38 @@
   </flowRegion>
   <flowDiv xml:space="preserve">L'image ci-dessous est une capture d'écran de la boîte de dialogue <flowSpan font-family="Liberation Sans,Arial,sans-serif">Vectoriser du pixel art</flowSpan> que vous pouvez ouvrir avec le menu <flowSpan font-family="Liberation Sans,Arial,sans-serif">Chemin &gt; Vectoriser du pixel art…</flowSpan> ou en cliquant avec le bouton droit de la souris sur une image puis en sélectionnant l'entrée <flowSpan font-family="Liberation Sans,Arial,sans-serif">Vectoriser du pixel art</flowSpan>.</flowDiv>
  </flowRoot>
- <g transform="translate(10 617.85) matrix(.38212 0 0 .38212 -160.25 -203)" inkscape:label="Camada 1">
+ <g transform="translate(10 617.96) matrix(.38212 0 0 .38212 -160.25 -203)" inkscape:label="Camada 1">
   <image x="685.14" y="540.79" width="329" height="272" sodipodi:absref="tracing-pixelart/pixelart-dialog.fr.png" xlink:href="pixelart-dialog.fr.png"/>
  </g>
- <rect id="ab" x="10" y="733.79" width="288" height="1e3px" display="none"/>
+ <rect id="ab" x="10" y="733.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ab"/>
   </flowRegion>
   <flowDiv xml:space="preserve">La boîte de dialogue propose deux sections : Heuristique et Résultat. Heuristique cible les usages avancés, mais comme les paramètres par défaut sont bien choisis vous ne devriez pas avoir besoin d'y toucher. Nous y reviendrons plus tard après avoir abordé la section Résultat.</flowDiv>
  </flowRoot>
- <rect id="aa" x="10" y="781.39" width="288" height="1e3px" display="none"/>
+ <rect id="aa" x="10" y="781.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aa"/>
   </flowRegion>
   <flowDiv xml:space="preserve">L'algorithme Kopf-Lischinski fonctionne (en nous plaçant à un haut niveau) comme un compilateur convertissant les données parmi plusieurs types de représentations. À chaque étape, l'algorithme a le choix d'explorer les opérations que cette représentation propose. Certaines de ces représentations intermédiaires ont un aspect visuel correct (comme une cellule remodelée dans un graphe de Voronoï), d'autres pas (comme un graphe de similitude). Pendant le développement de libdepixelize, les utilisateurs n'ont eu de cesse de demander à ce qu'il soit possible d'exporter ces étapes intermédiaires à partir de la bibliothèque, et l'auteur original a exaucé leurs vœux.</flowDiv>
  </flowRoot>
- <rect id="z" x="10" y="873.23" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="873.34" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Le paramétrage par défaut devrait donner le résultat le plus lisse possible, ce qui est probablement l'effet désiré. Vous avez déjà vu ce type de résultat dans le premier exemple de ce didacticiel. Pour l'expérimenter vous-même, ouvrez la boîte de dialogue <flowSpan font-family="Liberation Sans,Arial,sans-serif">Vectoriser du pixel art</flowSpan> et cliquez sur <flowSpan font-family="Liberation Sans,Arial,sans-serif">Valider</flowSpan> après avoir sélectionné une image.</flowDiv>
  </flowRoot>
- <rect id="y" x="10" y="922.72" width="288" height="1e3px" display="none"/>
+ <rect id="y" x="10" y="922.82" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#y"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Le résultat de type Voronoï ci-dessous est une image de pixels remodelée, dans laquelle les cellules (précédemment des pixels) ont été remodelées pour connecter les pixels faisant partie d'une même fonction. Aucune courbe n'est créée et l'image est toujours composée de lignes droites. La différence peut être observée en agrandissant l'image. Précédemment, les pixels ne pouvaient pas partager de bord avec un voisin en diagonale, même si ce voisin faisait partie de la même fonction. Mais maintenant (grâce à un graphe de similitude de couleur et l'heuristique que vous pouvez ajuster pour obtenir un meilleur résultat), il est possible de faire en sorte que deux cellules diagonales partagent un bord (auparavant seul un sommet pouvait être partagé entre deux voisins de ce type).</flowDiv>
  </flowRoot>
- <g transform="translate(-161.02 742.42)" inkscape:label="Layer 1">
+ <g transform="translate(-161.02 742.52)" inkscape:label="Layer 1">
   <image x="224.09" y="292.64" width="224" height="64" xlink:href="data:image/png;base64,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 xz7jf4MwidrFWy5FAAAAAElFTkSuQmCC "/>
   <g transform="translate(224.09 356.64)">
    <path d="m0 0h1v1h-1" fill-opacity="0" inkscape:connector-curvature="0"/>
@@ -15076,42 +15076,42 @@
    <path d="m223 63h1v1h-1" fill-opacity="0" inkscape:connector-curvature="0"/>
   </g>
  </g>
- <rect id="x" x="10" y="1173.1" width="288" height="1e3px" display="none"/>
+ <rect id="x" x="10" y="1173.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#x"/>
   </flowRegion>
   <flowDiv xml:space="preserve">La conversion B-spline standard apporte un résultat plus doux car l'image obtenue précédemment avec Voronoï est convertie en courbes de Bézier quadratiques. La conversion n'est cependant pas en 1:1 car elle nécessite un travail heuristique plus conséquent pour décider des courbes qui seront fusionnées lorsque l'algorithme atteint une jonction en T dans les couleurs visibles. Sachez qu'à cette étape, vous ne pouvez pas adapter l'heuristique.</flowDiv>
  </flowRoot>
- <rect id="w" x="10" y="1243.6" width="288" height="1e3px" display="none"/>
+ <rect id="w" x="10" y="1243.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#w"/>
   </flowRegion>
   <flowDiv xml:space="preserve">L'étape finale de libdepixelize (actuellement non exportable dans l'interface d'Inkscape du fait de son statut expérimental et incomplet) est l'optimisation des courbes, pour supprimer l'effet d'escalier des courbes B-spline. Cette étape effectue également une détection de bord pour empêcher certaines fonctions d'être lissées ainsi qu'une triangulation pour ajuster la position des nœuds après l'optimisation. Il devrait être possible de désactiver chacune de ces fonctionnalités une fois qu'elles auront quitté leur statut expérimental dans la bibliothèque (bientôt, avec un peu de chance).</flowDiv>
  </flowRoot>
- <rect id="v" x="10" y="1324.8" width="288" height="1e3px" display="none"/>
+ <rect id="v" x="10" y="1324.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#v"/>
   </flowRegion>
   <flowDiv xml:space="preserve">La section Heuristique de l'interface vous permet d'ajuster l'heuristique utilisée par libdepixelize pour décider, lorsqu'elle rencontre un bloc de 2×2 pixels ayant deux diagonales de couleurs similaires, de la connexion à conserver. L'algorithme essaie d'appliquer l'heuristique aux diagonales en conflit puis conserve la connexion du vainqueur. En cas d'égalité, les deux connexions sont supprimées.</flowDiv>
  </flowRoot>
- <rect id="u" x="10" y="1384.7" width="288" height="1e3px" display="none"/>
+ <rect id="u" x="10" y="1384.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Si vous souhaitez analyser l'effet de chaque heuristique et jouer avec le paramétrage, le meilleur résultat est obtenu avec un diagramme de Voronoï, qui vous permettra de visualiser facilement le rendu engendré par les valeurs choisies. Une fois satisfait(e) de vos paramètres, vous pouvez modifier le type de résultat à votre convenance.</flowDiv>
  </flowRoot>
- <rect id="t" x="10" y="1434" width="288" height="1e3px" display="none"/>
+ <rect id="t" x="10" y="1434.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#t"/>
   </flowRegion>
   <flowDiv xml:space="preserve">L'exemple ci-dessous montre une image et sa sortie B-spline avec seulement une des heuristiques activée à chaque essai. Les différences apportées par chaque heuristique sont mises en valeur par un cercle violet.</flowDiv>
  </flowRoot>
- <g transform="translate(-138.35 1197.9)" inkscape:label="Layer 1">
+ <g transform="translate(-138.35 1198)" inkscape:label="Layer 1">
   <image x="250.21" y="287.93" width="61" height="63" xlink:href="data:image/png;base64,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 "/>
   <image x="250.21" y="350.93" width="61" height="63" xlink:href="data:image/png;base64,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 "/>
   <image x="250.21" y="413.93" width="61" height="63" xlink:href="data:image/png;base64,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 "/>
@@ -15492,72 +15492,72 @@
   <path d="m369.55 329.16c0 1.7092-1.3856 3.0948-3.0948 3.0948-1.7092 0-3.0948-1.3856-3.0948-3.0948 0-1.7092 1.3856-3.0948 3.0948-3.0948 1.7092 0 3.0948 1.3856 3.0948 3.0948z" fill="none" stroke="#f0f" stroke-width="1.1" sodipodi:cx="366.45908" sodipodi:cy="329.15826" sodipodi:rx="3.0947776" sodipodi:ry="3.0947776" sodipodi:type="arc"/>
   <path d="m362.98 341.92c0 1.3887-1.1258 2.5145-2.5145 2.5145s-2.5145-1.1258-2.5145-2.5145c0-1.3887 1.1258-2.5145 2.5145-2.5145s2.5145 1.1258 2.5145 2.5145z" fill="none" stroke="#f0f" stroke-width="1.1" sodipodi:cx="360.46292" sodipodi:cy="341.92422" sodipodi:rx="2.5145068" sodipodi:ry="2.5145068" sodipodi:type="arc"/>
  </g>
- <rect id="r" x="10" y="1681.5" width="288" height="1e3px" display="none"/>
+ <rect id="r" x="10" y="1681.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#r"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Au premier essai (image du haut), nous avons seulement activé l'heuristique Courbes. Cette heuristique tente de conserver les longues courbes connectées. Notez qu'un résultat identique est obtenu avec la dernière image, qui utilise pour sa part l'heuristique Pixels clairsemés. Une différence vient du fait que sa « force » est plus modérée et qu'elle ne donne de une valeur élevée à son vote que si la conservation des connexions est vraiment importante. La définition de « modérée » s'appuie ici sur l'intuition humaine, à partir de la base de pixels analysée. Une autre différence est que cette heuristique ne peut pas prendre de décision lorsque les connexions assemblent de grands blocs plutôt que des longues courbes (imaginez un jeu d'échecs).</flowDiv>
  </flowRoot>
- <rect id="q" x="10" y="1783.9" width="288" height="1e3px" display="none"/>
+ <rect id="q" x="10" y="1784" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#q"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Le deuxième essai (image du milieu) active seulement l'heuristique Îles. Sa seule action consiste à tenter de conserver la connexion entre plusieurs pixels autrement isolés (îles) avec un vote de poids constant. Ce type de situation n'est pas aussi courant que ceux traités par les autres heuristiques, mais cette heuristique amène tout de même une amélioration.</flowDiv>
  </flowRoot>
- <rect id="p" x="10" y="1843.5" width="288" height="1e3px" display="none"/>
+ <rect id="p" x="10" y="1843.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#p"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Pour le troisième essai (image du bas), nous avons activé l'heuristique Pixels clairsemés. Cette heuristique tente de converser les courbes avec une couleur de premier plan connectées. Pour déterminer cette couleur, l'heuristique analyse une fenêtre contenant les pixels voisins de la courbe conflictuelle. Vous pouvez ainsi non seulement ajuster sa force, mais également la taille de la fenêtre de pixels à analyser. Gardez à l'esprit que l'augmentation de cette fenêtre augmente aussi la force du vote, et qu'il sera peut-être nécessaire de rééquilibrer en modifiant le multiplicateur. L'auteur original de libdepixelize estime cette heuristique trop gourmande et conseille une valeur de 0,25 pour le multiplicateur.</flowDiv>
  </flowRoot>
- <rect id="o" x="10" y="1945.8" width="288" height="1e3px" display="none"/>
+ <rect id="o" x="10" y="1945.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#o"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Même si les heuristiques Courbes et Pixels clairsemés donnent des résultats similaires, il peut être judicieux de les conserver toutes les deux actives pour s'assurer que des pixels nécessaires aux courbes de contour ne seront pas supprimés. Par ailleurs, l'heuristique Pixels clairsemés est dans certains cas la seule solution possible.</flowDiv>
  </flowRoot>
- <rect id="n" x="10" y="1995" width="288" height="1e3px" display="none"/>
+ <rect id="n" x="10" y="1995.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#n"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Astuce : vous pouvez désactiver l'heuristique en positionnant ses valeurs de multiplicateur et de poids à zéro. Vous pouvez faire en sorte que l'heuristique fonctionne à l'encontre de ses principes en utilisant des valeurs négatives pour ces mêmes paramètres. Mais pourquoi donc dégrader la qualité de l'image avec un tel choix ? Et bien, parce que c'est possible, ou parce que vous pourriez vouloir un résultat « artistique ». Quoi qu'il en soit, vous le pouvez, c'est tout.</flowDiv>
  </flowRoot>
- <rect id="m" x="10" y="2065.5" width="288" height="1e3px" display="none"/>
+ <rect id="m" x="10" y="2065.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#m"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Et voilà ! Nous avons fait le tour de toutes les options disponibles avec la version initiale de libdepixelize. Mais si les recherches de l'auteur de cette bibliothèque et de son mentor réussissent, vous pourriez bien recevoir dans le futur de nouvelles options pour élargir le champ des images pour lesquelles le résultat est satisfaisant. Souhaitons-leur bonne chance !</flowDiv>
  </flowRoot>
- <rect id="l" x="10" y="2123.8" width="288" height="1e3px" display="none"/>
+ <rect id="l" x="10" y="2123.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#l"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Les images utilisées dans ce didacticiel sont issues du concours Liberated Pixel Cup (pour éviter tout problème de droit). Les liens sont les suivants :</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2157.7)" r="2"/>
- <rect id="k" x="20" y="2151.7" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2157.8)" r="2"/>
+ <rect id="k" x="20" y="2151.8" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#k"/>
   </flowRegion>
   <flowDiv xml:space="preserve">http://opengameart.org/content/memento</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2175)" r="2"/>
- <rect id="i" x="20" y="2169" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2175.1)" r="2"/>
+ <rect id="i" x="20" y="2169.1" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#i"/>
   </flowRegion>
   <flowDiv xml:space="preserve">http://opengameart.org/content/rpg-enemies-bathroom-tiles</flowDiv>
  </flowRoot>
- <g transform="translate(0 2186.3)">
+ <g transform="translate(0 2186.4)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="e" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#a" inkscape:collect="always"/>
    <filter id="ah" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

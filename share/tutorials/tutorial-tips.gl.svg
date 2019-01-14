@@ -508,8 +508,8 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1615.071124" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1615.071124">Cleaning up the document</tspan>
+ <text x="10" y="1615.105388" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1615.105388">Cleaning up the document</tspan>
  </text>
  <rect id="aa" x="10" y="1620.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -522,8 +522,8 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1693.095569" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1693.095569">Hidden features and the XML editor</tspan>
+ <text x="10" y="1693.129833" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1693.129833">Hidden features and the XML editor</tspan>
  </text>
  <rect id="z" x="10" y="1698.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -536,8 +536,8 @@ more SVG features than are accessible from the GUI. The XML editor is one way to
 access to these features (if you know SVG).
 </flowDiv>
  </flowRoot>
- <text x="10" y="1760.40921" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1760.40921">Changing the rulers' unit of measure</tspan>
+ <text x="10" y="1760.443474" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1760.443474">Changing the rulers' unit of measure</tspan>
  </text>
  <rect id="x" x="10" y="1765.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -552,8 +552,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1838.506581" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1838.506581">Stamping</tspan>
+ <text x="10" y="1838.540845" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1838.540845">Stamping</tspan>
  </text>
  <rect id="w" x="10" y="1843.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -566,8 +566,8 @@ drag an object (or scale or rotate it), and while holding the mouse button down,
 repeat it as many times as you wish.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1895.180222" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1895.180222">Pen tool tricks</tspan>
+ <text x="10" y="1895.214486" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1895.214486">Pen tool tricks</tspan>
  </text>
  <rect id="v" x="10" y="1900.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -577,8 +577,8 @@ repeat it as many times as you wish.
   <flowDiv xml:space="preserve">In the Pen (Bezier) tool, you have the following options to finish the current line:
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 1923.7)" r="2"/>
- <rect id="u" x="20" y="1917.7" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1923.8)" r="2"/>
+ <rect id="u" x="20" y="1917.8" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>
@@ -603,8 +603,8 @@ repeat it as many times as you wish.
   <flowDiv xml:space="preserve">Click with the right mouse button
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 1972)" r="2"/>
- <rect id="bc" x="20" y="1966" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1972.1)" r="2"/>
+ <rect id="bc" x="20" y="1966.1" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bc"/>
@@ -633,8 +633,8 @@ either <flowSpan font-weight="bold">Esc</flowSpan> (cancel the whole path) or <f
 drawing from one of the end anchors of the selected path.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2091.687154" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2091.687154">Entering Unicode values</tspan>
+ <text x="10" y="2091.721418" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2091.721418">Entering Unicode values</tspan>
  </text>
  <rect id="ay" x="10" y="2096.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -650,7 +650,7 @@ an em-dash (—). To quit the Unicode mode without inserting anything press
 <flowSpan font-weight="bold">Esc</flowSpan>.
 </flowDiv>
  </flowRoot>
- <rect id="aw" x="10" y="2167.4" width="288" height="1e3px" display="none"/>
+ <rect id="aw" x="10" y="2167.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aw"/>
@@ -659,10 +659,10 @@ an em-dash (—). To quit the Unicode mode without inserting anything press
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2206.783182" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2206.783182">Using the grid for drawing icons</tspan>
+ <text x="10" y="2206.851709" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2206.851709">Using the grid for drawing icons</tspan>
  </text>
- <rect id="av" x="10" y="2212" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="2212.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
@@ -675,10 +675,10 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2284.727632" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2284.727632">Rotación de obxectos</tspan>
+ <text x="10" y="2284.796159" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2284.796159">Rotación de obxectos</tspan>
  </text>
- <rect id="au" x="10" y="2289.9" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2290" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
@@ -691,7 +691,7 @@ doing this, the rotation will occur around the opposite corner. You can also dra
 rotation center to any place.
 </flowDiv>
  </flowRoot>
- <rect id="at" x="10" y="2349.8" width="288" height="1e3px" display="none"/>
+ <rect id="at" x="10" y="2349.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#at"/>
@@ -702,8 +702,8 @@ degrees). The same <flowSpan font-weight="bold">[]</flowSpan> keys with <flowSpa
 pixel-size rotation.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2390.667143" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2390.667143">Drop shadows</tspan>
+ <text x="10" y="2390.73567" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2390.73567">Drop shadows</tspan>
  </text>
  <rect id="as" x="10" y="2395.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -726,10 +726,10 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2486.182884" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2486.182884">Situar un texto nun camiño</tspan>
+ <text x="10" y="2486.251411" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2486.251411">Situar un texto nun camiño</tspan>
  </text>
- <rect id="aq" x="10" y="2491.4" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="2491.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
@@ -741,10 +741,10 @@ be fitted to, rather than fitting it to some other drawing element — this will
 more control without screwing over your drawing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2564.125297" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2564.125297">Seleccionar o orixinal</tspan>
+ <text x="10" y="2564.193824" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2564.193824">Seleccionar o orixinal</tspan>
  </text>
- <rect id="ap" x="10" y="2569.3" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2569.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
@@ -756,10 +756,10 @@ offset, or clone, and press <flowSpan font-weight="bold">Shift+D</flowSpan> to m
 corresponding path, offset source, or clone original.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2631.438938" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2631.438938">Window off-screen recovery</tspan>
+ <text x="10" y="2631.507465" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2631.507465">Window off-screen recovery</tspan>
  </text>
- <rect id="ao" x="10" y="2636.6" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="2636.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
@@ -772,8 +772,8 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2720.079944" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2720.079944">Transparency, gradients, and PostScript export</tspan>
+ <text x="10" y="2720.148471" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2720.148471">Transparency, gradients, and PostScript export</tspan>
  </text>
  <rect id="an" x="10" y="2725.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">

@@ -67,35 +67,33 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Before invoking the extension, the objects that you are going to transform need to be <flowSpan font-style="italic">paths</flowSpan>. This is done by selecting the object and using <flowSpan font-family="Liberation Sans,Arial,sans-serif">Path &gt; Object to Path</flowSpan> or <flowSpan font-weight="bold">Shift+Ctrl+C</flowSpan>. If your objects are not paths, the extension will do nothing.</flowDiv>
  </flowRoot>
- <text x="10" y="193.4002624" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="193.4002624">Interpolation between two identical paths</tspan>
+ <text x="10" y="193.4345264" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="193.4345264">Interpolation between two identical paths</tspan>
  </text>
- <rect id="ab" x="10" y="198.6" width="288" height="1e3px" display="none"/>
+ <rect id="ab" x="10" y="198.63" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ab"/>
   </flowRegion>
   <flowDiv xml:space="preserve">The simplest use of the Interpolate extension is to interpolate between two paths that are identical. When the extension is called, the result is that the space between the two paths is filled with duplicates of the original paths. The number of steps defines how many of these duplicates are placed.</flowDiv>
  </flowRoot>
- <rect id="aa" x="10" y="247.86" width="288" height="1e3px" display="none"/>
+ <rect id="aa" x="10" y="247.89" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aa"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Ví dụ, lấy 2 đường nét sau:</flowDiv>
  </flowRoot>
- <g transform="translate(10 274.09)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482">
-  <path d="m20.29 2.0163c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
-  <path d="m245.44 2.0163c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
- </g>
- <rect id="z" x="10" y="326.66" width="288" height="1e3px" display="none"/>
+ <path transform="translate(10 274.11)" d="m20.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+ <path transform="translate(10 274.11)" d="m245.44 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+ <rect id="z" x="10" y="326.69" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Now, select the two paths, and run the Interpolate extension with the settings shown in the following image.</flowDiv>
  </flowRoot>
- <g transform="translate(10 362.6)">
+ <g transform="translate(10 362.63)">
   <path d="m20.29 2.0037c10.119 0 18.266 8.1464 18.266 18.266 0 10.119-8.1464 18.266-18.266 18.266s-18.266-8.1464-18.266-18.266c0-10.119 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate2.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
   <path d="m245.44 2.0037c10.119 0 18.266 8.1464 18.266 18.266 0 10.119-8.1464 18.266-18.266 18.266s-18.266-8.1464-18.266-18.266c0-10.119 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate2.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
   <g transform="matrix(.52187 0 0 .52187 -12.141 -26.068)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="7.757" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate2.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997">
@@ -108,42 +106,40 @@
   </g>
   <flowRoot transform="translate(-291.31 26.336)" fill="#000000" font-family="sans-serif" font-size="6px" stroke-width="1px" xml:space="preserve"><flowRegion><rect x="290.71" y="15.934" width="127.14" height="133.57"/></flowRegion><flowPara>Luỹ thừa: 0.0</flowPara><flowPara>Bước nội suy: 6</flowPara><flowPara>Phương pháp nội suy: 2</flowPara><flowPara>Nhân đôi đường nét cuối: không chọn</flowPara><flowPara>Nội suy kiểu dáng: không chọn</flowPara></flowRoot>
  </g>
- <rect id="y" x="10" y="454.2" width="288" height="1e3px" display="none"/>
+ <rect id="y" x="10" y="454.23" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#y"/>
   </flowRegion>
   <flowDiv xml:space="preserve">As can be seen from the above result, the space between the two circle-shaped paths has been filled with 6 (the number of interpolation steps) other circle-shaped paths. Also note that the extension groups these shapes together.</flowDiv>
  </flowRoot>
- <text x="10" y="505.6373686" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="505.6373686">Nội suy giữa 2 đường nét khác biệt</tspan>
+ <text x="10" y="505.6716326" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="505.6716326">Nội suy giữa 2 đường nét khác biệt</tspan>
  </text>
- <rect id="x" x="10" y="510.84" width="288" height="1e3px" display="none"/>
+ <rect id="x" x="10" y="510.87" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#x"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Khi áp dụng hiệu ứng Nội suy lên 2 đường nét khác biệt, Inkscape tạo các đường nét nội suy biến đổi từ hình dạng nét thứ nhất đến nét còn lại. Kết quả là bạn có nhiều nét có hình dạng biến đổi từ nét này đến nét kia, và tham số Bước nội suy điều chỉnh mức độ biến đổi giữa 2 nét liên tiếp.</flowDiv>
  </flowRoot>
- <rect id="w" x="10" y="561.31" width="288" height="1e3px" display="none"/>
+ <rect id="w" x="10" y="561.34" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#w"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Ví dụ, lấy 2 đường nét sau:</flowDiv>
  </flowRoot>
- <g transform="translate(-7.8827 520.41)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482">
-  <path d="m38.172 69.145c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.265-18.266 18.265c-10.119 0-18.266-8.1464-18.266-18.265s8.1464-18.266 18.266-18.266z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
-  <path d="m281.59 76.452-18.266 29.225-18.266-29.225h36.531z" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997" sodipodi:nodetypes="cccc"/>
- </g>
- <rect id="v" x="10" y="640.11" width="288" height="1e3px" display="none"/>
+ <path transform="translate(10 587.57)" d="m20.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.265-18.266 18.265c-10.119 0-18.266-8.1464-18.266-18.265s8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+ <path transform="translate(10 587.57)" d="m263.71 9.3303-18.266 29.225-18.266-29.225z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc"/>
+ <rect id="v" x="10" y="640.15" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#v"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Now, select the two paths, and run the Interpolate extension. The result should be like this:</flowDiv>
  </flowRoot>
- <g transform="translate(10 673.99)">
+ <g transform="translate(10 674.03)">
   <path d="m263.71 9.755s-8.5736 13.718-13.973 22.357c-2.4815 3.9705-4.2925 6.8681-4.2925 6.8681s-4.9394-7.903-9.681-15.49c-4.3765-7.0024-8.5846-13.735-8.5846-13.735h10.167 26.364" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482"/>
   <g transform="matrix(.52187 0 0 .52187 -7.8862 -205.17)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="7.757">
    <path d="m453.79 409.84c2.77 0-9.0817 24.761-17.95 41.72-4.0758 7.3606-7.255 12.91-7.6176 13.603-0.83381 1.5943-10.615-10.303-20.333-22.763-8.8975-11.501-17.313-23.409-18.214-24.71-0.55903-0.80742 6.3583-1.7889 15.812-2.8495 17.754-2.77 45.532-5 48.302-5"/>
@@ -156,28 +152,28 @@
   <path d="m20.29 2.4488c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482"/>
   <flowRoot transform="translate(-291.31 26.535)" fill="#000000" font-family="sans-serif" font-size="6px" stroke-width="1px" xml:space="preserve"><flowRegion><rect x="290.71" y="15.934" width="127.14" height="133.57"/></flowRegion><flowPara>Luỹ thừa: 0.0</flowPara><flowPara>Bước nội suy: 6</flowPara><flowPara>Phương pháp nội suy: 2</flowPara><flowPara>Nhân đôi đường nét cuối: không chọn</flowPara><flowPara>Nội suy kiểu dáng: không chọn</flowPara></flowRoot>
  </g>
- <rect id="u" x="10" y="765.79" width="288" height="1e3px" display="none"/>
+ <rect id="u" x="10" y="765.83" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Như trên, khoảng cách giữa đường nét hình tròn và đường nét hình tam giác đã được lấp đầy bằng 6 đường nét có hình dạng chuyển dần từ hình tròn về hình tam giác.</flowDiv>
  </flowRoot>
- <rect id="t" x="10" y="794.95" width="288" height="1e3px" display="none"/>
+ <rect id="t" x="10" y="794.98" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#t"/>
   </flowRegion>
   <flowDiv xml:space="preserve">When using the Interpolate extension on two different paths, the <flowSpan font-style="italic">position</flowSpan> of the starting node of each path is important. To find the starting node of a path, select the path, then choose the Node Tool so that the nodes appear and press <flowSpan font-weight="bold">TAB</flowSpan>. The first node that is selected is the starting node of that path.</flowDiv>
  </flowRoot>
- <rect id="s" x="10" y="844.26" width="288" height="1e3px" display="none"/>
+ <rect id="s" x="10" y="844.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#s"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Xem ảnh bên dưới, giống với ví dụ bên trên, nhưng khác nút được hiển thị. Nút màu xanh trong mỗi đường nét là nút đầu tiên.</flowDiv>
  </flowRoot>
- <g transform="translate(10.094 881.83)">
+ <g transform="translate(10.094 881.87)">
   <path d="m20.262 2.0739c10.119 0 18.266 8.1464 18.266 18.266 0 10.119-8.1464 18.265-18.266 18.265-10.119 0-18.266-8.1464-18.266-18.265 0-10.119 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
   <path d="m263.68 9.3801-18.266 29.225-18.266-29.225h36.531z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997" sodipodi:nodetypes="cccc"/>
   <rect transform="matrix(-.71298 .70119 -.70119 -.71298 0 0)" x="-14.604" y="-16.968" width="2.9821" height="2.9821" fill="#0f0"/>
@@ -188,14 +184,14 @@
   <rect transform="matrix(-.71298 .70119 -.70119 -.71298 0 0)" x="-181.96" y="-192.64" width="2.9821" height="2.9821" fill="#0f0"/>
   <rect transform="matrix(-.71298 .70119 -.70119 -.71298 0 0)" x="-150.15" y="-200.55" width="2.9821" height="2.9821" fill="#ccc"/>
  </g>
- <rect id="r" x="10" y="934.95" width="288" height="1e3px" display="none"/>
+ <rect id="r" x="10" y="934.99" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#r"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Ví dụ trên (lặp lại bên dưới) được thực hiện với các nút này được đặt làm nút đầu tiên.</flowDiv>
  </flowRoot>
- <g transform="translate(10 969.78)">
+ <g transform="translate(10 969.81)">
   <path d="m263.71 9.755s-8.5736 13.718-13.973 22.357c-2.4815 3.9705-4.2925 6.8681-4.2925 6.8681s-4.9394-7.903-9.681-15.49c-4.3765-7.0024-8.5846-13.735-8.5846-13.735h10.167 26.364" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482"/>
   <g transform="matrix(.52187 0 0 .52187 -7.8862 -205.17)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="7.757">
    <path d="m453.79 409.84c2.77 0-9.0817 24.761-17.95 41.72-4.0758 7.3606-7.255 12.91-7.6176 13.603-0.83381 1.5943-10.615-10.303-20.333-22.763-8.8975-11.501-17.313-23.409-18.214-24.71-0.55903-0.80742 6.3583-1.7889 15.812-2.8495 17.754-2.77 45.532-5 48.302-5"/>
@@ -240,10 +236,10 @@
    <path d="m450.42 525.98s16.429 26.286 26.775 42.84c4.755 7.6081 8.2253 13.16 8.2253 13.16s9.4647-15.144 18.55-29.681c8.3862-13.418 16.45-26.319 16.45-26.319h-19.481-50.519"/>
   </g>
  </g>
- <text x="10" y="1225.6431178" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1225.6431178">Các phương pháp nội suy</tspan>
+ <text x="10" y="1225.6773818" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1225.6773818">Các phương pháp nội suy</tspan>
  </text>
- <rect id="o" x="10" y="1230.8" width="288" height="1e3px" display="none"/>
+ <rect id="o" x="10" y="1230.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#o"/>
@@ -257,7 +253,7 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Trong ví dụ trên, ta dùng Phương pháp nội suy 2, và kết quả là:</flowDiv>
  </flowRoot>
- <g transform="translate(10 1295.7)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round">
+ <g transform="translate(10 1295.8)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round">
   <path d="m263.71 9.3346s-8.5736 13.718-13.973 22.357c-2.4815 3.9705-4.2925 6.8681-4.2925 6.8681s-4.9394-7.903-9.681-15.49c-4.3765-7.0024-8.5846-13.735-8.5846-13.735h10.167 26.364" stroke-width="4.0482"/>
   <g transform="matrix(.52187 0 0 .52187 -7.8862 -205.59)" stroke-width="7.757">
    <path d="m453.79 409.84c2.77 0-9.0817 24.761-17.95 41.72-4.0758 7.3606-7.255 12.91-7.6176 13.603-0.83381 1.5943-10.615-10.303-20.333-22.763-8.8975-11.501-17.313-23.409-18.214-24.71-0.55903-0.80742 6.3583-1.7889 15.812-2.8495 17.754-2.77 45.532-5 48.302-5"/>
@@ -269,7 +265,7 @@
   </g>
   <path d="m20.29 2.0284c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" stroke-width="4.0482"/>
  </g>
- <rect id="m" x="10" y="1348.3" width="288" height="1e3px" display="none"/>
+ <rect id="m" x="10" y="1348.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#m"/>
@@ -295,8 +291,8 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Sự khác biệt về mặt phương pháp tính toán giữa 2 phương thức nằm ngoài phạm vi của tài liệu này, nên bạn hãy thử cả 2 phương thức, và dùng phương thức nào cho kết quả tốt nhất mà bạn muốn.</flowDiv>
  </flowRoot>
- <text x="10" y="1480.1894492" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1480.1894492">Mũ</tspan>
+ <text x="10" y="1480.2237132" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1480.2237132">Mũ</tspan>
  </text>
  <rect id="k" x="10" y="1485.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -305,14 +301,14 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Tham số <flowSpan font-style="italic">Luỹ thừa</flowSpan> điều chỉnh khoảng cách giữa 2 bước của phép nội suy. Luỹ thừa bằng 0 sẽ làm cho khoảng cách giữa 2 đường nét nội suy là giống nhau.</flowDiv>
  </flowRoot>
- <rect id="j" x="10" y="1514.5" width="288" height="1e3px" display="none"/>
+ <rect id="j" x="10" y="1514.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#j"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Đây là kết quả thu được khi tham số Lũy thừa bằng 0.</flowDiv>
  </flowRoot>
- <g transform="translate(10 1541)">
+ <g transform="translate(10 1541.1)">
   <path d="m247.6 27.441h-10.653l-5.3267-9.2261 5.3267-9.2261h10.653l5.3267 9.2261-5.3267 9.2261z" fill="#0f0" stroke="#17a500" stroke-linejoin="round" stroke-width=".86884"/>
   <path d="m22.999 28.619s-3.4902-3.2745-3.621-3.2745c-0.06542 0-0.78972 4.8295-0.8715 4.8295-0.08177 0-2.3935-4.1658-2.4807-4.1658s-2.2831 4.3929-2.3649 4.3929c-0.08177 0-0.98642-4.6493-1.0518-4.6493-0.13084 0-3.581 3.5263-3.581 3.5263s0.60532-4.7533 0.5399-4.8666c-0.032709-0.0566-4.3589 2.1917-4.3998 2.1209s1.9782-4.3946 1.9346-4.4701c-0.043615-0.0756-4.8806 0.725-4.9215 0.6542s3.1954-3.5399 3.1627-3.5965c-0.065419-0.1133-4.9385-0.8368-4.9385-0.8368s4.2094-2.3001 4.2748-2.4134c0.032709-0.0567-4.322-2.2314-4.2811-2.3022 0.020444-0.0355 4.6909-0.9004 4.7124-0.9375 0.021466-0.0372-3.483-3.4379-3.4612-3.4757 0.021806-0.0378 4.7213 0.5734 4.7428 0.5362 0.021467-0.0372-2.2719-4.3618-2.2514-4.3972 0.040887-0.0708 4.3273 1.9258 4.36 1.8691 0.065418-0.1133-0.7671-4.9822-0.7671-4.9822s3.4902 3.2745 3.621 3.2745c0.06542 0 0.78972-4.8295 0.87149-4.8295 0.08178 0 2.3935 4.1658 2.4807 4.1658s2.2831-4.3929 2.3649-4.3929c0.08178 0 0.98643 4.6493 1.0518 4.6493 0.13084 0 3.581-3.5263 3.581-3.5263s-0.60532 4.7534-0.5399 4.8667c0.03271 0.0566 4.3589-2.1918 4.3998-2.121 0.04089 0.0709-1.9782 4.3946-1.9346 4.4702 0.02181 0.0377 4.837-0.8006 4.8584-0.7634 0.02146 0.0372-3.2319 3.4767-3.2115 3.5121 0.04089 0.0708 4.9086 0.7849 4.9413 0.8415 0.06542 0.1133-4.0568 2.4134-4.0568 2.4134s4.3493 2.1842 4.2839 2.2975c-0.03271 0.0567-4.7202 0.9511-4.7611 1.0219-0.02044 0.0354 3.4847 3.4349 3.4632 3.4721s-4.721-0.5739-4.7428-0.5362c-0.04361 0.0755 2.2273 4.4391 2.1864 4.5099-0.04089 0.0709-4.3273-1.9257-4.36-1.8691-0.06541 0.1134 0.76711 4.9822 0.76711 4.9822" fill="#0f0" stroke="#17a500" stroke-linejoin="round" stroke-width=".79675"/>
   <g transform="matrix(.52187 0 0 .52187 -9.2175 -573.47)" fill="#0f0" stroke="#17a500" stroke-linejoin="round" stroke-width="1.6649">
@@ -325,7 +321,7 @@
   </g>
   <flowRoot transform="translate(-291.31 14.935)" fill="#000000" font-family="sans-serif" font-size="6px" stroke-width="1px" xml:space="preserve"><flowRegion><rect x="290.71" y="15.934" width="127.14" height="133.57"/></flowRegion><flowPara>Luỹ thừa: 0.0</flowPara><flowPara>Bước nội suy: 6</flowPara><flowPara>Phương pháp nội suy: 2</flowPara><flowPara>Nhân đôi đường nét cuối: không chọn</flowPara><flowPara>Nội suy kiểu dáng: không chọn</flowPara></flowRoot>
  </g>
- <rect id="h" x="10" y="1621.2" width="288" height="1e3px" display="none"/>
+ <rect id="h" x="10" y="1621.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#h"/>
@@ -408,8 +404,8 @@
    <path d="m377.93 1476.3s-2.6691-1.6647-4.0882-1.6647c-0.69426 0-1.8328 2.4552-2.703 2.4552-0.75331 0-2.6833-2.1178-3.493-2.1178-0.80998 0-2.7026 2.2332-3.4988 2.2332-0.80651 0-2.009-2.3635-2.729-2.3635-0.9562 0-3.5058 1.7926-4.1342 1.7926-0.89811 0-1.3416-0.8847-1.26-1.5963 0.05327-0.4644-0.05345-1.1091-0.31903-1.5691-0.287-0.4971-2.8779-0.0324-3.3611-0.8693-0.3625-0.6279 0.28355-3.4849-0.13731-4.2138-0.39271-0.6802-3.238-0.9423-3.6446-1.6466-0.39381-0.6821 0.87895-3.0909 0.50506-3.7385-0.44551-0.7716-3.3148-1.8182-3.6637-2.4225-0.47557-0.8238 1.2688-2.6783 1.0438-3.1832-0.20178-0.3701-0.5996-0.7238-0.95967-0.9112-0.64732-0.3369-1.2513-1.3305-0.75053-2.1979 0.31697-0.549 3.0699-1.6445 3.5008-2.3909 0.36401-0.6305-1.0352-3.0215-0.63079-3.7221 0.37243-0.645 3.1322-0.9763 3.509-1.6288 0.40084-0.6943-0.38058-3.5588-0.00828-4.2036 0.4199-0.7273 2.9707-0.356 3.3086-0.9413 0.71981-1.2468 0.80906-4.2065 0.76113-4.4878-0.00333-0.0195 0.00419-0.03 0.02232-0.03 0.16096 0 2.7921 1.6647 4.0877 1.6647 0.69528 0 1.8335-2.4552 2.7025-2.4552 0.75376 0 2.6837 2.1178 3.493 2.1178 0.81046 0 2.7032-2.2332 3.4991-2.2332 0.8073 0 2.0102 2.3636 2.7297 2.3636 0.95781 0 3.5075-1.7927 4.1335-1.7927 0.88226 0 1.3178 0.86 1.2365 1.5661-0.05499 0.4775 0.05511 1.1483 0.32953 1.6236 0.28917 0.5009 2.8797 0.0354 3.361 0.869 0.36295 0.6287-0.28305 3.4857 0.13755 4.2142 0.37832 0.6552 3.2088 0.8916 3.6016 1.5721 0.38122 0.6603-0.90293 3.0493-0.53774 3.6819 0.43297 0.7499 3.2995 1.7918 3.6652 2.4252 0.48289 0.8364-1.2342 2.6614-0.97523 3.1099 0.2367 0.41 0.70504 0.8135 1.1094 1.0209 0.63993 0.3282 1.1763 1.2543 0.6955 2.087-0.32365 0.5605-3.0912 1.6813-3.5409 2.4602-0.36257 0.628 1.0372 3.0181 0.63266 3.7188-0.37201 0.6444-3.132 0.976-3.5095 1.6298-0.41771 0.7235 0.34634 3.618-0.04189 4.2905-0.41959 0.7267-2.9705 0.3556-3.3091 0.9421-0.72965 1.2638-0.7698 4.5416-0.7698 4.5416"/>
   </g>
  </g>
- <text x="10" y="1960.9697546" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1960.9697546">Nhân đôi đường nét cuối</tspan>
+ <text x="10" y="1961.0040186" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1961.0040186">Nhân đôi đường nét cuối</tspan>
  </text>
  <rect id="ak" x="10" y="1966.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -418,8 +414,8 @@
   </flowRegion>
   <flowDiv xml:space="preserve">This parameter defines whether the group of paths that is generated by the extension <flowSpan font-style="italic">includes a copy</flowSpan> of the original paths that interpolate was applied on.</flowDiv>
  </flowRoot>
- <text x="10" y="2006.9711676" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2006.9711676">Nội suy kiểu dáng</tspan>
+ <text x="10" y="2007.0054316" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2007.0054316">Nội suy kiểu dáng</tspan>
  </text>
  <rect id="aj" x="10" y="2012.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -435,7 +431,7 @@
   </flowRegion>
   <flowDiv xml:space="preserve">Đây là 1 ví dụ khi chọn Nội suy Kiểu dáng áp dụng lên màu tô của đường nét:</flowDiv>
  </flowRoot>
- <g transform="translate(-11.812 2060.5)">
+ <g transform="translate(-11.812 2060.6)">
   <path d="m52.663 48.163c-2.9976 2.9047-3.5071-5.427-7.1207-3.1925-3.6849 2.2787 1.1326 7.9413-3.2277 8.4695-4.2758 0.518 1.5441-6.9599-2.6777-7.5296-4.3051-0.581-3.831 7.2721-7.9079 5.6902-3.9979-1.5513 4.5381-5.7159 1.6296-8.8711-2.9659-3.2174-6.2133 5.7226-8.4629 1.9619-2.206-3.6879 5.5681-2.5544 4.9588-6.6857-0.62133-4.2129-8.4029-0.204-8.0303-4.4441 0.36534-4.1581 8.0153 2.7473 9.9006-1.0625 1.9225-3.8849-6.9532-4.6723-4.2767-7.8973 2.6247-3.1626 4.6708 4.5784 8.3708 2.3642 3.773-2.2578-2.7067-7.438 1.4582-8.4264 4.0843-0.9693 0.18368 7.8024 4.3501 8.2857 4.2486 0.4929 2.8247-8.4766 6.6595-6.6728 3.7606 1.769-3.6131 6.4805-0.83385 9.63 2.8341 3.2116 5.5873-5.8283 7.7624-2.1005 2.1329 3.6555-5.5152 3.2348-4.8635 7.5015 0.66462 4.351 8.8783 0.2244 8.0285 4.4871-0.83336 4.1802-8.3722-3.7561-9.9941 0.2035-1.6539 4.0378 7.3336 5.3268 4.2768 8.2889z" fill="#fc0"/>
   <path d="m276.7 46.671c-2.9976 2.9048-3.5071-5.4269-7.1207-3.1924-3.6849 2.2786 1.1326 7.9413-3.2277 8.4695-4.2758 0.518 1.5441-6.96-2.6777-7.5297-4.3052-0.5809-3.831 7.2721-7.9079 5.6902-3.9979-1.5512 4.5381-5.7159 1.6296-8.871-2.9659-3.2174-6.2133 5.7225-8.4629 1.9618-2.206-3.6879 5.568-2.5543 4.9588-6.6857-0.62133-4.2129-8.4029-0.2039-8.0303-4.4441 0.36534-4.158 8.0153 2.7474 9.9006-1.0624 1.9225-3.885-6.9532-4.6724-4.2767-7.8974 2.6247-3.1626 4.6708 4.5785 8.3708 2.3643 3.773-2.2578-2.7067-7.438 1.4582-8.4264 4.0843-0.9693 0.18367 7.8024 4.35 8.2857 4.2486 0.4928 2.8247-8.4766 6.6595-6.6728 3.7606 1.7689-3.6131 6.4805-0.83385 9.6299 2.8341 3.2117 5.5873-5.8282 7.7624-2.1005 2.133 3.6556-5.5152 3.2348-4.8635 7.5016 0.66462 4.351 8.8783 0.2244 8.0285 4.4871-0.83336 4.1802-8.3722-3.7561-9.9941 0.2035-1.6539 4.0378 7.3336 5.3268 4.2768 8.2888z" fill="#d40000"/>
   <g transform="matrix(.52187 0 0 .52187 16.74 -799.46)">
@@ -466,7 +462,7 @@
    <path d="m438.02 1706.9c-5.744 5.566-6.7202-10.399-13.644-6.1173h-9e-5c-7.0608 4.3664 2.1703 15.217-6.1847 16.229h-6.5e-4c-8.192 0.9918 2.9592-13.337-5.1303-14.428-2.2e-4 -1e-4 -4.3e-4 -1e-4 -6.5e-4 -1e-4 -8.2487-1.1124-7.3405 13.935-15.152 10.904l-6e-4 -3e-4c-7.6593-2.9727 8.6962-10.953 3.1232-16.998-3e-5 -1e-4 -5e-5 -1e-4 -8e-5 -1e-4 -5.6831-6.165-11.906 10.965-16.216 3.7593-2e-5 -1e-4 -4e-5 -1e-4 -6e-5 -1e-4 -4.227-7.0666 10.669-4.8946 9.5019-12.811-1e-5 -1e-4 -1e-5 -1e-4 -2e-5 -1e-4 -1.1907-8.0726-16.101-0.3908-15.388-8.5156 0-1e-4 0-1e-4 1e-5 -1e-4 0.70017-7.9674 15.359 5.2644 18.971-2.0357 1e-5 -1e-4 3e-5 -1e-4 5e-5 -1e-4 3.6836-7.4443-13.324-8.9531-8.195-15.133 2e-5 -1e-4 4e-5 -1e-4 6e-5 -1e-4 5.0294-6.0599 8.95 8.7731 16.04 4.5305 3e-5 -1e-4 6e-5 -1e-4 9e-5 -1e-4 7.2296-4.3264-5.1866-14.253 2.7941-16.146 3e-5 -1e-4 7e-5 -1e-4 1e-4 -1e-4 7.8261-1.8571 0.35188 14.951 8.3354 15.877h1e-4c8.141 0.9442 5.4125-16.243 12.761-12.786h9e-5c7.2058 3.3896-6.9234 12.418-1.5979 18.453h7e-5c5.4306 6.1539 10.706-11.168 14.874-4.025h5e-5c4.0869 7.0047-10.568 6.1985-9.3193 14.374 3e-5 2e-4 6e-5 4e-4 1e-4 6e-4 1.2743 8.3361 17.012 0.4295 15.384 8.5974-1e-5 0-2e-5 0-2e-5 1e-4 -1.597 8.0098-16.043-7.1974-19.15 0.3899-2e-5 0-3e-5 0-4e-5 1e-4 -3.169 7.7371 14.052 10.207 8.1951 15.883" fill="#da1d00" stroke="#cbcbcb"/>
   </g>
  </g>
- <rect id="ag" x="10" y="2203.4" width="288" height="1e3px" display="none"/>
+ <rect id="ag" x="10" y="2203.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ag"/>
@@ -495,8 +491,8 @@
    <path d="m123.62 1733.5c-1.8896 1.831-2.7623 0.9437-3.9672-0.6377-1.0107-1.3265-1.5484-3.1414-2.7492-4.2498-1.0976-1.0131-2.1619-1.4358-3.7936-0.3559-0.18945 0.1394-0.37187 0.2864-0.55999 0.4404-1.5329 1.2552-1.4651 2.974-1.4372 4.7657 0.02844 1.8258 0.86111 3.7273 0.81014 5.2912-0.05773 1.7714-0.34926 3.1096-2.8142 3.4134-0.01446 0.0021-0.03009 0.0041-0.04704 6e-3 -2.6163 0.2965-2.474-1.2639-2.1733-3.3707 0.23092-1.618 1.2148-3.5582 1.3199-5.2272 0.12035-1.9102-0.00675-3.4652-2.2544-3.7751-0.0197-0.0032-0.04098-0.0062-0.06411-9e-3 -2.0838-0.2563-3.0654 0.6998-4.1755 2.1003-1.0561 1.3323-1.438 3.067-2.3209 4.5426-1.0337 1.7279-1.7704 3.1007-3.5941 3.0574-0.47825-0.0114-0.94649-0.1202-1.4561-0.3455-1.6022-0.669-1.7414-1.6339-1.3399-2.7871 0.4449-1.2777 2.1719-2.7865 3.3813-4.3798 1.1601-1.5282 2.6406-3.1342 2.7559-4.6887 0.069218-0.9327-0.082002-1.8469-0.77027-2.7145-0.55548-0.7051-1.1264-1.0547-1.7878-1.1458-1.5344-0.2114-3.0862 1.3832-4.5932 2.7434-1.4296 1.2903-2.8187 3.1578-4.1143 3.7393-1.1624 0.5217-2.2494 0.5232-3.2228-0.981-0.28617-0.4153-0.47008-0.7965-0.56661-1.1842-0.47077-1.8912 1.137-2.3866 3.0997-3.2629 1.6065-0.7172 3.4508-0.9967 4.5876-2.1875 0.79534-0.833 1.2445-1.7423 1.0237-3.1169-0.088819-0.5317-0.26673-0.976-0.51714-1.3915-0.89105-1.4785-2.7002-1.4726-4.6801-1.6158-1.8125-0.1311-3.7681 0.3754-5.2937 0.0732-1.7205-0.3408-2.8941-0.8958-2.6984-3.0258 0.012452-0.122 0.030056-0.244 0.052622-0.3704 0.37123-2.0794 2.0851-1.7124 4.2889-1.1523 1.5455 0.3928 3.332 1.4995 5.0651 1.9995 1.9378 0.559 3.809 1.293 5.2025 0.6861 0.68056-0.2964 1.2472-0.7242 1.652-1.4464 0.53307-0.9666 0.56066-1.7798 0.2594-2.6108-0.53158-1.4663-2.087-2.2024-3.696-3.2784-1.6532-1.1057-3.3629-1.7174-4.0763-2.9255-0.5295-0.8967-0.51012-1.7482 0.48863-2.8329 0.51729-0.5415 1.0209-0.8378 1.5172-1.0046 1.5052-0.5058 2.5278 0.816 4.0745 2.3138 1.2934 1.2525 2.2482 2.628 3.7975 3.161 1.0779 0.3709 2.0772 0.3339 3.2419-0.4361 0.4562-0.3155 0.80532-0.6658 1.1099-1.0436 1.1503-1.4268 0.44861-3.2465-0.13664-5.0715-0.58099-1.8117-1.871-3.6287-1.9263-5.0716-0.04764-1.2423 0.32673-2.2074 2.0824-2.6532 0.4657-0.125 0.86596-0.1514 1.2436-0.0935 1.6536 0.2533 1.5879 2.1216 1.7026 4.403 0.08558 1.7017-0.37417 3.6334-0.1054 5.2961 0.31693 1.9607 0.65513 3.5475 2.5726 3.9425 0.12199 0.0251 0.23739 0.0454 0.35012 0.0606 1.8471 0.2254 2.7784-0.7537 3.6643-2.2201 0.84796-1.4036 0.97437-3.2539 1.5487-4.9218 0.71135-2.0658 1.0585-3.852 2.5166-4.1638 0.55281-0.1182 1.1308-0.0246 1.8328 0.3461 1.2089 0.6235 1.5549 1.4696 1.5416 2.4651-0.01867 1.3921-1.4234 3.0764-2.4395 4.8531-0.90836 1.5881-2.2526 3.2501-2.5282 4.8429-0.22299 1.289-0.20162 2.5327 0.66629 3.6555 0.29336 0.4025 0.6013 0.6878 0.95453 0.8742 1.569 0.8282 3.1156-0.7095 4.608-2.1839 1.3304-1.3144 2.6178-3.3231 3.8396-4.0633 1.1432-0.6925 2.229-0.8235 3.239 0.7844 0.263 0.3901 0.43546 0.7577 0.52994 1.1391 0.46323 1.8698-0.94794 2.5641-2.7526 3.6303-1.4771 0.8728-3.2179 1.3019-4.4103 2.5108-1.0116 1.0256-1.6285 2.078-1.3549 3.7531 0.04317 0.2447 0.10574 0.4804 0.18602 0.7212 0.61157 1.8345 2.2509 2.0893 4.1714 2.3523 1.7196 0.2354 3.6648-0.2702 5.2997-0.1431 2.1555 0.1676 3.7717 0.2989 3.6206 2.4706-0.0143 0.2054-0.04441 0.405-0.09137 0.6089-0.40084 1.8992-1.7462 1.9518-3.5153 1.5396-1.4565-0.3394-3.2004-1.5791-4.9409-2.3366-1.7944-0.781-3.5854-1.9053-5.0545-1.9377-1.2855-0.0282-2.3246 0.2938-2.904 1.5861-0.22316 0.4751-0.32837 0.9347-0.33628 1.4226-0.02806 1.7324 1.1706 2.7166 2.6712 3.9625 1.3931 1.1566 3.0464 1.7664 4.2199 2.8034 1.5398 1.3606 2.2536 2.3275 0.46961 4.0562" fill="#f8ae00" stroke="#212121" stroke-width="3.1036"/>
   </g>
  </g>
- <text x="10" y="2334.1046618" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2334.1046618">Dùng Nội suy để làm giả các chuyển sắc độc đáo</tspan>
+ <text x="10" y="2334.1389258" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2334.1389258">Dùng Nội suy để làm giả các chuyển sắc độc đáo</tspan>
  </text>
  <rect id="ae" x="10" y="2339.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -509,14 +505,14 @@
   <path d="m20 132.36 75-32.857 85.714 33.571 77.143-32.857" stroke="#35b8ff"/>
   <path d="m20 55.219 75-32.857 85.714 33.571 77.143-32.857" stroke="#ffed35"/>
  </g>
- <rect id="ad" x="10" y="2523.5" width="288" height="1e3px" display="none"/>
+ <rect id="ad" x="10" y="2523.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ad"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Và nội suy giữa 2 đường này để tạo ra chuyển sắc bạn cần:</flowDiv>
  </flowRoot>
- <g transform="translate(-7.25 2530.6)" fill="none" stroke-width="5.5">
+ <g transform="translate(-7.25 2530.7)" fill="none" stroke-width="5.5">
   <path d="m20 132.36 75-32.857 85.714 33.571 77.143-32.857" stroke="#35b8ff"/>
   <path d="m20 55.219 75-32.857 85.714 33.571 77.143-32.857" stroke="#ffed35"/>
   <path d="m20 59.757 75-32.857 85.714 33.571 77.143-32.857" stroke="#f3e940"/>
@@ -536,8 +532,8 @@
   <path d="m20 123.29 75-32.857 85.714 33.571 77.143-32.857" stroke="#4cbee7"/>
   <path d="m20 127.82 75-32.857 85.714 33.571 77.143-32.857" stroke="#40bbf3"/>
  </g>
- <text x="10" y="2691.7065783" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2691.7065783">Kết luận</tspan>
+ <text x="10" y="2691.7408423" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2691.7408423">Kết luận</tspan>
  </text>
  <rect id="ac" x="10" y="2696.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -546,7 +542,7 @@
   </flowRegion>
   <flowDiv xml:space="preserve">As demonstrated above, the Inkscape Interpolate extension is a powerful tool. This tutorial covers the basics of this extension, but experimentation is the key to exploring interpolation further.</flowDiv>
  </flowRoot>
- <g transform="translate(0 2735.5)">
+ <g transform="translate(0 2735.6)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="e" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#a" inkscape:collect="always"/>
    <filter id="ap" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

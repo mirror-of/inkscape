@@ -471,8 +471,8 @@ stops:
  </defs>
  <rect transform="translate(10 1486.8)" x="70.82" y=".55902" width="74.385" height="68.187" fill="url(#e)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
  <rect transform="translate(10 1486.8)" x="153.67" y=".55902" width="74.385" height="68.187" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
- <text x="10" y="1580.999651" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1580.999651">Alineando al centro de la página</tspan>
+ <text x="10" y="1581.00169" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1581.00169">Alineando al centro de la página</tspan>
  </text>
  <rect id="ab" x="10" y="1586.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -484,10 +484,10 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1637.720657" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1637.720657">Limpiar el documento</tspan>
+ <text x="10" y="1637.75696" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1637.75696">Limpiar el documento</tspan>
  </text>
- <rect id="aa" x="10" y="1642.9" width="288" height="1e3px" display="none"/>
+ <rect id="aa" x="10" y="1643" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aa"/>
@@ -498,10 +498,10 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1715.745102" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1715.745102">Características ocultas del editor de XML</tspan>
+ <text x="10" y="1715.781405" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1715.781405">Características ocultas del editor de XML</tspan>
  </text>
- <rect id="z" x="10" y="1720.9" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="1721" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
@@ -512,8 +512,8 @@ more SVG features than are accessible from the GUI. The XML editor is one way to
 access to these features (if you know SVG).
 </flowDiv>
  </flowRoot>
- <text x="10" y="1783.058743" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1783.058743">Cambiando las unidades de medida de las reglas</tspan>
+ <text x="10" y="1783.095046" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1783.095046">Cambiando las unidades de medida de las reglas</tspan>
  </text>
  <rect id="x" x="10" y="1788.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -528,8 +528,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1861.156114" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1861.156114">Estampado</tspan>
+ <text x="10" y="1861.192417" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1861.192417">Estampado</tspan>
  </text>
  <rect id="w" x="10" y="1866.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -538,8 +538,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Para crear varias copias de un objeto, use <flowSpan font-style="italic">estampado</flowSpan>. Tan sólo arrastre un objeto (o escálelo o rótelo), y mientras lo mantiene presionado con el ratón, presione <flowSpan font-weight="bold">Barra Espaceadora</flowSpan>. Esto permite una "estampilla" del objeto o forma actual. Usted puede repetir tantas veces como lo desee.</flowDiv>
  </flowRoot>
- <text x="10" y="1928.410268" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1928.410268">Trucos de la herramienta Pluma</tspan>
+ <text x="10" y="1928.446571" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1928.446571">Trucos de la herramienta Pluma</tspan>
  </text>
  <rect id="v" x="10" y="1933.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -548,8 +548,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">En la herramienta Pluma (Bezier), usted puede obtener las siguientes opciones para finalizar la línea actual:</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1965.9)" r="2"/>
- <rect id="u" x="20" y="1959.9" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1966)" r="2"/>
+ <rect id="u" x="20" y="1960" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>
@@ -573,8 +573,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   <flowDiv xml:space="preserve">Click with the right mouse button
 </flowDiv>
  </flowRoot>
- <circle transform="translate(15 2015.8)" r="2"/>
- <rect id="bc" x="20" y="2009.8" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2015.9)" r="2"/>
+ <rect id="bc" x="20" y="2009.9" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bc"/>
@@ -595,8 +595,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Para agregar un nuevo subtrazo para un trazo existente, seleccione el trazoo y inicie a dibujar con <flowSpan font-weight="bold">Mayus</flowSpan> desde un punto arbitrario. Si, sin embargo, lo que quiere simplificarIf, however, what you want is to simply <flowSpan font-style="italic">continue</flowSpan> an existing path, Mayus is not necessary; just start drawing from one of the end anchors of the selected path.</flowDiv>
  </flowRoot>
- <text x="10" y="2136.913561" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2136.913561">Ingresando valores Unicode</tspan>
+ <text x="10" y="2136.949864" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2136.949864">Ingresando valores Unicode</tspan>
  </text>
  <rect id="ay" x="10" y="2142.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -621,10 +621,10 @@ an em-dash (—). To quit the Unicode mode without inserting anything press
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2252.009589" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2252.009589">Usando la rejilla para dibujar íconos</tspan>
+ <text x="10" y="2252.080155" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2252.080155">Usando la rejilla para dibujar íconos</tspan>
  </text>
- <rect id="av" x="10" y="2257.2" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="2257.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
@@ -637,8 +637,8 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2329.954039" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2329.954039">Rotación de Objetos</tspan>
+ <text x="10" y="2330.024605" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2330.024605">Rotación de Objetos</tspan>
  </text>
  <rect id="au" x="10" y="2335.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -660,8 +660,8 @@ rotation center to any place.
   </flowRegion>
   <flowDiv xml:space="preserve">O, puede rotar desde el teclado presionando <flowSpan font-weight="bold">[</flowSpan> y <flowSpan font-weight="bold">]</flowSpan> (por 15 grados) o <flowSpan font-weight="bold">Ctrl+[</flowSpan> y <flowSpan font-weight="bold">Ctrl+]</flowSpan> (por 90 grados). Las mismas teclas <flowSpan font-weight="bold">[]</flowSpan> junto con <flowSpan font-weight="bold">Alt</flowSpan> desarrollan una lenta rotación a partir del tamaño de pixel.</flowDiv>
  </flowRoot>
- <text x="10" y="2446.462345" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2446.462345">Mapa de bits arrojando sombras</tspan>
+ <text x="10" y="2446.532911" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2446.532911">Mapa de bits arrojando sombras</tspan>
  </text>
  <rect id="as" x="10" y="2451.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -684,8 +684,8 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2541.978086" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2541.978086">Colocando texto sobre un trazo</tspan>
+ <text x="10" y="2542.048652" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2542.048652">Colocando texto sobre un trazo</tspan>
  </text>
  <rect id="aq" x="10" y="2547.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -694,20 +694,20 @@ say, 5.0. That's it!
   </flowRegion>
   <flowDiv xml:space="preserve">Para colocar texto a lo largo de una curva, seleccione el texto y la curva y escoja <flowSpan font-family="Liberation Sans,Arial,sans-serif">Poner en trayecto</flowSpan> desde el menú Texto. El texto iniciará en el principio del trazo. En general este es la mejor manera de crear un trazo explícito del cual desea que el texto este ajustado, mejor que esto, ajústelo a otros elementos de dibujo — esto le dará un mayor control sin tener que atornillarlo a su dibujo.</flowDiv>
  </flowRoot>
- <text x="10" y="2619.897061" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2619.897061">Selecting the original</tspan>
+ <text x="10" y="2619.967627" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2619.967627">Selecting the original</tspan>
  </text>
- <rect id="ap" x="10" y="2625.1" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2625.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">When you have a text on path, a linked offset, or a clone, their source object/path may be difficult to select because it may be directly underneath, or made invisible and/or locked. The magic key <flowSpan font-weight="bold">Mayus+D</flowSpan> will help you; select the text, linked offset, or clone, and press <flowSpan font-weight="bold">Mayus+D</flowSpan> to move selection to the corresponding path, offset source, or clone original.</flowDiv>
  </flowRoot>
- <text x="10" y="2687.210702" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2687.210702">Recuperación de la salida de la ventana</tspan>
+ <text x="10" y="2687.281268" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2687.281268">Recuperación de la salida de la ventana</tspan>
  </text>
- <rect id="ao" x="10" y="2692.4" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="2692.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
@@ -720,8 +720,8 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2775.851708" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2775.851708">Exporte de Trasparencias, gradientes y PostScript</tspan>
+ <text x="10" y="2775.922274" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2775.922274">Exporte de Trasparencias, gradientes y PostScript</tspan>
  </text>
  <rect id="an" x="10" y="2781.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -742,7 +742,7 @@ value of the object, but only the alpha value of its fill or stroke color, so ma
 every object's opacity value is set to 100% before you start out.
 </flowDiv>
  </flowRoot>
- <g transform="translate(0 2894.3)">
+ <g transform="translate(0 2894.4)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="s" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#d" inkscape:collect="always"/>
    <filter id="bf" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

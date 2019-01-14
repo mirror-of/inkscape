@@ -445,20 +445,20 @@
   </flowRegion>
   <flowDiv xml:space="preserve">如同字距，你也可以在多行的文字物件裡調整<flowSpan font-style="italic">行距</flowSpan>。在這個教學裡的某處試用 <flowSpan font-weight="bold">Ctrl+Alt+&lt;</flowSpan> 和 <flowSpan font-weight="bold">Ctrl+Alt+&gt;</flowSpan> 按鍵來縮小或加寬行距，因此文字物件的整體高度會以畫面的 1 像素進行變化。跟在選取工具裡一樣，按著 <flowSpan font-weight="bold">Shift</flowSpan> 再按增減行距或縮排的快捷鍵會產生原來的 10 倍效果。</flowDiv>
  </flowRoot>
- <text x="10" y="3764.121962" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3764.121962">XML 編輯器</tspan>
+ <text x="10" y="3764.156226" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3764.156226">XML 編輯器</tspan>
  </text>
- <rect id="v" x="10" y="3769.3" width="288" height="1e3px" display="none"/>
+ <rect id="v" x="10" y="3769.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#v"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Inkscape 的終極強力工具是 XML 編輯器 (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>)。它會顯示文件的整個 XML 樹狀架構，隨時反映目前的狀態。你可以編輯圖畫並觀察 XML 樹狀架構中對應的變化。此外，你可以用 XML 編輯器編輯任何文字、元件或節點並在畫布上看到效果。這個是互動式學習 SVG 的最佳工具，而且它能夠讓你實現用其他普通編輯工具做不到的把戲。</flowDiv>
  </flowRoot>
- <text x="10" y="3842.217028" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3842.217028">結論</tspan>
+ <text x="10" y="3842.251292" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3842.251292">結論</tspan>
  </text>
- <rect id="u" x="10" y="3847.4" width="288" height="1e3px" display="none"/>
+ <rect id="u" x="10" y="3847.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#u"/>

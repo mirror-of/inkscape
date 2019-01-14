@@ -60,44 +60,44 @@
   </flowRegion>
   <flowDiv xml:space="preserve">راه‌های زیادی برای پیمایش (اسکرول) صفحه‌ وجود دارد. برای اسکرول به کمک صفحه کلید از <flowSpan font-weight="bold">Ctrl+کلید‌های جهت‌دار</flowSpan> استفاده می‌شود. (همین الان، از این کلید‌ها برای اسکرول کردن صفحه به سمت پایین استفاده کنید.) همچنین می‌توانید صفحه را به کمک کلید وسط ماوس درگ کنید. یا، از نوار‌های پیمایش استفاده کنید (<flowSpan font-weight="bold">Ctrl+B</flowSpan> این نوار‌ها را مخفی و مرئی می‌کند). برای پیمایش عمودی <flowSpan font-weight="bold">چرخک ماوس</flowSpan> را به کار بگیرید با نگهداشتن کلید <flowSpan font-weight="bold">Shift</flowSpan> در حین چرخاندن چرخک، پیمایش افقی حاصل می‌شود.</flowDiv>
  </flowRoot>
- <text x="10" y="207.526962" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="207.526962">زوم کردن یا برگشت از زوم (zoom in or out)</tspan>
+ <text x="10" y="207.561226" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="207.561226">زوم کردن یا برگشت از زوم (zoom in or out)</tspan>
  </text>
- <rect id="bh" x="10" y="212.73" width="288" height="1e3px" display="none"/>
+ <rect id="bh" x="10" y="212.76" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bh"/>
   </flowRegion>
   <flowDiv xml:space="preserve">آسانترین راه برای زوم کردن، استفاده از کلید های <flowSpan font-weight="bold"> – </flowSpan> و  <flowSpan font-weight="bold">+ </flowSpan> (یا <flowSpan font-weight="bold"> = </flowSpan>) است. همچنین با استفاده از <flowSpan font-weight="bold"> ctrl + کلیک وسط موس </flowSpan> یا <flowSpan font-weight="bold"> Ctrl + کلیک راست ماوس </flowSpan> می‌توانید زوم کنید، <flowSpan font-weight="bold"> Shift + کلیک وسط ماوس </flowSpan> یا <flowSpan font-weight="bold"> shift + کلیک راست موس </flowSpan> برای برگشت از زوم به کار می‌آیند. عملیات مربوط به زوم و برگشت از زوم با نگه داشتن <flowSpan font-weight="bold"> ctrl + چرخاندن چرخک ماوس </flowSpan> نیز امکان پذیر است. با کلیک کردن در محدوده مربوط به زوم (در گوشه سمت راست پنجره سند)، مقدار دقیق زوم را به درصد بنویسید و کلید Enter را بزنید تا عملیات زوم به اندازه وارد شده انجام شود. همچنین ابزار Zoom در جعبه ابزار، سمت چپ به شما اجازه می‌دهد در محدوده‌ای که با ماوس حدودش را مشخص می‌کنید، زوم کنید.</flowDiv>
  </flowRoot>
- <rect id="ao" x="10" y="292.37" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="292.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
   </flowRegion>
   <flowDiv xml:space="preserve">نرم افزار Inkscape همچنین تاریخچه‌ای از مراحل زوم را در نشست کاری ذخیره می‌کند. کلید <flowSpan font-weight="bold"> ` </flowSpan> (کلیدی که علامت ~ دارد) را برای برگشتن به زوم قبلی و کلید<flowSpan font-weight="bold"> Shift+` </flowSpan> را برای رفتن به زوم بعدی بزنید.</flowDiv>
  </flowRoot>
- <text x="10" y="333.104062" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="333.104062">ابزارهای Inkscape</tspan>
+ <text x="10" y="333.138326" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="333.138326">ابزارهای Inkscape</tspan>
  </text>
- <rect id="ah" x="10" y="338.3" width="288" height="1e3px" display="none"/>
+ <rect id="ah" x="10" y="338.34" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ah"/>
   </flowRegion>
   <flowDiv xml:space="preserve">جعبه ابزار عمودی سمت چپ، ابزار‌های طراحی و ویرایش Inkscape را نشان می‌دهد. در قسمت بالای پنجره زیر منو‌ی اصلی، نوار <flowSpan font-style="italic">Commands</flowSpan> با دکمه‌های فرامین عمومی وجود دارد. این دکمه‌ها برای ساختن یک فایل جدید، ذخیره کردن فایل جاری،چاپ کردن و مواردی از این دست به کار می‌روند. با نگه‌داشتن ماوس روی هر دکمه می‌توانید کارکرد آن را متوجه شوید. بعد از این نوار، <flowSpan font-style="italic">نوار کنترل‌</flowSpan>های مربوط به هر ابزار انتخاب شده قرار دارد. هر گاه ابزاری انتخاب شود، گزینه‌های این نوار برای تنظیم عملکرد آن ابزار تغییر می‌کنند (با انتخاب چند ابزار از نوار ابزار تغییراتی که در این نوار حاصل می‌شود را ببینید). <flowSpan font-style="italic">نوار وضعیت</flowSpan> در قسمت پایینی پنجره قرار دارد، این نوار پیام‌ها و نکات مفیدی در هنگام کار با نرم افزار نمایش خواهد داد.</flowDiv>
  </flowRoot>
- <rect id="ag" x="10" y="428.45" width="288" height="1e3px" display="none"/>
+ <rect id="ag" x="10" y="428.49" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ag"/>
   </flowRegion>
   <flowDiv xml:space="preserve">بسیاری از اعمال را می‌توان با استفاده از میانبر‌های صفحه کلید انجام داد. برای دیدن مرجع کامل این میانبر‌ها از منوی Help زیر منوی Keys را انتخاب کنید.</flowDiv>
  </flowRoot>
- <text x="10" y="464.452833" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="464.452833">ساختن و مدیریت اسناد</tspan>
+ <text x="10" y="464.487097" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="464.487097">ساختن و مدیریت اسناد</tspan>
  </text>
- <rect id="af" x="10" y="469.65" width="288" height="1e3px" display="none"/>
+ <rect id="af" x="10" y="469.69" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#af"/>
@@ -107,7 +107,7 @@ or press <flowSpan font-weight="bold">Ctrl+N</flowSpan>. To create a new documen
 templates, use <flowSpan font-family="Liberation Sans,Arial,sans-serif">File &gt; New from Template...</flowSpan> or press 
 <flowSpan font-weight="bold">Ctrl+Alt+N</flowSpan></flowDiv>
  </flowRoot>
- <rect id="ae" x="10" y="508.57" width="288" height="1e3px" display="none"/>
+ <rect id="ae" x="10" y="508.61" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ae"/>
@@ -118,42 +118,42 @@ Open</flowSpan> (<flowSpan font-weight="bold">Ctrl+O</flowSpan>). To save, use <
 to save under a new name.  (Inkscape may still be unstable, so remember to save
 often!)</flowDiv>
  </flowRoot>
- <rect id="ad" x="10" y="547.53" width="288" height="1e3px" display="none"/>
+ <rect id="ad" x="10" y="547.56" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ad"/>
   </flowRegion>
   <flowDiv xml:space="preserve">نرم افزار Inkscape از فرمت SVG (سرواژه ی عبارت Scalable Vector Graphics) برای ذخیره کردن فایل‌های خودش استفاده می‌کند. SVG یک استاندارد باز است که طیف گسترده‌ای از نرم افزار‌های گرافیکی آن را پشتیبانی می‌کنند. فایل‌های SVG بر پایه‌ی XML بنا شده‌اند و توسط هر ویرایشگر متنی یا ویرایشگر XML ای می‌توانند ویرایش شوند. Inkscape در کنار SVG چندین نوع قالب فایلی دیگر مثل (PNG و EPS) را می‌تواند وارد (import) و صادر (export) کند. ( import کردن یک فایل، یعنی  اینکه آن فایل‌ را در سند ‌‌Inkscape به عنوان بخشی از فایلتان وارد کرده و از آن استفاده کنید. Export کردن یک فایل، یعنی فایلی که در Inkscape ساخته‌اید را می‌توانید به این فرمت‌ها درآورده و ذخیره کنید.)</flowDiv>
  </flowRoot>
- <rect id="ac" x="10" y="639.26" width="288" height="1e3px" display="none"/>
+ <rect id="ac" x="10" y="639.29" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ac"/>
   </flowRegion>
   <flowDiv xml:space="preserve">نرم افزار Inkscape برای هر سند جدید، یک پنجره‌ی جدید باز می‌کند. با <flowSpan font-weight="bold"> Alt+Tab </flowSpan> یا سایر روش‌ها می‌توانید بین پنجره‌ها حرکت کنید، یا از میانبر Inkscape (کلید‌های <flowSpan font-weight="bold"> Ctrl+Tab </flowSpan>) استفاده کنید که بین تمام پنجره‌های Inkscape که فایلی در آن باز شده باشد، سوییچ می‌کند. (همین الان یک سند جدید بسازید و برای تمرین بین آن و این سند سوییچ کنید.)  نکته: Inkscape با این پنجره‌ها مثل تب‌های یک مرورگر وب رفتار می‌کند، یعنی میانبر <flowSpan font-weight="bold"> Ctrl+Tab </flowSpan> بین اسنادی که در یک پروسه اجرا شده باشند، سوییچ می‌کند. اگر چند فایل را از یک مدیر فایل اجرا کنید یا بیش از یک پروسه Inkscape اجرا کرده باشید، این میانبر برای تمام پنجره‌ها کار نخواهد کرد.</flowDiv>
  </flowRoot>
- <text x="10" y="731.666524" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="731.666524">ساختن شکل‌ها</tspan>
+ <text x="10" y="731.700788" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="731.700788">ساختن شکل‌ها</tspan>
  </text>
- <rect id="ab" x="10" y="736.87" width="288" height="1e3px" display="none"/>
+ <rect id="ab" x="10" y="736.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ab"/>
   </flowRegion>
   <flowDiv xml:space="preserve">وقت کشیدن چند شکل نازنین است! روی ابزار مستطیل Rectangle در نوار ابزار کلیک کنید (یا کلید <flowSpan font-weight="bold"> F4 </flowSpan> را بزنید) و در یک سند جدید یا همینجا کلیک را نگه داشته و ماوس را بکشید و رها کنید (به این عمل درگ کردن می‌گویند)، در یک سند جدید یا همینجا مستطیل را بکشید:</flowDiv>
  </flowRoot>
- <rect transform="translate(10 783.47)" x="8.2426" y="11.835" width="19.394" height="21.106" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <rect transform="translate(10 783.47)" x="37.905" y="7.2717" width="23.387" height="15.972" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <rect transform="translate(10 783.47)" x="69.848" y=".99707" width="71.303" height="48.486" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <rect transform="translate(10 783.47)" x="108.64" y="2.7083" width="55.331" height="22.247" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <rect transform="translate(10 783.47)" x="122.33" y="15.828" width="39.93" height="25.099" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <rect transform="translate(10 783.47)" x="152.56" y="23.814" width="35.366" height="24.528" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <rect transform="translate(10 783.47)" x="176.52" y="4.4196" width="31.944" height="28.521" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
- <rect transform="translate(10 783.47)" x="213.39" y="41.053" width="8.8205" height="3.5282" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <rect transform="translate(10 783.47)" x="232.79" y="28.116" width="7.0564" height="4.1162" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <rect transform="translate(10 783.47)" x="247.49" y="20.472" width="4.1162" height="1.7641" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <rect transform="translate(10 783.47)" x="259.25" y="17.532" width="2.9402" height="1.1761" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <rect id="z" x="10" y="845.21" width="288" height="1e3px" display="none"/>
+ <rect transform="translate(10 783.5)" x="8.2426" y="11.835" width="19.394" height="21.106" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <rect transform="translate(10 783.5)" x="37.905" y="7.2717" width="23.387" height="15.972" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <rect transform="translate(10 783.5)" x="69.848" y=".99707" width="71.303" height="48.486" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <rect transform="translate(10 783.5)" x="108.64" y="2.7083" width="55.331" height="22.247" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <rect transform="translate(10 783.5)" x="122.33" y="15.828" width="39.93" height="25.099" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <rect transform="translate(10 783.5)" x="152.56" y="23.814" width="35.366" height="24.528" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <rect transform="translate(10 783.5)" x="176.52" y="4.4196" width="31.944" height="28.521" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+ <rect transform="translate(10 783.5)" x="213.39" y="41.053" width="8.8205" height="3.5282" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+ <rect transform="translate(10 783.5)" x="232.79" y="28.116" width="7.0564" height="4.1162" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+ <rect transform="translate(10 783.5)" x="247.49" y="20.472" width="4.1162" height="1.7641" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+ <rect transform="translate(10 783.5)" x="259.25" y="17.532" width="2.9402" height="1.1761" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+ <rect id="z" x="10" y="845.24" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
@@ -162,38 +162,38 @@ often!)</flowDiv>
 and fully opaque. We'll see how to change that below. With other tools, you can
 also create ellipses, stars, and spirals:</flowDiv>
  </flowRoot>
- <path transform="translate(12.776 245.75)" d="m27.637 659.92a9.7025 3.8222 0 1 1-19.405 0 9.7025 3.8222 0 1 1 19.405 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="17.934933" sodipodi:cy="659.92175" sodipodi:rx="9.7025042" sodipodi:ry="3.8221989" sodipodi:type="arc"/>
- <path transform="translate(12.776 245.75)" d="m31.166 681.68a5.2923 14.407 0 1 1-10.585 0 5.2923 14.407 0 1 1 10.585 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="25.873346" sodipodi:cy="681.67889" sodipodi:rx="5.2922754" sodipodi:ry="14.406750" sodipodi:type="arc"/>
- <path transform="translate(12.776 245.75)" d="m51.159 663.45a9.9965 9.1145 0 1 1-19.993 0 9.9965 9.1145 0 1 1 19.993 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="41.162140" sodipodi:cy="663.44995" sodipodi:rx="9.9965200" sodipodi:ry="9.1144743" sodipodi:type="arc"/>
- <path transform="translate(12.776 245.75)" d="m69.388 694.62a15.289 6.1743 0 1 1-30.578 0 15.289 6.1743 0 1 1 30.578 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="54.098812" sodipodi:cy="694.61554" sodipodi:rx="15.288795" sodipodi:ry="6.1743212" sodipodi:type="arc"/>
- <path transform="translate(12.776 245.75)" d="m73.504 671.09a16.465 15.583 0 1 1-32.93 0 16.465 15.583 0 1 1 32.93 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="57.038967" sodipodi:cy="671.09436" sodipodi:rx="16.464857" sodipodi:ry="15.582810" sodipodi:type="arc"/>
- <path transform="translate(12.776 245.75)" d="m90.557 672.86a9.9965 4.4102 0 1 1-19.993 0 9.9965 4.4102 0 1 1 19.993 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="80.560188" sodipodi:cy="672.85840" sodipodi:rx="9.9965200" sodipodi:ry="4.4102292" sodipodi:type="arc"/>
- <path transform="translate(12.776 245.75)" d="m178.76 683.15c0.67811 0.38328-0.1821 1.1032-0.63703 1.1271-1.2328 0.06473-1.8327-1.3708-1.6171-2.4011 0.38566-1.843 2.4972-2.6329 4.1652-2.1071 2.448 0.77161 3.4512 3.6368 2.5971 5.9293-1.1384 3.0556-4.7808 4.2769-7.6934 3.0872-3.6652-1.4972-5.1064-5.9269-3.5772-9.4575 1.8521-4.276 7.0742-5.938 11.222-4.0672 4.8876 2.2047 6.771 8.2222 4.5572 12.986-2.5559 5.4997-9.3706 7.6049-14.75 5.0472-6.1122-2.9062-8.4394-10.519-5.5373-16.514 3.2558-6.7249 11.668-9.2744 18.278-6.0273 7.3379 3.6049 10.11 12.818 6.5173 20.042" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.335104" sodipodi:cx="178.76129" sodipodi:cy="683.14899" sodipodi:expansion="1.0000000" sodipodi:radius="15.535585" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(12.776 245.75)" d="m205.81 671.39c-0.67811-0.50121 0.34107-1.1614 0.83304-1.1271 1.3332 0.09294 1.7886 1.7145 1.4211 2.7931-0.65732 1.9295-3.0302 2.4999-4.7532 1.7151-2.5286-1.1517-3.229-4.3626-2.0091-6.7133 1.6259-3.1332 5.7007-3.9654 8.6734-2.3031 3.7409 2.0918 4.7056 7.0415 2.5971 10.634-2.5536 4.3504-8.3839 5.448-12.594 2.8912-4.9611-3.0132-6.1917-9.7271-3.1852-14.554 3.4712-5.5725 11.071-6.9364 16.514-3.4792 6.1845 3.9283 7.6817 12.415 3.7732 18.474-4.3847 6.7968-13.76 8.4274-20.434 4.0672-7.4094-4.8406-9.1735-15.105-4.3612-22.394" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-21.354641" sodipodi:cx="205.81070" sodipodi:cy="671.38837" sodipodi:expansion="1.0000000" sodipodi:radius="16.818087" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(12.776 259.92)" d="m245.21 663.16c-1.7395 0.26535-1.2159-2.2139-0.44103-2.8912 2.0998-1.8353 5.1686-0.12212 6.2233 2.0091 1.8866 3.8123-0.76224 8.1619-4.4592 9.5555-5.4255 2.0451-11.206-1.6449-12.888-6.9094-2.2415-7.0168 2.5251-14.269 9.3595-16.22 8.6004-2.4546 17.342 3.4037 19.552 11.81 2.6765 10.181-4.2813 20.42-14.26 22.884-11.759 2.9035-23.502-5.1583-26.216-16.71-3.1338-13.337 6.0349-26.586 19.16-29.549 14.914-3.3662 29.672 6.9112 32.881 21.61 3.6002 16.49-7.7873 32.758-24.06 36.213-18.066 3.8353-35.846-8.6632-39.545-26.51" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-15.859339" sodipodi:cx="245.20876" sodipodi:cy="663.15594" sodipodi:expansion="1.0000000" sodipodi:radius="35.095131" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(12.776 238.66)" d="m216.98 669.62c0.58966 0.32431-0.14625 0.95485-0.53903 0.98005-1.0644 0.06829-1.597-1.1658-1.4211-2.0581 0.31469-1.596 2.1309-2.2996 3.5772-1.8621 2.1225 0.64203 3.018 3.1072 2.3031 5.0963-0.95278 2.6511-4.0872 3.7428-6.6153 2.7441-3.1814-1.2567-4.4708-5.069-3.1852-8.1344 1.5571-3.7126 6.0518-5.2008 9.6535-3.6262 4.2445 1.8556 5.9319 7.0352 4.0672 11.173-2.1529 4.7768-8.019 6.6638-12.692 4.5082-5.3094-2.4493-7.3963-9.003-4.9492-14.211 2.7452-5.8423 9.9873-8.1292 15.73-5.3903 6.3753 3.0407 8.8623 10.972 5.8313 17.249" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.346712" sodipodi:cx="216.98329" sodipodi:cy="669.62427" sodipodi:expansion="1.0000000" sodipodi:radius="13.422048" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(26.429 846.82)" d="m103.57 87.362-14.404-3.9992-11.46 9.5986-0.64768-14.935-12.67-7.9333 14.004-5.2311 3.6297-14.502 9.3025 11.702 14.914-1.0292-8.2546 12.463 5.5874 13.866z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.72927738" sodipodi:arg2="1.3575959" sodipodi:cx="86.785713" sodipodi:cy="72.362183" sodipodi:r1="22.511335" sodipodi:r2="11.255667" sodipodi:sides="5" sodipodi:type="star"/>
- <path transform="translate(26.429 846.82)" d="m109.29 85.934-9.6121-7.6866-11.781 3.5605 4.3401-11.517-7.0269-10.104 12.294 0.56876 7.4384-9.8054 3.2582 11.868 11.624 4.0443-10.281 6.7663-0.25433 12.305z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="1.1330050" sodipodi:arg2="1.7613236" sodipodi:cx="101.42857" sodipodi:cy="69.147896" sodipodi:r1="18.533615" sodipodi:r2="9.2668076" sodipodi:sides="5" sodipodi:type="star"/>
- <path transform="translate(26.429 846.82)" d="m127.14 79.862-10.28-1.5383-7.0953 7.5966-1.7138-10.253-9.4174-4.4005 9.2212-4.7982 1.275-10.316 7.4128 7.2871 10.205-1.9753-4.6398 9.3019 5.0323 9.0955z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.60698766" sodipodi:arg2="1.2353062" sodipodi:cx="114.28571" sodipodi:cy="70.933609" sodipodi:r1="15.653291" sodipodi:r2="7.8266454" sodipodi:sides="5" sodipodi:type="star"/>
- <path transform="translate(26.429 846.82)" d="m144.64 71.291-10.51 1.7486-4.5176 9.6488-4.9106-9.4548-10.573-1.3148 7.4746-7.592-2.0166-10.461 9.5302 4.7627 9.3262-5.1507-1.5846 10.536 7.7806 7.2781z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.29358899" sodipodi:arg2="0.92190752" sodipodi:cx="129.28571" sodipodi:cy="66.647896" sodipodi:r1="16.043627" sodipodi:r2="8.0218134" sodipodi:sides="5" sodipodi:type="star"/>
- <path transform="translate(26.429 846.82)" d="m162.5 66.648-5.3031-0.027522-3.0291 4.353-1.6126-5.0521-5.076-1.5357 4.3065-3.0948-0.10803-5.3021 4.2741 3.1394 5.0092-1.7412-1.6649 5.0351 3.2039 4.226z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:cx="155.35715" sodipodi:cy="63.076466" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:sides="5" sodipodi:type="star"/>
- <path transform="translate(26.429 846.82)" d="m180 69.505-3.7067-1.0799-2.991 2.4413-0.11839-3.859-3.246-2.0902 3.6335-1.3051 0.9848-3.7331 2.364 3.0524 3.8547-0.21699-2.1725 3.1916 1.3975 3.599z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:cx="175.71429" sodipodi:cy="65.576469" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:sides="5" sodipodi:type="star"/>
- <rect id="y" x="10" y="964.38" width="288" height="1e3px" display="none"/>
+ <path transform="translate(12.776 245.78)" d="m27.637 659.92a9.7025 3.8222 0 1 1-19.405 0 9.7025 3.8222 0 1 1 19.405 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="17.934933" sodipodi:cy="659.92175" sodipodi:rx="9.7025042" sodipodi:ry="3.8221989" sodipodi:type="arc"/>
+ <path transform="translate(12.776 245.78)" d="m31.166 681.68a5.2923 14.407 0 1 1-10.585 0 5.2923 14.407 0 1 1 10.585 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="25.873346" sodipodi:cy="681.67889" sodipodi:rx="5.2922754" sodipodi:ry="14.406750" sodipodi:type="arc"/>
+ <path transform="translate(12.776 245.78)" d="m51.159 663.45a9.9965 9.1145 0 1 1-19.993 0 9.9965 9.1145 0 1 1 19.993 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="41.162140" sodipodi:cy="663.44995" sodipodi:rx="9.9965200" sodipodi:ry="9.1144743" sodipodi:type="arc"/>
+ <path transform="translate(12.776 245.78)" d="m69.388 694.62a15.289 6.1743 0 1 1-30.578 0 15.289 6.1743 0 1 1 30.578 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="54.098812" sodipodi:cy="694.61554" sodipodi:rx="15.288795" sodipodi:ry="6.1743212" sodipodi:type="arc"/>
+ <path transform="translate(12.776 245.78)" d="m73.504 671.09a16.465 15.583 0 1 1-32.93 0 16.465 15.583 0 1 1 32.93 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="57.038967" sodipodi:cy="671.09436" sodipodi:rx="16.464857" sodipodi:ry="15.582810" sodipodi:type="arc"/>
+ <path transform="translate(12.776 245.78)" d="m90.557 672.86a9.9965 4.4102 0 1 1-19.993 0 9.9965 4.4102 0 1 1 19.993 0z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" sodipodi:cx="80.560188" sodipodi:cy="672.85840" sodipodi:rx="9.9965200" sodipodi:ry="4.4102292" sodipodi:type="arc"/>
+ <path transform="translate(12.776 245.78)" d="m178.76 683.15c0.67811 0.38328-0.1821 1.1032-0.63703 1.1271-1.2328 0.06473-1.8327-1.3708-1.6171-2.4011 0.38566-1.843 2.4972-2.6329 4.1652-2.1071 2.448 0.77161 3.4512 3.6368 2.5971 5.9293-1.1384 3.0556-4.7808 4.2769-7.6934 3.0872-3.6652-1.4972-5.1064-5.9269-3.5772-9.4575 1.8521-4.276 7.0742-5.938 11.222-4.0672 4.8876 2.2047 6.771 8.2222 4.5572 12.986-2.5559 5.4997-9.3706 7.6049-14.75 5.0472-6.1122-2.9062-8.4394-10.519-5.5373-16.514 3.2558-6.7249 11.668-9.2744 18.278-6.0273 7.3379 3.6049 10.11 12.818 6.5173 20.042" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.335104" sodipodi:cx="178.76129" sodipodi:cy="683.14899" sodipodi:expansion="1.0000000" sodipodi:radius="15.535585" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(12.776 245.78)" d="m205.81 671.39c-0.67811-0.50121 0.34107-1.1614 0.83304-1.1271 1.3332 0.09294 1.7886 1.7145 1.4211 2.7931-0.65732 1.9295-3.0302 2.4999-4.7532 1.7151-2.5286-1.1517-3.229-4.3626-2.0091-6.7133 1.6259-3.1332 5.7007-3.9654 8.6734-2.3031 3.7409 2.0918 4.7056 7.0415 2.5971 10.634-2.5536 4.3504-8.3839 5.448-12.594 2.8912-4.9611-3.0132-6.1917-9.7271-3.1852-14.554 3.4712-5.5725 11.071-6.9364 16.514-3.4792 6.1845 3.9283 7.6817 12.415 3.7732 18.474-4.3847 6.7968-13.76 8.4274-20.434 4.0672-7.4094-4.8406-9.1735-15.105-4.3612-22.394" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-21.354641" sodipodi:cx="205.81070" sodipodi:cy="671.38837" sodipodi:expansion="1.0000000" sodipodi:radius="16.818087" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(12.776 259.95)" d="m245.21 663.16c-1.7395 0.26535-1.2159-2.2139-0.44103-2.8912 2.0998-1.8353 5.1686-0.12212 6.2233 2.0091 1.8866 3.8123-0.76224 8.1619-4.4592 9.5555-5.4255 2.0451-11.206-1.6449-12.888-6.9094-2.2415-7.0168 2.5251-14.269 9.3595-16.22 8.6004-2.4546 17.342 3.4037 19.552 11.81 2.6765 10.181-4.2813 20.42-14.26 22.884-11.759 2.9035-23.502-5.1583-26.216-16.71-3.1338-13.337 6.0349-26.586 19.16-29.549 14.914-3.3662 29.672 6.9112 32.881 21.61 3.6002 16.49-7.7873 32.758-24.06 36.213-18.066 3.8353-35.846-8.6632-39.545-26.51" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-15.859339" sodipodi:cx="245.20876" sodipodi:cy="663.15594" sodipodi:expansion="1.0000000" sodipodi:radius="35.095131" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(12.776 238.69)" d="m216.98 669.62c0.58966 0.32431-0.14625 0.95485-0.53903 0.98005-1.0644 0.06829-1.597-1.1658-1.4211-2.0581 0.31469-1.596 2.1309-2.2996 3.5772-1.8621 2.1225 0.64203 3.018 3.1072 2.3031 5.0963-0.95278 2.6511-4.0872 3.7428-6.6153 2.7441-3.1814-1.2567-4.4708-5.069-3.1852-8.1344 1.5571-3.7126 6.0518-5.2008 9.6535-3.6262 4.2445 1.8556 5.9319 7.0352 4.0672 11.173-2.1529 4.7768-8.019 6.6638-12.692 4.5082-5.3094-2.4493-7.3963-9.003-4.9492-14.211 2.7452-5.8423 9.9873-8.1292 15.73-5.3903 6.3753 3.0407 8.8623 10.972 5.8313 17.249" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.346712" sodipodi:cx="216.98329" sodipodi:cy="669.62427" sodipodi:expansion="1.0000000" sodipodi:radius="13.422048" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(26.429 846.86)" d="m103.57 87.362-14.404-3.9992-11.46 9.5986-0.64768-14.935-12.67-7.9333 14.004-5.2311 3.6297-14.502 9.3025 11.702 14.914-1.0292-8.2546 12.463 5.5874 13.866z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.72927738" sodipodi:arg2="1.3575959" sodipodi:cx="86.785713" sodipodi:cy="72.362183" sodipodi:r1="22.511335" sodipodi:r2="11.255667" sodipodi:sides="5" sodipodi:type="star"/>
+ <path transform="translate(26.429 846.86)" d="m109.29 85.934-9.6121-7.6866-11.781 3.5605 4.3401-11.517-7.0269-10.104 12.294 0.56876 7.4384-9.8054 3.2582 11.868 11.624 4.0443-10.281 6.7663-0.25433 12.305z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="1.1330050" sodipodi:arg2="1.7613236" sodipodi:cx="101.42857" sodipodi:cy="69.147896" sodipodi:r1="18.533615" sodipodi:r2="9.2668076" sodipodi:sides="5" sodipodi:type="star"/>
+ <path transform="translate(26.429 846.86)" d="m127.14 79.862-10.28-1.5383-7.0953 7.5966-1.7138-10.253-9.4174-4.4005 9.2212-4.7982 1.275-10.316 7.4128 7.2871 10.205-1.9753-4.6398 9.3019 5.0323 9.0955z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.60698766" sodipodi:arg2="1.2353062" sodipodi:cx="114.28571" sodipodi:cy="70.933609" sodipodi:r1="15.653291" sodipodi:r2="7.8266454" sodipodi:sides="5" sodipodi:type="star"/>
+ <path transform="translate(26.429 846.86)" d="m144.64 71.291-10.51 1.7486-4.5176 9.6488-4.9106-9.4548-10.573-1.3148 7.4746-7.592-2.0166-10.461 9.5302 4.7627 9.3262-5.1507-1.5846 10.536 7.7806 7.2781z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.29358899" sodipodi:arg2="0.92190752" sodipodi:cx="129.28571" sodipodi:cy="66.647896" sodipodi:r1="16.043627" sodipodi:r2="8.0218134" sodipodi:sides="5" sodipodi:type="star"/>
+ <path transform="translate(26.429 846.86)" d="m162.5 66.648-5.3031-0.027522-3.0291 4.353-1.6126-5.0521-5.076-1.5357 4.3065-3.0948-0.10803-5.3021 4.2741 3.1394 5.0092-1.7412-1.6649 5.0351 3.2039 4.226z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:cx="155.35715" sodipodi:cy="63.076466" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:sides="5" sodipodi:type="star"/>
+ <path transform="translate(26.429 846.86)" d="m180 69.505-3.7067-1.0799-2.991 2.4413-0.11839-3.859-3.246-2.0902 3.6335-1.3051 0.9848-3.7331 2.364 3.0524 3.8547-0.21699-2.1725 3.1916 1.3975 3.599z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0.0000000" inkscape:rounded="0.0000000" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:cx="175.71429" sodipodi:cy="65.576469" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:sides="5" sodipodi:type="star"/>
+ <rect id="y" x="10" y="964.41" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#y"/>
   </flowRegion>
   <flowDiv xml:space="preserve">به مجموعه این ابزار‌ها، ابزار‌های <flowSpan font-style="italic"> ترسیم شکل (shape tools) </flowSpan> می‌گویند. هر شکلی که ایجاد کنید یک یا چند <flowSpan font-style="italic"> اهرم </flowSpan> چهارگوش دارد؛ سعی کنید آن‌ها را با ماوس بکشید تا اثر آن‌ها را بر شکل ببینید. یک راه دیگر برای تنظیم دقیق شکل وجود دارد. می‌توان پارامتر‌های نوار کنترل مربوط به ابزار را تنظیم کرد. این تغییرات بر روی شکلی که انتخاب شده باشد بلافاصله اعمال می‌شود. (معمولا اهرم‌های سفیدی روی شکلی که انتخاب شده باشد، دیده می‌شود) <flowSpan font-style="italic"> و </flowSpan>اگر قبل از تغییر دادن پارامتر‌ها هیچ شکلی انتخاب نشده باشد،  تغییرات بر اشکالی که بعدا ساخته شوند، اعمال خواهد شد.</flowDiv>
  </flowRoot>
- <rect id="w" x="10" y="1033.2" width="288" height="1e3px" display="none"/>
+ <rect id="w" x="10" y="1033.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#w"/>
   </flowRegion>
   <flowDiv xml:space="preserve">برای <flowSpan font-style="italic">خنثی</flowSpan> کردن آخرین عمل انجام شده، کلید‌های <flowSpan font-weight="bold"> Ctrl+Z </flowSpan> را بزنید. (یا اگر دوباره نظرتان عوض شد، می‌توانید عمل خنثی شده را با زدن کلید‌های <flowSpan font-weight="bold"> Shift+Ctrl+Z </flowSpan> دوباره برگردانید.)</flowDiv>
  </flowRoot>
- <text x="10" y="1073.972351" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1073.972351">جابه‌جا کردن، مقیاس کردن، چرخاندن</tspan>
+ <text x="10" y="1074.006615" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1074.006615">جابه‌جا کردن، مقیاس کردن، چرخاندن</tspan>
  </text>
  <rect id="v" x="10" y="1079.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -241,23 +241,23 @@ also create ellipses, stars, and spirals:</flowDiv>
   </flowRegion>
   <flowDiv xml:space="preserve">شئ را با کشیدن (درگ کردن) اهرم‌های گوشه <flowSpan font-style="italic">بچرخانید</flowSpan>. (کلید <flowSpan font-weight="bold"> Ctrl </flowSpan> را برای محدود کردن دَوَران به چرخش‌های ۱۵ درجه‌ای نگه دارید. علامت + را برای مشخص کردن مرکز دوران درگ کنید تا جابه‌جا شود.)</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1339.7)" r="2"/>
- <rect id="bv" x="20" y="1333.7" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1339.8)" r="2"/>
+ <rect id="bv" x="20" y="1333.8" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bv"/>
   </flowRegion>
   <flowDiv xml:space="preserve">شی را با درگ کردن اهرم‌هایی که در گوشه نیستند <flowSpan font-style="italic"> نامتوازن (skew) </flowSpan> کنید. (کلید <flowSpan font-weight="bold"> Ctrl </flowSpan> را برای محدود کردن نامتوازن‌سازی به مراحل ۱۵ درجه‌ای نگه دارید) (نامتوازن سازی در واقع موّرب کردن شکل است، به عنوان مثال با نامتوازن کردن یک مستطیل، می‌توانید آن را به یک متوازی‌الاضلاع تبدیل کنید)</flowDiv>
  </flowRoot>
- <rect id="bu" x="10" y="1382.9" width="288" height="1e3px" display="none"/>
+ <rect id="bu" x="10" y="1383" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bu"/>
   </flowRegion>
   <flowDiv xml:space="preserve">در حالی که ابزار انتخابگر فعال است، در نوار کنترل‌ (بالای صفحه) مقادیر دقیق مختصات (X و Y) و اندازه (W و H) -همان طول و عرض- مربوط به شئ انتخاب شده را (به عدد!) وارد کنید. (توجه داشته‌ باشید که مقادیر H و W در واقع شکل را مقیاس می‌کند.)</flowDiv>
  </flowRoot>
- <text x="10" y="1434.2674525" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1434.2674525">تغییر شکل با کلید‌ها</tspan>
+ <text x="10" y="1434.3017165" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1434.3017165">تغییر شکل با کلید‌ها</tspan>
  </text>
  <rect id="bt" x="10" y="1439.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -287,17 +287,17 @@ also create ellipses, stars, and spirals:</flowDiv>
   </flowRegion>
   <flowDiv xml:space="preserve">به طور مشابه، <flowSpan font-weight="bold"> Alt+&gt; </flowSpan> و <flowSpan font-weight="bold"> Alt+&lt; </flowSpan> ناحیه‌ی انتخاب شده را به اندازه یک پیکسل در زوم فعلی مقیاس می‌کنند، و <flowSpan font-weight="bold"> Alt+[ </flowSpan> و <flowSpan font-weight="bold"> Alt+] </flowSpan> آن ناحیه را طوری می‌چرخانند که دورترین نقطه از مرکز شئ به اندازه یک پیکسل صفحه نمایش در زوم فعلی جابه‌جا شود.</flowDiv>
  </flowRoot>
- <rect id="bp" x="10" y="1644.9" width="288" height="1e3px" display="none"/>
+ <rect id="bp" x="10" y="1645" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bp"/>
   </flowRegion>
   <flowDiv xml:space="preserve">نکته: کاربران گنو/لینوکس ممکن است از ترکیب <flowSpan font-weight="bold"> Alt/+کلید‌های جهت‌دار </flowSpan> و چند ترکیب دیگر از کلید‌ها نتیجه‌ای نگیرند، به خاطر اینکه مدیر پنجره‌شان احتمالاً رویداد آن کلید‌ها را قبل از رسیدن به برنامه Inkscape می‌گیرد. برای رفع این مشکل می‌بایست تنظیمات مدیر پنجره را به صورت مناسب تغییر داد.</flowDiv>
  </flowRoot>
- <text x="10" y="1705.3388125" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1705.3388125">انتخاب چندگانه</tspan>
+ <text x="10" y="1705.3730765" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1705.3730765">انتخاب چندگانه</tspan>
  </text>
- <rect id="bo" x="10" y="1710.5" width="288" height="1e3px" display="none"/>
+ <rect id="bo" x="10" y="1710.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bo"/>
@@ -307,16 +307,16 @@ also create ellipses, stars, and spirals:</flowDiv>
  <rect transform="translate(10 1789.2)" x="58.428" y="5.9827" width="25.253" height="26.656" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt"/>
  <path transform="translate(10 1789.2) matrix(.80106 0 0 .80106 32.311 -983.83)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
  <path transform="translate(10 1789.2) matrix(.87302 0 0 .87302 27.6 4.0534)" d="m182.84 29.583-13.183-3.2184-10.125 9.0355-1.013-13.533-11.722-6.8373 12.557-5.1452 2.8804-13.261 8.7737 10.353 13.502-1.3585-7.1347 11.543z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".91757pt"/>
- <rect id="bn" x="10" y="1837.3" width="288" height="1e3px" display="none"/>
+ <rect id="bn" x="10" y="1837.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bn"/>
   </flowRegion>
   <flowDiv xml:space="preserve">حالا با استفاده از انتخاب روبانی (با درگ کردن یا <flowSpan font-weight="bold"> Shift/+درگ کردن </flowSpan> ) دو بیضی را انتخاب کنید طوریکه مستطیل در محدوده انتخاب شده نباشد:</flowDiv>
  </flowRoot>
- <rect transform="translate(10 1871.7)" x="46.657" y="1.7363" width="151.14" height="39.698" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".93523pt"/>
- <path transform="translate(10 1871.7) matrix(.70711 -.70711 .70711 .70711 28.793 65.478)" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5c0-6.9036 2.9581-12.5 6.6071-12.5s6.6071 5.5964 6.6071 12.5z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt"/>
- <path transform="translate(10 1871.7) matrix(.70711 -.70711 .70711 .70711 56.471 65.835)" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5c0-6.9036 2.9581-12.5 6.6071-12.5s6.6071 5.5964 6.6071 12.5z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt"/>
+ <rect transform="translate(10 1871.8)" x="46.657" y="1.7363" width="151.14" height="39.698" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".93523pt"/>
+ <path transform="translate(10 1871.8) matrix(.70711 -.70711 .70711 .70711 28.793 65.478)" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5c0-6.9036 2.9581-12.5 6.6071-12.5s6.6071 5.5964 6.6071 12.5z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt"/>
+ <path transform="translate(10 1871.8) matrix(.70711 -.70711 .70711 .70711 56.471 65.835)" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5c0-6.9036 2.9581-12.5 6.6071-12.5s6.6071 5.5964 6.6071 12.5z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt"/>
  <rect id="bm" x="10" y="1924.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
@@ -338,10 +338,10 @@ also create ellipses, stars, and spirals:</flowDiv>
   </flowRegion>
   <flowDiv xml:space="preserve">زدن کلید <flowSpan font-weight="bold"> Esc </flowSpan> همه‌ چیز را در لایه‌ی فعلی از محدوده‌ی انتخاب خارج می‌کند. (اگر لایه‌ای نساخته باشید، این مثل خارج کردن همه اشیاء سند از حالت انتخاب می‌شود)</flowDiv>
  </flowRoot>
- <text x="10" y="2046.7269075" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2046.7269075">گروه بندی</tspan>
+ <text x="10" y="2046.7611715" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2046.7611715">گروه بندی</tspan>
  </text>
- <rect id="bj" x="10" y="2051.9" width="288" height="1e3px" display="none"/>
+ <rect id="bj" x="10" y="2052" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bj"/>
@@ -349,9 +349,9 @@ also create ellipses, stars, and spirals:</flowDiv>
   <flowDiv xml:space="preserve">چند شئ می‌توانند ترکیب شده و یک <flowSpan font-style="italic"> گروه </flowSpan> بسازند. یک گروه، موقع درگ کردن یا تغییر شکل دادن، مثل یک شئ منفرد رفتار می‌کند. در زیر، سه شئ سمت چپ مستقل هستند؛ سه شئ مشابه سمت راست گروه شده‌اند. سعی کنید گروه را به کمک ماوس درگ کنید.</flowDiv>
  </flowRoot>
  <path transform="translate(10 2092.2)" d="m14.389 22.485h31.525v33.276h-31.525z" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(-57.837 859.85)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(-75.476 896.41)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <g transform="translate(1.1301 635.2)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt">
+ <path transform="translate(-57.837 859.89)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(-75.476 896.44)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+ <g transform="translate(1.1301 635.24)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt">
   <path d="m186.25 1479.4h31.525v33.276h-31.525z" fill="#00f"/>
   <path transform="translate(104.03 224.65)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00"/>
   <path transform="translate(86.386 261.2)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0"/>
@@ -370,10 +370,10 @@ also create ellipses, stars, and spirals:</flowDiv>
   </flowRegion>
   <flowDiv xml:space="preserve">برای ویرایش یک شئ الزامی به خارج کردن آن از گروه نیست. فقط کافی است شئ را <flowSpan font-weight="bold"> Ctrl/+کلیک </flowSpan> کنید تا به تنهایی انتخاب شده و قابل ویرایش شود، یا چندین شئ (داخل یا بیرون از گروه) را با <flowSpan font-weight="bold"> Ctrl+Shift/+کلیک </flowSpan> کنید تا چند شئ صرفنظر از گروه‌بندی انتخاب و آماده ویرایش شود. سعی کنید اشیاء مجزای یک گروه را بدون از گروه خارج کردن، جابه‌جا کرده یا تغییر شکل دهید، سپس همه چیز را از حالت انتخاب شده خارج کرده، گروه را به طور طبیعی انتخاب کنید تا مطمئن شوید که گروه همچنان حالت گروه‌ بودنش را حفظ کرده است.</flowDiv>
  </flowRoot>
- <text x="10" y="2321.2431085" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2321.2431085">پُر کردن و حاشیه</tspan>
+ <text x="10" y="2321.2773725" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2321.2773725">پُر کردن و حاشیه</tspan>
  </text>
- <rect id="bf" x="10" y="2326.4" width="288" height="1e3px" display="none"/>
+ <rect id="bf" x="10" y="2326.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bf"/>
@@ -392,8 +392,8 @@ it (change its fill color).</flowDiv>
   </flowRegion>
   <flowDiv xml:space="preserve">از این قدرتمندتر، کادر محاوره Fill and Stroke از منوی  Object  است (یا کلید‌های <flowSpan font-weight="bold"> Shift+Ctrl+F </flowSpan>). شئ زیر را انتخاب کنید و کادر محاوره Fill and Stroke را باز کنید.</flowDiv>
  </flowRoot>
- <path transform="translate(13.066 979.34)" d="m190.32 1450.2c0 9.0277-29.666 16.346-66.261 16.346-36.595 0-66.261-7.3185-66.261-16.346 0-9.0278 29.666-16.346 66.261-16.346 36.595 0 66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
- <rect id="bd" x="10" y="2457.6" width="288" height="1e3px" display="none"/>
+ <path transform="translate(13.066 979.38)" d="m190.32 1450.2c0 9.0277-29.666 16.346-66.261 16.346-36.595 0-66.261-7.3185-66.261-16.346 0-9.0278 29.666-16.346 66.261-16.346 36.595 0 66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+ <rect id="bd" x="10" y="2457.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
@@ -407,7 +407,7 @@ it (change its fill color).</flowDiv>
   </flowRegion>
   <flowDiv xml:space="preserve">در قسمت پایین‌تر، مجموعه‌ای از رنگ گزین‌ها (<flowSpan font-style="italic"> color pickers </flowSpan>) را در تب مخصوص خودشان می‌بینید: RGB, CMYK, HSL و Wheel. شاید مناسب‌ترین آن‌ها رنگ گزین Wheel باشد که شما می‌توانید با چرخاندن مثلث، تُن رنگ را از چرخ بگیرید، و سپس با انتخاب میزان سایه‌ی دلخواه از آن تُن، رنگ نهایی را انتخاب کنید. تمام رنگ گزین‌ها یک لغزنده برای تنظیم میزان <flowSpan font-style="italic"> آلفا (شفافیت) </flowSpan> شئ یا اشیاء انتخاب شده دارند. (اگر شفافیت را صفر کنید، رنگ نامرئی به دست می‌آید)</flowDiv>
  </flowRoot>
- <rect id="bb" x="10" y="2598.6" width="288" height="1e3px" display="none"/>
+ <rect id="bb" x="10" y="2598.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bb"/>
@@ -515,18 +515,18 @@ it (change its fill color).</flowDiv>
   </flowRegion>
   <flowDiv xml:space="preserve">راه دیگری برای عوض کردن رنگ یک شئ وجود دارد، برای اینکار ابزار Dropper کلید (<flowSpan font-weight="bold"> F7 </flowSpan>) می‌تواند گزینه‌ی مناسبی باشد. برای استفاده از این ابزار، شکلی که می‌خواهید رنگ شود را انتخاب کنید، ابزار را فعال کنید و روی هر نقطه‌ای در صفحه که رنگ مورد نظرتان را دارد <flowSpan font-weight="bold"> کلیک </flowSpan> کنید تا شکل انتخاب شده به آن رنگ درآید (<flowSpan font-weight="bold">Shift/+کلیک </flowSpan> رنگ حاشیه را تنظیم می‌کند).</flowDiv>
  </flowRoot>
- <text x="10" y="3050.7197793" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3050.7197793">تکثیر، هم‌ترازی، توزیع</tspan>
+ <text x="10" y="3050.7883073" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3050.7883073">تکثیر، هم‌ترازی، توزیع</tspan>
  </text>
- <rect id="av" x="10" y="3055.9" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="3056" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
   </flowRegion>
   <flowDiv xml:space="preserve">یکی از پرکاربردترین اعمال، <flowSpan font-style="italic">تکثیر</flowSpan> یک شئ است (<flowSpan font-weight="bold"> Ctrl+D </flowSpan>). شئ تکثیر شده دقیقا بالای شکل اصلی قرار می‌گیرد و به حالت انتخاب شده در می‌آید، پس می توانید با درگ ماوس یا کلید‌های جهت‌دار آن را کنار بکشید. برای تمرین، سعی کنید از کپی‌های این مربع سیاه یک خط بسازید.</flowDiv>
  </flowRoot>
- <rect transform="translate(10 3100.9)" x="-.1145" y=".90725" width="11.092" height="11.092" fill-rule="evenodd"/>
- <rect id="au" x="10" y="3124" width="288" height="1e3px" display="none"/>
+ <rect transform="translate(10 3101)" x="-.1145" y=".90725" width="11.092" height="11.092" fill-rule="evenodd"/>
+ <rect id="au" x="10" y="3124.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
@@ -554,53 +554,53 @@ examples:</flowDiv>
    <stop stop-color="#0082ab" stop-opacity="0" offset="1"/>
   </linearGradient>
  </defs>
- <path transform="translate(10 3202.6) matrix(-1 0 0 1 413.56 -2103.4)" d="m223 2147.6-41.855 0.6907 20.329-36.593 10.763 17.951z" fill="url(#d)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6) matrix(-1 0 0 1 413.44 -2098.4)" d="m207.75 2141.8 20.273-34.005 19.313 34.56-19.793-0.2772z" fill="url(#e)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6) matrix(-1 0 0 1 433.5 -2109.1)" d="m218.9 2147.6 10.862-23.877 7.6235 10.673 7.6235 10.673-13.055 1.2656z" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6) matrix(-1 0 0 1 445.33 -2121.6)" d="m221.83 2157 15.164-20.492 10.165 23.379-12.664-1.4432z" fill="url(#g)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6) matrix(-1 0 0 1 411.97 -2130)" d="m232.98 2163.5 3.6889-6.8247 3.6889-6.8246 8.1317 13.214-7.7548 0.2176z" fill="url(#h)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6) matrix(-1 0 0 1 429.68 -2135.4)" d="m241.78 2168.2 4.8233-6.8928 4.8233-6.8927 7.1152 15.247-8.3809-0.7307z" fill="url(#i)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6) matrix(-1 0 0 1 450.9 -2138.5)" d="m254.11 2170.5 2.1825-5.3681 2.1825-5.368 7.1152 9.1482-5.7401 0.7939z" fill="url(#j)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6)" d="m30.105 4.9279 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m27.562 9.2561 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m25.019 13.584 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m22.476 17.913 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m19.933 22.241 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m17.39 26.569 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m14.847 30.897 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m12.304 35.225 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6)" d="m9.761 39.554 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
- <path transform="translate(10 3202.6) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1424.3 -31.314)" d="m131.46 2120.6c0.41193 0.206-0.07441 0.6569-0.34233 0.6847-0.72607 0.0752-1.1234-0.7544-1.027-1.3693 0.1724-1.0999 1.3955-1.6298 2.3963-1.3694 1.4687 0.3822 2.1472 2.044 1.7117 3.4234-0.58046 1.8385-2.6947 2.6691-4.4503 2.0539-2.2093-0.774-3.1933-3.3465-2.3963-5.4773 0.96528-2.5806 3.9991-3.7188 6.5043-2.7386 2.9523 1.1551 4.2452 4.6519 3.081 7.5313-1.3442 3.3243-5.3051 4.7721-8.5583 3.4233-3.6965-1.5326-5.2994-5.9584-3.7656-9.5853 1.7206-4.0689 6.6118-5.8269 10.612-4.108 4.4413 1.9084 6.3547 7.2654 4.4503 11.639" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.385908" sodipodi:cx="131.45540" sodipodi:cy="2120.6279" sodipodi:expansion="1.0000000" sodipodi:radius="9.1857243" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1440.6 -40.555)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1424.3 -54.931)" d="m154.34 2141.8c1.1181 0.5885-0.24162 1.7976-0.97809 1.8584-1.9958 0.1649-3.0381-2.1335-2.7386-3.8145 0.53572-3.007 3.9209-4.3904 6.651-3.619 4.0066 1.1321 5.7726 5.7289 4.4992 9.4875-1.6972 5.0097-7.5437 7.167-12.324 5.3795-6.0155-2.2494-8.5676-9.3617-6.2598-15.16 2.7951-7.0231 11.181-9.9718 17.997-7.1401 8.0318 3.3371 11.378 13.002 8.0203 20.833-3.8768 9.0413-14.824 12.786-23.67 8.9006-10.051-4.4149-14.195-16.646-9.7809-26.506 4.952-11.062 18.468-15.605 29.343-10.661 12.073 5.4883 17.015 20.291 11.541 32.179" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="154.34271" sodipodi:cy="2141.7546" sodipodi:expansion="1.0000000" sodipodi:radius="25.200598" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1424.3 -65.819)" d="m177.23 2161.1c0.94157 0.2943 0.06791 1.4144-0.48904 1.565-1.5093 0.408-2.6338-1.21-2.6408-2.543-0.0126-2.3846 2.3918-3.9242 4.597-3.7168 3.2363 0.3044 5.2405 3.5853 4.7926 6.651-0.59691 4.0862-4.7822 6.5672-8.705 5.8686-4.9364-0.8792-7.899-5.9808-6.9444-10.759 1.1561-5.7871 7.1801-9.2339 12.813-8.0204 6.6381 1.4301 10.571 8.3801 9.0962 14.867-1.7021 7.4895-9.5802 11.908-16.921 10.172-8.341-1.973-13.247-10.781-11.248-18.975 2.2429-9.1927 11.981-14.587 21.029-12.324 10.044 2.5121 15.927 13.182 13.4 23.083" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.546671" sodipodi:cx="177.23004" sodipodi:cy="2161.1208" sodipodi:expansion="1.0000000" sodipodi:radius="19.674946" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6) matrix(4.753e-17 .15352 -.15352 4.753e-17 473.62 31.043)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6) matrix(9.506e-17 .30705 -.30705 9.506e-17 806.81 7.1768)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6) matrix(3.8024e-16 1.2282 -1.2282 3.8024e-16 2753.8 -136.02)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6) matrix(7.6048e-16 2.4564 -2.4564 7.6048e-16 5347.5 -326.94)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width=".125" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(13.589 1099.2)" d="m223 2147.6-41.855 0.6907 20.329-36.593 10.763 17.951z" fill="url(#d)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(13.701 1104.2)" d="m207.75 2141.8 20.273-34.005 19.313 34.56-19.793-0.2772z" fill="url(#e)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(-6.352 1093.5)" d="m218.9 2147.6 10.862-23.877 7.6235 10.673 7.6235 10.673-13.055 1.2656z" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(-18.189 1081)" d="m221.83 2157 15.164-20.492 10.165 23.379-12.664-1.4432z" fill="url(#g)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(15.175 1072.6)" d="m232.98 2163.5 3.6889-6.8247 3.6889-6.8246 8.1317 13.214-7.7548 0.2176z" fill="url(#h)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(-2.5304 1067.2)" d="m241.78 2168.2 4.8233-6.8928 4.8233-6.8927 7.1152 15.247-8.3809-0.7307z" fill="url(#i)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(-23.757 1064.1)" d="m254.11 2170.5 2.1825-5.3681 2.1825-5.368 7.1152 9.1482-5.7401 0.7939z" fill="url(#j)" fill-opacity=".75" fill-rule="evenodd"/>
- <path transform="translate(10 3202.6) matrix(1.0825e-16 .34966 -.34966 1.0825e-16 853.98 .69279)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
- <path transform="translate(10 3202.6)" d="m175.2 51.728c-0.04373 0.9606-0.08412 2.0544-1.1052 2.797" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m182.3 51.84c0 0.7432-0.45969 2.1149-0.36838 3.0207" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m188.65 51.951c0.19998 0.6951 0.08211 1.788 1.842 2.5733" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m197.68 51.504c-0.21579 0.6669-1.8609 2.5621-1.1052 3.2446" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m204.82 52.287c-0.28049 0.399-1.3518 1.8021 0 2.3495" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m211.03 51.504c0.09154 0.9266-0.48104 1.8809 1.842 2.9089" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m220.14 51.951c0.07984 0.5698-0.99104 1.5626-1.4736 2.4614" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m225.4 51.84c0.02713 0.4366 0.19539 1.7227 2.9471 2.3495" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m233.97 52.063c0 0.1579-0.21227 1.6131 0.73678 2.2376" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m238.47 51.84c1.0548 1.2333 1.1304 2.6855 6.631 3.5801" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <path transform="translate(10 3202.6)" d="m248.88 52.511c0 0.8403-0.10579 1.6705 0.73678 2.4614" fill="none" stroke="#000" stroke-width=".36291pt"/>
- <text x="10" y="3283.4887883" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3283.4887883">Z-order</tspan>
+ <path transform="translate(10 3202.7) matrix(-1 0 0 1 413.56 -2103.4)" d="m223 2147.6-41.855 0.6907 20.329-36.593 10.763 17.951z" fill="url(#d)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7) matrix(-1 0 0 1 413.44 -2098.4)" d="m207.75 2141.8 20.273-34.005 19.313 34.56-19.793-0.2772z" fill="url(#e)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7) matrix(-1 0 0 1 433.5 -2109.1)" d="m218.9 2147.6 10.862-23.877 7.6235 10.673 7.6235 10.673-13.055 1.2656z" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7) matrix(-1 0 0 1 445.33 -2121.6)" d="m221.83 2157 15.164-20.492 10.165 23.379-12.664-1.4432z" fill="url(#g)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7) matrix(-1 0 0 1 411.97 -2130)" d="m232.98 2163.5 3.6889-6.8247 3.6889-6.8246 8.1317 13.214-7.7548 0.2176z" fill="url(#h)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7) matrix(-1 0 0 1 429.68 -2135.4)" d="m241.78 2168.2 4.8233-6.8928 4.8233-6.8927 7.1152 15.247-8.3809-0.7307z" fill="url(#i)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7) matrix(-1 0 0 1 450.9 -2138.5)" d="m254.11 2170.5 2.1825-5.3681 2.1825-5.368 7.1152 9.1482-5.7401 0.7939z" fill="url(#j)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7)" d="m30.105 4.9279 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m27.562 9.2561 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m25.019 13.584 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m22.476 17.913 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m19.933 22.241 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m17.39 26.569 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m14.847 30.897 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m12.304 35.225 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7)" d="m9.761 39.554 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt"/>
+ <path transform="translate(10 3202.7) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1424.3 -31.314)" d="m131.46 2120.6c0.41193 0.206-0.07441 0.6569-0.34233 0.6847-0.72607 0.0752-1.1234-0.7544-1.027-1.3693 0.1724-1.0999 1.3955-1.6298 2.3963-1.3694 1.4687 0.3822 2.1472 2.044 1.7117 3.4234-0.58046 1.8385-2.6947 2.6691-4.4503 2.0539-2.2093-0.774-3.1933-3.3465-2.3963-5.4773 0.96528-2.5806 3.9991-3.7188 6.5043-2.7386 2.9523 1.1551 4.2452 4.6519 3.081 7.5313-1.3442 3.3243-5.3051 4.7721-8.5583 3.4233-3.6965-1.5326-5.2994-5.9584-3.7656-9.5853 1.7206-4.0689 6.6118-5.8269 10.612-4.108 4.4413 1.9084 6.3547 7.2654 4.4503 11.639" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.385908" sodipodi:cx="131.45540" sodipodi:cy="2120.6279" sodipodi:expansion="1.0000000" sodipodi:radius="9.1857243" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1440.6 -40.555)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1424.3 -54.931)" d="m154.34 2141.8c1.1181 0.5885-0.24162 1.7976-0.97809 1.8584-1.9958 0.1649-3.0381-2.1335-2.7386-3.8145 0.53572-3.007 3.9209-4.3904 6.651-3.619 4.0066 1.1321 5.7726 5.7289 4.4992 9.4875-1.6972 5.0097-7.5437 7.167-12.324 5.3795-6.0155-2.2494-8.5676-9.3617-6.2598-15.16 2.7951-7.0231 11.181-9.9718 17.997-7.1401 8.0318 3.3371 11.378 13.002 8.0203 20.833-3.8768 9.0413-14.824 12.786-23.67 8.9006-10.051-4.4149-14.195-16.646-9.7809-26.506 4.952-11.062 18.468-15.605 29.343-10.661 12.073 5.4883 17.015 20.291 11.541 32.179" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="154.34271" sodipodi:cy="2141.7546" sodipodi:expansion="1.0000000" sodipodi:radius="25.200598" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7) matrix(1.9012e-16 .6141 -.6141 1.9012e-16 1424.3 -65.819)" d="m177.23 2161.1c0.94157 0.2943 0.06791 1.4144-0.48904 1.565-1.5093 0.408-2.6338-1.21-2.6408-2.543-0.0126-2.3846 2.3918-3.9242 4.597-3.7168 3.2363 0.3044 5.2405 3.5853 4.7926 6.651-0.59691 4.0862-4.7822 6.5672-8.705 5.8686-4.9364-0.8792-7.899-5.9808-6.9444-10.759 1.1561-5.7871 7.1801-9.2339 12.813-8.0204 6.6381 1.4301 10.571 8.3801 9.0962 14.867-1.7021 7.4895-9.5802 11.908-16.921 10.172-8.341-1.973-13.247-10.781-11.248-18.975 2.2429-9.1927 11.981-14.587 21.029-12.324 10.044 2.5121 15.927 13.182 13.4 23.083" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.546671" sodipodi:cx="177.23004" sodipodi:cy="2161.1208" sodipodi:expansion="1.0000000" sodipodi:radius="19.674946" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7) matrix(4.753e-17 .15352 -.15352 4.753e-17 473.62 31.043)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7) matrix(9.506e-17 .30705 -.30705 9.506e-17 806.81 7.1768)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7) matrix(3.8024e-16 1.2282 -1.2282 3.8024e-16 2753.8 -136.02)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7) matrix(7.6048e-16 2.4564 -2.4564 7.6048e-16 5347.5 -326.94)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width=".125" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(13.589 1099.3)" d="m223 2147.6-41.855 0.6907 20.329-36.593 10.763 17.951z" fill="url(#d)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(13.701 1104.3)" d="m207.75 2141.8 20.273-34.005 19.313 34.56-19.793-0.2772z" fill="url(#e)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(-6.352 1093.6)" d="m218.9 2147.6 10.862-23.877 7.6235 10.673 7.6235 10.673-13.055 1.2656z" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(-18.189 1081.1)" d="m221.83 2157 15.164-20.492 10.165 23.379-12.664-1.4432z" fill="url(#g)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(15.175 1072.7)" d="m232.98 2163.5 3.6889-6.8247 3.6889-6.8246 8.1317 13.214-7.7548 0.2176z" fill="url(#h)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(-2.5304 1067.3)" d="m241.78 2168.2 4.8233-6.8928 4.8233-6.8927 7.1152 15.247-8.3809-0.7307z" fill="url(#i)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(-23.757 1064.2)" d="m254.11 2170.5 2.1825-5.3681 2.1825-5.368 7.1152 9.1482-5.7401 0.7939z" fill="url(#j)" fill-opacity=".75" fill-rule="evenodd"/>
+ <path transform="translate(10 3202.7) matrix(1.0825e-16 .34966 -.34966 1.0825e-16 853.98 .69279)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.0824-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.8440" sodipodi:expansion="1.0000000" sodipodi:radius="12.600299" sodipodi:revolution="3.0000000" sodipodi:t0="0.0000000" sodipodi:type="spiral"/>
+ <path transform="translate(10 3202.7)" d="m175.2 51.728c-0.04373 0.9606-0.08412 2.0544-1.1052 2.797" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m182.3 51.84c0 0.7432-0.45969 2.1149-0.36838 3.0207" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m188.65 51.951c0.19998 0.6951 0.08211 1.788 1.842 2.5733" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m197.68 51.504c-0.21579 0.6669-1.8609 2.5621-1.1052 3.2446" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m204.82 52.287c-0.28049 0.399-1.3518 1.8021 0 2.3495" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m211.03 51.504c0.09154 0.9266-0.48104 1.8809 1.842 2.9089" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m220.14 51.951c0.07984 0.5698-0.99104 1.5626-1.4736 2.4614" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m225.4 51.84c0.02713 0.4366 0.19539 1.7227 2.9471 2.3495" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m233.97 52.063c0 0.1579-0.21227 1.6131 0.73678 2.2376" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m238.47 51.84c1.0548 1.2333 1.1304 2.6855 6.631 3.5801" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <path transform="translate(10 3202.7)" d="m248.88 52.511c0 0.8403-0.10579 1.6705 0.73678 2.4614" fill="none" stroke="#000" stroke-width=".36291pt"/>
+ <text x="10" y="3283.5573163" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3283.5573163">Z-order</tspan>
  </text>
- <rect id="at" x="10" y="3288.7" width="288" height="1e3px" display="none"/>
+ <rect id="at" x="10" y="3288.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#at"/>
@@ -614,71 +614,71 @@ and Lower (<flowSpan font-weight="bold">PgDn</flowSpan>), will sink or emerge th
 i.e. move it past one non-selected object in z-order (only objects that overlap the
 selection count, based on their respective bounding boxes).</flowDiv>
  </flowRoot>
- <rect id="as" x="10" y="3370" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="3370.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
   </flowRegion>
   <flowDiv xml:space="preserve">استفاده از این دستورات را با تغییر دادن z-order اشیاء زیر تمرین کنید، تا اولین بیضی از سمت چپ رو و اولین بیضی از سمت راست پشت بقیه بیضی‌ها قرار گیرد:</flowDiv>
  </flowRoot>
- <path transform="translate(10 3404.3) matrix(1.3625 0 0 1.7447 16.798 -4067.1)" d="m70.423 2348c0 7.6166-10.51 13.791-23.474 13.791-12.964 0-23.474-6.1744-23.474-13.791s10.51-13.791 23.474-13.791c12.964 0 23.474 6.1745 23.474 13.791z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".39901"/>
- <path transform="translate(10 3404.3) matrix(1 0 0 1.0513 31.763 -2451.9)" d="m100.94 2351.2c0 9.7234-11.429 17.606-25.528 17.606s-25.528-7.8823-25.528-17.606c0-9.7233 11.429-17.606 25.528-17.606s25.528 7.8823 25.528 17.606z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
- <path transform="translate(10 3404.3) matrix(1 0 0 1.0513 34.11 -2439.6)" d="m119.72 2349.5c0 7.4546-9.7215 13.498-21.714 13.498s-21.714-6.0431-21.714-13.498c0-7.4545 9.7215-13.498 21.714-13.498s21.714 6.0431 21.714 13.498z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
- <path transform="translate(10 3404.3) matrix(1 0 0 1.0513 36.436 -2449.6)" d="m129.69 2348c0 5.3478-5.7804 9.6831-12.911 9.6831-7.1304 0-12.911-4.3353-12.911-9.6831 0-5.3479 5.7804-9.6831 12.911-9.6831 7.1304 0 12.911 4.3352 12.911 9.6831z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
- <path transform="translate(10 3404.3) matrix(1 0 0 1.0513 37.632 -2444.9)" d="m142.61 2347.1c0 4.2135-5.2549 7.6291-11.737 7.6291-6.4822 0-11.737-3.4156-11.737-7.6291 0-4.2134 5.2549-7.6291 11.737-7.6291 6.4822 0 11.737 3.4157 11.737 7.6291z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
- <path transform="translate(10 3404.3) matrix(1 0 0 1.0513 37.045 -2450.2)" d="m150.23 2347.4c0 3.079-3.2843 5.5751-7.3357 5.5751-4.0514 0-7.3357-2.4961-7.3357-5.5751 0-3.0791 3.2843-5.5751 7.3357-5.5751 4.0514 0 7.3357 2.496 7.3357 5.5751z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
- <rect id="ar" x="10" y="3469.1" width="288" height="1e3px" display="none"/>
+ <path transform="translate(10 3404.4) matrix(1.3625 0 0 1.7447 16.798 -4067.1)" d="m70.423 2348c0 7.6166-10.51 13.791-23.474 13.791-12.964 0-23.474-6.1744-23.474-13.791s10.51-13.791 23.474-13.791c12.964 0 23.474 6.1745 23.474 13.791z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".39901"/>
+ <path transform="translate(10 3404.4) matrix(1 0 0 1.0513 31.763 -2451.9)" d="m100.94 2351.2c0 9.7234-11.429 17.606-25.528 17.606s-25.528-7.8823-25.528-17.606c0-9.7233 11.429-17.606 25.528-17.606s25.528 7.8823 25.528 17.606z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
+ <path transform="translate(10 3404.4) matrix(1 0 0 1.0513 34.11 -2439.6)" d="m119.72 2349.5c0 7.4546-9.7215 13.498-21.714 13.498s-21.714-6.0431-21.714-13.498c0-7.4545 9.7215-13.498 21.714-13.498s21.714 6.0431 21.714 13.498z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
+ <path transform="translate(10 3404.4) matrix(1 0 0 1.0513 36.436 -2449.6)" d="m129.69 2348c0 5.3478-5.7804 9.6831-12.911 9.6831-7.1304 0-12.911-4.3353-12.911-9.6831 0-5.3479 5.7804-9.6831 12.911-9.6831 7.1304 0 12.911 4.3352 12.911 9.6831z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
+ <path transform="translate(10 3404.4) matrix(1 0 0 1.0513 37.632 -2444.9)" d="m142.61 2347.1c0 4.2135-5.2549 7.6291-11.737 7.6291-6.4822 0-11.737-3.4156-11.737-7.6291 0-4.2134 5.2549-7.6291 11.737-7.6291 6.4822 0 11.737 3.4157 11.737 7.6291z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
+ <path transform="translate(10 3404.4) matrix(1 0 0 1.0513 37.045 -2450.2)" d="m150.23 2347.4c0 3.079-3.2843 5.5751-7.3357 5.5751-4.0514 0-7.3357-2.4961-7.3357-5.5751 0-3.0791 3.2843-5.5751 7.3357-5.5751 4.0514 0 7.3357 2.496 7.3357 5.5751z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".6"/>
+ <rect id="ar" x="10" y="3469.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
   </flowRegion>
   <flowDiv xml:space="preserve">یک میانبر بسیار مفید کلید <flowSpan font-weight="bold"> Tab </flowSpan> است. اگر هیچ چیز انتخاب نشده باشد، کلید Tab، شئ‌ای که در پایین‌ترین سطح z-order باشد را انتخاب می‌کند؛ در غیر اینصورت، شئ‌ای که <flowSpan font-style="italic">سطح z-order آن بالای شئ انتخاب شده باشد</flowSpan> انتخاب می‌شود. <flowSpan font-weight="bold">Shift+Tab</flowSpan> برعکس کار می‌کند، به این ترتیب که از بالاترین شئ شروع می‌کند و به سمت پایین حرکت می‌کند. از آنجا که اشیائی که می‌سازید به صورت پشته در سند ذخیره می‌شود، <flowSpan font-weight="bold"> Shift+Tab </flowSpan> زدن در حالتی که هیچ شئ‌ای انتخاب نشده باشد، آخرین شئ‌ای که اخیرا ساخته‌اید را انتخاب خواهد کرد. کار کردن با کلید‌های <flowSpan font-weight="bold"> Tab </flowSpan> و <flowSpan font-weight="bold"> Shift+Tab </flowSpan> را روی بیضی‌های بالا تمرین کنید.</flowDiv>
  </flowRoot>
- <text x="10" y="3550.8271693" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3550.8271693">انتخاب کردن شئ زیرین و درگ کردن آن</tspan>
+ <text x="10" y="3550.9642243" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3550.9642243">انتخاب کردن شئ زیرین و درگ کردن آن</tspan>
  </text>
- <rect id="aq" x="10" y="3556" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="3556.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
   </flowRegion>
   <flowDiv xml:space="preserve">اگر شئ‌ای که نیاز دارید زیر شئ دیگری پنهان شده باشد، چه کار می‌کنید؟ اگر شئ بالایی (تا حدودی) شفاف باشد، ممکن است هنوز شئ زیری را ببینید، اما کلیک کردن روی آن باعث می‌شود شئ بالایی انتخاب شود و نه آنچه که شما می‌خواهید.</flowDiv>
  </flowRoot>
- <rect id="ap" x="10" y="3593" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="3593.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">در این وضعیت <flowSpan font-weight="bold"> Alt/+کلیک </flowSpan> مفید واقع می‌شود. با چندبار زدن <flowSpan font-weight="bold"> Alt/+کلیک </flowSpan> می‌تواند اشیائی که در سطح z-order <flowSpan font-style="italic">پایین‌تر</flowSpan> هستند و در واقع پشت شی جلویی مخفی شده‌اند را انتخاب کنید. تکرار <flowSpan font-weight="bold"> Alt/+کلیک </flowSpan> در وضعیتی که آخرین شئ سطح z-order انتخاب شده باشد، باعث انتخاب شدن اولین شئ سطح z-order (در واقع جلوترین شئ) خواهد شد.</flowDiv>
  </flowRoot>
- <rect id="an" x="10" y="3642.2" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="3642.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
   </flowRegion>
   <flowDiv xml:space="preserve">نکته: (اگر در لینوکس باشید، ممکن است متوجه شوید که <flowSpan font-weight="bold"> Alt/+کلیک </flowSpan> به درستی کار نمی‌کند. در عوض، ممکن است پنجره اصلی Inkscape را جابه‌جا کند. دلیلش این است که مدیر پنجره شما <flowSpan font-weight="bold"> Alt/+کلیک </flowSpan> را برای عملیات دیگری رزرو کرده است. برای رفع این مشکل، باید تنظیمات رفتار مدیر پنجره را پیدا کرده و یا آن را خاموش کنید یا آن را با کلید متا (همان کلیدی که عکس ویندوز روی آن درج شده است) عوض کنید تا Inkscape و سایر برنامه‌ها بتوانند آزادانه از Alt استفاده کنند.</flowDiv>
  </flowRoot>
- <rect id="am" x="10" y="3702.1" width="288" height="1e3px" display="none"/>
+ <rect id="am" x="10" y="3702.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#am"/>
   </flowRegion>
   <flowDiv xml:space="preserve">تا اینجا همه چیز خوب است، اما وقتی یک شئ زیر سطحی را انتخاب می‌کنید، چه کاری می‌توانید با آن انجام‌دهید؟ شما می‌توانید از کلید‌ها برای تغییر شکل آن استفاده کنید و یا می‌توانید اهرم‌های ناحیه‌ی انتخاب شده را درگ کنید. البته، درگ کردن خود شئ، باعث ریست شدن سطح z-order شده و شئ موجود در بالاترین سطح را انتخاب و جابه‌جا خواهد کرد. (این چیزی است که کلیک و درگ برای آن ساخته شده است- مراحل کار به این شکل است که ابتدا بالاترین شئ زیر نشانگر ماوس را انتخاب شده، سپس <flowSpan font-style="italic"> ناحیه انتخاب شده </flowSpan> درگ می‌شود). برای اینکه به Inkscape بگویید که شئ انتخاب شده را بدون انتخاب هیچ شئ دیگری درگ کند، از <flowSpan font-weight="bold"> Alt/+درگ کردن </flowSpan> استفاده کنید.</flowDiv>
  </flowRoot>
- <rect id="al" x="10" y="3776.1" width="288" height="1e3px" display="none"/>
+ <rect id="al" x="10" y="3776.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#al"/>
   </flowRegion>
   <flowDiv xml:space="preserve">ترکیب‌های <flowSpan font-weight="bold"> Alt/+کلیک </flowSpan> و <flowSpan font-weight="bold"> Alt/+درگ </flowSpan> را روی دو شکل قهوه‌ای زیر مستطیل سبز شفاف تمرین کنید:</flowDiv>
  </flowRoot>
- <path transform="translate(10 3799.7) matrix(.39512 .68437 -.68437 .39512 2780 -1592.9)" d="m126.89 3940.5c-1.7128 2.7762-13.227-1.9871-15.92-0.2673-2.6928 1.7197-2.717 13.972-5.8567 14.525-3.1397 0.5531-6.3535-10.32-9.5433-11.1s-13.307 5.7281-15.627 3.5431c-2.3203-2.1851 6.0756-11.819 4.6565-14.776-1.4191-2.9564-12.432-3.072-12.315-6.2422s12.009-3.7964 13.505-6.565c1.4954-2.7687-2.9446-13.24-0.39835-15.118 2.5463-1.8777 10.873 5.667 14.076 5.0626 3.2032-0.6043 7.3014-9.5359 10.365-8.6831s0.25246 11.285 2.778 13.344c2.5256 2.0584 12.649-0.7081 13.802 2.2959 1.1532 3.0041-8.7265 9.769-8.7641 12.932s10.955 8.2731 9.2423 11.049z" color="#000000" fill="#ac7335" inkscape:flatsided="false" inkscape:randomized="0.047000000" inkscape:rounded="0.21000000" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:cx="100.73942" sodipodi:cy="3927.1016" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:sides="7" sodipodi:type="star"/>
- <path transform="translate(10 3799.7) matrix(.8326 .4807 -.4807 .8326 1947.5 -3288.4)" d="m107.62 3941.6c-0.52759 2.111-9.0763-3.5197-10.951-2.3937-2.4976 1.5003-1.9722 11.854-4.8626 12.594-2.1693 0.5554-1.5842-8.522-3.5626-9.4629-2.6361-1.2536-11.029 4.1052-13.221 2.1498-1.6453-1.4675 6.9505-5.6944 6.8942-7.9439-0.075069-2.9973-9.6434-9.8527-9.0821-12.757 0.42125-2.18 9.4727 5.1817 11.397 4.018 2.5638-1.5505 2.3375-12.598 5.2294-13.243 2.1704-0.4837 1.6931 9.0878 3.6599 10.096 2.6207 1.3439 12.061-3.374 14.214-1.3192 1.6159 1.5422-7.3719 4.7859-7.261 6.987 0.14775 2.9328 8.2486 8.462 7.5456 11.275z" color="#000000" fill="#ff9400" inkscape:flatsided="false" inkscape:randomized="0.047000000" inkscape:rounded="0.21000000" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:cx="90.665482" sodipodi:cy="3933.4641" sodipodi:r1="19.212250" sodipodi:r2="9.3934679" sodipodi:sides="6" sodipodi:type="star"/>
- <rect transform="translate(10 3799.7)" x="44.416" y="-.21458" width="171.79" height="56.564" rx="10.424" ry="10.424" color="#000000" fill="#2dd268" fill-opacity=".29609"/>
- <text x="10" y="3881.0837248" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="3881.0837248">Selecting similar objects</tspan>
+ <path transform="translate(10 3799.9) matrix(.39512 .68437 -.68437 .39512 2780 -1592.9)" d="m126.89 3940.5c-1.7128 2.7762-13.227-1.9871-15.92-0.2673-2.6928 1.7197-2.717 13.972-5.8567 14.525-3.1397 0.5531-6.3535-10.32-9.5433-11.1s-13.307 5.7281-15.627 3.5431c-2.3203-2.1851 6.0756-11.819 4.6565-14.776-1.4191-2.9564-12.432-3.072-12.315-6.2422s12.009-3.7964 13.505-6.565c1.4954-2.7687-2.9446-13.24-0.39835-15.118 2.5463-1.8777 10.873 5.667 14.076 5.0626 3.2032-0.6043 7.3014-9.5359 10.365-8.6831s0.25246 11.285 2.778 13.344c2.5256 2.0584 12.649-0.7081 13.802 2.2959 1.1532 3.0041-8.7265 9.769-8.7641 12.932s10.955 8.2731 9.2423 11.049z" color="#000000" fill="#ac7335" inkscape:flatsided="false" inkscape:randomized="0.047000000" inkscape:rounded="0.21000000" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:cx="100.73942" sodipodi:cy="3927.1016" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:sides="7" sodipodi:type="star"/>
+ <path transform="translate(10 3799.9) matrix(.8326 .4807 -.4807 .8326 1947.5 -3288.4)" d="m107.62 3941.6c-0.52759 2.111-9.0763-3.5197-10.951-2.3937-2.4976 1.5003-1.9722 11.854-4.8626 12.594-2.1693 0.5554-1.5842-8.522-3.5626-9.4629-2.6361-1.2536-11.029 4.1052-13.221 2.1498-1.6453-1.4675 6.9505-5.6944 6.8942-7.9439-0.075069-2.9973-9.6434-9.8527-9.0821-12.757 0.42125-2.18 9.4727 5.1817 11.397 4.018 2.5638-1.5505 2.3375-12.598 5.2294-13.243 2.1704-0.4837 1.6931 9.0878 3.6599 10.096 2.6207 1.3439 12.061-3.374 14.214-1.3192 1.6159 1.5422-7.3719 4.7859-7.261 6.987 0.14775 2.9328 8.2486 8.462 7.5456 11.275z" color="#000000" fill="#ff9400" inkscape:flatsided="false" inkscape:randomized="0.047000000" inkscape:rounded="0.21000000" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:cx="90.665482" sodipodi:cy="3933.4641" sodipodi:r1="19.212250" sodipodi:r2="9.3934679" sodipodi:sides="6" sodipodi:type="star"/>
+ <rect transform="translate(10 3799.9)" x="44.416" y="-.21458" width="171.79" height="56.564" rx="10.424" ry="10.424" color="#000000" fill="#2dd268" fill-opacity=".29609"/>
+ <text x="10" y="3881.2207798" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="3881.2207798">Selecting similar objects</tspan>
  </text>
- <rect id="ak" x="10" y="3886.3" width="288" height="1e3px" display="none"/>
+ <rect id="ak" x="10" y="3886.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ak"/>
@@ -689,46 +689,46 @@ blue squares, and use <flowSpan font-family="Liberation Sans,Arial,sans-serif">E
 Fill Color</flowSpan> from the menu. All the objects with a fill color the same 
 shade of blue are now selected.</flowDiv>
  </flowRoot>
- <rect transform="translate(10 3942.1)" x="48.992" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="48.992" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="48.992" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="68.185" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="86.873" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="105.06" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="122.73" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="140.92" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="159.6" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="177.28" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="195.46" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="68.185" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="86.873" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="105.06" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="122.73" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="140.92" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="159.6" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="177.28" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="195.46" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="68.185" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="86.873" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="105.06" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="122.73" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="140.92" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="159.6" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="177.28" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="195.46" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="9.5964" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="214.66" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="9.5964" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="214.66" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="9.5964" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="214.66" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="28.789" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="233.85" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="28.789" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="233.85" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="28.789" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect transform="translate(10 3942.1)" x="233.85" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
- <rect id="aj" x="10" y="4003.1" width="288" height="1e3px" display="none"/>
+ <rect transform="translate(10 3942.3)" x="48.992" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="48.992" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="48.992" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="68.185" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="86.873" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="105.06" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="122.73" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="140.92" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="159.6" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="177.28" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="195.46" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="68.185" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="86.873" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="105.06" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="122.73" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="140.92" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="159.6" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="177.28" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="195.46" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="68.185" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="86.873" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="105.06" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="122.73" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="140.92" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="159.6" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="177.28" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="195.46" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="9.5964" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="214.66" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="9.5964" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="214.66" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="9.5964" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="214.66" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="28.789" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="233.85" y="4.0448" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="28.789" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="233.85" y="21.722" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="28.789" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect transform="translate(10 3942.3)" x="233.85" y="38.895" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+ <rect id="aj" x="10" y="4003.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aj"/>
@@ -736,17 +736,17 @@ shade of blue are now selected.</flowDiv>
   <flowDiv xml:space="preserve">In addition to selecting by fill color, you can select multiple similar objects
 by stroke color, stroke style, fill &amp; stroke, and object type.</flowDiv>
  </flowRoot>
- <text x="10" y="4043.9097968" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="4043.9097968">جمع بندی</tspan>
+ <text x="10" y="4044.1519198" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="4044.1519198">جمع بندی</tspan>
  </text>
- <rect id="ai" x="10" y="4049.1" width="288" height="1e3px" display="none"/>
+ <rect id="ai" x="10" y="4049.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ai"/>
   </flowRegion>
   <flowDiv xml:space="preserve">این پایان آموزش گام به گام اصول مقدماتی Inkscape بود. مطالب زیادی در مورد Inkscape وجود دارد که بر پایه‌ی تکنیک‌هایی که در اینجا شرح داده شد، قابل اجرا خواهند بود. با گذراندن این بخش، شما قادر هستید که اشکال گرافیکی ساده ولی مفیدی بسازید. برای موارد پیچیده‌تر به بخش پیشرفته و سایر آموزش‌های گام به گام در <flowSpan font-family="Liberation Sans,Arial,sans-serif">Help &gt; Tutorials</flowSpan> رجوع کنید یا بخش بعدی این سری آموزشی را ببینید.</flowDiv>
  </flowRoot>
- <g transform="translate(0 4107.4)">
+ <g transform="translate(0 4107.7)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="o" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#c" inkscape:collect="always"/>
    <filter id="bx" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

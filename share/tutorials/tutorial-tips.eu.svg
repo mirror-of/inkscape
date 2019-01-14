@@ -484,8 +484,8 @@ stops:
  </defs>
  <rect transform="translate(10 1453.4)" x="70.82" y=".55902" width="74.385" height="68.187" fill="url(#e)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
  <rect transform="translate(10 1453.4)" x="153.67" y=".55902" width="74.385" height="68.187" fill="url(#f)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
- <text x="10" y="1547.5694918" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1547.5694918">Orriaren erdiarekiko lerrokatzen</tspan>
+ <text x="10" y="1547.5715308" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1547.5715308">Orriaren erdiarekiko lerrokatzen</tspan>
  </text>
  <rect id="ab" x="10" y="1552.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -497,8 +497,8 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1604.2904978" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1604.2904978">Dokumentua garbitzen</tspan>
+ <text x="10" y="1604.3268008" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1604.3268008">Dokumentua garbitzen</tspan>
  </text>
  <rect id="aa" x="10" y="1609.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -511,10 +511,10 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1682.3149428" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1682.3149428">Izkutuko ezaugarriak eta XML editorea</tspan>
+ <text x="10" y="1682.3512458" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1682.3512458">Izkutuko ezaugarriak eta XML editorea</tspan>
  </text>
- <rect id="z" x="10" y="1687.5" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="1687.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
@@ -525,10 +525,10 @@ more SVG features than are accessible from the GUI. The XML editor is one way to
 access to these features (if you know SVG).
 </flowDiv>
  </flowRoot>
- <text x="10" y="1749.6285838" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1749.6285838">Changing the rulers' unit of measure</tspan>
+ <text x="10" y="1749.6648868" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1749.6648868">Changing the rulers' unit of measure</tspan>
  </text>
- <rect id="x" x="10" y="1754.8" width="288" height="1e3px" display="none"/>
+ <rect id="x" x="10" y="1754.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#x"/>
@@ -541,10 +541,10 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1827.7259548" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1827.7259548">Stamping</tspan>
+ <text x="10" y="1827.7622578" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1827.7622578">Stamping</tspan>
  </text>
- <rect id="w" x="10" y="1832.9" width="288" height="1e3px" display="none"/>
+ <rect id="w" x="10" y="1833" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#w"/>
@@ -555,8 +555,8 @@ drag an object (or scale or rotate it), and while holding the mouse button down,
 repeat it as many times as you wish.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1884.3995958" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1884.3995958">Luma tresnaren trikimailuak</tspan>
+ <text x="10" y="1884.4358988" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1884.4358988">Luma tresnaren trikimailuak</tspan>
  </text>
  <rect id="v" x="10" y="1889.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -573,8 +573,8 @@ repeat it as many times as you wish.
   </flowRegion>
   <flowDiv xml:space="preserve"><flowSpan font-weight="bold">Enter</flowSpan> sakatu.</flowDiv>
  </flowRoot>
- <circle transform="translate(15 1928.5)" r="2"/>
- <rect id="be" x="20" y="1922.5" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1928.6)" r="2"/>
+ <rect id="be" x="20" y="1922.6" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#be"/>
@@ -612,8 +612,8 @@ repeat it as many times as you wish.
   </flowRegion>
   <flowDiv xml:space="preserve">Uneko bideari azpibide berri bat gehitzeko, bidea hautatu eta <flowSpan font-weight="bold">Shift</flowSpan> sakatuta duzula marrazten has zaitez edozein puntutik. Hala ere, existitzen den bide bat <flowSpan font-style="italic">jarraitu</flowSpan> nahi baduzu, Shift ez da beharrezkoa: nahikoa da hautatutako bidearen bukaera-aingura batetik marrazten hastea.</flowDiv>
  </flowRoot>
- <text x="10" y="2082.5080893" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2082.5080893">Unicode balioak sartzen</tspan>
+ <text x="10" y="2082.5443923" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2082.5443923">Unicode balioak sartzen</tspan>
  </text>
  <rect id="ay" x="10" y="2087.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -638,10 +638,10 @@ an em-dash (—). To quit the Unicode mode without inserting anything press
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2197.6041173" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2197.6041173">Ikonoak marrazteko sareta erabiltzen</tspan>
+ <text x="10" y="2197.6746833" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2197.6746833">Ikonoak marrazteko sareta erabiltzen</tspan>
  </text>
- <rect id="av" x="10" y="2202.8" width="288" height="1e3px" display="none"/>
+ <rect id="av" x="10" y="2202.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#av"/>
@@ -654,10 +654,10 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2275.5485673" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2275.5485673">Objektuen biratzea</tspan>
+ <text x="10" y="2275.6191333" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2275.6191333">Objektuen biratzea</tspan>
  </text>
- <rect id="au" x="10" y="2280.7" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2280.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
@@ -677,10 +677,10 @@ rotation center to any place.
   </flowRegion>
   <flowDiv xml:space="preserve">Edo teklatua erabiliz biratzeko <flowSpan font-weight="bold">[</flowSpan> eta <flowSpan font-weight="bold">]</flowSpan> (15 graduka) edo <flowSpan font-weight="bold">ktrl+[</flowSpan> eta <flowSpan font-weight="bold">Ktrl+]</flowSpan> (90 graduka) erabil dezakezu. <flowSpan font-weight="bold">[]</flowSpan> tekla hauek <flowSpan font-weight="bold">Alt</flowSpan> sakatuta erabiliz gero, pixelez-pixeleko biraketa geldoa burutuko da.</flowDiv>
  </flowRoot>
- <text x="10" y="2392.0803113" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2392.0803113">Itzalak jaurti</tspan>
+ <text x="10" y="2392.1508773" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2392.1508773">Itzalak jaurti</tspan>
  </text>
- <rect id="as" x="10" y="2397.3" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="2397.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
@@ -689,7 +689,7 @@ rotation center to any place.
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Filters &gt; Shadows and Glows &gt; Drop Shadow...</flowSpan> feature.
 </flowDiv>
  </flowRoot>
- <rect id="ar" x="10" y="2425.5" width="288" height="1e3px" display="none"/>
+ <rect id="ar" x="10" y="2425.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
@@ -701,30 +701,30 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2487.5960523" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2487.5960523">Bide batean testua sartzen</tspan>
+ <text x="10" y="2487.6666183" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2487.6666183">Bide batean testua sartzen</tspan>
  </text>
- <rect id="aq" x="10" y="2492.8" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="2492.9" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Testu batek kurba bat jarrai dezan, hautatu testua eta kurba eta Testua menuko <flowSpan font-family="Liberation Sans,Arial,sans-serif">Jarri bidean</flowSpan> komandoa erabili. Testua bidearen hasieran hasiko da. Normalean hobe da testurako bide zehatz bat sortzea beste elementu batera gehitzea baino  — honela kontrol handiagoa izango duzu irudia hondatu gabe</flowDiv>
  </flowRoot>
- <text x="10" y="2555.1445593" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2555.1445593">Originala aukeratzen</tspan>
+ <text x="10" y="2555.2151253" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2555.2151253">Originala aukeratzen</tspan>
  </text>
- <rect id="ap" x="10" y="2560.3" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2560.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Testua bidean, edo desplazamendu estekatua edo klon bat duzula, jatorrizko objektua edo bidea hautatzea zaila bihurtzen da, azpian edo ikusezin edo blokeatuta dagoelako. <flowSpan font-weight="bold">Shift+D</flowSpan> tekla magikoek lagunduko dizute; testua, edo desplazamendu estekatua edo klona hautatu eta <flowSpan font-weight="bold">Shift+D</flowSpan> sakatu hautapena dagokion bide, desplazamendu sorrera edo klon originalera</flowDiv>
  </flowRoot>
- <text x="10" y="2633.0504313" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2633.0504313">Leihoaren gehiegizko tamaina konpontzen</tspan>
+ <text x="10" y="2633.1552613" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2633.1552613">Leihoaren gehiegizko tamaina konpontzen</tspan>
  </text>
- <rect id="ao" x="10" y="2638.3" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="2638.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
@@ -737,10 +737,10 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2721.6914373" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2721.6914373">Gardentasuna, gradienteak eta PostScript-era esportatzea</tspan>
+ <text x="10" y="2721.7962673" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2721.7962673">Gardentasuna, gradienteak eta PostScript-era esportatzea</tspan>
  </text>
- <rect id="an" x="10" y="2726.9" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="2727" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
@@ -759,7 +759,7 @@ value of the object, but only the alpha value of its fill or stroke color, so ma
 every object's opacity value is set to 100% before you start out.
 </flowDiv>
  </flowRoot>
- <g transform="translate(0 2840.2)">
+ <g transform="translate(0 2840.3)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="s" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#d" inkscape:collect="always"/>
    <filter id="bf" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

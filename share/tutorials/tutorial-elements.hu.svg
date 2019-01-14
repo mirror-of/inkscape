@@ -33,7 +33,7 @@
   <path transform="matrix(.61496 .045496 .061919 -.45186 112.46 201.6)" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" color="#000000" fill-rule="evenodd" opacity=".5"/>
  </g>
  <text transform="scale(1.1307)" x="35" y="30" fill="#ffffff" font-family="Liberation Sans,Arial,sans-serif" font-size="7">
-  <tspan dx="0 -0.57057059 0 0 0 0 0" fill="#ffffff" letter-spacing="2.1813">::ELEMENTS OF DESIGN</tspan>
+  <tspan dx="0 -0.57057059 0 0 0 0 0" fill="#ffffff" letter-spacing="2.1813">::A TERVEZÉS ELEMEI</tspan>
  </text>
  <rect id="ah" x="35" y="42" width="264" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
@@ -626,13 +626,9 @@
   <flowRegion>
    <use xlink:href="#an"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Special thanks to Linda Kim (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.coroflot.com/redlucite/</flowSpan>) for helping 
-me (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.rejon.org/</flowSpan>) with this tutorial. Also, thanks to the 
-Open Clip Art Library (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.openclipart.org/</flowSpan>) and the graphics 
-people have submitted to that project.
-</flowDiv>
+  <flowDiv xml:space="preserve">Külön köszönet Linda Kim (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.coroflot.com/redlucite</flowSpan>/) segítségéért, melyet az ismertető elkészítésében nyújtott nekem (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.rejon.org/</flowSpan>). Szintén köszönetet az Open Clip Art Librarynek (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.openclipart.org/</flowSpan>) és a munkáikkal őket támogató grafikusoknak.</flowDiv>
  </flowRoot>
- <g transform="translate(0 2991.9)">
+ <g transform="translate(0 3002.5)">
   <defs xmlns:cc="http://creativecommons.org/ns#">
    <linearGradient id="x" x1="76.847" x2="76.847" y1="-7656.4" y2="-7528.7" gradientTransform="matrix(2.1496 0 0 .46519 -.13015 3495.4)" gradientUnits="userSpaceOnUse" xlink:href="#g" inkscape:collect="always"/>
    <filter id="ax" color-interpolation-filters="sRGB" inkscape:label="Drop shadow, custom">

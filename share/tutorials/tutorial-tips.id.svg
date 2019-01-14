@@ -483,10 +483,10 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1627.0266708" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1627.0266708">Membersihkan dokumen</tspan>
+ <text x="10" y="1627.0609348" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1627.0609348">Membersihkan dokumen</tspan>
  </text>
- <rect id="z" x="10" y="1632.2" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="1632.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
@@ -497,8 +497,8 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1705.0511158" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1705.0511158">Fitur tersembunyi dari editor XML</tspan>
+ <text x="10" y="1705.0853798" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1705.0853798">Fitur tersembunyi dari editor XML</tspan>
  </text>
  <rect id="x" x="10" y="1710.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -511,8 +511,8 @@ more SVG features than are accessible from the GUI. The XML editor is one way to
 access to these features (if you know SVG).
 </flowDiv>
  </flowRoot>
- <text x="10" y="1772.3647568" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1772.3647568">Merubah takaran satuan ukur</tspan>
+ <text x="10" y="1772.3990208" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1772.3990208">Merubah takaran satuan ukur</tspan>
  </text>
  <rect id="w" x="10" y="1777.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -527,8 +527,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1850.4621278" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1850.4621278">Cap</tspan>
+ <text x="10" y="1850.4963918" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1850.4963918">Cap</tspan>
  </text>
  <rect id="v" x="10" y="1855.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -537,8 +537,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Untuk membuat banyak duplikat sebuah obyek secara cepat, gunakanlah fitur <flowSpan font-style="italic">stamping<flowSpan font-style="italic">-cap. Seret sebuah obyek (atau skala ulang atau rotasilah), dan sambil tetap menekan tombol tetikus, tekan <flowSpan font-weight="bold">Spasi</flowSpan> pada keyboard. Ini akan meninggalkan ”cap” pada bentuk dan lokasi obyek saat itu. Anda bisa mengulangnya sebanyak yang anda inginkan.</flowSpan></flowSpan></flowDiv>
  </flowRoot>
- <text x="10" y="1917.7798448" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1917.7798448">Trik pen tool</tspan>
+ <text x="10" y="1917.8141088" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1917.8141088">Trik pen tool</tspan>
  </text>
  <rect id="u" x="10" y="1923" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -555,8 +555,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Menekan <flowSpan font-weight="bold">Enter</flowSpan></flowDiv>
  </flowRoot>
- <circle transform="translate(15 1972.5)" r="2"/>
- <rect id="bd" x="20" y="1966.5" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1972.6)" r="2"/>
+ <rect id="bd" x="20" y="1966.6" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
@@ -594,10 +594,10 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Untuk menambahkan subpath baru pada path yang sudah ada, pilihlah path tersebut dan mulailah menggambar dengan <flowSpan font-weight="bold">Shift</flowSpan> dari titik arbitarynya. Jika apa yang anda inginkan hanyalah <flowSpan font-style="italic">meneruskan</flowSpan> sebuah path yang ada, Shift tidak diperlukan; Langsung mulai saja menggambar dari salah satu anchor pada ujungnya.</flowDiv>
  </flowRoot>
- <text x="10" y="2129.7284504" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2129.7284504">Memasukkan nilai Unicode</tspan>
+ <text x="10" y="2129.7627144" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2129.7627144">Memasukkan nilai Unicode</tspan>
  </text>
- <rect id="ax" x="10" y="2134.9" width="288" height="1e3px" display="none"/>
+ <rect id="ax" x="10" y="2135" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ax"/>
@@ -613,8 +613,8 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2255.4067764" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2255.4067764">Menggunakan grid untuk menggambar ikon</tspan>
+ <text x="10" y="2255.4410404" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2255.4410404">Menggunakan grid untuk menggambar ikon</tspan>
  </text>
  <rect id="au" x="10" y="2260.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -629,8 +629,8 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2333.3512264" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2333.3512264">Rotasi obyek</tspan>
+ <text x="10" y="2333.3854904" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2333.3854904">Rotasi obyek</tspan>
  </text>
  <rect id="at" x="10" y="2338.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -652,8 +652,8 @@ rotation center to any place.
   </flowRegion>
   <flowDiv xml:space="preserve">Atau, anda juga bisa menggunakan keyboard dengan menekan <flowSpan font-weight="bold">[</flowSpan> dan <flowSpan font-weight="bold">]</flowSpan> (per 15 derajat) atau <flowSpan font-weight="bold">Ctrl+[</flowSpan> dan <flowSpan font-weight="bold">Ctrl+]</flowSpan> (per 90 derajat). Tombol-tombol <flowSpan font-weight="bold">[]</flowSpan> jika ditengan menggunakan keycap akan merotasi per pixel.</flowDiv>
  </flowRoot>
- <text x="10" y="2449.8829704" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2449.8829704">Bayangan</tspan>
+ <text x="10" y="2449.9172344" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2449.9172344">Bayangan</tspan>
  </text>
  <rect id="ar" x="10" y="2455.1" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -676,8 +676,8 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2545.3987114" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2545.3987114">Meletakkan teks dalam sebuah path</tspan>
+ <text x="10" y="2545.4329754" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2545.4329754">Meletakkan teks dalam sebuah path</tspan>
  </text>
  <rect id="ap" x="10" y="2550.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -686,20 +686,20 @@ say, 5.0. That's it!
   </flowRegion>
   <flowDiv xml:space="preserve">Untuk peletakkan teks mengikuti sebuah kurva, pilih teks dan kurvanya, kemudian pilih <flowSpan font-family="Liberation Sans,Arial,sans-serif">Put on Path</flowSpan> lewat menu Text. Teks tersebut akan mulai dari awal path. Pada umumnya lebih baik membuat sebuah path baru sebagai jalur teks ketimbang menggunakan elemen gambar yang sudah ada - ini akan memberikan anda kontrol yang lebih banyak tanpa merusak gambar.</flowDiv>
  </flowRoot>
- <text x="10" y="2623.3411244" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2623.3411244">Memilih obyek asal</tspan>
+ <text x="10" y="2623.3753884" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2623.3753884">Memilih obyek asal</tspan>
  </text>
- <rect id="ao" x="10" y="2628.5" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="2628.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Saat anda memiliki teks dalam path, offset yang berhubungan, atau sebuah klon, obyek asal/sumbernya biasanya sulit untuk diseleksi karna biasanya berada dibawah atau dibuat tidak terlihat dan/atau terkunci. Tombol ajaib <flowSpan font-weight="bold">Shift+D</flowSpan> bisa membantu anda; pilih teks, offset ataupun klon, kemudian tekan <flowSpan font-weight="bold">Shift+D</flowSpan> untuk memindahkan seleksi ke path yang berhubungan, sumber offset, atau klon asal.</flowDiv>
  </flowRoot>
- <text x="10" y="2701.3290284" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2701.3290284">Mengembalikan jendela yang off-screen</tspan>
+ <text x="10" y="2701.3632924" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2701.3632924">Mengembalikan jendela yang off-screen</tspan>
  </text>
- <rect id="an" x="10" y="2706.5" width="288" height="1e3px" display="none"/>
+ <rect id="an" x="10" y="2706.6" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#an"/>
@@ -712,8 +712,8 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2789.9700344" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2789.9700344">Transparansi, gradien, dan ekspor PostScrip</tspan>
+ <text x="10" y="2790.0042984" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2790.0042984">Transparansi, gradien, dan ekspor PostScrip</tspan>
  </text>
  <rect id="am" x="10" y="2795.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">

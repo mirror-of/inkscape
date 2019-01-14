@@ -484,8 +484,8 @@ choose <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> 
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
 </flowDiv>
  </flowRoot>
- <text x="10" y="1651.113717" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1651.113717">Làm sạch tài liệu</tspan>
+ <text x="10" y="1651.147981" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1651.147981">Làm sạch tài liệu</tspan>
  </text>
  <rect id="aa" x="10" y="1656.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -498,10 +498,10 @@ objects. However if you want to optimize your document, use the <flowSpan font-f
 which are not used by anything in the document, making the file smaller.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1729.138162" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1729.138162">Các tính năng ẩn và Bộ sửa XML</tspan>
+ <text x="10" y="1729.172426" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1729.172426">Các tính năng ẩn và Bộ sửa XML</tspan>
  </text>
- <rect id="z" x="10" y="1734.3" width="288" height="1e3px" display="none"/>
+ <rect id="z" x="10" y="1734.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#z"/>
@@ -512,8 +512,8 @@ more SVG features than are accessible from the GUI. The XML editor is one way to
 access to these features (if you know SVG).
 </flowDiv>
  </flowRoot>
- <text x="10" y="1796.451803" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1796.451803">Thay đổi đơn vị đo trên thước kẻ</tspan>
+ <text x="10" y="1796.486067" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1796.486067">Thay đổi đơn vị đo trên thước kẻ</tspan>
  </text>
  <rect id="x" x="10" y="1801.7" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -528,18 +528,18 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.
 </flowDiv>
  </flowRoot>
- <text x="10" y="1874.549174" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1874.549174">Đóng dấu</tspan>
+ <text x="10" y="1874.583438" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1874.583438">Đóng dấu</tspan>
  </text>
- <rect id="w" x="10" y="1879.7" width="288" height="1e3px" display="none"/>
+ <rect id="w" x="10" y="1879.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#w"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Để tạo ra nhiều bản sao của 1 đối tượng trong tài liệu, hãy dùng phương pháp <flowSpan font-style="italic">đóng dấu</flowSpan>. Chỉ việc di chuyển đối tượng (hoặc co giãn hay xoay nó), và trong khi vẫn giữ chuột, bạn nhấn <flowSpan font-weight="bold">Phím cách</flowSpan>. Thao tác này giống như “đóng dấu” xuống tài liệu, với hình dạng của đối tượng chính là con dấu. Bạn có thể lặp đi lặp lại thao tác này nhiều lần.</flowDiv>
  </flowRoot>
- <text x="10" y="1953.154936" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="1953.154936">Các mẹo sử dụng công cụ Bút</tspan>
+ <text x="10" y="1953.1892" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="1953.1892">Các mẹo sử dụng công cụ Bút</tspan>
  </text>
  <rect id="v" x="10" y="1958.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -556,16 +556,16 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Nhấn <flowSpan font-weight="bold">Enter</flowSpan></flowDiv>
  </flowRoot>
- <circle transform="translate(15 1999.6)" r="2"/>
- <rect id="be" x="20" y="1993.6" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 1999.7)" r="2"/>
+ <rect id="be" x="20" y="1993.7" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#be"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Bấm đúp chuột trái</flowDiv>
  </flowRoot>
- <circle transform="translate(15 2017.8)" r="2"/>
- <rect id="bd" x="20" y="2011.8" width="258" height="1e3px" display="none"/>
+ <circle transform="translate(15 2017.9)" r="2"/>
+ <rect id="bd" x="20" y="2011.9" width="258" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#bd"/>
@@ -588,15 +588,15 @@ change this, open <flowSpan font-family="Liberation Sans,Arial,sans-serif">Docum
   </flowRegion>
   <flowDiv xml:space="preserve">Lưu ý rằng khi đường nét chưa hoàn thiện (tức là nét có màu xanh lục, và đoạn đang vẽ màu đỏ) nó chưa tồn tại dưới dạng đối tượng trong tài liệu của bạn. Vì thế, để xoá nó, hãy dùng <flowSpan font-weight="bold">Esc</flowSpan> (xoá toàn bộ đường nét) hoặc <flowSpan font-weight="bold">Backspace</flowSpan> (xoá đoạn cuối cùng đang vẽ trong đường nét chưa hoàn chỉnh) thay vì lệnh <flowSpan font-family="Liberation Sans,Arial,sans-serif">Huỷ bước</flowSpan>.</flowDiv>
  </flowRoot>
- <rect id="az" x="10" y="2097.7" width="288" height="1e3px" display="none"/>
+ <rect id="az" x="10" y="2097.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#az"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Để thêm 1 đường nét thành phần cho 1 đường nét có sẵn, chọn đường nét đó và bắt đầu vẽ khi giữ <flowSpan font-weight="bold">Shift</flowSpan> từ 1 điểm bất kỳ. Tuy nhiên, nếu bạn muốn <flowSpan font-style="italic">vẽ tiếp</flowSpan> thêm vào nét đang có, bạn không cần phải giữ Shift; chỉ việc bắt đầu vẽ từ 1 nút cuối bên trong đường nét đang chọn.</flowDiv>
  </flowRoot>
- <text x="10" y="2161.9615696" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2161.9615696">Nhập các giá trị Unicode</tspan>
+ <text x="10" y="2161.9958336" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2161.9958336">Nhập các giá trị Unicode</tspan>
  </text>
  <rect id="ay" x="10" y="2167.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -612,7 +612,7 @@ an em-dash (—). To quit the Unicode mode without inserting anything press
 <flowSpan font-weight="bold">Esc</flowSpan>.
 </flowDiv>
  </flowRoot>
- <rect id="aw" x="10" y="2237.7" width="288" height="1e3px" display="none"/>
+ <rect id="aw" x="10" y="2237.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aw"/>
@@ -621,8 +621,8 @@ an em-dash (—). To quit the Unicode mode without inserting anything press
 glyphs into your document.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2277.0575976" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2277.0575976">Dùng lưới để vẽ biểu tượng</tspan>
+ <text x="10" y="2277.1261246" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2277.1261246">Dùng lưới để vẽ biểu tượng</tspan>
  </text>
  <rect id="av" x="10" y="2282.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
@@ -637,10 +637,10 @@ number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel)
 get a crisp bitmap image without unneeded antialiasing.
 </flowDiv>
  </flowRoot>
- <text x="10" y="2355.0020476" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2355.0020476">Xoay đối tượng</tspan>
+ <text x="10" y="2355.0705746" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2355.0705746">Xoay đối tượng</tspan>
  </text>
- <rect id="au" x="10" y="2360.2" width="288" height="1e3px" display="none"/>
+ <rect id="au" x="10" y="2360.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#au"/>
@@ -653,17 +653,17 @@ doing this, the rotation will occur around the opposite corner. You can also dra
 rotation center to any place.
 </flowDiv>
  </flowRoot>
- <rect id="at" x="10" y="2420.1" width="288" height="1e3px" display="none"/>
+ <rect id="at" x="10" y="2420.2" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#at"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Hoặc, bạn có thể xoay đối tượng bằng bàn phím thông qua phím <flowSpan font-weight="bold">[</flowSpan> và <flowSpan font-weight="bold">]</flowSpan> (mỗi lần 15 độ) hoặc <flowSpan font-weight="bold">Ctrl+[</flowSpan> và <flowSpan font-weight="bold">Ctrl+]</flowSpan> (mỗi lần 90 độ). Cặp phím <flowSpan font-weight="bold">[]</flowSpan> kết hợp với phím <flowSpan font-weight="bold">Alt</flowSpan> cho phép ta xoay các góc nhỏ theo mức điểm ảnh.</flowDiv>
  </flowRoot>
- <text x="10" y="2473.5102436" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2473.5102436">Đổ bóng</tspan>
+ <text x="10" y="2473.5787706" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2473.5787706">Đổ bóng</tspan>
  </text>
- <rect id="as" x="10" y="2478.7" width="288" height="1e3px" display="none"/>
+ <rect id="as" x="10" y="2478.8" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#as"/>
@@ -672,7 +672,7 @@ rotation center to any place.
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Filters &gt; Shadows and Glows &gt; Drop Shadow...</flowSpan> feature.
 </flowDiv>
  </flowRoot>
- <rect id="ar" x="10" y="2506.9" width="288" height="1e3px" display="none"/>
+ <rect id="ar" x="10" y="2507" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ar"/>
@@ -684,30 +684,30 @@ and lower than original object. Now open Fill And Stroke dialog and change Blur 
 say, 5.0. That's it!
 </flowDiv>
  </flowRoot>
- <text x="10" y="2569.0259846" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2569.0259846">Đặt văn bản theo đường nét</tspan>
+ <text x="10" y="2569.0945116" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2569.0945116">Đặt văn bản theo đường nét</tspan>
  </text>
- <rect id="aq" x="10" y="2574.2" width="288" height="1e3px" display="none"/>
+ <rect id="aq" x="10" y="2574.3" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#aq"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Để đặt văn bản dọc theo 1 đường nét, chọn văn bản và đường nét rồi chọn lệnh <flowSpan font-family="Liberation Sans,Arial,sans-serif">Để trên đường nét</flowSpan> từ trình đơn Văn bản. Văn bản sẽ bắt đầu từ đầu đường nét. Nói chung, bạn nên tạo riêng một đường nét để đặt văn bản lên trên đó, hơn là dùng các thành phần khác có sẵn trong tài liệu — việc này cho phép bạn dễ điều khiển hơn, mà không làm ảnh hưởng tới các thành phần khác trong bản vẽ.</flowDiv>
  </flowRoot>
- <text x="10" y="2649.2107646" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2649.2107646">Chọn đối tượng gốc</tspan>
+ <text x="10" y="2649.2792916" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2649.2792916">Chọn đối tượng gốc</tspan>
  </text>
- <rect id="ap" x="10" y="2654.4" width="288" height="1e3px" display="none"/>
+ <rect id="ap" x="10" y="2654.5" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ap"/>
   </flowRegion>
   <flowDiv xml:space="preserve">Nếu bạn có văn bản nằm trên đường nét, một đối tượng dời hình liên kết, hoặc một bản sao, có thể việc chọn các đối tượng/đường nét gốc sẽ trở nên khó khăn vì có thể chúng nằm ngay phía dưới hoặc/và bị khoá. Tổ hợp phím <flowSpan font-weight="bold">Shift+D</flowSpan> sẽ giúp bạn thực hiện việc chọn chúng; chọn văn bản, đối tượng dời hình liên kết, hoặc bản sao, và nhấn <flowSpan font-weight="bold">Shift+D</flowSpan> để chuyển vùng chọn sang đối tượng đường nét, hình gốc tương ứng.</flowDiv>
  </flowRoot>
- <text x="10" y="2740.1215956" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2740.1215956">Khôi phục cửa sổ</tspan>
+ <text x="10" y="2740.1901226" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2740.1901226">Khôi phục cửa sổ</tspan>
  </text>
- <rect id="ao" x="10" y="2745.3" width="288" height="1e3px" display="none"/>
+ <rect id="ao" x="10" y="2745.4" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
   <flowRegion>
    <use xlink:href="#ao"/>
@@ -720,8 +720,8 @@ option to save window geometry (<flowSpan font-family="Liberation Sans,Arial,san
 <flowSpan font-family="Liberation Sans,Arial,sans-serif">Interface &gt; Windows</flowSpan> section).
 </flowDiv>
  </flowRoot>
- <text x="10" y="2828.7626016" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-  <tspan x="10" y="2828.7626016">Xuất Độ trong suốt, Chuyển sắc và PostScript</tspan>
+ <text x="10" y="2828.8311286" fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <tspan x="10" y="2828.8311286">Xuất Độ trong suốt, Chuyển sắc và PostScript</tspan>
  </text>
  <rect id="an" x="10" y="2834" width="288" height="1e3px" display="none"/>
  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
