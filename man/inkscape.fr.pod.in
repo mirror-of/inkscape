@@ -254,6 +254,9 @@ cette sélection. Pour désélectionner tous les objets, utilisez
 C<--verb=EditDeselect>. Les identifiants d'objet disponibles dépendent du
 document ouvert.
 
+Note that the L<--verb> command requires a GUI, and thus cannot be used with
+the L<--z> option.
+
 =item B<-p> I<IMPRIMANTE>, B<--print>=I<IMPRIMANTE>
 
 Imprimer le(s) document(s) avec l'imprimante spécifiée en utilisant `lpr -P

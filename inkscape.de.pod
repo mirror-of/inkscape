@@ -254,6 +254,9 @@ ermöglicht es, diese Objekte mit verschiedenen Verben zu
 bearbeiten. C<--verb=EditDeselect> verwirft die gesamte Auswahl. Die
 verfügbaren Objekt-IDs hängen vom Dokument ab, das geladen werden soll.
 
+Note that the L<--verb> command requires a GUI, and thus cannot be used with
+the L<--z> option.
+
 =item B<-p> I<DRUCKER>, B<--print>=I<DRUCKER>
 
 Druckt Dokumente auf dem angegebenen Drucker aus. Verwendet `lpr -P

@@ -239,6 +239,9 @@ vykonávanie slovies na nich.  Ak chcete zrušiť všetky výbery, použite
 C<--verb=EditDeselect>.  ID objektov sú dostupné v závislosti na dokumente,
 ktorý sa má načítať.
 
+Note that the L<--verb> command requires a GUI, and thus cannot be used with
+the L<--z> option.
+
 =item B<-p> I<TLAČIAREŇ>, B<--print>=I<TLAČIAREŇ>
 
 Vytlačí dokumenty na určenej tlačiarni pomocou „lpr -P TLAČIAREŇ“.  Ak

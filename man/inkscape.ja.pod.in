@@ -212,6 +212,9 @@ L<--select> コマンドは指定された ID のオブジェクトを選択状�
 はここで指定されたオブジェクトに対して実行されます。すべての選択を解除するには C<--verb=EditDeselect>
 を使用します。使用できるオブジェクト ID は読み込まれるドキュメントに依存します。
 
+Note that the L<--verb> command requires a GUI, and thus cannot be used with
+the L<--z> option.
+
 =item B<-p> I<PRINTER>, B<--print>=I<PRINTER>
 
 ドキュメントを `lpr -P PRINTER' で指定されたプリンターで印刷します。他に、`| COMMAND'

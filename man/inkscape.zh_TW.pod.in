@@ -194,6 +194,9 @@ DPI 內定值)。
 而 L<--select> 指令會選取被指定 ID 的物件。此選項允許對選取物件執行各種動詞。使用 C<--verb=EditDeselect>
 可移除所有選取的項目。可用的物件 ID 取決於文件指定載入哪些物件。
 
+Note that the L<--verb> command requires a GUI, and thus cannot be used with
+the L<--z> option.
+
 =item B<-p> I<印表機>, B<--print>=I<印表機>
 
 用指定的印表機來列印文件，使用 `lpr -P PRINTER' 來指定印表機。 用 `| 指令' 來指定一個不同的指令到管線中，或用 `> 檔名'

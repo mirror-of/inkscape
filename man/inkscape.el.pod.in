@@ -250,6 +250,9 @@ L<--verb>.
 C<--verb=EditDeselect>. Οι διαθέσιμες ταυτότητες αντικειμένων εξαρτώνται από
 το καθοριζόμενο έγγραφο για φόρτωση.
 
+Note that the L<--verb> command requires a GUI, and thus cannot be used with
+the L<--z> option.
+
 =item B<-p> I<PRINTER>, B<--print>=I<PRINTER>
 
 Εκτύπωση εγγράφων στον καθορισμένο εκτυπωτή χρησιμοποιώντας `lpr -P
