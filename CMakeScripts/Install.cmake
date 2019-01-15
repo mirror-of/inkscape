@@ -3,6 +3,9 @@ if(UNIX)
     install(FILES
       ${CMAKE_BINARY_DIR}/inkscape.desktop
       DESTINATION ${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL}/applications)
+    install(FILES
+      ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
+      DESTINATION ${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL}/metainfo)
 endif()
 
 if(WIN32)
