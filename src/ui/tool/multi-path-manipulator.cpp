@@ -481,7 +481,7 @@ void MultiPathManipulator::distributeNodes(Geom::Dim2 d)
     if (_selection.empty()) return;
     _selection.distribute(d);
     if (d == Geom::X) {
-        _done("Distrubute nodes horizontally");
+        _done("Distribute nodes horizontally");
     } else {
         _done("Distribute nodes vertically");
     }
