@@ -31,7 +31,7 @@ Build-Depends:
  liblcms2-dev,
  libmagick++-dev,
  libpango1.0-dev,
- libpng16-dev | libpng-dev,
+ libpng16-dev | libpng-dev (>= 1.6),
  libpoppler-glib-dev,
  libpoppler-private-dev,
  libpopt-dev,
@@ -49,6 +49,8 @@ Build-Depends:
  python-dev,
  python-lxml,
  zlib1g-dev
+Build-Conflicts:
+ libpng12-dev
 Standards-Version: 3.9.8
 Homepage: http://www.inkscape.org/
 Vcs-Browser: https://code.launchpad.net/~inkscape.dev/inkscape/trunk
