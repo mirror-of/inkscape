@@ -1,7 +1,8 @@
-inkscape-trunk (1:0.48+devel+12610) precise; urgency=medium
+inkscape-trunk (1:0.48+devel+12611) precise; urgency=medium
 
   * control: Allow either libpng16-dev or libpng-dev to satisfy
-    requirement.  Fixes FTBS on Xenial.  Suggested by mapreri.
+    requirement, but don't allow libpng12-dev.  Fixes FTBS on Xenial.
+    Suggested by mapreri.
 
  -- Bryce Harrington <bryce@ubuntu.com>  Wed, 16 Jan 2019 14:03:30 -0800
 
