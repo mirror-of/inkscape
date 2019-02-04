@@ -21,6 +21,10 @@
 #include "shortcuts.h"
 #include "inkscape-application.h"
 
+#include "actions/actions-canvas-transform.h"
+
+#include "io/resource.h"
+
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
 #include "ui/drag-and-drop.h"  // Move to canvas?
@@ -32,6 +36,8 @@
 #include "ui/drag-and-drop.h"
 
 #include "widgets/desktop-widget.h"
+
+using Inkscape::IO::Resource::UIS;
 
 InkscapeWindow::InkscapeWindow(SPDocument* document)
     : _document(document)
@@ -54,13 +60,37 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     sp_ui_drag_setup(this);
 
-     // =============== Build interface ===============
+    // =================== Actions ===================
+    add_actions_canvas_transform(this);    // Actions to transform canvas view.
+
+
+    // =============== Build interface ===============
 
     // Main box
     _mainbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     _mainbox->set_name("DesktopMainBox");
     _mainbox->show();
     add(*_mainbox);
+
+    // TEMP TEMP TEMP
+    Glib::ustring zoom_toolbar_builder_file = get_filename(UIS, "zoom-toolbar.ui");
+    auto builder = Gtk::Builder::create();
+    try
+    {
+        builder->add_from_file(zoom_toolbar_builder_file);
+    }
+    catch (const Glib::Error& ex)
+    {
+        std::cerr << "InkscapeWindow: " << zoom_toolbar_builder_file << " file not read! " << ex.what() << std::endl; 
+    }
+
+    Gtk::Toolbar* toolbar = nullptr;
+    builder->get_widget("zoom-toolbar", toolbar);
+    if (!toolbar) {
+        std::cerr << "InkscapeWindow: Failed to load zoom toolbar!" << std::endl;
+    } else {
+        _mainbox->pack_start(*toolbar, false, false, 0);
+    }
 
     // Desktop widget (=> MultiPaned)
     _desktop_widget = sp_desktop_widget_new(_document);
@@ -84,8 +114,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
     signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
-
-    // =================== Actions ===================
 
 
     // ================ Window Options ==============
