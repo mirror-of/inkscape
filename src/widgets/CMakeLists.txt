@@ -13,6 +13,7 @@ set(widgets_SRC
 	ink-comboboxentry-action.cpp
 	ink-toggle-action.cpp
 	paint-selector.cpp
+	paned-canvas.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
 	sp-xmlview-tree.cpp
@@ -37,6 +38,7 @@ set(widgets_SRC
 	ink-comboboxentry-action.h
 	ink-toggle-action.h
 	paint-selector.h
+	paned-canvas.h
 	sp-attribute-widget.h
 	sp-color-selector.h
 	sp-xmlview-tree.h

@@ -224,7 +224,7 @@ Geom::Point
 SPDesktopWidget::window_get_pointer()
 {
     int x, y;
-    auto window = Glib::wrap(GTK_WIDGET(_canvas))->get_window();
+    auto window = Glib::wrap(GTK_WIDGET(_panedcanvas))->get_window();
     auto display = window->get_display();
 
 #if GTK_CHECK_VERSION(3,20,0)
@@ -479,17 +479,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         }
         watcher->add(dtw);
     }
-    /* Canvas */
-    dtw->_canvas = SP_CANVAS(SPCanvas::createAA());
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    dtw->_canvas->_enable_cms_display_adj = prefs->getBool("/options/displayprofile/enable");
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    gtk_widget_set_can_focus (GTK_WIDGET (dtw->_canvas), TRUE);
-
-    sp_ruler_add_track_widget (SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->_canvas));
-    sp_ruler_add_track_widget (SP_RULER(dtw->_vruler->gobj()), GTK_WIDGET(dtw->_canvas));
+    /* panedcanvas */
+    _panedcanvas = new SPPanedCanvas();
+    
+    sp_ruler_add_track_widget (SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->_panedcanvas));
+    sp_ruler_add_track_widget (SP_RULER(dtw->_vruler->gobj()), GTK_WIDGET(dtw->_panedcanvas));
     auto css_provider  = gtk_css_provider_new();
-    auto style_context = gtk_widget_get_style_context(GTK_WIDGET(dtw->_canvas));
+    auto style_context = gtk_widget_get_style_context(_panedcanvas->get_child1());
 
     gtk_css_provider_load_from_data(css_provider,
                                     "SPCanvas {\n"
@@ -500,11 +496,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_style_context_add_provider(style_context,
                                    GTK_STYLE_PROVIDER(css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
-    g_signal_connect (G_OBJECT (dtw->_canvas), "event", G_CALLBACK (SPDesktopWidget::event), dtw);
-
-    gtk_widget_set_hexpand(GTK_WIDGET(dtw->_canvas), TRUE);
-    gtk_widget_set_vexpand(GTK_WIDGET(dtw->_canvas), TRUE);
-    dtw->_canvas_tbl->attach(*Glib::wrap(GTK_WIDGET(dtw->_canvas)), 1, 1, 1, 1);
+    g_signal_connect (G_OBJECT (_panedcanvas), "event", G_CALLBACK (SPDesktopWidget::event), dtw);
+    
+    dtw->_canvas_tbl->attach(*Glib::wrap(GTK_WIDGET(dtw->_pannedcanvas)), 1, 1, 1, 1);
 
     /* Dock */
     bool create_dock =
@@ -576,7 +570,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     auto zoom_adj = Gtk::Adjustment::create(100.0, log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
     dtw->_zoom_status = Gtk::manage(new Gtk::SpinButton(zoom_adj));
 
-    dtw->_zoom_status->set_data("dtw", dtw->_canvas);
+    dtw->_zoom_status->set_data("dtw", dtw->_panedcanvas->get_child1());
+    dtw->_zoom_status->set_data("dtw", dtw->_panedcanvas->get_child1());
     dtw->_zoom_status->set_tooltip_text(_("Zoom"));
     dtw->_zoom_status->set_size_request(STATUS_ZOOM_WIDTH, -1);
     dtw->_zoom_status->set_width_chars(6);
@@ -602,7 +597,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // Rotate status spinbutton ---------------
     auto rotation_adj = Gtk::Adjustment::create(0, -360.0, 360.0, 1.0);
     dtw->_rotation_status = Gtk::manage(new Gtk::SpinButton(rotation_adj));
-    dtw->_rotation_status->set_data("dtw", dtw->_canvas);
+    dtw->_rotation_status->set_data("dtw", dtw->_panedcanvas->get_child1());
+    dtw->_rotation_status->set_data("dtw", dtw->_panedcanvas->get_child2());
     dtw->_rotation_status->set_tooltip_text(_("Rotation. (Also Ctrl+Shift+Scroll)"));
     dtw->_rotation_status->set_size_request(STATUS_ROTATION_WIDTH, -1);
     dtw->_rotation_status->set_width_chars(7);
@@ -671,10 +667,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
     if ( fromDisplay ) {
         Glib::ustring id = Inkscape::CMSSystem::getDisplayId( 0 );
-
         bool enabled = false;
-        dtw->_canvas->_cms_key = id;
-        enabled = !dtw->_canvas->_cms_key.empty();
+        dtw->_panedcanvas->get_child1()->_cms_key = id;
+        enabled = !dtw->_panedcanvas->get_child1()->_cms_key.empty();
         dtw->cms_adjust_set_sensitive(enabled);
     }
     g_signal_connect( G_OBJECT(dtw->_tracker), "changed", G_CALLBACK(SPDesktopWidget::color_profile_event), dtw );
@@ -683,7 +678,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // ------------------ Finish Up -------------------- //
     dtw->_vbox->show_all();
 
-    gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas));
+    gtk_widget_grab_focus (GTK_WIDGETdtw->_panedcanvas->get_child1()));
 
     // If this is the first desktop created, report the time it takes to show up
     if ( overallTimer ) {
@@ -735,8 +730,10 @@ SPDesktopWidget::dispose(GObject *object)
         dtw->_rotation_status_populate_popup_connection.disconnect();
 
         // Canvas
-        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->_canvas), (gpointer) G_CALLBACK (SPDesktopWidget::event), dtw);
+        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->_panedcanvas->get_child1()), (gpointer) G_CALLBACK (SPDesktopWidget::event), dtw);
+        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->_panedcanvas->get_child2()), (gpointer) G_CALLBACK (SPDesktopWidget::event), dtw);
         dtw->_canvas_tbl_size_allocate_connection.disconnect();
+
 
         dtw->layer_selector->setDesktop(nullptr);
         dtw->layer_selector->unreference();
@@ -941,7 +938,7 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
     if (event->type == GDK_BUTTON_PRESS) {
         // defocus any spinbuttons
-        gtk_widget_grab_focus (GTK_WIDGET(dtw->_canvas));
+        gtk_widget_grab_focus (GTK_WIDGET(dtw->_panedcanvas->get_child1()));
     }
 
     if ((event->type == GDK_BUTTON_PRESS) && (event->button.button == 3)) {
@@ -961,7 +958,7 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
         // current item on the canvas, because item events and all mouse events are caught
         // and passed on by the canvas acetate (I think). --bb
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
-                && !dtw->_canvas->_current_item) {
+                && (!dtw->_panedcanvas->get_child1()->_current_item | !dtw->_panedcanvas->get_child1()->_current_item)) {
             return sp_desktop_root_handler (nullptr, event, dtw->desktop);
         }
     }
@@ -999,9 +996,9 @@ SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktop
 
     Glib::ustring id = Inkscape::CMSSystem::getDisplayId( monitorNum );
     bool enabled = false;
-    dtw->_canvas->_cms_key = id;
+    dtw->_panedcanvas->get_child1()->_cms_key = id;
     dtw->requestCanvasUpdate();
-    enabled = !dtw->_canvas->_cms_key.empty();
+    enabled = !dtw->_panedcanvas->get_child1()->_cms_key.empty();
     dtw->cms_adjust_set_sensitive(enabled);
 }
 #else // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -1037,8 +1034,8 @@ SPDesktopWidget::cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
 
     bool down = dtw->_cms_adjust->get_active();
-    if ( down != dtw->_canvas->_enable_cms_display_adj ) {
-        dtw->_canvas->_enable_cms_display_adj = down;
+    if ( down != dtw->_panedcanvas->get_child1()->_enable_cms_display_adj ) {
+        dtw->_panedcanvas->get_child1()->_enable_cms_display_adj = down;
         dtw->desktop->redrawDesktop();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool("/options/displayprofile/enable", down);
@@ -1373,7 +1370,7 @@ bool SPDesktopWidget::warnDialog (Glib::ustring const &text)
 void
 SPDesktopWidget::iconify()
 {
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas)));
+    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(dtw->_panedcanvas->get_child1()));
     if (GTK_IS_WINDOW(topw)) {
         if (desktop->is_iconified()) {
             gtk_window_deiconify(topw);
@@ -1386,7 +1383,7 @@ SPDesktopWidget::iconify()
 void
 SPDesktopWidget::maximize()
 {
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas)));
+    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(dtw->_panedcanvas->get_child1()));
     if (GTK_IS_WINDOW(topw)) {
         if (desktop->is_maximized()) {
             gtk_window_unmaximize(topw);
@@ -1414,7 +1411,7 @@ SPDesktopWidget::maximize()
 void
 SPDesktopWidget::fullscreen()
 {
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(_canvas)));
+    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(dtw->_panedcanvas->get_child1()));
     if (GTK_IS_WINDOW(topw)) {
         if (desktop->is_fullscreen()) {
             gtk_window_unfullscreen(topw);
@@ -1653,7 +1650,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
 
     dtw->desktop = new SPDesktop();
     dtw->stub = new SPDesktopWidget::WidgetStub (dtw);
-    dtw->desktop->init (namedview, dtw->_canvas, dtw->stub);
+    dtw->desktop->init (namedview, dtw->_panedcanvas, dtw->stub);
     INKSCAPE.add_desktop (dtw->desktop);
 
     // Add the shape geometry to libavoid for autorouting connectors.
@@ -2217,7 +2214,7 @@ SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Ev
 
     int wx, wy;
 
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+    GdkWindow *window = gtk_widget_get_window(dtw->_panedcanvas->get_child1());
 
     gint width, height;
 
@@ -2227,7 +2224,7 @@ SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::Ev
     Geom::Point const event_win(wx, wy);
 
     if (_ruler_clicked) {
-        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point const event_w(sp_canvas_window_to_world(dtw->_panedcanvas->get_child1(), event_win));
         Geom::Point event_dt(desktop->w2d(event_w));
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -2261,7 +2258,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
 {
     int wx, wy;
 
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+    GdkWindow *window = gtk_widget_get_window(dtw->_panedcanvas->get_child1());
 
     gint width, height;
 
@@ -2280,7 +2277,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
         gdk_device_ungrab(event->device, event->time);
 #endif
 
-        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point const event_w(sp_canvas_window_to_world(dtw->_panedcanvas->get_child1(), event_win));
         Geom::Point event_dt(desktop->w2d(event_w));
 
         if (!(event->state & GDK_SHIFT_MASK)) {
@@ -2335,7 +2332,7 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Eve
 {
     int wx, wy;
 
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+    GdkWindow *window = gtk_widget_get_window(dtw->_panedcanvas->get_child1()));
 
     gint width, height;
 
@@ -2351,7 +2348,7 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Eve
         _xp = (gint) event->x;
         _yp = (gint) event->y;
 
-        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point const event_w(sp_canvas_window_to_world(dtw->_panedcanvas->get_child1(), event_win));
         Geom::Point const event_dt(desktop->w2d(event_w));
 
         // calculate the normal of the guidelines when dragged from the edges of rulers.
@@ -2425,7 +2422,7 @@ GtkAllocation
 SPDesktopWidget::get_canvas_allocation() const
 {
     GtkAllocation allocation;
-    gtk_widget_get_allocation(GTK_WIDGET(_canvas), &allocation);
+    gtk_widget_get_allocation(GTK_WIDGET(_panedcanvas), &allocation);
     return allocation;
 }
 

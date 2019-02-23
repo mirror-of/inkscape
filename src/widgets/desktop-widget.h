@@ -20,7 +20,6 @@
 #include "message.h"
 #include "ui/view/view-widget.h"
 #include "ui/view/edit-widget-interface.h"
-
 #include <cstddef>
 #include <sigc++/connection.h>
 #include <2geom/point.h>
@@ -30,6 +29,7 @@ typedef struct _EgeColorProfTracker EgeColorProfTracker;
 struct SPCanvas;
 struct SPCanvasItem;
 class SPDocument;
+class SPPanedCanvas;
 class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
@@ -139,6 +139,7 @@ private:
     Gtk::Grid *_canvas_tbl;
     sigc::connection _canvas_tbl_size_allocate_connection;
 
+    Gtk::Paned *_split_panned;
     Gtk::EventBox *_hruler_box;
     Gtk::EventBox *_vruler_box; // eventboxes for setting tooltips
 
@@ -151,7 +152,7 @@ private:
     Geom::Point _ruler_origin;
     double _dt2r;
 
-    SPCanvas *_canvas;
+    SPPanedCanvas *_panedcanvas;
 
 public:
     Inkscape::UI::Widget::LayerSelector *layer_selector;
