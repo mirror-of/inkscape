@@ -83,10 +83,11 @@ void Script::pump_events (void) {
     the given interpreter to a custom one per user.
 */
 Script::interpreter_t const Script::interpreterTab[] = {
-        {"perl",   "perl-interpreter",   "perl"   },
 #ifdef WIN32
+        {"perl",   "perl-interpreter",   "wperl"   },
         {"python", "python-interpreter", "pythonw" },
 #else
+        {"perl",   "perl-interpreter",   "perl"   },
         {"python", "python-interpreter", "python" },
 #endif
         {"ruby",   "ruby-interpreter",   "ruby"   },
