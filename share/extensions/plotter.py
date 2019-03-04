@@ -69,7 +69,7 @@ class Plot(inkex.Effect):
                 return 1
             else:
                 type, value, traceback = sys.exc_info()
-                raise ValueError, ('', type, value), traceback
+                raise ValueError('', type, value).with_traceback(traceback)
         # TODO: Get preview to work. This requires some work on the C++ side to be able to determine if it is
         # a preview or a final run. (Remember to set <effect needs-live-preview='false'> to true)
         '''
@@ -142,7 +142,7 @@ class Plot(inkex.Effect):
         # gracefully exit script when pySerial is missing
         try:
             import serial
-        except ImportError, e:
+        except ImportError as e:
             inkex.errormsg(_("pySerial is not installed. Please follow these steps:")
                 + "\n\n" + _("1. Download and extract (unzip) this file to your local harddisk:")
                 + "\n"   +   "   https://pypi.python.org/packages/source/p/pyserial/pyserial-2.7.tar.gz"
@@ -201,7 +201,7 @@ class Plot(inkex.Effect):
                 return
             else:
                 type, value, traceback = sys.exc_info()
-                raise ValueError, ('', type, value), traceback
+                raise ValueError('', type, value).with_traceback(traceback)
         # send data to plotter
         mySerial.write(self.hpgl)
         mySerial.read(2)

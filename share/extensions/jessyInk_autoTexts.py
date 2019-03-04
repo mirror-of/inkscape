@@ -59,7 +59,7 @@ class JessyInk_AutoTexts(inkex.Effect):
 				elif self.options.autoText == "numberOfSlides":
 					nodes[0].set("{" + inkex.NSS["jessyink"] + "}autoText","numberOfSlides")
 				else:
-					if nodes[0].attrib.has_key("{" + inkex.NSS["jessyink"] + "}autoText"):
+					if "{" + inkex.NSS["jessyink"] + "}autoText" in nodes[0].attrib:
 						del nodes[0].attrib["{" + inkex.NSS["jessyink"] + "}autoText"]
 
 # Create effect instance

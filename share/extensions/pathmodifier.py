@@ -129,7 +129,7 @@ class PathModifier(inkex.Effect):
             newNode = self.document.getroot().xpath(path, namespaces=inkex.NSS)[0]
             return newNode
         else:
-            raise AssertionError, "Trying to follow empty xlink.href attribute."
+            raise AssertionError("Trying to follow empty xlink.href attribute.")
 
     def unlinkClone(self,node,doReplace):
         if node.tag == inkex.addNS('use','svg') or node.tag=='use':
@@ -144,7 +144,7 @@ class PathModifier(inkex.Effect):
 
             return newNode
         else:
-            raise AssertionError, "Only clones can be unlinked..."
+            raise AssertionError("Only clones can be unlinked...")
 
 
 

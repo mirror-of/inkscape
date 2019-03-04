@@ -37,7 +37,7 @@ class C(chardataeffect.CharDataEffect):
   def process_chardata(self,text, line, par):
     r = ""
     for c in text:
-      if convert_table.has_key(c.lower()):
+      if c.lower() in convert_table:
         r = r + convert_table[c.lower()]
       else:
         r = r + c

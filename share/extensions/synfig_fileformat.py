@@ -204,11 +204,11 @@ def paramType(layer, param, value=None):
         if param in layer_params.keys():
             return layer_params[param][0]
         else:
-            raise Exception, "Invalid parameter type for layer"
+            raise Exception("Invalid parameter type for layer")
     else:
         # Unknown layer, try to determine parameter type based on value
         if value is None:
-            raise Exception, "No information for given layer"
+            raise Exception("No information for given layer")
         if type(value) == int:
             return "integer"
         elif type(value) == float:
@@ -221,7 +221,7 @@ def paramType(layer, param, value=None):
             elif 0.0 in value.keys():
                 return "gradient"
             else:
-                raise Exception, "Could not automatically determine parameter type"
+                raise Exception("Could not automatically determine parameter type")
         elif type(value) == list:
             if len(value) == 2:
                 return "vector"

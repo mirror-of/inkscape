@@ -1325,7 +1325,7 @@ def csp_segment_convex_hull(sp1,sp2):
 	if not (m1 and m2) and m3 : return [c,a,d]
 	if not (m1 and m3) and m2 : return [b,c,d]
 	
-	raise ValueError, "csp_segment_convex_hull happened which is something that shouldn't happen!"	
+	raise ValueError("csp_segment_convex_hull happened which is something that shouldn't happen!")	
 
 	
 ################################################################################
@@ -1474,7 +1474,7 @@ def atan2(*arg):
 		
 		return (math.pi/2 - math.atan2(arg[0],arg[1]) ) % math.pi2
 	else :
-		raise ValueError, "Bad argumets for atan! (%s)" % arg  
+		raise ValueError("Bad argumets for atan! (%s)" % arg)  
 
 def get_text(node) :
 	value = None
@@ -2331,11 +2331,11 @@ def biarc(sp1, sp2, z1, z2, depth=0):
 	elif 	csmall and a!=0:	beta = -b/a 
 	elif not asmall:	 
 		discr = b*b-4*a*c
-		if discr < 0:	raise ValueError, (a,b,c,discr)
+		if discr < 0:	raise ValueError(a,b,c,discr)
 		disq = discr**.5
 		beta1 = (-b - disq) / 2 / a
 		beta2 = (-b + disq) / 2 / a
-		if beta1*beta2 > 0 :	raise ValueError, (a,b,c,disq,beta1,beta2)
+		if beta1*beta2 > 0 :	raise ValueError(a,b,c,disq,beta1,beta2)
 		beta = max(beta1, beta2)
 	elif	asmall and bsmall:	
 		return biarc_split(sp1, sp2, z1, z2, depth)
@@ -2984,7 +2984,7 @@ class Polygon:
 		
 		while len(edges)>0 :
 			poly = []
-			if loops > len_edges  : raise ValueError, "Hull error"
+			if loops > len_edges  : raise ValueError("Hull error")
 			loops+=1
 			# Find left most vertex.
 			start = (1e100,1)
@@ -2995,7 +2995,7 @@ class Polygon:
 			loops1 = 0
 			while (last[1]!=start[0] or first_run) : 	
 				first_run = False
-				if loops1 > len_edges  : raise ValueError, "Hull error"
+				if loops1 > len_edges  : raise ValueError("Hull error")
 				loops1 += 1
 				next = get_closes_edge_by_angle(edges[last[1]],last)
 				#draw_pointer(next[0]+next[1],"Green","line", comment=i, width= 1)
@@ -4894,11 +4894,11 @@ class Gcodetools(inkex.Effect):
 			elif 	csmall and a!=0:	beta = -b/a 
 			elif not asmall:	 
 				discr = b*b-4*a*c
-				if discr < 0:	raise ValueError, (a,b,c,discr)
+				if discr < 0:	raise ValueError(a,b,c,discr)
 				disq = discr**.5
 				beta1 = (-b - disq) / 2 / a
 				beta2 = (-b + disq) / 2 / a
-				if beta1*beta2 > 0 :	raise ValueError, (a,b,c,disq,beta1,beta2)
+				if beta1*beta2 > 0 :	raise ValueError(a,b,c,disq,beta1,beta2)
 				beta = max(beta1, beta2)
 			elif	asmall and bsmall:	
 				return biarc_split(sp1, sp2, z1, z2, depth)
@@ -6359,7 +6359,7 @@ G01 Z1 (going to cutting z)\n""",
 			time_ = l/feed
 			c1,c2 = self.graffiti_reference_points[layer][0][0],self.graffiti_reference_points[layer][1][0]
 			d = math.sqrt( (c1[0]-c2[0])**2 + (c1[1]-c2[1])**2 )
-			if d == 0 : raise ValueError, "Error! Reference points should not be the same!"
+			if d == 0 : raise ValueError("Error! Reference points should not be the same!")
 			for i in range(int(time_*emmit+1)) :
 				t = i/(time_*emmit)
 				r1,r2 = start[0]*(1-t) + end[0]*t, start[1]*(1-t) + end[1]*t

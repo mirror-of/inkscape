@@ -262,7 +262,7 @@ def export_DIMENSION():
         y = height - scale*(vals[groups['21']][0] - ymin)
         size = 12                   # default fontsize in px
         if vals[groups['3']]:
-            if DIMTXT.has_key(vals[groups['3']][0]):
+            if vals[groups['3']][0] in DIMTXT:
                 size = scale*DIMTXT[vals[groups['3']][0]]
                 if size < 2:
                     size = 2
@@ -428,7 +428,7 @@ else:
 desc.text = '%s - scale = %f, origin = (%f, %f), method = %s' % (unicode(args[0], options.input_encode), scale, xmin, ymin, options.scalemethod)
 scale *= 96.0/25.4                                  # convert from mm to pixels
 
-if not layer_nodes.has_key('0'):
+if '0' not in layer_nodes:
     attribs = {inkex.addNS('groupmode','inkscape'): 'layer', inkex.addNS('label','inkscape'): '0'}
     layer_nodes['0'] = inkex.etree.SubElement(doc.getroot(), 'g', attribs)
     layer_colors['0'] = 7
@@ -454,7 +454,7 @@ while line[0] and (line[1] != 'ENDSEC' or not inENTITIES):
         inENTITIES = True
     elif line[1] == 'POLYLINE':
         polylines += 1
-    if entity and groups.has_key(line[0]):
+    if entity and line[0] in groups:
         seqs.append(line[0])                        # list of group codes
         if line[0] == '1' or line[0] == '2' or line[0] == '3' or line[0] == '6' or line[0] == '8':  # text value
             val = line[1].replace('\~', ' ')
@@ -474,24 +474,24 @@ while line[0] and (line[1] != 'ENDSEC' or not inENTITIES):
         else:                                       # unscaled float value
             val = float(line[1])
         vals[groups[line[0]]].append(val)
-    elif entities.has_key(line[1]):
-        if entities.has_key(entity):
+    elif line[1] in entities:
+        if entity in entities:
             if block != defs:                       # in a BLOCK
                 layer = block
             elif vals[groups['8']]:                 # use Common Layer Name
                 if not vals[groups['8']][0]:
                     vals[groups['8']][0] = '0'      # use default name
-                if not layer_nodes.has_key(vals[groups['8']][0]):
+                if vals[groups['8']][0] not in layer_nodes:
                     attribs = {inkex.addNS('groupmode','inkscape'): 'layer', inkex.addNS('label','inkscape'): '%s' % vals[groups['8']][0]}
                     layer_nodes[vals[groups['8']][0]] = inkex.etree.SubElement(doc.getroot(), 'g', attribs)
                 layer = layer_nodes[vals[groups['8']][0]]
             color = '#000000'                       # default color
             if vals[groups['8']]:
-                if layer_colors.has_key(vals[groups['8']][0]):
-                    if colors.has_key(layer_colors[vals[groups['8']][0]]):
+                if vals[groups['8']][0] in layer_colors:
+                    if layer_colors[vals[groups['8']][0]] in colors:
                         color = colors[layer_colors[vals[groups['8']][0]]]
             if vals[groups['62']]:                  # Common Color Number
-                if colors.has_key(vals[groups['62']][0]):
+                if vals[groups['62']][0] in colors:
                     color = colors[vals[groups['62']][0]]
             style = simplestyle.formatStyle({'stroke': '%s' % color, 'fill': 'none'})
             w = 0.5                                 # default lineweight for POINT
@@ -502,7 +502,7 @@ while line[0] and (line[1] != 'ENDSEC' or not inENTITIES):
                         w = 0.5
                     style = simplestyle.formatStyle({'stroke': '%s' % color, 'fill': 'none', 'stroke-width': '%.1f' % w})
             if vals[groups['6']]:                   # Common Linetype
-                if linetypes.has_key(vals[groups['6']][0]):
+                if vals[groups['6']][0] in linetypes:
                     style += ';' + linetypes[vals[groups['6']][0]]
             extrude = 1.0
             if vals[groups['230']]:

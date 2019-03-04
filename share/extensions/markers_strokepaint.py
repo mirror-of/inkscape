@@ -123,7 +123,7 @@ class MyEffect(inkex.Effect):
                     stroke = "none";
 
             for mprop in mprops:
-                if style.has_key(mprop) and style[mprop] != 'none'and style[mprop][:5] == 'url(#':
+                if mprop in style and style[mprop] != 'none'and style[mprop][:5] == 'url(#':
                     marker_id = style[mprop][5:-1]
 
                     try:

@@ -258,7 +258,7 @@ class Voronoi2svg(inkex.Effect):
         pts.append(Point(pt[0],pt[1]))
         fill = 'none'
         if self.options.delaunayFillOptions != "delaunay-no-fill":
-            if node.attrib.has_key('style'):
+            if 'style' in node.attrib:
                 style = node.get('style') # fixme: this will break for presentation attributes!
                 if style:
                     declarations = style.split(';')

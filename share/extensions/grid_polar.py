@@ -189,7 +189,7 @@ class Grid_Polar(inkex.Effect):
                                   rmax*sin(angle), rmax*cos(angle), 
                                   self.options.a_subdivs_th, 'RadialMinorGridline'+str(i), grid)
         
-        if self.options.c_dot_dia <> 0: #if a non-zero diameter, draw the centre dot
+        if self.options.c_dot_dia != 0: #if a non-zero diameter, draw the centre dot
             draw_SVG_circle(self.options.c_dot_dia /2.0,
                             0, 0, 0, '#000000', 'CentreDot', grid)
         

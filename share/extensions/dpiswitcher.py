@@ -409,7 +409,7 @@ class DPISwitcher(inkex.Effect):
             namedview = svg.find(inkex.addNS('namedview', 'sodipodi'))
             namedview.set(inkex.addNS('document-units', 'inkscape'), "px")
             self.units = self.parse_length(svg.get('width'))[1]
-            if self.units and self.units <> "px" and self.units <> "" and self.units <> "%":
+            if self.units and self.units != "px" and self.units != "" and self.units != "%":
                 if self.options.switcher == "0":
                     self.unitExponent = 1.0/(self.factor_a/self.__uuconv[self.units])
                 else:

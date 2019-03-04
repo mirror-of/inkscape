@@ -66,10 +66,10 @@ class SplitIt(inkex.Effect):
                 dashes = []
                 offset = 0
                 style = simplestyle.parseStyle(node.get('style'))
-                if style.has_key('stroke-dasharray'):
+                if 'stroke-dasharray' in style:
                     if style['stroke-dasharray'].find(',') > 0:
                         dashes = [float (dash) for dash in style['stroke-dasharray'].split(',')]
-                if style.has_key('stroke-dashoffset'):
+                if 'stroke-dashoffset' in style:
                     offset = style['stroke-dashoffset']
                 if dashes:
                     p = cubicsuperpath.parsePath(node.get('d'))

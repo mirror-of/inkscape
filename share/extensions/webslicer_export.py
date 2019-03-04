@@ -63,7 +63,7 @@ class WebSlicer_Export(WebSlicer_Effect):
                 # Try to create it:
                 try:
                     os.makedirs( self.options.dir )
-                except Exception, e:
+                except Exception as e:
                     inkex.errormsg( _('Can\'t create "%s".') % self.options.dir )
                     inkex.errormsg( _('Error: %s') % e )
                     return {'error':'Can\'t create the directory to export.'}

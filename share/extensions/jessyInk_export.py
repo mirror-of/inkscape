@@ -53,7 +53,7 @@ def dictToPropStr(dictio):
 def setStyle(node, propKey, propValue):
 	props = {}
 
-	if node.attrib.has_key("style"):
+	if "style" in node.attrib:
 		props = propStrToDict(node.get("style"))
 	
 	props[propKey] = propValue

@@ -194,7 +194,7 @@ class MyEffect(inkex.Effect):
         style = node.get('style')
         if style:
             style = simplestyle.parseStyle(style)
-            if style.has_key('stroke'):
+            if 'stroke' in style:
                 if style['stroke'] and style['stroke'] != 'none' and style['stroke'][0:3] != 'url':
                     rgb = simplestyle.parseColor(style['stroke'])
         hsl = coloreffect.ColorEffect.rgb_to_hsl(coloreffect.ColorEffect(),rgb[0]/255.0,rgb[1]/255.0,rgb[2]/255.0)
@@ -286,7 +286,7 @@ class MyEffect(inkex.Effect):
             style = group.get('style')
             if style:
                 style = simplestyle.parseStyle(style)
-                if style.has_key('display'):
+                if 'display' in style:
                     if style['display'] == 'none' and self.options.layer_option and self.options.layer_option=='visible':
                         return
             layer = group.get(inkex.addNS('label', 'inkscape'))

@@ -66,7 +66,7 @@ def run(command_format, prog_name):
                 msg = "%s failed:\n%s\n%s\n" % (prog_name, out, err)
             elif err:
                 sys.stderr.write("%s executed but logged the following error:\n%s\n%s\n" % (prog_name, out, err))
-    except Exception, inst:
+    except Exception as inst:
         msg = "Error attempting to run %s: %s" % (prog_name, str(inst))
 
     # If successful, copy the output file to stdout.
@@ -79,7 +79,7 @@ def run(command_format, prog_name):
             data = f.read()
             sys.stdout.write(data)
             f.close()
-        except IOError, inst:
+        except IOError as inst:
             msg = "Error reading temporary file: %s" % str(inst)
 
     # Clean up.

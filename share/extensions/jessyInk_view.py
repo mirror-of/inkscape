@@ -90,13 +90,13 @@ class JessyInk_Effects(inkex.Effect):
 			rect.set("{" + inkex.NSS["jessyink"] + "}view","name:view;order:" + self.options.viewOrder + ";length:" + str(int(self.options.viewDuration * 1000)))
 
 			# Remove possible effect arguments.
-			if rect.attrib.has_key("{" + inkex.NSS["jessyink"] + "}effectIn"):
+			if "{" + inkex.NSS["jessyink"] + "}effectIn" in rect.attrib:
 				del rect.attrib["{" + inkex.NSS["jessyink"] + "}effectIn"]
 
-			if rect.attrib.has_key("{" + inkex.NSS["jessyink"] + "}effectOut"):
+			if "{" + inkex.NSS["jessyink"] + "}effectOut" in rect.attrib:
 				del rect.attrib["{" + inkex.NSS["jessyink"] + "}effectOut"]
 		else:
-			if node.attrib.has_key("{" + inkex.NSS["jessyink"] + "}view"):
+			if "{" + inkex.NSS["jessyink"] + "}view" in node.attrib:
 				del node.attrib["{" + inkex.NSS["jessyink"] + "}view"]
 		
 # Create effect instance

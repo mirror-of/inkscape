@@ -328,7 +328,7 @@ def randomize_input_string(tokens, zoom ):					   # generate a glyph starting fr
 	for i in range(0,len(tokens)):
 		char = tokens[i]
 		#if ( re.match("[a-zA-Z0-9?]", char)):
-		if ( alphabet.has_key(char)):
+		if ( char in alphabet):
 			if ((i > 0) and (char == tokens[i-1])):		 # if this letter matches previous letter
 				imagelist.append(imagelist[len(stack)-1])# make them the same image
 			else:										# generate image for letter

@@ -63,7 +63,7 @@ def run(command_format, prog_name, uniconv_format):
                 msg = "Neither subprocess.Popen nor popen2.Popen3 is available"
         if rc and msg is None:
             msg = "%s failed:\n%s\n%s\n" % (prog_name, out, err)
-    except Exception, inst:
+    except Exception as inst:
         msg = "Error attempting to run %s: %s" % (prog_name, str(inst))
 
     # If successful, copy the output file to stdout.
@@ -76,7 +76,7 @@ def run(command_format, prog_name, uniconv_format):
             data = f.read()
             sys.stdout.write(data)
             f.close()
-        except IOError, inst:
+        except IOError as inst:
             msg = "Error reading temporary file: %s" % str(inst)
 
     # Clean up.

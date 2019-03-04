@@ -52,7 +52,7 @@ class ColorEffect(inkex.Effect):
             if new_val != val:
                 node.set(attr, new_val)
 
-    if node.attrib.has_key('style'):
+    if 'style' in node.attrib:
         # References for style attribute:
         # http://www.w3.org/TR/SVG11/styling.html#StyleAttribute,
         # http://www.w3.org/TR/CSS21/syndata.html
@@ -131,7 +131,7 @@ class ColorEffect(inkex.Effect):
     for child in newnode:
       self.changeStyle(child)
     xlink = inkex.addNS('href','xlink')
-    if newnode.attrib.has_key(xlink):
+    if xlink in newnode.attrib:
       href=newnode.get(xlink)
       if href.startswith('#'):
         id = href[len('#'):len(href)]

@@ -58,7 +58,7 @@ class HpglOutput(inkex.Effect):
                 return
             else:
                 type, value, traceback = sys.exc_info()
-                raise ValueError, ("", type, value), traceback
+                raise ValueError("", type, value).with_traceback(traceback)
         # convert raw HPGL to HPGL
         hpglInit = 'IN'
         if self.options.force > 0:

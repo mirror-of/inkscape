@@ -393,7 +393,7 @@ class SynfigDocument(object):
                 for layer in value:
                     el.append(layer)
         else:
-            raise AssertionError, "Unsupported param type %s" % (param_type)
+            raise AssertionError("Unsupported param type %s" % (param_type))
 
         if guid:
             el.set("guid", guid)
@@ -446,7 +446,7 @@ class SynfigDocument(object):
         guid -- guid of the parameter value
         """
         if modify_linked:
-            raise AssertionError, "Modifying linked parameters is not supported"
+            raise AssertionError("Modifying linked parameters is not supported")
 
         layer_type = layer.get("type")
         assert layer_type, "Layer does not have a type"
@@ -463,7 +463,7 @@ class SynfigDocument(object):
         if len(existing) == 0:
             self.build_param(layer, name, value, param_type, guid)
         elif len(existing) > 1:
-            raise AssertionError, "Found multiple parameters with the same name"
+            raise AssertionError("Found multiple parameters with the same name")
         else:
             new_param = self.build_param(None, name, value, param_type, guid)
             layer.replace(existing[0], new_param)
@@ -505,7 +505,7 @@ class SynfigDocument(object):
                 elif param_type == "integer":
                     return int(param[0].get("integer", "0"))
                 else:
-                    raise Exception, "Getting this type of parameter not yet implemented"
+                    raise Exception("Getting this type of parameter not yet implemented")
 
     ### Global defs, and related
 
@@ -530,7 +530,7 @@ class SynfigDocument(object):
         elif link != "":
             gradient["link"] = link
         else:
-            raise MalformedSVGError, "Gradient has neither stops nor link"
+            raise MalformedSVGError("Gradient has neither stops nor link")
         self.gradients[gradient_id] = gradient
 
     def add_radial_gradient(self, gradient_id, center, radius, focus, mtx=[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], stops=[], link="", spread_method="pad"):
@@ -549,7 +549,7 @@ class SynfigDocument(object):
         elif link != "":
             gradient["link"] = link
         else:
-            raise MalformedSVGError, "Gradient has neither stops nor link"
+            raise MalformedSVGError("Gradient has neither stops nor link")
         self.gradients[gradient_id] = gradient
 
     def get_gradient(self, gradient_id):
@@ -598,7 +598,7 @@ class SynfigDocument(object):
 
         # If the gradient does have a link, find the color stops recursively
         if gradient["link"] not in self.gradients.keys():
-            raise MalformedSVGError, "Linked gradient ID not found"
+            raise MalformedSVGError("Linked gradient ID not found")
 
         linked_gradient = self.get_gradient(gradient["link"])
         gradient["stops"] = linked_gradient["stops"]
@@ -772,7 +772,7 @@ class SynfigDocument(object):
         Returns: list of layers
         """
         if filter_id not in self.filters.keys():
-            raise MalformedSVGError, "Filter %s not found" % filter_id
+            raise MalformedSVGError("Filter %s not found" % filter_id)
 
         try:
             ret = self.filters[filter_id](self, layers, is_end)
@@ -907,7 +907,7 @@ def path_to_bline_list(path_d, nodetypes=None, mtx=[[1.0, 0.0, 0.0], [0.0, 1.0, 
     for s in path:
         cmd, params = s
         if cmd != "M" and bline_list == []:
-            raise MalformedSVGError, "Bad path data: path doesn't start with moveto, %s, %s" % (s, path)
+            raise MalformedSVGError("Bad path data: path doesn't start with moveto, %s, %s" % (s, path))
         elif cmd == "M":
             # Add previous point to subpath
             if last:
@@ -1171,7 +1171,7 @@ class SynfigExport(SynfigPrep):
                 style = extract_style(stop)
                 stops[offset] = extract_color(style, "stop-color", "stop-opacity")
             else:
-                raise MalformedSVGError, "Child of gradient is not a stop"
+                raise MalformedSVGError("Child of gradient is not a stop")
 
         return stops
 
@@ -1224,7 +1224,7 @@ class SynfigExport(SynfigPrep):
                     elif mode == "lighten":
                         blend_method = "brighten"
                     else:
-                        raise MalformedSVGError, "Invalid blend method"
+                        raise MalformedSVGError("Invalid blend method")
 
                     if child.get("in2") == "BackgroundImage":
                         encapsulate_result = False
@@ -1342,7 +1342,7 @@ if __name__ == '__main__':
     try:
         e = SynfigExport()
         e.affect(output=False)
-    except MalformedSVGError, e:
+    except MalformedSVGError as e:
         errormsg(e)
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

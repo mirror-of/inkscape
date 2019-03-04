@@ -56,7 +56,7 @@ class Style(dict):
     def add(self, c, el):
         self.total.append( (c, el) )
         for name,value in c.iteritems():
-            if not self.has_key(name):
+            if name not in self:
                 self[name] = value
             if self[name] == value:
                 self.weights[name] += 1
@@ -76,7 +76,7 @@ class Style(dict):
     def __eq__(self, o):
         """Not equals, prefer to overload 'in' but that doesn't seem possible"""
         for arg in self.keys():
-            if o.has_key(arg) and self[arg] != o[arg]:
+            if arg in o and self[arg] != o[arg]:
                 return False
         return True
 
@@ -122,7 +122,7 @@ class MergeStyles(inkex.Effect):
             st.remove(common.keys())
             el.attrib['style'] = st.to_str("")
             
-            olds = el.attrib.has_key('class') and el.attrib['class'].split() or []
+            olds = 'class' in el.attrib and el.attrib['class'].split() or []
             if newclass not in olds:
                 olds.append(newclass)
             el.attrib['class'] = ' '.join(olds)

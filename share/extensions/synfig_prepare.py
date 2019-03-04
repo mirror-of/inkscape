@@ -97,7 +97,7 @@ class InkscapeActionGroup(object):
         """
         node_id = node.get("id", None)
         if node_id is None:
-            raise MalformedSVGError, "Node has no id"
+            raise MalformedSVGError("Node has no id")
         self.select_id(node_id)
 
     def select_nodes(self, nodes):
@@ -293,7 +293,7 @@ def split_fill_and_stroke(path_node):
         d = attribs["d"]
         del attribs["d"]
     else:
-        raise AssertionError, "Cannot split stroke and fill of non-path element"
+        raise AssertionError("Cannot split stroke and fill of non-path element")
 
     if addNS("nodetypes", "sodipodi") in attribs.keys():
         nodetypes = attribs[addNS("nodetypes", "sodipodi")]
@@ -494,7 +494,7 @@ if __name__ == '__main__':
     try:
         e = SynfigPrep()
         e.affect()
-    except MalformedSVGError, e:
+    except MalformedSVGError as e:
         errormsg(e)
 
 
