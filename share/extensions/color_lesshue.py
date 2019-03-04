@@ -9,7 +9,7 @@ class C(coloreffect.ColorEffect):
     if hsl[0] < 0.0:
         hsl[0] = 1.0 + hsl[0]
     rgb = self.hsl_to_rgb(hsl[0], hsl[1], hsl[2])
-    return '%02x%02x%02x' % (rgb[0]*255, rgb[1]*255, rgb[2]*255)
+    return '%02x%02x%02x' % tuple(int(i * 0xFF) for i in rgb)
 
 c = C()
 c.affect()

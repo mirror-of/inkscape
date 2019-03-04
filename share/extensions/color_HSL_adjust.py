@@ -61,7 +61,7 @@ class C(coloreffect.ColorEffect):
             hsl[2] = self.clamp(0.0, lightval, 1.0)
         #inkex.debug("hsl new: " + str(hsl[0]) + ", " + str(hsl[1]) + ", " + str(hsl[2]))
         rgb = self.hsl_to_rgb(hsl[0], hsl[1], hsl[2])
-        return '%02x%02x%02x' % (rgb[0]*255, rgb[1]*255, rgb[2]*255)
+        return '%02x%02x%02x' % tuple(int(i * 0xFF) for i in rgb)
 
 c = C()
 c.affect()
