@@ -70,7 +70,7 @@ class HpglOutput(inkex.Effect):
     def output(self):
         # print to file
         if self.hpgl != '':
-            print self.hpgl
+            print(self.hpgl)
 
 if __name__ == '__main__':
     # start extension

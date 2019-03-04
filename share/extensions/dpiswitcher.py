@@ -373,34 +373,34 @@ class DPISwitcher(inkex.Effect):
         sys.stdout = sys.stderr
         svg = self.document.getroot()
         if self.options.action == '"page_info"':
-            print ":::SVG document related info:::"
-            print "version: " + str(svg.get(inkex.addNS('version',u'inkscape')))
+            print(":::SVG document related info:::")
+            print("version: " + str(svg.get(inkex.addNS('version',u'inkscape'))))
             width = svg.get('width')
             if width:
-                print "width: " + width
+                print("width: " + width)
             height = svg.get('height')
             if height:
-                print "height: " + height
+                print("height: " + height)
             viewBox = svg.get('viewBox')
             if viewBox:
-                print "viewBox: " + viewBox
+                print("viewBox: " + viewBox)
             namedview = svg.find(inkex.addNS('namedview', 'sodipodi'))
             docunits= namedview.get(inkex.addNS('document-units', 'inkscape'))
             if docunits:
-                print "document-units: " + docunits
+                print("document-units: " + docunits)
             units = namedview.get('units')
             if units:
-                print "units: " + units
+                print("units: " + units)
             xpathStr = '//sodipodi:guide'
             guides = svg.xpath(xpathStr, namespaces=inkex.NSS)
             xpathStr = '//inkscape:grid'
             if guides:
                 numberGuides = len(guides)
-                print "Document has " + str(numberGuides) + " guides"
+                print("Document has " + str(numberGuides) + " guides")
             grids = svg.xpath(xpathStr, namespaces=inkex.NSS)
             i = 1
             for grid in grids:
-                print "Grid number " + str(i) + ": Units: " + grid.get("units")
+                print("Grid number " + str(i) + ": Units: " + grid.get("units"))
                 i = i+1
         else:
             if self.options.switcher == "0":

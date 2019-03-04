@@ -78,12 +78,12 @@ def test_barcode():
         ('Upca', '12345678911'),
         ('Upce', '123456'),
       ):
-        print "RENDER TEST: %s" % kind
+        print("RENDER TEST: %s" % kind)
         bargen = getBarcode(kind, text=text)
         if bargen is not None:
             barcode = bargen.generate()
             if barcode is not None:
-                print inkex.etree.tostring(barcode, pretty_print=True)
+                print(inkex.etree.tostring(barcode, pretty_print=True))
 
 
 if __name__ == '__main__':

@@ -47,10 +47,10 @@ stream = open(sys.argv[-1:][0],'r')
 dom = parse(stream)
 stream.close()
 walk(dom)
-print 'GIMP Palette\nName: %s\n#' % (dom.getElementsByTagName('svg')[0].getAttribute(DOCNAME).split('.')[0])
+print('GIMP Palette\nName: %s\n#' % (dom.getElementsByTagName('svg')[0].getAttribute(DOCNAME).split('.')[0]))
 
 for k,v in sorted(colors.items()):
-    print k+v
+    print(k+v)
 
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

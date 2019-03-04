@@ -99,7 +99,7 @@ class MyEffect(inkex.Effect):
         self.d = array([0], float)              # knot vector
         self.poly = [[0.0,0.0]]                 # LWPOLYLINE data
     def output(self):
-        print ''.join(self.dxf)
+        print(''.join(self.dxf))
     def dxf_add(self, str):
         self.dxf.append(str.encode(self.options.char_encode))
     def dxf_line(self,csp):

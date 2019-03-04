@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 """
 
+from __future__ import print_function
+
 import inkex, os, tempfile, sys, xml.dom.minidom
 
 def parse_pkgs(pkgstring):
@@ -119,7 +121,7 @@ class EQTEXSVG(inkex.Effect):
             os.rmdir(base_dir)
 
         if self.options.formula == "":
-            print >>sys.stderr, "empty LaTeX input.  Nothing to be done"
+            print("empty LaTeX input.  Nothing to be done", file=sys.stderr)
             return
 
         add_header = parse_pkgs(self.options.packages)
@@ -129,9 +131,9 @@ class EQTEXSVG(inkex.Effect):
         try:
             os.stat(dvi_file)
         except OSError:
-            print >>sys.stderr, "invalid LaTeX input:"
-            print >>sys.stderr, self.options.formula
-            print >>sys.stderr, "temporary files were left in:", base_dir
+            print("invalid LaTeX input:", file=sys.stderr)
+            print(self.options.formula, file=sys.stderr)
+            print("temporary files were left in:", base_dir, file=sys.stderr)
             sys.exit(1)
 
         os.system('dvips -q -f -E -D 600 -y 5000 -o "%s" "%s"' % (ps_file, dvi_file))

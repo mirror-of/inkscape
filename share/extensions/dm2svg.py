@@ -21,13 +21,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 
+from __future__ import print_function
+
 import struct
 
 def process_file(filename):
     try:
         f = open(filename, 'rb')
     except IOError as e:
-        print >> sys.stderr, 'Unable to open %s: %s' % (filename, e)
+        print('Unable to open %s: %s' % (filename, e), file=sys.stderr)
         return
 
     with f:
@@ -73,10 +75,10 @@ def process_file(filename):
                     points = ' '.join(','.join(map(str, e)) for e in coords)
                     svg_element = '<polyline points="%s" dm:timestamp="%s" />' % (points, timestamp)
             else:
-                print >> sys.stderr, 'Unsupported tag: %s\n' % tag
+                print('Unsupported tag: %s\n' % tag, file=sys.stderr)
 
         # Emit the footer to finish it off
-        print '\n</svg>\n'
+        print('\n</svg>\n')
 
 
 def read_point(f, ymax):
@@ -90,7 +92,7 @@ def read_point(f, ymax):
 def emit_header(f):
     id, version, width, height, page_type = struct.unpack('<32sBHHBxx', f.read(40))
 
-    print '''
+    print('''
 <svg viewBox="0 0 %(width)s %(height)s" fill="none" stroke="black" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"
   xmlns="http://www.w3.org/2000/svg"
   xmlns:svg="http://www.w3.org/2000/svg"
@@ -107,14 +109,14 @@ def emit_header(f):
       </dm:page>
     </metadata>
     <rect width="%(width)s" height="%(height)s" fill="aliceblue"/>
-''' % locals()
+''' % locals())
 
     return height
 
 
 def emit_element(message):
     if message:
-        print '%s\n' % message
+        print('%s\n' % message)
 
 
 if __name__ == '__main__':
@@ -123,6 +125,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         process_file(sys.argv[1])
     else:
-        print >> sys.stderr, 'Usage: %s <dhw-file>' % sys.argv[0]
+        print('Usage: %s <dhw-file>' % sys.argv[0], file=sys.stderr)
         
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
