@@ -251,7 +251,7 @@ class FuncPlot(inkex.Effect):
 
     def effect(self):
         newpath = None
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('rect','svg'):
                 # create new path with basic dimensions of selected rectangle
                 newpath = inkex.etree.Element(inkex.addNS('path','svg'))

@@ -91,13 +91,13 @@ class Extract(inkex.Effect):
                 f.close
 
             #find the center of all selected objects **Not the average!
-            x,y,w,h = dimen[self.selected.keys()[0]]
+            x,y,w,h = dimen[list(self.selected.keys())[0]]
             minx = x
             miny = y
             maxx = x + w
             maxy = y + h
 
-            for id, node in self.selected.iteritems():
+            for id, node in self.selected.items():
                 # get the bounding box
                 x,y,w,h = dimen[id]
                 if x < minx:
@@ -113,7 +113,7 @@ class Extract(inkex.Effect):
             midy = (miny + maxy) / 2
 
             #calculate distances for each selected object
-            for id, node in self.selected.iteritems():
+            for id, node in self.selected.items():
                 # get the bounding box
                 x,y,w,h = dimen[id]
 

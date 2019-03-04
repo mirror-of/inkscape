@@ -134,7 +134,7 @@ class Interp(inkex.Effect):
 
         if self.options.zsort:
             # work around selection order swapping with Live Preview
-            sorted_ids = pathmodifier.zSort(self.document.getroot(),self.selected.keys())
+            sorted_ids = pathmodifier.zSort(self.document.getroot(),list(self.selected.keys()))
         else:
             # use selection order (default)
             sorted_ids = self.options.ids
@@ -209,9 +209,9 @@ class Interp(inkex.Effect):
                         t += l / etotal
                         lengths.setdefault(t,0)
                         lengths[t] += -1
-                sadd = [k for (k,v) in lengths.iteritems() if v < 0]
+                sadd = [k for (k,v) in lengths.items() if v < 0]
                 sadd.sort()
-                eadd = [k for (k,v) in lengths.iteritems() if v > 0]
+                eadd = [k for (k,v) in lengths.items() if v > 0]
                 eadd.sort()
 
                 t = 0

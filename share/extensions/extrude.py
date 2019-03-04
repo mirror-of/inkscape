@@ -35,7 +35,7 @@ class Extrude(inkex.Effect):
 
     def effect(self):
         paths = []
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == '{http://www.w3.org/2000/svg}path':
                 paths.append(node)
         if len(paths) < 2:

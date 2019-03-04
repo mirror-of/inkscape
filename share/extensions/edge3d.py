@@ -72,7 +72,7 @@ class Edge3d(inkex.Effect):
            for the current shade.  shade is a floating point 0-1 white-black"""
         # size of a wedge for shade i, wedges come in pairs
         delta = 360. / self.options.shades / 2.
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 d = node.get('d')
                 p = simplepath.parsePath(d)

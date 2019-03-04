@@ -168,7 +168,7 @@ class PathScatter(pathmodifier.Diffeo):
 
         if self.options.copymode=="copy":
             duplist=self.duplicateNodes({id:self.patternNode})
-            self.patternNode = duplist.values()[0]
+            self.patternNode = list(duplist.values())[0]
 
         #TODO: allow 4th option: duplicate the first copy and clone the next ones.
         if "%s"%self.options.copymode=="clone":
@@ -251,7 +251,7 @@ class PathScatter(pathmodifier.Diffeo):
         #inkex.debug(patternList)
                 
         counter=0
-        for skelnode in self.skeletons.itervalues(): 
+        for skelnode in self.skeletons.values(): 
             self.curSekeleton=cubicsuperpath.parsePath(skelnode.get('d'))
             for comp in self.curSekeleton:
                 self.skelcomp,self.lengths=linearize(comp)

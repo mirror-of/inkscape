@@ -36,7 +36,7 @@ class ColorEffect(inkex.Effect):
     if len(self.selected)==0:
       self.getAttribs(self.document.getroot())
     else:
-      for id,node in self.selected.iteritems():
+      for id,node in self.selected.items():
         self.getAttribs(node)
 
   def getAttribs(self,node):

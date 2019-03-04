@@ -118,13 +118,13 @@ class Restack(inkex.Effect):
             f.close
 
         #find the center of all selected objects **Not the average!
-        x,y,w,h = dimen[objects.keys()[0]]
+        x,y,w,h = dimen[list(objects.keys())[0]]
         minx = x
         miny = y
         maxx = x + w
         maxy = y + h
 
-        for id, node in objects.iteritems():
+        for id, node in objects.items():
             # get the bounding box
             x,y,w,h = dimen[id]
             if x < minx:
@@ -140,7 +140,7 @@ class Restack(inkex.Effect):
         midy = (miny + maxy) / 2
 
         #calculate distances for each selected object
-        for id, node in objects.iteritems():
+        for id, node in objects.items():
             # get the bounding box
             x,y,w,h = dimen[id]
 
@@ -194,7 +194,7 @@ class Restack(inkex.Effect):
                     objects.append(child)
         else:
             parentnode = self.current_layer
-            for id_ in zSort(self.document.getroot(), self.selected.keys()):
+            for id_ in zSort(self.document.getroot(), list(self.selected.keys())):
                 objects.append(self.selected[id_])
         if self.options.zsort == "rev":
             objects.reverse()

@@ -74,7 +74,7 @@ class MyEffect(inkex.Effect):
         if defs == None:
             defs = inkex.etree.SubElement(self.document.getroot(),inkex.addNS('defs','svg'))
 
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             mprops = ['marker','marker-start','marker-mid','marker-end']
             try:
                 style = simplestyle.parseStyle(node.get('style'))

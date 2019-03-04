@@ -69,7 +69,7 @@ class WebSlicer_CreateGroup(WebSlicer_Effect):
         if len(self.selected) == 0:
             inkex.errormsg(_('You must to select some "Slicer rectangles" or other "Layout groups".'))
             exit(1)
-        for id,node in self.selected.iteritems():
+        for id,node in self.selected.items():
             if node not in self.layer_descendants:
                 inkex.errormsg(_('Oops... The element "%s" is not in the Web Slicer layer') % id)
                 exit(2)
@@ -81,7 +81,7 @@ class WebSlicer_CreateGroup(WebSlicer_Effect):
               'width_unity', 'height_unity',
               'bg_color' ] )
 
-        for id,node in self.selected.iteritems():
+        for id,node in self.selected.items():
             group.insert( 1, node )
 
 

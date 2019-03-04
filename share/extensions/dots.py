@@ -46,7 +46,7 @@ class Dots(inkex.Effect):
     def effect(self):
         selection = self.selected
         if (selection):
-            for id, node in selection.iteritems():
+            for id, node in selection.items():
                 if node.tag == inkex.addNS('path','svg'):
                     self.addDot(node)
         else:

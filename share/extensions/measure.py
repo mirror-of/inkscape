@@ -227,7 +227,7 @@ class Length(inkex.Effect):
             self.options.fontsize /= factor
         factor *= scale/self.unittouu('1'+self.options.unit)
         # loop over all selected paths
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 mat = simpletransform.composeParents(node, [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]])
                 p = cubicsuperpath.parsePath(node.get('d'))

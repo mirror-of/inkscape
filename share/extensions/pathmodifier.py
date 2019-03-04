@@ -65,7 +65,7 @@ class PathModifier(inkex.Effect):
 
     def duplicateNodes(self, aList):
         clones={}
-        for id,node in aList.iteritems():
+        for id,node in aList.items():
             clone=copy.deepcopy(node)
             #!!!--> should it be given an id?
             #seems to work without this!?!
@@ -82,7 +82,7 @@ class PathModifier(inkex.Effect):
         return(id)
 
     def expandGroups(self,aList,transferTransform=True):
-        for id, node in aList.items():      
+        for id, node in list(aList.items()):      
             if node.tag == inkex.addNS('g','svg') or node.tag=='g':
                 mat=parseTransform(node.get("transform"))
                 for child in node:
@@ -95,7 +95,7 @@ class PathModifier(inkex.Effect):
         return(aList)
 
     def expandGroupsUnlinkClones(self,aList,transferTransform=True,doReplace=True):
-        for id in aList.keys()[:]:     
+        for id in list(aList.keys()):     
             node=aList[id]
             if node.tag == inkex.addNS('g','svg') or node.tag=='g':
                 self.expandGroups(aList,transferTransform)
@@ -223,7 +223,7 @@ class PathModifier(inkex.Effect):
             return(self.groupToPath(node,doReplace))
         elif node.tag == inkex.addNS('path','svg') or node.tag == 'path':
             #remove inkscape attributes, otherwise any modif of 'd' will be discarded!
-            for attName in node.attrib.keys():
+            for attName in list(node.attrib.keys()):
                 if ("sodipodi" in attName) or ("inkscape" in attName):
                     del node.attrib[attName]
             fuseTransform(node)
@@ -237,7 +237,7 @@ class PathModifier(inkex.Effect):
 
     def objectsToPaths(self,aList,doReplace=True):
         newSelection={}
-        for id,node in aList.items():
+        for id,node in list(aList.items()):
             newnode=self.objectToPath(node,doReplace)
             del aList[id]
             aList[newnode.get('id')]=newnode
@@ -253,7 +253,7 @@ class PathModifier(inkex.Effect):
         #self.expandGroupsUnlinkClones(self.selected, True)
         self.objectsToPaths(self.selected, True)
         self.bbox=computeBBox(self.selected.values())
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 d = node.get('d')
                 p = cubicsuperpath.parsePath(d)
@@ -298,7 +298,7 @@ class Diffeo(PathModifier):
         self.expandGroups(self.selected, True)
         self.objectsToPaths(self.selected, True)
         self.bbox=computeBBox(self.selected.values())
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg') or node.tag=='path':
                 d = node.get('d')
                 p = cubicsuperpath.parsePath(d)

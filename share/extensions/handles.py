@@ -20,7 +20,7 @@ import inkex, simplepath, simplestyle
 
 class Handles(inkex.Effect):
     def effect(self):
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 p = simplepath.parsePath(node.get('d'))
                 a =[]

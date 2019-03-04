@@ -194,7 +194,7 @@ class Split(inkex.Effect):
         preserve = self.options.preserve
        
         #checks if the selected elements are text nodes
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if not (node.tag == inkex.addNS("text", "svg") or node.tag == inkex.addNS("flowRoot", "svg")):
                 inkex.debug("Please select only text elements.")
                 break

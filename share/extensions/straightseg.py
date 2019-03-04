@@ -38,7 +38,7 @@ class SegmentStraightener(inkex.Effect):
                         dest="behave", default=1,
                         help="straightening behavior for cubic segments")
     def effect(self):
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path', 'svg'):
                 d = node.get('d')
                 p = simplepath.parsePath(d)

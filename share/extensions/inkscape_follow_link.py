@@ -19,7 +19,7 @@ class FollowLink(inkex.Effect):
 
     def effect(self):
         if (self.options.ids):
-            for id, node in self.selected.iteritems():
+            for id, node in self.selected.items():
                 if node.tag == inkex.addNS('a','svg'):
                     self.url = node.get(inkex.addNS('href','xlink'))
                     vwswli = VisitWebSiteWithoutLockingInkscape(self.url)

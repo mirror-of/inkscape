@@ -38,7 +38,7 @@ class Style(dict):
             self[name.strip()] = value.strip()
 
     def entries(self):
-        return [ "%s:%s;" % (n,v) for (n,v) in self.iteritems() ]
+        return [ "%s:%s;" % (n,v) for (n,v) in self.items() ]
 
     def to_str(self, sep="\n    "):
         return "    " + "\n    ".join(self.entries())
@@ -55,7 +55,7 @@ class Style(dict):
 
     def add(self, c, el):
         self.total.append( (c, el) )
-        for name,value in c.iteritems():
+        for name,value in c.items():
             if name not in self:
                 self[name] = value
             if self[name] == value:
@@ -63,7 +63,7 @@ class Style(dict):
 
     def clean(self, threshold):
         """Removes any elements that aren't the same using a weighted threshold"""
-        for attr in self.keys():
+        for attr in list(self.keys()):
             if self.weights[attr] < len(self.total) - threshold:
                 self.pop(attr)
 
@@ -119,7 +119,7 @@ class MergeStyles(inkex.Effect):
         styles.text = (styles.text or "") + "\n" + common.css( newclass )
 
         for (st, el) in common.all_matches():
-            st.remove(common.keys())
+            st.remove(list(common.keys()))
             el.attrib['style'] = st.to_str("")
             
             olds = 'class' in el.attrib and el.attrib['class'].split() or []

@@ -232,7 +232,7 @@ class PathAlongPath(pathmodifier.Diffeo):
         if dx < 0.01:
             exit(_("The total length of the pattern is too small :\nPlease choose a larger object or set 'Space between copies' > 0"))
 
-        for id, node in self.patterns.iteritems():
+        for id, node in self.patterns.items():
             if node.tag == inkex.addNS('path','svg') or node.tag=='path':
                 d = node.get('d')
                 p0 = cubicsuperpath.parsePath(d)
@@ -240,7 +240,7 @@ class PathAlongPath(pathmodifier.Diffeo):
                     flipxy(p0)
 
                 newp=[]
-                for skelnode in self.skeletons.itervalues(): 
+                for skelnode in self.skeletons.values(): 
                     self.curSekeleton=cubicsuperpath.parsePath(skelnode.get('d'))
                     if self.options.vertical:
                         flipxy(self.curSekeleton)

@@ -26,7 +26,7 @@ class MyEffect(inkex.Effect):
                         dest="flat", default=10.0,
                         help="Minimum flatness of the subdivided curves")
     def effect(self):
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 d = node.get('d')
                 p = cubicsuperpath.parsePath(d)

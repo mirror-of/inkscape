@@ -195,7 +195,7 @@ blend_method_names = {
     19 : "alpha over"      #deprecated
     }
 
-blend_methods = dict((v, k) for (k, v) in blend_method_names.iteritems())
+blend_methods = dict((v, k) for (k, v) in blend_method_names.items())
 
 ###### Functions ##########################################
 def paramType(layer, param, value=None):

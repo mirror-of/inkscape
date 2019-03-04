@@ -44,7 +44,7 @@ class MyEffect(inkex.Effect):
         path = self.options.filepath
         if (path != ''):
             if (self.options.ids):
-                for id, node in self.selected.iteritems():
+                for id, node in self.selected.items():
                     if node.tag == inkex.addNS('image','svg'):
                         xlink = node.get(inkex.addNS('href','xlink'))
                         if (xlink[:4]=='data'):

@@ -171,7 +171,7 @@ class Dimension(pathmodifier.PathModifier):
         line.set('stroke-width', str(0.5*scale))
         group.append(line)
 
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             group.append(node)
         
         layer.append(group)

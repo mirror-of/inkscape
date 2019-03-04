@@ -3018,7 +3018,7 @@ class Polygon:
 			self.polygon += [ poly ]
 			# Remove all edges that are intersects new poly (any vertex inside new poly)
 			poly_ = Polygon([poly])
-			for p in edges.keys()[:] : 
+			for p in list(edges.keys()) : 
 				if poly_.point_inside(list(p)) : del edges[p]
 		self.draw(color="Green", width=1)	
 
@@ -4545,7 +4545,7 @@ class Gcodetools(inkex.Effect):
 		self.check_dir() 
 		gcode = ""
 		
-		biarc_group = inkex.etree.SubElement( self.selected_paths.keys()[0] if len(self.selected_paths.keys())>0 else self.layers[0], inkex.addNS('g','svg') )
+		biarc_group = inkex.etree.SubElement( list(self.selected_paths.keys())[0] if len(self.selected_paths)>0 else self.layers[0], inkex.addNS('g','svg') )
 		print_(("self.layers=",self.layers))
 		print_(("paths=",paths))
 		colors = {}
@@ -6038,7 +6038,7 @@ G01 Z1 (going to cutting z)\n""",
 		else :
 			paths = self.selected_paths
 		#	Set group
-		group = inkex.etree.SubElement( self.selected_paths.keys()[0] if len(self.selected_paths.keys())>0 else self.layers[0], inkex.addNS('g','svg') )
+		group = inkex.etree.SubElement( list(self.selected_paths.keys())[0] if len(self.selected_paths)>0 else self.layers[0], inkex.addNS('g','svg') )
 		trans_ = [[1,0.3,0],[0,0.5,0]]	
 
 		self.set_markers()

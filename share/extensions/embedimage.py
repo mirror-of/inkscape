@@ -51,7 +51,7 @@ class Embedder(inkex.Effect):
         self.document=document
         self.selected=selected
         if (self.options.ids):
-            for id, node in selected.iteritems():
+            for id, node in selected.items():
                 if node.tag == inkex.addNS('image','svg'):
                     self.embedImage(node)
 

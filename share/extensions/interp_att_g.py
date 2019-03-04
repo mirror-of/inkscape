@@ -121,7 +121,7 @@ class InterpAttG(inkex.Effect):
       if len( self.selected ) > 1:
         # multiple selection
         if self.options.zsort:
-            sorted_ids = zSort(self.document.getroot(),self.selected.keys())
+            sorted_ids = zSort(self.document.getroot(),list(self.selected.keys()))
         else:
             sorted_ids = self.options.ids
         self.collection = list(sorted_ids)

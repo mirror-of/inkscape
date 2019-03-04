@@ -59,7 +59,7 @@ class Motion(inkex.Effect):
     def effect(self):
         self.vx = math.cos(math.radians(self.options.angle))*self.options.magnitude
         self.vy = math.sin(math.radians(self.options.angle))*self.options.magnitude
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 group = inkex.etree.SubElement(node.getparent(),inkex.addNS('g','svg'))
                 self.facegroup = inkex.etree.SubElement(group, inkex.addNS('g','svg'))

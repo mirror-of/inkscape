@@ -187,7 +187,7 @@ class ReplaceFont(inkex.Effect):
         to_return = []
         if scope == "selection_only":
             self.selected_items = []
-            for item in self.selected.iteritems():
+            for item in self.selected.items():
                 self.find_child_text_items(item[1])
             items = self.selected_items
             if len(items) == 0:

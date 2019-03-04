@@ -83,7 +83,7 @@ class JitterNodes(inkex.Effect):
                         help="The selected UI-tab when OK was pressed")
 
     def effect(self):
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 d = node.get('d')
                 p = cubicsuperpath.parsePath(d)

@@ -496,7 +496,7 @@ class PixelSnapEffect(inkex.Effect):
         
         self.document_offset = self.unittouu(svg.attrib['height']) % 1       # although SVG units are absolute, the elements are positioned relative to the top of the page, rather than zero
 
-        for id, elem in self.selected.iteritems():
+        for id, elem in self.selected.items():
             try:
                 self.pixel_snap(elem)
             except TransformError as e:

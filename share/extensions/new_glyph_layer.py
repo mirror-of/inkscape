@@ -51,7 +51,7 @@ class NewGlyphLayer(inkex.Effect):
 
 			#TODO: make it optional ("Use current selection as template glyph")
 			# Move selection to the newly created layer
-			for id,node in self.selected.iteritems():
+			for id,node in self.selected.items():
 				layer.append(node)
 
 if __name__ == '__main__':

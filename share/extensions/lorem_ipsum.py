@@ -217,7 +217,7 @@ class MyEffect(inkex.Effect):
   
   def effect(self):
     found=0
-    for id, node in self.selected.iteritems():
+    for id, node in self.selected.items():
       if node.tag == inkex.addNS('flowRoot','svg'):
         found+=1
         if found==1:

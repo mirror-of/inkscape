@@ -237,9 +237,9 @@ class DPISwitcher(inkex.Effect):
     def parse_length(self, length, percent=False):
         """Parse SVG length."""
         if self.options.switcher == "0":  # dpi90to96
-            known_units = self.__uuconvLegacy.keys()
+            known_units = list(self.__uuconvLegacy.keys())
         else:  # dpi96to90
-            known_units = self.__uuconv.keys()
+            known_units = list(self.__uuconv.keys())
         if percent:
             unitmatch = re.compile('(%s)$' % '|'.join(known_units + ['%']))
         else:

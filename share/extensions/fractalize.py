@@ -55,7 +55,7 @@ class PathFractalize(inkex.Effect):
                         dest="smooth", default="4.0",
                         help="Smoothness of the subdivision")
     def effect(self):
-        for id, node in self.selected.iteritems():
+        for id, node in self.selected.items():
             if node.tag == inkex.addNS('path','svg'):
                 d = node.get('d')
                 p = simplepath.parsePath(d)

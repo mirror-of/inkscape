@@ -32,7 +32,7 @@ class CharDataEffect(inkex.Effect):
     if len(self.selected)==0:
       self.recurse(self.document.getroot())
     else:
-      for id,node in self.selected.iteritems():
+      for id,node in self.selected.items():
         self.recurse(node)
 
   def recurse(self,node):

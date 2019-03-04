@@ -270,7 +270,7 @@ class Ungroup(inkex.Effect):
 
     def effect(self):
         if len(self.selected):
-            for elem in self.selected.itervalues():
+            for elem in self.selected.values():
                 self._deep_ungroup(elem)
         else:
             for elem in self.document.getroot():

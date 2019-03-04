@@ -105,13 +105,13 @@ class SetAttrImage(inkex.Effect):
 
     def change_selected_only(self, selected, attribute):
         if selected:
-            for node_id, node in selected.iteritems():
+            for node_id, node in selected.items():
                 if node.tag == inkex.addNS('image', 'svg'):
                     self.change_attribute(node, attribute)
 
     def change_in_selection(self, selected, attribute):
         if selected:
-            for node_id, node in selected.iteritems():
+            for node_id, node in selected.items():
                 self.change_all_images(node, attribute)
 
     def change_in_document(self, selected, attribute):
@@ -119,7 +119,7 @@ class SetAttrImage(inkex.Effect):
 
     def change_on_parent_group(self, selected, attribute):
         if selected:
-            for node_id, node in selected.iteritems():
+            for node_id, node in selected.items():
                 self.change_attribute(node.getparent(), attribute)
 
     def change_on_root_only(self, selected, attribute):
