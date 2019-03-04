@@ -80,6 +80,10 @@ import time
 import cmath
 import codecs
 import random
+
+if sys.version_info[0] >= 3:
+    unicode = lambda s: s.decode() if isinstance(s, bytes) else str(s)
+
 # local library
 import inkex
 import simplestyle

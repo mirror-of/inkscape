@@ -4,32 +4,32 @@
 import chardataeffect, inkex, string
 
 convert_table = {\
-'a': unicode("⠁", "utf-8"),\
-'b': unicode("⠃", "utf-8"),\
-'c': unicode("⠉", "utf-8"),\
-'d': unicode("⠙", "utf-8"),\
-'e': unicode("⠑", "utf-8"),\
-'f': unicode("⠋", "utf-8"),\
-'g': unicode("⠛", "utf-8"),\
-'h': unicode("⠓", "utf-8"),\
-'i': unicode("⠊", "utf-8"),\
-'j': unicode("⠚", "utf-8"),\
-'k': unicode("⠅", "utf-8"),\
-'l': unicode("⠇", "utf-8"),\
-'m': unicode("⠍", "utf-8"),\
-'n': unicode("⠝", "utf-8"),\
-'o': unicode("⠕", "utf-8"),\
-'p': unicode("⠏", "utf-8"),\
-'q': unicode("⠟", "utf-8"),\
-'r': unicode("⠗", "utf-8"),\
-'s': unicode("⠎", "utf-8"),\
-'t': unicode("⠞", "utf-8"),\
-'u': unicode("⠥", "utf-8"),\
-'v': unicode("⠧", "utf-8"),\
-'w': unicode("⠺", "utf-8"),\
-'x': unicode("⠭", "utf-8"),\
-'y': unicode("⠽", "utf-8"),\
-'z': unicode("⠵", "utf-8"),\
+'a': u'\u2801',
+'c': u'\u2809',
+'b': u'\u2803',
+'e': u'\u2811',
+'d': u'\u2819',
+'g': u'\u281b',
+'f': u'\u280b',
+'i': u'\u280a',
+'h': u'\u2813',
+'k': u'\u2805',
+'j': u'\u281a',
+'m': u'\u280d',
+'l': u'\u2807',
+'o': u'\u2815',
+'n': u'\u281d',
+'q': u'\u281f',
+'p': u'\u280f',
+'s': u'\u280e',
+'r': u'\u2817',
+'u': u'\u2825',
+'t': u'\u281e',
+'w': u'\u283a',
+'v': u'\u2827',
+'y': u'\u283d',
+'x': u'\u282d',
+'z': u'\u2835',
 }
 
 class C(chardataeffect.CharDataEffect):

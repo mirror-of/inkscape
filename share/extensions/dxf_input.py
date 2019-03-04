@@ -30,6 +30,7 @@ if sys.version_info[0] < 3:
 else:
     from io import StringIO
     from urllib.parse import quote
+    unicode = lambda s, enc: s.decode(enc) if isinstance(s, bytes) else s
 
 
 def export_MTEXT():

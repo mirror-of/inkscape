@@ -3,6 +3,10 @@
 from __future__ import print_function
 
 import math, sys
+
+if sys.version_info[0] >= 3:
+    unicode = lambda s, enc: s.decode(enc) if isinstance(s, bytes) else s
+
 import inkex
 from simpletransform import computePointInNode
 

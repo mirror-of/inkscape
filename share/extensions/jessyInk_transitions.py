@@ -16,6 +16,10 @@
 # These lines are only needed if you don't put the script directly into
 # the installation directory
 import sys
+
+if sys.version_info[0] >= 3:
+    unicode = lambda s, enc: s
+
 # Unix
 sys.path.append('/usr/share/inkscape/extensions')
 # OS X

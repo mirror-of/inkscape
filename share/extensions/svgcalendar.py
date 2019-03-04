@@ -34,6 +34,10 @@ import calendar
 import re
 from datetime import *
 
+import sys
+if sys.version_info[0] >= 3:
+    unicode = lambda s, enc: s.decode(enc) if isinstance(s, bytes) else s
+
 import inkex
 import simplestyle
 

@@ -44,6 +44,10 @@ import shutil
 import sys
 import tempfile
 import locale
+
+if sys.version_info[0] >= 3:
+    unicode = lambda s, enc: s.decode(enc) if isinstance(s, bytes) else s
+
 # local library
 import inkex
 import simplestyle

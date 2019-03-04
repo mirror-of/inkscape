@@ -79,10 +79,8 @@ class Embedder(inkex.Effect):
                 if (absref != None):
                     path=absref
 
-            try:
-                path=unicode(path, "utf-8")
-            except TypeError:
-                path=path
+            if isinstance(path, bytes):
+                path = path.decode("utf-8")
                 
             if (not os.path.isfile(path)):
                 inkex.errormsg(_('No xlink:href or sodipodi:absref attributes found, or they do not point to an existing file! Unable to embed image.'))

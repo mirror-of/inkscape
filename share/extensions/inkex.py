@@ -35,6 +35,9 @@ import re
 import sys
 from math import *
 
+if sys.version_info[0] >= 3:
+    unicode = str
+
 # a dictionary of all of the xmlns prefixes in a standard inkscape doc
 NSS = {
 u'sodipodi' :u'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
