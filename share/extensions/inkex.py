@@ -274,7 +274,8 @@ class Effect:
         original = etree.tostring(self.original_document)        
         result = etree.tostring(self.document)        
         if original != result:
-            self.document.write(sys.stdout)
+            out = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+            self.document.write(out)
 
     def affect(self, args=sys.argv[1:], output=True):
         """Affect an SVG document with a callback effect"""

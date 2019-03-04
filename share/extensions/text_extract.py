@@ -68,7 +68,8 @@ class Extract(inkex.Effect):
             # get all bounding boxes in file by calling inkscape again with the --query-all command line option
             # it returns a comma separated list structured id,x,y,w,h
             if bsubprocess:
-                p = Popen('inkscape --query-all "%s"' % (file), shell=True, stdout=PIPE, stderr=PIPE)
+                p = Popen('inkscape --query-all "%s"' % (file), shell=True, stdout=PIPE, stderr=PIPE,
+                        universal_newlines=True)
                 err = p.stderr
                 f = p.communicate()[0]
                 try:
@@ -85,7 +86,7 @@ class Extract(inkex.Effect):
             dimen = dict()
             for line in reader:
                 if len(line) > 0:
-                    dimen[line[0]] = map( float, line[1:])
+                    dimen[line[0]] = list(map( float, line[1:]))
 
             if not bsubprocess: #close file if opened using os.popen3
                 f.close
