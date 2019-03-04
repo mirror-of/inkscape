@@ -112,7 +112,7 @@ class Restack(inkex.Effect):
         dimen = dict()
         for line in reader:
             if len(line) > 0:
-                dimen[line[0]] = map( float, line[1:])
+                dimen[line[0]] = list(map( float, line[1:]))
 
         if not bsubprocess: #close file if opened using os.popen3
             f.close

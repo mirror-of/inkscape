@@ -155,7 +155,7 @@ class Nup(inkex.Effect):
         pgSize = self.expandTuple(unit, pgSize, length = 2)
     #    num = tuple(map(lambda ev: eval(str(ev)), num))
 
-        pgEdge = map(sum,zip(pgMargin, pgPadding))
+        pgEdge = list(map(sum,zip(pgMargin, pgPadding)))
 
         top, right, bottom, left = 0,1,2,3
         width, height = 0,1
