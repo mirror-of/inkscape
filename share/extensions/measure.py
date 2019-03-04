@@ -73,11 +73,15 @@ def interpcoord(v1,v2,p):
     return v1+((v2-v1)*p)
 def interppoints(p1,p2,p):
     return [interpcoord(p1[0],p2[0],p),interpcoord(p1[1],p2[1],p)]
-def pointdistance((x1,y1),(x2,y2)):
+def pointdistance(_x1_y1, _x2_y2):
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
     return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
 def bezlenapprx(sp1, sp2):
     return pointdistance(sp1[1], sp1[2]) + pointdistance(sp1[2], sp2[0]) + pointdistance(sp2[0], sp2[1])
-def tpoint((x1,y1), (x2,y2), t = 0.5):
+def tpoint(_x1_y1, _x2_y2, t = 0.5):
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
     return [x1+t*(x2-x1),y1+t*(y2-y1)]
 def cspbezsplit(sp1, sp2, t = 0.5):
     m1=tpoint(sp1[1],sp1[2],t)

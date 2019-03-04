@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 import math, inkex, simplepath, sys
 
-def pointAtPercent((x1, y1), (x2, y2), percent):
+def pointAtPercent(_x1_y1, _x2_y2, percent):
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
     percent /= 100.0
     x = x1 + (percent * (x2 - x1))
     y = y1 + (percent * (y2 - y1))

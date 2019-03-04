@@ -27,7 +27,9 @@ import cubicsuperpath, simplestyle, copy, math, re, bezmisc
 
 def numsegs(csp):
     return sum([len(p)-1 for p in csp])
-def tpoint((x1,y1), (x2,y2), t = 0.5):
+def tpoint(_x1_y1, _x2_y2, t = 0.5):
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
     return [x1+t*(x2-x1),y1+t*(y2-y1)]
 def cspbezsplit(sp1, sp2, t = 0.5):
     m1=tpoint(sp1[1],sp1[2],t)

@@ -19,7 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 import random, math, inkex, cubicsuperpath
 
-def randomize((x, y), rx, ry, dist):
+def randomize(_x_y, rx, ry, dist):
+    (x, y) = _x_y
 
     if dist == "Gaussian":
         r1 = random.gauss(0.0,rx)

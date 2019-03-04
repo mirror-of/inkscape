@@ -49,7 +49,9 @@ except:
     inkex.errormsg(_("Failed to import the numpy or numpy.linalg modules. These modules are required by this extension. Please install them and try again."))
     inkex.sys.exit()
 
-def pointdistance((x1,y1),(x2,y2)):
+def pointdistance(_x1_y1, _x2_y2):
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
     return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
 
 def get_fit(u, csp, col):

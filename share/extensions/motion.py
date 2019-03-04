@@ -30,7 +30,8 @@ class Motion(inkex.Effect):
                         dest="magnitude", default=100.0,
                         help="magnitude of the motion vector")    
 
-    def makeface(self,last,(cmd, params)):
+    def makeface(self,last, xxx_todo_changeme):
+        (cmd, params) = xxx_todo_changeme
         a = []
         a.append(['M',last[:]])
         a.append([cmd, params[:]])

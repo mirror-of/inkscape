@@ -70,7 +70,9 @@ def draw_SVG_tri(vert_mat, params, style, name, parent):
     inkex.etree.SubElement(parent, inkex.addNS('path','svg'), tri_attribs )
 
 #draw an SVG line segment between the given (raw) points
-def draw_SVG_line( (x1, y1), (x2, y2), style, name, parent):
+def draw_SVG_line(_x1_y1, _x2_y2, style, name, parent):
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
     line_style   = { 'stroke': style.l_col, 'stroke-width':str(style.l_th), 'fill': style.l_fill }
     line_attribs = {'style':simplestyle.formatStyle(line_style),
                     inkex.addNS('label','inkscape'):name,
@@ -85,10 +87,14 @@ def draw_vertex_lines( vert_mat, params, width, name, parent):
         
 #MATHEMATICAL ROUTINES
 
-def distance( (x0,y0),(x1,y1)):#find the pythagorean distance
+def distance(_x0_y0, _x1_y1):#find the pythagorean distance
+    (x0, y0) = _x0_y0
+    (x1, y1) = _x1_y1
     return sqrt( (x0-x1)*(x0-x1) + (y0-y1)*(y0-y1) )
 
-def vector_from_to( (x0,y0),(x1,y1) ):#get the vector from (x0,y0) to (x1,y1)
+def vector_from_to(_x0_y0, _x1_y1 ):#get the vector from (x0,y0) to (x1,y1)
+    (x0, y0) = _x0_y0
+    (x1, y1) = _x1_y1
     return (x1-x0, y1-y0)
 
 def get_cartesian_pt( t, p):#get the cartesian coordinates from a trilinear set
@@ -97,7 +103,8 @@ def get_cartesian_pt( t, p):#get the cartesian coordinates from a trilinear set
     c2 = p[0][2]*t[2]/denom
     return ( c1*p[2][1][0]+c2*p[2][0][0], c1*p[2][1][1]+c2*p[2][0][1] )
 
-def get_cartesian_tri( ((t11,t12,t13),(t21,t22,t23),(t31,t32,t33)), params):#get the cartesian points from a trilinear vertex matrix
+def get_cartesian_tri(xxx_todo_changeme6, params):#get the cartesian points from a trilinear vertex matrix
+    ((t11,t12,t13),(t21,t22,t23),(t31,t32,t33)) = xxx_todo_changeme6
     p1=get_cartesian_pt( (t11,t12,t13), params )
     p2=get_cartesian_pt( (t21,t22,t23), params )
     p3=get_cartesian_pt( (t31,t32,t33), params )

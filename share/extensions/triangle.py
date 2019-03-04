@@ -37,7 +37,11 @@ import simplestyle, sys
 from simpletransform import computePointInNode
 from math import *
 
-def draw_SVG_tri( (x1, y1), (x2, y2), (x3, y3), (ox,oy), width, name, parent):
+def draw_SVG_tri(_x1_y1, _x2_y2, _x3_y3, _ox_oy, width, name, parent):
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
+    (x3, y3) = _x3_y3
+    (ox, oy) = _ox_oy
     style = { 'stroke': '#000000', 'stroke-width':str(width), 'fill': 'none' }
     tri_attribs = {'style':simplestyle.formatStyle(style),
                     inkex.addNS('label','inkscape'):name,
@@ -63,7 +67,9 @@ def pt_on_circ(radius, angle): #return the x,y coordinate of the polar coordinat
     y = radius * sin(angle)
     return [x, y]
 
-def v_add( (x1,y1),(x2,y2) ):#add an offset to coordinates
+def v_add(_x1_y1, _x2_y2):#add an offset to coordinates
+    (x1, y1) = _x1_y1
+    (x2, y2) = _x2_y2
     return [x1+x2, y1+y2]
 
 def is_valid_tri_from_sides(a,b,c):#check whether triangle with sides a,b,c is valid

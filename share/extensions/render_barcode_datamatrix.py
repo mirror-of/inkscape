@@ -95,8 +95,9 @@ symbols = {
 #=====================================================================
     
 #create a 2d list corresponding to the 1's and 0s of the DataMatrix
-def encode(text, (nrow, ncol) ):
+def encode(text, xxx_todo_changeme ):
     #retreive the parameters of this size of DataMatrix
+    (nrow, ncol) = xxx_todo_changeme
     data_nrow, data_ncol, reg_row, reg_col, nd, nc, inter = get_parameters( nrow, ncol )
 
     if not ((nrow == 144) and (ncol == 144)):   #we have a regular datamatrix
@@ -510,8 +511,9 @@ def utah(array, nrow, ncol, row, col, char):
 
 #"place_bits" fills an nrow x ncol array with the bits from the 
 # codewords in data. 
-def place_bits(data, (nrow, ncol)): 
+def place_bits(data, xxx_todo_changeme1): 
 # First, fill the array[] with invalid entries */ 
+    (nrow, ncol) = xxx_todo_changeme1
     INVALID = 2
     array = [[INVALID] * ncol for i in xrange(nrow)]   #initialise and fill with -1's (invalid value)
 # Starting in the correct location for character #1, bit 8,...
@@ -609,7 +611,9 @@ def add_finder_pattern( array, data_nrow, data_ncol, reg_row, reg_col ):
 #=====================================================================
 
 #SVG element generation routine
-def draw_SVG_square((w,h), (x,y), parent):
+def draw_SVG_square(_w_h, _x_y, parent):
+    (w, h) = _w_h
+    (x, y) = _x_y
 
     style = {   'stroke'        : 'none',
                 'stroke-width'  : '1',

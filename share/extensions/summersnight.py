@@ -116,7 +116,8 @@ class Project(inkex.Effect):
         simpletransform.applyTransformToPath(mat, p)
         path.set('d',cubicsuperpath.formatPath(p))
 
-    def trafopoint(self,(x,y)):
+    def trafopoint(self, _x_y):
+        (x, y) = _x_y
         #Transform algorithm thanks to Jose Hevia (freon)
         vector = Segment(Point(self.q['x'],self.q['y']),Point(x,y))
         xratio = abs(vector.delta_x())/self.q['width']
