@@ -54,7 +54,7 @@ def csplength(csp):
     lengths = []
     for sp in csp:
         lengths.append([])
-        for i in xrange(1,len(sp)):
+        for i in range(1,len(sp)):
             l = cspseglength(sp[i-1],sp[i])
             lengths[-1].append(l)
             total += l            

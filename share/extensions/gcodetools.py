@@ -83,6 +83,10 @@ import random
 
 if sys.version_info[0] >= 3:
     unicode = lambda s: s.decode() if isinstance(s, bytes) else str(s)
+    xrange = range
+    range_list = lambda *a: list(range(*a))
+else:
+    range_list = range
 
 # local library
 import inkex
@@ -3036,7 +3040,7 @@ class Arangement_Genetic:
 	def add_random_species(self,count):
 		for i in range(count):
 			specimen = []
-			order = range(self.genes_count)
+			order = range_list(self.genes_count)
 			random.shuffle(order)
 			for j in order:
 				specimen += [ [j, random.random(), random.random()] ]
@@ -3125,7 +3129,7 @@ class Arangement_Genetic:
 				specimen[i] = [parent1[i][0], parent1[i][1]*tr+parent2[i][1]*(1-tr),parent1[i][2]*tp+parent2[i][2]*(1-tp)]
 				genes_order += [ parent1[i][0] ]
 
-			for i in range(0,start_gene)+range(end_gene,self.genes_count) : 
+			for i in range_list(0,start_gene)+range_list(end_gene,self.genes_count) : 
 				tr = 0. #rotation_mutate_param
 				tp = 0. #xposition_mutate_param
 				j = i 
@@ -3727,7 +3731,7 @@ class Gcodetools(inkex.Effect):
 			
 
 			### Sort to reduce Rapid distance	
-			k = range(1,len(p))
+			k = range_list(1,len(p))
 			keys = [0]
 			while len(k)>0:
 				end = p[keys[-1]][-1][1]

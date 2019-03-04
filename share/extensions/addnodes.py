@@ -51,7 +51,7 @@ def csplength(csp):
     lengths = []
     for sp in csp:
         lengths.append([])
-        for i in xrange(1,len(sp)):
+        for i in range(1,len(sp)):
             l = cspseglength(sp[i-1],sp[i])
             lengths[-1].append(l)
             total += l            
@@ -102,7 +102,7 @@ class SplitIt(inkex.Effect):
                         else:
                             splits = math.ceil(length/self.options.max)
 
-                        for s in xrange(int(splits),1,-1):
+                        for s in range(int(splits),1,-1):
                             new[-1][-1], next, sub[i] = cspbezsplitatlength(new[-1][-1], sub[i], 1.0/s)
                             new[-1].append(next[:])
                         new[-1].append(sub[i])

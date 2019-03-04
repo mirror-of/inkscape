@@ -51,6 +51,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     0.50    2009-10-25  Full functionality, up to 144x144.
                         ASCII and compressed digit encoding only.
 '''
+
+import sys
+if sys.version_info[0] >= 3:
+    xrange = range
+
 # local library
 import inkex
 import simplestyle
