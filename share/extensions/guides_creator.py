@@ -140,7 +140,7 @@ class Guides_Creator(inkex.Effect):
                 inkex.Effect.__init__(self)
 
                 # Define option for the tab.
-		self.OptionParser.add_option("--tab",
+                self.OptionParser.add_option("--tab",
                         action="store",type="string",
                         dest="tab", default="regular_guides",
                         help="")
@@ -486,8 +486,8 @@ class Guides_Creator(inkex.Effect):
                                 drawVerticalGuides(v_subdiv,rectangle_width,rectangle_height,0,nv,begin_from)
 
 if __name__ == '__main__':
-	# Create effect instance and apply it.
-	effect = Guides_Creator()
-	effect.affect()
+        # Create effect instance and apply it.
+        effect = Guides_Creator()
+        effect.affect()
 
 ## end of file guide_creator.py ##

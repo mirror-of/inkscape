@@ -25,7 +25,7 @@ class InsertBarcodeBasicTest(unittest.TestCase):
     for line in fhl:
       line = line.replace('\n', '').replace('\r', '')
       (btype, text, code) = line.split(':')
-      if not self.data.has_key(btype):
+      if btype not in self.data:
         self.data[btype] = []
       self.data[btype].append( [ text, code ] )
     fhl.close()

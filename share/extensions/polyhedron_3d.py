@@ -137,6 +137,8 @@ def get_obj_data(obj, name):
     if obj.name == '':#no name was found, use filename, without extension (.obj)
         obj.name = name[0:-4]
 
+    infile.close()
+
 #RENDERING AND SVG OUTPUT FUNCTIONS
 
 def draw_SVG_dot(_cx_cy, st, name, parent):

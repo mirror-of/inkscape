@@ -145,10 +145,12 @@ class CompressedMediaOutput(inkex.Effect):
         and add it to the temporary compressed file
         '''
         dst_file = os.path.join(self.tmp_dir, docstripped)
-        stream = open(dst_file,'w')
+        stream = open(dst_file,'wb')
         self.document.write(stream)
         stream.close()
-        z.write(dst_file,docstripped.encode(self.encoding)+'.svg')
+        if sys.version_info[0] < 3:
+            docstripped = docstripped.encode(self.encoding)
+        z.write(dst_file, docstripped + '.svg')
 
     def is_text(self, node):
         '''

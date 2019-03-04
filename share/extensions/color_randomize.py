@@ -20,7 +20,7 @@ class C(coloreffect.ColorEffect):
             action="store", type="int", 
             dest="lightness_range", default=0,
             help="Lightness range")
-	self.OptionParser.add_option("-o", "--opacity_range",
+        self.OptionParser.add_option("-o", "--opacity_range",
             action="store", type="int", 
             dest="opacity_range", default=0,
             help="Opacity range")
@@ -51,7 +51,7 @@ class C(coloreffect.ColorEffect):
         if self.options.lightness_range > 0:
             hsl[2] = self.randomize_hsl(self.options.lightness_range, hsl[2])
         rgb = self.hsl_to_rgb(hsl[0], hsl[1], hsl[2])
-        return '%02x%02x%02x' % (rgb[0]*255, rgb[1]*255, rgb[2]*255)
+        return '%02x%02x%02x' % tuple(int(i * 0xFF) for i in rgb)
 
     def opacmod(self, opacity):
         if self.options.opacity_range > 0:

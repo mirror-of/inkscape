@@ -35,9 +35,6 @@ import re
 import sys
 from math import *
 
-if sys.version_info[0] >= 3:
-    unicode = str
-
 # a dictionary of all of the xmlns prefixes in a standard inkscape doc
 NSS = {
 u'sodipodi' :u'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
@@ -106,6 +103,11 @@ def errormsg(msg):
     else:
         sys.stderr.write((unicode(msg, "utf-8", errors='replace') + "\n").encode("utf-8"))
 
+if sys.version_info[0] >= 3:
+    def errormsg(msg):
+        if isinstance(msg, bytes):
+            msg = msg.decode(errors='replace')
+        sys.stderr.write(msg + "\n")
 
 def are_near_relative(a, b, eps):
     return (a-b <= a*eps) and (a-b >= -a*eps)
