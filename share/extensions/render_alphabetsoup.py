@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import copy
 import math
 import cmath
-import string
 import random
 import os
 import sys
@@ -332,7 +331,7 @@ def randomize_input_string(tokens, zoom ):					   # generate a glyph starting fr
 			if ((i > 0) and (char == tokens[i-1])):		 # if this letter matches previous letter
 				imagelist.append(imagelist[len(stack)-1])# make them the same image
 			else:										# generate image for letter
-				stack = string.split( alphabet[char][random.randint(0,(len(alphabet[char])-1))] , "." )
+				stack = alphabet[char][random.randint(0,(len(alphabet[char])-1))].split(".")
 				#stack = string.split( alphabet[char][random.randint(0,(len(alphabet[char])-2))] , "." ) 
 				imagelist.append( draw_crop_scale( stack, zoom ))
 		elif( char == " "):							  # add a " " space to the image list

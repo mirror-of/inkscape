@@ -19,7 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # standard library
 import math
 import re
-import string
 # local library
 import inkex
 import simplestyle
@@ -68,8 +67,8 @@ class InterpAttG(inkex.Effect):
                         help="The selected UI-tab when OK was pressed")
 
     def getColorValues(self):
-      sv = string.replace( self.options.start_val, '#', '' )
-      ev = string.replace( self.options.end_val, '#', '' )
+      sv = self.options.start_val.replace('#', '' )
+      ev = self.options.end_val.replace('#', '' )
       if re.search('\s|,', sv):
         # There are separators. That must be a integer RGB color definition.
         sv = re.split( '[\s,]+', sv )

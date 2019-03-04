@@ -43,7 +43,6 @@ TODO:
 # standard libraries
 import sys
 import re
-import string
 import math
 from lxml import etree
 # local libraries
@@ -347,7 +346,7 @@ class DPISwitcher(inkex.Effect):
         xpathStr = '//sodipodi:guide'
         guides = svg.xpath(xpathStr, namespaces=inkex.NSS)
         for guide in guides:
-            point = string.split(guide.get("position"), ",")
+            point = guide.get("position").split(",")
             guide.set("position", str(float(point[0].strip()) * self.factor_a ) + "," + str(float(point[1].strip()) * self.factor_a ))
     
     def scaleGrid(self, svg):

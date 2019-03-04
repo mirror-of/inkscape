@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # standard libraries
 import math
 import re
-import string
 # local libraries
 import bezmisc
 import cspsubdiv
@@ -95,9 +94,9 @@ class hpglEncoder:
             self.debugValues['viewBoxHeight'] = "-"
         viewBox = self.doc.get('viewBox')
         if viewBox:
-            viewBox2 = string.split(viewBox, ',')
+            viewBox2 = viewBox.split(',')
             if len(viewBox2) < 4:
-                viewBox2 = string.split(viewBox, ' ')
+                viewBox2 = viewBox.split(' ')
             if self.options.debug:
                 self.debugValues['viewBoxWidth'] = viewBox2[2]
                 self.debugValues['viewBoxHeight'] = viewBox2[3]
