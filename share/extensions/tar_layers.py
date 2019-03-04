@@ -29,6 +29,9 @@ import StringIO
 import calendar
 import time
 
+if sys.version_info[0] > 2:
+    basestring = str
+
 # Inkscape Libraries
 import inkex
 import simplestyle

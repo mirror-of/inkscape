@@ -700,7 +700,7 @@ class SiteList(object):
         def __iter__(this):      return this
         def next(this): 
             try:
-                return this.generator.next()
+                return next(this.generator)
             except StopIteration:
                 return None
 

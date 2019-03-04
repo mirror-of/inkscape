@@ -86,7 +86,7 @@ def parsePath(d):
     
     while 1:
         try:
-            token, isCommand = lexer.next()
+            token, isCommand = next(lexer)
         except StopIteration:
             break
         params = []
@@ -111,7 +111,7 @@ def parsePath(d):
         while numParams > 0:
             if needParam:
                 try: 
-                    token, isCommand = lexer.next()
+                    token, isCommand = next(lexer)
                     if isCommand:
                         raise Exception('Invalid number of parameters')
                 except StopIteration:
