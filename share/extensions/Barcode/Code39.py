@@ -19,7 +19,7 @@
 Python barcode renderer for Code39 barcodes. Designed for use with Inkscape.
 """
 
-from Base import Barcode
+from .Base import Barcode
 
 ENCODE = {
     '0': '000110100',
@@ -77,7 +77,7 @@ class Code39(Barcode):
         # into full ascii, but this feature is
         # not enabled here
         for char in '*' + self.text + '*':
-            if not ENCODE.has_key(char):
+            if char not in ENCODE:
                 char = '-'
             result = result + ENCODE[char] + '0'
 

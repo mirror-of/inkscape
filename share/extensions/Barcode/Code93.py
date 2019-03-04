@@ -95,18 +95,18 @@ class Code93(Barcode):
     def encode_ascii(self, text):
         result = []
         for char in text:
-            if MAP.has_key(char):
+            if char in MAP:
                 result.append(char)
-            elif MAP_A.has_key(char):
+            elif char in MAP_A:
                 result.append('(%)')
                 result.append(MAP_A[char])
-            elif MAP_B.has_key(char):
+            elif char in MAP_B:
                 result.append('($)')
                 result.append(MAP_B[char])
-            elif MAP_C.has_key(char):
+            elif char in MAP_C:
                 result.append('(/)')
                 result.append(MAP_C[char])
-            elif MAP_D.has_key(char):
+            elif char in MAP_D:
                 result.append('(+)')
                 result.append(MAP_D[char])
         return result
