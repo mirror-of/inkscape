@@ -57,7 +57,7 @@ class JessyInk_Effects(inkex.Effect):
 			inkex.errormsg(_("Could not obtain the selected layer for inclusion of the video element.\n\n"))
 
 		# Parse template file.
-		tmplFile = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'jessyInk_video.svg'), 'r')
+		tmplFile = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'jessyInk_video.svg'), 'rb')
 		tmplRoot = etree.fromstring(tmplFile.read())
 		tmplFile.close()
 
@@ -83,7 +83,8 @@ class JessyInk_Effects(inkex.Effect):
 		layer[0].append(elem)
 
 def findInternalLinks(node, docRoot, nodeDict = {}):
-	for entry in re.findall("url\(#.*\)", etree.tostring(node)):
+	for entry in re.findall(b"url\(#.*\)", etree.tostring(node)):
+		entry = entry.decode()
 		linkId = entry[5:len(entry) - 1]
 
 		if linkId not in nodeDict:

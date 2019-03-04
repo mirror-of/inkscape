@@ -267,7 +267,7 @@ def interleave( blocks, inter):
     else:
         result = []
         for block in blocks:    #for each codeword block in the stream
-            block_length = len(block)/inter    #length of each interleaved block
+            block_length = len(block) // inter    #length of each interleaved block
             inter_blocks = [[0] * block_length for i in xrange(inter)]   #the interleaved blocks
             
             for i in range(block_length):   #for each element in the interleaved blocks
@@ -287,7 +287,7 @@ def combine_interleaved( blocks, inter, nd, nc, size144):
         return blocks
     else:
         result = []
-        for i in range( len(blocks) / inter ):  #for each group of "inter" blocks -> one full datamatrix
+        for i in range( len(blocks) // inter ):  #for each group of "inter" blocks -> one full datamatrix
             data_codewords = [] #interleaved data blocks
             
             if size144:
@@ -298,10 +298,10 @@ def combine_interleaved( blocks, inter, nd, nc, size144):
                 nc_range = nc*inter
             
             for j in range(nd_range):  #for each codeword in the final list
-                data_codewords.append( blocks[i*inter + j%inter][j/inter] )
+                data_codewords.append( blocks[i*inter + j%inter][j // inter] )
 
             for j in range(nc_range):  #for each block, add the ecc codewords
-                data_codewords.append( blocks[i*inter + j%inter][nd + j/inter] )
+                data_codewords.append( blocks[i*inter + j%inter][nd + j // inter] )
 
             result.append(data_codewords)
         return result
@@ -603,8 +603,8 @@ def add_finder_pattern( array, data_nrow, data_ncol, reg_row, reg_col ):
             
     for i in range( data_nrow*reg_row ):
         for j in range( data_ncol* reg_col ):
-            dest_col = j + 1 + 2*(j/(data_ncol)) #offset by 1, plus two for every addition block
-            dest_row = i + 1 + 2*(i/(data_nrow))
+            dest_col = j + 1 + 2*(j // data_ncol) #offset by 1, plus two for every addition block
+            dest_row = i + 1 + 2*(i // data_nrow)
             
             datamatrix[dest_row][dest_col] = array[i][j]    #transfer from the plain bit array
             

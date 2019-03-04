@@ -49,7 +49,7 @@ class Code25i(Barcode):
             number = '0' + number
 
         # Number is encoded by pairs of 2 figures
-        size = len(number) / 2
+        size = len(number) // 2
         encoded = '1010'
         for i in range(size):
             # First in the pair is encoded in black (1), second in white (0)

@@ -273,7 +273,8 @@ class MyEffect(inkex.Effect):
                 except:
                     pass
             try:
-                sys.stdout.write(x.read())
+                stdout = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+                stdout.write(x.read())
             finally:
                 x.close()
                 self.clear_tmp()

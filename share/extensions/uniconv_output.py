@@ -74,7 +74,8 @@ def run(command_format, prog_name, uniconv_format):
         try:
             f = open(outfile, "rb")
             data = f.read()
-            sys.stdout.write(data)
+            stdout = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+            stdout.write(data)
             f.close()
         except IOError as inst:
             msg = "Error reading temporary file: %s" % str(inst)

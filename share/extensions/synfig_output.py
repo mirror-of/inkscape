@@ -1072,7 +1072,8 @@ class SynfigExport(SynfigPrep):
         for layer in layers:
             root_canvas.append(layer)
 
-        d.get_root_tree().write(sys.stdout)
+        out = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+        d.get_root_tree().write(out)
 
     def convert_node(self, node, d):
         """Convert an SVG node to a list of Synfig layers"""

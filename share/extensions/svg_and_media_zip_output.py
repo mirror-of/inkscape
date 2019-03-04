@@ -99,7 +99,8 @@ class CompressedMediaOutput(inkex.Effect):
                 msvcrt.setmode(1, os.O_BINARY)
             except:
                 pass
-        sys.stdout.write(out.read())
+        stdout = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+        stdout.write(out.read())
         out.close()
         shutil.rmtree(self.tmp_dir)
 

@@ -65,6 +65,7 @@ if 'UNKNOWN_COMMANDS' in warnings:
     inkex.errormsg(_("The HPGL data contained unknown (unsupported) commands, there is a possibility that the drawing is missing some content."))
 
 # deliver document to inkscape
-doc.write(inkex.sys.stdout)
+out = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+doc.write(out)
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

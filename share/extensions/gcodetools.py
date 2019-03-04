@@ -1552,7 +1552,7 @@ def draw_pointer(x,color = "#f00", figure = "cross", group = None, comment = "",
 		draw_text(text,x[0]+size*2.2,x[1]-size, group = group, font_size = font_size) 
 	if figure  == "line" :
 		s = ""
-		for i in range(1,len(x)/2) :
+		for i in range(1,len(x) // 2) :
 			s+= " %s, %s " %(x[i*2],x[i*2+1])
 		attrib.update({"d": "M %s,%s L %s"%(x[0],x[1],s), "style":"fill:none;stroke:%s;stroke-width:%f;"%(color,width),"comment":str(comment)})			
 		inkex.etree.SubElement( group, inkex.addNS('path','svg'), attrib)

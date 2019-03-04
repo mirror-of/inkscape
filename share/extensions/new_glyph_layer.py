@@ -35,7 +35,9 @@ class NewGlyphLayer(inkex.Effect):
 
 	def effect(self):
 		# Get all the options
-		unicode_chars = self.options.unicodechars.decode(self.encoding)
+		unicode_chars = self.options.unicodechars
+		if sys.version_info[0] < 3:
+			unicode_chars = unicode_chars.decode(self.encoding)
 
 		#TODO: remove duplicate chars
 

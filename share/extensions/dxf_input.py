@@ -534,6 +534,7 @@ while line[0] and (line[1] != 'ENDSEC' or not inENTITIES):
 
 if polylines:
     inkex.errormsg(_('%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert to Release 13 format using QCad.') % polylines)
-doc.write(inkex.sys.stdout)
+out = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+doc.write(out)
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

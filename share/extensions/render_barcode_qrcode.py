@@ -977,7 +977,7 @@ class QRRSBlock:
         if rsBlock == None:
             raise Exception("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel)
 
-        length = len(rsBlock) / 3
+        length = len(rsBlock) // 3
 
         list = []
 

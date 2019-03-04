@@ -41,7 +41,7 @@ def process_file(filename):
 
         while True:
             tag = f.read(1)
-            if tag == '':
+            if tag == b'':
                 break
 
             if ord(tag) > 128:

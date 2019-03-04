@@ -25,10 +25,7 @@ import os
 import sys
 import copy
 import tarfile
-if sys.version_info[0] < 3:
-    import StringIO
-else:
-    import io as StringIO
+import io
 import calendar
 import time
 
@@ -89,17 +86,18 @@ class LayersOutput(inkex.Effect):
         return node.tag == GROUP and node.attrib.get(GROUPMODE,'').lower() == 'layer'
 
     def io_document(self, name, doc):
-        string = StringIO.StringIO()
+        string = io.BytesIO()
         doc.write(string)
-        string.seek(0)
         info = tarfile.TarInfo(name=name+'.svg')
         info.mtime = calendar.timegm(time.gmtime())
-        info.size  = len(string.buf)
+        info.size  = string.tell()
+        string.seek(0)
         return dict(tarinfo=info, fileobj=string)
 
     def effect(self):
         # open output tar file as a stream (to stdout)
-        tar = tarfile.open(fileobj=sys.stdout, mode='w|')
+        out = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+        tar = tarfile.open(fileobj=out, mode='w|')
 
         # Switch stdout to binary on Windows.
         if sys.platform == "win32":

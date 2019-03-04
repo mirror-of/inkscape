@@ -149,7 +149,7 @@ class Wireframe_Sphere(inkex.Effect):
                 
                 delta_long = 360.0/so.NUM_LONG      #angle between neighbouring lines of longitude in degrees
                 
-                for i in range(0,so.NUM_LONG/2):
+                for i in range(0,so.NUM_LONG // 2):
                     long_angle = so.ROT_OFFSET + (i*delta_long)*(pi/180.0); #The longitude of this particular line in radians
                     if long_angle > pi:
                         long_angle -= 2*pi

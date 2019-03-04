@@ -52,13 +52,6 @@ import simplestyle
 
 locale.setlocale(locale.LC_ALL, '')
 
-def float_sort(a, b):
-    '''
-    This is used to sort the horizontal and vertical guide positions,
-    which are floating point numbers, but which are held as text.
-    '''
-    return cmp(float(a), float(b))
-
 class Guillotine(inkex.Effect):
     """Exports slices made using guides"""
     def __init__(self):
@@ -131,7 +124,7 @@ class Guillotine(inkex.Effect):
             if h >= 0 and float(h) <= float(height):
                 horizontals.append(h)
         horizontals.append(height)
-        horizontals.sort(cmp=float_sort)
+        horizontals.sort(key=float)
         return horizontals
 
     def get_vertical_slice_positions(self):
@@ -147,7 +140,7 @@ class Guillotine(inkex.Effect):
             if v >= 0 and float(v) <= float(width):
                 verticals.append(v)
         verticals.append(width)
-        verticals.sort(cmp=float_sort)
+        verticals.sort(key=float)
         return verticals
 
     def get_slices(self):
