@@ -23,8 +23,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 
 import inkex, simplestyle, math
-from StringIO import StringIO
-from urllib import quote
+import sys
+if sys.version_info[0] < 3:
+    from StringIO import StringIO
+    from urllib import quote
+else:
+    from io import StringIO
+    from urllib.parse import quote
 
 
 def export_MTEXT():

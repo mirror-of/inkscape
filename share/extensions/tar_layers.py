@@ -25,7 +25,10 @@ import os
 import sys
 import copy
 import tarfile
-import StringIO
+if sys.version_info[0] < 3:
+    import StringIO
+else:
+    import io as StringIO
 import calendar
 import time
 

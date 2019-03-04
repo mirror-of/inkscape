@@ -37,8 +37,6 @@ TODOs
 - consider switching to lzma in order to allow cross platform compression with no encoding problem...
 '''
 # standard library
-import urlparse
-import urllib
 import os, os.path
 import string
 import zipfile
@@ -49,6 +47,13 @@ import locale
 # local library
 import inkex
 import simplestyle
+
+if sys.version_info[0] < 3:
+    import urllib
+    import urlparse
+else:
+    import urllib.request as urllib
+    import urllib.parse as urlparse
 
 locale.setlocale(locale.LC_ALL, '')
 inkex.localize()  # TODO: test if it's still needed now that localize is called from inkex.

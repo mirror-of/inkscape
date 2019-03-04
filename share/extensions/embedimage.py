@@ -20,8 +20,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import base64
 import os
 import sys
-import urllib
-import urlparse
+if sys.version_info[0] < 3:
+    import urllib
+    import urlparse
+else:
+    import urllib.request as urllib
+    import urllib.parse as urlparse
+
 # local library
 import inkex
 

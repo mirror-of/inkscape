@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 # standard libraries
 import sys
-from StringIO import StringIO
 # local libraries
 import hpgl_decoder
 import inkex
