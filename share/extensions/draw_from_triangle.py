@@ -103,8 +103,8 @@ def get_cartesian_pt( t, p):#get the cartesian coordinates from a trilinear set
     c2 = p[0][2]*t[2]/denom
     return ( c1*p[2][1][0]+c2*p[2][0][0], c1*p[2][1][1]+c2*p[2][0][1] )
 
-def get_cartesian_tri(xxx_todo_changeme6, params):#get the cartesian points from a trilinear vertex matrix
-    ((t11,t12,t13),(t21,t22,t23),(t31,t32,t33)) = xxx_todo_changeme6
+def get_cartesian_tri(arg, params):#get the cartesian points from a trilinear vertex matrix
+    ((t11,t12,t13),(t21,t22,t23),(t31,t32,t33)) = arg
     p1=get_cartesian_pt( (t11,t12,t13), params )
     p2=get_cartesian_pt( (t21,t22,t23), params )
     p3=get_cartesian_pt( (t31,t32,t33), params )

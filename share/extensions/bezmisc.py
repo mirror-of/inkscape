@@ -55,9 +55,9 @@ def rootWrapper(a,b,c,d):
         return 1.0*(-d/c),
     return ()
 
-def bezierparameterize(xxx_todo_changeme):
+def bezierparameterize(arg):
     #parametric bezier
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
     x0=bx0
     y0=by0
     cx=3*(bx1-x0)
@@ -70,10 +70,10 @@ def bezierparameterize(xxx_todo_changeme):
     return ax,ay,bx,by,cx,cy,x0,y0
     #ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
 
-def linebezierintersect(xxx_todo_changeme1, xxx_todo_changeme2):
+def linebezierintersect(arg_a, arg_b):
     #parametric line
-    ((lx1,ly1),(lx2,ly2)) = xxx_todo_changeme1
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme2
+    ((lx1,ly1),(lx2,ly2)) = arg_a
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg_b
     dd=lx1
     cc=lx2-lx1
     bb=ly1
@@ -102,23 +102,23 @@ def linebezierintersect(xxx_todo_changeme1, xxx_todo_changeme2):
             retval.append(bezierpointatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),i))
     return retval
 
-def bezierpointatt(xxx_todo_changeme3,t):
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme3
+def bezierpointatt(arg, t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     x=ax*(t**3)+bx*(t**2)+cx*t+x0
     y=ay*(t**3)+by*(t**2)+cy*t+y0
     return x,y
 
-def bezierslopeatt(xxx_todo_changeme4,t):
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme4
+def bezierslopeatt(arg, t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     dx=3*ax*(t**2)+2*bx*t+cx
     dy=3*ay*(t**2)+2*by*t+cy
     return dx,dy
 
-def beziertatslope(xxx_todo_changeme5, xxx_todo_changeme6):
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme5
-    (dy,dx) = xxx_todo_changeme6
+def beziertatslope(arg, d):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
+    (dy,dx) = d
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     #quadratic coefficents of slope formula
     if dx:
@@ -147,8 +147,8 @@ def tpoint(_x1_y1, _x2_y2, t):
     (x1, y1) = _x1_y1
     (x2, y2) = _x2_y2
     return x1+t*(x2-x1),y1+t*(y2-y1)
-def beziersplitatt(xxx_todo_changeme9,t):
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme9
+def beziersplitatt(arg, t):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
     m1=tpoint((bx0,by0),(bx1,by1),t)
     m2=tpoint((bx1,by1),(bx2,by2),t)
     m3=tpoint((bx2,by2),(bx3,by3),t)
@@ -226,15 +226,15 @@ def Simpson(f, a, b, n_limit, tolerance):
     #print multiplier, endsum, interval, asum, bsum, est1, est0
     return est1
 
-def bezierlengthSimpson(xxx_todo_changeme12, tolerance = 0.001):
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme12
+def bezierlengthSimpson(arg, tolerance = 0.001):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
     global balfax,balfbx,balfcx,balfay,balfby,balfcy
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy
     return Simpson(balf, 0.0, 1.0, 4096, tolerance)
 
-def beziertatlength(xxx_todo_changeme13, l = 0.5, tolerance = 0.001):
-    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme13
+def beziertatlength(arg, l = 0.5, tolerance = 0.001):
+    ((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
     global balfax,balfbx,balfcx,balfay,balfby,balfcy
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
     balfax,balfbx,balfcx,balfay,balfby,balfcy = 3*ax,2*bx,cx,3*ay,2*by,cy

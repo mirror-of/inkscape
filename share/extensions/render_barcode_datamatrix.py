@@ -100,9 +100,9 @@ symbols = {
 #=====================================================================
     
 #create a 2d list corresponding to the 1's and 0s of the DataMatrix
-def encode(text, xxx_todo_changeme ):
+def encode(text, n_row_col):
     #retreive the parameters of this size of DataMatrix
-    (nrow, ncol) = xxx_todo_changeme
+    (nrow, ncol) = n_row_col
     data_nrow, data_ncol, reg_row, reg_col, nd, nc, inter = get_parameters( nrow, ncol )
 
     if not ((nrow == 144) and (ncol == 144)):   #we have a regular datamatrix
@@ -516,9 +516,9 @@ def utah(array, nrow, ncol, row, col, char):
 
 #"place_bits" fills an nrow x ncol array with the bits from the 
 # codewords in data. 
-def place_bits(data, xxx_todo_changeme1): 
+def place_bits(data, n_row_col):
 # First, fill the array[] with invalid entries */ 
-    (nrow, ncol) = xxx_todo_changeme1
+    (nrow, ncol) = n_row_col
     INVALID = 2
     array = [[INVALID] * ncol for i in xrange(nrow)]   #initialise and fill with -1's (invalid value)
 # Starting in the correct location for character #1, bit 8,...

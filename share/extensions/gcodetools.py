@@ -107,8 +107,8 @@ except:
     exit()
 
 
-def bezierslopeatt(xxx_todo_changeme20,t):
-	((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = xxx_todo_changeme20
+def bezierslopeatt(arg, t):
+	((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)) = arg
 	ax,ay,bx,by,cx,cy,x0,y0=bezmisc.bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
 	dx=3*ax*(t**2)+2*bx*t+cx
 	dy=3*ay*(t**2)+2*by*t+cy
