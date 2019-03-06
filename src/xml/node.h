@@ -16,6 +16,8 @@
 #include <glibmm/ustring.h>
 #include "gc-anchored.h"
 #include "util/list.h"
+#include "util/share.h"
+#include <map>
 
 namespace Inkscape {
 namespace XML {
@@ -149,7 +151,7 @@ public:
      * @todo This method should return std::map<Glib::Quark const, gchar const *>
      *       or something similar with a custom allocator
      */
-    virtual Inkscape::Util::List<AttributeRecord const> attributeList() const=0;
+    virtual std::map<GQuark, Inkscape::Util::ptr_shared> attributeList() const=0;
 
     /**
      * @brief Check whether this node has any attribute that matches a string

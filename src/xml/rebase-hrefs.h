@@ -11,6 +11,7 @@
 #define REBASE_HREFS_H_SEEN
 
 #include "util/list.h"
+#include "util/share.h"
 #include "xml/attribute-record.h"
 class SPDocument;
 
@@ -31,10 +32,10 @@ void rebase_hrefs(SPDocument *doc, char const *new_base, bool spns);
  *
  * Note that old_abs_base and new_abs_base must each be non-NULL, absolute directory paths.
  */
-Inkscape::Util::List<AttributeRecord const> rebase_href_attrs(
+std::map<GQuark, Inkscape::Util::ptr_shared> rebase_href_attrs(
     char const *old_abs_base,
     char const *new_abs_base,
-    Inkscape::Util::List<AttributeRecord const> attributes);
+    std::map<GQuark, Inkscape::Util::ptr_shared> attributes);
 
 
 // /**

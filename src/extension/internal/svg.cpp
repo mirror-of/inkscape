@@ -52,8 +52,6 @@ namespace Internal {
 #include "clear-n_.h"
 
 
-using Inkscape::Util::List;
-using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::Node;
 
 /*
@@ -65,8 +63,8 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
     if (repr) {
         if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
             std::vector<gchar const*> attrsRemoved;
-            for ( List<AttributeRecord const> it = repr->attributeList(); it; ++it ) {
-                const gchar* attrName = g_quark_to_string(it->key);
+            for ( auto it : repr->attributeList() ) {
+                const gchar* attrName = g_quark_to_string(it.first);
                 if ((strncmp("inkscape:", attrName, 9) == 0) || (strncmp("sodipodi:", attrName, 9) == 0)) {
                     attrsRemoved.push_back(attrName);
                 }
@@ -160,9 +158,8 @@ static void remove_marker_auto_start_reverse(Inkscape::XML::Node *repr,
                         marker_reversed = repr->document()->createElement("svg:marker");
 
                         // Copy attributes
-                        for (List<AttributeRecord const> iter = marker->attributeList();
-                             iter ; ++iter) {
-                            marker_reversed->setAttribute(g_quark_to_string(iter->key), iter->value);
+                        for ( auto it : repr->attributeList() ) {
+                            marker_reversed->setAttribute(g_quark_to_string(it.first), it.second);
                         }
 
                         // Override attributes

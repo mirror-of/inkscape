@@ -294,7 +294,7 @@ bool GrDrag::styleSet( const SPCSSAttr *css )
         }
     }
 
-    if (!stop->attributeList()) { // nothing for us here, pass it on
+    if (stop->attributeList().empty()) { // nothing for us here, pass it on
         sp_repr_css_attr_unref(stop);
         return false;
     }

@@ -24,8 +24,6 @@
 #include "xml/node.h"
 #include "xml/rebase-hrefs.h"
 
-using Inkscape::XML::AttributeRecord;
-
 /**
  * Determine if a href needs rebasing.
  */
@@ -55,10 +53,10 @@ static bool href_needs_rebasing(std::string const &href)
     return ret;
 }
 
-Inkscape::Util::List<AttributeRecord const>
+std::map<GQuark, Inkscape::Util::ptr_shared>
 Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
                                  gchar const *const new_abs_base,
-                                 Inkscape::Util::List<AttributeRecord const> attributes)
+                                 std::map<GQuark, Inkscape::Util::ptr_shared> attributes)
 {
     using Inkscape::Util::List;
     using Inkscape::Util::cons;
@@ -79,18 +77,18 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
      * with no change to attributes. */
     ptr_shared old_href;
     ptr_shared sp_absref;
-    List<AttributeRecord const> ret;
+    std::map<GQuark, Inkscape::Util::ptr_shared> ret(attributes);
     {
-        for (List<AttributeRecord const> ai(attributes); ai; ++ai) {
-            if (ai->key == href_key) {
-                old_href = ai->value;
+        for (auto ai:attributes) {
+            if (ai.first == href_key) {
+                old_href = ai.second;
                 if (!href_needs_rebasing(static_cast<char const *>(old_href))) {
                     return attributes;
                 }
-            } else if (ai->key == absref_key) {
-                sp_absref = ai->value;
+            } else if (ai.first == absref_key) {
+                sp_absref = ai.second;
             } else {
-                ret = cons(AttributeRecord(ai->key, ai->value), ret);
+                ret[ai.first] = ai.second;
             }
         }
     }
@@ -118,15 +116,14 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
     }
 
     auto new_href = uri.str(baseuri.c_str());
+    ret[href_key] = share_string(new_href.c_str());
 
-    ret = cons(AttributeRecord(href_key, share_string(new_href.c_str())), ret); // Check if this is safe/copied or if it is only held.
     if (sp_absref) {
         /* We assume that if there wasn't previously a sodipodi:absref attribute
          * then we shouldn't create one. */
-        ret = cons(AttributeRecord(absref_key, ( streq(abs_href.c_str(), sp_absref)
+        ret[absref_key] = ( streq(abs_href.c_str(), sp_absref)
                                                  ? sp_absref
-                                                 : share_string(abs_href.c_str()) )),
-                   ret);
+                                                 : share_string(abs_href.c_str()) );
     }
 
     return ret;

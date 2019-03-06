@@ -615,7 +615,7 @@ void SvgFontsDialog::set_glyph_description_from_selected_path(){
 
     Inkscape::XML::Node* node = sel->xmlNodes().front();
     if (!node) return;//TODO: should this be an assert?
-    if (!node->matchAttributeName("d") || !node->attribute("d")){
+    if (!node->attribute("d")){
         char *msg = _("The selected object does not have a <b>path</b> description.");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         return;
@@ -657,7 +657,7 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
 
     Inkscape::XML::Node* node = sel->xmlNodes().front();
     if (!node) return;//TODO: should this be an assert?
-    if (!node->matchAttributeName("d") || !node->attribute("d")){
+    if (!node->attribute("d")){
         char *msg = _("The selected object does not have a <b>path</b> description.");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         return;

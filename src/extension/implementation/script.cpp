@@ -796,8 +796,6 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
     }
 
     // For copying attributes in root and in namedview
-    using Inkscape::Util::List;
-    using Inkscape::XML::AttributeRecord;
     std::vector<gchar const *> attribs;
 
     // Must explicitly copy root attributes. This must be done first since
@@ -805,8 +803,8 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
     // width, height, and viewBox of the root element.
 
     // Make a list of all attributes of the old root node.
-    for (List<AttributeRecord const> iter = oldroot->attributeList(); iter; ++iter) {
-        attribs.push_back(g_quark_to_string(iter->key));
+    for (auto iter : oldroot->attributeList()) {
+        attribs.push_back(g_quark_to_string(iter.first));
     }
 
     // Delete the attributes of the old root node.
@@ -815,8 +813,8 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
     }
 
     // Set the new attributes.
-    for (List<AttributeRecord const> iter = newroot->attributeList(); iter; ++iter) {
-        gchar const *name = g_quark_to_string(iter->key);
+    for (auto iter : newroot->attributeList()) {
+        gchar const *name = g_quark_to_string(iter.first);
         oldroot->setAttribute(name, newroot->attribute(name));
     }
 

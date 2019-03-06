@@ -658,7 +658,7 @@ private:
         Inkscape::Selection* sel = _desktop->getSelection();
         if (sel->isEmpty()) return;
         Inkscape::XML::Node* node = sel->xmlNodes().front();
-        if (!node || !node->matchAttributeName("id")) return;
+        if (!node || !node->attribute("id")) return;
 
         std::ostringstream xlikhref;
         xlikhref << "#" << node->attribute("id");

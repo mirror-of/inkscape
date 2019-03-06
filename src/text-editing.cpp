@@ -293,11 +293,11 @@ static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Docum
     switch (old_node->type()) {
         case Inkscape::XML::ELEMENT_NODE: {
             Inkscape::XML::Node *new_node = xml_doc->createElement(old_node->name());
-            Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = old_node->attributeList();
+            auto attributes = old_node->attributeList();
             GQuark const id_key = g_quark_from_string("id");
-            for ( ; attributes ; attributes++) {
-                if (attributes->key == id_key) continue;
-                new_node->setAttribute(g_quark_to_string(attributes->key), attributes->value);
+            for ( auto it : attributes) {
+                if (it.first == id_key) continue;
+                new_node->setAttribute(g_quark_to_string(it.first), it.second);
             }
             return new_node;
         }
@@ -678,11 +678,11 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     SPCSSAttr *dest_node_attrs = sp_repr_css_attr(new_parent_item->getRepr(), "style");
     SPCSSAttr *this_node_attrs = sp_repr_css_attr(this_repr, "style");
     SPCSSAttr *this_node_attrs_inherited = sp_repr_css_attr_inherited(this_repr, "style");
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = dest_node_attrs->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *key = g_quark_to_string(attrs->key);
+    auto attrs = dest_node_attrs->attributeList();
+    for ( auto it : attrs) {
+        gchar const *key = g_quark_to_string(it.first);
         gchar const *this_attr = this_node_attrs_inherited->attribute(key);
-        if ((this_attr == nullptr || strcmp(attrs->value, this_attr)) && this_node_attrs->attribute(key) == nullptr)
+        if ((this_attr == nullptr || strcmp(it.second, this_attr)) && this_node_attrs->attribute(key) == nullptr)
             this_node_attrs->setAttribute(key, this_attr);
     }
     sp_repr_css_attr_unref(this_node_attrs_inherited);
@@ -1427,16 +1427,16 @@ forwards and backwards to make sure we don't miss any attributes that are
 in one but not the other. */
 static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
+    auto attrs = first->attributeList();
+    for ( auto it:attrs ) {
+        gchar const *other_attr = second->attribute(g_quark_to_string(it.first));
+        if (other_attr == nullptr || strcmp(it.second, other_attr))
             return false;
     }
     attrs = second->attributeList();
-    for ( ; attrs ; attrs++) {
-        gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
+    for ( auto it : attrs ) {
+        gchar const *other_attr = first->attribute(g_quark_to_string(it.first));
+        if (other_attr == nullptr || strcmp(it.second, other_attr))
             return false;
     }
     return true;

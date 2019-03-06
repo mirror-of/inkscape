@@ -17,11 +17,13 @@
 
 #include <cassert>
 #include <iostream>
+#include <map>
 
 #include "xml/node.h"
 #include "xml/attribute-record.h"
 #include "xml/composite-node-observer.h"
 #include "util/list-container.h"
+#include "util/share.h"
 
 namespace Inkscape {
 
@@ -94,7 +96,7 @@ public:
     bool equal(Node const *other, bool recursive) override;
     void mergeFrom(Node const *src, char const *key, bool extension = false, bool clean = false) override;
 
-    Inkscape::Util::List<AttributeRecord const> attributeList() const override {
+    std::map<GQuark, Inkscape::Util::ptr_shared> attributeList() const override {
         return _attributes;
     }
 
@@ -144,7 +146,8 @@ private:
 
     int _name;
 
-    Inkscape::Util::MutableList<AttributeRecord> _attributes;
+    //Inkscape::Util::MutableList<AttributeRecord> _attributes;
+    std::map<GQuark, Inkscape::Util::ptr_shared> _attributes;
 
     Inkscape::Util::ptr_shared _content;
 
