@@ -53,6 +53,40 @@ static bool href_needs_rebasing(std::string const &href)
     return ret;
 }
 
+static std::string calc_abs_href(std::string const &abs_base_dir, std::string const &href,
+                                 gchar const *const sp_absref)
+{
+    std::string ret = Glib::build_filename(abs_base_dir, href);
+
+    if ( sp_absref
+         && !Inkscape::IO::file_test(ret.c_str(),       G_FILE_TEST_EXISTS)
+         &&  Inkscape::IO::file_test(sp_absref, G_FILE_TEST_EXISTS) )
+    {
+        /* sodipodi:absref points to an existing file while xlink:href doesn't.
+         * This could mean that xlink:href is wrong, or it could mean that the user
+         * intends to supply the missing file later.
+         *
+         * Given that we aren't sure what the right behaviour is, and given that a
+         * wrong xlink:href value may mean a bug (as has occurred in the past), we
+         * write a message to stderr. */
+        g_warning("xlink:href points to non-existent file, so using sodipodi:absref instead");
+
+        /* Currently, we choose to use sodipodi:absref in this situation (because we
+         * aren't yet confident in xlink:href interpretation); though note that
+         * honouring a foreign attribute in preference to standard SVG xlink:href and
+         * xlink:base means that we're not a conformant SVG user agent, so eventually
+         * we hope to have enough confidence in our xlink:href and xlink:base handling
+         * to be able to disregard sodipodi:absref.
+         *
+         * effic: Once we no longer consult sodipodi:absref, we can do
+         * `if (base unchanged) { return; }' at the start of rebase_hrefs.
+         */
+        ret = sp_absref;
+    }
+
+    return ret;
+}
+
 std::map<GQuark, Inkscape::Util::ptr_shared>
 Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
                                  gchar const *const new_abs_base,
@@ -102,22 +136,9 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
          * reversed.) */
     }
 
-    auto uri = URI::from_href_and_basedir(static_cast<char const *>(old_href), old_abs_base);
-    auto abs_href = uri.toNativeFilename();
-
-    if (!Inkscape::IO::file_test(abs_href.c_str(), G_FILE_TEST_EXISTS) &&
-        Inkscape::IO::file_test(sp_absref, G_FILE_TEST_EXISTS)) {
-        uri = URI::from_native_filename(sp_absref);
-    }
-
-    std::string baseuri;
-    if (new_abs_base) {
-        baseuri = URI::from_dirname(new_abs_base).str();
-    }
-
-    auto new_href = uri.str(baseuri.c_str());
-    ret[href_key] = share_string(new_href.c_str());
-
+    std::string abs_href = calc_abs_href(old_abs_base, static_cast<char const *>(old_href), sp_absref);
+    std::string new_href = sp_relative_path_from_path(abs_href, new_abs_base);
+    ret[href_key]=share_string(new_href.c_str()); // Check if this is safe/copied or if it is only held.
     if (sp_absref) {
         /* We assume that if there wasn't previously a sodipodi:absref attribute
          * then we shouldn't create one. */
