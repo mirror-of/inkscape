@@ -31,6 +31,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 # standard library
+import sys
 import math
 # local library
 import inkex
@@ -101,7 +102,8 @@ class MyEffect(inkex.Effect):
         self.d = array([0], float)              # knot vector
         self.poly = [[0.0,0.0]]                 # LWPOLYLINE data
     def output(self):
-        print(b''.join(self.dxf))
+        stdout = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+        stdout.write(b''.join(self.dxf))
     def dxf_add(self, str):
         self.dxf.append(str.encode(self.options.char_encode))
     def dxf_line(self,csp):
