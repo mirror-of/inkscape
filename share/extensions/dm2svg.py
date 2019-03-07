@@ -24,6 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from __future__ import print_function
 
 import struct
+import sys
+
+if sys.version_info[0] < 3:
+    _map_ord = lambda it: map(ord, it)
+else:
+    _map_ord = iter
 
 def process_file(filename):
     try:
@@ -45,7 +51,7 @@ def process_file(filename):
                 break
 
             if ord(tag) > 128:
-                if tag == '\x90':
+                if tag == b'\x90':
                     # Emit the current element and close the last layer
                     emit_element(svg_element)
                     emit_element('</g>')
@@ -54,7 +60,7 @@ def process_file(filename):
                     layer = 'layer%d' % (ord(f.read(1)) + 1)
                     timestamp = 0
                     svg_element = '<g inkscape:groupmode="layer" id="%s">' % layer
-                elif tag == '\x88':
+                elif tag == b'\x88':
                     # Read the timestamp next
                     timestamp += ord(f.read(1)) * 20
                 else:
@@ -82,7 +88,7 @@ def process_file(filename):
 
 
 def read_point(f, ymax):
-    x1, x2, y1, y2 = map(ord, f.read(4))
+    x1, x2, y1, y2 = _map_ord(f.read(4))
     x = x1 | x2 << 7
     y = y1 | y2 << 7
 
@@ -91,6 +97,7 @@ def read_point(f, ymax):
 
 def emit_header(f):
     id, version, width, height, page_type = struct.unpack('<32sBHHBxx', f.read(40))
+    id = id.decode()
 
     print('''
 <svg viewBox="0 0 %(width)s %(height)s" fill="none" stroke="black" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"
