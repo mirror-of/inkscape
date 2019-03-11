@@ -178,6 +178,7 @@ public:
     GtkWidget _widget;
 
     guint _idle_id;
+    guint _last_full_idle;
 
     SPCanvasItem *_root;
 
@@ -279,7 +280,7 @@ public:
 
     bool _is_scrolling;
     //only for DEBUG_CANVAS
-    GTimeVal _iddle_time;
+    GTimeVal _idle_time;
     int splits;
     //
 };

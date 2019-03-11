@@ -2322,12 +2322,12 @@ unsigned SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
             }
             gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
                     paint_rect.width(), paint_rect.height());
-            if (ret) {
+            /* if (ret) {
                 std::set<Inkscape::DrawingItem*> cached_items = arena->drawing.getCachedItems();
                 for (auto j : cached_items) {
                     j->setCached(false);
                 }
-            }
+            } */
         }
         return ret;
     } else {
@@ -2629,14 +2629,20 @@ gint SPCanvas::idle_handler(gpointer data)
     int const ret = canvas->doUpdate();
     if (ret) {
         // Reset idle id
+        canvas->_last_full_idle = canvas->_idle_id;
         canvas->_idle_id = 0;
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            arena->drawing.setIdleId(0);
+        }
 #ifdef DEBUG_CANVAS
         g_message("%i splits", canvas->splits);
         canvas->splits = 0;
         GTimeVal now;
         g_get_current_time (&now);
-        glong elapsed = (now.tv_sec - canvas->_iddle_time.tv_sec) * 1000000
-        + (now.tv_usec - canvas->_iddle_time.tv_usec);
+        glong elapsed = (now.tv_sec - canvas->_idle_time.tv_sec) * 1000000
+        + (now.tv_usec - canvas->_idle_time.tv_usec);
         g_message("%f iddle loop duration", elapsed/(double)1000000);
 #endif   
     }
@@ -2647,9 +2653,14 @@ void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
 #ifdef DEBUG_CANVAS
-        g_get_current_time (&_iddle_time);
+        g_get_current_time (&_idle_time);
 #endif
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            arena->drawing.setIdleId(_last_full_idle);
+        }
     }
 }
 void SPCanvas::removeIdle()
@@ -2657,11 +2668,16 @@ void SPCanvas::removeIdle()
     if (_idle_id) {
         g_source_remove(_idle_id);
         _idle_id = 0;
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            arena->drawing.setIdleId(0);
+        }
 #ifdef DEBUG_CANVAS
         GTimeVal now;
         g_get_current_time (&now);
-        glong elapsed = (now.tv_sec - _iddle_time.tv_sec) * 1000000
-        + (now.tv_usec - _iddle_time.tv_usec);
+        glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+        + (now.tv_usec - _idle_time.tv_usec);
         g_message("%f iddle removed", elapsed/(double)1000000);
 #endif
     }

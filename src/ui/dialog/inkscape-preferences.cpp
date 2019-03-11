@@ -1832,7 +1832,7 @@ void InkscapePreferences::initPageRendering()
                            _("Configure number of processors/threads to use when rendering filters"), false);
 
     /* threaded render */ 
-    _render_multi_threaded.init("/options/threading/renderthreads", 1.0, 16.0, 1.0, 2.0, 4.0, true, false);
+    _render_multi_threaded.init("/options/threading/renderthreads", 1.0, 16.0, 1.0, 2.0, 1.0, true, false);
     _page_rendering.add_line( false, _("Number of _Threads for rendering:"), _render_multi_threaded, "",
                            _("Configure number of processors/threads for rendering"), false);
 

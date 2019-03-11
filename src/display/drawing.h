@@ -66,6 +66,8 @@ public:
     bool getThreadInvalid(std::thread::id thread_id) const;
     void setThreadInvalid(std::thread::id thread_id);
     void setThreadValid(std::thread::id thread_id);
+    void setIdleId(guint idle_id);
+    guint getIdleId() const { return _idle_id; };
     void setOutlineSensitive(bool e);
     bool getOutlineSensitive() const { return _outline_sensitive; };
 
@@ -99,6 +101,7 @@ public:
     double delta;
 private:
     bool _exact;  // if true then rendering must be exact
+    guint _idle_id;
     RenderMode _rendermode;
     ColorMode _colormode;
     int _blur_quality;

@@ -13,6 +13,8 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_ITEM_H
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_ITEM_H
 
+#include <glib.h>
+
 #include <2geom/rect.h>
 #include <2geom/affine.h>
 #include <boost/operators.hpp>
@@ -209,7 +211,7 @@ protected:
     Inkscape::Filters::Filter *_filter;
     SPItem *_item; ///< Used to associate DrawingItems with SPItems that created them
     DrawingCache *_cache;
-
+    guint _idle_id;
     CacheList::iterator _cache_iterator;
 
     unsigned _state : 8;
