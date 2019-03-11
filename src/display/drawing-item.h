@@ -113,6 +113,8 @@ public:
     void setSensitive(bool v);
     bool cached() const { return _cached; }
     void setCached(bool c, bool persistent = false);
+    bool onRender() const { return _on_render; }
+    void setOnRender(bool on_render);
 
     virtual void setStyle(SPStyle *style, SPStyle *context_style = nullptr);
     virtual void setChildrenStyle(SPStyle *context_style);
@@ -229,7 +231,7 @@ protected:
 
     unsigned _isolation : 1;
     unsigned _mix_blend_mode : 4;
-
+    bool _on_render;
     friend class Drawing;
 };
 

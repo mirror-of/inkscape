@@ -20,7 +20,6 @@
 #include "cairo-templates.h"
 #include "drawing-context.h"
 
-
 namespace Inkscape {
 
 // hardcoded grayscale color matrix values as default
@@ -135,7 +134,34 @@ Drawing::setExact(bool e)
     _exact = e;
 }
 
-void Drawing::setOutlineSensitive(bool e) { _outline_sensitive = e; };
+bool 
+Drawing::getThreadInvalid(std::thread::id thread_id) const 
+{ 
+    return std::find(_invalid_thread.begin(), _invalid_thread.end(), thread_id) != _invalid_thread.end();
+};
+
+void 
+Drawing::setThreadInvalid(std::thread::id thread_id) 
+{
+    if (!getThreadInvalid(thread_id)) {
+        _invalid_thread.push_back(thread_id);
+    }
+};
+
+void 
+Drawing::setThreadValid(std::thread::id thread_id) 
+{
+    if (getThreadInvalid(thread_id)) {
+        auto tn = std::find(_invalid_thread.begin(), _invalid_thread.end(), thread_id);
+        _invalid_thread.erase(tn);
+    }
+}
+  
+void 
+Drawing::setOutlineSensitive(bool e) 
+{ 
+    _outline_sensitive = e; 
+};
 
 Geom::OptIntRect const &
 Drawing::cacheLimit() const
@@ -212,29 +238,33 @@ Drawing::pick(Geom::Point const &p, double delta, unsigned flags)
 void
 Drawing::_pickItemsForCaching()
 {
-    // we cache the objects with the highest score until the budget is exhausted
-    _candidate_items.sort(std::greater<CacheRecord>());
-    size_t used = 0;
-    CandidateList::iterator i;
-    for (i = _candidate_items.begin(); i != _candidate_items.end(); ++i) {
-        if (used + i->cache_size > _cache_budget) break;
-        used += i->cache_size;
-    }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint nthreds = prefs->getInt("/options/threading/renderthreads", 1);
+    if (nthreds < 1) {
+        // we cache the objects with the highest score until the budget is exhausted
+        _candidate_items.sort(std::greater<CacheRecord>());
+        size_t used = 0;
+        CandidateList::iterator i;
+        for (i = _candidate_items.begin(); i != _candidate_items.end(); ++i) {
+            if (used + i->cache_size > _cache_budget) break;
+            used += i->cache_size;
+        }
 
-    std::set<DrawingItem*> to_cache;
-    for (CandidateList::iterator j = _candidate_items.begin(); j != i; ++j) {
-        j->item->setCached(true);
-        to_cache.insert(j->item);
-    }
-    // Everything which is now in _cached_items but not in to_cache must be uncached
-    // Note that calling setCached on an item modifies _cached_items
-    // TODO: find a way to avoid the set copy
-    std::set<DrawingItem*> to_uncache;
-    std::set_difference(_cached_items.begin(), _cached_items.end(),
-                        to_cache.begin(), to_cache.end(),
-                        std::inserter(to_uncache, to_uncache.end()));
-    for (auto j : to_uncache) {
-        j->setCached(false);
+        std::set<DrawingItem*> to_cache;
+        for (CandidateList::iterator j = _candidate_items.begin(); j != i; ++j) {
+            j->item->setCached(true);
+            to_cache.insert(j->item);
+        }
+        // Everything which is now in _cached_items but not in to_cache must be uncached
+        // Note that calling setCached on an item modifies _cached_items
+        // TODO: find a way to avoid the set copy
+        std::set<DrawingItem*> to_uncache;
+        std::set_difference(_cached_items.begin(), _cached_items.end(),
+                            to_cache.begin(), to_cache.end(),
+                            std::inserter(to_uncache, to_uncache.end()));
+        for (auto j : to_uncache) {
+            j->setCached(false);
+        }
     }
 }
 

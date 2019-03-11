@@ -36,6 +36,7 @@
 #include "display/rendermode.h"
 #include "display/sp-canvas-group.h"
 #include "display/sp-canvas.h"
+#include "display/drawing-item.h"
 #include "helper/sp-marshal.h"
 #include "inkscape.h"
 #include "inkscape-window.h"
@@ -45,10 +46,13 @@
 #include "widgets/desktop-widget.h"
 #include <2geom/affine.h>
 #include <2geom/rect.h>
+#include <thread>
 
 #if GTK_CHECK_VERSION(3,20,0)
 # include <gdkmm/seat.h>
 #endif
+
+#define DEBUG_CANVAS
 
 using Inkscape::Debug::GdkEventLatencyTracker;
 
@@ -1893,15 +1897,6 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
         }
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-
-    cairo_surface_mark_dirty(_backing_store);
-    // cairo_surface_write_to_png( _backing_store, "debug3.png" );
-
-    // Mark the painted rectangle clean
-    markRect(paint_rect, 0);
-
-    gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
-        paint_rect.width(), paint_rect.height());
 }
 
 void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect)
@@ -2133,6 +2128,16 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
         */
 
         paintSingleBuffer(this_rect, setup->canvas_rect, bw);
+
+        cairo_surface_mark_dirty(_backing_store);
+        // cairo_surface_write_to_png( _backing_store, "debug3.png" );
+
+        // Mark the painted rectangle clean
+        markRect(this_rect, 0);
+
+        gtk_widget_queue_draw_area(GTK_WIDGET(this), this_rect.left() -_x0, this_rect.top() - _y0,
+            this_rect.width(), this_rect.height());
+        splits ++;
         //gdk_window_end_paint(window);
         return 1;
     }
@@ -2175,8 +2180,8 @@ The default for now is the strips mode.
         // Make sure that mid lies on a tile boundary
         mid = (mid / TILE_SIZE) * TILE_SIZE;
 
-        lo = Geom::IntRect(this_rect.left(), this_rect.top(), this_rect.right(), mid);
-        hi = Geom::IntRect(this_rect.left(), mid, this_rect.right(), this_rect.bottom());
+        lo = Geom::IntRect(this_rect.left(), mid, this_rect.right(), this_rect.bottom());
+        hi = Geom::IntRect(this_rect.left(), this_rect.top(), this_rect.right(), mid);
 
         if (setup->mouse_loc[Geom::Y] < mid) {
             // Always paint towards the mouse first
@@ -2190,7 +2195,7 @@ The default for now is the strips mode.
 }
 
 
-bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
+unsigned SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 {
     GtkAllocation allocation;
     g_return_val_if_fail (!_need_update, false);
@@ -2243,9 +2248,91 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     // Start the clock
     g_get_current_time(&(setup.start_time));
+    gint nthreds = 1;
+#if HAVE_OPENMP
+    nthreds = prefs->getInt("/options/threading/renderthreads");
+#endif
+    if(nthreds > 1) {
+        // see paintRectInternal for comments
+        bool ret = 1;
+        bool tmpret = 1;
+        // end duple code
+        int splits = 1 + (paint_rect.height() * paint_rect.width() / setup.max_pixels);
+        int splitsize = std::ceil(paint_rect.height()/(double)splits);
+#ifdef DEBUG_CANVAS
+        std::cout << "OMP::splits" << splits << std::endl;
+#endif
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            std::vector<Geom::IntRect> painted;
+            #pragma omp parallel for schedule(dynamic) num_threads(std::min(nthreds,omp_get_max_threads()))
+            for (int i = 0; i > splits ; i++)
+            {
+                GTimeVal now;
+                g_get_current_time (&now);
+                glong elapsed = (now.tv_sec - setup.start_time.tv_sec) * 1000000
+                    + (now.tv_usec - setup.start_time.tv_usec);
+                if (elapsed > 1000) {
+                    if (_forced_redraw_limit < 0 ||
+                        _forced_redraw_count < _forced_redraw_limit) {
 
-    // Go
-    return paintRectInternal(&setup, paint_rect);
+                        if (_forced_redraw_limit != -1) {
+                            _forced_redraw_count++;
+                        }
+                        tmpret = 0;
+                        ret = 0;
+                    }
+                }
+                Geom::IntRect r =  Geom::IntRect::from_xywh(paint_rect.left(), 
+                                                            paint_rect.top() + (i * splitsize), 
+                                                            paint_rect.width(),
+                                                            splitsize);
+                Geom::OptIntRect area = r & paint_rect;
+                if (tmpret && area && !area->hasZeroArea()) {
+                    r = *area;
+                    paintSingleBuffer(r, setup.canvas_rect, r.height());
+                    #pragma omp critical
+                    {
+                        if (arena->drawing.getThreadInvalid(std::this_thread::get_id())){
+                            arena->drawing.setThreadValid(std::this_thread::get_id());
+                            ret = 0;
+                        } else {
+                            painted.push_back(r);
+                        }
+                    }
+                    //g_get_current_time(&(setup.start_time));
+                }
+                tmpret = 1;
+#ifdef DEBUG_CANVAS
+                printf("t_thread_inside%d\n", omp_get_thread_num());
+#endif
+            }
+            #if 0
+            // 5 ms delay on Windows!
+            #pragma omp critical
+            printf("t_thread%d=%llu\n", omp_get_thread_num());
+            ret = 0;
+            #endif
+            cairo_surface_mark_dirty(_backing_store);
+            // cairo_surface_write_to_png( _backing_store, "debug3.png" );
+            for (auto r: painted) { 
+                // Mark the painted rectangle clean
+                markRect(r, 0);
+            }
+            gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
+                    paint_rect.width(), paint_rect.height());
+            if (ret) {
+                std::set<Inkscape::DrawingItem*> cached_items = arena->drawing.getCachedItems();
+                for (auto j : cached_items) {
+                    j->setCached(false);
+                }
+            }
+        }
+        return ret;
+    } else {
+        return paintRectInternal(&setup, paint_rect);
+    }   
 }
 
 void SPCanvas::forceFullRedrawAfterInterruptions(unsigned int count)
@@ -2543,6 +2630,15 @@ gint SPCanvas::idle_handler(gpointer data)
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
+#ifdef DEBUG_CANVAS
+        g_message("%i splits", canvas->splits);
+        canvas->splits = 0;
+        GTimeVal now;
+        g_get_current_time (&now);
+        glong elapsed = (now.tv_sec - canvas->_iddle_time.tv_sec) * 1000000
+        + (now.tv_usec - canvas->_iddle_time.tv_usec);
+        g_message("%f iddle loop duration", elapsed/(double)1000000);
+#endif   
     }
     return !ret;
 }
@@ -2550,6 +2646,9 @@ gint SPCanvas::idle_handler(gpointer data)
 void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
+#ifdef DEBUG_CANVAS
+        g_get_current_time (&_iddle_time);
+#endif
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
     }
 }
@@ -2558,6 +2657,13 @@ void SPCanvas::removeIdle()
     if (_idle_id) {
         g_source_remove(_idle_id);
         _idle_id = 0;
+#ifdef DEBUG_CANVAS
+        GTimeVal now;
+        g_get_current_time (&now);
+        glong elapsed = (now.tv_sec - _iddle_time.tv_sec) * 1000000
+        + (now.tv_usec - _iddle_time.tv_usec);
+        g_message("%f iddle removed", elapsed/(double)1000000);
+#endif
     }
 }
 

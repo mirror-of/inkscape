@@ -30,6 +30,9 @@
 #include <glibmm/ustring.h>
 #include <2geom/affine.h>
 #include <2geom/rect.h>
+#if HAVE_OPENMP
+#include <omp.h>
+#endif
 
 G_BEGIN_DECLS
 
@@ -133,7 +136,7 @@ private:
     void set_cursor(GtkWidget *widget);
     /// Draws a specific rectangular part of the canvas.
     /// @return true if the rectangle painting succeeds.
-    bool paintRect(int xx0, int yy0, int xx1, int yy1);
+    unsigned paintRect(int xx0, int yy0, int xx1, int yy1);
 
     /// Repaints the areas in the canvas that need it.
     /// @return true if all the dirty parts have been redrawn
@@ -275,6 +278,10 @@ public:
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     bool _is_scrolling;
+    //only for DEBUG_CANVAS
+    GTimeVal _iddle_time;
+    int splits;
+    //
 };
 
 bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, Geom::Point const &world);

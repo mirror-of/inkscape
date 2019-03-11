@@ -21,6 +21,7 @@
 #include "nr-filter.h"
 #include "preferences.h"
 #include "style.h"
+#include <thread>
 
 #include "display/cairo-utils.h"
 #include "display/cairo-templates.h"
@@ -132,6 +133,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _cached(0)
     , _cached_persistent(0)
     , _has_cache_iterator(0)
+    , _on_render(false)
     , _propagate(0)
 //    , _renders_opacity(0)
     , _pick_children(0)
@@ -357,6 +359,12 @@ DrawingItem::setCached(bool cached, bool persistent)
         _cache = nullptr;
     }
 }
+
+void 
+DrawingItem::setOnRender(bool on_render) 
+{
+    _on_render = on_render; 
+};
 
 /**
  * Process information related to the new style.
@@ -628,24 +636,39 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
     }
 
     if (to_update & STATE_CACHE) {
-        // Update cache score for this item
-        if (_has_cache_iterator) {
-            // remove old score information
-            _drawing._candidate_items.erase(_cache_iterator);
-            _has_cache_iterator = false;
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        gint nthreds = prefs->getInt("/options/threading/renderthreads");
+        if(nthreds > 1) {
+            if (_cacheRect()) {
+                CacheRecord cr;
+                cr.score = 0;
+                cr.cache_size = _cacheRect()->area() * 4;
+                cr.item = this;
+                _drawing._candidate_items.push_front(cr);
+            }
+        } else {
+            // Update cache score for this item
+            if (_has_cache_iterator) {
+                // remove old score information
+                _drawing._candidate_items.erase(_cache_iterator);
+                _has_cache_iterator = false;
+            }
+            double score = _cacheScore();
+            if (score >= _drawing._cache_score_threshold) {
+                CacheRecord cr;
+                cr.score = score;
+                // if _cacheRect() is empty, a negative score will be returned from _cacheScore(),
+                // so this will not execute (cache score threshold must be positive)
+                cr.cache_size = _cacheRect()->area() * 4;
+                cr.item = this;
+                _drawing._candidate_items.push_front(cr);
+                _cache_iterator = _drawing._candidate_items.begin();
+                _has_cache_iterator = true;
+            }
         }
-        double score = _cacheScore();
-        if (score >= _drawing._cache_score_threshold) {
-            CacheRecord cr;
-            cr.score = score;
-            // if _cacheRect() is empty, a negative score will be returned from _cacheScore(),
-            // so this will not execute (cache score threshold must be positive)
-            cr.cache_size = _cacheRect()->area() * 4;
-            cr.item = this;
-            _drawing._candidate_items.push_front(cr);
-            _cache_iterator = _drawing._candidate_items.begin();
-            _has_cache_iterator = true;
-        }
+        //    _cache_iterator = _drawing._candidate_items.begin();
+        //_has_cache_iterator = true;
+        //}
 
         /* Update cache if enabled.
          * General note: here we only tell the cache how it has to transform
@@ -653,7 +676,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
          * after the update the item can have its caching turned off,
          * e.g. because its filter was removed. This way we avoid tempoerarily
          * using more memory than the cache budget */
-        if (_cache) {
+        if (_filter && render_filters && _cache) {
             Geom::OptIntRect cl = _cacheRect();
             if (_visible && cl) { // never create cache for invisible items
                 // this takes care of invalidation on transform
@@ -710,17 +733,38 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 {
     bool outline = _drawing.outline();
     bool render_filters = _drawing.renderFilters();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint nthreds = prefs->getInt("/options/threading/renderthreads");
+    if (nthreds > 1) {
+        // We prevent multiple render of filtered elements for diferent threads
+        // mark by this way to render in the next iddle loop but too much faster
+        // because the filtered element is full render in cache (if there is cache).
+        if (_filter && render_filters && onRender()) {
+            _drawing.setThreadInvalid(std::this_thread::get_id());
+            render_filters = false;
+        }
+    }
+    setOnRender(true);
     // stop_at is handled in DrawingGroup, but this check is required to handle the case
     // where a filtered item with background-accessing filter has enable-background: new
-    if (this == stop_at) return RENDER_STOP;
+    if (this == stop_at) {
+        setOnRender(false);
+        return RENDER_STOP;
+    }
 
     // If we are invisible, return immediately
-    if (!_visible) return RENDER_OK;
-    if (_ctm.isSingular(1e-18)) return RENDER_OK;
-
+    if (!_visible) {
+        setOnRender(false);
+        return RENDER_OK;
+    }
+    if (_ctm.isSingular(1e-18)) {
+        setOnRender(false);
+        return RENDER_OK;
+    }
     // TODO convert outline rendering to a separate virtual function
     if (outline) {
         _renderOutline(dc, area, flags);
+        setOnRender(false);
         return RENDER_OK;
     }
 
@@ -734,7 +778,10 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         carea = cl;
     }
     
-    if (!carea) return RENDER_OK;
+    if (!carea) {
+        setOnRender(false);
+        return RENDER_OK;
+    }
 
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
@@ -763,7 +810,10 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             set_cairo_blend_operator( dc, _mix_blend_mode );
 
             _cache->paintFromCache(dc, carea);
-            if (!carea) return RENDER_OK;
+            if (!carea) {
+                setOnRender(false);
+                return RENDER_OK;
+            }
         } else {
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
@@ -808,6 +858,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // filters and opacity do not apply when rendering the ancestors of the filtered
     // element
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
+        setOnRender(false);
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
@@ -904,8 +955,8 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     set_cairo_blend_operator( dc, _mix_blend_mode );
     dc.fill();
     dc.setSource(0,0,0,0);
+    setOnRender(false);
     // the call above is to clear a ref on the intermediate surface held by dc
-
     return render_result;
 }
 
