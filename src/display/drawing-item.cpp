@@ -668,7 +668,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
             * after the update the item can have its caching turned off,
             * e.g. because its filter was removed. This way we avoid tempoerarily
             * using more memory than the cache budget */
-            if (_filter && render_filters && _cache) {
+            if (_cache) {
                 Geom::OptIntRect cl = _cacheRect();
                 if (_visible && cl) { // never create cache for invisible items
                     // this takes care of invalidation on transform
