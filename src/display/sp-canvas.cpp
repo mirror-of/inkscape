@@ -2631,11 +2631,6 @@ gint SPCanvas::idle_handler(gpointer data)
         // Reset idle id
         canvas->_last_full_idle = canvas->_idle_id;
         canvas->_idle_id = 0;
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        if (desktop) {
-            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
-            arena->drawing.setIdleId(0);
-        }
 #ifdef DEBUG_CANVAS
         g_message("%i splits", canvas->splits);
         canvas->splits = 0;
@@ -2655,12 +2650,12 @@ void SPCanvas::addIdle()
 #ifdef DEBUG_CANVAS
         g_get_current_time (&_idle_time);
 #endif
-        _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
             SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
             arena->drawing.setIdleId(_last_full_idle);
         }
+        _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
     }
 }
 void SPCanvas::removeIdle()
@@ -2668,11 +2663,6 @@ void SPCanvas::removeIdle()
     if (_idle_id) {
         g_source_remove(_idle_id);
         _idle_id = 0;
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        if (desktop) {
-            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
-            arena->drawing.setIdleId(0);
-        }
 #ifdef DEBUG_CANVAS
         GTimeVal now;
         g_get_current_time (&now);

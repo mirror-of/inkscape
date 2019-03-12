@@ -132,6 +132,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _visible(true)
     , _sensitive(true)
     , _cached(0)
+    , _idle_id(0)
     , _cached_persistent(0)
     , _has_cache_iterator(0)
     , _on_render(false)
@@ -639,11 +640,10 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
     if (to_update & STATE_CACHE) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         gint nthreds = prefs->getInt("/options/threading/renderthreads");
-        if(!(nthreds > 1 && _idle_id == _drawing.getIdleId())) {
-            // Update cache score for this item
-            if(_idle_id != _drawing.getIdleId()) {
-                _idle_id = _drawing.getIdleId();
-            }
+        
+        // Update cache score for this item
+       // if (nthreds == 1 || _idle_id != _drawing.getIdleId()) {    
+            _idle_id = _drawing.getIdleId();
             if (_has_cache_iterator) {
                 // remove old score information
                 _drawing._candidate_items.erase(_cache_iterator);
@@ -661,13 +661,14 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
                 _cache_iterator = _drawing._candidate_items.begin();
                 _has_cache_iterator = true;
             }
-
-            /* Update cache if enabled.
-            * General note: here we only tell the cache how it has to transform
-            * during the render phase. The transformation is deferred because
-            * after the update the item can have its caching turned off,
-            * e.g. because its filter was removed. This way we avoid tempoerarily
-            * using more memory than the cache budget */
+        //}
+        /* Update cache if enabled.
+        * General note: here we only tell the cache how it has to transform
+        * during the render phase. The transformation is deferred because
+        * after the update the item can have its caching turned off,
+        * e.g. because its filter was removed. This way we avoid tempoerarily
+        * using more memory than the cache budget */
+        if (nthreds == 1 || !onRender()) {    
             if (_cache) {
                 Geom::OptIntRect cl = _cacheRect();
                 if (_visible && cl) { // never create cache for invisible items
@@ -732,7 +733,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         // We prevent multiple render of filtered elements for diferent threads
         // mark by this way to render in the next idle loop but too much faster
         // because the filtered element is full render in cache (if there is cache).
-        if (_filter && render_filters && onRender()) {
+        if (onRender()) {
             int counter = 0;
             while(onRender()){
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
