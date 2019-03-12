@@ -109,7 +109,7 @@ def export_SPLINE():
                         vals[groups['20']].insert(i-1, (1.0 - a1)*vals[groups['20']][i-2] + a1*vals[groups['20']][i-1])
             ctrls = len(vals[groups['10']])
             path = 'M %f,%f' % (vals[groups['10']][0], vals[groups['20']][0])
-            for i in range (0, (ctrls - 1)/3):
+            for i in range (0, (ctrls - 1) // 3):
                 path += ' C %f,%f %f,%f %f,%f' % (vals[groups['10']][3*i + 1], vals[groups['20']][3*i + 1], vals[groups['10']][3*i + 2], vals[groups['20']][3*i + 2], vals[groups['10']][3*i + 3], vals[groups['20']][3*i + 3])
             if vals[groups['70']][0] & 1:       # closed path
                 path += ' z'

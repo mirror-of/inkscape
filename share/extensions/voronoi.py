@@ -189,7 +189,7 @@ def voronoi(siteList,context):
         if not priorityQ.isEmpty():
             minpt = priorityQ.getMinPt()
 
-        if (newsite and (priorityQ.isEmpty() or cmp(newsite,minpt) < 0)):
+        if (newsite and (priorityQ.isEmpty() or newsite < minpt)):
             # newsite is smallest -  this is a site event
             context.outSite(newsite)
             
@@ -341,6 +341,9 @@ class Site(object):
         else:
             return 0
 
+    def __lt__(self, other):
+        return self.__cmp__(other) < 0
+
     def distance(self,other):
         dx = self.x - other.x
         dy = self.y - other.y
@@ -442,6 +445,9 @@ class Halfedge(object):
         else:
             return 0
 
+    def __lt__(self, other):
+        return self.__cmp__(other) < 0
+
     def leftreg(self,default):
         if not self.edge: 
             return default
@@ -519,7 +525,7 @@ class Halfedge(object):
 
         xint = (e1.c*e2.b - e2.c*e1.b) / d
         yint = (e2.c*e1.a - e1.c*e2.a) / d
-        if(cmp(e1.reg[1],e2.reg[1]) < 0):
+        if e1.reg[1] < e2.reg[1]:
             he = self
             e = e1
         else:
@@ -637,7 +643,7 @@ class PriorityQueue(object):
         he.ystar  = site.y + offset
         last = self.hash[self.getBucket(he)]
         next = last.qnext
-        while((next is not None) and cmp(he,next) > 0):
+        while((next is not None) and he > next):
             last = next
             next = last.qnext
         he.qnext = last.qnext

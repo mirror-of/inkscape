@@ -103,7 +103,7 @@ class MyEffect(inkex.Effect):
         self.poly = [[0.0,0.0]]                 # LWPOLYLINE data
     def output(self):
         stdout = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
-        stdout.write(b''.join(self.dxf))
+        stdout.write(b''.join(self.dxf) + b'\n')
     def dxf_add(self, str):
         self.dxf.append(str.encode(self.options.char_encode))
     def dxf_line(self,csp):

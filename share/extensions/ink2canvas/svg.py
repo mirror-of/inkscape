@@ -16,6 +16,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 
+import sys
+if sys.version_info[0] > 2:
+    unicode = lambda s: s.decode() if isinstance(s, bytes) else str(s)
+
 import inkex
 import simplestyle
 from simplepath import parsePath
@@ -326,7 +330,7 @@ class Polygon(Path):
         points = map(lambda x: x.split(","), points)
         comm = []
         for pt in points:           # creating path command similar
-            pt = map(float, pt)
+            pt = list(map(float, pt))
             comm.append(["L", pt])
         comm[0][0] = "M"            # first command must be a 'M' => moveTo
         return comm
