@@ -108,7 +108,7 @@ private:
     int _filter_quality;
     std::vector<std::thread::id> _invalid_thread;
     Geom::OptIntRect _cache_limit;
-    
+
     double _cache_score_threshold; ///< do not consider objects for caching below this score
     size_t _cache_budget; ///< maximum allowed size of cache
 

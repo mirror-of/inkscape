@@ -212,6 +212,7 @@ protected:
     SPItem *_item; ///< Used to associate DrawingItems with SPItems that created them
     DrawingCache *_cache;
     guint _idle_id;
+
     CacheList::iterator _cache_iterator;
 
     unsigned _state : 8;
@@ -234,6 +235,7 @@ protected:
     unsigned _isolation : 1;
     unsigned _mix_blend_mode : 4;
     bool _on_render;
+
     friend class Drawing;
 };
 

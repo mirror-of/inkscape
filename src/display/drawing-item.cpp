@@ -954,6 +954,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     dc.setSource(0,0,0,0);
     setOnRender(false);
     // the call above is to clear a ref on the intermediate surface held by dc
+
     return render_result;
 }
 

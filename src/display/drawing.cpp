@@ -20,6 +20,7 @@
 #include "cairo-templates.h"
 #include "drawing-context.h"
 
+
 namespace Inkscape {
 
 // hardcoded grayscale color matrix values as default
