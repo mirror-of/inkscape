@@ -638,49 +638,42 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
     }
 
     if (to_update & STATE_CACHE) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gint nthreds = prefs->getInt("/options/threading/renderthreads");
-        
         // Update cache score for this item
-       // if (nthreds == 1 || _idle_id != _drawing.getIdleId()) {    
-            _idle_id = _drawing.getIdleId();
-            if (_has_cache_iterator) {
-                // remove old score information
-                _drawing._candidate_items.erase(_cache_iterator);
-                _has_cache_iterator = false;
-            }
-            double score = _cacheScore();
-            if (score >= _drawing._cache_score_threshold) {
-                CacheRecord cr;
-                cr.score = score;
-                // if _cacheRect() is empty, a negative score will be returned from _cacheScore(),
-                // so this will not execute (cache score threshold must be positive)
-                cr.cache_size = _cacheRect()->area() * 4;
-                cr.item = this;
-                _drawing._candidate_items.push_front(cr);
-                _cache_iterator = _drawing._candidate_items.begin();
-                _has_cache_iterator = true;
-            }
-        //}
+        if (_has_cache_iterator) {
+            // remove old score information
+            _drawing._candidate_items.erase(_cache_iterator);
+            _has_cache_iterator = false;
+        }
+        double score = _cacheScore();
+        if (score >= _drawing._cache_score_threshold) {
+            CacheRecord cr;
+            cr.score = score;
+            // if _cacheRect() is empty, a negative score will be returned from _cacheScore(),
+            // so this will not execute (cache score threshold must be positive)
+            cr.cache_size = _cacheRect()->area() * 4;
+            cr.item = this;
+            _drawing._candidate_items.push_front(cr);
+            _cache_iterator = _drawing._candidate_items.begin();
+            _has_cache_iterator = true;
+        }
+
         /* Update cache if enabled.
-        * General note: here we only tell the cache how it has to transform
-        * during the render phase. The transformation is deferred because
-        * after the update the item can have its caching turned off,
-        * e.g. because its filter was removed. This way we avoid tempoerarily
-        * using more memory than the cache budget */
-        if (nthreds == 1 || !onRender()) {    
-            if (_cache) {
-                Geom::OptIntRect cl = _cacheRect();
-                if (_visible && cl) { // never create cache for invisible items
-                    // this takes care of invalidation on transform
-                    _cache->scheduleTransform(*cl, ctm_change);
-                } else {
-                    // Destroy cache for this item - outside of canvas or invisible.
-                    // The opposite transition (invisible -> visible or object
-                    // entering the canvas) is handled during the render phase
-                    delete _cache;
-                    _cache = nullptr;
-                }
+         * General note: here we only tell the cache how it has to transform
+         * during the render phase. The transformation is deferred because
+         * after the update the item can have its caching turned off,
+         * e.g. because its filter was removed. This way we avoid tempoerarily
+         * using more memory than the cache budget */
+        if (_cache) {
+            Geom::OptIntRect cl = _cacheRect();
+            if (_visible && cl) { // never create cache for invisible items
+                // this takes care of invalidation on transform
+                _cache->scheduleTransform(*cl, ctm_change);
+            } else {
+                // Destroy cache for this item - outside of canvas or invisible.
+                // The opposite transition (invisible -> visible or object
+                // entering the canvas) is handled during the render phase
+                delete _cache;
+                _cache = nullptr;
             }
         }
     }
