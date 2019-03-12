@@ -2194,8 +2194,7 @@ The default for now is the strips mode.
     }
 }
 
-
-unsigned SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
+bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 {
     GtkAllocation allocation;
     g_return_val_if_fail (!_need_update, false);
