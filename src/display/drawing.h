@@ -22,7 +22,6 @@
 #include "display/drawing-item.h"
 #include "display/rendermode.h"
 #include "nr-filter-colormatrix.h"
-#include <thread>
 
 typedef struct _SPCanvasArena SPCanvasArena;
 typedef unsigned int guint32;
@@ -63,9 +62,8 @@ public:
     void setExact(bool e);
     bool getExact() const { return _exact; };
     std::set<DrawingItem *> getCachedItems() const { return _cached_items; };
-    bool getThreadInvalid(std::thread::id thread_id) const;
-    void setThreadInvalid(std::thread::id thread_id);
-    void setThreadValid(std::thread::id thread_id);
+    bool getValidRender() const  { return _valid_render; };
+    void setValidRender(bool valid_render);
     void setIdleId(guint idle_id);
     guint getIdleId() const { return _idle_id; };
     void setOutlineSensitive(bool e);
@@ -106,7 +104,7 @@ private:
     ColorMode _colormode;
     int _blur_quality;
     int _filter_quality;
-    std::vector<std::thread::id> _invalid_thread;
+    bool _valid_render;;
     Geom::OptIntRect _cache_limit;
 
     double _cache_score_threshold; ///< do not consider objects for caching below this score

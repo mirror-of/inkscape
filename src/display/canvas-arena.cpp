@@ -196,7 +196,6 @@ sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     Inkscape::DrawingContext dc(buf->ct, r->min());
 
-    arena->drawing.update(Geom::IntRect::infinite(), arena->ctx);
     arena->drawing.render(dc, *r);
 }
 

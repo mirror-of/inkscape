@@ -2252,10 +2252,9 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 #if HAVE_OPENMP
     nthreds = prefs->getInt("/options/threading/renderthreads");
 #endif
+    bool ret = true;
     if(nthreds > 1) {
         // see paintRectInternal for comments
-        bool ret = 1;
-        bool tmpret = 1;
         // end duple code
         int splits = 1 + (paint_rect.height() * paint_rect.width() / setup.max_pixels);
         int splitsize = std::ceil(paint_rect.height()/(double)splits);
@@ -2265,6 +2264,8 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
             SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            arena->drawing.update(Geom::IntRect::infinite(), arena->ctx);
+            arena->drawing.setValidRender(true);
             std::vector<Geom::IntRect> painted;
             #pragma omp parallel for schedule(dynamic) num_threads(std::min(nthreds,omp_get_max_threads()))
             for (int i = 0; i > splits ; i++)
@@ -2280,8 +2281,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
                         if (_forced_redraw_limit != -1) {
                             _forced_redraw_count++;
                         }
-                        tmpret = 0;
-                        ret = 0;
+                        ret = false;
                     }
                 }
                 Geom::IntRect r =  Geom::IntRect::from_xywh(paint_rect.left(), 
@@ -2289,21 +2289,19 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
                                                             paint_rect.width(),
                                                             splitsize);
                 Geom::OptIntRect area = r & paint_rect;
-                if (tmpret && area && !area->hasZeroArea()) {
+                if (ret && area && !area->hasZeroArea()) {
                     r = *area;
                     paintSingleBuffer(r, setup.canvas_rect, r.height());
                     #pragma omp critical
                     {
-                        if (arena->drawing.getThreadInvalid(std::this_thread::get_id())){
-                            arena->drawing.setThreadValid(std::this_thread::get_id());
-                            ret = 0;
+                        if (!arena->drawing.getValidRender()){
+                            ret = false;
                         } else {
                             painted.push_back(r);
                         }
                     }
-                    //g_get_current_time(&(setup.start_time));
+                    g_get_current_time(&(setup.start_time));
                 }
-                tmpret = 1;
 #ifdef DEBUG_CANVAS
                 printf("t_thread_inside%d\n", omp_get_thread_num());
 #endif
@@ -2312,25 +2310,25 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
             // 5 ms delay on Windows!
             #pragma omp critical
             printf("t_thread%d=%llu\n", omp_get_thread_num());
-            ret = 0;
+            ret = false;
             #endif
             cairo_surface_mark_dirty(_backing_store);
             // cairo_surface_write_to_png( _backing_store, "debug3.png" );
             for (auto r: painted) { 
                 // Mark the painted rectangle clean
                 markRect(r, 0);
+                gtk_widget_queue_draw_area(GTK_WIDGET(this), r.left() -_x0, r.top() - _y0,
+                    r.width(), r.height());
             }
-            gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
-                    paint_rect.width(), paint_rect.height());
-            /* if (ret) {
-                std::set<Inkscape::DrawingItem*> cached_items = arena->drawing.getCachedItems();
-                for (auto j : cached_items) {
-                    j->setCached(false);
-                }
-            } */
+            
         }
         return ret;
     } else {
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            arena->drawing.update(Geom::IntRect::infinite(), arena->ctx);
+        }
         return paintRectInternal(&setup, paint_rect);
     }   
 }
