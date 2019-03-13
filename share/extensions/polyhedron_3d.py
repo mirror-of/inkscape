@@ -194,9 +194,9 @@ def draw_faces( faces_data, pts, obj, shading, fill_col,st, parent):
 def get_darkened_colour(_r_g_b, factor):
 #return a hex triplet of colour, reduced in lightness proportionally to a value between 0 and 1
     (r, g, b) = _r_g_b
-    return  '#' + "%02X" % floor( factor*r ) \
-                + "%02X" % floor( factor*g ) \
-                + "%02X" % floor( factor*b ) #make the colour string
+    return  '#' + "%02X" % int( factor*r ) \
+                + "%02X" % int( factor*g ) \
+                + "%02X" % int( factor*b ) #make the colour string
 
 def make_rotation_log(options):
 #makes a string recording the axes and angles of each roation, so an object can be repeated
@@ -524,7 +524,7 @@ class Poly_3D(inkex.Effect):
                     if so.back or norm[2] > 0: # include all polygons or just the front-facing ones as needed
                         z_list.append((z_sort_param, angle, norm, i))#record the maximum z-value of the face and angle to light, along with the face ID and normal
                 
-                z_list.sort(lambda x, y: cmp(x[0],y[0])) #sort by ascending sort parameter of the face
+                z_list.sort(key=lambda x: x[0]) #sort by ascending sort parameter of the face
                 draw_faces( z_list, transformed_pts, obj, so.shade, fill_col, st, poly)
 
             else:#we cannot generate a list of faces from the edges without a lot of computation
