@@ -737,18 +737,15 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint nthreds = prefs->getInt("/options/threading/renderthreads", 1);
     if (nthreds > 1) {
-        if (!_drawing.getValidRender()) {
-            return RENDER_STOP;
-        }
         // We prevent multiple render of filtered elements for diferent threads
         // mark by this way to render in the next idle loop but too much faster
         // because the filtered element is full render in cache (if there is cache).
-        while(onRender()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            /*if (onRender()) {
+        if(onRender()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(3));
+            if (onRender()) {
                 _drawing.setValidRender(false);
                 return RENDER_STOP;
-            } */
+            }
         }
     }
 

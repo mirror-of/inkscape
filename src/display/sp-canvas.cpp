@@ -2270,6 +2270,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
             #pragma omp parallel for schedule(dynamic) num_threads(std::min(nthreds,omp_get_max_threads()))
             for (int i = 0; i > splits ; i++)
             {
+                bool tmpret = true;
                 GTimeVal now;
                 g_get_current_time (&now);
                 glong elapsed = (now.tv_sec - setup.start_time.tv_sec) * 1000000
@@ -2281,6 +2282,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
                         if (_forced_redraw_limit != -1) {
                             _forced_redraw_count++;
                         }
+                        tmpret = false;
                         ret = false;
                     }
                 }
@@ -2289,7 +2291,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
                                                             paint_rect.width(),
                                                             splitsize);
                 Geom::OptIntRect area = r & paint_rect;
-                if (ret && area && !area->hasZeroArea()) {
+                if (tmpret && area && !area->hasZeroArea()) {
                     r = *area;
                     paintSingleBuffer(r, setup.canvas_rect, r.height());
                     #pragma omp critical
@@ -2300,7 +2302,8 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
                             painted.push_back(r);
                         }
                     }
-                    g_get_current_time(&(setup.start_time));
+                } else {
+                    tmpret = true;
                 }
 #ifdef DEBUG_CANVAS
                 printf("t_thread_inside%d\n", omp_get_thread_num());

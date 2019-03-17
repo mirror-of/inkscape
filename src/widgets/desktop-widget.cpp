@@ -210,14 +210,15 @@ static CMSPrefWatcher* watcher = nullptr;
 void
 SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
 {
-    _select_status->set_markup(message ? message : "");
+//https://pastebin.com/qLFv2e1P
+//    _select_status->set_markup(message ? message : "");
 
-    // make sure the important messages are displayed immediately!
-    if (type == Inkscape::IMMEDIATE_MESSAGE && _select_status->get_is_drawable()) {
-        _select_status->queue_draw();
-    }
+//    // make sure the important messages are displayed immediately!
+//    if (type == Inkscape::IMMEDIATE_MESSAGE && _select_status->get_is_drawable()) {
+//        _select_status->queue_draw();
+//    }
 
-    _select_status->set_tooltip_text(_select_status->get_text());
+//    _select_status->set_tooltip_text(_select_status->get_text());
 }
 
 Geom::Point
