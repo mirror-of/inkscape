@@ -483,7 +483,6 @@ share/extensions/wireframe_sphere.py
 [type: gettext/xml] share/extensions/funcplot.inx
 [type: gettext/xml] share/extensions/gcodetools_about.inx
 [type: gettext/xml] share/extensions/gcodetools_area.inx
-[type: gettext/xml] share/extensions/gcodetools_check_for_updates.inx
 [type: gettext/xml] share/extensions/gcodetools_dxf_points.inx
 [type: gettext/xml] share/extensions/gcodetools_engraving.inx
 [type: gettext/xml] share/extensions/gcodetools_graffiti.inx

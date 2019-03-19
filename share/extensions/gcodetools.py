@@ -6321,37 +6321,6 @@ G01 Z1 (going to cutting z)\n""",
 							
 							
 ################################################################################
-###
-### Update function
-###
-###	Gets file containing version information from the web and compaares it with.
-###	current version.
-################################################################################
-	
-	def update(self) :
-		try :
-			if sys.version_info[0] < 3:
-				import urllib2
-			else:
-				import urllib.request as urllib2
-			f = urllib2.urlopen("http://www.cnc-club.ru/gcodetools_latest_version")
-			a = f.read().decode()
-			for s in a.split("\n") :
-				r = re.search(r"Gcodetools\s+latest\s+version\s*=\s*(.*)",s)
-				if r : 
-					ver = r.group(1).strip()
-					if ver != gcodetools_current_version :
-						self.error("There is a newer version of Gcodetools you can get it at: \nhttp://www.cnc-club.ru/gcodetools (English version). \nhttp://www.cnc-club.ru/gcodetools_ru (Russian version). ","Warning")					
-					else :
-						self.error("You are currently using latest stable version of Gcodetools.","Warning")					
-					return 
-			self.error("Can not check the latest version. You can check it manualy at \nhttp://www.cnc-club.ru/gcodetools (English version). \nhttp://www.cnc-club.ru/gcodetools_ru (Russian version). \nCurrent version is Gcodetools %s"%gcodetools_current_version,"Warning")					
-		except :
-			self.error("Can not check the latest version. You can check it manualy at \nhttp://www.cnc-club.ru/gcodetools (English version). \nhttp://www.cnc-club.ru/gcodetools_ru (Russian version). \nCurrent version is Gcodetools %s"%gcodetools_current_version,"Warning")					
-				
-
-
-################################################################################
 ### Graffiti function generates Gcode for graffiti drawer
 ################################################################################
 	def graffiti(self) :
@@ -6689,7 +6658,7 @@ G01 Z1 (going to cutting z)\n""",
 		elif self.options.active_tab ==  '"test"' :
 			self.test()
 			
-		elif self.options.active_tab not in ['"dxfpoints"','"path-to-gcode"', '"area_fill"', '"area"', '"area_artefacts"', '"engraving"', '"orientation"', '"tools_library"', '"lathe"', '"offset"', '"arrangement"', '"update"', '"graffiti"', '"lathe_modify_path"', '"plasma-prepare-path"']:
+		elif self.options.active_tab not in ['"dxfpoints"','"path-to-gcode"', '"area_fill"', '"area"', '"area_artefacts"', '"engraving"', '"orientation"', '"tools_library"', '"lathe"', '"offset"', '"arrangement"', '"graffiti"', '"lathe_modify_path"', '"plasma-prepare-path"']:
 			self.error(_("Select one of the action tabs - Path to Gcode, Area, Engraving, DXF points, Orientation, Offset, Lathe or Tools library.\n Current active tab id is %s" % self.options.active_tab),"error")
 		else:
 			# Get all Gcodetools data from the scene.
@@ -6729,8 +6698,6 @@ G01 Z1 (going to cutting z)\n""",
 				self.lathe()
 			elif self.options.active_tab == '"lathe_modify_path"': 
 				self.lathe_modify_path()
-			elif self.options.active_tab == '"update"': 
-				self.update()
 			elif self.options.active_tab == '"offset"': 
 				if self.options.offset_just_get_distance :
 					for layer in self.selected_paths :
