@@ -274,6 +274,13 @@ Selection::restoreBackup()
             add(item);
         }
     }
+    std::vector<SPObject *> selected = document->getObjectsBySelector(".selected");
+    for (auto& obj: selected) {
+        SPItem * item = dynamic_cast<SPItem *>(obj);
+        add(item);
+        item->removeAttribute("class");
+    }
+
     if (tool) {
         Inkscape::UI::ControlPointSelection *cps = tool->_selected_nodes;
         cps->selectAll();
