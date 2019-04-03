@@ -17,6 +17,7 @@ Build-Depends:
  libboost-dev,
  libcairo2-dev (>=1.12.16),
  libcdr-dev,
+ libdouble-conversion-dev,
  libdbus-1-dev,
  libdbus-glib-1-dev,
  libgc-dev (>= 1:6.8),
