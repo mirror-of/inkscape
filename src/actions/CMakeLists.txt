@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set(actions_SRC
-  # actions-base.cpp
-  # actions-selection.cpp
+  actions-canvas-transform.cpp
+  actions-canvas-snapping.cpp
 
   # HEADERS
-  # actions-base.h
-  # actions-selection.h
+  actions-canvas-transform.h
+  actions-canvas-snapping.h
   )
 
 add_inkscape_source("${actions_SRC}")

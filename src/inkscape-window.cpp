@@ -21,6 +21,8 @@
 #include "shortcuts.h"
 #include "inkscape-application.h"
 
+#include "actions/actions-canvas-transform.h"
+
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
 #include "ui/drag-and-drop.h"  // Move to canvas?
@@ -49,7 +51,12 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     ink_drag_setup(this);
 
-     // =============== Build interface ===============
+    // =================== Actions ===================
+    add_actions_canvas_transform(this);    // Actions to transform canvas view.
+
+    insert_action_group("doc", document->getActionGroup());
+
+    // =============== Build interface ===============
 
     // Main box
     _mainbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
@@ -79,8 +86,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
     signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
-
-    // =================== Actions ===================
 
 
     // ================ Window Options ==============
@@ -131,6 +136,18 @@ InkscapeWindow::setup_view()
     SPNamedView *nv = _desktop->namedview;
     if (nv && nv->lockguides) {
         nv->lockGuides();
+    }
+}
+
+// Change a document, leaving desktop/view the same. (Eventually move all code here.)
+void
+InkscapeWindow::change_document(SPDocument* document)
+{
+    _document = document;
+    if (_app) {
+        _app->set_active_document(_document);
+    } else {
+        std::cerr << "Inkscapewindow::change_document: app is nullptr!" << std::endl;
     }
 }
 

@@ -28,12 +28,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gtkmm.h>
 #include <glibmm/i18n.h>
-#include <gtk/gtk.h>
-#include <gtkmm/action.h>
-#include <gtkmm/actiongroup.h>
-#include <gtkmm/box.h>
-#include <gtkmm/toolitem.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
@@ -439,6 +435,33 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
     gtk_widget_set_name(tb, "SnapToolbox");
     gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 
+    Glib::ustring snap_toolbar_builder_file = get_filename(UIS, "snap-toolbar-new.ui");
+    auto builder = Gtk::Builder::create();
+    try
+    {
+        builder->add_from_file(snap_toolbar_builder_file);
+    }
+    catch (const Glib::Error& ex)
+    {
+        std::cerr << "ToolboxFactor::createSnapToolbox: " << snap_toolbar_builder_file << " file not read! " << ex.what() << std::endl;
+    }
+
+    Gtk::Toolbar* toolbar = nullptr;
+    builder->get_widget("snap-toolbar", toolbar);
+    if (!toolbar) {
+        std::cerr << "InkscapeWindow: Failed to load snap toolbar!" << std::endl;
+    } else {
+        gtk_box_pack_start(GTK_BOX(tb), GTK_WIDGET(toolbar->gobj()), false, false, 0);
+
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if ( prefs->getBool("/toolbox/icononly", true) ) {
+            toolbar->set_toolbar_style( Gtk::TOOLBAR_ICONS );
+        }
+
+        GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+        toolbar->set_icon_size (static_cast<Gtk::IconSize>(toolboxSize));
+    }
+
     return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
 }
 
@@ -517,6 +540,18 @@ static void setupToolboxCommon( GtkWidget *toolbox,
                                 gchar const* toolbarName,
                                 gchar const* sizePref )
 {
+    // We've already built Snap toolbar using Gio::Actions so skip it here.
+    // We may be missing some of the things set below... but keep it simple for now.
+    if (strcmp(toolbarName, "/ui/SnapToolbar") == 0) {
+        GtkWidget* child = gtk_bin_get_child(GTK_BIN(toolbox));
+        if (child) {
+            gtk_widget_set_sensitive( child, true );
+        } else {
+            std::cerr << "setupToolboxCommon: failed to find /ui/SnapToolbar!" << std::endl;
+        }
+        return;
+    }
+
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 

@@ -20,6 +20,7 @@
 #include "ui/tools/tool-base.h"
 #include "live_effects/effect-enum.h"
 
+
 struct SPCanvasItem;
 class SPCurve;
 struct SPDrawAnchor;
@@ -58,15 +59,16 @@ public:
     guint32 green_color;
     guint32 highlight_color;
 
-    // Red
+    // Red - Last segment as it's drawn.
     SPCanvasItem *red_bpath;
     SPCurve *red_curve;
+    boost::optional<Geom::Point> red_curve_get_last_point();
 
-    // Blue
+    // Blue - New path after LPE as it's drawn.
     SPCanvasItem *blue_bpath;
     SPCurve *blue_curve;
 
-    // Green
+    // Green - New path as it's drawn.
     std::vector<SPCanvasItem*> green_bpaths;
     SPCurve *green_curve;
     SPDrawAnchor *green_anchor;
@@ -87,7 +89,7 @@ public:
     SPDrawAnchor *ea;
 
 
-    /* type of the LPE that is to be applied automatically to a finished path (if any) */
+    /* Type of the LPE that is to be applied automatically to a finished path (if any) */
     Inkscape::LivePathEffect::EffectType waiting_LPE_type;
 
     sigc::connection sel_changed_connection;
