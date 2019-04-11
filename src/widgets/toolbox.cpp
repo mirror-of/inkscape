@@ -312,18 +312,6 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
         SP_VERB_SELECTION_GROUP,
         SP_VERB_SELECTION_OUTLINE,
         SP_VERB_SELECTION_UNGROUP,
-        SP_VERB_ZOOM_1_1,
-        SP_VERB_ZOOM_1_2,
-        SP_VERB_ZOOM_2_1,
-        SP_VERB_ZOOM_DRAWING,
-        SP_VERB_ZOOM_IN,
-        SP_VERB_ZOOM_NEXT,
-        SP_VERB_ZOOM_OUT,
-        SP_VERB_ZOOM_PAGE,
-        SP_VERB_ZOOM_PAGE_WIDTH,
-        SP_VERB_ZOOM_PREV,
-        SP_VERB_ZOOM_SELECTION,
-        SP_VERB_ZOOM_CENTER_PAGE
     };
 
     GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
