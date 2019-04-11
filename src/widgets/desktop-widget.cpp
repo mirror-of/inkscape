@@ -1842,7 +1842,6 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         _vruler_box->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
 
         update_rulers();
-        ToolboxFactory::updateSnapToolbox(this->desktop, nullptr, this->snap_toolbox);
     }
 }
 
