@@ -39,6 +39,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/convert.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/regex.h>
 
 #include "helper/action.h"
 #include "io/dir-util.h"
@@ -657,7 +658,24 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
             continue;
         }
 
+        // Handle shortcuts for Gio::Actions
+        gchar const *gaction = iter->attribute("gaction");
+        gchar const *keys    = iter->attribute("keys");
+        if (gaction && keys) {
+
+            std::vector<Glib::ustring> key_vector = Glib::Regex::split_simple("\\s*,\\s*", keys);
+
+            Glib::RefPtr<Gio::Application> gapp = Gio::Application::get_default();
+            Glib::RefPtr<Gtk::Application> app = Glib::RefPtr<Gtk::Application>::cast_dynamic(gapp);
+
+            app->set_accels_for_action(gaction, key_vector);
+
+            continue;
+        }
+
+        // Handle shortcuts for Inkscape verbs (legacy)
         gchar const *verb_name=iter->attribute("action");
+
         if (!verb_name) {
             g_warning("Missing verb name (action= attribute) for shortcut");
             continue;
