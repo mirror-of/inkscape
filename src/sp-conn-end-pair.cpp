@@ -319,6 +319,8 @@ SPConnEndPair::isAutoRoutingConn(void)
 void
 SPConnEndPair::makePathInvalid(void)
 {
+    g_assert(_connRef != NULL);
+
     _connRef->makePathInvalid();
 }
 
@@ -327,6 +329,8 @@ SPConnEndPair::makePathInvalid(void)
 // Straight or curved
 void recreateCurve(SPCurve *curve, Avoid::ConnRef *connRef, const gdouble curvature)
 {
+    g_assert(connRef != NULL);
+
     bool straight = curvature<1e-3;
 
     Avoid::PolyLine route = connRef->displayRoute();
@@ -366,7 +370,7 @@ void recreateCurve(SPCurve *curve, Avoid::ConnRef *connRef, const gdouble curvat
 void
 SPConnEndPair::tellLibavoidNewEndpoints(const bool processTransaction)
 {
-    if (!isAutoRoutingConn()) {
+    if (_connRef == NULL || !isAutoRoutingConn()) {
         // Do nothing
         return;
     }
@@ -390,7 +394,7 @@ SPConnEndPair::tellLibavoidNewEndpoints(const bool processTransaction)
 bool
 SPConnEndPair::reroutePathFromLibavoid(void)
 {
-    if (!isAutoRoutingConn()) {
+    if (_connRef == NULL || !isAutoRoutingConn()) {
         // Do nothing
         return false;
     }
