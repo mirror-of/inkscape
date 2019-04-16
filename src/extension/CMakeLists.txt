@@ -32,7 +32,6 @@ set(extension_SRC
 	param/string.cpp
 
 	internal/bluredge.cpp
-	internal/cairo-png-out.cpp
 	internal/cairo-ps-out.cpp
 	internal/cairo-render-context.cpp
 	internal/cairo-renderer.cpp
@@ -98,7 +97,6 @@ set(extension_SRC
 	implementation/xslt.h
 
 	internal/bluredge.h
-	internal/cairo-png-out.h
 	internal/cairo-ps-out.h
 	internal/cairo-render-context.h
 	internal/cairo-renderer-pdf-out.h
