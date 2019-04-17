@@ -231,8 +231,7 @@ override) the bindings in the main default.xml.
   <bind key="bar" modifiers="Shift" action="ToggleGuides" /> <!-- | -->
   <bind key="bar" action="ToggleGuides" display="true" />
 
-  <bind key="percent" action="ToggleSnapGlobal" display="true" /> <!-- % -->
-  <bind key="percent" modifiers="Shift" action="ToggleSnapGlobal" />
+  <bind gaction="doc.snap-global-toggle"      keys="percent, &lt;Shift&gt;percent" />
 
   <bind action="ToggleCommandsToolbar" />
   <bind action="ToggleSnapToolbar" />
