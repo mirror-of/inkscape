@@ -2463,6 +2463,74 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
     }
 
+    // Gio::Actions
+
+    // We need to find three lists of actions
+    Glib::RefPtr<Gio::Application> gapp = Gio::Application::get_default();
+    Glib::RefPtr<Gtk::Application> app = Glib::RefPtr<Gtk::Application>::cast_dynamic(gapp);
+
+    std::vector<Glib::ustring> actions; // All actions (app, win, doc)
+
+    std::vector<Glib::ustring> actions_app = app->list_actions();
+    for (auto action : actions_app) {
+        actions.push_back("app." + action);
+    }
+
+    Gtk::Window* gtkwin = app->get_active_window();
+    InkscapeWindow* win = dynamic_cast<InkscapeWindow*>(gtkwin);
+
+    if (win) {
+        std::vector<Glib::ustring> actions_win = win->list_actions();
+        for (auto action : actions_win) {
+            actions.push_back("win." + action);
+        }
+
+        SPDocument* document = win->get_document();
+        std::vector<Glib::ustring> actions_doc = document->getActionGroup()->list_actions();
+        for (auto action : actions_doc) {
+            actions.push_back("doc." + action);
+        }
+
+    } else {
+        std::cerr << " Didn't find window" << std::endl;
+    }
+
+
+    // We'll create an actions group for now
+    Gtk::TreeStore::iterator iter_group;
+    iter_group = _kb_store->append();
+    (*iter_group)[_kb_columns.name] = "Gio::Actions";
+    (*iter_group)[_kb_columns.shortcut] = "";
+    (*iter_group)[_kb_columns.description] = "";
+    (*iter_group)[_kb_columns.shortcutid] = 0;
+    (*iter_group)[_kb_columns.id] = "";
+    (*iter_group)[_kb_columns.user_set] = 0;
+
+    for (auto action : actions) {
+
+        // Find accelerator
+        std::vector<Glib::ustring> keys = app->get_accels_for_action(action);
+        // std::cout << "action: ";
+        // for (auto key : keys) {
+        //     std::cout << key << ", ";
+        // }
+        // std::cout << std::endl;
+
+        Glib::ustring shortcut_label;
+        if (!keys.empty()) {
+            shortcut_label = Glib::Markup::escape_text(keys[0]);
+        }
+
+        // Add the verb to the group
+        Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
+        (*row)[_kb_columns.name] =  action;
+        (*row)[_kb_columns.shortcut] = shortcut_label;
+        (*row)[_kb_columns.description] = "";
+        (*row)[_kb_columns.shortcutid] = 0;
+        (*row)[_kb_columns.id] = "";
+        (*row)[_kb_columns.user_set] = false;
+    }
+
     // re-order once after updating (then disable ordering again to increase performance)
     _kb_store->set_sort_column (_kb_columns.id, Gtk::SORT_ASCENDING );
     _kb_store->set_sort_column ( GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, Gtk::SORT_ASCENDING );
