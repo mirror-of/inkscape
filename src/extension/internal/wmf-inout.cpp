@@ -115,6 +115,9 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
     /* Print document */
     if (mod->begin(doc)) {
         g_free(oldoutput);
+        mod->base->invoke_hide(mod->dkey);
+        mod->base = NULL;
+        mod->root = NULL;
         throw Inkscape::Extension::Output::save_failed();
     }
     mod->base->invoke_print(&context);
