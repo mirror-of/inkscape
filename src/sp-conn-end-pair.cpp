@@ -59,6 +59,7 @@ SPConnEndPair::release()
         this->_connEnd[handle_ix]->_changed_connection.disconnect();
         this->_connEnd[handle_ix]->_delete_connection.disconnect();
         this->_connEnd[handle_ix]->_transformed_connection.disconnect();
+        this->_connEnd[handle_ix]->_group_connection.disconnect();
         g_free(this->_connEnd[handle_ix]->href);
         this->_connEnd[handle_ix]->href = NULL;
         this->_connEnd[handle_ix]->ref.detach();
