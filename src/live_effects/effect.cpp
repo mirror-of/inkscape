@@ -61,6 +61,7 @@
 #include "live_effects/lpe-show_handles.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-sketch.h"
+#include "live_effects/lpe-slice.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-tangent_to_curve.h"
 #include "live_effects/lpe-taperstroke.h"
@@ -866,6 +867,20 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "experimental" //icon
         , "Text label" //untranslated name
         , N_("Text label") //description
+        , true  //on_path
+        , true  //on_shape
+        , true  //on_group
+        , false //on_image
+        , false //on_text
+        , true //experimental
+    },
+    {
+        SLICE
+        , N_("Slice item") //label
+        , "slice" //key
+        , "slice" //icon
+        , "Slice item" //untranslated name
+        , N_("Slice an object along a movable axis. The sliced copy can be styled independently.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group

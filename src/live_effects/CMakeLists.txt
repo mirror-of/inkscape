@@ -51,6 +51,7 @@ set(live_effects_SRC
 	lpe-simplify.cpp
 	lpe-skeleton.cpp
 	lpe-sketch.cpp
+	lpe-slice.cpp
 	lpe-spiro.cpp
 	lpe-tangent_to_curve.cpp
 	lpe-taperstroke.cpp
@@ -145,6 +146,7 @@ set(live_effects_SRC
 	lpe-simplify.h
 	lpe-skeleton.h
 	lpe-sketch.h
+	lpe-slice.h
 	lpe-spiro.h
 	lpe-tangent_to_curve.h
 	lpe-taperstroke.h
