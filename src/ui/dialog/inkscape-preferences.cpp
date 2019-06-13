@@ -45,7 +45,8 @@
 #include "shortcuts.h"
 #include "verbs.h"
 
-/* #include "display/cairo-utils.h" */
+#include "actions/actions-extras.h"
+
 #include "display/canvas-grid.h"
 #include "display/nr-filter-gaussian.h"
 
@@ -2497,14 +2498,16 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
 
     // We'll create an actions group for now
-    Gtk::TreeStore::iterator iter_group;
-    iter_group = _kb_store->append();
-    (*iter_group)[_kb_columns.name] = "Gio::Actions";
-    (*iter_group)[_kb_columns.shortcut] = "";
-    (*iter_group)[_kb_columns.description] = "";
-    (*iter_group)[_kb_columns.shortcutid] = 0;
-    (*iter_group)[_kb_columns.id] = "";
-    (*iter_group)[_kb_columns.user_set] = 0;
+    // Gtk::TreeStore::iterator iter_group;
+    // iter_group = _kb_store->append();
+    // (*iter_group)[_kb_columns.name] = "Gio::Actions";
+    // (*iter_group)[_kb_columns.shortcut] = "";
+    // (*iter_group)[_kb_columns.description] = "";
+    // (*iter_group)[_kb_columns.shortcutid] = 0;
+    // (*iter_group)[_kb_columns.id] = "";
+    // (*iter_group)[_kb_columns.user_set] = 0;
+
+    std::map<Glib::ustring, Gtk::TreeStore::iterator> section_map;
 
     for (auto action : actions) {
 
@@ -2521,14 +2524,30 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             shortcut_label = Glib::Markup::escape_text(keys[0]);
         }
 
+        Glib::ustring section = InkActionExtras::get_section_for_action(action);
+        Gtk::TreeStore::iterator iter_group;
+        auto iter_map = section_map.find(section);
+        if (iter_map == section_map.end()) {
+            iter_group = _kb_store->append();
+            (*iter_group)[_kb_columns.name] = "Gio::Actions: " + section;
+            (*iter_group)[_kb_columns.shortcut] = "";
+            (*iter_group)[_kb_columns.description] = "";
+            (*iter_group)[_kb_columns.shortcutid] = 0;
+            (*iter_group)[_kb_columns.id] = "";
+            (*iter_group)[_kb_columns.user_set] = 0;
+            section_map[section] = iter_group;
+        } else {
+            iter_group = iter_map->second;
+        }
+
         // Add the verb to the group
         Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
-        (*row)[_kb_columns.name] =  action;
-        (*row)[_kb_columns.shortcut] = shortcut_label;
-        (*row)[_kb_columns.description] = "";
-        (*row)[_kb_columns.shortcutid] = 0;
-        (*row)[_kb_columns.id] = "";
-        (*row)[_kb_columns.user_set] = false;
+        (*row)[_kb_columns.name]        = InkActionExtras::get_label_for_action(action);
+        (*row)[_kb_columns.shortcut]    = shortcut_label;
+        (*row)[_kb_columns.description] = InkActionExtras::get_tooltip_for_action(action);
+        (*row)[_kb_columns.shortcutid]  = 0;
+        (*row)[_kb_columns.id]          = action;
+        (*row)[_kb_columns.user_set]    = false;
     }
 
     // re-order once after updating (then disable ordering again to increase performance)

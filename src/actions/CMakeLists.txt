@@ -3,10 +3,12 @@
 set(actions_SRC
   actions-canvas-transform.cpp
   actions-canvas-snapping.cpp
+  actions-extras.cpp
 
   # HEADERS
   actions-canvas-transform.h
   actions-canvas-snapping.h
+  actions-extras.h
   )
 
 add_inkscape_source("${actions_SRC}")
