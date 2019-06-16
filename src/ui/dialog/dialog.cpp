@@ -95,7 +95,7 @@ Dialog::~Dialog()
 void Dialog::addTopWindowClasses()
 {
     Gtk::Window *toplevel_window = dynamic_cast<Gtk::Window *>(canvas->get_toplevel());
-    if (toplevel_window){
+    if (toplevel_window) {
         if (toplevel_window->style_context->has_class("dark")) {
             style_context->add_class("dark");
             style_context->remove_class("bright");

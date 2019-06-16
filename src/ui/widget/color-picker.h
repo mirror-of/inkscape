@@ -18,12 +18,12 @@
 
 #include <cstddef>
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/window.h>
-#include <gtkmm/button.h>
-#include <sigc++/sigc++.h>
 #include "ui/selected-color.h"
 #include "ui/widget/color-preview.h"
+#include <gtkmm/button.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/window.h>
+#include <sigc++/sigc++.h>
 
 struct SPColorSelector;
 
