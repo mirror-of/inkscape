@@ -37,7 +37,6 @@ ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip,
     _preview.show();
     add (_preview);
     set_tooltip_text (tip);
-
     _selected_color.signal_changed.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
     _selected_color.signal_dragged.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
     _selected_color.signal_released.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
@@ -52,16 +51,25 @@ void ColorPicker::setupDialog(const Glib::ustring &title)
 {
     GtkWidget *dlg = GTK_WIDGET(_colorSelectorDialog.gobj());
     sp_transientize(dlg);
-
+    
     _colorSelectorDialog.hide();
     _colorSelectorDialog.set_title (title);
     _colorSelectorDialog.set_border_width (4);
 
     _color_selector = Gtk::manage(new ColorNotebook(_selected_color));
-
+    if(_transientwindow) {
+        Glib::RefPtr< Gdk::Window > window = get_parent_window();
+        if (window) {
+            window->set_transient_for(_transientwindow);
+        }
+    }
     _colorSelectorDialog.get_content_area()->pack_start (
               *_color_selector, true, true, 0);
     _color_selector->show();
+}
+
+void ColorPicker::setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow){
+    _transientwindow = transientwindow;
 }
 
 void ColorPicker::setRgba32 (guint32 rgba)

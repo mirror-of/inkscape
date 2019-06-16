@@ -51,7 +51,7 @@
 #include "extension/internal/gdkpixbuf-input.h"
 
 #include "include/gtkmm_version.h"
-
+#include "ui/icon-loader.h"
 #include "io/resource.h"
 #include "io/sys.h"
 
@@ -650,7 +650,12 @@ void InkscapePreferences::symbolicDefaultColor(){
     }
 
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    INKSCAPE.signal_change_theme.emit();
+}
 
+void InkscapePreferences::symbolicChangeColors(guint32 /*color*/)
+{
+    symbolicAddClass();
 }
 
 void InkscapePreferences::symbolicAddClass()
@@ -731,6 +736,7 @@ void InkscapePreferences::symbolicAddClass()
 
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+    INKSCAPE.signal_change_theme.emit();
 }
 void InkscapePreferences::themeChange()
 {
@@ -761,6 +767,7 @@ void InkscapePreferences::themeChange()
             window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
         }
+        INKSCAPE.signal_change_theme.emit();
     }
 }
 
@@ -996,20 +1003,39 @@ void InkscapePreferences::initPageUI()
     _symbolic_success_color.init(_("Color for symbolic success icons:"), "/theme/symbolicSuccessColor", 0x4AD589ff);
     _symbolic_warning_color.init(_("Color for symbolic warning icons:"), "/theme/symbolicWarningColor", 0xF57900ff);
     _symbolic_error_color.init(_("Color for symbolic error icons:"), "/theme/symbolicErrorColor", 0xcc0000ff);
+    _symbolic_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::symbolicChangeColors));
+    _symbolic_warning_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::symbolicChangeColors));
+    _symbolic_success_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::symbolicChangeColors));
+    _symbolic_error_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::symbolicChangeColors));
+    Gtk::Image *normal = Gtk::manage(sp_get_icon_image("tool-pointer", Gtk::ICON_SIZE_BUTTON));
+    Gtk::Image *success = Gtk::manage(sp_get_icon_image("tool-spray", Gtk::ICON_SIZE_BUTTON));
+    Gtk::Image *warning = Gtk::manage(sp_get_icon_image("tool-tweak", Gtk::ICON_SIZE_BUTTON));
+    Gtk::Image *error = Gtk::manage(sp_get_icon_image("tool-measure", Gtk::ICON_SIZE_BUTTON));
+    Glib::RefPtr< Gdk::Window > window = get_parent_window();
+    if (window) {
+        _symbolic_color.setTransientFor(window);
+        _symbolic_success_color.setTransientFor(window);
+        _symbolic_warning_color.setTransientFor(window);
+        _symbolic_error_color.setTransientFor(window);
+    }
     Gtk::Label *_symbolic_color_label = Gtk::manage(new Gtk::Label(_("Change colors:")));
-    Gtk::Button *apply_color = Gtk::manage(new Gtk::Button(_("Apply color")));
-    apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
-    apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
+    //Gtk::Button *apply_color = Gtk::manage(new Gtk::Button(_("Apply color")));
+    //apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
+    //apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     Gtk::Button *theme_decide_color = Gtk::manage(new Gtk::Button(_("Theme decides")));
     theme_decide_color->set_tooltip_text(_("Theme decide symbolic icon color)"));
     theme_decide_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicDefaultColor));
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
     icon_buttons->pack_start(*_symbolic_color_label, true, true, 4);
     icon_buttons->pack_start(_symbolic_color, true, true, 4);
+    icon_buttons->pack_start(*normal, true, true, 4);
     icon_buttons->pack_start(_symbolic_success_color, true, true, 4);
+    icon_buttons->pack_start(*success, true, true, 4);
     icon_buttons->pack_start(_symbolic_warning_color, true, true, 4);
+    icon_buttons->pack_start(*warning, true, true, 4);
     icon_buttons->pack_start(_symbolic_error_color, true, true, 4);
-    icon_buttons->pack_start(*apply_color, true, true, 4);
+    icon_buttons->pack_start(*error, true, true, 4);
+    //icon_buttons->pack_start(*apply_color, true, true, 4);
     icon_buttons->pack_start(*theme_decide_color, true, true, 4);
     _page_theme.add_line(false,"", *icon_buttons, "", _("Color for symbolic icons, theme based or custom. Some icon color changes need reload"), false );
     {

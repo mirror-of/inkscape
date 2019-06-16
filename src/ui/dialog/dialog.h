@@ -92,6 +92,7 @@ public:
     virtual void set_position(Gtk::WindowPosition position);
     virtual void set_title(Glib::ustring title);
     virtual void set_sensitive(bool sensitive=true);
+    virtual void addTopWindowClasses();
 
     virtual Glib::SignalProxy0<void> signal_show();
     virtual Glib::SignalProxy0<void> signal_hide();

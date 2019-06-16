@@ -19,6 +19,7 @@
 #include <cstddef>
 
 #include <gtkmm/dialog.h>
+#include <gtkmm/window.h>
 #include <gtkmm/button.h>
 #include <sigc++/sigc++.h>
 #include "ui/selected-color.h"
@@ -47,7 +48,7 @@ public:
     void setRgba32 (guint32 rgba);
 
     void closeWindow();
-
+    void setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow);
     sigc::connection connectChanged (const sigc::slot<void,guint>& slot)
         { return _changed_signal.connect (slot); }
 
@@ -70,6 +71,7 @@ protected:
     //Inkscape::UI::Dialog::Dialog _colorSelectorDialog;
     Gtk::Dialog _colorSelectorDialog;
     SelectedColor _selected_color;
+    Glib::RefPtr<Gdk::Window> _transientwindow;
     Gtk::Widget *_color_selector;
 };
 

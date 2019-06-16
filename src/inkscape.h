@@ -186,6 +186,8 @@ public:
     sigc::signal<void> signal_dialogs_hide;
     // user pressed F12
     sigc::signal<void> signal_dialogs_unhide;
+    // user change theme
+    sigc::signal<void> signal_change_theme;
     // a document was changed by some external means (undo or XML editor); this
     // may not be reflected by a selection change and thus needs a separate signal
     sigc::signal<void> signal_external_change;

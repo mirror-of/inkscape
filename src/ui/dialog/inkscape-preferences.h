@@ -593,6 +593,7 @@ private:
   void themeChange();
   void symbolicThemeCheck();
   void symbolicAddClass();
+  void symbolicChangeColors(guint32 /*color*/);
   void symbolicDefaultColor();
 
   InkscapePreferences();

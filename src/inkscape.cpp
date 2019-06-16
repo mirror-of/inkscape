@@ -459,7 +459,7 @@ Application::add_gtk_css()
         css_str += "    font-family: sans-serif";
         css_str += "}"; // we also can add to * but seems to me Cantarell looks better for other places
     }
-
+    signal_change_theme.emit();
     try {
         provider->load_from_data(css_str);
     } catch (const Gtk::CssProviderError &ex) {
