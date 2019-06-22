@@ -694,9 +694,10 @@ void TextEdit::onStartOffsetChange(GtkTextBuffer * /*text_buffer*/, TextEdit *se
     {
         SPTextPath *tp = SP_TEXTPATH(text->firstChild());
         const gchar *sstr = gtk_combo_box_text_get_active_text(reinterpret_cast<GtkComboBoxText *>(self->startOffset));
-        tp->setAttribute("startOffset", sstr);
-
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "startOffset", SP_VERB_CONTEXT_TEXT, _("Set text style"));
+        if (g_strcmp0(sstr,tp->getAttribute("startOffset"))) {
+            tp->setAttribute("startOffset", sstr);
+            DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "startOffset", SP_VERB_CONTEXT_TEXT, _("Set text style"));
+        }
     }
 }
 
