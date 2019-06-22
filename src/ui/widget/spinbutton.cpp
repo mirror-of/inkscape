@@ -70,7 +70,8 @@ void SpinButton::on_value_changed() {
     double absval = std::abs(val);
     int count = get_digits();
     double intpart;
-    if (modf(absval, &intpart) == 0.0) {
+    //Get int value if rounding lower than spinbutton digits
+    if (modf(absval, &intpart) < 9 / pow(10, prevdigits + 1)) {
         set_digits(0);
         count = 0;
     } else {
