@@ -94,7 +94,11 @@ protected:
     bool on_my_key_press_event(GdkEventKey* event);
 
 
+<<<<<<< HEAD
     void on_value_changed() override;
+=======
+    void on_value_changed();
+>>>>>>> Allow autosized spin buttons and integer show values
     /**
      * Undo the editing, by resetting the value upon when the spinbutton got focus.
      */
