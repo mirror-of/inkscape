@@ -66,15 +66,21 @@ int SpinButton::on_input(double* newvalue)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void SpinButton::on_value_changed()
 {
 =======
 void SpinButton::on_value_changed() {
 >>>>>>> Allow autosized spin buttons and integer show values
+=======
+void SpinButton::on_value_changed()
+{
+>>>>>>> fix coding style and falied build
     double val = get_value();
     double absval = std::abs(val);
     int count = get_digits();
     double intpart;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     // Get int value if rounding lower than spinbutton digits
@@ -84,6 +90,9 @@ void SpinButton::on_value_changed() {
 >>>>>>> Allow autosized spin buttons and integer show values
 =======
     //Get int value if rounding lower than spinbutton digits
+=======
+    // Get int value if rounding lower than spinbutton digits
+>>>>>>> fix coding style and falied build
     if (modf(absval, &intpart) < 9 / pow(10, prevdigits + 1)) {
 >>>>>>> allow to int if numer is below spinbuttons digits
         set_digits(0);
@@ -96,10 +105,14 @@ void SpinButton::on_value_changed() {
         count += 1;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     count += absval > 9 ? (int)log10(absval) + 1 : 1;
 =======
     count += absval > 9 ? (int) log10 (absval) + 1 : 1;
 >>>>>>> Allow autosized spin buttons and integer show values
+=======
+    count += absval > 9 ? (int)log10(absval) + 1 : 1;
+>>>>>>> fix coding style and falied build
     count = std::min(std::max(count, 3), 7);
     set_width_chars(count);
 }
