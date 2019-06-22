@@ -94,7 +94,7 @@ protected:
     bool on_my_key_press_event(GdkEventKey* event);
 
 
-    void on_value_changed();
+    void on_value_changed() override;
     /**
      * Undo the editing, by resetting the value upon when the spinbutton got focus.
      */
