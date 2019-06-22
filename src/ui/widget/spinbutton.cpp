@@ -76,11 +76,16 @@ void SpinButton::on_value_changed() {
     int count = get_digits();
     double intpart;
 <<<<<<< HEAD
+<<<<<<< HEAD
     // Get int value if rounding lower than spinbutton digits
     if (modf(absval, &intpart) < 9 / pow(10, prevdigits + 1)) {
 =======
     if (modf(absval, &intpart) == 0.0) {
 >>>>>>> Allow autosized spin buttons and integer show values
+=======
+    //Get int value if rounding lower than spinbutton digits
+    if (modf(absval, &intpart) < 9 / pow(10, prevdigits + 1)) {
+>>>>>>> allow to int if numer is below spinbuttons digits
         set_digits(0);
         count = 0;
     } else {
