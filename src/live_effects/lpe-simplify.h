@@ -28,8 +28,6 @@ public:
 
     virtual void generateHelperPathAndSmooth(Geom::PathVector &result);
 
-    Gtk::Widget * newWidget() override;
-
     virtual void drawNode(Geom::Point p);
 
     virtual void drawHandle(Geom::Point p);

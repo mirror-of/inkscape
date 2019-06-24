@@ -114,12 +114,6 @@ Gtk::Widget *LPEBSpline::newWidget()
                 widg_registered->signal_value_changed()
                 .connect(sigc::mem_fun(*this, &LPEBSpline::toWeight));
                 widg = dynamic_cast<Gtk::Widget *>(widg_registered);
-                if (widg) {
-                    Gtk::HBox * hbox_weight_steps = dynamic_cast<Gtk::HBox *>(widg);
-                    std::vector< Gtk::Widget* > childList = hbox_weight_steps->get_children();
-                    Gtk::Entry* entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
-                    entry_widget->set_width_chars(9);
-                }
             }
             if (param->param_key == "only_selected" || param->param_key == "apply_no_weight" || param->param_key == "apply_with_weight") {
                 Gtk::CheckButton *widg_registered =

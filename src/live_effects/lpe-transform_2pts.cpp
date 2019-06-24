@@ -292,24 +292,7 @@ Gtk::Widget *LPETransform2Pts::newWidget()
             Parameter *param = *it;
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
-            if (param->param_key == "first_knot" || param->param_key == "last_knot") {
-                Inkscape::UI::Widget::Scalar *registered_widget = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
-                registered_widget->signal_value_changed().connect(sigc::mem_fun(*this, &LPETransform2Pts::updateIndex));
-                widg = registered_widget;
-                if (widg) {
-                    Gtk::HBox *hbox_scalar = dynamic_cast<Gtk::HBox *>(widg);
-                    std::vector<Gtk::Widget *> child_list = hbox_scalar->get_children();
-                    Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(child_list[1]);
-                    entry_widget->set_width_chars(3);
-                    vbox->pack_start(*widg, true, true, 2);
-                    if (tip) {
-                        widg->set_tooltip_text(*tip);
-                    } else {
-                        widg->set_tooltip_text("");
-                        widg->set_has_tooltip(false);
-                    }
-                }
-            } else if (param->param_key == "from_original_width" || param->param_key == "elastic") {
+            if (param->param_key == "from_original_width" || param->param_key == "elastic") {
                 Glib::ustring * tip = param->param_getTooltip();
                 if (widg) {
                     button1->pack_start(*widg, true, true, 2);

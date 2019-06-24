@@ -173,24 +173,12 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                 widg_registered->signal_value_changed().connect(
                     sigc::mem_fun(*this, &LPEFilletChamfer::updateAmount));
                 widg = widg_registered;
-                if (widg) {
-                    Gtk::HBox *scalar_parameter = dynamic_cast<Gtk::HBox *>(widg);
-                    std::vector<Gtk::Widget *> childList = scalar_parameter->get_children();
-                    Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
-                    entry_widget->set_width_chars(6);
-                }
             } else if (param->param_key == "chamfer_steps") {
                 Inkscape::UI::Widget::Scalar *widg_registered =
                     Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
                 widg_registered->signal_value_changed().connect(
                     sigc::mem_fun(*this, &LPEFilletChamfer::updateChamferSteps));
                 widg = widg_registered;
-                if (widg) {
-                    Gtk::HBox *scalar_parameter = dynamic_cast<Gtk::HBox *>(widg);
-                    std::vector<Gtk::Widget *> childList = scalar_parameter->get_children();
-                    Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
-                    entry_widget->set_width_chars(3);
-                }
             } else if (param->param_key == "only_selected") {
                 Gtk::manage(widg);
             }

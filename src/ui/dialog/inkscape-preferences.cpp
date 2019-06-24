@@ -92,7 +92,6 @@ InkscapePreferences::InkscapePreferences()
 {
     //get the width of a spinbutton
     Inkscape::UI::Widget::SpinButton* sb = new Inkscape::UI::Widget::SpinButton;
-    sb->set_width_chars(6);
     _getContents()->add(*sb);
     show_all_children();
     Gtk::Requisition sreq;

@@ -68,60 +68,6 @@ LPESimplify::doBeforeEffect (SPLPEItem const* lpeitem)
     radius_helper_nodes = helper_size;
 }
 
-Gtk::Widget *
-LPESimplify::newWidget()
-{
-    // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
-    
-    vbox->set_border_width(5);
-    vbox->set_homogeneous(false);
-    vbox->set_spacing(2);
-    std::vector<Parameter *>::iterator it = param_vector.begin();
-    Gtk::HBox * buttons = Gtk::manage(new Gtk::HBox(true,0));
-    while (it != param_vector.end()) {
-        if ((*it)->widget_is_visible) {
-            Parameter * param = *it;
-            Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
-            if (param->param_key == "simplify_individual_paths" ||
-                    param->param_key == "simplify_just_coalesce") {
-                Glib::ustring * tip = param->param_getTooltip();
-                if (widg) {
-                    buttons->pack_start(*widg, true, true, 2);
-                    if (tip) {
-                        widg->set_tooltip_text(*tip);
-                    } else {
-                        widg->set_tooltip_text("");
-                        widg->set_has_tooltip(false);
-                    }
-                }
-            } else {
-                Glib::ustring * tip = param->param_getTooltip();
-                if (widg) {
-                    Gtk::HBox * horizontal_box = dynamic_cast<Gtk::HBox *>(widg);
-                    std::vector< Gtk::Widget* > child_list = horizontal_box->get_children();
-                    Gtk::Entry* entry_widg = dynamic_cast<Gtk::Entry *>(child_list[1]);
-                    entry_widg->set_width_chars(8);
-                    vbox->pack_start(*widg, true, true, 2);
-                    if (tip) {
-                        widg->set_tooltip_text(*tip);
-                    } else {
-                        widg->set_tooltip_text("");
-                        widg->set_has_tooltip(false);
-                    }
-                }
-            }
-        }
-
-        ++it;
-    }
-    vbox->pack_start(*buttons,true, true, 2);
-    if(Gtk::Widget* widg = defaultParamSet()) {
-        vbox->pack_start(*widg, true, true, 2);
-    }
-    return dynamic_cast<Gtk::Widget *>(vbox);
-}
-
 void
 LPESimplify::doEffect(SPCurve *curve)
 {

@@ -65,36 +65,15 @@ int SpinButton::on_input(double* newvalue)
     return true;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-void SpinButton::on_value_changed()
+bool SpinButton::on_output()
 {
-=======
-void SpinButton::on_value_changed() {
->>>>>>> Allow autosized spin buttons and integer show values
-=======
-void SpinButton::on_value_changed()
-{
->>>>>>> fix coding style and falied build
     double val = get_value();
     double absval = std::abs(val);
+    // To prevent rounding of double values
+    absval += 0.000000001;
     int count = get_digits();
-    double intpart;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    // Get int value if rounding lower than spinbutton digits
-    if (modf(absval, &intpart) < 9 / pow(10, prevdigits + 1)) {
-=======
-    if (modf(absval, &intpart) == 0.0) {
->>>>>>> Allow autosized spin buttons and integer show values
-=======
-    //Get int value if rounding lower than spinbutton digits
-=======
-    // Get int value if rounding lower than spinbutton digits
->>>>>>> fix coding style and falied build
-    if (modf(absval, &intpart) < 9 / pow(10, prevdigits + 1)) {
->>>>>>> allow to int if numer is below spinbuttons digits
+    prevdigits = count ? count : prevdigits;
+    if (Geom::are_near(int(absval), absval, 9.9 / pow(10, prevdigits + 1))) {
         set_digits(0);
         count = 0;
     } else {
@@ -104,19 +83,11 @@ void SpinButton::on_value_changed()
     if (val < 0) {
         count += 1;
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
     count += absval > 9 ? (int)log10(absval) + 1 : 1;
-=======
-    count += absval > 9 ? (int) log10 (absval) + 1 : 1;
->>>>>>> Allow autosized spin buttons and integer show values
-=======
-    count += absval > 9 ? (int)log10(absval) + 1 : 1;
->>>>>>> fix coding style and falied build
-    count = std::min(std::max(count, 3), 7);
+    count = std::min(std::max(count, 3), 9);
     set_width_chars(count);
+    return false;
 }
-
 bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
 {
     _on_focus_in_value = get_value();

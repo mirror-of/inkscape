@@ -138,6 +138,7 @@ void ScalarParam::param_set_range(gdouble min, gdouble max)
     } else {
         this->max = SCALARPARAM_G_MAXDOUBLE;
     }
+    param_effect->upd_params = true;
     param_set_value(value); // reset value to see whether it is in ranges
 }
 
@@ -147,6 +148,7 @@ void ScalarParam::param_make_integer(bool yes)
     digits = 0;
     inc_step = 1;
     inc_page = 10;
+    param_effect->upd_params = true;
 }
 
 void ScalarParam::param_set_undo(bool set_undo) { _set_undo = set_undo; }
@@ -174,12 +176,16 @@ Gtk::Widget *ScalarParam::param_newWidget()
     }
 }
 
-void ScalarParam::param_set_digits(unsigned digits) { this->digits = digits; }
+void ScalarParam::param_set_digits(unsigned digits) { 
+    this->digits = digits; 
+    param_effect->upd_params = true;
+}
 
 void ScalarParam::param_set_increments(double step, double page)
 {
     inc_step = step;
     inc_page = page;
+    param_effect->upd_params = true;
 }
 
 

@@ -73,6 +73,14 @@ protected:
     int on_input(double* newvalue) override;
 
     /**
+     * This callback function change the digita of the input to reduce the width to
+     * minimun.
+     *
+     * @retval true the value is been displayed.
+     */
+    bool on_output() override;
+
+    /**
      * When focus is obtained, save the value to enable undo later.
      * @retval false continue with default handler.
      * @retval true  don't call default handler. 
@@ -93,16 +101,6 @@ protected:
      */
     bool on_my_key_press_event(GdkEventKey* event);
 
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-    void on_value_changed() override;
-=======
-    void on_value_changed();
->>>>>>> Allow autosized spin buttons and integer show values
-=======
-    void on_value_changed() override;
->>>>>>> fix coding style and falied build
     /**
      * Undo the editing, by resetting the value upon when the spinbutton got focus.
      */
