@@ -29,7 +29,7 @@
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/inkscape/a.png</image>
-      <_caption>Main application window</_caption>
+      <caption>Main application window</caption>
     </screenshot>
   </screenshots>
   <releases>
