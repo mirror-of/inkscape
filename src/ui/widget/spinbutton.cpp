@@ -14,6 +14,7 @@
 #include "util/expression-evaluator.h"
 #include "ui/tools/tool-base.h"
 #include <cmath>
+#include "svg/css-ostringstream.h"
 
 namespace Inkscape {
 namespace UI {
@@ -67,34 +68,35 @@ int SpinButton::on_input(double* newvalue)
 
 bool SpinButton::on_output()
 {
-    double val = get_value();
-    double absval = std::abs(val);
+    double i = get_value();
     // To prevent rounding of double values
-    absval += 0.000000001;
-    int count = get_digits();
-    prevdigits = count ? count : prevdigits;
-    if (Geom::are_near(int(absval), absval, 9.9 / pow(10, prevdigits + 1))) {
-        set_digits(0);
-        count = 0;
-    } else {
-        set_digits(prevdigits);
-        count = prevdigits + 1;
+    i += 0.000000001;
+    std::string s;
+    std::string t;
+    std::string z;
+    Inkscape::CSSOStringStream out;
+    out << i;
+    s = out.str();
+    gint pos = s.find(".");
+    gint digits = 0;
+    if (pos != std::string::npos) {
+        t = s.substr(pos + 1, 6);
+        z = t.substr(t.size() -1);
+        while (z == "0") {
+            t.erase(t.size());
+            z = t.substr(t.size());
+        }
+        digits = t.size();
     }
-    if (val < 0) {
-        count += 1;
-    }
-    count += absval > 9 ? (int)log10(absval) + 1 : 1;
-    count = std::min(std::max(count, 3), 9);
-    set_width_chars(count);
+    set_digits(digits);
     return false;
 }
+
 bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
 {
     _on_focus_in_value = get_value();
     return false; // do not consume the event
 }
-
-
 
 bool SpinButton::on_scroll_event(GdkEventScroll *event)
 {

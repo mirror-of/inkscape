@@ -64,13 +64,21 @@ PageSizer::PageSizer(Registry & _wr)
     // set precision of scalar entry boxes
     _wr.setUpdating (true);
     _dimensionWidth.setDigits(5);
+    _dimensionWidth.setWidthChars(5);
     _dimensionHeight.setDigits(5);
+    _dimensionHeight.setWidthChars(5);
     _marginTop.setDigits(5);
     _marginLeft.setDigits(5);
     _marginRight.setDigits(5);
     _marginBottom.setDigits(5);
+    _marginTop.setWidthChars(5);
+    _marginBottom.setWidthChars(5);
+    _marginLeft.setWidthChars(5);
+    _marginRight.setWidthChars(5);
     _scaleX.setDigits(5);
+    _scaleX.setWidthChars(5);
     _scaleY.setDigits(5);
+    _scaleY.setWidthChars(5);
     _viewboxX.setDigits(5);
     _viewboxY.setDigits(5);
     _viewboxW.setDigits(5);
@@ -83,6 +91,8 @@ PageSizer::PageSizer(Registry & _wr)
     _viewboxY.setRange( -10000000, 10000000 );
     _viewboxW.setRange( 0.00001, 10000000 );
     _viewboxH.setRange( 0.00001, 10000000 );
+    _viewboxX.setWidthChars(5);
+    _viewboxY.setWidthChars(5);
 
     _scaleY.set_sensitive (false); // We only want to display Y scale.
 
