@@ -36,6 +36,7 @@
 
 #include "helper/action.h"
 #include "helper/action-context.h"
+#include "dir-util.h"
 #include "io/sys.h"
 #include "io/resource.h"
 #include "verbs.h"
@@ -90,15 +91,28 @@ void sp_shortcut_init()
 
     // try to load shortcut file as set in preferences
     // if preference is unset or loading fails fallback to share/keys/default.xml and finally share/keys/inkscape.xml
+    // make paths relative to share/keys/ if possible (handle parallel installations of Inkscape gracefully)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring shortcutfile = prefs->getString("/options/kbshortcuts/shortcutfile");
+    std::string shortcutfile = prefs->getString("/options/kbshortcuts/shortcutfile");
     bool success = false;
     gchar const *reason;
     if (shortcutfile.empty()) {
         reason = "No key file set in preferences";
     } else {
-        success = try_shortcuts_file(shortcutfile.c_str());
         reason = "Unable to read key file set in preferences";
+        
+        bool absolute = Glib::path_is_absolute(shortcutfile);
+        if (absolute) {
+            success = try_shortcuts_file(shortcutfile.c_str());
+        } else {
+            success = try_shortcuts_file(get_path(SYSTEM, KEYS, shortcutfile.c_str()));
+        }
+
+        // store shortcutfile location relative to INKSCAPE_DATADIR
+        if (absolute && success) {
+            shortcutfile = sp_relative_path_from_path(shortcutfile, std::string(get_path(SYSTEM, KEYS)));
+            prefs->setString("/options/kbshortcuts/shortcutfile", shortcutfile.c_str());
+        }
     }
     if (!success) {
         g_info("%s. Falling back to 'default.xml'.", reason);
@@ -267,7 +281,13 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
                         continue;
                     }
                     if (g_str_has_suffix(lower, ".xml")) {
-                        gchar* full = g_build_filename(dirname, filename, NULL);
+                        gchar *full = g_build_filename(dirname, filename, NULL);
+                        gchar *relative;
+                        if (strcmp(dirname, INKSCAPE_KEYSDIR)) {
+                            relative = g_strdup(full);
+                        } else {
+                            relative = g_strdup(filename);
+                        }
                         if (!Inkscape::IO::file_test(full, G_FILE_TEST_IS_DIR)) {
 
                         	// Get the "key name" from the root element of each file
@@ -290,16 +310,17 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
                             }
 
                             if (!strcmp(filename, "default.xml")) {
-                                paths->insert(paths->begin(), full);
+                                paths->insert(paths->begin(), relative);
                                 names->insert(names->begin(), label.c_str());
                             } else {
-                                paths->push_back(full);
+                                paths->push_back(relative);
                                 names->push_back(label.c_str());
                             }
 
                             Inkscape::GC::release(doc);
                         }
                         g_free(full);
+                        g_free(relative);
                     }
                     g_free(lower);
                 }
