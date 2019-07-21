@@ -594,8 +594,6 @@ void SPObject::detach(SPObject *object)
     g_return_if_fail(SP_IS_OBJECT(object));
     g_return_if_fail(object->parent == this);
 
-    object->releaseReferences();
-
     SPObject *prev=NULL;
     for ( SPObject *child = this->children ; child && child != object ;
           child = child->next )
@@ -612,6 +610,8 @@ void SPObject::detach(SPObject *object)
     if (!next) {
         this->_last_child = prev;
     }
+
+    object->releaseReferences();
 
     object->next = NULL;
     object->parent = NULL;
