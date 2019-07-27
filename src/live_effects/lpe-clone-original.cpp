@@ -61,11 +61,9 @@ void LPECloneOriginal::doEffect (SPCurve * curve)
             curve_out = SP_TEXT(linked_obj)->getNormalizedBpath();
         }
 
-        if (curve_out == NULL) {
-            // curve invalid, set empty pathvector
-            curve_out->set_pathvector(Geom::PathVector());
+        if (curve_out != NULL) {
+            curve->set_pathvector(curve_out->get_pathvector());
         }
-        curve->set_pathvector(curve_out->get_pathvector());
     }
 }
 
