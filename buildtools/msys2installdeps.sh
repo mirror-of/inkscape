@@ -87,10 +87,10 @@ $ARCH-python2-six
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)
-      /mingw32/bin/pip install --upgrade coverage pyserial scour
+      /mingw32/bin/pip2 install --upgrade coverage pyserial scour
       ;;
     mingw-w64-x86_64)
-      /mingw64/bin/pip install --upgrade coverage pyserial scour
+      /mingw64/bin/pip2 install --upgrade coverage pyserial scour
       ;;
   esac
 done
