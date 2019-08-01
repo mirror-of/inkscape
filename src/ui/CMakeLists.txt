@@ -98,7 +98,6 @@ set(ui_SRC
 	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
-	dialog/spellcheck.cpp
 	dialog/svg-fonts-dialog.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
@@ -239,7 +238,6 @@ set(ui_SRC
 	dialog/polar-arrange-tab.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
-	dialog/spellcheck.h
 	dialog/svg-fonts-dialog.h
 	dialog/swatches.h
 	dialog/symbols.h
@@ -372,4 +370,13 @@ set ( ui_flood_and_trace_SRC
 
 if ("${HAVE_POTRACE}")
 	add_inkscape_source("${ui_flood_and_trace_SRC}")
+endif()
+
+set ( ui_spellcheck_SRC
+	dialog/spellcheck.cpp
+	dialog/spellcheck.h
+)
+
+if ("${HAVE_ASPELL}")
+	add_inkscape_source("${ui_spellcheck_SRC}")
 endif()

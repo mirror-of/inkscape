@@ -53,7 +53,11 @@
 #include "ui/dialog/object-attributes.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/dialog/text-edit.h"
-#include "ui/dialog/spellcheck.h"
+
+#if HAVE_ASPELL
+# include "ui/dialog/spellcheck.h"
+#endif
+
 #include "ui/dialog/export.h"
 #include "ui/dialog/xml-tree.h"
 #include "ui/dialog/clonetiler.h"
@@ -138,7 +142,9 @@ DialogManager::DialogManager() {
         registerFactory("UndoHistory",         &create<UndoHistory,          FloatingBehavior>);
         registerFactory("InputDevices",        &create<InputDialog,          FloatingBehavior>);
         registerFactory("TextFont",            &create<TextEdit,             FloatingBehavior>);
+#if HAVE_ASPELL
         registerFactory("SpellCheck",          &create<SpellCheck,           FloatingBehavior>);
+#endif
         registerFactory("Export",              &create<Export,               FloatingBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           FloatingBehavior>);
         registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
@@ -177,7 +183,9 @@ DialogManager::DialogManager() {
         registerFactory("UndoHistory",         &create<UndoHistory,          DockBehavior>);
         registerFactory("InputDevices",        &create<InputDialog,          DockBehavior>);
         registerFactory("TextFont",            &create<TextEdit,             DockBehavior>);
+#if HAVE_ASPELL
         registerFactory("SpellCheck",          &create<SpellCheck,           DockBehavior>);
+#endif
         registerFactory("Export",              &create<Export,               DockBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           DockBehavior>);
         registerFactory("XmlTree",             &create<XmlTree,              DockBehavior>);

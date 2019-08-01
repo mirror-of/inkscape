@@ -84,7 +84,11 @@
 #include "ui/dialog/object-properties.h"
 #include "ui/dialog/swatches.h"
 #include "ui/dialog/symbols.h"
-#include "ui/dialog/spellcheck.h"
+
+#if HAVE_ASPELL
+# include "ui/dialog/spellcheck.h"
+#endif
+
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
 #include "selection.h"
@@ -838,6 +842,9 @@ Verb *Verb::getbyid(gchar const *id)
                 && strcmp(id, "ToolPaintBucket")  != 0
                 && strcmp(id, "SelectionTrace")   != 0
                 && strcmp(id, "PaintBucketPrefs") != 0
+#endif
+#if !HAVE_ASPELL
+                && strcmp(id, "DialogSpellcheck") != 0
 #endif
             )
         printf("Unable to find: %s\n", id);
@@ -2071,9 +2078,11 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_FINDREPLACE:
             // not implemented yet
             break;
+#if HAVE_ASPELL
         case SP_VERB_DIALOG_SPELLCHECK:
             dt->_dlg_mgr->showDialog("SpellCheck");
             break;
+#endif
         case SP_VERB_DIALOG_DEBUG:
             dt->_dlg_mgr->showDialog("Messages");
             break;
@@ -2188,14 +2197,10 @@ void TutorialVerb::perform(SPAction *action, void *data)
             // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial(NULL, (gpointer)_("tutorial-advanced.svg"));
             break;
-
-#if HAVE_POTRACE
         case SP_VERB_TUTORIAL_TRACING:
             // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial(NULL, (gpointer)_("tutorial-tracing.svg"));
             break;
-#endif
-
         case SP_VERB_TUTORIAL_TRACING_PIXELART:
             sp_help_open_tutorial(NULL, (gpointer)_("tutorial-tracing-pixelart.svg"));
             break;
@@ -2941,8 +2946,12 @@ Verb *Verb::_base_verbs[] = {
                    N_("Find objects in document"), INKSCAPE_ICON("edit-find")),
     new DialogVerb(SP_VERB_DIALOG_FINDREPLACE, "DialogFindReplace", N_("Find and _Replace Text..."),
                    N_("Find and replace text in document"), INKSCAPE_ICON("edit-find-replace")),
+
+#if HAVE_ASPELL
     new DialogVerb(SP_VERB_DIALOG_SPELLCHECK, "DialogSpellcheck", N_("Check Spellin_g..."),
                    N_("Check spelling of text in document"), INKSCAPE_ICON("tools-check-spelling")),
+#endif
+
     new DialogVerb(SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."),
                    N_("View debug messages"), INKSCAPE_ICON("dialog-messages")),
     new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/Hide D_ialogs"),
