@@ -1770,7 +1770,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     static unsigned tile_multiplier = 0;
     if (tile_multiplier == 0) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 1, 1, 64);
+        tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
     }
 
     if (_rendermode != Inkscape::RENDERMODE_OUTLINE) {
