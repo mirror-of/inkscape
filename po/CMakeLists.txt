@@ -30,9 +30,7 @@ add_custom_target(inkscape_pot BYPRODUCTS ${_potFile}
     # extract strings from source files into inkscape.pot
     COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -C -f POTFILES.src.in
     COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Glade -f POTFILES.ui.in
-    COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Python -f POTFILES.py.in
     # the following uses po/its/inx.{loc, its}
-    COMMAND ${its_workaround} ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -f POTFILES.inx.in --from-code=UTF-8
     COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L AppData ../org.inkscape.Inkscape.appdata.xml.in
     COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Desktop ../org.inkscape.Inkscape.desktop.template
     # the following uses po/its/menus.{loc, its}
